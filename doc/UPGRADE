@@ -1,0 +1,17 @@
+Upgrading Support Incident Tracker
+----------------------------------
+
+To upgrade simply copy all the new files over the existing ones being careful not to overwrite
+your config.inc.php or any custom themes you might have.  Then run setup.php in your browser.
+
+Further instructions and notes about specific upgrades follow:
+
+
+Upgrading from 3.20 to 3.21
+---------------------------
+
+Email templates can now insert updates into the incident log that are hidden from the customer view.
+You should review your email templates and set the update visibility of each.
+
+The config variable attachment_path has been renamed to attachment_fspath and a new variable
+attachment_webpath has been created for the web view of the same path

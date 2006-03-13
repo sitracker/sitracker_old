@@ -1,0 +1,23 @@
+To Do
+
+v3.23
+* Roles
+* Related Incidents
+* Remove/Rename obsolete permissions (e.g. PO)
+* Site Incident Graphs
+* Banner graphic
+* Remove obsolete ftnpassword field
+
+v3.2x
+* Incoming email handler
+* Re-write the help
+
+v3.3x
+* Contact flags
+
+v4.00 / Future
+* Interface for adding/editing vendors
+* Change maintenance table to use servicelevel field that stores tag instead of id
+* Overhaul the email templates (emailtypes)
+* Add tabbed incident_details popup window, with tabs relevant to SLA status
+* Customer view of incidents

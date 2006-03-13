@@ -1,0 +1,64 @@
+body        { background-color: #FFFFFF; color: #000000; }
+p       { font-family: Tahoma, Helvetica, sans serif; font-size: 8pt; color: #000000; }
+table       { font-family: Tahoma, Helvetica, sans serif; font-size: 8pt; color: #000000; }
+td      { font-family: Tahoma, Helvetica, sans serif; font-size: 8pt; color: #000000; }
+a       { font-family: Tahoma, Helvetica, sans serif; font-size: 8pt; color: #881111; font-weight: bold; text-decoration: none; }
+a:hover     { font-family: Tahoma, Helvetica, sans serif; font-size: 8pt; color: #881111; font-weight: bold; text-decoration: underline; }
+a:active    { font-family: Tahoma, Helvetica, sans serif; font-size: 8pt; color: #881111; font-weight: bold; text-decoration: underline; }
+a em { font-style: normal; text-decoration: underline; }
+center      { font-family: Tahoma, Helvetica, sans serif; font-size: 8pt; color: #000000; }
+
+.barlink    { font-family: Tahoma, Helvetica, sans serif; font-size: 8pt; color: #FFFFFF; font-weight: bold; text-decoration: none; }
+.barlink:hover  { font-family: Tahoma, Helvetica, sans serif; font-size: 8pt; color: #FFFFFF; font-weight: bold; text-decoration: underline; }
+.barlink:active { font-family: Tahoma, Helvetica, sans serif; font-size: 8pt; color: #FFFFFF; font-weight: bold; text-decoration: underline; }
+
+.error      { font-family: Tahoma, Helvetica, sans serif; font-size: 8pt; color: #FF0000; font-weight: bold; text-align: center; }
+.red        { font-family: Tahoma, Helvetica, sans serif; font-size: 8pt; color: #FF0000; }
+
+.mainshade  { background-color: #FFFFFF; }
+.shade1     { background-color: #CCCCCC; }
+.shade2     { background-color: #DDDDDD; }
+.urgent     { background-color: #E8B7DD; }
+.expired    { background-color: #E8B7DD; }
+.review { background-color: #7AC5CD; }
+.critical { background-color: #ff3366; }
+.idle     { background-color: #90ee90; }
+
+.navbarmenu { background-color: #333333; font-family: Tahoma, Helvetica, sans serif; font-size: 8pt; font-weight: bold; color: #FFFFFF; width: 75px; height:20px; }
+
+/* SpellCheck */
+a.spellLink {
+    color:              Red;
+    text-decoration:    none;
+    border-bottom:      1px dashed Red;
+}
+
+a.spellLink:hover {
+    color:              Red;
+    text-decoration:    none;
+    border-bottom:      1px dashed Red;
+}
+
+.spell-tooltip {
+    position:   absolute;
+    width:      250px;
+    border:     1px Solid WindowFrame;
+    background: Infobackground;
+    color:      InfoText;
+    font:       StatusBar;
+    font:       Status-Bar;
+    padding:    3px;
+    filter:     progid:DXImageTransform.Microsoft.Shadow(color="#777777", Direction=135, Strength=3);
+}
+
+
+.spell-tooltip a,
+.spell-tooltip a:hover {
+    color:      blue !important;
+    background: none;
+}
+
+.tablelist TD {border-left: 1px solid #ffffff;border-top: 1px solid #ffffff;}
+table.tablelist {border: 1px solid #ffffff;}
+.tablelist TR {border: 1px solid #ffffff; border-right: 1px solid #ffffff ! important;}
+.tablelist TH {border-left: 1px solid #ffffff; border-top: 1px solid #ffffff;}

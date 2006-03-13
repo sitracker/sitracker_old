@@ -1,0 +1,720 @@
+Changes in v3.23 - Unreleased
+-------------------------------------------------------------------------------------
+* Improved Auto-reassign back to original owner after holiday
+* Improved contact support page
+* Merged list of sites contracts onto the site details page
+* Surname and Email address is now checked when adding a contact to help prevent dupes
+* Contacts now use their site address unless specifically overridden
+* Improved password generation
+* Fixed bug with contact address (country field)
+* Fixed bug with log produced after editing incidents.
+* Removed ability to change the product an incident is logged to as this didn't make much sense,
+  incidents should be re-logged instead
+* Fixed bug where slashes appeared in incident titles with apostrophe
+* SiT! now uses superglobals no longer requires register_globals to be on
+* Much improved input checking throughout
+* Many other minor bugfixes
+* Fixed bug with creating a directory to hold attachments for new incidents
+* Fixed bug with locking/unlocking incoming updates
+* Show product on site/contact incidents page and allow date filtering
+* Show total number of incidents logged for each product on contact/site support page
+* Fixed bug with searching for kb articles by doc id
+* Improved Database Error handling
+* Prevented revealing SQL on failure for security reasons
+* KB references in incident logs are now converted to hyperlinks
+
+Changes in v3.22 - Released 27 January 2006
+-------------------------------------------------------------------------------------
+* Slashes are now stripped from incident log display so all updates must now be
+  escaped on insertion
+* Fixed bug where incidents were not reassigned to backup engineers when users set
+  themselves not accepting incidents
+* Improved Help
+* Fixed crash when there are no feedback records
+* New styles for informational, warning and error messages
+* New authentication mecahnism to simplify future code changes
+* Fixed redirect after adding a user
+* Fixed reassignment bug
+* Made holding queue refresh automatically
+* Started adding support for user roles  (not complete, don't use yet)
+* Fixed bug with configuration of working day
+* Added php SLA calculation script timecalc.php
+* Fixed bugs with email templates
+* Fixed bug in database setup
+* Tidied HTML
+* Escape incident log variables and strip slashes on log display (to fix Novell Forge #1438)
+* Fixed bug where incidents were not reassigned to backup engineers when users set themselves not accepting incidents
+* Fixes and improvements to knowledgebase articles and incident log quoting
+
+Changes in v3.21 - Released 14 December 2005
+-------------------------------------------------------------------------------------
+* Improved the display of outstanding incidents when assigning newly added incidents
+* Fixed stray character on add incident page
+* Fixed help link
+* Much improved setup script, now handles upgrades as well
+* Added link to kb after closing an incident
+* Fixed permissions problem with control panel
+* Fixed review message on incident details page
+* Fix problem with headers on close incident page after an error occurs
+* Fix problem with address 1 field not being saved when adding an site
+* Fixed defaut country when adding a site
+* Fixed site not being saved when adding a contact
+* Fixed minor bugs with editing products and software
+* New pages for adding resellers and vendors
+* More sample data added during installation
+* User email templates can now be deleted
+* System email templates are now referred to by name rather than id names are uppercase with
+  underscores instead of spaces
+* Plugins can now specify a minimum required version
+* Attachment paths are now configurable and attachments more user friendly
+* Fixed a bug with the service level details page
+* Fixed bug that caused a message to appear about forced reassigns when reassigns were not forced
+* Random tips are now shown on front page
+
+Changes in v3.20 - Released 23 November 2005
+-------------------------------------------------------------------------------------
+* Fixed a crash in recent incidents report
+* Improved tooltips for better browser support and ease of use (now uses CSS popups)
+* Seperated updates headers from body
+* Made incident details default to show auto-updates
+* Proserv: Added ability to search by job number (without prefix or task letter) (#98)
+* Code tidying and removal of obsolete code sections and files
+* Various improvements for speed
+* Webtrack can now run with short_open_tag set to off
+* Webtrack now validates XHTML 1.0 Transitional with CSS2 (and some CSS3)
+* Many speed improvements
+* Plugin interface
+* Contacts can now assign another contact to be notified in email templates
+* Add maintenance now shows proper list of service levels
+* Incident pools other than 'unlimited' can also be configured for maintenance contracts
+* You can now add/edit service levels from the control panel, you can't remove them yet though
+* Sites can now be deleted
+* All incidents now have service levels and the service level is stored with the incident
+* You can now select a service level when logging an incident that isn't tied to a contract
+* Incident pools are now working (#106)
+* Added product to 'Recent Incidents' report (#40)
+* Fixed hierarchical menus, should now work in all browsers (#56)
+* Fixed Incident appears twice if you are temp owner (#73)
+* Fixed  Unable to reassign incidents to yourself if you are set as non accepting (#80)
+* Improved handling of long URLs converted to HTML hyperlinks in incident details
+* Javascript that changes the browser status bar text now removed/replaced
+* Fixed bug that allowed contacts to be added without associating them with a site
+* You can now view waiting incidents (and all open) on the watch incidents page (#75)
+* There is a new CC field on an incident record for copying managers in on emails
+* Hierarchical menu structure is now available with all themes, improved navigation
+* You can now set the manager of a contact without using tags and use this in email templates (#104)
+
+Changes in v3.19 - Released 30 September 2005
+-------------------------------------------------------------------------------------
+* Proserv: Changed a few page titles
+* Proserv: CSS Improvements for neater printouts from proserv pages
+* Proserv: Now shows site name and day number in the daily tooltips on the chart
+* Proserv: Fixed bug where new tasks showed 100% complete (#88)
+* Proserv: Added gaps between jobs in chart (#86)
+* Proserv: Display overrun jobs (#87)
+* Proserv: Added Job overview tab (#84)
+
+Changes in v3.18 - Released 28 September 2005
+-------------------------------------------------------------------------------------
+* Proserv: Fixed several chart bugs
+* Proserv: Fixed links to sibling tasks
+* Proserv: Added filter to Management Overview page
+* Proserv: Added percentage complete information
+* Proserv: Added information for admin team on Management Overview page (#83)
+* Proserv: Allow a contact to be added to a job (#78)
+* Proserv: Made filters 'sticky' (#59)
+* Proserv: Fixed bugs with sorting
+* Proserv: Added capability to sort all columns (#60)
+* Proserv: PO's can now only be assigned to Jobs and not tasks (#62)
+* Proserv: Improved formatting of jobs list for IE browser
+* Proserv: Added filter to show/hide tasks on jobs list (#63)
+* Proserv: Chart now highlights current day
+* Proserv: Added a tooltip to jobs list showing extract of job overview
+* Proserv: Automatic notification to salesperson of new jobs that haven't been updated every 3 days
+* Proserv: Automatic notification to project manager of jobs that have reached the next action time
+* Authentication now uses Ichain
+
+Changes in v3.17 - Released 25 August 2005
+-------------------------------------------------------------------------------------
+* ProServ: Salesperson is now saved properly when editing a job
+* Fixed server ID string
+* ProServ: Fixed several bugs causing job fields not to be saved
+* ProServ: Fixed bug Screen rendering / formatting issue after PO number saved
+* ProServ: Fixed emails sent via email templates
+* ProServ: Fixed bug where jobs/tasks were not displayed on 'My Jobs' page
+* ProServ: Tasks can now have two consultants, Primary and now Secondary
+* ProServ: More links provided after adding/editing jobs/tasks to improve workflow
+* ProServ: New status of 'Cancelled'
+* ProServ: Chart now groups jobs/tasks together in a way similar to MS Project
+* ProServ: When viewing a task there are now links to sibling tasks
+* ProServ: New filtering allows viewing jobs by status, consultant, site, salesperson
+    or search
+
+Changes in v3.16 - Released 27 April 2005
+-------------------------------------------------------------------------------------
+* Sites can now be assigned to users (For sales people to manage sites)
+* Interface HTML/CSS improvements for faster page loads and better browser support
+* Webtrack hyperlinks no longer update the browser status bar using javascript
+* Fixed a problem with BCC and CC fields in Template Emails
+* Improved several drop-down boxes for ease of use
+* Backup engineers can now be set from the users profile
+* Improved re-assign page.  Now displays users with relevent skills and can handle
+  backup engineers
+* Changing your status to 'Not Accepting' or marking yourself as 'On Holiday' (etc)
+  now passes your incidents to a backup engineer (via the holding queue).
+* Review Incoming Updates page now displays pending re-assignments (incidents to
+  be re-assigned after an engineer has gone on holiday.
+* Improved facility that marks incident updates as visible or hidden (now doesn't
+  lose the view or your place in the log)
+* Incident updates that are visible to customers through the portal are now marked
+  very clearly in the incident log (green!)
+* Incidents can now be assigned temporarily to another engineer, this will put show
+  the incident in both queues (the original queue and the new assignee's queue)
+  This is intended to be used with the new backup engineers/on holiday features, but
+  you may find it useful when working with a partner to resolve an incident.
+* The _incident number_ link in the incident queues is now a normal hyperlink and not
+  a popup window, the incident title link remains a popup window.  This might make it
+  easier for those people with a browser that supports tabbed browsing (e.g. Firefox,
+  Opera) to manage multiple incidents.
+* New Interface Style (Theme) 'Neoteric' with the new Salford corporate look and a
+  hierarchical menu structure.
+* Changed the menu on email and close incident popup windows to make it harder to be
+  confused and have the same incident open in two windows at once.
+* Fixed bug that meant incident reassigns were not made customer-visible even when
+  checkbox was checked.
+* Fixed bug where incident reviews could not be added if they were marked as hidden,
+  reviews are now forced to be visible instead.
+* New field 'Site' for Marketing report
+* ProServ jobs display can now be sorted
+* ProServ Fixed bug where tasks were not assigned a letter
+* ProServ Fixed several minor bugs with tasks and updates
+* ProServ field job 'owner' will now be referred to as 'Project Manager'
+* ProServ New field 'Salesperson' for Jobs
+* ProServ Jobs now require tasks in order to define scheduled work
+* ProServ Actual Dates can now be stored as well as Anticpated dates
+* ProServ New Gantt-style chart showing anticipated and scheduled jobs
+* Improved email templates, user and system templates now seperate
+* Added a description field for email templates
+* Only user templates are now shown when sending an email making an easier shorter list
+* Email templates can now be used for ProServ too
+* ProServ now sends emails when jobs are created, marked as requiring action, or closed
+* Removed erroneous link to Sales Incidents.  These were depreciated over a year ago.
+
+Changes in v3.15 - Released 16 December 2004
+-------------------------------------------------------------------------------------
+* Contact passwords are now generated by webtrack again
+* Incident Update. Priority field now defaults to enabled except for brand incidents
+  awaiting initial response. This is to work-around browser bugs where javascript
+  onclick/onselect events didn't happen.
+* Flags can now be added/removed from contacts.
+* Fixed another bug where sometimes sending an email didn't mark
+  'awaiting customer action' when requested for SLA purposes.
+  Causing some incidents to go 'Red' prematurely.
+* Fix: Incidents can again be sorted by priority
+* When viewing a site blank lines are now collapsed for a shorter easy to read page
+* Support manager is now notified by email when an incident is due for review
+* Support manager and technical director is now notified when an incident goes
+  out of it's SLA
+* Contacts can now be tagged as 'MGR - Site Manager' which means that they hold a
+  management at that site and wish to be contacted during an incident review
+* The Sales Team are notified when a customer logs more than 7 incidents in 30 days
+* Fixed obscure bug with email template variables
+
+Changes in v3.14 - Released 23 November 2004
+-------------------------------------------------------------------------------------
+* New 'Watch Incidents' (displays all open incidents) page now available from
+  the Reports menu
+* New 'Site Products' report showing all sites of a particular type along with all
+  products that the site has had or currently has under maintenance contract.
+* New incident review feature, will notify when an incident is due for review
+  The update incident page is now able to add an update of type 'Review'
+* Fixed a couple of bugs affecting the accurate display of SLA times
+* The Incident Details window now has AccessKeys, e.g. Press ALT+E to send an email
+  (exact keys are browser dependent)
+* Tasks for ProServ (sub-jobs)
+* ProServ: Coloured status to improve readability
+* ProServ: Several minor bug fixes
+* Now using SubVersion (svn) instead of cvs
+* Contact passwords are no longer generated or controlled by webtrack
+
+Changes in v3.12 - Released 19 October 2004
+-------------------------------------------------------------------------------------
+* Display of time to next SLA
+* Work with .NET component (by ASmith) that calculates time since last SLA
+* Added drop-down box for updates and send email that create special records
+  in the updates table.
+* Show number of hours in addition to days when an age is less than a week
+-- Patches after install:
+* Added ProServ jobs manager
+* Fixed bug with sla still counting when awaiting customer action where last
+  update was an email
+* Fixed bug with status not being set in updates which was affecting sla notification
+* Fixed bug with incidents display
+* SLA Time remaining now shown in working days (8 hour days)
+
+
+Changes in v3.11 - Released 10 March 2004
+-------------------------------------------------------------------------------------
+* Fixed bug in edit site where country could not be edited
+* Fixed send incident email html
+* Added site type
+-- Patches after install:
+* Made product-only contracts show as 'notice' class (yellow)
+* Fixed bug with setting contracts as terminated
+* Fixed version number
+
+Changes in v3.10 - Released 25 Feburary 2004
+-------------------------------------------------------------------------------------
+* Made spelling conditional and only appear when pspell module is available
+* Removed dependencies on FTP and Sockets, which will no longer be used
+
+Changes in v3.09 - Released 13 January 2004
+-------------------------------------------------------------------------------------
+* Fixed bug with tables in update incident page
+* Fixed bug #29  Edit incident shows full product list instead of just supported products
+* Resolved bug #222  Incident closure emails not being sent  (fixed in a previous version)
+* Fixed bug where extra slashes would be added to a KB article after editing (ASmith)
+* Added the ability to remove a KB article content section (must be marked restricted first)
+* Fixed bug #230 Open/Closed incidents filter broken (MDunken)
+* Changed mail handling mechanism to all PHP
+* Added ability to create incidents from incoming emails
+* Improved mail holding queue to handle all messages not just updates to existing incidents
+* Fixed a bug in Add Incidents
+* Fixed bug #229 journal dates are now displayed
+
+Changes in v3.08.1 alpha - Development Release
+-------------------------------------------------------------------------------------
+* Added External Knowledge Base interface for Website
+
+Changes in v3.08 - Released 30 October 2003
+-------------------------------------------------------------------------------------
+* Fixed spelling of "Knowledge Base" in close article (when creating KB Article)
+* KB Now defaults to showing just recent articles as was originally intended
+* Merged and Improved opened and closed incidents reports and added extra info for PRLees
+* Added list of allowed HTML tags for KB articles to help
+* Fixed bug #223 slashes in kb article titles
+* Fixed bugs with slashes in kb article body
+* Fixed bug where applicable software would be lost when editing a kb article
+* Fixed bug that made it possible to try and edit a non-existant kb article
+
+Changes in v3.07.3 - Released 11 September 2003
+-------------------------------------------------------------------------------------
+* Fixed bug with encoding unusual attachment filenames that stopped attachments from being displayed
+* Fixed bug #220  Contact usernames and passwords not displayed
+
+Changes in v3.07.2 - Released 10 September 2003
+-------------------------------------------------------------------------------------
+* Temporary patch to fix a problem displaying attachments
+
+Changes in v3.07.1 - Released 10 September 2003
+-------------------------------------------------------------------------------------
+* Fixed bug  Added mobile phone field to Add Contact
+* Fixed bug  Incidents appearing as duplicates in own incidents queue and others queue
+
+Changes in v3.07 - Released 10 September 2003
+-------------------------------------------------------------------------------------
+* Fixed bug #1  Customer profile reports
+* Added Feature #13  Staff qualifications table
+* Fixed bug #15   Deleting incoming updates causes error removing tempincoming
+* Fixed Bug #18   Month labels on incident graphs
+* Fixed bug #19   Some users can't change password
+* Fixed bug #24   It's possible to add a sales incident with no priority
+* Fixed bug #31   Add Purchase Order Fields
+* Added Feature #36  Ability to move incidents from one contact to another
+* Added Feature #57  Improved Journaling, including admin display and reporting
+* Added Feature #60  Add time and date etc to email template identifiers
+* Fixed bug #64   Days formatting says '1 months'
+* Fixed bug #66   Remove sales_invoicedate field and optimise all tables
+* Added Feature #75   QBE (Query by Example) Reporting Module
+* Fixed bug #76   Staff Holiday Report shows H as W
+* Fixed bug #87   Emails with uuencoded attachments
+* Fixed bug #95   Check holiday approval with group members
+* Added Feature #118   New users added to webtrack have plaintext password
+* Fixed bug #152  CC: Field on outgoing emails is not displayed
+* Fixed bug #160  Changing a contact fails with apostophe
+* Fixed bug #161  Error if mailing lists server is down
+* Fixed bug #163  Auto email-update failure
+* Fixed bug #168  Javascript error after adding incident
+* Fixed bug #171  Clicking on a spellcheck hyperlink returns to previous page
+* Fixed bug #176  Spell check now causing serious java script errors
+* Fixed bug #194   Newly added products dont have vendor ID set
+* Added Feature #205  Support product template variable
+* Fixed bug #209   SLA Not displayed on maintenance details page
+* Fixed bug #210   DSE contract SLA on new incidents
+* Fixed bug #211   Can't view/change the software that an incident is logged under
+* Fixed bug #212   SLA Crash while updating incident
+* Added Feature #215   Display service level in maintenance section
+* Fixed bug #217  Upload file size isn't standard
+* Fixed bug #219  Able to have an incident with no title
+* Added Feature   Disabled accounts are no longer shown in user listboxes
+* Added Feature   Improved Reports Menu
+* Fixed bug   Country field not displayed in add/edit contact
+* More not documented yet
+
+Changes in v3.06 - Released 7 March 2003
+-------------------------------------------------------------------------------------
+* Product Based Support Incidents
+  New support incidents will now be associated with individual maintenance contracts which indicate exactly
+  which product is being supported.
+
+* Service Levels
+  Maintenance contracts can be assigned various service levels which define certain targets that we will agree
+  to meet, webtrack will now keep track of these targets and inform engineers when a target is due or overdue
+  to be met.
+
+* Better searching
+  The search system has been improved to provide faster results and extended to support searching incidents
+  by product.
+
+* Email error handling
+  An extra email header is now set on all outgoing emails to request that any errors that occurr during delivery
+  will be sent back to the original sender (rather than postmaster)
+
+* Integration with BugTrack
+  Incidents with an external ID prefixed with 'BUG' will link to Bugtrack.  Useful for tracking support for our
+  internal projects such as FTN95 and GPAS.  (Bugtrack is located at https://webtrack.salfordsoftware.co.uk/bugs/)
+
+* Various bugfixes
+  A lot of work has gone into making sure this release of webtrack is more stable than the last.  In particular
+  many of the problems you have reported with incoming and outgoing emails have been fixed.
+
+
+Changes in v3.05 - Released 8 August 2002
+-------------------------------------------------------------------------------------
+DONE: Added new svrconfig variable $application_shortname_svr_tag (INLucas 26Apr02)
+DONE: Dummy attachment file (svrconfig variable)
+DONE: Changed incident auto-closure time to six days and 10 hours (TGerrard 2Mar02)
+DONE: Added method of unbooking holidays that are approved (JShazell 7May02)
+DONE: Improved code that adds contacts from the salford online store (AThomas 11July02)
+FIX!: Backslashes are stripped from outgoing emails (no spellcheck) (TGerrard 1Feb02)
+FIX!: Add Incident chokes on site names with apostraphe (LDrakonaki 2May02)
+FIX!: Occasional errors when checking free support availability (INLucas 31July02)
+DONE: Added warning not to create duplicates on add_contact page (INLucas 8Aug02)
+DONE: Added ability to delete contacts and move incidents and maintenance (INLucas 8Aug02)
+DONE: Other undocumented changes
+DONE: add a search button to the menu on review_incoming_updates (LDrakonaki 24July02)
+DONE: Remove sales incidents queue? (INLucas 26Apr02)
+DONE: add_incident Integration with SDSS website. (INLucas 8Aug02)
+DONE: Upgraded raw database editing (phpMyAdmin) (INLucas 8Aug02)
+--
+DONE: Changed URL for Mailing List admin connection to Pingu (INLucas 12Feb03)
+DONE: Fixed mailing list admin for Mozilla/Netscape (INLucas 12Feb03)
+
+Changes in v3.04a - Released 10 July 2002
+-------------------------------------------------------------------------------------
+DONE: Removed mod_gzip compression (TGerrard 9July02)
+DONE: Updated proforma invoice - export to csv for mailmerge (JDoggart 5Jun02)
+--
+FIX!: To help with the stripping plus signs problem, made spellcheck default (PLees 29July02)
+
+Changes in v3.03a - Released 25 April 2002
+-------------------------------------------------------------------------------------
+DONE: Make support incidents queue show sales incidents as well - Making one queue for all users (PRLees 2Apr02)
+DONE: Group/team incidents queue.  e.g. Netware incidents queue (PRLees 17Apr02)
+DONE: The InnerWeb is now incorporated into Webtrack as mostly static content
+DONE: Make visible to customer flag more visible (PRLees 23Apr02)
+DONE: Ability to hide hidden updates from users without appropriate permission (PRLees 24Apr02)
+DONE: Ability to view maintenance contracts grouped by products
+FIX!: Opening contact details from maintenance.php page gives blank page (LDrakonaki 31Jan02)
+DONE: produce a page to check who is a DSE site and make this available on the innerweb (PRLees 5Dec01)
+DONE: innerweb page showing SDSS customers and number of incidents active (past 12 months) and closed etc. (PRLees 17Apr02)
+FIX!: Maintenance.php doesn't show expired contracts in grey (INLucas 19Apr02)
+DONE: Show group membership on edit profile page (INLucas 18Apr02)
+FIX!: Division by zero error when displaying a specific customers incidents and there is only 1 (INLucas 19Mar02)
+DONE: Field to store mobile telephone numbers for contacts (PRLees 21Feb02)
+DONE: 3rd party details in webtrack as contacts and make this information available on the innerweb. (PRLees 17Apr02)
+DONE: Email 3rd party support, ie Novell/Microsoft/CA etc when we close an incident @ our end (PRLees 1Mar02)
+DONE: Speeded up incidents queues (INLucas 25Apr02)
+DONE: Added incidents table indexes: status, priority, timeofnextaction (INLucas 25Apr02)
+DONE: Added updates table indexes: timestamp (INLucas 25Apr02)
+DONE: Added maintenance table indexes: site (INLucas 25Apr02)
+DONE: Changed the text of the forgotten ID email for the store (AThomas 25Apr02)
+FIX!: Help menu option doesn't work in innerweb (TGerrard 25Apr02)
+FIX!: Logout menu option doesn't work in innerweb (TGerrard 25Apr02)
+DONE: Made holiday calender display the name of the person that approved the holiday (INLucas 25Apr02)
+FIX!: Made styles work in subdirectories - e.g. Innerweb and Reports (INLucas 25Apr02)
+--
+FIX!: Fixed hyperlink to contact details on sdss_customers innerweb page (INLucas 26Apr02)
+DONE: Added mod_gzip compression to make access faster for people with modems etc. (TGerrard 26Apr02)
+
+
+
+
+Changes in v3.03 - Released 17 April 2002
+-------------------------------------------------------------------------------------
+FIX!: Resource mime-type small icon fixed (TPGerrard 28Feb02)
+FIX!: Users are able to create incidents without titles (MCampbell 17Dec01)
+DONE: Changed/Added Holiday Table (INLucas 27Mar02)
+DONE: Add new field to users table: holiday_entitlement (INLucas 27Mar02)
+DONE: Added new record to permissions table: 50 - approve holiday (INLucas 28Mar02)
+DONE: edit_profile now displays holiday entitlement (INLucas 3Apr02)
+FIX!: Typo in incident_details (DBracken 3Apr02)
+DONE: Holiday Chart, Edit, Display
+DONE: 'None' link on next action time on update incident page (INLucas 25Feb02)
+FIX!: Edit incident does not remember previous last action time (TGerrard 10Jan02)
+FIX!: DSE Email template has incorrect macro replacement (PRLees 10Jan02)
+FIX!: Country selection box does not handle 'UK' as well as 'United Kingdom' (INLucas 10Dec01)
+FIX!: Edit contact menu option after Adding a new contact fails due to no ID.  (INLucas)
+FIX!: Add Incident will search for firstname or lastname but not both at once (MCampbell)
+FIX!: Search will search for firstname or lastname but not both at once (MCampbell)
+---
+FIX!: Fixed a bug which caused some fields not to appear in site_details (AThomas 18Apr02)
+DONE: Improved mailhandler, external engineers details are now filled in automatically (TPGerrard 22Apr02)
+FIX!: Incidents marked for closure will now actually be auto-closed as promised (TPGerrard 23Apr02)
+FIX!: Fixed a problem with holiday requests where holidays were requested for other users (INLucas 24Apr02)
+FIX!: Made it possible for an Administrator to set holidays for another user (JShazell 24Apr02)
+
+
+Changes in v3.02 - Released 21 February 2002
+-------------------------------------------------------------------------------------
+FIX!: Maximum upload/attachment filesize is now whatever is configured in php.ini
+DONE: Report of all Microsoft activity for given month (TGerrard/TBristow 8Jan02)
+DONE: Check add_maintenance expiry dates after changing month date function (INLucas 14Jan02)
+FIX!: Manually assigning an incoming update without an attachment causes file rename error (INLucas 5Dec01)
+FIX!: confirmation_page() function reverts to default style (TGerrard 13Dec01)
+FIX!: Colors on 'add site' form are wrong
+DONE: Added code to support styles that use frames (TGerrard 16Jan02)
+FIX!: Search incident page now prompts for login when not logged in (TGerrard 16Jan02)
+FIX!: Edit sales incident fails if surname has a single quote char (INLucas 10Dec01)
+DONE: A warning is now given when trying to add an incident without a title (MCampbell 12Feb02)
+FIX!: Emails that begin with text that looks like headers have that text as headers (PRLees 5Dec01)
+FIX!: Removed spurious characters from edit_maintenance page (INLucas 12Feb02)
+DONE: Moved priority field to bottom of add_incident and made default 'Low' (MCampbell 21Feb02)
+---
+FIX!: After browsing for a maintenance contract admin contact opens in same window (JEwbank 21Feb02)
+FIX!: Yellow and Blue style is broken (INLucas 21Feb02)
+FIX!: No cell borders on incident page (CPritchard 21Feb02)
+FIX!: Improved selection algorithm using SLA for 'Action Needed' queue (INLucas 21Feb02)
+DONE: contact_support page showing incidents logged for a particular contact (INLucas 21Feb02)
+DONE: Ability to view all support incidents and stats for individual site or contact (INLucas 21Feb02)
+FIX!: Incident Priority summary page now shows regular contact timing (INLucas 22Feb02)
+FIX!: Edit incident redundent fields removed, use Update instead (TPGerrard 22Feb02)
+BUG!: Incoming auto-updates do not clear next-action time (PRLees 25Feb02)
+BUG!: Moving from inbox doesn't reset next action time (INLucas 25Feb02)
+FIX!: Contact Support page links to incident details were wrong (JBlake 28Feb02)
+FIX!: Admin Reset password fails when password is the same (INLucas 28Feb02)
+FIX!: Search incident for 'gary scobie' fails but searching for 'scobie' succeeds (MCampbell 4Mar02)
+FIX!: Changed wording on move incident page for clarity (MCampbell 7Mar02)
+DONE: Improved incident_search to make search sites possible (MCampbell 8Mar02)
+FIX!: Fixed a bug with generating webtrack ID's from new webstore online contacts (PHarrison 10Apr02)
+
+Changes in v3.01 - Released 8th January 2002
+-------------------------------------------------------------------------------------
+DONE: Message after spellcheck to indicate when there are no spelling errors (INLucas 5Dec01)
+DONE: Plain header tries to get 'Style10.css'
+FIX!: Tidied up assigning a maintenance contract to a support contact
+DONE: Ability to search notes
+DONE: Add link for user to edit his own profile from his entry in the user listing
+FIX!: Fixed spellcheck_email.php, no longer removes all slashes (TGerrard 10Dec01)
+FIX!: Marking incidents for closure via close incident does not wait 7 days (INLucas 5Dec01)
+DONE: Advanced Search now displays date incident was opened (TBristow 11Dec01)
+FIX!: Some incidents marked with a next action time appear in Action queue prematurely (PRLees 12Dec01)
+DONE: Show incoming email headers TO: and CC: (PRLees 7Dec01)
+DONE: FTP connections now use Passive mode (ftp_pasv)
+FIX!: Incoming updates from Microsoft with two ID fields fail (MCampbell 6Dec01)
+FIX!: Spell checking an email with a double-quote truncates the email (TGerrard 11Dec01)
+DONE: Show total number of open incident on incident monitor page (INLucas 10Dec01)
+FIX!: Text within angle brackets is stripped from outgoing emails (ASmith 15Dec01)
+FIX!: Incoming emails can reopen closed incidents (INLucas 11Dec01)
+DONE: Log failed logins to a text file (TGerrard 7Jan02)
+DONE: DB Field for Configurable Header HTML (TGerrard 7Jan02)
+---
+FIX!: Quotable printed decoding based on header (TGerrard 8Jan02)
+FIX!: Outgoing emails that haven't been spellchecked have extra '\' characters (INLucas 9Jan02)
+FIX!: Javascript error on Add Incident page (PRLees 9Jan02)
+FIX!: Made view logfiles features display a text header (TPGerrard 28Jan02)
+DONE: Added ability to view MailhandlerLogfile from admin screen (TPGerrard 28Jan02)
+FIX!: Fixed a problem with Advanced search on product field (HDE 6Feb02)
+
+
+Changed after v3.00 General Release - 5th December 2001
+-------------------------------------------------------------------------------------
+FIX!: Title now displays correctly on close and reopen incident pages
+FIX!: BCC Field in emails doesn't seem to work (PRLees 5Dec01)
+FIX!: Edit Incident quits with error if you edit the time to next action (JBlake 5Dec01)
+FIX!: Updates are marked as having an attachment even when they dont (INLucas 5Dec01)
+FIX!: strip slashes from global signature (INLucas 5Dec01)
+FIX!: Close sales incident hangs with Netscape 6 (SNunn 5Dec01)
+FIX!: Close sales incident page has PONumber field which causes error when filled (SNunn 5Dec01)
+FIX!: Edit incident changes the product erroniously (INLucas 5Dec01)
+FIX!: After closing incident a blank page is displayed [in send_closing_email.php] (INLucas 5Dec01)
+FIX!: Search renewals erronious link to support contacts has been removed
+DONE: Added forenames to search renewals (JEwbank 5Dec01)
+TODO: close an incident - two screens so that we can cut and copy between the two. (PRLees 5Dec01)
+FIX!: Job title can now be updated and is displayed on contact details page (MCampbell 6Dec01)
+DONE: Change sales incident colours (JBlake 5Dec01)
+FIX!: Mailing list admin links don't appear for some lists (PRLees 7Dec01)
+FIX!: Update incident time to next action field javascript selects wrong radio button (TBristow 6Dec01)
+DONE: Need to migrate rest of email templates (DBracken 6Dec01)
+FIX!: Change password in edit_profile.php doesn't work (TGerrard 7Dec01)
+DONE: Administrators with 'edit permissions' permission can now reset users passwords
+FIX!: Incident attachments sometimes have an incorrect url with the ID number twice (MAlderson 6Dec01)
+FIX!: Add incident link from search contact page is broken (TGerrard 7Dec01)
+FIX!: Add contact link does not appear when adding a new incident and no match is found (MCampbell 6Dec01)
+FIX!: Add incident won't find full name, it finds first OR surname but not both (MCampbell 5Dec01)
+
+
+Changed after v3.00 - 7th November 2001
+-------------------------------------------------------------------------------------
+FIX!: Fixed a problem with the incident display where updates with special chars caused incident title corruption (9Nov01)
+DONE: Ability to check the spelling of outgoing emails
+DONE: Set cookie security (Duration)
+DONE: FTP site file management
+DONE: Ability to publish files to FTP site for a specified period
+DONE: Date Macro for email templates
+DONE: Contact integration with Mailing lists
+FIX!: Auto-update incidents can not handle email addresses with single quote character
+FIX!: Closed Incidents Queue showed age of incidents incorrectly.
+DONE: Auto-purge for expired FTP published files
+FIX!: Country and Postcode now show in contact details view
+FIX!: Auto updates now checks that ID field is set, not body field to cater for messages with attachment and no body
+DONE: User accounts can now be hidden by setting the user status to 0
+
+Changed after v3.00 Beta 3 - 19th October 2001
+-------------------------------------------------------------------------------------
+FIX!: when you click on view supported product it says contact Ivan Lucas there is a bug (JEwbank)
+FIX!: where you can click view supported products. I don't think you need that because you can view it from the support contact anyway (JEwbank)
+FIX!: Updates show reassigns as reassigned to webtrack - Rewrite and Run proc that sets Reassigned (INLucas)
+FIX!: Reassigning and saying customer does not show up in the log (don't know whether it actually does)
+DONE: Process incoming emails and insert incident updates where appropriate
+DONE: Global email signature for marketting taglines
+
+-------------------------------------------------------------------------------------
+Changed after v3.00 Beta 2 October 2001
+-------------------------------------------------------------------------------------
+FIX!: Add Close Window link to Incident Monitor screen.
+DONE: Browse customers menu doesn't have browse sites option
+FIX!: View supported contacts from browse contacts gives sql error
+FIX!: "Inform sales of free incident" template does not seem right
+FIX!: Two 'H's on browse screens alpha index (JDoggart)
+DONE: Add site option while adding a contact
+FIX!: Add Contact - name, surname and firstname is unclear
+FIX!: Cannot add contact from Add Incidents screen, link doesn't work
+FIX!: Add Incident - Find Contact finds everybody if search field is left blank
+FIX!: Edit incident sometimes gets next action time wrong.
+DONE: Report for email addresses of all Novell admin contacts (JDoggart)
+DONE: Checkbox for 'License Receieved' (JDoggart)
+FIX!: Collapse All link in incident details opens a new window in certain browsers
+FIX!: Sending attachments that are too large does not cause a warning but does send the email without the attachment.
+FIX!: When adding new contact id gets unrelated maintenance.  (confirmed - serious problem with maintenance contracts db)
+FIX!: Support Contacts link displays no contacts (JDoggart)
+DONE: Check results from import of Current Webtrack data (INLucas)
+FIX!: Expand all does not have incident_details (whilst all updates does)
+DONE: Remove placeholders from menus
+FIX!: Add maintenance and edit maintenance have wrong menu permissions (could be more options with this prob too)
+
+-------------------------------------------------------------------------------------
+Changed after v3.00 Beta 1 September 2001
+-------------------------------------------------------------------------------------
+FIX!: Unable to create new users.
+FIX!: Unable to create incident from search results. Display blank page.
+DONE: Expired maintenance search
+DONE: Add new contact when creating an incident.
+FIX!: Browsing Sites and Contacts and using this interface to create incident displays nothing.
+FIX!: Viewing support incidents from "Manage Users" pages returns error. (Mon, 3 Sep 2001 16:45:41 +0100)
+DONE: Admin can assign incident even if user is 'not accepting'
+DONE: Decrement free incidents from free incident counter
+FIX!: Edit contact link on add incident
+DONE: User ICQ/AIM Addresses
+FIX!: Adding an incident gives an error - "User ID not set: user_novellid()" (Wed,  5 Sep 2001 16:29:35 +0100)
+FIX!: Can't send an email when opening incident
+FIX!: When displaying admin contact sometime displays old type windows and fails to display details. (for example when searching)
+FIX!: View Supported products gives error when clicked from the browse contacts page
+DONE: Email sales & marketing when new 'Free' incident is created
+-------------------------------------------------------------------------------------
+ 31.07.00
+ - Added webtrack_connect_db function
+ - Added authenticate function
+ - Added priority_name function
+ - Added product_drop_down function
+ - Added user_drop_down function
+ - Added incidentstatus_drop_down function
+ - Added incidenttype_drop_down function
+ - Added priority_drop_down function
+ - Added user_realname function
+ - Added user_id function
+
+ 1.8.00
+ - Added incidenttype_name function
+ - Added incidentstatus_name function
+ - Added product_name function
+ - Added emailtype_drop_down function
+ - Added incident_status function
+ - Added emailtype_to function
+ - Added emailtype_cc function
+ - Added emailtype_subject function
+ - Added emailtype_body function
+ - Added emailtype_replace_specials function
+ - Added incident_email function
+
+ 2.8.00
+ - Added user_signature function
+ - Added user_status function
+ - Added accepting_drop_down function
+ - Added user_accepting function
+ - Added user_message function
+ - Added user_jobtitle function
+ - Added user_email function
+ - Added user_phone function
+ - Added user_fax function
+ - Added user_password function
+ - Added userstatus_name
+ - Added incident_owner
+
+ 4.8.00
+ - Added contact_drop_down function
+ - Modified incident_contact function (now returns integer)
+ - Added contact_realname function
+ - Added incidentstatus_drop_down_all function
+
+ 7.8.00
+ - Changed incident_contact function (now returns string)
+ - Added contact_site function
+ - Added incident_externalid function
+ - Added contact_email function
+ - Changed incident_contact function (now returns integer)
+
+ 8.8.00
+ - Celebrated 20th birthday :-)
+ - Added user_refresh function
+ - Added format_seconds function
+
+ 9.8.00
+ - Added incident_productinfo_html function
+ - Added user_update_order function
+ - Added contact_phone function
+ - Added contact_fax function
+ - Added confirmation_page function
+
+ 10.8.00
+ - Added message_subject function
+
+ 11.8.00
+ - Added message_recipient function
+ - Changed name of user_refresh to user_incident_refresh
+ - Added user_message_refresh function
+
+ 14.8.00
+ - Added num_incidents function
+
+ 16.8.00
+ - Added contactproducts_drop_down function
+ - Added contact_productsupport function
+ - Added closingstatus_drop_down function
+ - Added closingstatus_name function
+
+ 17.8.00
+ - Added emailtype_bcc function
+ - Added supported_product_drop_down function
+
+ 18.8.00
+ - Added user_outstandingincidents function
+
+ 21.8.00
+ - Added incident_type function
+ - Added calculate_time_of_next_action function
+
+ 22.8.00
+ - Added contact_productsupport_expiryday function
+ - Added contact_productsupport_expirymonth function
+ - Added contact_productsupport_expiryyear function

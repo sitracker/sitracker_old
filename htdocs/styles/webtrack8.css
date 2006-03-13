@@ -1,0 +1,17 @@
+/* Webtrack Neoteric Style by Ivan Lucas */
+/* This style WAS purple and black, but is no longer */
+
+h1 { font-size: 16pt; font-weight: bold; color: #FFF; background-color: #205D96; margin: 0px; padding: 3px 0px 3px 0px; }
+#apptitle { background-image: url('../images/salfordwave1.png'); background-position: top-left; background-repeat: no-repeat; height: 50px;}
+
+th { -moz-border-radius: 7px; }
+th:hover { background: #E9E9E9; }
+
+tr.shade1:hover { background-color: #F2F2F2; }
+tr.shade2:hover { background-color: #F2F2F2; }
+tr.critical:hover { background-color: #FFAAAB; }
+tr.urgent:hover { background-color: #FFAAAB; }
+tr.expired:hover { background-color: #F2F2F2; }
+tr.notice:hover { background-color: #F2F2F2; }
+#userbar,#footerbar { background-color: transparent; }
+#footerbar select { font-size: 80%; }

@@ -1,0 +1,364 @@
+<?php
+// kb_edit_article.php - Form to edit kb article
+//
+// SiT (Support Incident Tracker) - Support call tracking system
+// Copyright (C) 2000-2006 Salford Software Ltd.
+//
+// This software may be used and distributed according to the terms
+// of the GNU General Public License, incorporated herein by reference.
+//
+
+
+// Authors: Ivan Lucas, Tom Gerrard
+$permission=54; // view KB
+
+// uses superglobals.  see http://www.php.net/manual/en/reserved.variables.php#reserved.variables.post
+
+require('db_connect.inc.php');
+require('functions.inc.php');
+// This page requires authentication
+require('auth.inc.php');
+
+// User has access
+if (user_permission($sit[2],$permission))
+{
+    // External variables
+    $process = cleanvar($_REQUEST['process']);
+    $id = cleanvar($_REQUEST['id']);
+
+    $sections[]='Summary';
+    $sections[]='Symptoms';
+    $sections[]='Cause';
+    $sections[]='Question';
+    $sections[]='Answer';
+    $sections[]='Solution';
+    $sections[]='Workaround';
+    $sections[]='Status';
+    $sections[]='Additional';
+    $sections[]='References';
+
+    if (empty($_POST['process']))
+    {
+        if (empty($id))
+        {
+            header("Location: browse_kb.php");
+            exit;
+        }
+        $docid = $id;
+        include('htmlheader.inc.php');
+
+        echo "<table summary='Knowledge Base Article' width='98%' align='center' border='0'><tr><td>";
+
+        $sql = "SELECT * FROM kbarticles WHERE docid='{$docid}' LIMIT 1";
+        $result = mysql_query($sql);
+        if (mysql_error()) trigger_error("MySQL Query Error ".mysql_error(), E_USER_ERROR);
+        $kbarticle = mysql_fetch_object($result);
+
+        ?>
+        <script type="text/javascript">
+        <!--
+        function deleteOption(object,index) {
+            object.options[index] = null;
+        }
+
+
+        function addOption(object,text,value) {
+            var defaultSelected = true;
+            var selected = true;
+            var optionName = new Option(text, value, defaultSelected, selected)
+            object.options[object.length] = optionName;
+        }
+
+        function copySelected(fromObject,toObject) {
+            for (var i=0, l=fromObject.options.length;i<l;i++) {
+                if (fromObject.options[i].selected)
+                    addOption(toObject,fromObject.options[i].text,fromObject.options[i].value);
+            }
+            for (var i=fromObject.options.length-1;i>-1;i--) {
+                if (fromObject.options[i].selected)
+                    deleteOption(fromObject,i);
+            }
+        }
+
+        function copyAll(fromObject,toObject) {
+            for (var i=0, l=fromObject.options.length;i<l;i++) {
+                addOption(toObject,fromObject.options[i].text,fromObject.options[i].value);
+            }
+            for (var i=fromObject.options.length-1;i>-1;i--) {
+                deleteOption(fromObject,i);
+            }
+        }
+
+        function populateHidden(fromObject,toObject) {
+            var output = '';
+            for (var i=0, l=fromObject.options.length;i<l;i++) {
+                    output += escape(fromObject.name) + '=' + escape(fromObject.options[i].value) + '&';
+            }
+            // alert(output);
+            toObject.value = output;
+        }
+
+
+        var MIN_ROWS = 3 ;
+        var MAX_ROWS = 10 ;
+        var MIN_COLS = 40 ;
+        var MAX_COLS = 80 ;
+
+        function changeTextAreaLength ( e ) {
+
+            var txtLength = e.value.length;
+            var numRows = 0 ;
+            var arrNewLines = e.value.split("\n");
+
+            for(var i=0; i<=arrNewLines.length-1; i++){
+                numRows++;
+                if(arrNewLines[i].length > MAX_COLS-5) {
+                    numRows += Math.floor(arrNewLines[i].length/MAX_COLS)
+                }
+            }
+
+            if(txtLength == 0){
+                e.cols = MIN_COLS ;
+                e.rows = MIN_ROWS ;
+            } else {
+
+                if(numRows <= 1) {
+                    e.cols = (txtLength % MAX_COLS) + 1 >= MIN_COLS ? ((txtLength % MAX_COLS) + 1) : MIN_COLS ;
+                }else{
+                    e.cols = MAX_COLS ;
+                    e.rows = numRows > MAX_ROWS ? MAX_ROWS : numRows ;
+                }
+            }
+        }
+
+        function resetTextAreaLength ( e ) {
+            e.cols = MIN_COLS ;
+            e.rows = MIN_ROWS ;
+        }
+
+        //--></script>
+        <?php
+        if (empty($_REQUEST['user']) || $_REQUEST['user']=='current') $user=$sit[2];
+        else $user=$_REQUEST['user'];
+
+        $softsql = "SELECT * FROM kbsoftware, software WHERE kbsoftware.softwareid=software.id AND kbsoftware.docid='{$docid}' ORDER BY name";
+        $softresult = mysql_query($softsql);
+        if (mysql_error()) trigger_error("MySQL Error: ".mysql_error(),E_USER_ERROR);
+        if (mysql_num_rows($result) >= 1)
+        {
+            while ($software = mysql_fetch_object($softresult))
+            {
+                $expertise[]=$software->id;
+            }
+        }
+        echo "<p align='center'>Select the software that applies to this article</p>";
+        echo "<form name='kbform' action='{$_SERVER['PHP_SELF']}' method='post' onsubmit=\"populateHidden(document.kbform.elements['expertise[]'],document.kbform.choices)\">";
+        echo "<table>";
+        echo "<tr><th>Does NOT apply</th><th>&nbsp;</th><th>Applies</th></tr>";
+        echo "<tr><td align='center' width='300' class='shade1'>";
+        $listsql = "SELECT * FROM software ORDER BY name";
+        $listresult = mysql_query($listsql);
+        if (mysql_error()) trigger_error("MySQL Error: ".mysql_error(),E_USER_ERROR);
+        if (mysql_num_rows($listresult) >= 1 )
+        {
+            echo "<select name='software' multiple='multiple' size='7'>";
+            while ($software = mysql_fetch_object($listresult))
+            {
+                if (is_array($expertise)) { if (!in_array($software->id,$expertise)) echo "<option value='{$software->id}'>$software->name</option>\n";  }
+                else  echo "<option value='{$software->id}'>{$software->name}</option>\n";
+            }
+            echo "</select>";
+        }
+        else echo "<p class='error'>No software found</p>";
+        echo "</td>";
+        echo "<td class='shade1'>";
+        echo "<input type='button' value='&gt;' onclick=\"copySelected(this.form.software,this.form.elements['expertise[]'])\" /><br />";
+        echo "<input type='button' value='&lt;' onclick=\"copySelected(this.form.elements['expertise[]'],this.form.software)\" /><br />";
+        echo "<input type='button' value='&gt;&gt;' onclick=\"copyAll(this.form.software,this.form.elements['expertise[]'])\" /><br />";
+        echo "<input type='button' value='&lt;&lt;' onclick=\"copyAll(this.form.elements['expertise[]'],this.form.software)\" /><br />";
+        echo "</td>";
+        echo "<td width='300' class='shade2'>";
+        $softsql = "SELECT * FROM kbsoftware, software WHERE kbsoftware.softwareid=software.id AND docid='{$docid}' ORDER BY name";
+        $softresult = mysql_query($softsql);
+        if (mysql_error()) trigger_error("MySQL Error: ".mysql_error(),E_USER_ERROR);
+        echo "<select name='expertise[]' multiple='multiple' size='7'>";
+        if (mysql_num_rows($softresult) < 1) echo "<option value=''></option>\n";
+        while ($software = mysql_fetch_object($softresult))
+        {
+            echo "<option value='{$software->id}' selected='selected'>$software->name</option>\n";
+        }
+        // echo "<option value='0'>---</option>\n";
+        echo "</select>";
+        echo "<input type='hidden' name='userid' value='{$user}' />";
+        echo "</td></tr>\n";
+        ?>
+        </table>
+        <br />
+        <input type="hidden" name="choices" />
+        <!-- <input name="submit" type="submit" value="Make Changes" /> -->
+
+        <!-- </form> -->
+        <?php
+
+        // Lookup what software this applies to
+        /*
+        $ssql = "SELECT * FROM kbsoftware, software WHERE kbsoftware.softwareid=software.id AND kbsoftware.docid='{$docid}' ORDER BY software.name";
+        $sresult = mysql_query($ssql);
+        if (mysql_error()) trigger_error("MySQL Query Error ".mysql_error(), E_USER_ERROR);
+        if (mysql_num_rows($sresult) >= 1)
+        {
+            echo "<p>The information in this article applies to:</p>\n";
+            echo "<ul>\n";
+            while ($kbsoftware = mysql_fetch_object($sresult))
+            {
+                echo "<li>{$kbsoftware->name}</li>\n";
+            }
+            echo "</ul>\n";
+        }
+        else
+        {
+            echo "<p>This article is not linked to any software</p>";
+        }
+        */
+
+        // ---
+        // echo "<form name='kbform' action='{$_SERVER['PHP_SELF']}' method='post' >";
+        echo "<div align='center'>";
+
+        echo "<p align='center'>Title:<br /><input type='text' name='title' size='60' value='".remove_slashes($kbarticle->title)."' /></p>";
+        echo "<p align='center'>Keywords:<br /><input type='text' name='keywords' value='{$kbarticle->keywords}' size='60' /></p>";
+
+        echo "\n<script type=\"text/javascript\">\n";
+        echo "<!--\n";
+        echo "function change_header(element,headertext)\n";
+        echo "{\n";
+        echo "  var headerelement = 'header' + element; \n";
+        // echo "alert (headerelement);";
+        echo "  var headersize = document.getElementById(headerelement).options[document.getElementById(headerelement).selectedIndex].value; \n";
+        // echo "alert (headersize);";
+        // echo "  var headersize = \"h3\"; \n";
+        echo "  var content=\"<\" + headersize + \" style='margin:0px; display:inline'>\" + headertext + \"</\" + headersize + \">\"; \n";
+
+        echo "  document.getElementById(element).innerHTML=content;  \n";
+        echo "}\n";
+        echo "//-->\n";
+        echo "</script>\n";
+
+        echo "<table summary='' width='95%'>";
+        foreach ($sections AS $section)
+        {
+            // summary
+            $csql = "SELECT * FROM kbcontent WHERE docid='{$docid}' AND header='$section' ";
+            $cresult = mysql_query($csql);
+            if (mysql_error()) trigger_error("MySQL Query Error ".mysql_error(), E_USER_ERROR);
+            $num_rows = mysql_num_rows($cresult);
+            if ($num_rows >= 1)
+            {
+                while ($kbcontent = mysql_fetch_object($cresult))
+                {
+                    $element=$kbcontent->id;
+                    echo "<tr><th class='shade1' valign='top'>";
+                    echo "$kbcontent->header:</th>";
+                    echo "<td class='shade2' width='200'>";
+                    echo "<textarea name='content$element' rows='10' title='Full Details' cols='100'>";
+                    echo remove_slashes($kbcontent->content);
+                    echo "</textarea>\n<br /><br />\n";
+                    $author[]=$kbcontent->ownerid;
+                    $id_array[]= $kbcontent->id;
+                    echo "</td><td class='shade1'>";
+                    echo distribution_listbox("distribution$element",$kbcontent->distribution);
+                    echo "<br /><input type='checkbox' name='delete{$element}' value='yes' />Delete</td></tr>";
+                }
+            }
+            else
+            {
+                echo "<tr><th valign='top'>";
+                echo "$section:";
+                echo "</th><td class='shade2' width='200'>";
+                echo "<textarea name='content{$section}' rows='2' title='Full Details' cols='100' onfocus=\"myInterval = window.setInterval('changeTextAreaLength(document.kbform.content{$section})', 300);\" onblur=\"window.clearInterval(myInterval); resetTextAreaLength(document.kbform.content{$section});\">";
+                echo "</textarea>\n<br /><br />\n";
+                echo "</td><td class='shade1'><input type='checkbox' name='add$section' value='yes' />Add</td></tr>\n";
+            }
+    }
+    reset ($sections);
+    if (is_array($id_array)) $id_list=implode(",",$id_array);
+    else $id_array='';
+    echo "<tr><td class='shade1' colspan='3'>";
+    echo "<input type='hidden' name='articleid' value='{$docid}' />";
+    echo "<input type='hidden' name='idlist' value='$id_list' />";
+    echo "<input type='hidden' name='process' value='true' />";
+    echo "<input type='submit' value='Save Changes' />";
+    echo "</form>";
+    echo "</td></tr></table>";
+
+    echo "</td></tr></table>";
+    include('htmlfooter.inc.php');
+    }
+    else
+    {
+        // Update the database
+        $allowable_html_tags="<em><strong><cite><dfn><code><samp><kbd><var><abbr><acronym><q><blockquote><sub><sup><p><br /><ins><del><ul><li><ol><pre>";
+
+        $idlist=explode(',',$idlist);
+        foreach ($idlist AS $id)
+        {
+            $cfieldname = "content$id";
+            $dfieldname = "delete$id";
+            $title = cleanvar($_REQUEST['title']);
+            $keywords = cleanvar($_REQUEST['keywords']);
+            $articleid = cleanvar($_REQUEST['articleid']);
+            $sql = "UPDATE kbarticles SET title='$title', keywords='$keywords' WHERE docid='{$articleid}'";
+            mysql_query($sql);
+            if (mysql_error()) trigger_error("MySQL Query Error ".mysql_error(), E_USER_ERROR);
+
+            // I know we shouldn't need to stripslashes here, but for some reason the raw posted input
+            // is escaped.  why?  I just don't know.  Oh well.  INL 17Jun03, Def needed INL 12Nov03
+            $content = mysql_escape_string(stripslashes($_REQUEST[$cfieldname]));
+            $content = strip_tags($content,$allowable_html_tags);
+            $hfieldname = "header$id";
+            $headerstyle = mysql_escape_string($_REQUEST[$hfieldname]);
+            $distfield = "distribution$id";
+            $distribution = mysql_escape_string($_REQUEST[$distfield]);
+            if (empty($headerstyle)) $headerstyle='h3';
+            if ($_REQUEST[$dfieldname]!='yes') {
+
+                $sql = "UPDATE kbcontent SET content='$content', headerstyle='h1', distribution='$distribution' WHERE id='$id' AND docid='{$articleid}' ";
+            }
+            else
+            $sql = "DELETE FROM kbcontent WHERE id='$id' AND docid='{$_REQUEST['articleid']}' ";
+            mysql_query($sql);
+            if (mysql_error()) trigger_error("MySQL Query Error ".mysql_error(), E_USER_ERROR);
+        }
+        // Add new content if any
+
+        foreach ($sections AS $section)
+        {
+            if ($_REQUEST["add$section"]=='yes')
+            {
+                $content = mysql_escape_string(stripslashes($_REQUEST["content$section"]));
+                $content = strip_tags($content,$allowable_html_tags);
+                $sql = "INSERT into kbcontent (content, header, headerstyle, distribution, docid) VALUES ('$content','$section','h1','private','{$articleid}') ";
+                mysql_query($sql);
+                if (mysql_error()) trigger_error("MySQL Query Error ".mysql_error(), E_USER_ERROR);
+            }
+        }
+
+        // Remove associated software ready for re-assocation
+        $sql = "DELETE FROM kbsoftware WHERE docid='{$articleid}'";
+        mysql_query($sql);
+
+        if (is_array($expertise))
+        {
+            $expertise=array_unique($expertise);
+            foreach ($expertise AS $value)
+            {
+                $sql = "INSERT INTO kbsoftware (docid, softwareid) VALUES ('{$articleid}', '$value')";
+                mysql_query($sql);
+                if (mysql_error()) trigger_error("MySQL Query Error ".mysql_error(), E_USER_ERROR);
+            }
+        }
+        header("Location: kb_view_article.php?id={$articleid}");
+        exit;
+    }
+}
+?>

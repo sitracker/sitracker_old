@@ -1,0 +1,76 @@
+/* Webtrack Cool Blue Style: Cool Blue */
+/* by Paul Harrison, paul.harrison@salfordsoftware.co.uk - August 2001 */
+/* @import url("/styles/webtrack.css"); */
+
+#apptitle { color: #FFF; background-image: url(/styles/images/bg.gif); }
+#menu { background-color: #1063BE; background-image: url(/styles/images/bg1.gif); }
+#menu ul, #menu ul li ul { background-color: #1063BE; }
+#menu a { color: white; }
+
+body        { background-color: #FFFFFF; color: #000000; font-family: Tahoma, Helvetica, sans serif; }
+p           { font-size: 8pt; color: #000000; }
+table       { font-size: 8pt; color: #000000; }
+td        { font-size: 8pt; color: #000000; }
+a       { font-family: Tahoma, Helvetica, sans serif; font-size: 8pt; color: #3366CC; font-weight: bold; text-decoration: none; }
+a:hover     { font-family: Tahoma, Helvetica, sans serif; font-size: 8pt; color: #3366CC; font-weight: bold; text-decoration: underline; }
+a:active    { font-family: Tahoma, Helvetica, sans serif; font-size: 8pt; color: #3366CC; font-weight: bold; text-decoration: underline; }
+center      { font-family: Tahoma, Helvetica, sans serif; font-size: 8pt; color: #000000; }
+
+/* .error is used for error messages */
+.error      { font-family: Tahoma, Helvetica, sans serif; font-size: 8pt; color: #FF0000; font-weight: bold; text-align: center; }
+.red        { font-family: Tahoma, Helvetica, sans serif; font-size: 8pt; color: #FF0000; }
+
+/* Menu Row at Top of Pages */
+.barlink    { font-family: Tahoma, Helvetica, sans serif; font-size: 8pt; color: #FFFFFF; font-weight: bold; text-decoration: none; }
+.barlink:hover  { font-family: Tahoma, Helvetica, sans serif; font-size: 8pt; color: #CCCCCC; font-weight: bold; text-decoration: underline; }
+.barlink:active { font-family: Tahoma, Helvetica, sans serif; font-size: 8pt; color: #FFFFFF; font-weight: bold; text-decoration: underline; }
+.navbarmenu { background-color: #000000; font-family: Tahoma, Helvetica, sans serif; font-size: 8pt; font-weight: bold; color: #FFFFFF; height:20px; }
+
+
+/* Shading for tables*/
+.mainshade  { background-color: #FFFFFF; bordercolorlight: #CCCCFF; bordercolordark: #333366; }
+.shade1     { background-color: #DCEBFC; }
+.shade2     { background-color: #8DBFF5; font-family: Tahoma, Helvetica, sans serif; font-size: 8pt; color: #141B22; text-decoration: none;  }
+.urgent     { background-color: #E8B7DD; }
+.critical   { background-color: #f08080; }
+.expired    { background-color: #DDDDDF; }
+.idle       { background-color: #CCffCC; } /* #90ee90; */
+
+
+
+/* SpellCheck */
+a.spellLink {
+    color:              Red;
+    text-decoration:    none;
+    border-bottom:      1px dashed Red;
+}
+
+a.spellLink:hover {
+    color:              Red;
+    text-decoration:    none;
+    border-bottom:      1px dashed Red;
+}
+
+.spell-tooltip {
+    position:   absolute;
+    width:      250px;
+    border:     1px Solid WindowFrame;
+    background: Infobackground;
+    color:      InfoText;
+    font:       StatusBar;
+    font:       Status-Bar;
+    padding:    3px;
+    filter:     progid:DXImageTransform.Microsoft.Shadow(color="#777777", Direction=135, Strength=3);
+}
+
+
+.spell-tooltip a,
+.spell-tooltip a:hover {
+    color:      blue !important;
+    background: none;
+}
+
+.tablelist TD {border-left: 1px solid #FFFFFF;border-top: 1px solid #FFFFFF;}
+table.tablelist {border: 1px solid #FFFFFF;}
+.tablelist TR {border: 1px solid #FFFFFF; border-right: 1px solid #FFFFFF ! important;}
+.tablelist TH {border-left: 1px solid #FFFFFF; border-top: 1px solid #FFFFFF;}

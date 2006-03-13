@@ -1,0 +1,240 @@
+<?php
+// cust_export.php
+//
+// SiT (Support Incident Tracker) - Support call tracking system
+// Copyright (C) 2000-2006 Salford Software Ltd.
+//
+// This software may be used and distributed according to the terms
+// of the GNU General Public License, incorporated herein by reference.
+//
+
+// Author: Ivan Lucas
+
+// This Page Is Valid XHTML 1.0 Transitional!  4Feb06
+
+$permission=37; // Run Reports
+$title='Customer Export Report';
+require('db_connect.inc.php');
+require('functions.inc.php');
+
+// This page requires authentication
+require('auth.inc.php');
+
+
+// Temporary: put in place so that this 3.07 feature can be used under 3.06
+if (!function_exists('strip_comma'))
+{
+    function strip_comma($string)
+    {
+        // also strips Tabs, CR's and LF's
+        $string=str_replace(",", " ", $string);
+        $string=str_replace("\r", " ", $string);
+        $string=str_replace("\n", " ", $string);
+        $string=str_replace("\t", " ", $string);
+        return $string;
+    }
+}
+
+// Valid user, check permissions
+if (!user_permission($sit[2],$permission))
+{
+    header("Location: /noaccess.php?id=$permission");
+    exit;
+}
+if (empty($_REQUEST['mode']))
+{
+    include('htmlheader.inc.php');
+    echo "<h2>$title</h2>";
+    echo "<form action='{$_SERVER['PHP_SELF']}' method='post'>";
+    echo "<table>";
+    echo "<tr><th colspan='2' align='center' class='shade1'>Include</th></tr>";
+    // echo "<th align='center' width='300' class='shade1'>Exclude</th>";
+    echo "<tr><td align='center' colspan='2' class='shade1'>";
+    $sql = "SELECT * FROM sites ORDER BY name";
+    $result = mysql_query($sql);
+    if (mysql_error()) trigger_error("MySQL Query Error ".mysql_error(), E_USER_ERROR);
+    echo "<select name='inc[]' multiple='multiple' size='20'>";
+    while ($site = mysql_fetch_object($result))
+    {
+        echo "<option value='{$site->id}'>$site->name</option>\n";
+    }
+    echo "</select>";
+    echo "</td>";
+    /*
+    echo "<td width='300' class='shade2'>";
+    $sql = "SELECT * FROM sites ORDER BY name";
+    $result = mysql_query($sql);
+    if (mysql_error()) trigger_error("MySQL Query Error ".mysql_error(), E_USER_ERROR);
+    echo "<select name='exc[]' multiple='multiple' size='20'>";
+    while ($site = mysql_fetch_object($result))
+    {
+        echo "<option value='{$site->id}'>$site->name</option>\n";
+    }
+    echo "</select>";
+    echo "</td>";
+    */
+    echo "</tr>\n";
+    echo "<tr><td align='right' width='200' class='shade1'><b>Output</b>:</td>";
+    echo "<td width='400' class='shade2'>";
+    echo "<select name='output'>";
+    echo "<option value='screen'>Screen</option>";
+    // echo "<option value='printer'>Printer</option>";
+    echo "<option value='csv'>Disk - Comma Seperated (CSV) file</option>";
+    echo "</select>";
+    echo "</td></tr>";
+    echo "</table>";
+    echo "<p align='center'>";
+    echo "<input type='hidden' name='table1' value='{$_POST['table1']}' />";
+    echo "<input type='hidden' name='mode' value='report' />";
+    echo "<input type='submit' value='report' />";
+    echo "</p>";
+    echo "</form>";
+    echo "<table align='center'><tr><td>";
+    echo "<h4>When outputting to a CSV file the format is as follows:</h4>";
+    echo "<strong>Field 1:</strong> Forenames<br />";
+    echo "<strong>Field 2:</strong> Surname<br />";
+    echo "<strong>Field 3:</strong> Email Address<br />";
+    echo "<strong>Field 4:</strong> Address Line 1<br />";
+    echo "<strong>Field 5:</strong> Address Line 2<br />";
+    echo "<strong>Field 6:</strong> City<br />";
+    echo "<strong>Field 7:</strong> County<br />";
+    echo "<strong>Field 8:</strong> Postcode<br />";
+    echo "<strong>Field 9:</strong> Country<br />";
+    echo "<strong>Field 10:</strong> Phone Number<br />";
+    echo "<strong>Field 11:</strong> Customers Site<br />";
+    echo "<strong>Field 12:</strong> Products <em>(Lists all the customers products regardless of selections made above)</em><br />";
+    echo "</td></tr></table>";
+    include('htmlfooter.inc.php');
+}
+elseif ($_REQUEST['mode']=='report')
+{
+    if (is_array($_POST['exc']) && is_array($_POST['exc'])) $_POST['inc']=array_values(array_diff($_POST['inc'],$_POST['exc']));  // don't include anything excluded
+    $includecount=count($_POST['inc']);
+    if ($includecount >= 1)
+    {
+        // $html .= "<strong>Include:</strong><br />";
+        $incsql .= "(";
+        for ($i = 0; $i < $includecount; $i++)
+        {
+            // $html .= "{$_POST['inc'][$i]} <br />";
+            $incsql .= "siteid={$_POST['inc'][$i]}";
+            if ($i < ($includecount-1)) $incsql .= " OR ";
+        }
+        $incsql .= ")";
+    }
+    /*
+    $excludecount=count($_POST['exc']);
+    if ($excludecount >= 1)
+    {
+    // $html .= "<strong>Exclude:</strong><br />";
+    $excsql .= "(";
+    for ($i = 0; $i < $excludecount; $i++)
+    {
+        // $html .= "{$_POST['exc'][$i]} <br />";
+        $excsql .= "siteid!={$_POST['exc'][$i]}";
+        if ($i < ($excludecount-1)) $excsql .= " OR ";
+    }
+    $excsql .= ")";
+    }
+    */
+    $sql = "SELECT *, contacts.id AS contactid, sites.name AS site, contacts.email AS cemail FROM contacts ";
+    $sql .= "LEFT JOIN sites ON contacts.siteid=sites.id ";
+
+    if (empty($incsql)==FALSE OR empty($excsql)==FALSE) $sql .= "WHERE ";
+    if (!empty($incsql)) $sql .= "$incsql";
+    if (empty($incsql)==FALSE AND empty($excsql)==FALSE) $sql .= " AND ";
+    if (!empty($excsql)) $sql .= "$excsql";
+
+    $sql .= " ORDER BY contacts.email ASC ";
+
+    $result = mysql_query($sql);
+    if (mysql_error()) trigger_error("MySQL Query Error ".mysql_error(), E_USER_ERROR);
+    $numrows = mysql_num_rows($result);
+
+    $html .= "<p align='center'>This report is a list of ($numrows) contact details for all sites that you selected</p>";
+    $html .= "<table width='99%' align='center'>";
+    $html .= "<tr class='shade1'><th>Forenames</th><th>Surname</th><th>Email</th><th>Address Line 1</th>";
+    $html .= "<th>Address Line 2</th><th>City</th><th>County</th><th>Postcode</th><th>Country</th><th>Telephone</th><th>Site</th><th>Products</th></tr>";
+    $csvfieldheaders .= "Forenames,Surname,Email,Address Line 1,Address Line 2,City,County,Postcode,Country,Telephone,Site,Products\r\n";
+    $rowcount=0;
+    while ($row = mysql_fetch_object($result))
+    {
+        if ($row->cemail!=$lastemail)
+        {
+            $html .= "<tr class='shade2'><td>{$row->forenames}</td><td>{$row->surname}</td>";
+            if ($row->dataprotection_email!='Yes') $html .= "<td>{$row->cemail}</td>";
+            else $html .= "<td><em style='color: red';>Withheld</em></td>";
+            if ($row->dataprotection_address!='Yes')
+                $html .= "<td>{$row->address1}</td><td>{$row->address2}</td><td>{$row->city}</td><td>{$row->county}</td><td>{$row->postcode}</td><td>{$row->country}</td>";
+            else
+                $html .= "<td colspan='6'><em style='color: red';>Withheld</em></td>";
+            if ($row->dataprotection_phone!='Yes') $html .= "<td>{$row->phone}</td>";
+            else $html .= "<td><em style='color: red';>Withheld</em></td>";
+
+            $html .= "<td>$row->site</td>";
+
+            $psql = "SELECT * FROM supportcontacts, maintenance, products WHERE ";
+            $psql .= "supportcontacts.maintenanceid=maintenance.id AND ";
+            $psql .= "maintenance.product=products.id ";
+            $psql .= "AND supportcontacts.contactid='$row->contactid' ";
+            $html .= "<td>";
+
+            $csv .= strip_comma($row->forenames).','
+                . strip_comma($row->surname).',';
+            if ($row->dataprotection_email!='Yes') $csv .= strip_comma(strtolower($row->cemail)).',';
+            else $csv .= ',';
+
+            $csv  .= strip_comma($row->address1).','
+                . strip_comma($row->address2).','
+                . strip_comma($row->city).','
+                . strip_comma($row->county).','
+                . strip_comma($row->postcode).','
+                . strip_comma($row->country).',';
+
+            if ($row->dataprotection_phone!='Yes') $csv .= strip_comma(strtolower($row->phone)).',';
+            else $csv .= ',';
+
+            $csv .= strip_comma($row->site).',';
+
+            $presult = mysql_query($psql);
+            if (mysql_error()) trigger_error("MySQL Query Error ".mysql_error(), E_USER_ERROR);
+            $numproducts=mysql_num_rows($presult);
+            $productcount=1;
+
+            while ($product = mysql_fetch_object($presult))
+            {
+                $html .= strip_comma($product->name);
+                $csv .=  strip_comma($product->name);
+                if ($productcount < $numproducts) { $html .= " - "; $csv.=' - '; }
+                $productcount++;
+            }
+
+            $html .= "</td>";
+            // $html .= "<td>{$row->name}</td></tr>\n";
+            $csv .= strip_comma($row->name) ."\r\n";
+
+            $rowcount++;
+        }
+        $lastemail = $row->cemail;
+    }
+    $html .= "</table>";
+    $html .= "<p align='center'>$rowcount Records</p>";
+    $html .= "<p align='center'>SQL Query used to produce this report:<br /><code>$sql</code></p>\n";
+
+    if ($_POST['output']=='screen')
+    {
+        include('htmlheader.inc.php');
+        echo $html;
+        include('htmlfooter.inc.php');
+    }
+    elseif ($_POST['output']=='csv')
+    {
+        // --- CSV File HTTP Header
+        header("Content-type: text/csv\r\n");
+        header("Content-disposition-type: attachment\r\n");
+        header("Content-disposition: filename=qbe_report.csv");
+        echo $csvfieldheaders;
+        echo $csv;
+    }
+}
+?>
