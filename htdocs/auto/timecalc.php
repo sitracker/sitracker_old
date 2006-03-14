@@ -9,11 +9,16 @@
 //
 // Author: Tom Gerrard
 
-require('db_connect.inc.php');
-require('functions.inc.php');
+// Prevent script from being run directly (ie. it must always be included by auto.php)
+if (realpath(__FILE__) == realpath($_SERVER['SCRIPT_FILENAME']))
+{
+    exit;
+}
 
 define("STATUS_CLOSED",2);
 define("STATUS_CUSTOMER",8);
+
+if ($verbose) echo "Calcuating SLA times{$crlf}";
 
 function calculate_working_time($t1,$t2) {
   // Returns the number of 'working minutes' between two unix timestamps -
@@ -86,7 +91,7 @@ while ($incident=mysql_fetch_array($incident_result)) {
 
     if ($currentSla=="") {
     // We have a problem, or SLAs are turned off, bail out of this one
-    echo "Cannot find SLA information for incident ".$incident['id'].", skipping\n";
+    if ($verbose) echo "Cannot find SLA information for incident ".$incident['id'].", skipping{$crlf}";
     } else {
 
         // We need to calculate the working time for both review and SLA, so we may as well do it in one go
@@ -161,13 +166,13 @@ while ($incident=mysql_fetch_array($incident_result)) {
         $emailSent=0;
         // First check SLA
         if ($times['next_sla_time'] < $newSlaTime) {
-        echo "Incident {$incident['id']} out of SLA\n";
+        if ($verbose) echo "Incident {$incident['id']} out of SLA{$crlf}";
         send_template_email('OUT_OF_SLA',$incident['id'],$tag,$newSlaTime-$times['next_sla_time']);
         $emailSent=1;
         }
 
         if ($times['review_days']*($CONFIG['end_working_day']-$CONFIG['start_working_day'])/60 < $newReviewTime) {
-        echo "Incident {$incident['id']} out of Review\n";
+        if ($verbose) echo "Incident {$incident['id']} out of Review{$crlf}";
         send_template_email('OUT_OF_REVIEW',$incident['id'],"",-1);
         $emailSent=1;
         }

@@ -104,6 +104,7 @@ When called via http the auto.php script accepts two parameters
                 happening, if omited the script will produce no output
 
 e.g. http://localhost/sit/auto.php?actions=CloseIncidents,PurgeJournal
+or   http://localhost/sit/auto.php?actions=TimeCalc&verbose=TRUE
 
 When called from the console the auto.php again accepts two
 parameters, the first being a comma seperated list of tasks to run
@@ -119,6 +120,9 @@ Actions:
     PurgeJournal        Delete old journal entries according to the
                         config setting $CONFIG['journal_purge_after']
 
+    TimeCalc            Calculate SLA Target Times and trigger
+                        OUT_OF_SLA and OUT_OF_REVIEW system email
+                        templates where appropriate.
 
 Creating Plugins
 ----------------

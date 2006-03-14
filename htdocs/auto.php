@@ -20,13 +20,14 @@ if ($_SERVER['argv'][1]=='-h' OR $_SERVER['argv'][1]=='help' || $_SERVER['argv']
 {
     echo "-h    Help\n";
     echo "-v    verbose\n";
+    echo "Syntax: auto.php <comma-seperate-list-of-actions> <--verbose>|<-v>";
     exit;
 }
-if ($_SERVER['argv'][1]!='') $actions = $_REQUEST['actions'];
+if ($_SERVER['argv'][1]!='') $actions=$_SERVER['argv'][1];
 else
 {
-    $actions=$_SERVER['argv'][1];
-    $crlf = "<br >\n";
+    $actions = $_REQUEST['actions'];
+    $crlf = "<br />\n";
 }
 
 if ($_SERVER['argv'][2]!='')
@@ -74,5 +75,11 @@ if ($actions[0]=='' OR in_array('PurgeJournal',$actions))
     if (mysql_error()) trigger_error(mysql_error(),E_USER_ERROR);
     if ($verbose) echo "Purged ".mysql_affected_rows()." journal entries{$crlf}";
 }
+
+if ($actions[0]=='' OR in_array('TimeCalc',$actions))
+{
+    require('auto/timecalc.php');
+}
+
 
 ?>
