@@ -33,6 +33,7 @@ if (!empty($_REQUEST['start'])) $start = strtotime($_REQUEST['start']);
 else $start=0;
 if (!empty($_REQUEST['end'])) $start = strtotime($_REQUEST['end']);
 else $end=0;
+$status = $_REQUEST['status'];
 
 include('htmlheader.inc.php');
 
@@ -77,6 +78,7 @@ $shade='shade1';
 $totalduration=0;
 $countclosed=0;
 $countincidents=0;
+$countextincidents=0;
 $productlist = array();
 if ($mode=='site') $contactlist = array();
 while ($row=mysql_fetch_object($result))
@@ -135,6 +137,7 @@ while ($row=mysql_fetch_object($result))
     if (!array_key_exists($row->product, $productlist)) $productlist[$row->product] = 1;
     else { $productlist[$row->product]++; }
     $countincidents++;
+    if (!empty($row->externalid)) $countextincidents++;
     $totalduration=$totalduration+$row->duration_closed;
     $countclosed++;
     echo "</tr>\n";
@@ -194,6 +197,17 @@ if ($countproducts >= 1 OR $contactcontacts >= 1)
             echo "<img src='chart.php?type=pie&data=$data&legends=$legends&title=$title' />";
             echo "</div>";
         }
+
+        $countinternalincidents = ($countincidents - $countextincidents);
+        $externalpercent = number_format(($countextincidents / $countincidents * 100),1);
+        $internalpercent = number_format(($countinternalincidents / $countincidents * 100),1);
+        $data = "$countinternalincidents,$countextincidents";
+        $keys = "a,b";
+        $legends = "Not Escalated ({$internalpercent}%),Escalated ({$externalpercent}%)";
+        $title = urlencode('Incidents by Escalation');
+        echo "<div style='text-align:center;'>";
+        echo "<img src='chart.php?type=pie&data=$data&legends=$legends&title=$title' />";
+        echo "</div>";
     }
 }
 
