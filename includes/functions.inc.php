@@ -986,10 +986,12 @@ function incident_sla_history($incidentid)
             default:
                 $slahistory[$idx]['targettime'] = 0;
         }
-        if ($prevtime > 0) $slahistory[$idx]['actualtime'] = (working_day_diff($prevtime, $history->timestamp) / 60);
+        if ($prevtime > 0) $slahistory[$idx]['actualtime'] = calculate_working_time($prevtime, $history->timestamp);
         else $slahistory[$idx]['actualtime'] = 0;
         $slahistory[$idx]['timestamp'] = $history->timestamp;
         $slahistory[$idx]['userid'] = $history->userid;
+        if ($slahistory[$idx]['actualtime'] <= $slahistory[$idx]['targettime']) $slahistory[$idx]['targetmet'] = TRUE;
+        else $slahistory[$idx]['targetmet'] = FALSE;
         $prevtime=$history->timestamp;
         $idx++;
     }
@@ -1005,7 +1007,11 @@ function incident_sla_history($incidentid)
         default:
             $slahistory[$idx]['targettime'] = 0;
     }
+    // TODO v3.23 calc actual time for unmet sla's
     $slahistory[$idx]['actualtime'] = 0;
+    // this next line is meaningless if we don't calculate actualtime.
+    if ($slahistory[$idx]['actualtime'] <= $slahistory[$idx]['targettime']) $slahistory[$idx]['targetmet'] = TRUE;
+    else $slahistory[$idx]['targetmet'] = FALSE;
     $slahistory[$idx]['timestamp'] = 0;
     $idx++;
 
@@ -1996,11 +2002,13 @@ function format_seconds($seconds)
 
 
 // Return a string containing the time remaining, the time in minutes
-// provided as an argument should be in working-days. (ie. 9am - 5pm)
+// provided as an argument should be in working-days. (eg. 9am - 5pm)
 function format_workday_minutes($minutes)
 {
-    $days = floor($minutes / 480);
-    $remainder = ($minutes % 480);
+    global $CONFIG;
+    $working_day_mins = ($CONFIG['end_working_day'] - $CONFIG['start_working_day']) / 60;
+    $days = floor($minutes / $working_day_mins);
+    $remainder = ($minutes % $working_day_mins);
     $hours = floor($remainder / 60);
     $minutes = floor($remainder % 60);
 
@@ -3760,7 +3768,8 @@ function iso_8601_date($timestamp)
    return $date_mod;
 }
 
-
+// OBSOLETE replaced by calculate_working_time()
+// Returns the number of working day seconds between two times
 function working_day_diff($start, $end)
 {
     global $CONFIG;
@@ -3780,17 +3789,34 @@ function working_day_diff($start, $end)
             $today_work_end = mktime(0,0,0,date('m',$c),date('d',$c),date('Y',$c))+$CONFIG['end_working_day'];
             if ($start < $today_work_start) $cstart = $today_work_start;
             else $cstart = $start;
-            if ($end > $today_work_end) $cend = $today_work_end;
+            if ($end > $today_work_end AND $today_work_end > $cstart) $cend = $today_work_end;
+            //elseif ($end > $today_work_end AND $today_work_end <= $cstart) $cend = $end;
             else $cend = $end;
             $wdiff += ($cend - $cstart);
             //echo "<p>Today: ".date('r',$today_work_start)." - ".date('r',$today_work_end)." ($wdiff)</p>";
-            //echo "<p>C: ".format_seconds($cend)." - ".format_seconds($cstart)." = ".format_seconds($wdiff)."</p>";
+            echo "<p>C($c): ".format_seconds($cend)." - ".format_seconds($cstart)." = ".format_seconds($wdiff)." ($wdiff)</p>";
         }
     }
-    //echo "<hr />";
-    // if ($start > $today_work_end || $end < $today_work_start) return 0;  // range not within working day
-
+    $wdiff = round($wdiff,0);
     return $wdiff;
+}
+
+
+function calculate_working_time($t1,$t2) {
+  // Returns the number of 'working minutes' between two unix timestamps -
+  // this could be improved but in practice we will only be counting to 300 or so
+  global $CONFIG;
+  $weeks=floor(($t2-$t1)/(60*60*24*7));
+  $t1+=$weeks*60*60*24*7;
+
+  for ($i=$t1; $i<$t2; $i+=60) {
+    $hour=date('H',$i);
+    if ($hour>=($CONFIG['start_working_day']/3600) && $hour<($CONFIG['end_working_day']/3600)) {
+      $day=date('w',$i);
+      if (in_array($day, $CONFIG['working_days'])) $workedMinutes++;
+    }
+  }
+  return $workedMinutes+$weeks*($CONFIG['end_working_day']-$CONFIG['start_working_day'])*count($CONFIG['working_days'])/60;
 }
 
 

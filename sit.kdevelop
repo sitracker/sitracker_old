@@ -135,7 +135,7 @@
   </kdevdocumentation>
   <ctagspart>
     <customArguments></customArguments>
-    <customTagfilePath>/home/ivan/dev1/sit/tags</customTagfilePath>
+    <customTagfilePath>tags</customTagfilePath>
   </ctagspart>
   <kdevdebugger>
     <general>

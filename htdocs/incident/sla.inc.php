@@ -10,7 +10,7 @@ if (realpath(__FILE__) == realpath($_SERVER['SCRIPT_FILENAME']))
 echo "<h2>Service Level History</h2>";
 echo "<p align='center'>Current Service Level: {$servicelevel_tag}</p>";
 
-// Create an object containing the service level history
+// Create an array containing the service level history
 $slahistory = incident_sla_history($incidentid);
 
 echo "<table align='center'>";
@@ -29,4 +29,5 @@ foreach($slahistory AS $history)
     echo "</td>";
 }
 echo "</table>\n";
+
 ?>

@@ -73,16 +73,19 @@ echo "<th>Engineer</th>";
 echo "<th>Opened</th>";
 echo "<th>Closed</th>";
 echo "<th>Duration</th>";
+echo "<th>SLA</th>";
 echo "</tr>";
 $shade='shade1';
 $totalduration=0;
 $countclosed=0;
 $countincidents=0;
 $countextincidents=0;
+$countslaexceeded=0;
 $productlist = array();
 if ($mode=='site') $contactlist = array();
 while ($row=mysql_fetch_object($result))
 {
+    $targetmet = TRUE;
     if ($row->status==2) $shade='expired';
     else $shade='shade1';
     echo "<tr class='$shade'>";
@@ -114,9 +117,15 @@ while ($row=mysql_fetch_object($result))
         echo "<td>".format_seconds($row->duration_closed)."</td>";
     }
     else echo "<td colspan='2'>-</td>";
-
-    // TODO v3.23 Use incident_sla_history() to record sla history into an array
-    // use the array to make another chart
+    echo "<td>";
+    $slahistory = incident_sla_history($row->incidentid);
+    foreach($slahistory AS $history)
+    {
+        if ($history['targetmet'] == FALSE) $targetmet = FALSE;
+    }
+    if ($targetmet == TRUE) echo "Met";
+    else { $countslaexceeded++; echo "Exceeded"; }
+    echo "</td>";
 
     if (!array_key_exists($row->product, $productlist)) $productlist[$row->product] = 1;
     else { $productlist[$row->product]++; }
@@ -182,6 +191,7 @@ if ($countproducts >= 1 OR $contactcontacts >= 1)
             echo "</div>";
         }
 
+        // Escalation chart
         $countinternalincidents = ($countincidents - $countextincidents);
         $externalpercent = number_format(($countextincidents / $countincidents * 100),1);
         $internalpercent = number_format(($countinternalincidents / $countincidents * 100),1);
@@ -192,6 +202,20 @@ if ($countproducts >= 1 OR $contactcontacts >= 1)
         echo "<div style='text-align:center;'>";
         echo "<img src='chart.php?type=pie&data=$data&legends=$legends&title=$title' />";
         echo "</div>";
+
+        // SLA chart
+        $countslamet = ($countincidents - $countslaexceeded);
+        $metpercent = number_format(($countslamet / $countincidents * 100),1);
+        $exceededpercent = number_format(($countslaexceeded / $countincidents * 100),1);
+        $data = "$countslamet,$countslaexceeded";
+        $keys = "a,b";
+        $legends = "SLA Met ({$metpercent}%),SLA Exceeded ({$externalpercent}%)";
+        $title = urlencode('Incident Service Level Performance');
+        echo "<div style='text-align:center;'>";
+        echo "<img src='chart.php?type=pie&data=$data&legends=$legends&title=$title' />";
+        echo "</div>";
+
+
     }
 }
 

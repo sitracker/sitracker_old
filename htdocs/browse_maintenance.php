@@ -74,7 +74,8 @@ echo product_drop_down('productid', $productid)
     <a href="<?php echo $_SERVER['PHP_SELF'] ?>?search_string=W">W</a> |
     <a href="<?php echo $_SERVER['PHP_SELF'] ?>?search_string=X">X</a> |
     <a href="<?php echo $_SERVER['PHP_SELF'] ?>?search_string=Y">Y</a> |
-    <a href="<?php echo $_SERVER['PHP_SELF'] ?>?search_string=Z">Z</a>
+    <a href="<?php echo $_SERVER['PHP_SELF'] ?>?search_string=Z">Z</a> |
+    <a href="<?php echo $_SERVER['PHP_SELF'] ?>?search_string=*">All</a>
 </td>
 </tr>
 </table>

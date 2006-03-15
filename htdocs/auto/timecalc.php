@@ -20,23 +20,6 @@ define("STATUS_CUSTOMER",8);
 
 if ($verbose) echo "Calcuating SLA times{$crlf}";
 
-function calculate_working_time($t1,$t2) {
-  // Returns the number of 'working minutes' between two unix timestamps -
-  // this could be improved but in practice we will only be counting to 300 or so
-  global $CONFIG;
-  $weeks=floor(($t2-$t1)/(60*60*24*7));
-  $t1+=$weeks*60*60*24*7;
-
-  for ($i=$t1; $i<$t2; $i+=60) {
-    $hour=date('H',$i);
-    if ($hour>=($CONFIG['start_working_day']/3600) && $hour<($CONFIG['end_working_day']/3600)) {
-      $day=date('w',$i);
-      if (in_array($day, $CONFIG['working_days'])) $workedMinutes++;
-    }
-  }
-  return $workedMinutes+$weeks*($CONFIG['end_working_day']-$CONFIG['start_working_day'])*count($CONFIG['working_days'])/60;
-}
-
 $sql="SELECT id,maintenanceid,priority,slaemail,servicelevel,status FROM incidents WHERE status != ".STATUS_CLOSED;
 //$sql="SELECT id,maintenanceid,priority,slaemail,servicelevel,status FROM incidents WHERE id=32138";
 $incident_result=mysql_query($sql);
