@@ -22,6 +22,9 @@ Changes in v3.23 - Unreleased
 * Improved Database Error handling
 * Prevented revealing SQL on failure for security reasons
 * KB references in incident logs are now converted to hyperlinks
+* Improved reporting to show percentage of incidents that were escalated
+* Added SLA time calculation to auto.php scheduling
+* Changed sites.notes column to TEXT from BLOB
 
 Changes in v3.22 - Released 27 January 2006
 -------------------------------------------------------------------------------------

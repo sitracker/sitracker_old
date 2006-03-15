@@ -115,24 +115,8 @@ while ($row=mysql_fetch_object($result))
     }
     else echo "<td colspan='2'>-</td>";
 
-    /*
-    echo "<td>";
-    $slsql = "SELECT * FROM servicelevels WHERE tag='{$row->servicelevel}' AND priority='{$row->priority}' ";
-    $slresult = mysql_query($slsql);
-    if (mysql_error()) trigger_error("MySQL Query Error ".mysql_error(), E_USER_WARNING);
-    $level = mysql_fetch_object($slresult);
-
-    $usql = "SELECT * FROM updates WHERE type='slamet' AND incidentid='$id' ORDER BY id ASC, timestamp ASC";
-    $uresult = mysql_query($usql);
-    if (mysql_error()) trigger_error("MySQL Query Error ".mysql_error(), E_USER_ERROR);
-    $prevtime=$row->opened;
-    while ($history = mysql_fetch_object($uresult))
-    {
-        $timetaken=working_day_diff($prevtime, $history->timestamp);
-        echo target_type_name($history->sla)."  ".format_seconds($prevtime)."<br />";
-    }
-    echo "</td>";
-    */
+    // TODO v3.23 Use incident_sla_history() to record sla history into an array
+    // use the array to make another chart
 
     if (!array_key_exists($row->product, $productlist)) $productlist[$row->product] = 1;
     else { $productlist[$row->product]++; }
