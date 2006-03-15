@@ -250,7 +250,7 @@ if (empty($bodytext))
     <td class="shade2"><input type="text" name="nextaction" maxlength="50" size="30" value="" /></td></tr>
     <tr>
     <th align='right'>
-    <b>Time To Next Action</b>:<br />The incident will be placed in the waiting queue until the time specified.</th>
+    <strong>Time To Next Action</strong>:<br />The incident will be placed in the waiting queue until the time specified.</th>
     <td class="shade2">
     <?php
     $oldtimeofnextaction=incident_timeofnextaction($id);
@@ -266,11 +266,11 @@ if (empty($bodytext))
     if ($na_hours<0) $na_hours=0;
     if ($na_minutes<0) $na_minutes=0;
     ?>
-    <input type="radio" name="timetonextaction_none" value="time">In <em>x</em> days, hours, minutes<br />&nbsp;&nbsp;&nbsp;
-    <input maxlength=3 name="timetonextaction_days" value="<?php echo $na_days ?>" onclick="window.document.updateform.timetonextaction_none[0].checked = true;" size=3> Days&nbsp;
-    <input maxlength=2 name="timetonextaction_hours" value="<?php echo $na_hours ?>" onclick="window.document.updateform.timetonextaction_none[0].checked = true;" size=3> Hours&nbsp;
-    <input maxlength=2 name="timetonextaction_minutes" value="<?php echo $na_minutes ?>" onclick="window.document.updateform.timetonextaction_none[0].checked = true;" size=3> Minutes<br />
-    <INPUT type="radio" name="timetonextaction_none" value="date">On specified Date<br />&nbsp;&nbsp;&nbsp;
+    <input type="radio" name="timetonextaction_none" value="time" />In <em>x</em> days, hours, minutes<br />&nbsp;&nbsp;&nbsp;
+    <input maxlength='3' name="timetonextaction_days" value="<?php echo $na_days ?>" onclick="window.document.updateform.timetonextaction_none[0].checked = true;" size='3' /> Days&nbsp;
+    <input maxlength='2' name="timetonextaction_hours" value="<?php echo $na_hours ?>" onclick="window.document.updateform.timetonextaction_none[0].checked = true;" size='3' /> Hours&nbsp;
+    <input maxlength='2' name="timetonextaction_minutes" value="<?php echo $na_minutes ?>" onclick="window.document.updateform.timetonextaction_none[0].checked = true;" size='3' /> Minutes<br />
+    <input type="radio" name="timetonextaction_none" value="date">On specified Date<br />&nbsp;&nbsp;&nbsp;
     <?php
     // Print Listboxes for a date selection
     ?><select name='day' class='dropdown' onclick="window.document.updateform.timetonextaction_none[1].checked = true;"><?php
@@ -281,7 +281,7 @@ if (empty($bodytext))
         {
             echo "selected='selected'";
         }
-        echo ">$t_day\n";
+        echo ">$t_day</option>\n";
     }
     ?></select><select name='month' class='dropdown' onclick="window.document.updateform.timetonextaction_none[1].checked = true;"><?php
     for ($t_month=1;$t_month<=12;$t_month++)
@@ -291,21 +291,21 @@ if (empty($bodytext))
         {
             echo " selected='selected'";
         }
-        echo ">". date ("F", mktime(0,0,0,$t_month,1,2000)) ."\n";
+        echo ">". date ("F", mktime(0,0,0,$t_month,1,2000)) ."</option>\n";
     }
     ?></select><select name='year' class='dropdown' onclick="window.document.updateform.timetonextaction_none[1].checked = true;"><?php
     for ($t_year=(date("Y")-1);$t_year<=(date("Y")+5);$t_year++)
     {
-        echo "<option value=\"$t_year\" ";
+        echo "<option value=\"$t_year\"";
         if ($t_year==date("Y"))
         {
-            echo "selected";
+            echo " selected='selected'";
         }
-        echo ">$t_year\n";
+        echo ">$t_year</option>\n";
     }
     ?></select>
     <br />
-    <input checked type="radio" name="timetonextaction_none" onclick="window.document.updateform.timetonextaction_days.value = ''; window.document.updateform.timetonextaction_hours.value = ''; window.document.updateform.timetonextaction_minutes.value = '';" value="None"> Unspecified
+    <input checked type="radio" name="timetonextaction_none" onclick="window.document.updateform.timetonextaction_days.value = ''; window.document.updateform.timetonextaction_hours.value = ''; window.document.updateform.timetonextaction_minutes.value = '';" value="None" /> Unspecified
     </td></tr>
     <tr>
     <?php
@@ -336,12 +336,20 @@ else
     $time = time();
     // External variables
     $id = cleanvar($_REQUEST['id']);
-    $bodytext = cleanvar($_REQUEST['bodytext']);
-    $updatetype = cleanvar($_REQUEST['updatetype']);
-    $newstatus = cleanvar($_REQUEST['newstatus']);
-    $nextaction = cleanvar($_REQUEST['nxtaction']);
-    $newpriority = cleanvar($_REQUEST['newpriority']);
-
+    $bodytext = cleanvar($_POST['bodytext']);
+    $target = cleanvar($_POST['target']);
+    $updatetype = cleanvar($_POST['updatetype']);
+    $newstatus = cleanvar($_POST['newstatus']);
+    $nextaction = cleanvar($_POST['nxtaction']);
+    $newpriority = cleanvar($_POST['newpriority']);
+    $cust_vis = cleanvar($_POST['cust_vis']);
+    $timetonextaction_none = cleanvar($_POST['timetonextaction_none']);
+    $timetonextaction_days = cleanvar($_POST['timetonextaction_days']);
+    $timetonextaction_hours = cleanvar($_POST['timetonextaction_hours']);
+    $timetonextaction_minutes = cleanvar($_POST['timetonextaction_minutes']);
+    $year = cleanvar($_POST['year']);
+    $month = cleanvar($_POST['month']);
+    $day = cleanvar($_POST['day']);
 
     if (empty($newpriority)) $newpriority  = incident_priority($id);
 
