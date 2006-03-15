@@ -799,7 +799,7 @@ CREATE TABLE `sites` (
   `telephone` varchar(255) NOT NULL default '',
   `fax` varchar(255) NOT NULL default '',
   `email` varchar(255) NOT NULL default '',
-  `notes` blob NOT NULL,
+  `notes` text NOT NULL,
   `typeid` int(5) NOT NULL default '1',
   `freesupport` int(5) NOT NULL default '0',
   `licenserx` int(5) NOT NULL default '0',
@@ -810,9 +810,11 @@ CREATE TABLE `sites` (
   KEY `owner` (`owner`)
 ) ;
 
-INSERT INTO `sites` VALUES (1,'ACME Widgets Co.','Manufacturing Dept.','21 Any Street','',
-    'Anytown','Anyshire','UNITED KINGDOM','AN1 0TH','0555 555555','0444 444444',
-    'acme@example.com','Example Site',0,0,0,'',0);
+INSERT INTO `sites` (`id`, `name`, `department`, `address1`, `address2`, `city`, `county`,
+`country`, `postcode`, `telephone`, `fax`, `email`, `notes`, `typeid`, `freesupport`, `licenserx`,
+`ftnpassword`, `owner`) VALUES (1, 'ACME Widgets Co.', 'Manufacturing Dept.', '21 Any Street', '',
+'Anytown', 'Anyshire', 'UNITED KINGDOM', 'AN1 0TH', '0555 555555', '0444 444444', 'acme@example.com',
+'Example site', 1, 0, 0, '', 0);
 
 CREATE TABLE `sitetypes` (
   `typeid` int(5) NOT NULL auto_increment,
@@ -1141,6 +1143,7 @@ PRIMARY KEY ( `id` ) ,
 INDEX ( `incidentid` , `relatedid` )
 ) ;
 
+ALTER TABLE `sites` CHANGE `notes` `notes` TEXT NOT NULL ;
 ";
 
 // Important: When making changes to the schema you must add SQL to make the alterations
