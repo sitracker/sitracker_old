@@ -952,6 +952,67 @@ function incident_productinfo_html($incidentid)
 }
 
 
+// Create an array containing the service level history
+function incident_sla_history($incidentid)
+{
+    global $CONFIG;
+    $working_day_mins = ($CONFIG['end_working_day'] - $CONFIG['start_working_day']) / 60;
+
+    // Not the most efficient but..
+    $sla_tag = db_read_column('servicelevel', 'incidents', $incidentid);
+    $priority = db_read_column('priority', 'incidents', $incidentid);
+
+    // Get service levels
+    $sql = "SELECT * FROM servicelevels WHERE tag='{$sla_tag}' AND priority='{$priority}' ";
+    $result = mysql_query($sql);
+    if (mysql_error()) trigger_error("MySQL Query Error ".mysql_error(), E_USER_ERROR);
+    $level = mysql_fetch_object($result);
+
+    // Loop through the updates looking for service level events
+    $sql = "SELECT * FROM updates WHERE type='slamet' AND incidentid='{$incidentid}' ORDER BY id ASC, timestamp ASC";
+    $result = mysql_query($sql);
+    if (mysql_error()) trigger_error("MySQL Query Error ".mysql_error(), E_USER_ERROR);
+    $prevtime=0;
+    $idx=0;
+    while ($history = mysql_fetch_object($result))
+    {
+        $slahistory[$idx]['targetsla'] = $history->sla;
+        switch ($history->sla)
+        {
+            case 'initialresponse': $slahistory[$idx]['targettime'] = $level->initial_response_mins; break;
+            case 'probdef': $slahistory[$idx]['targettime'] = $level->prob_determ_mins; break;
+            case 'actionplan': $slahistory[$idx]['targettime'] = $level->action_plan_mins; break;
+            case 'solution': $slahistory[$idx]['targettime'] = ($level->resolution_days * $working_day_mins); break;
+            default:
+                $slahistory[$idx]['targettime'] = 0;
+        }
+        if ($prevtime > 0) $slahistory[$idx]['actualtime'] = (working_day_diff($prevtime, $history->timestamp) / 60);
+        else $slahistory[$idx]['actualtime'] = 0;
+        $slahistory[$idx]['timestamp'] = $history->timestamp;
+        $slahistory[$idx]['userid'] = $history->userid;
+        $prevtime=$history->timestamp;
+        $idx++;
+    }
+    // Get next target
+    $target = incident_get_next_target($incidentid);
+    $slahistory[$idx]['targetsla'] = $target->type;
+    switch ($target->type)
+    {
+        case 'initialresponse': $slahistory[$idx]['targettime'] = $level->initial_response_mins; break;
+        case 'probdef': $slahistory[$idx]['targettime'] = $level->prob_determ_mins; break;
+        case 'actionplan': $slahistory[$idx]['targettime'] = $level->action_plan_mins; break;
+        case 'solution': $slahistory[$idx]['targettime'] = ($level->resolution_days * $working_day_mins); break; // 480 mins in a working day
+        default:
+            $slahistory[$idx]['targettime'] = 0;
+    }
+    $slahistory[$idx]['actualtime'] = 0;
+    $slahistory[$idx]['timestamp'] = 0;
+    $idx++;
+
+    return $slahistory;
+}
+
+
 
 /*============================================================*/
 /*                                                            */
@@ -3698,6 +3759,7 @@ function iso_8601_date($timestamp)
    $date_mod .= $time_zone;
    return $date_mod;
 }
+
 
 function working_day_diff($start, $end)
 {
