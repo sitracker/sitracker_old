@@ -10,6 +10,8 @@
 
 // Author: Ivan Lucas
 
+// This Page Is Valid XHTML 1.0 Transitional!   15Mar06
+
 $permission=37; // Run Reports
 $title='Yearly Incident Report';
 require('db_connect.inc.php');
@@ -28,9 +30,10 @@ if (empty($_REQUEST['mode']))
 {
     include('htmlheader.inc.php');
     echo "<h2>$title</h2>";
+    echo "<p align='center'>This report lists the incidents that each site has logged over the past twelve months.</p>";
     echo "<form action='{$_SERVER['PHP_SELF']}' method='post'>";
-    echo "<table>";
-    echo "<tr><th colspan='2' align='center'>Include</th>";
+    echo "<table summary='Site Selection Table'>";
+    echo "<tr><th colspan='2' align='center'>Include</th></tr>";
     echo "<tr><td align='center' colspan='2' class='shade1'>";
     $sql = "SELECT * FROM sites ORDER BY name";
     $result = mysql_query($sql);
@@ -44,7 +47,9 @@ if (empty($_REQUEST['mode']))
     echo "</td>";
     echo "</tr>\n";
     echo "<tr><td align='right' width='200' class='shade1'><b>Output</b>:</td>";
-    echo "<td width=400 class='shade2'>";
+    echo "<td width='400' class='shade2'>";
+    echo "<input type='checkbox' name='showsitetotals' value='yes' /> Add a line after each site showing totals<br />";
+    echo "<input type='checkbox' name='showtotals' value='yes' /> Add a line to the bottom of the report showing totals<br /><br />";
     echo "<select name='output'>";
     echo "<option value='screen'>Screen</option>";
     echo "<option value='csv'>Disk - Comma Seperated (CSV) file</option>";
@@ -64,6 +69,12 @@ elseif ($_REQUEST['mode']=='report')
     if (is_array($_POST['exc']) && is_array($_POST['exc'])) $_POST['inc']=array_values(array_diff($_POST['inc'],$_POST['exc']));  // don't include anything excluded
 
     $includecount=count($_POST['inc']);
+    if ($_POST['showsitetotals']=='yes') $showsitetotals = TRUE;
+    else $showsitetotals = FALSE;
+
+    if ($_POST['showtotals']=='yes') $showtotals = TRUE;
+    else $showtotals = FALSE;
+
     if ($includecount >= 1)
     {
         // $html .= "<strong>Include:</strong><br />";
@@ -77,7 +88,8 @@ elseif ($_REQUEST['mode']=='report')
         $incsql .= ")";
     }
     $sql = "SELECT incidents.id AS incid, incidents.title AS title, contacts.id AS contactid, sites.name AS site, contacts.email AS cemail, ";
-    $sql .= "CONCAT(contacts.forenames,' ',contacts.surname) AS cname, incidents.opened as opened, sitetypes.typename, incidents.externalid AS externalid ";
+    $sql .= "CONCAT(contacts.forenames,' ',contacts.surname) AS cname, incidents.opened as opened, sitetypes.typename, incidents.externalid AS externalid, ";
+    $sql .= "sites.id AS siteid ";
     $sql .= "FROM contacts, sites, sitetypes, incidents ";
     $sql .= "WHERE contacts.siteid=sites.id AND sites.typeid=sitetypes.typeid AND incidents.opened > ($now-60*60*24*365.25) ";
     $sql .= "AND incidents.contact=contacts.id";
@@ -98,12 +110,37 @@ elseif ($_REQUEST['mode']=='report')
     $html .= "<tr><th>Opened</th><th>Incident</th><th>External ID</th><th>Title</th><th>Contact</th><th>Site</th><th>Type</th></tr>";
     $csvfieldheaders .= "opened,id,externalid,title,contact,site,type\r\n";
     $rowcount=0;
+    $externalincidents=0;
     while ($row = mysql_fetch_object($result))
     {
         $nicedate=date('d/m/Y',$row->opened);
-        $html .= "<tr class='shade2'><td>$nicedate</td><td>{$row->incid}</td><td>{$row->externalid}</td><td>{$row->title}</td><td>{$row->cname}</td><td>{$row->site}</td><td>{$row->typename}</td></tr>";
+        $html .= "<tr class='shade2'><td>$nicedate</td><td>{$row->incid}</td><td>{$row->externalid}</td><td>{$row->title}</td><td>{$row->cname}</td><td>{$row->site}</td><td>{$row->typename}</td></tr>\n";
         $csv .="'".$nicedate."', '{$row->incid}','{$row->externalid}', '{$row->title}','{$row->cname}','{$row->site}','{$row->typename}'\n";
+        if (!empty($row->externalid))
+        {
+            $externalincidents++;
+            $sitetotals[$row->siteid]['extincidents']++;
+        }
+        $sitetotals[$row->siteid]['incidents']++;
+        if ($sitetotals[$row->siteid]['name']=='') $sitetotals[$row->siteid]['name']=$row->site;
+
     }
+
+    if ($showsitetotals)
+    {
+        foreach ($sitetotals AS $sitetotal)
+        {
+            if ($sitetotal['incidents'] >= 1) $externalpercent = number_format(($sitetotal['extincidents'] / $sitetotal['incidents'] * 100),1);
+            $html .= "<tr class='shade1'><td colspan='0'>Number of incidents logged by {$sitetotal['name']}: {$sitetotal['incidents']}, Logged externally: {$sitetotal['extincidents']} ({$externalpercent}%)</td></tr>\n";
+        }
+    }
+
+    if ($numrows >= 1) $externalpercent = number_format(($externalincidents / $numrows * 100),1);
+    if ($showtotals)
+    {
+        $html .= "<tfoot><tr><td colspan='0'>Total Number of incidents logged: {$numrows}, Logged externally: {$externalincidents} ({$externalpercent}%)</td></tr></tfoot>\n";
+    }
+
     $html .= "</table>";
 
     // $html .= "<p align='center'>SQL Query used to produce this report:<br /><code>$sql</code></p>\n";
