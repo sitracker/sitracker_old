@@ -169,9 +169,9 @@ if ($countproducts >= 1 OR $contactcontacts >= 1)
     if (extension_loaded('gd'))
     {
         // Incidents by product chart
-        $data = implode(',',$productlist);
+        $data = implode('|',$productlist);
         $keys = array_keys($productlist);
-        $legends = implode(',', $productlegends);
+        $legends = implode('|', $productlegends);
         $title = urlencode('Incidents by Product');
         //$data="1,2,3";
         echo "<div style='text-align:center;'>";
@@ -181,9 +181,9 @@ if ($countproducts >= 1 OR $contactcontacts >= 1)
         if ($mode=='site')
         {
             // Incidents by contacts chart
-            $data = implode(',',$contactlist);
+            $data = implode('|',$contactlist);
             $keys = array_keys($contactlist);
-            $legends = implode(',', $contactlegends);
+            $legends = implode('|', $contactlegends);
             $title = urlencode('Incidents by Contact');
             //$data="1,2,3";
             echo "<div style='text-align:center;'>";
@@ -195,9 +195,9 @@ if ($countproducts >= 1 OR $contactcontacts >= 1)
         $countinternalincidents = ($countincidents - $countextincidents);
         $externalpercent = number_format(($countextincidents / $countincidents * 100),1);
         $internalpercent = number_format(($countinternalincidents / $countincidents * 100),1);
-        $data = "$countinternalincidents,$countextincidents";
-        $keys = "a,b";
-        $legends = "Not Escalated ({$internalpercent}%),Escalated ({$externalpercent}%)";
+        $data = "$countinternalincidents|$countextincidents";
+        $keys = "a|b";
+        $legends = "Not Escalated ({$internalpercent}%)|Escalated ({$externalpercent}%)";
         $title = urlencode('Incidents by Escalation');
         echo "<div style='text-align:center;'>";
         echo "<img src='chart.php?type=pie&data=$data&legends=$legends&title=$title' />";
@@ -207,9 +207,9 @@ if ($countproducts >= 1 OR $contactcontacts >= 1)
         $countslamet = ($countincidents - $countslaexceeded);
         $metpercent = number_format(($countslamet / $countincidents * 100),1);
         $exceededpercent = number_format(($countslaexceeded / $countincidents * 100),1);
-        $data = "$countslamet,$countslaexceeded";
-        $keys = "a,b";
-        $legends = "SLA Met ({$metpercent}%),SLA Exceeded ({$exceededpercent}%)";
+        $data = "$countslamet|$countslaexceeded";
+        $keys = "a|b";
+        $legends = "SLA Met ({$metpercent}%)|SLA Exceeded ({$exceededpercent}%)";
         $title = urlencode('Incident Service Level Performance');
         echo "<div style='text-align:center;'>";
         echo "<img src='chart.php?type=pie&data=$data&legends=$legends&title=$title' />";

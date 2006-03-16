@@ -105,7 +105,9 @@ while ($update = mysql_fetch_object($result))
     $currentowner=user_realname($update->currentowner);
     $currentstatu=incident_status($update->currentstatus);
 
-    $updateheadertext = str_replace('currentowner', $currentowner, $updatetypes[$update->type]['text']);
+    $updateheadermacro[] = 'currentowner';      $updateheaderstring[] = $currentowner;
+
+    $updateheadertext = str_replace($updateheadermacro, $updateheaderstring, $updatetypes[$update->type]['text']);
 
     // Print a header row for the update
     if ($updatebody=='' AND $update->customervisibility=='show') echo "<div class='detailinfo'>";
@@ -125,7 +127,7 @@ while ($update = mysql_fetch_object($result))
     {
         echo "<img src='{$CONFIG['application_webpath']}images/icons/16x16/{$updatetypes[$update->type]['icon']}' width='16' height='16' alt='{$update->type}' />";
         echo "<span>Click here to {$newmode} this update</span></a> ";
-        echo "{$updateheadertext} by {$updateuser}";
+        echo "{$updateheadertext}"; //  by {$updateuser}
     }
     else
     {

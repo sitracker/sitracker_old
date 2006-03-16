@@ -19,8 +19,8 @@ if (!extension_loaded('gd')) trigger_error("{$CONFIG['application_name']} requir
 
 // External variables
 $type = $_REQUEST['type'];
-$data = explode(',',cleanvar($_REQUEST['data']));
-$legends = explode(',',cleanvar($_REQUEST['legends']));
+$data = explode('|',cleanvar($_REQUEST['data']));
+$legends = explode('|',cleanvar($_REQUEST['legends']));
 $title = urldecode(cleanvar($_REQUEST['title']));
 
 $countdata = count($data);
@@ -130,13 +130,13 @@ switch ($type)
             };
 
         };
-        imagerectangle($img, 250, $legendY-5, 450, $legendY+($countdata*15), $black);
+        imagerectangle($img, 250, $legendY-5, 470, $legendY+($countdata*15), $black);
         //Top pie.
         for($i=0;$i<$countdata;$i++)
         {
             imagefilledarc($img,$cx,$cy,$sx,$sy,$angle_sum[$i-1] ,$angle_sum[$i], $colors[$i], IMG_ARC_PIE);
             imagefilledrectangle($img, 255, ($legendY+1), 264, ($legendY+9), $colors[$i]);
-            imagestring($img,2, 270, ($legendY-1), "{$legends[$i]} ({$data[$i]})", $black);
+            imagestring($img,2, 270, ($legendY-1), substr($legends[$i],0,27)." ({$data[$i]})", $black);
             // imagearc($img,$cx,$cy,$sx,$sy,$angle_sum[$i1] ,$angle_sum[$i], $blue);
             $legendY+=15;
         };

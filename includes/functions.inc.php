@@ -63,24 +63,24 @@ $todayrecent=$now-(16*3600);  // past 16 hours
 $CONFIG['upload_max_filesize'] = return_bytes($CONFIG['upload_max_filesize']);
 
 // Non specific update types
-$updatetypes['actionplan'] = array('icon' => 'actions/enum_list.png', 'text' => 'Action Plan');
-$updatetypes['auto'] = array('icon' => 'actions/info.png', 'text' => 'Updated automatically');
-$updatetypes['closing'] = array('icon' => 'actions/fileclose.png', 'text' => 'Marked for closure');
-$updatetypes['editing'] = array('icon' => 'actions/edit.png', 'text' => 'Edited');
-$updatetypes['email'] = array('icon' => 'actions/mail_send.png', 'text' => 'Email sent');
-$updatetypes['emailin'] = array('icon' => 'actions/mail_generic.png', 'text' => 'Email received');
-$updatetypes['externalinfo'] = array('icon' => 'actions/ktip.png', 'text' => 'External info added');
-$updatetypes['probdef'] = array('icon' => 'actions/enum_list.png', 'text' => 'Problem Definition');
-$updatetypes['research'] = array('icon' => 'actions/idea.png', 'text' => 'Researched');
+$updatetypes['actionplan'] = array('icon' => 'actions/enum_list.png', 'text' => 'Action Plan by currentowner');
+$updatetypes['auto'] = array('icon' => 'actions/info.png', 'text' => 'Updated automatically by currentowner');
+$updatetypes['closing'] = array('icon' => 'actions/fileclose.png', 'text' => 'Marked for closure by currentowner');
+$updatetypes['editing'] = array('icon' => 'actions/edit.png', 'text' => 'Edited by currentowner');
+$updatetypes['email'] = array('icon' => 'actions/mail_send.png', 'text' => 'Email sent by currentowner');
+$updatetypes['emailin'] = array('icon' => 'actions/mail_generic.png', 'text' => 'Email received by currentowner');
+$updatetypes['externalinfo'] = array('icon' => 'actions/ktip.png', 'text' => 'External info added by currentowner');
+$updatetypes['probdef'] = array('icon' => 'actions/enum_list.png', 'text' => 'Problem Definition by currentowner');
+$updatetypes['research'] = array('icon' => 'actions/idea.png', 'text' => 'Researched by currentowner');
 $updatetypes['reassigning'] = array('icon' => 'actions/2rightarrow.png', 'text' => 'Reassigned to currentowner');
-$updatetypes['reviewmet'] = array('icon' => 'actions/flag.png', 'text' => 'Review Period'); // conditional
+$updatetypes['reviewmet'] = array('icon' => 'actions/flag.png', 'text' => 'Review Period by currentowner'); // conditional
 $updatetypes['tempassigning'] = array('icon' => 'actions/1rightarrow.png', 'text' => 'Temporarily assigned to currentowner');
-$updatetypes['opening'] = array('icon' => 'actions/filenew.png', 'text' => 'Opened');
-$updatetypes['phonecallout'] = array('icon' => 'actions/forward.png', 'text' => 'Phone call made');
-$updatetypes['phonecallin'] = array('icon' => 'actions/back.png', 'text' => 'Phone call taken');
-$updatetypes['reopening'] = array('icon' => 'actions/filenew.png', 'text' => 'Reopened');
-$updatetypes['slamet'] = array('icon' => 'actions/flag.png', 'text' => 'SLA Met');
-$updatetypes['solution'] = array('icon' => 'actions/endturn.png', 'text' => 'Resolved');
+$updatetypes['opening'] = array('icon' => 'actions/filenew.png', 'text' => 'Opened by currentowner');
+$updatetypes['phonecallout'] = array('icon' => 'actions/forward.png', 'text' => 'Phone call made by currentowner');
+$updatetypes['phonecallin'] = array('icon' => 'actions/back.png', 'text' => 'Phone call taken by currentowner');
+$updatetypes['reopening'] = array('icon' => 'actions/filenew.png', 'text' => 'Reopened by currentowner');
+$updatetypes['slamet'] = array('icon' => 'actions/flag.png', 'text' => 'SLA Met by currentowner');
+$updatetypes['solution'] = array('icon' => 'actions/endturn.png', 'text' => 'Resolved by currentowner');
 $updatetypes['webupdate'] = array('icon' => 'actions/comment.png', 'text' => 'Web update');
 
 // Email template settings
