@@ -959,11 +959,13 @@ function incident_sla_history($incidentid)
     $working_day_mins = ($CONFIG['end_working_day'] - $CONFIG['start_working_day']) / 60;
 
     // Not the most efficient but..
-    $sla_tag = db_read_column('servicelevel', 'incidents', $incidentid);
-    $priority = db_read_column('priority', 'incidents', $incidentid);
+    $sql = "SELECT * FROM incidents WHERE id='{$incidentid}'";
+    $result = mysql_query($sql);
+    if (mysql_error()) trigger_error("MySQL Query Error ".mysql_error(), E_USER_ERROR);
+    $incident = mysql_fetch_object($result);
 
     // Get service levels
-    $sql = "SELECT * FROM servicelevels WHERE tag='{$sla_tag}' AND priority='{$priority}' ";
+    $sql = "SELECT * FROM servicelevels WHERE tag='{$incident->servicelevel}' AND priority='{$incident->priority}' ";
     $result = mysql_query($sql);
     if (mysql_error()) trigger_error("MySQL Query Error ".mysql_error(), E_USER_ERROR);
     $level = mysql_fetch_object($result);
@@ -995,23 +997,24 @@ function incident_sla_history($incidentid)
         $prevtime=$history->timestamp;
         $idx++;
     }
-    // Get next target
-    $target = incident_get_next_target($incidentid);
-    $slahistory[$idx]['targetsla'] = $target->type;
-    switch ($target->type)
+    if ($incident->status != 2 AND $incident>status != 7)
     {
-        case 'initialresponse': $slahistory[$idx]['targettime'] = $level->initial_response_mins; break;
-        case 'probdef': $slahistory[$idx]['targettime'] = $level->prob_determ_mins; break;
-        case 'actionplan': $slahistory[$idx]['targettime'] = $level->action_plan_mins; break;
-        case 'solution': $slahistory[$idx]['targettime'] = ($level->resolution_days * $working_day_mins); break;
-        default:
-            $slahistory[$idx]['targettime'] = 0;
+        // Get next target, but only if incident is still open
+        $target = incident_get_next_target($incidentid);
+        $slahistory[$idx]['targetsla'] = $target->type;
+        switch ($target->type)
+        {
+            case 'initialresponse': $slahistory[$idx]['targettime'] = $level->initial_response_mins; break;
+            case 'probdef': $slahistory[$idx]['targettime'] = $level->prob_determ_mins; break;
+            case 'actionplan': $slahistory[$idx]['targettime'] = $level->action_plan_mins; break;
+            case 'solution': $slahistory[$idx]['targettime'] = ($level->resolution_days * $working_day_mins); break;
+            default:
+                $slahistory[$idx]['targettime'] = 0;
+        }
+        $slahistory[$idx]['actualtime'] = $target->since;   if ($slahistory[$idx]['actualtime'] <= $slahistory[$idx]['targettime']) $slahistory[$idx]['targetmet'] = TRUE;
+        else $slahistory[$idx]['targetmet'] = FALSE;
+        $slahistory[$idx]['timestamp'] = 0;
     }
-    $slahistory[$idx]['actualtime'] = $target->since;   if ($slahistory[$idx]['actualtime'] <= $slahistory[$idx]['targettime']) $slahistory[$idx]['targetmet'] = TRUE;
-    else $slahistory[$idx]['targetmet'] = FALSE;
-    $slahistory[$idx]['timestamp'] = 0;
-    $idx++;
-
     return $slahistory;
 }
 
