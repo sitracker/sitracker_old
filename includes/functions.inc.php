@@ -63,13 +63,13 @@ $todayrecent=$now-(16*3600);  // past 16 hours
 $CONFIG['upload_max_filesize'] = return_bytes($CONFIG['upload_max_filesize']);
 
 // Non specific update types
-$updatetypes['actionplan'] = array('icon' => 'actions/enum_list.png', 'text' => 'Action Plan by currentowner');
+$updatetypes['actionplan'] = array('icon' => 'actions/enum_list.png', 'text' => 'Action Plan by updateuser');
 $updatetypes['auto'] = array('icon' => 'actions/info.png', 'text' => 'Updated automatically by currentowner');
 $updatetypes['closing'] = array('icon' => 'actions/fileclose.png', 'text' => 'Marked for closure by currentowner');
 $updatetypes['editing'] = array('icon' => 'actions/edit.png', 'text' => 'Edited by currentowner');
-$updatetypes['email'] = array('icon' => 'actions/mail_send.png', 'text' => 'Email sent by currentowner');
-$updatetypes['emailin'] = array('icon' => 'actions/mail_generic.png', 'text' => 'Email received by currentowner');
-$updatetypes['externalinfo'] = array('icon' => 'actions/ktip.png', 'text' => 'External info added by currentowner');
+$updatetypes['email'] = array('icon' => 'actions/mail_send.png', 'text' => 'Email sent by updateuser');
+$updatetypes['emailin'] = array('icon' => 'actions/mail_generic.png', 'text' => 'Email received by updateuser');
+$updatetypes['externalinfo'] = array('icon' => 'actions/ktip.png', 'text' => 'External info added by updateuser');
 $updatetypes['probdef'] = array('icon' => 'actions/enum_list.png', 'text' => 'Problem Definition by currentowner');
 $updatetypes['research'] = array('icon' => 'actions/idea.png', 'text' => 'Researched by currentowner');
 $updatetypes['reassigning'] = array('icon' => 'actions/2rightarrow.png', 'text' => 'Reassigned to currentowner');

@@ -103,9 +103,10 @@ while ($update = mysql_fetch_object($result))
     $updateuser=user_realname($update->userid);
     $updatetime = readable_date($update->timestamp);
     $currentowner=user_realname($update->currentowner);
-    $currentstatu=incident_status($update->currentstatus);
+    $currentstatus=incident_status($update->currentstatus);
 
     $updateheadermacro[] = 'currentowner';      $updateheaderstring[] = $currentowner;
+    $updateheadermacro[] = 'updateuser';      $updateheaderstring[] = $updateuser;
 
     $updateheadertext = str_replace($updateheadermacro, $updateheaderstring, $updatetypes[$update->type]['text']);
 
