@@ -106,7 +106,7 @@ if (empty($submit))
     </th><td><textarea name="message" rows="4" cols="40"><?php echo strip_tags($user->message); ?></textarea></td></tr>
 
     <tr><th colspan='2'>CONTACT DETAILS</td></tr>
-    <tr><th>Email:</th><td><input maxlength="50" name="email" size="30" type="text" value="<?php echo strip_tags($user->email); ?>" /></td></tr>
+    <tr><th>Email:<sup class='red'>*</sup></th><td><input maxlength="50" name="email" size="30" type="text" value="<?php echo strip_tags($user->email); ?>" /></td></tr>
     <tr><th>Phone:</th><td><input maxlength="50" name="phone" size="30" type="text" value="<?php echo strip_tags($user->phone); ?>" /></td></tr>
     <tr><th>Fax:</th><td><input maxlength="50" name="fax" size="30" type="text" value="<?php echo strip_tags($user->fax); ?>" /></td></tr>
     <tr><th>Mobile:</th><td><input maxlength="50" name="mobile" size="30" type="text" value="<?php echo user_mobile($userid) ?>" /></td></tr>

@@ -2038,7 +2038,7 @@ function confirmation_page($refreshtime, $location, $message)
    <html>
    <head>
 
-   <?PHP
+   <?php
    echo "<title>{$CONFIG['application_shortname']} Confirmation Page</title>";
    echo "<meta http-equiv=\"refresh\" content=\"$refreshtime; url=$location\" />\n";
    $userstyle = user_style($sit[2]);

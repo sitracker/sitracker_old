@@ -136,7 +136,7 @@ while ($contactrow=mysql_fetch_array($contactresult))
     echo "</table>\n";
 
     echo "<p align='center'>";
-    echo "<a href=\"add_incident.php?action=findcontact&contactid=$id\">Add Incident</a> | ";
+    echo "<a href=\"add_incident.php?action=findcontact&amp;contactid=$id\">Add Incident</a> | ";
     echo "<a href=\"contact_details.php?id=$id&amp;output=vcard\">vCard</a> | ";
     echo "<a href=\"edit_contact.php?action=edit&amp;contact=$id\">Edit</a> | ";
     echo "<a href=\"delete_contact.php?id=$id\">Delete</a>";

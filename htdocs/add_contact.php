@@ -89,9 +89,11 @@ else
     if (!empty($address1)) $country = cleanvar($_REQUEST['country']);
     else $country='';
     $postcode = cleanvar($_REQUEST['postcode']);
+    $phone = cleanvar($_REQUEST['phone']);
     $mobile = cleanvar($_REQUEST['mobile']);
     $fax = cleanvar($_REQUEST['fax']);
     $department = cleanvar($_REQUEST['department']);
+    $notes = cleanvar($_REQUEST['notes']);
 
     $errors = 0;
     // check for blank name
@@ -130,9 +132,9 @@ else
     // add contact if no errors
     if ($errors == 0)
     {
-        if (isset($dataprotection_email)) $dataprotection_email='Yes'; else $dataprotection_email='No';
-        if (isset($dataprotection_phone)) $dataprotection_phone='Yes'; else $dataprotection_phone='No';
-        if (isset($dataprotection_address)) $dataprotection_address='Yes'; else $dataprotection_address='No';
+        if (!empty($dataprotection_email)) $dataprotection_email='Yes'; else $dataprotection_email='No';
+        if (!empty($dataprotection_phone)) $dataprotection_phone='Yes'; else $dataprotection_phone='No';
+        if (!empty($dataprotection_address)) $dataprotection_address='Yes'; else $dataprotection_address='No';
 
         // generate username and password
         ## From 23Nov04 (v3.14) Passwords are no longer generated/controlled by SiT - INL
@@ -143,10 +145,12 @@ else
 
         $sql  = "INSERT INTO contacts (username, password, salutation, forenames, surname, jobtitle, ";
         $sql .= "siteid, address1, address2, city, county, country, postcode, email, phone, mobile, fax, ";
-        $sql .= "department, timestamp_added, timestamp_modified) ";
+        $sql .= "department, notes, dataprotection_email, dataprotection_phone, dataprotection_address, ";
+        $sql .= "timestamp_added, timestamp_modified) ";
         $sql .= "VALUES ('$username', '$password', '$salutation', '$forenames', '$surname', '$jobtitle', ";
         $sql .= "'$siteid', '$address1', '$address2', '$city', '$county', '$country', '$postcode', '$email', ";
-        $sql .= "'$phone', '$mobile', '$fax', '$department', '$now', '$now')";
+        $sql .= "'$phone', '$mobile', '$fax', '$department', '$notes', '$dataprotection_email', ";
+        $sql .= "'$dataprotection_phone', '$dataprotection_address', '$now', '$now')";
         $result = mysql_query($sql);
         if (mysql_error()) trigger_error("MySQL Query Error ".mysql_error(), E_USER_ERROR);
 
