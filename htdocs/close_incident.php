@@ -311,12 +311,19 @@ else
                     if (mysql_error()) trigger_error("MySQL Query Error ".mysql_error(), E_USER_ERROR);
                 }
             }
+
+            // Meet service level 'solution'
+            $sql  = "INSERT INTO updates (incidentid, userid, type, timestamp, currentowner, customervisibility, sla, bodytext, timesincesla) ";
+            $sql .= "VALUES ('$id', '".$sit[2]."', 'slamet', '$now', '{$sit[2]}', 'show', 'solution','', '0')";
+            $result = mysql_query($sql);
+            if (mysql_error()) trigger_error("MySQL Query Error ".mysql_error(), E_USER_ERROR);
+
             //
             if ($wait=='yes')
             {
                 // Update - mark for closure
                 $sql  = "INSERT INTO updates (incidentid, userid, type, bodytext, timestamp) ";
-                $sql .= "VALUES ('$id', '$sit[2]', 'closing', 'Marked for Closure', '$now')";
+                $sql .= "VALUES ('$id', '{$sit[2]}', 'closing', 'Marked for Closure', '$now')";
                 $result = mysql_query($sql);
                 if (mysql_error()) trigger_error("MySQL Query Error ".mysql_error(), E_USER_ERROR);
             }
@@ -324,7 +331,7 @@ else
             {
                 // Update - close immediately
                 $sql  = "INSERT INTO updates (incidentid, userid, type, bodytext, timestamp) ";
-                $sql .= "VALUES ('$id', '$sit[2]', 'closing', 'Incident Closed', '$now')";
+                $sql .= "VALUES ('$id', '{$sit[2]}', 'closing', 'Incident Closed', '$now')";
                 $result = mysql_query($sql);
                 if (mysql_error()) trigger_error("MySQL Query Error ".mysql_error(), E_USER_ERROR);
             }

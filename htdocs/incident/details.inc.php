@@ -125,22 +125,26 @@ echo incidentstatus_name($incident->status);
 if ($incident->status == 2) echo " (" . closingstatus_name($incident->closingstatus) . ")";
 echo "<br />\n";
 
-if ($slaremain<>0)
+// Show sla target/review target if incident is still open
+if ($incident->status != 2 AND $incident->status!=7)
 {
-    echo $targettype;
-    if ($slaremain > 0) echo " in ".format_workday_minutes($slaremain);  //  ." left"
-    elseif ($slaremain < 0) echo " ".format_workday_minutes((0-$slaremain))." late";  //  ." left"
-}
-if ($reviewremain>0 && $reviewremain<=2400)
-{
-    // Only display if review is due in the next five days
-    if ($slaremain<>0) echo "<br />"; // only need a line sometimes
-    echo "Review in ".format_workday_minutes($reviewremain);
-}
-elseif ($reviewremain <= 0)
-{
-    if ($slaremain <> 0) echo "<br />"; // only need a line sometimes
-    echo "Review Due Now!";
+    if ($slaremain<>0)
+    {
+        echo $targettype;
+        if ($slaremain > 0) echo " in ".format_workday_minutes($slaremain);  //  ." left"
+        elseif ($slaremain < 0) echo " ".format_workday_minutes((0-$slaremain))." late";  //  ." left"
+    }
+    if ($reviewremain>0 && $reviewremain<=2400)
+    {
+        // Only display if review is due in the next five days
+        if ($slaremain<>0) echo "<br />"; // only need a line sometimes
+        echo "Review in ".format_workday_minutes($reviewremain);
+    }
+    elseif ($reviewremain <= 0)
+    {
+        if ($slaremain <> 0) echo "<br />"; // only need a line sometimes
+        echo "Review Due Now!";
+    }
 }
 echo "</td>";
 echo "</tr>\n";
