@@ -314,6 +314,7 @@ if ($menu != 'hide')
     else
     {
       echo "<a class='barlink' href='reopen_incident.php?id={$id}&amp;popup={$popup}'>Reopen</a> | ";
+      echo "<a class='barlink' href='incident_service_levels.php?id={$id}&amp;popup={$poup}' accesskey='S'><em>S</em>ervice</a> | ";
       echo "<a class='barlink' href='incident_attachments.php?id={$id}&amp;popup={$popup}' accesskey='F'><em>F</em>iles</a> | ";
       echo "<a class='barlink' href='incident_details.php?id={$id}&amp;popup={$popup}' accesskey='D'><em>D</em>etails And Log</a> | ";
       echo "<a class='barlink' href='javascript:help_window({$permission});'>?</a>";
