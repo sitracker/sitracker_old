@@ -1007,10 +1007,7 @@ function incident_sla_history($incidentid)
         default:
             $slahistory[$idx]['targettime'] = 0;
     }
-    // TODO v3.23 calc actual time for unmet sla's
-    $slahistory[$idx]['actualtime'] = 0;
-    // this next line is meaningless if we don't calculate actualtime.
-    if ($slahistory[$idx]['actualtime'] <= $slahistory[$idx]['targettime']) $slahistory[$idx]['targetmet'] = TRUE;
+    $slahistory[$idx]['actualtime'] = $target->since;   if ($slahistory[$idx]['actualtime'] <= $slahistory[$idx]['targettime']) $slahistory[$idx]['targetmet'] = TRUE;
     else $slahistory[$idx]['targetmet'] = FALSE;
     $slahistory[$idx]['timestamp'] = 0;
     $idx++;
