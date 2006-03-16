@@ -77,13 +77,14 @@ while ($incidents = mysql_fetch_array($result))
 
     // Get next target
     $target = incident_get_next_target($incidents['id']);
+    $working_day_mins = ($CONFIG['end_working_day'] - $CONFIG['start_working_day']) / 60;
     // Calculate time remaining in SLA
     switch ($target->type)
     {
         case 'initialresponse': $slatarget=$servicelevel->initial_response_mins; break;
         case 'probdef': $slatarget=$servicelevel->prob_determ_mins; break;
         case 'actionplan': $slatarget=$servicelevel->action_plan_mins; break;
-        case 'solution': $slatarget=($servicelevel->resolution_days * 480); break; // 480 mins in a working day
+        case 'solution': $slatarget=($servicelevel->resolution_days * $working_day_mins); break;
         default: $slaremain=0; $slatarget=0;
     }
     if ($slatarget >0) $slaremain=($slatarget - $target->since);

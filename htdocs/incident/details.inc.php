@@ -24,12 +24,13 @@ $servicelevel = mysql_fetch_object($slresult);
 // Get next target
 $target = incident_get_next_target($incidentid);
 // Calculate time remaining in SLA
+$working_day_mins = ($CONFIG['end_working_day'] - $CONFIG['start_working_day']) / 60;
 switch ($target->type)
 {
     case 'initialresponse': $slatarget=$servicelevel->initial_response_mins; break;
     case 'probdef': $slatarget=$servicelevel->prob_determ_mins; break;
     case 'actionplan': $slatarget=$servicelevel->action_plan_mins; break;
-    case 'solution': $slatarget=($servicelevel->resolution_days * 480); break; // 480 mins in a working day
+    case 'solution': $slatarget=($servicelevel->resolution_days * $working_day_mins); break;
     default: $slaremain=0; $slatarget=0;
 }
 
@@ -39,7 +40,7 @@ $targettype = target_type_name($target->type);
 
 // Get next review time
 $reviewsince = incident_get_next_review($incidents['id']);  // time since last review in minutes
-$reviewtarget = ($servicelevel->review_days * 480);          // how often reviews should happen in minutes
+$reviewtarget = ($servicelevel->review_days * $working_day_mins);          // how often reviews should happen in minutes
 if ($reviewtarget > 0) $reviewremain=($reviewtarget - $reviewsince);
 else $reviewremain = 0;
 

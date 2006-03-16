@@ -1003,7 +1003,7 @@ function incident_sla_history($incidentid)
         case 'initialresponse': $slahistory[$idx]['targettime'] = $level->initial_response_mins; break;
         case 'probdef': $slahistory[$idx]['targettime'] = $level->prob_determ_mins; break;
         case 'actionplan': $slahistory[$idx]['targettime'] = $level->action_plan_mins; break;
-        case 'solution': $slahistory[$idx]['targettime'] = ($level->resolution_days * $working_day_mins); break; // 480 mins in a working day
+        case 'solution': $slahistory[$idx]['targettime'] = ($level->resolution_days * $working_day_mins); break;
         default:
             $slahistory[$idx]['targettime'] = 0;
     }
