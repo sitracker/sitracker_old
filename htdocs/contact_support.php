@@ -209,7 +209,7 @@ if ($countproducts >= 1 OR $contactcontacts >= 1)
         $exceededpercent = number_format(($countslaexceeded / $countincidents * 100),1);
         $data = "$countslamet,$countslaexceeded";
         $keys = "a,b";
-        $legends = "SLA Met ({$metpercent}%),SLA Exceeded ({$externalpercent}%)";
+        $legends = "SLA Met ({$metpercent}%),SLA Exceeded ({$exceededpercent}%)";
         $title = urlencode('Incident Service Level Performance');
         echo "<div style='text-align:center;'>";
         echo "<img src='chart.php?type=pie&data=$data&legends=$legends&title=$title' />";
