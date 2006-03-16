@@ -187,7 +187,7 @@ if (user_permission($sit[2],$permission))
                 {
                     while($row = mysql_fetch_object($result))
                     {
-                        $srch_results[$key]['url']="<a href='incident_details.php?id={$row->id}'>Incident {$row->id}: {$row->title}</a>";
+                        $srch_results[$key]['url']="<a href=\"javascript:incident_details_window('{$row->id}', 'incident{$row->id}');\">Incident {$row->id}: {$row->title}</a>";
                         $owner=user_realname($row->owner);
                         $srch_results[$key]['string'] = "{$row->title}";
                         if ($row->status==2) $srch_results[$key]['string'] .= " (Closed)";
