@@ -3768,42 +3768,11 @@ function iso_8601_date($timestamp)
    return $date_mod;
 }
 
-// OBSOLETE replaced by calculate_working_time()
-// Returns the number of working day seconds between two times
-function working_day_diff($start, $end)
-{
-    global $CONFIG;
-    $day = substr($mysqldate,8,2);
-    if ($start > $end)
-    {
-        trigger_error("End timestamp before start timestamp", E_USER_NOTICE);
-        return 0;  // error end before start
-    }
-    $wdiff=0;
-    for($c=$start;$c<=$end;$c+=86400)
-    {
-        $cend=0;
-        if (date('w',$c)>=1 AND date('w',$c)<=5)
-        {
-            $today_work_start = mktime(0,0,0,date('m',$c),date('d',$c),date('Y',$c))+$CONFIG['start_working_day'];
-            $today_work_end = mktime(0,0,0,date('m',$c),date('d',$c),date('Y',$c))+$CONFIG['end_working_day'];
-            if ($start < $today_work_start) $cstart = $today_work_start;
-            else $cstart = $start;
-            if ($end > $today_work_end AND $today_work_end > $cstart) $cend = $today_work_end;
-            //elseif ($end > $today_work_end AND $today_work_end <= $cstart) $cend = $end;
-            else $cend = $end;
-            $wdiff += ($cend - $cstart);
-            //echo "<p>Today: ".date('r',$today_work_start)." - ".date('r',$today_work_end)." ($wdiff)</p>";
-            echo "<p>C($c): ".format_seconds($cend)." - ".format_seconds($cstart)." = ".format_seconds($wdiff)." ($wdiff)</p>";
-        }
-    }
-    $wdiff = round($wdiff,0);
-    return $wdiff;
-}
 
-
+// Returns the number of working minutes (minutes in the working day)
+// between two unix timestamps
 function calculate_working_time($t1,$t2) {
-// Note that this won't work if we have something 
+// Note that this won't work if we have something
 // more complicated than a weekend
 
   global $CONFIG;
@@ -3853,7 +3822,7 @@ function calculate_working_time($t1,$t2) {
           $at1['yday']=0;
         }
       }
-  
+
       $at1['hours']=$swd;
       $at1['minutes']=0;
     }
@@ -3875,7 +3844,7 @@ function calculate_working_time($t1,$t2) {
 
     $at2['hours']=$ewd;
     $at2['minutes']=0;
-  
+
   } else {
     if (($at2['hours']>$ewd) || (!in_array($at2['wday'],$CONFIG['working_days']))) {
       while (!in_array($at2['wday'],$CONFIG['working_days'])) {

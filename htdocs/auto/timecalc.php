@@ -149,21 +149,21 @@ while ($incident=mysql_fetch_array($incident_result)) {
         $emailSent=0;
         // First check SLA
         if ($times['next_sla_time'] < $newSlaTime) {
-        if ($verbose) echo "Incident {$incident['id']} out of SLA{$crlf}";
-        send_template_email('OUT_OF_SLA',$incident['id'],$tag,$newSlaTime-$times['next_sla_time']);
-        $emailSent=1;
+            if ($verbose) echo "Incident {$incident['id']} out of SLA{$crlf}";
+            send_template_email('OUT_OF_SLA',$incident['id'],$tag,$newSlaTime-$times['next_sla_time']);
+            $emailSent=1;
         }
 
         if (($times['review_days'] * 24 * 60) < $newReviewTime) {
-        if ($verbose) echo "Incident {$incident['id']} out of Review{$crlf}";
-        send_template_email('OUT_OF_REVIEW',$incident['id'],"",-1);
-        $emailSent=1;
+            if ($verbose) echo "Incident {$incident['id']} out of Review{$crlf}";
+            send_template_email('OUT_OF_REVIEW',$incident['id'],"",-1);
+            $emailSent=1;
         }
 
         // If we just sent one then update the incident so we don't send another next time
         if ($emailSent) {
-        $sql="UPDATE incidents SET slaemail='1' WHERE id='{$incident['id']}'";
-        mysql_query($sql);
+            $sql="UPDATE incidents SET slaemail='1' WHERE id='{$incident['id']}'";
+            mysql_query($sql);
         }
 
     }

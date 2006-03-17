@@ -106,7 +106,7 @@ while ($update = mysql_fetch_object($result))
     $currentstatus=incident_status($update->currentstatus);
 
     $updateheadermacro[] = 'currentowner';      $updateheaderstring[] = $currentowner;
-    $updateheadermacro[] = 'updateuser';      $updateheaderstring[] = "-=-$updateuser";
+    $updateheadermacro[] = 'updateuser';      $updateheaderstring[] = "$updateuser";
 
     $updateheadertext = str_replace($updateheadermacro, $updateheaderstring, $updatetypes[$update->type]['text']);
 
