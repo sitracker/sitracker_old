@@ -812,9 +812,9 @@ CREATE TABLE `sites` (
 
 INSERT INTO `sites` (`id`, `name`, `department`, `address1`, `address2`, `city`, `county`,
 `country`, `postcode`, `telephone`, `fax`, `email`, `notes`, `typeid`, `freesupport`, `licenserx`,
-`ftnpassword`, `owner`) VALUES (1, 'ACME Widgets Co.', 'Manufacturing Dept.', '21 Any Street', '',
+ `owner`) VALUES (1, 'ACME Widgets Co.', 'Manufacturing Dept.', '21 Any Street', '',
 'Anytown', 'Anyshire', 'UNITED KINGDOM', 'AN1 0TH', '0555 555555', '0444 444444', 'acme@example.com',
-'Example site', 1, 0, 0, '', 0);
+'Example site', 1, 0, 0, 0);
 
 CREATE TABLE `sitetypes` (
   `typeid` int(5) NOT NULL auto_increment,
@@ -1144,6 +1144,8 @@ INDEX ( `incidentid` , `relatedid` )
 ) ;
 
 ALTER TABLE `sites` CHANGE `notes` `notes` TEXT NOT NULL ;
+
+ALTER TABLE `sites` DROP `ftnpassword`;
 ";
 
 // Important: When making changes to the schema you must add SQL to make the alterations

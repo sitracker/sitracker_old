@@ -3,7 +3,7 @@ Changes in v3.23 - Unreleased
 * Improved Auto-reassign back to original owner after holiday
 * Improved contact support page
 * Merged list of sites contracts onto the site details page
-* Surname and Email address is now checked when adding a contact to help prevent dupes
+* Surname and Email address are now both checked when adding a contact to help prevent dupes
 * Contacts now use their site address unless specifically overridden
 * Improved password generation
 * Fixed bug with contact address (country field)
@@ -25,6 +25,11 @@ Changes in v3.23 - Unreleased
 * Improved reporting to show percentage of incidents that were escalated
 * Added SLA time calculation to auto.php scheduling
 * Changed sites.notes column to TEXT from BLOB
+* Removed obsolete and unused database column 'ftnpassword'
+* Fixed missing banner graphic for neoteric theme, added blue swirl
+* Improved the list of incidents that a site/contact has a logged and added
+  new png pie charts showing various data
+
 
 Changes in v3.22 - Released 27 January 2006
 -------------------------------------------------------------------------------------

@@ -4,9 +4,6 @@ v3.23
 * Roles
 * Related Incidents
 * Remove/Rename obsolete permissions (e.g. PO)
-* Site Incident Graphs
-* Banner graphic
-* Remove obsolete ftnpassword field
 
 v3.2x
 * Incoming email handler
