@@ -69,6 +69,7 @@ $updatetypes['closing'] = array('icon' => 'actions/fileclose.png', 'text' => 'Ma
 $updatetypes['editing'] = array('icon' => 'actions/edit.png', 'text' => 'Edited by currentowner');
 $updatetypes['email'] = array('icon' => 'actions/mail_send.png', 'text' => 'Email sent by updateuser');
 $updatetypes['emailin'] = array('icon' => 'actions/mail_generic.png', 'text' => 'Email received by updateuser');
+$updatetypes['emailout'] = array('icon' => 'actions/mail_send.png', 'text' => 'Email sent by updateuser');
 $updatetypes['externalinfo'] = array('icon' => 'actions/ktip.png', 'text' => 'External info added by updateuser');
 $updatetypes['probdef'] = array('icon' => 'actions/enum_list.png', 'text' => 'Problem Definition by currentowner');
 $updatetypes['research'] = array('icon' => 'actions/idea.png', 'text' => 'Researched by currentowner');
