@@ -56,7 +56,9 @@ if (mysql_error()) trigger_error(mysql_error(),E_USER_WARNING);
 
 ?>
 <h2>Manage Users</h2>
-<p align='center'><a href="add_user.php?action=showform">Add User</a></p>
+<p align='center'><a href="add_user.php?action=showform">Add User</a> |
+<a href="edit_user_permissions.php">Set Role Permissions</a>
+</p>
 <table align='center'>
 <tr>
     <th><a href="<?php echo $_SERVER['PHP_SELF'] ?>?sort=realname">Name</a> (<a href="<?php echo $_SERVER['PHP_SELF'] ?>?sort=username">Username</a>)</th>
