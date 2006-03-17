@@ -2018,6 +2018,7 @@ function format_workday_minutes($minutes)
 
     if ($days <= 3 AND $hours == 1) $time .= " {$hours} hour";
     elseif ($days <= 3 AND $hours > 1) $time .= " {$hours} hours";
+    elseif ($days > 3 AND $hours >= 1) $time = "&gt; ".$time;
 
     if ($days < 1 AND $hours < 8 AND $minutes == 1) $time .= " {$minutes} minute";
     elseif ($days < 1 AND $hours < 8 AND $minutes > 1) $time .= " {$minutes} minutes";

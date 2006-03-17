@@ -28,7 +28,9 @@ if (count($slahistory) >= 1)
     echo "<tr><th>Event</th><th>User</th><th>Target</th><th>Actual</th><th>Date &amp; Time</th></tr>\n";
     foreach($slahistory AS $history)
     {
-        echo "<tr class='shade2'>";
+        if ($history['targetmet']==FALSE) $class='critical';
+        else $class='shade2';
+        echo "<tr class='$class'>";
         echo "<td>".target_type_name($history['targetsla'])."</td>";
         echo "<td>";
         if (!empty($history['userid'])) echo user_realname($history['userid']);
