@@ -136,7 +136,7 @@ switch ($type)
         {
             imagefilledarc($img,$cx,$cy,$sx,$sy,$angle_sum[$i-1] ,$angle_sum[$i], $colors[$i], IMG_ARC_PIE);
             imagefilledrectangle($img, 255, ($legendY+1), 264, ($legendY+9), $colors[$i]);
-            imagestring($img,2, 270, ($legendY-1), substr($legends[$i],0,27)." ({$data[$i]})", $black);
+            imagestring($img,2, 270, ($legendY-1), substr(urldecode($legends[$i]),0,27)." ({$data[$i]})", $black);
             // imagearc($img,$cx,$cy,$sx,$sy,$angle_sum[$i1] ,$angle_sum[$i], $blue);
             $legendY+=15;
         };

@@ -76,7 +76,7 @@ while ($contactrow=mysql_fetch_array($contactresult))
     }
 
     echo "<table align='center' class='vertical'>";
-    echo "<tr><th colspan='2'><h3>".$contactrow['forenames'].' '.$contactrow['surname']."</h3></th></tr>";
+    echo "<tr><th colspan='2'><h3>".stripslashes($contactrow['forenames']).' '.stripslashes($contactrow['surname'])."</h3></th></tr>";
     echo "<tr><th>Flags:</th><td>";
     print_contact_flags($id);
     echo "</td></tr>";

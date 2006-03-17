@@ -43,7 +43,8 @@ else echo "<h2>".contact_realname($id)."'</h2>";
 if ($mode=='site')
 {
     $sql = "SELECT *, (closed - opened) AS duration_closed, incidents.id AS incidentid FROM incidents, contacts ";
-    $sql .= "WHERE incidents.contact=contacts.id AND contacts.siteid='$id' ";
+    $sql .= "WHERE incidents.contact=contacts.id ";
+    if (!empty($id) AND ($id != 'all' AND !empty($start)))$sql .= "AND contacts.siteid='$id' ";
     if ($status=='open') $sql .= "AND incidents.status!=2 ";
     elseif ($status=='closed') $sql .= "AND incidents.status=2 ";
     if ($start > 0) $sql .= "AND opened >= $start ";
@@ -154,7 +155,7 @@ if ($countproducts >= 1 OR $contactcontacts >= 1)
     foreach ($productlist AS $product => $quantity)
     {
         $productpercentage = number_format($quantity * 100 / $countproducts, 1);
-        $productlegends[] = product_name($product)." ({$productpercentage}%)";
+        $productlegends[] = urlencode(product_name($product)." ({$productpercentage}%)");
     }
 
     if ($mode=='site')
@@ -162,7 +163,7 @@ if ($countproducts >= 1 OR $contactcontacts >= 1)
         foreach ($contactlist AS $contact => $quantity)
         {
             $contactpercentage = number_format($quantity * 100 / $countcontacts, 1);
-            $contactlegends[] = "$contact ({$contactpercentage}%)";
+            $contactlegends[] = urlencode("$contact ({$contactpercentage}%)");
         }
     }
 

@@ -611,7 +611,7 @@ function contact_realname($id)
     else
     {
         $contact = mysql_fetch_array($result);
-        $realname=$contact['forenames'].' '.$contact['surname'];
+        $realname=stripslashes($contact['forenames'].' '.$contact['surname']);
         mysql_free_result($result);
         return($realname);
     }
