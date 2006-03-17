@@ -3803,20 +3803,106 @@ function working_day_diff($start, $end)
 
 
 function calculate_working_time($t1,$t2) {
-  // Returns the number of 'working minutes' between two unix timestamps -
-  // this could be improved but in practice we will only be counting to 300 or so
-  global $CONFIG;
+// Note that this won't work if we have something 
+// more complicated than a weekend
+
+global $CONFIG;
+
+  $swd=$CONFIG['start_working_day']/3600;
+  $ewd=$CONFIG['end_working_day']/3600;
+
+  // Just in case they are the wrong way around ...
+
+  if ( $t1>$t2 ) {
+    $t3=$t2;
+    $t2=$t1;
+    $t1=$t3;
+  }
+
+  // We don't need all the elements here.  hours, days and year are used
+  // later on to calculate the difference.  wday is just used in this
+  // section
+
+  $at1=getdate($t1);
+  $at2=getdate($t2);
+
+  // Make sure that the start time is on a valid day and within normal hours
+  // if it isn't then move it forward to the next work minute
+
+  if ($at1['hours']>$ewd) {
+    do {
+      $at1['days']++;
+      $at1['wday']++;
+      $at1['wday']%=7;
+      if ($at1['days']>365) {
+        $at1['year']++;
+        $at1['days']=0;
+      }
+    } while (!in_array($at1['wday'],$CONFIG['working_days']));
+
+    $at1['hours']=$swd;
+    $at1['minutes']=0;
+
+  } else if (($at1['hours']<$swd) || (!in_array($at1['wday'],$CONFIG['working_days']))) {
+      while (!in_array($at1['wday'],$CONFIG['working_days'])) {
+        $at1['days']++;
+        $at1['wday']++;
+        $at1['wday']%=7;
+        if ($at1['days']>365) {
+          $at1['year']++;
+          $at1['days']=0;
+        }
+      }
+  
+      $at1['hours']=$swd;
+      $at1['minutes']=0;
+    }
+  }
+
+  // Same again but for the end time
+  // if it isn't then move it backward to the previous work minute
+
+  if ( $at2['hours']<$swd) {
+    do {
+      $at2['days']--;
+      $at2['wday']--;
+      if ($at2['wday']<0) $at2['wday']=6;
+      if ($at2['days']<0) {
+        $at2['days']=365;
+        $at2['year']--;
+      }
+    } while (!in_array($at2['wday'],$CONFIG['working_days']));
+
+    $at2['hours']=$ewd;
+    $at2['minutes']=0;
+  
+  } else if (($at2['hours']>$ewd) || (!in_array($at2['wday'],$CONFIG['working_days']))) {
+      while (!in_array($at2['wday'],$CONFIG['working_days'])) {
+      $at2['days']--;
+      $at2['wday']--;
+      if ($at2['wday']<0) $at2['wday']=6;
+      if ($at2['days']<0) {
+        $at2['days']=365;
+        $at2['year']--;
+      }
+  
+      $at2['hours']=$ewd;
+      $at2['minutes']=0;
+    }
+
+  $t1=mktime($at1['hours'],$at1['minutes'],0,1,$at1['days'],$at1['year']);
+  $t2=mktime($at2['hours'],$at2['minutes'],0,1,$at2['days'],$at2['year']);
+
   $weeks=floor(($t2-$t1)/(60*60*24*7));
   $t1+=$weeks*60*60*24*7;
 
-  for ($i=$t1; $i<$t2; $i+=60) {
-    $hour=date('H',$i);
-    if ($hour>=($CONFIG['start_working_day']/3600) && $hour<($CONFIG['end_working_day']/3600)) {
-      $day=date('w',$i);
-      if (in_array($day, $CONFIG['working_days'])) $workedMinutes++;
-    }
-  }
-  return $workedMinutes+$weeks*($CONFIG['end_working_day']-$CONFIG['start_working_day'])*count($CONFIG['working_days'])/60;
+  $days=floor( ($t2-$t1) / 60*60*24));
+  $t1+=$days;
+
+  // this could be negative and that's ok
+  $min=floor( ($t2-$t1)/60 );
+
+  return $min + ($weeks * count($CONFIG['working_days']) + $days ) * ($ewd-$swd) * 60;
 }
 
 
