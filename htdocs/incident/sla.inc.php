@@ -42,4 +42,9 @@ if (count($slahistory) >= 1)
     echo "</table>\n";
 }
 else echo "<p align='center'>There is no history to display.<p>";
+
+echo "<pre>";
+print_r($slahistory);
+echo "</pre>";
+
 ?>

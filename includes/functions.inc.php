@@ -997,9 +997,9 @@ function incident_sla_history($incidentid)
         $prevtime=$history->timestamp;
         $idx++;
     }
-    if ($incident->status != 2 AND $incident>status != 7)
+    // Get next target, but only if incident is still open
+    if ($incident->status != 2 AND $incident->status != 7)
     {
-        // Get next target, but only if incident is still open
         $target = incident_get_next_target($incidentid);
         $slahistory[$idx]['targetsla'] = $target->type;
         switch ($target->type)
@@ -1011,7 +1011,8 @@ function incident_sla_history($incidentid)
             default:
                 $slahistory[$idx]['targettime'] = 0;
         }
-        $slahistory[$idx]['actualtime'] = $target->since;   if ($slahistory[$idx]['actualtime'] <= $slahistory[$idx]['targettime']) $slahistory[$idx]['targetmet'] = TRUE;
+        $slahistory[$idx]['actualtime'] = $target->since;
+        if ($slahistory[$idx]['actualtime'] <= $slahistory[$idx]['targettime']) $slahistory[$idx]['targetmet'] = TRUE;
         else $slahistory[$idx]['targetmet'] = FALSE;
         $slahistory[$idx]['timestamp'] = 0;
     }
