@@ -72,7 +72,7 @@ $updatetypes['emailin'] = array('icon' => 'actions/mail_generic.png', 'text' => 
 $updatetypes['externalinfo'] = array('icon' => 'actions/ktip.png', 'text' => 'External info added by updateuser');
 $updatetypes['probdef'] = array('icon' => 'actions/enum_list.png', 'text' => 'Problem Definition by currentowner');
 $updatetypes['research'] = array('icon' => 'actions/idea.png', 'text' => 'Researched by currentowner');
-$updatetypes['reassigning'] = array('icon' => 'actions/2rightarrow.png', 'text' => 'Reassigned to currentowner');
+$updatetypes['reassigning'] = array('icon' => 'actions/2rightarrow.png', 'text' => 'Reassigned to currentowner by updateuser');
 $updatetypes['reviewmet'] = array('icon' => 'actions/flag.png', 'text' => 'Review Period by currentowner'); // conditional
 $updatetypes['tempassigning'] = array('icon' => 'actions/1rightarrow.png', 'text' => 'Temporarily assigned to currentowner');
 $updatetypes['opening'] = array('icon' => 'actions/filenew.png', 'text' => 'Opened by currentowner');
@@ -3806,8 +3806,7 @@ function calculate_working_time($t1,$t2) {
 // Note that this won't work if we have something 
 // more complicated than a weekend
 
-global $CONFIG;
-
+  global $CONFIG;
   $swd=$CONFIG['start_working_day']/3600;
   $ewd=$CONFIG['end_working_day']/3600;
 
@@ -3831,26 +3830,27 @@ global $CONFIG;
 
   if ($at1['hours']>$ewd) {
     do {
-      $at1['days']++;
+      $at1['yday']++;
       $at1['wday']++;
       $at1['wday']%=7;
-      if ($at1['days']>365) {
+      if ($at1['yday']>365) {
         $at1['year']++;
-        $at1['days']=0;
+        $at1['yday']=0;
       }
     } while (!in_array($at1['wday'],$CONFIG['working_days']));
 
     $at1['hours']=$swd;
     $at1['minutes']=0;
 
-  } else if (($at1['hours']<$swd) || (!in_array($at1['wday'],$CONFIG['working_days']))) {
+  } else {
+    if (($at1['hours']<$swd) || (!in_array($at1['wday'],$CONFIG['working_days']))) {
       while (!in_array($at1['wday'],$CONFIG['working_days'])) {
-        $at1['days']++;
+        $at1['yday']++;
         $at1['wday']++;
         $at1['wday']%=7;
         if ($at1['days']>365) {
           $at1['year']++;
-          $at1['days']=0;
+          $at1['yday']=0;
         }
       }
   
@@ -3864,11 +3864,11 @@ global $CONFIG;
 
   if ( $at2['hours']<$swd) {
     do {
-      $at2['days']--;
+      $at2['yday']--;
       $at2['wday']--;
       if ($at2['wday']<0) $at2['wday']=6;
-      if ($at2['days']<0) {
-        $at2['days']=365;
+      if ($at2['yday']<0) {
+        $at2['yday']=365;
         $at2['year']--;
       }
     } while (!in_array($at2['wday'],$CONFIG['working_days']));
@@ -3876,33 +3876,48 @@ global $CONFIG;
     $at2['hours']=$ewd;
     $at2['minutes']=0;
   
-  } else if (($at2['hours']>$ewd) || (!in_array($at2['wday'],$CONFIG['working_days']))) {
+  } else {
+    if (($at2['hours']>$ewd) || (!in_array($at2['wday'],$CONFIG['working_days']))) {
       while (!in_array($at2['wday'],$CONFIG['working_days'])) {
-      $at2['days']--;
-      $at2['wday']--;
-      if ($at2['wday']<0) $at2['wday']=6;
-      if ($at2['days']<0) {
-        $at2['days']=365;
-        $at2['year']--;
+        $at2['yday']--;
+        $at2['wday']--;
+        if ($at2['wday']<0) $at2['wday']=6;
+        if ($at2['yday']<0) {
+          $at2['yday']=365;
+          $at2['year']--;
+        }
       }
-  
       $at2['hours']=$ewd;
       $at2['minutes']=0;
     }
+  }
 
-  $t1=mktime($at1['hours'],$at1['minutes'],0,1,$at1['days'],$at1['year']);
-  $t2=mktime($at2['hours'],$at2['minutes'],0,1,$at2['days'],$at2['year']);
+
+  $t1=mktime($at1['hours'],$at1['minutes'],0,1,$at1['yday']+1,$at1['year']);
+  $t2=mktime($at2['hours'],$at2['minutes'],0,1,$at2['yday']+1,$at2['year']);
 
   $weeks=floor(($t2-$t1)/(60*60*24*7));
   $t1+=$weeks*60*60*24*7;
 
-  $days=floor( ($t2-$t1) / 60*60*24));
-  $t1+=$days;
+  while ( date('z',$t2) != date('z',$t1) ) {
+    if (in_array(date('w',$t1),$CONFIG['working_days'])) $days++;
+    $t1+=60*60*24;
+  }
 
-  // this could be negative and that's ok
-  $min=floor( ($t2-$t1)/60 );
+  // this could be negative and that's not ok
 
-  return $min + ($weeks * count($CONFIG['working_days']) + $days ) * ($ewd-$swd) * 60;
+  $coefficient=1;
+  if ($t2<$t1) {
+    $t3=$t2;
+    $t2=$t1;
+    $t1=$t3;
+    $coefficient=-1;
+  }
+
+  $min=floor( ($t2-$t1)/60 )*$coefficient;
+
+  $minutes= $min + ($weeks * count($CONFIG['working_days']) + $days ) * ($ewd-$swd) * 60;
+  return $minutes;
 }
 
 
