@@ -743,7 +743,6 @@ INSERT INTO `rolepermissions` (`roleid`, `permissionid`, `granted`) VALUES (3, 1
 INSERT INTO `rolepermissions` (`roleid`, `permissionid`, `granted`) VALUES (3, 26, 'true');
 INSERT INTO `rolepermissions` (`roleid`, `permissionid`, `granted`) VALUES (3, 27, 'true');
 INSERT INTO `rolepermissions` (`roleid`, `permissionid`, `granted`) VALUES (3, 28, 'true');
-INSERT INTO `rolepermissions` (`roleid`, `permissionid`, `granted`) VALUES (3, 29, 'true');
 INSERT INTO `rolepermissions` (`roleid`, `permissionid`, `granted`) VALUES (3, 30, 'true');
 INSERT INTO `rolepermissions` (`roleid`, `permissionid`, `granted`) VALUES (3, 33, 'true');
 INSERT INTO `rolepermissions` (`roleid`, `permissionid`, `granted`) VALUES (3, 34, 'true');
