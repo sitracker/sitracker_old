@@ -29,7 +29,11 @@ Changes in v3.23 - Unreleased
 * Fixed missing banner graphic for neoteric theme, added blue swirl
 * Improved the list of incidents that a site/contact has a logged and added
   new png pie charts showing various data
-
+* User Permissions can now be set using 'Roles', there are currently three roles available
+  'Administator', 'Manager' and 'User' and the permissions for each of these can
+  be configured.
+* User Permissions are now read only once at login and stored in the users session
+  for quick retreival
 
 Changes in v3.22 - Released 27 January 2006
 -------------------------------------------------------------------------------------

@@ -17,6 +17,11 @@ php.ini has register_globals set OFF, this has been the default since
 PHP 4.2.0 but since SiT! previously required it to be ON you should
 check your php.ini.
 
+Some permissions have changed with the introduction of the new roles
+based permissions system, after upgrading you should check role
+permissions and then assign roles to your users, finally you should
+check each users' permissions to ensure they meet your needs.
+
 
 Upgrading from 3.20 to 3.21
 ---------------------------

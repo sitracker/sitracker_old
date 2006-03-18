@@ -9,7 +9,7 @@
 //
 
 
-$permission=21; // Edit Maintenance Contracts
+$permission=21; // Edit Contracts
 
 require('db_connect.inc.php');
 require('functions.inc.php');

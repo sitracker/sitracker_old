@@ -10,7 +10,7 @@
 
 // by Ivan Lucas, June 2004
 
-$permission=17; // Edit Email Template
+$permission=51; // View Feedback
 
 require('db_connect.inc.php');
 require('functions.inc.php');

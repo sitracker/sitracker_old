@@ -42,8 +42,6 @@ if (empty($action) OR $action == "showform")
     if(mysql_num_rows($result) >= 1)
     {
         echo "<h2>Set Role Permissions</h2>";
-        // FIXME v3.23 Roles need finishing for 3.23 release
-        echo "<p align='center' class='warning'>Roles are an incomplete feature and not ready for production use</p>";
         echo "<form action='{$_SERVER['PHP_SELF']}' method='post' onsubmit='return confirm_submit()'>";
         echo "<table align='center'>";
         echo "<tr>";

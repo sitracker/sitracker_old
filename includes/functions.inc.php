@@ -1321,10 +1321,6 @@ function role_drop_down($name, $id)
 
 
 
-/*  prints the HTML for a drop down list of     */
-/* incident status names (EXCLUDING 'CLOSED'), with the given */
-/* name and with the given id selected.                       */
-
 function interfacestyle_drop_down($name, $id)
 {
    // extract statuses
@@ -1342,7 +1338,7 @@ function interfacestyle_drop_down($name, $id)
       ?><option <?php if ($styles["id"] == $id) { ?>selected='selected' <?php } ?>value='<?php echo $styles["id"] ?>'><?php echo $styles["name"] ?></option><?php
       echo "\n";
    }
-   echo "</select>";
+   echo "</select>\n";
 }
 
 

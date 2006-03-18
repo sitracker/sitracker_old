@@ -503,8 +503,8 @@ INSERT INTO `permissions` VALUES (24, 'Add Product');
 INSERT INTO `permissions` VALUES (25, 'Add Product Information');
 INSERT INTO `permissions` VALUES (26, 'Get Help');
 INSERT INTO `permissions` VALUES (27, 'View Your Calendar');
-INSERT INTO `permissions` VALUES (28, 'Add Quotation');
-INSERT INTO `permissions` VALUES (29, 'Edit Quotation');
+INSERT INTO `permissions` VALUES (28, 'View Products and Software');
+INSERT INTO `permissions` VALUES (29, 'Edit Products');
 INSERT INTO `permissions` VALUES (30, 'View Supported Products');
 INSERT INTO `permissions` VALUES (32, 'Edit Supported Products');
 INSERT INTO `permissions` VALUES (33, 'Send Emails');
@@ -522,12 +522,12 @@ INSERT INTO `permissions` VALUES (44, 'Publish files to FTP site');
 INSERT INTO `permissions` VALUES (45, 'View Mailing List Subscriptions');
 INSERT INTO `permissions` VALUES (46, 'Edit Mailing List Subscriptions');
 INSERT INTO `permissions` VALUES (47, 'Administrate Mailing Lists');
-INSERT INTO `permissions` VALUES (48, 'View Sales Purchase Orders');
-INSERT INTO `permissions` VALUES (49, 'Add/Edit Sales Purchase Orders');
+INSERT INTO `permissions` VALUES (48, 'Add Feedback Forms');
+INSERT INTO `permissions` VALUES (49, 'Edit Feedback Forms');
 INSERT INTO `permissions` VALUES (50, 'Approve Holidays');
-INSERT INTO `permissions` VALUES (51, 'View InnerWeb');
+INSERT INTO `permissions` VALUES (51, 'View Feedback');
 INSERT INTO `permissions` VALUES (52, 'View Hidden Updates');
-INSERT INTO `permissions` VALUES (53, 'Administrate Store');
+INSERT INTO `permissions` VALUES (53, 'Edit Service Levels');
 INSERT INTO `permissions` VALUES (54, 'View KB Articles');
 INSERT INTO `permissions` VALUES (55, 'Delete Sites/Contacts');
 INSERT INTO `permissions` VALUES (56, 'Add Software');
@@ -1146,6 +1146,13 @@ INDEX ( `incidentid` , `relatedid` )
 ALTER TABLE `sites` CHANGE `notes` `notes` TEXT NOT NULL ;
 
 ALTER TABLE `sites` DROP `ftnpassword`;
+
+UPDATE `permissions` SET `name` = 'View Products and Software' WHERE `id` =28 LIMIT 1 ;
+UPDATE `permissions` SET `name` = 'Edit Products' WHERE `id` =29 LIMIT 1 ;
+UPDATE `permissions` SET `name` = 'Add Feedback Forms' WHERE `id` =48 LIMIT 1 ;
+UPDATE `permissions` SET `name` = 'Edit Feedback Forms' WHERE `id` =49 LIMIT 1 ;
+UPDATE `permissions` SET `name` = 'View Feedback' WHERE `id` =51 LIMIT 1 ;
+UPDATE `permissions` SET `name` = 'Edit Service Levels' WHERE `id` =53 LIMIT 1 ;
 ";
 
 // Important: When making changes to the schema you must add SQL to make the alterations

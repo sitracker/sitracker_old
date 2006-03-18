@@ -11,7 +11,7 @@
 
 // Author: Ivan Lucas
 
-$permission=24; // Add Product
+$permission=29; // Edit products
 
 require('db_connect.inc.php');
 require('functions.inc.php');

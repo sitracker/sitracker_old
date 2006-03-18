@@ -10,7 +10,7 @@
 
 // Author: Ivan Lucas
 
-$permission=22; // Administrate
+$permission=53; // Edit Service Levels
 $title = 'Edit Service Level';
 
 require('db_connect.inc.php');

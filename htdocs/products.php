@@ -10,7 +10,7 @@
 
 // Author: Ivan Lucas
 
-$permission=24; // Add Product
+$permission=28; // View Products and Software
 $title='Products List';
 
 require('db_connect.inc.php');
