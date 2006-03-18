@@ -31,6 +31,7 @@ function confirm_submit()
 $user = cleanvar($_REQUEST['user']);
 $role = cleanvar($_REQUEST['role']);
 $action = $_REQUEST['action'];
+$perm = $_POST['perm'];
 
 if (empty($action) OR $action == "showform")
 {
@@ -43,7 +44,7 @@ if (empty($action) OR $action == "showform")
         echo "<h2>Set Role Permissions</h2>";
         // FIXME v3.23 Roles need finishing for 3.23 release
         echo "<p align='center' class='warning'>Roles are an incomplete feature and not ready for production use</p>";
-        echo "<form action='{$_SERVER['PHP_SELF']}?action=update' method='post' onsubmit='return confirm_submit()'>";
+        echo "<form action='{$_SERVER['PHP_SELF']}' method='post' onsubmit='return confirm_submit()'>";
         echo "<table align='center'>";
         echo "<tr>";
         echo "<th>Permission</th>";
@@ -74,7 +75,9 @@ if (empty($action) OR $action == "showform")
             else $class = "shade2";
         }
         echo "</table>";
-        echo "<p><input name='reset' type='reset' value='Reset' /> <input name='submit' type='submit' value='Save' /></p>";
+        echo "<p><input name='reset' type='reset' value='Reset' />";
+        echo "<input type='hidden' name='action' value='update' />";
+        echo "<input name='submit' type='submit' value='Save' /></p>";
         echo "</form>";
     }
 }
@@ -85,24 +88,22 @@ elseif ($action == "edit" && (!empty($user) OR !empty($role)))
     if (!empty($user)) $object = "user: ".user_realname($user);
     else $object = "role: ".db_read_column('rolename', 'roles', $role);
     echo "<h2>Set Permissions for {$object}</h2>";
+    if (!empty($user)) echo "<p align='center'>Permissions that are inherited from the users role can not be changed.</p>";
 
     // Next lookup the permissions
-    $sql = "SELECT * FROM users, rolepermissions WHERE users.roleid=rolepermissions.roleid AND granted='true'";
+    $sql = "SELECT * FROM users, rolepermissions WHERE users.roleid=rolepermissions.roleid AND users.id = '$user' AND granted='true'";
     $result = mysql_query($sql);
     if (mysql_error()) trigger_error(mysql_error(),E_USER_ERROR);
+    $userrolepermission=array();
     if (mysql_num_rows($result) >= 1)
     {
         while ($roleperm = mysql_fetch_object($result))
         {
-            $userrolepermission[]=$roleperm->permissionid;
+           $userrolepermission[]=$roleperm->permissionid;
         }
     }
-    // FIXME v3.34 unfinished...
-
-
+    echo "<form action='{$_SERVER['PHP_SELF']}?action=update' method='post' onsubmit='return confirm_submit()'>";
     ?>
-    <form action="<?php echo $_SERVER['PHP_SELF']; ?>?action=update" method="post" onsubmit="return confirm_submit()">
-    <p>
     <table align='center'>
     <tr>
     <th>ID</th>
@@ -126,35 +127,36 @@ elseif ($action == "edit" && (!empty($user) OR !empty($role)))
 
     $sql = "SELECT * FROM permissions";
     $result= mysql_query($sql);
-    $i=0;
     $class='shade1';
     while ($permissions = mysql_fetch_array($result))
     {
+        $permission_array=mysql_fetch_array($permission_result);
         if (!in_array($permissions['id'],$userrolepermission))
         {
             echo "<tr class='$class'><td align='right'>".$permissions['id']."</td>";
             echo "<td>";
             echo "<input name=\"perm[]\" type=\"checkbox\" value=\"".$permissions['id']."\"";
-            $permission_array=mysql_fetch_array($permission_result);
+
 
             if ($permission_array['granted']=='true') echo " checked='checked'";
             echo " /> ".$permissions['name'];
 
             echo "</td></tr>\n";
-            $i++;
-            if ($class=='shade2') $class = "shade1";
-            else $class = "shade2";
         }
+        else
+        {
+            echo "<tr class='$class'><td align='right'>{$permissions['id']}</td>";
+            echo "<td><input name='dummy[]' type='checkbox' checked='checked' disabled='disabled' /> {$permissions['name']}";
+            echo "<input type='hidden' name='perm[]' value='{$permissions['id']}' /></td></tr>\n";
+        }
+        if ($class=='shade2') $class = "shade1";
+        else $class = "shade2";
     }
-    // FIXME v3.23 hidden field with checkbox contents needed here
     echo "</table>";
-    echo "<input name='user' type='hidden' value='{$user}' />";
+    echo "<p><input name='user' type='hidden' value='{$user}' />";
     echo "<input name='role' type='hidden' value='{$role}' />";
-    echo "<p>";
-    ?>
-    <input name="submit2" type="submit" value="Make Changes" />
-    </p>
-    <?php
+    echo "<input name='submit' type='submit' value='Make Changes' /></p>";
+    echo "</form>";
 }
 elseif ($action == "update")
 {
@@ -201,7 +203,7 @@ elseif ($action == "update")
         }
         confirmation_page("2", "manage_users.php", "<h2>Role Permissions Successfully Set</h2><p align='center'>Please wait while you are redirected...</p>");
         exit;
-   }
+    }
 
     // edit contact if no errors
     if ($errors == 0)

@@ -38,11 +38,25 @@ else
 // if ($permission=='') trigger_error("Could not determine required permissions",E_USER_ERROR);
 
 // Valid user, check permissions
-if (!user_permission($sit[2],$permission))
+if ($permission >= 1)
 {
-    // No access permission
-    header("Location: noaccess.php?id=$permission");
-    exit;
-}
+    $grantaccess = FALSE;
+    if (!is_array($permission)) { $permission = array($permission); }
 
+    foreach($permission AS $perm)
+    {
+        if (in_array($perm, $_SESSION['permissions']) == TRUE) $accessgranted = TRUE;
+        else $accessgranted = FALSE;
+    }
+
+    if ($accessgranted == FALSE)
+    {
+        print_r($refused);
+        echo "----------";
+        // No access permission
+        $refused = implode(',',$permission);
+        header("Location: noaccess.php?id=$refused");
+        exit;
+    }
+}
 ?>

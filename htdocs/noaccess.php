@@ -34,11 +34,21 @@ if ($username!='')
     unset($errlog);
 }
 
-echo "<p align='center' class='error'>Sorry, you do not have permission to <u>".permission_name($id)."</u>, ($id)</p>";
-journal(CFG_LOGGING_MIN, 'Access Failure', "Access to ".permission_name($id)." ($id) was denied", CFG_JOURNAL_OTHER, $id);
+if (strpos($id,',')!==FALSE)
+{
+    $refused = explode(',', $id);
+}
+else $refused = array($id);
 
-echo "<p align='center'>If you feel that you should have access to this particular feature, please ask an administrator to grant you access (quote the permission ID #$id)</p>";
-
+echo "<p align='center' class='error'>Sorry, you do not have permission to the following areas:</p>";
+echo "<ul>";
+foreach ($refused AS $id)
+{
+    echo "<li>$id: ".permission_name($id)."</li>\n";
+    journal(CFG_LOGGING_MIN, 'Access Failure', "Access to ".permission_name($id)." ($id) was denied", CFG_JOURNAL_OTHER, $id);
+}
+echo "</ul>";
+   echo "<p align='center'>If you feel that you should have access to this particular feature, please ask an administrator to grant you access</p>";
 echo "<p align='center'><a href=\"javascript:history.back();\">Back</a></p>";
 
 

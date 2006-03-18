@@ -13,6 +13,7 @@ require('db_connect.inc.php');
 require('functions.inc.php');
 
 session_start();
+session_regenerate_id(TRUE);
 
 // External vars
 $password=md5($_REQUEST['password']);
@@ -22,7 +23,34 @@ $public_browser = cleanvar($_REQUEST['public_browser']);
 if (authenticate($username, $password) == 1)
 {
     // Valid user
+    $userid = user_id($username, $password);
     $_SESSION['auth']==TRUE;
+
+    // Get an array full of users permissions
+    // First lookup the role permissions
+    $sql = "SELECT * FROM users, rolepermissions WHERE users.roleid=rolepermissions.roleid AND users.id = '$userid' AND granted='true'";
+    $result = mysql_query($sql);
+    if (mysql_error()) trigger_error(mysql_error(),E_USER_ERROR);
+    if (mysql_num_rows($result) >= 1)
+    {
+        while ($perm = mysql_fetch_object($result))
+        {
+            $userpermissions[]=$perm->permissionid;
+        }
+    }
+    // Next lookup the individual users permissions
+    $sql = "SELECT * FROM userpermissions WHERE userid = '{$sit[2]}' AND granted='true' ";
+    $result = mysql_query($sql);
+    if (mysql_error()) trigger_error(mysql_error(),E_USER_ERROR);
+    if (mysql_num_rows($result) >= 1)
+    {
+        while ($perm = mysql_fetch_object($result))
+        {
+            $userpermissions[]=$perm->permissionid;
+        }
+    }
+    $_SESSION['permissions'] = array_unique($userpermissions);
+
     if (!$public_browser=='yes')
     {
         // set the cookie (expires in 30 days)
@@ -35,7 +63,7 @@ if (authenticate($username, $password) == 1)
         // set the cookie for a public machine (expires in 30 mins)
         setcookie("sit[0]", $username, time()+1800);
         setcookie("sit[1]", $password, time()+1800);
-        setcookie("sit[2]", user_id($username, $password), time()+1800);
+        setcookie("sit[2]", $userid, time()+1800);
         setcookie("sit[3]", 'public', time()+1800);
     }
     // redirect
