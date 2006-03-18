@@ -20,12 +20,6 @@ require('auth.inc.php');
 $incidentid = cleanvar($_REQUEST['incidentid']);
 $updateid = cleanvar($_REQUEST['updateid']);
 
-// valid user, check permissions
-if (!user_permission($sit[2],$permission))
-{
-    header("Location: noaccess.php?id=$permission");
-    exit;
-}
 if ($incidentid=='')
 {
     $title = "Move Update $updateid";

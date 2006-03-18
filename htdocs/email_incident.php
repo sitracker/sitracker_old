@@ -18,13 +18,6 @@ include('mime.inc.php');
 // This page requires authentication
 require('auth.inc.php');
 
-// check permissions
-if (!user_permission($sit[2],$permission))
-{
-    header("Location: noaccess.php?id=$permission");
-    exit;
-}
-
 // External variables
 $step = cleanvar($_REQUEST['step']);
 $id = cleanvar($_REQUEST['id']);

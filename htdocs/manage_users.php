@@ -17,12 +17,6 @@ require('functions.inc.php');
 // This page requires authentication
 require('auth.inc.php');
 
-// check permissions
-if (!user_permission($sit[2],$permission))
-{
-    header("Location: noaccess.php?id=$permission");
-    exit;
-}
 include('htmlheader.inc.php');
 
 $sql  = "SELECT *,users.id AS userid FROM users, roles ";
