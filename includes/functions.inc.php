@@ -254,34 +254,22 @@ function db_read_column($column, $table, $id)
 }
 
 
-function user_permission($userid,$permissionid)
+function user_permission($userid,$permission)
 {
-    // Always allow if permission required is 0
-    if ($permissionid == 0) return TRUE;
+    // Default is no access
+    $grantaccess = FALSE;
 
-    $sql = "SELECT granted FROM userpermissions WHERE userid='$userid' AND permissionid='$permissionid' ";
-    $result = mysql_query($sql);
-    if (mysql_error()) trigger_error('MySQL Query Error Reading Users Permissions:'.mysql_error(),E_USER_WARNING);
+    if (!is_array($permission)) { $permission = array($permission); }
 
-    list($granted)=mysql_fetch_row($result);
-    if ( mysql_num_rows($result) < 1)
+    foreach($permission AS $perm)
     {
-        mysql_free_result($result);
-        return FALSE;
+        if (in_array($perm, $_SESSION['permissions']) == TRUE) $accessgranted = TRUE;
+        else $accessgranted = FALSE;
+        // Permission 0 is always TRUE (general acess)
+        if ($perm == 0) $accessgranted = TRUE;
     }
-    else
-    {
-        if ($granted=='true' || $granted=='TRUE')
-        {
-            mysql_free_result($result);
-            return TRUE;
-        }
-    }
-    // catchall
-    mysql_free_result($result);
-    return FALSE;
+    return $accessgranted;
 }
-
 
 function permission_name($permissionid)
 {
