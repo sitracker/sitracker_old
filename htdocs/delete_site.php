@@ -19,103 +19,93 @@ require('functions.inc.php');
 // This page requires authentication
 require('auth.inc.php');
 
-// Valid user, check permissions
-if (user_permission($sit[2],$permission))
+// External variables
+$id = mysql_escape_string($_REQUEST['id']);
+
+include('htmlheader.inc.php');
+if (!isset($process) || empty($process))
 {
-    // External variables
-    $id = mysql_escape_string($_REQUEST['id']);
-
-    include('htmlheader.inc.php');
-    if (!isset($process) || empty($process))
+    if (empty($id))
     {
-        if (empty($id))
+        echo "<h2>Select Site To Delete</h2>";
+        echo "<form action='{$_SERVER['PHP_SELF']}?action=delete' method='post'>";
+        echo "<table>";
+        echo "<tr><th>Site:</th><td>".site_drop_down('id', 0)."</td></tr>";
+        echo "</table>";
+        echo "<p><input name='submit' type='submit' value='Continue' /></p>";
+        echo "</form>";
+    }
+    else
+    {
+        if (empty($destinationid))
         {
-            echo "<h2>Select Site To Delete</h2>";
-            echo "<form action='{$_SERVER['PHP_SELF']}?action=delete' method='post'>";
-            echo "<table>";
-            echo "<tr><th>Site:</th><td>".site_drop_down('id', 0)."</td></tr>";
+            echo "<h2>Delete Site</h2>";
+            $sql="SELECT * FROM sites WHERE id='$id' LIMIT 1";
+            $siteresult = mysql_query($sql);
+            $site=mysql_fetch_object($siteresult);
+            if (mysql_error()) trigger_error(mysql_error(),E_USER_ERROR);
+            echo "<table align='center' class='vertical'>";
+            echo "<tr><th>Site:</th><td><h3>".$site->name."</h3></td></tr>";
+            echo "<tr><th>Department:</th><td>".$site->department."</td></tr>";
+            echo "<tr><th>Address1:</th><td>".$site->address1."</td></tr>";
             echo "</table>";
-            echo "<p><input name='submit' type='submit' value='Continue' /></p>";
-            echo "</form>";
-        }
-        else
-        {
-            if (empty($destinationid))
+
+            // Look for associated contacts
+            $sql = "SELECT COUNT(id) FROM contacts WHERE siteid='$id'";
+            $result = mysql_query($sql);
+            if (mysql_error()) trigger_error(mysql_error(),E_USER_ERROR);
+            list($numcontacts) = mysql_fetch_row($result);
+            if ($numcontacts>0)
             {
-                echo "<h2>Delete Site</h2>";
-                $sql="SELECT * FROM sites WHERE id='$id' LIMIT 1";
-                $siteresult = mysql_query($sql);
-                $site=mysql_fetch_object($siteresult);
-                if (mysql_error()) trigger_error(mysql_error(),E_USER_ERROR);
-                echo "<table align='center' class='vertical'>";
-                echo "<tr><th>Site:</th><td><h3>".$site->name."</h3></td></tr>";
-                echo "<tr><th>Department:</th><td>".$site->department."</td></tr>";
-                echo "<tr><th>Address1:</th><td>".$site->address1."</td></tr>";
+                echo "<p align='center' class='warning'>There are $numcontacts contacts assigned to this site</p>";
+            }
+
+            // Look for associated maintenance contracts
+            $sql = "SELECT COUNT(id) FROM maintenance WHERE site='$id'";
+            $result = mysql_query($sql);
+            if (mysql_error()) trigger_error(mysql_error(),E_USER_ERROR);
+            list($numcontracts) = mysql_fetch_row($result);
+            if ($numcontracts>0)
+            {
+                echo "<p align='center' class='warning'>There are $numcontracts contracts assigned to this site</p>";
+            }
+            if ($numcontacts > 0 OR $numcontracts > 0)
+            {
+                echo "<p align='center'>In order to delete this site you must select another site to recieve the records that are assigned to this one</p>";
+                echo "<form action='{$_SERVER['PHP_SELF']}?action=delete' method='post'>";
+                echo "<table>";
+                echo "<tr><th>Transfer records to:</th><td>".site_drop_down('destinationid', 0)."</td></tr>";
                 echo "</table>";
-
-                // Look for associated contacts
-                $sql = "SELECT COUNT(id) FROM contacts WHERE siteid='$id'";
-                $result = mysql_query($sql);
-                if (mysql_error()) trigger_error(mysql_error(),E_USER_ERROR);
-                list($numcontacts) = mysql_fetch_row($result);
-                if ($numcontacts>0)
-                {
-                    echo "<p align='center' class='warning'>There are $numcontacts contacts assigned to this site</p>";
-                }
-
-                // Look for associated maintenance contracts
-                $sql = "SELECT COUNT(id) FROM maintenance WHERE site='$id'";
-                $result = mysql_query($sql);
-                if (mysql_error()) trigger_error(mysql_error(),E_USER_ERROR);
-                list($numcontracts) = mysql_fetch_row($result);
-                if ($numcontracts>0)
-                {
-                    echo "<p align='center' class='warning'>There are $numcontracts contracts assigned to this site</p>";
-                }
-                if ($numcontacts > 0 OR $numcontracts > 0)
-                {
-                    echo "<p align='center'>In order to delete this site you must select another site to recieve the records that are assigned to this one</p>";
-                    echo "<form action='{$_SERVER['PHP_SELF']}?action=delete' method='post'>";
-                    echo "<table>";
-                    echo "<tr><th>Transfer records to:</th><td>".site_drop_down('destinationid', 0)."</td></tr>";
-                    echo "</table>";
-                    echo "<input type='hidden' name='id' value='$id' />";
-                    echo "<p><input name='submit' type='submit' value='Transfer records and delete site' /></p>";
-                    echo "</form>";
-                }
-                else
-                {
-                    $sql = "DELETE FROM sites WHERE id='$id' LIMIT 1";
-                    $result = mysql_query($sql);
-                    if (mysql_error()) trigger_error(mysql_error(),E_USER_ERROR);
-                    else  echo "<p class='info'>Site $id deleted</p>";
-                }
+                echo "<input type='hidden' name='id' value='$id' />";
+                echo "<p><input name='submit' type='submit' value='Transfer records and delete site' /></p>";
+                echo "</form>";
             }
             else
             {
-                // Records need moving before we delete
-                // Move contacts
-                $sql = "UPDATE contacts SET siteid='$destinationid' WHERE siteid='$id'";
-                mysql_query($sql);
+                $sql = "DELETE FROM sites WHERE id='$id' LIMIT 1";
+                $result = mysql_query($sql);
                 if (mysql_error()) trigger_error(mysql_error(),E_USER_ERROR);
-
-                // Move contracts
-                $sql = "UPDATE maintenance SET site='$destinationid' WHERE site='$id'";
-                mysql_query($sql);
-                if (mysql_error()) trigger_error(mysql_error(),E_USER_ERROR);
-
-                journal(CFG_LOGGING_NORMAL, 'Site Deleted', "Site $id was deleted", CFG_JOURNAL_SITES, $id);
-
-                confirmation_page("2", "browse_sites.php?search_string=A", "<h2>Site Deleted Successfully</h2><p align='center'>Please wait while you are redirected...</p>");
+                else  echo "<p class='info'>Site $id deleted</p>";
             }
         }
+        else
+        {
+            // Records need moving before we delete
+            // Move contacts
+            $sql = "UPDATE contacts SET siteid='$destinationid' WHERE siteid='$id'";
+            mysql_query($sql);
+            if (mysql_error()) trigger_error(mysql_error(),E_USER_ERROR);
+
+            // Move contracts
+            $sql = "UPDATE maintenance SET site='$destinationid' WHERE site='$id'";
+            mysql_query($sql);
+            if (mysql_error()) trigger_error(mysql_error(),E_USER_ERROR);
+
+            journal(CFG_LOGGING_NORMAL, 'Site Deleted', "Site $id was deleted", CFG_JOURNAL_SITES, $id);
+
+            confirmation_page("2", "browse_sites.php?search_string=A", "<h2>Site Deleted Successfully</h2><p align='center'>Please wait while you are redirected...</p>");
+        }
     }
-    include('htmlfooter.inc.php');
 }
-else
-{
-    // User does not have access
-    header("Location: noaccess.php?id=$permission");
-    exit;
-}
+include('htmlfooter.inc.php');
 ?>

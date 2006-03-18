@@ -20,14 +20,6 @@ $title="Browse Journal";
 // This page requires authentication
 require('auth.inc.php');
 
-
-// Valid user, check permissions
-if (!user_permission($sit[2],$permission))
-{
-    header("Location: noaccess.php?id=$permission");
-    exit;
-}
-
 // External variables
 $offset = cleanvar($_REQUEST['offset']);
 $perpage = cleanvar($_REQUEST['perpage']);
