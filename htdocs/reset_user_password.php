@@ -22,12 +22,6 @@ require('auth.inc.php');
 // External variables
 $id = cleanvar($_REQUEST['id']);
 
-// Valid user, check users permissions
-if (!user_permission($sit[2],$permission))
-{
-    header("Location: noaccess.php?id=$permission");
-    exit;
-}
 if (empty($id)) throw_error('!Error setting password.  User ID number was zero or blank','');
 
 $newpasswordplain = generate_password();

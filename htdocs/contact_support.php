@@ -20,12 +20,6 @@ require('functions.inc.php');
 // This page requires authentication
 require('auth.inc.php');
 
-if (!user_permission($sit[2],$permission))
-{
-    header("Location: noaccess.php?id=$permission");
-    exit;
-}
-
 // External variables
 $id = cleanvar($_REQUEST['id']);
 $mode = $_REQUEST['mode'];
