@@ -17,13 +17,6 @@ $title="Associate software with a product";
 // This page requires authentication
 require('auth.inc.php');
 
-// Valid user, check permissions
-if (!user_permission($sit[2],$permission))
-{
-    header("Location: noaccess.php?id=$permission");
-    exit;
-}
-
 // External variables
 $action = mysql_escape_string($_REQUEST['action']);
 $productid = cleanvar($_REQUEST['productid']);

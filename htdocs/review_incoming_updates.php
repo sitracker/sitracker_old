@@ -78,13 +78,6 @@ function deldir($location)
     rmdir($location);
 }
 
-
-if (!user_permission($sit[2],$permission))
-{
-    header("Location: noaccess.php?id=$permission");
-    exit;
-}
-
 $title = 'Review Held Updates';
 $refresh = user_incident_refresh($sit[2]);
 include('htmlheader.inc.php');

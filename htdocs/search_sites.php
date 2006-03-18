@@ -17,13 +17,6 @@ require('functions.inc.php');
 // This page requires authentication
 require('auth.inc.php');
 
-// Valid user, Check User Has Permission
-if (!user_permission($sit[2],$permission))
-{
-    header("Location: noaccess.php?id=$permission");
-    exit;
-}
-
 // External variables
 $search_string = cleanvar($_REQUEST['search_string']);
 $user = cleanvar($_REQUEST['user']);
