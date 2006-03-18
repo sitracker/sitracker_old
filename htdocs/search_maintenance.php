@@ -17,18 +17,11 @@ require('functions.inc.php');
 // This page requires authentication
 require('auth.inc.php');
 
-// Valid user, check permissions
-if (!user_permission($sit[2],$permission))
-{
-    header("Location: noaccess.php?id=$permission");
-    exit;
-}
-
 // External variables
 $search_string = cleanvar($_REQUEST['search_string']);
 
 // show search maintenance form
-if (!isset($search_string))
+if (empty($search_string))
 {
     include('htmlheader.inc.php');
     ?>

@@ -21,13 +21,6 @@ $title="Disassociate software with a product";
 // This page requires authentication
 require('auth.inc.php');
 
-// Valid user, check permissions
-if (!user_permission($sit[2],$permission))
-{
-    header("Location: noaccess.php?id=$permission");
-    exit;
-}
-
 // External variables
 $productid = cleanvar($_REQUEST['productid']);
 $softwareid = cleanvar($_REQUEST['softwareid']);

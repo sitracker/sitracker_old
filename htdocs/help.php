@@ -17,13 +17,6 @@ $title="Help";
 // This page requires authentication
 require('auth.inc.php');
 
-// Valiod user,  Check users permissions
-if (!user_permission($sit[2],$permission))
-{
-    header("Location: noaccess.php?id=$permission");
-    exit;
-}
-
 // External variables
 $id = cleanvar($_REQUEST['id']);
 
