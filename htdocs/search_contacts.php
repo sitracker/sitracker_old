@@ -8,7 +8,7 @@
 // of the GNU General Public License, incorporated herein by reference.
 //
 
-$permission=60; // Perform Searches
+$permission=array(60,12); // Perform Searches, View Contacts
 require('db_connect.inc.php');
 require('functions.inc.php');
 $title="Search Contacts";
@@ -16,18 +16,6 @@ $title="Search Contacts";
 // This page requires authentication
 require('auth.inc.php');
 
-// Valid user, check permissions
-// Check BOTH users permissions
-if (user_permission($sit[2],$permission)==FALSE)
-{
-    header("Location: noaccess.php?id=$permission");
-    exit;
-}
-if (user_permission($sit[2],12)==FALSE) // View Contacts
-{
-    header("Location: noaccess.php?id=12");
-    exit;
-}
 
 // External variables
 $search_string = cleanvar($_REQUEST['search_string']);
@@ -45,7 +33,7 @@ function contact_products_window(contactid)
 <?php
 
 // show add incident form
-if (!isset($search_string))
+if (empty($search_string))
 {
     ?>
     <h2>Search Contacts</h2>

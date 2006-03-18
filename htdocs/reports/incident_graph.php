@@ -23,12 +23,6 @@ $openedcolour='#FF962A';
 $closedcolour='#72B8B8';
 $currentcolour='#1CA772';
 
-// Valid user, Check users permissions
-if (!user_permission($sit[2],$permission))
-{
-    header("Location: noaccess.php?id=$permission");
-    exit;
-}
 $currentyear=date('Y');
 include('htmlheader.inc.php');
 $currentyear=date('Y');

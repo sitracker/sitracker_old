@@ -25,12 +25,6 @@ require('auth.inc.php');
 $id = cleanvar($_REQUEST['id']);
 $mode = cleanvar($_REQUEST['mode']);
 
-// Valid user, check permissions
-if (!user_permission($sit[2],$permission))
-{
-    header("Location: noaccess.php?id=$permission");
-    exit;
-}
 include('htmlheader.inc.php');
 if ($mode=='site') echo "<h2>".site_name($id)."'s Support Incidents</h2>";
 else echo "<h2>".contact_realname($id)."'s Support Incidents</h2>";

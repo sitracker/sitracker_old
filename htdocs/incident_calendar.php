@@ -20,13 +20,6 @@ $title="Incident Calendar";
 // This page requires authentication
 require('auth.inc.php');
 
-// Check users permissions
-if (!user_permission($sit[2],$permission))
-{
-header("Location: noaccess.php?id=$permission");
-exit;
-}
-
 // External variables
 
 

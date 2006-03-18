@@ -18,12 +18,6 @@ require('auth.inc.php');
 
 if (authenticate($sit[0], $sit[1]) == 1)
 {
-    // Valid user, check permissions
-    if (!user_permission($sit[2],$permission))
-    {
-        header("Location: /noaccess.php?id=$permission");
-        exit;
-    }
     $sql = "SELECT DISTINCT sites.id, sites.name as name, resellers.name as resel FROM sites, maintenance, resellers ";
     $sql.= "WHERE sites.id=maintenance.site AND resellers.id=maintenance.reseller AND maintenance.term<>'yes' ORDER BY name";
     $result = mysql_query($sql);

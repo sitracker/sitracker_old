@@ -32,12 +32,6 @@ if (!function_exists('strip_comma'))
     }
 }
 
-// Valid user, check permissions
-if (!user_permission($sit[2],$permission))
-{
-    header("Location: /noaccess.php?id=$permission");
-    exit;
-}
 if (empty($_REQUEST['mode']))
 {
     include('htmlheader.inc.php');

@@ -19,77 +19,67 @@ require('functions.inc.php');
 // This page requires authentication
 require('auth.inc.php');
 
-// Valid user, check permissions
-if (user_permission($sit[2],$permission))
+include('htmlheader.inc.php');
+?>
+<script type="text/javascript">
+function confirm_submit()
 {
-    include('htmlheader.inc.php');
+    return window.confirm('Are you sure you want to add this product information?');
+}
+</script>
+<?php
+// Show add product information form
+if (empty($_REQUEST['submit']))
+{
     ?>
-    <script type="text/javascript">
-    function confirm_submit()
-    {
-        return window.confirm('Are you sure you want to add this product information?');
-    }
-    </script>
+    <h2>Add Product Question</h2>
+    <p align='center'>Mandatory fields are marked <sup class='red'>*</sup></p>
+    <form action="<?php echo $_SERVER['PHP_SELF']; ?>" method="post" onsubmit="return confirm_submit()">
+    <table>
+    <tr><th>Product:</th><td><?php echo product_drop_down("product", 0) ?></td></tr>
+    <tr><th>Question: <sup class='red'>*</sup></th><td><input name="information" size="30" /></td></tr>
+    <tr><th>More Information: <sup class='red'>*</sup></th><td><input name="moreinformation" size="30" /></td></tr>
+    </table>
+    <p align='center'><input name="submit" type="submit" value="Add" /></p>
+    </form>
     <?php
-    // Show add product information form
-    if (empty($_REQUEST['submit']))
-    {
-        ?>
-        <h2>Add Product Question</h2>
-        <p align='center'>Mandatory fields are marked <sup class='red'>*</sup></p>
-        <form action="<?php echo $_SERVER['PHP_SELF']; ?>" method="post" onsubmit="return confirm_submit()">
-        <table>
-        <tr><th>Product:</th><td><?php echo product_drop_down("product", 0) ?></td></tr>
-        <tr><th>Question: <sup class='red'>*</sup></th><td><input name="information" size="30" /></td></tr>
-        <tr><th>More Information: <sup class='red'>*</sup></th><td><input name="moreinformation" size="30" /></td></tr>
-        </table>
-        <p align='center'><input name="submit" type="submit" value="Add" /></p>
-        </form>
-        <?php
-    }
-    else
-    {
-        // External variables
-        $product = mysql_escape_string($_POST['product']);
-        $information = cleanvar($_POST['information']);
-        $moreinformation = cleanvar($_POST['moreinformation']);
-
-        // Add product information
-        $errors = 0;
-        // check for blank product
-        if ($product == 0)
-        {
-            $errors = 1;
-            echo "<p class='error'>You must select a product</p>\n";
-        }
-        // check for blank information
-        if ($information == "")
-        {
-            $errors = 1;
-            echo "<p class='error'>You must enter some product information</p>\n";
-        }
-
-        // add product information if no errors
-        if ($errors == 0)
-        {
-            $sql = "INSERT INTO productinfo (productid, information. moreinformation) VALUES ($product, '$information', '$moreinformation')";
-            $result = mysql_query($sql);
-            if (mysql_error()) trigger_error(mysql_error(),E_USER_ERROR);
-
-            if (!$result) echo "<p class='error'>Addition of product information failed\n";
-            else
-            {
-                journal(CFG_LOGGING_NORMAL, 'Product Info Added', "Info was added to Product $product", CFG_JOURNAL_PRODUCTS, $product);
-                echo "<h2>Product Information Added</h2>\n";
-            }
-        }
-    }
-    include('htmlfooter.inc.php');
 }
 else
 {
-    // User does not have access
-    header("Location: noaccess.php?id=$permission");
-    exit;
+    // External variables
+    $product = mysql_escape_string($_POST['product']);
+    $information = cleanvar($_POST['information']);
+    $moreinformation = cleanvar($_POST['moreinformation']);
+
+    // Add product information
+    $errors = 0;
+    // check for blank product
+    if ($product == 0)
+    {
+        $errors = 1;
+        echo "<p class='error'>You must select a product</p>\n";
+    }
+    // check for blank information
+    if ($information == "")
+    {
+        $errors = 1;
+        echo "<p class='error'>You must enter some product information</p>\n";
+    }
+
+    // add product information if no errors
+    if ($errors == 0)
+    {
+        $sql = "INSERT INTO productinfo (productid, information. moreinformation) VALUES ($product, '$information', '$moreinformation')";
+        $result = mysql_query($sql);
+        if (mysql_error()) trigger_error(mysql_error(),E_USER_ERROR);
+
+        if (!$result) echo "<p class='error'>Addition of product information failed\n";
+        else
+        {
+            journal(CFG_LOGGING_NORMAL, 'Product Info Added', "Info was added to Product $product", CFG_JOURNAL_PRODUCTS, $product);
+            echo "<h2>Product Information Added</h2>\n";
+        }
+    }
 }
+include('htmlfooter.inc.php');
 ?>
