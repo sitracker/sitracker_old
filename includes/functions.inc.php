@@ -399,15 +399,6 @@ function user_accepting($id)
 }
 
 
-function user_incident_refresh($id)
-{
-    $refresh = db_read_column('var_incident_refresh', 'users', $id);
-    if ($refresh == '') $refresh = 0;
-
-    return($refresh);
-}
-
-
 function user_update_order($id)
 {
     return db_read_column('var_update_order', 'users', $id);

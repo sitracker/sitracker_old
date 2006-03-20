@@ -36,6 +36,7 @@ if (authenticate($username, $password) == 1)
     $_SESSION['username'] = $user->username;
     $_SESSION['style'] = $user->var_style;
     $_SESSION['realname'] = $user->realname;
+    $_SESSION['incident_refresh'] = $user->var_incident_refresh;
 
     // Get an array full of users permissions
     // First lookup the role permissions

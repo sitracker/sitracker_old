@@ -30,7 +30,7 @@ $sortorder = cleanvar($_REQUEST['sortorder']);
 if (empty($type)) $type='support';
 if (empty($user)) $user='current';
 
-$refresh = user_incident_refresh($sit[2]);
+$refresh = $_SESSION['incident_refresh'];
 include('htmlheader.inc.php');
 ?>
 <script type="text/javascript">

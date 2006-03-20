@@ -226,6 +226,7 @@ else
         // Update the profile in the users current session
         $_SESSION['style'] = $style;
         $_SESSION['realname'] = $realname;
+        $_SESSION['incident_refresh'] = $incidentrefresh;
 
         if (!$result)
         {
