@@ -246,6 +246,7 @@ switch($_REQUEST['tab'])
     case 'files': include('incident/files.inc.php'); break;
     case 'SLA': include('incident/sla.inc.php'); break;
     case 'edit': include('incident/edit.inc.php'); break;
+    case 'relationships': include('incident/relationships.inc.php'); break;
     case 'log':
     default:
         include('incident/log.inc.php');

@@ -149,20 +149,29 @@ if ($incident->status != 2 AND $incident->status!=7)
 echo "</td>";
 echo "</tr>\n";
 
-
+// Incident relationships
 $rsql = "SELECT * FROM relatedincidents WHERE incidentid='$id' OR relatedid='$id'";
 $rresult = mysql_query($rsql);
 if (mysql_error()) trigger_error(mysql_error(),E_USER_WARNING);
 if (mysql_num_rows($rresult) >= 1)
 {
-    echo "<tr><td colspan='2'>Related incidents: ";
+    echo "<tr><td colspan='2'>Relations: ";
     while ($related = mysql_fetch_object($rresult))
     {
         if ($related->relatedid==$id)
         {
-            echo "<a href='incident_details.php?id={$related->incidentid}' title='??'>{$related->incidentid}</a> ";
+            if ($related->relation=='child') $linktitle='Child';
+            else $linktitle='Sibling';
+            $linktitle .= ": ".incident_title($related->incidentid);
+            echo "<a href='incident_details.php?id={$related->incidentid}' title='$linktitle'>{$related->incidentid}</a> ";
         }
-        else echo "<a href='incident_details.php?id={$related->relatedid}' title='$relationship'>{$related->relatedid}</a> ";
+        else
+        {
+            if ($related->relation=='child') $linktitle='Parent';
+            else $linktitle='Sibling';
+            $linktitle .= ": ".incident_title($related->relatedid);
+            echo "<a href='incident_details.php?id={$related->relatedid}' title='$linktitle'>{$related->relatedid}</a> ";
+        }
         echo " &nbsp;";
     }
     echo "</td></tr>";

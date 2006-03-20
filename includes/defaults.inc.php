@@ -48,7 +48,6 @@ $CONFIG['working_days'] = array(1,2,3,4,5);
 $CONFIG['start_working_day'] = (9 * 3600);
 $CONFIG['end_working_day'] = (17 * 3600);
 
-
 $CONFIG['attachment_fspath'] = "/var/www/sit/attachments/";
 $CONFIG['attachment_webpath'] = "attachments/";
 
@@ -118,6 +117,9 @@ $CONFIG['spam_email_subject']='SPAMASSASSIN';
 $CONFIG['feedback_max_score']=9;
 
 $CONFIG['tipsfile']= '../doc/tips.txt';
+
+// The session name for use in cookies and URL's, Must contain alphanumeric characters only
+$CONFIG['session_name'] = 'SiTsessionID';
 
 // Output extra debug information, some as HTML comments and some in the page footer
 $CONFIG['debug'] = FALSE;

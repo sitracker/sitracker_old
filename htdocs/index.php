@@ -12,6 +12,7 @@
 require('db_connect.inc.php');
 require('functions.inc.php');
 
+session_name($CONFIG['session_name']);
 session_start();
 
 if ($_SESSION['auth'] != TRUE)
@@ -28,7 +29,7 @@ if ($_SESSION['auth'] != TRUE)
     <div style='width: 40%; margin-left: 40%;'>
     <?php
     if ($id==1) echo "<p class='error'>Enter your credentials to login to {$CONFIG['application_shortname']}</p><br />";
-    if ($id==2) echo "<p class='error'>You must login before accessing {$CONFIG['application_shortname']} functions</p><br />";
+    if ($id==2) echo "<p class='error'>Your session has expired or you have not yet logged in</p><br />";
     if ($id==3) echo "<p class='error'>Invalid username/password combination</p><br />";
     ?>
     <br />

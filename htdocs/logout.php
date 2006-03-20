@@ -32,7 +32,11 @@ if (isset($_COOKIE[session_name()]))
    setcookie(session_name(), '', time()-42000, '/');
 }
 
-if (isset($_SESSION['auth'])) session_destroy();
+if (isset($_SESSION['auth']))
+{
+    session_unset();
+    session_destroy();
+}
 
 // redirect
 if (!empty($CONFIG['logout_url'])) $url = $CONFIG['logout_url'];

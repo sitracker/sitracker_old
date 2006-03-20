@@ -52,69 +52,72 @@ switch ($_REQUEST['action'])
         $sql = "SELECT * FROM feedbackforms WHERE id = '$formid'";
         $result = mysql_query($sql);
         if (mysql_error()) trigger_error ("MySQL Error: ".mysql_error(), E_USER_ERROR);
-
-        while ($form = mysql_fetch_object($result))
+        if (mysql_num_rows($result) >= 1)
         {
-            echo "<form action='{$_SERVER['PHP_SELF']}' method='post'>";
-            echo "<table summary='Form' align='center'>";
-            echo "<tr>";
-
-            echo "<th>Form ID:</th>";
-            echo "<td><strong>{$form->id}</strong></td>";
-            echo "</tr>\n<tr>";
-
-            echo "<th>Name:</th>";
-            echo "<td><input type='text' name='name' size='35' maxlength='255' value='".stripslashes($form->name)."' /></td>";
-            echo "</tr>\n<tr>";
-
-            echo "<th>Description:<br />(For Staff Use, not displayed)</th>";
-            echo "<td><textarea name='description' cols='80' rows='6'>";
-            echo stripslashes($form->description)."</textarea></td>";
-            echo "</tr>\n<tr>";
-
-            echo "<th>Introduction:<br />(Simple HTML Allowed)</th>";
-            echo "<td><textarea name='introduction' cols='80' rows='10'>";
-            echo stripslashes($form->introduction)."</textarea></td>";
-            echo "</tr>\n<tr>";
-
-            echo "<th>Closing Thanks:<br />(Simple HTML Allowed)</th>";
-            echo "<td><textarea name='thanks' cols='80' rows='10'>";
-            echo stripslashes($form->thanks)."</textarea></td>";
-            echo "</tr>\n";
-
-            // If there are no reponses to this feedback form, allow questions to be modified also
-            echo "<tr>";
-            echo "<th>Questions:</th>";
-            echo "<td>";
-            echo "<table width='100%'>";
-            // echo "<tr><th>Q</th><th>Question</th><th>Text</th></tr>\n<tr><th>Type</th><th>Reqd</th><th>Options</th></tr>\n";
-            $qsql  = "SELECT * FROM feedbackquestions ";
-            $qsql .= "WHERE formid='$formid'";
-            $qresult = mysql_query($qsql);
-            while ($question = mysql_fetch_object($qresult))
+            while ($form = mysql_fetch_object($result))
             {
+                echo "<form action='{$_SERVER['PHP_SELF']}' method='post'>";
+                echo "<table summary='Form' align='center'>";
                 echo "<tr>";
-                echo "<td><strong>Q{$question->taborder}</strong></td>";
-                echo "<td><a href='edit_feedback_question.php?qid={$question->id}'><strong>{$question->question}</strong></a></td>";
-                echo "<td>{$question->questiontext}</td>";
+
+                echo "<th>Form ID:</th>";
+                echo "<td><strong>{$form->id}</strong></td>";
                 echo "</tr>\n<tr>";
-                echo "<td>{$question->type}</td>";
-                echo "<td colspan='2'>";
-                if ($question->required=='true') echo "<strong>Required</strong> ";
-                echo "<samp>{$question->options}</samp></td>";
+
+                echo "<th>Name:</th>";
+                echo "<td><input type='text' name='name' size='35' maxlength='255' value='".stripslashes($form->name)."' /></td>";
+                echo "</tr>\n<tr>";
+
+                echo "<th>Description:<br />(For Staff Use, not displayed)</th>";
+                echo "<td><textarea name='description' cols='80' rows='6'>";
+                echo stripslashes($form->description)."</textarea></td>";
+                echo "</tr>\n<tr>";
+
+                echo "<th>Introduction:<br />(Simple HTML Allowed)</th>";
+                echo "<td><textarea name='introduction' cols='80' rows='10'>";
+                echo stripslashes($form->introduction)."</textarea></td>";
+                echo "</tr>\n<tr>";
+
+                echo "<th>Closing Thanks:<br />(Simple HTML Allowed)</th>";
+                echo "<td><textarea name='thanks' cols='80' rows='10'>";
+                echo stripslashes($form->thanks)."</textarea></td>";
+                echo "</tr>\n";
+
+                // If there are no reponses to this feedback form, allow questions to be modified also
+                echo "<tr>";
+                echo "<th>Questions:</th>";
+                echo "<td>";
+                echo "<table width='100%'>";
+                // echo "<tr><th>Q</th><th>Question</th><th>Text</th></tr>\n<tr><th>Type</th><th>Reqd</th><th>Options</th></tr>\n";
+                $qsql  = "SELECT * FROM feedbackquestions ";
+                $qsql .= "WHERE formid='$formid'";
+                $qresult = mysql_query($qsql);
+                while ($question = mysql_fetch_object($qresult))
+                {
+                    echo "<tr>";
+                    echo "<td><strong>Q{$question->taborder}</strong></td>";
+                    echo "<td><a href='edit_feedback_question.php?qid={$question->id}'><strong>{$question->question}</strong></a></td>";
+                    echo "<td>{$question->questiontext}</td>";
+                    echo "</tr>\n<tr>";
+                    echo "<td>{$question->type}</td>";
+                    echo "<td colspan='2'>";
+                    if ($question->required=='true') echo "<strong>Required</strong> ";
+                    echo "<samp>{$question->options}</samp></td>";
+                    echo "</tr>";
+                }
+                echo "</table>";
+                echo "<p><a href='add_feedback_question.php?fid=$formid'>Add Question</a><br />Save the main form first</p>";
+                echo "</td></tr>\n";
+                echo "<tr>";
+                echo "<td><input type='hidden' name='formid' value='{$formid}' />";
+                echo "<input type='hidden' name='action' value='save' /></td>";
+                echo "<td><input type='submit' value='Save' /></td>";
                 echo "</tr>";
+                echo "</table>";
+                echo "</form>";
             }
-            echo "</table>";
-            echo "<p><a href='add_feedback_question.php?fid=$formid'>Add Question</a><br />Save the main form first</p>";
-            echo "</td></tr>\n";
-            echo "<tr>";
-            echo "<td><input type='hidden' name='formid' value='{$formid}' />";
-            echo "<input type='hidden' name='action' value='save' /></td>";
-            echo "<td><input type='submit' value='Save' /></td>";
-            echo "</tr>";
-            echo "</table>";
-            echo "</form>";
         }
+        else echo "<p class='error'>No feedback form found</p>";
         include('htmlfooter.inc.php');
     break;
 }

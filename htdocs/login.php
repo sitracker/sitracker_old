@@ -12,6 +12,7 @@
 require('db_connect.inc.php');
 require('functions.inc.php');
 
+session_name($CONFIG['session_name']);
 session_start();
 session_regenerate_id(TRUE);
 
@@ -24,6 +25,8 @@ if (authenticate($username, $password) == 1)
 {
     // Valid user
     $_SESSION['auth'] = TRUE;
+
+    // TODO v3.23 Check trusted server setting and password use
 
     // Retreive users profile
     $sql = "SELECT * FROM users WHERE username='$username' AND password='$password' LIMIT 1";

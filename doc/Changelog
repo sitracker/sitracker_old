@@ -34,6 +34,12 @@ Changes in v3.23 - Unreleased
   be configured.
 * User Permissions are now read only once at login and stored in the users session
   for quick retreival
+* SiT! no longer uses it's own cookies for authentication PHP sessions are used instead.
+* Authentication is now performed only once at login and the authenicated status is passed
+  with the users session
+* The users profile variables are loaded into the session at login (and after changes) this
+  avoids multiple SQL Queries which should improve performance
+* Incident relationships.  Related incidents can now be linked together.
 
 Changes in v3.22 - Released 27 January 2006
 -------------------------------------------------------------------------------------

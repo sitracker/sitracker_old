@@ -1134,12 +1134,13 @@ ALTER TABLE `users` DROP `accesslevel` ;
 ";
 
 $upgrade_schema[323] = "CREATE TABLE `relatedincidents` (
-`id` INT( 5 ) NOT NULL AUTO_INCREMENT ,
-`incidentid` INT( 5 ) NOT NULL ,
-`relation` ENUM( 'child', 'sibling' ) DEFAULT 'child' NOT NULL ,
-`relatedid` INT( 5 ) NOT NULL ,
-PRIMARY KEY ( `id` ) ,
-INDEX ( `incidentid` , `relatedid` )
+`id` int(5) NOT NULL auto_increment,
+`incidentid` int(5) NOT NULL default '0',
+`relation` enum('child','sibling') NOT NULL default 'child',
+`relatedid` int(5) NOT NULL default '0',
+`owner` int(5) NOT NULL default '0',
+PRIMARY KEY  (`id`),
+KEY `incidentid` (`incidentid`,`relatedid`)
 ) ;
 
 ALTER TABLE `sites` CHANGE `notes` `notes` TEXT NOT NULL ;

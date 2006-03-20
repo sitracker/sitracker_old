@@ -12,6 +12,7 @@
 // it requires the functions.inc.php file to be already included
 // This file must be included before any page output
 
+session_name($CONFIG['session_name']);
 session_start();
 
 // Check session is authenticated, if not redirect to login page
@@ -20,7 +21,7 @@ if (!isset($_SESSION['auth']) OR $_SESSION['auth'] == FALSE)
     $_SESSION['auth'] = FALSE;
     // Invalid user
     $page = urlencode($_SERVER['PHP_SELF']);
-    header("Location: index.php?id=1&page=$page");
+    header("Location: index.php?id=2&page=$page");
     exit;
 }
 else
