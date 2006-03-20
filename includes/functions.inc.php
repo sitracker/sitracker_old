@@ -310,7 +310,8 @@ function user_realname($id)
     global $CONFIG;
     if ($id >= 1)
     {
-        return db_read_column('realname', 'users', $id);
+        if ($id == $_SESSION['userid']) return $_SESSION['realname'];
+        else return db_read_column('realname', 'users', $id);
     }
     else return($CONFIG['application_shortname']); // Default user / No user
 }

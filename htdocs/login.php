@@ -35,6 +35,7 @@ if (authenticate($username, $password) == 1)
     $_SESSION['userid'] = $user->id;
     $_SESSION['username'] = $user->username;
     $_SESSION['style'] = $user->var_style;
+    $_SESSION['realname'] = $user->realname;
 
     // Get an array full of users permissions
     // First lookup the role permissions

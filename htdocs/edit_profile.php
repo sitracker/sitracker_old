@@ -223,6 +223,10 @@ else
         $result = mysql_query($sql);
         if (mysql_error()) trigger_error("MySQL Query Error ".mysql_error(), E_USER_ERROR);
 
+        // Update the profile in the users current session
+        $_SESSION['style'] = $style;
+        $_SESSION['realname'] = $realname;
+
         if (!$result)
         {
             include('htmlheader.inc.php');
