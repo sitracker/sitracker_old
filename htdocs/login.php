@@ -16,19 +16,30 @@ session_start();
 session_regenerate_id(TRUE);
 
 // External vars
-$password=md5($_REQUEST['password']);
+$password = md5($_REQUEST['password']);
 $username = cleanvar($_REQUEST['username']);
 $public_browser = cleanvar($_REQUEST['public_browser']);
 
 if (authenticate($username, $password) == 1)
 {
     // Valid user
-    $userid = user_id($username, $password);
-    $_SESSION['auth']==TRUE;
+    $_SESSION['auth'] = TRUE;
+
+    // Retreive users profile
+    $sql = "SELECT * FROM users WHERE username='$username' AND password='$password' LIMIT 1";
+    $result = mysql_query($sql);
+    if (mysql_error()) trigger_error(mysql_error(), E_USER_ERROR);
+    if (mysql_num_rows($result) < 1) trigger_error("No such user", E_USER_ERROR);
+    $user = mysql_fetch_object($result);
+    // Profile
+    $_SESSION['userid'] = $user->id;
+    $_SESSION['username'] = $user->username;
+    $_SESSION['style'] = $user->var_style;
 
     // Get an array full of users permissions
     // First lookup the role permissions
-    $sql = "SELECT * FROM users, rolepermissions WHERE users.roleid=rolepermissions.roleid AND users.id = '$userid' AND granted='true'";
+    $sql = "SELECT * FROM users, rolepermissions WHERE users.roleid=rolepermissions.roleid ";
+    $sql .= "AND users.id = '{$_SESSION['userid']}' AND granted='true'";
     $result = mysql_query($sql);
     if (mysql_error()) trigger_error(mysql_error(),E_USER_ERROR);
     if (mysql_num_rows($result) >= 1)
@@ -39,7 +50,7 @@ if (authenticate($username, $password) == 1)
         }
     }
     // Next lookup the individual users permissions
-    $sql = "SELECT * FROM userpermissions WHERE userid = '{$sit[2]}' AND granted='true' ";
+    $sql = "SELECT * FROM userpermissions WHERE userid = '{$_SESSION['userid']}' AND granted='true' ";
     $result = mysql_query($sql);
     if (mysql_error()) trigger_error(mysql_error(),E_USER_ERROR);
     if (mysql_num_rows($result) >= 1)
@@ -51,6 +62,7 @@ if (authenticate($username, $password) == 1)
     }
     $_SESSION['permissions'] = array_unique($userpermissions);
 
+/*
     if (!$public_browser=='yes')
     {
         // set the cookie (expires in 30 days)
@@ -66,6 +78,7 @@ if (authenticate($username, $password) == 1)
         setcookie("sit[2]", $userid, time()+1800);
         setcookie("sit[3]", 'public', time()+1800);
     }
+    */
     // redirect
     header ("Location: main.php?pg=welcome");
     exit;
@@ -75,7 +88,7 @@ else
     // Invalid user
     // TODO target v3.25 Have a look if this is a contact trying to login
 
-    $_SESSION['auth']==FALSE;
+    $_SESSION['auth'] = FALSE;
     // log the failure
     if ($username!='')
     {

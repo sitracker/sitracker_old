@@ -14,25 +14,24 @@
 
 session_start();
 
-// Attempt to prevent session fixation attacks
-if (!isset($_SESSION['auth']))
+// Check session is authenticated, if not redirect to login page
+if (!isset($_SESSION['auth']) OR $_SESSION['auth'] == FALSE)
 {
-    session_regenerate_id();
     $_SESSION['auth'] = FALSE;
-}
-
-if (authenticate($sit[0], $sit[1]) != 1)
-{
     // Invalid user
-    $_SESSION['auth']=FALSE;
     $page = urlencode($_SERVER['PHP_SELF']);
     header("Location: index.php?id=1&page=$page");
     exit;
 }
 else
 {
-    $_SESSION['auth']=TRUE;
-    // Continue executing...
+    // Attempt to prevent session fixation attacks
+    session_regenerate_id();
+    // Conversions for when register_globals=off
+    // We've migrated away from using cookies and now use sessions
+    $sit[0] = $_SESSION['username'];
+    $sit[1] = 'obsolete'; // FIXME Check $sit[1] is unused then remove
+    $sit[2] = $_SESSION['userid'];
 }
 
 // if ($permission=='') trigger_error("Could not determine required permissions",E_USER_ERROR);

@@ -12,7 +12,9 @@
 require('db_connect.inc.php');
 require('functions.inc.php');
 
-if (authenticate($sit[0], $sit[1]) != 1)
+session_start();
+
+if ($_SESSION['auth'] != TRUE)
 {
     // External variables
     $id = cleanvar($_REQUEST['id']);
@@ -33,7 +35,6 @@ if (authenticate($sit[0], $sit[1]) != 1)
     <label>Username:<br /><input name="username" size="20" type="text" /></label><br />
     <label>Password:<br /><input name="password" size="20" type="password" /></label><br />
     <input type="submit" value="Log In" />
-    <input type="checkbox" name='public_browser' />Public/Shared Computer (Increased Security)
     <?php
     echo "</div>";
     echo "</form>";

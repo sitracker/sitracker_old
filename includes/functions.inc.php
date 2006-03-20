@@ -18,12 +18,6 @@
 // Version number of the application, (numbers only)
 $application_version='3.23';
 
-// Conversions for when register_globals=off
-// Eventually we should migrate away from these cookies and move to using sessions
-$sit[0]=mysql_escape_string($_COOKIE['sit'][0]);
-$sit[1]=strip_tags(mysql_escape_string($_COOKIE['sit'][1]));
-$sit[2]=mysql_escape_string($_COOKIE['sit'][2]);
-
 // Clean PHP_SELF server variable to avoid potential XSS security issue
 $_SERVER['PHP_SELF'] = substr($_SERVER['PHP_SELF'], 0, (strlen($_SERVER['PHP_SELF']) - @strlen($_SERVER['PATH_INFO'])));
 
@@ -416,12 +410,6 @@ function user_incident_refresh($id)
 function user_update_order($id)
 {
     return db_read_column('var_update_order', 'users', $id);
-}
-
-
-function user_style($id)
-{
-    return db_read_column('var_style', 'users', $id);
 }
 
 
@@ -2028,8 +2016,7 @@ function confirmation_page($refreshtime, $location, $message)
    <?php
    echo "<title>{$CONFIG['application_shortname']} Confirmation Page</title>";
    echo "<meta http-equiv=\"refresh\" content=\"$refreshtime; url=$location\" />\n";
-   $userstyle = user_style($sit[2]);
-   $style=interface_style($userstyle);
+   $style = interface_style($_SESSION['style']);
    echo "<link rel='stylesheet' href='{$CONFIG['application_webpath']}styles/webtrack.css' />\n";
    // <link rel="stylesheet" href="webtrack.css">
    ?>

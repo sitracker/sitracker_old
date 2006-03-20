@@ -7,10 +7,10 @@ else echo $application_name;
 echo "</title>";
 echo "<meta http-equiv=\"Content-Type\" content=\"text/html; charset=utf-8\" />";
 echo "<style type='text/css'>@import url('{$CONFIG['application_webpath']}styles/webtrack.css');</style>\n";
-if (authenticate($sit[0], $sit[1]) == 1)
+// FIXME v3.23 This authentication method is obsolete and needs removing or altering
+if ($_SESSION['auth'] == TRUE)
 {
-    $userstyle = user_style($sit[2]);
-    $style=interface_style($userstyle);
+    $style = interface_style($_SESSION['style']);
     echo "<link rel='stylesheet' href='{$CONFIG['application_webpath']}styles/{$style['cssurl']}' />\n";
 }
 else

@@ -27,10 +27,9 @@ if (isset($title)) { echo "$title - {$CONFIG['application_shortname']}"; } else 
 echo "</title>\n";
 echo "<link rel='SHORTCUT ICON' href='{$CONFIG['application_webpath']}images/sit_favicon.png' />\n";
 echo "<style type='text/css'>@import url('{$CONFIG['application_webpath']}styles/webtrack.css');</style>\n";
-if (authenticate($sit[0], $sit[1]) == 1)
+if ($_SESSION['auth'] == TRUE)
 {
-    $userstyle = user_style($sit[2]);
-    $style=interface_style($userstyle);
+    $style = interface_style($_SESSION['style']);
     echo "<link rel='stylesheet' href='{$CONFIG['application_webpath']}styles/{$style['cssurl']}' />\n";
 }
 else
