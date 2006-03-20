@@ -223,10 +223,15 @@ else
         $result = mysql_query($sql);
         if (mysql_error()) trigger_error("MySQL Query Error ".mysql_error(), E_USER_ERROR);
 
-        // Update the profile in the users current session
-        $_SESSION['style'] = $style;
-        $_SESSION['realname'] = $realname;
-        $_SESSION['incident_refresh'] = $incidentrefresh;
+        // If this is the current user, update the profile in the users session
+        if ($userid == $_SESSION['userid'])
+        {
+            $_SESSION['style'] = $style;
+            $_SESSION['realname'] = $realname;
+            $_SESSION['email'] = $email;
+            $_SESSION['incident_refresh'] = $incidentrefresh;
+            $_SESSION['update_order'] = $updateorder;
+        }
 
         if (!$result)
         {

@@ -325,7 +325,8 @@ function user_jobtitle($id)
 
 function user_email($id)
 {
-    return db_read_column('email', 'users', $id);
+    if ($id == $_SESSION['userid']) return $_SESSION['email'];
+    else return db_read_column('email', 'users', $id);
 }
 
 
@@ -396,12 +397,6 @@ function user_accepting($id)
     if ($accepting == '')  $accepting = "NoSuchUser";
 
     return($accepting);
-}
-
-
-function user_update_order($id)
-{
-    return db_read_column('var_update_order', 'users', $id);
 }
 
 

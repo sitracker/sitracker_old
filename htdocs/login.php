@@ -34,9 +34,12 @@ if (authenticate($username, $password) == 1)
     // Profile
     $_SESSION['userid'] = $user->id;
     $_SESSION['username'] = $user->username;
-    $_SESSION['style'] = $user->var_style;
     $_SESSION['realname'] = $user->realname;
+    $_SESSION['email'] = $user->email;
+    $_SESSION['style'] = $user->var_style;
     $_SESSION['incident_refresh'] = $user->var_incident_refresh;
+    $_SESSION['update_order'] = $user->var_update_order;
+    $_SESSION['collapse'] = $user->var_collapse;
 
     // Get an array full of users permissions
     // First lookup the role permissions
