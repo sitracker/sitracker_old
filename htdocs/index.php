@@ -9,6 +9,13 @@
 //
 // This Page Is Valid XHTML 1.0 Transitional! 31Oct05
 
+// Since this is the first page people will visit check if the include path is correct
+if (($fp = @fopen($filename, 'r', 1)) and fclose($fp) == FALSE)
+{
+    header("Location: setup.php");
+    exit;
+}
+
 require('db_connect.inc.php');
 require('functions.inc.php');
 
