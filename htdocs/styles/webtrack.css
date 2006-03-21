@@ -315,7 +315,7 @@ tr.notice { background-color: #FFFFB0; }
   /*padding-top: 14px; */
   padding-bottom: 0px;
   line-height: 14px;
-  width: 170px;
+  width: 130px;
   left: -1px;
 }
 
@@ -376,7 +376,7 @@ div#menu li:hover li ul,
 #menu li ul li ul {
   padding-top: 0px;
   border-top-width: 1px;
-  left: 170px;
+  left: 130px;
 }
 
 #menu li li ul {

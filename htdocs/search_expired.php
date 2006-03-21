@@ -82,8 +82,10 @@ else
 
         if (mysql_num_rows($result) == 0)
         {
+            include('htmlheader.inc.php');
             echo $pagetitle;
-            echo "<h2>Sorry, your search yielded no results</h2>\n";
+            echo "<p class='error'>Sorry, your search yielded no results</p>\n";
+            include('htmlfooter.inc.php');
         }
         else
         {
