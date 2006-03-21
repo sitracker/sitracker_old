@@ -124,7 +124,7 @@ if ($sit[3]=='public')
 ?>
 </div>
 <?php
-echo "<div id='statusbar'><a href='about.php'><img src='{$CONFIG['application_webpath']}images/sit_favicon.png' width='16' height='16' border='0' alt='About {$CONFIG['application_shortname']}' /></a>";
+echo "<div id='statusbar'><a href='about.php'><img src='{$CONFIG['application_webpath']}images/sitting_man_logo16x16.png' width='16' height='16' border='0' alt='About {$CONFIG['application_shortname']}' /></a>";
 ?>
 
 <strong><?php echo "{$CONFIG['application_shortname']} {$application_version}"; ?></strong> running on <?php echo strip_tags($_SERVER["SERVER_SOFTWARE"]); ?> at

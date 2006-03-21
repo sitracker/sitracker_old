@@ -1,17 +1,19 @@
 To Do
 
-v3.23
-* Related Incidents
+v3.24
+* Improve Related Incidents to add Parents/Children
 
 v3.2x
 * Incoming email handler
 * Re-write the help
+* Application icon
+* Context 'actions' menus
 
 v3.3x
 * Contact flags
 
 v4.00 / Future
-* Interface for adding/editing vendors
+* Interface for editing vendors
 * Change maintenance table to use servicelevel field that stores tag instead of id
 * Overhaul the email templates (emailtypes)
 * Add tabbed incident_details popup window, with tabs relevant to SLA status

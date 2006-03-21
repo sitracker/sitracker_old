@@ -360,6 +360,9 @@ div#menu li:hover li ul,
 #menu li ul a:hover
 {
     background-color: #CCC;
+    filter:alpha(opacity=75);
+    opacity: 0.75;
+    -moz-opacity:0.75;
 }
 
 /*
@@ -383,7 +386,7 @@ div#menu li:hover li ul,
 }
 
 #menu li.menuitem {
-  background: url('images/menu_divider.gif') no-repeat right center;
+  /* background: url('../images/menu_divider.gif') no-repeat right center; */
 }
 
 

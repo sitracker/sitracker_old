@@ -24,7 +24,7 @@ Agreements and incidents are flagged if they stray outside of them.</p>
 
 <h3><a name='incidents'>Incidents</a></h3>
 <p>As is clear from the name Support <em>Incident</em> tracker, incidents are an important part of SiT!, 'Incident'
-is the name we give to support call or helpdesk ticket.</p>
+is the name we use for what may also be referred to as a 'support call'. 'service request' or 'helpdesk ticket'.</p>
 <p>Incidents are usually referred to by their reference number, what we call the 'Incident Number'.  Incidents
 have a title, an associated product, contract and contact and possibly other information as well.</p>
 <p>After an incident is added it is always 'owned' by a SiT! user although the user can reassign this ownership while the

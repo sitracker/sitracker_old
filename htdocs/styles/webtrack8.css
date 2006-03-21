@@ -15,3 +15,14 @@ tr.expired:hover { background-color: #F2F2F2; }
 tr.notice:hover { background-color: #F2F2F2; }
 #userbar,#footerbar { background-color: transparent; }
 #footerbar select { font-size: 80%; }
+#statusbar { background-color: #203894; }
+
+div.windowbox
+{
+    border: 1px solid #203894;
+}
+
+div.windowtitle
+{
+    background-color: #203894;
+}

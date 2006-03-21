@@ -109,6 +109,7 @@ else
     // Add new email template
 
     // External Variables
+    // These variables may contain templates so don't strip tags
     $name = mysql_escape_string($_POST['name']);
     $description = mysql_escape_string($_POST['description']);
     $tofield = mysql_escape_string($_POST['tofield']);

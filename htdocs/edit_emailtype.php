@@ -142,15 +142,15 @@ elseif ($action == "edit")
         <tr><th>&lt;info1&gt;</th><td>Additional Info #1 (template dependent)</td></tr>
         <tr><th>&lt;info2&gt;</th><td>Additional Info #2 (template dependent)</td></tr>
         <?php
-        echo "<tr><th>&lt;useremail&gt;</th><td></td></tr>";
-        echo "<tr><th>&lt;userrealname&gt;</th><td></td></tr>";
-        echo "<tr><th>&lt;applicationname&gt;</th><td></td></tr>";
-        echo "<tr><th>&lt;applicationversion&gt;</th><td></td></tr>";
-        echo "<tr><th>&lt;applicationshortname&gt;</th><td></td></tr>";
-        echo "<tr><th>&lt;supportemail&gt;</th><td></td></tr>";
-        echo "<tr><th>&lt;signature&gt;</th><td></td></tr>";
-        echo "<tr><th>&lt;globalsignature&gt;</th><td></td></tr>";
-        echo "<tr><th>&lt;todaysdate&gt;</th><td></td></tr>";
+        echo "<tr><th>&lt;useremail&gt;</th><td>The current users email address</td></tr>";
+        echo "<tr><th>&lt;userrealname&gt;</th><td>The full name of the current user</td></tr>";
+        echo "<tr><th>&lt;applicationname&gt;</th><td>'{$CONFIG['application_name']}'</td></tr>";
+        echo "<tr><th>&lt;applicationversion&gt;</th><td>'{$application_version}'</td></tr>";
+        echo "<tr><th>&lt;applicationshortname&gt;</th><td>'{$CONFIG['application_shortname']}'</td></tr>";
+        echo "<tr><th>&lt;supportemail&gt;</th><td>The support email address</td></tr>";
+        echo "<tr><th>&lt;signature&gt;</th><td>The current users signature</td></tr>";
+        echo "<tr><th>&lt;globalsignature&gt;</th><td>The global signature</td></tr>";
+        echo "<tr><th>&lt;todaysdate&gt;</th><td>Todays date</td></tr>";
 
         plugin_do('emailtemplate_list');
         echo "</table>\n";
@@ -195,6 +195,7 @@ elseif ($action == "update")
     $bodytext = mysql_escape_string($_POST['bodytext']);
     $cust_vis = cleanvar($_POST['cust_vis']);
     $id = cleanvar($_POST['id']);
+    $type = cleanvar($_POST['type']);
 
     // check form input
     $errors = 0;
