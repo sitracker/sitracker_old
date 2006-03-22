@@ -9,7 +9,7 @@
 //
 
 
-// Author: Ivan Lucas
+// Author: Ivan Lucas <ivanlucas[at]users.sourceforge.net>
 
 $permission=29; // Edit products
 
@@ -21,45 +21,9 @@ require('auth.inc.php');
 // External variables
 $id = cleanvar($_REQUEST['id']);
 $name = $_REQUEST['name'];
+$action = $_POST['action'];
 
-if (empty($name))
-{
-    $title='Edit Product';
-    include('htmlheader.inc.php');
-
-    echo "<h2>$title</h2>\n";
-
-    echo "<form action='{$_SERVER['PHP_SELF']}' method='post' >";
-    echo "<table align='center' class='vertical'>";
-
-    $sql = "SELECT * FROM products WHERE id='$id' ";
-    $result = mysql_query($sql);
-    if (mysql_error()) trigger_error("MySQL Query Error ".mysql_error(), E_USER_ERROR);
-
-    $row = mysql_fetch_object($result);
-
-    echo "<tr><th>Vendor: <sup class='red'>*</sup></th>";
-    echo "<td>";
-    vendor_drop_down('vendor', $row->vendorid);
-    echo "</td></tr>";
-    echo "<tr><th>Product Name: <sup class='red'>*</sup></td>";
-    echo "<td>";
-    echo "<input class='textbox' maxlength='255' name='name' size='40' value='{$row->name}' />";
-    echo "</td></tr>";
-    echo "<tr><th>Description:</th>";
-    echo "<td>";
-    echo "<textarea name='description' cols='40' rows='6'>{$row->description}</textarea>";
-    echo "</td></tr>";
-    echo "</table>";
-    echo "<input type='hidden' name='productid' value='$id' />";
-    echo "<p align='center'><input type='submit' value='Save' /></p>";
-    echo "</td></tr>";
-    echo "</form>";
-    mysql_free_result($result);
-
-    include('htmlfooter.inc.php');
-}
-else
+if ($action == 'save')
 {
     // External variables
     $vendor = cleanvar($_POST['vendor']);
@@ -79,5 +43,42 @@ else
         confirmation_page("2", "products.php", "<h2>Product Edited Successfully</h2><p align='center'>Please wait while you are redirected...</p>");
     }
 }
-include('db_disconnect.inc.php');
+else
+{
+    $title='Edit Product';
+    include('htmlheader.inc.php');
+
+    echo "<h2>$title</h2>\n";
+
+    echo "<form action='{$_SERVER['PHP_SELF']}' method='post' >";
+    echo "<table align='center' class='vertical'>";
+
+    $sql = "SELECT * FROM products WHERE id='$id' ";
+    $result = mysql_query($sql);
+    if (mysql_error()) trigger_error("MySQL Query Error ".mysql_error(), E_USER_ERROR);
+
+    $row = mysql_fetch_object($result);
+
+    echo "<tr><th>Vendor: <sup class='red'>*</sup></th>";
+    echo "<td>";
+    echo vendor_drop_down('vendor', $row->vendorid);
+    echo "</td></tr>";
+    echo "<tr><th>Product Name: <sup class='red'>*</sup></td>";
+    echo "<td>";
+    echo "<input class='textbox' maxlength='255' name='name' size='40' value='{$row->name}' />";
+    echo "</td></tr>";
+    echo "<tr><th>Description:</th>";
+    echo "<td>";
+    echo "<textarea name='description' cols='40' rows='6'>{$row->description}</textarea>";
+    echo "</td></tr>";
+    echo "</table>";
+    echo "<input type='hidden' name='productid' value='$id' />";
+    echo "<input type='hidden' name='action' value='save' />";
+    echo "<p align='center'><input type='submit' value='Save' /></p>";
+    echo "</td></tr>";
+    echo "</form>";
+    mysql_free_result($result);
+
+    include('htmlfooter.inc.php');
+}
 ?>
