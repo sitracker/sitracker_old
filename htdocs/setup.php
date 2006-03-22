@@ -199,14 +199,16 @@ echo "<html xmlns=\"http://www.w3.org/1999/xhtml\" xml:lang=\"en\" lang=\"en\">\
 echo "<head>\n";
 echo "<meta http-equiv=\"Content-Type\" content=\"text/html;charset=UTF-8\" />\n";
 echo "<style type=\"text/css\">\n";
-echo "body { background-color: #FFFFCC; font-family: Tahoma, Helvetica, sans-serif; font-size: 10pt;}\n";
-echo "h1,h2,h3,h4,h5 { background-color: #99CCFF; padding: 0.1em; border: 1px solid #FFFF33; }\n";
-echo "h4 {background-color: #FFFFE1;}\n";
-echo ".error {background: #FFFF33; border: 1px solid red; color: red; padding: 2px;}\n";
+echo "body { background-color: #FFF; font-family: Tahoma, Helvetica, sans-serif; font-size: 10pt;}\n";
+echo "h1,h2,h3,h4,h5 { background-color: #203894; padding: 0.1em; border: 1px solid #203894; color: #FFF; }\n";
+echo "h4 {background-color: #F7FAFF; color: #000; border: 1px solid #3165CD; }\n";
+echo ".error {background: #FFFFCC; border: 1px solid red; color: red; padding: 2px;}\n";
+echo ".help {background: #F7FAFF; border: 1px solid #3165CD; color: #203894; padding: 2px;}\n";
 echo ".warning {background: #FFFFE6; border: 2px solid #FFFF31; color: red; padding: 2px;}\n";
 echo "pre {background:#FFF; border:#999; padding: 1em;}\n";
 echo "a:link,a:visited { color: #000099; }\n";
 echo "a:hover { background: #99CCFF; }\n";
+echo "hr { background-color: #203894; margin-top: 3em; }\n";
 echo "</style>\n";
 echo "<title>Support Incident Tracker Setup</title\n";
 echo "</head>\n<body>\n";
@@ -275,7 +277,9 @@ switch ($_REQUEST['action'])
         if (!$fp)
         {
             echo "<p class='error'>Could not write {$config_filename}</p>";
-            echo "<h2>Copy this text and paste it into a config.inc.php file in the includes directory</h2>";
+            echo "<p class='help'>Copy this text and paste it into a <var>config.inc.php</var> file in the includes directory<br />";
+            echo "Or change the permissions on the file so that it is writable and refresh this page to try again (if you do this remember to make it ";
+            echo "read-only again afterwards)</p>";
             echo "<div style='margin-left: 5%; margin-right: 5%; background-color: white; padding: 1em;'>";
             highlight_string($newcfgfile);
             echo "</div>";
@@ -288,7 +292,8 @@ switch ($_REQUEST['action'])
             echo "<p>Config file modified</p>";
             echo "<p class='warning'>Important: The file permissions on the file config.inc.php allow the file to be modified, we recommend you now make this file read-only.</p>";
         }
-        echo "<h2>Now run <a href='setup.php'>setup</a> again</h2>";
+        echo "<h2>After creating your config.inc.php file</h2>";
+        echo "<p>Now run <a href='setup.php'>setup</a> again</p>";
     break;
 
     default:
@@ -333,8 +338,8 @@ switch ($_REQUEST['action'])
                 }
                 else
                 {
-                    echo "<p class='error'>If this is the first time you have used SiT! you may need to create the database, ";
-                    echo "if you have the necessary MySQL permissions you can you can <a href='setup.php?action=createdatabase'>create the database automatically</a>.<br />";
+                    echo "<p class='help'>If this is the first time you have used SiT! you may need to create the database, ";
+                    echo "if you have the necessary MySQL permissions you can <a href='setup.php?action=createdatabase'>create the database automatically</a>.<br />";
                     echo "Alternatively you can create it manually by executing the SQL statement <br /><code>{$sql};</code></p";
                 }
                 echo "<p>After creating the database run <a href='setup.php'>setup</a> again to create the database schema</p>";
@@ -365,7 +370,7 @@ switch ($_REQUEST['action'])
                     if (mysql_error()) trigger_error($sql.mysql_error(),E_USER_ERROR);
                     $installed_version = $application_version;
                     echo "<h2>Database schema created</h2>";
-                    echo "<p>If no errors were reported above you should now check the installation by running <a href='setup.php>setup</a> again.</p>";
+                    echo "<p>If no errors were reported above you should now check the installation by running <a href='setup.php'>setup</a> again.</p>";
                 }
                 else
                 {
@@ -472,7 +477,9 @@ switch ($_REQUEST['action'])
             }
         }
 }
-echo "<h3>&nbsp;</h3>";
+echo "<hr />";
+echo "<p><a href='http://sourceforge.net/projects/sitracker'>{$CONFIG['application_name']}</a> Setup</p>";
+echo "<p></p>";
 
 echo "\n</body>\n</html>";
 ?>
