@@ -9,7 +9,7 @@
 //
 
 
-// Author: Ivan Lucas
+// Author: Ivan Lucas <ivanlucas[at]users.sourceforge.net>
 $permission=4; // Edit your profile
 
 require('db_connect.inc.php');

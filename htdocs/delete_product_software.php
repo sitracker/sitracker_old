@@ -9,7 +9,7 @@
 //
 
 
-// Author: Ivan Lucas
+// Author: Ivan Lucas <ivanlucas[at]users.sourceforge.net>
 
 // Removes link between a product and software
 

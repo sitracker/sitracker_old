@@ -8,7 +8,7 @@
 // of the GNU General Public License, incorporated herein by reference.
 //
 
-// Author: Ivan Lucas
+// Author: Ivan Lucas <ivanlucas[at]users.sourceforge.net>
 
 $permission=13; // Reassign Incident
 require('db_connect.inc.php');

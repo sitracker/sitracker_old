@@ -9,7 +9,7 @@
 //
 
 
-// Author: Ivan Lucas
+// Author: Ivan Lucas <ivanlucas[at]users.sourceforge.net>
 
 $permission=44; // ftp publishing
 require('db_connect.inc.php');

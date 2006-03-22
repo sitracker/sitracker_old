@@ -11,7 +11,7 @@
 
 // This Page Is Valid XHTML 1.0 Transitional!   4Nov05
 
-// Author: Ivan Lucas
+// Author: Ivan Lucas <ivanlucas[at]users.sourceforge.net>
 
 $permission=43; // Edit global signature
 

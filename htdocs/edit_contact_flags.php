@@ -9,7 +9,7 @@
 //
 
 
-// Author: Ivan Lucas
+// Author: Ivan Lucas <ivanlucas[at]users.sourceforge.net>
 
 $permission=36; // Set Contact Flags
 $title='Set Contact Flags';

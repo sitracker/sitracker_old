@@ -8,7 +8,7 @@
 // of the GNU General Public License, incorporated herein by reference.
 //
 
-// Author: Ivan Lucas
+// Author: Ivan Lucas <ivanlucas[at]users.sourceforge.net>
 
 $permission=24;  // Add Product
 require('db_connect.inc.php');
@@ -21,7 +21,6 @@ require('auth.inc.php');
 $action = mysql_escape_string($_REQUEST['action']);
 $productid = cleanvar($_REQUEST['productid']);
 $softwareid = cleanvar($_REQUEST['softwareid']);
-$contactid = cleanvar($_REQUEST['contactid']);
 $context = cleanvar($_REQUEST['context']);
 
 
@@ -31,14 +30,16 @@ if (empty($action) OR $action == "showform")
     ?>
     <h2>Link software with a product</h2>
     <form action="<?php echo $_SERVER['PHP_SELF'] ?>?action=add" method="post">
-    <input type="hidden" name="context" value="<?php echo $context ?>" />
+    <input type="hidden" name="context" value="<?php echo $context; ?>" />
     <table class='vertical'>
     <?php
     if (empty($productid))
     {
-        ?>
-        <tr><th>Product:</th><td><?php echo product_drop_down("productid", 0) ?></td></tr>
-        <?php
+        echo "<tr><th>Product:</th>";
+        echo "<td>";
+        echo product_drop_down("productid", 0);
+        echo "</td></tr>";
+
     }
     else
     {
@@ -53,27 +54,19 @@ if (empty($action) OR $action == "showform")
 
     if (empty($softwareid))
     {
-        ?>
-        <tr><th>Link Software:</hd><td><?php echo software_drop_down("softwareid", 0) ?></td></tr>
-        <?php
+        echo "<tr><th>Link Software:</hd><td>";
+        echo software_drop_down("softwareid", 0);
+        echo "</td></tr>\n";
     }
-    else
-    {
-        echo "<tr><th>Contact:</th><td>$contactid - ".contact_realname($contactid).", ".site_name(contact_site($contactid))."</td></tr>";
-    }
-    ?>
-    </table>
-    <p align='center'><input name="submit" type="submit" value="Save Link" /></p>
-    </form>
-    <?php
+    echo "</table>\n";
+    echo "<p align='center'><input name='submit' type='submit' value='Save Link' /></p>\n";
+    echo "</form>";
     include('htmlfooter.inc.php');
 }
 elseif ($action == "add")
 {
-    // Add support contact
-
     $errors = 0;
-    // check for blank contact
+    // check for blank
     if ($productid == 0)
     {
         $errors = 1;
@@ -83,12 +76,21 @@ elseif ($action == "add")
     if ($softwareid == 0)
     {
         $errors = 1;
-        $errors_string .= "<p class='error'>Something weird has happened, better call technical support</p>\n";
+        $errors_string .= "<p class='error'>Software ID cannot be blank</p>\n";
     }
 
     // add record if no errors
     if ($errors == 0)
     {
+        // First have a look if we already have this link
+        $sql = "SELECT productid FROM softwareproducts WHERE productid='$productid' AND softwareid='$softwareid'";
+        $result = mysql_query($sql);
+        if (mysql_error()) trigger_error("MySQL Query Error ".mysql_error(), E_USER_ERROR);
+        if (mysql_num_rows($result) >= 1)
+        {
+            confirmation_page("1", "add_product_software.php?productid={$productid}", "<h2>Software Link Already Exists</h2><p align='center'>Please wait while you are redirected...</p>");
+        }
+
         $sql  = "INSERT INTO softwareproducts (productid, softwareid) VALUES ($productid, $softwareid)";
         $result = mysql_query($sql);
         if (mysql_error()) trigger_error("MySQL Query Error ".mysql_error(), E_USER_ERROR);

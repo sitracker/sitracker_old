@@ -9,7 +9,7 @@
 //
 
 
-// Author: Ivan Lucas
+// Author: Ivan Lucas <ivanlucas[at]users.sourceforge.net>
 // Created: 24th May 2001
 // Purpose: Show All Contact Details
 // This Page Is Valid XHTML 1.0 Transitional! 27Oct05

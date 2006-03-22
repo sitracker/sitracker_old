@@ -8,7 +8,7 @@
 // of the GNU General Public License, incorporated herein by reference.
 //
 
-// Author: Ivan Lucas
+// Author: Ivan Lucas <ivanlucas[at]users.sourceforge.net>
 
 if (empty($_REQUEST['user']) || $_REQUEST['user']=='current') $permission=58; /* Edit your software skills */
 else $permission=59; // Manage users software skills

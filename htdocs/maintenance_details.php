@@ -8,7 +8,7 @@
 // of the GNU General Public License, incorporated herein by reference.
 //
 
-// Author: Ivan Lucas
+// Author: Ivan Lucas <ivanlucas[at]users.sourceforge.net>
 // Created: 20th August 2001
 // Purpose: Show All Maintenance Contract Details
 // This Page Is Valid XHTML 1.0 Transitional! 27Oct05

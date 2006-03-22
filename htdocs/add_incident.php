@@ -9,7 +9,7 @@
 //
 
 
-// Author: Ivan Lucas, Tom Gerrard
+// Author: Ivan Lucas <ivanlucas[at]users.sourceforge.net>, Tom Gerrard
 // 7Oct02 INL  Added support for maintenanceid to be put into incidents table
 
 $permission=5;

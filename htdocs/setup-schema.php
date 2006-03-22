@@ -8,7 +8,7 @@
 // of the GNU General Public License, incorporated herein by reference.
 //
 
-// Author: Ivan Lucas
+// Author: Ivan Lucas <ivanlucas[at]users.sourceforge.net>
 
 $schema = "CREATE TABLE `closingstatus` (
  `id` int(11) NOT NULL auto_increment,

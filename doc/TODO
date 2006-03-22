@@ -1,5 +1,11 @@
 To Do
 
+v3.23
+* Fix Logout
+* Fix link products with software
+* Fix names in incident log
+* Stop people putting N/A or 'None' in fields
+
 v3.24
 * Improve Related Incidents to add Parents/Children
 
@@ -8,6 +14,9 @@ v3.2x
 * Re-write the help
 * Application icon
 * Context 'actions' menus
+* Interface for editing incident product info questions
+* Public Holidays
+* Monitor incidents by email, e.g. get an email when an incident is about to go out of SLA
 
 v3.3x
 * Contact flags

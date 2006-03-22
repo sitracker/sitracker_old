@@ -161,7 +161,7 @@ $hmenu[203010] = array (10=> array ( 'perm'=> 1, 'name'=> "Add Vendor", 'url'=>"
                         20=> array ( 'perm'=> 24, 'name'=> "Add Product", 'url'=>"add_product.php"),
                         30=> array ( 'perm'=> 0, 'name'=> "List Products", 'url'=>"products.php"),
                         40=> array ( 'perm'=> 56, 'name'=> "Add Software", 'url'=>"add_software.php"),
-                        50=> array ( 'perm'=> 24, 'name'=> "Link Products/Software", 'url'=>"add_product_software.php"),
+                        50=> array ( 'perm'=> 24, 'name'=> "Link Products", 'url'=>"add_product_software.php"),
                         60=> array ( 'perm'=> 25, 'name'=> "Add Product Question", 'url'=>"add_productinfo.php")
 );
 
@@ -1154,22 +1154,20 @@ function softwareproduct_drop_down($name, $id, $productid)
 
 function vendor_drop_down($name, $id)
 {
-  $sql = "SELECT id, name FROM vendors ORDER BY name ASC";
-  $result = mysql_query($sql);
-  if (mysql_error()) trigger_error(mysql_error(),E_USER_WARNING);
- ?>
-   <select name="<?php echo $name ?>">
-   <?php
-   if ($id == 0)
-   echo "<option selected='selected' value='0'></option>\n";
-   while ($row = mysql_fetch_array($result))
-      {
-      ?><option <?php if ($row['id'] == $id) { ?>selected <?php } ?>value=<?php echo $row['id'] ?>><?php echo $row['name'] ?></option><?php
-      echo "\n";
-      }
-   ?>
-   </select>
-   <?php
+    $sql = "SELECT id, name FROM vendors ORDER BY name ASC";
+    $result = mysql_query($sql);
+    if (mysql_error()) trigger_error(mysql_error(),E_USER_WARNING);
+    $html = "<select name='$name'>";
+    if ($id == 0)
+        $html .= "<option selected='selected' value='0'></option>\n";
+    while ($row = mysql_fetch_array($result))
+    {
+        $html .= "<option";
+        if ($row['id'] == $id) $html .= " selected='selected'";
+        $html .= " value='{$row['id']}'>{$row['name']}</option>\n";
+    }
+   $html .= "</select>";
+   return $html;
 }
 
 

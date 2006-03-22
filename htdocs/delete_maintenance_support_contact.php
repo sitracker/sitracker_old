@@ -11,7 +11,7 @@
 
 // Removes an Association between a contact and a maintenance contract
 
-// Author: Ivan Lucas
+// Author: Ivan Lucas <ivanlucas[at]users.sourceforge.net>
 
 // This Page Is Valid XHTML 1.0 Transitional!   31Oct05
 
