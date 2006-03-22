@@ -76,6 +76,9 @@ $CONFIG['custom_dictionary_file'] = "{$CONFIG['application_fspath']}dictionary/c
 // The CSS file to use when no other is configured
 $CONFIG['default_css_url'] = 'styles/webtrack1.css';
 
+// The interface style that new users should use (user default style)
+$CONFIG['default_interface_style'] = 8;
+
 // Knowledgebase ID prefix, inserted before the ID to give it uniqueness
 $CONFIG['kb_id_prefix'] = 'KB';
 // Knowledgebase disclaimer, displayed at the bottom of every article

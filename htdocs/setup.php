@@ -70,6 +70,7 @@ $CFGVAR['enable_spellchecker']['title'] = 'Set to TRUE to enable spellchecking o
 $CFGVAR['main_dictionary_file']['title'] = 'Spell check main dictionary file';
 $CFGVAR['custom_dictionary_file']['title'] = 'Spell check custom words dictionary file';
 $CFGVAR['default_css_url']['title'] = 'The CSS file to use when no other is configured';
+$CFGVAR['default_interface_style']['title'] = 'The interface style that new users should use (user default style)';
 $CFGVAR['kb_id_prefix']['title'] = 'Knowledgebase ID prefix';
 $CFGVAR['kb_id_prefix']['help'] = 'inserted before the ID to give it uniqueness';
 $CFGVAR['kb_disclaimer_html']['title']  = 'Knowledgebase disclaimer, displayed at the bottom of every article';

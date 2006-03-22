@@ -103,8 +103,8 @@ else
     if ($errors == 0)
     {
         $password=strtoupper(md5($password));
-        $sql = "INSERT INTO users (username, password, realname, roleid, title, email, phone, fax, status) ";
-        $sql .= "VALUES ('$username', '$password', '$realname', '$roleid', '$jobtitle', '$email', '$phone', '$fax', 1)";
+        $sql = "INSERT INTO users (username, password, realname, roleid, title, email, phone, fax, status, var_style) ";
+        $sql .= "VALUES ('$username', '$password', '$realname', '$roleid', '$jobtitle', '$email', '$phone', '$fax', 1, '{$CONFIG['default_interface_style']}')";
         $result = mysql_query($sql);
         if (mysql_error()) trigger_error("MySQL Query Error ".mysql_error(), E_USER_ERROR);
         $newuserid = mysql_insert_id();
