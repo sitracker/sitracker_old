@@ -16,8 +16,11 @@
 require('db_connect.inc.php');
 require('functions.inc.php');
 
-if (empty($_REQUEST['user']) || $_REQUEST['user']=='current' || $_REQUEST['user']==$sit[2]) $permission=58; /* Edit your software skills */
-else $permission=59; // Manage users software skills
+if (empty($_REQUEST['user'])
+    OR $_REQUEST['user']=='current'
+    OR $_REQUEST['user']==$_SESSION['userid']
+    OR $_REQUEST['userid']==$_SESSION['userid']) $permission = 58; // Edit your software skills
+else $permission = 59; // Manage users software skills
 
 // This page requires authentication
 require('auth.inc.php');

@@ -40,6 +40,7 @@ Changes in v3.23 - Unreleased
 * The users profile variables are loaded into the session at login (and after changes) this
   avoids multiple SQL Queries which should improve performance
 * Incident relationships.  Related incidents can now be linked together.
+* The interface style that new users should use (user default style) can now be configured
 
 Changes in v3.22 - Released 27 January 2006
 -------------------------------------------------------------------------------------
