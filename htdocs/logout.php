@@ -13,6 +13,9 @@
 require('db_connect.inc.php');
 require('functions.inc.php');
 
+session_name($CONFIG['session_name']);
+session_start();
+
 journal(CFG_LOGGING_NORMAL, 'Logout', "User {$sit[2]} logged out", CFG_JOURNAL_LOGIN, $sit[2]);
 
 // expire the cookie, as of v3,23 we don't use cookies, but leave this here for a few versions
@@ -24,18 +27,15 @@ setcookie("sit[2]");
 
 
 // End the session, remove the cookie and destroy all data registered with the session
-
+$_SESSION['auth']=FALSE;
 $_SESSION = array();
+
+session_unset();
+session_destroy();
 
 if (isset($_COOKIE[session_name()]))
 {
    setcookie(session_name(), '', time()-42000, '/');
-}
-
-if (isset($_SESSION['auth']))
-{
-    session_unset();
-    session_destroy();
 }
 
 // redirect
