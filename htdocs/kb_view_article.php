@@ -8,7 +8,7 @@
 // of the GNU General Public License, incorporated herein by reference.
 //
 
-// Authors: Ivan Lucas, Tom Gerrard
+// Authors: Ivan Lucas <ivanlucas[at]users.sourceforge.net>, Tom Gerrard
 
 $permission=54; // View KB
 
