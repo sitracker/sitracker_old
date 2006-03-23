@@ -239,6 +239,4 @@ else
 
 echo "</div>\n";
 include('htmlfooter.inc.php');
-include('db_disconnect.inc.php');
-
 ?>

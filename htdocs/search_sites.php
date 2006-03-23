@@ -45,7 +45,6 @@ if (empty($search_string))
     </form>
     <?php
     include('htmlfooter.inc.php');
-    include('db_disconnect.inc.php');
 }
 else
 {
@@ -135,6 +134,5 @@ else
         }
     }
     include('htmlfooter.inc.php');
-    include('db_disconnect.inc.php');
 }
 ?>

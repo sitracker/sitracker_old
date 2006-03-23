@@ -33,7 +33,6 @@ if (empty($expire))
     </form>
     <?php
     include('htmlfooter.inc.php');
-    include('db_disconnect.inc.php');
 }
 else
 {

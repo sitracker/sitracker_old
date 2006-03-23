@@ -99,5 +99,4 @@ else echo "<p>None</p>";
 echo "</td></tr>";
 echo "</table>\n";
 include('htmlfooter.inc.php');
-include('db_disconnect.inc.php');
 ?>

@@ -142,5 +142,4 @@ Set your Status: <?php if(isset($sit[2])) userstatus_bardrop_down("status", user
 <?php
 
 include('htmlfooter.inc.php');
-include('db_disconnect.inc.php');
 ?>

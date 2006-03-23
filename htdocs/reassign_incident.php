@@ -275,6 +275,5 @@ else
     {
         confirmation_page("4", "reassign_incident.php?id={$id}", "<h2 class='error'>Error</h2><h3>That user is not accepting incidents.</h3><h5>Please wait while you are returned...</h5>");
     }
-    include('db_disconnect.inc.php');
 }
 ?>

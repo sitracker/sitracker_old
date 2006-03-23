@@ -29,5 +29,4 @@ include("help/help-$id.inc.php");
 echo "</div>";
 
 include('htmlfooter.inc.php');
-include('db_disconnect.inc.php');
 ?>

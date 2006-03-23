@@ -123,6 +123,5 @@ echo "<h2>$survcount Surveys</h2>";
 
 echo "</div>\n";
 include('htmlfooter.inc.php');
-include('db_disconnect.inc.php');
 
 ?>

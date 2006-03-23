@@ -17,6 +17,10 @@ require('functions.inc.php');
 // This page requires authentication
 require('auth.inc.php');
 
+// External variables
+$startyear = cleanvar($_REQUEST['startyear']);
+
+
 $title="Incident Graph";
 
 $openedcolour='#FF962A';
@@ -123,5 +127,4 @@ else $diff="<span style='color: $openedcolour;'>$diff</span>";
 echo "<h3>Grand Total: <u style='color: $openedcolour;'>$grandtotal</u> incidents opened and <u style='color: $closedcolour;'>$grandtotalclosed</u> closed during the year, difference <u>$diff</u></h3>";
 
 include('htmlfooter.inc.php');
-include('db_disconnect.inc.php');
 ?>

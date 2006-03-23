@@ -135,7 +135,6 @@ if (empty($process))
         }
     }
     include('htmlfooter.inc.php');
-    include('db_disconnect.inc.php');
 }
 else
 {

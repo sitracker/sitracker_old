@@ -91,6 +91,4 @@ while ($user = mysql_fetch_object($uresult))
 
 echo "</div>\n";
 include('htmlfooter.inc.php');
-include('db_disconnect.inc.php');
-
 ?>

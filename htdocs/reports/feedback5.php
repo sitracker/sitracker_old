@@ -234,6 +234,5 @@ if (mysql_num_rows($mresult) >= 1)
 else echo "<p class='error'>No feedback found</p>";
 echo "</div>\n";
 include('htmlfooter.inc.php');
-include('db_disconnect.inc.php');
 
 ?>

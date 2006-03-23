@@ -186,5 +186,4 @@ while ($contactrow=mysql_fetch_array($contactresult))
 mysql_free_result($contactresult);
 
 include('htmlfooter.inc.php');
-include('db_disconnect.inc.php');
 ?>

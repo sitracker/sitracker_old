@@ -149,12 +149,9 @@ if ($errors == 0)
             if ($shade == 1) $shade = 0;
             else $shade = 1;
         }
-        ?>
-        </table>
-        <?php
+        echo "</table>\n";
     }
 }
 
 include('htmlfooter.inc.php');
-include('db_disconnect.inc.php');
 ?>

@@ -1,5 +1,0 @@
-<?php
-
-mysql_close();
-
-?>

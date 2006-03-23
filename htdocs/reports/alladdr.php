@@ -62,6 +62,4 @@ mysql_free_result($result);
 
 
 include('htmlfooter.inc.php');
-include('db_disconnect.inc.php');
-
 ?>

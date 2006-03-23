@@ -160,5 +160,4 @@ echo "</table>\n";
 echo "<p align='center'><strong>Legend:</strong> H - Holiday, S - Sickness, W - Working Away, T - Training, L - Other Leave</p>";
 
 include('htmlfooter.inc.php');
-include('db_disconnect.inc.php');
 ?>
