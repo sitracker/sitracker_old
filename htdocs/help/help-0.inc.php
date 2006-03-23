@@ -6,11 +6,17 @@
         <li><a href='#addincident'>Adding an Incident</a></li>
         <li><a href='#incidentqueues'>Incident Queues</a></li>
         <li><a href='#watchincidents'>Watching Incidents</a></li>
+        <li><a href='#servicelevels'>Service Levels</a></li>
+        <li><a href='#closeincident'>Closing an Incident</a></li>
     </ul>
     </li>
     <li><a href='#customers'>Customers</a></li>
     <li><a href='#contracts'>Contracts</a></li>
     <li><a href='#softwareproducts'>Software &amp; Products</a></li>
+    <li>Control Panel
+    <ul>
+        <li><a href='#adduser'>Adding Users</a></li>
+    </ul>
     <li><a href='#morehelp'>More Help</a></li>
 </ul>
 
@@ -29,7 +35,7 @@ is the name we use for what may also be referred to as a 'support call'. 'servic
 have a title, an associated product, contract and contact and possibly other information as well.</p>
 <p>After an incident is added it is always 'owned' by a SiT! user although the user can reassign this ownership while the
 incident is open.</p>
-<p>Each incident has a current status which may be one of the following:
+<p>Each incident has a current status which may be one of the following:</p>
 <ul>
 <li>Active</li>
 <li>Closed</li>
@@ -41,11 +47,11 @@ incident is open.</p>
 <li>Awaiting Customer Action</li>
 <li>Unsupported</li>
 </ul>
-</p>
-<p>In addition closed incidents have an additional closing status:
+
+<p>In addition closed incidents have an additional closing status:</p>
 <ul>
 <li>Sent Information</li>
-<li>Incidents
+<li>Incidents</li>
 <li>Solved Problem</li>
 <li>Reported Bug</li>
 <li>Action Taken</li>
@@ -55,7 +61,7 @@ incident is open.</p>
 <li>Support Expired</li>
 <li>Unsolved</li>
 </ul>
-</p>
+
 <p>Each incident has an 'updates log' which shows everything that has happened during the lifetime of the incident,
 a complete record of all contact with the customer, with colleagues and with external engineers.</p>
 <p>Incidents can also have files attached.</p>
@@ -63,19 +69,18 @@ a complete record of all contact with the customer, with colleagues and with ext
 
 <h3><a name='addincident'>Adding an Incident</a></h3>
 <p>Before you can add an incident, the customer must already have a contract that entitles them to support.</p>
-<p>Adding an incident is a four step process that goes like this:
+<p>Adding an incident is a four step process that goes like this:</p>
 <ol>
 <li>Enter all or part of the contact name in the box and click on the <strong>Find Contact</strong> button</li>
 <li>From the list of contacts or people, click the the appropriate <strong>Add Incident</strong> link</li>
 <li>Enter full details of the incident, give the incident a title and enter a problem description etc.</li>
 <li>Assign the incident to an engineer who is to work on it</li>
 </ol>
-</p>
 
 
 <h3><a name='incidentqueues'>Incident Queues</a></h3>
 <p>SiT! works in a manner that is perhaps different to other support tracking/helpdesk applications that you may
-have used in several respects.
+have used in several respects.</p>
 <ul>
 <li>It's possible for any engineer to view and even work on incidents that are in other engineers queues</li>
 <li>Incidents are assigned to engineers as soon as they are logged, rather than waiting in a central pending queue
@@ -83,7 +88,8 @@ or inbox for an engineer to decide to work on them.</li>
 <li>Incidents can be passed easily from engineer to engineer by re-assigning</li>
 <li>Engineers can keep an eye on incidents that their colleagues are working on, if they have skills in those areas</li>
 </ul>
-We believe this to be a better, more collaborative, way of working.  It helps prevent difficult or unpopular issues
+
+<p>We believe this to be a better, more collaborative, way of working.  It helps prevent difficult or unpopular issues
 from being ignored or left till last and it encourages team working.</p>
 <p>There are a number of queues and they do work in different ways, lets look at them one at a time.</p>
 
@@ -133,6 +139,40 @@ incident is displayed in this queue.</p>
 by selecting <strong>Support</strong> | <strong>Watch Incidents</strong> from the menu.  You can also view the various
 combined queues here by selecting, 'Action Needed', 'Waiting' or 'All Open' from the pulldown menu.</p>
 
+<h3><a name='servicelevels'>Service Levels</a></h3>
+<p>Each incident created is allocated a service level according to the service level set in the <a href='#contracts'>contract</a>.
+SiT comes with just one service level 'standard' defined by default, but you can add more or customize existing levels
+to suit your requirements via <strong>SiT!</strong> | <strong>Control Panel</strong> | <strong>Service Levels</strong>.</p>
+<p>The service level targets define an amount of time allowed for the incident to reach a certain stage of progression,
+ensuring your team meet these targets helps you to provide a better service.  Targets have different times for each
+incident priority so you can aim to respond to high priority incidents faster.</p>
+<p>The service level targets are:</p>
+<ul>
+<li>Initial Response</li>
+<li>Problem Determination</li>
+<li>Action Plan</li>
+<li>Resolution</li>
+<li>Review</li>
+</ul>
+
+<h3><a name='closeincident'>Closing an Incident</a></h3>
+<p>When you close an incident you are given the choice to mark the incident for closure or to close it immediately.
+If you choose to mark it for closure it will be closed after seven days. (this period can be configured by setting the
+<var>closure_delay</var> in the config file.)</p>
+<p>You must select a closing status at this point, this can be used later to quickly see whether the query was
+answered etc.  The options available are:</p>
+
+<ul>
+<li>Sent Information</li>
+<li>Solved Problem</li>
+<li>Reported Bug</li>
+<li>Action Taken</li>
+<li>Duplicate</li>
+<li>No Longer Relevant</li>
+<li>Unsupported</li>
+<li>Support Expired</li>
+<li>Unsolved</li>
+</ul>
 
 <h3><a name='customers'>Customers</a></h3>
 <p>People and organisations that you provide support to using SiT are referred to within SiT as 'customers'</p>
@@ -185,75 +225,36 @@ Then to link software to that, go to <strong>Customers</strong> |
 <p>Products can also be grouped by vendor, you can add vendors by going to <strong>Customers</strong> |
 <strong>Maintenance</strong> | <strong>Products &amp; Software</strong> | <strong>Add Vendor</strong>.</p>
 
+<h3><a name='adduser'>Adding Users</a></h3>
+<p>If you have appropriate permission you can create additional SiT users. (The 'admin' user always has this
+permission).  Go to <strong>Control Panel</strong> | <strong>Users</strong> | <strong>Add User</strong>.</p>
+<p>Usernames must be unique and cannot contain spaces.  Each user must have an email address.</p>
+<p>There are three available roles</p>
+<ul>
+<li>Administrator</li>
+<li>Manager</li>
+<li>User</li>
+</ul>
+<p>Each role has different permissions, and you can alter the permissions assigned to roles should you require.</p>
+
+<p>After adding a user you are presented with the user permissions page where you can grant additional permissions
+should the user have needs beyond that provided by the nearest role.</p>
+
+<p class='info'>Note that permissions are additive and you cannot take permissions away from a user that are granted
+by the role except by changing the users role or altering the permissions on the role itself.</p>
+
+
 <h3><a name='morehelp'>More Help</a></h3>
 
-<p>Please note that this help is currently incomplete and sometimes innacurate, we hope to have this fixed for a
+<p>Please note that this documentation below is currently incomplete and sometimes innacurate, we hope to have this fixed for a
 release in the near future, if you think you can help us with this, your help would be most welcome.</p>
 
 <ul>
-  <li><strong>Incidents...</strong></li>
-  <ul>
-    <li><a href="help.php?id=18">Close Incidents</a></li>
-  </ul>
-</ul>
-
-<ul>
-  <li><strong>Users...</strong></li>
-  <ul>
-    <li><a href="help.php?id=20">Add Users</a></li>
-    <li><a href="help.php?id=23">Edit User</a></li>
-    <li><a href="help.php?id=9">Edit User Permissions</a></li>
-    <li><a href="help.php?id=14">View Users</a></li>
-  </ul>
-</ul>
-
-<ul>
-  <li><strong>Email...</strong></li>
-  <ul>
-    <li><a href="help.php?id=16">Add Email Templates</a></li>
-    <li><a href="help.php?id=17">Edit Email Templates</a></li>
-    <li><a href="help.php?id=33">Send Emails</a></li>
     <li><a href="help.php?id=43">Edit Global Signature</a></li>
-  </ul>
-</ul>
-
-<ul>
-  <li><strong>Contracts...</strong></li>
-  <ul>
-    <li><a href="help.php?id=39">Add Contract</a></li>
-    <li><a href="help.php?id=21">Edit Contracts</a></li>
-    <li><a href="help.php?id=19">View Contracts</a></li>
-  </ul>
-</ul>
-
-<ul>
-  <li><strong>Manage your Account...</strong></li>
-  <ul>
     <li><a href="help.php?id=4">Edit your profile</a></li>
+    <li><a href="help.php?id=39">Add Contract</a></li>
     <li><a href="help.php?id=27">View Your Calendar</a></li>
     <li><a href="help.php?id=35">Set your status</a></li>
-    <li><a href="help.php?id=50">Approve Holidays</a></li>
-    <li><a href="help.php?id=58">Edit your Software Skills</a></li>
-  </ul>
-</ul>
-
-<ul>
-  <li><strong>Administrate...</strong></li>
-  <ul>
-    <li><a href="help.php?id=37">Run Reports</a></li>
-    <li><a href="help.php?id=41">View Status</a></li>
-    <li><a href="help.php?id=57">Disable User's Account</a></li>
-    <li><a href="help.php?id=59">Manage User's Software</a></li>
-  </ul>
-</ul>
-
-<ul>
-  <li><strong>Other...</strong></li>
-  <ul>
-    <!--<li><a href="help.php?id=26">Get Help</a></li>-->
-    <li><a href="help.php?id=44">Publish files to FTP site and remove them</a></li>
-    <li><a href="help.php?id=53">Administrate Store</a></li>
     <li><a href="help.php?id=54">View Knowledge Base Articles</a></li>
-    <li><a href="help.php?id=60">Perform Searches</a></li>
-    </ul>
+    <li><a href="help.php?id=55">Delete a contact</a></li>
 </ul>

@@ -1,19 +1,15 @@
-<P>The possible <i>Status</i> options are,</P>
+<p>The possible user <em>Status</em> options are,</p>
 <ul>
-  <li><i>Absent Sick</i>, implies <i>not Accepting Calls</i></li>
-  <li><i>At Lunch</i>, implies <i>not Accepting Calls</i></li>
-  <li><i>In Meeting</i>, implies <i>not Accepting Calls</i></li>
-  <li><i>In Office</i>, implies <i>Accepting Calls</i></li>
-  <li><i>Not In Office</i>, implies <i>not Accepting Calls</i></li>
-  <li><i>On Holiday</i>, implies <i>not Accepting Calls</i></li>
-  <li><i>On Training Course</i>, implies <i>not Accepting Calls</i></li>
-  <li><i>Working Away</i>, implies <i>not Accepting Calls</i></li>
-  <li><i>Working From Home</i>, implies <i>Accepting Calls</i></li>
-  <li><i>Accepting Calls</i>. changes into <i>Accepting Calls</i></li>
-  <li><i>Not Accepting Calls</i>, changes into <i>Not Accepting Calls</i></li>
+  <li><em>Absent Sick</em>, implies <em>not Accepting Calls</em></li>
+  <li><em>At Lunch</em>, implies <em>not Accepting Calls</em></li>
+  <li><em>In Meeting</em>, implies <em>not Accepting Calls</em></li>
+  <li><em>In Office</em>, implies <em>Accepting Calls</em></li>
+  <li><em>Not In Office</em>, implies <em>not Accepting Calls</em></li>
+  <li><em>On Holiday</em>, implies <em>not Accepting Calls</em></li>
+  <li><em>On Training Course</em>, implies <em>not Accepting Calls</em></li>
+  <li><em>Working Away</em>, implies <em>not Accepting Calls</em></li>
+  <li><em>Working From Home</em>, implies <em>Accepting Calls</em></li>
+  <li><em>Accepting Calls</em>. changes into <em>Accepting Calls</em></li>
+  <li><em>Not Accepting Calls</em>, changes into <em>Not Accepting Calls</em></li>
 </ul>
 
-
-  
-
-<P></P>

@@ -1,12 +1,12 @@
-<P>If you know the name of the <i>Article</i>, type it in and click on <i>GO</i>.<br />
-If not, you can always use a <i>string</i> and the articles shown will follow that pattern.</P>
+<p>If you know the name of the <em>Article</em>, type it in and click on <em>GO</em>.
+If not, you can always use a <em>string</em> and the articles shown will follow that pattern.</p>
 
-<p>It's also possible to list all the <i>Articles</i> that start with a specific letter. Just<br />
+<p>It's also possible to list all the <em>Articles</em> that start with a specific letter. Just
 click on it from the capital letters listed at the top of the article's list.</p>
 
-<p>Once you have located the <i>Article</i> click on its name to browse the content</p> 
+<p>Once you have located the <em>Article</em> click on its name to browse the content</p>
 
-<p>You can also <i>Add a knowledge base article</i> by clicking on the appropriate link</p>
+<p>You can also <em>Add a knowledge base article</em> by clicking on the appropriate link</p>
 
 <p>You are encouraged to use the following HTHML tags in KB articles:</p>
 
@@ -83,4 +83,3 @@ click on it from the capital letters listed at the top of the article's list.</p
 <dd>Preformatted text</dd>
 </dl>
 
-<P></P>

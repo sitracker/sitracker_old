@@ -1,1 +1,0 @@
-<p>See <a href='#addincident'>Adding an Incident</a></p>
