@@ -123,16 +123,6 @@ if ($sit[3]=='public')
 }
 ?>
 </div>
-<?php
-echo "<div id='statusbar'><a href='about.php'><img src='{$CONFIG['application_webpath']}images/sitting_man_logo16x16.png' width='16' height='16' border='0' alt='About {$CONFIG['application_shortname']}' /></a>";
-?>
-
-<strong><?php echo "{$CONFIG['application_shortname']} {$application_version}"; ?></strong> running on <?php echo strip_tags($_SERVER["SERVER_SOFTWARE"]); ?> at
-<?php echo date('H:i',$now);
-if ($CONFIG['bugtracker_url']!='') echo ", Report bugs in <a href='{$CONFIG['bugtracker_url']}' class='barlink'>{$CONFIG['bugtracker_name']}</a>";
-?>
-</div>
-
 <div id='footerbar'>
 <?php
 echo "<form style='margin: 0px;' action='{$_SERVER['PHP_SELF']}'>";
@@ -140,6 +130,5 @@ echo "<form style='margin: 0px;' action='{$_SERVER['PHP_SELF']}'>";
 Set your Status: <?php if(isset($sit[2])) userstatus_bardrop_down("status", user_status($sit[2])); ?></form>
 </div>
 <?php
-
 include('htmlfooter.inc.php');
 ?>

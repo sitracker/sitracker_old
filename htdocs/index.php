@@ -29,11 +29,10 @@ if ($_SESSION['auth'] != TRUE)
 
     // Invalid user, show log in form
     include('htmlheader.inc.php');
+    echo "<div style='width: 15%;  margin-left: auto; margin-right: auto; margin-top: 1em; padding: 2em;'>";
     ?>
-
     <h2>Login to <?php echo $CONFIG['application_shortname']; ?></h2>
     <form action="login.php" method="post">
-    <div style='width: 40%; margin-left: 40%;'>
     <?php
     if ($id==1) echo "<p class='error'>Enter your credentials to login to {$CONFIG['application_shortname']}</p><br />";
     if ($id==2) echo "<p class='error'>Your session has expired or you have not yet logged in</p><br />";
@@ -44,9 +43,8 @@ if ($_SESSION['auth'] != TRUE)
     <label>Password:<br /><input name="password" size="20" type="password" /></label><br />
     <input type="submit" value="Log In" />
     <?php
-    echo "</div>";
     echo "</form>";
-
+    echo "</div>";
     include('htmlfooter.inc.php');
 }
 else
