@@ -7,7 +7,7 @@
 // This software may be used and distributed according to the terms
 // of the GNU General Public License, incorporated herein by reference.
 //
-// Authors: Tom Gerrard, Ivan Lucas
+// Authors: Tom Gerrard, Ivan Lucas <ivanlucas[at]users.sourceforge.net>
 
 // This Page Is Valid XHTML 1.0 Transitional! 31Oct05
 
@@ -234,5 +234,9 @@ if (mysql_num_rows($result) >= 1)
     }
 }
 echo "</table>\n";
+
+// TODO v3.23 Add another section that shows incidents with userid=0 and status=0 (new incidents)
+// TODO v3.2x Merge the sections into a single queue using an array
+
 include('htmlfooter.inc.php');
 ?>

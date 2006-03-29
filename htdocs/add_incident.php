@@ -481,8 +481,10 @@ elseif ($action=='assign')
                 default: $timeofnextaction = 0; break;
             }
 
-            // Set the service levelm the contract
+            // Set the service level the contract
             if ($servicelevel=='') $servicelevel = servicelevel_id2tag(maintenance_servicelevel($maintid));
+            // Use default service level if we didn't find one above
+            if ($servicelevel=='') $servicelevel = $CONFIG['default_service_level'];
 
             // Check the service level priorities, look for the highest possible and reduce the chosen priority if needed
             $sql = "SELECT priority FROM servicelevels WHERE tag='$servicelevel' ORDER BY priority DESC LIMIT 1";
