@@ -684,7 +684,7 @@ elseif ($action=='reassign')
 
     include('htmlheader.inc.php');
     echo "<h2>Incident Added - Summary</h2>";
-    echo "<p align='center'>Incident <a href=\"incident_details.php?id=$incidentid\" target=\"_blank\">$incidentid</a> has been moved to ".user_realname($userid)."'s <strong style='color: red'>Action Needed</b> queue</p>";
+    echo "<p align='center'>Incident <a href=\"incident_details.php?id=$incidentid\" target=\"_blank\">$incidentid</a> has been moved to ".user_realname($userid)."'s <strong style='color: red'>Action Needed</strong> queue</p>";
     $userphone = user_phone($userid);
     if ($userphone!='') echo "<p align='center'>Telephone: {$userphone}</p>";
     $sql = "UPDATE incidents SET owner='$userid', lastupdated='$now' WHERE id='$incidentid'";

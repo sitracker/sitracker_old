@@ -8,7 +8,7 @@
 // of the GNU General Public License, incorporated herein by reference.
 //
 
-// This isn't a very secure way of handling forgotten passwords
+// FIXME This isn't a very secure way of handling forgotten passwords
 // We should do something better really
 
 
