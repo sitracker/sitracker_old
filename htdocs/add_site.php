@@ -82,7 +82,7 @@ elseif ($action == "add")
     if ($name == "")
     {
         $errors = 1;
-        $errors_string .= "<p class='error'>You must enter a name</p>\n";
+        $errors_string .= "You must enter a name for the site";
     }
 
     // add site if no errors
@@ -109,7 +109,7 @@ elseif ($action == "add")
     }
     else
     {
-        trigger_error("Error adding site: {$errors_string}", E_USER_ERROR);
+        throw_user_error($errors_string);
     }
 }
 ?>

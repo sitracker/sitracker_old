@@ -192,7 +192,7 @@ if (empty($_POST['process']))
     </table>
     <br />
     <input type="hidden" name="choices" />
-    <!-- <input name="submit" type="submit" value="Make Changes" /> -->
+    <!-- <input name="submit" type="submit" value="Save" /> -->
 
     <!-- </form> -->
     <?php

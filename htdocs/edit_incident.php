@@ -86,7 +86,7 @@ if (empty($submit))
         <input name="oldproductversion" type="hidden" value="<?php echo $incident["productversion"] ?>" />
         <input name="oldproductservicepacks" type="hidden" value="<?php echo $incident["productservicepacks"] ?>" />
         <input name="oldsoftware" type="hidden" value="<?php echo $incident["softwareid"] ?>" />
-        <input name="submit" type="submit" value="Make Changes" /></p>
+        <input name="submit" type="submit" value="Save" /></p>
         </form>
         <?php
     }

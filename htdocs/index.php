@@ -29,15 +29,14 @@ if ($_SESSION['auth'] != TRUE)
 
     // Invalid user, show log in form
     include('htmlheader.inc.php');
-    echo "<div style='width: 15%;  margin-left: auto; margin-right: auto; margin-top: 1em; padding: 2em;'>";
+    if ($id==1) echo "<p class='error'>Enter your credentials to login to {$CONFIG['application_shortname']}</p><br />";
+    if ($id==2) echo "<p class='error'>Your session has expired or you have not yet logged in</p><br />";
+    if ($id==3) throw_user_error("Invalid username/password combination");
+    echo "<div style='width: 25%; margin-left: auto; margin-right: auto; margin-top: 1em; padding: 2em;'>";
     ?>
     <h2>Login to <?php echo $CONFIG['application_shortname']; ?></h2>
     <form action="login.php" method="post">
-    <?php
-    if ($id==1) echo "<p class='error'>Enter your credentials to login to {$CONFIG['application_shortname']}</p><br />";
-    if ($id==2) echo "<p class='error'>Your session has expired or you have not yet logged in</p><br />";
-    if ($id==3) echo "<p class='error'>Invalid username/password combination</p><br />";
-    ?>
+
     <br />
     <label>Username:<br /><input name="username" size="20" type="text" /></label><br />
     <label>Password:<br /><input name="password" size="20" type="password" /></label><br />

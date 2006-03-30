@@ -153,7 +153,7 @@ elseif ($action == "edit" && (!empty($user) OR !empty($role)))
     echo "</table>";
     echo "<p><input name='user' type='hidden' value='{$user}' />";
     echo "<input name='role' type='hidden' value='{$role}' />";
-    echo "<input name='submit' type='submit' value='Make Changes' /></p>";
+    echo "<input name='submit' type='submit' value='Save' /></p>";
     echo "</form>";
 }
 elseif ($action == "update")

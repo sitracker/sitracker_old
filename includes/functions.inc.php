@@ -157,9 +157,9 @@ $hmenu[2030] = array (10=> array ( 'perm'=> 19, 'name'=> "Browse", 'url'=>"brows
                       70=> array ( 'perm'=> 0, 'name'=> "Products &amp; Software", 'url'=>"products.php", 'submenu'=>"203010"),
 );
 
-$hmenu[203010] = array (10=> array ( 'perm'=> 1, 'name'=> "Add Vendor", 'url'=>"add_product_vendor.php"),
+$hmenu[203010] = array (10=> array ( 'perm'=> 56, 'name'=> "Add Vendor", 'url'=>"add_product_vendor.php"),
                         20=> array ( 'perm'=> 24, 'name'=> "Add Product", 'url'=>"add_product.php"),
-                        30=> array ( 'perm'=> 0, 'name'=> "List Products", 'url'=>"products.php"),
+                        30=> array ( 'perm'=> 28, 'name'=> "List Products", 'url'=>"products.php"),
                         40=> array ( 'perm'=> 56, 'name'=> "Add Software", 'url'=>"add_software.php"),
                         50=> array ( 'perm'=> 24, 'name'=> "Link Products", 'url'=>"add_product_software.php"),
                         60=> array ( 'perm'=> 25, 'name'=> "Add Product Question", 'url'=>"add_productinfo.php")
@@ -2027,9 +2027,8 @@ function calculate_time_of_next_action($days, $hours, $minutes)
 }
 
 
-/*  prints the HTML for a drop down list of     */
-/* servicelevels, with the given name and with the given id   */
-/* selected.                                                  */
+// Returns the HTML for a drop down list of service levels,
+// with the given name and with the given id selected.
 function servicelevel_drop_down($name, $id, $collapse=FALSE)
 {
    if ($collapse) $sql = "SELECT DISTINCT id, tag FROM servicelevels";
@@ -2037,7 +2036,8 @@ function servicelevel_drop_down($name, $id, $collapse=FALSE)
    $result = mysql_query($sql);
 
    $html = "<select name='$name'>\n";
-   if ($id == 0) $html .= "<option selected='selected' value='0'></option>\n";
+   // INL 30Mar06 Removed this ability to select a null service level
+   // if ($id == 0) $html .= "<option selected='selected' value='0'></option>\n";
    while ($servicelevels = mysql_fetch_object($result))
    {
       $html .= "<option ";
@@ -2288,31 +2288,33 @@ function throw_error($message, $details)
 }
 
 
-function throw_user_error($message, $details)
+function throw_user_error($message, $details='')
 {
-  global $CONFIG, $application_version, $sit;
-  echo "<h2>Oops!</h2>, ";
-  echo "<hr style='color: red; background: red;' />";
-  //echo "<b class='error'>ERROR:</b><br />";
-  $errorstring=date("r")."\n";
-  $errorstring.=strip_tags($message);
-  $errorstring.=' ';
-  $errorstring.=strip_tags($details);
-  $errorstring.="\n";
-  $errorstring.="Application Version: {$CONFIG['application_shortname']} $application_version\n";
-  $errorstring.="User: ".$sit[0]."\n";
-  $errorstring.="USER_AGENT: ".getenv('HTTP_USER_AGENT')."\n";
-  $errorstring.="REMOTE_ADDR: ".getenv('REMOTE_ADDR')."\n";
-  $errorstring.="REQUEST_METHOD: ".getenv('REQUEST_METHOD')."\n";
-  $errorstring.="REQUEST_URI: ".getenv('REQUEST_URI')."\n";
-  $errorstring.="QUERY_STRING: ".getenv('QUERY_STRING')."\n";
-  $errorstring.="HTTP_REFERER: ".getenv('HTTP_REFERER')."\n";
-  $errorstring.="SERVER_SIGNATURE: ".strip_tags(getenv('SERVER_SIGNATURE'))."\n";
-  // echo nl2br($errorstring);
-  $errlog=error_log("---\n$errorstring", 3, $CONFIG['error_logfile']);
-  if (!$errlog) echo "Fatal error logging this problem<br />";
-  echo "ABORTED!<br />\n";
-  echo "<hr style='color: red; background: red;' />";
+    global $CONFIG, $application_version, $sit;
+
+    $html = "<div class='error'>";
+    if (is_array($message)) echo "<p class='error'>Oops</p>";
+
+
+
+    if (is_array($message))
+    {
+        $html .= "<ul>";
+        // Loop through the array
+        foreach ($message AS $msg)
+        {
+            $html .= "<li>$msg</li>";
+        }
+        $html .- "</ul>";
+    }
+    else
+    {
+        $html .= "<p class='error'>$message</p>";
+    }
+
+    $html .= "</div>\n";
+
+    echo $html;
 }
 
 

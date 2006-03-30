@@ -177,7 +177,7 @@ p.tip,p.info, p.warning, p.error, h5.warning, h5.error
   padding: 3px 3px 3px 22px;
   min-height: 16px;
   -moz-border-radius: 5px;
-  display: inline;
+  /* display: inline; */
   border: 1px solid #000;
   margin-left: 2em;
   margin-right: 2em;
@@ -200,9 +200,9 @@ p.info
 p.warning, h5.warning
 {
   background-image: url('../images/icons/16x16/actions/info.png');
-  color: white;
+  color: black;
   border: 1px solid #17446B;
-  background-color: #2772B4;
+  background-color: #B4D2E6;
 }
 p.error, h5.error
 {

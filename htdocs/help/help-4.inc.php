@@ -7,5 +7,5 @@
 <P><strong>Interface Style</strong> - You can select one of the pre-defined interface styles to apply a 'theme'.  Select one that you find most appealing / easiest to work with.</p>
 <P><strong>Collapse Data</strong> - Condenses the updates on the incident details page so that only the two most recent updates are shown, you can then choose to expand only the updates that you want to see. Click in the box to activate.</p>
 <P><strong>Password</strong> - To change your password enter relevant information in the fields provided.</p>
-<P><strong>To save changes</strong> - Click on the Make Changes button at the bottom of the screen.</p>
+<P><strong>To save changes</strong> - Click on the Save button at the bottom of the screen.</p>
 
