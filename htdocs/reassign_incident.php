@@ -37,30 +37,32 @@ if (empty($bodytext))
     if (mysql_error()) trigger_error("MySQL Query Error ".mysql_error(), E_USER_ERROR);
     $incident = mysql_fetch_object($result);
 
-    echo "<tr><th>Current Owner:</th>";
-    echo "<td>";
-    if ($incident->towner==$sit[2])
-    {
-        echo "You are the temporary owner of this incident.";
-        echo "<br />\n".user_realname($incident->owner)." is the original owner.";
-    }
-    elseif ($incident->owner==$sit[2])
-    {
-        echo "You are the owner of this incident.";
-        if ($incident->towner > 0) echo "<br />\n".user_realname($incident->towner)." also has temporary ownership.";
-    }
-    else
-    {
-        echo user_realname($incident->owner).".";
-        if ($incident->towner > 0) echo "<br />\n".user_realname($incident->towner)." also has temporary ownership.";
-    }
-    echo "</td></tr>";
-
+    if ($incident->owner!=0) 
+		{
+    		echo "<tr><th>Current Owner:</th>";
+    		echo "<td>";
+		    if ($incident->towner==$sit[2])
+		    {
+		        echo "You are the temporary owner of this incident.";
+		        echo "<br />\n".user_realname($incident->owner)." is the original owner.";
+    		}
+    		elseif ($incident->owner==$sit[2])
+    		{
+		        echo "You are the owner of this incident.";
+		        if ($incident->towner > 0) echo "<br />\n".user_realname($incident->towner)." also has temporary ownership.";
+		    }
+		    else
+		    {
+        		echo user_realname($incident->owner).".";
+        		if ($incident->towner > 0) echo "<br />\n".user_realname($incident->towner)." also has temporary ownership.";
+    		}
+    		echo "</td></tr>";
+		}
     if (empty($_REQUEST['backupid']) AND empty($_REQUEST['originalid']))
     {
         if ($incident->softwareid > 0)
         {
-            echo "<tr><th>Other users with relevent skills:</th>";
+            echo "<tr><th>Users with relevent skills:</th>";
             $usql = "SELECT *,users.id AS userid FROM usersoftware, users WHERE usersoftware.userid=users.id AND usersoftware.softwareid={$incident->softwareid} ";
             $usql .= "ORDER BY realname";
             $uresult = mysql_query($usql);
@@ -89,7 +91,8 @@ if (empty($bodytext))
         //
         // Radio Buttons, how should the incident be reassigned
         //
-        echo "<tr><th>Reassign:</th>";
+				if ($incident->owner == 0) echo "<tr><th>Reassign:</th>";
+        else echo "<tr><th>Reassign:</th>";
         echo "<td class='shade2'>";
         if ($incident->towner == $sit[2])
         {
@@ -119,7 +122,7 @@ if (empty($bodytext))
             echo "<input type='radio' name='assign' value='permassign' />Reassign to ";
             user_drop_down("permnewowner", 0, TRUE, array($incident->owner), "onclick=\"document.assignform.assign[1].checked=true;\"");
         }
-        else
+        else if ($incident->owner != 0 )
         {
             // you are not the owner or the temp owner
             if ($incident->towner == 0)
@@ -137,6 +140,14 @@ if (empty($bodytext))
             echo "<input type='radio' name='assign' value='permassign' />Reassign to ";
             user_drop_down("permnewowner", 0, TRUE, array($incident->owner), "onclick=\"document.assignform.assign[1].checked=true;\"");
         }
+				else
+				{
+						// The incident has no owner at all
+            echo "<input type='hidden' name='assign' value='permassign' />Assign to ";
+            user_drop_down("permnewowner", 0, TRUE, array($incident->owner), "onclick=\"document.assignform.assign[1].checked=true;\"");
+						$incident->status='1';
+				}
+
         echo "</td></tr>\n";
 
         /*
@@ -191,7 +202,7 @@ if (empty($bodytext))
     echo "<tr><th>New Status:</th>";
     ?>
 
-    <td><?php echo incidentstatus_drop_down("newstatus", incident_status($id)); ?></td></tr>
+    <td><?php echo incidentstatus_drop_down("newstatus", $incident->status); ?></td></tr>
     </table>
     <?php
     echo "<p align='center'><input name='submit' type='submit' value='Reassign Incident' /></p>";

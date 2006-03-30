@@ -176,6 +176,34 @@ if (is_array($spam_array)) echo "<p align='center'><a href={$_SERVER['PHP_SELF']
 
 
 echo "<br /><br />"; //gap
+
+
+echo "<h2>New incidents</h2>";
+echo "<p align='center'>Incidents that haven't been assigned to anyone yet</p>";
+echo "<table align='center' style='width: 95%;'>";
+echo "<tr><th title='Opened'>Date</th><th title='Product'>Product</th>";
+echo "<th title='Incident Title'>Subject</th><th>Reason</th>";
+echo "<th>Operation</th></tr>\n";
+$sql = "SELECT * FROM incidents WHERE status='0' AND owner='0' ";
+$result = mysql_query($sql);
+if (mysql_num_rows($result) >= 1)
+{
+    while ($new = mysql_fetch_object($result))
+    {
+        echo "<tr class='shade1'>";
+        echo "<td>".date($CONFIG['dateformat_datetime'], $new->opened)."</td>";
+        echo "<td>".product_name($new->product)."</td>";
+				echo "<td>".$new->title."</td>";
+				echo "<td style='text-align:center;'>Not assigned yet</td>";
+				echo "<td style='text-align:center;'><a href= \"javascript:wt_winpopup('reassign_incident.php?id={$new->id}&amp;reason=Initial%20assignment%20to%20engineer&amp;popup=yes','mini');\" title='Assign this incident'>Assign</a></td>";
+				echo "</tr>";
+		}
+}
+
+echo "</table>\n";
+
+echo "<br /><br />\n";
+
 echo "<h2>Pending Re-Assignments</h2>";
 echo "<p align='center'>Automatic reassignments that could not be made because users were set to 'not accepting'</p>";
 echo "<table align='center' style='width: 95%;'>";
@@ -235,7 +263,6 @@ if (mysql_num_rows($result) >= 1)
 }
 echo "</table>\n";
 
-// TODO v3.23 Add another section that shows incidents with userid=0 and status=0 (new incidents)
 // TODO v3.2x Merge the sections into a single queue using an array
 
 include('htmlfooter.inc.php');
