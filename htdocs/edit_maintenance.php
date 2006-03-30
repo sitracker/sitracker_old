@@ -99,8 +99,8 @@ if ($action == "edit")
         <tr><th>Terminated:</th><td><input name="terminated" id="terminated" type="checkbox" value="yes"<?php if ($maint["term"] == "yes") echo " checked" ?> /></td></tr>
         <tr><th>Product Only:</th><td><input name="productonly" type="checkbox" value="yes" onclick="set_terminated();" <?php if ($maint["productonly"] == "yes") echo " checked" ?> /></td></tr>
         </table>
-        <input name="maintid" type="hidden" value="<?php echo $maintid ?>">
-        <p align='center'><input name="submit" type="submit" value="Make Changes" /></p>
+        <input name="maintid" type="hidden" value="<?php echo $maintid ?>" />
+        <p align='center'><input name="submit" type="submit" value="Save" /></p>
         </form>
         <?php
         mysql_free_result($result);

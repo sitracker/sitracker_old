@@ -43,7 +43,7 @@ if ($action == "showform" OR $action=='')
     <tr><th>Licence Quantity: <sup class='red'>*</sup></th><td><input maxlength="7" name="licence_quantity" size="5" /></td></tr>
     <tr><th>Licence Type: <sup class='red'>*</sup></th><td><?php echo licence_type_drop_down("licence_type", 0); ?></td></tr>
     <tr><th>Expiry Date: <sup class='red'>*</sup></th><td><?php day_drop_down("expiry_day", 0); ?><?php month_drop_down("expiry_month", 0); ?><?php year_drop_down("expiry_year", 0); ?></td></tr>
-    <tr><th>Service Level:</th><td><?php echo servicelevel_drop_down('servicelevelid',$maint['servicelevelid'], TRUE); ?></td></tr>
+    <tr><th>Service Level:</th><td><?php echo servicelevel_drop_down('servicelevelid', 1, TRUE); ?></td></tr>
     <?php
     echo "<tr><th>Incident Pool:</th>";
     $incident_pools = explode(',', "Unlimited,{$CONFIG['incident_pools']}");
