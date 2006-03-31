@@ -192,12 +192,14 @@ if (mysql_num_rows($result) >= 1)
     {
         echo "<tr class='shade1'>";
         echo "<td>".date($CONFIG['dateformat_datetime'], $new->opened)."</td>";
-        echo "<td>".product_name($new->product)."</td>";
-				echo "<td>".$new->title."</td>";
-				echo "<td style='text-align:center;'>Not assigned yet</td>";
-				echo "<td style='text-align:center;'><a href= \"javascript:wt_winpopup('reassign_incident.php?id={$new->id}&amp;reason=Initial%20assignment%20to%20engineer&amp;popup=yes','mini');\" title='Assign this incident'>Assign</a></td>";
-				echo "</tr>";
-		}
+        echo "<td>".product_name($new->product)." / ".software_name($new->softwareid)."</td>";
+	echo "<td>".$new->title."</td>";
+	echo "<td style='text-align:center;'>Unassigned</td>";
+	echo "<td style='text-align:center;'>";
+	echo "<a href= \"javascript:incident_details_window('{$new->id}','holdingview');\" title='View this incident'>View</a> | ";
+	echo "<a href= \"javascript:wt_winpopup('reassign_incident.php?id={$new->id}&amp;reason=Initial%20assignment%20to%20engineer&amp;popup=yes','mini');\" title='Assign this incident'>Assign</a></td>";
+	echo "</tr>";
+    }
 }
 
 echo "</table>\n";
