@@ -14,13 +14,13 @@
 @include("defaults.inc.php");
 // Keep the defaults as a seperate array
 $DEFAULTS = $CONFIG;
+
 // Load config file with customisations
 // @include("config.inc-dist.php");
 @include("config.inc.php");
 // Server Configuration
 @include('/etc/webtrack.conf'); // for legacy systems
 @include('/etc/sit.conf');
-require('setup-schema.php');
 
 // These are the required variables we want to configure during installation
 $SETUP=array('db_hostname','db_database','db_username','db_password','application_fspath','application_webpath');
@@ -154,6 +154,7 @@ function setup_configure()
                 if ($value==TRUE) $value='TRUE';
                 else $value='FALSE';
             }
+            if ($setupvar=='db_password') $value='';
             $html .= $value;
         }
         $html .= "' />";
@@ -348,6 +349,11 @@ switch ($_REQUEST['action'])
             else
             {
                 require('functions.inc.php');
+                // Generate a random admin password to use for new schema installations
+                $_SESSION['adminpw'] = generate_password(10);
+
+                // Load the empty schema
+                require('setup-schema.php');
 
                 // Connected to database and db selected
                 echo "<p>Connected to database - ok</p>";
@@ -472,7 +478,13 @@ switch ($_REQUEST['action'])
                         echo "</p>";
                     }
                     elseif(@ini_get('register_globals')==1) echo "<p class='error'>SiT! recommends that your php.ini setting <code>register_globals</code> be OFF.</p>";
-                    else echo "<p>SiT! v".number_format($installed_version,2)." is installed and ready to <a href='index.php'>run</a>.</p>";
+                    else
+                    {
+                        if (!empty($_SESSION['adminpw'])) echo "<p>SiT! is initially configured with just one user, <var><strong>admin</strong></var> with an automatically generated password of <var><strong>{$_SESSION['adminpw']}</strong></var>, ";
+                        echo "you should make a note of this password and change it as soon as you have logged in.</p>";
+                        $_SESSION['adminpw']='';
+                        echo "<p>SiT! v".number_format($installed_version,2)." is installed and ready to <a href='index.php'>run</a>.</p>";
+                    }
                 }
             }
         }
