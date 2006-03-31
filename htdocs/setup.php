@@ -350,7 +350,7 @@ switch ($_REQUEST['action'])
             {
                 require('functions.inc.php');
                 // Generate a random admin password to use for new schema installations
-                $_SESSION['adminpw'] = generate_password(10);
+                $adminpw = generate_password(10);
 
                 // Load the empty schema
                 require('setup-schema.php');
@@ -367,6 +367,7 @@ switch ($_REQUEST['action'])
                 }
                 if (mysql_num_rows($result) < 1)
                 {
+                    $_SESSION['adminpw'] = $adminpw;
                     echo "<h2>Creating new database schema...</h2>";
                     // No users table or empty users table, proceed to install
                     echo setup_exec_sql($schema);

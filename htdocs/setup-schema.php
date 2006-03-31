@@ -1050,7 +1050,7 @@ CREATE TABLE `users` (
   KEY `status` (`status`)
 ) ;
 
-INSERT INTO `users` VALUES (1, 'admin', MD5('{$_SESSION['adminpw']}'), 'Administrator', 1, 'Administrator', 'Regards,\r\n\r\nAdministrator', '', '', '', '', '', '', '', 1, '', 'Yes', 60, 'desc', 8, 'false', 'false', 'false', 'false', '', 32, '');
+INSERT INTO `users` VALUES (1, 'admin', MD5('{$adminpw}'), 'Administrator', 1, 'Administrator', 'Regards,\r\n\r\nAdministrator', '', '', '', '', '', '', '', 1, '', 'Yes', 60, 'desc', 8, 'false', 'false', 'false', 'false', '', 32, '');
 
 
 CREATE TABLE `usersoftware` (
