@@ -34,8 +34,8 @@ if (mysql_error()) trigger_error("MySQL Query Error ".mysql_error(), E_USER_ERRO
 function deldir($location)
 {
     if (substr($location,-1) <> "/")
-    $location = $location."/";
-        $all=opendir($location);
+        $location = $location."/";
+    $all=opendir($location);
     while ($file=readdir($all))
     {
         if (is_dir($location.$file) && $file <> ".." && $file <> ".")
