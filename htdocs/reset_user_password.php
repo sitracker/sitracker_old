@@ -22,13 +22,20 @@ require('auth.inc.php');
 // External variables
 $id = cleanvar($_REQUEST['id']);
 
-if (empty($id)) throw_error('!Error setting password.  User ID number was zero or blank','');
+if ($id > 1)
+{
+    if (empty($id)) throw_error('!Error setting password.  User ID number was zero or blank','');
 
-$newpasswordplain = generate_password();
-$newpassword=md5($newpasswordplain);
+    $newpasswordplain = generate_password();
+    $newpassword=md5($newpasswordplain);
 
-$sql = "UPDATE users SET password='$newpassword' WHERE id='$id'";
-$result = mysql_query($sql);
-if (mysql_error()) trigger_error("MySQL Query Error ".mysql_error(), E_USER_ERROR);
-confirmation_page("7", "index.php", "<h2>Password was reset to: '$newpasswordplain' (sans-quotes)</h2><p align='center'>Please wait while you are redirected...</p>");
+    $sql = "UPDATE users SET password='$newpassword' WHERE id='$id'";
+    $result = mysql_query($sql);
+    if (mysql_error()) trigger_error("MySQL Query Error ".mysql_error(), E_USER_ERROR);
+    confirmation_page("7", "index.php", "<h2>Password was reset to: '$newpasswordplain' (sans-quotes)</h2><p align='center'>Please wait while you are redirected...</p>");
+}
+else
+{
+    confirmation_page("3", "index.php", "<h2>You cannot reset this users password</h2><p align='center'>Please wait while you are redirected...</p>");
+}
 ?>

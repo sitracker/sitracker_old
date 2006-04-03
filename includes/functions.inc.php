@@ -70,13 +70,13 @@ $updatetypes['externalinfo'] = array('icon' => 'actions/ktip.png', 'text' => 'Ex
 $updatetypes['probdef'] = array('icon' => 'actions/enum_list.png', 'text' => 'Problem Definition by currentowner');
 $updatetypes['research'] = array('icon' => 'actions/idea.png', 'text' => 'Researched by updateuser');
 $updatetypes['reassigning'] = array('icon' => 'actions/2rightarrow.png', 'text' => 'Reassigned to currentowner by updateuser');
-$updatetypes['reviewmet'] = array('icon' => 'actions/flag.png', 'text' => 'Review Period by currentowner'); // conditional
+$updatetypes['reviewmet'] = array('icon' => 'actions/flag.png', 'text' => 'Review Period by updateuser'); // conditional
 $updatetypes['tempassigning'] = array('icon' => 'actions/1rightarrow.png', 'text' => 'Temporarily assigned to currentowner');
 $updatetypes['opening'] = array('icon' => 'actions/filenew.png', 'text' => 'Opened by updateuser');
 $updatetypes['phonecallout'] = array('icon' => 'actions/forward.png', 'text' => 'Phone call made by currentowner');
 $updatetypes['phonecallin'] = array('icon' => 'actions/back.png', 'text' => 'Phone call taken by currentowner');
 $updatetypes['reopening'] = array('icon' => 'actions/filenew.png', 'text' => 'Reopened by currentowner');
-$updatetypes['slamet'] = array('icon' => 'actions/flag.png', 'text' => 'SLA Met by currentowner');
+$updatetypes['slamet'] = array('icon' => 'actions/flag.png', 'text' => 'SLA Met by updateuser');
 $updatetypes['solution'] = array('icon' => 'actions/endturn.png', 'text' => 'Resolved by currentowner');
 $updatetypes['webupdate'] = array('icon' => 'actions/comment.png', 'text' => 'Web update');
 

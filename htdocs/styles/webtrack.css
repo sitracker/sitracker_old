@@ -111,7 +111,7 @@ div.window
 #menumenu a:hover { text-decoration: underline; }
 #menumenu a:active { text-decoration: underline; }
 
-#statusbar { background-color: #2F4F4F; color: #FFF; text-align: center; padding: 2px 0px 2px 0px; margin-top: 1em;}
+#statusbar { background-color: #203894; color: #FFF; text-align: center; padding: 2px 0px 2px 0px; margin-top: 1em;}
 #statusbar a { text-decoration: none; color: #FFF; }
 #statusbar a:hover { text-decoration: underline; }
 #statusbar a:active { text-decoration: underline; }
