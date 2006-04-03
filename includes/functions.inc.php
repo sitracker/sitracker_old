@@ -71,7 +71,7 @@ $updatetypes['probdef'] = array('icon' => 'actions/enum_list.png', 'text' => 'Pr
 $updatetypes['research'] = array('icon' => 'actions/idea.png', 'text' => 'Researched by updateuser');
 $updatetypes['reassigning'] = array('icon' => 'actions/2rightarrow.png', 'text' => 'Reassigned to currentowner by updateuser');
 $updatetypes['reviewmet'] = array('icon' => 'actions/flag.png', 'text' => 'Review Period by updateuser'); // conditional
-$updatetypes['tempassigning'] = array('icon' => 'actions/1rightarrow.png', 'text' => 'Temporarily assigned to currentowner');
+$updatetypes['tempassigning'] = array('icon' => 'actions/1rightarrow.png', 'text' => 'Temporarily assigned to currentowner by updateuser');
 $updatetypes['opening'] = array('icon' => 'actions/filenew.png', 'text' => 'Opened by updateuser');
 $updatetypes['phonecallout'] = array('icon' => 'actions/forward.png', 'text' => 'Phone call made by currentowner');
 $updatetypes['phonecallin'] = array('icon' => 'actions/back.png', 'text' => 'Phone call taken by currentowner');
@@ -1347,13 +1347,13 @@ function interface_style($id)
 function incidentstatus_drop_down($name, $id)
 {
     // extract statuses
-    $sql  = "SELECT id, name FROM incidentstatus WHERE id<>2 AND id<>7 ORDER BY name ASC";
+    $sql  = "SELECT id, name FROM incidentstatus WHERE id >0 AND id<>2 AND id<>7 ORDER BY name ASC";
     $result = mysql_query($sql);
     if (mysql_error()) trigger_error(mysql_error(),E_USER_WARNING);
     if (mysql_num_rows($result) < 1) trigger_error("Zero rows returned",E_USER_WARNING);
 
     $html = "<select name='{$name}'>";
-    if ($id == 0) $html .= "<option selected='selected' value='0'></option>\n";
+    // if ($id == 0) $html .= "<option selected='selected' value='0'></option>\n";
     while ($statuses = mysql_fetch_array($result))
     {
         $html .= "<option ";
@@ -1361,7 +1361,7 @@ function incidentstatus_drop_down($name, $id)
         $html .= "value='{$statuses['id']}'";
         $html .= ">{$statuses['name']}</option>\n";
     }
-    $html .= "</select>";
+    $html .= "</select>\n";
     return $html;
 }
 

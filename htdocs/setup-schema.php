@@ -341,6 +341,7 @@ CREATE TABLE `incidentstatus` (
   PRIMARY KEY  (`id`)
 ) AUTO_INCREMENT=10 ;
 
+INSERT INTO `incidentstatus` VALUES (0, 'Active (Unassigned)', 'Active');
 INSERT INTO `incidentstatus` VALUES (1, 'Active', 'Active');
 INSERT INTO `incidentstatus` VALUES (2, 'Closed', 'Closed');
 INSERT INTO `incidentstatus` VALUES (3, 'Research Needed', 'Research');
@@ -1153,6 +1154,9 @@ UPDATE `permissions` SET `name` = 'Add Feedback Forms' WHERE `id` =48 LIMIT 1 ;
 UPDATE `permissions` SET `name` = 'Edit Feedback Forms' WHERE `id` =49 LIMIT 1 ;
 UPDATE `permissions` SET `name` = 'View Feedback' WHERE `id` =51 LIMIT 1 ;
 UPDATE `permissions` SET `name` = 'Edit Service Levels' WHERE `id` =53 LIMIT 1 ;
+
+INSERT INTO `incidentstatus` VALUES (10, 'Active (Unassigned)', 'Active');
+UPDATE `incidentstatus` SET `id` = '0' WHERE `id` =10 LIMIT 1 ;
 ";
 
 // Important: When making changes to the schema you must add SQL to make the alterations

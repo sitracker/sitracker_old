@@ -22,6 +22,7 @@ require('auth.inc.php');
 $approve = $_REQUEST['approve'];
 $startdate = cleanvar($_REQUEST['startdate']);
 $type = cleanvar($_REQUEST['type']);
+$user = cleanvar($_REQUEST['user']);
 $length = cleanvar($_REQUEST['length']);
 $view = cleanvar($_REQUEST['view']);
 

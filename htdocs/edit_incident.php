@@ -187,7 +187,7 @@ else
                 if ($oldexternalengineer != $externalengineer) $header .= "External Engineer: " . $oldexternalengineer . " -&gt; <b>" . $externalengineer . "</b>\n";
                 if ($oldexternalemail != $externalemail) $header .= "External email: " . $oldexternalemail . " -&gt; <b>" . $externalemail . "</b>\n";
                 if ($oldsoftware != $software) $header .= "Software: ".software_name($oldsoftware)." -&gt; <b>".software_name($software)."</b>\n";
-                if ($oldproductversion != $productversion) $header .= "Product Version: $oldproductversion -&gt; <b>$productversion</b>\n";
+                if ($oldproductversion != $productversion) $header .= "Software Version: $oldproductversion -&gt; <b>$productversion</b>\n";
                 if ($oldproductservicepacks != $productservicepacks) $header .= "Service Packs Applied: $oldproductservicepacks -&gt; <b>$productservicepacks</b>\n";
 
                 if (!empty($header)) $header .= "<hr>";

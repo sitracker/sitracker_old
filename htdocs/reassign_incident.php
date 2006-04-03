@@ -37,7 +37,7 @@ if (empty($bodytext))
     if (mysql_error()) trigger_error("MySQL Query Error ".mysql_error(), E_USER_ERROR);
     $incident = mysql_fetch_object($result);
 
-    if ($incident->owner!=0) 
+    if ($incident->owner!=0)
 		{
     		echo "<tr><th>Current Owner:</th>";
     		echo "<td>";
@@ -140,14 +140,13 @@ if (empty($bodytext))
             echo "<input type='radio' name='assign' value='permassign' />Reassign to ";
             user_drop_down("permnewowner", 0, TRUE, array($incident->owner), "onclick=\"document.assignform.assign[1].checked=true;\"");
         }
-				else
-				{
-						// The incident has no owner at all
+        else
+        {
+            // The incident has no owner at all
             echo "<input type='hidden' name='assign' value='permassign' />Assign to ";
             user_drop_down("permnewowner", 0, TRUE, array($incident->owner), "onclick=\"document.assignform.assign[1].checked=true;\"");
-						$incident->status='1';
-				}
-
+            $incident->status='1';
+        }
         echo "</td></tr>\n";
 
         /*
@@ -201,7 +200,6 @@ if (empty($bodytext))
 
     echo "<tr><th>New Status:</th>";
     ?>
-
     <td><?php echo incidentstatus_drop_down("newstatus", $incident->status); ?></td></tr>
     </table>
     <?php

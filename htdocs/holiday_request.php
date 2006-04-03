@@ -21,7 +21,7 @@ require('auth.inc.php');
 $user = cleanvar($_REQUEST['user']);
 $sent = cleanvar($_REQUEST['sent']);
 $mode = cleanvar($_REQUEST['mode']);
-$approvaluser = = cleanvar($_REQUEST['approvaluser']);
+$approvaluser = cleanvar($_REQUEST['approvaluser']);
 
 include('htmlheader.inc.php');
 if (!isset($user) || $user=='0') $user=$sit[2];
@@ -118,7 +118,7 @@ if (!$sent)
     }
     else
     {
-    echo "<p class='error'>You have no holidays that are booked but not yet approved</p>";
+    echo "<p class='info'>You have no holidays that are booked but not yet approved</p>";
     }
 }
 else
