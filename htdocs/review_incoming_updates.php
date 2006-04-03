@@ -21,7 +21,7 @@ require('auth.inc.php');
 
 function generate_row($update)
 {
-    global $CONFIG;
+    global $CONFIG, $sit;
     if (strlen($update['bodytext']) > 1003) $updatebodytext = substr($update['bodytext'],0,1000).'...';
     else $updatebodytext=$update['bodytext'];
 
@@ -36,11 +36,11 @@ function generate_row($update)
     $html_row.="<td class='shade1' width='20%'>".htmlentities($update['subject'],ENT_QUOTES).'</td>';
     $html_row.="<td align='center' class='shade1' width='20%'>".$update['reason'].'</td>';
     $html_row.="<td align='center' class='shade1' width='20%'>";
-    if (($update['locked'] != $_COOKIE['sit']['2']) && ($update['locked']>0))
+    if (($update['locked'] != $sit[2]) && ($update['locked']>0))
     $html_row.= "Locked by ".user_realname($update['locked']);
     else
     {
-        if ($update['locked'] == $_COOKIE['sit']['2'])
+        if ($update['locked'] == $sit[2])
         {
             $html_row.="<a href='{$_SERVER['PHP_SELF']}?unlock={$update['tempid']}' title='Unlock this update so it can be modified by someone else'> Unlock</a> | ";
             $html_row.="<a href=\"move_update.php?updateid=".$update['id']."&amp;incidentidnumber=".$update['incidentid']."\" title=\"Assign this text to an existing incident\">Assign</a> | ";

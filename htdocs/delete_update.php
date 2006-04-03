@@ -35,7 +35,7 @@ function deldir($location)
 {
     if (substr($location,-1) <> "/")
     $location = $location."/";
-    $all=opendir($location);
+        $all=opendir($location);
     while ($file=readdir($all))
     {
         if (is_dir($location.$file) && $file <> ".." && $file <> ".")
@@ -58,5 +58,4 @@ if (file_exists($path)) deldir($path);
 
 journal(CFG_LOGGING_NORMAL, 'Incident Log Entry Deleted', "Incident Log Entry $updateid was deleted from Incident $incidentid", CFG_JOURNAL_INCIDENTS, $incidentid);
 confirmation_page("0", "review_incoming_updates.php", "<h2>Delete Successful</p><p align='center'>Please wait while you are redirected...</h2>");
-}
 ?>
