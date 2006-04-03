@@ -1337,7 +1337,7 @@ function interface_style($id)
         $style = mysql_fetch_array($result);
         mysql_free_result($result);
     }
-    if (empty($style) $style = (array($CONFIG['default_css_url'],''));  // default style
+    if (empty($style)) $style = (array($CONFIG['default_css_url'],''));  // default style
     return($style);
 }
 
