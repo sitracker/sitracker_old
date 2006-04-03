@@ -262,7 +262,7 @@ function user_permission($userid,$permission)
 
     foreach($permission AS $perm)
     {
-        if (in_array($perm, $_SESSION['permissions']) == TRUE) $accessgranted = TRUE;
+        if (@in_array($perm, $_SESSION['permissions']) == TRUE) $accessgranted = TRUE;
         else $accessgranted = FALSE;
         // Permission 0 is always TRUE (general acess)
         if ($perm == 0) $accessgranted = TRUE;
