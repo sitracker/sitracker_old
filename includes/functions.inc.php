@@ -2255,8 +2255,7 @@ function throw_fatal_error($message,$details)
     trigger_error("{$message}: {$details}", E_USER_ERROR);
 }
 
-// FIXME
-// Don't use throw_error in new code, use trigger_error() php function instead
+// FIXME Don't use throw_error in new code, use trigger_error() php function instead
 // we'll have a proper trap eventually
 function throw_error($message, $details)
 {

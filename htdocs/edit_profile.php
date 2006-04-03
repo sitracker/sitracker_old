@@ -173,7 +173,7 @@ else
     $accepting = cleanvar($_POST['accepting']);
     $roleid = cleanvar($_POST['roleid']);
 
-    // TODO target v3.23 Add some extra checking here so that users can't edit other peoples profiles
+    // TODO target v3.24 Add some extra checking here so that users can't edit other peoples profiles
 
     // Update user profile
     $errors = 0;

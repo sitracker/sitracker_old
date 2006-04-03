@@ -15,7 +15,6 @@ require('functions.inc.php');
 session_name($CONFIG['session_name']);
 session_start();
 session_regenerate_id(TRUE);
-// FIXME v3.23 the session should not expire before the users login does
 
 // External vars
 $password = md5($_REQUEST['password']);
@@ -58,9 +57,6 @@ if (authenticate($username, $password) == 1)
             $userpermissions[]=$perm->permissionid;
         }
     }
-
-
-    // FIXME v3,23 Replace these cookies with session variables
 
     // Next lookup the individual users permissions
     $sql = "SELECT * FROM userpermissions WHERE userid = '{$_SESSION['userid']}' AND granted='true' ";

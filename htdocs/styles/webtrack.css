@@ -420,3 +420,8 @@ div#kbarticle
     width: 85%; margin: 30px auto; border: 1px solid #C5C5C5;
 }
 #kbarticle h1,#kbarticle h2,#kbarticle h3,#kbarticle h4, #kbarticle h5,#kbarticle h6 { text-align: left; background: transparent; color: black;}
+
+@media print
+{
+    #menu, #statusbar {visibility:hidden; display:none;}
+}

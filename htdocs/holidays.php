@@ -8,7 +8,7 @@
 // of the GNU General Public License, incorporated herein by reference.
 //
 
-// TODO target v3.23 link this on the menu
+// TODO target v3.24 link this on the menu
 
 $permission=4; // Edit your profile
 

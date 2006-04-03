@@ -226,7 +226,7 @@ if (empty($bodytext))
     echo "<tr><th align='right' valign='top'>New Priority:</td>";
     echo "<td class='shade1'>";
 
-    // FIXME, fix maximum priority
+    // FIXME fix maximum priority
     $servicelevel=maintenance_servicelevel(incident_maintid($id));
     if ($servicelevel==2 || $servicelevel==5) $maxpriority=4;
     else $maxpriority=3;
