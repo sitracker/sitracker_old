@@ -478,7 +478,7 @@ switch ($_REQUEST['action'])
                         echo "<code>chmod -R 777 {$CONFIG['attachment_fspath']}</code>";
                         echo "</p>";
                     }
-                    elseif(@ini_get('register_globals')==1) echo "<p class='error'>SiT! recommends that your php.ini setting <code>register_globals</code> be OFF.</p>";
+                    elseif(@ini_get('register_globals')==1) echo "<p class='error'>SiT! strongly recommends that your php.ini setting <code>register_globals</code> be OFF.</p>";
                     else
                     {
                         if (!empty($_SESSION['adminpw'])) echo "<p>SiT! is initially configured with just one user, <var><strong>admin</strong></var> with an automatically generated password of <var><strong>{$_SESSION['adminpw']}</strong></var>, ";

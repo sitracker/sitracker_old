@@ -29,8 +29,8 @@ echo "<link rel='SHORTCUT ICON' href='{$CONFIG['application_webpath']}images/sit
 echo "<style type='text/css'>@import url('{$CONFIG['application_webpath']}styles/webtrack.css');</style>\n";
 if ($_SESSION['auth'] == TRUE)
 {
-    $style = interface_style($_SESSION['style']);
-    echo "<link rel='stylesheet' href='{$CONFIG['application_webpath']}styles/{$style['cssurl']}' />\n";
+    $cssurl = db_read_column('cssurl', 'interfacestyles', $_SESSION['style']);
+    echo "<link rel='stylesheet' href='{$CONFIG['application_webpath']}styles/{$cssurl}' />\n";
 }
 else
 {
