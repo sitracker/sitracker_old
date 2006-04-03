@@ -158,7 +158,7 @@ $email_from = user_email($user);
 $email_to = user_email($approvaluser);
 $email_subject = "{$CONFIG['application_shortname']}: Holiday Approval Request";
 $extra_headers  = "From: $email_from\nReply-To: $email_replyto\nErrors-To: {$CONFIG['support_email']}\n";
-$extra_headers .= "X-Mailer: {$CONFIG['application_shortname']} $application_version/PHP " . phpversion()."\n";
+$extra_headers .= "X-Mailer: {$CONFIG['application_shortname']} {$application_version_string}/PHP " . phpversion()."\n";
 
 $rtnvalue = mail($email_to, stripslashes($email_subject), stripslashes($bodytext), $extra_headers);
     echo "<p align='center'><a href='holiday_calendar.php?type=1&user=$user'>Back to your calendar</p></p>";

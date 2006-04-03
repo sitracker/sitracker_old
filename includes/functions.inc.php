@@ -17,6 +17,8 @@
 
 // Version number of the application, (numbers only)
 $application_version='3.23';
+// Revision string, e.g. 'beta2' or ''
+$application_revision='beta1';
 
 // Clean PHP_SELF server variable to avoid potential XSS security issue
 $_SERVER['PHP_SELF'] = substr($_SERVER['PHP_SELF'], 0, (strlen($_SERVER['PHP_SELF']) - @strlen($_SERVER['PATH_INFO'])));
@@ -77,6 +79,9 @@ $updatetypes['reopening'] = array('icon' => 'actions/filenew.png', 'text' => 'Re
 $updatetypes['slamet'] = array('icon' => 'actions/flag.png', 'text' => 'SLA Met by currentowner');
 $updatetypes['solution'] = array('icon' => 'actions/endturn.png', 'text' => 'Resolved by currentowner');
 $updatetypes['webupdate'] = array('icon' => 'actions/comment.png', 'text' => 'Web update');
+
+// Set a string to be the full version number and revision of the application
+$application_version_string=trim("v{$application_version} {$application_revision}");
 
 // Email template settings
 $template_openincident_email=12;
@@ -1760,7 +1765,7 @@ function product_name($id)
 // with their appropriate values.
 function emailtype_replace_specials($string, $incidentid, $userid=0)
 {
-   global $CONFIG, $application_version;
+   global $CONFIG, $application_version, $application_version_string;
    if ($incidentid=='') throw_error('incident ID was blank in emailtype_replace_specials()',$string);
 
    $contactid=incident_contact($incidentid);
@@ -1840,7 +1845,7 @@ function emailtype_replace_specials($string, $incidentid, $userid=0)
    $return_string = str_replace("<applicationshortname>", $CONFIG['application_shortname'], $return_string);
 
    // application version
-   $return_string = str_replace("<applicationversion>", $application_version, $return_string);
+   $return_string = str_replace("<applicationversion>", $application_version_string, $return_string);
 
    // support email
    $return_string = str_replace("<supportemail>", $CONFIG['support_email'], $return_string);
@@ -2259,7 +2264,7 @@ function throw_fatal_error($message,$details)
 // we'll have a proper trap eventually
 function throw_error($message, $details)
 {
-  global $CONFIG, $application_version, $sit;
+  global $CONFIG, $application_version_string, $sit;
   echo "<hr style='color: red; background: red;' />";
   echo "<strong>A system error has occured</strong>";
   echo "<hr style='color: red; background: red;' />";
@@ -2269,7 +2274,7 @@ function throw_error($message, $details)
   $errorstring.=' ';
   $errorstring.=strip_tags($details);
   $errorstring.="\n";
-  $errorstring.="Application Version: {$CONFIG['application_shortname']} $application_version\n";
+  $errorstring.="Application Version: {$CONFIG['application_shortname']} {$application_version_string}\n";
   $errorstring.="User: ".$sit[0]."\n";
   $errorstring.="USER_AGENT: ".getenv('HTTP_USER_AGENT')."\n";
   $errorstring.="REMOTE_ADDR: ".getenv('REMOTE_ADDR')."\n";
@@ -2289,7 +2294,7 @@ function throw_error($message, $details)
 
 function throw_user_error($message, $details='')
 {
-    global $CONFIG, $application_version, $sit;
+    global $CONFIG, $application_version_string, $sit;
 
     $html = "<div class='error'>";
     if (is_array($message)) echo "<p class='error'>Oops</p>";
@@ -2780,7 +2785,7 @@ function html_checkbox($name,$state)
 
 function send_template_email($template, $incidentid, $info1='', $info2='')
 {
-    global $CONFIG, $application_version, $sit;
+    global $CONFIG, $application_version_string, $sit;
     if (empty($template)) throw_error('Blank template ID:', 'send_template_email()');
     if (empty($incidentid)) throw_error('Blank incident ID:', 'send_template_email()');
 
@@ -2816,7 +2821,7 @@ function send_template_email($template, $incidentid, $info1='', $info2='')
 
     // build the extra headers string for email
     $extra_headers  = "From: $email_from\r\nReply-To: $email_replyto\r\nErrors-To: {$CONFIG['support_email']}\r\n";
-    $extra_headers .= "X-Mailer: {$CONFIG['application_shortname']} $application_version/PHP " . phpversion()."\r\n";
+    $extra_headers .= "X-Mailer: {$CONFIG['application_shortname']} {$application_version_string}/PHP " . phpversion()."\r\n";
     if ($email_cc != '')
         $extra_headers .= "CC: $email_cc\r\n";
     if ($email_bcc != "")

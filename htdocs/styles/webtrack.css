@@ -423,5 +423,5 @@ div#kbarticle
 
 @media print
 {
-    #menu, #statusbar {visibility:hidden; display:none;}
+    #menu, #statusbar, h1#apptitle, #menulist, .contextmenu {visibility:hidden; display:none;}
 }

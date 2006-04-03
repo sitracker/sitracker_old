@@ -21,7 +21,7 @@
      of the GNU General Public License, incorporated herein by reference. -->
 <meta http-equiv="Content-Type" content="text/html;charset=UTF-8" />
 <?php
-echo "<meta name=\"GENERATOR\" content=\"{$CONFIG['application_name']} $application_version\" />\n";
+echo "<meta name=\"GENERATOR\" content=\"{$CONFIG['application_name']} {$application_version_string}\" />\n";
 echo "<title>";
 if (isset($title)) { echo "$title - {$CONFIG['application_shortname']}"; } else { echo "{$CONFIG['application_name']}{$extratitlestring}"; }
 echo "</title>\n";

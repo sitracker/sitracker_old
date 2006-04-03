@@ -26,8 +26,6 @@ if (authenticate($username, $password) == 1)
     // Valid user
     $_SESSION['auth'] = TRUE;
 
-    // TODO v3.23 Check trusted server setting and password use
-
     // Retreive users profile
     $sql = "SELECT * FROM users WHERE username='$username' AND password='$password' LIMIT 1";
     $result = mysql_query($sql);

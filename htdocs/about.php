@@ -25,7 +25,7 @@ include('htmlheader.inc.php');
 <tr><td class='shade2' colspan="2">
 <?php
 echo "<h2>{$CONFIG['application_name']}</h2>";
-echo "<p align='center'>Version: $application_version</p><br />";
+echo "<p align='center'>Version: {$application_version} {$application_revision}</p><br />";
 ?>
 </td>
 </tr>

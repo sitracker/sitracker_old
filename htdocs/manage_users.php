@@ -50,7 +50,7 @@ if (mysql_error()) trigger_error(mysql_error(),E_USER_WARNING);
 
 ?>
 <h2>Manage Users</h2>
-<p align='center'><a href="add_user.php?action=showform">Add User</a> |
+<p class='contextmenu' align='center'><a href="add_user.php?action=showform">Add User</a> |
 <a href="edit_user_permissions.php">Set Role Permissions</a>
 </p>
 <table align='center'>

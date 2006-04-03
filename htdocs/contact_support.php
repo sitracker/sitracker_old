@@ -135,7 +135,7 @@ if (mysql_num_rows($result)>=1 && $countclosed >= 1)
 {
     echo "<p align='center'>Average incident duration: ".format_seconds($totalduration/$countclosed)."</p>";
 }
-echo "<p align='center'>Show: ";
+echo "<p class='contextmenu' align='center'>Show: ";
 echo "<a href=\"{$_SERVER['PHP_SELF']}?id=$id&amp;mode=$mode&amp;status=open\">Open Only</a> | ";
 echo "<a href=\"{$_SERVER['PHP_SELF']}?id=$id&amp;mode=$mode&amp;status=closed\">Closed  Only</a> | ";
 echo "<a href=\"{$_SERVER['PHP_SELF']}?id=$id&amp;mode=$mode\">All</a>";
