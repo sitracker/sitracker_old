@@ -38,7 +38,7 @@ if ($mode=='site')
 {
     $sql = "SELECT *, (closed - opened) AS duration_closed, incidents.id AS incidentid FROM incidents, contacts ";
     $sql .= "WHERE incidents.contact=contacts.id ";
-    if (!empty($id) AND ($id != 'all' AND !empty($start)))$sql .= "AND contacts.siteid='$id' ";
+    if (!empty($id) AND $id != 'all') $sql .= "AND contacts.siteid='$id' ";
     if ($status=='open') $sql .= "AND incidents.status!=2 ";
     elseif ($status=='closed') $sql .= "AND incidents.status=2 ";
     if ($start > 0) $sql .= "AND opened >= $start ";
