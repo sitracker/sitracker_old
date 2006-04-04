@@ -103,7 +103,8 @@ echo "<form action='{$_SERVER['PHP_SELF']}?id={$incidentid}' method='post' name=
 echo "<input type='hidden' name='tab' value='{$selectedtab}' />";
 echo "<input type='hidden' name='action' value='{$selectedaction}' />";
 echo "<input type='hidden' name='MAX_FILE_SIZE' value='{$att_file_size}' />";
-echo "Upload a file <input class='textbox' type='file' name='attachment' size='30' maxfilesize='{$att_file_size}' /> ";
+// maxfilesize='{$att_file_size}'
+echo "Upload a file <input class='textbox' type='file' name='attachment' size='30' /> ";
 echo "<input type='submit' value='Upload' /> (&lt;{$attmax})";
 echo "</form>";
 echo "</div>";
@@ -143,7 +144,7 @@ function draw_file_row($file, $delim, $incidentid, $incident_attachment_fspath)
 
     $html = "<tr>";
     $html .= "<td align='right' width='5%'>";
-    $html .= "<a href=\"$url\"><img src='".getattachmenticon($filename)."# alt='Icon' title='{$filename} ({$file_size})' /></a>";
+    $html .= "<a href=\"$url\"><img src='".getattachmenticon($filename)."' alt='Icon' title='{$filename} ({$file_size})' /></a>";
     $html .= "&nbsp;</td>";
     $html .= "<td width='30%'><a href='$url'";
     if (substr($mime_type, 0, 4)=='text' AND $filesize < 512000)
@@ -186,7 +187,7 @@ if (file_exists($incident_attachment_fspath))
     if (count($rfilearray) >= 1)
     {
         $headhtml = "<div class='detailhead'>\n";
-        $headhtml .= "<img src='{$CONFIG['application_webpath']}images/smallicons/folder.gif' alt='Root dir' title='Root dir' border=0 height='16' width='16' valign='top'> \\";
+        $headhtml .= "<img src='{$CONFIG['application_webpath']}images/smallicons/folder.gif' alt='Root dir' title='Root dir' border='0' height='16' width='16' valign='top' /> \\";
         $headhtml .= "</div>\n";
         echo $headhtml;
         echo "<div class='detailentry'>\n";
@@ -207,7 +208,7 @@ if (file_exists($incident_attachment_fspath))
         if ( is_number($dirname) && $dirname!=$id && strlen($dirname)==10) $dirprettyname=date('l jS M Y @ g:ia',$dirname);
         else $dirprettyname=$dirname;
         $headhtml = "<div class='detailhead'>\n";
-        $headhtml .= "<img src='{$CONFIG['application_webpath']}images/smallicons/folder.gif' alt='{$di}' title='{$dir}' border=0 height='16' width='16' valign='top'> {$dirprettyname}";
+        $headhtml .= "<img src='{$CONFIG['application_webpath']}images/smallicons/folder.gif' alt='{$di}' title='{$dir}' border='0' height='16' width='16' valign='top' /> {$dirprettyname}";
         $headhtml .= "</div>\n";
         $tempfarray=list_dir($dir, 1);
         if (count($tempfarray)==1 AND (substr($tempfarray[0],-8)=='mail.eml'))
