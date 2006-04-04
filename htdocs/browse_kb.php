@@ -39,7 +39,7 @@ if (empty($mode) && empty($search_string)) $mode='RECENT';
         </tr>
         <tr>
         <td valign="middle">
-        <a href="<?php echo $_SERVER['PHP_SELF'] ?>?mode=RECENT" title="Recent Articles">New</a> |
+        <a href="<?php echo $_SERVER['PHP_SELF'] ?>?mode=RECENT" title="Recent Articles">Recent</a> |
         <a href="<?php echo $_SERVER['PHP_SELF'] ?>?search_string=A">A</a> |
         <a href="<?php echo $_SERVER['PHP_SELF'] ?>?search_string=B">B</a> |
         <a href="<?php echo $_SERVER['PHP_SELF'] ?>?search_string=C">C</a> |
@@ -95,7 +95,6 @@ if (strlen($search_string) > 4)
 }
 // Find Articles
 $sql = "SELECT * FROM kbarticles ";
-if (strtolower($mode)=='recent') $sql .= "ORDER BY published DESC LIMIT 20";
 if (strtolower($mode)=='myarticles') $sql .= "WHERE author='{$sit[2]}' ";
 if (!empty($search_string))
 {
@@ -118,6 +117,7 @@ if (!empty($search_string))
         $sql .= "title LIKE '%{$search_string}%' OR keywords LIKE '%{$search_string}%' ";
     }
 }
+if (strtolower($mode)=='recent') $sql .= "ORDER BY published DESC LIMIT 20";
 
 $result = mysql_query($sql);
 if (mysql_error()) trigger_error("MySQL Query Error ".mysql_error(), E_USER_ERROR);
