@@ -120,6 +120,10 @@ else if ($action == "update")
     $terminated = cleanvar($_POST['terminated']);
     $servicelevelid = cleanvar($_POST['servicelevelid']);
     $incidentpoolid = cleanvar($_POST['incidentpoolid']);
+    $expiry_year = cleanvar($_POST['expiry_year']);
+    $expiry_month = cleanvar($_POST['expiry_month']);
+    $expiry_day = cleanvar($_POST['expiry_day']);
+
 
     // Update maintenance
     $errors = 0;
