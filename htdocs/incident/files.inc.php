@@ -136,9 +136,9 @@ function draw_file_row($file, $delim, $incidentid, $incident_attachment_fspath)
     // calculate filesize
     $j = 0;
     $ext = array("Bytes","KiloBytes","MegaBytes","GigaBytes","TerraBytes");
-    $file_size = filesize($file);
-    while ($file_size >= pow(1024,$j)) ++$j;
-    $file_size = round($file_size / pow(1024,$j-1) * 100) / 100 . ' ' . $ext[$j-1];
+    $filesize = filesize($file);
+    while ($filesize >= pow(1024,$j)) ++$j;
+    $file_size = round($filesize / pow(1024,$j-1) * 100) / 100 . ' ' . $ext[$j-1];
     $mime_type = mime_content_type($file);
 
     $html = "<tr>";
@@ -146,7 +146,7 @@ function draw_file_row($file, $delim, $incidentid, $incident_attachment_fspath)
     $html .= "<a href=\"$url\"><img src='".getattachmenticon($filename)."# alt='Icon' title='{$filename} ({$file_size})' /></a>";
     $html .= "&nbsp;</td>";
     $html .= "<td width='30%'><a href='$url'";
-    if (substr($mime_type, 0, 4)=='text')
+    if (substr($mime_type, 0, 4)=='text' AND $filesize < 512000)
     {
         // The file is text, extract some of the contents of the file into a string for a preview
         $handle = fopen($file, "r");

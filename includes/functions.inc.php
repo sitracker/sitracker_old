@@ -62,22 +62,22 @@ $CONFIG['upload_max_filesize'] = return_bytes($CONFIG['upload_max_filesize']);
 $updatetypes['actionplan'] = array('icon' => 'actions/enum_list.png', 'text' => 'Action Plan by updateuser');
 $updatetypes['auto'] = array('icon' => 'actions/info.png', 'text' => 'Updated automatically by updateuser');
 $updatetypes['closing'] = array('icon' => 'actions/fileclose.png', 'text' => 'Marked for closure by updateuser');
-$updatetypes['editing'] = array('icon' => 'actions/edit.png', 'text' => 'Edited by currentowner');
+$updatetypes['editing'] = array('icon' => 'actions/edit.png', 'text' => 'Edited by updateuser');
 $updatetypes['email'] = array('icon' => 'actions/mail_send.png', 'text' => 'Email sent by updateuser');
 $updatetypes['emailin'] = array('icon' => 'actions/mail_generic.png', 'text' => 'Email received by updateuser');
 $updatetypes['emailout'] = array('icon' => 'actions/mail_send.png', 'text' => 'Email sent by updateuser');
 $updatetypes['externalinfo'] = array('icon' => 'actions/ktip.png', 'text' => 'External info added by updateuser');
-$updatetypes['probdef'] = array('icon' => 'actions/enum_list.png', 'text' => 'Problem Definition by currentowner');
+$updatetypes['probdef'] = array('icon' => 'actions/enum_list.png', 'text' => 'Problem Definition by updateuser');
 $updatetypes['research'] = array('icon' => 'actions/idea.png', 'text' => 'Researched by updateuser');
 $updatetypes['reassigning'] = array('icon' => 'actions/2rightarrow.png', 'text' => 'Reassigned to currentowner by updateuser');
 $updatetypes['reviewmet'] = array('icon' => 'actions/flag.png', 'text' => 'Review Period by updateuser'); // conditional
 $updatetypes['tempassigning'] = array('icon' => 'actions/1rightarrow.png', 'text' => 'Temporarily assigned to currentowner by updateuser');
 $updatetypes['opening'] = array('icon' => 'actions/filenew.png', 'text' => 'Opened by updateuser');
-$updatetypes['phonecallout'] = array('icon' => 'actions/forward.png', 'text' => 'Phone call made by currentowner');
-$updatetypes['phonecallin'] = array('icon' => 'actions/back.png', 'text' => 'Phone call taken by currentowner');
-$updatetypes['reopening'] = array('icon' => 'actions/filenew.png', 'text' => 'Reopened by currentowner');
+$updatetypes['phonecallout'] = array('icon' => 'actions/forward.png', 'text' => 'Phone call made by updateuser');
+$updatetypes['phonecallin'] = array('icon' => 'actions/back.png', 'text' => 'Phone call taken by updateuser');
+$updatetypes['reopening'] = array('icon' => 'actions/filenew.png', 'text' => 'Reopened by updateuser');
 $updatetypes['slamet'] = array('icon' => 'actions/flag.png', 'text' => 'SLA Met by updateuser');
-$updatetypes['solution'] = array('icon' => 'actions/endturn.png', 'text' => 'Resolved by currentowner');
+$updatetypes['solution'] = array('icon' => 'actions/endturn.png', 'text' => 'Resolved by updateuser');
 $updatetypes['webupdate'] = array('icon' => 'actions/comment.png', 'text' => 'Web update');
 
 // Set a string to be the full version number and revision of the application
