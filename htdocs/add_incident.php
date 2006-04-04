@@ -44,7 +44,10 @@ if (empty($action) OR $action=='showform')
         <input type="hidden" name="context" value="<?php echo $context ?>" />
         <input type="hidden" name="updateid" value="<?php echo $updateid ?>" />
         <table class='vertical'>
-        <tr><th>Contact:</th><td><input type="text" size="30" name="search_string" value="<?php echo $query; ?>" />
+        <tr><th>Contact:</th><td>
+        <?php
+        echo "<input type='text' name='search_string' size='30' value='{$query}' />\n";
+        ?>
         <input name="submit" type="submit" value="Find Contact" />
         </td></tr>
         </table>
