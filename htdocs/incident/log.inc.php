@@ -115,10 +115,9 @@ while ($update = mysql_fetch_object($result))
     $currentowner=user_realname($update->currentowner);
     $currentstatus=incident_status($update->currentstatus);
 
-    $updateheadermacro[] = 'currentowner';      $updateheaderstring[] = $currentowner;
-    $updateheadermacro[] = 'updateuser';      $updateheaderstring[] = $updateuser;
-
-    $updateheadertext = str_replace($updateheadermacro, $updateheaderstring, $updatetypes[$update->type]['text']);
+    $updateheadertext = $updatetypes[$update->type]['text'];
+    $updateheadertext = str_replace('currentowner', $currentowner, $updateheadertext);
+    $updateheadertext = str_replace('updateuser', $updateuser, $updateheadertext);
 
     // Print a header row for the update
     if ($updatebody=='' AND $update->customervisibility=='show') echo "<div class='detailinfo'>";

@@ -313,7 +313,7 @@ if (empty($bodytext))
     <?php echo "(&lt;{$att_file_size}):</th>";
     ?>
     <td class="shade1"><input type="hidden" name="MAX_FILE_SIZE" value="<?php echo $CONFIG['upload_max_filesize'] ?>" />
-    <input class='textbox' type='file' name="attachment" size=40 maxfilesize="<?php echo $CONFIG['upload_max_filesize'] ?>" /></td>
+    <input class='textbox' type='file' name="attachment" size="40" maxfilesize="<?php echo $CONFIG['upload_max_filesize'] ?>" /></td>
     </tr>
     </table>
     <p class='center'><input name="submit" type="submit" value="Update Incident" /></p>
