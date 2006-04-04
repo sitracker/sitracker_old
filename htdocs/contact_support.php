@@ -32,7 +32,7 @@ $status = $_REQUEST['status'];
 include('htmlheader.inc.php');
 
 if ($mode=='site') echo "<h2>".site_name($id)."</h2>";
-else echo "<h2>".contact_realname($id)."'</h2>";
+else echo "<h2>".contact_realname($id)."</h2>";
 
 if ($mode=='site')
 {

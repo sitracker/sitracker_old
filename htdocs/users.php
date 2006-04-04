@@ -107,9 +107,9 @@ while ($users = mysql_fetch_array($result))
     elseif ($countactive < 1) echo "{$countincidents} Incidents</a>";
     else echo "{$countactive} Action Needed + {$countdiff} Other</a>";
     echo "</td>";
-    if (strlen(user_aim($sit[2])) > 3) { ?> <td align='center'><?php if ($users['aim'] !='') echo "<a href=\"javascript:alert('{$users['aim']}');\" title=\"".$users['aim']."\"><img src=\"images/aol.gif\" border=\"0\" width=\"16\" height=\"16\" alt=\"".$users['aim']."\" /></a>"; else echo '&nbsp;';  ?></td> <?php } ?>
-    <?php if (strlen(user_icq($sit[2])) > 3) { ?> <td align='center'><?php if ($users['icq'] !='') echo "<a href=\"javascript:alert('{$users['icq']}');\" title=\"{$users['icq']}\"><img src=\"images/icq.gif\" border=\"0\" width=\"16\" height=\"16\" alt=\"".$users['icq']."\" /></a>"; else echo '&nbsp;'; ?></td> <?php } ?>
-    <?php if (strlen(user_msn($sit[2])) > 3) { ?> <td align='center'><?php if ($users['msn'] !='') echo "<a href=\"javascript:alert('{$users['msn']}');\"><img src=\"images/msn.gif\" width=\"16\" height=\"16\" border=\"0\" title=\"{$users['msn']}\" alt=\"".$users['msn']."\" /></a>"; else echo '&nbsp;'; ?></td> <?php } ?>
+    if (strlen(user_aim($sit[2])) > 3) { ?> <td align='center'><?php if ($users['aim'] !='') echo "<a href=\"javascript:alert('{$users['aim']}');\" title=\"".$users['aim']."\"><img src=\"images/icons/16x16/apps/ksmiletris.png\" border=\"0\" width=\"16\" height=\"16\" alt=\"".$users['aim']."\" /></a>"; else echo '&nbsp;';  ?></td> <?php } ?>
+    <?php if (strlen(user_icq($sit[2])) > 3) { ?> <td align='center'><?php if ($users['icq'] !='') echo "<a href=\"javascript:alert('{$users['icq']}');\" title=\"{$users['icq']}\"><img src=\"images/icons/16x16/apps/licq.png\" border=\"0\" width=\"16\" height=\"16\" alt=\"".$users['icq']."\" /></a>"; else echo '&nbsp;'; ?></td> <?php } ?>
+    <?php if (strlen(user_msn($sit[2])) > 3) { ?> <td align='center'><?php if ($users['msn'] !='') echo "<a href=\"javascript:alert('{$users['msn']}');\"><img src=\"images/icons/16x16/apps/personal.png\" width=\"16\" height=\"16\" border=\"0\" title=\"{$users['msn']}\" alt=\"".$users['msn']."\" /></a>"; else echo '&nbsp;'; ?></td> <?php } ?>
 
     <td align='center'><?php if ($users["phone"] == "") { ?>None<?php } else { echo $users["phone"]; } ?></td>
     <td align='center'><?php if ($users["phone"] == "") { ?>None<?php } else { if ($users['mobile']!='') echo $users["mobile"]; else echo '&nbsp;'; } ?></td>
