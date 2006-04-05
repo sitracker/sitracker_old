@@ -106,7 +106,7 @@ $hmenu[0] = array (10=> array ( 'perm'=> 0, 'name'=> "{$CONFIG['application_shor
                    60=> array ( 'perm'=> 37, 'name'=> "Reports", 'url'=>"reports.php", 'submenu'=>"60"),
                    70=> array ( 'perm'=> 0, 'name'=> "Help", 'url'=>"help.php", 'submenu'=>"70")
 );
-$hmenu[10] = array (1=> array ( 'perm'=> 60, 'name'=> "Main Page", 'url'=>"main.php"),
+$hmenu[10] = array (1=> array ( 'perm'=> 0, 'name'=> "Main Page", 'url'=>"main.php"),
                     10=> array ( 'perm'=> 60, 'name'=> "Search", 'url'=>"search.php"),
                     20=> array ( 'perm'=> 4, 'name'=> "My Details", 'url'=>"edit_profile.php", 'submenu'=>"1020"),
                     30=> array ( 'perm'=> 4, 'name'=> "Control Panel", 'url'=>"control_panel.php", 'submenu'=>"1030"),
@@ -2578,88 +2578,6 @@ function build_topmenu($id)
         echo "<a href=\"/logout.php\">Logout</a>";
     }
 }
-
-
-// Build a heirarchical top menu
-// Requires some CSS thats currently only used in webtrack8.css
-function build_htopmenu($hmenu, $id=0)
-{
-    global $CONFIG,  $sit;
-    if (!isset($id)) $id=0;
-
-    $topmenu=$hmenu;
-    if (!is_array($topmenu))
-    {
-        echo "<p class='error'>Error. Menu not defined</p>";
-    }
-
-    // FIXME v3.2x change these permission lookups to use the session permissions
-    $sql = "SELECT permissionid FROM userpermissions WHERE userid='{$sit['2']}' AND granted='true'";
-    $result = mysql_query($sql);
-    if (mysql_error()) trigger_error(mysql_error(),E_USER_WARNING);
-
-    while (list($userperms[])=mysql_fetch_row($result)) { $ttt=1;  }
-
-    if ($CONFIG['debug'])
-    {
-        echo "<!--";
-        print_r($userperms);
-        echo "-->";
-    }
-    echo "<div id='menu'>\n";
-    echo "<ul id='menuList'>\n";
-    foreach ($topmenu[$id] as $top => $topvalue)
-    {
-        echo "<li class='menuitem'>";
-        // Permission Required: ".permission_name($topvalue['perm'])."
-        if ($topvalue['perm'] >=1 AND !in_array($topvalue['perm'], $userperms)) echo "<a href='javascript:void();' class='greyed'>{$topvalue['name']}</a>";
-        else echo "<a href='{$CONFIG['application_webpath']}{$topvalue['url']}'>{$topvalue['name']}</a>";
-        // Do we need a submenu?
-        if ($topvalue['submenu'] > 0 AND in_array($topvalue['perm'], $userperms))
-        {
-            echo "\n<ul>"; //  id='menuSub'
-            foreach ($topmenu[$topvalue['submenu']] as $sub => $subvalue)
-            {
-                if ($subvalue['submenu'] > 0) echo "<li class='submenu'>";
-                else echo "<li>";
-                if ($subvalue['perm'] >=1 AND !in_array($subvalue['perm'], $userperms)) echo "<a href='javascript:void();' class='greyed'>{$subvalue['name']}</a>";
-                else echo "<a href='{$CONFIG['application_webpath']}{$subvalue['url']}'>{$subvalue['name']}</a>";
-                if ($subvalue['submenu'] > 0 AND in_array($subvalue['perm'], $userperms))
-                {
-                    echo "<ul>"; // id ='menuSubSub'
-                    foreach ($topmenu[$subvalue['submenu']] as $subsub => $subsubvalue)
-                    {
-                        if ($subsubvalue['submenu'] > 0) echo "<li class='submenu'>";
-                        else echo "<li>";
-                        if ($subsubvalue['perm'] >=1 AND !in_array($subsubvalue['perm'], $userperms)) echo "<a href=\"javascript:void();\" class='greyed'>{$subsubvalue['name']}</a>";
-                        else echo "<a href='{$CONFIG['application_webpath']}{$subsubvalue['url']}'>{$subsubvalue['name']}</a>";
-                        if ($subsubvalue['submenu'] > 0 AND in_array($subsubvalue['perm'], $userperms))
-                        {
-                            echo "<ul>"; // id ='menuSubSubSub'
-                            foreach ($topmenu[$subsubvalue['submenu']] as $subsubsub => $subsubsubvalue)
-                            {
-                                if ($subsubsubvalue['submenu'] > 0) echo "<li class='submenu'>";
-                                else echo "<li>";
-                                if ($subsubsubvalue['perm'] >=1 AND !in_array($subsubsubvalue['perm'], $userperms)) echo "<a href='javascript:void();' class='greyed'>{$subsubsubvalue['name']}</a>";
-                                else echo "<a href='{$CONFIG['application_webpath']}{$subsubsubvalue['url']}'>{$subsubsubvalue['name']}</a>";
-                                echo "</li>\n";
-                            }
-                            echo "</ul>\n";
-                        }
-                        echo "</li>\n";
-                    }
-                    echo "</ul>\n";
-                }
-                echo "</li>\n";
-            }
-           echo "</ul>\n";
-        }
-        echo "</li>\n";
-    }
-    echo "</ul>\n\n";
-    echo "</div>\n";
-}
-
 
 function countdayincidents($day, $month, $year)
 {
