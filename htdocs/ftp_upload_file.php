@@ -86,7 +86,7 @@ if (empty($file))
 else
 {
 
-    // TODO ext variables
+    // TODO v3.2x ext variables
 
     // receive the uploaded file to a temp directory on the local server
     if ($file!='')

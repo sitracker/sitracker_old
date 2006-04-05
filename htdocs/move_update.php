@@ -20,6 +20,7 @@ require('auth.inc.php');
 $incidentid = cleanvar($_REQUEST['incidentid']);
 $updateid = cleanvar($_REQUEST['updateid']);
 $error = cleanvar($_REQUEST['error']);
+$send_email = cleanvar($_REQUEST['send_email']);
 
 if ($incidentid=='')
 {
@@ -29,7 +30,7 @@ if ($incidentid=='')
     if ($error=='1') echo "<p class='error'>Error assigning that incident update</p>";
     ?>
     <div align='center'>
-    <form action="<?php echo $_SERVER['PHP_SELF']; ?>" method='POST'>
+    <form action="<?php echo $_SERVER['PHP_SELF']; ?>" method='post'>
     To Incident ID: <input type="text" name="incidentid" value="<?php echo $incidentid; ?>" />
     <input type="submit" value="move" /><br />
     Check here <input type="checkbox" name="send_email" checked='checked' value="yes" /> to send an email reply to the customer.

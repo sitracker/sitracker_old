@@ -1,10 +1,12 @@
 To Do
 
 v3.23
-* Stop people putting N/A or 'None' in fields
+* Fix 'updated by' names in tooltip on incidents page
 
 v3.24
 * Improve Related Incidents to add Parents/Children
+* Add product-end-of-lifetime date column to software table
+* Show email in tooltip after new incidents are logged, not reassign
 
 v3.2x
 * Incoming email handler
@@ -14,6 +16,7 @@ v3.2x
 * Interface for editing incident product info questions
 * Public Holidays
 * Monitor incidents by email, e.g. get an email when an incident is about to go out of SLA
+* Make holding queue locks timeout
 
 v3.3x
 * Contact flags
