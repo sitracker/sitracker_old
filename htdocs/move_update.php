@@ -19,6 +19,7 @@ require('auth.inc.php');
 // External variables
 $incidentid = cleanvar($_REQUEST['incidentid']);
 $updateid = cleanvar($_REQUEST['updateid']);
+$error = cleanvar($_REQUEST['error']);
 
 if ($incidentid=='')
 {
