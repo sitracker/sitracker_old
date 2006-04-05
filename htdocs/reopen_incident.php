@@ -19,6 +19,8 @@ require('auth.inc.php');
 // External variables
 $submit = cleanvar($_REQUEST['submit']);
 $id = cleanvar($_REQUEST['id']);
+$newstatus = cleanvar($_REQUEST['newstatus']);
+$bodytext = cleanvar($_REQUEST['bodytext']);
 
 if (empty($submit))
 {
@@ -43,13 +45,15 @@ else
     // Reopen the incident
     // update incident
     $time = time();
-    $sql = "UPDATE incidents SET status=$newstatus, lastupdated=$time, closed=0 WHERE id=$id";
+    $sql = "UPDATE incidents SET status='$newstatus', lastupdated='$time', closed='0' WHERE id='$id' LIMIT 1";
     mysql_query($sql);
+    if (mysql_error()) trigger_error(mysql_error(),E_USER_ERROR);
 
     // add update
     $sql  = "INSERT INTO updates (incidentid, userid, type, bodytext, timestamp) ";
     $sql .= "VALUES ($id, $sit[2], 'reopening', '$bodytext', $time)";
     $result = mysql_query($sql);
+    if (mysql_error()) trigger_error(mysql_error(),E_USER_ERROR);
 
     if (!$result)
     {
@@ -59,7 +63,7 @@ else
     }
     else
     {
-        confirmation_page("2", "incident_details.php?id=" . $id, "<h2>Incident Reopened</h2><p align='center'>Please wait while you are redirected...</h2>");
+        confirmation_page("2", "incident_details.php?id=" . $id, "<h2>Incident Reopened</h2><p align='center'>Please wait while you are redirected...</p>");
     }
 }
 ?>

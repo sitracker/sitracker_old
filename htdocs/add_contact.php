@@ -73,7 +73,7 @@ else
     // Add new contact
     // External variables
     $siteid = mysql_escape_string($_REQUEST['siteid']);
-    $email = cleanvar($_REQUEST['email']);
+    $email = strtolower(cleanvar($_REQUEST['email']));
     $dataprotection_email = mysql_escape_string($_REQUEST['dataprotection_email']);
     $dataprotection_phone = mysql_escape_string($_REQUEST['dataprotection_phone']);
     $dataprotection_address = mysql_escape_string($_REQUEST['dataprotection_address']);
@@ -109,7 +109,7 @@ else
         echo "<p class='error'>You must select a site for this customer</p>\n";
     }
     // check for blank email
-    if ($email == "")
+    if ($email == "" OR $email=='none' OR $email=='n/a')
     {
         $errors = 1;
         echo "<p class='error'>You must enter an email address</p>\n";
