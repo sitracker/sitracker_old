@@ -61,7 +61,7 @@ if ($actions[0]=='' OR in_array('CloseIncidents',$actions))
         if ($verbose) echo "  Incident ".$row['id']." closed{$crlf}";
 
         $sqlc="INSERT INTO updates (incidentid, userid, type, currentowner, currentstatus, bodytext, timestamp, nextaction, customervisibility) ";
-        $sqlc.="VALUES ('".$irow['id']."', '0', 'closing', '".$irow['owner']."', '".$irow['status']."', 'Incident Closed by {$CONFIG['application_shortname']}, '$now', '', 'show' ) ";
+        $sqlc.="VALUES ('".$irow['id']."', '0', 'closing', '".$irow['owner']."', '".$irow['status']."', 'Incident Closed by {$CONFIG['application_shortname']}', '$now', '', 'show' ) ";
         $resultc=mysql_query($sqlc);
         if (mysql_error()) trigger_error(mysql_error(),E_USER_ERROR);
     }
