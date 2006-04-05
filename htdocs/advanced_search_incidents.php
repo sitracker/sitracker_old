@@ -25,11 +25,12 @@ $search_externalid = cleanvar($_REQUEST['search_externalid']);
 $search_contact = cleanvar($_REQUEST['search_contact']);
 $search_details = cleanvar($_REQUEST['search_details']);
 $search_date = cleanvar($_REQUEST['search_date']);
+$action = cleanvar($_REQUEST['action']);
 
 include('htmlheader.inc.php');
 
 // show search incidents form
-if (empty($search_title))
+if (empty($action))
 {
     ?>
     <h2>Advanced Incidents Search</h2>
@@ -84,6 +85,7 @@ if (empty($search_title))
     <tr>
     <td>
     </td><td>
+    <input type='hidden' name='action' value='search' />
     <input name="reset" type="reset" value="Clear" />&nbsp;<input name="submit" type="submit" value="Search" />
     </td></tr>
     </table>
