@@ -42,7 +42,9 @@ if (authenticate($username, $password) == 1)
     $_SESSION['update_order'] = $user->var_update_order;
     $_SESSION['collapse'] = $user->var_collapse;
 
-    // Get an array full of users permissions
+    // Make an array full of users permissions
+    // The zero permission is added to all users, zero means everybody can access
+    $userpermissions[]=0;
     // First lookup the role permissions
     $sql = "SELECT * FROM users, rolepermissions WHERE users.roleid=rolepermissions.roleid ";
     $sql .= "AND users.id = '{$_SESSION['userid']}' AND granted='true'";
