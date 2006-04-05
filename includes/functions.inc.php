@@ -2582,14 +2582,18 @@ function build_topmenu($id)
 
 // Build a heirarchical top menu
 // Requires some CSS thats currently only used in webtrack8.css
-function build_htopmenu($id)
+function build_htopmenu($hmenu, $id=0)
 {
-    global $CONFIG, $hmenu, $sit;
+    global $CONFIG,  $sit;
     if (!isset($id)) $id=0;
 
     $topmenu=$hmenu;
-    if (!is_array($topmenu)) throw_error('Error: Menu not defined', '');
+    if (!is_array($topmenu))
+    {
+        echo "<p class='error'>Error. Menu not defined</p>";
+    }
 
+    // FIXME v3.2x change these permission lookups to use the session permissions
     $sql = "SELECT permissionid FROM userpermissions WHERE userid='{$sit['2']}' AND granted='true'";
     $result = mysql_query($sql);
     if (mysql_error()) trigger_error(mysql_error(),E_USER_WARNING);

@@ -46,7 +46,7 @@ echo "</head>\n";
 echo "<body>\n";
 echo "<h1 id='apptitle'>{$CONFIG['application_name']}</h1>\n";
 // Show menu if logged in
-if ($sit[0]!='') build_htopmenu(0);
+if ($sit[0]!='') build_htopmenu($hmenu, 0);
     /*
         echo "<div id='navmenu'>";
         build_topmenu($permission);
