@@ -120,7 +120,7 @@ else if ($action == "update")
     $surname = cleanvar($_POST['surname']);
     $forenames = cleanvar($_POST['forenames']);
     $siteid = cleanvar($_POST['siteid']);
-    $email = cleanvar($_POST['email']);
+    $email = strtolower(cleanvar($_POST['email']));
     $phone = cleanvar($_POST['phone']);
     $mobile = cleanvar($_POST['mobile']);
     $fax = cleanvar($_POST['fax']);
@@ -157,7 +157,7 @@ else if ($action == "update")
         echo "<p class='error'>You must enter a site name</p>\n";
     }
     // check for blank name
-    if ($email == "")
+    if ($email == "" OR $email=='none' OR $email=='n/a')
     {
         $errors = 1;
         echo "<p class='error'>You must enter an email address</p>\n";
