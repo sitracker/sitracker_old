@@ -77,7 +77,12 @@ while ($users = mysql_fetch_array($result))
     if ($users['status']==0) $class='expired';
     // print HTML
     echo "<tr class='{$class}'>\n";
-    echo "<td>{$users['realname']} ({$users['username']})</td>";
+    echo "<td>{$users['realname']}";
+    echo " (";
+    if ($users['userid'] == 1) echo "<strong>";
+    echo "{$users['username']}";
+    if ($users['userid'] == 1) echo "</strong>";
+    echo ")</td>";
 
     echo "<td>{$users['rolename']}</td>";
     echo "<td>";
