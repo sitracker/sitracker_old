@@ -10,6 +10,7 @@
 
 // Author: Ivan Lucas <ivanlucas[at]users.sourceforge.net>
 // Removed mention of contactproducts - INL 08Oct01
+// This Page Is Valid XHTML 1.0 Transitional!   - INL 6Apr06
 
 $permission=6;  // view incidents
 
@@ -27,8 +28,8 @@ $search_details = cleanvar($_REQUEST['search_details']);
 $search_date = cleanvar($_REQUEST['search_date']);
 $action = cleanvar($_REQUEST['action']);
 
-include('htmlheader.inc.php');
 
+include('htmlheader.inc.php');
 // show search incidents form
 if (empty($action))
 {
@@ -43,17 +44,17 @@ if (empty($action))
     <tr><th>Priority:</th><td><?php echo priority_drop_down('search_priority', 0); ?></td></tr>
     <tr><th>Product:</th><td><?php echo product_drop_down('search_product', 0) ?></td></tr>
     <tr><th>Incident Details:</th><td><input maxlength='100' name="search_details" size='30' type="text" /></td></tr>
-    <tr><th>Status<br />Open/Closed:</td><td>
+    <tr><th>Status<br />Open/Closed:</th><td>
     <select size="1" name="search_range">
-    <option selected value="All">All Incidents</option>
+    <option selected='selected' value="All">All Incidents</option>
     <option value="Open">Open Incidents Only</option>
     <option value="Closed">Closed Incidents Only</option>
     </select>
     </td></tr>
 
-    <tr><th>Last Update:</td><td width='300'>
+    <tr><th>Last Update:</th><td width='300'>
     <select size="1" name="search_date">
-    <option selected value="All">All dates</option>
+    <option selected="selected" value="All">All dates</option>
     <option value="Recent180">Updated in past six months only</option>
     <option value="Recent90">Updated in past three months only</option>
     <option value="Recent30">Updated in past month only</option>
@@ -68,13 +69,13 @@ if (empty($action))
     <option value="Old180">Not updated in the past six months</option>
     </select>
     </td></tr>
-    <tr><th>Owner:</td><td width='300'>
+    <tr><th>Owner:</th><td width='300'>
     <?php user_drop_down('search_user',0); ?>
     </td></tr>
 
-    <tr><th>Sort Results:</td><td width='300'>
+    <tr><th>Sort Results:</th><td width='300'>
     <select size="1" name="sort_results">
-    <option selected value="DateDESC">By date, newest first</option>
+    <option selected='selected' value="DateDESC">By date, newest first</option>
     <option value="DateASC">By Date, oldest first</option>
     <option value="IDASC">By Incident ID</option>
     <option value="TitleASC">By Title</option>
@@ -211,8 +212,8 @@ else
         }
         echo "</table>";
         echo "<br />";
-        echo "<a href=\"advanced_search_incidents.php\">Search Again</a>";
-        include('htmlfooter.inc.php');
+        echo "<p align='center'><a href=\"advanced_search_incidents.php\">Search Again</a></p>";
     }
 }
+include('htmlfooter.inc.php');
 ?>
