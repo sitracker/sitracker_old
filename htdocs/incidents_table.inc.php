@@ -73,7 +73,7 @@ while ($incidents = mysql_fetch_array($result))
     if (mysql_num_rows($slresult) < 1) trigger_error("could not retrieve service level ($slsql)", E_USER_WARNING);
 
     // Get Last Update
-    list($update_userid, $update_type, $update_currentowner, $update_currentstatus, $update_body, $update_timestamp, $update_nextaction)=incident_lastupdate($incidents['id']);
+    list($update_userid, $update_type, $update_currentowner, $update_currentstatus, $update_body, $update_timestamp, $update_nextaction, $update_id)=incident_lastupdate($incidents['id']);
 
     // Get next target
     $target = incident_get_next_target($incidents['id']);
@@ -108,6 +108,8 @@ while ($incidents = mysql_fetch_array($result))
         $update_body=nl2br(htmlspecialchars($update_body));
         $update_body=str_replace("&amp;gt;", "&gt;", $update_body);
         $update_body=str_replace("&amp;lt;", "&lt;", $update_body);
+        // Insert path to attachments
+        $update_body = preg_replace("/\[\[att\]\](.*?)\[\[\/att\]\]/","$1 ", $update_body);
         if (strlen($update_body)>490) $update_body .= '...';
     }
     $update_user = user_realname($update_userid);
@@ -174,7 +176,10 @@ while ($incidents = mysql_fetch_array($result))
     else
     {
         $update_currentownername = user_realname($update_currentowner);
-        echo "<span>".str_replace('currentowner', $update_currentownername, $updatetypes[$update_type]['text'])." by {$update_user} on ".date($CONFIG['dateformat_datetime'],$update_timestamp)." </span>";
+        $update_headertext = $updatetypes[$update_type]['text'];
+        $update_headertext = str_replace('currentowner', $update_currentownername,$update_headertext);
+        $update_headertext = str_replace('updateuser', $update_user, $update_headertext);
+        echo "<span>{$update_headertext} on ".date($CONFIG['dateformat_datetime'],$update_timestamp)." </span>";
     }
     echo "</a></td>";
 
