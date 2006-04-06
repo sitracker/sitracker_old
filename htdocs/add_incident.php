@@ -446,7 +446,8 @@ elseif ($action=='assign')
         $software = cleanvar($_REQUEST['software']);
         $productversion = cleanvar($_REQUEST['productversion']);
         $productservicepacks = cleanvar($_REQUEST['productservicepacks']);
-        $bodytext = cleanvar($bodytext);
+        $bodytext = cleanvar($_REQUEST['bodytext']);
+        $send_email = cleanvar($_REQUEST['send_email']);
 
         // check form input
         $errors = 0;
