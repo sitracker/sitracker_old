@@ -59,26 +59,25 @@ if (empty($submit))
     <tr><th>Email Signature:<br />
     Inserted automatically at the bottom of your outgoing emails.
     </th><td><textarea name="signature" rows="4" cols="40"><?php echo strip_tags($user->signature); ?></textarea></td></tr>
-    <tr><th>Holiday Entitlement:</th><td>
-    <?php $entitlement=user_holiday_entitlement($userid);
-    $holidaystaken=user_count_holidays($userid, 1);
-
-    echo "$entitlement days, ";
-    echo "$holidaystaken taken, ";
-    echo $entitlement-$holidaystaken." Remaining";
-    ?>
-    </td></tr>
-
-    <tr><th>Other Leave:</th><td>
-    <?php echo user_count_holidays($userid, 2)." days sick leave, ";
-    echo user_count_holidays($userid, 3)." days working away, ";
-    echo user_count_holidays($userid, 4)." days training";
-    echo "<br />";
-    echo user_count_holidays($userid, 5)." days other leave";
-    ?></td></tr>
-
-    <tr><th>Group Membership:</th><td valign='top'>
     <?php
+    $entitlement=user_holiday_entitlement($userid);
+    if ($entitlement > 0)
+    {
+        $holidaystaken=user_count_holidays($userid, 1);
+        echo "<tr><th>Holiday Entitlement:</th><td>";
+        echo "$entitlement days, ";
+        echo "$holidaystaken taken, ";
+        echo $entitlement-$holidaystaken." Remaining";
+        echo "</td></tr>\n";
+        echo "<tr><th>Other Leave:</th><td>";
+        echo user_count_holidays($userid, 2)." days sick leave, ";
+        echo user_count_holidays($userid, 3)." days working away, ";
+        echo user_count_holidays($userid, 4)." days training";
+        echo "<br />";
+        echo user_count_holidays($userid, 5)." days other leave";
+        echo "</td></tr>";
+    }
+    echo "<tr><th>Group Membership:</th><td valign='top'>";
     $sql="SELECT groupid, name FROM usergroups, groups WHERE usergroups.groupid=groups.id AND userid='{$userid}' ";
     $result = mysql_query($sql);
     $countgroups=mysql_num_rows($result);
