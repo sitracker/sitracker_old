@@ -59,7 +59,7 @@ while ($update = mysql_fetch_object($result))
 
     // Insert path to attachments
     $updatebody = preg_replace("/\[\[att\]\](.*?)\[\[\/att\]\]/",
-                               "<a href = '/attachments/updates/{$update->id}/$1'>$1</a>",
+                               "<a href = '/attachments/updates/{$update->id}/$1'>$1</a> ",
                                $updatebody);
 
     // Put the header part (up to the <hr /> in a seperate DIV)
