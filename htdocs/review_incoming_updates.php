@@ -33,7 +33,7 @@ function generate_row($update)
     $html_row="<tr>";
     $html_row.="<td align='center' class='shade1' width='20%'>".date($CONFIG['dateformat_datetime'],$update['timestamp']).'</td>';
     $html_row.="<td class='shade1' width='20%'>".htmlentities($update['emailfrom'],ENT_QUOTES)."</td>";
-    $html_row.="<td class='shade1' width='20%'><a class='info' style='cursor:help;'>";
+    $html_row.="<td class='shade1' width='20%'><a id='{$update['id']}' class='info' style='cursor:help;'>";
     $html_row.=htmlentities($update['subject'],ENT_QUOTES);
     $html_row.='<span>'.nl2br(htmlentities($updatebodytext,ENT_QUOTES)).'</a></td>';
     $html_row.="<td align='center' class='shade1' width='20%'>".$update['reason'].'</td>';
