@@ -1690,7 +1690,8 @@ function priority_name($id)
 // Returns an array of fields from the most recent update record for a given incident id
 function incident_lastupdate($id)
 {
-    $sql = "SELECT userid, type, currentowner, currentstatus, LEFT(bodytext,500) AS body, timestamp, nextaction FROM updates WHERE incidentid='$id' ORDER BY timestamp DESC LIMIT 1";
+    $sql = "SELECT userid, type, currentowner, currentstatus, LEFT(bodytext,500) AS body, timestamp, nextaction, id ";
+    $sql .= "FROM updates WHERE incidentid='$id' ORDER BY timestamp DESC LIMIT 1";
     $result = mysql_query($sql);
     if (mysql_error()) trigger_error(mysql_error(),E_USER_WARNING);
 
@@ -1700,7 +1701,7 @@ function incident_lastupdate($id)
     {
         $update = mysql_fetch_array($result);
         mysql_free_result($result);
-        return array($update['userid'], $update['type'] ,$update['currentowner'], $update['currentstatus'], stripslashes($update['body']), $update['timestamp'], $update['nextaction']);
+        return array($update['userid'], $update['type'] ,$update['currentowner'], $update['currentstatus'], stripslashes($update['body']), $update['timestamp'], $update['nextaction'], $update['id']);
     }
 }
 

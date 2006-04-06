@@ -25,8 +25,9 @@ require('auth.inc.php');
 // External Variables
 $bodytext = cleanvar($_REQUEST['bodytext']);
 $id = cleanvar($_REQUEST['id']);
+$action = cleanvar($_REQUEST['action']);
 
-if (empty($bodytext))
+if (empty($action))
 {
     // No update body text detected show update form
     $incident_title=incident_title($id);
@@ -214,7 +215,7 @@ if (empty($bodytext))
     <br />
     Check here <input type="checkbox" name="cust_vis" checked='checked' value="yes" /> to make this update visible to the customer.
     </td>
-    <td class="shade1"><textarea name="bodytext" rows="15" cols="50"></textarea></td>
+    <td class="shade1"><textarea name="bodytext" rows="13" cols="50"></textarea></td>
     </tr>
     <?php
     echo "<input type='hidden' name='storepriority' value='".incident_priority($id)."'>";
@@ -313,10 +314,12 @@ if (empty($bodytext))
     <?php echo "(&lt;{$att_file_size}):</th>";
     ?>
     <td class="shade1"><input type="hidden" name="MAX_FILE_SIZE" value="<?php echo $CONFIG['upload_max_filesize'] ?>" />
-    <input class='textbox' type='file' name="attachment" size="40" maxfilesize="<?php echo $CONFIG['upload_max_filesize'] ?>" /></td>
+    <input type='file' name="attachment" size="40" maxfilesize="<?php echo $CONFIG['upload_max_filesize'] ?>" /></td>
     </tr>
     </table>
-    <p class='center'><input name="submit" type="submit" value="Update Incident" /></p>
+    <p class='center'>
+    <input type="hidden" name='action' value="update" />
+    <input type="submit" name="submit" value="Update Incident" /></p>
     </form>
     <?php
     include('incident_html_bottom.inc.php');
@@ -398,9 +401,9 @@ else
         $bodytext=$timetext.$bodytext;
     }
     // was '$attachment'
-    if ($attachment_name!='' && isset($attachment_name)==TRUE)
+    if ($_FILES['attachment']['name']!='' && isset($_FILES['attachment']['name'])==TRUE)
     {
-        $bodytext = "Attachment: <b>Yes</b>\n".$bodytext;
+        $bodytext = "Attachment: [[att]]{$_FILES['attachment']['name']}[[/att]]\n".$bodytext;
     }
     // Debug
     ## if ($target!='') $bodytext = "Target: $target\n".$bodytext;
@@ -481,22 +484,21 @@ else
     }
 
     // attach file
-    if ($attachment_name!="")
+    $att_max_filesize = return_bytes($CONFIG['upload_max_filesize']);
+    if ($_FILES['attachment']['name'] != "")
     {
         // Is this the right path?  INL 2Nov05
-        $filename = $CONFIG['attachment_fspath'].$attachment_name;
+        $filename = $CONFIG['attachment_fspath'].$_FILES['attachment']['name'];
 
-        $mv=move_uploaded_file($attachment, "$filename");
-        if (!mv) throw_error('!Error: Problem moving attachment from temp directory:',$filename);
+        //$mv=move_uploaded_file($attachment, "$filename");
+        //if (!mv) throw_error('!Error: Problem moving attachment from temp directory:',$filename);
 
         // Check file size before attaching
-        $filesize=filesize($filename);
-        if (!$filesize) throw_error("!Error: Problem checking filesize of uploaded attachment:", $filename);
-        if ($filesize > $CONFIG['upload_max_filesize'] || filesize($filename)==FALSE)
+        if ($_FILES['attachment']['size'] > $att_max_filesize)
         {
-            throw_error('User Error: Attachment too large or file upload error - size:',filesize($filename));
-            // throwing an error isn't the nicest thing to do for the user but there seems to be no way of
-            // checking file sizes at the client end before the attachment is uploaded. - INL
+            throw_error('User Error: Attachment too large or file upload error - size:',$_FILES['attachment']['size']);
+            // throwing an error isn't the nicest thing to do for the user but there seems to be no guaranteed
+            // way of checking file sizes at the client end before the attachment is uploaded. - INL
         }
         // after update, move the attachment to the incident file attachment directory / timestamp
         if ($filename!="" && file_exists($filename))

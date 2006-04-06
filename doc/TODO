@@ -1,7 +1,7 @@
 To Do
 
 v3.23
-* Fix 'updated by' names in tooltip on incidents page
+* Fix broken upload while updating incident
 
 v3.24
 * Improve Related Incidents to add Parents/Children

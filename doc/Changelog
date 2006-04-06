@@ -1,23 +1,27 @@
 Changes in v3.23 - Unreleased
--------------------------------------------------------------------------------------
+-----------------------------------------------------------------------
 * Improved Auto-reassign back to original owner after holiday
 * Improved contact support page
 * Merged list of sites contracts onto the site details page
-* Surname and Email address are now both checked when adding a contact to help prevent dupes
+* Surname and Email address are now both checked when adding a contact
+  to help prevent dupes
 * Contacts now use their site address unless specifically overridden
 * Improved password generation
 * Fixed bug with contact address (country field)
 * Fixed bug with log produced after editing incidents.
-* Removed ability to change the product an incident is logged to as this didn't make much sense,
+* Removed ability to change the product an incident is logged to as
+  this didn't make much sense,
   incidents should be re-logged instead
 * Fixed bug where slashes appeared in incident titles with apostrophe
 * SiT! now uses superglobals no longer requires register_globals to be on
 * Much improved input checking throughout
 * Many other minor bugfixes
-* Fixed bug with creating a directory to hold attachments for new incidents
+* Fixed bug with creating a directory to hold attachments for new
+  incidents
 * Fixed bug with locking/unlocking incoming updates
 * Show product on site/contact incidents page and allow date filtering
-* Show total number of incidents logged for each product on contact/site support page
+* Show total number of incidents logged for each product on contact/site
+  support page
 * Fixed bug with searching for kb articles by doc id
 * Improved Database Error handling
 * Prevented revealing SQL on failure for security reasons
@@ -27,20 +31,33 @@ Changes in v3.23 - Unreleased
 * Changed sites.notes column to TEXT from BLOB
 * Removed obsolete and unused database column 'ftnpassword'
 * Fixed missing banner graphic for neoteric theme, added blue swirl
-* Improved the list of incidents that a site/contact has a logged and added
-  new png pie charts showing various data
-* User Permissions can now be set using 'Roles', there are currently three roles available
-  'Administator', 'Manager' and 'User' and the permissions for each of these can
-  be configured.
-* User Permissions are now read only once at login and stored in the users session
-  for quick retreival
-* SiT! no longer uses it's own cookies for authentication PHP sessions are used instead.
-* Authentication is now performed only once at login and the authenicated status is passed
-  with the users session
-* The users profile variables are loaded into the session at login (and after changes) this
-  avoids multiple SQL Queries which should improve performance
-* Incident relationships.  Related incidents can now be linked together.
-* The interface style that new users should use (user default style) can now be configured
+* Improved the list of incidents that a site/contact has a logged and
+  added new png pie charts showing various data
+* User Permissions can now be set using 'Roles', there are currently
+  three roles available 'Administator', 'Manager' and 'User' and the
+  permissions for each of these can be configured.
+* User Permissions are now read only once at login and stored in the
+  users session for quick retrieval
+* SiT! no longer uses it's own cookies for authentication PHP sessions
+  are used instead.
+* Authentication is now performed only once at login and the authenicated
+  status is passed with the users session
+* The users profile variables are loaded into the session at login (and
+  after changes) this avoids multiple SQL Queries which should improve
+  performance
+* Incident relationships. Related incidents can now be linked together
+* The interface style that new users should use (user default style)
+  can now be configured
+* Attachment filenames are now displayed after uploading a file during
+  an incident update
+* Attachment filenames are now displayed neatly in the incident page
+  tooltips
+* Menu permissions are now checked using the session variable
+* Setup script now prints a message if the PHP version is < 4.1
+* The first user (admin) is now show in bold on the manage users page
+* Fixed missing IM icons
+* Made the install more secure by removing the default password
+  'password' and using a randomly generated password instead.
 
 Changes in v3.22 - Released 27 January 2006
 -------------------------------------------------------------------------------------
@@ -67,6 +84,7 @@ Changes in v3.22 - Released 27 January 2006
 
 Changes in v3.21 - Released 14 December 2005
 -------------------------------------------------------------------------------------
+* SiT is now open source under the GPL 2 License
 * Improved the display of outstanding incidents when assigning newly added incidents
 * Fixed stray character on add incident page
 * Fixed help link
@@ -96,7 +114,7 @@ Changes in v3.20 - Released 23 November 2005
 * Improved tooltips for better browser support and ease of use (now uses CSS popups)
 * Seperated updates headers from body
 * Made incident details default to show auto-updates
-* Proserv: Added ability to search by job number (without prefix or task letter) (#98)
+* Proserv plugin: Added ability to search by job number (without prefix or task letter) (#98)
 * Code tidying and removal of obsolete code sections and files
 * Various improvements for speed
 * Webtrack can now run with short_open_tag set to off
@@ -125,48 +143,48 @@ Changes in v3.20 - Released 23 November 2005
 
 Changes in v3.19 - Released 30 September 2005
 -------------------------------------------------------------------------------------
-* Proserv: Changed a few page titles
-* Proserv: CSS Improvements for neater printouts from proserv pages
-* Proserv: Now shows site name and day number in the daily tooltips on the chart
-* Proserv: Fixed bug where new tasks showed 100% complete (#88)
-* Proserv: Added gaps between jobs in chart (#86)
-* Proserv: Display overrun jobs (#87)
-* Proserv: Added Job overview tab (#84)
+* Proserv plugin: Changed a few page titles
+* Proserv plugin: CSS Improvements for neater printouts from proserv pages
+* Proserv plugin: Now shows site name and day number in the daily tooltips on the chart
+* Proserv plugin: Fixed bug where new tasks showed 100% complete (#88)
+* Proserv plugin: Added gaps between jobs in chart (#86)
+* Proserv plugin: Display overrun jobs (#87)
+* Proserv plugin: Added Job overview tab (#84)
 
 Changes in v3.18 - Released 28 September 2005
 -------------------------------------------------------------------------------------
-* Proserv: Fixed several chart bugs
-* Proserv: Fixed links to sibling tasks
-* Proserv: Added filter to Management Overview page
-* Proserv: Added percentage complete information
-* Proserv: Added information for admin team on Management Overview page (#83)
-* Proserv: Allow a contact to be added to a job (#78)
-* Proserv: Made filters 'sticky' (#59)
-* Proserv: Fixed bugs with sorting
-* Proserv: Added capability to sort all columns (#60)
-* Proserv: PO's can now only be assigned to Jobs and not tasks (#62)
-* Proserv: Improved formatting of jobs list for IE browser
-* Proserv: Added filter to show/hide tasks on jobs list (#63)
-* Proserv: Chart now highlights current day
-* Proserv: Added a tooltip to jobs list showing extract of job overview
-* Proserv: Automatic notification to salesperson of new jobs that haven't been updated every 3 days
-* Proserv: Automatic notification to project manager of jobs that have reached the next action time
+* Proserv plugin: Fixed several chart bugs
+* Proserv plugin: Fixed links to sibling tasks
+* Proserv plugin: Added filter to Management Overview page
+* Proserv plugin: Added percentage complete information
+* Proserv plugin: Added information for admin team on Management Overview page (#83)
+* Proserv plugin: Allow a contact to be added to a job (#78)
+* Proserv plugin: Made filters 'sticky' (#59)
+* Proserv plugin: Fixed bugs with sorting
+* Proserv plugin: Added capability to sort all columns (#60)
+* Proserv plugin: PO's can now only be assigned to Jobs and not tasks (#62)
+* Proserv plugin: Improved formatting of jobs list for IE browser
+* Proserv plugin: Added filter to show/hide tasks on jobs list (#63)
+* Proserv plugin: Chart now highlights current day
+* Proserv plugin: Added a tooltip to jobs list showing extract of job overview
+* Proserv plugin: Automatic notification to salesperson of new jobs that haven't been updated every 3 days
+* Proserv plugin: Automatic notification to project manager of jobs that have reached the next action time
 * Authentication now uses Ichain
 
 Changes in v3.17 - Released 25 August 2005
 -------------------------------------------------------------------------------------
-* ProServ: Salesperson is now saved properly when editing a job
+* Proserv plugin: Salesperson is now saved properly when editing a job
 * Fixed server ID string
-* ProServ: Fixed several bugs causing job fields not to be saved
-* ProServ: Fixed bug Screen rendering / formatting issue after PO number saved
-* ProServ: Fixed emails sent via email templates
-* ProServ: Fixed bug where jobs/tasks were not displayed on 'My Jobs' page
-* ProServ: Tasks can now have two consultants, Primary and now Secondary
-* ProServ: More links provided after adding/editing jobs/tasks to improve workflow
-* ProServ: New status of 'Cancelled'
-* ProServ: Chart now groups jobs/tasks together in a way similar to MS Project
-* ProServ: When viewing a task there are now links to sibling tasks
-* ProServ: New filtering allows viewing jobs by status, consultant, site, salesperson
+* Proserv plugin: Fixed several bugs causing job fields not to be saved
+* Proserv plugin: Fixed bug Screen rendering / formatting issue after PO number saved
+* Proserv plugin: Fixed emails sent via email templates
+* Proserv plugin: Fixed bug where jobs/tasks were not displayed on 'My Jobs' page
+* Proserv plugin: Tasks can now have two consultants, Primary and now Secondary
+* Proserv plugin: More links provided after adding/editing jobs/tasks to improve workflow
+* Proserv plugin: New status of 'Cancelled'
+* Proserv plugin: Chart now groups jobs/tasks together in a way similar to MS Project
+* Proserv plugin: When viewing a task there are now links to sibling tasks
+* Proserv plugin: New filtering allows viewing jobs by status, consultant, site, salesperson
     or search
 
 Changes in v3.16 - Released 27 April 2005
@@ -251,8 +269,8 @@ Changes in v3.14 - Released 23 November 2004
 * The Incident Details window now has AccessKeys, e.g. Press ALT+E to send an email
   (exact keys are browser dependent)
 * Tasks for ProServ (sub-jobs)
-* ProServ: Coloured status to improve readability
-* ProServ: Several minor bug fixes
+* Proserv plugin: Coloured status to improve readability
+* Proserv plugin: Several minor bug fixes
 * Now using SubVersion (svn) instead of cvs
 * Contact passwords are no longer generated or controlled by webtrack
 
