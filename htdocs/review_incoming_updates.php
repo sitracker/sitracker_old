@@ -30,14 +30,14 @@ function generate_row($update)
     $updatebodytext=htmlspecialchars(str_replace($search, $replace, $updatebodytext));
     if ($updatebodytext=='') $updatebodytext='&nbsp;';
 
-    $html_row="<tr>";
-    $html_row.="<td align='center' class='shade1' width='20%'>".date($CONFIG['dateformat_datetime'],$update['timestamp']).'</td>';
-    $html_row.="<td class='shade1' width='20%'>".htmlentities($update['emailfrom'],ENT_QUOTES)."</td>";
-    $html_row.="<td class='shade1' width='20%'><a id='{$update['id']}' class='info' style='cursor:help;'>";
+    $html_row="<tr class='shade1'>";
+    $html_row.="<td align='center' width='20%'>".date($CONFIG['dateformat_datetime'],$update['timestamp']).'</td>';
+    $html_row.="<td width='20%'>".htmlentities($update['emailfrom'],ENT_QUOTES)."</td>";
+    $html_row.="<td width='20%'><a id='{$update['id']}' class='info' style='cursor:help;'>";
     $html_row.=htmlentities($update['subject'],ENT_QUOTES);
     $html_row.='<span>'.nl2br(htmlentities($updatebodytext,ENT_QUOTES)).'</span></a></td>';
-    $html_row.="<td align='center' class='shade1' width='20%'>".$update['reason'].'</td>';
-    $html_row.="<td align='center' class='shade1' width='20%'>";
+    $html_row.="<td align='center' width='20%'>".$update['reason'].'</td>';
+    $html_row.="<td align='center' width='20%'>";
     if (($update['locked'] != $sit[2]) && ($update['locked']>0))
     $html_row.= "Locked by ".user_realname($update['locked']);
     else
