@@ -260,3 +260,4 @@ while ($incidents = mysql_fetch_array($result))
 }
 echo "</table>\n\n";
 if ($CONFIG['debug']) echo "<!-- End of Support Incidents Table -->\n";
+?>
