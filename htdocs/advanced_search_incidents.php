@@ -29,6 +29,7 @@ $search_externalid = cleanvar($_REQUEST['search_externalid']);
 $search_contact = cleanvar($_REQUEST['search_contact']);
 $search_details = cleanvar($_REQUEST['search_details']);
 $search_date = cleanvar($_REQUEST['search_date']);
+$search_user = cleanvar($_REQUEST['search_user']);
 $action = cleanvar($_REQUEST['action']);
 
 
@@ -38,7 +39,7 @@ if (empty($action))
 {
     ?>
     <h2>Advanced Incidents Search</h2>
-    <form action="<?php echo $_SERVER['PHP_SELF'] ?>" method="post">
+    <form action="<?php echo $_SERVER['PHP_SELF'] ?>" method="get">
     <table class='vertical'>
     <tr><th>Title:</th><td><input maxlength='100' name="search_title" size='30' type='text' /></td></tr>
     <tr><th>Incident ID:</th><td><input maxlength='100' name='search_id' size='30' type="text" /></td></tr>
