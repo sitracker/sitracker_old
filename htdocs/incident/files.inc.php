@@ -223,7 +223,7 @@ if (file_exists($incident_attachment_fspath))
             {
                 $updatelink=readlink($dir);
                 $updateid=substr($updatelink,strrpos($updatelink,$delim)+1,strlen($updatelink));
-                echo "<p>These files arrived by <a href='{$incident_attachment_fspath}/mail.eml'>email</a>, jump to the appropriate <a href='incident.php?id=$incidentid&amp#$updateid'>entry in the log</a></p>";
+                echo "<p>These files arrived by <a href='{$incident_attachment_fspath}/{$dirname}/mail.eml'>email</a>, jump to the appropriate <a href='incident.php?id=$incidentid&amp#$updateid'>entry in the log</a></p>";
             }
             foreach($tempfarray as $fvalue)
             {
