@@ -9,7 +9,7 @@
 //
 
 // Authors: Ivan Lucas <ivanlucas[at]users.sourceforge.net>
-//          Paul Heaney
+//          Paul Heaney <paulheaney[at]users.sourceforge.net>
 
 // Notes:
 //  Lists incidents that have been logged to specified engineers over the past 12 months
@@ -75,7 +75,7 @@ elseif ($_REQUEST['mode']=='report')
             {
                 // $html .= "{$_POST['inc'][$i]} <br />";
                 $incsql .= "users.id={$_POST['inc'][$i]}";
-		$incsql_esc .= "userid={$_POST['inc'][$i]}";
+		$incsql_esc .= "incidents.owner={$_POST['inc'][$i]}";
                 if ($i < ($includecount-1)) $incsql .= " OR ";
 		if ($i < ($includecount-1)) $incsql_esc .= " OR ";
             }
@@ -98,14 +98,14 @@ elseif ($_REQUEST['mode']=='report')
     if (mysql_error()) trigger_error("MySQL Query Error ".mysql_error(), E_USER_ERROR);
     $numrows = mysql_num_rows($result);
 
-    $sql_esc = "SELECT distinct(incidentid) AS incid FROM updates WHERE bodytext LIKE \"%External ID%\"";
+    $sql_esc = "SELECT distinct(incidentid) AS incid FROM updates, incidents WHERE updates.incidentid = incidents.id AND incidents.opened > ($now-60*60*24*365.25)  AND updates.bodytext LIKE \"External ID:%\"";
 
-    if (empty($incsql_esc)==FALSE OR empty($excsql_esc)==FALSE) $sql_esc .= " AND ";
-    if (!empty($incsql_esc)) $sql_esc .= "$incsql_esc";
-    if (empty($incsql_esc)==FALSE AND empty($excsql_esc)==FALSE) $sql_esc .= " AND ";
-    if (!empty($excsql_esc)) $sql_esc .= "$excsql_esc";
+    if (empty($incsql_esc)==FALSE OR empty($excsql)==FALSE) $sql_esc .= " AND ";
+    if (!empty($incsql)) $sql_esc .= "$incsql_esc";
+    if (empty($incsql_sc)==FALSE AND empty($excsql)==FALSE) $sql_esc .= " AND ";
+    if (!empty($excsql)) $sql_esc .= "$excsql";
 
-    $sql_esc .= "GROUP BY incidentID";
+    $sql_esc .= " GROUP BY incidentID";
 
     $result_esc = mysql_query($sql_esc);
     if (mysql_error()) throw_error("!Error: MySQL Query Error in ($sql_esc)",mysql_error());
