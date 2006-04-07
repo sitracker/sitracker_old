@@ -189,7 +189,8 @@ $hmenu[50] = array (10=> array ( 'perm'=> 54, 'name'=> "New Article", 'url'=>"kb
 $hmenu[60] = array (10=> array ( 'perm'=> 37, 'name'=> "Marketing Mailshot", 'url'=>"reports/marketing.php"),
                     20=> array ( 'perm'=> 37, 'name'=> "Customer Export", 'url'=>"reports/cust_export.php"),
                     30=> array ( 'perm'=> 37, 'name'=> "Query by Example", 'url'=>"reports/qbe.php"),
-                    50=> array ( 'perm'=> 37, 'name'=> "Incidents Logged", 'url'=>"reports/yearly_customer_export.php"),
+                    50=> array ( 'perm'=> 37, 'name'=> "Incidents by Site", 'url'=>"reports/yearly_customer_export.php"),
+                    55=> array ( 'perm'=> 37, 'name'=> "Incidents by Engineer", 'url'=>"reports/yearly_engineer_export.php"),
                     60=> array ( 'perm'=> 37, 'name'=> "Site Products", 'url'=>"reports/site_products.php"),
                     70=> array ( 'perm'=> 37, 'name'=> "Site Contracts", 'url'=>"reports/supportbycontract.php"),
                     80=> array ( 'perm'=> 37, 'name'=> "Customer Feedback", 'url'=>"reports/feedback.php"),
@@ -4271,6 +4272,17 @@ function authenticate_contact($username, $password)
     }
 }
 
+function external_escalation($escalated, $incid)
+{
+
+   foreach($escalated as $i => $id){
+	if($id == $incid){
+	   return "yes";
+	}
+   }
+
+   return "no";
+}
 
 // -------------------------- // -------------------------- // --------------------------
 // leave this section at the bottom of functions.inc.php ================================
