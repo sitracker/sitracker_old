@@ -485,10 +485,24 @@ else
 
     // attach file
     $att_max_filesize = return_bytes($CONFIG['upload_max_filesize']);
+    $incident_attachment_fspath = $CONFIG['attachment_fspath'] . $id;
     if ($_FILES['attachment']['name'] != "")
     {
-        // Is this the right path?  INL 2Nov05
-        $filename = $CONFIG['attachment_fspath'].$_FILES['attachment']['name'];
+        // make incident attachment dir if it doesn't exist
+        $umask=umask(0000);
+        if (!file_exists($CONFIG['attachment_fspath'] . "$id"))
+        {
+            $mk=@mkdir($CONFIG['attachment_fspath'] ."$id", 0770);
+            if (!$mk) throw_error('Failed creating incident attachment directory: ',$incident_attachment_fspath .$id);
+        }
+        $mk=@mkdir($CONFIG['attachment_fspath'] .$id . "/$now", 0770);
+        if (!$mk) throw_error('Failed creating incident attachment (timestamp) directory: ',$incident_attachment_fspath .$id . "/$now");
+        umask($umask);
+        $newfilename = $incident_attachment_fspath.'/'.$now.'/'.$_FILES['attachment']['name'];
+
+        // Move the uploaded file from the temp directory into the incidents attachment dir
+        $mv=move_uploaded_file($_FILES['attachment']['tmp_name'], $newfilename);
+        if (!$mv) trigger_error('!Error: Problem moving attachment from temp directory to: '.$newfilename, E_USER_WARNING);
 
         //$mv=move_uploaded_file($attachment, "$filename");
         //if (!mv) throw_error('!Error: Problem moving attachment from temp directory:',$filename);
@@ -500,11 +514,11 @@ else
             // throwing an error isn't the nicest thing to do for the user but there seems to be no guaranteed
             // way of checking file sizes at the client end before the attachment is uploaded. - INL
         }
+        /*
         // after update, move the attachment to the incident file attachment directory / timestamp
         if ($filename!="" && file_exists($filename))
         {
             // make incident attachment dir if it doesn't exist
-
             $umask=umask(0000);
             if (!file_exists($CONFIG['attachment_fspath'] . "$id"))
             {
@@ -521,6 +535,7 @@ else
             $rn=rename($filename, $CONFIG['attachment_fspath'] . $id . "/$now/" . $filename_end_part);
             if (!rn) throw_error('Failed moving attachment: ',$CONFIG['attachment_fspath'] .$id . "/$now");
         }
+        */
     }
     if (!$result)
     {
