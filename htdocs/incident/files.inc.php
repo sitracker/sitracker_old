@@ -208,7 +208,7 @@ if (file_exists($incident_attachment_fspath))
         if ( is_number($dirname) && $dirname!=$id && strlen($dirname)==10) $dirprettyname=date('l jS M Y @ g:ia',$dirname);
         else $dirprettyname=$dirname;
         $headhtml = "<div class='detailhead'>\n";
-        $headhtml .= "<img src='{$CONFIG['application_webpath']}images/smallicons/folder.gif' alt='{$di}' title='{$dir}' border='0' height='16' width='16' valign='top' /> {$dirprettyname}";
+        $headhtml .= "<img src='{$CONFIG['application_webpath']}images/smallicons/folder.gif' alt='{$id}' title='{$dir}' border='0' height='16' width='16' valign='top' /> {$dirprettyname}";
         $headhtml .= "</div>\n";
         $tempfarray=list_dir($dir, 1);
         if (count($tempfarray)==1 AND (substr($tempfarray[0],-8)=='mail.eml'))
@@ -223,7 +223,7 @@ if (file_exists($incident_attachment_fspath))
             {
                 $updatelink=readlink($dir);
                 $updateid=substr($updatelink,strrpos($updatelink,$delim)+1,strlen($updatelink));
-                echo "<p>These files arrived by <a href='{$incident_attachment_webpath}/{$dirname}/mail.eml'>email</a>, jump to the appropriate <a href='incident.php?id=$incidentid&amp#$updateid'>entry in the log</a></p>";
+                echo "<p>These files arrived by <a href='{$incident_attachment_webpath}/{$incidentid}/{$dirname}/mail.eml'>email</a>, jump to the appropriate <a href='incident.php?id=$incidentid&amp#$updateid'>entry in the log</a></p>";
             }
             foreach($tempfarray as $fvalue)
             {
