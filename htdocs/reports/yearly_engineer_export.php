@@ -128,7 +128,7 @@ elseif ($_REQUEST['mode']=='report')
     {
         $nicedate=date('d/m/Y',$row->opened);
 	$ext = external_escalation($escalated_array, $row->incid);
-        $html .= "<tr class='shade2'><td>$nicedate</td><td><a href='/incident_details.php?id={$row->incid}'>{$row->incid}</a></td><td>{$row->title}</td><td>{$row->realname}</td><td>$ext</td></tr>";
+        $html .= "<tr class='shade2'><td>$nicedate</td><td><a href='../incident_details.php?id={$row->incid}'>{$row->incid}</a></td><td>{$row->title}</td><td>{$row->realname}</td><td>$ext</td></tr>";
         $csv .="'".$nicedate."', '{$row->incid}','{$row->title}','{$row->realname},'$ext'\n";
     }
     $html .= "</table>";
