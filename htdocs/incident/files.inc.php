@@ -112,6 +112,26 @@ echo "</div>";
 // try to figure out what delimeter is being used (for windows or unix)...
 $delim = (strstr($incident_attachment_fspath,"/")) ? "/" : "\\";
 
+// Convert a binary string into something viewable in a web browser
+function encode_binary($string)
+{
+   $chars = array();
+   $ent = null;
+   $chars = preg_split("//", $string, -1, PREG_SPLIT_NO_EMPTY);
+   for ($i = 0; $i < count($chars); $i++ )
+   {
+     if ( preg_match("/^(\w| )$/",$chars[$i]))
+         $ent[$i] = $chars[$i];
+     elseif( ord($chars[$i]) < 32) $ent[$i]=".";
+     else
+         $ent[$i] = "&#" . ord($chars[$i]) . ";";
+   }
+
+   if ( sizeof($ent) < 1)
+     return "";
+
+   return implode("",$ent);
+}
 
 function draw_file_row($file, $delim, $incidentid, $incident_attachment_fspath)
 {
@@ -154,7 +174,7 @@ function draw_file_row($file, $delim, $incidentid, $incident_attachment_fspath)
         $preview = fread($handle, 512); // only read this much, we can't preview the whole thing, not enough space
         fclose($handle);
         // Make the preview safe to display
-        $preview=nl2br(htmlspecialchars(strip_tags($preview)));
+        $preview=nl2br(encode_binary(strip_tags($preview)));
         $html .= " class='info'><span>{$preview}</span>$filename</a>";
     }
     else $html .= ">$filename</a>";
@@ -170,7 +190,7 @@ function draw_file_row($file, $delim, $incidentid, $incident_attachment_fspath)
 
 if (file_exists($incident_attachment_fspath))
 {
-
+    $dirarray=array();
     echo "<form name='filelistform' action='{$_SERVER['PHP_SELF']}' method='post' onsubmit=\"return confirm_action('Are you sure?'\">";
     // FIXME  echo "<input type='submit' name='test' value='List' />";
     echo "<input type='hidden' name='id' value='{$incidentid}' />";
@@ -187,7 +207,7 @@ if (file_exists($incident_attachment_fspath))
     if (count($rfilearray) >= 1)
     {
         $headhtml = "<div class='detailhead'>\n";
-        $headhtml .= "<img src='{$CONFIG['application_webpath']}images/smallicons/folder.gif' alt='Root dir' title='Root dir' border='0' height='16' width='16' valign='top' /> \\";
+        $headhtml .= "<img src='{$CONFIG['application_webpath']}images/smallicons/folder.gif' alt='Root dir' title='Root dir' border='0' height='16' width='16' /> \\";
         $headhtml .= "</div>\n";
         echo $headhtml;
         echo "<div class='detailentry'>\n";
