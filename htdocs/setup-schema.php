@@ -156,7 +156,7 @@ CREATE TABLE `feedbackquestions` (
 CREATE TABLE `feedbackreport` (
   `id` int(5) NOT NULL default '0',
   `formid` int(5) NOT NULL default '0',
-  `respondent` int(11) NOT NULL default '',
+  `respondent` int(11) NOT NULL default '0',
   `responseref` varchar(255) NOT NULL default '',
   `email` varchar(255) NOT NULL default '',
   `completed` enum('yes','no') NOT NULL default 'no',
