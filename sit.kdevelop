@@ -46,11 +46,11 @@
     </webInvocation>
     <shell>
       <phpexe>/usr/local/bin/php</phpexe>
-      <phpini/>
+      <phpini></phpini>
     </shell>
     <options>
-      <phpincludepath/>
-      <defaultFile/>
+      <phpincludepath></phpincludepath>
+      <defaultFile></defaultFile>
       <startupFileMode>1</startupFileMode>
     </options>
   </kdevphpsupport>
@@ -134,8 +134,8 @@
     </projectdoc>
   </kdevdocumentation>
   <ctagspart>
-    <customArguments/>
-    <customTagfilePath>/home/ivan/dev1/sit/tags</customTagfilePath>
+    <customArguments></customArguments>
+    <customTagfilePath>tags</customTagfilePath>
   </ctagspart>
   <kdevdebugger>
     <general>
