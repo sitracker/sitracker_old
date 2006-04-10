@@ -1,16 +1,13 @@
 To Do
 
-v3.23
-* Fix broken upload while updating incident
-
 v3.24
-* Improve Related Incidents to add Parents/Children
+* Improve Related Incidents to add Parents/Children?
 * Add product-end-of-lifetime date column to software table
 * Show email in tooltip after new incidents are logged, not reassign
 * Make send_template_email store emails in the incident log
 * When an incident is closed or reassigned, check for related
   pending-reassignments and remove if necessary
-* Allow more than one global signature and pick randomly
+* Allow more than one global signature and pick randomly?
 
 v3.2x
 * Incoming email handler
