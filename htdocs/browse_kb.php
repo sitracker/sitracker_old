@@ -117,7 +117,7 @@ if (!empty($search_string))
         $sql .= "title LIKE '%{$search_string}%' OR keywords LIKE '%{$search_string}%' ";
     }
 }
-if (strtolower($mode)=='recent') $sql .= "ORDER BY docid DESC, published DESC LIMIT 20";
+if (strtolower($mode)=='recent') $sql .= "ORDER BY docid DESC LIMIT 20";
 
 $result = mysql_query($sql);
 if (mysql_error()) trigger_error("MySQL Query Error ".mysql_error(), E_USER_ERROR);
