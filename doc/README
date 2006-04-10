@@ -13,6 +13,7 @@ of the GNU General Public License, incorporated herein by reference.
         * About Support Incident Tracker
         * Security Recommendations
         * Installing
+        * Upgrading
         * Configuring
         * Regular Scheduled Tasks
         * Creating Plugins
@@ -91,6 +92,11 @@ upgrade.
 When SiT! is configured we advise you to make the config.inc.php file
 read only, this will prevent setup.php being used maliciously to
 compromise your installation.
+
+
+Upgrading
+---------
+See the UPGRADE file for instructions
 
 
 Regular Scheduled Tasks

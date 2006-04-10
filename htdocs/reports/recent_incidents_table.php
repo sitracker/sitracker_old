@@ -16,12 +16,13 @@ require('functions.inc.php');
 
 // This page requires authentication
 require('auth.inc.php');
+include('htmlheader.inc.php');
 
 $sites=array();
 
 $monthago = time()-(60 * 60 * 24 * 30.5);
 
-echo "<h1>Incidents opened since ".date('d M Y', $monthago)."</h1>";
+echo "<h2>Incidents opened since ".date('d M Y', $monthago)."</h2>";
 
 $sql  = "SELECT *,sites.id AS siteid FROM sites, maintenance, supportcontacts, incidents ";
 $sql .= "WHERE sites.id = maintenance.site ";
@@ -48,7 +49,6 @@ while ($row = mysql_fetch_object($result))
     $prvincid=$row->id;
     // print_r($row);
 }
-echo "<hr />";
 
 
 $sites=array_unique($sites);
@@ -86,5 +86,5 @@ foreach($totals AS $site => $val)
 }
 */
 
-
+include('htmlfooter.inc.php');
 ?>

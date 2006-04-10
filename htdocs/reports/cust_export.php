@@ -147,7 +147,7 @@ elseif ($_REQUEST['mode']=='report')
 
     $html .= "<p align='center'>This report is a list of ($numrows) contact details for all sites that you selected</p>";
     $html .= "<table width='99%' align='center'>";
-    $html .= "<tr class='shade1'><th>Forenames</th><th>Surname</th><th>Email</th><th>Address Line 1</th>";
+    $html .= "<tr><th>Forenames</th><th>Surname</th><th>Email</th><th>Address Line 1</th>";
     $html .= "<th>Address Line 2</th><th>City</th><th>County</th><th>Postcode</th><th>Country</th><th>Telephone</th><th>Site</th><th>Products</th></tr>";
     $csvfieldheaders .= "Forenames,Surname,Email,Address Line 1,Address Line 2,City,County,Postcode,Country,Telephone,Site,Products\r\n";
     $rowcount=0;

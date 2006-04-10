@@ -1,4 +1,4 @@
-Changes in v3.23 - Unreleased
+Changes in v3.23 - Released 10 April 2006
 -----------------------------------------------------------------------
 * Improved Auto-reassign back to original owner after holiday
 * Improved contact support page
@@ -13,6 +13,7 @@ Changes in v3.23 - Unreleased
   this didn't make much sense,
   incidents should be re-logged instead
 * Fixed bug where slashes appeared in incident titles with apostrophe
+* Fixed bug with missing roleid column on new installations
 * SiT! now uses superglobals no longer requires register_globals to be on
 * Much improved input checking throughout
 * Many other minor bugfixes

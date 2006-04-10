@@ -67,7 +67,7 @@ elseif ($_REQUEST['mode']=='report')
 
     $html .= "<p align='center'>This report is a list of sites that you selected and the products they have (or have had) maintenance for.</p>";
     $html .= "<table width='99%' align='center'>";
-    $html .= "<tr class='shade1'><th>Site</th><th>Address1</th><th>Address2</th><th>City</th><th>County</th><th>Country</th><th>Postcode</th><th>Products</th></tr>";
+    $html .= "<tr><th>Site</th><th>Address1</th><th>Address2</th><th>City</th><th>County</th><th>Country</th><th>Postcode</th><th>Products</th></tr>";
     $csvfieldheaders .= "site,address1,address2,city,county,country,postcode,products\r\n";
     $rowcount=0;
     while ($row = mysql_fetch_object($result))
