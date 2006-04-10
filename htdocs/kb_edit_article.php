@@ -347,9 +347,9 @@ else
     $sql = "DELETE FROM kbsoftware WHERE docid='{$articleid}'";
     mysql_query($sql);
 
-    if (is_array($expertise))
+    if (is_array($_POST['expertise']))
     {
-        $expertise=array_unique($expertise);
+        $expertise=array_unique(($_POST['expertise']);
         foreach ($expertise AS $value)
         {
             $sql = "INSERT INTO kbsoftware (docid, softwareid) VALUES ('{$articleid}', '$value')";
