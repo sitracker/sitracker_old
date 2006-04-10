@@ -127,6 +127,11 @@ Actions:
                         OUT_OF_SLA and OUT_OF_REVIEW system email
                         templates where appropriate.
 
+An example crontab might look like this:
+6 * * * * /usr/bin/php -f /var/www/sit/htdocs/auto.php TimeCalc
+30 * * * * /usr/bin/php -f /var/www/sit/htdocs/auto.php CloseIncidents,PurgeJournal
+
+
 Creating Plugins
 ----------------
 Your plugin is a regular PHP script, place your plugin in the plugins

@@ -22,6 +22,8 @@ based permissions system, after upgrading you should check role
 permissions and then assign roles to your users, finally you should
 check each users' permissions to ensure they meet your needs.
 
+You should read the README file regarding setting up scheduled tasks
+
 
 Upgrading from 3.20 to 3.21
 ---------------------------
