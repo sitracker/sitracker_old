@@ -349,7 +349,7 @@ else
 
     if (is_array($_POST['expertise']))
     {
-        $expertise=array_unique(($_POST['expertise']);
+        $expertise=array_unique(($_POST['expertise']));
         foreach ($expertise AS $value)
         {
             $sql = "INSERT INTO kbsoftware (docid, softwareid) VALUES ('{$articleid}', '$value')";
