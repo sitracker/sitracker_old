@@ -22,11 +22,10 @@ require('auth.inc.php');
 $search_string = cleanvar($_REQUEST['search_string']);
 $mode = cleanvar($_REQUEST['mode']);
 
-if (empty($search_string)) $search_string='a';
-
 $title="Browse Knowledge Base";
 include('htmlheader.inc.php');
 if (empty($mode) && empty($search_string)) $mode='RECENT';
+if (empty($search_string) AND empty($mode)) $search_string='a';
 ?>
 <h2>Browse Knowledge Base</h2>
 <table summary="alphamenu" align="center">
@@ -173,6 +172,7 @@ else
     echo "<p align='center'>No matching articles</p>";
 }
 
+echo "<!---SQL === $sql --->";
 echo "<p align='center'><a href='kb_add_article.php'>Add a knowledge base article</a></p>";
 
 include('htmlfooter.inc.php');
