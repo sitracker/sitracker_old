@@ -238,6 +238,7 @@ else
     $status = cleanvar($_POST['status']);
     $additional = cleanvar($_POST['additional']);
     $references = cleanvar($_POST['references']);
+    $wait = cleanvar($_POST['wait']);
 
     // Close the incident
     $errors = 0;
