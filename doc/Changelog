@@ -1,3 +1,11 @@
+Changes in v3.24 - Unreleased
+-----------------------------------------------------------------------
+* Fixed service levels for reopened incidents, service level target
+  'opened' is now added making the next action 'initial response'
+* Fixed regression where 'mark for closure' was ignored and the incident
+  was closed immediately
+
+
 Changes in v3.23 - Released 10 April 2006
 -----------------------------------------------------------------------
 * Improved Auto-reassign back to original owner after holiday
