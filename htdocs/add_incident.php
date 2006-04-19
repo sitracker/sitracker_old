@@ -615,14 +615,26 @@ elseif ($action=='assign')
                 <th>Telephone</th>
                 <th>Status</th>
                 <th>Message</th>
-                <th align='center'>Action Needed</th>
+		<th colspan='5'>Incidents in Queue</th>
+                <!--<th align='center'>Action Needed</th>
 		<th align='center'>Other</th>
     		<th align='center'>Critical</th>
     		<th align='center'>High</th>
     		<th align='center'>Medium</th>
-    		<th align='center'>Low</th>
+    		<th align='center'>Low</th>-->
                 <th>Accepting?</th>
             </tr>
+	    <tr>
+		<th colspan='5'></th>
+		<th align='center'>Action Needed / Other</th>
+    		<?php
+    		echo "<th align='center'>".priority_icon(4)."</th>";
+    		echo "<th align='center'>".priority_icon(3)."</th>";
+    		echo "<th align='center'>".priority_icon(2)."</th>";
+    		echo "<th align='center'>".priority_icon(1)."</th>";
+    		?>
+		<th></th>
+	    </tr>
             <?php
             $shade='shade2';
             while ($userrow = mysql_fetch_array($result))
@@ -666,14 +678,13 @@ elseif ($action=='assign')
 
                 $countdiff=$countincidents-$countactive;
 
-               	if($countactive == 0) echo "None"; else echo $countactive."</td>";
-   		echo "<td align='center'>$countdiff</td>";
-   		echo "<td align='center'>".$incpriority['4']."</td>";
-   		echo "<td align='center'>".$incpriority['3']."</td>";
-   		echo "<td align='center'>".$incpriority['2']."</td>";
-   		echo "<td align='center'>".$incpriority['1']."</td>";
+    		echo "$countactive / {$countdiff}</td>";
+    		echo "<td align='center'>".$incpriority['4']."</td>";
+    		echo "<td align='center'>".$incpriority['3']."</td>";
+    		echo "<td align='center'>".$incpriority['2']."</td>";
+    		echo "<td align='center'>".$incpriority['1']."</td>";
 
-                echo "<td>";
+                echo "<td align='center'>";
                 echo $userrow['accepting']=='Yes' ? 'Yes' : "<span class='error'>No</span>";
                 echo "</td>";
                 echo "</tr>\n";
