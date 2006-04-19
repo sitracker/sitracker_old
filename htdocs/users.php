@@ -80,10 +80,10 @@ if (mysql_error()) trigger_error("MySQL Query Error ".mysql_error(), E_USER_ERRO
     <th></th>
     <th align='center'>Action Needed / Other</th>
     <?php
-    echo "<th align='center'><img src='{$CONFIG['application_webpath']}images/crit_priority.gif' width='16' height='16' alt='Critical Priority' title='Critical Priority' /></th>";
-    echo "<th align='center'><img src='{$CONFIG['application_webpath']}images/high_priority.gif' width='10' height='16' alt='High Priority' title='High Priority' /></th>";
-    echo "<th align='center'><img src='{$CONFIG['application_webpath']}images/med_priority.gif' width='10' height='16' alt='Medium Priority' title='Medium Priority' /></th>";
-    echo "<th align='center'><img src='{$CONFIG['application_webpath']}images/low_priority.gif' width='10' height='16' alt='Low Priority' title='Low Priority' /></th>";
+    echo "<th align='center'>".priority_icon(4)."</th>";
+    echo "<th align='center'>".priority_icon(3)."</th>";
+    echo "<th align='center'>".priority_icon(2)."</th>";
+    echo "<th align='center'>".priority_icon(1)."</th>";
     ?>
     <th colspan='7'></th>
 </tr>

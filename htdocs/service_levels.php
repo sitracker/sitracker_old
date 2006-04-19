@@ -33,18 +33,18 @@ if (mysql_num_rows($tresult) >= 1)
     echo "<table align='center'>";
     while ($tag = mysql_fetch_object($tresult))
     {
-        echo "<thead><tr><th colspan='7'>{$tag->tag}</th></tr></thead>";
+        echo "<thead><tr><th colspan='8'>{$tag->tag}</th></tr></thead>";
         $sql = "SELECT * FROM servicelevels WHERE tag='{$tag->tag}' ORDER BY priority";
         $result = mysql_query($sql);
         if (mysql_error()) trigger_error(mysql_error(),E_USER_WARNING);
 
-        echo "<tr><th>Priority</th><th>Initial Response</th>";
+        echo "<tr><th colspan='2'>Priority</th><th>Initial Response</th>";
         echo "<th>Problem Determination</th><th>Action Plan</th><th>Resolution</th>";
         echo "<th>Review</th><th></th></tr>";
         while ($sla = mysql_fetch_object($result))
         {
             echo "<tr>";
-            echo "<td>".priority_name($sla->priority)."</td>";
+            echo "<td align='right'>".priority_icon($sla->priority)."</td><td>".priority_name($sla->priority)."</td>";
             echo "<td>".format_workday_minutes($sla->initial_response_mins)."</td>";
             echo "<td>".format_workday_minutes($sla->prob_determ_mins)."</td>";
             echo "<td>".format_workday_minutes($sla->action_plan_mins)."</td>";

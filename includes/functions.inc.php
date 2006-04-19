@@ -1703,6 +1703,21 @@ function priority_name($id)
    return $value;
 }
 
+// Returns HTML for an icon to indicate priority
+function priority_icon($id)
+{
+    global $CONFIG;
+    switch ($id)
+    {
+        case 1: $html = "<img src='{$CONFIG['application_webpath']}images/low_priority.gif' width='10' height='16' alt='Low Priority' title='Low Priority' />"; break;
+        case 2: $html = "<img src='{$CONFIG['application_webpath']}images/med_priority.gif' width='10' height='16' alt='Medium Priority' title='Medium Priority' />"; break;
+        case 3: $html = "<img src='{$CONFIG['application_webpath']}images/high_priority.gif' width='10' height='16' alt='High Priority' title='High Priority' />"; break;
+        case 4: $html = "<img src='{$CONFIG['application_webpath']}images/crit_priority.gif' width='16' height='16' alt='Critical Priority' title='Critical Priority' />"; break;
+        default: $html = '?'; break;
+   }
+   return $html;
+}
+
 
 // Returns an array of fields from the most recent update record for a given incident id
 function incident_lastupdate($id)
