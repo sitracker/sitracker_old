@@ -64,11 +64,21 @@ if (empty($submit))
     if ($entitlement > 0)
     {
         $holidaystaken=user_count_holidays($userid, 1);
-        echo "<tr><th>Holiday Entitlement:</th><td>";
-        echo "$entitlement days, ";
-        echo "$holidaystaken taken, ";
-        echo $entitlement-$holidaystaken." Remaining";
-        echo "</td></tr>\n";
+        if ($userid!=$sit[2])
+        {
+            echo "<tr><th>Holiday Entitlement:</th><td>";
+            echo "<input type='text' name='holiday_entitlement' value='$entitlement' size='2' /> days, ";
+            echo "$holidaystaken taken";
+            echo "</td></tr>";
+        }
+        else
+        {
+            echo "<tr><th>Holiday Entitlement:</th><td>";
+            echo "$entitlement days, ";
+            echo "$holidaystaken taken, ";
+            echo $entitlement-$holidaystaken." Remaining";
+            echo "</td></tr>\n";
+        }
         echo "<tr><th>Other Leave:</th><td>";
         echo user_count_holidays($userid, 2)." days sick leave, ";
         echo user_count_holidays($userid, 3)." days working away, ";
@@ -171,6 +181,7 @@ else
     $style = cleanvar($_POST['style']);
     $accepting = cleanvar($_POST['accepting']);
     $roleid = cleanvar($_POST['roleid']);
+    $holiday_entitlement = cleanvar($_POST['holiday_entitlement']);
 
     // TODO target v3.24 Add some extra checking here so that users can't edit other peoples profiles
 
@@ -217,6 +228,7 @@ else
         $sql  = "UPDATE users SET realname='$realname', title='$jobtitle', email='$email', qualifications='$qualifications', ";
         $sql .= "phone='$phone', mobile='$mobile', aim='$aim', icq='$icq', msn='$msn', fax='$fax', var_incident_refresh='$incidentrefresh', ";
         if ($userid != 1 AND !empty($_REQUEST['roleid']) AND $edituserpermission==TRUE) $sql .= "roleid='{$roleid}', ";
+        if (!empty($holiday_entitlement) AND $edituserpermission==TRUE) $sql .= "holiday_entitlement='{$holiday_entitlement}', ";
         $sql .= "var_update_order='$updateorder', var_style='$style', signature='$signature', message='$message', status='$status', accepting='$accepting', ";
         $sql .= "var_collapse='$collapse' WHERE id='$userid' LIMIT 1";
         $result = mysql_query($sql);

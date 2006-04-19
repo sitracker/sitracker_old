@@ -26,6 +26,8 @@ $type = cleanvar($_REQUEST['type']);
 $selectedday = cleanvar($_REQUEST['selectedday']);
 $selectedmonth = cleanvar($_REQUEST['selectedmonth']);
 $selectedyear = cleanvar($_REQUEST['selectedyear']);
+$length = cleanvar($_REQUEST['length']);
+if (empty($length)) $length='day';
 
 include('htmlheader.inc.php');
 
@@ -343,16 +345,16 @@ if ($approved==0)
 {
     switch ($length)
     {
-    case 'am':
-        echo "You can make it <a href='add_holiday.php?type=$type&amp;user=$user&amp;year=$selectedyear&amp;month=$selectedmonth&amp;day=$selectedday&amp;length=pm'>the afternoon instead</a>, or book <a href='add_holiday.php?type=$type&amp;user=$user&amp;year=$selectedyear&amp;month=$selectedmonth&amp;day=$selectedday&amp;length=day'>full day</a>. ";
-    break;
+        case 'am':
+            echo "You can make it <a href='add_holiday.php?type=$type&amp;user=$user&amp;year=$selectedyear&amp;month=$selectedmonth&amp;day=$selectedday&amp;length=pm'>the afternoon instead</a>, or book <a href='add_holiday.php?type=$type&amp;user=$user&amp;year=$selectedyear&amp;month=$selectedmonth&amp;day=$selectedday&amp;length=day'>full day</a>. ";
+        break;
 
-    case 'pm':
-        echo "You can make it <a href='add_holiday.php?type=$type&amp;user=$user&amp;year=$selectedyear&amp;month=$selectedmonth&amp;day=$selectedday&amp;length=am'>the morning</a> instead, or book <a href='add_holiday.php?type=$type&amp;user=$user&amp;year=$selectedyear&amp;month=$selectedmonth&amp;day=$selectedday&amp;length=day'>full day</a>. ";
-    break;
+        case 'pm':
+            echo "You can make it <a href='add_holiday.php?type=$type&amp;user=$user&amp;year=$selectedyear&amp;month=$selectedmonth&amp;day=$selectedday&amp;length=am'>the morning</a> instead, or book <a href='add_holiday.php?type=$type&amp;user=$user&amp;year=$selectedyear&amp;month=$selectedmonth&amp;day=$selectedday&amp;length=day'>full day</a>. ";
+        break;
 
-    case 'day':
-        echo "You can make it <a href='add_holiday.php?type=$type&amp;user=$user&amp;year=$selectedyear&amp;month=$selectedmonth&amp;day=$selectedday&amp;length=am'>the morning</a>, or <a href='add_holiday.php?type=$type&amp;user=$user&amp;year=$selectedyear&amp;month=$selectedmonth&amp;day=$selectedday&amp;length=pm'>the afternoon</a> instead. ";
+        case 'day':
+            echo "You can make it <a href='add_holiday.php?type=$type&amp;user=$user&amp;year=$selectedyear&amp;month=$selectedmonth&amp;day=$selectedday&amp;length=am'>the morning</a>, or <a href='add_holiday.php?type=$type&amp;user=$user&amp;year=$selectedyear&amp;month=$selectedmonth&amp;day=$selectedday&amp;length=pm'>the afternoon</a> instead. ";
     }
     if ($length!='0') echo "Or you can <a href='add_holiday.php?type=$type&amp;user=$user&amp;year=$selectedyear&amp;month=$selectedmonth&amp;day=$selectedday&amp;length=0'>unbook</a> it.";
 }
