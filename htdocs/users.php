@@ -69,20 +69,23 @@ if (mysql_error()) trigger_error("MySQL Query Error ".mysql_error(), E_USER_ERRO
 <h2>User Listing</h2>
 <table align='center' style='width: 95%;'>
 <tr>
-    <th align='left'><a href="<?php echo $_SERVER['PHP_SELF'] ?>?sort=realname">Name</a> (Click name to send email)</th>
-    <th align='center'>Action Needed</th>
-    <th align='center'>Other</th>
-    <th align='center'>Critical</th>
-    <th align='center'>High</th>
-    <th align='center'>Medium</th>
-    <th align='center'>Low</th>
-    <?php if (strlen(user_aim($sit[2])) > 3) { echo "<th>AIM</th>"; } ?>
-    <?php if (strlen(user_icq($sit[2])) > 3) { echo "<th>ICQ</th>"; } ?>
-    <?php if (strlen(user_msn($sit[2])) > 3) { echo "<th>MSN</th>"; } ?>
+    <th align='left'><a href="<?php echo $_SERVER['PHP_SELF'] ?>?sort=realname">Name</a></th>
+    <th colspan='5'>Incidents in Queue</th>
     <th><a href="<?php echo $_SERVER['PHP_SELF'] ?>?sort=phone">Phone</a></th>
     <th>Mobile</th>
     <th><a href="<?php echo $_SERVER['PHP_SELF'] ?>?sort=status">Status</a></th>
     <th><a href="<?php echo $_SERVER['PHP_SELF'] ?>?sort=accepting">Accepting</a></th>
+</tr>
+<tr>
+    <th></th>
+    <th align='center'>Action Needed / Other</th>
+    <?php
+    echo "<th align='center'><img src='{$CONFIG['application_webpath']}images/crit_priority.gif' width='16' height='16' alt='Critical Priority' title='Critical Priority' /></th>";
+    echo "<th align='center'><img src='{$CONFIG['application_webpath']}images/high_priority.gif' width='10' height='16' alt='High Priority' title='High Priority' /></th>";
+    echo "<th align='center'><img src='{$CONFIG['application_webpath']}images/med_priority.gif' width='10' height='16' alt='Medium Priority' title='Medium Priority' /></th>";
+    echo "<th align='center'><img src='{$CONFIG['application_webpath']}images/low_priority.gif' width='10' height='16' alt='Low Priority' title='Low Priority' /></th>";
+    ?>
+    <th colspan='7'></th>
 </tr>
 <?php
 
@@ -95,44 +98,41 @@ while ($users = mysql_fetch_array($result))
     else $class = "shade2";
 
     // print HTML for rows
-    ?>
-    <tr class='<?php echo $class ?>'>
-    <td><a href="mailto:<?php  echo $users['email'] ?>" title="<?php $users['title']  ?>"><?php  echo $users['realname'] ?></a></td>
-    <td align='center'><a href="incidents.php?user=<?php echo $users["id"] ?>&amp;queue=1&amp;type=support">
-    <?php
-    $incpriority = user_incidents($users['id']);     
+    echo "<tr class='$class'>";
+    echo "<td>";
+    echo "<a href='mailto:{$users['email']}' title='Email {$users['realname']}'><img src='{$CONFIG['application_webpath']}images/icons/16x16/actions/mail_generic.png' width='16' height='16' alt='Email icon' style='border:none;' /></a> ";
+    echo "<a href='incidents.php?user={$users['id']}&amp;queue=1&amp;type=support' class='info'>{$users['realname']}";
+    echo "<span>";
+    echo "<strong>{$users['title']}</strong><br />";
+    if (strlen($users['aim']) > 3) echo "<img src='{$CONFIG['application_webpath']}images/icons/16x16/apps/ksmiletris.png' width='16' height='16' alt='{$users['aim']}' /> <strong>AIM</strong>: {$users['aim']}<br />";
+    if (strlen($users['icq']) > 3) echo "<img src='{$CONFIG['application_webpath']}images/icons/16x16/apps/licq.png' width='16' height='16' alt='{$users['icq']}' /> <strong>ICQ</strong>: {$users['icq']}<br />";
+    if (strlen($users['msn']) > 3) echo "<img src='{$CONFIG['application_webpath']}images/icons/16x16/apps/personal.png' width='16' height='16' alt='{$users['msn']}' /> <strong>MSN</strong>: {$users['msn']}<br />";
+    if (!empty($users['message'])) echo "<br /><strong>Message</strong>: {$users['message']}";
+    echo "</span>";
+    echo "</a>";
+    if (!empty($users['message'])) echo " <sup>*</sup>";
+    echo "</td>";
+    echo "<td align='center'><a href='incidents.php?user={$users['id']}&amp;queue=1&amp;type=support'>";
+    $incpriority = user_incidents($users['id']);
     $countincidents = ($incpriority['1']+$incpriority['2']+$incpriority['3']+$incpriority['4']);
     if ($countincidents >= 1) $countactive=user_activeincidents($users['id']);
     else $countactive=0;
 
     $countdiff=$countincidents-$countactive;
 
-   if($countactive == 0) echo "None"; else echo $countactive."</td>";
-   echo "<td align='center'>$countdiff</td>";
-   echo "<td align='center'>".$incpriority['4']."</td>";
-   echo "<td align='center'>".$incpriority['3']."</td>";
-   echo "<td align='center'>".$incpriority['2']."</td>";
-   echo "<td align='center'>".$incpriority['1']."</td>";
-
-   
-    
-    if (strlen(user_aim($sit[2])) > 3) { ?> <td align='center'><?php if ($users['aim'] !='') echo "<a href=\"javascript:alert('{$users['aim']}');\" title=\"".$users['aim']."\"><img src=\"images/icons/16x16/apps/ksmiletris.png\" border=\"0\" width=\"16\" height=\"16\" alt=\"".$users['aim']."\" /></a>"; else echo '&nbsp;';  ?></td> <?php } ?>
-    <?php if (strlen(user_icq($sit[2])) > 3) { ?> <td align='center'><?php if ($users['icq'] !='') echo "<a href=\"javascript:alert('{$users['icq']}');\" title=\"{$users['icq']}\"><img src=\"images/icons/16x16/apps/licq.png\" border=\"0\" width=\"16\" height=\"16\" alt=\"".$users['icq']."\" /></a>"; else echo '&nbsp;'; ?></td> <?php } ?>
-    <?php if (strlen(user_msn($sit[2])) > 3) { ?> <td align='center'><?php if ($users['msn'] !='') echo "<a href=\"javascript:alert('{$users['msn']}');\"><img src=\"images/icons/16x16/apps/personal.png\" width=\"16\" height=\"16\" border=\"0\" title=\"{$users['msn']}\" alt=\"".$users['msn']."\" /></a>"; else echo '&nbsp;'; ?></td> <?php } ?>
-
+    echo $countactive;
+    echo "</a> / {$countdiff}</td>";
+    echo "<td align='center'>".$incpriority['4']."</td>";
+    echo "<td align='center'>".$incpriority['3']."</td>";
+    echo "<td align='center'>".$incpriority['2']."</td>";
+    echo "<td align='center'>".$incpriority['1']."</td>";
+    ?>
     <td align='center'><?php if ($users["phone"] == "") { ?>None<?php } else { echo $users["phone"]; } ?></td>
     <td align='center'><?php if ($users["phone"] == "") { ?>None<?php } else { if ($users['mobile']!='') echo $users["mobile"]; else echo '&nbsp;'; } ?></td>
     <td align='center'><?php echo userstatus_name($users["status"]) ?></td>
     <td align='center'><?php echo $users["accepting"]=='Yes' ? 'Yes' : "<span class='error'>No</span>"; ?></td>
     </tr>
     <?php
-    if ($users['message'] != '')
-    {
-        ?>
-        <tr class='<?php echo $class ?>'><td align='right'><strong>Message</strong>:</td><td colspan='10'><?php echo strip_tags($users['message']); ?></td></tr>
-        <?php
-    }
-
     // invert shade
     if ($shade == 1) $shade = 0;
     else $shade = 1;
