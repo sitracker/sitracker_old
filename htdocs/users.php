@@ -70,7 +70,12 @@ if (mysql_error()) trigger_error("MySQL Query Error ".mysql_error(), E_USER_ERRO
 <table align='center' style='width: 95%;'>
 <tr>
     <th align='left'><a href="<?php echo $_SERVER['PHP_SELF'] ?>?sort=realname">Name</a> (Click name to send email)</th>
-    <th align='center'>View Incidents</th>
+    <th align='center'>Action Needed</th>
+    <th align='center'>Other</th>
+    <th align='center'>Critical</th>
+    <th align='center'>High</th>
+    <th align='center'>Medium</th>
+    <th align='center'>Low</th>
     <?php if (strlen(user_aim($sit[2])) > 3) { echo "<th>AIM</th>"; } ?>
     <?php if (strlen(user_icq($sit[2])) > 3) { echo "<th>ICQ</th>"; } ?>
     <?php if (strlen(user_msn($sit[2])) > 3) { echo "<th>MSN</th>"; } ?>
@@ -95,18 +100,22 @@ while ($users = mysql_fetch_array($result))
     <td><a href="mailto:<?php  echo $users['email'] ?>" title="<?php $users['title']  ?>"><?php  echo $users['realname'] ?></a></td>
     <td align='center'><a href="incidents.php?user=<?php echo $users["id"] ?>&amp;queue=1&amp;type=support">
     <?php
-    $countincidents = user_countincidents($users['id']);
+    $incpriority = user_incidents($users['id']);     
+    $countincidents = ($incpriority['1']+$incpriority['2']+$incpriority['3']+$incpriority['4']);
     if ($countincidents >= 1) $countactive=user_activeincidents($users['id']);
     else $countactive=0;
 
     $countdiff=$countincidents-$countactive;
 
-    if ($countincidents==0) echo "None</a>";
-    elseif ($countactive==$countincidents) echo "{$countincidents} Action Needed</a>";
-    elseif ($countactive >= 1) echo "{$countactive} Action Needed + {$countdiff} Other</a>";
-    elseif ($countactive < 1) echo "{$countincidents} Incidents</a>";
-    else echo "{$countactive} Action Needed + {$countdiff} Other</a>";
-    echo "</td>";
+   if($countactive == 0) echo "None"; else echo $countactive."</td>";
+   echo "<td align='center'>$countdiff</td>";
+   echo "<td align='center'>".$incpriority['4']."</td>";
+   echo "<td align='center'>".$incpriority['3']."</td>";
+   echo "<td align='center'>".$incpriority['2']."</td>";
+   echo "<td align='center'>".$incpriority['1']."</td>";
+
+   
+    
     if (strlen(user_aim($sit[2])) > 3) { ?> <td align='center'><?php if ($users['aim'] !='') echo "<a href=\"javascript:alert('{$users['aim']}');\" title=\"".$users['aim']."\"><img src=\"images/icons/16x16/apps/ksmiletris.png\" border=\"0\" width=\"16\" height=\"16\" alt=\"".$users['aim']."\" /></a>"; else echo '&nbsp;';  ?></td> <?php } ?>
     <?php if (strlen(user_icq($sit[2])) > 3) { ?> <td align='center'><?php if ($users['icq'] !='') echo "<a href=\"javascript:alert('{$users['icq']}');\" title=\"{$users['icq']}\"><img src=\"images/icons/16x16/apps/licq.png\" border=\"0\" width=\"16\" height=\"16\" alt=\"".$users['icq']."\" /></a>"; else echo '&nbsp;'; ?></td> <?php } ?>
     <?php if (strlen(user_msn($sit[2])) > 3) { ?> <td align='center'><?php if ($users['msn'] !='') echo "<a href=\"javascript:alert('{$users['msn']}');\"><img src=\"images/icons/16x16/apps/personal.png\" width=\"16\" height=\"16\" border=\"0\" title=\"{$users['msn']}\" alt=\"".$users['msn']."\" /></a>"; else echo '&nbsp;'; ?></td> <?php } ?>

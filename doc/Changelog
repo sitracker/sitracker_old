@@ -4,6 +4,8 @@ Changes in v3.24 - Unreleased
   'opened' is now added making the next action 'initial response'
 * Fixed regression where 'mark for closure' was ignored and the incident
   was closed immediately
+* Lists number of incidents of each priority a user has on the user listings
+  page.
 
 
 Changes in v3.23 - Released 10 April 2006

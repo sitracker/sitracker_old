@@ -615,7 +615,12 @@ elseif ($action=='assign')
                 <th>Telephone</th>
                 <th>Status</th>
                 <th>Message</th>
-                <th>Outstanding Incidents</th>
+                <th align='center'>Action Needed</th>
+		<th align='center'>Other</th>
+    		<th align='center'>Critical</th>
+    		<th align='center'>High</th>
+    		<th align='center'>Medium</th>
+    		<th align='center'>Low</th>
                 <th>Accepting?</th>
             </tr>
             <?php
@@ -652,18 +657,22 @@ elseif ($action=='assign')
                 echo "<td>".userstatus_name($userrow['status'])."</td>";
                 echo "<td>".$userrow['message']."</td>";
                 echo "<td align='center'>";
-                $countincidents = user_countincidents($userrow['id']);
+
+    		$incpriority = user_incidents($userrow['id']); 
+    		$countincidents = ($incpriority['1']+$incpriority['2']+$incpriority['3']+$incpriority['4']);
+
                 if ($countincidents >= 1) $countactive=user_activeincidents($userrow['id']);
                 else $countactive=0;
 
                 $countdiff=$countincidents-$countactive;
 
-                if ($countincidents==0) echo "None";
-                elseif ($countactive==$countincidents) echo "{$countincidents} Action Needed";
-                elseif ($countactive >= 1) echo "{$countactive} Action Needed + {$countdiff} Other";
-                elseif ($countactive < 1) echo "{$countincidents} Incidents";
-                else echo "{$countactive} Action Needed + {$countdiff} Other";
-                echo "</td>";
+               	if($countactive == 0) echo "None"; else echo $countactive."</td>";
+   		echo "<td align='center'>$countdiff</td>";
+   		echo "<td align='center'>".$incpriority['4']."</td>";
+   		echo "<td align='center'>".$incpriority['3']."</td>";
+   		echo "<td align='center'>".$incpriority['2']."</td>";
+   		echo "<td align='center'>".$incpriority['1']."</td>";
+
                 echo "<td>";
                 echo $userrow['accepting']=='Yes' ? 'Yes' : "<span class='error'>No</span>";
                 echo "</td>";

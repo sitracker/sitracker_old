@@ -448,7 +448,23 @@ function user_countincidents($id)
     return(mysql_num_rows($result));
 }
 
+// counts number of incidents and priorty
+function user_incidents($id){
+    $sql = "SELECT priority, count(priority) AS num FROM incidents where (owner = $id OR towner = $id) AND status != 2";
+    $sql .= " GROUP BY priority";
 
+    $result = mysql_query($sql);
+    if(mysql_error()) trigger_error(mysql_error(),E_USER_WARNING);
+
+    $arr = array('1' => '0', '2' => '0', '3' => '0', '4' => '0');
+
+    if(mysql_num_rows($result) > 0){
+	while ($count = mysql_fetch_array($result)){
+		$arr[$count['priority']] = $count['num'];
+	}
+    }
+    return $arr;
+}
 
 /* Returns an integer representing the number  */
 /* of incidents the given user has that are awaiting action   */
