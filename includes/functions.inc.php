@@ -4079,17 +4079,20 @@ function incident_backup_switchover($userid, $accepting)
                 // Incident has actually been reassigned, so have a look if we can grab it back.
                 $lsql = "SELECT id,status FROM incidents WHERE id='{$assign->incidentid}' AND owner='{$assign->originalowner}' AND towner!=''";
                 $lresult = mysql_query($lsql);
+                if (mysql_error()) trigger_error(mysql_error(),E_USER_WARNING);
                 while ($incident = mysql_fetch_object($lresult))
                 {
                     // Find our tempassign
                     $usql = "SELECT id,currentowner FROM updates WHERE incidentid='{$incident->id}' AND userid='0' AND type='tempassigning' ORDER BY id DESC LIMIT 1";
                     $uresult = mysql_query($usql);
+                    if (mysql_error()) trigger_error(mysql_error(),E_USER_WARNING);
                     list($prevassignid,$tempowner) = mysql_fetch_row($uresult);
 
                     // Look to see if the temporary owner has updated the incident since we temp assigned it
                     // If he has, we leave it in his queue
                     $usql = "SELECT id FROM updates WHERE incidentid='{$incident->id}' AND id > {$prevassignid} AND userid='$tempowner' LIMIT 1 ";
                     $uresult = mysql_query($usql);
+                    if (mysql_error()) trigger_error(mysql_error(),E_USER_WARNING);
                     if (mysql_num_rows($uresult) < 1)
                     {
                         // Incident appears not to have been updated by the temporary owner so automatically reassign back to orignal owner
