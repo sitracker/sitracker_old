@@ -64,6 +64,7 @@ if (empty($bodytext))
         {
             echo "<tr><th>Users with relevent skills:</th>";
             $usql = "SELECT *,users.id AS userid FROM usersoftware, users WHERE usersoftware.userid=users.id AND usersoftware.softwareid={$incident->softwareid} ";
+	    $usql .= "AND users.status != 0 "; //the account isn't disabled
             $usql .= "ORDER BY realname";
             $uresult = mysql_query($usql);
             if (mysql_error()) trigger_error("MySQL Query Error ".mysql_error(), E_USER_ERROR);
