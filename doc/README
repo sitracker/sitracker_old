@@ -57,8 +57,6 @@ Installing
         PHP >= 4.1
         MySQL >= 3.2
 
-        SiT! currently requires the php.ini setting register_globals to be ON.
-
     Instructions:
 
         - Copy the files to a directory on your web server
