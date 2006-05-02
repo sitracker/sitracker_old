@@ -44,7 +44,6 @@ if ($_SESSION['auth'] != TRUE)
     <?php
     echo "</form>";
     echo "</div>";
-    if ($CONFIG['demo']) echo "<p class='info'>Demo mode</p>";
     include('htmlfooter.inc.php');
 }
 else
