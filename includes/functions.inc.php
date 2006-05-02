@@ -2787,7 +2787,8 @@ function send_template_email($template, $incidentid, $info1='', $info2='')
     ## bugbug: tidy up these stripslashes.  INL 5Sep01
 
     // send email
-    $rtnvalue = mail($email_to, stripslashes($email_subject), stripslashes($email_body), $extra_headers);
+    if ($CONFIG['demo']) $rtnvalue = TRUE;
+    else $rtnvalue = mail($email_to, stripslashes($email_subject), stripslashes($email_body), $extra_headers);
     return $rtnvalue;
 }
 
