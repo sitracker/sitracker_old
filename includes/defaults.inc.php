@@ -124,6 +124,9 @@ $CONFIG['tipsfile']= '../doc/tips.txt';
 // The session name for use in cookies and URL's, Must contain alphanumeric characters only
 $CONFIG['session_name'] = 'SiTsessionID';
 
+// Run in demo mode, some features are disabled or replaced with mock-ups
+$CONFIG['demo'] = FALSE;
+
 // Output extra debug information, some as HTML comments and some in the page footer
 $CONFIG['debug'] = FALSE;
 

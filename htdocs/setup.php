@@ -87,7 +87,8 @@ $CFGVAR['spam_email_subject']['title']='String to look for in email message subj
 $CFGVAR['spam_forward']['title']='Email address to forward spam messages that are to be marked as spam';
 $CFGVAR['feedback_max_score']['title']='The max score to use in rating fields for feedback forms';
 $CFGVAR['tipsfile']['title']='Path to a file containing tips to be shown on the main page, one per line';
-$CFGVAR['session_name']['tit;e']='The session name for use in cookies and URLs, Must contain alphanumeric characters only';
+$CFGVAR['session_name']['title']='The session name for use in cookies and URLs, Must contain alphanumeric characters only';
+$CFGVAR['demo']['title']='Run in demo mode, some features are disabled or replaced with mock-ups';
 $CFGVAR['debug']['title'] = 'Set to TRUE to output extra debug information, some as HTML comments and some in the page footer, FALSE to disable';
 $CFGVAR['journal_loglevel']['title'] = 'Journal Logging Level';
 $CFGVAR['journal_loglevel']['help'] = '0 = none, 1 = minimal, 2 = normal, 3 = full, 4 = maximum/debug';
