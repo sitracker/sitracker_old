@@ -143,7 +143,7 @@ elseif ($action=='findcontact')
                 echo "<td>Run out ({$contactrow['incidents_used']}/{$contactrow['incident_quantity']} Used)</td>";
             else
             {
-                echo "<td><a href=\"{$_SERVER['PHP_SELF']}?action=incidentform&amp;type=support&amp;contactid=".$contactrow['contactid']."&amp;maintid=".$contactrow['maintenanceid']."&amp;producttext=".urlencode($contactrow['productname'])."&amp;productid=".$contactrow['productid']."&amp;updateid=$updateid\" onclick=\"return confirm_support();\">Add Incident</a> ";
+                echo "<td><a href=\"{$_SERVER['PHP_SELF']}?action=incidentform&amp;type=support&amp;contactid=".$contactrow['contactid']."&amp;maintid=".$contactrow['maintenanceid']."&amp;producttext=".urlencode($contactrow['productname'])."&amp;productid=".$contactrow['productid']."&amp;updateid=$updateid&amp;siteid=".$contactrow['siteid']."\" onclick=\"return confirm_support();\">Add Incident</a> ";
                 if ($contactrow['incident_quantity']==0) echo "(Unlimited)";
                 else echo "({$incidents_remaining} Left)";
             }
@@ -311,6 +311,8 @@ elseif ($action=='incidentform')
         echo "<tr><th>Contract:</th><td>{$maintid} - ".urldecode($producttext)."</td></tr>";
         echo "<tr><th>Software:</th><td>".softwareproduct_drop_down('software', 1, $productid)."</td></tr>";
     }
+
+    plugin_do('new_incident');
     ?>
     <tr><th>Software Version:</th><td><input maxlength='50' name='productversion' size='40' type='text' /></td></tr>
     <tr><th>Service Packs Applied:</th><td><input maxlength='100' name="productservicepacks" size=40 type="text" /></td></tr>
@@ -505,6 +507,8 @@ elseif ($action=='assign')
             if (mysql_error()) trigger_error("MySQL Query Error ".mysql_error(), E_USER_ERROR);
 
             $incidentid = mysql_insert_id();
+	    $_SESSION['incidentid'] = $incidentid;
+
             // We use <b> tags in updatetext, not <strong>
             $updatetext = "Opened as Priority: <b>" . priority_name($priority) . "</b>\n\n" . $bodytext;
             if ($probdesc != "") $updatetext .= "<b>Problem Description</b>\n" . $probdesc . "\n\n";
