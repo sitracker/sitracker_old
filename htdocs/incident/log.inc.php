@@ -107,7 +107,7 @@ while ($update = mysql_fetch_object($result))
     //$updatebody = preg_replace("/href=\"www/i", "href=\"http://www", preg_replace ($search, $replace, $updatebody));
 
     //"!(http:/{2}[\w\.]{2,}[/\w\-\.\?\&\=\#]*)!e"
-    $updatebody = preg_replace("!(http:/{2}[\w\.]{2,}[/\w\-\.\?\&\=\#\$|;|\[|\]]*)!e", "'<a href=\"\\1\" title=\"\\1\">'.(strlen('\\1')>=70 ? substr('\\1',0,70).'...':'\\1').'</a>'", $updatebody);
+    $updatebody = preg_replace("!(http:/{2}[\w\.]{2,}[/\w\-\.\?\&\=\#\$\%|;|\[|\]]*)!e", "'<a href=\"\\1\" title=\"\\1\">'.(strlen('\\1')>=70 ? substr('\\1',0,70).'...':'\\1').'</a>'", $updatebody);
 
     // Make KB article references into a hyperlink
     $updatebody = preg_replace("/\b{$CONFIG['kb_id_prefix']}([0-9]{3,4})\b/", "<a href=\"kb_view_article.php?id=$1\" title=\"View KB Article $1\">$0</a>", $updatebody);
