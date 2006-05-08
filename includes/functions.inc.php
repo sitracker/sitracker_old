@@ -956,7 +956,7 @@ function incident_sla_history($incidentid)
     if (mysql_error()) trigger_error("MySQL Query Error ".mysql_error(), E_USER_ERROR);
     $level = mysql_fetch_object($result);
 
-    // Loop through the updates looking for service level events
+    // Loop through the updates in ascending order looking for service level events
     $sql = "SELECT * FROM updates WHERE type='slamet' AND incidentid='{$incidentid}' ORDER BY id ASC, timestamp ASC";
     $result = mysql_query($sql);
     if (mysql_error()) trigger_error("MySQL Query Error ".mysql_error(), E_USER_ERROR);

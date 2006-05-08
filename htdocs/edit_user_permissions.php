@@ -18,6 +18,12 @@ require('functions.inc.php');
 // This page requires authentication
 require('auth.inc.php');
 
+//if ($CONFIG['demo'])
+//{
+    //confirmation_page("3", "manage_users.php", "<h2>You cannot reset passwords while in DEMO MODE</h2><p align='center'>Please wait while you are redirected...</p>");
+//}
+
+
 include('htmlheader.inc.php');
 ?>
 <script type="text/javascript">
