@@ -185,7 +185,7 @@ incident_created_site       Perform an action after an incident is
                              created and logged against a site
 incident_closed             Perform an action after an incident is
                              closed
-new_incident		    Perform an action when logging an incident
+new_incident_form           Add to the new incident form
 
 If your plugin needs to use additional pages, put those pages in a
 subdirectory inside htdocs/ext

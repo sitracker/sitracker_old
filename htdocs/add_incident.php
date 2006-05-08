@@ -312,7 +312,8 @@ elseif ($action=='incidentform')
         echo "<tr><th>Software:</th><td>".softwareproduct_drop_down('software', 1, $productid)."</td></tr>";
     }
 
-    plugin_do('new_incident');
+    plugin_do('new_incident');      // DEPRECATED 8May06
+    plugin_do('new_incident_form');
     ?>
     <tr><th>Software Version:</th><td><input maxlength='50' name='productversion' size='40' type='text' /></td></tr>
     <tr><th>Service Packs Applied:</th><td><input maxlength='100' name="productservicepacks" size=40 type="text" /></td></tr>
@@ -674,7 +675,7 @@ elseif ($action=='assign')
                 echo "<td>".$userrow['message']."</td>";
                 echo "<td align='center'>";
 
-    		$incpriority = user_incidents($userrow['id']); 
+    		$incpriority = user_incidents($userrow['id']);
     		$countincidents = ($incpriority['1']+$incpriority['2']+$incpriority['3']+$incpriority['4']);
 
                 if ($countincidents >= 1) $countactive=user_activeincidents($userrow['id']);
