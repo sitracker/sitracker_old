@@ -312,7 +312,6 @@ elseif ($action=='incidentform')
         echo "<tr><th>Software:</th><td>".softwareproduct_drop_down('software', 1, $productid)."</td></tr>";
     }
 
-    plugin_do('new_incident');      // DEPRECATED 8May06
     plugin_do('new_incident_form');
     ?>
     <tr><th>Software Version:</th><td><input maxlength='50' name='productversion' size='40' type='text' /></td></tr>
