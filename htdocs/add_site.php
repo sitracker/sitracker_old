@@ -103,6 +103,10 @@ elseif ($action == "add")
         else
         {
             $id=mysql_insert_id();
+
+            $_SESSION['siteid'] = $siteid;
+            plugin_do('site_created');
+            unset($_SESSION['siteid']);
             journal(CFG_LOGGING_NORMAL, 'Site Added', "Site $id was added", CFG_JOURNAL_SITES, $id);
             confirmation_page("2", "site_details.php?id=$id", "<h2>Site Addition Successful</h2><p align='center'>Please wait while you are redirected...</p>");
         }
