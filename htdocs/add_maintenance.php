@@ -49,7 +49,7 @@ if ($action == "showform" OR $action=='')
     $incident_pools = explode(',', "Unlimited,{$CONFIG['incident_pools']}");
     echo "<td>".array_drop_down($incident_pools,'incident_poolid',$maint['incident_quantity'])."</td></tr>";
     ?>
-    <tr><th>Admin Contact: <sup class='red'>*</sup></th><td><?php echo contact_drop_down("admincontact", 0) ?></td></tr>
+    <tr><th>Admin Contact: <sup class='red'>*</sup></th><td><?php echo contact_drop_down("admincontact", 0, true) ?></td></tr>
     <tr><th>Notes:</th><td><textarea cols="40" name="notes" rows="5"></textarea></td></tr>
     <tr><th>Product Only:</th><td><input name="productonly" type="checkbox" value="yes" /></td></tr>
     </table>
