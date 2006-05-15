@@ -6,6 +6,7 @@ Changes in v3.24 - Unreleased
   was closed immediately
 * Lists number of incidents of each priority a user has on the user listings
   page.
+* Show more accurately who last updated the call on list incidents pages
 
 
 Changes in v3.23 - Released 10 April 2006
