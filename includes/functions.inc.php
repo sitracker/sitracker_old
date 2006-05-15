@@ -313,11 +313,30 @@ function user_password($id)
 
 function user_realname($id)
 {
+    global $update_body;
+    global $incidents;
     global $CONFIG;
     if ($id >= 1)
     {
         if ($id == $_SESSION['userid']) return $_SESSION['realname'];
         else return db_read_column('realname', 'users', $id);
+    }elseif(!empty($incidents['email'])){
+	//an an incident
+        preg_match('/From:[ A-Za-z@\.]*/', $update_body, $from);
+	if(!empty($from)){
+		$frommail = substr(strstr($from[0], '@'), 1);
+		$customerdomain = substr(strstr($incidents['email'], '@'), 1);
+		if($frommail == $customerdomain){
+			return "Customer";
+		}elseif(strstr(strtolower($frommail), 'novell')){
+			return 'Novell';
+		}elseif(strstr(strtolower($frommail), 'microsoft')){
+			return 'Microsoft';
+		}else{
+			return($CONFIG['application_shortname']); // No from email address
+		}
+		
+	}else return($CONFIG['application_shortname']); // No from email address
     }
     else return($CONFIG['application_shortname']); // Default user / No user
 }

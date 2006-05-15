@@ -51,7 +51,7 @@ switch($type)
         // If you alter this SQL also update the function user_activeincidents($id)
         if ($user=='current') $user=$sit[2];
 
-        $sql = "SELECT incidents.id, externalid, title, owner, towner, priority, status, siteid, forenames, surname, incidents.maintenanceid, ";
+        $sql = "SELECT incidents.id, externalid, title, owner, towner, priority, status, siteid, forenames, surname, email, incidents.maintenanceid, ";
         $sql .= "servicelevel, softwareid, lastupdated, timeofnextaction, ";
         $sql .= "(timeofnextaction - $now) AS timetonextaction, opened, ($now - opened) AS duration, closed, (closed - opened) AS duration_closed, type, ";
         $sql .= "($now - lastupdated) AS timesincelastupdate ";
