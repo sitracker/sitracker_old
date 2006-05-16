@@ -126,16 +126,16 @@ else
             }
             </script>
             <h2>Search yielded <?php echo mysql_num_rows($result) ?> result(s)</h2>
-            <table align='center' border=1 bordercolor=#FFFFFF cellpadding=1 cellspacing=0 width=975>
+            <table align='center'>
             <tr>
-            <td align='center' class='shade1' width=50><b>ID</b></td>
-            <td align='center' class='shade1' width='100'><b>Site</b></td>
-            <td align='center' class='shade1' width='100'><b>Product</b></td>
-            <td align='center' class='shade1' width='100'><b>Reseller</b></td>
-            <td align='center' class='shade1' width=75><b>Licence</b></td>
-            <td align='center' class='shade1' width='100'><b>Exipry Date</b></td>
-            <td align='center' class='shade1' width='100'><b>Admin Contact</b></td>
-            <td align='center' class='shade1' width='150'><b>Notes</b></td>
+            <th>ID</th>
+            <th>Site</th>
+            <th>Product</th>
+            <th>Reseller</th>
+            <th>Licence</th>
+            <th>Exipry Date</th>
+            <th>Admin Contact</th>
+            <th>Notes</th>
             </tr>
             <?php
             $shade = 0;
@@ -144,15 +144,15 @@ else
                 // define class for table row shading
                 if ($shade) $class = "shade1";
                 else $class = "shade2";
+                echo "<tr class='$class'>";
                 ?>
-                <tr>
-                <td align='center' class='<?php echo $class; ?>' width=50><a href="maintenance_details.php?id=<?php echo $results['maintid'] ?>" onMouseOver="window.status='Display This Maintenance Contract'; return true;" onMouseOut="window.status=''; return true;"><?php echo $results["maintid"] ?></a></td>
-                <td align='center' class='<?php echo $class; ?>' width='100'><?php echo $results["site"] ?></td>
-                <td align='center' class='<?php echo $class; ?>' width='100'><?php echo $results["product"] ?></td>
-                <td align='center' class='<?php echo $class; ?>' width='100'><?php echo $results["reseller"] ?></td>
-                <td align='center' class='<?php echo $class; ?>' width=75><?php echo $results["licence_quantity"] ?> <?php echo $results["licence_type"] ?></td>
-                <td align='center' class='<?php echo $class; ?>' width='100'><?php echo date("jS M Y", $results["expirydate"]); ?></td>
-                <td align='center' class='<?php echo $class; ?>' width='100'><a href="contact_details.php?id=<?php echo $results['admincontact']?>" onMouseOver="window.status='View Contact Details'; return true;" onMouseOut="window.status=''; return true;"><?php echo $results['admincontactforenames'].' '.$results['admincontactsurnname']; ?></a></td>                 <td align='center' class='<?php echo $class; ?>' width='150'><?php if ($results["notes"] == "") echo "&nbsp;"; else echo nl2br($results["notes"]); ?></td>
+                <td><a href="maintenance_details.php?id=<?php echo $results['maintid'] ?>"><?php echo $results["maintid"] ?></a></td>
+                <td><?php echo $results["site"] ?></td>
+                <td><?php echo $results["product"] ?></td>
+                <td><?php echo $results["reseller"] ?></td>
+                <td><?php echo $results["licence_quantity"] ?> <?php echo $results["licence_type"] ?></td>
+                <td><?php echo date($CONFIG['dateformat_date'], $results["expirydate"]); ?></td>
+                <td><a href="contact_details.php?id=<?php echo $results['admincontact']?>" ><?php echo $results['admincontactforenames'].' '.$results['admincontactsurnname']; ?></a></td>                 <td align='center' width='150'><?php if ($results["notes"] == "") echo "&nbsp;"; else echo nl2br($results["notes"]); ?></td>
                 </tr>
                 <?php
                 // invert shade
@@ -161,7 +161,7 @@ else
             }
             ?>
             </table>
-            <p align='center'><a href="search.php?query=<?php echo $search_string; ?>&context=maintenance">Search Again</a></p>
+            <p align='center'><a href="search.php?query=<?php echo $search_string; ?>&amp;context=maintenance">Search Again</a></p>
             <?php
         }
     }
