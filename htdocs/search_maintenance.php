@@ -19,6 +19,7 @@ require('auth.inc.php');
 
 // External variables
 $search_string = cleanvar($_REQUEST['search_string']);
+$fields = cleanvar($_REQUEST['fields']);
 
 // show search maintenance form
 if (empty($search_string))
@@ -59,7 +60,7 @@ else
     {
         // search for criteria
         // build SQL
-        if ($fields == "all")
+        if ($fields=='' OR $fields == "all")
         {
             $sql  = "SELECT maintenance.id AS maintid, sites.name AS site, products.name AS product, resellers.name AS reseller, licence_quantity, licencetypes.name AS licence_type, expirydate, admincontact, contacts.forenames AS admincontactforenames, contacts.surname AS admincontactsurnname, maintenance.notes FROM maintenance, sites, contacts, products, licencetypes, resellers WHERE ";
             $sql .= "(maintenance.site=sites.id AND product=products.id AND reseller=resellers.id AND licence_type=licencetypes.id AND admincontact=contacts.id) AND ";
@@ -102,7 +103,7 @@ else
         $sql .= " ORDER BY site ASC";
 
         $result = mysql_query($sql);
-        if (mysql_error()) trigger_error("MySQL Query Error ".mysql_error(), E_USER_ERROR);
+        if (mysql_error()) trigger_error("MySQL Query Error".mysql_error(), E_USER_ERROR);
 
         if (mysql_num_rows($result) == 0)
         {
