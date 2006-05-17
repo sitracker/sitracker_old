@@ -186,7 +186,7 @@ echo "<table align='center' style='width: 95%;'>";
 echo "<tr><th title='Opened'>Date</th><th title='Product'>Product</th>";
 echo "<th title='Incident Title'>Subject</th><th>Reason</th>";
 echo "<th>Operation</th></tr>\n";
-$sql = "SELECT * FROM incidents WHERE owner='0' ";
+$sql = "SELECT * FROM incidents WHERE owner='0' AND status!='2'";
 $result = mysql_query($sql);
 if (mysql_num_rows($result) >= 1)
 {
