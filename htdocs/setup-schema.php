@@ -14,7 +14,7 @@ $schema = "CREATE TABLE `closingstatus` (
  `id` int(11) NOT NULL auto_increment,
  `name` varchar(50) default NULL,
  PRIMARY KEY  (`id`)
-) ;
+) ENGINE=MyISAM;
 
 INSERT INTO `closingstatus` VALUES (1, 'Sent Information');
 INSERT INTO `closingstatus` VALUES (2, 'Solved Problem');
@@ -32,7 +32,7 @@ CREATE TABLE `contactflags` (
  `flag` char(3) NOT NULL default '',
   KEY `contactid` (`contactid`),
   KEY `flag` (`flag`)
-);
+) ENGINE=MyISAM;
 
 CREATE TABLE `contactproducts` (
  `id` int(11) NOT NULL auto_increment,
@@ -48,7 +48,7 @@ CREATE TABLE `contactproducts` (
  KEY `maintenancecontactid` (`maintenancecontactid`),
  KEY `incidentpoolid` (`incidentpoolid`),
  KEY `servicelevelid` (`servicelevelid`)
-);
+) ENGINE=MyISAM;
 
 
 CREATE TABLE `contacts` (
@@ -84,7 +84,7 @@ CREATE TABLE `contacts` (
   KEY `forenames` (`forenames`),
   KEY `surname` (`surname`),
   KEY `notify_contactid` (`notify_contactid`)
-) ;
+) ENGINE=MyISAM;
 
 INSERT INTO `contacts` VALUES (1,0,'Acme1','2830','John','Acme','Chairman','Mr',1,'acme@example.com',
 '0666 222111','','','','','','','','','','No','No','No',1132930556,1132930556,'');
@@ -93,7 +93,7 @@ CREATE TABLE `emailsig` (
   `id` int(11) NOT NULL auto_increment,
   `signature` text NOT NULL,
   PRIMARY KEY  (`id`)
-) COMMENT='Global Email Signature' ;
+)  ENGINE=MyISAM COMMENT='Global Email Signature' ;
 
 
 INSERT INTO `emailsig` VALUES (1, '');
@@ -112,7 +112,7 @@ CREATE TABLE `emailtype` (
   `body` text,
   `customervisibility` enum('show','hide') NOT NULL default 'show',
   PRIMARY KEY  (`id`)
-) ;
+) ENGINE=MyISAM;
 
 INSERT INTO `emailtype` VALUES (1,'Support Email','user','','<contactemail>','<supportemail>','<supportemail>','','<useremail>','[<incidentid>] - <incidenttitle>','<contactfirstname>,\r\n\r\n<signature>\r\n<globalsignature>', 'show');
 INSERT INTO `emailtype` VALUES (2,'User Email','user','','<contactemail>','<useremail>','<useremail>','','','','<signature>\r\n<globalsignature>\r\n', 'show');
@@ -134,7 +134,7 @@ CREATE TABLE `feedbackforms` (
   `multi` enum('yes','no') NOT NULL default 'no',
   PRIMARY KEY  (`id`),
   KEY `multi` (`multi`)
-);
+) ENGINE=MyISAM;
 
 CREATE TABLE `feedbackquestions` (
   `id` int(5) NOT NULL auto_increment,
@@ -150,7 +150,7 @@ CREATE TABLE `feedbackquestions` (
   KEY `taborder` (`taborder`),
   KEY `type` (`type`),
   KEY `formid` (`formid`)
-) ;
+) ENGINE=MyISAM;
 
 
 CREATE TABLE `feedbackreport` (
@@ -170,7 +170,7 @@ CREATE TABLE `feedbackreport` (
   KEY `completed` (`completed`),
   KEY `incidentid` (`incidentid`),
   KEY `contactid` (`contactid`)
-);
+) ENGINE=MyISAM;
 
 CREATE TABLE `feedbackrespondents` (
   `id` int(5) NOT NULL auto_increment,
@@ -185,7 +185,7 @@ CREATE TABLE `feedbackrespondents` (
   KEY `formid` (`formid`),
   KEY `contactid` (`contactid`),
   KEY `completed` (`completed`)
-);
+) ENGINE=MyISAM;
 
 CREATE TABLE `feedbackresults` (
   `id` int(5) NOT NULL auto_increment,
@@ -196,7 +196,7 @@ CREATE TABLE `feedbackresults` (
   PRIMARY KEY  (`id`),
   KEY `questionid` (`questionid`),
   KEY `respondentid` (`respondentid`)
-) ;
+) ENGINE=MyISAM;
 
 
 CREATE TABLE `files` (
@@ -223,7 +223,7 @@ CREATE TABLE `files` (
   KEY `filename` (`filename`),
   KEY `published` (`published`),
   KEY `webcategory` (`webcategory`)
-) ;
+) ENGINE=MyISAM;
 
 
 CREATE TABLE `flags` (
@@ -231,7 +231,7 @@ CREATE TABLE `flags` (
   `name` varchar(100) default NULL,
   PRIMARY KEY  (`flag`),
   KEY `flag` (`flag`)
-);
+) ENGINE=MyISAM;
 
 
 CREATE TABLE `groups` (
@@ -239,7 +239,7 @@ CREATE TABLE `groups` (
   `name` varchar(255) NOT NULL default '',
   `imageurl` varchar(255) NOT NULL default '',
   PRIMARY KEY  (`id`)
-) COMMENT='List of user groups' ;
+) ENGINE=MyISAM COMMENT='List of user groups' ;
 
 
 CREATE TABLE `holidays` (
@@ -255,14 +255,14 @@ CREATE TABLE `holidays` (
   KEY `startdate` (`startdate`),
   KEY `type` (`type`),
   KEY `approved` (`approved`)
-) ;
+) ENGINE=MyISAM;
 
 
 CREATE TABLE `holidaytypes` (
   `id` int(11) NOT NULL auto_increment,
   `name` varchar(255) NOT NULL default '',
   PRIMARY KEY  (`id`)
-) ;
+) ENGINE=MyISAM;
 
 INSERT INTO `holidaytypes` VALUES (1, 'Holiday');
 INSERT INTO `holidaytypes` VALUES (2, 'Sickness');
@@ -279,7 +279,7 @@ CREATE TABLE `incidentpools` (
   `incidentsremaining` int(5) NOT NULL default '0',
   PRIMARY KEY  (`id`),
   KEY `maintenanceid` (`maintenanceid`)
-) ;
+) ENGINE=MyISAM;
 
 
 CREATE TABLE `incidentproductinfo` (
@@ -289,7 +289,7 @@ CREATE TABLE `incidentproductinfo` (
   `information` text,
   PRIMARY KEY  (`id`),
   UNIQUE KEY `id` (`id`)
-) ;
+) ENGINE=MyISAM;
 
 
 CREATE TABLE `incidents` (
@@ -332,14 +332,14 @@ CREATE TABLE `incidents` (
   KEY `opened` (`opened`),
   KEY `closed` (`closed`),
   KEY `servicelevel` (`servicelevel`)
-) ;
+) ENGINE=MyISAM;
 
 CREATE TABLE `incidentstatus` (
   `id` int(11) NOT NULL auto_increment,
   `name` varchar(50) default NULL,
   `ext_name` varchar(50) default NULL,
   PRIMARY KEY  (`id`)
-) AUTO_INCREMENT=10 ;
+) AUTO_INCREMENT=10 ENGINE=MyISAM;
 
 INSERT INTO `incidentstatus` VALUES (0, 'Active (Unassigned)', 'Active');
 INSERT INTO `incidentstatus` VALUES (1, 'Active', 'Active');
@@ -359,7 +359,7 @@ CREATE TABLE `interfacestyles` (
   `cssurl` varchar(255) NOT NULL default '',
   `headerhtml` text NOT NULL,
   PRIMARY KEY  (`id`)
-) ;
+) ENGINE=MyISAM;
 
 
 INSERT INTO `interfacestyles` VALUES (1, 'Light Blue (Default)', 'webtrack1.css', '');
@@ -389,7 +389,7 @@ CREATE TABLE `journal` (
   PRIMARY KEY  (`id`),
   KEY `refid` (`refid`),
   KEY `userid` (`userid`)
-) ;
+) ENGINE=MyISAM;
 
 
 CREATE TABLE `kbarticles` (
@@ -405,7 +405,7 @@ CREATE TABLE `kbarticles` (
   PRIMARY KEY  (`docid`),
   KEY `distribution` (`distribution`),
   KEY `title` (`title`)
-) COMMENT='Knowledge base articles' ;
+) ENGINE=MyISAM COMMENT='Knowledge base articles' ;
 
 
 CREATE TABLE `kbcontent` (
@@ -422,14 +422,14 @@ CREATE TABLE `kbcontent` (
   KEY `ownerid` (`ownerid`),
   KEY `docid` (`docid`),
   FULLTEXT KEY `c_index` (`content`)
-) ;
+) ENGINE=MyISAM;
 
 
 CREATE TABLE `kbsoftware` (
   `docid` int(5) NOT NULL default '0',
   `softwareid` int(5) NOT NULL default '0',
   PRIMARY KEY  (`docid`,`softwareid`)
-) COMMENT='Links kb articles with software';
+) ENGINE=MyISAM COMMENT='Links kb articles with software';
 
 
 
@@ -437,7 +437,7 @@ CREATE TABLE `licencetypes` (
   `id` int(11) NOT NULL auto_increment,
   `name` varchar(100) default NULL,
   PRIMARY KEY  (`id`)
-) ;
+) ENGINE=MyISAM;
 
 
 INSERT INTO `licencetypes` VALUES (1, 'Per User');
@@ -466,7 +466,7 @@ CREATE TABLE `maintenance` (
   PRIMARY KEY  (`id`),
   KEY `site` (`site`),
   KEY `productonly` (`productonly`)
-) ;
+) ENGINE=MyISAM;
 
 INSERT INTO `maintenance` VALUES (1,1,1,2,1268179200,1,4,0,0,'This is an example contract.',1,'no','no',0,0);
 
@@ -474,7 +474,7 @@ CREATE TABLE `permissions` (
   `id` int(5) NOT NULL auto_increment,
   `name` varchar(255) NOT NULL default '',
   PRIMARY KEY  (`id`)
-) ;
+) ENGINE=MyISAM;
 
 
 INSERT INTO `permissions` VALUES (1, 'Add new contacts');
@@ -544,7 +544,7 @@ CREATE TABLE `priority` (
   `id` int(11) NOT NULL auto_increment,
   `name` varchar(50) default NULL,
   PRIMARY KEY  (`id`)
-) COMMENT='Used in incidents.php' AUTO_INCREMENT=5 ;
+) ENGINE=MyISAM COMMENT='Used in incidents.php' AUTO_INCREMENT=5 ;
 
 INSERT INTO `priority` VALUES (1, 'Low');
 INSERT INTO `priority` VALUES (2, 'Medium');
@@ -559,7 +559,7 @@ CREATE TABLE `productinfo` (
   `information` text,
   `moreinformation` varchar(255) NOT NULL default '',
   PRIMARY KEY  (`id`)
-) ;
+) ENGINE=MyISAM;
 
 
 CREATE TABLE `products` (
@@ -570,7 +570,7 @@ CREATE TABLE `products` (
   PRIMARY KEY  (`id`),
   KEY `vendorid` (`vendorid`),
   KEY `name` (`name`)
-) COMMENT='Current List of Products' ;
+) ENGINE=MyISAM COMMENT='Current List of Products' ;
 
 INSERT INTO `products` VALUES (1,1,'Example Product','This is an example product.');
 
@@ -581,13 +581,13 @@ CREATE TABLE `relatedincidents` (
 `relatedid` INT( 5 ) NOT NULL ,
 PRIMARY KEY ( `id` ) ,
 INDEX ( `incidentid` , `relatedid` )
-) ;
+) ENGINE=MyISAM;
 
 CREATE TABLE `resellers` (
   `id` tinyint(4) NOT NULL auto_increment,
   `name` varchar(100) default NULL,
   PRIMARY KEY  (`id`)
-) ;
+) ENGINE=MyISAM;
 
 INSERT INTO `resellers` VALUES (1,'Us (No Reseller)');
 INSERT INTO `resellers` VALUES (2,'Example Reseller');
@@ -596,7 +596,7 @@ CREATE TABLE `roles` (
 `id` INT( 5 ) NOT NULL AUTO_INCREMENT ,
 `rolename` VARCHAR( 255 ) NOT NULL ,
 PRIMARY KEY ( `id` )
-) ;
+) ENGINE=MyISAM;
 
 INSERT INTO `roles` ( `id` , `rolename` ) VALUES ('1', 'Administrator');
 INSERT INTO `roles` ( `id` , `rolename` ) VALUES ('2', 'Manager');
@@ -607,7 +607,7 @@ CREATE TABLE `rolepermissions` (
 `permissionid` int( 5 ) NOT NULL default '0',
 `granted` enum( 'true', 'false' ) NOT NULL default 'false',
 PRIMARY KEY ( `roleid` , `permissionid` )
-);
+) ENGINE=MyISAM;
 
 INSERT INTO `rolepermissions` (`roleid`, `permissionid`, `granted`) VALUES (1, 1, 'true');
 INSERT INTO `rolepermissions` (`roleid`, `permissionid`, `granted`) VALUES (1, 2, 'true');
@@ -772,7 +772,7 @@ CREATE TABLE `servicelevels` (
   `review_days` int(11) NOT NULL default '365',
   PRIMARY KEY  (`tag`,`priority`),
   KEY `id` (`id`),
-  KEY `review_days` (`review_days`));
+  KEY `review_days` (`review_days`)) ENGINE=MyISAM;
 
 
 INSERT INTO `servicelevels` VALUES (0, 'standard', 1, 320, 380, 960, 14.00, 28, 90);
@@ -784,7 +784,7 @@ CREATE TABLE `sitecontacts` (
   `siteid` int(11) NOT NULL default '0',
   `contactid` int(11) NOT NULL default '0',
   PRIMARY KEY  (`siteid`,`contactid`)
-);
+) ENGINE=MyISAM;
 
 CREATE TABLE `sites` (
   `id` int(11) NOT NULL auto_increment,
@@ -808,7 +808,7 @@ CREATE TABLE `sites` (
   PRIMARY KEY  (`id`),
   KEY `typeid` (`typeid`),
   KEY `owner` (`owner`)
-) ;
+) ENGINE=MyISAM;
 
 INSERT INTO `sites` (`id`, `name`, `department`, `address1`, `address2`, `city`, `county`,
 `country`, `postcode`, `telephone`, `fax`, `email`, `notes`, `typeid`, `freesupport`, `licenserx`,
@@ -820,7 +820,7 @@ CREATE TABLE `sitetypes` (
   `typeid` int(5) NOT NULL auto_increment,
   `typename` varchar(255) NOT NULL default '',
   PRIMARY KEY  (`typeid`)
-) ;
+) ENGINE=MyISAM;
 
 INSERT INTO `sitetypes` VALUES (1, 'Unclassified');
 INSERT INTO `sitetypes` VALUES (2, 'Commercial');
@@ -830,7 +830,7 @@ CREATE TABLE `software` (
   `id` int(5) NOT NULL auto_increment,
   `name` varchar(255) NOT NULL default '',
   PRIMARY KEY  (`id`)
-) COMMENT='Individual software products as they are supported' ;
+) ENGINE=MyISAM COMMENT='Individual software products as they are supported' ;
 
 INSERT INTO `software` VALUES (1,'Example Software');
 
@@ -838,7 +838,7 @@ CREATE TABLE `softwareproducts` (
   `productid` int(5) NOT NULL default '0',
   `softwareid` int(5) NOT NULL default '0',
   PRIMARY KEY  (`productid`,`softwareid`)
-) COMMENT='Table to link products with software';
+) ENGINE=MyISAM COMMENT='Table to link products with software';
 
 INSERT INTO `softwareproducts` VALUES (1,1);
 
@@ -866,7 +866,7 @@ CREATE TABLE `spellcheck` (
   `timestamp` timestamp(14) NOT NULL,
   PRIMARY KEY  (`id`),
   KEY `updateid` (`updateid`)
-) COMMENT='Temporary table used during spellcheck' ;
+) ENGINE=MyISAM COMMENT='Temporary table used during spellcheck' ;
 
 
 CREATE TABLE `supportcontacts` (
@@ -874,7 +874,7 @@ CREATE TABLE `supportcontacts` (
   `maintenanceid` int(11) default NULL,
   `contactid` int(11) default NULL,
   PRIMARY KEY  (`id`)
-) ;
+) ENGINE=MyISAM;
 
 INSERT INTO `supportcontacts` VALUES (1,1,1);
 
@@ -883,7 +883,7 @@ CREATE TABLE `system` (
   `id` int(1) NOT NULL default '0',
   `version` float(3,2) NOT NULL default '0.00',
   PRIMARY KEY  (`id`)
-) ;
+) ENGINE=MyISAM;
 
 
 CREATE TABLE `tempassigns` (
@@ -893,7 +893,7 @@ CREATE TABLE `tempassigns` (
   `assigned` enum('yes','no') NOT NULL default 'no',
   PRIMARY KEY  (`incidentid`,`originalowner`),
   KEY `assigned` (`assigned`)
-);
+) ENGINE=MyISAM;
 
 
 CREATE TABLE `tempincoming` (
@@ -910,7 +910,7 @@ CREATE TABLE `tempincoming` (
   PRIMARY KEY  (`id`),
   UNIQUE KEY `id` (`id`),
   KEY `updateid` (`updateid`)
-) COMMENT='Temporary store for incoming attachment paths' ;
+) ENGINE=MyISAM COMMENT='Temporary store for incoming attachment paths' ;
 
 
 
@@ -936,14 +936,14 @@ CREATE TABLE `updates` (
   KEY `timestamp` (`timestamp`),
   KEY `type` (`type`),
   KEY `timesincereview` (`timesincereview`,`reviewcalculated`)
-) ;
+) ENGINE=MyISAM;
 
 
 CREATE TABLE `usergroups` (
   `userid` int(5) NOT NULL default '0',
   `groupid` int(5) NOT NULL default '0',
   PRIMARY KEY  (`userid`,`groupid`)
-) COMMENT='Links users with groups';
+) ENGINE=MyISAM COMMENT='Links users with groups';
 
 
 
@@ -952,7 +952,7 @@ CREATE TABLE `userpermissions` (
   `permissionid` int(5) NOT NULL default '0',
   `granted` enum('true','false') NOT NULL default 'false',
   PRIMARY KEY  (`userid`,`permissionid`)
-);
+) ENGINE=MyISAM;
 
 INSERT INTO `userpermissions` VALUES (1, 1, 'true');
 INSERT INTO `userpermissions` VALUES (1, 2, 'true');
@@ -1049,7 +1049,7 @@ CREATE TABLE `users` (
   KEY `username` (`username`),
   KEY `accepting` (`accepting`),
   KEY `status` (`status`)
-) ;
+) ENGINE=MyISAM;
 
 INSERT INTO `users` VALUES (1, 'admin', MD5('{$adminpw}'), 'Administrator', 1, 'Administrator', 'Regards,\r\n\r\nAdministrator', '', '', '', '', '', '', '', 1, '', 'Yes', 60, 'desc', 8, 'false', 'false', 'false', 'false', '', 32, '');
 
@@ -1060,7 +1060,7 @@ CREATE TABLE `usersoftware` (
   `backupid` tinyint(4) NOT NULL default '0',
   PRIMARY KEY  (`userid`,`softwareid`),
   KEY `backupid` (`backupid`)
-) COMMENT='Defines which software users have expertise with';
+) ENGINE=MyISAM COMMENT='Defines which software users have expertise with';
 
 
 CREATE TABLE `userstatus` (
@@ -1068,7 +1068,7 @@ CREATE TABLE `userstatus` (
   `name` varchar(50) default NULL,
   PRIMARY KEY  (`id`),
   UNIQUE KEY `id` (`id`)
-) ;
+) ENGINE=MyISAM;
 
 
 INSERT INTO `userstatus` VALUES (1, 'In Office');
@@ -1086,7 +1086,7 @@ CREATE TABLE `vendors` (
   `id` int(5) NOT NULL auto_increment,
   `name` varchar(255) NOT NULL default '',
   PRIMARY KEY  (`id`)
-) ;
+) ENGINE=MyISAM;
 
 INSERT INTO `vendors` VALUES (1,'Default');
 
@@ -1095,7 +1095,7 @@ INSERT INTO `vendors` VALUES (1,'Default');
 $upgrade_schema[321] = "CREATE TABLE `system`
   (`id` INT( 1 ) NOT NULL ,
   `version` FLOAT( 3, 2 ) DEFAULT '0.00' NOT NULL ,
-  PRIMARY KEY ( `id` )) ;
+  PRIMARY KEY ( `id` )) ENGINE=MyISAM;
 
 CREATE TABLE `feedbackforms` (
   `id` int(5) NOT NULL auto_increment,
@@ -1106,7 +1106,7 @@ CREATE TABLE `feedbackforms` (
   `multi` enum('yes','no') NOT NULL default 'no',
   PRIMARY KEY  (`id`),
   KEY `multi` (`multi`)
-);
+) ENGINE=MyISAM;
 ALTER TABLE `feedbackrespondents` CHANGE `respondent` `contactid` INT( 11 ) NOT NULL;
 ALTER TABLE `feedbackrespondents` CHANGE `responseref` `incidentid` INT( 11 ) NOT NULL;
 ALTER TABLE `feedbackreport` CHANGE `respondent` `respondent` INT( 11 ) NOT NULL;
@@ -1117,7 +1117,7 @@ $upgrade_schema[322] = "CREATE TABLE `roles` (
 `id` INT( 5 ) NOT NULL AUTO_INCREMENT ,
 `rolename` VARCHAR( 255 ) NOT NULL ,
 PRIMARY KEY ( `id` )
-) ;
+) ENGINE=MyISAM;
 
 INSERT INTO `roles` ( `id` , `rolename` ) VALUES ('1', 'Administrator');
 INSERT INTO `roles` ( `id` , `rolename` ) VALUES ('2', 'Manager');
@@ -1128,7 +1128,7 @@ CREATE TABLE `rolepermissions` (
 `permissionid` int( 5 ) NOT NULL default '0',
 `granted` enum( 'true', 'false' ) NOT NULL default 'false',
 PRIMARY KEY ( `roleid` , `permissionid` )
-);
+) ENGINE=MyISAM;
 
 ALTER TABLE `users` ADD `roleid` INT( 5 ) NOT NULL DEFAULT '1' AFTER `realname` ;
 ALTER TABLE `users` DROP `accesslevel` ;
@@ -1142,7 +1142,7 @@ $upgrade_schema[323] = "CREATE TABLE `relatedincidents` (
 `owner` int(5) NOT NULL default '0',
 PRIMARY KEY  (`id`),
 KEY `incidentid` (`incidentid`,`relatedid`)
-) ;
+) ENGINE=MyISAM;
 
 ALTER TABLE `sites` CHANGE `notes` `notes` TEXT NOT NULL ;
 
@@ -1160,6 +1160,7 @@ UPDATE `incidentstatus` SET `id` = '0' WHERE `id` =10 LIMIT 1 ;
 ";
 
 // Important: When making changes to the schema you must add SQL to make the alterations
-// to existing databases in $upgrade_schema[] *AND* you must also change $schema[]
+// to existing databases in $upgrade_schema[] *AND* you must also change $schema[] for
+// new installations.
 
 ?>
