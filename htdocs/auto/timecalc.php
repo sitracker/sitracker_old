@@ -18,7 +18,9 @@ if (realpath(__FILE__) == realpath($_SERVER['SCRIPT_FILENAME']))
 define("STATUS_CLOSED",2);
 define("STATUS_CUSTOMER",8);
 
-if ($verbose) echo "Calcuating SLA times{$crlf}";
+// FIXME this should only run INSIDE the working day
+
+if ($verbose) echo "Calculating SLA times{$crlf}";
 
 $sql="SELECT id,maintenanceid,priority,slaemail,servicelevel,status FROM incidents WHERE status != ".STATUS_CLOSED;
 //$sql="SELECT id,maintenanceid,priority,slaemail,servicelevel,status FROM incidents WHERE id=32138";
