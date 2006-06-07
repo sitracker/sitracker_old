@@ -7,6 +7,7 @@ Changes in v3.24 - Unreleased
 * Lists number of incidents of each priority a user has on the user listings
   page.
 * Show more accurately who last updated the call on list incidents pages
+* Added multiple global signatures, one is choosen at random when email is sent.
 
 
 Changes in v3.23 - Released 10 April 2006

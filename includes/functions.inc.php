@@ -3047,7 +3047,8 @@ function count_incoming_updates()
 
 function global_signature()
 {
-    $sql = "SELECT signature FROM emailsig LIMIT 1";
+    //$sql = "SELECT signature FROM emailsig LIMIT 1";
+    $sql = "SELECT signature FROM emailsig ORDER BY RAND() LIMIT 1";
     $result=mysql_query($sql);
     list($signature)=mysql_fetch_row($result);
     mysql_free_result($result);
