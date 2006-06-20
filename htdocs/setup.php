@@ -483,8 +483,16 @@ switch ($_REQUEST['action'])
                     elseif(@ini_get('register_globals')==1) echo "<p class='error'>SiT! strongly recommends that your php.ini setting <code>register_globals</code> be OFF.</p>";
                     else
                     {
-                        if (!empty($_SESSION['adminpw'])) echo "<p>SiT! is initially configured with just one user, <var><strong>admin</strong></var> with an automatically generated password of <var><strong>{$_SESSION['adminpw']}</strong></var>, ";
-                        echo "you should make a note of this password and change it as soon as you have logged in.</p>";
+                        if (!empty($_SESSION['adminpw']))
+                        {
+                            echo "<p>SiT! is initially configured with just one user, <var><strong>admin</strong></var> with an automatically generated password of <var><strong>{$_SESSION['adminpw']}</strong></var>, ";
+                            echo "you should make a note of this password and change it as soon as you have logged in.</p>";
+                        }
+                        else
+                        {
+                            echo "<p class='error'>An error occurred during installation and we forgot the random admin password that was generated, this will prevent you logging in. Sorry. ";
+                            echo "Check your PHP session settings, in particular make sure you have '<code>sesion.auto.start = 0</code>' in your php.ini.</p>";
+                        }
                         $_SESSION['adminpw']='';
                         echo "<p>SiT! v".number_format($installed_version,2)." is installed and ready to <a href='index.php'>run</a>.</p>";
                     }
