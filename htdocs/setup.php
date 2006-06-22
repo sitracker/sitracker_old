@@ -480,7 +480,7 @@ switch ($_REQUEST['action'])
                         echo "</p>";
                     }
                     elseif(!isset($_REQUEST)) echo "<p class='error'>SiT! requires PHP 4.1.0 or later</p>";
-                    elseif(@ini_get('register_globals')==1) echo "<p class='error'>SiT! strongly recommends that your php.ini setting <code>register_globals</code> be OFF.</p>";
+                    elseif(@ini_get('register_globals')==1) echo "<p class='error'>SiT! strongly recommends that you change your php.ini setting <code>register_globals</code> to OFF.</p>";
                     else
                     {
                         if (!empty($_SESSION['adminpw']))
