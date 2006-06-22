@@ -149,9 +149,9 @@ if (empty($action))
     //-->
     </script>
     <form action="<?php echo $_SERVER['PHP_SELF']; ?>?id=<?php echo $id ?>" method="post" name="updateform" id="updateform" enctype="multipart/form-data">
-    <table align='center' width="600">
+    <table align='center' width="95%">
     <tr>
-    <th align="right" valign="top"><h3>Update to Incident:</h3></td>
+    <th align="right" valign="top" width="30%"><h3>Update to Incident:</h3></td>
     <td class="shade2"><h3 style='text-align: left'><?php echo "$id - $incident_title"; ?></h3></td>
     </tr>
     <tr>
