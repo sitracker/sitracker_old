@@ -8,6 +8,12 @@ Changes in v3.24 - Unreleased
   page.
 * Show more accurately who last updated the call on list incidents pages
 * Added multiple global signatures, one is choosen at random when email is sent.
+* Fixed bug where disabled user accounts would still display as having
+  relevant skills
+* Fixed issue where URLs would not be shortened if they contained a % (percent)
+  or $ (dollar) symbol
+* Incidents page informs you more accuratly who updated the call
+* Specified MySQL Engine type to be MyISAM on all table creations
 
 
 Changes in v3.23 - Released 10 April 2006
