@@ -709,21 +709,21 @@ elseif ($action=='reassign')
 {
     // External variables
     $incidentid = cleanvar($_REQUEST['incidentid']);
-    $userid = cleanvar($_REQUEST['userid']);
+    $uid = cleanvar($_REQUEST['userid']);
     $nextaction = cleanvar($_REQUST['nextaction']);
 
     include('htmlheader.inc.php');
     echo "<h2>Incident Added - Summary</h2>";
-    echo "<p align='center'>Incident <a href=\"javascript:incident_details_window('$incidentid','incident{$incidentid}');\">$incidentid</a> has been moved to ".user_realname($userid)."'s <strong style='color: red'>Action Needed</strong> queue</p>";
+    echo "<p align='center'>Incident <a href=\"javascript:incident_details_window('$incidentid','incident{$incidentid}');\">$incidentid</a> has been moved to ".user_realname($uid)."'s <strong style='color: red'>Action Needed</strong> queue</p>";
     $userphone = user_phone($userid);
     if ($userphone!='') echo "<p align='center'>Telephone: {$userphone}</p>";
-    $sql = "UPDATE incidents SET owner='$userid', lastupdated='$now' WHERE id='$incidentid'";
+    $sql = "UPDATE incidents SET owner='$uid', lastupdated='$now' WHERE id='$incidentid'";
     mysql_query($sql);
     if (mysql_error()) trigger_error("MySQL Query Error ".mysql_error(), E_USER_ERROR);
 
     // add update
     $sql  = "INSERT INTO updates (incidentid, userid, type, timestamp, currentowner, currentstatus, nextaction) ";
-    $sql .= "VALUES ('$incidentid', '$sit[2]', 'reassigning', '$now', '$userid', '1', '$nextaction')";
+    $sql .= "VALUES ('$incidentid', '$sit[2]', 'reassigning', '$now', '$uid', '1', '$nextaction')";
     $result = mysql_query($sql);
     if (mysql_error()) trigger_error("MySQL Query Error ".mysql_error(), E_USER_ERROR);
     include('htmlfooter.inc.php');
