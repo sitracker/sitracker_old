@@ -110,7 +110,7 @@ while ($users = mysql_fetch_array($result))
     if (!empty($users['message'])) echo "<br /><strong>Message</strong>: {$users['message']}";
     echo "</span>";
     echo "</a>";
-    if (!empty($users['message'])) echo " <sup>*</sup>";
+    if (!empty($users['message'])) echo " <sup title='{$users['message']}'[>[message]</sup>";
     echo "</td>";
     echo "<td align='center'><a href='incidents.php?user={$users['id']}&amp;queue=1&amp;type=support'>";
     $incpriority = user_incidents($users['id']);
