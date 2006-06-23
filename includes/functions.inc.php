@@ -4337,6 +4337,7 @@ function external_escalation($escalated, $incid)
    return "no";
 }
 
+
 // -------------------------- // -------------------------- // --------------------------
 // leave this section at the bottom of functions.inc.php ================================
 

@@ -16,6 +16,9 @@ include("defaults.inc.php");
 // Server Configuration
 @include('/etc/webtrack.conf');  // Legacy, for compatibility
 @include('/etc/sit.conf');
+// TODO determine which language to use, for now we're hardcoded to English (British)
+// i18n
+@include('i18n/en-gb.inc.php');
 
 if ($CONFIG['debug'] > 0)
 {

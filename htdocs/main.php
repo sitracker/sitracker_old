@@ -57,36 +57,36 @@ mysql_free_result($result);
 
 echo "<div style='height: 400px;'>";
 echo "<div class='windowbox' style='width: 50%'>";
-echo "<div class='windowtitle'>Random Tip</div>";
+echo "<div class='windowtitle'>{$i18n_RANDOM_TIP}</div>";
 echo "<div class='window'>";
 echo random_tip();
 echo "</div>";
 echo "</div>";
 
 echo "<div class='windowbox' style='width: 50%'>";
-echo "<div class='windowtitle'>Todays Statistics</div>";
+echo "<div class='windowtitle'>{$i18n_TODAYS_STATS}</div>";
 echo "<div class='window'>";
-if ($todaysincidents == 0) echo "No Incidents";
+if ($todaysincidents == 0) echo $i18n_NO_INCIDENTS;
 elseif ($todaysincidents == 1) echo "{$todaysincidents} Incident";
 elseif ($todaysincidents > 1) echo "{$todaysincidents} Incidents";
-echo " logged<br />";
+echo " {$i18n_LOGGED}<br />";
 
-if ($todaysupdated == 0) echo "No Incidents";
+if ($todaysupdated == 0) echo $i18n_NO_INCIDENTS;
 elseif ($todaysupdated == 1) echo "{$todaysupdated} Incident";
 elseif ($todaysupdated > 1) echo "{$todaysupdated} Incidents";
-echo " updated<br />";
+echo " {$i18n_UPDATED}<br />";
 
-if ($todaysclosed == 0) echo "No Incidents";
+if ($todaysclosed == 0) echo $i18n_NO_INCIDENTS;
 elseif ($todaysclosed == 1) echo "{$todaysclosed} Incident";
 elseif ($todaysclosed > 1) echo "{$todaysclosed} Incidents";
 echo " closed<br />";
 
-if ($supportopen == 0) echo "No Incidents";
+if ($supportopen == 0) echo $i18n_NO_INCIDENTS;
 elseif ($supportopen == 1) echo "{$supportopen} Incident";
 elseif ($supportopen > 1) echo "{$supportopen} Incidents";
 echo " currently open<br />";
 
-if ($kbpublished == 0) echo "No KB Articles";
+if ($kbpublished == 0) echo $i18n_NO_KB_ARTICLES;
 elseif ($kbpublished == 1) echo "{$kbpublished} KB Article";
 elseif ($kbpublished > 1) echo "{$kbpublished} KB Articles";
 echo " published<br />";
