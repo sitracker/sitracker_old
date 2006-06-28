@@ -330,13 +330,18 @@ function user_realname($id)
             $frommail = substr(strstr($from[0], '@'), 1);
             $customerdomain = substr(strstr($incidents['email'], '@'), 1);
             if($frommail == $customerdomain) return "Customer";
-            elseif(strstr(strtolower($frommail), 'novell')) return 'Novell';
-            elseif(strstr(strtolower($frommail), 'microsoft')) return 'Microsoft';
-            else return($CONFIG['application_shortname']); // No from email address
+            foreach($CONFIG['ext_esc_partners'] AS $partner)
+            {
+                if(strstr(strtolower($frommail), strtolower($partner['email_domain'])))
+                {
+                    return $partner['name'];
+                }
+            }
         }
-        else return($CONFIG['application_shortname']); // No from email address
     }
-    else return($CONFIG['application_shortname']); // Default user / No user
+
+    //Got this far not returned anything so 
+    return($CONFIG['application_shortname']); // No from email address
 }
 
 
@@ -4163,17 +4168,22 @@ function incident_backup_switchover($userid, $accepting)
 
 function format_external_id($externalid)
 {
-    // FIXME These external URL's should be config variables really
-    if (substr($externalid,0,2)=='SR')
-        $html = "<a href='https://support.microsoft.com/oas/default.aspx?tp=re&amp;incno={$externalid}' title='Microsoft Help and Support' target='_blank'>{$externalid}</a>";
-    elseif (strlen($externalid)==7 AND is_numeric($externalid))
-        $html = "<a href='https://secure-support.novell.com/eService_enu/' title='Novell Bug ID' target='_blank'>{$externalid}</a>";
-    elseif ((strlen($externalid)==10 OR strlen($externalid)==11) AND is_numeric($externalid))
-        $html = "<a href='https://secure-support.novell.com/eService_enu/' title='Novell Help and Support Login'>{$externalid}</a>";
-    elseif (preg_match("/^[0-9]{3}-[0-9]{4}/",$externalid))
-        $html = "<a href='http://support.bluechiptechnology.co.uk/cgi-bin/pdesk.cgi?do=track&amp;lang=' title='BlueChip Technology Technical Support Pages'>{$externalid}</a>";
-    else
-        $html = $externalid;
+    global $CONFIG;
+
+    $html = $externalid;
+    foreach($CONFIG['ext_esc_partners'] AS $partner)
+    {
+        if(!empty($partner['ext_callid_regexp']))
+        {
+            if(preg_match($partner['ext_callid_regexp'], $externalid))
+            {
+                if(!empty($partner['ext_url']))
+                {
+                    $html = "<a href='".str_replace("%externalid", $externalid, $partner['ext_url'])."' title = '".$partner['ext_url_title']."'>{$externalid}</a>";
+                }
+            }
+        }
+    }
 
     return $html;
 }

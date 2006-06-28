@@ -149,8 +149,31 @@ $CONFIG['error_logfile'] = "{$CONFIG['application_fspath']}logs/sit.log";
 $CONFIG['access_logfile'] = '';
 
 // The plugins configuration is an array
-$CONFIG['plugins'] = array();
+//$CONFIG['plugins'] = array();
+$CONFIG['plugins'] =array('armaas_integration');
 
 // The URL for pages that do not exist yet.
 $CONFIG['error_notavailable_url']="/?msg=not+available";
+
+//external escalation partners, used for linking from incidents page to partners support site and identification of update origin
+$CONFIG['ext_esc_partners'] = array('novell' => array('name' => 'Novell', 
+                                            'ext_callid_regexp' => '/^[0-9]{7}$/', 
+                                            'ext_url' => 'https://secure-support.novell.com/eService_enu/',
+                                            'ext_url_title' => 'Novell support',
+                                            'email_domain' => 'novell.com'),
+                                    'microsoft' => array('name' => 'Microsoft', 
+                                            'ext_callid_regexp' => '/^SR/', 
+                                            'ext_url' => 'https://support.microsoft.com/oas/default.aspx?tp=re&amp;incno=%externalid%',
+                                            'ext_url_title' => 'Microsoft Help and Support',
+                                            'email_domain' => 'microsoft.com'),
+                                    'bluechip' => array('name' => 'Bluechip',
+                                            'ext_callid_regexp' => '/^[0-9]{3}-[0-9]{4}/',
+                                            'ext_url' => 'http://support.bluechiptechnology.co.uk/cgi-bin/pdesk.cgi?do=track&amp;lang=',
+                                            'ext_url_title' => 'BlueChip Technology Technical Support Pages',
+                                            'email_domain' => 'bluechiptechnology.co.uk'),
+                                    'sun' => array('name' => 'Sun Microsystems',
+                                            'ext_callid_regexp' => '',
+                                            'ext_url' => '',
+                                            'ext_url_title' => '',
+                                            'email_domain' => 'sun.com'));
 ?>

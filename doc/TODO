@@ -7,7 +7,7 @@ v3.24
 * Make send_template_email store emails in the incident log
 * When an incident is closed or reassigned, check for related
   pending-reassignments and remove if necessary
-* Allow configuration of external escalation partners
+* Provide interface to configure external escalation partners (setup.php)
 
 v3.2x
 * Incoming email handler
