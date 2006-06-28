@@ -150,19 +150,19 @@ $CONFIG['access_logfile'] = '';
 
 // The plugins configuration is an array
 //$CONFIG['plugins'] = array();
-$CONFIG['plugins'] =array('armaas_integration');
+$CONFIG['plugins'] =array('');
 
 // The URL for pages that do not exist yet.
 $CONFIG['error_notavailable_url']="/?msg=not+available";
 
 //external escalation partners, used for linking from incidents page to partners support site and identification of update origin
-$CONFIG['ext_esc_partners'] = array('novell' => array('name' => 'Novell', 
-                                            'ext_callid_regexp' => '/^[0-9]{7}$/', 
+$CONFIG['ext_esc_partners'] = array('novell' => array('name' => 'Novell',
+                                            'ext_callid_regexp' => '/^[0-9]{7}$/',
                                             'ext_url' => 'https://secure-support.novell.com/eService_enu/',
                                             'ext_url_title' => 'Novell support',
                                             'email_domain' => 'novell.com'),
-                                    'microsoft' => array('name' => 'Microsoft', 
-                                            'ext_callid_regexp' => '/^SR/', 
+                                    'microsoft' => array('name' => 'Microsoft',
+                                            'ext_callid_regexp' => '/^SR/',
                                             'ext_url' => 'https://support.microsoft.com/oas/default.aspx?tp=re&amp;incno=%externalid%',
                                             'ext_url_title' => 'Microsoft Help and Support',
                                             'email_domain' => 'microsoft.com'),
