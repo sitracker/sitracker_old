@@ -43,6 +43,12 @@ function statusform_submit(user)
 </script>
 <?php
 
+// Generic bit of SQL, common to both queue types
+$selectsql = "SELECT incidents.id, externalid, title, owner, towner, priority, status, siteid, forenames, surname, email, incidents.maintenanceid, ";
+$selectsql .= "servicelevel, softwareid, lastupdated, timeofnextaction, ";
+$selectsql .= "(timeofnextaction - $now) AS timetonextaction, opened, ($now - opened) AS duration, closed, (closed - opened) AS duration_closed, type, ";
+$selectsql .= "($now - lastupdated) AS timesincelastupdate ";
+$selectsql .= "FROM incidents, contacts, priority ";
 
 switch($type)
 {
@@ -50,12 +56,7 @@ switch($type)
         // Create SQL for chosen queue
         // If you alter this SQL also update the function user_activeincidents($id)
         if ($user=='current') $user=$sit[2];
-
-        $sql = "SELECT incidents.id, externalid, title, owner, towner, priority, status, siteid, forenames, surname, email, incidents.maintenanceid, ";
-        $sql .= "servicelevel, softwareid, lastupdated, timeofnextaction, ";
-        $sql .= "(timeofnextaction - $now) AS timetonextaction, opened, ($now - opened) AS duration, closed, (closed - opened) AS duration_closed, type, ";
-        $sql .= "($now - lastupdated) AS timesincelastupdate ";
-        $sql .= "FROM incidents, contacts, priority WHERE contact=contacts.id AND incidents.priority=priority.id ";
+        $sql = $selectsql . "WHERE contact=contacts.id AND incidents.priority=priority.id ";
         if ($user!='all') $sql .= "AND (owner='$user' OR towner='$user') ";
 
         echo "<h2>";
@@ -183,10 +184,7 @@ switch($type)
             $incsql .= ")";
 
             // Create SQL for chosen queue
-            $sql = "SELECT incidents.id, externalid, title, owner, towner, priority, status, siteid, forenames, surname, incidents.maintenanceid, servicelevel, softwareid, lastupdated, timeofnextaction, ";
-            $sql .= "(timeofnextaction - $now) AS timetonextaction, opened, ($now - opened) AS duration, closed, (closed - opened) AS duration_closed, type, ";
-            $sql .= "($now - lastupdated) AS timesincelastupdate ";
-            $sql .= "FROM incidents, contacts, priority WHERE contact=contacts.id AND incidents.priority=priority.id ";
+            $sql = $selectsql . "WHERE contact=contacts.id AND incidents.priority=priority.id ";
             $sql .= "AND owner!='$user' AND towner!='$user' ";
             $sql .= "AND $incsql ";
 

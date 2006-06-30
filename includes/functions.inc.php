@@ -135,7 +135,9 @@ $hmenu[103020] = array (10=> array ( 'perm'=> 16, 'name'=> "Add Template", 'url'
                         30=> array ( 'perm'=> 43, 'name'=> "Global Signature", 'url'=>"edit_global_signature.php")
 );
 $hmenu[1040] = array (10=> array ( 'perm'=> 0, 'name'=> "View Users", 'url'=>"users.php"),
-                      20=> array ( 'perm'=> 0, 'name'=> "List Skills", 'url'=>"user_skills.php")
+                      20=> array ( 'perm'=> 0, 'name'=> "List Skills", 'url'=>"user_skills.php"),
+                      30=> array ( 'perm'=> 27, 'name'=> "Holiday Planner", 'url'=>"holiday_calendar.php"),
+                      40=> array ( 'perm'=> 50, 'name'=> "Approve Holidays", 'url'=>"holiday_request.php?user=all&mode=approval")
 );
 
 
@@ -3240,8 +3242,8 @@ function check_group_holiday($userid, $date, $length='day')
             if (mysql_error()) trigger_error(mysql_error(),E_USER_WARNING);
             if (mysql_num_rows($hresult) >= 1)
             {
-                // bugbug: need to deal with am / pm etc
-                $namelist .= user_realname($member->userid);
+                // FIXME: need to deal with am / pm etc
+                $namelist .= user_realname($member->userid)." ($length)";
                 $namelist .= "&nbsp;&nbsp;";
             }
         }

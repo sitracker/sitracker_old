@@ -28,6 +28,7 @@ $selectedmonth = cleanvar($_REQUEST['selectedmonth']);
 $selectedyear = cleanvar($_REQUEST['selectedyear']);
 $length = cleanvar($_REQUEST['length']);
 if (empty($length)) $length='day';
+$display = cleanvar($_REQUEST['display']);
 
 include('htmlheader.inc.php');
 
@@ -41,17 +42,9 @@ function draw_calendar($nmonth, $nyear)
     // Get the current date/time for the users timezone
     $timebase=gmmktime()+($timezone*3600);
 
-    if (!$nday)
-    {
-    $nday = date('d',$timebase);
-    }
-    if (!$nmonth)
-    {
-    $nmonth = date('m',$timebase);
-    }
-    if (!$nyear) {
-    $nyear = date('Y',$timebase);
-    }
+    if (!$nday) $nday = date('d',$timebase);
+    if (!$nmonth) $nmonth = date('m',$timebase);
+    if (!$nyear) $nyear = date('Y',$timebase);
 
     # get the first day of the week!
     $firstday = date('w',mktime(0,0,0,$nmonth,1,$nyear));
@@ -61,10 +54,10 @@ function draw_calendar($nmonth, $nyear)
     $lastday = 31;
     do
     {
-    # This should probably be recursed, but it works as it is
-    $monthOrig = date('m',mktime(0,0,0,$nmonth,1,$nyear));
-    $monthTest = date('m',mktime(0,0,0,$nmonth,$lastday,$nyear));
-    if ($monthTest != $monthOrig) { $lastday -= 1; }
+        # This should probably be recursed, but it works as it is
+        $monthOrig = date('m',mktime(0,0,0,$nmonth,1,$nyear));
+        $monthTest = date('m',mktime(0,0,0,$nmonth,$lastday,$nyear));
+        if ($monthTest != $monthOrig) { $lastday -= 1; }
     }
     while ($monthTest != $monthOrig);
     $monthName = date('F',mktime(0,0,0,$nmonth,1,$nyear));
@@ -208,7 +201,7 @@ function draw_calendar($nmonth, $nyear)
                 if ($calday==$selectedday && $selectedmonth==$nmonth && $selectedyear==$nyear)
                 {
                     // consider a border color to indicate the selected cell
-                    $style.="border: 1px red solid; ";
+                    $style.="border: 1px red dashed; ";
                     // $shade="critical";
                 }
 
@@ -262,7 +255,7 @@ function draw_calendar($nmonth, $nyear)
                 }
                 if ($dtype==1 || $dtype=='' || $dtype==5 || $dtype==3 || $dtype==2 || $dtype==4)
                 {
-                    echo "<td class=\"$shade\" style=\"width:33px; $style\">";
+                    echo "<td class=\"$shade\" style=\"$style\">";
                     echo "<a href=\"add_holiday.php?type=$type&amp;user=$user&amp;year=$nyear&amp;month=$nmonth&amp;day=$calday\"  title=\"$celltitle\">$bold$adjusted_day$notbold</a></td>";
                 }
                 else
@@ -278,127 +271,306 @@ function draw_calendar($nmonth, $nyear)
     #  echo "$nmonth";
 }
 
-echo "<h2>";
-switch ($type)
+
+// Holiday planner chart
+function draw_chart($month, $year)
 {
-    case 1:
-        if ($user=='all' && $approver==TRUE) echo "Everybody";
-        else echo user_realname($user);
-        echo "'s Holiday Calendar</h2>";
-        echo "<p align='center'>Used ".user_count_holidays($user, $type)." of ".user_holiday_entitlement($user)." days entitlement.<br />";
-    break;
-
-    case 2:
-        if ($user=='all' && $approver==TRUE) echo "Everybody";
-        else echo user_realname($user);
-        echo "'s Sickness Calendar</h2>";
-    break;
-
-    case 3:
-        if ($user=='all' && $approver==TRUE) echo "Everybody";
-        else echo user_realname($user);
-        echo "'s Working Away Calendar</h2>";
-    break;
-
-    case 4:
-        if ($user=='all' && $approver==TRUE) echo "Everybody";
-        else echo user_realname($user);
-        echo "'s Training Calendar</h2>";
-    break;
-
-    case 10:
-        echo "Set Bank Holidays</h2>";
-    break;
-
-    default:
-        trigger_error("Error: Holiday type '$type' not handled ", E_USER_ERROR);
-}
-?>
-<table align='center'>
-<tr>
-<td align='center'>
-<?php
-if (!empty($selectedday))
-{
-    echo "$selectedday/$selectedmonth/$selectedyear is ";
-    switch ($length)
+    // Get list of holiday types
+    $sql = "SELECT * FROM holidaytypes";
+    $result = mysql_query($sql);
+    if (mysql_error()) trigger_error(mysql_error(),E_USER_ERROR);
+    while ($type = mysql_fetch_object($result))
     {
-        case 'am':
-        echo "booked for the <strong>morning";
+        $holidaytype[$type->id]=$type->name;
+    }
+
+    $html .= "<table align='center' border='1' bordercolor='#AAA' cellpadding='0' cellspacing='0' style='border-collapse:collapse; width: 99%;' ";
+    $html .= "width='100%;'>";
+    $html .= "<tr>";
+    $html .= "<td align='left' colspan='2' class='shade2'></td>";
+
+    $daysinmonth=date('t',mktime(0,0,0,$month,1,$year));
+    for($day=1;$day<=$daysinmonth;$day++)
+    {
+        $shade='shade1';
+        if (date('D',mktime(0,0,0,$month,$day,$year))=='Sat')
+        {
+            $shade='expired';
+            $html .= "<td class='$shade'><strong title='Week Number'>".substr(date('W',mktime(0,0,0,$month,$day,$year))+1,0, 1)."<br />".substr(date('W',mktime(0,0,0,$month,$day,$year))+1,1, 1)."</strong></td>";
+        }
+        elseif (date('D',mktime(0,0,0,$month,$day,$year))=='Sun') $html .= '';  // nothing
+        else
+        {
+            $html .= "<td align='center' class=\"$shade\"";
+            if (mktime(0,0,0,$month,$day,$year)==mktime(0,0,0,date('m'),date('d'),date('Y'))) $html .= " style='background: #FFFF00;' title='Today'";
+            $html .= ">";
+            $html .= substr(date('D',mktime(0,0,0,$month,$day,$year)),0,1)."<br />".date('d',mktime(0,0,0,$month,$day,$year)) ;
+            $html .= "</td>";
+        }
+    }
+
+    $html .= "</tr>";
+
+    $usql  = "SELECT * FROM users WHERE status!=0";  // status=0 means left company
+    $uresult = mysql_query($usql);
+    if (mysql_error()) trigger_error(mysql_error(),E_USER_ERROR);
+
+    while ($user = mysql_fetch_object($uresult))
+    {
+        unset($hdays);
+        $startdate = mktime(0,0,0,$month,1,$year);
+        $enddate  = mktime(0,0,0,$month,$daysinmonth,$year);
+        $hsql = "SELECT * FROM holidays WHERE userid={$user->id} AND startdate >= $startdate AND startdate <= $enddate";
+        $hresult = mysql_query($hsql);
+        if (mysql_error()) trigger_error(mysql_error(),E_USER_ERROR);
+        while ($holiday = mysql_fetch_object($hresult))
+        {
+            $day = date('j',$holiday->startdate);
+            $hdays[$day] = $holiday->length;
+            $htypes[$day] = $holiday->type;
+            $happroved[$day] = $holiday->approved;
+        }
+        $html .= "<tr><td rowspan='2'>{$user->username}</td>";
+        // AM
+        $html .= "<td>am</td>";
+        $countdays=0;
+        for($day=1;$day<=$daysinmonth;$day++)
+        {
+            $shade='shade1';
+            if ((date('D',mktime(0,0,0,$month,$day,$year))=='Sat' OR date('D',mktime(0,0,0,$month,$day,$year))=='Sun') AND mktime(9,0,0,$month,$day,$year) >= $job->actual_start)
+            {
+                // Add  day on for a weekend
+                if ($weekend==FALSE) $displaydays+=1;
+                $weekend=TRUE;
+            }
+            if (date('D',mktime(0,0,0,$month,$day,$year))=='Sat')
+            {
+                $html .= "<td class='shade1'>&nbsp;</td>";
+            }
+            elseif (date('D',mktime(0,0,0,$month,$day,$year))=='Sun')
+            {
+                // Do nothing on sundays
+            }
+            else
+            {
+                $weekend=FALSE;  $hello='';
+                if ($hdays[$day]=='am' OR $hdays[$day]=='day')
+                {
+                    if ($happroved[$day] == 0) $html .= "<td class='review'>";
+                    elseif ($happroved[$day] == 1) $html .= "<td class='idle'>";
+                    else $html .= "<td class='notice'>";
+                    $html .= substr($holidaytype[$htypes[$day]],0,1);
+                    $html .= "</td>";
+                }
+                else $html .= "<td class='shade2'></td>";
+            }
+        }
+        $html .= "</tr>";
+        // PM
+        $html .= "<tr><td>pm</td>";
+                $countdays=0;
+        for($day=1;$day<=$daysinmonth;$day++)
+        {
+            $shade='shade1';
+            if ((date('D',mktime(0,0,0,$month,$day,$year))=='Sat' OR date('D',mktime(0,0,0,$month,$day,$year))=='Sun') AND mktime(9,0,0,$month,$day,$year) >= $job->actual_start)
+            {
+                // Add  day on for a weekend
+                if ($weekend==FALSE) $displaydays+=1;
+                $weekend=TRUE;
+            }
+            if (date('D',mktime(0,0,0,$month,$day,$year))=='Sat')
+            {
+                $html .= "<td class='shade1'>&nbsp;</td>";
+            }
+            elseif (date('D',mktime(0,0,0,$month,$day,$year))=='Sun')
+            {
+                // Do nothing on sundays
+            }
+            else
+            {
+                $weekend=FALSE;  $hello='';
+                if ($hdays[$day]=='pm' OR $hdays[$day]=='day')
+                {
+                    if ($happroved[$day] == 0) $html .= "<td class='review'>";
+                    elseif ($happroved[$day] == 1) $html .= "<td class='idle'>";
+                    else $html .= "<td class='notice'>";
+                    $html .= "<span title='{$holidaytype[$htypes[$day]]}'>".substr($holidaytype[$htypes[$day]],0,1)."</span>";
+                    $html .= "</td>";
+                }
+                else $html .= "<td class='shade2'></td>";
+            }
+        }
+        $html .= "</tr>\n";
+    }
+
+
+    $html .= "</table>";
+
+
+
+    return $html;
+}
+
+function month_select($month, $year)
+{
+    $cyear=$year;
+    $cmonth = $month - 3;
+    if ($cmonth < 1) { $cmonth +=12; $cyear--; }
+    $html = "<p align='center'>";
+    $pmonth=$cmonth-5;
+    $pyear=$cyear-1;
+    $nyear=$cyear+1;
+    $html .= "<a href='{$SERVER['PHP_SELF']}?month={$month}&amp;year={$pyear}'>&lt;&lt;</a> ";
+    for ($c=1;$c <= 12;$c++)
+    {
+        if (mktime(0,0,0,$cmonth,1,$cyear)==mktime(0,0,0,date('m'),1,date('Y'))) $html .= "<span style='background: #FFFF00;'>";
+        if (mktime(0,0,0,$cmonth,1,$cyear)==mktime(0,0,0,$month,1,$year)) $html .= "<strong>";
+        $html .= "<a href='{$SERVER['PHP_SELF']}?month=$cmonth&amp;year=$cyear'>".date('M y',mktime(0,0,0,$cmonth,1,$cyear))."</a>";
+        if (mktime(0,0,0,$cmonth,1,$cyear)==mktime(0,0,0,$month,1,$year)) $html .= "</strong>";
+        if (mktime(0,0,0,$cmonth,1,$cyear)==mktime(0,0,0,date('m'),1,date('Y'))) $html .= "</span>";
+        if ($c < 12) $html .= " <span style='color: #666;'>|</span> ";
+        $cmonth++;
+        if ($cmonth > 12) { $cmonth -= 12; $cyear++; }
+    }
+    $html .= " <a href='{$SERVER['PHP_SELF']}?month={$month}&amp;year={$nyear}'>&gt;&gt;</a>";
+    $html .= "</p>";
+    return $html;
+}
+
+
+
+if ($display=='chart' OR empty($type))
+{
+    // Display planner chart
+    // TODO holiday planner
+    echo "<h2>Holiday Planner</h2>";
+    if (empty($_REQUEST['month'])) $month=date('m');
+    else $month=$_REQUEST['month'];
+    if (empty($_REQUEST['year'])) $year=date('Y');
+    else $year=$_REQUEST['year'];
+
+    echo month_select($month, $year);
+    echo "<p align='center'>".date('F Y',mktime(0,0,0,$month,1,$year))."</p>";
+
+    echo draw_chart($month,$year);
+}
+else
+{
+    // Display year calendar
+    echo "<h2>";
+    switch ($type)
+    {
+        case 1:
+            if ($user=='all' && $approver==TRUE) echo "Everybody";
+            else echo user_realname($user);
+            echo "'s Holiday Calendar</h2>";
+            echo "<p align='center'>Used ".user_count_holidays($user, $type)." of ".user_holiday_entitlement($user)." days entitlement.<br />";
         break;
 
-        case 'pm':
-        echo "booked for the <strong>afternoon";
+        case 2:
+            if ($user=='all' && $approver==TRUE) echo "Everybody";
+            else echo user_realname($user);
+            echo "'s Sickness Calendar</h2>";
         break;
 
-        case 'day':
-        echo "booked for the <strong>full day";
+        case 3:
+            if ($user=='all' && $approver==TRUE) echo "Everybody";
+            else echo user_realname($user);
+            echo "'s Working Away Calendar</h2>";
+        break;
+
+        case 4:
+            if ($user=='all' && $approver==TRUE) echo "Everybody";
+            else echo user_realname($user);
+            echo "'s Training Calendar</h2>";
+        break;
+
+        case 10:
+            echo "Set Bank Holidays</h2>";
         break;
 
         default:
-        echo "<strong>not booked";
-}
-echo "</strong> ";
-echo " as ".holiday_type($selectedtype).".  ";
-
-if ($approved==0)
-{
-    switch ($length)
-    {
-        case 'am':
-            echo "You can make it <a href='add_holiday.php?type=$type&amp;user=$user&amp;year=$selectedyear&amp;month=$selectedmonth&amp;day=$selectedday&amp;length=pm'>the afternoon instead</a>, or book <a href='add_holiday.php?type=$type&amp;user=$user&amp;year=$selectedyear&amp;month=$selectedmonth&amp;day=$selectedday&amp;length=day'>full day</a>. ";
-        break;
-
-        case 'pm':
-            echo "You can make it <a href='add_holiday.php?type=$type&amp;user=$user&amp;year=$selectedyear&amp;month=$selectedmonth&amp;day=$selectedday&amp;length=am'>the morning</a> instead, or book <a href='add_holiday.php?type=$type&amp;user=$user&amp;year=$selectedyear&amp;month=$selectedmonth&amp;day=$selectedday&amp;length=day'>full day</a>. ";
-        break;
-
-        case 'day':
-            echo "You can make it <a href='add_holiday.php?type=$type&amp;user=$user&amp;year=$selectedyear&amp;month=$selectedmonth&amp;day=$selectedday&amp;length=am'>the morning</a>, or <a href='add_holiday.php?type=$type&amp;user=$user&amp;year=$selectedyear&amp;month=$selectedmonth&amp;day=$selectedday&amp;length=pm'>the afternoon</a> instead. ";
+            trigger_error("Error: Holiday type '$type' not handled ", E_USER_ERROR);
     }
-    if ($length!='0') echo "Or you can <a href='add_holiday.php?type=$type&amp;user=$user&amp;year=$selectedyear&amp;month=$selectedmonth&amp;day=$selectedday&amp;length=0'>unbook</a> it.";
-}
-elseif ($approved==1)
-{
-    list($xtype, $xlength, $xapproved, $xapprovedby)=user_holiday($user, $type, $selectedyear, $selectedmonth, $selectedday, FALSE);
-    echo "The Holiday has been Approved by ".user_realname($xapprovedby).".";
-    if ($length!='0' && $approver==TRUE && $sit[2]==$xapprovedby) echo "&nbsp;As approver for this holiday you can <a href='add_holiday.php?type=$type&amp;user=$user&amp;year=$selectedyear&amp;month=$selectedmonth&amp;day=$selectedday&amp;length=0'>unbook</a> it.";
-}
-else
-{
-    echo "<span class='error'>The Holiday has been Declined</span>.  You should <a href='add_holiday.php?type=$type&amp;user=$user&amp;year=$selectedyear&amp;month=$selectedmonth&amp;day=$selectedday&amp;length=0'>unbook</a> it.";
-}
-}
-else
-{
-echo "Click on a day to book it";
-}
 
-?>
-</p>
-</td>
-</tr>
-</table>
+    echo "<p align='center'>";
+    if (!empty($selectedday))
+    {
+        echo "$selectedday/$selectedmonth/$selectedyear is ";
+        switch ($length)
+        {
+            case 'am':
+            echo "booked for the <strong>morning";
+            break;
 
-<?php
-echo "<table align='center' summary=\"calendar\" width='100%'>";
-if (date('m')<=7) { $displayyear=date('Y')-1; $displaymonth=8; }
-if (date('m')>7) { $displayyear=date('Y'); $displaymonth=8; }
-if (date('m')>11) { $displayyear=date('Y'); $displaymonth=12; }
-for ($r==1;$r<5;$r++)
-{
-echo "<tr>";
-for ($c=1;$c<=4;$c++)
-{
-    echo "<td valign=top align='center' class='shade1'>";
-    draw_calendar($displaymonth,$displayyear);
-    echo "</td>";
-    if ($displaymonth==12) { $displayyear++; $displaymonth=0; }
-    $displaymonth++;
-}
-echo "</tr>";
-}
-echo "</table>";
+            case 'pm':
+            echo "booked for the <strong>afternoon";
+            break;
 
+            case 'day':
+            echo "booked for the <strong>full day";
+            break;
+
+            default:
+            echo "<strong>not booked";
+        }
+        echo "</strong> ";
+        echo " as ".holiday_type($selectedtype).".  ";
+
+        if ($approved==0)
+        {
+            switch ($length)
+            {
+                case 'am':
+                    echo "You can make it <a href='add_holiday.php?type=$type&amp;user=$user&amp;year=$selectedyear&amp;month=$selectedmonth&amp;day=$selectedday&amp;length=pm'>the afternoon instead</a>, or book <a href='add_holiday.php?type=$type&amp;user=$user&amp;year=$selectedyear&amp;month=$selectedmonth&amp;day=$selectedday&amp;length=day'>full day</a>. ";
+                break;
+
+                case 'pm':
+                    echo "You can make it <a href='add_holiday.php?type=$type&amp;user=$user&amp;year=$selectedyear&amp;month=$selectedmonth&amp;day=$selectedday&amp;length=am'>the morning</a> instead, or book <a href='add_holiday.php?type=$type&amp;user=$user&amp;year=$selectedyear&amp;month=$selectedmonth&amp;day=$selectedday&amp;length=day'>full day</a>. ";
+                break;
+
+                case 'day':
+                    echo "You can make it <a href='add_holiday.php?type=$type&amp;user=$user&amp;year=$selectedyear&amp;month=$selectedmonth&amp;day=$selectedday&amp;length=am'>the morning</a>, or <a href='add_holiday.php?type=$type&amp;user=$user&amp;year=$selectedyear&amp;month=$selectedmonth&amp;day=$selectedday&amp;length=pm'>the afternoon</a> instead. ";
+            }
+            if ($length!='0') echo "Or you can <a href='add_holiday.php?type=$type&amp;user=$user&amp;year=$selectedyear&amp;month=$selectedmonth&amp;day=$selectedday&amp;length=0'>unbook</a> it.";
+        }
+        elseif ($approved==1)
+        {
+            list($xtype, $xlength, $xapproved, $xapprovedby)=user_holiday($user, $type, $selectedyear, $selectedmonth, $selectedday, FALSE);
+            echo "The Holiday has been Approved by ".user_realname($xapprovedby).".";
+            if ($length!='0' && $approver==TRUE && $sit[2]==$xapprovedby) echo "&nbsp;As approver for this holiday you can <a href='add_holiday.php?type=$type&amp;user=$user&amp;year=$selectedyear&amp;month=$selectedmonth&amp;day=$selectedday&amp;length=0'>unbook</a> it.";
+        }
+        else
+        {
+            echo "<span class='error'>The Holiday has been Declined</span>.  You should <a href='add_holiday.php?type=$type&amp;user=$user&amp;year=$selectedyear&amp;month=$selectedmonth&amp;day=$selectedday&amp;length=0'>unbook</a> it.";
+        }
+    }
+    else
+    {
+        echo "Click on a day to book it";
+    }
+    echo "</p>\n";
+
+
+
+    echo "<table align='center' summary=\"calendar\">";
+    if (date('m')<=7) { $displayyear=date('Y')-1; $displaymonth=8; }
+    if (date('m')>7) { $displayyear=date('Y'); $displaymonth=8; }
+    if (date('m')>11) { $displayyear=date('Y'); $displaymonth=12; }
+    for ($r==1;$r<5;$r++)
+    {
+        echo "<tr>";
+        for ($c=1;$c<=4;$c++)
+        {
+            echo "<td valign=top align='center' class='shade1'>";
+            draw_calendar($displaymonth,$displayyear);
+            echo "</td>";
+            if ($displaymonth==12) { $displayyear++; $displaymonth=0; }
+            $displaymonth++;
+        }
+        echo "</tr>";
+    }
+    echo "</table>";
+}
 include('htmlfooter.inc.php');
 ?>
