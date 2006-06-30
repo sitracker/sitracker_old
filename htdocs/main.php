@@ -79,17 +79,17 @@ echo " {$i18n_UPDATED}<br />";
 if ($todaysclosed == 0) echo $i18n_NO_INCIDENTS;
 elseif ($todaysclosed == 1) echo "{$todaysclosed} Incident";
 elseif ($todaysclosed > 1) echo "{$todaysclosed} Incidents";
-echo " closed<br />";
+echo " {$i18n_CLOSED}<br />";
 
 if ($supportopen == 0) echo $i18n_NO_INCIDENTS;
 elseif ($supportopen == 1) echo "{$supportopen} Incident";
 elseif ($supportopen > 1) echo "{$supportopen} Incidents";
-echo " currently open<br />";
+echo " {$i18n_CURRENTLY_OPEN}<br />";
 
 if ($kbpublished == 0) echo $i18n_NO_KB_ARTICLES;
 elseif ($kbpublished == 1) echo "{$kbpublished} KB Article";
 elseif ($kbpublished > 1) echo "{$kbpublished} KB Articles";
-echo " published<br />";
+echo " {$i18n_PUBLISHED}<br />";
 
 echo "</div>";
 echo "</div>";

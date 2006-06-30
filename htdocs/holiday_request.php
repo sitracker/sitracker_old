@@ -24,7 +24,7 @@ $mode = cleanvar($_REQUEST['mode']);
 $approvaluser = cleanvar($_REQUEST['approvaluser']);
 
 include('htmlheader.inc.php');
-if (!isset($user) || $user=='0') $user=$sit[2];
+if (empty($user) || $user=='0') $user=$sit[2];
 if (!$sent)
 {
     // check to see if this user has approve permission
@@ -43,11 +43,11 @@ if (!$sent)
     if (mysql_error()) trigger_error("MySQL Query Error ".mysql_error(), E_USER_ERROR);
     if (mysql_num_rows($result)>0)
     {
-        echo "<table align='center' bgcolor='#FFFFFF'  cellpadding='2' cellspacing='0' class='tablelist' >";
-        echo "<tr class='shade1'>";
+        echo "<table align='center'>";
+        echo "<tr>";
         if ($user=='all' && $approver==TRUE) echo "<th>Name</th>";
         echo "<th>Date</th><th>Length</th><th>Type</th>";
-        if ($approver) echo "<th>&nbsp;</th><th>Group Members Away</th>";
+        if ($approver) echo "<th>Approval</th><th>Group Members Away</th>";
 
         echo "</tr>";
         while ($holiday=mysql_fetch_object($result))
@@ -68,8 +68,9 @@ if (!$sent)
                 {
                     $approvetext='Approve';
                     if ($holiday->type==2) $approvetext='Acknowledge';
-                    echo "<a href=\"holiday_approve.php?approve=TRUE&user=".$holiday->userid."&view=$user&startdate=".$holiday->startdate."&type=".$holiday->type."&length=".$holiday->length."\">$approvetext</a> | <a href=\"holiday_approve.php?approve=FALSE&user=".$holiday->userid."&view=$user&startdate=".$holiday->startdate."&type=".$holiday->type."&length=".$holiday->length."\">Decline</a>";
-                    if ($holiday->type==1) echo "| <a href=\"holiday_approve.php?approve=FREE&user=".$holiday->userid."&view=$user&startdate=".$holiday->startdate."&type=".$holiday->type."&length=".$holiday->length."\">Free Leave</a>";
+                    echo "<a href=\"holiday_approve.php?approve=TRUE&amp;user={$holiday->userid}&amp;view={$user}&amp;startdate={$holiday->startdate}&amp;type={$holiday->type}&amp;length={$holiday->length}\">{$approvetext}</a> | ";
+                    echo "<a href=\"holiday_approve.php?approve=FALSE&amp;user={$holiday->userid}&amp;view={$user}&amp;startdate={$holiday->startdate}&amp;type={$holiday->type}&amp;length={$holiday->length}\">Decline</a>";
+                    if ($holiday->type==1) echo "| <a href=\"holiday_approve.php?approve=FREE&amp;user={$holiday->userid}&amp;view={$user}&amp;startdate={$holiday->startdate}&amp;type={$holiday->type}&amp;length={$holiday->length}\">Free Leave</a>";
                 }
                 else echo "Cannot approve yourself";
                 if ($approver==TRUE)
@@ -86,8 +87,8 @@ if (!$sent)
         echo "</table>";
         if (!$mode=='approval')
         {
+            echo "<form action='{$_SERVER['PHP_SELF']}' method='post'>";
             echo "<p align='center'>";
-            echo "<form action='{$_SERVER['PHP_SELF']}' method='POST'>";
             echo "Send the request(s) to: ";
             // extract users
             $sql  = "SELECT id, realname, accepting FROM users, userpermissions ";
@@ -96,12 +97,12 @@ if (!$sent)
 
             echo "<select class='dropdown' name='approvaluser'>";
             if ($id == 0)
-            echo "<option selected value=0>Select A User\n";
+            echo "<option selected value='0'>Select A User\n";
             while ($users = mysql_fetch_array($result))
             {
                 if($users['id'] != $sit[2])
                 {
-                    ?><option <?php if ($users["id"] == $id) { ?>selected='selected' <?php } ?>value=<?php echo $users["id"] ?>>
+                    ?><option <?php if ($users["id"] == $id) { ?>selected='selected' <?php } ?>value='<?php echo $users["id"] ?>'>
                     <?php echo $users["realname"]; ?><?php
                 }
                 echo "</option\n";
@@ -112,8 +113,9 @@ if (!$sent)
             echo "<textarea name='memo' rows='3' cols='40'></textarea>";
             echo "<input type='hidden' name='user' value='$user'>";
             echo "<input type='hidden' name='sent' value='true'><br /><br />";
-            echo "<input type='submit' name='submit' value='submit'></form>";
+            echo "<input type='submit' name='submit' value='submit'>";
             echo "</p>";
+            echo "</form>";
         }
     }
     else

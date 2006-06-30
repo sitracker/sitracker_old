@@ -8,9 +8,12 @@ v3.24
 * When an incident is closed or reassigned, check for related
   pending-reassignments and remove if necessary
 * Provide interface to configure external escalation partners (setup.php)
+* Make sure every user has an email address set
+
+v3.25
+* Incoming email handler
 
 v3.2x
-* Incoming email handler
 * Re-write the help
 * Application icon
 * Context 'actions' menus
@@ -24,7 +27,7 @@ v3.3x
 * Internationalisation, and hopefully at least one translation
 
 v4.00 / Future
-* Interface for editing vendors
+* Interface for adding/editing vendors
 * Change maintenance table to use servicelevel field that stores tag instead of id
 * Overhaul the email templates (emailtypes)
 * Add tabbed incident_details popup window, with tabs relevant to SLA status

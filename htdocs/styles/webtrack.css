@@ -17,7 +17,7 @@ p, table, td, center, input, textarea, select
   color: #000000;
 }
 
-textarea {width: 100%;}
+td textarea {width: 100%;}
 
 a
 {

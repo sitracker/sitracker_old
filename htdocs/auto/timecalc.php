@@ -108,6 +108,7 @@ while ($incident=mysql_fetch_array($incident_result)) {
 
 
     // And now SLA - this is pretty much the same as above
+    // FIXME timesincesla appears to be calculated from the last update and not the last SLA target
     for ($i=$slaStart-1; $i>=0; $i--) {
         if ($interval[$i]['type']=='slamet') $lastTime=0;
         else $lastTime=$interval[$i+1]['timesincesla'];

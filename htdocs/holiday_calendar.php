@@ -318,27 +318,27 @@ switch ($type)
 <tr>
 <td align='center'>
 <?php
-if (isset($selectedday))
+if (!empty($selectedday))
 {
-echo "$selectedday/$selectedmonth/$selectedyear is ";
-switch ($length)
-{
-    case 'am':
-    echo "booked for the <b>morning";
-    break;
+    echo "$selectedday/$selectedmonth/$selectedyear is ";
+    switch ($length)
+    {
+        case 'am':
+        echo "booked for the <strong>morning";
+        break;
 
-    case 'pm':
-    echo "booked for the <b>afternoon";
-    break;
+        case 'pm':
+        echo "booked for the <strong>afternoon";
+        break;
 
-    case 'day':
-    echo "booked for the <b>full day";
-    break;
+        case 'day':
+        echo "booked for the <strong>full day";
+        break;
 
-    default:
-    echo "<b>not booked";
+        default:
+        echo "<strong>not booked";
 }
-echo "</b> ";
+echo "</strong> ";
 echo " as ".holiday_type($selectedtype).".  ";
 
 if ($approved==0)
