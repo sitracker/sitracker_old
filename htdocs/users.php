@@ -130,7 +130,9 @@ while ($users = mysql_fetch_array($result))
     ?>
     <td align='center'><?php if ($users["phone"] == "") { ?>None<?php } else { echo $users["phone"]; } ?></td>
     <td align='center'><?php if ($users["phone"] == "") { ?>None<?php } else { if ($users['mobile']!='') echo $users["mobile"]; else echo '&nbsp;'; } ?></td>
-    <td align='center'><?php echo userstatus_name($users["status"]) ?></td>
+    <td>
+    <?php echo "<a href='holiday_calendar.php?type=1&amp;user={$users['id']}' title='Holiday Calendar'><img src='{$CONFIG['application_webpath']}images/icons/16x16/apps/date.png' width='16' height='16' alt='Calendar icon' style='border:none;' /></a> ";
+    echo userstatus_name($users["status"]) ?></td>
     <td align='center'><?php echo $users["accepting"]=='Yes' ? 'Yes' : "<span class='error'>No</span>"; ?></td>
     </tr>
     <?php

@@ -285,7 +285,11 @@ switch ($step)
             <input type="file" name="attachment" size="40" maxfilesize="<?php echo $CONFIG['upload_max_filesize'] ?>" />
             </td></tr>
             <tr><th>Message:</th><td>
-            <textarea name="bodytext" rows="20" cols="65"><?php echo emailtype_replace_specials(emailtype_body($emailtype), $id, $sit[2]) ?></textarea>
+            <textarea name="bodytext" rows="20" cols="65"><?php
+            // Attempt to restore email body from session in case there was an error submitting previously
+            if (!empty($_SESSION['temp-emailbody'])) echo $_SESSION['temp-emailbody'];
+            else echo emailtype_replace_specials(emailtype_body($emailtype), $id, $sit[2])
+            ?></textarea>
             </td></tr>
             <?php
             if ($CONFIG['enable_spellchecker']==TRUE) echo "<tr><th>&nbsp;</th><td><input type='checkbox' name='spellcheck' value='yes' /> Check Spelling before sending</td></tr>\n";
@@ -370,6 +374,10 @@ switch ($step)
             $errors = 1;
             $error_string .= "<p class='error'>You must complete the 'Reply To' field</p>\n";
         }
+        // Store email body in session if theres been an error
+        if ($errors > 0) $_SESSION['temp-emailbody'] = $bodytext;
+        else unset($_SESSION['temp-emailbody']);
+
         // send email if no errors
         if ($errors == 0)
         {

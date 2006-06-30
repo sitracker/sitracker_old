@@ -262,12 +262,12 @@ function draw_calendar($nmonth, $nyear)
                 }
                 if ($dtype==1 || $dtype=='' || $dtype==5 || $dtype==3 || $dtype==2 || $dtype==4)
                 {
-                    echo "<td class=\"$shade\" style=\"$style\">";
+                    echo "<td class=\"$shade\" style=\"width:33px; $style\">";
                     echo "<a href=\"add_holiday.php?type=$type&amp;user=$user&amp;year=$nyear&amp;month=$nmonth&amp;day=$calday\"  title=\"$celltitle\">$bold$adjusted_day$notbold</a></td>";
                 }
                 else
                 {
-                    echo "<td class=\"$shade\" style=\"$style\">$bold$adjusted_day$notbold</td>";
+                    echo "<td class=\"$shade\" style=\"width:33px; $style\">$bold$adjusted_day$notbold</td>";
                 }
             }
         }
@@ -285,7 +285,7 @@ switch ($type)
         if ($user=='all' && $approver==TRUE) echo "Everybody";
         else echo user_realname($user);
         echo "'s Holiday Calendar</h2>";
-        echo "<p align='center'>You have used ".user_count_holidays($user, $type)." of your ".user_holiday_entitlement($user)." days entitlement.<br />";
+        echo "<p align='center'>Used ".user_count_holidays($user, $type)." of ".user_holiday_entitlement($user)." days entitlement.<br />";
     break;
 
     case 2:

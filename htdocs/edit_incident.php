@@ -136,6 +136,12 @@ else
             $errors = 1;
             $error_string .= "<p class='error'>You must enter a title</p>\n";
         }
+
+        if ($errors > 0)
+        {
+            echo "<div>$bodytext</div>";
+        }
+
         if ($errors == 0)
         {
             $addition_errors = 0;
