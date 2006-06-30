@@ -35,6 +35,8 @@ if (!$sent)
     else echo user_realname($user);
     echo " - Holiday Requests</h2>";
 
+    if ($approver==TRUE AND $mode!='approval') echo "<p align='center'><a href='holiday_request.php?user=all&amp;mode=approval'>Approve holiday requests</a></p>";
+
     $sql = "SELECT * FROM holidays, holidaytypes WHERE holidays.type=holidaytypes.id AND approved=0 ";
     if ($mode!='approval') $sql.="AND userid='$user' ";
     if ($user!='all' && $approver==TRUE) $sql .= "AND userid='".$user."' ";
@@ -120,7 +122,7 @@ if (!$sent)
     }
     else
     {
-    echo "<p class='info'>You have no holidays that are booked but not yet approved</p>";
+        echo "<p class='info'>You have no holidays that are booked but not yet approved</p>";
     }
 }
 else
@@ -135,6 +137,7 @@ else
     if (mysql_error()) trigger_error("MySQL Query Error ".mysql_error(), E_USER_ERROR);
     if (mysql_num_rows($result)>0)
     {
+        // FIXME this email should probably use the email template system
         $bodytext = "Message from {$CONFIG['application_shortname']}: ".user_realname($user)." has requested that you approve the following holidays:\n\n";
         while ($holiday=mysql_fetch_object($result))
         {
@@ -151,7 +154,7 @@ else
         $bodytext .= "The following comments were sent with the request:\n\n";
         $bodytext .= "---\n$memo\n---\n";
         }
-        $bodytext .= "Please point your browser to\n<https://$HOSTNAME/holiday_request.php?user=$user&mode=approval>\n ";
+        $bodytext .= "Please point your browser to\n<https://{$_SERVER['HOSTNAME']}/holiday_request.php?user={$user}&mode=approval>\n ";
         $bodytext .= "to approve or decline these requests.";
     }
     echo "<p align='center'>Your request has been sent</p>";
