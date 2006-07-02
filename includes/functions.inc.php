@@ -4379,6 +4379,33 @@ function external_escalation($escalated, $incid)
    return "no";
 }
 
+function bbcode($text)
+{
+    $bbcode_regex = array(0 => '/\[b\](.+?)\[\/b\]/s',
+                        1 => '/\[i\](.+?)\[\/i\]/s',
+                        2 => '/\[u\](.+?)\[\/u\]/s',
+                        3 => '/\[quote\](.+?)\[\/quote\]/s',
+                        4 => '/\[quote\=(.+?)](.+?)\[\/quote\]/s',
+                        5 => '/\[url\](.+?)\[\/url\]/s',
+                        6 => '/\[url\=(.+?)\](.+?)\[\/url\]/s',
+                        7 => '/\[img\](.+?)\[\/img\]/s',
+                        8 => '/\[color\=(.+?)\](.+?)\[\/color\]/s',
+                        9 => '/\[size\=(.+?)\](.+?)\[\/size\]/s');
+
+    $bbcode_replace = array(0 => '<b>$1</b>',
+                            1 => '<i>$1</i>',
+                            2 => '<u>$1</u>',
+                            3 => '<table class="quote"><tr><td>Quote:</td></tr><tr><td class="quote_box">$1</td></tr></table>',
+                            4 => '<table class="quote"><tr><td>$1 said:</td></tr><tr><td class="quote_box">$2</td></tr></table>',
+                            5 => '<a href="$1" title="$1">$1</a>',
+                            6 => '<a href="$1" title="$1">$2</a>',
+                            7 => '<img src="$1" alt="User submitted image" title="User submitted image"/>',
+                            8 => '<span style="color:$1">$2</span>',
+                            9 => '<span style="font-size:$1">$2</span>');
+
+    return preg_replace($bbcode_regex, $bbcode_replace, $text);
+}
+
 
 // -------------------------- // -------------------------- // --------------------------
 // leave this section at the bottom of functions.inc.php ================================

@@ -17,6 +17,7 @@ Changes in v3.24 - Unreleased
 * Allow configuration of external escalation partners
 * Call opening notes are shown in tool tip after new incidents logged rather
   than reassign
+* BB Code. Basic set of BB codes supported in incident updates
 
 Changes in v3.23 - Released 10 April 2006
 -----------------------------------------------------------------------
