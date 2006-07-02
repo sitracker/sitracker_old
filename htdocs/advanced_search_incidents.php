@@ -28,6 +28,7 @@ $search_id = cleanvar($_REQUEST['search_id']);
 $search_externalid = cleanvar($_REQUEST['search_externalid']);
 $search_contact = cleanvar($_REQUEST['search_contact']);
 $search_details = cleanvar($_REQUEST['search_details']);
+$search_range = cleanvar($_REQUEST['search_range']);
 $search_date = cleanvar($_REQUEST['search_date']);
 $search_user = cleanvar($_REQUEST['search_user']);
 $action = cleanvar($_REQUEST['action']);
