@@ -39,7 +39,7 @@ if (empty($_REQUEST['process']))
             //document.closeform.cust_vis2.checked=true;
             //document.closeform.cust_vis2.disabled=true;
             // Enable KB includes
-            document.closeform.incsummary.disabled=false;
+            //document.closeform.incsummary.disabled=false;
             document.closeform.summary.disabled=false;
             document.closeform.incsymptoms.disabled=false;
             document.closeform.symptoms.disabled=false;
@@ -49,7 +49,7 @@ if (empty($_REQUEST['process']))
             document.closeform.question.disabled=false;
             document.closeform.incanswer.disabled=false;
             document.closeform.answer.disabled=false;
-            document.closeform.incsolution.disabled=false;
+            //document.closeform.incsolution.disabled=false;
             document.closeform.solution.disabled=false;
             document.closeform.incworkaround.disabled=false;
             document.closeform.workaround.disabled=false;
@@ -144,8 +144,8 @@ if (empty($_REQUEST['process']))
     You should provide a summary of the problem and information about how it was resolved.<br /><strong>Final Update</strong>:</span></td></tr>
 
     <tr><th>Summary:<br />
-        A concise but full summary of the problem(s) that were encountered.
-        <input type='checkbox' name='incsummary' onclick="if (this.checked) {document.closeform.summary.disabled = false; document.closeform.summary.style.display='';} else { saveValue=document.closeform.summary.value; document.closeform.summary.disabled = true; document.closeform.summary.style.display='none';}" checked='checked' /></td>
+        A concise but full summary of the problem(s) that were encountered.<sup class='red'>*</sup>
+        <input type='checkbox' name='incsummary' onclick="if (this.checked) {document.closeform.summary.disabled = false; document.closeform.summary.style.display='';} else { saveValue=document.closeform.summary.value; document.closeform.summary.disabled = true; document.closeform.summary.style.display='none';}" checked='checked' disabled='disabled' /></td>
     <td><textarea id="summary" name="summary" cols='40' rows='8' onfocus="if (this.enabled) { this.value = saveValue; setTimeout('document.articlform.summary.blur()',1); } else saveValue=this.value;"><?php
     //  style="display: none;"
     $sql = "SELECT * FROM updates WHERE incidentid='$id' AND type='probdef' ORDER BY timestamp ASC";
@@ -171,7 +171,7 @@ if (empty($_REQUEST['process']))
     <tr><th>Answer: <input type='checkbox' name='incanswer' onclick="if (this.checked) {document.closeform.answer.disabled = false; document.closeform.answer.style.display=''} else { saveValue=document.closeform.answer.value; document.closeform.answer.disabled = true; document.closeform.answer.style.display='none'}" disabled='disabled' /></th>
     <td><textarea id="answer" name="answer" cols='40' rows='8' style="display: none;" onfocus="if (this.enabled) { this.value = saveValue; setTimeout('document.articlform.answer.blur()',1); } else saveValue=this.value;"></textarea></td></tr>
 
-    <tr><th>Solution: <input type='checkbox' name='incsolution' onclick="if (this.checked) {document.closeform.solution.disabled = false; document.closeform.solution.style.display=''} else { saveValue=document.closeform.solution.value; document.closeform.solution.disabled = true; document.closeform.solution.style.display='none'}" checked='checked' /></th>
+    <tr><th>Solution: <sup class='red'>*</sup><input type='checkbox' name='incsolution' onclick="if (this.checked) {document.closeform.solution.disabled = false; document.closeform.solution.style.display=''} else { saveValue=document.closeform.solution.value; document.closeform.solution.disabled = true; document.closeform.solution.style.display='none'}" checked='checked' disabled='disabled' /></th>
 
     <?php
     echo "<td><textarea id='solution' name='solution' cols='40' rows='8' onfocus='if (this.enabled) { this.value = saveValue; setTimeout('document.articlform.solution.blur()',1); } else saveValue=this.value;'>";

@@ -18,6 +18,8 @@ Changes in v3.24 - Unreleased
 * Call opening notes are shown in tool tip after new incidents logged rather
   than reassign
 * BB Code. Basic set of BB codes supported in incident updates
+* Prevent summary and solution from being uncheck from close incident page 
+  since these are mandatory
 
 Changes in v3.23 - Released 10 April 2006
 -----------------------------------------------------------------------
