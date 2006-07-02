@@ -3,7 +3,6 @@ To Do
 v3.24
 * Improve Related Incidents to add Parents/Children?
 * Add product-end-of-lifetime date column to software table
-* Show email in tooltip after new incidents are logged, not reassign
 * Make send_template_email store emails in the incident log
 * When an incident is closed or reassigned, check for related
   pending-reassignments and remove if necessary

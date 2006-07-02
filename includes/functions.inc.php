@@ -1757,6 +1757,35 @@ function incident_lastupdate($id)
     else
     {
         $update = mysql_fetch_array($result);
+
+        if($update['type'] == "reassigning")
+        {
+            //check if the previous update was by userid == 0 if so then we can assume this is a new call
+            $sqlPrevious = "SELECT userid, type, currentowner, currentstatus, LEFT(bodytext,500) AS body, timestamp, nextaction, id ";
+            $sqlPrevious .= "FROM updates WHERE id < ".$update['id']." AND incidentid = '$id' ORDER BY id DESC";
+            $resultPrevious = mysql_query($sqlPrevious);
+            if (mysql_error()) trigger_error(mysql_error(),E_USER_WARNING);
+        
+        
+            if (mysql_num_rows($result) == 0) trigger_error("Zero records while retrieving incident last update",E_USER_WARNING);
+            else
+            {
+                $row = mysql_fetch_array($resultPrevious);
+                if($row['userid'] == 0)
+                {
+                    $last;
+                    //This was an initial assignment so we now want the first update - looping round data retrieved rather than second query
+                    while($row = mysql_fetch_array($resultPrevious)){$last = $row;}
+                    mysql_free_result($resultPrevious);
+
+                    return array($last['userid'], $last['type'] ,$last['currentowner'], $last['currentstatus'], stripslashes($last['body']), $last['timestamp'], $last['nextaction'], $last['id']);
+                    
+                }
+            }
+
+        }
+
+
         mysql_free_result($result);
         return array($update['userid'], $update['type'] ,$update['currentowner'], $update['currentstatus'], stripslashes($update['body']), $update['timestamp'], $update['nextaction'], $update['id']);
     }
