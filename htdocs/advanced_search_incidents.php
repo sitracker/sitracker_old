@@ -163,7 +163,7 @@ else
         if ($countresults == 0)
         {
             echo "<h2>Sorry, your search yielded no results</h2>\n";
-            echo "<p><a href=\"advanced_search_incidents.php\">Search Again</a></p>";
+            echo "<p align='center'><a href=\"advanced_search_incidents.php\">Search Again</a></p>";
         }
         else
         {
@@ -212,7 +212,7 @@ else
         echo "<br />";
         echo "<p align='center'><a href=\"advanced_search_incidents.php\">Search Again</a></p>";
         // FIXME v3.2x Replace maxresults limit with paging
-        echo "<p class='info'>A maximum of {$maxresults} results are displayed, your search might have returned more.</p>";
+        if ($countresults >= $maxresults) echo "<p class='info'>A maximum of {$maxresults} results are displayed, your search might have returned more.</p>";
     }
 }
 include('htmlfooter.inc.php');
