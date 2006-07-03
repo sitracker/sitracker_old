@@ -1765,8 +1765,8 @@ function incident_lastupdate($id)
             $sqlPrevious .= "FROM updates WHERE id < ".$update['id']." AND incidentid = '$id' ORDER BY id DESC";
             $resultPrevious = mysql_query($sqlPrevious);
             if (mysql_error()) trigger_error(mysql_error(),E_USER_WARNING);
-        
-        
+
+
             if (mysql_num_rows($result) == 0) trigger_error("Zero records while retrieving incident last update",E_USER_WARNING);
             else
             {
@@ -1779,7 +1779,7 @@ function incident_lastupdate($id)
                     mysql_free_result($resultPrevious);
 
                     return array($last['userid'], $last['type'] ,$last['currentowner'], $last['currentstatus'], stripslashes($last['body']), $last['timestamp'], $last['nextaction'], $last['id']);
-                    
+
                 }
             }
 
@@ -2794,7 +2794,7 @@ function html_checkbox($name,$state)
 
 
 function send_template_email($template, $incidentid, $info1='', $info2='')
-{    
+{
     global $CONFIG, $application_version_string, $sit, $now;
     if (empty($template)) throw_error('Blank template ID:', 'send_template_email()');
     if (empty($incidentid)) throw_error('Blank incident ID:', 'send_template_email()');
@@ -4399,11 +4399,11 @@ function bbcode($text)
                         8 => '/\[color\=(.+?)\](.+?)\[\/color\]/s',
                         9 => '/\[size\=(.+?)\](.+?)\[\/size\]/s');
 
-    $bbcode_replace = array(0 => '<b>$1</b>',
-                            1 => '<i>$1</i>',
+    $bbcode_replace = array(0 => '<strong>$1</strong>',
+                            1 => '<em>$1</em>',
                             2 => '<u>$1</u>',
-                            3 => '<table class="quote"><tr><td>Quote:</td></tr><tr><td class="quote_box">$1</td></tr></table>',
-                            4 => '<table class="quote"><tr><td>$1 said:</td></tr><tr><td class="quote_box">$2</td></tr></table>',
+                            3 => '<blockquote><p>$1</p></blockquote>',
+                            4 => '<blockquote cite="$1"><p>$1 said:<br />$2</p></blockquote>',
                             5 => '<a href="$1" title="$1">$1</a>',
                             6 => '<a href="$1" title="$1">$2</a>',
                             7 => '<img src="$1" alt="User submitted image" title="User submitted image"/>',

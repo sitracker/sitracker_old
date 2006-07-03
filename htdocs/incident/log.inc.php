@@ -17,8 +17,6 @@ if (realpath(__FILE__) == realpath($_SERVER['SCRIPT_FILENAME']))
     exit;
 }
 
-include('bbcode.php');
-
 if ($incidentid=='' OR $incidentid < 1) trigger_error("Incident ID cannot be zero or blank", E_USER_ERROR);
 
 $sql  = "SELECT * FROM updates WHERE incidentid='{$incidentid}' ";
