@@ -128,7 +128,8 @@ $hmenu[1030] = array (10=> array ( 'perm'=> 22, 'name'=> "Users", 'url'=>"manage
 );
 $hmenu[103010] = array (10=> array ( 'perm'=> 22, 'name'=> "Manage Users", 'url'=>"manage_users.php"),
                         20=> array ( 'perm'=> 20, 'name'=> "Add User", 'url'=>"add_user.php?action=showform"),
-                        30=> array ( 'perm'=> 9, 'name'=> "Set Permissions", 'url'=>"edit_user_permissions.php")
+                        30=> array ( 'perm'=> 9, 'name'=> "Set Permissions", 'url'=>"edit_user_permissions.php"),
+                        40=> array ( 'perm'=> 23, 'name'=> "User Groups", 'url'=>"usergroups.php")
 );
 $hmenu[103020] = array (10=> array ( 'perm'=> 16, 'name'=> "Add Template", 'url'=>"add_emailtype.php?action=showform"),
                         20=> array ( 'perm'=> 17, 'name'=> "Edit Template", 'url'=>"edit_emailtype.php?action=showform"),
