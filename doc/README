@@ -187,6 +187,9 @@ incident_created_site       Perform an action after an incident is
 incident_closed             Perform an action after an incident is
                              closed
 new_incident_form           Add to the new incident form
+edit_incident_form          Add to the edit incident form
+incident_edited             Perform an action after an incident is 
+                             updated
 
 If your plugin needs to use additional pages, put those pages in a
 subdirectory inside htdocs/ext

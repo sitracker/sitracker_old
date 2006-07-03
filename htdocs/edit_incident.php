@@ -71,7 +71,11 @@ if (empty($submit))
         <td><input maxlength='80' name="externalengineer" size='30' type="text" value="<?php echo $incident["externalengineer"] ?>" /></td></tr>
         <tr><th>External Email:</th>
         <td><input maxlength='255' name="externalemail" size='30' type="text" value="<?php echo $incident["externalemail"] ?>" /></td></tr>
-        </table>
+        <?php
+            plugin_do('edit_incident_form');
+        ?>
+	</table>
+
         <p align='center'>
         <input name="type" type="hidden" value="Support" />
         <input name="id" type="hidden" value="<?php echo $id; ?>" />
@@ -209,6 +213,8 @@ else
                     $addition_errors = 1;
                     $addition_errors_string .= "<p class='error'>Addition of incident update failed</p>\n";
                 }
+
+                plugin_do('incident_edited');
             }
 
             if ($addition_errors == 0)

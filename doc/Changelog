@@ -20,6 +20,8 @@ Changes in v3.24 - Unreleased
 * BB Code. Basic set of BB codes supported in incident updates
 * Prevent summary and solution from being uncheck from close incident page 
   since these are mandatory
+* Fixed bug with not sending closing email
+* send_template_email inow store emails in the incident log
 
 Changes in v3.23 - Released 10 April 2006
 -----------------------------------------------------------------------

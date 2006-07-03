@@ -239,6 +239,7 @@ else
     $additional = cleanvar($_POST['additional']);
     $references = cleanvar($_POST['references']);
     $wait = cleanvar($_POST['wait']);
+    $send_email = cleanvar($_POST['send_email']);
 
     // Close the incident
     $errors = 0;

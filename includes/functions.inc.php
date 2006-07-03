@@ -2794,8 +2794,8 @@ function html_checkbox($name,$state)
 
 
 function send_template_email($template, $incidentid, $info1='', $info2='')
-{
-    global $CONFIG, $application_version_string, $sit;
+{    
+    global $CONFIG, $application_version_string, $sit, $now;
     if (empty($template)) throw_error('Blank template ID:', 'send_template_email()');
     if (empty($incidentid)) throw_error('Blank incident ID:', 'send_template_email()');
 
@@ -2839,6 +2839,13 @@ function send_template_email($template, $incidentid, $info1='', $info2='')
 
     $extra_headers .= "\r\n";
     ## bugbug: tidy up these stripslashes.  INL 5Sep01
+
+    $sql = "INSERT INTO updates (incidentid, userid, type, bodytext, timestamp, customervisibility) VALUES ";
+    $sql .= "($incidentid, 0, 'email', 'To: <b>$email_to</b>\nFrom: <b>$email_from</b>\n";
+    $sql .= "Reply-To: <b>$emailreplyto</b>\nBCC: <b>$email_bcc</b>\nSubject: <b>$email_subject</b>\n<hr>$email_body', ";
+    $sql .= "$now, 'show')";
+    $result = mysql_query($sql);
+    if (mysql_error()) trigger_error("MySQL Query Error ".mysql_error(), E_USER_ERROR);
 
     // send email
     if ($CONFIG['demo']) $rtnvalue = TRUE;
