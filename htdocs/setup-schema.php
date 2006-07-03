@@ -268,7 +268,7 @@ INSERT INTO `holidaytypes` VALUES (1, 'Holiday');
 INSERT INTO `holidaytypes` VALUES (2, 'Sickness');
 INSERT INTO `holidaytypes` VALUES (3, 'Working Away');
 INSERT INTO `holidaytypes` VALUES (4, 'Training');
-INSERT INTO `holidaytypes` VALUES (5, 'Maternity/Paternity/Compassionate Leave');
+INSERT INTO `holidaytypes` VALUES (5, 'Compassionate/Maternity/Paternity Leave');
 
 
 CREATE TABLE `incidentpools` (
@@ -1023,6 +1023,7 @@ CREATE TABLE `users` (
   `password` varchar(50) default NULL,
   `realname` varchar(50) default NULL,
   `roleid` int(5) NOT NULL default '1',
+  `groupid` int(5) default NULL,
   `title` varchar(50) default NULL,
   `signature` text,
   `email` varchar(50) default NULL,
@@ -1048,7 +1049,8 @@ CREATE TABLE `users` (
   PRIMARY KEY  (`id`),
   KEY `username` (`username`),
   KEY `accepting` (`accepting`),
-  KEY `status` (`status`)
+  KEY `status` (`status`),
+  KEY `groupid` (`groupid`)
 ) ENGINE=MyISAM;
 
 INSERT INTO `users` VALUES (1, 'admin', MD5('{$adminpw}'), 'Administrator', 1, 'Administrator', 'Regards,\r\n\r\nAdministrator', '', '', '', '', '', '', '', 1, '', 'Yes', 60, 'desc', 8, 'false', 'false', 'false', 'false', '', 32, '');
@@ -1158,6 +1160,10 @@ UPDATE `permissions` SET `name` = 'Edit Service Levels' WHERE `id` =53 LIMIT 1 ;
 INSERT INTO `incidentstatus` VALUES (10, 'Active (Unassigned)', 'Active');
 UPDATE `incidentstatus` SET `id` = '0' WHERE `id` =10 LIMIT 1 ;
 ";
+
+$upgrade_schema[324] = "ALTER TABLE `users` ADD `groupid` INT( 5 ) NULL AFTER `roleid` ;
+ALTER TABLE `users` ADD INDEX ( `groupid` ) ;";
+
 
 // Important: When making changes to the schema you must add SQL to make the alterations
 // to existing databases in $upgrade_schema[] *AND* you must also change $schema[] for

@@ -19,6 +19,7 @@ v3.2x
 * Public Holidays
 * Monitor incidents by email, e.g. get an email when an incident is about to go out of SLA
 * Make holding queue locks timeout
+* Task/Todo List
 
 v3.3x
 * Contact flags
