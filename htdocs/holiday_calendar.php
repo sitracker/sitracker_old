@@ -460,7 +460,7 @@ function month_select($month, $year)
     $pmonth=$cmonth-5;
     $pyear=$cyear-1;
     $nyear=$cyear+1;
-    $html .= "<a href='{$SERVER['PHP_SELF']}?month={$month}&amp;year={$pyear}'>&lt;&lt;</a> ";
+    $html .= "<a href='{$SERVER['PHP_SELF']}?month={$month}&amp;year={$pyear}' title='Back one year'>&lt;&lt;</a> ";
     for ($c=1;$c <= 12;$c++)
     {
         if (mktime(0,0,0,$cmonth,1,$cyear)==mktime(0,0,0,date('m'),1,date('Y'))) $html .= "<span style='background: #FFFF00;'>";
@@ -472,7 +472,7 @@ function month_select($month, $year)
         $cmonth++;
         if ($cmonth > 12) { $cmonth -= 12; $cyear++; }
     }
-    $html .= " <a href='{$SERVER['PHP_SELF']}?month={$month}&amp;year={$nyear}'>&gt;&gt;</a>";
+    $html .= " <a href='{$SERVER['PHP_SELF']}?month={$month}&amp;year={$nyear}' title='Forward one year'>&gt;&gt;</a>";
     $html .= "</p>";
     return $html;
 }
@@ -498,7 +498,7 @@ if ($display=='chart' OR empty($type))
     else { $prevmonth = 12; $prevyear = $year-1; }
 
     echo month_select($month, $year);
-    echo "<p align='center'><a href='{$_SERVER['PHP_SELF']}?month={$prevmonth}&amp;year={$prevyear}'>&lt;</a> ".date('F Y',mktime(0,0,0,$month,1,$year))." <a href='{$_SERVER['PHP_SELF']}?month={$nextmonth}&amp;year={$nextyear}'>&gt;</a></p>";
+    echo "<p align='center'><a href='{$_SERVER['PHP_SELF']}?month={$prevmonth}&amp;year={$prevyear}' title='Previous Month'>&lt;</a> ".date('F Y',mktime(0,0,0,$month,1,$year))." <a href='{$_SERVER['PHP_SELF']}?month={$nextmonth}&amp;year={$nextyear}' title='Next Month'>&gt;</a></p>";
 
     echo draw_chart($month,$year);
 }
