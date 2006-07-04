@@ -7,6 +7,9 @@ v3.24
   pending-reassignments and remove if necessary
 * Provide interface to configure external escalation partners (setup.php)
 * Make sure every user has an email address set
+* Allow holidays to be cancelled after they've been approved, cancellations
+  will need to be approved too probably?
+* Mark previous holidays as 'spent' when holiday entitlement is changed
 
 v3.25
 * Incoming email handler
