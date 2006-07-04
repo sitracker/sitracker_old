@@ -284,6 +284,7 @@ function draw_chart($month, $year)
     {
         $grouparr[$group->id]=$group->name;
     }
+    $numgroups = count($grouparr);
 
     // Get list of holiday types
     $sql = "SELECT * FROM holidaytypes";
@@ -328,6 +329,7 @@ function draw_chart($month, $year)
     $uresult = mysql_query($usql);
     if (mysql_error()) trigger_error(mysql_error(),E_USER_ERROR);
 
+    $prevgroupid='000';
     while ($user = mysql_fetch_object($uresult))
     {
         unset($hdays);
@@ -346,6 +348,7 @@ function draw_chart($month, $year)
 
         if ($prevgroupid != $user->groupid)
         {
+            if ($user->groupid=='') $user->groupid=0;
             $html .= "<tr>";
             $html .= "<td align='left' colspan='2' class='shade2'>Group: <strong>{$grouparr[$user->groupid]}</strong></td>";
             for($day=1;$day<=$daysinmonth;$day++)
@@ -409,7 +412,7 @@ function draw_chart($month, $year)
         $html .= "</tr>\n";
         // PM
         $html .= "<tr><td>pm</td>";
-                $countdays=0;
+        $countdays=0;
         for($day=1;$day<=$daysinmonth;$day++)
         {
             $shade='shade1';
