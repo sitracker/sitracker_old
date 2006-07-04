@@ -19,7 +19,7 @@ require('auth.inc.php');
 
 // External variables
 $sort = cleanvar($_REQUEST['sort']);
-$groupid = cleanvar($_GET['groupid']);
+$groupid = cleanvar($_REQUEST['gid']);
 
 // By default show users in home group
 if ($groupid!='') $filtergroup = $groupid;
@@ -87,11 +87,11 @@ if ($numgroups >= 1)
     echo "Group: <select name='choosegroup' onchange='window.location.href=this.options[this.selectedIndex].value'>";
     foreach($grouparr AS $groupid => $groupname)
     {
-        echo "<option value='{$_SERVER['PHP_SELF']}?groupid={$groupid}'";
+        echo "<option value='{$_SERVER['PHP_SELF']}?gid={$groupid}'";
         if ($groupid == $filtergroup) echo " selected='selected'";
         echo ">$groupname</option>\n";
     }
-    echo "<option value='{$_SERVER['PHP_SELF']}?groupid=0'>Users with no group</option>\n";
+    echo "<option value='{$_SERVER['PHP_SELF']}?gid=0'>Users with no group</option>\n";
     echo "</select>\n";
     echo "</form>\n<br />";
 }
