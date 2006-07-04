@@ -4416,6 +4416,19 @@ function bbcode($text)
     return preg_replace($bbcode_regex, $bbcode_replace, $text);
 }
 
+function strip_bbcode_tooltip($text)
+{
+    $bbcode_regex = array(0 => '/\[url\](.+?)\[\/url\]/s',
+                        1 => '/\[url\=(.+?)\](.+?)\[\/url\]/s',
+                        2 => '/\[color\=(.+?)\](.+?)\[\/color\]/s',
+                        3 => '/\[size\=(.+?)\](.+?)\[\/size\]/s');
+    $bbcode_replace = array(0 => '$1',
+                            1 => '$2',
+                            2 => '$2',
+                            3 => '$2');
+
+    return preg_replace($bbcode_regex, $bbcode_replace, $text); 
+}
 
 // -------------------------- // -------------------------- // --------------------------
 // leave this section at the bottom of functions.inc.php ================================
