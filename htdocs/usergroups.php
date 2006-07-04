@@ -115,7 +115,7 @@ switch ($action)
 
         echo "<form action='{$_SERVER['PHP_SELF']}' method='post'>";
         echo "<table summary='User Group Membership' align='center'>";
-        echo "<tr><th>User</th><th>Group</th>";
+        echo "<tr><th>User</th><th>Group</th></tr>";
         while ($user = mysql_fetch_object($result))
         {
             echo "<tr><td>{$user->realname} ({$user->username})</td>";

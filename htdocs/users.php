@@ -91,7 +91,9 @@ if ($numgroups >= 1)
         if ($groupid == $filtergroup) echo " selected='selected'";
         echo ">$groupname</option>\n";
     }
-    echo "<option value='{$_SERVER['PHP_SELF']}?gid=0'>Users with no group</option>\n";
+    echo "<option value='{$_SERVER['PHP_SELF']}?gid=0'";
+    if ($filtergroup==0) echo " selected='selected'";
+    echo ">Users with no group</option>\n";
     echo "</select>\n";
     echo "</form>\n<br />";
 }
