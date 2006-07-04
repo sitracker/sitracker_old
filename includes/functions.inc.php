@@ -1763,7 +1763,7 @@ function incident_lastupdate($id)
     {
         $update = mysql_fetch_array($result);
 
-        if(($update['type'] == "reassigning" AND !isset($update['bodytext'])) OR ($update['type'] == 'slamet' AND $row['sla'] == 'opened'))
+        if(($update['type'] == "reassigning" AND !isset($update['body'])) OR ($update['type'] == 'slamet' AND $row['sla'] == 'opened'))
         {
             //check if the previous update was by userid == 0 if so then we can assume this is a new call
             $sqlPrevious = "SELECT userid, type, currentowner, currentstatus, LEFT(bodytext,500) AS body, timestamp, nextaction, id, sla, type ";
