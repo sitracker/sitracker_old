@@ -19,11 +19,17 @@ require('auth.inc.php');
 
 // External variables
 $sort = cleanvar($_REQUEST['sort']);
+$groupid = cleanvar($_GET['groupid']);
 
+// By default show users in home group
+if ($groupid!='') $filtergroup = $groupid;
+else $filtergroup = $_SESSION['groupid'];
 
 include('htmlheader.inc.php');
 
-$sql  = "SELECT * FROM users WHERE status!=0";  // status=0 means left company
+$sql  = "SELECT * FROM users WHERE status!=0 ";  // status=0 means left company
+if ($filtergroup==0) $sql .= "AND (groupid='{$filtergroup}' OR groupid='')";
+else $sql .= "AND groupid='{$filtergroup}'";
 
 // sort users by realname by default
 if ($sort == "realname")
@@ -65,8 +71,35 @@ else $sql .= " ORDER BY realname ASC";
 $result = mysql_query($sql);
 if (mysql_error()) trigger_error("MySQL Query Error ".mysql_error(), E_USER_ERROR);
 
+
+$gsql = "SELECT * FROM groups ORDER BY name";
+$gresult = mysql_query($gsql);
+if (mysql_error()) trigger_error(mysql_error(),E_USER_ERROR);
+while ($group = mysql_fetch_object($gresult))
+{
+    $grouparr[$group->id]=$group->name;
+}
+$numgroups = count($grouparr);
+echo "<h2>User Listing</h2>";
+if ($numgroups >= 1)
+{
+    echo "<form action='{$_SERVER['PHP_SELF']}' style='text-align: center;' method='get'>";
+    echo "Group: <select name='choosegroup' onchange='window.location.href=this.options[this.selectedIndex].value'>";
+    foreach($grouparr AS $groupid => $groupname)
+    {
+        echo "<option value='{$_SERVER['PHP_SELF']}?groupid={$groupid}'";
+        if ($groupid == $filtergroup) echo " selected='selected'";
+        echo ">$groupname</option>\n";
+    }
+    echo "<option value='{$_SERVER['PHP_SELF']}?groupid=0'>Users with no group</option>\n";
+    echo "</select>\n";
+    echo "</form>\n<br />";
+}
+
+
+
 ?>
-<h2>User Listing</h2>
+
 <table align='center' style='width: 95%;'>
 <tr>
     <th align='left'><a href="<?php echo $_SERVER['PHP_SELF'] ?>?sort=realname">Name</a></th>
