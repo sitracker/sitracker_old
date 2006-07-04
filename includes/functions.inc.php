@@ -857,6 +857,10 @@ function emailtype_body($id)
     return db_read_column('body', 'emailtype', $id);
 }
 
+function emailtype_customervisibility($id)
+{
+    return db_read_column('customervisibility', 'emailtype', $id);
+}
 
 function incident_owner($id)
 {
@@ -2818,6 +2822,7 @@ function send_template_email($template, $incidentid, $info1='', $info2='')
     $email_bcc     = trim(emailtype_replace_specials(emailtype_bcc($templateid), $incidentid, $sit[2]));
     $email_subject = trim(emailtype_replace_specials(emailtype_subject($templateid), $incidentid, $sit[2]));
     $email_body    = trim(emailtype_replace_specials(emailtype_body($templateid), $incidentid, $sit[2]));
+    $email_customervisibility = trim(emailtype_customervisibility($templateid));
 
     // Additional information
     if (empty($info1)==FALSE || empty($info2)==FALSE)
@@ -2844,7 +2849,7 @@ function send_template_email($template, $incidentid, $info1='', $info2='')
     $sql = "INSERT INTO updates (incidentid, userid, type, bodytext, timestamp, customervisibility) VALUES ";
     $sql .= "($incidentid, 0, 'email', 'To: <b>$email_to</b>\nFrom: <b>$email_from</b>\n";
     $sql .= "Reply-To: <b>$emailreplyto</b>\nBCC: <b>$email_bcc</b>\nSubject: <b>$email_subject</b>\n<hr>$email_body', ";
-    $sql .= "$now, 'show')";
+    $sql .= "$now, '$email_customervisibility')";
     $result = mysql_query($sql);
     if (mysql_error()) trigger_error("MySQL Query Error ".mysql_error(), E_USER_ERROR);
 
