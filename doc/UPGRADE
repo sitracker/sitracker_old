@@ -8,7 +8,6 @@ instructions on-screen.
 
 Further instructions and notes about specific upgrades follow:
 
-
 Upgrading to 3.23
 -----------------
 As of v3.23 SiT! no longer require the php.ini setting register_globals

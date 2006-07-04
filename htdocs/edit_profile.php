@@ -61,24 +61,20 @@ if (empty($submit))
     </th><td><textarea name="signature" rows="4" cols="40"><?php echo strip_tags($user->signature); ?></textarea></td></tr>
     <?php
     $entitlement=user_holiday_entitlement($userid);
-    if ($entitlement > 0)
+    if ($edituserpermission && $userid!=$sit[2])
+    {
+        echo "<tr><th>Holiday Entitlement:</th><td>";
+        echo "<input type='text' name='holiday_entitlement' value='$entitlement' size='2' /> days";
+        echo "</td></tr>";
+    }
+    elseif ($entitlement > 0)
     {
         $holidaystaken=user_count_holidays($userid, 1);
-        if ($userid!=$sit[2])
-        {
-            echo "<tr><th>Holiday Entitlement:</th><td>";
-            echo "<input type='text' name='holiday_entitlement' value='$entitlement' size='2' /> days, ";
-            echo "$holidaystaken taken";
-            echo "</td></tr>";
-        }
-        else
-        {
-            echo "<tr><th>Holiday Entitlement:</th><td>";
-            echo "$entitlement days, ";
-            echo "$holidaystaken taken, ";
-            echo $entitlement-$holidaystaken." Remaining";
-            echo "</td></tr>\n";
-        }
+        echo "<tr><th>Holiday Entitlement:</th><td>";
+        echo "$entitlement days, ";
+        echo "$holidaystaken taken, ";
+        echo $entitlement-$holidaystaken." Remaining";
+        echo "</td></tr>\n";
         echo "<tr><th>Other Leave:</th><td>";
         echo user_count_holidays($userid, 2)." days sick leave, ";
         echo user_count_holidays($userid, 3)." days working away, ";
