@@ -75,7 +75,7 @@ switch ($action)
 
         function group_drop_down($name, $selected)
         {
-            global $grouparr;
+            global $grouparr, $numgroups;
             $html = "<select name='$name'>";
             $html .= "<option value='0'>None</option>\n";
             if ($numgroups >= 1)
