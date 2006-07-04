@@ -84,18 +84,13 @@ if (empty($submit))
         echo "</td></tr>";
     }
     echo "<tr><th>Group Membership:</th><td valign='top'>";
-    $sql="SELECT groupid, name FROM usergroups, groups WHERE usergroups.groupid=groups.id AND userid='{$userid}' ";
-    $result = mysql_query($sql);
-    $countgroups=mysql_num_rows($result);
-    $counter=0;
-    if ($countgroups>0)
+    if ($user->groupid >= 1)
     {
-        while ($group=mysql_fetch_object($result))
-        {
-            $counter++;
-            echo $group->name;
-            if ($counter<$countgroups) echo "<br />";
-        }
+        $sql="SELECT name FROM groups WHERE id='{$user->groupid}' ";
+        $result = mysql_query($sql);
+        if (mysql_error()) trigger_error(mysql_error(),E_USER_ERROR);
+        $group = mysql_fetch_object($result);
+        echo $group->name;
     }
     else
     {

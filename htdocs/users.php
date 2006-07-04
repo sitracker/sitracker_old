@@ -22,13 +22,15 @@ $sort = cleanvar($_REQUEST['sort']);
 $groupid = cleanvar($_REQUEST['gid']);
 
 // By default show users in home group
-if ($groupid!='') $filtergroup = $groupid;
-else $filtergroup = $_SESSION['groupid'];
+if ($groupid=='all') $filtergroup = 'all';
+elseif ($groupid=='') $filtergroup = $_SESSION['groupid'];
+else $filtergroup = $groupid;
 
 include('htmlheader.inc.php');
 
 $sql  = "SELECT * FROM users WHERE status!=0 ";  // status=0 means left company
-if ($filtergroup==0) $sql .= "AND (groupid='{$filtergroup}' OR groupid='')";
+if ($filtergroup=='0') $sql .= "AND (groupid='{$filtergroup}' OR groupid='')";
+elseif ($filtergroup=='all') {} // Do nothing
 else $sql .= "AND groupid='{$filtergroup}'";
 
 // sort users by realname by default
@@ -85,6 +87,9 @@ if ($numgroups >= 1)
 {
     echo "<form action='{$_SERVER['PHP_SELF']}' style='text-align: center;' method='get'>";
     echo "Group: <select name='choosegroup' onchange='window.location.href=this.options[this.selectedIndex].value'>";
+    echo "<option value='{$_SERVER['PHP_SELF']}?gid=all'";
+    if ($filtergroup=='all') echo " selected='selected'";
+    echo ">All</option>\n";
     foreach($grouparr AS $groupid => $groupname)
     {
         echo "<option value='{$_SERVER['PHP_SELF']}?gid={$groupid}'";
@@ -92,7 +97,7 @@ if ($numgroups >= 1)
         echo ">$groupname</option>\n";
     }
     echo "<option value='{$_SERVER['PHP_SELF']}?gid=0'";
-    if ($filtergroup==0) echo " selected='selected'";
+    if ($filtergroup=='0') echo " selected='selected'";
     echo ">Users with no group</option>\n";
     echo "</select>\n";
     echo "</form>\n<br />";

@@ -294,7 +294,7 @@ function draw_chart($month, $year)
         $holidaytype[$type->id]=$type->name;
     }
 
-    $html .= "<table align='center' border='1' bordercolor='#AAA' cellpadding='0' cellspacing='0' style='border-collapse:collapse; width: 99%;' ";
+    $html .= "<table align='center' border='1' cellpadding='0' cellspacing='0' style='border-collapse:collapse; border-color: #AAA; width: 99%;' ";
     $html .= "width='100%;'>";
 
 

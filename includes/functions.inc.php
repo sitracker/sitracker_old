@@ -4432,7 +4432,7 @@ function strip_bbcode_tooltip($text)
                             2 => '$2',
                             3 => '$2');
 
-    return preg_replace($bbcode_regex, $bbcode_replace, $text); 
+    return preg_replace($bbcode_regex, $bbcode_replace, $text);
 }
 
 // -------------------------- // -------------------------- // --------------------------
