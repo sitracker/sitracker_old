@@ -1752,7 +1752,7 @@ function priority_icon($id)
 // Returns an array of fields from the most recent update record for a given incident id
 function incident_lastupdate($id)
 {
-    $sql = "SELECT userid, type, currentowner, currentstatus, LEFT(bodytext,500) AS body, timestamp, nextaction, id ";
+    $sql = "SELECT userid, type, sla, currentowner, currentstatus, LEFT(bodytext,500) AS body, timestamp, nextaction, id ";
     $sql .= "FROM updates WHERE incidentid='$id' ORDER BY timestamp DESC LIMIT 1";
     $result = mysql_query($sql);
     if (mysql_error()) trigger_error(mysql_error(),E_USER_WARNING);
@@ -1763,10 +1763,10 @@ function incident_lastupdate($id)
     {
         $update = mysql_fetch_array($result);
 
-        if($update['type'] == "reassigning")
+        if($update['type'] == "reassigning" OR ($update['type'] == 'slamet' AND $row['sla'] == 'opened'))
         {
             //check if the previous update was by userid == 0 if so then we can assume this is a new call
-            $sqlPrevious = "SELECT userid, type, currentowner, currentstatus, LEFT(bodytext,500) AS body, timestamp, nextaction, id ";
+            $sqlPrevious = "SELECT userid, type, currentowner, currentstatus, LEFT(bodytext,500) AS body, timestamp, nextaction, id, sla, type ";
             $sqlPrevious .= "FROM updates WHERE id < ".$update['id']." AND incidentid = '$id' ORDER BY id DESC";
             $resultPrevious = mysql_query($sqlPrevious);
             if (mysql_error()) trigger_error(mysql_error(),E_USER_WARNING);
@@ -1780,7 +1780,18 @@ function incident_lastupdate($id)
                 {
                     $last;
                     //This was an initial assignment so we now want the first update - looping round data retrieved rather than second query
-                    while($row = mysql_fetch_array($resultPrevious)){$last = $row;}
+                    while($row = mysql_fetch_array($resultPrevious))
+                    {                        
+                        $last = $row;
+                        if($row['userid'] != 0)
+                        {
+                            if($row['type'] ==  'slamet' AND $row['sla'] == 'opened')
+                            {
+                                $last = mysql_fetch_array($resultPrevious);
+                            }
+                            break;
+                        }
+                    }
                     mysql_free_result($resultPrevious);
 
                     return array($last['userid'], $last['type'] ,$last['currentowner'], $last['currentstatus'], stripslashes($last['body']), $last['timestamp'], $last['nextaction'], $last['id']);
