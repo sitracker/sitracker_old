@@ -24,7 +24,7 @@ $action = cleanvar($_REQUEST['action']);
 switch ($action)
 {
     case 'savemembers':
-        $sql = "SELECT * FROM users ORDER BY realname";
+        $sql = "SELECT * FROM users WHERE status !=0 ORDER BY realname";  // status=0 means left company
         $result = mysql_query($sql);
         if (mysql_error()) trigger_error(mysql_error(),E_USER_ERROR);
         while ($user = mysql_fetch_object($result))
