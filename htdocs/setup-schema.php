@@ -829,8 +829,12 @@ INSERT INTO `sitetypes` VALUES (3, 'Academic');
 CREATE TABLE `software` (
   `id` int(5) NOT NULL auto_increment,
   `name` varchar(255) NOT NULL default '',
+  `lifetime_start` date default NULL,
+  `lifetime_end` date default NULL,
   PRIMARY KEY  (`id`)
-) ENGINE=MyISAM COMMENT='Individual software products as they are supported' ;
+) ENGINE=MyISAM DEFAULT COMMENT='Individual software products as they are supported' AUTO_INCREMENT=2 ;
+
+INSERT INTO `software` (`id`, `name`, `lifetime_start`, `lifetime_end`) VALUES (1, 'Example Software', NULL, NULL);
 
 INSERT INTO `software` VALUES (1,'Example Software');
 
@@ -1162,8 +1166,9 @@ UPDATE `incidentstatus` SET `id` = '0' WHERE `id` =10 LIMIT 1 ;
 ";
 
 $upgrade_schema[324] = "ALTER TABLE `users` ADD `groupid` INT( 5 ) NULL AFTER `roleid` ;
-ALTER TABLE `users` ADD INDEX ( `groupid` ) ;";
-
+ALTER TABLE `users` ADD INDEX ( `groupid` ) ;
+ALTER TABLE `software` ADD `lifetime_start` DATE NULL ,
+ADD `lifetime_end` DATE NULL ;";
 
 // Important: When making changes to the schema you must add SQL to make the alterations
 // to existing databases in $upgrade_schema[] *AND* you must also change $schema[] for
