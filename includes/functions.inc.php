@@ -138,7 +138,7 @@ $hmenu[103020] = array (10=> array ( 'perm'=> 16, 'name'=> "Add Template", 'url'
 $hmenu[1040] = array (10=> array ( 'perm'=> 0, 'name'=> "View Users", 'url'=>"users.php"),
                       20=> array ( 'perm'=> 0, 'name'=> "List Skills", 'url'=>"user_skills.php"),
                       30=> array ( 'perm'=> 27, 'name'=> "Holiday Planner", 'url'=>"holiday_calendar.php"),
-                      40=> array ( 'perm'=> 50, 'name'=> "Approve Holidays", 'url'=>"holiday_request.php?user=all&mode=approval")
+                      40=> array ( 'perm'=> 50, 'name'=> "Approve Holidays", 'url'=>"holiday_request.php?user=all&amp;mode=approval")
 );
 
 

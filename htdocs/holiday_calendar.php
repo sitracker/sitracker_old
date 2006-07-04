@@ -105,7 +105,7 @@ function draw_calendar($nmonth, $nyear)
     //       echo "<small><a href=\"blank.php?nmonth=".date('m',$timebase)."&nyear=".date('Y',$timebase)."&nday=".date('d',$timebase)."&sid=$sid\" title=\"jump to today\">".date('D jS M Y')."</a></small><br /> ";
     //       echo "<a href=\"blank.php?nmonth=$prevmonth&nyear=$prevyear&sid=$sid\" title=\"Previous Month\"><img src=\"images/arrow_left.gif\" height=\"9\" width=\"6\" border=\"0\"></a>";
     /* Print Current Month */
-    echo "&nbsp;<b>$monthName $nyear</b>";
+    echo "&nbsp;<strong>$monthName $nyear</strong>";
     echo "&nbsp;";
     echo "<a href=\"blank.php?nmonth=$nextmonth&amp;nyear=$nextyear&amp;sid=$sid\" title=\"Next Month\"><img src=\"images/arrow_right.gif\" height=\"9\" width=\"6\" border=\"0\" /></a>";
     echo "</td></tr>";
@@ -275,6 +275,16 @@ function draw_calendar($nmonth, $nyear)
 // Holiday planner chart
 function draw_chart($month, $year)
 {
+    // Get list of user groups
+    $gsql = "SELECT * FROM groups ORDER BY name";
+    $gresult = mysql_query($gsql);
+    if (mysql_error()) trigger_error(mysql_error(),E_USER_ERROR);
+    $grouparr[0]='None';
+    while ($group = mysql_fetch_object($gresult))
+    {
+        $grouparr[$group->id]=$group->name;
+    }
+
     // Get list of holiday types
     $sql = "SELECT * FROM holidaytypes";
     $result = mysql_query($sql);
@@ -286,10 +296,13 @@ function draw_chart($month, $year)
 
     $html .= "<table align='center' border='1' bordercolor='#AAA' cellpadding='0' cellspacing='0' style='border-collapse:collapse; width: 99%;' ";
     $html .= "width='100%;'>";
-    $html .= "<tr>";
-    $html .= "<td align='left' colspan='2' class='shade2'></td>";
+
+
+//    $html .= "<tr>";
+    //$html .= "<td align='left' colspan='2' class='shade2'></td>";
 
     $daysinmonth=date('t',mktime(0,0,0,$month,1,$year));
+    /*
     for($day=1;$day<=$daysinmonth;$day++)
     {
         $shade='shade1';
@@ -308,10 +321,10 @@ function draw_chart($month, $year)
             $html .= "</td>";
         }
     }
-
     $html .= "</tr>";
+    */
 
-    $usql  = "SELECT * FROM users WHERE status!=0";  // status=0 means left company
+    $usql  = "SELECT * FROM users WHERE status!=0 ORDER BY groupid, realname";  // status=0 means left company
     $uresult = mysql_query($usql);
     if (mysql_error()) trigger_error(mysql_error(),E_USER_ERROR);
 
@@ -330,7 +343,35 @@ function draw_chart($month, $year)
             $htypes[$day] = $holiday->type;
             $happroved[$day] = $holiday->approved;
         }
-        $html .= "<tr><td rowspan='2'>{$user->username}</td>";
+
+        if ($prevgroupid != $user->groupid)
+        {
+            $html .= "<tr>";
+            $html .= "<td align='left' colspan='2' class='shade2'>Group: <strong>{$grouparr[$user->groupid]}</strong></td>";
+            for($day=1;$day<=$daysinmonth;$day++)
+            {
+                $shade='shade1';
+                if (date('D',mktime(0,0,0,$month,$day,$year))=='Sat')
+                {
+                    $shade='expired';
+                    $html .= "<td class='$shade'><strong title='Week Number'>".substr(date('W',mktime(0,0,0,$month,$day,$year))+1,0, 1)."<br />".substr(date('W',mktime(0,0,0,$month,$day,$year))+1,1, 1)."</strong></td>";
+                }
+                elseif (date('D',mktime(0,0,0,$month,$day,$year))=='Sun') $html .= '';  // nothing
+                else
+                {
+                    $html .= "<td align='center' class=\"$shade\"";
+                    if (mktime(0,0,0,$month,$day,$year)==mktime(0,0,0,date('m'),date('d'),date('Y'))) $html .= " style='background: #FFFF00;' title='Today'";
+                    $html .= ">";
+                    $html .= substr(date('D',mktime(0,0,0,$month,$day,$year)),0,1)."<br />".date('d',mktime(0,0,0,$month,$day,$year)) ;
+                    $html .= "</td>";
+                }
+            }
+            $html .= "</tr>\n";
+        }
+        $prevgroupid = $user->groupid;
+
+
+        $html .= "<tr><th rowspan='2'>{$user->realname}</th>";
         // AM
         $html .= "<td>am</td>";
         $countdays=0;
@@ -345,7 +386,7 @@ function draw_chart($month, $year)
             }
             if (date('D',mktime(0,0,0,$month,$day,$year))=='Sat')
             {
-                $html .= "<td class='shade1'>&nbsp;</td>";
+                $html .= "<td class='expired'>&nbsp;</td>";
             }
             elseif (date('D',mktime(0,0,0,$month,$day,$year))=='Sun')
             {
@@ -365,7 +406,7 @@ function draw_chart($month, $year)
                 else $html .= "<td class='shade2'></td>";
             }
         }
-        $html .= "</tr>";
+        $html .= "</tr>\n";
         // PM
         $html .= "<tr><td>pm</td>";
                 $countdays=0;
@@ -380,7 +421,7 @@ function draw_chart($month, $year)
             }
             if (date('D',mktime(0,0,0,$month,$day,$year))=='Sat')
             {
-                $html .= "<td class='shade1'>&nbsp;</td>";
+                $html .= "<td class='expired'>&nbsp;</td>";
             }
             elseif (date('D',mktime(0,0,0,$month,$day,$year))=='Sun')
             {
@@ -401,10 +442,9 @@ function draw_chart($month, $year)
             }
         }
         $html .= "</tr>\n";
+        $html .= "<tr><td colspan='0'></td></tr>\n";
     }
-
-
-    $html .= "</table>";
+    $html .= "</table>\n\n";
 
 
 
@@ -424,9 +464,9 @@ function month_select($month, $year)
     for ($c=1;$c <= 12;$c++)
     {
         if (mktime(0,0,0,$cmonth,1,$cyear)==mktime(0,0,0,date('m'),1,date('Y'))) $html .= "<span style='background: #FFFF00;'>";
-        if (mktime(0,0,0,$cmonth,1,$cyear)==mktime(0,0,0,$month,1,$year)) $html .= "<strong>";
+        if (mktime(0,0,0,$cmonth,1,$cyear)==mktime(0,0,0,$month,1,$year)) $html .= "<u>";
         $html .= "<a href='{$SERVER['PHP_SELF']}?month=$cmonth&amp;year=$cyear'>".date('M y',mktime(0,0,0,$cmonth,1,$cyear))."</a>";
-        if (mktime(0,0,0,$cmonth,1,$cyear)==mktime(0,0,0,$month,1,$year)) $html .= "</strong>";
+        if (mktime(0,0,0,$cmonth,1,$cyear)==mktime(0,0,0,$month,1,$year)) $html .= "</u>";
         if (mktime(0,0,0,$cmonth,1,$cyear)==mktime(0,0,0,date('m'),1,date('Y'))) $html .= "</span>";
         if ($c < 12) $html .= " <span style='color: #666;'>|</span> ";
         $cmonth++;
@@ -449,8 +489,16 @@ if ($display=='chart' OR empty($type))
     if (empty($_REQUEST['year'])) $year=date('Y');
     else $year=$_REQUEST['year'];
 
+    $nextyear=$year;
+    if ($month < 12) $nextmonth = $month +1;
+    else { $nextmonth = 1; $nextyear = $year+1; }
+
+    $prevyear=$year;
+    if ($month > 1) $prevmonth = $month -1;
+    else { $prevmonth = 12; $prevyear = $year-1; }
+
     echo month_select($month, $year);
-    echo "<p align='center'>".date('F Y',mktime(0,0,0,$month,1,$year))."</p>";
+    echo "<p align='center'><a href='{$_SERVER['PHP_SELF']}?month={$prevmonth}&amp;year={$prevyear}'>&lt;</a> ".date('F Y',mktime(0,0,0,$month,1,$year))." <a href='{$_SERVER['PHP_SELF']}?month={$nextmonth}&amp;year={$nextyear}'>&gt;</a></p>";
 
     echo draw_chart($month,$year);
 }
