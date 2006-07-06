@@ -87,8 +87,8 @@ elseif ($supportopen > 1) echo "{$supportopen} Incidents";
 echo " {$i18n_CURRENTLY_OPEN}<br />";
 
 if ($kbpublished == 0) echo $i18n_NO_KB_ARTICLES;
-elseif ($kbpublished == 1) echo "{$kbpublished} KB Article";
-elseif ($kbpublished > 1) echo "{$kbpublished} KB Articles";
+elseif ($kbpublished == 1) echo "<a href='browse_kb.php?mode=today' title='View articles published today'>{$kbpublished}</a> KB Article";
+elseif ($kbpublished > 1) echo "<a href='browse_kb.php?mode=today' title='View articles published today'>{$kbpublished}</a> KB Articles";
 echo " {$i18n_PUBLISHED}<br />";
 
 echo "</div>";

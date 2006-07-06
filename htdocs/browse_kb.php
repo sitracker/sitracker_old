@@ -28,6 +28,10 @@ if (empty($mode) && empty($search_string)) $mode='RECENT';
 if (empty($search_string) AND empty($mode)) $search_string='a';
 ?>
 <h2>Browse Knowledge Base</h2>
+<?php
+if (strtolower($mode)=='recent') echo "<h4>Articles published recently</h4>";
+elseif (strtolower($mode)=='today') echo "<h4>Articles published today</h4>";
+?>
 <table summary="alphamenu" align="center">
     <tr>
         <td align="center">
@@ -117,6 +121,8 @@ if (!empty($search_string))
     }
 }
 if (strtolower($mode)=='recent') $sql .= "ORDER BY docid DESC LIMIT 20";
+
+if (strtolower($mode)=='today') $sql .= " WHERE published > '".date('Y-m-d')."' ORDER BY published DESC";
 
 $result = mysql_query($sql);
 if (mysql_error()) trigger_error("MySQL Query Error ".mysql_error(), E_USER_ERROR);
