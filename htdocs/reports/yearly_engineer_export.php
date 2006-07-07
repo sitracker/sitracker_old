@@ -98,7 +98,7 @@ elseif ($_REQUEST['mode']=='report')
     if (mysql_error()) trigger_error("MySQL Query Error ".mysql_error(), E_USER_ERROR);
     $numrows = mysql_num_rows($result);
 
-    $sql_esc = "SELECT distinct(incidentid) AS incid FROM updates, incidents WHERE updates.incidentid = incidents.id AND incidents.opened > ($now-60*60*24*365.25)  AND updates.bodytext LIKE \"External ID:%\"";
+    $sql_esc = "SELECT distinct(incidentid) AS incid FROM updates, incidents WHERE updates.incidentid = incidents.id AND incidents.opened > ($now-60*60*24*365.25)  AND updates.bodytext LIKE \"External ID%\"";
 
     if (empty($incsql_esc)==FALSE OR empty($excsql)==FALSE) $sql_esc .= " AND ";
     if (!empty($incsql)) $sql_esc .= "$incsql_esc";
