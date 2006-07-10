@@ -332,8 +332,8 @@ function user_realname($id)
         preg_match('/From:[ A-Za-z@\.]*/', $update_body, $from);
         if(!empty($from))
         {
-            $frommail = substr(strstr($from[0], '@'), 1);
-            $customerdomain = substr(strstr($incidents['email'], '@'), 1);
+            $frommail = strtolower(substr(strstr($from[0], '@'), 1));
+            $customerdomain = strtolower(substr(strstr($incidents['email'], '@'), 1));
             if($frommail == $customerdomain) return "Customer";
             foreach($CONFIG['ext_esc_partners'] AS $partner)
             {
