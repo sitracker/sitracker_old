@@ -52,7 +52,8 @@ if (empty($action))
             object.updatetype.options[Current] = null;
         }
         object.priority.value=object.storepriority.value;
-        object.priority.disabled=true;
+        //object.priority.disabled=true;
+        object.priority.disabled=false;
         object.updatetype.selectedIndex=0;
         object.updatetype.disabled=false;
     }

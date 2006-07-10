@@ -27,6 +27,7 @@ Changes in v3.24 - Unreleased
 * Users can now be placed in groups, view users shows just your own
   group by default
 * Users with 'edit user' permission can set users' holiday entitlement
+* Able to change external escalation details on bulk
 
 Changes in v3.23 - Released 10 April 2006
 -----------------------------------------------------------------------
