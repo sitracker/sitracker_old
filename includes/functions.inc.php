@@ -1782,7 +1782,7 @@ function incident_lastupdate($id)
                     $last;
                     //This was an initial assignment so we now want the first update - looping round data retrieved rather than second query
                     while($row = mysql_fetch_array($resultPrevious))
-                    {                        
+                    {
                         $last = $row;
                         if($row['userid'] != 0)
                         {
@@ -2860,7 +2860,7 @@ function send_template_email($template, $incidentid, $info1='', $info2='')
 
     $sql = "INSERT INTO updates (incidentid, userid, type, bodytext, timestamp, customervisibility) VALUES ";
     $sql .= "($incidentid, 0, 'email', 'To: <b>$email_to</b>\nFrom: <b>$email_from</b>\n";
-    $sql .= "Reply-To: <b>$emailreplyto</b>\nBCC: <b>$email_bcc</b>\nSubject: <b>$email_subject</b>\n<hr>$email_body', ";
+    $sql .= "Reply-To: <b>$emailreplyto</b>\nBCC: <b>$email_bcc</b>\nSubject: <b>$email_subject</b>\n<hr>".mysql_escape_string($email_body)."', ";
     $sql .= "$now, '$email_customervisibility')";
     $result = mysql_query($sql);
     if (mysql_error()) trigger_error("MySQL Query Error ".mysql_error(), E_USER_ERROR);
