@@ -19,7 +19,7 @@ require('auth.inc.php');
 include('htmlheader.inc.php');
 
 $action = cleanvar($_REQUEST['action']);
-    
+
     switch($action)
     {
         case 'external_esc': //show external escalation modification page
@@ -41,7 +41,7 @@ $action = cleanvar($_REQUEST['action']);
                     echo $row['externalengineer']." - ".$row['externalemail']."</option>";
                 }
             }
-            echo "</select></td>";
+            echo "</select></td></tr>";
             echo "<tr><th>External Engineers Name:</th>";
             echo "<td><input maxlength='80' name='externalengineer' size='30' type='text' value='' /></td></tr>";
             echo "<tr><th>External Email:</th>";
@@ -81,13 +81,13 @@ External email:  -&gt; <b>foo@pheaney.co.uk</b>
 
             $result = mysql_query($sql);
             if (mysql_error()) trigger_error(mysql_error(),E_USER_ERROR);
-            confirmation_page("2", "main.php" . $id, "<h2>Update Successful</h2><p align='center'>Please wait while you are redirected...</p>");
+            confirmation_page("2", "main.php", "<h2>Update Successful</h2><p align='center'>Please wait while you are redirected...</p>");
             break;
-        default: 
+        default:
             echo '<h1>No action specified</h1>';
             break;
     }
-    
+
 
 include('htmlfooter.inc.php');
 
