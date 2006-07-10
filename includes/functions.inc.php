@@ -18,7 +18,7 @@
 // Version number of the application, (numbers only)
 $application_version='3.24';
 // Revision string, e.g. 'beta2' or ''
-$application_revision='alpha-1';
+$application_revision='alpha-2';
 
 // Clean PHP_SELF server variable to avoid potential XSS security issue
 $_SERVER['PHP_SELF'] = substr($_SERVER['PHP_SELF'], 0, (strlen($_SERVER['PHP_SELF']) - @strlen($_SERVER['PATH_INFO'])));
