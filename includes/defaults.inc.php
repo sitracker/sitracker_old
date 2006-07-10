@@ -157,7 +157,7 @@ $CONFIG['error_notavailable_url']="/?msg=not+available";
 
 //external escalation partners, used for linking from incidents page to partners support site and identification of update origin
 $CONFIG['ext_esc_partners'] = array('novell' => array('name' => 'Novell',
-                                            'ext_callid_regexp' => '/^[0-9]{7}$/',
+                                            'ext_callid_regexp' => '/^[0-9]{11}$/',
                                             'ext_url' => 'https://secure-support.novell.com/eService_enu/',
                                             'ext_url_title' => 'Novell support',
                                             'email_domain' => 'novell.com'),
