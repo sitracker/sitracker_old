@@ -68,7 +68,7 @@ External email:  -&gt; <b>foo@pheaney.co.uk</b>
             while($row = mysql_fetch_array($result))
             {
                 $bodytext = "External Engineer: ".$old_external_engineer." -&gt; [b]". $new_extenal_engineer."[/b]\n";
-                $bodytext .= "External email: ".$old_email_address." -&gt; [b]".$new_external_email."[/b]\n<nr>";
+                $bodytext .= "External email: ".$old_email_address." -&gt; [b]".$new_external_email."[/b]\n<hr>";
                 $sql  = "INSERT INTO updates (incidentid, userid, type, bodytext, timestamp) ";
                 $sql .= "VALUES ('".$row['id']."', '0', 'editing', '$bodytext', '".time()."')";
                 $result = mysql_query($sql);
@@ -76,7 +76,8 @@ External email:  -&gt; <b>foo@pheaney.co.uk</b>
             }
 
 
-            $sql = "UPDATE incidents SET externalengineer = '$new_extenal_engineer', externalemail = '$new_external_email' WHERE externalemail = '$old_email_address'";
+            $sql = "UPDATE incidents SET externalengineer = '$new_extenal_engineer', externalemail = '$new_external_email' ";
+	    $sql .= " WHERE externalemail = '$old_email_address' AND closed = '0'";
 
 
             $result = mysql_query($sql);
