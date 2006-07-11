@@ -65,16 +65,17 @@ if (!$sent)
             echo "<td>".$holiday->name."</td>";
             if ($approver==TRUE)
             {
-                echo "<td>";
                 if ($sit[2]!=$holiday->userid)
                 {
+                    echo "<td>";
                     $approvetext='Approve';
                     if ($holiday->type==2) $approvetext='Acknowledge';
                     echo "<a href=\"holiday_approve.php?approve=TRUE&amp;user={$holiday->userid}&amp;view={$user}&amp;startdate={$holiday->startdate}&amp;type={$holiday->type}&amp;length={$holiday->length}\">{$approvetext}</a> | ";
                     echo "<a href=\"holiday_approve.php?approve=FALSE&amp;user={$holiday->userid}&amp;view={$user}&amp;startdate={$holiday->startdate}&amp;type={$holiday->type}&amp;length={$holiday->length}\">Decline</a>";
-                    if ($holiday->type==1) echo "| <a href=\"holiday_approve.php?approve=FREE&amp;user={$holiday->userid}&amp;view={$user}&amp;startdate={$holiday->startdate}&amp;type={$holiday->type}&amp;length={$holiday->length}\">Free Leave</a>";
+                    if ($holiday->type==1) echo " | <a href=\"holiday_approve.php?approve=FREE&amp;user={$holiday->userid}&amp;view={$user}&amp;startdate={$holiday->startdate}&amp;type={$holiday->type}&amp;length={$holiday->length}\">Free Leave</a>";
+                    echo "</td>";
                 }
-                else echo "Cannot approve yourself";
+                else echo "<td>Cannot approve yourself</td>";
                 if ($approver==TRUE)
                 {
                     echo "<td>";
@@ -84,7 +85,6 @@ if (!$sent)
                 echo "</td>";
             }
             echo "</tr>";
-
         }
         echo "</table>";
         if (!$mode=='approval')
@@ -99,15 +99,15 @@ if (!$sent)
 
             echo "<select class='dropdown' name='approvaluser'>";
             if ($id == 0)
-            echo "<option selected value='0'>Select A User\n";
+            echo "<option selected value='0'>Select A User</option>\n";
             while ($users = mysql_fetch_array($result))
             {
                 if($users['id'] != $sit[2])
                 {
                     ?><option <?php if ($users["id"] == $id) { ?>selected='selected' <?php } ?>value='<?php echo $users["id"] ?>'>
                     <?php echo $users["realname"]; ?><?php
+                    echo "</option\n";
                 }
-                echo "</option\n";
             }
             echo "</select>";
             echo "</p>";
