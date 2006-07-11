@@ -82,7 +82,6 @@ if (!$sent)
                     echo check_group_holiday($holiday->userid, $holiday->startdate, $holiday->length);
                     echo "</td>";
                 }
-                echo "</td>";
             }
             echo "</tr>";
         }
