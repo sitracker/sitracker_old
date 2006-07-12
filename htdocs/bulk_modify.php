@@ -70,7 +70,7 @@ External email:  -&gt; <b>foo@pheaney.co.uk</b>
                 $bodytext = "External Engineer: ".$old_external_engineer." -&gt; [b]". $new_extenal_engineer."[/b]\n";
                 $bodytext .= "External email: ".$old_email_address." -&gt; [b]".$new_external_email."[/b]\n<hr>";
                 $sql  = "INSERT INTO updates (incidentid, userid, type, bodytext, timestamp) ";
-                $sql .= "VALUES ('".$row['id']."', '0', 'editing', '$bodytext', '".time()."')";
+                $sql .= "VALUES ('".$row['id']."', '".$sit[2]."', 'editing', '$bodytext', '".time()."')";
                 $result = mysql_query($sql);
                 if (mysql_error()) trigger_error("MySQL Query Error ".mysql_error(), E_USER_ERROR);
             }
