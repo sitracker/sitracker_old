@@ -69,6 +69,9 @@ elseif ($_REQUEST['mode']=='report')
     if ($_POST['showtotals']=='yes') $showtotals = TRUE;
     else $showtotals = FALSE;
 
+    if ($_POST['showgrandtotals']=='yes') $showgrandtotals = TRUE;
+    else $showgrandtotals = FALSE;
+
     if ($includecount >= 1)
     {
         // $html .= "<strong>Include:</strong><br />";

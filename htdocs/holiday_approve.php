@@ -32,7 +32,9 @@ elseif ($approve=='FALSE') $sql = "UPDATE holidays SET approved='2', approvedby=
 else $sql = "UPDATE holidays SET approved='1', approvedby='$sit[2]', type='5' "; // free
 $sql .= "WHERE userid='$user' AND startdate='$startdate' AND type='$type' AND length='$length' ";
 $result = mysql_query($sql);
-## echo $sql;
+
+plugin_do('holiday_ack');
+
 if (mysql_error()) trigger_error("MySQL Query Error ".mysql_error(), E_USER_ERROR);
 header("Location: holiday_request.php?user=$view&mode=approval");
 exit;
