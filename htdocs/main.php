@@ -64,11 +64,11 @@ echo "</div>";
 echo "</div>";
 
 echo "<div class='windowbox' style='width: 50%'>";
-echo "<div class='windowtitle'>{$i18n_TODAYS_STATS}</div>";
+echo "<div class='windowtitle'>{$i18n_TODAYS_STATS}</a></div>";
 echo "<div class='window'>";
 if ($todaysincidents == 0) echo $i18n_NO_INCIDENTS;
-elseif ($todaysincidents == 1) echo "{$todaysincidents} Incident";
-elseif ($todaysincidents > 1) echo "{$todaysincidents} Incidents";
+elseif ($todaysincidents == 1) echo "<a href='statistics.php'>{$todaysincidents}</a> Incident";
+elseif ($todaysincidents > 1) echo "<a href='statistics.php'>{$todaysincidents}</a> Incidents";
 echo " {$i18n_LOGGED}<br />";
 
 if ($todaysupdated == 0) echo $i18n_NO_INCIDENTS;
@@ -77,8 +77,8 @@ elseif ($todaysupdated > 1) echo "{$todaysupdated} Incidents";
 echo " {$i18n_UPDATED}<br />";
 
 if ($todaysclosed == 0) echo $i18n_NO_INCIDENTS;
-elseif ($todaysclosed == 1) echo "{$todaysclosed} Incident";
-elseif ($todaysclosed > 1) echo "{$todaysclosed} Incidents";
+elseif ($todaysclosed == 1) echo "<a href='statistics.php'>{$todaysclosed}</a> Incident";
+elseif ($todaysclosed > 1) echo "<a href='statistics.php'>{$todaysclosed}</a> Incidents";
 echo " {$i18n_CLOSED}<br />";
 
 if ($supportopen == 0) echo $i18n_NO_INCIDENTS;
