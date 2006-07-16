@@ -1,4 +1,14 @@
 <?php
+// statistics.php - Over view and stats of calls logged - intended for last 24hours
+//
+// SiT (Support Incident Tracker) - Support call tracking system
+// Copyright (C) 2000-2006 Salford Software Ltd.
+//
+// This software may be used and distributed according to the terms
+// of the GNU General Public License, incorporated herein by reference.
+//
+// Author: Paul Heaney <paulheaney[at]users.sourceforge.net>
+
 
 $title='Todays statistics';
 require('db_connect.inc.php');

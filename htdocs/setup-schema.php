@@ -111,6 +111,7 @@ CREATE TABLE `emailtype` (
   `subjectfield` varchar(255) default NULL,
   `body` text,
   `customervisibility` enum('show','hide') NOT NULL default 'show',
+  `storeinlog` enum('No','Yes') NOT NULL default 'Yes',
   PRIMARY KEY  (`id`)
 ) ENGINE=MyISAM;
 
@@ -1168,7 +1169,8 @@ UPDATE `incidentstatus` SET `id` = '0' WHERE `id` =10 LIMIT 1 ;
 $upgrade_schema[324] = "ALTER TABLE `users` ADD `groupid` INT( 5 ) NULL AFTER `roleid` ;
 ALTER TABLE `users` ADD INDEX ( `groupid` ) ;
 ALTER TABLE `software` ADD `lifetime_start` DATE NULL ,
-ADD `lifetime_end` DATE NULL ;";
+ADD `lifetime_end` DATE NULL ;
+ALTER TABLE `emailtype` ADD `storeinlog` ENUM( 'No', 'Yes' ) NOT NULL DEFAULT 'Yes';";
 
 // Important: When making changes to the schema you must add SQL to make the alterations
 // to existing databases in $upgrade_schema[] *AND* you must also change $schema[] for

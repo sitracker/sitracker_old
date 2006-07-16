@@ -863,6 +863,11 @@ function emailtype_customervisibility($id)
     return db_read_column('customervisibility', 'emailtype', $id);
 }
 
+function emailtype_storeinlog($id)
+{
+    return db_read_column('storeinlog', 'emailtype', $id);
+}
+
 function incident_owner($id)
 {
     return db_read_column('owner', 'incidents', $id);
@@ -2835,6 +2840,7 @@ function send_template_email($template, $incidentid, $info1='', $info2='')
     $email_subject = trim(emailtype_replace_specials(emailtype_subject($templateid), $incidentid, $sit[2]));
     $email_body    = trim(emailtype_replace_specials(emailtype_body($templateid), $incidentid, $sit[2]));
     $email_customervisibility = trim(emailtype_customervisibility($templateid));
+    $email_storeinlog = trim(emailtype_storeinlog($templateid));
 
     // Additional information
     if (empty($info1)==FALSE || empty($info2)==FALSE)
@@ -2858,13 +2864,16 @@ function send_template_email($template, $incidentid, $info1='', $info2='')
     $extra_headers .= "\r\n";
     ## bugbug: tidy up these stripslashes.  INL 5Sep01
 
-    $sql = "INSERT INTO updates (incidentid, userid, type, bodytext, timestamp, customervisibility) VALUES ";
-    $sql .= "($incidentid, 0, 'email', 'To: <b>$email_to</b>\nFrom: <b>$email_from</b>\n";
-    $sql .= "Reply-To: <b>$emailreplyto</b>\nBCC: <b>$email_bcc</b>\nSubject: <b>$email_subject</b>\n<hr>".mysql_escape_string($email_body)."', ";
-    $sql .= "$now, '$email_customervisibility')";
-    $result = mysql_query($sql);
-    if (mysql_error()) trigger_error("MySQL Query Error ".mysql_error(), E_USER_ERROR);
-
+    if($email_storeinlog == 'Yes')
+    {
+        $sql = "INSERT INTO updates (incidentid, userid, type, bodytext, timestamp, customervisibility) VALUES ";
+        $sql .= "($incidentid, 0, 'email', 'To: <b>$email_to</b>\nFrom: <b>$email_from</b>\n";
+        $sql .= "Reply-To: <b>$emailreplyto</b>\nBCC: <b>$email_bcc</b>\nSubject: <b>$email_subject</b>\n<hr>".mysql_escape_string($email_body)."', ";
+        $sql .= "$now, '$email_customervisibility')";
+        $result = mysql_query($sql);
+        if (mysql_error()) trigger_error("MySQL Query Error ".mysql_error(), E_USER_ERROR);
+    }
+    
     // send email
     if ($CONFIG['demo']) $rtnvalue = TRUE;
     else $rtnvalue = mail($email_to, stripslashes($email_subject), stripslashes($email_body), $extra_headers);

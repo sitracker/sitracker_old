@@ -21,7 +21,7 @@ Changes in v3.24 - Unreleased
 * Prevent summary and solution from being uncheck from close incident page
   since these are mandatory
 * Fixed bug with not sending closing email
-* send_template_email inow store emails in the incident log
+* send_template_email now store emails in the incident log
 * Holiday calendar is now functional
 * New holiday planner shows when all users are in/out
 * Users can now be placed in groups, view users shows just your own
