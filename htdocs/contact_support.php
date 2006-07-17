@@ -126,8 +126,11 @@ while ($row=mysql_fetch_object($result))
     else { $productlist[$row->product]++; }
     $countincidents++;
     if (!empty($row->externalid)) $countextincidents++;
-    $totalduration=$totalduration+$row->duration_closed;
-    $countclosed++;
+    if ($row->duration_closed >= 1)
+    {
+        $totalduration=$totalduration+$row->duration_closed;
+        $countclosed++;
+    }
     echo "</tr>\n";
 }
 echo "</table>\n";
