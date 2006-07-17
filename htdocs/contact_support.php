@@ -77,6 +77,7 @@ $countincidents=0;
 $countextincidents=0;
 $countslaexceeded=0;
 $productlist = array();
+$softwarelist = array();
 if ($mode=='site') $contactlist = array();
 while ($row=mysql_fetch_object($result))
 {
@@ -124,6 +125,8 @@ while ($row=mysql_fetch_object($result))
 
     if (!array_key_exists($row->product, $productlist)) $productlist[$row->product] = 1;
     else { $productlist[$row->product]++; }
+    if (!array_key_exists($row->softwareid, $softwarelist)) $softwarelist[$row->softwareid] = 1;
+    else { $softwarelist[$row->softwareid]++; }
     $countincidents++;
     if (!empty($row->externalid)) $countextincidents++;
     if ($row->duration_closed >= 1)
@@ -155,6 +158,12 @@ if ($countproducts >= 1 OR $contactcontacts >= 1)
         $productlegends[] = urlencode(product_name($product)." ({$productpercentage}%)");
     }
 
+    foreach ($softwarelist AS $software => $quantity)
+    {
+        $softwarepercentage = number_format($quantity * 100 / $countproducts, 1);
+        $softwarelegends[] = urlencode(software_name($software)." ({$softwarepercentage}%)");
+    }
+
     if ($mode=='site')
     {
         foreach ($contactlist AS $contact => $quantity)
@@ -175,6 +184,17 @@ if ($countproducts >= 1 OR $contactcontacts >= 1)
         echo "<div style='text-align:center;'>";
         echo "<img src='chart.php?type=pie&data=$data&legends=$legends&title=$title' />";
         echo "</div>";
+
+        // Incidents by software chart
+        $data = implode('|',$softwarelist);
+        $keys = array_keys($softwarelist);
+        $legends = implode('|', $softwarelegends);
+        $title = urlencode('Incidents by Software');
+        //$data="1,2,3";
+        echo "<div style='text-align:center;'>";
+        echo "<img src='chart.php?type=pie&data=$data&legends=$legends&title=$title' />";
+        echo "</div>";
+
 
         if ($mode=='site')
         {
