@@ -91,7 +91,7 @@ elseif ($_REQUEST['mode']=='report')
         $html .= "</tr>";
         $csv .="'{$row->name}', '{$row->address1}','{$row->address2}','{$row->city}','{$row->county}','{$row->country}','{$row->postcode}',";
         $csv .= "".str_replace("\n", ",", $product)."\n";
-        flush();
+        // flush();
     }
     $html .= "</table>";
 
