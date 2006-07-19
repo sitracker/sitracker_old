@@ -118,7 +118,7 @@ if ($numgroups >= 1)
 </tr>
 <tr>
     <th></th>
-    <th align='center'>Action Needed / Other</th>
+    <th align='center'>Action Needed / Waiting</th>
     <?php
     echo "<th align='center'>".priority_icon(4)."</th>";
     echo "<th align='center'>".priority_icon(3)."</th>";
@@ -163,7 +163,7 @@ while ($users = mysql_fetch_array($result))
     $countdiff=$countincidents-$countactive;
 
     echo $countactive;
-    echo "</a> / {$countdiff}</td>";
+    echo "</a> / <a href='incidents.php?user={$users['id']}&amp;queue=2&amp;type=support'>{$countdiff}</a></td>";
     echo "<td align='center'>".$incpriority['4']."</td>";
     echo "<td align='center'>".$incpriority['3']."</td>";
     echo "<td align='center'>".$incpriority['2']."</td>";
