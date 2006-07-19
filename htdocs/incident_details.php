@@ -342,7 +342,7 @@ while ($updates = mysql_fetch_array($result))
 
     case 'reviewmet':
         echo "<strong style='background-color:#7AC5CD;'>REVIEW: ";
-        if ($updates['sla']=='opened') echo "Review period started";
+        if ($updates['userid']==0) echo "Review period started";
         else echo "Incident reviewed";
         echo " by ".user_realname($updates['userid'])."</strong>";
     break;
