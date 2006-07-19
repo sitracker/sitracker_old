@@ -70,8 +70,12 @@ Installing
           for a few important settings and take you through the
           process of creating the database schema
 
+        - setup.php will display a password for the admin account,
+          make a note of this as it is only displayed once
+
         - Now visit index.php in your browser and login using
-          'admin' as the username and 'password' as the password
+          'admin' as the username and the password that was
+          displayed by setup.php
 
         - Within sit go to SiT! -> Control Panel -> Manage Users
           -> Add User to create more users
