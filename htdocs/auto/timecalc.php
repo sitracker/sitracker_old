@@ -23,8 +23,7 @@ define("STATUS_CUSTOMER",8);
 
 if ($verbose) echo "Calculating SLA times{$crlf}";
 
-//$sql="SELECT id,maintenanceid,priority,slaemail,servicelevel,status FROM incidents WHERE status != ".STATUS_CLOSED;
-$sql="SELECT id,maintenanceid,priority,slaemail,servicelevel,status FROM incidents WHERE id=34657";
+$sql="SELECT id,maintenanceid,priority,slaemail,servicelevel,status FROM incidents WHERE status != ".STATUS_CLOSED;
 $incident_result=mysql_query($sql);
 
 while ($incident=mysql_fetch_array($incident_result)) {
