@@ -3901,6 +3901,59 @@ function calculate_working_time($t1,$t2) {
 }
 
 
+function is_active_status($status) {
+    $customerstates=array(2,7,8);
+    if (in_array($status,$customerstates)) return false;
+    else return true;
+}
+
+
+function calculate_incident_working_time($incidentid, $t1, $t2){
+// Calculate the working time between two timestamps for a given incident
+// i.e. ignore times when customer has action
+
+    if ( $t1>$t2 ) {
+        $t3=$t2;
+        $t2=$t1;
+        $t1=$t3;
+    }
+
+    $sql="select id, currentstatus, timestamp from updates where incidentid='$incidentid' order by id asc";
+    $result=mysql_query($sql);
+    if (mysql_error()) trigger_error(mysql_error(),E_USER_WARNING);
+    $time=0;
+    $timeptr=0;
+    $laststatus=2;
+    while ($update=mysql_fetch_array($result)) {
+
+        if ($t1<=$update['timestamp']) {
+
+            if ($timeptr==0) {
+                if (is_active_status($laststatus)) $timeptr=$t1;
+                else $timeptr=$update['timestamp'];
+            } else {
+    
+                if (is_active_status($laststatus)!=is_active_status($update['currentstatus'])) {
+                    if (is_active_status($laststatus)) $time+=calculate_working_time($timeptr,$update['timestamp']);
+                    else $timeptr=$update['timestamp'];
+                }
+        
+                if ($t2<$update['timestamp']) {
+                    if (is_active_status($laststatus)) $time+=calculate_working_time($timeptr,$t2);
+                    break;
+                }
+            }
+        }
+        
+        $laststatus=$update['currentstatus'];
+    }
+    mysql_free_result($result);
+    
+    if ( ($time==0) && (is_active_status($laststatus)) ) $time=calculate_working_time($t1,$t2);
+    
+    return $time;
+}
+
 function strip_comma($string)
 {
     // also strips Tabs, CR's and LF's
