@@ -118,7 +118,7 @@ while ($incident=mysql_fetch_array($incident_result)) {
                 $emailSent=1;
             }
 
-            if (($times['review_days'] * 24 * 60) < ($newReviewTime*.01*$CONFIG['urgent_threshold']) ) {
+            if (($times['review_days'] * 24 * 60) < ($newReviewTime) ) {
                 if ($verbose) echo "   Incident {$incident['id']} out of Review{$crlf}";
                 send_template_email('OUT_OF_REVIEW',$incident['id'],"",-1);
                 $emailSent=1;
