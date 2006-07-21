@@ -18,7 +18,7 @@
 // Version number of the application, (numbers only)
 $application_version='3.24';
 // Revision string, e.g. 'beta2' or ''
-$application_revision='alpha-2';
+$application_revision='alpha-3';
 
 // Clean PHP_SELF server variable to avoid potential XSS security issue
 $_SERVER['PHP_SELF'] = substr($_SERVER['PHP_SELF'], 0, (strlen($_SERVER['PHP_SELF']) - @strlen($_SERVER['PATH_INFO'])));
@@ -1010,7 +1010,7 @@ function incident_sla_history($incidentid)
             default:
                 $slahistory[$idx]['targettime'] = 0;
         }
-        if ($prevtime > 0) $slahistory[$idx]['actualtime'] = calculate_working_time($prevtime, $history->timestamp);
+        if ($prevtime > 0) $slahistory[$idx]['actualtime'] = calculate_incident_working_time($incidentid, $prevtime, $history->timestamp);
         else $slahistory[$idx]['actualtime'] = 0;
         $slahistory[$idx]['timestamp'] = $history->timestamp;
         $slahistory[$idx]['userid'] = $history->userid;
@@ -3588,6 +3588,7 @@ function check_email($email, $check_dns = FALSE)
 
 function incident_get_next_target($incidentid)
 {
+    global $now;
     $sql = "SELECT * FROM updates WHERE incidentid='$incidentid' AND type='slamet' ORDER BY id DESC LIMIT 1";
     $result = mysql_query($sql);
     if (mysql_error()) trigger_error(mysql_error(),E_USER_WARNING);
@@ -3684,6 +3685,7 @@ function target_radio_buttons($incidentid)
 
 function incident_get_next_review($incidentid)
 {
+    global $now;
     $sql = "SELECT timestamp FROM updates WHERE incidentid='$incidentid' AND type='reviewmet' ORDER BY id DESC LIMIT 1";
     $result = mysql_query($sql);
     if (mysql_error()) trigger_error(mysql_error(),E_USER_WARNING);
@@ -3916,7 +3918,7 @@ function calculate_incident_working_time($incidentid, $t1, $t2){
             } else {
 
                 if (is_active_status($laststatus)!=is_active_status($update['currentstatus'])) {
-                    if (is_active_status($laststatus)) $time+=calculate_working_time($timeptr,$update['timestamp']);
+                    if (is_active_status($laststatus) && ($t2 >= $update['timestamp'])) $time+=calculate_working_time($timeptr,$update['timestamp']);
                     else $timeptr=$update['timestamp'];
                 }
 
@@ -3931,7 +3933,7 @@ function calculate_incident_working_time($incidentid, $t1, $t2){
     }
     mysql_free_result($result);
 
-    if ( ($time==0) && (is_active_status($laststatus)) ) $time=calculate_working_time($t1,$t2);
+    if ( is_active_status($laststatus) && ($t2 >= $update->timestamp)) $time+=calculate_working_time($timeptr,$t2);
 
     return $time;
 }

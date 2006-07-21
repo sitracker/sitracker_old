@@ -91,6 +91,7 @@ elseif ($action == "edit")
         <tr><th>'CC' Field:</th><td><input maxlength='100' name="ccfield" size='30' value="<?php echo $emailtype["ccfield"] ?>" /></td></tr>
         <tr><th>'BCC' Field:</th><td><input maxlength='100' name="bccfield" size='30' value="<?php echo $emailtype["bccfield"] ?>" /></td></tr>
         <tr><th>'Subject' Field:</th><td><input maxlength='255' name="subjectfield" size='50' value="<?php echo $emailtype["subjectfield"] ?>" /></td></tr>
+        <tr><th>Store in Log:</th><td><input type="checkbox" name="storeinlog" value="Yes" <?php if ($emailtype['storeinlog']=='Yes') echo "checked='checked'"; ?> /> Store the email in the incident log</td></tr>
         <tr><th>Visibility:</th><td><input type="checkbox" name="cust_vis" value="yes" <?php if ($emailtype['customervisibility']=='show') echo "checked='checked'"; ?> /> Make the update to the incident log visible to the customer</td></tr>
         </table>
         <p>
@@ -194,6 +195,7 @@ elseif ($action == "update")
     $subjectfield = mysql_escape_string($_POST['subjectfield']);
     $bodytext = mysql_escape_string($_POST['bodytext']);
     $cust_vis = cleanvar($_POST['cust_vis']);
+    $storeinlog = cleanvar($_POST['storeinlog']);
     $id = cleanvar($_POST['id']);
     $type = cleanvar($_POST['type']);
 
@@ -245,11 +247,15 @@ elseif ($action == "update")
     if ($cust_vis=='yes') $cust_vis='show';
     else $cust_vis='hide';
 
+    if ($storeinlog=='Yes') $storeinlog='Yes';
+    else $storeinlog='No';
+
+
     if ($errors == 0)
     {
         $sql  = "UPDATE emailtype SET name='$name', description='$description', tofield='$tofield', fromfield='$fromfield', ";
         $sql .= "replytofield='$replytofield', ccfield='$ccfield', bccfield='$bccfield', subjectfield='$subjectfield', ";
-        $sql .= "body='$bodytext', customervisibility='$cust_vis' ";
+        $sql .= "body='$bodytext', customervisibility='$cust_vis', storeinlog='$storeinlog' ";
         $sql .= "WHERE id='$id' LIMIT 1";
         $result = mysql_query($sql);
         if (mysql_error()) trigger_error("MySQL Query Error ".mysql_error(), E_USER_ERROR);
