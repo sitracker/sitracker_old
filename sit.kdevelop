@@ -3,7 +3,7 @@
   <general>
     <author>Ivan Lucas</author>
     <email>ivan.lucas@salfordsoftware.co.uk</email>
-    <version>3.23</version>
+    <version>3.24</version>
     <projectmanagement>KDevScriptProject</projectmanagement>
     <primarylanguage>PHP</primarylanguage>
     <ignoreparts/>
@@ -46,11 +46,11 @@
     </webInvocation>
     <shell>
       <phpexe>/usr/local/bin/php</phpexe>
-      <phpini/>
+      <phpini></phpini>
     </shell>
     <options>
-      <phpincludepath/>
-      <defaultFile/>
+      <phpincludepath></phpincludepath>
+      <defaultFile></defaultFile>
       <startupFileMode>1</startupFileMode>
     </options>
   </kdevphpsupport>

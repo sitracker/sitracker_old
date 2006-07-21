@@ -127,9 +127,9 @@ while ($incidents = mysql_fetch_array($result))
             $explain='';
             if ($slaremain >= 1)
             {
-                if (($slaremain - ($slatarget * 0.15 )) < 0 ) $class='notice';
-                if (($slaremain - ($slatarget * 0.10 )) < 0 ) $class='urgent';
-                if (($slaremain - ($slatarget * 0.05 )) < 0 ) $class='critical';
+                if (($slaremain - ($slatarget * ((100 - $CONFIG['notice_threshold']) /100))) < 0 ) $class='notice';
+                if (($slaremain - ($slatarget * ((100 - $CONFIG['urgent_threshold']) /100))) < 0 ) $class='urgent';
+                if (($slaremain - ($slatarget * ((100 - $CONFIG['critical_threshold']) /100))) < 0 ) $class='critical';
                 if ($incidents["priority"]==4) $class='critical';  // Force critical incidents to be critical always
             }
             elseif ($slaremain < 0) $class='critical';

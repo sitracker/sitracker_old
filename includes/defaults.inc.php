@@ -124,6 +124,17 @@ $CONFIG['tipsfile']= '../doc/tips.txt';
 // The session name for use in cookies and URL's, Must contain alphanumeric characters only
 $CONFIG['session_name'] = 'SiTsessionID';
 
+
+// Notice Threshold, flag items as 'notice' when they are this percentage complete.
+$CONFIG['notice_threshold'] = 85;
+
+// Urgent Threshold, flag items as 'urgent' when they are this percentage complete.
+$CONFIG['urgent_threshold'] = 90;
+
+// Urgent Threshold, flag items as 'critical' when they are this percentage complete.
+$CONFIG['critical_threshold'] = 95;
+
+
 // Run in demo mode, some features are disabled or replaced with mock-ups
 $CONFIG['demo'] = FALSE;
 
