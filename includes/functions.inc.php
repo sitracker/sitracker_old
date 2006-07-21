@@ -3607,23 +3607,13 @@ function incident_get_next_target($incidentid)
             case 'closed': $target->type='opened'; break;
         }
 
-        $ssql = "SELECT timesincesla FROM updates WHERE incidentid='$incidentid' AND timesincesla > 0 ORDER BY id DESC LIMIT 1";
-        $sresult = mysql_query($ssql);
-        if (mysql_error()) trigger_error(mysql_error(),E_USER_WARNING);
-        if (mysql_num_rows($sresult)>0)
-        {
-            list($timesincesla)=mysql_fetch_row($sresult);
-        }
-        else $timesincesla=0;
+        $target->since=calculate_incident_working_time($incidentid,$upd->timestamp,$now)
 
-        $target->since=$timesincesla;
-        $target->met=0;
     }
     else
     {
         $target->type='regularcontact';
         $target->since=0;
-        $target->met=0;
     }
     return $target;
 }
@@ -3695,22 +3685,14 @@ function target_radio_buttons($incidentid)
 
 function incident_get_next_review($incidentid)
 {
-    $sql = "SELECT * FROM updates WHERE incidentid='$incidentid' AND type='reviewmet' ORDER BY id DESC LIMIT 1";
+    $sql = "SELECT timestamp FROM updates WHERE incidentid='$incidentid' AND type='reviewmet' ORDER BY id DESC LIMIT 1";
     $result = mysql_query($sql);
     if (mysql_error()) trigger_error(mysql_error(),E_USER_WARNING);
 
     if (mysql_num_rows($result) > 0)
     {
         $upd=mysql_fetch_object($result);
-
-        $ssql = "SELECT timesincereview FROM updates WHERE incidentid='$incidentid' AND timesincereview > 0 ORDER BY id DESC LIMIT 1";
-        $sresult = mysql_query($ssql);
-        if (mysql_error()) trigger_error(mysql_error(),E_USER_WARNING);
-        if (mysql_num_rows($sresult)>0)
-        {
-            list($timesincereview)=mysql_fetch_row($sresult);
-        }
-        else $timesincereview=0;
+        $timesincereview=floor(($now-($upd->timestamp))/60);
     }
     return $timesincereview;
 }
