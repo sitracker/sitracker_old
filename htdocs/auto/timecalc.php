@@ -49,7 +49,7 @@ while ($incident=mysql_fetch_array($incident_result)) {
     $sql= "SELECT id, type, sla, timestamp, currentstatus FROM updates WHERE incidentid='{$incident['id']}' ";
     $sql.="AND type='slamet' ORDER BY id DESC LIMIT 1";
     $update_result=mysql_query($sql);
-    
+
     if (mysql_num_rows($update_result)!=1) {
         if ($verbose) echo "Cannot find SLA information for incident ".$incident['id'].", skipping{$crlf}";
     } else {
@@ -59,15 +59,15 @@ while ($incident=mysql_fetch_array($incident_result)) {
 
     }
     mysql_free_result($update_result);
-    
+
     $sql= "SELECT id, type, sla, timestamp, currentstatus, currentowner FROM updates WHERE incidentid='{$incident['id']}' ";
     $sql.="AND type='reviewmet' ORDER BY id DESC LIMIT 1";
     $update_result=mysql_query($sql);
-    
+
     if (mysql_num_rows($update_result)!=1) {
         if ($verbose) echo "   Cannot find review information for incident ".$incident['id'].", skipping{$crlf}";
     } else {
-    
+
         $reviewInfo=mysql_fetch_array($update_result);
         $newReviewTime=floor($now-$reviewInfo['timestamp'])/60;
         if ($verbose) {
@@ -78,7 +78,7 @@ while ($incident=mysql_fetch_array($incident_result)) {
     }
     mysql_free_result($update_result);
 
- 
+
     if ($newSlaTime!=-1) {
 
         // Get these time of NEXT SLA requirement in minutes
@@ -98,40 +98,38 @@ while ($incident=mysql_fetch_array($incident_result)) {
         $result=mysql_query($sql);
         $times=mysql_fetch_assoc($result);
         mysql_free_result($result);
-        
+
         if ($verbose) {
             echo "   The next SLA target should be met in ".$times['next_sla_time']." minutes{$crlf}";
             echo "   Reviews need to be made every ".($times['review_days']*24*60)." minutes{$crlf}";
         }
-    
+
         // Check if we have already sent an out of SLA/Review period mail
         // This attribute is reset when an update to the incident meets sla/review time
         if ($incident['slaemail']==0) {
-    
+
             // If not, check if we need to
-    
+
             $emailSent=0;
             // First check SLA
             if ($times['next_sla_time'] < ($newSlaTime*.01*$CONFIG['urgent_threshold']) ) {
-                if ($verbose) echo "   Incident {$incident['id']} out of SLA{$crlf}";
-//                send_template_email('OUT_OF_SLA',$incident['id'],$tag,$newSlaTime-$times['next_sla_time']);
-                    echo 'OUT_OF_SLA'.','.$incident['id'].','.$tag.','.$newSlaTime-$times['next_sla_time'];
+                send_template_email('OUT_OF_SLA',$incident['id'],$tag,$times['next_sla_time']-$newSlaTime);
+
                 $emailSent=1;
             }
-    
+
             if (($times['review_days'] * 24 * 60) < ($newReviewTime*.01*$CONFIG['urgent_threshold']) ) {
                 if ($verbose) echo "   Incident {$incident['id']} out of Review{$crlf}";
-//                send_template_email('OUT_OF_REVIEW',$incident['id'],"",-1);
-                    echo 'OUT_OF_REVIEW'.','.$incident['id'];
+                send_template_email('OUT_OF_REVIEW',$incident['id'],"",-1);
                 $emailSent=1;
             }
-    
+
             // If we just sent one then update the incident so we don't send another next time
             if ($emailSent) {
                 $sql="UPDATE incidents SET slaemail='1' WHERE id='{$incident['id']}'";
-                //mysql_query($sql);
+                mysql_query($sql);
             }
-    
+
         }
 
     }
