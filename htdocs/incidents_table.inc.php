@@ -92,7 +92,7 @@ while ($incidents = mysql_fetch_array($result))
 
     // Get next review time
     $reviewsince = incident_get_next_review($incidents['id']);  // time since last review in minutes
-    $reviewtarget=($servicelevel->review_days * 86400);          // how often reviews should happen in minutes
+    $reviewtarget=($servicelevel->review_days * 1440);          // how often reviews should happen in minutes
     if ($reviewtarget >0) $reviewremain=($reviewtarget - $reviewsince);
     else $reviewremain=0;
 
