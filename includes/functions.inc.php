@@ -2866,8 +2866,8 @@ function send_template_email($template, $incidentid, $info1='', $info2='')
 
     if($email_storeinlog == 'Yes')
     {
-        $bt   ="To: <b>$email_to</b>\nFrom: <b>$email_from</b>\nReply-To: <b>$emailreplyto</b>\n";
-        $bt  .="BCC: <b>$email_bcc</b>\nSubject: <b>$email_subject</b>\n<hr>".$email_body."";
+        $bt   = "To: <b>$email_to</b>\nFrom: <b>$email_from</b>\nReply-To: <b>$emailreplyto</b>\n";
+        $bt  .= "BCC: <b>$email_bcc</b>\nSubject: <b>$email_subject</b>\n<hr>".$email_body;
         $sql = "INSERT INTO updates (incidentid, userid, type, bodytext, timestamp, customervisibility) VALUES ";
         $sql .= "($incidentid, 0, 'email', '".mysql_escape_string($bt)."', ";
         $sql .= "$now, '$email_customervisibility')";

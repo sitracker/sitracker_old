@@ -24,6 +24,7 @@ define("STATUS_CUSTOMER",8);
 if ($verbose) echo "Calculating SLA times{$crlf}";
 
 $sql="SELECT id,maintenanceid,priority,slaemail,servicelevel,status FROM incidents WHERE status != ".STATUS_CLOSED;
+//$sql="SELECT id,maintenanceid,priority,slaemail,servicelevel,status FROM incidents WHERE id=34833";
 $incident_result=mysql_query($sql);
 
 while ($incident=mysql_fetch_array($incident_result)) {
@@ -40,113 +41,50 @@ while ($incident=mysql_fetch_array($incident_result)) {
         mysql_free_result($result);
     } else $tag=$incident['servicelevel'];
 
+    if ($verbose) echo $incident['id']." is a $tag incident{$crlf}";
 
-    $interval=array();
-    $currentSla="";
+    $newReviewTime=-1;
+    $newSlaTime=-1;
 
-    $slaStart=0;
-    $reviewStart=0;
-    $lastReview=0;
-
-    // Pull out all the timing information for this incident from the updates table
-    $sql="SELECT id, type, sla, timestamp, currentstatus, timesincesla, slacalculated, timesincereview, reviewcalculated FROM updates WHERE incidentid='{$incident['id']}' ORDER BY id DESC";
+    $sql= "SELECT id, type, sla, timestamp, currentstatus FROM updates WHERE incidentid='{$incident['id']}' ";
+    $sql.="AND type='slamet' ORDER BY id DESC LIMIT 1";
     $update_result=mysql_query($sql);
-
-    // We are looking for three things here:
-    // 1) The most recent update that has ReviewCalculated set (reviewStart)
-    // 2) The most recent update that has SlaCalculated set, OR has met an SLA (slaStart)
-    // 3) The most recent SLA type that was met, opened, initialresponse, etc. (currentSla)
-
-    while ($update=mysql_fetch_array($update_result)) {
-        // Read (backwards) through the updates to find the most recent sla and review information
-        $interval[] = $update;
-        end($interval);
-
-        if ( ($slaStart==0) && ($update['slacalculated']=='true') ) 
-            $slaStart=key($interval);
     
-        if ( ($reviewStart==0) && 
-            (($update['reviewcalculated']=='true') || ($update['type']=='reviewmet')) ) 
-            $reviewStart=key($interval);
+    if (mysql_num_rows($update_result)!=1) {
+        if ($verbose) echo "Cannot find SLA information for incident ".$incident['id'].", skipping{$crlf}";
+    } else {
+        $slaInfo=mysql_fetch_array($update_result);
+        $newSlaTime=calculate_incident_working_time($incident['id'],$slaInfo['timestamp'],$now);
+        if ($verbose) echo "   Last SLA record is ".$slaInfo['sla']." at ".date("jS F Y H:i",$slaInfo['timestamp'])." which is $newSlaTime working minutes ago{$crlf}";
 
-        if ( ($currentSla=="") && ($update['sla']!="") ) {
-            $currentSla=$update['sla'];
-            if ($slaStart==0) $slaStart=key($interval);
+    }
+    mysql_free_result($update_result);
+    
+    $sql= "SELECT id, type, sla, timestamp, currentstatus, currentowner FROM updates WHERE incidentid='{$incident['id']}' ";
+    $sql.="AND type='reviewmet' ORDER BY id DESC LIMIT 1";
+    $update_result=mysql_query($sql);
+    
+    if (mysql_num_rows($update_result)!=1) {
+        if ($verbose) echo "   Cannot find review information for incident ".$incident['id'].", skipping{$crlf}";
+    } else {
+    
+        $reviewInfo=mysql_fetch_array($update_result);
+        $newReviewTime=floor($now-$reviewInfo['timestamp'])/60;
+        if ($verbose) {
+            if ($reviewInfo['currentowner']!=0) echo "   There has been no review on this incident, which was opened $newReviewTime minutes ago{$crlf}";
+            else echo "   The last review took place $newReviewTime minutes ago{$crlf}";
         }
 
-        // If we have found the three items then we don't need to look back any more
-        if ( ($reviewStart!="") && ($currentSla!="") ) break;
     }
-
     mysql_free_result($update_result);
 
-    if ($currentSla=="") {
-        // We have a problem, or SLAs are turned off, bail out of this one
-        if ($verbose) echo "Cannot find SLA information for incident ".$incident['id'].", skipping{$crlf}";
-    } 
-    else 
-    {
-
-        // We need to calculate the working time for both review and SLA
-        // and it could be a fairly slow process, so only do it once
-        for ($i=count($interval)-2; $i>0; $i--)
-            $interval[$i]['timesincelastupdate']=calculate_working_time($interval[$i+1]['timestamp'],$interval[$i]['timestamp']);
-
-        $interval[0]['timesincelastupdate']=calculate_working_time($interval[0]['timestamp'],$now);
-
-        // If there have been a few updates since the last run we need to update them historically
-        // First do review ...
-
-        $newReviewTime=0; // reviewStart-1 might be < 0, so this is important
-
-        for ($i=$reviewStart-1; $i>=0; $i--) {
-
-            // If we have just reviewed the incident then we start counting from 0
-            if ($interval[$i]['type']=='reviewmet') $lastTime=0;
-            else $lastTime=$interval[$i+1]['timesincereview'];
-            $newReviewTime=$interval[$i]['timesincelastupdate']+$lastTime;
-
-            // Now we have the time, put it back in the array in case the next iteration needs it
-            $interval[$i]['timesincereview']=$newReviewTime;
-
-            // And update the database
-            $sql="UPDATE updates SET timesincereview=$newReviewTime";
-
-            // We only set reviewcalculated when the time won't change, i.e.
-            // all except the most recent
-            if ($i>0) $sql.=",reviewcalculated='true'";
-            $sql.=" WHERE id=".$interval[$i]['id'];
-            mysql_query($sql);
-        }
-
-
-        // And now SLA.  This is slightly different than above, 
-        // as if the status is 'Awaiting Customer Action' then we 
-        // do not increase the time counter
-
-        $newSlaTime=0;
-
-        for ($i=$slaStart-1; $i>=0; $i--) {
-            if ($interval[$i]['type']=='slamet') $lastTime=0;
-            else $lastTime=$interval[$i+1]['timesincesla'];
-
-            // 
-            if ($interval[$i]['currentstatus']!=STATUS_CUSTOMER)
-                $newSlaTime=$interval[$i]['timesincelastupdate']+$lastTime;
-            else
-                $newSlaTime=$lastTime;
-
-            $interval[$i]['timesincesla']=$newSlaTime;
-            $sql="UPDATE updates SET timesincesla=$newSlaTime";
-            if ($i>0) $sql.=",slacalculated='true'";
-            $sql.=" WHERE id=".$interval[$i]['id'];
-            mysql_query($sql);
-        }
+ 
+    if ($newSlaTime!=-1) {
 
         // Get these time of NEXT SLA requirement in minutes
         $coefficient=1;
 
-        switch ($currentSla) {
+        switch ($slaInfo['sla']) {
             case 'opened':          $slaRequest='initial_response_mins'; break;
             case 'initialresponse': $slaRequest='prob_determ_mins';      break;
             case 'probdef':         $slaRequest='action_plan_mins';      break;
@@ -160,6 +98,11 @@ while ($incident=mysql_fetch_array($incident_result)) {
         $result=mysql_query($sql);
         $times=mysql_fetch_assoc($result);
         mysql_free_result($result);
+        
+        if ($verbose) {
+            echo "   The next SLA target should be met in ".$times['next_sla_time']." minutes{$crlf}";
+            echo "   Reviews need to be made every ".($times['review_days']*24*60)." minutes{$crlf}";
+        }
     
         // Check if we have already sent an out of SLA/Review period mail
         // This attribute is reset when an update to the incident meets sla/review time
@@ -169,22 +112,24 @@ while ($incident=mysql_fetch_array($incident_result)) {
     
             $emailSent=0;
             // First check SLA
-            if ($times['next_sla_time'] < $newSlaTime) {
-                if ($verbose) echo "Incident {$incident['id']} out of SLA{$crlf}";
-                send_template_email('OUT_OF_SLA',$incident['id'],$tag,$newSlaTime-$times['next_sla_time']);
+            if ($times['next_sla_time'] < ($newSlaTime*.01*$CONFIG['urgent_threshold']) ) {
+                if ($verbose) echo "   Incident {$incident['id']} out of SLA{$crlf}";
+//                send_template_email('OUT_OF_SLA',$incident['id'],$tag,$newSlaTime-$times['next_sla_time']);
+                    echo 'OUT_OF_SLA'.','.$incident['id'].','.$tag.','.$newSlaTime-$times['next_sla_time'];
                 $emailSent=1;
             }
     
-            if (($times['review_days'] * 24 * 60) < $newReviewTime) {
-                if ($verbose) echo "Incident {$incident['id']} out of Review{$crlf}";
-                send_template_email('OUT_OF_REVIEW',$incident['id'],"",-1);
+            if (($times['review_days'] * 24 * 60) < ($newReviewTime*.01*$CONFIG['urgent_threshold']) ) {
+                if ($verbose) echo "   Incident {$incident['id']} out of Review{$crlf}";
+//                send_template_email('OUT_OF_REVIEW',$incident['id'],"",-1);
+                    echo 'OUT_OF_REVIEW'.','.$incident['id'];
                 $emailSent=1;
             }
     
             // If we just sent one then update the incident so we don't send another next time
             if ($emailSent) {
                 $sql="UPDATE incidents SET slaemail='1' WHERE id='{$incident['id']}'";
-                mysql_query($sql);
+                //mysql_query($sql);
             }
     
         }
