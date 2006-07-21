@@ -497,7 +497,11 @@ elseif ($action=='assign')
             $result = mysql_query($sql);
             if (mysql_error()) trigger_error(mysql_error(). "--$sql--",E_USER_ERROR);
             list($highestpriority) = mysql_fetch_row($result);
-            if ($priority > $highestpriority) $priority = $highestpriority;
+            if ($priority > $highestpriority)
+            {
+                $prioritychangedmessage = " (Reduced from ".priority_name($priority)." according to SLA)";
+                $priority = $highestpriority;
+            }
 
             $sql  = "INSERT INTO incidents (title, owner, contact, priority, servicelevel, status, type, maintenanceid, ";
             $sql .= "product, softwareid, productversion, productservicepacks, opened, lastupdated, timeofnextaction) ";
@@ -507,10 +511,12 @@ elseif ($action=='assign')
             if (mysql_error()) trigger_error("MySQL Query Error ".mysql_error(), E_USER_ERROR);
 
             $incidentid = mysql_insert_id();
-	    $_SESSION['incidentid'] = $incidentid;
+            $_SESSION['incidentid'] = $incidentid;
 
             // We use <b> tags in updatetext, not <strong>
-            $updatetext = "Opened as Priority: <b>" . priority_name($priority) . "</b>\n\n" . $bodytext;
+            $updatetext = "Opened as Priority: <b>" . priority_name($priority) . "</b>";
+            if (!empty($prioritychangedmessage)) $updatetext .= $prioritychangedmessage;
+            $updatetext .= "\n\n" . $bodytext;
             if ($probdesc != "") $updatetext .= "<b>Problem Description</b>\n" . $probdesc . "\n\n";
             if ($workarounds != "") $updatetext .= "<b>Workarounds Attempted</b>\n" . $workarounds . "\n\n";
             if ($probreproduction != "") $updatetext .= "<b>Problem Reproduction</b>\n" . $probreproduction . "\n\n";
