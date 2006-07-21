@@ -1487,24 +1487,25 @@ function closingstatus_drop_down($name, $id)
 /*  prints the HTML for a drop down list of     */
 /* user status names, with the given name and with the given  */
 /* id selected.                                               */
-
 function userstatus_drop_down($name, $id)
 {
    // extract statuses
    $sql  = "SELECT id, name FROM userstatus ORDER BY name ASC";
    $result = mysql_query($sql);
 
-   // print HTML
-
-   echo "<select name='$name'>";
-   if ($id == 0)
-      echo "<option selected='selected' value='0'></option>\n";
+   $html = "<select name='$name'>\n";
+   if ($id == 0) $html .= "<option selected='selected' value='0'></option>\n";
    while ($statuses = mysql_fetch_array($result))
    {
-     ?><option <?php if ($statuses["id"] == $id) { ?>selected='selected' <?php } ?>value='<?php echo $statuses["id"] ?>'><?php echo $statuses["name"] ?></option><?php
-      echo "\n";
+
+        $html .= "<option ";
+        if ($statuses["id"] == $id) $html .= "selected='selected' ";
+        $html .= "value='{$statuses["id"]}'>";
+        $html .= "{$statuses["name"]}</option>\n";
    }
-   echo "</select>\n";
+   $html .= "</select>\n";
+
+   echo $html;
 }
 
 
@@ -1512,7 +1513,6 @@ function userstatus_drop_down($name, $id)
 /*  prints the HTML for a drop down list of     */
 /* user status names, with the given name and with the given  */
 /* id selected.                                               */
-
 function userstatus_bardrop_down($name, $id)
 {
    // extract statuses
@@ -2874,7 +2874,7 @@ function send_template_email($template, $incidentid, $info1='', $info2='')
         $result = mysql_query($sql);
         if (mysql_error()) trigger_error("MySQL Query Error ".mysql_error(), E_USER_ERROR);
     }
-    
+
     // send email
     if ($CONFIG['demo']) $rtnvalue = TRUE;
     else $rtnvalue = mail($email_to, stripslashes($email_subject), stripslashes($email_body), $extra_headers);
@@ -3607,8 +3607,7 @@ function incident_get_next_target($incidentid)
             case 'closed': $target->type='opened'; break;
         }
 
-        $target->since=calculate_incident_working_time($incidentid,$upd->timestamp,$now)
-
+        $target->since=calculate_incident_working_time($incidentid,$upd->timestamp,$now);
     }
     else
     {
@@ -3915,25 +3914,25 @@ function calculate_incident_working_time($incidentid, $t1, $t2){
                 if (is_active_status($laststatus)) $timeptr=$t1;
                 else $timeptr=$update['timestamp'];
             } else {
-    
+
                 if (is_active_status($laststatus)!=is_active_status($update['currentstatus'])) {
                     if (is_active_status($laststatus)) $time+=calculate_working_time($timeptr,$update['timestamp']);
                     else $timeptr=$update['timestamp'];
                 }
-        
+
                 if ($t2<$update['timestamp']) {
                     if (is_active_status($laststatus)) $time+=calculate_working_time($timeptr,$t2);
                     break;
                 }
             }
         }
-        
+
         $laststatus=$update['currentstatus'];
     }
     mysql_free_result($result);
-    
+
     if ( ($time==0) && (is_active_status($laststatus)) ) $time=calculate_working_time($t1,$t2);
-    
+
     return $time;
 }
 
