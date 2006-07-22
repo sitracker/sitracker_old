@@ -25,7 +25,7 @@ $id = cleanvar($_REQUEST['id']);
 $mode = $_REQUEST['mode'];
 if (!empty($_REQUEST['start'])) $start = strtotime($_REQUEST['start']);
 else $start=0;
-if (!empty($_REQUEST['end'])) $start = strtotime($_REQUEST['end']);
+if (!empty($_REQUEST['end'])) $end = strtotime($_REQUEST['end']);
 else $end=0;
 $status = $_REQUEST['status'];
 
