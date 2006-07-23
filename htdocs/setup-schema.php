@@ -837,8 +837,6 @@ CREATE TABLE `software` (
 
 INSERT INTO `software` (`id`, `name`, `lifetime_start`, `lifetime_end`) VALUES (1, 'Example Software', NULL, NULL);
 
-INSERT INTO `software` VALUES (1,'Example Software');
-
 CREATE TABLE `softwareproducts` (
   `productid` int(5) NOT NULL default '0',
   `softwareid` int(5) NOT NULL default '0',
