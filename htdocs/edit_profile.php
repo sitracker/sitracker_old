@@ -173,6 +173,9 @@ else
     $accepting = cleanvar($_POST['accepting']);
     $roleid = cleanvar($_POST['roleid']);
     $holiday_entitlement = cleanvar($_POST['holiday_entitlement']);
+    $password = cleanvar($_POST['password']);
+    $newpassword1 = cleanvar($_POST['newpassword1']);
+    $newpassword2 = cleanvar($_POST['newpassword2']);
 
     // TODO target v3.24 Add some extra checking here so that users can't edit other peoples profiles
 
@@ -193,7 +196,7 @@ else
             if (mysql_error()) trigger_error("MySQL Query Error ".mysql_error(), E_USER_ERROR);
 
             if (mysql_affected_rows() < 1) { throw_error('!Error password change failed - new password', '$newpassword1'); }
-            $confirm_message = "<h2>Password Changed</h2>\n<p align='center'>You should log in again</p>\n<p align='center'>Please wait while you are redirected to the log in page...</p>";
+            $confirm_message = "<h2>Password Changed</h2>\n<p align='center'>You should log out and log back in again</p>\n<p align='center'>Please wait while you are redirected.</p>";
         }
         else
         {
