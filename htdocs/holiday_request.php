@@ -21,6 +21,7 @@ require('auth.inc.php');
 $user = cleanvar($_REQUEST['user']);
 $sent = cleanvar($_REQUEST['sent']);
 $mode = cleanvar($_REQUEST['mode']);
+$memo = cleanvar($_REQUEST['memo']);
 $approvaluser = cleanvar($_REQUEST['approvaluser']);
 
 include('htmlheader.inc.php');
@@ -129,42 +130,42 @@ else
     if (empty($approvaluser)) echo "<p class='error'>Error: You did not select a user to send the request to</p>";
     else
     {
-    $sql = "SELECT * FROM holidays, holidaytypes WHERE holidays.type=holidaytypes.id AND approved=0 ";
-    if ($user!='all' || $approver==FALSE) $sql .= "AND userid='".$sit[2]."' ";
-    $sql .= "ORDER BY startdate, length";
-    $result = mysql_query($sql);
-    if (mysql_error()) trigger_error("MySQL Query Error ".mysql_error(), E_USER_ERROR);
-    if (mysql_num_rows($result)>0)
-    {
-        // FIXME this email should probably use the email template system
-        $bodytext = "Message from {$CONFIG['application_shortname']}: ".user_realname($user)." has requested that you approve the following holidays:\n\n";
-        while ($holiday=mysql_fetch_object($result))
+        $sql = "SELECT * FROM holidays, holidaytypes WHERE holidays.type=holidaytypes.id AND approved=0 ";
+        if ($user!='all' || $approver==FALSE) $sql .= "AND userid='".$sit[2]."' ";
+        $sql .= "ORDER BY startdate, length";
+        $result = mysql_query($sql);
+        if (mysql_error()) trigger_error("MySQL Query Error ".mysql_error(), E_USER_ERROR);
+        if (mysql_num_rows($result)>0)
         {
-        $bodytext .= date('l j F Y', $holiday->startdate).", ";
-        if ($holiday->length=='am') $bodytext .= "Morning Only";
-        if ($holiday->length=='pm') $bodytext .= "Afternoon Only";
-        if ($holiday->length=='day') $bodytext .= "Full Day";
-        $bodytext .= ", ";
-        $bodytext .= $holiday->name."\n";
+            // FIXME this email should probably use the email template system
+            $bodytext = "Message from {$CONFIG['application_shortname']}: ".user_realname($user)." has requested that you approve the following holidays:\n\n";
+            while ($holiday=mysql_fetch_object($result))
+            {
+                $bodytext .= date('l j F Y', $holiday->startdate).", ";
+                if ($holiday->length=='am') $bodytext .= "Morning Only";
+                if ($holiday->length=='pm') $bodytext .= "Afternoon Only";
+                if ($holiday->length=='day') $bodytext .= "Full Day";
+                $bodytext .= ", ";
+                $bodytext .= $holiday->name."\n";
+            }
+            $bodytext .= "\n";
+            if (strlen($memo)>3)
+            {
+                $bodytext .= "The following comments were sent with the request:\n\n";
+                $bodytext .= "---\n$memo\n---\n";
+            }
+            $bodytext .= "Please point your browser to\n<https://{$_SERVER['HTTP_HOST']}/holiday_request.php?user={$user}&mode=approval>\n ";
+            $bodytext .= "to approve or decline these requests.";
         }
-        $bodytext .= "\n";
-        if (strlen($memo)>3)
-        {
-        $bodytext .= "The following comments were sent with the request:\n\n";
-        $bodytext .= "---\n$memo\n---\n";
-        }
-        $bodytext .= "Please point your browser to\n<https://{$_SERVER['HOSTNAME']}/holiday_request.php?user={$user}&mode=approval>\n ";
-        $bodytext .= "to approve or decline these requests.";
+        echo "<p align='center'>Your request has been sent</p>";
     }
-    echo "<p align='center'>Your request has been sent</p>";
-    }
-$email_from = user_email($user);
-$email_to = user_email($approvaluser);
-$email_subject = "{$CONFIG['application_shortname']}: Holiday Approval Request";
-$extra_headers  = "From: $email_from\nReply-To: $email_replyto\nErrors-To: {$CONFIG['support_email']}\n";
-$extra_headers .= "X-Mailer: {$CONFIG['application_shortname']} {$application_version_string}/PHP " . phpversion()."\n";
-
-$rtnvalue = mail($email_to, stripslashes($email_subject), stripslashes($bodytext), $extra_headers);
+    $email_from = user_email($user);
+    $email_to = user_email($approvaluser);
+    $email_subject = "{$CONFIG['application_shortname']}: Holiday Approval Request";
+    $extra_headers  = "From: $email_from\nReply-To: $email_from\nErrors-To: {$CONFIG['support_email']}\n";
+    $extra_headers .= "X-Mailer: {$CONFIG['application_shortname']} {$application_version_string}/PHP " . phpversion()."\n";
+    
+    $rtnvalue = mail($email_to, stripslashes($email_subject), stripslashes($bodytext), $extra_headers);
     echo "<p align='center'><a href='holiday_calendar.php?type=1&user=$user'>Back to your calendar</p></p>";
 }
 include('htmlfooter.inc.php');
