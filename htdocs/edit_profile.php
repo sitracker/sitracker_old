@@ -200,7 +200,8 @@ else
         }
         else
         {
-            throw_error("User Error changing password, please try again typing your passwords carefully.",'');
+            // TODO produce a better message when password change fails
+            throw_error("User Error changing password, please try again typing your passwords carefully. $password ($newpassword1 / $newpassword2)",'');
         }
     }
     // check for blank real name

@@ -928,17 +928,12 @@ CREATE TABLE `updates` (
   `timestamp` int(11) default NULL,
   `nextaction` varchar(50) NOT NULL default '',
   `customervisibility` enum('show','hide','unset') default 'unset',
-  `timesincesla` int(5) default NULL,
-  `timesincereview` int(5) default NULL,
-  `reviewcalculated` enum('true','false') NOT NULL default 'false',
   `sla` enum('opened','initialresponse','probdef','actionplan','solution','closed') default NULL,
-  `slacalculated` enum('false','true') NOT NULL default 'false',
   PRIMARY KEY  (`id`),
   KEY `currentowner` (`currentowner`,`currentstatus`),
   KEY `incidentid` (`incidentid`),
   KEY `timestamp` (`timestamp`),
-  KEY `type` (`type`),
-  KEY `timesincereview` (`timesincereview`,`reviewcalculated`)
+  KEY `type` (`type`)
 ) ENGINE=MyISAM;
 
 
@@ -1168,7 +1163,13 @@ $upgrade_schema[324] = "ALTER TABLE `users` ADD `groupid` INT( 5 ) NULL AFTER `r
 ALTER TABLE `users` ADD INDEX ( `groupid` ) ;
 ALTER TABLE `software` ADD `lifetime_start` DATE NULL ,
 ADD `lifetime_end` DATE NULL ;
-ALTER TABLE `emailtype` ADD `storeinlog` ENUM( 'No', 'Yes' ) NOT NULL DEFAULT 'Yes';";
+ALTER TABLE `emailtype` ADD `storeinlog` ENUM( 'No', 'Yes' ) NOT NULL DEFAULT 'Yes';
+ALTER TABLE `updates`
+  DROP `timesincesla`,
+  DROP `timesincereview`,
+  DROP `reviewcalculated`,
+  DROP `slacalculated`;
+";
 
 // Important: When making changes to the schema you must add SQL to make the alterations
 // to existing databases in $upgrade_schema[] *AND* you must also change $schema[] for

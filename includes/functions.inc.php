@@ -3902,7 +3902,7 @@ function calculate_incident_working_time($incidentid, $t1, $t2){
         $t1=$t3;
     }
 
-    $sql="select id, currentstatus, timestamp from updates where incidentid='$incidentid' order by id asc";
+    $sql="SELECT id, currentstatus, timestamp FROM updates WHERE incidentid='$incidentid' ORDER BY id ASC";
     $result=mysql_query($sql);
     if (mysql_error()) trigger_error(mysql_error(),E_USER_WARNING);
     $time=0;

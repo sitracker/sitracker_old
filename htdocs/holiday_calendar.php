@@ -185,7 +185,8 @@ function draw_calendar($nmonth, $nyear)
                 // colors and shading
                 $halfday="";
                 $style='';
-                // check holiday data
+
+                // Get the holiday information for a single day
                 list($dtype, $dlength, $approved, $approvedby)=user_holiday($user, $type, $nyear, $nmonth, $calday, false);
 
                 if ($dlength=='pm')
