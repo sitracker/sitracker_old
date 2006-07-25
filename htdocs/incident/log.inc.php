@@ -108,7 +108,7 @@ while ($update = mysql_fetch_object($result))
 
     $updatebody = bbcode($updatebody);
 
-    $updatebody = emotion($updatebody);
+    //$updatebody = emotion($updatebody);
 
     //"!(http:/{2}[\w\.]{2,}[/\w\-\.\?\&\=\#]*)!e"
     // [\n\t ]+

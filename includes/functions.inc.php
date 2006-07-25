@@ -4493,59 +4493,7 @@ function strip_bbcode_tooltip($text)
     return preg_replace($bbcode_regex, $bbcode_replace, $text);
 }
 
-function emotion($text)
-{
-    $tango_emotes = 'images/Tango/tango-icon-theme-0.7.2/16x16/emotes/';
-    /*$emotion_regex = array(0 => '/:-\)/',
-                            1 => '/:-\(/');*/
-    $emotion_regex = array(0 => '/0:-\)/',
-                           1 => '/:\'\(/',
-                           2 => '/&gt;:-\)/',
-                           3 => '/&gt;:-\(/',
-                           4 => '/B-\)/',
-                           5 => '/:-\*/',
-                           6 => '/:-\(\|\)/',
-                           7 => '/:-\|/',
-                           8 => '/:-\(/',
-                           9 => '/:-\)/',
-                           10 => '/:-D/',
-                           11 => '/:-\!/',
-                           12 => '/:-0/',
-                           13 => '/;-\)/');
-/*
-face-angel  -   -   -   SVG The icon used for the 0:-) emote.
-face-crying -   -   -   SVG The icon used for the :'( emote.
-face-devil-grin -   -   -   SVG The icon used for the >:-) emote.
-face-devil-sad  -   -   -   SVG The icon used for the >:-( emote.
-face-glasses    -   -   -   SVG The icon used for the B-) emote.
-face-kiss   -   -   -   SVG The icon used for the :-* emote.
-face-monkey -   -   -   SVG The icon used for the :-(|) emote.
-face-plain  -   -   -   SVG The icon used for the :-| emote.
-face-sad    -   -   -   SVG The icon used for the :-( emote.
-face-smile  -   -   -   SVG The icon used for the :-) emote.
-face-smile-big  -   -   -   SVG The icon used for the :-D emote.
-face-smirk  -   -   -   SVG The icon used for the :-! emote.
-face-surprise   -   -   -   SVG The icon used for the :-0 emote.
-face-wink   -   -   -   SVG The icon used for the ;-) emote.
-*/  
 
-    $emotion_replace = array(0 => "<img src={$tango_emotes}face-angel.png />",
-                            1 => "<img src={$tango_emotes}face-crying.png />",
-                            2 => "<img src={$tango_emotes}face-devil-grin.png />",
-                            /*3 => "<img src={$tango_emotes}face-devil-sad.png />" Not IMplemented yet*/ 3 => ">:\(",
-                            4 => "<img src={$tango_emotes}face-glasses.png />",
-                            5 => "<img src={$tango_emotes}face-kiss.png />",
-                            6 => "<img src={$tango_emotes}face-monkey.png />",
-                            7 => "<img src={$tango_emotes}face-plain.png />",
-                            8 => "<img src={$tango_emotes}face-sad.png />",
-                            9 => "<img src={$tango_emotes}face-smile.png />",
-                            10 => "<img src={$tango_emotes}face-smile-big.png />",
-                            11 => ":-!" /* not in tango yet*/, 
-                            12 => "<img src={$tango_emotes}face-surprise.png />",
-                            13 => "<img src={$tango_emotes}face-wink.png />");
-
-    return preg_replace($emotion_regex, $emotion_replace, $text);
-}
 
 // -------------------------- // -------------------------- // --------------------------
 // leave this section at the bottom of functions.inc.php ================================
