@@ -15,6 +15,7 @@ if (realpath(__FILE__) == realpath($_SERVER['SCRIPT_FILENAME']))
     exit;
 }
 
+define("STATUS_CLOSING",7);
 define("STATUS_CLOSED",2);
 define("STATUS_CUSTOMER",8);
 
@@ -23,7 +24,7 @@ define("STATUS_CUSTOMER",8);
 
 if ($verbose) echo "Calculating SLA times{$crlf}";
 
-$sql="SELECT id,maintenanceid,priority,slaemail,servicelevel,status FROM incidents WHERE status != ".STATUS_CLOSED;
+$sql="SELECT id,maintenanceid,priority,slaemail,servicelevel,status FROM incidents WHERE status != ".STATUS_CLOSED." AND status != ".STATUS_CLOSING;
 //$sql="SELECT id,maintenanceid,priority,slaemail,servicelevel,status FROM incidents WHERE id=34833";
 $incident_result=mysql_query($sql);
 
