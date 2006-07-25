@@ -180,7 +180,7 @@ if (mysql_num_rows($rresult) >= 1)
 
 echo "</table>";
 
-plugin_do('display_incident_meta_data');
+plugin_do('incident_details');
 
 echo "</div>\n\n";
 
