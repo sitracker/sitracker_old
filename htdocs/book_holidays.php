@@ -72,8 +72,8 @@ if (empty($step))
     <form name="date" action="<?php echo $_SERVER['PHP_SELF']; ?>" method="post">
     <table>
     <tr><th>Holiday Type:</th><td class='shade2'><?php holidaytype_drop_down('type', 1) ?></td></tr>
-    <tr><th>Start Date:</th><td align='left' class='shade1' title='date picker'><input name='start' size="10" /> <img onmouseup="toggleDatePicker('daysOfMonth','date.start')" id=daysOfMonthPos name=daysOfMonthPos width=16 height=16 src="images/icons/16x16/actions/1day.png" align=top border=0 alt="date picker"><div id="daysOfMonth" style="position:absolute;"></td></tr>
-    <tr><th>End Date:</th><td align='left' class='shade1' title='date picker'><input name='end' size="10"> <img onmouseup="toggleDatePicker('daysOfMonth2','date.end')" id=daysOfMonth2Pos name=daysOfMonth2Pos width=16 height=16 src="images/icons/16x16/actions/1day.png" align=top border=0 alt="date picker"><div id="daysOfMonth2" style="position:absolute;"></td></tr>
+    <tr><th>Start Date:</th><td align='left' class='shade1' title='date picker'><input name='start' size="10" /> <img onmouseup="toggleDatePicker('daysOfMonth','date.start')" id=daysOfMonthPos name=daysOfMonthPos width=16 height=16 src="images/icons/kdeclassic/16x16/actions/1day.png" align=top border=0 alt="date picker"><div id="daysOfMonth" style="position:absolute;"></td></tr>
+    <tr><th>End Date:</th><td align='left' class='shade1' title='date picker'><input name='end' size="10"> <img onmouseup="toggleDatePicker('daysOfMonth2','date.end')" id=daysOfMonth2Pos name=daysOfMonth2Pos width=16 height=16 src="images/icons/kdeclassic/16x16/actions/1day.png" align=top border=0 alt="date picker"><div id="daysOfMonth2" style="position:absolute;"></td></tr>
     <tr><td align='right' class='shade1' width='200'>&nbsp;</td><td align='left' class='shade1'>
     <input type='hidden' name='step' value='1' />
     <input type='submit' value='Book' /></td></tr>

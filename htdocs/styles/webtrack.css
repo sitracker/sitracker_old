@@ -187,28 +187,28 @@ p.tip,p.info, p.warning, p.error, h5.warning, h5.error
 }
 p.tip
 {
-  background-image: url('../images/icons/16x16/actions/idea.png');
+  background-image: url('../images/icons/kdeclassic/16x16/actions/idea.png');
   color: InfoText;
   border: 1px solid InfoText;
   background-color: InfoBackground;
 }
 p.info
 {
-  background-image: url('../images/icons/16x16/actions/info.png');
+  background-image: url('../images/icons/kdeclassic/16x16/actions/info.png');
   color: #17446B;
   border: 1px solid #17446B;
   background-color: #F4F6FF;
 }
 p.warning, h5.warning
 {
-  background-image: url('../images/icons/16x16/actions/info.png');
+  background-image: url('../images/icons/kdeclassic/16x16/actions/info.png');
   color: black;
   border: 1px solid #17446B;
   background-color: #B4D2E6;
 }
 p.error, h5.error
 {
-  background-image: url('../images/icons/16x16/actions/stop.png');
+  background-image: url('../images/icons/kdeclassic/16x16/actions/stop.png');
   color: #f00;
   border: 1px solid #f00;
   background-color: #fff;

@@ -2995,93 +2995,93 @@ function getattachmenticon($filename)
     global $CONFIG;
     // Maybe sometime make this use mime typesad of file extensions
     $ext=strtolower(substr($filename, (strlen($filename)-3) , 3));
-    $imageurl="{$CONFIG['application_webpath']}images/smallicons/mime_empty.gif";
+    $imageurl="{$CONFIG['application_webpath']}images/icons/kdeclassic/32x32/mimetypes/mime_empty.gif";
 
-    $filetype[]="gif";    $imgurl[]="{$CONFIG['application_webpath']}images/smallicons/image.gif";
-    $filetype[]="jpg";    $imgurl[]="{$CONFIG['application_webpath']}images/smallicons/image.gif";
-    $filetype[]="bmp";    $imgurl[]="{$CONFIG['application_webpath']}images/smallicons/image.gif";
-    $filetype[]="png";    $imgurl[]="{$CONFIG['application_webpath']}images/smallicons/image.gif";
-    $filetype[]="pcx";    $imgurl[]="{$CONFIG['application_webpath']}images/smallicons/image.gif";
-    $filetype[]="xls";    $imgurl[]="{$CONFIG['application_webpath']}images/smallicons/spreadsheet.gif";
-    $filetype[]="csv";    $imgurl[]="{$CONFIG['application_webpath']}images/smallicons/spreadsheet.gif";
-    $filetype[]="zip";    $imgurl[]="{$CONFIG['application_webpath']}images/smallicons/tgz.gif";
-    $filetype[]="arj";    $imgurl[]="{$CONFIG['application_webpath']}images/smallicons/tgz.gif";
-    $filetype[]="rar";    $imgurl[]="{$CONFIG['application_webpath']}images/smallicons/tgz.gif";
-    $filetype[]="cab";    $imgurl[]="{$CONFIG['application_webpath']}images/smallicons/tgz.gif";
-    $filetype[]="lzh";    $imgurl[]="{$CONFIG['application_webpath']}images/smallicons/tgz.gif";
-    $filetype[]="txt";    $imgurl[]="{$CONFIG['application_webpath']}images/smallicons/txt.gif";
-    $filetype[]="f90";    $imgurl[]="{$CONFIG['application_webpath']}images/smallicons/source_f.gif";
-    $filetype[]="f77";    $imgurl[]="{$CONFIG['application_webpath']}images/smallicons/source_f.gif";
-    $filetype[]="inf";    $imgurl[]="{$CONFIG['application_webpath']}images/smallicons/source.gif";
-    $filetype[]="ins";    $imgurl[]="{$CONFIG['application_webpath']}images/smallicons/source.gif";
-    $filetype[]="adm";    $imgurl[]="{$CONFIG['application_webpath']}images/smallicons/source.gif";
-    $filetype[]="f95";    $imgurl[]="{$CONFIG['application_webpath']}images/smallicons/source_f.gif";
-    $filetype[]="cpp";    $imgurl[]="{$CONFIG['application_webpath']}images/smallicons/source_cpp.gif";
-    $filetype[]="for";    $imgurl[]="{$CONFIG['application_webpath']}images/smallicons/source_f.gif";
-    $filetype[]=".pl";    $imgurl[]="{$CONFIG['application_webpath']}images/smallicons/source_pl.gif";
-    $filetype[]=".py";    $imgurl[]="{$CONFIG['application_webpath']}images/smallicons/source_py.gif";
-    $filetype[]="rtm";    $imgurl[]="{$CONFIG['application_webpath']}images/smallicons/misc_doc.gif";
-    $filetype[]="doc";    $imgurl[]="{$CONFIG['application_webpath']}images/smallicons/wordprocessing.gif";
-    $filetype[]="rtf";    $imgurl[]="{$CONFIG['application_webpath']}images/smallicons/wordprocessing.gif";
-    $filetype[]="wri";    $imgurl[]="{$CONFIG['application_webpath']}images/smallicons/wordprocessing.gif";
-    $filetype[]="wri";    $imgurl[]="{$CONFIG['application_webpath']}images/smallicons/wordprocessing.gif";
-    $filetype[]="pdf";    $imgurl[]="{$CONFIG['application_webpath']}images/smallicons/pdf.gif";
-    $filetype[]="htm";    $imgurl[]="{$CONFIG['application_webpath']}images/smallicons/html.gif";
-    $filetype[]="tml";    $imgurl[]="{$CONFIG['application_webpath']}images/smallicons/html.gif";
-    $filetype[]="wav";    $imgurl[]="{$CONFIG['application_webpath']}images/smallicons/sound.gif";
-    $filetype[]="mp3";    $imgurl[]="{$CONFIG['application_webpath']}images/smallicons/sound.gif";
-    $filetype[]="voc";    $imgurl[]="{$CONFIG['application_webpath']}images/smallicons/sound.gif";
-    $filetype[]="exe";    $imgurl[]="{$CONFIG['application_webpath']}images/smallicons/binary.gif";
-    $filetype[]="com";    $imgurl[]="{$CONFIG['application_webpath']}images/smallicons/binary.gif";
-    $filetype[]="nlm";    $imgurl[]="{$CONFIG['application_webpath']}images/smallicons/binary.gif";
-    $filetype[]="evt";    $imgurl[]="{$CONFIG['application_webpath']}images/smallicons/log.gif";
-    $filetype[]="log";    $imgurl[]="{$CONFIG['application_webpath']}images/smallicons/log.gif";
-    $filetype[]="386";    $imgurl[]="{$CONFIG['application_webpath']}images/smallicons/binary2.gif";
-    $filetype[]="dll";    $imgurl[]="{$CONFIG['application_webpath']}images/smallicons/binary2.gif";
-    $filetype[]="asc";    $imgurl[]="{$CONFIG['application_webpath']}images/smallicons/txt.gif";
-    $filetype[]="asp";    $imgurl[]="{$CONFIG['application_webpath']}images/smallicons/html.gif";
-    $filetype[]="avi";    $imgurl[]="{$CONFIG['application_webpath']}images/smallicons/video.gif";
-    $filetype[]="bkf";    $imgurl[]="{$CONFIG['application_webpath']}images/smallicons/tar.gif";
-    $filetype[]="chm";    $imgurl[]="{$CONFIG['application_webpath']}images/smallicons/man.gif";
-    $filetype[]="hlp";    $imgurl[]="{$CONFIG['application_webpath']}images/smallicons/man.gif";
-    $filetype[]="dif";    $imgurl[]="{$CONFIG['application_webpath']}images/smallicons/txt.gif";
-    $filetype[]="hta";    $imgurl[]="{$CONFIG['application_webpath']}images/smallicons/html.gif";
-    $filetype[]="reg";    $imgurl[]="{$CONFIG['application_webpath']}images/smallicons/resource.gif";
-    $filetype[]="dmp";    $imgurl[]="{$CONFIG['application_webpath']}images/smallicons/core.gif";
-    $filetype[]="ini";    $imgurl[]="{$CONFIG['application_webpath']}images/smallicons/source.gif";
-    $filetype[]="jpe";    $imgurl[]="{$CONFIG['application_webpath']}images/smallicons/image.gif";
-    $filetype[]="mht";    $imgurl[]="{$CONFIG['application_webpath']}images/smallicons/html.gif";
-    $filetype[]="msi";    $imgurl[]="{$CONFIG['application_webpath']}images/smallicons/binary.gif";
-    $filetype[]="aot";    $imgurl[]="{$CONFIG['application_webpath']}images/smallicons/binary.gif";
-    $filetype[]="pgp";    $imgurl[]="{$CONFIG['application_webpath']}images/smallicons/binary.gif";
-    $filetype[]="dbg";    $imgurl[]="{$CONFIG['application_webpath']}images/smallicons/binary.gif";
-    $filetype[]="axt";    $imgurl[]="{$CONFIG['application_webpath']}images/smallicons/source.gif"; // zen text
-    $filetype[]="rdp";    $imgurl[]="{$CONFIG['application_webpath']}images/smallicons/binary2.gif";
-    $filetype[]="sig";    $imgurl[]="{$CONFIG['application_webpath']}images/smallicons/document.gif";
-    $filetype[]="tif";    $imgurl[]="{$CONFIG['application_webpath']}images/smallicons/image.gif";
-    $filetype[]="ttf";    $imgurl[]="{$CONFIG['application_webpath']}images/smallicons/font_ttf.gif";
-    $filetype[]="for";    $imgurl[]="{$CONFIG['application_webpath']}images/smallicons/font_bitmap.gif";
-    $filetype[]="vbs";    $imgurl[]="{$CONFIG['application_webpath']}images/smallicons/shellscript.gif";
-    $filetype[]="vbe";    $imgurl[]="{$CONFIG['application_webpath']}images/smallicons/shellscript.gif";
-    $filetype[]="bat";    $imgurl[]="{$CONFIG['application_webpath']}images/smallicons/shellscript.gif";
-    $filetype[]="wsf";    $imgurl[]="{$CONFIG['application_webpath']}images/smallicons/shellscript.gif";
-    $filetype[]="cmd";    $imgurl[]="{$CONFIG['application_webpath']}images/smallicons/shellscript.gif";
-    $filetype[]="scr";    $imgurl[]="{$CONFIG['application_webpath']}images/smallicons/binary2.gif";
-    $filetype[]="xml";    $imgurl[]="{$CONFIG['application_webpath']}images/smallicons/source.gif";
-    $filetype[]="zap";    $imgurl[]="{$CONFIG['application_webpath']}images/smallicons/binary2.gif";
-    $filetype[]=".ps";    $imgurl[]="{$CONFIG['application_webpath']}images/smallicons/postscript.gif";
-    $filetype[]=".rm";    $imgurl[]="{$CONFIG['application_webpath']}images/smallicons/real_doc.gif";
-    $filetype[]="ram";    $imgurl[]="{$CONFIG['application_webpath']}images/smallicons/real_doc.gif";
-    $filetype[]="vcf";    $imgurl[]="{$CONFIG['application_webpath']}images/smallicons/vcard.gif";
-    $filetype[]="wmf";    $imgurl[]="{$CONFIG['application_webpath']}images/smallicons/vectorgfx.gif";
-    $filetype[]="cer";    $imgurl[]="{$CONFIG['application_webpath']}images/smallicons/document.gif";
-    $filetype[]="tmp";    $imgurl[]="{$CONFIG['application_webpath']}images/smallicons/unknown.gif";
-    $filetype[]="cap";    $imgurl[]="{$CONFIG['application_webpath']}images/smallicons/binary.gif";
-    $filetype[]="tr1";    $imgurl[]="{$CONFIG['application_webpath']}images/smallicons/binary.gif";
-    $filetype[]=".gz";    $imgurl[]="{$CONFIG['application_webpath']}images/smallicons/tgz.gif";
-    $filetype[]="tar";    $imgurl[]="{$CONFIG['application_webpath']}images/smallicons/tar.gif";
-    $filetype[]="nfo";    $imgurl[]="{$CONFIG['application_webpath']}images/smallicons/info.gif";
-    $filetype[]="pal";    $imgurl[]="{$CONFIG['application_webpath']}images/smallicons/colorscm.gif";
+    $filetype[]="gif";    $imgurl[]="{$CONFIG['application_webpath']}images/icons/kdeclassic/32x32/mimetypes/image.gif";
+    $filetype[]="jpg";    $imgurl[]="{$CONFIG['application_webpath']}images/icons/kdeclassic/32x32/mimetypes/image.gif";
+    $filetype[]="bmp";    $imgurl[]="{$CONFIG['application_webpath']}images/icons/kdeclassic/32x32/mimetypes/image.gif";
+    $filetype[]="png";    $imgurl[]="{$CONFIG['application_webpath']}images/icons/kdeclassic/32x32/mimetypes/image.gif";
+    $filetype[]="pcx";    $imgurl[]="{$CONFIG['application_webpath']}images/icons/kdeclassic/32x32/mimetypes/image.gif";
+    $filetype[]="xls";    $imgurl[]="{$CONFIG['application_webpath']}images/icons/kdeclassic/32x32/mimetypes/spreadsheet.gif";
+    $filetype[]="csv";    $imgurl[]="{$CONFIG['application_webpath']}images/icons/kdeclassic/32x32/mimetypes/spreadsheet.gif";
+    $filetype[]="zip";    $imgurl[]="{$CONFIG['application_webpath']}images/icons/kdeclassic/32x32/mimetypes/tgz.gif";
+    $filetype[]="arj";    $imgurl[]="{$CONFIG['application_webpath']}images/icons/kdeclassic/32x32/mimetypes/tgz.gif";
+    $filetype[]="rar";    $imgurl[]="{$CONFIG['application_webpath']}images/icons/kdeclassic/32x32/mimetypes/tgz.gif";
+    $filetype[]="cab";    $imgurl[]="{$CONFIG['application_webpath']}images/icons/kdeclassic/32x32/mimetypes/tgz.gif";
+    $filetype[]="lzh";    $imgurl[]="{$CONFIG['application_webpath']}images/icons/kdeclassic/32x32/mimetypes/tgz.gif";
+    $filetype[]="txt";    $imgurl[]="{$CONFIG['application_webpath']}images/icons/kdeclassic/32x32/mimetypes/txt.gif";
+    $filetype[]="f90";    $imgurl[]="{$CONFIG['application_webpath']}images/icons/kdeclassic/32x32/mimetypes/source_f.gif";
+    $filetype[]="f77";    $imgurl[]="{$CONFIG['application_webpath']}images/icons/kdeclassic/32x32/mimetypes/source_f.gif";
+    $filetype[]="inf";    $imgurl[]="{$CONFIG['application_webpath']}images/icons/kdeclassic/32x32/mimetypes/source.gif";
+    $filetype[]="ins";    $imgurl[]="{$CONFIG['application_webpath']}images/icons/kdeclassic/32x32/mimetypes/source.gif";
+    $filetype[]="adm";    $imgurl[]="{$CONFIG['application_webpath']}images/icons/kdeclassic/32x32/mimetypes/source.gif";
+    $filetype[]="f95";    $imgurl[]="{$CONFIG['application_webpath']}images/icons/kdeclassic/32x32/mimetypes/source_f.gif";
+    $filetype[]="cpp";    $imgurl[]="{$CONFIG['application_webpath']}images/icons/kdeclassic/32x32/mimetypes/source_cpp.gif";
+    $filetype[]="for";    $imgurl[]="{$CONFIG['application_webpath']}images/icons/kdeclassic/32x32/mimetypes/source_f.gif";
+    $filetype[]=".pl";    $imgurl[]="{$CONFIG['application_webpath']}images/icons/kdeclassic/32x32/mimetypes/source_pl.gif";
+    $filetype[]=".py";    $imgurl[]="{$CONFIG['application_webpath']}images/icons/kdeclassic/32x32/mimetypes/source_py.gif";
+    $filetype[]="rtm";    $imgurl[]="{$CONFIG['application_webpath']}images/icons/kdeclassic/32x32/mimetypes/misc_doc.gif";
+    $filetype[]="doc";    $imgurl[]="{$CONFIG['application_webpath']}images/icons/kdeclassic/32x32/mimetypes/wordprocessing.gif";
+    $filetype[]="rtf";    $imgurl[]="{$CONFIG['application_webpath']}images/icons/kdeclassic/32x32/mimetypes/wordprocessing.gif";
+    $filetype[]="wri";    $imgurl[]="{$CONFIG['application_webpath']}images/icons/kdeclassic/32x32/mimetypes/wordprocessing.gif";
+    $filetype[]="wri";    $imgurl[]="{$CONFIG['application_webpath']}images/icons/kdeclassic/32x32/mimetypes/wordprocessing.gif";
+    $filetype[]="pdf";    $imgurl[]="{$CONFIG['application_webpath']}images/icons/kdeclassic/32x32/mimetypes/pdf.gif";
+    $filetype[]="htm";    $imgurl[]="{$CONFIG['application_webpath']}images/icons/kdeclassic/32x32/mimetypes/html.gif";
+    $filetype[]="tml";    $imgurl[]="{$CONFIG['application_webpath']}images/icons/kdeclassic/32x32/mimetypes/html.gif";
+    $filetype[]="wav";    $imgurl[]="{$CONFIG['application_webpath']}images/icons/kdeclassic/32x32/mimetypes/sound.gif";
+    $filetype[]="mp3";    $imgurl[]="{$CONFIG['application_webpath']}images/icons/kdeclassic/32x32/mimetypes/sound.gif";
+    $filetype[]="voc";    $imgurl[]="{$CONFIG['application_webpath']}images/icons/kdeclassic/32x32/mimetypes/sound.gif";
+    $filetype[]="exe";    $imgurl[]="{$CONFIG['application_webpath']}images/icons/kdeclassic/32x32/mimetypes/binary.gif";
+    $filetype[]="com";    $imgurl[]="{$CONFIG['application_webpath']}images/icons/kdeclassic/32x32/mimetypes/binary.gif";
+    $filetype[]="nlm";    $imgurl[]="{$CONFIG['application_webpath']}images/icons/kdeclassic/32x32/mimetypes/binary.gif";
+    $filetype[]="evt";    $imgurl[]="{$CONFIG['application_webpath']}images/icons/kdeclassic/32x32/mimetypes/log.gif";
+    $filetype[]="log";    $imgurl[]="{$CONFIG['application_webpath']}images/icons/kdeclassic/32x32/mimetypes/log.gif";
+    $filetype[]="386";    $imgurl[]="{$CONFIG['application_webpath']}images/icons/kdeclassic/32x32/mimetypes/binary2.gif";
+    $filetype[]="dll";    $imgurl[]="{$CONFIG['application_webpath']}images/icons/kdeclassic/32x32/mimetypes/binary2.gif";
+    $filetype[]="asc";    $imgurl[]="{$CONFIG['application_webpath']}images/icons/kdeclassic/32x32/mimetypes/txt.gif";
+    $filetype[]="asp";    $imgurl[]="{$CONFIG['application_webpath']}images/icons/kdeclassic/32x32/mimetypes/html.gif";
+    $filetype[]="avi";    $imgurl[]="{$CONFIG['application_webpath']}images/icons/kdeclassic/32x32/mimetypes/video.gif";
+    $filetype[]="bkf";    $imgurl[]="{$CONFIG['application_webpath']}images/icons/kdeclassic/32x32/mimetypes/tar.gif";
+    $filetype[]="chm";    $imgurl[]="{$CONFIG['application_webpath']}images/icons/kdeclassic/32x32/mimetypes/man.gif";
+    $filetype[]="hlp";    $imgurl[]="{$CONFIG['application_webpath']}images/icons/kdeclassic/32x32/mimetypes/man.gif";
+    $filetype[]="dif";    $imgurl[]="{$CONFIG['application_webpath']}images/icons/kdeclassic/32x32/mimetypes/txt.gif";
+    $filetype[]="hta";    $imgurl[]="{$CONFIG['application_webpath']}images/icons/kdeclassic/32x32/mimetypes/html.gif";
+    $filetype[]="reg";    $imgurl[]="{$CONFIG['application_webpath']}images/icons/kdeclassic/32x32/mimetypes/resource.gif";
+    $filetype[]="dmp";    $imgurl[]="{$CONFIG['application_webpath']}images/icons/kdeclassic/32x32/mimetypes/core.gif";
+    $filetype[]="ini";    $imgurl[]="{$CONFIG['application_webpath']}images/icons/kdeclassic/32x32/mimetypes/source.gif";
+    $filetype[]="jpe";    $imgurl[]="{$CONFIG['application_webpath']}images/icons/kdeclassic/32x32/mimetypes/image.gif";
+    $filetype[]="mht";    $imgurl[]="{$CONFIG['application_webpath']}images/icons/kdeclassic/32x32/mimetypes/html.gif";
+    $filetype[]="msi";    $imgurl[]="{$CONFIG['application_webpath']}images/icons/kdeclassic/32x32/mimetypes/binary.gif";
+    $filetype[]="aot";    $imgurl[]="{$CONFIG['application_webpath']}images/icons/kdeclassic/32x32/mimetypes/binary.gif";
+    $filetype[]="pgp";    $imgurl[]="{$CONFIG['application_webpath']}images/icons/kdeclassic/32x32/mimetypes/binary.gif";
+    $filetype[]="dbg";    $imgurl[]="{$CONFIG['application_webpath']}images/icons/kdeclassic/32x32/mimetypes/binary.gif";
+    $filetype[]="axt";    $imgurl[]="{$CONFIG['application_webpath']}images/icons/kdeclassic/32x32/mimetypes/source.gif"; // zen text
+    $filetype[]="rdp";    $imgurl[]="{$CONFIG['application_webpath']}images/icons/kdeclassic/32x32/mimetypes/binary2.gif";
+    $filetype[]="sig";    $imgurl[]="{$CONFIG['application_webpath']}images/icons/kdeclassic/32x32/mimetypes/document.gif";
+    $filetype[]="tif";    $imgurl[]="{$CONFIG['application_webpath']}images/icons/kdeclassic/32x32/mimetypes/image.gif";
+    $filetype[]="ttf";    $imgurl[]="{$CONFIG['application_webpath']}images/icons/kdeclassic/32x32/mimetypes/font_ttf.gif";
+    $filetype[]="for";    $imgurl[]="{$CONFIG['application_webpath']}images/icons/kdeclassic/32x32/mimetypes/font_bitmap.gif";
+    $filetype[]="vbs";    $imgurl[]="{$CONFIG['application_webpath']}images/icons/kdeclassic/32x32/mimetypes/shellscript.gif";
+    $filetype[]="vbe";    $imgurl[]="{$CONFIG['application_webpath']}images/icons/kdeclassic/32x32/mimetypes/shellscript.gif";
+    $filetype[]="bat";    $imgurl[]="{$CONFIG['application_webpath']}images/icons/kdeclassic/32x32/mimetypes/shellscript.gif";
+    $filetype[]="wsf";    $imgurl[]="{$CONFIG['application_webpath']}images/icons/kdeclassic/32x32/mimetypes/shellscript.gif";
+    $filetype[]="cmd";    $imgurl[]="{$CONFIG['application_webpath']}images/icons/kdeclassic/32x32/mimetypes/shellscript.gif";
+    $filetype[]="scr";    $imgurl[]="{$CONFIG['application_webpath']}images/icons/kdeclassic/32x32/mimetypes/binary2.gif";
+    $filetype[]="xml";    $imgurl[]="{$CONFIG['application_webpath']}images/icons/kdeclassic/32x32/mimetypes/source.gif";
+    $filetype[]="zap";    $imgurl[]="{$CONFIG['application_webpath']}images/icons/kdeclassic/32x32/mimetypes/binary2.gif";
+    $filetype[]=".ps";    $imgurl[]="{$CONFIG['application_webpath']}images/icons/kdeclassic/32x32/mimetypes/postscript.gif";
+    $filetype[]=".rm";    $imgurl[]="{$CONFIG['application_webpath']}images/icons/kdeclassic/32x32/mimetypes/real_doc.gif";
+    $filetype[]="ram";    $imgurl[]="{$CONFIG['application_webpath']}images/icons/kdeclassic/32x32/mimetypes/real_doc.gif";
+    $filetype[]="vcf";    $imgurl[]="{$CONFIG['application_webpath']}images/icons/kdeclassic/32x32/mimetypes/vcard.gif";
+    $filetype[]="wmf";    $imgurl[]="{$CONFIG['application_webpath']}images/icons/kdeclassic/32x32/mimetypes/vectorgfx.gif";
+    $filetype[]="cer";    $imgurl[]="{$CONFIG['application_webpath']}images/icons/kdeclassic/32x32/mimetypes/document.gif";
+    $filetype[]="tmp";    $imgurl[]="{$CONFIG['application_webpath']}images/icons/kdeclassic/32x32/mimetypes/unknown.gif";
+    $filetype[]="cap";    $imgurl[]="{$CONFIG['application_webpath']}images/icons/kdeclassic/32x32/mimetypes/binary.gif";
+    $filetype[]="tr1";    $imgurl[]="{$CONFIG['application_webpath']}images/icons/kdeclassic/32x32/mimetypes/binary.gif";
+    $filetype[]=".gz";    $imgurl[]="{$CONFIG['application_webpath']}images/icons/kdeclassic/32x32/mimetypes/tgz.gif";
+    $filetype[]="tar";    $imgurl[]="{$CONFIG['application_webpath']}images/icons/kdeclassic/32x32/mimetypes/tar.gif";
+    $filetype[]="nfo";    $imgurl[]="{$CONFIG['application_webpath']}images/icons/kdeclassic/32x32/mimetypes/info.gif";
+    $filetype[]="pal";    $imgurl[]="{$CONFIG['application_webpath']}images/icons/kdeclassic/32x32/mimetypes/colorscm.gif";
 
 
     // bugbug: think there is an inifinate loop here if a filetype
@@ -4491,6 +4491,60 @@ function strip_bbcode_tooltip($text)
                             3 => '$2');
 
     return preg_replace($bbcode_regex, $bbcode_replace, $text);
+}
+
+function emotion($text)
+{
+    $tango_emotes = 'images/Tango/tango-icon-theme-0.7.2/16x16/emotes/';
+    /*$emotion_regex = array(0 => '/:-\)/',
+                            1 => '/:-\(/');*/
+    $emotion_regex = array(0 => '/0:-\)/',
+                           1 => '/:\'\(/',
+                           2 => '/&gt;:-\)/',
+                           3 => '/&gt;:-\(/',
+                           4 => '/B-\)/',
+                           5 => '/:-\*/',
+                           6 => '/:-\(\|\)/',
+                           7 => '/:-\|/',
+                           8 => '/:-\(/',
+                           9 => '/:-\)/',
+                           10 => '/:-D/',
+                           11 => '/:-\!/',
+                           12 => '/:-0/',
+                           13 => '/;-\)/');
+/*
+face-angel  -   -   -   SVG The icon used for the 0:-) emote.
+face-crying -   -   -   SVG The icon used for the :'( emote.
+face-devil-grin -   -   -   SVG The icon used for the >:-) emote.
+face-devil-sad  -   -   -   SVG The icon used for the >:-( emote.
+face-glasses    -   -   -   SVG The icon used for the B-) emote.
+face-kiss   -   -   -   SVG The icon used for the :-* emote.
+face-monkey -   -   -   SVG The icon used for the :-(|) emote.
+face-plain  -   -   -   SVG The icon used for the :-| emote.
+face-sad    -   -   -   SVG The icon used for the :-( emote.
+face-smile  -   -   -   SVG The icon used for the :-) emote.
+face-smile-big  -   -   -   SVG The icon used for the :-D emote.
+face-smirk  -   -   -   SVG The icon used for the :-! emote.
+face-surprise   -   -   -   SVG The icon used for the :-0 emote.
+face-wink   -   -   -   SVG The icon used for the ;-) emote.
+*/  
+
+    $emotion_replace = array(0 => "<img src={$tango_emotes}face-angel.png />",
+                            1 => "<img src={$tango_emotes}face-crying.png />",
+                            2 => "<img src={$tango_emotes}face-devil-grin.png />",
+                            /*3 => "<img src={$tango_emotes}face-devil-sad.png />" Not IMplemented yet*/ 3 => ">:\(",
+                            4 => "<img src={$tango_emotes}face-glasses.png />",
+                            5 => "<img src={$tango_emotes}face-kiss.png />",
+                            6 => "<img src={$tango_emotes}face-monkey.png />",
+                            7 => "<img src={$tango_emotes}face-plain.png />",
+                            8 => "<img src={$tango_emotes}face-sad.png />",
+                            9 => "<img src={$tango_emotes}face-smile.png />",
+                            10 => "<img src={$tango_emotes}face-smile-big.png />",
+                            11 => ":-!" /* not in tango yet*/, 
+                            12 => "<img src={$tango_emotes}face-surprise.png />",
+                            13 => "<img src={$tango_emotes}face-wink.png />");
+
+    return preg_replace($emotion_regex, $emotion_replace, $text);
 }
 
 // -------------------------- // -------------------------- // --------------------------
