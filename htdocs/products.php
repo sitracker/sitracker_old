@@ -66,7 +66,7 @@ if (mysql_num_rows($result) >= 1)
 }
 else echo "<p class='error'>No software vendors defined</p>";
 
-echo "<p align='center'><a href='add_product.php'>Add Product</a> | <a href='add_software.php'>Add Software</a></p>";
+echo "<p align='center'><a href='add_vendor.php'>Add Vendor</a> | <a href='add_product.php'>Add Product</a> | <a href='add_software.php'>Add Software</a></p>";
 
 include('htmlfooter.inc.php');
 ?>

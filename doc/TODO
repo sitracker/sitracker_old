@@ -29,7 +29,7 @@ v3.3x
 * Internationalisation, and hopefully at least one translation
 
 v4.00 / Future
-* Interface for adding/editing vendors
+* Interface for editing vendors
 * Change maintenance table to use servicelevel field that stores tag instead of id
 * Overhaul the email templates (emailtypes)
 * Add tabbed incident_details popup window, with tabs relevant to SLA status

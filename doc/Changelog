@@ -29,6 +29,7 @@ Changes in v3.24 - Unreleased
 * Users with 'edit user' permission can set users' holiday entitlement
 * Able to change external escalation details on bulk
 * View users now has links to 'Waiting' queues and holiday calendars
+* New interface for adding vendors
 
 Changes in v3.23 - Released 10 April 2006
 -----------------------------------------------------------------------
