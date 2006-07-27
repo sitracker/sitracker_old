@@ -1041,6 +1041,7 @@ CREATE TABLE `users` (
   `var_hideautoupdates` enum('true','false') NOT NULL default 'false',
   `var_hideheader` enum('true','false') NOT NULL default 'false',
   `var_monitor` enum('true','false') NOT NULL default 'true',
+  `var_notify_on_reassign` enum('yes','no') NOT NULL default 'no',
   `listadmin` tinytext,
   `holiday_entitlement` float NOT NULL default '0',
   `qualifications` tinytext,
@@ -1169,6 +1170,7 @@ ALTER TABLE `updates`
   DROP `timesincereview`,
   DROP `reviewcalculated`,
   DROP `slacalculated`;
+ALTER TABLE `users` ADD `var_notify_on_reassign` ENUM( 'yes', 'no' ) NOT NULL AFTER `var_monitor` DEFAULT 'no';
 ";
 
 // Important: When making changes to the schema you must add SQL to make the alterations

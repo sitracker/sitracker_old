@@ -4450,6 +4450,11 @@ function external_escalation($escalated, $incid)
    return "no";
 }
 
+function user_notification_on_reassign($user)
+{
+    return db_read_column('var_notify_on_reassign', 'users', $user);
+}
+
 function bbcode($text)
 {
     $bbcode_regex = array(0 => '/\[b\](.+?)\[\/b\]/s',

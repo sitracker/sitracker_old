@@ -271,6 +271,18 @@ else
         mysql_query($sql);
         if (mysql_error()) trigger_error("MySQL Query Error ".mysql_error(), E_USER_ERROR);
 
+        $newowner = '';
+        if($_REQUEST['assign']=='permassign') $newowner = $permnewowner;
+        else if($_REQUESR['assign']<>'deltempassign') $newowner = $tempnewowner; //not interested in deltemp state
+
+        if(!empty($newowner))
+        {
+            if(user_notification_on_reassign($newowner)=='yes')
+            {
+                send_template_email('INCIDENT_REASSIGNED_USER_NOTIFY', $id);
+            }
+        }
+
         journal(CFG_LOGGING_FULL,'Incident Reassigned', "Incident $id reassigned to user id $newowner", CFG_JOURNAL_SUPPORT, $id);
 
         if (!$result)
