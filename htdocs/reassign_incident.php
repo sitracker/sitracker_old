@@ -277,7 +277,7 @@ else
 
         if(!empty($newowner))
         {
-            if(user_notification_on_reassign($newowner)=='yes')
+            if(user_notification_on_reassign($newowner)=='true')
             {
                 send_template_email('INCIDENT_REASSIGNED_USER_NOTIFY', $id);
             }

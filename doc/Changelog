@@ -30,6 +30,7 @@ Changes in v3.24 - Unreleased
 * Able to change external escalation details on bulk
 * View users now has links to 'Waiting' queues and holiday calendars
 * New interface for adding vendors
+* Ability to request email notification when a call is reassigned to a user
 
 Changes in v3.23 - Released 10 April 2006
 -----------------------------------------------------------------------

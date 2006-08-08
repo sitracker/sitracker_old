@@ -727,6 +727,11 @@ elseif ($action=='reassign')
     mysql_query($sql);
     if (mysql_error()) trigger_error("MySQL Query Error ".mysql_error(), E_USER_ERROR);
 
+    if(user_notification_on_reassign($uid)=='true')
+    {
+        send_template_email('INCIDENT_REASSIGNED_USER_NOTIFY', $incidentid);
+    }
+
     // add update
     $sql  = "INSERT INTO updates (incidentid, userid, type, timestamp, currentowner, currentstatus, nextaction) ";
     $sql .= "VALUES ('$incidentid', '$sit[2]', 'reassigning', '$now', '$uid', '1', '$nextaction')";
