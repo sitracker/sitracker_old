@@ -128,6 +128,11 @@ if (empty($submit))
     </td></tr>
     <tr><th>Collapse Data:</th><td><?php html_checkbox('collapse', $user->var_collapse); ?></td></tr>
 
+<!-- Remmed out as this doesn't seem to work YET
+    <tr><th colspan='2'>NOTIFICATIONS</td></tr>
+    <tr><th>EMail notification on reassign</th><td><?php html_checkbox('emailonreassign', $user->var_notify_on_reassign); ?></td><tr>
+-->
+
     <?php
     plugin_do('edit_profile_form');
 
@@ -169,6 +174,7 @@ else
     $message = cleanvar($_POST['message']);
     $status = cleanvar($_POST['status']);
     $collapse = cleanvar($_POST['collapse']);
+    $emailonreassign = cleanvar($_GET['emailonreassign']);
     $style = cleanvar($_POST['style']);
     $accepting = cleanvar($_POST['accepting']);
     $roleid = cleanvar($_POST['roleid']);
@@ -220,12 +226,13 @@ else
     // update database if no errors
     if ($errors == 0)
     {
+    echo $emailonreassign;
         $sql  = "UPDATE users SET realname='$realname', title='$jobtitle', email='$email', qualifications='$qualifications', ";
         $sql .= "phone='$phone', mobile='$mobile', aim='$aim', icq='$icq', msn='$msn', fax='$fax', var_incident_refresh='$incidentrefresh', ";
         if ($userid != 1 AND !empty($_REQUEST['roleid']) AND $edituserpermission==TRUE) $sql .= "roleid='{$roleid}', ";
         if (!empty($holiday_entitlement) AND $edituserpermission==TRUE) $sql .= "holiday_entitlement='{$holiday_entitlement}', ";
         $sql .= "var_update_order='$updateorder', var_style='$style', signature='$signature', message='$message', status='$status', accepting='$accepting', ";
-        $sql .= "var_collapse='$collapse' WHERE id='$userid' LIMIT 1";
+        $sql .= "var_collapse='$collapse', var_notify_on_reassign='$emailonreassign' WHERE id='$userid' LIMIT 1";
         $result = mysql_query($sql);
         if (mysql_error()) trigger_error("MySQL Query Error ".mysql_error(), E_USER_ERROR);
 
