@@ -1041,7 +1041,7 @@ CREATE TABLE `users` (
   `var_hideautoupdates` enum('true','false') NOT NULL default 'false',
   `var_hideheader` enum('true','false') NOT NULL default 'false',
   `var_monitor` enum('true','false') NOT NULL default 'true',
-  `var_notify_on_reassign` enum('yes','no') NOT NULL default 'no',
+  `var_notify_on_reassign` enum('true','false') NOT NULL default 'false',
   `listadmin` tinytext,
   `holiday_entitlement` float NOT NULL default '0',
   `qualifications` tinytext,
@@ -1052,7 +1052,7 @@ CREATE TABLE `users` (
   KEY `groupid` (`groupid`)
 ) ENGINE=MyISAM;
 
-INSERT INTO `users` VALUES (1, 'admin', MD5('{$adminpw}'), 'Administrator', 1, 0, 'Administrator', 'Regards,\r\n\r\nAdministrator', '', '', '', '', '', '', '', 1, '', 'Yes', 60, 'desc', 8, 'false', 'false', 'false', 'false', 'no', '', 32, '');
+INSERT INTO `users` VALUES (1, 'admin', MD5('{$adminpw}'), 'Administrator', 1, 0, 'Administrator', 'Regards,\r\n\r\nAdministrator', '', '', '', '', '', '', '', 1, '', 'Yes', 60, 'desc', 8, 'false', 'false', 'false', 'false', 'false', '', 32, '');
 
 
 CREATE TABLE `usersoftware` (
@@ -1170,7 +1170,7 @@ ALTER TABLE `updates`
   DROP `timesincereview`,
   DROP `reviewcalculated`,
   DROP `slacalculated`;
-ALTER TABLE `users` ADD `var_notify_on_reassign` ENUM( 'yes', 'no' ) NOT NULL AFTER `var_monitor` DEFAULT 'no';
+ALTER TABLE `users` ADD `var_notify_on_reassign` ENUM( 'true', 'false' ) NOT NULL AFTER `var_monitor` DEFAULT 'false';
 ";
 
 // Important: When making changes to the schema you must add SQL to make the alterations
