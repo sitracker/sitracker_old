@@ -1171,7 +1171,7 @@ ALTER TABLE `updates`
   DROP `timesincereview`,
   DROP `reviewcalculated`,
   DROP `slacalculated`;
-ALTER TABLE `users` ADD `var_notify_on_reassign` ENUM( 'true', 'false' ) NOT NULL AFTER `var_monitor` DEFAULT 'false';
+ALTER TABLE `users` ADD `var_notify_on_reassign` ENUM( 'true', 'false' ) NOT NULL DEFAULT 'false' AFTER `var_monitor`;
 UPDATE users SET `var_notify_on_reassign` = 'false';
 INSERT INTO `emailtype` (`name`, `type`, `description`, `tofield`, `fromfield`, `replytofield`, `ccfield`, `bccfield`, `subjectfield`, `body`, `customervisibility`, `storeinlog`) VALUES ('INCIDENT_REASSIGNED_USER_NOTIFY', 'system', 'Notify user when call assigned to them', '<useremail>', '<supportemail>', '<supportemail>', '', '', 'A <incidentpriority> priority call ([<incidentid>] - <incidenttitle>) has been reassigned to you', 'Hi,\r\n\r\nIncident [<incidentid>] entitled <incidenttitle> has been reassigned to you.\r\n\r\nThe details of this incident are:\r\n\r\nPriority: <incidentpriority>\r\nContact: <contactname>\r\nSite: <contactsite>\r\n\r\n\r\nRegards\r\n<applicationname>\r\n\r\n\r\n---\r\n<todaysdate> - <applicationshortname> <applicationversion>', 'hide', 'No');
 ";
