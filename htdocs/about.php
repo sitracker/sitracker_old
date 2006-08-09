@@ -59,7 +59,7 @@ Completely free for commercial and non-commercial use.</p>
 <tr><td class='shade2' colspan='2'>
 <textarea cols="100%" rows="10" readonly="readonly" style="background: transparent;">
 <?php
-$fp = fopen('../doc/LICENSE', "r");
+$fp = fopen($CONFIG['licensefile'], "r");
 $contents = htmlentities(fread($fp, filesize($CONFIG['licensefile'])));
 fclose($fp);
 echo $contents;
@@ -70,7 +70,7 @@ echo $contents;
 <tr><td colspan="2" class="shade2">
 <textarea cols="100%" rows="10" readonly="readonly" style="background: transparent;">
 <?php
-$fp = fopen('../doc/Changelog', "r");
+$fp = fopen($CONFIG['changelogfile'], "r");
 $contents = htmlentities(fread($fp, filesize($CONFIG['changelogfile'])));
 fclose($fp);
 echo $contents;
