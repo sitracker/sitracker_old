@@ -29,10 +29,10 @@ function give_overview()
     $todaysincidents=mysql_num_rows($result);
     mysql_free_result($result);
 
-    $string = "<h4>$todaysincidents Incidents logged today<h4>";
+    $string = "<h4>$todaysincidents Incidents logged today</h4>";
     if($todaysincidents > 0)
     {
-        $string .= "<table align='center' width='50%'><tr><td colspan='2'>Which were assigned as follows:</td></tr>";
+        $string .= "<table align='center' width='50%'><tr><td colspan='2'>Assigned as follows:</td></tr>";
         $sql = "SELECT count(incidents.id), realname, users.id AS owner FROM incidents, users WHERE opened > '$todayrecent' AND incidents.owner = users.id GROUP BY owner DESC";
 
         $result = mysql_query($sql);
