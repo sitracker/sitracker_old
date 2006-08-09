@@ -92,14 +92,14 @@ if (!$sent)
             echo "<form action='{$_SERVER['PHP_SELF']}' method='post'>";
             echo "<p align='center'>";
             echo "Send the request(s) to: ";
-            // extract users
+            // extract users (only show users with permission to approve that are not disabled accounts)
             $sql  = "SELECT id, realname, accepting FROM users, userpermissions ";
-            $sql .= "WHERE users.id=userpermissions.userid AND permissionid=50 ORDER BY realname ASC";
+            $sql .= "WHERE users.id=userpermissions.userid AND permissionid=50 AND users.status > 0 ORDER BY realname ASC";
             $result = mysql_query($sql);
 
             echo "<select class='dropdown' name='approvaluser'>";
             if ($id == 0)
-            echo "<option selected value='0'>Select A User</option>\n";
+            echo "<option selected='selected' value='0'>Select A User</option>\n";
             while ($users = mysql_fetch_array($result))
             {
                 if($users['id'] != $sit[2])
@@ -113,9 +113,9 @@ if (!$sent)
             echo "</p>";
             echo "<p align='center'>Send comments with your request: (or leave blank)<br />";
             echo "<textarea name='memo' rows='3' cols='40'></textarea>";
-            echo "<input type='hidden' name='user' value='$user'>";
-            echo "<input type='hidden' name='sent' value='true'><br /><br />";
-            echo "<input type='submit' name='submit' value='submit'>";
+            echo "<input type='hidden' name='user' value='$user' />";
+            echo "<input type='hidden' name='sent' value='true' /><br /><br />";
+            echo "<input type='submit' name='submit' value='submit' />";
             echo "</p>";
             echo "</form>";
         }
@@ -164,7 +164,7 @@ else
     $email_subject = "{$CONFIG['application_shortname']}: Holiday Approval Request";
     $extra_headers  = "From: $email_from\nReply-To: $email_from\nErrors-To: {$CONFIG['support_email']}\n";
     $extra_headers .= "X-Mailer: {$CONFIG['application_shortname']} {$application_version_string}/PHP " . phpversion()."\n";
-    
+
     $rtnvalue = mail($email_to, stripslashes($email_subject), stripslashes($bodytext), $extra_headers);
     echo "<p align='center'><a href='holiday_calendar.php?type=1&user=$user'>Back to your calendar</p></p>";
 }
