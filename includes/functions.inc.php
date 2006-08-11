@@ -167,7 +167,7 @@ $hmenu[2030] = array (10=> array ( 'perm'=> 19, 'name'=> "Browse", 'url'=>"brows
                       70=> array ( 'perm'=> 0, 'name'=> "Products &amp; Software", 'url'=>"products.php", 'submenu'=>"203010"),
 );
 
-$hmenu[203010] = array (10=> array ( 'perm'=> 56, 'name'=> "Add Vendor", 'url'=>"add_product_vendor.php"),
+$hmenu[203010] = array (10=> array ( 'perm'=> 56, 'name'=> "Add Vendor", 'url'=>"add_vendor.php"),
                         20=> array ( 'perm'=> 24, 'name'=> "Add Product", 'url'=>"add_product.php"),
                         30=> array ( 'perm'=> 28, 'name'=> "List Products", 'url'=>"products.php"),
                         40=> array ( 'perm'=> 56, 'name'=> "Add Software", 'url'=>"add_software.php"),

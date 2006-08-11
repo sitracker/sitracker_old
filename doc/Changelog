@@ -12,6 +12,7 @@ Changes in v3.24 - Unreleased
   relevant skills
 * Fixed issue where URLs would not be shortened if they contained a % (percent)
   or $ (dollar) symbol
+* Fixed issues with URLs that contain colons
 * Incidents page informs you more accuratly who updated the call
 * Specified MySQL Engine type to be MyISAM on all table creations
 * Allow configuration of external escalation partners

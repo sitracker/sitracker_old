@@ -35,8 +35,15 @@ if (empty($submit))
     <h2>Add New Software</h2>
     <p align='center'>Mandatory fields are marked <sup class='red'>*</sup></p>
     <form action="<?php echo $_SERVER['PHP_SELF']; ?>" method="post" onsubmit="return confirm_submit()">
-    <table>
+    <table class='vertical'>
     <tr><th>Software Name: <sup class='red'>*</sup></th><td><input maxlength="50" name="name" size="30" /></td></tr>
+    <tr><th>Product Lifetime:</th><td>From:
+<?php
+    echo "<input type='text' name='lifetime_start' id='lifetime_start' size='10' value='".date('Y-m-d')."' />";
+    echo " To: ";
+    echo "<input type='text' name='lifetime_end' id='lifetime_end' size='10' value='".date('Y-m-d',strtotime('Next Year'))."' />";
+?>
+    </td></tr>
     </table>
     <p align='center'><input name="submit" type="submit" value="Add Software" /></p>
     <p class='warning'>Please check that the software does not already exist <em>before</em> adding it</p>
@@ -48,6 +55,10 @@ else
 {
     // External variables
     $name = cleanvar($_REQUEST['name']);
+    if (!empty($_REQUEST['lifetime_start'])) $lifetime_start = strtotime($_REQUEST['lifetime_start']);
+    else $lifetime_start = '';
+    if (!empty($_REQUEST['lifetime_end'])) $lifetime_end = strtotime($_REQUEST['lifetime_end']);
+    else $lifetime_end = '';
 
     // Add new
     $errors = 0;
@@ -58,11 +69,19 @@ else
         $errors = 1;
         $errors_string .= "<p class='error'>You must enter a name</p>\n";
     }
+    // Check this is not a duplicate
+    $sql = "SELECT id FROM software WHERE LCASE(name)=LCASE('$name') LIMIT 1";
+    $result = mysql_query($sql);
+    if (mysql_num_rows($result) >= 1)
+    {
+        $errors++;
+        $errors_string .= "<p class='error'>A record already exists with that name</p>";
+    }
 
     // add product if no errors
     if ($errors == 0)
     {
-        $sql = "INSERT INTO software (name) VALUES ('$name')";
+        $sql = "INSERT INTO software (name, lifetime_start, lifetime_end) VALUES ('$name','$lifetime_start','$lifetime_end')";
         $result = mysql_query($sql);
         if (mysql_error()) trigger_error("MySQL Query Error ".mysql_error(), E_USER_ERROR);
 

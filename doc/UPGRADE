@@ -10,7 +10,7 @@ Further instructions and notes about specific upgrades follow:
 
 Upgrading to 3.23
 -----------------
-As of v3.23 SiT! no longer require the php.ini setting register_globals
+As of v3.23 SiT! no longer requires the php.ini setting register_globals
 to be on.  Therefore we *strongly* recommend that you make sure your
 php.ini has register_globals set OFF, this has been the default since
 PHP 4.2.0 but since SiT! previously required it to be ON you should
