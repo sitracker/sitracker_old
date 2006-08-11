@@ -444,6 +444,10 @@ elseif ($action=='assign')
         $type = cleanvar($_REQUEST['type']);
         $incidenttitle = cleanvar($_REQUEST['incidenttitle']);
         $probdesc = cleanvar($_REQUEST['probdesc']);
+        $workarounds = cleanvar($_REQUEST['workarounds']);
+        $probreproduction = cleanvar($_REQUEST['probreproduction']);
+        $custimpact = cleanvar($_REQUEST['custimpact']);
+        $other = cleanvar($_REQUEST['other']);
         $priority = cleanvar($_REQUEST['priority']);
         $software = cleanvar($_REQUEST['software']);
         $productversion = cleanvar($_REQUEST['productversion']);
