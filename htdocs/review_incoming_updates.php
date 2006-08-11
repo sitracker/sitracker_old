@@ -34,6 +34,7 @@ function generate_row($update)
     $html_row.="<td align='center' width='20%'>".date($CONFIG['dateformat_datetime'],$update['timestamp']).'</td>';
     $html_row.="<td width='20%'>".htmlentities($update['emailfrom'],ENT_QUOTES)."</td>";
     $html_row.="<td width='20%'><a id='{$update['id']}' class='info' style='cursor:help;'>";
+    if (empty($update['subject'])) $update['subject']='Untitled';
     $html_row.=htmlentities($update['subject'],ENT_QUOTES);
     $html_row.='<span>'.nl2br(htmlentities($updatebodytext,ENT_QUOTES)).'</span></a></td>';
     $html_row.="<td align='center' width='20%'>".$update['reason'].'</td>';
