@@ -75,24 +75,24 @@ function give_overview()
         if (mysql_error()) trigger_error("MySQL Query Error ".mysql_error(), E_USER_ERROR);
         while($row = mysql_fetch_array($result))
         {
-            $string .= "<tr><th colspan='4' align='left'>".$row['count(incidents.id)']." Closed by ".$row['realname']."</th></tr>";
+            $string .= "<tr><th colspan='4' align='left'>".$row['count(incidents.id)']." Closed by ".$row['realname']."</th></tr>\n";
 
             $sql = "SELECT incidents.id, incidents.title, closingstatus.name ";
             $sql .= "FROM incidents, closingstatus ";
             $sql .= "WHERE incidents.closingstatus = closingstatus.id AND closed > '$todayrecent' AND incidents.owner = '".$row['owner']."' ORDER BY closed";
 
 
-    	    $string .= "<tr><th>ID</th><th>Title</th><th>Owner</th><th>Closing status</th></tr>";
+    	    $string .= "<tr><th>ID</th><th>Title</th><th>Owner</th><th>Closing status</th></tr>\n";
             $iresult = mysql_query($sql);
             if (mysql_error()) trigger_error("MySQL Query Error ".mysql_error(), E_USER_ERROR);
             while($irow = mysql_fetch_array($iresult))
             {
                 $string .= "<tr><th><a href=\"javascript:incident_details_window('".$irow['id']."', 'incident".$irow['id']."')\" title='[".$irow['id']."] - ".$irow['title']."'>".$irow['id']."</a></th>";
-                $string .= "<td class='shade2' align='left'>".$irow['title']."</td><td class='shade2' align='left'>".$row['realname']."</td><td class='shade2'>".$irow['name']."</td></tr>";
+                $string .= "<td class='shade2' align='left'>".$irow['title']."</td><td class='shade2' align='left'>".$row['realname']."</td><td class='shade2'>".$irow['name']."</td></tr>\n";
             }
-            $string .= "</table>";
+            // $string .= "</table>\n";
         }
-        $string .= "</table>";
+        $string .= "</table>\n\n";
     }
 
     mysql_free_result($result);
