@@ -51,7 +51,6 @@ incident is open.</p>
 <p>In addition closed incidents have an additional closing status:</p>
 <ul>
 <li>Sent Information</li>
-<li>Incidents</li>
 <li>Solved Problem</li>
 <li>Reported Bug</li>
 <li>Action Taken</li>
