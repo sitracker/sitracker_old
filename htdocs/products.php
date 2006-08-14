@@ -34,32 +34,39 @@ if (mysql_num_rows($result) >= 1)
         $psql = "SELECT * FROM products WHERE vendorid='{$vendor->id}' ORDER BY name";
         $presult = mysql_query($psql);
         if (mysql_error()) trigger_error("MySQL Query Error ".mysql_error(), E_USER_ERROR);
-        while ($product = mysql_fetch_object($presult))
+        if (mysql_num_rows($presult) >= 1)
         {
-            echo "<tr><td class='shade1'><a href='edit_product.php?id={$product->id}'>Edit</a></td>";
-            echo "<td class='shade1' colspan='2'>";
-            echo "<strong>{$product->name}</strong><br />";
-            echo "</td></tr>";
-            if (!empty($product->description))
-                echo "<tr><td class='shade1'>&nbsp;</td><td class='shade1' colspan='2'>".nl2br($product->description)."</td></tr>\n";
-
-            $swsql = "SELECT * FROM softwareproducts, software WHERE softwareproducts.softwareid=software.id AND productid='{$product->id}' ORDER BY name";
-            $swresult=mysql_query($swsql);
-            if (mysql_error()) trigger_error("MySQL Query Error ".mysql_error(), E_USER_ERROR);
-
-            if (mysql_num_rows($swresult) > 0)
+            while ($product = mysql_fetch_object($presult))
             {
-                while ($software=mysql_fetch_array($swresult))
+                echo "<tr><td class='shade1'><a href='edit_product.php?id={$product->id}'>Edit</a></td>";
+                echo "<td class='shade1' colspan='2'>";
+                echo "<strong>{$product->name}</strong><br />";
+                echo "</td></tr>";
+                if (!empty($product->description))
+                    echo "<tr><td class='shade1'>&nbsp;</td><td class='shade1' colspan='2'>".nl2br($product->description)."</td></tr>\n";
+
+                $swsql = "SELECT * FROM softwareproducts, software WHERE softwareproducts.softwareid=software.id AND productid='{$product->id}' ORDER BY name";
+                $swresult=mysql_query($swsql);
+                if (mysql_error()) trigger_error("MySQL Query Error ".mysql_error(), E_USER_ERROR);
+
+                if (mysql_num_rows($swresult) > 0)
                 {
-                    echo "<tr><td colspan='2'>{$software['name']}&nbsp; ";
-                    echo "(<a href='delete_product_software.php?productid={$product->id}&amp;softwareid={$software['softwareid']}'>Remove</a>)</td></tr>\n";
+                    while ($software=mysql_fetch_array($swresult))
+                    {
+                        echo "<tr><td colspan='2'>{$software['name']}&nbsp; ";
+                        echo "(<a href='delete_product_software.php?productid={$product->id}&amp;softwareid={$software['softwareid']}'>Remove</a>)</td></tr>\n";
+                    }
                 }
+                else
+                {
+                    echo "<tr><td>&nbsp;</td><td><em>No software associated with this product</em></td><td>&nbsp;</td></tr>\n";
+                }
+                echo "<tr><td>&nbsp;</td><td >&nbsp;</td><td><a href='add_product_software.php?productid={$product->id}'>Insert</a></td></tr>\n";
             }
-            else
-            {
-                echo "<tr><td>&nbsp;</td><td><em>No supported software associated</em></td><td>&nbsp;</td></tr>\n";
-            }
-            echo "<tr><td>&nbsp;</td><td >&nbsp;</td><td><a href='add_product_software.php?productid={$product->id}'>Insert</a></td></tr>\n";
+        }
+        else
+        {
+            echo "<tr><td>&nbsp;</td><td><em>No products associated with this vendor</em></td><td>&nbsp;</td></tr>\n";
         }
     }
     echo "</table>\n";
