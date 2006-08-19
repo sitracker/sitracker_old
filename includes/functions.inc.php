@@ -1942,6 +1942,15 @@ function emailtype_replace_specials($string, $incidentid, $userid=0)
    // Incident owner
    $return_string = str_replace("<incidentowner>", user_realname($incident->owner), $return_string);
 
+    if($incident->towner != 0)
+    {
+        $return_string = str_replace("<incidentreassignemailaddress>", user_email($incident->towner), $return_string);
+    }
+    else
+    {
+        $return_string = str_replace("<incidentreassignemailaddress>", user_email($incident->owner), $return_string);
+    }
+
    // user email
    $return_string = str_replace("<useremail>", user_email($userid), $return_string);
 

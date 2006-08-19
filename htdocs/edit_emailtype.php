@@ -126,6 +126,7 @@ elseif ($action == "edit")
         <tr><th>&lt;incidentpriority&gt;</th><td>Priority of incident</td></tr>
         <tr><th>&lt;incidentsoftware&gt;</th><td>Software assigned to an incident</td></tr>
         <tr><th>&lt;incidentowner&gt;</th><td>The full name of the person who owns the incident</td></tr>
+        <tr><th>&lt;incidentreassignemailaddress&gt;</th><td>The email address of the person a call has been reassigned to</td></tr>
         <tr><th>&lt;useremail&gt;</th><td>Email address of current user</td></tr>
         <tr><th>&lt;userrealname&gt;</th><td>Real name of current user</td></tr>
         <tr><th>&lt;signature&gt;</th><td>Signature of current user</td></tr>
