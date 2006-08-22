@@ -143,7 +143,7 @@ function draw_calendar($nmonth, $nyear)
         $bold="";
         $notbold="";
         // Colour Today in Red
-        if ($adjusted_day==date('d') && $nmonth==date('m'))
+        if ($adjusted_day==date('d') && $nmonth==date('m') && $nyear==date('Y'))
         {
             $bold="<span style=\"color: red\"><B>";
             $notbold="</span></B>";
