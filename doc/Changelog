@@ -32,6 +32,8 @@ Changes in v3.24 - Unreleased
 * View users now has links to 'Waiting' queues and holiday calendars
 * New interface for adding vendors
 * Ability to request email notification when a call is reassigned to a user
+* Users without valid email address are now prompted on the main page to
+  edit their profile
 
 Changes in v3.23 - Released 10 April 2006
 -----------------------------------------------------------------------

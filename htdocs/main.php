@@ -103,6 +103,10 @@ echo "</div>";
 // count total number of SUPPORT incidents that are open at this time (not closed)
 
 
+// Check users email address
+if (empty($_SESSION['email']) OR !preg_match('/^[A-z0-9][\w.-]*@[A-z0-9][\w\-\.]+\.[A-z0-9]{2,6}$/',$_SESSION['email']))
+    echo "<p class='error'>Please <a href='edit_profile.php'>edit your profile</a>i and set a valid email address</p>";
+
 
 //  Users Login Details
 echo "<div id='userbar'>Logged in as: <strong>{$sit[0]}</strong>, ";
