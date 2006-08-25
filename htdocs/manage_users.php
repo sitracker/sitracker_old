@@ -96,9 +96,10 @@ while ($users = mysql_fetch_array($result))
     </td>
     <?php
     echo "<td>";
+    echo "<a href='edit_profile.php?userid={$users['userid']}'>Edit</a>";
     if ($users['status']>0)
     {
-        echo "<a href='edit_profile.php?userid={$users['userid']}'>Edit</a> | ";
+        echo " | ";
         if ($users['userid'] >1) echo "<a href='reset_user_password.php?id={$users['userid']}'>Reset Password</a> | ";
         echo "<a href='edit_user_software.php?user={$users['userid']}'>Skills</a>";
         if ($users['userid'] >1) echo " | <a href='edit_user_permissions.php?action=edit&amp;user={$users['userid']}'>Permissions</a>";

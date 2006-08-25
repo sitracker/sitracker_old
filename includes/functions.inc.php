@@ -1487,14 +1487,14 @@ function closingstatus_drop_down($name, $id)
 /*  prints the HTML for a drop down list of     */
 /* user status names, with the given name and with the given  */
 /* id selected.                                               */
-function userstatus_drop_down($name, $id)
+function userstatus_drop_down($name, $id, $userdisable=FALSE)
 {
    // extract statuses
    $sql  = "SELECT id, name FROM userstatus ORDER BY name ASC";
    $result = mysql_query($sql);
 
    $html = "<select name='$name'>\n";
-   if ($id == 0) $html .= "<option selected='selected' value='0'></option>\n";
+   if ($userdisable) $html .= "<option style='color: red;' selected='selected' value='0'>ACCOUNT DISABLED</option>\n";
    while ($statuses = mysql_fetch_array($result))
    {
 

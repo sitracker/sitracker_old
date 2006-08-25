@@ -34,6 +34,8 @@ Changes in v3.24 - Unreleased
 * Ability to request email notification when a call is reassigned to a user
 * Users without valid email address are now prompted on the main page to
   edit their profile
+* Ability for administrators to disable users by editing a profile and
+  setting status to 'Disabled Account'.
 
 Changes in v3.23 - Released 10 April 2006
 -----------------------------------------------------------------------

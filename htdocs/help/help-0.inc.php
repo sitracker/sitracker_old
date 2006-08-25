@@ -16,6 +16,7 @@
     <li>Control Panel
     <ul>
         <li><a href='#adduser'>Adding Users</a></li>
+        <li><a href='#disableuser'>Removing Users</a></li>
     </ul>
     <li><a href='#morehelp'>More Help</a></li>
 </ul>
@@ -241,6 +242,16 @@ should the user have needs beyond that provided by the nearest role.</p>
 
 <p class='info'>Note that permissions are additive and you cannot take permissions away from a user that are granted
 by the role except by changing the users role or altering the permissions on the role itself.</p>
+
+<h3><a name='disableuser'>Removing Users</a></h3>
+<p>To maintain data integrity there isn't a way to delete users from SiT!, however user accounts can be disabled which
+will prevent further logins and stop the users name from showing up in selection boxes etc.</p>
+
+<p>To disable a users account go to <strong>Control Panel</strong> | <strong>Users</strong> and select <strong>Edit</strong>
+next to the user you would like to disable.  Then select 'DISABLED ACCOUNT' from the Status drop down box and click save.</p>
+
+<p>Re-enabling a user account is simple, just edit the users profile and set their status to 'In Office'.</p>
+
 
 
 <h3><a name='morehelp'>More Help</a></h3>

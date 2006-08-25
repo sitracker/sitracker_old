@@ -99,7 +99,11 @@ if (empty($submit))
     ?>
     </td></tr>
     <tr><th colspan='2'>WORK STATUS</td></tr>
-    <tr><th>Status:</th><td><?php userstatus_drop_down("status", $user->status); ?></td></tr>
+    <?php
+    if ($edituserpermission AND $userid != $sit[2]) $userdisable=TRUE;
+    else $userdisable=FALSE;
+    ?>
+    <tr><th>Status:</th><td><?php userstatus_drop_down("status", $user->status, $userdisable); ?></td></tr>
     <tr><th>Accepting Incidents:</th><td><?php accepting_drop_down("accepting", $userid); ?></td></tr>
     <tr><th>Message:<br />
     e.g. &quot;In france until Tue 22nd&quot;<br />Displayed on the 'view users' page for the benefit of your colleagues.
