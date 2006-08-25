@@ -28,66 +28,84 @@ $fp = fopen("php://stdin", "r");
 $rawemail = '';
 while (!feof($fp))
 {
-    $rawemail .= fread($fp, 1024);
+    $rawemail[] = fgets($fp); // , 1024
 }
 fclose($fp);
 
 // Create and populate the email object
 $email = new mime_email;
 $email->set_emaildata($rawemail);
+unset($rawemail);
 
-print_r($email);
+
 //echo "------------------------------\n\n\n\n";
 
 $decoded_email = $email->go_decode();
 
+
 echo "Decoded mail...\n";
-//print_r($decoded_email->mime_block);
-echo "----\n----\n-------------------------------\n\n\n\n";
+print_r($decoded_email);
+//echo $decoded_email->emailtextplain;
+
+
+
 $part=1;
-foreach($decoded_email->mime_block AS $block)
+if ($decoded_email->contenttype=='multipart/mixed'
+    OR $decoded_email->contenttype=='multipart/alternative')
 {
-    // Do the decoding
-    switch ($block->mime_transferenc)
+    // This is a MIME message
+    foreach($decoded_email->mime_block AS $block)
     {
-        case 'quoted-printable':
-            $block->mime_content = quoted_printable_decode($block->mime_content);
-        break;
-
-        case 'base64':
-            $block->mime_content = base64_decode($block->mime_content);
-        break;
-
-        default:
-            // Do no decoding
-    }
-    // Extract any inline text into the incident log (if it's HTML strip the tags first)
-    if ($block->mime_contentdisposition=='inline')
-    {
-        switch ($block->mime_contenttype)
+        print_r($block);
+        // Do the decoding
+        switch ($block->mime_transferenc)
         {
-            case 'text/plain':
-                $message .= htmlentities($block->mime_content);
+            case 'quoted-printable':
+                $block->mime_content = quoted_printable_decode($block->mime_content);
             break;
 
-            case 'text/html':
-                $message .= htmlentities(strip_tags($block->mime_content));
+            case 'base64':
+                $block->mime_content = base64_decode($block->mime_content);
             break;
 
             default:
-                $message .= "Inline content of type {$block->mime_contenttype} ommitted.";
+                // Do no decoding
         }
-    }
-    else
-    {
-        $filename=str_replace(' ','_',$block->mime_contentdispositionname);
-        if (empty($filename)) $filename = "part{$part}";
-        echo "FILENAME: $filename\n\n\n";
-    }
-    $part++;
-}
+        // Extract any inline text into the incident log (if it's HTML strip the tags first)
+        if ($block->mime_contentdisposition=='inline' OR $block->mime_contentdisposition=='')
+        {
+            switch ($block->mime_contenttype)
+            {
+                case 'text/plain':
+                    $message .= htmlentities($block->mime_content);
+                break;
 
+                case 'text/html':
+                    // Only use HTML version if we have no text version
+                    if (empty($message)) $message = htmlentities(strip_tags($block->mime_content));
+                break;
+
+                default:
+                    $message .= "Inline content of type {$block->mime_contenttype} ommitted.\n";
+                    // FIXME we should treat these blocks as attachments
+            }
+        }
+        else
+        {
+            $filename=str_replace(' ','_',$block->mime_contentdispositionname);
+            if (empty($filename)) $filename = "part{$part}";
+            echo "* FILE ATTACHMENT: $filename\n";
+        }
+        $part++;
+    }
+}
+if (empty($message)) $message = htmlentities($decoded_email->emailtextplain);
+
+// Strip excessive line breaks
+$message = str_replace("\n\n\n\n","\n", $message);
+
+echo "#*#-[START MESSAGE]*#*#*#*#*#*#*#*#*#*#*#*#*#*#*#*#*#*#*#*#*#*#*#*#*#*#*#*#*#*#\n";
 echo $message;
-echo "---------------------------------------\n\n\n\n";
+echo "\n#*#-[END MESSAGE]*#*#*#*#*#*#*#*#*#*#*#*#*#*#*#*#*#*#*#*#*#*#*#*#*#*#*#*#*#*#*#\n";
 
 ?>
