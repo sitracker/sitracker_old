@@ -122,8 +122,6 @@ function give_overview()
 
 include('htmlheader.inc.php');
 
-echo "<script src='/webtrack.js' type='text/javascript'></script>";
-
 $mode = cleanvar($_REQUEST['mode']);
 
 switch($mode)
