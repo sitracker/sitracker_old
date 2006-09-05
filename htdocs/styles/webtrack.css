@@ -102,6 +102,7 @@ div.windowtitle
     color: white;
     padding: 1px;
 }
+.windowtitle a { color: white; font-weight: normal;}
 div.window
 {
     padding: 3px;

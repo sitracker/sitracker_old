@@ -64,7 +64,7 @@ echo "</div>";
 echo "</div>";
 
 echo "<div class='windowbox' style='width: 50%'>";
-echo "<div class='windowtitle'>{$i18n_TODAYS_STATS}</a></div>";
+echo "<div class='windowtitle'><a href='statistics.php'>{$i18n_TODAYS_STATS}</a></div>";
 echo "<div class='window'>";
 if ($todaysincidents == 0) echo $i18n_NO_INCIDENTS;
 elseif ($todaysincidents == 1) echo "<a href='statistics.php'>{$todaysincidents}</a> Incident";
