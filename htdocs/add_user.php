@@ -98,6 +98,16 @@ else
         $errors = 1;
         echo "<p class='error'>You must enter an email address</p>\n";
     }
+    // Check username is unique
+    $sql = "SELECT COUNT(id) FROM users WHERE username='$username'";
+    $result = mysql_query($sql);
+    if (mysql_error()) trigger_error(mysql_error(),E_USER_ERROR);
+    list($countexisting) = mysql_fetch_row($result);
+    if ($countexisting >= 1)
+    {
+        $errors++;
+        echo "<p class='error'>Username must be unique</p>\n";
+    }
 
     // add information if no errors
     if ($errors == 0)

@@ -36,6 +36,8 @@ Changes in v3.24 - Unreleased
   edit their profile
 * Ability for administrators to disable users by editing a profile and
   setting status to 'Disabled Account'.
+* Force username to be unique when adding new users
+* Do incident switchover when changing status via edit profie
 
 Changes in v3.23 - Released 10 April 2006
 -----------------------------------------------------------------------
