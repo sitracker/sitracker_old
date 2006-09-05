@@ -140,6 +140,9 @@ else
     $selections=urldecode($_POST['choices']);
     parse_str($selections);
 
+    $expertise = $_POST['expertise'];
+    $noskills = $_POST['noskills'];
+
     // remove existing selections first
 
     // FIXME: This is going to wipe the backup engineer settings, need to fix this
