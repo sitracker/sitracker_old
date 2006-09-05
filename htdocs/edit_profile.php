@@ -187,6 +187,9 @@ else
 
     // TODO target v3.24 Add some extra checking here so that users can't edit other peoples profiles
 
+    // If users status is set to 0 (disabled) force 'accepting' to no
+    if ($status==0) $accepting='No';
+
     // Update user profile
     $errors = 0;
 
@@ -249,6 +252,9 @@ else
             $_SESSION['incident_refresh'] = $incidentrefresh;
             $_SESSION['update_order'] = $updateorder;
         }
+
+        // reassign the users incidents if appropriate
+        incident_backup_switchover($userid, $accepting);
 
         if (!$result)
         {

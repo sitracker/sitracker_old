@@ -4100,7 +4100,7 @@ function software_backup_userid($userid, $softwareid)
     $backup1=$backupid;
 
     // Check to see if that user is accepting
-    if ($backupid==0 OR user_accepting($backupid)!='Yes')
+    if (empty($backupid) OR user_accepting($backupid)!='Yes')
     {
         $sql = "SELECT backupid FROM usersoftware WHERE userid='$backupid' AND softwareid='$softwareid' AND backupid!='$backup1'";
         $result = mysql_query($sql);
@@ -4110,7 +4110,7 @@ function software_backup_userid($userid, $softwareid)
     }
 
     // One more iteration, is the backup of the backup accepting?
-    if ($backupid==0 OR user_accepting($backupid)!='Yes')
+    if (empty($backupid) OR user_accepting($backupid)!='Yes')
     {
         $sql = "SELECT backupid FROM usersoftware WHERE userid='$backupid' AND softwareid='$softwareid' AND backupid!='$backup1' AND backupid!='$backup2'";
         $result = mysql_query($sql);
@@ -4139,7 +4139,7 @@ function incident_backup_switchover($userid, $accepting)
             // Try and find a backup engineer
             $backupid=software_backup_userid($userid, $incident->softwareid);
 
-            if ($backupid==0)
+            if (empty($backupid))
             {
                 // no backup engineer found so add to the holding queue
                 // Look to see if this assignment is in the queue already
