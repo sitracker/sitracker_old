@@ -31,14 +31,14 @@ function give_overview()
     if(mysql_num_rows($result) > 0)
     {
        // echo "<table align='center' class='vertical' width='20%'>";
-        echo "<table align='center'>";
+        echo "<table class='vertical' align='center'>";
         $openCalls = 0;
         while($row = mysql_fetch_array($result))
         {
             echo "<tr><th>".$row['name']."</th><td class='shade2' align='left'>".$row['COUNT(incidents.id)']."</td></tr>";
-            $opencalls += $row['COUNT(incidents.id)'];  
+            $opencalls += $row['COUNT(incidents.id)'];
         }
-        echo "<tr><th>Total</th><td class='shade2' align='left'>$opencalls</td></tr>";
+        echo "<tr><th>Total</th><td class='shade2' align='left'><strong>$opencalls</strong></td></tr>";
         echo "</table>";
     }
     mysql_free_result($result);
@@ -92,6 +92,7 @@ function give_overview()
 
         $sql = "SELECT count(incidents.id), realname, users.id AS owner FROM incidents, users WHERE closed > '$todayrecent' AND incidents.owner = users.id GROUP BY owner";
         $string .= "<table align='center' width='50%'>";
+        $string .= "<tr><th>ID</th><th>Title</th><th>Owner</th><th>Closing status</th></tr>\n";
         $result = mysql_query($sql);
         if (mysql_error()) trigger_error("MySQL Query Error ".mysql_error(), E_USER_ERROR);
         while($row = mysql_fetch_array($result))
@@ -102,8 +103,6 @@ function give_overview()
             $sql .= "FROM incidents, closingstatus ";
             $sql .= "WHERE incidents.closingstatus = closingstatus.id AND closed > '$todayrecent' AND incidents.owner = '".$row['owner']."' ORDER BY closed";
 
-
-    	    $string .= "<tr><th>ID</th><th>Title</th><th>Owner</th><th>Closing status</th></tr>\n";
             $iresult = mysql_query($sql);
             if (mysql_error()) trigger_error("MySQL Query Error ".mysql_error(), E_USER_ERROR);
             while($irow = mysql_fetch_array($iresult))
