@@ -8,8 +8,8 @@
 // of the GNU General Public License, incorporated herein by reference.
 //
 
-// Author:   Ivan Lucas
-// Email:    ivan.lucas@salfordsoftware.co.uk
+// Authors: Ivan Lucas <ivanlucas[at]users.sourceforge.net> & Tom Gerrard
+//
 // Comments: How long do we take to close incidents?
 
 $title='Average Incident Duration';
