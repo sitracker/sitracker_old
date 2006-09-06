@@ -24,12 +24,6 @@ require('auth.inc.php');
 $id = cleanvar($_REQUEST['id']);
 $mode = cleanvar($_REQUEST['mode']);
 
-
-if (!empty($_REQUEST['start'])) $start = strtotime($_REQUEST['start']);
-else $start=0;
-if (!empty($_REQUEST['end'])) $end = strtotime($_REQUEST['end']);
-else $end=0;
-
 if (empty($_REQUEST['increment'])) $increment = 1;
 else $increment = cleanvar($_REQUEST['increment']);
 
