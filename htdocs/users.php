@@ -28,9 +28,38 @@ else $filtergroup = $groupid;
 
 include('htmlheader.inc.php');
 
-$sql  = "SELECT * FROM users WHERE status!=0 ";  // status=0 means left company
-if ($filtergroup=='0') $sql .= "AND (groupid='{$filtergroup}' OR groupid='')";
-elseif ($filtergroup=='all') {} // Do nothing
+$gsql = "SELECT * FROM groups ORDER BY name";
+$gresult = mysql_query($gsql);
+if (mysql_error()) trigger_error(mysql_error(),E_USER_ERROR);
+while ($group = mysql_fetch_object($gresult))
+{
+    $grouparr[$group->id]=$group->name;
+}
+$numgroups = count($grouparr);
+echo "<h2>User Listing</h2>";
+if ($numgroups >= 1)
+{
+    echo "<form action='{$_SERVER['PHP_SELF']}' style='text-align: center;' method='get'>";
+    echo "Group: <select name='choosegroup' onchange='window.location.href=this.options[this.selectedIndex].value'>";
+    echo "<option value='{$_SERVER['PHP_SELF']}?gid=all'";
+    if ($filtergroup=='all') echo " selected='selected'";
+    echo ">All</option>\n";
+    foreach($grouparr AS $groupid => $groupname)
+{
+        echo "<option value='{$_SERVER['PHP_SELF']}?gid={$groupid}'";
+        if ($groupid == $filtergroup) echo " selected='selected'";
+        echo ">$groupname</option>\n";
+}
+    echo "<option value='{$_SERVER['PHP_SELF']}?gid=0'";
+    if ($filtergroup=='0') echo " selected='selected'";
+    echo ">Users with no group</option>\n";
+    echo "</select>\n";
+    echo "</form>\n<br />";
+}
+
+$sql  = "SELECT * FROM users WHERE status!=0 ";  // status=0 means account disabled
+if ($numgroups >= 1 AND $filtergroup==0) $sql .= "AND (groupid='{$filtergroup}' OR groupid='') ";
+elseif ($numgroups < 1 OR $filtergroup=='all') {} // Do nothing
 else $sql .= "AND groupid='{$filtergroup}'";
 
 // sort users by realname by default
@@ -74,34 +103,6 @@ $result = mysql_query($sql);
 if (mysql_error()) trigger_error("MySQL Query Error ".mysql_error(), E_USER_ERROR);
 
 
-$gsql = "SELECT * FROM groups ORDER BY name";
-$gresult = mysql_query($gsql);
-if (mysql_error()) trigger_error(mysql_error(),E_USER_ERROR);
-while ($group = mysql_fetch_object($gresult))
-{
-    $grouparr[$group->id]=$group->name;
-}
-$numgroups = count($grouparr);
-echo "<h2>User Listing</h2>";
-if ($numgroups >= 1)
-{
-    echo "<form action='{$_SERVER['PHP_SELF']}' style='text-align: center;' method='get'>";
-    echo "Group: <select name='choosegroup' onchange='window.location.href=this.options[this.selectedIndex].value'>";
-    echo "<option value='{$_SERVER['PHP_SELF']}?gid=all'";
-    if ($filtergroup=='all') echo " selected='selected'";
-    echo ">All</option>\n";
-    foreach($grouparr AS $groupid => $groupname)
-    {
-        echo "<option value='{$_SERVER['PHP_SELF']}?gid={$groupid}'";
-        if ($groupid == $filtergroup) echo " selected='selected'";
-        echo ">$groupname</option>\n";
-    }
-    echo "<option value='{$_SERVER['PHP_SELF']}?gid=0'";
-    if ($filtergroup=='0') echo " selected='selected'";
-    echo ">Users with no group</option>\n";
-    echo "</select>\n";
-    echo "</form>\n<br />";
-}
 
 
 
