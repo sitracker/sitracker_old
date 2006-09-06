@@ -9,6 +9,9 @@
 //
 
 // This Page Is Valid XHTML 1.0 Transitional! 31Oct05
+// This page seems to sometimes generate a warning
+// Warning: Unknown: Your script possibly relies on a session side-effect which existed until PHP 4.2.3. Please be advised that the session extension does not consider global variables as a source of data, unless register_globals is enabled. You can disable this functionality and this warning by setting session.bug_compat_42 or session.bug_compat_warn to off, respectively. in Unknown on line 0
+// Not sure why - Ivan 6Sep06
 
 $permission=14; // View Users
 require('db_connect.inc.php');

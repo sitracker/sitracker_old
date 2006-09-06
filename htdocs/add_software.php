@@ -37,12 +37,12 @@ if (empty($submit))
     <form action="<?php echo $_SERVER['PHP_SELF']; ?>" method="post" onsubmit="return confirm_submit()">
     <table class='vertical'>
     <tr><th>Software Name: <sup class='red'>*</sup></th><td><input maxlength="50" name="name" size="30" /></td></tr>
-    <tr><th>Product Lifetime:</th><td>From:
-<?php
+    <?php
+        echo "<tr><th>Lifetime:</th><td>";
     echo "<input type='text' name='lifetime_start' id='lifetime_start' size='10' value='".date('Y-m-d')."' />";
     echo " To: ";
     echo "<input type='text' name='lifetime_end' id='lifetime_end' size='10' value='".date('Y-m-d',strtotime('Next Year'))."' />";
-?>
+    ?>
     </td></tr>
     </table>
     <p align='center'><input name="submit" type="submit" value="Add Software" /></p>
