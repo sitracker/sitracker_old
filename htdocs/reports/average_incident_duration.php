@@ -31,14 +31,25 @@ else $increment = cleanvar($_REQUEST['increment']);
 if (empty($_REQUEST['states'])) $states = array('2,6,7,8');
 else $states = explode(',',$_REQUEST['states']);
 
+function count_incident_owners($incidentid)
+{
+    $sql = "SELECT count(DISTINCT userid) FROM updates WHERE incidentid='$incidentid' AND userid!=0 GROUP BY userid";
+    $result = mysql_query($sql);
+    if (mysql_error()) trigger_error(mysql_error(),E_USER_ERROR);
+    list($unique_users) = mysql_fetch_row($result);
+    return $unique_users;
+}
+
+
 
 function average_incident_duration($start,$end,$states)
 {
-    // Returns number of closed incidents that were open within the period giving
+    // Returns number of closed incidents that were opened within the period giving
     // the average duration in minutes
     // and the average worked time in minutes
-    $sql = "SELECT *, (closed - opened) AS duration_closed, incidents.id AS incidentid FROM incidents, contacts WHERE incidents.contact=contacts.id AND status='2' ";
-    if ($mode=='site') $sql .= " AND siteid='$id' ";
+    $sql = "SELECT *, (closed - opened) AS duration_closed, incidents.id AS incidentid ";
+    $sql .= "FROM incidents ";
+    $sql .= "WHERE status='2' ";
     if ($start > 0) $sql .= "AND opened >= $start ";
     if ($end > 0) $sql .= "AND opened <= $end ";
 
@@ -48,6 +59,7 @@ function average_incident_duration($start,$end,$states)
     $totalduration=0;
     $totalworkingduration=0;
     $countclosed=0;
+    $total_unique_owners=0;
     while ($row=mysql_fetch_object($result))
     {
         $working_time=calculate_incident_working_time($row->incidentid, $row->opened, $row->closed, $states);
@@ -57,11 +69,13 @@ function average_incident_duration($start,$end,$states)
             $totalworkingduration=$totalworkingduration+$working_time;
             $countclosed++;
         }
+        $total_unique_owners += count_incident_owners($row->incidentid);
     }
+    $average_owners = ($countclosed == 0) ? 0 : ($total_unique_owners / $countclosed);
     $average_incident_duration = ($countclosed == 0) ? 0 : ($totalduration / $countclosed) / 60;
     $average_worked_minutes = ($countclosed == 0) ? 0 : $totalworkingduration / $countclosed;
 
-    return array($countclosed, $average_incident_duration, $average_worked_minutes);
+    return array($countclosed, $average_incident_duration, $average_worked_minutes,$total_unique_owners);
 }
 
 
@@ -74,7 +88,7 @@ $current_time=$firstdate;
 
 $html .= "<h2>$title</h2>";
 $html .= "<table align='center'>";
-$html .= "<tr><th>Period</th><th># Incidents</th><th>Total Duration</th><th>Worked Time</th></tr>\n";
+$html .= "<tr><th>Period</th><th># Incidents</th><th>Total Duration</th><th>Worked Time</th><th>Users</th></tr>\n";
 $csv .= "Period,# Incidents,Total Duration,Worked Time\n";
 $shade='shade1';
 while ($current_time<time()) {
@@ -91,18 +105,19 @@ while ($current_time<time()) {
 
   $next_time=mktime(0,0,0,$next_month,1,$next_year);
 
-  $times=average_incident_duration($current_time,$next_time,$states);
+  $stats=average_incident_duration($current_time,$next_time,$states);
 
 
   $html .= "<tr class='$shade'>";
   $html .= "<td>".date('F Y',mktime(0,0,0,$current_month,1,$current_year));
   if ($next_month > $current_month+1 AND $next_year==$current_year)  $html .= " - ".date('F Y',mktime(0,0,0,$next_month,1,$next_year))."</td>";
-  $html .= "<td>{$times[0]}</td>";
-  $html .= "<td>".format_seconds($times[1]*60)."</td>";
-  $html .= "<td>".round($times[2]/60)." hours</td>";
+  $html .= "<td>{$stats[0]}</td>";
+  $html .= "<td>".format_seconds($stats[1]*60)."</td>";
+  $html .= "<td>".round($stats[2]/60)." hours</td>";
+  $html .= "<td>{$stats[3]}</td>";
   $html .= "</tr>\n";
   $csv .= date('F Y',mktime(0,0,0,$current_month,1,$current_year))." - ".date('F Y',mktime(0,0,0,$next_month,1,$next_year));
-  $csv .= ",{$times[0]},".($times[1]/60).",".round($times[2]/60)."\n";
+  $csv .= ",{$stats[0]},".($stats[1]/60).",".round($stats[2]/60)."\n";
   if ($shade=='shade1') $shade='shade2';
   else $shade='shade1';
   $current_time=$next_time;
