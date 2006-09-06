@@ -38,6 +38,8 @@ Changes in v3.24 - Unreleased
   setting status to 'Disabled Account'.
 * Force username to be unique when adding new users
 * Do incident switchover when changing status via edit profie
+* New report, average incident duration.  Shows the time taken to close
+  incidents over the months.
 
 Changes in v3.23 - Released 10 April 2006
 -----------------------------------------------------------------------
