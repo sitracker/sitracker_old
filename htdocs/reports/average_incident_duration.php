@@ -12,9 +12,8 @@
 // Email:    ivan.lucas@salfordsoftware.co.uk
 // Comments: How long do we take to close incidents?
 
-// FIXME
-
-$permission=6; // view incidents
+$title='Average Incident Duration';
+$permission=37; // Run Reports
 
 require('db_connect.inc.php');
 require('functions.inc.php');
@@ -25,59 +24,111 @@ require('auth.inc.php');
 $id = cleanvar($_REQUEST['id']);
 $mode = cleanvar($_REQUEST['mode']);
 
-include('htmlheader.inc.php');
-if ($mode=='site') echo "<h2>".site_name($id)."'s Support Incidents</h2>";
-else echo "<h2>".contact_realname($id)."'s Support Incidents</h2>";
 
-if ($mode=='site') $sql = "SELECT *, (closed - opened) AS duration_closed, incidents.id AS incidentid FROM incidents, contacts WHERE incidents.contact=contacts.id AND status='2' AND owner='$owner' ORDER BY opened DESC";
-else $sql = "SELECT *, (closed - opened) AS duration_closed, incidents.id AS incidentid FROM incidents WHERE status='2' AND owner='$owner' ORDER BY opened DESC";
-$result = mysql_query($sql);
+if (!empty($_REQUEST['start'])) $start = strtotime($_REQUEST['start']);
+else $start=0;
+if (!empty($_REQUEST['end'])) $end = strtotime($_REQUEST['end']);
+else $end=0;
 
-echo "<table class='tablelist' align='center' border=0 bordercolor=#FFFFFF cellpadding=2 cellspacing=0>";
-echo "<tr>";
-echo "<th class='shade2'>Date</th>";
-echo "<th class='shade2'>Incident ID</th>";
-echo "<th class='shade2'>Title</th>";
-if ($mode=='site') echo "<th class='shade2'>Contact</th>";
-echo "<th class='shade2'>Status</th>";
-echo "<th class='shade2'>Engineer</th>";
-echo "</tr>";
-$shade='shade1';
-$totalduration=0;
-$countclosed=0;
-while ($row=mysql_fetch_object($result))
+if (empty($_REQUEST['increment'])) $increment = 1;
+else $increment = cleanvar($_REQUEST['increment']);
+
+if (empty($_REQUEST['states'])) $states = array('2,6,7,8');
+else $states = explode(',',$_REQUEST['states']);
+
+
+function average_incident_duration($start,$end,$states)
 {
-    if ($row->status==2) $shade='expired';
-    else $shade='shade1';
-    echo "<tr class='$shade'>";
-    if ($row->status==2)
+    // Returns number of closed incidents that were open within the period giving
+    // the average duration in minutes
+    // and the average worked time in minutes
+    $sql = "SELECT *, (closed - opened) AS duration_closed, incidents.id AS incidentid FROM incidents, contacts WHERE incidents.contact=contacts.id AND status='2' ";
+    if ($mode=='site') $sql .= " AND siteid='$id' ";
+    if ($start > 0) $sql .= "AND opened >= $start ";
+    if ($end > 0) $sql .= "AND opened <= $end ";
+
+    $result = mysql_query($sql);
+    if (mysql_error()) trigger_error(mysql_error(),E_USER_ERROR);
+
+    $totalduration=0;
+    $totalworkingduration=0;
+    $countclosed=0;
+    while ($row=mysql_fetch_object($result))
     {
-        echo "<td>Closed: ".date('j M Y', $row->closed).' ('.format_seconds($row->duration_closed).")</td>";
-        $totalduration=$totalduration+$row->duration_closed;
-        $countclosed++;
+        $working_time=calculate_incident_working_time($row->incidentid, $row->opened, $row->closed, $states);
+        if ($working_time > 0)
+        {
+            $totalduration=$totalduration+$row->duration_closed;
+            $totalworkingduration=$totalworkingduration+$working_time;
+            $countclosed++;
+        }
     }
-    else echo "<td>Opened: ".date('j M Y',$row->opened)."</td>";
-    echo "<td>".$row->incidentid."</td>";
-    // title
-    echo "<td>";
-    echo "<a href=\"javascript:incident_details_window('".$row->id."','incident".$row->id."')\">";
-    if (trim($row->title) !='') echo $row->title; else echo 'Untitled';
-    echo "</a>";
-    echo "</td>";
-    if ($mode=='site') echo "<td>".contact_realname($row->contact)."</td>";
-    if ($row->status==2) echo "<td>Closed, ".closingstatus_name($row->closingstatus)."</td>";
-    else echo "<td>".incidentstatus_name($row->status)."</td>";
-    echo "<td>".user_realname($row->owner)."</td>";
-    echo "</tr>\n";
+    $average_incident_duration = ($countclosed == 0) ? 0 : ($totalduration / $countclosed) / 60;
+    $average_worked_minutes = ($countclosed == 0) ? 0 : $totalworkingduration / $countclosed;
+
+    return array($countclosed, $average_incident_duration, $average_worked_minutes);
 }
-echo "</table>\n";
-if (mysql_num_rows($result)>=1)
+
+
+// get the first date
+$sql = "SELECT opened FROM incidents ORDER BY id ASC LIMIT 1";
+$result = mysql_query($sql);
+list($firstdate)=mysql_fetch_row($result);
+
+$current_time=$firstdate;
+
+$html .= "<h2>$title</h2>";
+$html .= "<table align='center'>";
+$html .= "<tr><th>Period</th><th># Incidents</th><th>Total Duration</th><th>Worked Time</th></tr>\n";
+$csv .= "Period,# Incidents,Total Duration,Worked Time\n";
+$shade='shade1';
+while ($current_time<time()) {
+
+  $current_month=date('m', $current_time);
+  $current_year=date('Y', $current_time);
+
+  $next_month=$current_month+$increment;
+  $next_year=$current_year;
+  if ($next_month>12) {
+    $next_year++;
+    $next_month%=12;
+  }
+
+  $next_time=mktime(0,0,0,$next_month,1,$next_year);
+
+  $times=average_incident_duration($current_time,$next_time,$states);
+
+
+  $html .= "<tr class='$shade'>";
+  $html .= "<td>".date('F Y',mktime(0,0,0,$current_month,1,$current_year))." - ".date('F Y',mktime(0,0,0,$next_month,1,$next_year))."</td>";
+  $html .= "<td>{$times[0]}</td>";
+  $html .= "<td>".format_seconds($times[1]*60)."</td>";
+  $html .= "<td>".round($times[2]/60)." hours</td>";
+  $html .= "</tr>\n";
+  $csv .= date('F Y',mktime(0,0,0,$current_month,1,$current_year))." - ".date('F Y',mktime(0,0,0,$next_month,1,$next_year));
+  $csv .= ",{$times[0]},".($times[1]/60).",".round($times[2]/60)."\n";
+  if ($shade=='shade1') $shade='shade2';
+  else $shade='shade1';
+  $current_time=$next_time;
+
+}
+$html .= "</table>";
+$html .= "<p align='center'><a href='{$_SERVER['PHP_SELF']}?mode={$mode}&output=csv'>Save this report in CSV format</a></p>";
+
+if ($_REQUEST['output']=='csv')
 {
-    echo "<p align='center'>Average incident duration: ".format_seconds($totalduration/$countclosed)."</p>";
+    // --- CSV File HTTP Header
+    header("Content-type: text/csv\r\n");
+    header("Content-disposition-type: attachment\r\n");
+    header("Content-disposition: filename=average_incident_duration_{$increment}_months.csv");
+    echo $csv;
 }
 else
 {
-    echo "<p align='center'>None</p>";
+    include('htmlheader.inc.php');
+    echo $html;
+    include('htmlfooter.inc.php');
 }
-include('htmlfooter.inc.php');
+
+
 ?>

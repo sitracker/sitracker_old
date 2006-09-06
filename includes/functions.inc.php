@@ -201,7 +201,8 @@ $hmenu[60] = array (10=> array ( 'perm'=> 37, 'name'=> "Marketing Mailshot", 'ur
                     80=> array ( 'perm'=> 37, 'name'=> "Customer Feedback", 'url'=>"reports/feedback.php"),
                     90=> array ( 'perm'=> 37, 'name'=> "Site Incidents", 'url'=>"reports/site_incidents.php"),
                     100=> array ( 'perm'=> 37, 'name'=> "Recent Incidents", 'url'=>"reports/recent_incidents_table.php"),
-                    110=> array ( 'perm'=> 37, 'name'=> "Incidents Logged (Open/Closed)", 'url'=>"reports/incident_graph.php")
+                    110=> array ( 'perm'=> 37, 'name'=> "Incidents Logged (Open/Closed)", 'url'=>"reports/incident_graph.php"),
+                    120=> array ( 'perm'=> 37, 'name'=> "Average Incident Duration", 'url'=>"reports/average_incident_duration.php")
 );
 
 
@@ -1758,17 +1759,18 @@ function priority_icon($id)
 // Returns an array of fields from the most recent update record for a given incident id
 function incident_lastupdate($id)
 {
+    // Find the most recent update
     $sql = "SELECT userid, type, sla, currentowner, currentstatus, LEFT(bodytext,500) AS body, timestamp, nextaction, id ";
     $sql .= "FROM updates WHERE incidentid='$id' ORDER BY timestamp DESC, id DESC LIMIT 1";
     $result = mysql_query($sql);
     if (mysql_error()) trigger_error(mysql_error(),E_USER_WARNING);
-
 
     if (mysql_num_rows($result) == 0) trigger_error("Zero records while retrieving incident last update",E_USER_WARNING);
     else
     {
         $update = mysql_fetch_array($result);
 
+        // In certain circumstances go back even further, find an earlier update
         if(($update['type'] == "reassigning" AND !isset($update['body'])) OR ($update['type'] == 'slamet' AND $row['sla'] == 'opened'))
         {
             //check if the previous update was by userid == 0 if so then we can assume this is a new call
@@ -1806,8 +1808,6 @@ function incident_lastupdate($id)
             }
 
         }
-
-
         mysql_free_result($result);
         return array($update['userid'], $update['type'] ,$update['currentowner'], $update['currentstatus'], stripslashes($update['body']), $update['timestamp'], $update['nextaction'], $update['id']);
     }
@@ -3894,14 +3894,13 @@ function calculate_working_time($t1,$t2) {
 }
 
 
-function is_active_status($status) {
-    $customerstates=array(2,7,8);
-    if (in_array($status,$customerstates)) return false;
+function is_active_status($status, $states) {
+    if (in_array($status,$states)) return false;
     else return true;
 }
 
 
-function calculate_incident_working_time($incidentid, $t1, $t2){
+function calculate_incident_working_time($incidentid, $t1, $t2, $states=array(2,7,8)){
 // Calculate the working time between two timestamps for a given incident
 // i.e. ignore times when customer has action
 
@@ -3922,17 +3921,17 @@ function calculate_incident_working_time($incidentid, $t1, $t2){
         if ($t1<=$update['timestamp']) {
 
             if ($timeptr==0) {
-                if (is_active_status($laststatus)) $timeptr=$t1;
+                if (is_active_status($laststatus, $states)) $timeptr=$t1;
                 else $timeptr=$update['timestamp'];
             } else {
 
-                if (is_active_status($laststatus)!=is_active_status($update['currentstatus'])) {
-                    if (is_active_status($laststatus) && ($t2 >= $update['timestamp'])) $time+=calculate_working_time($timeptr,$update['timestamp']);
+                if (is_active_status($laststatus, $states)!=is_active_status($update['currentstatus'], $states)) {
+                    if (is_active_status($laststatus, $states) && ($t2 >= $update['timestamp'])) $time+=calculate_working_time($timeptr,$update['timestamp']);
                     else $timeptr=$update['timestamp'];
                 }
 
                 if ($t2<$update['timestamp']) {
-                    if (is_active_status($laststatus)) $time+=calculate_working_time($timeptr,$t2);
+                    if (is_active_status($laststatus, $states)) $time+=calculate_working_time($timeptr,$t2);
                     break;
                 }
             }
@@ -3942,7 +3941,7 @@ function calculate_incident_working_time($incidentid, $t1, $t2){
     }
     mysql_free_result($result);
 
-    if ( is_active_status($laststatus) && ($t2 >= $update->timestamp)) $time+=calculate_working_time($timeptr,$t2);
+    if ( is_active_status($laststatus, $states) && ($t2 >= $update->timestamp)) $time+=calculate_working_time($timeptr,$t2);
 
     return $time;
 }
