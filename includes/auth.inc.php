@@ -21,7 +21,7 @@ if (!isset($_SESSION['auth']) OR $_SESSION['auth'] == FALSE)
     $_SESSION['auth'] = FALSE;
     // Invalid user
     $page = urlencode($_SERVER['PHP_SELF']);
-    header("Location: index.php?id=2&page=$page");
+    header("Location: {$CONFIG['application_webpath']}index.php?id=2&page=$page");
     exit;
 }
 else
@@ -42,7 +42,7 @@ if (user_permission($userid, $permission) == FALSE)
 {
     // No access permission
     $refused = implode(',',$permission);
-    header("Location: noaccess.php?id=$refused");
+    header("Location: {$CONFIG['application_webpath']}noaccess.php?id=$refused");
     exit;
 }
 
