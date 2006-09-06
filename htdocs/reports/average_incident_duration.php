@@ -24,6 +24,7 @@ require('auth.inc.php');
 $id = cleanvar($_REQUEST['id']);
 $mode = cleanvar($_REQUEST['mode']);
 
+// Increment selects the number of months to group together
 if (empty($_REQUEST['increment'])) $increment = 1;
 else $increment = cleanvar($_REQUEST['increment']);
 
@@ -94,7 +95,8 @@ while ($current_time<time()) {
 
 
   $html .= "<tr class='$shade'>";
-  $html .= "<td>".date('F Y',mktime(0,0,0,$current_month,1,$current_year))." - ".date('F Y',mktime(0,0,0,$next_month,1,$next_year))."</td>";
+  $html .= "<td>".date('F Y',mktime(0,0,0,$current_month,1,$current_year));
+  if ($next_month > $current_month+1 AND $next_year==$current_year)  $html .= " - ".date('F Y',mktime(0,0,0,$next_month,1,$next_year))."</td>";
   $html .= "<td>{$times[0]}</td>";
   $html .= "<td>".format_seconds($times[1]*60)."</td>";
   $html .= "<td>".round($times[2]/60)." hours</td>";
@@ -107,7 +109,7 @@ while ($current_time<time()) {
 
 }
 $html .= "</table>";
-$html .= "<p align='center'><a href='{$_SERVER['PHP_SELF']}?mode={$mode}&output=csv'>Save this report in CSV format</a></p>";
+$html .= "<p align='center'><a href='{$_SERVER['PHP_SELF']}?mode={$mode}&amp;output=csv'>Save this report in CSV format</a></p>";
 
 if ($_REQUEST['output']=='csv')
 {
