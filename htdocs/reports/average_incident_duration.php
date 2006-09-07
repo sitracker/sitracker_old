@@ -82,6 +82,7 @@ function average_incident_duration($start,$end,$states)
 // get the first date
 $sql = "SELECT opened FROM incidents ORDER BY id ASC LIMIT 1";
 $result = mysql_query($sql);
+if (mysql_error()) trigger_error(mysql_error(),E_USER_ERROR);
 list($firstdate)=mysql_fetch_row($result);
 
 $current_time=$firstdate;
