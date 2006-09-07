@@ -1,5 +1,9 @@
 To Do
 
+Whenevr
+* Ability to delete software/products. Should check contracts and incidents and
+  correct any inconsitancies
+
 v3.24
 * Improve Related Incidents to add Parents/Children?
 * When an incident is closed or reassigned, check for related
