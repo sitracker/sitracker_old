@@ -3599,7 +3599,8 @@ function check_email($email, $check_dns = FALSE)
 function incident_get_next_target($incidentid)
 {
     global $now;
-    $sql = "SELECT * FROM updates WHERE incidentid='$incidentid' AND type='slamet' ORDER BY id DESC LIMIT 1";
+    // Find the most recent SLA target that was met
+    $sql = "SELECT sla,timestamp FROM updates WHERE incidentid='$incidentid' AND type='slamet' ORDER BY id DESC LIMIT 1";
     $result = mysql_query($sql);
     if (mysql_error()) trigger_error(mysql_error(),E_USER_WARNING);
 
