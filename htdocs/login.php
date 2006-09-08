@@ -20,6 +20,7 @@ session_regenerate_id(TRUE);
 $password = md5($_REQUEST['password']);
 $username = cleanvar($_REQUEST['username']);
 $public_browser = cleanvar($_REQUEST['public_browser']);
+$page = cleanvar(str_replace('..','',str_replace('//','',str_replace(':','',urldecode($_REQUEST['page'])))));
 
 if (authenticate($username, $password) == 1)
 {
@@ -90,8 +91,16 @@ if (authenticate($username, $password) == 1)
     }
     */
     // redirect
-    header ("Location: main.php?pg=welcome");
-    exit;
+    if (empty($page))
+    {
+        header ("Location: main.php?pg=welcome");
+        exit;
+    }
+    else
+    {
+        header("Location: {$page}");
+        exit;
+    }
 }
 else
 {

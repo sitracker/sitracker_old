@@ -26,6 +26,7 @@ if ($_SESSION['auth'] != TRUE)
 {
     // External variables
     $id = cleanvar($_REQUEST['id']);
+    $page = cleanvar(str_replace('..','',str_replace('//','',str_replace(':','',urldecode($_REQUEST['page'])))));
 
     // Invalid user, show log in form
     include('htmlheader.inc.php');
@@ -40,6 +41,9 @@ if ($_SESSION['auth'] != TRUE)
     <br />
     <label>Username:<br /><input name="username" size="20" type="text" /></label><br />
     <label>Password:<br /><input name="password" size="20" type="password" /></label><br />
+    <?php
+    echo "<input type='hidden' name='page' value='$page' />";
+    ?>
     <input type="submit" value="Log In" />
     <?php
     echo "</form>";
