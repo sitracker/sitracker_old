@@ -114,9 +114,6 @@ class mime_email
     }
 
     function set_emaildata ($myemail){
-        $myemail = str_replace("\r", null, $myemail);
-        $myemail = explode("\n",$myemail);
-
     	$this->rawemail = $myemail;
     }
 

@@ -164,7 +164,7 @@ if (user_permission($sit[2],19)) // View contracts
             <td align='center' class='<?php echo $class ?>'><?php echo $results["product"] ?></td>
             <td align='center' class='<?php echo $class ?>'><?php echo $results["reseller"] ?></td>
             <td align='center' class='<?php echo $class ?>'><?php echo $results["licence_quantity"] ?> <?php echo $results["licence_type"] ?></td>
-            <td align='center' class='<?php echo $class ?>'><?php echo date("jS M Y", $results["expirydate"]); ?></td>
+            <td align='center' class='<?php echo $class ?>'><?php echo date($CONFIG['dateformat_date'], $results["expirydate"]); ?></td>
             <td align='center' class='<?php echo $class ?>'><?php echo $results['admincontactsforenames'].' '.$results['admincontactssurname'] ?></td>
             <td align='center' class='<?php echo $class ?>'><?php if ($results['maintnotes'] == '') echo '&nbsp;'; else echo nl2br($results['maintnotes']); ?></td>
         </tr>

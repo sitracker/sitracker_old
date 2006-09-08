@@ -40,6 +40,8 @@ Changes in v3.24 - Unreleased
 * Do incident switchover when changing status via edit profie
 * New report, average incident duration.  Shows the time taken to close
   incidents over the months.
+* When session expires and user logs in again the user is now redirected
+  the the previously accessed page rather than the main page.
 
 Changes in v3.23 - Released 10 April 2006
 -----------------------------------------------------------------------

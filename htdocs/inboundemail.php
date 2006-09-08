@@ -17,8 +17,8 @@
 // The intention is that emails are piped to this script
 
 echo "Mail decoder\n";
-//require('db_connect.inc.php');
-//require('functions.inc.php');
+require('db_connect.inc.php');
+require('functions.inc.php');
 require('mime_email.class.php');
 
 
@@ -36,7 +36,7 @@ fclose($fp);
 $email = new mime_email;
 $email->set_emaildata($rawemail);
 unset($rawemail);
-
+$attachment=array();
 
 //echo "------------------------------\n\n\n\n";
 
@@ -47,6 +47,10 @@ echo "Decoded mail...\n";
 print_r($decoded_email);
 //echo $decoded_email->emailtextplain;
 
+
+// Extract Incident ID etc.
+if (preg_match('/\[(\d{1,5})\]/',$decoded_email->subject,$m)) $incidentid = $m[1];
+$customer_visible = 'No';
 
 
 $part=1;
@@ -77,12 +81,12 @@ if ($decoded_email->contenttype=='multipart/mixed'
             switch ($block->mime_contenttype)
             {
                 case 'text/plain':
-                    $message .= htmlentities($block->mime_content);
+                    $message .= $block->mime_content;
                 break;
 
                 case 'text/html':
                     // Only use HTML version if we have no text version
-                    if (empty($message)) $message = htmlentities(strip_tags($block->mime_content));
+                    if (empty($message)) $message = strip_tags($block->mime_content);
                 break;
 
                 default:
@@ -92,20 +96,94 @@ if ($decoded_email->contenttype=='multipart/mixed'
         }
         else
         {
+            // try to figure out what delimeter is being used (for windows or unix)...
+            $delim = (strstr($CONFIG['attachment_fspath'],"/")) ? "/" : "\\";
+
             $filename=str_replace(' ','_',$block->mime_contentdispositionname);
             if (empty($filename)) $filename = "part{$part}";
             echo "* FILE ATTACHMENT: $filename\n";
+            $attachment[]=$filename;
+            // Write the attachment
+            $fa_dir = $CONFIG['attachment_fspath'].$incidentid;
+            echo "FA DIR: $fa_dir\n";
+            if (!file_exists($fa_dir))
+            {
+                if (!mkdir($fa_dir, 0775)) trigger_error("Failed to create incident attachment directory",E_USER_WARNING);
+            }
+            $fa_update_dir = $fa_dir . "{$delim}{$now}";
+            if (!file_exists($fa__update_dir))
+            {
+                if (!mkdir($fa_update_dir, 0775)) trigger_error("Failed to create incident update attachment directory",E_USER_WARNING);
+            }
+            echo "About to write to ".$fa_update_dir.$delim.$filename."\n";
+            if (is_writable($fa_update_dir.$delim.$filename))
+            {
+                $fwp = fopen($fa_update_dir.$delim.$filename, 'a');
+                // FIXME not actually writing content here yet
+                fwrite($fwp, "This is a test\n");
+                fclose($fwp);
+            }
+            else echo "NOT WRITABLE $filename\n";
         }
-        $part++;
     }
 }
-if (empty($message)) $message = htmlentities($decoded_email->emailtextplain);
+
+$count_attachments = count($attachment);
+
+// DEBUG
+echo "* INCIDENT NUMBER: {$incidentid}\n";
+
+if (empty($message)) $message = $decoded_email->emailtextplain;
 
 // Strip excessive line breaks
 $message = str_replace("\n\n\n\n","\n", $message);
+$message = str_replace(">\n>\n>\n>\n",">\n", $message);
 
+
+// DEBUG
 echo "#*#-[START MESSAGE]*#*#*#*#*#*#*#*#*#*#*#*#*#*#*#*#*#*#*#*#*#*#*#*#*#*#*#*#*#*#\n";
 echo $message;
 echo "\n#*#-[END MESSAGE]*#*#*#*#*#*#*#*#*#*#*#*#*#*#*#*#*#*#*#*#*#*#*#*#*#*#*#*#*#*#*#\n";
+
+// Build up text to insert in the incident log
+if (!empty($decoded_email->from)) $headertext .= "From: [b]".htmlentities(mysql_escape_string($decoded_email->from), ENT_NOQUOTES)."[/b]\n";
+if (!empty($decoded_email->to)) $headertext .= "To: [b]".htmlentities(mysql_escape_string($decoded_email->to))."[/b]\n";
+if (!empty($decoded_email->cc)) $headertext .= "CC: [b]".htmlentities(mysql_escape_string($decoded_email->cc))."[/b]\n";
+if (!empty($decoded_email->subject)) $headertext .= "Subject: [b]".htmlentities(mysql_escape_string($decoded_email->subject))."[/b]\n";
+if ($count_attachments >= 1)
+{
+    $headertext .= "Attachments: [b]{$count_attachments}[/b] - ";
+    $c=1;
+    foreach($attachment AS $att)
+    {
+        $headertext .= "[[att]]{$att}[[/att]]";
+        if ($c < $count_attachments) $headertext .= ", ";
+        $c++;
+    }
+    $headertext .= "\n";
+}
+
+if (!empty($headertext)) $bodytext .= "{$headertext}<hr>";
+$bodytext .= mysql_escape_string($message);
+
+if (empty($incidentid))
+{
+    // This could be a new incident or just spam
+    die('Invalid incident ID or incident ID not found');
+}
+else
+{
+    // Existing incident, new update:
+    // Add entry to the incident update log
+    $sql  = "INSERT INTO updates (incidentid, userid, type, bodytext, timestamp, customervisibility, currentstatus) ";
+    $sql .= "VALUES ('{$incidentid}', 0, 'emailin', '{$bodytext}', '{$now}', '$customer_visible', 1 )";
+    mysql_query($sql);
+    if (mysql_error()) trigger_error(mysql_error(),E_USER_WARNING);
+
+    // Mark the incident as active
+    $sql = "UPDATE incidents SET status='1', lastupdated='".time()."', timeofnextaction='0' WHERE id='{$incidentid}'";
+    mysql_query($sql);
+    if (mysql_error()) trigger_error(mysql_error(),E_USER_WARNING);
+}
 
 ?>
