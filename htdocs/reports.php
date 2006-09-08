@@ -74,6 +74,11 @@ Calendar showing which staff are in and out of the office.
 Bar Chart showing incident logging trends <em>(May take a few mins to calculate)</em>
 </td></tr>
 
+<tr><td><a href="reports/average_incident_duration.php">Average Incident Duration</a><br />
+Report showing the average length of time taken to close incidents <em>(May take a few mins to calculate)</em>
+</td></tr>
+
+
 <tr><td><a href='reports/recent_incidents_table.php'>Recent Incidents Table</a><br />
 A 'league' style table showing sites that have logged incidents recently.
 </td></tr>

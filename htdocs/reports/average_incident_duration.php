@@ -33,7 +33,7 @@ else $increment = cleanvar($_REQUEST['increment']);
 if (empty($_REQUEST['states'])) $states = array('0,2,6,7,8');
 else $states = explode(',',$_REQUEST['states']);
 
-function count_incident_owners($incidentid)
+function count_incident_stats($incidentid)
 {
     $sql = "SELECT count(DISTINCT currentowner),count(id) FROM updates WHERE incidentid='$incidentid' AND userid!=0 GROUP BY userid";
     $result = mysql_query($sql);
@@ -69,7 +69,7 @@ function average_incident_duration($start,$end,$states)
         {
             $totalduration=$totalduration+$row->duration_closed;
             $totalworkingduration += $working_time;
-            $cio=count_incident_owners($row->incidentid);
+            $cio=count_incident_stats($row->incidentid);
             $total_unique_owners += $cio[0];
             $total_updates += $cio[1];
             $countclosed++;
