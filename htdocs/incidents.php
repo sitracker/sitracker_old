@@ -56,6 +56,15 @@ switch($type)
         // Create SQL for chosen queue
         // If you alter this SQL also update the function user_activeincidents($id)
         if ($user=='current') $user=$sit[2];
+        // If the user is passed as a username lookup the userid
+        if (!is_number($user) AND $user!='current' AND $user!='all')
+        {
+            $usql = "SELECT id FROM users WHERE username='$user' LIMIT 1";
+            $uresult = mysql_query($usql);
+            if (mysql_error()) trigger_error(mysql_error(),E_USER_WARNING);
+            if (mysql_num_rows($uresult) >= 1) list($user) = mysql_fetch_row($uresult);
+            else $user=$sit[2]; // force to current user if username not found
+        }
         $sql = $selectsql . "WHERE contact=contacts.id AND incidents.priority=priority.id ";
         if ($user!='all') $sql .= "AND (owner='$user' OR towner='$user') ";
 
