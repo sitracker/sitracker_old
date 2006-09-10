@@ -252,11 +252,17 @@ switch($type)
             $rowcount = mysql_num_rows($result);
 
             // expertise incident listing goes here
-            include('incidents_table.inc.php');
-
-                // end of expertise queue
-                // ***
+            // Print message if no incidents were listed
+            if ($rowcount >= 1)
+            {
+                // Incidents Table
+                include('incidents_table.inc.php');
             }
+            else echo "<h5>No incidents in this queue</h5>";
+
+            // end of expertise queue
+            // ***
         }
-        include('htmlfooter.inc.php');
+}
+include('htmlfooter.inc.php');
 ?>
