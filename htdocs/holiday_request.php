@@ -104,9 +104,10 @@ if (!$sent)
             {
                 if($users['id'] != $sit[2])
                 {
-                    ?><option <?php if ($users["id"] == $id) { ?>selected='selected' <?php } ?>value='<?php echo $users["id"] ?>'>
-                    <?php echo $users["realname"]; ?><?php
-                    echo "</option\n";
+                    echo "<option";
+                    if ($users['id'] == $id) echo " selected='selected'";
+                    echo " value='{$users['id']}'";
+                    echo ">{$users['realname']}</option>\n";
                 }
             }
             echo "</select>";
