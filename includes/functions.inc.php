@@ -3920,7 +3920,7 @@ function calculate_incident_working_time($incidentid, $t1, $t2, $states=array(2,
     $laststatus=2;
     while ($update=mysql_fetch_array($result)) {
 
-        if ($t1<=$update['timestamp']) {
+        if ($t1<=$update['timestamp'] AND $t2 >= $update['timestamp']) {
 
             if ($timeptr==0) {
                 if (is_active_status($laststatus, $states)) $timeptr=$t1;
@@ -4227,7 +4227,7 @@ function incident_backup_switchover($userid, $accepting)
 
                     // Look to see if the temporary owner has updated the incident since we temp assigned it
                     // If he has, we leave it in his queue
-                    $usql = "SELECT id FROM updates WHERE incidentid='{$incident->id}' AND id > {$prevassignid} AND userid='$tempowner' LIMIT 1 ";
+                    $usql = "SELECT id FROM updates WHERE incidentid='{$incident->id}' AND id > '{$prevassignid}' AND userid='$tempowner' LIMIT 1 ";
                     $uresult = mysql_query($usql);
                     if (mysql_error()) trigger_error(mysql_error(),E_USER_WARNING);
                     if (mysql_num_rows($uresult) < 1)
