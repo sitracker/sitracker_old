@@ -42,6 +42,8 @@ Changes in v3.24 - Unreleased
   incidents over the months.
 * When session expires and user logs in again the user is now redirected
   the the previously accessed page rather than the main page.
+* Improved accuracy of SLA calculation
+* Added ability to edit/delete software records
 
 Changes in v3.23 - Released 10 April 2006
 -----------------------------------------------------------------------

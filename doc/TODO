@@ -1,7 +1,7 @@
 To Do
 
-Whenevr
-* Ability to delete software/products. Should check contracts and incidents and
+Whenever
+* Ability to delete products. Should check contracts and incidents and
   correct any inconsitancies
 
 v3.24
@@ -21,7 +21,7 @@ v3.2x
 * Application icon
 * Context 'actions' menus
 * Interface for editing incident product info questions
-* Public Holidays
+* Public Holidays, improve the 'Bank Holidays' editor
 * Monitor incidents by email, e.g. get an email when an incident is about to go out of SLA
 * Make holding queue locks timeout
 * Task/Todo List
