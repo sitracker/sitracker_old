@@ -2106,6 +2106,9 @@ function format_workday_minutes($minutes)
     if ($days < 1 AND $hours < 8 AND $minutes == 1) $time .= " {$minutes} minute";
     elseif ($days < 1 AND $hours < 8 AND $minutes > 1) $time .= " {$minutes} minutes";
 
+    if ($days == 1 AND $hours < 8 AND $minutes == 1) $time .= " {$minutes} min";
+    elseif ($days == 1 AND $hours < 8 AND $minutes > 1) $time .= " {$minutes} mins";
+
     $time = trim($time);
 
     return ($time);
