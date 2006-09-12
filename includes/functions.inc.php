@@ -3876,7 +3876,7 @@ function calculate_working_time($t1,$t2) {
 
   while ( date('z',$t2) != date('z',$t1) ) {
     if (in_array(date('w',$t1),$CONFIG['working_days'])) $days++;
-    $t1+=60*60*24;
+    $t1+=(60*60*24);
   }
 
   // this could be negative and that's not ok
@@ -3902,9 +3902,10 @@ function is_active_status($status, $states) {
 }
 
 
-function calculate_incident_working_time($incidentid, $t1, $t2, $states=array(2,7,8)){
-// Calculate the working time between two timestamps for a given incident
-// i.e. ignore times when customer has action
+function calculate_incident_working_time($incidentid, $t1, $t2, $states=array(2,7,8))
+{
+    // Calculate the working time between two timestamps for a given incident
+    // i.e. ignore times when customer has action
 
     if ( $t1>$t2 ) {
         $t3=$t2;
@@ -3917,36 +3918,52 @@ function calculate_incident_working_time($incidentid, $t1, $t2, $states=array(2,
     if (mysql_error()) trigger_error(mysql_error(),E_USER_WARNING);
     $time=0;
     $timeptr=0;
-    $laststatus=2;
-    while ($update=mysql_fetch_array($result)) {
-
-        if ($t1<=$update['timestamp'] AND $t2 >= $update['timestamp']) {
-
-            if ($timeptr==0) {
+    $laststatus=2; // closed
+    while ($update=mysql_fetch_array($result))
+    {
+        //  if ($t1<=$update['timestamp'])
+        if ($t1<=$update['timestamp'])
+        {
+            if ($timeptr==0)
+            {
+                // This is the first update
+                // If it's active, set the ptr = t1
+                // otherwise set to current timestamp ???
                 if (is_active_status($laststatus, $states)) $timeptr=$t1;
                 else $timeptr=$update['timestamp'];
-            } else {
+            }
+            if ($t2<$update['timestamp'])
+            {
+                // If we have reached the very end of the range, increment time to end of range, break
+                if (is_active_status($laststatus, $states)) $time+=calculate_working_time($timeptr,$t2);
+                break;
+            }
 
-                if (is_active_status($laststatus, $states)!=is_active_status($update['currentstatus'], $states)) {
-                    if (is_active_status($laststatus, $states) && ($t2 >= $update['timestamp'])) $time+=calculate_working_time($timeptr,$update['timestamp']);
-                    else $timeptr=$update['timestamp'];
+            // if status has changed or this is the first (active update)
+            if (is_active_status($laststatus, $states)!=is_active_status($update['currentstatus'], $states))
+            {
+                // If it's active and we've not reached the end of the range, increment time
+                if (is_active_status($laststatus, $states) && ($t2 >= $update['timestamp'])) $time+=calculate_working_time($timeptr,$update['timestamp']);
+                else
+                {
+                    $timeptr=$update['timestamp'];
                 }
-
-                if ($t2<$update['timestamp']) {
-                    if (is_active_status($laststatus, $states)) $time+=calculate_working_time($timeptr,$t2);
-                    break;
-                }
+                // if it's not active set the ptr
             }
         }
-
         $laststatus=$update['currentstatus'];
     }
     mysql_free_result($result);
 
-    if ( is_active_status($laststatus, $states) && ($t2 >= $update->timestamp)) $time+=calculate_working_time($timeptr,$t2);
+    // Calculate remainder
+    if ( is_active_status($laststatus, $states) && ($t2 >= $update['timestamp']))
+    {
+        $time+=calculate_working_time($timeptr,$t2);
+    }
 
     return $time;
 }
+
 
 function strip_comma($string)
 {
