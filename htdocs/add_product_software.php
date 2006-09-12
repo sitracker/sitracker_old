@@ -22,7 +22,9 @@ $action = mysql_escape_string($_REQUEST['action']);
 $productid = cleanvar($_REQUEST['productid']);
 $softwareid = cleanvar($_REQUEST['softwareid']);
 $context = cleanvar($_REQUEST['context']);
+$return = cleanvar($_REQUEST['return']);
 
+// FIXME check this HTML
 
 if (empty($action) OR $action == "showform")
 {
@@ -31,15 +33,15 @@ if (empty($action) OR $action == "showform")
     <h2>Link software with a product</h2>
     <form action="<?php echo $_SERVER['PHP_SELF'] ?>?action=add" method="post">
     <input type="hidden" name="context" value="<?php echo $context; ?>" />
-    <table class='vertical'>
     <?php
     if (empty($productid))
     {
-        echo "<tr><th>Product:</th>";
-        echo "<td>";
+        $name = db_read_column('name', 'software', $softwareid);
+        echo "<h3>Software: $name</h3>";
+        echo "<input name=\"softwareid\" type=\"hidden\" value=\"$softwareid\" />\n";
+        echo "<p align='center'>Link Product: ";
         echo product_drop_down("productid", 0);
-        echo "</td></tr>";
-
+        echo "</p>";
     }
     else
     {
@@ -48,19 +50,23 @@ if (empty($action) OR $action == "showform")
         if (mysql_error()) trigger_error("MySQL Query Error ".mysql_error(), E_USER_ERROR);
 
         list($product) = mysql_fetch_row($result);
-        echo "<h3>$product</h3>";
+        echo "<h3>Product: $product</h3>";
         echo "<input name=\"productid\" type=\"hidden\" value=\"$productid\" />\n";
     }
-
     if (empty($softwareid))
     {
-        echo "<tr><th>Link Software:</hd><td>";
+        echo "<p align='center'>Link Software: ";
         echo software_drop_down("softwareid", 0);
-        echo "</td></tr>\n";
+        echo "</p>\n";
     }
     echo "</table>\n";
-    echo "<p align='center'><input name='submit' type='submit' value='Save Link' /></p>\n";
+    echo "<p align='center'><input name='submit' type='submit' value='Save Link' />";
+    echo "<input type='checkbox' name='return' value='true' ";
+    if ($return=='true') echo "checked='checked' ";
+    echo "/> Return to this page after saving</p>\n";
     echo "</form>";
+
+    echo "<p align='center'><a href='products.php'>Return to products list without saving</a></p>";
     include('htmlfooter.inc.php');
 }
 elseif ($action == "add")
@@ -88,7 +94,7 @@ elseif ($action == "add")
         if (mysql_error()) trigger_error("MySQL Query Error ".mysql_error(), E_USER_ERROR);
         if (mysql_num_rows($result) >= 1)
         {
-            confirmation_page("1", "add_product_software.php?productid={$productid}", "<h2>Software Link Already Exists</h2><p align='center'>Please wait while you are redirected...</p>");
+            confirmation_page("1", "add_product_software.php?productid={$productid}&return=$return", "<h2>Software Link Already Exists</h2><p align='center'>Please wait while you are redirected...</p>");
             exit;
         }
 
@@ -107,7 +113,8 @@ elseif ($action == "add")
         else
         {
             journal(CFG_LOGGING_NORMAL, 'Product Added', "Software $softwareid was added to product $productid", CFG_JOURNAL_PRODUCTS, $productid);
-            confirmation_page("1", "add_product_software.php?productid={$productid}", "<h2>Software Linked to Product Successfully</h2><p align='center'>Please wait while you are redirected...</p>");
+            if ($return=='true') confirmation_page("1", "add_product_software.php?productid={$productid}&return=true", "<h2>Software Linked to Product Successfully</h2><p align='center'>Please wait while you are returned...</p>");
+            else confirmation_page("1", "products.php", "<h2>Software Linked to Product Successfully</h2><p align='center'>Please wait while you are redirected...</p>");
         }
     }
     else

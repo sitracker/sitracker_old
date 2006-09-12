@@ -18,10 +18,10 @@ require('functions.inc.php');
 require('auth.inc.php');
 
 // External variables
-$submit = $_REQUEST['submit'];
 $id = cleanvar($_REQUEST['id']);
+$action = cleanvar($_REQUEST['action']);
 
-if (empty($submit))
+if (empty($action) OR $action=='edit')
 {
     $title='Edit Software';
     // Show add product form
@@ -56,12 +56,44 @@ if (empty($submit))
         echo "</table>";
     }
     echo "<input type='hidden' name='id' value='$id' />";
+    echo "<input type='hidden' name='action' value='save' />";
     echo "<p align='center'><input name='submit' type='submit' value='Save' /></p>";
     echo "</form>\n";
+    echo "<p align='center'><a href='products.php'>Return to products list without saving</a></p>";
     include('htmlfooter.inc.php');
+}
+elseif($action=='delete')
+{
+    // Delete
+    // First check there are no incidents using this software
+    $sql = "SELECT count(id) FROM incidents WHERE softwareid='$id'";
+    $result = mysql_query($sql);
+    if (mysql_error()) trigger_error(mysql_error(),E_USER_ERROR);
+    list($countincidents) = mysql_fetch_row($result);
+    if ($countincidents >=1 )
+    {
+        include('htmlheader.inc.php');
+        echo "<p class='error'>Sorry, this software cannot be deleted because it has been associated with one or more incidents</p>";
+        echo "<p align='center'><a href='products.php'>Return to products list</a></p>";
+        include('htmlfooter.inc.php');
+    }
+    else
+    {
+        $sql = "DELETE FROM software WHERE id='$id'";
+        mysql_query($sql);
+        if (mysql_error()) trigger_error(mysql_error(),E_USER_ERROR);
+
+        $sql = "DELETE FROM softwareproducts WHERE softwareid='$id'";
+        mysql_query($sql);
+        if (mysql_error()) trigger_error(mysql_error(),E_USER_ERROR);
+
+        journal(CFG_LOGGING_DEBUG, 'Software Deleted', "Software $id was deleted", CFG_JOURNAL_DEBUG, $id);
+        confirmation_page("2", "products.php", "<h2>Software Deleted Successfully</h2><p align='center'>Please wait while you are redirected...</p>");
+    }
 }
 else
 {
+      // Save
     // External variables
     $name = cleanvar($_REQUEST['name']);
     if (!empty($_REQUEST['lifetime_start'])) $lifetime_start = date('Y-m-d',strtotime($_REQUEST['lifetime_start']));

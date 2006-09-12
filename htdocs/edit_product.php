@@ -77,6 +77,8 @@ else
     echo "<p align='center'><input type='submit' value='Save' /></p>";
     echo "</td></tr>";
     echo "</form>";
+
+    echo "<p align='center'><a href='products.php'>Return to products list without saving</a></p>";
     mysql_free_result($result);
 
     include('htmlfooter.inc.php');

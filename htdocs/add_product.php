@@ -48,6 +48,7 @@ if (empty($submit))
     <p class='warning'>Please check that the product does not already exist <em>before</em> adding it</p>
     </form>
     <?php
+    echo "<p align='center'><a href='products.php'>Return to products list without saving</a></p>";
     include('htmlfooter.inc.php');
 }
 else
