@@ -26,7 +26,7 @@ $id = cleanvar($_REQUEST['id']);
 // No submit detected show edit form
 if (empty($submit))
 {
-    $title = 'Edit: '.$id . " - " . incident_title($id);
+    $title = 'Edit: ';
     include('incident_html_top.inc.php');
 
     // extract incident details

@@ -15,55 +15,11 @@ if (realpath(__FILE__) == realpath($_SERVER['SCRIPT_FILENAME']))
     exit;
 }
 
-// Lookup the service level times
-$slsql = "SELECT * FROM servicelevels WHERE tag='{$servicelevel_tag}' AND priority='{$incident->priority}' ";
-$slresult = mysql_query($slsql);
-if (mysql_error()) trigger_error("MySQL Query Error ".mysql_error(), E_USER_ERROR);
-$servicelevel = mysql_fetch_object($slresult);
-
-// Get next target
-$target = incident_get_next_target($incidentid);
-// Calculate time remaining in SLA
-$working_day_mins = ($CONFIG['end_working_day'] - $CONFIG['start_working_day']) / 60;
-switch ($target->type)
-{
-    case 'initialresponse': $slatarget=$servicelevel->initial_response_mins; break;
-    case 'probdef': $slatarget=$servicelevel->prob_determ_mins; break;
-    case 'actionplan': $slatarget=$servicelevel->action_plan_mins; break;
-    case 'solution': $slatarget=($servicelevel->resolution_days * $working_day_mins); break;
-    default: $slaremain=0; $slatarget=0;
-}
-
-if ($slatarget >0) $slaremain=($slatarget - $target->since);
-else $slaremain=0;
-$targettype = target_type_name($target->type);
-
-// Get next review time
-$reviewsince = incident_get_next_review($incidents['id']);  // time since last review in minutes
-$reviewtarget = ($servicelevel->review_days * $working_day_mins);          // how often reviews should happen in minutes
-if ($reviewtarget > 0) $reviewremain=($reviewtarget - $reviewsince);
-else $reviewremain = 0;
-
-// Color the title bar according to the SLA and priority
-$class='';
-if ($slaremain <> 0)
-{
-    if (($slaremain - ($slatarget * 0.15 )) < 0 ) $class='notice';
-    if (($slaremain - ($slatarget * 0.10 )) < 0 ) $class='urgent';
-    if (($slaremain - ($slatarget * 0.05 )) < 0 ) $class='critical';
-    if ($incident->priority==4) $class='critical';  // Force critical incidents to be critical always
-}
 
 
-// Print a table showing summary details of the incident
+
 echo "<div id='detailsummary'>";
-// Tempory hack, don't show this for old incident details page
-if (strpos($_SERVER['PHP_SELF'], 'incident_details.php')===FALSE)
-{
-    echo "<h1 class='$class'>";  // Unknown
-    echo "{$title}";
-    echo "</h1>";
-}
+
 // Two column table
 echo "<table>";
 echo "<tr><td>";

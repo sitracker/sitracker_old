@@ -96,6 +96,7 @@ if (!$sent)
             $sql  = "SELECT id, realname, accepting FROM users, userpermissions ";
             $sql .= "WHERE users.id=userpermissions.userid AND permissionid=50 AND users.status > 0 ORDER BY realname ASC";
             $result = mysql_query($sql);
+            if (mysql_error()) trigger_error(mysql_error(),E_USER_ERROR);
 
             echo "<select class='dropdown' name='approvaluser'>";
             if ($id == 0)

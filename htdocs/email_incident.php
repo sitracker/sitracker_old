@@ -23,7 +23,7 @@ $step = cleanvar($_REQUEST['step']);
 $id = cleanvar($_REQUEST['id']);
 
 
-$title = 'Email: '.$id . " - " . incident_title($id);
+$title = 'Email: ';
 
 if (empty($step)) $step=1;
 

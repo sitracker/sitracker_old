@@ -22,8 +22,7 @@ $id = cleanvar($_REQUEST['id']);
 // No submit detected show closure form
 if (empty($_REQUEST['process']))
 {
-    $incident_title=incident_title($id);
-    $title = 'Close: '.$id . " - " . $incident_title;
+    $title = 'Close: ';
     include('incident_html_top.inc.php');
     ?>
     <script type="text/javascript">

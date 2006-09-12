@@ -21,27 +21,8 @@ require('auth.inc.php');
 $incidentid = cleanvar($_REQUEST['id']);
 $id = $incidentid;
 
-$title = $id . " - " . incident_title($id);
 include('incident_html_top.inc.php');
 
-// Retrieve incident
-// extract incident details
-$sql  = "SELECT *, incidents.id AS incidentid, ";
-$sql .= "contacts.id AS contactid ";
-$sql .= "FROM incidents, contacts ";
-$sql .= "WHERE (incidents.id='{$incidentid}' AND incidents.contact=contacts.id) ";
-$sql .= " OR incidents.contact=NULL ";
-$result = mysql_query($sql);
-if (mysql_error()) trigger_error(mysql_error(), E_USER_ERROR);
-$incident = mysql_fetch_object($result);
-$site_name=site_name($incident->siteid);
-$product_name=product_name($incident->product);
-if ($incident->softwareid > 0) $software_name=software_name($incident->softwareid);
-$servicelevel_id=maintenance_servicelevel($incident->maintenanceid);
-$servicelevel_tag = $incident->servicelevel;
-if ($servicelevel_tag=='') $servicelevel_tag = servicelevel_id2tag(maintenance_servicelevel($incident->maintenanceid));
-$servicelevel_name=servicelevel_name($servicelevelid);
-$opened_for=format_seconds(time() - $incident->opened);
 
 include('incident/details.inc.php');
 echo "<br />";

@@ -26,7 +26,7 @@ $reason = cleanvar($_REQUEST['reason']);
 if (empty($bodytext))
 {
     // No submit detected show reassign form
-    $title = 'Reassign: '.$id . " - " . incident_title($id);
+    $title = 'Reassign: ';
     include('incident_html_top.inc.php');
     ?>
     <form name='assignform' action="<?php echo $_SERVER['PHP_SELF']; ?>?id=<?php echo $id ?>" method="post">

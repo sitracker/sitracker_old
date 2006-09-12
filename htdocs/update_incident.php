@@ -30,8 +30,7 @@ $action = cleanvar($_REQUEST['action']);
 if (empty($action))
 {
     // No update body text detected show update form
-    $incident_title=incident_title($id);
-    $title = "Update: {$id} - {$incident_title}";
+    $title = "Update: ";
     include('incident_html_top.inc.php');
     ?>
     <script type="text/javascript">

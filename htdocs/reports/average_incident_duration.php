@@ -49,7 +49,7 @@ function average_incident_duration($start,$end,$states)
     // Returns number of closed incidents that were opened within the period giving
     // the average duration in minutes
     // and the average worked time in minutes
-    $sql = "SELECT *, (closed - opened) AS duration_closed, incidents.id AS incidentid ";
+    $sql = "SELECT opened, closed, (closed - opened) AS duration_closed, incidents.id AS incidentid ";
     $sql .= "FROM incidents ";
     $sql .= "WHERE status='2' ";
     if ($start > 0) $sql .= "AND opened >= $start ";
