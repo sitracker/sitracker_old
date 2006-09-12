@@ -39,9 +39,9 @@ if (empty($submit))
     <tr><th>Software Name: <sup class='red'>*</sup></th><td><input maxlength="50" name="name" size="30" /></td></tr>
     <?php
         echo "<tr><th>Lifetime:</th><td>";
-    echo "<input type='text' name='lifetime_start' id='lifetime_start' size='10' value='".date('Y-m-d')."' />";
+    echo "<input type='text' name='lifetime_start' id='lifetime_start' size='10' value='' />";
     echo " To: ";
-    echo "<input type='text' name='lifetime_end' id='lifetime_end' size='10' value='".date('Y-m-d',strtotime('Next Year'))."' />";
+    echo "<input type='text' name='lifetime_end' id='lifetime_end' size='10' value='' />";
     ?>
     </td></tr>
     </table>
@@ -55,9 +55,9 @@ else
 {
     // External variables
     $name = cleanvar($_REQUEST['name']);
-    if (!empty($_REQUEST['lifetime_start'])) $lifetime_start = strtotime($_REQUEST['lifetime_start']);
+    if (!empty($_REQUEST['lifetime_start'])) $lifetime_start = date('Y-m-d',strtotime($_REQUEST['lifetime_start']));
     else $lifetime_start = '';
-    if (!empty($_REQUEST['lifetime_end'])) $lifetime_end = strtotime($_REQUEST['lifetime_end']);
+    if (!empty($_REQUEST['lifetime_end'])) $lifetime_end = date('Y-m-d',strtotime($_REQUEST['lifetime_end']));
     else $lifetime_end = '';
 
     // Add new

@@ -27,10 +27,11 @@ if (mysql_error()) trigger_error("MySQL Query Error ".mysql_error(), E_USER_ERRO
 
 if (mysql_num_rows($result) >= 1)
 {
-    echo "<table summary='' align='center'>";
+
     while ($vendor = mysql_fetch_object($result))
     {
-        echo "<tr><th colspan='3'><h3>{$vendor->name}</h3></th></tr>";
+
+        echo "<h2>{$vendor->name}</h2>";
         $psql = "SELECT * FROM products WHERE vendorid='{$vendor->id}' ORDER BY name";
         $presult = mysql_query($psql);
         if (mysql_error()) trigger_error("MySQL Query Error ".mysql_error(), E_USER_ERROR);
@@ -38,12 +39,10 @@ if (mysql_num_rows($result) >= 1)
         {
             while ($product = mysql_fetch_object($presult))
             {
-                echo "<tr><td class='shade1'><a href='edit_product.php?id={$product->id}'>Edit</a></td>";
-                echo "<td class='shade1' colspan='2'>";
-                echo "<strong>{$product->name}</strong><br />";
-                echo "</td></tr>";
-                if (!empty($product->description))
-                    echo "<tr><td class='shade1'>&nbsp;</td><td class='shade1' colspan='2'>".nl2br($product->description)."</td></tr>\n";
+                echo "<table summary='' align='center' width='30%'>";
+                echo "<tr><th colspan='3'>Product: {$product->name} (<a href='edit_product.php?id={$product->id}'>Edit</a>)</th></tr>";
+                if (!empty($product->description)) echo "<tr class='shade1'><td colspan='3'>".nl2br($product->description)."</td></tr>";
+                echo "</th></tr>";
 
                 $swsql = "SELECT * FROM softwareproducts, software WHERE softwareproducts.softwareid=software.id AND productid='{$product->id}' ORDER BY name";
                 $swresult=mysql_query($swsql);
@@ -51,25 +50,39 @@ if (mysql_num_rows($result) >= 1)
 
                 if (mysql_num_rows($swresult) > 0)
                 {
+                    echo "<tr><th>Software</th><th>Lifetime</th><th>Actions</th></tr>";
+                    $shade='shade2';
                     while ($software=mysql_fetch_array($swresult))
                     {
-                        echo "<tr><td colspan='2'>{$software['name']}&nbsp; ";
-                        echo "(<a href='delete_product_software.php?productid={$product->id}&amp;softwareid={$software['softwareid']}'>Remove</a>)</td></tr>\n";
+                        echo "<tr class='$shade'><td>{$software['name']}</td>";
+                        echo "<td>";
+                        if ($software['lifetime_start'] > 1) echo date($CONFIG['dateformat_shortdate'],mysql2date($software['lifetime_start'])).' to ';
+                        else echo "&#8734;";
+                        if ($software['lifetime_end'] > 1) echo date($CONFIG['dateformat_shortdate'],mysql2date($software['lifetime_end']));
+                        elseif ($software['lifetime_start'] >1) echo "&#8734;";
+                        echo "</td>";
+                        echo "<td><a href='delete_product_software.php?productid={$product->id}&amp;softwareid={$software['softwareid']}'>Unlink</a> ";
+                        echo "| <a href='edit_software.php?id={$software['softwareid']}'>Edit</a>";
+                        echo "</td>";
+                        echo "</tr>\n";
+                        if ($shade=='shade1') $shade='shade2';
+                        else $shade='shade1';
                     }
                 }
                 else
                 {
-                    echo "<tr><td>&nbsp;</td><td><em>No software associated with this product</em></td><td>&nbsp;</td></tr>\n";
+                    echo "<tr><td>&nbsp;</td><td><em>No software linked to this product</em></td><td>&nbsp;</td></tr>\n";
                 }
-                echo "<tr><td>&nbsp;</td><td >&nbsp;</td><td><a href='add_product_software.php?productid={$product->id}'>Insert</a></td></tr>\n";
+                echo "</table>\n";
+                echo "<p align='center'><a href='add_product_software.php?productid={$product->id}'>Link software to {$product->name}</a></p>\n";
+                echo "<p>&nbsp;</p>";
             }
         }
         else
         {
-            echo "<tr><td>&nbsp;</td><td><em>No products associated with this vendor</em></td><td>&nbsp;</td></tr>\n";
+            echo "<p class='warning'>No products for this vendor</p>\n";
         }
     }
-    echo "</table>\n";
 }
 else echo "<p class='error'>No software vendors defined</p>";
 
