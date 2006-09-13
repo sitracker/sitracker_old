@@ -116,9 +116,7 @@ $hmenu[10] = array (1=> array ( 'perm'=> 0, 'name'=> "Main Page", 'url'=>"main.p
 $hmenu[1020] = array (10=> array ( 'perm'=> 4, 'name'=> "My Profile", 'url'=>"edit_profile.php"),
                       20=> array ( 'perm'=> 58, 'name'=> "My Skills", 'url'=>"edit_user_software.php"),
                       30=> array ( 'perm'=> 58, 'name'=> "My Backup Engineers", 'url'=>"edit_backup_users.php"),
-                      40=> array ( 'perm'=> 27, 'name'=> "My Holiday Calendar", 'url'=>"holiday_calendar.php?type=1"),
-                      50=> array ( 'perm'=> 27, 'name'=> "My Holiday Requests", 'url'=>"holiday_request.php?type=1"),
-                      60=> array ( 'perm'=> 27, 'name'=> "Book Holidays", 'url'=>"book_holidays.php")
+                      40=> array ( 'perm'=> 27, 'name'=> "My Holidays", 'url'=>"holidays.php")
 );
 // configure
 $hmenu[1030] = array (10=> array ( 'perm'=> 22, 'name'=> "Users", 'url'=>"manage_users.php", 'submenu'=>"103010"),
@@ -126,7 +124,7 @@ $hmenu[1030] = array (10=> array ( 'perm'=> 22, 'name'=> "Users", 'url'=>"manage
                       30=> array ( 'perm'=> 22, 'name'=> "Set Bank Holidays", 'url'=>"holiday_calendar.php?type=10"),
                       40=> array ( 'perm'=> 22, 'name'=> "FTP Files DB", 'url'=>"ftp_list_files.php"),
                       50=> array ( 'perm'=> 22, 'name'=> "Service Levels", 'url'=>"service_levels.php"),
-		      60=> array ( 'perm'=> 7, 'name'=> "Bulk Modify", 'url'=>"bulk_modify.php?action=external_esc"),
+                      60=> array ( 'perm'=> 7, 'name'=> "Bulk Modify", 'url'=>"bulk_modify.php?action=external_esc"),
 );
 $hmenu[103010] = array (10=> array ( 'perm'=> 22, 'name'=> "Manage Users", 'url'=>"manage_users.php"),
                         20=> array ( 'perm'=> 20, 'name'=> "Add User", 'url'=>"add_user.php?action=showform"),
@@ -4540,7 +4538,7 @@ function date_picker($formelement)
 
     $divid = "datediv".str_replace('.','',$formelement);
     $html = "<img src='{$CONFIG['application_webpath']}images/icons/kdeclassic/16x16/actions/1day.png' ";
-    $html .= "onmouseup=\"toggleDatePicker('$divid','$formelement')\" width='16' height='16' alt='date picker' style='cursor: pointer; vertical-align: top;' />";
+    $html .= "onmouseup=\"toggleDatePicker('$divid','$formelement')\" width='16' height='16' alt='date picker' style='cursor: pointer;' />";
     $html .= "<div name='$divid' id='$divid' style='position: absolute;'></div>";
     return $html;
 }

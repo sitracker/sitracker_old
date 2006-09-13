@@ -66,7 +66,7 @@ CSV File showing how many incidents each site has logged, including sites that h
 A full list of all contacts, showing number of incidents logged
 </td></tr>
 
-<tr><td><a href="reports/holiday_chart.php">Holiday Chart</a><br />
+<tr><td><a href="holiday_calendar.php">Holiday Planner</a><br />
 Calendar showing which staff are in and out of the office.
 </td></tr>
 

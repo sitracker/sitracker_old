@@ -213,8 +213,20 @@ elseif ($step=='1')
 }
 else
 {
+    $approvaluser = cleanvar($_REQUEST['approvaluser']);
+    $memo = cleanvar($_REQUEST['memo']);
+    $type = cleanvar($_REQUEST['type']);
+    $numberofdays = cleanvar($_REQUEST['numberofdays']);
+    for ($h=1;$h < $numberofdays;$h++)
+    {
+        $dayfield="day{$h}";
+        $lengthfield="length{$h}";
+        $$dayfield = cleanvar($_REQUEST[$dayfield]);
+        $$lengthfield = cleanvar($_REQUEST[$lengthfield]);
+    }
+
     // check that approval user is set
-    // bugbug: don't die, do nice msg
+    // FIXME: don't die, do nice msg
     if ($approvaluser < 1) die('Please hit back and select a user to send the holiday request to.');
 
     include('htmlheader.inc.php');
@@ -223,8 +235,8 @@ else
     //
     echo "<h2>Holiday Booking</h2>";
     echo "<p align='center'>You have requested a holiday booking as shown below</p>";
-    echo "<table align='center' bgcolor='#FFFFFF'  cellpadding='2' cellspacing='0' class='tablelist' >";
-    echo "<tr class='shade1'>";
+    echo "<table class='vertical' align='center'>";
+    echo "<tr>";
     echo "<th>Date</th><th>Length</th><th>Type</th>";
     echo "</tr>\n";
     for ($holiday=1;$holiday < $numberofdays;$holiday++)
