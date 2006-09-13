@@ -8,9 +8,9 @@
 // of the GNU General Public License, incorporated herein by reference.
 //
 
-
+// This Page Is Valid XHTML 1.0 Transitional! 13Sep06
 // Author: Ivan Lucas <ivanlucas[at]users.sourceforge.net>
-$permission=4; // Edit your profile
+$permission=27; // view your calendar
 
 require('db_connect.inc.php');
 require('functions.inc.php');
@@ -70,14 +70,14 @@ if (empty($step))
     // -->
     </script>
     <form name="date" action="<?php echo $_SERVER['PHP_SELF']; ?>" method="post">
-    <table>
+    <table class='vertical'>
     <tr><th>Holiday Type:</th><td class='shade2'><?php holidaytype_drop_down('type', 1) ?></td></tr>
-    <tr><th>Start Date:</th><td align='left' class='shade1' title='date picker'><input name='start' size="10" /> <img onmouseup="toggleDatePicker('daysOfMonth','date.start')" id=daysOfMonthPos name=daysOfMonthPos width=16 height=16 src="images/icons/kdeclassic/16x16/actions/1day.png" align=top border=0 alt="date picker"><div id="daysOfMonth" style="position:absolute;"></td></tr>
-    <tr><th>End Date:</th><td align='left' class='shade1' title='date picker'><input name='end' size="10"> <img onmouseup="toggleDatePicker('daysOfMonth2','date.end')" id=daysOfMonth2Pos name=daysOfMonth2Pos width=16 height=16 src="images/icons/kdeclassic/16x16/actions/1day.png" align=top border=0 alt="date picker"><div id="daysOfMonth2" style="position:absolute;"></td></tr>
-    <tr><td align='right' class='shade1' width='200'>&nbsp;</td><td align='left' class='shade1'>
-    <input type='hidden' name='step' value='1' />
-    <input type='submit' value='Book' /></td></tr>
+    <tr><th>Start Date:</th><td align='left' class='shade1' title='date picker'><input name='start' size="10" /> <img onmouseup="toggleDatePicker('daysOfMonth','date.start')" id='daysOfMonthPos' name='daysOfMonthPos' width='16' height='16' src="images/icons/kdeclassic/16x16/actions/1day.png" align='top' border='0' alt="date picker" /><div id="daysOfMonth" style="position:absolute;"></div></td></tr>
+    <tr><th>End Date:</th><td align='left' class='shade1' title='date picker'><input name='end' size="10" /> <img onmouseup="toggleDatePicker('daysOfMonth2','date.end')" id='daysOfMonth2Pos' name='daysOfMonth2Pos' width='16' height='16' src="images/icons/kdeclassic/16x16/actions/1day.png" align='top' border='0' alt="date picker" /><div id="daysOfMonth2" style="position:absolute;"></div></td></tr>
     </table>
+    <p align='center'>
+    <input type='hidden' name='step' value='1' />
+    <input type='submit' value='Book' /></p>
     </form>
 
     <?php
@@ -86,9 +86,9 @@ if (empty($step))
 elseif ($step=='1')
 {
     // External variables
-    $start = cleanvar($_REQUEST['start');
-    $end = cleanvar($_REQUEST['end');
-    $type = cleanvar($_REQUEST['type');
+    $start = cleanvar($_REQUEST['start']);
+    $end = cleanvar($_REQUEST['end']);
+    $type = cleanvar($_REQUEST['type']);
 
     include('htmlheader.inc.php');
     $start=strtotime($start);

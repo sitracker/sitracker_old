@@ -117,7 +117,8 @@ $hmenu[1020] = array (10=> array ( 'perm'=> 4, 'name'=> "My Profile", 'url'=>"ed
                       20=> array ( 'perm'=> 58, 'name'=> "My Skills", 'url'=>"edit_user_software.php"),
                       30=> array ( 'perm'=> 58, 'name'=> "My Backup Engineers", 'url'=>"edit_backup_users.php"),
                       40=> array ( 'perm'=> 27, 'name'=> "My Holiday Calendar", 'url'=>"holiday_calendar.php?type=1"),
-                      50=> array ( 'perm'=> 27, 'name'=> "My Holiday Requests", 'url'=>"holiday_request.php?type=1")
+                      50=> array ( 'perm'=> 27, 'name'=> "My Holiday Requests", 'url'=>"holiday_request.php?type=1"),
+                      60=> array ( 'perm'=> 27, 'name'=> "Book Holidays", 'url'=>"book_holidays.php")
 );
 // configure
 $hmenu[1030] = array (10=> array ( 'perm'=> 22, 'name'=> "Users", 'url'=>"manage_users.php", 'submenu'=>"103010"),
