@@ -425,6 +425,8 @@ div#kbarticle
 }
 #kbarticle h1,#kbarticle h2,#kbarticle h3,#kbarticle h4, #kbarticle h5,#kbarticle h6 { text-align: left; background: transparent; color: black;}
 
+.datepicker { background-color: #CCCCFF; border: 1px solid black; font-family: monospace; }
+
 @media print
 {
     #menu, #statusbar, h1#apptitle, #menulist, .contextmenu {visibility:hidden; display:none;}

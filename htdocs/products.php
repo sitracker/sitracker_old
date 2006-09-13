@@ -37,7 +37,7 @@ if (mysql_num_rows($result) >= 1)
         {
             while ($product = mysql_fetch_object($presult))
             {
-                echo "<table summary='' align='center' width='30%'>";
+                echo "<table summary='' align='center' width='40%'>";
                 echo "<tr><th colspan='3'>Product: {$product->name} (<a href='edit_product.php?id={$product->id}'>Edit</a>)</th></tr>";
                 if (!empty($product->description)) echo "<tr class='shade1'><td colspan='3'>".nl2br($product->description)."</td></tr>";
 
@@ -85,10 +85,11 @@ if (mysql_num_rows($result) >= 1)
 else echo "<p class='error'>No software vendors defined</p>";
 
 echo "<h2>Software not linked</h2>";
+echo "<p align='center'>This software is not linked to any product</p>";
 $sql = "SELECT software.* FROM software LEFT JOIN softwareproducts ON software.id=softwareproducts.softwareid WHERE softwareproducts.softwareid IS NULL";
 $result = mysql_query($sql);
 if (mysql_error()) trigger_error(mysql_error(),E_USER_ERROR);
-echo "<table summary='' align='center' width='30%'>";
+echo "<table summary='' align='center' width='40%'>";
 echo "<tr><th>Software</th><th>Lifetime</th><th>Actions</th></tr>";
 while ($software = mysql_fetch_array($result))
 {
@@ -105,7 +106,7 @@ while ($software = mysql_fetch_array($result))
     echo "</td>";
     echo "</tr>\n";
     if ($shade=='shade1') $shade='shade2';
-    else $shade='shade1'; 
+    else $shade='shade1';
 }
 echo "</table>";
 echo "<p align='center'><a href='add_vendor.php'>Add Vendor</a> | <a href='add_product.php'>Add Product</a> | <a href='add_software.php'>Add Software</a></p>";

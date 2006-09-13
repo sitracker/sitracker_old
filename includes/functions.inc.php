@@ -4533,6 +4533,17 @@ function strip_bbcode_tooltip($text)
 }
 
 
+function date_picker($formelement)
+{
+    // Parameter1: form element id, eg. myform.dateinputbox
+    global $CONFIG;
+
+    $divid = "datediv".str_replace('.','',$formelement);
+    $html = "<img src='{$CONFIG['application_webpath']}images/icons/kdeclassic/16x16/actions/1day.png' ";
+    $html .= "onmouseup=\"toggleDatePicker('$divid','$formelement')\" width='16' height='16' alt='date picker' style='cursor: pointer; vertical-align: top;' />";
+    $html .= "<div name='$divid' id='$divid' style='position: absolute;'></div>";
+    return $html;
+}
 
 // -------------------------- // -------------------------- // --------------------------
 // leave this section at the bottom of functions.inc.php ================================

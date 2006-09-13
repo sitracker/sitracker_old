@@ -31,49 +31,21 @@ if (empty($step))
     ?>
     <h2>Book Holidays</h2>
 
-    <script type="text/javascript" src="tjmlib.js"></script>
-    <script type="text/javascript" src="calendar.js"></script>
-    <script type="text/javascript">
-    <!--
-    // fixPosition() attaches the element named eltname
-    // to an image named eltname+'Pos'
-    //
-    function fixPosition(divname) {
-    divstyle = getDivStyle(divname);
-    positionerImgName = divname + 'Pos';
-    // hint: try setting isPlacedUnder to false
-    isPlacedUnder = false;
-    if (isPlacedUnder) {
-    setPosition(divstyle,positionerImgName,true);
-    } else {
-    setPosition(divstyle,positionerImgName)
-    }
-    }
-
-    function toggleDatePicker(eltName,formElt) {
-    var x = formElt.indexOf('.');
-    var formName = formElt.substring(0,x);
-    var formEltName = formElt.substring(x+1);
-    newCalendar(eltName,document.forms[formName].elements[formEltName]);
-    toggleVisible(eltName);
-    }
-
-    // fixPositions() puts everything back in the right place after a resize.
-    function fixPositions()
-    {
-    // add a fixPosition call here for every element
-    // you think might get stranded in a resize/reflow.
-    fixPosition('daysOfMonth');
-    fixPosition('daysOfMonth2');
-    }
-
-    // -->
-    </script>
     <form name="date" action="<?php echo $_SERVER['PHP_SELF']; ?>" method="post">
     <table class='vertical'>
     <tr><th>Holiday Type:</th><td class='shade2'><?php holidaytype_drop_down('type', 1) ?></td></tr>
-    <tr><th>Start Date:</th><td align='left' class='shade1' title='date picker'><input name='start' size="10" /> <img onmouseup="toggleDatePicker('daysOfMonth','date.start')" id='daysOfMonthPos' name='daysOfMonthPos' width='16' height='16' src="images/icons/kdeclassic/16x16/actions/1day.png" align='top' border='0' alt="date picker" /><div id="daysOfMonth" style="position:absolute;"></div></td></tr>
-    <tr><th>End Date:</th><td align='left' class='shade1' title='date picker'><input name='end' size="10" /> <img onmouseup="toggleDatePicker('daysOfMonth2','date.end')" id='daysOfMonth2Pos' name='daysOfMonth2Pos' width='16' height='16' src="images/icons/kdeclassic/16x16/actions/1day.png" align='top' border='0' alt="date picker" /><div id="daysOfMonth2" style="position:absolute;"></div></td></tr>
+    <tr><th>Start Date:</th><td align='left' class='shade1' title='date picker'>
+    <input name='start' size="10" />
+    <?php
+    echo date_picker('date.start');
+    ?>
+    <tr><th>End Date:</th><td align='left' class='shade1' title='date picker'>
+    <input name='end' size="10" />
+    <?php
+    echo date_picker('date.end');
+    // <img onmouseup="toggleDatePicker('enddate','date.end')" id='enddatePos' width='16' height='16' src="images/icons/kdeclassic/16x16/actions/1day.png" align='top' border='0' alt="date picker" /><div id="enddate" style="position:absolute;"></div></td></tr>
+    ?>
+
     </table>
     <p align='center'>
     <input type='hidden' name='step' value='1' />

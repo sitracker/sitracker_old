@@ -4,7 +4,10 @@
 // "You may use the strategies and code in these articles license and royalty free unless otherwise directed.
 // "If I helped you build something cool I'd like to hear about it. Drop me a line at tom@dagblastit.com."
 
+// Some functions from here have been moved to calendar.js, the rest are left here unused and
+// commented out in case they're needed in the future
 
+/*
 // overly simplistic test for IE
 isIE = (document.all ? true : false);
 // both IE5 and NS6 are DOM-compliant
@@ -22,17 +25,24 @@ function getAbsPos(elt,which) {
  return iPos;
 }
 
-function getDivStyle(divname) {
- var style;
- if (isDOM) { style = document.getElementById(divname).style; }
- else { style = isIE ? document.all[divname].style
-                     : document.layers[divname]; } // NS4
- return style;
+// fixPosition() attaches the element named eltname
+// to an image named eltname+'Pos'
+//
+
+function fixPosition(divname) {
+divstyle = getDivStyle(divname);
+positionerImgName = divname + 'Pos';
+// hint: try setting isPlacedUnder to false
+isPlacedUnder = false;
+if (isPlacedUnder) {
+setPosition(divstyle,positionerImgName,true);
+} else {
+setPosition(divstyle,positionerImgName)
+}
 }
 
-function hideElement(divname) {
- getDivStyle(divname).visibility = 'hidden';
-}
+
+
 
 // annoying detail: IE and NS6 store elt.top and elt.left as strings.
 function moveBy(elt,deltaX,deltaY) {
@@ -40,15 +50,7 @@ function moveBy(elt,deltaX,deltaY) {
  elt.top = parseInt(elt.top) + deltaY;
 }
 
-function toggleVisible(divname) {
- divstyle = getDivStyle(divname);
- if (divstyle.visibility == 'visible' || divstyle.visibility == 'show') {
-   divstyle.visibility = 'hidden';
- } else {
-   fixPosition(divname);
-   divstyle.visibility = 'visible';
- }
-}
+
 
 function setPosition(elt,positionername,isPlacedUnder) {
  var positioner;
@@ -68,3 +70,4 @@ function setPosition(elt,positionername,isPlacedUnder) {
  elt.left = getAbsX(positioner);
  elt.top = getAbsY(positioner) + (isPlacedUnder ? positioner.height : 0);
 }
+*/
