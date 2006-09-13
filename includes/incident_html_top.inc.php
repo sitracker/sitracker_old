@@ -7,6 +7,7 @@ if (isset($title)) echo $title;
 else echo $application_name;
 echo "</title>";
 echo "<meta http-equiv=\"Content-Type\" content=\"text/html; charset=utf-8\" />";
+echo "<meta name=\"GENERATOR\" content=\"{$CONFIG['application_name']} {$application_version_string}\" />\n";
 echo "<style type='text/css'>@import url('{$CONFIG['application_webpath']}styles/webtrack.css');</style>\n";
 if ($_SESSION['auth'] == TRUE)
 {
@@ -294,38 +295,106 @@ function Hide(button,element)
 <body onload="self.focus()">
 
 <?php
-echo "<h1>$title</h1>";
+$incidentid=$id;
+// Retrieve incident
+// extract incident details
+$sql  = "SELECT *, incidents.id AS incidentid, ";
+$sql .= "contacts.id AS contactid ";
+$sql .= "FROM incidents, contacts ";
+$sql .= "WHERE (incidents.id='{$incidentid}' AND incidents.contact=contacts.id) ";
+$sql .= " OR incidents.contact=NULL ";
+$result = mysql_query($sql);
+if (mysql_error()) trigger_error("MySQL Query Error ".mysql_error(), E_USER_ERROR);
+$incident = mysql_fetch_object($result);
+$site_name=site_name($incident->siteid);
+$product_name=product_name($incident->product);
+if ($incident->softwareid > 0) $software_name=software_name($incident->softwareid);
+$servicelevel_id=maintenance_servicelevel($incident->maintenanceid);
+$servicelevel_tag = $incident->servicelevel;
+if ($servicelevel_tag=='') $servicelevel_tag = servicelevel_id2tag(maintenance_servicelevel($incident->maintenanceid));
+$servicelevel_name=servicelevel_name($servicelevelid);
+$opened_for=format_seconds(time() - $incident->opened);
+
+// Lookup the service level times
+$slsql = "SELECT * FROM servicelevels WHERE tag='{$servicelevel_tag}' AND priority='{$incident->priority}' ";
+$slresult = mysql_query($slsql);
+if (mysql_error()) trigger_error("MySQL Query Error ".mysql_error(), E_USER_ERROR);
+$servicelevel = mysql_fetch_object($slresult);
+
+// Get next target
+$target = incident_get_next_target($incidentid);
+// Calculate time remaining in SLA
+$working_day_mins = ($CONFIG['end_working_day'] - $CONFIG['start_working_day']) / 60;
+switch ($target->type)
+{
+    case 'initialresponse': $slatarget=$servicelevel->initial_response_mins; break;
+    case 'probdef': $slatarget=$servicelevel->prob_determ_mins; break;
+    case 'actionplan': $slatarget=$servicelevel->action_plan_mins; break;
+    case 'solution': $slatarget=($servicelevel->resolution_days * $working_day_mins); break;
+    default: $slaremain=0; $slatarget=0;
+}
+
+if ($slatarget >0) $slaremain=($slatarget - $target->since);
+else $slaremain=0;
+$targettype = target_type_name($target->type);
+
+// Get next review time
+$reviewsince = incident_get_next_review($incidentid);  // time since last review in minutes
+$reviewtarget = ($servicelevel->review_days * $working_day_mins);          // how often reviews should happen in minutes
+if ($reviewtarget > 0) $reviewremain=($reviewtarget - $reviewsince);
+else $reviewremain = 0;
+
+// Color the title bar according to the SLA and priority
+$class='';
+if ($slaremain <> 0)
+{
+    if (($slaremain - ($slatarget * ((100 - $CONFIG['notice_threshold']) /100))) < 0 ) $class='notice';
+    if (($slaremain - ($slatarget * ((100 - $CONFIG['urgent_threshold']) /100))) < 0 ) $class='urgent';
+    if (($slaremain - ($slatarget * ((100 - $CONFIG['critical_threshold']) /100))) < 0 ) $class='critical';
+    if ($incidents["priority"]==4) $class='critical';  // Force critical incidents to be critical always
+}
+
+// Print a table showing summary details of the incident
+
+// Tempory hack, don't show this for old incident details page
+//if (strpos($_SERVER['PHP_SELF'], 'incident_details.php')===FALSE)
+//{
+    echo "<h1 class='$class'>{$title}{$incident->id} - {$incident->title}</h1>";
+//}
+
+// echo "<h1>$title</h1>";
 echo "<div id='navmenu'>";
 if ($menu != 'hide')
 {
-   if (incident_status($id) != 2)
-   {
-     echo "<a class='barlink' href='update_incident.php?id={$id}&amp;popup={$popup}' accesskey='U'><em>U</em>pdate</a> | ";
-     echo "<a class='barlink' href='javascript:close_window({$id});'>Close</a> | ";
-     echo "<a class='barlink' href='reassign_incident.php?id={$id}&amp;popup={$popup}' accesskey='R'><em>R</em>eassign</a> | ";
-     echo "<a class='barlink' href='edit_incident.php?id={$id}&amp;popup={$popup}'>Edit</a> | ";
-     echo "<a class='barlink' href='incident_service_levels.php?id={$id}&amp;popup={$popup}' accesskey='S'><em>S</em>ervice</a> | ";
-     echo "<a class='barlink' href='incident_relationships.php?id={$id}&amp;tab=relationships'>Relations</a> | ";
-     echo "<a class='barlink' href='javascript:email_window({$id})' accesskey='E'><em>E</em>mail</a> | ";
-     echo "<a class='barlink' href='incident_attachments.php?id={$id}&amp;popup={$popup}' accesskey='F'><em>F</em>iles</a> | ";
-     echo "<a class='barlink' href='incident_details.php?id={$id}&amp;popup={$popup}' accesskey='D'><em>D</em>etails And Log</a> | ";
-     echo "<a class='barlink' href='javascript:help_window({$permission});'>?</a>";
-     if (!empty($_REQUEST['popup'])) echo " | <a class=barlink href='javascript:window.close();'>Close Window</a>";
+    if (incident_status($id) != 2)
+    {
+        echo "<a class='barlink' href='update_incident.php?id={$id}&amp;popup={$popup}' accesskey='U'><em>U</em>pdate</a> | ";
+        echo "<a class='barlink' href='javascript:close_window({$id});'>Close</a> | ";
+        echo "<a class='barlink' href='reassign_incident.php?id={$id}&amp;popup={$popup}' accesskey='R'><em>R</em>eassign</a> | ";
+        echo "<a class='barlink' href='edit_incident.php?id={$id}&amp;popup={$popup}'>Edit</a> | ";
+        echo "<a class='barlink' href='incident_service_levels.php?id={$id}&amp;popup={$popup}' accesskey='S'><em>S</em>ervice</a> | ";
+        echo "<a class='barlink' href='incident_relationships.php?id={$id}&amp;tab=relationships'>Relations</a> | ";
+        echo "<a class='barlink' href='javascript:email_window({$id})' accesskey='E'><em>E</em>mail</a> | ";
+        echo "<a class='barlink' href='incident_attachments.php?id={$id}&amp;popup={$popup}' accesskey='F'><em>F</em>iles</a> | ";
+        echo "<a class='barlink' href='incident_details.php?id={$id}&amp;popup={$popup}' accesskey='D'><em>D</em>etails And Log</a> | ";
+        echo "<a class='barlink' href='javascript:help_window({$permission});'>?</a>";
+        if (!empty($_REQUEST['popup'])) echo " | <a class=barlink href='javascript:window.close();'>Close Window</a>";
     }
     else
     {
-      echo "<a class='barlink' href='reopen_incident.php?id={$id}&amp;popup={$popup}'>Reopen</a> | ";
-      echo "<a class='barlink' href='incident_service_levels.php?id={$id}&amp;popup={$poup}' accesskey='S'><em>S</em>ervice</a> | ";
-      echo "<a class='barlink' href='incident_relationships.php?id={$id}&amp;tab=relationships'>Relations</a> | ";
-      echo "<a class='barlink' href='incident_attachments.php?id={$id}&amp;popup={$popup}' accesskey='F'><em>F</em>iles</a> | ";
-      echo "<a class='barlink' href='incident_details.php?id={$id}&amp;popup={$popup}' accesskey='D'><em>D</em>etails And Log</a> | ";
-      echo "<a class='barlink' href='javascript:help_window({$permission});'>?</a>";
-      if (!empty($_REQUEST['popup'])) echo " | <a class='barlink' href='javascript:window.close();'>Close Window</a>";
+        echo "<a class='barlink' href='reopen_incident.php?id={$id}&amp;popup={$popup}'>Reopen</a> | ";
+        echo "<a class='barlink' href='incident_service_levels.php?id={$id}&amp;popup={$poup}' accesskey='S'><em>S</em>ervice</a> | ";
+        echo "<a class='barlink' href='incident_relationships.php?id={$id}&amp;tab=relationships'>Relations</a> | ";
+        echo "<a class='barlink' href='incident_attachments.php?id={$id}&amp;popup={$popup}' accesskey='F'><em>F</em>iles</a> | ";
+        echo "<a class='barlink' href='incident_details.php?id={$id}&amp;popup={$popup}' accesskey='D'><em>D</em>etails And Log</a> | ";
+        echo "<a class='barlink' href='javascript:help_window({$permission});'>?</a>";
+        if (!empty($_REQUEST['popup'])) echo " | <a class='barlink' href='javascript:window.close();'>Close Window</a>";
     }
 }
 else
 {
-  echo "<a class='barlink' href='javascript:window.close();'>Close Window</a>";
+    echo "<a class='barlink' href='javascript:window.close();'>Close Window</a>";
 }
 echo "</div>";
+
 ?>

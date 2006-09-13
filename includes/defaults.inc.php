@@ -17,6 +17,8 @@ $CONFIG['application_shortname'] = 'SiT!';
 $CONFIG['application_fspath'] = '';
 $CONFIG['application_webpath'] = '/';
 
+$CONFIG['application_uriprefix'] = "http://{$_SERVER['HTTP_HOST']}";
+
 $CONFIG['db_hostname'] = 'localhost';
 $CONFIG['db_username'] = '';
 $CONFIG['db_password'] = '';

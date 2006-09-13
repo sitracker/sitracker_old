@@ -3737,18 +3737,21 @@ function strip_anchor_tags ($string)
 // RETURNS: A php style date (unix).
 function mysql2date($mysqldate)
 {
-   // Takes a MYSQL date and converts it to a proper PHP date
-   $day = substr($mysqldate,8,2);
-   $month = substr($mysqldate,5,2);
-   $year = substr($mysqldate,0,4);
-   $hour = substr($mysqldate,11,2);
-   $minute = substr($mysqldate,14,2);
-   $second = substr($mysqldate,17,2);
-   if (strlen($mysqldate) > 10)
-      $phpdate= mktime($hour,$minute,$second,$month,$day,$year);
-   else
-      $phpdate= mktime(0,0,0,$month,$day,$year);
-   return $phpdate;
+    // Takes a MYSQL date and converts it to a proper PHP date
+    $day = substr($mysqldate,8,2);
+    $month = substr($mysqldate,5,2);
+    $year = substr($mysqldate,0,4);
+
+    if (strlen($mysqldate) > 10)
+    {
+        $hour = substr($mysqldate,11,2);
+        $minute = substr($mysqldate,14,2);
+        $second = substr($mysqldate,17,2);
+        $phpdate= mktime($hour,$minute,$second,$month,$day,$year);
+    }
+    else $phpdate= mktime(0,0,0,$month,$day,$year);
+
+    return $phpdate;
 }
 
 
