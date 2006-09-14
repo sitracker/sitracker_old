@@ -26,7 +26,7 @@ if ($_SESSION['auth'] != TRUE)
 {
     // External variables
     $id = cleanvar($_REQUEST['id']);
-    $page = cleanvar(str_replace('..','',str_replace('//','',str_replace(':','',urldecode($_REQUEST['page'])))));
+    $page = strip_tags(str_replace('..','',str_replace('//','',str_replace(':','',urldecode($_REQUEST['page'])))));
 
     // Invalid user, show log in form
     include('htmlheader.inc.php');

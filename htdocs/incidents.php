@@ -101,7 +101,7 @@ switch($type)
             break;
 
             default:
-                throw_error("Error invalid queue on query string:",$queue);
+                trigger_error("Invalid queue ($queue) on query string",E_USER_NOTICE);
             break;
         }
         echo "</h2>\n";

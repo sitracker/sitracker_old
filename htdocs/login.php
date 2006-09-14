@@ -20,7 +20,7 @@ session_regenerate_id(TRUE);
 $password = md5($_REQUEST['password']);
 $username = cleanvar($_REQUEST['username']);
 $public_browser = cleanvar($_REQUEST['public_browser']);
-$page = cleanvar(str_replace('..','',str_replace('//','',str_replace(':','',urldecode($_REQUEST['page'])))));
+$page = strip_tags(str_replace('..','',str_replace('//','',str_replace(':','',urldecode($_REQUEST['page'])))));
 
 if (authenticate($username, $password) == 1)
 {
