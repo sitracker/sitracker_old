@@ -349,7 +349,7 @@ else $reviewremain = 0;
 
 // Color the title bar according to the SLA and priority
 $class='';
-if ($slaremain <> 0)
+if ($slaremain <> 0 AND $incident->status!=2)
 {
     if (($slaremain - ($slatarget * ((100 - $CONFIG['notice_threshold']) /100))) < 0 ) $class='notice';
     if (($slaremain - ($slatarget * ((100 - $CONFIG['urgent_threshold']) /100))) < 0 ) $class='urgent';
