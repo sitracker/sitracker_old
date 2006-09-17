@@ -4543,6 +4543,33 @@ function date_picker($formelement)
     return $html;
 }
 
+function incident_open($incidentid)
+{
+    $sql = "SELECT id FROM incidents WHERE id='$incidentid' AND status!=2";
+    $result=mysql_query($sql);
+    if (mysql_error()) trigger_error("MySQL Query Error ".mysql_error(), E_USER_ERROR);
+    if (mysql_num_rows($result) > 0)
+    {
+        return "Yes";
+    }
+    else
+    {
+        $sql = "SELECT id FROM incidents WHERE id = '$incidentid'";
+        $result=mysql_query($sql);
+        if (mysql_error()) trigger_error("MySQL Query Error ".mysql_error(), E_USER_ERROR);
+        if (mysql_num_rows($result) > 0)
+        {
+            //closed
+            return "No";
+        }
+        else
+        {
+            //doesn't exist
+            return "Doesn't exist";
+        }
+    }
+}
+
 // -------------------------- // -------------------------- // --------------------------
 // leave this section at the bottom of functions.inc.php ================================
 

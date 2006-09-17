@@ -178,10 +178,11 @@ if ($incidentid=='')
 else
 {
     // check that the incident is still open.  i.e. status not = closed
-    $sql = "SELECT id FROM incidents WHERE id='$incidentid' AND status!=2";
-    $result=mysql_query($sql);
-    if (mysql_error()) trigger_error("MySQL Query Error ".mysql_error(), E_USER_ERROR);
-    if (mysql_num_rows($result) > 0)
+    //$sql = "SELECT id FROM incidents WHERE id='$incidentid' AND status!=2";
+    //$result=mysql_query($sql);
+    //if (mysql_error()) trigger_error("MySQL Query Error ".mysql_error(), E_USER_ERROR);
+    //if (mysql_num_rows($result) > 0)
+    if (incident_open($incidentid))
     {
         // retrieve the update body so that we can insert time headers
         $sql = "SELECT incidentid, bodytext, timestamp FROM updates WHERE id='$updateid'";

@@ -21,8 +21,6 @@ require('db_connect.inc.php');
 require('functions.inc.php');
 require('mime_email.class.php');
 
-
-
 // read the email from stdin (it should be piped to us by the MTA)
 $fp = fopen("php://stdin", "r");
 $rawemail = '';
@@ -90,9 +88,42 @@ if ($decoded_email->contenttype=='multipart/mixed'
                 break;
 
                 default:
-                    $message .= "Inline content of type {$block->mime_contenttype} ommitted.\n";
+                    //$message .= "Inline content of type {$block->mime_contenttype} ommitted.\n";
+
                     // FIXME we should treat these blocks as attachments
-            }
+                    // FIXME this code should be shared with below rather than copied on mass
+
+                    // try to figure out what delimeter is being used (for windows or unix)...
+                    $delim = (strstr($CONFIG['attachment_fspath'],"/")) ? "/" : "\\";
+
+                    $filename=str_replace(' ','_',$block->mime_contentdispositionname);
+                    if (empty($filename)) $filename = "part{$part}";
+                    echo "* FILE ATTACHMENT: $filename\n";
+                    $attachment[]=$filename;
+                    // Write the attachment
+                    $fa_dir = $CONFIG['attachment_fspath'].$incidentid;
+                    echo "FA DIR: $fa_dir\n";
+                    if (!file_exists($fa_dir))
+                    {
+                        if (!mkdir($fa_dir, 0775)) trigger_error("Failed to create incident attachment directory",E_USER_WARNING);
+                    }
+                    $fa_update_dir = $fa_dir . "{$delim}{$now}";
+                    if (!file_exists($fa__update_dir))
+                    {
+                        if (!mkdir($fa_update_dir, 0775)) trigger_error("Failed to create incident update attachment directory",E_USER_WARNING);
+                    }
+                    echo "About to write to ".$fa_update_dir.$delim.$filename."\n";
+                    if (is_writable($fa_update_dir.$delim)) //File doesn't exist yet .$filename
+                    {
+                        $fwp = fopen($fa_update_dir.$delim.$filename, 'a');
+                        // FIXME not actually writing content here yet
+                        //fwrite($fwp, "This is a test\n");
+                        fwrite($fwp, $block->mime_content);
+                        fclose($fwp);
+                    }
+                    else echo "NOT WRITABLE $filename\n";
+        
+                    }
         }
         else
         {
@@ -116,11 +147,12 @@ if ($decoded_email->contenttype=='multipart/mixed'
                 if (!mkdir($fa_update_dir, 0775)) trigger_error("Failed to create incident update attachment directory",E_USER_WARNING);
             }
             echo "About to write to ".$fa_update_dir.$delim.$filename."\n";
-            if (is_writable($fa_update_dir.$delim.$filename))
+            if (is_writable($fa_update_dir.$delim)) //File doesn't exist yet .$filename
             {
                 $fwp = fopen($fa_update_dir.$delim.$filename, 'a');
                 // FIXME not actually writing content here yet
-                fwrite($fwp, "This is a test\n");
+                //fwrite($fwp, "This is a test\n");
+                fwrite($fwp, $block->mime_content);
                 fclose($fwp);
             }
             else echo "NOT WRITABLE $filename\n";
@@ -168,22 +200,67 @@ $bodytext .= mysql_escape_string($message);
 
 if (empty($incidentid))
 {
+    // Add entry to the incident update log
+    $sql  = "INSERT INTO updates (incidentid, userid, type, bodytext, timestamp, customervisibility, currentstatus) ";
+    $sql .= "VALUES ('{$incidentid}', 0, 'emailin', '{$bodytext}', '{$now}', '$customer_visible', 1 )";
+    mysql_query($sql);
+    if (mysql_error()) trigger_error(mysql_error(),E_USER_WARNING);
+    $updateid = mysql_insert_id();
+
+    //new call
+    $sql = "INSERT INTO tempincoming (updateid, incidentid, emailfrom, subject, reason, contactid) ";
+    $sql.= "VALUES ('".$updateid."', '0', '".$decoded_email->from_name."', '".$decoded_email->subject."', 'Possible new call', '$contactid' )";
+    mysql_query($sql);
+    if (mysql_error()) trigger_error(mysql_error(),E_USER_WARNING);
+
     // This could be a new incident or just spam
     die('Invalid incident ID or incident ID not found');
 }
 else
 {
+    $incident_open = incident_open($incidentid);
+
+    if($incident_open != "Yes")
+    {
+        //Dont want to associate with a closed call
+        $oldincidentid = $incidentid;
+        $incidentid = 0;
+    }
     // Existing incident, new update:
     // Add entry to the incident update log
     $sql  = "INSERT INTO updates (incidentid, userid, type, bodytext, timestamp, customervisibility, currentstatus) ";
     $sql .= "VALUES ('{$incidentid}', 0, 'emailin', '{$bodytext}', '{$now}', '$customer_visible', 1 )";
     mysql_query($sql);
     if (mysql_error()) trigger_error(mysql_error(),E_USER_WARNING);
-
-    // Mark the incident as active
-    $sql = "UPDATE incidents SET status='1', lastupdated='".time()."', timeofnextaction='0' WHERE id='{$incidentid}'";
-    mysql_query($sql);
-    if (mysql_error()) trigger_error(mysql_error(),E_USER_WARNING);
+    $updateid = mysql_insert_id();
+    
+    if($incident_open == "Yes")
+    {
+        // Mark the incident as active
+        $sql = "UPDATE incidents SET status='1', lastupdated='".time()."', timeofnextaction='0' WHERE id='{$incidentid}'";
+        mysql_query($sql);
+        if (mysql_error()) trigger_error(mysql_error(),E_USER_WARNING);
+    }
+    else
+    {
+        //create record in tempincoming
+        if($incident_open == "No")
+        {
+            //incident closed
+            $sql = "INSERT INTO tempincoming (updateid, incidentid, emailfrom, subject, reason, contactid) ";
+            $sql.= "VALUES ('".$updateid."', '0', '".$decoded_email->from_name."', '".$decoded_email->subject."', 'Incident ".$oldincidentid." is closed', '$contactid' )";
+            mysql_query($sql);
+            if (mysql_error()) trigger_error(mysql_error(),E_USER_WARNING);
+        }
+        else
+        {
+            //new call
+            $sql = "INSERT INTO tempincoming (updateid, incidentid, emailfrom, subject, reason, contactid) ";
+            $sql.= "VALUES ('".$updateid."', '0', '".$decoded_email->from_name."', '".$decoded_email->subject."', 'Possible new call', '$contactid' )";
+            mysql_query($sql);
+            if (mysql_error()) trigger_error(mysql_error(),E_USER_WARNING);
+        }
+    }
 }
 
 ?>
