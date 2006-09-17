@@ -45,6 +45,7 @@ Changes in v3.24 - Unreleased
 * Improved accuracy of SLA calculation
 * Added ability to edit/delete software records
 * When an inicdent is closed pending-reassignments are remove as necessary
+* When an incident is closed any related incidents are notified of the closure.
 
 Changes in v3.23 - Released 10 April 2006
 -----------------------------------------------------------------------

@@ -339,6 +339,44 @@ else
                 $addition_errors_string .= "<p class='error'>Addition of incident update failed</p>\n";
             }
 
+            //notify related inicdents this has been closed 
+            $sql = "SELECT distinct (relatedid) FROM relatedincidents WHERE incidentid = '$id'";
+            $result = mysql_query($sql);
+            if (mysql_error()) trigger_error("MySQL Query Error ".mysql_error(), E_USER_ERROR);
+
+            $relatedincidents;
+
+            while($a = mysql_fetch_array($result))
+            {
+                $relatedincidents[] = $a[0];
+            }
+
+            $sql = "SELECT distinct (incidentid) FROM relatedincidents WHERE relatedid = '$id'";
+            $result = mysql_query($sql);
+            if (mysql_error()) trigger_error("MySQL Query Error ".mysql_error(), E_USER_ERROR);
+
+            while($a = mysql_fetch_array($result))
+            {
+                $relatedincidents[] = $a[0];
+            }
+            $uniquearray = array_unique($relatedincidents);
+            
+            foreach($uniquearray AS $relatedid)
+            {
+                //dont care if I'm related to myself
+                if($relatedid != $id)
+                {
+                    $sql  = "INSERT INTO updates (incidentid, userid, type, bodytext, timestamp) ";
+                    $sql .= "VALUES ('$relatedid', '{$sit[2]}', 'research', 'New Status: [b]Active[/b]<hr>Related incident [$id] has been closed', '$now')";
+                    $result = mysql_query($sql);
+                    if (mysql_error()) trigger_error("MySQL Query Error ".mysql_error(), E_USER_ERROR);
+
+                    $sql = "UPDATE incidents SET status = 1 WHERE id = '$relatedid'";
+                    $result = mysql_query($sql);
+                    if (mysql_error()) trigger_error("MySQL Query Error ".mysql_error(), E_USER_ERROR);
+                }
+            }
+
             //tidy up temp reassigns
             $sql = "DELETE FROM tempassigns WHERE incidentid = '$id'";
             $result = mysql_query($sql);
