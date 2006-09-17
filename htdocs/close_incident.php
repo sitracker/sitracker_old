@@ -338,6 +338,11 @@ else
                 $addition_errors = 1;
                 $addition_errors_string .= "<p class='error'>Addition of incident update failed</p>\n";
             }
+
+            //tidy up temp reassigns
+            $sql = "DELETE FROM tempassigns WHERE incidentid = '$id'";
+            $result = mysql_query($sql);
+            if (mysql_error()) trigger_error("MySQL Query Error ".mysql_error(), E_USER_ERROR);
         }
         $bodytext = "Closing Status: <b>" . closingstatus_name($closingstatus) . "</b>\n\n" . $bodytext;
 

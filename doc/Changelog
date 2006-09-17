@@ -44,6 +44,7 @@ Changes in v3.24 - Unreleased
   the the previously accessed page rather than the main page.
 * Improved accuracy of SLA calculation
 * Added ability to edit/delete software records
+* When an inicdent is closed pending-reassignments are remove as necessary
 
 Changes in v3.23 - Released 10 April 2006
 -----------------------------------------------------------------------
