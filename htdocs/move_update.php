@@ -234,6 +234,11 @@ else
             send_template_email('INCIDENT_UPDATED', $incidentid);
         }
 
+        //remove from tempincoming to prevent build up
+        $sql = "DELETE FROM tempincoming WHERE updateid='$updateid'";
+        mysql_query($sql);
+        if (mysql_error()) trigger_error("MySQL Query Error ".mysql_error(), E_USER_ERROR);
+
         journal(CFG_LOGGING_NORMAL, 'Incident Update Moved', "Incident update $update moved to incident $incidentid", CFG_JOURNAL_INCIDENTS, $incidentid);
 
         confirmation_page("2", "review_incoming_updates.php", "<h2>Move Successful</h2><p align='center'>Please wait while you are redirected...</p>");
