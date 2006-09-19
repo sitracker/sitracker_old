@@ -889,16 +889,21 @@ CREATE TABLE `system` (
   PRIMARY KEY  (`id`)
 ) ENGINE=MyISAM;
 
-
-CREATE TABLE `tempassigns` (
-  `incidentid` int(5) NOT NULL default '0',
-  `originalowner` int(5) NOT NULL default '0',
-  `userstatus` tinyint(4) NOT NULL default '1',
-  `assigned` enum('yes','no') NOT NULL default 'no',
-  PRIMARY KEY  (`incidentid`,`originalowner`),
-  KEY `assigned` (`assigned`)
-) ENGINE=MyISAM;
-
+CREATE TABLE `tasks` (
+  `id` int(11) NOT NULL auto_increment,
+  `name` varchar(255) default NULL,
+  `priority` tinyint(4) default NULL,
+  `owner` tinyint(4) NOT NULL default '0',
+  `duedate` datetime default NULL,
+  `startdate` datetime default NULL,
+  `completion` tinyint(4) default NULL,
+  `value` float(6,2) default NULL,
+  `distribution` enum('public','private') NOT NULL default 'public',
+  `created` datetime NOT NULL default '0000-00-00 00:00:00',
+  `lastupdated` timestamp NOT NULL default CURRENT_TIMESTAMP,
+  PRIMARY KEY  (`id`),
+  KEY `owner` (`owner`)
+) ENGINE=MyISAM AUTO_INCREMENT=1 ;
 
 CREATE TABLE `tempincoming` (
   `id` int(11) NOT NULL auto_increment,
@@ -1094,6 +1099,8 @@ INSERT INTO `vendors` VALUES (1,'Default');
 
 ";
 
+// ********************************************************************
+
 $upgrade_schema[321] = "CREATE TABLE `system`
   (`id` INT( 1 ) NOT NULL ,
   `version` FLOAT( 3, 2 ) DEFAULT '0.00' NOT NULL ,
@@ -1181,6 +1188,22 @@ INSERT INTO `emailtype` (`name`, `type`, `description`, `tofield`, `fromfield`,
 'Hi,\r\n\r\nIncident [<incidentid>] entitled <incidenttitle> has been reassigned to you.\r\n\r\nThe details of this incident are:\r\n\r\nPriority: <incidentpriority>\r\nContact: <contactname>\r\nSite: <contactsite>\r\n\r\n\r\nRegards\r\n<applicationname>\r\n\r\n\r\n---\r\n<todaysdate> - <applicationshortname> <applicationversion>',
 'hide', 'No');
 UPDATE emailtype SET `toField` = '<incidentreassignemailaddress>' WHERE `name` =  'INCIDENT_REASSIGNED_USER_NOTIFY';
+
+CREATE TABLE `tasks` (
+  `id` int(11) NOT NULL auto_increment,
+  `name` varchar(255) default NULL,
+  `priority` tinyint(4) default NULL,
+  `owner` tinyint(4) NOT NULL default '0',
+  `duedate` datetime default NULL,
+  `startdate` datetime default NULL,
+  `completion` tinyint(4) default NULL,
+  `value` float(6,2) default NULL,
+  `distribution` enum('public','private') NOT NULL default 'public',
+  `created` datetime NOT NULL default '0000-00-00 00:00:00',
+  `lastupdated` timestamp NOT NULL default CURRENT_TIMESTAMP,
+  PRIMARY KEY  (`id`),
+  KEY `owner` (`owner`)
+) ENGINE=MyISAM AUTO_INCREMENT=1 ;
 ";
 
 // Important: When making changes to the schema you must add SQL to make the alterations
