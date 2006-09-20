@@ -22,6 +22,7 @@ require('auth.inc.php');
 // External variables
 $productid = cleanvar($_REQUEST['productid']);
 $search_string = cleanvar($_REQUEST['search_string']);
+$sort = cleanvar($_REQUEST['sort']);
 
 include('htmlheader.inc.php');
 ?>
@@ -105,7 +106,11 @@ if ($search_string != '*')
         $sql .= "AND maintenance.product='$productid' ";
     }
 }
-$sql .= " ORDER BY sites.name ASC";
+if ($sort=='expiry') $sql .= "ORDER BY expirydate DESC";
+elseif ($sort=='id') $sql .= "ORDER BY maintenance.id ASC";
+elseif ($sort='product') $sql .= " ORDER BY products.name ASC";
+elseif ($sort='reseller') $sql .= " ORDER BY resellers.name ASC";
+else $sql .= " ORDER BY sites.name ASC";
 
 $result = mysql_query($sql);
 if (mysql_error()) trigger_error("MySQL Query Error ".mysql_error(), E_USER_ERROR);
@@ -135,15 +140,14 @@ else
     </p>
     <table align='center' style='width: 95%;'>
     <tr>
-        <th>ID</th>
-        <th>Product</th>
-        <th>Site</th>
-        <th>Reseller</th>
-        <th>Licence</th>
-        <th>Expiry Date</th>
-        <th width='200'>Notes</th>
-    </tr>
-    <?php
+        <?php
+        echo "<th><a href='{$_SERVER['PHP_SELF']}?search_string=".urlencode($search_string)."&amp;productid={$productid}&amp;sort=id'>ID</a></th>";
+        echo "<th><a href='{$_SERVER['PHP_SELF']}?search_string=".urlencode($search_string)."&amp;productid={$productid}&amp;sort=product'>Product</a></th>";
+        echo "<th><a href='{$_SERVER['PHP_SELF']}?search_string=".urlencode($search_string)."&amp;productid={$productid}&amp;sort=site'>Site</a></th>";
+        echo "<th>Reseller</th><th>Licence</th>";
+        echo "<th><a href='{$_SERVER['PHP_SELF']}?search_string=".urlencode($search_string)."&amp;productid={$productid}&amp;sort=expiry'>Expiry Date</a></th>";
+        echo "<th width='200'>Notes</th>";
+    echo "</tr>\n";
     $shade = 0;
     while ($results = mysql_fetch_array($result))
     {
