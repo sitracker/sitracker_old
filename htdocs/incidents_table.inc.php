@@ -56,8 +56,8 @@ while ($incidents = mysql_fetch_array($result))
         $updated = "Today @ ".date($CONFIG['dateformat_time'], $incidents['lastupdated']);
     elseif (date('dmy', $incidents['lastupdated']) == date('dmy', (time()-86400)))
         $updated = "Yesterday @ ".date($CONFIG['dateformat_time'], $incidents['lastupdated']);
-    elseif (date('dmy', $incidents['lastupdated']) < date('dmy', (time()-86400)) AND
-            date('dmy', $incidents['lastupdated']) > date('dmy', (time()-(86400*6))))
+    elseif ($incidents['lastupdated'] < $now-86400 AND
+            $incidents['lastupdated'] > $now-(86400*6))
         $updated = date('l', $incidents['lastupdated'])." @ ".date($CONFIG['dateformat_time'], $incidents['lastupdated']);
     else
         $updated = date($CONFIG['dateformat_datetime'], $incidents["lastupdated"]);

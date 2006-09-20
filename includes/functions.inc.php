@@ -1568,29 +1568,27 @@ function emailtype_drop_down($name, $id)
 
 
 
-/*  prints the HTML for a drop down list of     */
-/* priorities, with the given name and with the given id      */
-/* selected.                                                  */
+// prints the HTML for a drop down list of priorities, with the given name
+// and with the given id selected
 function priority_drop_down($name, $id, $max=4, $disable=FALSE)
 {
    // INL 8Oct02 - Removed DB Query
-
    $html = "<select id='priority' name='$name' ";
    if ($disable) $html .= "disabled='disabled'";
    $html .= ">";
    if ($id == 0) $html .= "<option selected='selected' value='0'></option>\n";
-   $html .= "<option value='1'";
+   $html .= "<option style='text-indent: 14px; background-image: url(./images/low_priority.gif); background-repeat:no-repeat;' value='1'";
      if ($id==1) $html .= " selected='selected'";
      $html .= ">Low</option>\n";
-   $html .= "<option value='2'";
+   $html .= "<option style='text-indent: 14px; background-image: url(./images/med_priority.gif); background-repeat:no-repeat;' value='2'";
      if ($id==2) $html .= " selected='selected'";
      $html .= ">Medium</option>\n";
-   $html .= "<option value='3'";
+   $html .= "<option style='text-indent: 14px; background-image: url(./images/high_priority.gif); background-repeat:no-repeat;' value='3'";
      if ($id==3) $html .= " selected='selected'";
      $html .= ">High</option>\n";
    if ($max >=4)
    {
-        $html .= "<option value='4'";
+        $html .= "<option style='text-indent: 14px; background-image: url(./images/crit_priority.gif); background-repeat:no-repeat;' value='4'";
         if ($id==4) $html .= " selected='selected'";
         $html .= ">Critical</option>\n";
    }
@@ -4542,6 +4540,17 @@ function date_picker($formelement)
     $html .= "<div name='$divid' id='$divid' style='position: absolute;'></div>";
     return $html;
 }
+
+
+function percent_bar($percent)
+{
+    if ($percent=='') $percent=0;
+    $html = "<div style='width: 100px; border: 1px solid #ccc; background-color: white; height: 12px; margin-left: auto; margin-right: auto;'>";
+    $html .= "<div style='text-align: center; height: 12px; font-size: 90%; width: {$percent}%; background: #B4D6B4;'>  {$percent}&#037;";
+    $html .= "</div></div>\n";
+    return $html;
+}
+
 
 function incident_open($incidentid)
 {

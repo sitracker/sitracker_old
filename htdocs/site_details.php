@@ -161,12 +161,12 @@ if (user_permission($sit[2],19)) // View contracts
         ?>
         <tr>
             <td class='<?php echo $class ?>'><a href="maintenance_details.php?id=<?php echo $results['maintid'] ?>">Contract <?php echo $results['maintid'] ?></a></td>
-            <td align='center' class='<?php echo $class ?>'><?php echo $results["product"] ?></td>
-            <td align='center' class='<?php echo $class ?>'><?php echo $results["reseller"] ?></td>
-            <td align='center' class='<?php echo $class ?>'><?php echo $results["licence_quantity"] ?> <?php echo $results["licence_type"] ?></td>
-            <td align='center' class='<?php echo $class ?>'><?php echo date($CONFIG['dateformat_date'], $results["expirydate"]); ?></td>
-            <td align='center' class='<?php echo $class ?>'><?php echo $results['admincontactsforenames'].' '.$results['admincontactssurname'] ?></td>
-            <td align='center' class='<?php echo $class ?>'><?php if ($results['maintnotes'] == '') echo '&nbsp;'; else echo nl2br($results['maintnotes']); ?></td>
+            <td class='<?php echo $class ?>'><?php echo $results["product"] ?></td>
+            <td class='<?php echo $class ?>'><?php echo $results["reseller"] ?></td>
+            <td class='<?php echo $class ?>'><?php echo $results["licence_quantity"] ?> <?php echo $results["licence_type"] ?></td>
+            <td class='<?php echo $class ?>'><?php echo date($CONFIG['dateformat_date'], $results["expirydate"]); ?></td>
+            <td class='<?php echo $class ?>'><?php echo $results['admincontactsforenames'].' '.$results['admincontactssurname'] ?></td>
+            <td class='<?php echo $class ?>'><?php if ($results['maintnotes'] == '') echo '&nbsp;'; else echo nl2br($results['maintnotes']); ?></td>
         </tr>
         <?php
         // invert shade

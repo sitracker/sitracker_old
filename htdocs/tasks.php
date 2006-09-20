@@ -37,17 +37,26 @@ if (mysql_error()) trigger_error(mysql_error(),E_USER_ERROR);
 if (mysql_num_rows($result) >=1 )
 {
     echo "<table align='center'>";
-    echo "<tr><th>ID</th><th>Task</th><th>Priority</th><th>Completion</th><th>Due Date</th><th>Start Date</th></tr>\n";
+    echo "<tr><th>ID</th><th>Task</th><th>Priority</th><th>Completion</th><th>Start Date</th><th>Due Date</th></tr>\n";
     $shade='shade1';
     while ($task = mysql_fetch_object($result))
     {
+        $duedate = mysql2date($task->duedate);
+        $startdate = mysql2date($task->startdate);
         echo "<tr class='$shade'>";
         echo "<td>{$task->id}</td>";
-        echo "<td>{$task->name}</td>";
-        echo "<td>{$task->priority}</td>";
-        echo "<td>{$task->completion}</td>";
-        echo "<td>{$task->duedate}</td>";
-        echo "<td>{$task->startdate}</td>";
+        echo "<td><a href='edit_task.php?id={$task->id}' class='info'>{$task->name}";
+        if (!empty($task->description)) echo "<span>".nl2br($task->description)."</span>";
+        echo "</a></td>";
+        echo "<td>".priority_name($task->priority)."</td>";
+        echo "<td>".percent_bar($task->completion)."</td>";
+        echo "<td>";
+        if ($task->startdate > 0) echo date($CONFIG['dateformat_date'],$startdate);
+        echo "</td>";
+        echo "<td>";
+        if ($task->duedate > 0) echo date($CONFIG['dateformat_date'],$duedate);
+        echo "</td>";
+
         echo "</tr>\n";
         if ($shade=='shade1') $shade='shade2';
         else $shade='shade1';
@@ -56,7 +65,7 @@ if (mysql_num_rows($result) >=1 )
 }
 else echo "<p align='center'>No tasks</p>";
 
-
+echo "<p align='center'><a href='add_task.php'>Add Task</a></p>";
 
 include('htmlfooter.inc.php');
 

@@ -892,6 +892,7 @@ CREATE TABLE `system` (
 CREATE TABLE `tasks` (
   `id` int(11) NOT NULL auto_increment,
   `name` varchar(255) default NULL,
+  `description` text default NULL,
   `priority` tinyint(4) default NULL,
   `owner` tinyint(4) NOT NULL default '0',
   `duedate` datetime default NULL,
@@ -903,7 +904,7 @@ CREATE TABLE `tasks` (
   `lastupdated` timestamp NOT NULL default CURRENT_TIMESTAMP,
   PRIMARY KEY  (`id`),
   KEY `owner` (`owner`)
-) ENGINE=MyISAM AUTO_INCREMENT=1 ;
+) ENGINE=MyISAM DEFAULT AUTO_INCREMENT=1 ;
 
 CREATE TABLE `tempassigns` (
   `incidentid` int(5) NOT NULL default '0',
