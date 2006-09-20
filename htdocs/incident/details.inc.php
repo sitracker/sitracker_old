@@ -70,10 +70,8 @@ if ($software_name!='' OR $incident->productversion != '' OR $incident->products
     }
     echo "<br />\n";
 }
-if ($incident->priority==1) echo "<img src='{$CONFIG['application_webpath']}images/low_priority.gif' width='10' height='16' alt='Low Priority' title='Low Priority' /> ";
-elseif ($incident->priority==2) echo "<img src='{$CONFIG['application_webpath']}images/med_priority.gif' width='10' height='16' alt='Medium Priority' title='Medium Priority' /> ";  // Medium
-elseif ($incident->priority==3) echo "<img src='{$CONFIG['application_webpath']}images/high_priority.gif' width='10' height='16' alt='High Priority' title='High Priority' /> ";  // High
-elseif ($incident->priority==4) echo "<img src='{$CONFIG['application_webpath']}images/crit_priority.gif' width='16' height='16' alt='Critical Priority' title='Critical Priority' />  ";  // Critical
+echo priority_icon($incident->priority)." ";
+
 if ($product_name!='') echo "{$product_name} / ";
 echo "{$servicelevel_tag}<br />\n";
 echo "Open for {$opened_for}, ";

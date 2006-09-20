@@ -1572,28 +1572,29 @@ function emailtype_drop_down($name, $id)
 // and with the given id selected
 function priority_drop_down($name, $id, $max=4, $disable=FALSE)
 {
-   // INL 8Oct02 - Removed DB Query
-   $html = "<select id='priority' name='$name' ";
-   if ($disable) $html .= "disabled='disabled'";
-   $html .= ">";
-   if ($id == 0) $html .= "<option selected='selected' value='0'></option>\n";
-   $html .= "<option style='text-indent: 14px; background-image: url(./images/low_priority.gif); background-repeat:no-repeat;' value='1'";
-     if ($id==1) $html .= " selected='selected'";
-     $html .= ">Low</option>\n";
-   $html .= "<option style='text-indent: 14px; background-image: url(./images/med_priority.gif); background-repeat:no-repeat;' value='2'";
-     if ($id==2) $html .= " selected='selected'";
-     $html .= ">Medium</option>\n";
-   $html .= "<option style='text-indent: 14px; background-image: url(./images/high_priority.gif); background-repeat:no-repeat;' value='3'";
-     if ($id==3) $html .= " selected='selected'";
-     $html .= ">High</option>\n";
-   if ($max >=4)
-   {
-        $html .= "<option style='text-indent: 14px; background-image: url(./images/crit_priority.gif); background-repeat:no-repeat;' value='4'";
+    global $CONFIG;
+    // INL 8Oct02 - Removed DB Query
+    $html = "<select id='priority' name='$name' ";
+    if ($disable) $html .= "disabled='disabled'";
+    $html .= ">";
+    if ($id == 0) $html .= "<option selected='selected' value='0'></option>\n";
+    $html .= "<option style='text-indent: 14px; background-image: url({$CONFIG['application_webpath']}/images/low_priority.gif); background-repeat:no-repeat;' value='1'";
+    if ($id==1) $html .= " selected='selected'";
+    $html .= ">Low</option>\n";
+    $html .= "<option style='text-indent: 14px; background-image: url({$CONFIG['application_webpath']}/images/med_priority.gif); background-repeat:no-repeat;' value='2'";
+    if ($id==2) $html .= " selected='selected'";
+    $html .= ">Medium</option>\n";
+    $html .= "<option style='text-indent: 14px; background-image: url({$CONFIG['application_webpath']}/images/high_priority.gif); background-repeat:no-repeat;' value='3'";
+    if ($id==3) $html .= " selected='selected'";
+    $html .= ">High</option>\n";
+    if ($max >=4)
+    {
+        $html .= "<option style='text-indent: 14px; background-image: url({$CONFIG['application_webpath']}/images/crit_priority.gif); background-repeat:no-repeat;' value='4'";
         if ($id==4) $html .= " selected='selected'";
         $html .= ">Critical</option>\n";
-   }
-   $html .= "</select>\n";
-   return $html;
+    }
+    $html .= "</select>\n";
+    return $html;
 }
 
 
