@@ -102,6 +102,7 @@ $hmenu[1031] = array (10=> array ( 'perm'=> 0, 'name'=> "Option1", 'url'=>""),
 $hmenu[0] = array (10=> array ( 'perm'=> 0, 'name'=> "{$CONFIG['application_shortname']}", 'url'=>"main.php", 'submenu'=>"10"),
                    20=> array ( 'perm'=> 11, 'name'=> "Customers", 'url'=>"browse_sites.php?search_string=A", 'submenu'=>"20"),
                    30=> array ( 'perm'=> 6, 'name'=> "Support", 'url'=>"incidents.php?user=current&amp;queue=1&amp;type=support", 'submenu'=>"30"),
+                   40=> array ( 'perm'=> 0, 'name'=> "Tasks", 'url'=>"tasks.php", 'submenu'=>"40"),
                    50=> array ( 'perm'=> 54, 'name'=> "KnowledgeBase", 'url'=>"browse_kb.php", 'submenu'=>"50"),
                    60=> array ( 'perm'=> 37, 'name'=> "Reports", 'url'=>"reports.php", 'submenu'=>"60"),
                    70=> array ( 'perm'=> 0, 'name'=> "Help", 'url'=>"help.php", 'submenu'=>"70")
@@ -183,10 +184,16 @@ $hmenu[30] = array (10=> array ( 'perm'=> 5, 'name'=> "Add Incident", 'url'=>"ad
 );
 
 
+// Tasks
+$hmenu[40] = array (10=> array ( 'perm'=> 0, 'name'=> "Add Task", 'url'=>"add_task.php"),
+                    20=> array ( 'perm'=> 0, 'name'=> "View Tasks", 'url'=>"tasks.php")
+);
+
 // KB
 $hmenu[50] = array (10=> array ( 'perm'=> 54, 'name'=> "New Article", 'url'=>"kb_add_article.php"),
                     20=> array ( 'perm'=> 54, 'name'=> "Browse", 'url'=>"browse_kb.php")
 );
+
 
 
 // Reports
