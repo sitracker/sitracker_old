@@ -905,6 +905,15 @@ CREATE TABLE `tasks` (
   KEY `owner` (`owner`)
 ) ENGINE=MyISAM AUTO_INCREMENT=1 ;
 
+CREATE TABLE `tempassigns` (
+  `incidentid` int(5) NOT NULL default '0',
+  `originalowner` int(5) NOT NULL default '0',
+  `userstatus` tinyint(4) NOT NULL default '1',
+  `assigned` enum('yes','no') NOT NULL default 'no',
+  PRIMARY KEY  (`incidentid`,`originalowner`),
+  KEY `assigned` (`assigned`)
+) ENGINE=MyISAM;
+
 CREATE TABLE `tempincoming` (
   `id` int(11) NOT NULL auto_increment,
   `updateid` int(11) NOT NULL default '0',
@@ -920,8 +929,6 @@ CREATE TABLE `tempincoming` (
   UNIQUE KEY `id` (`id`),
   KEY `updateid` (`updateid`)
 ) ENGINE=MyISAM COMMENT='Temporary store for incoming attachment paths' ;
-
-
 
 CREATE TABLE `updates` (
   `id` int(11) NOT NULL auto_increment,
