@@ -38,7 +38,7 @@ elseif ($sort=='name') $sql .= "ORDER BY name ASC";
 elseif ($sort=='priority') $sql .= "ORDER BY priority DESC";
 elseif ($sort=='completion') $sql .= "ORDER BY completion ASC";
 elseif ($sort=='startdate') $sql .= "ORDER BY startdate ASC";
-elseif ($sort=='duedate') $sql .= "ORDER BY duedate DESC";
+elseif ($sort=='duedate') $sql .= "ORDER BY duedate ASC";
 
 $result = mysql_query($sql);
 if (mysql_error()) trigger_error(mysql_error(),E_USER_ERROR);
@@ -64,10 +64,14 @@ if (mysql_num_rows($result) >=1 )
         echo "</a></td>";
         echo "<td>".priority_icon($task->priority).priority_name($task->priority)."</td>";
         echo "<td>".percent_bar($task->completion)."</td>";
-        echo "<td>";
+        echo "<td";
+        if ($startdate <= $now) echo " class='critical'";
+        echo ">";
         if ($task->startdate > 0) echo date($CONFIG['dateformat_date'],$startdate);
         echo "</td>";
-        echo "<td>";
+        echo "<td";
+        if ($duedate <= $now) echo " class='critical'";
+        echo ">";
         if ($task->duedate > 0) echo date($CONFIG['dateformat_date'],$duedate);
         echo "</td>";
 
