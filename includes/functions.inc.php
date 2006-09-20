@@ -3735,6 +3735,9 @@ function strip_anchor_tags ($string)
 // RETURNS: A php style date (unix).
 function mysql2date($mysqldate)
 {
+    // for the zero/blank case, return 0
+    if (empty($mysqldate)) return 0;
+    
     // Takes a MYSQL date and converts it to a proper PHP date
     $day = substr($mysqldate,8,2);
     $month = substr($mysqldate,5,2);
@@ -3757,15 +3760,18 @@ function mysql2date($mysqldate)
 // RETURNS: a php style date (unix).
 function mysqlts2date($mysqldate)
 {
-   // Takes a MYSQL date and converts it to a proper PHP date
-   $day = substr($mysqldate,6,2);
-   $month = substr($mysqldate,4,2);
-   $year = substr($mysqldate,0,4);
-   $hour = substr($mysqldate,8,2);
-   $minute = substr($mysqldate,10,2);
-   $second = substr($mysqldate,12,2);
-   $phpdate= mktime($hour,$minute,$second,$month,$day,$year);
-   return $phpdate;
+    // for the zero/blank case, return 0
+    if (empty($mysqldate)) return 0;
+    
+    // Takes a MYSQL date and converts it to a proper PHP date
+    $day = substr($mysqldate,6,2);
+    $month = substr($mysqldate,4,2);
+    $year = substr($mysqldate,0,4);
+    $hour = substr($mysqldate,8,2);
+    $minute = substr($mysqldate,10,2);
+    $second = substr($mysqldate,12,2);
+    $phpdate= mktime($hour,$minute,$second,$month,$day,$year);
+    return $phpdate;
 }
 
 
