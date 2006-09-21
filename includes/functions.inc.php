@@ -4632,7 +4632,40 @@ function colheader($colname, $coltitle, $sort, $order, $filter='', $defaultorder
     return $html;
 }
 
+// --------------------------------------------------------------------------------------------
+// Dashbaord widgets
 
+global $DASHBOARDCOMP;
+
+//$path = "./dashboard/";
+$path = "{$CONFIG['application_fspath']}/dashboard/";
+
+$dir_handle = @opendir($path) or die("Unable to open dashboard directory $path");
+
+while($file = readdir($dir_handle))
+{
+    if($file == "." || $file == "..")
+    {
+        //not interested in these two cases
+    }
+    else
+    {
+        include("{$CONFIG['application_fspath']}/dashboard/".$file);
+        $DASHBOARDCOMP[substr($file, 0, strlen($file)-4)] = substr($file, 0, strlen($file)-4);
+    } 
+}
+
+closedir($dir_handle);
+
+function dashboard_do($context)
+{
+    global $DASHBOARDCOMP;
+    $action = $DASHBOARDCOMP[$context];
+    if($action != NULL || $action != "")
+    {
+        $action();
+    }
+}
 
 // -------------------------- // -------------------------- // --------------------------
 // leave this section at the bottom of functions.inc.php ================================
