@@ -5,7 +5,6 @@ Whenever
   correct any inconsitancies
 
 v3.24
-* Improve Related Incidents to add Parents/Children?
 * When an incident is reassigned, check for related
   pending-reassignments and remove if necessary
 * Provide interface to configure external escalation partners (setup.php)

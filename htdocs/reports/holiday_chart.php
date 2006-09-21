@@ -130,7 +130,7 @@ while ($users = mysql_fetch_array($result))
             break;
 
 
-            case 10: // bank holidays
+            case 10: // public holidays
                 $shade="expired";
                 $style="border-left: 1px dotted blue; border-right: 1px dotted blue;";
             break;

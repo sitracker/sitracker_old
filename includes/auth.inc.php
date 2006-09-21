@@ -20,7 +20,9 @@ if (!isset($_SESSION['auth']) OR $_SESSION['auth'] == FALSE)
 {
     $_SESSION['auth'] = FALSE;
     // Invalid user
-    $page = urlencode($_SERVER['PHP_SELF'].'?'.$_SERVER['QUERY_STRING']);
+    $page = $_SERVER['PHP_SELF'];
+    if (!empty($_SERVER['QUERY_STRING'])) $page .= '?'.$_SERVER['QUERY_STRING'];
+    $page = urlencode($page);
     header("Location: {$CONFIG['application_webpath']}index.php?id=2&page=$page");
     exit;
 }

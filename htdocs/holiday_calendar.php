@@ -244,7 +244,7 @@ function draw_calendar($nmonth, $nyear)
                         if ($approved==2) $shade='urgent';
                     break;
 
-                    case 10: // bank holidays
+                    case 10: // public holidays
                         $style="border: 1px dotted blue; ";
                         // $style="background-image: url(images/halfday-am.gif";
                         $shade='shade1';
@@ -516,26 +516,25 @@ else
         else echo user_realname($user);
         echo "'s Calendar</h2>";
         if ($type==1) echo "<p align='center'>Used ".user_count_holidays($user, $type)." of ".user_holiday_entitlement($user)." days entitlement.<br />";
+
+        $sql = "SELECT * FROM holidaytypes";
+        $result = mysql_query($sql);
+        if (mysql_error()) trigger_error(mysql_error(),E_USER_ERROR);
+        echo "<form action='{$_SERVER['PHP_SELF']}' style='text-align: center;'>";
+        echo "Calendar: <select class='dropdown' name='type' onchange='window.location.href=this.options[this.selectedIndex].value'>\n";
+        while ($holidaytypes = mysql_fetch_object($result))
+        {
+            echo "<option value='{$_SERVER['PHP_SELF']}?user=$user&amp;type={$holidaytypes->id}'";
+            if ($type == $holidaytypes->id) echo " selected='selected'";
+            echo ">{$holidaytypes->name}</option>\n";
+        }
+        echo "</select></form>";
     }
     else
     {
-        // Bank Holidays are a special type = 10
-        echo "<h2>Set Bank Holidays</h2>";
+        // Public Holidays are a special type = 10
+        echo "<h2>Set Public Holidays</h2>";
     }
-    $sql = "SELECT * FROM holidaytypes";
-    $result = mysql_query($sql);
-    if (mysql_error()) trigger_error(mysql_error(),E_USER_ERROR);
-    echo "<form action='{$_SERVER['PHP_SELF']}' style='text-align: center;'>";
-    echo "Calendar: <select class='dropdown' name='type' onchange='window.location.href=this.options[this.selectedIndex].value'>\n";
-    while ($holidaytypes = mysql_fetch_object($result))
-    {
-        echo "<option value='{$_SERVER['PHP_SELF']}?user=$user&amp;type={$holidaytypes->id}'";
-        if ($type == $holidaytypes->id) echo " selected='selected'";
-        echo ">{$holidaytypes->name}</option>\n";
-
-    }
-    echo "</select></form>";
-
 
     echo "<p align='center'>";
     if (!empty($selectedday))
