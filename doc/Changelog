@@ -49,6 +49,7 @@ Changes in v3.24 - Unreleased
 * Added icons to priority selection dropdown for browsers that support it
 * Improved sorting of some tables, you can now click again on the column header
   to sort in the opposite direction ascending/descending
+* Holding queue locks now timeout after $CONFIG['record_lock_delay']
 
 Changes in v3.23 - Released 10 April 2006
 -----------------------------------------------------------------------

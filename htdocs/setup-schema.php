@@ -925,10 +925,10 @@ CREATE TABLE `tempincoming` (
   `subject` varchar(255) default NULL,
   `emailfrom` varchar(255) default NULL,
   `locked` tinyint(4) default NULL,
+  `lockeduntil` datetime default NULL,
   `reason` varchar(255) default NULL,
   `contactid` int(11) default NULL,
   PRIMARY KEY  (`id`),
-  UNIQUE KEY `id` (`id`),
   KEY `updateid` (`updateid`)
 ) ENGINE=MyISAM COMMENT='Temporary store for incoming attachment paths' ;
 
@@ -1213,6 +1213,8 @@ CREATE TABLE `tasks` (
   PRIMARY KEY  (`id`),
   KEY `owner` (`owner`)
 ) ENGINE=MyISAM AUTO_INCREMENT=1 ;
+
+ALTER TABLE `tempincoming` ADD `lockeduntil` DATETIME NULL AFTER `locked` ; 
 ";
 
 // Important: When making changes to the schema you must add SQL to make the alterations

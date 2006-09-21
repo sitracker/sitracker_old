@@ -87,16 +87,24 @@ include('htmlheader.inc.php');
 
 if ($lock=$_REQUEST['lock'])
 {
-    $sql = 'UPDATE tempincoming SET locked = '. $sit[2]. ' WHERE tempincoming.id='.$lock.' AND (locked = 0 OR locked IS NULL)';
+    $lockeduntil=date('Y-m-d H:i:s',$now+$CONFIG['record_lock_delay']);
+    $sql = "UPDATE tempincoming SET locked='{$sit[2]}', lockeduntil='{$lockeduntil}' WHERE tempincoming.id='{$lock}' AND (locked = 0 OR locked IS NULL)";
     $result = mysql_query($sql);
     if (mysql_error()) trigger_error("MySQL Query Error ".mysql_error(), E_USER_ERROR);
 }
-
-if ($unlock=$_REQUEST['unlock'])
+elseif ($unlock=$_REQUEST['unlock'])
 {
-    $sql = 'UPDATE tempincoming SET locked = 0 WHERE tempincoming.id='.$unlock.' AND locked = '.$sit[2];
+    $sql = "UPDATE tempincoming SET locked=NULL, lockeduntil=NULL WHERE tempincoming.id='{$unlock}' AND locked = '{$sit[2]}'";
     $result = mysql_query($sql);
     if (mysql_error()) trigger_error("MySQL Query Error ".mysql_error(), E_USER_ERROR);
+}
+else
+{
+    // Unlock any expired locks
+    $nowdatel=date('Y-m-d H:i:s');
+    $sql = "UPDATE tempincoming SET locked=NULL, lockeduntil=NULL WHERE UNIX_TIMESTAMP(lockeduntil) < '$now' ";
+    mysql_query($sql);
+    if (mysql_error()) trigger_error(mysql_error(),E_USER_ERROR);
 }
 
 if ($spam_string=$_REQUEST['delete_all_spam'])
