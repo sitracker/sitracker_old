@@ -67,12 +67,12 @@ if (mysql_num_rows($result) >=1 )
         echo "<td";
         if ($startdate > 0 AND $startdate <= $now) echo " class='critical'";
         echo ">";
-        if ($task->startdate > 0) echo date($CONFIG['dateformat_date'],$startdate);
+        if ($startdate > 0) echo date($CONFIG['dateformat_date'],$startdate);
         echo "</td>";
         echo "<td";
         if ($duedate > 0 AND $duedate <= $now) echo " class='critical'";
         echo ">";
-        if ($task->duedate > 0) echo date($CONFIG['dateformat_date'],$duedate);
+        if ($duedate > 0) echo date($CONFIG['dateformat_date'],$duedate);
         echo "</td>";
 
         echo "</tr>\n";
