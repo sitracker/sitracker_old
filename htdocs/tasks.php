@@ -65,7 +65,7 @@ if (mysql_num_rows($result) >=1 )
         echo "<td>".priority_icon($task->priority).priority_name($task->priority)."</td>";
         echo "<td>".percent_bar($task->completion)."</td>";
         echo "<td";
-        if ($startdate > 0 AND $startdate <= $now) echo " class='critical'";
+        if ($startdate > 0 AND $startdate <= $now) echo " class='notice'";
         echo ">";
         if ($startdate > 0) echo date($CONFIG['dateformat_date'],$startdate);
         echo "</td>";
