@@ -358,7 +358,7 @@ function draw_chart($month, $year)
                 if (date('D',mktime(0,0,0,$month,$day,$year))=='Sat')
                 {
                     $shade='expired';
-                    $html .= "<td class='$shade'><strong title='Week Number'>".substr(date('W',mktime(0,0,0,$month,$day,$year))+1,0, 1)."<br />".substr(date('W',mktime(0,0,0,$month,$day,$year))+1,1, 1)."</strong></td>";
+                    $html .= "<td class='$shade' style='text-align: center; font-size: 80%; border-left: 1px solid black;'><strong title='Week Number' >wk<br />".substr(date('W',mktime(0,0,0,$month,$day,$year))+1,0, 1)."".substr(date('W',mktime(0,0,0,$month,$day,$year))+1,1, 1)."</strong></td>";
                 }
                 elseif (date('D',mktime(0,0,0,$month,$day,$year))=='Sun') $html .= '';  // nothing
                 else
