@@ -30,9 +30,9 @@ switch ($action)
         $name = cleanvar($_REQUEST['name']);
         $description = cleanvar($_REQUEST['description']);
         $priority = cleanvar($_REQUEST['priority']);
-        if (!empty($_REQUEST['duedate'])) $duedate = date('Y-m-d',strtotime($_REQUEST['duedate']));
+        if (!empty($_REQUEST['duedate'])) $duedate = strtotime($_REQUEST['duedate']);
         else $duedate = '';
-        if (!empty($_REQUEST['startdate'])) $startdate = date('Y-m-d',strtotime($_REQUEST['startdate']));
+        if (!empty($_REQUEST['startdate'])) $startdate = strtotime($_REQUEST['startdate']);
         else $startdate = '';
         $completion = cleanvar($_REQUEST['completion']);
         $value = cleanvar($_REQUEST['value']);
@@ -41,6 +41,7 @@ switch ($action)
         // Validate input
         $error=array();
         if ($name=='') $error[]='Task name must not be blank';
+        if ($startdate > $duedate) $error[]='The start date cannot be after the due date';
         if (count($error) >= 1)
         {
             include('htmlheader.inc.php');
@@ -55,6 +56,8 @@ switch ($action)
         }
         else
         {
+            $startdate = date('Y-m-d',$startdate);
+            $duedate = date('Y-m-d',$duedate);
             $sql = "INSERT INTO tasks ";
             $sql .= "(name,description,priority,owner,duedate,startdate,completion,value,distribution,created) ";
             $sql .= "VALUES ('$name','$description','$priority','{$sit[2]}','$duedate','$startdate','$completion','$value','$distribution','".date('Y-m-d')."')";
@@ -72,11 +75,11 @@ switch ($action)
         echo "<form id='addtask' action='{$_SERVER['PHP_SELF']}' method='post'>";
         echo "<table class='vertical'>";
         echo "<tr><th>Title</th>";
-        echo "<td><input type='text' name='name' size='35' maxlength='255' /></tr>";
+        echo "<td><input type='text' name='name' size='35' maxlength='255' /></td></tr>";
         echo "<tr><th>Description</th>";
-        echo "<td><textarea name='description' rows='4' cols='30'></textarea></tr>";
+        echo "<td><textarea name='description' rows='4' cols='30'></textarea></td></tr>";
         echo "<tr><th>Priority</th>";
-        echo "<td>".priority_drop_down('priority',1)."</tr>";
+        echo "<td>".priority_drop_down('priority',1)."</td></tr>";
         echo "<tr><th>Start Date</th>";
         echo "<td><input type='text' name='startdate' id='startdate' size='10' /> ";
         echo date_picker('addtask.startdate');
@@ -86,12 +89,12 @@ switch ($action)
         echo date_picker('addtask.duedate');
         echo "</td></tr>";
         echo "<tr><th>Completion</th>";
-        echo "<td><input type='text' name='completion' size='3' maxlength='3' value='0' />&#037;</tr>";
+        echo "<td><input type='text' name='completion' size='3' maxlength='3' value='0' />&#037;</td></tr>";
         echo "<tr><th>Value</th>";
-        echo "<td><input type='text' name='value' size='6' maxlength='12' /></tr>";
+        echo "<td><input type='text' name='value' size='6' maxlength='12' /></td></tr>";
         echo "<tr><th>Privacy</th>";
         echo "<td><input type='radio' name='distribution' value='public' /> Public<br />";
-        echo "<input type='radio' name='distribution' checked='checked' value='private' /> Private</tr>";
+        echo "<input type='radio' name='distribution' checked='checked' value='private' /> Private</td></tr>";
         echo "</table>";
         echo "<p><input name='submit' type='submit' value='Add Task' /></p>";
         echo "<input type='hidden' name='action' value='addtask' />";

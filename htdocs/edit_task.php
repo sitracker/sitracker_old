@@ -31,9 +31,9 @@ switch ($action)
         $name = cleanvar($_REQUEST['name']);
         $description = cleanvar($_REQUEST['description']);
         $priority = cleanvar($_REQUEST['priority']);
-        if (!empty($_REQUEST['duedate'])) $duedate = date('Y-m-d',strtotime($_REQUEST['duedate']));
+        if (!empty($_REQUEST['duedate'])) $duedate = strtotime($_REQUEST['duedate']);
         else $duedate = '';
-        if (!empty($_REQUEST['startdate'])) $startdate = date('Y-m-d',strtotime($_REQUEST['startdate']));
+        if (!empty($_REQUEST['startdate'])) $startdate = strtotime($_REQUEST['startdate']);
         else $startdate = '';
         $completion = cleanvar($_REQUEST['completion']);
         $value = cleanvar($_REQUEST['value']);
@@ -42,6 +42,7 @@ switch ($action)
         // Validate input
         $error=array();
         if ($name=='') $error[]='Task name must not be blank';
+        if ($startdate > $duedate) $error[]='The start date cannot be after the due date';
         if (count($error) >= 1)
         {
             include('htmlheader.inc.php');
@@ -56,6 +57,8 @@ switch ($action)
         }
         else
         {
+            $startdate = date('Y-m-d',$startdate);
+            $duedate = date('Y-m-d',$duedate);
             $sql = "UPDATE tasks ";
             $sql .= "SET name='$name', description='$description', priority='$priority', ";
             $sql .= "duedate='$duedate', startdate='$startdate', ";
@@ -85,14 +88,14 @@ switch ($action)
                 echo "<form id='edittask' action='{$_SERVER['PHP_SELF']}' method='post'>";
                 echo "<table class='vertical'>";
                 echo "<tr><th>Title</th>";
-                echo "<td><input type='text' name='name' size='35' maxlength='255' value='{$task->name}' /></tr>";
+                echo "<td><input type='text' name='name' size='35' maxlength='255' value='{$task->name}' /></td></tr>";
                 echo "<tr><th>Description</th>";
-                echo "<td><textarea name='description' rows='4' cols='30'>{$task->description}</textarea></tr>";
+                echo "<td><textarea name='description' rows='4' cols='30'>{$task->description}</textarea></td></tr>";
                 echo "<tr><th>Priority</th>";
-                echo "<td>".priority_drop_down('priority',$task->priority)."</tr>";
+                echo "<td>".priority_drop_down('priority',$task->priority)."</td></tr>";
                 echo "<tr><th>Start Date</th>";
                 echo "<td><input type='text' name='startdate' id='startdate' size='10' value='";
-                if ($startdate > 0) date('Y-m-d',$startdate);
+                if ($startdate > 0) echo date('Y-m-d',$startdate);
                 echo "' /> ";
                 echo date_picker('edittask.startdate');
                 echo "</td></tr>";
@@ -103,9 +106,9 @@ switch ($action)
                 echo date_picker('edittask.duedate');
                 echo "</td></tr>";
                 echo "<tr><th>Completion</th>";
-                echo "<td><input type='text' name='completion' size='3' maxlength='3' value='{$task->completion}' />&#037;</tr>";
+                echo "<td><input type='text' name='completion' size='3' maxlength='3' value='{$task->completion}' />&#037;</td></tr>";
                 echo "<tr><th>Value</th>";
-                echo "<td><input type='text' name='value' size='6' maxlength='12' value='{$task->value}' /></tr>";
+                echo "<td><input type='text' name='value' size='6' maxlength='12' value='{$task->value}' /></td></tr>";
                 echo "<tr><th>Privacy</th>";
                 echo "<td>";
                 echo "<input type='radio' name='distribution' ";
@@ -113,7 +116,7 @@ switch ($action)
                 echo "value='public' /> Public<br />";
                 echo "<input type='radio' name='distribution' ";
                 if ($task->distribution=='private') echo "checked='checked' ";
-                echo "value='private' /> Private</tr>";
+                echo "value='private' /> Private</td></tr>";
                 echo "</table>";
                 echo "<p><input name='submit' type='submit' value='Edit Task' /></p>";
                 echo "<input type='hidden' name='action' value='edittask' />";

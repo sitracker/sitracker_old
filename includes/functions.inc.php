@@ -4552,7 +4552,7 @@ function date_picker($formelement)
     $divid = "datediv".str_replace('.','',$formelement);
     $html = "<img src='{$CONFIG['application_webpath']}images/icons/kdeclassic/16x16/actions/1day.png' ";
     $html .= "onmouseup=\"toggleDatePicker('$divid','$formelement')\" width='16' height='16' alt='date picker' style='cursor: pointer;' />";
-    $html .= "<div name='$divid' id='$divid' style='position: absolute;'></div>";
+    $html .= "<div id='$divid' style='position: absolute;'></div>";
     return $html;
 }
 
