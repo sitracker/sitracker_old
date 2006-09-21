@@ -23,6 +23,7 @@ include('htmlheader.inc.php');
 echo "<script type=\"text/javascript\" src=\"scripts/dojo/dojo.js\"></script>";
 ?>
 <script type="text/javascript">
+<!--
     dojo.require("dojo.dnd.*");
     dojo.require("dojo.event.*");
 
@@ -57,22 +58,19 @@ echo "<script type=\"text/javascript\" src=\"scripts/dojo/dojo.js\"></script>";
     }
 
     dojo.event.connect(dojo, "loaded", "init");
+-->
 </script>
 <?php
 
-echo "<table border=0 width=\"99%\"><tr><td width=\"33%\"><div id='dragList1'>AAA</div></td><td width=\"33%\">";
+echo "<table border=\"0\" width=\"99%\"><tr><td width=\"33%\"><div id='dragList1'>AAA</div></td><td width=\"33%\">";
 
 
 echo "<div style='height: 400px;'  id='dragList2'>";
-echo "<div class='windowbox' style='width: 95%'>";
 
 dashboard_do("dashboard_random_tip");
 
-
 dashboard_do("dashboard_statistics");
 
-
-echo "</div>";
 echo "</div>";
 
 
@@ -80,7 +78,7 @@ echo "</td><td width=\"33%\" valign=\"top\">";
 
 dashboard_do("users_incidents");
 
-echo "</td></table>";
+echo "</td></tr></table>";
 
 
 // Check users email address
