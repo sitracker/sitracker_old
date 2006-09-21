@@ -4644,13 +4644,13 @@ $dir_handle = @opendir($path) or die("Unable to open dashboard directory $path")
 
 while($file = readdir($dir_handle))
 {
-    if($file == "." || $file == "..")
+    if(substr($file,0,1) == ".")
     {
-        //not interested in these two cases
+        //not interested if the file begins with a dot
     }
     else
     {
-        include("{$CONFIG['application_fspath']}/dashboard/".$file);
+        include("{$CONFIG['application_fspath']}dashboard/".$file);
         $DASHBOARDCOMP[substr($file, 0, strlen($file)-4)] = substr($file, 0, strlen($file)-4);
     } 
 }
