@@ -20,6 +20,7 @@ require('auth.inc.php');
 
 // External variables
 $expired = cleanvar($_REQUEST['expired']);
+$output = cleanvar($_REQUEST['output']);
 
 // show search expired maintenance form
 if (empty($expired))
@@ -27,9 +28,9 @@ if (empty($expired))
     include('htmlheader.inc.php');
     ?>
     <h2>Search Expired Contracts</h2>
-    <form action="<?php echo $_SERVER['PHP_SELF']; ?>" method="post">
+    <form action="<?php echo $_SERVER['PHP_SELF']; ?>" method="get">
     <p>Show Contracts Expired Within <input maxlength='3' name="expired" size='3' type="text" /> Days</p>
-    <p><input checked name="show" type=radio value="terminated"> Terminated <input name="show" type=radio value="nonterminated" /> Non-terminated</p>
+    <p><input checked='checked' name="show" type='radio' value="terminated"> Terminated <input name="show" type='radio' value="nonterminated" /> Non-terminated</p>
     <?php
     echo "<p align='center'>Output: ";
     echo "<select name='output'>";

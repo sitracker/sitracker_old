@@ -11,6 +11,7 @@ v3.24
 * Allow holidays to be cancelled after they've been approved, cancellations
   will need to be approved too probably?
 * Mark previous holidays as 'spent' when holiday entitlement is changed
+* Ability to add resellers add_reseller.php (on menu but missing)
 
 v3.25
 * Incoming email handler

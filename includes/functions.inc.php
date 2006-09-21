@@ -2507,6 +2507,7 @@ function site_count_maintenance($id)
 // given id selected.
 function maintenance_drop_down($name, $id)
 {
+    // FIXME make maintenance_drop_down a hierarchical selection box sites/contracts
     // extract all maintenance contracts
     $sql  = "SELECT sites.name AS sitename, products.name AS productname, maintenance.id AS id FROM maintenance, sites, products ";
     $sql .= "WHERE site=sites.id AND product=products.id ORDER BY sites.name ASC";
@@ -4650,9 +4651,11 @@ while($file = readdir($dir_handle))
     }
     else
     {
+        // Not sure about this wildcard include, it's a potential security
+        // risk - Ivan 21Sep06
         include("{$CONFIG['application_fspath']}dashboard/".$file);
         $DASHBOARDCOMP[substr($file, 0, strlen($file)-4)] = substr($file, 0, strlen($file)-4);
-    } 
+    }
 }
 
 closedir($dir_handle);
