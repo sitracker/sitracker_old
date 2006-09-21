@@ -23,6 +23,7 @@ require('auth.inc.php');
 // External variables
 $user = cleanvar($_REQUEST['user']);
 $sort = cleanvar($_REQUEST['sort']);
+$order = cleanvar($_REQUEST['order']);
 
 // Defaults
 if (empty($user)) $user=$sit[2];
@@ -32,25 +33,34 @@ include('htmlheader.inc.php');
 echo "<h2>".user_realname($user) . "'s Tasks:</h2>";
 
 
-$sql = "SELECT * FROM tasks WHERE owner='$user' ";
-if ($sort=='id') $sql .= "ORDER BY id ASC";
-elseif ($sort=='name') $sql .= "ORDER BY name ASC";
-elseif ($sort=='priority') $sql .= "ORDER BY priority DESC";
-elseif ($sort=='completion') $sql .= "ORDER BY completion ASC";
-elseif ($sort=='startdate') $sql .= "ORDER BY startdate ASC";
-elseif ($sort=='duedate') $sql .= "ORDER BY duedate ASC";
+$sql = "SELECT * FROM tasks WHERE owner='$user' AND (completion < 100 OR completion='' OR completion IS NULL) ";
+if (!empty($sort))
+{
+    if ($sort=='id') $sql .= "ORDER BY id ";
+    elseif ($sort=='name') $sql .= "ORDER BY name ";
+    elseif ($sort=='priority') $sql .= "ORDER BY priority ";
+    elseif ($sort=='completion') $sql .= "ORDER BY completion ";
+    elseif ($sort=='startdate') $sql .= "ORDER BY startdate ";
+    elseif ($sort=='duedate') $sql .= "ORDER BY duedate ";
+    if ($order=='a' OR $order=='ASC' OR $order='') $sql .= "ASC";
+    else $sql .= "DESC";
+}
 
 $result = mysql_query($sql);
 if (mysql_error()) trigger_error(mysql_error(),E_USER_ERROR);
+
+
+
 if (mysql_num_rows($result) >=1 )
 {
     echo "<table align='center'>";
-    echo "<tr><th><a href='{$_SERVER['PHP_SELF']}?sort=id'>ID</a></th>";
-    echo "<th><a href='{$_SERVER['PHP_SELF']}?sort=name'>Task</a></th>";
-    echo "<th><a href='{$_SERVER['PHP_SELF']}?sort=priority'>Priority</a></th>";
-    echo "<th><a href='{$_SERVER['PHP_SELF']}?sort=completion'>Completion</a></th>";
-    echo "<th><a href='{$_SERVER['PHP_SELF']}?sort=startdate'>Start Date</a></th>";
-    echo "<th><a href='{$_SERVER['PHP_SELF']}?sort=duedate'>Due Date</a></th>";
+    echo "<tr>";
+    echo colheader('id', 'ID', $sort, $order);
+    echo colheader('name', 'Task', $sort, $order);
+    echo colheader('priority', 'Priority', $sort, $order);
+    echo colheader('completion', 'Completion', $sort, $order);
+    echo colheader('startdate', 'Start Date', $sort, $order);
+    echo colheader('duedate', 'Due Date', $sort, $order);
     echo "</tr>\n";
     $shade='shade1';
     while ($task = mysql_fetch_object($result))

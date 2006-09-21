@@ -1740,6 +1740,7 @@ function priority_name($id)
         case 2: $value = 'Medium'; break;
         case 3: $value = 'High'; break;
         case 4: $value = 'Critical'; break;
+        case '': $value = 'Not set'; break;
         default: $value = 'Unknown'; break;
    }
    return $value;
@@ -3744,7 +3745,7 @@ function mysql2date($mysqldate)
 {
     // for the zero/blank case, return 0
     if (empty($mysqldate)) return 0;
-    
+
     // Takes a MYSQL date and converts it to a proper PHP date
     $day = substr($mysqldate,8,2);
     $month = substr($mysqldate,5,2);
@@ -3769,7 +3770,7 @@ function mysqlts2date($mysqldate)
 {
     // for the zero/blank case, return 0
     if (empty($mysqldate)) return 0;
-    
+
     // Takes a MYSQL date and converts it to a proper PHP date
     $day = substr($mysqldate,6,2);
     $month = substr($mysqldate,4,2);
@@ -4592,6 +4593,46 @@ function incident_open($incidentid)
         }
     }
 }
+
+// Return HTML for a table column header (th and /th) with links for sorting
+// Filter parameter can be an assocative array containing fieldnames and values
+// to pass on the url for data filtering purposes
+function colheader($colname, $coltitle, $sort, $order, $filter='', $defaultorder='a')
+{
+    global $CONFIG;
+    $html = "<th>";
+    $qsappend='';
+    if (!empty($filter) AND is_array($filter))
+    {
+        foreach ($filter AS $key => $var)
+        {
+            if ($var != '') $qsappend .= "&amp;{$key}=".urlencode($var);
+        }
+    }
+    else $qsappend='';
+    if ($sort==$colname)
+    {
+        //if ($order=='') $order=$defaultorder;
+        if ($order=='a')
+        {
+            $html .= "<a href='{$_SERVER['PHP_SELF']}?sort=$colname&amp;order=d{$qsappend}'>{$coltitle}</a> ";
+            $html .= "<img src='{$CONFIG['application_webpath']}images/sort_a.png' width='5' height='5' alt='Sort Ascending' style='border: 0px;' /> ";
+        }
+        else
+        {
+            $html .= "<a href='{$_SERVER['PHP_SELF']}?sort=$colname&amp;order=a{$qsappend}'>{$coltitle}</a> ";
+            $html .= "<img src='{$CONFIG['application_webpath']}images/sort_d.png' width='5' height='5' alt='Sort Descending' style='border: 0px;' /> ";
+        }
+    }
+    else
+    {
+        $html .= "<a href='{$_SERVER['PHP_SELF']}?sort=$colname&amp;order={$defaultorder}{$qsappend}'>{$coltitle}</a> ";
+    }
+    $html .= "</th>";
+    return $html;
+}
+
+
 
 // -------------------------- // -------------------------- // --------------------------
 // leave this section at the bottom of functions.inc.php ================================

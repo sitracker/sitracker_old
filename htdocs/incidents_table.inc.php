@@ -24,18 +24,18 @@ echo "<table align='center' style='width:95%;'>";
 <col width='10%'></col><col width='23%'></col><col width='17%'></col><col width='7%'></col><col width='10%'></col><col width='15%'></col><col width='10%'></col><col width='10%'></col><col width='8%'></col>
 <tr>
 <?php
-echo "<th title='{$rowcount} Incidents'><a href='{$_SERVER['PHP_SELF']}{$querystring}sort=id&amp;sortorder={$newsortorder}'>ID</a></th>\n";
-?>
-<th align='left'><a href="<?php echo $_SERVER['PHP_SELF']; ?><?php echo $querystring ?>sort=title&amp;sortorder=<?php echo $newsortorder; ?>">Title</a></th>
-<th align='left'><a href="<?php echo $_SERVER['PHP_SELF'] ?><?php echo $querystring ?>sort=contact&amp;sortorder=<?php echo $newsortorder; ?>">Contact</a></th>
-<th><a href="<?php echo $_SERVER['PHP_SELF'] ?><?php echo $querystring ?>sort=priority&amp;sortorder=<?php echo $newsortorder; ?>">Priority</a></th>
-<th><a href="<?php echo $_SERVER['PHP_SELF'] ?><?php echo $querystring ?>sort=status&amp;sortorder=<?php echo $newsortorder; ?>">Status</a></th>
-<th><a href="<?php echo $_SERVER['PHP_SELF'] ?><?php echo $querystring ?>sort=lastupdated&amp;sortorder=<?php echo $newsortorder; ?>">Last Update</a></th>
-<th><a href="<?php echo $_SERVER['PHP_SELF'] ?><?php echo $querystring ?>sort=nextaction&amp;sortorder=<?php echo $newsortorder; ?>">SLA Target</a></th>
-<th><a href="<?php $_SERVER['PHP_SELF'] ?><?php echo $querystring ?>sort=duration&amp;sortorder=<?php echo $newsortorder; ?>">Info</a></th>
-</tr>
-<?php
-
+$filter=array('queue' => $queue,
+              'user' => $user,
+              'type' => $type);
+echo colheader('id','ID',$sort, $order, $filter);
+echo colheader('title','Title',$sort, $order, $filter);
+echo colheader('contact','Contact',$sort, $order, $filter);
+echo colheader('priority','Priority',$sort, $order, $filter);
+echo colheader('status','Status',$sort, $order, $filter);
+echo colheader('lastupdate','Last Updated',$sort, $order, $filter);
+echo colheader('nextaction','SLA Target',$sort, $order, $filter);
+echo colheader('duration','Info',$sort, $order, $filter);
+echo "</tr>";
 // Display the Support Incidents Themselves
 $shade = 0;
 while ($incidents = mysql_fetch_array($result))

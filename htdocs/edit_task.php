@@ -80,6 +80,8 @@ switch ($action)
         {
             while ($task = mysql_fetch_object($result))
             {
+                $startdate=mysql2date($task->startdate);
+                $duedate=mysql2date($task->duedate);
                 echo "<form id='edittask' action='{$_SERVER['PHP_SELF']}' method='post'>";
                 echo "<table class='vertical'>";
                 echo "<tr><th>Title</th>";
@@ -89,11 +91,15 @@ switch ($action)
                 echo "<tr><th>Priority</th>";
                 echo "<td>".priority_drop_down('priority',$task->priority)."</tr>";
                 echo "<tr><th>Start Date</th>";
-                echo "<td><input type='text' name='startdate' id='startdate' size='10' value='".date('Y-m-d',mysql2date($task->startdate))."' /> ";
+                echo "<td><input type='text' name='startdate' id='startdate' size='10' value='";
+                if ($startdate > 0) date('Y-m-d',$startdate);
+                echo "' /> ";
                 echo date_picker('edittask.startdate');
                 echo "</td></tr>";
                 echo "<tr><th>Due Date</th>";
-                echo "<td><input type='text' name='duedate' id='duedate' size='10' value='".date('Y-m-d',mysql2date($task->duedate))."' /> ";
+                echo "<td><input type='text' name='duedate' id='duedate' size='10' value='";
+                if ($duedate > 0) echo date('Y-m-d',$duedate);
+                echo "' /> ";
                 echo date_picker('edittask.duedate');
                 echo "</td></tr>";
                 echo "<tr><th>Completion</th>";

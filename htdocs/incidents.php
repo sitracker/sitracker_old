@@ -24,7 +24,7 @@ $type = cleanvar($_REQUEST['type']);
 $user = cleanvar($_REQUEST['user']);
 $queue = cleanvar($_REQUEST['queue']);
 $sort = cleanvar($_REQUEST['sort']);
-$sortorder = cleanvar($_REQUEST['sortorder']);
+$order = cleanvar($_REQUEST['order']);
 
 // Defaults
 if (empty($type)) $type='support';
@@ -107,19 +107,24 @@ switch($type)
         echo "</h2>\n";
 
         // Create SQL for Sorting
-        switch($sort)
+        if (!empty($sort))
         {
-            case 'id': $sql .= " ORDER BY id $sortorder"; break;
-            case 'title': $sql .= " ORDER BY title $sortorder"; break;
-            case 'contact': $sql .= " ORDER BY contacts.surname $sortorder, contacts.forenames $sortorder"; break;
-            case 'priority': $sql .=  " ORDER BY priority $sortorder, lastupdated ASC"; break;
-            case 'status': $sql .= " ORDER BY status $sortorder"; break;
-            case 'lastupdated': $sql .= " ORDER BY lastupdated $sortorder"; break;
-            case 'duration': $sql .= " ORDER BY duration $sortorder"; break;
-            case 'nextaction': $sql .= " ORDER BY timetonextaction $sortorder"; break;
-            default:   $sql .= " ORDER BY priority DESC, lastupdated ASC"; break;
-        }
+            if ($order=='a' OR $order=='ASC' OR $order='') $sortorder = "ASC";
+            else $sortorder = "DESC";
+            switch($sort)
+            {
+                case 'id': $sql .= " ORDER BY id $sortorder"; break;
+                case 'title': $sql .= " ORDER BY title $sortorder"; break;
+                case 'contact': $sql .= " ORDER BY contacts.surname $sortorder, contacts.forenames $sortorder"; break;
+                case 'priority': $sql .=  " ORDER BY priority $sortorder, lastupdated ASC"; break;
+                case 'status': $sql .= " ORDER BY status $sortorder"; break;
+                case 'lastupdated': $sql .= " ORDER BY lastupdated $sortorder"; break;
+                case 'duration': $sql .= " ORDER BY duration $sortorder"; break;
+                case 'nextaction': $sql .= " ORDER BY timetonextaction $sortorder"; break;
+                default:   $sql .= " ORDER BY priority DESC, lastupdated ASC"; break;
+            }
 
+        }
         $result = mysql_query($sql);
         if (mysql_error()) trigger_error("MySQL Query Error ".mysql_error(), E_USER_ERROR);
         $rowcount = mysql_num_rows($result);

@@ -23,6 +23,7 @@ require('auth.inc.php');
 $productid = cleanvar($_REQUEST['productid']);
 $search_string = cleanvar($_REQUEST['search_string']);
 $sort = cleanvar($_REQUEST['sort']);
+$order = cleanvar($_REQUEST['order']);
 
 include('htmlheader.inc.php');
 ?>
@@ -77,11 +78,13 @@ echo product_drop_down('productid', $productid)
 <?php
 
 // check input
+/*
 if (empty($search_string) && empty($productid))
 {
     $errors = 1;
     echo "<p class='error'>You must enter a search string</p>\n";
 }
+*/
 
 // search for criteria
 $sql  = "SELECT maintenance.id AS maintid, sites.name AS site, products.name AS product, resellers.name AS reseller, licence_quantity, ";
@@ -106,18 +109,27 @@ if ($search_string != '*')
         $sql .= "AND maintenance.product='$productid' ";
     }
 }
-if ($sort=='expiry') $sql .= "ORDER BY expirydate DESC";
-elseif ($sort=='id') $sql .= "ORDER BY maintenance.id ASC";
-elseif ($sort='product') $sql .= " ORDER BY products.name ASC";
-elseif ($sort='reseller') $sql .= " ORDER BY resellers.name ASC";
-else $sql .= " ORDER BY sites.name ASC";
+if (!empty($sort))
+{
+    if ($sort=='expiry') $sql .= "ORDER BY expirydate ";
+    elseif ($sort=='id') $sql .= "ORDER BY maintenance.id ";
+    elseif ($sort=='product') $sql .= " ORDER BY products.name ";
+    elseif ($sort=='site') $sql .= " ORDER BY sites.name ";
+    elseif ($sort=='reseller') $sql .= " ORDER BY resellers.name ";
+    else $sql .= " ORDER BY sites.name ";
+
+    if ($order=='a' OR $order=='ASC' OR $order='') $sql .= "ASC";
+    else $sql .= "DESC";
+}
 
 $result = mysql_query($sql);
 if (mysql_error()) trigger_error("MySQL Query Error ".mysql_error(), E_USER_ERROR);
 
 if (mysql_num_rows($result) == 0)
 {
-    echo "<p align='center'>Sorry, unable to find any maintenance contracts matching <em>'$search_string</em>'</p>\n";
+    echo "<p align='center'>Sorry, unable to find any maintenance contracts";
+    if (!empty($search_string)) echo " matching '<em>{$search_string}</em>";
+    echo "</p>\n";
 }
 else
 {
@@ -130,22 +142,23 @@ else
         window.open(URL, "contact_details_window", "toolbar=no,status=yes,menubar=no,scrollbars=yes,resizable=yes,width=450,height=240");
     }
     </script>
-    <p align='center'>Displaying <?php echo mysql_num_rows($result) ?> contract(s) matching <em>'<?php echo $search_string; ?>'</em>
     <?php
-    if ($productid)
-    {
-        echo " where product matches <i>'".product_name($productid)."'</i>";
-    }
+    echo "<p align='center'>Displaying ".mysql_num_rows($result)." contract(s)";
+    if (!empty($search_string)) echo " matching '<em>{$search_string}</em>";
+    if ($productid) echo " where product matches <em>'".product_name($productid)."'</em>";
+    echo "</p>\n";
     ?>
-    </p>
     <table align='center' style='width: 95%;'>
     <tr>
         <?php
-        echo "<th><a href='{$_SERVER['PHP_SELF']}?search_string=".urlencode($search_string)."&amp;productid={$productid}&amp;sort=id'>ID</a></th>";
-        echo "<th><a href='{$_SERVER['PHP_SELF']}?search_string=".urlencode($search_string)."&amp;productid={$productid}&amp;sort=product'>Product</a></th>";
-        echo "<th><a href='{$_SERVER['PHP_SELF']}?search_string=".urlencode($search_string)."&amp;productid={$productid}&amp;sort=site'>Site</a></th>";
-        echo "<th>Reseller</th><th>Licence</th>";
-        echo "<th><a href='{$_SERVER['PHP_SELF']}?search_string=".urlencode($search_string)."&amp;productid={$productid}&amp;sort=expiry'>Expiry Date</a></th>";
+        $filter=array('search_string' => $search_string,
+                      'productid' => $productid);
+        echo colheader('id', 'ID', $sort, $order, $filter);
+        echo colheader('product', 'Product', $sort, $order, $filter);
+        echo colheader('site', 'Site', $sort, $order, $filter);
+        echo colheader('reseller', 'Reseller', $sort, $order. $filter);
+        echo "<th>Licence</th>";
+        echo colheader('expiry', 'Expiry Date', $sort, $order, $filter);
         echo "<th width='200'>Notes</th>";
     echo "</tr>\n";
     $shade = 0;

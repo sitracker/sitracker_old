@@ -22,7 +22,9 @@ require('auth.inc.php');
 
 // External variables
 $sort = cleanvar($_REQUEST['sort']);
+$order = cleanvar($_REQUEST['order']);
 $groupid = cleanvar($_REQUEST['gid']);
+
 
 // By default show users in home group
 if ($groupid=='all') $filtergroup = 'all';
@@ -61,77 +63,47 @@ if ($numgroups >= 1)
 }
 
 $sql  = "SELECT * FROM users WHERE status!=0 ";  // status=0 means account disabled
-if ($numgroups >= 1 AND $filtergroup==0) $sql .= "AND (groupid='{$filtergroup}' OR groupid='') ";
-elseif ($numgroups < 1 OR $filtergroup=='all') {} // Do nothing
+if ($numgroups >= 1 AND $filtergroup=='0') $sql .= "AND (groupid='0' OR groupid='' OR groupid IS NULL) ";
+elseif ($numgroups < 1 OR $filtergroup=='all') { $sql .= "AND 1=1 "; }
 else $sql .= "AND groupid='{$filtergroup}'";
 
-// sort users by realname by default
-if ($sort == "realname")
+// Sorting
+if (!empty($sort))
 {
-    $sql .= " ORDER BY realname ASC";
+    if ($sort == "realname") $sql .= " ORDER BY realname ";
+    elseif ($sort == "jobtitle") $sql .= " ORDER BY title ";
+    elseif ($sort == "email") $sql .= " ORDER BY email ";
+    elseif ($sort == "phone") $sql .= " ORDER BY phone ";
+    elseif ($sort == "fax") $sql .= " ORDER BY fax ";
+    elseif ($sort == "status") $sql .= " ORDER BY status ";
+    elseif ($sort == "accepting") $sql .= " ORDER BY accepting ";
+    else $sql .= " ORDER BY realname ";
+
+    if ($order=='a' OR $order=='ASC' OR $order='') $sql .= "ASC";
+    else $sql .= "DESC";
 }
-// sort incidents by job title
-elseif ($sort == "jobtitle")
-{
-    $sql .= " ORDER BY title ASC";
-}
-// sort incidents by email
-elseif ($sort == "email")
-{
-    $sql .= " ORDER BY email ASC";
-}
-// sort incidents by phone
-elseif ($sort == "phone")
-{
-    $sql .= " ORDER BY phone ASC";
-}
-// sort incidents by fax
-elseif ($sort == "fax")
-{
-    $sql .= " ORDER BY fax ASC";
-}
-// sort incidents by status
-elseif ($sort == "status")
-{
-    $sql .= " ORDER BY status ASC";
-}
-// sort incidents by accepting calls
-elseif ($sort == "accepting")
-{
-    $sql .= " ORDER BY accepting ASC";
-}
-else $sql .= " ORDER BY realname ASC";
 
 $result = mysql_query($sql);
 if (mysql_error()) trigger_error("MySQL Query Error ".mysql_error(), E_USER_ERROR);
 
-
-
-
-
-?>
-
-<table align='center' style='width: 95%;'>
-<tr>
-    <th align='left'><a href="<?php echo $_SERVER['PHP_SELF'] ?>?sort=realname">Name</a></th>
-    <th colspan='5'>Incidents in Queue</th>
-    <th><a href="<?php echo $_SERVER['PHP_SELF'] ?>?sort=phone">Phone</a></th>
-    <th>Mobile</th>
-    <th><a href="<?php echo $_SERVER['PHP_SELF'] ?>?sort=status">Status</a></th>
-    <th><a href="<?php echo $_SERVER['PHP_SELF'] ?>?sort=accepting">Accepting</a></th>
-</tr>
-<tr>
-    <th></th>
-    <th align='center'>Action Needed / Waiting</th>
-    <?php
-    echo "<th align='center'>".priority_icon(4)."</th>";
-    echo "<th align='center'>".priority_icon(3)."</th>";
-    echo "<th align='center'>".priority_icon(2)."</th>";
-    echo "<th align='center'>".priority_icon(1)."</th>";
-    ?>
-    <th colspan='7'></th>
-</tr>
-<?php
+echo "<table align='center' style='width: 95%;'>";
+echo "<tr>";
+$filter=array('gid' => $filtergroup);
+echo colheader('realname', 'Name', $sort, $order, $filter);
+echo "<th colspan='5'>Incidents in Queue</th>";
+echo colheader('phone','Phone',$sort, $order, $filter);
+echo colheader('mobile','Mobile',$sort, $order, $filter);
+echo colheader('status','Status',$sort, $order, $filter);
+echo colheader('accepting','Accepting',$sort, $order, $filter);
+echo "</tr><tr>";
+echo "<th></th>";
+echo "<th align='center'>Action Needed / Waiting</th>";
+echo "<th align='center'>".priority_icon(4)."</th>";
+echo "<th align='center'>".priority_icon(3)."</th>";
+echo "<th align='center'>".priority_icon(2)."</th>";
+echo "<th align='center'>".priority_icon(1)."</th>";
+echo "<th colspan='7'></th>";
+echo "</tr>\n";
 
 // show results
 $shade = 0;
