@@ -36,7 +36,7 @@ function generate_row($update)
     $html_row.="<td width='20%'><a id='{$update['id']}' class='info' style='cursor:help;'>";
     if (empty($update['subject'])) $update['subject']='Untitled';
     $html_row.=htmlentities($update['subject'],ENT_QUOTES);
-    $html_row.='<span>'.nl2br(htmlentities($updatebodytext,ENT_QUOTES)).'</span></a></td>';
+    $html_row.='<span>'.parse_updatebody($updatebodytext).'</span></a></td>';
     $html_row.="<td align='center' width='20%'>".$update['reason'].'</td>';
     $html_row.="<td align='center' width='20%'>";
     if (($update['locked'] != $sit[2]) && ($update['locked']>0))
@@ -192,7 +192,7 @@ echo "<br /><br />"; //gap
 echo "<h2>New incidents</h2>";
 echo "<p align='center'>Incidents that haven't been assigned to anyone yet</p>";
 echo "<table align='center' style='width: 95%;'>";
-echo "<tr><th title='Opened'>Date</th><th title='Product'>Product</th>";
+echo "<tr><th title='Opened'>Date</th><th>From</th>";
 echo "<th title='Incident Title'>Subject</th><th>Reason</th>";
 echo "<th>Operation</th></tr>\n";
 $sql = "SELECT * FROM incidents WHERE owner='0' AND status!='2'";
@@ -201,15 +201,19 @@ if (mysql_num_rows($result) >= 1)
 {
     while ($new = mysql_fetch_object($result))
     {
+        // Get Last Update
+        list($update_userid, $update_type, $update_currentowner, $update_currentstatus, $update_body, $update_timestamp, $update_nextaction, $update_id)=incident_lastupdate($new->id);
+        $update_body = parse_updatebody($update_body);
         echo "<tr class='shade1'>";
-        echo "<td>".date($CONFIG['dateformat_datetime'], $new->opened)."</td>";
-        echo "<td>".product_name($new->product)." / ".software_name($new->softwareid)."</td>";
-	echo "<td>".$new->title."</td>";
-	echo "<td style='text-align:center;'>Unassigned</td>";
-	echo "<td style='text-align:center;'>";
-	echo "<a href= \"javascript:incident_details_window('{$new->id}','holdingview');\" title='View this incident'>View</a> | ";
-	echo "<a href= \"javascript:wt_winpopup('reassign_incident.php?id={$new->id}&amp;reason=Initial%20assignment%20to%20engineer&amp;popup=yes','mini');\" title='Assign this incident'>Assign</a></td>";
-	echo "</tr>";
+        echo "<td align='center'>".date($CONFIG['dateformat_datetime'], $new->opened)."</td>";
+        echo "<td>".contact_realname($new->contact)."</td>";
+        echo "<td>".product_name($new->product)." / ".software_name($new->softwareid)."<br />";
+        echo "[{$new->id}] <a href=\"javascript:incident_details_window('{$new->id}','holdingview');\" class='info'>{$new->title}<span>{$update_body}</span></a></td>";
+        echo "<td style='text-align:center;'>Unassigned</td>";
+        echo "<td style='text-align:center;'>";
+        echo "<a href= \"javascript:incident_details_window('{$new->id}','holdingview');\" title='View this incident'>View</a> | ";
+        echo "<a href= \"javascript:wt_winpopup('reassign_incident.php?id={$new->id}&amp;reason=Initial%20assignment%20to%20engineer&amp;popup=yes','mini');\" title='Assign this incident'>Assign</a></td>";
+        echo "</tr>";
     }
 }
 
@@ -235,7 +239,7 @@ if (mysql_num_rows($result) >= 1)
         if (($assign->owner == $assign->originalowner || $assign->towner == $assign->originalowner) AND $useraccepting=='no')
         {
             echo "<tr class='shade1'>";
-            echo "<td>".date($CONFIG['dateformat_datetime'], $assign->lastupdated)."</td>";
+            echo "<td align='center'>".date($CONFIG['dateformat_datetime'], $assign->lastupdated)."</td>";
             echo "<td>".user_realname($assign->originalowner)."</td>";
             echo "<td>[<a href=\"javascript:wt_winpopup('incident_details.php?id={$assign->id}&amp;popup=yes', 'mini')\">{$assign->id}</a>] {$assign->title}</td>";
             $userstatus=userstatus_name($assign->userstatus);

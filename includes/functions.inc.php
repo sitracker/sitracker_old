@@ -1815,7 +1815,10 @@ function incident_lastupdate($id)
 
         }
         mysql_free_result($result);
-        return array($update['userid'], $update['type'] ,$update['currentowner'], $update['currentstatus'], stripslashes($update['body']), $update['timestamp'], $update['nextaction'], $update['id']);
+        // Remove Tags from update Body
+        $update['body']=trim($update['body']);
+        $update['body'] = stripslashes($update['body']);
+        return array($update['userid'], $update['type'] ,$update['currentowner'], $update['currentstatus'], $update['body'], $update['timestamp'], $update['nextaction'], $update['id']);
     }
 }
 
@@ -4513,7 +4516,8 @@ function bbcode($text)
                         7 => '/\[img\](.+?)\[\/img\]/s',
                         8 => '/\[color\=(.+?)\](.+?)\[\/color\]/s',
                         9 => '/\[size\=(.+?)\](.+?)\[\/size\]/s',
-                        10 => '/\[code\](.+?)\[\/code\]/s');
+                        10 => '/\[code\](.+?)\[\/code\]/s',
+                        11 => '/\[hr\]/s');
 
     $bbcode_replace = array(0 => '<strong>$1</strong>',
                             1 => '<em>$1</em>',
@@ -4525,7 +4529,8 @@ function bbcode($text)
                             7 => '<img src="$1" alt="User submitted image" title="User submitted image"/>',
                             8 => '<span style="color:$1">$2</span>',
                             9 => '<span style="font-size:$1">$2</span>',
-                            10 => '<code>$1</code>');
+                            10 => '<code>$1</code>',
+                            11 => '<hr />');
 
     return preg_replace($bbcode_regex, $bbcode_replace, $text);
 }
@@ -4633,8 +4638,30 @@ function colheader($colname, $coltitle, $sort, $order, $filter='', $defaultorder
     return $html;
 }
 
+function parse_updatebody($updatebody)
+{
+    if (!empty($updatebody))
+    {
+        $updatebody=str_replace("&lt;hr&gt;", "[hr]\n", $updatebody);
+        $updatebody=strip_tags($updatebody);
+        $updatebody=nl2br(htmlspecialchars($updatebody,ENT_COMPAT));
+        $updatebody=str_replace("&amp;quot;", "&quot;", $updatebody);
+        $updatebody=str_replace("&amp;gt;", "&gt;", $updatebody);
+        $updatebody=str_replace("&amp;lt;", "&lt;", $updatebody);
+        // Insert path to attachments
+        $updatebody = preg_replace("/\[\[att\]\](.*?)\[\[\/att\]\]/","$1", $updatebody);
+        //remove tags that are incompatable with tool tip
+        $updatebody = strip_bbcode_tooltip($updatebody);
+        //then show compatable BBCode
+        $updatebody = bbcode($updatebody);
+        if (strlen($updatebody)>490) $updatebody .= '...';
+    }
+
+    return $updatebody;
+}
+
 // --------------------------------------------------------------------------------------------
-// Dashbaord widgets
+// Dashboard widgets
 
 global $DASHBOARDCOMP;
 

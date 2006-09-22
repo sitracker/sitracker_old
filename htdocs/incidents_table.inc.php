@@ -101,21 +101,7 @@ while ($incidents = mysql_fetch_array($result))
     ##echo "-->";
 
     // Remove Tags from update Body
-    $update_body=trim($update_body);
-    if (!empty($update_body))
-    {
-        $update_body=strip_tags($update_body);
-        $update_body=nl2br(htmlspecialchars($update_body));
-        $update_body=str_replace("&amp;gt;", "&gt;", $update_body);
-        $update_body=str_replace("&amp;lt;", "&lt;", $update_body);
-        // Insert path to attachments
-        $update_body = preg_replace("/\[\[att\]\](.*?)\[\[\/att\]\]/","$1", $update_body);
-        //remove tags that are incompatable with tool tip
-        $update_body = strip_bbcode_tooltip($update_body);
-        //then show compatable BBCode
-        $update_body = bbcode($update_body);
-        if (strlen($update_body)>490) $update_body .= '...';
-    }
+    $update_body = parse_updatebody($update_body);
     $update_user = user_realname($update_userid);
 
     // ======= Row Colors / Shading =======
