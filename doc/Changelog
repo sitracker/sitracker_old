@@ -50,6 +50,7 @@ Changes in v3.24 - Unreleased
 * Improved sorting of some tables, you can now click again on the column header
   to sort in the opposite direction ascending/descending
 * Holding queue locks now timeout after $CONFIG['record_lock_delay']
+* Ability to delete multiple held emails in one go
 
 Changes in v3.23 - Released 10 April 2006
 -----------------------------------------------------------------------

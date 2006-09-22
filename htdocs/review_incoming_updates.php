@@ -31,6 +31,7 @@ function generate_row($update)
     if ($updatebodytext=='') $updatebodytext='&nbsp;';
 
     $html_row="<tr class='shade1'>";
+    $html_row.="<td><input type='checkbox' name='selected[]' value='".$update['id']."' /></td>";
     $html_row.="<td align='center' width='20%'>".date($CONFIG['dateformat_datetime'],$update['timestamp']).'</td>';
     $html_row.="<td width='20%'>".htmlentities($update['emailfrom'],ENT_QUOTES)."</td>";
     $html_row.="<td width='20%'><a id='{$update['id']}' class='info' style='cursor:help;'>";
@@ -83,6 +84,7 @@ function deldir($location)
 
 $title = 'Review Held Updates';
 $refresh = $_SESSION['incident_refresh'];
+$selected = $_REQUEST['selected'];
 include('htmlheader.inc.php');
 
 if ($lock=$_REQUEST['lock'])
@@ -129,6 +131,25 @@ if ($spam_string=$_REQUEST['delete_all_spam'])
     unset($spam_array);
 }
 
+if(!empty($selected))
+{
+    foreach($selected as $updateid)
+    {
+        // We delete using ID and timestamp to make sure we dont' delete the wrong update by accident
+        $sql = "DELETE FROM updates WHERE id='$updateid'";
+        mysql_query($sql);
+        if (mysql_error()) trigger_error("MySQL Query Error ".mysql_error(), E_USER_ERROR);
+        
+        $sql = "DELETE FROM tempincoming WHERE updateid='$updateid'";
+        mysql_query($sql);
+        if (mysql_error()) trigger_error("MySQL Query Error ".mysql_error(), E_USER_ERROR);
+        $path=$incident_attachment_fspath.'updates/'.$updateid;
+        if (file_exists($path)) deldir($path);
+        
+        journal(CFG_LOGGING_NORMAL, 'Incident Log Entry Deleted', "Incident Log Entry $updateid was deleted", CFG_JOURNAL_INCIDENTS);
+    }
+}
+
 // extract updates
 $sql  = 'SELECT updates.id as id, updates.bodytext as bodytext, tempincoming.emailfrom as emailfrom, tempincoming.subject as subject, ';
 $sql .= 'updates.timestamp as timestamp, tempincoming.incidentid as incidentid, tempincoming.id as tempid, tempincoming.locked as locked, ';
@@ -139,7 +160,7 @@ $result = mysql_query($sql);
 if (mysql_error()) trigger_error("MySQL Query Error ".mysql_error(), E_USER_ERROR);
 $countresults=mysql_num_rows($result);
 echo "<h2>Held Email";
-if ($countresults !=1) echo 's';
+if ($countresults >1) echo 's';
 echo " ($countresults total) </h2>";
 echo "<p align='center'>Incoming email that cannot be handled automatically</p>";
 ?>
@@ -149,8 +170,10 @@ echo "<p align='center'>Incoming email that cannot be handled automatically</p>"
         return window.confirm("This item will be permanently deleted.  Are you sure you want to continue?");
     }
 </script>
+<form action='review_incoming_updates.php' name='held_emails'>
 <table align='center' style='width: 95%'>
 <tr>
+<th></th>
 <th>Date</th>
 <th>From</th>
 <th>Subject</th>
@@ -162,7 +185,19 @@ if ($countresults) mysql_data_seek($result, 0);
 
 while ($updates = mysql_fetch_array($result))
     if (!stristr($updates['subject'],$CONFIG['spam_email_subject'])) echo generate_row($updates);
+
+if($countresults > 0) echo "<tr><td><a href=\"javascript: submitform()\" onclick='return confirm_delete();'>Delete</a></td></tr>";
 echo "</table>\n<br /><br />\n";
+
+?>
+<script language="JavaScript">
+function submitform()
+{
+  document.held_emails.submit();
+}
+</script>
+<?php
+echo "</form>";
 echo "<h2>Spam Emails</h2>\n";
 echo "<p align='center'>Incoming email that is suspected to be spam</p>";
 
