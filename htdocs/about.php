@@ -51,9 +51,13 @@ Copyright &copy; 1999 - 2002 Erik Arvidsson. Licensed under the GPL.</p>
 <p align='center'>KDEClassic Icon theme<br />
 Completely free for commercial and non-commercial use.</p>
 
-<p align='center'>whatever:hover (csshover.htc) 1.41 by <a hfref='http://www.xs4all.nl/~peterned/'>Peter Nederlof</a><br />
+<p align='center'>whatever:hover (csshover.htc) 1.41 by <a href='http://www.xs4all.nl/~peterned/'>Peter Nederlof</a><br />
 &copy; 2005 - Peter Nederlof.  Licensed under the LGPL.</p>
 
+<p align='center'>Dojo 0.3.1 by <a href='http://dojotoolkit.org/'>The Dojo Foundation</a><br />
+Copyright &copy; 2004-2006, The Dojo Foundation. Licensed under the BSD license.</p>
+
+        
 </td></tr>
 <tr><td class='shade1' colspan="2">Licence:</td></tr>
 <tr><td class='shade2' colspan='2'>
