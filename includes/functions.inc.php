@@ -4639,7 +4639,7 @@ function colheader($colname, $coltitle, $sort, $order, $filter='', $defaultorder
 global $DASHBOARDCOMP;
 
 //$path = "./dashboard/";
-$path = "{$CONFIG['application_fspath']}/dashboard/";
+$path = "{$CONFIG['application_fspath']}dashboard/";
 
 $dir_handle = @opendir($path) or die("Unable to open dashboard directory $path");
 
