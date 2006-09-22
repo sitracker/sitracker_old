@@ -41,7 +41,6 @@ if (empty($submit))
         ?>
         <form action="<?php echo $_SERVER['PHP_SELF'] ?>" method="post" name="editform">
         <table class='vertical'>
-        <tr><th>Edit Incident:</th><td><h3><?php echo $id; ?></h3></td></tr>
         <tr><th>Title:</th><td><input maxlength='150' name="title" size='40' type="text" value="<?php echo stripslashes($incident['title']) ?>" /></td></tr>
         <tr><th>Important:</th>
         <td>Changing the contact or software will not reassign this incident to another contract.
