@@ -35,7 +35,7 @@ echo "<script type=\"text/javascript\" src=\"scripts/dojo/dojo.js\"></script>";
         // list one
         var dl = byId("dragList1");
         new dojo.dnd.HtmlDropTarget(dl, ["li1"]);
-        var lis = dl.getElementsByTagName("div");
+        var lis = dl.getElementsByTagName("span");
         for(var x=0; x<lis.length; x++){
             new dojo.dnd.HtmlDragSource(lis[x], "li1");
         }
@@ -43,17 +43,17 @@ echo "<script type=\"text/javascript\" src=\"scripts/dojo/dojo.js\"></script>";
         // list two
         var dl = byId("dragList2");
         new dojo.dnd.HtmlDropTarget(dl, ["li1"]);
-        var lis = dl.getElementsByTagName("div");
+        var lis = dl.getElementsByTagName("span");
         for(var x=0; x<lis.length; x++){
             new dojo.dnd.HtmlDragSource(lis[x], "li1");
         }
 
         // list three
         var dl = byId("dragList3");
-        new dojo.dnd.HtmlDropTarget(dl, ["li2"]);
-        var lis = dl.getElementsByTagName("li");
+        new dojo.dnd.HtmlDropTarget(dl, ["li1"]);
+        var lis = dl.getElementsByTagName("span");
         for(var x=0; x<lis.length; x++){
-            new dojo.dnd.HtmlDragSource(lis[x], "li2");
+            new dojo.dnd.HtmlDragSource(lis[x], "li1");
         }
     }
 
@@ -62,10 +62,17 @@ echo "<script type=\"text/javascript\" src=\"scripts/dojo/dojo.js\"></script>";
 </script>
 <?php
 
-echo "<table border=\"0\" width=\"99%\"><tr><td width=\"33%\"><div id='dragList1'>AAA</div></td><td width=\"33%\">";
+echo "<table border=\"0\" width=\"99%\"><tr>";
+echo "<td width=\"33%\" valign='top'>";
+echo "<div id='dragList1' style='vertical-align: top;'>";
+
+dashboard_do("dashboard_tasks");
+
+echo "</div>";
+echo "</td><td width=\"33%\" valign='top'>";
 
 
-echo "<div style='height: 400px;'  id='dragList2'>";
+echo "<div style='height: 400px;' id='dragList2'>";
 
 dashboard_do("dashboard_random_tip");
 
@@ -76,7 +83,11 @@ echo "</div>";
 
 echo "</td><td width=\"33%\" valign=\"top\">";
 
+echo "<div style='height: 400px;'  id='dragList3'>";
+
 dashboard_do("users_incidents");
+
+echo "</div>";
 
 echo "</td></tr></table>";
 

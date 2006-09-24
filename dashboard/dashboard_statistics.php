@@ -45,7 +45,7 @@ function dashboard_statistics()
     $kbpublished=mysql_num_rows($result);
     mysql_free_result($result);
 
-
+    echo "<span id=dragList2>";
     echo "<div class='windowbox' style='width: 95%'>";
     echo "<div class='windowtitle'><a href='statistics.php'>{$i18n_TODAYS_STATS}</a></div>";
     echo "<div class='window'>";
@@ -76,6 +76,7 @@ function dashboard_statistics()
 
     echo "</div>";
     echo "</div>";
+    echo "</span>";
 }
 
 ?>

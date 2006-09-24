@@ -19,11 +19,28 @@ if (realpath(__FILE__) == realpath($_SERVER['SCRIPT_FILENAME']))
 }
 
 if ($CONFIG['debug']) echo "<!-- Support Incidents Table -->";
-echo "<table align='center' style='width:95%;'>";
-?>
-<col width='10%'></col><col width='23%'></col><col width='17%'></col><col width='7%'></col><col width='10%'></col><col width='15%'></col><col width='10%'></col><col width='10%'></col><col width='8%'></col>
-<tr>
-<?php
+
+if(empty($incidents_minimal)) echo "<table align='center' style='width:95%;'>";
+else echo  "<table align='center' style='width:99%;'>";
+
+if(!empty($incidents_minimal)) echo "<col width='15%'></col>";
+else echo "<col width='10%'></col>";
+if(!empty($incidents_minimal)) echo "<col width='30%'></col>";
+else echo "<col width='23%'></col>";
+if(!empty($incidents_minimal)) echo "<col width='23%'></col>";
+else echo "<col width='17%'></col>";
+if(!empty($incidents_minimal)) echo "<col width='7%'></col>";
+else echo "<col width='7%'></col>";
+if(empty($incidents_minimal)) echo "<col width='10%'></col>";
+if(!empty($incidents_minimal)) echo "<col width='30%'></col>";
+else echo "<col width='15%'></col>";
+if(!empty($incidents_minimal)) echo "<col width='15%'></col>";
+else echo "<col width='10%'></col>";
+if(empty($incidents_minimal)) echo "<col width='10%'></col>";
+if(empty($incidents_minimal)) echo "<col width='8%'></col>";
+
+echo "<tr>";
+
 $filter=array('queue' => $queue,
               'user' => $user,
               'type' => $type);
@@ -31,10 +48,10 @@ echo colheader('id','ID',$sort, $order, $filter);
 echo colheader('title','Title',$sort, $order, $filter);
 echo colheader('contact','Contact',$sort, $order, $filter);
 echo colheader('priority','Priority',$sort, $order, $filter);
-echo colheader('status','Status',$sort, $order, $filter);
+if(empty($incidents_minimal)) echo colheader('status','Status',$sort, $order, $filter);
 echo colheader('lastupdate','Last Updated',$sort, $order, $filter);
-echo colheader('nextaction','SLA Target',$sort, $order, $filter);
-echo colheader('duration','Info',$sort, $order, $filter);
+if(empty($incidents_minimal)) echo colheader('nextaction','SLA Target',$sort, $order, $filter);
+if(empty($incidents_minimal)) echo colheader('duration','Info',$sort, $order, $filter);
 echo "</tr>";
 // Display the Support Incidents Themselves
 $shade = 0;
@@ -186,66 +203,82 @@ while ($incidents = mysql_fetch_array($result))
         else echo priority_name($incidents['priority']);
     echo "</td>\n";
 
-    echo "<td align='center' valign='top'>";
-    echo incidentstatus_name($incidents["status"]);
-    echo "</td>\n";
-    echo "<td align='center' valign='top'>";
-    echo "{$updated}<br />by {$update_user}";
-    if ($incidents['towner'] > 0 AND $incidents['towner']!=$user) echo "<br />Temp: <strong>".user_realname($incidents['towner'])."</strong>";
-    elseif ($incidents['owner']!=$user) echo '<br />Owner: <strong>'.user_realname($incidents['owner'])."</strong>";
-    echo "</td>\n";
-    echo "<td align='center' valign='top' title='{$explain}'>";
-    // Next Action
-    /*
-      if ($target->time > $now) echo target_type_name($target->type);
-      else echo "<strong style='color: red; background-color: white;'>&nbsp;".target_type_name($target->type)."&nbsp;</strong>";
-    */
-    $targettype = target_type_name($target->type);
-    if ($targettype!='')
+    if(empty($incidents_minimal))
     {
-        echo $targettype;
-        if ($slaremain > 0)
-        {
-            echo "<br />in ".format_workday_minutes($slaremain);  //  ." left"
-        }
-        elseif ($slaremain < 0)
-        {
-            echo "<br />".format_workday_minutes((0-$slaremain))." late";  //  ." left"
-        }
+        echo "<td align='center' valign='top'>";
+        echo incidentstatus_name($incidents["status"]);
+        echo "</td>\n";
     }
-    else
+    echo "<td align='center' valign='top'>";
+    echo "{$updated}";
+    if(empty($incidents_minimal)) echo "<br />by {$update_user}";
+
+    if(empty($incidents_minimal))
     {
-        ## Don't print anything, because there is no target to meet
-        //echo "...";
+        if ($incidents['towner'] > 0 AND $incidents['towner']!=$user) echo "<br />Temp: <strong>".user_realname($incidents['towner'])."</strong>";
+        elseif ($incidents['owner']!=$user) echo '<br />Owner: <strong>'.user_realname($incidents['owner'])."</strong>";
     }
-    ##print_r($target);
+    echo "</td>\n";
+
+    if(empty($incidents_minimal))
+    {
+        echo "<td align='center' valign='top' title='{$explain}'>";
+        // Next Action
+        /*
+            if ($target->time > $now) echo target_type_name($target->type);
+            else echo "<strong style='color: red; background-color: white;'>&nbsp;".target_type_name($target->type)."&nbsp;</strong>";
+        */
+        $targettype = target_type_name($target->type);
+        if ($targettype!='')
+        {
+            echo $targettype;
+            if ($slaremain > 0)
+            {
+                echo "<br />in ".format_workday_minutes($slaremain);  //  ." left"
+            }
+            elseif ($slaremain < 0)
+            {
+                echo "<br />".format_workday_minutes((0-$slaremain))." late";  //  ." left"
+            }
+        }
+        else
+        {
+            ## Don't print anything, because there is no target to meet
+            //echo "...";
+        }
+        ##print_r($target);
+        
+        echo "</td>";
+    }
+
 
     ##echo target_type_name($target->type);
     ##echo "<br />";
     ##if ($update_nextaction!=target_type_name($target->type))
     ##  echo "$update_nextaction";
     ##if (!empty($timetonextactionstring)) echo "<br />$timetonextaction_string";
-    echo "</td>";
-
-    // Final column
-    if ($reviewremain>0 && $reviewremain<=2400)
+    if(empty($incidents_minimal))
     {
-        // Only display if review is due in the next five days
-        echo "<td align='center' valign='top'>";
-        echo "Review in ".format_workday_minutes($reviewremain);
+        // Final column
+        if ($reviewremain>0 && $reviewremain<=2400)
+        {
+            // Only display if review is due in the next five days
+            echo "<td align='center' valign='top'>";
+            echo "Review in ".format_workday_minutes($reviewremain);
+        }
+        elseif ($reviewremain<=0)
+        {
+            echo "<td align='center' valign='top' class='review'>";
+            echo "Review Due Now!";
+        }
+        else
+        {
+            echo "<td align='center' valign='top'>";
+            if ($incidents['status'] == 2) echo "Age: ".format_seconds($incidents["duration_closed"]);
+            else echo format_seconds($incidents["duration"])." old";
+        }
+        echo "</td>";
     }
-    elseif ($reviewremain<=0)
-    {
-        echo "<td align='center' valign='top' class='review'>";
-        echo "Review Due Now!";
-    }
-    else
-    {
-        echo "<td align='center' valign='top'>";
-        if ($incidents['status'] == 2) echo "Age: ".format_seconds($incidents["duration_closed"]);
-        else echo format_seconds($incidents["duration"])." old";
-    }
-    echo "</td>";
     echo "</tr>\n";
 }
 echo "</table>\n\n";
