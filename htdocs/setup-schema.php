@@ -540,6 +540,7 @@ INSERT INTO `permissions` VALUES (59, 'Manage users software skills');
 INSERT INTO `permissions` VALUES (60, 'Perform Searches');
 INSERT INTO `permissions` VALUES (61, 'View Incident Details');
 INSERT INTO `permissions` VALUES (62, 'View Incident Attachments');
+INSERT INTO `permissions` VALUES (63, 'Add Reseller');
 
 
 CREATE TABLE `priority` (
@@ -1209,12 +1210,13 @@ CREATE TABLE `tasks` (
   `value` float(6,2) default NULL,
   `distribution` enum('public','private') NOT NULL default 'public',
   `created` datetime NOT NULL default '0000-00-00 00:00:00',
-  `lastupdated` timestamp NOT NULL default CURRENT_TIMESTAMP,
+  `lastupdated` timestamp NOT NULL default 'CURRENT_TIMESTAMP',
   PRIMARY KEY  (`id`),
   KEY `owner` (`owner`)
 ) ENGINE=MyISAM AUTO_INCREMENT=1 ;
 
-ALTER TABLE `tempincoming` ADD `lockeduntil` DATETIME NULL AFTER `locked` ; 
+ALTER TABLE `tempincoming` ADD `lockeduntil` DATETIME NULL AFTER `locked` ;
+INSERT INTO `permissions` VALUES (63, 'Add Reseller'); 
 ";
 
 // Important: When making changes to the schema you must add SQL to make the alterations
