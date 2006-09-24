@@ -78,7 +78,7 @@ while ($cflag = mysql_fetch_object($cresult))
 }
 
 echo "<h2>Available Flags</h2>";
-echo "<table align='center'>";
+echo "<table align='center'><tr>";
 
 $sql="SELECT * FROM flags ORDER BY flag";
 $flagresult = mysql_query($sql);
@@ -100,6 +100,6 @@ while($col<=5)
     echo "<td class=\"shade2\">&nbsp;</td>";
     $col++;
 }
-echo "</table>";
+echo "</tr></table>";
 include('htmlfooter.inc.php');
 ?>

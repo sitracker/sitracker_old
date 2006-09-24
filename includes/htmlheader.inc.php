@@ -30,12 +30,12 @@ echo "<style type='text/css'>@import url('{$CONFIG['application_webpath']}styles
 if ($_SESSION['auth'] == TRUE)
 {
     $cssurl = db_read_column('cssurl', 'interfacestyles', $_SESSION['style']);
-    echo "<link rel='stylesheet' href='{$CONFIG['application_webpath']}styles/{$cssurl}' />\n";
 }
 else
 {
-    echo "<link rel='stylesheet' href='{$CONFIG['application_webpath']}styles/webtrack1.css' />\n";
+    $cssurl = db_read_column('cssurl', 'interfacestyles', $CONFIG['default_interface_style']);
 }
+echo "<link rel='stylesheet' href='{$CONFIG['application_webpath']}styles/{$cssurl}' />\n";
 
 if (isset($refresh) && $refresh != 0)
 {

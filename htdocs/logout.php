@@ -28,6 +28,7 @@ setcookie("sit[2]");
 
 // End the session, remove the cookie and destroy all data registered with the session
 $_SESSION['auth']=FALSE;
+$_SESSION['portalauth']=FALSE;
 $_SESSION = array();
 
 session_unset();

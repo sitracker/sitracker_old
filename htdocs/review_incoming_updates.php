@@ -139,13 +139,13 @@ if(!empty($selected))
         $sql = "DELETE FROM updates WHERE id='$updateid'";
         mysql_query($sql);
         if (mysql_error()) trigger_error("MySQL Query Error ".mysql_error(), E_USER_ERROR);
-        
+
         $sql = "DELETE FROM tempincoming WHERE updateid='$updateid'";
         mysql_query($sql);
         if (mysql_error()) trigger_error("MySQL Query Error ".mysql_error(), E_USER_ERROR);
         $path=$incident_attachment_fspath.'updates/'.$updateid;
         if (file_exists($path)) deldir($path);
-        
+
         journal(CFG_LOGGING_NORMAL, 'Incident Log Entry Deleted', "Incident Log Entry $updateid was deleted", CFG_JOURNAL_INCIDENTS);
     }
 }
@@ -190,7 +190,7 @@ if($countresults > 0) echo "<tr><td><a href=\"javascript: submitform()\" onclick
 echo "</table>\n<br /><br />\n";
 
 ?>
-<script language="JavaScript">
+<script type="text/javascript">
 function submitform()
 {
   document.held_emails.submit();

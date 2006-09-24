@@ -73,23 +73,6 @@ if (authenticate($username, $password) == 1)
     }
     $_SESSION['permissions'] = array_unique($userpermissions);
 
-/*
-    if (!$public_browser=='yes')
-    {
-        // set the cookie (expires in 30 days)
-        setcookie("sit[0]", $username, time()+2592000);
-        setcookie("sit[1]", $password, time()+2592000);
-        setcookie("sit[2]", user_id($username, $password), time()+2592000);
-    }
-    else
-    {
-        // set the cookie for a public machine (expires in 30 mins)
-        setcookie("sit[0]", $username, time()+1800);
-        setcookie("sit[1]", $password, time()+1800);
-        setcookie("sit[2]", $userid, time()+1800);
-        setcookie("sit[3]", 'public', time()+1800);
-    }
-    */
     // redirect
     if (empty($page))
     {
@@ -106,8 +89,25 @@ else
 {
     // Invalid user
     // TODO target v3.25 Have a look if this is a contact trying to login
+    $sql = "SELECT * FROM contacts WHERE username='$username' AND password='$password' LIMIT 1";
+    $result = mysql_query($sql);
+    if (mysql_error()) trigger_error(mysql_error(),E_USER_ERROR);
+    if (mysql_num_rows($result) >= 1)
+    {
+        $contact = mysql_fetch_object($result);
 
+        // Customer session
+        // Valid user
+        $_SESSION['portalauth'] = TRUE;
+
+        $_SESSION['contactid'] = $contact->id;
+        header("Location: portal.php");
+        exit;
+    }
+
+    // Login failure
     $_SESSION['auth'] = FALSE;
+    $_SESSION['portalauth'] = FALSE;
     // log the failure
     if ($username!='')
     {

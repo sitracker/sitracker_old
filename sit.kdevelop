@@ -40,7 +40,7 @@
       <invocationMode>1</invocationMode>
     </general>
     <webInvocation>
-      <weburl>https://wtdev.salfordsoftware.co.uk/</weburl>
+      <weburl/>
       <webFileMode>2</webFileMode>
       <defaultFile/>
     </webInvocation>
