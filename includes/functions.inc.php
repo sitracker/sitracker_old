@@ -4670,9 +4670,11 @@ function add_note_form($linkid, $refid)
     $html .= "New Note by ".user_realname($sit[2])."</div>";
     $html .= "<div class='detailentry note'>";
     $html .= "<textarea name='bodytext' style='width: 94%; margin-top: 5px; margin-bottom: 5px; margin-left: 3%; margin-right: 3%; background-color: transparent; border: 1px dashed #A2A86A;'></textarea>";
+    if (!empty($linkid)) $html .= "<input type='hidden' name='link' value='$linkid' />";
+    else $html .= "&nbsp;Link <input type='text' name='link' size='3' />";
+    if (!empty($refid)) $html .= "<input type='hidden' name='refid' value='{$refid}' />";
+    else $html .= "&nbsp;Ref ID <input type='text' name='refid' size='4' />";
     $html .= "<input type='hidden' name='action' value='addnote' />";
-    $html .= "<input type='hidden' name='link' value='$linkid' />";
-    $html .= "<input type='hidden' name='refid' value='{$refid}' />";
     $html .= "<input type='hidden' name='rpath' value='{$_SERVER['PHP_SELF']}?{$_SERVER['QUERY_STRING']}' />";
     $html .= "<div style='text-align: right'><input type='submit' value='Add note' /></div>";
     $html .= "</div>";
@@ -4694,7 +4696,7 @@ function show_notes($linkid, $refid)
             $html .= "<img src='{$CONFIG['application_webpath']}images/icons/kdeclassic/16x16/mimetypes/document2.png' width='16' height='16' alt='Note icon' /> ";
             $html .= "Note added by ".user_realname($note->userid)."</div>";
             $html .= "<div class='detailentry note'>";
-            $html .= $note->bodytext;
+            $html .= nl2br($note->bodytext);
             $html .= "</div>\n";
         }
     }

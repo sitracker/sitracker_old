@@ -22,10 +22,12 @@ include('htmlheader.inc.php');
 ?>
 <table summary="by Ivan Lucas" align="center">
 <tr><td class='shade1' colspan="2">About <?php echo $CONFIG['application_shortname']; ?>...</td></tr>
-<tr><td class='shade2' colspan="2">
+<tr><td class='shade2' colspan="2" style='background-image: url(images/sitting_man_logo64x64.png); background-repeat: no-repeat; background-position: 1% bottom;'>
 <?php
+echo "<img src='' style='float: left; margin-top: 15px;' />";
 echo "<h2>{$CONFIG['application_name']}</h2>";
-echo "<p align='center'>Version: {$application_version} {$application_revision}</p><br />";
+echo "<p align='center'>";
+echo "Version: {$application_version} {$application_revision}</p><br />";
 ?>
 </td>
 </tr>
@@ -57,7 +59,7 @@ Completely free for commercial and non-commercial use.</p>
 <p align='center'>Dojo 0.3.1 by <a href='http://dojotoolkit.org/'>The Dojo Foundation</a><br />
 Copyright &copy; 2004-2006, The Dojo Foundation. Licensed under the BSD license.</p>
 
-        
+
 </td></tr>
 <tr><td class='shade1' colspan="2">Licence:</td></tr>
 <tr><td class='shade2' colspan='2'>
