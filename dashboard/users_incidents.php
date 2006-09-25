@@ -23,7 +23,7 @@ function users_incidents()
     }
     $sql = $selectsql . "WHERE contact=contacts.id AND incidents.priority=priority.id ";
     if ($user!='all') $sql .= "AND (owner='$user' OR towner='$user') ";
-    
+
 
     $queue = 1; //we still need this for the included page so the incidents are coloured correctly
     //the only case we're really interested in
@@ -36,6 +36,7 @@ function users_incidents()
     echo "<span>";
     echo "<div class='windowbox' style='width: 95%'>";
     echo "<div class='windowtitle'>".user_realname($user)."'s Incidents: (Action Needed)</div>";
+    echo "<div class='window'>";
 
     $selectsql = "SELECT incidents.id, externalid, title, owner, towner, priority, status, siteid, forenames, surname, email, incidents.maintenanceid, ";
     $selectsql .= "servicelevel, softwareid, lastupdated, timeofnextaction, ";
@@ -76,6 +77,7 @@ function users_incidents()
         $incidents_minimal = true;
         include('incidents_table.inc.php');
     }
+    echo "</div>";
     echo "</div>";
     echo "</div>";
     echo "</span>";

@@ -90,13 +90,14 @@ div.windowbox
 {
     margin-left: auto;
     margin-right: auto;
-    margin-top: 50px;
-    margin-bottom: 50px;
+    margin-bottom: 5%;
+    margin-top: 5%;
     border: 1px solid #205D94;
     width: 120px;
 }
 div.windowtitle
 {
+    cursor: pointer;
     width: 100%;
     background: #205D94;
     color: white;
@@ -105,6 +106,7 @@ div.windowtitle
 .windowtitle a { color: white; font-weight: normal;}
 div.window
 {
+    max-width: 380px;
     padding: 3px;
 }
 

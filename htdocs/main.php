@@ -64,7 +64,7 @@ echo "<script type=\"text/javascript\" src=\"scripts/dojo/dojo.js\"></script>";
 
 echo "<table border=\"0\" width=\"99%\"><tr>";
 echo "<td width=\"33%\" valign='top'>";
-echo "<div id='dragList1' style='vertical-align: top;'>";
+echo "<div id='dragList1' style='vertical-align: top; height: 400px;'>";
 
 dashboard_do("dashboard_tasks");
 

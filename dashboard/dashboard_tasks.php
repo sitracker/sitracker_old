@@ -4,9 +4,10 @@ function dashboard_tasks()
 {
     global $sit;
     $user = $sit[2];
-    echo "<span id=dragList1>";
-    echo "<div class='windowbox' style='width: 95%'>";
+    echo "<span id='dragList1' >";
+    echo "<div class='windowbox' style='width: 95%;'>";
     echo "<div class='windowtitle'>".user_realname($user)."'s Tasks:</div>";
+    echo "<div class='window'>";
     echo "<br />";
 
 
@@ -23,12 +24,12 @@ function dashboard_tasks()
         else $sql .= "DESC";
     }
     else $sql .= "ORDER BY duedate ASC, startdate DESC, priority DESC";
-    
+
     $result = mysql_query($sql);
     if (mysql_error()) trigger_error(mysql_error(),E_USER_ERROR);
-    
-    
-    
+
+
+
     if (mysql_num_rows($result) >=1 )
     {
         echo "<table align='center'>";
@@ -62,7 +63,7 @@ function dashboard_tasks()
             echo ">";
             if ($duedate > 0) echo date($CONFIG['dateformat_date'],$duedate);
             echo "</td>";
-    
+
             echo "</tr>\n";
             if ($shade=='shade1') $shade='shade2';
             else $shade='shade1';
@@ -73,7 +74,8 @@ function dashboard_tasks()
     {
         echo "<p align='center'>No tasks</p>";
     }
-    
+
+    echo "</div>";
     echo "</div>";
     echo "</span>";
 }
