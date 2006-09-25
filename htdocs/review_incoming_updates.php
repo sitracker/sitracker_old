@@ -173,7 +173,7 @@ echo "<p align='center'>Incoming email that cannot be handled automatically</p>"
 <form action='review_incoming_updates.php' name='held_emails'>
 <table align='center' style='width: 95%'>
 <tr>
-<th></th>
+<td><input type='checkbox' name='selectAll' value='CheckAll' onclick="checkAll(this.checked);" /></td>
 <th>Date</th>
 <th>From</th>
 <th>Subject</th>
@@ -194,6 +194,25 @@ echo "</table>\n<br /><br />\n";
 function submitform()
 {
   document.held_emails.submit();
+}
+
+function checkAll(checkStatus)
+{
+    var frm = document.held_emails.elements;
+    for(i = 0; i < frm.length; i++)
+    {
+        if(frm[i].type == 'checkbox')
+        {
+            if(checkStatus)
+            {
+                frm[i].checked = true;
+            }
+            else
+            {
+                frm[i].checked = false;
+            }
+        }
+    }
 }
 </script>
 <?php
