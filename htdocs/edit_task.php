@@ -35,7 +35,8 @@ switch ($action)
         else $duedate = '';
         if (!empty($_REQUEST['startdate'])) $startdate = strtotime($_REQUEST['startdate']);
         else $startdate = '';
-        $completion = cleanvar($_REQUEST['completion']);
+        $completion = cleanvar(str_replace('%','',$_REQUEST['completion']));
+        if ($completion!='' AND !is_numeric($completion)) $completion=0;
         $value = cleanvar($_REQUEST['value']);
         $distribution = cleanvar($_REQUEST['distribution']);
 
@@ -57,8 +58,10 @@ switch ($action)
         }
         else
         {
-            $startdate = date('Y-m-d',$startdate);
-            $duedate = date('Y-m-d',$duedate);
+            if ($startdate > 0) $startdate = date('Y-m-d',$startdate);
+            else $startdate = '';
+            if ($duedate > 0) $duedate = date('Y-m-d',$duedate);
+            else $duedate='';
             $sql = "UPDATE tasks ";
             $sql .= "SET name='$name', description='$description', priority='$priority', ";
             $sql .= "duedate='$duedate', startdate='$startdate', ";
@@ -118,11 +121,15 @@ switch ($action)
                 if ($task->distribution=='private') echo "checked='checked' ";
                 echo "value='private' /> Private</td></tr>";
                 echo "</table>";
-                echo "<p><input name='submit' type='submit' value='Edit Task' /></p>";
+                echo "<p><input name='submit' type='submit' value='Save' /></p>";
                 echo "<input type='hidden' name='action' value='edittask' />";
                 echo "<input type='hidden' name='id' value='{$id}' />";
                 echo "</form>";
             }
+
+            // Notes
+            echo add_note_form(10, $id);
+            echo show_notes(10, $id);
         }
         else echo "<p class='error'>No matching task found</p>";
         include('htmlfooter.inc.php');

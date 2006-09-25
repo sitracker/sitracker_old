@@ -22,6 +22,7 @@ require('auth.inc.php');
 
 // External variables
 $user = cleanvar($_REQUEST['user']);
+$show = cleanvar($_REQUEST['show']);
 $sort = cleanvar($_REQUEST['sort']);
 $order = cleanvar($_REQUEST['order']);
 
@@ -32,8 +33,25 @@ include('htmlheader.inc.php');
 
 echo "<h2>".user_realname($user) . "'s Tasks:</h2>";
 
+// show drop down select for task view options
+echo "<form action='{$_SERVER['PHP_SELF']}' style='text-align: center;'>";
+echo "View: <select class='dropdown' name='queue' onchange='window.location.href=this.options[this.selectedIndex].value'>\n";
+echo "<option ";
+if ($show == '' OR $show == 'active') echo "selected='selected' ";
+echo "value='{$_SERVER['PHP_SELF']}?user=$user&amp;show=active&amp;sort=$sort&amp;order=$order'>Active</option>\n";
+echo "<option ";
+if ($show == 'completed') echo "selected='selected' ";
+echo "value='{$_SERVER['PHP_SELF']}?user=$user&amp;show=completed&amp;sort=$sort&amp;order=$order'>Completed</option>\n";
+echo "</select>\n";
+echo "</form><br />";
 
-$sql = "SELECT * FROM tasks WHERE owner='$user' AND (completion < 100 OR completion='' OR completion IS NULL) ";
+
+
+$sql = "SELECT * FROM tasks WHERE owner='$user' ";
+if ($show=='' OR $show=='active' ) $sql .= "AND (completion < 100 OR completion='' OR completion IS NULL) ";
+elseif ($show=='completed') $sql .= "AND (completion = 100) ";
+else $sql .= "AND 1=2 "; // force no results for other cases
+
 if (!empty($sort))
 {
     if ($sort=='id') $sql .= "ORDER BY id ";

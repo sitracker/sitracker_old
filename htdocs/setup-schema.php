@@ -472,6 +472,19 @@ CREATE TABLE `maintenance` (
 
 INSERT INTO `maintenance` VALUES (1,1,1,2,1268179200,1,4,0,0,'This is an example contract.',1,'no','no',0,0);
 
+CREATE TABLE `notes` (
+  `id` int(11) NOT NULL auto_increment,
+  `userid` int(11) NOT NULL default '0',
+  `timestamp` timestamp NOT NULL default CURRENT_TIMESTAMP on update CURRENT_TIMESTAMP,
+  `bodytext` text NOT NULL,
+  `link` int(11) NOT NULL default '0',
+  `refid` int(11) NOT NULL default '0',
+  PRIMARY KEY  (`id`),
+  KEY `refid` (`refid`),
+  KEY `userid` (`userid`),
+  KEY `link` (`link`)
+) ENGINE=MyISAM ;
+
 CREATE TABLE `permissions` (
   `id` int(5) NOT NULL auto_increment,
   `name` varchar(255) NOT NULL default '',
@@ -1216,9 +1229,21 @@ CREATE TABLE `tasks` (
   KEY `owner` (`owner`)
 ) ENGINE=MyISAM;
 
-
 ALTER TABLE `tempincoming` ADD `lockeduntil` DATETIME NULL AFTER `locked` ;
 INSERT INTO `permissions` VALUES (63, 'Add Reseller');
+
+CREATE TABLE `notes` (
+  `id` int(11) NOT NULL auto_increment,
+  `userid` int(11) NOT NULL default '0',
+  `timestamp` timestamp NOT NULL default CURRENT_TIMESTAMP on update CURRENT_TIMESTAMP,
+  `bodytext` text NOT NULL,
+  `link` int(11) NOT NULL default '0',
+  `refid` int(11) NOT NULL default '0',
+  PRIMARY KEY  (`id`),
+  KEY `refid` (`refid`),
+  KEY `userid` (`userid`),
+  KEY `link` (`link`)
+) ENGINE=MyISAM ;
 ";
 
 // Important: When making changes to the schema you must add SQL to make the alterations

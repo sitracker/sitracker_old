@@ -34,7 +34,7 @@ function generate_row($update)
     $html_row.="<td><input type='checkbox' name='selected[]' value='".$update['id']."' /></td>";
     $html_row.="<td align='center' width='20%'>".date($CONFIG['dateformat_datetime'],$update['timestamp']).'</td>';
     $html_row.="<td width='20%'>".htmlentities($update['emailfrom'],ENT_QUOTES)."</td>";
-    $html_row.="<td width='20%'><a id='{$update['id']}' class='info' style='cursor:help;'>";
+    $html_row.="<td width='20%'><a id='update{$update['id']}' class='info' style='cursor:help;'>";
     if (empty($update['subject'])) $update['subject']='Untitled';
     $html_row.=htmlentities($update['subject'],ENT_QUOTES);
     $html_row.='<span>'.parse_updatebody($updatebodytext).'</span></a></td>';
@@ -165,15 +165,17 @@ echo " ($countresults total) </h2>";
 echo "<p align='center'>Incoming email that cannot be handled automatically</p>";
 ?>
 <script type="text/javascript">
+<!--
     function confirm_delete()
     {
         return window.confirm("This item will be permanently deleted.  Are you sure you want to continue?");
     }
+-->
 </script>
 <form action='review_incoming_updates.php' name='held_emails'>
 <table align='center' style='width: 95%'>
 <tr>
-<td><input type='checkbox' name='selectAll' value='CheckAll' onclick="checkAll(this.checked);" /></td>
+<th><input type='checkbox' name='selectAll' value='CheckAll' onclick="checkAll(this.checked);" /></th>
 <th>Date</th>
 <th>From</th>
 <th>Subject</th>
@@ -191,6 +193,7 @@ echo "</table>\n<br /><br />\n";
 
 ?>
 <script type="text/javascript">
+<!--
 function submitform()
 {
   document.held_emails.submit();
@@ -214,6 +217,7 @@ function checkAll(checkStatus)
         }
     }
 }
+-->
 </script>
 <?php
 echo "</form>";

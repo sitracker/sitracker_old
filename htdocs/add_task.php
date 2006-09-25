@@ -56,8 +56,10 @@ switch ($action)
         }
         else
         {
-            $startdate = date('Y-m-d',$startdate);
-            $duedate = date('Y-m-d',$duedate);
+            if ($startdate > 0) $startdate = date('Y-m-d',$startdate);
+            else $startdate = '';
+            if ($duedate > 0) $duedate = date('Y-m-d',$duedate);
+            else $duedate='';
             $sql = "INSERT INTO tasks ";
             $sql .= "(name,description,priority,owner,duedate,startdate,completion,value,distribution,created) ";
             $sql .= "VALUES ('$name','$description','$priority','{$sit[2]}','$duedate','$startdate','$completion','$value','$distribution','".date('Y-m-d')."')";

@@ -61,6 +61,7 @@ $journaltype[6]='Admin';
 $journaltype[7]='User Management';
 $journaltype[8]='Maintenance';
 $journaltype[9]='Products';
+$journaltype[10]='Tasks';
 
 $journal_count = mysql_num_rows($result);
 if ($journal_count >= 1)
