@@ -226,39 +226,72 @@ else
         $oldincidentid = $incidentid;
         $incidentid = 0;
     }
-    // Existing incident, new update:
-    // Add entry to the incident update log
-    $sql  = "INSERT INTO updates (incidentid, userid, type, bodytext, timestamp, customervisibility, currentstatus) ";
-    $sql .= "VALUES ('{$incidentid}', 0, 'emailin', '{$bodytext}', '{$now}', '$customer_visible', 1 )";
-    mysql_query($sql);
+
+    $fifteenminsago = $now - 900;
+    $sql = "SELECT bodytext FROM updates WHERE incidentid = '{$incidentid}' AND timestamp > '{$fifteenminsago}' ORDER BY id DESC LIMIT 1";
+    $result = mysql_query($sql);
     if (mysql_error()) trigger_error(mysql_error(),E_USER_WARNING);
-    $updateid = mysql_insert_id();
-    
-    if($incident_open == "Yes")
+
+    if(mysql_num_rows($result) > 0)
     {
-        // Mark the incident as active
-        $sql = "UPDATE incidents SET status='1', lastupdated='".time()."', timeofnextaction='0' WHERE id='{$incidentid}'";
+        list($lastupdate) = mysql_fetch_row($result);
+
+        $newtext = "{$headertext}<hr>{$message}";
+        if(strcmp(trim($lastupdate),trim($newtext)) == 0)
+        {
+            $error = 1;
+        }
+
+    }
+
+    if($error != 1)
+    {
+        // Existing incident, new update:
+        // Add entry to the incident update log
+        $sql  = "INSERT INTO updates (incidentid, userid, type, bodytext, timestamp, customervisibility, currentstatus) ";
+        $sql .= "VALUES ('{$incidentid}', 0, 'emailin', '{$bodytext}', '{$now}', '$customer_visible', 1 )";
         mysql_query($sql);
         if (mysql_error()) trigger_error(mysql_error(),E_USER_WARNING);
-    }
-    else
-    {
-        //create record in tempincoming
-        if($incident_open == "No")
+        $updateid = mysql_insert_id();
+        
+        if($incident_open == "Yes")
         {
-            //incident closed
-            $sql = "INSERT INTO tempincoming (updateid, incidentid, emailfrom, subject, reason, contactid) ";
-            $sql.= "VALUES ('".$updateid."', '0', '".$decoded_email->from_name."', '".$decoded_email->subject."', 'Incident ".$oldincidentid." is closed', '$contactid' )";
+            // Mark the incident as active
+            $sql = "UPDATE incidents SET status='1', lastupdated='".time()."', timeofnextaction='0' WHERE id='{$incidentid}'";
             mysql_query($sql);
             if (mysql_error()) trigger_error(mysql_error(),E_USER_WARNING);
         }
         else
         {
-            //new call
-            $sql = "INSERT INTO tempincoming (updateid, incidentid, emailfrom, subject, reason, contactid) ";
-            $sql.= "VALUES ('".$updateid."', '0', '".$decoded_email->from_name."', '".$decoded_email->subject."', 'Possible new call', '$contactid' )";
+            //create record in tempincoming
+            if($incident_open == "No")
+            {
+                //incident closed
+                $sql = "INSERT INTO tempincoming (updateid, incidentid, emailfrom, subject, reason, contactid) ";
+                $sql.= "VALUES ('".$updateid."', '0', '".$decoded_email->from_name."', '".$decoded_email->subject."', 'Incident ".$oldincidentid." is closed', '$contactid' )";
+                mysql_query($sql);
+                if (mysql_error()) trigger_error(mysql_error(),E_USER_WARNING);
+            }
+            else
+            {
+                //new call
+                $sql = "INSERT INTO tempincoming (updateid, incidentid, emailfrom, subject, reason, contactid) ";
+                $sql.= "VALUES ('".$updateid."', '0', '".$decoded_email->from_name."', '".$decoded_email->subject."', 'Possible new call', '$contactid' )";
+                mysql_query($sql);
+                if (mysql_error()) trigger_error(mysql_error(),E_USER_WARNING);
+            }
+        }
+    }
+    else
+    {
+        if($incidentid != 0)
+        {
+            $bodytext = "[i]Received duplicate email within 15 minutes. Message not stored. Possible mail loop.[/i]";
+            $sql  = "INSERT INTO updates (incidentid, userid, type, bodytext, timestamp, customervisibility, currentstatus) ";
+            $sql .= "VALUES ('{$incidentid}', 0, 'emailin', '{$bodytext}', '{$now}', '$customer_visible', 1 )";
             mysql_query($sql);
             if (mysql_error()) trigger_error(mysql_error(),E_USER_WARNING);
+
         }
     }
 }
