@@ -505,8 +505,6 @@ if ($display=='chart' OR empty($type))
     echo "<p align='center'><a href='{$_SERVER['PHP_SELF']}?month={$prevmonth}&amp;year={$prevyear}' title='Previous Month'>&lt;</a> ".date('F Y',mktime(0,0,0,$month,1,$year))." <a href='{$_SERVER['PHP_SELF']}?month={$nextmonth}&amp;year={$nextyear}' title='Next Month'>&gt;</a></p>";
 
     echo draw_chart($month,$year);
-
-    echo "<p>Legend:</p>";
 }
 else
 {
