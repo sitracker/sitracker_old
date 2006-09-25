@@ -1202,6 +1202,7 @@ UPDATE emailtype SET `toField` = '<incidentreassignemailaddress>' WHERE `name` =
 CREATE TABLE `tasks` (
   `id` int(11) NOT NULL auto_increment,
   `name` varchar(255) default NULL,
+  `description` text NULL,
   `priority` tinyint(4) default NULL,
   `owner` tinyint(4) NOT NULL default '0',
   `duedate` datetime default NULL,
@@ -1210,13 +1211,14 @@ CREATE TABLE `tasks` (
   `value` float(6,2) default NULL,
   `distribution` enum('public','private') NOT NULL default 'public',
   `created` datetime NOT NULL default '0000-00-00 00:00:00',
-  `lastupdated` timestamp NOT NULL default 'CURRENT_TIMESTAMP',
+  `lastupdated` timestamp NOT NULL default CURRENT_TIMESTAMP,
   PRIMARY KEY  (`id`),
   KEY `owner` (`owner`)
-) ENGINE=MyISAM AUTO_INCREMENT=1 ;
+) ENGINE=MyISAM;
+
 
 ALTER TABLE `tempincoming` ADD `lockeduntil` DATETIME NULL AFTER `locked` ;
-INSERT INTO `permissions` VALUES (63, 'Add Reseller'); 
+INSERT INTO `permissions` VALUES (63, 'Add Reseller');
 ";
 
 // Important: When making changes to the schema you must add SQL to make the alterations
