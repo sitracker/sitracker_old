@@ -78,9 +78,9 @@ h5 { font-size: 100%; font-weight: normal; }
 
 hr { height: 1px; background-color: #CDCDCD; color: #CDCDCD; margin:0px;padding:0px; }
 
-form table { margin-left: auto; margin-right: auto; }
-form table th { text-align: right; background-color: #CCCCFF; }
-form table td { background-color: #DEDEFF; }
+form table.vertical { margin-left: auto; margin-right: auto; }
+form table.vertical th { text-align: right; background-color: #CCCCFF; }
+form table.vertical td { background-color: #DEDEFF; }
 form p { text-align: center; }
 
 table.vertical { border: 1px solid #CCCCFF; }
@@ -116,7 +116,7 @@ div.window
 #menumenu a:hover { text-decoration: underline; }
 #menumenu a:active { text-decoration: underline; }
 
-#statusbar { background-color: #203894; color: #FFF; text-align: center; padding: 2px 0px 2px 0px; margin-top: 1em;}
+#statusbar { clear: both; background-color: #203894; color: #FFF; text-align: center; padding: 2px 0px 2px 0px; margin-top: 1em;}
 #statusbar a { text-decoration: none; color: #FFF; }
 #statusbar a:hover { text-decoration: underline; }
 #statusbar a:active { text-decoration: underline; }
@@ -175,6 +175,7 @@ div.iheader { color: #666; margin-bottom:5px;}
 
 /* Information and Errors */
 sup.red { color: #F00; font-size: 125%; }
+td sup { color: #444; }
 p.tip,p.info, p.warning, p.error, h5.warning, h5.error
 {
   background-position: 3px 2px;
@@ -497,7 +498,7 @@ div.detailfoot
     margin-left: 60%;
 }
 
-div.note { font-size: 98%; background-color: #FFFFA2; border-color: #A2A86A; }
+div.note { font-size: 98%; background-color: #FFFFA2; border-color: #A2A86A; margin-top: 0px; }
 
 @media print
 {

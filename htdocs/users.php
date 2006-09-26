@@ -95,6 +95,7 @@ echo colheader('phone','Phone',$sort, $order, $filter);
 echo colheader('mobile','Mobile',$sort, $order, $filter);
 echo colheader('status','Status',$sort, $order, $filter);
 echo colheader('accepting','Accepting',$sort, $order, $filter);
+echo "<th>Jump to</th>";
 echo "</tr><tr>";
 echo "<th></th>";
 echo "<th align='center'>Action Needed / Waiting</th>";
@@ -102,7 +103,7 @@ echo "<th align='center'>".priority_icon(4)."</th>";
 echo "<th align='center'>".priority_icon(3)."</th>";
 echo "<th align='center'>".priority_icon(2)."</th>";
 echo "<th align='center'>".priority_icon(1)."</th>";
-echo "<th colspan='7'></th>";
+echo "<th colspan='8'></th>";
 echo "</tr>\n";
 
 // show results
@@ -148,11 +149,16 @@ while ($users = mysql_fetch_array($result))
     <td align='center'><?php if ($users["phone"] == "") { ?>None<?php } else { echo $users["phone"]; } ?></td>
     <td align='center'><?php if ($users["phone"] == "") { ?>None<?php } else { if ($users['mobile']!='') echo $users["mobile"]; else echo '&nbsp;'; } ?></td>
     <td>
-    <?php echo "<a href='holiday_calendar.php?type=1&amp;user={$users['id']}' title='Holiday Calendar'><img src='{$CONFIG['application_webpath']}images/icons/kdeclassic/16x16/apps/date.png' width='16' height='16' alt='Calendar icon' style='border:none;' /></a> ";
+    <?php
     echo userstatus_name($users["status"]) ?></td>
     <td align='center'><?php echo $users["accepting"]=='Yes' ? 'Yes' : "<span class='error'>No</span>"; ?></td>
-    </tr>
     <?php
+    echo "<td>";
+    echo "<a href='holiday_calendar.php?type=1&amp;user={$users['id']}' title='Holiday Calendar'><img src='{$CONFIG['application_webpath']}images/icons/kdeclassic/16x16/apps/date.png' width='16' height='16' alt='Calendar icon' style='border:none;' /></a> ";
+    echo "<a href='tasks.php?user={$users['id']}' title='Tasks'><img src='{$CONFIG['application_webpath']}images/icons/kdeclassic/16x16/actions/todo.png' width='16' height='16' alt='Todo icon' style='border:none;' /></a> ";
+    echo "</td>";
+    echo "</tr>";
+
     // invert shade
     if ($shade == 1) $shade = 0;
     else $shade = 1;

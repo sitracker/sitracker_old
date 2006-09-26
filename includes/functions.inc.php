@@ -3749,6 +3749,7 @@ function mysql2date($mysqldate)
 {
     // for the zero/blank case, return 0
     if (empty($mysqldate)) return 0;
+    if ($mysqldate=='0000-00-00 00:00:00' OR $mysqldate=='0000-00-00') return 0;
 
     // Takes a MYSQL date and converts it to a proper PHP date
     $day = substr($mysqldate,8,2);
@@ -4566,7 +4567,7 @@ function date_picker($formelement)
 function percent_bar($percent)
 {
     if ($percent=='') $percent=0;
-    $html = "<div style='width: 100px; border: 1px solid #ccc; background-color: white; height: 12px; margin-left: auto; margin-right: auto;'>";
+    $html = "<div style='width: 100px; border: 1px solid #ccc; background-color: white; height: 12px;'>";
     $html .= "<div style='text-align: center; height: 12px; font-size: 90%; width: {$percent}%; background: #B4D6B4;'>  {$percent}&#037;";
     $html .= "</div></div>\n";
     return $html;
@@ -4684,6 +4685,7 @@ function add_note_form($linkid, $refid)
 
 function show_notes($linkid, $refid)
 {
+    global $sit;
     $sql = "SELECT * FROM notes WHERE link='{$linkid}' AND refid='{$refid}' ORDER BY timestamp DESC, id DESC";
     $result = mysql_query($sql);
     if (mysql_error()) trigger_error(mysql_error(),E_USER_ERROR);
@@ -4692,11 +4694,13 @@ function show_notes($linkid, $refid)
     {
         while ($note = mysql_fetch_object($result))
         {
-            $html .= "<div class='detailhead note'> <div class='detaildate'>".readable_date(mysql2date($note->timestamp))."</div>";
+            $html .= "<div class='detailhead note'> <div class='detaildate'>".readable_date(mysql2date($note->timestamp));
+            if ($sit[2]==$note->userid) $html .= "<a href='delete_note.php?id={$note->id}&amp;rpath={$_SERVER['PHP_SELF']}?{$_SERVER['QUERY_STRING']}' onclick='return confirm_delete();'><img src='{$CONFIG['application_webpath']}images/icons/kdeclassic/16x16/actions/eventdelete.png' width='16' height='16' alt='Delete icon' style='border: 0px;' /></a>";
+            $html .= "</div>";
             $html .= "<img src='{$CONFIG['application_webpath']}images/icons/kdeclassic/16x16/mimetypes/document2.png' width='16' height='16' alt='Note icon' /> ";
             $html .= "Note added by ".user_realname($note->userid)."</div>";
             $html .= "<div class='detailentry note'>";
-            $html .= nl2br($note->bodytext);
+            $html .= nl2br(bbcode($note->bodytext));
             $html .= "</div>\n";
         }
     }

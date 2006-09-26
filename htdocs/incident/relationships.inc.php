@@ -126,7 +126,7 @@ else echo "<p align='center'>There are no related incidents</p>";
 
 echo "<form action='incident_relationships.php' method='post'>";
 echo "<h2>Add a relation</h2>";
-echo "<table summary='Add a relationship'>";
+echo "<table summary='Add a relationship' class='vertical'>";
 echo "<tr><th>Incident ID</th><td><input type='text' name='relatedid' size='10' /></td></tr>\n";
 // TODO v3.24 Child/Parent incident relationships
 //echo "<tr><th>Relationship to this incident</th><td>";

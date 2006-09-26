@@ -41,7 +41,7 @@ switch ($action)
         // Validate input
         $error=array();
         if ($name=='') $error[]='Task name must not be blank';
-        if ($startdate > $duedate) $error[]='The start date cannot be after the due date';
+        if ($startdate > $duedate AND $duedate != '' AND $duedate > 0 ) $error[]='The start date cannot be after the due date';
         if (count($error) >= 1)
         {
             include('htmlheader.inc.php');
@@ -96,7 +96,7 @@ switch ($action)
         echo "<td><input type='text' name='value' size='6' maxlength='12' /></td></tr>";
         echo "<tr><th>Privacy</th>";
         echo "<td><input type='radio' name='distribution' value='public' /> Public<br />";
-        echo "<input type='radio' name='distribution' checked='checked' value='private' /> Private</td></tr>";
+        echo "<input type='radio' name='distribution' checked='checked' value='private' /> Private </td></tr>";
         echo "</table>";
         echo "<p><input name='submit' type='submit' value='Add Task' /></p>";
         echo "<input type='hidden' name='action' value='addtask' />";

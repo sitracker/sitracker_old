@@ -43,7 +43,7 @@ switch ($action)
         // Validate input
         $error=array();
         if ($name=='') $error[]='Task name must not be blank';
-        if ($startdate > $duedate) $error[]='The start date cannot be after the due date';
+        if ($startdate > $duedate AND $duedate != '' AND $duedate > 0 ) $error[]='The start date cannot be after the due date';
         if (count($error) >= 1)
         {
             include('htmlheader.inc.php');
@@ -70,8 +70,8 @@ switch ($action)
             $sql .= "WHERE id='$id' LIMIT 1";
             mysql_query($sql);
             if (mysql_error()) trigger_error(mysql_error(),E_USER_ERROR);
-            if (mysql_affected_rows() < 1) trigger_error("Task update failed",E_USER_ERROR);
-            confirmation_page("2", "tasks.php", "<h2>Task edited successfully</h2><p align='center'>Please wait while you are redirected...</p>");
+            // if (mysql_affected_rows() < 1) trigger_error("Task update failed",E_USER_ERROR);
+            confirmation_page("2", "view_task.php?id={$id}", "<h2>Task edited successfully</h2><p align='center'>Please wait while you are redirected...</p>");
         }
     break;
 
@@ -119,19 +119,18 @@ switch ($action)
                 echo "value='public' /> Public<br />";
                 echo "<input type='radio' name='distribution' ";
                 if ($task->distribution=='private') echo "checked='checked' ";
-                echo "value='private' /> Private</td></tr>";
+                echo "value='private' /> Private <img src='{$CONFIG['application_webpath']}images/icons/kdeclassic/16x16/apps/password.png' width='16' height='16' title='Private' alt='Private' /></td></tr>";
                 echo "</table>";
                 echo "<p><input name='submit' type='submit' value='Save' /></p>";
                 echo "<input type='hidden' name='action' value='edittask' />";
                 echo "<input type='hidden' name='id' value='{$id}' />";
                 echo "</form>";
             }
-
-            // Notes
-            echo add_note_form(10, $id);
-            echo show_notes(10, $id);
         }
         else echo "<p class='error'>No matching task found</p>";
+
+
+        echo "<p align='center'><a href='tasks.php'>Tasks List</a></p>";
         include('htmlfooter.inc.php');
 }
 

@@ -51,6 +51,7 @@ $sql = "SELECT * FROM tasks WHERE owner='$user' ";
 if ($show=='' OR $show=='active' ) $sql .= "AND (completion < 100 OR completion='' OR completion IS NULL) ";
 elseif ($show=='completed') $sql .= "AND (completion = 100) ";
 else $sql .= "AND 1=2 "; // force no results for other cases
+if ($user != $sit[2]) $sql .= "AND distribution='public' ";
 
 if (!empty($sort))
 {
@@ -60,6 +61,8 @@ if (!empty($sort))
     elseif ($sort=='completion') $sql .= "ORDER BY completion ";
     elseif ($sort=='startdate') $sql .= "ORDER BY startdate ";
     elseif ($sort=='duedate') $sql .= "ORDER BY duedate ";
+    elseif ($sort=='distribution') $sql .= "ORDER BY distribution ";
+    else $sql = "ORDER BY id ";
     if ($order=='a' OR $order=='ASC' OR $order='') $sql .= "ASC";
     else $sql .= "DESC";
 }
@@ -74,6 +77,7 @@ if (mysql_num_rows($result) >=1 )
 {
     echo "<table align='center'>";
     echo "<tr>";
+    if ($user == $sit[2]) echo colheader('distribution', "<img src='{$CONFIG['application_webpath']}images/icons/kdeclassic/16x16/apps/password.png' width='16' height='16' title='Public/Private' alt='Private' style='border: 0px;' />", $sort, $order);
     echo colheader('id', 'ID', $sort, $order);
     echo colheader('name', 'Task', $sort, $order);
     echo colheader('priority', 'Priority', $sort, $order);
@@ -87,19 +91,31 @@ if (mysql_num_rows($result) >=1 )
         $duedate = mysql2date($task->duedate);
         $startdate = mysql2date($task->startdate);
         echo "<tr class='$shade'>";
-        echo "<td>{$task->id}</td>";
-        echo "<td><a href='edit_task.php?id={$task->id}' class='info'>{$task->name}";
+        if ($user == $sit[2])
+        {
+            echo "<td>";
+            if ($task->distribution=='private') echo " <img src='{$CONFIG['application_webpath']}images/icons/kdeclassic/16x16/apps/password.png' width='16' height='16' title='Private' alt='Private' />";
+            echo "</td>";
+        }
+        echo "<td>";
+        echo "{$task->id}";
+        echo "</td>";
+        echo "<td>";
+        echo "<a href='view_task.php?id={$task->id}' class='info'>{$task->name}";
         if (!empty($task->description)) echo "<span>".nl2br($task->description)."</span>";
-        echo "</a></td>";
+        echo "</a>";
+
+        echo "</td>";
         echo "<td>".priority_icon($task->priority).priority_name($task->priority)."</td>";
         echo "<td>".percent_bar($task->completion)."</td>";
         echo "<td";
-        if ($startdate > 0 AND $startdate <= $now) echo " class='notice'";
+        if ($startdate > 0 AND $startdate <= $now AND $task->completion <= 0) echo " class='urgent'";
+        elseif ($startdate > 0 AND $startdate <= $now AND $task->completion >= 1 AND $task->completion < 100) echo " class='idle'";
         echo ">";
         if ($startdate > 0) echo date($CONFIG['dateformat_date'],$startdate);
         echo "</td>";
         echo "<td";
-        if ($duedate > 0 AND $duedate <= $now) echo " class='critical'";
+        if ($duedate > 0 AND $duedate <= $now AND $task->completion < 100) echo " class='urgent'";
         echo ">";
         if ($duedate > 0) echo date($CONFIG['dateformat_date'],$duedate);
         echo "</td>";
