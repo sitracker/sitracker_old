@@ -208,7 +208,8 @@ $hmenu[60] = array (10=> array ( 'perm'=> 37, 'name'=> "Marketing Mailshot", 'ur
                     90=> array ( 'perm'=> 37, 'name'=> "Site Incidents", 'url'=>"reports/site_incidents.php"),
                     100=> array ( 'perm'=> 37, 'name'=> "Recent Incidents", 'url'=>"reports/recent_incidents_table.php"),
                     110=> array ( 'perm'=> 37, 'name'=> "Incidents Logged (Open/Closed)", 'url'=>"reports/incident_graph.php"),
-                    120=> array ( 'perm'=> 37, 'name'=> "Average Incident Duration", 'url'=>"reports/average_incident_duration.php")
+                    120=> array ( 'perm'=> 37, 'name'=> "Average Incident Duration", 'url'=>"reports/average_incident_duration.php"),
+                    130=> array ( 'perm'=> 37, 'name'=> "Incidents by Software", 'url'=>"reports/incidents_by_software.php")
 );
 
 
