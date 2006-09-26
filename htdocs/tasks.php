@@ -66,7 +66,7 @@ if (!empty($sort))
     if ($order=='a' OR $order=='ASC' OR $order='') $sql .= "ASC";
     else $sql .= "DESC";
 }
-else $sql .= "ORDER BY duedate ASC, startdate DESC, priority DESC";
+else $sql .= "ORDER BY IF(duedate,duedate,99999999) ASC, duedate ASC, startdate DESC, priority DESC, completion ASC";
 
 $result = mysql_query($sql);
 if (mysql_error()) trigger_error(mysql_error(),E_USER_ERROR);
