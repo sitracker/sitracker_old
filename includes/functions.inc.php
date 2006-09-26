@@ -1720,6 +1720,27 @@ function year_drop_down($name, $year, $pre=5, $post=30)
 }
 
 
+function escalation_path_drop_down($name, $id)
+{
+   $sql  = "SELECT id, name FROM escalationpaths ";
+   $sql .= "ORDER BY name ASC";
+   $result = mysql_query($sql);
+   if (mysql_error()) trigger_error(mysql_error(),E_USER_WARNING);
+   $html = "<select name='{$name}'>";
+   $html .= "<option selected='selected' value='0'>None</option>\n";
+   while ($path = mysql_fetch_array($result))
+   {
+        $html .= "<option value='{$path['id']}'";
+        if ($path['id']==$id) $html .= " selected='selected'";
+        $html .= ">{$path['name']}</option>\n";
+   }
+   $html .= "</select>\n";
+
+   return $html;
+}
+
+
+
 /*============================================================*/
 /*                                                            */
 /*                      OTHER FUNCTIONS                       */
@@ -4568,8 +4589,9 @@ function date_picker($formelement)
 function percent_bar($percent)
 {
     if ($percent=='') $percent=0;
+    // #B4D6B4;
     $html = "<div style='width: 100px; border: 1px solid #ccc; background-color: white; height: 12px;'>";
-    $html .= "<div style='text-align: center; height: 12px; font-size: 90%; width: {$percent}%; background: #B4D6B4;'>  {$percent}&#037;";
+    $html .= "<div style='text-align: center; height: 12px; font-size: 90%; width: {$percent}%; background: #AFAFAF;'>  {$percent}&#037;";
     $html .= "</div></div>\n";
     return $html;
 }

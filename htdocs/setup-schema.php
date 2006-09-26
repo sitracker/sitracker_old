@@ -127,6 +127,14 @@ INSERT INTO `emailtype` VALUES (49,'INCIDENT_CLOSED_EXTERNAL','system','Notify e
 INSERT INTO `emailtype` VALUES (9,'INCIDENT_LOGGED_EMAIL','system','Acknowledge the contacts email and notify them of the new incident number','<contactemail>','<supportemail>','<supportemail>','','<useremail>','[<incidentid>] - <incidenttitle>','Thank you for your email. The incident <incidentid> has been generated and your details stored in our tracking system. \r\n\r\nYou will be receiving a response from one of our product specialists as soon as possible. When referring to this incident please remember to quote incident <incidentid> in \r\nall communications.\r\n\r\nFor all email communications please title your email as [<incidentid>] - <incidenttitle>\r\n\r\n<globalsignature>', 'show', 'no');
 INSERT INTO `emailtype` (`id`, `name`, `type`, `description`, `tofield`, `fromfield`, `replytofield`, `ccfield`, `bccfield`, `subjectfield`, `body`, `customervisibility`, `storeinlog`) VALUES (50,'INCIDENT_REASSIGNED_USER_NOTIFY', 'system', 'Notify user when call assigned to them', '<incidentreassignemailaddress>', '<supportemail>', '<supportemail>', '', '', 'A <incidentpriority> priority call ([<incidentid>] - <incidenttitle>) has been reassigned to you', 'Hi,\r\n\r\nIncident [<incidentid>] entitled <incidenttitle> has been reassigned to you.\r\n\r\nThe details of this incident are:\r\n\r\nPriority: <incidentpriority>\r\nContact: <contactname>\r\nSite: <contactsite>\r\n\r\n\r\nRegards\r\n<applicationname>\r\n\r\n\r\n---\r\n<todaysdate> - <applicationshortname> <applicationversion>', 'hide', 'No');
 
+CREATE TABLE `escalationpaths` (
+`id` INT( 11 ) NOT NULL AUTO_INCREMENT PRIMARY KEY ,
+`name` VARCHAR( 255 ) NULL ,
+`url` VARCHAR( 255 ) NULL ,
+`url_title` VARCHAR( 255 ) NULL ,
+`email_domain` VARCHAR( 255 ) NULL
+) ENGINE = MYISAM ;
+
 CREATE TABLE `feedbackforms` (
   `id` int(5) NOT NULL auto_increment,
   `name` varchar(255) NOT NULL default '',
@@ -296,6 +304,7 @@ CREATE TABLE `incidentproductinfo` (
 
 CREATE TABLE `incidents` (
   `id` int(11) NOT NULL auto_increment,
+  `escalationpath` int(11) default NULL,
   `externalid` varchar(50) default NULL,
   `externalengineer` varchar(80) NOT NULL default '',
   `externalemail` varchar(255) NOT NULL default '',
@@ -334,7 +343,7 @@ CREATE TABLE `incidents` (
   KEY `opened` (`opened`),
   KEY `closed` (`closed`),
   KEY `servicelevel` (`servicelevel`)
-) ENGINE=MyISAM;
+) ENGINE=MyISAM DEFAULT ;
 
 CREATE TABLE `incidentstatus` (
   `id` int(11) NOT NULL auto_increment,
@@ -1244,6 +1253,16 @@ CREATE TABLE `notes` (
   KEY `userid` (`userid`),
   KEY `link` (`link`)
 ) ENGINE=MyISAM ;
+
+CREATE TABLE `escalationpaths` (
+`id` INT( 11 ) NOT NULL AUTO_INCREMENT PRIMARY KEY ,
+`name` VARCHAR( 255 ) NULL ,
+`url` VARCHAR( 255 ) NULL ,
+`url_title` VARCHAR( 255 ) NULL ,
+`email_domain` VARCHAR( 255 ) NULL
+) ENGINE = MYISAM ;
+
+ALTER TABLE `incidents` ADD `escalationpath` INT( 11 ) NULL AFTER `id` ;
 ";
 
 // Important: When making changes to the schema you must add SQL to make the alterations

@@ -44,7 +44,7 @@ function statusform_submit(user)
 <?php
 
 // Generic bit of SQL, common to both queue types
-$selectsql = "SELECT incidents.id, externalid, title, owner, towner, priority, status, siteid, forenames, surname, email, incidents.maintenanceid, ";
+$selectsql = "SELECT incidents.id, escalationpath, externalid, title, owner, towner, priority, status, siteid, forenames, surname, email, incidents.maintenanceid, ";
 $selectsql .= "servicelevel, softwareid, lastupdated, timeofnextaction, ";
 $selectsql .= "(timeofnextaction - $now) AS timetonextaction, opened, ($now - opened) AS duration, closed, (closed - opened) AS duration_closed, type, ";
 $selectsql .= "($now - lastupdated) AS timesincelastupdate ";

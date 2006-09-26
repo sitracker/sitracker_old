@@ -164,7 +164,9 @@ while ($incidents = mysql_fetch_array($result))
     if ($update_nextaction=='') $update_nextaction=$explain;
 
     // Create URL for External ID's
-    $externalid = format_external_id($incidents['externalid']);
+    $externalid='';
+    if (empty($incidents['externalid']) AND $incidents['escalationpath']>=1) $externalid=db_read_column('name', 'escalationpaths', $incidents['escalationpath']);
+    if (!empty($incidents['externalid'])) $externalid = format_external_id($incidents['externalid']);
     ?>
     <tr class='<?php echo $class; ?>'>
     <td align='center'>
@@ -172,7 +174,7 @@ while ($incidents = mysql_fetch_array($result))
     // Note: Sales incident type is obsolete
     if ($incidents['type']!='Support') echo "<strong>".ucfirst($incidents['type'])."</strong>: ";
     echo "<a href='incident_details.php?id={$incidents['id']}' style='color: #000000;'>{$incidents['id']}</a>";
-    ?><br /><?php if ($incidents["externalid"] != "") echo $externalid ?></td>
+    ?><br /><?php if ($externalid != "") echo $externalid ?></td>
     <td>
     <?php
     if (!empty($incidents['softwareid'])) echo software_name($incidents['softwareid'])."<br />";
@@ -247,7 +249,7 @@ while ($incidents = mysql_fetch_array($result))
             //echo "...";
         }
         ##print_r($target);
-        
+
         echo "</td>";
     }
 

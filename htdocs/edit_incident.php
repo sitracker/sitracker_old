@@ -64,6 +64,10 @@ if (empty($submit))
         <td><input maxlength='100' name="productservicepacks" size='30' type="text" value="<?php echo $incident["productservicepacks"] ?>" /></td></tr>
         <tr><th>CC Email:</th>
         <td><input maxlength='255' name="ccemail" size='30' type="text" value="<?php echo $incident["ccemail"] ?>" /></td></tr>
+        <?php
+        echo "<tr><th>Escalation</th>";
+        echo "<td>".escalation_path_drop_down('escalationpath', $incident['escalationpath'])."</td></tr>";
+        ?>
         <tr><th>External ID:</th>
         <td><input maxlength='50' name="externalid" size='30' type="text" value="<?php echo $incident["externalid"] ?>" /></td></tr>
         <tr><th>External Engineers Name:</th>
@@ -81,6 +85,7 @@ if (empty($submit))
         <input name="oldtitle" type="hidden" value="<?php echo $incident["title"] ?>" />
         <input name="oldcontact" type="hidden" value="<?php echo $incident["contact"] ?>" />
         <input name="oldccemail" type="hidden" value="<?php echo $incident["ccemail"] ?>" />
+        <input name="oldescalationpath" type="hidden" value="<?php echo db_read_column('name', 'escalationpaths', $incident["escalationpath"]) ?>" />
         <input name="oldexternalid" type="hidden" value="<?php echo $incident["externalid"] ?>" />
         <input name="oldexternalengineer" type="hidden" value="<?php echo $incident["externalengineer"] ?>" />
         <input name="oldexternalemail" type="hidden" value="<?php echo $incident["externalemail"] ?>" />
@@ -101,6 +106,7 @@ else
     $externalid = cleanvar($_POST['externalid']);
     $type = cleanvar($_POST['type']);
     $ccemail = cleanvar($_POST['ccemail']);
+    $escalationpath = cleanvar($_POST['escalationpath']);
     $externalengineer = cleanvar($_POST['externalengineer']);
     $externalemail = cleanvar($_POST['externalemail']);
     $title = cleanvar($_POST['title']);
@@ -112,6 +118,7 @@ else
     $oldtitle = cleanvar($_POST['oldtitle']);
     $oldcontact = cleanvar($_POST['oldcontact']);
     $maintid = cleanvar($_POST['maintid']);
+    $oldescalationpath = cleanvar($_POST['oldescalationpath']);
     $oldexternalid = cleanvar($_POST['oldexternalid']);
     $oldexternalemail = cleanvar($_POST['oldexternalemail']);
     $oldproduct = cleanvar($_POST['oldproduct']);
@@ -151,7 +158,7 @@ else
 
             // update support incident
             $sql = "UPDATE incidents SET externalid='$externalid', ccemail='$ccemail', ";
-            $sql .= "externalengineer='$externalengineer', externalemail='$externalemail', title='$title', ";
+            $sql .= "escalationpath='$escalationpath', externalengineer='$externalengineer', externalemail='$externalemail', title='$title', ";
             $sql .= "contact='$contact', softwareid='$software', productversion='$productversion', ";
             $sql .= "productservicepacks='$productservicepacks' WHERE id='$id'";
             $result = mysql_query($sql);
@@ -192,7 +199,9 @@ else
                         $header .= "None";
                     $header .= "</b>\n";
                 }
+                $escalationpath=db_read_column('name', 'escalationpaths', $escalationpath);
                 if ($oldccemail != $ccemail) $header .= "CC Email: " . $oldccemail . " -&gt; <b>" . $ccemail . "</b>\n";
+                if ($oldescalationpath != $escalationpath) $header .= "Escalation: " . $oldescalationpath . " -&gt; <b>" . $escalationpath . "</b>\n";
                 if ($oldexternalengineer != $externalengineer) $header .= "External Engineer: " . $oldexternalengineer . " -&gt; <b>" . $externalengineer . "</b>\n";
                 if ($oldexternalemail != $externalemail) $header .= "External email: " . $oldexternalemail . " -&gt; <b>" . $externalemail . "</b>\n";
                 if ($oldsoftware != $software) $header .= "Software: ".software_name($oldsoftware)." -&gt; <b>".software_name($software)."</b>\n";
