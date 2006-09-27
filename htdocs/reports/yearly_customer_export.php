@@ -26,7 +26,7 @@ if (empty($_REQUEST['mode']))
     echo "<h2>$title</h2>";
     echo "<p align='center'>This report lists the incidents that each site has logged over the past twelve months.</p>";
     echo "<form action='{$_SERVER['PHP_SELF']}' method='post'>";
-    echo "<table summary='Site Selection Table'>";
+    echo "<table summary='Site Selection Table' align='center'>";
     echo "<tr><th colspan='2' align='center'>Include</th></tr>";
     echo "<tr><td align='center' colspan='2' class='shade1'>";
     $sql = "SELECT * FROM sites ORDER BY name";

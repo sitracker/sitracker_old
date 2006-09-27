@@ -32,7 +32,7 @@ if (empty($_REQUEST['mode']))
     include('htmlheader.inc.php');
     echo "<h2>$title</h2>";
     echo "<form action='{$_SERVER['PHP_SELF']}' method='post'>";
-    echo "<table>";
+    echo "<table align='center'>";
     echo "<tr><th colspan='2' align='center' class='shade1'>Include</th></tr>";
     echo "<tr><td align='center' colspan='2' class='shade1'>";
     $sql = "SELECT * FROM users WHERE status > 0 ORDER BY username";

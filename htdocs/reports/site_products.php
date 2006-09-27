@@ -21,7 +21,7 @@ if (empty($_REQUEST['mode']))
     include('htmlheader.inc.php');
     echo "<h2>$title</h2>";
     echo "<form action='{$_SERVER['PHP_SELF']}' method='post'>";
-    echo "<table>";
+    echo "<table align='center'>";
 
     echo "<tr><td align='right' width='200' class='shade1'><b>Site Type</b>:</td>";
     echo "<td width=400 class='shade2'>";

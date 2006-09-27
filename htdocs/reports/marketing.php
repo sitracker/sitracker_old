@@ -38,7 +38,7 @@ if (empty($_REQUEST['mode']))
     echo "<h2>Marketing Report</h2>";
     echo "<p></p>";
     echo "<form action='{$_SERVER['PHP_SELF']}' method='post'>";
-    echo "<table>";
+    echo "<table align='center'>";
     echo "<tr><th>Include</th><th>Exclude</th></tr>";
     echo "<tr><td>";
     $sql   = "SELECT * FROM products ORDER BY name";

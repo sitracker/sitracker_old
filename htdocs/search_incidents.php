@@ -28,7 +28,7 @@ if (empty($search_string))
     ?>
     <h2>Search Incidents</h2>
     <form action="<?php echo $_SERVER['PHP_SELF'] ?>" method="get">
-    <table summary="Form to Search Incidents">
+    <table summary="Form to Search Incidents" class='vertical'>
 
     <tr><th>Search String:</th><td><input maxlength='100' name="search_string" size="30" type="text" />
     </td></tr>

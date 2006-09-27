@@ -77,6 +77,7 @@ function users_incidents()
         $incidents_minimal = true;
         include('incidents_table.inc.php');
     }
+    else echo "<p align='center'>No Incidents</p>";
     echo "</div>";
     echo "</div>";
     echo "</div>";

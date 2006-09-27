@@ -4627,7 +4627,7 @@ function incident_open($incidentid)
 // Return HTML for a table column header (th and /th) with links for sorting
 // Filter parameter can be an assocative array containing fieldnames and values
 // to pass on the url for data filtering purposes
-function colheader($colname, $coltitle, $sort, $order, $filter='', $defaultorder='a')
+function colheader($colname, $coltitle, $sort=FALSE, $order='', $filter='', $defaultorder='a')
 {
     global $CONFIG;
     $html = "<th>";
@@ -4656,7 +4656,8 @@ function colheader($colname, $coltitle, $sort, $order, $filter='', $defaultorder
     }
     else
     {
-        $html .= "<a href='{$_SERVER['PHP_SELF']}?sort=$colname&amp;order={$defaultorder}{$qsappend}'>{$coltitle}</a> ";
+        if ($sort===FALSE) $html .= "{$coltitle}";
+        else $html .= "<a href='{$_SERVER['PHP_SELF']}?sort=$colname&amp;order={$defaultorder}{$qsappend}'>{$coltitle}</a> ";
     }
     $html .= "</th>";
     return $html;
