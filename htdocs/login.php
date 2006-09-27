@@ -42,7 +42,7 @@ if (authenticate($username, $password) == 1)
     $_SESSION['incident_refresh'] = $user->var_incident_refresh;
     $_SESSION['update_order'] = $user->var_update_order;
     $_SESSION['collapse'] = $user->var_collapse;
-    $_SESSION['groupid'] = $user->groupid;
+    $_SESSION['groupid'] = is_null($user->groupid) ? 0 : $user->groupid;
 
     // Make an array full of users permissions
     // The zero permission is added to all users, zero means everybody can access
