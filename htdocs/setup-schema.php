@@ -128,12 +128,14 @@ INSERT INTO `emailtype` VALUES (9,'INCIDENT_LOGGED_EMAIL','system','Acknowledge 
 INSERT INTO `emailtype` (`id`, `name`, `type`, `description`, `tofield`, `fromfield`, `replytofield`, `ccfield`, `bccfield`, `subjectfield`, `body`, `customervisibility`, `storeinlog`) VALUES (50,'INCIDENT_REASSIGNED_USER_NOTIFY', 'system', 'Notify user when call assigned to them', '<incidentreassignemailaddress>', '<supportemail>', '<supportemail>', '', '', 'A <incidentpriority> priority call ([<incidentid>] - <incidenttitle>) has been reassigned to you', 'Hi,\r\n\r\nIncident [<incidentid>] entitled <incidenttitle> has been reassigned to you.\r\n\r\nThe details of this incident are:\r\n\r\nPriority: <incidentpriority>\r\nContact: <contactname>\r\nSite: <contactsite>\r\n\r\n\r\nRegards\r\n<applicationname>\r\n\r\n\r\n---\r\n<todaysdate> - <applicationshortname> <applicationversion>', 'hide', 'No');
 
 CREATE TABLE `escalationpaths` (
-`id` INT( 11 ) NOT NULL AUTO_INCREMENT PRIMARY KEY ,
-`name` VARCHAR( 255 ) NULL ,
-`url` VARCHAR( 255 ) NULL ,
-`url_title` VARCHAR( 255 ) NULL ,
-`email_domain` VARCHAR( 255 ) NULL
-) ENGINE = MYISAM ;
+  `id` int(11) NOT NULL auto_increment,
+  `name` varchar(255) default NULL,
+  `track_url` varchar(255) default NULL,
+  `home_url` varchar(255) NOT NULL default '',
+  `url_title` varchar(255) default NULL,
+  `email_domain` varchar(255) default NULL,
+  PRIMARY KEY  (`id`)
+) ENGINE=MyISAM ;
 
 CREATE TABLE `feedbackforms` (
   `id` int(5) NOT NULL auto_increment,
@@ -1255,12 +1257,14 @@ CREATE TABLE `notes` (
 ) ENGINE=MyISAM ;
 
 CREATE TABLE `escalationpaths` (
-`id` INT( 11 ) NOT NULL AUTO_INCREMENT PRIMARY KEY ,
-`name` VARCHAR( 255 ) NULL ,
-`url` VARCHAR( 255 ) NULL ,
-`url_title` VARCHAR( 255 ) NULL ,
-`email_domain` VARCHAR( 255 ) NULL
-) ENGINE = MYISAM ;
+  `id` int(11) NOT NULL auto_increment,
+  `name` varchar(255) default NULL,
+  `track_url` varchar(255) default NULL,
+  `home_url` varchar(255) NOT NULL default '',
+  `url_title` varchar(255) default NULL,
+  `email_domain` varchar(255) default NULL,
+  PRIMARY KEY  (`id`)
+) ENGINE=MyISAM ;
 
 ALTER TABLE `incidents` ADD `escalationpath` INT( 11 ) NULL AFTER `id` ;
 ";

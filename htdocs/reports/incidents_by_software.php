@@ -47,10 +47,10 @@ if (empty($_REQUEST['mode']))
 else
 {
     $startdate = strtotime($_REQUEST['startdate']);
-    $sql = "SELECT count(software.id), software.name ";
+    $sql = "SELECT count(software.id) AS softwarecount, software.name ";
     $sql .= "FROM software, incidents ";
     $sql .= "WHERE software.id = incidents.softwareid AND incidents.lastupdated > '{$startdate}' ";
-    $sql .= "GROUP BY software.id";
+    $sql .= "GROUP BY software.id ORDER BY softwarecount DESC";
     $result = mysql_query($sql);
     if (mysql_error()) trigger_error("MySQL Query Error ".mysql_error(), E_USER_ERROR);
 
@@ -60,10 +60,10 @@ else
     $count = 0;
     while($row = mysql_fetch_array($result))
     {
-        $countArray[$c] = $row['count(software.id)'];
+        $countArray[$c] = $row['softwarecount'];
         $count += $countArray[$c];
         $softwareNames[$c]  = $row['name'];
-        $c++; 
+        $c++;
     }
 
     include('htmlheader.inc.php');
@@ -72,16 +72,28 @@ else
     echo "<p>";
     echo "<table class='vertical' align='center'>";
     echo "<tr><th>Number of calls</th><th>%</th><th>Software</th></tr>";
+    $others=0;
     for($i = 0; $i < $c; $i++)
     {
-        $data .= $countArray[$i]."|";
-        $percentage = number_format(($countArray[$i]/$count) * 100,1);
-        $legend .= $softwareNames[$i]." ({$percentage}%)|";
+        if ($i<=25)
+        {
+            $data .= $countArray[$i]."|";
+            $percentage = number_format(($countArray[$i]/$count) * 100,1);
+            $legend .= $softwareNames[$i]." ({$percentage}%)|";
+        }
+        else
+        {
+            $others += $countArray[$i];
+        }
         echo "<tr><td class='shade1'>{$countArray[$i]}</td>";
         echo "<td class='shade1'>{$percentage}%</td>";
         echo "<td class='shade1'>$softwareNames[$i]</td></tr>";
     }
     echo "</table>";
+    $data .= $others."|";
+    $percentage = number_format(($others/$count) * 100,1);
+    $legend .= "Others ($percentage)|";
+
 
     echo "</p>";
 

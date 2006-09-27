@@ -43,6 +43,21 @@ function statusform_submit(user)
 </script>
 <?php
 
+// Extract escalation paths
+$epsql = "SELECT id, name, track_url, home_url, url_title FROM escalationpaths";
+$epresult = mysql_query($epsql);
+if (mysql_error()) trigger_error(mysql_error(),E_USER_ERROR);
+if (mysql_num_rows($epresult) >= 1)
+{
+    while ($escalationpath = mysql_fetch_object($epresult))
+    {
+        $epath[$escalationpath->id]['name'] = $escalationpath->name;
+        $epath[$escalationpath->id]['track_url'] = $escalationpath->track_url;
+        $epath[$escalationpath->id]['home_url'] = $escalationpath->home_url;
+        $epath[$escalationpath->id]['url_title'] = $escalationpath->url_title;
+    }
+}
+
 // Generic bit of SQL, common to both queue types
 $selectsql = "SELECT incidents.id, escalationpath, externalid, title, owner, towner, priority, status, siteid, forenames, surname, email, incidents.maintenanceid, ";
 $selectsql .= "servicelevel, softwareid, lastupdated, timeofnextaction, ";

@@ -165,8 +165,18 @@ while ($incidents = mysql_fetch_array($result))
 
     // Create URL for External ID's
     $externalid='';
-    if (empty($incidents['externalid']) AND $incidents['escalationpath']>=1) $externalid=db_read_column('name', 'escalationpaths', $incidents['escalationpath']);
-    if (!empty($incidents['externalid'])) $externalid = format_external_id($incidents['externalid']);
+    $escalationpath=$incidents['escalationpath'];
+    if (!empty($incidents['escalationpath']) AND !empty($incidents['externalid']))
+    {
+        $epathurl = str_replace('%externalid%',$incidents['externalid'],$epath[$escalationpath]['track_url']);
+        $externalid = "<a href='{$epathurl}' title='{$epath[$escalationpath]['url_title']}'>{$incidents['externalid']}</a>";
+    }
+    elseif (empty($incidents['externalid']) AND $incidents['escalationpath']>=1)
+    {
+        $epathurl = $epath[$escalationpath]['home_url'];
+        $externalid = "<a href='{$epathurl}' title='{$epath[$escalationpath]['url_title']}'>{$epath[$escalationpath]['name']}</a>";
+    }
+    elseif (empty($incidents['escalationpath']) AND !empty($incidents['externalid'])) $externalid = format_external_id($incidents['externalid']);
     ?>
     <tr class='<?php echo $class; ?>'>
     <td align='center'>

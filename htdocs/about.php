@@ -32,7 +32,8 @@ echo "Version: {$application_version} {$application_revision}</p><br />";
 </td>
 </tr>
 <tr><td class='shade1' colspan="2">Credits:</td></tr>
-<tr><td class='shade2' width='20%' align='right'><strong>Code:</strong></td><td class='shade2'>Ivan Lucas, Tom Gerrard, Andy Smith</td></tr>
+<tr><td class='shade2' width='20%' align='right'><strong>Code:</strong></td><td class='shade2'>Ivan 
+Lucas, Tom Gerrard, Paul Heaney</td></tr>
 <tr><td class='shade2' width='20%' align='right'><strong>Design/Testing:</strong></td><td class='shade2'>Paul Lees, Peter Atkins, Tom Gerrard, Ivan Lucas, Micky Campbell and the Salford Software Staff</td></tr>
 <tr><td class='shade2' width='20%' align='right'><strong>CSS Styles:</strong></td><td class='shade2'>Ivan Lucas, Tom Gerrard, Paul Harrison</td></tr>
 <tr><td class='shade2' width='20%' align='right'><strong>Version 2:</strong></td><td class='shade2'>Martin Kilkoyne</td></tr>
