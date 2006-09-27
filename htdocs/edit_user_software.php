@@ -108,13 +108,13 @@ if (empty($submit))
     }
     else echo "<p class='error'>No software defined</p>";
     echo "</td>";
-    echo "<td>";
+    echo "<td class='shade2'>";
     echo "<input type='button' value='&gt;' title='Add Selected' onclick=\"copySelected(this.form.elements['noskills[]'],this.form.elements['expertise[]'])\" /><br />";
     echo "<input type='button' value='&lt;' title='Remove Selected' onclick=\"copySelected(this.form.elements['expertise[]'],this.form.elements['noskills[]'])\" /><br />";
     echo "<input type='button' value='&gt;&gt;' title='Add All' onclick=\"copyAll(this.form.elements['noskills[]'],this.form.elements['expertise[]'])\" /><br />";
     echo "<input type='button' value='&lt;&lt;' title='Remove All' onclick=\"copyAll(this.form.elements['expertise[]'],this.form.elements['noskills[]'])\" /><br />";
     echo "</td>";
-    echo "<td>";
+    echo "<td class='shade1'>";
     $sql = "SELECT * FROM usersoftware, software WHERE usersoftware.softwareid=software.id AND userid='{$user}' ORDER BY name";
     $result = mysql_query($sql);
     echo "<select name='expertise[]' multiple='multiple' size='20'>";

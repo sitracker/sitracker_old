@@ -76,18 +76,24 @@ if ($action == "edit")
         ?>
         <p align='center'>Mandatory fields are marked <sup class='red'>*</sup></p>
         <form id='maintform' name='maintform' action="<?php echo $_SERVER['PHP_SELF']; ?>?action=update" method="post" onsubmit="return confirm_submit()">
-        <table align='center'>
+        <table align='center' class='vertical'>
         <tr><th>Site: <sup class='red'>*</sup></th><td><?php echo site_name($maint["site"]) ?></td></tr>
         <tr><th>Product: <sup class='red'>*</sup></th><td><?php echo product_name($maint["product"]) ?></td></tr>
         <tr><th>Reseller: <sup class='red'>*</sup></th><td><?php echo reseller_drop_down("reseller", $maint["reseller"]) ?></td></tr>
         <tr><th>Licence Quantity: <sup class='red'>*</sup></th><td><input maxlength="7" name="licence_quantity" size="5" value="<?php echo $maint["licence_quantity"] ?>" /></td></tr>
         <tr><th>Licence Type: <sup class='red'>*</sup></th><td><?php echo licence_type_drop_down("licence_type", $maint["licence_type"]) ?></td></tr>
-        <tr><th>Expiry Date: <sup class='red'>*</sup></th><td>
+        <tr><th>Expiry Date: <sup class='red'>*</sup></th>
         <?php
-        day_drop_down("expiry_day", maintenance_expiry_day($maintid));
-        month_drop_down("expiry_month", maintenance_expiry_month($maintid));
-        year_drop_down("expiry_year", maintenance_expiry_year($maintid))
-        ?></td></tr>
+        echo "<td><input name='expirydate' size='10' value='";
+        if ($maint['expirydate'] > 0) echo date('Y-m-d',$maint['expirydate']);
+        echo "' /> ".date_picker('maintform.expirydate')."</td></tr>\n";
+        ?>
+        <?php
+        //day_drop_down("expiry_day", maintenance_expiry_day($maintid));
+        //month_drop_down("expiry_month", maintenance_expiry_month($maintid));
+        //year_drop_down("expiry_year", maintenance_expiry_year($maintid))
+        // </td></tr>
+        ?>
         <tr><th>Service Level:</th><td><?php echo servicelevel_drop_down('servicelevelid',$maint['servicelevelid'], TRUE); ?></td></tr>
         <?php
         echo "<tr><th>Incident Pool:</th>";
@@ -103,6 +109,7 @@ if ($action == "edit")
         <p align='center'><input name="submit" type="submit" value="Save" /></p>
         </form>
         <?php
+        echo "<p align='center'><a href='maintenance_details.php?id={$maintid}'>View contract</a></p>";
         mysql_free_result($result);
     }
     include('htmlfooter.inc.php');
@@ -120,10 +127,7 @@ else if ($action == "update")
     $terminated = cleanvar($_POST['terminated']);
     $servicelevelid = cleanvar($_POST['servicelevelid']);
     $incidentpoolid = cleanvar($_POST['incidentpoolid']);
-    $expiry_year = cleanvar($_POST['expiry_year']);
-    $expiry_month = cleanvar($_POST['expiry_month']);
-    $expiry_day = cleanvar($_POST['expiry_day']);
-
+    $expirydate = strtotime($_REQUEST['expirydate']);
 
     // Update maintenance
     $errors = 0;
@@ -153,28 +157,15 @@ else if ($action == "update")
         $errors_string .= "<p class='error'>You must select an admin contact</p>\n";
     }
     // check for blank expiry day
-    if ($expiry_day == 0)
+    if ($expirydate == 0)
     {
         $errors = 1;
-        $errors_string .= "<p class='error'>You must select an expiry day</p>\n";
-    }
-    // check for blank expiry month
-    if ($expiry_month == "0")
-    {
-        $errors = 1;
-        $errors_string .= "<p class='error'>You must select an expiry month</p>\n";
-    }
-    // check for blank expiry year
-    if ($expiry_year == 0)
-    {
-        $errors = 1;
-        $errors_string .= "<p class='error'>You must select an expiry year</p>\n";
+        $errors_string .= "<p class='error'>You must enter an expiry date</p>\n";
     }
 
     // update maintenance if no errors
     if ($errors == 0)
     {
-        $expirydate=mktime(0,0,0,$expiry_month,$expiry_day,$expiry_year);
         if (empty($productonly)) $productonly='no';
         if ($productonly=='yes') $terminated='yes';
 

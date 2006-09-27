@@ -34,7 +34,7 @@ if (empty($submit))
     <h2>Add New Product</h2>
     <p align='center'>Mandatory fields are marked <sup class='red'>*</sup></p>
     <form action="<?php echo $_SERVER['PHP_SELF']; ?>" method="post" onsubmit="return confirm_submit()">
-    <table>
+    <table align='center'>
     <tr><th>Vendor: <sup class='red'>*</sup></th><td><?php echo vendor_drop_down('vendor', 0); ?></td></tr>
     <tr><th>Product Name: <sup class='red'>*</sup></th><td><input maxlength="50" name="name" size="40" /></td></tr>
     <?php

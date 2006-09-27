@@ -36,7 +36,7 @@ if (empty($submit))
     <h2>Add New Contact</h2>
     <h5>Mandatory fields are marked <sup class='red'>*</sup></h5>
     <form name='contactform' action="<?php echo $_SERVER['PHP_SELF']; ?>" method="post" onsubmit="return confirm_submit()">
-    <table>
+    <table align='center'>
     <tr><th>Contact Name: <sup class='red'>*</sup><br />Title, Forenames, Surname</th>
     <td><input maxlength="50" name="salutation" title="Salutation (Mr, Mrs, Miss, Dr. etc.)" size="7" />
     <input maxlength="100" name="forenames" size="15" title="Firstnames (or initials)" />

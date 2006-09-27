@@ -78,10 +78,14 @@ Bar Chart showing incident logging trends <em>(May take a few mins to calculate)
 Report showing the average length of time taken to close incidents <em>(May take a few mins to calculate)</em>
 </td></tr>
 
-
 <tr><td><a href='reports/recent_incidents_table.php'>Recent Incidents Table</a><br />
 A 'league' style table showing sites that have logged incidents recently.
 </td></tr>
+
+<tr><td><a href='reports/incidents_by_software.php'>Incidents by Software</a><br />
+Table and chart showing the number of incidents logged under different software.
+</td></tr>
+
 
 <?php
 

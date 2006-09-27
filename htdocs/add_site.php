@@ -34,7 +34,7 @@ if ($action == "showform" OR $action == '')
     <h2>Add New Site</h2>
     <h5>Mandatory fields are marked <sup class='red'>*</sup></h5>
     <form action="<?php echo $_SERVER['PHP_SELF']; ?>?action=add" method="post" onsubmit="return confirm_submit()">
-    <table>
+    <table align='center'>
     <tr><th>Name: <sup class="red">*</sup></th><td><input maxlength="255" name="name" size="30" /></td></tr>
     <tr><th>Department: <sup class="red">*</sup></th><td><input maxlength="255" name="department" size="30" /></td></tr>
     <tr><th>Address1:<sup class="red">*</sup></th><td><input maxlength="255" name="address1" size="30" /></td></tr>

@@ -35,14 +35,18 @@ if ($action == "showform" OR $action=='')
     </script>
     <h2>Add Contract</h2>
     <p align='center'>Mandatory fields are marked <sup class='red'>*</sup></p>
-    <form action="<?php echo $_SERVER['PHP_SELF']; ?>?action=add" method="post" onsubmit="return confirm_submit()">
+    <form name='addcontract' action="<?php echo $_SERVER['PHP_SELF']; ?>?action=add" method="post" onsubmit="return confirm_submit()">
     <table align='center' class='vertical'>
     <tr><th>Site: <sup class='red'>*</sup></th><td><?php echo site_drop_down("site", $siteid) ?></td></tr>
     <tr><th>Product: <sup class='red'>*</sup></th><td><?php echo product_drop_down("product", 0); ?></td></tr>
     <tr><th>Reseller: <sup class='red'>*</sup></th><td><?php echo reseller_drop_down("reseller", 0) ?></td></tr>
     <tr><th>Licence Quantity: <sup class='red'>*</sup></th><td><input maxlength="7" name="licence_quantity" size="5" /></td></tr>
     <tr><th>Licence Type: <sup class='red'>*</sup></th><td><?php echo licence_type_drop_down("licence_type", 0); ?></td></tr>
-    <tr><th>Expiry Date: <sup class='red'>*</sup></th><td><?php day_drop_down("expiry_day", 0); ?><?php month_drop_down("expiry_month", 0); ?><?php year_drop_down("expiry_year", 0); ?></td></tr>
+    <tr><th>Expiry Date: <sup class='red'>*</sup></th>
+    <?php
+    echo "<td><input name='expiry' size='10' /> ".date_picker('addcontract.expiry')."</td></tr>\n";
+    ?>
+
     <tr><th>Service Level:</th><td><?php echo servicelevel_drop_down('servicelevelid', 1, TRUE); ?></td></tr>
     <?php
     echo "<tr><th>Incident Pool:</th>";
@@ -67,9 +71,7 @@ elseif ($action == "add")
     $licence_quantity = mysql_escape_string($_REQUEST['licence_quantity']);
     $licence_type = mysql_escape_string($_REQUEST['licence_type']);
     $admincontact = mysql_escape_string($_REQUEST['admincontact']);
-    $expiry_day = mysql_escape_string($_REQUEST['expiry_day']);
-    $expiry_month = mysql_escape_string($_REQUEST['expiry_month']);
-    $expiry_year = mysql_escape_string($_REQUEST['expiry_year']);
+    $expirydate = strtotime($_REQUEST['expiry']);
     $notes = mysql_escape_string($_REQUEST['notes']);
     $servicelevelid = mysql_escape_string($_REQUEST['servicelevelid']);
     $incidentpoolid = mysql_escape_string($_REQUEST['incidentpoolid']);
@@ -124,30 +126,21 @@ elseif ($action == "add")
         $errors_string .= "<p class='error'>You must select a service level</p>\n";
     }
     // check for blank expiry day
-    if ($expiry_day == 0)
+    if ($expirydate == 0)
     {
         $errors = 1;
-        $errors_string .= "<p class='error'>You must select an expiry day</p>\n";
+        $errors_string .= "<p class='error'>You must enter an expiry date</p>\n";
     }
-    // check for blank expiry month
-    if ($expiry_month == "0")
+    if ($expirydate < $now)
     {
         $errors = 1;
-        $errors_string .= "<p class='error'>You must select an expiry month</p>\n";
+        $errors_string .= "<p class='error'>Expiry date cannot be in the past</p>\n";
     }
-    // check for blank expiry year
-    if ($expiry_year == 0)
-    {
-        $errors = 1;
-        $errors_string .= "<p class='error'>You must select an expiry year</p>\n";
-    }
-
     // add maintenance if no errors
     if ($errors == 0)
     {
         $addition_errors = 0;
 
-        $expirydate=mktime(0,0,0,$expiry_month,$expiry_day,$expiry_year);
         if (empty($productonly)) $productonly='no';
         if ($productonly=='yes') $term='yes';
         else $term='no';
