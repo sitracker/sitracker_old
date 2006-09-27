@@ -68,7 +68,6 @@ function users_incidents()
     $querystring = "?user=$user&amp;queue=$queue&amp;type=$type&amp;";
 
     if ($user=='all') echo "<p align='center'>There are <strong>{$rowcount}</strong> incidents in this list.</p>";
-    else echo "<br />";
     $mode = "min";
     // Print message if no incidents were listed
     if (mysql_num_rows($result) >= 1)

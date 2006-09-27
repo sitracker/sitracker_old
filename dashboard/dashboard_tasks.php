@@ -8,8 +8,6 @@ function dashboard_tasks()
     echo "<div class='windowbox' style='width: 95%;'>";
     echo "<div class='windowtitle'>".user_realname($user)."'s Tasks:</div>";
     echo "<div class='window'>";
-    echo "<br />";
-
 
     $sql = "SELECT * FROM tasks WHERE owner='$user' AND (completion < 100 OR completion='' OR completion IS NULL) ";
     if (!empty($sort))
@@ -32,7 +30,7 @@ function dashboard_tasks()
 
     if (mysql_num_rows($result) >=1 )
     {
-        echo "<table align='center'>";
+        echo "<table align='center' width='100%'>";
         echo "<tr>";
         echo colheader('id', 'ID');
         echo colheader('name', 'Task');

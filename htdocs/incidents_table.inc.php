@@ -294,6 +294,6 @@ while ($incidents = mysql_fetch_array($result))
     echo "</tr>\n";
 }
 echo "</table>\n\n";
-echo "<p align='center'>{$rowcount} Incidents</p>";
+if(empty($incidents_minimal)) echo "<p align='center'>{$rowcount} Incidents</p>";
 if ($CONFIG['debug']) echo "<!-- End of Support Incidents Table -->\n";
 ?>
