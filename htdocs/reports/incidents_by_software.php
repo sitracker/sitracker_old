@@ -75,7 +75,7 @@ else
     for($i = 0; $i < $c; $i++)
     {
         $data .= $countArray[$i]."|";
-        $percentage = ($countArray[$i]/$count) * 100;
+        $percentage = number_format(($countArray[$i]/$count) * 100,1);
         $legend .= $softwareNames[$i]." ({$percentage}%)|";
         echo "<tr><td class='shade1'>{$countArray[$i]}</td>";
         echo "<td class='shade1'>{$percentage}%</td>";
