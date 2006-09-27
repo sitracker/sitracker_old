@@ -6,7 +6,40 @@ careful not to overwrite your config.inc.php or any custom themes you
 might have.  Then run setup.php in your browser and follow the
 instructions on-screen.
 
-Further instructions and notes about specific upgrades follow:
+Further instructions and notes about specific upgrades follow, if you
+upgrading and skipping several versions listed below you should read
+everything carefully to make sure you've met all the requirements:
+
+Upgrading to 3.24
+-----------------
+A permission has been added for the new 'Add Reseller' feature, no users
+will have this permission after upgrading, you should check each users'
+permissions (and/or role permissions) to ensure they meet your needs.
+
+Administrators can now disable accounts by editing a users profile
+and setting status to disabled.  If you have redundant user accounts
+we recommend you do this now.
+
+Multiple global email signatures are now possible, you may want to
+visit SiT! -> Control Panel -> Email Settings -> Global Signature and
+add more signatures (to be chosen at random).
+
+Email templates can now store information in the incident log, this
+can be set individually for each template, you may want to review
+your templates and adjust this.  See SiT! -> Control Panel ->
+Email Settings -> Edit Template
+
+Users can now be placed in groups, if you want to group your users
+go to SiT! -> Control Panel -> Users -> User Groups
+
+You can now add vendors, you may want to group your products by
+vendor, see Customers -> Maintenance -> Products & Software
+Add Vendor and see also Edit Product.
+For example you may want to group some of your Linux Support products
+under Red Hat and others under Mandriva.
+It's also possible to edit products and edit or delete software records
+you may find it helpful to do some housekeeping.
+
 
 Upgrading to 3.23
 -----------------

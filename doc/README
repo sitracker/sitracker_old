@@ -16,6 +16,7 @@ of the GNU General Public License, incorporated herein by reference.
         * Upgrading
         * Configuring
         * Regular Scheduled Tasks
+        * Inbound email
         * Creating Plugins
         * Getting help
         * Reporting bugs
@@ -138,6 +139,11 @@ Actions:
 An example crontab might look like this:
 6 * * * * /usr/bin/php -f /var/www/sit/htdocs/auto.php TimeCalc
 30 * * * * /usr/bin/php -f /var/www/sit/htdocs/auto.php CloseIncidents,PurgeJournal
+
+
+Inbound email
+-------------
+TODO Documentation to be written
 
 
 Creating Plugins

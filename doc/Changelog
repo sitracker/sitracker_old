@@ -15,7 +15,6 @@ Changes in v3.24 - Unreleased
 * Fixed issues with URLs that contain colons
 * Incidents page informs you more accuratly who updated the call
 * Specified MySQL Engine type to be MyISAM on all table creations
-* Allow configuration of external escalation partners
 * Call opening notes are shown in tool tip after new incidents logged rather
   than reassign
 * BB Code. Basic set of BB codes supported in incident updates
@@ -54,6 +53,7 @@ Changes in v3.24 - Unreleased
 * Ability to add resellers
 * Escalation can now be configured via a database table, though there is no
   GUI for this yet
+* External escalation partners can be configured via config file
 * Edit incident now lets you select an escalation path (assuming paths are
   configured in the escalationpaths database table)
 * Ability to add/edit/view tasks
