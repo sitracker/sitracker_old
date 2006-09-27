@@ -8,15 +8,9 @@
 // This software may be used and distributed according to the terms
 // of the GNU General Public License, incorporated herein by reference.
 //
-// Author: Ivan Lucas
+// Authors: Ivan Lucas <ivanlucas[at]users.sourceforge.net>
+//          Paul Heaney <paulheaney[at]users.sourceforge.net>
 
-
-// TODO Stub
-// This script is uninished as of 25 Aug 06, committing it to SVN so I can work on it
-// elsewhere -- Ivan
-// The intention is that emails are piped to this script
-
-echo "Mail decoder\n";
 require('db_connect.inc.php');
 require('functions.inc.php');
 require('mime_email.class.php');
@@ -36,20 +30,11 @@ $email->set_emaildata($rawemail);
 unset($rawemail);
 $attachment=array();
 
-//echo "------------------------------\n\n\n\n";
-
 $decoded_email = $email->go_decode();
-
-
-echo "Decoded mail...\n";
-print_r($decoded_email);
-//echo $decoded_email->emailtextplain;
-
 
 // Extract Incident ID etc.
 if (preg_match('/\[(\d{1,5})\]/',$decoded_email->subject,$m)) $incidentid = $m[1];
 $customer_visible = 'No';
-
 
 $part=1;
 if ($decoded_email->contenttype=='multipart/mixed'
@@ -98,11 +83,9 @@ if ($decoded_email->contenttype=='multipart/mixed'
 
                     $filename=str_replace(' ','_',$block->mime_contentdispositionname);
                     if (empty($filename)) $filename = "part{$part}";
-                    echo "* FILE ATTACHMENT: $filename\n";
                     $attachment[]=$filename;
                     // Write the attachment
                     $fa_dir = $CONFIG['attachment_fspath'].$incidentid;
-                    echo "FA DIR: $fa_dir\n";
                     if (!file_exists($fa_dir))
                     {
                         if (!mkdir($fa_dir, 0775)) trigger_error("Failed to create incident attachment directory",E_USER_WARNING);
@@ -112,7 +95,6 @@ if ($decoded_email->contenttype=='multipart/mixed'
                     {
                         if (!mkdir($fa_update_dir, 0775)) trigger_error("Failed to create incident update attachment directory",E_USER_WARNING);
                     }
-                    echo "About to write to ".$fa_update_dir.$delim.$filename."\n";
                     if (is_writable($fa_update_dir.$delim)) //File doesn't exist yet .$filename
                     {
                         $fwp = fopen($fa_update_dir.$delim.$filename, 'a');
@@ -122,7 +104,7 @@ if ($decoded_email->contenttype=='multipart/mixed'
                         fclose($fwp);
                     }
                     else echo "NOT WRITABLE $filename\n";
-        
+
                     }
         }
         else
@@ -132,11 +114,9 @@ if ($decoded_email->contenttype=='multipart/mixed'
 
             $filename=str_replace(' ','_',$block->mime_contentdispositionname);
             if (empty($filename)) $filename = "part{$part}";
-            echo "* FILE ATTACHMENT: $filename\n";
             $attachment[]=$filename;
             // Write the attachment
             $fa_dir = $CONFIG['attachment_fspath'].$incidentid;
-            echo "FA DIR: $fa_dir\n";
             if (!file_exists($fa_dir))
             {
                 if (!mkdir($fa_dir, 0775)) trigger_error("Failed to create incident attachment directory",E_USER_WARNING);
@@ -162,20 +142,11 @@ if ($decoded_email->contenttype=='multipart/mixed'
 
 $count_attachments = count($attachment);
 
-// DEBUG
-echo "* INCIDENT NUMBER: {$incidentid}\n";
-
 if (empty($message)) $message = $decoded_email->emailtextplain;
 
 // Strip excessive line breaks
 $message = str_replace("\n\n\n\n","\n", $message);
 $message = str_replace(">\n>\n>\n>\n",">\n", $message);
-
-
-// DEBUG
-echo "#*#-[START MESSAGE]*#*#*#*#*#*#*#*#*#*#*#*#*#*#*#*#*#*#*#*#*#*#*#*#*#*#*#*#*#*#\n";
-echo $message;
-echo "\n#*#-[END MESSAGE]*#*#*#*#*#*#*#*#*#*#*#*#*#*#*#*#*#*#*#*#*#*#*#*#*#*#*#*#*#*#*#\n";
 
 // Build up text to insert in the incident log
 if (!empty($decoded_email->from)) $headertext .= "From: [b]".htmlentities(mysql_escape_string($decoded_email->from), ENT_NOQUOTES)."[/b]\n";
@@ -241,7 +212,6 @@ else
         {
             $error = 1;
         }
-
     }
 
     if($error != 1)
@@ -253,7 +223,7 @@ else
         mysql_query($sql);
         if (mysql_error()) trigger_error(mysql_error(),E_USER_WARNING);
         $updateid = mysql_insert_id();
-        
+
         if($incident_open == "Yes")
         {
             // Mark the incident as active
@@ -291,7 +261,6 @@ else
             $sql .= "VALUES ('{$incidentid}', 0, 'emailin', '{$bodytext}', '{$now}', '$customer_visible', 1 )";
             mysql_query($sql);
             if (mysql_error()) trigger_error(mysql_error(),E_USER_WARNING);
-
         }
     }
 }
