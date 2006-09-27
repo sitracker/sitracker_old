@@ -486,7 +486,7 @@ INSERT INTO `maintenance` VALUES (1,1,1,2,1268179200,1,4,0,0,'This is an example
 CREATE TABLE `notes` (
   `id` int(11) NOT NULL auto_increment,
   `userid` int(11) NOT NULL default '0',
-  `timestamp` timestamp NOT NULL default CURRENT_TIMESTAMP on update CURRENT_TIMESTAMP,
+  `timestamp` timestamp default NULL,
   `bodytext` text NOT NULL,
   `link` int(11) NOT NULL default '0',
   `refid` int(11) NOT NULL default '0',
@@ -917,7 +917,7 @@ CREATE TABLE `system` (
 CREATE TABLE `tasks` (
   `id` int(11) NOT NULL auto_increment,
   `name` varchar(255) default NULL,
-  `description` text NULL,
+  `description` text NOT NULL,
   `priority` tinyint(4) default NULL,
   `owner` tinyint(4) NOT NULL default '0',
   `duedate` datetime default NULL,
@@ -926,10 +926,10 @@ CREATE TABLE `tasks` (
   `value` float(6,2) default NULL,
   `distribution` enum('public','private') NOT NULL default 'public',
   `created` datetime NOT NULL default '0000-00-00 00:00:00',
-  `lastupdated` timestamp NOT NULL default CURRENT_TIMESTAMP,
+  `lastupdated` timestamp DEFAULT NULL,
   PRIMARY KEY  (`id`),
   KEY `owner` (`owner`)
-) ENGINE=MyISAM;
+) ENGINE=MyISAM  ;
 
 
 CREATE TABLE `tempassigns` (
@@ -1226,7 +1226,7 @@ UPDATE emailtype SET `toField` = '<incidentreassignemailaddress>' WHERE `name` =
 CREATE TABLE `tasks` (
   `id` int(11) NOT NULL auto_increment,
   `name` varchar(255) default NULL,
-  `description` text NULL,
+  `description` text NOT NULL,
   `priority` tinyint(4) default NULL,
   `owner` tinyint(4) NOT NULL default '0',
   `duedate` datetime default NULL,
@@ -1235,10 +1235,10 @@ CREATE TABLE `tasks` (
   `value` float(6,2) default NULL,
   `distribution` enum('public','private') NOT NULL default 'public',
   `created` datetime NOT NULL default '0000-00-00 00:00:00',
-  `lastupdated` timestamp NOT NULL default CURRENT_TIMESTAMP,
+  `lastupdated` timestamp DEFAULT NULL,
   PRIMARY KEY  (`id`),
   KEY `owner` (`owner`)
-) ENGINE=MyISAM;
+) ENGINE=MyISAM  ;
 
 ALTER TABLE `tempincoming` ADD `lockeduntil` DATETIME NULL AFTER `locked` ;
 INSERT INTO `permissions` VALUES (63, 'Add Reseller');
@@ -1246,7 +1246,7 @@ INSERT INTO `permissions` VALUES (63, 'Add Reseller');
 CREATE TABLE `notes` (
   `id` int(11) NOT NULL auto_increment,
   `userid` int(11) NOT NULL default '0',
-  `timestamp` timestamp NOT NULL default CURRENT_TIMESTAMP on update CURRENT_TIMESTAMP,
+  `timestamp` timestamp default NULL,
   `bodytext` text NOT NULL,
   `link` int(11) NOT NULL default '0',
   `refid` int(11) NOT NULL default '0',
