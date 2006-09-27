@@ -88,8 +88,9 @@ if (authenticate($username, $password) == 1)
 else
 {
     // Invalid user
-    // TODO target v3.25 Have a look if this is a contact trying to login
-    $sql = "SELECT * FROM contacts WHERE username='$username' AND password='$password' LIMIT 1";
+    // Have a look if this is a contact trying to login
+    $portalpassword=cleanvar($_REQUEST['password']);
+    $sql = "SELECT * FROM contacts WHERE username='$username' AND password='$portalpassword' LIMIT 1";
     $result = mysql_query($sql);
     if (mysql_error()) trigger_error(mysql_error(),E_USER_ERROR);
     if (mysql_num_rows($result) >= 1)

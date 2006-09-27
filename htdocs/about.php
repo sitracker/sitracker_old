@@ -32,7 +32,7 @@ echo "Version: {$application_version} {$application_revision}</p><br />";
 </td>
 </tr>
 <tr><td class='shade1' colspan="2">Credits:</td></tr>
-<tr><td class='shade2' width='20%' align='right'><strong>Code:</strong></td><td class='shade2'>Ivan 
+<tr><td class='shade2' width='20%' align='right'><strong>Code:</strong></td><td class='shade2'>Ivan
 Lucas, Tom Gerrard, Paul Heaney</td></tr>
 <tr><td class='shade2' width='20%' align='right'><strong>Design/Testing:</strong></td><td class='shade2'>Paul Lees, Peter Atkins, Tom Gerrard, Ivan Lucas, Micky Campbell and the Salford Software Staff</td></tr>
 <tr><td class='shade2' width='20%' align='right'><strong>CSS Styles:</strong></td><td class='shade2'>Ivan Lucas, Tom Gerrard, Paul Harrison</td></tr>
@@ -42,7 +42,7 @@ Lucas, Tom Gerrard, Paul Heaney</td></tr>
 
 <tr><td class='shade1' colspan="2">Copyright Information:</td></tr>
 <tr><td class='shade2' colspan='2'>
-<p align='center'><?php echo "{$CONFIG['application_name']}"; ?> is Copyright &copy; 2000-<?php echo date('Y'); ?> <a href='http://www.salfordsoftware.co.uk/'>Salford Software Ltd.</a><br />
+<p align='center'><a href='http://sitracker.sourceforge.net'>SiT! Support Incident Tracker</a> is Copyright &copy; 2000-<?php echo date('Y'); ?> <a href='http://www.salfordsoftware.co.uk/'>Salford Software Ltd.</a><br />
 Licensed under the GNU General Public License.<br />
 Salford Software, Lancastrian Office Centre, Talbot Road, Old Trafford, Manchester. M32 0FP.</p>
 
