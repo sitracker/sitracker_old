@@ -339,7 +339,7 @@ else
                 $addition_errors_string .= "<p class='error'>Addition of incident update failed</p>\n";
             }
 
-            //notify related inicdents this has been closed 
+            //notify related inicdents this has been closed
             $sql = "SELECT distinct (relatedid) FROM relatedincidents WHERE incidentid = '$id'";
             $result = mysql_query($sql);
             if (mysql_error()) trigger_error("MySQL Query Error ".mysql_error(), E_USER_ERROR);
@@ -359,24 +359,26 @@ else
             {
                 $relatedincidents[] = $a[0];
             }
-            $uniquearray = array_unique($relatedincidents);
-            
-            foreach($uniquearray AS $relatedid)
+            if (is_array($relatedincidents))
             {
-                //dont care if I'm related to myself
-                if($relatedid != $id)
-                {
-                    $sql  = "INSERT INTO updates (incidentid, userid, type, bodytext, timestamp) ";
-                    $sql .= "VALUES ('$relatedid', '{$sit[2]}', 'research', 'New Status: [b]Active[/b]<hr>\nRelated incident [$id] has been closed', '$now')";
-                    $result = mysql_query($sql);
-                    if (mysql_error()) trigger_error("MySQL Query Error ".mysql_error(), E_USER_ERROR);
+                $uniquearray = array_unique($relatedincidents);
 
-                    $sql = "UPDATE incidents SET status = 1 WHERE id = '$relatedid'";
-                    $result = mysql_query($sql);
-                    if (mysql_error()) trigger_error("MySQL Query Error ".mysql_error(), E_USER_ERROR);
+                foreach($uniquearray AS $relatedid)
+                {
+                    //dont care if I'm related to myself
+                    if($relatedid != $id)
+                    {
+                        $sql  = "INSERT INTO updates (incidentid, userid, type, bodytext, timestamp) ";
+                        $sql .= "VALUES ('$relatedid', '{$sit[2]}', 'research', 'New Status: [b]Active[/b]<hr>\nRelated incident [$id] has been closed', '$now')";
+                        $result = mysql_query($sql);
+                        if (mysql_error()) trigger_error("MySQL Query Error ".mysql_error(), E_USER_ERROR);
+
+                        $sql = "UPDATE incidents SET status = 1 WHERE id = '$relatedid'";
+                        $result = mysql_query($sql);
+                        if (mysql_error()) trigger_error("MySQL Query Error ".mysql_error(), E_USER_ERROR);
+                    }
                 }
             }
-
             //tidy up temp reassigns
             $sql = "DELETE FROM tempassigns WHERE incidentid = '$id'";
             $result = mysql_query($sql);
