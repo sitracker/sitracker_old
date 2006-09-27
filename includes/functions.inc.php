@@ -3799,12 +3799,24 @@ function mysqlts2date($mysqldate)
     if (empty($mysqldate)) return 0;
 
     // Takes a MYSQL date and converts it to a proper PHP date
-    $day = substr($mysqldate,6,2);
-    $month = substr($mysqldate,4,2);
-    $year = substr($mysqldate,0,4);
-    $hour = substr($mysqldate,8,2);
-    $minute = substr($mysqldate,10,2);
-    $second = substr($mysqldate,12,2);
+    if (strlen($mysqldate) == 14)
+    {
+        $day = substr($mysqldate,6,2);
+        $month = substr($mysqldate,4,2);
+        $year = substr($mysqldate,0,4);
+        $hour = substr($mysqldate,8,2);
+        $minute = substr($mysqldate,10,2);
+        $second = substr($mysqldate,12,2);
+    }
+    elseif (strlen($mysqldate) > 14)
+    {
+        $day = substr($mysqldate,8,2);
+        $month = substr($mysqldate,5,2);
+        $year = substr($mysqldate,0,4);
+        $hour = substr($mysqldate,11,2);
+        $minute = substr($mysqldate,14,2);
+        $second = substr($mysqldate,17,2);
+    }
     $phpdate= mktime($hour,$minute,$second,$month,$day,$year);
     return $phpdate;
 }
@@ -4718,13 +4730,13 @@ function show_notes($linkid, $refid)
     {
         while ($note = mysql_fetch_object($result))
         {
-            $html .= "<div class='detailhead note'> <div class='detaildate'>".readable_date(mysql2date($note->timestamp));
+            $html .= "<div class='detailhead note'> <div class='detaildate'>".readable_date(mysqlts2date($note->timestamp));
             if ($sit[2]==$note->userid) $html .= "<a href='delete_note.php?id={$note->id}&amp;rpath={$_SERVER['PHP_SELF']}?{$_SERVER['QUERY_STRING']}' onclick='return confirm_delete();'><img src='{$CONFIG['application_webpath']}images/icons/kdeclassic/16x16/actions/eventdelete.png' width='16' height='16' alt='Delete icon' style='border: 0px;' /></a>";
             $html .= "</div>";
             $html .= "<img src='{$CONFIG['application_webpath']}images/icons/kdeclassic/16x16/mimetypes/document2.png' width='16' height='16' alt='Note icon' /> ";
             $html .= "Note added by ".user_realname($note->userid)."</div>";
             $html .= "<div class='detailentry note'>";
-            $html .= nl2br(bbcode($note->bodytext));
+            $html .= nl2br(bbcode(stripslashes($note->bodytext)));
             $html .= "</div>\n";
         }
     }
