@@ -63,6 +63,7 @@ Changes in v3.24 - Unreleased
 * New report incidents by software shows which software has the most
   incidents logged
 * Tidied more HTML
+* Fixed next action field, this is now stored and displayed again
 
 Changes in v3.23 - Released 10 April 2006
 -----------------------------------------------------------------------

@@ -332,7 +332,7 @@ else
     $target = cleanvar($_POST['target']);
     $updatetype = cleanvar($_POST['updatetype']);
     $newstatus = cleanvar($_POST['newstatus']);
-    $nextaction = cleanvar($_POST['nxtaction']);
+    $nextaction = cleanvar($_POST['nextaction']);
     $newpriority = cleanvar($_POST['newpriority']);
     $cust_vis = cleanvar($_POST['cust_vis']);
     $timetonextaction_none = cleanvar($_POST['timetonextaction_none']);

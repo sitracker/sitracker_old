@@ -52,6 +52,7 @@ foreach($keeptags AS $keeptag)
 while ($update = mysql_fetch_object($result))
 {
     $updatebody=trim($update->bodytext);
+    $updatebodylen=strlen($updatebody);
 
     $updatebody = str_replace($origtag, $temptag, $updatebody);
     $updatebody = htmlspecialchars($updatebody);
@@ -160,7 +161,9 @@ while ($update = mysql_fetch_object($result))
     {
         if ($update->customervisibility=='show') echo "<div class='detailentry'>\n";
         else echo "<div class='detailentryhidden'>\n";
-        echo nl2br(stripslashes($updatebody));
+        if ($updatebodylen > 5) echo nl2br(stripslashes($updatebody));
+        else echo stripslashes($updatebody);
+        if (!empty($update->nextaction)) echo "<div class='detailhead'>Next action: ".stripslashes($update->nextaction)."</div>";
         echo "</div>\n"; // detailentry
     }
 }
