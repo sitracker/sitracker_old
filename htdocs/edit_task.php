@@ -75,6 +75,15 @@ switch ($action)
         }
     break;
 
+    case 'markcomplete':
+        $sql = "UPDATE tasks ";
+        $sql .= "SET completion='100' ";
+        $sql .= "WHERE id='$id' LIMIT 1";
+        mysql_query($sql);
+        if (mysql_error()) trigger_error(mysql_error(),E_USER_ERROR);
+        confirmation_page("2", "view_task.php?id={$id}", "<h2>Task marked complete successfully</h2><p align='center'>Please wait while you are redirected...</p>");
+    break;
+
     case '':
     default:
         include('htmlheader.inc.php');

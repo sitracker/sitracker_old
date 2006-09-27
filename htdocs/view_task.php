@@ -64,7 +64,9 @@ if (mysql_num_rows($result) >= 1)
         if ($task->distribution=='private') echo "Private <img src='{$CONFIG['application_webpath']}images/icons/kdeclassic/16x16/apps/password.png' width='16' height='16' title='Private' alt='Private' />";
         echo "</td></tr>";
         echo "</table>";
-        echo "<p align='center'><a href='edit_task.php?id={$id}'>Edit Task</a> | <a href='edit_task.php?id={$id}'>Mark Complete</a></p>";
+        echo "<p align='center'><a href='edit_task.php?id={$id}'>Edit Task</a>";
+        if ($task->completion < 100) echo " | <a href='edit_task.php?id={$id}&amp;action=markcomplete'>Mark Complete</a>";
+        echo "</p>";
         echo "</div>";
     }
 
