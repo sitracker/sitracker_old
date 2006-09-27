@@ -1,34 +1,46 @@
 To Do
 
-Whenever
 * Ability to delete products. Should check contracts and incidents and
   correct any inconsitancies
-
-v3.24
-* Provide interface to configure external escalation partners (setup.php)
 * Allow holidays to be cancelled after they've been approved, cancellations
   will need to be approved too probably?
 * Mark previous holidays as 'spent' when holiday entitlement is changed
-
-v3.25
-* Incoming email handler
-
-v3.2x
+* Provide interface to configure external escalation partners
 * Re-write the help
-* Application icon
-* Context 'actions' menus
+* Context 'actions' menus?
 * Interface for editing incident product info questions
-* Public Holidays, improve the 'Bank Holidays' editor
-* Monitor incidents by email, e.g. get an email when an incident is about to go out of SLA
-* Task/Todo List
-
-v3.3x
 * Contact flags
-* Internationalisation, and hopefully at least one translation
-
-v4.00 / Future
+* Internationalisation
 * Interface for editing vendors
 * Change maintenance table to use servicelevel field that stores tag instead of id
 * Overhaul the email templates (emailtypes)
 * Add tabbed incident_details popup window, with tabs relevant to SLA status
-* Customer view of incidents
+* Customer portal view of incidents, with ability to add/update incidents
+* Monitor incidents by email, e.g. get an email when an incident is about to go out of SLA
+
+Rough roadmap with main goals (subject to slippage or change at any whim) ;)
+
+v3.25 December 2006
+
+    - Complete tasks system
+    - Neat escalations
+    - Fully XHML 1.0 Valid
+
+v3.26 Q1 2007
+
+    - Fully working customer portal, with ability to manage incidents and contracts
+      and their own details (maybe site details too?)
+
+v3.27 Q2 2007
+
+    - Improved products/software interface, easier
+
+v3.3x Q4 2007
+
+    - Nice themes, preferably with some nice graphics if we can find somebody to do them
+
+v4.00 2008?
+
+    - Complete plugin support and Plugins installer
+    - Internationalisation support (and hopefully at least one translation)
+    - More reports, more useful reports

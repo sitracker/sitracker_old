@@ -52,6 +52,17 @@ Changes in v3.24 - Unreleased
 * Holding queue locks now timeout after $CONFIG['record_lock_delay']
 * Ability to delete multiple held emails in one go
 * Ability to add resellers
+* Escalation can now be configured via a database table, though there is no
+  GUI for this yet
+* Edit incident now lets you select an escalation path (assuming paths are
+  configured in the escalationpaths database table)
+* Ability to add/edit/view tasks
+* Ability to add notes to tasks
+* Note owners can now delete their own notes
+* Basic incoming email handler now included with SiT, as inboundemail.php
+* New report incidents by software shows which software has the most
+  incidents logged
+* Tidied more HTML
 
 Changes in v3.23 - Released 10 April 2006
 -----------------------------------------------------------------------
