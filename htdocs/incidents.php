@@ -29,6 +29,7 @@ $order = cleanvar($_REQUEST['order']);
 // Defaults
 if (empty($type)) $type='support';
 if (empty($user)) $user='current';
+if (empty($sort)) $sort='priority';
 
 $refresh = $_SESSION['incident_refresh'];
 include('htmlheader.inc.php');
