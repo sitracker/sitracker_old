@@ -340,7 +340,8 @@ else
             }
 
             //notify related inicdents this has been closed
-            $sql = "SELECT distinct (relatedid) FROM relatedincidents WHERE incidentid = '$id'";
+            $sql = "SELECT distinct (relatedid) FROM relatedincidents,incidents WHERE incidentid = '$id' ";
+            $sql .= "AND incidents.id = relatedincidents.relatedid AND incidents.status != 2";
             $result = mysql_query($sql);
             if (mysql_error()) trigger_error("MySQL Query Error ".mysql_error(), E_USER_ERROR);
 
@@ -351,7 +352,8 @@ else
                 $relatedincidents[] = $a[0];
             }
 
-            $sql = "SELECT distinct (incidentid) FROM relatedincidents WHERE relatedid = '$id'";
+            $sql = "SELECT distinct (incidentid) FROM relatedincidents, incidents WHERE relatedid = '$id' ";
+            $sql .= "AND incidents.id = relatedincidents.incidentid AND incidents.status != 2";
             $result = mysql_query($sql);
             if (mysql_error()) trigger_error("MySQL Query Error ".mysql_error(), E_USER_ERROR);
 
