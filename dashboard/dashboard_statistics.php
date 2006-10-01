@@ -9,6 +9,7 @@ function dashboard_statistics()
     global $i18n_UPDATED;
     global $i18n_CLOSED;
     global $i18n_CURRENTLY_OPEN;
+    global $i18n_NO_KB_ARTICLES;
     global $i18n_PUBLISHED;
     // Count incidents logged today
     $sql = "SELECT id FROM incidents WHERE opened > '$todayrecent'";
