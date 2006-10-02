@@ -146,7 +146,7 @@ if(!empty($selected))
         $path=$incident_attachment_fspath.'updates/'.$updateid;
         if (file_exists($path)) deldir($path);
 
-        journal(CFG_LOGGING_NORMAL, 'Incident Log Entry Deleted', "Incident Log Entry $updateid was deleted", CFG_JOURNAL_INCIDENTS);
+        journal(CFG_LOGGING_NORMAL, 'Incident Log Entry Deleted', "Incident Log Entry $updateid was deleted", CFG_JOURNAL_INCIDENTS, $updateid);
     }
 }
 
