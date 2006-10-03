@@ -1,5 +1,5 @@
 <?php
-// add_escalation_path.php - Display a form for closing an incident
+// add_escalation_path.php - Display a form for adding an escalation path
 //
 // SiT (Support Incident Tracker) - Support call tracking system
 // Copyright (C) 2000-2006 Salford Software Ltd.
@@ -11,7 +11,7 @@
 
 //// This Page Is Valid XHTML 1.0 Transitional!  (1 Oct 2006)
 
-$permission=0; // Everybody has access (for now)
+$permission=64; // Add escalation path
 
 require('db_connect.inc.php');
 require('functions.inc.php');

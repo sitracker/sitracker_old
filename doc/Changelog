@@ -64,6 +64,7 @@ Changes in v3.24 - Unreleased
   incidents logged
 * Tidied more HTML
 * Fixed next action field, this is now stored and displayed again
+* Interface to configure external escalation partners
 
 Changes in v3.23 - Released 10 April 2006
 -----------------------------------------------------------------------
