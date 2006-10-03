@@ -247,7 +247,9 @@ $servicelevel_id=maintenance_servicelevel($incident->maintenanceid);
 $servicelevel_tag = $incident->servicelevel;
 if ($servicelevel_tag=='') $servicelevel_tag = servicelevel_id2tag(maintenance_servicelevel($incident->maintenanceid));
 $servicelevel_name=servicelevel_name($servicelevelid);
-$opened_for=format_seconds(time() - $incident->opened);
+if($incident->closed == 0) $closed = time();
+else $closed = $incident->closed;
+$opened_for=format_seconds($closed - $incident->opened);
 
 // Lookup the service level times
 $slsql = "SELECT * FROM servicelevels WHERE tag='{$servicelevel_tag}' AND priority='{$incident->priority}' ";
