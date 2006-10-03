@@ -88,12 +88,6 @@ if ($action == "edit")
         if ($maint['expirydate'] > 0) echo date('Y-m-d',$maint['expirydate']);
         echo "' /> ".date_picker('maintform.expirydate')."</td></tr>\n";
         ?>
-        <?php
-        //day_drop_down("expiry_day", maintenance_expiry_day($maintid));
-        //month_drop_down("expiry_month", maintenance_expiry_month($maintid));
-        //year_drop_down("expiry_year", maintenance_expiry_year($maintid))
-        // </td></tr>
-        ?>
         <tr><th>Service Level:</th><td><?php echo servicelevel_drop_down('servicelevelid',$maint['servicelevelid'], TRUE); ?></td></tr>
         <?php
         echo "<tr><th>Incident Pool:</th>";

@@ -49,7 +49,7 @@ incident is open.</p>
 <li>Unsupported</li>
 </ul>
 
-<p>In addition closed incidents have an additional closing status:</p>
+<p>Closed incidents have an additional closing status:</p>
 <ul>
 <li>Sent Information</li>
 <li>Solved Problem</li>

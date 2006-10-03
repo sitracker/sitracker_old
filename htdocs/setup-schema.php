@@ -565,7 +565,7 @@ INSERT INTO `permissions` VALUES (60, 'Perform Searches');
 INSERT INTO `permissions` VALUES (61, 'View Incident Details');
 INSERT INTO `permissions` VALUES (62, 'View Incident Attachments');
 INSERT INTO `permissions` VALUES (63, 'Add Reseller');
-INSERT INTO `permissions` VALUES (64, 'Add Escalation Path');
+INSERT INTO `permissions` VALUES (64, 'Manage Escalation Paths');
 
 
 CREATE TABLE `priority` (
@@ -1273,7 +1273,7 @@ CREATE TABLE `escalationpaths` (
 ) ENGINE=MyISAM ;
 
 ALTER TABLE `incidents` ADD `escalationpath` INT( 11 ) NULL AFTER `id` ;
-INSERT INTO `permissions` VALUES (64, 'Add Escalation Path');
+INSERT INTO `permissions` VALUES (64, 'Manage Escalation Paths');
 ";
 
 // Important: When making changes to the schema you must add SQL to make the alterations

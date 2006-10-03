@@ -126,7 +126,7 @@ $hmenu[1030] = array (10=> array ( 'perm'=> 22, 'name'=> "Users", 'url'=>"manage
                       40=> array ( 'perm'=> 22, 'name'=> "FTP Files DB", 'url'=>"ftp_list_files.php"),
                       50=> array ( 'perm'=> 22, 'name'=> "Service Levels", 'url'=>"service_levels.php"),
                       60=> array ( 'perm'=> 7, 'name'=> "Bulk Modify", 'url'=>"bulk_modify.php?action=external_esc"),
-                      70=> array ( 'perm'=> 64, 'name'=> "Add Escalation Path", 'url'=>"add_escalation_path.php"),
+                      70=> array ( 'perm'=> 64, 'name'=> "Escalation Paths", 'url'=>"escalation_paths.php"),
 );
 $hmenu[103010] = array (10=> array ( 'perm'=> 22, 'name'=> "Manage Users", 'url'=>"manage_users.php"),
                         20=> array ( 'perm'=> 20, 'name'=> "Add User", 'url'=>"add_user.php?action=showform"),

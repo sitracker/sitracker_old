@@ -11,7 +11,7 @@
 
 //// This Page Is Valid XHTML 1.0 Transitional!  (1 Oct 2006)
 
-$permission=64; // Add escalation path
+$permission=64; // Manage escalation paths
 
 require('db_connect.inc.php');
 require('functions.inc.php');
@@ -81,7 +81,7 @@ else
         if(!$result) echo "<p class='error'>Addition of escalation path failed</p>";
         else
         {
-            confirmation_page("2", "add_escalation_path.php", "<h2>Escalation path added</h2><h5>Please wait while you are redirected...</h5>");
+            confirmation_page("2", "escalation_paths.php", "<h2>Escalation path added</h2><h5>Please wait while you are redirected...</h5>");
         }
     }
 }

@@ -29,7 +29,7 @@ switch ($action)
         // External variables
         $link = cleanvar($_REQUEST['link']);
         $refid = cleanvar($_REQUEST['refid']);
-        $bodytext = cleanvar($_REQUEST['bodytext']);
+        $bodytext = cleanvar($_REQUEST['bodytext'],FALSE,FALSE);
         $rpath = cleanvar($_REQUEST['rpath']);
 
         // Input validation
