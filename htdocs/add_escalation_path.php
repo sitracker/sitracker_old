@@ -57,11 +57,11 @@ if(empty($submit))
 }
 else
 {
-    $name = $_REQUEST['name'];
-    $trackurl = $_REQUEST['trackurl'];
-    $homeurl = $_REQUEST['homeurl'];
-    $title = $_REQUEST['title'];
-    $emaildomain = $_REQUEST['emaildomain'];
+    $name = cleanvar($_REQUEST['name']);
+    $trackurl = cleanvar($_REQUEST['trackurl']);
+    $homeurl = cleanvar($_REQUEST['homeurl']);
+    $title = cleanvar($_REQUEST['title']);
+    $emaildomain = cleanvar($_REQUEST['emaildomain']);
 
 
     $errors = 0;
