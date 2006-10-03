@@ -34,7 +34,12 @@ $result = mysql_query($sql);
 if (mysql_error()) trigger_error(mysql_error(),E_USER_ERROR);
 if (mysql_num_rows($result) >= 1)
 {
-    while ($task = mysql_fetch_object($result))
+    $task = mysql_fetch_object($result);
+    if ($task->distribution == 'private' AND $task->owner != $sit[2])
+    {
+        echo "<p class='error'>Sorry, you cannot view this task as it has been marked private and you are not the owner.</p>";
+    }
+    else
     {
         echo "<div style='width: 48%; float: left;'>";
         $startdate=mysql2date($task->startdate);
@@ -44,6 +49,11 @@ if (mysql_num_rows($result) >= 1)
         echo "<td>{$task->name}</td></tr>";
         echo "<tr><th>Description</th>";
         echo "<td>".nl2br($task->description)."</td></tr>";
+        if ($task->owner != $sit[2])
+        {
+            echo "<tr><th>Owner</th>";
+            echo "<td>".user_realname($task->owner)."</td></tr>";
+        }
         echo "<tr><th>Priority</th>";
         echo "<td>".priority_icon($task->priority).' '.priority_name($task->priority)."</td></tr>";
         echo "<tr><th>Start Date</th>";
@@ -68,15 +78,16 @@ if (mysql_num_rows($result) >= 1)
         if ($task->completion < 100) echo " | <a href='edit_task.php?id={$id}&amp;action=markcomplete'>Mark Complete</a>";
         echo "</p>";
         echo "</div>";
-    }
 
-    // Notes
-    echo "<div style='width: 48%; float: right; border: 1px solid #CCCCFF;'>";
-    echo add_note_form(10, $id);
-    echo show_notes(10, $id);
-    echo "</div>";
+        // Notes
+        echo "<div style='width: 48%; float: right; border: 1px solid #CCCCFF;'>";
+        echo add_note_form(10, $id);
+        echo show_notes(10, $id);
+        echo "</div>";
+    }
 }
 else echo "<p class='error'>No matching task found</p>";
+
 echo "</div>";
 echo "<div style='clear:both;'>";
 echo "<p align='center'><a href='tasks.php'>Tasks List</a></p>";

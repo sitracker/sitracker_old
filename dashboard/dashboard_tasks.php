@@ -18,10 +18,12 @@ function dashboard_tasks()
         elseif ($sort=='completion') $sql .= "ORDER BY completion ";
         elseif ($sort=='startdate') $sql .= "ORDER BY startdate ";
         elseif ($sort=='duedate') $sql .= "ORDER BY duedate ";
+        elseif ($sort=='distribution') $sql .= "ORDER BY distribution ";
+        else $sql = "ORDER BY id ";
         if ($order=='a' OR $order=='ASC' OR $order='') $sql .= "ASC";
         else $sql .= "DESC";
     }
-    else $sql .= "ORDER BY duedate ASC, startdate DESC, priority DESC";
+    else $sql .= "ORDER BY IF(duedate,duedate,99999999) ASC, duedate ASC, startdate DESC, priority DESC, completion ASC";
 
     $result = mysql_query($sql);
     if (mysql_error()) trigger_error(mysql_error(),E_USER_ERROR);
