@@ -55,7 +55,7 @@ while ($update = mysql_fetch_object($result))
     $updatebodylen=strlen($updatebody);
 
     $updatebody = str_replace($origtag, $temptag, $updatebody);
-    $updatebody = htmlspecialchars($updatebody);
+    // $updatebody = htmlspecialchars($updatebody);
     $updatebody = str_replace($temptag, $origtag, $updatebody);
 
     // Insert path to attachments

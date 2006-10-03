@@ -23,7 +23,7 @@ $disable_priority=TRUE;
 require('auth.inc.php');
 
 // External Variables
-$bodytext = cleanvar($_REQUEST['bodytext']);
+$bodytext = cleanvar($_REQUEST['bodytext'],FALSE,FALSE);
 $id = cleanvar($_REQUEST['id']);
 $action = cleanvar($_REQUEST['action']);
 
@@ -327,8 +327,6 @@ else
 
     $time = time();
     // External variables
-    $id = cleanvar($_REQUEST['id']);
-    $bodytext = cleanvar($_POST['bodytext']);
     $target = cleanvar($_POST['target']);
     $updatetype = cleanvar($_POST['updatetype']);
     $newstatus = cleanvar($_POST['newstatus']);

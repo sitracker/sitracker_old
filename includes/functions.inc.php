@@ -4489,10 +4489,12 @@ function file_permissions_info($perms)
 }
 
 
-function cleanvar($var)
+function cleanvar($var,$striphtml=TRUE, $transentities=TRUE)
 {
-    $var = strip_tags($var);
-    $var = htmlentities($var);
+    if ($striphtml) $var = strip_tags($var);
+    if ($transentities) $var = htmlentities($var);
+    else $var = htmlspecialchars($var);
+
     $var = mysql_escape_string($var);
     $var = trim($var);
     return $var;
@@ -4702,9 +4704,9 @@ function add_note_form($linkid, $refid)
 {
     global $now, $sit;
     $html = "<form name='addnote' action='add_note.php' method='post'>";
-    $html .= "<div class='detailhead note'> <div class='detaildate'>".readable_date($now)."</div>";
+    $html .= "<div class='detailhead note'> <div class='detaildate'>".readable_date($now)."</div>\n";
     $html .= "<img src='{$CONFIG['application_webpath']}images/icons/kdeclassic/16x16/mimetypes/document2.png' width='16' height='16' alt='Note icon' /> ";
-    $html .= "New Note by ".user_realname($sit[2])."</div>";
+    $html .= "New Note by ".user_realname($sit[2])."</div>\n";
     $html .= "<div class='detailentry note'>";
     $html .= "<textarea name='bodytext' style='width: 94%; margin-top: 5px; margin-bottom: 5px; margin-left: 3%; margin-right: 3%; background-color: transparent; border: 1px dashed #A2A86A;'></textarea>";
     if (!empty($linkid)) $html .= "<input type='hidden' name='link' value='$linkid' />";
@@ -4713,8 +4715,8 @@ function add_note_form($linkid, $refid)
     else $html .= "&nbsp;Ref ID <input type='text' name='refid' size='4' />";
     $html .= "<input type='hidden' name='action' value='addnote' />";
     $html .= "<input type='hidden' name='rpath' value='{$_SERVER['PHP_SELF']}?{$_SERVER['QUERY_STRING']}' />";
-    $html .= "<div style='text-align: right'><input type='submit' value='Add note' /></div>";
-    $html .= "</div>";
+    $html .= "<div style='text-align: right'><input type='submit' value='Add note' /></div>\n";
+    $html .= "</div>\n";
     $html .= "</form>";
     return $html;
 }
@@ -4732,9 +4734,9 @@ function show_notes($linkid, $refid)
         {
             $html .= "<div class='detailhead note'> <div class='detaildate'>".readable_date(mysqlts2date($note->timestamp));
             if ($sit[2]==$note->userid) $html .= "<a href='delete_note.php?id={$note->id}&amp;rpath={$_SERVER['PHP_SELF']}?{$_SERVER['QUERY_STRING']}' onclick='return confirm_delete();'><img src='{$CONFIG['application_webpath']}images/icons/kdeclassic/16x16/actions/eventdelete.png' width='16' height='16' alt='Delete icon' style='border: 0px;' /></a>";
-            $html .= "</div>";
+            $html .= "</div>\n";
             $html .= "<img src='{$CONFIG['application_webpath']}images/icons/kdeclassic/16x16/mimetypes/document2.png' width='16' height='16' alt='Note icon' /> ";
-            $html .= "Note added by ".user_realname($note->userid)."</div>";
+            $html .= "Note added by ".user_realname($note->userid)."</div>\n";
             $html .= "<div class='detailentry note'>";
             $html .= nl2br(bbcode(stripslashes($note->bodytext)));
             $html .= "</div>\n";
