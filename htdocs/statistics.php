@@ -36,9 +36,9 @@ function give_overview()
         while($row = mysql_fetch_array($result))
         {
             echo "<tr><th>".$row['name']."</th><td class='shade2' align='left'>".$row['COUNT(incidents.id)']."</td></tr>";
-            $opencalls += $row['COUNT(incidents.id)'];
+            if(strpos(strtolower($row['name']), "clos") === false) $opencalls += $row['COUNT(incidents.id)'];
         }
-        echo "<tr><th>Total</th><td class='shade2' align='left'><strong>$opencalls</strong></td></tr>";
+        echo "<tr><th>Total Open</th><td class='shade2' align='left'><strong>$opencalls</strong></td></tr>";
         echo "</table>";
     }
     mysql_free_result($result);
