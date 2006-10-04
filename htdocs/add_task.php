@@ -60,9 +60,10 @@ switch ($action)
             else $startdate = '';
             if ($duedate > 0) $duedate = date('Y-m-d',$duedate);
             else $duedate='';
+            if ($startdate < 1 AND $completion > 0) $startdate = date('Y-m-d H:i:s');
             $sql = "INSERT INTO tasks ";
             $sql .= "(name,description,priority,owner,duedate,startdate,completion,value,distribution,created) ";
-            $sql .= "VALUES ('$name','$description','$priority','{$sit[2]}','$duedate','$startdate','$completion','$value','$distribution','".date('Y-m-d')."')";
+            $sql .= "VALUES ('$name','$description','$priority','{$sit[2]}','$duedate','$startdate','$completion','$value','$distribution','".date('Y-m-d H:i:s')."')";
             mysql_query($sql);
             if (mysql_error()) trigger_error(mysql_error(),E_USER_ERROR);
             if (mysql_affected_rows() < 1) trigger_error("Task insert failed",E_USER_ERROR);

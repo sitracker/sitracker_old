@@ -62,6 +62,7 @@ switch ($action)
             else $startdate = '';
             if ($duedate > 0) $duedate = date('Y-m-d',$duedate);
             else $duedate='';
+            if ($startdate < 1 AND $completion > 0) $startdate = date('Y-m-d H:i:s');
             $sql = "UPDATE tasks ";
             $sql .= "SET name='$name', description='$description', priority='$priority', ";
             $sql .= "duedate='$duedate', startdate='$startdate', ";
