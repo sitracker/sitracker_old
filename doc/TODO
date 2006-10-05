@@ -16,6 +16,8 @@ To Do
 * Add tabbed incident_details popup window, with tabs relevant to SLA status
 * Customer portal view of incidents, with ability to add/update incidents
 * Monitor incidents by email, e.g. get an email when an incident is about to go out of SLA
+* Update users status automatically based on data from the holiday calendar
+  this would need to be a scheduled task that runs (at least) twice a day
 
 Rough roadmap with main goals (subject to slippage or change at any whim) ;)
 

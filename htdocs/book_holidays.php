@@ -91,10 +91,10 @@ elseif ($step=='1')
     echo "<p align='center'>Send the request(s) to: ";
     // extract approvers
     $sql  = "SELECT id, realname, accepting FROM users, userpermissions ";
-    $sql .= "WHERE users.id=userpermissions.userid AND permissionid=50 ORDER BY realname ASC";
+    $sql .= "WHERE users.id=userpermissions.userid AND permissionid=50 AND users.status !=0 ORDER BY realname ASC";
     $result = mysql_query($sql);
 
-    $id=20; // DMV
+    $id=0;
     echo "<select class='dropdown' name='approvaluser'>";
     if ($id == 0)
         echo "<option selected value='0'>Select A User\n";

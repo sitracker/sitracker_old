@@ -27,7 +27,16 @@ $sort = cleanvar($_REQUEST['sort']);
 $order = cleanvar($_REQUEST['order']);
 
 // Defaults
-if (empty($user)) $user=$sit[2];
+if (empty($user) OR $user=='current') $user=$sit[2];
+// If the user is passed as a username lookup the userid
+if (!is_number($user) AND $user!='current' AND $user!='all')
+{
+    $usql = "SELECT id FROM users WHERE username='$user' LIMIT 1";
+    $uresult = mysql_query($usql);
+    if (mysql_error()) trigger_error(mysql_error(),E_USER_WARNING);
+    if (mysql_num_rows($uresult) >= 1) list($user) = mysql_fetch_row($uresult);
+    else $user=$sit[2]; // force to current user if username not found
+}
 
 include('htmlheader.inc.php');
 
