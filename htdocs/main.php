@@ -8,7 +8,8 @@
 // of the GNU General Public License, incorporated herein by reference.
 //
 // Author: Ivan Lucas <ivanlucas[at]users.sourceforge.net>
-// This Page Is Valid XHTML 1.0 Transitional! 27Oct05
+// Author: Paul Heaney <paulheaney[at]users.sourceforge.net>
+// This Page Is *NOT* Valid XHTML 1.0 Transitional!
 
 $permission=0; // not required
 require('db_connect.inc.php');
@@ -17,8 +18,23 @@ require('functions.inc.php');
 // This page requires authentication
 require('auth.inc.php');
 
+// --------------------------------------------------------------------------------------------
+// Dashboard widgets
+
+$sql = "SELECT * FROM dashboard WHERE enabled='true' ORDER BY id";
+$result = mysql_query($sql);
+if (mysql_error()) trigger_error(mysql_error(),E_USER_ERROR);
+while ($dashboard = mysql_fetch_object($result))
+{
+   include("{$CONFIG['application_fspath']}dashboard/dashboard_{$dashboard->name}.php");
+   $DASHBOARDCOMP["dashboard_{$dashboard->name}"]="dashboard_{$dashboard->name}";
+}
+
 // Valid user
 include('htmlheader.inc.php');
+/*
+// Dojo javascript fancy moving of dashboard widgets disabled for v3.24 release
+// Hope to have it ready for 3.25
 
 echo "<script type=\"text/javascript\" src=\"scripts/dojo/dojo.js\"></script>";
 ?>
@@ -61,7 +77,7 @@ echo "<script type=\"text/javascript\" src=\"scripts/dojo/dojo.js\"></script>";
 -->
 </script>
 <?php
-
+*/
 echo "<table border=\"0\" width=\"99%\"><tr>";
 echo "<td width=\"33%\" valign='top'>";
 echo "<div id='dragList1' style='vertical-align: top; height: 400px;'>";
@@ -85,7 +101,7 @@ echo "</td><td width=\"33%\" valign=\"top\">";
 
 echo "<div style='height: 400px;'  id='dragList3'>";
 
-dashboard_do("users_incidents");
+dashboard_do("dashboard_user_incidents");
 
 echo "</div>";
 

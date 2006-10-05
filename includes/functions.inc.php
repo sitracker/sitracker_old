@@ -18,7 +18,7 @@
 // Version number of the application, (numbers only)
 $application_version='3.24';
 // Revision string, e.g. 'beta2' or ''
-$application_revision='beta-1';
+$application_revision='beta-2';
 
 // Clean PHP_SELF server variable to avoid potential XSS security issue
 $_SERVER['PHP_SELF'] = substr($_SERVER['PHP_SELF'], 0, (strlen($_SERVER['PHP_SELF']) - @strlen($_SERVER['PATH_INFO'])));
@@ -4745,33 +4745,6 @@ function show_notes($linkid, $refid)
     }
     return $html;
 }
-
-// --------------------------------------------------------------------------------------------
-// Dashboard widgets
-
-global $DASHBOARDCOMP;
-
-//$path = "./dashboard/";
-$path = "{$CONFIG['application_fspath']}dashboard/";
-
-$dir_handle = @opendir($path) or die("Unable to open dashboard directory $path");
-
-while($file = readdir($dir_handle))
-{
-    if(substr($file,0,1) == ".")
-    {
-        //not interested if the file begins with a dot
-    }
-    else
-    {
-        // Not sure about this wildcard include, it's a potential security
-        // risk - Ivan 21Sep06
-        include("{$CONFIG['application_fspath']}dashboard/".$file);
-        $DASHBOARDCOMP[substr($file, 0, strlen($file)-4)] = substr($file, 0, strlen($file)-4);
-    }
-}
-
-closedir($dir_handle);
 
 function dashboard_do($context)
 {

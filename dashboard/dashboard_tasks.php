@@ -1,4 +1,13 @@
 <?php
+// dashboard_tasks.php - List of tasks
+//
+// SiT (Support Incident Tracker) - Support call tracking system
+// Copyright (C) 2000-2006 Salford Software Ltd.
+//
+// This software may be used and distributed according to the terms
+// of the GNU General Public License, incorporated herein by reference.
+//
+
 
 function dashboard_tasks()
 {

@@ -89,6 +89,18 @@ CREATE TABLE `contacts` (
 INSERT INTO `contacts` VALUES (1,0,'Acme1','2830','John','Acme','Chairman','Mr',1,'acme@example.com',
 '0666 222111','','','','','','','','','','No','No','No',1132930556,1132930556,'');
 
+CREATE TABLE `dashboard` (
+  `id` int(11) NOT NULL auto_increment,
+  `name` varchar(100) NOT NULL default '',
+  `enabled` enum('true','false') NOT NULL default 'false',
+  PRIMARY KEY  (`id`)
+) ENGINE=MyISAM DEFAULT ;
+
+INSERT INTO `dashboard` (`id`, `name`, `enabled`) VALUES (1, 'random_tip', 'true'),
+(2, 'statistics', 'true'),
+(3, 'tasks', 'true'),
+(4, 'user_incidents', 'true');
+
 CREATE TABLE `emailsig` (
   `id` int(11) NOT NULL auto_increment,
   `signature` text NOT NULL,
@@ -1274,6 +1286,18 @@ CREATE TABLE `escalationpaths` (
 
 ALTER TABLE `incidents` ADD `escalationpath` INT( 11 ) NULL AFTER `id` ;
 INSERT INTO `permissions` VALUES (64, 'Manage Escalation Paths');
+
+CREATE TABLE `dashboard` (
+  `id` int(11) NOT NULL auto_increment,
+  `name` varchar(100) NOT NULL default '',
+  `enabled` enum('true','false') NOT NULL default 'false',
+  PRIMARY KEY  (`id`)
+) ENGINE=MyISAM DEFAULT ;
+
+INSERT INTO `dashboard` (`id`, `name`, `enabled`) VALUES (1, 'random_tip', 'true'),
+(2, 'statistics', 'true'),
+(3, 'tasks', 'true'),
+(4, 'user_incidents', 'true');
 ";
 
 // Important: When making changes to the schema you must add SQL to make the alterations
