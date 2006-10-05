@@ -94,7 +94,7 @@ CREATE TABLE `dashboard` (
   `name` varchar(100) NOT NULL default '',
   `enabled` enum('true','false') NOT NULL default 'false',
   PRIMARY KEY  (`id`)
-) ENGINE=MyISAM DEFAULT ;
+) ENGINE=MyISAM ;
 
 INSERT INTO `dashboard` (`id`, `name`, `enabled`) VALUES (1, 'random_tip', 'true'),
 (2, 'statistics', 'true'),
@@ -1292,7 +1292,7 @@ CREATE TABLE `dashboard` (
   `name` varchar(100) NOT NULL default '',
   `enabled` enum('true','false') NOT NULL default 'false',
   PRIMARY KEY  (`id`)
-) ENGINE=MyISAM DEFAULT ;
+) ENGINE=MyISAM ;
 
 INSERT INTO `dashboard` (`id`, `name`, `enabled`) VALUES (1, 'random_tip', 'true'),
 (2, 'statistics', 'true'),
