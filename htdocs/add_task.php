@@ -41,7 +41,7 @@ switch ($action)
         // Validate input
         $error=array();
         if ($name=='') $error[]='Task name must not be blank';
-        if ($startdate > $duedate AND $duedate != '' AND $duedate > 0 ) $error[]='The start date cannot be after the due date';
+        if ($startdate > $duedate AND $duedate != '' AND $duedate > 0 ) $startdate=$duedate;
         if (count($error) >= 1)
         {
             include('htmlheader.inc.php');
