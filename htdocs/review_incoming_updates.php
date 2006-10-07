@@ -31,7 +31,7 @@ function generate_row($update)
     if ($updatebodytext=='') $updatebodytext='&nbsp;';
 
     $html_row="<tr class='shade1'>";
-    $html_row.="<td><input type='checkbox' name='selected[]' value='".$update['id']."' /></td>";
+    $html_row.="<td style='text-align: center'><input type='checkbox' name='selected[]' value='".$update['id']."' /></td>";
     $html_row.="<td align='center' width='20%'>".date($CONFIG['dateformat_datetime'],$update['timestamp']).'</td>';
     $html_row.="<td width='20%'>".htmlentities($update['emailfrom'],ENT_QUOTES)."</td>";
     $html_row.="<td width='20%'><a id='update{$update['id']}' class='info' style='cursor:help;'>";

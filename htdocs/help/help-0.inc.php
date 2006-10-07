@@ -124,14 +124,15 @@ it can contain incoming emails as well as incidents and it can be viewed by sele
 <strong>Holding Queue</strong> from the menu.</p>
 
 <h4>Holding Queue</h4>
-<p>This special queue has three sections, 'Held Emails', 'Spam Emails' and 'Pending Re-Assignments'.  The three sections
-show items that cannot be handled automatically by SiT for one reason or another.  Incoming email is held in this queue if they
-arrive without the incident number correctly formatted on the subject line or if the incident number quoted in the subject
-relates to an incident that has been closed.  Email is determined to be spam if certain text is found in the subject line
-(this can set by your anti-spam software for example SpamAssassin) and are always held for you to review.  The third sections
-is a list of incidents that could not be reassigned automatically after a user went away, normally when a user marks himself
-away incidents are automatically assigned to backup engineers, but in the case where a backup engineer was unavailable the
-incident is displayed in this queue.</p>
+<p>This special queue has four sections, 'Held Emails', 'Spam Emails', 'New Incidents' and 'Pending Re-Assignments'.
+The four sections show items that cannot be handled automatically by SiT for one reason or another.  Incoming email is
+held in this queue if they arrive without the incident number correctly formatted on the subject line or if the incident
+number quoted in the subject relates to an incident that has been closed.  Email is determined to be spam if certain
+text is found in the subject line (this can set by your anti-spam software for example SpamAssassin) and are always held
+for you to review.  Next is a section with new incidents created directly by the customer that need to be assigned to
+engineers.  The final section is a list of incidents that could not be reassigned automatically after a user went away,
+normally when a user marks himself away incidents are automatically assigned to backup engineers, but in the case where
+a backup engineer was unavailable the incident is displayed in this queue.</p>
 
 
 <h3><a name='watchincidents'>Watching Incidents</a></h3>
