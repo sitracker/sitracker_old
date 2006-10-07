@@ -140,7 +140,7 @@ else
         ## From 23Nov04 (v3.14) Passwords are no longer generated/controlled by SiT - INL
         ## From 24Nov04 (v3.15) Passwords are again generated/controlled by SiT - INL
 
-        $username = substr($surname, 0, strcspn($surname, " "));
+        $username = strtolower(substr($surname, 0, strcspn($surname, " ")));
         $password = generate_password();
 
         $sql  = "INSERT INTO contacts (username, password, salutation, forenames, surname, jobtitle, ";
