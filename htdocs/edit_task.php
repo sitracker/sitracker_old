@@ -39,6 +39,14 @@ switch ($action)
         if ($completion!='' AND !is_numeric($completion)) $completion=0;
         $value = cleanvar($_REQUEST['value']);
         $distribution = cleanvar($_REQUEST['distribution']);
+        $old_name = cleanvar($_REQUEST['old_name']);
+        $old_description = cleanvar($_REQUEST['old_description']);
+        $old_priority = cleanvar($_REQUEST['old_priority']);
+        $old_startdate = cleanvar($_REQUEST['old_startdate']);
+        $old_duedate = cleanvar($_REQUEST['old_duedate']);
+        $old_completion = cleanvar($_REQUEST['old_completion']);
+        $old_value = cleanvar($_REQUEST['old_value']);
+        $old_distribution = cleanvar($_REQUEST['old_distribution']);
 
         // Validate input
         $error=array();
@@ -72,6 +80,29 @@ switch ($action)
             mysql_query($sql);
             if (mysql_error()) trigger_error(mysql_error(),E_USER_ERROR);
             // if (mysql_affected_rows() < 1) trigger_error("Task update failed",E_USER_ERROR);
+
+            // Add a note to say what changed (if required)
+            $bodytext='';
+            if ($name != $old_name) $bodytext .= "Name: {$old_name} -&gt; [b]{$name}[/b]\n";
+            if ($description != $old_description) $bodytext .= "Description: {$old_description} -&gt; [b]{$description}[/b]\n";
+            if ($priority != $old_priority) $bodytext .= "Priority: ".priority_name($old_priority)." -&gt; [b]".priority_name($priority)."[/b]\n";
+            $old_startdate = substr($old_startdate,0,10);
+            if ($startdate != $old_startdate) $bodytext .= "Start Date: {$old_startdate} -&gt; [b]{$startdate}[/b]\n";
+            $old_duedate = substr($old_duedate,0,10);
+            if ($duedate != $old_duedate) $bodytext .= "Due Date: {$old_duedate} -&gt; [b]{$duedate}[/b]\n";
+            if ($completion != $old_completion) $bodytext .= "Completion: {$old_completion}% -&gt; [b]{$completion}%[/b]\n";
+            if ($value != $old_value) $bodytext .= "Value: {$old_value} -&gt; [b]{$value}[/b]\n";
+            if ($distribution != $old_distribution) $bodytext .= "Privacy: {$old_distribution} -&gt; [b]{$distribution}[/b]\n";
+            if (!empty($bodytext))
+            {
+                $bodytext="Task Edited by {$_SESSION['realname']}:\n\n".$bodytext;
+                // Link 10 = Tasks
+                $sql = "INSERT INTO notes ";
+                $sql .= "(userid, bodytext, link, refid) ";
+                $sql .= "VALUES ('0', '{$bodytext}', '10',' $id')";
+                mysql_query($sql);
+                if (mysql_error()) trigger_error(mysql_error(),E_USER_ERROR);
+            }
             confirmation_page("2", "view_task.php?id={$id}", "<h2>Task edited successfully</h2><p align='center'>Please wait while you are redirected...</p>");
         }
     break;
@@ -82,6 +113,15 @@ switch ($action)
         $sql .= "WHERE id='$id' LIMIT 1";
         mysql_query($sql);
         if (mysql_error()) trigger_error(mysql_error(),E_USER_ERROR);
+
+        // Insert note to say what happened
+        $bodytext="Task marked 100% complete by {$_SESSION['realname']}:\n\n".$bodytext;
+        $sql = "INSERT INTO notes ";
+        $sql .= "(userid, bodytext, link, refid) ";
+        $sql .= "VALUES ('0', '{$bodytext}', '10',' $id')";
+        mysql_query($sql);
+        if (mysql_error()) trigger_error(mysql_error(),E_USER_ERROR);
+
         confirmation_page("2", "view_task.php?id={$id}", "<h2>Task marked complete successfully</h2><p align='center'>Please wait while you are redirected...</p>");
     break;
 
@@ -101,7 +141,7 @@ switch ($action)
                 echo "<form id='edittask' action='{$_SERVER['PHP_SELF']}' method='post'>";
                 echo "<table class='vertical'>";
                 echo "<tr><th>Title</th>";
-                echo "<td><input type='text' name='name' size='35' maxlength='255' value='{$task->name}' /></td></tr>";
+                echo "<td><input type='text' name='name' size='35' maxlength='255' value='".stripslashes($task->name)."' /></td></tr>";
                 echo "<tr><th>Description</th>";
                 echo "<td><textarea name='description' rows='4' cols='30'>{$task->description}</textarea></td></tr>";
                 echo "<tr><th>Priority</th>";
@@ -134,6 +174,15 @@ switch ($action)
                 echo "<p><input name='submit' type='submit' value='Save' /></p>";
                 echo "<input type='hidden' name='action' value='edittask' />";
                 echo "<input type='hidden' name='id' value='{$id}' />";
+                // Send copy of existing data so we can see when it is changed
+                echo "<input type='hidden' name='old_name' value='{$task->name}' />";
+                echo "<input type='hidden' name='old_description' value='{$task->description}' />";
+                echo "<input type='hidden' name='old_priority' value='{$task->priority}' />";
+                echo "<input type='hidden' name='old_startdate' value='{$task->startdate}' />";
+                echo "<input type='hidden' name='old_duedate' value='{$task->duedate}' />";
+                echo "<input type='hidden' name='old_completion' value='{$task->completion}' />";
+                echo "<input type='hidden' name='old_value' value='{$task->value}' />";
+                echo "<input type='hidden' name='old_distribution' value='{$task->distribution}' />";
                 echo "</form>";
             }
         }

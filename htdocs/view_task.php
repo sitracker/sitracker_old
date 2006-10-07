@@ -46,7 +46,7 @@ if (mysql_num_rows($result) >= 1)
         $duedate=mysql2date($task->duedate);
         echo "<table class='vertical' width='100%'>";
         echo "<tr><th>Title</th>";
-        echo "<td>{$task->name}</td></tr>";
+        echo "<td>".stripslashes($task->name)."</td></tr>";
         echo "<tr><th>Description</th>";
         echo "<td>".nl2br($task->description)."</td></tr>";
         if ($task->owner != $sit[2])
