@@ -181,15 +181,5 @@ $CONFIG['ext_esc_partners'] = array('novell' => array('name' => 'Novell',
                                             'ext_callid_regexp' => '/^SR/',
                                             'ext_url' => 'https://support.microsoft.com/oas/default.aspx?tp=re&amp;incno=%externalid%',
                                             'ext_url_title' => 'Microsoft Help and Support',
-                                            'email_domain' => 'microsoft.com'),
-                                    'bluechip' => array('name' => 'Bluechip',
-                                            'ext_callid_regexp' => '/^[0-9]{3}-[0-9]{4}/',
-                                            'ext_url' => 'http://support.bluechiptechnology.co.uk/cgi-bin/pdesk.cgi?do=track&amp;lang=',
-                                            'ext_url_title' => 'BlueChip Technology Technical Support Pages',
-                                            'email_domain' => 'bluechiptechnology.co.uk'),
-                                    'sun' => array('name' => 'Sun Microsystems',
-                                            'ext_callid_regexp' => '',
-                                            'ext_url' => '',
-                                            'ext_url_title' => '',
-                                            'email_domain' => 'sun.com'));
+                                            'email_domain' => 'microsoft.com'));
 ?>

@@ -311,8 +311,7 @@ CREATE TABLE `incidentproductinfo` (
   `incidentid` int(11) default NULL,
   `productinfoid` int(11) default NULL,
   `information` text,
-  PRIMARY KEY  (`id`),
-  UNIQUE KEY `id` (`id`)
+  PRIMARY KEY  (`id`)
 ) ENGINE=MyISAM;
 
 

@@ -148,8 +148,6 @@ $servicelevel_id=maintenance_servicelevel($incident->maintenanceid);
 $servicelevel_name=servicelevel_name($servicelevelid);
 $opened_for=format_seconds(time() - $incident->opened);
 
-
-
 $title = "{$id} - {$incident->title}";
 include('incident_html_top.inc.php');
 

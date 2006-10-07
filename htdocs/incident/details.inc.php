@@ -36,7 +36,7 @@ if ($incident->phone!='' OR $incident->phone!='')
 if ($incident->externalid != '')
 {
     echo "External ID: ";
-    echo format_external_id($incident->externalid)."<br />\n";
+    echo format_external_id($incident->externalid,$incident->escalationpath)."<br />\n";
 }
 if ($incident->externalengineer != '')
 {

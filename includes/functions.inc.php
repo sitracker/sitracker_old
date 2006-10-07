@@ -4354,25 +4354,53 @@ function incident_backup_switchover($userid, $accepting)
 }
 
 
-function format_external_id($externalid)
+function format_external_id($externalid, $escalationpath='')
 {
     global $CONFIG;
-
-    $html = $externalid;
-    foreach($CONFIG['ext_esc_partners'] AS $partner)
+    if (!empty($escalationpath))
     {
-        if(!empty($partner['ext_callid_regexp']))
+        // Extract escalation path
+        $epsql = "SELECT id, name, track_url, home_url, url_title FROM escalationpaths";
+        $epresult = mysql_query($epsql);
+        if (mysql_error()) trigger_error(mysql_error(),E_USER_ERROR);
+        if (mysql_num_rows($epresult) >= 1)
         {
-            if(preg_match($partner['ext_callid_regexp'], $externalid))
+            while ($escalationpath = mysql_fetch_object($epresult))
             {
-                if(!empty($partner['ext_url']))
+                $epath['name'] = $escalationpath->name;
+                $epath['track_url'] = $escalationpath->track_url;
+                $epath['home_url'] = $escalationpath->home_url;
+                $epath['url_title'] = $escalationpath->url_title;
+            }
+            if (!empty($externalid))
+            {
+                $epathurl = str_replace('%externalid%',$externalid,$epath['track_url']);
+                $html = "<a href='{$epathurl}' title='{$epath['url_title']}'>{$externalid}</a>";
+            }
+            else
+            {
+                $epathurl = $epath['home_url'];
+                $html = "<a href='{$epathurl}' title='{$epath['url_title']}'>{$epath['name']}</a>";
+            }
+        }
+    }
+    else
+    {
+        $html = $externalid;
+        foreach($CONFIG['ext_esc_partners'] AS $partner)
+        {
+            if(!empty($partner['ext_callid_regexp']))
+            {
+                if(preg_match($partner['ext_callid_regexp'], $externalid))
                 {
-                    $html = "<a href='".str_replace("%externalid", $externalid, $partner['ext_url'])."' title = '".$partner['ext_url_title']."'>{$externalid}</a>";
+                    if(!empty($partner['ext_url']))
+                    {
+                        $html = "<a href='".str_replace("%externalid", $externalid, $partner['ext_url'])."' title = '".$partner['ext_url_title']."'>{$externalid}</a>";
+                    }
                 }
             }
         }
     }
-
     return $html;
 }
 
