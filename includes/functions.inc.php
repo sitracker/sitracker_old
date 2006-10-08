@@ -2147,6 +2147,22 @@ function format_workday_minutes($minutes)
 }
 
 
+// Make a readable and friendly date, i.e. say Today, or Yesterday if it is
+function format_date_friendly($date)
+{
+    global $CONFIG;
+    if (date('dmy', $date) == date('dmy', time()))
+        $datestring = "Today @ ".date($CONFIG['dateformat_time'], $date);
+    elseif (date('dmy', $date) == date('dmy', (time()-86400)))
+        $datestring = "Yesterday @ ".date($CONFIG['dateformat_time'], $date);
+    elseif ($date < $now-86400 AND
+            $date > $now-(86400*6))
+        $datestring = date('l', $date)." @ ".date($CONFIG['dateformat_time'], $date);
+    else
+        $datestring = date($CONFIG['dateformat_datetime'], $date);
+
+    return ($datestring);
+}
 
 /*  generates a confirmation page containing    */
 /* the given message and which refreshes after the given      */
