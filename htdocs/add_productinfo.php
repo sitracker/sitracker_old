@@ -35,7 +35,7 @@ if (empty($_REQUEST['submit']))
     <h2>Add Product Question</h2>
     <p align='center'>Mandatory fields are marked <sup class='red'>*</sup></p>
     <form action="<?php echo $_SERVER['PHP_SELF']; ?>" method="post" onsubmit="return confirm_submit()">
-    <table>
+    <table align='center'>
     <tr><th>Product:</th><td><?php echo product_drop_down("product", 0) ?></td></tr>
     <tr><th>Question: <sup class='red'>*</sup></th><td><input name="information" size="30" /></td></tr>
     <tr><th>More Information: <sup class='red'>*</sup></th><td><input name="moreinformation" size="30" /></td></tr>
@@ -69,7 +69,8 @@ else
     // add product information if no errors
     if ($errors == 0)
     {
-        $sql = "INSERT INTO productinfo (productid, information. moreinformation) VALUES ($product, '$information', '$moreinformation')";
+        $sql = "INSERT INTO productinfo (productid, information, moreinformation) ";
+        $sql .= "VALUES ('$product', '$information', '$moreinformation')";
         $result = mysql_query($sql);
         if (mysql_error()) trigger_error(mysql_error(),E_USER_ERROR);
 
@@ -77,7 +78,7 @@ else
         else
         {
             journal(CFG_LOGGING_NORMAL, 'Product Info Added', "Info was added to Product $product", CFG_JOURNAL_PRODUCTS, $product);
-            echo "<h2>Product Information Added</h2>\n";
+            confirmation_page("2", "products.php", "<h2>Product Information Added</h2><p align='center'>Please wait while you are redirected...</p>");
         }
     }
 }

@@ -10,6 +10,8 @@
 
 // Author: Ivan Lucas <ivanlucas[at]users.sourceforge.net>
 
+// This Page Is Valid XHTML 1.0 Transitional!  11Oct06
+
 $permission=24;  // Add Product
 require('db_connect.inc.php');
 require('functions.inc.php');
@@ -23,8 +25,6 @@ $productid = cleanvar($_REQUEST['productid']);
 $softwareid = cleanvar($_REQUEST['softwareid']);
 $context = cleanvar($_REQUEST['context']);
 $return = cleanvar($_REQUEST['return']);
-
-// FIXME check this HTML
 
 if (empty($action) OR $action == "showform")
 {
@@ -59,7 +59,6 @@ if (empty($action) OR $action == "showform")
         echo software_drop_down("softwareid", 0);
         echo "</p>\n";
     }
-    echo "</table>\n";
     echo "<p align='center'><input name='submit' type='submit' value='Save Link' />";
     echo "<input type='checkbox' name='return' value='true' ";
     if ($return=='true') echo "checked='checked' ";
