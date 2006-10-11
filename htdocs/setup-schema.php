@@ -356,7 +356,7 @@ CREATE TABLE `incidents` (
   KEY `opened` (`opened`),
   KEY `closed` (`closed`),
   KEY `servicelevel` (`servicelevel`)
-) ENGINE=MyISAM DEFAULT ;
+) ENGINE=MyISAM ;
 
 CREATE TABLE `incidentstatus` (
   `id` int(11) NOT NULL auto_increment,
@@ -497,7 +497,7 @@ INSERT INTO `maintenance` VALUES (1,1,1,2,1268179200,1,4,0,0,'This is an example
 CREATE TABLE `notes` (
   `id` int(11) NOT NULL auto_increment,
   `userid` int(11) NOT NULL default '0',
-  `timestamp` timestamp(14) default NULL,
+  `timestamp` timestamp(14) NOT NULL,
   `bodytext` text NOT NULL,
   `link` int(11) NOT NULL default '0',
   `refid` int(11) NOT NULL default '0',
@@ -940,7 +940,7 @@ CREATE TABLE `tasks` (
   `value` float(6,2) default NULL,
   `distribution` enum('public','private') NOT NULL default 'public',
   `created` datetime NOT NULL default '0000-00-00 00:00:00',
-  `lastupdated` timestamp(14) DEFAULT NULL,
+  `lastupdated` timestamp(14) NOT NULL,
   PRIMARY KEY  (`id`),
   KEY `owner` (`owner`)
 ) ENGINE=MyISAM  ;
