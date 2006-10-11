@@ -24,7 +24,7 @@ echo "<div id='detailsummary'>";
 echo "<table>";
 echo "<tr><td>";
 // First column: Contact Details
-echo "{$incident->forenames} {$incident->surname} of {$site_name}<br />\n";
+echo "<a href='contact_details.php?id={$incident->contactid}' title='Contact Details' target='top.opener'>{$incident->forenames} {$incident->surname}</a> of <a href='site_details.php?id={$incident->siteid}' title='Site Details' target='top.opener'>{$site_name}</a><br />\n";
 echo "<a href='mailto:{$incident->email}'>{$incident->email}</a><br />\n";
 if ($incident->ccemail != '') echo "CC: <a href='mailto:{$incident->ccemail}'>{$incident->ccemail}</a><br />\n";
 if ($incident->phone!='' OR $incident->phone!='')
@@ -33,9 +33,9 @@ if ($incident->phone!='' OR $incident->phone!='')
     if ($incident->mobile!='') echo " Mob: {$incident->mobile}";
     echo "<br />\n";
 }
-if ($incident->externalid != '')
+if ($incident->externalid != '' OR $incident->escalationpath > 0)
 {
-    echo "External ID: ";
+    echo "Escalated: ";
     echo format_external_id($incident->externalid,$incident->escalationpath)."<br />\n";
 }
 if ($incident->externalengineer != '')
@@ -71,8 +71,11 @@ if ($software_name!='' OR $incident->productversion != '' OR $incident->products
     echo "<br />\n";
 }
 echo priority_icon($incident->priority)." ";
+echo "<a href='maintenance_details.php?id={$incident->maintenanceid}' title='Contract {$incident->maintenanceid} Details' target='top.opener'>";
+if ($product_name!='') echo "{$product_name}";
+else echo "Contract {$incident->maintenanceid}";
+echo "</a> / ";
 
-if ($product_name!='') echo "{$product_name} / ";
 echo "{$servicelevel_tag}<br />\n";
 echo "Open for {$opened_for}, ";
 echo incidentstatus_name($incident->status);

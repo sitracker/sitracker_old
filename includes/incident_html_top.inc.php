@@ -4,7 +4,7 @@ session_start();
 echo "<!DOCTYPE html PUBLIC \"-//W3C//DTD XHTML 1.0 Transitional//EN\" \"http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd\">";
 echo "<html xmlns=\"http://www.w3.org/1999/xhtml\" xml:lang=\"en\" lang=\"en\"><head><title>";
 if (isset($title)) echo $title;
-else echo $application_name;
+else echo $CONFIG['application_name'];
 echo "</title>";
 echo "<meta http-equiv=\"Content-Type\" content=\"text/html; charset=utf-8\" />";
 echo "<meta name=\"GENERATOR\" content=\"{$CONFIG['application_name']} {$application_version_string}\" />\n";
