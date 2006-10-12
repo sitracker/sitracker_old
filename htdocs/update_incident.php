@@ -25,12 +25,13 @@ require('auth.inc.php');
 // External Variables
 $bodytext = cleanvar($_REQUEST['bodytext'],FALSE,FALSE);
 $id = cleanvar($_REQUEST['id']);
+$incidentid=$id;
 $action = cleanvar($_REQUEST['action']);
 
 if (empty($action))
 {
     // No update body text detected show update form
-    $title = "Update: ";
+    $title = "Update";
     include('incident_html_top.inc.php');
     ?>
     <script type="text/javascript">

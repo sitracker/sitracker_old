@@ -8,8 +8,6 @@
 // of the GNU General Public License, incorporated herein by reference.
 //
 
-
-$title="$id - Send Email";
 $permission=33; // Send Emails
 require('db_connect.inc.php');
 require('functions.inc.php');
@@ -21,9 +19,9 @@ require('auth.inc.php');
 // External variables
 $step = cleanvar($_REQUEST['step']);
 $id = cleanvar($_REQUEST['id']);
+$incidentid=$id;
 
-
-$title = 'Email: ';
+$title = 'Email';
 
 if (empty($step)) $step=1;
 

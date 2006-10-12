@@ -17,12 +17,12 @@ require('auth.inc.php');
 
 // External Variables
 $id = cleanvar($_REQUEST['id']);
-
+$incidentid=$id;
 
 // No submit detected show closure form
 if (empty($_REQUEST['process']))
 {
-    $title = 'Close: ';
+    $title = 'Close';
     include('incident_html_top.inc.php');
     ?>
     <script type="text/javascript">

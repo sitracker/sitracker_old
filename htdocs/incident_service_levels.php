@@ -21,7 +21,7 @@ require('auth.inc.php');
 $incidentid = cleanvar($_REQUEST['id']);
 $id = $incidentid;
 
-$title = 'Service Levels: ';
+$title = 'Service Levels';
 
 // Retrieve incident
 // extract incident details

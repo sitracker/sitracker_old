@@ -121,7 +121,7 @@ $hmenu[1020] = array (10=> array ( 'perm'=> 4, 'name'=> "My Profile", 'url'=>"ed
 );
 // configure
 $hmenu[1030] = array (10=> array ( 'perm'=> 22, 'name'=> "Users", 'url'=>"manage_users.php", 'submenu'=>"103010"),
-                      20=> array ( 'perm'=> 22, 'name'=> "Email Settings", 'url'=>"", 'submenu'=>"103020"),
+                      20=> array ( 'perm'=> 0, 'name'=> "Email Settings", 'url'=>"", 'submenu'=>"103020"),
                       30=> array ( 'perm'=> 22, 'name'=> "Set Public Holidays", 'url'=>"holiday_calendar.php?type=10"),
                       40=> array ( 'perm'=> 22, 'name'=> "FTP Files DB", 'url'=>"ftp_list_files.php"),
                       50=> array ( 'perm'=> 22, 'name'=> "Service Levels", 'url'=>"service_levels.php"),
@@ -4376,7 +4376,8 @@ function format_external_id($externalid, $escalationpath='')
     if (!empty($escalationpath))
     {
         // Extract escalation path
-        $epsql = "SELECT id, name, track_url, home_url, url_title FROM escalationpaths";
+        $epsql = "SELECT id, name, track_url, home_url, url_title FROM escalationpaths ";
+        if (!empty($escalationpath)) $epsql .= "WHERE id='$escalationpath' ";
         $epresult = mysql_query($epsql);
         if (mysql_error()) trigger_error(mysql_error(),E_USER_ERROR);
         if (mysql_num_rows($epresult) >= 1)

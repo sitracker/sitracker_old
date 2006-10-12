@@ -19,6 +19,7 @@ require('auth.inc.php');
 // External variables
 $bodytext = cleanvar($_REQUEST['bodytext']);
 $id = cleanvar($_REQUEST['id']);
+$incidentid=$id;
 $backupid = cleanvar($_REQUEST['backupid']);
 $originalid = cleanvar($_REQUEST['originalid']);
 $reason = cleanvar($_REQUEST['reason']);
@@ -26,7 +27,7 @@ $reason = cleanvar($_REQUEST['reason']);
 if (empty($bodytext))
 {
     // No submit detected show reassign form
-    $title = 'Reassign: ';
+    $title = 'Reassign';
     include('incident_html_top.inc.php');
     ?>
     <form name='assignform' action="<?php echo $_SERVER['PHP_SELF']; ?>?id=<?php echo $id ?>" method="post">

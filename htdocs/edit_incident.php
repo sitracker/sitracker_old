@@ -22,11 +22,12 @@ require('auth.inc.php');
 // External variables
 $submit = $_REQUEST['submit'];
 $id = cleanvar($_REQUEST['id']);
+$incidentid=$id;
 
 // No submit detected show edit form
 if (empty($submit))
 {
-    $title = 'Edit: ';
+    $title = 'Edit';
     include('incident_html_top.inc.php');
 
     // extract incident details
