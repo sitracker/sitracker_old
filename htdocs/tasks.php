@@ -135,7 +135,13 @@ if (mysql_num_rows($result) >=1 )
     }
     echo "</table>\n";
 }
-else echo "<p align='center'>No tasks</p>";
+else
+{
+    echo "<p align='center'>";
+    if ($sit[2]==$user) echo "No tasks";
+    else echo "No public tasks";
+    echo "</p>";
+}
 
 echo "<p align='center'><a href='add_task.php'>Add Task</a></p>";
 
