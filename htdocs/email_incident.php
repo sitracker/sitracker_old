@@ -489,7 +489,7 @@ switch ($step)
                 $updateheader .= "Subject: <b>$subjectfield</b>\n";
 
                 if (!empty($updateheader)) $updateheader .= "<hr>";
-                $updatebody = $updateheader . $bodytext;
+                $updatebody = $updateheader . cleanvar($bodytext);
                 $updatebody=mysql_escape_string($updatebody);
                 $sql  = "INSERT INTO updates (incidentid, userid, bodytext, type, timestamp, currentstatus,customervisibility) ";
                 $sql .= "VALUES ($id, $sit[2], '$updatebody', 'email', '$now', '$newincidentstatus', '{$emailtype->customervisibility}')";
