@@ -58,7 +58,7 @@ if (empty($submit))
     </th><td><textarea name="qualifications" rows="3" cols="40"><?php echo $user->qualifications; ?></textarea></td></tr>
     <tr><th>Email Signature:<br />
     Inserted automatically at the bottom of your outgoing emails.
-    </th><td><textarea name="signature" rows="4" cols="40"><?php echo strip_tags($user->signature); ?></textarea></td></tr>
+    </th><td><textarea name="signature" rows="4" cols="40"><?php echo strip_tags(stripslashes($user->signature)); ?></textarea></td></tr>
     <?php
     $entitlement=user_holiday_entitlement($userid);
     if ($edituserpermission && $userid!=$sit[2])
