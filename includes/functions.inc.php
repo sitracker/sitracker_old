@@ -4892,9 +4892,9 @@ function show_create_links($table, $ref)
 
 
 // Function to create a PNG chart
-// Returns a png image object
+// Returns an image resource
 // Currently only has support for pie charts (type='pie')
-function draw_png_chart($type, $width, $height, $data, $legends, $title='')
+function draw_chart_image($type, $width, $height, $data, $legends, $title='')
 {
     // Graph settings
     if (empty($width)) $width = 500;

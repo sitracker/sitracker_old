@@ -21,7 +21,7 @@ $data = explode('|',cleanvar($_REQUEST['data']));
 $legends = explode('|',cleanvar($_REQUEST['legends']));
 $title = urldecode(cleanvar($_REQUEST['title']));
 
-$img = draw_png_chart($type, 500, 150, $data, $legends, $title);
+$img = draw_chart_image($type, 500, 150, $data, $legends, $title);
 
 // output to browser
 // flush image
