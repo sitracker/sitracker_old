@@ -16,9 +16,9 @@
 // use SQL joins.
 
 // Version number of the application, (numbers only)
-$application_version='3.24';
+$application_version='3.25';
 // Revision string, e.g. 'beta2' or ''
-$application_revision='beta-3';
+$application_revision='alpha-1';
 
 // Clean PHP_SELF server variable to avoid potential XSS security issue
 $_SERVER['PHP_SELF'] = substr($_SERVER['PHP_SELF'], 0, (strlen($_SERVER['PHP_SELF']) - @strlen($_SERVER['PATH_INFO'])));
@@ -4754,7 +4754,7 @@ function add_note_form($linkid, $refid)
     $html .= "<img src='{$CONFIG['application_webpath']}images/icons/kdeclassic/16x16/mimetypes/document2.png' width='16' height='16' alt='Note icon' /> ";
     $html .= "New Note by ".user_realname($sit[2])."</div>\n";
     $html .= "<div class='detailentry note'>";
-    $html .= "<textarea name='bodytext' style='width: 94%; margin-top: 5px; margin-bottom: 5px; margin-left: 3%; margin-right: 3%; background-color: transparent; border: 1px dashed #A2A86A;'></textarea>";
+    $html .= "<textarea rows='3' cols='40' name='bodytext' style='width: 94%; margin-top: 5px; margin-bottom: 5px; margin-left: 3%; margin-right: 3%; background-color: transparent; border: 1px dashed #A2A86A;'></textarea>";
     if (!empty($linkid)) $html .= "<input type='hidden' name='link' value='$linkid' />";
     else $html .= "&nbsp;Link <input type='text' name='link' size='3' />";
     if (!empty($refid)) $html .= "<input type='hidden' name='refid' value='{$refid}' />";
@@ -4800,6 +4800,224 @@ function dashboard_do($context)
         $action();
     }
 }
+
+// Recursive function to list links as a tree
+function show_links($origtab, $colref, $level=0, $parentlinktype='', $direction='lr')
+{
+    // Maximum recursion
+    $maxrecursions=15;
+
+    if ($level <= $maxrecursions)
+    {
+        $sql = "SELECT * FROM linktypes WHERE origtab='$origtab' ";
+        if (!empty($parentlinktype)) $sql .= "AND id='{$parentlinktype}'";
+        $result = mysql_query($sql);
+        if (mysql_error()) trigger_error(mysql_error(),E_USER_WARNING);
+        while ($linktype = mysql_fetch_object($result))
+        {
+            // Look up links of this type
+            $lsql = "SELECT * FROM links WHERE linktype='{$linktype->id}' ";
+            if ($direction=='lr') $lsql .= "AND origcolref='{$colref}'";
+            elseif ($direction=='rl') $lsql .= "AND linkcolref='{$colref}'";
+            $lresult = mysql_query($lsql);
+            if (mysql_error()) trigger_error(mysql_error(),E_USER_WARNING);
+            if (mysql_num_rows($lresult) >= 1)
+            {
+                if (mysql_num_rows($lresult) >= 1)
+                {
+                    $html .= "<ul>";
+                    $html .= "<li>";
+                    while ($link = mysql_fetch_object($lresult))
+                    {
+                        $recsql = "SELECT {$linktype->selectionsql} AS recordname FROM {$linktype->linktab} WHERE ";
+                        if ($direction=='lr') $recsql .= "{$linktype->linkcol}='{$link->linkcolref}' ";
+                        elseif ($direction=='rl') $recsql .= "{$linktype->origcol}='{$link->origcolref}' ";
+                        $recresult = mysql_query($recsql);
+                        if (mysql_error()) trigger_error(mysql_error(),E_USER_WARNING);
+                        while ($record = mysql_fetch_object($recresult))
+                        {
+                            if ($link->direction=='bi') $html .= "<strong>{$linktype->name}</strong> ";
+                            elseif ($direction=='lr') $html .= "<strong>{$linktype->lrname}</strong> ";
+                            elseif ($direction=='rl') $html .= "<strong>{$linktype->rlname}</strong> ";
+                            else $html = "Whoops";
+
+                            if ($direction=='lr') $currentlinkref=$link->linkcolref;
+                            elseif ($direction=='rl') $currentlinkref=$link->origcolref;
+
+                            $viewurl = str_replace('%id%',$currentlinkref,$linktype->viewurl);
+
+                            $html .= "{$currentlinkref}: ";
+                            if (!empty($viewurl)) $html .= "<a href='$viewurl'>";
+                            $html .= "{$record->recordname}";
+                            if (!empty($viewurl)) $html .= "</a>";
+                            $html .= " - ".user_realname($link->userid);
+                            $html .= show_links($linktype->linktab, $currentlinkref, $level+1, $linktype->id, $direction); // Recurse
+                            $html .= "</li>\n";
+                        }
+                    }
+                    $html .= "</ul>\n";
+                }
+                else $html .= "<p>None</p>";
+            }
+        }
+    }
+    else $html .= "<p class='error'>Maximum number of {$maxrecursions} recursions reached</p>";
+    return $html;
+}
+
+
+function show_create_links($table, $ref)
+{
+    $html .= "<p align='center'>Add Link: ";
+    $sql = "SELECT * FROM linktypes WHERE origtab='$table' OR linktab='$table' ";
+    $result = mysql_query($sql);
+    if (mysql_error()) trigger_error(mysql_error(),E_USER_WARNING);
+    $numlinktypes=mysql_num_rows($result);
+    $rowcount=1;
+    while ($linktype = mysql_fetch_object($result))
+    {
+        if ($linktype->origtab == $table AND $linktype->linktab != $table) $html .= "<a href='add_link.php?origtab=tasks&amp;origref={$ref}&amp;linktype={$linktype->id}'>{$linktype->lrname}</a>";
+        elseif ($linktype->origtab != $table AND $linktype->linktab == $table) $html .= "<a href='add_link.php?origtab=tasks&amp;origref={$ref}&amp;linktype={$linktype->id}'>{$linktype->rlname}</a>";
+        else
+        {
+            $html .= "<a href='add_link.php?origtab=tasks&amp;origref={$ref}&amp;linktype={$linktype->id}'>{$linktype->lrname}</a> | ";
+            $html .= "<a href='add_link.php?origtab=tasks&amp;origref={$ref}&amp;linktype={$linktype->id}&amp;dir=rl'>{$linktype->rlname}</a>";
+        }
+        if ($rowcount < $numlinktypes) $html .= " | ";
+        $rowcount++;
+    }
+    $html .= "</p>";
+    return $html;
+}
+
+
+// Function to create a PNG chart
+// Returns a png image object
+// Currently only has support for pie charts (type='pie')
+function draw_png_chart($type, $width, $height, $data, $legends, $title='')
+{
+    // Graph settings
+    if (empty($width)) $width = 500;
+    if (empty($height)) $height = 150;
+
+    $countdata = count($data);
+    $sumdata = array_sum($data);
+
+    if ($countdata > 8) $height += (($countdata - 8) * 14);
+
+    $img = imagecreatetruecolor($width, $height);
+
+    $white = imagecolorallocate($img, 255, 255, 255);
+    $blue = imagecolorallocate($img, 240, 240, 255);
+    $black = imagecolorallocate($img, 0, 0, 0);
+    $red = imagecolorallocate($img, 255, 0, 0);
+
+    imagefill($img, 0, 0, $white);
+
+    $rgb[] = "190,190,255";
+    $rgb[] = "205,255,255";
+    $rgb[] = "255,255,156";
+    $rgb[] = "156,255,156";
+    $rgb[] = "255,205,195";
+    $rgb[] = "255,140,255";
+    $rgb[] = "100,100,155";
+    $rgb[] = "98,153,90";
+    $rgb[] = "205,210,230";
+    $rgb[] = "192,100,100";
+    $rgb[] = "204,204,0";
+    $rgb[] = "255,102,102";
+    $rgb[] = "0,204,204";
+    $rgb[] = "0,255,0";
+    $rgb[] = "255,168,88";
+    $rgb[] = "128,0,128";
+    $rgb[] = "0,153,153";
+    $rgb[] = "255,230,204";
+    $rgb[] = "128,170,213";
+    $rgb[] = "75,75,75";
+    // repeats...
+    $rgb[] = "190,190,255";
+    $rgb[] = "156,255,156";
+    $rgb[] = "255,255,156";
+    $rgb[] = "205,255,255";
+    $rgb[] = "255,205,195";
+    $rgb[] = "255,140,255";
+    $rgb[] = "100,100,155";
+    $rgb[] = "98,153,90";
+    $rgb[] = "205,210,230";
+    $rgb[] = "192,100,100";
+    $rgb[] = "204,204,0";
+    $rgb[] = "255,102,102";
+    $rgb[] = "0,204,204";
+    $rgb[] = "0,255,0";
+    $rgb[] = "255,168,88";
+    $rgb[] = "128,0,128";
+    $rgb[] = "0,153,153";
+    $rgb[] = "255,230,204";
+    $rgb[] = "128,170,213";
+    $rgb[] = "75,75,75";
+
+    switch ($type)
+    {
+        case 'pie':
+            // ImageString($img,3, 10, 10, "Pie Chart $countdata / $sumdata", $black);
+            // for($i=0;$i<=$Randomized;$i++){$data[$i]=rand(2,20);};//full array with garbage.
+            $cx = '120';$cy ='60'; //Set Pie Postition. CenterX,CenterY
+            $sx = '200';$sy='100';$sz ='15';// Set Size-dimensions. SizeX,SizeY,SizeZ
+
+            if (!empty($title))
+            {
+                $cy += 10;
+                imagestring($img,2, 2, ($legendY-1), "{$title}", $black);
+            }
+
+            //convert to angles.
+            for($i=0;$i<=$countdata;$i++)
+            {
+                $angle[$i] = (($data[$i] / $sumdata) * 360);
+                $angle_sum[$i] = array_sum($angle);
+            };
+
+            $background = imagecolorallocate($img, 255, 255, 255);
+            //Random colors.
+
+            for($i=0;$i<=$countdata;$i++)
+            {
+                $rgbcolors = explode(',',$rgb[$i]);
+                $colors[$i] = imagecolorallocate($img,$rgbcolors[0],$rgbcolors[1],$rgbcolors[2]);
+                $colord[$i] = imagecolorallocate($img,($rgbcolors[0]/1.5),($rgbcolors[1]/1.5),($rgbcolors[2]/1.5));
+            }
+
+            //3D effect.
+            $legendY = 80 - ($countdata * 10);
+            if ($legendY < 10) $legendY = 10;
+            for($z=1;$z<=$sz;$z++)
+            {
+                for($i=0;$i<$countdata;$i++)
+                {
+                imagefilledarc($img,$cx,($cy+$sz)-$z,$sx,$sy,$angle_sum[$i-1],$angle_sum[$i],$colord[$i],IMG_ARC_PIE);
+                };
+
+            };
+            imagerectangle($img, 250, $legendY-5, 470, $legendY+($countdata*15), $black);
+            //Top pie.
+            for($i=0;$i<$countdata;$i++)
+            {
+                imagefilledarc($img,$cx,$cy,$sx,$sy,$angle_sum[$i-1] ,$angle_sum[$i], $colors[$i], IMG_ARC_PIE);
+                imagefilledrectangle($img, 255, ($legendY+1), 264, ($legendY+9), $colors[$i]);
+                imagestring($img,2, 270, ($legendY-1), substr(urldecode($legends[$i]),0,27)." ({$data[$i]})", $black);
+                // imagearc($img,$cx,$cy,$sx,$sy,$angle_sum[$i1] ,$angle_sum[$i], $blue);
+                $legendY+=15;
+            };
+        break;
+
+        default:
+            imagestring($img,3, 10, 10, "Invalid chart type", $red);
+    }
+
+    // Return a PNG image
+    return $img;
+}
+
 
 // -------------------------- // -------------------------- // --------------------------
 // leave this section at the bottom of functions.inc.php ================================
