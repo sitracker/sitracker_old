@@ -24,7 +24,6 @@ include('htmlheader.inc.php');
 <tr><td class='shade1' colspan="2">About <?php echo $CONFIG['application_shortname']; ?>...</td></tr>
 <tr><td class='shade2' colspan="2" style='background-image: url(images/sitting_man_logo64x64.png); background-repeat: no-repeat; background-position: 1% bottom;'>
 <?php
-echo "<img src='' style='float: left; margin-top: 15px;' />";
 echo "<h2>{$CONFIG['application_name']}</h2>";
 echo "<p align='center'>";
 echo "Version: {$application_version} {$application_revision}</p><br />";
