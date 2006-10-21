@@ -146,6 +146,9 @@ $CONFIG['demo'] = FALSE;
 // Output extra debug information, some as HTML comments and some in the page footer
 $CONFIG['debug'] = FALSE;
 
+// Enable user portal
+$CONFIG['portal'] = FALSE;
+
 // Journal Logging Level
 //      0 = No logging
 //      1 = Minimal Logging

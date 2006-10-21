@@ -85,9 +85,9 @@ if (authenticate($username, $password) == 1)
         exit;
     }
 }
-else
+else if($CONFIG['portal'] == TRUE)
 {
-    // Invalid user
+    // Invalid user and portal enabled
     // Have a look if this is a contact trying to login
     $portalpassword=cleanvar($_REQUEST['password']);
     $sql = "SELECT * FROM contacts WHERE username='$username' AND password='$portalpassword' LIMIT 1";
@@ -123,6 +123,11 @@ else
     }
     // redirect
 
+    header ("Location: index.php?id=3");
+    exit;
+}else
+{
+    //invalid user and portal disabled
     header ("Location: index.php?id=3");
     exit;
 }

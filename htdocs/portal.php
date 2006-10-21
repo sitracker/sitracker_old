@@ -17,6 +17,17 @@ require('functions.inc.php');
 session_name($CONFIG['session_name']);
 session_start();
 
+if($CONFIG['portal'] == FALSE)
+{
+    // portal disabled
+    $_SESSION['portalauth'] = FALSE;
+    $page = $_SERVER['PHP_SELF'];
+    if (!empty($_SERVER['QUERY_STRING'])) $page .= '?'.$_SERVER['QUERY_STRING'];
+    $page = urlencode($page);
+    header("Location: {$CONFIG['application_webpath']}index.php?id=2&page=$page");
+    exit;
+}
+
 // Check session is authenticated, if not redirect to login page
 if (!isset($_SESSION['portalauth']) OR $_SESSION['portalauth'] == FALSE)
 {
