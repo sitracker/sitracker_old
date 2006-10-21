@@ -234,6 +234,8 @@ else
         if(!empty($collapse)) $collapse = 'true'; else $collapse = 'false';
         if(!empty($emailonreassign)) $emailonreassign = 'true'; else $emailonreassign = 'false';
 
+        $oldstatus = user_status($userid);
+
         $sql  = "UPDATE users SET realname='$realname', title='$jobtitle', email='$email', qualifications='$qualifications', ";
         $sql .= "phone='$phone', mobile='$mobile', aim='$aim', icq='$icq', msn='$msn', fax='$fax', var_incident_refresh='$incidentrefresh', ";
         if ($userid != 1 AND !empty($_REQUEST['roleid']) AND $edituserpermission==TRUE) $sql .= "roleid='{$roleid}', ";
@@ -253,8 +255,13 @@ else
             $_SESSION['update_order'] = $updateorder;
         }
 
-        // reassign the users incidents if appropriate
-        incident_backup_switchover($userid, $accepting);
+        //only want to reassign to backup if you've changed you status 
+        //(i.e. In Office -> On Holiday rather than when youve updated your message) or changes from accepting to not accepting
+        if($oldstatus != $status)
+        {
+            // reassign the users incidents if appropriate
+            incident_backup_switchover($userid, $accepting);
+        }
 
         if (!$result)
         {
