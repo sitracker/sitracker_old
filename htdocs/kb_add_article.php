@@ -99,16 +99,16 @@ if (user_permission($sit[2],$permission))
         $title = cleanvar($_POST['title']);
         $distribution = cleanvar($_POST['distribution']);
         $keywords = cleanvar($_POST['keywords']);
-        $summary = cleanvar($_POST['summary']);
-        $symptoms = cleanvar($_POST['symptoms']);
-        $cause = cleanvar($_POST['cause']);
-        $question = cleanvar($_POST['question']);
-        $answer = cleanvar($_POST['answer']);
-        $solution = cleanvar($_POST['solution']);
-        $workaround = cleanvar($_POST['workaround']);
-        $status = cleanvar($_POST['status']);
-        $additional = cleanvar($_POST['additional']);
-        $references = cleanvar($_POST['references']);
+        $summary = cleanvar($_POST['summary'],FALSE,FALSE);
+        $symptoms = cleanvar($_POST['symptoms'],FALSE,FALSE);
+        $cause = cleanvar($_POST['cause'],FALSE,FALSE);
+        $question = cleanvar($_POST['question'],FALSE,FALSE);
+        $answer = cleanvar($_POST['answer'],FALSE,FALSE);
+        $solution = cleanvar($_POST['solution'],FALSE,FALSE);
+        $workaround = cleanvar($_POST['workaround'],FALSE,FALSE);
+        $status = cleanvar($_POST['status'],FALSE,FALSE);
+        $additional = cleanvar($_POST['additional'],FALSE,FALSE);
+        $references = cleanvar($_POST['references'],FALSE,FALSE);
 
         $sql = "INSERT INTO kbarticles (doctype, title, distribution, author, published, keywords) VALUES ";
         $sql .= "('1', ";

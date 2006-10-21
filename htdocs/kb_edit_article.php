@@ -311,9 +311,7 @@ else
         mysql_query($sql);
         if (mysql_error()) trigger_error("MySQL Query Error ".mysql_error(), E_USER_ERROR);
 
-        // I know we shouldn't need to stripslashes here, but for some reason the raw posted input
-        // is escaped.  why?  I just don't know.  Oh well.  INL 17Jun03, Def needed INL 12Nov03
-        $content = mysql_escape_string(stripslashes($_REQUEST[$cfieldname]));
+        $content = cleanvar($_REQUEST[$cfieldname],FALSE,FALSE);
         $content = strip_tags($content,$allowable_html_tags);
         $hfieldname = "header$id";
         $headerstyle = cleanvar($_REQUEST[$hfieldname]);

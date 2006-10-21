@@ -88,7 +88,7 @@ if (user_permission($sit[2],$permission))
         }
         */
         // $kbcontent->content=nl2br(stripslashes($kbcontent->content));
-        $kbcontent->content=nl2br(remove_slashes($kbcontent->content));
+        $kbcontent->content=nl2br($kbcontent->content);
         $search = array("/(?<!quot;|[=\"]|:\/{2})\b((\w+:\/{2}|www\.).+?)"."(?=\W*([<>\s]|$))/i", "/(([\w\.]+))(@)([\w\.]+)\b/i");
         $replace = array("<a href=\"$1\">$1</a>", "<a href=\"mailto:$0\">$0</a>");
         $kbcontent->content = preg_replace("/href=\"www/i", "href=\"http://www", preg_replace ($search, $replace, $kbcontent->content));
