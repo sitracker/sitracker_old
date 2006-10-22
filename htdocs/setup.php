@@ -98,6 +98,7 @@ $CFGVAR['critical_threshold']['title']='flag items as notice when they are this 
 $CFGVAR['critical_threshold']['help']='Enter a number between 0 and 100.';
 $CFGVAR['demo']['title']='Run in demo mode, some features are disabled or replaced with mock-ups';
 $CFGVAR['debug']['title'] = 'Set to TRUE to output extra debug information, some as HTML comments and some in the page footer, FALSE to disable';
+$CFGVAR['portal']['title'] = 'Enable user portal';
 $CFGVAR['journal_loglevel']['title'] = 'Journal Logging Level';
 $CFGVAR['journal_loglevel']['help'] = '0 = none, 1 = minimal, 2 = normal, 3 = full, 4 = maximum/debug';
 $CFGVAR['journal_purge_after']['title'] = 'How long should we keep journal entries (in seconds), entries older than this will be purged (deleted)';
