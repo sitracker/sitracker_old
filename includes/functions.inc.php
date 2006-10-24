@@ -4589,17 +4589,17 @@ function user_notification_on_reassign($user)
 
 function bbcode($text)
 {
-    $bbcode_regex = array(0 => '/\[b\](.+?)\[\/b\]/s',
-                        1 => '/\[i\](.+?)\[\/i\]/s',
-                        2 => '/\[u\](.+?)\[\/u\]/s',
-                        3 => '/\[quote\](.+?)\[\/quote\]/s',
-                        4 => '/\[quote\=(.+?)](.+?)\[\/quote\]/s',
-                        5 => '/\[url\](.+?)\[\/url\]/s',
-                        6 => '/\[url\=(.+?)\](.+?)\[\/url\]/s',
-                        7 => '/\[img\](.+?)\[\/img\]/s',
-                        8 => '/\[color\=(.+?)\](.+?)\[\/color\]/s',
-                        9 => '/\[size\=(.+?)\](.+?)\[\/size\]/s',
-                        10 => '/\[code\](.+?)\[\/code\]/s',
+    $bbcode_regex = array(0 => '/\[b\](.*?)\[\/b\]/s',
+                        1 => '/\[i\](.*?)\[\/i\]/s',
+                        2 => '/\[u\](.*?)\[\/u\]/s',
+                        3 => '/\[quote\](.*?)\[\/quote\]/s',
+                        4 => '/\[quote\=(.*?)](.*?)\[\/quote\]/s',
+                        5 => '/\[url\](.*?)\[\/url\]/s',
+                        6 => '/\[url\=(.*?)\](.*?)\[\/url\]/s',
+                        7 => '/\[img\](.*?)\[\/img\]/s',
+                        8 => '/\[color\=(.*?)\](.*?)\[\/color\]/s',
+                        9 => '/\[size\=(.*?)\](.*?)\[\/size\]/s',
+                        10 => '/\[code\](.*?)\[\/code\]/s',
                         11 => '/\[hr\]/s');
 
     $bbcode_replace = array(0 => '<strong>$1</strong>',
@@ -4620,10 +4620,10 @@ function bbcode($text)
 
 function strip_bbcode_tooltip($text)
 {
-    $bbcode_regex = array(0 => '/\[url\](.+?)\[\/url\]/s',
-                        1 => '/\[url\=(.+?)\](.+?)\[\/url\]/s',
-                        2 => '/\[color\=(.+?)\](.+?)\[\/color\]/s',
-                        3 => '/\[size\=(.+?)\](.+?)\[\/size\]/s');
+    $bbcode_regex = array(0 => '/\[url\](.*?)\[\/url\]/s',
+                        1 => '/\[url\=(.*?)\](.*?)\[\/url\]/s',
+                        2 => '/\[color\=(.*?)\](.*?)\[\/color\]/s',
+                        3 => '/\[size\=(.*?)\](.*?)\[\/size\]/s');
     $bbcode_replace = array(0 => '$1',
                             1 => '$2',
                             2 => '$2',
