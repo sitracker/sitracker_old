@@ -16,9 +16,9 @@
 // use SQL joins.
 
 // Version number of the application, (numbers only)
-$application_version='3.25';
+$application_version='3.24';
 // Revision string, e.g. 'beta2' or ''
-$application_revision='alpha-1';
+$application_revision='beta-3';
 
 // Clean PHP_SELF server variable to avoid potential XSS security issue
 $_SERVER['PHP_SELF'] = substr($_SERVER['PHP_SELF'], 0, (strlen($_SERVER['PHP_SELF']) - @strlen($_SERVER['PATH_INFO'])));
@@ -4896,9 +4896,14 @@ function show_create_links($table, $ref)
 // Currently only has support for pie charts (type='pie')
 function draw_chart_image($type, $width, $height, $data, $legends, $title='')
 {
+    global $CONFIG;
     // Graph settings
     if (empty($width)) $width = 500;
     if (empty($height)) $height = 150;
+    $fontfile="{$CONFIG['application_fspath']}FreeSans.ttf";
+
+    if (!empty($fontfile) AND file_exists($fontfile)) $use_ttf=TRUE;
+    else $use_ttf=FALSE;
 
     $countdata = count($data);
     $sumdata = array_sum($data);
@@ -4959,15 +4964,15 @@ function draw_chart_image($type, $width, $height, $data, $legends, $title='')
     switch ($type)
     {
         case 'pie':
-            // ImageString($img,3, 10, 10, "Pie Chart $countdata / $sumdata", $black);
-            // for($i=0;$i<=$Randomized;$i++){$data[$i]=rand(2,20);};//full array with garbage.
             $cx = '120';$cy ='60'; //Set Pie Postition. CenterX,CenterY
             $sx = '200';$sy='100';$sz ='15';// Set Size-dimensions. SizeX,SizeY,SizeZ
 
+            // Title
             if (!empty($title))
             {
                 $cy += 10;
-                imagestring($img,2, 2, ($legendY-1), "{$title}", $black);
+                if ($use_ttf) imagettftext($img, 10, 0, 2, 10, $black, $fontfile, $title);
+                else imagestring($img,2, 2, ($legendY-1), "{$title}", $black);
             }
 
             //convert to angles.
@@ -4975,7 +4980,7 @@ function draw_chart_image($type, $width, $height, $data, $legends, $title='')
             {
                 $angle[$i] = (($data[$i] / $sumdata) * 360);
                 $angle_sum[$i] = array_sum($angle);
-            };
+            }
 
             $background = imagecolorallocate($img, 255, 255, 255);
             //Random colors.
@@ -4994,20 +4999,22 @@ function draw_chart_image($type, $width, $height, $data, $legends, $title='')
             {
                 for($i=0;$i<$countdata;$i++)
                 {
-                imagefilledarc($img,$cx,($cy+$sz)-$z,$sx,$sy,$angle_sum[$i-1],$angle_sum[$i],$colord[$i],IMG_ARC_PIE);
-                };
+                    imagefilledarc($img,$cx,($cy+$sz)-$z,$sx,$sy,$angle_sum[$i-1],$angle_sum[$i],$colord[$i],IMG_ARC_PIE);
+                }
 
-            };
+            }
             imagerectangle($img, 250, $legendY-5, 470, $legendY+($countdata*15), $black);
             //Top pie.
             for($i=0;$i<$countdata;$i++)
             {
                 imagefilledarc($img,$cx,$cy,$sx,$sy,$angle_sum[$i-1] ,$angle_sum[$i], $colors[$i], IMG_ARC_PIE);
                 imagefilledrectangle($img, 255, ($legendY+1), 264, ($legendY+9), $colors[$i]);
-                imagestring($img,2, 270, ($legendY-1), substr(urldecode($legends[$i]),0,27)." ({$data[$i]})", $black);
+                // Legend
+                if ($use_ttf) imagettftext($img, 8, 0, 270, ($legendY+9), $black, $fontfile, substr(urldecode($legends[$i]),0,27)." ({$data[$i]})");
+                else imagestring($img,2, 270, ($legendY-1), substr(urldecode($legends[$i]),0,27)." ({$data[$i]})", $black);
                 // imagearc($img,$cx,$cy,$sx,$sy,$angle_sum[$i1] ,$angle_sum[$i], $blue);
                 $legendY+=15;
-            };
+            }
         break;
 
         default:
