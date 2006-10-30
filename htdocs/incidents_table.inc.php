@@ -190,7 +190,7 @@ while ($incidents = mysql_fetch_array($result))
     if (!empty($incidents['softwareid'])) echo software_name($incidents['softwareid'])."<br />";
     ?>
     <a href="javascript:incident_details_window('<?php echo $incidents["id"] ?>','incident<?php echo $incidents["id"] ?>')" class='info'>
-    <?php if (trim($incidents['title']) !='') echo htmlspecialchars(stripslashes($incidents['title'])); else echo 'Untitled';
+    <?php if (trim($incidents['title']) !='') echo (stripslashes($incidents['title'])); else echo 'Untitled';
     if (!empty($update_body) AND $update_body!='...') echo "<span>{$update_body}</span>";
     else
     {
