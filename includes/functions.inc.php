@@ -4727,6 +4727,7 @@ function parse_updatebody($updatebody)
 {
     if (!empty($updatebody))
     {
+        $updatebody=stripslashes($updatebody);
         $updatebody=str_replace("&lt;hr&gt;", "[hr]\n", $updatebody);
         $updatebody=strip_tags($updatebody);
         $updatebody=nl2br(htmlspecialchars($updatebody,ENT_COMPAT));
