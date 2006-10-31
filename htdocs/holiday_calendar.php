@@ -566,19 +566,19 @@ else
         switch ($length)
         {
             case 'am':
-            echo "booked for the <strong>morning";
+            echo "selected for the <strong>morning";
             break;
 
             case 'pm':
-            echo "booked for the <strong>afternoon";
+            echo "selected for the <strong>afternoon";
             break;
 
             case 'day':
-            echo "booked for the <strong>full day";
+            echo "selected for the <strong>full day";
             break;
 
             default:
-            echo "<strong>not booked";
+            echo "<strong>not selected";
         }
         echo "</strong> ";
         echo " as ".holiday_type($selectedtype).".  ";

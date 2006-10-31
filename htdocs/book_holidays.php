@@ -152,7 +152,7 @@ elseif ($step=='1')
                     if ($existing_holiday['length']=='am' ) echo "$holiday_legend";
                     elseif ($existing_holiday['length']!='day')
                     {
-                        if (($type=='2' && $day < $now) || ($type!='2' && $day > $now))
+                        if (($type=='2' && $day < $now) || ($type!='2'))
                             echo "<input type='radio' name='length{$daynumber}' value='am' checked='checked' />";
                         else echo "-";
                     }
@@ -164,7 +164,7 @@ elseif ($step=='1')
                     if ($existing_holiday['length']=='pm') echo "$holiday_legend";
                     elseif ($existing_holiday['length']!='day')
                     {
-                        if (($type=='2' && $day < $now) || ($type!='2' && $day > $now))
+                        if (($type=='2' && $day < $now) || ($type!='2'))
                         echo "<input type='radio' name='length{$daynumber}' value='pm' checked='checked' />";
                         else echo "-";
                     }
@@ -185,7 +185,7 @@ elseif ($step=='1')
                 else
                 {
                     echo "<tr><td align='right' width='200'>&nbsp;</td><td class='shade2' align='right'>".date('D d M Y',$day)." </td>";
-                    if (($type=='2' && $day < $now) || ($type!=2 && $day > $now))
+                    if (($type=='2' && $day < $now) || ($type!=2))
                         echo "<td class='shade1' align='center'><input type='radio' name='length{$daynumber}' value='day' checked='checked'/></td><td class='shade2' align='center'><input type='radio' name='length{$daynumber}' value='am' /></td><td class='shade1' align='center'><input type='radio' name='length{$daynumber}' value='pm' /></td>";
                     else
                         echo "<td class='shade1' align='center'>-</td><td class='shade2' align='center'>-</td><td class='shade1' align='center'>-</td>";
