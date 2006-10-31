@@ -56,7 +56,7 @@ if (!$sent)
         while ($holiday=mysql_fetch_object($result))
         {
             echo "<tr class='shade2'>";
-            if ($user=='all' && $approver==TRUE) 
+            if ($user=='all' && $approver==TRUE)
             {
                 echo "<td><a href='{$_SERVER['PHP_SELF']}?user={$holiday->userid}&amp;mode=approval'>";
                 echo user_realname($holiday->userid);
@@ -95,37 +95,38 @@ if (!$sent)
         if ($mode=='approval') echo "<p align='center'><a href='holiday_approve.php?approve=TRUE&user=$user&view=$user&startdate=all&type=all'>Approve all</a></p>";
         else
         {
-            echo "<form action='{$_SERVER['PHP_SELF']}' method='post'>";
-            echo "<p align='center'>";
-            echo "Send the request(s) to: ";
             // extract users (only show users with permission to approve that are not disabled accounts)
             $sql  = "SELECT id, realname, accepting FROM users, userpermissions ";
-            $sql .= "WHERE users.id=userpermissions.userid AND permissionid=50 AND granted='true' AND users.status > 0 ORDER BY realname ASC";
+            $sql .= "WHERE users.id=userpermissions.userid AND permissionid=50 AND granted='true' ";
+            $sql .= "AND users.id != {$sit[2]} AND users.status > 0 ORDER BY realname ASC";
             $result = mysql_query($sql);
             if (mysql_error()) trigger_error(mysql_error(),E_USER_ERROR);
-
-            echo "<select class='dropdown' name='approvaluser'>";
-            if ($id == 0)
-            echo "<option selected='selected' value='0'>Select A User</option>\n";
-            while ($users = mysql_fetch_array($result))
+            $numapprovers = mysql_num_rows($result);
+            if ($numapprovers > 0)
             {
-                if($users['id'] != $sit[2])
+                echo "<form action='{$_SERVER['PHP_SELF']}' method='post'>";
+                echo "<p align='center'>";
+                echo "Send the request(s) to: ";
+                echo "<select name='approvaluser'>";
+                echo "<option selected='selected' value='0'>Select A User</option>\n";
+                while ($users = mysql_fetch_array($result))
                 {
                     echo "<option";
                     if ($users['id'] == $id) echo " selected='selected'";
                     echo " value='{$users['id']}'";
                     echo ">{$users['realname']}</option>\n";
                 }
+                echo "</select>";
+                echo "</p>";
+                echo "<p align='center'>Send comments with your request: (or leave blank)<br />";
+                echo "<textarea name='memo' rows='3' cols='40'></textarea>";
+                echo "<input type='hidden' name='user' value='$user' />";
+                echo "<input type='hidden' name='sent' value='true' /><br /><br />";
+                echo "<input type='submit' name='submit' value='submit' />";
+                echo "</p>";
+                echo "</form>";
             }
-            echo "</select>";
-            echo "</p>";
-            echo "<p align='center'>Send comments with your request: (or leave blank)<br />";
-            echo "<textarea name='memo' rows='3' cols='40'></textarea>";
-            echo "<input type='hidden' name='user' value='$user' />";
-            echo "<input type='hidden' name='sent' value='true' /><br /><br />";
-            echo "<input type='submit' name='submit' value='submit' />";
-            echo "</p>";
-            echo "</form>";
+            else echo "<p class='error'>There are no users that can approve your request, only users with appropiate permissions can approve holiday requests and you cannot approve your own requests.</p>";
         }
     }
     else
