@@ -461,6 +461,16 @@ function draw_chart($month, $year)
     }
     $html .= "</table>\n\n";
 
+    // Legend
+    $html .= "<table align='center'><tr><td><strong>Legend</strong>:</td>";
+    foreach ($holidaytype AS $htype)
+    {
+        $html .= "<td>".substr($htype,0,1)." = {$htype}</td>";
+    }
+    $html .= "</tr>";
+    $html .= "<tr><td></td><td class='review'>not approved</td><td class='idle'>approved</td></tr>";
+    $html .= "</table>\n\n";
+
     return $html;
 }
 
