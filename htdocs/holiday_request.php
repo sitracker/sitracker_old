@@ -56,7 +56,12 @@ if (!$sent)
         while ($holiday=mysql_fetch_object($result))
         {
             echo "<tr class='shade2'>";
-            if ($user=='all' && $approver==TRUE) echo "<td>".user_realname($holiday->userid)."</td>";
+            if ($user=='all' && $approver==TRUE) 
+            {
+                echo "<a href='{$_SERVER['PHP_SELF']}?user=$user&amp;mode=approval'>";
+                echo "<td>".user_realname($holiday->userid)."</td>";
+                echo "</a>";
+            }
             echo "<td>".date('l j F Y', $holiday->startdate)."</td>";
             echo "<td>";
             if ($holiday->length=='am') echo "Morning Only";
@@ -87,6 +92,7 @@ if (!$sent)
             echo "</tr>";
         }
         echo "</table>";
+        echo "<p><a href='holiday_approve.php?approve=TRUE&user=$user&startdate=all&type=all'>Approve all</a></p>";
         if (!$mode=='approval')
         {
             echo "<form action='{$_SERVER['PHP_SELF']}' method='post'>";
