@@ -92,7 +92,7 @@ if (!$sent)
             echo "</tr>";
         }
         echo "</table>";
-        echo "<p align='center'><a href='holiday_approve.php?approve=TRUE&user=$user&startdate=all&type=all'>Approve all</a></p>";
+        echo "<p align='center'><a href='holiday_approve.php?approve=TRUE&user=$user&view=$user&startdate=all&type=all'>Approve all</a></p>";
         if (!$mode=='approval')
         {
             echo "<form action='{$_SERVER['PHP_SELF']}' method='post'>";
