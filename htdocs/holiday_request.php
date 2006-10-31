@@ -58,9 +58,9 @@ if (!$sent)
             echo "<tr class='shade2'>";
             if ($user=='all' && $approver==TRUE) 
             {
-                echo "<a href='{$_SERVER['PHP_SELF']}?user=$user&amp;mode=approval'>";
-                echo "<td>".user_realname($holiday->userid)."</td>";
-                echo "</a>";
+                echo "<td><a href='{$_SERVER['PHP_SELF']}?user=$user&amp;mode=approval'>";
+                echo user_realname($holiday->userid);
+                echo "</a></td>";
             }
             echo "<td>".date('l j F Y', $holiday->startdate)."</td>";
             echo "<td>";
