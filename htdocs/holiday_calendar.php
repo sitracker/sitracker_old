@@ -530,7 +530,7 @@ else
         }
         echo "</select></form>";
         
-        $sql = "SELECT * from holidays WHERE userid='{$sit[2]}' AND approved=0";
+        $sql = "SELECT * from holidays WHERE userid='{$sit[2]}' AND approved=0 AND type='$type'";
         $result = mysql_query($sql);
         if (mysql_error()) trigger_error("MySQL Query Error ".mysql_error(), E_USER_ERROR);
         if (mysql_num_rows($result)) 
@@ -540,9 +540,10 @@ else
             echo "<tr class='shade1'><td>";
             while ($dates = mysql_fetch_array($result))
             {
-                echo date('l jS F Y', $dates['startdate']);
-                if ($dates['length']=='am') echo " Morning only";
-                if ($dates['length']=='pm') echo " Afternoon only";
+                echo date('l ', $dates['startdate']);
+                if ($dates['length']=='am') echo "morning ";
+                if ($dates['length']=='pm') echo "afternoon ";
+                echo date('jS F Y', $dates['startdate']);
                 echo "<br/>\n";
             }
             echo "</td></tr>\n";
