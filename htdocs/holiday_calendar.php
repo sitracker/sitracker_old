@@ -26,6 +26,7 @@ $type = cleanvar($_REQUEST['type']);
 $selectedday = cleanvar($_REQUEST['selectedday']);
 $selectedmonth = cleanvar($_REQUEST['selectedmonth']);
 $selectedyear = cleanvar($_REQUEST['selectedyear']);
+$selectedtype = cleanvar($_REQUEST['selectedtype']);
 $length = cleanvar($_REQUEST['length']);
 if (empty($length)) $length='day';
 $display = cleanvar($_REQUEST['display']);
@@ -617,7 +618,11 @@ else
                 case 'day':
                     echo "You can make it <a href='add_holiday.php?type=$type&amp;user=$user&amp;year=$selectedyear&amp;month=$selectedmonth&amp;day=$selectedday&amp;length=am'>the morning</a>, or <a href='add_holiday.php?type=$type&amp;user=$user&amp;year=$selectedyear&amp;month=$selectedmonth&amp;day=$selectedday&amp;length=pm'>the afternoon</a> instead. ";
             }
-            if ($length!='0') echo "Or you can <a href='add_holiday.php?type=$type&amp;user=$user&amp;year=$selectedyear&amp;month=$selectedmonth&amp;day=$selectedday&amp;length=0'>unbook</a> it.";
+            if ($length!='0')
+            {
+                echo "Or you can <a href='add_holiday.php?type=$type&amp;user=$user&amp;year=$selectedyear&amp;month=$selectedmonth&amp;day=$selectedday&amp;length=0'>unbook</a> it. ";
+                echo "<a href='holiday_calendar.php?type=$type&amp;user=$user' title='Clear this message'>Okay</a>.";
+            }
         }
         elseif ($approved==1)
         {
