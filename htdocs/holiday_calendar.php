@@ -326,131 +326,140 @@ function draw_chart($month, $year)
     $html .= "</tr>";
     */
 
-    $usql  = "SELECT * FROM users WHERE status!=0 AND groupid <> 0 ORDER BY groupid, realname";  // status=0 means left company
+    $usql  = "SELECT * FROM users WHERE status!=0 ";
+    if ($numgroups > 1) $usql .= "AND groupid > 0 ";  // there is always 1 group (ie. 'none')
+    $usql .= "ORDER BY groupid, realname";  // status=0 means left company
     $uresult = mysql_query($usql);
     if (mysql_error()) trigger_error(mysql_error(),E_USER_ERROR);
 
+    $numusers = mysql_num_rows($uresult);
     $prevgroupid='000';
-    while ($user = mysql_fetch_object($uresult))
+    if ($numusers > 0)
     {
-        unset($hdays);
-        $startdate = mktime(0,0,0,$month,1,$year);
-        $enddate  = mktime(0,0,0,$month,$daysinmonth,$year);
-        $hsql = "SELECT * FROM holidays WHERE userid={$user->id} AND startdate >= $startdate AND startdate <= $enddate";
-        $hresult = mysql_query($hsql);
-        if (mysql_error()) trigger_error(mysql_error(),E_USER_ERROR);
-        while ($holiday = mysql_fetch_object($hresult))
+        while ($user = mysql_fetch_object($uresult))
         {
-            $day = date('j',$holiday->startdate);
-            $hdays[$day] = $holiday->length;
-            $htypes[$day] = $holiday->type;
-            $happroved[$day] = $holiday->approved;
-        }
+            unset($hdays);
+            $startdate = mktime(0,0,0,$month,1,$year);
+            $enddate  = mktime(0,0,0,$month,$daysinmonth,$year);
+            $hsql = "SELECT * FROM holidays WHERE userid={$user->id} AND startdate >= $startdate AND startdate <= $enddate";
+            $hresult = mysql_query($hsql);
+            if (mysql_error()) trigger_error(mysql_error(),E_USER_ERROR);
+            while ($holiday = mysql_fetch_object($hresult))
+            {
+                $day = date('j',$holiday->startdate);
+                $hdays[$day] = $holiday->length;
+                $htypes[$day] = $holiday->type;
+                $happroved[$day] = $holiday->approved;
+            }
 
-        if ($prevgroupid != $user->groupid)
-        {
-            if ($user->groupid=='') $user->groupid=0;
-            $html .= "<tr>";
-            $html .= "<td align='left' colspan='2' class='shade2'>Group: <strong>{$grouparr[$user->groupid]}</strong></td>";
+            if ($prevgroupid != $user->groupid)
+            {
+                if ($user->groupid=='') $user->groupid=0;
+                $html .= "<tr>";
+                $html .= "<td align='left' colspan='2' class='shade2'>Group: <strong>{$grouparr[$user->groupid]}</strong></td>";
+                for($day=1;$day<=$daysinmonth;$day++)
+                {
+                    $shade='shade1';
+                    if (date('D',mktime(0,0,0,$month,$day,$year))=='Sat')
+                    {
+                        $shade='expired';
+                        $html .= "<td class='$shade' style='text-align: center; font-size: 80%; border-left: 1px solid black;'><strong title='Week Number' >wk<br />".substr(date('W',mktime(0,0,0,$month,$day,$year))+1,0, 1)."".substr(date('W',mktime(0,0,0,$month,$day,$year))+1,1, 1)."</strong></td>";
+                    }
+                    elseif (date('D',mktime(0,0,0,$month,$day,$year))=='Sun') $html .= '';  // nothing
+                    else
+                    {
+                        $html .= "<td align='center' class=\"$shade\"";
+                        if (mktime(0,0,0,$month,$day,$year)==mktime(0,0,0,date('m'),date('d'),date('Y'))) $html .= " style='background: #FFFF00;' title='Today'";
+                        $html .= ">";
+                        $html .= substr(date('D',mktime(0,0,0,$month,$day,$year)),0,1)."<br />".date('d',mktime(0,0,0,$month,$day,$year)) ;
+                        $html .= "</td>";
+                    }
+                }
+                $html .= "</tr>\n";
+            }
+            $prevgroupid = $user->groupid;
+
+
+            $html .= "<tr><th rowspan='2'>{$user->realname}</th>";
+            // AM
+            $html .= "<td>am</td>";
+            $countdays=0;
             for($day=1;$day<=$daysinmonth;$day++)
             {
                 $shade='shade1';
+                if ((date('D',mktime(0,0,0,$month,$day,$year))=='Sat' OR date('D',mktime(0,0,0,$month,$day,$year))=='Sun') AND mktime(9,0,0,$month,$day,$year) >= $job->actual_start)
+                {
+                    // Add  day on for a weekend
+                    if ($weekend==FALSE) $displaydays+=1;
+                    $weekend=TRUE;
+                }
                 if (date('D',mktime(0,0,0,$month,$day,$year))=='Sat')
                 {
-                    $shade='expired';
-                    $html .= "<td class='$shade' style='text-align: center; font-size: 80%; border-left: 1px solid black;'><strong title='Week Number' >wk<br />".substr(date('W',mktime(0,0,0,$month,$day,$year))+1,0, 1)."".substr(date('W',mktime(0,0,0,$month,$day,$year))+1,1, 1)."</strong></td>";
+                    $html .= "<td class='expired'>&nbsp;</td>";
                 }
-                elseif (date('D',mktime(0,0,0,$month,$day,$year))=='Sun') $html .= '';  // nothing
+                elseif (date('D',mktime(0,0,0,$month,$day,$year))=='Sun')
+                {
+                    // Do nothing on sundays
+                }
                 else
                 {
-                    $html .= "<td align='center' class=\"$shade\"";
-                    if (mktime(0,0,0,$month,$day,$year)==mktime(0,0,0,date('m'),date('d'),date('Y'))) $html .= " style='background: #FFFF00;' title='Today'";
-                    $html .= ">";
-                    $html .= substr(date('D',mktime(0,0,0,$month,$day,$year)),0,1)."<br />".date('d',mktime(0,0,0,$month,$day,$year)) ;
-                    $html .= "</td>";
+                    $weekend=FALSE;  $hello='';
+                    if ($hdays[$day]=='am' OR $hdays[$day]=='day')
+                    {
+                        if ($happroved[$day] == 0) $html .= "<td class='review'>";
+                        elseif ($happroved[$day] == 1) $html .= "<td class='idle'>";
+                        else $html .= "<td class='notice'>";
+                        $html .= substr($holidaytype[$htypes[$day]],0,1);
+                        $html .= "</td>";
+                    }
+                    else $html .= "<td class='shade2'></td>";
                 }
             }
             $html .= "</tr>\n";
-        }
-        $prevgroupid = $user->groupid;
-
-
-        $html .= "<tr><th rowspan='2'>{$user->realname}</th>";
-        // AM
-        $html .= "<td>am</td>";
-        $countdays=0;
-        for($day=1;$day<=$daysinmonth;$day++)
-        {
-            $shade='shade1';
-            if ((date('D',mktime(0,0,0,$month,$day,$year))=='Sat' OR date('D',mktime(0,0,0,$month,$day,$year))=='Sun') AND mktime(9,0,0,$month,$day,$year) >= $job->actual_start)
+            // PM
+            $html .= "<tr><td>pm</td>";
+            $countdays=0;
+            for($day=1;$day<=$daysinmonth;$day++)
             {
-                // Add  day on for a weekend
-                if ($weekend==FALSE) $displaydays+=1;
-                $weekend=TRUE;
-            }
-            if (date('D',mktime(0,0,0,$month,$day,$year))=='Sat')
-            {
-                $html .= "<td class='expired'>&nbsp;</td>";
-            }
-            elseif (date('D',mktime(0,0,0,$month,$day,$year))=='Sun')
-            {
-                // Do nothing on sundays
-            }
-            else
-            {
-                $weekend=FALSE;  $hello='';
-                if ($hdays[$day]=='am' OR $hdays[$day]=='day')
+                $shade='shade1';
+                if ((date('D',mktime(0,0,0,$month,$day,$year))=='Sat' OR date('D',mktime(0,0,0,$month,$day,$year))=='Sun') AND mktime(9,0,0,$month,$day,$year) >= $job->actual_start)
                 {
-                    if ($happroved[$day] == 0) $html .= "<td class='review'>";
-                    elseif ($happroved[$day] == 1) $html .= "<td class='idle'>";
-                    else $html .= "<td class='notice'>";
-                    $html .= substr($holidaytype[$htypes[$day]],0,1);
-                    $html .= "</td>";
+                    // Add  day on for a weekend
+                    if ($weekend==FALSE) $displaydays+=1;
+                    $weekend=TRUE;
                 }
-                else $html .= "<td class='shade2'></td>";
-            }
-        }
-        $html .= "</tr>\n";
-        // PM
-        $html .= "<tr><td>pm</td>";
-        $countdays=0;
-        for($day=1;$day<=$daysinmonth;$day++)
-        {
-            $shade='shade1';
-            if ((date('D',mktime(0,0,0,$month,$day,$year))=='Sat' OR date('D',mktime(0,0,0,$month,$day,$year))=='Sun') AND mktime(9,0,0,$month,$day,$year) >= $job->actual_start)
-            {
-                // Add  day on for a weekend
-                if ($weekend==FALSE) $displaydays+=1;
-                $weekend=TRUE;
-            }
-            if (date('D',mktime(0,0,0,$month,$day,$year))=='Sat')
-            {
-                $html .= "<td class='expired'>&nbsp;</td>";
-            }
-            elseif (date('D',mktime(0,0,0,$month,$day,$year))=='Sun')
-            {
-                // Do nothing on sundays
-            }
-            else
-            {
-                $weekend=FALSE;  $hello='';
-                if ($hdays[$day]=='pm' OR $hdays[$day]=='day')
+                if (date('D',mktime(0,0,0,$month,$day,$year))=='Sat')
                 {
-                    if ($happroved[$day] == 0) $html .= "<td class='review'>";
-                    elseif ($happroved[$day] == 1) $html .= "<td class='idle'>";
-                    else $html .= "<td class='notice'>";
-                    $html .= "<span title='{$holidaytype[$htypes[$day]]}'>".substr($holidaytype[$htypes[$day]],0,1)."</span>";
-                    $html .= "</td>";
+                    $html .= "<td class='expired'>&nbsp;</td>";
                 }
-                else $html .= "<td class='shade2'></td>";
+                elseif (date('D',mktime(0,0,0,$month,$day,$year))=='Sun')
+                {
+                    // Do nothing on sundays
+                }
+                else
+                {
+                    $weekend=FALSE;  $hello='';
+                    if ($hdays[$day]=='pm' OR $hdays[$day]=='day')
+                    {
+                        if ($happroved[$day] == 0) $html .= "<td class='review'>";
+                        elseif ($happroved[$day] == 1) $html .= "<td class='idle'>";
+                        else $html .= "<td class='notice'>";
+                        $html .= "<span title='{$holidaytype[$htypes[$day]]}'>".substr($holidaytype[$htypes[$day]],0,1)."</span>";
+                        $html .= "</td>";
+                    }
+                    else $html .= "<td class='shade2'></td>";
+                }
             }
+            $html .= "</tr>\n";
+            $html .= "<tr><td colspan='0'></td></tr>\n";
         }
-        $html .= "</tr>\n";
-        $html .= "<tr><td colspan='0'></td></tr>\n";
+    }
+    else
+    {
+        if ($numgroups < 1) $html .= "<p class='info'>Nothing to display</p>";
+        else $html .= "<p class='info'>Nothing to display, check user group membership.</p>";
     }
     $html .= "</table>\n\n";
-
-
 
     return $html;
 }
@@ -529,11 +538,11 @@ else
             echo ">{$holidaytypes->name}</option>\n";
         }
         echo "</select></form>";
-        
+
         $sql = "SELECT * from holidays WHERE userid='{$sit[2]}' AND approved=0 AND type='$type'";
         $result = mysql_query($sql);
         if (mysql_error()) trigger_error("MySQL Query Error ".mysql_error(), E_USER_ERROR);
-        if (mysql_num_rows($result)) 
+        if (mysql_num_rows($result))
         {
             echo "<table align='center'>";
             echo "<tr class='shade2'><td><strong>Dates waiting for approval</strong>:</td></tr>";
