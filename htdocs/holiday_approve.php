@@ -30,7 +30,9 @@ $view = cleanvar($_REQUEST['view']);
 if ($approve=='TRUE') $sql = "UPDATE holidays SET approved='1', approvedby='$sit[2]' ";
 elseif ($approve=='FALSE') $sql = "UPDATE holidays SET approved='2', approvedby='$sit[2]' "; //decline
 else $sql = "UPDATE holidays SET approved='1', approvedby='$sit[2]', type='5' "; // free
-$sql .= "WHERE userid='$user' AND startdate='$startdate' AND type='$type' AND length='$length' ";
+$sql .= "WHERE userid='$user' ";
+if ($startdate!='all') $sql.="AND startdate='$startdate' AND type='$type' AND length='$length' ";
+$sql .= "AND approved='0'";
 $result = mysql_query($sql);
 
 plugin_do('holiday_ack');
