@@ -88,33 +88,8 @@ elseif ($step=='1')
 
     echo "<form name='date' action='{$_SERVER['PHP_SELF']}' method='post'>";
 
-    echo "<p align='center'>Send the request(s) to: ";
-    // extract approvers
-    $sql  = "SELECT id, realname, accepting FROM users, userpermissions ";
-    $sql .= "WHERE users.id=userpermissions.userid AND permissionid=50 AND granted='true' AND users.status !=0 ORDER BY realname ASC";
-    $result = mysql_query($sql);
-
-    $id=0;
-    echo "<select class='dropdown' name='approvaluser'>";
-    if ($id == 0)
-        echo "<option selected value='0'>Select A User\n";
-    while ($users = mysql_fetch_array($result))
-    {
-        if($users['id'] != $sit[2])
-        {
-            echo "<option ";
-            if ($users['id'] == $id) echo "selected='selected' ";
-            echo "value='{$users['id']}'>";
-            echo $users['realname']."</option>\n";
-        }
-        echo "\n";
-    }
-    echo "</select> <em>(Your Manager)</em>";
-    echo "<br /><br />Send comments with your request: (or leave blank)<br />";
-    echo "<textarea name='memo' rows='3' cols='40'></textarea>";
     echo "<input type='hidden' name='user' value='$user' />";
     echo "<input type='hidden' name='type' value='$type' />";
-    echo "</p>\n";
 
     echo "<p align='center'><strong>Select Days</strong></p>";
 
@@ -201,7 +176,7 @@ elseif ($step=='1')
     echo "<input type='hidden' name='step' value='3' />";
 
     echo "<p align='center'>";
-    echo "<input type='submit' value='Book' />";
+    echo "<input type='submit' value='Select' />";
     echo "</p>";
     echo "</form>";
 
@@ -225,42 +200,20 @@ else
         $$lengthfield = cleanvar($_REQUEST[$lengthfield]);
     }
 
-    // check that approval user is set
-    // FIXME: don't die, do nice msg
-    if ($approvaluser < 1) die('Please hit back and select a user to send the holiday request to.');
-
-    include('htmlheader.inc.php');
-    //
     // SAVE REQUEST TO DATABASE
-    //
-    echo "<h2>Holiday Booking</h2>";
-    echo "<p align='center'>You have requested a holiday booking as shown below</p>";
-    echo "<table class='vertical' align='center'>";
-    echo "<tr>";
-    echo "<th>Date</th><th>Length</th><th>Type</th>";
-    echo "</tr>\n";
     for ($holiday=1;$holiday < $numberofdays;$holiday++)
     {
         $len="length{$holiday}";
         $d="day{$holiday}";
         if (empty($$len)) $$len='day';
-        echo "<tr class='shade2'>";
-        echo "<td>" . date('D d M Y', $$d) . "</td>";
-        echo "<td>{$$len}</td>";
-        echo "<td>".holiday_type($type)."</td>";
-        echo "</tr>\n";
 
         // check to see if there is other holiday booked on this day
         // and modify that where required.
-
         $sql = "INSERT INTO holidays (userid, type, startdate, length, approved, approvedby) ";
         $sql .= "VALUES ('{$sit[2]}', '$type', '{$$d}', '{$$len}', '0', '$approvaluser') ";
         mysql_query($sql);
         if (mysql_error()) trigger_error("MySQL Query Error ".mysql_error(), E_USER_ERROR);
     }
-    echo "</table>";
-    echo "<p align='center'>You should check your holiday page in a few days to see the approval status.</p>";
-    echo "<p align='center'><a href=\"holidays.php\">Return to Holidays Page</a>";
-    include('htmlfooter.inc.php');
+    header('location:holiday_request.php');
 }
 ?>
