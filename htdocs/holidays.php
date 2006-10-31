@@ -114,7 +114,7 @@ mysql_free_result($result);
 $sql = "SELECT * from holidaytypes";
 $tresult = mysql_query($sql);
 if (mysql_error()) trigger_error("MySQL Query Error ".mysql_error(), E_USER_ERROR);
-while ($holidaytype=mysql_fetch_array($result)) 
+while ($holidaytype=mysql_fetch_array($tresult)) 
 {
     $sql = "SELECT * FROM holidays WHERE userid='{$sit[2]}' AND type={$holidaytype['id']} ";
     $sql.= "AND approved>0 ORDER BY startdate DESC ";
