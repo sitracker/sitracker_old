@@ -162,7 +162,7 @@ else
                 $bodytext .= "The following comments were sent with the request:\n\n";
                 $bodytext .= "---\n$memo\n---\n";
             }
-            $bodytext .= "Please point your browser to\n<https://{$_SERVER['HTTP_HOST']}/holiday_request.php?user={$user}&mode=approval>\n ";
+            $bodytext .= "Please point your browser to\n<{$_SERVER['HTTP_REFERER']}?user={$user}&mode=approval>\n ";
             $bodytext .= "to approve or decline these requests.";
         }
         echo "<p align='center'>Your request has been sent</p>";
