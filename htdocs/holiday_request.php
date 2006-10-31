@@ -39,8 +39,8 @@ if (!$sent)
     if ($approver==TRUE AND $mode!='approval') echo "<p align='center'><a href='holiday_request.php?user=all&amp;mode=approval'>Approve holiday requests</a></p>";
 
     $sql = "SELECT * FROM holidays, holidaytypes WHERE holidays.type=holidaytypes.id AND approved=0 ";
-    if ($mode!='approval') $sql.="AND userid='$user' ";
-    if ($user!='all' && $approver==TRUE) $sql .= "AND userid='".$user."' ";
+    if ($mode!='approval' || $user!='all') $sql.="AND userid='$user' ";
+    if ($approver==TRUE && $mode=='approval') $sql .= "AND approvedby={$sit[2]} ";
     $sql .= "ORDER BY startdate, length";
     $result = mysql_query($sql);
     if (mysql_error()) trigger_error("MySQL Query Error ".mysql_error(), E_USER_ERROR);
