@@ -91,7 +91,7 @@ elseif ($step=='1')
     echo "<p align='center'>Send the request(s) to: ";
     // extract approvers
     $sql  = "SELECT id, realname, accepting FROM users, userpermissions ";
-    $sql .= "WHERE users.id=userpermissions.userid AND permissionid=50 AND users.status !=0 ORDER BY realname ASC";
+    $sql .= "WHERE users.id=userpermissions.userid AND permissionid=50 AND granted=TRUE AND users.status !=0 ORDER BY realname ASC";
     $result = mysql_query($sql);
 
     $id=0;
