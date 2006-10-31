@@ -326,7 +326,7 @@ function draw_chart($month, $year)
     $html .= "</tr>";
     */
 
-    $usql  = "SELECT * FROM users WHERE status!=0 ORDER BY groupid, realname";  // status=0 means left company
+    $usql  = "SELECT * FROM users WHERE status!=0 AND group <> 0 ORDER BY groupid, realname";  // status=0 means left company
     $uresult = mysql_query($usql);
     if (mysql_error()) trigger_error(mysql_error(),E_USER_ERROR);
 
