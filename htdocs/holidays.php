@@ -92,86 +92,49 @@ else echo "<tr><td>Nobody</td></tr>\n";
 <table align='center' width='350'>
 <tr><th align='right'>YOUR HOLIDAY LIST</th></tr>
 <?php
-// FIXME this should probably loop through holiday types instead of doing this
-echo "<tr class='shade2'><td><strong>Holidays</strong>:</td></tr>";
-$sql = "SELECT * FROM holidays WHERE userid='{$sit[2]}' AND type=1 ORDER BY startdate DESC ";
+
+$sql = "SELECT * from holidays WHERE userid='{$sit[2]}' AND approved=0";
 $result = mysql_query($sql);
 if (mysql_error()) trigger_error("MySQL Query Error ".mysql_error(), E_USER_ERROR);
-while ($dates = mysql_fetch_array($result))
+if (mysql_num_rows($result)) 
 {
-    echo "<tr class='shade1'><td>";
-    echo date('l jS F Y', $dates['startdate']);
-    if ($dates['length']=='am') echo " Morning only";
-    if ($dates['length']=='pm') echo " Afternoon only";
-    echo " - ".holiday_approval_status($dates['approved']);
-    echo "</td></tr>\n";
+    echo "<tr class='shade2'><td><strong>Dates waiting for approval</strong>:</td></tr>";
+    while ($dates = mysql_fetch_array($result))
+    {
+        echo "<tr class='shade1'><td>";
+        echo date('l jS F Y', $dates['startdate']);
+        if ($dates['length']=='am') echo " Morning only";
+        if ($dates['length']=='pm') echo " Afternoon only";
+        echo "</td></tr>\n";
+    }
+    echo "<tr class='shade1'><td><a href='holiday_request.php'>Send reminder request</a></td></tr>";
 }
-echo "<tr class='shade2'><td><strong>Sickness</strong>:</td></tr>";
-$sql = "SELECT * FROM holidays WHERE userid='{$sit[2]}' AND type=2 ORDER BY startdate DESC ";
-$result = mysql_query($sql);
+mysql_free_result($result);
+
+$sql = "SELECT * from holidaytypes";
+$tresult = mysql_query($sql);
 if (mysql_error()) trigger_error("MySQL Query Error ".mysql_error(), E_USER_ERROR);
-while ($dates = mysql_fetch_array($result))
+while ($holidaytype=mysql_fetch_array($result)) 
 {
-    echo "<tr class='shade1'><td>";
-    if ($dates['approved']==1) echo "<span style='background: green; color: white;'>";
-    echo date('l jS F Y', $dates['startdate']);
-    if ($dates['length']=='am') echo " Morning only";
-    if ($dates['length']=='pm') echo " Afternoon only";
-    echo " - ".holiday_approval_status($dates['approved']);
-    if ($dates['approved']==1) echo "</span>";
-    echo "</td></tr>\n";
+    $sql = "SELECT * FROM holidays WHERE userid='{$sit[2]}' AND type={$holidaytype['id']} ";
+    $sql.= "AND approved>0 ORDER BY startdate DESC ";
+    $result = mysql_query($sql);
+    if (mysql_error()) trigger_error("MySQL Query Error ".mysql_error(), E_USER_ERROR);
+    if (mysql_num_rows($result))
+    {
+        echo "<tr class='shade2'><td><strong>{$holidaytype['name']}</strong>:</td></tr>";     
+        while ($dates = mysql_fetch_array($result))
+        {
+            echo "<tr class='shade1'><td>";
+            echo date('l jS F Y', $dates['startdate']);
+            if ($dates['length']=='am') echo " Morning only";
+            if ($dates['length']=='pm') echo " Afternoon only";
+            echo "</td></tr>\n";
+        }
+    }
+    mysql_free_result($result);
 }
-echo "<tr class='shade2'><td ><strong>Working Away</strong>:</td></tr>";
-$sql = "SELECT * FROM holidays WHERE userid='{$sit[2]}' AND type=3 ORDER BY startdate DESC ";
-$result = mysql_query($sql);
-if (mysql_error()) trigger_error("MySQL Query Error ".mysql_error(), E_USER_ERROR);
-while ($dates = mysql_fetch_array($result))
-{
-    echo "<tr class='shade1'><td>";
-    if ($dates['startdate'] < $now) echo "<span style='color: #555555;'>";
-    elseif ($dates['approved']==1) echo "<span style='background: green; color: white;'>";
-    else echo "<span>";
-    echo date('l jS F Y', $dates['startdate']);
-    if ($dates['length']=='am') echo " Morning only";
-    if ($dates['length']=='pm') echo " Afternoon only";
-    echo " - ".holiday_approval_status($dates['approved']);
-    echo "</span>";
-    echo "</td></tr>\n";
-}
-echo "<tr class='shade2'><td><strong>Training</strong>:</td></tr>";
-$sql = "SELECT * FROM holidays WHERE userid='{$sit[2]}' AND type=4 ORDER BY startdate DESC ";
-$result = mysql_query($sql);
-if (mysql_error()) trigger_error("MySQL Query Error ".mysql_error(), E_USER_ERROR);
-while ($dates = mysql_fetch_array($result))
-{
-    echo "<tr class='shade1'><td>";
-    if ($dates['startdate'] < $now) echo "<span style='color: #777777;'>";
-    elseif ($dates['approved']==1) echo "<span style='background: green; color: white;'>";
-    else echo "<span>";
-    echo date('l jS F Y', $dates['startdate']);
-    if ($dates['length']=='am') echo " Morning only";
-    if ($dates['length']=='pm') echo " Afternoon only";
-    echo " - ".holiday_approval_status($dates['approved']);
-    echo "</span>";
-    echo "</td></tr>\n";
-}
-echo "<tr class='shade2'><td><strong>Other Leave</strong>:</td></tr>";
-$sql = "SELECT * FROM holidays WHERE userid='{$sit[2]}' AND type=5 ORDER BY startdate DESC ";
-$result = mysql_query($sql);
-if (mysql_error()) trigger_error("MySQL Query Error ".mysql_error(), E_USER_ERROR);
-while ($dates = mysql_fetch_array($result))
-{
-    echo "<tr class='shade1'><td>";
-    if ($dates['startdate'] < $now) echo "<span style='color: #777777;'>";
-    elseif ($dates['approved']==1) echo "<span style='background: green; color: white;'>";
-    else echo "<span>";
-    echo date('l jS F Y', $dates['startdate']);
-    if ($dates['length']=='am') echo " Morning only";
-    if ($dates['length']=='pm') echo " Afternoon only";
-    echo " - ".holiday_approval_status($dates['approved']);
-    echo "</span>";
-    echo "</td></tr>\n";
-}
+
 ?>
 </table>
 <?php
