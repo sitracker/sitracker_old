@@ -92,8 +92,8 @@ if (!$sent)
             echo "</tr>";
         }
         echo "</table>";
-        echo "<p align='center'><a href='holiday_approve.php?approve=TRUE&user=$user&view=$user&startdate=all&type=all'>Approve all</a></p>";
-        if (!$mode=='approval')
+        if ($mode=='approval') echo "<p align='center'><a href='holiday_approve.php?approve=TRUE&user=$user&view=$user&startdate=all&type=all'>Approve all</a></p>";
+        else
         {
             echo "<form action='{$_SERVER['PHP_SELF']}' method='post'>";
             echo "<p align='center'>";
@@ -166,14 +166,14 @@ else
             $bodytext .= "to approve or decline these requests.";
         }
         echo "<p align='center'>Your request has been sent</p>";
-    }
-    $email_from = user_email($user);
-    $email_to = user_email($approvaluser);
-    $email_subject = "{$CONFIG['application_shortname']}: Holiday Approval Request";
-    $extra_headers  = "From: $email_from\nReply-To: $email_from\nErrors-To: {$CONFIG['support_email']}\n";
-    $extra_headers .= "X-Mailer: {$CONFIG['application_shortname']} {$application_version_string}/PHP " . phpversion()."\n";
+        $email_from = user_email($user);
+        $email_to = user_email($approvaluser);
+        $email_subject = "{$CONFIG['application_shortname']}: Holiday Approval Request";
+        $extra_headers  = "From: $email_from\nReply-To: $email_from\nErrors-To: {$CONFIG['support_email']}\n";
+        $extra_headers .= "X-Mailer: {$CONFIG['application_shortname']} {$application_version_string}/PHP " . phpversion()."\n";
+        $rtnvalue = mail($email_to, stripslashes($email_subject), stripslashes($bodytext), $extra_headers);
 
-    $rtnvalue = mail($email_to, stripslashes($email_subject), stripslashes($bodytext), $extra_headers);
+    }
     echo "<p align='center'><a href='holiday_calendar.php?type=1&user=$user'>Back to your calendar</p></p>";
 }
 include('htmlfooter.inc.php');
