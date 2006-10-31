@@ -529,6 +529,27 @@ else
             echo ">{$holidaytypes->name}</option>\n";
         }
         echo "</select></form>";
+        
+        $sql = "SELECT * from holidays WHERE userid='{$sit[2]}' AND approved=0";
+        $result = mysql_query($sql);
+        if (mysql_error()) trigger_error("MySQL Query Error ".mysql_error(), E_USER_ERROR);
+        if (mysql_num_rows($result)) 
+        {
+            echo "<table align='center'>";
+            echo "<tr class='shade2'><td><strong>Dates waiting for approval</strong>:</td></tr>";
+            while ($dates = mysql_fetch_array($result))
+            {
+                echo "<tr class='shade1'><td>";
+                echo date('l jS F Y', $dates['startdate']);
+                if ($dates['length']=='am') echo " Morning only";
+                if ($dates['length']=='pm') echo " Afternoon only";
+                echo "</td></tr>\n";
+            }
+            echo "<tr class='shade1'><td><a href='holiday_request.php'>Send reminder request</a></td></tr>";
+            echo "</table>";
+        }
+        mysql_free_result($result);
+
     }
     else
     {

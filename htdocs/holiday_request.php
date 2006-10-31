@@ -130,7 +130,7 @@ if (!$sent)
     }
     else
     {
-        echo "<p class='info'>You have no holidays that are booked but not yet approved</p>";
+        echo "<p class='info'>There are no holidays that are booked but not yet approved</p>";
     }
 }
 else
