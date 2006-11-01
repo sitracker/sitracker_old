@@ -418,8 +418,8 @@ function draw_chart($month, $year)
                     if ($hdays[$day]=='am' OR $hdays[$day]=='day')
                     {
                         if ($happroved[$day] == 0) $html .= "<td class='review'>";
-                        elseif ($happroved[$day] == 1 AND $holidaytype[$htypes[$day]] <= 4) $html .= "<td class='idle'>";
-                        elseif ($happroved[$day] == 1 AND $holidaytype[$htypes[$day]] == 5) $html .= "<td class='notice'>";
+                        elseif ($happroved[$day] == 1 AND $htypes[$day] <= 4) $html .= "<td class='idle'>";
+                        elseif ($happroved[$day] == 1 AND $htypes[$day] == 5) $html .= "<td class='notice'>";
                         elseif ($happroved[$day] == 2) $html .= "<td class='urgent'>";
                         else $html .= "<td class='shade2'>";
                         $html .= substr($holidaytype[$htypes[$day]],0,1);
@@ -459,8 +459,8 @@ function draw_chart($month, $year)
                     if ($hdays[$day]=='pm' OR $hdays[$day]=='day')
                     {
                         if ($happroved[$day] == 0) $html .= "<td class='review'>";
-                        elseif ($happroved[$day] == 1 AND $holidaytype[$htypes[$day]] <= 4) $html .= "<td class='idle'>";
-                        elseif ($happroved[$day] == 1 AND $holidaytype[$htypes[$day]] == 5) $html .= "<td class='notice'>";
+                        elseif ($happroved[$day] == 1 AND $htypes[$day] <= 4) $html .= "<td class='idle'>";
+                        elseif ($happroved[$day] == 1 AND $htypes[$day] == 5) $html .= "<td class='notice'>";
                         elseif ($happroved[$day] == 2) $html .= "<td class='urgent'>";
                         else $html .= "<td class='shade2'>";
 
@@ -493,7 +493,7 @@ function draw_chart($month, $year)
     }
     $html .= "<td>PH = Public Holiday</td>";
     $html .= "</tr>";
-    $html .= "<tr><td></td><td class='review'>not approved</td><td class='idle'>approved</td><td class='notice'>approved free</td><td class='urgent'>declined</td></tr>";
+    $html .= "<tr><td></td><td class='urgent'>declined</td><td class='review'>not approved</td><td class='idle'>approved</td><td class='notice'>approved free</td></tr>";
     $html .= "</table>\n\n";
 
     return $html;
@@ -591,7 +591,7 @@ else
                 echo "<br/>\n";
             }
             echo "</td></tr>\n";
-            echo "<tr class='shade1'><td><a href='holiday_request.php'>Send holiday request</a></td></tr>";
+            echo "<tr class='shade1'><td><a href='holiday_request.php?type=$type'>Send holiday request</a></td></tr>";
             echo "</table>";
         }
         mysql_free_result($result);

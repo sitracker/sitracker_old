@@ -88,17 +88,19 @@ elseif ($step=='1')
         unset($newend);
     }
 
-    echo "<form name='date' action='{$_SERVER['PHP_SELF']}' method='post'>";
+    echo "<p align='center'><strong>Select Days</strong></p>";
 
+    echo "<table align='center' width='550' class='vertical'>";
+    echo "<tr><th>Start Date</th><td>".date($CONFIG['dateformat_date'],$start)."</td></tr>";
+    echo "<tr><th>End Date</th><td>".date($CONFIG['dateformat_date'],$end)."</td></tr>";
+    echo "</table><br />";
+
+    echo "<form name='date' action='{$_SERVER['PHP_SELF']}' method='post'>";
     echo "<input type='hidden' name='user' value='$user' />";
     echo "<input type='hidden' name='type' value='$type' />";
 
-    echo "<p align='center'><strong>Select Days</strong></p>";
-
-    echo "<table align='center' border='0' cellpadding='2' cellspacing='0' width='550'>";
-    echo "<tr><td align='right' class='shade1' width='200'><strong>Start Date</strong>:</td><td class='shade2' colspan='4'>".date($CONFIG['dateformat_date'],$start)."</td></tr>";
-    echo "<tr><td align='right' class='shade1' width='200'><strong>End Date</strong>:</td><td class='shade2' colspan='4'>".date($CONFIG['dateformat_date'],$end)."</td></tr>";
-    echo "<tr><td class='shade2' colspan='2'>&nbsp;</td><td class='shade1' align='center'><strong>Day</strong></td><td class='shade2' align='center'><strong>AM</strong></td><td class='shade1'  align='center'><strong>PM</strong></td></tr>";
+    echo "<table align='center' width='550'>";
+    echo "<tr><th>Date</th><th>None</th><th>Day</th><th>AM</th><th>PM</th></tr>\n";
 
     $daynumber=1;
     $options=0;
@@ -119,10 +121,15 @@ elseif ($step=='1')
                 {
                     $holiday_type=holiday_type($existing_holiday['type']);
                     $holiday_legend=strtoupper(substr($holiday_type,0,1));
-                    echo "<tr><td align='right'>&nbsp;</td>";
-                    echo "<td class='shade2' align='right'> ".date($CONFIG['dateformat_date'],$day)." </td>";
+                    echo "<tr>";
+                    echo "<td class='shade2' align='right'> ".date('l jS M y',$day)." </td>";
+                    echo "<td class='shade1' align='center'>";
+                    if ($existing_holiday['length']=='day') echo "<input type='radio' name='dummy{$daynumber}' value='day' disabled='disabled' />";
+                    else echo "<input type='radio' name='length{$daynumber}' value='none' checked='checked' />";
+                    echo "</td>";
                     echo "<td class='shade1' align='center'>";
                     if ($existing_holiday['length']=='day') echo "$holiday_legend";
+                    else echo "<input type='radio' name='dummy{$daynumber}' value='day' disabled='disabled' />";
                     echo "</td>";
 
                     // am
@@ -135,9 +142,9 @@ elseif ($step=='1')
                             echo "<input type='radio' name='length{$daynumber}' value='am' checked='checked' />";
                             $options++;
                         }
-                        else echo "-";
+                        else echo "<input type='radio' name='dummy{$daynumber}' disabled='disabled' />";
                     }
-                    else echo "-";
+                    else echo "<input type='radio' name='dummy{$daynumber}' disabled='disabled' />";
                     echo "</td>";
 
                     // pm
@@ -150,11 +157,11 @@ elseif ($step=='1')
                             echo "<input type='radio' name='length{$daynumber}' value='pm' checked='checked' />";
                             $options++;
                         }
-                        else echo "-";
+                        else echo "<input type='radio' name='dummy{$daynumber}' disabled='disabled' />";
                     }
-                    else echo "-";
+                    else echo "<input type='radio' name='dummy{$daynumber}' disabled='disabled' />";
                     echo "</td>";
-                    echo "</tr>";
+                    echo "</tr>\n";
                 }
             }
             else
@@ -164,14 +171,18 @@ elseif ($step=='1')
                 if (mysql_error()) trigger_error("MySQL Query Error ".mysql_error(), E_USER_ERROR);
                 if (mysql_num_rows($result) > 0)
                 {
-                    echo "<tr><td align='right' class='shade1' width='200'><strong>Bank Holiday</strong>:</td><td class='shade2'>".date($CONFIG['dateformat_date'],$day)."</td></tr>";
+                    echo "<tr><td align='right' class='shade1' width='200'><strong>Public Holiday</strong>:</td><td class='shade2'>".date('l jS M y',$day)."</td></tr>";
                 }
                 else
                 {
-                    echo "<tr><td align='right' width='200'>&nbsp;</td><td class='shade2' align='right'>".date($CONFIG['dateformat_date'],$day)." </td>";
+                    echo "<tr><td class='shade2' align='right'>".date('l jS M y',$day)." </td>";
+                    // Don't allow booking sickness in the future, still not sure whether we should allow this or not, it could be useful in the case of long term illness
                     if (($type=='2' && $day < $now) || ($type!=2))
                     {
-                        echo "<td class='shade1' align='center'><input type='radio' name='length{$daynumber}' value='day' checked='checked'/></td><td class='shade2' align='center'><input type='radio' name='length{$daynumber}' value='am' /></td><td class='shade1' align='center'><input type='radio' name='length{$daynumber}' value='pm' /></td>";
+                        echo "<td class='shade1' align='center'><input type='radio' name='length{$daynumber}' value='none' /></td>";
+                        echo "<td class='shade1' align='center'><input type='radio' name='length{$daynumber}' value='day' checked='checked' /></td>";
+                        echo "<td class='shade2' align='center'><input type='radio' name='length{$daynumber}' value='am' /></td>";
+                        echo "<td class='shade1' align='center'><input type='radio' name='length{$daynumber}' value='pm' /></td>";
                         $options++;
                     }
                     else
@@ -221,13 +232,15 @@ else
         $len="length{$holiday}";
         $d="day{$holiday}";
         if (empty($$len)) $$len='day';
-
-        // check to see if there is other holiday booked on this day
-        // and modify that where required.
-        $sql = "INSERT INTO holidays (userid, type, startdate, length, approved, approvedby) ";
-        $sql .= "VALUES ('{$sit[2]}', '$type', '{$$d}', '{$$len}', '0', '$approvaluser') ";
-        mysql_query($sql);
-        if (mysql_error()) trigger_error("MySQL Query Error ".mysql_error(), E_USER_ERROR);
+        if ($$len != 'none')
+        {
+            // check to see if there is other holiday booked on this day
+            // and modify that where required.
+            $sql = "INSERT INTO holidays (userid, type, startdate, length, approved, approvedby) ";
+            $sql .= "VALUES ('{$sit[2]}', '$type', '{$$d}', '{$$len}', '0', '$approvaluser') ";
+            mysql_query($sql);
+            if (mysql_error()) trigger_error("MySQL Query Error ".mysql_error(), E_USER_ERROR);
+        }
     }
     header('location:holiday_request.php');
 }

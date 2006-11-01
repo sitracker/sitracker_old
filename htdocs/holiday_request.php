@@ -21,6 +21,8 @@ require('auth.inc.php');
 $user = cleanvar($_REQUEST['user']);
 $sent = cleanvar($_REQUEST['sent']);
 $mode = cleanvar($_REQUEST['mode']);
+$action = cleanvar($_REQUEST['action']);
+$type = cleanvar($_REQUEST['type']);
 $memo = cleanvar($_REQUEST['memo']);
 $approvaluser = cleanvar($_REQUEST['approvaluser']);
 
@@ -31,14 +33,17 @@ if (!$sent)
     // check to see if this user has approve permission
     $approver=user_permission($sit[2], 50);
 
+    $waiting=FALSE;
     echo "<h2>";
     if ($user=='all') echo "All";
     else echo user_realname($user);
     echo " - Holiday Requests</h2>";
 
     if ($approver==TRUE AND $mode!='approval') echo "<p align='center'><a href='holiday_request.php?user=all&amp;mode=approval'>Approve holiday requests</a></p>";
+    if ($approver==TRUE AND $mode=='approval' AND $user!='all') echo "<p align='center'><a href='holiday_request.php?user=all&amp;mode=approval'>Show all requests</a></p>";
 
     $sql = "SELECT * FROM holidays, holidaytypes WHERE holidays.type=holidaytypes.id AND approved=0 ";
+    if (!empty($type)) $sql .= "AND type='$type' ";
     if ($mode!='approval' || $user!='all') $sql.="AND userid='$user' ";
     if ($approver==TRUE && $mode=='approval') $sql .= "AND approvedby={$sit[2]} ";
     $sql .= "ORDER BY startdate, length";
@@ -64,8 +69,8 @@ if (!$sent)
             }
             echo "<td>".date('l j F Y', $holiday->startdate)."</td>";
             echo "<td>";
-            if ($holiday->length=='am') echo "Morning Only";
-            if ($holiday->length=='pm') echo "Afternoon Only";
+            if ($holiday->length=='am') echo "Morning";
+            if ($holiday->length=='pm') echo "Afternoon";
             if ($holiday->length=='day') echo "Full Day";
             echo "</td>";
             echo "<td>".$holiday->name."</td>";
@@ -85,7 +90,11 @@ if (!$sent)
                 {
                     echo "<td>";
                     if ($holiday->approvedby > 0) echo "Request sent to ".user_realname($holiday->approvedby);
-                    else echo "Request not sent";
+                    else
+                    {
+                        echo "Request not sent";
+                        $waiting=TRUE;
+                    }
                     echo "</td>";
                 }
                 if ($approver==TRUE)
@@ -124,11 +133,15 @@ if (!$sent)
                 }
                 echo "</select>";
                 echo "</p>";
+
+                // Force resend if there are no new additions to be requested
+                if ($waiting==FALSE AND $action!='resend') $action='resend';
+                echo "<input type='hidden' name='action' value='$action' />";
                 echo "<p align='center'>Send comments with your request: (or leave blank)<br />";
                 echo "<textarea name='memo' rows='3' cols='40'></textarea>";
                 echo "<input type='hidden' name='user' value='$user' />";
                 echo "<input type='hidden' name='sent' value='true' /><br /><br />";
-                echo "<input type='submit' name='submit' value='submit' />";
+                echo "<input type='submit' name='submit' value='Send Request' />";
                 echo "</p>";
                 echo "</form>";
             }
@@ -146,6 +159,7 @@ else
     else
     {
         $sql = "SELECT * FROM holidays, holidaytypes WHERE holidays.type=holidaytypes.id AND approved=0 ";
+        if ($action!='resend') $sql .= "AND approvedby=0 ";
         if ($user!='all' || $approver==FALSE) $sql .= "AND userid='".$sit[2]."' ";
         $sql .= "ORDER BY startdate, length";
         $result = mysql_query($sql);
@@ -156,18 +170,18 @@ else
             $bodytext = "Message from {$CONFIG['application_shortname']}: ".user_realname($user)." has requested that you approve the following holidays:\n\n";
             while ($holiday=mysql_fetch_object($result))
             {
-                $bodytext .= date('l j F Y', $holiday->startdate).", ";
-                if ($holiday->length=='am') $bodytext .= "Morning Only";
-                if ($holiday->length=='pm') $bodytext .= "Afternoon Only";
-                if ($holiday->length=='day') $bodytext .= "Full Day";
-                $bodytext .= ", ";
-                $bodytext .= $holiday->name."\n";
+                $holidaylist .= date('l j F Y', $holiday->startdate).", ";
+                if ($holiday->length=='am') $holidaylist .= "Morning";
+                if ($holiday->length=='pm') $holidaylist .= "Afternoon";
+                if ($holiday->length=='day') $holidaylist .= "Full Day";
+                $holidaylist .= ", ";
+                $holidaylist .= $holiday->name."\n";
             }
-            $bodytext .= "\n";
+            $bodytext .= "$holidaylist\n";
             if (strlen($memo)>3)
             {
                 $bodytext .= "The following comments were sent with the request:\n\n";
-                $bodytext .= "---\n$memo\n---\n";
+                $bodytext .= "---\n$memo\n---\n\n";
             }
             $bodytext .= "Please point your browser to\n<{$_SERVER['HTTP_REFERER']}?user={$user}&mode=approval>\n ";
             $bodytext .= "to approve or decline these requests.";
@@ -184,11 +198,14 @@ else
         $extra_headers .= "X-Mailer: {$CONFIG['application_shortname']} {$application_version_string}/PHP " . phpversion()."\n";
         $rtnvalue = mail($email_to, stripslashes($email_subject), stripslashes($bodytext), $extra_headers);
 
-        if ($rtnvalue===TRUE) echo "<p align='center'>Your request has been sent</p>";
+        if ($rtnvalue===TRUE)
+        {
+            echo "<p align='center'>Your request has been sent</p>";
+            echo "<p align='center'>".nl2br($holidaylist)."</p>";
+        }
         else echo "<p class='error'>There was a problem sending your request</p>";
-
     }
-    echo "<p align='center'><a href='holiday_calendar.php?type=1&user=$user'>Back to your calendar</p></p>";
+    echo "<p align='center'><a href='holidays.php?type=1&user=$user'>Back to your holidays page</p></p>";
 }
 include('htmlfooter.inc.php');
 ?>
