@@ -38,7 +38,7 @@ function confirm_submit()
 $user = cleanvar($_REQUEST['user']);
 $role = cleanvar($_REQUEST['role']);
 $action = $_REQUEST['action'];
-$perm = $_POST['perm'];
+$perm = $_REQUEST['perm'];
 
 if (empty($action) OR $action == "showform")
 {
@@ -64,7 +64,7 @@ if (empty($action) OR $action == "showform")
         while ($perm = mysql_fetch_object($presult))
         {
             echo "<tr class='$class'>";
-            echo "<td>{$perm->id} {$perm->name}</td>";
+            echo "<td><a href='{$PHP_SELF}?action=check&amp;perm={$perm->id}' title='Check who has this permission'>{$perm->id}</a> {$perm->name}</td>";
             mysql_data_seek($result, 0);
             while ($rolerow = mysql_fetch_object($result))
             {
@@ -138,7 +138,7 @@ elseif ($action == "edit" && (!empty($user) OR !empty($role)))
         $permission_array=mysql_fetch_array($permission_result);
         if (!in_array($permissions['id'],$userrolepermission))
         {
-            echo "<tr class='$class'><td align='right'>".$permissions['id']."</td>";
+            echo "<tr class='$class'><td align='right'><a href='{$_SERVER['PHP_SELF']}?action=check&amp;perm={$permissions['id']}'  title='Check who has this permission'>".$permissions['id']."</a></td>";
             echo "<td>";
             echo "<input name=\"perm[]\" type=\"checkbox\" value=\"".$permissions['id']."\"";
 
@@ -150,7 +150,7 @@ elseif ($action == "edit" && (!empty($user) OR !empty($role)))
         }
         else
         {
-            echo "<tr class='$class'><td align='right'>{$permissions['id']}</td>";
+            echo "<tr class='$class'><td align='right'><a href='{$_SERVER['PHP_SELF']}?action=check&amp;perm={$permissions['id']}' title='Check who has this permission'>{$permissions['id']}</a></td>";
             echo "<td><input name='dummy[]' type='checkbox' checked='checked' disabled='disabled' /> {$permissions['name']}";
             echo "<input type='hidden' name='perm[]' value='{$permissions['id']}' /></td></tr>\n";
         }
@@ -287,6 +287,60 @@ elseif ($action == "update")
             }
         }
     }
+}
+elseif ($action == "check")
+{
+    echo "<h2>Check User &amp; Role Permissions</h2>";
+    if (!empty($perm))
+    {
+        echo "<h3>Role Permission: $perm - ".permission_name($perm)."</h3>";
+        $sql = "SELECT rolepermissions.roleid AS roleid, username, users.id AS userid, realname, rolename FROM rolepermissions, roles, users ";
+        $sql .= "WHERE rolepermissions.roleid=roles.id ";
+        $sql .= "AND roles.id=users.roleid ";
+        $sql .= "AND permissionid='$perm' AND granted='true'";
+        $result = mysql_query($sql);
+        if (mysql_error()) trigger_error(mysql_error(),E_USER_WARNING);
+        if (mysql_num_rows($result) >= 1)
+        {
+            echo "<table align='center'>";
+            echo "<tr><th>User</th><th>Role</th></tr>";
+            $shade='shade1';
+            while($user = mysql_fetch_object($result))
+            {
+                echo "<tr class='$shade'><td>&#10004; ";
+                if ($user->roleid != 1) echo "<a href='edit_profile.php?user={$user->userid}'>";
+                echo "{$user->realname}";
+                if ($user->roleid != 1) echo "</a>";
+                echo " ({$user->username})</td><td>{$user->rolename}</td></tr>\n";
+                if ($shade=='shade1') $shade='shade2';
+                else $shade='shade1';
+            }
+            echo "</table>";
+        } else echo "<p align='center'>None</p>";
+
+        echo "<p align='center'><a href='edit_user_permissions.php'>Set role permissions</a></p>";
+
+        echo "<h3>User Permission: $perm - ".permission_name($perm)."</h3>";
+        $sql = "SELECT userpermissions.userid AS userid, username, realname FROM userpermissions, users ";
+        $sql .= "WHERE userpermissions.userid=users.id ";
+        $sql .= "AND permissionid='$perm' AND granted='true'";
+        $result = mysql_query($sql);
+        if (mysql_error()) trigger_error(mysql_error(),E_USER_WARNING);
+        if (mysql_num_rows($result) >= 1)
+        {
+            echo "<table align='center'>";
+            echo "<tr><th>User</th></tr>";
+            $shade='shade1';
+            while($user = mysql_fetch_object($result))
+            {
+                echo "<tr class='$shade'><td>&#10004; <a href='{$_SERVER['PHP_SELF']}?action=edit&amp;user={$user->userid}#perm{$perm}'>{$user->realname}</a> ({$user->username})</td></tr>\n";
+                if ($shade=='shade1') $shade='shade2';
+                else $shade='shade1';
+            }
+            echo "</table>";
+        } else echo "<p align='center'>None</p>";
+    }
+    else echo "<p class='error'>No permission specified</p>";
 }
 else
 {

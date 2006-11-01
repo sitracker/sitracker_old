@@ -65,6 +65,8 @@ Changes in v3.24 - Unreleased
 * Tidied more HTML
 * Fixed next action field, this is now stored and displayed again
 * Interface to configure external escalation partners
+* Made holiday booking easier
+* Added ability to check which users have been granted each permission
 
 Changes in v3.23 - Released 10 April 2006
 -----------------------------------------------------------------------
