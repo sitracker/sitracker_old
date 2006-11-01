@@ -3301,9 +3301,13 @@ function replace_word($text, $changepos, $replacement)
 
 function holiday_type($id)
 {
-    $holidaytype = db_read_column('name', 'holidaytypes', $id);
-    if (empty($holidaytype)) $holidaytype = 'Holiday';  // default: holiday
-
+    if ($id==10) $holidaytype='Public Holiday';
+    else
+    {
+        $holidaytype = db_read_column('name', 'holidaytypes', $id);
+        if (empty($holidaytype))
+        $holidaytype = 'Holiday';  // default: holiday
+    }
     return($holidaytype);
 }
 
