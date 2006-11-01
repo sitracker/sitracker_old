@@ -343,7 +343,8 @@ function draw_chart($month, $year)
             unset($hdays);
             $startdate = mktime(0,0,0,$month,1,$year);
             $enddate  = mktime(0,0,0,$month,$daysinmonth,$year);
-            $hsql = "SELECT * FROM holidays WHERE userid={$user->id} AND startdate >= $startdate AND startdate <= $enddate";
+            $hsql = "SELECT * FROM holidays WHERE userid={$user->id} AND startdate >= $startdate AND startdate <= $enddate ";
+            $hsql .= "AND type != 10";
             $hresult = mysql_query($hsql);
             if (mysql_error()) trigger_error(mysql_error(),E_USER_ERROR);
             while ($holiday = mysql_fetch_object($hresult))
@@ -353,7 +354,15 @@ function draw_chart($month, $year)
                 $htypes[$day] = $holiday->type;
                 $happroved[$day] = $holiday->approved;
             }
-
+            // Public holidays
+            $phsql = "SELECT * FROM holidays WHERE type=10 AND startdate >= $startdate AND startdate <= $enddate ";
+            $phresult = mysql_query($phsql);
+            if (mysql_error()) trigger_error(mysql_error(),E_USER_ERROR);
+            while ($pubhol = mysql_fetch_object($phresult))
+            {
+                $day = date('j',$pubhol->startdate);
+                $pubholdays[$day] = $pubhol->length;
+            }
             if ($prevgroupid != $user->groupid)
             {
                 if ($user->groupid=='') $user->groupid=0;
@@ -414,7 +423,11 @@ function draw_chart($month, $year)
                         $html .= substr($holidaytype[$htypes[$day]],0,1);
                         $html .= "</td>";
                     }
-                    else $html .= "<td class='shade2'></td>";
+                    else
+                    {
+                        if ($pubholdays[$day]=='am' OR $pubholdays[$day]=='day') $html .= "<td class='expired'>PH</td>";
+                        else $html .= "<td class='shade2'></td>";
+                    }
                 }
             }
             $html .= "</tr>\n";
@@ -446,10 +459,15 @@ function draw_chart($month, $year)
                         if ($happroved[$day] == 0) $html .= "<td class='review'>";
                         elseif ($happroved[$day] == 1) $html .= "<td class='idle'>";
                         else $html .= "<td class='notice'>";
+                        if ($pubholdays[$day]=='am' OR $pubhol[$day]=='day') $html .= "PH";
                         $html .= "<span title='{$holidaytype[$htypes[$day]]}'>".substr($holidaytype[$htypes[$day]],0,1)."</span>";
                         $html .= "</td>";
                     }
-                    else $html .= "<td class='shade2'></td>";
+                    else
+                    {
+                        if ($pubholdays[$day]=='pm' OR $pubholdays[$day]=='day') $html .= "<td class='expired'>PH</td>";
+                        else $html .= "<td class='shade2'></td>";
+                    }
                 }
             }
             $html .= "</tr>\n";
@@ -469,6 +487,7 @@ function draw_chart($month, $year)
     {
         $html .= "<td>".substr($htype,0,1)." = {$htype}</td>";
     }
+    $html .= "<td>PH = Public Holiday</td>";
     $html .= "</tr>";
     $html .= "<tr><td></td><td class='review'>not approved</td><td class='idle'>approved</td><td class='notice'>approved free</td></tr>";
     $html .= "</table>\n\n";
@@ -602,18 +621,18 @@ else
             echo "<strong>not selected";
         }
         echo "</strong> ";
-        echo " as ".holiday_type($selectedtype).".  ";
+        echo " as ".holiday_type($type).".  ";
 
         if ($approved==0)
         {
             switch ($length)
             {
                 case 'am':
-                    echo "You can make it <a href='add_holiday.php?type=$type&amp;user=$user&amp;year=$selectedyear&amp;month=$selectedmonth&amp;day=$selectedday&amp;length=pm'>the afternoon instead</a>, or book <a href='add_holiday.php?type=$type&amp;user=$user&amp;year=$selectedyear&amp;month=$selectedmonth&amp;day=$selectedday&amp;length=day'>full day</a>. ";
+                    echo "You can make it <a href='add_holiday.php?type=$type&amp;user=$user&amp;year=$selectedyear&amp;month=$selectedmonth&amp;day=$selectedday&amp;length=pm'>the afternoon instead</a>, or select the <a href='add_holiday.php?type=$type&amp;user=$user&amp;year=$selectedyear&amp;month=$selectedmonth&amp;day=$selectedday&amp;length=day'>full day</a>. ";
                 break;
 
                 case 'pm':
-                    echo "You can make it <a href='add_holiday.php?type=$type&amp;user=$user&amp;year=$selectedyear&amp;month=$selectedmonth&amp;day=$selectedday&amp;length=am'>the morning</a> instead, or book <a href='add_holiday.php?type=$type&amp;user=$user&amp;year=$selectedyear&amp;month=$selectedmonth&amp;day=$selectedday&amp;length=day'>full day</a>. ";
+                    echo "You can make it <a href='add_holiday.php?type=$type&amp;user=$user&amp;year=$selectedyear&amp;month=$selectedmonth&amp;day=$selectedday&amp;length=am'>the morning</a> instead, or select the <a href='add_holiday.php?type=$type&amp;user=$user&amp;year=$selectedyear&amp;month=$selectedmonth&amp;day=$selectedday&amp;length=day'>full day</a>. ";
                 break;
 
                 case 'day':
