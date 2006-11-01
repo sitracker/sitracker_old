@@ -418,9 +418,10 @@ function draw_chart($month, $year)
                     if ($hdays[$day]=='am' OR $hdays[$day]=='day')
                     {
                         if ($happroved[$day] == 0) $html .= "<td class='review'>";
-                        elseif ($happroved[$day] == 1) $html .= "<td class='idle'>";
+                        elseif ($happroved[$day] == 1 AND $holidaytype <= 4) $html .= "<td class='idle'>";
+                        elseif ($happroved[$day] == 1 AND $holidaytype == 5) $html .= "<td class='notice'>";
                         elseif ($happroved[$day] == 2) $html .= "<td class='urgent'>";
-                        else $html .= "<td class='notice'>";
+                        else $html .= "<td>";
                         $html .= substr($holidaytype[$htypes[$day]],0,1);
                         $html .= "</td>";
                     }
@@ -458,7 +459,9 @@ function draw_chart($month, $year)
                     if ($hdays[$day]=='pm' OR $hdays[$day]=='day')
                     {
                         if ($happroved[$day] == 0) $html .= "<td class='review'>";
-                        elseif ($happroved[$day] == 1) $html .= "<td class='idle'>";
+                        elseif ($happroved[$day] == 1 AND $holidaytype <= 4) $html .= "<td class='idle'>";
+                        elseif ($happroved[$day] == 1 AND $holidaytype == 5) $html .= "<td class='notice'>";
+                        elseif ($happroved[$day] == 2) $html .= "<td class='urgent'>";
                         else $html .= "<td class='notice'>";
                         if ($pubholdays[$day]=='am' OR $pubhol[$day]=='day') $html .= "PH";
                         $html .= "<span title='{$holidaytype[$htypes[$day]]}'>".substr($holidaytype[$htypes[$day]],0,1)."</span>";
