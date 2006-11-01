@@ -38,7 +38,7 @@ $result = mysql_query($sql);
 $bodytext = "Message from {$CONFIG['application_shortname']}: ".$sit[2]." has ";
 if ($approve=='FALSE') $bodytext.="rejected";
 else $bodytext.="approved";
-$bodytext=" your request for ";
+$bodytext.=" your request for ";
 if ($startdate=='all') $bodytext .= "all days requested\n\n";
 else 
 {
