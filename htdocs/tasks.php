@@ -111,7 +111,7 @@ if (mysql_num_rows($result) >=1 )
         echo "</td>";
         echo "<td>";
         echo "<a href='view_task.php?id={$task->id}' class='info'>".stripslashes($task->name);
-        if (!empty($task->description)) echo "<span>".nl2br($task->description)."</span>";
+        if (!empty($task->description)) echo "<span>".nl2br(stripslashes($task->description))."</span>";
         echo "</a>";
 
         echo "</td>";

@@ -141,9 +141,9 @@ switch ($action)
                 echo "<form id='edittask' action='{$_SERVER['PHP_SELF']}' method='post'>";
                 echo "<table class='vertical'>";
                 echo "<tr><th>Title</th>";
-                echo "<td><input type='text' name='name' size='35' maxlength='255' value='".stripslashes($task->name)."' /></td></tr>";
+                echo "<td><input type='text' name='name' size='35' maxlength='255' value=\"".stripslashes($task->name)."\" /></td></tr>";
                 echo "<tr><th>Description</th>";
-                echo "<td><textarea name='description' rows='4' cols='30'>{$task->description}</textarea></td></tr>";
+                echo "<td><textarea name='description' rows='4' cols='30'>".stripslashes($task->description)."</textarea></td></tr>";
                 echo "<tr><th>Priority</th>";
                 echo "<td>".priority_drop_down('priority',$task->priority)."</td></tr>";
                 echo "<tr><th>Start Date</th>";
