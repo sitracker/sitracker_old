@@ -38,8 +38,12 @@ $result = mysql_query($sql);
 $bodytext = "Message from {$CONFIG['application_shortname']}: ".$sit[2]." has ";
 if ($approve=='FALSE') $bodytext.="rejected";
 else $bodytext.="approved";
-echo " the following holidays:\n\n";
-    
+$bodytext=" your request for ";
+if ($startdate=='all') $bodytext .= "all days requested\n\n";
+else 
+{
+    $bodytext .= "the ";
+    $bodytext .= date('l j F Y',$startdate);
     $bodytext .= "\n";
 }
 $email_from = user_email($sit[2]);
