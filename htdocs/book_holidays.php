@@ -65,6 +65,8 @@ elseif ($step=='1')
     include('htmlheader.inc.php');
     $start=strtotime($start);
     $end=strtotime($end);
+    if ($start==0) $start=$now;
+    if ($end==0) $end=$now;
 
     echo "<h2>Book ".holiday_type($type)."</h2>";
     if ($type=='2') echo "<p align='center'>Sickness, can of course only be booked for days that have passed.</p>";
@@ -94,11 +96,12 @@ elseif ($step=='1')
     echo "<p align='center'><strong>Select Days</strong></p>";
 
     echo "<table align='center' border='0' cellpadding='2' cellspacing='0' width='550'>";
-    echo "<tr><td align='right' class='shade1' width='200'><strong>Start Date</strong>:</td><td class='shade2' colspan='4'>".date('D d M Y',$start)."</td></tr>";
-    echo "<tr><td align='right' class='shade1' width='200'><strong>End Date</strong>:</td><td class='shade2' colspan='4'>".date('D d M Y',$end)."</td></tr>";
+    echo "<tr><td align='right' class='shade1' width='200'><strong>Start Date</strong>:</td><td class='shade2' colspan='4'>".date($CONFIG['dateformat_date'],$start)."</td></tr>";
+    echo "<tr><td align='right' class='shade1' width='200'><strong>End Date</strong>:</td><td class='shade2' colspan='4'>".date($CONFIG['dateformat_date'],$end)."</td></tr>";
     echo "<tr><td class='shade2' colspan='2'>&nbsp;</td><td class='shade1' align='center'><strong>Day</strong></td><td class='shade2' align='center'><strong>AM</strong></td><td class='shade1'  align='center'><strong>PM</strong></td></tr>";
 
     $daynumber=1;
+    $options=0;
     // if ($end==$start)
     $end+=86400;  // ensure we still loop for single day bookings by setting end to next day
     for($day=$start;$day < $end; $day=$day+86400)
@@ -117,7 +120,7 @@ elseif ($step=='1')
                     $holiday_type=holiday_type($existing_holiday['type']);
                     $holiday_legend=strtoupper(substr($holiday_type,0,1));
                     echo "<tr><td align='right'>&nbsp;</td>";
-                    echo "<td class='shade2' align='right'> ".date('D d M Y',$day)." </td>";
+                    echo "<td class='shade2' align='right'> ".date($CONFIG['dateformat_date'],$day)." </td>";
                     echo "<td class='shade1' align='center'>";
                     if ($existing_holiday['length']=='day') echo "$holiday_legend";
                     echo "</td>";
@@ -128,7 +131,10 @@ elseif ($step=='1')
                     elseif ($existing_holiday['length']!='day')
                     {
                         if (($type=='2' && $day < $now) || ($type!='2'))
+                        {
                             echo "<input type='radio' name='length{$daynumber}' value='am' checked='checked' />";
+                            $options++;
+                        }
                         else echo "-";
                     }
                     else echo "-";
@@ -140,7 +146,10 @@ elseif ($step=='1')
                     elseif ($existing_holiday['length']!='day')
                     {
                         if (($type=='2' && $day < $now) || ($type!='2'))
-                        echo "<input type='radio' name='length{$daynumber}' value='pm' checked='checked' />";
+                        {
+                            echo "<input type='radio' name='length{$daynumber}' value='pm' checked='checked' />";
+                            $options++;
+                        }
                         else echo "-";
                     }
                     else echo "-";
@@ -155,13 +164,16 @@ elseif ($step=='1')
                 if (mysql_error()) trigger_error("MySQL Query Error ".mysql_error(), E_USER_ERROR);
                 if (mysql_num_rows($result) > 0)
                 {
-                    echo "<tr><td align='right' class='shade1' width='200'><strong>Bank Holiday</strong>:</td><td class='shade2'>".date('D d M Y',$day)."</td></tr>";
+                    echo "<tr><td align='right' class='shade1' width='200'><strong>Bank Holiday</strong>:</td><td class='shade2'>".date($CONFIG['dateformat_date'],$day)."</td></tr>";
                 }
                 else
                 {
-                    echo "<tr><td align='right' width='200'>&nbsp;</td><td class='shade2' align='right'>".date('D d M Y',$day)." </td>";
+                    echo "<tr><td align='right' width='200'>&nbsp;</td><td class='shade2' align='right'>".date($CONFIG['dateformat_date'],$day)." </td>";
                     if (($type=='2' && $day < $now) || ($type!=2))
+                    {
                         echo "<td class='shade1' align='center'><input type='radio' name='length{$daynumber}' value='day' checked='checked'/></td><td class='shade2' align='center'><input type='radio' name='length{$daynumber}' value='am' /></td><td class='shade1' align='center'><input type='radio' name='length{$daynumber}' value='pm' /></td>";
+                        $options++;
+                    }
                     else
                         echo "<td class='shade1' align='center'>-</td><td class='shade2' align='center'>-</td><td class='shade1' align='center'>-</td>";
                     echo "</tr>\n";
@@ -175,9 +187,12 @@ elseif ($step=='1')
     echo "<input type='hidden' name='numberofdays' value='$daynumber' />";
     echo "<input type='hidden' name='step' value='3' />";
 
-    echo "<p align='center'>";
-    echo "<input type='submit' value='Select' />";
-    echo "</p>";
+    if ($options > 0)
+    {
+        echo "<p align='center'>";
+        echo "<input type='submit' value='Select' />";
+        echo "</p>";
+    } else echo "";
     echo "</form>";
 
 
