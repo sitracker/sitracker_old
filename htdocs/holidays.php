@@ -93,7 +93,7 @@ else echo "<tr class='shade2'><td><em>Nobody</em></td></tr>\n";
 <tr><th align='right'>YOUR HOLIDAY LIST</th></tr>
 <?php
 
-$sql = "SELECT * from holidays WHERE userid='{$sit[2]}' AND approved=0";
+$sql = "SELECT * from holidays, holidaytypes WHERE holidays.type=holidaytypes.id AND userid='{$sit[2]}' AND approved=0";
 $result = mysql_query($sql);
 if (mysql_error()) trigger_error("MySQL Query Error ".mysql_error(), E_USER_ERROR);
 if (mysql_num_rows($result))
@@ -102,12 +102,15 @@ if (mysql_num_rows($result))
     while ($dates = mysql_fetch_array($result))
     {
         echo "<tr class='shade1'><td>";
+        if (empty($dates['approvedby'])) echo "<em>";
+        echo "{$dates['name']} ";
         echo date('l jS F Y', $dates['startdate']);
         if ($dates['length']=='am') echo " Morning only";
         if ($dates['length']=='pm') echo " Afternoon only";
+        if (empty($dates['approvedby'])) echo " (not requested yet)</em>";
         echo "</td></tr>\n";
     }
-    echo "<tr class='shade1'><td><a href='holiday_request.php'>Send reminder request</a></td></tr>";
+    echo "<tr class='shade1'><td><a href='holiday_request.php?action=resend'>Send reminder request</a></td></tr>";
 }
 mysql_free_result($result);
 
@@ -117,7 +120,7 @@ if (mysql_error()) trigger_error("MySQL Query Error ".mysql_error(), E_USER_ERRO
 while ($holidaytype=mysql_fetch_array($tresult))
 {
     $sql = "SELECT * FROM holidays WHERE userid='{$sit[2]}' AND type={$holidaytype['id']} ";
-    $sql.= "AND approved==1 ORDER BY startdate DESC ";
+    $sql.= "AND approved=1 ORDER BY startdate DESC ";
     $result = mysql_query($sql);
     if (mysql_error()) trigger_error("MySQL Query Error ".mysql_error(), E_USER_ERROR);
     if (mysql_num_rows($result))
@@ -127,8 +130,8 @@ while ($holidaytype=mysql_fetch_array($tresult))
         {
             echo "<tr class='shade1'><td>";
             echo date('l jS F Y', $dates['startdate']);
-            if ($dates['length']=='am') echo " Morning only";
-            if ($dates['length']=='pm') echo " Afternoon only";
+            if ($dates['length']=='am') echo " Morning";
+            if ($dates['length']=='pm') echo " Afternoon";
             echo "</td></tr>\n";
         }
     }
