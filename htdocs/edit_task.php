@@ -175,8 +175,8 @@ switch ($action)
                 echo "<input type='hidden' name='action' value='edittask' />";
                 echo "<input type='hidden' name='id' value='{$id}' />";
                 // Send copy of existing data so we can see when it is changed
-                echo "<input type='hidden' name='old_name' value='{$task->name}' />";
-                echo "<input type='hidden' name='old_description' value='{$task->description}' />";
+                echo "<input type='hidden' name='old_name' value=\"".stripslashes($task->name)."\" />";
+                echo "<input type='hidden' name='old_description' value=\"".stripslashes($task->description)."\" />";
                 echo "<input type='hidden' name='old_priority' value='{$task->priority}' />";
                 echo "<input type='hidden' name='old_startdate' value='{$task->startdate}' />";
                 echo "<input type='hidden' name='old_duedate' value='{$task->duedate}' />";
