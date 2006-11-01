@@ -27,6 +27,7 @@ $selectedday = cleanvar($_REQUEST['selectedday']);
 $selectedmonth = cleanvar($_REQUEST['selectedmonth']);
 $selectedyear = cleanvar($_REQUEST['selectedyear']);
 $selectedtype = cleanvar($_REQUEST['selectedtype']);
+$approved = cleanvar($_REQUEST['approved']);
 $length = cleanvar($_REQUEST['length']);
 if (empty($length)) $length='day';
 $display = cleanvar($_REQUEST['display']);
