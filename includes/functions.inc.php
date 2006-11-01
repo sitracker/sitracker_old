@@ -4730,7 +4730,7 @@ function parse_updatebody($updatebody)
         $updatebody=stripslashes($updatebody);
         $updatebody=str_replace("&lt;hr&gt;", "[hr]\n", $updatebody);
         $updatebody=strip_tags($updatebody);
-        $updatebody=nl2br(htmlspecialchars($updatebody,ENT_COMPAT));
+        $updatebody=nl2br($updatebody);
         $updatebody=str_replace("&amp;quot;", "&quot;", $updatebody);
         $updatebody=str_replace("&amp;gt;", "&gt;", $updatebody);
         $updatebody=str_replace("&amp;lt;", "&lt;", $updatebody);
