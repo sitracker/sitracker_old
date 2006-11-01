@@ -27,15 +27,17 @@ $length = cleanvar($_REQUEST['length']);
 $view = cleanvar($_REQUEST['view']);
 
 // there is an existing booking so alter it
-if ($approve=='TRUE') $sql = "UPDATE holidays SET approved='1', approvedby='$sit[2]' ";
-elseif ($approve=='FALSE') $sql = "UPDATE holidays SET approved='2', approvedby='$sit[2]' "; //decline
-else $sql = "UPDATE holidays SET approved='1', approvedby='$sit[2]', type='5' "; // free
-$sql .= "WHERE userid='$user' ";
+if ($approve=='TRUE') $sql = "UPDATE holidays SET approved='1' ";
+elseif ($approve=='FALSE') $sql = "UPDATE holidays SET approved='2' "; //decline
+else $sql = "UPDATE holidays SET approved='1', type='5' "; // free
+if ($user!='all') $sql.= "WHERE ";
+else $sql .= "WHERE userid='$user' AND ";
+$sql .= "approvedby='$sit[2]' "; 
 if ($startdate!='all') $sql.="AND startdate='$startdate' AND type='$type' AND length='$length' ";
 $sql .= "AND approved='0'";
 $result = mysql_query($sql);
 
-$bodytext = "Message from {$CONFIG['application_shortname']}: ".$sit[2]." has ";
+$bodytext = "Message from {$CONFIG['application_shortname']}: ".user_realname($sit[2])." has ";
 if ($approve=='FALSE') $bodytext.="rejected";
 else $bodytext.="approved";
 $bodytext.=" your request for ";
