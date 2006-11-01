@@ -27,14 +27,27 @@ $length = cleanvar($_REQUEST['length']);
 $view = cleanvar($_REQUEST['view']);
 
 // there is an existing booking so alter it
-if ($approve=='TRUE') $sql = "UPDATE holidays SET approved='1' ";
-elseif ($approve=='FALSE') $sql = "UPDATE holidays SET approved='2' "; //decline
-else $sql = "UPDATE holidays SET approved='1', type='5' "; // free
-if ($user!='all') $sql.= "WHERE ";
-else $sql .= "WHERE userid='$user' AND ";
-$sql .= "approvedby='$sit[2]' "; 
-if ($startdate!='all') $sql.="AND startdate='$startdate' AND type='$type' AND length='$length' ";
-$sql .= "AND approved='0'";
+switch (strtolower($approve))
+{
+    case 'true': 
+        $sql = "UPDATE holidays SET approved='1' ";
+    break;
+    case 'false': 
+        $sql = "UPDATE holidays SET approved='2' ";
+    break;
+    case 'free':
+        $sql = "UPDATE holidays SET approved='1', type='5' ";
+    break;
+}
+
+$sql .= "WHERE approvedby='$sit[2]' AND approved=0 ";
+
+if ($user != 'all') 
+    $sql .= "AND userid='$user' ";
+
+if ($startdate != 'all') 
+    $sql.="AND startdate='$startdate' AND type='$type' AND length='$length'";
+
 $result = mysql_query($sql);
 
 $bodytext = "Message from {$CONFIG['application_shortname']}: ".user_realname($sit[2])." has ";
