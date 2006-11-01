@@ -81,7 +81,13 @@ if (!$sent)
                     if ($holiday->type==1) echo " | <a href=\"holiday_approve.php?approve=FREE&amp;user={$holiday->userid}&amp;view={$user}&amp;startdate={$holiday->startdate}&amp;type={$holiday->type}&amp;length={$holiday->length}\">Free Leave</a>";
                     echo "</td>";
                 }
-                else echo "<td>Cannot approve yourself</td>";
+                else
+                {
+                    echo "<td>";
+                    if ($holiday->approvedby > 0) echo "Request sent to ".user_realname($holiday->approvedby);
+                    else echo "Request not sent";
+                    echo "</td>";
+                }
                 if ($approver==TRUE)
                 {
                     echo "<td>";
@@ -143,7 +149,7 @@ else
         if ($user!='all' || $approver==FALSE) $sql .= "AND userid='".$sit[2]."' ";
         $sql .= "ORDER BY startdate, length";
         $result = mysql_query($sql);
-        if (mysql_error()) trigger_error("MySQL Query Error ".mysql_error(), E_USER_ERROR);
+        if (mysql_error()) trigger_error("MySQL Query Error ".mysql_error(), E_USER_WARNING);
         if (mysql_num_rows($result)>0)
         {
             // FIXME this email should probably use the email template system
@@ -166,13 +172,20 @@ else
             $bodytext .= "Please point your browser to\n<{$_SERVER['HTTP_REFERER']}?user={$user}&mode=approval>\n ";
             $bodytext .= "to approve or decline these requests.";
         }
-        echo "<p align='center'>Your request has been sent</p>";
+        // Mark the userid of the person who will approve the request so that they can see them
+        $sql = "UPDATE holidays SET approvedby='{$approvaluser}' WHERE userid='{$sit[2]}' AND approved=0";
+        mysql_query($sql);
+        if (mysql_error()) trigger_error(mysql_error(),E_USER_ERROR);
+
         $email_from = user_email($user);
         $email_to = user_email($approvaluser);
         $email_subject = "{$CONFIG['application_shortname']}: Holiday Approval Request";
         $extra_headers  = "From: $email_from\nReply-To: $email_from\nErrors-To: {$CONFIG['support_email']}\n";
         $extra_headers .= "X-Mailer: {$CONFIG['application_shortname']} {$application_version_string}/PHP " . phpversion()."\n";
         $rtnvalue = mail($email_to, stripslashes($email_subject), stripslashes($bodytext), $extra_headers);
+
+        if ($rtnvalue===TRUE) echo "<p align='center'>Your request has been sent</p>";
+        else echo "<p class='error'>There was a problem sending your request</p>";
 
     }
     echo "<p align='center'><a href='holiday_calendar.php?type=1&user=$user'>Back to your calendar</p></p>";

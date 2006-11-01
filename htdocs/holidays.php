@@ -85,7 +85,7 @@ if (mysql_num_rows($result) >=1)
         echo "</td></tr>\n";
     }
 }
-else echo "<tr><td>Nobody</td></tr>\n";
+else echo "<tr class='shade2'><td><em>Nobody</em></td></tr>\n";
 ?>
 </table>
 
@@ -96,7 +96,7 @@ else echo "<tr><td>Nobody</td></tr>\n";
 $sql = "SELECT * from holidays WHERE userid='{$sit[2]}' AND approved=0";
 $result = mysql_query($sql);
 if (mysql_error()) trigger_error("MySQL Query Error ".mysql_error(), E_USER_ERROR);
-if (mysql_num_rows($result)) 
+if (mysql_num_rows($result))
 {
     echo "<tr class='shade2'><td><strong>Dates waiting for approval</strong>:</td></tr>";
     while ($dates = mysql_fetch_array($result))
@@ -114,7 +114,7 @@ mysql_free_result($result);
 $sql = "SELECT * from holidaytypes";
 $tresult = mysql_query($sql);
 if (mysql_error()) trigger_error("MySQL Query Error ".mysql_error(), E_USER_ERROR);
-while ($holidaytype=mysql_fetch_array($tresult)) 
+while ($holidaytype=mysql_fetch_array($tresult))
 {
     $sql = "SELECT * FROM holidays WHERE userid='{$sit[2]}' AND type={$holidaytype['id']} ";
     $sql.= "AND approved>0 ORDER BY startdate DESC ";
@@ -122,7 +122,7 @@ while ($holidaytype=mysql_fetch_array($tresult))
     if (mysql_error()) trigger_error("MySQL Query Error ".mysql_error(), E_USER_ERROR);
     if (mysql_num_rows($result))
     {
-        echo "<tr class='shade2'><td><strong>{$holidaytype['name']}</strong>:</td></tr>";     
+        echo "<tr class='shade2'><td><strong>{$holidaytype['name']}</strong>:</td></tr>";
         while ($dates = mysql_fetch_array($result))
         {
             echo "<tr class='shade1'><td>";

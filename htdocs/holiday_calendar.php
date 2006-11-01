@@ -469,7 +469,7 @@ function draw_chart($month, $year)
         $html .= "<td>".substr($htype,0,1)." = {$htype}</td>";
     }
     $html .= "</tr>";
-    $html .= "<tr><td></td><td class='review'>not approved</td><td class='idle'>approved</td></tr>";
+    $html .= "<tr><td></td><td class='review'>not approved</td><td class='idle'>approved</td><td class='notice'>approved free</td></tr>";
     $html .= "</table>\n\n";
 
     return $html;
