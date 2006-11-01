@@ -296,7 +296,7 @@ if ($slaremain <> 0 AND $incident->status!=2)
 // Tempory hack, don't show this for old incident details page
 //if (strpos($_SERVER['PHP_SELF'], 'incident_details.php')===FALSE)
 //{
-    echo "<h1 class='$class'>{$title}: {$incidentid} - {$incident->title}</h1>";
+    echo "<h1 class='$class'>{$title}: {$incidentid} - ".stripslashes($incident->title)."</h1>";
 //}
 
 // echo "<h1>$title</h1>";
