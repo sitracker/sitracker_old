@@ -419,6 +419,7 @@ function draw_chart($month, $year)
                     {
                         if ($happroved[$day] == 0) $html .= "<td class='review'>";
                         elseif ($happroved[$day] == 1) $html .= "<td class='idle'>";
+                        elseif ($happroved[$day] == 2) $html .= "<td class='urgent'>";
                         else $html .= "<td class='notice'>";
                         $html .= substr($holidaytype[$htypes[$day]],0,1);
                         $html .= "</td>";
@@ -489,7 +490,7 @@ function draw_chart($month, $year)
     }
     $html .= "<td>PH = Public Holiday</td>";
     $html .= "</tr>";
-    $html .= "<tr><td></td><td class='review'>not approved</td><td class='idle'>approved</td><td class='notice'>approved free</td></tr>";
+    $html .= "<tr><td></td><td class='review'>not approved</td><td class='idle'>approved</td><td class='notice'>approved free</td><td class='urgent'>declined</td></tr>";
     $html .= "</table>\n\n";
 
     return $html;
