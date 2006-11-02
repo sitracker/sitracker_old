@@ -171,7 +171,7 @@ elseif ($step=='1')
                 if (mysql_error()) trigger_error("MySQL Query Error ".mysql_error(), E_USER_ERROR);
                 if (mysql_num_rows($result) > 0)
                 {
-                    echo "<tr><td align='right' class='shade1' width='200'><strong>Public Holiday</strong>:</td><td class='shade2'>".date('l jS M y',$day)."</td></tr>";
+                    echo "<tr><td class='shade1' align='right'>".date('l jS M y',$day)."</td><td colspan='4'>Public Holiday</td></tr>";
                 }
                 else
                 {
