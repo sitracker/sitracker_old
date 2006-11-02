@@ -294,10 +294,12 @@ elseif ($action == "check")
     if (!empty($perm))
     {
         echo "<h3>Role Permission: $perm - ".permission_name($perm)."</h3>";
-        $sql = "SELECT rolepermissions.roleid AS roleid, username, users.id AS userid, realname, rolename FROM rolepermissions, roles, users ";
+        $sql = "SELECT rolepermissions.roleid AS roleid, username, users.id AS userid, realname, rolename ";
+        $sql .= "FROM rolepermissions, roles, users ";
         $sql .= "WHERE rolepermissions.roleid=roles.id ";
         $sql .= "AND roles.id=users.roleid ";
-        $sql .= "AND permissionid='$perm' AND granted='true'";
+        $sql .= "AND permissionid='$perm' AND granted='true' ";
+        $sql .= "AND users.status > 0";
         $result = mysql_query($sql);
         if (mysql_error()) trigger_error(mysql_error(),E_USER_WARNING);
         if (mysql_num_rows($result) >= 1)
@@ -323,7 +325,7 @@ elseif ($action == "check")
         echo "<h3>User Permission: $perm - ".permission_name($perm)."</h3>";
         $sql = "SELECT userpermissions.userid AS userid, username, realname FROM userpermissions, users ";
         $sql .= "WHERE userpermissions.userid=users.id ";
-        $sql .= "AND permissionid='$perm' AND granted='true'";
+        $sql .= "AND permissionid='$perm' AND granted='true' AND users.status > 0";
         $result = mysql_query($sql);
         if (mysql_error()) trigger_error(mysql_error(),E_USER_WARNING);
         if (mysql_num_rows($result) >= 1)
