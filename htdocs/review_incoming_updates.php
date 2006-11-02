@@ -299,7 +299,7 @@ if (mysql_num_rows($result) >= 1)
             echo "<tr class='shade1'>";
             echo "<td align='center'>".date($CONFIG['dateformat_datetime'], $assign->lastupdated)."</td>";
             echo "<td>".user_realname($assign->originalowner)."</td>";
-            echo "<td>[<a href=\"javascript:wt_winpopup('incident_details.php?id={$assign->id}&amp;popup=yes', 'mini')\">{$assign->id}</a>] {$assign->title}</td>";
+            echo "<td>[<a href=\"javascript:wt_winpopup('incident_details.php?id={$assign->id}&amp;popup=yes', 'mini')\">{$assign->id}</a>] ".stripslashes($assign->title)."</td>";
             $userstatus=userstatus_name($assign->userstatus);
             $usermessage=user_message($assign->originalowner);
             $username=user_realname($assign->originalowner);
