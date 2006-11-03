@@ -43,7 +43,7 @@ function dashboard_user_incidents()
     $sql .= ") AND timeofnextaction < $now ) ";
     echo "<span>";
     echo "<div class='windowbox' style='width: 95%'>";
-    echo "<div class='windowtitle'>".user_realname($user)."'s Incidents: (Action Needed)</div>";
+    echo "<div class='windowtitle'><a href='incidents.php?user=current&queue=1&type=support'>".user_realname($user,TRUE)."'s Incidents</a> (Action Needed)</div>";
     echo "<div class='window'>";
 
     $selectsql = "SELECT incidents.id, externalid, title, owner, towner, priority, status, siteid, forenames, surname, email, incidents.maintenanceid, ";

@@ -121,7 +121,7 @@ div.window
 #statusbar a:hover { text-decoration: underline; }
 #statusbar a:active { text-decoration: underline; }
 
-#userbar,#footerbar { background-color: #DDF; text-align: center; padding: 2px 0px 2px 0px; }
+#userbar,#footerbar { text-align: center; padding: 2px 0px 2px 0px; }
 
 #tabcontainer
     {
@@ -499,6 +499,8 @@ div.detailfoot
 }
 
 div.note { font-size: 98%; background-color: #FFFFA2; border-color: #A2A86A; margin-top: 0px; }
+
+.deleted { text-decoration: line-through; }
 
 @media print
 {

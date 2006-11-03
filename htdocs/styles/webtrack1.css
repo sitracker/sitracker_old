@@ -1,80 +1,34 @@
 /* CSS2 Style Sheet for Webtrack */
 /* Webtrack Default Style: Light Blue */
-/* by Ivan Lucas, ivan.lucas@salfordsoftware.co.uk - August 2001, Updated March 2002 */
+/* by Ivan Lucas. Original. August 2001, Updated March 2002, Remade November 2006 */
 
+h1 { font-size: 16pt; font-weight: bold; color: #DDDDFF; background-color: #203894; margin: 0px; padding: 3px 0px 3px 0px; }
 
-#menu { background-color: #000; color: #fff; }
-#menu ul, #menu ul li ul { background-color: #000; color: #fff; }
-#menu a { color: #fff; }
+th, th a, th a:active, th a:link, th a:visited { background-color: #B5D7E8; color: #203894; }
+th a:hover { text-decoration: underline; }
+
+#apptitle { background-image: url('../images/sit_swirl1.png'); background-position: top-left; background-repeat: no-repeat; height: 50px;}
+
+#menu,#statusbar { background-color: #DDDDFF; color: #203894; }
+#menu ul, #menu ul li ul { background-color: #fff; color: #203894; }
+#menu a { color: #203894; }
 #menu li:hover>a, #menu a:hover
 {
-  color: #fff;
+  color: #203894;
 }
 #menu li:hover, #menu li ul a:hover
 {
-    background-color: #4C4C4C;
+    background-color: #B5D7E8;
 }
 
+#statusbar a { color: #203894; }
 
-/* --- Classes --- */
+tr.shade1:hover { background-color: #F2F2F2; }
+tr.shade2:hover { background-color: #F2F2F2; }
+tr.critical:hover { background-color: #FFAAAB; }
+tr.urgent:hover { background-color: #FFAAAB; }
+tr.expired:hover { background-color: #F2F2F2; }
+tr.notice:hover { background-color: #F2F2F2; }
 
-.error { font-family: Tahoma, Helvetica, sans serif; font-size: 8pt; color: #FF0000; font-weight: bold; text-align: center; }
-.red { font-family: Tahoma, Helvetica, sans serif; font-size: 8pt; color: #FF0000; }
-
-/* Menu Row at Top of Pages */
-.barlink { font-family: Tahoma, Helvetica, sans serif; font-size: 8pt; color: #FFFFFF; font-weight: bold; text-decoration: none; }
-.barlink:hover { font-family: Tahoma, Helvetica, sans serif; font-size: 8pt; color: #FFFFFF; font-weight: bold; text-decoration: underline; }
-.barlink:active { font-family: Tahoma, Helvetica, sans serif; font-size: 8pt; color: #FFFFFF; font-weight: bold; text-decoration: underline; }
-.navbarmenu { background-color: #000000; font-family: Tahoma, Helvetica, sans serif; font-size: 8pt; font-weight: bold; color: #FFFFFF; height:20px; }
-
-
-/* Shading for tables*/
-.mainshade { background-color: #FFFFFF; }
-.shade1 { background-color: #CCCCFF; }
-.shade2 { background-color: #DDDDFF; }
-.urgent { background-color: #f08080; } /* #E8B7DD; */
-.notice { background-color: #FFFFB0; } /* was #ffbbaa; mild red */
-.critical { background-color: #ff4500; }
-.expired { background-color: #FF4433; }
-/* expired was #DDDDDF; */
-.review { background-color: #7AC5CD; }
-.idle     { background-color: #CCffCC; } /* #90ee90; */
-
-
-/* SpellCheck */
-a.spellLink {
-color: Red;
- text-decoration: none;
- border-bottom: 1px dashed Red;
-}
-
-a.spellLink:hover {
- color: Red;
- text-decoration: none;
- border-bottom: 1px dashed Red;
-}
-
-.spell-tooltip {
-position: absolute;
-width: 250px;
-border: 1px Solid WindowFrame;
-background: Infobackground;
-color: InfoText;
-font: StatusBar;
-font: Status-Bar;
-padding:3px;
-filter: progid:DXImageTransform.Microsoft.Shadow(color="#777777", Direction=135, Strength=3);
-}
-
-
-.spell-tooltip a,
-.spell-tooltip a:hover {
-color: blue !important;
-background: none;
-}
-
-
-.tablelist td {border-left: 1px solid #000066;border-top: 1px solid #000066;}
-table.tablelist {border: 1px solid #000066;}
-.tablelist tr {border: 1px solid #000066; border-right: 1px solid #000066 ! important;}
-.tablelist th {border-left: 1px solid #000066; border-top: 1px solid #000066;}
+div.windowbox { border: 1px solid #B5D7E8; }
+div.windowtitle, div.windowtitle a { background-color: #B5D7E8; color: black; }

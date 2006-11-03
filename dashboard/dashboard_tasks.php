@@ -15,7 +15,7 @@ function dashboard_tasks()
     $user = $sit[2];
     echo "<span id='dragList1' >";
     echo "<div class='windowbox' style='width: 95%;'>";
-    echo "<div class='windowtitle'>".user_realname($user)."'s Tasks:</div>";
+    echo "<div class='windowtitle'><a href='tasks.php'>".user_realname($user,TRUE)."'s Tasks</a></div>";
     echo "<div class='window'>";
 
     $sql = "SELECT * FROM tasks WHERE owner='$user' AND (completion < 100 OR completion='' OR completion IS NULL) ";
