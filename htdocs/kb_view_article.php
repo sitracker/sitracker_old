@@ -39,7 +39,7 @@ if (user_permission($sit[2],$permission))
     $kbarticle = mysql_fetch_object($result);
     if (empty($kbarticle->title)) $kbarticle->title='Untitled';
 
-    echo "<h2>".remove_slashes($kbarticle->title)."</h2>";
+    echo "<h2>".stripslashes($kbarticle->title)."</h2>";
 
     // Lookup what software this applies to
     $ssql = "SELECT * FROM kbsoftware, software WHERE kbsoftware.softwareid=software.id AND kbsoftware.docid='{$id}' ";
@@ -93,7 +93,7 @@ if (user_permission($sit[2],$permission))
         $replace = array("<a href=\"$1\">$1</a>", "<a href=\"mailto:$0\">$0</a>");
         $kbcontent->content = preg_replace("/href=\"www/i", "href=\"http://www", preg_replace ($search, $replace, $kbcontent->content));
         // $kbcontent->content = preg_replace("/(([\w\.]+))(@)([\w\.]+)\b/i", "<a href=\"mailto:$0\">$0</a>", $kbcontent->content);
-        echo $kbcontent->content;
+        echo stripslashes($kbcontent->content);
         $author[]=$kbcontent->ownerid;
         echo "</div>";
 
