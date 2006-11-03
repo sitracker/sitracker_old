@@ -44,16 +44,10 @@ if (empty($_POST['process']))
     $docid = $id;
     include('htmlheader.inc.php');
 
-    echo "<table summary='Knowledge Base Article' width='98%' align='center' border='0'><tr><td>";
-
-    $sql = "SELECT * FROM kbarticles WHERE docid='{$docid}' LIMIT 1";
-    $result = mysql_query($sql);
-    if (mysql_error()) trigger_error("MySQL Query Error ".mysql_error(), E_USER_ERROR);
-    $kbarticle = mysql_fetch_object($result);
-
     ?>
     <script type="text/javascript">
     <!--
+
     function deleteOption(object,index) {
         object.options[index] = null;
     }
@@ -67,28 +61,28 @@ if (empty($_POST['process']))
     }
 
     function copySelected(fromObject,toObject) {
-        for (var i=0, l=fromObject.options.length;i<l;i++) {
+        for (var i=0, l=fromObject.options.length;i < l;i++) {
             if (fromObject.options[i].selected)
                 addOption(toObject,fromObject.options[i].text,fromObject.options[i].value);
         }
-        for (var i=fromObject.options.length-1;i>-1;i--) {
+        for (var i=fromObject.options.length-1;i >-1;i-- ) {
             if (fromObject.options[i].selected)
                 deleteOption(fromObject,i);
         }
     }
 
     function copyAll(fromObject,toObject) {
-        for (var i=0, l=fromObject.options.length;i<l;i++) {
+        for (var i=0, l=fromObject.options.length;i < l;i++) {
             addOption(toObject,fromObject.options[i].text,fromObject.options[i].value);
         }
-        for (var i=fromObject.options.length-1;i>-1;i--) {
+        for (var i=fromObject.options.length-1;i > -1;i--) {
             deleteOption(fromObject,i);
         }
     }
 
     function populateHidden(fromObject,toObject) {
         var output = '';
-        for (var i=0, l=fromObject.options.length;i<l;i++) {
+        for (var i=0, l=fromObject.options.length;i < l;i++) {
                 output += escape(fromObject.name) + '=' + escape(fromObject.options[i].value) + '&';
         }
         // alert(output);
@@ -132,9 +126,17 @@ if (empty($_POST['process']))
         e.cols = MIN_COLS ;
         e.rows = MIN_ROWS ;
     }
-
-    //--></script>
+    // -->
+    </script>
     <?php
+
+    $sql = "SELECT * FROM kbarticles WHERE docid='{$docid}' LIMIT 1";
+    $result = mysql_query($sql);
+    if (mysql_error()) trigger_error("MySQL Query Error ".mysql_error(), E_USER_ERROR);
+    $kbarticle = mysql_fetch_object($result);
+
+    echo "<table summary='Knowledge Base Article' width='98%' align='center' border='0'><tr><td>";
+
     if (empty($_REQUEST['user']) OR $_REQUEST['user']=='current') $user=$sit[2];
     else $user=$_REQUEST['user'];
 
@@ -150,7 +152,7 @@ if (empty($_POST['process']))
     }
     echo "<p align='center'>Select the software that applies to this article</p>";
     echo "<form name='kbform' action='{$_SERVER['PHP_SELF']}' method='post' onsubmit=\"populateHidden(document.kbform.elements['expertise[]'],document.kbform.choices)\">";
-    echo "<table>";
+    echo "<table align='center'>";
     echo "<tr><th>Does NOT apply</th><th>&nbsp;</th><th>Applies</th></tr>";
     echo "<tr><td align='center' width='300' class='shade1'>";
     $listsql = "SELECT * FROM software ORDER BY name";
@@ -220,9 +222,7 @@ if (empty($_POST['process']))
 
     // ---
     // echo "<form name='kbform' action='{$_SERVER['PHP_SELF']}' method='post' >";
-    echo "<div align='center'>";
-
-    echo "<p align='center'>Title:<br /><input type='text' name='title' size='60' value='".remove_slashes($kbarticle->title)."' /></p>";
+    echo "<p align='center'>Title:<br /><input type='text' name='title' size='60' value=\"".stripslashes($kbarticle->title)."\" /></p>";
     echo "<p align='center'>Keywords:<br /><input type='text' name='keywords' value='{$kbarticle->keywords}' size='60' /></p>";
 
     echo "\n<script type=\"text/javascript\">\n";
@@ -238,10 +238,10 @@ if (empty($_POST['process']))
 
     echo "  document.getElementById(element).innerHTML=content;  \n";
     echo "}\n";
-    echo "//-->\n";
+    echo "// -->\n";
     echo "</script>\n";
 
-    echo "<table summary='' width='95%'>";
+    echo "<table summary='' width='95%' align='center'>";
     foreach ($sections AS $section)
     {
         // summary
@@ -256,9 +256,9 @@ if (empty($_POST['process']))
                 $element=$kbcontent->id;
                 echo "<tr><th class='shade1' valign='top'>";
                 echo "$kbcontent->header:</th>";
-                echo "<td class='shade2' width='200'>";
-                echo "<textarea name='content$element' rows='10' title='Full Details' cols='100'>";
-                echo remove_slashes($kbcontent->content);
+                echo "<td class='shade2'>";
+                echo "<textarea name='content$element' rows='10'  cols='100' title='Full Details'>";
+                echo stripslashes($kbcontent->content);
                 echo "</textarea>\n<br /><br />\n";
                 $author[]=$kbcontent->ownerid;
                 $id_array[]= $kbcontent->id;
@@ -271,25 +271,25 @@ if (empty($_POST['process']))
         {
             echo "<tr><th valign='top'>";
             echo "$section:";
-            echo "</th><td class='shade2' width='200'>";
-            echo "<textarea name='content{$section}' rows='2' title='Full Details' cols='100' onfocus=\"myInterval = window.setInterval('changeTextAreaLength(document.kbform.content{$section})', 300);\" onblur=\"window.clearInterval(myInterval); resetTextAreaLength(document.kbform.content{$section});\">";
+            echo "</th><td class='shade2'>";
+            echo "<textarea name='content{$section}' rows='2' cols='100' title='Full Details' onfocus=\"myInterval = window.setInterval('changeTextAreaLength(document.kbform.content{$section})', 300);\" onblur=\"window.clearInterval(myInterval); resetTextAreaLength(document.kbform.content{$section});\">";
             echo "</textarea>\n<br /><br />\n";
             echo "</td><td class='shade1'><input type='checkbox' name='add$section' value='yes' />Add</td></tr>\n";
         }
-}
-reset ($sections);
-if (is_array($id_array)) $id_list=implode(",",$id_array);
-else $id_array='';
-echo "<tr><td class='shade1' colspan='3'>";
-echo "<input type='hidden' name='articleid' value='{$docid}' />";
-echo "<input type='hidden' name='idlist' value='$id_list' />";
-echo "<input type='hidden' name='process' value='true' />";
-echo "<input type='submit' value='Save Changes' />";
-echo "</form>";
-echo "</td></tr></table>";
+    }
+    reset ($sections);
+    if (is_array($id_array)) $id_list=implode(",",$id_array);
+    else $id_array='';
+    echo "<tr><td class='shade1' colspan='3'>";
+    echo "<input type='hidden' name='articleid' value='{$docid}' />";
+    echo "<input type='hidden' name='idlist' value='$id_list' />";
+    echo "<input type='hidden' name='process' value='true' />";
+    echo "</td></tr></table>";
+    echo "<p><input type='submit' value='Save Changes' /></p>";
+    echo "</form>";
 
-echo "</td></tr></table>";
-include('htmlfooter.inc.php');
+    echo "</td></tr></table>";
+    include('htmlfooter.inc.php');
 }
 else
 {
@@ -323,7 +323,7 @@ else
             $sql = "UPDATE kbcontent SET content='$content', headerstyle='h1', distribution='$distribution' WHERE id='$id' AND docid='{$articleid}' ";
         }
         else
-        $sql = "DELETE FROM kbcontent WHERE id='$id' AND docid='{$_REQUEST['articleid']}' ";
+            $sql = "DELETE FROM kbcontent WHERE id='$id' AND docid='{$_REQUEST['articleid']}' ";
         mysql_query($sql);
         if (mysql_error()) trigger_error("MySQL Query Error ".mysql_error(), E_USER_ERROR);
     }
