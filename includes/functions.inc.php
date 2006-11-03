@@ -4189,7 +4189,7 @@ function software_backup_userid($userid, $softwareid)
 {
     $backupid=0; // default
     // Find out who is the backup for this
-    $sql = "SELECT backupid FROM usersoftware WHERE userid='$userid' AND softwareid='$softwareid'";
+    $sql = "SELECT backupid FROM usersoftware WHERE userid='$userid' AND userid!='$userid' AND softwareid='$softwareid'";
     $result = mysql_query($sql);
     if (mysql_error()) trigger_error(mysql_error(),E_USER_WARNING);
     list($backupid)=mysql_fetch_row($result);
@@ -4198,7 +4198,7 @@ function software_backup_userid($userid, $softwareid)
     // Check to see if that user is accepting
     if (empty($backupid) OR user_accepting($backupid)!='Yes')
     {
-        $sql = "SELECT backupid FROM usersoftware WHERE userid='$backupid' AND softwareid='$softwareid' AND backupid!='$backup1'";
+        $sql = "SELECT backupid FROM usersoftware WHERE userid='$backupid' AND userid!='$userid' AND softwareid='$softwareid' AND backupid!='$backup1'";
         $result = mysql_query($sql);
         if (mysql_error()) trigger_error(mysql_error(),E_USER_WARNING);
         list($backupid)=mysql_fetch_row($result);
@@ -4208,7 +4208,7 @@ function software_backup_userid($userid, $softwareid)
     // One more iteration, is the backup of the backup accepting?
     if (empty($backupid) OR user_accepting($backupid)!='Yes')
     {
-        $sql = "SELECT backupid FROM usersoftware WHERE userid='$backupid' AND softwareid='$softwareid' AND backupid!='$backup1' AND backupid!='$backup2'";
+        $sql = "SELECT backupid FROM usersoftware WHERE userid='$backupid' AND userid!='$userid' AND softwareid='$softwareid' AND backupid!='$backup1' AND backupid!='$backup2'";
         $result = mysql_query($sql);
         if (mysql_error()) trigger_error(mysql_error(),E_USER_WARNING);
         list($backupid)=mysql_fetch_row($result);
