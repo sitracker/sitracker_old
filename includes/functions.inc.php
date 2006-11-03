@@ -2525,7 +2525,7 @@ function site_drop_down($name, $id)
 
 function site_name($id)
 {
-    $sitename = db_read_column('name', 'sites', $id);
+    $sitename = stripslashes(db_read_column('name', 'sites', $id));
     if (empty($sitename)) $sitename="Unknown";
 
     return($sitename);

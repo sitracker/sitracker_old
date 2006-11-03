@@ -16,7 +16,8 @@ if (realpath(__FILE__) == realpath($_SERVER['SCRIPT_FILENAME']))
 }
 
 
-
+$incident->forenames = stripslashes($incident->forenames);
+$incident->surname = stripslashes($incident->surname);
 
 echo "<div id='detailsummary'>";
 
