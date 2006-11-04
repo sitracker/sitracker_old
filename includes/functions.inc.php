@@ -116,7 +116,7 @@ $hmenu[10] = array (1=> array ( 'perm'=> 0, 'name'=> "Main Page", 'url'=>"main.p
 );
 $hmenu[1020] = array (10=> array ( 'perm'=> 4, 'name'=> "My Profile", 'url'=>"edit_profile.php"),
                       20=> array ( 'perm'=> 58, 'name'=> "My Skills", 'url'=>"edit_user_software.php"),
-                      30=> array ( 'perm'=> 58, 'name'=> "My Backup Engineers", 'url'=>"edit_backup_users.php"),
+                      30=> array ( 'perm'=> 58, 'name'=> "My Substitutes", 'url'=>"edit_backup_users.php"),
                       40=> array ( 'perm'=> 27, 'name'=> "My Holidays", 'url'=>"holidays.php")
 );
 // configure
@@ -325,7 +325,7 @@ function user_password($id)
 }
 
 
-function user_realname($id)
+function user_realname($id,$allowhtml=FALSE)
 {
     global $update_body;
     global $incidents;
@@ -333,7 +333,16 @@ function user_realname($id)
     if ($id >= 1)
     {
         if ($id == $_SESSION['userid']) return $_SESSION['realname'];
-        else return db_read_column('realname', 'users', $id);
+        else
+        {
+            // return db_read_column('realname', 'users', $id);
+            $sql = "SELECT realname, status FROM users WHERE id='$id' LIMIT 1";
+            $result = mysql_query($sql);
+            if (mysql_error()) trigger_error(mysql_error(),E_USER_WARNING);
+            list($realname, $status)=mysql_fetch_row($result);
+            if ($allowhtml==FALSE OR $status > 0) return $realname;
+            else return ("<span class='deleted'>$realname</span>");
+        }
     }
     elseif(!empty($incidents['email']))
     {
@@ -1950,7 +1959,7 @@ function emailtype_replace_specials($string, $incidentid, $userid=0)
     // incident external id
     $return_string = str_replace("<incidentexternalid>", $incident->externalid, $return_string);
 
-    
+
     // incident cc email
     $return_string = str_replace("<incidentccemail>", incident_ccemail($incidentid), $return_string);
 
@@ -4311,7 +4320,7 @@ function software_backup_userid($userid, $softwareid)
 
 function incident_backup_switchover($userid, $accepting)
 {
-    // Switches incidents to temporarily by the backup engineer depending on the setting of 'accepting'
+    // Switches incidents to temporarily by the backup/substitute engineer depending on the setting of 'accepting'
     // yes: back to user
     // no: assign to backup
     global $now;
@@ -4324,7 +4333,7 @@ function incident_backup_switchover($userid, $accepting)
         if (mysql_error()) trigger_error(mysql_error(),E_USER_WARNING);
         while ($incident = mysql_fetch_object($result))
         {
-            // Try and find a backup engineer
+            // Try and find a backup/substitute engineer
             $backupid=software_backup_userid($userid, $incident->softwareid);
 
             if (empty($backupid))
@@ -4879,7 +4888,7 @@ function show_notes($linkid, $refid)
             if ($sit[2]==$note->userid) $html .= "<a href='delete_note.php?id={$note->id}&amp;rpath={$_SERVER['PHP_SELF']}?{$_SERVER['QUERY_STRING']}' onclick='return confirm_delete();'><img src='{$CONFIG['application_webpath']}images/icons/kdeclassic/16x16/actions/eventdelete.png' width='16' height='16' alt='Delete icon' style='border: 0px;' /></a>";
             $html .= "</div>\n";
             $html .= "<img src='{$CONFIG['application_webpath']}images/icons/kdeclassic/16x16/mimetypes/document2.png' width='16' height='16' alt='Note icon' /> ";
-            $html .= "Note added by ".user_realname($note->userid)."</div>\n";
+            $html .= "Note added by ".user_realname($note->userid,TRUE)."</div>\n";
             $html .= "<div class='detailentry note'>";
             $html .= nl2br(bbcode(stripslashes($note->bodytext)));
             $html .= "</div>\n";
@@ -4947,7 +4956,7 @@ function show_links($origtab, $colref, $level=0, $parentlinktype='', $direction=
                             if (!empty($viewurl)) $html .= "<a href='$viewurl'>";
                             $html .= "{$record->recordname}";
                             if (!empty($viewurl)) $html .= "</a>";
-                            $html .= " - ".user_realname($link->userid);
+                            $html .= " - ".user_realname($link->userid,TRUE);
                             $html .= show_links($linktype->linktab, $currentlinkref, $level+1, $linktype->id, $direction); // Recurse
                             $html .= "</li>\n";
                         }
