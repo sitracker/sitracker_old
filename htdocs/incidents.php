@@ -85,7 +85,7 @@ switch($type)
         if ($user!='all') $sql .= "AND (owner='$user' OR towner='$user') ";
 
         echo "<h2>";
-        if ($user!='all') echo user_realname($user) . "'s Incidents: ";
+        if ($user!='all') echo user_realname($user,TRUE) . "'s Incidents: ";
         else echo "Watching All ";
 
         switch($queue)

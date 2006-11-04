@@ -39,6 +39,14 @@ exit;
 // -------------------
 */
 
+// Holiday types
+// 1 = Holiday
+// 2 = Sickness
+// 3 = Working Away
+// 4 = Training
+// 5 - Compassionate/Free
+
+
 if (user_permission($sit[2],50)) $approver=TRUE;
 
 // check to see if there is a holiday on this day already.

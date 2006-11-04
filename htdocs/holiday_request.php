@@ -36,7 +36,7 @@ if (!$sent)
     $waiting=FALSE;
     echo "<h2>";
     if ($user=='all') echo "All";
-    else echo user_realname($user);
+    else echo user_realname($user,TRUE);
     echo " - Holiday Requests</h2>";
 
     if ($approver==TRUE AND $mode!='approval') echo "<p align='center'><a href='holiday_request.php?user=all&amp;mode=approval'>Approve holiday requests</a></p>";
@@ -64,7 +64,7 @@ if (!$sent)
             if ($user=='all' && $approver==TRUE)
             {
                 echo "<td><a href='{$_SERVER['PHP_SELF']}?user={$holiday->userid}&amp;mode=approval'>";
-                echo user_realname($holiday->userid);
+                echo user_realname($holiday->userid,TRUE);
                 echo "</a></td>";
             }
             echo "<td>".date('l j F Y', $holiday->startdate)."</td>";
@@ -89,7 +89,7 @@ if (!$sent)
                 else
                 {
                     echo "<td>";
-                    if ($holiday->approvedby > 0) echo "Request sent to ".user_realname($holiday->approvedby);
+                    if ($holiday->approvedby > 0) echo "Request sent to ".user_realname($holiday->approvedby,TRUE);
                     else
                     {
                         echo "Request not sent";

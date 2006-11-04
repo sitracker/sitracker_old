@@ -557,7 +557,7 @@ else
     {
         echo "<h2>";
         if ($user=='all' && $approver==TRUE) echo "Everybody";
-        else echo user_realname($user);
+        else echo user_realname($user,TRUE);
         echo "'s Calendar</h2>";
         if ($type==1) echo "<p align='center'>Used ".user_count_holidays($user, $type)." of ".user_holiday_entitlement($user)." days entitlement.<br />";
 

@@ -169,7 +169,7 @@ if ($lockexpires > time() AND $incident->locked >0 AND $incident->locked != $sit
 {
     // The incident is locked by somebody else
     echo "<p><img src='images/lock.png' width='16' height='16' alt='Locked' style='border:0px;' /> ";
-    echo "This incident is locked by ".user_realname($incident->locked)." until ".date('H:i',$lockexpires)." (".format_seconds($lockexpires).")</p>";
+    echo "This incident is locked by ".user_realname($incident->locked,TRUE)." until ".date('H:i',$lockexpires)." (".format_seconds($lockexpires).")</p>";
     $locked=TRUE;
 }
 elseif ($incident->locked == 0 OR $lockexpires <= time())

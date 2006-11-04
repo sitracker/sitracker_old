@@ -38,9 +38,9 @@ if (empty($save))
     $softlist = $_REQUEST['softlist'];
 
     include('htmlheader.inc.php');
-    echo "<h2>Define Backup Engineers for ".user_realname($user)."</h2>\n";
+    echo "<h2>Define Substitute Engineers for ".user_realname($user,TRUE)."</h2>\n";
     echo "<form name='def' action='{$_SERVER['PHP_SELF']}' method='post'>";
-    echo "<p align='center'>Default Backup Engineer: ";
+    echo "<p align='center'>Default Substitute Engineer: ";
     user_drop_down('default', $default, FALSE, $sit[2], "onchange='javascript:this.form.submit();'");
     echo "</p>";
     echo "</form>";

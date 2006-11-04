@@ -88,7 +88,7 @@ if (empty($submit))
             $expertise[]=$software->id;
         }
     }
-    echo "<h2>Software Skills for ".user_realname($user)."</h2>";
+    echo "<h2>Software Skills for ".user_realname($user,TRUE)."</h2>";
     echo "<p align='center'>Select the software that you have the skills to support</p>";
     echo "<form name='softwareform' action='{$_SERVER['PHP_SELF']}' method='post' onsubmit=\"populateHidden(document.softwareform.elements['expertise[]'],document.softwareform.choices)\">";
     echo "<table align='center'>";
@@ -145,7 +145,7 @@ else
 
     // remove existing selections first
 
-    // FIXME: This is going to wipe the backup engineer settings, need to fix this
+    // FIXME: This is going to wipe the backup/substitute engineer settings, need to fix this
     // INL 21Dec04
 
     // FIXME: whatabout cases where the user is a backup for one of the products
@@ -192,14 +192,14 @@ else
 
         journal(CFG_LOGGING_MAX,'Skillset Updated',"Users Skillset was Changed",CFG_JOURNAL_USER,0);
     }
-    // Have a look to see if any of the software we support is lacking a backup engineer
+    // Have a look to see if any of the software we support is lacking a backup/substitute engineer
     $sql = "SELECT userid FROM usersoftware WHERE userid='{$_POST['userid']}' AND backupid='0' LIMIT 1";
     $result=mysql_query($sql);
     if (mysql_error()) trigger_error("MySQL Query Error ".mysql_error(), E_USER_ERROR);
     $lacking=mysql_num_rows($result);
     if ($lacking >= 1)
     {
-        confirmation_page("3", "edit_backup_users.php?user={$_POST['userid']}", "<h2>Changes Saved</h2><h3>You should now define a backup engineer for each piece of software.</h3><h5>Please wait while you are redirected...</h5>");
+        confirmation_page("3", "edit_backup_users.php?user={$_POST['userid']}", "<h2>Changes Saved</h2><h3>You should now define a substitute engineer for each piece of software.</h3><h5>Please wait while you are redirected...</h5>");
     }
     else
     {

@@ -119,7 +119,7 @@ while ($incidents = mysql_fetch_array($result))
 
     // Remove Tags from update Body
     $update_body = parse_updatebody($update_body);
-    $update_user = user_realname($update_userid);
+    $update_user = user_realname($update_userid,TRUE);
 
     // ======= Row Colors / Shading =======
     // Define Row Shading lowest to highest priority so that unimportant colors are overwritten by important ones
@@ -194,7 +194,7 @@ while ($incidents = mysql_fetch_array($result))
     if (!empty($update_body) AND $update_body!='...') echo "<span>{$update_body}</span>";
     else
     {
-        $update_currentownername = user_realname($update_currentowner);
+        $update_currentownername = user_realname($update_currentowner,TRUE);
         $update_headertext = $updatetypes[$update_type]['text'];
         $update_headertext = str_replace('currentowner', $update_currentownername,$update_headertext);
         $update_headertext = str_replace('updateuser', $update_user, $update_headertext);
@@ -227,8 +227,8 @@ while ($incidents = mysql_fetch_array($result))
 
     if(empty($incidents_minimal))
     {
-        if ($incidents['towner'] > 0 AND $incidents['towner']!=$user) echo "<br />Temp: <strong>".user_realname($incidents['towner'])."</strong>";
-        elseif ($incidents['owner']!=$user) echo '<br />Owner: <strong>'.user_realname($incidents['owner'])."</strong>";
+        if ($incidents['towner'] > 0 AND $incidents['towner']!=$user) echo "<br />Temp: <strong>".user_realname($incidents['towner'],TRUE)."</strong>";
+        elseif ($incidents['owner']!=$user) echo '<br />Owner: <strong>'.user_realname($incidents['owner'],TRUE)."</strong>";
     }
     echo "</td>\n";
 
