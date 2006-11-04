@@ -1307,6 +1307,8 @@ INSERT INTO `dashboard` (`id`, `name`, `enabled`) VALUES (1, 'random_tip', 'true
 (2, 'statistics', 'true'),
 (3, 'tasks', 'true'),
 (4, 'user_incidents', 'true');
+
+UPDATE `interfacestyles` SET `name` = 'Light Blue' WHERE `id` =1 LIMIT 1 ;
 ";
 
 
