@@ -115,7 +115,7 @@ if (user_permission($sit[2],$permission))
         else echo "Author: ";
         foreach ($author AS $authorid)
         {
-            echo user_realname($authorid);
+            echo user_realname($authorid,TRUE);
             if ($count < $countauthors) echo ", " ;
             $count++;
         }

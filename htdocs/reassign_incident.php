@@ -45,17 +45,17 @@ if (empty($bodytext))
         if ($incident->towner==$sit[2])
         {
             echo "You are the temporary owner of this incident.";
-            echo "<br />\n".user_realname($incident->owner)." is the original owner.";
+            echo "<br />\n".user_realname($incident->owner,TRUE)." is the original owner.";
         }
         elseif ($incident->owner==$sit[2])
         {
             echo "You are the owner of this incident.";
-            if ($incident->towner > 0) echo "<br />\n".user_realname($incident->towner)." also has temporary ownership.";
+            if ($incident->towner > 0) echo "<br />\n".user_realname($incident->towner,TRUE)." also has temporary ownership.";
         }
         else
         {
-            echo user_realname($incident->owner).".";
-            if ($incident->towner > 0) echo "<br />\n".user_realname($incident->towner)." also has temporary ownership.";
+            echo user_realname($incident->owner,TRUE).".";
+            if ($incident->towner > 0) echo "<br />\n".user_realname($incident->towner,TRUE)." also has temporary ownership.";
         }
         echo "</td></tr>";
     }
@@ -99,7 +99,7 @@ if (empty($bodytext))
         if ($incident->towner == $sit[2])
         {
             // you are the temporary owner
-            echo "<input type='radio' name='assign' value='permassign' checked='checked' />Assign back to original owner (".user_realname($incident->owner).")<br />";
+            echo "<input type='radio' name='assign' value='permassign' checked='checked' />Assign back to original owner (".user_realname($incident->owner,TRUE).")<br />";
             echo "<input type='hidden' name='permnewowner' value='{$incident->owner}' />";
             echo "<input type='radio' name='assign' value='tempassign' />Reassign temporary ownership to ";
             user_drop_down("tempnewowner", 0, TRUE, array($incident->owner,$incident->towner), "onclick=\"document.assignform.assign[1].checked=true;\"");
@@ -115,7 +115,7 @@ if (empty($bodytext))
             }
             else
             {
-                echo "<input type='radio' name='assign' value='tempassign' />Change temporary owner from ".user_realname($incident->towner)." to ";
+                echo "<input type='radio' name='assign' value='tempassign' />Change temporary owner from ".user_realname($incident->towner,TRUE)." to ";
                 user_drop_down("tempnewowner", 0, TRUE, array($incident->owner,$incident->towner), "onclick=\"document.assignform.assign[0].checked=true;\"");
                 echo "<br />\n";
                 echo "<input type='radio' name='assign' checked='checked' value='deltempassign' />Remove temporary ownership";
@@ -135,7 +135,7 @@ if (empty($bodytext))
             }
             else
             {
-                echo "<input type='radio' name='assign' value='tempassign' />Change temporary owner from ".user_realname($incident->towner)." to ";
+                echo "<input type='radio' name='assign' value='tempassign' />Change temporary owner from ".user_realname($incident->towner,TRUE)." to ";
                 user_drop_down("tempnewowner", 0, TRUE, array($incident->owner,$incident->towner), "onclick=\"document.assignform.assign[0].checked=true;\"");
                 echo "<br />\n";
             }
@@ -161,7 +161,7 @@ if (empty($bodytext))
     elseif (!empty($originalid))
     {
         echo "<tr><th>Reassign:</th>";
-        echo "<td>Reassign to original engineer (".user_realname($originalid).")";
+        echo "<td>Reassign to original engineer (".user_realname($originalid,TRUE).")";
         echo "<input type='hidden' name='permnewowner' value='{$originalid}' />";
         echo "<input type='hidden' name='permassign' value='{$originalid}' />";
         echo "</td></tr>\n";
@@ -169,7 +169,7 @@ if (empty($bodytext))
     elseif (!empty($backupid))
     {
         echo "<tr><th>Reassign</strong>:</th>";
-        echo "<td>To Backup Engineer (".user_realname($backupid).")";
+        echo "<td>To Backup Engineer (".user_realname($backupid,TRUE).")";
         echo "<input type='hidden' name='tempnewowner' value='{$backupid}' />";
         echo "<input type='hidden' name='tempassign' value='{$originalid}' />";
         echo "</td></tr>\n";

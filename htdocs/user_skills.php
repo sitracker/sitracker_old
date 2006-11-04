@@ -66,15 +66,15 @@ while ($users = mysql_fetch_array($result))
         $c=1;
         while ($software = mysql_fetch_object($sresult))
         {
-            if ($software->backupid==0) echo "<u class='info' title='No backup engineer'>{$software->name}</u>";
-            else echo "<span class='info' title='Backup: ".user_realname($software->backupid)."'>{$software->name}</span>";
+            if ($software->backupid==0) echo "<u class='info' title='No substitute engineer'>{$software->name}</u>";
+            else echo "<span class='info' title='Backup: ".user_realname($software->backupid,TRUE)."'>{$software->name}</span>";
             if ($software->backupid==0) $nobackup++;
             if ($c < $countskills) echo ", ";
             else
             {
                 echo "<br />&bull; $countskills Software skills";
-                if (($nobackup+1) >= $countskills) echo ", <strong>No backup engineers defined</strong>.";
-                elseif ($nobackup > 0) echo ", <strong>{$nobackup} need backup engineers to be defined</strong>.";
+                if (($nobackup+1) >= $countskills) echo ", <strong>No substitute engineers defined</strong>.";
+                elseif ($nobackup > 0) echo ", <strong>{$nobackup} need substitute engineers to be defined</strong>.";
             }
             $c++;
         }

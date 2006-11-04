@@ -53,7 +53,7 @@ while ($siterow=mysql_fetch_array($siteresult))
     echo "<tr><th>Support Incidents:</th><td>See <a href=\"contact_support.php?id=".$siterow['id']."&amp;mode=site\">here</a></td></tr>";
     echo "<tr><th>Site Incident Pool:</th><td>{$siterow['freesupport']} Incidents remaining</td></tr>";
     echo "<tr><th>Salesperson:</th><td>";
-    if ($siterow['owner']>=1) echo user_realname($siterow['owner']);
+    if ($siterow['owner']>=1) echo user_realname($siterow['owner'],TRUE);
     else echo 'Not Set';
     echo "</td></tr>\n";
 }

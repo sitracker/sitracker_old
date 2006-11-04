@@ -54,80 +54,80 @@ if ($incidentid=='')
         switch ($updates['type'])
         {
             case 'opening':
-                echo "Opened by <strong>".user_realname($updates['userid'])."</strong>";
+                echo "Opened by <strong>".user_realname($updates['userid'],TRUE)."</strong>";
                 if ($updates['customervisibility'] == 'show') echo " (Customer Visible)";
             break;
 
             case 'reassigning':
-                echo "Reassigned by <strong>".user_realname($updates['userid'])."</strong>";
+                echo "Reassigned by <strong>".user_realname($updates['userid'],TRUE)."</strong>";
                 if ($updates['currentowner']!=0)  // only say who it was assigned to if the currentowner field is filled in
                 {
-                    echo " To <strong>".user_realname($updates['currentowner'])."</strong>";
+                    echo " To <strong>".user_realname($updates['currentowner'],TRUE)."</strong>";
                 }
             break;
 
             case 'email':
-                echo "Email Sent by <strong>".user_realname($updates['userid'])."</strong>";
+                echo "Email Sent by <strong>".user_realname($updates['userid'],TRUE)."</strong>";
                 if ($updates['customervisibility'] == 'show') echo " (Customer Visible)";
             break;
 
             case 'closing':
-                echo "Closed by <strong>".user_realname($updates['userid'])."</strong>";
+                echo "Closed by <strong>".user_realname($updates['userid'],TRUE)."</strong>";
                 if ($updates['customervisibility'] == 'show') echo " (Customer Visible)";
             break;
 
             case 'reopening':
-                echo "Reopened by <strong>".user_realname($updates['userid'])."</strong>";
+                echo "Reopened by <strong>".user_realname($updates['userid'],TRUE)."</strong>";
                 if ($updates['customervisibility'] == 'show') echo " (Customer Visible)";
             break;
 
             case 'phonecallout':
-                echo "Call made by <strong>".user_realname($updates['userid'])."</strong>";
+                echo "Call made by <strong>".user_realname($updates['userid'],TRUE)."</strong>";
             break;
 
             case 'phonecallin':
-                echo "Call taken by <strong>".user_realname($updates['userid'])."</strong>";
+                echo "Call taken by <strong>".user_realname($updates['userid'],TRUE)."</strong>";
             break;
 
             case 'research':
-                echo "Researched by <strong>".user_realname($updates['userid'])."</strong>";
+                echo "Researched by <strong>".user_realname($updates['userid'],TRUE)."</strong>";
             break;
 
             case 'webupdate':
-                echo "Web Update by <strong>".user_realname($updates['userid'])."</strong>";
+                echo "Web Update by <strong>".user_realname($updates['userid'],TRUE)."</strong>";
             break;
 
             case 'emailout':
-                echo "Email sent by <strong>".user_realname($updates['userid'])."</strong>";
+                echo "Email sent by <strong>".user_realname($updates['userid'],TRUE)."</strong>";
             break;
 
             case 'emailin':
-                echo "Email received by <strong>".user_realname($updates['userid'])."</strong>";
+                echo "Email received by <strong>".user_realname($updates['userid'],TRUE)."</strong>";
             break;
 
             case 'externalinfo':
-                echo "External info added by <strong>".user_realname($updates['userid'])."</strong>";
+                echo "External info added by <strong>".user_realname($updates['userid'],TRUE)."</strong>";
             break;
 
             case 'probdef':
-                echo "Problem Definition by <strong>".user_realname($updates['userid'])."</strong>";
+                echo "Problem Definition by <strong>".user_realname($updates['userid'],TRUE)."</strong>";
             break;
 
             case 'solution':
-                echo "Final Solution by <strong>".user_realname($updates['userid'])."</strong>";
+                echo "Final Solution by <strong>".user_realname($updates['userid'],TRUE)."</strong>";
             break;
 
             default:
-                echo "Updated by <strong>".user_realname($updates['userid'])."</strong>";
+                echo "Updated by <strong>".user_realname($updates['userid'],TRUE)."</strong>";
                 if ($updates['customervisibility'] == 'show') echo " (Customer Visible)";
             break;
         }
         if ($updates['nextaction']!='') echo " Next Action: <strong>".$updates['nextaction'].'</strong>';
         ?>
-        </td><td align='right' class='shade1' width='200'><b><?php echo $update_timestamp_string ?></b>
+        </td><td align='right' class='shade1' width='200'><strong><?php echo $update_timestamp_string ?></strong>
         </td></tr>
         </table>
-        <table align='center' border='0' cellpadding='2' cellspacing='0' width="95%" ondblclick="ShowHide('collapse<?php echo $updates['id']; ?>','update<?php echo $updates['id']; ?>')">
+        <table align='center' border='0' width="95%">
         <tr><td class='shade2' width="100%">
         <?php
         $updatecounter++;

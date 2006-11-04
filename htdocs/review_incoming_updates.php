@@ -41,7 +41,7 @@ function generate_row($update)
     $html_row.="<td align='center' width='20%'>".$update['reason'].'</td>';
     $html_row.="<td align='center' width='20%'>";
     if (($update['locked'] != $sit[2]) && ($update['locked']>0))
-    $html_row.= "Locked by ".user_realname($update['locked']);
+    $html_row.= "Locked by ".user_realname($update['locked'],TRUE);
     else
     {
         if ($update['locked'] == $sit[2])
@@ -298,14 +298,14 @@ if (mysql_num_rows($result) >= 1)
         {
             echo "<tr class='shade1'>";
             echo "<td align='center'>".date($CONFIG['dateformat_datetime'], $assign->lastupdated)."</td>";
-            echo "<td>".user_realname($assign->originalowner)."</td>";
+            echo "<td>".user_realname($assign->originalowner,TRUE)."</td>";
             echo "<td>[<a href=\"javascript:wt_winpopup('incident_details.php?id={$assign->id}&amp;popup=yes', 'mini')\">{$assign->id}</a>] ".stripslashes($assign->title)."</td>";
             $userstatus=userstatus_name($assign->userstatus);
             $usermessage=user_message($assign->originalowner);
-            $username=user_realname($assign->originalowner);
+            $username=user_realname($assign->originalowner,TRUE);
             echo "<td>Owner {$userstatus} &amp; not accepting<br />{$usermessage}</td>";
             $backupid=software_backup_userid($assign->originalowner, $assign->softwareid);
-            $backupname=user_realname($backupid);
+            $backupname=user_realname($backupid,TRUE);
             $reason = urlencode(trim("Previous Incident Owner ($username) {$userstatus}  {$usermessage}"));
             echo "<td>";
             if ($backupid >= 1) echo "<a href=\"javascript:wt_winpopup('reassign_incident.php?id={$assign->id}&amp;reason={$reason}&amp;backupid={$backupid}&amp;asktemp=temporary&amp;popup=yes','mini');\" title='Re-assign this incident to {$backupname}'>Assign to Backup</a> | ";
@@ -318,15 +318,15 @@ if (mysql_num_rows($result) >= 1)
             // display a row to assign the incident back to the original owner
             echo "<tr class='shade2'>";
             echo "<td>".date($CONFIG['dateformat_datetime'], $assign->lastupdated)."</td>";
-            echo "<td>".user_realname($assign->owner)."</td>";
+            echo "<td>".user_realname($assign->owner,TRUE)."</td>";
             echo "<td>[<a href=\"javascript:wt_winpopup('incident_details.php?id={$assign->id}&amp;popup=yes', 'mini')\">{$assign->id}</a>] {$assign->title}</td>";
             $userstatus=user_status($assign->originalowner);
             $userstatusname=userstatus_name($userstatus);
             $origstatus=userstatus_name($assign->userstatus);
             $usermessage=user_message($assign->originalowner);
-            $username=user_realname($assign->owner);
+            $username=user_realname($assign->owner,TRUE);
             echo "<td>Owner {$userstatusname} &amp; accepting again<br />{$usermessage}</td>";
-            $originalname=user_realname($assign->originalowner);
+            $originalname=user_realname($assign->originalowner,TRUE);
             $reason = urlencode(trim("{$originalname} is now accepting incidents again. Previous status {$origstatus} and not accepting."));
             echo "<td>";
             echo "<a href=\"javascript:wt_winpopup('reassign_incident.php?id={$assign->id}&amp;reason={$reason}&amp;originalid={$assign->originalowner}&amp;popup=yes','mini');\" title='Re-assign this incident to {$originalname}'>Return to original owner</a> | ";
