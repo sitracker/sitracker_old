@@ -1,7 +1,8 @@
-/* Webtrack Style: XP */
+/* Webtrack Style: Ex Pea */
 /* by Ivan Lucas, ivan.lucas@salfordsoftware.co.uk - August 2001 */
+body {background: green; }
 
-h1 { background-color: #188918; }
+h1 { background-color: #F2F2F2; }
 
 body        { background-color: #7190E0; color: #000000; font-family: Tahoma, Helvetica, sans serif; }
 p           { font-size: 8pt; color: #000000; }
@@ -14,7 +15,7 @@ center      { font-family: Tahoma, Helvetica, sans serif; font-size: 8pt; color:
 a em { font-style: normal; text-decoration: underline; }
 
 
-#menu { background-color: #205DD5; }
+#menu { background-color: #205DD5; color: black;}
 #menu ul, #menu ul li ul { background-color: #205DD5; }
 #menu a { color: white; }
 #menu a:hover { color: #CDE6F6; }

@@ -1,4 +1,6 @@
+/* Just Light */
 
+h1 { color: #ABABAB; background-color: #F2F2F2; margin: 0px; padding: 3px 0px 3px 0px; }
 body        { background-color: #FFFFFF; color: #ABABAB; }
 p       { font-family: arial, Helvetica, sans serif; font-size: 8pt; color: #A0A0A0; }
 table       { font-family: arial, Helvetica, sans serif; font-size: 8pt; color: #A0A0A0; }
@@ -11,23 +13,25 @@ a em { font-style: normal; text-decoration: underline; }
 
 #menu { background-color: #ABABAB;  }
 #menu ul, #menu ul li ul { background-color: #ABABAB; }
-#menu a { color: #ABABAB; }
+#menu a { color: #F2F2F2; background-color: #ABABAB; }
 
+div.windowbox
+{
+    border: 1px solid #ABABAB;
+}
 
-.barlink    { font-family: arial, Helvetica, sans serif; font-size: 8pt; color: #A0A0A0; font-weight: bold; text-decoration: none; }
-.barlink:hover  { font-family: arial, Helvetica, sans serif; font-size: 8pt; color: #A0A0A0; font-weight: bold; text-decoration: underline; }
-.barlink:active { font-family: arial, Helvetica, sans serif; font-size: 8pt; color: #A0A0A0; font-weight: bold; text-decoration: underline; }
-
-.error      { font-family: arial, Helvetica, sans serif; font-size: 8pt; color: #FFC0C0; font-weight: bold; text-align: center; }
-.red        { font-family: arial, Helvetica, sans serif; font-size: 8pt; color: #FFF0F0; }
-
-
+div.windowtitle, #statusbar
+{
+    background-color: #ABABAB;
+}
+td { color: #555; }
 .mainshade  { background-color: #FFFFFF; }
 .shade1     { background-color: #F8F7F7; }
 .shade2     { background-color: #F7F7F8; }
 .expired    { background-color: #FFFFFF; }
-.urgent     { background-color: #f7F7F7; }
-.critical   { background-color: #f7f7f7; }
+.urgent     { background-color: #E7CBB3; }
+.critical, tr.critical   { background-color: #E79992; color: #555;}
+.critical a {color: #555;}
 .idle       { background-color: #F8F8F8; }
 .review { background-color: #7AC5CD; }
 
