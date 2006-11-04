@@ -33,7 +33,7 @@ if (count($slahistory) >= 1)
         echo "<tr class='$class'>";
         echo "<td>".target_type_name($history['targetsla'])."</td>";
         echo "<td>";
-        if (!empty($history['userid'])) echo user_realname($history['userid']);
+        if (!empty($history['userid'])) echo user_realname($history['userid'],TRUE);
         echo "</td>";
         echo "<td>".format_workday_minutes($history['targettime'])."</td>";
         echo "<td>".format_workday_minutes($history['actualtime'])."</td>";

@@ -51,12 +51,12 @@ echo "<td>";
 // Second column, Product and Incident details
 if ($incident->owner != $sit[2] OR ($incident->towner > 0 AND $incident->towner != $incident->owner))
 {
-    echo "Owner: <strong>".user_realname($incident->owner)."</strong> ";
+    echo "Owner: <strong>".user_realname($incident->owner,TRUE)."</strong> ";
     $incidentowner_phone = user_phone($incident->owner);
     if ($incidentowner_phone != '') echo "(Tel: {$incidentowner_phone}) ";
     if ($incident->towner > 0 AND $incident->towner != $incident->owner)
     {
-       echo "(Temp: ".user_realname($incident->towner).")";
+       echo "(Temp: ".user_realname($incident->towner,TRUE).")";
     }
     echo "<br />";
 }

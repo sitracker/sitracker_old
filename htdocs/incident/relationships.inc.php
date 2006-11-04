@@ -116,7 +116,7 @@ if (mysql_num_rows($rresult) >= 1)
         }
         echo "<td>$incidenttitle</td>";
         echo "<td>$relationship</td>";
-        echo "<td>".user_realname($related->owner)."</td>";
+        echo "<td>".user_realname($related->owner,TRUE)."</td>";
         echo "<td><a href='incident_relationships.php?id={$id}&amp;rid={$related->id}&amp;action=delete'>Remove</a></td>";
         echo "</tr>\n";
     }

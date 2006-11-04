@@ -120,9 +120,9 @@ while ($update = mysql_fetch_object($result))
     $updatebody = preg_replace("/\b{$CONFIG['kb_id_prefix']}([0-9]{3,4})\b/", "<a href=\"kb_view_article.php?id=$1\" title=\"View KB Article $1\">$0</a>", $updatebody);
 
     // Lookup some extra data
-    $updateuser=user_realname($update->userid);
+    $updateuser=user_realname($update->userid,TRUE);
     $updatetime = readable_date($update->timestamp);
-    $currentowner=user_realname($update->currentowner);
+    $currentowner=user_realname($update->currentowner,TRUE);
     $currentstatus=incident_status($update->currentstatus);
 
     $updateheadertext = $updatetypes[$update->type]['text'];
