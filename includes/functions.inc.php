@@ -1907,121 +1907,215 @@ function product_name($id)
 // with their appropriate values.
 function emailtype_replace_specials($string, $incidentid, $userid=0)
 {
-   global $CONFIG, $application_version, $application_version_string;
-   if ($incidentid=='') throw_error('incident ID was blank in emailtype_replace_specials()',$string);
+    global $CONFIG, $application_version, $application_version_string;
+    if ($incidentid=='') throw_error('incident ID was blank in emailtype_replace_specials()',$string);
 
-   $contactid=incident_contact($incidentid);
-   if ($contactid==0) throw_error('cannot obtain contact ID in email_replace_specials()',$contactid);
+    $contactid=incident_contact($incidentid);
+    if ($contactid==0) throw_error('cannot obtain contact ID in email_replace_specials()',$contactid);
 
-   // bugbug: all these replace strings should be in two arrays really - INL 7Nov01
+    // INL 13Jun03 Do one query to grab the incident details instead of doing a query
+    // per replace-keyword - this should save a few queries
 
-   // INL 13Jun03 Do one query to grab the incident details instead of doing a query
-   // per replace-keyword - this should save a few queries
+    $sql = "SELECT * FROM incidents WHERE id='$incidentid'";
+    $result = mysql_query($sql);
+    if (mysql_error()) trigger_error(mysql_error(),E_USER_WARNING);
+    $incident=mysql_fetch_object($result);
+/*
+     // contact email
+    $return_string = str_replace("<contactemail>", contact_email($contactid), $string);
 
-   $sql = "SELECT * FROM incidents WHERE id='$incidentid'";
-   $result = mysql_query($sql);
-   if (mysql_error()) trigger_error(mysql_error(),E_USER_WARNING);
-   $incident=mysql_fetch_object($result);
+    // contact name
+    $return_string = str_replace("<contactname>", contact_realname($contactid), $return_string);
 
-   // contact email
-   $return_string = str_replace("<contactemail>", contact_email($contactid), $string);
+    // contact firstname
+    $return_string = str_replace("<contactfirstname>", strtok(contact_realname($contactid),' '), $return_string);
 
-   // contact name
-   $return_string = str_replace("<contactname>", contact_realname($contactid), $return_string);
 
-   // contact firstname
-   $return_string = str_replace("<contactfirstname>", strtok(contact_realname($contactid),' '), $return_string);
+    // contact site
+    $return_string = str_replace("<contactsite>", contact_site($contactid), $return_string);
 
-   // contact site
-   $return_string = str_replace("<contactsite>", contact_site($contactid), $return_string);
+    // contact phone number
+    $return_string = str_replace("<contactphone>", contact_phone($contactid), $return_string);
 
-   // contact phone number
-   $return_string = str_replace("<contactphone>", contact_phone($contactid), $return_string);
+// contact line manager
+    $return_string = str_replace("<contactmanager>", contact_manager_email($contactid), $return_string);
 
-   // contact line manager
-   $return_string = str_replace("<contactmanager>", contact_manager_email($contactid), $return_string);
 
-   // contact notify
-   $return_string = str_replace("<contactnotify>", contact_notify_email($contactid), $return_string);
+    // contact notify
+    $return_string = str_replace("<contactnotify>", contact_notify_email($contactid), $return_string);
 
-   // incident id
-   $return_string = str_replace("<incidentid>", $incidentid, $return_string);
+    // incident id
+    $return_string = str_replace("<incidentid>", $incidentid, $return_string);
 
-   // incident external id
-   $return_string = str_replace("<incidentexternalid>", $incident->externalid, $return_string);
+    // incident external id
+    $return_string = str_replace("<incidentexternalid>", $incident->externalid, $return_string);
 
-   // incident cc email
-   $return_string = str_replace("<incidentccemail>", incident_ccemail($incidentid), $return_string);
+    
+    // incident cc email
+    $return_string = str_replace("<incidentccemail>", incident_ccemail($incidentid), $return_string);
 
-   // incident external engineers name
-   $return_string = str_replace("<incidentexternalengineer>", incident_externalengineer($incidentid), $return_string);
+    // incident external engineers name
+    $return_string = str_replace("<incidentexternalengineer>", incident_externalengineer($incidentid), $return_string);
 
-   // incident external engineers first name
-   $return_string = str_replace("<incidentexternalengineerfirstname>", strtok(incident_externalengineer($incidentid),' '), $return_string);
+    // incident external engineers first name
+    $return_string = str_replace("<incidentexternalengineerfirstname>", strtok(incident_externalengineer($incidentid),' '), $return_string);
 
-   // incident external engineers email
-   $return_string = str_replace("<incidentexternalemail>", incident_externalemail($incidentid), $return_string);
+// incident external engineers email
+    $return_string = str_replace("<incidentexternalemail>", incident_externalemail($incidentid), $return_string);
 
-   // incident title
-   $return_string = str_replace("<incidenttitle>", incident_title($incidentid), $return_string);
+    // incident title
+    $return_string = str_replace("<incidenttitle>", incident_title($incidentid), $return_string);
 
-   // incident priortiy
-   $return_string = str_replace("<incidentpriority>", priority_name(incident_priority($incidentid)), $return_string);
+    // incident priortiy
+    $return_string = str_replace("<incidentpriority>", priority_name(incident_priority($incidentid)), $return_string);
 
-   // Incident software
-   $return_string = str_replace("<incidentsoftware>", software_name($incident->softwareid), $return_string);
+    // Incident software
+    $return_string = str_replace("<incidentsoftware>", software_name($incident->softwareid), $return_string);
 
-   // Incident owner
-   $return_string = str_replace("<incidentowner>", user_realname($incident->owner), $return_string);
+    // Incident owner
+    $return_string = str_replace("<incidentowner>", user_realname($incident->owner), $return_string);
+
+
+    // user email
+    $return_string = str_replace("<useremail>", user_email($userid), $return_string);
+
+    // user real name
+    $return_string = str_replace("<userrealname>", user_realname($userid), $return_string);
+
+    // application name
+    $return_string = str_replace("<applicationname>", $CONFIG['application_name'], $return_string);
+
+
+
+
+    // application short name
+    $return_string = str_replace("<applicationshortname>", $CONFIG['application_shortname'], $return_string);
+
+    // application version
+    $return_string = str_replace("<applicationversion>", $application_version_string, $return_string);
+
+    // support email
+    $return_string = str_replace("<supportemail>", $CONFIG['support_email'], $return_string);
+
+    // sales email
+    $return_string = str_replace("<salesemail>", $CONFIG['sales_email'], $return_string);
+
+    $return_string = str_replace("<supportmanageremail>", $CONFIG['support_manager_email'], $return_string);
+
+    // user signature
+    $return_string = str_replace("<signature>", user_signature($userid), $return_string);
+
+    // global email signature
+    $return_string = str_replace("<globalsignature>", global_signature(), $return_string);
+
+    // todays date
+    $return_string = str_replace("<todaysdate>", date("jS F Y"), $return_string);
+
+*/
+    $email_regex = array(0 => '/<contactemail>/s',
+                    1 => '/<contactname>/s',
+                    2 => '/<contactfirstname>/s',
+                    3 => '/<contactsite>/s',
+                    4 => '/<contactphone>/s',
+                    5 => '/<contactmanager>/s',
+                    6 => '/<contactnotify>/s',
+                    7 => '/<incidentid>/s',
+                    8 => '/<incidentexternalid>/s',
+                    9 => '/<incidentccemail>/s',
+                    10 => '/<incidentexternalengineer>/s',
+                    11 => '/<incidentexternalengineerfirstname>/s',
+                    12 => '/<incidentexternalemail>/s',
+                    13 => '/<incidenttitle>/s',
+                    14 => '/<incidentpriority>/s',
+                    15 => '/<incidentsoftware>/s',
+                    16 => '/<incidentowner>/s',
+                    17 => '/<useremail>/s',
+                    18 => '/<userrealname>/s',
+                    19 => "/<applicationname>/s",
+                    20 => '/<applicationshortname>/s',
+                    21 => '/<applicationversion>/s',
+                    22 => '/<supportemail>/s',
+                    23 => '/<salesemail>/s',
+                    24 => '/<supportmanageremail>/s',
+                    25 => '/<signature>/s',
+                    26 => '/<globalsignature>/s',
+                    27 => '/<todaysdate>/s'
+                );
+
+    $email_replace = array(0 => contact_email($contactid),
+                    1 => contact_realname($contactid),
+                    2 => strtok(contact_realname($contactid),' '),
+                    3 => contact_site($contactid),
+                    4 => contact_phone($contactid),
+                    5 => contact_manager_email($contactid),
+                    6 => contact_notify_email($contactid),
+                    7 => $incidentid,
+                    8 => $incident->externalid,
+                    9 => incident_ccemail($incidentid),
+                    10 => incident_externalengineer($incidentid),
+                    11 => strtok(incident_externalengineer($incidentid),' '),
+                    12 => incident_externalemail($incidentid),
+                    13 => incident_title($incidentid),
+                    14 => priority_name(incident_priority($incidentid)),
+                    15 => software_name($incident->softwareid),
+                    16 => user_realname($incident->owner),
+                    17 => user_email($userid),
+                    18 => user_realname($userid),
+                    19 => $CONFIG['application_name'],
+                    20 => $CONFIG['application_shortname'],
+                    21 => $application_version_string,
+                    22 => $CONFIG['support_email'],
+                    23 => $CONFIG['sales_email'],
+                    24 => $CONFIG['support_manager_email'],
+                    25 => user_signature($userid),
+                    26 => global_signature(),
+                    27 => date("jS F Y")
+                );
 
     if($incident->towner != 0)
     {
-        $return_string = str_replace("<incidentreassignemailaddress>", user_email($incident->towner), $return_string);
+        //$return_string = str_replace("<incidentreassignemailaddress>", user_email($incident->towner), $return_string);
+        $email_regex[] = '/<incidentreassignemailaddress>/s';
+        $email_replace[] = user_email($incident->towner);
     }
     else
     {
-        $return_string = str_replace("<incidentreassignemailaddress>", user_email($incident->owner), $return_string);
+        //$return_string = str_replace("<incidentreassignemailaddress>", user_email($incident->owner), $return_string);
+        $email_regex[] = '/<incidentreassignemailaddress>/s';
+        $email_replace[] = user_email($incident->owner);
     }
 
-   // user email
-   $return_string = str_replace("<useremail>", user_email($userid), $return_string);
+    /*if (function_exists('escid_novellid')) $return_string = str_replace("<novellid>", escid_novellid($userid), $return_string);
+    if (function_exists('escid_microsoftid')) $return_string = str_replace("<microsoftid>", escid_microsoftid($userid), $return_string);
+    if (function_exists('escid_dseid')) $return_string = str_replace("<dseid>", escid_dseid($userid), $return_string);
+    if (function_exists('escid_cheyenneid')) $return_string = str_replace("<cheyenneid>", escid_cheyenneid($userid), $return_string);*/
 
-   // user real name
-   $return_string = str_replace("<userrealname>", user_realname($userid), $return_string);
+    if (function_exists('escid_novellid'))
+    {
+        $email_regex[] = '/<novellid>/s';
+        $email_replace[] = escid_novellid($userid);
+    }
 
-   // application name
-   $return_string = str_replace("<applicationname>", $CONFIG['application_name'], $return_string);
+    if (function_exists('escid_microsoftid'))
+    {
+        $email_regex[] = '/<microsoftid>/s';
+        $email_replace[] = escid_microsoftid($userid);
+    }
 
-   // application short name
-   $return_string = str_replace("<applicationshortname>", $CONFIG['application_shortname'], $return_string);
+    if (function_exists('escid_dseid'))
+    {
+        $email_regex[] = '/<desid>/s';
+        $email_replace[] = escid_dseid($userid);
+    }
 
-   // application version
-   $return_string = str_replace("<applicationversion>", $application_version_string, $return_string);
+    if (function_exists('escid_cheyenneid'))
+    {
+        $email_regex[] = '/<cheyenneid>/s';
+        $email_replace[] = escid_cheyenneid($userid);
+    }
+    print_r($email_regex);
 
-   // support email
-   $return_string = str_replace("<supportemail>", $CONFIG['support_email'], $return_string);
-
-   // sales email
-   $return_string = str_replace("<salesemail>", $CONFIG['sales_email'], $return_string);
-
-   $return_string = str_replace("<supportmanageremail>", $CONFIG['support_manager_email'], $return_string);
-
-   // user signature
-   $return_string = str_replace("<signature>", user_signature($userid), $return_string);
-
-   // FIXME: These escalation IDs need moving to the escalation_ids plugin
-   if (function_exists('escid_novellid')) $return_string = str_replace("<novellid>", escid_novellid($userid), $return_string);
-   if (function_exists('escid_microsoftid')) $return_string = str_replace("<microsoftid>", escid_microsoftid($userid), $return_string);
-   if (function_exists('escid_dseid')) $return_string = str_replace("<dseid>", escid_dseid($userid), $return_string);
-   if (function_exists('escid_cheyenneid')) $return_string = str_replace("<cheyenneid>", escid_cheyenneid($userid), $return_string);
-
-   // global email signature
-   $return_string = str_replace("<globalsignature>", global_signature(), $return_string);
-
-   // todays date
-   $return_string = str_replace("<todaysdate>", date("jS F Y"), $return_string);
-
-   return($return_string);
+    return preg_replace($email_regex,$email_replace,$string);
 }
 
 
