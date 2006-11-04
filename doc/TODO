@@ -18,8 +18,9 @@ To Do
 * Monitor incidents by email, e.g. get an email when an incident is about to go out of SLA
 * Update users status automatically based on data from the holiday calendar
   this would need to be a scheduled task that runs (at least) twice a day
-* EMail admin contact for site with list of current contacts for contracts to ensure we have 
+* EMail admin contact for site with list of current contacts for contracts to ensure we have
   the correct contacts (could be a report, could by in the user portal)
+* Make all date and time formats consistantly use config files
 
 Rough roadmap with main goals (subject to slippage or change at any whim) ;)
 
