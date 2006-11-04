@@ -1,5 +1,6 @@
 /* Webtrack Orange'n Grey Style: Orange'n Grey */
 /* by Paul Harrison, paul.harrison@salfordsoftware.co.uk - August 2001 */
+/* Recreated by Ivan Lucas - November 2006 */
 
 body        { background-color: #FFFFFF; color: #000000; font-family: Tahoma, Helvetica, sans serif; }
 p       { font-size: 8pt; color: #000000; }
@@ -10,33 +11,25 @@ a:hover     { font-family: Tahoma, Helvetica, sans serif; font-size: 8pt; color:
 a:active    { font-family: Tahoma, Helvetica, sans serif; font-size: 8pt; color: #808080; font-weight: bold; text-decoration: underline; }
 center      { font-family: Tahoma, Helvetica, sans serif; font-size: 8pt; color: #000000; }
 
-/* Pagetitle is used for individual page headings */
-.pagetitle  { font-family: Tahoma, Helvetica, sans serif; font-size: 14pt; color: #000000; font-weight: bold; text-align: center; }
-.subtitle   { font-family: Tahoma, Helvetica, sans serif; font-size: 12pt; color: #000000; font-weight: bold; text-align: center; }
-.large          { font-family: Tahoma, Helvetica, sans serif; font-size: 14pt; font-weight: bold; }
-.narrow     { font-family: Arial Narrow, Helvetica, sans serif; font-size: 8pt; color: #000000; }
-
-/* .error is used for error messages */
-.error      { font-family: Tahoma, Helvetica, sans serif; font-size: 8pt; color: #FF0000; font-weight: bold; text-align: center; }
-.red        { font-family: Tahoma, Helvetica, sans serif; font-size: 8pt; color: #FF0000; }
-.barlink    { font-family: Tahoma, Helvetica, sans serif; font-size: 8pt; color: #808080; font-weight: bold; text-decoration: none; }
-.barlink:hover  { font-family: Tahoma, Helvetica, sans serif; font-size: 8pt; color: #FFA953; font-weight: bold; text-decoration: none; }
-.barlink:active { font-family: Tahoma, Helvetica, sans serif; font-size: 8pt; color: #FFFFFF; font-weight: bold; text-decoration: none; }
-.navbarmenu { background-color: #000000; font-family: Tahoma, Helvetica, sans serif; font-size: 8pt; font-weight: bold; color: #FFFFFF; height:20px; }
-
+h1 { color: #FFF; background-color: #FFC68C; margin: 0px; }
 
 /* Shading for tables*/
 .mainshade  { background-color: #FFFFFF; }
-.shade1     { background-color: #FFC68C; }
-.shade2     { background-color: #FFA953; font-family: Tahoma, Helvetica, sans serif; font-size: 8pt; color: #FFFFFF; font-weight: bold; text-decoration: none;  }
-.urgent     { background-color: #E8B7DD; }
-.critical   { background-color: #f08080; }
-.expired    { background-color: #DDDDDF; }
-.idle       { background-color: #CCffCC; } /* #90ee90; */
+tr.shade1     { background-color: #FFC68C; }
+tr.shade2     { background-color: #FFA953; font-family: Tahoma, Helvetica, sans serif; font-size: 8pt; color: #FFFFFF; font-weight: bold; text-decoration: none;  }
+tr.urgent     { background-color: #E8B7DD; }
+tr.critical   { background-color: #f08080; }
+tr.expired    { background-color: #DDDDDF; }
+tr.idle       { background-color: #CCffCC; } /* #90ee90; */
 
 
 
-.tablelist td {border-left: 1px solid #ffffff;border-top: 1px solid #ffffff;}
-table.tablelist {border: 1px solid #ffffff;}
-.tablelist tr {border: 1px solid #ffffff; border-right: 1px solid #ffffff ! important;}
-.tablelist th {border-left: 1px solid #ffffff; border-top: 1px solid #ffffff;}
+div.windowbox
+{
+    border: 1px solid #FFA953;
+}
+
+div.windowtitle, #statusbar
+{
+    background-color: #FFA953;
+}

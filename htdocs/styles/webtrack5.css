@@ -1,7 +1,7 @@
 /* Webtrack Classic */
 body        { background-color: #ffffcc; font-family: 'Times New Roman', Times; color: #000000; }
 p           { font-size: 12pt; color: #000000; }
-table       { font-size: 12pt; color: #000000; }
+table       { clear: both; font-size: 12pt; color: #000000; }
 td        { font-size: 12pt; color: #000000; }
 a           { font-size: 12pt; color: #000080; font-weight: bold; text-decoration: none; }
 a:hover     { color: #000080; font-weight: bold; text-decoration: underline; }
@@ -9,53 +9,5 @@ a:active    { color: #FF0000; font-weight: bold; text-decoration: underline; }
 a em { font-style: normal; text-decoration: underline; }
 center      { color: #000000; }
 
-.barlink    { font-size: 8pt; color: #000000; font-size: 110%; font-weight: bold; text-decoration: none; }
-.barlink:hover  { font-size: 8pt; color: #0000FF; font-size: 110%; font-weight: bold; font-size: 110%; text-decoration: underline; }
-.barlink:active { color: #000000; font-weight: bold; font-size: 110%; text-decoration: underline; }
+h1 { color: #000; background-color: #FFFFCC; margin: 0px; padding: 3px 0px 3px 0px; }
 
-.error        { font-size: 8pt; color: #FF0000; font-weight: bold; text-align: center; }
-.red            { font-size: 8pt; color: #FF0000; }
-
-.mainshade  { background-color: #ffffcc;  }
-.shade1     { background-color: #ffffcc;  }
-.shade2     { background-color: #ffffcc;  }
-.urgent     { background-color: #ffffcc;  color: white}
-.critical { background-color: #ffffcc;  color: red }
-.expired    { background-color: #ffffcc;  color: grey }
-.idle     { background-color: #ffffcc;  } /* #90ee90; */
-.review { background-color: #7AC5CD; }
-
-.navbarmenu { background-color: #ffffcc; font-size: 8pt; font-weight: bold; color: #FFFFFF; width: 75px; height:20px; }
-
-
-/* SpellCheck */
-a.spellLink {
-    color:              Red;
-    text-decoration:    none;
-    border-bottom:      1px dashed Red;
-}
-
-a.spellLink:hover {
-    color:              Red;
-    text-decoration:    none;
-    border-bottom:      1px dashed Red;
-}
-
-.spell-tooltip {
-    position:   absolute;
-    width:      250px;
-    border:     1px Solid WindowFrame;
-    background: Infobackground;
-    color:      InfoText;
-    font:       StatusBar;
-    font:       Status-Bar;
-    padding:    3px;
-    filter:     progid:DXImageTransform.Microsoft.Shadow(color="#777777", Direction=135, Strength=3);
-}
-
-
-.spell-tooltip a,
-.spell-tooltip a:hover {
-    color:      blue !important;
-    background: none;
-}
