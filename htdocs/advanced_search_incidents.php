@@ -196,7 +196,7 @@ else
                 <td align='center' width='100'><?php echo stripslashes($results['forenames'].' '.$results['surname']); ?></td>
                 <td align='center' width='100'><?php echo site_name($results['siteid']) ?></td>
                 <td align='center' width='50'><?php echo servicelevel_name($results['servicelevelid'])."<br />".priority_name($results["priority"]); ?></td>
-                <td align='center' width='100'><?php echo user_realname($results['owner']) ?></td>
+                <td align='center' width='100'><?php echo user_realname($results['owner'],TRUE) ?></td>
                 <td align='center' width='150'><?php echo date($CONFIG['dateformat_datetime'], $results["opened"]); ?></td>
                 <td align='center' width='150'><?php echo date($CONFIG['dateformat_datetime'], $results["lastupdated"]); ?></td>
                 <td align='center' width='50'><?php echo $results["type"] ?></td>

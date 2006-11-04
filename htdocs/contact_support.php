@@ -105,7 +105,7 @@ while ($row=mysql_fetch_object($result))
     echo "<td>".product_name($row->product)."</td>";
     if ($row->status==2) echo "<td>Closed, ".closingstatus_name($row->closingstatus)."</td>";
     else echo "<td>".incidentstatus_name($row->status)."</td>";
-    echo "<td>".user_realname($row->owner)."</td>";
+    echo "<td>".user_realname($row->owner,TRUE)."</td>";
     echo "<td>".date($CONFIG['dateformat_date'],$row->opened)."</td>";
     if ($row->closed > 0)
     {
