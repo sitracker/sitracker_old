@@ -131,8 +131,8 @@ number quoted in the subject relates to an incident that has been closed.  Email
 text is found in the subject line (this can set by your anti-spam software for example SpamAssassin) and are always held
 for you to review.  Next is a section with new incidents created directly by the customer that need to be assigned to
 engineers.  The final section is a list of incidents that could not be reassigned automatically after a user went away,
-normally when a user marks himself away incidents are automatically assigned to backup engineers, but in the case where
-a backup engineer was unavailable the incident is displayed in this queue.</p>
+normally when a user marks himself away incidents are automatically assigned to substitute engineers, but in the case where
+a substitute engineer was unavailable the incident is displayed in this queue.</p>
 
 
 <h3><a name='watchincidents'>Watching Incidents</a></h3>
@@ -153,8 +153,16 @@ incident priority so you can aim to respond to high priority incidents faster.</
 <li>Problem Determination</li>
 <li>Action Plan</li>
 <li>Resolution</li>
-<li>Review</li>
+<li>Review<sup>*</sup></li>
 </ul>
+
+<p>You can meet a service level target by making an update to an incident or by sending an email and marking the
+service level you want to meet.<p>
+
+<p><sup>*</sup> An incident review is a special type of service level target, the review period is not affected
+by the working week it is simply based on the amount of time an incident has been open, to review an incident
+make an update and mark the update type as 'Review'.  Review periods are a useful way of preventing incidents from
+dragging on and on.</p>
 
 <h3><a name='closeincident'>Closing an Incident</a></h3>
 <p>When you close an incident you are given the choice to mark the incident for closure or to close it immediately.
