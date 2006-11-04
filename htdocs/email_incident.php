@@ -182,7 +182,7 @@ switch ($step)
         <input maxlength="3" name="timetonextaction_days" onclick="window.document.updateform.timetonextaction_none[1].checked = true;" size="3" /> Days&nbsp;
         <input maxlength="2" name="timetonextaction_hours" onclick="window.document.updateform.timetonextaction_none[1].checked = true;" size="3" /> Hours&nbsp;
         <input maxlength="2" name="timetonextaction_minutes" onclick="window.document.updateform.timetonextaction_none[1].checked = true;" size="3" /> Minutes<br />
-        <input type="radio" name="timetonextaction_none" value="date">On specified Date<br />&nbsp;&nbsp;&nbsp;
+        <input type="radio" name="timetonextaction_none" value="date" />On specified Date<br />&nbsp;&nbsp;&nbsp;
         <?php
         // Print Listboxes for a date selection
         ?><select name='day' onclick="window.document.updateform.timetonextaction_none[2].checked = true;"><?php
