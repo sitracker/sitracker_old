@@ -2113,8 +2113,6 @@ function emailtype_replace_specials($string, $incidentid, $userid=0)
         $email_regex[] = '/<cheyenneid>/s';
         $email_replace[] = escid_cheyenneid($userid);
     }
-    print_r($email_regex);
-
     return preg_replace($email_regex,$email_replace,$string);
 }
 
