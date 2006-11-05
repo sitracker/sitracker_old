@@ -55,7 +55,8 @@ a.info:hover span
   border:1px solid InfoText;
   text-decoration: none;
   font-weight: normal;
-  background-color:InfoBackground; color:InfoText ;
+  /*background-color:InfoBackground; color:InfoText ;*/
+  background-color:#FFFF99; color:#000000 ;
   text-align: left;
   -moz-border-radius: 7px;
   filter:alpha(opacity=85);
