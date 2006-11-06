@@ -1,0 +1,138 @@
+<?php
+// edit_software.php - Form for editing software
+//
+// SiT (Support Incident Tracker) - Support call tracking system
+// Copyright (C) 2000-2006 Salford Software Ltd.
+//
+// This software may be used and distributed according to the terms
+// of the GNU General Public License, incorporated herein by reference.
+//
+
+// Author: Ivan Lucas <ivanlucas[at]users.sourceforge.net>
+
+$permission=56; // Add Software
+
+require('db_connect.inc.php');
+require('functions.inc.php');
+// This page requires authentication
+require('auth.inc.php');
+
+// External variables
+$id = cleanvar($_REQUEST['id']);
+$action = cleanvar($_REQUEST['action']);
+
+if (empty($action) OR $action=='edit')
+{
+    $title='Edit Software';
+    // Show add product form
+    include('htmlheader.inc.php');
+    ?>
+    <script type="text/javascript">
+    function confirm_submit()
+    {
+        return window.confirm('Are you sure you want to edit this software?');
+    }
+    </script>
+    <?php
+    echo "<h2>$title</h2>";
+    $sql = "SELECT * FROM software WHERE id='$id' LIMIT 1";
+    $result = mysql_query($sql);
+    if (mysql_error()) trigger_error(mysql_error(),E_USER_ERROR);
+    while ($software = mysql_fetch_object($result))
+    {
+        echo "<p align='center'>Mandatory fields are marked <sup class='red'>*</sup></p>";
+        echo "<form name='editsoftware' action='{$_SERVER['PHP_SELF']}' method='post' onsubmit='return confirm_submit()'>";
+        echo "<table class='vertical'>";
+        echo "<tr><th>Software Name: <sup class='red'>*</sup></th><td><input maxlength='50' name='name' size='30' value='".stripslashes($software->name)."' /></td></tr>";
+        echo "<tr><th>Lifetime:</th><td>";
+        echo "<input type='text' name='lifetime_start' id='lifetime_start' size='10' value='";
+        if ($software->lifetime_start > 1) echo date('Y-m-d',mysql2date($software->lifetime_start));
+        echo "' /> ";
+        echo date_picker('editsoftware.lifetime_start');
+        // <img src='{$CONFIG['application_webpath']}images/icons/kdeclassic/16x16/actions/1day.png' border='0' style='cursor: pointer;' width='16' height='16' title='Pick date' onclick=\"displayDatePicker('po_date');\">";
+        echo " To: ";
+        echo "<input type='text' name='lifetime_end' id='lifetime_end' size='10' value='";
+        if ($software->lifetime_end > 1) echo date('Y-m-d',mysql2date($software->lifetime_end));
+        echo "' /> ";
+        echo date_picker('editsoftware.lifetime_end');
+        echo "</td></tr>";
+        echo "</table>";
+    }
+    echo "<input type='hidden' name='id' value='$id' />";
+    echo "<input type='hidden' name='action' value='save' />";
+    echo "<p align='center'><input name='submit' type='submit' value='Save' /></p>";
+    echo "</form>\n";
+    echo "<p align='center'><a href='products.php'>Return to products list without saving</a></p>";
+    include('htmlfooter.inc.php');
+}
+elseif($action=='delete')
+{
+    // Delete
+    // First check there are no incidents using this software
+    $sql = "SELECT count(id) FROM incidents WHERE softwareid='$id'";
+    $result = mysql_query($sql);
+    if (mysql_error()) trigger_error(mysql_error(),E_USER_ERROR);
+    list($countincidents) = mysql_fetch_row($result);
+    if ($countincidents >=1 )
+    {
+        include('htmlheader.inc.php');
+        echo "<p class='error'>Sorry, this software cannot be deleted because it has been associated with one or more incidents</p>";
+        echo "<p align='center'><a href='products.php'>Return to products list</a></p>";
+        include('htmlfooter.inc.php');
+    }
+    else
+    {
+        $sql = "DELETE FROM software WHERE id='$id'";
+        mysql_query($sql);
+        if (mysql_error()) trigger_error(mysql_error(),E_USER_ERROR);
+
+        $sql = "DELETE FROM softwareproducts WHERE softwareid='$id'";
+        mysql_query($sql);
+        if (mysql_error()) trigger_error(mysql_error(),E_USER_ERROR);
+
+        journal(CFG_LOGGING_DEBUG, 'Software Deleted', "Software $id was deleted", CFG_JOURNAL_DEBUG, $id);
+        confirmation_page("2", "products.php", "<h2>Software Deleted Successfully</h2><p align='center'>Please wait while you are redirected...</p>");
+    }
+}
+else
+{
+      // Save
+    // External variables
+    $name = cleanvar($_REQUEST['name']);
+    if (!empty($_REQUEST['lifetime_start'])) $lifetime_start = date('Y-m-d',strtotime($_REQUEST['lifetime_start']));
+    else $lifetime_start = '';
+    if (!empty($_REQUEST['lifetime_end'])) $lifetime_end = date('Y-m-d',strtotime($_REQUEST['lifetime_end']));
+    else $lifetime_end = '';
+
+    // Add new
+    $errors = 0;
+
+    // check for blank name
+    if ($name == "")
+    {
+        $errors = 1;
+        $errors_string .= "<p class='error'>You must enter a name</p>\n";
+    }
+    // add product if no errors
+    if ($errors == 0)
+    {
+        $sql = "UPDATE software SET ";
+        $sql .= "name='$name', lifetime_start='$lifetime_start', lifetime_end='$lifetime_end' ";
+        $sql .= "WHERE id = '$id'";
+        mysql_query($sql);
+        if (mysql_error()) trigger_error("MySQL Query Error ".mysql_error(), E_USER_ERROR);
+        else
+        {
+            $id=mysql_insert_id();
+            journal(CFG_LOGGING_DEBUG, 'Software Edited', "Software $id was edited", CFG_JOURNAL_DEBUG, $id);
+            confirmation_page("2", "products.php", "<h2>Software Edit Successful</h2><p align='center'>Please wait while you are redirected...</p>");
+        }
+    }
+    else
+    {
+        include('htmlheader.inc.php');
+        echo $errors_string;
+        include('htmlfooter.inc.php');
+    }
+}
+?>

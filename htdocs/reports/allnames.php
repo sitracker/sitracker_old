@@ -1,0 +1,72 @@
+<?php
+// allnames.php - Names of all customers in alphabetical order, for duplicate finding
+//
+// SiT (Support Incident Tracker) - Support call tracking system
+// Copyright (C) 2000-2006 Salford Software Ltd.
+//
+// This software may be used and distributed according to the terms
+// of the GNU General Public License, incorporated herein by reference.
+//
+
+//  Author:   Ivan Lucas
+//  Email:    ivan.lucas@salfordsoftware.co.uk
+//  Comments: Names of all customers in alphabetical order, for duplicate finding
+
+// FIXME Not on menu
+
+require('db_connect.inc.php');
+require('functions.inc.php');
+
+// This page requires authentication
+require('auth.inc.php');
+
+include('htmlheader.inc.php');
+
+
+$sql  = "SELECT * ";
+$sql.="FROM contacts ";
+$sql.="ORDER BY surname, forenames ASC ";
+//$sql.="LIMIT 100";
+$result=mysql_query($sql);
+if (mysql_error()) trigger_error("MySQL Query Error ".mysql_error(), E_USER_ERROR);
+
+$count=mysql_num_rows($result);
+echo "<b>Report showing all $count contact records</b> - ".date(r)."<br><br>";
+
+if($result)
+{
+    echo "<table summary=\"\" width=\"100%\">";
+    while($row=mysql_fetch_array($result))
+    {
+        echo "<tr>";
+        echo "<td>";
+        if ($lastsurname==$row['surname'] && $lastforenames==$row['forenames'])
+        {
+            echo "<em>".$row['id']."</em>";
+        }
+        else
+        {
+            echo $row['id'];
+        }
+        echo "</td>";
+        echo "<td><strong>";
+        echo $row['surname'];
+        echo "</strong>, ".$row['forenames']."</td>";
+        echo "<td>".$row['email']."</td>";
+        echo "<td>".site_name($row['siteid'])."</td>";
+        echo "<td>".contact_count_incidents($row['id'])." Incidents</td>";
+        $lastsurname=$row['surname'];
+        $lastforenames=$row['forenames'];
+        echo "</tr>";
+    }
+    echo "</table>";
+}
+else
+{
+    echo "Error: Failed to fetch contacts.";
+}
+mysql_free_result($result);
+mysql_close($db);
+
+include('htmlfooter.inc.php');
+?>
