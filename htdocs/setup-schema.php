@@ -470,17 +470,6 @@ INSERT INTO `licencetypes` VALUES (3, 'Per Server');
 INSERT INTO `licencetypes` VALUES (4, 'Site');
 INSERT INTO `licencetypes` VALUES (5, 'Evaluation');
 
-
-CREATE TABLE `links` (
-`id` INT( 11 ) NOT NULL AUTO_INCREMENT PRIMARY KEY ,
-`name` VARCHAR( 255 ) NOT NULL ,
-`linktab` VARCHAR( 255 ) NOT NULL ,
-`linkcol` VARCHAR( 255 ) NOT NULL DEFAULT 'id',
-`filtersql` VARCHAR( 255 ) NOT NULL ,
-`referer` VARCHAR( 255 ) NOT NULL
-) ENGINE = MYISAM ;
-
-
 CREATE TABLE `maintenance` (
   `id` int(11) NOT NULL auto_increment,
   `site` int(11) default NULL,
@@ -1309,17 +1298,6 @@ INSERT INTO `dashboard` (`id`, `name`, `enabled`) VALUES (1, 'random_tip', 'true
 (4, 'user_incidents', 'true');
 
 UPDATE `interfacestyles` SET `name` = 'Light Blue' WHERE `id` =1 LIMIT 1 ;
-";
-
-
-$upgrade_schema[325] = "CREATE TABLE `links` (
-`id` INT( 11 ) NOT NULL AUTO_INCREMENT PRIMARY KEY ,
-`name` VARCHAR( 255 ) NOT NULL ,
-`linktab` VARCHAR( 255 ) NOT NULL ,
-`linkcol` VARCHAR( 255 ) NOT NULL DEFAULT 'id',
-`filtersql` VARCHAR( 255 ) NOT NULL ,
-`referer` VARCHAR( 255 ) NOT NULL
-) ENGINE = MYISAM ;
 ";
 
 // Important: When making changes to the schema you must add SQL to make the alterations
