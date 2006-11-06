@@ -12,9 +12,9 @@ everything carefully to make sure you've met all the requirements:
 
 Upgrading to 3.24
 -----------------
-A permission has been added for the new 'Add Reseller' and 
-'Manage Escalation Paths'  feature, no users will have this permission
-after upgrading, you should check each users' permissions (and/or role permissions) 
+Permissions have been added for the new 'Add Reseller' and
+'Manage Escalation Paths'  features, no users will have these permissions
+after upgrading, you should check each users' permissions (and/or role permissions)
 to ensure they meet your needs.
 
 Administrators can now disable accounts by editing a users profile
