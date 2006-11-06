@@ -107,6 +107,7 @@ CREATE TABLE `emailsig` (
   PRIMARY KEY  (`id`)
 )  ENGINE=MyISAM COMMENT='Global Email Signature' ;
 
+INSERT INTO `emailsig` (`id`, `signature`) VALUES (1, '--\r\n... Powered by Open Source Software: Support Incident Tracker (SiT!) is available free from http://sourceforge.net/projects/sitracker/');
 
 INSERT INTO `emailsig` VALUES (1, '');
 
