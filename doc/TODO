@@ -20,6 +20,7 @@ To Do
   this would need to be a scheduled task that runs (at least) twice a day
 * EMail admin contact for site with list of current contacts for contracts to ensure we have
   the correct contacts (could be a report, could by in the user portal)
+* Ability to add more Roles
 * Make all date and time formats consistantly use config files
 
 Rough roadmap with main goals (subject to slippage or change at any whim) ;)

@@ -59,6 +59,8 @@ a.info:hover span
   background-color:#FFFF99; color:#000000 ;
   text-align: left;
   -moz-border-radius: 7px;
+  -khtml-border-radius: 7px;
+  border-radius: 7px;
   filter:alpha(opacity=85);
   opacity: 0.85;
   -moz-opacity:0.85;
