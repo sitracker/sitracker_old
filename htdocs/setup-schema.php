@@ -1251,7 +1251,7 @@ CREATE TABLE `tasks` (
   `value` float(6,2) default NULL,
   `distribution` enum('public','private') NOT NULL default 'public',
   `created` datetime NOT NULL default '0000-00-00 00:00:00',
-  `lastupdated` timestamp DEFAULT NULL,
+  `lastupdated` timestamp,
   PRIMARY KEY  (`id`),
   KEY `owner` (`owner`)
 ) ENGINE=MyISAM  ;
@@ -1262,7 +1262,7 @@ INSERT INTO `permissions` VALUES (63, 'Add Reseller');
 CREATE TABLE `notes` (
   `id` int(11) NOT NULL auto_increment,
   `userid` int(11) NOT NULL default '0',
-  `timestamp` timestamp default NULL,
+  `timestamp` timestamp,
   `bodytext` text NOT NULL,
   `link` int(11) NOT NULL default '0',
   `refid` int(11) NOT NULL default '0',
