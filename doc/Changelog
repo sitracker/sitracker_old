@@ -1,4 +1,4 @@
-Changes in v3.24 - Unreleased
+Changes in v3.24 - Released 6 November 2006
 -----------------------------------------------------------------------
 * Fixed service levels for reopened incidents, service level target
   'opened' is now added making the next action 'initial response'
