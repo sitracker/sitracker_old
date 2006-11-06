@@ -83,7 +83,7 @@ function dashboard_user_incidents()
         // Incidents Table
         $incidents_minimal = true;
         //include('incidents_table.inc.php');
-        echo "<table>";
+        echo "<table style=\"width: 100%\">";
         while($row = mysql_fetch_array($result))
         {
             echo "<tr><td class='shade1'><a href='javascript:incident_details_window({$row['id']}) '>{$row['id']} - {$row['title']} for {$row['forenames']}   {$row['surname']}</a></td></tr>";
