@@ -16,51 +16,60 @@ require('functions.inc.php');
 // This page requires authentication
 require('auth.inc.php');
 
+$title='Skills Matrix';
+
 include('htmlheader.inc.php');
 
+echo "<h2>$title</h2>";
+
 $sql = "SELECT users.id, users.realname FROM users, usersoftware WHERE users.id = usersoftware.userid GROUP BY users.id ORDER BY users.id";
+$usersresult = mysql_query($sql);
+if (mysql_error()) trigger_error(mysql_error(),E_USER_WARNING);
 
-$result = mysql_query($sql);
-if (mysql_error()) trigger_error(mysql_error(),E_USER_ERROR);
+$countusers = mysql_num_rows($usersresult);
 
-$count = mysql_num_rows($result);
-
-if($count > 0)
+if($countusers > 0)
 {
-    while($row = mysql_fetch_object($result))
+    while($row = mysql_fetch_object($usersresult))
     {
         $users[$row->id] = $row->realname;
     }
 }
+mysql_data_seek($usersresult, 0);
 
 $sql = "SELECT users.id, users.realname, software.name FROM users, software, usersoftware ";
 $sql .= "WHERE users.id = usersoftware.userid AND software.id = usersoftware.softwareid ";
 $sql .= "ORDER BY software.id, users.id";
 
 $result = mysql_query($sql);
-if (mysql_error()) trigger_error(mysql_error(),E_USER_ERROR);
+if (mysql_error()) trigger_error(mysql_error(),E_USER_WARNING);
 
-$count = mysql_num_rows($result);
+$countskills = mysql_num_rows($result);
 
-if($count > 0)
+if($countskills > 0)
 {
-
-    echo "<table>";
+    echo "<table align='center'>";
     echo "<tr><td>Software</td>";
     foreach($users AS $u) echo "<th>$u</th>";
-    echo "</tr>";
+    echo "</tr>\n";
     $previous = "";
     while($row = mysql_fetch_object($result))
     {
         if($previous != $row->name)
         {
-            if($started == true) echo "</tr>";
+            // if($started == true) echo "</tr>";
             echo "<tr><th>{$row->name}</th>";
+            while($user = mysql_fetch_object($usersresult))
+            {
+                // Temporarily just print the users ID, later this will be a tick or cross
+                // depending if they have the skill or not
+                echo "<td>{$user->id}</td>";
+            }
+            echo "</tr>\n";
             $started = true;
         }
-        
-
-        echo $row->realname." ";
+        mysql_data_seek($usersresult, 0);
+        //echo $row->realname." ";
         $previous = $row->name;
     }
 
