@@ -323,7 +323,7 @@ switch ($step)
         $replytofield = cleanvar($_REQUEST['replytofield']);
         $ccfield = cleanvar($_REQUEST['ccfield']);
         $bccfield = cleanvar($_REQUEST['bccfield']);
-        $subjectfield = cleanvar($_REQUEST['subjectfield']);
+        $subjectfield = stripslashes(cleanvar($_REQUEST['subjectfield'],FALSE,TRUE));
         $emailtype = cleanvar($_REQUEST['emailtype']);
         $newincidentstatus = cleanvar($_REQUEST['newincidentstatus']);
         $timetonextaction_none = cleanvar($_REQUEST['timetonextaction_none']);
