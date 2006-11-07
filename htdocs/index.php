@@ -35,7 +35,7 @@ if ($_SESSION['auth'] != TRUE)
     if ($id==3) throw_user_error("Invalid username/password combination");
     echo "<div style='width: 25%; margin-left: auto; margin-right: auto; margin-top: 1em; padding: 2em;'>";
     ?>
-    <table class='vertical'>
+    <table class='vertical' align='center'>
     <tr><td colspan='2' align='center'><h2>Login to <?php echo $CONFIG['application_shortname']; ?></h2></td></tr>
     <form action="login.php" method="post">
 
@@ -48,8 +48,8 @@ if ($_SESSION['auth'] != TRUE)
     echo "<input type='hidden' name='page' value='$page' />";
     ?>
     <tr><td colspan='2' align='center'><input type="submit" value="Log In" /></td></tr>
-    
-    
+
+
     <?php
     echo "</form>";
     if($CONFIG['portal'] == TRUE)
