@@ -1538,9 +1538,7 @@ function userstatus_bardrop_down($name, $id)
    $result = mysql_query($sql);
 
    // print HTML
-   //
-   // class='navbarmenu'  title='Set your status' ONCHANGE=\"if (this.options[this.selectedIndex].value != 'null') { window.open(this.options[this.selectedIndex].value,'_top') }\">\n";
-   // style='background-color: #000000; color: #FFFFFF; font-family: Tahoma, Helvetica, sans serif; font-size: 8pt; font-weight: bold;'
+
     echo "<select name='$name' title='Set your status' onchange=\"if (this.options[this.selectedIndex].value != 'null') { window.open(this.options[this.selectedIndex].value,'_top') }\">\n";
     while ($statuses = mysql_fetch_array($result))
     {
@@ -1691,21 +1689,18 @@ function day_drop_down($name, $day)
 /* selected depending on the supplied argument                */
 function month_drop_down($name, $month)
 {
-   $months = array ('Dummy', 'January', 'February', 'March', 'April', 'May', 'June', 'July', 'August', 'September', 'October', 'November', 'December');
-   echo "<select name=\"$name\">\n";
-   if ($month == 0) echo "<option value='0'>Select A Month</option>\n";
+    $months = array ('Dummy', 'January', 'February', 'March', 'April', 'May', 'June', 'July', 'August', 'September', 'October', 'November', 'December');
+    echo "<select name=\"$name\">\n";
+    if ($month == 0) echo "<option value='0'>Select A Month</option>\n";
 
-   for ($counter = 1; $counter <= 12; $counter++)
-      {
-      echo "<option ";
-      if ($counter == $month) echo "selected='selected' ";
-      // echo "value=\"$months[$counter]\">$months[$counter]\n";
-      // changed by INL on 14Jan02, makes sense to have a number returned for month
-      // but not sure how this might have affected existing code that uses this func
-      echo "value=\"$counter\">$months[$counter]</option>\n";
-      }
+    for ($counter = 1; $counter <= 12; $counter++)
+    {
+        echo "<option ";
+        if ($counter == $month) echo "selected='selected' ";
+        echo "value=\"$counter\">$months[$counter]</option>\n";
+    }
 
-   echo "</select>\n";
+    echo "</select>\n";
 }
 
 
@@ -1929,98 +1924,7 @@ function emailtype_replace_specials($string, $incidentid, $userid=0)
     $result = mysql_query($sql);
     if (mysql_error()) trigger_error(mysql_error(),E_USER_WARNING);
     $incident=mysql_fetch_object($result);
-/*
-     // contact email
-    $return_string = str_replace("<contactemail>", contact_email($contactid), $string);
 
-    // contact name
-    $return_string = str_replace("<contactname>", contact_realname($contactid), $return_string);
-
-    // contact firstname
-    $return_string = str_replace("<contactfirstname>", strtok(contact_realname($contactid),' '), $return_string);
-
-
-    // contact site
-    $return_string = str_replace("<contactsite>", contact_site($contactid), $return_string);
-
-    // contact phone number
-    $return_string = str_replace("<contactphone>", contact_phone($contactid), $return_string);
-
-// contact line manager
-    $return_string = str_replace("<contactmanager>", contact_manager_email($contactid), $return_string);
-
-
-    // contact notify
-    $return_string = str_replace("<contactnotify>", contact_notify_email($contactid), $return_string);
-
-    // incident id
-    $return_string = str_replace("<incidentid>", $incidentid, $return_string);
-
-    // incident external id
-    $return_string = str_replace("<incidentexternalid>", $incident->externalid, $return_string);
-
-
-    // incident cc email
-    $return_string = str_replace("<incidentccemail>", incident_ccemail($incidentid), $return_string);
-
-    // incident external engineers name
-    $return_string = str_replace("<incidentexternalengineer>", incident_externalengineer($incidentid), $return_string);
-
-    // incident external engineers first name
-    $return_string = str_replace("<incidentexternalengineerfirstname>", strtok(incident_externalengineer($incidentid),' '), $return_string);
-
-// incident external engineers email
-    $return_string = str_replace("<incidentexternalemail>", incident_externalemail($incidentid), $return_string);
-
-    // incident title
-    $return_string = str_replace("<incidenttitle>", incident_title($incidentid), $return_string);
-
-    // incident priortiy
-    $return_string = str_replace("<incidentpriority>", priority_name(incident_priority($incidentid)), $return_string);
-
-    // Incident software
-    $return_string = str_replace("<incidentsoftware>", software_name($incident->softwareid), $return_string);
-
-    // Incident owner
-    $return_string = str_replace("<incidentowner>", user_realname($incident->owner), $return_string);
-
-
-    // user email
-    $return_string = str_replace("<useremail>", user_email($userid), $return_string);
-
-    // user real name
-    $return_string = str_replace("<userrealname>", user_realname($userid), $return_string);
-
-    // application name
-    $return_string = str_replace("<applicationname>", $CONFIG['application_name'], $return_string);
-
-
-
-
-    // application short name
-    $return_string = str_replace("<applicationshortname>", $CONFIG['application_shortname'], $return_string);
-
-    // application version
-    $return_string = str_replace("<applicationversion>", $application_version_string, $return_string);
-
-    // support email
-    $return_string = str_replace("<supportemail>", $CONFIG['support_email'], $return_string);
-
-    // sales email
-    $return_string = str_replace("<salesemail>", $CONFIG['sales_email'], $return_string);
-
-    $return_string = str_replace("<supportmanageremail>", $CONFIG['support_manager_email'], $return_string);
-
-    // user signature
-    $return_string = str_replace("<signature>", user_signature($userid), $return_string);
-
-    // global email signature
-    $return_string = str_replace("<globalsignature>", global_signature(), $return_string);
-
-    // todays date
-    $return_string = str_replace("<todaysdate>", date("jS F Y"), $return_string);
-
-*/
     $email_regex = array(0 => '/<contactemail>/s',
                     1 => '/<contactname>/s',
                     2 => '/<contactfirstname>/s',
@@ -2094,11 +1998,7 @@ function emailtype_replace_specials($string, $incidentid, $userid=0)
         $email_replace[] = user_email($incident->owner);
     }
 
-    /*if (function_exists('escid_novellid')) $return_string = str_replace("<novellid>", escid_novellid($userid), $return_string);
-    if (function_exists('escid_microsoftid')) $return_string = str_replace("<microsoftid>", escid_microsoftid($userid), $return_string);
-    if (function_exists('escid_dseid')) $return_string = str_replace("<dseid>", escid_dseid($userid), $return_string);
-    if (function_exists('escid_cheyenneid')) $return_string = str_replace("<cheyenneid>", escid_cheyenneid($userid), $return_string);*/
-
+    //TODO move to seperate plugin
     if (function_exists('escid_novellid'))
     {
         $email_regex[] = '/<novellid>/s';
@@ -2185,35 +2085,6 @@ function format_seconds($seconds)
       */
       $return_string=trim($return_string);
       return($return_string);
-      /*
-                        $months = (float)($seconds / 2629800);
-
-      $whole_months = floor($months);
-      $days = (float)($seconds / 86400);
-      $whole_days = floor($days);
-      $hours = (float)($seconds / 3600);
-      $whole_hours = floor($hours) - ($whole_days * 24);
-      $minutes = (float)($seconds / 60);
-      $whole_minutes = floor($minutes) - (floor($hours) * 60);
-
-      if ($whole_days == 1)
-         $return_string .= $whole_days . " day ";
-      else if ($whole_days > 1)
-         $return_string .= $whole_days . " days ";
-
-      if ($whole_hours == 1 && $whole_days < 14)
-         $return_string .= $whole_hours . " hr ";
-      else if ($whole_hours > 1 && $whole_days < 14)
-         $return_string .= $whole_hours . " hrs ";
-
-      if ($whole_minutes == 1 && $whole_days < 2)
-         $return_string .= $whole_minutes . " min ";
-      else if ($whole_minutes > 1 && $whole_days < 2)
-         $return_string .= $whole_minutes . " mins ";
-
-      return($return_string);
-                        */
-
    }
 }
 
@@ -2280,7 +2151,6 @@ function confirmation_page($refreshtime, $location, $message)
    echo "<meta http-equiv=\"refresh\" content=\"$refreshtime; url=$location\" />\n";
    $style = interface_style($_SESSION['style']);
    echo "<link rel='stylesheet' href='{$CONFIG['application_webpath']}styles/webtrack.css' />\n";
-   // <link rel="stylesheet" href="webtrack.css">
    ?>
    </head>
    <body>
@@ -2827,8 +2697,6 @@ function build_topmenu($id)
 
     if (!is_array($topmenu)) throw_error('Error: Menu not defined', '');
 
-    // back button
-    // echo "<a class=barlink href=\"javascript:history.back();\" onMouseOver=\"window.status='Home'; return true;\" onMouseOut=\"window.status=''; return true;\">Back</a> | ";
     if ($id==26) // help
     {
         echo "<a href=\"{CONFIG['application_webpath']}help.php?id=0\">Help Index</a> | <a href=\"javascript:window.close();\">Close</a>\n";
@@ -3012,7 +2880,7 @@ function send_template_email($template, $incidentid, $info1='', $info2='')
         $email_subject = str_replace("<info2>", "$info2", $email_subject);
     }
 
-    ## echo "Sending email to $email_to with subject '".stripslashes($email_subject)."'";
+    ##echo "Sending email to $email_to with subject '".stripslashes($email_subject)."'";
 
     // build the extra headers string for email
     $extra_headers  = "From: $email_from\r\nReply-To: $email_replyto\r\nErrors-To: {$CONFIG['support_email']}\r\n";
@@ -3023,7 +2891,6 @@ function send_template_email($template, $incidentid, $info1='', $info2='')
         $extra_headers .= "BCC: $email_bcc\r\n";
 
     $extra_headers .= "\r\n";
-    ## bugbug: tidy up these stripslashes.  INL 5Sep01
 
     if($email_storeinlog == 'Yes')
     {

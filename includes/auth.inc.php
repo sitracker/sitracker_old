@@ -37,7 +37,6 @@ else
     $sit[2] = $_SESSION['userid'];
 }
 
-// if ($permission=='') trigger_error("Could not determine required permissions",E_USER_ERROR);
 if (!is_array($permission)) { $permission = array($permission); }
 // Valid user, check permissions
 if (user_permission($userid, $permission) == FALSE)

@@ -24,8 +24,6 @@ echo "<script src='{$CONFIG['application_webpath']}webtrack.js' type='text/javas
 // javascript popup date library
 echo "<script src='{$CONFIG['application_webpath']}calendar.js' type='text/javascript'></script>\n";
 
-// if ($userstyle == "1") echo "<link rel=\"stylesheet\" href=\"styles/webtrack1.css\">\n";
-// if ($userstyle == "2") echo "<link rel=\"stylesheet\" href=\"styles/webtrack2.css\">\n";
 // FIXME put here some js to set action field then post form
 ?>
 <script type='text/javascript'>
