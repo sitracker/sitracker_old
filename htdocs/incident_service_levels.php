@@ -9,6 +9,7 @@
 //
 
 // Authro: Ivan Lucas
+// November 2006 - SiT 3.25 this file DEPRICATED  - PH
 
 $permission=6; // View Incidents
 

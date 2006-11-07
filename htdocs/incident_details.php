@@ -70,7 +70,10 @@ if (incident_status($id) != 2)
 
     if(user_permission($sit[2],7)) //Edit incident
     {
-        echo "<a dojoType='LinkPane' href=edit_incident.php?id={$id}' refreshOnShow='true' style='display: none'>Edit</a>";
+        //echo "<a dojoType='LinkPane' href=edit_incident.php?id={$id}' refreshOnShow='true' style='display: none'>Edit</a>";
+        echo "<div id='Edit' dojoType='ContentPane' label='Edit'>";
+        include('incident/edit.inc.php');
+        echo "</div>";
     }
 
     if(user_permission($sit[2],6)) //View incident

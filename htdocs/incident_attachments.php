@@ -10,6 +10,7 @@
 
 // Author: Ivan Lucas <ivanlucas[at]users.sourceforge.net>
 
+// November 2006 - SiT 3.25 this file DEPRICATED - PH
 // INL 2Nov05
 // This file will be superceded by htdocs/incidents/files.inc.php
 
