@@ -2885,6 +2885,7 @@ function send_template_email($template, $incidentid, $info1='', $info2='')
     // build the extra headers string for email
     $extra_headers  = "From: $email_from\r\nReply-To: $email_replyto\r\nErrors-To: {$CONFIG['support_email']}\r\n";
     $extra_headers .= "X-Mailer: {$CONFIG['application_shortname']} {$application_version_string}/PHP " . phpversion()."\r\n";
+    $extra_headers .= "X-Originating-IP: {$_SERVER['REMOTE_ADDR']}\r\n";
     if ($email_cc != '')
         $extra_headers .= "CC: $email_cc\r\n";
     if ($email_bcc != "")

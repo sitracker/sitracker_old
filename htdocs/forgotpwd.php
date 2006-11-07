@@ -18,15 +18,17 @@ $email = cleanvar($_REQUEST['emailaddress']);
 
 if(empty($email))
 {
+    $title='Password Reminder';
     include('htmlheader.inc.php');
+    echo "<h2>$title</h2>";
     echo "<form action='{$_SERVER['PHP_SELF']}' method='post'>";
     ?>
 
     <table class='vertical'>
     <tr><td colspan='2'><h2>Forgotten your details?</h2></td></tr>
-    <tr><th>EMail address</th><td><input name="emailaddress" size="20" type="text" /></td></tr>
-    <tr><td colspan='2'><input type="submit" value='EMail password' /></td></tr>
+    <tr><th>Email address</th><td><input name="emailaddress" size="20" type="text" /></td></tr>
     </table>
+    <p><input type="submit" value='Send password' /></p>
     </form>
     <?php
     include('htmlfooter.inc.php');
@@ -47,6 +49,7 @@ else
         {
             $extra_headers = "Reply-To: {$CONFIG['support_email']}\n";
             $extra_headers .= "X-Mailer: {$CONFIG['application_shortname']} {$application_version_string}/PHP " . phpversion() . "\n";
+            $extra_headers .= "X-Originating-IP: {$_SERVER['REMOTE_ADDR']}\n";
             $extra_headers .= "\n"; // add an extra crlf to create a null line to separate headers from body
 
 
