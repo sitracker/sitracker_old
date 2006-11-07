@@ -184,7 +184,7 @@ else
                 $bodytext .= "---\n$memo\n---\n\n";
             }
             $url = parse_url($_SERVER['HTTP_REFERER']);
-            $approveurl = "{$url['scheme']}{$url['host']}{$url['path']}";
+            $approveurl = "{$url['scheme']}://{$url['host']}{$url['path']}";
             $bodytext .= "Please point your browser to\n<{$approveurl}?user={$user}&mode=approval>\n ";
             $bodytext .= "to approve or decline these requests.";
         }
