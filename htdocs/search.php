@@ -184,9 +184,9 @@ else
             {
                 while($row = mysql_fetch_object($result))
                 {
-                    $srch_results[$key]['url']="<a href=\"javascript:incident_details_window('{$row->id}', 'incident{$row->id}');\">Incident {$row->id}: {$row->title}</a>";
+                    $srch_results[$key]['url']="<a href=\"javascript:incident_details_window('{$row->id}', 'incident{$row->id}');\">Incident {$row->id}: ".stripslashes($row->title)."</a>";
                     $owner=user_realname($row->owner,TRUE);
-                    $srch_results[$key]['string'] = "{$row->title}";
+                    $srch_results[$key]['string'] = stripslashes($row->title);
                     if ($row->status==2) $srch_results[$key]['string'] .= " (Closed)";
                     $srch_results[$key]['string'] .= "\n{$row->forenames} {$row->surname}, {$row->sitename}\n{$owner} {$row->externalid}";
                     $srch_results[$key]['date']=$row->lastupdated;
