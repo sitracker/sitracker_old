@@ -26,7 +26,7 @@ switch ($action)
 {
     case 'add':
         // First check there isn't already a relationship to that incident
-        $sql = "SELECT id FROM relatedincidents WHERE incidentid='$relatedid' OR relatedid='$relatedid'";
+        $sql = "SELECT id FROM relatedincidents WHERE (incidentid='$relatedid' AND relatedid='$id') OR (relatedid='$relatedid' AND incidentid='$id')";
         $result = mysql_query($sql);
         if (mysql_num_rows($result) < 1 AND $relatedid!=$id)
         {
@@ -52,7 +52,7 @@ switch ($action)
                     if (mysql_error()) trigger_error("MySQL Query Error ".mysql_error(), E_USER_ERROR);
                 break;
             }
-            // TODO v3.24 Child/Parent incident relationships
+            // TODO v3.2x Child/Parent incident relationships
         }
         else echo "<br /><p class='error' align='center'>A relationship already exists with that incident</p>";
     break;
