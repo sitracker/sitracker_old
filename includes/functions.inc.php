@@ -2013,7 +2013,7 @@ function emailtype_replace_specials($string, $incidentid, $userid=0)
 
     if (function_exists('escid_dseid'))
     {
-        $email_regex[] = '/<desid>/s';
+        $email_regex[] = '/<dseid>/s';
         $email_replace[] = escid_dseid($userid);
     }
 

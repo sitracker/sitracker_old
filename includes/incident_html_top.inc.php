@@ -243,6 +243,14 @@ $sql .= " OR incidents.contact=NULL ";
 $result = mysql_query($sql);
 if (mysql_error()) trigger_error("MySQL Query Error ".mysql_error(), E_USER_ERROR);
 $incident = mysql_fetch_object($result);
+
+// Prepare data for output
+$incident->title = stripslashes($incident->title);
+$incident->externalengineer = stripslashes($incident->externalengineer);
+$incident->product = stripslashes($incident->product);
+$incident->productversion = stripslashes($incident->productversion);
+$incident->servicepacks = stripslashes($incident->servicepacks);
+
 $site_name=site_name($incident->siteid);
 $product_name=product_name($incident->product);
 if ($incident->softwareid > 0) $software_name=software_name($incident->softwareid);
