@@ -10,6 +10,10 @@ Further instructions and notes about specific upgrades follow, if you
 upgrading and skipping several versions listed below you should read
 everything carefully to make sure you've met all the requirements:
 
+Upgrading to 3.25
+-----------------
+Follow the instructions above, nothing further needs to be done.
+
 Upgrading to 3.24
 -----------------
 Permissions have been added for the new 'Add Reseller' and

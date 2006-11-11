@@ -27,14 +27,13 @@ if (isset($title)) { echo "$title - {$CONFIG['application_shortname']}"; } else 
 echo "</title>\n";
 echo "<link rel='SHORTCUT ICON' href='{$CONFIG['application_webpath']}images/sit_favicon.png' />\n";
 echo "<style type='text/css'>@import url('{$CONFIG['application_webpath']}styles/webtrack.css');</style>\n";
-if ($_SESSION['auth'] == TRUE)
-{
-    $cssurl = db_read_column('cssurl', 'interfacestyles', $_SESSION['style']);
-}
-else
-{
-    $cssurl = db_read_column('cssurl', 'interfacestyles', $CONFIG['default_interface_style']);
-}
+if ($_SESSION['auth'] == TRUE) $styleid = $_SESSION['style'];
+else $styleid= $CONFIG['default_interface_style'];
+$sql = "SELECT cssurl, iconset FROM interfacestyles WHERE id='{$styleid}'";
+$result = mysql_query($sql);
+if (mysql_error()) trigger_error(mysql_error(),E_USER_WARNING);
+else list($cssurl, $iconset) = mysql_fetch_row($result);
+unset($styleid);
 echo "<link rel='stylesheet' href='{$CONFIG['application_webpath']}styles/{$cssurl}' />\n";
 
 if (isset($refresh) && $refresh != 0)

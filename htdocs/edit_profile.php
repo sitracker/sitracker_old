@@ -114,10 +114,14 @@ if (empty($submit))
     <tr><th>Phone:</th><td><input maxlength="50" name="phone" size="30" type="text" value="<?php echo strip_tags($user->phone); ?>" /></td></tr>
     <tr><th>Fax:</th><td><input maxlength="50" name="fax" size="30" type="text" value="<?php echo strip_tags($user->fax); ?>" /></td></tr>
     <tr><th>Mobile:</th><td><input maxlength="50" name="mobile" size="30" type="text" value="<?php echo user_mobile($userid) ?>" /></td></tr>
-    <tr><th>AIM: <img src="images/icons/kdeclassic/16x16/apps/ksmiletris.png" width="16" height="16" alt="AIM" /></th><td><input maxlength="50" name="aim" size="30" type="text" value="<?php echo strip_tags($user->aim); ?>" /></td></tr>
-    <tr><th>ICQ: <img src="images/icons/kdeclassic/16x16/apps/licq.png" width="16" height="16" alt="ICQ" /></th><td><input maxlength="50" name="icq" size="30" type="text" value="<?php echo strip_tags($user->icq); ?>" /></td></tr>
-    <tr><th>MSN: <img src="images/icons/kdeclassic/16x16/apps/personal.png" width="16" height="16" alt="MSN" /></th><td><input maxlength="50" name="msn" size="30" type="text" value="<?php echo strip_tags($user->msn); ?>" /></td></tr>
-
+    <?php
+    echo "<tr><th>AIM: <img src=\"images/icons/{$iconset}/16x16/apps/ksmiletris.png\" width=\"16\" height=\"16\" alt=\"AIM\" /></th>";
+    echo "<td><input maxlength=\"50\" name=\"aim\" size=\"30\" type=\"text\" value=\"".strip_tags($user->aim)."\" /></td></tr>";
+    echo "<tr><th>ICQ: <img src=\"images/icons/{$iconset}/16x16/apps/licq.png\" width=\"16\" height=\"16\" alt=\"ICQ\" /></th>";
+    echo "<td><input maxlength=\"50\" name=\"icq\" size=\"30\" type=\"text\" value=\"".strip_tags($user->icq)."\" /></td></tr>";
+    echo "<tr><th>MSN: <img src=\"images/icons/{$iconset}/16x16/apps/personal.png\" width=\"16\" height=\"16\" alt=\"MSN\" /></th>";
+    echo "<td><input maxlength=\"50\" name=\"msn\" size=\"30\" type=\"text\" value=\"".strip_tags($user->msn)."\" /></td></tr>";
+    ?>
     <tr><th colspan='2'>DISPLAY PREFERENCES</td></tr>
     <tr><th>Interface Style (Theme):</th><td>
     <?php interfacestyle_drop_down('style', $user->var_style) ?>
@@ -255,7 +259,7 @@ else
             $_SESSION['update_order'] = $updateorder;
         }
 
-        //only want to reassign to backup if you've changed you status 
+        //only want to reassign to backup if you've changed you status
         //(i.e. In Office -> On Holiday rather than when youve updated your message) or changes from accepting to not accepting
         if($oldstatus != $status)
         {

@@ -47,7 +47,7 @@ if (mysql_num_rows($result) >= 1)
 
                 if (mysql_num_rows($swresult) > 0)
                 {
-                    echo "<tr><th>Software</th><th>Lifetime</th><th>Actions</th></tr>";
+                    echo "<tr><th>Skill</th><th>Lifetime</th><th>Actions</th></tr>";
                     $shade='shade2';
                     while ($software=mysql_fetch_array($swresult))
                     {

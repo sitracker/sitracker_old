@@ -378,30 +378,32 @@ INSERT INTO `incidentstatus` VALUES (8, 'Awaiting Customer Action', 'Customer ha
 INSERT INTO `incidentstatus` VALUES (9, 'Unsupported', 'Unsupported');
 
 
+
 CREATE TABLE `interfacestyles` (
-  `id` int(5) NOT NULL auto_increment,
+  `id` int(5) NOT NULL,
   `name` varchar(50) NOT NULL default '',
   `cssurl` varchar(255) NOT NULL default '',
+  `iconset` varchar(255) NOT NULL default 'kdeclassic',
   `headerhtml` text NOT NULL,
   PRIMARY KEY  (`id`)
-) ENGINE=MyISAM;
+) TYPE=MyISAM AUTO_INCREMENT=16 ;
 
+INSERT INTO `interfacestyles` (`id`, `name`, `cssurl`, `iconset`, `headerhtml`) VALUES (1, 'Light Blue', 'webtrack1.css', 'kdeclassic', ''),
+(2, 'Grey', 'webtrack2.css', 'kdeclassic', ''),
+(3, 'Green', 'webtrack3.css', 'kdeclassic', ''),
+(4, 'Silver Blue', 'webtrack4.css', 'kdeclassic', ''),
+(5, 'Classic', 'webtrack5.css', 'kdeclassic', ''),
+(6, 'Orange', 'webtrack_ph2.css', 'kdeclassic', ''),
+(7, 'Yellow and Blue', 'webtrack7.css', 'kdeclassic', ''),
+(8, 'Neoteric', 'webtrack8.css', 'kdeclassic', ''),
+(9, 'Toms Linux Style', 'webtrack9.css', 'kdeclassic', ''),
+(10, 'Cool Blue', 'webtrack_ph.css', 'kdeclassic', ''),
+(11, 'Just Light', 'webtrack10.css', 'kdeclassic', ''),
+(12, 'Ex Pea', 'webtrack11.css', 'kdeclassic', ''),
+(13, 'GUI Colours', 'webtrack12.css', 'kdeclassic', ''),
+(14, 'Flashy', 'webtrack14/webtrack14.css', 'kdeclassic', ''),
+(15, 'Richard', 'webtrack15.css', 'kdeclassic', '');
 
-INSERT INTO `interfacestyles` VALUES (1, 'Light Blue', 'webtrack1.css', '');
-INSERT INTO `interfacestyles` VALUES (2, 'Grey', 'webtrack2.css', '');
-INSERT INTO `interfacestyles` VALUES (3, 'Green', 'webtrack3.css', '');
-INSERT INTO `interfacestyles` VALUES (4, 'Silver Blue', 'webtrack4.css', '');
-INSERT INTO `interfacestyles` VALUES (5, 'Classic', 'webtrack5.css', '');
-INSERT INTO `interfacestyles` VALUES (6, 'Orange', 'webtrack_ph2.css', '');
-INSERT INTO `interfacestyles` VALUES (7, 'Yellow and Blue', 'webtrack7.css', '');
-INSERT INTO `interfacestyles` VALUES (8, 'Neoteric', 'webtrack8.css', '');
-INSERT INTO `interfacestyles` VALUES (9, 'Toms Linux Style', 'webtrack9.css', '');
-INSERT INTO `interfacestyles` VALUES (10, 'Cool Blue', 'webtrack_ph.css', '');
-INSERT INTO `interfacestyles` VALUES (11, 'Just Light', 'webtrack10.css', '');
-INSERT INTO `interfacestyles` VALUES (12, 'Ex Pea', 'webtrack11.css', '');
-INSERT INTO `interfacestyles` VALUES (13, 'GUI Colours', 'webtrack12.css', '');
-INSERT INTO `interfacestyles` VALUES (14, 'Flashy', 'webtrack14/webtrack14.css', '');
-INSERT INTO `interfacestyles` VALUES (15, 'Richard', 'webtrack15.css', '');
 
 CREATE TABLE `journal` (
   `id` int(11) NOT NULL auto_increment,
@@ -1299,6 +1301,10 @@ INSERT INTO `dashboard` (`id`, `name`, `enabled`) VALUES (1, 'random_tip', 'true
 (4, 'user_incidents', 'true');
 
 UPDATE `interfacestyles` SET `name` = 'Light Blue' WHERE `id` =1 LIMIT 1 ;
+";
+
+$upgrade_schema[324] = "
+ALTER TABLE `interfacestyles` ADD `iconset` VARCHAR( 255 ) NOT NULL DEFAULT 'kdeclassic' AFTER `cssurl` ;
 ";
 
 // Important: When making changes to the schema you must add SQL to make the alterations

@@ -145,13 +145,13 @@ while ($update = mysql_fetch_object($result))
 
     if (array_key_exists($update->type, $updatetypes))
     {
-        echo "<img src='{$CONFIG['application_webpath']}images/icons/kdeclassic/16x16/{$updatetypes[$update->type]['icon']}' width='16' height='16' alt='{$update->type}' />";
+        echo "<img src='{$CONFIG['application_webpath']}images/icons/{$iconset}/16x16/{$updatetypes[$update->type]['icon']}' width='16' height='16' alt='{$update->type}' />";
         echo "<span>Click here to {$newmode} this update</span></a> ";
         echo "{$updateheadertext}"; //  by {$updateuser}
     }
     else
     {
-        echo "<img src='{$CONFIG['application_webpath']}images/icons/kdeclassic/16x16/{$updatetypes['research']['icon']}' width='16' height='16' alt='Research' />";
+        echo "<img src='{$CONFIG['application_webpath']}images/icons/{$iconset}/16x16/{$updatetypes['research']['icon']}' width='16' height='16' alt='Research' />";
         echo "<span>Click to {$newmode}</span></a> ";
         echo "Updated ({$update->type}) by {$updateuser}";
     }
