@@ -10,15 +10,15 @@ echo "</title>";
 echo "<meta http-equiv=\"Content-Type\" content=\"text/html; charset=utf-8\" />";
 echo "<meta name=\"GENERATOR\" content=\"{$CONFIG['application_name']} {$application_version_string}\" />\n";
 echo "<style type='text/css'>@import url('{$CONFIG['application_webpath']}styles/webtrack.css');</style>\n";
-if ($_SESSION['auth'] == TRUE)
-{
-    $style = interface_style($_SESSION['style']);
-    echo "<link rel='stylesheet' href='{$CONFIG['application_webpath']}styles/{$style['cssurl']}' />\n";
-}
-else
-{
-    echo "<link rel=\"stylesheet\" href=\"styles/webtrack1.css\" />\n";
-}
+
+if ($_SESSION['auth'] == TRUE) $styleid = $_SESSION['style'];
+else $styleid= $CONFIG['default_interface_style'];
+$sql = "SELECT cssurl, iconset FROM interfacestyles WHERE id='{$styleid}'";
+$result = mysql_query($sql);
+if (mysql_error()) trigger_error(mysql_error(),E_USER_WARNING);
+else list($cssurl, $iconset) = mysql_fetch_row($result);
+unset($styleid);
+echo "<link rel='stylesheet' href='{$CONFIG['application_webpath']}styles/{$cssurl}' />\n";
 
 echo "<script src='{$CONFIG['application_webpath']}webtrack.js' type='text/javascript'></script>\n";
 // javascript popup date library
