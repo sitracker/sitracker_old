@@ -725,6 +725,247 @@ switch($action)
         }
 
         break;
+    case 'send-email':
+        // External variables
+        $bodytext = $_REQUEST['bodytext'];
+        $tofield = cleanvar($_REQUEST['tofield']);
+        $fromfield = cleanvar($_REQUEST['fromfield']);
+        $replytofield = cleanvar($_REQUEST['replytofield']);
+        $ccfield = cleanvar($_REQUEST['ccfield']);
+        $bccfield = cleanvar($_REQUEST['bccfield']);
+        $subjectfield = stripslashes(cleanvar($_REQUEST['subjectfield'],FALSE,TRUE));
+        $emailtype = cleanvar($_REQUEST['emailtype']);
+        $newincidentstatus = cleanvar($_REQUEST['newincidentstatus']);
+        $timetonextaction_none = cleanvar($_REQUEST['timetonextaction_none']);
+        $timetonextaction_days = cleanvar($_REQUEST['timetonextaction_days']);
+        $timetonextaction_hours = cleanvar($_REQUEST['timetonextaction_hours']);
+        $timetonextaction_minutes = cleanvar($_REQUEST['timetonextaction_minutes']);
+        $day = cleanvar($_REQUEST['day']);
+        $month = cleanvar($_REQUEST['month']);
+        $year = cleanvar($_REQUEST['year']);
+        $target = cleanvar($_REQUEST['target']);
+
+        // move attachment to a safe place for processing later
+        if ($_FILES['attachment']['name']!='')       // Should be using this format throughout TPG 13/08/2002
+        {
+            if (!isset($filename)) $filename = $CONFIG['attachment_fspath'].$_FILES['attachment']['name'];
+            $mv=move_uploaded_file($_FILES['attachment']['tmp_name'], "$filename");    // Added tmp_name TPG 13/08/2002
+            if (!mv) throw_error('!Error: Problem moving attachment from temp directory:',$filename);
+            $attachmenttype = $_FILES['attachment']['type'];
+        }
+
+        /*
+        Remmed out for the moment as it will break the tab style (PH 13Nov06)
+        // spellcheck email if required
+        if ($spellcheck == 'yes')
+        {
+            include('spellcheck_email.php');
+            exit;
+        }
+        */
+        if ($encoded=='yes')
+
+        $errors = 0;
+        // check to field
+        if ($tofield == '')
+        {
+            $errors = 1;
+            $error_string .= "<p class='error'>You must enter a recipient in the 'To' field</p>\n";
+        }
+        // check from field
+        if ($fromfield == "")
+        {
+            $errors = 1;
+            $error_string .= "<p class='error'>You must complete the 'From' field</p>\n";
+        }
+        // check reply to field
+        if ($replytofield == "")
+        {
+            $errors = 1;
+            $error_string .= "<p class='error'>You must complete the 'Reply To' field</p>\n";
+        }
+
+        // Store email body in session if theres been an error
+        if ($errors > 0) $_SESSION['temp-emailbody'] = $bodytext;
+        else unset($_SESSION['temp-emailbody']);
+
+        // send email if no errors
+        if ($errors == 0)
+        {
+            $extra_headers = "Reply-To: $replytofield\nErrors-To: ".user_email($sit[2])."\n";
+            $extra_headers .= "X-Mailer: {$CONFIG['application_shortname']} {$application_version_string}/PHP " . phpversion() . "\n";
+            $extra_headers .= "X-Originating-IP: {$_SERVER['REMOTE_ADDR']}\n";
+            if ($ccfield != '')  $extra_headers .= "cc: $ccfield\n";
+            if ($bccfield != '') $extra_headers .= "Bcc: $bccfield\n";
+
+            $extra_headers .= "\n"; // add an extra crlf to create a null line to separate headers from body
+                                // this appears to be required by some email clients - INL
+
+            $mime = new MIME_mail($fromfield, $tofield, stripslashes($subjectfield), stripslashes($bodytext), $extra_headers, $mailerror);
+
+            // check for attachment
+            if ($filename!='' && strlen($filename) > 3)
+            {
+                if (!file_exists($filename)) throw_error('Error: File did not exist upon processing attachment', $filename);
+                if ($filename=='') throw_error('Error: Filename was blank upon processing attachment', $filename);
+
+                // Check file size before sending
+                if (filesize($filename) > $CONFIG['upload_max_filesize'] || filesize($filename)==FALSE)
+                {
+                    throw_error("User Error: Attachment too large or file upload error, filename: $filename,  perms: ".fileperms($filename).", size:",filesize($filename));
+                    // throwing an error isn't the nicest thing to do for the user but there seems to be no way of
+                    // checking file sizes at the client end before the attachment is uploaded. - INL
+                }
+                if (preg_match("!/x\-.+!i", $attachmenttype))  $type = OCTET;
+                else $type = str_replace("\n","",$attachmenttype);
+                $mime -> fattach($filename, "Attachment for incident $id", $type);
+            }
+
+            // Lookup the email template (we need this to find out if the update should be visible or not)
+            $sql = "SELECT * FROM emailtype WHERE id='$emailtype' ";
+            $result = mysql_query($sql);
+            if (mysql_error()) trigger_error("MySQL Query Error ".mysql_error(), E_USER_ERROR);
+            if (mysql_num_rows($result) < 1) trigger_error("Email template '{$meailtype}' not found",E_USER_ERROR);
+            $emailtype = mysql_fetch_object($result);
+
+            // actually send the email
+            $mailok=$mime -> send_mail();
+
+            // after mail is sent, move the attachment to the incident file attachment directory / timestamp
+            if ($filename!="" && file_exists($filename) && $mailok==TRUE)
+            {
+                // make incident attachment dir if it doesn't exist
+                $umask=umask(0000);
+                if (!file_exists($CONFIG['attachment_fspath'] . "$id"))
+                {
+                    $mk=mkdir($CONFIG['attachment_fspath'] ."$id", 0770);
+                    if (!$mk) throw_error('Failed creating incident attachment directory after sending mail: ',$CONFIG['attachment_fspath'] .$id);
+                }
+                $mk=mkdir($CONFIG['attachment_fspath'] .$id . "/$now", 0770);
+                if (!$mk) throw_error('Failed creating incident attachment (timestamp) directory after sending mail: ',$CONFIG['attachment_fspath'] .$id . "/$now");
+                umask($umask);
+                // failes coz renaming file to a directory
+                $filename_parts_array=explode('/', $filename);
+                $filename_parts_count=count($filename_parts_array)-1;
+                $filename_end_part=$filename_parts_array[$filename_parts_count]; // end part of filename (actual name)
+                $rn=rename($filename, $CONFIG['attachment_fspath'] . $id . "/$now/" . $filename_end_part);
+                if (!rn) throw_error('Failed moving attachment after sending mail: ',$CONFIG['attachment_fspath'] .$id . "/$now");
+            }
+
+            if ($mailok==FALSE) throw_error('Internal error sending email:','send_mail() failed');
+
+            if ($mailok==TRUE)
+            {
+                // update incident status if necessary
+                switch ($timetonextaction_none)
+                {
+                    case 'none':
+                        $timeofnextaction = 0;
+                    break;
+
+                    case 'time':
+                        $timeofnextaction = calculate_time_of_next_action($timetonextaction_days, $timetonextaction_hours, $timetonextaction_minutes);
+                    break;
+
+                    case 'date':
+                        // $now + ($days * 86400) + ($hours * 3600) + ($minutes * 60);
+                        $unixdate=mktime(9,0,0,$month,$day,$year);
+                        $timeofnextaction = $unixdate;
+                        if ($timeofnextaction<0) $timeofnextaction=0;
+                    break;
+
+                    default:
+                        $timeofnextaction = 0;
+                    break;
+                }
+
+                if ($newincidentstatus != incident_status($id))
+                {
+                    $sql = "UPDATE incidents SET status='$newincidentstatus', lastupdated='$now', timeofnextaction='$timeofnextaction' WHERE id='$id'";
+                    mysql_query($sql);
+                    if (mysql_error()) trigger_error("MySQL Query Error ".mysql_error(), E_USER_ERROR);
+                    $updateheader = "New Status: <b>" . incidentstatus_name($newincidentstatus) . "</b>\n\n";
+                }
+                else
+                {
+                    mysql_query("UPDATE incidents SET lastupdated='$now', timeofnextaction='$timeofnextaction' WHERE id='$id'");
+                    if (mysql_error()) trigger_error("MySQL Query Error ".mysql_error(), E_USER_ERROR);
+                }
+
+                // add update
+                $updateheader .= "To: <b>$tofield</b>\nFrom: <b>$fromfield</b>\nReply-To: <b>$replytofield</b>\n";
+                if ($ccfield!="") $updateheader .=   "CC: <b>$ccfield</b>\n";
+                if ($bccfield!="") $updateheader .= "BCC: <b>$bccfield</b>\n";
+                if ($filename!="") $updateheader .= "Attachment: <b>".$filename_end_part."</b>\n";
+                $updateheader .= "Subject: <b>$subjectfield</b>\n";
+
+                if (!empty($updateheader)) $updateheader .= "<hr>";
+                $updatebody = $updateheader . $bodytext;
+                $updatebody=mysql_escape_string($updatebody);
+                $sql  = "INSERT INTO updates (incidentid, userid, bodytext, type, timestamp, currentstatus,customervisibility) ";
+                $sql .= "VALUES ($id, $sit[2], '$updatebody', 'email', '$now', '$newincidentstatus', '{$emailtype->customervisibility}')";
+                mysql_query($sql);
+                if (mysql_error()) trigger_error("MySQL Query Error ".mysql_error(), E_USER_ERROR);
+
+                // Handle meeting of service level targets
+                switch ($target)
+                {
+                    case 'none':
+                        // do nothing
+                        $sql = '';
+                    break;
+
+                    case 'initialresponse':
+                        $sql  = "INSERT INTO updates (incidentid, userid, type, timestamp, currentowner, currentstatus, customervisibility, sla, bodytext) ";
+                        $sql .= "VALUES ('$id', '".$sit[2]."', 'slamet', '$now', '".$sit[2]."', '$newincidentstatus', 'show', 'initialresponse','The Initial Response has been made.')";
+                    break;
+
+                    case 'probdef':
+                        $sql  = "INSERT INTO updates (incidentid, userid, type, timestamp, currentowner, currentstatus, customervisibility, sla, bodytext) ";
+                        $sql .= "VALUES ('$id', '".$sit[2]."', 'slamet', '$now', '".$sit[2]."', '$newincidentstatus', 'show', 'probdef','The problem has been defined.')";
+                    break;
+
+                    case 'actionplan':
+                        $sql  = "INSERT INTO updates (incidentid, userid, type, timestamp, currentowner, currentstatus, customervisibility, sla, bodytext) ";
+                        $sql .= "VALUES ('$id', '".$sit[2]."', 'slamet', '$now', '".$sit[2]."', '$newincidentstatus', 'show', 'actionplan','An action plan has been made.')";
+                    break;
+
+                    case 'solution':
+                        $sql  = "INSERT INTO updates (incidentid, userid, type, timestamp, currentowner, currentstatus, customervisibility, sla, bodytext) ";
+                        $sql .= "VALUES ('$id', '".$sit[2]."', 'slamet', '$now', '".$sit[2]."', '$newincidentstatus', 'show', 'solution','The incident has been resolved or reprioritised.\nThe issue should now be brought to a close or a new problem definition created within the service level.')";
+                    break;
+                }
+                if (!empty($sql))
+                {
+                    mysql_query($sql);
+                    if (mysql_error()) trigger_error("MySQL Query Error ".mysql_error(), E_USER_ERROR);
+                }
+                if ($target!='none')
+                {
+                    // Reset the slaemail sent column, so that email reminders can be sent if the new sla target goes out
+                    $sql = "UPDATE incidents SET slaemail='0' WHERE id='$id' LIMIT 1";
+                    mysql_query($sql);
+                    if (mysql_error()) trigger_error("MySQL Query Error ".mysql_error(), E_USER_ERROR);
+                }
+
+                journal(CFG_LOGGING_FULL, 'Email Sent', "Email sent subject: $subjectfield, regarding incident $id", CFG_JOURNAL_INCIDENTS, $id);
+                confirmation_page("2", "incident_details.php?id=" . $id, "<h2>Email sent successfully.</h2><h5>Please wait while you are redirected...</h5>");
+            }
+            else
+            {
+                include('incident_html_top.inc.php');
+                echo "<p class='error'>Error sending email: $mailerror</p>\n";
+                include('incident_html_bottom.inc.php');
+            }
+        }
+        else
+        {
+            // there were errors
+            include('incident_html_top.inc.php');
+            echo $error_string;
+            include('incident_html_bottom.inc.php');
+        }
+        break;
 
 
 }

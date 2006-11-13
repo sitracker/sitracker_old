@@ -14,6 +14,7 @@
 $permission=61; // View Incident Details
 require('db_connect.inc.php');
 require('functions.inc.php');
+include('mime.inc.php');
 
 // This page requires authentication
 require('auth.inc.php');
@@ -25,7 +26,7 @@ $action = cleanvar($_REQUEST['action']);
 $id = $incidentid;
 $title='Details';
 
-if(!empty($action))
+if(!empty($action) && $action != 'email')
 {
     include('incident/perform_actions.inc.php');
 }
@@ -54,11 +55,15 @@ else
     
     </style>
     <?php
-    //include('incident/details.inc.php');
-    
-    
-    //include('incident/log.inc.php');
-    echo "<div id='mainTabContainer' dojoType='TabContainer' style='width: 100%; height: 500px' selectedTab='log'>";
+
+    if($action != 'email')
+    {
+        echo "<div id='mainTabContainer' dojoType='TabContainer' style='width: 100%; height: 500px' selectedTab='log'>";
+    }
+    else
+    {
+        echo "<div id='mainTabContainer' dojoType='TabContainer' style='width: 100%; height: 500px' selectedTab='Email'>";
+    }
     
     echo "<div id='log' dojoType='ContentPane' label='Incident Log'>";
     include('incident/log.inc.php');
@@ -121,6 +126,25 @@ else
             echo "</div>";
         }
     
+        if(user_permission($sit[2],33)) //Send email
+        {
+            //echo "<a dojoType='LinkPane' href=incident_attachments.php?id={$id}' refreshOnShow='true' style='display: none'>Files</a>";
+            if($action == 'email')
+            {
+                //show send email form
+                echo "<div id='Email' dojoType='ContentPane' label='Email'>";
+                include('incident/send_email.inc.php');
+                echo "</div>";
+            }
+            else
+            {
+                //show select email form
+                echo "<div id='Email' dojoType='ContentPane' label='Email'>";
+                include('incident/email.inc.php');
+                echo "</div>";
+            }
+        }
+
         echo "<div id='escalate' dojoType='ContentPane' label='Escalate'>";
         include('incident/escalate.inc.php');
         echo "</div>";
