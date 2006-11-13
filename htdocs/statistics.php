@@ -23,7 +23,7 @@ function give_overview()
     global $todayrecent;
 
     $sql = "SELECT COUNT(incidents.id), incidentstatus.name FROM incidents, incidentstatus ";
-    $sql .= "WHERE incidents.status = incidentstatus.id AND closed = 0 GROUP BY incidents.status";
+    $sql .= "WHERE incidents.status = incidentstatus.id AND status != 2 AND staus != 7 GROUP BY incidents.status";
 
     $result = mysql_query($sql);
     if (mysql_error()) trigger_error("MySQL Query Error ".mysql_error(), E_USER_ERROR);
