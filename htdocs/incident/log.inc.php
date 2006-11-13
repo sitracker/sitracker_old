@@ -107,7 +107,7 @@ while ($update = mysql_fetch_object($result))
     //$replace = array("<a href=\"\\1\">\\1</a>"); // , "<a href=\"mailto:$0\">$0</a>"
     //$updatebody = preg_replace("/href=\"www/i", "href=\"http://www", preg_replace ($search, $replace, $updatebody));
 
-    // $updatebody = bbcode($updatebody);
+    $updatebody = bbcode($updatebody);
 
     //$updatebody = emotion($updatebody);
 
