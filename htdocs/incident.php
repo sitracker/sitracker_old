@@ -7,6 +7,7 @@
 // This software may be used and distributed according to the terms
 // of the GNU General Public License, incorporated herein by reference.
 
+// As of Nov 06 incident_details will probably be used, this will probably be removed at a latter date.
 
 // incident framework
 $permission=61; // View Incident Details

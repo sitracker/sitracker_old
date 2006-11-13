@@ -9,7 +9,6 @@
 //
 
 
-// This file will soon be superceded by incident.php - 20Oct05 INL
 
 $permission=61; // View Incident Details
 require('db_connect.inc.php');
