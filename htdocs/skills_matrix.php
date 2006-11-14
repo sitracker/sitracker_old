@@ -59,19 +59,30 @@ echo "</pre>";*/
     echo "<table align='center'>";
     echo "<tr><td>Software</td>";
     foreach($users AS $u) echo "<th>$u</th>";
+    echo "<th>Count</th>";
     echo "</tr>\n";
     $previous = "";
     while($row = mysql_fetch_object($result))
     {
         if($previous != $row->name)
         {
+            $count = 0;
             echo "<tr><th>{$row->name}</th>";
             while($user = mysql_fetch_object($usersresult))
             {
                 //todo get the proper symbol for a cross
-                if(empty($skills[$row->name][$user->realname])) echo "<td align='center'>&#215;</td>"; 
-                else echo "<td align='center'>&#10004;</td>";
+                if(empty($skills[$row->name][$user->realname])) 
+                {
+                    // No skill in this software
+                    echo "<td align='center'>&#215;</td>"; 
+                }
+                else
+                {
+                    //Skill in software
+                    echo "<td align='center'>&#10004;</td>";
+                }
             }
+            echo "<td>$count</td>";
             echo "</tr>\n";
             $started = true;
         }
