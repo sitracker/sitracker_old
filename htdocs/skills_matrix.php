@@ -80,9 +80,10 @@ echo "</pre>";*/
                 {
                     //Skill in software
                     echo "<td align='center'>&#10004;</td>";
+                    $count++;
                 }
             }
-            echo "<td>$count</td>";
+            echo "<td align='center'>$count</td>";
             echo "</tr>\n";
             $started = true;
         }
