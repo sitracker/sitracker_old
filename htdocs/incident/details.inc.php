@@ -47,7 +47,7 @@ if ($incident->externalengineer != '')
 }
 echo "</td>";
 
-echo "<td>";
+echo "<td align='right'>";
 // Second column, Product and Incident details
 if ($incident->owner != $sit[2] OR ($incident->towner > 0 AND $incident->towner != $incident->owner))
 {

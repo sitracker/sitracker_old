@@ -41,7 +41,6 @@ function gotab(tab) {
     background: #F7FAFF;
     margin-left: auto;
     margin-right: auto;
-    border-bottom: 3px solid #3165CD;
     border-top: 3px solid #3165CD;
 }
 #detailsummary table, .detailentry table
@@ -303,61 +302,11 @@ if ($slaremain <> 0 AND $incident->status!=2)
 
 // Print a table showing summary details of the incident
 
-// Tempory hack, don't show this for old incident details page
-//if (strpos($_SERVER['PHP_SELF'], 'incident_details.php')===FALSE)
-//{
-    echo "<h1 class='$class'>{$title}: {$incidentid} - ".stripslashes($incident->title)."</h1>";
-//}
+echo "<h1 class='$class'>{$title}: {$incidentid} - ".stripslashes($incident->title)."</h1>";
 
 include('incident/details.inc.php');
 
 
-
-// echo "<h1>$title</h1>";
-//echo "<div id='navmenu'>";
-/*echo "<div id='mainTabContainer' dojoType='TabContainer' style='width: 80%; height: 500px' selectedTab='Log'>";
-
-echo "<div id='Log' dojoType='ContentPane' label='Log'>";
-include('incident/log.inc.php');
-echo "</div>";
-*//*
-if ($menu != 'hide')
-{
-    if (incident_status($id) != 2)
-    {
-        //echo "<a class='barlink' href='update_incident.php?id={$id}&amp;popup={$popup}' accesskey='U'><em>U</em>pdate</a> | ";
-        /*if(user_permission($sit[2],8))
-        {
-            echo "<a dojoType='LinkPane' href='update_incident.php?id={$id}' refreshOnShow='true' style='display: none'>Update</a>";
-        }*/
-        /*echo "<a class='barlink' href='javascript:close_window({$id});'>Close</a> | ";
-        echo "<a class='barlink' href='reassign_incident.php?id={$id}&amp;popup={$popup}' accesskey='R'><em>R</em>eassign</a> | ";
-        echo "<a class='barlink' href='edit_incident.php?id={$id}&amp;popup={$popup}'>Edit</a> | ";
-        echo "<a class='barlink' href='incident_service_levels.php?id={$id}&amp;popup={$popup}' accesskey='S'><em>S</em>ervice</a> | ";
-        echo "<a class='barlink' href='incident_relationships.php?id={$id}&amp;tab=relationships'>Relations</a> | ";
-        echo "<a class='barlink' href='javascript:email_window({$id})' accesskey='E'><em>E</em>mail</a> | ";
-        echo "<a class='barlink' href='incident_attachments.php?id={$id}&amp;popup={$popup}' accesskey='F'><em>F</em>iles</a> | ";
-        echo "<a class='barlink' href='incident_details.php?id={$id}&amp;popup={$popup}' accesskey='D'><em>D</em>etails And Log</a> | ";
-        echo "<a class='barlink' href='javascript:help_window({$permission});'>?</a>";
-        if (!empty($_REQUEST['popup'])) echo " | <a class=barlink href='javascript:window.close();'>Close Window</a>";*//*
-    }
-    else
-    {
-        echo "<a class='barlink' href='reopen_incident.php?id={$id}&amp;popup={$popup}'>Reopen</a> | ";
-        echo "<a class='barlink' href='incident_service_levels.php?id={$id}&amp;popup={$poup}' accesskey='S'><em>S</em>ervice</a> | ";
-        echo "<a class='barlink' href='incident_relationships.php?id={$id}&amp;tab=relationships'>Relations</a> | ";
-        echo "<a class='barlink' href='incident_attachments.php?id={$id}&amp;popup={$popup}' accesskey='F'><em>F</em>iles</a> | ";
-        echo "<a class='barlink' href='incident_details.php?id={$id}&amp;popup={$popup}' accesskey='D'><em>D</em>etails And Log</a> | ";
-        echo "<a class='barlink' href='javascript:help_window({$permission});'>?</a>";
-        if (!empty($_REQUEST['popup'])) echo " | <a class='barlink' href='javascript:window.close();'>Close Window</a>";
-    }
-}
-else
-{
-    echo "<a class='barlink' href='javascript:window.close();'>Close Window</a>";
-}
-echo "</div>";
-*/
 
 
 ?>
