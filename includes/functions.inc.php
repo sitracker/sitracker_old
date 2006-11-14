@@ -368,12 +368,6 @@ function user_realname($id,$allowhtml=FALSE)
 }
 
 
-function user_jobtitle($id)
-{
-    return db_read_column('title', 'users', $id);
-}
-
-
 function user_email($id)
 {
     if ($id == $_SESSION['userid']) return $_SESSION['email'];
@@ -384,29 +378,6 @@ function user_email($id)
 function user_phone($id)
 {
     return db_read_column('phone', 'users', $id);
-}
-
-
-function user_fax($id)
-{
-    return db_read_column('fax', 'users', $id);
-}
-
-
-function user_aim($id)
-{
-    return db_read_column('aim', 'users', $id);
-}
-
-function user_icq($id)
-{
-    return db_read_column('icq', 'users', $id);
-}
-
-
-function user_msn($id)
-{
-    return db_read_column('msn', 'users', $id);
 }
 
 
@@ -427,13 +398,6 @@ function user_message($id)
     return db_read_column('message', 'users', $id);
 }
 
-
-function user_qualifications($id)
-{
-    return db_read_column('qualifications', 'users', $id);
-}
-
-
 function user_status($id)
 {
     return db_read_column('status', 'users', $id);
@@ -448,16 +412,6 @@ function user_accepting($id)
     if ($accepting == '')  $accepting = "NoSuchUser";
 
     return($accepting);
-}
-
-
-function user_collapse($id)
-{
-    $var_collapse = db_read_column('var_collapse', 'users', $id);
-    if ($var_collapse == 'true') $var_collapse = TRUE;
-    else $var_collapse = FALSE;
-
-    return($var_collapse);
 }
 
 
@@ -510,52 +464,6 @@ function user_incidents($id){
     }
     return $arr;
 }
-
-/* Returns an integer representing the number  */
-/* of incidents the given user has that are awaiting action   */
-/* Based upon the timetonextaction field                      */
-/* Returns 0 if  the user does not exist.                     */
-/* INL                                                        */
-function user_awaitingactionincidents($id)
-{
-    $now=time();
-    if ($id=='') throw_error('Incident ID not set:','user_awaitingactionincidents()');
-
-
-    $sql = "SELECT id FROM incidents WHERE owner='$id' AND timeofnextaction<$now AND timeofnextaction!=0 ";
-    $sql .="AND (status!=2)";
-    $result = mysql_query($sql);
-    if (mysql_error()) trigger_error(mysql_error(),E_USER_WARNING);
-    $returnvalue=mysql_num_rows($result);
-
-    mysql_free_result($result);
-
-    return($returnvalue);
-}
-
-
-
-/* Returns an integer representing the number  */
-/* of incidents the given user has that are awaiting action   */
-/* TODAY (i.e. in the next eight hjouts                       */
-/* Based upon the timetonextaction field                      */
-/* Returns 0 if  the user does not exist.                     */
-/* INL                                                        */
-function user_awaitingactionincidentstoday($id)
-{
-    $now=time()+(8*3600);  // next 8 hours
-
-    $sql = "SELECT id FROM incidents WHERE owner='$id' AND timeofnextaction<$now AND timeofnextaction!=0 ";
-    $sql .="AND (status!=2)";
-    $result = mysql_query($sql);
-    if (mysql_error()) trigger_error(mysql_error(),E_USER_WARNING);
-    $returnvalue=mysql_num_rows($result);
-
-    mysql_free_result($result);
-
-    return($returnvalue);
-}
-
 
 
 // gets users holiday information for a certain day given an optional type
@@ -1663,27 +1571,6 @@ function accepting_drop_down($name, $userid)
 }
 
 
-
-/*  prints the HTML for a drop down list of     */
-/* days of the month with the gven name and with the option   */
-/* selected depending on the supplied argument                */
-function day_drop_down($name, $day)
-{
-   echo "<select name=\"$name\">\n";
-   if ($day == 0) echo "<option value='0'>Select A Day</option>\n";
-
-   for ($counter = 1; $counter <= 31; $counter++)
-      {
-      echo "<option ";
-      if ($counter == $day) echo "selected='selected' ";
-      echo "value='$counter'>$counter</option>\n";
-      }
-
-   echo "</select>\n";
-}
-
-
-
 /*  prints the HTML for a drop down list of     */
 /* months of the year with the gven name and with the option  */
 /* selected depending on the supplied argument                */
@@ -2501,18 +2388,6 @@ function site_name($id)
 }
 
 
-// Returns the number of maintenance contracts a site has.
-function site_count_maintenance($id)
-{
-    $sql  = "SELECT id FROM maintenance WHERE site='$id'";
-    $result = mysql_query($sql);
-
-    $count=mysql_num_rows($result);
-    mysql_free_result($result);
-    return $count;
-}
-
-
 //  prints the HTML for a drop down list of
 // maintenance contracts, with the given name and with the
 // given id selected.
@@ -2538,60 +2413,6 @@ function maintenance_drop_down($name, $id)
     ?>
     </select>
     <?php
-}
-
-
-// Returns an integer representing the expiry day of the month for the given maintenance contract.
-// Returns 0 if the maintenance contract does not exist.
-function maintenance_expiry_day($id)
-{
-    $sql = "SELECT id, expirydate FROM maintenance WHERE id=$id";
-    $result = mysql_query($sql);
-
-    if (mysql_num_rows($result) == 0)
-        return(0);
-    else
-    {
-        $maintenance = mysql_fetch_array($result);
-        $date_array = getdate($maintenance["expirydate"]);
-        return($date_array["mday"]);
-    }
-}
-
-
-// Returns an integer representing the expiry month of the year for the given maintenance contract.
-// Returns 0 if the maintenance contract does not exist.
-function maintenance_expiry_month($id)
-{
-    $sql = "SELECT id, expirydate FROM maintenance WHERE id=$id";
-    $result = mysql_query($sql);
-
-    if (mysql_num_rows($result) == 0)
-        return(0);
-    else
-    {
-        $maintenance = mysql_fetch_array($result);
-        $date_array = getdate($maintenance["expirydate"]);
-        return($date_array["mon"]);
-    }
-}
-
-
-// Returns an integer representing the expiry year for the given maintenance contract. Returns 0 if the
-// maintenance contract does not exist.
-function maintenance_expiry_year($id)
-{
-    $sql = "SELECT id, expirydate FROM maintenance WHERE id=$id";
-    $result = mysql_query($sql);
-
-    if (mysql_num_rows($result) == 0)
-        return(0);
-    else
-    {
-        $maintenance = mysql_fetch_array($result);
-        $date_array = getdate($maintenance["expirydate"]);
-        return($date_array["year"]);
-    }
 }
 
 
@@ -2656,66 +2477,6 @@ function licence_type($id)
     return db_read_column('name', 'licencetypes', $id);
 }
 
-
-
-//  prints the HTML for a drop down list of
-// incidentpools, with the given name and with the given id
-// selected.
-// OBSOLETE Incident Pools
-function incidentpool_drop_down($name, $maintenanceid)
-{
-    // extract statuses
-    $sql  = "SELECT id, name, incidentsremaining FROM incidentpools";
-    $result = mysql_query($sql);
-
-    // echo "<select
-    // print HTML
-    ?>
-    <select name="<?php echo $name ?>">
-    <?php
-
-    echo "<option value='0'>Unlimited</option>\n";
-    while ($incidentpools = mysql_fetch_array($result))
-    {
-        ?><option <?php if ($incidentpools["id"] == $id) { ?>selected='selected' <?php } ?>value='<?php echo $incidentpools["id"] ?>'>
-        <?php echo "{$incidentpools["name"]}, {$incidentpools["incidentsremaining"]} remaining";
-        echo "\n";
-    }
-    ?>
-    </select>
-    <?php
-}
-
-
-/*  prints the HTML for the top menu bar        */
-/* given a permission ID                                      */
-/* Uses the topmenu array from config.inc.php                 */
-function build_topmenu($id)
-{
-    global $topmenu, $CONFIG;
-    if (!isset($id)) $id=0;
-
-    if (!is_array($topmenu)) throw_error('Error: Menu not defined', '');
-
-    if ($id==26) // help
-    {
-        echo "<a href=\"{CONFIG['application_webpath']}help.php?id=0\">Help Index</a> | <a href=\"javascript:window.close();\">Close</a>\n";
-    }
-    else
-    {
-        echo "<a href=\"/main.php\">Main</a> | \n";
-        foreach ($topmenu[$id] as $key => $value)
-        {
-            echo "<a href=\"".$value['url']."\"";
-            echo "title=\"Permission Required: ".permission_name($value['perm'])."\">";
-            echo $value['name'];
-            echo "</a> | \n";
-        }
-        echo "<a href=\"javascript:help_window($id);\">?</a>";
-        echo " | ";
-        echo "<a href=\"/logout.php\">Logout</a>";
-    }
-}
 
 function countdayincidents($day, $month, $year)
 {
@@ -4517,29 +4278,6 @@ function cleanvar($var,$striphtml=TRUE, $transentities=TRUE)
     return $var;
 }
 
-
-function authenticate_contact($username, $password)
-{
-    global $CONFIG;
-    // $password
-    $sql  = "SELECT id FROM contacts ";
-    $sql .= "WHERE username='$username' AND password='$password' AND status!=0 ";
-    // a status of 0 means the user account is disabled
-    $result = mysql_query($sql);
-    if (mysql_error()) trigger_error(mysql_error(),E_USER_WARNING);
-
-    // return appropriate value
-    if (mysql_num_rows($result) == 0)
-    {
-        mysql_free_result($result);
-        return 0;
-    }
-    else
-    {
-        journal(4,'User Authenticated',"$username authenticated from ".getenv('REMOTE_ADDR'),1,0);
-        return 1;
-    }
-}
 
 function external_escalation($escalated, $incid)
 {
