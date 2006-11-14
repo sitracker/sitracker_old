@@ -33,6 +33,7 @@ if($countusers > 0)
     while($row = mysql_fetch_object($usersresult))
     {
         $users[$row->id] = $row->realname;
+        $counting[$row->realname]=0;
     }
 }
 mysql_data_seek($usersresult, 0);
@@ -80,6 +81,7 @@ echo "</pre>";*/
                 {
                     //Skill in software
                     echo "<td align='center'>&#10004;</td>";
+                    $counting[$user->realname]++;
                     $count++;
                 }
             }
@@ -91,7 +93,8 @@ echo "</pre>";*/
         //echo $row->realname." ";
         $previous = $row->name;
     }
-
+    echo "<th align='right'>COUNT</th>";
+    foreach($counting AS $c) echo "<td align='center'>{$c}</td>";
     echo "</table>";
 }
 
