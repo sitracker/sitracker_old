@@ -40,7 +40,6 @@ mysql_data_seek($usersresult, 0);
 $sql = "SELECT users.id, users.realname, software.name FROM users, software, usersoftware ";
 $sql .= "WHERE users.id = usersoftware.userid AND software.id = usersoftware.softwareid ";
 $sql .= "ORDER BY software.id, users.id";
-
 $result = mysql_query($sql);
 if (mysql_error()) trigger_error(mysql_error(),E_USER_WARNING);
 
@@ -48,6 +47,15 @@ $countskills = mysql_num_rows($result);
 
 if($countskills > 0)
 {
+    $previous = "";
+    while($row = mysql_fetch_object($result))
+    {
+        $skills[$row->name][$row->realname] = $row->realname;
+    }
+/*echo "<pre>";
+print_r($skills);
+echo "</pre>";*/
+    mysql_data_seek($result, 0);
     echo "<table align='center'>";
     echo "<tr><td>Software</td>";
     foreach($users AS $u) echo "<th>$u</th>";
@@ -57,13 +65,12 @@ if($countskills > 0)
     {
         if($previous != $row->name)
         {
-            // if($started == true) echo "</tr>";
             echo "<tr><th>{$row->name}</th>";
             while($user = mysql_fetch_object($usersresult))
             {
-                // Temporarily just print the users ID, later this will be a tick or cross
-                // depending if they have the skill or not
-                echo "<td>{$user->id}</td>";
+                //todo get the proper symbol for a cross
+                if(empty($skills[$row->name][$user->realname])) echo "<td>&#215;</td>"; 
+                else echo "<td>&#10004;</td>";
             }
             echo "</tr>\n";
             $started = true;
