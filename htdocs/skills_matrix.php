@@ -22,7 +22,7 @@ include('htmlheader.inc.php');
 
 echo "<h2>$title</h2>";
 
-$sql = "SELECT users.id, users.realname FROM users, usersoftware WHERE users.id = usersoftware.userid AND users.status <> 0 GROUP BY users.id ORDER BY users.id";
+$sql = "SELECT users.id, users.realname FROM users, usersoftware WHERE users.id = usersoftware.userid AND users.status <> 0 GROUP BY users.id ORDER BY users.realname";
 $usersresult = mysql_query($sql);
 if (mysql_error()) trigger_error(mysql_error(),E_USER_WARNING);
 
@@ -39,7 +39,7 @@ mysql_data_seek($usersresult, 0);
 
 $sql = "SELECT users.id, users.realname, software.name FROM users, software, usersoftware ";
 $sql .= "WHERE users.id = usersoftware.userid AND software.id = usersoftware.softwareid ";
-$sql .= "ORDER BY software.id, users.id";
+$sql .= "AND users.status <> 0 ORDER BY software.name, users.id";
 $result = mysql_query($sql);
 if (mysql_error()) trigger_error(mysql_error(),E_USER_WARNING);
 
@@ -69,8 +69,8 @@ echo "</pre>";*/
             while($user = mysql_fetch_object($usersresult))
             {
                 //todo get the proper symbol for a cross
-                if(empty($skills[$row->name][$user->realname])) echo "<td>&#215;</td>"; 
-                else echo "<td>&#10004;</td>";
+                if(empty($skills[$row->name][$user->realname])) echo "<td align='center'>&#215;</td>"; 
+                else echo "<td align='center'>&#10004;</td>";
             }
             echo "</tr>\n";
             $started = true;
