@@ -110,7 +110,7 @@ echo "</td></tr></table>";
 
 // Check users email address
 if (empty($_SESSION['email']) OR !preg_match('/^[A-z0-9][\w.-]*@[A-z0-9][\w\-\.]+\.[A-z0-9]{2,6}$/',$_SESSION['email']))
-    echo "<p class='error'>Please <a href='edit_profile.php'>edit your profile</a>i and set a valid email address</p>";
+    echo "<p class='error'>Please <a href='edit_profile.php'>edit your profile</a> and set a valid email address</p>";
 
 
 //  Users Login Details

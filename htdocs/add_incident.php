@@ -156,7 +156,6 @@ elseif ($action=='findcontact')
             echo "</tr>\n";
         }
         echo "</table>\n";
-
         // Select the contact from the list of contacts as well
         $sql = "SELECT *, contacts.id AS contactid FROM contacts, sites WHERE contacts.siteid=sites.id ";
         if (empty($contactid))
