@@ -32,7 +32,7 @@ function give_overview()
     {
        // echo "<table align='center' class='vertical' width='20%'>";
         echo "<table class='vertical' align='center'>";
-        $openCalls = 0;
+        $opencalls = 0;
         while($row = mysql_fetch_array($result))
         {
             echo "<tr><th>".$row['name']."</th><td class='shade2' align='left'>".$row['COUNT(incidents.id)']."</td></tr>";
