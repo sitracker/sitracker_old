@@ -22,7 +22,7 @@ include('htmlheader.inc.php');
 
 echo "<h2>$title</h2>";
 
-$sql = "SELECT users.id, users.realname FROM users, usersoftware WHERE users.id = usersoftware.userid GROUP BY users.id ORDER BY users.id";
+$sql = "SELECT users.id, users.realname FROM users, usersoftware WHERE users.id = usersoftware.userid AND users.status <> 0 GROUP BY users.id ORDER BY users.id";
 $usersresult = mysql_query($sql);
 if (mysql_error()) trigger_error(mysql_error(),E_USER_WARNING);
 
