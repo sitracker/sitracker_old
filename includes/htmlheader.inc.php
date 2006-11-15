@@ -115,4 +115,5 @@ if ($sit[0]!='')
     echo "</ul>\n\n";
     echo "</div>\n";
 }
+echo "<div id='mainframe'>";
 ?>

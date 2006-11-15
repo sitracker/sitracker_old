@@ -54,7 +54,7 @@ if ($_SESSION['auth'] != TRUE)
     echo "</form>";
     if($CONFIG['portal'] == TRUE)
     {
-        echo "<tr><td colspan='2'><a href='forgotpwd.php'>Forgotten your details? (Customers)</a></td></tr>";
+        echo "<tr><td colspan='2'><a href='forgotpwd.php'>Forgotten your details?</a></td></tr>";
     }
     echo "</table>";
     echo "</div>";
