@@ -8,6 +8,7 @@
 // of the GNU General Public License, incorporated herein by reference.
 //
 // Authors: Tom Gerrard, Ivan Lucas <ivanlucas[at]users.sourceforge.net>
+//                       Paul Heaney <paulheaney[at]users.sourceforge.net>
 
 // This Page Is Valid XHTML 1.0 Transitional! 31Oct05
 
@@ -150,22 +151,7 @@ if(!empty($selected))
     }
 }
 
-// extract updates
-$sql  = 'SELECT updates.id as id, updates.bodytext as bodytext, tempincoming.emailfrom as emailfrom, tempincoming.subject as subject, ';
-$sql .= 'updates.timestamp as timestamp, tempincoming.incidentid as incidentid, tempincoming.id as tempid, tempincoming.locked as locked, ';
-$sql .= 'tempincoming.reason as reason, tempincoming.contactid as contactid ';
-$sql .= 'FROM updates, tempincoming WHERE updates.incidentid=0 AND tempincoming.updateid=updates.id ';
-$sql .= 'ORDER BY timestamp ASC, id ASC';
-$result = mysql_query($sql);
-if (mysql_error()) trigger_error("MySQL Query Error ".mysql_error(), E_USER_ERROR);
-$countresults=mysql_num_rows($result);
-$spamcount=0;
-if($countresults > 0)
-{
-    echo "<h2>Held Email";
-    if ($countresults >1) echo 's';
-    echo " ($countresults total) </h2>";
-    echo "<p align='center'>Incoming email that cannot be handled automatically</p>";
+
     ?>
     <script type="text/javascript">
     <!--
@@ -175,27 +161,7 @@ if($countresults > 0)
         }
     -->
     </script>
-    <form action='review_incoming_updates.php' name='held_emails'>
-    <table align='center' style='width: 95%'>
-    <tr>
-    <th><input type='checkbox' name='selectAll' value='CheckAll' onclick="checkAll(this.checked);" /></th>
-    <th>Date</th>
-    <th>From</th>
-    <th>Subject</th>
-    <th>Reason</th>
-    <th>Operation</th>
-    </tr>
-    <?php
-    if ($countresults) mysql_data_seek($result, 0);
     
-    while ($updates = mysql_fetch_array($result))
-        if (!stristr($updates['subject'],$CONFIG['spam_email_subject'])) echo generate_row($updates);
-        else $spamcount++;
-    
-    if($countresults > 0) echo "<tr><td><a href=\"javascript: submitform()\" onclick='return confirm_delete();'>Delete</a></td></tr>";
-    echo "</table>\n<br /><br />\n";
-    
-    ?>
     <script type="text/javascript">
     <!--
     function submitform()
@@ -223,8 +189,80 @@ if($countresults > 0)
     }
     -->
     </script>
+
+<?php
+
+// extract updates
+$sql  = 'SELECT updates.id as id, updates.bodytext as bodytext, tempincoming.emailfrom as emailfrom, tempincoming.subject as subject, ';
+$sql .= 'updates.timestamp as timestamp, tempincoming.incidentid as incidentid, tempincoming.id as tempid, tempincoming.locked as locked, ';
+$sql .= 'tempincoming.reason as reason, tempincoming.contactid as contactid ';
+$sql .= 'FROM updates, tempincoming WHERE updates.incidentid=0 AND tempincoming.updateid=updates.id ';
+$sql .= 'ORDER BY timestamp ASC, id ASC';
+$result = mysql_query($sql);
+if (mysql_error()) trigger_error("MySQL Query Error ".mysql_error(), E_USER_ERROR);
+$countresults=mysql_num_rows($result);
+$spamcount=0;
+if($countresults > 0)
+{
+    if ($countresults) mysql_data_seek($result, 0);
+    
+    while ($updates = mysql_fetch_array($result))
+        if (!stristr($updates['subject'],$CONFIG['spam_email_subject'])) $html .= generate_row($updates);
+        else $spamcount++;
+}
+
+$sql = "SELECT * FROM incidents WHERE owner='0' AND status!='2'";
+$resultnew = mysql_query($sql);
+if (mysql_num_rows($resultnew) >= 1)
+{
+    while ($new = mysql_fetch_object($resultnew))
+    {
+        // Get Last Update
+        list($update_userid, $update_type, $update_currentowner, $update_currentstatus, $update_body, $update_timestamp, $update_nextaction, $update_id)=incident_lastupdate($new->id);
+        $update_body = parse_updatebody($update_body);
+        $html .= "<tr class='shade1'><td />";
+        $html .= "<td align='center'>".date($CONFIG['dateformat_datetime'], $new->opened)."</td>";
+        $html .= "<td>".contact_realname($new->contact)."</td>";
+        $html .= "<td>".product_name($new->product)." / ".software_name($new->softwareid)."<br />";
+        $html .= "[{$new->id}] <a href=\"javascript:incident_details_window('{$new->id}','holdingview');\" class='info'>{$new->title}<span>{$update_body}</span></a></td>";
+        $html .= "<td style='text-align:center;'>Unassigned</td>";
+        $html .= "<td style='text-align:center;'>";
+        $html .= "<a href= \"javascript:incident_details_window('{$new->id}','holdingview');\" title='View this incident'>View</a> | ";
+        $html .= "<a href= \"javascript:wt_winpopup('reassign_incident.php?id={$new->id}&amp;reason=Initial%20assignment%20to%20engineer&amp;popup=yes','mini');\" title='Assign this incident'>Assign</a></td>";
+        $html .= "</tr>";
+    }
+}
+
+if((mysql_num_rows($resultnew) > 0) OR ($countresults > 0))
+{
+    $totalheld = $countresults + mysql_num_rows($resultnew);
+    echo "<h2>Held Email";
+    if ($totalheld >1) echo 's';
+    echo " ($totalheld total) </h2>";
+    echo "<p align='center'>Incoming email that cannot be handled automatically</p>";
+    ?>
+    <form action='review_incoming_updates.php' name='held_emails'>
+    <table align='center' style='width: 95%'>
+    <tr>
+    <th>
+    <?php if($countresults > 0) echo "<input type='checkbox' name='selectAll' value='CheckAll' onclick=\"checkAll(this.checked);\" />"?>
+    </th>
+    <th>Date</th>
+    <th>From</th>
+    <th>Subject</th>
+    <th>Reason</th>
+    <th>Operation</th>
+    </tr>
+
     <?php
+    echo $html;
+    if($countresults > 0) echo "<tr><td><a href=\"javascript: submitform()\" onclick='return confirm_delete();'>Delete</a></td></tr>";
+    echo "</table>\n";
     echo "</form>";
+}
+else
+{
+    echo "<h2>No emails pending</h2>";
 }
 
 if($spamcount > 0)
@@ -255,36 +293,7 @@ if($spamcount > 0)
     echo "<br /><br />"; //gap
 }
 
-$sql = "SELECT * FROM incidents WHERE owner='0' AND status!='2'";
-$result = mysql_query($sql);
-if (mysql_num_rows($result) >= 1)
-{
 
-    echo "<h2>New incidents</h2>";
-    echo "<p align='center'>Incidents that haven't been assigned to anyone yet</p>";
-    echo "<table align='center' style='width: 95%;'>";
-    echo "<tr><th title='Opened'>Date</th><th>From</th>";
-    echo "<th title='Incident Title'>Subject</th><th>Reason</th>";
-    echo "<th>Operation</th></tr>\n";
-
-    while ($new = mysql_fetch_object($result))
-    {
-        // Get Last Update
-        list($update_userid, $update_type, $update_currentowner, $update_currentstatus, $update_body, $update_timestamp, $update_nextaction, $update_id)=incident_lastupdate($new->id);
-        $update_body = parse_updatebody($update_body);
-        echo "<tr class='shade1'>";
-        echo "<td align='center'>".date($CONFIG['dateformat_datetime'], $new->opened)."</td>";
-        echo "<td>".contact_realname($new->contact)."</td>";
-        echo "<td>".product_name($new->product)." / ".software_name($new->softwareid)."<br />";
-        echo "[{$new->id}] <a href=\"javascript:incident_details_window('{$new->id}','holdingview');\" class='info'>{$new->title}<span>{$update_body}</span></a></td>";
-        echo "<td style='text-align:center;'>Unassigned</td>";
-        echo "<td style='text-align:center;'>";
-        echo "<a href= \"javascript:incident_details_window('{$new->id}','holdingview');\" title='View this incident'>View</a> | ";
-        echo "<a href= \"javascript:wt_winpopup('reassign_incident.php?id={$new->id}&amp;reason=Initial%20assignment%20to%20engineer&amp;popup=yes','mini');\" title='Assign this incident'>Assign</a></td>";
-        echo "</tr>";
-    }
-    echo "</table>\n";
-}
 
 $sql = "SELECT * FROM tempassigns,incidents WHERE tempassigns.incidentid=incidents.id AND assigned='no' ";
 $result = mysql_query($sql);
