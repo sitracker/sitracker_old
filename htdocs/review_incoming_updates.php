@@ -159,104 +159,114 @@ $sql .= 'ORDER BY timestamp ASC, id ASC';
 $result = mysql_query($sql);
 if (mysql_error()) trigger_error("MySQL Query Error ".mysql_error(), E_USER_ERROR);
 $countresults=mysql_num_rows($result);
-echo "<h2>Held Email";
-if ($countresults >1) echo 's';
-echo " ($countresults total) </h2>";
-echo "<p align='center'>Incoming email that cannot be handled automatically</p>";
-?>
-<script type="text/javascript">
-<!--
-    function confirm_delete()
-    {
-        return window.confirm("This item will be permanently deleted.  Are you sure you want to continue?");
-    }
--->
-</script>
-<form action='review_incoming_updates.php' name='held_emails'>
-<table align='center' style='width: 95%'>
-<tr>
-<th><input type='checkbox' name='selectAll' value='CheckAll' onclick="checkAll(this.checked);" /></th>
-<th>Date</th>
-<th>From</th>
-<th>Subject</th>
-<th>Reason</th>
-<th>Operation</th>
-</tr>
-<?php
-if ($countresults) mysql_data_seek($result, 0);
-
-while ($updates = mysql_fetch_array($result))
-    if (!stristr($updates['subject'],$CONFIG['spam_email_subject'])) echo generate_row($updates);
-
-if($countresults > 0) echo "<tr><td><a href=\"javascript: submitform()\" onclick='return confirm_delete();'>Delete</a></td></tr>";
-echo "</table>\n<br /><br />\n";
-
-?>
-<script type="text/javascript">
-<!--
-function submitform()
+$spamcount=0;
+if($countresults > 0)
 {
-  document.held_emails.submit();
-}
-
-function checkAll(checkStatus)
-{
-    var frm = document.held_emails.elements;
-    for(i = 0; i < frm.length; i++)
-    {
-        if(frm[i].type == 'checkbox')
+    echo "<h2>Held Email";
+    if ($countresults >1) echo 's';
+    echo " ($countresults total) </h2>";
+    echo "<p align='center'>Incoming email that cannot be handled automatically</p>";
+    ?>
+    <script type="text/javascript">
+    <!--
+        function confirm_delete()
         {
-            if(checkStatus)
+            return window.confirm("This item will be permanently deleted.  Are you sure you want to continue?");
+        }
+    -->
+    </script>
+    <form action='review_incoming_updates.php' name='held_emails'>
+    <table align='center' style='width: 95%'>
+    <tr>
+    <th><input type='checkbox' name='selectAll' value='CheckAll' onclick="checkAll(this.checked);" /></th>
+    <th>Date</th>
+    <th>From</th>
+    <th>Subject</th>
+    <th>Reason</th>
+    <th>Operation</th>
+    </tr>
+    <?php
+    if ($countresults) mysql_data_seek($result, 0);
+    
+    while ($updates = mysql_fetch_array($result))
+        if (!stristr($updates['subject'],$CONFIG['spam_email_subject'])) echo generate_row($updates);
+        else $spamcount++;
+    
+    if($countresults > 0) echo "<tr><td><a href=\"javascript: submitform()\" onclick='return confirm_delete();'>Delete</a></td></tr>";
+    echo "</table>\n<br /><br />\n";
+    
+    ?>
+    <script type="text/javascript">
+    <!--
+    function submitform()
+    {
+    document.held_emails.submit();
+    }
+    
+    function checkAll(checkStatus)
+    {
+        var frm = document.held_emails.elements;
+        for(i = 0; i < frm.length; i++)
+        {
+            if(frm[i].type == 'checkbox')
             {
-                frm[i].checked = true;
-            }
-            else
-            {
-                frm[i].checked = false;
+                if(checkStatus)
+                {
+                    frm[i].checked = true;
+                }
+                else
+                {
+                    frm[i].checked = false;
+                }
             }
         }
     }
+    -->
+    </script>
+    <?php
+    echo "</form>";
 }
--->
-</script>
-<?php
-echo "</form>";
-echo "<h2>Spam Emails</h2>\n";
-echo "<p align='center'>Incoming email that is suspected to be spam</p>";
 
-// Reset back for 'nasty' emails
-if ($countresults) mysql_data_seek($result, 0);
-
-echo "<table align='center' style='width: 95%;'>";
-echo "<tr><th>Date</th><th>From</th>";
-echo "<th>Subject</th><th>Reason</th>";
-echo "<th>Operation</th></tr>\n";
-
-while ($updates = mysql_fetch_array($result))
+if($spamcount > 0)
 {
-    if (stristr($updates['subject'],$CONFIG['spam_email_subject']))
+    echo "<h2>Spam Emails</h2>\n";
+    echo "<p align='center'>Incoming email that is suspected to be spam</p>";
+    
+    // Reset back for 'nasty' emails
+    if ($countresults) mysql_data_seek($result, 0);
+    
+    echo "<table align='center' style='width: 95%;'>";
+    echo "<tr><th>Date</th><th>From</th>";
+    echo "<th>Subject</th><th>Reason</th>";
+    echo "<th>Operation</th></tr>\n";
+    
+    while ($updates = mysql_fetch_array($result))
     {
-        echo generate_row($updates);
-        $spam_array[]=$updates['id'].'_'.$updates['tempid'];
+        if (stristr($updates['subject'],$CONFIG['spam_email_subject']))
+        {
+            echo generate_row($updates);
+            $spam_array[]=$updates['id'].'_'.$updates['tempid'];
+        }
     }
+    echo "</table>";
+    if (is_array($spam_array)) echo "<p align='center'><a href={$_SERVER['PHP_SELF']}?delete_all_spam=".implode(',',$spam_array).'>Delete all mail from spam queue</a></p>';
+    
+    
+    echo "<br /><br />"; //gap
 }
-echo "</table>";
-if (is_array($spam_array)) echo "<p align='center'><a href={$_SERVER['PHP_SELF']}?delete_all_spam=".implode(',',$spam_array).'>Delete all mail from spam queue</a></p>';
 
-
-echo "<br /><br />"; //gap
-
-
-echo "<h2>New incidents</h2>";
-echo "<p align='center'>Incidents that haven't been assigned to anyone yet</p>";
-echo "<table align='center' style='width: 95%;'>";
-echo "<tr><th title='Opened'>Date</th><th>From</th>";
-echo "<th title='Incident Title'>Subject</th><th>Reason</th>";
-echo "<th>Operation</th></tr>\n";
 $sql = "SELECT * FROM incidents WHERE owner='0' AND status!='2'";
 $result = mysql_query($sql);
 if (mysql_num_rows($result) >= 1)
 {
+
+    echo "<h2>New incidents</h2>";
+    echo "<p align='center'>Incidents that haven't been assigned to anyone yet</p>";
+    echo "<table align='center' style='width: 95%;'>";
+    echo "<tr><th title='Opened'>Date</th><th>From</th>";
+    echo "<th title='Incident Title'>Subject</th><th>Reason</th>";
+    echo "<th>Operation</th></tr>\n";
+
     while ($new = mysql_fetch_object($result))
     {
         // Get Last Update
@@ -273,23 +283,23 @@ if (mysql_num_rows($result) >= 1)
         echo "<a href= \"javascript:wt_winpopup('reassign_incident.php?id={$new->id}&amp;reason=Initial%20assignment%20to%20engineer&amp;popup=yes','mini');\" title='Assign this incident'>Assign</a></td>";
         echo "</tr>";
     }
+    echo "</table>\n";
 }
-
-echo "</table>\n";
-
-echo "<br /><br />\n";
-
-echo "<h2>Pending Re-Assignments</h2>";
-echo "<p align='center'>Automatic reassignments that could not be made because users were set to 'not accepting'</p>";
-echo "<table align='center' style='width: 95%;'>";
-echo "<tr><th title='Last Updated'>Date</th><th title='Current Owner'>From</th>";
-echo "<th title='Incident Title'>Subject</th><th>Reason</th>";
-echo "<th>Operation</th></tr>\n";
 
 $sql = "SELECT * FROM tempassigns,incidents WHERE tempassigns.incidentid=incidents.id AND assigned='no' ";
 $result = mysql_query($sql);
+
 if (mysql_num_rows($result) >= 1)
 {
+    echo "<br /><br />\n";
+    
+    echo "<h2>Pending Re-Assignments</h2>";
+    echo "<p align='center'>Automatic reassignments that could not be made because users were set to 'not accepting'</p>";
+    echo "<table align='center' style='width: 95%;'>";
+    echo "<tr><th title='Last Updated'>Date</th><th title='Current Owner'>From</th>";
+    echo "<th title='Incident Title'>Subject</th><th>Reason</th>";
+    echo "<th>Operation</th></tr>\n";
+
     while ($assign = mysql_fetch_object($result))
     {
         // $originalownerstatus=user_status($assign->originalowner);
@@ -335,8 +345,9 @@ if (mysql_num_rows($result) >= 1)
             echo "</tr>\n";
         }
     }
+    echo "</table>\n";
 }
-echo "</table>\n";
+
 
 // TODO v3.2x Merge the sections into a single queue using an array
 
