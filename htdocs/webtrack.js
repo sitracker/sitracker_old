@@ -3,7 +3,10 @@
 function incident_details_window(incidentid,win)
 {
     // URL = "incident.php?popup=yes&id=" + incidentid;
-    URL = "incident_details.php?id=" + incidentid + "&javascript=enabled";
+    if(win=='holdingview')
+        URL = "incident_details.php?id=" + incidentid + "&javascript=enabled&view=lockedview";
+    else
+        URL = "incident_details.php?id=" + incidentid + "&javascript=enabled";
     window.open(URL, "sit_popup", "toolbar=yes,status=yes,menubar=no,scrollbars=yes,resizable=yes,width=700,height=600");
 }
 
