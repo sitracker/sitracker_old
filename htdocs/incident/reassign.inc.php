@@ -172,6 +172,7 @@ if (realpath(__FILE__) == realpath($_SERVER['SCRIPT_FILENAME']))
     <?php
     echo "<textarea name='bodytext' wrap='soft' rows='15' cols='65'>";
     if (!empty($reason)) echo $reason;
+    if (!empty($resassignmessage)) echo $resassignmessage;
     echo "</textarea>";
     echo "</td></tr>\n";
 

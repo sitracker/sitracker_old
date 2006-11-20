@@ -56,20 +56,14 @@ else
     </style>
     <?php
 
-    if($view != 'lockedview')
+
+    if($action != 'email')
     {
-        if($action != 'email')
-        {
-            echo "<div id='mainTabContainer' dojoType='TabContainer' style='width: 100%; height: 500px' selectedTab='log'>";
-        }
-        else
-        {
-            echo "<div id='mainTabContainer' dojoType='TabContainer' style='width: 100%; height: 500px' selectedTab='Email'>";
-        }
+        echo "<div id='mainTabContainer' dojoType='TabContainer' style='width: 100%; height: 500px' selectedTab='log'>";
     }
     else
     {
-        echo "<hr />";
+        echo "<div id='mainTabContainer' dojoType='TabContainer' style='width: 100%; height: 500px' selectedTab='Email'>";
     }
 
     echo "<div id='log' dojoType='ContentPane' label='Incident Log'>";
@@ -163,6 +157,17 @@ else
         
         }
         echo "</div>";
+    }
+    else
+    {
+        if(user_permission($sit[2],12)) //Reassign incident
+        {
+            //echo "<a dojoType='LinkPane' href=reassign_incident.php?id={$id}' refreshOnShow='true' style='display: none'>Reassign</a>";
+            $resassignmessage = "Initial assignment to engineer";
+            echo "<div id='Reassign' dojoType='ContentPane' label='Reassign'>";
+            include('incident/reassign.inc.php');
+            echo "</div>";
+        }
     }
     
     include('incident_html_bottom.inc.php');
