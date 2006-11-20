@@ -233,7 +233,7 @@ if (mysql_num_rows($resultnew) >= 1)
     }
 }
 
-if((mysql_num_rows($resultnew) > 0) OR ($countresults > 0))
+if((mysql_num_rows($resultnew) > 0) OR ($countresults > 0) AND ($countresults != $spamcount))
 {
     $totalheld = $countresults + mysql_num_rows($resultnew);
     echo "<h2>Held Email";
@@ -260,7 +260,7 @@ if((mysql_num_rows($resultnew) > 0) OR ($countresults > 0))
     echo "</table>\n";
     echo "</form>";
 }
-else
+else if($spamcount == 0)
 {
     echo "<h2>No emails pending</h2>";
 }
@@ -274,7 +274,7 @@ if($spamcount > 0)
     if ($countresults) mysql_data_seek($result, 0);
     
     echo "<table align='center' style='width: 95%;'>";
-    echo "<tr><th>Date</th><th>From</th>";
+    echo "<tr><th /><th>Date</th><th>From</th>";
     echo "<th>Subject</th><th>Reason</th>";
     echo "<th>Operation</th></tr>\n";
     
