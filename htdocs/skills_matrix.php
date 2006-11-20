@@ -16,13 +16,20 @@ require('functions.inc.php');
 // This page requires authentication
 require('auth.inc.php');
 
+$legacy = cleanvar($_REQUEST['legacy']);
+
 $title='Skills Matrix';
 
 include('htmlheader.inc.php');
 
 echo "<h2>$title</h2>";
+if(empty($legacy)) echo "<p align='center'><a href='{$_SERVER['PHP_SELF']}?legacy=yes'>Show legacy software</a></p>";
+else echo "<p align='center'><a href='{$_SERVER['PHP_SELF']}'>Hide legacy software</a></p>";
 
-$sql = "SELECT users.id, users.realname FROM users, usersoftware WHERE users.id = usersoftware.userid AND users.status <> 0 GROUP BY users.id ORDER BY users.realname";
+$sql = "SELECT users.id, users.realname FROM users, usersoftware, software ";
+$sql .= "WHERE users.id = usersoftware.userid AND users.status <> 0 ";
+if(empty($legacy)) $sql .= " AND (software.lifetime_end > NOW() OR software.lifetime_end = '0000-00-00' OR software.lifetime_end is NULL) ";
+$sql .= "AND software.id = usersoftware.softwareid GROUP BY users.id ORDER BY users.realname";
 $usersresult = mysql_query($sql);
 if (mysql_error()) trigger_error(mysql_error(),E_USER_WARNING);
 
@@ -40,7 +47,9 @@ mysql_data_seek($usersresult, 0);
 
 $sql = "SELECT users.id, users.realname, software.name FROM users, software, usersoftware ";
 $sql .= "WHERE users.id = usersoftware.userid AND software.id = usersoftware.softwareid ";
-$sql .= "AND users.status <> 0 ORDER BY software.name, users.id";
+$sql .= "AND users.status <> 0 ";
+if(empty($legacy)) $sql .= "AND (software.lifetime_end > NOW() OR software.lifetime_end = '0000-00-00' OR software.lifetime_end is NULL) ";
+$sql .= " ORDER BY software.name, users.id";
 $result = mysql_query($sql);
 if (mysql_error()) trigger_error(mysql_error(),E_USER_WARNING);
 
