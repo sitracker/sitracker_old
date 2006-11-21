@@ -66,25 +66,26 @@ if($countskills > 0)
 print_r($skills);
 echo "</pre>";*/
     mysql_data_seek($result, 0);
-    echo "<table align='center'>";
-    echo "<tr><td>Software</td>";
+    echo "<table align='center' class='vertical'>";
+    $shade='shade1';
+    echo "<tr><thead><td>Software</td>";
     foreach($users AS $u) echo "<th>$u</th>";
     echo "<th>Count</th>";
-    echo "</tr>\n";
+    echo "</thead></tr>\n";
     $previous = "";
     while($row = mysql_fetch_object($result))
     {
         if($previous != $row->name)
         {
             $count = 0;
-            echo "<tr><th>{$row->name}</th>";
+            echo "<tr class='$shade'><th width='20%;'>{$row->name}</th>";
             while($user = mysql_fetch_object($usersresult))
             {
                 //todo get the proper symbol for a cross
-                if(empty($skills[$row->name][$user->realname])) 
+                if(empty($skills[$row->name][$user->realname]))
                 {
                     // No skill in this software
-                    echo "<td align='center'>&#215;</td>"; 
+                    echo "<td align='center'></td>"; // &#215;
                 }
                 else
                 {
@@ -97,6 +98,8 @@ echo "</pre>";*/
             echo "<td align='center'>$count</td>";
             echo "</tr>\n";
             $started = true;
+            if ($shade=='shade1') $shade='shade2';
+            else $shade='shade1';
         }
         mysql_data_seek($usersresult, 0);
         //echo $row->realname." ";
