@@ -173,7 +173,8 @@ $hmenu[203010] = array (10=> array ( 'perm'=> 56, 'name'=> "Add Vendor", 'url'=>
                         30=> array ( 'perm'=> 28, 'name'=> "List Products", 'url'=>"products.php"),
                         40=> array ( 'perm'=> 56, 'name'=> "Add Software", 'url'=>"add_software.php"),
                         50=> array ( 'perm'=> 24, 'name'=> "Link Products", 'url'=>"add_product_software.php"),
-                        60=> array ( 'perm'=> 25, 'name'=> "Add Product Question", 'url'=>"add_productinfo.php")
+                        60=> array ( 'perm'=> 25, 'name'=> "Add Product Question", 'url'=>"add_productinfo.php"),
+                        70=> array ('perm'=> 56, 'name'=> "Edit Vendor", 'url'=>"edit_vendor.php")
 );
 
 

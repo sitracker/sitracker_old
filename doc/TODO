@@ -10,7 +10,6 @@ To Do
 * Interface for editing incident product info questions
 * Contact flags
 * Internationalisation
-* Interface for editing vendors
 * Change maintenance table to use servicelevel field that stores tag instead of id
 * Overhaul the email templates (emailtypes)
 * Add tabbed incident_details popup window, with tabs relevant to SLA status

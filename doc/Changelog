@@ -6,6 +6,8 @@ Changes in v3.25 - Unreleased
 * Adds forgotten password functionality for portal users
 * Interface to manage dashboard
 * Adds a skills matrix
+* Tidyed up the review incoming updates page
+* New interface for editing vendors
 
 Changes in v3.24 - Released 6 November 2006
 -----------------------------------------------------------------------
