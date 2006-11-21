@@ -234,9 +234,11 @@ if (mysql_num_rows($resultnew) >= 1)
     }
 }
 
-if((mysql_num_rows($resultnew) > 0) OR ($countresults > 0) AND ($countresults != $spamcount))
+$realemails = $countresults-$spamcount;
+
+if((mysql_num_rows($resultnew) > 0) OR ($realemails > 0))
 {
-    $totalheld = $countresults + mysql_num_rows($resultnew);
+    $totalheld = $countresults + mysql_num_rows($resultnew) - $spamcount;
     echo "<h2>Held Email";
     if ($totalheld >1) echo 's';
     echo " ($totalheld total) </h2>";
@@ -246,7 +248,7 @@ if((mysql_num_rows($resultnew) > 0) OR ($countresults > 0) AND ($countresults !=
     <table align='center' style='width: 95%'>
     <tr>
     <th>
-    <?php if($countresults > 0) echo "<input type='checkbox' name='selectAll' value='CheckAll' onclick=\"checkAll(this.checked);\" />"?>
+    <?php if($realemails > 0) echo "<input type='checkbox' name='selectAll' value='CheckAll' onclick=\"checkAll(this.checked);\" />"?>
     </th>
     <th>Date</th>
     <th>From</th>
@@ -261,7 +263,7 @@ if((mysql_num_rows($resultnew) > 0) OR ($countresults > 0) AND ($countresults !=
     {
         echo $row;
     }
-    if($countresults > 0) echo "<tr><td><a href=\"javascript: submitform()\" onclick='return confirm_delete();'>Delete</a></td></tr>";
+    if($realemails > 0) echo "<tr><td><a href=\"javascript: submitform()\" onclick='return confirm_delete();'>Delete</a></td></tr>";
     echo "</table>\n";
     echo "</form>";
 }
@@ -272,7 +274,9 @@ else if($spamcount == 0)
 
 if($spamcount > 0)
 {
-    echo "<h2>Spam Emails</h2>\n";
+    echo "<h2>Spam Email";
+    if($spamcount > 1) echo "s";
+    echo " ({$spamcount} total)</h2>\n";
     echo "<p align='center'>Incoming email that is suspected to be spam</p>";
     
     // Reset back for 'nasty' emails

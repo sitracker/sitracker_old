@@ -66,7 +66,7 @@ while ($contactrow=mysql_fetch_array($contactresult))
 {
 
     echo "<h2>".stripslashes($contactrow['forenames']).' '.stripslashes($contactrow['surname'])."</h2>";
-    echo "<div id='mainTabContainer' dojoType='TabContainer' style='width: 80%; height: 500px' selectedTab='details'>";
+    echo "<div id='mainTabContainer' dojoType='TabContainer' style='width: 80%; height: 500px; margin-right:auto;margin-left:auto' selectedTab='details'>";
 
     echo "<div id='details' dojoType='ContentPane' label='Details'>";
     include('contact/details.inc.php');

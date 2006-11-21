@@ -51,7 +51,7 @@ if (empty($id))
     exit;
 }
 
-echo "<div id='mainTabContainer' dojoType='TabContainer' style='width: 80%; height: 500px' selectedTab='details'>";
+echo "<div id='mainTabContainer' dojoType='TabContainer' style='width: 80%; height: 500px; margin-right:auto;margin-left:auto' selectedTab='details'>";
 
 echo "<div id='details' dojoType='ContentPane' label='Details'>";
 include('site/details.inc.php');
