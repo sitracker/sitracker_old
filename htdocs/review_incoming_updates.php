@@ -207,7 +207,7 @@ if($countresults > 0)
     if ($countresults) mysql_data_seek($result, 0);
     
     while ($updates = mysql_fetch_array($result))
-        if (!stristr($updates['subject'],$CONFIG['spam_email_subject'])) $html .= generate_row($updates);
+        if (!stristr($updates['subject'],$CONFIG['spam_email_subject'])) $queuerows[$updates->timestamp] = generate_row($updates);
         else $spamcount++;
 }
 
@@ -220,7 +220,7 @@ if (mysql_num_rows($resultnew) >= 1)
         // Get Last Update
         list($update_userid, $update_type, $update_currentowner, $update_currentstatus, $update_body, $update_timestamp, $update_nextaction, $update_id)=incident_lastupdate($new->id);
         $update_body = parse_updatebody($update_body);
-        $html .= "<tr class='shade1'><td />";
+        $html = "<tr class='shade1'><td />";
         $html .= "<td align='center'>".date($CONFIG['dateformat_datetime'], $new->opened)."</td>";
         $html .= "<td>".contact_realname($new->contact)."</td>";
         $html .= "<td>".product_name($new->product)." / ".software_name($new->softwareid)."<br />";
@@ -230,6 +230,7 @@ if (mysql_num_rows($resultnew) >= 1)
         $html .= "<a href= \"javascript:incident_details_window('{$new->id}','holdingview');\" title='View this incident'>View</a> | ";
         $html .= "<a href= \"javascript:wt_winpopup('reassign_incident.php?id={$new->id}&amp;reason=Initial%20assignment%20to%20engineer&amp;popup=yes','mini');\" title='Assign this incident'>Assign</a></td>";
         $html .= "</tr>";
+        $queuerows[$update_timestamp] = $html;
     }
 }
 
@@ -255,7 +256,11 @@ if((mysql_num_rows($resultnew) > 0) OR ($countresults > 0) AND ($countresults !=
     </tr>
 
     <?php
-    echo $html;
+    sort($queuerows);
+    foreach($queuerows AS $row)
+    {
+        echo $row;
+    }
     if($countresults > 0) echo "<tr><td><a href=\"javascript: submitform()\" onclick='return confirm_delete();'>Delete</a></td></tr>";
     echo "</table>\n";
     echo "</form>";
