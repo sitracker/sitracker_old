@@ -29,10 +29,10 @@ echo "<link rel='SHORTCUT ICON' href='{$CONFIG['application_webpath']}images/sit
 echo "<style type='text/css'>@import url('{$CONFIG['application_webpath']}styles/webtrack.css');</style>\n";
 if ($_SESSION['auth'] == TRUE) $styleid = $_SESSION['style'];
 else $styleid= $CONFIG['default_interface_style'];
-$sql = "SELECT cssurl, iconset FROM interfacestyles WHERE id='{$styleid}'";
-$result = mysql_query($sql);
+$csssql = "SELECT cssurl, iconset FROM interfacestyles WHERE id='{$styleid}'";
+$cssresult = mysql_query($csssql);
 if (mysql_error()) trigger_error(mysql_error(),E_USER_WARNING);
-else list($cssurl, $iconset) = mysql_fetch_row($result);
+else list($cssurl, $iconset) = mysql_fetch_row($cssresult);
 unset($styleid);
 echo "<link rel='stylesheet' href='{$CONFIG['application_webpath']}styles/{$cssurl}' />\n";
 

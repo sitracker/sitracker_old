@@ -98,7 +98,7 @@ elseif ($action=='findcontact')
     if (mysql_error()) trigger_error("MySQL Query Error ".mysql_error(), E_USER_ERROR);
     if (mysql_num_rows($result)>0)
     {
-        include('htmlheader.inc.php')
+        include('htmlheader.inc.php');
         ?>
         <script type="text/javascript">
         function confirm_support()
