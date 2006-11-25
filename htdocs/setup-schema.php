@@ -842,7 +842,8 @@ CREATE TABLE `sites` (
   `telephone` varchar(255) NOT NULL default '',
   `fax` varchar(255) NOT NULL default '',
   `email` varchar(255) NOT NULL default '',
-  `notes` text NOT NULL,
+  `websiteurl` varchar(255) default NULL,
+  `notes` blob NOT NULL,
   `typeid` int(5) NOT NULL default '1',
   `freesupport` int(5) NOT NULL default '0',
   `licenserx` int(5) NOT NULL default '0',
@@ -1305,6 +1306,7 @@ UPDATE `interfacestyles` SET `name` = 'Light Blue' WHERE `id` =1 LIMIT 1 ;
 
 $upgrade_schema[325] = "
 ALTER TABLE `interfacestyles` ADD `iconset` VARCHAR( 255 ) NOT NULL DEFAULT 'kdeclassic' AFTER `cssurl` ;
+ALTER TABLE `sites` ADD `websiteurl` VARCHAR( 255 ) NULL AFTER `email` ;
 ";
 
 // Important: When making changes to the schema you must add SQL to make the alterations

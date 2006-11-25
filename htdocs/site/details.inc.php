@@ -17,6 +17,7 @@ while ($siterow=mysql_fetch_array($siteresult))
     echo "<tr><th>Telephone:</th><td>".stripslashes($siterow['telephone'])."</td></tr>";
     echo "<tr><th>Fax:</th><td>".stripslashes($siterow['fax'])."</td></tr>";
     echo "<tr><th>Email:</th><td><a href=\"mailto:".stripslashes($siterow['email'])."\">".stripslashes($siterow['email'])."</a></td></tr>";
+    echo "<tr><th>Website:</th><td><a href=\"".stripslashes($siterow['websiteurl'])."\">".stripslashes($siterow['websiteurl'])."</a></td></tr>";
     echo "<tr><th>Notes:</th><td>".stripslashes($siterow['notes'])."</td></tr>";
     echo "<tr><td colspan='2'>&nbsp;</td></tr>";
     echo "<tr><th>Support Incidents:</th><td>See <a href=\"contact_support.php?id=".$siterow['id']."&amp;mode=site\">here</a></td></tr>";

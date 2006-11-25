@@ -76,6 +76,7 @@ elseif ($action == "edit")
             <tr><th>Telephone:</th><td><input maxlength="255" name="telephone" size="40" value="<?php echo $siterow['telephone'] ?>" /></td></tr>
             <tr><th>Fax:</th><td><input maxlength="255" name="fax" size="40" value="<?php echo $siterow['fax'] ?>" /></td></tr>
             <tr><th>Email:</th><td><input maxlength="255" name="email" size="40" value="<?php echo $siterow['email'] ?>" /></td></tr>
+            <tr><th>Website:</th><td><input maxlength="255" name="websiteurl" size="40" value="<?php echo $siterow['websiteurl'] ?>" /></td></tr>
             <tr><th>Site Type:</th><td>
             <?php echo sitetype_drop_down('typeid', $siterow['typeid']) ?>
             </td></tr>
@@ -117,6 +118,7 @@ elseif ($action == "update")
     $telephone = cleanvar($_POST['telephone']);
     $fax = cleanvar($_POST['fax']);
     $email = cleanvar($_POST['email']);
+    $websiteurl = cleanvar($_POST['websiteurl']);
     $notes = cleanvar($_POST['notes']);
     $typeid = cleanvar($_POST['typeid']);
     $owner = cleanvar($_POST['owner']);
@@ -138,7 +140,7 @@ elseif ($action == "update")
         // update site
         $sql = "UPDATE sites SET name='$name', department='$department', address1='$address1', address2='$address2', city='$city', ";
         $sql .= "county='$county', postcode='$postcode', country='$country', telephone='$telephone', fax='$fax', email='$email', ";
-        $sql .= "notes='$notes', typeid='$typeid', owner='$owner', freesupport='$incident_quantity' WHERE id='$site' LIMIT 1";
+        $sql .= "websiteurl='$websiteurl', notes='$notes', typeid='$typeid', owner='$owner', freesupport='$incident_quantity' WHERE id='$site' LIMIT 1";
 
         // licenserx='$licenserx'
         $result = mysql_query($sql);

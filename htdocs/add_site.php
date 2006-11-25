@@ -46,6 +46,7 @@ if ($action == "showform" OR $action == '')
     <tr><th>Telephone:</th><td><input maxlength="255" name="telephone" size="30" /></td></tr>
     <tr><th>Fax:</th><td><input maxlength="255" name="fax" size="30" /></td></tr>
     <tr><th>Email: <sup class="red">*</sup></th><td><input maxlength="255" name="email" size="30" /></td></tr>
+    <tr><th>Website:</th><td><input maxlength="255" name="websiteurl" size="30" /></td></tr>
     <tr><th>Site Type:</th><td>
     <?php echo sitetype_drop_down('typeid', 1) ?>
     </td></tr>
@@ -71,6 +72,7 @@ elseif ($action == "add")
     $telephone = cleanvar($_POST['telephone']);
     $fax = cleanvar($_POST['fax']);
     $email = cleanvar($_POST['email']);
+    $websiteurl = cleanvar($_POST['websiteurl']);
     $notes = cleanvar($_POST['notes']);
     $typeid = cleanvar($_POST['typeid']);
 
@@ -88,9 +90,9 @@ elseif ($action == "add")
     // add site if no errors
     if ($errors == 0)
     {
-        $sql  = "INSERT INTO sites (name, department, address1, address2, city, county, country, postcode, telephone, fax, email, notes, typeid) ";
+        $sql  = "INSERT INTO sites (name, department, address1, address2, city, county, country, postcode, telephone, fax, email, websiteurl, notes, typeid) ";
         $sql .= "VALUES ('$name', '$department' ,'$address1', '$address2', '$city', '$county', '$country', '$postcode', ";
-        $sql .= "'$telephone', '$fax', '$email', '$notes', '$typeid')";
+        $sql .= "'$telephone', '$fax', '$email', '$websiteurl', '$notes', '$typeid')";
         $result = mysql_query($sql);
         if (mysql_error()) trigger_error("MySQL Query Error ".mysql_error(), E_USER_ERROR);
 
