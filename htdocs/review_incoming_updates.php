@@ -49,7 +49,7 @@ function generate_row($update)
         {
             $html_row.="<a href='{$_SERVER['PHP_SELF']}?unlock={$update['tempid']}' title='Unlock this update so it can be modified by someone else'> Unlock</a> | ";
             $html_row.="<a href=\"move_update.php?updateid=".$update['id']."&amp;incidentidnumber=".$update['incidentid']."\" title=\"Assign this text to an existing incident\">Assign</a> | ";
-            $html_row.="<a href='/add_incident.php?action=findcontact&amp;updateid=".$update['id']."&amp;search_string=".urlencode($update['emailfrom']);
+            $html_row.="<a href='add_incident.php?action=findcontact&amp;updateid=".$update['id']."&amp;search_string=".urlencode($update['emailfrom']);
             if ($update['contactid'])
                 $html_row.="&amp;contactid=".$update['contactid'];
             $html_row.= "' title=\"Add a new incident from this text\">Create</a> | ";
