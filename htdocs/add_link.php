@@ -56,25 +56,30 @@ switch ($action)
             if ($direction=='lr') echo "<h2>Link {$linktype->lrname}</h2>";
             elseif ($direction=='rl') echo "<h2>Link {$linktype->rlname}</h2>";
             echo "<p align='center'>Make a {$linktype} link for origtab {$origtab}, origref {$origref}</p>";
-            echo "<form action='{$_SERVER['PHP_SELF']}' method='post'>";
-            echo "<p>";
-            echo "<select name='linkref'>";
             $recsql = "SELECT {$linktype->linkcol} AS recordref, {$linktype->selectionsql} AS recordname FROM {$linktype->linktab} ";
+            $recsql .= "WHERE {$linktype->linkcol} != '{$origref}'";
             $recresult = mysql_query($recsql);
             if (mysql_error()) trigger_error(mysql_error(),E_USER_WARNING);
-            while ($record = mysql_fetch_object($recresult))
+            if (mysql_num_rows($recresult) >= 1)
             {
-                echo "<option value='{$record->recordref}'>{$record->recordname}</option>\n";
+                echo "<form action='{$_SERVER['PHP_SELF']}' method='post'>";
+                echo "<p>";
+                echo "<select name='linkref'>";
+                while ($record = mysql_fetch_object($recresult))
+                {
+                    echo "<option value='{$record->recordref}'>{$record->recordname}</option>\n";
+                }
+                echo "</select>";
+                echo "</p>";
+                echo "<p><input name='submit' type='submit' value='Add Link' /></p>";
+                echo "<input type='hidden' name='action' value='addlink' />";
+                echo "<input type='hidden' name='origtab' value='$origtab' />";
+                echo "<input type='hidden' name='origref' value='$origref' />";
+                echo "<input type='hidden' name='linktype' value='$linktypeid' />";
+                echo "<input type='hidden' name='dir' value='$direction' />";
+                echo "</form>";
             }
-            echo "</select>";
-            echo "</p>";
-            echo "<p><input name='submit' type='submit' value='Add Link' /></p>";
-            echo "<input type='hidden' name='action' value='addlink' />";
-            echo "<input type='hidden' name='origtab' value='$origtab' />";
-            echo "<input type='hidden' name='origref' value='$origref' />";
-            echo "<input type='hidden' name='linktype' value='$linktypeid' />";
-            echo "<input type='hidden' name='dir' value='$direction' />";
-            echo "</form>";
+            else echo "<p class='error'>Nothing to link</p>";
         }
         include('htmlfooter.inc.php');
 }
