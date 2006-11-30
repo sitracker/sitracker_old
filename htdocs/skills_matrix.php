@@ -17,19 +17,67 @@ require('functions.inc.php');
 require('auth.inc.php');
 
 $legacy = cleanvar($_REQUEST['legacy']);
+$groupid = cleanvar($_REQUEST['gid']);
+
+// By default show users in home group
+if ($groupid=='all') $filtergroup = 'all';
+elseif ($groupid=='') $filtergroup = $_SESSION['groupid'];
+else $filtergroup = $groupid;
 
 $title='Skills Matrix';
 
 include('htmlheader.inc.php');
 
 echo "<h2>$title</h2>";
-if(empty($legacy)) echo "<p align='center'><a href='{$_SERVER['PHP_SELF']}?legacy=yes'>Show legacy software</a></p>";
-else echo "<p align='center'><a href='{$_SERVER['PHP_SELF']}'>Hide legacy software</a></p>";
+if(empty($legacy)) echo "<p align='center'><a href='{$_SERVER['PHP_SELF']}?legacy=yes&gid={$groupid}'>Show legacy software</a></p>";
+else echo "<p align='center'><a href='{$_SERVER['PHP_SELF']}?gid={$groupid}'>Hide legacy software</a></p>";
+
+$gsql = "SELECT * FROM groups ORDER BY name";
+$gresult = mysql_query($gsql);
+if (mysql_error()) trigger_error(mysql_error(),E_USER_ERROR);
+while ($group = mysql_fetch_object($gresult))
+{
+    $grouparr[$group->id]=$group->name;
+}
+$numgroups = count($grouparr);
+if ($numgroups >= 1)
+{
+    echo "<form action='{$_SERVER['PHP_SELF']}' style='text-align: center;' method='get'>";
+    echo "Group: <select name='choosegroup' onchange='window.location.href=this.options[this.selectedIndex].value'>";
+    echo "<option value='{$_SERVER['PHP_SELF']}?gid=all";
+    if(empty($legacy)) echo "'";
+    else echo "&legacy=yes'";
+    if ($filtergroup=='all') echo " selected='selected'";
+    echo ">All</option>\n";
+    foreach($grouparr AS $groupid => $groupname)
+    {
+        echo "<option value='{$_SERVER['PHP_SELF']}?gid={$groupid}";
+        if(empty($legacy)) echo "'";
+        else echo "&legacy=yes'";
+        if ($groupid == $filtergroup) echo " selected='selected'";
+        echo ">$groupname</option>\n";
+    }
+    echo "<option value='{$_SERVER['PHP_SELF']}?gid=0";
+    if(empty($legacy)) echo "'";
+    else echo "&legacy=yes'";
+    if ($filtergroup=='0') echo " selected='selected'";
+    echo ">Users with no group</option>\n";
+    echo "</select>\n";
+    echo "</form>\n<br />";
+}
+
 
 $sql = "SELECT users.id, users.realname FROM users, usersoftware, software ";
 $sql .= "WHERE users.id = usersoftware.userid AND users.status <> 0 ";
 if(empty($legacy)) $sql .= " AND (software.lifetime_end > NOW() OR software.lifetime_end = '0000-00-00' OR software.lifetime_end is NULL) ";
-$sql .= "AND software.id = usersoftware.softwareid GROUP BY users.id ORDER BY users.realname";
+$sql .= "AND software.id = usersoftware.softwareid ";
+
+if ($numgroups >= 1 AND $filtergroup=='0') $sql .= "AND (users.groupid='0' OR users.groupid='' OR users.groupid IS NULL) ";
+elseif ($numgroups < 1 OR $filtergroup=='all') { $sql .= "AND 1=1 "; }
+else $sql .= "AND users.groupid='{$filtergroup}'";
+
+$sql .= "GROUP BY users.id ORDER BY users.realname";
+
 $usersresult = mysql_query($sql);
 if (mysql_error()) trigger_error(mysql_error(),E_USER_WARNING);
 
@@ -96,7 +144,7 @@ echo "</pre>";*/
                     $count++;
                 }
             }
-            echo "<td align='center'>$count</td>";
+            echo "<td align='center'><b>$count</b></td>";
             echo "</tr>\n";
             $started = true;
             if ($shade=='shade1') $shade='shade2';
