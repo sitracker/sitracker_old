@@ -67,16 +67,26 @@ if ($numgroups >= 1)
 }
 
 
-$sql = "SELECT users.id, users.realname FROM users, usersoftware, software ";
+/*$sql = "SELECT users.id, users.realname FROM users, usersoftware LEFT JOIN software ON  ";
+if(empty($legacy)) $sql .= " ((software.lifetime_end > NOW() OR software.lifetime_end = '0000-00-00' OR software.lifetime_end is NULL) AND (";
+else $sql .= "(";
+$sql .= "software.id = usersoftware.softwareid )";
+if(empty($legacy)) $sql .= ")";
+
 $sql .= "WHERE users.id = usersoftware.userid AND users.status <> 0 ";
-if(empty($legacy)) $sql .= " AND (software.lifetime_end > NOW() OR software.lifetime_end = '0000-00-00' OR software.lifetime_end is NULL) ";
-$sql .= "AND software.id = usersoftware.softwareid ";
 
 if ($numgroups >= 1 AND $filtergroup=='0') $sql .= "AND (users.groupid='0' OR users.groupid='' OR users.groupid IS NULL) ";
 elseif ($numgroups < 1 OR $filtergroup=='all') { $sql .= "AND 1=1 "; }
 else $sql .= "AND users.groupid='{$filtergroup}'";
 
-$sql .= "GROUP BY users.id ORDER BY users.realname";
+$sql .= "GROUP BY users.id ORDER BY users.realname";*/
+$sql = "SELECT users.id, users.realname,software.name FROM usersoftware RIGHT JOIN software ON (usersoftware.softwareid = software.id) LEFT JOIN users ON usersoftware.userid = users.id ";
+$sql .= " WHERE (users.status <> 0 OR users.status IS NULL) ";
+if(empty($legacy)) $sql .= "AND (software.lifetime_end > NOW() OR software.lifetime_end = '0000-00-00' OR software.lifetime_end is NULL) ";
+if ($numgroups >= 1 AND $filtergroup=='0') $sql .= "AND (users.groupid='0' OR users.groupid='' OR users.groupid IS NULL) ";
+elseif ($numgroups < 1 OR $filtergroup=='all') { $sql .= "AND 1=1 "; }
+else $sql .= "AND (users.groupid='{$filtergroup}' OR users.groupid IS NULL)";
+$sql .= " GROUP BY users.id ORDER BY users.realname";
 
 $usersresult = mysql_query($sql);
 if (mysql_error()) trigger_error(mysql_error(),E_USER_WARNING);
@@ -87,17 +97,27 @@ if($countusers > 0)
 {
     while($row = mysql_fetch_object($usersresult))
     {
-        $users[$row->id] = $row->realname;
-        $counting[$row->realname]=0;
+        if(($row->realname != NULL) AND ($row->realname != ''))
+        {
+            $users[$row->id] = $row->realname;
+            $counting[$row->realname]=0;
+        }
+        else
+        {
+            $countusers--;
+        }
     }
 }
 mysql_data_seek($usersresult, 0);
 
-$sql = "SELECT users.id, users.realname, software.name FROM users, software, usersoftware ";
-$sql .= "WHERE users.id = usersoftware.userid AND software.id = usersoftware.softwareid ";
-$sql .= "AND users.status <> 0 ";
+$sql = "SELECT users.id, users.realname,software.name FROM usersoftware RIGHT JOIN software ON (usersoftware.softwareid = software.id) LEFT JOIN users ON usersoftware.userid = users.id ";
+$sql .= " WHERE (users.status <> 0 OR users.status IS NULL) ";
 if(empty($legacy)) $sql .= "AND (software.lifetime_end > NOW() OR software.lifetime_end = '0000-00-00' OR software.lifetime_end is NULL) ";
+if ($numgroups >= 1 AND $filtergroup=='0') $sql .= "AND (users.groupid='0' OR users.groupid='' OR users.groupid IS NULL) ";
+elseif ($numgroups < 1 OR $filtergroup=='all') { $sql .= "AND 1=1 "; }
+else $sql .= "AND (users.groupid='{$filtergroup}' OR users.groupid IS NULL)";
 $sql .= " ORDER BY software.name, users.id";
+
 $result = mysql_query($sql);
 if (mysql_error()) trigger_error(mysql_error(),E_USER_WARNING);
 
@@ -108,7 +128,7 @@ if($countskills > 0)
     $previous = "";
     while($row = mysql_fetch_object($result))
     {
-        $skills[$row->name][$row->realname] = $row->realname;
+        if(($row->realname != NULL) AND ($row->realname != '')) $skills[$row->name][$row->realname] = $row->realname;
     }
 /*echo "<pre>";
 print_r($skills);
@@ -129,19 +149,22 @@ echo "</pre>";*/
             echo "<tr class='$shade'><th width='20%;'>{$row->name}</th>";
             while($user = mysql_fetch_object($usersresult))
             {
-                //todo get the proper symbol for a cross
-                if(empty($skills[$row->name][$user->realname]))
+                if(($user->realname != NULL) AND ($user->realname != ''))
                 {
-                    // No skill in this software
-                    echo "<td align='center'></td>"; // &#215;
-                }
-                else
-                {
-                    //Skill in software
-                    // echo "<td align='center'>&#10004;</td>"; // Doesn't work in Windows (fonts!) rubbishy O/S
-                    echo "<td align='center'><img src='{$CONFIG['application_webpath']}images/icons/{$iconset}/16x16/actions/endturn.png' /></td>";
-                    $counting[$user->realname]++;
-                    $count++;
+                    //todo get the proper symbol for a cross
+                    if(empty($skills[$row->name][$user->realname]))
+                    {
+                        // No skill in this software
+                        echo "<td align='center'></td>"; // &#215;
+                    }
+                    else
+                    {
+                        //Skill in software
+                        // echo "<td align='center'>&#10004;</td>"; // Doesn't work in Windows (fonts!) rubbishy O/S
+                        echo "<td align='center'><img src='{$CONFIG['application_webpath']}images/icons/{$iconset}/16x16/actions/endturn.png' /></td>";
+                        $counting[$user->realname]++;
+                        $count++;
+                    }
                 }
             }
             echo "<td align='center'><b>$count</b></td>";
