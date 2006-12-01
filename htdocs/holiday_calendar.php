@@ -668,9 +668,12 @@ else
 
 
     echo "<table align='center' summary=\"calendar\">";
-    if (date('m')<=7) { $displayyear=date('Y')-1; $displaymonth=8; }
-    if (date('m')>7) { $displayyear=date('Y'); $displaymonth=8; }
-    if (date('m')>11) { $displayyear=date('Y'); $displaymonth=12; }
+    //if (date('m')<=7) { $displayyear=date('Y')-1; $displaymonth=8; }
+    //if (date('m')>7) { $displayyear=date('Y'); $displaymonth=8; }
+    //if (date('m')>11) { $displayyear=date('Y'); $displaymonth=12; }
+    if (date('m') > 7) { $displayyear=date('Y'); $displaymonth=7; }
+    else { $displayyear=date('Y'); $displaymonth=1; }
+
     for ($r==1;$r<5;$r++)
     {
         echo "<tr>";
