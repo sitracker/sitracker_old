@@ -574,7 +574,7 @@ else
         }
         echo "</select></form>";
 
-        $sql = "SELECT * from holidays WHERE userid='{$sit[2]}' AND approved=0 AND type='$type'";
+        $sql = "SELECT * from holidays WHERE userid='{$user}' AND approved=0 AND type='$type'";
         $result = mysql_query($sql);
         if (mysql_error()) trigger_error("MySQL Query Error ".mysql_error(), E_USER_ERROR);
         if (mysql_num_rows($result))
