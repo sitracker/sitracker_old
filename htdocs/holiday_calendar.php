@@ -417,10 +417,10 @@ function draw_chart($month, $year)
                     $weekend=FALSE;  $hello='';
                     if ($hdays[$day]=='am' OR $hdays[$day]=='day')
                     {
-                        if ($happroved[$day] == 0) $html .= "<td class='review'>";
-                        elseif ($happroved[$day] == 1 AND $htypes[$day] <= 4) $html .= "<td class='idle'>";
-                        elseif ($happroved[$day] == 1 AND $htypes[$day] == 5) $html .= "<td class='notice'>";
-                        elseif ($happroved[$day] == 2) $html .= "<td class='urgent'>";
+                        if ($happroved[$day] == 0 OR $happroved[$day]==10) $html .= "<td class='review'>";
+                        elseif (($happroved[$day] == 1 OR $happroved[$day]==11) AND $htypes[$day] <= 4) $html .= "<td class='idle'>";
+                        elseif (($happroved[$day] == 1 OR $happroved[$day]==11) AND $htypes[$day] == 5) $html .= "<td class='notice'>";
+                        elseif ($happroved[$day] == 2 OR $happroved[$day]==12) $html .= "<td class='urgent'>";
                         else $html .= "<td class='shade2'>";
                         $html .= substr($holidaytype[$htypes[$day]],0,1);
                         $html .= "</td>";
@@ -458,10 +458,10 @@ function draw_chart($month, $year)
                     $weekend=FALSE;  $hello='';
                     if ($hdays[$day]=='pm' OR $hdays[$day]=='day')
                     {
-                        if ($happroved[$day] == 0) $html .= "<td class='review'>";
-                        elseif ($happroved[$day] == 1 AND $htypes[$day] <= 4) $html .= "<td class='idle'>";
-                        elseif ($happroved[$day] == 1 AND $htypes[$day] == 5) $html .= "<td class='notice'>";
-                        elseif ($happroved[$day] == 2) $html .= "<td class='urgent'>";
+                        if ($happroved[$day] == 0 OR $happroved[$day]==10) $html .= "<td class='review'>";
+                        elseif (($happroved[$day] == 1 OR $happroved[$day]==11) AND $htypes[$day] <= 4) $html .= "<td class='idle'>";
+                        elseif (($happroved[$day] == 1 OR $happroved[$day]==11) AND $htypes[$day] == 5) $html .= "<td class='notice'>";
+                        elseif ($happroved[$day] == 2 OR $happroved[$day]==12) $html .= "<td class='urgent'>";
                         else $html .= "<td class='shade2'>";
 
                         $html .= "<span title='{$holidaytype[$htypes[$day]]}'>".substr($holidaytype[$htypes[$day]],0,1)."</span>";
