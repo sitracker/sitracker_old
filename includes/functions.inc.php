@@ -516,12 +516,12 @@ function user_holiday($userid, $type=0, $year, $month, $day, $length=FALSE)
 
 function user_count_holidays($userid, $type)
 {
-    $sql = "SELECT id FROM holidays WHERE userid='$userid' AND type='$type' AND length='day' AND approved<2 ";
+    $sql = "SELECT id FROM holidays WHERE userid='$userid' AND type='$type' AND length='day' AND approved >= 0 AND approved < 2 ";
     $result = mysql_query($sql);
     if (mysql_error()) trigger_error(mysql_error(),E_USER_WARNING);
     $full_days=mysql_num_rows($result);
 
-    $sql = "SELECT id FROM holidays WHERE userid='$userid' AND type='$type' AND (length='pm' OR length='am') AND approved<2 ";
+    $sql = "SELECT id FROM holidays WHERE userid='$userid' AND type='$type' AND (length='pm' OR length='am') AND approved >= 0 AND approved < 2 ";
     $result = mysql_query($sql);
     if (mysql_error()) trigger_error(mysql_error(),E_USER_WARNING);
     $half_days=mysql_num_rows($result);
@@ -3044,6 +3044,7 @@ function holiday_type($id)
 
 function holiday_approval_status($approvedid)
 {
+    // We add 10 to normal status when we archive holiday
     switch ($approvedid)
     {
         case -2: $status = "Not requested"; break;
@@ -3051,6 +3052,11 @@ function holiday_approval_status($approvedid)
         case 0: $status = "Requested"; break;
         case 1: $status = "Approved"; break;
         case 2: $status = "Approved 'Free'"; break;
+        case 8: $status = "Archived. Not Requested";
+        case 9: $status = "Archived. Denied";
+        case 10: $status = "Archived. Requested";
+        case 11: $status = "Archived. Approved";
+        case 12: $status = "Archived. Approved 'Free'";
         default: $status = "Approval Status Unknown"; break;
     }
     return $status;

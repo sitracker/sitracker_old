@@ -193,13 +193,13 @@ function draw_calendar($nmonth, $nyear)
 
                 if ($dlength=='pm')
                 {
-                    $halfday = "style=\"background-image: url(images/halfday-pm.gif)\" ";
-                    $style="background-image: url(images/halfday-pm.gif); ";
+                    $halfday = "style=\"background-image: url(images/halfday-pm.gif); background-repeat: no-repeat;\" ";
+                    $style="background-image: url(images/halfday-pm.gif); background-repeat: no-repeat; ";
                 }
                 if ($dlength=='am')
                 {
-                    $halfday = "style=\"background-image: url(images/halfday-am.gif)\" ";
-                    $style="background-image: url(images/halfday-am.gif); ";
+                    $halfday = "style=\"background-image: url(images/halfday-am.gif); background-position: bottom right; background-repeat: no-repeat;\" ";
+                    $style="background-image: url(images/halfday-am.gif); background-position: bottom right; background-repeat: no-repeat;";
                 }
                 if ($calday==$selectedday && $selectedmonth==$nmonth && $selectedyear==$nyear)
                 {
@@ -258,12 +258,12 @@ function draw_calendar($nmonth, $nyear)
                 }
                 if ($dtype==1 || $dtype=='' || $dtype==5 || $dtype==3 || $dtype==2 || $dtype==4)
                 {
-                    echo "<td class=\"$shade\" style=\"$style\">";
+                    echo "<td class=\"$shade\" style=\"width: 32px; $style\">";
                     echo "<a href=\"add_holiday.php?type=$type&amp;user=$user&amp;year=$nyear&amp;month=$nmonth&amp;day=$calday\"  title=\"$celltitle\">$bold$adjusted_day$notbold</a></td>";
                 }
                 else
                 {
-                    echo "<td class=\"$shade\" style=\"width:33px; $style\">$bold$adjusted_day$notbold</td>";
+                    echo "<td class=\"$shade\" style=\"width:32px; $style\">$bold$adjusted_day$notbold</td>";
                 }
             }
         }
