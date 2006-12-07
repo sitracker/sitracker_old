@@ -37,7 +37,7 @@ switch($_REQUEST['action'])
                 $new_entitlement = $default_entitlement + $carryover;
 
                 // Archive previous holiday
-                $hsql = "UPDATE holidays SET approved = approved+10 WHERE approved <= 7 AND userid={$users->id} AND startdate < $now";
+                $hsql = "UPDATE holidays SET approved = approved+10 WHERE approved <= 7 AND userid={$users->id}";
                 mysql_query($hsql);
                 if (mysql_error()) trigger_error(mysql_error(),E_USER_ERROR);
 

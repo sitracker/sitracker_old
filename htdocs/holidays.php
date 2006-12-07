@@ -124,7 +124,7 @@ if (mysql_error()) trigger_error("MySQL Query Error ".mysql_error(), E_USER_ERRO
 while ($holidaytype=mysql_fetch_array($tresult))
 {
     $sql = "SELECT * FROM holidays WHERE userid='{$user}' AND type={$holidaytype['id']} ";
-    $sql.= "AND approved=1 ORDER BY startdate DESC ";
+    $sql.= "AND (approved=1 OR (approved=11 AND startdate >= $now)) ORDER BY startdate DESC ";
     $result = mysql_query($sql);
     if (mysql_error()) trigger_error("MySQL Query Error ".mysql_error(), E_USER_ERROR);
     if (mysql_num_rows($result))
