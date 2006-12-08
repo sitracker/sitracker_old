@@ -32,6 +32,34 @@ function confirm_submit()
 if (empty($submit))
 {
     // Show add user form
+    $gsql = "SELECT * FROM groups ORDER BY name";
+    $gresult = mysql_query($gsql);
+    if (mysql_error()) trigger_error(mysql_error(),E_USER_ERROR);
+    while ($group = mysql_fetch_object($gresult))
+    {
+        $grouparr[$group->id]=$group->name;
+    }
+
+    $numgroups = count($grouparr);
+
+    function group_drop_down($name, $selected)
+    {
+        global $grouparr, $numgroups;
+        $html = "<select name='$name'>";
+        $html .= "<option value='0'>None</option>\n";
+        if ($numgroups >= 1)
+        {
+            foreach($grouparr AS $groupid => $groupname)
+            {
+                $html .= "<option value='$groupid'";
+                if ($groupid == $selected) $html .= " selected='selected'";
+                $html .= ">$groupname</option>\n";
+            }
+        }
+        $html .= "</select>\n";
+        return $html;
+    }
+
     ?>
     <h2>Add User</h2>
     <p align='center'>Mandatory fields are marked <sup class='red'>*</sup></p>
@@ -41,6 +69,9 @@ if (empty($submit))
     <tr><th>Username: <sup class='red'>*</sup></th><td><input maxlength="50" name="username" size="30" /></td></tr>
     <tr><th>Password: <sup class='red'>*</sup></th><td><input maxlength="50" name="password" size="30" /></td></tr>
     <?php
+    echo "<tr><th>Group:</th>";
+    echo "<td>".group_drop_down('groupid', 0)."</td>";
+    echo "</tr>";
     echo "<tr><th>Role:</th>";
     echo "<td>".role_drop_down('roleid', 1)."</td>";
     echo "</tr>";
@@ -61,6 +92,7 @@ else
     $username = mysql_escape_string(strtolower(trim(strip_tags($_REQUEST['username']))));
     $realname = cleanvar($_REQUEST['realname']);
     $password = mysql_escape_string($_REQUEST['password']);
+    $groupid = cleanvar($_REQUEST['groupid']);
     $roleid = cleanvar($_REQUEST['roleid']);
     $jobtitle = cleanvar($_REQUEST['jobtitle']);
     $email = cleanvar($_REQUEST['email']);
@@ -115,8 +147,8 @@ else
     if ($errors == 0)
     {
         $password=strtoupper(md5($password));
-        $sql = "INSERT INTO users (username, password, realname, roleid, title, email, phone, fax, status, var_style, holiday_entitlement) ";
-        $sql .= "VALUES ('$username', '$password', '$realname', '$roleid', '$jobtitle', '$email', '$phone', '$fax', 1, '{$CONFIG['default_interface_style']}', '$holiday_entitlement')";
+        $sql = "INSERT INTO users (username, password, realname, roleid, groupid, title, email, phone, fax, status, var_style, holiday_entitlement) ";
+        $sql .= "VALUES ('$username', '$password', '$realname', '$roleid', '$groupid', '$jobtitle', '$email', '$phone', '$fax', 1, '{$CONFIG['default_interface_style']}', '$holiday_entitlement')";
         $result = mysql_query($sql);
         if (mysql_error()) trigger_error("MySQL Query Error ".mysql_error(), E_USER_ERROR);
         $newuserid = mysql_insert_id();
