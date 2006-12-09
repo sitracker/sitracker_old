@@ -17,12 +17,44 @@ if (realpath(__FILE__) == realpath($_SERVER['SCRIPT_FILENAME']))
     exit;
 }
 
+function log_nav_bar()
+{
+    global $incidentid;
+    global $firstid;
+    global $updateid;
+    $nav = "<table width='98%'><tr><td align='left'><a href='{$_SERVER['PHP_SELF']}?id={$incidentid}&javascript=enabled&recordupto={$firstid}&direction=previous'><< Previous</a></td>";
+    $nav .= "<td align='right'><a href='{$_SERVER['PHP_SELF']}?id={$incidentid}&javascript=enabled&recordupto={$updateid}&direction=next'>Next >></a></td></tr></table>";
+    return $nav;
+}
+
+$upto = $_REQUEST['recordupto'];
+$direction = $_REQUEST['direction'];
+
 if ($incidentid=='' OR $incidentid < 1) trigger_error("Incident ID cannot be zero or blank", E_USER_ERROR);
 
 $sql  = "SELECT * FROM updates WHERE incidentid='{$incidentid}' ";
 // Don't show hidden updates if we're on the customer view tab
 if (strtolower($selectedtab)=='customer_view') $sql .= "AND customervisibility='show' ";
-$sql .= "ORDER BY id DESC";
+if(!empty($upto))
+{
+    $sql .= "AND id ";
+    switch ($direction)
+    {
+        case 'previous':
+            if($_SESSION['update_order'] == 'desc') $sql .= " > ";
+            else $sql .= " < ";
+            break;
+        case 'next':
+        default:
+            if($_SESSION['update_order'] == 'desc') $sql .= " < ";
+            else $sql .= " > ";
+            break;
+    }
+
+    $sql .= " '{$upto}' ";
+}
+$sql .= "ORDER BY id {$_SESSION['update_order']} ";
+$sql .= "LIMIT {$_SESSION['num_update_view']}";
 $result = mysql_query($sql);
 if (mysql_error()) trigger_error("MySQL Query Error ".mysql_error(), E_USER_ERROR);
 
@@ -49,8 +81,11 @@ foreach($keeptags AS $keeptag)
     }
 }
 
+//echo log_nav_bar();
+
 while ($update = mysql_fetch_object($result))
 {
+    if(empty($firstid)) $firstid = $update->id;
     $updatebody=trim($update->bodytext);
     $updatebodylen=strlen($updatebody);
 
@@ -166,6 +201,9 @@ while ($update = mysql_fetch_object($result))
         if (!empty($update->nextaction)) echo "<div class='detailhead'>Next action: ".stripslashes($update->nextaction)."</div>";
         echo "</div>\n"; // detailentry
     }
+    $updateid = $update->id;
 }
+
+echo log_nav_bar();
 
 ?>

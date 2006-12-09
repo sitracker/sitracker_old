@@ -1126,6 +1126,7 @@ CREATE TABLE `users` (
   `accepting` enum('No','Yes') default 'Yes',
   `var_incident_refresh` int(11) default '60',
   `var_update_order` enum('desc','asc') default 'desc',
+  `var_num_updates_view` int(11) NOT NULL default '15',
   `var_style` int(11) default '1',
   `var_collapse` enum('true','false') NOT NULL default 'true',
   `var_hideautoupdates` enum('true','false') NOT NULL default 'false',
@@ -1365,6 +1366,8 @@ CREATE TABLE `linktypes` (
    ) ENGINE=MyISAM;
 
 INSERT INTO `linktypes` VALUES (1,'Task','Subtask','Parent Task','tasks','id','tasks','id','name','','view_task.php?id=%id%'),(2,'Contact','Contact','Contact Task','tasks','id','contacts','id','forenames','','contact_details.php?id=%id%'),(3,'Site','Site','Site Task','tasks','id','sites','id','name','','site_details.php?id=%id%'),(4,'Incident','Incident','Task','tasks','id','incidents','id','title','','incident_details.php?id=%id%');
+
+ALTER TABLE `users` ADD `var_num_updates_view` INT NOT NULL DEFAULT '15' AFTER `var_update_order` ;
 ";
 
 // Important: When making changes to the schema you must add SQL to make the alterations

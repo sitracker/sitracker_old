@@ -134,6 +134,7 @@ if (empty($submit))
     <option <?php if ($user->var_update_order == "asc") echo "selected='selected'" ?> value="asc">Most Recent At Bottom</option>
     </select>
     </td></tr>
+    <tr><th>Incident Updates per page:</th><td><input maxlength="5" name="updatesperpage" size="3" type="text" value="<?php echo $user->var_num_updates_view; ?>" /></td></tr>
     <tr><th>Collapse Data:</th><td><?php html_checkbox('collapse', $user->var_collapse); ?></td></tr>
 
     <tr><th colspan='2'>NOTIFICATIONS</td></tr>
@@ -176,6 +177,7 @@ else
     $fax = cleanvar($_POST['fax']);
     $incidentrefresh = cleanvar($_POST['incidentrefresh']);
     $updateorder = cleanvar($_POST['updateorder']);
+    $updatesperpage = cleanvar($_POST['updatesperpage']);
     $signature = cleanvar($_POST['signature']);
     $message = cleanvar($_POST['message']);
     $status = cleanvar($_POST['status']);
@@ -244,7 +246,7 @@ else
         $sql .= "phone='$phone', mobile='$mobile', aim='$aim', icq='$icq', msn='$msn', fax='$fax', var_incident_refresh='$incidentrefresh', ";
         if ($userid != 1 AND !empty($_REQUEST['roleid']) AND $edituserpermission==TRUE) $sql .= "roleid='{$roleid}', ";
         if (!empty($holiday_entitlement) AND $edituserpermission==TRUE) $sql .= "holiday_entitlement='{$holiday_entitlement}', ";
-        $sql .= "var_update_order='$updateorder', var_style='$style', signature='$signature', message='$message', status='$status', accepting='$accepting', ";
+        $sql .= "var_update_order='$updateorder', var_num_updates_view='$updatesperpage', var_style='$style', signature='$signature', message='$message', status='$status', accepting='$accepting', ";
         $sql .= "var_collapse='$collapse', var_notify_on_reassign='$emailonreassign' WHERE id='$userid' LIMIT 1";
         $result = mysql_query($sql);
         if (mysql_error()) trigger_error("MySQL Query Error ".mysql_error(), E_USER_ERROR);
