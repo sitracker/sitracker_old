@@ -21,8 +21,10 @@ define("STATUS_CUSTOMER",8);
 
 // FIXME ? this will not update the database fully if two SLAs have been met since last run - does it matter ?
 
+$secondssincemidnight = (date('H',$now)*3600)+(date('i',$now)*60);
+
 // Only run inside the working day
-if (date('Hi',$now) >= $CONFIG['start_working_day'] AND date('Hi',$now) <= $CONFIG['end_working_day'])
+if ($secondssincemidnight >= $CONFIG['start_working_day'] AND $secondssincemidnight <= $CONFIG['end_working_day'])
 {
     if ($verbose) echo "Calculating SLA times{$crlf}";
 
