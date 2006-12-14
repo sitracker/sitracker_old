@@ -4767,17 +4767,25 @@ function plugin_register($context, $action)
 }
 
 
-function plugin_do($context)
+function plugin_do($context, $optparams=FALSE)
 {
     global $PLUGINACTIONS;
+
     if (is_array($PLUGINACTIONS[$context]))
     {
         foreach($PLUGINACTIONS[$context] AS $action)
         {
             // Call Variable function (function with variable name)
-            $action();
+            if ($optparams) $rtn = $action($optparams);
+            else $rtn = $action();
+
+            // Append return value
+            if (is_array($rtn) AND is_array($rtnvalue)) array_push($rtnvalue, $rtn);
+            elseif (is_array($rtn) AND !is_array($rtnvalue)) { $rtnvalue=array(); array_push($rtnvalue, $rtn); }
+            else $rtnvalue .= $rtn;
         }
     }
+    return $rtnvalue;
 }
 
 

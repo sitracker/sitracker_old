@@ -67,7 +67,7 @@ if (empty($submit))
     <table align='center'>
     <tr><th>Real Name: <sup class='red'>*</sup></th><td><input maxlength="50" name="realname" size="30" /></td></tr>
     <tr><th>Username: <sup class='red'>*</sup></th><td><input maxlength="50" name="username" size="30" /></td></tr>
-    <tr><th>Password: <sup class='red'>*</sup></th><td><input maxlength="50" name="password" size="30" /></td></tr>
+    <tr id='password'><th>Password: <sup class='red'>*</sup></th><td><input maxlength="50" name="password" size="30" /></td></tr>
     <?php
     echo "<tr><th>Group:</th>";
     echo "<td>".group_drop_down('groupid', 0)."</td>";
@@ -85,6 +85,7 @@ if (empty($submit))
     <p><input name="submit" type="submit" value="Add User" /></p>
     </form>
     <?php
+    plugin_do('testbbb');
 }
 else
 {
