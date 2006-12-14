@@ -85,7 +85,6 @@ if (empty($submit))
     <p><input name="submit" type="submit" value="Add User" /></p>
     </form>
     <?php
-    plugin_do('testbbb');
 }
 else
 {
