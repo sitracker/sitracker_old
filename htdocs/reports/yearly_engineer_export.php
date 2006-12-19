@@ -53,6 +53,7 @@ if (empty($_REQUEST['mode']))
     echo "<option value='csv'>Disk - Comma Seperated (CSV) file</option>";
     echo "</select>";
     echo "</td></tr>";
+    echo "<tr><th align='right' width='200' class='shade1'>Statistics only</th><td class='shade2'><input type='checkbox' name='statistics' /></td></tr>";
     echo "</table>";
     echo "<p align='center'>";
     echo "<input type='hidden' name='table1' value='{$_POST['table1']}' />";
@@ -62,26 +63,234 @@ if (empty($_REQUEST['mode']))
     echo "</form>";
     include('htmlfooter.inc.php');
 }
+elseif ($_REQUEST['statistics'] == 'on')
+{
+    if (is_array($_POST['exc']) && is_array($_POST['exc'])) $_POST['inc']=array_values(array_diff($_POST['inc'],$_POST['exc']));  // don't include anything excluded
+    $includecount=count($_POST['inc']);
+    if ($includecount >= 1)
+    {
+        // $html .= "<strong>Include:</strong><br />";
+        $incsql .= "(";
+        $incsql_esc .= "(";
+        for ($i = 0; $i < $includecount; $i++)
+        {
+            // $html .= "{$_POST['inc'][$i]} <br />";
+            $incsql .= "users.id={$_POST['inc'][$i]}";
+            $incsql_esc .= "incidents.owner={$_POST['inc'][$i]}";
+            if ($i < ($includecount-1)) $incsql .= " OR ";
+            if ($i < ($includecount-1)) $incsql_esc .= " OR ";
+        }
+        $incsql .= ")";
+        $incsql_esc .= ")";
+    }
+
+    $sql = "SELECT COUNT(incidents.id) AS numberOpened, users.id, users.realname ";
+    $sql .= "FROM users, incidents ";
+    $sql .= "WHERE users.id=incidents.owner AND incidents.opened > ($now-60*60*24*365.25) ";
+
+    if (empty($incsql)==FALSE OR empty($excsql)==FALSE) $sql .= " AND ";
+    if (!empty($incsql)) $sql .= "$incsql";
+    if (empty($incsql)==FALSE AND empty($excsql)==FALSE) $sql .= " AND ";
+    if (!empty($excsql)) $sql .= "$excsql";
+
+    $sql .= " GROUP BY users.id ";
+
+    //echo $sql;
+
+    $result = mysql_query($sql);
+    if (mysql_error()) trigger_error("MySQL Query Error ".mysql_error(), E_USER_ERROR);
+    $numrows = mysql_num_rows($result);
+
+    $totalOpened = 0;
+    if($numrows > 0)
+    {
+        while($obj = mysql_fetch_object($result))
+        {
+            $data[$obj->id]['realname'] = $obj->realname;
+            $data[$obj->id]['opened'] = $obj->numberOpened;
+            $totalOpened += $obj->numberOpened;
+        }
+    }
+
+    //
+    //    CLOSED
+    //
+
+    $sql = "SELECT COUNT(incidents.id) AS numberClosed, users.id, users.realname ";
+    $sql .= "FROM users, incidents ";
+    $sql .= "WHERE users.id=incidents.owner AND incidents.closed > ($now-60*60*24*365.25) ";
+
+    if (empty($incsql)==FALSE OR empty($excsql)==FALSE) $sql .= " AND ";
+    if (!empty($incsql)) $sql .= "$incsql";
+    if (empty($incsql)==FALSE AND empty($excsql)==FALSE) $sql .= " AND ";
+    if (!empty($excsql)) $sql .= "$excsql";
+
+    $sql .= " GROUP BY users.id ";
+
+    //echo $sql;
+
+    $result = mysql_query($sql);
+    if (mysql_error()) trigger_error("MySQL Query Error ".mysql_error(), E_USER_ERROR);
+    $numrows = mysql_num_rows($result);
+
+    $totalClosed = 0;
+    if($numrows > 0)
+    {
+        while($obj = mysql_fetch_object($result))
+        {
+            $data[$obj->id]['realname'] = $obj->realname;
+            $data[$obj->id]['closed'] = $obj->numberClosed;
+            $totalClosed += $obj->numberClosed;
+        }
+    }
+
+    //
+    // Escalated
+    //
+    $sql = "SELECT COUNT(DISTINCT(incidentid)) AS numberEscalated, users.id, users.realname FROM updates, incidents,users WHERE  users.id=incidents.owner AND updates.incidentid = incidents.id AND incidents.opened > ($now-60*60*24*365.25)  AND updates.bodytext LIKE \"External ID%\"";
+    if (empty($incsql)==FALSE OR empty($excsql)==FALSE) $sql .= " AND ";
+    if (!empty($incsql)) $sql .= "$incsql";
+    if (empty($incsql)==FALSE AND empty($excsql)==FALSE) $sql .= " AND ";
+    if (!empty($excsql)) $sql .= "$excsql";
+
+    $sql .= " GROUP BY users.id ";
+
+    //echo $sql;
+
+    $result = mysql_query($sql);
+    if (mysql_error()) trigger_error("MySQL Query Error ".mysql_error(), E_USER_ERROR);
+    $numrows = mysql_num_rows($result);
+
+    $totalEscalated = 0;
+    if($numrows > 0)
+    {
+        while($obj = mysql_fetch_object($result))
+        {
+            $data[$obj->id]['realname'] = $obj->realname;
+            $data[$obj->id]['escalated'] = $obj->numberEscalated;
+            $totalEscalated += $obj->numberEscalated;
+        }
+    }
+
+
+    /*echo "<pre>";
+    print_r($data);
+    echo "</pre>";*/
+
+    if(sizeof($data) > 0)
+    {
+        $html .= "<table align='center'>";
+        $html .= "<tr>";
+        $html .= "<th>Engineer name</th>";
+        $html .= "<th>Assigned</th>";
+        $html .= "<th>Escalated</th>";
+        $html .= "<th>Closed</th>";
+        $html .= "<th>Avg Assigned (Month)</th>";
+        $html .= "<th>Avg Escalated (Month)</th>";
+        $html .= "<th>Avg Closed (Month)</th>";
+        $html .= "<th>Percentage escalated</th>";
+        $html .= "<tr>";
+
+        $csv .= "Engineer name,Assigned,Escalated,Closed,Avg Assigned (Month),Avg Escalated (Month),";
+        $csv .= "Avg Closed (Month),Percentage escalated\n";
+
+        $class="class='shade1'";
+        foreach($data AS $engineer)
+        {
+            $html .= "<tr>";
+            $html .= "<td {$class}>".$engineer['realname']."</td>";
+            if(empty($engineer['opened'])) $open = 0;
+            else $open = $engineer['opened'];
+            $html .= "<td {$class}>{$open}</td>";
+            if(empty($engineer['escalated'])) $escalated = 0;
+            else $escalated = $engineer['escalated'];
+            $html .= "<td {$class}>{$escalated}</td>";
+            if(empty($engineer['closed'])) $closed = 0;
+            else $closed = $engineer['closed'];
+            $html .= "<td {$class}>{$closed}</td>";
+            $html .= "<td {$class}>".round($engineer['opened']/12,2)."</td>"; //The average over a 12mnth period
+            $html .= "<td {$class}>".round($engineer['escalated']/12,2)."</td>"; //The average over a 12mnth period
+            $html .= "<td {$class}>".round($engineer['closed']/12,2)."</td>"; //The average over a 12mnth period
+            $html .= "<td {$class}>".round(($engineer['escalated']/$engineer['opened'])*100,2)."%</td>";
+            $html .= "</tr>";
+
+            $csv .= $engineer['realname'].",";
+            $csv .= "{$opened},";
+            $csv .= "{$escalated},";
+            $csv .= "{$closed},";
+            $csv .= round($engineer['opened']/12,2).","; //The average over a 12mnth period
+            $csv .= round($engineer['escalated']/12,2).","; //The average over a 12mnth period
+            $csv .= round($engineer['closed']/12,2).","; //The average over a 12mnth period
+            $csv .= round(($engineer['escalated']/$engineer['opened'])*100,2)."%\n";
+    
+
+            if($class=="class='shade1'") $class="class='shade2'";
+            else $class="class='shade1'";
+        }
+        $html .= "<tr>";
+        $html .= "<td {$class} align='right'><super>TOTALS:</super></td>";
+        $html .= "<td {$class}>$totalOpened</td>";
+        $html .= "<td {$class}>$totalEscalated</td>";
+        $html .= "<td {$class}>$totalClosed</td>";
+        $html .= "<td {$class}>".round($totalOpened/12,2)."</td>"; //The average over a 12mnth period
+        $html .= "<td {$class}>".round($totalEscalated/12,2)."</td>"; //The average over a 12mnth period
+        $html .= "<td {$class}>".round($totalClosed/12,2)."</td>"; //The average over a 12mnth period
+        $html .= "<td {$class}>".round(($totalEscalated/$totalOpened)*100,2)."%</td>";
+        $html .= "</tr>";
+        $html .= "</table>";
+
+        $csv .= "TOTALS:,";
+        $csv .= $totalOpened.",";
+        $csv .= $totalEscalated.",";
+        $csv .= $totalClosed.",";
+        $csv .= round($totalOpened/12,2).","; //The average over a 12mnth period
+        $csv .= round($totalEscalated/12,2).","; //The average over a 12mnth period
+        $csv .= round($totalClosed/12,2).","; //The average over a 12mnth period
+        $csv .= round(($totalEscalated/$totalOpened)*100,2)."%\n";
+
+
+        $html .= "<p align='center'>The statistics are approximation only. They don't take into consideration incidents reassigned</p>";
+        $csv .= "The statistics are approximation only. They don't take into consideration incidents reassigned\n";
+    
+
+    }
+
+    if ($_POST['output']=='screen')
+    {
+        include('htmlheader.inc.php');
+        echo "<h2>Engineer statistics for past year</h2>";
+        echo $html;
+        include('htmlfooter.inc.php');
+    }
+    elseif ($_POST['output']=='csv')
+    {
+        // --- CSV File HTTP Header
+        header("Content-type: text/csv\r\n");
+        header("Content-disposition-type: attachment\r\n");
+        header("Content-disposition: filename=yearly_incidents.csv");
+        echo $csv;
+    }
+}
 elseif ($_REQUEST['mode']=='report')
 {
-        if (is_array($_POST['exc']) && is_array($_POST['exc'])) $_POST['inc']=array_values(array_diff($_POST['inc'],$_POST['exc']));  // don't include anything excluded
-        $includecount=count($_POST['inc']);
-        if ($includecount >= 1)
-        {
-            // $html .= "<strong>Include:</strong><br />";
-            $incsql .= "(";
+    if (is_array($_POST['exc']) && is_array($_POST['exc'])) $_POST['inc']=array_values(array_diff($_POST['inc'],$_POST['exc']));  // don't include anything excluded
+    $includecount=count($_POST['inc']);
+    if ($includecount >= 1)
+    {
+        // $html .= "<strong>Include:</strong><br />";
+        $incsql .= "(";
 	    $incsql_esc .= "(";
-            for ($i = 0; $i < $includecount; $i++)
-            {
-                // $html .= "{$_POST['inc'][$i]} <br />";
-                $incsql .= "users.id={$_POST['inc'][$i]}";
-		$incsql_esc .= "incidents.owner={$_POST['inc'][$i]}";
-                if ($i < ($includecount-1)) $incsql .= " OR ";
-		if ($i < ($includecount-1)) $incsql_esc .= " OR ";
-            }
-            $incsql .= ")";
-	    $incsql_esc .= ")";
+        for ($i = 0; $i < $includecount; $i++)
+        {
+            // $html .= "{$_POST['inc'][$i]} <br />";
+            $incsql .= "users.id={$_POST['inc'][$i]}";
+		    $incsql_esc .= "incidents.owner={$_POST['inc'][$i]}";
+            if ($i < ($includecount-1)) $incsql .= " OR ";
+		    if ($i < ($includecount-1)) $incsql_esc .= " OR ";
         }
+        $incsql .= ")";
+	    $incsql_esc .= ")";
+    }
 //
     $sql = "SELECT incidents.id AS incid, incidents.title AS title,users.realname AS realname, users.id AS userid, ";
     $sql .= "incidents.opened as opened FROM users, incidents ";
@@ -114,8 +323,8 @@ elseif ($_REQUEST['mode']=='report')
     $escalated_array = array($numrows_esc);
     $count = 0;
     while($row = mysql_fetch_object($result_esc)){
-	$escalated_array[$count] = $row->incid;
-	$count++;
+        $escalated_array[$count] = $row->incid;
+        $count++;
     }
 
 
