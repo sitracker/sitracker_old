@@ -77,10 +77,13 @@ if (empty($submit))
     echo "</tr>";
     ?>
     <tr><th>Job Title: <sup class='red'>*</sup></th><td><input maxlength="50" name="jobtitle" size="30" /></td></tr>
-    <tr><th>Email: <sup class='red'>*</sup></th><td><input maxlength="50" name="email" size="30" /></td></tr>
+    <tr id='email'><th>Email: <sup class='red'>*</sup></th><td><input maxlength="50" name="email" size="30" /></td></tr>
     <tr><th>Phone:</th><td><input maxlength="50" name="phone" size="30" /></td></tr>
     <tr><th>Fax:</th><td><input maxlength="50" name="fax" size="30" /></td></tr>
     <tr><th>Holiday Entitlement:</th><td><input maxlength="3" name="holiday_entitlement" size="3" /> days</td></tr>
+    <?php
+    plugin_do('add_user_form');
+    ?>
     </table>
     <p><input name="submit" type="submit" value="Add User" /></p>
     </form>
@@ -168,7 +171,7 @@ else
         else
         {
             journal(CFG_LOGGING_NORMAL, 'User Added', "User $username was added", CFG_JOURNAL_ADMIN, $id);
-            confirmation_page("2", "edit_user_permissions.php?action=edit&user={$newuserid}", "<h2>New User Added Successfully</h2><p align='center'>Please wait while you are redirected...</p>");
+            confirmation_page("2", "manage_users.php?#userid{$newuserid}", "<h2>New User Added Successfully</h2><p align='center'>Please wait while you are redirected...</p>");
         }
     }
 }

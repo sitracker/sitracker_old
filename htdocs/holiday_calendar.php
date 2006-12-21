@@ -416,7 +416,7 @@ function draw_chart($month, $year)
                 }
                 else
                 {
-                    $weekend=FALSE;  $hello='';
+                    $weekend=FALSE;
                     if ($hdays[$day]=='am' OR $hdays[$day]=='day')
                     {
                         if ($happroved[$day] == 0 OR $happroved[$day]==10) $html .= "<td class='review'>";
