@@ -2523,6 +2523,7 @@ function countdaycurrentincidents($day, $month, $year)
 
 
 // Takes a contact ID and prints HTML listing all the flags
+// LEGACY
 function print_contact_flags($id, $editlink=FALSE)
 {
     $sql = "SELECT contactflags.flag, flags.name FROM contactflags, flags ";
@@ -4743,6 +4744,54 @@ function draw_chart_image($type, $width, $height, $data, $legends, $title='')
     return $img;
 }
 
+function get_flag_id($flag)
+{
+    $sql = "SELECT flagid FROM new_flags WHERE name = LOWER('$flag')";
+echo $sql;
+    $result = mysql_query($sql);
+    if (mysql_error()) trigger_error(mysql_error(),E_USER_ERROR);
+    if(mysql_num_rows($result) == 1)
+    {
+        $id = mysql_fetch_row($result);
+        return $id[0];
+    }
+    else
+    {
+        //need to add
+        $sql = "INSERT INTO new_flags (name) VALUES (LOWER('$flag'))";
+        $result = mysql_query($sql);
+        if (mysql_error()) trigger_error(mysql_error(),E_USER_ERROR);
+        return get_flag_id($flag);
+    }
+}
+
+function add_flag($id, $type, $flag)
+{
+/*
+FLAG TYPES
+1 - contact
+2 - incident
+*/
+
+    $flagid = get_flag_id($flag);
+    $sql = "INSERT INTO set_flags VALUES ('$id', '$type', '$flagid')";
+    $result = mysql_query($sql);
+    if (mysql_error()) trigger_error(mysql_error(),E_USER_ERROR);
+    return true;
+}
+
+function print_flags($recordid, $type)
+{
+    $sql = "SELECT new_flags.name, new_flags.flagid FROM set_flags, new_flags WHERE set_flags.flagid = new_flags.flagid AND ";
+    $sql .= "set_flags.type = '$type' AND set_flags.id = '$recordid'";
+    $result = mysql_query($sql);
+    if (mysql_error()) trigger_error(mysql_error(),E_USER_ERROR);
+    while($flags = mysql_fetch_object($result))
+    {
+        $str .= "<a href='view_flags.php?flagid=$flags->flagid'>$flags->name</a>, ";
+    }
+    echo $str;
+}
 
 // -------------------------- // -------------------------- // --------------------------
 // leave this section at the bottom of functions.inc.php ================================
