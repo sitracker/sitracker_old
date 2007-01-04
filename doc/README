@@ -56,7 +56,7 @@ Installing
     Requirements:
         A web server (Apache recommended)
         PHP >= 4.1
-        MySQL >= 3.2
+        MySQL >= 4.0.18
 
     Instructions:
 
