@@ -2523,7 +2523,7 @@ function countdaycurrentincidents($day, $month, $year)
 
 
 // Takes a contact ID and prints HTML listing all the flags
-// LEGACY
+// LEGACY / DEPRECATED
 function print_contact_flags($id, $editlink=FALSE)
 {
     $sql = "SELECT contactflags.flag, flags.name FROM contactflags, flags ";
@@ -2544,7 +2544,7 @@ function print_contact_flags($id, $editlink=FALSE)
     return TRUE;
 }
 
-
+// LEGACY / DEPRECATED
 function check_contact_flag($id, $flag)
 {
     $sql = "SELECT flag FROM contactflags WHERE contactid='$id' AND flag='$flag'";
@@ -2552,7 +2552,7 @@ function check_contact_flag($id, $flag)
     if (mysql_error()) trigger_error(mysql_error(),E_USER_WARNING);
 }
 
-
+// LEGACY / DEPRECATED
 function add_contact_flag($id, $flag)
 {
     // first check that contact does not already have this flag
@@ -4744,12 +4744,13 @@ function draw_chart_image($type, $width, $height, $data, $legends, $title='')
     return $img;
 }
 
-function get_flag_id($flag)
+
+function get_tag_id($tag)
 {
-    $sql = "SELECT flagid FROM new_flags WHERE name = LOWER('$flag')";
-echo $sql;
+    $sql = "SELECT tagid FROM tags WHERE name = LOWER('$tag')";
+    // echo $sql;
     $result = mysql_query($sql);
-    if (mysql_error()) trigger_error(mysql_error(),E_USER_ERROR);
+    if (mysql_error()) trigger_error(mysql_error(),E_USER_WARNING);
     if(mysql_num_rows($result) == 1)
     {
         $id = mysql_fetch_row($result);
@@ -4758,39 +4759,38 @@ echo $sql;
     else
     {
         //need to add
-        $sql = "INSERT INTO new_flags (name) VALUES (LOWER('$flag'))";
+        $sql = "INSERT INTO tags (name) VALUES (LOWER('$tag'))";
         $result = mysql_query($sql);
         if (mysql_error()) trigger_error(mysql_error(),E_USER_ERROR);
-        return get_flag_id($flag);
+        return mysql_insert_id();
     }
 }
 
-function add_flag($id, $type, $flag)
+function add_tag($id, $type, $tag)
 {
-/*
-FLAG TYPES
-1 - contact
-2 - incident
-*/
-
-    $flagid = get_flag_id($flag);
-    $sql = "INSERT INTO set_flags VALUES ('$id', '$type', '$flagid')";
+    /*
+    TAG TYPES
+    1 - contact
+    2 - incident
+    */
+    $tagid = get_flag_id($tag);
+    $sql = "INSERT INTO set_tags VALUES ('$id', '$type', '$tagid')";
     $result = mysql_query($sql);
     if (mysql_error()) trigger_error(mysql_error(),E_USER_ERROR);
     return true;
 }
 
-function print_flags($recordid, $type)
+function list_tag_links($recordid, $type)
 {
-    $sql = "SELECT new_flags.name, new_flags.flagid FROM set_flags, new_flags WHERE set_flags.flagid = new_flags.flagid AND ";
-    $sql .= "set_flags.type = '$type' AND set_flags.id = '$recordid'";
+    $sql = "SELECT tags.name, tags.tagid FROM set_tags, tags WHERE set_tags.tagid = tags.tagid AND ";
+    $sql .= "set_tags.type = '$type' AND set_tags.id = '$recordid'";
     $result = mysql_query($sql);
     if (mysql_error()) trigger_error(mysql_error(),E_USER_ERROR);
-    while($flags = mysql_fetch_object($result))
+    while($tags = mysql_fetch_object($result))
     {
-        $str .= "<a href='view_flags.php?flagid=$flags->flagid'>$flags->name</a>, ";
+        $str .= "<a href='view_tags.php?tagid={$tags->tagid}'>{$tags->name}</a>, ";
     }
-    echo $str;
+    return $str;
 }
 
 // -------------------------- // -------------------------- // --------------------------

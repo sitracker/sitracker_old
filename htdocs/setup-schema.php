@@ -529,14 +529,6 @@ CREATE TABLE `maintenance` (
 
 INSERT INTO `maintenance` VALUES (1,1,1,2,1268179200,1,4,0,0,'This is an example contract.',1,'no','no',0,0);
 
-
-CREATE TABLE `new_flags` (
-  `flagid` int(11) NOT NULL auto_increment,
-  `name` varchar(255) NOT NULL default '',
-  PRIMARY KEY  (`flagid`)
-) ENGINE=MyISAM;
-
-
 CREATE TABLE `notes` (
   `id` int(11) NOT NULL auto_increment,
   `userid` int(11) NOT NULL default '0',
@@ -866,11 +858,11 @@ INSERT INTO `servicelevels` VALUES (0, 'standard', 2, 240, 320, 960, 10.00, 20, 
 INSERT INTO `servicelevels` VALUES (0, 'standard', 3, 120, 180, 480, 7.00, 14, 90);
 INSERT INTO `servicelevels` VALUES (0, 'standard', 4, 60, 120, 240, 3.00, 6, 90);
 
-CREATE TABLE `set_flags` (
+CREATE TABLE `set_tags` (
 `id` INT NOT NULL ,
 `type` MEDIUMINT NOT NULL ,
-`flagid` INT NOT NULL ,
-PRIMARY KEY ( `id` , `type` , `flagid` )
+`tagid` INT NOT NULL ,
+PRIMARY KEY ( `id` , `type` , `tagid` )
 ) ENGINE=MYISAM;
 
 CREATE TABLE `sitecontacts` (
@@ -979,6 +971,12 @@ CREATE TABLE `system` (
   `id` int(1) NOT NULL default '0',
   `version` float(3,2) NOT NULL default '0.00',
   PRIMARY KEY  (`id`)
+) ENGINE=MyISAM;
+
+CREATE TABLE `tags` (
+  `tagid` int(11) NOT NULL auto_increment,
+  `name` varchar(255) NOT NULL default '',
+  PRIMARY KEY  (`tagid`)
 ) ENGINE=MyISAM;
 
 CREATE TABLE `tasks` (
@@ -1391,13 +1389,13 @@ ALTER TABLE `users` ADD `var_num_updates_view` INT NOT NULL DEFAULT '15' AFTER `
 INSERT INTO `emailtype` (name, type, description, tofield, replytofield, ccfield, bccfield, subjectfield, body, customervisibility, storeinlog) VALUES ('NEARING SLA', 'system', 'Notification when an incident nears its SLA target', '<supportmanageremail>', '<supportemail>', '<supportemail>', '<useremail>', '', '<applicationshortname> SLA: Incident <incidentid> about to breach SLA', 'This is an automatic notification that this incident is about to breach it\\\\\\''s SLA.  The SLA target <info1> will expire in <info2> minutes.\r\n\r\nIncident: [<incidentid>] - <incidenttitle>\r\nOwner: <incidentowner>\r\nPriority: <incidentpriority>\r\nExternal Id: <incidentexternalid>\r\nExternal Engineer: <incidentexternalengineer>\r\nSite: <contactsite>\r\nContact: <contactname>\r\n\r\n--\r\n<applicationshortname> v<applicationversion>\r\n<todaysdate>\r\n', 'hide', 'Yes');
 
 
-CREATE TABLE `new_flags` (
-  `flagid` int(11) NOT NULL auto_increment,
+CREATE TABLE `tags` (
+  `tagid` int(11) NOT NULL auto_increment,
   `name` varchar(255) NOT NULL default '',
-  PRIMARY KEY  (`flagid`)
+  PRIMARY KEY  (`tagid`)
 ) ENGINE=MyISAM;
 
-CREATE TABLE `set_flags` (
+CREATE TABLE `set_tags` (
 `id` INT NOT NULL ,
 `type` MEDIUMINT NOT NULL ,
 `flagid` INT NOT NULL ,

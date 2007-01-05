@@ -26,9 +26,9 @@
     }
     echo "<table align='center' class='vertical'>";
     echo "<tr><th colspan='2'><h3>".stripslashes($contactrow['forenames']).' '.stripslashes($contactrow['surname'])."</h3></th></tr>";
-    echo "<tr><th>Flags:</th><td>";
+    echo "<tr><th>Tags:</th><td>";
     //print_contact_flags($id);
-    print_flags($id, 1); //contacts
+    print_tags($id, 1); //contacts
     echo "</td></tr>";
     echo "<tr><th>Job Title:</th><td>".$contactrow['jobtitle']."</td></tr>";
     echo "<tr><th>Site:</th><td><a href=\"site_details.php?id=".$contactrow['siteid']."\">".site_name($contactrow['siteid'])."</a></td></tr>";

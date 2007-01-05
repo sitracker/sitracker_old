@@ -1,5 +1,5 @@
 <?php
-// add_flag.php - Adds a flag to a record
+// add_tag.php - Adds a tag to a record
 //
 // SiT (Support Incident Tracker) - Support call tracking system
 // Copyright (C) 2000-2006 Salford Software Ltd.
@@ -16,37 +16,37 @@ require('functions.inc.php');
 // This page requires authentication
 require('auth.inc.php');
 
-$flagname = $_REQUEST['flagname'];
+$tagname = $_REQUEST['tagname'];
 $recordid = $_REQUEST['recordid'];
-$flagtype = $_REQUEST['flagtype'];
+$tagtype = $_REQUEST['tagtype'];
 
-if(empty($flagname))
+if(empty($tagname))
 {
     include('htmlheader.inc.php');
-    echo "<h2>Add flag</h2>";
-    echo "<form name='flagform' action='".$_SERVER['PHP_SELF']."' method='post'>";
+    echo "<h2>Add tag</h2>";
+    echo "<form name='tagform' action='".$_SERVER['PHP_SELF']."' method='post'>";
     echo "<table align='center' class='vertical'>";
-    echo "<tr><th>Flag:</th><td><input maxlength='255' name='flagname' size='40' /></td></tr>";
+    echo "<tr><th>Tag:</th><td><input maxlength='255' name='tagname' size='40' /></td></tr>";
     echo "</table>";
     echo "<p align='center'><input name='submit' type='submit' value='Add' /></p>";
     echo "<input name='recordid' type='hidden' value='$recordid' />";
-    echo "<input name='flagtype' type='hidden' value='$flagtype' />";
+    echo "<input name='tagtype' type='hidden' value='$tagtype' />";
     echo "</form>";
     include('htmlfooter.inc.php');
 }
 else
 {
-    $success = add_flag($recordid, $flagtype, $flagname);
+    $success = add_tag($recordid, $tagtype, $tagname);
     if($success)
     {
         include('htmlheader.inc.php');
-        confirmation_page("2", "main.php", "<h2>Flag added Successfully</h2><p align='center'>Please wait while you are redirected...</p>");
+        confirmation_page("2", "main.php", "<h2>Tag added Successfully</h2><p align='center'>Please wait while you are redirected...</p>");
         include('htmlfooter.inc.php');
     }
     else
     {
         include('htmlheader.inc.php');
-        echo "<h2>Error occured adding flag</h2>";
+        echo "<h2>Error occured adding tag</h2>";
         include('htmlfooter.inc.php');
     }
 }

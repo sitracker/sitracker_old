@@ -64,10 +64,10 @@ elseif ($action == "edit" && isset($contact))
         <td><input maxlength="50" name="salutation" title="Salutation (Mr, Mrs, Miss, Dr. etc.)" size="7" value="<?php echo $contactrow['salutation'] ?>" />
         <input maxlength="100" name="forenames" size="15" title="Firstnames (or initials)" value="<?php echo $contactrow['forenames'] ?>" />
         <input maxlength="100" name="surname" size="20" title="Surname/Last Name" value="<?php echo $contactrow['surname'] ?>" /></td></tr>
-        <tr><th>Flags:</th><td>
-        <?php  /* print_contact_flags($contact);*/ print_flags($contact, 1); ?>
-        <a href="edit_flags.php?recordid=<?php echo $contact ?>&flagtype=1">Edit</a> 
-        <a href="add_flag.php?recordid=<?php echo $contact ?>&flagtype=1">Add</a>
+        <tr><th>Tags:</th><td>
+        <?php  /* print_contact_flags($contact);*/ list_tag_links($contact, 1); ?>
+        <a href="edit_tags.php?recordid=<?php echo $contact ?>&amp;tagtype=1">Edit</a>
+        <a href="add_tag.php?recordid=<?php echo $contact ?>&amp;tagtype=1">Add</a>
         </td></tr>
         <tr><th>Job Title:</th><td><input maxlength="255" name="jobtitle" size="40" value="<?php echo $contactrow['jobtitle'] ?>" /></td></tr>
         <tr><th>Site: <sup class='red'>*</sup></th><td><?php echo site_drop_down('siteid',$contactrow['siteid']); ?></td></tr>

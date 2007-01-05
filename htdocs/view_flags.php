@@ -1,5 +1,5 @@
 <?php
-// view_flags.php - Page to view the flags on either a record or in general
+// view_tags.php - Page to view the tags on either a record or in general
 //
 // SiT (Support Incident Tracker) - Support call tracking system
 // Copyright (C) 2000-2006 Salford Software Ltd.
@@ -16,23 +16,23 @@ require('functions.inc.php');
 // This page requires authentication
 require('auth.inc.php');
 
-$flagid = $_REQUEST['flagid'];
+$tagid = $_REQUEST['tagid'];
 
-if(empty($flagid))
+if(empty($tagid))
 {
-    //show all flags
-    $sql = "SELECT DISTINCT(name), new_flags.flagid FROM new_flags, set_flags WHERE new_flags.flagid = set_flags.flagid";
+    //show all tags
+    $sql = "SELECT DISTINCT(name), tags.tagid FROM tags, set_tags WHERE tags.tagid = set_tags.tagid";
     $result = mysql_query($sql);
     if (mysql_error()) trigger_error(mysql_error(),E_USER_ERROR);
 
     include('htmlheader.inc.php');
-    echo "<h2>Flags</h2>";
+    echo "<h2>Tags</h2>";
     if(mysql_num_rows($result) > 0)
     {
         echo "<table align='center'><tr><td>";
         while($obj = mysql_fetch_object($result))
         {
-            echo "<a href='".$_SERVER['PHP_SELF']."?flagid=$obj->flagid'>$obj->name</a>  "; 
+            echo "<a href='".$_SERVER['PHP_SELF']."?tagid=$obj->tagid'>$obj->name</a>  ";
         }
         echo "</td></tr></table>";
     }
@@ -40,13 +40,13 @@ if(empty($flagid))
 }
 else
 {
-    //show only this flag
-    $sql = "SELECT * FROM set_flags WHERE flagid = '$flagid'";
+    //show only this tag
+    $sql = "SELECT * FROM set_tags WHERE tagid = '$tagid'";
     $result = mysql_query($sql);
     if (mysql_error()) trigger_error(mysql_error(),E_USER_ERROR);
 
     include('htmlheader.inc.php');
-    echo "<h2>Flags</h2>";
+    echo "<h2>Tags</h2>";
     if(mysql_num_rows($result) > 0)
     {
         echo "<table align='center'>";
