@@ -180,6 +180,7 @@ else
             $sql .= "CONCAT(forenames, ' ', surname) LIKE ('%$search_string%')) ORDER BY incidents.id DESC LIMIT $limit_results";
             $result=mysql_query($sql);
             if (mysql_error()) trigger_error("MySQL Error".mysql_error(), E_USER_ERROR);
+            $srch_results = array();
             if (mysql_num_rows($result)>=1)
             {
                 while($row = mysql_fetch_object($result))
@@ -213,6 +214,7 @@ else
             $sql .= "OR CONCAT(forenames, ' ', surname) LIKE ('%$search_string%')) LIMIT $limit_results";
             $result=mysql_query($sql);
             if (mysql_error()) trigger_error("MySQL Error".mysql_error(), E_USER_ERROR);
+            $srch_results = array();
             if (mysql_num_rows($result)>=1)
             {
                 while($row = mysql_fetch_object($result))
@@ -235,6 +237,7 @@ else
             $sql = "SELECT * FROM kbarticles WHERE (title LIKE ('%$search_string%') OR keywords LIKE ('%$search_string%'))LIMIT $limit_results";
             $result=mysql_query($sql);
             if (mysql_error()) trigger_error("MySQL Error".mysql_error(), E_USER_ERROR);
+            $srch_results = array();
             if (mysql_num_rows($result)>=1)
             {
                 while($row = mysql_fetch_object($result))
@@ -256,6 +259,7 @@ else
             $sql = "SELECT * FROM sites WHERE name LIKE ('%$search_string%') ORDER BY name LIMIT $limit_results";
             $result=mysql_query($sql);
             if (mysql_error()) trigger_error("MySQL Error".mysql_error(), E_USER_ERROR);
+            $srch_results = array();
             if (mysql_num_rows($result)>=1)
             {
                 while($row = mysql_fetch_object($result))
@@ -281,6 +285,7 @@ else
             $sql = "SELECT * FROM updates WHERE bodytext LIKE ('%$search_string%') ORDER BY id DESC LIMIT $limit_results";
             $result=mysql_query($sql);
             if (mysql_error()) trigger_error("MySQL Error".mysql_error(), E_USER_ERROR);
+            $srch_results = array();
             if (mysql_num_rows($result)>=1)
             {
                 while($row = mysql_fetch_object($result))
@@ -306,6 +311,7 @@ else
             $sql .= "ORDER BY maintenance.id DESC LIMIT $limit_results";
             $result=mysql_query($sql);
             if (mysql_error()) trigger_error("MySQL Error".mysql_error(), E_USER_ERROR);
+            $srch_results = array();
             if (mysql_num_rows($result)>=1)
             {
                 while($row = mysql_fetch_object($result))
@@ -338,7 +344,8 @@ else
         $srch_results6 = search_maintenance($search_string);
         // $srch_results7 = search_updates($search_string); // bugbug not finished
         // , $srch_results7
-        $srch_results = array_merge($srch_results1, $srch_results2, $srch_results3, $srch_results4, $srch_results5, $srch_results6);
+        //$srch_results = array_merge($srch_results1, $srch_results2, $srch_results3, $srch_results4, $srch_results5, $srch_results6);
+        $srch_results = array_merge($srch_results1, $srch_results2, $srch_results3, $srch_results4, $srch_results6);
 
         // bugbug also offer a sort by date
         if ($sortby=='date') $srch_results=ansort($srch_results,'date');
