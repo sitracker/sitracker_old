@@ -105,5 +105,8 @@ if (count($CONFIG['plugins']) >= 1)
 else echo "<p>None</p>";
 echo "</td></tr>";
 echo "</table>\n";
+
+plugin_do('about');
+
 include('htmlfooter.inc.php');
 ?>

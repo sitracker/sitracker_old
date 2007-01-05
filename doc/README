@@ -203,6 +203,7 @@ incident_edited             Perform an action after an incident is
 incident_details            Add to the incident details page
 holiday_chart_cal           Add to the top of the holiday chart page
 add_user_form               Add to the add user form
+about                       Add to the about page
 
 If your plugin needs to use additional pages, put those pages in a
 subdirectory (named for your plugin) inside htdocs/ext

@@ -21,29 +21,6 @@ To Do
 * Ability to add more Roles
 * Make all date and time formats consistantly use config files
 
-Rough roadmap with main goals (subject to slippage or change at any whim) ;)
+Roadmap
 
-v3.25 Q1 2007
-
-    - Complete tasks system
-    - Neat escalations
-    - Fully XHML 1.0 Valid
-
-v3.26 Q2 2007
-
-    - Fully working customer portal, with ability to manage incidents and contracts
-      and their own details (maybe site details too?)
-
-v3.27 Q3 2007
-
-    - Improved products/software interface, easier
-
-v3.3x Q1 2008
-
-    - Nice themes, preferably with some nice graphics if we can find somebody to do them
-
-v4.00 Q3 2008?
-
-    - Complete plugin support and Plugins installer
-    - Internationalisation support (and hopefully at least one translation)
-    - More reports, more useful reports
+Our project roadmap is now maintained online at http://sitracker.sourceforge.net/Roadmap
