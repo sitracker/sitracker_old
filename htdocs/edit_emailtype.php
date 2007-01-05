@@ -96,7 +96,7 @@ elseif ($action == "edit")
         </table>
         <p>
         Body Text<br />
-        <textarea name="bodytext" rows="20" cols="60"><?php echo $emailtype["body"] ?></textarea>
+        <textarea name="bodytext" rows="20" cols="60"><?php echo stripslashes($emailtype["body"]); ?></textarea>
         </p>
 
         <?php

@@ -86,7 +86,7 @@ function dashboard_user_incidents()
         echo "<table style=\"width: 100%\">";
         while($row = mysql_fetch_array($result))
         {
-            echo "<tr><td class='shade1'><a href='javascript:incident_details_window({$row['id']}) '>{$row['id']} - {$row['title']} for {$row['forenames']}   {$row['surname']}</a></td></tr>";
+            echo "<tr><td class='shade1'><a href='javascript:incident_details_window({$row['id']}) '>".stripslashes("{$row['id']} - {$row['title']} for {$row['forenames']}   {$row['surname']}")."</a></td></tr>";
         }
         echo "</table>";
     }
