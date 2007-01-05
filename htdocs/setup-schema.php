@@ -620,6 +620,7 @@ INSERT INTO `permissions` VALUES (61, 'View Incident Details');
 INSERT INTO `permissions` VALUES (62, 'View Incident Attachments');
 INSERT INTO `permissions` VALUES (63, 'Add Reseller');
 INSERT INTO `permissions` VALUES (64, 'Manage Escalation Paths');
+INSERT INTO `permissions` VALUES (65, 'Delete Products');
 
 
 CREATE TABLE `priority` (
@@ -754,6 +755,7 @@ INSERT INTO `rolepermissions` (`roleid`, `permissionid`, `granted`) VALUES (1, 6
 INSERT INTO `rolepermissions` (`roleid`, `permissionid`, `granted`) VALUES (1, 62, 'true');
 INSERT INTO `rolepermissions` (`roleid`, `permissionid`, `granted`) VALUES (1, 63, 'true');
 INSERT INTO `rolepermissions` (`roleid`, `permissionid`, `granted`) VALUES (1, 64, 'true');
+INSERT INTO `rolepermissions` (`roleid`, `permissionid`, `granted`) VALUES (1, 65, 'true');
 INSERT INTO `rolepermissions` (`roleid`, `permissionid`, `granted`) VALUES (2, 1, 'true');
 INSERT INTO `rolepermissions` (`roleid`, `permissionid`, `granted`) VALUES (2, 2, 'true');
 INSERT INTO `rolepermissions` (`roleid`, `permissionid`, `granted`) VALUES (2, 3, 'true');
@@ -1121,7 +1123,7 @@ INSERT INTO `userpermissions` VALUES (1, 61, 'true');
 INSERT INTO `userpermissions` VALUES (1, 62, 'true');
 INSERT INTO `userpermissions` VALUES (1, 63, 'true');
 INSERT INTO `userpermissions` VALUES (1, 64, 'true');
-
+INSERT INTO `userpermissions` VALUES (1, 65, 'true');
 
 CREATE TABLE `users` (
   `id` tinyint(4) NOT NULL auto_increment,
@@ -1402,6 +1404,9 @@ CREATE TABLE `set_flags` (
 PRIMARY KEY ( `id` , `type` , `flagid` )
 ) ENGINE=MYISAM;
 
+INSERT INTO `permissions` VALUES (65, 'Delete Products');
+INSERT INTO `rolepermissions` (`roleid`, `permissionid`, `granted`) VALUES (1, 65, 'true');
+INSERT INTO `userpermissions` VALUES (1, 65, 'true');
 ";
 
 // Important: When making changes to the schema you must add SQL to make the alterations

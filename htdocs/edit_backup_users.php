@@ -53,7 +53,7 @@ if (empty($save))
     {
         echo "<form action='{$_SERVER['PHP_SELF']}' method='post'>\n";
         echo "<table align='center'>\n";
-        echo "<tr><th>Software</th><th>Backup Engineer</th></tr>";
+        echo "<tr><th>Software</th><th>Substitute</th></tr>";
         $class='shade1';
         while ($software = mysql_fetch_object($result))
         {

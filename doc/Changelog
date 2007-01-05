@@ -17,6 +17,7 @@ Changes in v3.25 - Unreleased
 * Plugin functions can now accept optional parameters
 * Yearly engineer report now has a statistics option
 * Added working flags to contacts
+* Added ability to delete products if they are not linked with other records
 
 Changes in v3.24 - Released 6 November 2006
 -----------------------------------------------------------------------
