@@ -64,10 +64,11 @@ elseif ($action == "edit" && isset($contact))
         <td><input maxlength="50" name="salutation" title="Salutation (Mr, Mrs, Miss, Dr. etc.)" size="7" value="<?php echo $contactrow['salutation'] ?>" />
         <input maxlength="100" name="forenames" size="15" title="Firstnames (or initials)" value="<?php echo $contactrow['forenames'] ?>" />
         <input maxlength="100" name="surname" size="20" title="Surname/Last Name" value="<?php echo $contactrow['surname'] ?>" /></td></tr>
-        <tr><th>Tags:</th><td>
-        <?php  /* print_contact_flags($contact);*/ list_tag_links($contact, 1); ?>
-        <a href="edit_tags.php?recordid=<?php echo $contact ?>&amp;tagtype=1">Edit</a>
-        <a href="add_tag.php?recordid=<?php echo $contact ?>&amp;tagtype=1">Add</a>
+        <tr><th>Tags:</th><td><textarea rows='2' cols='60' name='tags'>
+        <?php  /* print_contact_flags($contact);*/ echo list_tag_links($contact, 1, false); ?>
+        </textarea>
+        <!-- <a href="edit_tags.php?recordid=<?php echo $contact ?>&amp;tagtype=1">Edit</a>
+        <a href="add_tag.php?recordid=<?php echo $contact ?>&amp;tagtype=1">Add</a> -->
         </td></tr>
         <tr><th>Job Title:</th><td><input maxlength="255" name="jobtitle" size="40" value="<?php echo $contactrow['jobtitle'] ?>" /></td></tr>
         <tr><th>Site: <sup class='red'>*</sup></th><td><?php echo site_drop_down('siteid',$contactrow['siteid']); ?></td></tr>
@@ -138,7 +139,7 @@ else if ($action == "update")
     $jobtitle = cleanvar($_POST['jobtitle']);
     $department = cleanvar($_POST['department']);
     $notify_contactid = cleanvar($_POST['notify_contactid']);
-
+    $tags = cleanvar($_POST['tags']);
 
     // Save changes to database
     $errors = 0;
@@ -177,6 +178,21 @@ else if ($action == "update")
         if ($dataprotection_email != '') $dataprotection_email='Yes'; else $dataprotection_email='No';
         if ($dataprotection_phone  != '') $dataprotection_phone='Yes'; else $dataprotection_phone='No';
         if ($dataprotection_address  != '') $dataprotection_address='Yes'; else $dataprotection_address='No';
+
+        /*
+            TAGS
+        */
+
+        // first remove old tags
+        $sql = "DELETE FROM set_tags WHERE id = '$contact' AND type = '1'";
+        $result = mysql_query($sql);
+        if (mysql_error()) trigger_error("MySQL Query Error ".mysql_error(), E_USER_ERROR);
+
+        $tag_array = explode(",", $tags);
+        foreach($tag_array AS $tag)
+        {
+            add_tag($contact, 1, trim($tag));
+        }
 
         $sql = "UPDATE contacts SET salutation='$salutation', surname='$surname', forenames='$forenames', siteid='$siteid', email='$email', phone='$phone', mobile='$mobile', fax='$fax', ";
         $sql .= "address1='$address1', address2='$address2', city='$city', county='$county', postcode='$postcode', ";

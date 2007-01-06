@@ -4748,7 +4748,6 @@ function draw_chart_image($type, $width, $height, $data, $legends, $title='')
 function get_tag_id($tag)
 {
     $sql = "SELECT tagid FROM tags WHERE name = LOWER('$tag')";
-    // echo $sql;
     $result = mysql_query($sql);
     if (mysql_error()) trigger_error(mysql_error(),E_USER_WARNING);
     if(mysql_num_rows($result) == 1)
@@ -4773,14 +4772,14 @@ function add_tag($id, $type, $tag)
     1 - contact
     2 - incident
     */
-    $tagid = get_flag_id($tag);
+    $tagid = get_tag_id($tag);
     $sql = "INSERT INTO set_tags VALUES ('$id', '$type', '$tagid')";
     $result = mysql_query($sql);
     if (mysql_error()) trigger_error(mysql_error(),E_USER_ERROR);
     return true;
 }
 
-function list_tag_links($recordid, $type)
+function list_tag_links($recordid, $type, $html=true)
 {
     $sql = "SELECT tags.name, tags.tagid FROM set_tags, tags WHERE set_tags.tagid = tags.tagid AND ";
     $sql .= "set_tags.type = '$type' AND set_tags.id = '$recordid'";
@@ -4788,9 +4787,10 @@ function list_tag_links($recordid, $type)
     if (mysql_error()) trigger_error(mysql_error(),E_USER_ERROR);
     while($tags = mysql_fetch_object($result))
     {
-        $str .= "<a href='view_tags.php?tagid={$tags->tagid}'>{$tags->name}</a>, ";
+        if($html) $str .= "<a href='view_tags.php?tagid={$tags->tagid}'>{$tags->name}</a>, ";
+        else $str .= $tags->name.", ";
     }
-    return $str;
+    return substr($str, 0, strlen($str)-2);
 }
 
 // -------------------------- // -------------------------- // --------------------------

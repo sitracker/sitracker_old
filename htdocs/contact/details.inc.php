@@ -28,7 +28,7 @@
     echo "<tr><th colspan='2'><h3>".stripslashes($contactrow['forenames']).' '.stripslashes($contactrow['surname'])."</h3></th></tr>";
     echo "<tr><th>Tags:</th><td>";
     //print_contact_flags($id);
-    list_tag_links($id, 1); //contacts
+    echo list_tag_links($id, 1); //contacts
     echo "</td></tr>";
     echo "<tr><th>Job Title:</th><td>".$contactrow['jobtitle']."</td></tr>";
     echo "<tr><th>Site:</th><td><a href=\"site_details.php?id=".$contactrow['siteid']."\">".site_name($contactrow['siteid'])."</a></td></tr>";
