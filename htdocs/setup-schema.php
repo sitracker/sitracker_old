@@ -1398,7 +1398,7 @@ CREATE TABLE `tags` (
 CREATE TABLE `set_tags` (
 `id` INT NOT NULL ,
 `type` MEDIUMINT NOT NULL ,
-`flagid` INT NOT NULL ,
+`tagid` INT NOT NULL ,
 PRIMARY KEY ( `id` , `type` , `flagid` )
 ) ENGINE=MYISAM;
 
