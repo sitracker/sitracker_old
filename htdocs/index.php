@@ -33,31 +33,22 @@ if ($_SESSION['auth'] != TRUE)
     if ($id==1) echo "<p class='error'>Enter your credentials to login to {$CONFIG['application_shortname']}</p><br />";
     if ($id==2) echo "<p class='error'>Your session has expired or you have not yet logged in</p><br />";
     if ($id==3) throw_user_error("Invalid username/password combination");
-    echo "<div style='width: 25%; margin-left: auto; margin-right: auto; margin-top: 1em; padding: 2em;'>";
-    ?>
-    <table class='vertical' align='center'>
-    <tr><td colspan='2' align='center'><h2>Login to <?php echo $CONFIG['application_shortname']; ?></h2></td></tr>
-    <form action="login.php" method="post">
 
-    <!--<br />
-    <label>Username:<br /><input name="username" size="20" type="text" /></label><br />
-    <label>Password:<br /><input name="password" size="20" type="password" /></label><br />-->
-    <tr><th class='shade2'>Username:</td><td><input name="username" size="20" type="text" /></td></tr>
-    <tr><th class='shade2'>Password:</td><td><input name="password" size="20" type="password" /></td></tr>
-    <?php
+    echo "<div class='windowbox' style='width: 220px;'>";
+    echo "<div class='windowtitle'>{$CONFIG['application_shortname']} - Login</div>";
+    echo "<div class='window'>";
+    echo "<form action='login.php' method='post'>";
+    echo "<label>Username:<br /><input name='username' size='30' type='text' /></label><br />";
+    echo "<label>Password:<br /><input name='password' size='30' type='password' /></label><br /><br />";
     echo "<input type='hidden' name='page' value='$page' />";
-    ?>
-    <tr><td colspan='2' align='center'><input type="submit" value="Log In" /></td></tr>
+    echo "<input type='submit' value='Log In' /><br />";
 
-
-    <?php
-    echo "</form>";
     if($CONFIG['portal'] == TRUE)
     {
-        echo "<tr><td colspan='2'><a href='forgotpwd.php'>Forgotten your details?</a></td></tr>";
+        echo "<br /><a href='forgotpwd.php'>Forgotten your details?</a>";
     }
-    echo "</table>";
-    echo "</div>";
+    echo "</form>";
+    echo "</div>\n</div>\n";
     include('htmlfooter.inc.php');
 }
 else
