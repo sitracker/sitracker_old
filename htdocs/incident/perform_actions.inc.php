@@ -514,7 +514,8 @@ switch($action)
         $oldccemail = stripslashes(cleanvar($_POST['oldccemail']));
         $oldexternalengineer = stripslashes(cleanvar($_POST['oldexternalengineer']));
         $oldsoftware = cleanvar($_POST['oldsoftware']);
-    
+        $tags = cleanvar($_POST['tags']);
+
         // Edit the incident
         if ($type == "Support")  // FIXME: This IF might not be needed since sales incidents are obsolete INL 29Apr03
         {
@@ -543,6 +544,21 @@ switch($action)
             {
                 $addition_errors = 0;
     
+                /*
+                    TAGS
+                */
+        
+                // first remove old tags
+                $sql = "DELETE FROM set_tags WHERE id = '$id' AND type = '2'";
+                $result = mysql_query($sql);
+                if (mysql_error()) trigger_error("MySQL Query Error ".mysql_error(), E_USER_ERROR);
+        
+                $tag_array = explode(",", $tags);
+                foreach($tag_array AS $tag)
+                {
+                    add_tag($id, 2, trim($tag));
+                }
+
                 // update support incident
                 $sql = "UPDATE incidents SET externalid='$externalid', ccemail='$ccemail', ";
                 $sql .= "escalationpath='$escalationpath', externalengineer='$externalengineer', externalemail='$externalemail', title='$title', ";

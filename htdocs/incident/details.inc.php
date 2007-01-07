@@ -136,6 +136,10 @@ if (mysql_num_rows($rresult) >= 1)
 
 }
 
+// Tags
+
+echo "<tr><td colspan='2'>Tags: ".list_tag_links($id, 2)."</td></tr>";
+
 echo "</table>";
 
 plugin_do('incident_details');
