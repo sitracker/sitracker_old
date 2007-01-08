@@ -547,20 +547,7 @@ switch($action)
                 /*
                     TAGS
                 */
-
-                // first remove old tags
-                $sql = "DELETE FROM set_tags WHERE id = '$id' AND type = '2'";
-                $result = mysql_query($sql);
-                if (mysql_error()) trigger_error("MySQL Query Error ".mysql_error(), E_USER_ERROR);
-
-                // Change seperators to spaces
-                $seperators=array(', ',';',',');
-                $tags=str_replace($seperators, ' ', $tags);
-                $tag_array = explode(" ", $tags);
-                foreach($tag_array AS $tag)
-                {
-                    add_tag($id, 2, trim($tag));
-                }
+                replace_tags(2, $id, $tags);
 
                 // update support incident
                 $sql = "UPDATE incidents SET externalid='$externalid', ccemail='$ccemail', ";

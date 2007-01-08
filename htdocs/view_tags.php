@@ -31,19 +31,23 @@ if(empty($tagid))
 
     include('htmlheader.inc.php');
     echo "<h2>Tags</h2>";
+    $countsql = "SELECT COUNT(*) AS counted FROM set_tags GROUP BY tagid ORDER BY counted DESC LIMIT 1";
+
+    $countresult = mysql_query($countsql);
+    if (mysql_error()) trigger_error(mysql_error(),E_USER_ERROR);
+    list($max) = mysql_fetch_row($countresult);
+
     echo "<p align='center'>Sort: <a href='".$_SERVER['PHP_SELF']."?orderby=name'>alphabetically</a> | ";
     echo "<a href='".$_SERVER['PHP_SELF']."?orderby=occurrences'>popularity</a></p>";
     if(mysql_num_rows($result) > 0)
     {
         echo "<table align='center'><tr><td>";
         $min=1;
-        $max=20;
 
         while($obj = mysql_fetch_object($result))
         {
-            $size=($max - $obj->occurrences) * $obj->occurrences;
-            if ($size < 100) $size+=100;
-            if ($size > 200) $size=200;
+            $size = (($obj->occurrences) * 300 / $max) +100;
+            if ($size==0) $size=100;
             echo "<a href='".$_SERVER['PHP_SELF']."?tagid=$obj->tagid' style='font-size: {$size}%;' title='{$obj->occurrences}'>{$obj->name}</a> &nbsp;";
         }
         echo "</td></tr></table>";

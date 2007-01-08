@@ -64,7 +64,7 @@ elseif ($action == "edit" && isset($contact))
         <td><input maxlength="50" name="salutation" title="Salutation (Mr, Mrs, Miss, Dr. etc.)" size="7" value="<?php echo $contactrow['salutation'] ?>" />
         <input maxlength="100" name="forenames" size="15" title="Firstnames (or initials)" value="<?php echo $contactrow['forenames'] ?>" />
         <input maxlength="100" name="surname" size="20" title="Surname/Last Name" value="<?php echo $contactrow['surname'] ?>" /></td></tr>
-        <tr><th>Tags:<br />Separated by commas</th><td><textarea rows='2' cols='60' name='tags'><?php  /* print_contact_flags($contact);*/ echo list_tags($contact, 1, false); ?>
+        <tr><th>Tags:</th><td><textarea rows='2' cols='60' name='tags'><?php  /* print_contact_flags($contact);*/ echo list_tags($contact, 1, false); ?>
         </textarea>
         <!-- <a href="edit_tags.php?recordid=<?php echo $contact ?>&amp;tagtype=1">Edit</a>
         <a href="add_tag.php?recordid=<?php echo $contact ?>&amp;tagtype=1">Add</a> -->
@@ -181,17 +181,7 @@ else if ($action == "update")
         /*
             TAGS
         */
-
-        // first remove old tags
-        $sql = "DELETE FROM set_tags WHERE id = '$contact' AND type = '1'";
-        $result = mysql_query($sql);
-        if (mysql_error()) trigger_error("MySQL Query Error ".mysql_error(), E_USER_ERROR);
-
-        $tag_array = explode(",", $tags);
-        foreach($tag_array AS $tag)
-        {
-            add_tag($contact, 1, trim($tag));
-        }
+        replace_tags(1, $contact, $tags);
 
         $sql = "UPDATE contacts SET salutation='$salutation', surname='$surname', forenames='$forenames', siteid='$siteid', email='$email', phone='$phone', mobile='$mobile', fax='$fax', ";
         $sql .= "address1='$address1', address2='$address2', city='$city', county='$county', postcode='$postcode', ";

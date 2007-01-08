@@ -4772,11 +4772,32 @@ function add_tag($id, $type, $tag)
     1 - contact
     2 - incident
     */
-    $tagid = get_tag_id($tag);
-    $sql = "INSERT INTO set_tags VALUES ('$id', '$type', '$tagid')";
-    $result = mysql_query($sql);
-    if (mysql_error()) trigger_error(mysql_error(),E_USER_ERROR);
+    if ($tag!='')
+    {
+        $tagid = get_tag_id($tag);
+        // Ignore errors, die silently
+        $sql = "INSERT INTO set_tags VALUES ('$id', '$type', '$tagid')";
+        $result = @mysql_query($sql);
+    }
     return true;
+}
+
+
+function replace_tags($type, $id, $tagstring)
+{
+    // first remove old tags
+    $sql = "DELETE FROM set_tags WHERE id = '$id' AND type = '$type'";
+    $result = mysql_query($sql);
+    if (mysql_error()) trigger_error("MySQL Query Error ".mysql_error(), E_USER_ERROR);
+
+    // Change seperators to spaces
+    $seperators=array(', ',';',',');
+    $tags=str_replace($seperators, ' ', trim($tagstring));
+    $tag_array = explode(" ", $tags);
+    foreach($tag_array AS $tag)
+    {
+        add_tag($id, $type, trim($tag));
+    }
 }
 
 function list_tags($recordid, $type, $html=TRUE)
@@ -4790,7 +4811,7 @@ function list_tags($recordid, $type, $html=TRUE)
         if($html) $str .= "<a href='view_tags.php?tagid={$tags->tagid}'>{$tags->name}</a>, ";
         else $str .= $tags->name.", ";
     }
-    return substr($str, 0, strlen($str)-2);
+    return trim(substr($str, 0, strlen($str)-2));
 }
 
 // -------------------------- // -------------------------- // --------------------------
