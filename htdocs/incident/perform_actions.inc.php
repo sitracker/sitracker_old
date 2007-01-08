@@ -20,7 +20,7 @@ switch($action)
 {
     case 'update':
         // Update the incident
-    
+
         $time = time();
         // External variables
         $bodytext = cleanvar($_REQUEST['bodytext'],FALSE,FALSE);
@@ -37,16 +37,16 @@ switch($action)
         $year = cleanvar($_POST['year']);
         $month = cleanvar($_POST['month']);
         $day = cleanvar($_POST['day']);
-    
+
         if (empty($newpriority)) $newpriority  = incident_priority($id);
-    
+
         // update incident
         switch ($timetonextaction_none)
         {
             case 'none':
                 $timeofnextaction = 0;
             break;
-    
+
             case 'time':
                 if ($timetonextaction_days<1 && $timetonextaction_hours<1 && $timetonextaction_minutes<1)
                 {
@@ -57,7 +57,7 @@ switch($action)
                     $timeofnextaction = calculate_time_of_next_action($timetonextaction_days, $timetonextaction_hours, $timetonextaction_minutes);
                 }
             break;
-    
+
             case 'date':
                 // $now + ($days * 86400) + ($hours * 3600) + ($minutes * 60);
                 $unixdate=mktime(9,0,0,$month,$day,$year);
@@ -65,12 +65,12 @@ switch($action)
                 $timeofnextaction = $unixdate;
                 if ($timeofnextaction<0) $timeofnextaction=0;
             break;
-    
+
             default:
                 $timeofnextaction = 0;
             break;
         }
-    
+
         // Put text into body of update for field changes (reverse order)
         // delim first
         $bodytext = "<hr>" . $bodytext;
@@ -98,7 +98,7 @@ switch($action)
         }
         // Debug
         ## if ($target!='') $bodytext = "Target: $target\n".$bodytext;
-    
+
         // Check the updatetype field, if it's blank look at the target
         if (empty($updatetype))
         {
@@ -110,10 +110,10 @@ switch($action)
                 default: $updatetype='research';  break;
             }
         }
-    
+
         // Force reviewmet to be visible
         if ($updatetype=='reviewmet') $cust_vis='yes';
-    
+
         // visible update
         if ($cust_vis == "yes")
         {
@@ -128,11 +128,11 @@ switch($action)
         }
         $result = mysql_query($sql);
         if (mysql_error()) trigger_error("MySQL Query Error ".mysql_error(), E_USER_ERROR);
-    
+
         $sql = "UPDATE incidents SET status='$newstatus', priority='$newpriority', lastupdated='$time', timeofnextaction='$timeofnextaction' WHERE id='$id'";
         mysql_query($sql);
         if (mysql_error()) trigger_error("MySQL Query Error ".mysql_error(), E_USER_ERROR);
-    
+
         // Handle meeting of service level targets
         switch ($target)
         {
@@ -140,22 +140,22 @@ switch($action)
                 // do nothing
                 $sql = '';
             break;
-    
+
             case 'initialresponse':
                 $sql  = "INSERT INTO updates (incidentid, userid, type, timestamp, currentowner, currentstatus, customervisibility, sla, bodytext) ";
                 $sql .= "VALUES ('$id', '".$sit[2]."', 'slamet', '$now', '".$sit[2]."', '$newstatus', 'show', 'initialresponse','The Initial Response has been made.')";
             break;
-    
+
             case 'probdef':
                 $sql  = "INSERT INTO updates (incidentid, userid, type, timestamp, currentowner, currentstatus, customervisibility, sla, bodytext) ";
                 $sql .= "VALUES ('$id', '".$sit[2]."', 'slamet', '$now', '".$sit[2]."', '$newstatus', 'show', 'probdef','The problem has been defined.')";
             break;
-    
+
             case 'actionplan':
                 $sql  = "INSERT INTO updates (incidentid, userid, type, timestamp, currentowner, currentstatus, customervisibility, sla, bodytext) ";
                 $sql .= "VALUES ('$id', '".$sit[2]."', 'slamet', '$now', '".$sit[2]."', '$newstatus', 'show', 'actionplan','An action plan has been made.')";
             break;
-    
+
             case 'solution':
                 $sql  = "INSERT INTO updates (incidentid, userid, type, timestamp, currentowner, currentstatus, customervisibility, sla, bodytext) ";
                 $sql .= "VALUES ('$id', '".$sit[2]."', 'slamet', '$now', '".$sit[2]."', '$newstatus', 'show', 'solution','The incident has been resolved or reprioritised.\nThe issue should now be brought to a close or a new problem definition created within the service level.')";
@@ -173,7 +173,7 @@ switch($action)
             mysql_query($sql);
             if (mysql_error()) trigger_error("MySQL Query Error ".mysql_error(), E_USER_ERROR);
         }
-    
+
         // attach file
         $att_max_filesize = return_bytes($CONFIG['upload_max_filesize']);
         $incident_attachment_fspath = $CONFIG['attachment_fspath'] . $id;
@@ -190,14 +190,14 @@ switch($action)
             if (!$mk) throw_error('Failed creating incident attachment (timestamp) directory: ',$incident_attachment_fspath .$id . "/$now");
             umask($umask);
             $newfilename = $incident_attachment_fspath.'/'.$now.'/'.$_FILES['attachment']['name'];
-    
+
             // Move the uploaded file from the temp directory into the incidents attachment dir
             $mv=move_uploaded_file($_FILES['attachment']['tmp_name'], $newfilename);
             if (!$mv) trigger_error('!Error: Problem moving attachment from temp directory to: '.$newfilename, E_USER_WARNING);
-    
+
             //$mv=move_uploaded_file($attachment, "$filename");
             //if (!mv) throw_error('!Error: Problem moving attachment from temp directory:',$filename);
-    
+
             // Check file size before attaching
             if ($_FILES['attachment']['size'] > $att_max_filesize)
             {
@@ -236,10 +236,10 @@ switch($action)
         $references = cleanvar($_POST['references']);
         $wait = cleanvar($_POST['wait']);
         $send_email = cleanvar($_POST['send_email']);
-    
+
         // Close the incident
         $errors = 0;
-    
+
         // check for blank closing status field
         if ($closingstatus == 0)
         {
@@ -251,11 +251,11 @@ switch($action)
             $errors = 1;
             $error_string = "<p class='error'>You must enter some text for both summary and solution</P>\n";
         }
-    
+
         if ($errors == 0)
         {
             $addition_errors = 0;
-    
+
             // update incident
             if ($wait=='yes')
             {
@@ -277,7 +277,7 @@ switch($action)
                 $addition_errors = 1;
                 $addition_errors_string .= "<p class='error'>Update of incident failed</p>\n";
             }
-    
+
             // add update(s)
             if ($addition_errors == 0)
             {
@@ -302,13 +302,13 @@ switch($action)
                         if (mysql_error()) trigger_error("MySQL Query Error ".mysql_error(), E_USER_ERROR);
                     }
                 }
-    
+
                 // Meet service level 'solution'
                 $sql  = "INSERT INTO updates (incidentid, userid, type, timestamp, currentowner, customervisibility, sla, bodytext) ";
                 $sql .= "VALUES ('$id', '".$sit[2]."', 'slamet', '$now', '{$sit[2]}', 'show', 'solution','')";
                 $result = mysql_query($sql);
                 if (mysql_error()) trigger_error("MySQL Query Error ".mysql_error(), E_USER_ERROR);
-    
+
                 //
                 if ($wait=='yes')
                 {
@@ -326,34 +326,34 @@ switch($action)
                     $result = mysql_query($sql);
                     if (mysql_error()) trigger_error("MySQL Query Error ".mysql_error(), E_USER_ERROR);
                 }
-    
+
                 // Make Journal Entry
                 journal(CFG_LOGGING_NORMAL,'Incident Closed',"Incident $id was closed",CFG_JOURNAL_SUPPORT,$id);
-    
+
                 if (!$result)
                 {
                     $addition_errors = 1;
                     $addition_errors_string .= "<p class='error'>Addition of incident update failed</p>\n";
                 }
-    
+
                 //notify related inicdents this has been closed
                 $sql = "SELECT distinct (relatedid) FROM relatedincidents,incidents WHERE incidentid = '$id' ";
                 $sql .= "AND incidents.id = relatedincidents.relatedid AND incidents.status != 2";
                 $result = mysql_query($sql);
                 if (mysql_error()) trigger_error("MySQL Query Error ".mysql_error(), E_USER_ERROR);
-    
+
                 $relatedincidents;
-    
+
                 while($a = mysql_fetch_array($result))
                 {
                     $relatedincidents[] = $a[0];
                 }
-    
+
                 $sql = "SELECT distinct (incidentid) FROM relatedincidents, incidents WHERE relatedid = '$id' ";
                 $sql .= "AND incidents.id = relatedincidents.incidentid AND incidents.status != 2";
                 $result = mysql_query($sql);
                 if (mysql_error()) trigger_error("MySQL Query Error ".mysql_error(), E_USER_ERROR);
-    
+
                 while($a = mysql_fetch_array($result))
                 {
                     $relatedincidents[] = $a[0];
@@ -361,7 +361,7 @@ switch($action)
                 if (is_array($relatedincidents))
                 {
                     $uniquearray = array_unique($relatedincidents);
-    
+
                     foreach($uniquearray AS $relatedid)
                     {
                         //dont care if I'm related to myself
@@ -371,7 +371,7 @@ switch($action)
                             $sql .= "VALUES ('$relatedid', '{$sit[2]}', 'research', 'New Status: [b]Active[/b]<hr>\nRelated incident [$id] has been closed', '$now')";
                             $result = mysql_query($sql);
                             if (mysql_error()) trigger_error("MySQL Query Error ".mysql_error(), E_USER_ERROR);
-    
+
                             $sql = "UPDATE incidents SET status = 1 WHERE id = '$relatedid'";
                             $result = mysql_query($sql);
                             if (mysql_error()) trigger_error("MySQL Query Error ".mysql_error(), E_USER_ERROR);
@@ -384,20 +384,20 @@ switch($action)
                 if (mysql_error()) trigger_error("MySQL Query Error ".mysql_error(), E_USER_ERROR);
             }
             $bodytext = "Closing Status: <b>" . closingstatus_name($closingstatus) . "</b>\n\n" . $bodytext;
-    
+
             if ($addition_errors == 0)
             {
                 if ($CONFIG['feedback_form'] != '' AND $CONFIG['feedback_form'] > 0)
                     create_incident_feedback($CONFIG['feedback_form'], $id);
-    
+
                 plugin_do('incident_closed');
-    
+
                 if ($send_engineer_email == 'yes')
                 {
                     $eml=send_template_email('INCIDENT_CLOSED_EXTERNAL', $id);  // close with external engineer
                     if (!$eml) throw_error('!Error: Failed while sending close with engineer email, error code: ', $eml);
                 }
-    
+
                 if ($send_email == 'yes')
                 {
                     if ($wait=='yes')
@@ -414,7 +414,7 @@ switch($action)
                         if (!$eml) throw_error('!Error: Failed while sending incident closed email to customer, error code:', $eml);
                     }
                 }
-    
+
                 // Check for knowledge base stuff, prior to confirming:
                 if ($_REQUEST['kbarticle']=='yes')
                 {
@@ -428,21 +428,21 @@ switch($action)
                     mysql_query($sql);
                     if (mysql_error()) trigger_error("MySQL Query Error ".mysql_error(), E_USER_ERROR);
                     $docid = mysql_insert_id();
-    
+
                     // Update the incident to say that a KB article was created, with the KB Article number
                     $update = "<b>Knowledge base article</b> created from this incident, see: {$CONFIG['kb_id_prefix']}".leading_zero(4,$docid);
                     $sql  = "INSERT INTO updates (incidentid, userid, type, bodytext, timestamp) ";
                     $sql .= "VALUES ('$id', '$sit[2]', 'default', '$update', '$now')";
                     $result = mysql_query($sql);
                     if (mysql_error()) trigger_error("MySQL Query Error ".mysql_error(), E_USER_ERROR);
-    
-    
+
+
                     // Get softwareid from Incident record
                     $sql = "SELECT softwareid FROM incidents WHERE id='$id'";
                     $result=mysql_query($sql);
                     if (mysql_error()) trigger_error("MySQL Query Error ".mysql_error(), E_USER_ERROR);
                     list($softwareid)=mysql_fetch_row($result);
-    
+
                     if (!empty($_POST['summary'])) $query[]="INSERT INTO kbcontent (docid, ownerid, headerstyle, header, contenttype, content, distribution) VALUES ('$docid', '".mysql_escape_string($sit[2])."', 'h1', 'Summary', '1', '{$summary}', 'private') ";
                     if (!empty($_POST['symptoms'])) $query[]="INSERT INTO kbcontent (docid, ownerid, headerstyle, header, contenttype, content, distribution) VALUES ('$docid', '".mysql_escape_string($sit[2])."', 'h1', 'Symptoms', '1', '{$symptoms}', 'private') ";
                     if (!empty($_POST['cause'])) $query[]="INSERT INTO kbcontent (docid, ownerid, headerstyle, header, contenttype, content, distribution) VALUES ('$docid', '".mysql_escape_string($sit[2])."', 'h1', 'Cause', '1', '{$cause}', 'private') ";
@@ -453,22 +453,22 @@ switch($action)
                     if (!empty($_POST['status'])) $query[]="INSERT INTO kbcontent (docid, ownerid, headerstyle, header, contenttype, content, distribution) VALUES ('$docid', '".mysql_escape_string($sit[2])."', 'h1', 'Status', '1', '{$status}', 'private') ";
                     if (!empty($_POST['additional'])) $query[]="INSERT INTO kbcontent (docid, ownerid, headerstyle, header, contenttype, content, distribution) VALUES ('$docid', '".mysql_escape_string($sit[2])."', 'h1', 'Additional Information', '1', '{$additional}', 'private') ";
                     if (!empty($_POST['references'])) $query[]="INSERT INTO kbcontent (docid, ownerid, headerstyle, header, contenttype, content, distribution) VALUES ('$docid', '".mysql_escape_string($sit[2])."', 'h1', 'References', '1', '{$references}', 'private') ";
-    
+
                     if (count($query) < 1) $query[] = "INSERT INTO kbcontent (docid, ownerid, headerstyle, header, contenttype, content, distribution) VALUES ('$docid', '".mysql_escape_string($sit[2])."', 'h1', 'Summary', '1', 'Enter details here...', 'restricted') ";
-    
+
                     foreach ($query AS $sql)
                     {
                         mysql_query($sql);
                         if (mysql_error()) trigger_error("MySQL Query Error ".mysql_error(), E_USER_ERROR);
                     }
-    
+
                     // Add Software Record
                     if ($softwareid>0)  $sql="INSERT INTO kbsoftware (docid,softwareid) VALUES ('$docid', '$softwareid')";
                     mysql_query($sql);
                     if (mysql_error()) trigger_error("MySQL Query Error ".mysql_error(), E_USER_ERROR);
-    
+
                     journal(CFG_LOGGING_NORMAL, 'KB Article Added', "KB Article $docid was added", CFG_JOURNAL_KB, $docid);
-    
+
                     confirmation_page("5", "incident_details.php?id=" . $id, "<h2>Incident $id Closure Requested<h2><p align='center'>Knowledge Base Article {$CONFIG['kb_id_prefix']}{$docid} created.</h2><p align='center'>Please wait while you are redirected...</p>");
                 }
                 else confirmation_page("2", "incident_details.php?id=" . $id, "<h2>Incident $id Closure Requested</h2><p align='center'>Please wait while you are redirected...</p>");
@@ -521,7 +521,7 @@ switch($action)
         {
             // check form input
             $errors = 0;
-    
+
             // check for blank contact
             if ($contact == 0)
             {
@@ -534,26 +534,29 @@ switch($action)
                 $errors = 1;
                 $error_string .= "<p class='error'>You must enter a title</p>\n";
             }
-    
+
             if ($errors > 0)
             {
                 echo "<div>$bodytext</div>";
             }
-    
+
             if ($errors == 0)
             {
                 $addition_errors = 0;
-    
+
                 /*
                     TAGS
                 */
-        
+
                 // first remove old tags
                 $sql = "DELETE FROM set_tags WHERE id = '$id' AND type = '2'";
                 $result = mysql_query($sql);
                 if (mysql_error()) trigger_error("MySQL Query Error ".mysql_error(), E_USER_ERROR);
-        
-                $tag_array = explode(",", $tags);
+
+                // Change seperators to spaces
+                $seperators=array(', ',';',',');
+                $tags=str_replace($seperators, ' ', $tags);
+                $tag_array = explode(" ", $tags);
                 foreach($tag_array AS $tag)
                 {
                     add_tag($id, 2, trim($tag));
@@ -571,7 +574,7 @@ switch($action)
                     $addition_errors = 1;
                     $addition_errors_string .= "<p class='error'>Update of incident failed</p>\n";
                 }
-    
+
                 if ($addition_errors == 0)
                 {
                     // dump details to incident update
@@ -610,7 +613,7 @@ switch($action)
                     if ($oldsoftware != $software) $header .= "Software: ".software_name($oldsoftware)." -&gt; <b>".software_name($software)."</b>\n";
                     if ($oldproductversion != $productversion) $header .= "Software Version: $oldproductversion -&gt; <b>$productversion</b>\n";
                     if ($oldproductservicepacks != $productservicepacks) $header .= "Service Packs Applied: $oldproductservicepacks -&gt; <b>$productservicepacks</b>\n";
-    
+
                     if (!empty($header)) $header .= "<hr>";
                     $bodytext = $header . $bodytext;
                     $bodytext = mysql_escape_string($bodytext);
@@ -618,16 +621,16 @@ switch($action)
                     $sql .= "VALUES ('$id', '$sit[2]', 'editing', '$bodytext', '$now')";
                     $result = mysql_query($sql);
                     if (mysql_error()) trigger_error("MySQL Query Error ".mysql_error(), E_USER_ERROR);
-    
+
                     if (!$result)
                     {
                         $addition_errors = 1;
                         $addition_errors_string .= "<p class='error'>Addition of incident update failed</p>\n";
                     }
-    
+
                     plugin_do('incident_edited');
                 }
-    
+
                 if ($addition_errors == 0)
                 {
                     journal(CFG_LOGGING_NORMAL, 'Incident Edited', "Incident $id was edited", CFG_JOURNAL_INCIDENTS, $id);
@@ -659,7 +662,7 @@ switch($action)
         $permnewowner = cleanvar($_REQUEST['permnewowner']);
         $newstatus = cleanvar($_REQUEST['newstatus']);
         $id = cleanvar($_REQUEST['id']);
-    
+
         // Reassign the incident
         if (($_REQUEST['assign']=='tempassign' AND user_accepting($tempnewowner) == "Yes")
             OR ($_REQUEST['assign']=='permassign' AND user_accepting($permnewowner) == "Yes")
@@ -671,7 +674,7 @@ switch($action)
             $oldstatus=incident_status($id);
             if ($newstatus != $oldstatus)
             $bodytext = "Status: ".incidentstatus_name($oldstatus)." -&gt; <b>" . incidentstatus_name($newstatus) . "</b>\n\n" . $bodytext;
-    
+
             // update incident
             $sql = "UPDATE incidents SET ";
             if ($_REQUEST['assign']=='tempassign') $sql .= "towner='{$tempnewowner}', ";
@@ -681,7 +684,7 @@ switch($action)
             $sql .= "status='$newstatus', lastupdated='$now' WHERE id='$id' LIMIT 1";
             mysql_query($sql);
             if (mysql_error()) trigger_error("MySQL Query Error ".mysql_error(), E_USER_ERROR);
-    
+
             // add update
             if ($_REQUEST['assign']=='tempassign')
             {
@@ -697,8 +700,8 @@ switch($action)
             }
             if ($_REQUEST['cust_vis']=='yes') $customervisibility='show';
             else $customervisibility='hide';
-    
-    
+
+
             $sql  = "INSERT INTO updates (incidentid, userid, bodytext, type, timestamp, currentowner, currentstatus, customervisibility) ";
             $sql .= "VALUES ($id, $sit[2], '$bodytext', '$assigntype', '$now', ";
             if ($_REQUEST['assign']=='permassign') $sql .= "'$permnewowner', ";
@@ -707,16 +710,16 @@ switch($action)
             $sql .= "'$newstatus', '$customervisibility')";
             $result = mysql_query($sql);
             if (mysql_error()) trigger_error("MySQL Query Error ".mysql_error(), E_USER_ERROR);
-    
+
             // Remove any tempassigns that are pending for this incident
             $sql = "DELETE FROM tempassigns WHERE incidentid='$id'";
             mysql_query($sql);
             if (mysql_error()) trigger_error("MySQL Query Error ".mysql_error(), E_USER_ERROR);
-    
+
             $newowner = '';
             if($_REQUEST['assign']=='permassign') $newowner = $permnewowner;
             else if($_REQUESR['assign']<>'deltempassign') $newowner = $tempnewowner; //not interested in deltemp state
-    
+
             if(!empty($newowner))
             {
                 if(user_notification_on_reassign($newowner)=='true')
@@ -724,9 +727,9 @@ switch($action)
                     send_template_email('INCIDENT_REASSIGNED_USER_NOTIFY', $id);
                 }
             }
-    
+
             journal(CFG_LOGGING_FULL,'Incident Reassigned', "Incident $id reassigned to user id $newowner", CFG_JOURNAL_SUPPORT, $id);
-    
+
             if (!$result)
             {
                 include('includes/incident_html_top.inc');

@@ -28,7 +28,7 @@ if ($incident["type"] == "Support")
     <form action="<?php echo $_SERVER['PHP_SELF'] ?>" method="post" name="editform">
     <table class='vertical'>
     <tr><th>Title:</th><td><input maxlength='150' name="title" size='40' type="text" value="<?php echo stripslashes($incident['title']) ?>" /></td></tr>
-    <tr><th>Tags:<br />Separated by commas</th><td><textarea rows='2' cols='40' name='tags'><?php  echo list_tags($id, 2, false); ?></textarea></td></tr>
+    <tr><th>Tags:</th><td><textarea rows='2' cols='40' name='tags'><?php  echo list_tags($id, 2, false); ?></textarea></td></tr>
     <tr><th>Important:</th>
     <td>Changing the contact or software will not reassign this incident to another contract.
     <?php
