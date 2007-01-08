@@ -56,7 +56,7 @@ Completely free for commercial and non-commercial use.</p>
 <p align='center'>whatever:hover (csshover.htc) 1.41 by <a href='http://www.xs4all.nl/~peterned/'>Peter Nederlof</a><br />
 &copy; 2005 - Peter Nederlof.  Licensed under the LGPL.</p>
 
-<p align='center'>Dojo 0.3.1 by <a href='http://dojotoolkit.org/'>The Dojo Foundation</a><br />
+<p align='center'>Dojo 0.4.1 by <a href='http://dojotoolkit.org/'>The Dojo Foundation</a><br />
 Copyright &copy; 2004-2006, The Dojo Foundation. Licensed under the BSD license.</p>
 
 
