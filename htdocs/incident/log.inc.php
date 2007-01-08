@@ -55,6 +55,7 @@ if(!empty($upto))
 }
 $sql .= "ORDER BY id {$_SESSION['update_order']} ";
 $sql .= "LIMIT {$_SESSION['num_update_view']}";
+
 $result = mysql_query($sql);
 if (mysql_error()) trigger_error("MySQL Query Error ".mysql_error(), E_USER_ERROR);
 

@@ -138,7 +138,7 @@ if (mysql_num_rows($rresult) >= 1)
 
 // Tags
 
-echo "<tr><td colspan='2'>Tags: ".list_tag_links($id, 2)."</td></tr>";
+echo "<tr><td colspan='2'>Tags: ".list_tags($id, 2)."</td></tr>";
 
 echo "</table>";
 
