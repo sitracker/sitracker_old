@@ -31,14 +31,20 @@ if(empty($tagid))
 
     include('htmlheader.inc.php');
     echo "<h2>Tags</h2>";
-    echo "<p align='center'>Sort: <a href='".$_SERVER['PHP_SELF']."?orderby=name'>alphabetically</a> ";
+    echo "<p align='center'>Sort: <a href='".$_SERVER['PHP_SELF']."?orderby=name'>alphabetically</a> | ";
     echo "<a href='".$_SERVER['PHP_SELF']."?orderby=occurrences'>popularity</a></p>";
     if(mysql_num_rows($result) > 0)
     {
         echo "<table align='center'><tr><td>";
+        $min=1;
+        $max=20;
+
         while($obj = mysql_fetch_object($result))
         {
-            echo "<a href='".$_SERVER['PHP_SELF']."?tagid=$obj->tagid'>$obj->name ($obj->occurrences)</a>  ";
+            $size=($max - $obj->occurrences) * $obj->occurrences;
+            if ($size < 100) $size+=100;
+            if ($size > 200) $size=200;
+            echo "<a href='".$_SERVER['PHP_SELF']."?tagid=$obj->tagid' style='font-size: {$size}%;' title='{$obj->occurrences}'>{$obj->name}</a> &nbsp;";
         }
         echo "</td></tr></table>";
     }
