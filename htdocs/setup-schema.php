@@ -1399,7 +1399,7 @@ CREATE TABLE `set_tags` (
 `id` INT NOT NULL ,
 `type` MEDIUMINT NOT NULL ,
 `tagid` INT NOT NULL ,
-PRIMARY KEY ( `id` , `type` , `flagid` )
+PRIMARY KEY ( `id` , `type` , `tagid` )
 ) ENGINE=MYISAM;
 
 INSERT INTO `permissions` VALUES (65, 'Delete Products');

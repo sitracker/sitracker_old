@@ -4779,7 +4779,7 @@ function add_tag($id, $type, $tag)
     return true;
 }
 
-function list_tag_links($recordid, $type, $html=true)
+function list_tags($recordid, $type, $html=TRUE)
 {
     $sql = "SELECT tags.name, tags.tagid FROM set_tags, tags WHERE set_tags.tagid = tags.tagid AND ";
     $sql .= "set_tags.type = '$type' AND set_tags.id = '$recordid'";
