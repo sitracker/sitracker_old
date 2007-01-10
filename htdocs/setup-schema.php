@@ -109,8 +109,6 @@ CREATE TABLE `emailsig` (
 
 INSERT INTO `emailsig` (`id`, `signature`) VALUES (1, '--\r\n... Powered by Open Source Software: Support Incident Tracker (SiT!) is available free from http://sourceforge.net/projects/sitracker/');
 
-INSERT INTO `emailsig` VALUES (1, '');
-
 CREATE TABLE `emailtype` (
   `id` int(11) NOT NULL auto_increment,
   `name` varchar(50) default NULL,
