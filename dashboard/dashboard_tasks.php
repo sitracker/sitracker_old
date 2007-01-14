@@ -9,12 +9,11 @@
 //
 
 
-function dashboard_tasks()
+function dashboard_tasks($row,$dashboardid)
 {
     global $sit;
     $user = $sit[2];
-    echo "<span id='dragList1' >";
-    echo "<div class='windowbox' style='width: 95%;'>";
+    echo "<div class='windowbox' style='width: 95%;' id='$row-$dashboardid'>";
     echo "<div class='windowtitle'><a href='tasks.php'>".user_realname($user,TRUE)."'s Tasks</a></div>";
     echo "<div class='window'>";
 
@@ -73,7 +72,6 @@ function dashboard_tasks()
 
     echo "</div>";
     echo "</div>";
-    echo "</span>";
 }
 
 ?>

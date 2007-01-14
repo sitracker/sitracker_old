@@ -4510,13 +4510,26 @@ function show_notes($linkid, $refid)
     return $html;
 }
 
-function dashboard_do($context)
+function dashboard_do($context, $row=0, $dashboardid=0)
 {
     global $DASHBOARDCOMP;
     $action = $DASHBOARDCOMP[$context];
     if($action != NULL || $action != "")
     {
-        $action();
+        $action($row,$dashboardid);
+    }
+}
+
+function show_dashboard_component($row, $dashboardid)
+{
+    $sql = "SELECT name FROM dashboard WHERE enabled = 'true' AND id = '$dashboardid'";
+    $result = mysql_query($sql);
+    if (mysql_error()) trigger_error(mysql_error(),E_USER_ERROR);
+
+    if(mysql_num_rows($result) == 1)
+    {
+        $obj = mysql_fetch_object($result);
+        dashboard_do("dashboard_".$obj->name,'db_'.$row,$dashboardid);
     }
 }
 
@@ -4813,6 +4826,41 @@ function list_tags($recordid, $type, $html=TRUE)
         else $str .= $tags->name.", ";
     }
     return trim(substr($str, 0, strlen($str)-2));
+}
+
+function show_tag_cloud($orderby="name")
+{
+    $sql = "SELECT COUNT(name) AS occurrences, name, tags.tagid FROM tags, set_tags WHERE tags.tagid = set_tags.tagid GROUP BY name ORDER BY $orderby";
+    if($orderby == "occurrences") $sql .= " DESC";
+    $result = mysql_query($sql);
+    if (mysql_error()) trigger_error(mysql_error(),E_USER_ERROR);
+
+    $countsql = "SELECT COUNT(*) AS counted FROM set_tags GROUP BY tagid ORDER BY counted DESC LIMIT 1";
+
+    $countresult = mysql_query($countsql);
+    if (mysql_error()) trigger_error(mysql_error(),E_USER_ERROR);
+    list($max) = mysql_fetch_row($countresult);
+
+    if($_SERVER['PHP_SELF'] != "/main.php")
+    {
+        //not in the dashbaord
+        $html .= "<p align='center'>Sort: <a href='view_tags.php?orderby=name'>alphabetically</a> | ";
+        $html .= "<a href='view_tags.php?orderby=occurrences'>popularity</a></p>";
+    }
+    if(mysql_num_rows($result) > 0)
+    {
+        $html .= "<table align='center'><tr><td>";
+        $min=1;
+
+        while($obj = mysql_fetch_object($result))
+        {
+            $size = (($obj->occurrences) * 300 / $max) +100;
+            if ($size==0) $size=100;
+            $html .= "<a href='view_tags.php?tagid=$obj->tagid' style='font-size: {$size}%;' title='{$obj->occurrences}'>{$obj->name}</a> &nbsp;";
+        }
+        $html .= "</td></tr></table>";
+    }
+    return $html;
 }
 
 // -------------------------- // -------------------------- // --------------------------

@@ -24,34 +24,9 @@ if(empty($orderby)) $orderby = "name";
 if(empty($tagid))
 {
     //show all tags
-    $sql = "SELECT COUNT(name) AS occurrences, name, tags.tagid FROM tags, set_tags WHERE tags.tagid = set_tags.tagid GROUP BY name ORDER BY $orderby";
-    if($orderby == "occurrences") $sql .= " DESC";
-    $result = mysql_query($sql);
-    if (mysql_error()) trigger_error(mysql_error(),E_USER_ERROR);
-
     include('htmlheader.inc.php');
     echo "<h2>Tags</h2>";
-    $countsql = "SELECT COUNT(*) AS counted FROM set_tags GROUP BY tagid ORDER BY counted DESC LIMIT 1";
-
-    $countresult = mysql_query($countsql);
-    if (mysql_error()) trigger_error(mysql_error(),E_USER_ERROR);
-    list($max) = mysql_fetch_row($countresult);
-
-    echo "<p align='center'>Sort: <a href='".$_SERVER['PHP_SELF']."?orderby=name'>alphabetically</a> | ";
-    echo "<a href='".$_SERVER['PHP_SELF']."?orderby=occurrences'>popularity</a></p>";
-    if(mysql_num_rows($result) > 0)
-    {
-        echo "<table align='center'><tr><td>";
-        $min=1;
-
-        while($obj = mysql_fetch_object($result))
-        {
-            $size = (($obj->occurrences) * 300 / $max) +100;
-            if ($size==0) $size=100;
-            echo "<a href='".$_SERVER['PHP_SELF']."?tagid=$obj->tagid' style='font-size: {$size}%;' title='{$obj->occurrences}'>{$obj->name}</a> &nbsp;";
-        }
-        echo "</td></tr></table>";
-    }
+    echo show_tag_cloud($orderby);
     include('htmlfooter.inc.php');
 }
 else
