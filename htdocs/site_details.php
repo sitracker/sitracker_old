@@ -51,7 +51,17 @@ if (empty($id))
     exit;
 }
 
-echo "<div id='mainTabContainer' dojoType='TabContainer' style='width: 80%; height: 500px; margin-right:auto;margin-left:auto' selectedTab='details'>";
+$sql = "SELECT name FROM sites WHERE id = '$id'";
+$result = mysql_query($sql);
+if (mysql_error()) trigger_error(mysql_error(),E_USER_ERROR);
+if(mysql_num_rows($result) > 0)
+{
+    $obj = mysql_fetch_object($result);
+//echo "<h2>".stripslashes($contactrow['forenames']).' '.stripslashes($contactrow['surname'])."</h2>";
+    echo "<h2>".stripslashes($obj->name)."</h2>";
+}
+
+echo "<div id='mainTabContainer' dojoType='TabContainer' style='width: 80%; height: 550px; margin-right:auto;margin-left:auto' selectedTab='details'>";
 
 echo "<div id='details' dojoType='ContentPane' label='Details'>";
 include('site/details.inc.php');

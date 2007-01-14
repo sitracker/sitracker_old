@@ -64,6 +64,7 @@ elseif ($action == "edit")
             <p align='center'>Mandatory fields are marked <sup class='red'>*</sup></p>
             <table align='center' class='vertical'>
             <tr><th>Name: <sup class='red'>*</sup></th><td><input maxlength="50" name="name" size="40" value="<?php echo $siterow['name'] ?>" /></td></tr>
+            <tr><th>Tags:</th><td><textarea rows='2' cols='60' name='tags'><?php echo list_tags($site, 3, false); ?></textarea>
             <tr><th>Department: <sup class='red'>*</sup></th><td><input maxlength="50" name="department" size="40" value="<?php echo $siterow['department'] ?>" /></td></tr>
             <tr><th>Address1: <sup class='red'>*</sup></th><td><input maxlength="50" name="address1" size="40" value="<?php echo $siterow['address1'] ?>" /></td></tr>
             <tr><th>Address2: </th><td><input maxlength="50" name="address2" size="40" value="<?php echo $siterow['address2'] ?>" /></td></tr>
@@ -123,6 +124,7 @@ elseif ($action == "update")
     $typeid = cleanvar($_POST['typeid']);
     $owner = cleanvar($_POST['owner']);
     $site = cleanvar($_POST['site']);
+    $tags = cleanvar($_POST['tags']);
 
     // Edit site, update the database
     $errors = 0;
@@ -136,6 +138,8 @@ elseif ($action == "update")
     // edit site if no errors
     if ($errors == 0)
     {
+
+        replace_tags(3, $site, $tags);
         if (isset($licenserx)) $licenserx='1'; else $licenserx='0';
         // update site
         $sql = "UPDATE sites SET name='$name', department='$department', address1='$address1', address2='$address2', city='$city', ";

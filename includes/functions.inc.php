@@ -4771,6 +4771,7 @@ function add_tag($id, $type, $tag)
     TAG TYPES
     1 - contact
     2 - incident
+    3 - Site
     */
     if ($tag!='')
     {

@@ -7,6 +7,10 @@ if (mysql_error()) trigger_error(mysql_error(),E_USER_WARNING);
 while ($siterow=mysql_fetch_array($siteresult))
 {
     echo "<tr><th>Site:</th><td><h3>".stripslashes($siterow['name'])."</h3></td></tr>";
+    echo "<tr><th>Tags:</th><td>";
+    //print_contact_flags($id);
+    echo list_tags($id, 3); //site
+    echo "</td></tr>";
     echo "<tr><th>Department:</th><td>".stripslashes($siterow['department'])."</td></tr>";
     echo "<tr><th>Address1:</th><td>".stripslashes($siterow['address1'])."</td></tr>";
     echo "<tr><th>Address2:</th><td>".stripslashes($siterow['address2'])."</td></tr>";

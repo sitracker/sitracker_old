@@ -64,8 +64,7 @@ elseif ($action == "edit" && isset($contact))
         <td><input maxlength="50" name="salutation" title="Salutation (Mr, Mrs, Miss, Dr. etc.)" size="7" value="<?php echo $contactrow['salutation'] ?>" />
         <input maxlength="100" name="forenames" size="15" title="Firstnames (or initials)" value="<?php echo $contactrow['forenames'] ?>" />
         <input maxlength="100" name="surname" size="20" title="Surname/Last Name" value="<?php echo $contactrow['surname'] ?>" /></td></tr>
-        <tr><th>Tags:</th><td><textarea rows='2' cols='60' name='tags'><?php  /* print_contact_flags($contact);*/ echo list_tags($contact, 1, false); ?>
-        </textarea>
+        <tr><th>Tags:</th><td><textarea rows='2' cols='60' name='tags'><?php echo list_tags($contact, 1, false); ?></textarea>
         <!-- <a href="edit_tags.php?recordid=<?php echo $contact ?>&amp;tagtype=1">Edit</a>
         <a href="add_tag.php?recordid=<?php echo $contact ?>&amp;tagtype=1">Add</a> -->
         </td></tr>
