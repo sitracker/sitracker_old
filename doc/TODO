@@ -6,8 +6,6 @@ To Do
 * Re-write the help
 * Context 'actions' menus?
 * Interface for editing incident product info questions
-* Extend flags to other record types (i.e incidents, sites, contracts)
-* Improve viwing of flags
 * Internationalisation
 * Change maintenance table to use servicelevel field that stores tag instead of id
 * Overhaul the email templates (emailtypes)

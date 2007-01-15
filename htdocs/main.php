@@ -33,9 +33,6 @@ while ($dashboard = mysql_fetch_object($result))
 // Valid user
 include('htmlheader.inc.php');
 
-// Dojo javascript fancy moving of dashboard widgets disabled for v3.24 release
-// Hope to have it ready for 3.25
-
 echo "<script type=\"text/javascript\" src=\"scripts/dojo/dojo.js\"></script>";
 
 $sql = "SELECT dashboard FROM users WHERE id = '".$_SESSION['userid']."'";
@@ -188,7 +185,7 @@ $cols2 = substr($cols2, 0, -1);
 </script>
 <?php
 
-
+echo "<p align='right'><a href='manage_user_dashboard.php'>Manage Dashboard</a></p>";
 echo "<table border=\"0\" width=\"99%\" id='cols'><tr>";
 echo "<td width=\"33%\" valign='top' id='col0'>";
 
