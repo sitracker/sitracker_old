@@ -81,9 +81,10 @@ $cols2 = substr($cols2, 0, -1);
 
 ?>
 <script type="text/javascript">
+/* <![CDATA[ */
     dojo.require("dojo.dnd.*");
     dojo.require("dojo.event.*");
-    
+
     function byId(id){
         return document.getElementById(id);
     }
@@ -163,7 +164,7 @@ $cols2 = substr($cols2, 0, -1);
                     }
                     toPass = toPass+s.substr(0,s.length-1)+",";
                 }
-                
+
         xmlhttp.open("GET", "storedashboard.php?val="+escape(toPass), true);
         xmlhttp.onreadystatechange=function() {
             //remove this in the future after testing
@@ -173,7 +174,7 @@ $cols2 = substr($cols2, 0, -1);
         }
         xmlhttp.send(null)
     }
--->
+/* ]]> */
 </script>
 <?php
 
@@ -203,7 +204,7 @@ foreach($arr AS $a)
     show_dashboard_component(2,$a);
 }
 
-echo "</td></tr></table>";
+echo "</td></tr></table>\n";
 
 // Check users email address
 if (empty($_SESSION['email']) OR !preg_match('/^[A-z0-9][\w.-]*@[A-z0-9][\w\-\.]+\.[A-z0-9]{2,6}$/',$_SESSION['email']))
