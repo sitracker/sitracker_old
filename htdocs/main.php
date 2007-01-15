@@ -155,25 +155,35 @@ $cols2 = substr($cols2, 0, -1);
                 xmlhttp=false;
             }
         }
-                var toPass = "";
-                for(var i = 0; i < 3; i++){
-                    var col = byId("col"+i).childNodes;
-                    var s = i+"=";
-                    for(var x = 0; x < col.length; x++){
-                        s = s+col.item(x).id.substr(5)+"-";
-                    }
-                    toPass = toPass+s.substr(0,s.length-1)+",";
-                }
 
-        xmlhttp.open("GET", "storedashboard.php?val="+escape(toPass), true);
+        var toPass = "";
+        for(var i = 0; i < 3; i++){
+            var col = byId("col"+i).childNodes;
+            var s = "";
+            for(var x = 0; x < col.length; x++){
+                // s = s+col.item(x).id.substr(5)+"-";
+                s = s+i+"-"+col.item(x).id.substr(5)+",";
+            }
+            toPass = toPass+s.substr(0,s.length-1)+",";
+        }
+
+                //alert(toPass);
+
+        xmlhttp.open("GET", "storedashboard.php?id="+<?php echo $_SESSION['userid']; ?>+"&val="+escape(toPass), true);
+
         xmlhttp.onreadystatechange=function() {
             //remove this in the future after testing
             if (xmlhttp.readyState==4) {
-                alert(xmlhttp.responseText)
+                if(xmlhttp.responseText != ""){
+                    alert(xmlhttp.responseText);
+                }
             }
         }
-        xmlhttp.send(null)
+        xmlhttp.send(null);
     }
+
+    window.onunload = save_layout;
+
 /* ]]> */
 </script>
 <?php
@@ -210,7 +220,7 @@ echo "</td></tr></table>\n";
 if (empty($_SESSION['email']) OR !preg_match('/^[A-z0-9][\w.-]*@[A-z0-9][\w\-\.]+\.[A-z0-9]{2,6}$/',$_SESSION['email']))
     echo "<p class='error'>Please <a href='edit_profile.php'>edit your profile</a> and set a valid email address</p>";
 
-echo "<a href=\"#\" onclick=\"save_layout();\">Save</a>";
+echo "<p align='right'><a href=\"#\" onclick=\"save_layout();\">Save</a></p>";
 
 //  Users Login Details
 echo "<div id='userbar'>Logged in as: <strong>{$sit[0]}</strong>, ";

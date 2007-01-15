@@ -282,13 +282,18 @@ elseif ($_REQUEST['mode']=='report')
 	    $incsql_esc .= "(";
         for ($i = 0; $i < $includecount; $i++)
         {
-            // $html .= "{$_POST['inc'][$i]} <br />";
-            $incsql .= "users.id={$_POST['inc'][$i]}";
-		    $incsql_esc .= "incidents.owner={$_POST['inc'][$i]}";
-            if ($i < ($includecount-1)) $incsql .= " OR ";
-		    if ($i < ($includecount-1)) $incsql_esc .= " OR ";
-        }
-        $incsql .= ")";
+            // $html .= "<strong>Include:</strong><br />";
+            $incsql .= "(";
+	        $incsql_esc .= "(";
+            for ($i = 0; $i < $includecount; $i++)
+            {
+                // $html .= "{$_POST['inc'][$i]} <br />";
+                $incsql .= "users.id={$_POST['inc'][$i]}";
+		        $incsql_esc .= "incidents.owner={$_POST['inc'][$i]}";
+                if ($i < ($includecount-1)) $incsql .= " OR ";
+		if ($i < ($includecount-1)) $incsql_esc .= " OR ";
+            }
+            $incsql .= ")";
 	    $incsql_esc .= ")";
     }
 //
