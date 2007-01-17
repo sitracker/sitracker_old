@@ -16,8 +16,8 @@ require('functions.inc.php');
 // This page requires authentication
 require('auth.inc.php');
 
-$tagid = $_REQUEST['tagid'];
-$orderby = $_REQUEST['orderby'];
+$tagid = cleanvar($_REQUEST['tagid']);
+$orderby = cleanvar($_REQUEST['orderby']);
 
 if(empty($orderby)) $orderby = "name";
 
@@ -31,13 +31,20 @@ if(empty($tagid))
 }
 else
 {
+    $sql = "SELECT name FROM tags WHERE tagid = '$tagid' LIMIT 1";
+    $result = mysql_query($sql);
+    if (mysql_error()) trigger_error(mysql_error(),E_USER_WARNING);
+    list($tagname)=mysql_fetch_row($result);
+
+    include('htmlheader.inc.php');
+    echo "<h2><a href='view_tags.php'>Tag</a>: $tagname</h2>";
+
+
     //show only this tag
     $sql = "SELECT * FROM set_tags WHERE tagid = '$tagid'";
     $result = mysql_query($sql);
-    if (mysql_error()) trigger_error(mysql_error(),E_USER_ERROR);
+    if (mysql_error()) trigger_error(mysql_error(),E_USER_WARNING);
 
-    include('htmlheader.inc.php');
-    echo "<h2>Tags</h2>";
     if(mysql_num_rows($result) > 0)
     {
         echo "<table align='center'>";
@@ -47,16 +54,17 @@ else
             switch($obj->type)
             {
                 case 1: //contact
-                    $sql = "SELECT forenames, surname FROM contacts WHERE id = '$obj->id'";
+                    $sql = "SELECT forenames, surname FROM contacts WHERE id = '{$obj->id}'";
                     $resultcon = mysql_query($sql);
                     if (mysql_error()) trigger_error(mysql_error(),E_USER_ERROR);
                     if(mysql_num_rows($resultcon) > 0)
                     {
                         $objcon = mysql_fetch_object($resultcon);
-                        echo "<th>CONTACT</th><td><a href='contact_details.php?id=$obj->id'>";
+                        echo "<th>CONTACT</th><td><a href='contact_details.php?id={$obj->id}'>";
                         echo $objcon->forenames." ".$objcon->surname."</a></td>";
                     }
-                    break;
+                break;
+
                 case 2: //incident
                     $sql = "SELECT title FROM incidents WHERE id = '$obj->id'";
                     $resultinc = mysql_query($sql);
@@ -65,22 +73,38 @@ else
                     {
                         $objinc = mysql_fetch_object($resultinc);
 //javascript:incident_details_window('119','incident119')
-                        echo "<th>INCIDENT</th><td><a href=\"javascript:incident_details_window('$obj->id','incident$obj->id')\">";
+                        echo "<th>INCIDENT</th><td><a href=\"javascript:incident_details_window('{$obj->id}','incident{$obj->id}')\">";
                         echo $objinc->title."</a></td>";
                     }
-                    break;
+                break;
+
                 case 3: //site
-                    $sql = "SELECT name FROM sites WHERE id = '$obj->id'";
+                    $sql = "SELECT name FROM sites WHERE id = '{$obj->id}'";
                     $resultsite = mysql_query($sql);
                     if (mysql_error()) trigger_error(mysql_error(),E_USER_ERROR);
                     if(mysql_num_rows($resultsite) > 0)
                     {
                         $objsite = mysql_fetch_object($resultsite);
-                         echo "<th>SITE</th><td><a href='site_details.php?id=$obj->id&action=show'>";
+                         echo "<th>SITE</th><td><a href='site_details.php?id={$obj->id}&action=show'>";
                         echo $objsite->name."</a></td>";
                     }
+
+                case 4: // task
+                    $sql = "SELECT name FROM tasks WHERE id = '{$obj->id}'";
+                    $resulttask = mysql_query($sql);
+                    if (mysql_error()) trigger_error(mysql_error(),E_USER_ERROR);
+                    if(mysql_num_rows($resulttask) > 0)
+                    {
+                        $objtask = mysql_fetch_object($resulttask);
+                         echo "<th>TASK</th><td><a href='view_task.php?id={$obj->id}'>";
+                        echo $objtask->name."</a></td>";
+                    }
+                break;
+
+                default:
+                    echo "<th>Other</th><td>{$obj->id}</td>";
             }
-            echo "</tr>";
+            echo "</tr>\n";
         }
         echo "</table>";
     }

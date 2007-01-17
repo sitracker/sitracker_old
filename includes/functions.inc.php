@@ -4788,6 +4788,7 @@ function add_tag($id, $type, $tag)
     1 - contact
     2 - incident
     3 - Site
+    4 - task
     */
     if ($tag!='')
     {
