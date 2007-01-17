@@ -47,7 +47,8 @@ switch ($action)
         $old_completion = cleanvar($_REQUEST['old_completion']);
         $old_value = cleanvar($_REQUEST['old_value']);
         $old_distribution = cleanvar($_REQUEST['old_distribution']);
-        $tags = cleanvar($_POST['tags']);
+        if ($distribution=='public') $tags = cleanvar($_POST['tags']);
+        else $tags='';
 
         // Validate input
         $error=array();
@@ -146,8 +147,11 @@ switch ($action)
                 echo "<td><input type='text' name='name' size='35' maxlength='255' value=\"".stripslashes($task->name)."\" /></td></tr>";
                 echo "<tr><th>Description</th>";
                 echo "<td><textarea name='description' rows='4' cols='30'>".stripslashes($task->description)."</textarea></td></tr>";
-                echo "<tr><th>Tags:</th>";
-                echo "<td><textarea rows='2' cols='30' name='tags'>".list_tags($id, 4, false)."</textarea></td></tr>";
+                if ($task->distribution=='public')
+                {
+                    echo "<tr><th>Tags:</th>";
+                    echo "<td><textarea rows='2' cols='30' name='tags'>".list_tags($id, 4, false)."</textarea></td></tr>";
+                }
                 echo "<tr><th>Priority</th>";
                 echo "<td>".priority_drop_down('priority',$task->priority)."</td></tr>";
                 echo "<tr><th>Start Date</th>";

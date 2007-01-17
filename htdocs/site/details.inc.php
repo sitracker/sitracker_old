@@ -1,12 +1,12 @@
 <?php
 // Display site
-echo "<table align='center' class='vertical'>";
+echo "<table class='vertical' width='30%'>";
 $sql="SELECT * FROM sites WHERE id='$id' ";
 $siteresult = mysql_query($sql);
 if (mysql_error()) trigger_error(mysql_error(),E_USER_WARNING);
 while ($siterow=mysql_fetch_array($siteresult))
 {
-    echo "<tr><th>Site:</th><td><h3>".stripslashes($siterow['name'])."</h3></td></tr>";
+    //echo "<tr><th>Site:</th><td><h3>".stripslashes($siterow['name'])."</h3></td></tr>";
     echo "<tr><th>Tags:</th><td>";
     //print_contact_flags($id);
     echo list_tags($id, 3); //site

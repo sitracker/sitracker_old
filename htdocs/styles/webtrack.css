@@ -507,6 +507,20 @@ div.note { font-size: 98%; background-color: #FFFFA2; border-color: #A2A86A; mar
 
 .deleted { text-decoration: line-through; }
 
+
+.dojo-TabContainer
+{
+ width: 95%; height: 550px; margin-right:auto;margin-left:auto;
+}
+
+.dojo-ContentPane
+{
+/*     border: 1px solid red; */
+}
+.dojoTab
+{
+}
+
 @media print
 {
     #menu, #statusbar, h1#apptitle, #menulist, .contextmenu {visibility:hidden; display:none;}

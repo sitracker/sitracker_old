@@ -49,6 +49,12 @@ if (mysql_num_rows($result) >= 1)
         echo "<td>".stripslashes($task->name)."</td></tr>";
         echo "<tr><th>Description</th>";
         echo "<td>".nl2br(stripslashes($task->description))."</td></tr>";
+        if ($task->distribution=='public')
+        {
+            echo "<tr><th>Tags:</th><td>";
+            echo list_tags($id, 4);
+            echo "</td></tr>";
+        }
         if ($task->owner != $sit[2])
         {
             echo "<tr><th>Owner</th>";

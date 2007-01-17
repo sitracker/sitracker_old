@@ -24,8 +24,8 @@
         $country = $contactrow['country'];
         $postcode = $contactrow['postcode'];
     }
-    echo "<table align='center' class='vertical'>";
-    echo "<tr><th colspan='2'><h3>".stripslashes($contactrow['forenames']).' '.stripslashes($contactrow['surname'])."</h3></th></tr>";
+    echo "<table class='vertical' width='30%'>";
+    //echo "<tr><th colspan='2'><h3>".stripslashes($contactrow['forenames']).' '.stripslashes($contactrow['surname'])."</h3></th></tr>";
     echo "<tr><th>Tags:</th><td>";
     //print_contact_flags($id);
     echo list_tags($id, 1); //contacts

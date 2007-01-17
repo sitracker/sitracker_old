@@ -84,7 +84,7 @@ else
     $sql = "UPDATE users SET dashboard = '$dashboardstr' WHERE id = '".$_SESSION['userid']."'";
     $contactresult = mysql_query($sql);
     if (mysql_error()) trigger_error("MySQL Query Error ".mysql_error(), E_USER_ERROR);
-    confirmation_page("2", "main.php", "<h2>Added to dashboard successfully</h2><p align='center'>Please wait while you are redirected...</p>");
+    confirmation_page("2", "main.php", "<h2>Modified your dashboard successfully</h2><p align='center'>Please wait while you are redirected...</p>");
 }
 
 ?>

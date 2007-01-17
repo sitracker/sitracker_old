@@ -66,7 +66,7 @@ if(mysql_num_rows($result) > 0)
     echo "<h2>".stripslashes($obj->name)."</h2>";
 }
 
-echo "<div id='mainTabContainer' class='dojo-TabContainer' style='width: 80%; height: 550px; margin-right:auto;margin-left:auto' dojo:selectedTab='details'>";
+echo "<div id='mainTabContainer' class='dojo-TabContainer' dojo:selectedTab='details'>";
 
 echo "<div id='details' class='dojo-ContentPane' label='Details'>";
 include('site/details.inc.php');
