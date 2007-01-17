@@ -96,7 +96,7 @@ div.windowbox
     margin-bottom: 5%;
     margin-top: 5%;
     border: 1px solid #205D94;
-    width: 120px;
+    max-width: 500px;
 }
 div.windowtitle
 {
