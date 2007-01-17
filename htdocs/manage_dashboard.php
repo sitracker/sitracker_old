@@ -12,7 +12,7 @@
 // NOTE: not to be comitted until v3.25
 
 
-$permission=0; // not required
+$permission=4; // Edit profile
 require('db_connect.inc.php');
 require('functions.inc.php');
 
@@ -135,7 +135,7 @@ switch($_REQUEST['action'])
             else $opposite = "true";
             echo "<tr><td class='shade2'>{$dashboardnames->id}</td>";
             echo "<td class='shade2'>{$dashboardnames->name}</td>";
-            echo "<td class='shade2'><a href='".$_SERVER['PHP_SELF']."?action=enable&id={$dashboardnames->id}&enable={$opposite}'>{$dashboardnames->enabled}</a></td></tr>";
+            echo "<td class='shade2'><a href='".$_SERVER['PHP_SELF']."?action=enable&amp;id={$dashboardnames->id}&amp;enable={$opposite}'>{$dashboardnames->enabled}</a></td></tr>";
         }
         echo "</table>";
 

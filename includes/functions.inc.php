@@ -117,7 +117,8 @@ $hmenu[10] = array (1=> array ( 'perm'=> 0, 'name'=> "Main Page", 'url'=>"main.p
 $hmenu[1020] = array (10=> array ( 'perm'=> 4, 'name'=> "My Profile", 'url'=>"edit_profile.php"),
                       20=> array ( 'perm'=> 58, 'name'=> "My Skills", 'url'=>"edit_user_software.php"),
                       30=> array ( 'perm'=> 58, 'name'=> "My Substitutes", 'url'=>"edit_backup_users.php"),
-                      40=> array ( 'perm'=> 27, 'name'=> "My Holidays", 'url'=>"holidays.php")
+                      40=> array ( 'perm'=> 27, 'name'=> "My Holidays", 'url'=>"holidays.php"),
+                      50=> array ( 'perm'=> 4, 'name'=> "My Dashboard", 'url'=>"manage_user_dashboard.php")
 );
 // configure
 $hmenu[1030] = array (10=> array ( 'perm'=> 22, 'name'=> "Users", 'url'=>"manage_users.php", 'submenu'=>"103010"),
@@ -1841,7 +1842,8 @@ function emailtype_replace_specials($string, $incidentid, $userid=0)
                     24 => '/<supportmanageremail>/s',
                     25 => '/<signature>/s',
                     26 => '/<globalsignature>/s',
-                    27 => '/<todaysdate>/s'
+                    27 => '/<todaysdate>/s',
+                    28 => '/<salespersonemail>/s'
                 );
 
     $email_replace = array(0 => contact_email($contactid),
@@ -1871,7 +1873,8 @@ function emailtype_replace_specials($string, $incidentid, $userid=0)
                     24 => $CONFIG['support_manager_email'],
                     25 => user_signature($userid),
                     26 => global_signature(),
-                    27 => date("jS F Y")
+                    27 => date("jS F Y"),
+                    28 => user_email(db_read_column('owner', 'sites', db_read_column('siteid','contacts',$contactid)))
                 );
 
     if($incident->towner != 0)
@@ -4841,7 +4844,7 @@ function show_tag_cloud($orderby="name")
     if (mysql_error()) trigger_error(mysql_error(),E_USER_ERROR);
     list($max) = mysql_fetch_row($countresult);
 
-    if($_SERVER['PHP_SELF'] != "/main.php")
+    if(substr($_SERVER['SCRIPT_NAME'],-8) != "main.php")
     {
         //not in the dashbaord
         $html .= "<p align='center'>Sort: <a href='view_tags.php?orderby=name'>alphabetically</a> | ";

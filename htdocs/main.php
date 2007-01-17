@@ -172,7 +172,7 @@ $cols2 = substr($cols2, 0, -1);
             //remove this in the future after testing
             if (xmlhttp.readyState==4) {
                 if(xmlhttp.responseText != ""){
-                    alert(xmlhttp.responseText);
+                    //alert(xmlhttp.responseText);
                 }
             }
         }
@@ -185,7 +185,7 @@ $cols2 = substr($cols2, 0, -1);
 </script>
 <?php
 
-echo "<p align='right'><a href='manage_user_dashboard.php'>Manage Dashboard</a></p>";
+echo "<p align='right'><a href='manage_user_dashboard.php'>Manage your Dashboard</a></p>";
 echo "<table border=\"0\" width=\"99%\" id='cols'><tr>";
 echo "<td width=\"33%\" valign='top' id='col0'>";
 

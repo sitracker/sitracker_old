@@ -38,8 +38,8 @@ if ($_SESSION['auth'] != TRUE)
     echo "<div class='windowtitle'>{$CONFIG['application_shortname']} - Login</div>";
     echo "<div class='window'>";
     echo "<form action='login.php' method='post'>";
-    echo "<label>Username:<br /><input name='username' size='30' type='text' /></label><br />";
-    echo "<label>Password:<br /><input name='password' size='30' type='password' /></label><br /><br />";
+    echo "<label>Username:<br /><input name='username' size='28' type='text' /></label><br />";
+    echo "<label>Password:<br /><input name='password' size='28' type='password' /></label><br /><br />";
     echo "<input type='hidden' name='page' value='$page' />";
     echo "<input type='submit' value='Log In' /><br />";
 

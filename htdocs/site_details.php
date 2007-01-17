@@ -28,12 +28,17 @@ include('htmlheader.inc.php');
 <script type="text/javascript" src="scripts/dojo/dojo.js"></script>
 
 <script type="text/javascript">
+/* <![CDATA[ */
     dojo.require("dojo.widget.TabContainer");
     dojo.require("dojo.widget.LinkPane");
     dojo.require("dojo.widget.ContentPane");
     dojo.require("dojo.widget.LayoutContainer");
+/* ]]> */
 </script>
 
+<?php
+
+/*
 <style type="text/css">
 body {
     font-family : sans-serif;
@@ -43,7 +48,7 @@ body {
 }
 
 </style>
-<?php
+*/
 
 if (empty($id))
 {
@@ -61,20 +66,20 @@ if(mysql_num_rows($result) > 0)
     echo "<h2>".stripslashes($obj->name)."</h2>";
 }
 
-echo "<div id='mainTabContainer' dojoType='TabContainer' style='width: 80%; height: 550px; margin-right:auto;margin-left:auto' selectedTab='details'>";
+echo "<div id='mainTabContainer' class='dojo-TabContainer' style='width: 80%; height: 550px; margin-right:auto;margin-left:auto' dojo:selectedTab='details'>";
 
-echo "<div id='details' dojoType='ContentPane' label='Details'>";
+echo "<div id='details' class='dojo-ContentPane' label='Details'>";
 include('site/details.inc.php');
 echo "</div>";
 
-echo "<div id='contacts' dojoType='ContentPane' label='Contacts'>";
+echo "<div id='contacts' class='dojo-ContentPane' label='Contacts'>";
 include('site/contacts.inc.php');
 echo "</div>";
 
 // Valid user, check perms
 if (user_permission($sit[2],19)) // View contracts
 {
-    echo "<div id='contracts' dojoType='ContentPane' label='Contracts'>";
+    echo "<div id='contracts' class='dojo-ContentPane' label='Contracts'>";
     include('site/contracts.inc.php');
     echo "</div>";
 }
