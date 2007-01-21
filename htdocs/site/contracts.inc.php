@@ -62,6 +62,6 @@
         else $shade = 1;
     }
     echo "</table>\n";
-    echo "<p align='center'><a href='add_maintenance.php?action=showform&siteid=$id'>Add Contract</a></p>";
+    echo "<p align='center'><a href='add_maintenance.php?action=showform&amp;siteid=$id'>Add Contract</a></p>";
 
 ?>

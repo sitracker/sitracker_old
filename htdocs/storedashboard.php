@@ -8,24 +8,11 @@ require('functions.inc.php');
 require('auth.inc.php');
 
 
-//0=4,1=2-1,2=3,
-/*
-  0 has 4
-  1 has 2 and 1
-  2 has 3
-*/
 $id = $_REQUEST['id'];
 $val = $_REQUEST['val'];
 
-/*$file = fopen("/tmp/file",'w');
-fwrite($file, $val);*/
-
-//echo $val;
-//echo $id;
-//echo "S".$_SESSION['userid'];
 if($id == $_SESSION['userid'])
 {
-//echo $id;
     //check your changing your own
     $sql = "UPDATE users SET dashboard = '$val' WHERE id = '$id'";
     $contactresult = mysql_query($sql);

@@ -52,9 +52,6 @@ include('htmlheader.inc.php');
 body {
     font-family : sans-serif;
 }
-.dojoTabPaneWrapper {
-  padding : 10px 10px 10px 10px;
-}
 
 </style>
 <?php

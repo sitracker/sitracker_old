@@ -510,7 +510,7 @@ div.note { font-size: 98%; background-color: #FFFFA2; border-color: #A2A86A; mar
 
 .dojo-TabContainer
 {
- width: 95%; height: 550px; margin-right:auto;margin-left:auto;
+ width: 95%; height: 550px; margin-right:auto; margin-left:auto;
 }
 
 .dojo-ContentPane
@@ -519,6 +519,10 @@ div.note { font-size: 98%; background-color: #FFFFA2; border-color: #A2A86A; mar
 }
 .dojoTab
 {
+}
+
+.dojoTabPaneWrapper {
+  padding : 10px 10px 10px 10px;
 }
 
 @media print

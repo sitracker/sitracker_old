@@ -1,5 +1,5 @@
 <?php
-// install_dashboard.php - Page to install a new dashboard component
+// manager_dashboard.php - Page to install a new dashboard component
 //
 // SiT (Support Incident Tracker) - Support call tracking system
 // Copyright (C) 2000-2006 Salford Software Ltd.
@@ -9,10 +9,7 @@
 //
 // Author: Paul Heaney <paulheaney[at]users.sourceforge.net>
 
-// NOTE: not to be comitted until v3.25
-
-
-$permission=4; // Edit profile
+$permission=66; // Edit profile
 require('db_connect.inc.php');
 require('functions.inc.php');
 
