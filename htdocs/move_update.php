@@ -27,7 +27,11 @@ if ($incidentid=='')
     $title = "Move Update $updateid";
     include('htmlheader.inc.php');
     echo "<h2>$title</h2>";
-    if ($error=='1') echo "<p class='error'>Error assigning that incident update</p>";
+    if ($error=='1')
+    {
+        echo "<p class='error'>Error assigning that incident update. Probable cause is ";
+        echo "that no incident exists with that ID or it has been closed.</p>";
+    }
     ?>
     <div align='center'>
     <form action="<?php echo $_SERVER['PHP_SELF']; ?>" method='post'>
@@ -185,7 +189,7 @@ else
     //$result=mysql_query($sql);
     //if (mysql_error()) trigger_error("MySQL Query Error ".mysql_error(), E_USER_ERROR);
     //if (mysql_num_rows($result) > 0)
-    if (incident_open($incidentid))
+    if (incident_open($incidentid) == "Yes")
     {
         // retrieve the update body so that we can insert time headers
         $sql = "SELECT incidentid, bodytext, timestamp FROM updates WHERE id='$updateid'";
