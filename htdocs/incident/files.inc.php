@@ -204,6 +204,7 @@ if (file_exists($incident_attachment_fspath))
          if (is_dir($value)) $dirarray[] = $value;
          elseif (is_file($value) AND substr($value,-1)!='.' AND substr($value,-8)!='mail.eml') $rfilearray[] = $value;
     }
+
     if (count($rfilearray) >= 1)
     {
         $headhtml = "<div class='detailhead'>\n";
@@ -221,6 +222,7 @@ if (file_exists($incident_attachment_fspath))
         echo "</table>\n";
         echo "</div>";
     }
+
     foreach($dirarray AS $dir)
     {
         $directory=substr($dir,0,strrpos($dir,$delim));

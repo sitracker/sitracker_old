@@ -2727,6 +2727,11 @@ if (!function_exists('list_dir'))
         if (sizeof($result_array))
         {
             natsort($result_array);
+
+            if($_SESSION['update_order'] == "desc")
+            {
+                $result_array = array_reverse($result_array);
+            }
         }
         return $result_array;
     }
