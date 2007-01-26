@@ -68,25 +68,25 @@ if(mysql_num_rows($result) > 0)
 
 echo "<div id='mainTabContainer' class='dojo-TabContainer' dojo:selectedTab='details'>";
 
-echo "<div id='details' class='dojo-ContentPane' label='Details'>";
+echo "<div id='details' class='dojo-ContentPane' label='Details' style='overflow: auto;'>";
 include('site/details.inc.php');
 echo "</div>";
 
-echo "<div id='contacts' class='dojo-ContentPane' label='Contacts'>";
+echo "<div id='contacts' class='dojo-ContentPane' label='Contacts' style='overflow: auto;'>";
 include('site/contacts.inc.php');
 echo "</div>";
 
 // Valid user, check perms
 if (user_permission($sit[2],19)) // View contracts
 {
-    echo "<div id='contracts' class='dojo-ContentPane' label='Contracts'>";
+    echo "<div id='contracts' class='dojo-ContentPane' label='Contracts' style='overflow: auto;'>";
     include('site/contracts.inc.php');
     echo "</div>";
 }
 
 if(user_permission($sit[2],6)) //view incidents
 {
-    echo "<a dojoType='LinkPane' href='contact_support.php?id={$id}&mode=site&view=embeded' refreshOnShow='true' style='display: none'>Incidents</a>";
+    echo "<a dojoType='LinkPane' href='contact_support.php?id={$id}&mode=site&view=embeded' refreshOnShow='true' style='display: nonel overflow: auto;'>Incidents</a>";
 }
 
 

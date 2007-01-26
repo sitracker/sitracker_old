@@ -65,13 +65,13 @@ while ($contactrow=mysql_fetch_array($contactresult))
     echo "<h2>".stripslashes($contactrow['forenames']).' '.stripslashes($contactrow['surname'])."</h2>";
     echo "<div id='mainTabContainer' class='dojo-TabContainer' selectedTab='details'>";
 
-    echo "<div id='details' class='dojo-ContentPane' label='Details'>";
+    echo "<div id='details' class='dojo-ContentPane' label='Details'  style='overflow: auto;'>";
     include('contact/details.inc.php');
     echo "</div>";
 
     if (user_permission($sit[2],30)) // view supported products
     {
-        echo "<div id='Contracts' class='dojo-ContentPane' label='Contracts'>";
+        echo "<div id='Contracts' class='dojo-ContentPane' label='Contracts' style='overflow: auto;'>";
         include('contact/contracts.inc.php');
         echo "</div>";
     }
@@ -79,7 +79,7 @@ while ($contactrow=mysql_fetch_array($contactresult))
     if(user_permission($sit[2],6)) //view incidents
     {
 
-        echo "<a dojoType='LinkPane' href='contact_support.php?id={$id}&view=embeded' refreshOnShow='true' style='display: none'>Incidents</a>";
+        echo "<a dojoType='LinkPane' href='contact_support.php?id={$id}&view=embeded' refreshOnShow='true' style='display: none; overflow: auto;'>Incidents</a>";
     }
 
 

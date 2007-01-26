@@ -66,7 +66,7 @@ else
         echo "<div id='mainTabContainer' dojoType='TabContainer' style='width: 100%; height: 500px' selectedTab='Email'>";
     }
 
-    echo "<div id='log' dojoType='ContentPane' label='Incident Log'>";
+    echo "<div id='log' dojoType='ContentPane' label='Incident Log'  style='overflow: auto;'>";
     include('incident/log.inc.php');
     echo "</div>";
     
@@ -78,7 +78,7 @@ else
             if(user_permission($sit[2],8)) //udpate incidents
             {
                 //echo "<a dojoType='LinkPane' href='update_incident.php?id={$id}' refreshOnShow='true' style='display: none'>Update</a>";
-                echo "<div id='Update' dojoType='ContentPane' label='Update'>";
+                echo "<div id='Update' dojoType='ContentPane' label='Update' style='overflow: auto;'>";
                 include('incident/update.inc.php');
                 echo "</div>";
             }
@@ -86,7 +86,7 @@ else
             if(user_permission($sit[2],12)) //Reassign incident
             {
                 //echo "<a dojoType='LinkPane' href=reassign_incident.php?id={$id}' refreshOnShow='true' style='display: none'>Reassign</a>";
-                echo "<div id='Reassign' dojoType='ContentPane' label='Reassign'>";
+                echo "<div id='Reassign' dojoType='ContentPane' label='Reassign' style='overflow: auto;'>";
                 include('incident/reassign.inc.php');
                 echo "</div>";
             }
@@ -94,14 +94,14 @@ else
             if(user_permission($sit[2],7)) //Edit incident
             {
                 //echo "<a dojoType='LinkPane' href=edit_incident.php?id={$id}' refreshOnShow='true' style='display: none'>Edit</a>";
-                echo "<div id='Edit' dojoType='ContentPane' label='Edit'>";
+                echo "<div id='Edit' dojoType='ContentPane' label='Edit' style='overflow: auto;'>";
                 include('incident/edit.inc.php');
                 echo "</div>";
             }
         
             if(user_permission($sit[2],18)) //Close incident
             {
-                echo "<div id='Close' dojoType='ContentPane' label='Close'>";
+                echo "<div id='Close' dojoType='ContentPane' label='Close' style='overflow: auto;'>";
                 include('incident/close.inc.php');
                 echo "</div>";
             }
@@ -109,7 +109,7 @@ else
             if(user_permission($sit[2],6)) //View incident
             {
                 //echo "<a dojoType='LinkPane' href=incident_service_levels.php?id={$id}' refreshOnShow='true' style='display: none'>Service</a>";
-                echo "<div id='sla' dojoType='ContentPane' label='Service'>";
+                echo "<div id='sla' dojoType='ContentPane' label='Service' style='overflow: auto;'>";
                 include('incident/sla.inc.php');
                 echo "</div>";
             }
@@ -117,7 +117,7 @@ else
             if(user_permission($sit[2],61)) //Incident details
             {
                 //echo "<a dojoType='LinkPane' href=incident_relationships.php?id={$id}' refreshOnShow='true' style='display: none'>Relationships</a>";
-                echo "<div id='Relationships' dojoType='ContentPane' label='Relationships'>";
+                echo "<div id='Relationships' dojoType='ContentPane' label='Relationships' style='overflow: auto;'>";
                 include('incident/relationships.inc.php');
                 echo "</div>";
             }
@@ -125,7 +125,7 @@ else
             if(user_permission($sit[2],62)) //View attachements
             {
                 //echo "<a dojoType='LinkPane' href=incident_attachments.php?id={$id}' refreshOnShow='true' style='display: none'>Files</a>";
-                echo "<div id='Files' dojoType='ContentPane' label='Files'>";
+                echo "<div id='Files' dojoType='ContentPane' label='Files' style='overflow: auto;'>";
                 include('incident/files.inc.php');
                 echo "</div>";
             }
@@ -136,20 +136,20 @@ else
                 if($action == 'email')
                 {
                     //show send email form
-                    echo "<div id='Email' dojoType='ContentPane' label='Email'>";
+                    echo "<div id='Email' dojoType='ContentPane' label='Email' style='overflow: auto;'>";
                     include('incident/send_email.inc.php');
                     echo "</div>";
                 }
                 else
                 {
                     //show select email form
-                    echo "<div id='Email' dojoType='ContentPane' label='Email'>";
+                    echo "<div id='Email' dojoType='ContentPane' label='Email' style='overflow: auto;'>";
                     include('incident/email.inc.php');
                     echo "</div>";
                 }
             }
     
-            echo "<div id='escalate' dojoType='ContentPane' label='Escalate'>";
+            echo "<div id='escalate' dojoType='ContentPane' label='Escalate' style='overflow: auto;'>";
             include('incident/escalate.inc.php');
             echo "</div>";
         
@@ -164,7 +164,7 @@ else
         {
             //echo "<a dojoType='LinkPane' href=reassign_incident.php?id={$id}' refreshOnShow='true' style='display: none'>Reassign</a>";
             $resassignmessage = "Initial assignment to engineer";
-            echo "<div id='Reassign' dojoType='ContentPane' label='Reassign'>";
+            echo "<div id='Reassign' dojoType='ContentPane' label='Reassign' style='overflow: auto;'>";
             include('incident/reassign.inc.php');
             echo "</div>";
         }
