@@ -69,7 +69,7 @@ if ($sit[0]!='')
         echo "<li class='menuitem'>";
         // Permission Required: ".permission_name($topvalue['perm'])."
         if ($topvalue['perm'] >=1 AND !in_array($topvalue['perm'], $_SESSION['permissions'])) echo "<a href='javascript:void();' class='greyed'>{$topvalue['name']}</a>";
-        else echo "<a href='{$CONFIG['application_webpath']}{$topvalue['url']}'>{$topvalue['name']}</a>";
+        else echo "<a href='{$topvalue['url']}'>{$topvalue['name']}</a>";
         // Do we need a submenu?
         if ($topvalue['submenu'] > 0 AND in_array($topvalue['perm'], $_SESSION['permissions']))
         {
@@ -79,7 +79,7 @@ if ($sit[0]!='')
                 if ($subvalue['submenu'] > 0) echo "<li class='submenu'>";
                 else echo "<li>";
                 if ($subvalue['perm'] >=1 AND !in_array($subvalue['perm'], $_SESSION['permissions'])) echo "<a href='javascript:void();' class='greyed'>{$subvalue['name']}</a>";
-                else echo "<a href='{$CONFIG['application_webpath']}{$subvalue['url']}'>{$subvalue['name']}</a>";
+                else echo "<a href='{$subvalue['url']}'>{$subvalue['name']}</a>";
                 if ($subvalue['submenu'] > 0 AND in_array($subvalue['perm'], $_SESSION['permissions']))
                 {
                     echo "<ul>"; // id ='menuSubSub'
@@ -88,7 +88,7 @@ if ($sit[0]!='')
                         if ($subsubvalue['submenu'] > 0) echo "<li class='submenu'>";
                         else echo "<li>";
                         if ($subsubvalue['perm'] >=1 AND !in_array($subsubvalue['perm'], $_SESSION['permissions'])) echo "<a href=\"javascript:void();\" class='greyed'>{$subsubvalue['name']}</a>";
-                        else echo "<a href='{$CONFIG['application_webpath']}{$subsubvalue['url']}'>{$subsubvalue['name']}</a>";
+                        else echo "<a href='{$subsubvalue['url']}'>{$subsubvalue['name']}</a>";
                         if ($subsubvalue['submenu'] > 0 AND in_array($subsubvalue['perm'], $_SESSION['permissions']))
                         {
                             echo "<ul>"; // id ='menuSubSubSub'
@@ -97,7 +97,7 @@ if ($sit[0]!='')
                                 if ($subsubsubvalue['submenu'] > 0) echo "<li class='submenu'>";
                                 else echo "<li>";
                                 if ($subsubsubvalue['perm'] >=1 AND !in_array($subsubsubvalue['perm'], $_SESSION['permissions'])) echo "<a href='javascript:void();' class='greyed'>{$subsubsubvalue['name']}</a>";
-                                else echo "<a href='{$CONFIG['application_webpath']}{$subsubsubvalue['url']}'>{$subsubsubvalue['name']}</a>";
+                                else echo "<a href='{$subsubsubvalue['url']}'>{$subsubsubvalue['name']}</a>";
                                 echo "</li>\n";
                             }
                             echo "</ul>\n";
