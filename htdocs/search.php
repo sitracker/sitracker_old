@@ -62,10 +62,15 @@ if (empty($search_string) OR empty($search_domain))
     echo "<tr><td><a href='search_expired.php'>Search Expired Contracts</a></td></tr>";
     echo "</table>\n";
 
+    echo "<p /><table align='center'>";
+    echo "<tr><th>Firefox 2 and IE 7 users</th></tr>";
+    echo "<tr><td>You can <a href=\"javascript:window.external.AddSearchProvider('{$CONFIG['application_uriprefix']}{$CONFIG['application_webpath']}opensearch.php')\">install this search plugin</a> to make searching easier</td></tr>";
+
     if (strpos($_SERVER['HTTP_USER_AGENT'],'Firefox'))
     {
-        echo "<p align='center'>Mozilla Firefox users can <a href='javascript:addEngine();'>install this search plugin</a> to make searching easier.</p>";
+        echo "<tr><th>Mozilla Firefox 1 users</th></tr><tr><td>You can <a href='javascript:addEngine();'>install this search plugin</a> to make searching easier.</td></tr>";
     }
+    echo "</table>";
     include('htmlfooter.inc.php');
 }
 else

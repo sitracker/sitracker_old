@@ -19,6 +19,7 @@ Changes in v3.25 - Unreleased
 * Added working flags to contacts, sites and incidents
 * Added ability to delete products if they are not linked with other records
 * Main page now features working dashbaord with user saveable layout
+* Adds OpenSearch plugin compatable with Firefox2 and IE7
 
 Changes in v3.24 - Released 6 November 2006
 -----------------------------------------------------------------------

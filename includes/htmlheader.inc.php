@@ -43,6 +43,12 @@ if (isset($refresh) && $refresh != 0)
 echo "<script src='{$CONFIG['application_webpath']}webtrack.js' type='text/javascript'></script>\n";
 // javascript popup date library
 echo "<script src='{$CONFIG['application_webpath']}calendar.js' type='text/javascript'></script>\n";
+
+if($sit[0] != '')
+{
+    echo "<link rel=\"search\" type=\"application/opensearchdescription+xml\" title=\"{$CONFIG['application_shortname']} Search\" href=\"{$CONFIG['application_webpath']}opensearch.php\" />";
+}
+
 echo "</head>\n";
 echo "<body>\n";
 echo "<h1 id='apptitle'>{$CONFIG['application_name']}</h1>\n";
