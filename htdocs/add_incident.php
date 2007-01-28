@@ -12,6 +12,9 @@
 // Author: Ivan Lucas <ivanlucas[at]users.sourceforge.net>, Tom Gerrard
 // 7Oct02 INL  Added support for maintenanceid to be put into incidents table
 
+?>
+<?php
+
 $permission=5;
 $title='Add Incident';
 require('db_connect.inc.php');
@@ -36,6 +39,12 @@ if (empty($action) OR $action=='showform')
 {
     // This Page Is Valid XHTML 1.0 Transitional! 27Oct05
     include('htmlheader.inc.php');
+    ?>
+    <script type="text/javascript" src="scripts/dojo/dojo.js"></script>
+    <script type="text/javascript">
+        dojo.require("dojo.widget.ComboBox");
+    </script>
+    <?php
     echo "<h2>Add Incident - Find Contact</h2>";
     if (empty($siteid))
     {
@@ -46,7 +55,8 @@ if (empty($action) OR $action=='showform')
         <table class='vertical'>
         <tr><th>Contact:</th><td>
         <?php
-        echo "<input type='text' name='search_string' size='30' value='{$query}' />\n";
+        //echo "<input type='text' name='search_string' size='30' value='{$query}' />\n";
+        echo "<input dojoType='ComboBox' value='{$query}' dataUrl='autocomplete.php?action=contact' style='width: 300px;' name='search_string' />";
         ?>
         <input name="submit" type="submit" value="Find Contact" />
         </td></tr>
