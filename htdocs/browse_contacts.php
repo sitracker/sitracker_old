@@ -34,13 +34,18 @@ URL = "contact_products.php?id=" + contactid;
 window.open(URL, "contact_products_window", "toolbar=no,status=yes,menubar=no,scrollbars=yes,resizable=yes,width=520,height=240");
 }
 </script>
+<script type="text/javascript" src="scripts/dojo/dojo.js"></script>
+<script type="text/javascript">
+    dojo.require("dojo.widget.ComboBox");
+</script>
 <h2>Browse Contacts</h2>
 <table summary="alphamenu" align="center">
 <tr>
 <td align="center">
     <form action="<?php echo $_SERVER['PHP_SELF']; ?>" method="get">
-    <input type="text" name="search_string" />
-    <input name="submit" type="submit" value="go" />
+    <!-- <input type="text" name="search_string" />-->
+    <p>Browse contacts: <input dojoType='ComboBox' dataUrl='autocomplete.php?action=contact' style='width: 300px;' name='search_string' />
+    <input name="submit" type="submit" value="go" /></p>
     </form>
 </td>
 </tr>
@@ -103,9 +108,14 @@ else
             $sql .= "WHERE ";
             if ($search_string_len<=6) $sql .= "id=('$search_string') OR ";
             if ($search_string_len<=2)
+            {
                 $sql .= "SUBSTRING(surname,1,$search_string_len)=('$search_string') ";
+            }
             else
-                $sql .= "surname LIKE '%$search_string%' OR forenames LIKE '%$search_string%' ";
+            {
+                $sql .= "surname LIKE '%$search_string%' OR forenames LIKE '%$search_string%' OR ";
+                $sql .= "CONCAT(forenames,' ',surname) LIKE '%$search_string%'";
+            }
         }
         $sql .= " ORDER BY surname ASC";
 
