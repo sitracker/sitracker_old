@@ -20,8 +20,6 @@ $action = $_REQUEST['action'];
 
 switch($action)
 {
-//SELECT tags.name, tags.tagid FROM set_tags, tags WHERE set_tags.tagid = tags.tagid A
-
     case 'tags':
         $sql = "SELECT DISTINCT tags.name FROM set_tags, tags WHERE set_tags.tagid = tags.tagid GROUP BY tags.name";
         $result = mysql_query($sql);

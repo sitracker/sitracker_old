@@ -22,7 +22,7 @@ require('auth.inc.php');
 $search_string = cleanvar($_REQUEST['search_string']);
 $submit_value = cleanvar($_REQUEST['submit']);
 
-if($submit_value == 'go')
+if($submit_value == "go")
 {
 // build SQL
     $sql  = "SELECT id, name, department FROM sites ";
@@ -70,6 +70,7 @@ include('htmlheader.inc.php');
 <script type="text/javascript">
     dojo.require("dojo.widget.ComboBox");
 </script>
+<h2>Browse Sites</h2>
 <table summary="alphamenu" align="center">
 <tr>
 <td align="center">
@@ -132,7 +133,7 @@ if ($search_string == "")
 // search for criteria
 if ($errors == 0)
 {
-    if($submit_value == 'go')
+    if($submit_value != 'go')
     {
         // Don't  need to do this again, already done above, us the results of that
         // build SQL
@@ -161,7 +162,7 @@ if ($errors == 0)
             }
         }
         $sql .= " ORDER BY name ASC";
-    
+
         // execute query
         $result = mysql_query($sql);
         if (mysql_error()) trigger_error("MySQL Query Error ".mysql_error(), E_USER_ERROR);

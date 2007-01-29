@@ -27,12 +27,18 @@ $order = cleanvar($_REQUEST['order']);
 
 include('htmlheader.inc.php');
 ?>
-
+<script type="text/javascript" src="scripts/dojo/dojo.js"></script>
+<script type="text/javascript">
+    dojo.require("dojo.widget.ComboBox");
+</script>
+<h2>Browse Maintenance</h2>
 <table summary="alphamenu" align="center">
 <tr>
 <td align="center">
 <form action="<?php echo $_SERVER['PHP_SELF']; ?>" method="get">
-Browse Contracts by Site (or ID): <input type="text" name="search_string" /><br />
+Browse Contracts by Site (or ID): <!--<input type="text" name="search_string" />-->
+<input dojoType='ComboBox' dataUrl='autocomplete.php?action=sites' style='width: 300px;' name='search_string' />
+<br />
 and/or by product:
 <?php
 echo product_drop_down('productid', $productid)

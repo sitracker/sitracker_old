@@ -134,7 +134,7 @@ else
     // search for criteria
     if ($errors == 0)
     {
-        if($submit_value == 'go')
+        if($submit_value != 'go')
         {
             // Don't  need to do this again, already done above, us the results of that
             // build SQL
