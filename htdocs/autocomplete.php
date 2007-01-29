@@ -23,7 +23,7 @@ switch($action)
 //SELECT tags.name, tags.tagid FROM set_tags, tags WHERE set_tags.tagid = tags.tagid A
 
     case 'tags':
-        $sql = "SELECT tags.name FROM set_tags, tags WHERE set_tags.tagid = tags.tagid GROUP BY tags.name";
+        $sql = "SELECT DISTINCT tags.name FROM set_tags, tags WHERE set_tags.tagid = tags.tagid GROUP BY tags.name";
         $result = mysql_query($sql);
         if (mysql_error()) trigger_error(mysql_error(),E_USER_ERROR);
         if(mysql_num_rows($result) > 0)
@@ -35,7 +35,7 @@ switch($action)
         }
         break;
     case 'contact' :
-        $sql = "SELECT forenames,surname FROM contacts";
+        $sql = "SELECT DISTINCT forenames,surname FROM contacts";
         $result = mysql_query($sql);
         if (mysql_error()) trigger_error(mysql_error(),E_USER_ERROR);
         if(mysql_num_rows($result) > 0)
@@ -48,7 +48,7 @@ switch($action)
         }
         break;
     case 'sites':
-        $sql = "SELECT name FROM sites";
+        $sql = "SELECT DISTINCT name FROM sites";
         $result = mysql_query($sql);
         if (mysql_error()) trigger_error(mysql_error(),E_USER_ERROR);
         if(mysql_num_rows($result) > 0)

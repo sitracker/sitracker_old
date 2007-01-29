@@ -19,11 +19,45 @@ require('functions.inc.php');
 // This page requires authentication
 require('auth.inc.php');
 
-include('htmlheader.inc.php');
-
 // External variables
 $search_string = cleanvar($_REQUEST['search_string']);
+$submit_value = cleanvar($_REQUEST['submit']);
 
+if($submit_value == 'go')
+{
+        // build SQL
+        $sql  = "SELECT * FROM contacts ";
+        $search_string_len=strlen($search_string);
+        if ($search_string != '*')
+        {
+            $sql .= "WHERE ";
+            if ($search_string_len<=6) $sql .= "id=('$search_string') OR ";
+            if ($search_string_len<=2)
+            {
+                $sql .= "SUBSTRING(surname,1,$search_string_len)=('$search_string') ";
+            }
+            else
+            {
+                $sql .= "surname LIKE '%$search_string%' OR forenames LIKE '%$search_string%' OR ";
+                $sql .= "CONCAT(forenames,' ',surname) LIKE '%$search_string%'";
+            }
+        }
+        $sql .= " ORDER BY surname ASC";
+
+        // execute query
+        $result = mysql_query($sql);
+        if (mysql_error()) trigger_error("MySQL Query Error ".mysql_error(), E_USER_ERROR);
+
+        if(mysql_num_rows($result) == 1)
+        {
+            //go straight to the contact 
+            $row = mysql_fetch_array($result);
+            $url = "contact_details.php?id=".$row["id"];
+            header("Location: $url");
+        }
+}
+
+include('htmlheader.inc.php');
 
 if (empty($search_string)) $search_string='a';
 ?>
@@ -100,28 +134,32 @@ else
     // search for criteria
     if ($errors == 0)
     {
-        // build SQL
-        $sql  = "SELECT * FROM contacts ";
-        $search_string_len=strlen($search_string);
-        if ($search_string != '*')
+        if($submit_value == 'go')
         {
-            $sql .= "WHERE ";
-            if ($search_string_len<=6) $sql .= "id=('$search_string') OR ";
-            if ($search_string_len<=2)
+            // Don't  need to do this again, already done above, us the results of that
+            // build SQL
+            $sql  = "SELECT * FROM contacts ";
+            $search_string_len=strlen($search_string);
+            if ($search_string != '*')
             {
-                $sql .= "SUBSTRING(surname,1,$search_string_len)=('$search_string') ";
+                $sql .= "WHERE ";
+                if ($search_string_len<=6) $sql .= "id=('$search_string') OR ";
+                if ($search_string_len<=2)
+                {
+                    $sql .= "SUBSTRING(surname,1,$search_string_len)=('$search_string') ";
+                }
+                else
+                {
+                    $sql .= "surname LIKE '%$search_string%' OR forenames LIKE '%$search_string%' OR ";
+                    $sql .= "CONCAT(forenames,' ',surname) LIKE '%$search_string%'";
+                }
             }
-            else
-            {
-                $sql .= "surname LIKE '%$search_string%' OR forenames LIKE '%$search_string%' OR ";
-                $sql .= "CONCAT(forenames,' ',surname) LIKE '%$search_string%'";
-            }
+            $sql .= " ORDER BY surname ASC";
+    
+            // execute query
+            $result = mysql_query($sql);
+            if (mysql_error()) trigger_error("MySQL Query Error ".mysql_error(), E_USER_ERROR);
         }
-        $sql .= " ORDER BY surname ASC";
-
-        // execute query
-        $result = mysql_query($sql);
-        if (mysql_error()) trigger_error("MySQL Query Error ".mysql_error(), E_USER_ERROR);
 
         if (mysql_num_rows($result) == 0)
             echo "<p align='center'>Sorry, unable to find any contacts matching <em>'$search_string</em>'</p>\n";
