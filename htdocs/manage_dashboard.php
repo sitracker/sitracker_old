@@ -96,6 +96,14 @@ switch($_REQUEST['action'])
             if(!$result) echo "<p class='error'>Instalation of plugin(s) failed</p>";
             else
             {
+                // run the post install compoents
+                foreach($dashboardcomponents AS $comp)
+                {
+                    include("{$CONFIG['application_fspath']}dashboard/dashboard_{$comp}.php");
+                    $func = "dashboard_".$comp."_install";
+                    if(function_exists($func)) $func();
+                }
+
                 confirmation_page("2", "manage_dashboard.php", "<h2>Dashboard components installed</h2><h5>Please wait while you are redirected...</h5>");
             }
         }
