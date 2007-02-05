@@ -91,7 +91,7 @@ switch($action)
             }
             echo "</table>";
         }
-        echo "<p align='center'>No feeds currently present</p>";
+        else echo "<p align='center'>No feeds currently present</p>";
         echo "<p align='center'><a href='{$_SERVER['PHP_SELF']}?action=add'>Add</a></p>";
         include('htmlfooter.inc.php');
         break;
