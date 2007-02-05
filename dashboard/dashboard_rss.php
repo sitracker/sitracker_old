@@ -20,7 +20,7 @@ function dashboard_rss($row,$dashboardid)
     if (mysql_error()) trigger_error(mysql_error(),E_USER_ERROR);
 
     echo "<div class='windowbox' style='width: 95%' id='$row-$dashboardid'>";
-    echo "<div class='windowtitle'>RSS feeds<div align='right'><a href='edit_rss_feeds.php'>edit</a></div></div>";
+    echo "<div class='windowtitle'><div style='float: right'><a href='edit_rss_feeds.php'>edit</a></div>RSS feeds</div>";
     echo "<div class='window'>";
 
     if(mysql_num_rows($result) > 0)
@@ -33,10 +33,10 @@ function dashboard_rss($row,$dashboardid)
             {
                 //echo '<pre>';
                 //print_r($rs);
-                //echo '</pre>'; 
+                //echo '</pre>';
                 echo "<table align='center' 'width=100%'>";
                 echo "<tr><th>{$rss->channel['title']}</th></tr>";
-                foreach($rss->items as $item) 
+                foreach($rss->items as $item)
                 {
                     echo "<tr><td><a href='{$item['link']}' class='info'>{$item['title']}";
                     //echo $rss->feed_type;
@@ -48,7 +48,7 @@ function dashboard_rss($row,$dashboardid)
             }
             else
             {
-                echo "Error: It's not possible to get $url..."; 
+                echo "Error: It's not possible to get $url...";
             }
         }
     }
