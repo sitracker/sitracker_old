@@ -12,9 +12,6 @@
 // Author: Ivan Lucas <ivanlucas[at]users.sourceforge.net>, Tom Gerrard
 // 7Oct02 INL  Added support for maintenanceid to be put into incidents table
 
-?>
-<?php
-
 $permission=5;
 $title='Add Incident';
 require('db_connect.inc.php');
@@ -366,13 +363,13 @@ elseif ($action=='incidentform')
     }
     else
     {
-        $sql="SELECT bodytext from updates where id=$updateid";
+        $sql="SELECT bodytext FROM updates WHERE id=$updateid";
         $result=mysql_query($sql);
         if (mysql_error()) trigger_error("MySQL Query Error ".mysql_error(), E_USER_ERROR);
         $updaterow=mysql_fetch_array($result);
         $mailed_body_text=$updaterow['bodytext'];
 
-        $sql="SELECT subject from tempincoming where updateid=$updateid";
+        $sql="SELECT subject FROM tempincoming WHERE updateid=$updateid";
         $result=mysql_query($sql);
         if (mysql_error()) trigger_error("MySQL Query Error ".mysql_error(), E_USER_ERROR);
         $updaterow=mysql_fetch_array($result);
@@ -541,7 +538,7 @@ elseif ($action=='assign')
             if (!empty($updateid))
             {
                 // Assign existing update to new incident if we have one
-                $sql="UPDATE updates SET incidentid='$incidentid', userid='".$sit[2]."' WHERE id='$updateid'";
+                $sql="UPDATE updates SET incidentid='$incidentid', userid='".$sit[2]."', sla='opened' WHERE id='$updateid'";
                 $result=mysql_query($sql);
                 if (mysql_error()) trigger_error("MySQL Query Error ".mysql_error(), E_USER_ERROR);
                 // + move any attachments we may have received
@@ -562,9 +559,9 @@ elseif ($action=='assign')
             {
                 // Create a new update from details entered
                 $sql  = "INSERT INTO updates (incidentid, userid, type, bodytext, timestamp, currentowner, ";
-                $sql .= "currentstatus, customervisibility, nextaction) ";
+                $sql .= "currentstatus, customervisibility, nextaction, sla) ";
                 $sql .= "VALUES ('$incidentid', '".$sit[2]."', 'opening', '$updatetext', '$now', '".$sit[2]."', ";
-                $sql .= "'1', '$customervisibility', '$nextaction')";
+                $sql .= "'1', '$customervisibility', '$nextaction', 'opened')";
                 $result = mysql_query($sql);
                 if (mysql_error()) trigger_error("MySQL Query Error ".mysql_error(), E_USER_ERROR);
             }
@@ -586,17 +583,20 @@ elseif ($action=='assign')
             $targetval = $level->initial_response_mins * 60;
             $initialresponse=$now + $targetval;
 
+            /*
+            This has now been moved above - to reduce the number of updates Nov2006
             // Insert the first SLA update, this indicates the start of an incident
             // This insert could possibly be merged with another of the 'updates' records, but for now we keep it seperate for clarity
             $sql  = "INSERT INTO updates (incidentid, userid, type, timestamp, currentowner, currentstatus, customervisibility, sla, bodytext) ";
             $sql .= "VALUES ('$incidentid', '".$sit[2]."', 'slamet', '$now', '".$sit[2]."', '1', 'show', 'opened','The incident is open and awaiting action.')";
             mysql_query($sql);
             if (mysql_error()) trigger_error("MySQL Query Error ".mysql_error(), E_USER_ERROR);
+            */
 
             // Insert the first Review update, this indicates the review period of an incident has started
             // This insert could possibly be merged with another of the 'updates' records, but for now we keep it seperate for clarity
-            $sql  = "INSERT INTO updates (incidentid, userid, type, timestamp, currentowner, currentstatus, customervisibility, sla, bodytext) ";
-            $sql .= "VALUES ('$incidentid', '0', 'reviewmet', '$now', '".$sit[2]."', '1', 'hide', '','')";
+            $sql  = "INSERT INTO updates (incidentid, userid, type, timestamp, currentowner, currentstatus, customervisibility, bodytext) ";
+            $sql .= "VALUES ('$incidentid', '0', 'reviewmet', '$now', '".$sit[2]."', '1', 'hide', '')";
             mysql_query($sql);
             if (mysql_error()) trigger_error("MySQL Query Error ".mysql_error(), E_USER_ERROR);
 

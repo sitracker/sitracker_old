@@ -117,22 +117,40 @@ switch($action)
         // visible update
         if ($cust_vis == "yes")
         {
-            $sql  = "INSERT INTO updates (incidentid, userid, type, bodytext, timestamp, currentstatus, customervisibility, nextaction) ";
-            $sql .= "VALUES ('$id', '$sit[2]', '$updatetype', '$bodytext', '$time', '$newstatus', 'show' , '$nextaction')";
+            $sql  = "INSERT INTO updates (incidentid, userid, type, bodytext, timestamp, currentstatus, customervisibility, nextaction ";
+            $sqlValues = "VALUES ('$id', '$sit[2]', '$updatetype', '$bodytext', '$time', '$newstatus', 'show' , '$nextaction' ";
         }
         // invisible update
         else
         {
-            $sql  = "INSERT INTO updates (incidentid, userid, type, bodytext, timestamp, currentstatus, nextaction) ";
-            $sql .= "VALUES ($id, $sit[2], '$updatetype', '$bodytext', $time, '$newstatus', '$nextaction')";
+            $sql  = "INSERT INTO updates (incidentid, userid, type, bodytext, timestamp, currentstatus, nextaction ";
+            $sqlValues = "VALUES ($id, $sit[2], '$updatetype', '$bodytext', $time, '$newstatus', '$nextaction' ";
         }
+
+        if($target != 'none')
+        {
+                $sql .= ", sla)";
+                $sqlValues .= ", '{$target}')";
+        }
+        else
+        {
+            $sql .= ")";
+            $sqlValues .= ")";
+        }
+        /*if (!empty($sql))
+        {
+            mysql_query($sql);
+            if (mysql_error()) trigger_error("MySQL Query Error ".mysql_error(), E_USER_ERROR);
+        }*/
+  //  echo $sql." - ".$sqlValues;
+        $sql=$sql.$sqlValues;
+//echo $sql;
         $result = mysql_query($sql);
         if (mysql_error()) trigger_error("MySQL Query Error ".mysql_error(), E_USER_ERROR);
+    
 
-        $sql = "UPDATE incidents SET status='$newstatus', priority='$newpriority', lastupdated='$time', timeofnextaction='$timeofnextaction' WHERE id='$id'";
-        mysql_query($sql);
-        if (mysql_error()) trigger_error("MySQL Query Error ".mysql_error(), E_USER_ERROR);
 
+        /* MOved above
         // Handle meeting of service level targets
         switch ($target)
         {
@@ -165,7 +183,13 @@ switch($action)
         {
             mysql_query($sql);
             if (mysql_error()) trigger_error("MySQL Query Error ".mysql_error(), E_USER_ERROR);
-        }
+        }*/
+
+        $sql = "UPDATE incidents SET status='$newstatus', priority='$newpriority', lastupdated='$time', timeofnextaction='$timeofnextaction' WHERE id='$id'";
+        mysql_query($sql);
+        if (mysql_error()) trigger_error("MySQL Query Error ".mysql_error(), E_USER_ERROR);
+
+
         if ($target!='none')
         {
             // Reset the slaemail sent column, so that email reminders can be sent if the new sla target goes out
@@ -288,27 +312,28 @@ switch($action)
                     if (strlen($_REQUEST['summary'])>3)
                     {
                         // Problem Definition
-                        $sql  = "INSERT INTO updates (incidentid, userid, type, bodytext, timestamp, customervisibility) ";
-                        $sql .= "VALUES ('$id', '$sit[2]', 'probdef', '$summary', '$now', 'hide')";
+                        $sql  = "INSERT INTO updates (incidentid, userid, type, bodytext, timestamp, customervisibility, sla) ";
+                        $sql .= "VALUES ('$id', '$sit[2]', 'probdef', '$summary', '$now', 'hide', 'solution')";
                         $result = mysql_query($sql);
                         if (mysql_error()) trigger_error("MySQL Query Error ".mysql_error(), E_USER_ERROR);
                     }
                     if (strlen($_REQUEST['solution'])>3)
                     {
                         // Final Solution
-                        $sql  = "INSERT INTO updates (incidentid, userid, type, bodytext, timestamp, customervisibility) ";
-                        $sql .= "VALUES ('$id', '$sit[2]', 'solution', '$solution', '$now', 'hide')";
+                        $sql  = "INSERT INTO updates (incidentid, userid, type, bodytext, timestamp, customervisibility, sla) ";
+                        $sql .= "VALUES ('$id', '$sit[2]', 'solution', '$solution', '$now', 'hide', 'solution')";
                         $result = mysql_query($sql);
                         if (mysql_error()) trigger_error("MySQL Query Error ".mysql_error(), E_USER_ERROR);
                     }
                 }
-
+    
+                /* Moved above
                 // Meet service level 'solution'
                 $sql  = "INSERT INTO updates (incidentid, userid, type, timestamp, currentowner, customervisibility, sla, bodytext) ";
                 $sql .= "VALUES ('$id', '".$sit[2]."', 'slamet', '$now', '{$sit[2]}', 'show', 'solution','')";
                 $result = mysql_query($sql);
                 if (mysql_error()) trigger_error("MySQL Query Error ".mysql_error(), E_USER_ERROR);
-
+                */
                 //
                 if ($wait=='yes')
                 {
@@ -750,6 +775,7 @@ switch($action)
         $month = cleanvar($_REQUEST['month']);
         $year = cleanvar($_REQUEST['year']);
         $target = cleanvar($_REQUEST['target']);
+        $id = cleanvar($_REQUEST['id']);
 
         // move attachment to a safe place for processing later
         if ($_FILES['attachment']['name']!='')       // Should be using this format throughout TPG 13/08/2002
@@ -908,12 +934,29 @@ switch($action)
                 if (!empty($updateheader)) $updateheader .= "<hr>";
                 $updatebody = $updateheader . $bodytext;
                 $updatebody=mysql_escape_string($updatebody);
-                $sql  = "INSERT INTO updates (incidentid, userid, bodytext, type, timestamp, currentstatus,customervisibility) ";
-                $sql .= "VALUES ($id, $sit[2], '$updatebody', 'email', '$now', '$newincidentstatus', '{$emailtype->customervisibility}')";
-                mysql_query($sql);
+                $sql  = "INSERT INTO updates (incidentid, userid, bodytext, type, timestamp, currentstatus,customervisibility ";
+                $sqlValues .= "VALUES ($id, $sit[2], '$updatebody', 'email', '$now', '$newincidentstatus', '{$emailtype->customervisibility}'";
+                if($target != 'none')
+                {
+                        $sql .= ", sla)";
+                        $sqlValues .= ", '{$target}')";
+                }
+                else
+                {
+                    $sql .= ")";
+                    $sqlValues .= ")";
+                }
+                /*if (!empty($sql))
+                {
+                    mysql_query($sql);
+                    if (mysql_error()) trigger_error("MySQL Query Error ".mysql_error(), E_USER_ERROR);
+                }*/
+            
+                $sql=$sql.$sqlValues;
+                $result = mysql_query($sql);
                 if (mysql_error()) trigger_error("MySQL Query Error ".mysql_error(), E_USER_ERROR);
 
-                // Handle meeting of service level targets
+/*                // Handle meeting of service level targets
                 switch ($target)
                 {
                     case 'none':
@@ -945,7 +988,7 @@ switch($action)
                 {
                     mysql_query($sql);
                     if (mysql_error()) trigger_error("MySQL Query Error ".mysql_error(), E_USER_ERROR);
-                }
+                }*/
                 if ($target!='none')
                 {
                     // Reset the slaemail sent column, so that email reminders can be sent if the new sla target goes out

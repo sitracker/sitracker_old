@@ -923,7 +923,8 @@ function incident_sla_history($incidentid)
     $level = mysql_fetch_object($result);
 
     // Loop through the updates in ascending order looking for service level events
-    $sql = "SELECT * FROM updates WHERE type='slamet' AND incidentid='{$incidentid}' ORDER BY id ASC, timestamp ASC";
+    //$sql = "SELECT * FROM updates WHERE type='slamet' AND incidentid='{$incidentid}' ORDER BY id ASC, timestamp ASC";
+    $sql = "SELECT * FROM updates WHERE sla IS NOT NULL AND sla!= '' AND incidentid='{$incidentid}' ORDER BY id ASC,   timestamp ASC";
     $result = mysql_query($sql);
     if (mysql_error()) trigger_error("MySQL Query Error ".mysql_error(), E_USER_ERROR);
     $prevtime=0;
@@ -3402,7 +3403,8 @@ function incident_get_next_target($incidentid)
 {
     global $now;
     // Find the most recent SLA target that was met
-    $sql = "SELECT sla,timestamp FROM updates WHERE incidentid='$incidentid' AND type='slamet' ORDER BY id DESC LIMIT 1";
+    //$sql = "SELECT sla,timestamp FROM updates WHERE incidentid='$incidentid' AND type='slamet' ORDER BY id DESC LIMIT 1";
+    $sql = "SELECT sla,timestamp FROM updates WHERE incidentid='$incidentid' AND (sla IS NOT NULL AND sla!='') ORDER BY id DESC LIMIT 1";
     $result = mysql_query($sql);
     if (mysql_error()) trigger_error(mysql_error(),E_USER_WARNING);
 

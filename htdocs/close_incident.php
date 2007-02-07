@@ -295,27 +295,28 @@ else
                 if (strlen($_REQUEST['summary'])>3)
                 {
                     // Problem Definition
-                    $sql  = "INSERT INTO updates (incidentid, userid, type, bodytext, timestamp, customervisibility) ";
-                    $sql .= "VALUES ('$id', '$sit[2]', 'probdef', '$summary', '$now', 'hide')";
+                    $sql  = "INSERT INTO updates (incidentid, userid, type, bodytext, timestamp, customervisibility, 'sla') ";
+                    $sql .= "VALUES ('$id', '$sit[2]', 'probdef', '$summary', '$now', 'hide', 'solution')";
                     $result = mysql_query($sql);
                     if (mysql_error()) trigger_error("MySQL Query Error ".mysql_error(), E_USER_ERROR);
                 }
                 if (strlen($_REQUEST['solution'])>3)
                 {
                     // Final Solution
-                    $sql  = "INSERT INTO updates (incidentid, userid, type, bodytext, timestamp, customervisibility) ";
-                    $sql .= "VALUES ('$id', '$sit[2]', 'solution', '$solution', '$now', 'hide')";
+                    $sql  = "INSERT INTO updates (incidentid, userid, type, bodytext, timestamp, customervisibility, sla) ";
+                    $sql .= "VALUES ('$id', '$sit[2]', 'solution', '$solution', '$now', 'hide', 'solution')";
                     $result = mysql_query($sql);
                     if (mysql_error()) trigger_error("MySQL Query Error ".mysql_error(), E_USER_ERROR);
                 }
             }
 
+            /*
             // Meet service level 'solution'
             $sql  = "INSERT INTO updates (incidentid, userid, type, timestamp, currentowner, customervisibility, sla, bodytext) ";
             $sql .= "VALUES ('$id', '".$sit[2]."', 'slamet', '$now', '{$sit[2]}', 'show', 'solution','')";
             $result = mysql_query($sql);
             if (mysql_error()) trigger_error("MySQL Query Error ".mysql_error(), E_USER_ERROR);
-
+            */
             //
             if ($wait=='yes')
             {

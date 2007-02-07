@@ -52,12 +52,11 @@ if ($secondssincemidnight >= $CONFIG['start_working_day'] AND $secondssincemidni
         $newSlaTime=-1;
 
         $sql= "SELECT id, type, sla, timestamp, currentstatus FROM updates WHERE incidentid='{$incident['id']}' ";
-        $sql.="AND type='slamet' ORDER BY id DESC LIMIT 1";
+        $sql.="AND sla IS NOT NULL ORDER BY id DESC LIMIT 1";
         $update_result=mysql_query($sql);
         if (mysql_error()) trigger_error(mysql_error(),E_USER_ERROR);
 
-        if (mysql_num_rows($update_result)!=1)
-        {
+        if (mysql_num_rows($update_result)!=1) {
             if ($verbose) echo "Cannot find SLA information for incident ".$incident['id'].", skipping{$crlf}";
         }
         else
@@ -81,10 +80,11 @@ if ($secondssincemidnight >= $CONFIG['start_working_day'] AND $secondssincemidni
         {
             $reviewInfo=mysql_fetch_array($update_result);
             $newReviewTime=floor($now-$reviewInfo['timestamp'])/60;
-            if ($verbose)
-            {
-                if ($reviewInfo['currentowner']!=0) echo "   There has been no review on this incident, which was opened $newReviewTime minutes ago{$crlf}";
-                else echo "   The last review took place $newReviewTime minutes ago{$crlf}";
+            if ($verbose) {
+                // This no longer makes sense as we have review times since the SQL returned something
+                //if ($reviewInfo['currentowner']!=0) echo "   There has been no review on this incident, which was opened $newReviewTime minutes ago{$crlf}";
+                //else 
+                echo "   The last review took place $newReviewTime minutes ago{$crlf}";
             }
 
         }
@@ -106,8 +106,9 @@ if ($secondssincemidnight >= $CONFIG['start_working_day'] AND $secondssincemidni
             }
 
             // Query the database for the next SLA and review times...
-            // $slaRequest variable is a column name!
-            $sql="SELECT ($slaRequest*$coefficient) as 'next_sla_time', review_days from servicelevels WHERE tag='$tag' AND priority='{$incident['priority']}'";
+
+            $sql="SELECT ($slaRequest*$coefficient) as 'next_sla_time', review_days FROM servicelevels WHERE tag='$tag' AND priority='{$incident['priority']}'";
+
             $result=mysql_query($sql);
             if (mysql_error()) trigger_error(mysql_error(),E_USER_ERROR);
             $times=mysql_fetch_assoc($result);
@@ -121,8 +122,10 @@ if ($secondssincemidnight >= $CONFIG['start_working_day'] AND $secondssincemidni
 
             // Check if we have already sent an out of SLA/Review period mail
             // This attribute is reset when an update to the incident meets sla/review time
-            if ($incident['slaemail'] < 2)
-            {
+            if ($incident['slaemail']==0) {
+
+                // If not, check if we need to
+
                 $emailSent=0;
 
                 if ($incident['slaemail'] == 0 AND (($times['next_sla_time'] - $newSlaTime) - ($times['next_sla_time'] * ((100 - $CONFIG['urgent_threshold']) /100))) < 0 )

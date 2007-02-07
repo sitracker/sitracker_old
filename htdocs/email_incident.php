@@ -492,12 +492,12 @@ switch ($step)
                 if (!empty($updateheader)) $updateheader .= "<hr>";
                 $updatebody = $updateheader . $bodytext;
                 $updatebody=mysql_escape_string($updatebody);
-                $sql  = "INSERT INTO updates (incidentid, userid, bodytext, type, timestamp, currentstatus,customervisibility) ";
-                $sql .= "VALUES ($id, $sit[2], '$updatebody', 'email', '$now', '$newincidentstatus', '{$emailtype->customervisibility}')";
-                mysql_query($sql);
-                if (mysql_error()) trigger_error("MySQL Query Error ".mysql_error(), E_USER_ERROR);
+                $sql  = "INSERT INTO updates (incidentid, userid, bodytext, type, timestamp, currentstatus,customervisibility ";
+                $sqlValues .= "VALUES ($id, $sit[2], '$updatebody', 'email', '$now', '$newincidentstatus', '{$emailtype->customervisibility}'";
+                
 
                 // Handle meeting of service level targets
+                /* How handled in one update
                 switch ($target)
                 {
                     case 'none':
@@ -524,12 +524,28 @@ switch ($step)
                         $sql  = "INSERT INTO updates (incidentid, userid, type, timestamp, currentowner, currentstatus, customervisibility, sla, bodytext) ";
                         $sql .= "VALUES ('$id', '".$sit[2]."', 'slamet', '$now', '".$sit[2]."', '$newincidentstatus', 'show', 'solution','The incident has been resolved or reprioritised.\nThe issue should now be brought to a close or a new problem definition created within the service level.')";
                     break;
+                }*/
+
+                if($target != 'none')
+                {
+                        $sql .= ", sla)";
+                        $sqlValues .= ", '{$target}')";
                 }
-                if (!empty($sql))
+                else
+                {
+                    $sql .= ")";
+                    $sqlValues .= ")";
+                }
+                /*if (!empty($sql))
                 {
                     mysql_query($sql);
                     if (mysql_error()) trigger_error("MySQL Query Error ".mysql_error(), E_USER_ERROR);
-                }
+                }*/
+
+                $sql=$sql.$sqlValues;
+                $result = mysql_query($sql);
+                if (mysql_error()) trigger_error("MySQL Query Error ".mysql_error(), E_USER_ERROR);
+
                 if ($target!='none')
                 {
                     // Reset the slaemail sent column, so that email reminders can be sent if the new sla target goes out
