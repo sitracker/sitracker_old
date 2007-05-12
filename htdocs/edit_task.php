@@ -47,6 +47,8 @@ switch ($action)
         $old_completion = cleanvar($_REQUEST['old_completion']);
         $old_value = cleanvar($_REQUEST['old_value']);
         $old_distribution = cleanvar($_REQUEST['old_distribution']);
+        if ($distribution=='public') $tags = cleanvar($_POST['tags']);
+        else $tags='';
 
         // Validate input
         $error=array();
@@ -66,6 +68,7 @@ switch ($action)
         }
         else
         {
+            replace_tags(4, $id, $tags);
             if ($startdate > 0) $startdate = date('Y-m-d',$startdate);
             else $startdate = '';
             if ($duedate > 0) $duedate = date('Y-m-d',$duedate);
@@ -144,6 +147,11 @@ switch ($action)
                 echo "<td><input type='text' name='name' size='35' maxlength='255' value=\"".stripslashes($task->name)."\" /></td></tr>";
                 echo "<tr><th>Description</th>";
                 echo "<td><textarea name='description' rows='4' cols='30'>".stripslashes($task->description)."</textarea></td></tr>";
+                if ($task->distribution=='public')
+                {
+                    echo "<tr><th>Tags:</th>";
+                    echo "<td><textarea rows='2' cols='30' name='tags'>".list_tags($id, 4, false)."</textarea></td></tr>";
+                }
                 echo "<tr><th>Priority</th>";
                 echo "<td>".priority_drop_down('priority',$task->priority)."</td></tr>";
                 echo "<tr><th>Start Date</th>";
@@ -169,7 +177,7 @@ switch ($action)
                 echo "value='public' /> Public<br />";
                 echo "<input type='radio' name='distribution' ";
                 if ($task->distribution=='private') echo "checked='checked' ";
-                echo "value='private' /> Private <img src='{$CONFIG['application_webpath']}images/icons/kdeclassic/16x16/apps/password.png' width='16' height='16' title='Private' alt='Private' /></td></tr>";
+                echo "value='private' /> Private <img src='{$CONFIG['application_webpath']}images/icons/{$iconset}/16x16/apps/password.png' width='16' height='16' title='Private' alt='Private' /></td></tr>";
                 echo "</table>";
                 echo "<p><input name='submit' type='submit' value='Save' /></p>";
                 echo "<input type='hidden' name='action' value='edittask' />";
