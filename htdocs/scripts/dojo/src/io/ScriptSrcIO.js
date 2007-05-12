@@ -33,14 +33,12 @@ dojo.io.ScriptSrcTransport = new function(){
 	};
 
 	this.startWatchingInFlight = function(){
-		//summary: Internal method to start the process of watching for in-flight requests.
 		if(!this.inFlightTimer){
 			this.inFlightTimer = setInterval("dojo.io.ScriptSrcTransport.watchInFlight();", 100);
 		}
 	}
 
 	this.watchInFlight = function(){
-		//summary: Internal method to watch for in-flight requests.
 		var totalCount = 0;
 		var doneCount = 0;
 		for(var param in this._state){
@@ -49,17 +47,15 @@ dojo.io.ScriptSrcTransport = new function(){
 			if(currentState.isDone){
 				doneCount++;
 				delete this._state[param];
-			}else if(!currentState.isFinishing){
+			}else{
 				var listener = currentState.kwArgs;
 				try{
 					if(currentState.checkString && eval("typeof(" + currentState.checkString + ") != 'undefined'")){
-						currentState.isFinishing = true;
 						this._finish(currentState, "load");
 						doneCount++;
 						delete this._state[param];
 					}else if(listener.timeoutSeconds && listener.timeout){
 						if(currentState.startTime + (listener.timeoutSeconds * 1000) < (new Date()).getTime()){
-							currentState.isFinishing = true;
 							this._finish(currentState, "timeout");
 							doneCount++;
 							delete this._state[param];
@@ -72,27 +68,19 @@ dojo.io.ScriptSrcTransport = new function(){
 						doneCount++;
 					}
 				}catch(e){
-					currentState.isFinishing = true;
 					this._finish(currentState, "error", {status: this.DsrStatusCodes.Error, response: e});
 				}
 			}
 		}
 	
-		if(doneCount >= totalCount){
+		if(doneCount == totalCount){
 			clearInterval(this.inFlightTimer);
 			this.inFlightTimer = null;
 		}
 	}
 
-	this.canHandle = function(/*dojo.io.Request*/kwArgs){
-		//summary: Tells dojo.io.bind() if this is a good transport to
-		//use for the particular type of request. This type of transport can only
-		//handle responses that are JavaScript or JSON that is passed to a JavaScript
-		//callback. It can only do asynchronous binds, is limited to GET HTTP method
-		//requests, and cannot handle formNodes. However, it has the advantage of being
-		//able to do cross-domain requests.
-
-		return dojo.lang.inArray(["text/javascript", "text/json", "application/json"], (kwArgs["mimetype"].toLowerCase()))
+	this.canHandle = function(kwArgs){
+		return dojo.lang.inArray((kwArgs["mimetype"].toLowerCase()), ["text/javascript", "text/json"])
 			&& (kwArgs["method"].toLowerCase() == "get")
 			&& !(kwArgs["formNode"] && dojo.io.formHasFile(kwArgs["formNode"]))
 			&& (!kwArgs["sync"] || kwArgs["sync"] == false)
@@ -100,13 +88,16 @@ dojo.io.ScriptSrcTransport = new function(){
 			&& !kwArgs["multipart"];
 	}
 
+	/**
+	 * Removes any script tags from the DOM that may have been added by ScriptSrcTransport.
+	 * Be careful though, by removing them from the script, you may invalidate some
+	 * script objects that were defined by the js file that was pulled in as the
+	 * src of the script tag. Test carefully if you decide to call this method.
+	 * 
+	 * In MSIE 6 (and probably 5.x), if you removed the script element while 
+	 * part of the script is still executing, the browser will crash.
+	 */
 	this.removeScripts = function(){
-		//summary: Removes any script tags from the DOM that may have been added by ScriptSrcTransport.
-		//description: Be careful though, by removing them from the script, you may invalidate some
-		//script objects that were defined by the js file that was pulled in as the
-		//src of the script tag. Test carefully if you decide to call this method.
-		//In MSIE 6 (and probably 5.x), if you remove the script element while 
-		//part of the response script is still executing, the browser might crash.
 		var scripts = document.getElementsByTagName("script");
 		for(var i = 0; scripts && i < scripts.length; i++){
 			var scriptTag = scripts[i];
@@ -118,12 +109,7 @@ dojo.io.ScriptSrcTransport = new function(){
 		}
 	}
 
-	this.bind = function(/*dojo.io.Request*/kwArgs){
-		//summary: function that sends the request to the server.
-		//description: See the Dojo Book page on this transport for a full
-		//description of supported kwArgs properties and usage:
-		//http://manual.dojotoolkit.org/WikiHome/DojoDotBook/Book25
-
+	this.bind = function(kwArgs){
 		//START duplication from BrowserIO.js (some changes made)
 		var url = kwArgs.url;
 		var query = "";
@@ -192,8 +178,7 @@ dojo.io.ScriptSrcTransport = new function(){
 			"url": url,
 			"query": query,
 			"kwArgs": kwArgs,
-			"startTime": (new Date()).getTime(),
-			"isFinishing": false
+			"startTime": (new Date()).getTime()
 		};
 
 		if(!url){
@@ -207,9 +192,7 @@ dojo.io.ScriptSrcTransport = new function(){
 			state.jsonp = content[jsonpName];
 			state.jsonpCall = function(data){
 				if(data["Error"]||data["error"]){
-					if(dojo["json"] && dojo["json"]["serialize"]){
-						dojo.debug(dojo.json.serialize(data));
-					}
+					dojo.debug(dojo.json.serialize(data));
 					dojo.io.ScriptSrcTransport._finish(this, "error", data);
 				}else{
 					dojo.io.ScriptSrcTransport._finish(this, "load", data);

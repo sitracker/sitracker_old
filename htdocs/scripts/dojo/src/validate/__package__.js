@@ -16,6 +16,6 @@ dojo.kwCompoundRequire({
 						"dojo.validate.jp", 
 						"dojo.validate.us", 
 						"dojo.validate.web" 
-	]
+	],
 });
 dojo.provide("dojo.validate.*");

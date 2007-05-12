@@ -11,17 +11,22 @@
 dojo.provide("dojo.uuid.NameBasedGenerator");
 
 dojo.uuid.NameBasedGenerator = new function() {
-	this.generate = function(/* constructor? */ returnType) {
-		// summary: 
-		//   This function generates name-based UUIDs, meaning "version 3" 
-		//   and "version 5" UUIDs.
-		// returnType: The type of object to return. Usually String or dojo.uuid.Uuid
 
-		// examples: 
-		//   var string = dojo.uuid.NameBasedGenerator.generate();
-		//   var string = dojo.uuid.NameBasedGenerator.generate(String);
-		//   var uuid   = dojo.uuid.NameBasedGenerator.generate(dojo.uuid.Uuid);
-
+/**
+ * This function generates name-based UUIDs, meaning "version 3" 
+ * and "version 5" UUIDs.
+ *
+ * Examples:
+ * <pre>
+ *   var string = dojo.uuid.NameBasedGenerator.generate();
+ *   var string = dojo.uuid.NameBasedGenerator.generate(String);
+ *   var uuid   = dojo.uuid.NameBasedGenerator.generate(dojo.uuid.Uuid);
+ * </pre>
+ *
+ * @param	returnType	Optional. The type of instance to return.
+ * @return	A newly generated version 3 or version 5 UUID.
+ */
+	this.generate = function(returnType) {
 		dojo.unimplemented('dojo.uuid.NameBasedGenerator.generate');
 		
 		// FIXME:
@@ -33,6 +38,6 @@ dojo.uuid.NameBasedGenerator = new function() {
 		if (returnType && (returnType != String)) {
 			returnValue = new returnType(returnValue);
 		}
-		return returnValue; // object
+		return returnValue;
 	};
 }();

@@ -1,26 +1,3 @@
-Changes in v3.25 - Unreleased
------------------------------------------------------------------------
-* Users with disabled user accounts are now displayed with strikethrough
-  text style
-* Adds new tabbed interface
-* Adds forgotten password functionality for portal users
-* Interface to manage dashboard
-* Adds a skills matrix
-* Tidyed up the review incoming updates page
-* New interface for editing vendors
-* Allow setting of holiday entitlement when adding users
-* Added new system email 'NEARING_SLA' that notifies when incidents
-  reach the 'urgent_threshold' of the SLA time remaining.
-* Fixed the OUT_OF_SLA email so that it is only sent after an incident
-  breaches it's SLA
-* Plugin function can now return values
-* Plugin functions can now accept optional parameters
-* Yearly engineer report now has a statistics option
-* Added working flags to contacts, sites and incidents
-* Added ability to delete products if they are not linked with other records
-* Main page now features working dashbaord with user saveable layout
-* Adds OpenSearch plugin compatable with Firefox2 and IE7
-
 Changes in v3.24 - Released 6 November 2006
 -----------------------------------------------------------------------
 * Fixed service levels for reopened incidents, service level target

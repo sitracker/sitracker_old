@@ -29,10 +29,10 @@ $view = cleanvar($_REQUEST['view']);
 // there is an existing booking so alter it
 switch (strtolower($approve))
 {
-    case 'true':
+    case 'true': 
         $sql = "UPDATE holidays SET approved='1' ";
     break;
-    case 'false':
+    case 'false': 
         $sql = "UPDATE holidays SET approved='2' ";
     break;
     case 'free':
@@ -42,10 +42,10 @@ switch (strtolower($approve))
 
 $sql .= "WHERE approvedby='$sit[2]' AND approved=0 ";
 
-if ($user != 'all')
+if ($user != 'all') 
     $sql .= "AND userid='$user' ";
 
-if ($startdate != 'all')
+if ($startdate != 'all') 
     $sql.="AND startdate='$startdate' AND type='$type' AND length='$length'";
 
 $result = mysql_query($sql);
@@ -55,7 +55,7 @@ if ($approve=='FALSE') $bodytext.="rejected";
 else $bodytext.="approved";
 $bodytext.=" your request for ";
 if ($startdate=='all') $bodytext .= "all days requested\n\n";
-else
+else 
 {
     $bodytext .= "the ";
     $bodytext .= date('l j F Y',$startdate);
@@ -66,7 +66,6 @@ $email_to = user_email($user);
 $email_subject = "Re: {$CONFIG['application_shortname']}: Holiday Approval Request";
 $extra_headers  = "From: $email_from\nReply-To: $email_from\nErrors-To: {$CONFIG['support_email']}\n";
 $extra_headers .= "X-Mailer: {$CONFIG['application_shortname']} {$application_version_string}/PHP " . phpversion()."\n";
-$extra_headers .= "X-Originating-IP: {$_SERVER['REMOTE_ADDR']}\n";
 $rtnvalue = mail($email_to, stripslashes($email_subject), stripslashes($bodytext), $extra_headers);
 
 //if ($rtnvalue===TRUE) echo "<p align='center'>".user_realname($user)." has been notified of your decision</p>";

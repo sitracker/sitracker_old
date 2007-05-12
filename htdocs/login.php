@@ -41,7 +41,6 @@ if (authenticate($username, $password) == 1)
     $_SESSION['style'] = $user->var_style;
     $_SESSION['incident_refresh'] = $user->var_incident_refresh;
     $_SESSION['update_order'] = $user->var_update_order;
-    $_SESSION['num_update_view'] = $user->var_num_updates_view;
     $_SESSION['collapse'] = $user->var_collapse;
     $_SESSION['groupid'] = is_null($user->groupid) ? 0 : $user->groupid;
 
@@ -130,6 +129,6 @@ else if($CONFIG['portal'] == TRUE)
 {
     //invalid user and portal disabled
     header ("Location: index.php?id=3");
-    exit; 
+    exit;
 }
 ?>

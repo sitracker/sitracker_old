@@ -204,11 +204,10 @@ if (file_exists($incident_attachment_fspath))
          if (is_dir($value)) $dirarray[] = $value;
          elseif (is_file($value) AND substr($value,-1)!='.' AND substr($value,-8)!='mail.eml') $rfilearray[] = $value;
     }
-
     if (count($rfilearray) >= 1)
     {
         $headhtml = "<div class='detailhead'>\n";
-        $headhtml .= "<img src='{$CONFIG['application_webpath']}images/icons/{$iconset}/32x32/mimetypes/folder.gif' alt='Root dir' title='Root dir' border='0' height='16' width='16' /> \\";
+        $headhtml .= "<img src='{$CONFIG['application_webpath']}images/icons/kdeclassic/32x32/mimetypes/folder.gif' alt='Root dir' title='Root dir' border='0' height='16' width='16' /> \\";
         $headhtml .= "</div>\n";
         echo $headhtml;
         echo "<div class='detailentry'>\n";
@@ -222,7 +221,6 @@ if (file_exists($incident_attachment_fspath))
         echo "</table>\n";
         echo "</div>";
     }
-
     foreach($dirarray AS $dir)
     {
         $directory=substr($dir,0,strrpos($dir,$delim));
@@ -230,7 +228,7 @@ if (file_exists($incident_attachment_fspath))
         if ( is_number($dirname) && $dirname!=$id && strlen($dirname)==10) $dirprettyname=date('l jS M Y @ g:ia',$dirname);
         else $dirprettyname=$dirname;
         $headhtml = "<div class='detailhead'>\n";
-        $headhtml .= "<img src='{$CONFIG['application_webpath']}images/icons/{$iconset}/32x32/mimetypes/folder.gif' alt='{$id}' title='{$dir}' border='0' height='16' width='16' valign='top' /> {$dirprettyname}";
+        $headhtml .= "<img src='{$CONFIG['application_webpath']}images/icons/kdeclassic/32x32/mimetypes/folder.gif' alt='{$id}' title='{$dir}' border='0' height='16' width='16' valign='top' /> {$dirprettyname}";
         $headhtml .= "</div>\n";
         $tempfarray=list_dir($dir, 1);
         if (count($tempfarray)==1 AND (substr($tempfarray[0],-8)=='mail.eml'))

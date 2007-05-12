@@ -23,7 +23,7 @@ function give_overview()
     global $todayrecent;
 
     $sql = "SELECT COUNT(incidents.id), incidentstatus.name FROM incidents, incidentstatus ";
-    $sql .= "WHERE incidents.status = incidentstatus.id AND status != 2 AND status != 7 GROUP BY incidents.status";
+    $sql .= "WHERE incidents.status = incidentstatus.id AND closed = 0 GROUP BY incidents.status";
 
     $result = mysql_query($sql);
     if (mysql_error()) trigger_error("MySQL Query Error ".mysql_error(), E_USER_ERROR);
@@ -32,7 +32,7 @@ function give_overview()
     {
        // echo "<table align='center' class='vertical' width='20%'>";
         echo "<table class='vertical' align='center'>";
-        $opencalls = 0;
+        $openCalls = 0;
         while($row = mysql_fetch_array($result))
         {
             echo "<tr><th>".$row['name']."</th><td class='shade2' align='left'>".$row['COUNT(incidents.id)']."</td></tr>";
@@ -69,7 +69,7 @@ function give_overview()
             if (mysql_error()) trigger_error("MySQL Query Error ".mysql_error(), E_USER_ERROR);
             while($irow = mysql_fetch_array($iresult))
             {
-                $string .= "<small><a href=\"javascript:incident_details_window('".$irow['id']."', 'incident".$irow['id']."')\"  title=\"".stripslashes($irow['title'])."\">[".$irow['id']."]</a></small> ";
+                $string .= "<small><a href=\"javascript:incident_details_window('".$irow['id']."', 'incident".$irow['id']."')\"  title='".$irow['title']."'>[".$irow['id']."]</a></small> ";
             }
 
             $string .= "</td></tr>";
@@ -107,7 +107,7 @@ function give_overview()
             if (mysql_error()) trigger_error("MySQL Query Error ".mysql_error(), E_USER_ERROR);
             while($irow = mysql_fetch_array($iresult))
             {
-                $string .= "<tr><th><a href=\"javascript:incident_details_window('".$irow['id']."', 'incident".$irow['id']."')\" title='[".$irow['id']."] - ".stripslashes($irow['title'])."'>".$irow['id']."</a></th>";
+                $string .= "<tr><th><a href=\"javascript:incident_details_window('".$irow['id']."', 'incident".$irow['id']."')\" title='[".$irow['id']."] - ".$irow['title']."'>".$irow['id']."</a></th>";
                 $string .= "<td class='shade2' align='left'>".$irow['title']."</td><td class='shade2' align='left'>".$row['realname']."</td><td class='shade2'>".$irow['name']."</td></tr>\n";
             }
             // $string .= "</table>\n";

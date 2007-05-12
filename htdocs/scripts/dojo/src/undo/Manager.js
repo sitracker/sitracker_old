@@ -9,14 +9,13 @@
 */
 
 dojo.provide("dojo.undo.Manager");
-dojo.require("dojo.lang.common");
+dojo.require("dojo.lang");
 
-dojo.undo.Manager = function(/*dojo.undo.Manager Object */parent) {
-	//summary: Constructor for a dojo.undo.Manager object.
+dojo.undo.Manager = function(parent) {
 	this.clear();
 	this._parent = parent;
 };
-dojo.extend(dojo.undo.Manager, {
+dojo.lang.extend(dojo.undo.Manager, {
 	_parent: null,
 	_undoStack: null,
 	_redoStack: null,
@@ -28,49 +27,21 @@ dojo.extend(dojo.undo.Manager, {
 	isUndoing: false,
 	isRedoing: false,
 
-	onUndo: function(/*Object*/manager, /*Object*/item) {
-		//summary: An event that fires when undo is called.
-		//It allows you to hook in and update your code (UI?) as necessary.
+	// these events allow you to hook in and update your code (UI?) as necessary
+	onUndo: function(manager, item) {},
+	onRedo: function(manager, item) {},
 
-		//manager: Object: the dojo.undo.Manager instance.
-		//item: Object: The object stored by the undo stack. It has the following properties:
-		//		undo: Function: the undo function for this item in the stack.
-		//		redo: Function: the redo function for this item in the stack. May be null.
-		//		description: String: description of this item. May be null.
-	},
-	onRedo: function(/*Object*/manager, /*Object*/item) {
-		//summary: An event that fires when redo is called.
-		//It allows you to hook in and update your code (UI?) as necessary.
-
-		//manager: Object: the dojo.undo.Manager instance.
-		//item: Object: The object stored by the redo stack. It has the following properties:
-		//		undo: Function: the undo function for this item in the stack.
-		//		redo: Function: the redo function for this item in the stack. May be null.
-		//		description: String: description of this item. May be null.
-	},
-
-	onUndoAny: function(/*Object*/manager, /*Object*/item) {
-		//summary: An event that fires when *any* undo action is done, 
-		//which means you'll have one for every item
-		//in a transaction. This is usually only useful for debugging.
-		//See notes for onUndo for info on the function parameters.
-	},
-	
-	onRedoAny: function(/*Object*/manager, /*Object*/item) {
-		//summary: An event that fires when *any* redo action is done, 
-		//which means you'll have one for every item
-		//in a transaction. This is usually only useful for debugging.
-		//See notes for onRedo for info on the function parameters.
-	},
+	// fired when you do *any* undo action, which means you'll have one for every item
+	// in a transaction. this is usually only useful for debugging
+	onUndoAny: function(manager, item) {},
+	onRedoAny: function(manager, item) {},
 
 	_updateStatus: function() {
-		//summary: Private method used to set some internal state.
 		this.canUndo = this._undoStack.length > 0;
 		this.canRedo = this._redoStack.length > 0;
 	},
 
 	clear: function() {
-		//summary: Clears this instance of dojo.undo.Manager.
 		this._undoStack = [];
 		this._redoStack = [];
 		this._currentManager = this;
@@ -82,10 +53,7 @@ dojo.extend(dojo.undo.Manager, {
 	},
 
 	undo: function() {
-		//summary: Call this method to go one place back in the undo
-		//stack. Returns true if the manager successfully completed
-		//the undo step.
-		if(!this.canUndo) { return false; /*boolean*/}
+		if(!this.canUndo) { return false; }
 
 		this.endAllTransactions();
 
@@ -103,21 +71,18 @@ dojo.extend(dojo.undo.Manager, {
 
 		this._updateStatus();
 		this.onUndo(this, top);
-		if(!(top instanceof dojo.undo.Manager)) {
+		if(!(top instanceof dojo.undo.Manager)){
 			this.getTop().onUndoAny(this, top);
 		}
-		return true; //boolean
+		return true;
 	},
 
 	redo: function() {
-		//summary: Call this method to go one place forward in the redo
-		//stack. Returns true if the manager successfully completed
-		//the redo step.
-		if(!this.canRedo){ return false; /*boolean*/}
+		if(!this.canRedo){ return false; }
 
 		this.isRedoing = true;
 		var top = this._redoStack.pop();
-		if(top instanceof dojo.undo.Manager) {
+		if(top instanceof dojo.undo.Manager){
 			top.redoAll();
 		}else{
 			top.redo();
@@ -130,27 +95,22 @@ dojo.extend(dojo.undo.Manager, {
 		if(!(top instanceof dojo.undo.Manager)){
 			this.getTop().onRedoAny(this, top);
 		}
-		return true; //boolean
+		return true;
 	},
 
 	undoAll: function() {
-		//summary: Call undo as many times as it takes to get all the
-		//way through the undo stack.
 		while(this._undoStack.length > 0) {
 			this.undo();
 		}
 	},
 
 	redoAll: function() {
-		//summary: Call redo as many times as it takes to get all the
-		//way through the redo stack.
 		while(this._redoStack.length > 0) {
 			this.redo();
 		}
 	},
 
-	push: function(/*Function*/undo, /*Function?*/redo, /*String?*/description) {
-		//summary: add something to the undo manager.
+	push: function(undo, redo /* optional */, description /* optional */) {
 		if(!undo) { return; }
 
 		if(this._currentManager == this) {
@@ -167,9 +127,7 @@ dojo.extend(dojo.undo.Manager, {
 		this._updateStatus();
 	},
 
-	concat: function(/*Object*/manager) {
-		//summary: Adds all undo and redo stack items to another dojo.undo.Manager
-		//instance.
+	concat: function(manager) {
 		if ( !manager ) { return; }
 
 		if (this._currentManager == this ) {
@@ -177,21 +135,14 @@ dojo.extend(dojo.undo.Manager, {
 				this._undoStack.push(manager._undoStack[x]);
 			}
 			// adding a new undo-able item clears out the redo stack
-			if (manager._undoStack.length > 0) {
-				this._redoStack = [];
-			}
+			this._redoStack = [];
 			this._updateStatus();
 		} else {
 			this._currentManager.concat.apply(this._currentManager, arguments);
 		}
 	},
 
-	beginTransaction: function(/*String?*/description) {
-		//summary: All undo/redo items added via
-		//push() after this call is made but before endTransaction() is called are
-		//treated as one item in the undo and redo stacks. When undo() or redo() is
-		//called then undo/redo is called on all of the items in the transaction.
-		//Transactions can be nested.
+	beginTransaction: function(description /* optional */) {
 		if(this._currentManager == this) {
 			var mgr = new dojo.undo.Manager(this);
 			mgr.description = description ? description : "";
@@ -205,12 +156,6 @@ dojo.extend(dojo.undo.Manager, {
 	},
 
 	endTransaction: function(flatten /* optional */) {
-		//summary: Ends a transaction started by beginTransaction(). See beginTransaction()
-		//for details.
-		
-		//flatten: boolean: If true, adds the current transaction to the parent's
-		//undo stack.
-	
 		if(this._currentManager == this) {
 			if(this._parent) {
 				this._parent._currentManager = this._parent;
@@ -237,14 +182,13 @@ dojo.extend(dojo.undo.Manager, {
 	},
 
 	endAllTransactions: function() {
-		//summary: Ends all nested transactions.
 		while(this._currentManager != this) {
 			this.endTransaction();
 		}
 	},
 
+	// find the top parent of an undo manager
 	getTop: function() {
-		//summary: Finds the top parent of an undo manager.
 		if(this._parent) {
 			return this._parent.getTop();
 		} else {

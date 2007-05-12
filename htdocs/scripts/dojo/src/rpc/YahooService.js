@@ -19,12 +19,12 @@ dojo.rpc.YahooService = function(appId){
 	this.appId = appId;
 	if(!appId){
 		this.appId = "dojotoolkit";
-		dojo.debug(	"please initialize the YahooService class with your own",
+		dojo.debug(	"please initializae the YahooService class with your own",
 					"application ID. Using the default may cause problems during",
 					"deployment of your application");
 	}
 	this.connect(dojo.uri.dojoUri("src/rpc/yahoo.smd"));
-	this.strictArgChecks = false;
+	this.scrictArgChecks = false;
 }
 
 dojo.inherits(dojo.rpc.YahooService, dojo.rpc.JsonService);
@@ -33,10 +33,6 @@ dojo.lang.extend(dojo.rpc.YahooService, {
 	strictArgChecks: false,
 
 	bind: function(method, parameters, deferredRequestHandler, url){
-		//summary
-		//Yahoo RPC bind method. Takes remote method, parameters, deferred,
-		//and a url and sends of a ScriptSrcIO request to connect to Yahoo
-		//services crossplatform
 		var params = parameters;
 		if(	(dojo.lang.isArrayLike(parameters))&&
 			(parameters.length == 1)){

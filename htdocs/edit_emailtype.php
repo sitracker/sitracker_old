@@ -96,7 +96,7 @@ elseif ($action == "edit")
         </table>
         <p>
         Body Text<br />
-        <textarea name="bodytext" rows="20" cols="60"><?php echo stripslashes($emailtype["body"]); ?></textarea>
+        <textarea name="bodytext" rows="20" cols="60"><?php echo $emailtype["body"] ?></textarea>
         </p>
 
         <?php
@@ -146,7 +146,6 @@ elseif ($action == "edit")
         <?php
         echo "<tr><th>&lt;useremail&gt;</th><td>The current users email address</td></tr>";
         echo "<tr><th>&lt;userrealname&gt;</th><td>The full name of the current user</td></tr>";
-        echo "<tr><th>&lt;salespersonemail&gt;</th><td>The email address of the salesperson attached to the contacts site</td></tr>";
         echo "<tr><th>&lt;applicationname&gt;</th><td>'{$CONFIG['application_name']}'</td></tr>";
         echo "<tr><th>&lt;applicationversion&gt;</th><td>'{$application_version_string}'</td></tr>";
         echo "<tr><th>&lt;applicationshortname&gt;</th><td>'{$CONFIG['application_shortname']}'</td></tr>";

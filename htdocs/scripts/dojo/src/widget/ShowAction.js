@@ -9,22 +9,18 @@
 */
 
 dojo.provide("dojo.widget.ShowAction");
-dojo.require("dojo.widget.*");
 
-dojo.widget.defineWidget(
-	"dojo.widget.ShowAction",
-	dojo.widget.HtmlWidget,
-{
+dojo.require("dojo.widget.*");
+dojo.require("dojo.lang.common");
+
+dojo.widget.ShowAction = function(){}
+dojo.lang.extend(dojo.widget.ShowAction, {
 	on: "",
-	action: "fade",
-	duration: 350,
+	action: "",
+	duration: 0,
 	from: "",
 	to: "",
-	auto: "false",
-	postMixInProperties: function(){ 
-		// fix for very strange Opera 9 bug
-		if(dojo.render.html.opera){
-			this.action = this.action.split("/").pop();
-		}
-	}
+	auto: "false"
 });
+
+dojo.requireAfterIf("html", "dojo.widget.html.ShowAction");

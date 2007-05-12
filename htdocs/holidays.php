@@ -18,21 +18,17 @@ require('functions.inc.php');
 // This page requires authentication
 require('auth.inc.php');
 
-if (!empty($_REQUEST['user']) AND user_permission($sit[2], 22)) $user = cleanvar($_REQUEST['user']);
-else $user = $sit[2];
-
-if ($user==$sit[2]) $title="{$_SESSION['realname']}'s Holidays";
-else $title = user_realname($user)."'s Holidays";
+$title="{$_SESSION['realname']}'s Holidays";
 
 include('htmlheader.inc.php');
 echo "<h2>$title</h2>";
 ?>
 <table align='center' width='350'>
-<tr><th align='right'>HOLIDAYS</th></tr>
+<tr><th align='right'>YOUR HOLIDAYS</th></tr>
 <tr class='shade1'><td><strong>Annual Holiday Entitlement</strong>:</td></tr>
 <tr class='shade2'><td>
-<?php $entitlement=user_holiday_entitlement($user);
-    $holidaystaken=user_count_holidays($user, 1);
+<?php $entitlement=user_holiday_entitlement($sit[2]);
+    $holidaystaken=user_count_holidays($sit[2], 1);
 
     echo "$entitlement days, ";
     echo "$holidaystaken taken, ";
@@ -42,11 +38,11 @@ echo "<h2>$title</h2>";
 
 <tr class='shade1'><td ><strong>Other Leave Taken</strong>:</td></tr>
 <tr class='shade2'><td>
-<?php echo user_count_holidays($user, 2)." days sick leave, ";
-    echo user_count_holidays($user, 3)." days working away, ";
-    echo user_count_holidays($user, 4)." days training";
+<?php echo user_count_holidays($sit[2], 2)." days sick leave, ";
+    echo user_count_holidays($sit[2], 3)." days working away, ";
+    echo user_count_holidays($sit[2], 4)." days training";
     echo "<br />";
-    echo user_count_holidays($user, 5)." days other leave";
+    echo user_count_holidays($sit[2], 5)." days other leave";
 ?></td></tr>
 <tr class='shade1'><td>&nbsp;</td></tr>
 <tr class='shade2'><td><a href="holiday_calendar.php?type=1">My Holiday Calendar</a></td></tr>
@@ -97,7 +93,7 @@ else echo "<tr class='shade2'><td><em>Nobody</em></td></tr>\n";
 <tr><th align='right'>YOUR HOLIDAY LIST</th></tr>
 <?php
 
-$sql = "SELECT * from holidays, holidaytypes WHERE holidays.type=holidaytypes.id AND userid='{$user}' AND approved=0";
+$sql = "SELECT * from holidays, holidaytypes WHERE holidays.type=holidaytypes.id AND userid='{$sit[2]}' AND approved=0";
 $result = mysql_query($sql);
 if (mysql_error()) trigger_error("MySQL Query Error ".mysql_error(), E_USER_ERROR);
 if (mysql_num_rows($result))
@@ -123,8 +119,8 @@ $tresult = mysql_query($sql);
 if (mysql_error()) trigger_error("MySQL Query Error ".mysql_error(), E_USER_ERROR);
 while ($holidaytype=mysql_fetch_array($tresult))
 {
-    $sql = "SELECT * FROM holidays WHERE userid='{$user}' AND type={$holidaytype['id']} ";
-    $sql.= "AND (approved=1 OR (approved=11 AND startdate >= $now)) ORDER BY startdate DESC ";
+    $sql = "SELECT * FROM holidays WHERE userid='{$sit[2]}' AND type={$holidaytype['id']} ";
+    $sql.= "AND approved=1 ORDER BY startdate DESC ";
     $result = mysql_query($sql);
     if (mysql_error()) trigger_error("MySQL Query Error ".mysql_error(), E_USER_ERROR);
     if (mysql_num_rows($result))

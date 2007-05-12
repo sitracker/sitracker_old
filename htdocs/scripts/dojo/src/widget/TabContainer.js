@@ -9,216 +9,253 @@
 */
 
 dojo.provide("dojo.widget.TabContainer");
+dojo.provide("dojo.widget.html.TabContainer");
+dojo.provide("dojo.widget.Tab");
 
 dojo.require("dojo.lang.func");
 dojo.require("dojo.widget.*");
-dojo.require("dojo.widget.PageContainer");
+dojo.require("dojo.widget.HtmlWidget");
 dojo.require("dojo.event.*");
-dojo.require("dojo.html.selection");
-dojo.require("dojo.widget.html.layout");
+dojo.require("dojo.html");
+dojo.require("dojo.style");
+dojo.require("dojo.html.layout");
 
-dojo.widget.defineWidget("dojo.widget.TabContainer", dojo.widget.PageContainer, {
+//////////////////////////////////////////
+// TabContainer -- a set of Tabs
+//////////////////////////////////////////
+dojo.widget.html.TabContainer = function() {
+	dojo.widget.HtmlWidget.call(this);
+}
 
-	// summary
-	//	A TabContainer is a container that has multiple panes, but shows only
-	//	one pane at a time.  There are a set of tabs corresponding to each pane,
-	//	where each tab has the title (aka label) of the pane, and optionally a close button.
-	//
-	//	Publishes topics <widgetId>-addChild, <widgetId>-removeChild, and <widgetId>-selectChild
-	//	(where <widgetId> is the id of the TabContainer itself.
+dojo.inherits(dojo.widget.html.TabContainer, dojo.widget.HtmlWidget);
 
-	// labelPosition: String
-	//   Defines where tab labels go relative to tab content.
-	//   "top", "bottom", "left-h", "right-h"
+dojo.lang.extend(dojo.widget.html.TabContainer, {
+	widgetType: "TabContainer",
+    isContainer: true,
+
+	// Constructor arguments
 	labelPosition: "top",
-	
-	// closeButton: String
-	//   If closebutton=="tab", then every tab gets a close button.
-	//   DEPRECATED:  Should just say closable=true on each
-	//   pane you want to be closable.
 	closeButton: "none",
 
-	templateString: null,	// override setting in PageContainer
-	templatePath: dojo.uri.dojoUri("src/widget/templates/TabContainer.html"),
-	templateCssPath: dojo.uri.dojoUri("src/widget/templates/TabContainer.css"),
+	useVisibility: false,		// true-->use visibility:hidden instead of display:none
+	
+	// if false, TabContainers size changes according to size of currently selected tab
+	doLayout: true,
 
-	// selectedTab: String
-	//	initially selected tab (widgetId)
-	//	DEPRECATED: use selectedChild instead.
-	selectedTab: "",
+	templatePath: dojo.uri.dojoUri("src/widget/templates/HtmlTabContainer.html"),
+	templateCssPath: dojo.uri.dojoUri("src/widget/templates/HtmlTabContainer.css"),
 
-	postMixInProperties: function() {
-		if(this.selectedTab){
-			dojo.deprecated("selectedTab deprecated, use selectedChild instead, will be removed in", "0.5");
-			this.selectedChild=this.selectedTab;
-		}
-		if(this.closeButton!="none"){
-			dojo.deprecated("closeButton deprecated, use closable='true' on each child instead, will be removed in", "0.5");
-		}
-		dojo.widget.TabContainer.superclass.postMixInProperties.apply(this, arguments);
+	selectedTab: "",		// initially selected tab (widgetId)
+
+	fillInTemplate: function(args, frag) {
+		// Copy style info from input node to output node
+		var source = this.getFragNodeRef(frag);
+		dojo.html.copyStyle(this.domNode, source);
+
+		dojo.widget.html.TabContainer.superclass.fillInTemplate.call(this, args, frag);
 	},
 
-	fillInTemplate: function() {
-		// create the tab list that will have a tab (a.k.a. tab button) for each tab panel
-		this.tablist = dojo.widget.createWidget("TabController",
-			{
-				id: this.widgetId + "_tablist",
-				labelPosition: this.labelPosition,
-				doLayout: this.doLayout,
-				containerId: this.widgetId
-			}, this.tablistNode);
-		dojo.widget.TabContainer.superclass.fillInTemplate.apply(this, arguments);
-	},
-
-	postCreate: function(args, frag) {	
-		dojo.widget.TabContainer.superclass.postCreate.apply(this, arguments);
-
-		// size the container pane to take up the space not used by the tabs themselves
-		this.onResized();
-	},
-
-	_setupChild: function(tab){
-		if(this.closeButton=="tab" || this.closeButton=="pane"){
-			// TODO: remove in 0.5
-			tab.closable=true;
+	postCreate: function(args, frag) {
+		// Load all the tabs, creating a label for each one
+		for(var i=0; i<this.children.length; i++){
+			this._setupTab(this.children[i]);
 		}
+
+		if (this.closeButton=="pane") {
+			var div = document.createElement("div");
+			dojo.html.addClass(div, "dojoTabPanePaneClose");
+			var self = this;
+			dojo.event.connect(div, "onclick", function(){ self._runOnCloseTab(self.selectedTabWidget); });
+			dojo.event.connect(div, "onmouseover", function(){ dojo.html.addClass(div, "dojoTabPanePaneCloseHover"); });
+			dojo.event.connect(div, "onmouseout", function(){ dojo.html.removeClass(div, "dojoTabPanePaneCloseHover"); });
+			this.dojoTabLabels.appendChild(div);
+		}
+
+		if(this.doLayout){
+			dojo.html.addClass(this.dojoTabLabels, "dojoTabLabels-"+this.labelPosition);
+		} else {
+			dojo.html.addClass(this.dojoTabLabels, "dojoTabLabels-"+this.labelPosition+"-noLayout");
+		}
+
+        this._doSizing();
+
+		// Display the selected tab
+		if(this.selectedTabWidget){
+			this.selectTab(this.selectedTabWidget, true);
+		}
+	},
+
+	addChild: function(child, overrideContainerNode, pos, ref, insertIndex){
+		this._setupTab(child);
+		dojo.widget.html.TabContainer.superclass.addChild.call(this,child, overrideContainerNode, pos, ref, insertIndex);
+
+		// in case the tab labels have overflowed from one line to two lines
+		this._doSizing();
+	},
+
+	_setupTab: function(tab){
+		tab.domNode.style.display="none";
+
+		// Create label
+		tab.div = document.createElement("div");
+		dojo.widget.wai.setAttr(tab.div, "waiRole", "tab");
+		dojo.html.addClass(tab.div, "dojoTabPaneTab");
+		var span = document.createElement("span");
+		span.innerHTML = tab.label;
+		dojo.html.disableSelection(span);
+		if (this.closeButton=="tab") {
+			var img = document.createElement("div");
+			dojo.html.addClass(img, "dojoTabPaneTabClose");
+			var self = this;
+			dojo.event.connect(img, "onclick", function(evt){ self._runOnCloseTab(tab); dojo.event.browser.stopEvent(evt); });
+			dojo.event.connect(img, "onmouseover", function(){ dojo.html.addClass(img,"dojoTabPaneTabCloseHover"); });
+			dojo.event.connect(img, "onmouseout", function(){ dojo.html.removeClass(img,"dojoTabPaneTabCloseHover"); });
+			span.appendChild(img);
+		}
+		tab.div.appendChild(span);
+		this.dojoTabLabels.appendChild(tab.div);
+		
+		var self = this;
+		dojo.event.connect(tab.div, "onclick", function(){ self.selectTab(tab); });
+
+		if(!this.selectedTabWidget || this.selectedTab==tab.widgetId || tab.selected){
+    		this.selectedTabWidget = tab;
+        } else {
+            this._hideTab(tab);
+        }
+
 		dojo.html.addClass(tab.domNode, "dojoTabPane");
-		dojo.widget.TabContainer.superclass._setupChild.apply(this, arguments);
+		with(tab.domNode.style){
+			top = dojo.style.getPixelValue(this.containerNode, "padding-top", true);
+			left = dojo.style.getPixelValue(this.containerNode, "padding-left", true);
+		}
 	},
 
-	onResized: function(){
-		// Summary: Configure the content pane to take up all the space except for where the tabs are
-		if(!this.doLayout){ return; }
-
+	// Configure the content pane to take up all the space except for where the tab labels are
+	_doSizing: function(){
 		// position the labels and the container node
 		var labelAlign=this.labelPosition.replace(/-h/,"");
 		var children = [
-			{domNode: this.tablist.domNode, layoutAlign: labelAlign},
+			{domNode: this.dojoTabLabels, layoutAlign: labelAlign},
 			{domNode: this.containerNode, layoutAlign: "client"}
 		];
-		dojo.widget.html.layout(this.domNode, children);
-
-		if(this.selectedChildWidget){
-			var containerSize = dojo.html.getContentBox(this.containerNode);
-			this.selectedChildWidget.resizeTo(containerSize.width, containerSize.height);
-		}
-	},
-
-	selectTab: function(tab, callingWidget){
-		dojo.deprecated("use selectChild() rather than selectTab(), selectTab() will be removed in", "0.5");
-		this.selectChild(tab, callingWidget);
-	},
-
-	onKey: function(e){
-		// summary
-		//	Keystroke handling for keystrokes on the tab panel itself (that were bubbled up to me)
-		//	Ctrl-up: focus is returned from the pane to the tab button
-		//	Alt-del: close tab
-		if(e.keyCode == e.KEY_UP_ARROW && e.ctrlKey){
-			// set focus to current tab
-			var button = this.correspondingTabButton || this.selectedTabWidget.tabButton;
-			button.focus();
-			dojo.event.browser.stopEvent(e);
-		}else if(e.keyCode == e.KEY_DELETE && e.altKey){
-			if (this.selectedChildWidget.closable){
-				this.closeChild(this.selectedChildWidget);
-				dojo.event.browser.stopEvent(e);
-			}
-		}
-	},
-
-	destroy: function(){
-		this.tablist.destroy();
-		dojo.widget.TabContainer.superclass.destroy.apply(this, arguments);
-	}
-});
-
-dojo.widget.defineWidget(
-    "dojo.widget.TabController",
-    dojo.widget.PageController,
-	{
-		// summary
-		// 	Set of tabs (the things with labels and a close button, that you click to show a tab panel).
-		//	Lets the user select the currently shown pane in a TabContainer or PageContainer.
-		//	TabController also monitors the TabContainer, and whenever a pane is
-		//	added or deleted updates itself accordingly.
-
-		templateString: "<div wairole='tablist' dojoAttachEvent='onKey'></div>",
-
-		// labelPosition: String
-		//   Defines where tab labels go relative to tab content.
-		//   "top", "bottom", "left-h", "right-h"
-		labelPosition: "top",
-
-		doLayout: true,
-
-		// class: String
-		//	Class name to apply to the top dom node
-		"class": "",
-
-		// buttonWidget: String
-		//	the name of the tab widget to create to correspond to each page
-		buttonWidget: "TabButton",
-
-		postMixInProperties: function() {
-			if(!this["class"]){
-				this["class"] = "dojoTabLabels-" + this.labelPosition + (this.doLayout ? "" : " dojoTabNoLayout");
-			}
-			dojo.widget.TabController.superclass.postMixInProperties.apply(this, arguments);
-		}
-	}
-);
-
-dojo.widget.defineWidget("dojo.widget.TabButton", dojo.widget.PageButton,
-{
-	// summary
-	//	A tab (the thing you click to select a pane).
-	//	Contains the title (aka label) of the pane, and optionally a close-button to destroy the pane.
-	//	This is an internal widget and should not be instantiated directly.
-
-	templateString: "<div class='dojoTab' dojoAttachEvent='onClick'>"
-						+"<div dojoAttachPoint='innerDiv'>"
-							+"<span dojoAttachPoint='titleNode' tabIndex='-1' waiRole='tab'>${this.label}</span>"
-							+"<span dojoAttachPoint='closeButtonNode' class='close closeImage' style='${this.closeButtonStyle}'"
-							+"    dojoAttachEvent='onMouseOver:onCloseButtonMouseOver; onMouseOut:onCloseButtonMouseOut; onClick:onCloseButtonClick'></span>"
-						+"</div>"
-					+"</div>",
-
-	postMixInProperties: function(){
-		this.closeButtonStyle = this.closeButton ? "" : "display: none";
-		dojo.widget.TabButton.superclass.postMixInProperties.apply(this, arguments);
-	},
-
-	fillInTemplate: function(){
-		dojo.html.disableSelection(this.titleNode);
-		dojo.widget.TabButton.superclass.fillInTemplate.apply(this, arguments);
-	},
-	
-	onCloseButtonClick: function(/*Event*/ evt){
-		// since the close button is located inside the select button, make sure that the select
-		// button doesn't inadvertently get an onClick event
-		evt.stopPropagation();
-		dojo.widget.TabButton.superclass.onCloseButtonClick.apply(this, arguments);
-	}
-});
 
 
-dojo.widget.defineWidget(
-	"dojo.widget.a11y.TabButton",
-	dojo.widget.TabButton,
-	{
-		// summary
-		//	Tab for display in high-contrast mode (where background images don't show up).
-		//	This is an internal widget and shouldn't be instantiated directly.
-
-		imgPath: dojo.uri.dojoUri("src/widget/templates/images/tab_close.gif"),
+		if (this.doLayout) {
+			dojo.html.layout(this.domNode, children);
+		} 
+			
+		// size the current tab
+		// TODO: should have ptr to current tab rather than searching
+		var cw=dojo.style.getContentWidth(this.containerNode);
+		var ch=dojo.style.getContentHeight(this.containerNode);
+		dojo.lang.forEach(this.children, function(child){
+			//if (this.doLayout) {
+				if(child.selected){
+					child.resizeTo(cw, ch);
+				} 
+			//} else {
+			//	child.onResized();
+			//}
+		});
 		
-		templateString: "<div class='dojoTab' dojoAttachEvent='onClick;onKey'>"
-							+"<div dojoAttachPoint='innerDiv'>"
-								+"<span dojoAttachPoint='titleNode' tabIndex='-1' waiRole='tab'>${this.label}</span>"
-								+"<img class='close' src='${this.imgPath}' alt='[x]' style='${this.closeButtonStyle}'"
-								+"    dojoAttachEvent='onClick:onCloseButtonClick'>"
-							+"</div>"
-						+"</div>"
+	},
+
+    removeChild: function(tab) {
+
+		// remove tab event handlers
+		dojo.event.disconnect(tab.div, "onclick", function () { });
+		if (this.closeButton=="tab") {
+			var img = tab.div.lastChild.lastChild;
+			if (img) {
+				dojo.html.removeClass(img, "dojoTabPaneTabClose", function () { });
+				dojo.event.disconnect(img, "onclick", function () { });
+				dojo.event.disconnect(img, "onmouseover", function () { });
+				dojo.event.disconnect(img, "onmouseout", function () { });
+			}
+		}
+
+        dojo.widget.html.TabContainer.superclass.removeChild.call(this, tab);
+
+        dojo.html.removeClass(tab.domNode, "dojoTabPane");
+        this.dojoTabLabels.removeChild(tab.div);
+        delete(tab.div);
+
+        if (this.selectedTabWidget === tab) {
+            this.selectedTabWidget = undefined;
+            if (this.children.length > 0) {
+                this.selectTab(this.children[0], true);
+            }
+        }
+
+		// in case the tab labels have overflowed from one line to two lines
+		this._doSizing();
+    },
+
+    selectTab: function(tab, _noRefresh) {
+		// Deselect old tab and select new one
+		if (this.selectedTabWidget) {
+			this._hideTab(this.selectedTabWidget);
+		}
+		this.selectedTabWidget = tab;
+		this._showTab(tab, _noRefresh);
+	},
+
+	_showTab: function(tab, _noRefresh) {
+		dojo.html.addClass(tab.div, "current");
+		tab.selected=true;
+		if ( this.useVisibility && !dojo.render.html.ie ) {
+			tab.domNode.style.visibility="visible";
+		} else {
+			// make sure we dont refresh onClose and on postCreate
+			// speeds up things a bit when using refreshOnShow and fixes #646
+			if(_noRefresh && tab.refreshOnShow){
+				var tmp = tab.refreshOnShow;
+				tab.refreshOnShow = false;
+				tab.show();
+				tab.refreshOnShow = tmp;
+			}else{
+				tab.show();
+			}
+
+			tab.resizeTo(
+				dojo.style.getContentWidth(this.containerNode),
+				dojo.style.getContentHeight(this.containerNode)
+			);
+		}
+	},
+
+	_hideTab: function(tab) {
+		dojo.html.removeClass(tab.div, "current");
+		tab.selected=false;
+		if( this.useVisibility ){
+			tab.domNode.style.visibility="hidden";
+		}else{
+			tab.hide();
+		}
+	},
+
+	_runOnCloseTab: function(tab) {
+		var onc = tab.extraArgs.onClose || tab.extraArgs.onclose;
+		var fcn = dojo.lang.isFunction(onc) ? onc : window[onc];
+		var remove = dojo.lang.isFunction(fcn) ? fcn(this,tab) : true;
+		if(remove) {
+			this.removeChild(tab);
+			// makes sure we can clean up executeScripts in ContentPane onUnLoad
+			tab.destroy();
+		}
+	},
+
+	onResized: function() {
+		this._doSizing();
 	}
-);
+});
+dojo.widget.tags.addParseTreeHandler("dojo:TabContainer");
+
+// These arguments can be specified for the children of a TabContainer.
+// Since any widget can be specified as a TabContainer child, mix them
+// into the base widget class.  (This is a hack, but it's effective.)
+dojo.lang.extend(dojo.widget.Widget, {
+	label: "",
+	selected: false	// is this tab currently selected?
+});

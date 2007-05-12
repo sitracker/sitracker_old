@@ -8,197 +8,124 @@
 		http://dojotoolkit.org/community/licensing.shtml
 */
 
-dojo.require("dojo.lang.common");
-dojo.require("dojo.lang.func");
-dojo.require("dojo.lang.declare");
+dojo.require("dojo.lang");
+dojo.provide("dojo.dnd.DragSource");
+dojo.provide("dojo.dnd.DropTarget");
+dojo.provide("dojo.dnd.DragObject");
 dojo.provide("dojo.dnd.DragAndDrop");
 
-// summary:
-//		Core "interfaces" for the participants in all DnD operations.
-//		Subclasses implement all of the actions outlined by these APIs, with
-//		most of the ones you probably care about being defined in
-//		HtmlDragAndDrop.js, which will be automatically included should you
-//		dojo.require("dojo.dnd.*");.
-//
-//		In addition to the various actor classes, a global manager will be
-//		created/installed at dojo.dnd.dragManager. This manager object is of
-//		type dojo.dnd.DragManager and will be replaced by environment-specific
-//		managers.
-//
-// 		The 3 object types involved in any Drag and Drop operation are:
-//			* DragSource
-//				This is the item that can be selected for dragging. Drag
-//				sources can have "types" to help mediate whether or not various
-//				DropTargets will accept (or reject them). Most dragging actions
-//				are handled by the DragObject which the DragSource generates
-//				from its onDragStart method.
-//			* DragObject
-//				This, along with the manger, does most of the hard work of DnD.
-//				Implementations may rely on DragObject instances to implement
-//				"shadowing", "movement", or other kinds of DnD variations that
-//				affect the visual representation of the drag operation.
-//			* DropTarget
-//				Represents some section of the screen that can accept drag
-//				and drop events. DropTargets keep a list of accepted types
-//				which is checked agains the types of the respective DragSource
-//				objects that pass over it. DropTargets may implement behaviors
-//				that respond to drop events to take application-level actions.
+dojo.dnd.DragSource = function(){
+	var dm = dojo.dnd.dragManager;
+	if(dm["registerDragSource"]){ // side-effect prevention
+		dm.registerDragSource(this);
+	}
+}
 
-dojo.declare("dojo.dnd.DragSource", null, {
-	// String: 
-	//		what kind of drag source are we? Used to determine if we can be
-	//		dropped on a given DropTarget
+dojo.lang.extend(dojo.dnd.DragSource, {
 	type: "",
 
-	onDragEnd: function(/*dojo.dnd.DragEvent*/evt){
-		// summary:
-		//		stub handler that is called when dragging finishes.
+	onDragEnd: function(){
 	},
 
-	onDragStart: function(/*dojo.dnd.DragEvent*/evt){ // dojo.dnd.DragObject
-		// summary:
-		//		stub handler that is called when dragging starts. Subclasses
-		//		should ensure that onDragStart *always* returns a
-		//		dojo.dnd.DragObject instance.
+	onDragStart: function(){
 	},
 
-	onSelected: function(/*dojo.dnd.DragEvent*/evt){
-		// summary:
-		//		This function gets called when the DOM element was selected for
-		//		dragging by the HtmlDragAndDropManager.
+	/*
+	 * This function gets called when the DOM element was 
+	 * selected for dragging by the HtmlDragAndDropManager.
+	 */
+	onSelected: function(){
 	},
 
 	unregister: function(){
-		// summary: remove this drag source from the manager
 		dojo.dnd.dragManager.unregisterDragSource(this);
 	},
 
 	reregister: function(){
-		// summary: add this drag source to the manager
 		dojo.dnd.dragManager.registerDragSource(this);
 	}
 });
 
-dojo.declare("dojo.dnd.DragObject", null, {
-	// String: 
-	//		what kind of drag object are we? Used to determine if we can be
-	//		dropped on a given DropTarget
+dojo.dnd.DragObject = function(){
+	var dm = dojo.dnd.dragManager;
+	if(dm["registerDragObject"]){ // side-effect prevention
+		dm.registerDragObject(this);
+	}
+}
+
+dojo.lang.extend(dojo.dnd.DragObject, {
 	type: "",
-	
-	register: function(){
-		// summary: register this DragObject with the manager
-		var dm = dojo.dnd.dragManager;
-		if(dm["registerDragObject"]){ // side-effect prevention
-			dm.registerDragObject(this);
-		}
+
+	onDragStart: function(){
+		// gets called directly after being created by the DragSource
+		// default action is to clone self as icon
 	},
 
-	onDragStart: function(/*dojo.dnd.DragEvent*/evt){
-		// summary:
-		// 		over-ridden by subclasses. Gets called directly after being
-		// 		created by the DragSource default action is to clone self as
-		// 		icon
+	onDragMove: function(){
+		// this changes the UI for the drag icon
+		//	"it moves itself"
 	},
 
-	onDragMove: function(/*dojo.dnd.DragEvent*/evt){
-		// summary: 
-		//		Implemented by subclasses. Should change the UI for the drag
-		//		icon i.e., "it moves itself"
+	onDragOver: function(){
 	},
 
-	onDragOver: function(/*dojo.dnd.DragEvent*/evt){
-		// summary:
-		//		stub handler that is called when the DragObject instance is
-		//		"over" a DropTarget.
+	onDragOut: function(){
 	},
 
-	onDragOut: function(/*dojo.dnd.DragEvent*/evt){
-		// summary:
-		//		stub handler that is called when the DragObject instance leaves
-		//		a DropTarget.
-	},
-
-	onDragEnd: function(/*dojo.dnd.DragEvent*/evt){
-		// summary:
-		//		stub handler that is called when dragging ends, either through
-		//		dropping or cancelation.
+	onDragEnd: function(){
 	},
 
 	// normal aliases
-	onDragLeave: dojo.lang.forward("onDragOut"),
-	onDragEnter: dojo.lang.forward("onDragOver"),
+	onDragLeave: this.onDragOut,
+	onDragEnter: this.onDragOver,
 
 	// non-camel aliases
-	ondragout: dojo.lang.forward("onDragOut"),
-	ondragover: dojo.lang.forward("onDragOver")
+	ondragout: this.onDragOut,
+	ondragover: this.onDragOver
 });
 
-dojo.declare("dojo.dnd.DropTarget", null, {
+dojo.dnd.DropTarget = function(){
+	if (this.constructor == dojo.dnd.DropTarget) { return; } // need to be subclassed
+	this.acceptedTypes = [];
+	dojo.dnd.dragManager.registerDropTarget(this);
+}
 
-	acceptsType: function(/*String*/type){
-		// summary: 
-		//		determines whether or not this DropTarget will accept the given
-		//		type. The default behavior is to consult this.acceptedTypes and
-		//		if "*" is a member, to always accept the type.
+dojo.lang.extend(dojo.dnd.DropTarget, {
+
+	acceptsType: function(type){
 		if(!dojo.lang.inArray(this.acceptedTypes, "*")){ // wildcard
-			if(!dojo.lang.inArray(this.acceptedTypes, type)) { return false; } // Boolean
+			if(!dojo.lang.inArray(this.acceptedTypes, type)) { return false; }
 		}
-		return true; // Boolean
+		return true;
 	},
 
-	accepts: function(/*Array*/dragObjects){
-		// summary: 
-		//		determines if we'll accept all members of the passed array of
-		//		dojo.dnd.DragObject instances
+	accepts: function(dragObjects){
 		if(!dojo.lang.inArray(this.acceptedTypes, "*")){ // wildcard
 			for (var i = 0; i < dragObjects.length; i++) {
 				if (!dojo.lang.inArray(this.acceptedTypes,
-					dragObjects[i].type)) { return false; } // Boolean
+					dragObjects[i].type)) { return false; }
 			}
 		}
-		return true; // Boolean
+		return true;
 	},
 
-	unregister: function(){
-		// summary: remove from the drag manager
-		dojo.dnd.dragManager.unregisterDropTarget(this);
+	onDragOver: function(){
 	},
 
-	onDragOver: function(/*dojo.dnd.DragEvent*/evt){
-		// summary:
-		//		stub handler that is called when DragObject instances are
-		//		"over" this DropTarget.
+	onDragOut: function(){
 	},
 
-	onDragOut: function(/*dojo.dnd.DragEvent*/evt){
-		// summary:
-		//		stub handler that is called when DragObject instances are
-		//		"leave" this DropTarget.
+	onDragMove: function(){
 	},
 
-	onDragMove: function(/*dojo.dnd.DragEvent*/evt){
-		// summary:
-		//		stub handler that is called when DragObject instances are
-		//		moved across this DropTarget. May fire many times in the course
-		//		of the drag operation but will end after onDragOut
+	onDropStart: function(){
 	},
 
-	onDropStart: function(/*dojo.dnd.DragEvent*/evt){ // Boolean
-		// summary:
-		//		stub handler that is called when DragObject instances are
-		//		dropped on this target. If true is returned from onDropStart,
-		//		dropping proceeds, otherwise it's cancled.
-	},
-
-	onDrop: function(/*dojo.dnd.DragEvent*/evt){
-		// summary: we're getting dropped on!
+	onDrop: function(){
 	},
 
 	onDropEnd: function(){
-		// summary: dropping is over
 	}
-}, function(){
-	this.acceptedTypes = [];
 });
 
 // NOTE: this interface is defined here for the convenience of the DragManager
@@ -215,44 +142,28 @@ dojo.dnd.DragEvent = function(){
 	//		"dragStart", "dragEnter", "dragLeave"]
 	//
 }
-/*
- *	The DragManager handles listening for low-level events and dispatching
- *	them to higher-level primitives like drag sources and drop targets. In
- *	order to do this, it must keep a list of the items.
- */
-dojo.declare("dojo.dnd.DragManager", null, {
-	// Array: an array of currently selected DragSource objects
+
+dojo.dnd.DragManager = function(){
+	/*
+	 *	The DragManager handles listening for low-level events and dispatching
+	 *	them to higher-level primitives like drag sources and drop targets. In
+	 *	order to do this, it must keep a list of the items.
+	 */
+}
+
+dojo.lang.extend(dojo.dnd.DragManager, {
 	selectedSources: [],
-	// Array: all DragObjects we know about
 	dragObjects: [],
-	// Array: all DragSources we know about
 	dragSources: [],
-	registerDragSource: function(/*dojo.dnd.DragSource*/ source){
-		// summary: called by DragSource class constructor
-	},
-	// Array: all DropTargets we know about
+	registerDragSource: function(){},
 	dropTargets: [],
-	registerDropTarget: function(/*dojo.dnd.DropTarget*/ target){
-		// summary: called by DropTarget class constructor
-	},
-	// dojo.dnd.DropTarget:
-	//		what was the last DropTarget instance we left in the drag phase?
+	registerDropTarget: function(){},
 	lastDragTarget: null,
-	// dojo.dnd.DropTarget:
-	//		the DropTarget the mouse is currently over
 	currentDragTarget: null,
-	onKeyDown: function(){
-		// summary: generic handler called by low-level events
-	},
-	onMouseOut: function(){
-		// summary: generic handler called by low-level events
-	},
-	onMouseMove: function(){
-		// summary: generic handler called by low-level events
-	},
-	onMouseUp: function(){
-		// summary: generic handler called by low-level events
-	}
+	onKeyDown: function(){},
+	onMouseOut: function(){},
+	onMouseMove: function(){},
+	onMouseUp: function(){}
 });
 
 // NOTE: despite the existance of the DragManager class, there will be a

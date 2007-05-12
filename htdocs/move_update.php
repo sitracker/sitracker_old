@@ -27,11 +27,7 @@ if ($incidentid=='')
     $title = "Move Update $updateid";
     include('htmlheader.inc.php');
     echo "<h2>$title</h2>";
-    if ($error=='1')
-    {
-        echo "<p class='error'>Error assigning that incident update. Probable cause is ";
-        echo "that no incident exists with that ID or it has been closed.</p>";
-    }
+    if ($error=='1') echo "<p class='error'>Error assigning that incident update</p>";
     ?>
     <div align='center'>
     <form action="<?php echo $_SERVER['PHP_SELF']; ?>" method='post'>
@@ -154,11 +150,8 @@ if ($incidentid=='')
         $updatebodytext = str_replace( "&gt;", "[[gt]]", $updatebodytext );
 
         $updatebodytext=htmlspecialchars($updatebodytext);
-        $updatebodytext = preg_replace("/\[\[att\]\](.*?)\[\[\/att\]\]/",
-                               "<a href = '/attachments/{$updateid}/{$updates["timestamp"]}/$1'>$1</a>",
-                               $updatebodytext);
         // Bold, Italic, Underline
-        $updatebodytext = bbcode($updatebodytext);
+
         $updatebodytext = str_replace( "[[b]]", "<b>", $updatebodytext );
         $updatebodytext = str_replace( "[[/b]]", "</b>", $updatebodytext );
         $updatebodytext = str_replace( "[[B]]", "<b>", $updatebodytext );
@@ -189,7 +182,7 @@ else
     //$result=mysql_query($sql);
     //if (mysql_error()) trigger_error("MySQL Query Error ".mysql_error(), E_USER_ERROR);
     //if (mysql_num_rows($result) > 0)
-    if (incident_open($incidentid) == "Yes")
+    if (incident_open($incidentid))
     {
         // retrieve the update body so that we can insert time headers
         $sql = "SELECT incidentid, bodytext, timestamp FROM updates WHERE id='$updateid'";

@@ -172,7 +172,7 @@ function draw_calendar($nmonth, $nyear)
         {
             $calnicedate=date( "l jS F Y", mktime(0,0,0,$nmonth,$calday,$nyear) );
             echo "<td id=\"id$calday\" class=\"calendar\"><a href=\"daymessages.php?month=$nmonth&amp;day=$calday&amp;year=$nyear&amp;sid=$sid\" title=\"$rowcount messages\"
-            $targetString target=\"mainscreen\" onmouseover=\"window.over('id$calday')\" onmouseout=\"window.out('id$calday')\">$bold$adjusted_day$notbold</a></td>";
+            $targetString target=\"mainscreen\" onMouseOver=\"window.over('id$calday')\" onMouseOut=\"window.out('id$calday')\">$bold$adjusted_day$notbold</a></td>";
         }
         else
         {
@@ -193,13 +193,13 @@ function draw_calendar($nmonth, $nyear)
 
                 if ($dlength=='pm')
                 {
-                    $halfday = "style=\"background-image: url(images/halfday-pm.gif); background-repeat: no-repeat;\" ";
-                    $style="background-image: url(images/halfday-pm.gif); background-repeat: no-repeat; ";
+                    $halfday = "style=\"background-image: url(images/halfday-pm.gif)\" ";
+                    $style="background-image: url(images/halfday-pm.gif); ";
                 }
                 if ($dlength=='am')
                 {
-                    $halfday = "style=\"background-image: url(images/halfday-am.gif); background-position: bottom right; background-repeat: no-repeat;\" ";
-                    $style="background-image: url(images/halfday-am.gif); background-position: bottom right; background-repeat: no-repeat;";
+                    $halfday = "style=\"background-image: url(images/halfday-am.gif)\" ";
+                    $style="background-image: url(images/halfday-am.gif); ";
                 }
                 if ($calday==$selectedday && $selectedmonth==$nmonth && $selectedyear==$nyear)
                 {
@@ -258,12 +258,12 @@ function draw_calendar($nmonth, $nyear)
                 }
                 if ($dtype==1 || $dtype=='' || $dtype==5 || $dtype==3 || $dtype==2 || $dtype==4)
                 {
-                    echo "<td class=\"$shade\" style=\"width: 32px; $style\">";
+                    echo "<td class=\"$shade\" style=\"$style\">";
                     echo "<a href=\"add_holiday.php?type=$type&amp;user=$user&amp;year=$nyear&amp;month=$nmonth&amp;day=$calday\"  title=\"$celltitle\">$bold$adjusted_day$notbold</a></td>";
                 }
                 else
                 {
-                    echo "<td class=\"$shade\" style=\"width:32px; $style\">$bold$adjusted_day$notbold</td>";
+                    echo "<td class=\"$shade\" style=\"width:33px; $style\">$bold$adjusted_day$notbold</td>";
                 }
             }
         }
@@ -278,8 +278,6 @@ function draw_calendar($nmonth, $nyear)
 // Holiday planner chart
 function draw_chart($month, $year)
 {
-    global $plugin_calendar;
-
     // Get list of user groups
     $gsql = "SELECT * FROM groups ORDER BY name";
     $gresult = mysql_query($gsql);
@@ -416,40 +414,21 @@ function draw_chart($month, $year)
                 }
                 else
                 {
-                    $weekend=FALSE;
+                    $weekend=FALSE;  $hello='';
                     if ($hdays[$day]=='am' OR $hdays[$day]=='day')
                     {
-                        if ($happroved[$day] == 0 OR $happroved[$day]==10) $html .= "<td class='review'>";
-                        elseif (($happroved[$day] == 1 OR $happroved[$day]==11) AND $htypes[$day] <= 4) $html .= "<td class='idle'>";
-                        elseif (($happroved[$day] == 1 OR $happroved[$day]==11) AND $htypes[$day] == 5) $html .= "<td class='notice'>";
-                        elseif ($happroved[$day] == 2 OR $happroved[$day]==12) $html .= "<td class='urgent'>";
+                        if ($happroved[$day] == 0) $html .= "<td class='review'>";
+                        elseif ($happroved[$day] == 1 AND $htypes[$day] <= 4) $html .= "<td class='idle'>";
+                        elseif ($happroved[$day] == 1 AND $htypes[$day] == 5) $html .= "<td class='notice'>";
+                        elseif ($happroved[$day] == 2) $html .= "<td class='urgent'>";
                         else $html .= "<td class='shade2'>";
-
                         $html .= substr($holidaytype[$htypes[$day]],0,1);
-                        // This plugin function takes an optional param with an associative array containing the day
-                        $pluginparams = array('plugin_calendar' => $plugin_calendar,
-                                              'year'=> $year,
-                                              'month'=> $month,
-                                              'day'=> $day,
-                                              'useremail' => $user->email);
-                        $html .= plugin_do('holiday_chart_day_am',$pluginparams);
                         $html .= "</td>";
                     }
                     else
                     {
                         if ($pubholdays[$day]=='am' OR $pubholdays[$day]=='day') $html .= "<td class='expired'>PH</td>";
-                        else
-                        {
-                            $html .= "<td class='shade2'>";
-                            // This plugin function takes an optional param with an associative array containing the day
-                            $pluginparams = array('plugin_calendar' => $plugin_calendar,
-                                              'year'=> $year,
-                                              'month'=> $month,
-                                              'day'=> $day,
-                                              'useremail' => $user->email);
-                            $html .= plugin_do('holiday_chart_day_am',$pluginparams);
-                            $html .= "</td>";
-                        }
+                        else $html .= "<td class='shade2'></td>";
                     }
                 }
             }
@@ -479,37 +458,19 @@ function draw_chart($month, $year)
                     $weekend=FALSE;  $hello='';
                     if ($hdays[$day]=='pm' OR $hdays[$day]=='day')
                     {
-                        if ($happroved[$day] == 0 OR $happroved[$day]==10) $html .= "<td class='review'>";
-                        elseif (($happroved[$day] == 1 OR $happroved[$day]==11) AND $htypes[$day] <= 4) $html .= "<td class='idle'>";
-                        elseif (($happroved[$day] == 1 OR $happroved[$day]==11) AND $htypes[$day] == 5) $html .= "<td class='notice'>";
-                        elseif ($happroved[$day] == 2 OR $happroved[$day]==12) $html .= "<td class='urgent'>";
+                        if ($happroved[$day] == 0) $html .= "<td class='review'>";
+                        elseif ($happroved[$day] == 1 AND $htypes[$day] <= 4) $html .= "<td class='idle'>";
+                        elseif ($happroved[$day] == 1 AND $htypes[$day] == 5) $html .= "<td class='notice'>";
+                        elseif ($happroved[$day] == 2) $html .= "<td class='urgent'>";
                         else $html .= "<td class='shade2'>";
 
                         $html .= "<span title='{$holidaytype[$htypes[$day]]}'>".substr($holidaytype[$htypes[$day]],0,1)."</span>";
-                        // This plugin function takes an optional param with an associative array containing the day
-                        $pluginparams = array('plugin_calendar' => $plugin_calendar,
-                                              'year'=> $year,
-                                              'month'=> $month,
-                                              'day'=> $day,
-                                              'useremail' => $user->email);
-                        $html .= plugin_do('holiday_chart_day_pm',$pluginparams);
                         $html .= "</td>";
                     }
                     else
                     {
                         if ($pubholdays[$day]=='pm' OR $pubholdays[$day]=='day') $html .= "<td class='expired'>PH</td>";
-                        else
-                        {
-                            $html .= "<td class='shade2'>";
-                            // This plugin function takes an optional param with an associative array containing the day
-                            $pluginparams = array('plugin_calendar' => $plugin_calendar,
-                                              'year'=> $year,
-                                              'month'=> $month,
-                                              'day'=> $day,
-                                              'useremail' => $user->email);
-                            $html .= plugin_do('holiday_chart_day_pm',$pluginparams);
-                            $html .= "</td>";
-                        }
+                        else $html .= "<td class='shade2'></td>";
                     }
                 }
             }
@@ -550,10 +511,10 @@ function month_select($month, $year)
     $html .= "<a href='{$SERVER['PHP_SELF']}?month={$month}&amp;year={$pyear}' title='Back one year'>&lt;&lt;</a> ";
     for ($c=1;$c <= 12;$c++)
     {
-        if (mktime(0,0,0,$cmonth,1,$cyear)==mktime(0,0,0,date('m'),1,date('Y'))) $html .= "<span style='background: #FF0;'>";
-        if (mktime(0,0,0,$cmonth,1,$cyear)==mktime(0,0,0,$month,1,$year)) $html .= "<span style='font-size: 160%'>";
+        if (mktime(0,0,0,$cmonth,1,$cyear)==mktime(0,0,0,date('m'),1,date('Y'))) $html .= "<span style='background: #FFFF00;'>";
+        if (mktime(0,0,0,$cmonth,1,$cyear)==mktime(0,0,0,$month,1,$year)) $html .= "<u>";
         $html .= "<a href='{$SERVER['PHP_SELF']}?month=$cmonth&amp;year=$cyear'>".date('M y',mktime(0,0,0,$cmonth,1,$cyear))."</a>";
-        if (mktime(0,0,0,$cmonth,1,$cyear)==mktime(0,0,0,$month,1,$year)) $html .= "</span>";
+        if (mktime(0,0,0,$cmonth,1,$cyear)==mktime(0,0,0,$month,1,$year)) $html .= "</u>";
         if (mktime(0,0,0,$cmonth,1,$cyear)==mktime(0,0,0,date('m'),1,date('Y'))) $html .= "</span>";
         if ($c < 12) $html .= " <span style='color: #666;'>|</span> ";
         $cmonth++;
@@ -571,7 +532,6 @@ if ($display=='chart' OR empty($type))
     // Display planner chart
     // TODO holiday planner
     echo "<h2>Holiday Planner</h2>";
-
     if (empty($_REQUEST['month'])) $month=date('m');
     else $month=$_REQUEST['month'];
     if (empty($_REQUEST['year'])) $year=date('Y');
@@ -584,8 +544,6 @@ if ($display=='chart' OR empty($type))
     $prevyear=$year;
     if ($month > 1) $prevmonth = $month -1;
     else { $prevmonth = 12; $prevyear = $year-1; }
-
-    $plugin_calendar = plugin_do('holiday_chart_cal');
 
     echo month_select($month, $year);
     echo "<p align='center'><a href='{$_SERVER['PHP_SELF']}?month={$prevmonth}&amp;year={$prevyear}' title='Previous Month'>&lt;</a> ".date('F Y',mktime(0,0,0,$month,1,$year))." <a href='{$_SERVER['PHP_SELF']}?month={$nextmonth}&amp;year={$nextyear}' title='Next Month'>&gt;</a></p>";
@@ -616,7 +574,7 @@ else
         }
         echo "</select></form>";
 
-        $sql = "SELECT * from holidays WHERE userid='{$user}' AND approved=0 AND type='$type'";
+        $sql = "SELECT * from holidays WHERE userid='{$sit[2]}' AND approved=0 AND type='$type'";
         $result = mysql_query($sql);
         if (mysql_error()) trigger_error("MySQL Query Error ".mysql_error(), E_USER_ERROR);
         if (mysql_num_rows($result))
@@ -710,12 +668,9 @@ else
 
 
     echo "<table align='center' summary=\"calendar\">";
-    //if (date('m')<=7) { $displayyear=date('Y')-1; $displaymonth=8; }
-    //if (date('m')>7) { $displayyear=date('Y'); $displaymonth=8; }
-    //if (date('m')>11) { $displayyear=date('Y'); $displaymonth=12; }
-    if (date('m') > 7) { $displayyear=date('Y'); $displaymonth=7; }
-    else { $displayyear=date('Y'); $displaymonth=1; }
-
+    if (date('m')<=7) { $displayyear=date('Y')-1; $displaymonth=8; }
+    if (date('m')>7) { $displayyear=date('Y'); $displaymonth=8; }
+    if (date('m')>11) { $displayyear=date('Y'); $displaymonth=12; }
     for ($r==1;$r<5;$r++)
     {
         echo "<tr>";

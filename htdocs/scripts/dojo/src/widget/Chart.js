@@ -9,118 +9,60 @@
 */
 
 dojo.provide("dojo.widget.Chart");
+dojo.provide("dojo.widget.Chart.PlotTypes");
+dojo.provide("dojo.widget.Chart.DataSeries");
 
 dojo.require("dojo.widget.*");
-dojo.require("dojo.gfx.color");
-dojo.require("dojo.gfx.color.hsl");
+dojo.require("dojo.graphics.color");
+dojo.require("dojo.graphics.color.hsl");
+dojo.widget.tags.addParseTreeHandler("dojo:chart");
 
-dojo.declare(
-	"dojo.widget.Chart",
-	null,
-	function(){
-		// summary: Base class for svg and vml implementations of Chart
-		this.series = [];
-	},
-{
-	isContainer: false,
-
-	assignColors: function(){
-		//	summary
-		//	Assigns/generates a color for a data series.
+dojo.widget.Chart = function(){
+	dojo.widget.Widget.call(this);
+	this.widgetType = "Chart";
+	this.isContainer = false;
+	this.series = [];
+	// FIXME: why is this a mixin method?
+	this.assignColors = function(){
 		var hue=30;
 		var sat=120;
 		var lum=120;
 		var steps = Math.round(330/this.series.length);
 
 		for(var i=0; i<this.series.length; i++){
-			var c=dojo.gfx.color.hsl2rgb(hue,sat,lum);
+			var c=dojo.graphics.color.hsl2rgb(hue,sat,lum);
 			if(!this.series[i].color){
-				this.series[i].color = dojo.gfx.color.rgb2hex(c[0],c[1],c[2]);
+				this.series[i].color = dojo.graphics.color.rgb2hex(c[0],c[1],c[2]);
 			}
 			hue += steps;
 		}
-	},
-	parseData: function(table){
-		var thead=table.getElementsByTagName("thead")[0];
-		var tbody=table.getElementsByTagName("tbody")[0];
-		if(!(thead&&tbody)) dojo.raise("dojo.widget.Chart: supplied table must define a head and a body.");
+	};
+}
+dojo.inherits(dojo.widget.Chart, dojo.widget.Widget);
 
-		//	set up the series.
-		var columns=thead.getElementsByTagName("tr")[0].getElementsByTagName("th");	//	should be <tr><..>
-		
-		//	assume column 0 == X
-		for (var i=1; i<columns.length; i++){
-			var key="column"+i;
-			var label=columns[i].innerHTML;
-			var plotType=columns[i].getAttribute("plotType")||"line";
-			var color=columns[i].getAttribute("color");
-			var ds=new dojo.widget.Chart.DataSeries(key,label,plotType,color);
-			this.series.push(ds);
-		}
+dojo.widget.Chart.PlotTypes = {
+	Bar:"bar",
+	Line:"line",
+	Scatter:"scatter",
+	Bubble:"bubble"
+};
 
-		//	ok, get the values.
-		var rows=tbody.rows;
-		var xMin=Number.MAX_VALUE,xMax=Number.MIN_VALUE;
-		var yMin=Number.MAX_VALUE,yMax=Number.MIN_VALUE;
-		var ignore = [
-			"accesskey","align","bgcolor","class",
-			"colspan","height","id","nowrap",
-			"rowspan","style","tabindex","title",
-			"valign","width"
-		];
+/*
+ *	Every chart has a set of data series; this is the series.  Note that each
+ *	member of value is an object and in the minimum has 2 properties: .x and
+ *	.value.
+ */
+dojo.widget.Chart.DataSeries = function(key, label, plotType, color){
+	// FIXME: why the hell are plot types specified neumerically? What is this? C?
+	this.id = "DataSeries"+dojo.widget.Chart.DataSeries.count++;
+	this.key = key;
+	this.label = label||this.id;
+	this.plotType = plotType||0;
+	this.color = color;
+	this.values = [];
+};
 
-		for(var i=0; i<rows.length; i++){
-			var row=rows[i];
-			var cells=row.cells;
-			var x=Number.MIN_VALUE;
-			for (var j=0; j<cells.length; j++){
-				if (j==0){
-					x=parseFloat(cells[j].innerHTML);
-					xMin=Math.min(xMin, x);
-					xMax=Math.max(xMax, x);
-				} else {
-					var ds=this.series[j-1];
-					var y=parseFloat(cells[j].innerHTML);
-					yMin=Math.min(yMin,y);
-					yMax=Math.max(yMax,y);
-					var o={x:x, value:y};
-					var attrs=cells[j].attributes;
-					for(var k=0; k<attrs.length; k++){
-						var attr=attrs.item(k);
-						var bIgnore=false;
-						for (var l=0; l<ignore.length; l++){
-							if (attr.nodeName.toLowerCase()==ignore[l]){
-								bIgnore=true;
-								break;
-							}
-						}
-						if(!bIgnore) o[attr.nodeName]=attr.nodeValue;
-					}
-					ds.add(o);
-				}
-			}
-		}
-		return { x:{ min:xMin, max:xMax}, y:{ min:yMin, max:yMax} };
-	}
-});
-
-dojo.declare(
-	"dojo.widget.Chart.DataSeries",
-	null,
-	function(key, label, plotType, color){
-		//	summary:
-		//		Every chart has a set of data series; this is the series.  Note that each
-		//		member of value is an object and in the minimum has 2 properties: .x and
-		//		.value.
-		//
-		this.id = "DataSeries"+dojo.widget.Chart.DataSeries.count++;
-		this.key = key;
-		this.label = label||this.id;
-		this.plotType = plotType||"line";	//	let line be the default.
-		this.color = color;
-		this.values = [];
-	},
-{
+dojo.lang.extend(dojo.widget.Chart.DataSeries, {
 	add: function(v){
 		if(v.x==null||v.value==null){
 			dojo.raise("dojo.widget.Chart.DataSeries.add: v must have both an 'x' and 'value' property.");
@@ -253,5 +195,5 @@ dojo.declare(
 	}
 });
 
-dojo["requireIf"](dojo.render.svg.capable, "dojo.widget.svg.Chart");
-dojo["requireIf"](!dojo.render.svg.capable && dojo.render.vml.capable, "dojo.widget.vml.Chart");
+dojo.requireIf(dojo.render.svg.support.builtin, "dojo.widget.svg.Chart");
+dojo.requireIf(dojo.render.html.ie, "dojo.widget.vml.Chart");

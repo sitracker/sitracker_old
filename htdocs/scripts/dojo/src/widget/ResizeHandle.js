@@ -9,57 +9,62 @@
 */
 
 dojo.provide("dojo.widget.ResizeHandle");
+dojo.provide("dojo.widget.html.ResizeHandle");
 
 dojo.require("dojo.widget.*");
-dojo.require("dojo.html.layout");
-dojo.require("dojo.event.*");
+dojo.require("dojo.html");
+dojo.require("dojo.style");
+dojo.require("dojo.dom");
+dojo.require("dojo.event");
 
-dojo.widget.defineWidget(
-	"dojo.widget.ResizeHandle",
-	dojo.widget.HtmlWidget,
-{
-	// summary
-	//	The handle on the bottom-right corner of FloatingPane or other widgets that allows
-	//	the widget to be resized.
-	//	Typically not used directly.
+dojo.widget.html.ResizeHandle = function(){
+	dojo.widget.HtmlWidget.call(this);
+}
 
-	// targetElmId: String
-	//	id of the Widget OR DomNode that I will size
+dojo.inherits(dojo.widget.html.ResizeHandle, dojo.widget.HtmlWidget);
+
+dojo.lang.extend(dojo.widget.html.ResizeHandle, {
+	widgetType: "ResizeHandle",
+
+	isSizing: false,
+	startPoint: null,
+	startSize: null,
+	minSize: null,
+
 	targetElmId: '',
 
-	templateCssPath: dojo.uri.dojoUri("src/widget/templates/ResizeHandle.css"),
+	templateCssPath: dojo.uri.dojoUri("src/widget/templates/HtmlResizeHandle.css"),
 	templateString: '<div class="dojoHtmlResizeHandle"><div></div></div>',
 
 	postCreate: function(){
-		dojo.event.connect(this.domNode, "onmousedown", this, "_beginSizing");
+		dojo.event.connect(this.domNode, "onmousedown", this, "beginSizing");
 	},
 
-	_beginSizing: function(/*Event*/ e){
-		if (this._isSizing){ return false; }
+	beginSizing: function(e){
+		if (this.isSizing){ return false; }
 
 		// get the target dom node to adjust.  targetElmId can refer to either a widget or a simple node
 		this.targetWidget = dojo.widget.byId(this.targetElmId);
 		this.targetDomNode = this.targetWidget ? this.targetWidget.domNode : dojo.byId(this.targetElmId);
 		if (!this.targetDomNode){ return; }
 
-		this._isSizing = true;
+		this.isSizing = true;
 		this.startPoint  = {'x':e.clientX, 'y':e.clientY};
-		var mb = dojo.html.getMarginBox(this.targetDomNode);
-		this.startSize  = {'w':mb.width, 'h':mb.height};
+		this.startSize  = {'w':dojo.style.getOuterWidth(this.targetDomNode), 'h':dojo.style.getOuterHeight(this.targetDomNode)};
 
 		dojo.event.kwConnect({
-			srcObj: dojo.body(), 
+			srcObj: document.body, 
 			srcFunc: "onmousemove",
 			targetObj: this,
-			targetFunc: "_changeSizing",
+			targetFunc: "changeSizing",
 			rate: 25
 		});
-		dojo.event.connect(dojo.body(), "onmouseup", this, "_endSizing");
+		dojo.event.connect(document.body, "onmouseup", this, "endSizing");
 
 		e.preventDefault();
 	},
 
-	_changeSizing: function(/*Event*/ e){
+	changeSizing: function(e){
 		// On IE, if you move the mouse above/to the left of the object being resized,
 		// sometimes clientX/Y aren't set, apparently.  Just ignore the event.
 		try{
@@ -76,30 +81,32 @@ dojo.widget.defineWidget(
 
 		// minimum size check
 		if (this.minSize) {
-			var mb = dojo.html.getMarginBox(this.targetDomNode);
 			if (newW < this.minSize.w) {
-				newW = mb.width;
+				newW = dojo.style.getOuterWidth(this.targetDomNode);
 			}
 			if (newH < this.minSize.h) {
-				newH = mb.height;
+				newH = dojo.style.getOuterHeight(this.targetDomNode);
 			}
 		}
 		
 		if(this.targetWidget){
 			this.targetWidget.resizeTo(newW, newH);
 		}else{
-			dojo.html.setMarginBox(this.targetDomNode, { width: newW, height: newH});
+			dojo.style.setOuterWidth(this.targetDomNode, newW);
+			dojo.style.setOuterHeight(this.targetDomNode, newH);
 		}
 		
 		e.preventDefault();
 	},
 
-	_endSizing: function(/*Event*/ e){
-		dojo.event.disconnect(dojo.body(), "onmousemove", this, "_changeSizing");
-		dojo.event.disconnect(dojo.body(), "onmouseup", this, "_endSizing");
+	endSizing: function(e){
+		dojo.event.disconnect(document.body, "onmousemove", this, "changeSizing");
+		dojo.event.disconnect(document.body, "onmouseup", this, "endSizing");
 
-		this._isSizing = false;
+		this.isSizing = false;
 	}
 
 
 });
+
+dojo.widget.tags.addParseTreeHandler("dojo:ResizeHandle");

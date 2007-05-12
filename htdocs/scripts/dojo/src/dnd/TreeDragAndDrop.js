@@ -17,12 +17,14 @@
 */
 
 dojo.provide("dojo.dnd.TreeDragAndDrop");
+dojo.provide("dojo.dnd.TreeDragSource");
+dojo.provide("dojo.dnd.TreeDropTarget");
+dojo.provide("dojo.dnd.TreeDNDController");
 
 dojo.require("dojo.dnd.HtmlDragAndDrop");
 dojo.require("dojo.lang.func");
 dojo.require("dojo.lang.array");
 dojo.require("dojo.lang.extras");
-dojo.require("dojo.html.layout");
 
 dojo.dnd.TreeDragSource = function(node, syncController, type, treeNode){
 	this.controller = syncController;
@@ -91,11 +93,12 @@ dojo.lang.extend(dojo.dnd.TreeDragSource, {
 
 // .......................................
 
-dojo.dnd.TreeDropTarget = function(domNode, controller, type, treeNode){
+dojo.dnd.TreeDropTarget = function(domNode, controller, type, treeNode, DNDMode){
 
 	this.treeNode = treeNode;
 	this.controller = controller; // I will sync-ly process drops
-	
+	this.DNDMode = DNDMode;
+
 	dojo.dnd.HtmlDropTarget.apply(this, [domNode, type]);
 }
 
@@ -203,14 +206,9 @@ dojo.lang.extend(dojo.dnd.TreeDropTarget, {
 	},
 
 
-	getDNDMode: function() {
-		return this.treeNode.tree.DNDMode;
-	},
-		
-
 	getAcceptPosition: function(e, sourceTreeNode) {
 
-		var DNDMode = this.getDNDMode();
+		var DNDMode = this.DNDMode;
 
 		if (DNDMode & dojo.widget.Tree.prototype.DNDModes.ONTO &&
 			// check if ONTO is allowed localy
@@ -283,10 +281,10 @@ dojo.lang.extend(dojo.dnd.TreeDropTarget, {
 
 	/* get DNDMode and see which position e fits */
 	getPosition: function(e, DNDMode) {
-		var node = dojo.byId(this.treeNode.labelNode);
-		var mousey = e.pageY || e.clientY + dojo.body().scrollTop;
-		var nodey = dojo.html.getAbsolutePosition(node).y;
-		var height = dojo.html.getBorderBox(node).height;
+		node = dojo.byId(this.treeNode.labelNode);
+		var mousey = e.pageY || e.clientY + document.body.scrollTop;
+		var nodey = dojo.html.getAbsoluteY(node);
+		var height = dojo.html.getInnerHeight(node);
 
 		var relY = mousey - nodey;
 		var p = relY / height;
@@ -448,7 +446,7 @@ dojo.lang.extend(dojo.dnd.TreeDNDController, {
 			this.dragSources[node.widgetId] = source;
 		}
 
-		var target = new dojo.dnd.TreeDropTarget(node.labelNode, this.treeController, node.tree.DNDAcceptTypes, node);
+		var target = new dojo.dnd.TreeDropTarget(node.labelNode, this.treeController, node.tree.DNDAcceptTypes, node, node.tree.DNDMode);
 
 		this.dropTargets[node.widgetId] = target;
 

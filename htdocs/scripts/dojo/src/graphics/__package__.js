@@ -8,5 +8,8 @@
 		http://dojotoolkit.org/community/licensing.shtml
 */
 
-// By default... don't pull in anything?  (todo: figure out what should be in list)
+dojo.kwCompoundRequire({
+	browser:	["dojo.graphics.htmlEffects"],
+	dashboard:	["dojo.graphics.htmlEffects"]
+});
 dojo.provide("dojo.graphics.*");

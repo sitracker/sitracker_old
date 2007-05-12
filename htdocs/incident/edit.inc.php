@@ -15,75 +15,41 @@ if (realpath(__FILE__) == realpath($_SERVER['SCRIPT_FILENAME']))
     exit;
 }
 
-// extract incident details
-$sql  = "SELECT * FROM incidents WHERE id='$id'";
-$result = mysql_query($sql);
-if (mysql_error()) trigger_error("MySQL Query Error ".mysql_error(), E_USER_ERROR);
-$incident = mysql_fetch_array($result);
+echo "<h2>Edit Incident</h2>";
 
-// SUPPORT INCIDENT
-if ($incident["type"] == "Support")
-{
-    ?>
-    <form action="<?php echo $_SERVER['PHP_SELF'] ?>" method="post" name="editform">
-    <table class='vertical'>
-    <tr><th>Title:</th><td><input maxlength='150' name="title" size='40' type="text" value="<?php echo stripslashes($incident['title']) ?>" /></td></tr>
-    <tr><th>Tags:</th><td><textarea rows='2' cols='40' name='tags'><?php  echo list_tags($id, 2, false); ?></textarea></td></tr>
-    <tr><th>Important:</th>
-    <td>Changing the contact or software will not reassign this incident to another contract.
-    <?php
-    if ($incident['maintenanceid'] >= 1) echo "This incident is logged under contract {$incident['maintenanceid']}. ";
-    else echo "This incident is not logged under contract. ";
-    echo "To change the contract log a new incident and close this one.";
-    ?>
-    </td></tr>
-    <tr><th>Contact:</th><td><?php echo contact_drop_down("contact", $incident["contact"], TRUE); ?></td></tr>
-    <?php
-    flush();
-    $maintid=maintenance_siteid($incident['maintenanceid']);
-    echo "<tr><th>Site:</th><td>".site_name($maintid)."</td></tr>";
-    ?>
-    <tr><th>Software:</th>
-    <td><?php echo software_drop_down("software", $incident["softwareid"]); flush(); ?></td></tr>
-    <tr><th>Software Version:</th>
-    <td><input maxlength='50' name="productversion" size='30' type="text" value="<?php echo $incident["productversion"] ?>" /></td></tr>
-    <tr><th>Service Packs Applied:</th>
-    <td><input maxlength='100' name="productservicepacks" size='30' type="text" value="<?php echo $incident["productservicepacks"] ?>" /></td></tr>
-    <tr><th>CC Email:</th>
-    <td><input maxlength='255' name="ccemail" size='30' type="text" value="<?php echo $incident["ccemail"] ?>" /></td></tr>
-    <?php
-    echo "<tr><th>Escalation</th>";
-    echo "<td>".escalation_path_drop_down('escalationpath', $incident['escalationpath'])."</td></tr>";
-    ?>
-    <tr><th>External ID:</th>
-    <td><input maxlength='50' name="externalid" size='30' type="text" value="<?php echo $incident["externalid"] ?>" /></td></tr>
-    <tr><th>External Engineers Name:</th>
-    <td><input maxlength='80' name="externalengineer" size='30' type="text" value="<?php echo $incident["externalengineer"] ?>" /></td></tr>
-    <tr><th>External Email:</th>
-    <td><input maxlength='255' name="externalemail" size='30' type="text" value="<?php echo $incident["externalemail"] ?>" /></td></tr>
-    <?php
-        plugin_do('edit_incident_form');
-    ?>
-    </table>
+echo "<form action='{$_SERVER['PHP_SELF']}' method='post' name='editform'>";
+echo "<table align='center' class='vertical'>";
+echo "<tr><th>Edit Incident:</th><td>{$id}</td></tr>";
+echo "<tr><th>Title:</th><td><input maxlength='150' name='title' size='40' type='text' value='{$incident->title}' /></td></tr>";
+echo "<tr><th>Important:</th><td>Changing the contact, product or software will not reassign this incident to another ";
+echo "maintenance contract. This incident is currently logged under contract {$incident->maintenanceid}. ";
+echo "To change the contract log a new incident and close this one.</td></tr>";
 
-    <p align='center'>
-    <input name="type" type="hidden" value="Support" />
-    <input name="id" type="hidden" value="<?php echo $id; ?>" />
-    <input name="oldtitle" type="hidden" value="<?php echo stripslashes($incident["title"]) ?>" />
-    <input name="oldcontact" type="hidden" value="<?php echo $incident["contact"] ?>" />
-    <input name="oldccemail" type="hidden" value="<?php echo $incident["ccemail"] ?>" />
-    <input name="oldescalationpath" type="hidden" value="<?php echo db_read_column('name', 'escalationpaths', $incident["escalationpath"]) ?>" />
-    <input name="oldexternalid" type="hidden" value="<?php echo $incident["externalid"] ?>" />
-    <input name="oldexternalengineer" type="hidden" value="<?php echo $incident["externalengineer"] ?>" />
-    <input name="oldexternalemail" type="hidden" value="<?php echo $incident["externalemail"] ?>" />
-    <input name="oldpriority" type="hidden" value="<?php echo $incident["priority"] ?>" />
-    <input name="oldstatus" type="hidden" value="<?php echo $incident["status"] ?>" />
-    <input name="oldproductversion" type="hidden" value="<?php echo $incident["productversion"] ?>" />
-    <input name="oldproductservicepacks" type="hidden" value="<?php echo $incident["productservicepacks"] ?>" />
-    <input name="oldsoftware" type="hidden" value="<?php echo $incident["softwareid"] ?>" />
-    <input type="hidden" name='action' value="save-edit" />
-    <input name="submit" type="submit" value="Save" /></p>
-    </form>
-    <?php
-}
+echo "<tr><th>Contact:</th><td>".contact_drop_down("contact", $incident->contact)."</td></tr>";
+flush();
+echo "<tr><th>Product:</th><td>".supported_product_drop_down("product", $incident->contact, $incident->product)."</td></tr>";
+flush();
+echo "<tr><th>Software:</th><td>".software_drop_down("software", $incident->softwareid)."</td></tr>";
+flush();
+echo "<tr><th>Software Version:</th><td><input maxlength='50' name='productversion' size='30' type='text' value='{$incident->productversion}' /></td></tr>";
+echo "<tr><th>Service Packs Applied:</th><td><input maxlength='100' name='productservicepacks' size='30' type='text' value='{$incident->productservicepacks}' /></td></tr>";
+echo "<tr><th>External ID:</th><td><input maxlength='50' name='externalid' size='30' type='text' value='{$incident->externalid}' /></td></tr>";
+echo "<tr><th>External Engineers Name:</th><td><input maxlength='80' name='externalengineer' size='30' type='text' value='{$incident->externalengineer}' /></td></tr>";
+echo "<tr><th>External Email:</th><td><input maxlength='255' name='externalemail' size='30' type='text' value='{$incident->externalemail}' /></td></tr>";
+echo "</table>\n";
+echo "<input name='type' type='hidden' value='Support' />";
+echo "<input name='oldtitle' type='hidden' value='{$incident->title}' />";
+echo "<input name='oldcontact' type='hidden' value='{$incident->contact}' />";
+echo "<input name='oldexternalid' type='hidden' value='{$incident->externalid}' />";
+echo "<input name='oldexternalengineer' type='hidden' value='{$incident->externalengineer}' />";
+echo "<input name='oldexternalemail' type='hidden' value='{$incident->externalemail}' />";
+echo "<input name='oldpriority' type='hidden' value='{$incident->priority} />";
+echo "<input name='oldstatus' type='hidden' value='{$incident->status}' />";
+echo "<input name='oldproduct' type='hidden' value='{$incident->product} />";
+echo "<input name='oldproductversion' type='hidden' value='{$incident->productversion}' />";
+echo "<input name='oldproductservicepacks' type='hidden' value='{$incident->productservicepacks}' />";
+echo "<input name='id' type='hidden' value='{$id}' />";
+echo "<input name='action' type='hidden' value='save-edit' />";
+echo "<p align='center'><input name='submit' type='submit' value='Save' /></p>";
+echo "</form>\n";
 ?>

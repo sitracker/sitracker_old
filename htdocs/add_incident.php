@@ -36,12 +36,6 @@ if (empty($action) OR $action=='showform')
 {
     // This Page Is Valid XHTML 1.0 Transitional! 27Oct05
     include('htmlheader.inc.php');
-    ?>
-    <script type="text/javascript" src="scripts/dojo/dojo.js"></script>
-    <script type="text/javascript">
-        dojo.require("dojo.widget.ComboBox");
-    </script>
-    <?php
     echo "<h2>Add Incident - Find Contact</h2>";
     if (empty($siteid))
     {
@@ -52,8 +46,7 @@ if (empty($action) OR $action=='showform')
         <table class='vertical'>
         <tr><th>Contact:</th><td>
         <?php
-        //echo "<input type='text' name='search_string' size='30' value='{$query}' />\n";
-        echo "<input dojoType='ComboBox' value='{$query}' dataUrl='autocomplete.php?action=contact' style='width: 300px;' name='search_string' />";
+        echo "<input type='text' name='search_string' size='30' value='{$query}' />\n";
         ?>
         <input name="submit" type="submit" value="Find Contact" />
         </td></tr>
@@ -105,7 +98,7 @@ elseif ($action=='findcontact')
     if (mysql_error()) trigger_error("MySQL Query Error ".mysql_error(), E_USER_ERROR);
     if (mysql_num_rows($result)>0)
     {
-        include('htmlheader.inc.php');
+        include('htmlheader.inc.php')
         ?>
         <script type="text/javascript">
         function confirm_support()
@@ -163,6 +156,7 @@ elseif ($action=='findcontact')
             echo "</tr>\n";
         }
         echo "</table>\n";
+
         // Select the contact from the list of contacts as well
         $sql = "SELECT *, contacts.id AS contactid FROM contacts, sites WHERE contacts.siteid=sites.id ";
         if (empty($contactid))
@@ -363,13 +357,13 @@ elseif ($action=='incidentform')
     }
     else
     {
-        $sql="SELECT bodytext FROM updates WHERE id=$updateid";
+        $sql="SELECT bodytext from updates where id=$updateid";
         $result=mysql_query($sql);
         if (mysql_error()) trigger_error("MySQL Query Error ".mysql_error(), E_USER_ERROR);
         $updaterow=mysql_fetch_array($result);
         $mailed_body_text=$updaterow['bodytext'];
 
-        $sql="SELECT subject FROM tempincoming WHERE updateid=$updateid";
+        $sql="SELECT subject from tempincoming where updateid=$updateid";
         $result=mysql_query($sql);
         if (mysql_error()) trigger_error("MySQL Query Error ".mysql_error(), E_USER_ERROR);
         $updaterow=mysql_fetch_array($result);
@@ -538,7 +532,7 @@ elseif ($action=='assign')
             if (!empty($updateid))
             {
                 // Assign existing update to new incident if we have one
-                $sql="UPDATE updates SET incidentid='$incidentid', userid='".$sit[2]."', sla='opened' WHERE id='$updateid'";
+                $sql="UPDATE updates SET incidentid='$incidentid', userid='".$sit[2]."' WHERE id='$updateid'";
                 $result=mysql_query($sql);
                 if (mysql_error()) trigger_error("MySQL Query Error ".mysql_error(), E_USER_ERROR);
                 // + move any attachments we may have received
@@ -559,9 +553,9 @@ elseif ($action=='assign')
             {
                 // Create a new update from details entered
                 $sql  = "INSERT INTO updates (incidentid, userid, type, bodytext, timestamp, currentowner, ";
-                $sql .= "currentstatus, customervisibility, nextaction, sla) ";
+                $sql .= "currentstatus, customervisibility, nextaction) ";
                 $sql .= "VALUES ('$incidentid', '".$sit[2]."', 'opening', '$updatetext', '$now', '".$sit[2]."', ";
-                $sql .= "'1', '$customervisibility', '$nextaction', 'opened')";
+                $sql .= "'1', '$customervisibility', '$nextaction')";
                 $result = mysql_query($sql);
                 if (mysql_error()) trigger_error("MySQL Query Error ".mysql_error(), E_USER_ERROR);
             }
@@ -583,20 +577,17 @@ elseif ($action=='assign')
             $targetval = $level->initial_response_mins * 60;
             $initialresponse=$now + $targetval;
 
-            /*
-            This has now been moved above - to reduce the number of updates Nov2006
             // Insert the first SLA update, this indicates the start of an incident
             // This insert could possibly be merged with another of the 'updates' records, but for now we keep it seperate for clarity
             $sql  = "INSERT INTO updates (incidentid, userid, type, timestamp, currentowner, currentstatus, customervisibility, sla, bodytext) ";
             $sql .= "VALUES ('$incidentid', '".$sit[2]."', 'slamet', '$now', '".$sit[2]."', '1', 'show', 'opened','The incident is open and awaiting action.')";
             mysql_query($sql);
             if (mysql_error()) trigger_error("MySQL Query Error ".mysql_error(), E_USER_ERROR);
-            */
 
             // Insert the first Review update, this indicates the review period of an incident has started
             // This insert could possibly be merged with another of the 'updates' records, but for now we keep it seperate for clarity
-            $sql  = "INSERT INTO updates (incidentid, userid, type, timestamp, currentowner, currentstatus, customervisibility, bodytext) ";
-            $sql .= "VALUES ('$incidentid', '0', 'reviewmet', '$now', '".$sit[2]."', '1', 'hide', '')";
+            $sql  = "INSERT INTO updates (incidentid, userid, type, timestamp, currentowner, currentstatus, customervisibility, sla, bodytext) ";
+            $sql .= "VALUES ('$incidentid', '0', 'reviewmet', '$now', '".$sit[2]."', '1', 'hide', '','')";
             mysql_query($sql);
             if (mysql_error()) trigger_error("MySQL Query Error ".mysql_error(), E_USER_ERROR);
 

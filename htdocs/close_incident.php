@@ -8,10 +8,6 @@
 // of the GNU General Public License, incorporated herein by reference.
 //
 
-// November 2006 - SiT 3.25 this file DEPRICATED - PH 
-// Soon to be replaced
-// See incident/close.inc.php
-
 $permission=18; //  Close Incidents
 
 require('db_connect.inc.php');
@@ -295,28 +291,27 @@ else
                 if (strlen($_REQUEST['summary'])>3)
                 {
                     // Problem Definition
-                    $sql  = "INSERT INTO updates (incidentid, userid, type, bodytext, timestamp, customervisibility, 'sla') ";
-                    $sql .= "VALUES ('$id', '$sit[2]', 'probdef', '$summary', '$now', 'hide', 'solution')";
+                    $sql  = "INSERT INTO updates (incidentid, userid, type, bodytext, timestamp, customervisibility) ";
+                    $sql .= "VALUES ('$id', '$sit[2]', 'probdef', '$summary', '$now', 'hide')";
                     $result = mysql_query($sql);
                     if (mysql_error()) trigger_error("MySQL Query Error ".mysql_error(), E_USER_ERROR);
                 }
                 if (strlen($_REQUEST['solution'])>3)
                 {
                     // Final Solution
-                    $sql  = "INSERT INTO updates (incidentid, userid, type, bodytext, timestamp, customervisibility, sla) ";
-                    $sql .= "VALUES ('$id', '$sit[2]', 'solution', '$solution', '$now', 'hide', 'solution')";
+                    $sql  = "INSERT INTO updates (incidentid, userid, type, bodytext, timestamp, customervisibility) ";
+                    $sql .= "VALUES ('$id', '$sit[2]', 'solution', '$solution', '$now', 'hide')";
                     $result = mysql_query($sql);
                     if (mysql_error()) trigger_error("MySQL Query Error ".mysql_error(), E_USER_ERROR);
                 }
             }
 
-            /*
             // Meet service level 'solution'
             $sql  = "INSERT INTO updates (incidentid, userid, type, timestamp, currentowner, customervisibility, sla, bodytext) ";
             $sql .= "VALUES ('$id', '".$sit[2]."', 'slamet', '$now', '{$sit[2]}', 'show', 'solution','')";
             $result = mysql_query($sql);
             if (mysql_error()) trigger_error("MySQL Query Error ".mysql_error(), E_USER_ERROR);
-            */
+
             //
             if ($wait=='yes')
             {

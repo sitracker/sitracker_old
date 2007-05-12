@@ -20,24 +20,30 @@
  */
 dojo.provide("dojo.widget.Tree");
 
-dojo.require("dojo.widget.*");
 dojo.require("dojo.event.*");
 dojo.require("dojo.io.*");
 dojo.require("dojo.widget.HtmlWidget");
 dojo.require("dojo.widget.TreeNode");
-dojo.require("dojo.html.common");
-dojo.require("dojo.html.selection");
 
 
-dojo.widget.defineWidget("dojo.widget.Tree", dojo.widget.HtmlWidget, function() {
+
+// make it a tag
+dojo.widget.tags.addParseTreeHandler("dojo:Tree");
+
+
+dojo.widget.Tree = function() {
+	dojo.widget.HtmlWidget.call(this);
+
 	this.eventNames = {};
 
 	this.tree = this;
 	this.DNDAcceptTypes = [];
 	this.actionsDisabled = [];
 
-},
-{
+}
+dojo.inherits(dojo.widget.Tree, dojo.widget.HtmlWidget);
+
+dojo.lang.extend(dojo.widget.Tree, {
 	widgetType: "Tree",
 
 	eventNamesDefault: {
@@ -332,7 +338,7 @@ dojo.widget.defineWidget("dojo.widget.Tree", dojo.widget.HtmlWidget, function() 
 		// add new child into DOM after it was added into children
 		if (index < this.children.length) { // children[] already has child
 			//dojo.debug("Inserting before "+this.children[index].title);
-			dojo.html.insertBefore(child.domNode, this.children[index].domNode);
+			dojo.dom.insertBefore(child.domNode, this.children[index].domNode);
 		} else {
 			this.containerNode.appendChild(child.domNode);
 			if (this.isExpanded && this.isTreeNode) {
@@ -372,7 +378,7 @@ dojo.widget.defineWidget("dojo.widget.Tree", dojo.widget.HtmlWidget, function() 
 		// Use-case:
 		// a child was moved down under the last node so last node should be updated
 		var prevSibling = child.getPreviousSibling();
-		if (child.isLastChild() && prevSibling) {
+		if (child.isLastNode() && prevSibling) {
 			prevSibling.updateExpandGridColumn();
 		}
 
@@ -494,9 +500,9 @@ dojo.widget.defineWidget("dojo.widget.Tree", dojo.widget.HtmlWidget, function() 
 
 
 		children.splice(index,1);
-		dojo.html.removeNode(child.domNode);
+		dojo.dom.removeNode(child.domNode);
 
-		if (parent.children.length == 0 && !parent.isTree) {
+		if (parent.children.length == 0) {
 			parent.containerNode.style.display = "none";
 		}
 

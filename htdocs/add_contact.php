@@ -137,6 +137,8 @@ else
         if (!empty($dataprotection_address)) $dataprotection_address='Yes'; else $dataprotection_address='No';
 
         // generate username and password
+        ## From 23Nov04 (v3.14) Passwords are no longer generated/controlled by SiT - INL
+        ## From 24Nov04 (v3.15) Passwords are again generated/controlled by SiT - INL
 
         $username = strtolower(substr($surname, 0, strcspn($surname, " ")));
         $password = generate_password();

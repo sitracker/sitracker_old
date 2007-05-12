@@ -19,45 +19,11 @@ require('functions.inc.php');
 // This page requires authentication
 require('auth.inc.php');
 
+include('htmlheader.inc.php');
+
 // External variables
 $search_string = cleanvar($_REQUEST['search_string']);
-$submit_value = cleanvar($_REQUEST['submit']);
 
-if($submit_value == 'go')
-{
-        // build SQL
-        $sql  = "SELECT * FROM contacts ";
-        $search_string_len=strlen($search_string);
-        if ($search_string != '*')
-        {
-            $sql .= "WHERE ";
-            if ($search_string_len<=6) $sql .= "id=('$search_string') OR ";
-            if ($search_string_len<=2)
-            {
-                $sql .= "SUBSTRING(surname,1,$search_string_len)=('$search_string') ";
-            }
-            else
-            {
-                $sql .= "surname LIKE '%$search_string%' OR forenames LIKE '%$search_string%' OR ";
-                $sql .= "CONCAT(forenames,' ',surname) LIKE '%$search_string%'";
-            }
-        }
-        $sql .= " ORDER BY surname ASC";
-
-        // execute query
-        $result = mysql_query($sql);
-        if (mysql_error()) trigger_error("MySQL Query Error ".mysql_error(), E_USER_ERROR);
-
-        if(mysql_num_rows($result) == 1)
-        {
-            //go straight to the contact 
-            $row = mysql_fetch_array($result);
-            $url = "contact_details.php?id=".$row["id"];
-            header("Location: $url");
-        }
-}
-
-include('htmlheader.inc.php');
 
 if (empty($search_string)) $search_string='a';
 ?>
@@ -68,18 +34,13 @@ URL = "contact_products.php?id=" + contactid;
 window.open(URL, "contact_products_window", "toolbar=no,status=yes,menubar=no,scrollbars=yes,resizable=yes,width=520,height=240");
 }
 </script>
-<script type="text/javascript" src="scripts/dojo/dojo.js"></script>
-<script type="text/javascript">
-    dojo.require("dojo.widget.ComboBox");
-</script>
 <h2>Browse Contacts</h2>
 <table summary="alphamenu" align="center">
 <tr>
 <td align="center">
     <form action="<?php echo $_SERVER['PHP_SELF']; ?>" method="get">
-    <!-- <input type="text" name="search_string" />-->
-    <p>Browse contacts: <input dojoType='ComboBox' dataUrl='autocomplete.php?action=contact' style='width: 300px;' name='search_string' />
-    <input name="submit" type="submit" value="go" /></p>
+    <input type="text" name="search_string" />
+    <input name="submit" type="submit" value="go" />
     </form>
 </td>
 </tr>
@@ -134,32 +95,23 @@ else
     // search for criteria
     if ($errors == 0)
     {
-        if($submit_value != 'go')
+        // build SQL
+        $sql  = "SELECT * FROM contacts ";
+        $search_string_len=strlen($search_string);
+        if ($search_string != '*')
         {
-            // Don't  need to do this again, already done above, us the results of that
-            // build SQL
-            $sql  = "SELECT * FROM contacts ";
-            $search_string_len=strlen($search_string);
-            if ($search_string != '*')
-            {
-                $sql .= "WHERE ";
-                if ($search_string_len<=6) $sql .= "id=('$search_string') OR ";
-                if ($search_string_len<=2)
-                {
-                    $sql .= "SUBSTRING(surname,1,$search_string_len)=('$search_string') ";
-                }
-                else
-                {
-                    $sql .= "surname LIKE '%$search_string%' OR forenames LIKE '%$search_string%' OR ";
-                    $sql .= "CONCAT(forenames,' ',surname) LIKE '%$search_string%'";
-                }
-            }
-            $sql .= " ORDER BY surname ASC";
-    
-            // execute query
-            $result = mysql_query($sql);
-            if (mysql_error()) trigger_error("MySQL Query Error ".mysql_error(), E_USER_ERROR);
+            $sql .= "WHERE ";
+            if ($search_string_len<=6) $sql .= "id=('$search_string') OR ";
+            if ($search_string_len<=2)
+                $sql .= "SUBSTRING(surname,1,$search_string_len)=('$search_string') ";
+            else
+                $sql .= "surname LIKE '%$search_string%' OR forenames LIKE '%$search_string%' ";
         }
+        $sql .= " ORDER BY surname ASC";
+
+        // execute query
+        $result = mysql_query($sql);
+        if (mysql_error()) trigger_error("MySQL Query Error ".mysql_error(), E_USER_ERROR);
 
         if (mysql_num_rows($result) == 0)
             echo "<p align='center'>Sorry, unable to find any contacts matching <em>'$search_string</em>'</p>\n";

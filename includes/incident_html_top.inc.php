@@ -10,20 +10,22 @@ echo "</title>";
 echo "<meta http-equiv=\"Content-Type\" content=\"text/html; charset=utf-8\" />";
 echo "<meta name=\"GENERATOR\" content=\"{$CONFIG['application_name']} {$application_version_string}\" />\n";
 echo "<style type='text/css'>@import url('{$CONFIG['application_webpath']}styles/webtrack.css');</style>\n";
-
-if ($_SESSION['auth'] == TRUE) $styleid = $_SESSION['style'];
-else $styleid= $CONFIG['default_interface_style'];
-$sql = "SELECT cssurl, iconset FROM interfacestyles WHERE id='{$styleid}'";
-$result = mysql_query($sql);
-if (mysql_error()) trigger_error(mysql_error(),E_USER_WARNING);
-else list($cssurl, $iconset) = mysql_fetch_row($result);
-unset($styleid);
-echo "<link rel='stylesheet' href='{$CONFIG['application_webpath']}styles/{$cssurl}' />\n";
+if ($_SESSION['auth'] == TRUE)
+{
+    $style = interface_style($_SESSION['style']);
+    echo "<link rel='stylesheet' href='{$CONFIG['application_webpath']}styles/{$style['cssurl']}' />\n";
+}
+else
+{
+    echo "<link rel=\"stylesheet\" href=\"styles/webtrack1.css\" />\n";
+}
 
 echo "<script src='{$CONFIG['application_webpath']}webtrack.js' type='text/javascript'></script>\n";
 // javascript popup date library
 echo "<script src='{$CONFIG['application_webpath']}calendar.js' type='text/javascript'></script>\n";
 
+// if ($userstyle == "1") echo "<link rel=\"stylesheet\" href=\"styles/webtrack1.css\">\n";
+// if ($userstyle == "2") echo "<link rel=\"stylesheet\" href=\"styles/webtrack2.css\">\n";
 // FIXME put here some js to set action field then post form
 ?>
 <script type='text/javascript'>
@@ -41,7 +43,7 @@ function gotab(tab) {
     background: #F7FAFF;
     margin-left: auto;
     margin-right: auto;
-    border-top: 3px solid #3165CD;
+    border-bottom: 3px solid #3165CD;
 }
 #detailsummary table, .detailentry table
 {
@@ -224,9 +226,6 @@ function Hide(button,element)
 
 //-->
 </script>
-
-
-
 </head>
 <body onload="self.focus()">
 
@@ -242,14 +241,6 @@ $sql .= " OR incidents.contact=NULL ";
 $result = mysql_query($sql);
 if (mysql_error()) trigger_error("MySQL Query Error ".mysql_error(), E_USER_ERROR);
 $incident = mysql_fetch_object($result);
-
-// Prepare data for output
-$incident->title = stripslashes($incident->title);
-$incident->externalengineer = stripslashes($incident->externalengineer);
-$incident->product = stripslashes($incident->product);
-$incident->productversion = stripslashes($incident->productversion);
-$incident->servicepacks = stripslashes($incident->servicepacks);
-
 $site_name=site_name($incident->siteid);
 $product_name=product_name($incident->product);
 if ($incident->softwareid > 0) $software_name=software_name($incident->softwareid);
@@ -302,11 +293,45 @@ if ($slaremain <> 0 AND $incident->status!=2)
 
 // Print a table showing summary details of the incident
 
-echo "<h1 class='$class'>{$title}: {$incidentid} - ".stripslashes($incident->title)."</h1>";
+// Tempory hack, don't show this for old incident details page
+//if (strpos($_SERVER['PHP_SELF'], 'incident_details.php')===FALSE)
+//{
+    echo "<h1 class='$class'>{$title}: {$incidentid} - ".stripslashes($incident->title)."</h1>";
+//}
 
-include('incident/details.inc.php');
-
-
-
+// echo "<h1>$title</h1>";
+echo "<div id='navmenu'>";
+if ($menu != 'hide')
+{
+    if (incident_status($id) != 2)
+    {
+        echo "<a class='barlink' href='update_incident.php?id={$id}&amp;popup={$popup}' accesskey='U'><em>U</em>pdate</a> | ";
+        echo "<a class='barlink' href='javascript:close_window({$id});'>Close</a> | ";
+        echo "<a class='barlink' href='reassign_incident.php?id={$id}&amp;popup={$popup}' accesskey='R'><em>R</em>eassign</a> | ";
+        echo "<a class='barlink' href='edit_incident.php?id={$id}&amp;popup={$popup}'>Edit</a> | ";
+        echo "<a class='barlink' href='incident_service_levels.php?id={$id}&amp;popup={$popup}' accesskey='S'><em>S</em>ervice</a> | ";
+        echo "<a class='barlink' href='incident_relationships.php?id={$id}&amp;tab=relationships'>Relations</a> | ";
+        echo "<a class='barlink' href='javascript:email_window({$id})' accesskey='E'><em>E</em>mail</a> | ";
+        echo "<a class='barlink' href='incident_attachments.php?id={$id}&amp;popup={$popup}' accesskey='F'><em>F</em>iles</a> | ";
+        echo "<a class='barlink' href='incident_details.php?id={$id}&amp;popup={$popup}' accesskey='D'><em>D</em>etails And Log</a> | ";
+        echo "<a class='barlink' href='javascript:help_window({$permission});'>?</a>";
+        if (!empty($_REQUEST['popup'])) echo " | <a class=barlink href='javascript:window.close();'>Close Window</a>";
+    }
+    else
+    {
+        echo "<a class='barlink' href='reopen_incident.php?id={$id}&amp;popup={$popup}'>Reopen</a> | ";
+        echo "<a class='barlink' href='incident_service_levels.php?id={$id}&amp;popup={$poup}' accesskey='S'><em>S</em>ervice</a> | ";
+        echo "<a class='barlink' href='incident_relationships.php?id={$id}&amp;tab=relationships'>Relations</a> | ";
+        echo "<a class='barlink' href='incident_attachments.php?id={$id}&amp;popup={$popup}' accesskey='F'><em>F</em>iles</a> | ";
+        echo "<a class='barlink' href='incident_details.php?id={$id}&amp;popup={$popup}' accesskey='D'><em>D</em>etails And Log</a> | ";
+        echo "<a class='barlink' href='javascript:help_window({$permission});'>?</a>";
+        if (!empty($_REQUEST['popup'])) echo " | <a class='barlink' href='javascript:window.close();'>Close Window</a>";
+    }
+}
+else
+{
+    echo "<a class='barlink' href='javascript:window.close();'>Close Window</a>";
+}
+echo "</div>";
 
 ?>

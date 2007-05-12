@@ -1,6 +1,6 @@
 <?php
 
-function dashboard_statistics($row,$dashboardid)
+function dashboard_statistics()
 {
     global $todayrecent;
     global $i18n_TODAYS_STATS;
@@ -46,7 +46,8 @@ function dashboard_statistics($row,$dashboardid)
     $kbpublished=mysql_num_rows($result);
     mysql_free_result($result);
 
-    echo "<div class='windowbox' style='width: 95%' id='$row-$dashboardid'>";
+    echo "<span id='dragList2'>";
+    echo "<div class='windowbox' style='width: 95%'>";
     echo "<div class='windowtitle'><a href='statistics.php'>{$i18n_TODAYS_STATS}</a></div>";
     echo "<div class='window'>";
     if ($todaysincidents == 0) echo $i18n_NO_INCIDENTS;
@@ -76,6 +77,7 @@ function dashboard_statistics($row,$dashboardid)
 
     echo "</div>";
     echo "</div>";
+    echo "</span>";
 }
 
 ?>

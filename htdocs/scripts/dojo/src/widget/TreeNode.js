@@ -8,16 +8,27 @@
 		http://dojotoolkit.org/community/licensing.shtml
 */
 
+
 dojo.provide("dojo.widget.TreeNode");
 
-dojo.require("dojo.html.*");
 dojo.require("dojo.event.*");
 dojo.require("dojo.io.*");
 
-dojo.widget.defineWidget("dojo.widget.TreeNode", dojo.widget.HtmlWidget, function() {
+// make it a tag
+dojo.widget.tags.addParseTreeHandler("dojo:TreeNode");
+
+
+// # //////////
+
+dojo.widget.TreeNode = function() {
+	dojo.widget.HtmlWidget.call(this);
+
 	this.actionsDisabled = [];
-},
-{
+}
+
+dojo.inherits(dojo.widget.TreeNode, dojo.widget.HtmlWidget);
+
+dojo.lang.extend(dojo.widget.TreeNode, {
 	widgetType: "TreeNode",
 
 	loadStates: {
@@ -84,11 +95,11 @@ dojo.widget.defineWidget("dojo.widget.TreeNode", dojo.widget.HtmlWidget, functio
 	domNodeInitialized: false,  // domnode is initialized with icons etc
 
 
-	isFirstChild: function() {
+	isFirstNode: function() {
 		return this.getParentIndex() == 0 ? true: false;
 	},
 
-	isLastChild: function() {
+	isLastNode: function() {
 		return this.getParentIndex() == this.parent.children.length-1 ? true : false;
 	},
 
@@ -161,14 +172,14 @@ dojo.widget.defineWidget("dojo.widget.TreeNode", dojo.widget.HtmlWidget, functio
 				var img = this.tree.makeBlankImg();
 				this.imgs.unshift(img);
 				//dojo.debugShallow(this.domNode);
-				dojo.html.insertBefore(this.imgs[0], this.domNode.firstChild);
+				dojo.dom.insertBefore(this.imgs[0], this.domNode.firstChild);
 
 			}
 		}
 		if (depthDiff<0) {
 			for(var i=0; i<-depthDiff;i++) {
 				this.imgs.shift();
-				dojo.html.removeNode(this.domNode.firstChild);
+				dojo.dom.removeNode(this.domNode.firstChild);
 			}
 		}
 
@@ -232,7 +243,7 @@ dojo.widget.defineWidget("dojo.widget.TreeNode", dojo.widget.HtmlWidget, functio
 		// add to images before the title
 		this.imgs.push(this.childIcon);
 
-		dojo.html.insertBefore(this.childIcon, this.titleNode);
+		dojo.dom.insertBefore(this.childIcon, this.titleNode);
 
 		// node with children(from source html) becomes folder on build stage.
 		if (this.children.length || this.isFolder) {
@@ -309,12 +320,12 @@ dojo.widget.defineWidget("dojo.widget.TreeNode", dojo.widget.HtmlWidget, functio
 
 		if (this.tree.showGrid){
 			if (this.depth){
-				this.setGridImage(-2, this.isLastChild() ? this.tree.gridIconSrcL : this.tree.gridIconSrcT);
+				this.setGridImage(-2, this.isLastNode() ? this.tree.gridIconSrcL : this.tree.gridIconSrcT);
 			}else{
-				if (this.isFirstChild()){
-					this.setGridImage(-2, this.isLastChild() ? this.tree.gridIconSrcX : this.tree.gridIconSrcY);
+				if (this.isFirstNode()){
+					this.setGridImage(-2, this.isLastNode() ? this.tree.gridIconSrcX : this.tree.gridIconSrcY);
 				}else{
-					this.setGridImage(-2, this.isLastChild() ? this.tree.gridIconSrcL : this.tree.gridIconSrcT);
+					this.setGridImage(-2, this.isLastNode() ? this.tree.gridIconSrcL : this.tree.gridIconSrcT);
 				}
 			}
 		}else{
@@ -349,7 +360,7 @@ dojo.widget.defineWidget("dojo.widget.TreeNode", dojo.widget.HtmlWidget, functio
 			//dojo.debug("Parent "+parent);
 
 			var idx = this.imgs.length-(3+i);
-			var img = (this.tree.showGrid && !parent.isLastChild()) ? this.tree.gridIconSrcV : this.tree.blankIconSrc;
+			var img = (this.tree.showGrid && !parent.isLastNode()) ? this.tree.gridIconSrcV : this.tree.blankIconSrc;
 
 			//dojo.debug("Image "+img+" for "+idx);
 
@@ -364,7 +375,7 @@ dojo.widget.defineWidget("dojo.widget.TreeNode", dojo.widget.HtmlWidget, functio
 
 		var _this = this;
 
-		var icon = this.isLastChild() ? this.tree.blankIconSrc : this.tree.gridIconSrcV;
+		var icon = this.isLastNode() ? this.tree.blankIconSrc : this.tree.gridIconSrcV;
 
 		dojo.lang.forEach(_this.getDescendants(),
 			function(node) { node.setGridImage(_this.depth, icon); }

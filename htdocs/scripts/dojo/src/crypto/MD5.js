@@ -15,8 +15,6 @@ dojo.provide("dojo.crypto.MD5");
  *	implemented getHMAC for message digest auth.
  */
 dojo.crypto.MD5 = new function(){
-	//	summary
-	//	object for creating digests using the MD5 algorithm
 	var chrsz=8;
 	var mask=(1<<chrsz)-1;
 	function toWord(s) {
@@ -164,35 +162,31 @@ dojo.crypto.MD5 = new function(){
 	}
 
 	//	Public functions
-	this.compute=function(/* string */data, /* dojo.crypto.outputTypes */outputType){
-		//	summary
-		//	computes the digest of data, and returns the result as a string of type outputType
+	this.compute=function(data,outputType){
 		var out=outputType||dojo.crypto.outputTypes.Base64;
 		switch(out){
 			case dojo.crypto.outputTypes.Hex:{
-				return toHex(core(toWord(data),data.length*chrsz));	//	string
+				return toHex(core(toWord(data),data.length*chrsz));
 			}
 			case dojo.crypto.outputTypes.String:{
-				return toString(core(toWord(data),data.length*chrsz));	//	string
+				return toString(core(toWord(data),data.length*chrsz));
 			}
 			default:{
-				return toBase64(core(toWord(data),data.length*chrsz));	//	string
+				return toBase64(core(toWord(data),data.length*chrsz));
 			}
 		}
 	};
-	this.getHMAC=function(/* string */data, /* string */key, /* dojo.crypto.outputTypes */outputType){
-		//	summary
-		//	computes a digest of data using key, and returns the result as a string of outputType
+	this.getHMAC=function(data,key,outputType){
 		var out=outputType||dojo.crypto.outputTypes.Base64;
 		switch(out){
 			case dojo.crypto.outputTypes.Hex:{
-				return toHex(hmac(data,key));	//	string
+				return toHex(hmac(data,key));
 			}
 			case dojo.crypto.outputTypes.String:{
-				return toString(hmac(data,key));	//	string
+				return toString(hmac(data,key));
 			}
 			default:{
-				return toBase64(hmac(data,key));	//	string
+				return toBase64(hmac(data,key));
 			}
 		}
 	};

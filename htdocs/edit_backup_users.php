@@ -40,9 +40,8 @@ if (empty($save))
     include('htmlheader.inc.php');
     echo "<h2>Define Substitute Engineers for ".user_realname($user,TRUE)."</h2>\n";
     echo "<form name='def' action='{$_SERVER['PHP_SELF']}' method='post'>";
-    echo "<input type='hidden' name='user' value='{$user}' />";
     echo "<p align='center'>Default Substitute Engineer: ";
-    user_drop_down('default', $default, FALSE, $user, "onchange='javascript:this.form.submit();'");
+    user_drop_down('default', $default, FALSE, $sit[2], "onchange='javascript:this.form.submit();'");
     echo "</p>";
     echo "</form>";
 
@@ -53,7 +52,7 @@ if (empty($save))
     {
         echo "<form action='{$_SERVER['PHP_SELF']}' method='post'>\n";
         echo "<table align='center'>\n";
-        echo "<tr><th>Software</th><th>Substitute</th></tr>";
+        echo "<tr><th>Software</th><th>Backup Engineer</th></tr>";
         $class='shade1';
         while ($software = mysql_fetch_object($result))
         {

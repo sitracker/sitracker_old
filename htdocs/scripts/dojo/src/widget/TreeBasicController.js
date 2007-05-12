@@ -16,7 +16,17 @@ dojo.require("dojo.json")
 dojo.require("dojo.io.*");
 
 
-dojo.widget.defineWidget("dojo.widget.TreeBasicController", dojo.widget.HtmlWidget, {
+dojo.widget.tags.addParseTreeHandler("dojo:TreeBasicController");
+
+
+dojo.widget.TreeBasicController = function() {
+	dojo.widget.HtmlWidget.call(this);
+}
+
+dojo.inherits(dojo.widget.TreeBasicController, dojo.widget.HtmlWidget);
+
+
+dojo.lang.extend(dojo.widget.TreeBasicController, {
 	widgetType: "TreeBasicController",
 
 	DNDController: "",

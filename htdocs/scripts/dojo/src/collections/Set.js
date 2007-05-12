@@ -12,12 +12,9 @@ dojo.provide("dojo.collections.Set");
 dojo.require("dojo.collections.Collections");
 dojo.require("dojo.collections.ArrayList");
 
+//	straight up sets are based on arrays or array-based collections.
 dojo.collections.Set = new function(){
-	//	summary
-	//	Singleton for dealing with common set operations.
-	this.union = function(/* array */setA, /* array */setB){
-		//	summary
-		//	Return the union of the two passed sets.
+	this.union = function(setA, setB){
 		if (setA.constructor == Array) var setA = new dojo.collections.ArrayList(setA);
 		if (setB.constructor == Array) var setB = new dojo.collections.ArrayList(setB);
 		if (!setA.toArray || !setB.toArray) dojo.raise("Set operations can only be performed on array-based collections.");
@@ -29,11 +26,9 @@ dojo.collections.Set = new function(){
 				result.add(item);
 			}
 		}
-		return result;	//	dojo.collections.ArrayList
+		return result;
 	};
-	this.intersection = function(/* array */setA, /* array */setB){
-		//	summary
-		//	Return the intersection of the two passed sets.
+	this.intersection = function(setA, setB){
 		if (setA.constructor == Array) var setA = new dojo.collections.ArrayList(setA);
 		if (setB.constructor == Array) var setB = new dojo.collections.ArrayList(setB);
 		if (!setA.toArray || !setB.toArray) dojo.raise("Set operations can only be performed on array-based collections.");
@@ -45,11 +40,10 @@ dojo.collections.Set = new function(){
 				result.add(item);
 			}
 		}
-		return result;	//	dojo.collections.ArrayList
+		return result;
 	};
-	this.difference = function(/* array */setA, /* array */setB){
-		//	summary
-		//	Returns everything in setA that is not in setB.
+	//	returns everything in setA that is not in setB.
+	this.difference = function(setA, setB){
 		if (setA.constructor == Array) var setA = new dojo.collections.ArrayList(setA);
 		if (setB.constructor == Array) var setB = new dojo.collections.ArrayList(setB);
 		if (!setA.toArray || !setB.toArray) dojo.raise("Set operations can only be performed on array-based collections.");
@@ -61,34 +55,30 @@ dojo.collections.Set = new function(){
 				result.add(item);
 			}
 		}
-		return result;	//	dojo.collections.ArrayList
+		return result;
 	};
-	this.isSubSet = function(/* array */setA, /* array */setB) {
-		//	summary
-		//	Returns if set B is a subset of set A.
+	this.isSubSet = function(setA, setB) {
 		if (setA.constructor == Array) var setA = new dojo.collections.ArrayList(setA);
 		if (setB.constructor == Array) var setB = new dojo.collections.ArrayList(setB);
 		if (!setA.toArray || !setB.toArray) dojo.raise("Set operations can only be performed on array-based collections.");
 		var e = setA.getIterator();
 		while(!e.atEnd()){
 			if(!setB.contains(e.get())){
-				return false;	//	boolean
+				return false;
 			}
 		}
-		return true;	//	boolean
+		return true;
 	};
-	this.isSuperSet = function(/* array */setA, /* array */setB){
-		//	summary
-		//	Returns if set B is a superset of set A.
+	this.isSuperSet = function(setA, setB){
 		if (setA.constructor == Array) var setA = new dojo.collections.ArrayList(setA);
 		if (setB.constructor == Array) var setB = new dojo.collections.ArrayList(setB);
 		if (!setA.toArray || !setB.toArray) dojo.raise("Set operations can only be performed on array-based collections.");
 		var e = setB.getIterator();
 		while(!e.atEnd()){
 			if(!setA.contains(e.get())){
-				return false;	//	boolean
+				return false;
 			}
 		}
-		return true;	//	boolean
+		return true;
 	};
 }();

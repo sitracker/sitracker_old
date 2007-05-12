@@ -11,8 +11,8 @@
 
 $permission=14; // View Users
 $title="Open Incident Monitor";
-require('db_connect.inc.php');
-require('functions.inc.php');
+include('db_connect.inc.php ');
+include('functions.inc.php ');
 // This page requires authentication
 require('auth.inc.php');
 
