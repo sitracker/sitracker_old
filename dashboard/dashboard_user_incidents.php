@@ -8,7 +8,7 @@
 // of the GNU General Public License, incorporated herein by reference.
 //
 
-function dashboard_user_incidents()
+function dashboard_user_incidents($row,$dashboardid)
 {
     global $user;
     global $sit;
@@ -41,9 +41,8 @@ function dashboard_user_incidents()
     $sql .= "(IF ((status >= 5 AND status <=8), ($now - lastupdated) > ({$CONFIG['regular_contact_days']} * 86400), 1=2 ) ";  // awaiting
     $sql .= "OR IF (status='1' OR status='3' OR status='4', 1=1 , 1=2) ";  // active, research, left message - show all
     $sql .= ") AND timeofnextaction < $now ) ";
-    echo "<span>";
-    echo "<div class='windowbox' style='width: 95%'>";
-    echo "<div class='windowtitle'><a href='incidents.php?user=current&queue=1&type=support'>".user_realname($user,TRUE)."'s Incidents</a> (Action Needed)</div>";
+    echo "<div class='windowbox' style='width: 95%' id='$row-$dashboardid'>";
+    echo "<div class='windowtitle'><a href='incidents.php?user=current&amp;queue=1&amp;type=support'>".user_realname($user,TRUE)."'s Incidents</a> (Action Needed)</div>";
     echo "<div class='window'>";
 
     $selectsql = "SELECT incidents.id, externalid, title, owner, towner, priority, status, siteid, forenames, surname, email, incidents.maintenanceid, ";
@@ -82,13 +81,18 @@ function dashboard_user_incidents()
     {
         // Incidents Table
         $incidents_minimal = true;
-        include('incidents_table.inc.php');
+        //include('incidents_table.inc.php');
+        echo "<table style=\"width: 100%\">";
+        while($row = mysql_fetch_array($result))
+        {
+            echo "<tr><td class='shade1'><a href='javascript:incident_details_window({$row['id']}) '>".stripslashes("{$row['id']} - {$row['title']} for {$row['forenames']}   {$row['surname']}")."</a></td></tr>\n";
+        }
+        echo "</table>";
     }
     else echo "<p align='center'>No Incidents</p>";
     echo "</div>";
     echo "</div>";
-    echo "</div>";
-    echo "</span>";
+    //echo "</div>";
 }
 
 ?>

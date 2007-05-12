@@ -1,5 +1,5 @@
 <?php
-// dashboard_random_tip.php - A random tip
+// dashboard_tags.php - Show tags
 //
 // SiT (Support Incident Tracker) - Support call tracking system
 // Copyright (C) 2000-2006 Salford Software Ltd.
@@ -9,13 +9,12 @@
 //
 
 
-function dashboard_random_tip($row,$dashboardid)
+function dashboard_tags($row,$dashboardid)
 {
-    global $i18n_RANDOM_TIP;
     echo "<div class='windowbox' style='width: 95%' id='$row-$dashboardid'>";
-    echo "<div class='windowtitle'>{$i18n_RANDOM_TIP}</div>";
+    echo "<div class='windowtitle'>Tags</div>";
     echo "<div class='window'>";
-    echo random_tip();
+    echo show_tag_cloud();
     echo "</div>";
     echo "</div>";
 }
