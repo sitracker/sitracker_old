@@ -27,7 +27,11 @@ if ($incidentid=='')
     $title = "Move Update $updateid";
     include('htmlheader.inc.php');
     echo "<h2>$title</h2>";
-    if ($error=='1') echo "<p class='error'>Error assigning that incident update</p>";
+    if ($error=='1')
+    {
+        echo "<p class='error'>Error assigning that incident update. Probable cause is ";
+        echo "that no incident exists with that ID or it has been closed.</p>";
+    }
     ?>
     <div align='center'>
     <form action="<?php echo $_SERVER['PHP_SELF']; ?>" method='post'>
