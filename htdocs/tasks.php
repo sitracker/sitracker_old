@@ -86,7 +86,7 @@ if (mysql_num_rows($result) >=1 )
 {
     echo "<table align='center'>";
     echo "<tr>";
-    if ($user == $sit[2]) echo colheader('distribution', "<img src='{$CONFIG['application_webpath']}images/icons/kdeclassic/16x16/apps/password.png' width='16' height='16' title='Public/Private' alt='Private' style='border: 0px;' />", $sort, $order);
+    if ($user == $sit[2]) echo colheader('distribution', "<img src='{$CONFIG['application_webpath']}images/icons/{$iconset}/16x16/apps/password.png' width='16' height='16' title='Public/Private' alt='Private' style='border: 0px;' />", $sort, $order);
     echo colheader('id', 'ID', $sort, $order);
     echo colheader('name', 'Task', $sort, $order);
     echo colheader('priority', 'Priority', $sort, $order);
@@ -103,7 +103,7 @@ if (mysql_num_rows($result) >=1 )
         if ($user == $sit[2])
         {
             echo "<td>";
-            if ($task->distribution=='private') echo " <img src='{$CONFIG['application_webpath']}images/icons/kdeclassic/16x16/apps/password.png' width='16' height='16' title='Private' alt='Private' />";
+            if ($task->distribution=='private') echo " <img src='{$CONFIG['application_webpath']}images/icons/{$iconset}/16x16/apps/password.png' width='16' height='16' title='Private' alt='Private' />";
             echo "</td>";
         }
         echo "<td>";
