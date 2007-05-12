@@ -472,6 +472,35 @@ INSERT INTO `licencetypes` VALUES (3, 'Per Server');
 INSERT INTO `licencetypes` VALUES (4, 'Site');
 INSERT INTO `licencetypes` VALUES (5, 'Evaluation');
 
+CREATE TABLE `links` (
+     `linktype` int(11) NOT NULL default '0',
+     `origcolref` int(11) NOT NULL default '0',
+     `linkcolref` int(11) NOT NULL default '0',
+     `direction` enum('left','right','bi') NOT NULL default 'left',
+     `userid` tinyint(4) NOT NULL default '0',
+     PRIMARY KEY  (`linktype`,`origcolref`,`linkcolref`),
+     KEY `userid` (`userid`)
+   ) ENGINE=MyISAM ;
+
+CREATE TABLE `linktypes` (
+     `id` int(11) NOT NULL auto_increment,
+     `name` varchar(255) NOT NULL default '',
+     `lrname` varchar(255) NOT NULL default '',
+     `rlname` varchar(255) NOT NULL default '',
+     `origtab` varchar(255) NOT NULL default '',
+     `origcol` varchar(255) NOT NULL default '',
+     `linktab` varchar(255) NOT NULL default '',
+     `linkcol` varchar(255) NOT NULL default 'id',
+     `selectionsql` varchar(255) NOT NULL default '',
+     `filtersql` varchar(255) NOT NULL default '',
+     `viewurl` varchar(255) NOT NULL default '',
+     PRIMARY KEY  (`id`),
+     KEY `origtab` (`origtab`),
+     KEY `linktab` (`linktab`)
+   ) ENGINE=MyISAM;
+
+INSERT INTO `linktypes` VALUES (1,'Task','Subtask','Parent Task','tasks','id','tasks','id','name','','view_task.php?id=%id%'),(2,'Contact','Contact','Contact Task','tasks','id','contacts','id','forenames','','contact_details.php?id=%id%'),(3,'Site','Site','Site Task','tasks','id','sites','id','name','','site_details.php?id=%id%'),(4,'Incident','Incident','Task','tasks','id','incidents','id','title','','incident_details.php?id=%id%');
+
 CREATE TABLE `maintenance` (
   `id` int(11) NOT NULL auto_increment,
   `site` int(11) default NULL,
@@ -1336,6 +1365,35 @@ CREATE TABLE `set_tags` (
 `tagid` INT NOT NULL ,
 PRIMARY KEY ( `id` , `type` , `tagid` )
 ) ENGINE=MYISAM;
+
+CREATE TABLE `links` (
+     `linktype` int(11) NOT NULL default '0',
+     `origcolref` int(11) NOT NULL default '0',
+     `linkcolref` int(11) NOT NULL default '0',
+     `direction` enum('left','right','bi') NOT NULL default 'left',
+     `userid` tinyint(4) NOT NULL default '0',
+     PRIMARY KEY  (`linktype`,`origcolref`,`linkcolref`),
+     KEY `userid` (`userid`)
+   ) ENGINE=MyISAM ;
+
+CREATE TABLE `linktypes` (
+     `id` int(11) NOT NULL auto_increment,
+     `name` varchar(255) NOT NULL default '',
+     `lrname` varchar(255) NOT NULL default '',
+     `rlname` varchar(255) NOT NULL default '',
+     `origtab` varchar(255) NOT NULL default '',
+     `origcol` varchar(255) NOT NULL default '',
+     `linktab` varchar(255) NOT NULL default '',
+     `linkcol` varchar(255) NOT NULL default 'id',
+     `selectionsql` varchar(255) NOT NULL default '',
+     `filtersql` varchar(255) NOT NULL default '',
+     `viewurl` varchar(255) NOT NULL default '',
+     PRIMARY KEY  (`id`),
+     KEY `origtab` (`origtab`),
+     KEY `linktab` (`linktab`)
+   ) ENGINE=MyISAM;
+
+INSERT INTO `linktypes` VALUES (1,'Task','Subtask','Parent Task','tasks','id','tasks','id','name','','view_task.php?id=%id%'),(2,'Contact','Contact','Contact Task','tasks','id','contacts','id','forenames','','contact_details.php?id=%id%'),(3,'Site','Site','Site Task','tasks','id','sites','id','name','','site_details.php?id=%id%'),(4,'Incident','Incident','Task','tasks','id','incidents','id','title','','incident_details.php?id=%id%');
 
 ";
 
