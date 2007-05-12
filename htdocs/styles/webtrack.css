@@ -512,7 +512,10 @@ div.note { font-size: 98%; background-color: #FFFFA2; border-color: #A2A86A; mar
 
 .deleted { text-decoration: line-through; }
 
+.dojoComboBox { height: 1.5em; }
+
 @media print
 {
     #menu, #statusbar, h1#apptitle, #menulist, .contextmenu {visibility:hidden; display:none;}
 }
+
