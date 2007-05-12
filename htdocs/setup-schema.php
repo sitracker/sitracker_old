@@ -822,6 +822,13 @@ INSERT INTO `servicelevels` VALUES (0, 'standard', 2, 240, 320, 960, 10.00, 20, 
 INSERT INTO `servicelevels` VALUES (0, 'standard', 3, 120, 180, 480, 7.00, 14, 90);
 INSERT INTO `servicelevels` VALUES (0, 'standard', 4, 60, 120, 240, 3.00, 6, 90);
 
+CREATE TABLE `set_tags` (
+`id` INT NOT NULL ,
+`type` MEDIUMINT NOT NULL ,
+`tagid` INT NOT NULL ,
+PRIMARY KEY ( `id` , `type` , `tagid` )
+) ENGINE=MYISAM;
+
 CREATE TABLE `sitecontacts` (
   `siteid` int(11) NOT NULL default '0',
   `contactid` int(11) NOT NULL default '0',
@@ -927,6 +934,12 @@ CREATE TABLE `system` (
   `id` int(1) NOT NULL default '0',
   `version` float(3,2) NOT NULL default '0.00',
   PRIMARY KEY  (`id`)
+) ENGINE=MyISAM;
+
+CREATE TABLE `tags` (
+  `tagid` int(11) NOT NULL auto_increment,
+  `name` varchar(255) NOT NULL default '',
+  PRIMARY KEY  (`tagid`)
 ) ENGINE=MyISAM;
 
 CREATE TABLE `tasks` (
@@ -1310,6 +1323,20 @@ UPDATE `interfacestyles` SET `name` = 'Light Blue' WHERE `id` =1 LIMIT 1 ;
 $upgrade_schema[325] = "
 ALTER TABLE `interfacestyles` ADD `iconset` VARCHAR( 255 ) NOT NULL DEFAULT 'kdeclassic' AFTER `cssurl` ;
 ALTER TABLE `sites` ADD `websiteurl` VARCHAR( 255 ) NULL AFTER `email` ;
+
+CREATE TABLE `tags` (
+  `tagid` int(11) NOT NULL auto_increment,
+  `name` varchar(255) NOT NULL default '',
+  PRIMARY KEY  (`tagid`)
+) ENGINE=MyISAM;
+
+CREATE TABLE `set_tags` (
+`id` INT NOT NULL ,
+`type` MEDIUMINT NOT NULL ,
+`tagid` INT NOT NULL ,
+PRIMARY KEY ( `id` , `type` , `tagid` )
+) ENGINE=MYISAM;
+
 ";
 
 // Important: When making changes to the schema you must add SQL to make the alterations
