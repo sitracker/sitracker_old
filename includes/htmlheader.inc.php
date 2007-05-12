@@ -27,14 +27,13 @@ if (isset($title)) { echo "$title - {$CONFIG['application_shortname']}"; } else 
 echo "</title>\n";
 echo "<link rel='SHORTCUT ICON' href='{$CONFIG['application_webpath']}images/sit_favicon.png' />\n";
 echo "<style type='text/css'>@import url('{$CONFIG['application_webpath']}styles/webtrack.css');</style>\n";
-if ($_SESSION['auth'] == TRUE)
-{
-    $cssurl = db_read_column('cssurl', 'interfacestyles', $_SESSION['style']);
-}
-else
-{
-    $cssurl = db_read_column('cssurl', 'interfacestyles', $CONFIG['default_interface_style']);
-}
+if ($_SESSION['auth'] == TRUE) $styleid = $_SESSION['style'];
+else $styleid= $CONFIG['default_interface_style'];
+$csssql = "SELECT cssurl, iconset FROM interfacestyles WHERE id='{$styleid}'";
+$cssresult = mysql_query($csssql);
+if (mysql_error()) trigger_error(mysql_error(),E_USER_WARNING);
+else list($cssurl, $iconset) = mysql_fetch_row($cssresult);
+unset($styleid);
 echo "<link rel='stylesheet' href='{$CONFIG['application_webpath']}styles/{$cssurl}' />\n";
 
 if (isset($refresh) && $refresh != 0)
@@ -44,6 +43,12 @@ if (isset($refresh) && $refresh != 0)
 echo "<script src='{$CONFIG['application_webpath']}webtrack.js' type='text/javascript'></script>\n";
 // javascript popup date library
 echo "<script src='{$CONFIG['application_webpath']}calendar.js' type='text/javascript'></script>\n";
+
+if($sit[0] != '')
+{
+    echo "<link rel=\"search\" type=\"application/opensearchdescription+xml\" title=\"{$CONFIG['application_shortname']} Search\" href=\"{$CONFIG['application_webpath']}opensearch.php\" />";
+}
+
 echo "</head>\n";
 echo "<body>\n";
 echo "<h1 id='apptitle'>{$CONFIG['application_name']}</h1>\n";
@@ -70,7 +75,7 @@ if ($sit[0]!='')
         echo "<li class='menuitem'>";
         // Permission Required: ".permission_name($topvalue['perm'])."
         if ($topvalue['perm'] >=1 AND !in_array($topvalue['perm'], $_SESSION['permissions'])) echo "<a href='javascript:void();' class='greyed'>{$topvalue['name']}</a>";
-        else echo "<a href='{$CONFIG['application_webpath']}{$topvalue['url']}'>{$topvalue['name']}</a>";
+        else echo "<a href='{$topvalue['url']}'>{$topvalue['name']}</a>";
         // Do we need a submenu?
         if ($topvalue['submenu'] > 0 AND in_array($topvalue['perm'], $_SESSION['permissions']))
         {
@@ -80,7 +85,7 @@ if ($sit[0]!='')
                 if ($subvalue['submenu'] > 0) echo "<li class='submenu'>";
                 else echo "<li>";
                 if ($subvalue['perm'] >=1 AND !in_array($subvalue['perm'], $_SESSION['permissions'])) echo "<a href='javascript:void();' class='greyed'>{$subvalue['name']}</a>";
-                else echo "<a href='{$CONFIG['application_webpath']}{$subvalue['url']}'>{$subvalue['name']}</a>";
+                else echo "<a href='{$subvalue['url']}'>{$subvalue['name']}</a>";
                 if ($subvalue['submenu'] > 0 AND in_array($subvalue['perm'], $_SESSION['permissions']))
                 {
                     echo "<ul>"; // id ='menuSubSub'
@@ -89,7 +94,7 @@ if ($sit[0]!='')
                         if ($subsubvalue['submenu'] > 0) echo "<li class='submenu'>";
                         else echo "<li>";
                         if ($subsubvalue['perm'] >=1 AND !in_array($subsubvalue['perm'], $_SESSION['permissions'])) echo "<a href=\"javascript:void();\" class='greyed'>{$subsubvalue['name']}</a>";
-                        else echo "<a href='{$CONFIG['application_webpath']}{$subsubvalue['url']}'>{$subsubvalue['name']}</a>";
+                        else echo "<a href='{$subsubvalue['url']}'>{$subsubvalue['name']}</a>";
                         if ($subsubvalue['submenu'] > 0 AND in_array($subsubvalue['perm'], $_SESSION['permissions']))
                         {
                             echo "<ul>"; // id ='menuSubSubSub'
@@ -98,7 +103,7 @@ if ($sit[0]!='')
                                 if ($subsubsubvalue['submenu'] > 0) echo "<li class='submenu'>";
                                 else echo "<li>";
                                 if ($subsubsubvalue['perm'] >=1 AND !in_array($subsubsubvalue['perm'], $_SESSION['permissions'])) echo "<a href='javascript:void();' class='greyed'>{$subsubsubvalue['name']}</a>";
-                                else echo "<a href='{$CONFIG['application_webpath']}{$subsubsubvalue['url']}'>{$subsubsubvalue['name']}</a>";
+                                else echo "<a href='{$subsubsubvalue['url']}'>{$subsubsubvalue['name']}</a>";
                                 echo "</li>\n";
                             }
                             echo "</ul>\n";
@@ -116,4 +121,5 @@ if ($sit[0]!='')
     echo "</ul>\n\n";
     echo "</div>\n";
 }
+echo "<div id='mainframe'>";
 ?>
