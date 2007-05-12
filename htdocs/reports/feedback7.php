@@ -20,7 +20,7 @@ require('auth.inc.php');
 
 include('htmlheader.inc.php');
 
-$formid=6;
+$formid=$CONFIG['feedback_form'];
 $now = time();
 
 echo "<div style='margin: 20px'>";
