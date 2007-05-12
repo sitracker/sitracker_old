@@ -32,6 +32,34 @@ function confirm_submit()
 if (empty($submit))
 {
     // Show add user form
+    $gsql = "SELECT * FROM groups ORDER BY name";
+    $gresult = mysql_query($gsql);
+    if (mysql_error()) trigger_error(mysql_error(),E_USER_ERROR);
+    while ($group = mysql_fetch_object($gresult))
+    {
+        $grouparr[$group->id]=$group->name;
+    }
+
+    $numgroups = count($grouparr);
+
+    function group_drop_down($name, $selected)
+    {
+        global $grouparr, $numgroups;
+        $html = "<select name='$name'>";
+        $html .= "<option value='0'>None</option>\n";
+        if ($numgroups >= 1)
+        {
+            foreach($grouparr AS $groupid => $groupname)
+            {
+                $html .= "<option value='$groupid'";
+                if ($groupid == $selected) $html .= " selected='selected'";
+                $html .= ">$groupname</option>\n";
+            }
+        }
+        $html .= "</select>\n";
+        return $html;
+    }
+
     ?>
     <h2>Add User</h2>
     <p align='center'>Mandatory fields are marked <sup class='red'>*</sup></p>
@@ -39,16 +67,23 @@ if (empty($submit))
     <table align='center'>
     <tr><th>Real Name: <sup class='red'>*</sup></th><td><input maxlength="50" name="realname" size="30" /></td></tr>
     <tr><th>Username: <sup class='red'>*</sup></th><td><input maxlength="50" name="username" size="30" /></td></tr>
-    <tr><th>Password: <sup class='red'>*</sup></th><td><input maxlength="50" name="password" size="30" /></td></tr>
+    <tr id='password'><th>Password: <sup class='red'>*</sup></th><td><input maxlength="50" name="password" size="30" /></td></tr>
     <?php
+    echo "<tr><th>Group:</th>";
+    echo "<td>".group_drop_down('groupid', 0)."</td>";
+    echo "</tr>";
     echo "<tr><th>Role:</th>";
     echo "<td>".role_drop_down('roleid', 1)."</td>";
     echo "</tr>";
     ?>
     <tr><th>Job Title: <sup class='red'>*</sup></th><td><input maxlength="50" name="jobtitle" size="30" /></td></tr>
-    <tr><th>Email: <sup class='red'>*</sup></th><td><input maxlength="50" name="email" size="30" /></td></tr>
+    <tr id='email'><th>Email: <sup class='red'>*</sup></th><td><input maxlength="50" name="email" size="30" /></td></tr>
     <tr><th>Phone:</th><td><input maxlength="50" name="phone" size="30" /></td></tr>
     <tr><th>Fax:</th><td><input maxlength="50" name="fax" size="30" /></td></tr>
+    <tr><th>Holiday Entitlement:</th><td><input maxlength="3" name="holiday_entitlement" size="3" /> days</td></tr>
+    <?php
+    plugin_do('add_user_form');
+    ?>
     </table>
     <p><input name="submit" type="submit" value="Add User" /></p>
     </form>
@@ -60,11 +95,13 @@ else
     $username = mysql_escape_string(strtolower(trim(strip_tags($_REQUEST['username']))));
     $realname = cleanvar($_REQUEST['realname']);
     $password = mysql_escape_string($_REQUEST['password']);
+    $groupid = cleanvar($_REQUEST['groupid']);
     $roleid = cleanvar($_REQUEST['roleid']);
     $jobtitle = cleanvar($_REQUEST['jobtitle']);
     $email = cleanvar($_REQUEST['email']);
     $phone = cleanvar($_REQUEST['phone']);
     $fax = cleanvar($_REQUEST['fax']);
+    $holiday_entitlement = cleanvar($_REQUEST['holiday_entitlement']);
 
     // Add user
     $errors = 0;
@@ -113,8 +150,8 @@ else
     if ($errors == 0)
     {
         $password=strtoupper(md5($password));
-        $sql = "INSERT INTO users (username, password, realname, roleid, title, email, phone, fax, status, var_style) ";
-        $sql .= "VALUES ('$username', '$password', '$realname', '$roleid', '$jobtitle', '$email', '$phone', '$fax', 1, '{$CONFIG['default_interface_style']}')";
+        $sql = "INSERT INTO users (username, password, realname, roleid, groupid, title, email, phone, fax, status, var_style, holiday_entitlement) ";
+        $sql .= "VALUES ('$username', '$password', '$realname', '$roleid', '$groupid', '$jobtitle', '$email', '$phone', '$fax', 1, '{$CONFIG['default_interface_style']}', '$holiday_entitlement')";
         $result = mysql_query($sql);
         if (mysql_error()) trigger_error("MySQL Query Error ".mysql_error(), E_USER_ERROR);
         $newuserid = mysql_insert_id();
@@ -134,7 +171,7 @@ else
         else
         {
             journal(CFG_LOGGING_NORMAL, 'User Added', "User $username was added", CFG_JOURNAL_ADMIN, $id);
-            confirmation_page("2", "edit_user_permissions.php?action=edit&user={$newuserid}", "<h2>New User Added Successfully</h2><p align='center'>Please wait while you are redirected...</p>");
+            confirmation_page("2", "manage_users.php?#userid{$newuserid}", "<h2>New User Added Successfully</h2><p align='center'>Please wait while you are redirected...</p>");
         }
     }
 }
