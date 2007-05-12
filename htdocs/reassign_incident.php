@@ -174,17 +174,7 @@ if (empty($bodytext))
         echo "<input type='hidden' name='tempassign' value='{$originalid}' />";
         echo "</td></tr>\n";
     }
-    /*
-    echo "<tr><td align='right' class='shade1'><strong>Type of Assignment</strong>:</td>";
-    echo "<td class='shade2'><select name='asktemp'>";
-    echo "<option value='permanent'";
-    if ($_REQUEST['asktemp']=='permanent' OR $incident->towner < 1) echo " selected='selected'";
-    echo ">Permanent (Change queue)</option>";
-    echo "<option value='temporary'";
-    if ($_REQUEST['asktemp']=='temporary' OR $incident->towner > 0) echo " selected='selected'";
-    echo ">Temporary (Appears in both queues)</option>";
-    echo "</select>";
-    */
+
     ?>
     <tr>
     <th>Update Log:<br />
