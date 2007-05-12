@@ -27,12 +27,25 @@ $att_max_filesize = return_bytes($CONFIG['upload_max_filesize']);
 // Have a look to see if we've uploaded a file and process it if we have
 if ($_FILES['attachment']['name']!="")
 {
-// Check size is ok
-    if ($_FILES['attachment']['size'] > $att_max_filesize)
+    // Check if we had an error whilst uploading
+    if($_FILES['attachment']['error']!='')
     {
-        throw_error('User Error: Attachment too large or file upload error - size:',filesize($_FILES['attachment']['name']));
-        // throwing an error isn't the nicest thing to do for the user but there seems to be no guaranteed
-        // way of checking file sizes at the client end before the attachment is uploaded. - INL
+        echo "<div class='detailinfo'>\n";
+
+        echo "An error occurred while uploading <strong>{$_FILES['attachment']['name']}</strong>";
+
+        echo "<p class='error'>";
+        switch ($_FILES['attachment']['error'])
+        {
+            case UPLOAD_ERR_INI_SIZE:
+            case UPLOAD_ERR_FORM_SIZE:  echo "The uploaded file was too large"; break;
+            case UPLOAD_ERR_PARTIAL: echo "The file was only partially uploaded"; break;
+            case UPLOAD_ERR_NO_FILE: echo "No file was uploaded"; break;
+            case UPLOAD_ERR_NO_TMP_DIR: echo "Temporary folder is missing"; break;
+            default: echo "An unknown file upload error occurred"; break;
+        }
+        echo "</p>";
+        echo "</div>";
     }
     else
     {
@@ -52,20 +65,7 @@ if ($_FILES['attachment']['name']!="")
         echo "<div class='detailinfo'>\n";
         if (!$mk OR !$mv) echo "File <strong>{$_FILES['attachment']['name']}</strong> ({$_FILES['attachment']['type']} {$_FILES['attachment']['size']} bytes) uploaded OK";
         else echo "An error occurred while uploading <strong>{$_FILES['attachment']['name']}</strong>";
-        if ($_FILES['attachment']['error']!='')
-        {
-            echo "<p class='error'>";
-            switch ($_FILES['attachment']['error'])
-            {
-                case UPLOAD_ERR_INI_SIZE:
-                case UPLOAD_ERR_FORM_SIZE:  echo "The uploaded file was too large"; break;
-                case UPLOAD_ERR_PARTIAL: echo "The file was only partially uploaded"; break;
-                case UPLOAD_ERR_NO_FILE: echo "No file was uploaded"; break;
-                case UPLOAD_ERR_NO_TMP_DIR: echo "Temporary folder is missing"; break;
-                default: echo "An unknown file upload error occurred"; break;
-            }
-            echo "</p>";
-        }
+
         // Debug
         //echo " tmp filename: {$_FILES['attachment']['tmp_name']}<br />";
         //echo "error: {$_FILES['attachment']['eroor']}<br />";
@@ -102,7 +102,7 @@ echo "<div class='detailentry'>\n";
 echo "<form action='{$_SERVER['PHP_SELF']}?id={$incidentid}' method='post' name='updateform' id='updateform' enctype='multipart/form-data'>\n";
 echo "<input type='hidden' name='tab' value='{$selectedtab}' />";
 echo "<input type='hidden' name='action' value='{$selectedaction}' />";
-echo "<input type='hidden' name='MAX_FILE_SIZE' value='{$att_file_size}' />";
+echo "<input type='hidden' name='MAX_FILE_SIZE' value='{$att_max_filesize}' />";
 // maxfilesize='{$att_file_size}'
 echo "Upload a file <input class='textbox' type='file' name='attachment' size='30' /> ";
 echo "<input type='submit' value='Upload' /> (&lt;{$attmax})";
@@ -199,66 +199,71 @@ if (file_exists($incident_attachment_fspath))
 
     // List the directories first
     $temparray=list_dir($incident_attachment_fspath, 0);
-    if (count($temparray) == 0) echo "no files";
-    foreach($temparray as $value) {
-         if (is_dir($value)) $dirarray[] = $value;
-         elseif (is_file($value) AND substr($value,-1)!='.' AND substr($value,-8)!='mail.eml') $rfilearray[] = $value;
-    }
-    if (count($rfilearray) >= 1)
+    if (count($temparray) == 0) echo "<p class='info'>No files<p>";
+    else
     {
-        $headhtml = "<div class='detailhead'>\n";
-        $headhtml .= "<img src='{$CONFIG['application_webpath']}images/icons/kdeclassic/32x32/mimetypes/folder.gif' alt='Root dir' title='Root dir' border='0' height='16' width='16' /> \\";
-        $headhtml .= "</div>\n";
-        echo $headhtml;
-        echo "<div class='detailentry'>\n";
+        foreach($temparray as $value) {
+            if (is_dir($value)) $dirarray[] = $value;
+            elseif (is_file($value) AND substr($value,-1)!='.' AND substr($value,-8)!='mail.eml') $rfilearray[] = $value;
+        }
 
-        echo "<p><em>Root of Incident {$incidentid}</em></p>\n";
-        echo "<table>\n";
-        foreach($rfilearray AS $rfile)
+        if (count($rfilearray) >= 1)
         {
-            echo draw_file_row($rfile, $delim, $incidentid, $incident_attachment_fspath);
-        }
-        echo "</table>\n";
-        echo "</div>";
-    }
-    foreach($dirarray AS $dir)
-    {
-        $directory=substr($dir,0,strrpos($dir,$delim));
-        $dirname=substr($dir,strrpos($dir,$delim)+1,strlen($dir));
-        if ( is_number($dirname) && $dirname!=$id && strlen($dirname)==10) $dirprettyname=date('l jS M Y @ g:ia',$dirname);
-        else $dirprettyname=$dirname;
-        $headhtml = "<div class='detailhead'>\n";
-        $headhtml .= "<img src='{$CONFIG['application_webpath']}images/icons/kdeclassic/32x32/mimetypes/folder.gif' alt='{$id}' title='{$dir}' border='0' height='16' width='16' valign='top' /> {$dirprettyname}";
-        $headhtml .= "</div>\n";
-        $tempfarray=list_dir($dir, 1);
-        if (count($tempfarray)==1 AND (substr($tempfarray[0],-8)=='mail.eml'))
-        {
-            // do nothing if theres only an email in the dir, don't even list the directory
-        }
-        else
-        {
-            echo $headhtml;  // print the directory header bar that we drew above
+            $headhtml = "<div class='detailhead'>\n";
+            $headhtml .= "<img src='{$CONFIG['application_webpath']}images/icons/{$iconset}/32x32/mimetypes/folder.gif' alt='Root dir' title='Root dir' border='0' height='16' width='16' /> \\";
+            $headhtml .= "</div>\n";
+            echo $headhtml;
             echo "<div class='detailentry'>\n";
-            if (in_array("{$dir}{$delim}mail.eml",$tempfarray))
-            {
-                $updatelink=readlink($dir);
-                $updateid=substr($updatelink,strrpos($updatelink,$delim)+1,strlen($updatelink));
-                echo "<p>These files arrived by <a href='{$CONFIG['attachment_webpath']}{$incidentid}/{$dirname}/mail.eml'>email</a>, jump to the appropriate <a href='incident_details.php?id={$incidentid}#$updateid'>entry in the log</a></p>";
-            }
-            foreach($tempfarray as $fvalue)
-            {
-                if (is_file($fvalue) AND substr($fvalue,-8)!='mail.eml') $filearray[] = $fvalue;
-            }
-            echo "<table>\n";
-            foreach($filearray AS $file)
-            {
-                echo draw_file_row($file, $delim, $incidentid, $incident_attachment_fspath);
 
+            echo "<p><em>Root of Incident {$incidentid}</em></p>\n";
+            echo "<table>\n";
+            foreach($rfilearray AS $rfile)
+            {
+                echo draw_file_row($rfile, $delim, $incidentid, $incident_attachment_fspath);
             }
             echo "</table>\n";
             echo "</div>";
         }
-        unset($filearray);
+
+        foreach($dirarray AS $dir)
+        {
+            $directory=substr($dir,0,strrpos($dir,$delim));
+            $dirname=substr($dir,strrpos($dir,$delim)+1,strlen($dir));
+            if ( is_number($dirname) && $dirname!=$id && strlen($dirname)==10) $dirprettyname=date('l jS M Y @ g:ia',$dirname);
+            else $dirprettyname=$dirname;
+            $headhtml = "<div class='detailhead'>\n";
+            $headhtml .= "<img src='{$CONFIG['application_webpath']}images/icons/{$iconset}/32x32/mimetypes/folder.gif' alt='{$id}' title='{$dir}' border='0' height='16' width='16' valign='top' /> {$dirprettyname}";
+            $headhtml .= "</div>\n";
+            $tempfarray=list_dir($dir, 1);
+            if (count($tempfarray)==1 AND (substr($tempfarray[0],-8)=='mail.eml'))
+            {
+                // do nothing if theres only an email in the dir, don't even list the directory
+            }
+            else
+            {
+                echo $headhtml;  // print the directory header bar that we drew above
+                echo "<div class='detailentry'>\n";
+                if (in_array("{$dir}{$delim}mail.eml",$tempfarray))
+                {
+                    $updatelink=readlink($dir);
+                    $updateid=substr($updatelink,strrpos($updatelink,$delim)+1,strlen($updatelink));
+                    echo "<p>These files arrived by <a href='{$CONFIG['attachment_webpath']}{$incidentid}/{$dirname}/mail.eml'>email</a>, jump to the appropriate <a href='incident_details.php?id={$incidentid}#$updateid'>entry in the log</a></p>";
+                }
+                foreach($tempfarray as $fvalue)
+                {
+                    if (is_file($fvalue) AND substr($fvalue,-8)!='mail.eml') $filearray[] = $fvalue;
+                }
+                echo "<table>\n";
+                foreach($filearray AS $file)
+                {
+                    echo draw_file_row($file, $delim, $incidentid, $incident_attachment_fspath);
+
+                }
+                echo "</table>\n";
+                echo "</div>";
+            }
+            unset($filearray);
+        }
     }
 }
 echo "</form>";
