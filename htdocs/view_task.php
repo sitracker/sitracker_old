@@ -49,10 +49,16 @@ if (mysql_num_rows($result) >= 1)
         echo "<td>".stripslashes($task->name)."</td></tr>";
         echo "<tr><th>Description</th>";
         echo "<td>".nl2br(stripslashes($task->description))."</td></tr>";
+        if ($task->distribution=='public')
+        {
+            echo "<tr><th>Tags:</th><td>";
+            echo list_tags($id, 4);
+            echo "</td></tr>";
+        }
         if ($task->owner != $sit[2])
         {
             echo "<tr><th>Owner</th>";
-            echo "<td>".user_realname($task->owner)."</td></tr>";
+            echo "<td>".user_realname($task->owner,TRUE)."</td></tr>";
         }
         echo "<tr><th>Priority</th>";
         echo "<td>".priority_icon($task->priority).' '.priority_name($task->priority)."</td></tr>";
@@ -65,18 +71,31 @@ if (mysql_num_rows($result) >= 1)
         if ($duedate > 0) echo date('Y-m-d',$duedate);
         echo "</td></tr>";
         echo "<tr><th>Completion</th>";
-        echo "<td>".percent_bar($task->completion)."</td>";
+        echo "<td>".percent_bar($task->completion)."</td></tr>";
         echo "<tr><th>Value</th>";
         echo "<td>{$task->value}</td></tr>";
         echo "<tr><th>Privacy</th>";
         echo "<td>";
         if ($task->distribution=='public') echo "Public";
-        if ($task->distribution=='private') echo "Private <img src='{$CONFIG['application_webpath']}images/icons/kdeclassic/16x16/apps/password.png' width='16' height='16' title='Private' alt='Private' />";
+        if ($task->distribution=='private') echo "Private <img src='{$CONFIG['application_webpath']}images/icons/{$iconset}/16x16/apps/password.png' width='16' height='16' title='Private' alt='Private' />";
         echo "</td></tr>";
         echo "</table>";
         echo "<p align='center'><a href='edit_task.php?id={$id}'>Edit Task</a>";
         if ($task->completion < 100) echo " | <a href='edit_task.php?id={$id}&amp;action=markcomplete'>Mark Complete</a>";
         echo "</p>";
+
+        echo "<div style='border: 1px solid #CCCCFF; padding: 5px;'>";
+        echo "<p><strong>Links</strong>:</p>";
+        // Draw links tree
+        // Have a look what can be linked from tasks
+        echo show_links('tasks', $task->id);
+
+        echo "<p><strong>Reverse Links</strong>:</p>";
+        echo show_links('tasks', $task->id, 0, '', 'rl');
+
+        echo "</div>";
+
+        echo show_create_links('tasks', $task->id);
         echo "</div>";
 
         // Notes
@@ -89,7 +108,7 @@ if (mysql_num_rows($result) >= 1)
 else echo "<p class='error'>No matching task found</p>";
 
 echo "</div>";
-echo "<div style='clear:both;'>";
+echo "<div style='clear:both; padding-top: 20px;'>";
 echo "<p align='center'><a href='tasks.php'>Tasks List</a></p>";
 echo "</div>";
 
