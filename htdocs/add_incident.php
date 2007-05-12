@@ -36,6 +36,12 @@ if (empty($action) OR $action=='showform')
 {
     // This Page Is Valid XHTML 1.0 Transitional! 27Oct05
     include('htmlheader.inc.php');
+    ?>
+    <script type="text/javascript" src="scripts/dojo/dojo.js"></script>
+    <script type="text/javascript">
+        dojo.require("dojo.widget.ComboBox");
+    </script>
+    <?php
     echo "<h2>Add Incident - Find Contact</h2>";
     if (empty($siteid))
     {
@@ -46,7 +52,8 @@ if (empty($action) OR $action=='showform')
         <table class='vertical'>
         <tr><th>Contact:</th><td>
         <?php
-        echo "<input type='text' name='search_string' size='30' value='{$query}' />\n";
+        //echo "<input type='text' name='search_string' size='30' value='{$query}' />\n";
+        echo "<input dojoType='ComboBox' value='{$query}' dataUrl='autocomplete.php?action=contact' style='width: 300px;' name='search_string' />";
         ?>
         <input name="submit" type="submit" value="Find Contact" />
         </td></tr>
@@ -98,7 +105,7 @@ elseif ($action=='findcontact')
     if (mysql_error()) trigger_error("MySQL Query Error ".mysql_error(), E_USER_ERROR);
     if (mysql_num_rows($result)>0)
     {
-        include('htmlheader.inc.php')
+        include('htmlheader.inc.php');
         ?>
         <script type="text/javascript">
         function confirm_support()
@@ -156,7 +163,6 @@ elseif ($action=='findcontact')
             echo "</tr>\n";
         }
         echo "</table>\n";
-
         // Select the contact from the list of contacts as well
         $sql = "SELECT *, contacts.id AS contactid FROM contacts, sites WHERE contacts.siteid=sites.id ";
         if (empty($contactid))
@@ -357,13 +363,13 @@ elseif ($action=='incidentform')
     }
     else
     {
-        $sql="SELECT bodytext from updates where id=$updateid";
+        $sql="SELECT bodytext FROM updates WHERE id=$updateid";
         $result=mysql_query($sql);
         if (mysql_error()) trigger_error("MySQL Query Error ".mysql_error(), E_USER_ERROR);
         $updaterow=mysql_fetch_array($result);
         $mailed_body_text=$updaterow['bodytext'];
 
-        $sql="SELECT subject from tempincoming where updateid=$updateid";
+        $sql="SELECT subject FROM tempincoming WHERE updateid=$updateid";
         $result=mysql_query($sql);
         if (mysql_error()) trigger_error("MySQL Query Error ".mysql_error(), E_USER_ERROR);
         $updaterow=mysql_fetch_array($result);

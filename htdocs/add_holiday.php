@@ -26,6 +26,7 @@ $year = cleanvar($_REQUEST['year']);
 $user = cleanvar($_REQUEST['user']);
 $type = cleanvar($_REQUEST['type']);
 $length = cleanvar($_REQUEST['length']);
+$return = cleanvar($_REQUEST['return']);
 
 // startdate in unix format
 $startdate=mktime(0,0,0,$month,$day,$year);
@@ -106,6 +107,14 @@ else
         $approved=0;
     }
 }
-header("Location: holiday_calendar.php?selectedyear=$year&selectedmonth=$month&selectedday=$day&type=$type&length=$dlength&user=$user&selectedtype=$dtype&approved=$dapproved");
-exit;
+if ($return=='list')
+{
+    header("Location: holiday_calendar.php?display=list&type=$type");
+    exit;
+}
+else
+{
+    header("Location: holiday_calendar.php?selectedyear=$year&selectedmonth=$month&selectedday=$day&type=$type&length=$dlength&user=$user&selectedtype=$dtype&approved=$dapproved");
+    exit;
+}
 ?>

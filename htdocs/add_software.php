@@ -34,14 +34,16 @@ if (empty($submit))
 
     <h2>Add New Software</h2>
     <p align='center'>Mandatory fields are marked <sup class='red'>*</sup></p>
-    <form action="<?php echo $_SERVER['PHP_SELF']; ?>" method="post" onsubmit="return confirm_submit()">
+    <form name='addsoftware' action="<?php echo $_SERVER['PHP_SELF']; ?>" method="post" onsubmit="return confirm_submit()">
     <table class='vertical'>
     <tr><th>Software Name: <sup class='red'>*</sup></th><td><input maxlength="50" name="name" size="30" /></td></tr>
     <?php
         echo "<tr><th>Lifetime:</th><td>";
-    echo "<input type='text' name='lifetime_start' id='lifetime_start' size='10' value='' />";
+    echo "<input type='text' name='lifetime_start' id='lifetime_start' size='10' value='' /> ";
+    echo date_picker('addsoftware.lifetime_start');
     echo " To: ";
-    echo "<input type='text' name='lifetime_end' id='lifetime_end' size='10' value='' />";
+    echo "<input type='text' name='lifetime_end' id='lifetime_end' size='10' value='' /> ";
+    echo date_picker('addsoftware.lifetime_end');
     ?>
     </td></tr>
     </table>
