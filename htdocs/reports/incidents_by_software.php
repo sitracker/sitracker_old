@@ -35,6 +35,8 @@ if (empty($_REQUEST['mode']))
     echo "<td class='shade2'><input type='text' name='startdate' id='startdate' size='10' /> ";
     echo date_picker('incidentsbysoftware.startdate');
     echo "</td></tr>";
+    echo "<tr><td>Month breakdown:</td><td><input type='checkbox' name='monthbreakdown' /></tr>";
+    echo "<tr><td>Software name</td><td><input type='text' name='software' id='software' size='20'/>";
     echo "</table>";
     echo "<p align='center'>";
     echo "<input type='hidden' name='mode' value='report' />";
@@ -46,16 +48,20 @@ if (empty($_REQUEST['mode']))
 }
 else
 {
+    $monthbreakdownstatus = $_REQUEST['monthbreakdown'];
     $startdate = strtotime($_REQUEST['startdate']);
-    $sql = "SELECT count(software.id) AS softwarecount, software.name ";
+    $sql = "SELECT count(software.id) AS softwarecount, software.name, software.id ";
     $sql .= "FROM software, incidents ";
-    $sql .= "WHERE software.id = incidents.softwareid AND incidents.lastupdated > '{$startdate}' ";
+    $sql .= "WHERE software.id = incidents.softwareid AND incidents.opened > '{$startdate}' ";
+    $software = $_REQUEST['software'];
+    if(!empty($software)) $sql .= "AND software.name LIKE '%{$software}%' ";
     $sql .= "GROUP BY software.id ORDER BY softwarecount DESC";
     $result = mysql_query($sql);
     if (mysql_error()) trigger_error("MySQL Query Error ".mysql_error(), E_USER_ERROR);
 
     $countArray[0]=0;
     $softwareNames[0]='Name';
+    $softwareID[0] = 0;
     $c = 0;
     $count = 0;
     while($row = mysql_fetch_array($result))
@@ -63,15 +69,29 @@ else
         $countArray[$c] = $row['softwarecount'];
         $count += $countArray[$c];
         $softwareNames[$c]  = $row['name'];
+        $softwareID[$c] = $row['id'];
         $c++;
     }
 
     include('htmlheader.inc.php');
 
+    $sqlSLA = "SELECT DISTINCT(tag) FROM servicelevels";
+    $resultSLA = mysql_query($sqlSLA);
+    if (mysql_error()) trigger_error("MySQL Query Error ".mysql_error(), E_USER_ERROR);
+
     echo "<h2>Number of incidents by software since ".$_REQUEST['startdate']."</h2>";
     echo "<p>";
     echo "<table class='vertical' align='center'>";
-    echo "<tr><th>Number of calls</th><th>%</th><th>Software</th></tr>";
+    echo "<tr><th>Number of calls</th><th>%</th><th>Software</th>";
+    while($sla = mysql_fetch_object($resultSLA))
+    {
+        echo "<th>".$sla->tag."</th>";
+        $slas[$sla->tag]['name'] = $sla->tag;
+        $slas[$sla->tag]['notEscalated'] = 0;
+        $slas[$sla->tag]['escalated'] = 0;
+    }
+    echo "<tr>";
+
     $others=0;
     for($i = 0; $i < $c; $i++)
     {
@@ -85,11 +105,100 @@ else
         {
             $others += $countArray[$i];
         }
+
+        $sqlN = "SELECT id, servicelevel, opened FROM incidents WHERE softwareid = '".$softwareID[$i]."'";
+        $sqlN .= " AND opened > '{$startdate}' ORDER BY opened";
+
+        $resultN = mysql_query($sqlN);
+        if (mysql_error()) trigger_error("MySQL Query Error ".mysql_error(), E_USER_ERROR);
+        $numrows = mysql_num_rows($resultN);
+
+        foreach($slas AS &$slaReset)
+        {
+            $slaReset['notEscalated'] = 0;
+            $slaReset['escalated'] = 0;
+        }
+
+
+        if($numrows > 0) 
+        {
+            unset($monthbreakdown);
+            while($obj = mysql_fetch_object($resultN)) 
+            {
+                $datestr = date("M y",$obj->opened);
+
+                $sqlL = "SELECT count(id) FROM updates WHERE updates.bodytext LIKE \"External ID%\" AND incidentid = '".$obj->id."'";
+                $resultL = mysql_query($sqlL);
+                if (mysql_error()) trigger_error("MySQL Query Error ".mysql_error(), E_USER_ERROR);
+                list($numrowsL) = mysql_fetch_row($resultL);
+
+                if($numrowsL > 0) $slas[$obj->servicelevel]['escalated']++;
+                else $slas[$obj->servicelevel]['notEscalated']++;
+
+                $monthbreakdown[$datestr][$obj->servicelevel]++;
+                $monthbreakdown[$datestr]['month']=$datestr;
+            }
+        }
+
         echo "<tr><td class='shade1'>{$countArray[$i]}</td>";
         echo "<td class='shade1'>{$percentage}%</td>";
-        echo "<td class='shade1'>$softwareNames[$i]</td></tr>";
+        echo "<td class='shade1'>$softwareNames[$i]</td>";
+
+        foreach($slas AS $sla)
+        {
+            echo "<td class='shade1'>";
+            echo ($sla['notEscalated']+$sla['escalated'])."/".$sla['escalated'];
+            echo "</td>";
+        }
+
+        if($monthbreakdownstatus === "on")
+        {
+
+            echo "<tr><td class='shade1' /><td colspan='".(count($slas)+2)."' class='shade1'>";
+            echo "<table><tr>";
+            foreach($monthbreakdown AS $month) echo "<th>{$month['month']}</th>";
+            echo "</tr><tr>";
+            foreach($monthbreakdown AS $month)
+            {//echo "<pre>".print_r($month)."</pre>";
+	            echo "<td><table>";
+                $total=0;
+                foreach($slas AS $slaNames)
+                {
+                    if(empty($month[$slaNames['name']])) $month[$slaNames['name']] = 0;
+                    echo "<tr>";
+                    echo "<td>".$slaNames['name']."</td><td>".$month[$slaNames['name']]."</td>";
+                    echo "</tr>";
+                    $total+=$month[$slaNames['name']];
+                }
+	            echo "<tr><td><strong>TOTAL</strong></td><td><strong>";
+                echo $total;
+                echo "</strong></td></tr>";
+	            $monthtotals[$month['month']]['month']=$month['month'];
+                $monthtotals[$month['month']]['value']+=$total;
+                echo "</table></td>";
+            }
+            echo "</tr></table>";
+            echo "</td></tr>";
+        }
     }
     echo "</table>";
+
+    if($monthbreakdownstatus === "on")
+    {
+        echo "<p><table align='center'>";
+        echo "<tr><th>Month</th><th>Number of calls</th></tr>";
+        foreach($monthtotals AS $m)
+        {
+	    echo "<tr>";
+	    echo "<th>".$m['month']."</th><td align='center'>".$m['value']."</td><tr>";
+	    $total+=$m['value'];
+	    echo "</tr>";
+        }
+        echo "<td><strong>Total</strong></td><td align='center'><strong>{$total}</strong></td></tr>";
+        echo "</table></p>";
+
+    }
+
     $data .= $others."|";
     $percentage = number_format(($others/$count) * 100,1);
     $legend .= "Others ($percentage)|";
