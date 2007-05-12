@@ -38,7 +38,7 @@ if (mysql_num_rows($result) >= 1)
             while ($product = mysql_fetch_object($presult))
             {
                 echo "<table summary='' align='center' width='40%'>";
-                echo "<tr><th colspan='3'>Product: {$product->name} (<a href='edit_product.php?id={$product->id}'>Edit</a>)</th></tr>";
+                echo "<tr><th colspan='3'>Product: {$product->name} (<a href='edit_product.php?id={$product->id}'>Edit</a> | <a href='delete_product.php?id={$product->id}'>Delete</a>)</th></tr>";
                 if (!empty($product->description)) echo "<tr class='shade1'><td colspan='3'>".nl2br($product->description)."</td></tr>";
 
                 $swsql = "SELECT * FROM softwareproducts, software WHERE softwareproducts.softwareid=software.id AND productid='{$product->id}' ORDER BY name";
@@ -47,7 +47,7 @@ if (mysql_num_rows($result) >= 1)
 
                 if (mysql_num_rows($swresult) > 0)
                 {
-                    echo "<tr><th>Software</th><th>Lifetime</th><th>Actions</th></tr>";
+                    echo "<tr><th>Skill</th><th>Lifetime</th><th>Actions</th></tr>";
                     $shade='shade2';
                     while ($software=mysql_fetch_array($swresult))
                     {
