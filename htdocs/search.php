@@ -62,10 +62,11 @@ if (empty($search_string) OR empty($search_domain))
     echo "<tr><td><a href='search_expired.php'>Search Expired Contracts</a></td></tr>";
     echo "</table>\n";
 
-    if (strpos($_SERVER['HTTP_USER_AGENT'],'Firefox'))
-    {
-        echo "<p align='center'>Mozilla Firefox users can <a href='javascript:addEngine();'>install this search plugin</a> to make searching easier.</p>";
-    }
+    echo "<p /><table align='center'>";
+    echo "<tr><th>Firefox 2 and IE 7 users</th></tr>";
+    echo "<tr><td>You can <a href=\"javascript:window.external.AddSearchProvider('{$CONFIG['application_uriprefix']}{$CONFIG['application_webpath']}opensearch.php')\">install this search plugin</a> to make searching easier</td></tr>";
+
+    echo "</table>";
     include('htmlfooter.inc.php');
 }
 else
@@ -180,13 +181,14 @@ else
             $sql .= "CONCAT(forenames, ' ', surname) LIKE ('%$search_string%')) ORDER BY incidents.id DESC LIMIT $limit_results";
             $result=mysql_query($sql);
             if (mysql_error()) trigger_error("MySQL Error".mysql_error(), E_USER_ERROR);
+            $srch_results = array();
             if (mysql_num_rows($result)>=1)
             {
                 while($row = mysql_fetch_object($result))
                 {
-                    $srch_results[$key]['url']="<a href=\"javascript:incident_details_window('{$row->id}', 'incident{$row->id}');\">Incident {$row->id}: {$row->title}</a>";
+                    $srch_results[$key]['url']="<a href=\"javascript:incident_details_window('{$row->id}', 'incident{$row->id}');\">Incident {$row->id}: ".stripslashes($row->title)."</a>";
                     $owner=user_realname($row->owner,TRUE);
-                    $srch_results[$key]['string'] = "{$row->title}";
+                    $srch_results[$key]['string'] = stripslashes($row->title);
                     if ($row->status==2) $srch_results[$key]['string'] .= " (Closed)";
                     $srch_results[$key]['string'] .= "\n{$row->forenames} {$row->surname}, {$row->sitename}\n{$owner} {$row->externalid}";
                     $srch_results[$key]['date']=$row->lastupdated;
@@ -201,9 +203,8 @@ else
                     if ($row->status==2) $srch_results[$key]['score']-=5;
                     $key++;
                 }
-                return($srch_results);
             }
-            else return(FALSE);
+            return($srch_results);
         }
 
         function search_contacts($search_string)
@@ -213,6 +214,7 @@ else
             $sql .= "OR CONCAT(forenames, ' ', surname) LIKE ('%$search_string%')) LIMIT $limit_results";
             $result=mysql_query($sql);
             if (mysql_error()) trigger_error("MySQL Error".mysql_error(), E_USER_ERROR);
+            $srch_results = array();
             if (mysql_num_rows($result)>=1)
             {
                 while($row = mysql_fetch_object($result))
@@ -235,6 +237,7 @@ else
             $sql = "SELECT * FROM kbarticles WHERE (title LIKE ('%$search_string%') OR keywords LIKE ('%$search_string%'))LIMIT $limit_results";
             $result=mysql_query($sql);
             if (mysql_error()) trigger_error("MySQL Error".mysql_error(), E_USER_ERROR);
+            $srch_results = array();
             if (mysql_num_rows($result)>=1)
             {
                 while($row = mysql_fetch_object($result))
@@ -256,6 +259,7 @@ else
             $sql = "SELECT * FROM sites WHERE name LIKE ('%$search_string%') ORDER BY name LIMIT $limit_results";
             $result=mysql_query($sql);
             if (mysql_error()) trigger_error("MySQL Error".mysql_error(), E_USER_ERROR);
+            $srch_results = array();
             if (mysql_num_rows($result)>=1)
             {
                 while($row = mysql_fetch_object($result))
@@ -281,6 +285,7 @@ else
             $sql = "SELECT * FROM updates WHERE bodytext LIKE ('%$search_string%') ORDER BY id DESC LIMIT $limit_results";
             $result=mysql_query($sql);
             if (mysql_error()) trigger_error("MySQL Error".mysql_error(), E_USER_ERROR);
+            $srch_results = array();
             if (mysql_num_rows($result)>=1)
             {
                 while($row = mysql_fetch_object($result))
@@ -306,6 +311,7 @@ else
             $sql .= "ORDER BY maintenance.id DESC LIMIT $limit_results";
             $result=mysql_query($sql);
             if (mysql_error()) trigger_error("MySQL Error".mysql_error(), E_USER_ERROR);
+            $srch_results = array();
             if (mysql_num_rows($result)>=1)
             {
                 while($row = mysql_fetch_object($result))
@@ -338,7 +344,8 @@ else
         $srch_results6 = search_maintenance($search_string);
         // $srch_results7 = search_updates($search_string); // bugbug not finished
         // , $srch_results7
-        $srch_results = array_merge($srch_results1, $srch_results2, $srch_results3, $srch_results4, $srch_results5, $srch_results6);
+        //$srch_results = array_merge($srch_results1, $srch_results2, $srch_results3, $srch_results4, $srch_results5, $srch_results6);
+        $srch_results = array_merge($srch_results1, $srch_results2, $srch_results3, $srch_results4, $srch_results6);
 
         // bugbug also offer a sort by date
         if ($sortby=='date') $srch_results=ansort($srch_results,'date');
