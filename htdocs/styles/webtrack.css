@@ -96,7 +96,7 @@ div.windowbox
     margin-bottom: 5%;
     margin-top: 5%;
     border: 1px solid #205D94;
-    width: 120px;
+    max-width: 500px;
 }
 div.windowtitle
 {
@@ -118,6 +118,12 @@ div.window
 #menumenu a { text-decoration: none; color: #FFF; }
 #menumenu a:hover { text-decoration: underline; }
 #menumenu a:active { text-decoration: underline; }
+
+#actionmenu { color: #aaa; margin-bottom: 5px; }
+#actionmenu a:link { color: #E76666; }
+#actionmenu a:hover { background: #203894; color: white; }
+
+#mainframe { margin: 0px 1em; }
 
 #statusbar { clear: both; background-color: #203894; color: #FFF; text-align: center; padding: 2px 0px 2px 0px; margin-top: 1em;}
 #statusbar a { text-decoration: none; color: #FFF; }
@@ -191,6 +197,7 @@ p.tip,p.info, p.warning, p.error, h5.warning, h5.error
   margin-left: 2em;
   margin-right: 2em;
   width: auto;
+  text-align: left;
 }
 p.tip
 {
