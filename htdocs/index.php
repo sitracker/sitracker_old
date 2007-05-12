@@ -33,22 +33,21 @@ if ($_SESSION['auth'] != TRUE)
     if ($id==1) echo "<p class='error'>Enter your credentials to login to {$CONFIG['application_shortname']}</p><br />";
     if ($id==2) echo "<p class='error'>Your session has expired or you have not yet logged in</p><br />";
     if ($id==3) throw_user_error("Invalid username/password combination");
+    echo "<div style='width: 25%; margin-left: auto; margin-right: auto; margin-top: 1em; padding: 2em;'>";
+    ?>
+    <h2>Login to <?php echo $CONFIG['application_shortname']; ?></h2>
+    <form action="login.php" method="post">
 
-    echo "<div class='windowbox' style='width: 220px;'>";
-    echo "<div class='windowtitle'>{$CONFIG['application_shortname']} - Login</div>";
-    echo "<div class='window'>";
-    echo "<form action='login.php' method='post'>";
-    echo "<label>Username:<br /><input name='username' size='28' type='text' /></label><br />";
-    echo "<label>Password:<br /><input name='password' size='28' type='password' /></label><br /><br />";
+    <br />
+    <label>Username:<br /><input name="username" size="20" type="text" /></label><br />
+    <label>Password:<br /><input name="password" size="20" type="password" /></label><br />
+    <?php
     echo "<input type='hidden' name='page' value='$page' />";
-    echo "<input type='submit' value='Log In' /><br />";
-
-    if($CONFIG['portal'] == TRUE)
-    {
-        echo "<br /><a href='forgotpwd.php'>Forgotten your details?</a>";
-    }
+    ?>
+    <input type="submit" value="Log In" />
+    <?php
     echo "</form>";
-    echo "</div>\n</div>\n";
+    echo "</div>";
     include('htmlfooter.inc.php');
 }
 else

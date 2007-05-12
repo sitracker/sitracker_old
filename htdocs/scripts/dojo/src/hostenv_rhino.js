@@ -11,6 +11,7 @@
 /*
 * Rhino host environment
 */
+
 // make jsc shut up (so we can use jsc for sanity checking) 
 /*@cc_on
 @if (@_jscript_version >= 7)
@@ -18,64 +19,44 @@ var loadClass; var print; var load; var quit; var version; var Packages; var jav
 @end
 @*/
 
-dojo.hostenv.println=function(line){
-	if(arguments.length > 0){
-		print(arguments[0]);
-		for(var i=1; i<arguments.length; i++){
-			var valid=false;
-			for (var p in arguments[i]){valid=true;break;}
-			if(valid){
-				dojo.debugShallow(arguments[i]);
-			}
-		}
-	} else {
-		print(line);
-	}
-}
+// TODO: not sure what we gain from the next line, anyone?
+//if (typeof loadClass == 'undefined') { dojo.raise("attempt to use Rhino host environment when no 'loadClass' global"); }
 
-dojo.locale = dojo.locale || java.util.Locale.getDefault().toString().replace('_','-').toLowerCase();
 dojo.render.name = dojo.hostenv.name_ = 'rhino';
-dojo.hostenv.getVersion = function() {return version();};
-
-if (dj_undef("byId")) {
-	dojo.byId = function(id, doc){
-		if(id && (typeof id == "string" || id instanceof String)){
-			if(!doc){ doc = document; }
-			return doc.getElementById(id);
-		}
-		return id; // assume it's a node
-	}
-}
+dojo.hostenv.getVersion = function() {return version()};
 
 // see comments in spidermonkey loadUri
 dojo.hostenv.loadUri = function(uri, cb){
+	dojo.debug("uri: "+uri);
 	try{
-		var local = (new java.io.File(uri)).exists();
-		if(!local){
+		// FIXME: what about remote URIs?
+		var found = true;
+		if(!(new java.io.File(uri)).exists()){
 			try{
 				// try it as a file first, URL second
-				var stream = (new java.net.URL(uri)).openStream();
-				// close the stream so we don't leak resources
-				stream.close();
+				(new java.io.URL(uri)).openStream();
 			}catch(e){
-				// no debug output; this failure just means the uri was not found.
-				return false;
+				found = false;
 			}
 		}
-//FIXME: Use Rhino 1.6 native readFile/readUrl if available?
-		if(cb){
-			var contents = (local ? readText : readUri)(uri, "UTF-8");
-			cb(eval('('+contents+')'));
-		}else{
-			load(uri);
+		if(!found){
+			dojo.debug(uri+" does not exist");
+			if(cb){ cb(0); }
+			return 0;
 		}
-		return true;
+		var ok = load(uri);
+		// dojo.debug(typeof ok);
+		dojo.debug("rhino load('", uri, "') returned. Ok: ", ok);
+		if(cb){ cb(1); }
+		return 1;
 	}catch(e){
-		dojo.debug("rhino load('" + uri + "') failed. Exception: " + e);
-		return false;
+		dojo.debug("rhino load('", uri, "') failed");
+		if(cb){ cb(0); }
+		return 0;
 	}
 }
 
+dojo.hostenv.println = print;
 dojo.hostenv.exit = function(exitcode){ 
 	quit(exitcode);
 }
@@ -130,7 +111,7 @@ dojo.hostenv.exit = function(exitcode){
 // do it by using java java.lang.Exception
 function dj_rhino_current_script_via_java(depth) {
     var optLevel = Packages.org.mozilla.javascript.Context.getCurrentContext().getOptimizationLevel();  
-   // if (optLevel == -1){ dojo.unimplemented("getCurrentScriptURI (determine current script path for rhino when interpreter mode)", ''); }
+    if (optLevel == -1) dojo.unimplemented("getCurrentScriptURI (determine current script path for rhino when interpreter mode)", '');
     var caw = new java.io.CharArrayWriter();
     var pw = new java.io.PrintWriter(caw);
     var exc = new java.lang.Exception();
@@ -148,7 +129,7 @@ function dj_rhino_current_script_via_java(depth) {
     var fname = matches[3];
 	if(!fname){ fname = matches[1]; }
     // print("got fname '" + fname + "' from stack string '" + s + "'");
-    if (!fname){ throw Error("could not find js file in printStackTrace output: " + s); }
+    if (!fname) throw Error("could not find js file in printStackTrace output: " + s);
     //print("Rhino getCurrentScriptURI returning '" + fname + "' from: " + s); 
     return fname;
 }
@@ -163,44 +144,28 @@ function dj_rhino_current_script_via_eval_exception() {
     // try{throw Error("whatever");} catch(e) {exc = e;}
     // 'SyntaxError: identifier is a reserved word'
     // try {eval ("static in return")} catch(e) { exc = e; }
-   // print("got exception: '" + exc + "' type=" + (typeof exc));
-    // print("exc.stack=" + (typeof exc.stack));
-    var sn = exc.rhinoException.getSourceName();
+    print("got exception: '" + exc + "'");
+    print("exc.stack=" + (typeof exc.stack));
+    var sn = exc.getSourceName();
     print("SourceName=" + sn);
     return sn;
-}*/
+} 
+*/
 
 // reading a file from disk in Java is a humiliating experience by any measure.
 // Lets avoid that and just get the freaking text
-function readText(path, encoding){
-	encoding = encoding || "utf-8";
+function readText(uri){
 	// NOTE: we intentionally avoid handling exceptions, since the caller will
 	// want to know
-	var jf = new java.io.File(path);
-	var is = new java.io.FileInputStream(jf);
-	return dj_readInputStream(is, encoding);
-}
-
-function readUri(uri, encoding){
-	var conn = (new java.net.URL(uri)).openConnection();
-	encoding = encoding || conn.getContentEncoding() || "utf-8";
-	var is = conn.getInputStream();
-	return dj_readInputStream(is, encoding);
-}
-
-function dj_readInputStream(is, encoding){
-	var input = new java.io.BufferedReader(new java.io.InputStreamReader(is, encoding));
-	try {
-		var sb = new java.lang.StringBuffer();
-		var line = "";
-		while((line = input.readLine()) !== null){
-			sb.append(line);
-			sb.append(java.lang.System.getProperty("line.separator"));
-		}
-		return sb.toString();
-	} finally {
-		input.close();
+	var jf = new java.io.File(uri);
+	var sb = new java.lang.StringBuffer();
+	var input = new java.io.BufferedReader(new java.io.FileReader(jf));
+	var line = "";
+	while((line = input.readLine()) != null){
+		sb.append(line);
+		sb.append(java.lang.System.getProperty("line.separator"));
 	}
+	return sb.toString();
 }
 
 // call this now because later we may not be on the top of the stack
@@ -211,9 +176,9 @@ if(!djConfig.libraryScriptUri.length){
 		// otherwise just fake it
 		if(djConfig["isDebug"]){
 			print("\n");
-			print("we have no idea where Dojo is located.");
+			print("we have no idea where Dojo is located from.");
 			print("Please try loading rhino in a non-interpreted mode or set a");
-			print("\n\tdjConfig.libraryScriptUri\n");
+			print("\n	djConfig.libraryScriptUri\n");
 			print("Setting the dojo path to './'");
 			print("This is probably wrong!");
 			print("\n");
@@ -223,35 +188,3 @@ if(!djConfig.libraryScriptUri.length){
 	}
 }
 
-dojo.doc = function(){
-	// summary:
-	//		return the document object associated with the dojo.global()
-	return document;
-}
-
-dojo.body = function(){
-	return document.body;	
-}
-
-function setTimeout(func, delay){
-	// summary: provides timed callbacks using Java threads
-
-	var def={
-		sleepTime:delay,
-		hasSlept:false,
-		
-		run:function(){
-			if (!this.hasSlept){
-				this.hasSlept=true;
-				java.lang.Thread.currentThread().sleep(this.sleepTime);
-			}
-			try {
-				func();
-			} catch(e){dojo.debug("Error running setTimeout thread:" + e);}
-		}
-	};
-	
-	var runnable=new java.lang.Runnable(def);
-	var thread=new java.lang.Thread(runnable);
-	thread.start();
-}

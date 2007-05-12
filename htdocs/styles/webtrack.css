@@ -96,7 +96,7 @@ div.windowbox
     margin-bottom: 5%;
     margin-top: 5%;
     border: 1px solid #205D94;
-    max-width: 500px;
+    width: 120px;
 }
 div.windowtitle
 {
@@ -118,8 +118,6 @@ div.window
 #menumenu a { text-decoration: none; color: #FFF; }
 #menumenu a:hover { text-decoration: underline; }
 #menumenu a:active { text-decoration: underline; }
-
-#mainframe { margin: 0px 1em; }
 
 #statusbar { clear: both; background-color: #203894; color: #FFF; text-align: center; padding: 2px 0px 2px 0px; margin-top: 1em;}
 #statusbar a { text-decoration: none; color: #FFF; }
@@ -506,24 +504,6 @@ div.detailfoot
 div.note { font-size: 98%; background-color: #FFFFA2; border-color: #A2A86A; margin-top: 0px; }
 
 .deleted { text-decoration: line-through; }
-
-
-.dojo-TabContainer
-{
- width: 95%; height: 550px; margin-right:auto; margin-left:auto;
-}
-
-.dojo-ContentPane
-{
-/*     border: 1px solid red; */
-}
-.dojoTab
-{
-}
-
-.dojoTabPaneWrapper {
-  padding : 10px 10px 10px 10px;
-}
 
 @media print
 {

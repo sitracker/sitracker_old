@@ -11,27 +11,23 @@
 dojo.provide("dojo.uri.Uri");
 
 dojo.uri = new function() {
-	this.dojoUri = function (/*dojo.uri.Uri||String*/uri) {
-		// summary: returns a Uri object resolved relative to the dojo root
+	this.joinPath = function() {
+		// DEPRECATED: use the dojo.uri.Uri object instead
+		var arr = [];
+		for(var i = 0; i < arguments.length; i++) { arr.push(arguments[i]); }
+		return arr.join("/").replace(/\/{2,}/g, "/").replace(/((https*|ftps*):)/i, "$1/");
+	}
+	
+	this.dojoUri = function (uri) {
+		// returns a Uri object resolved relative to the dojo root
 		return new dojo.uri.Uri(dojo.hostenv.getBaseScriptUri(), uri);
 	}
-
-	this.moduleUri = function(/*String*/module, /*dojo.uri.Uri||String*/uri){
-		// summary: returns a Uri object relative to a module
-		// description: Examples: dojo.uri.moduleUri("dojo","Editor"), or dojo.uri.moduleUri("acme","someWidget")
-		var loc = dojo.hostenv.getModuleSymbols(module).join('/');
-		//var loc = dojo.hostenv.getModulePrefix(module);
-		if(!loc){return null;}
-		if(loc.lastIndexOf("/") != loc.length-1){loc += "/";}
-		return new dojo.uri.Uri(dojo.hostenv.getBaseScriptUri()+loc,uri);
-	}
-
-	this.Uri = function (/*dojo.uri.Uri||String...*/) {
-		// summary: Constructor to create an object representing a URI.
-		// description: 
-		//  Each argument is evaluated in order relative to the next until
-		//  a canonical uri is produced. To get an absolute Uri relative
-		//  to the current document use
+		
+	this.Uri = function (/*uri1, uri2, [...]*/) {
+		// An object representing a Uri.
+		// Each argument is evaluated in order relative to the next until
+		// a conanical uri is producued. To get an absolute Uri relative
+		// to the current document use
 		//      new dojo.uri.Uri(document.baseURI, uri)
 
 		// TODO: support for IPv6, see RFC 2732
@@ -45,15 +41,16 @@ dojo.uri = new function() {
 			var relobj = new dojo.uri.Uri(arguments[i].toString());
 			var uriobj = new dojo.uri.Uri(uri.toString());
 
-			if ((relobj.path=="")&&(relobj.scheme==null)&&(relobj.authority==null)&&(relobj.query==null)) {
+			if (relobj.path == "" && relobj.scheme == null &&
+				relobj.authority == null && relobj.query == null) {
 				if (relobj.fragment != null) { uriobj.fragment = relobj.fragment; }
 				relobj = uriobj;
 			} else if (relobj.scheme == null) {
 				relobj.scheme = uriobj.scheme;
-
+			
 				if (relobj.authority == null) {
 					relobj.authority = uriobj.authority;
-
+					
 					if (relobj.path.charAt(0) != "/") {
 						var path = uriobj.path.substring(0,
 							uriobj.path.lastIndexOf("/") + 1) + relobj.path;
@@ -87,25 +84,25 @@ dojo.uri = new function() {
 
 		// break the uri into its main components
 		var regexp = "^(([^:/?#]+):)?(//([^/?#]*))?([^?#]*)(\\?([^#]*))?(#(.*))?$";
-		var r = this.uri.match(new RegExp(regexp));
+	    var r = this.uri.match(new RegExp(regexp));
 
 		this.scheme = r[2] || (r[1] ? "" : null);
 		this.authority = r[4] || (r[3] ? "" : null);
 		this.path = r[5]; // can never be undefined
 		this.query = r[7] || (r[6] ? "" : null);
 		this.fragment  = r[9] || (r[8] ? "" : null);
-
+		
 		if (this.authority != null) {
 			// server based naming authority
 			regexp = "^((([^:]+:)?([^@]+))@)?([^:]*)(:([0-9]+))?$";
 			r = this.authority.match(new RegExp(regexp));
-
+			
 			this.user = r[3] || null;
 			this.password = r[4] || null;
 			this.host = r[5];
 			this.port = r[7] || null;
 		}
-
+	
 		this.toString = function(){ return this.uri; }
 	}
 };

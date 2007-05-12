@@ -26,8 +26,8 @@ echo "<table>";
 echo "<tr><td>";
 // First column: Contact Details
 echo "<a href='contact_details.php?id={$incident->contactid}' title='Contact Details' target='top.opener'>{$incident->forenames} {$incident->surname}</a> of <a href='site_details.php?id={$incident->siteid}' title='Site Details' target='top.opener'>{$site_name}</a><br />\n";
-echo "<a href=\"mailto:{$incident->email}\">{$incident->email}</a><br />\n";
-if ($incident->ccemail != '') echo "CC: <a href=\"mailto:{$incident->ccemail}\">{$incident->ccemail}</a><br />\n";
+echo "<a href='mailto:{$incident->email}'>{$incident->email}</a><br />\n";
+if ($incident->ccemail != '') echo "CC: <a href='mailto:{$incident->ccemail}'>{$incident->ccemail}</a><br />\n";
 if ($incident->phone!='' OR $incident->phone!='')
 {
     if ($incident->phone!='') echo "Tel: {$incident->phone}";
@@ -47,7 +47,7 @@ if ($incident->externalengineer != '')
 }
 echo "</td>";
 
-echo "<td align='right'>";
+echo "<td>";
 // Second column, Product and Incident details
 if ($incident->owner != $sit[2] OR ($incident->towner > 0 AND $incident->towner != $incident->owner))
 {
@@ -111,11 +111,9 @@ echo "</tr>\n";
 $rsql = "SELECT * FROM relatedincidents WHERE incidentid='$id' OR relatedid='$id'";
 $rresult = mysql_query($rsql);
 if (mysql_error()) trigger_error(mysql_error(),E_USER_WARNING);
-echo "<tr>";
 if (mysql_num_rows($rresult) >= 1)
 {
-    //echo "<tr><td colspan='2'>Relations: ";
-    echo "<td>Relations: ";
+    echo "<tr><td colspan='2'>Relations: ";
     while ($related = mysql_fetch_object($rresult))
     {
         if ($related->relatedid==$id)
@@ -134,25 +132,9 @@ if (mysql_num_rows($rresult) >= 1)
         }
         echo " &nbsp;";
     }
-    echo "</td>";
+    echo "</td></tr>";
 
 }
-else
-{
-    echo "<td />";
-}
-
-$str = list_tags($id, 2);
-if(!empty($str))
-{
-    echo "<td align='right'>Tags: ".list_tags($id, 2)."</td>";
-}
-else
-{
-    echo "<td />";
-}
-
-echo "</tr>";
 
 echo "</table>";
 

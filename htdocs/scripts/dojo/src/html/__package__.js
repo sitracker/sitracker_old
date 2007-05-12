@@ -9,7 +9,6 @@
 */
 
 dojo.kwCompoundRequire({
-	common: [ "dojo.html.common",
-			  "dojo.html.style" ]
+	common: ["dojo.html", "dojo.html.extras", "dojo.html.shadow"]
 });
 dojo.provide("dojo.html.*");

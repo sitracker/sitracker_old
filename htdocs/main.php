@@ -32,53 +32,14 @@ while ($dashboard = mysql_fetch_object($result))
 
 // Valid user
 include('htmlheader.inc.php');
+/*
+// Dojo javascript fancy moving of dashboard widgets disabled for v3.24 release
+// Hope to have it ready for 3.25
 
 echo "<script type=\"text/javascript\" src=\"scripts/dojo/dojo.js\"></script>";
-
-$sql = "SELECT dashboard FROM users WHERE id = '".$_SESSION['userid']."'";
-$result = mysql_query($sql);
-if (mysql_error()) trigger_error(mysql_error(),E_USER_WARNING);
-
-if(mysql_num_rows($result) > 0)
-{
-    $obj = mysql_fetch_object($result);
-    $dashboardcomponents = explode(",",$obj->dashboard);
-}
-
-$col0 = 0;
-$col1 = 0;
-$col2 = 0;
-
-$cols0 = "";
-$cols1 = "";
-$cols2 = "";
-
-foreach($dashboardcomponents AS $db)
-{
-    $c = explode("-",$db);
-    switch($c[0])
-    {
-        case 0: $col0++;
-            $cols0 .= $c[1].",";
-            break;
-        case 1: $col1++;
-            $cols1 .= $c[1].",";
-            break;
-        case 2: $col2++;
-            $cols2 .= $c[1].",";
-            break;
-    }
-}
-
-$colstr = $col0.",".$col1.",".$col2;
-
-$cols0 = substr($cols0, 0, -1);
-$cols1 = substr($cols1, 0, -1);
-$cols2 = substr($cols2, 0, -1);
-
 ?>
 <script type="text/javascript">
-/* <![CDATA[ */
+<!--
     dojo.require("dojo.dnd.*");
     dojo.require("dojo.event.*");
 
@@ -87,137 +48,70 @@ $cols2 = substr($cols2, 0, -1);
     }
 
     function init(){
-
-        //var cols = [1,3,1];
-        var cols = [<?php echo $colstr; ?>];
-        var cols0 = [<?php echo $cols0; ?>];
-        var cols1 = [<?php echo $cols1; ?>];
-        var cols2 = [<?php echo $cols2; ?>];
-
         // list one
-        var dl = byId("col0");
+        var dl = byId("dragList1");
         new dojo.dnd.HtmlDropTarget(dl, ["li1"]);
-        for(var x=0; x<cols0.length; x++){
-            new dojo.dnd.HtmlDragSource(byId('db_0-'+cols0[x]),"li1");
+        var lis = dl.getElementsByTagName("span");
+        for(var x=0; x<lis.length; x++){
+            new dojo.dnd.HtmlDragSource(lis[x], "li1");
         }
 
         // list two
-        var dl = byId("col1");
-        var dt2 = new dojo.dnd.HtmlDropTarget(dl, ["li1"]);
-        for(var x=0; x<cols1.length; x++){
-            new dojo.dnd.HtmlDragSource(byId('db_1-'+cols1[x]),"li1");
+        var dl = byId("dragList2");
+        new dojo.dnd.HtmlDropTarget(dl, ["li1"]);
+        var lis = dl.getElementsByTagName("span");
+        for(var x=0; x<lis.length; x++){
+            new dojo.dnd.HtmlDragSource(lis[x], "li1");
         }
 
         // list three
-        var dl = byId("col2");
+        var dl = byId("dragList3");
         new dojo.dnd.HtmlDropTarget(dl, ["li1"]);
-        for(var x=0; x<cols2.length; x++){
-            new dojo.dnd.HtmlDragSource(byId('db_2-'+cols2[x]),"li1");
+        var lis = dl.getElementsByTagName("span");
+        for(var x=0; x<lis.length; x++){
+            new dojo.dnd.HtmlDragSource(lis[x], "li1");
         }
     }
 
     dojo.event.connect(dojo, "loaded", "init");
-
-    /*
-        Not directly dojo related
-    */
-
-    function save_layout(){
-        var xmlhttp=false;
-        /*@cc_on @*/
-        /*@if (@_jscript_version >= 5)
-        // JScript gives us Conditional compilation, we can cope with old IE versions.
-        // and security blocked creation of the objects.
-        try {
-        xmlhttp = new ActiveXObject("Msxml2.XMLHTTP");
-        } catch (e) {
-        try {
-        xmlhttp = new ActiveXObject("Microsoft.XMLHTTP");
-        } catch (E) {
-        xmlhttp = false;
-        }
-        }
-        @end @*/
-        if (!xmlhttp && typeof XMLHttpRequest!='undefined') {
-            try {
-                xmlhttp = new XMLHttpRequest();
-            } catch (e) {
-                xmlhttp=false;
-            }
-        }
-        if (!xmlhttp && window.createRequest) {
-            try {
-                xmlhttp = window.createRequest();
-            } catch (e) {
-                xmlhttp=false;
-            }
-        }
-
-        var toPass = "";
-        for(var i = 0; i < 3; i++){
-            var col = byId("col"+i).childNodes;
-            var s = "";
-            for(var x = 0; x < col.length; x++){
-                // s = s+col.item(x).id.substr(5)+"-";
-                s = s+i+"-"+col.item(x).id.substr(5)+",";
-            }
-            toPass = toPass+s.substr(0,s.length-1)+",";
-        }
-
-                //alert(toPass);
-
-        xmlhttp.open("GET", "storedashboard.php?id="+<?php echo $_SESSION['userid']; ?>+"&val="+escape(toPass), true);
-
-        xmlhttp.onreadystatechange=function() {
-            //remove this in the future after testing
-            if (xmlhttp.readyState==4) {
-                if(xmlhttp.responseText != ""){
-                    //alert(xmlhttp.responseText);
-                }
-            }
-        }
-        xmlhttp.send(null);
-    }
-
-    window.onunload = save_layout;
-
-/* ]]> */
+-->
 </script>
 <?php
+*/
+echo "<table border=\"0\" width=\"99%\"><tr>";
+echo "<td width=\"33%\" valign='top'>";
+echo "<div id='dragList1' style='vertical-align: top; height: 400px;'>";
 
-echo "<p align='right'><a href='manage_user_dashboard.php'>Manage your Dashboard</a></p>";
-echo "<table border=\"0\" width=\"99%\" id='cols'><tr>";
-echo "<td width=\"33%\" valign='top' id='col0'>";
+dashboard_do("dashboard_tasks");
 
-$arr = explode(",",$cols0);
-foreach($arr AS $a)
-{
-    show_dashboard_component(0,$a);
-}
+echo "</div>";
+echo "</td><td width=\"33%\" valign='top'>";
 
-echo "</td><td width=\"33%\" valign='top' id='col1'>";
 
-$arr = explode(",",$cols1);
-foreach($arr AS $a)
-{
-    show_dashboard_component(1,$a);
-}
+echo "<div style='height: 400px;' id='dragList2'>";
 
-echo "</td><td width=\"33%\" valign=\"top\" id='col2'>";
+dashboard_do("dashboard_random_tip");
 
-$arr = explode(",",$cols2);
-foreach($arr AS $a)
-{
-    show_dashboard_component(2,$a);
-}
+dashboard_do("dashboard_statistics");
 
-echo "</td></tr></table>\n";
+echo "</div>";
+
+
+echo "</td><td width=\"33%\" valign=\"top\">";
+
+echo "<div style='height: 400px;'  id='dragList3'>";
+
+dashboard_do("dashboard_user_incidents");
+
+echo "</div>";
+
+echo "</td></tr></table>";
+
 
 // Check users email address
 if (empty($_SESSION['email']) OR !preg_match('/^[A-z0-9][\w.-]*@[A-z0-9][\w\-\.]+\.[A-z0-9]{2,6}$/',$_SESSION['email']))
-    echo "<p class='error'>Please <a href='edit_profile.php'>edit your profile</a> and set a valid email address</p>";
+    echo "<p class='error'>Please <a href='edit_profile.php'>edit your profile</a>i and set a valid email address</p>";
 
-echo "<p align='right'><a href=\"#\" onclick=\"save_layout();\">Save</a></p>";
 
 //  Users Login Details
 echo "<div id='userbar'>Logged in as: <strong>{$sit[0]}</strong>, ";

@@ -17,45 +17,12 @@ if (realpath(__FILE__) == realpath($_SERVER['SCRIPT_FILENAME']))
     exit;
 }
 
-function log_nav_bar()
-{
-    global $incidentid;
-    global $firstid;
-    global $updateid;
-    $nav = "<table width='98%'><tr><td align='left'><a href='{$_SERVER['PHP_SELF']}?id={$incidentid}&javascript=enabled&recordupto={$firstid}&direction=previous'><< Previous</a></td>";
-    $nav .= "<td align='right'><a href='{$_SERVER['PHP_SELF']}?id={$incidentid}&javascript=enabled&recordupto={$updateid}&direction=next'>Next >></a></td></tr></table>";
-    return $nav;
-}
-
-$upto = $_REQUEST['recordupto'];
-$direction = $_REQUEST['direction'];
-
 if ($incidentid=='' OR $incidentid < 1) trigger_error("Incident ID cannot be zero or blank", E_USER_ERROR);
 
 $sql  = "SELECT * FROM updates WHERE incidentid='{$incidentid}' ";
 // Don't show hidden updates if we're on the customer view tab
 if (strtolower($selectedtab)=='customer_view') $sql .= "AND customervisibility='show' ";
-if(!empty($upto))
-{
-    $sql .= "AND id ";
-    switch ($direction)
-    {
-        case 'previous':
-            if($_SESSION['update_order'] == 'desc') $sql .= " > ";
-            else $sql .= " < ";
-            break;
-        case 'next':
-        default:
-            if($_SESSION['update_order'] == 'desc') $sql .= " < ";
-            else $sql .= " > ";
-            break;
-    }
-
-    $sql .= " '{$upto}' ";
-}
-$sql .= "ORDER BY id {$_SESSION['update_order']} ";
-$sql .= "LIMIT {$_SESSION['num_update_view']}";
-
+$sql .= "ORDER BY id DESC";
 $result = mysql_query($sql);
 if (mysql_error()) trigger_error("MySQL Query Error ".mysql_error(), E_USER_ERROR);
 
@@ -82,11 +49,8 @@ foreach($keeptags AS $keeptag)
     }
 }
 
-//echo log_nav_bar();
-
 while ($update = mysql_fetch_object($result))
 {
-    if(empty($firstid)) $firstid = $update->id;
     $updatebody=trim($update->bodytext);
     $updatebodylen=strlen($updatebody);
 
@@ -99,7 +63,7 @@ while ($update = mysql_fetch_object($result))
     //                           "<a href = '/attachments/updates/{$update->id}/$1'>$1</a> ",
     //                           $updatebody);
     $updatebody = preg_replace("/\[\[att\]\](.*?)\[\[\/att\]\]/",
-                               "<a href = '{$CONFIG['application_webpath']}/attachments/{$update->incidentid}/{$update->timestamp}/$1'>$1</a>",
+                               "<a href = '/attachments/{$update->incidentid}/{$update->timestamp}/$1'>$1</a>",
                                $updatebody);
 
     // Put the header part (up to the <hr /> in a seperate DIV)
@@ -143,7 +107,7 @@ while ($update = mysql_fetch_object($result))
     //$replace = array("<a href=\"\\1\">\\1</a>"); // , "<a href=\"mailto:$0\">$0</a>"
     //$updatebody = preg_replace("/href=\"www/i", "href=\"http://www", preg_replace ($search, $replace, $updatebody));
 
-    $updatebody = bbcode($updatebody);
+    // $updatebody = bbcode($updatebody);
 
     //$updatebody = emotion($updatebody);
 
@@ -181,16 +145,14 @@ while ($update = mysql_fetch_object($result))
 
     if (array_key_exists($update->type, $updatetypes))
     {
-        echo "<img src='{$CONFIG['application_webpath']}images/icons/{$iconset}/16x16/{$updatetypes[$update->type]['icon']}' width='16' height='16' alt='{$update->type}' />";
+        echo "<img src='{$CONFIG['application_webpath']}images/icons/kdeclassic/16x16/{$updatetypes[$update->type]['icon']}' width='16' height='16' alt='{$update->type}' />";
         echo "<span>Click here to {$newmode} this update</span></a> ";
-        if($update->sla != '') echo "<img src='{$CONFIG['application_webpath']}images/icons/{$iconset}/16x16/{$updatetypes['slamet']['icon']}' width='16' height='16' alt='{$update->type}' />";
         echo "{$updateheadertext}"; //  by {$updateuser}
     }
     else
     {
-        echo "<img src='{$CONFIG['application_webpath']}images/icons/{$iconset}/16x16/{$updatetypes['research']['icon']}' width='16' height='16' alt='Research' />";
+        echo "<img src='{$CONFIG['application_webpath']}images/icons/kdeclassic/16x16/{$updatetypes['research']['icon']}' width='16' height='16' alt='Research' />";
         echo "<span>Click to {$newmode}</span></a> ";
-        if($update->sla != '') echo "<img src='{$CONFIG['application_webpath']}images/icons/{$iconset}/16x16/{$updatetypes['slamet']['icon']}' width='16' height='16' alt='{$update->type}' />";
         echo "Updated ({$update->type}) by {$updateuser}";
     }
 
@@ -204,9 +166,6 @@ while ($update = mysql_fetch_object($result))
         if (!empty($update->nextaction)) echo "<div class='detailhead'>Next action: ".stripslashes($update->nextaction)."</div>";
         echo "</div>\n"; // detailentry
     }
-    $updateid = $update->id;
 }
-
-echo log_nav_bar();
 
 ?>

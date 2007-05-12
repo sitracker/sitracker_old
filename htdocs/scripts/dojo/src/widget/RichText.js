@@ -10,176 +10,116 @@
 
  /* -*- tab-width: 4 -*- */
 dojo.provide("dojo.widget.RichText");
+dojo.provide("dojo.widget.html.RichText");
 
 dojo.require("dojo.widget.*");
-dojo.require("dojo.html.*");
-dojo.require("dojo.html.layout");
-dojo.require("dojo.html.selection");
+dojo.require("dojo.dom");
+dojo.require("dojo.html");
 dojo.require("dojo.event.*");
-dojo.require("dojo.string.extras");
-dojo.require("dojo.uri.Uri");
-dojo.require("dojo.Deferred");
+dojo.require("dojo.style");
+dojo.require("dojo.string");
 
 // used to save content
-if(dojo.hostenv.post_load_){
-	(function(){
-		var savetextarea = dojo.doc().createElement('textarea');
-		savetextarea.id = "dojo.widget.RichText.savedContent";
-		savetextarea.style = "display:none;position:absolute;top:-100px;left:-100px;height:3px;width:3px;overflow:hidden;";
-		dojo.body().appendChild(savetextarea);
-	})();
-}else{
-	//dojo.body() is not available before onLoad is fired
-	try {
-		dojo.doc().write('<textarea id="dojo.widget.RichText.savedContent" ' +
-			'style="display:none;position:absolute;top:-100px;left:-100px;height:3px;width:3px;overflow:hidden;"></textarea>');
-	}catch(e){ }
-}
+try {
+	document.write('<textarea id="dojo.widget.RichText.savedContent" ' +
+		'style="display:none;position:absolute;top:-100px;left:-100px;height:3px;width:3px;overflow:hidden;"></textarea>');
+}catch(e){ }
 
 dojo.widget.defineWidget(
-	"dojo.widget.RichText",
+	"dojo.widget.html.RichText",
 	dojo.widget.HtmlWidget,
-	function(){
-		// summary:
-		//		dojo.widget.RichText is the core of the WYSIWYG editor in dojo, which
-		//		provides the basic editing features. It also encapsulates the differences
-		//		of different js engines for various browsers
-
-		// contentPreFilters: Array
-		//		pre content filter function register array
-		this.contentPreFilters = [];
-
-		// contentPostFilters: Array
-		//		post content filter function register array
-		this.contentPostFilters = [];
-
-		// contentDomPreFilters: Array
-		//		pre content dom filter function register array
-		this.contentDomPreFilters = [];
-
-		// contentDomPostFilters: Array
-		//		post content dom filter function register array
-		this.contentDomPostFilters = [];
-
-		// editingAreaStyleSheets: Array
-		//		array to store all the stylesheets applied to the editing area
-		this.editingAreaStyleSheets=[];
-
-		if(dojo.render.html.moz){
-			this.contentPreFilters.push(this._fixContentForMoz);
-		}
-
-		this._keyHandlers = {};
-
-		if(dojo.Deferred){
-			this.onLoadDeferred = new dojo.Deferred();
-		}
-	},
 	{
-		// inheritWidth: Boolean
-		//		whether to inherit the parent's width or simply use 100%
+		/** whether to inherit the parent's width or simply use 100% */
 		inheritWidth: false,
-
-		// focusOnLoad: Boolean
-		//		whether focusing into this instance of richtext when page onload
-		focusOnLoad: false,
-
-		// saveName: String
-		//		If a save name is specified the content is saved and restored when the user
-		//		leave this page can come back, or if the editor is not properly closed after
-		//		editing has started.
+		focusOnLoad: true,
+		
+		/**
+		 * If a save name is specified the content is saved and restored if the
+		 * editor is not properly closed after editing has started.
+		 */
 		saveName: "",
-
-		// styleSheets: String
-		//		semicolon (";") separated list of css files for the editing area
-		styleSheets: "",
-
-		// _content: String
-		//		temporary content storage
 		_content: "",
+		
+		/* set height to fix the editor at a specific height, with scrolling */
+		height: null,
 
-		// height: String
-		//		set height to fix the editor at a specific height, with scrolling
-		height: "",
-
-		// minHeight: String
-		//		The minimum height that the editor should have
+		/** The minimum height that the editor should have */
 		minHeight: "1em",
-
-		// isClosed: Boolean
+		
 		isClosed: true,
-
-		// isLoaded: Boolean
 		isLoaded: false,
-
-		// useActiveX: Boolean
-		//		whether to use the active-x object in IE
+		
+		/** whether to use the active-x object in IE */
 		useActiveX: false,
 
-		// relativeImageUrls: Boolean
-		//		whether to use relative URLs for images - if this is enabled
-		//		images will be given absolute URLs when inside the editor but
-		//		will be changed to use relative URLs (to the current page) on save
+		/* whether to use relative URLs for images - if this is enabled
+       	images will be given absolute URLs when inside the editor but
+       	will be changed to use relative URLs (to the current page) on save
+		*/
 		relativeImageUrls: false,
-
-		// _SEPARATOR: String
-		//		used to concat contents from multiple textareas into a single string
+		
 		_SEPARATOR: "@@**%%__RICHTEXTBOUNDRY__%%**@@",
 
-		// onLoadDeferred: dojo.Deferred
-		//		deferred that can be used to connect to the onLoad function. This
-		//		will only be set if dojo.Deferred is required
-		onLoadDeferred: null,
+		// contentFilters: [],
+
+		/*
+		defaultContentCleaner: function(content){
+			if(!dojo.render.html.ie){
+				return content;
+			}
+
+			content = content.replace(/\x20/g, " ");
+			// alert(content);
+			return content;
+		},
+		*/
 
 	/* Init
 	 *******/
 
 		fillInTemplate: function(){
-			// summary: see dojo.widget.DomWidget
-			dojo.event.topic.publish("dojo.widget.RichText::init", this);
 			this.open();
 
-
+			// add the formatting functions
+			var funcs = ["queryCommandEnabled", "queryCommandState",
+				"queryCommandValue", "execCommand"];
+			for(var i = 0; i < funcs.length; i++){
+				dojo.event.connect("around", this, funcs[i], this, "_normalizeCommand");
+			}
+			
 			// backwards compatibility, needs to be removed
 			dojo.event.connect(this, "onKeyPressed", this, "afterKeyPress");
 			dojo.event.connect(this, "onKeyPress", this, "keyPress");
 			dojo.event.connect(this, "onKeyDown", this, "keyDown");
 			dojo.event.connect(this, "onKeyUp", this, "keyUp");
 
-			this.setupDefaultShortcuts();
-		},
-
-		setupDefaultShortcuts: function(){
-			// summary: add some default key handlers
-			// description: 
-			// 		Overwrite this to setup your own handlers. The default
-			// 		implementation does not use Editor2 commands, but directly
-			//		executes the builtin commands within the underlying browser
-			//		support.
+			// add default some key handlers		
 			var ctrl = this.KEY_CTRL;
 			var exec = function (cmd, arg) {
 				return arguments.length == 1 ? function () { this.execCommand(cmd); } :
 					function () { this.execCommand(cmd, arg); }
 			}
+				
 			this.addKeyHandler("b", ctrl, exec("bold"));
 			this.addKeyHandler("i", ctrl, exec("italic"));
 			this.addKeyHandler("u", ctrl, exec("underline"));
 			this.addKeyHandler("a", ctrl, exec("selectall"));
+			//this.addKeyHandler("k", ctrl, exec("createlink", ""));
+			//this.addKeyHandler("K", ctrl, exec("unlink"));
 			this.addKeyHandler("s", ctrl, function () { this.save(true); });
-
+			
 			this.addKeyHandler("1", ctrl, exec("formatblock", "h1"));
 			this.addKeyHandler("2", ctrl, exec("formatblock", "h2"));
 			this.addKeyHandler("3", ctrl, exec("formatblock", "h3"));
 			this.addKeyHandler("4", ctrl, exec("formatblock", "h4"));
-
+					
 			this.addKeyHandler("\\", ctrl, exec("insertunorderedlist"));
 			if(!dojo.render.html.ie){
 				this.addKeyHandler("Z", ctrl, exec("redo"));
 			}
 		},
 
-		// events: Array
-		//		 events which should be connected to the underlying editing area
+
 		events: ["onBlur", "onFocus", "onKeyPress", "onKeyDown", "onKeyUp", "onClick"],
 
 		/**
@@ -188,21 +128,10 @@ dojo.widget.defineWidget(
 		 * designMode is used, an <object> and active-x component if inside of IE or
 		 * a reguler element if contentEditable is available.
 		 */
-		open: function (/*DomNode, optional*/element) {
-			// summary:
-			//		Transforms the node referenced in this.domNode into a rich text editing
-			//		node. This can result in the creation and replacement with an <iframe> if
-			//		designMode is used, an <object> and active-x component if inside of IE or
-			//		a reguler element if contentEditable is available.
-
-			if(this.onLoadDeferred.fired >= 0){
-				this.onLoadDeferred = new dojo.Deferred();
-			}
-
-			var h = dojo.render.html;
-			if (!this.isClosed) { this.close(); }
+		open: function (element) {
 			dojo.event.topic.publish("dojo.widget.RichText::open", this);
 
+			if (!this.isClosed) { this.close(); }
 			this._content = "";
 			if((arguments.length == 1)&&(element["nodeName"])){ this.domNode = element; } // else unchanged
 
@@ -210,76 +139,62 @@ dojo.widget.defineWidget(
 				(this.domNode.nodeName.toLowerCase() == "textarea")){
 				this.textarea = this.domNode;
 				var html = dojo.string.trim(this.textarea.value);
-				this.domNode = dojo.doc().createElement("div");
-				dojo.html.copyStyle(this.domNode, this.textarea);
-				var tmpFunc = dojo.lang.hitch(this, function(){
-					//some browsers refuse to submit display=none textarea, so
-					//move the textarea out of screen instead
-					with(this.textarea.style){
-						display = "block";
-						position = "absolute";
-						left = top = "-1000px";
-
-						if(h.ie){ //nasty IE bug: abnormal formatting if overflow is not hidden
-							this.__overflow = overflow;
-							overflow = "hidden";
-						}
+				if(html == ""){ html = "&nbsp;"; }
+				this.domNode = document.createElement("div");
+				with(this.textarea.style){
+					display = "block";
+					position = "absolute";
+					width = "1px";
+					height = "1px";
+					border = margin = padding = "0px";
+					visiblity = "hidden";
+					if(dojo.render.html.ie){
+						overflow = "hidden";
 					}
-				});
-				if(h.ie){
-					setTimeout(tmpFunc, 10);
-				}else{
-					tmpFunc();
 				}
-				if(!h.safari){
-					// FIXME: VERY STRANGE safari 2.0.4 behavior here caused by
-					// moving the textarea. Often crashed the browser!!! Seems
-					// fixed on webkit nightlies.
-					dojo.html.insertBefore(this.domNode, this.textarea);
-				}
-				// this.domNode.innerHTML = html;
-
+				dojo.dom.insertBefore(this.domNode, this.textarea);
+				this.domNode.innerHTML = html;
+				
 				if(this.textarea.form){
-					dojo.event.connect('before', this.textarea.form, "onsubmit",
+					dojo.event.connect(this.textarea.form, "onsubmit", 
 						// FIXME: should we be calling close() here instead?
 						dojo.lang.hitch(this, function(){
 							this.textarea.value = this.getEditorContent();
 						})
 					);
 				}
-
+				
 				// dojo plucks our original domNode from the document so we need
 				// to go back and put ourselves back in
 				var editor = this;
 				dojo.event.connect(this, "postCreate", function (){
-					dojo.html.insertAfter(editor.textarea, editor.domNode);
+					dojo.dom.insertAfter(editor.textarea, editor.domNode);
 				});
 			}else{
-				var html = this._preFilterContent(dojo.string.trim(this.domNode.innerHTML));
+				var html = dojo.string.trim(this.domNode.innerHTML);
+				if(html == ""){ html = "&nbsp;"; }
 			}
-			if(html == ""){ html = "&nbsp;"; }
-			var content = dojo.html.getContentBox(this.domNode);
-			this._oldHeight = content.height;
-			this._oldWidth = content.width;
+					
+			this._oldHeight = dojo.style.getContentHeight(this.domNode);
+			this._oldWidth = dojo.style.getContentWidth(this.domNode);
 
 			this._firstChildContributingMargin = this._getContributingMargin(this.domNode, "top");
 			this._lastChildContributingMargin = this._getContributingMargin(this.domNode, "bottom");
 
-			this.savedContent = this.domNode.innerHTML;
-			this.domNode.innerHTML = '';
-
-			this.editingArea = dojo.doc().createElement("div");
-			this.domNode.appendChild(this.editingArea);
-
+			this.savedContent = document.createElement("div");
+			while (this.domNode.hasChildNodes()) {
+				this.savedContent.appendChild(this.domNode.firstChild);
+			}
+			
 			// If we're a list item we have to put in a blank line to force the
 			// bullet to nicely align at the top of text
 			if(	(this.domNode["nodeName"])&&
 				(this.domNode.nodeName == "LI")){
 				this.domNode.innerHTML = " <br>";
 			}
-
+					
 			if(this.saveName != ""){
-				var saveTextarea = dojo.doc().getElementById("dojo.widget.RichText.savedContent");
+				var saveTextarea = document.getElementById("dojo.widget.RichText.savedContent");
 				if (saveTextarea.value != "") {
 					var datas = saveTextarea.value.split(this._SEPARATOR);
 					for (var i = 0; i < datas.length; i++) {
@@ -289,127 +204,65 @@ dojo.widget.defineWidget(
 							datas.splice(i, 1);
 							break;
 						}
-					}
+					}				
 				}
 				dojo.event.connect("before", window, "onunload", this, "_saveContent");
 				// dojo.event.connect(window, "onunload", this, "_saveContent");
 			}
 
-			if(h.ie70 && this.useActiveX){
-				dojo.debug("activeX in ie70 is not currently supported, useActiveX is ignored for now.");
-				this.useActiveX = false;
-			}
 			// Safari's selections go all out of whack if we do it inline,
 			// so for now IE is our only hero
 			//if (typeof document.body.contentEditable != "undefined") {
-			if(this.useActiveX && h.ie){ // active-x
-				var self = this;
-				//if call _drawObject directly here, textarea replacement
-				//won't work: no content is shown. However, add a delay
-				//can workaround this. No clue why.
-				setTimeout(function(){self._drawObject(html);}, 0);
-			}else if(h.ie || this._safariIsLeopard() || h.opera){ // contentEditable, easy
-				this.iframe = dojo.doc().createElement( 'iframe' ) ;
-				this.iframe.src = 'javascript:void(0)';
-				this.editorObject = this.iframe;
-				with(this.iframe.style){
-					border = '0';
-					width = "100%";
-				}
-				this.iframe.frameBorder = 0;
-				this.editingArea.appendChild(this.iframe)
-				this.window = this.iframe.contentWindow;
-				this.document = this.window.document;
-				this.document.open();
-				this.document.write("<html><head><style>body{margin:0;padding:0;border:0;overflow:hidden;}</style></head><body><div></div></body></html>");
-				this.document.close();
-				this.editNode = this.document.body.firstChild;//document.createElement("div");
-				this.editNode.contentEditable = true;
-				with (this.iframe.style) {
-					if(h.ie70){
-						if(this.height){
-							height = this.height;
-						}
-						if(this.minHeight){
-							minHeight = this.minHeight;
-						}
-					}else{
-						height = this.height ? this.height : this.minHeight;
-					}
+			if (this.useActiveX && dojo.render.html.ie) { // active-x
+				this._drawObject(html);
+				// dojo.debug(this.object.document);
+			} else if (dojo.render.html.ie) { // contentEditable, easy
+				this.editNode = document.createElement("div");
+				with (this.editNode) {
+					innerHTML = html;
+					contentEditable = true;
+					style.height = this.height ? this.height : this.minHeight;
 				}
 
+				if(this.height){ this.editNode.style.overflowY="scroll"; }
 				// FIXME: setting contentEditable on switches this element to
 				// IE's hasLayout mode, triggering weird margin collapsing
 				// behavior. It's particularly bad if the element you're editing
 				// contains childnodes that don't have margin: defined in local
 				// css rules. It would be nice if it was possible to hack around
-				// this. Sadly _firstChildContributingMargin and
+				// this. Sadly _firstChildContributingMargin and 
 				// _lastChildContributingMargin don't work on IE unless all
 				// elements have margins set in CSS :-(
 
-				//if the normal way fails, we try the hard way to get the list
-				//do not use _cacheLocalBlockFormatNames here, as it will trigger security warning in IE7
-				//in the array below, ul can not come directly after ol, otherwise the queryCommandValue returns Normal for it
-				var formats = ['p', 'pre', 'address', 'h1', 'h2', 'h3', 'h4', 'h5', 'h6', 'ol', 'div', 'ul'];
-				var localhtml = "";
-				for(var i in formats){
-					if(formats[i].charAt(1) != 'l'){
-						localhtml += "<"+formats[i]+"><span>content</span></"+formats[i]+">";
-					}else{
-						localhtml += "<"+formats[i]+"><li>content</li></"+formats[i]+">";
-					}
-				}
-				//queryCommandValue returns empty if we hide editNode, so move it out of screen temporary
-				with(this.editNode.style){
-					position = "absolute";
-					left = "-2000px";
-					top = "-2000px";
-				}
-				this.editNode.innerHTML = localhtml;
-				var node = this.editNode.firstChild;
-				while(node){
-					dojo.withGlobal(this.window, "selectElement", dojo.html.selection, [node.firstChild]);
-					var nativename = node.tagName.toLowerCase();
-					this._local2NativeFormatNames[nativename] = this.queryCommandValue("formatblock");
-//						dojo.debug([nativename,this._local2NativeFormatNames[nativename]]);
-					this._native2LocalFormatNames[this._local2NativeFormatNames[nativename]] = nativename;
-					node = node.nextSibling;
-				}
-				with(this.editNode.style){
-					position = "";
-					left = "";
-					top = "";
-				}
-
-				this.editNode.innerHTML = html;
-				if(this.height){ this.document.body.style.overflowY="scroll"; }
+				this.domNode.appendChild(this.editNode);
 
 				dojo.lang.forEach(this.events, function(e){
 					dojo.event.connect(this.editNode, e.toLowerCase(), this, e);
 				}, this);
-
+			
+				this.window = window;
+				this.document = document;
+				
 				this.onLoad();
 			} else { // designMode in iframe
 				this._drawIframe(html);
-				this.editorObject = this.iframe;
 			}
 
 			// TODO: this is a guess at the default line-height, kinda works
 			if (this.domNode.nodeName == "LI") { this.domNode.lastChild.style.marginTop = "-1.2em"; }
 			dojo.html.addClass(this.domNode, "RichTextEditable");
-
+			
 			this.isClosed = false;
 		},
 
-		_hasCollapseableMargin: function(/*DomNode*/element, /*String*/side) {
-			// summary:
-			//		check if an element has padding or borders on the given side
-			//		which would prevent it from collapsing margins
-			if (dojo.html.getPixelValue(element,
-										 'border-'+side+'-width',
+		_hasCollapseableMargin: function(element, side) {
+			// check if an element has padding or borders on the given side
+			// which would prevent it from collapsing margins
+			if (dojo.style.getPixelValue(element, 
+										 'border-'+side+'-width', 
 										 false)) {
 				return false;
-			} else if (dojo.html.getPixelValue(element,
+			} else if (dojo.style.getPixelValue(element, 
 												'padding-'+side,
 												false)) {
 				return false;
@@ -418,12 +271,11 @@ dojo.widget.defineWidget(
 			}
 		},
 
-		_getContributingMargin:	function(/*DomNode*/element, /*String*/topOrBottom) {
-			// summary:
-			//		calculate how much margin this element and its first or last
-			//		child are contributing to the total margin between this element
-			//		and the adjacent node. CSS border collapsing makes this
-			//		necessary.
+		_getContributingMargin:	function(element, topOrBottom) {
+			// calculate how much margin this element and its first or last
+			// child are contributing to the total margin between this element
+			// and the adjacent node. CSS border collapsing makes this
+			// necessary.
 
 			if (topOrBottom == "top") {
 				var siblingAttr = "previousSibling";
@@ -439,14 +291,14 @@ dojo.widget.defineWidget(
 				var siblingMarginProp = "margin-top";
 			}
 
-			var elementMargin = dojo.html.getPixelValue(element, marginProp, false);
+			var elementMargin = dojo.style.getPixelValue(element, marginProp, false);
 
 			function isSignificantNode(element) {
 				// see if an node is significant in the current context
 				// for calulating margins
-				return !(element.nodeType==3 && dojo.string.isBlank(element.data))
-					&& dojo.html.getStyle(element, "display") != "none"
-					&& !dojo.html.isPositionAbsolute(element);
+				return !(element.nodeType==3 && dojo.string.isBlank(element.data)) 
+					&& dojo.style.getStyle(element, "display") != "none" 
+					&& !dojo.style.isPositionAbsolute(element);
 			}
 
 			// walk throuh first/last children to find total collapsed margin size
@@ -457,11 +309,11 @@ dojo.widget.defineWidget(
 				while ((!isSignificantNode(child)) && child[childSiblingAttr]) {
 					child = child[childSiblingAttr];
 				}
-
-				childMargin = Math.max(childMargin, dojo.html.getPixelValue(child, marginProp, false));
+						  
+				childMargin = Math.max(childMargin, dojo.style.getPixelValue(child, marginProp, false));
 				// stop if we hit a bordered/padded element
 				if (!this._hasCollapseableMargin(child, topOrBottom)) break;
-				child = child[childAttr];
+				child = child[childAttr];								   
 			}
 
 			// if this element has a border, return full child margin immediately
@@ -473,15 +325,15 @@ dojo.widget.defineWidget(
 			var sibling = element[siblingAttr];
 			while (sibling) {
 				if (isSignificantNode(sibling)) {
-					contextMargin = dojo.html.getPixelValue(sibling,
-															 siblingMarginProp,
+					contextMargin = dojo.style.getPixelValue(sibling, 
+															 siblingMarginProp, 
 															 false);
 					break;
 				}
 				sibling = sibling[siblingAttr];
 			}
 			if (!sibling) { // no sibling, look at parent's margin instead
-				contextMargin = dojo.html.getPixelValue(element.parentNode,
+				contextMargin = dojo.style.getPixelValue(element.parentNode, 
 												marginProp, false);
 			}
 
@@ -490,78 +342,69 @@ dojo.widget.defineWidget(
 			} else {
 				return 0;
 			}
-
+			
 		},
-
-		_drawIframe: function (/*String*/html){
-			// summary:
-			//		Draws an iFrame using the existing one if one exists.
-			//		Used by Mozilla, Safari, and Opera
+		
+		/** Draws an iFrame using the existing one if one exists. 
+			Used by Mozilla, Safari, and Opera */
+		_drawIframe: function (html) {
 
 			// detect firefox < 1.5, which has some iframe loading issues
 			var oldMoz = Boolean(dojo.render.html.moz && (
 									typeof window.XML == 'undefined'))
 
-			if(!this.iframe){
-				var currentDomain = (new dojo.uri.Uri(dojo.doc().location)).host;
-				this.iframe = dojo.doc().createElement("iframe");
-				// dojo.body().appendChild(this.iframe);
-				with(this.iframe){
+			if (!this.iframe) {
+				var currentDomain = (new dojo.uri.Uri(document.location)).host;
+				this.iframe = document.createElement("iframe");
+				with (this.iframe) {
+					scrolling = this.height ? "auto" : "no";
 					style.border = "none";
 					style.lineHeight = "0"; // squash line height
 					style.verticalAlign = "bottom";
-					scrolling = this.height ? "auto" : "no";
 				}
 			}
 			// opera likes this to be outside the with block
-			this.iframe.src = dojo.uri.dojoUri("src/widget/templates/richtextframe.html") + ((dojo.doc().domain != currentDomain) ? ("#"+dojo.doc().domain) : "");
+			this.iframe.src = dojo.uri.dojoUri("src/widget/templates/richtextframe.html") + "#" + ((document.domain != currentDomain) ? document.domain : "");
 			this.iframe.width = this.inheritWidth ? this._oldWidth : "100%";
-			if(this.height){
+			if (this.height) {
 				this.iframe.style.height = this.height;
-			}else{
+			} else {
 				var height = this._oldHeight;
-				if(this._hasCollapseableMargin(this.domNode, 'top')){
+				if (this._hasCollapseableMargin(this.domNode, 'top')) {
 					height += this._firstChildContributingMargin;
 				}
-				if(this._hasCollapseableMargin(this.domNode, 'bottom')){
+				if (this._hasCollapseableMargin(this.domNode, 'bottom')) {
 					height += this._lastChildContributingMargin;
 				}
 				this.iframe.height = height;
 			}
 
-			var tmpContent = dojo.doc().createElement('div');
+			var tmpContent = document.createElement('div');
 			tmpContent.innerHTML = html;
-			//append tmpContent to under the current domNode so that the margin
-			//calculation below is correct
-			this.editingArea.appendChild(tmpContent);
 
 			// make relative image urls absolute
-			if(this.relativeImageUrls){
+			if (this.relativeImageUrls) {
 				var imgs = tmpContent.getElementsByTagName('img');
-				for(var i=0; i<imgs.length; i++){
-					imgs[i].src = (new dojo.uri.Uri(dojo.global().location, imgs[i].src)).toString();
+				for (var i=0; i<imgs.length; i++) {
+					imgs[i].src = (new dojo.uri.Uri(window.location, imgs[i].src)).toString();
 				}
 				html = tmpContent.innerHTML;
 			}
 
 			// fix margins on tmpContent
-			var firstChild = dojo.html.firstElement(tmpContent);
-			var lastChild = dojo.html.lastElement(tmpContent);
+			var firstChild = dojo.dom.firstElement(tmpContent);
+			var lastChild = dojo.dom.lastElement(tmpContent);
 			if(firstChild){
 				firstChild.style.marginTop = this._firstChildContributingMargin+"px";
 			}
 			if(lastChild){
 				lastChild.style.marginBottom = this._lastChildContributingMargin+"px";
 			}
-			//do we want to show the content before the editing area finish loading here?
-			//if external style sheets are used for the editing area, the appearance now
-			//and after loading of the editing area won't be the same (and padding/margin
-			//calculation above may not be accurate)
-//			tmpContent.style.display = "none";
-			this.editingArea.appendChild(this.iframe);
-			if(dojo.render.html.safari){
-				this.iframe.src = this.iframe.src;
-			}
+
+			// show existing content behind iframe for now
+			tmpContent.style.position = "absolute";
+			this.domNode.appendChild(tmpContent);
+			this.domNode.appendChild(this.iframe);
 
 			var _iframeInitialized = false;
 
@@ -573,56 +416,59 @@ dojo.widget.defineWidget(
 				if(!this.editNode){
 					if(this.iframe.contentWindow){
 						this.window = this.iframe.contentWindow;
-						this.document = this.iframe.contentWindow.document
-					}else if(this.iframe.contentDocument){
+					}else{
 						// for opera
 						this.window = this.iframe.contentDocument.window;
+					}
+					if(dojo.render.html.moz){
+						this.document = this.iframe.contentWindow.document
+					}else{
 						this.document = this.iframe.contentDocument;
 					}
 
 					// curry the getStyle function
 					var getStyle = (function (domNode) { return function (style) {
-						return dojo.html.getStyle(domNode, style);
+						return dojo.style.getStyle(domNode, style);
 					}; })(this.domNode);
 
 					var font =
 						getStyle('font-weight') + " " +
 						getStyle('font-size') + " " +
 						getStyle('font-family');
-
+					
 					// line height is tricky - applying a units value will mess things up.
 					// if we can't get a non-units value, bail out.
 					var lineHeight = "1.0";
-					var lineHeightStyle = dojo.html.getUnitValue(this.domNode, 'line-height');
+					var lineHeightStyle = dojo.style.getUnitValue(this.domNode, 'line-height');
 					if (lineHeightStyle.value && lineHeightStyle.units=="") {
 						lineHeight = lineHeightStyle.value;
 					}
 
-					dojo.html.insertCssText(
-						'body,html{background:transparent;padding:0;margin:0;}' +
+					dojo.style.insertCssText(
+						'    body,html { background: transparent; padding: 0; margin: 0; }\n' +
 						// TODO: left positioning will case contents to disappear out of view
 						//       if it gets too wide for the visible area
-						'body{top:0;left:0;right:0;' +
-						(((this.height)||(dojo.render.html.opera)) ? '' : 'position:fixed;') +
-						'font:' + font + ';' +
-						'min-height:' + this.minHeight + ';' +
-						'line-height:' + lineHeight + '}' +
-						'p{margin: 1em 0 !important;}' +
-						'body > *:first-child{padding-top:0 !important;margin-top:' + this._firstChildContributingMargin + 'px !important;}' + // FIXME: test firstChild nodeType
-						'body > *:last-child{padding-bottom:0 !important;margin-bottom:' + this._lastChildContributingMargin + 'px !important;}' +
-						'li > ul:-moz-first-node, li > ol:-moz-first-node{padding-top:1.2em;}\n' +
-						'li{min-height:1.2em;}' +
-						//'    p,ul,li { padding-top: 0; padding-bottom: 0; margin-top:0; margin-bottom: 0; }\n' +
+						'    body { top: 0; left: 0; right: 0;' +
+						(this.height ? '' : ' position: fixed; ') + 
+						'        font: ' + font + ';\n' + 
+						'        min-height: ' + this.minHeight + '; \n' +
+						'        line-height: ' + lineHeight + '} \n' +
+						'    p { margin: 1em 0 !important; }\n' +
+						'    body > *:first-child { padding-top: 0 !important; margin-top: ' + this._firstChildContributingMargin + 'px !important; }\n' + // FIXME: test firstChild nodeType
+						'    body > *:last-child { padding-bottom: 0 !important; margin-bottom: ' + this._lastChildContributingMargin + 'px !important; }\n' +
+						'    li > ul:-moz-first-node, li > ol:-moz-first-node { padding-top: 1.2em; }\n' +
+						'    li { min-height: 1.2em; }\n' +
+						//'    p,ul,li { padding-top: 0; padding-bottom: 0; margin-top:0; margin-bottom: 0; }\n' + 
 						'', this.document);
 
-					dojo.html.removeNode(tmpContent);
+					tmpContent.parentNode.removeChild(tmpContent);
 					this.document.body.innerHTML = html;
-					if(oldMoz||dojo.render.html.safari){
+					if(oldMoz){
 						this.document.designMode = "on";
 					}
 					this.onLoad();
 				}else{
-					dojo.html.removeNode(tmpContent);
+					tmpContent.parentNode.removeChild(tmpContent);
 					this.editNode.innerHTML = html;
 					this.onDisplayChanged();
 				}
@@ -640,91 +486,10 @@ dojo.widget.defineWidget(
 				this.iframe.onload = ifrFunc;
 			}
 		},
-
-		_applyEditingAreaStyleSheets: function(){
-			// summary:
-			//		apply the specified css files in styleSheets
-			var files = [];
-			if(this.styleSheets){
-				files = this.styleSheets.split(';');
-				this.styleSheets = '';
-			}
-
-			//empty this.editingAreaStyleSheets here, as it will be filled in addStyleSheet
-			files = files.concat(this.editingAreaStyleSheets);
-			this.editingAreaStyleSheets = [];
-
-			if(files.length>0){
-				for(var i=0;i<files.length;i++){
-					var url = files[i];
-					if(url){
-						this.addStyleSheet(dojo.uri.dojoUri(url));
-	 				}
-	 			}
-			}
-		},
-
-		addStyleSheet: function(/*dojo.uri.Uri*/uri) {
-			// summary:
-			//		add an external stylesheet for the editing area
-			// uri:	a dojo.uri.Uri pointing to the url of the external css file
-			var url=uri.toString();
-			if(dojo.lang.find(this.editingAreaStyleSheets, url) > -1){
-				dojo.debug("dojo.widget.RichText.addStyleSheet: Style sheet "+url+" is already applied to the editing area!");
-				return;
-			}
-
-			//if uri is relative, then convert it to absolute so that it can be resolved correctly in iframe
-			if(url.charAt(0) == '.' || (url.charAt(0) != '/' && !uri.host)){
-				url = (new dojo.uri.Uri(dojo.global().location, url)).toString();
-			}
-
-			this.editingAreaStyleSheets.push(url);
-			if(this.document.createStyleSheet){ //IE
-				this.document.createStyleSheet(url);
-			}else{ //other browser
-				var head = this.document.getElementsByTagName("head")[0];
-				var stylesheet = this.document.createElement("link");
-				with(stylesheet){
-					rel="stylesheet";
-					type="text/css";
-					href=url;
-				}
-				head.appendChild(stylesheet);
-			}
-		},
-
-		removeStyleSheet: function (/*dojo.uri.Uri*/uri) {
-			// summary:
-			//		remove an external stylesheet for the editing area
-			var url=uri.toString();
-			//if uri is relative, then convert it to absolute so that it can be resolved correctly in iframe
-			if(url.charAt(0) == '.' || (url.charAt(0) != '/' && !uri.host)){
-				url = (new dojo.uri.Uri(dojo.global().location, url)).toString();
-			}
-			var index = dojo.lang.find(this.editingAreaStyleSheets, url);
-			if(index == -1){
-				dojo.debug("dojo.widget.RichText.removeStyleSheet: Style sheet "+url+" is not applied to the editing area so it can not be removed!");
-				return;
-			}
-			delete this.editingAreaStyleSheets[index];
-
-			var links = this.document.getElementsByTagName("link");
-			for(var i=0;i<links.length;i++){
-				if(links[i].href == url){
-					if(dojo.render.html.ie){//we need to empty the href first, to get IE to remove the rendered styles
-						links[i].href="";
-					}
-					dojo.html.removeNode(links[i]);
-					break;
-				}
-			}
-		},
-
-		_drawObject: function (/*String*/html) {
-			// summary:
-			//		Draws an active x object, used by IE
-			this.object = dojo.html.createExternalElement(dojo.doc(), "object");
+		
+		/** Draws an active x object, used by IE */
+		_drawObject: function (html) {
+			this.object = document.createElement("object");
 
 			with (this.object) {
 				classid = "clsid:2D360201-FFF5-11D1-8D03-00A0C959BC0A";
@@ -733,104 +498,50 @@ dojo.widget.defineWidget(
 				Scrollbars = this.height ? true : false;
 				Appearance = this._activeX.appearance.flat;
 			}
-			this.editorObject = this.object;
-			this.editingArea.appendChild(this.object);
+			this.domNode.appendChild(this.object);
 
 			this.object.attachEvent("DocumentComplete", dojo.lang.hitch(this, "onLoad"));
-			//DisplayChanged is fired too often even no change is made, so we ignore it
-			//and call onDisplayChanged manually in execCommand instead
-//			this.object.attachEvent("DisplayChanged", dojo.lang.hitch(this, "onDisplayChanged"));
+			this.object.attachEvent("DisplayChanged", dojo.lang.hitch(this, "_updateHeight"));
+			this.object.attachEvent("DisplayChanged", dojo.lang.hitch(this, "onDisplayChanged"));
 
 			dojo.lang.forEach(this.events, function(e){
 				this.object.attachEvent(e.toLowerCase(), dojo.lang.hitch(this, e));
 			}, this);
 
 			this.object.DocumentHTML = '<!doctype HTML PUBLIC "-//W3C//DTD HTML 4.01//EN" "http://www.w3.org/TR/html4/strict.dtd">' +
-				'<html><title></title>' +
+				'<title></title>' +
 				'<style type="text/css">' +
 				'    body,html { padding: 0; margin: 0; }' + //font: ' + font + '; }' +
-				(this.height ? '' : '    body,  { overflow: hidden; }') +
+				(this.height ? '' : '    body { overflow: hidden; }') +
+				//'    #bodywrapper {  }' +
 				'</style>' +
-				//'<base href="' + dojo.global().location + '">' +
-				'<body><div>' + html + '<div></body></html>';
-
-			this._cacheLocalBlockFormatNames();
+				//'<base href="' + window.location + '">' +
+				'<body><div id="bodywrapper">' + html + '</div></body>';
 		},
 
-		//static cache variables shared among all instance of this class
-		_local2NativeFormatNames: {},
-		_native2LocalFormatNames: {},
-		//in IE, names for blockformat is locale dependent, so we cache the values here
-		//we use activeX to obtain the list, if success or the names are already cached,
-		//return true
-		_cacheLocalBlockFormatNames: function(){
-			// summary:
-			//		in IE, names for blockformat is locale dependent, so we cache the values here
-			//		we use activeX to obtain the list, if success or the names are already cached,
-			//		return true
-			if(!this._native2LocalFormatNames['p']){
-				var obj = this.object;
-				var error = false;
-				if(!obj){
-					//create obj temporarily
-					try{
-						obj = dojo.html.createExternalElement(dojo.doc(), "object");
-						obj.classid = "clsid:2D360201-FFF5-11D1-8D03-00A0C959BC0A";
-						dojo.body().appendChild(obj);
-						obj.DocumentHTML = "<html><head></head><body></body></html>";
-					}catch(e){ error = true; }
-				}
-				try{
-					var oNamesParm = new ActiveXObject("DEGetBlockFmtNamesParam.DEGetBlockFmtNamesParam");
-					obj.ExecCommand(this._activeX.command['getblockformatnames'], 0, oNamesParm);
-					var vbNamesArray = new VBArray(oNamesParm.Names);
-					var localFormats = vbNamesArray.toArray();
-					var nativeFormats = ['p', 'pre', 'address', 'h1', 'h2', 'h3', 'h4', 'h5', 'h6', 'ol', 'ul', '', '', '','','div'];
-					for(var i=0;i<nativeFormats.length;++i){
-						if(nativeFormats[i].length>0){
-							this._local2NativeFormatNames[localFormats[i]] = nativeFormats[i];
-							this._native2LocalFormatNames[nativeFormats[i]] = localFormats[i];
-						}
-					}
-				}catch(e){ error = true; }
-				if(obj && !this.object){
-					//delete the temporary obj
-					dojo.body().removeChild(obj);
-				}
-			}
-			return !error;
-		},
 	/* Event handlers
 	 *****************/
 
-		_isResized: function(){ return false; },
+	 	_isResized: function(){ return false; },
 
 		onLoad: function(e){
-			// summary: handler after the content of the document finishes loading
 			this.isLoaded = true;
 			if (this.object){
 				this.document = this.object.DOM;
 				this.window = this.document.parentWindow;
 				this.editNode = this.document.body.firstChild;
-				this.editingArea.style.height = this.height ? this.height : this.minHeight;
-				if(!this.height){
-					this.connect(this, "onDisplayChanged", "_updateHeight");
-				}
-				//pretend the object as an iframe, so that the context menu for the
-				//editor can be placed correctly when shown
-				this.window._frameElement = this.object;
-			}else if (this.iframe && !dojo.render.html.ie){
+				this.domNode.style.height = this.height ? this.height : this.minHeight;
+				this.connect(this, "onDisplayChanged", "_updateHeight");
+			}else if (this.iframe){
 				this.editNode = this.document.body;
-				if(!this.height){
-					this.connect(this, "onDisplayChanged", "_updateHeight");
-				}
-
+				this.connect(this, "onDisplayChanged", "_updateHeight");
+		
 				try { // sanity check for Mozilla
 					this.document.execCommand("useCSS", false, true); // old moz call
 					this.document.execCommand("styleWithCSS", false, false); // new moz call
 					//this.document.execCommand("insertBrOnReturn", false, false); // new moz call
 				}catch(e2){ }
-
+				
 				if (dojo.render.html.safari) {
 					/*
 					this.iframe.style.visiblity = "visible";
@@ -841,54 +552,49 @@ dojo.widget.defineWidget(
 					// this.onDisplayChanged();
 					this.connect(this.editNode, "onblur", "onBlur");
 					this.connect(this.editNode, "onfocus", "onFocus");
-					this.connect(this.editNode, "onclick", "onFocus");
-
+				
 					this.interval = setInterval(dojo.lang.hitch(this, "onDisplayChanged"), 750);
 					// dojo.raise("onload");
 					// dojo.debug(this.editNode.parentNode.parentNode.parentNode.nodeName);
 				} else if (dojo.render.html.mozilla || dojo.render.html.opera) {
+
+					// We need to unhook the blur event listener on close as we
+					// can encounter a garunteed crash in FF if another event is
+					// also fired
 					var doc = this.document;
+					var blurfp = dojo.event.browser.addListener(this.document, "blur", dojo.lang.hitch(this, "onBlur"));
+					var unBlur = { unBlur: function(e){
+							dojo.event.browser.removeListener(doc, "blur", blurfp);
+					} };
+					dojo.event.connect("before", this, "close", unBlur, "unBlur");
+					dojo.event.browser.addListener(this.document, "focus", dojo.lang.hitch(this, "onFocus"));
+				
+					// safari can't handle key listeners, it kills the speed
 					var addListener = dojo.event.browser.addListener;
-					var self = this;
-					dojo.lang.forEach(this.events, function(e){
-						var l = addListener(self.document, e.substr(2).toLowerCase(), dojo.lang.hitch(self, e));
-						if(e=="onBlur"){
-							// We need to unhook the blur event listener on close as we
-							// can encounter a garunteed crash in FF if another event is
-							// also fired
-							var unBlur = { unBlur: function(e){
-									dojo.event.browser.removeListener(doc, "blur", l);
-							} };
-							dojo.event.connect("before", self, "close", unBlur, "unBlur");
-						}
-					});
+					addListener(this.document, "keypress", dojo.lang.hitch(this, "onKeyPress"));
+					addListener(this.document, "keydown", dojo.lang.hitch(this, "onKeyDown"));
+					addListener(this.document, "keyup", dojo.lang.hitch(this, "onKeyUp"));
+					addListener(this.document, "click", dojo.lang.hitch(this, "onClick"));
 				}
-				// FIXME: when scrollbars appear/disappear this needs to be fired
+
+				// FIXME: when scrollbars appear/disappear this needs to be fired						
 			}else if(dojo.render.html.ie){
 				// IE contentEditable
-				if(!this.height){
-					this.connect(this, "onDisplayChanged", "_updateHeight");
-				}
 				this.editNode.style.zoom = 1.0;
 			}
-
-			this._applyEditingAreaStyleSheets();
-
+			
 			if(this.focusOnLoad){
 				this.focus();
 			}
 			this.onDisplayChanged(e);
-			if(this.onLoadDeferred){
-				this.onLoadDeferred.callback(true);
-			}
 		},
 
+		/** Fired on keydown */
 		onKeyDown: function(e){
-			// summary: Fired on keydown
 			if((!e)&&(this.object)){
 				e = dojo.event.browser.fixEvent(this.window.event);
 			}
-			// dojo.debug("onkeydown:", e.keyCode);
+			dojo.debug("onkeydown:", e.keyCode);
 			// we need this event at the moment to get the events from control keys
 			// such as the backspace. It might be possible to add this to Dojo, so that
 			// keyPress events can be emulated by the keyDown and keyUp detection.
@@ -897,7 +603,7 @@ dojo.widget.defineWidget(
 				e.stopPropagation();
 				// FIXME: this is a poor-man's indent/outdent. It would be
 				// better if it added 4 "&nbsp;" chars in an undoable way.
-				// Unfortuantly pasteHTML does not prove to be undoable
+				// Unfortuantly pasteHTML does not prove to be undoable 
 				this.execCommand((e.shiftKey ? "outdent" : "indent"));
 			}else if(dojo.render.html.ie){
 				if((65 <= e.keyCode)&&(e.keyCode <= 90)){
@@ -910,53 +616,101 @@ dojo.widget.defineWidget(
 				// this.onKeyPress(e);
 			}
 		},
-
+		
+		/** Fired on keyup */
 		onKeyUp: function(e){
-			// summary: Fired on keyup
 			return;
 		},
-
+		
 		KEY_CTRL: 1,
-
+		
+		/** Fired on keypress. */
 		onKeyPress: function(e){
-			// summary: Fired on keypress
 			if((!e)&&(this.object)){
 				e = dojo.event.browser.fixEvent(this.window.event);
 			}
 			// handle the various key events
 
+			var character = e.charCode > 0 ? String.fromCharCode(e.charCode) : null;
+			var code = e.keyCode;
+
 			var modifiers = e.ctrlKey ? this.KEY_CTRL : 0;
 
-			if (this._keyHandlers[e.key]) {
-				// dojo.debug("char:", e.key);
-				var handlers = this._keyHandlers[e.key], i = 0, handler;
+			if (this._keyHandlers[character]) {
+				dojo.debug("char:", character);
+				var handlers = this._keyHandlers[character], i = 0, handler;
 				while (handler = handlers[i++]) {
 					if (modifiers == handler.modifiers) {
-						e.preventDefault();
 						handler.handler.call(this);
+						e.preventDefault();
 						break;
 					}
 				}
 			}
+			
+			/*
+			// define some key combos
+			if (e.ctrlKey || e.metaKey) { // modifier pressed
+				switch (character) {
+					case "b": this.execCommand("bold"); break;
+					case "i": this.execCommand("italic"); break;
+					case "u": this.execCommand("underline"); break;
+					//case "a": this.execCommand("selectall"); break;
+					//case "k": this.execCommand("createlink", ""); break;
+					//case "K": this.execCommand("unlink"); break;
+					case "Z": this.execCommand("redo"); break;
+					case "s": this.close(true); break; // saves
+					
+					case "1": this.execCommand("formatblock", "h1"); break;
+					case "2": this.execCommand("formatblock", "h2"); break;
+					case "3": this.execCommand("formatblock", "h3"); break;
+					case "4": this.execCommand("formatblock", "h4"); break;
+					
+					case "\\": this.execCommand("insertunorderedlist"); break;
+					
+					default: switch (code) {
+						case e.KEY_LEFT_ARROW:
+						case e.KEY_RIGHT_ARROW:
+							//break; // preventDefault stops the browser
+								   // going through its history
+						default:
+							preventDefault = false; break; // didn't handle here
+					}
+				}
+			} else {
+				switch (code) {
+					case e.KEY_TAB:
+					  // commenting out bcs it's crashing FF
+						// this.execCommand(e.shiftKey ? "unindent" : "indent");
+						// break;
+					default:
+						preventDefault = false; break; // didn't handle here
+				}
+			}
+			
+			if (preventDefault) { e.preventDefault(); }
+			*/
 
 			// function call after the character has been inserted
 			dojo.lang.setTimeout(this, this.onKeyPressed, 1, e);
 		},
-
-		addKeyHandler: function (/*String*/key, /*Int*/modifiers, /*Function*/handler) {
-			// summary: add a handler for a keyboard shortcut
+		
+		addKeyHandler: function (key, modifiers, handler) {
 			if (!(this._keyHandlers[key] instanceof Array)) { this._keyHandlers[key] = []; }
 			this._keyHandlers[key].push({
 				modifiers: modifiers || 0,
 				handler: handler
 			});
 		},
-
+		
+		
+		
+		/**
+		 * Fired after a keypress event has occured and it's action taken. This
+		 * is useful if action needs to be taken after text operations have
+		 * finished
+		 */
 		onKeyPressed: function (e) {
-			// summary:
-			//		Fired after a keypress event has occured and it's action taken. This
-		 	//		is useful if action needs to be taken after text operations have finished
-
 			// Mozilla adds a single <p> with an embedded <br> when you hit enter once:
 			//   <p><br>\n</p>
 			// when you hit enter again it adds another <br> inside your enter
@@ -967,7 +721,7 @@ dojo.widget.defineWidget(
 			// and so we need to remove the <p>s to ensure the position of the cursor
 			// changes from the users perspective when they hit enter, as the second two
 			// html snippets render the same when margins are set to 0.
-
+			
 			// TODO: doesn't really work; is this really needed?
 			//if (dojo.render.html.moz) {
 			//	for (var i = 0; i < this.document.getElementsByTagName("p").length; i++) {
@@ -980,72 +734,42 @@ dojo.widget.defineWidget(
 			//}
 			this.onDisplayChanged(/*e*/); // can't pass in e
 		},
-
+		
 		onClick: function(e){ this.onDisplayChanged(e); },
 		onBlur: function(e){ },
 		_initialFocus: true,
-		onFocus: function(e){
-			// summary: Fired on focus
+		onFocus: function(e){ 
 			if( (dojo.render.html.mozilla)&&(this._initialFocus) ){
 				this._initialFocus = false;
 				if(dojo.string.trim(this.editNode.innerHTML) == "&nbsp;"){
-					this.placeCursorAtStart();
-//					this.execCommand("selectall");
-//					this.window.getSelection().collapseToStart();
+					this.execCommand("selectall");
+					this.window.getSelection().collapseToStart();
 				}
 			}
-			/*
-			// FIXME: attempted (but ultimately unworkable) solution for #2066
-			if(dojo.render.html.safari){
-				var sel = this.window.getSelection();
-				dojo.debug(dojo.dom.isDescendantOf(sel.focusNode, this.document.body));
-
-				var isLastNode = (sel.focusNode == this.document.body.lastChild);
-				if(!isLastNode){ return; }
-				var isText = (sel.focusNode.nodeType == 3); 
-				if(!isText){ return; }
-				var isLastChar = (sel.focusOffset == sel.focusNode.nodeValue.length);
-				if(!isLastChar){ return; }
-				dojo.debug(sel.focusOffset, sel.focusNode.nodeValue.length);
-				if(isLastNode && isText && isLastChar){
-					this.document.body.appendChild(this.document.createTextNode(" "));
-					this.document.body.appendChild(this.document.createElement("br"));
-					this.document.body.appendChild(this.document.createElement("p"));
-					this.document.body.appendChild(this.document.createElement("p"));
-					sel.collapse(sel.focusNode, sel.focusOffset-1);
-					sel.collapse(sel.focusNode, sel.focusOffset+1);
-				}
-			}
-			*/
 		},
 
 		blur: function () {
-			// summary: remove focus from this instance
-			if(this.iframe) { this.window.blur(); }
-			else if(this.object) { this.document.body.blur(); }
-			else if(this.editNode) { this.editNode.blur(); }
+			if (this.iframe) { this.window.blur(); }
+			else if (this.editNode) { this.editNode.blur(); }
 		},
-
+		
 		focus: function () {
-			// summary: move focus to this instance
-			if(this.iframe && !dojo.render.html.ie) { this.window.focus(); }
-			else if(this.object) { this.document.focus(); }
-			// editNode may be hidden in display:none div, lets just punt in this case
-			else if(this.editNode && this.editNode.focus) { this.editNode.focus(); }
-			else{
-				dojo.debug("Have no idea how to focus into the editor!");
+			if(this.iframe){
+				this.window.focus();
+			}else if(this.editNode){
+				this.editNode.focus();
 			}
 		},
-
+		
 		/** this event will be fired everytime the display context changes and the
 		 result needs to be reflected in the UI */
 		onDisplayChanged: function (e){ },
-
+		
 
 	/* Formatting commands
 	 **********************/
-
-		// Object: IE's Active X codes: see http://www.computerbytesman.com/js/activex/dhtmledit.htm
+		
+		/** IE's Active X codes */
 		_activeX: {
 			command: {
 				bold: 5000,
@@ -1084,7 +808,7 @@ dojo.widget.defineWidget(
 				deleterows: 5007,
 				mergecells: 5029,
 				splitcell: 5047,
-
+				
 				// the command need mapping, they don't translate directly
 				// to the contentEditable commands
 				setblockformat: 5043,
@@ -1098,12 +822,12 @@ dojo.widget.defineWidget(
 				getbackcolor: 5010,
 				setforecolor: 5046,
 				getforecolor: 5015,
-
+				
 				findtext: 5008,
 				font: 5009,
 				hyperlink: 5016,
 				image: 5017,
-
+				
 				lockelement: 5027,
 				makeabsolute: 5028,
 				sendbackward: 5036,
@@ -1112,16 +836,16 @@ dojo.widget.defineWidget(
 				bringabovetext: 5039,
 				sendtoback: 5040,
 				bringtofront: 5041,
-
+				
 				properties: 5052
 			},
-
+			
 			ui: {
 				"default": 0,
 				prompt: 1,
 				noprompt: 2
 			},
-
+			
 			status: {
 				notsupported: 0,
 				disabled: 1,
@@ -1129,208 +853,180 @@ dojo.widget.defineWidget(
 				latched: 7,
 				ninched: 11
 			},
-
+			
 			appearance: {
 				flat: 0,
 				inset: 1
 			},
-
+			
 			state: {
 				unchecked: 0,
 				checked: 1,
 				gray: 2
 			}
 		},
-
-		_normalizeCommand: function (/*String*/cmd){
-			// summary:
-			//		Used as the advice function by dojo.event.connect to map our
-		 	//		normalized set of commands to those supported by the target
-		 	//		browser
+		
+		/**
+		 * Used as the advice function by dojo.event.connect to map our
+		 * normalized set of commands to those supported by the target
+		 * browser
+		 *
+		 * @param arugments The arguments Array, containing at least one
+		 *                  item, the command and an optional second item,
+		 *                  an argument.
+		 */
+		_normalizeCommand: function (joinObject){
 			var drh = dojo.render.html;
-
-			var command = cmd.toLowerCase();
+			
+			var command = joinObject.args[0].toLowerCase();
 			if(command == "formatblock"){
 				if(drh.safari){ command = "heading"; }
-			}else if(this.object){
-				switch(command){
-					case "createlink":
-						command = "hyperlink";
-						break;
-					case "insertimage":
-						command = "image";
-						break;
-				}
-			}else if(command == "hilitecolor" && !drh.mozilla){
-				command = "backcolor";
+				if(drh.ie){ joinObject.args[1] = "<"+joinObject.args[1]+">"; }
 			}
-
-			return command;
-		},
-
-		_safariIsLeopard: function(){
-			var gt420 = false;
-			if(dojo.render.html.safari){
-				var tmp = dojo.render.html.UA.split("AppleWebKit/")[1];
-				var ver = parseFloat(tmp.split(" ")[0]);
-				if(ver >= 420){ gt420 = true; }
+			if (command == "hilitecolor" && !drh.mozilla) { command = "backcolor"; }
+			joinObject.args[0] = command;
+			
+			if (joinObject.args.length > 1) { // a command was specified
+				var argument = joinObject.args[1];
+				if (command == "heading") { throw new Error("unimplemented"); }
+				joinObject.args[1] = argument;
 			}
-			return gt420;
+			
+			return joinObject.proceed();
 		},
-
-		queryCommandAvailable: function (/*String*/command) {
-			// summary:
-			//		Tests whether a command is supported by the host. Clients SHOULD check
-			//		whether a command is supported before attempting to use it, behaviour
-			//		for unsupported commands is undefined.
-			// command: The command to test for
+		
+		/**
+		 * Tests whether a command is supported by the host. Clients SHOULD check
+		 * whether a command is supported before attempting to use it, behaviour
+		 * for unsupported commands is undefined.
+		 *
+		 * @param command The command to test for
+		 * @return true if the command is supported, false otherwise
+		 */
+		queryCommandAvailable: function (command) {
 			var ie = 1;
 			var mozilla = 1 << 1;
 			var safari = 1 << 2;
 			var opera = 1 << 3;
-			var safari420 = 1 << 4;
-
-			var gt420 = this._safariIsLeopard();
-
 			function isSupportedBy (browsers) {
 				return {
 					ie: Boolean(browsers & ie),
 					mozilla: Boolean(browsers & mozilla),
 					safari: Boolean(browsers & safari),
-					safari420: Boolean(browsers & safari420),
 					opera: Boolean(browsers & opera)
 				}
 			}
 
 			var supportedBy = null;
-
+			
 			switch (command.toLowerCase()) {
 				case "bold": case "italic": case "underline":
 				case "subscript": case "superscript":
 				case "fontname": case "fontsize":
 				case "forecolor": case "hilitecolor":
-				case "justifycenter": case "justifyfull": case "justifyleft":
-				case "justifyright": case "delete": case "selectall":
+				case "justifycenter": case "justifyfull": case "justifyleft": 
+				case "justifyright": case "delete": case "undo": case "redo":
 					supportedBy = isSupportedBy(mozilla | ie | safari | opera);
 					break;
-
+					
 				case "createlink": case "unlink": case "removeformat":
 				case "inserthorizontalrule": case "insertimage":
 				case "insertorderedlist": case "insertunorderedlist":
-				case "indent": case "outdent": case "formatblock":
-				case "inserthtml": case "undo": case "redo": case "strikethrough":
-					supportedBy = isSupportedBy(mozilla | ie | opera | safari420);
+				case "indent": case "outdent": case "formatblock": 
+				case "inserthtml":
+					supportedBy = isSupportedBy(mozilla | ie | opera);
+					break;
+					
+				case "strikethrough": 
+					supportedBy = isSupportedBy(mozilla |  opera | (this.object ? 0 : ie));
 					break;
 
 				case "blockdirltr": case "blockdirrtl":
 				case "dirltr": case "dirrtl":
 				case "inlinedirltr": case "inlinedirrtl":
+				case "cut": case "copy": case "paste": 
 					supportedBy = isSupportedBy(ie);
 					break;
-				case "cut": case "copy": case "paste":
-					supportedBy = isSupportedBy( ie | mozilla | safari420);
-					break;
-
+				
 				case "inserttable":
 					supportedBy = isSupportedBy(mozilla | (this.object ? ie : 0));
 					break;
-
+				
 				case "insertcell": case "insertcol": case "insertrow":
 				case "deletecells": case "deletecols": case "deleterows":
 				case "mergecells": case "splitcell":
 					supportedBy = isSupportedBy(this.object ? ie : 0);
 					break;
-
+				
 				default: return false;
 			}
-
+			
 			return (dojo.render.html.ie && supportedBy.ie) ||
 				(dojo.render.html.mozilla && supportedBy.mozilla) ||
 				(dojo.render.html.safari && supportedBy.safari) ||
-				(gt420 && supportedBy.safari420) ||
-				(dojo.render.html.opera && supportedBy.opera);  // Boolean return true if the command is supported, false otherwise
+				(dojo.render.html.opera && supportedBy.opera);
 		},
 
-		execCommand: function (/*String*/command, argument){
-			// summary: Executes a command in the Rich Text area
-			// command: The command to execute
-			// argument: An optional argument to the command
+		/**
+		 * Executes a command in the Rich Text area
+		 *
+		 * @param command The command to execute
+		 * @param argument An optional argument to the command
+		 */
+		execCommand: function (command, argument){
 			var returnValue;
-
-			//focus() is required for IE (none-activeX mode) to work
-			//In addition, focus() makes sure after the execution of
-			//the command, the editor receives the focus as expected
-			this.focus();
-
-			command = this._normalizeCommand(command);
-			if (argument != undefined) {
-				if(command == "heading") { throw new Error("unimplemented"); }
-				else if(command == "formatblock"){
-					if(this.object){ //IE activeX mode
-						argument = this._native2LocalFormatNames[argument];
-					}
-					else if(dojo.render.html.ie){ argument = '<'+argument+'>'; }
-				}
-			}
 			if(this.object){
-				switch (command) {
-					case "hilitecolor":
-						command = "setbackcolor";
-						break;
-					case "forecolor":
-					case "backcolor":
-					case "fontsize":
-					case "fontname":
-						command = "set" + command;
-						break;
-					case "formatblock":
-						command = "setblockformat";
+				if(command == "forecolor"){
+					command = "setforecolor";
+				}else if(command == "backcolor"){
+					command = "setbackcolor";
 				}
-
-				if(command == "strikethrough"){
-					command = "inserthtml";
-					var range = this.document.selection.createRange();
-					if(!range.htmlText){
-						return;
+			
+				//if (typeof this._activeX.command[command] == "undefined") { return null; }
+			
+				if(command == "inserttable"){
+					var tableInfo = this.constructor._tableInfo;
+					if(!tableInfo){
+						tableInfo = document.createElement("object");
+						tableInfo.classid = "clsid:47B0DFC7-B7A3-11D1-ADC5-006008A5848C";
+						document.body.appendChild(tableInfo);
+						this.constructor._table = tableInfo;
 					}
-					argument=range.htmlText.strike();
-				}else if(command == "inserthorizontalrule"){
-					command = "inserthtml";
-					argument="<hr>";
+					
+					tableInfo.NumRows = argument["rows"];
+					tableInfo.NumCols = argument["cols"];
+					tableInfo.TableAttrs = argument["TableAttrs"];
+					tableInfo.CellAttrs = argument["CellAttrs"];
+					tableInfo.Caption = argument["Caption"];
 				}
-
+			
 				if(command == "inserthtml"){
-					var range = this.document.selection.createRange();
-					if(this.document.selection.type.toUpperCase() == "CONTROL"){
-						//if selection is controlrange, no pasteHTML is available,
-						//we replace the outerHTML directly
-						for(var i=0;i<range.length;i++){
-							range.item(i).outerHTML = argument;
-						}
-					}else{
-						// on IE, we can use the pasteHTML method of the textRange object
-						// to get an undo-able innerHTML modification
-						range.pasteHTML(argument);
-						range.select();
-					}
-					returnValue = true;
+					var insertRange = this.document.selection.createRange();
+					insertRange.select();
+					insertRange.pasteHTML(argument);
+					insertRange.collapse(true);
+					return true;
 				}else if(arguments.length == 1){
-					returnValue = this.object.ExecCommand(this._activeX.command[command],
+					return this.object.ExecCommand(this._activeX.command[command],
 						this._activeX.ui.noprompt);
 				}else{
-					returnValue = this.object.ExecCommand(this._activeX.command[command],
+					return this.object.ExecCommand(this._activeX.command[command],
 						this._activeX.ui.noprompt, argument);
 				}
+		
+			/* */
 			}else if(command == "inserthtml"){
+				// on IE, we can use the pasteHTML method of the textRange object
+				// to get an undo-able innerHTML modification
 				if(dojo.render.html.ie){
-					//dojo.debug("inserthtml breaks the undo stack when not using the ActiveX version of the control!");
+					dojo.debug("inserthtml breaks the undo stack when not using the ActiveX version of the control!");
 					var insertRange = this.document.selection.createRange();
-					insertRange.pasteHTML(argument);
 					insertRange.select();
-					//insertRange.collapse(true);
+					insertRange.pasteHTML(argument);
+					insertRange.collapse(true);
 					return true;
 				}else{
-					return this.document.execCommand(command, false, argument);
+					return this.document.execCommand(command, false, argument);			
 				}
 			/* */
 			// fix up unlink in Mozilla to unlink the link and not just the selection
@@ -1346,93 +1042,92 @@ dojo.widget.defineWidget(
 				var selectionStartOffset = selectionRange.startOffset;
 				var selectionEndContainer = selectionRange.endContainer;
 				var selectionEndOffset = selectionRange.endOffset;
-
+				
 				// select our link and unlink
-				var a = dojo.withGlobal(this.window, "getAncestorElement", dojo.html.selection, ['a']);
-				dojo.withGlobal(this.window, "selectElement", dojo.html.selection, [a]);
-
+				var range = document.createRange();
+				var a = this.getSelectedNode();
+				while(a.nodeName != "A"){ a = a.parentNode; }
+				range.selectNode(a);
+				selection.removeAllRanges();
+				selection.addRange(range);
+				
 				returnValue = this.document.execCommand("unlink", false, null);
-
+				
 				// restore original selection
-				var selectionRange = this.document.createRange();
+				var selectionRange = document.createRange();
 				selectionRange.setStart(selectionStartContainer, selectionStartOffset);
 				selectionRange.setEnd(selectionEndContainer, selectionEndOffset);
 				selection.removeAllRanges();
 				selection.addRange(selectionRange);
-
+				
 				return returnValue;
+			}else if((command == "inserttable")&&(dojo.render.html.mozilla)){
+
+				var cols = "<tr>";
+				for (var i = 0; i < argument.cols; i++) { cols += "<td></td>"; }
+				cols += "</tr>";
+			
+				var table = "<table><tbody>";
+				for (var i = 0; i < argument.rows; i++) { table += cols; }
+				table += "</tbody></table>";
+				returnValue = this.document.execCommand("inserthtml", false, table);
+
 			}else if((command == "hilitecolor")&&(dojo.render.html.mozilla)){
 				// mozilla doesn't support hilitecolor properly when useCSS is
 				// set to false (bugzilla #279330)
-
+				
 				this.document.execCommand("useCSS", false, false);
-				returnValue = this.document.execCommand(command, false, argument);
+				returnValue = this.document.execCommand(command, false, argument);			
 				this.document.execCommand("useCSS", false, true);
-
+			
 			}else if((dojo.render.html.ie)&&( (command == "backcolor")||(command == "forecolor") )){
-				// Tested under IE 6 XP2, no problem here, comment out
-				// IE weirdly collapses ranges when we exec these commands, so prevent it
-//				var tr = this.document.selection.createRange();
+				// IE weirdly collapses ranges when we exec these commands, so prevent it	
+				var tr = this.document.selection.createRange();
 				argument = arguments.length > 1 ? argument : null;
 				returnValue = this.document.execCommand(command, false, argument);
-
 				// timeout is workaround for weird IE behavior were the text
 				// selection gets correctly re-created, but subsequent input
 				// apparently isn't bound to it
-//				setTimeout(function(){tr.select();}, 1);
+				setTimeout(function(){tr.select();}, 1);
 			}else{
 				// dojo.debug("command:", command, "arg:", argument);
 
 				argument = arguments.length > 1 ? argument : null;
-//				if(dojo.render.html.moz){
-//					this.document = this.iframe.contentWindow.document
-//				}
-
-				if(argument || command!="createlink") {
-					returnValue = this.document.execCommand(command, false, argument);
+				if(dojo.render.html.moz){
+					this.document = this.iframe.contentWindow.document
 				}
-			}
+				returnValue = this.document.execCommand(command, false, argument);
 
+				// try{
+				// }catch(e){
+				// 	dojo.debug(e);
+				// }
+			}
+			
 			this.onDisplayChanged();
 			return returnValue;
 		},
 
-		queryCommandEnabled: function(/*String*/command){
-			// summary: check whether a command is enabled or not
-			command = this._normalizeCommand(command);
+		queryCommandEnabled: function(command, argument){
 			if(this.object){
-				switch (command) {
-					case "hilitecolor":
-						command = "setbackcolor";
-						break;
-					case "forecolor":
-					case "backcolor":
-					case "fontsize":
-					case "fontname":
-						command = "set" + command;
-						break;
-					case "formatblock":
-						command = "setblockformat";
-						break;
-					//below are not natively supported commands, we fake them
-					case "strikethrough":
-						command = "bold"; //whenever bold is enabled, strikethrough should be so as well
-						break;
-					case "inserthorizontalrule":
-						return true;
+				if(command == "forecolor"){
+					command = "setforecolor";
+				}else if(command == "backcolor"){
+					command = "setbackcolor";
 				}
 
 				if(typeof this._activeX.command[command] == "undefined"){ return false; }
 				var status = this.object.QueryStatus(this._activeX.command[command]);
-				return ((status != this._activeX.status.notsupported)&&
-					(status != this._activeX.status.disabled));
+				return ((status != this.activeX.status.notsupported)&& 
+					(status != this.activeX.status.diabled));
 			}else{
-				if(dojo.render.html.mozilla){
-					if(command == "unlink"){ // mozilla returns true always
-						return dojo.withGlobal(this.window, "hasAncestorElement", dojo.html.selection, ['a']);
-					} else if (command == "inserttable") {
-						return true;
-					}
+				// mozilla returns true always
+				if(command == "unlink" && dojo.render.html.mozilla){
+					var node = this.getSelectedNode();
+					while (node.parentNode && node.nodeName != "A") { node = node.parentNode; }
+					return node.nodeName == "A";
+				} else if (command == "inserttable" && dojo.render.html.mozilla) {
+					return true;
 				}
 
 				// return this.document.queryCommandEnabled(command);
@@ -1441,201 +1136,194 @@ dojo.widget.defineWidget(
 			}
 		},
 
-		queryCommandState: function(command){
-			// summary: check the state of a given command
-			command = this._normalizeCommand(command);
+		queryCommandState: function(command, argument){
 			if(this.object){
 				if(command == "forecolor"){
 					command = "setforecolor";
 				}else if(command == "backcolor"){
 					command = "setbackcolor";
-				}else if(command == "strikethrough"){
-					//check whether we are under a <strike>
-					return dojo.withGlobal(this.window, "hasAncestorElement", dojo.html.selection, ['strike']);
-				}else if(command == "inserthorizontalrule"){
-					return false;
 				}
 
 				if(typeof this._activeX.command[command] == "undefined"){ return null; }
 				var status = this.object.QueryStatus(this._activeX.command[command]);
-				return ((status == this._activeX.status.latched)||
+				return ((status == this._activeX.status.enabled)||
 					(status == this._activeX.status.ninched));
 			}else{
 				return this.document.queryCommandState(command);
 			}
 		},
 
-		queryCommandValue: function (command) {
-			// summary: check the value of a given command
-			command = this._normalizeCommand(command);
+		queryCommandValue: function (command, argument) {
 			if (this.object) {
 				switch (command) {
 					case "forecolor":
 					case "backcolor":
 					case "fontsize":
 					case "fontname":
+					case "blockformat":
 						command = "get" + command;
 						return this.object.execCommand(
 							this._activeX.command[command],
 							this._activeX.ui.noprompt);
-					case "formatblock":
-						var retvalue = this.object.execCommand(
-							this._activeX.command["getblockformat"],
-							this._activeX.ui.noprompt);
-						if(retvalue){
-							return this._local2NativeFormatNames[retvalue];
-						}
-				}
+				}			
+			
+				//var status = this.object.QueryStatus(this._activeX.command[command]);
 			} else {
-				if(dojo.render.html.ie && command == "formatblock"){
-					return this._local2NativeFormatNames[this.document.queryCommandValue(command)] || this.document.queryCommandValue(command);
-				}
 				return this.document.queryCommandValue(command);
 			}
 		},
-
-
+		
+		
 	/* Misc.
 	 ********/
 
+		getSelectedNode: function(){
+			if(!this.isLoaded){ return; }
+			if(this.document.selection){
+				return this.document.selection.createRange().parentElement();
+			}else if(dojo.render.html.mozilla){
+				return this.window.getSelection().getRangeAt(0).commonAncestorContainer;
+			}
+			return this.editNode;
+		},
+		
 		placeCursorAtStart: function(){
-			// summary:
-			//		place the cursor at the start of the editing area
-			this.focus();
-			//see comments in placeCursorAtEnd
-			if(dojo.render.html.moz && this.editNode.firstChild &&
-				this.editNode.firstChild.nodeType != dojo.dom.TEXT_NODE){
-				dojo.withGlobal(this.window, "selectElementChildren", dojo.html.selection, [this.editNode.firstChild]);
-			}else{
-				dojo.withGlobal(this.window, "selectElementChildren", dojo.html.selection, [this.editNode]);
+			if(!this.isLoaded){
+				dojo.event.connect(this, "onLoad", this, "placeCursorAtEnd");
+				return;
 			}
-			dojo.withGlobal(this.window, "collapse", dojo.html.selection, [true]);
+			dojo.event.disconnect(this, "onLoad", this, "placeCursorAtEnd");
+			if(this.window.getSelection){
+				var selection = this.window.getSelection;
+				if(selection.removeAllRanges){ // Mozilla
+					var range = this.document.createRange();
+					range.selectNode(this.editNode.firstChild);
+					range.collapse(true);
+					var selection = this.window.getSelection();
+					selection.removeAllRanges();
+					selection.addRange(range);
+				}else{ // Safari
+					// not a great deal we can do
+				}
+			}else if(this.document.selection){ // IE
+				var range = this.document.body.createTextRange();
+				range.moveToElementText(this.editNode);
+				range.collapse(true);
+				range.select();
+			}
 		},
 
-		placeCursorAtEnd: function(){
-			// summary:
-			//		place the cursor at the end of the editing area
-			this.focus();
-			//In mozilla, if last child is not a text node, we have to use selectElementChildren on this.editNode.lastChild
-			//otherwise the cursor would be placed at the end of the closing tag of this.editNode.lastChild
-			if(dojo.render.html.moz && this.editNode.lastChild &&
-				this.editNode.lastChild.nodeType != dojo.dom.TEXT_NODE){
-				dojo.withGlobal(this.window, "selectElementChildren", dojo.html.selection, [this.editNode.lastChild]);
-			}else{
-				dojo.withGlobal(this.window, "selectElementChildren", dojo.html.selection, [this.editNode]);
-			}
-			dojo.withGlobal(this.window, "collapse", dojo.html.selection, [false]);
-		},
-
-		replaceEditorContent: function(/*String*/html){
-			// summary:
-			//		this function set the content while trying to maintain the undo stack
-			html = this._preFilterContent(html);
-			if(this.isClosed){
-				this.domNode.innerHTML = html;
-			}else if(this.window && this.window.getSelection && !dojo.render.html.moz){ // Safari
-				// look ma! it's a totally f'd browser!
-				this.editNode.innerHTML = html;
-			}else if((this.window && this.window.getSelection) || (this.document && this.document.selection)){ // Moz/IE
-				this.execCommand("selectall");
-				if(dojo.render.html.moz && !html){ html = "&nbsp;" }
+		replaceEditorContent: function(html){
+			if(this.window.getSelection){
+				var selection = this.window.getSelection;
+				// if(selection.removeAllRanges){ // Mozilla			
+				if(dojo.render.html.moz){ // Mozilla			
+					var range = this.document.createRange();
+					range.selectNodeContents(this.editNode);
+					var selection = this.window.getSelection();
+					selection.removeAllRanges();
+					selection.addRange(range);
+					this.execCommand("inserthtml", html);
+				}else{ // Safari
+					// look ma! it's a totally f'd browser!
+					this.editNode.innerHTML = html;
+				}
+			}else if(this.document.selection){ // IE
+				var range = this.document.body.createTextRange();
+				range.moveToElementText(this.editNode);
+				range.select();
 				this.execCommand("inserthtml", html);
 			}
 		},
-
-		_preFilterContent: function(/*String*/html){
-			// summary:
-			//		filter the input before setting the content of the editing area
-			var ec = html;
-			dojo.lang.forEach(this.contentPreFilters, function(ef){
-				ec = ef(ec);
-			});
-			if(this.contentDomPreFilters.length>0){
-				var dom = dojo.doc().createElement('div');
-				dom.style.display = "none";
-				dojo.body().appendChild(dom);
-				dom.innerHTML = ec;
-				dojo.lang.forEach(this.contentDomPreFilters, function(ef){
-					dom = ef(dom);
-				});
-				ec = dom.innerHTML;
-				dojo.body().removeChild(dom);
+		
+		placeCursorAtEnd: function(){
+			if(!this.isLoaded){
+				dojo.event.connect(this, "onLoad", this, "placeCursorAtEnd");
+				return;
 			}
-			return ec;
-		},
-		_postFilterContent: function(/*String*/html){
-			// summary:
-			//		filter the output after getting the content of the editing area
-			var ec = html;
-			if(this.contentDomPostFilters.length>0){
-				var dom = this.document.createElement('div');
-				dom.innerHTML = ec;
-				dojo.lang.forEach(this.contentDomPostFilters, function(ef){
-					dom = ef(dom);
-				});
-				ec = dom.innerHTML;
+			dojo.event.disconnect(this, "onLoad", this, "placeCursorAtEnd");
+			if(this.window.getSelection){
+				var selection = this.window.getSelection;
+				if(selection.removeAllRanges){ // Mozilla
+					var range = this.document.createRange();
+					range.selectNode(this.editNode.lastChild);
+					range.collapse(false);
+					var selection = this.window.getSelection();
+					selection.removeAllRanges();
+					selection.addRange(range);
+				}else{ // Safari
+					// not a great deal we can do
+				}
+			}else if(this.document.selection){ // IE
+				var range = this.document.body.createTextRange();
+				range.moveToElementText(this.editNode);
+				range.collapse(true);
+				range.select();
 			}
-			dojo.lang.forEach(this.contentPostFilters, function(ef){
-				ec = ef(ec);
-			});
-			return ec;
 		},
 
-		//Int: stored last time height
 		_lastHeight: 0,
 
+		/** Updates the height of the iframe to fit the contents. */
 		_updateHeight: function(){
-			// summary:
-			//		Updates the height of the editor area to fit the contents.
 			if(!this.isLoaded){ return; }
 			if(this.height){ return; }
+			if(this.iframe){
+				/*
+				if(!this.document.body["offsetHeight"]){
+					return;
+				}
+				*/
+				// The height includes the padding, borders and margins so these
+				// need to be added on
+				var heights = ["margin-top", "margin-bottom",
+					"padding-bottom", "padding-top",
+					"border-width-bottom", "border-width-top"];
+				for(var i = 0, chromeheight = 0; i < heights.length; i++){
+					var height = dojo.style.getStyle(this.iframe, heights[i]);
+					// Safari doesn't have all the heights so we have to test
+					if(height){
+						chromeheight += Number(height.replace(/[^0-9]/g, ""));
+					}
+				}
 
-			var height = dojo.html.getBorderBox(this.editNode).height;
-			//height maybe zero in some cases even though the content is not empty,
-			//we try the height of body instead
-			if(!height){
-				height = dojo.html.getBorderBox(this.document.body).height;
+				if(this.document.body["offsetHeight"]){
+					this._lastHeight = Math.max(this.document.body.scrollHeight, this.document.body.offsetHeight) + chromeheight;
+					this.iframe.height = this._lastHeight + "px";
+					this.window.scrollTo(0, 0);
+				}
+				// dojo.debug(this.iframe.height);
+			}else if(this.object){
+				this.object.style.height = dojo.style.getInnerHeight(this.editNode)+"px";
 			}
-			if(height == 0){
-				dojo.debug("Can not figure out the height of the editing area!");
-				return; //prevent setting height to 0
-			}
-			this._lastHeight = height;
-			this.editorObject.style.height = this._lastHeight + "px";
-			this.window.scrollTo(0, 0);
 		},
-
+		
+		/**
+		 * Saves the content in an onunload event if the editor has not been closed
+		 */
 		_saveContent: function(e){
-			// summary:
-			//		Saves the content in an onunload event if the editor has not been closed
-			var saveTextarea = dojo.doc().getElementById("dojo.widget.RichText.savedContent");
+			var saveTextarea = document.getElementById("dojo.widget.RichText.savedContent");
 			saveTextarea.value += this._SEPARATOR + this.saveName + ":" + this.getEditorContent();
 		},
 
 		getEditorContent: function(){
-			// summary:
-			//		return the current content of the editing area (post filters are applied)
 			var ec = "";
 			try{
 				ec = (this._content.length > 0) ? this._content : this.editNode.innerHTML;
 				if(dojo.string.trim(ec) == "&nbsp;"){ ec = ""; }
 			}catch(e){ /* squelch */ }
 
-			if(dojo.render.html.ie && !this.object){
-				//removing appended <P>&nbsp;</P> for IE in none-activeX mode
-				var re = new RegExp("(?:<p>&nbsp;</p>[\n\r]*)+$", "i");
-				ec = ec.replace(re,"");
-			}
-
-			ec = this._postFilterContent(ec);
+			dojo.lang.forEach(this.contentFilters, function(ef){
+				ec = ef(ec);
+			});
 
 			if (this.relativeImageUrls) {
-				// why use a regexp instead of dom? because IE is stupid
+				// why use a regexp instead of dom? because IE is stupid 
 				// and won't let us set img.src to a relative URL
-				// this comes after contentPostFilters because once content
+				// this comes after contentFilters because once content
 				// gets innerHTML'd img urls will be fully qualified
-				var siteBase = dojo.global().location.protocol + "//" + dojo.global().location.host;
-				var pathBase = dojo.global().location.pathname;
+				var siteBase = window.location.protocol + "//" + window.location.host;
+				var pathBase = window.location.pathname;
 				if (pathBase.match(/\/$/)) {
 					// ends with slash, match full path
 				} else {
@@ -1647,120 +1335,117 @@ dojo.widget.defineWidget(
 					pathBase = pathParts.join("/") + "/";
 
 				}
-
+				
 				var sameSite = new RegExp("(<img[^>]*\ src=[\"'])("+siteBase+"("+pathBase+")?)", "ig");
 				ec = ec.replace(sameSite, "$1");
 			}
 			return ec;
 		},
-
-		close: function(/*Boolean*/save, /*Boolean*/force){
-			// summary:
-			//		Kills the editor and optionally writes back the modified contents to the
-			//		element from which it originated.
-			// save:
-			//		Whether or not to save the changes. If false, the changes are discarded.
-			// force:
+		
+		/**
+		 * Kills the editor and optionally writes back the modified contents to the 
+		 * element from which it originated.
+		 *
+		 * @param save Whether or not to save the changes. If false, the changes are
+		 *             discarded.
+		 * @return true if the contents has been modified, false otherwise
+		 */
+		close: function(save, force){
 			if(this.isClosed){return false; }
 
 			if (arguments.length == 0) { save = true; }
-			this._content = this._postFilterContent(this.editNode.innerHTML);
-			var changed = (this.savedContent != this._content);
-
+			this._content = this.editNode.innerHTML;
+			var changed = (this.savedContent.innerHTML != this._content);
+			
 			// line height is squashed for iframes
 			// FIXME: why was this here? if (this.iframe){ this.domNode.style.lineHeight = null; }
 
 			if(this.interval){ clearInterval(this.interval); }
-
+			
 			if(dojo.render.html.ie && !this.object){
 				dojo.event.browser.clean(this.editNode);
 			}
-
+			
 			if (this.iframe) {
 				// FIXME: should keep iframe around for later re-use
 				delete this.iframe;
 			}
+			this.domNode.innerHTML = "";
 
-			if(this.textarea){
-				with(this.textarea.style){
-					position = "";
-					left = top = "";
-					if(dojo.render.html.ie){
-						overflow = this.__overflow;
-						this.__overflow = null;
-					}
-				}
-				if(save){
-					this.textarea.value = this._content;
+			if(save){
+				// kill listeners on the saved content
+				dojo.event.browser.clean(this.savedContent);
+				if(dojo.render.html.moz){
+					var nc = document.createElement("span");
+					this.domNode.appendChild(nc);
+					nc.innerHTML = this.editNode.innerHTML;
 				}else{
-					this.textarea.value = this.savedContent;
+					this.domNode.innerHTML = this._content;
 				}
-				dojo.html.removeNode(this.domNode);
-				this.domNode = this.textarea;
-			}else{
-				if(save){
-					if(dojo.render.html.moz){
-						var nc = dojo.doc().createElement("span");
-						this.domNode.appendChild(nc);
-						nc.innerHTML = this.editNode.innerHTML;
-					}else{
-						this.domNode.innerHTML = this._content;
-					}
-				}else{
-					this.domNode.innerHTML = this.savedContent;
+			} else {
+				while (this.savedContent.hasChildNodes()) {
+					this.domNode.appendChild(this.savedContent.firstChild);
 				}
 			}
-
+			delete this.savedContent;
+			
 			dojo.html.removeClass(this.domNode, "RichTextEditable");
 			this.isClosed = true;
 			this.isLoaded = false;
 			// FIXME: is this always the right thing to do?
 			delete this.editNode;
 
-			if(this.window._frameElement){
-				this.window._frameElement = null;
-			}
-
-			this.window = null;
-			this.document = null;
-			this.object = null;
-			this.editingArea = null;
-			this.editorObject = null;
-
-			return changed; // Boolean: whether the content has been modified
+			return changed;
 		},
 
 		destroyRendering: function(){}, // stub!
-
+		
 		destroy: function (){
 			this.destroyRendering();
 			if(!this.isClosed){ this.close(false); }
-
-			dojo.widget.RichText.superclass.destroy.call(this);
+		
+			// disconnect those listeners.
+			while(this._connected.length){
+				this.disconnect(this._connected[0],
+					this._connected[1], this._connected[2]);
+			}
 		},
 
+		_connected: [],
 		connect: function (targetObj, targetFunc, thisFunc) {
-			// summary: convenient method for dojo.event.connect
 			dojo.event.connect(targetObj, targetFunc, this, thisFunc);
+			// this._connected.push([targetObj, targetFunc, thisFunc]);	
 		},
-
+		
+		// FIXME: below two functions do not work with the above line commented out
 		disconnect: function (targetObj, targetFunc, thisFunc) {
-			// summary: convenient method for dojo.event.disconnect
-			dojo.event.disconnect(targetObj, targetFunc, this, thisFunc);
+			for (var i = 0; i < this._connected.length; i++) {
+				if (this._connected[0] == targetObj &&
+					this._connected[1] == targetFunc &&
+					this._connected[2] == thisFunc) {
+					dojo.event.disconnect(targetObj, targetFunc, this, thisFunc);
+					this._connected.splice(i, 1);
+					break;
+				}
+			}
 		},
-
+		
 		disconnectAllWithRoot: function (targetObj) {
-			dojo.deprecated("disconnectAllWithRoot", "is deprecated. No need to disconnect manually", "0.5");
-		},
-
-		_fixContentForMoz: function(html){
-			// summary:
-			//		Moz can not handle strong/em tags correctly, correct them here
-			html = html.replace(/<strong([ \>])/gi, '<b$1' );
-			html = html.replace(/<\/strong>/gi, '<\/b>' );
-			html = html.replace(/<em([ \>])/gi, '<i$1' );
-			html = html.replace(/<\/em>/gi, '<\/i>' );
-			return html;
+			for (var i = 0; i < this._connected.length; i++) {
+				if (this._connected[0] == targetObj) {
+					dojo.event.disconnect(targetObj,
+						this._connected[1], this, this._connected[2]);
+					this._connected.splice(i, 1);
+				}
+			}	
 		}
+		
+	},
+	"html",
+	function(){
+		this.contentFilters = [];
+		// this.contentFilters.push(this.defaultContentCleaner);
+		
+		this._keyHandlers = {};
 	}
 );

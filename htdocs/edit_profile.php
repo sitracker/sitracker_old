@@ -110,18 +110,14 @@ if (empty($submit))
     </th><td><textarea name="message" rows="4" cols="40"><?php echo strip_tags($user->message); ?></textarea></td></tr>
 
     <tr><th colspan='2'>CONTACT DETAILS</td></tr>
-    <tr id='email'><th>Email:<sup class='red'>*</sup></th><td><input maxlength="50" name="email" size="30" type="text" value="<?php echo strip_tags($user->email); ?>" /></td></tr>
-    <tr id='phone'><th>Phone:</th><td><input maxlength="50" name="phone" size="30" type="text" value="<?php echo strip_tags($user->phone); ?>" /></td></tr>
+    <tr><th>Email:<sup class='red'>*</sup></th><td><input maxlength="50" name="email" size="30" type="text" value="<?php echo strip_tags($user->email); ?>" /></td></tr>
+    <tr><th>Phone:</th><td><input maxlength="50" name="phone" size="30" type="text" value="<?php echo strip_tags($user->phone); ?>" /></td></tr>
     <tr><th>Fax:</th><td><input maxlength="50" name="fax" size="30" type="text" value="<?php echo strip_tags($user->fax); ?>" /></td></tr>
     <tr><th>Mobile:</th><td><input maxlength="50" name="mobile" size="30" type="text" value="<?php echo user_mobile($userid) ?>" /></td></tr>
-    <?php
-    echo "<tr><th>AIM: <img src=\"images/icons/{$iconset}/16x16/apps/ksmiletris.png\" width=\"16\" height=\"16\" alt=\"AIM\" /></th>";
-    echo "<td><input maxlength=\"50\" name=\"aim\" size=\"30\" type=\"text\" value=\"".strip_tags($user->aim)."\" /></td></tr>";
-    echo "<tr><th>ICQ: <img src=\"images/icons/{$iconset}/16x16/apps/licq.png\" width=\"16\" height=\"16\" alt=\"ICQ\" /></th>";
-    echo "<td><input maxlength=\"50\" name=\"icq\" size=\"30\" type=\"text\" value=\"".strip_tags($user->icq)."\" /></td></tr>";
-    echo "<tr><th>MSN: <img src=\"images/icons/{$iconset}/16x16/apps/personal.png\" width=\"16\" height=\"16\" alt=\"MSN\" /></th>";
-    echo "<td><input maxlength=\"50\" name=\"msn\" size=\"30\" type=\"text\" value=\"".strip_tags($user->msn)."\" /></td></tr>";
-    ?>
+    <tr><th>AIM: <img src="images/icons/kdeclassic/16x16/apps/ksmiletris.png" width="16" height="16" alt="AIM" /></th><td><input maxlength="50" name="aim" size="30" type="text" value="<?php echo strip_tags($user->aim); ?>" /></td></tr>
+    <tr><th>ICQ: <img src="images/icons/kdeclassic/16x16/apps/licq.png" width="16" height="16" alt="ICQ" /></th><td><input maxlength="50" name="icq" size="30" type="text" value="<?php echo strip_tags($user->icq); ?>" /></td></tr>
+    <tr><th>MSN: <img src="images/icons/kdeclassic/16x16/apps/personal.png" width="16" height="16" alt="MSN" /></th><td><input maxlength="50" name="msn" size="30" type="text" value="<?php echo strip_tags($user->msn); ?>" /></td></tr>
+
     <tr><th colspan='2'>DISPLAY PREFERENCES</td></tr>
     <tr><th>Interface Style (Theme):</th><td>
     <?php interfacestyle_drop_down('style', $user->var_style) ?>
@@ -134,7 +130,6 @@ if (empty($submit))
     <option <?php if ($user->var_update_order == "asc") echo "selected='selected'" ?> value="asc">Most Recent At Bottom</option>
     </select>
     </td></tr>
-    <tr><th>Incident Updates per page:</th><td><input maxlength="5" name="updatesperpage" size="3" type="text" value="<?php echo $user->var_num_updates_view; ?>" /></td></tr>
     <tr><th>Collapse Data:</th><td><?php html_checkbox('collapse', $user->var_collapse); ?></td></tr>
 
     <tr><th colspan='2'>NOTIFICATIONS</td></tr>
@@ -145,11 +140,11 @@ if (empty($submit))
 
     if ($CONFIG['trusted_server']==FALSE AND $userid==$sit[2])
     {
-        echo "<tr class='password'><th colspan='2'>CHANGE PASSWORD</td></tr>";
-        echo "<tr class='password'><th>&nbsp;</th><td>To change your password - first enter your existing password and then type your new password twice to confirm it.</td></tr>";
-        echo "<tr class='password'><th>Old Password:</th><td><input maxlength='50' name='password' size='30' type='password' /></td></tr>";
-        echo "<tr class='password'><th>New Password:</th><td><input maxlength='50' name='newpassword1' size='30' type='password' /></td></tr>";
-        echo "<tr class='password'><th>Confirm New Password:</th><td><input maxlength='50' name='newpassword2' size='30' type='password' /></td></tr>";
+        echo "<tr><th colspan='2'>CHANGE PASSWORD</td></tr>";
+        echo "<tr><th>&nbsp;</th><td>To change your password - first enter your existing password and then type your new password twice to confirm it.</td></tr>";
+        echo "<tr><th>Old Password:</th><td><input maxlength='50' name='password' size='30' type='password' /></td></tr>";
+        echo "<tr><th>New Password:</th><td><input maxlength='50' name='newpassword1' size='30' type='password' /></td></tr>";
+        echo "<tr><th>Confirm New Password:</th><td><input maxlength='50' name='newpassword2' size='30' type='password' /></td></tr>";
     }
     echo "</table>\n";
     echo "<input type='hidden' name='userid' value='{$userid}' />";
@@ -177,7 +172,6 @@ else
     $fax = cleanvar($_POST['fax']);
     $incidentrefresh = cleanvar($_POST['incidentrefresh']);
     $updateorder = cleanvar($_POST['updateorder']);
-    $updatesperpage = cleanvar($_POST['updatesperpage']);
     $signature = cleanvar($_POST['signature']);
     $message = cleanvar($_POST['message']);
     $status = cleanvar($_POST['status']);
@@ -246,7 +240,7 @@ else
         $sql .= "phone='$phone', mobile='$mobile', aim='$aim', icq='$icq', msn='$msn', fax='$fax', var_incident_refresh='$incidentrefresh', ";
         if ($userid != 1 AND !empty($_REQUEST['roleid']) AND $edituserpermission==TRUE) $sql .= "roleid='{$roleid}', ";
         if (!empty($holiday_entitlement) AND $edituserpermission==TRUE) $sql .= "holiday_entitlement='{$holiday_entitlement}', ";
-        $sql .= "var_update_order='$updateorder', var_num_updates_view='$updatesperpage', var_style='$style', signature='$signature', message='$message', status='$status', accepting='$accepting', ";
+        $sql .= "var_update_order='$updateorder', var_style='$style', signature='$signature', message='$message', status='$status', accepting='$accepting', ";
         $sql .= "var_collapse='$collapse', var_notify_on_reassign='$emailonreassign' WHERE id='$userid' LIMIT 1";
         $result = mysql_query($sql);
         if (mysql_error()) trigger_error("MySQL Query Error ".mysql_error(), E_USER_ERROR);
@@ -261,7 +255,7 @@ else
             $_SESSION['update_order'] = $updateorder;
         }
 
-        //only want to reassign to backup if you've changed you status
+        //only want to reassign to backup if you've changed you status 
         //(i.e. In Office -> On Holiday rather than when youve updated your message) or changes from accepting to not accepting
         if($oldstatus != $status)
         {

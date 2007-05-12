@@ -1,12 +1,16 @@
 To Do
 
+* Ability to delete products. Should check contracts and incidents and
+  correct any inconsitancies
 * Allow holidays to be cancelled after they've been approved, cancellations
   will need to be approved too probably?
 * Mark previous holidays as 'spent' when holiday entitlement is changed
 * Re-write the help
 * Context 'actions' menus?
 * Interface for editing incident product info questions
+* Contact flags
 * Internationalisation
+* Interface for editing vendors
 * Change maintenance table to use servicelevel field that stores tag instead of id
 * Overhaul the email templates (emailtypes)
 * Add tabbed incident_details popup window, with tabs relevant to SLA status
@@ -19,6 +23,29 @@ To Do
 * Ability to add more Roles
 * Make all date and time formats consistantly use config files
 
-Roadmap
+Rough roadmap with main goals (subject to slippage or change at any whim) ;)
 
-Our project roadmap is now maintained online at http://sitracker.sourceforge.net/Roadmap
+v3.25 December 2006
+
+    - Complete tasks system
+    - Neat escalations
+    - Fully XHML 1.0 Valid
+
+v3.26 Q1 2007
+
+    - Fully working customer portal, with ability to manage incidents and contracts
+      and their own details (maybe site details too?)
+
+v3.27 Q2 2007
+
+    - Improved products/software interface, easier
+
+v3.3x Q4 2007
+
+    - Nice themes, preferably with some nice graphics if we can find somebody to do them
+
+v4.00 2008?
+
+    - Complete plugin support and Plugins installer
+    - Internationalisation support (and hopefully at least one translation)
+    - More reports, more useful reports

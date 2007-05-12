@@ -8,7 +8,6 @@
 // of the GNU General Public License, incorporated herein by reference.
 //
 
-// November 2006 - SiT 3.25 this file DEPRICATED - PH 
 // Soon to be replaced
 // See incident/edit.inc.php
 

@@ -10,6 +10,7 @@
 
 dojo.provide("dojo.collections.Collections");
 
+dojo.collections={Collections:true};
 dojo.collections.DictionaryEntry=function(/* string */k, /* object */v){
 	//	summary
 	//	return an object of type dojo.collections.DictionaryEntry
@@ -25,7 +26,7 @@ dojo.collections.DictionaryEntry=function(/* string */k, /* object */v){
 
 /*	Iterators
  *	The collections.Iterators (Iterator and DictionaryIterator) are built to
- *	work with the Collections included in this module.  However, they *can*
+ *	work with the Collections included in this namespace.  However, they *can*
  *	be used with arrays and objects, respectively, should one choose to do so.
  */
 dojo.collections.Iterator=function(/* array */arr){

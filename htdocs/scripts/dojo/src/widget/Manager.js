@@ -13,9 +13,7 @@ dojo.require("dojo.lang.array");
 dojo.require("dojo.lang.func");
 dojo.require("dojo.event.*");
 
-// summary
-//	Manager class for the widgets.
-//	This is an internal class used by dojo; users shouldn't call this class directly.
+// Manager class
 dojo.widget.manager = new function(){
 	this.widgets = [];
 	this.widgetIds = [];
@@ -27,16 +25,12 @@ dojo.widget.manager = new function(){
 	var renderPrefixCache = [];
 
 	this.getUniqueId = function (widgetType) {
-		var widgetId;
-		do{
-			widgetId = widgetType + "_" + (widgetTypeCtr[widgetType] != undefined ?
+		return widgetType + "_" + (widgetTypeCtr[widgetType] != undefined ?
 			++widgetTypeCtr[widgetType] : widgetTypeCtr[widgetType] = 0);
-		}while(this.getWidgetById(widgetId));
-		return widgetId;
 	}
 
 	this.add = function(widget){
-		//dojo.profile.start("dojo.widget.manager.add");
+		dojo.profile.start("dojo.widget.manager.add");
 		this.widgets.push(widget);
 		// Opera9 uses ID (caps)
 		if(!widget.extraArgs["id"]){
@@ -49,7 +43,7 @@ dojo.widget.manager = new function(){
 			}else if(widget.extraArgs["id"]){
 				widget.widgetId = widget.extraArgs["id"];
 			}else{
-				widget.widgetId = this.getUniqueId(widget.ns+'_'+widget.widgetType);
+				widget.widgetId = this.getUniqueId(widget.widgetType);
 			}
 		}
 		if(this.widgetIds[widget.widgetId]){
@@ -58,7 +52,7 @@ dojo.widget.manager = new function(){
 		this.widgetIds[widget.widgetId] = widget;
 		// Widget.destroy already calls removeById(), so we don't need to
 		// connect() it here
-		//dojo.profile.end("dojo.widget.manager.add");
+		dojo.profile.end("dojo.widget.manager.add");
 	}
 
 	this.destroyAll = function(){
@@ -74,21 +68,13 @@ dojo.widget.manager = new function(){
 	// FIXME: we should never allow removal of the root widget until all others
 	// are removed!
 	this.remove = function(widgetIndex){
-		if(dojo.lang.isNumber(widgetIndex)){
-			var tw = this.widgets[widgetIndex].widgetId;
-			delete this.widgetIds[tw];
-			this.widgets.splice(widgetIndex, 1);
-		}else{
-			this.removeById(widgetIndex);
-		}
+		var tw = this.widgets[widgetIndex].widgetId;
+		delete this.widgetIds[tw];
+		this.widgets.splice(widgetIndex, 1);
 	}
 	
 	// FIXME: suboptimal performance
 	this.removeById = function(id) {
-		if(!dojo.lang.isString(id)){
-			id = id["widgetId"];
-			if(!id){ dojo.debug("invalid widget or id passed to removeById"); return; }
-		}
 		for (var i=0; i<this.widgets.length; i++){
 			if(this.widgets[i].widgetId == id){
 				this.remove(i);
@@ -98,23 +84,23 @@ dojo.widget.manager = new function(){
 	}
 
 	this.getWidgetById = function(id){
-		if(dojo.lang.isString(id)){
-			return this.widgetIds[id];
-		}
-		return id;
+		return this.widgetIds[id];
 	}
 
 	this.getWidgetsByType = function(type){
 		var lt = type.toLowerCase();
-		var getType = (type.indexOf(":") < 0 ? 
-			function(x) { return x.widgetType.toLowerCase(); } :
-			function(x) { return x.getNamespacedType(); }
-		);
 		var ret = [];
 		dojo.lang.forEach(this.widgets, function(x){
-			if(getType(x) == lt){ret.push(x);}
+			if(x.widgetType.toLowerCase() == lt){
+				ret.push(x);
+			}
 		});
 		return ret;
+	}
+
+	this.getWidgetsOfType = function (id) {
+		dojo.deprecated("getWidgetsOfType", "use getWidgetsByType", "0.4");
+		return dojo.widget.manager.getWidgetsByType(id);
 	}
 
 	this.getWidgetsByFilter = function(unaryFunc, onlyOne){
@@ -136,9 +122,8 @@ dojo.widget.manager = new function(){
 	//	added, trt 2006-01-20
 	this.getWidgetByNode = function(/* DOMNode */ node){
 		var w=this.getAllWidgets();
-		node = dojo.byId(node);
-		for(var i=0; i<w.length; i++){
-			if(w[i].domNode==node){
+		for (var i=0; i<w.length; i++){
+			if (w[i].domNode==node){
 				return w[i];
 			}
 		}
@@ -172,126 +157,82 @@ dojo.widget.manager = new function(){
 		return dojo.lang.map(widgetPackages, function(elt) { return(elt!==true ? elt : undefined); });
 	}
 	
-	this.getImplementation = function(widgetName, ctorObject, mixins, ns){
+	this.getImplementation = function(widgetName, ctorObject, mixins){
 		// try and find a name for the widget
-		var impl = this.getImplementationName(widgetName, ns);
+		var impl = this.getImplementationName(widgetName);
 		if(impl){ 
 			// var tic = new Date();
-			var ret = ctorObject ? new impl(ctorObject) : new impl();
+			var ret = new impl(ctorObject);
 			// dojo.debug(new Date() - tic);
 			return ret;
 		}
 	}
 
-	function buildPrefixCache() {
-		for(var renderer in dojo.render){
-			if(dojo.render[renderer]["capable"] === true){
-				var prefixes = dojo.render[renderer].prefixes;
-				for(var i=0; i<prefixes.length; i++){
-					renderPrefixCache.push(prefixes[i].toLowerCase());
-				}
-			}
-		}
-		// make sure we don't HAVE to prefix widget implementation names
-		// with anything to get them to render
-		//renderPrefixCache.push("");
-		// empty prefix is included automatically
-	}
-	
-	var findImplementationInModule = function(lowerCaseWidgetName, module){
-		if(!module){return null;}
-		for(var i=0, l=renderPrefixCache.length, widgetModule; i<=l; i++){
-			widgetModule = (i<l ? module[renderPrefixCache[i]] : module);
-			if(!widgetModule){continue;}
-			for(var name in widgetModule){
-				if(name.toLowerCase() == lowerCaseWidgetName){
-					return widgetModule[name];
-				}
-			}
-		}
-		return null;
-	}
-
-	var findImplementation = function(lowerCaseWidgetName, moduleName){
-		// locate registered widget module
-		var module = dojo.evalObjPath(moduleName, false);
-		// locate a widget implementation in the registered module for our current rendering environment
-		return (module ? findImplementationInModule(lowerCaseWidgetName, module) : null);
-	}
-
-	this.getImplementationName = function(widgetName, ns){
+	this.getImplementationName = function(widgetName){
 		/*
-		 * Locate an implementation (constructor) for 'widgetName' in namespace 'ns' 
-		 * widgetNames are case INSENSITIVE
-		 * 
-		 * 1. Return value from implementation cache, if available, for quick turnaround.
-		 * 2. Locate a namespace registration for 'ns'
-		 * 3. If no namespace found, register the conventional one (ns.widget)
-		 * 4. Allow the namespace resolver (if any) to load a module for this widget.
-		 * 5. Permute the widget name and capable rendering prefixes to locate, cache, and return 
-		 *    an appropriate widget implementation.
-		 * 6. If no implementation is found, attempt to load the namespace manifest,
-		 *    and then look again for an implementation to cache and return.
-		 * 7. Use the deprecated widgetPackages registration system to attempt to locate the widget
-		 * 8. Fail
+		 * This is the overly-simplistic implemention of getImplementation (har
+		 * har). In the future, we are going to want something that allows more
+		 * freedom of expression WRT to specifying different specializations of
+		 * a widget.
+		 *
+		 * Additionally, this implementation treats widget names as case
+		 * insensitive, which does not necessarialy mesh with the markup which
+		 * can construct a widget.
 		 */
+
 		var lowerCaseWidgetName = widgetName.toLowerCase();
 
-		// default to dojo namespace
-		ns=ns||"dojo";
-		// use cache if available
-		var imps = knownWidgetImplementations[ns] || (knownWidgetImplementations[ns]={});
-		//if(!knownWidgetImplementations[ns]){knownWidgetImplementations[ns]={};}
-		var impl = imps[lowerCaseWidgetName];
+		var impl = knownWidgetImplementations[lowerCaseWidgetName];
 		if(impl){
 			return impl;
 		}
-		
-		// (one time) store a list of the render prefixes we are capable of rendering
+
+		// first store a list of the render prefixes we are capable of rendering
 		if(!renderPrefixCache.length){
-			buildPrefixCache();
+			for(var renderer in dojo.render){
+				if(dojo.render[renderer]["capable"] === true){
+					var prefixes = dojo.render[renderer].prefixes;
+					for(var i = 0; i < prefixes.length; i++){
+						renderPrefixCache.push(prefixes[i].toLowerCase());
+					}
+				}
+			}
+			// make sure we don't HAVE to prefix widget implementation names
+			// with anything to get them to render
+			renderPrefixCache.push("");
 		}
 
-		// lookup namespace
-		var nsObj = dojo.ns.get(ns);
-		if(!nsObj){
-			// default to <ns>.widget by convention
-			dojo.ns.register(ns, ns + '.widget');
-			nsObj = dojo.ns.get(ns);
-		}
-		
-		// allow the namespace to resolve the widget module
-		if(nsObj){nsObj.resolve(widgetName);}
+		// look for a rendering-context specific version of our widget name
+		for(var i = 0; i < widgetPackages.length; i++){
+			var widgetPackage = dojo.evalObjPath(widgetPackages[i]);
+			if(!widgetPackage) { continue; }
 
-		// locate a widget implementation in the registered module for our current rendering environment
-		impl = findImplementation(lowerCaseWidgetName, nsObj.module);
-		if(impl){return(imps[lowerCaseWidgetName] = impl)};
+			for (var j = 0; j < renderPrefixCache.length; j++) {
+				if (!widgetPackage[renderPrefixCache[j]]) { continue; }
+				for (var widgetClass in widgetPackage[renderPrefixCache[j]]) {
+					if (widgetClass.toLowerCase() != lowerCaseWidgetName) { continue; }
+					knownWidgetImplementations[lowerCaseWidgetName] =
+						widgetPackage[renderPrefixCache[j]][widgetClass];
+					return knownWidgetImplementations[lowerCaseWidgetName];
+				}
+			}
 
-		// try to load a manifest to resolve this implemenation
-		nsObj = dojo.ns.require(ns);
-		if((nsObj)&&(nsObj.resolver)){
-			nsObj.resolve(widgetName);
-			impl = findImplementation(lowerCaseWidgetName, nsObj.module);
-			if(impl){return(imps[lowerCaseWidgetName] = impl)};
-		}
+			for (var j = 0; j < renderPrefixCache.length; j++) {
+				for (var widgetClass in widgetPackage) {
+					if (widgetClass.toLowerCase() !=
+						(renderPrefixCache[j] + lowerCaseWidgetName)) { continue; }
 	
-		// this is an error condition under new rules
-		dojo.deprecated('dojo.widget.Manager.getImplementationName', 
-			'Could not locate widget implementation for "' + widgetName + '" in "' + nsObj.module + '" registered to namespace "' + nsObj.name + '". '										
-			+ "Developers must specify correct namespaces for all non-Dojo widgets", "0.5");
-
-		// backward compat: if the user has not specified any namespace and their widget is not in dojo.widget.*
-		// search registered widget packages [sic]
-		// note: registerWidgetPackage itself is now deprecated 
-		for(var i=0; i<widgetPackages.length; i++){
-			impl = findImplementation(lowerCaseWidgetName, widgetPackages[i]);
-			if(impl){return(imps[lowerCaseWidgetName] = impl)};
+					knownWidgetImplementations[lowerCaseWidgetName] =
+						widgetPackage[widgetClass];
+					return knownWidgetImplementations[lowerCaseWidgetName];
+				}
+			}
 		}
 		
-		throw new Error('Could not locate widget implementation for "' + widgetName + '" in "' + nsObj.module + '" registered to namespace "' + nsObj.name + '"');
+		throw new Error('Could not locate "' + widgetName + '" class');
 	}
 
-	// FIXME: does it even belong in this module?
+	// FIXME: does it even belong in this name space?
 	// NOTE: this method is implemented by DomWidget.js since not all
 	// hostenv's would have an implementation.
 	/*this.getWidgetFromPrimitive = function(baseRenderType){
@@ -315,7 +256,7 @@ dojo.widget.manager = new function(){
 				if(child.checkSize ){
 					child.checkSize();
 				}
-			}
+			};
 		}catch(e){
 		}finally{
 			this.resizing=false;

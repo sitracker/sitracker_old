@@ -11,13 +11,18 @@
 dojo.provide("dojo.validate.jp");
 dojo.require("dojo.validate.common");
 
-dojo.validate.isJapaneseCurrency = function(/*String*/value) {
-	//summary: checks to see if 'value' is a valid representation of Japanese currency
+/**
+  Validates Japanese currency.
+
+  @param value  A string.
+  @return  true or false.
+*/
+dojo.validate.isJapaneseCurrency = function(value) {
 	var flags = {
-		symbol: "\u00a5",
-		fractional: false
+		symbol: "�",
+		cents: false
 	};
-	return dojo.validate.isCurrency(value, flags); // Boolean
+	return dojo.validate.isCurrency(value, flags);
 }
 
 

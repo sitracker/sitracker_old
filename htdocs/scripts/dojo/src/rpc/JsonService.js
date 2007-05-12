@@ -12,7 +12,7 @@ dojo.provide("dojo.rpc.JsonService");
 dojo.require("dojo.rpc.RpcService");
 dojo.require("dojo.io.*");
 dojo.require("dojo.json");
-dojo.require("dojo.lang.common");
+dojo.require("dojo.lang");
 
 dojo.rpc.JsonService = function(args){
 	// passing just the URL isn't terribly useful. It's expected that at
@@ -57,7 +57,7 @@ dojo.rpc.JsonService = function(args){
 
 dojo.inherits(dojo.rpc.JsonService, dojo.rpc.RpcService);
 
-dojo.extend(dojo.rpc.JsonService, {
+dojo.lang.extend(dojo.rpc.JsonService, {
 
 	bustCache: false,
 	
@@ -66,20 +66,12 @@ dojo.extend(dojo.rpc.JsonService, {
 	lastSubmissionId: 0,
 
 	callRemote: function(method, params){
-		//summary
-		// call an arbitrary remote method without requiring it
-		// to be predefined with SMD
-		var deferred = new dojo.Deferred();
+		var deferred = new dojo.rpc.Deferred();
 		this.bind(method, params, deferred);
 		return deferred;
 	},
 
 	bind: function(method, parameters, deferredRequestHandler, url){
-		//summary
-		//JSON-RPC bind method. Takes remote method, parameters, deferred,
-		//and a url, calls createRequest to make a JSON-RPC envelope and
-		//passes that off with bind.
-
 		dojo.io.bind({
 			url: url||this.serviceUrl,
 			postContent: this.createRequest(method, parameters),
@@ -87,14 +79,11 @@ dojo.extend(dojo.rpc.JsonService, {
 			contentType: this.contentType,
 			mimetype: "text/json",
 			load: this.resultCallback(deferredRequestHandler),
-			error: this.errorCallback(deferredRequestHandler),
 			preventCache:this.bustCache 
 		});
 	},
 
 	createRequest: function(method, params){
-		//summary
-		//create a JSON-RPC envelope for the request
 		var req = { "params": params, "method": method, "id": ++this.lastSubmissionId };
 		var data = dojo.json.serialize(req);
 		dojo.debug("JsonService: JSON-RPC Request: " + data);
@@ -102,14 +91,9 @@ dojo.extend(dojo.rpc.JsonService, {
 	},
 
 	parseResults: function(obj){
-		//summary
-		//parse the result envelope and pass the results back to 
-		// to the callback function
 		if(!obj){ return; }
-		if (obj["Result"]!=null){ 
-			return obj["Result"]; 
-		}else if(obj["result"]!=null){ 
-			return obj["result"]; 
+		if(obj["Result"]||obj["result"]){
+			return obj["result"]||obj["Result"];
 		}else if(obj["ResultSet"]){
 			return obj["ResultSet"];
 		}else{

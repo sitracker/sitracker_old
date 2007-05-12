@@ -11,16 +11,32 @@
 
 
 dojo.provide("dojo.widget.TreeContextMenu");
+dojo.provide("dojo.widget.TreeMenuItem");
 
 dojo.require("dojo.event.*");
 dojo.require("dojo.io.*");
 dojo.require("dojo.widget.Menu2");
 
 
-dojo.widget.defineWidget("dojo.widget.TreeContextMenu", dojo.widget.PopupMenu2, function() {
+dojo.widget.tags.addParseTreeHandler("dojo:TreeContextMenu");
+dojo.widget.tags.addParseTreeHandler("dojo:TreeMenuItem");
+
+
+
+dojo.widget.TreeContextMenu = function() {
+	dojo.widget.PopupMenu2.call(this);
+
 	this.listenedTrees = [];
-},
-{
+
+}
+
+
+dojo.inherits(dojo.widget.TreeContextMenu, dojo.widget.PopupMenu2);
+
+dojo.lang.extend(dojo.widget.TreeContextMenu, {
+
+	widgetType: "TreeContextMenu",
+
 	open: function(x, y, parentMenu, explodeSrc){
 
 		var result = dojo.widget.PopupMenu2.prototype.open.apply(this, arguments);
@@ -124,7 +140,24 @@ dojo.widget.defineWidget("dojo.widget.TreeContextMenu", dojo.widget.PopupMenu2, 
 
 });
 
-dojo.widget.defineWidget("dojo.widget.TreeMenuItem", dojo.widget.MenuItem2, {
+
+
+
+
+
+dojo.widget.TreeMenuItem = function() {
+	dojo.widget.MenuItem2.call(this);
+
+}
+
+
+dojo.inherits(dojo.widget.TreeMenuItem, dojo.widget.MenuItem2);
+
+
+dojo.lang.extend(dojo.widget.TreeMenuItem, {
+
+	widgetType: "TreeMenuItem",
+
 	// treeActions menu item performs following actions (to be checked for permissions)
 	treeActions: "",
 

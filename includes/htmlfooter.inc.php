@@ -1,6 +1,5 @@
 <?php
 // This Page Is Valid XHTML 1.0 Transitional! 27Oct05
-echo "</div>"; // mainframe
 if ($CONFIG['debug'] == TRUE)
 {
   $exec_time_end = getmicrotime();

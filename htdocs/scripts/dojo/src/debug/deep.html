@@ -21,14 +21,11 @@ window.onload = function(){
 
 function startMeUp(){
 	frame = document.getElementById('frame');
-	// GET string 
-	var index = location.search.split("=").pop();
-	var debugObj = window.opener.dojo.debugDeep;
-	var debugVar = debugObj.debugVars[index] || window.debugVar;
-	buildTable('root', frame, debugVar);
+	buildTable('root', frame, window.debugVar);
 }
 
 function buildTable(path, parent, obj){
+
 	var keys = [];
 	var vals = [];
 	for(var prop in obj){

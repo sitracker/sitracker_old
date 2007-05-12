@@ -28,11 +28,8 @@ else $start=0;
 if (!empty($_REQUEST['end'])) $end = strtotime($_REQUEST['end']);
 else $end=0;
 $status = $_REQUEST['status'];
-$view = $_REQUEST['view'];
-if(empty($view)) $view = 'normal';
 
-if($view == 'normal') include('htmlheader.inc.php');
-
+include('htmlheader.inc.php');
 
 if ($mode=='site') echo "<h2>".site_name($id)."</h2>";
 else echo "<h2>".contact_realname($id)."</h2>";
@@ -92,7 +89,7 @@ while ($row=mysql_fetch_object($result))
     // title
     echo "<td>";
     echo "<a href=\"javascript:incident_details_window('".$row->incidentid."','incident".$row->incidentid."')\">";
-    if (trim($row->title) !='') echo htmlspecialchars(stripslashes($row->title)); else echo 'Untitled';
+    if (trim($row->title) !='') echo htmlspecialchars($row->title); else echo 'Untitled';
     echo "</a>";
     echo "</td>";
     if ($mode=='site')
@@ -240,5 +237,5 @@ if ($countproducts >= 1 OR $contactcontacts >= 1)
     }
 }
 
-if($view == 'normal')  include('htmlfooter.inc.php');
+include('htmlfooter.inc.php');
 ?>

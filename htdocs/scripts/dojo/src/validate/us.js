@@ -11,30 +11,40 @@
 dojo.provide("dojo.validate.us");
 dojo.require("dojo.validate.common");
 
-dojo.validate.us.isCurrency = function(/*String*/value, /*Object?*/flags){
-	// summary: Validates U.S. currency
-	// value: the representation to check
-	// flags: flags in validate.isCurrency can be applied.
-	return dojo.validate.isCurrency(value, flags); // Boolean
+/**
+  Validates U.S. currency.
+
+  @param value  A string.
+  @param flags  An object.
+    flags in validate.isCurrency can be applied.
+  @return  true or false.
+*/
+dojo.validate.us.isCurrency = function(value, flags) {
+	return dojo.validate.isCurrency(value, flags);
 }
 
 
-dojo.validate.us.isState = function(/*String*/value, /*Object?*/flags){
-	// summary: Validates US state and territory abbreviations.
-	//
-	// value: A two character string
-	// flags: An object
-	//    flags.allowTerritories  Allow Guam, Puerto Rico, etc.  Default is true.
-	//    flags.allowMilitary  Allow military 'states', e.g. Armed Forces Europe (AE).  Default is true.
+/**
+  Validates US state and territory abbreviations.
 
+	@param value  A two character string.
+  @param flags  An object.
+    flags.allowTerritories  Allow Guam, Puerto Rico, etc.  Default is true.
+    flags.allowMilitary  Allow military 'states', e.g. Armed Forces Europe (AE).  Default is true.
+  @return  true or false
+*/
+dojo.validate.us.isState = function(value, flags) {
 	var re = new RegExp("^" + dojo.regexp.us.state(flags) + "$", "i");
-	return re.test(value); // Boolean
+	return re.test(value);
 }
 
-dojo.validate.us.isPhoneNumber = function(/*String*/value){
-	// summary: Validates 10 US digit phone number for several common formats
-	// value: The telephone number string
+/**
+  Validates 10 US digit phone number for several common formats:
 
+  @param value The telephone number string
+  @return true or false
+*/
+dojo.validate.us.isPhoneNumber = function(value) {
 	var flags = {
 		format: [
 			"###-###-####",
@@ -53,11 +63,11 @@ dojo.validate.us.isPhoneNumber = function(/*String*/value){
 		]
 	};
 
-	return dojo.validate.isNumberFormat(value, flags); // Boolean
+	return dojo.validate.isNumberFormat(value, flags);
 }
 
-dojo.validate.us.isSocialSecurityNumber = function(/*String*/value){
-// summary: Validates social security number
+// Validates social security number
+dojo.validate.us.isSocialSecurityNumber = function(value) {
 	var flags = {
 		format: [
 			"###-##-####",
@@ -66,11 +76,11 @@ dojo.validate.us.isSocialSecurityNumber = function(/*String*/value){
 		]
 	};
 
-	return dojo.validate.isNumberFormat(value, flags); // Boolean
+	return dojo.validate.isNumberFormat(value, flags);
 }
 
-dojo.validate.us.isZipCode = function(/*String*/value){
-// summary: Validates U.S. zip-code
+// Validates U.S. zip-code
+dojo.validate.us.isZipCode = function(value) {
 	var flags = {
 		format: [
 			"#####-####",
@@ -80,5 +90,5 @@ dojo.validate.us.isZipCode = function(/*String*/value){
 		]
 	};
 
-	return dojo.validate.isNumberFormat(value, flags); // Boolean
+	return dojo.validate.isNumberFormat(value, flags);
 }

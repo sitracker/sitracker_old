@@ -9,9 +9,15 @@
 */
 
 dojo.provide("dojo.dnd.HtmlDragMove");
+dojo.provide("dojo.dnd.HtmlDragMoveSource");
+dojo.provide("dojo.dnd.HtmlDragMoveObject");
 dojo.require("dojo.dnd.*");
 
-dojo.declare("dojo.dnd.HtmlDragMoveSource", dojo.dnd.HtmlDragSource, {
+dojo.dnd.HtmlDragMoveSource = function(node, type){
+	dojo.dnd.HtmlDragSource.call(this, node, type);
+}
+dojo.inherits(dojo.dnd.HtmlDragMoveSource, dojo.dnd.HtmlDragSource);
+dojo.lang.extend(dojo.dnd.HtmlDragMoveSource, {
 	onDragStart: function(){
 		var dragObj =  new dojo.dnd.HtmlDragMoveObject(this.dragObject, this.type);
 		if (this.constrainToContainer) {
@@ -29,61 +35,42 @@ dojo.declare("dojo.dnd.HtmlDragMoveSource", dojo.dnd.HtmlDragSource, {
 	}
 });
 
-dojo.declare("dojo.dnd.HtmlDragMoveObject", dojo.dnd.HtmlDragObject, {
+dojo.dnd.HtmlDragMoveObject = function(node, type){
+	dojo.dnd.HtmlDragObject.call(this, node, type);
+}
+dojo.inherits(dojo.dnd.HtmlDragMoveObject, dojo.dnd.HtmlDragObject);
+dojo.lang.extend(dojo.dnd.HtmlDragMoveObject, {
+	onDragEnd: function(e){
+		// shortly the browser will fire an onClick() event,
+		// but since this was really a drag, just squelch it
+		dojo.event.connect(this.domNode, "onclick", this, "squelchOnClick");
+	},
 	onDragStart: function(e){
 		dojo.html.clearSelection();
 
 		this.dragClone = this.domNode;
 
-		// Record drag start position, where "position" is simply the top/left style values for
-		// the node (the meaning of top/left is dependent on whether node is position:absolute or
-		// position:relative, and also on the container).
-		// Not sure if we should support moving nodes that aren't position:absolute,
-		// but supporting it for now
-		if(dojo.html.getComputedStyle(this.domNode, 'position') != 'absolute'){
-			this.domNode.style.position = "relative";
-		}
-		var left = parseInt(dojo.html.getComputedStyle(this.domNode, 'left'));
-		var top = parseInt(dojo.html.getComputedStyle(this.domNode, 'top'));
-		this.dragStartPosition = {
-			x: isNaN(left) ? 0 : left,
-			y: isNaN(top) ? 0 : top
-		};
-
-		this.scrollOffset = dojo.html.getScroll().offset;
-
-		// used to convert mouse position into top/left value for node
+		this.scrollOffset = dojo.html.getScrollOffset();
+		this.dragStartPosition = dojo.style.getAbsolutePosition(this.domNode, true);
+		
 		this.dragOffset = {y: this.dragStartPosition.y - e.pageY,
 			x: this.dragStartPosition.x - e.pageX};
 
-		// since the DragObject's position is relative to the containing block, for our purposes
-		// the containing block's position is just (0,0)
-		this.containingBlockPosition = {x:0, y:0};
+		this.containingBlockPosition = this.domNode.offsetParent ? 
+			dojo.style.getAbsolutePosition(this.domNode.offsetParent, true) : {x:0, y:0};
+
+		this.dragClone.style.position = "absolute";
 
 		if (this.constrainToContainer) {
 			this.constraints = this.getConstraints();
 		}
-
-		// shortly the browser will fire an onClick() event,
-		// but since this was really a drag, just squelch it
-		dojo.event.connect(this.domNode, "onclick", this, "_squelchOnClick");
 	},
-
-	onDragEnd: function(e){
-	},
-
+	/**
+	 * Set the position of the drag node.  (x,y) is relative to <body>.
+	 */
 	setAbsolutePosition: function(x, y){
-		// summary: Set the top & left style attributes of the drag node (TODO: function is poorly named)
-		if(!this.disableY) { this.domNode.style.top = y + "px"; }
-		if(!this.disableX) { this.domNode.style.left = x + "px"; }
-	},
-
-	_squelchOnClick: function(e){
-		// summary
-		//	this function is called to squelch this onClick() event because
-		//	it's the result of a drag (ie, it's not a real click)
-
-		dojo.event.browser.stopEvent(e);
-		dojo.event.disconnect(this.domNode, "onclick", this, "_squelchOnClick");
+		// The drag clone is attached to it's constraining container so offset for that
+		if(!this.disableY) { this.domNode.style.top = (y-this.containingBlockPosition.y) + "px"; }
+		if(!this.disableX) { this.domNode.style.left = (x-this.containingBlockPosition.x) + "px"; }
 	}
 });

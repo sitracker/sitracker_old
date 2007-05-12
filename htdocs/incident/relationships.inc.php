@@ -26,7 +26,7 @@ switch ($action)
 {
     case 'add':
         // First check there isn't already a relationship to that incident
-        $sql = "SELECT id FROM relatedincidents WHERE (incidentid='$relatedid' AND relatedid='$id') OR (relatedid='$relatedid' AND incidentid='$id')";
+        $sql = "SELECT id FROM relatedincidents WHERE incidentid='$relatedid' OR relatedid='$relatedid'";
         $result = mysql_query($sql);
         if (mysql_num_rows($result) < 1 AND $relatedid!=$id)
         {
@@ -52,7 +52,7 @@ switch ($action)
                     if (mysql_error()) trigger_error("MySQL Query Error ".mysql_error(), E_USER_ERROR);
                 break;
             }
-            // TODO v3.2x Child/Parent incident relationships
+            // TODO v3.24 Child/Parent incident relationships
         }
         else echo "<br /><p class='error' align='center'>A relationship already exists with that incident</p>";
     break;
@@ -69,14 +69,14 @@ switch ($action)
         if (mysql_error()) trigger_error("MySQL Query Error ".mysql_error(), E_USER_ERROR);
 
         // Insert an entry into the update log for this incident
-        $sql  = "INSERT INTO updates (incidentid, userid, type, timestamp, currentowner, customervisibility,  bodytext) ";
-        $sql .= "VALUES ('{$relation->incidentid}', '".$sit[2]."', 'editing', '$now', '".$sit[2]."', 'hide', 'Removed relationship with Incident {$relation->relatedid}')";
+        $sql  = "INSERT INTO updates (incidentid, userid, type, timestamp, currentowner, customervisibility, sla, bodytext) ";
+        $sql .= "VALUES ('{$relation->incidentid}', '".$sit[2]."', 'editing', '$now', '".$sit[2]."', 'hide', '','Removed relationship with Incident {$relation->relatedid}')";
         mysql_query($sql);
         if (mysql_error()) trigger_error("MySQL Query Error ".mysql_error(), E_USER_ERROR);
 
         // Insert an entry into the update log for the related incident
-        $sql  = "INSERT INTO updates (incidentid, userid, type, timestamp, currentowner, customervisibility,  bodytext) ";
-        $sql .= "VALUES ('{$relation->relatedid}', '".$sit[2]."', 'editing', '$now', '".$sit[2]."', 'hide','Removed relationship with Incident {$relation->incidentid}')";
+        $sql  = "INSERT INTO updates (incidentid, userid, type, timestamp, currentowner, customervisibility, sla, bodytext) ";
+        $sql .= "VALUES ('{$relation->relatedid}', '".$sit[2]."', 'editing', '$now', '".$sit[2]."', 'hide', '','Removed relationship with Incident {$relation->incidentid}')";
         mysql_query($sql);
         if (mysql_error()) trigger_error("MySQL Query Error ".mysql_error(), E_USER_ERROR);
 

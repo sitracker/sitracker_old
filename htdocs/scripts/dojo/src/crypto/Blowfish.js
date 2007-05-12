@@ -22,8 +22,6 @@ dojo.provide("dojo.crypto.Blowfish");
  *	2005-12-08
  */
 dojo.crypto.Blowfish = new function(){
-	//	summary
-	//	Object for doing Blowfish encryption/decryption.
 	var POW2=Math.pow(2,2);
 	var POW3=Math.pow(2,3);
 	var POW4=Math.pow(2,4);
@@ -308,35 +306,17 @@ dojo.crypto.Blowfish = new function(){
 		var p="=";
 		var tab="ABCDEFGHIJKLMNOPQRSTUVWXYZabcdefghijklmnopqrstuvwxyz0123456789+/";
 		var s=[];
-		var l=ba.length;
-		var rm=l%3;
-		var x=l-rm;
-		for (var i=0; i<x;){
+		var count=0;
+		for (var i =0; i<ba.length;){
 			var t=ba[i++]<<16|ba[i++]<<8|ba[i++];
 			s.push(tab.charAt((t>>>18)&0x3f)); 
 			s.push(tab.charAt((t>>>12)&0x3f));
 			s.push(tab.charAt((t>>>6)&0x3f));
 			s.push(tab.charAt(t&0x3f));
+			count+=4;
 		}
-		//	deal with trailers, based on patch from Peter Wood.
-		switch(rm){
-			case 2:{
-				var t=ba[i++]<<16|ba[i++]<<8;
-				s.push(tab.charAt((t>>>18)&0x3f));
-				s.push(tab.charAt((t>>>12)&0x3f));
-				s.push(tab.charAt((t>>>6)&0x3f));
-				s.push(p);
-				break;
-			}
-			case 1:{
-				var t=ba[i++]<<16;
-				s.push(tab.charAt((t>>>18)&0x3f));
-				s.push(tab.charAt((t>>>12)&0x3f));
-				s.push(p);
-				s.push(p);
-				break;
-			}
-		}
+		var pa=i-ba.length;
+		while((pa--)>0)	s.push(p);	
 		return s.join("");
 	}
 	function fromBase64(str){
@@ -358,31 +338,27 @@ dojo.crypto.Blowfish = new function(){
 //	PUBLIC FUNCTIONS
 //	0.2: Only supporting ECB mode for now.
 ////////////////////////////////////////////////////////////////////////////
-	this.getIV=function(/* dojo.crypto.outputTypes? */ outputType){
-		//	summary
-		//	returns the initialization vector in the output format specified by outputType
+	this.getIV=function(outputType){
 		var out=outputType||dojo.crypto.outputTypes.Base64;
 		switch(out){
 			case dojo.crypto.outputTypes.Hex:{
 				var s=[];
 				for(var i=0; i<iv.length; i++)
 					s.push((iv[i]).toString(16));
-				return s.join("");		//	string
+				return s.join("");
 			}
 			case dojo.crypto.outputTypes.String:{
-				return iv.join("");		//	string
+				return iv.join("");
 			}
 			case dojo.crypto.outputTypes.Raw:{
-				return iv;				//	array
+				return iv;
 			}
 			default:{
-				return toBase64(iv); 	//	 string
+				return toBase64(iv);
 			}
 		}
 	};
-	this.setIV=function(/* string */data, /* dojo.crypto.outputTypes? */inputType){
-		//	summary
-		//	sets the initialization vector to data (as interpreted as inputType)
+	this.setIV=function(data, inputType){
 		var ip=inputType||dojo.crypto.outputTypes.Base64;
 		var ba=null;
 		switch(ip){
@@ -416,9 +392,7 @@ dojo.crypto.Blowfish = new function(){
 		iv.left=ba[0]*POW24|ba[1]*POW16|ba[2]*POW8|ba[3];
 		iv.right=ba[4]*POW24|ba[5]*POW16|ba[6]*POW8|ba[7];
 	}
-	this.encrypt = function(/* string */plaintext, /* string */key, /* object? */ao){
-		//	summary
-		//	encrypts plaintext using key; allows user to specify output type and cipher mode via keyword object "ao"
+	this.encrypt = function(plaintext, key, ao){
 		var out=dojo.crypto.outputTypes.Base64;
 		var mode=dojo.crypto.cipherModes.EBC;
 		if (ao){
@@ -472,23 +446,21 @@ dojo.crypto.Blowfish = new function(){
 				var s=[];
 				for(var i=0; i<cipher.length; i++)
 					s.push((cipher[i]).toString(16));
-				return s.join("");	//	string
+				return s.join("");
 			}
 			case dojo.crypto.outputTypes.String:{
-				return cipher.join("");	//	string
+				return cipher.join("");
 			}
 			case dojo.crypto.outputTypes.Raw:{
-				return cipher;	//	array
+				return cipher;
 			}
 			default:{
-				return toBase64(cipher);	//	string
+				return toBase64(cipher);
 			}
 		}
 	};
 
-	this.decrypt = function(/* string */ciphertext, /* string */key, /* object? */ao){
-		//	summary
-		//	decrypts ciphertext using key; allows specification of how ciphertext is encoded via ao.
+	this.decrypt = function(ciphertext, key, ao){
 		var ip=dojo.crypto.outputTypes.Base64;
 		var mode=dojo.crypto.cipherModes.EBC;
 		if (ao){
@@ -569,7 +541,7 @@ dojo.crypto.Blowfish = new function(){
 		//	convert to string
 		for(var i=0; i<pt.length; i++)
 			pt[i]=String.fromCharCode(pt[i]);
-		return pt.join("");		//	string
+		return pt.join("");
 	};
 
 	this.setIV("0000000000000000", dojo.crypto.outputTypes.Hex);

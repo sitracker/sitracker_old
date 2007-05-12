@@ -108,8 +108,7 @@ class DojoExternalInterface{
 		
 		// check at regular intervals for return results	
 		var resultsChecker = function(){
-			if((typeof _root._returnResult != "undefined")&&
-				(_root._returnResult != "undefined")){
+			if(_root._returnResult != undefined){
 				clearInterval(_root._callbackID);
 				resultsCallback.call(null, _root._returnResult);
 			}

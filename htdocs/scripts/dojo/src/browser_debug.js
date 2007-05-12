@@ -12,12 +12,10 @@ dojo.hostenv.loadedUris.push("../src/bootstrap1.js");
 dojo.hostenv.loadedUris.push("../src/loader.js");
 dojo.hostenv.loadedUris.push("../src/hostenv_browser.js");
 dojo.hostenv.loadedUris.push("../src/bootstrap2.js");
-dojo.hostenv._loadedUrisListStart = dojo.hostenv.loadedUris.length;
 
 function removeComments(contents){
 	contents = new String((!contents) ? "" : contents);
 	// clobber all comments
-	// FIXME broken if // or /* inside quotes or regexp
 	contents = contents.replace( /^(.*?)\/\/(.*)$/mg , "$1");
 	contents = contents.replace( /(\n)/mg , "__DOJONEWLINE");
 	contents = contents.replace( /\/\*(.*?)\*\//g , "");
@@ -33,7 +31,7 @@ dojo.hostenv.getRequiresAndProvides = function(contents){
 	var deps = [];
 	var tmp;
 	RegExp.lastIndex = 0;
-	var testExp = /dojo.(hostenv.loadModule|hostenv.require|require|requireIf|kwCompoundRequire|hostenv.conditionalLoadModule|hostenv.startPackage|provide)\([\w\W]*?\)/mg;
+	var testExp = /dojo.(hostenv.loadModule|hosetnv.require|require|requireIf|kwCompoundRequire|hostenv.conditionalLoadModule|hostenv.startPackage|provide)\([\w\W]*?\)/mg;
 	while((tmp = testExp.exec(contents)) != null){
 		deps.push(tmp[0]);
 	}
@@ -118,39 +116,30 @@ function zip(arr){
 var old_dj_eval = dj_eval;
 dj_eval = function(){ return true; }
 dojo.hostenv.oldLoadUri = dojo.hostenv.loadUri;
-dojo.hostenv.loadUri = function(uri, cb /*optional*/){
+dojo.hostenv.loadUri = function(uri){
 	if(dojo.hostenv.loadedUris[uri]){
 		return true; // fixes endless recursion opera trac 471
 	}
 	try{
 		var text = this.getText(uri, null, true);
-		if(!text) { return false; }
-		if(cb){
-			// No way to load i18n bundles but to eval them, and they usually
-			// don't have script needing to be debugged anyway
-			var expr = old_dj_eval('('+text+')');
-			cb(expr);
-		}else {
-			var requires = dojo.hostenv.getRequiresAndProvides(text);
-			eval(requires.join(";"));
-			dojo.hostenv.loadedUris.push(uri);
-			dojo.hostenv.loadedUris[uri] = true;
-			var delayRequires = dojo.hostenv.getDelayRequiresAndProvides(text);
-			eval(delayRequires.join(";"));
-		}
+		var requires = dojo.hostenv.getRequiresAndProvides(text);
+		eval(requires.join(";"));
+		dojo.hostenv.loadedUris.push(uri);
+		dojo.hostenv.loadedUris[uri] = true;
+		var delayRequires = dojo.hostenv.getDelayRequiresAndProvides(text);
+		eval(delayRequires.join(";"));
 	}catch(e){ 
 		alert(e);
 	}
 	return true;
 }
 
-dojo.hostenv._writtenIncludes = {};
-dojo.hostenv.writeIncludes = function(willCallAgain){
+dojo.hostenv.writeIncludes = function(){
 	for(var x=removals.length-1; x>=0; x--){
 		dojo.clobberLastObject(removals[x]);
 	}
 	var depList = [];
-	var seen = dojo.hostenv._writtenIncludes;
+	var seen = {};
 	for(var x=0; x<dojo.hostenv.loadedUris.length; x++){
 		var curi = dojo.hostenv.loadedUris[x];
 		// dojo.debug(curi);
@@ -161,16 +150,13 @@ dojo.hostenv.writeIncludes = function(willCallAgain){
 	}
 
 	dojo.hostenv._global_omit_module_check = true;
-	
-	for(var x= dojo.hostenv._loadedUrisListStart; x<depList.length; x++){
+	for(var x=4; x<depList.length; x++){
 		document.write("<script type='text/javascript' src='"+depList[x]+"'></script>");
 	}
 	document.write("<script type='text/javascript'>dojo.hostenv._global_omit_module_check = false;</script>");
-	dojo.hostenv._loadedUrisListStart = 0;
-	if (!willCallAgain) {
-		// turn off debugAtAllCosts, so that dojo.require() calls inside of ContentPane hrefs
-		// work correctly
-		dj_eval = old_dj_eval;
-		dojo.hostenv.loadUri = dojo.hostenv.oldLoadUri;
-	}
+
+	// turn off debugAtAllCosts, so that dojo.require() calls inside of ContentPane hrefs
+	// work correctly
+	dj_eval = old_dj_eval;
+	dojo.hostenv.loadUri = dojo.hostenv.oldLoadUri;
 }

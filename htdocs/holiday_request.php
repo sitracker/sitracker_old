@@ -184,7 +184,7 @@ else
                 $bodytext .= "---\n$memo\n---\n\n";
             }
             $url = parse_url($_SERVER['HTTP_REFERER']);
-            $approveurl = "{$url['scheme']}://{$url['host']}{$url['path']}";
+            $approveurl = "{$url['scheme']}{$url['host']}{$url['path']}";
             $bodytext .= "Please point your browser to\n<{$approveurl}?user={$user}&mode=approval>\n ";
             $bodytext .= "to approve or decline these requests.";
         }
@@ -198,7 +198,6 @@ else
         $email_subject = "{$CONFIG['application_shortname']}: Holiday Approval Request";
         $extra_headers  = "From: $email_from\nReply-To: $email_from\nErrors-To: {$CONFIG['support_email']}\n";
         $extra_headers .= "X-Mailer: {$CONFIG['application_shortname']} {$application_version_string}/PHP " . phpversion()."\n";
-        $extra_headers .= "X-Originating-IP: {$_SERVER['REMOTE_ADDR']}\n";
         $rtnvalue = mail($email_to, stripslashes($email_subject), stripslashes($bodytext), $extra_headers);
 
         if ($rtnvalue===TRUE)

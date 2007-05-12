@@ -12,8 +12,7 @@
 
 dojo.provide("dojo.widget.SvgButton");
 
-dojo.require("dojo.experimental");
-dojo.experimental("dojo.widget.SvgButton");
+dojo.require("dojo.widget.Button");
 
 dojo.widget.SvgButton = function(){
 	// FIXME: this is incomplete and doesn't work yet

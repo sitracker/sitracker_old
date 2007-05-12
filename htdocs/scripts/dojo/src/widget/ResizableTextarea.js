@@ -9,28 +9,41 @@
 */
 
 dojo.provide("dojo.widget.ResizableTextarea");
+dojo.require("dojo.html");
 dojo.require("dojo.widget.*");
 dojo.require("dojo.widget.LayoutContainer");
 dojo.require("dojo.widget.ResizeHandle");
 
-dojo.widget.defineWidget(
-	"dojo.widget.ResizableTextarea",
-	dojo.widget.HtmlWidget,
-{
-	// summary
-	//	A resizable textarea.
-	//	Takes all the parameters (name, value, etc.) that a vanilla textarea takes.
-	// usage
-	//	<textarea dojoType="ResizableTextArea">...</textarea>
+dojo.widget.tags.addParseTreeHandler("dojo:resizabletextarea");
 
-	templatePath: dojo.uri.dojoUri("src/widget/templates/ResizableTextarea.html"),
-	templateCssPath: dojo.uri.dojoUri("src/widget/templates/ResizableTextarea.css"),
+dojo.widget.ResizableTextarea = function(){
+	dojo.widget.HtmlWidget.call(this);
+}
+
+dojo.inherits(dojo.widget.ResizableTextarea, dojo.widget.HtmlWidget);
+
+dojo.lang.extend(dojo.widget.ResizableTextarea, {
+	templatePath: dojo.uri.dojoUri("src/widget/templates/HtmlResizableTextarea.html"),
+	templateCssPath: dojo.uri.dojoUri("src/widget/templates/HtmlResizableTextarea.css"),
+	widgetType: "ResizableTextarea",
+	tagName: "dojo:resizabletextarea",
+	isContainer: false,
+	textAreaNode: null,
+	textAreaContainer: null,
+	textAreaContainerNode: null,
+	statusBar: null,
+	statusBarContainerNode: null,
+	statusLabelNode: null,
+	statusLabel: null,
+	rootLayoutNode: null,
+	resizeHandleNode: null,
+	resizeHandle: null,
 
 	fillInTemplate: function(args, frag){
 		this.textAreaNode = this.getFragNodeRef(frag).cloneNode(true);
 
 		// FIXME: Safari apparently needs this!
-		dojo.body().appendChild(this.domNode);
+		document.body.appendChild(this.domNode);
 
 		this.rootLayout = dojo.widget.createWidget(
 			"LayoutContainer",
@@ -41,8 +54,7 @@ dojo.widget.defineWidget(
 			this.rootLayoutNode
 		);
 
-		// TODO: all this code should be replaced with a template
-		// (especially now that templates can contain subwidgets)
+
 		this.textAreaContainer = dojo.widget.createWidget(
 			"LayoutContainer",
 			{ layoutAlign: "client" },
@@ -82,5 +94,17 @@ dojo.widget.defineWidget(
 			this.resizeHandleNode
 		);
 		this.statusBar.addChild(this.resizeHandle);
+		// dojo.debug(this.rootLayout.widgetId);
+
+		// dojo.event.connect(this.resizeHandle, "beginSizing", this, "hideContent");
+		// dojo.event.connect(this.resizeHandle, "endSizing", this, "showContent");
+	},
+
+	hideContent: function(){
+		this.textAreaNode.style.display = "none";
+	},
+
+	showContent: function(){
+		this.textAreaNode.style.display = "";
 	}
 });

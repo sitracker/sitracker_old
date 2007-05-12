@@ -8,12 +8,13 @@
 		http://dojotoolkit.org/community/licensing.shtml
 */
 
-dojo.debug = function(/*...*/){
-	// summary:
-	//		Produce a line of debug output. Does nothing unless
-	//		djConfig.isDebug is true. Accepts any nubmer of args, joined with
-	//		' ' to produce a single line of debugging output.  Caller should not
-	//		supply a trailing "\n".
+/**
+ * Produce a line of debug output. 
+ * Does nothing unless djConfig.isDebug is true.
+ * varargs, joined with ''.
+ * Caller should not supply a trailing "\n".
+ */
+dojo.debug = function(){
 	if (!djConfig.isDebug) { return; }
 	var args = arguments;
 	if(dj_undef("println", dojo.hostenv)){
@@ -39,8 +40,11 @@ dojo.debug = function(/*...*/){
 		}
 		s.push(msg);
 	}
-	
-	dojo.hostenv.println(s.join(" "));
+	if(isJUM){ // this seems to be the only way to get JUM to "play nice"
+		jum.debug(s.join(" "));
+	}else{
+		dojo.hostenv.println(s.join(" "));
+	}
 }
 
 /**
@@ -48,11 +52,7 @@ dojo.debug = function(/*...*/){
  * display the properties of the object
 **/
 
-dojo.debugShallow = function(/*Object*/obj){
-	// summary:
-	//		outputs a "name: value" style listing of all enumerable properties
-	//		in obj. Does nothing if djConfig.isDebug == false.
-	// obj: the object to be enumerated
+dojo.debugShallow = function(obj){
 	if (!djConfig.isDebug) { return; }
 	dojo.debug('------------------------------------------------------------');
 	dojo.debug('Object: '+obj);
@@ -71,21 +71,10 @@ dojo.debugShallow = function(/*Object*/obj){
 	dojo.debug('------------------------------------------------------------');
 }
 
-dojo.debugDeep = function(/*Object*/obj){
-	// summary:
-	//		provides an "object explorer" view of the passed obj in a popup
-	//		window.
-	// obj: the object to be examined
+dojo.debugDeep = function(obj){
 	if (!djConfig.isDebug) { return; }
 	if (!dojo.uri || !dojo.uri.dojoUri){ return dojo.debug("You'll need to load dojo.uri.* for deep debugging - sorry!"); }
 	if (!window.open){ return dojo.debug('Deep debugging is only supported in host environments with window.open'); }
-	var idx = dojo.debugDeep.debugVars.length;
-	dojo.debugDeep.debugVars.push(obj);
-	// dojo.undo.browser back and forward breaks relpaths
-	var url = new dojo.uri.Uri(location, dojo.uri.dojoUri("src/debug/deep.html?var="+idx)).toString();
-	var win = window.open(url, '_blank', 'width=600, height=400, resizable=yes, scrollbars=yes, status=yes');
-	try{
-		win.debugVar = obj;
-	}catch(e){}
+	var win = window.open(dojo.uri.dojoUri("src/debug/deep.html"), '_blank', 'width=600, height=400, resizable=yes, scrollbars=yes, status=yes');
+	win.debugVar = obj;
 }
-dojo.debugDeep.debugVars = [];

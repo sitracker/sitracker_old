@@ -14,53 +14,45 @@ dojo.require("dojo.widget.*");
 dojo.require("dojo.widget.LayoutContainer");
 dojo.require("dojo.widget.ContentPane");
 dojo.require("dojo.event.*");
-dojo.require("dojo.html.style");
+dojo.require("dojo.html");
+dojo.require("dojo.style");
 
-// TODO: base this on PageContainer
-dojo.widget.defineWidget(
-	"dojo.widget.WizardContainer",
-	dojo.widget.LayoutContainer,
-{
-	// summary
-	//		A set of panels that display sequentially, typically notating a step-by-step
-	//		procedure like an install
-	
+//////////////////////////////////////////
+// WizardContainer -- a set of panels
+//////////////////////////////////////////
+dojo.widget.WizardContainer = function() {
+	dojo.widget.html.LayoutContainer.call(this);
+}
+dojo.inherits(dojo.widget.WizardContainer, dojo.widget.html.LayoutContainer);
+
+dojo.lang.extend(dojo.widget.WizardContainer, {
+
+	widgetType: "WizardContainer",
+
+	labelPosition: "top",
+
 	templatePath: dojo.uri.dojoUri("src/widget/templates/Wizard.html"),
 	templateCssPath: dojo.uri.dojoUri("src/widget/templates/Wizard.css"),
 
-	// selected: DomNode
-	//		Currently selected panel.  (Read-only)
-	selected: null,
-
-	// nextButtonLabel: String
-	//		Label for the "Next" button.
+	selected: null,		// currently selected panel
+	wizardNode: null, // the outer wizard node
+	wizardPanelContainerNode: null, // the container for the panels
+	wizardControlContainerNode: null, // the container for the wizard controls
+	previousButton: null, // the previous button
+	nextButton: null, // the next button
+	cancelButton: null, // the cancel button
+	doneButton: null, // the done button
 	nextButtonLabel: "next",
-
-	// previousButtonLabel: String
-	//		Label for the "Previous" button.
 	previousButtonLabel: "previous",
-
-	// cancelButtonLabel: String
-	//		Label for the "Cancel" button.
 	cancelButtonLabel: "cancel",
-
-	// doneButtonLabel: String
-	//		Label for the "Done" button.
 	doneButtonLabel: "done",
+	cancelFunction : "",
 
-	// cancelButtonLabel: FunctionName
-	//		Name of function to call if user presses cancel button.
-	//		Cancel button is not displayed if function is not specified.
-	cancelFunction: "",
-
-	// hideDisabledButtons: Boolean
-	//		If true, disabled buttons are hidden; otherwise, they are assigned the
-	//		"WizardButtonDisabled" CSS class
 	hideDisabledButtons: false,
 
 	fillInTemplate: function(args, frag){
-		dojo.event.connect(this.nextButton, "onclick", this, "_onNextButtonClick");
-		dojo.event.connect(this.previousButton, "onclick", this, "_onPreviousButtonClick");
+		dojo.event.connect(this.nextButton, "onclick", this, "nextPanel");
+		dojo.event.connect(this.previousButton, "onclick", this, "previousPanel");
 		if (this.cancelFunction){
 			dojo.event.connect(this.cancelButton, "onclick", this.cancelFunction);
 		}else{
@@ -73,10 +65,10 @@ dojo.widget.defineWidget(
 		this.doneButton.value = this.doneButtonLabel;
 	},
 
-	_checkButtons: function(){
+	checkButtons: function(){
 		var lastStep = !this.hasNextPanel();
 		this.nextButton.disabled = lastStep;
-		this._setButtonClass(this.nextButton);
+		this.setButtonClass(this.nextButton);
 		if(this.selected.doneFunction){
 			this.doneButton.style.display = "";
 			// hide the next button if this is the last one and we have a done function
@@ -87,10 +79,10 @@ dojo.widget.defineWidget(
 			this.doneButton.style.display = "none";
 		}
 		this.previousButton.disabled = ((!this.hasPreviousPanel()) || (!this.selected.canGoBack));
-		this._setButtonClass(this.previousButton);
+		this.setButtonClass(this.previousButton);
 	},
 
-	_setButtonClass: function(button){
+	setButtonClass: function(button){
 		if(!this.hideDisabledButtons){
 			button.style.display = "";
 			dojo.html.setClass(button, button.disabled ? "WizardButtonDisabled" : "WizardButton");
@@ -107,13 +99,13 @@ dojo.widget.defineWidget(
 		if(!this.selected){
 			this.onSelected(panel);
 		}
-		this._checkButtons();
+		this.checkButtons();
 	},
 
-	onSelected: function(/*WizardPanel*/ panel){
-		// summary: Callback when new panel is selected..  Deselect old panel and select new one
+	onSelected: function(panel){
+		// Deselect old panel and select new one
 		if(this.selected ){
-			if (this.selected._checkPass()) {
+			if (this.selected.checkPass()) {
 				this.selected.hide();
 			} else {
 				return;
@@ -124,20 +116,17 @@ dojo.widget.defineWidget(
 	},
 
 	getPanels: function() {
-		// summary: returns array of WizardPane children
-		return this.getChildrenOfType("WizardPane", false);		// WizardPane[]
+		return this.getChildrenOfType("WizardPane", false);
 	},
 
 	selectedIndex: function() {
-		// summary: Returns index (into this.children[]) for currently selected child.
 		if (this.selected) {
-			return dojo.lang.indexOf(this.getPanels(), this.selected);	// Integer
+			return dojo.lang.indexOf(this.getPanels(), this.selected);
 		}
 		return -1;
 	},
 
-	_onNextButtonClick: function() {
-		// summary: callback when next button is clicked
+	nextPanel: function() {
 		var selectedIndex = this.selectedIndex();
 		if ( selectedIndex > -1 ) {
 			var childPanels = this.getPanels();
@@ -145,11 +134,10 @@ dojo.widget.defineWidget(
 				this.onSelected(childPanels[selectedIndex + 1]);
 			}
 		}
-		this._checkButtons();
+		this.checkButtons();
 	},
 
-	_onPreviousButtonClick: function() {
-		// summary: callback when previous button is clicked
+	previousPanel: function() {
 		var selectedIndex = this.selectedIndex();
 		if ( selectedIndex > -1 ) {
 			var childPanels = this.getPanels();
@@ -157,64 +145,51 @@ dojo.widget.defineWidget(
 				this.onSelected(childPanels[selectedIndex - 1]);
 			}
 		}
-		this._checkButtons();
+		this.checkButtons();
 	},
 
 	hasNextPanel: function() {
-		// summary: Returns true if there's a another panel after the current panel
 		var selectedIndex = this.selectedIndex();
 		return (selectedIndex < (this.getPanels().length - 1));
 	},
 
 	hasPreviousPanel: function() {
-		// summary: Returns true if there's a panel before the current panel
 		var selectedIndex = this.selectedIndex();
 		return (selectedIndex > 0);
 	},
 
 	done: function() {
-		// summary: Finish the wizard's operation
 		this.selected.done();
 	}
 });
+dojo.widget.tags.addParseTreeHandler("dojo:WizardContainer");
 
-dojo.widget.defineWidget(
-	"dojo.widget.WizardPane",
-	dojo.widget.ContentPane,
-{
-	// summary
-	//		a panel in a WizardContainer
+//////////////////////////////////////////
+// WizardPane -- a panel in a wizard
+//////////////////////////////////////////
+dojo.widget.WizardPane = function() {
+	dojo.widget.html.ContentPane.call(this);
+}
+dojo.inherits(dojo.widget.WizardPane, dojo.widget.html.ContentPane);
 
-	// canGoBack: Boolean
-	//		If true, then can move back to a previous panel (by clicking the "Previous" button)
+dojo.lang.extend(dojo.widget.WizardPane, {
+	widgetType: "WizardPane",
+
 	canGoBack: true,
 
-	// passFunction: String
-	//		Name of function that checks if it's OK to advance to the next panel.
-	//		If it's not OK (for example, mandatory field hasn't been entered), then
-	//		returns an error message (String) explaining the reason.
 	passFunction: "",
-	
-	// doneFunction: String
-	//		Name of function that is run if you press the "Done" button from this panel
 	doneFunction: "",
 
-	postMixInProperties: function(args, frag) {
+	fillInTemplate: function(args, frag) {
 		if (this.passFunction) {
 			this.passFunction = dj_global[this.passFunction];
 		}
 		if (this.doneFunction) {
 			this.doneFunction = dj_global[this.doneFunction];
 		}
-		dojo.widget.WizardPane.superclass.postMixInProperties.apply(this, arguments);
 	},
 
-	_checkPass: function() {
-		// summary:
-		//		Called when the user presses the "next" button.
-		//		Calls passFunction to see if it's OK to advance to next panel, and
-		//		if it isn't, then display error.
-		//		Returns true to advance, false to not advance.
+	checkPass: function() {
 		if (this.passFunction && dojo.lang.isFunction(this.passFunction)) {
 			var failMessage = this.passFunction();
 			if (failMessage) {
@@ -231,3 +206,5 @@ dojo.widget.defineWidget(
 		}
 	}
 });
+
+dojo.widget.tags.addParseTreeHandler("dojo:WizardPane");

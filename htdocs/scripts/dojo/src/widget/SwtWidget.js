@@ -10,9 +10,6 @@
 
 dojo.provide("dojo.widget.SwtWidget");
 
-dojo.require("dojo.experimental");
-dojo.experimental("dojo.widget.SwtWidget");
-
 dojo.require("dojo.event.*");
 dojo.require("dojo.widget.Widget");
 dojo.require("dojo.uri.*");
@@ -22,13 +19,13 @@ dojo.require("dojo.lang.extras");
 try{
 	importPackage(Packages.org.eclipse.swt.widgets);
 
-	dojo.declare("dojo.widget.SwtWidget", dojo.widget.Widget,
-		function() {
+	dojo.declare("dojo.widget.SwtWidget", dojo.widget.Widget, {
+		initializer: function() {
 			if((arguments.length>0)&&(typeof arguments[0] == "object")){
 				this.create(arguments[0]);
 			}
 		},
-	{
+
 		display: null,
 		shell: null,
 
@@ -39,8 +36,9 @@ try{
 		registerChild: function(){ },
 		addWidgetAsDirectChild: function(){ },
 		removeChild: function(){ },
+		cleanUp: function(){ },
 		destroyRendering: function(){ },
-		postInitialize: function(){ }
+		postInitialize: function(){ },
 	});
 
 	// initialize SWT runtime

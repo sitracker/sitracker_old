@@ -109,6 +109,8 @@ CREATE TABLE `emailsig` (
 
 INSERT INTO `emailsig` (`id`, `signature`) VALUES (1, '--\r\n... Powered by Open Source Software: Support Incident Tracker (SiT!) is available free from http://sourceforge.net/projects/sitracker/');
 
+INSERT INTO `emailsig` VALUES (1, '');
+
 CREATE TABLE `emailtype` (
   `id` int(11) NOT NULL auto_increment,
   `name` varchar(50) default NULL,
@@ -126,8 +128,6 @@ CREATE TABLE `emailtype` (
   PRIMARY KEY  (`id`)
 ) ENGINE=MyISAM;
 
--- FIXME remove ID columns
-
 INSERT INTO `emailtype` VALUES (1,'Support Email','user','','<contactemail>','<supportemail>','<supportemail>','','<useremail>','[<incidentid>] - <incidenttitle>','<contactfirstname>,\r\n\r\n<signature>\r\n<globalsignature>', 'show', 'yes');
 INSERT INTO `emailtype` VALUES (2,'User Email','user','','<contactemail>','<useremail>','<useremail>','','','','<signature>\r\n<globalsignature>\r\n', 'show', 'yes');
 INSERT INTO `emailtype` VALUES (5,'INCIDENT_CLOSURE','system','Notify contact that the incident has been marked for closure and will be closed shortly','<contactemail>','<supportemail>','<supportemail>','','<useremail>','[<incidentid>] - <incidenttitle>','<contactfirstname>,\r\n\r\nIncident <incidentid> has been marked for closure. If you still have outstanding issues relating to this incident then please reply with details, otherwise it will be closed after the next seven days.\r\n\r\n<signature>\r\n<globalsignature>', 'show', 'yes');
@@ -139,7 +139,6 @@ INSERT INTO `emailtype` VALUES (48,'INCIDENT_UPDATED','system','Aknoweldge conta
 INSERT INTO `emailtype` VALUES (49,'INCIDENT_CLOSED_EXTERNAL','system','Notify external engineer that an incident has been closed','<incidentexternalemail>','<supportemail>','<supportemail>','','','Incident ref #<incidentexternalid>  - <incidenttitle> CLOSED - [<incidentid>]','<incidentexternalengineerfirstname>,\r\n\r\nThis is an automated email to let you know that Incident <incidentexternalid> has been closed within our tracking system.\r\n\r\nMany thanks for your help.\r\n\r\n<signature>\r\n<globalsignature>', 'hide', 'no');
 INSERT INTO `emailtype` VALUES (9,'INCIDENT_LOGGED_EMAIL','system','Acknowledge the contacts email and notify them of the new incident number','<contactemail>','<supportemail>','<supportemail>','','<useremail>','[<incidentid>] - <incidenttitle>','Thank you for your email. The incident <incidentid> has been generated and your details stored in our tracking system. \r\n\r\nYou will be receiving a response from one of our product specialists as soon as possible. When referring to this incident please remember to quote incident <incidentid> in \r\nall communications.\r\n\r\nFor all email communications please title your email as [<incidentid>] - <incidenttitle>\r\n\r\n<globalsignature>', 'show', 'no');
 INSERT INTO `emailtype` (`id`, `name`, `type`, `description`, `tofield`, `fromfield`, `replytofield`, `ccfield`, `bccfield`, `subjectfield`, `body`, `customervisibility`, `storeinlog`) VALUES (50,'INCIDENT_REASSIGNED_USER_NOTIFY', 'system', 'Notify user when call assigned to them', '<incidentreassignemailaddress>', '<supportemail>', '<supportemail>', '', '', 'A <incidentpriority> priority call ([<incidentid>] - <incidenttitle>) has been reassigned to you', 'Hi,\r\n\r\nIncident [<incidentid>] entitled <incidenttitle> has been reassigned to you.\r\n\r\nThe details of this incident are:\r\n\r\nPriority: <incidentpriority>\r\nContact: <contactname>\r\nSite: <contactsite>\r\n\r\n\r\nRegards\r\n<applicationname>\r\n\r\n\r\n---\r\n<todaysdate> - <applicationshortname> <applicationversion>', 'hide', 'No');
-INSERT INTO `emailtype` (name, type, description, tofield, replytofield, ccfield, bccfield, subjectfield, body, customervisibility, storeinlog) VALUES ('NEARING SLA', 'system', 'Notification when an incident nears its SLA target', '<supportmanageremail>', '<supportemail>', '<supportemail>', '<useremail>', '', '<applicationshortname> SLA: Incident <incidentid> about to breach SLA', 'This is an automatic notification that this incident is about to breach it\\\\\\''s SLA.  The SLA target <info1> will expire in <info2> minutes.\r\n\r\nIncident: [<incidentid>] - <incidenttitle>\r\nOwner: <incidentowner>\r\nPriority: <incidentpriority>\r\nExternal Id: <incidentexternalid>\r\nExternal Engineer: <incidentexternalengineer>\r\nSite: <contactsite>\r\nContact: <contactname>\r\n\r\n--\r\n<applicationshortname> v<applicationversion>\r\n<todaysdate>\r\n', 'hide', 'Yes');
 
 CREATE TABLE `escalationpaths` (
   `id` int(11) NOT NULL auto_increment,
@@ -379,32 +378,30 @@ INSERT INTO `incidentstatus` VALUES (8, 'Awaiting Customer Action', 'Customer ha
 INSERT INTO `incidentstatus` VALUES (9, 'Unsupported', 'Unsupported');
 
 
-
 CREATE TABLE `interfacestyles` (
-  `id` int(5) NOT NULL,
+  `id` int(5) NOT NULL auto_increment,
   `name` varchar(50) NOT NULL default '',
   `cssurl` varchar(255) NOT NULL default '',
-  `iconset` varchar(255) NOT NULL default 'kdeclassic',
   `headerhtml` text NOT NULL,
   PRIMARY KEY  (`id`)
-) TYPE=MyISAM AUTO_INCREMENT=16 ;
+) ENGINE=MyISAM;
 
-INSERT INTO `interfacestyles` (`id`, `name`, `cssurl`, `iconset`, `headerhtml`) VALUES (1, 'Light Blue', 'webtrack1.css', 'kdeclassic', ''),
-(2, 'Grey', 'webtrack2.css', 'kdeclassic', ''),
-(3, 'Green', 'webtrack3.css', 'kdeclassic', ''),
-(4, 'Silver Blue', 'webtrack4.css', 'kdeclassic', ''),
-(5, 'Classic', 'webtrack5.css', 'kdeclassic', ''),
-(6, 'Orange', 'webtrack_ph2.css', 'kdeclassic', ''),
-(7, 'Yellow and Blue', 'webtrack7.css', 'kdeclassic', ''),
-(8, 'Neoteric', 'webtrack8.css', 'kdeclassic', ''),
-(9, 'Toms Linux Style', 'webtrack9.css', 'kdeclassic', ''),
-(10, 'Cool Blue', 'webtrack_ph.css', 'kdeclassic', ''),
-(11, 'Just Light', 'webtrack10.css', 'kdeclassic', ''),
-(12, 'Ex Pea', 'webtrack11.css', 'kdeclassic', ''),
-(13, 'GUI Colours', 'webtrack12.css', 'kdeclassic', ''),
-(14, 'Flashy', 'webtrack14/webtrack14.css', 'kdeclassic', ''),
-(15, 'Richard', 'webtrack15.css', 'kdeclassic', '');
 
+INSERT INTO `interfacestyles` VALUES (1, 'Light Blue', 'webtrack1.css', '');
+INSERT INTO `interfacestyles` VALUES (2, 'Grey', 'webtrack2.css', '');
+INSERT INTO `interfacestyles` VALUES (3, 'Green', 'webtrack3.css', '');
+INSERT INTO `interfacestyles` VALUES (4, 'Silver Blue', 'webtrack4.css', '');
+INSERT INTO `interfacestyles` VALUES (5, 'Classic', 'webtrack5.css', '');
+INSERT INTO `interfacestyles` VALUES (6, 'Orange', 'webtrack_ph2.css', '');
+INSERT INTO `interfacestyles` VALUES (7, 'Yellow and Blue', 'webtrack7.css', '');
+INSERT INTO `interfacestyles` VALUES (8, 'Neoteric', 'webtrack8.css', '');
+INSERT INTO `interfacestyles` VALUES (9, 'Toms Linux Style', 'webtrack9.css', '');
+INSERT INTO `interfacestyles` VALUES (10, 'Cool Blue', 'webtrack_ph.css', '');
+INSERT INTO `interfacestyles` VALUES (11, 'Just Light', 'webtrack10.css', '');
+INSERT INTO `interfacestyles` VALUES (12, 'Ex Pea', 'webtrack11.css', '');
+INSERT INTO `interfacestyles` VALUES (13, 'GUI Colours', 'webtrack12.css', '');
+INSERT INTO `interfacestyles` VALUES (14, 'Flashy', 'webtrack14/webtrack14.css', '');
+INSERT INTO `interfacestyles` VALUES (15, 'Richard', 'webtrack15.css', '');
 
 CREATE TABLE `journal` (
   `id` int(11) NOT NULL auto_increment,
@@ -473,36 +470,6 @@ INSERT INTO `licencetypes` VALUES (2, 'Per Workstation');
 INSERT INTO `licencetypes` VALUES (3, 'Per Server');
 INSERT INTO `licencetypes` VALUES (4, 'Site');
 INSERT INTO `licencetypes` VALUES (5, 'Evaluation');
-
-CREATE TABLE `links` (
-     `linktype` int(11) NOT NULL default '0',
-     `origcolref` int(11) NOT NULL default '0',
-     `linkcolref` int(11) NOT NULL default '0',
-     `direction` enum('left','right','bi') NOT NULL default 'left',
-     `userid` tinyint(4) NOT NULL default '0',
-     PRIMARY KEY  (`linktype`,`origcolref`,`linkcolref`),
-     KEY `userid` (`userid`)
-   ) ENGINE=MyISAM ;
-
-CREATE TABLE `linktypes` (
-     `id` int(11) NOT NULL auto_increment,
-     `name` varchar(255) NOT NULL default '',
-     `lrname` varchar(255) NOT NULL default '',
-     `rlname` varchar(255) NOT NULL default '',
-     `origtab` varchar(255) NOT NULL default '',
-     `origcol` varchar(255) NOT NULL default '',
-     `linktab` varchar(255) NOT NULL default '',
-     `linkcol` varchar(255) NOT NULL default 'id',
-     `selectionsql` varchar(255) NOT NULL default '',
-     `filtersql` varchar(255) NOT NULL default '',
-     `viewurl` varchar(255) NOT NULL default '',
-     PRIMARY KEY  (`id`),
-     KEY `origtab` (`origtab`),
-     KEY `linktab` (`linktab`)
-   ) ENGINE=MyISAM;
-
-
-INSERT INTO `linktypes` VALUES (1,'Task','Subtask','Parent Task','tasks','id','tasks','id','name','','view_task.php?id=%id%'),(2,'Contact','Contact','Contact Task','tasks','id','contacts','id','forenames','','contact_details.php?id=%id%'),(3,'Site','Site','Site Task','tasks','id','sites','id','name','','site_details.php?id=%id%'),(4,'Incident','Incident','Task','tasks','id','incidents','id','title','','incident_details.php?id=%id%');
 
 CREATE TABLE `maintenance` (
   `id` int(11) NOT NULL auto_increment,
@@ -610,8 +577,6 @@ INSERT INTO `permissions` VALUES (61, 'View Incident Details');
 INSERT INTO `permissions` VALUES (62, 'View Incident Attachments');
 INSERT INTO `permissions` VALUES (63, 'Add Reseller');
 INSERT INTO `permissions` VALUES (64, 'Manage Escalation Paths');
-INSERT INTO `permissions` VALUES (65, 'Delete Products');
-INSERT INTO `permissions` VALUES (66, 'Install Dashboard Components');
 
 
 CREATE TABLE `priority` (
@@ -746,8 +711,6 @@ INSERT INTO `rolepermissions` (`roleid`, `permissionid`, `granted`) VALUES (1, 6
 INSERT INTO `rolepermissions` (`roleid`, `permissionid`, `granted`) VALUES (1, 62, 'true');
 INSERT INTO `rolepermissions` (`roleid`, `permissionid`, `granted`) VALUES (1, 63, 'true');
 INSERT INTO `rolepermissions` (`roleid`, `permissionid`, `granted`) VALUES (1, 64, 'true');
-INSERT INTO `rolepermissions` (`roleid`, `permissionid`, `granted`) VALUES (1, 65, 'true');
-INSERT INTO `rolepermissions` (`roleid`, `permissionid`, `granted`) VALUES (1, 66, 'true');
 INSERT INTO `rolepermissions` (`roleid`, `permissionid`, `granted`) VALUES (2, 1, 'true');
 INSERT INTO `rolepermissions` (`roleid`, `permissionid`, `granted`) VALUES (2, 2, 'true');
 INSERT INTO `rolepermissions` (`roleid`, `permissionid`, `granted`) VALUES (2, 3, 'true');
@@ -858,13 +821,6 @@ INSERT INTO `servicelevels` VALUES (0, 'standard', 2, 240, 320, 960, 10.00, 20, 
 INSERT INTO `servicelevels` VALUES (0, 'standard', 3, 120, 180, 480, 7.00, 14, 90);
 INSERT INTO `servicelevels` VALUES (0, 'standard', 4, 60, 120, 240, 3.00, 6, 90);
 
-CREATE TABLE `set_tags` (
-`id` INT NOT NULL ,
-`type` MEDIUMINT NOT NULL ,
-`tagid` INT NOT NULL ,
-PRIMARY KEY ( `id` , `type` , `tagid` )
-) ENGINE=MYISAM;
-
 CREATE TABLE `sitecontacts` (
   `siteid` int(11) NOT NULL default '0',
   `contactid` int(11) NOT NULL default '0',
@@ -884,8 +840,7 @@ CREATE TABLE `sites` (
   `telephone` varchar(255) NOT NULL default '',
   `fax` varchar(255) NOT NULL default '',
   `email` varchar(255) NOT NULL default '',
-  `websiteurl` varchar(255) default NULL,
-  `notes` blob NOT NULL,
+  `notes` text NOT NULL,
   `typeid` int(5) NOT NULL default '1',
   `freesupport` int(5) NOT NULL default '0',
   `licenserx` int(5) NOT NULL default '0',
@@ -971,12 +926,6 @@ CREATE TABLE `system` (
   `id` int(1) NOT NULL default '0',
   `version` float(3,2) NOT NULL default '0.00',
   PRIMARY KEY  (`id`)
-) ENGINE=MyISAM;
-
-CREATE TABLE `tags` (
-  `tagid` int(11) NOT NULL auto_increment,
-  `name` varchar(255) NOT NULL default '',
-  PRIMARY KEY  (`tagid`)
 ) ENGINE=MyISAM;
 
 CREATE TABLE `tasks` (
@@ -1121,8 +1070,7 @@ INSERT INTO `userpermissions` VALUES (1, 61, 'true');
 INSERT INTO `userpermissions` VALUES (1, 62, 'true');
 INSERT INTO `userpermissions` VALUES (1, 63, 'true');
 INSERT INTO `userpermissions` VALUES (1, 64, 'true');
-INSERT INTO `userpermissions` VALUES (1, 65, 'true');
-INSERT INTO `userpermissions` VALUES (1, 66, 'true');
+
 
 CREATE TABLE `users` (
   `id` tinyint(4) NOT NULL auto_increment,
@@ -1145,7 +1093,6 @@ CREATE TABLE `users` (
   `accepting` enum('No','Yes') default 'Yes',
   `var_incident_refresh` int(11) default '60',
   `var_update_order` enum('desc','asc') default 'desc',
-  `var_num_updates_view` int(11) NOT NULL default '15',
   `var_style` int(11) default '1',
   `var_collapse` enum('true','false') NOT NULL default 'true',
   `var_hideautoupdates` enum('true','false') NOT NULL default 'false',
@@ -1155,7 +1102,6 @@ CREATE TABLE `users` (
   `listadmin` tinytext,
   `holiday_entitlement` float NOT NULL default '0',
   `qualifications` tinytext,
-  `dashboard` varchar(255) NOT NULL default '0-3,1-1,1-2,2-4',
   PRIMARY KEY  (`id`),
   KEY `username` (`username`),
   KEY `accepting` (`accepting`),
@@ -1353,67 +1299,6 @@ INSERT INTO `dashboard` (`id`, `name`, `enabled`) VALUES (1, 'random_tip', 'true
 (4, 'user_incidents', 'true');
 
 UPDATE `interfacestyles` SET `name` = 'Light Blue' WHERE `id` =1 LIMIT 1 ;
-";
-
-$upgrade_schema[325] = "
-ALTER TABLE `interfacestyles` ADD `iconset` VARCHAR( 255 ) NOT NULL DEFAULT 'kdeclassic' AFTER `cssurl` ;
-ALTER TABLE `sites` ADD `websiteurl` VARCHAR( 255 ) NULL AFTER `email` ;
-CREATE TABLE `links` (
-     `linktype` int(11) NOT NULL default '0',
-     `origcolref` int(11) NOT NULL default '0',
-     `linkcolref` int(11) NOT NULL default '0',
-     `direction` enum('left','right','bi') NOT NULL default 'left',
-     `userid` tinyint(4) NOT NULL default '0',
-     PRIMARY KEY  (`linktype`,`origcolref`,`linkcolref`),
-     KEY `userid` (`userid`)
-   ) ENGINE=MyISAM ;
-
-CREATE TABLE `linktypes` (
-     `id` int(11) NOT NULL auto_increment,
-     `name` varchar(255) NOT NULL default '',
-     `lrname` varchar(255) NOT NULL default '',
-     `rlname` varchar(255) NOT NULL default '',
-     `origtab` varchar(255) NOT NULL default '',
-     `origcol` varchar(255) NOT NULL default '',
-     `linktab` varchar(255) NOT NULL default '',
-     `linkcol` varchar(255) NOT NULL default 'id',
-     `selectionsql` varchar(255) NOT NULL default '',
-     `filtersql` varchar(255) NOT NULL default '',
-     `viewurl` varchar(255) NOT NULL default '',
-     PRIMARY KEY  (`id`),
-     KEY `origtab` (`origtab`),
-     KEY `linktab` (`linktab`)
-   ) ENGINE=MyISAM;
-
-INSERT INTO `linktypes` VALUES (1,'Task','Subtask','Parent Task','tasks','id','tasks','id','name','','view_task.php?id=%id%'),(2,'Contact','Contact','Contact Task','tasks','id','contacts','id','forenames','','contact_details.php?id=%id%'),(3,'Site','Site','Site Task','tasks','id','sites','id','name','','site_details.php?id=%id%'),(4,'Incident','Incident','Task','tasks','id','incidents','id','title','','incident_details.php?id=%id%');
-
-ALTER TABLE `users` ADD `var_num_updates_view` INT NOT NULL DEFAULT '15' AFTER `var_update_order` ;
-INSERT INTO `emailtype` (name, type, description, tofield, replytofield, ccfield, bccfield, subjectfield, body, customervisibility, storeinlog) VALUES ('NEARING SLA', 'system', 'Notification when an incident nears its SLA target', '<supportmanageremail>', '<supportemail>', '<supportemail>', '<useremail>', '', '<applicationshortname> SLA: Incident <incidentid> about to breach SLA', 'This is an automatic notification that this incident is about to breach it\\\\\\''s SLA.  The SLA target <info1> will expire in <info2> minutes.\r\n\r\nIncident: [<incidentid>] - <incidenttitle>\r\nOwner: <incidentowner>\r\nPriority: <incidentpriority>\r\nExternal Id: <incidentexternalid>\r\nExternal Engineer: <incidentexternalengineer>\r\nSite: <contactsite>\r\nContact: <contactname>\r\n\r\n--\r\n<applicationshortname> v<applicationversion>\r\n<todaysdate>\r\n', 'hide', 'Yes');
-
-
-CREATE TABLE `tags` (
-  `tagid` int(11) NOT NULL auto_increment,
-  `name` varchar(255) NOT NULL default '',
-  PRIMARY KEY  (`tagid`)
-) ENGINE=MyISAM;
-
-CREATE TABLE `set_tags` (
-`id` INT NOT NULL ,
-`type` MEDIUMINT NOT NULL ,
-`tagid` INT NOT NULL ,
-PRIMARY KEY ( `id` , `type` , `tagid` )
-) ENGINE=MYISAM;
-
-INSERT INTO `permissions` VALUES (65, 'Delete Products');
-INSERT INTO `rolepermissions` (`roleid`, `permissionid`, `granted`) VALUES (1, 65, 'true');
-INSERT INTO `userpermissions` VALUES (1, 65, 'true');
-
-ALTER TABLE `users` ADD `dashboard` VARCHAR( 255 ) NOT NULL DEFAULT '0-3,1-1,1-2,2-4';
-
-INSERT INTO `permissions` VALUES (66, 'Install Dashboard Components');
-INSERT INTO `rolepermissions` (`roleid`, `permissionid`, `granted`) VALUES (1, 66, 'true');
-INSERT INTO `userpermissions` VALUES (1, 66, 'true');
-
 ";
 
 // Important: When making changes to the schema you must add SQL to make the alterations

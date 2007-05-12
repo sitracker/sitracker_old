@@ -10,18 +10,16 @@
 
 dojo.provide("dojo.string.Builder");
 dojo.require("dojo.string");
-dojo.require("dojo.lang.common");
 
 // NOTE: testing shows that direct "+=" concatenation is *much* faster on
 // Spidermoneky and Rhino, while arr.push()/arr.join() style concatenation is
 // significantly quicker on IE (Jscript/wsh/etc.).
 
-dojo.string.Builder = function(/* string? */str){
-	//	summary
+dojo.string.Builder = function(str){
 	this.arrConcat = (dojo.render.html.capable && dojo.render.html["ie"]);
 
 	var a = [];
-	var b = "";
+	var b = str || "";
 	var length = this.length = b.length;
 
 	if(this.arrConcat){
@@ -32,43 +30,28 @@ dojo.string.Builder = function(/* string? */str){
 	}
 
 	this.toString = this.valueOf = function(){ 
-		//	summary
-		//	Concatenate internal buffer and return as a string
-		return (this.arrConcat) ? a.join("") : b;	//	string
+		return (this.arrConcat) ? a.join("") : b;
 	};
 
-	this.append = function(){
-		//	summary
-		//	Append all arguments to the end of the internal buffer
-		for(var x=0; x<arguments.length; x++){
-			var s = arguments[x];
-			if(dojo.lang.isArrayLike(s)){
-				this.append.apply(this, s);
-			} else {
-				if(this.arrConcat){
-					a.push(s);
-				}else{
-					b+=s;
-				}
-				length += s.length;
-				this.length = length;
-			}
+	this.append = function(s){
+		if(this.arrConcat){
+			a.push(s);
+		}else{
+			b+=s;
 		}
-		return this;	//	dojo.string.Builder
+		length += s.length;
+		this.length = length;
+		return this;
 	};
 
 	this.clear = function(){
-		//	summary
-		//	Clear the internal buffer.
 		a = [];
 		b = "";
 		length = this.length = 0;
-		return this;	//	dojo.string.Builder
+		return this;
 	};
 
-	this.remove = function(/* integer */f, /* integer */l){
-		//	summary
-		//	Remove a section of string from the internal buffer.
+	this.remove = function(f,l){
 		var s = ""; 
 		if(this.arrConcat){
 			b = a.join(""); 
@@ -83,12 +66,10 @@ dojo.string.Builder = function(/* string? */str){
 			a.push(b);
 			b="";
 		}
-		return this;	//	dojo.string.Builder
+		return this;
 	};
 
-	this.replace = function(/* string */o, /* string */n){
-		//	summary
-		//	replace phrase *o* with phrase *n*.
+	this.replace = function(o,n){
 		if(this.arrConcat){
 			b = a.join(""); 
 		}
@@ -99,12 +80,10 @@ dojo.string.Builder = function(/* string? */str){
 			a.push(b);
 			b="";
 		}
-		return this;	//	dojo.string.Builder
+		return this;
 	};
 
-	this.insert = function(/* integer */idx, /* string */s){
-		//	summary
-		//	Insert string s at index idx.
+	this.insert = function(idx,s){
 		if(this.arrConcat){
 			b = a.join(""); 
 		}
@@ -121,8 +100,6 @@ dojo.string.Builder = function(/* string? */str){
 			a.push(b); 
 			b="";
 		}
-		return this;	//	dojo.string.Builder
+		return this;
 	};
-
-	this.append.apply(this, arguments);
 };

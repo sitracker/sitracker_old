@@ -15,28 +15,26 @@ dojo.require("dojo.AdapterRegistry");
 dojo.require("dojo.string.extras");
 
 dojo.lang.reprRegistry = new dojo.AdapterRegistry();
-dojo.lang.registerRepr = function(/*String*/name, /*Function*/check, /*Function*/wrap, /*Boolean?*/override){
-	// summary:
-	//	Register a repr function.  repr functions should take
-	//	one argument and return a string representation of it
-	//	suitable for developers, primarily used when debugging.
-	//
-	//	If override is given, it is used as the highest priority
-	//	repr, otherwise it will be used as the lowest.
+dojo.lang.registerRepr = function(name, check, wrap, /*optional*/ override){
+        /***
+			Register a repr function.  repr functions should take
+			one argument and return a string representation of it
+			suitable for developers, primarily used when debugging.
 
-	dojo.lang.reprRegistry.register(name, check, wrap, override);
-};
+			If override is given, it is used as the highest priority
+			repr, otherwise it will be used as the lowest.
+        ***/
+        dojo.lang.reprRegistry.register(name, check, wrap, override);
+    };
 
-dojo.lang.repr = function(/*Object*/obj){
-	// summary: Return a "programmer representation" for an object
-	// description: returns a string representation of an object suitable for developers, primarily used when debugging
-
+dojo.lang.repr = function(obj){
+	/***
+		Return a "programmer representation" for an object
+	***/
 	if(typeof(obj) == "undefined"){
-		// obj: undefined
-		return "undefined"; // String
+		return "undefined";
 	}else if(obj === null){
-		// obj: null
-		return "null"; // String
+		return "null";
 	}
 
 	try{
@@ -51,28 +49,35 @@ dojo.lang.repr = function(/*Object*/obj){
 				obj.toString == Function.prototype.toString ||
 				obj.toString == Object.prototype.toString
 			)){
-			return obj.NAME; // String
+			return o.NAME;
 		}
 	}
 
 	if(typeof(obj) == "function"){
-		// obj: Function
 		obj = (obj + "").replace(/^\s+/, "");
 		var idx = obj.indexOf("{");
 		if(idx != -1){
 			obj = obj.substr(0, idx) + "{...}";
 		}
 	}
-	return obj + ""; // String
+	return obj + "";
 }
 
-dojo.lang.reprArrayLike = function(/*Array*/arr){
-	// summary: Maps each element of arr to dojo.lang.repr and provides output in an array-like format
-	// description: returns an array-like string representation of the provided array suitable for developers, primarily used when debugging
+dojo.lang.reprArrayLike = function(arr){
 	try{
 		var na = dojo.lang.map(arr, dojo.lang.repr);
-		return "[" + na.join(", ") + "]"; // String
+		return "[" + na.join(", ") + "]";
 	}catch(e){ }
+};
+
+dojo.lang.reprString = function(str){ 
+	dojo.deprecated("dojo.lang.reprNumber", "use `String(num)` instead", "0.4");
+	return dojo.string.escapeString(str);
+};
+
+dojo.lang.reprNumber = function(num){
+	dojo.deprecated("dojo.lang.reprNumber", "use `String(num)` instead", "0.4");
+	return num + "";
 };
 
 (function(){

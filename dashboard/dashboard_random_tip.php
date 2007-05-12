@@ -9,15 +9,17 @@
 //
 
 
-function dashboard_random_tip($row,$dashboardid)
+function dashboard_random_tip()
 {
     global $i18n_RANDOM_TIP;
-    echo "<div class='windowbox' style='width: 95%' id='$row-$dashboardid'>";
+    echo "<span id='dragList2'>";
+    echo "<div class='windowbox' style='width: 95%'>";
     echo "<div class='windowtitle'>{$i18n_RANDOM_TIP}</div>";
     echo "<div class='window'>";
     echo random_tip();
     echo "</div>";
     echo "</div>";
+    echo "</span>";
 }
 
 ?>
