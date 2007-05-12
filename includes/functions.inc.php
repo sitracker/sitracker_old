@@ -99,123 +99,128 @@ $hmenu[1031] = array (10=> array ( 'perm'=> 0, 'name'=> "Option1", 'url'=>""),
 */
 //
 //////////////////
-$hmenu[0] = array (10=> array ( 'perm'=> 0, 'name'=> "{$CONFIG['application_shortname']}", 'url'=>"main.php", 'submenu'=>"10"),
-                   20=> array ( 'perm'=> 11, 'name'=> "Customers", 'url'=>"browse_sites.php?search_string=A", 'submenu'=>"20"),
-                   30=> array ( 'perm'=> 6, 'name'=> "Support", 'url'=>"incidents.php?user=current&amp;queue=1&amp;type=support", 'submenu'=>"30"),
-                   40=> array ( 'perm'=> 0, 'name'=> "Tasks", 'url'=>"tasks.php", 'submenu'=>"40"),
-                   50=> array ( 'perm'=> 54, 'name'=> "KnowledgeBase", 'url'=>"browse_kb.php", 'submenu'=>"50"),
-                   60=> array ( 'perm'=> 37, 'name'=> "Reports", 'url'=>"reports.php", 'submenu'=>"60"),
-                   70=> array ( 'perm'=> 0, 'name'=> "Help", 'url'=>"help.php", 'submenu'=>"70")
+$hmenu[0] = array (10=> array ( 'perm'=> 0, 'name'=> "{$CONFIG['application_shortname']}", 'url'=>"{$CONFIG['application_webpath']}main.php", 'submenu'=>"10"),
+                   20=> array ( 'perm'=> 11, 'name'=> "Customers", 'url'=>"{$CONFIG['application_webpath']}customers.php", 'submenu'=>"20"),
+                   30=> array ( 'perm'=> 6, 'name'=> "Support", 'url'=>"{$CONFIG['application_webpath']}incidents.php?user=current&amp;queue=1&amp;type=support", 'submenu'=>"30"),
+                   40=> array ( 'perm'=> 0, 'name'=> "Tasks", 'url'=>"{$CONFIG['application_webpath']}tasks.php", 'submenu'=>"40"),
+                   50=> array ( 'perm'=> 54, 'name'=> "KnowledgeBase", 'url'=>"{$CONFIG['application_webpath']}browse_kb.php", 'submenu'=>"50"),
+                   60=> array ( 'perm'=> 37, 'name'=> "Reports", 'url'=>"{$CONFIG['application_webpath']}reports.php", 'submenu'=>"60"),
+                   70=> array ( 'perm'=> 0, 'name'=> "Help", 'url'=>"{$CONFIG['application_webpath']}help.php", 'submenu'=>"70")
 );
-$hmenu[10] = array (1=> array ( 'perm'=> 0, 'name'=> "Main Page", 'url'=>"main.php"),
-                    10=> array ( 'perm'=> 60, 'name'=> "Search", 'url'=>"search.php"),
-                    20=> array ( 'perm'=> 4, 'name'=> "My Details", 'url'=>"edit_profile.php", 'submenu'=>"1020"),
-                    30=> array ( 'perm'=> 4, 'name'=> "Control Panel", 'url'=>"control_panel.php", 'submenu'=>"1030"),
-                    40=> array ( 'perm'=> 14, 'name'=> "Users", 'url'=>"users.php", 'submenu'=>"1040"),
-                    50=> array ( 'perm'=> 0, 'name'=> "Logout", 'url'=>"logout.php")
+$hmenu[10] = array (1=> array ( 'perm'=> 0, 'name'=> "Main Page", 'url'=>"{$CONFIG['application_webpath']}main.php"),
+                    10=> array ( 'perm'=> 60, 'name'=> "Search", 'url'=>"{$CONFIG['application_webpath']}search.php"),
+                    20=> array ( 'perm'=> 4, 'name'=> "My Details", 'url'=>"{$CONFIG['application_webpath']}edit_profile.php", 'submenu'=>"1020"),
+                    30=> array ( 'perm'=> 4, 'name'=> "Control Panel", 'url'=>"{$CONFIG['application_webpath']}control_panel.php", 'submenu'=>"1030"),
+                    40=> array ( 'perm'=> 14, 'name'=> "Users", 'url'=>"{$CONFIG['application_webpath']}users.php", 'submenu'=>"1040"),
+                    50=> array ( 'perm'=> 0, 'name'=> "Logout", 'url'=>"{$CONFIG['application_webpath']}logout.php")
 );
-$hmenu[1020] = array (10=> array ( 'perm'=> 4, 'name'=> "My Profile", 'url'=>"edit_profile.php"),
-                      20=> array ( 'perm'=> 58, 'name'=> "My Skills", 'url'=>"edit_user_software.php"),
-                      30=> array ( 'perm'=> 58, 'name'=> "My Substitutes", 'url'=>"edit_backup_users.php"),
-                      40=> array ( 'perm'=> 27, 'name'=> "My Holidays", 'url'=>"holidays.php")
+$hmenu[1020] = array (10=> array ( 'perm'=> 4, 'name'=> "My Profile", 'url'=>"{$CONFIG['application_webpath']}edit_profile.php"),
+                      20=> array ( 'perm'=> 58, 'name'=> "My Skills", 'url'=>"{$CONFIG['application_webpath']}edit_user_software.php"),
+                      30=> array ( 'perm'=> 58, 'name'=> "My Substitutes", 'url'=>"{$CONFIG['application_webpath']}edit_backup_users.php"),
+                      40=> array ( 'perm'=> 27, 'name'=> "My Holidays", 'url'=>"{$CONFIG['application_webpath']}holidays.php"),
+                      50=> array ( 'perm'=> 4, 'name'=> "My Dashboard", 'url'=>"{$CONFIG['application_webpath']}manage_user_dashboard.php")
 );
 // configure
-$hmenu[1030] = array (10=> array ( 'perm'=> 22, 'name'=> "Users", 'url'=>"manage_users.php", 'submenu'=>"103010"),
+$hmenu[1030] = array (10=> array ( 'perm'=> 22, 'name'=> "Users", 'url'=>"{$CONFIG['application_webpath']}manage_users.php", 'submenu'=>"103010"),
                       20=> array ( 'perm'=> 0, 'name'=> "Email Settings", 'url'=>"", 'submenu'=>"103020"),
-                      30=> array ( 'perm'=> 22, 'name'=> "Set Public Holidays", 'url'=>"holiday_calendar.php?type=10"),
-                      40=> array ( 'perm'=> 22, 'name'=> "FTP Files DB", 'url'=>"ftp_list_files.php"),
-                      50=> array ( 'perm'=> 22, 'name'=> "Service Levels", 'url'=>"service_levels.php"),
-                      60=> array ( 'perm'=> 7, 'name'=> "Bulk Modify", 'url'=>"bulk_modify.php?action=external_esc"),
-                      70=> array ( 'perm'=> 64, 'name'=> "Escalation Paths", 'url'=>"escalation_paths.php"),
+                      30=> array ( 'perm'=> 22, 'name'=> "Set Public Holidays", 'url'=>"{$CONFIG['application_webpath']}holiday_calendar.php?type=10"),
+                      40=> array ( 'perm'=> 22, 'name'=> "FTP Files DB", 'url'=>"{$CONFIG['application_webpath']}ftp_list_files.php"),
+                      50=> array ( 'perm'=> 22, 'name'=> "Service Levels", 'url'=>"{$CONFIG['application_webpath']}service_levels.php"),
+                      60=> array ( 'perm'=> 7, 'name'=> "Bulk Modify", 'url'=>"{$CONFIG['application_webpath']}bulk_modify.php?action=external_esc"),
+                      70=> array ( 'perm'=> 64, 'name'=> "Escalation Paths", 'url'=>"{$CONFIG['application_webpath']}escalation_paths.php"),
+                      80=> array ( 'perm'=> 66, 'name'=> "Manage Dashboard Components", 'url'=>"{$CONFIG['application_webpath']}manage_dashboard.php")
 );
-$hmenu[103010] = array (10=> array ( 'perm'=> 22, 'name'=> "Manage Users", 'url'=>"manage_users.php"),
-                        20=> array ( 'perm'=> 20, 'name'=> "Add User", 'url'=>"add_user.php?action=showform"),
-                        30=> array ( 'perm'=> 9, 'name'=> "Set Permissions", 'url'=>"edit_user_permissions.php"),
-                        40=> array ( 'perm'=> 23, 'name'=> "User Groups", 'url'=>"usergroups.php")
+$hmenu[103010] = array (10=> array ( 'perm'=> 22, 'name'=> "Manage Users", 'url'=>"{$CONFIG['application_webpath']}manage_users.php"),
+                        20=> array ( 'perm'=> 20, 'name'=> "Add User", 'url'=>"{$CONFIG['application_webpath']}add_user.php?action=showform"),
+                        30=> array ( 'perm'=> 9, 'name'=> "Set Permissions", 'url'=>"{$CONFIG['application_webpath']}edit_user_permissions.php"),
+                        40=> array ( 'perm'=> 23, 'name'=> "User Groups", 'url'=>"{$CONFIG['application_webpath']}usergroups.php")
 );
-$hmenu[103020] = array (10=> array ( 'perm'=> 16, 'name'=> "Add Template", 'url'=>"add_emailtype.php?action=showform"),
-                        20=> array ( 'perm'=> 17, 'name'=> "Edit Template", 'url'=>"edit_emailtype.php?action=showform"),
-                        30=> array ( 'perm'=> 43, 'name'=> "Global Signature", 'url'=>"edit_global_signature.php")
+$hmenu[103020] = array (10=> array ( 'perm'=> 16, 'name'=> "Add Template", 'url'=>"{$CONFIG['application_webpath']}add_emailtype.php?action=showform"),
+                        20=> array ( 'perm'=> 17, 'name'=> "Edit Template", 'url'=>"{$CONFIG['application_webpath']}edit_emailtype.php?action=showform"),
+                        30=> array ( 'perm'=> 43, 'name'=> "Global Signature", 'url'=>"{$CONFIG['application_webpath']}edit_global_signature.php")
 );
-$hmenu[1040] = array (10=> array ( 'perm'=> 0, 'name'=> "View Users", 'url'=>"users.php"),
-                      20=> array ( 'perm'=> 0, 'name'=> "List Skills", 'url'=>"user_skills.php"),
-                      30=> array ( 'perm'=> 27, 'name'=> "Holiday Planner", 'url'=>"holiday_calendar.php"),
-                      40=> array ( 'perm'=> 50, 'name'=> "Approve Holidays", 'url'=>"holiday_request.php?user=all&amp;mode=approval")
+$hmenu[1040] = array (10=> array ( 'perm'=> 0, 'name'=> "View Users", 'url'=>"{$CONFIG['application_webpath']}users.php"),
+                      20=> array ( 'perm'=> 0, 'name'=> "List Skills", 'url'=>"{$CONFIG['application_webpath']}user_skills.php"),
+                      21=> array ( 'perm'=> 0, 'name'=> "Skills Matrix", 'url'=>"{$CONFIG['application_webpath']}skills_matrix.php"),
+                      30=> array ( 'perm'=> 27, 'name'=> "Holiday Planner", 'url'=>"{$CONFIG['application_webpath']}holiday_calendar.php"),
+                      40=> array ( 'perm'=> 50, 'name'=> "Approve Holidays", 'url'=>"{$CONFIG['application_webpath']}holiday_request.php?user=all&amp;mode=approval")
 );
 
 
 
 // Customers
-$hmenu[20] = array (10=> array ( 'perm'=> 0, 'name'=> "Sites", 'url'=>"browse_sites.php?search_string=A", 'submenu'=>"2010"),
-                    20=> array ( 'perm'=> 0, 'name'=> "Contacts", 'url'=>"browse_contacts.php?search_string=A", 'submenu'=>"2020"),
-                    30=> array ( 'perm'=> 0, 'name'=> "Maintainance", 'url'=>"browse_maintenance.php?search_string=A", 'submenu'=>"2030"),
-                    40=> array ( 'perm'=> 0, 'name'=> "Browse Feedback", 'url'=>"browse_feedback.php")
+$hmenu[20] = array (05=> array ( 'perm'=> 0, 'name'=> "Customers", 'url'=>"{$CONFIG['application_webpath']}customers.php"),
+                    10=> array ( 'perm'=> 0, 'name'=> "Sites", 'url'=>"{$CONFIG['application_webpath']}browse_sites.php", 'submenu'=>"2010"),
+                    20=> array ( 'perm'=> 0, 'name'=> "Contacts", 'url'=>"{$CONFIG['application_webpath']}browse_contacts.php?search_string=A", 'submenu'=>"2020"),
+                    30=> array ( 'perm'=> 0, 'name'=> "Maintainance", 'url'=>"{$CONFIG['application_webpath']}browse_maintenance.php?search_string=A", 'submenu'=>"2030"),
+                    40=> array ( 'perm'=> 0, 'name'=> "Browse Feedback", 'url'=>"{$CONFIG['application_webpath']}browse_feedback.php")
 );
 
-$hmenu[2010] = array (10=> array ( 'perm'=> 11, 'name'=> "Browse", 'url'=>"browse_sites.php?search_string=A"),
-                      20=> array ( 'perm'=> 2, 'name'=> "New Site", 'url'=>"add_site.php?action=showform")
+$hmenu[2010] = array (10=> array ( 'perm'=> 11, 'name'=> "Browse", 'url'=>"{$CONFIG['application_webpath']}browse_sites.php"),
+                      20=> array ( 'perm'=> 2, 'name'=> "New Site", 'url'=>"{$CONFIG['application_webpath']}add_site.php?action=showform")
 );
-$hmenu[2020] = array (10=> array ( 'perm'=> 11, 'name'=> "Browse", 'url'=>"browse_contacts.php?search_string=A"),
-                      20=> array ( 'perm'=> 1, 'name'=> "New Contact", 'url'=>"add_contact.php?action=showform")
-);
-
-$hmenu[2030] = array (10=> array ( 'perm'=> 19, 'name'=> "Browse", 'url'=>"browse_maintenance.php?search_string=A"),
-                      20=> array ( 'perm'=> 39, 'name'=> "New Contract", 'url'=>"add_maintenance.php?action=showform"),
-                      30=> array ( 'perm'=> 21, 'name'=> "Edit Contract", 'url'=>"edit_maintenance.php?action=showform"),
-                      40=> array ( 'perm'=> 2, 'name'=> "New Reseller", 'url'=>"add_reseller.php"),
-                      50=> array ( 'perm'=> 19, 'name'=> "Show Renewals", 'url'=>"search_renewals.php?action=showform"),
-                      60=> array ( 'perm'=> 19, 'name'=> "Show Expired", 'url'=>"search_expired.php?action=showform"),
-                      70=> array ( 'perm'=> 0, 'name'=> "Products &amp; Software", 'url'=>"products.php", 'submenu'=>"203010"),
+$hmenu[2020] = array (10=> array ( 'perm'=> 11, 'name'=> "Browse", 'url'=>"{$CONFIG['application_webpath']}browse_contacts.php?search_string=A"),
+                      20=> array ( 'perm'=> 1, 'name'=> "New Contact", 'url'=>"{$CONFIG['application_webpath']}add_contact.php?action=showform")
 );
 
-$hmenu[203010] = array (10=> array ( 'perm'=> 56, 'name'=> "Add Vendor", 'url'=>"add_vendor.php"),
-                        20=> array ( 'perm'=> 24, 'name'=> "Add Product", 'url'=>"add_product.php"),
-                        30=> array ( 'perm'=> 28, 'name'=> "List Products", 'url'=>"products.php"),
-                        40=> array ( 'perm'=> 56, 'name'=> "Add Software", 'url'=>"add_software.php"),
-                        50=> array ( 'perm'=> 24, 'name'=> "Link Products", 'url'=>"add_product_software.php"),
-                        60=> array ( 'perm'=> 25, 'name'=> "Add Product Question", 'url'=>"add_productinfo.php")
+$hmenu[2030] = array (10=> array ( 'perm'=> 19, 'name'=> "Browse", 'url'=>"{$CONFIG['application_webpath']}browse_maintenance.php?search_string=A"),
+                      20=> array ( 'perm'=> 39, 'name'=> "New Contract", 'url'=>"{$CONFIG['application_webpath']}add_maintenance.php?action=showform"),
+                      30=> array ( 'perm'=> 21, 'name'=> "Edit Contract", 'url'=>"{$CONFIG['application_webpath']}edit_maintenance.php?action=showform"),
+                      40=> array ( 'perm'=> 2, 'name'=> "New Reseller", 'url'=>"{$CONFIG['application_webpath']}add_reseller.php"),
+                      50=> array ( 'perm'=> 19, 'name'=> "Show Renewals", 'url'=>"{$CONFIG['application_webpath']}search_renewals.php?action=showform"),
+                      60=> array ( 'perm'=> 19, 'name'=> "Show Expired", 'url'=>"{$CONFIG['application_webpath']}search_expired.php?action=showform"),
+                      70=> array ( 'perm'=> 0, 'name'=> "Products &amp; Software", 'url'=>"{$CONFIG['application_webpath']}products.php", 'submenu'=>"203010"),
+);
+
+$hmenu[203010] = array (10=> array ( 'perm'=> 56, 'name'=> "Add Vendor", 'url'=>"{$CONFIG['application_webpath']}add_vendor.php"),
+                        20=> array ( 'perm'=> 24, 'name'=> "Add Product", 'url'=>"{$CONFIG['application_webpath']}add_product.php"),
+                        30=> array ( 'perm'=> 28, 'name'=> "List Products", 'url'=>"{$CONFIG['application_webpath']}products.php"),
+                        40=> array ( 'perm'=> 56, 'name'=> "Add Software", 'url'=>"{$CONFIG['application_webpath']}add_software.php"),
+                        50=> array ( 'perm'=> 24, 'name'=> "Link Products", 'url'=>"{$CONFIG['application_webpath']}add_product_software.php"),
+                        60=> array ( 'perm'=> 25, 'name'=> "Add Product Question", 'url'=>"{$CONFIG['application_webpath']}add_productinfo.php"),
+                        70=> array ('perm'=> 56, 'name'=> "Edit Vendor", 'url'=>"{$CONFIG['application_webpath']}edit_vendor.php")
 );
 
 
 // Support
-$hmenu[30] = array (10=> array ( 'perm'=> 5, 'name'=> "Add Incident", 'url'=>"add_incident.php"),
-                    20=> array ( 'perm'=> 0, 'name'=> "View Incidents", 'url'=>"incidents.php?user=current&amp;queue=1&amp;type=support"),
-                    30=> array ( 'perm'=> 0, 'name'=> "Watch Incidents", 'url'=>"incidents.php?user=all&amp;queue=1&amp;type=support"),
-                    40=> array ( 'perm'=> 42, 'name'=> "Holding Queue", 'url'=>"review_incoming_updates.php")
+$hmenu[30] = array (10=> array ( 'perm'=> 5, 'name'=> "Add Incident", 'url'=>"{$CONFIG['application_webpath']}add_incident.php"),
+                    20=> array ( 'perm'=> 0, 'name'=> "View Incidents", 'url'=>"{$CONFIG['application_webpath']}incidents.php?user=current&amp;queue=1&amp;type=support"),
+                    30=> array ( 'perm'=> 0, 'name'=> "Watch Incidents", 'url'=>"{$CONFIG['application_webpath']}incidents.php?user=all&amp;queue=1&amp;type=support"),
+                    40=> array ( 'perm'=> 42, 'name'=> "Holding Queue", 'url'=>"{$CONFIG['application_webpath']}review_incoming_updates.php")
 );
 
 
 // Tasks
-$hmenu[40] = array (10=> array ( 'perm'=> 0, 'name'=> "Add Task", 'url'=>"add_task.php"),
-                    20=> array ( 'perm'=> 0, 'name'=> "View Tasks", 'url'=>"tasks.php")
+$hmenu[40] = array (10=> array ( 'perm'=> 0, 'name'=> "Add Task", 'url'=>"{$CONFIG['application_webpath']}add_task.php"),
+                    20=> array ( 'perm'=> 0, 'name'=> "View Tasks", 'url'=>"{$CONFIG['application_webpath']}tasks.php")
 );
 
 // KB
-$hmenu[50] = array (10=> array ( 'perm'=> 54, 'name'=> "New Article", 'url'=>"kb_add_article.php"),
-                    20=> array ( 'perm'=> 54, 'name'=> "Browse", 'url'=>"browse_kb.php")
+$hmenu[50] = array (10=> array ( 'perm'=> 54, 'name'=> "New Article", 'url'=>"{$CONFIG['application_webpath']}kb_add_article.php"),
+                    20=> array ( 'perm'=> 54, 'name'=> "Browse", 'url'=>"{$CONFIG['application_webpath']}browse_kb.php")
 );
 
 
 
 // Reports
-$hmenu[60] = array (10=> array ( 'perm'=> 37, 'name'=> "Marketing Mailshot", 'url'=>"reports/marketing.php"),
-                    20=> array ( 'perm'=> 37, 'name'=> "Customer Export", 'url'=>"reports/cust_export.php"),
-                    30=> array ( 'perm'=> 37, 'name'=> "Query by Example", 'url'=>"reports/qbe.php"),
-                    50=> array ( 'perm'=> 37, 'name'=> "Incidents by Site", 'url'=>"reports/yearly_customer_export.php"),
-                    55=> array ( 'perm'=> 37, 'name'=> "Incidents by Engineer", 'url'=>"reports/yearly_engineer_export.php"),
-                    60=> array ( 'perm'=> 37, 'name'=> "Site Products", 'url'=>"reports/site_products.php"),
-                    70=> array ( 'perm'=> 37, 'name'=> "Site Contracts", 'url'=>"reports/supportbycontract.php"),
-                    80=> array ( 'perm'=> 37, 'name'=> "Customer Feedback", 'url'=>"reports/feedback.php"),
-                    90=> array ( 'perm'=> 37, 'name'=> "Site Incidents", 'url'=>"reports/site_incidents.php"),
-                    100=> array ( 'perm'=> 37, 'name'=> "Recent Incidents", 'url'=>"reports/recent_incidents_table.php"),
-                    110=> array ( 'perm'=> 37, 'name'=> "Incidents Logged (Open/Closed)", 'url'=>"reports/incident_graph.php"),
-                    120=> array ( 'perm'=> 37, 'name'=> "Average Incident Duration", 'url'=>"reports/average_incident_duration.php"),
-                    130=> array ( 'perm'=> 37, 'name'=> "Incidents by Software", 'url'=>"reports/incidents_by_software.php")
+$hmenu[60] = array (10=> array ( 'perm'=> 37, 'name'=> "Marketing Mailshot", 'url'=>"{$CONFIG['application_webpath']}reports/marketing.php"),
+                    20=> array ( 'perm'=> 37, 'name'=> "Customer Export", 'url'=>"{$CONFIG['application_webpath']}reports/cust_export.php"),
+                    30=> array ( 'perm'=> 37, 'name'=> "Query by Example", 'url'=>"{$CONFIG['application_webpath']}reports/qbe.php"),
+                    50=> array ( 'perm'=> 37, 'name'=> "Incidents by Site", 'url'=>"{$CONFIG['application_webpath']}reports/yearly_customer_export.php"),
+                    55=> array ( 'perm'=> 37, 'name'=> "Incidents by Engineer", 'url'=>"{$CONFIG['application_webpath']}reports/yearly_engineer_export.php"),
+                    60=> array ( 'perm'=> 37, 'name'=> "Site Products", 'url'=>"{$CONFIG['application_webpath']}reports/site_products.php"),
+                    70=> array ( 'perm'=> 37, 'name'=> "Site Contracts", 'url'=>"{$CONFIG['application_webpath']}reports/supportbycontract.php"),
+                    80=> array ( 'perm'=> 37, 'name'=> "Customer Feedback", 'url'=>"{$CONFIG['application_webpath']}reports/feedback.php"),
+                    90=> array ( 'perm'=> 37, 'name'=> "Site Incidents", 'url'=>"{$CONFIG['application_webpath']}reports/site_incidents.php"),
+                    100=> array ( 'perm'=> 37, 'name'=> "Recent Incidents", 'url'=>"{$CONFIG['application_webpath']}reports/recent_incidents_table.php"),
+                    110=> array ( 'perm'=> 37, 'name'=> "Incidents Logged (Open/Closed)", 'url'=>"{$CONFIG['application_webpath']}reports/incident_graph.php"),
+                    120=> array ( 'perm'=> 37, 'name'=> "Average Incident Duration", 'url'=>"{$CONFIG['application_webpath']}reports/average_incident_duration.php"),
+                    130=> array ( 'perm'=> 37, 'name'=> "Incidents by Software", 'url'=>"{$CONFIG['application_webpath']}reports/incidents_by_software.php")
 );
 
 
-$hmenu[70] = array (10=> array ( 'perm'=> 0, 'name'=> "Help Contents...", 'url'=>"help.php"),
-                    20=> array ( 'perm'=> 41, 'name'=> "About", 'url'=>"about.php")
+$hmenu[70] = array (10=> array ( 'perm'=> 0, 'name'=> "Help Contents...", 'url'=>"{$CONFIG['application_webpath']}help.php"),
+                    20=> array ( 'perm'=> 41, 'name'=> "About", 'url'=>"{$CONFIG['application_webpath']}about.php")
 );
 
 if (!function_exists('authenticate'))
@@ -368,12 +373,6 @@ function user_realname($id,$allowhtml=FALSE)
 }
 
 
-function user_jobtitle($id)
-{
-    return db_read_column('title', 'users', $id);
-}
-
-
 function user_email($id)
 {
     if ($id == $_SESSION['userid']) return $_SESSION['email'];
@@ -384,29 +383,6 @@ function user_email($id)
 function user_phone($id)
 {
     return db_read_column('phone', 'users', $id);
-}
-
-
-function user_fax($id)
-{
-    return db_read_column('fax', 'users', $id);
-}
-
-
-function user_aim($id)
-{
-    return db_read_column('aim', 'users', $id);
-}
-
-function user_icq($id)
-{
-    return db_read_column('icq', 'users', $id);
-}
-
-
-function user_msn($id)
-{
-    return db_read_column('msn', 'users', $id);
 }
 
 
@@ -427,13 +403,6 @@ function user_message($id)
     return db_read_column('message', 'users', $id);
 }
 
-
-function user_qualifications($id)
-{
-    return db_read_column('qualifications', 'users', $id);
-}
-
-
 function user_status($id)
 {
     return db_read_column('status', 'users', $id);
@@ -448,16 +417,6 @@ function user_accepting($id)
     if ($accepting == '')  $accepting = "NoSuchUser";
 
     return($accepting);
-}
-
-
-function user_collapse($id)
-{
-    $var_collapse = db_read_column('var_collapse', 'users', $id);
-    if ($var_collapse == 'true') $var_collapse = TRUE;
-    else $var_collapse = FALSE;
-
-    return($var_collapse);
 }
 
 
@@ -511,52 +470,6 @@ function user_incidents($id){
     return $arr;
 }
 
-/* Returns an integer representing the number  */
-/* of incidents the given user has that are awaiting action   */
-/* Based upon the timetonextaction field                      */
-/* Returns 0 if  the user does not exist.                     */
-/* INL                                                        */
-function user_awaitingactionincidents($id)
-{
-    $now=time();
-    if ($id=='') throw_error('Incident ID not set:','user_awaitingactionincidents()');
-
-
-    $sql = "SELECT id FROM incidents WHERE owner='$id' AND timeofnextaction<$now AND timeofnextaction!=0 ";
-    $sql .="AND (status!=2)";
-    $result = mysql_query($sql);
-    if (mysql_error()) trigger_error(mysql_error(),E_USER_WARNING);
-    $returnvalue=mysql_num_rows($result);
-
-    mysql_free_result($result);
-
-    return($returnvalue);
-}
-
-
-
-/* Returns an integer representing the number  */
-/* of incidents the given user has that are awaiting action   */
-/* TODAY (i.e. in the next eight hjouts                       */
-/* Based upon the timetonextaction field                      */
-/* Returns 0 if  the user does not exist.                     */
-/* INL                                                        */
-function user_awaitingactionincidentstoday($id)
-{
-    $now=time()+(8*3600);  // next 8 hours
-
-    $sql = "SELECT id FROM incidents WHERE owner='$id' AND timeofnextaction<$now AND timeofnextaction!=0 ";
-    $sql .="AND (status!=2)";
-    $result = mysql_query($sql);
-    if (mysql_error()) trigger_error(mysql_error(),E_USER_WARNING);
-    $returnvalue=mysql_num_rows($result);
-
-    mysql_free_result($result);
-
-    return($returnvalue);
-}
-
-
 
 // gets users holiday information for a certain day given an optional type
 // and optional length returns both type and length and approved as an array
@@ -606,12 +519,12 @@ function user_holiday($userid, $type=0, $year, $month, $day, $length=FALSE)
 
 function user_count_holidays($userid, $type)
 {
-    $sql = "SELECT id FROM holidays WHERE userid='$userid' AND type='$type' AND length='day' AND approved<2 ";
+    $sql = "SELECT id FROM holidays WHERE userid='$userid' AND type='$type' AND length='day' AND approved >= 0 AND approved < 2 ";
     $result = mysql_query($sql);
     if (mysql_error()) trigger_error(mysql_error(),E_USER_WARNING);
     $full_days=mysql_num_rows($result);
 
-    $sql = "SELECT id FROM holidays WHERE userid='$userid' AND type='$type' AND (length='pm' OR length='am') AND approved<2 ";
+    $sql = "SELECT id FROM holidays WHERE userid='$userid' AND type='$type' AND (length='pm' OR length='am') AND approved >= 0 AND approved < 2 ";
     $result = mysql_query($sql);
     if (mysql_error()) trigger_error(mysql_error(),E_USER_WARNING);
     $half_days=mysql_num_rows($result);
@@ -1101,7 +1014,7 @@ function contact_drop_down($name, $id, $showsite=FALSE)
     $result = mysql_query($sql);
     if (mysql_error()) trigger_error(mysql_error(),E_USER_WARNING);
 
-    $html = "<select name='$name'>\n";
+    $html = "<select name='$name' id='$name' >\n";
     if ($id == 0)
         $html .= "<option selected='selected' value='0'></option>\n";
     $prevsite=0;
@@ -1163,7 +1076,7 @@ function product_drop_down($name, $id)
    $result = mysql_query($sql);
    if (mysql_error()) trigger_error(mysql_error(),E_USER_WARNING);
 
-   $html = "<select name='{$name}'>";
+   $html = "<select name='{$name}' id='{$name}'>";
 
    if ($id == 0)
       $html .= "<option selected='selected' value='0'></option>\n";
@@ -1177,7 +1090,6 @@ function product_drop_down($name, $id)
    return $html;
 }
 
-
 function software_drop_down($name, $id)
 {
    // extract software
@@ -1186,7 +1098,7 @@ function software_drop_down($name, $id)
    $result = mysql_query($sql);
    if (mysql_error()) trigger_error(mysql_error(),E_USER_WARNING);
 
-   $html = "<select name='{$name}'>";
+   $html = "<select name='{$name}' id='{$name}' >";
 
    if ($id == 0)
       $html .= "<option selected='selected' value='0'></option>\n";
@@ -1315,7 +1227,7 @@ function user_drop_down($name, $id, $accepting=TRUE, $exclude=FALSE, $attribs=""
     $result = mysql_query($sql);
     if (mysql_error()) trigger_error(mysql_error(),E_USER_WARNING);
 
-    echo "<select name='{$name}'";
+    echo "<select name='{$name}' id='{$name}' ";
     if (!empty($attribs)) echo " $attribs";
     echo ">\n";
     if ($id == 0)
@@ -1538,9 +1450,7 @@ function userstatus_bardrop_down($name, $id)
    $result = mysql_query($sql);
 
    // print HTML
-   //
-   // class='navbarmenu'  title='Set your status' ONCHANGE=\"if (this.options[this.selectedIndex].value != 'null') { window.open(this.options[this.selectedIndex].value,'_top') }\">\n";
-   // style='background-color: #000000; color: #FFFFFF; font-family: Tahoma, Helvetica, sans serif; font-size: 8pt; font-weight: bold;'
+
     echo "<select name='$name' title='Set your status' onchange=\"if (this.options[this.selectedIndex].value != 'null') { window.open(this.options[this.selectedIndex].value,'_top') }\">\n";
     while ($statuses = mysql_fetch_array($result))
     {
@@ -1665,47 +1575,23 @@ function accepting_drop_down($name, $userid)
 }
 
 
-
-/*  prints the HTML for a drop down list of     */
-/* days of the month with the gven name and with the option   */
-/* selected depending on the supplied argument                */
-function day_drop_down($name, $day)
-{
-   echo "<select name=\"$name\">\n";
-   if ($day == 0) echo "<option value='0'>Select A Day</option>\n";
-
-   for ($counter = 1; $counter <= 31; $counter++)
-      {
-      echo "<option ";
-      if ($counter == $day) echo "selected='selected' ";
-      echo "value='$counter'>$counter</option>\n";
-      }
-
-   echo "</select>\n";
-}
-
-
-
 /*  prints the HTML for a drop down list of     */
 /* months of the year with the gven name and with the option  */
 /* selected depending on the supplied argument                */
 function month_drop_down($name, $month)
 {
-   $months = array ('Dummy', 'January', 'February', 'March', 'April', 'May', 'June', 'July', 'August', 'September', 'October', 'November', 'December');
-   echo "<select name=\"$name\">\n";
-   if ($month == 0) echo "<option value='0'>Select A Month</option>\n";
+    $months = array ('Dummy', 'January', 'February', 'March', 'April', 'May', 'June', 'July', 'August', 'September', 'October', 'November', 'December');
+    echo "<select name=\"$name\">\n";
+    if ($month == 0) echo "<option value='0'>Select A Month</option>\n";
 
-   for ($counter = 1; $counter <= 12; $counter++)
-      {
-      echo "<option ";
-      if ($counter == $month) echo "selected='selected' ";
-      // echo "value=\"$months[$counter]\">$months[$counter]\n";
-      // changed by INL on 14Jan02, makes sense to have a number returned for month
-      // but not sure how this might have affected existing code that uses this func
-      echo "value=\"$counter\">$months[$counter]</option>\n";
-      }
+    for ($counter = 1; $counter <= 12; $counter++)
+    {
+        echo "<option ";
+        if ($counter == $month) echo "selected='selected' ";
+        echo "value=\"$counter\">$months[$counter]</option>\n";
+    }
 
-   echo "</select>\n";
+    echo "</select>\n";
 }
 
 
@@ -1736,7 +1622,7 @@ function escalation_path_drop_down($name, $id)
    $sql .= "ORDER BY name ASC";
    $result = mysql_query($sql);
    if (mysql_error()) trigger_error(mysql_error(),E_USER_WARNING);
-   $html = "<select name='{$name}'>";
+   $html = "<select name='{$name}' id='{$name}' >";
    $html .= "<option selected='selected' value='0'>None</option>\n";
    while ($path = mysql_fetch_array($result))
    {
@@ -1763,9 +1649,7 @@ function escalation_path_drop_down($name, $id)
 /* priority does not exist.                                   */
 function priority_name($id)
 {
-    // INL 10Oct02 Replaced database query with a simple
-    // switch statement to speed this function up.
-    // Priorities are not likely to change anyway
+    //db_read_column('name','priority',)
     switch ($id)
     {
         case 1: $value = 'Low'; break;
@@ -1929,98 +1813,7 @@ function emailtype_replace_specials($string, $incidentid, $userid=0)
     $result = mysql_query($sql);
     if (mysql_error()) trigger_error(mysql_error(),E_USER_WARNING);
     $incident=mysql_fetch_object($result);
-/*
-     // contact email
-    $return_string = str_replace("<contactemail>", contact_email($contactid), $string);
 
-    // contact name
-    $return_string = str_replace("<contactname>", contact_realname($contactid), $return_string);
-
-    // contact firstname
-    $return_string = str_replace("<contactfirstname>", strtok(contact_realname($contactid),' '), $return_string);
-
-
-    // contact site
-    $return_string = str_replace("<contactsite>", contact_site($contactid), $return_string);
-
-    // contact phone number
-    $return_string = str_replace("<contactphone>", contact_phone($contactid), $return_string);
-
-// contact line manager
-    $return_string = str_replace("<contactmanager>", contact_manager_email($contactid), $return_string);
-
-
-    // contact notify
-    $return_string = str_replace("<contactnotify>", contact_notify_email($contactid), $return_string);
-
-    // incident id
-    $return_string = str_replace("<incidentid>", $incidentid, $return_string);
-
-    // incident external id
-    $return_string = str_replace("<incidentexternalid>", $incident->externalid, $return_string);
-
-
-    // incident cc email
-    $return_string = str_replace("<incidentccemail>", incident_ccemail($incidentid), $return_string);
-
-    // incident external engineers name
-    $return_string = str_replace("<incidentexternalengineer>", incident_externalengineer($incidentid), $return_string);
-
-    // incident external engineers first name
-    $return_string = str_replace("<incidentexternalengineerfirstname>", strtok(incident_externalengineer($incidentid),' '), $return_string);
-
-// incident external engineers email
-    $return_string = str_replace("<incidentexternalemail>", incident_externalemail($incidentid), $return_string);
-
-    // incident title
-    $return_string = str_replace("<incidenttitle>", incident_title($incidentid), $return_string);
-
-    // incident priortiy
-    $return_string = str_replace("<incidentpriority>", priority_name(incident_priority($incidentid)), $return_string);
-
-    // Incident software
-    $return_string = str_replace("<incidentsoftware>", software_name($incident->softwareid), $return_string);
-
-    // Incident owner
-    $return_string = str_replace("<incidentowner>", user_realname($incident->owner), $return_string);
-
-
-    // user email
-    $return_string = str_replace("<useremail>", user_email($userid), $return_string);
-
-    // user real name
-    $return_string = str_replace("<userrealname>", user_realname($userid), $return_string);
-
-    // application name
-    $return_string = str_replace("<applicationname>", $CONFIG['application_name'], $return_string);
-
-
-
-
-    // application short name
-    $return_string = str_replace("<applicationshortname>", $CONFIG['application_shortname'], $return_string);
-
-    // application version
-    $return_string = str_replace("<applicationversion>", $application_version_string, $return_string);
-
-    // support email
-    $return_string = str_replace("<supportemail>", $CONFIG['support_email'], $return_string);
-
-    // sales email
-    $return_string = str_replace("<salesemail>", $CONFIG['sales_email'], $return_string);
-
-    $return_string = str_replace("<supportmanageremail>", $CONFIG['support_manager_email'], $return_string);
-
-    // user signature
-    $return_string = str_replace("<signature>", user_signature($userid), $return_string);
-
-    // global email signature
-    $return_string = str_replace("<globalsignature>", global_signature(), $return_string);
-
-    // todays date
-    $return_string = str_replace("<todaysdate>", date("jS F Y"), $return_string);
-
-*/
     $email_regex = array(0 => '/<contactemail>/s',
                     1 => '/<contactname>/s',
                     2 => '/<contactfirstname>/s',
@@ -2048,7 +1841,8 @@ function emailtype_replace_specials($string, $incidentid, $userid=0)
                     24 => '/<supportmanageremail>/s',
                     25 => '/<signature>/s',
                     26 => '/<globalsignature>/s',
-                    27 => '/<todaysdate>/s'
+                    27 => '/<todaysdate>/s',
+                    28 => '/<salespersonemail>/s'
                 );
 
     $email_replace = array(0 => contact_email($contactid),
@@ -2078,7 +1872,8 @@ function emailtype_replace_specials($string, $incidentid, $userid=0)
                     24 => $CONFIG['support_manager_email'],
                     25 => user_signature($userid),
                     26 => global_signature(),
-                    27 => date("jS F Y")
+                    27 => date("jS F Y"),
+                    28 => user_email(db_read_column('owner', 'sites', db_read_column('siteid','contacts',$contactid)))
                 );
 
     if($incident->towner != 0)
@@ -2094,11 +1889,7 @@ function emailtype_replace_specials($string, $incidentid, $userid=0)
         $email_replace[] = user_email($incident->owner);
     }
 
-    /*if (function_exists('escid_novellid')) $return_string = str_replace("<novellid>", escid_novellid($userid), $return_string);
-    if (function_exists('escid_microsoftid')) $return_string = str_replace("<microsoftid>", escid_microsoftid($userid), $return_string);
-    if (function_exists('escid_dseid')) $return_string = str_replace("<dseid>", escid_dseid($userid), $return_string);
-    if (function_exists('escid_cheyenneid')) $return_string = str_replace("<cheyenneid>", escid_cheyenneid($userid), $return_string);*/
-
+    //TODO move to seperate plugin
     if (function_exists('escid_novellid'))
     {
         $email_regex[] = '/<novellid>/s';
@@ -2113,7 +1904,7 @@ function emailtype_replace_specials($string, $incidentid, $userid=0)
 
     if (function_exists('escid_dseid'))
     {
-        $email_regex[] = '/<desid>/s';
+        $email_regex[] = '/<dseid>/s';
         $email_replace[] = escid_dseid($userid);
     }
 
@@ -2185,35 +1976,6 @@ function format_seconds($seconds)
       */
       $return_string=trim($return_string);
       return($return_string);
-      /*
-                        $months = (float)($seconds / 2629800);
-
-      $whole_months = floor($months);
-      $days = (float)($seconds / 86400);
-      $whole_days = floor($days);
-      $hours = (float)($seconds / 3600);
-      $whole_hours = floor($hours) - ($whole_days * 24);
-      $minutes = (float)($seconds / 60);
-      $whole_minutes = floor($minutes) - (floor($hours) * 60);
-
-      if ($whole_days == 1)
-         $return_string .= $whole_days . " day ";
-      else if ($whole_days > 1)
-         $return_string .= $whole_days . " days ";
-
-      if ($whole_hours == 1 && $whole_days < 14)
-         $return_string .= $whole_hours . " hr ";
-      else if ($whole_hours > 1 && $whole_days < 14)
-         $return_string .= $whole_hours . " hrs ";
-
-      if ($whole_minutes == 1 && $whole_days < 2)
-         $return_string .= $whole_minutes . " min ";
-      else if ($whole_minutes > 1 && $whole_days < 2)
-         $return_string .= $whole_minutes . " mins ";
-
-      return($return_string);
-                        */
-
    }
 }
 
@@ -2280,7 +2042,6 @@ function confirmation_page($refreshtime, $location, $message)
    echo "<meta http-equiv=\"refresh\" content=\"$refreshtime; url=$location\" />\n";
    $style = interface_style($_SESSION['style']);
    echo "<link rel='stylesheet' href='{$CONFIG['application_webpath']}styles/webtrack.css' />\n";
-   // <link rel="stylesheet" href="webtrack.css">
    ?>
    </head>
    <body>
@@ -2631,18 +2392,6 @@ function site_name($id)
 }
 
 
-// Returns the number of maintenance contracts a site has.
-function site_count_maintenance($id)
-{
-    $sql  = "SELECT id FROM maintenance WHERE site='$id'";
-    $result = mysql_query($sql);
-
-    $count=mysql_num_rows($result);
-    mysql_free_result($result);
-    return $count;
-}
-
-
 //  prints the HTML for a drop down list of
 // maintenance contracts, with the given name and with the
 // given id selected.
@@ -2668,60 +2417,6 @@ function maintenance_drop_down($name, $id)
     ?>
     </select>
     <?php
-}
-
-
-// Returns an integer representing the expiry day of the month for the given maintenance contract.
-// Returns 0 if the maintenance contract does not exist.
-function maintenance_expiry_day($id)
-{
-    $sql = "SELECT id, expirydate FROM maintenance WHERE id=$id";
-    $result = mysql_query($sql);
-
-    if (mysql_num_rows($result) == 0)
-        return(0);
-    else
-    {
-        $maintenance = mysql_fetch_array($result);
-        $date_array = getdate($maintenance["expirydate"]);
-        return($date_array["mday"]);
-    }
-}
-
-
-// Returns an integer representing the expiry month of the year for the given maintenance contract.
-// Returns 0 if the maintenance contract does not exist.
-function maintenance_expiry_month($id)
-{
-    $sql = "SELECT id, expirydate FROM maintenance WHERE id=$id";
-    $result = mysql_query($sql);
-
-    if (mysql_num_rows($result) == 0)
-        return(0);
-    else
-    {
-        $maintenance = mysql_fetch_array($result);
-        $date_array = getdate($maintenance["expirydate"]);
-        return($date_array["mon"]);
-    }
-}
-
-
-// Returns an integer representing the expiry year for the given maintenance contract. Returns 0 if the
-// maintenance contract does not exist.
-function maintenance_expiry_year($id)
-{
-    $sql = "SELECT id, expirydate FROM maintenance WHERE id=$id";
-    $result = mysql_query($sql);
-
-    if (mysql_num_rows($result) == 0)
-        return(0);
-    else
-    {
-        $maintenance = mysql_fetch_array($result);
-        $date_array = getdate($maintenance["expirydate"]);
-        return($date_array["year"]);
-    }
 }
 
 
@@ -2787,68 +2482,6 @@ function licence_type($id)
 }
 
 
-
-//  prints the HTML for a drop down list of
-// incidentpools, with the given name and with the given id
-// selected.
-// OBSOLETE Incident Pools
-function incidentpool_drop_down($name, $maintenanceid)
-{
-    // extract statuses
-    $sql  = "SELECT id, name, incidentsremaining FROM incidentpools";
-    $result = mysql_query($sql);
-
-    // echo "<select
-    // print HTML
-    ?>
-    <select name="<?php echo $name ?>">
-    <?php
-
-    echo "<option value='0'>Unlimited</option>\n";
-    while ($incidentpools = mysql_fetch_array($result))
-    {
-        ?><option <?php if ($incidentpools["id"] == $id) { ?>selected='selected' <?php } ?>value='<?php echo $incidentpools["id"] ?>'>
-        <?php echo "{$incidentpools["name"]}, {$incidentpools["incidentsremaining"]} remaining";
-        echo "\n";
-    }
-    ?>
-    </select>
-    <?php
-}
-
-
-/*  prints the HTML for the top menu bar        */
-/* given a permission ID                                      */
-/* Uses the topmenu array from config.inc.php                 */
-function build_topmenu($id)
-{
-    global $topmenu, $CONFIG;
-    if (!isset($id)) $id=0;
-
-    if (!is_array($topmenu)) throw_error('Error: Menu not defined', '');
-
-    // back button
-    // echo "<a class=barlink href=\"javascript:history.back();\" onMouseOver=\"window.status='Home'; return true;\" onMouseOut=\"window.status=''; return true;\">Back</a> | ";
-    if ($id==26) // help
-    {
-        echo "<a href=\"{CONFIG['application_webpath']}help.php?id=0\">Help Index</a> | <a href=\"javascript:window.close();\">Close</a>\n";
-    }
-    else
-    {
-        echo "<a href=\"/main.php\">Main</a> | \n";
-        foreach ($topmenu[$id] as $key => $value)
-        {
-            echo "<a href=\"".$value['url']."\"";
-            echo "title=\"Permission Required: ".permission_name($value['perm'])."\">";
-            echo $value['name'];
-            echo "</a> | \n";
-        }
-        echo "<a href=\"javascript:help_window($id);\">?</a>";
-        echo " | ";
-        echo "<a href=\"/logout.php\">Logout</a>";
-    }
-}
-
 function countdayincidents($day, $month, $year)
 {
     // Counts the number of incidents opened on a specified day
@@ -2892,6 +2525,7 @@ function countdaycurrentincidents($day, $month, $year)
 
 
 // Takes a contact ID and prints HTML listing all the flags
+// LEGACY / DEPRECATED
 function print_contact_flags($id, $editlink=FALSE)
 {
     $sql = "SELECT contactflags.flag, flags.name FROM contactflags, flags ";
@@ -2912,7 +2546,7 @@ function print_contact_flags($id, $editlink=FALSE)
     return TRUE;
 }
 
-
+// LEGACY / DEPRECATED
 function check_contact_flag($id, $flag)
 {
     $sql = "SELECT flag FROM contactflags WHERE contactid='$id' AND flag='$flag'";
@@ -2920,7 +2554,7 @@ function check_contact_flag($id, $flag)
     if (mysql_error()) trigger_error(mysql_error(),E_USER_WARNING);
 }
 
-
+// LEGACY / DEPRECATED
 function add_contact_flag($id, $flag)
 {
     // first check that contact does not already have this flag
@@ -3012,18 +2646,18 @@ function send_template_email($template, $incidentid, $info1='', $info2='')
         $email_subject = str_replace("<info2>", "$info2", $email_subject);
     }
 
-    ## echo "Sending email to $email_to with subject '".stripslashes($email_subject)."'";
+    ##echo "Sending email to $email_to with subject '".stripslashes($email_subject)."'";
 
     // build the extra headers string for email
     $extra_headers  = "From: $email_from\r\nReply-To: $email_replyto\r\nErrors-To: {$CONFIG['support_email']}\r\n";
     $extra_headers .= "X-Mailer: {$CONFIG['application_shortname']} {$application_version_string}/PHP " . phpversion()."\r\n";
+    $extra_headers .= "X-Originating-IP: {$_SERVER['REMOTE_ADDR']}\r\n";
     if ($email_cc != '')
         $extra_headers .= "CC: $email_cc\r\n";
     if ($email_bcc != "")
         $extra_headers .= "BCC: $email_bcc\r\n";
 
     $extra_headers .= "\r\n";
-    ## bugbug: tidy up these stripslashes.  INL 5Sep01
 
     if($email_storeinlog == 'Yes')
     {
@@ -3091,6 +2725,11 @@ if (!function_exists('list_dir'))
         if (sizeof($result_array))
         {
             natsort($result_array);
+
+            if($_SESSION['update_order'] == "desc")
+            {
+                $result_array = array_reverse($result_array);
+            }
         }
         return $result_array;
     }
@@ -3153,96 +2792,96 @@ function rec_copy ($from_path, $to_path)
 
 function getattachmenticon($filename)
 {
-    global $CONFIG;
+    global $CONFIG, $iconset;
     // Maybe sometime make this use mime typesad of file extensions
     $ext=strtolower(substr($filename, (strlen($filename)-3) , 3));
-    $imageurl="{$CONFIG['application_webpath']}images/icons/kdeclassic/32x32/mimetypes/mime_empty.gif";
+    $imageurl="{$CONFIG['application_webpath']}images/icons/{$iconset}/32x32/mimetypes/mime_empty.gif";
 
-    $filetype[]="gif";    $imgurl[]="{$CONFIG['application_webpath']}images/icons/kdeclassic/32x32/mimetypes/image.gif";
-    $filetype[]="jpg";    $imgurl[]="{$CONFIG['application_webpath']}images/icons/kdeclassic/32x32/mimetypes/image.gif";
-    $filetype[]="bmp";    $imgurl[]="{$CONFIG['application_webpath']}images/icons/kdeclassic/32x32/mimetypes/image.gif";
-    $filetype[]="png";    $imgurl[]="{$CONFIG['application_webpath']}images/icons/kdeclassic/32x32/mimetypes/image.gif";
-    $filetype[]="pcx";    $imgurl[]="{$CONFIG['application_webpath']}images/icons/kdeclassic/32x32/mimetypes/image.gif";
-    $filetype[]="xls";    $imgurl[]="{$CONFIG['application_webpath']}images/icons/kdeclassic/32x32/mimetypes/spreadsheet.gif";
-    $filetype[]="csv";    $imgurl[]="{$CONFIG['application_webpath']}images/icons/kdeclassic/32x32/mimetypes/spreadsheet.gif";
-    $filetype[]="zip";    $imgurl[]="{$CONFIG['application_webpath']}images/icons/kdeclassic/32x32/mimetypes/tgz.gif";
-    $filetype[]="arj";    $imgurl[]="{$CONFIG['application_webpath']}images/icons/kdeclassic/32x32/mimetypes/tgz.gif";
-    $filetype[]="rar";    $imgurl[]="{$CONFIG['application_webpath']}images/icons/kdeclassic/32x32/mimetypes/tgz.gif";
-    $filetype[]="cab";    $imgurl[]="{$CONFIG['application_webpath']}images/icons/kdeclassic/32x32/mimetypes/tgz.gif";
-    $filetype[]="lzh";    $imgurl[]="{$CONFIG['application_webpath']}images/icons/kdeclassic/32x32/mimetypes/tgz.gif";
-    $filetype[]="txt";    $imgurl[]="{$CONFIG['application_webpath']}images/icons/kdeclassic/32x32/mimetypes/txt.gif";
-    $filetype[]="f90";    $imgurl[]="{$CONFIG['application_webpath']}images/icons/kdeclassic/32x32/mimetypes/source_f.gif";
-    $filetype[]="f77";    $imgurl[]="{$CONFIG['application_webpath']}images/icons/kdeclassic/32x32/mimetypes/source_f.gif";
-    $filetype[]="inf";    $imgurl[]="{$CONFIG['application_webpath']}images/icons/kdeclassic/32x32/mimetypes/source.gif";
-    $filetype[]="ins";    $imgurl[]="{$CONFIG['application_webpath']}images/icons/kdeclassic/32x32/mimetypes/source.gif";
-    $filetype[]="adm";    $imgurl[]="{$CONFIG['application_webpath']}images/icons/kdeclassic/32x32/mimetypes/source.gif";
-    $filetype[]="f95";    $imgurl[]="{$CONFIG['application_webpath']}images/icons/kdeclassic/32x32/mimetypes/source_f.gif";
-    $filetype[]="cpp";    $imgurl[]="{$CONFIG['application_webpath']}images/icons/kdeclassic/32x32/mimetypes/source_cpp.gif";
-    $filetype[]="for";    $imgurl[]="{$CONFIG['application_webpath']}images/icons/kdeclassic/32x32/mimetypes/source_f.gif";
-    $filetype[]=".pl";    $imgurl[]="{$CONFIG['application_webpath']}images/icons/kdeclassic/32x32/mimetypes/source_pl.gif";
-    $filetype[]=".py";    $imgurl[]="{$CONFIG['application_webpath']}images/icons/kdeclassic/32x32/mimetypes/source_py.gif";
-    $filetype[]="rtm";    $imgurl[]="{$CONFIG['application_webpath']}images/icons/kdeclassic/32x32/mimetypes/misc_doc.gif";
-    $filetype[]="doc";    $imgurl[]="{$CONFIG['application_webpath']}images/icons/kdeclassic/32x32/mimetypes/wordprocessing.gif";
-    $filetype[]="rtf";    $imgurl[]="{$CONFIG['application_webpath']}images/icons/kdeclassic/32x32/mimetypes/wordprocessing.gif";
-    $filetype[]="wri";    $imgurl[]="{$CONFIG['application_webpath']}images/icons/kdeclassic/32x32/mimetypes/wordprocessing.gif";
-    $filetype[]="wri";    $imgurl[]="{$CONFIG['application_webpath']}images/icons/kdeclassic/32x32/mimetypes/wordprocessing.gif";
-    $filetype[]="pdf";    $imgurl[]="{$CONFIG['application_webpath']}images/icons/kdeclassic/32x32/mimetypes/pdf.gif";
-    $filetype[]="htm";    $imgurl[]="{$CONFIG['application_webpath']}images/icons/kdeclassic/32x32/mimetypes/html.gif";
-    $filetype[]="tml";    $imgurl[]="{$CONFIG['application_webpath']}images/icons/kdeclassic/32x32/mimetypes/html.gif";
-    $filetype[]="wav";    $imgurl[]="{$CONFIG['application_webpath']}images/icons/kdeclassic/32x32/mimetypes/sound.gif";
-    $filetype[]="mp3";    $imgurl[]="{$CONFIG['application_webpath']}images/icons/kdeclassic/32x32/mimetypes/sound.gif";
-    $filetype[]="voc";    $imgurl[]="{$CONFIG['application_webpath']}images/icons/kdeclassic/32x32/mimetypes/sound.gif";
-    $filetype[]="exe";    $imgurl[]="{$CONFIG['application_webpath']}images/icons/kdeclassic/32x32/mimetypes/binary.gif";
-    $filetype[]="com";    $imgurl[]="{$CONFIG['application_webpath']}images/icons/kdeclassic/32x32/mimetypes/binary.gif";
-    $filetype[]="nlm";    $imgurl[]="{$CONFIG['application_webpath']}images/icons/kdeclassic/32x32/mimetypes/binary.gif";
-    $filetype[]="evt";    $imgurl[]="{$CONFIG['application_webpath']}images/icons/kdeclassic/32x32/mimetypes/log.gif";
-    $filetype[]="log";    $imgurl[]="{$CONFIG['application_webpath']}images/icons/kdeclassic/32x32/mimetypes/log.gif";
-    $filetype[]="386";    $imgurl[]="{$CONFIG['application_webpath']}images/icons/kdeclassic/32x32/mimetypes/binary2.gif";
-    $filetype[]="dll";    $imgurl[]="{$CONFIG['application_webpath']}images/icons/kdeclassic/32x32/mimetypes/binary2.gif";
-    $filetype[]="asc";    $imgurl[]="{$CONFIG['application_webpath']}images/icons/kdeclassic/32x32/mimetypes/txt.gif";
-    $filetype[]="asp";    $imgurl[]="{$CONFIG['application_webpath']}images/icons/kdeclassic/32x32/mimetypes/html.gif";
-    $filetype[]="avi";    $imgurl[]="{$CONFIG['application_webpath']}images/icons/kdeclassic/32x32/mimetypes/video.gif";
-    $filetype[]="bkf";    $imgurl[]="{$CONFIG['application_webpath']}images/icons/kdeclassic/32x32/mimetypes/tar.gif";
-    $filetype[]="chm";    $imgurl[]="{$CONFIG['application_webpath']}images/icons/kdeclassic/32x32/mimetypes/man.gif";
-    $filetype[]="hlp";    $imgurl[]="{$CONFIG['application_webpath']}images/icons/kdeclassic/32x32/mimetypes/man.gif";
-    $filetype[]="dif";    $imgurl[]="{$CONFIG['application_webpath']}images/icons/kdeclassic/32x32/mimetypes/txt.gif";
-    $filetype[]="hta";    $imgurl[]="{$CONFIG['application_webpath']}images/icons/kdeclassic/32x32/mimetypes/html.gif";
-    $filetype[]="reg";    $imgurl[]="{$CONFIG['application_webpath']}images/icons/kdeclassic/32x32/mimetypes/resource.gif";
-    $filetype[]="dmp";    $imgurl[]="{$CONFIG['application_webpath']}images/icons/kdeclassic/32x32/mimetypes/core.gif";
-    $filetype[]="ini";    $imgurl[]="{$CONFIG['application_webpath']}images/icons/kdeclassic/32x32/mimetypes/source.gif";
-    $filetype[]="jpe";    $imgurl[]="{$CONFIG['application_webpath']}images/icons/kdeclassic/32x32/mimetypes/image.gif";
-    $filetype[]="mht";    $imgurl[]="{$CONFIG['application_webpath']}images/icons/kdeclassic/32x32/mimetypes/html.gif";
-    $filetype[]="msi";    $imgurl[]="{$CONFIG['application_webpath']}images/icons/kdeclassic/32x32/mimetypes/binary.gif";
-    $filetype[]="aot";    $imgurl[]="{$CONFIG['application_webpath']}images/icons/kdeclassic/32x32/mimetypes/binary.gif";
-    $filetype[]="pgp";    $imgurl[]="{$CONFIG['application_webpath']}images/icons/kdeclassic/32x32/mimetypes/binary.gif";
-    $filetype[]="dbg";    $imgurl[]="{$CONFIG['application_webpath']}images/icons/kdeclassic/32x32/mimetypes/binary.gif";
-    $filetype[]="axt";    $imgurl[]="{$CONFIG['application_webpath']}images/icons/kdeclassic/32x32/mimetypes/source.gif"; // zen text
-    $filetype[]="rdp";    $imgurl[]="{$CONFIG['application_webpath']}images/icons/kdeclassic/32x32/mimetypes/binary2.gif";
-    $filetype[]="sig";    $imgurl[]="{$CONFIG['application_webpath']}images/icons/kdeclassic/32x32/mimetypes/document.gif";
-    $filetype[]="tif";    $imgurl[]="{$CONFIG['application_webpath']}images/icons/kdeclassic/32x32/mimetypes/image.gif";
-    $filetype[]="ttf";    $imgurl[]="{$CONFIG['application_webpath']}images/icons/kdeclassic/32x32/mimetypes/font_ttf.gif";
-    $filetype[]="for";    $imgurl[]="{$CONFIG['application_webpath']}images/icons/kdeclassic/32x32/mimetypes/font_bitmap.gif";
-    $filetype[]="vbs";    $imgurl[]="{$CONFIG['application_webpath']}images/icons/kdeclassic/32x32/mimetypes/shellscript.gif";
-    $filetype[]="vbe";    $imgurl[]="{$CONFIG['application_webpath']}images/icons/kdeclassic/32x32/mimetypes/shellscript.gif";
-    $filetype[]="bat";    $imgurl[]="{$CONFIG['application_webpath']}images/icons/kdeclassic/32x32/mimetypes/shellscript.gif";
-    $filetype[]="wsf";    $imgurl[]="{$CONFIG['application_webpath']}images/icons/kdeclassic/32x32/mimetypes/shellscript.gif";
-    $filetype[]="cmd";    $imgurl[]="{$CONFIG['application_webpath']}images/icons/kdeclassic/32x32/mimetypes/shellscript.gif";
-    $filetype[]="scr";    $imgurl[]="{$CONFIG['application_webpath']}images/icons/kdeclassic/32x32/mimetypes/binary2.gif";
-    $filetype[]="xml";    $imgurl[]="{$CONFIG['application_webpath']}images/icons/kdeclassic/32x32/mimetypes/source.gif";
-    $filetype[]="zap";    $imgurl[]="{$CONFIG['application_webpath']}images/icons/kdeclassic/32x32/mimetypes/binary2.gif";
-    $filetype[]=".ps";    $imgurl[]="{$CONFIG['application_webpath']}images/icons/kdeclassic/32x32/mimetypes/postscript.gif";
-    $filetype[]=".rm";    $imgurl[]="{$CONFIG['application_webpath']}images/icons/kdeclassic/32x32/mimetypes/real_doc.gif";
-    $filetype[]="ram";    $imgurl[]="{$CONFIG['application_webpath']}images/icons/kdeclassic/32x32/mimetypes/real_doc.gif";
-    $filetype[]="vcf";    $imgurl[]="{$CONFIG['application_webpath']}images/icons/kdeclassic/32x32/mimetypes/vcard.gif";
-    $filetype[]="wmf";    $imgurl[]="{$CONFIG['application_webpath']}images/icons/kdeclassic/32x32/mimetypes/vectorgfx.gif";
-    $filetype[]="cer";    $imgurl[]="{$CONFIG['application_webpath']}images/icons/kdeclassic/32x32/mimetypes/document.gif";
-    $filetype[]="tmp";    $imgurl[]="{$CONFIG['application_webpath']}images/icons/kdeclassic/32x32/mimetypes/unknown.gif";
-    $filetype[]="cap";    $imgurl[]="{$CONFIG['application_webpath']}images/icons/kdeclassic/32x32/mimetypes/binary.gif";
-    $filetype[]="tr1";    $imgurl[]="{$CONFIG['application_webpath']}images/icons/kdeclassic/32x32/mimetypes/binary.gif";
-    $filetype[]=".gz";    $imgurl[]="{$CONFIG['application_webpath']}images/icons/kdeclassic/32x32/mimetypes/tgz.gif";
-    $filetype[]="tar";    $imgurl[]="{$CONFIG['application_webpath']}images/icons/kdeclassic/32x32/mimetypes/tar.gif";
-    $filetype[]="nfo";    $imgurl[]="{$CONFIG['application_webpath']}images/icons/kdeclassic/32x32/mimetypes/info.gif";
-    $filetype[]="pal";    $imgurl[]="{$CONFIG['application_webpath']}images/icons/kdeclassic/32x32/mimetypes/colorscm.gif";
+    $filetype[]="gif";    $imgurl[]="{$CONFIG['application_webpath']}images/icons/{$iconset}/32x32/mimetypes/image.gif";
+    $filetype[]="jpg";    $imgurl[]="{$CONFIG['application_webpath']}images/icons/{$iconset}/32x32/mimetypes/image.gif";
+    $filetype[]="bmp";    $imgurl[]="{$CONFIG['application_webpath']}images/icons/{$iconset}/32x32/mimetypes/image.gif";
+    $filetype[]="png";    $imgurl[]="{$CONFIG['application_webpath']}images/icons/{$iconset}/32x32/mimetypes/image.gif";
+    $filetype[]="pcx";    $imgurl[]="{$CONFIG['application_webpath']}images/icons/{$iconset}/32x32/mimetypes/image.gif";
+    $filetype[]="xls";    $imgurl[]="{$CONFIG['application_webpath']}images/icons/{$iconset}/32x32/mimetypes/spreadsheet.gif";
+    $filetype[]="csv";    $imgurl[]="{$CONFIG['application_webpath']}images/icons/{$iconset}/32x32/mimetypes/spreadsheet.gif";
+    $filetype[]="zip";    $imgurl[]="{$CONFIG['application_webpath']}images/icons/{$iconset}/32x32/mimetypes/tgz.gif";
+    $filetype[]="arj";    $imgurl[]="{$CONFIG['application_webpath']}images/icons/{$iconset}/32x32/mimetypes/tgz.gif";
+    $filetype[]="rar";    $imgurl[]="{$CONFIG['application_webpath']}images/icons/{$iconset}/32x32/mimetypes/tgz.gif";
+    $filetype[]="cab";    $imgurl[]="{$CONFIG['application_webpath']}images/icons/{$iconset}/32x32/mimetypes/tgz.gif";
+    $filetype[]="lzh";    $imgurl[]="{$CONFIG['application_webpath']}images/icons/{$iconset}/32x32/mimetypes/tgz.gif";
+    $filetype[]="txt";    $imgurl[]="{$CONFIG['application_webpath']}images/icons/{$iconset}/32x32/mimetypes/txt.gif";
+    $filetype[]="f90";    $imgurl[]="{$CONFIG['application_webpath']}images/icons/{$iconset}/32x32/mimetypes/source_f.gif";
+    $filetype[]="f77";    $imgurl[]="{$CONFIG['application_webpath']}images/icons/{$iconset}/32x32/mimetypes/source_f.gif";
+    $filetype[]="inf";    $imgurl[]="{$CONFIG['application_webpath']}images/icons/{$iconset}/32x32/mimetypes/source.gif";
+    $filetype[]="ins";    $imgurl[]="{$CONFIG['application_webpath']}images/icons/{$iconset}/32x32/mimetypes/source.gif";
+    $filetype[]="adm";    $imgurl[]="{$CONFIG['application_webpath']}images/icons/{$iconset}/32x32/mimetypes/source.gif";
+    $filetype[]="f95";    $imgurl[]="{$CONFIG['application_webpath']}images/icons/{$iconset}/32x32/mimetypes/source_f.gif";
+    $filetype[]="cpp";    $imgurl[]="{$CONFIG['application_webpath']}images/icons/{$iconset}/32x32/mimetypes/source_cpp.gif";
+    $filetype[]="for";    $imgurl[]="{$CONFIG['application_webpath']}images/icons/{$iconset}/32x32/mimetypes/source_f.gif";
+    $filetype[]=".pl";    $imgurl[]="{$CONFIG['application_webpath']}images/icons/{$iconset}/32x32/mimetypes/source_pl.gif";
+    $filetype[]=".py";    $imgurl[]="{$CONFIG['application_webpath']}images/icons/{$iconset}/32x32/mimetypes/source_py.gif";
+    $filetype[]="rtm";    $imgurl[]="{$CONFIG['application_webpath']}images/icons/{$iconset}/32x32/mimetypes/misc_doc.gif";
+    $filetype[]="doc";    $imgurl[]="{$CONFIG['application_webpath']}images/icons/{$iconset}/32x32/mimetypes/wordprocessing.gif";
+    $filetype[]="rtf";    $imgurl[]="{$CONFIG['application_webpath']}images/icons/{$iconset}/32x32/mimetypes/wordprocessing.gif";
+    $filetype[]="wri";    $imgurl[]="{$CONFIG['application_webpath']}images/icons/{$iconset}/32x32/mimetypes/wordprocessing.gif";
+    $filetype[]="wri";    $imgurl[]="{$CONFIG['application_webpath']}images/icons/{$iconset}/32x32/mimetypes/wordprocessing.gif";
+    $filetype[]="pdf";    $imgurl[]="{$CONFIG['application_webpath']}images/icons/{$iconset}/32x32/mimetypes/pdf.gif";
+    $filetype[]="htm";    $imgurl[]="{$CONFIG['application_webpath']}images/icons/{$iconset}/32x32/mimetypes/html.gif";
+    $filetype[]="tml";    $imgurl[]="{$CONFIG['application_webpath']}images/icons/{$iconset}/32x32/mimetypes/html.gif";
+    $filetype[]="wav";    $imgurl[]="{$CONFIG['application_webpath']}images/icons/{$iconset}/32x32/mimetypes/sound.gif";
+    $filetype[]="mp3";    $imgurl[]="{$CONFIG['application_webpath']}images/icons/{$iconset}/32x32/mimetypes/sound.gif";
+    $filetype[]="voc";    $imgurl[]="{$CONFIG['application_webpath']}images/icons/{$iconset}/32x32/mimetypes/sound.gif";
+    $filetype[]="exe";    $imgurl[]="{$CONFIG['application_webpath']}images/icons/{$iconset}/32x32/mimetypes/binary.gif";
+    $filetype[]="com";    $imgurl[]="{$CONFIG['application_webpath']}images/icons/{$iconset}/32x32/mimetypes/binary.gif";
+    $filetype[]="nlm";    $imgurl[]="{$CONFIG['application_webpath']}images/icons/{$iconset}/32x32/mimetypes/binary.gif";
+    $filetype[]="evt";    $imgurl[]="{$CONFIG['application_webpath']}images/icons/{$iconset}/32x32/mimetypes/log.gif";
+    $filetype[]="log";    $imgurl[]="{$CONFIG['application_webpath']}images/icons/{$iconset}/32x32/mimetypes/log.gif";
+    $filetype[]="386";    $imgurl[]="{$CONFIG['application_webpath']}images/icons/{$iconset}/32x32/mimetypes/binary2.gif";
+    $filetype[]="dll";    $imgurl[]="{$CONFIG['application_webpath']}images/icons/{$iconset}/32x32/mimetypes/binary2.gif";
+    $filetype[]="asc";    $imgurl[]="{$CONFIG['application_webpath']}images/icons/{$iconset}/32x32/mimetypes/txt.gif";
+    $filetype[]="asp";    $imgurl[]="{$CONFIG['application_webpath']}images/icons/{$iconset}/32x32/mimetypes/html.gif";
+    $filetype[]="avi";    $imgurl[]="{$CONFIG['application_webpath']}images/icons/{$iconset}/32x32/mimetypes/video.gif";
+    $filetype[]="bkf";    $imgurl[]="{$CONFIG['application_webpath']}images/icons/{$iconset}/32x32/mimetypes/tar.gif";
+    $filetype[]="chm";    $imgurl[]="{$CONFIG['application_webpath']}images/icons/{$iconset}/32x32/mimetypes/man.gif";
+    $filetype[]="hlp";    $imgurl[]="{$CONFIG['application_webpath']}images/icons/{$iconset}/32x32/mimetypes/man.gif";
+    $filetype[]="dif";    $imgurl[]="{$CONFIG['application_webpath']}images/icons/{$iconset}/32x32/mimetypes/txt.gif";
+    $filetype[]="hta";    $imgurl[]="{$CONFIG['application_webpath']}images/icons/{$iconset}/32x32/mimetypes/html.gif";
+    $filetype[]="reg";    $imgurl[]="{$CONFIG['application_webpath']}images/icons/{$iconset}/32x32/mimetypes/resource.gif";
+    $filetype[]="dmp";    $imgurl[]="{$CONFIG['application_webpath']}images/icons/{$iconset}/32x32/mimetypes/core.gif";
+    $filetype[]="ini";    $imgurl[]="{$CONFIG['application_webpath']}images/icons/{$iconset}/32x32/mimetypes/source.gif";
+    $filetype[]="jpe";    $imgurl[]="{$CONFIG['application_webpath']}images/icons/{$iconset}/32x32/mimetypes/image.gif";
+    $filetype[]="mht";    $imgurl[]="{$CONFIG['application_webpath']}images/icons/{$iconset}/32x32/mimetypes/html.gif";
+    $filetype[]="msi";    $imgurl[]="{$CONFIG['application_webpath']}images/icons/{$iconset}/32x32/mimetypes/binary.gif";
+    $filetype[]="aot";    $imgurl[]="{$CONFIG['application_webpath']}images/icons/{$iconset}/32x32/mimetypes/binary.gif";
+    $filetype[]="pgp";    $imgurl[]="{$CONFIG['application_webpath']}images/icons/{$iconset}/32x32/mimetypes/binary.gif";
+    $filetype[]="dbg";    $imgurl[]="{$CONFIG['application_webpath']}images/icons/{$iconset}/32x32/mimetypes/binary.gif";
+    $filetype[]="axt";    $imgurl[]="{$CONFIG['application_webpath']}images/icons/{$iconset}/32x32/mimetypes/source.gif"; // zen text
+    $filetype[]="rdp";    $imgurl[]="{$CONFIG['application_webpath']}images/icons/{$iconset}/32x32/mimetypes/binary2.gif";
+    $filetype[]="sig";    $imgurl[]="{$CONFIG['application_webpath']}images/icons/{$iconset}/32x32/mimetypes/document.gif";
+    $filetype[]="tif";    $imgurl[]="{$CONFIG['application_webpath']}images/icons/{$iconset}/32x32/mimetypes/image.gif";
+    $filetype[]="ttf";    $imgurl[]="{$CONFIG['application_webpath']}images/icons/{$iconset}/32x32/mimetypes/font_ttf.gif";
+    $filetype[]="for";    $imgurl[]="{$CONFIG['application_webpath']}images/icons/{$iconset}/32x32/mimetypes/font_bitmap.gif";
+    $filetype[]="vbs";    $imgurl[]="{$CONFIG['application_webpath']}images/icons/{$iconset}/32x32/mimetypes/shellscript.gif";
+    $filetype[]="vbe";    $imgurl[]="{$CONFIG['application_webpath']}images/icons/{$iconset}/32x32/mimetypes/shellscript.gif";
+    $filetype[]="bat";    $imgurl[]="{$CONFIG['application_webpath']}images/icons/{$iconset}/32x32/mimetypes/shellscript.gif";
+    $filetype[]="wsf";    $imgurl[]="{$CONFIG['application_webpath']}images/icons/{$iconset}/32x32/mimetypes/shellscript.gif";
+    $filetype[]="cmd";    $imgurl[]="{$CONFIG['application_webpath']}images/icons/{$iconset}/32x32/mimetypes/shellscript.gif";
+    $filetype[]="scr";    $imgurl[]="{$CONFIG['application_webpath']}images/icons/{$iconset}/32x32/mimetypes/binary2.gif";
+    $filetype[]="xml";    $imgurl[]="{$CONFIG['application_webpath']}images/icons/{$iconset}/32x32/mimetypes/source.gif";
+    $filetype[]="zap";    $imgurl[]="{$CONFIG['application_webpath']}images/icons/{$iconset}/32x32/mimetypes/binary2.gif";
+    $filetype[]=".ps";    $imgurl[]="{$CONFIG['application_webpath']}images/icons/{$iconset}/32x32/mimetypes/postscript.gif";
+    $filetype[]=".rm";    $imgurl[]="{$CONFIG['application_webpath']}images/icons/{$iconset}/32x32/mimetypes/real_doc.gif";
+    $filetype[]="ram";    $imgurl[]="{$CONFIG['application_webpath']}images/icons/{$iconset}/32x32/mimetypes/real_doc.gif";
+    $filetype[]="vcf";    $imgurl[]="{$CONFIG['application_webpath']}images/icons/{$iconset}/32x32/mimetypes/vcard.gif";
+    $filetype[]="wmf";    $imgurl[]="{$CONFIG['application_webpath']}images/icons/{$iconset}/32x32/mimetypes/vectorgfx.gif";
+    $filetype[]="cer";    $imgurl[]="{$CONFIG['application_webpath']}images/icons/{$iconset}/32x32/mimetypes/document.gif";
+    $filetype[]="tmp";    $imgurl[]="{$CONFIG['application_webpath']}images/icons/{$iconset}/32x32/mimetypes/unknown.gif";
+    $filetype[]="cap";    $imgurl[]="{$CONFIG['application_webpath']}images/icons/{$iconset}/32x32/mimetypes/binary.gif";
+    $filetype[]="tr1";    $imgurl[]="{$CONFIG['application_webpath']}images/icons/{$iconset}/32x32/mimetypes/binary.gif";
+    $filetype[]=".gz";    $imgurl[]="{$CONFIG['application_webpath']}images/icons/{$iconset}/32x32/mimetypes/tgz.gif";
+    $filetype[]="tar";    $imgurl[]="{$CONFIG['application_webpath']}images/icons/{$iconset}/32x32/mimetypes/tar.gif";
+    $filetype[]="nfo";    $imgurl[]="{$CONFIG['application_webpath']}images/icons/{$iconset}/32x32/mimetypes/info.gif";
+    $filetype[]="pal";    $imgurl[]="{$CONFIG['application_webpath']}images/icons/{$iconset}/32x32/mimetypes/colorscm.gif";
 
 
     // bugbug: think there is an inifinate loop here if a filetype
@@ -3413,6 +3052,7 @@ function holiday_type($id)
 
 function holiday_approval_status($approvedid)
 {
+    // We add 10 to normal status when we archive holiday
     switch ($approvedid)
     {
         case -2: $status = "Not requested"; break;
@@ -3420,6 +3060,11 @@ function holiday_approval_status($approvedid)
         case 0: $status = "Requested"; break;
         case 1: $status = "Approved"; break;
         case 2: $status = "Approved 'Free'"; break;
+        case 8: $status = "Archived. Not Requested";
+        case 9: $status = "Archived. Denied";
+        case 10: $status = "Archived. Requested";
+        case 11: $status = "Archived. Approved";
+        case 12: $status = "Archived. Approved 'Free'";
         default: $status = "Approval Status Unknown"; break;
     }
     return $status;
@@ -4650,29 +4295,6 @@ function cleanvar($var,$striphtml=TRUE, $transentities=TRUE)
 }
 
 
-function authenticate_contact($username, $password)
-{
-    global $CONFIG;
-    // $password
-    $sql  = "SELECT id FROM contacts ";
-    $sql .= "WHERE username='$username' AND password='$password' AND status!=0 ";
-    // a status of 0 means the user account is disabled
-    $result = mysql_query($sql);
-    if (mysql_error()) trigger_error(mysql_error(),E_USER_WARNING);
-
-    // return appropriate value
-    if (mysql_num_rows($result) == 0)
-    {
-        mysql_free_result($result);
-        return 0;
-    }
-    else
-    {
-        journal(4,'User Authenticated',"$username authenticated from ".getenv('REMOTE_ADDR'),1,0);
-        return 1;
-    }
-}
-
 function external_escalation($escalated, $incid)
 {
 
@@ -4739,10 +4361,10 @@ function strip_bbcode_tooltip($text)
 function date_picker($formelement)
 {
     // Parameter1: form element id, eg. myform.dateinputbox
-    global $CONFIG;
+    global $CONFIG, $iconset;
 
     $divid = "datediv".str_replace('.','',$formelement);
-    $html = "<img src='{$CONFIG['application_webpath']}images/icons/kdeclassic/16x16/actions/1day.png' ";
+    $html = "<img src='{$CONFIG['application_webpath']}images/icons/{$iconset}/16x16/actions/1day.png' ";
     $html .= "onmouseup=\"toggleDatePicker('$divid','$formelement')\" width='16' height='16' alt='date picker' style='cursor: pointer;' />";
     $html .= "<div id='$divid' style='position: absolute;'></div>";
     return $html;
@@ -4852,10 +4474,10 @@ function parse_updatebody($updatebody)
 
 function add_note_form($linkid, $refid)
 {
-    global $now, $sit;
+    global $now, $sit, $iconset;
     $html = "<form name='addnote' action='add_note.php' method='post'>";
     $html .= "<div class='detailhead note'> <div class='detaildate'>".readable_date($now)."</div>\n";
-    $html .= "<img src='{$CONFIG['application_webpath']}images/icons/kdeclassic/16x16/mimetypes/document2.png' width='16' height='16' alt='Note icon' /> ";
+    $html .= "<img src='{$CONFIG['application_webpath']}images/icons/{$iconset}/16x16/mimetypes/document2.png' width='16' height='16' alt='Note icon' /> ";
     $html .= "New Note by ".user_realname($sit[2])."</div>\n";
     $html .= "<div class='detailentry note'>";
     $html .= "<textarea rows='3' cols='40' name='bodytext' style='width: 94%; margin-top: 5px; margin-bottom: 5px; margin-left: 3%; margin-right: 3%; background-color: transparent; border: 1px dashed #A2A86A;'></textarea>";
@@ -4873,7 +4495,7 @@ function add_note_form($linkid, $refid)
 
 function show_notes($linkid, $refid)
 {
-    global $sit;
+    global $sit, $iconset;
     $sql = "SELECT * FROM notes WHERE link='{$linkid}' AND refid='{$refid}' ORDER BY timestamp DESC, id DESC";
     $result = mysql_query($sql);
     if (mysql_error()) trigger_error(mysql_error(),E_USER_ERROR);
@@ -4883,9 +4505,9 @@ function show_notes($linkid, $refid)
         while ($note = mysql_fetch_object($result))
         {
             $html .= "<div class='detailhead note'> <div class='detaildate'>".readable_date(mysqlts2date($note->timestamp));
-            if ($sit[2]==$note->userid) $html .= "<a href='delete_note.php?id={$note->id}&amp;rpath={$_SERVER['PHP_SELF']}?{$_SERVER['QUERY_STRING']}' onclick='return confirm_delete();'><img src='{$CONFIG['application_webpath']}images/icons/kdeclassic/16x16/actions/eventdelete.png' width='16' height='16' alt='Delete icon' style='border: 0px;' /></a>";
+            if ($sit[2]==$note->userid) $html .= "<a href='delete_note.php?id={$note->id}&amp;rpath={$_SERVER['PHP_SELF']}?{$_SERVER['QUERY_STRING']}' onclick='return confirm_delete();'><img src='{$CONFIG['application_webpath']}images/icons/{$iconset}/16x16/actions/eventdelete.png' width='16' height='16' alt='Delete icon' style='border: 0px;' /></a>";
             $html .= "</div>\n";
-            $html .= "<img src='{$CONFIG['application_webpath']}images/icons/kdeclassic/16x16/mimetypes/document2.png' width='16' height='16' alt='Note icon' /> ";
+            $html .= "<img src='{$CONFIG['application_webpath']}images/icons/{$iconset}/16x16/mimetypes/document2.png' width='16' height='16' alt='Note icon' /> ";
             $html .= "Note added by ".user_realname($note->userid,TRUE)."</div>\n";
             $html .= "<div class='detailentry note'>";
             $html .= nl2br(bbcode(stripslashes($note->bodytext)));
@@ -4895,13 +4517,26 @@ function show_notes($linkid, $refid)
     return $html;
 }
 
-function dashboard_do($context)
+function dashboard_do($context, $row=0, $dashboardid=0)
 {
     global $DASHBOARDCOMP;
     $action = $DASHBOARDCOMP[$context];
     if($action != NULL || $action != "")
     {
-        $action();
+        $action($row,$dashboardid);
+    }
+}
+
+function show_dashboard_component($row, $dashboardid)
+{
+    $sql = "SELECT name FROM dashboard WHERE enabled = 'true' AND id = '$dashboardid'";
+    $result = mysql_query($sql);
+    if (mysql_error()) trigger_error(mysql_error(),E_USER_ERROR);
+
+    if(mysql_num_rows($result) == 1)
+    {
+        $obj = mysql_fetch_object($result);
+        dashboard_do("dashboard_".$obj->name,'db_'.$row,$dashboardid);
     }
 }
 
@@ -5130,6 +4765,112 @@ function draw_chart_image($type, $width, $height, $data, $legends, $title='')
 }
 
 
+function get_tag_id($tag)
+{
+    $sql = "SELECT tagid FROM tags WHERE name = LOWER('$tag')";
+    $result = mysql_query($sql);
+    if (mysql_error()) trigger_error(mysql_error(),E_USER_WARNING);
+    if(mysql_num_rows($result) == 1)
+    {
+        $id = mysql_fetch_row($result);
+        return $id[0];
+    }
+    else
+    {
+        //need to add
+        $sql = "INSERT INTO tags (name) VALUES (LOWER('$tag'))";
+        $result = mysql_query($sql);
+        if (mysql_error()) trigger_error(mysql_error(),E_USER_ERROR);
+        return mysql_insert_id();
+    }
+}
+
+function add_tag($id, $type, $tag)
+{
+    /*
+    TAG TYPES
+    1 - contact
+    2 - incident
+    3 - Site
+    4 - task
+    */
+    if ($tag!='')
+    {
+        $tagid = get_tag_id($tag);
+        // Ignore errors, die silently
+        $sql = "INSERT INTO set_tags VALUES ('$id', '$type', '$tagid')";
+        $result = @mysql_query($sql);
+    }
+    return true;
+}
+
+
+function replace_tags($type, $id, $tagstring)
+{
+    // first remove old tags
+    $sql = "DELETE FROM set_tags WHERE id = '$id' AND type = '$type'";
+    $result = mysql_query($sql);
+    if (mysql_error()) trigger_error("MySQL Query Error ".mysql_error(), E_USER_ERROR);
+
+    // Change seperators to spaces
+    $seperators=array(', ',';',',');
+    $tags=str_replace($seperators, ' ', trim($tagstring));
+    $tag_array = explode(" ", $tags);
+    foreach($tag_array AS $tag)
+    {
+        add_tag($id, $type, trim($tag));
+    }
+}
+
+function list_tags($recordid, $type, $html=TRUE)
+{
+    $sql = "SELECT tags.name, tags.tagid FROM set_tags, tags WHERE set_tags.tagid = tags.tagid AND ";
+    $sql .= "set_tags.type = '$type' AND set_tags.id = '$recordid'";
+    $result = mysql_query($sql);
+    if (mysql_error()) trigger_error(mysql_error(),E_USER_ERROR);
+    while($tags = mysql_fetch_object($result))
+    {
+        if($html) $str .= "<a href='view_tags.php?tagid={$tags->tagid}'>{$tags->name}</a>, ";
+        else $str .= $tags->name.", ";
+    }
+    return trim(substr($str, 0, strlen($str)-2));
+}
+
+function show_tag_cloud($orderby="name")
+{
+    $sql = "SELECT COUNT(name) AS occurrences, name, tags.tagid FROM tags, set_tags WHERE tags.tagid = set_tags.tagid GROUP BY name ORDER BY $orderby";
+    if($orderby == "occurrences") $sql .= " DESC";
+    $result = mysql_query($sql);
+    if (mysql_error()) trigger_error(mysql_error(),E_USER_ERROR);
+
+    $countsql = "SELECT COUNT(*) AS counted FROM set_tags GROUP BY tagid ORDER BY counted DESC LIMIT 1";
+
+    $countresult = mysql_query($countsql);
+    if (mysql_error()) trigger_error(mysql_error(),E_USER_ERROR);
+    list($max) = mysql_fetch_row($countresult);
+
+    if(substr($_SERVER['SCRIPT_NAME'],-8) != "main.php")
+    {
+        //not in the dashbaord
+        $html .= "<p align='center'>Sort: <a href='view_tags.php?orderby=name'>alphabetically</a> | ";
+        $html .= "<a href='view_tags.php?orderby=occurrences'>popularity</a></p>";
+    }
+    if(mysql_num_rows($result) > 0)
+    {
+        $html .= "<table align='center'><tr><td>";
+        $min=1;
+
+        while($obj = mysql_fetch_object($result))
+        {
+            $size = (($obj->occurrences) * 300 / $max) +100;
+            if ($size==0) $size=100;
+            $html .= "<a href='view_tags.php?tagid=$obj->tagid' style='font-size: {$size}%;' title='{$obj->occurrences}'>{$obj->name}</a> &nbsp;";
+        }
+        $html .= "</td></tr></table>";
+    }
+    return $html;
+}
+
 // -------------------------- // -------------------------- // --------------------------
 // leave this section at the bottom of functions.inc.php ================================
 
@@ -5153,17 +4894,25 @@ function plugin_register($context, $action)
 }
 
 
-function plugin_do($context)
+function plugin_do($context, $optparams=FALSE)
 {
     global $PLUGINACTIONS;
+
     if (is_array($PLUGINACTIONS[$context]))
     {
         foreach($PLUGINACTIONS[$context] AS $action)
         {
             // Call Variable function (function with variable name)
-            $action();
+            if ($optparams) $rtn = $action($optparams);
+            else $rtn = $action();
+
+            // Append return value
+            if (is_array($rtn) AND is_array($rtnvalue)) array_push($rtnvalue, $rtn);
+            elseif (is_array($rtn) AND !is_array($rtnvalue)) { $rtnvalue=array(); array_push($rtnvalue, $rtn); }
+            else $rtnvalue .= $rtn;
         }
     }
+    return $rtnvalue;
 }
 
 
