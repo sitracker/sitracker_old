@@ -43,7 +43,6 @@ if (empty($step))
     <input name='end' size="10" />
     <?php
     echo date_picker('date.end');
-    // <img onmouseup="toggleDatePicker('enddate','date.end')" id='enddatePos' width='16' height='16' src="images/icons/kdeclassic/16x16/actions/1day.png" align='top' border='0' alt="date picker" /><div id="enddate" style="position:absolute;"></div></td></tr>
     ?>
 
     </table>
