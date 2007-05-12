@@ -81,5 +81,6 @@ if ($actions[0]=='' OR in_array('TimeCalc',$actions))
     require('auto/timecalc.php');
 }
 
+plugin_do('automata');
 
 ?>
