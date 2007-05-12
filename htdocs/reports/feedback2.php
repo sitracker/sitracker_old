@@ -20,7 +20,7 @@ require('auth.inc.php');
 
 include('htmlheader.inc.php');
 
-$formid=6;
+$formid=$CONFIG['feedback_form'];
 
 echo "<div style='margin: 20px'>";
 echo "<h2>Average <a href='{$CONFIG['application_webpath']}reports/feedback.php'>Feedback</a> Scores: By Engineer</h2>";
@@ -32,63 +32,66 @@ if ($_REQUEST['userid']>0) $usql .= "AND id='".mysql_escape_string($_REQUEST['us
 else $usql .= "ORDER BY username";
 $uresult = mysql_query($usql);
 if (mysql_error()) trigger_error(mysql_error(), E_USER_ERROR);
-
-while ($user = mysql_fetch_object($uresult))
+if (mysql_num_rows($uresult) >= 1)
 {
-    $totalresult=0;
-    $numquestions=0;
-    $html = "<h2>".ucfirst($user->realname)."</h2>";
-    $qsql = "SELECT * FROM feedbackquestions WHERE formid='{$formid}' AND type='rating' ORDER BY taborder";
-    $qresult = mysql_query($qsql);
-    if (mysql_error()) trigger_error(mysql_error(), E_USER_ERROR);
-
-    if (mysql_num_rows($qresult) >= 1)
+    while ($user = mysql_fetch_object($uresult))
     {
-        while ($qrow = mysql_fetch_object($qresult))
+        $totalresult=0;
+        $numquestions=0;
+        $html = "<h2>".ucfirst($user->realname)."</h2>";
+        $qsql = "SELECT * FROM feedbackquestions WHERE formid='{$formid}' AND type='rating' ORDER BY taborder";
+        $qresult = mysql_query($qsql);
+        if (mysql_error()) trigger_error(mysql_error(), E_USER_ERROR);
+
+        if (mysql_num_rows($qresult) >= 1)
         {
-            $numquestions++;
-            $html .= "Q{$qrow->taborder}: {$qrow->question} &nbsp;";
-            $sql = "SELECT * FROM feedbackreport, incidents, users, feedbackresults ";
-            $sql .= "WHERE feedbackreport.incidentid=incidents.id ";
-            $sql .= "AND incidents.owner=users.id ";
-            $sql .= "AND feedbackreport.id=feedbackresults.respondentid ";
-            $sql .= "AND feedbackresults.questionid='$qrow->id' ";
-            $sql .= "AND users.id='$user->id' ";
-            $sql .= "AND feedbackreport.completed = 'yes' \n"; ///////////////////////
-            $sql .= "ORDER BY incidents.owner, incidents.id";
-            $result = mysql_query($sql);
-            if (mysql_error()) trigger_error(mysql_error(), E_USER_ERROR);
-            $numresults=0;
-            $cumul=0;
-            $percent=0;
-            $average=0;
-            ## echo "=== $sql<br /> ";
-            while ($row = mysql_fetch_object($result))
+            while ($qrow = mysql_fetch_object($qresult))
             {
-                if (!empty($row->result))
+                $numquestions++;
+                $html .= "Q{$qrow->taborder}: {$qrow->question} &nbsp;";
+                $sql = "SELECT * FROM feedbackrespondents, incidents, users, feedbackresults ";
+                $sql .= "WHERE feedbackrespondents.incidentid=incidents.id ";
+                $sql .= "AND incidents.owner=users.id ";
+                $sql .= "AND feedbackrespondents.id=feedbackresults.respondentid ";
+                $sql .= "AND feedbackresults.questionid='$qrow->id' ";
+                $sql .= "AND users.id='$user->id' ";
+                $sql .= "AND feedbackrespondents.completed = 'yes' \n"; ///////////////////////
+                $sql .= "ORDER BY incidents.owner, incidents.id";
+                $result = mysql_query($sql);
+                if (mysql_error()) trigger_error(mysql_error(), E_USER_ERROR);
+                $numresults=0;
+                $cumul=0;
+                $percent=0;
+                $average=0;
+                ## echo "=== $sql<br /> ";
+                while ($row = mysql_fetch_object($result))
                 {
-                    $cumul+=$row->result;
-                    $numresults++;
-                    ## echo "===== Result: {$row->result}<br />";
+                    if (!empty($row->result))
+                    {
+                        $cumul+=$row->result;
+                        $numresults++;
+                        ## echo "===== Result: {$row->result}<br />";
+                    }
                 }
+                if ($numresults>0) $average=number_format(($cumul/$numresults), 2);
+                $percent =number_format((($average / 9) * 100), 0);
+                $totalresult+=$average;
+                $html .= "{$average} <strong>({$percent}%)</strong><br />";
             }
-            if ($numresults>0) $average=number_format(($cumul/$numresults), 2);
-            $percent =number_format((($average / 9) * 100), 0);
-            $totalresult+=$average;
-            $html .= "{$average} <strong>({$percent}%)</strong><br />";
+            $total_average=number_format($totalresult/$numquestions,2);
+            $total_percent=number_format((($total_average / 9) * 100), 0);
+            $html .= "<p>Positivity: {$total_average} <strong>({$total_percent}%)</strong> after $numresults surveys.</p>";
+            $surveys+=$numresults;
+            $html .= "<hr />\n";
+
+            //if ($total_average>0)
+            echo $html;
+            echo "\n\n\n<!-- $surveys -->\n\n\n";
         }
-        $total_average=number_format($totalresult/$numquestions,2);
-        $total_percent=number_format((($total_average / 9) * 100), 0);
-        $html .= "<p>Positivity: {$total_average} <strong>({$total_percent}%)</strong> after $numresults surveys.</p>";
-        $surveys+=$numresults;
-        $html .= "<hr />\n";
-
-        if ($total_average>0) echo $html;
-        echo "\n\n\n<!-- $surveys -->\n\n\n";
+        else echo "<p class='error'>No feedback found for ".ucfirst($user->realname)."</p>";
     }
-    else echo "<p class='error'>No feedback found for ".ucfirst($user->realname)."</p>";
 }
-
+else echo "<p class='error'>Found no users to report on</p>";
 echo "</div>\n";
 include('htmlfooter.inc.php');
 ?>

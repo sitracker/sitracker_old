@@ -20,7 +20,7 @@ require('auth.inc.php');
 
 include('htmlheader.inc.php');
 
-$formid=6;
+$formid=$CONFIG['feedback_form'];
 $now = time();
 
 echo "<div style='margin: 20px'>";
@@ -37,12 +37,12 @@ while ($qrow = mysql_fetch_object($qresult))
 }
 
 $msql = "SELECT *,  \n";
-$msql .= "feedbackreport.id AS reportid, \n";
+$msql .= "feedbackrespondents.id AS reportid, \n";
 $msql .= "products.id AS productid, products.name AS productname ";
-$msql .= "FROM feedbackreport, incidents, products WHERE feedbackreport.incidentid=incidents.id \n";
+$msql .= "FROM feedbackrespondents, incidents, products WHERE feedbackrespondents.incidentid=incidents.id \n";
 $msql .= "AND incidents.product=products.id ";
-$msql .= "AND feedbackreport.incidentid > 0 \n";
-$msql .= "AND feedbackreport.completed = 'yes' \n"; ///////////////////////
+$msql .= "AND feedbackrespondents.incidentid > 0 \n";
+$msql .= "AND feedbackrespondents.completed = 'yes' \n"; ///////////////////////
 $msql .= "ORDER BY products.name, incidents.id ASC \n";
 
 $mresult = mysql_query($msql);
@@ -147,12 +147,12 @@ if (mysql_num_rows($mresult) >= 1)
     {
         $numquestions++;
         // $html .= "Q{$qrow->taborder}: {$qrow->question} &nbsp;";
-        $sql = "SELECT * FROM feedbackreport, incidents, users, feedbackresults ";
-        $sql .= "WHERE feedbackreport.incidentid=incidents.id ";
+        $sql = "SELECT * FROM feedbackrespondents, incidents, users, feedbackresults ";
+        $sql .= "WHERE feedbackrespondents.incidentid=incidents.id ";
         $sql .= "AND incidents.owner=users.id ";
-        $sql .= "AND feedbackreport.id=feedbackresults.respondentid ";
+        $sql .= "AND feedbackrespondents.id=feedbackresults.respondentid ";
         $sql .= "AND feedbackresults.questionid='$qrow->id' ";
-        $sql .= "AND feedbackreport.id='$mrow->reportid' ";
+        $sql .= "AND feedbackrespondents.id='$mrow->reportid' ";
         $sql .= "ORDER BY incidents.contact, incidents.id";
         // echo "==== $sql ====";
         $result = mysql_query($sql);

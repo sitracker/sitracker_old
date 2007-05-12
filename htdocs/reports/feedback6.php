@@ -20,7 +20,7 @@ require('auth.inc.php');
 
 include('htmlheader.inc.php');
 
-$formid=6;
+$formid=$CONFIG['feedback_form'];
 $now = time();
 
 echo "<div style='margin: 20px'>";
@@ -31,11 +31,11 @@ echo "incidents logged:</p>";
 $rcount=1;
 
 $msql = "SELECT *,  \n";
-$msql .= "feedbackreport.id AS reportid, \n";
+$msql .= "feedbackrespondents.id AS reportid, \n";
 $msql .= "software.id AS softwareid, software.name AS softwarename ";
-$msql .= "FROM feedbackreport, incidents, software WHERE feedbackreport.incidentid=incidents.id \n";
+$msql .= "FROM feedbackrespondents, incidents, software WHERE feedbackrespondents.incidentid=incidents.id \n";
 $msql .= "AND incidents.softwareid=software.id ";
-$msql .= "AND feedbackreport.incidentid > 0 \n";
+$msql .= "AND feedbackrespondents.incidentid > 0 \n";
 $msql .= "ORDER BY software.name, incidents.id ASC \n";
 $mresult = mysql_query($msql);
 if (mysql_error()) trigger_error(mysql_error(), E_USER_ERROR);
@@ -51,12 +51,12 @@ while ($mrow = mysql_fetch_object($mresult))
     {
         $numquestions++;
         $html .= "Q{$qrow->taborder}: {$qrow->question} &nbsp;";
-        $sql = "SELECT * FROM feedbackreport, incidents, users, feedbackresults ";
-        $sql .= "WHERE feedbackreport.incidentid=incidents.id ";
+        $sql = "SELECT * FROM feedbackrespondents, incidents, users, feedbackresults ";
+        $sql .= "WHERE feedbackrespondents.incidentid=incidents.id ";
         $sql .= "AND incidents.owner=users.id ";
-        $sql .= "AND feedbackreport.id=feedbackresults.respondentid ";
+        $sql .= "AND feedbackrespondents.id=feedbackresults.respondentid ";
         $sql .= "AND feedbackresults.questionid='$qrow->id' ";
-        $sql .= "AND feedbackreport.id='$mrow->reportid' ";
+        $sql .= "AND feedbackrespondents.id='$mrow->reportid' ";
         $sql .= "ORDER BY incidents.owner, incidents.id";
         $result = mysql_query($sql);
         if (mysql_error()) trigger_error(mysql_error(), E_USER_ERROR);
