@@ -382,6 +382,7 @@ CREATE TABLE `interfacestyles` (
   `id` int(5) NOT NULL auto_increment,
   `name` varchar(50) NOT NULL default '',
   `cssurl` varchar(255) NOT NULL default '',
+  `iconset` varchar(255) NOT NULL default 'kdeclassic',
   `headerhtml` text NOT NULL,
   PRIMARY KEY  (`id`)
 ) ENGINE=MyISAM;
@@ -840,11 +841,11 @@ CREATE TABLE `sites` (
   `telephone` varchar(255) NOT NULL default '',
   `fax` varchar(255) NOT NULL default '',
   `email` varchar(255) NOT NULL default '',
+  `websiteurl` varchar(255) default NULL,
   `notes` text NOT NULL,
   `typeid` int(5) NOT NULL default '1',
   `freesupport` int(5) NOT NULL default '0',
   `licenserx` int(5) NOT NULL default '0',
-  `ftnpassword` varchar(40) NOT NULL default '',
   `owner` tinyint(4) NOT NULL default '0',
   PRIMARY KEY  (`id`),
   KEY `typeid` (`typeid`),
@@ -1299,6 +1300,16 @@ INSERT INTO `dashboard` (`id`, `name`, `enabled`) VALUES (1, 'random_tip', 'true
 (4, 'user_incidents', 'true');
 
 UPDATE `interfacestyles` SET `name` = 'Light Blue' WHERE `id` =1 LIMIT 1 ;
+";
+
+
+/*
+ 3.25
+*/
+
+$upgrade_schema[325] = "
+ALTER TABLE `interfacestyles` ADD `iconset` VARCHAR( 255 ) NOT NULL DEFAULT 'kdeclassic' AFTER `cssurl` ;
+ALTER TABLE `sites` ADD `websiteurl` VARCHAR( 255 ) NULL AFTER `email` ;
 ";
 
 // Important: When making changes to the schema you must add SQL to make the alterations
