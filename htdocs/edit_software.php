@@ -49,7 +49,6 @@ if (empty($action) OR $action=='edit')
         if ($software->lifetime_start > 1) echo date('Y-m-d',mysql2date($software->lifetime_start));
         echo "' /> ";
         echo date_picker('editsoftware.lifetime_start');
-        // <img src='{$CONFIG['application_webpath']}images/icons/kdeclassic/16x16/actions/1day.png' border='0' style='cursor: pointer;' width='16' height='16' title='Pick date' onclick=\"displayDatePicker('po_date');\">";
         echo " To: ";
         echo "<input type='text' name='lifetime_end' id='lifetime_end' size='10' value='";
         if ($software->lifetime_end > 1) echo date('Y-m-d',mysql2date($software->lifetime_end));
