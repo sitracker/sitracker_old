@@ -20,14 +20,63 @@ require('auth.inc.php');
 
 // External variables
 $search_string = cleanvar($_REQUEST['search_string']);
+$submit_value = cleanvar($_REQUEST['submit']);
+
+if($submit_value == "go")
+{
+// build SQL
+    $sql  = "SELECT id, name, department FROM sites ";
+
+    if ($search_string != '*')
+    {
+        $sql .= "WHERE ";
+        if (strlen($search_string)==1)
+        {
+            if ($search_string=='0') $sql .= "(SUBSTRING(name,1,1)=('0')
+                                            OR SUBSTRING(name,1,1)=('1')
+                                            OR SUBSTRING(name,1,1)=('2')
+                                            OR SUBSTRING(name,1,1)=('3')
+                                            OR SUBSTRING(name,1,1)=('4')
+                                            OR SUBSTRING(name,1,1)=('5')
+                                            OR SUBSTRING(name,1,1)=('6')
+                                            OR SUBSTRING(name,1,1)=('7')
+                                            OR SUBSTRING(name,1,1)=('8')
+                                            OR SUBSTRING(name,1,1)=('9'))";
+            else $sql .= "SUBSTRING(name,1,1)=('$search_string') ";
+        }
+        else
+        {
+            $sql .= "name LIKE '%$search_string%' ";
+        }
+    }
+    $sql .= " ORDER BY name ASC";
+
+    // execute query
+    $result = mysql_query($sql);
+    if (mysql_error()) trigger_error("MySQL Query Error ".mysql_error(), E_USER_ERROR);
+
+    if(mysql_num_rows($result) == 1)
+    {
+            //go straight to the site 
+            $row = mysql_fetch_array($result);
+            $url = "site_details.php?id=".$row["id"];
+            header("Location: $url");
+    }
+}
 
 include('htmlheader.inc.php');
 ?>
+<script type="text/javascript" src="scripts/dojo/dojo.js"></script>
+<script type="text/javascript">
+    dojo.require("dojo.widget.ComboBox");
+</script>
+<h2>Browse Sites</h2>
 <table summary="alphamenu" align="center">
 <tr>
 <td align="center">
     <form action="<?php echo $_SERVER['PHP_SELF']; ?>" method="get">
-    <p>Browse sites: <input type="text" name="search_string" /><input type="submit" value="go" /></p>
+    <!-- <p>Browse sites: <input type="text" name="search_string" /><input type="submit" value="go" /></p>-->
+    <p>Browse sites: <input dojoType='ComboBox' dataUrl='autocomplete.php?action=sites' style='width: 300px;' name='search_string' /><input name="submit" type="submit" value="go" /></p>
     </form>
 </td>
 </tr>
@@ -84,36 +133,40 @@ if ($search_string == "")
 // search for criteria
 if ($errors == 0)
 {
-    // build SQL
-    $sql  = "SELECT id, name, department FROM sites ";
-
-    if ($search_string != '*')
+    if($submit_value != 'go')
     {
-        $sql .= "WHERE ";
-        if (strlen($search_string)==1)
+        // Don't  need to do this again, already done above, us the results of that
+        // build SQL
+        $sql  = "SELECT id, name, department FROM sites ";
+    
+        if ($search_string != '*')
         {
-            if ($search_string=='0') $sql .= "(SUBSTRING(name,1,1)=('0')
-                                            OR SUBSTRING(name,1,1)=('1')
-                                            OR SUBSTRING(name,1,1)=('2')
-                                            OR SUBSTRING(name,1,1)=('3')
-                                            OR SUBSTRING(name,1,1)=('4')
-                                            OR SUBSTRING(name,1,1)=('5')
-                                            OR SUBSTRING(name,1,1)=('6')
-                                            OR SUBSTRING(name,1,1)=('7')
-                                            OR SUBSTRING(name,1,1)=('8')
-                                            OR SUBSTRING(name,1,1)=('9'))";
-            else $sql .= "SUBSTRING(name,1,1)=('$search_string') ";
+            $sql .= "WHERE ";
+            if (strlen($search_string)==1)
+            {
+                if ($search_string=='0') $sql .= "(SUBSTRING(name,1,1)=('0')
+                                                OR SUBSTRING(name,1,1)=('1')
+                                                OR SUBSTRING(name,1,1)=('2')
+                                                OR SUBSTRING(name,1,1)=('3')
+                                                OR SUBSTRING(name,1,1)=('4')
+                                                OR SUBSTRING(name,1,1)=('5')
+                                                OR SUBSTRING(name,1,1)=('6')
+                                                OR SUBSTRING(name,1,1)=('7')
+                                                OR SUBSTRING(name,1,1)=('8')
+                                                OR SUBSTRING(name,1,1)=('9'))";
+                else $sql .= "SUBSTRING(name,1,1)=('$search_string') ";
+            }
+            else
+            {
+                $sql .= "name LIKE '%$search_string%' ";
+            }
         }
-        else
-        {
-            $sql .= "name LIKE '%$search_string%' ";
-        }
-    }
-    $sql .= " ORDER BY name ASC";
+        $sql .= " ORDER BY name ASC";
 
-    // execute query
-    $result = mysql_query($sql);
-    if (mysql_error()) trigger_error("MySQL Query Error ".mysql_error(), E_USER_ERROR);
+        // execute query
+        $result = mysql_query($sql);
+        if (mysql_error()) trigger_error("MySQL Query Error ".mysql_error(), E_USER_ERROR);
+    }
 
     if (mysql_num_rows($result) == 0)
     {
@@ -141,8 +194,8 @@ if ($errors == 0)
             ?>
             <tr class='<?php echo $class ?>'>
                 <td align='center'><?php echo $results['id'] ?></td>
-                <td><a href="site_details.php?id=<?php echo $results['id']; ?>&amp;action=show"><?php echo htmlspecialchars($results['name']) ?></a></td>
-                <td><?php echo nl2br(htmlspecialchars($results["department"])); ?></td>
+                <td><a href="site_details.php?id=<?php echo $results['id']; ?>&amp;action=show"><?php echo htmlspecialchars(stripslashes($results['name'])) ?></a></td>
+                <td><?php echo nl2br(htmlspecialchars(stripslashes($results["department"]))); ?></td>
             </tr>
             <?php
             // invert shade
