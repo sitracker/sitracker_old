@@ -118,16 +118,16 @@ while ($users = mysql_fetch_array($result))
     // print HTML for rows
     echo "<tr class='$class'>";
     echo "<td>";
-    echo "<a href='mailto:{$users['email']}' title='Email {$users['realname']}'><img src='{$CONFIG['application_webpath']}images/icons/kdeclassic/16x16/actions/mail_generic.png' width='16' height='16' alt='Email icon' style='border:none;' /></a> ";
+    echo "<a href='mailto:{$users['email']}' title='Email {$users['realname']}'><img src='{$CONFIG['application_webpath']}images/icons/{$iconset}/16x16/actions/mail_generic.png' width='16' height='16' alt='Email icon' style='border:none;' /></a> ";
     echo "<a href='incidents.php?user={$users['id']}&amp;queue=1&amp;type=support' class='info'>";
-    if (!empty($users['message'])) echo "<img src='{$CONFIG['application_webpath']}images/icons/kdeclassic/16x16/actions/flag.png' width='16' height='16' title='{$users['message']}' alt='Flag' />";
+    if (!empty($users['message'])) echo "<img src='{$CONFIG['application_webpath']}images/icons/{$iconset}/16x16/actions/flag.png' width='16' height='16' title='{$users['message']}' alt='Flag' />";
     echo "{$users['realname']}";
     echo "<span>";
     if (!empty($users['title'])) echo "<strong>{$users['title']}</strong><br />";
     if ($users['groupid'] > 0) echo "Group: {$grouparr[$users['groupid']]}<br />";
-    if (strlen($users['aim']) > 3) echo "<img src='{$CONFIG['application_webpath']}images/icons/kdeclassic/16x16/apps/ksmiletris.png' width='16' height='16' alt='{$users['aim']}' /> <strong>AIM</strong>: {$users['aim']}<br />";
-    if (strlen($users['icq']) > 3) echo "<img src='{$CONFIG['application_webpath']}images/icons/kdeclassic/16x16/apps/licq.png' width='16' height='16' alt='{$users['icq']}' /> <strong>ICQ</strong>: {$users['icq']}<br />";
-    if (strlen($users['msn']) > 3) echo "<img src='{$CONFIG['application_webpath']}images/icons/kdeclassic/16x16/apps/personal.png' width='16' height='16' alt='{$users['msn']}' /> <strong>MSN</strong>: {$users['msn']}<br />";
+    if (strlen($users['aim']) > 3) echo "<img src='{$CONFIG['application_webpath']}images/icons/{$iconset}/16x16/apps/ksmiletris.png' width='16' height='16' alt='{$users['aim']}' /> <strong>AIM</strong>: {$users['aim']}<br />";
+    if (strlen($users['icq']) > 3) echo "<img src='{$CONFIG['application_webpath']}images/icons/{$iconset}/16x16/apps/licq.png' width='16' height='16' alt='{$users['icq']}' /> <strong>ICQ</strong>: {$users['icq']}<br />";
+    if (strlen($users['msn']) > 3) echo "<img src='{$CONFIG['application_webpath']}images/icons/{$iconset}/16x16/apps/personal.png' width='16' height='16' alt='{$users['msn']}' /> <strong>MSN</strong>: {$users['msn']}<br />";
     if (!empty($users['message'])) echo "<br /><strong>Message</strong>: {$users['message']}";
     echo "</span>";
     echo "</a>";
@@ -155,8 +155,8 @@ while ($users = mysql_fetch_array($result))
     <td align='center'><?php echo $users["accepting"]=='Yes' ? 'Yes' : "<span class='error'>No</span>"; ?></td>
     <?php
     echo "<td>";
-    echo "<a href='holiday_calendar.php?type=1&amp;user={$users['id']}' title='Holiday Calendar'><img src='{$CONFIG['application_webpath']}images/icons/kdeclassic/16x16/apps/date.png' width='16' height='16' alt='Calendar icon' style='border:none;' /></a> ";
-    echo "<a href='tasks.php?user={$users['id']}' title='Tasks'><img src='{$CONFIG['application_webpath']}images/icons/kdeclassic/16x16/actions/todo.png' width='16' height='16' alt='Todo icon' style='border:none;' /></a> ";
+    echo "<a href='holiday_calendar.php?type=1&amp;user={$users['id']}' title='Holiday Calendar'><img src='{$CONFIG['application_webpath']}images/icons/{$iconset}/16x16/apps/date.png' width='16' height='16' alt='Calendar icon' style='border:none;' /></a> ";
+    echo "<a href='tasks.php?user={$users['id']}' title='Tasks'><img src='{$CONFIG['application_webpath']}images/icons/{$iconset}/16x16/actions/todo.png' width='16' height='16' alt='Todo icon' style='border:none;' /></a> ";
     echo "</td>";
     echo "</tr>";
 
