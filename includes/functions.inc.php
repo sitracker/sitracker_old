@@ -4871,6 +4871,58 @@ function show_tag_cloud($orderby="name")
     return $html;
 }
 
+
+function ansort($x,$var,$cmp='strcasecmp')
+{
+    // Numeric descending sort of multi array
+    if ( is_string($var) ) $var = "'$var'";
+    if ($cmp=='numeric') uasort($x, create_function('$a,$b', 'return '.'( $a['.$var.'] < $b['.$var.']);'));
+    else uasort($x, create_function('$a,$b', 'return '.$cmp.'( $a['.$var.'],$b['.$var.']);'));
+    return $x;
+}
+
+function array_remove_duplicate($array, $field)
+{
+    foreach ($array as $sub) $cmp[] = $sub[$field];
+    $unique = array_unique($cmp);
+    foreach ($unique as $k => $rien) $new[] = $array[$k];
+    return $new;
+}
+
+// This function doesn't exist for PHP4 so use this instead
+if (!function_exists("stripos"))
+{
+  function stripos($str,$needle,$offset=0)
+  {
+      return strpos(strtolower($str),strtolower($needle),$offset);
+  }
+}
+
+
+function array_multi_search($needle, $haystack, $searchkey)
+{
+    foreach($haystack AS $thekey => $thevalue)
+    {
+        if($thevalue[$searchkey] == $needle) return $thekey;
+    }
+    return FALSE;
+}
+
+
+function string_find_all($haystack, $needle, $limit=0)
+{
+    $positions = array();
+    $currentoffset = 0;
+    $count=0;
+    while(($pos = stripos($haystack, $needle, $offset)) !==false && ($count < $limit || $limit == 0))
+    {
+        $positions[] = $pos;
+        $offset = $pos + strlen($needle);
+        $count++;
+    }
+    return $positions;
+}
+
 // -------------------------- // -------------------------- // --------------------------
 // leave this section at the bottom of functions.inc.php ================================
 

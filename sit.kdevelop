@@ -2,8 +2,8 @@
 <kdevelop>
   <general>
     <author>Ivan Lucas</author>
-    <email>ivan.lucas@salfordsoftware.co.uk</email>
-    <version>3.24</version>
+    <email>ivanlucas@users.sourceforge.net</email>
+    <version>3.30</version>
     <projectmanagement>KDevScriptProject</projectmanagement>
     <primarylanguage>PHP</primarylanguage>
     <ignoreparts/>
@@ -11,6 +11,8 @@
     <absoluteprojectpath>false</absoluteprojectpath>
     <description>Support Incident Tracker (or SiT!) is a web based application for tracking technical support calls/emails. Manage contacts, sites, technical support contracts and support incidents in one place. Send and receive emails directly from SiT!, attach files and record every communication in the incident log. SiT is aware of Service Level Agreements and incidents are flagged if they stray outside of them.</description>
     <versioncontrol>kdevsubversion</versioncontrol>
+    <projectname>sit</projectname>
+    <defaultencoding></defaultencoding>
   </general>
   <kdevscriptproject>
     <general>
@@ -32,25 +34,25 @@
   </kdevdoctreeview>
   <kdevphpsupport>
     <codeHelp>
-      <codeCompletion>true</codeCompletion>
-      <codeHinting>true</codeHinting>
-      <realtimeParsing>true</realtimeParsing>
+      <codeCompletion>false</codeCompletion>
+      <codeHinting>false</codeHinting>
+      <realtimeParsing>false</realtimeParsing>
     </codeHelp>
     <general>
       <invocationMode>1</invocationMode>
     </general>
     <webInvocation>
-      <weburl/>
+      <weburl>http://localhost/</weburl>
       <webFileMode>2</webFileMode>
       <defaultFile/>
     </webInvocation>
     <shell>
       <phpexe>/usr/local/bin/php</phpexe>
-      <phpini/>
+      <phpini></phpini>
     </shell>
     <options>
-      <phpincludepath/>
-      <defaultFile/>
+      <phpincludepath></phpincludepath>
+      <defaultFile></defaultFile>
       <startupFileMode>1</startupFileMode>
     </options>
   </kdevphpsupport>
@@ -128,9 +130,9 @@
   </kdevfileview>
   <kdevdocumentation>
     <projectdoc>
-      <docsystem/>
-      <docurl/>
-      <usermanualurl/>
+      <docsystem></docsystem>
+      <docurl></docurl>
+      <usermanualurl></usermanualurl>
     </projectdoc>
   </kdevdocumentation>
   <ctagspart>
