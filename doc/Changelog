@@ -1,3 +1,7 @@
+Changes in v3.30 - Unreleased
+* Improved search, now supports AND, OR and NOT operators, default is OR
+
+
 Changes in v3.24 - Released 6 November 2006
 -----------------------------------------------------------------------
 * Fixed service levels for reopened incidents, service level target
