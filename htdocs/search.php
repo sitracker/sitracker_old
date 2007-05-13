@@ -228,7 +228,7 @@ if (!empty($search_string))
                     $positions=string_find_all($entry['string'], $sterm);
                     $numpositions=count($positions);
                     if ($numpositions >0 ) $entry['score']+=$numpositions;
-                    echo "numpos: $numpositions<br />";
+//                     echo "numpos: $numpositions<br />";
                 }
                 search_build_results($srch_results,$entry);
                 unset($entry);
