@@ -1,5 +1,14 @@
 Changes in v3.30 - Unreleased
 * Improved search, now supports AND, OR and NOT operators, default is OR
+* Adds forgotten password functionality for portal users
+* Interface to manage dashboard
+* Adds a skills matrix
+* Tidyed up the review incoming updates page
+* New interface for editing vendors
+* Allow setting of holiday entitlement when adding users
+* Added new system email 'NEARING_SLA' that notifies when incidents
+* Yearly engineer report now has a statistics option
+* Adds OpenSearch plugin compatable with Firefox2 and IE7
 
 
 Changes in v3.24 - Released 6 November 2006
