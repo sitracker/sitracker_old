@@ -23,25 +23,65 @@ function give_overview()
     global $todayrecent;
 
     $sql = "SELECT COUNT(incidents.id), incidentstatus.name FROM incidents, incidentstatus ";
-    $sql .= "WHERE incidents.status = incidentstatus.id AND closed = 0 GROUP BY incidents.status";
+    $sql .= "WHERE incidents.status = incidentstatus.id AND status != 2 AND status != 7 GROUP BY incidents.status";
 
     $result = mysql_query($sql);
     if (mysql_error()) trigger_error("MySQL Query Error ".mysql_error(), E_USER_ERROR);
 
+    echo "<table class='vertical' align='center'>";
     if(mysql_num_rows($result) > 0)
     {
        // echo "<table align='center' class='vertical' width='20%'>";
-        echo "<table class='vertical' align='center'>";
         $openCalls = 0;
+        echo "<td><table class='vertical' align='center'>";
         while($row = mysql_fetch_array($result))
         {
             echo "<tr><th>".$row['name']."</th><td class='shade2' align='left'>".$row['COUNT(incidents.id)']."</td></tr>";
-            if(strpos(strtolower($row['name']), "clos") === false) $opencalls += $row['COUNT(incidents.id)'];
+            if(strpos(strtolower($row['name']), "clos") === false) $openCalls += $row['COUNT(incidents.id)'];
         }
-        echo "<tr><th>Total Open</th><td class='shade2' align='left'><strong>$opencalls</strong></td></tr>";
-        echo "</table>";
+        echo "<tr><th>Total Open</th><td class='shade2' align='left'><strong>$openCalls</strong></td></tr></table></td>";
     }
+    plugin_do('statistics_table_overview');
+    echo "</table>";
     mysql_free_result($result);
+
+    //count incidents by Vendor
+
+    $sql = "SELECT DISTINCT products.vendorid, vendors.name FROM incidents, products, vendors ";
+    $sql .= "WHERE status != 2 AND status != 7 AND incidents.product = products.id AND vendors.id = products.vendorid ORDER BY vendorid";
+
+    $result = mysql_query($sql);
+    if (mysql_error()) trigger_error("MySQL Query Error ".mysql_error(), E_USER_ERROR);
+
+    if(mysql_num_rows($result) > 1)
+    {
+        echo "<p><h2>By vendor</h2><table class='vertical' align='center'>";
+        while($vendors = mysql_fetch_array($result))
+        {
+            $sqlVendor = "SELECT COUNT(incidents.id), incidentstatus.name FROM incidents, incidentstatus, products ";
+            $sqlVendor .= "WHERE incidents.status = incidentstatus.id AND closed = 0 AND incidents.product = products.id ";
+            $sqlVendor .= "AND products.vendorid = ".$vendors['vendorid']." ";
+            $sqlVendor .= "GROUP BY incidents.status";
+
+            $resultVendor = mysql_query($sqlVendor);
+            if (mysql_error()) trigger_error("MySQL Query Error ".mysql_error(), E_USER_ERROR);
+
+            if(mysql_num_rows($resultVendor) > 0)
+            {
+                $openCallsVendor = 0;
+                echo "<td style='vertical-align:top' align='center'><strong>".$vendors['name']."</strong>";
+                echo "<table class='vertical' align='center'>";
+                while($rowVendor = mysql_fetch_array($resultVendor))
+                {
+                    echo "<tr><th>".$rowVendor['name']."</th><td class='shade2' align='left'>".$rowVendor['COUNT(incidents.id)']."</td></tr>";
+                    if(strpos(strtolower($rowVendor['name']), "clos") === false) $openCallsVendor += $rowVendor['COUNT(incidents.id)'];
+                }
+                echo "<tr><th>Total Open</th><td class='shade2' align='left'><strong>$openCallsVendor</strong></td></tr></table></td>";
+            }
+        }
+        echo "</table></p>";
+    }
+
 
     // Count incidents logged today
     $sql = "SELECT id FROM incidents WHERE opened > '$todayrecent'";
@@ -69,7 +109,7 @@ function give_overview()
             if (mysql_error()) trigger_error("MySQL Query Error ".mysql_error(), E_USER_ERROR);
             while($irow = mysql_fetch_array($iresult))
             {
-                $string .= "<small><a href=\"javascript:incident_details_window('".$irow['id']."', 'incident".$irow['id']."')\"  title='".$irow['title']."'>[".$irow['id']."]</a></small> ";
+                $string .= "<small><a href=\"javascript:incident_details_window('".$irow['id']."', 'incident".$irow['id']."')\"  title=\"".stripslashes($irow['title'])."\">[".$irow['id']."]</a></small> ";
             }
 
             $string .= "</td></tr>";
@@ -107,7 +147,7 @@ function give_overview()
             if (mysql_error()) trigger_error("MySQL Query Error ".mysql_error(), E_USER_ERROR);
             while($irow = mysql_fetch_array($iresult))
             {
-                $string .= "<tr><th><a href=\"javascript:incident_details_window('".$irow['id']."', 'incident".$irow['id']."')\" title='[".$irow['id']."] - ".$irow['title']."'>".$irow['id']."</a></th>";
+                $string .= "<tr><th><a href=\"javascript:incident_details_window('".$irow['id']."', 'incident".$irow['id']."')\" title='[".$irow['id']."] - ".stripslashes($irow['title'])."'>".$irow['id']."</a></th>";
                 $string .= "<td class='shade2' align='left'>".$irow['title']."</td><td class='shade2' align='left'>".$row['realname']."</td><td class='shade2'>".$irow['name']."</td></tr>\n";
             }
             // $string .= "</table>\n";
