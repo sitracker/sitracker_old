@@ -291,10 +291,11 @@ elseif ($_REQUEST['mode']=='report')
                 $incsql .= "users.id={$_POST['inc'][$i]}";
 		        $incsql_esc .= "incidents.owner={$_POST['inc'][$i]}";
                 if ($i < ($includecount-1)) $incsql .= " OR ";
-		if ($i < ($includecount-1)) $incsql_esc .= " OR ";
+		        if ($i < ($includecount-1)) $incsql_esc .= " OR ";
             }
             $incsql .= ")";
-	    $incsql_esc .= ")";
+	        $incsql_esc .= ")";
+        }
     }
 //
     $sql = "SELECT incidents.id AS incid, incidents.title AS title,users.realname AS realname, users.id AS userid, ";
