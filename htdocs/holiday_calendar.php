@@ -629,7 +629,8 @@ elseif ($display=='list')
             echo "<td>";
             if (empty($dates['approvedby'])) echo " <em>not requested yet</em>";
             else echo "<strong>".holiday_approval_status($dates['approved'])."</strong>";
-            if ($dates['approvedby'] > 0) echo " by ".user_realname($dates['approvedby']);
+            if ($dates['approvedby'] > 0 AND $dates['approved'] >= 1) echo " by ".user_realname($dates['approvedby']);
+            elseif ($dates['approvedby'] > 0 AND empty($dates['approved'])) echo " of ".user_realname($dates['approvedby']);
             echo "</td>";
             echo "<td>";
             if ($approver==TRUE) echo "<a href='add_holiday.php?year=".date('Y',$dates['startdate'])."&amp;month=".date('m',$dates['startdate'])."&amp;day=".date('d',$dates['startdate'])."&amp;user={$dates['userid']}&amp;type={$dates['type']}&amp;length=0&return=list' onclick=\"return window.confirm('".date('l jS F Y', $dates['startdate']).": Are you sure you want to delete this?');\">Delete</a>";
