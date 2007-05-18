@@ -37,6 +37,7 @@ if (empty($search_string))
     <option value="product">Product</option>
     <option value="admincontact">Admin Contact</option>
     <option value="reseller">Reseller</option>
+    <option value="licence_type">Licence Type</option>
     </select>
     </td></tr>
     <tr><th>Search String:</th><td><input maxlength='100' name="search_string" size='30' type='text' /></td></tr>
@@ -68,6 +69,7 @@ else
             $sql .= "sites.name LIKE ('%$search_string%') OR ";
             $sql .= "products.name LIKE ('%$search_string%') OR ";
             $sql .= "resellers.name LIKE ('%$search_string%') OR ";
+            $sql .= "licencetypes.name LIKE ('%$search_string%') OR ";
             $sql .= "contacts.surname LIKE ('%$search_string%'))";
         }
         elseif ($fields == "id")
@@ -100,6 +102,13 @@ else
             $sql .= "(maintenance.site=sites.id AND product=products.id AND reseller=resellers.id AND licence_type=licencetypes.id AND admincontact=contacts.id) AND ";
             $sql .= "(resellers.name LIKE ('%$search_string%'))";
         }
+        elseif ($fields == "licence_type")
+        {
+            $sql  = "SELECT maintenance.id AS maintid, sites.name AS site, products.name AS product, resellers.name AS reseller, licence_quantity, licencetypes.name AS licence_type, expirydate, admincontact, contacts.forenames AS admincontactforenames, contacts.surname AS admincontactsurnname, maintenance.notes FROM maintenance, sites, contacts, products, licencetypes, resellers WHERE ";
+            $sql .= "(maintenance.site=sites.id AND product=products.id AND reseller=resellers.id AND licence_type=licencetypes.id AND admincontact=contacts.id) AND ";
+            $sql .= "(licencetypes.name LIKE ('%$search_string%'))";
+        }
+
         $sql .= " ORDER BY site ASC";
 
         $result = mysql_query($sql);
