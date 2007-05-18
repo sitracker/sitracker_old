@@ -419,10 +419,22 @@ function draw_chart($month, $year)
                     $weekend=FALSE;
                     if ($hdays[$day]=='am' OR $hdays[$day]=='day')
                     {
-                        if ($happroved[$day] == 0 OR $happroved[$day]==10) $html .= "<td class='review'>";
-                        elseif (($happroved[$day] == 1 OR $happroved[$day]==11) AND $htypes[$day] <= 4) $html .= "<td class='idle'>";
-                        elseif (($happroved[$day] == 1 OR $happroved[$day]==11) AND $htypes[$day] == 5) $html .= "<td class='notice'>";
-                        elseif ($happroved[$day] == 2 OR $happroved[$day]==12) $html .= "<td class='urgent'>";
+                        if ($happroved[$day] == 0
+                            OR $happroved[$day]==10
+                            OR $happroved[$day]==8
+                            OR $happroved[$day]==-2) $html .= "<td class='review'>";  // Waiting approval
+                        elseif ($htypes[$day] <= 4
+                                AND ($happroved[$day] == 1
+                                OR $happroved[$day]==11)) $html .= "<td class='idle'>"; // Approved
+                        elseif ($htypes[$day] <= 4
+                                AND ($happroved[$day] == 2
+                                OR $happroved[$day]==12)) $html .= "<td class='notice'>"; // Approved Free
+                        elseif ($htypes[$day] == 5
+                                AND ($happroved[$day] == 1
+                                OR $happroved[$day] == 2
+                                OR $happroved[$day]== 11
+                                OR $happroved[$day] == 12)) $html .= "<td class='notice'>"; // Approved Free
+                        elseif ($happroved[$day] == -1 OR $happroved[$day]==9) $html .= "<td class='urgent'>"; // Denied
                         else $html .= "<td class='shade2'>";
 
                         $html .= substr($holidaytype[$htypes[$day]],0,1);
@@ -479,10 +491,22 @@ function draw_chart($month, $year)
                     $weekend=FALSE;  $hello='';
                     if ($hdays[$day]=='pm' OR $hdays[$day]=='day')
                     {
-                        if ($happroved[$day] == 0 OR $happroved[$day]==10) $html .= "<td class='review'>";
-                        elseif (($happroved[$day] == 1 OR $happroved[$day]==11) AND $htypes[$day] <= 4) $html .= "<td class='idle'>";
-                        elseif (($happroved[$day] == 1 OR $happroved[$day]==11) AND $htypes[$day] == 5) $html .= "<td class='notice'>";
-                        elseif ($happroved[$day] == 2 OR $happroved[$day]==12) $html .= "<td class='urgent'>";
+                        if ($happroved[$day] == 0
+                            OR $happroved[$day]==10
+                            OR $happroved[$day]==8
+                            OR $happroved[$day]==-2) $html .= "<td class='review'>";  // Waiting approval
+                        elseif ($htypes[$day] <= 4
+                                AND ($happroved[$day] == 1
+                                OR $happroved[$day]==11)) $html .= "<td class='idle'>"; // Approved
+                        elseif ($htypes[$day] <= 4
+                                AND ($happroved[$day] == 2
+                                OR $happroved[$day]==12)) $html .= "<td class='notice'>"; // Approved Free
+                        elseif ($htypes[$day] == 5
+                                AND ($happroved[$day] == 1
+                                OR $happroved[$day] == 2
+                                OR $happroved[$day]== 11
+                                OR $happroved[$day] == 12)) $html .= "<td class='notice'>"; // Approved Free
+                        elseif ($happroved[$day] == -1 OR $happroved[$day]==9) $html .= "<td class='urgent'>"; // Denied
                         else $html .= "<td class='shade2'>";
 
                         $html .= "<span title='{$holidaytype[$htypes[$day]]}'>".substr($holidaytype[$htypes[$day]],0,1)."</span>";
