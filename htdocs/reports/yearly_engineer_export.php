@@ -33,8 +33,8 @@ if (empty($_REQUEST['mode']))
     echo "<h2>$title</h2>";
     echo "<form action='{$_SERVER['PHP_SELF']}' method='post'>";
     echo "<table align='center'>";
-    echo "<tr><th colspan='2' align='center' class='shade1'>Include</th></tr>";
-    echo "<tr><td align='center' colspan='2' class='shade1'>";
+    echo "<tr><th colspan='2'>Include</th></tr>";
+    echo "<tr><td align='center' colspan='2'>";
     $sql = "SELECT * FROM users WHERE status > 0 ORDER BY username";
     $result = mysql_query($sql);
     if (mysql_error()) trigger_error("MySQL Query Error ".mysql_error(), E_USER_ERROR);
@@ -46,19 +46,19 @@ if (empty($_REQUEST['mode']))
     echo "</select>";
     echo "</td>";
     echo "</tr>\n";
-    echo "<tr><td align='right' width='200' class='shade1'><strong>Output</strong>:</td>";
-    echo   "<td width='400' class='shade2'>";
+    echo "<tr><th align='right' width='200'><strong>Output</strong>:</td>";
+    echo   "<td width='400'>";
     echo "<select name='output'>";
     echo "<option value='screen'>Screen</option>";
     echo "<option value='csv'>Disk - Comma Seperated (CSV) file</option>";
     echo "</select>";
     echo "</td></tr>";
-    echo "<tr><th align='right' width='200' class='shade1'>Statistics only</th><td class='shade2'><input type='checkbox' name='statistics' /></td></tr>";
+    echo "<tr><th align='right' width='200'>Statistics only</th><td><input type='checkbox' name='statistics' /></td></tr>";
     echo "</table>";
     echo "<p align='center'>";
     echo "<input type='hidden' name='table1' value='{$_POST['table1']}' />";
     echo "<input type='hidden' name='mode' value='report' />";
-    echo "<input type='submit' value='report' />";
+    echo "<input type='submit' value='Run Report' />";
     echo "</p>";
     echo "</form>";
     include('htmlfooter.inc.php');
@@ -222,7 +222,7 @@ elseif ($_REQUEST['statistics'] == 'on')
             $csv .= round($engineer['escalated']/12,2).","; //The average over a 12mnth period
             $csv .= round($engineer['closed']/12,2).","; //The average over a 12mnth period
             $csv .= round(($engineer['escalated']/$engineer['opened'])*100,2)."%\n";
-    
+
 
             if($class=="class='shade1'") $class="class='shade2'";
             else $class="class='shade1'";
@@ -251,7 +251,7 @@ elseif ($_REQUEST['statistics'] == 'on')
 
         $html .= "<p align='center'>The statistics are approximation only. They don't take into consideration incidents reassigned</p>";
         $csv .= "The statistics are approximation only. They don't take into consideration incidents reassigned\n";
-    
+
 
     }
 

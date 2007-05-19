@@ -36,7 +36,6 @@ if (empty($_REQUEST['mode']))
 {
     include('htmlheader.inc.php');
     echo "<h2>Marketing Report</h2>";
-    echo "<p></p>";
     echo "<form action='{$_SERVER['PHP_SELF']}' method='post'>";
     echo "<table align='center'>";
     echo "<tr><th>Include</th><th>Exclude</th></tr>";
@@ -78,9 +77,7 @@ if (empty($_REQUEST['mode']))
     // echo "<tr><td align='right' width='200' class='shade1'><b>Limit to</b>:</td>";
     // echo "<td width=400 class='shade2'><input type='text' name='limit' value='9999' size='4' /> Records</td></tr>";
 
-    echo "<tr><th>Output:</th>";
-    echo "<td>";
-    echo "<select name='output'>";
+    echo "<tr><td colspan='2'>Output: <select name='output'>";
     echo "<option value='screen'>Screen</option>";
     // echo "<option value='printer'>Printer</option>";
     echo "<option value='csv'>Disk - Comma Seperated (CSV) file</option>";

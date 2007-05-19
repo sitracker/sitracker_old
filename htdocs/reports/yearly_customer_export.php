@@ -28,7 +28,7 @@ if (empty($_REQUEST['mode']))
     echo "<form action='{$_SERVER['PHP_SELF']}' method='post'>";
     echo "<table summary='Site Selection Table' align='center'>";
     echo "<tr><th colspan='2' align='center'>Include</th></tr>";
-    echo "<tr><td align='center' colspan='2' class='shade1'>";
+    echo "<tr><td align='center' colspan='2'>";
     $sql = "SELECT * FROM sites ORDER BY name";
     $result = mysql_query($sql);
     if (mysql_error()) trigger_error("MySQL Query Error ".mysql_error(), E_USER_ERROR);
@@ -40,8 +40,8 @@ if (empty($_REQUEST['mode']))
     echo "</select>";
     echo "</td>";
     echo "</tr>\n";
-    echo "<tr><td align='right' width='200' class='shade1'><b>Output</b>:</td>";
-    echo "<td width='400' class='shade2'>";
+    echo "<tr><th align='right'>Output:</th>";
+    echo "<td width='400'>";
     echo "<input type='checkbox' name='showsitetotals' value='yes' /> Add a line after each site showing totals<br />";
     echo "<input type='checkbox' name='showtotals' value='yes' /> Add a line to the bottom of the report showing totals<br /><br />";
     echo "<select name='output'>";

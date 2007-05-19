@@ -31,16 +31,16 @@ if (empty($_REQUEST['mode']))
     echo "<h2>$title</h2>";
     echo "<form action='{$_SERVER['PHP_SELF']}' id='incidentsbysoftware' method='post'>";
     echo "<table class='vertical'>";
-    echo "<tr><td class='shade2'>Start Date:</td>";
-    echo "<td class='shade2'><input type='text' name='startdate' id='startdate' size='10' /> ";
+    echo "<tr><th>Start Date:</th>";
+    echo "<td><input type='text' name='startdate' id='startdate' size='10' /> ";
     echo date_picker('incidentsbysoftware.startdate');
     echo "</td></tr>";
-    echo "<tr><td>Month breakdown:</td><td><input type='checkbox' name='monthbreakdown' /></tr>";
-    echo "<tr><td>Software name</td><td><input type='text' name='software' id='software' size='20'/>";
+    echo "<tr><th>Month breakdown:</th><td><input type='checkbox' name='monthbreakdown' /></td></tr>";
+    echo "<tr><th>Software name</th><td><input type='text' name='software' id='software' size='20'/></td></tr>";
     echo "</table>";
     echo "<p align='center'>";
     echo "<input type='hidden' name='mode' value='report' />";
-    echo "<input type='submit' value='report' />";
+    echo "<input type='submit' value='Run Report' />";
     echo "</p>";
     echo "</form>";
 
@@ -120,10 +120,10 @@ else
         }
 
 
-        if($numrows > 0) 
+        if($numrows > 0)
         {
             unset($monthbreakdown);
-            while($obj = mysql_fetch_object($resultN)) 
+            while($obj = mysql_fetch_object($resultN))
             {
                 $datestr = date("M y",$obj->opened);
 

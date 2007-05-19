@@ -24,8 +24,8 @@ if (empty($_REQUEST['mode']))
     echo "<h2>QBE - Query by Example</h2>";
     echo "<form action='{$_SERVER['PHP_SELF']}' method='post'>";
     echo "<table align='center'>";
-    echo "<tr><td align='right' width='200' class='shade1'><b>Table</b>:</td>";
-    echo "<td width=400 class='shade2'>";
+    echo "<tr><th>Table:</th>";
+    echo "<td>";
     $result = mysql_list_tables($CONFIG['db_database']);
     echo "<select name='table1'>";
     while ($row = mysql_fetch_row($result))
@@ -49,7 +49,7 @@ if (empty($_REQUEST['mode']))
     echo "</table>";
     echo "<p align='center'>";
     echo "<input type='hidden' name='mode' value='selectfields' />";
-    echo "<input type='submit' value='Report' />";
+    echo "<input type='submit' value='Run Report' />";
     echo "</p>";
     echo "</form>";
     include('htmlfooter.inc.php');
