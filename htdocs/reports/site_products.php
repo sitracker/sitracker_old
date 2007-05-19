@@ -23,13 +23,13 @@ if (empty($_REQUEST['mode']))
     echo "<form action='{$_SERVER['PHP_SELF']}' method='post'>";
     echo "<table align='center'>";
 
-    echo "<tr><td align='right' width='200' class='shade1'><b>Site Type</b>:</td>";
-    echo "<td width=400 class='shade2'>";
+    echo "<tr><th>Site Type:</td>";
+    echo "<td>";
     echo sitetype_drop_down('type', 0);
     echo "</td></tr>";
 
-    echo "<tr><td align='right' width='200' class='shade1'><b>Output</b>:</td>";
-    echo "<td width=400 class='shade2'>";
+    echo "<tr><th>Output:</th>";
+    echo "<td>";
     echo "<select name='output'>";
     echo "<option value='screen'>Screen</option>";
     echo "<option value='csv'>Disk - Comma Seperated (CSV) file</option>";
@@ -39,7 +39,7 @@ if (empty($_REQUEST['mode']))
     echo "<p align='center'>";
     echo "<input type='hidden' name='table1' value='{$_POST['table1']}' />";
     echo "<input type='hidden' name='mode' value='report' />";
-    echo "<input type='submit' value='report' />";
+    echo "<input type='submit' value='Run Report' />";
     echo "</p>";
     echo "</form>";
 

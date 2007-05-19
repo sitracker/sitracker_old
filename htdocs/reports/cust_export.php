@@ -40,10 +40,10 @@ if (empty($_REQUEST['mode']))
     include('htmlheader.inc.php');
     echo "<h2>$title</h2>";
     echo "<form action='{$_SERVER['PHP_SELF']}' method='post'>";
-    echo "<table>";
-    echo "<tr><th colspan='2' align='center' class='shade1'>Include</th></tr>";
+    echo "<table align='center'>";
+    echo "<tr><th colspan='2' align='center'>Include</th></tr>";
     // echo "<th align='center' width='300' class='shade1'>Exclude</th>";
-    echo "<tr><td align='center' colspan='2' class='shade1'>";
+    echo "<tr><td align='center' colspan='2'>";
     $sql = "SELECT * FROM sites ORDER BY name";
     $result = mysql_query($sql);
     if (mysql_error()) trigger_error("MySQL Query Error ".mysql_error(), E_USER_ERROR);
@@ -68,9 +68,9 @@ if (empty($_REQUEST['mode']))
     echo "</td>";
     */
     echo "</tr>\n";
-    echo "<tr><td align='right' width='200' class='shade1'><b>Output</b>:</td>";
-    echo "<td width='400' class='shade2'>";
-    echo "<select name='output'>";
+    echo "<tr>";
+    echo "<td colspan='2'>";
+    echo "Output: <select name='output'>";
     echo "<option value='screen'>Screen</option>";
     // echo "<option value='printer'>Printer</option>";
     echo "<option value='csv'>Disk - Comma Seperated (CSV) file</option>";
@@ -80,7 +80,7 @@ if (empty($_REQUEST['mode']))
     echo "<p align='center'>";
     echo "<input type='hidden' name='table1' value='{$_POST['table1']}' />";
     echo "<input type='hidden' name='mode' value='report' />";
-    echo "<input type='submit' value='report' />";
+    echo "<input type='submit' value='Run Report' />";
     echo "</p>";
     echo "</form>";
     echo "<table align='center'><tr><td>";
