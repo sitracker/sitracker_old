@@ -40,6 +40,7 @@ if (isset($refresh) && $refresh != 0)
 {
    echo "<meta http-equiv=\"refresh\" content=\"$refresh\" />\n";
 }
+echo "<script src='{$CONFIG['application_webpath']}scripts/prototype.js' type='text/javascript'></script>\n";
 echo "<script src='{$CONFIG['application_webpath']}webtrack.js' type='text/javascript'></script>\n";
 // javascript popup date library
 echo "<script src='{$CONFIG['application_webpath']}calendar.js' type='text/javascript'></script>\n";
