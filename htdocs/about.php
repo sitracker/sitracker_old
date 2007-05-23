@@ -57,10 +57,13 @@ Completely free for commercial and non-commercial use.</p>
 &copy; 2005 - Peter Nederlof.  Licensed under the LGPL.</p>
 
 <p align='center'>Dojo 0.4.2 by <a href='http://dojotoolkit.org/'>The Dojo Foundation</a><br />
-Copyright &copy; 2004-2006, The Dojo Foundation. All rights reserved. Licensed under the BSD license.</p>
+Copyright &copy; 2004-2006 The Dojo Foundation. Licensed under the BSD license.</p>
 
 <p align='center'>MagpieRSS 0.72 by <a href='http://magpierss.sourceforge.net/'>Kellan Elliott-McCrea</a><br />
-Copyright &copy;, Kellan Elliott-McCrea. Licensed under the GPL license.</p>
+Copyright &copy; Kellan Elliott-McCrea. Licensed under the GPL license.</p>
+
+<p align='center'>Prototype JavaScript framework 1.5.1 by <a href='http://www.prototypejs.org/'>Sam Stephenson</a><br />
+Copyright &copy; 2005-2007 Sam Stephenson. Licensed under the MIT license.</p>
 
 </td></tr>
 <tr><td class='shade1' colspan="2">Licence:</td></tr>

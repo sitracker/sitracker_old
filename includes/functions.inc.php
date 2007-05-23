@@ -142,7 +142,7 @@ $hmenu[103020] = array (10=> array ( 'perm'=> 16, 'name'=> "Add Template", 'url'
 $hmenu[1040] = array (10=> array ( 'perm'=> 0, 'name'=> "View Users", 'url'=>"{$CONFIG['application_webpath']}users.php"),
                       20=> array ( 'perm'=> 0, 'name'=> "List Skills", 'url'=>"{$CONFIG['application_webpath']}user_skills.php"),
                       21=> array ( 'perm'=> 0, 'name'=> "Skills Matrix", 'url'=>"{$CONFIG['application_webpath']}skills_matrix.php"),
-                      30=> array ( 'perm'=> 27, 'name'=> "Holiday Planner", 'url'=>"{$CONFIG['application_webpath']}holiday_calendar.php"),
+                      30=> array ( 'perm'=> 27, 'name'=> "Holiday Planner", 'url'=>"{$CONFIG['application_webpath']}holiday_calendar.php?display=month"),
                       40=> array ( 'perm'=> 50, 'name'=> "Approve Holidays", 'url'=>"{$CONFIG['application_webpath']}holiday_request.php?user=all&amp;mode=approval")
 );
 

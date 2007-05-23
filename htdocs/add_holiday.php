@@ -114,7 +114,9 @@ if ($return=='list')
 }
 else
 {
-    header("Location: holiday_calendar.php?selectedyear=$year&selectedmonth=$month&selectedday=$day&type=$type&length=$dlength&user=$user&selectedtype=$dtype&approved=$dapproved");
+    $url = $_SERVER['HTTP_REFERER'];
+    header("Location: $url");
+    // holiday_calendar.php?selectedyear=$year&selectedmonth=$month&selectedday=$day&type=$type&length=$dlength&user=$user&selectedtype=$dtype&approved=$dapproved
     exit;
 }
 ?>

@@ -12,7 +12,7 @@
     <description>Support Incident Tracker (or SiT!) is a web based application for tracking technical support calls/emails. Manage contacts, sites, technical support contracts and support incidents in one place. Send and receive emails directly from SiT!, attach files and record every communication in the incident log. SiT is aware of Service Level Agreements and incidents are flagged if they stray outside of them.</description>
     <versioncontrol>kdevsubversion</versioncontrol>
     <projectname>sit</projectname>
-    <defaultencoding></defaultencoding>
+    <defaultencoding/>
   </general>
   <kdevscriptproject>
     <general>
@@ -48,11 +48,11 @@
     </webInvocation>
     <shell>
       <phpexe>/usr/local/bin/php</phpexe>
-      <phpini></phpini>
+      <phpini/>
     </shell>
     <options>
-      <phpincludepath></phpincludepath>
-      <defaultFile></defaultFile>
+      <phpincludepath/>
+      <defaultFile/>
       <startupFileMode>1</startupFileMode>
     </options>
   </kdevphpsupport>
@@ -130,9 +130,9 @@
   </kdevfileview>
   <kdevdocumentation>
     <projectdoc>
-      <docsystem></docsystem>
-      <docurl></docurl>
-      <usermanualurl></usermanualurl>
+      <docsystem/>
+      <docurl/>
+      <usermanualurl/>
     </projectdoc>
   </kdevdocumentation>
   <ctagspart>

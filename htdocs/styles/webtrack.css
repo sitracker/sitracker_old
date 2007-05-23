@@ -26,7 +26,8 @@ a
   color: #3366CC;
 }
 
-a em { font-style: normal; text-decoration: underline; }
+a em { font-style: normal; text-decoration: underline; color: #224488; }
+
 a:hover
 {
   font-weight: bold;
@@ -509,7 +510,22 @@ div.detailfoot
 }
 
 div.note { font-size: 98%; background-color: #FFFFA2; border-color: #A2A86A; margin-top: 0px; }
-
+div.appointment:hover { background-color: #FFFFA2; cursor: pointer; }
+div.appointmentdata
+{
+    visibility: hidden;
+    display: none;
+    z-index: 2; width: 150px; height: 30px;
+    background: white; position:absolute; top: 5px; left: 5px;
+    border: 1px solid black;
+    filter:alpha(opacity=85);
+    opacity: 0.85;
+    -moz-opacity:0.85;
+    padding: 2px;
+}
+div.appointmentdata h2 { font-size: 100%; font-style: bold; background-color: #CCCCFF; padding: 0px; margin: 0px;}
+div.appointmentdata h2 a {color: red; float: right; }
+div.appointmentdata h2 a:hover {background: white;}
 .deleted { text-decoration: line-through; }
 
 .dojoComboBox { height: 1.5em; }

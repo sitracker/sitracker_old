@@ -19,6 +19,7 @@ require('auth.inc.php');
 
 // External variables
 $step = $_REQUEST['step'];
+$date = cleanvar($_REQUEST['date']);
 
 if (empty($step))
 {
@@ -33,18 +34,18 @@ if (empty($step))
 
     <form name="date" action="<?php echo $_SERVER['PHP_SELF']; ?>" method="post">
     <table class='vertical'>
-    <tr><th>Holiday Type:</th><td class='shade2'><?php holidaytype_drop_down('type', 1) ?></td></tr>
-    <tr><th>Start Date:</th><td align='left' class='shade1' title='date picker'>
-    <input name='start' size="10" />
-    <?php
+    <tr><th>Holiday Type:</th><td><?php holidaytype_drop_down('type', 1) ?></td></tr>
+    <tr><th>Start Date:</th><td title='date picker'>
+    <?php echo "<input name='start' size='10' value='{$date}' /> ";
     echo date_picker('date.start');
     ?>
+    </td></tr>
     <tr><th>End Date:</th><td align='left' class='shade1' title='date picker'>
     <input name='end' size="10" />
     <?php
     echo date_picker('date.end');
     ?>
-
+    </td></tr>
     </table>
     <p align='center'>
     <input type='hidden' name='step' value='1' />
@@ -64,8 +65,9 @@ elseif ($step=='1')
     include('htmlheader.inc.php');
     $start=strtotime($start);
     $end=strtotime($end);
-    if ($start==0) $start=$now;
-    if ($end==0) $end=$now;
+    if ($start==0 && $end==0) { $start=$now; $end=$now; }
+    elseif ($end==0 && $start>0) $end=$start;
+    elseif ($start==0 && $end>0) $start=$end;
 
     echo "<h2>Book ".holiday_type($type)."</h2>";
     if ($type=='2') echo "<p align='center'>Sickness, can of course only be booked for days that have passed.</p>";

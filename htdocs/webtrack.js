@@ -1,4 +1,5 @@
 /* Javascript/ECMAscript Functions for SiT (previously known as Webtrack) by Ivan Lucas */
+/* Since v3.30 this requires prototype.js */
 
 function incident_details_window(incidentid,win)
 {
@@ -59,5 +60,22 @@ function togglecontactaddress()
         document.contactform.county.disabled=true;
         document.contactform.country.disabled=true;
         document.contactform.postcode.disabled=true;
+    }
+}
+
+function appointment(id)
+{
+
+    if ($(id).style.visibility=='visible')
+    {
+        $(id).style.visibility='hidden';
+        $(id).style.display='none';
+    }
+    else
+    {
+        var parent = $(id).ancestors();
+        parent[0].makePositioned();
+        $(id).style.visibility='visible';
+        $(id).style.display='block';
     }
 }
