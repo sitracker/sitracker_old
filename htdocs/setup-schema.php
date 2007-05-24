@@ -25,7 +25,7 @@ INSERT INTO `closingstatus` VALUES (6, 'No Longer Relevant');
 INSERT INTO `closingstatus` VALUES (7, 'Unsupported');
 INSERT INTO `closingstatus` VALUES (8, 'Support Expired');
 INSERT INTO `closingstatus` VALUES (9, 'Unsolved');
-
+INSERT INTO `closingstatus` VALUES (10, 'Escalated');
 
 CREATE TABLE `contactflags` (
  `contactid` int(11) default NULL,
@@ -1404,7 +1404,7 @@ CREATE TABLE `linktypes` (
    ) ENGINE=MyISAM;
 
 INSERT INTO `linktypes` VALUES (1,'Task','Subtask','Parent Task','tasks','id','tasks','id','name','','view_task.php?id=%id%'),(2,'Contact','Contact','Contact Task','tasks','id','contacts','id','forenames','','contact_details.php?id=%id%'),(3,'Site','Site','Site Task','tasks','id','sites','id','name','','site_details.php?id=%id%'),(4,'Incident','Incident','Task','tasks','id','incidents','id','title','','incident_details.php?id=%id%');
-
+INSERT INTO `closingstatus` ( `id` , `name` ) VALUES ( NULL , 'Escalated' );
 ";
 
 // Important: When making changes to the schema you must add SQL to make the alterations
