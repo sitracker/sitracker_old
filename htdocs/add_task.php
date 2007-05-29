@@ -93,6 +93,10 @@ switch ($action)
         echo "</td></tr>";
         echo "<tr><th>Completion</th>";
         echo "<td><input type='text' name='completion' size='3' maxlength='3' value='0' />&#037;</td></tr>";
+        echo "<tr><th>End Date</th>";
+        echo "<td><input type='text' name='enddate' id='enddate' size='10' /> ";
+        echo date_picker('addtask.enddate');
+        echo "</td></tr>";
         echo "<tr><th>Value</th>";
         echo "<td><input type='text' name='value' size='6' maxlength='12' /></td></tr>";
         echo "<tr><th>Privacy</th>";

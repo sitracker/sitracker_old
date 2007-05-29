@@ -70,6 +70,7 @@ if (!empty($sort))
     elseif ($sort=='completion') $sql .= "ORDER BY completion ";
     elseif ($sort=='startdate') $sql .= "ORDER BY startdate ";
     elseif ($sort=='duedate') $sql .= "ORDER BY duedate ";
+    elseif ($sort=='enddate') $sql .= "ORDER BY enddate ";
     elseif ($sort=='distribution') $sql .= "ORDER BY distribution ";
     else $sql = "ORDER BY id ";
     if ($order=='a' OR $order=='ASC' OR $order='') $sql .= "ASC";
@@ -93,12 +94,14 @@ if (mysql_num_rows($result) >=1 )
     echo colheader('completion', 'Completion', $sort, $order);
     echo colheader('startdate', 'Start Date', $sort, $order);
     echo colheader('duedate', 'Due Date', $sort, $order);
+    if ($show=='completed') echo colheader('enddate', 'End Date', $sort, $order);
     echo "</tr>\n";
     $shade='shade1';
     while ($task = mysql_fetch_object($result))
     {
         $duedate = mysql2date($task->duedate);
         $startdate = mysql2date($task->startdate);
+        $enddate = mysql2date($task->enddate);
         echo "<tr class='$shade'>";
         if ($user == $sit[2])
         {
@@ -128,7 +131,12 @@ if (mysql_num_rows($result) >=1 )
         echo ">";
         if ($duedate > 0) echo date($CONFIG['dateformat_date'],$duedate);
         echo "</td>";
-
+        if ($show=='completed')
+        {
+            echo "<td>";
+            if ($duedate > 0) echo date($CONFIG['dateformat_date'],$enddate);
+            echo "</td>";
+        }
         echo "</tr>\n";
         if ($shade=='shade1') $shade='shade2';
         else $shade='shade1';

@@ -44,6 +44,7 @@ if (mysql_num_rows($result) >= 1)
         echo "<div style='width: 48%; float: left;'>";
         $startdate=mysql2date($task->startdate);
         $duedate=mysql2date($task->duedate);
+        $enddate=mysql2date($task->enddate);
         echo "<table class='vertical' width='100%'>";
         echo "<tr><th>Title</th>";
         echo "<td>".stripslashes($task->name)."</td></tr>";
@@ -72,6 +73,10 @@ if (mysql_num_rows($result) >= 1)
         echo "</td></tr>";
         echo "<tr><th>Completion</th>";
         echo "<td>".percent_bar($task->completion)."</td></tr>";
+        echo "<tr><th>End Date</th>";
+        echo "<td>";
+        if ($enddate > 0) echo date('Y-m-d',$enddate);
+        echo "</td></tr>";
         echo "<tr><th>Value</th>";
         echo "<td>{$task->value}</td></tr>";
         echo "<tr><th>Privacy</th>";

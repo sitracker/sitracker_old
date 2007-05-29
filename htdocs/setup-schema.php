@@ -979,6 +979,7 @@ CREATE TABLE `tags` (
   PRIMARY KEY  (`tagid`)
 ) ENGINE=MyISAM;
 
+
 CREATE TABLE `tasks` (
   `id` int(11) NOT NULL auto_increment,
   `name` varchar(255) default NULL,
@@ -987,6 +988,7 @@ CREATE TABLE `tasks` (
   `owner` tinyint(4) NOT NULL default '0',
   `duedate` datetime default NULL,
   `startdate` datetime default NULL,
+  `enddate` datetime default NULL,
   `completion` tinyint(4) default NULL,
   `value` float(6,2) default NULL,
   `distribution` enum('public','private') NOT NULL default 'public',
@@ -994,7 +996,8 @@ CREATE TABLE `tasks` (
   `lastupdated` timestamp(14) NOT NULL,
   PRIMARY KEY  (`id`),
   KEY `owner` (`owner`)
-) ENGINE=MyISAM  ;
+) ENGINE=MyISAM ;
+
 
 
 CREATE TABLE `tempassigns` (
@@ -1405,6 +1408,7 @@ CREATE TABLE `linktypes` (
 
 INSERT INTO `linktypes` VALUES (1,'Task','Subtask','Parent Task','tasks','id','tasks','id','name','','view_task.php?id=%id%'),(2,'Contact','Contact','Contact Task','tasks','id','contacts','id','forenames','','contact_details.php?id=%id%'),(3,'Site','Site','Site Task','tasks','id','sites','id','name','','site_details.php?id=%id%'),(4,'Incident','Incident','Task','tasks','id','incidents','id','title','','incident_details.php?id=%id%');
 INSERT INTO `closingstatus` ( `id` , `name` ) VALUES ( NULL , 'Escalated' );
+ALTER TABLE `tasks` ADD `enddate` DATETIME NULL AFTER `startdate` ;
 ";
 
 // Important: When making changes to the schema you must add SQL to make the alterations
