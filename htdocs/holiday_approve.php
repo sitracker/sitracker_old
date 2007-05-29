@@ -29,10 +29,10 @@ $view = cleanvar($_REQUEST['view']);
 // there is an existing booking so alter it
 switch (strtolower($approve))
 {
-    case 'true': 
+    case 'true':
         $sql = "UPDATE holidays SET approved='1' ";
     break;
-    case 'false': 
+    case 'false':
         $sql = "UPDATE holidays SET approved='2' ";
     break;
     case 'free':
@@ -42,20 +42,21 @@ switch (strtolower($approve))
 
 $sql .= "WHERE approvedby='$sit[2]' AND approved=0 ";
 
-if ($user != 'all') 
+if ($user != 'all')
     $sql .= "AND userid='$user' ";
 
-if ($startdate != 'all') 
+if ($startdate != 'all')
     $sql.="AND startdate='$startdate' AND type='$type' AND length='$length'";
 
 $result = mysql_query($sql);
+if (mysql_error()) trigger_error(mysql_error(),E_USER_ERROR);
 
 $bodytext = "Message from {$CONFIG['application_shortname']}: ".user_realname($sit[2])." has ";
 if ($approve=='FALSE') $bodytext.="rejected";
 else $bodytext.="approved";
 $bodytext.=" your request for ";
 if ($startdate=='all') $bodytext .= "all days requested\n\n";
-else 
+else
 {
     $bodytext .= "the ";
     $bodytext .= date('l j F Y',$startdate);

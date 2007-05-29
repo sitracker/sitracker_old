@@ -37,6 +37,11 @@ switch ($action)
         else $startdate = '';
         $completion = cleanvar(str_replace('%','',$_REQUEST['completion']));
         if ($completion!='' AND !is_numeric($completion)) $completion=0;
+        if ($completion > 100) $completion=100;
+        if ($completion < 0) $completion=0;
+        if (!empty($_REQUEST['enddate'])) $enddate = strtotime($_REQUEST['enddate']);
+        else $enddate = '';
+        if ($completion==100 AND $enddate == '') $enddate = $now;
         $value = cleanvar($_REQUEST['value']);
         $distribution = cleanvar($_REQUEST['distribution']);
         $old_name = cleanvar($_REQUEST['old_name']);
@@ -45,6 +50,7 @@ switch ($action)
         $old_startdate = cleanvar($_REQUEST['old_startdate']);
         $old_duedate = cleanvar($_REQUEST['old_duedate']);
         $old_completion = cleanvar($_REQUEST['old_completion']);
+        $old_enddate = cleanvar($_REQUEST['old_enddate']);
         $old_value = cleanvar($_REQUEST['old_value']);
         $old_distribution = cleanvar($_REQUEST['old_distribution']);
         if ($distribution=='public') $tags = cleanvar($_POST['tags']);
@@ -73,11 +79,13 @@ switch ($action)
             else $startdate = '';
             if ($duedate > 0) $duedate = date('Y-m-d',$duedate);
             else $duedate='';
+            if ($enddate > 0) $enddate = date('Y-m-d',$enddate);
+            else $enddate='';
             if ($startdate < 1 AND $completion > 0) $startdate = date('Y-m-d H:i:s');
             $sql = "UPDATE tasks ";
             $sql .= "SET name='$name', description='$description', priority='$priority', ";
             $sql .= "duedate='$duedate', startdate='$startdate', ";
-            $sql .= "completion='$completion', value='$value', ";
+            $sql .= "completion='$completion', enddate='$enddate', value='$value', ";
             $sql .= "distribution='$distribution' ";
             $sql .= "WHERE id='$id' LIMIT 1";
             mysql_query($sql);
@@ -94,6 +102,7 @@ switch ($action)
             $old_duedate = substr($old_duedate,0,10);
             if ($duedate != $old_duedate) $bodytext .= "Due Date: {$old_duedate} -&gt; [b]{$duedate}[/b]\n";
             if ($completion != $old_completion) $bodytext .= "Completion: {$old_completion}% -&gt; [b]{$completion}%[/b]\n";
+            if ($enddate != $old_enddate) $bodytext .= "End Date: {$old_enddate} -&gt; [b]{$enddate}[/b]\n";
             if ($value != $old_value) $bodytext .= "Value: {$old_value} -&gt; [b]{$value}[/b]\n";
             if ($distribution != $old_distribution) $bodytext .= "Privacy: {$old_distribution} -&gt; [b]{$distribution}[/b]\n";
             if (!empty($bodytext))
@@ -111,8 +120,9 @@ switch ($action)
     break;
 
     case 'markcomplete':
+        $enddate = date('Y-m-d H:i:s');
         $sql = "UPDATE tasks ";
-        $sql .= "SET completion='100' ";
+        $sql .= "SET completion='100', enddate='$enddate' ";
         $sql .= "WHERE id='$id' LIMIT 1";
         mysql_query($sql);
         if (mysql_error()) trigger_error(mysql_error(),E_USER_ERROR);
@@ -141,6 +151,7 @@ switch ($action)
             {
                 $startdate=mysql2date($task->startdate);
                 $duedate=mysql2date($task->duedate);
+                $enddate=mysql2date($task->enddate);
                 echo "<form id='edittask' action='{$_SERVER['PHP_SELF']}' method='post'>";
                 echo "<table class='vertical'>";
                 echo "<tr><th>Title</th>";
@@ -168,6 +179,12 @@ switch ($action)
                 echo "</td></tr>";
                 echo "<tr><th>Completion</th>";
                 echo "<td><input type='text' name='completion' size='3' maxlength='3' value='{$task->completion}' />&#037;</td></tr>";
+                echo "<tr><th>End Date</th>";
+                echo "<td><input type='text' name='enddate' id='enddate' size='10' value='";
+                if ($enddate > 0) echo date('Y-m-d',$enddate);
+                echo "' /> ";
+                echo date_picker('edittask.enddate');
+                echo "</td></tr>";
                 echo "<tr><th>Value</th>";
                 echo "<td><input type='text' name='value' size='6' maxlength='12' value='{$task->value}' /></td></tr>";
                 echo "<tr><th>Privacy</th>";
@@ -189,6 +206,7 @@ switch ($action)
                 echo "<input type='hidden' name='old_startdate' value='{$task->startdate}' />";
                 echo "<input type='hidden' name='old_duedate' value='{$task->duedate}' />";
                 echo "<input type='hidden' name='old_completion' value='{$task->completion}' />";
+                echo "<input type='hidden' name='old_enddate' value='{$task->enddate}' />";
                 echo "<input type='hidden' name='old_value' value='{$task->value}' />";
                 echo "<input type='hidden' name='old_distribution' value='{$task->distribution}' />";
                 echo "</form>";
