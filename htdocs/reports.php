@@ -87,6 +87,10 @@ Table and chart showing the number of incidents logged under different software.
 </td></tr>
 
 
+<tr><td><a href='reports/incidents_by_vendor.php'>Incidents by Vendor</a><br />
+Table showing the number of incidents logged for different Vendors.
+</td></tr>
+
 <?php
 
 plugin_do('reports_menu');
