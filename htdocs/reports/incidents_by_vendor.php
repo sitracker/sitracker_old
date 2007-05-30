@@ -36,7 +36,7 @@ if (empty($_REQUEST['mode']))
     echo "</table>";
     echo "<p align='center'>";
     echo "<input type='hidden' name='mode' value='report' />";
-    echo "<input type='submit' value='report' />";
+    echo "<input type='submit' value='Run Report' />";
     echo "</p>";
     echo "</form>";
 
@@ -71,7 +71,7 @@ LIMIT 0 , 30
     {
         echo "<p>";
         echo "<table class='vertical' align='center'>";
-        echo "<tr><td>Vendor</td><td>Number of calls</td></tr>";
+        echo "<tr><th>Vendor</th><th>Number of calls</th></tr>";
         while($row = mysql_fetch_array($result))
         {
             echo "<tr><td class='shade1'>".$row['name']."</td><td class='shade1'>".$row['volume']."</td></tr>";
