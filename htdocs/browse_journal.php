@@ -25,30 +25,33 @@ $offset = cleanvar($_REQUEST['offset']);
 $perpage = cleanvar($_REQUEST['perpage']);
 $search_string = cleanvar($_REQUEST['search_string']);
 $type = cleanvar($_REQUEST['type']);
+$sort = cleanvar($_REQUEST['sort']);
+$order = cleanvar($_REQUEST['order']);
 
 if (empty($search_string)) $search_string='a';
 
 include('htmlheader.inc.php');
-?>
-<h2>Browse Journal</h2>
-<table summary="alphamenu" align="center">
-<tr>
-<td align="center">
-<form action="<?php echo $_SERVER['PHP_SELF']; ?>" method="get">
-<input type="text" name="search_string" /><input type="submit" value="go" />
-</form>
-</td>
-</tr>
-</table>
-<br />
-<?php
+echo "<h2>{$title}</h2>";
 
-$perpage = 50;
+if (empty($perpage)) $perpage = 50;
 if ($offset=='') $offset=0;
 
 $sql = "SELECT * FROM journal ";
 if (!empty($type)) $sql .= "WHERE journaltype='{$type}' ";
-$sql .= "ORDER BY timestamp DESC LIMIT $offset, $perpage ";
+// Create SQL for Sorting
+if (!empty($sort))
+{
+    if ($order=='a' OR $order=='ASC' OR $order='') $sortorder = "ASC";
+    else $sortorder = "DESC";
+    switch($sort)
+    {
+        case 'userid': $sql .= " ORDER BY userid $sortorder"; break;
+        case 'timestamp': $sql .= " ORDER BY timestamp $sortorder"; break;
+        case 'refid': $sql .= " ORDER BY contacts.surname $sortorder, contacts.forenames $sortorder"; break;
+        default:   $sql .= " ORDER BY timestamp DESC"; break;
+    }
+}
+$sql .= " LIMIT $offset, $perpage ";
 $result = mysql_query($sql);
 if (mysql_error()) trigger_error("MySQL Query Error ".mysql_error(), E_USER_ERROR);
 
@@ -68,7 +71,11 @@ if ($journal_count >= 1)
 {
     echo "<table align='center'>";
     echo "<tr>";
-    echo "<th>User</th><th>Time/Date</th><th>Event</th><th>Action</th><th>Type</th>";
+    echo colheader('userid','User',$sort, $order, $filter);
+    echo colheader('timestamp','Time/Date',$sort, $order, $filter);
+    echo colheader('event','Event');
+    echo colheader('action','Action');
+    echo colheader('type','Type');
     echo "</tr>\n";
     $shade = 0;
     while ($journal = mysql_fetch_object($result))
@@ -95,6 +102,13 @@ if ($journal_count >= 1)
         else $shade = 1;
     }
     echo "</table>\n";
+    $prev=$offset-$perpage;
+    $next=$offset+$perpage;
+    echo "<p align='center'>";
+    if ($prev > 0) echo "<a href='{$_SERVER['PHP_SELF']}?offset={$prev}'>&lt;</a>";
+    echo "&nbsp;";
+    echo "<a href='{$_SERVER['PHP_SELF']}?offset={$next}'>&gt;</a>";
+    echo "</p>";
 }
 else
 {
