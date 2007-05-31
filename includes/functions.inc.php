@@ -4869,6 +4869,7 @@ function show_tag_cloud($orderby="name")
         }
         $html .= "</td></tr></table>";
     }
+    else $html .= "<p>No tags to display</p>";
     return $html;
 }
 
