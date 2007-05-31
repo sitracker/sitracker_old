@@ -43,7 +43,7 @@ function gotab(tab) {
     background: #F7FAFF;
     margin-left: auto;
     margin-right: auto;
-    border-bottom: 3px solid #3165CD;
+    border-bottom: 3px solid #203894;
 }
 #detailsummary table, .detailentry table
 {
@@ -128,12 +128,14 @@ span.sig { color: red; }
 #navmenu
 {
     color: white;
-    background: black;
+    background: #203894;
     padding-left: 20px;
     padding-top: 2px;
     padding-bottom: 2px;
+    text-align: center;
 }
 #navmenu a { color: white; }
+#navmenu a em { color: #ddd; }
 
 </style>
 <script type="text/javascript" src="helptip.js"></script>
