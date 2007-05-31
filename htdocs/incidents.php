@@ -22,6 +22,7 @@ require('auth.inc.php');
 // External variables
 $type = cleanvar($_REQUEST['type']);
 $user = cleanvar($_REQUEST['user']);
+$softwareid = cleanvar($_REQUEST['softwareid']);
 $queue = cleanvar($_REQUEST['queue']);
 $sort = cleanvar($_REQUEST['sort']);
 $order = cleanvar($_REQUEST['order']);
@@ -83,6 +84,7 @@ switch($type)
         }
         $sql = $selectsql . "WHERE contact=contacts.id AND incidents.priority=priority.id ";
         if ($user!='all') $sql .= "AND (owner='$user' OR towner='$user') ";
+        if (!empty($softwareid)) $sql .= "AND softwareid='$softwareid' ";
 
         echo "<h2>";
         if ($user!='all') echo user_realname($user,TRUE) . "'s Incidents: ";
@@ -173,6 +175,7 @@ switch($type)
         echo "</select>\n";
         echo "</form>";
 
+        if (!empty($softwareid)) echo "<p align='center'>Filter active: only displaying incidents for ".software_name($softwareid)."</p>";
         if ($user=='all') echo "<p align='center'>There are <strong>{$rowcount}</strong> incidents in this list.</p>";
         else echo "<br />";
 
