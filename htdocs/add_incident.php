@@ -147,7 +147,7 @@ elseif ($action=='findcontact')
             if ($contactrow['expirydate']<$now) echo "<td>Expired</td>";
             elseif ($contactrow['term']=='yes') echo "<td>Terminated</td>";
             elseif ($contactrow['incident_quantity'] >= 1 AND $contactrow['incidents_used'] >= $contactrow['incident_quantity'])
-                echo "<td>Zero remaining ({$contactrow['incidents_used']}/{$contactrow['incident_quantity']} Used)</td>";
+                echo "<td class='expired'>Zero remaining ({$contactrow['incidents_used']}/{$contactrow['incident_quantity']} Used)</td>";
             else
             {
                 echo "<td><a href=\"{$_SERVER['PHP_SELF']}?action=incidentform&amp;type=support&amp;contactid=".$contactrow['contactid']."&amp;maintid=".$contactrow['maintenanceid']."&amp;producttext=".urlencode($contactrow['productname'])."&amp;productid=".$contactrow['productid']."&amp;updateid=$updateid&amp;siteid=".$contactrow['siteid']."\" onclick=\"return confirm_support();\">Add Incident</a> ";
