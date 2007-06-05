@@ -133,7 +133,8 @@ $hmenu[1030] = array (10=> array ( 'perm'=> 22, 'name'=> "Users", 'url'=>"{$CONF
 $hmenu[103010] = array (10=> array ( 'perm'=> 22, 'name'=> "Manage Users", 'url'=>"{$CONFIG['application_webpath']}manage_users.php"),
                         20=> array ( 'perm'=> 20, 'name'=> "Add User", 'url'=>"{$CONFIG['application_webpath']}add_user.php?action=showform"),
                         30=> array ( 'perm'=> 9, 'name'=> "Set Permissions", 'url'=>"{$CONFIG['application_webpath']}edit_user_permissions.php"),
-                        40=> array ( 'perm'=> 23, 'name'=> "User Groups", 'url'=>"{$CONFIG['application_webpath']}usergroups.php")
+                        40=> array ( 'perm'=> 23, 'name'=> "User Groups", 'url'=>"{$CONFIG['application_webpath']}usergroups.php"),
+                        50=> array ( 'perm'=> 22, 'name'=> "Edit Holiday Entitlement", 'url'=>"{$CONFIG['application_webpath']}edit_holidays.php")
 );
 $hmenu[103020] = array (10=> array ( 'perm'=> 16, 'name'=> "Add Template", 'url'=>"{$CONFIG['application_webpath']}add_emailtype.php?action=showform"),
                         20=> array ( 'perm'=> 17, 'name'=> "Edit Template", 'url'=>"{$CONFIG['application_webpath']}edit_emailtype.php?action=showform"),
