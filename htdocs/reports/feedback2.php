@@ -74,12 +74,12 @@ if (mysql_num_rows($uresult) >= 1)
                     }
                 }
                 if ($numresults>0) $average=number_format(($cumul/$numresults), 2);
-                $percent =number_format((($average / 9) * 100), 0);
+                $percent =number_format((($average / $CONFIG['feedback_max_score']) * 100), 0);
                 $totalresult+=$average;
                 $html .= "{$average} <strong>({$percent}%)</strong><br />";
             }
             $total_average=number_format($totalresult/$numquestions,2);
-            $total_percent=number_format((($total_average / 9) * 100), 0);
+            $total_percent=number_format((($total_average / $CONFIG['feedback_max_score']) * 100), 0);
             $html .= "<p>Positivity: {$total_average} <strong>({$total_percent}%)</strong> after $numresults surveys.</p>";
             $surveys+=$numresults;
             $html .= "<hr />\n";
