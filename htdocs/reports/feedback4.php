@@ -83,14 +83,14 @@ if (mysql_num_rows($mresult) >=1)
             {
                 if ($storeone[$c]>0) $qr=number_format($storeone[$c]/$storetwo[$c],2);
                 else $qr=0;
-                if ($storeone[$c]>0) $qp=number_format((($storeone[$c] / (9 * $storetwo[$c])) * 100), 0);
+                if ($storeone[$c]>0) $qp=number_format((($storeone[$c] / ($CONFIG['feedback_max_score'] * $storetwo[$c])) * 100), 0);
                 else $qp=0;
                 $html .= "Q$c: {$q[$c]->question} {$qr} <strong>({$qp}%)</strong><br />";
                 $gtotal+=$qr;
             }
             if ($c>0) $c--;
             $total_average=number_format($gtotal/$c,2);
-            $total_percent=number_format((($gtotal / (9 * $c)) * 100), 0);
+            $total_percent=number_format((($gtotal / ($CONFIG['feedback_max_score'] * $c)) * 100), 0);
 
             ## ($gtotal)($c)
             $html .= "<p>Positivity: {$total_average} <strong>({$total_percent}%)</strong>, after $surveys surveys</p>";
@@ -186,7 +186,7 @@ if (mysql_num_rows($mresult) >=1)
         }
 
         if ($numresults>0) $average=number_format(($cumul/$numresults), 2);
-        $percent =number_format((($average / 9) * 100), 0);
+        $percent =number_format((($average / $CONFIG['feedback_max_score']) * 100), 0);
         $totalresult+=$average;
 
         $qanswer[$qrow->taborder]+=$average;
