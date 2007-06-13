@@ -519,14 +519,17 @@ function user_holiday($userid, $type=0, $year, $month, $day, $length=FALSE)
 }
 
 
-function user_count_holidays($userid, $type)
+// Optional date field only counts holidays before that date
+function user_count_holidays($userid, $type, $date=0)
 {
     $sql = "SELECT id FROM holidays WHERE userid='$userid' AND type='$type' AND length='day' AND approved >= 0 AND approved < 2 ";
+    if ($date > 0) $sql .= "AND startdate < $date";
     $result = mysql_query($sql);
     if (mysql_error()) trigger_error(mysql_error(),E_USER_WARNING);
     $full_days=mysql_num_rows($result);
 
     $sql = "SELECT id FROM holidays WHERE userid='$userid' AND type='$type' AND (length='pm' OR length='am') AND approved >= 0 AND approved < 2 ";
+    if ($date > 0) $sql .= "AND startdate < $date";
     $result = mysql_query($sql);
     if (mysql_error()) trigger_error(mysql_error(),E_USER_WARNING);
     $half_days=mysql_num_rows($result);
@@ -1966,9 +1969,10 @@ function format_seconds($seconds)
         elseif ($minutes>1) $return_string .= "$minutes minutes";
       }
 
-      if ($months<1 AND $days<1 AND $hours<1 AND $minutes>0)
+      if ($months<1 AND $days<1 AND $hours<1 )
       {
-        $return_string .= "$minutes minutes";
+            if ($minutes<=1) $return_string .= "$minutes minute";
+            if ($minutes>1) $return_string .= "$minutes minutes";
       }
       /*
           if ($months<1 AND $days<1 AND $hours<1 AND $minutes>0)
