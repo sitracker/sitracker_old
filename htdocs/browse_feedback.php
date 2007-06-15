@@ -37,8 +37,8 @@ switch($mode)
         if (mysql_error()) trigger_error(mysql_error(),E_USER_WARNING);
         $response = mysql_fetch_object($result);
         echo "<table class='vertical' align='center'>";
-        echo "<tr><th>Contact</th><td>{$response->contactid}</td></tr>\n";
-        echo "<tr><th>Incident</th><td>{$response->incidentid}</td>\n";
+        echo "<tr><th>Contact</th><td>{$response->contactid} - ".contact_realname($response->contactid)."</td></tr>\n";
+        echo "<tr><th>Incident</th><td><a href=\"javascript:incident_details_window('{$response->incidentid}','incident{$response->incidentid}')\">{$response->incidentid} - ".incident_title($response->incidentid)."</a></td>\n";
         echo "<tr><th>Form</th><td>{$response->formid}</td>\n";
         echo "<tr><th>Date</th><td>{$response->created}</td>\n";
         echo "<tr><th>Completed</th><td>{$response->completed}</td>\n";
@@ -81,14 +81,14 @@ switch($mode)
                     }
                 }
                 if ($numresults>0) $average=number_format(($cumul/$numresults), 2);
-                $percent =number_format((($average / 9) * 100), 0);
+                $percent =number_format((($average / $CONFIG['feedback_max_score']) * 100), 0);
                 $totalresult+=$average;
                 $html .= "<td>{$average}</td></tr>";
                 // <strong>({$percent}%)</strong><br />";
             }
             $html .= "</table>\n";
             $total_average=number_format($totalresult/$numquestions,2);
-            $total_percent=number_format((($total_average / 9) * 100), 0);
+            $total_percent=number_format((($total_average / $CONFIG['feedback_max_score']) * 100), 0);
             $html .= "<p align='center'>Positivity: {$total_average} <strong>({$total_percent}%)</strong></p>";
             $surveys+=$numresults;
             $html .= "<hr />\n";
@@ -154,6 +154,7 @@ switch($mode)
         echo colheader('incidentid','Incident',$sort, $order, $filter);
         echo "<th>Action</th>";
         echo "</tr>\n";
+        $shade='shade1';
         while ($resp = mysql_fetch_object($result))
         {
             $respondentarr=explode('-',$resp->respondent);
@@ -166,7 +167,7 @@ switch($mode)
             $hashcode2=base64_encode($hashcode3);
             $hashcode1=trim($hashcode2);
             $hashcode=urlencode($hashcode1);
-            echo "<tr>";
+            echo "<tr class='$shade'>";
             echo "<td>".date($CONFIG['dateformat_datetime'],mysqlts2date($resp->created))."</td>";
             echo "<td><a href='contact_details.php?id={$resp->contactid}' title='{$resp->email}'>".contact_realname($resp->contactid)."</a></td>";
             echo "<td><a href=\"javascript:incident_details_window('{$resp->incidentid}','incident{$resp->incidentid}')\">Incident [{$resp->incidentid}]</a> - ";
@@ -193,6 +194,8 @@ switch($mode)
             }
             echo "</td>";
             echo "</tr>\n";
+            if ($shade=='shade1') $shade='shade2';
+            else $shade='shade1';
         }
         echo "</table>\n";
     }
@@ -205,14 +208,14 @@ switch($mode)
         $sql = "SELECT COUNT(id) FROM feedbackrespondents WHERE formid='{$formid}' AND completed='yes'";
         $result = mysql_query($sql);
         list($completedforms) = mysql_fetch_row($result);
-        if ($completedforms > 0) echo "<p>There are <a href='{$_SERVER['PHP_SELF']}'>{$completedforms} feedback forms</a> that have been returned already.</p>";
+        if ($completedforms > 0) echo "<p align='center'>There are <a href='{$_SERVER['PHP_SELF']}'>{$completedforms} feedback forms</a> that have been returned already.</p>";
     }
     else
     {
         $sql = "SELECT COUNT(id) FROM feedbackrespondents WHERE formid='{$formid}' AND completed='no'";
         $result = mysql_query($sql);
         list($waiting) = mysql_fetch_row($result);
-        if ($waiting > 0) echo "<p>There are <a href='{$_SERVER['PHP_SELF']}?completed=no'>{$waiting} feedback forms</a> that have not been returned yet.</p>";
+        if ($waiting > 0) echo "<p align='center'>There are <a href='{$_SERVER['PHP_SELF']}?completed=no'>{$waiting} feedback forms</a> that have not been returned yet.</p>";
     }
 }
 include('htmlfooter.inc.php');
