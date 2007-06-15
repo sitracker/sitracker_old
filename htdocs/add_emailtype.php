@@ -100,6 +100,7 @@ if (empty($submit))
     <tr><th>'BCC' Field:</th><td><input maxlength='100' name="bccfield" size="30" /></td></tr>
     <tr><th>'Subject' Field:</th><td><input maxlength=255 name="subjectfield" size="30" /></td></tr>
     <tr><th>Body text:</th><td><textarea name="bodytext" rows="20" cols="60" /></textarea></td></tr>
+    <tr><th>Store in Log:</th><td><input type="checkbox" name="storeinlog" value="Yes" checked='checked' /> Store the email in the incident log</td></tr>
     <tr><th>Visibility:</th><td><input type="checkbox" name="cust_vis" checked='checked' value="yes" /> Make the update to the incident log visible to the customer</td></tr>
     </table>
     <p align='center'><input name="submit" type="submit" value="Add It" /></p>
@@ -121,6 +122,7 @@ else
     $bccfield = mysql_escape_string($_POST['bccfield']);
     $subjectfield = mysql_escape_string($_POST['subjectfield']);
     $bodytext = mysql_escape_string($_POST['bodytext']);
+    $storeinlog = mysql_escape_string($_POST['storeinlog']);
     $cust_vis = mysql_escape_string($_POST['cust_vis']);
 
     // check form input
@@ -147,10 +149,12 @@ else
     {
         if ($_REQUEST['cust_vis']=='yes') $cust_vis='show';
         else $cust_vis='hide';
+        if ($_REQUEST['storeinlog']=='yes') $storeinlog='Yes';
+        else $storeinlog='No';
 
-        $sql  = "INSERT INTO emailtype (name, description, tofield, fromfield, replytofield, ccfield, bccfield, subjectfield, body, customervisibility) ";
+        $sql  = "INSERT INTO emailtype (name, description, tofield, fromfield, replytofield, ccfield, bccfield, subjectfield, body, customervisibility, storeinlog) ";
         $sql .= "VALUES ('$name', '$description', '$tofield', '$fromfield', '$replytofield', '$ccfield', ";
-        $sql .= "'$bccfield', '$subjectfield', '$bodytext', '$cust_vis')";
+        $sql .= "'$bccfield', '$subjectfield', '$bodytext', '$cust_vis', '$storeinlog')";
         $result = mysql_query($sql);
         if (mysql_error()) trigger_error("MySQL Query Error ".mysql_error(), E_USER_ERROR);
 
