@@ -107,7 +107,7 @@ if (mysql_num_rows($result))
         echo date('l jS F Y', $dates['startdate']);
         if ($dates['length']=='am') echo " Morning only";
         if ($dates['length']=='pm') echo " Afternoon only";
-        if (empty($dates['approvedby'])) echo " (not requested yet)</em>";
+        if (empty($dates['approvedby'])) echo " (not requested yet)</em> [<a href='add_holiday.php?year=".date('Y',$dates['startdate'])."&amp;month=".date('m',$dates['startdate'])."&amp;day=".date('d',$dates['startdate'])."&amp;user={$sit[2]}&amp;type={$dates['type']}&amp;length=0&return=holidays' onclick=\"return window.confirm('".date('l jS F Y', $dates['startdate']).": Are you sure you want to cancel this?');\">cancel</a>]";
         echo "</td></tr>\n";
     }
     echo "<tr class='shade1'><td><a href='holiday_request.php?action=resend'>Send reminder request</a></td></tr>";
