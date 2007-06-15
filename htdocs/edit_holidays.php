@@ -23,7 +23,7 @@ switch($_REQUEST['action'])
         $archivedate = strtotime($_REQUEST['archivedate']);
         if ($archivedate < 1000) $archivedate = $now;
         $default_entitlement = cleanvar($_REQUEST['default_entitlement']);
-        $sql = "SELECT * FROM users WHERE status >= 1 ORDER BY realname ASC";
+        $sql = "SELECT * FROM users WHERE status >= 1";
         $result = mysql_query($sql);
         if (mysql_error()) trigger_error(mysql_error(),E_USER_WARNING);
         while ($users = mysql_fetch_object($result))
@@ -32,7 +32,7 @@ switch($_REQUEST['action'])
             if ($_REQUEST[$fieldname]=='yes')
             {
                 $orig_entitlement = user_holiday_entitlement($users->id);
-                $used_holidays = user_count_holidays($users->id, 1);
+                $used_holidays = user_count_holidays($users->id, 1, $archivedate);
                 $remaining_holidays = $orig_entitlement - $used_holidays;
                 if ($remaining_holidays < $max_carryover) $carryover = $remaining_holidays;
                 else $carryover = $max_carryover;
@@ -85,7 +85,7 @@ switch($_REQUEST['action'])
             else $shade = "shade1";
             echo "<tr class='$shade'>";
             echo "<td><input type='checkbox' name='user{$users->id}' value='yes' /></td>";
-            echo "<td>{$users->realname} ({$users->username})</td>";
+            echo "<td><a href='holidays.php?user={$users->id}'>{$users->realname}</a> ({$users->username})</td>";
 
             $entitlement = user_holiday_entitlement($users->id);
             $used_holidays = user_count_holidays($users->id, 1);
