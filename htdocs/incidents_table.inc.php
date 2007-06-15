@@ -71,8 +71,10 @@ while ($incidents = mysql_fetch_array($result))
     // Make a readble last updated field
     if ($incidents['lastupdated'] > $now - 300)
         $updated = "<em style='color: #640000; font-weight: bolder;'>".format_seconds($now - $incidents['lastupdated'])." ago</em>";
-    elseif ($incidents['lastupdated'] > $now - 3600)
+    elseif ($incidents['lastupdated'] > $now - 1800)
         $updated = "<em style='color: #640000;'>".format_seconds($now - $incidents['lastupdated'])." ago</em>";
+    elseif ($incidents['lastupdated'] > $now - 3600)
+        $updated = "<em>".format_seconds($now - $incidents['lastupdated'])." ago</em>";
     elseif (date('dmy', $incidents['lastupdated']) == date('dmy', $now))
         $updated = "Today @ ".date($CONFIG['dateformat_time'], $incidents['lastupdated']);
     elseif (date('dmy', $incidents['lastupdated']) == date('dmy', ($now-86400)))
