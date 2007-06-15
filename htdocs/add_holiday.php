@@ -77,7 +77,7 @@ else
     {
         if ($length=='0')
         {
-            // bugbug: doesn't check permission or anything
+            // FIXME: doesn't check permission or anything
             $sql = "DELETE FROM holidays ";
             $sql .= "WHERE userid='$user' AND startdate='$startdate' AND type='$type' ";
             $result = mysql_query($sql);
