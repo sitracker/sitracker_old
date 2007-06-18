@@ -79,7 +79,7 @@ else
     $resultSLA = mysql_query($sqlSLA);
     if (mysql_error()) trigger_error("MySQL Query Error ".mysql_error(), E_USER_ERROR);
 
-    echo "<h2>Number of incidents by software since ".date($CONFIG['dateformat_shortdate'], $startdate)."</h2>";
+    echo "<h2>Number of incidents by software since ".date($CONFIG['dateformat_date'], $startdate)."</h2>";
     echo "<p>";
     echo "<table class='vertical' align='center'>";
     echo "<tr><th>Number of calls</th><th>%</th><th>Software</th>";
