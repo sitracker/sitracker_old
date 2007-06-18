@@ -34,15 +34,15 @@ if (empty($_REQUEST['mode']))
     echo "<tr><th>Start Date:</th>";
     echo "<td><input type='text' name='startdate' id='startdate' size='10' /> ";
     echo date_picker('incidentsbysoftware.startdate');
-    echo "</td></tr>";
-    echo "<tr><th>Month breakdown:</th><td><input type='checkbox' name='monthbreakdown' /></td></tr>";
-    echo "<tr><th>Software name</th><td><input type='text' name='software' id='software' size='20'/></td></tr>";
-    echo "</table>";
+    echo "</td></tr>\n";
+    echo "<tr><th>Month breakdown:</th><td><input type='checkbox' name='monthbreakdown' /></td></tr>\n";
+    echo "<tr><th>Software name</th><td><input type='text' name='software' id='software' size='20'/></td></tr>\n";
+    echo "</table>\n";
     echo "<p align='center'>";
     echo "<input type='hidden' name='mode' value='report' />";
     echo "<input type='submit' value='Run Report' />";
     echo "</p>";
-    echo "</form>";
+    echo "</form>\n";
 
     include('htmlfooter.inc.php');
 }
@@ -79,7 +79,9 @@ else
     $resultSLA = mysql_query($sqlSLA);
     if (mysql_error()) trigger_error("MySQL Query Error ".mysql_error(), E_USER_ERROR);
 
-    echo "<h2>Number of incidents by software since ".date($CONFIG['dateformat_date'], $startdate)."</h2>";
+    echo "<h2>Number of incidents by software";
+    if ($startdate > 1) echo " since ".date($CONFIG['dateformat_date'], $startdate);
+    echo "</h2>";
     echo "<p>";
     echo "<table class='vertical' align='center'>";
     echo "<tr><th>Number of calls</th><th>%</th><th>Software</th>";
@@ -93,6 +95,7 @@ else
     echo "<tr>";
 
     $others=0;
+    $shade='shade1';
     for($i = 0; $i < $c; $i++)
     {
         if ($i<=25)
@@ -139,25 +142,23 @@ else
                 $monthbreakdown[$datestr]['month']=$datestr;
             }
         }
-
-        echo "<tr><td class='shade1'>{$countArray[$i]}</td>";
-        echo "<td class='shade1'>{$percentage}%</td>";
-        echo "<td class='shade1'>$softwareNames[$i]</td>";
+        echo "<tr class='$shade'><td>{$countArray[$i]}</td>";
+        echo "<td>{$percentage}%</td>";
+        echo "<td>{$softwareNames[$i]}</td>";
 
         foreach($slas AS $sla)
         {
-            echo "<td class='shade1'>";
-            echo ($sla['notEscalated']+$sla['escalated'])."/".$sla['escalated'];
+            echo "<td>";
+            echo ($sla['notEscalated']+$sla['escalated'])." / ".$sla['escalated'];
             echo "</td>";
         }
 
         if($monthbreakdownstatus === "on")
         {
-
-            echo "<tr><td class='shade1' /><td colspan='".(count($slas)+2)."' class='shade1'>";
-            echo "<table><tr>";
+            echo "<tr class='$shade'><td></td><td colspan='".(count($slas)+2)."'>";
+            echo "<table style='width: 100%'><tr>";
             foreach($monthbreakdown AS $month) echo "<th>{$month['month']}</th>";
-            echo "</tr><tr>";
+            echo "</tr>\n<tr>";
             foreach($monthbreakdown AS $month)
             {//echo "<pre>".print_r($month)."</pre>";
 	            echo "<td><table>";
@@ -167,19 +168,21 @@ else
                     if(empty($month[$slaNames['name']])) $month[$slaNames['name']] = 0;
                     echo "<tr>";
                     echo "<td>".$slaNames['name']."</td><td>".$month[$slaNames['name']]."</td>";
-                    echo "</tr>";
+                    echo "</tr>\n";
                     $total+=$month[$slaNames['name']];
                 }
 	            echo "<tr><td><strong>TOTAL</strong></td><td><strong>";
                 echo $total;
-                echo "</strong></td></tr>";
+                echo "</strong></td></tr>\n";
 	            $monthtotals[$month['month']]['month']=$month['month'];
                 $monthtotals[$month['month']]['value']+=$total;
                 echo "</table></td>";
             }
             echo "</tr></table>";
-            echo "</td></tr>";
+            echo "</td></tr>\n";
         }
+        if ($shade=='shade1') $shade='shade2';
+        else $shade='shade1';
     }
     echo "</table>";
 
@@ -187,14 +190,17 @@ else
     {
         echo "<p><table align='center'>";
         echo "<tr><th>Month</th><th>Number of calls</th></tr>";
+        $shade='shade1';
         foreach($monthtotals AS $m)
         {
-	    echo "<tr>";
-	    echo "<th>".$m['month']."</th><td align='center'>".$m['value']."</td><tr>";
-	    $total+=$m['value'];
-	    echo "</tr>";
+            echo "<tr class='$shade'>";
+            echo "<td>".$m['month']."</td><td align='center'>".$m['value']."</td><tr>";
+            $total+=$m['value'];
+            echo "</tr>";
+            if ($shade=='shade1') $shade='shade2';
+            else $shade='shade1';
         }
-        echo "<td><strong>Total</strong></td><td align='center'><strong>{$total}</strong></td></tr>";
+        echo "<tfoot><tr><th>Total</th><td align='center'><strong>{$total}</strong></td></tr></tfoot>";
         echo "</table></p>";
 
     }
