@@ -1148,6 +1148,7 @@ CREATE TABLE `users` (
   `accepting` enum('No','Yes') default 'Yes',
   `var_incident_refresh` int(11) default '60',
   `var_update_order` enum('desc','asc') default 'desc',
+  `var_num_updates_view` int(11) NOT NULL default '15',
   `var_style` int(11) default '1',
   `var_collapse` enum('true','false') NOT NULL default 'true',
   `var_hideautoupdates` enum('true','false') NOT NULL default 'false',
@@ -1407,6 +1408,33 @@ CREATE TABLE `linktypes` (
    ) ENGINE=MyISAM;
 
 INSERT INTO `linktypes` VALUES (1,'Task','Subtask','Parent Task','tasks','id','tasks','id','name','','view_task.php?id=%id%'),(2,'Contact','Contact','Contact Task','tasks','id','contacts','id','forenames','','contact_details.php?id=%id%'),(3,'Site','Site','Site Task','tasks','id','sites','id','name','','site_details.php?id=%id%'),(4,'Incident','Incident','Task','tasks','id','incidents','id','title','','incident_details.php?id=%id%');
+
+ALTER TABLE `users` ADD `var_num_updates_view` INT NOT NULL DEFAULT '15' AFTER `var_update_order` ;
+INSERT INTO `emailtype` (name, type, description, tofield, replytofield, ccfield, bccfield, subjectfield, body, customervisibility, storeinlog) VALUES ('NEARING SLA', 'system', 'Notification when an incident nears its SLA target', '<supportmanageremail>', '<supportemail>', '<supportemail>', '<useremail>', '', '<applicationshortname> SLA: Incident <incidentid> about to breach SLA', 'This is an automatic notification that this incident is about to breach it\\\\\\''s SLA.  The SLA target <info1> will expire in <info2> minutes.\r\n\r\nIncident: [<incidentid>] - <incidenttitle>\r\nOwner: <incidentowner>\r\nPriority: <incidentpriority>\r\nExternal Id: <incidentexternalid>\r\nExternal Engineer: <incidentexternalengineer>\r\nSite: <contactsite>\r\nContact: <contactname>\r\n\r\n--\r\n<applicationshortname> v<applicationversion>\r\n<todaysdate>\r\n', 'hide', 'Yes');
+
+
+CREATE TABLE `tags` (
+  `tagid` int(11) NOT NULL auto_increment,
+  `name` varchar(255) NOT NULL default '',
+  PRIMARY KEY  (`tagid`)
+) ENGINE=MyISAM;
+
+CREATE TABLE `set_tags` (
+`id` INT NOT NULL ,
+`type` MEDIUMINT NOT NULL ,
+`tagid` INT NOT NULL ,
+PRIMARY KEY ( `id` , `type` , `tagid` )
+) ENGINE=MYISAM;
+
+INSERT INTO `permissions` VALUES (65, 'Delete Products');
+INSERT INTO `rolepermissions` (`roleid`, `permissionid`, `granted`) VALUES (1, 65, 'true');
+INSERT INTO `userpermissions` VALUES (1, 65, 'true');
+
+ALTER TABLE `users` ADD `dashboard` VARCHAR( 255 ) NOT NULL DEFAULT '0-3,1-1,1-2,2-4';
+
+INSERT INTO `permissions` VALUES (66, 'Install Dashboard Components');
+INSERT INTO `rolepermissions` (`roleid`, `permissionid`, `granted`) VALUES (1, 66, 'true');
+INSERT INTO `userpermissions` VALUES (1, 66, 'true');
 INSERT INTO `closingstatus` ( `id` , `name` ) VALUES ( NULL , 'Escalated' );
 ALTER TABLE `tasks` ADD `enddate` DATETIME NULL AFTER `startdate` ;
 ";

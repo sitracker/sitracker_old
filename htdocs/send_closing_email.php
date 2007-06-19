@@ -51,6 +51,7 @@ else
     if ($bccfield != "")
 
     $extra_headers .= "BCC: $bccfield\n";
+    $extra_headers .= "X-Originating-IP: {$_SERVER['REMOTE_ADDR']}\n";
 
     // send email
     $success = mail($tofield, stripslashes($subjectfield), stripslashes($bodytext), $extra_headers);
