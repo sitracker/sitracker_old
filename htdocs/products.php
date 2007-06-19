@@ -126,7 +126,7 @@ else
         {
             echo "<table summary='List of skills linked to product' align='center'>";
             echo "<tr><thead><th colspan='0'>Product: {$product->name} (<a href='edit_product.php?id={$product->id}'>Edit</a> | <a href='delete_product.php?id={$product->id}'>Delete</a>)</th></thead></tr>";
-            if (!empty($product->description)) echo "<tr class='shade1'><td colspan='3'>".nl2br($product->description)."</td></tr>";
+            if (!empty($product->description)) echo "<tr class='shade1'><td colspan='0'>".nl2br($product->description)."</td></tr>";
 
             $swsql = "SELECT * FROM softwareproducts, software WHERE softwareproducts.softwareid=software.id AND productid='{$product->id}' ORDER BY name";
             $swresult=mysql_query($swsql);
