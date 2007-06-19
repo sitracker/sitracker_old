@@ -50,10 +50,33 @@ function give_overview()
         list($count['handled'])=mysql_fetch_row($result);
         mysql_free_result($result);
 
-        $sql = "SELECT count(*) FROM updates WHERE timestamp >= '$startdate' AND timestamp <= '$enddate' ";
+        $sql = "SELECT count(*), count(DISTINCT userid) FROM updates WHERE timestamp >= '$startdate' AND timestamp <= '$enddate' ";
         $result= mysql_query($sql);
         if (mysql_error()) trigger_error(mysql_error(),E_USER_ERROR);
-        list($count['updates'])=mysql_fetch_row($result);
+        list($count['updates'],$count['users'])=mysql_fetch_row($result);
+        mysql_free_result($result);
+
+        $sql = "SELECT count(DISTINCT softwareid), count(DISTINCT owner) FROM incidents WHERE opened <= '{$enddate}' AND (closed >= '$startdate' OR closed = 0) ";
+        $result= mysql_query($sql);
+        if (mysql_error()) trigger_error(mysql_error(),E_USER_ERROR);
+        list($count['skills'], $count['owners'])=mysql_fetch_row($result);
+        mysql_free_result($result);
+
+        $sql = "SELECT count(*) FROM updates WHERE timestamp >= '$startdate' AND timestamp <= '$enddate' AND type='email'";
+        $result= mysql_query($sql);
+        if (mysql_error()) trigger_error(mysql_error(),E_USER_ERROR);
+        list($count['emailtx'])=mysql_fetch_row($result);
+        mysql_free_result($result);
+
+        $sql = "SELECT count(*) FROM updates WHERE timestamp >= '$startdate' AND timestamp <= '$enddate' AND type='emailin'";
+        $result= mysql_query($sql);
+        if (mysql_error()) trigger_error(mysql_error(),E_USER_ERROR);
+        list($count['emailrx'])=mysql_fetch_row($result);
+        mysql_free_result($result);
+
+        $sql = "SELECT count(*) FROM incidents WHERE opened <= '{$enddate}' AND (closed >= '$startdate' OR closed = 0) AND priority >= 3";
+        $result= mysql_query($sql);
+        list($count['higherpriority'])=mysql_fetch_row($result);
         mysql_free_result($result);
 
         return $count;
@@ -64,14 +87,43 @@ function give_overview()
         global $shade;
         if ($shade=='') $shade='shade1';
         $count = count_incidents($start,$end);
-        $html = "<tr class='$shade'><td>$desc</td><td>{$count['opened']}</td><td>{$count['updated']}</td><td>{$count['closed']}</td><td>{$count['handled']}</td><td>{$count['updates']}</td><td>".number_format($count['updates']/$count['updated'], 2)."</td></tr>\n";
+        $updatesperuser = @number_format($count['updates']/$count['users'], 2);
+        $updatesperincident = @number_format($count['updates']/$count['updated'], 2);
+        $incidentsperowner = @number_format($count['handled']/$count['owners'], 2);
+/*
+        $workload = $count['handled'] + $count['emailrx'] + $count['skills'] + $count['updates'] + $count['higherpriority'];
+        $resource = $count['owners'] + $count['users'] + $count['emailtx'] + ($count['opened'] - $count['closed']);
+        $busyrating = ($resource / $workload * 100);
+        $busyrating = @number_format($busyrating * 4.5,1);
+*/
+        if ($count['updated'] > 10) $freshness = ($count['updated'] / $count['handled'] * 100);
+        else $freshness=$count['updated'];
+        if ($count['owners'] > 0) $load = (($count['handled'] / $count['owners']) / $count['handled'] * 100);
+        else $load = 0;
+        if ($count['updates'] > 10) $busyness = (($count['updates'] / $count['users']) / $count['updates'] * 100);
+        else $busyness=$count['updates'];
+        if ($count['users'] > 0) $busyness2 = (($count['emailtx'] / $count['users']) / $count['handled'] * 100);
+        else $busyness2 = 0;
+        $activity = ($freshness+$load+$busyness+$busyness2 / 400 * 100);
+        $activity = @number_format($activity,1);
+        if ($activity > 100) $activity=100;
+        if ($activity < 0) $activity = 0;
+
+        $html = "<tr class='$shade'><td>$desc</td><td>{$count['opened']}</td><td>{$count['updated']}</td><td>{$count['closed']}</td>";
+        $html .= "<td>{$count['handled']}</td><td>{$count['updates']}</td><td>{$updatesperincident}</td>";
+        $html .= "<td>{$count['skills']}</td><td>{$count['owners']}</td><td>{$count['users']}</td>";
+        $html .= "<td>{$updatesperuser}</td><td>{$incidentsperowner}</td>";
+        $html .= "<td>{$count['emailrx']}</td><td>{$count['emailtx']}</td>";
+        $html .= "<td>{$count['higherpriority']}</td>";
+        $html .= "<td>".percent_bar($activity)."</td>";
+        $html .= "</tr>\n";
         if ($shade=='shade1') $shade='shade2';
         else $shade='shade1';
         return $html;
     }
 
     echo "<table align='center'>";
-    echo "<tr><th>Period</th><th>Opened</th><th>Updated</th><th>Closed</th><th>Handled</th><th>Updates</th><th>per incident</th></tr>\n";
+    echo "<tr><th>Period</th><th>Opened</th><th>Updated</th><th>Closed</th><th>Handled</th><th>Updates</th><th>per incident</th><th>Skills</th><th>Owners</th><th>Users</th><th>upd per user</th><th>inc per owner</th><th>Email Rx</th><th>Email Tx</th><th>Higher Priority</th><th>Activity</th></tr>\n";
     echo stats_period_row('Today', mktime(0,0,0,date('m'),date('d'),date('Y')),mktime(23,59,59,date('m'),date('d'),date('Y')));
     echo stats_period_row('Yesterday', mktime(0,0,0,date('m'),date('d')-1,date('Y')),mktime(23,59,59,date('m'),date('d')-1,date('Y')));
     echo stats_period_row(date('l',mktime(0,0,0,date('m'),date('d')-2,date('Y'))), mktime(0,0,0,date('m'),date('d')-2,date('Y')),mktime(23,59,59,date('m'),date('d')-2,date('Y')));
@@ -79,17 +131,18 @@ function give_overview()
     echo stats_period_row(date('l',mktime(0,0,0,date('m'),date('d')-4,date('Y'))), mktime(0,0,0,date('m'),date('d')-4,date('Y')),mktime(23,59,59,date('m'),date('d')-4,date('Y')));
     echo stats_period_row(date('l',mktime(0,0,0,date('m'),date('d')-5,date('Y'))), mktime(0,0,0,date('m'),date('d')-5,date('Y')),mktime(23,59,59,date('m'),date('d')-5,date('Y')));
     echo stats_period_row(date('l',mktime(0,0,0,date('m'),date('d')-6,date('Y'))), mktime(0,0,0,date('m'),date('d')-6,date('Y')),mktime(23,59,59,date('m'),date('d')-6,date('Y')));
+    echo "<tr><td colspan='*'></td></tr>";
     echo stats_period_row('Past 7 days', mktime(0,0,0,date('m'),date('d')-6,date('Y')),mktime(23,59,59,date('m'),date('d'),date('Y')));
     echo stats_period_row('Previous 7 days', mktime(0,0,0,date('m'),date('d')-13,date('Y')),mktime(23,59,59,date('m'),date('d')-7,date('Y')));
-
+    echo "<tr><td colspan='*'></td></tr>";
     echo stats_period_row('This month', mktime(0,0,0,date('m'),1,date('Y')),mktime(23,59,59,date('m'),date('d'),date('Y')));
-    echo stats_period_row(date('F y',mktime(0,0,0,date('m')-1,1,date('Y'))), mktime(0,0,0,date('m')-1,date('d'),date('Y')),mktime(23,59,59,date('m'),0,date('Y')));
+    echo stats_period_row('Last month', mktime(0,0,0,date('m')-1,date('d'),date('Y')),mktime(23,59,59,date('m'),0,date('Y')));
     echo stats_period_row(date('F y',mktime(0,0,0,date('m')-2,1,date('Y'))), mktime(0,0,0,date('m')-2,date('d'),date('Y')),mktime(23,59,59,date('m')-1,0,date('Y')));
     echo stats_period_row(date('F y',mktime(0,0,0,date('m')-3,1,date('Y'))), mktime(0,0,0,date('m')-3,date('d'),date('Y')),mktime(23,59,59,date('m')-2,0,date('Y')));
     echo stats_period_row(date('F y',mktime(0,0,0,date('m')-4,1,date('Y'))), mktime(0,0,0,date('m')-4,date('d'),date('Y')),mktime(23,59,59,date('m')-3,0,date('Y')));
     echo stats_period_row(date('F y',mktime(0,0,0,date('m')-5,1,date('Y'))), mktime(0,0,0,date('m')-5,date('d'),date('Y')),mktime(23,59,59,date('m')-4,0,date('Y')));
     echo stats_period_row(date('F y',mktime(0,0,0,date('m')-6,1,date('Y'))), mktime(0,0,0,date('m')-6,date('d'),date('Y')),mktime(23,59,59,date('m')-5,0,date('Y')));
-
+    echo "<tr><td colspan='*'></td></tr>";
     echo stats_period_row('This year', mktime(0,0,0,1,1,date('Y')),mktime(23,59,59,date('m'),date('d'),date('Y')));
     echo stats_period_row('Last year', mktime(0,0,0,1,1,date('Y')-1),mktime(23,59,59,12,31,date('Y')-1));
     echo stats_period_row(date('Y',mktime(0,0,0,1,1,date('Y')-2)), mktime(0,0,0,1,1,date('Y')-2),mktime(23,59,59,12,31,date('Y')-2));
@@ -126,7 +179,7 @@ function give_overview()
     //count incidents by Vendor
 
     $sql = "SELECT DISTINCT products.vendorid, vendors.name FROM incidents, products, vendors ";
-    $sql .= "WHERE status != 2 AND status != 7 AND incidents.product = products.id AND vendors.id = products.vendorid ORDER BY vendorid";
+    $sql .= "WHERE (status != 2 AND status != 7) AND incidents.product = products.id AND vendors.id = products.vendorid ORDER BY vendorid";
 
     $result = mysql_query($sql);
     if (mysql_error()) trigger_error("MySQL Query Error ".mysql_error(), E_USER_ERROR);
@@ -136,6 +189,7 @@ function give_overview()
         echo "<h2>By vendor</h2><table class='vertical' align='center'>";
         while($vendors = mysql_fetch_array($result))
         {
+            // This should use the software and relate to the product and then to the vendor
             $sqlVendor = "SELECT COUNT(incidents.id), incidentstatus.name FROM incidents, incidentstatus, products ";
             $sqlVendor .= "WHERE incidents.status = incidentstatus.id AND closed = 0 AND incidents.product = products.id ";
             $sqlVendor .= "AND products.vendorid = ".$vendors['vendorid']." ";
@@ -197,18 +251,15 @@ function give_overview()
 
 
     // Count incidents closed today
-
-    $sql = "SELECT id FROM incidents WHERE closed > '$todayrecent'";
+    $sql = "SELECT COUNT(id) FROM incidents WHERE closed > '$todayrecent'";
     $result = mysql_query($sql);
     if (mysql_error()) trigger_error("MySQL Query Error ".mysql_error(), E_USER_ERROR);
-    $todaysclosed=mysql_num_rows($result);
-
+    list($todaysclosed)=mysql_fetch_row($result);
 
     $string .= "<h4>$todaysclosed Incidents closed today</h4>";
     if($todaysclosed > 0)
     {
-
-        $sql = "SELECT count(incidents.id), realname, users.id AS owner FROM incidents, users WHERE closed > '$todayrecent' AND incidents.owner = users.id GROUP BY owner";
+        $sql = "SELECT count(incidents.id), realname, users.id AS owner FROM incidents LEFT JOIN users ON incidents.owner = users.id WHERE closed > '$todayrecent' GROUP BY owner";
         $string .= "<table align='center' width='50%'>";
         $string .= "<tr><th>ID</th><th>Title</th><th>Owner</th><th>Closing status</th></tr>\n";
         $result = mysql_query($sql);
