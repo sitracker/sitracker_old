@@ -10,8 +10,6 @@ Changes in v3.30 - Unreleased
 * Allow setting of holiday entitlement when adding users
 * Added new system email 'NEARING_SLA' that notifies when incidents
 * Yearly engineer report now has a statistics option
-* Adds OpenSearch plugin compatable with Firefox2 and IE7
-* Added new closing status 'Escalated'
 * Tidied browsing of feedback
 * Improved login page
 * Send X-Originating-IP Header on outgoing emails to help prevent/diagnose
