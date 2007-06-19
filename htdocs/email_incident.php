@@ -323,7 +323,7 @@ switch ($step)
         $replytofield = cleanvar($_REQUEST['replytofield']);
         $ccfield = cleanvar($_REQUEST['ccfield']);
         $bccfield = cleanvar($_REQUEST['bccfield']);
-        $subjectfield = cleanvar($_REQUEST['subjectfield']);
+        $subjectfield = stripslashes(cleanvar($_REQUEST['subjectfield'],FALSE,TRUE));
         $emailtype = cleanvar($_REQUEST['emailtype']);
         $newincidentstatus = cleanvar($_REQUEST['newincidentstatus']);
         $timetonextaction_none = cleanvar($_REQUEST['timetonextaction_none']);
@@ -381,6 +381,7 @@ switch ($step)
         {
             $extra_headers = "Reply-To: $replytofield\nErrors-To: ".user_email($sit[2])."\n";
             $extra_headers .= "X-Mailer: {$CONFIG['application_shortname']} {$application_version_string}/PHP " . phpversion() . "\n";
+            $extra_headers .= "X-Originating-IP: {$_SERVER['REMOTE_ADDR']}\n";
             if ($ccfield != '')  $extra_headers .= "cc: $ccfield\n";
             if ($bccfield != '') $extra_headers .= "Bcc: $bccfield\n";
 

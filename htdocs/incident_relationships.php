@@ -21,7 +21,7 @@ require('auth.inc.php');
 // External variables
 $id = cleanvar($_REQUEST['id']);
 
-$title = 'Relations: ';
+$title = 'Relations';
 include('incident_html_top.inc.php');
 
 include('incident/relationships.inc.php');

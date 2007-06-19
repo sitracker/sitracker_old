@@ -63,7 +63,7 @@ while ($contactrow=mysql_fetch_array($contactresult))
     echo "<table align='center'>";
     echo "<tr><th>Name:</th><td><h3><a href='edit_contact.php?action=edit&amp;contact={$contactid}'>".$contactrow['forenames'].' '.$contactrow['surname']."</a></h3></td></tr>";
     echo "<tr><th>Current Flags:</th><td>";
-    print_contact_flags($id, TRUE);
+    print_contact_flags($contactid, TRUE);
     echo "</td></tr>\n";
 }
 echo "</table>";

@@ -72,7 +72,7 @@ switch ($action)
         $sql .= "WHERE id='$qid' LIMIT 1";
         mysql_query($sql);
         if (mysql_error()) trigger_error ("MySQL Error: ".mysql_error(), E_USER_ERROR);
-        header("Location: edit_feedback_form.php?formid={$_POST['formid']}");
+        header("Location: edit_feedback_form.php?formid={$fid}");
         exit;
     break;
 
@@ -101,7 +101,7 @@ switch ($action)
             echo "</tr>\n<tr>";
 
             echo "<th>Question:</th>";
-            echo "<td><input type='text' name='question' size='35' maxlength='255' value='".stripslashes($question->question)."' /></td>";
+            echo "<td><input type='text' name='question' size='70' maxlength='255' value='".stripslashes($question->question)."' /></td>";
             echo "</tr>\n<tr>";
 
             echo "<th>Additional Question Text:<br />(Information and Instructions)</th>";
@@ -126,7 +126,7 @@ switch ($action)
             echo "</td></tr>\n<tr>";
 
             echo "<td><input type='hidden' name='qid' value='{$qid}' />";
-            echo "<input type='hidden' name='formid' value='{$fid}' />";
+            echo "<input type='hidden' name='fid' value='{$fid}' />";
             echo "<input type='hidden' name='action' value='save' /></td>";
             echo "<td><input type='submit' value='Save' /></td>";
             echo "</tr>";

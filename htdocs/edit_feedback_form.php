@@ -90,13 +90,13 @@ switch ($_REQUEST['action'])
                 echo "<table width='100%'>";
                 // echo "<tr><th>Q</th><th>Question</th><th>Text</th></tr>\n<tr><th>Type</th><th>Reqd</th><th>Options</th></tr>\n";
                 $qsql  = "SELECT * FROM feedbackquestions ";
-                $qsql .= "WHERE formid='$formid'";
+                $qsql .= "WHERE formid='$formid' ORDER BY taborder";
                 $qresult = mysql_query($qsql);
                 while ($question = mysql_fetch_object($qresult))
                 {
                     echo "<tr>";
                     echo "<td><strong>Q{$question->taborder}</strong></td>";
-                    echo "<td><a href='edit_feedback_question.php?qid={$question->id}'><strong>{$question->question}</strong></a></td>";
+                    echo "<td><a href='edit_feedback_question.php?qid={$question->id}&amp;fid={$formid}'><strong>{$question->question}</strong></a></td>";
                     echo "<td>{$question->questiontext}</td>";
                     echo "</tr>\n<tr>";
                     echo "<td>{$question->type}</td>";

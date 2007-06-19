@@ -150,8 +150,7 @@ $hmenu[1040] = array (10=> array ( 'perm'=> 0, 'name'=> "View Users", 'url'=>"{$
 
 
 // Customers
-$hmenu[20] = array (05=> array ( 'perm'=> 0, 'name'=> "Customers", 'url'=>"{$CONFIG['application_webpath']}customers.php"),
-                    10=> array ( 'perm'=> 0, 'name'=> "Sites", 'url'=>"{$CONFIG['application_webpath']}browse_sites.php", 'submenu'=>"2010"),
+$hmenu[20] = array (10=> array ( 'perm'=> 0, 'name'=> "Sites", 'url'=>"{$CONFIG['application_webpath']}browse_sites.php", 'submenu'=>"2010"),
                     20=> array ( 'perm'=> 0, 'name'=> "Contacts", 'url'=>"{$CONFIG['application_webpath']}browse_contacts.php?search_string=A", 'submenu'=>"2020"),
                     30=> array ( 'perm'=> 0, 'name'=> "Maintainance", 'url'=>"{$CONFIG['application_webpath']}browse_maintenance.php?search_string=A", 'submenu'=>"2030"),
                     40=> array ( 'perm'=> 0, 'name'=> "Browse Feedback", 'url'=>"{$CONFIG['application_webpath']}browse_feedback.php")
