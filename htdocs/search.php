@@ -197,7 +197,8 @@ $search_string = str_replace($removechars, '', stripslashes($search_string));
 
 if (!empty($search_string))
 {
-    echo "<p>Searching for $search_string in $search_domain&hellip;</p>";
+    echo "<p>Searching for '$search_string' in ".ucfirst($search_domain)."&hellip;</p>";
+    flush();
     $sterms = explode(' ',trim($search_string));
     search_fix_quoted($sterms);
     $key=0;
