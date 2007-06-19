@@ -12,6 +12,70 @@ Changes in v3.30 - Unreleased
 * Yearly engineer report now has a statistics option
 * Adds OpenSearch plugin compatable with Firefox2 and IE7
 * Added new closing status 'Escalated'
+* Tidied browsing of feedback
+* Improved login page
+* Send X-Originating-IP Header on outgoing emails to help prevent/diagnose
+  abuse
+* Fixed bug where user was prevented from adding relationships with a
+  message that a similar relationship already existed
+* The term 'software' has now been renamed to the more generic 'skill'
+  which is more appropriate when supporting hardware and other things
+* The term 'Backup Engineer' has now been renamed 'Substitute Engineer'
+  to avoid confusion
+* Improved holding queue page.  It will now only show queues if there are
+  items to display and some queues have been merged to make the page
+  simpler
+* Improved the skills matrix page
+* Fixed a bug that caused contracts not to be displayed while adding
+  an incident
+* Added a new field to the sites table to store a URL (website) for the
+  site
+* After sending an email you are now redirected back to the incident log
+* Made timecalc run only inside the working day
+* Fixed a bug with SLA calculation
+* Fixed a bug where your own holiday waiting approval was shown even when
+  viewing somebody elses calendar
+* Added the ability to set holiday entitlement and group when adding users
+* New page edit_holidays.php allows admins to set new holiday entitlement
+  and carry-over days - When holiday entitlement is changed, holidays booked
+  prior to a specified date are archived
+* Fixed bug where users mobile phone number wasn't displayed if regular
+  telephone number was blank
+* Fix to OUT_OF_SLA emails, now only sent when actually out of SLA
+* Added NEARING_SLA email, sent when SLA reaches urgent_threshold (90% by default)
+* Changed minimum MySQL requirement to 4.0.18
+* Fixed bug which prevented search working with PHP5
+* Added ability to delete products (and new associated permission)
+* New feature: tags
+* Users can now set their own dashboard preferences
+* Positions of dashboard items are now saved
+* Fixed bug with email addresses containing apostrophe
+* Added <salespersonemail> template variable to emails
+* Files view now respects the users prefered ordering
+* Fixed bug where update could be assigned if call was closed
+* Added an OpenSearch plugin, compatable with Firefox 2 and IE7
+  (This replaces the old firefox 1 search plugin)
+* Added autocompletion to the add incident and browse sites pages
+* Added new RSS agregator dashboard component
+* Fix max upload size bug on files page
+* Fix bug with attachment URL's in incident log
+* Improved the feedback system
+* Improvements to incidents by software report now includes:
+  Monthly break down, SLA breakdown, Ability to view only certain products
+* Fixed bug where holiday calendar cell colours for holidays approved as
+  'free' didn't match the legend
+* Added filters to allow terminated/expired contracts to be hidden from the contracts search
+* Added new closing status - 'Escalated'
+* Tasks can now have an end date as well as a start date
+* New Report to show incidents by vendor
+* Mark very recently updated incidents slightly differently in the incident queues to make
+  it easier to spot recent changes
+* Fixed plurality bug with formatting seconds to minutes
+* Fixed feedback results when the rating is not 1 to 9
+* Fixed missing field 'store in log' which appears in edit email template but was missing from add email template
+* Enable users to delete/cancel unrequested holiday
+* Removed a lot of old unused code
+* Plus many more minor changes and fixes
 
 Changes in v3.24 - Released 6 November 2006
 -----------------------------------------------------------------------

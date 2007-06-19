@@ -136,7 +136,7 @@ echo "</pre>";*/
     mysql_data_seek($result, 0);
     echo "<table align='center' class='vertical'>";
     $shade='shade1';
-    echo "<tr><thead><td>Software</td>";
+    echo "<tr><thead><td>Skill</td>";
     foreach($users AS $u) echo "<th>$u</th>";
     echo "<th>Count</th>";
     echo "</thead></tr>\n";

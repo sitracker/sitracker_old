@@ -60,6 +60,7 @@ incident is open.</p>
 <li>Unsupported</li>
 <li>Support Expired</li>
 <li>Unsolved</li>
+<li>Escalated</li>
 </ul>
 
 <p>Each incident has an 'updates log' which shows everything that has happened during the lifetime of the incident,
