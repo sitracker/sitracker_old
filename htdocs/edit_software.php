@@ -76,7 +76,7 @@ elseif($action=='delete')
     {
         include('htmlheader.inc.php');
         echo "<p class='error'>Sorry, this software cannot be deleted because it has been associated with one or more incidents</p>";
-        echo "<p align='center'><a href='products.php'>Return to products list</a></p>";
+        echo "<p align='center'><a href='products.php?display=skills'>Return to products list</a></p>";
         include('htmlfooter.inc.php');
     }
     else
@@ -94,7 +94,7 @@ elseif($action=='delete')
         if (mysql_error()) trigger_error(mysql_error(),E_USER_ERROR);
 
         journal(CFG_LOGGING_DEBUG, 'Software Deleted', "Software $id was deleted", CFG_JOURNAL_DEBUG, $id);
-        confirmation_page("2", "products.php", "<h2>Software Deleted Successfully</h2><p align='center'>Please wait while you are redirected...</p>");
+        confirmation_page("2", "products.php?display=skills", "<h2>Software Deleted Successfully</h2><p align='center'>Please wait while you are redirected...</p>");
     }
 }
 else
@@ -128,7 +128,7 @@ else
         {
             $id=mysql_insert_id();
             journal(CFG_LOGGING_DEBUG, 'Software Edited', "Software $id was edited", CFG_JOURNAL_DEBUG, $id);
-            confirmation_page("2", "products.php", "<h2>Software Edit Successful</h2><p align='center'>Please wait while you are redirected...</p>");
+            confirmation_page("2", "products.php?display=skills", "<h2>Software Edit Successful</h2><p align='center'>Please wait while you are redirected...</p>");
         }
     }
     else
