@@ -42,6 +42,9 @@ if (!empty($productid))
 
     if ($errors==0)
     {
+        $sql = "DELETE FROM products WHERE id =$productid LIMIT 1";
+        $result = mysql_query($sql);
+        if (mysql_error()) trigger_error(mysql_error(),E_USER_ERROR);
         journal(CFG_LOGGING_NORMAL, 'Product Removed', "Product $productid was removed", CFG_JOURNAL_PRODUCTS, $productid);
         confirmation_page("2", "products.php", "<h2>Product removed Successfully</p><p align='center'>Please wait while you are redirected...</h2>");
     }
@@ -49,7 +52,7 @@ if (!empty($productid))
     {
         include('htmlheader.inc.php');
         echo "<p class='error'>Sorry, this product cannot be deleted because it has been associated with one or more incidents, contracts or skills</p>";
-        echo "<p align='center'><a href='products.php'>Return to products list</a></p>";
+        echo "<p align='center'><a href='products.php#{$productid}'>Return to products list</a></p>";
         include('htmlfooter.inc.php');
     }
 }

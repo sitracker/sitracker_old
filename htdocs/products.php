@@ -57,11 +57,12 @@ if (empty($productid))
                     if (mysql_error()) trigger_error("MySQL Query Error ".mysql_error(), E_USER_ERROR);
                     list($countcontracts)=mysql_fetch_row($sresult);
 
-                    echo "<tr class='{$shade}'><td><a href='{$_SERVER['PHP_SELF']}?productid={$product->id}'>{$product->name}</a></td>";
+                    if ($countlinked < 1) $shade='expired';
+                    echo "<tr class='{$shade}'><td><a href='{$_SERVER['PHP_SELF']}?productid={$product->id}' name='{$product->id}'>{$product->name}</a></td>";
                     echo "<td>{$product->description}</td>";
                     echo "<td align='right'>{$countlinked}</td>";
                     echo "<td align='right'>";
-                    if ($countcontracts > 0) echo "<a href='browse_maintenance.php?search_string=&productid={$product->id}'>{$countcontracts}</a>";
+                    if ($countcontracts > 0) echo "<a href='browse_maintenance.php?search_string=&amp;productid={$product->id}&amp;activeonly=yes'>{$countcontracts}</a>";
                     else echo "{$countcontracts}";
                     echo "</td>";
                     // FIXME
@@ -172,12 +173,32 @@ else
             }
             echo "</table>\n";
             echo "<p align='center'><a href='add_product_software.php?productid={$product->id}'>Link software to {$product->name}</a></p>\n";
+
+            $sql = "SELECT * FROM maintenance WHERE product='{$product->id}' ORDER BY id DESC";
+            $result = mysql_query($sql);
+            if (mysql_error()) trigger_error(mysql_error(),E_USER_ERROR);
+            if (mysql_num_rows($result) >= 1)
+            {
+                echo "<h3>Related Contracts</h3>";
+                echo "<table align='center'>";
+                $shade = 'shade1';
+                while ($contract = mysql_fetch_object($result))
+                {
+                    if ($results['term']=='yes' || $results['expirydate']<$now) $shade = "expired";
+                    echo "<tr class='{$shade}'>";
+                    echo "<td><a href='maintenance_details.php?id={$contract->id}'>Contract {$contract->id}</a></td>";
+                    echo "</tr>\n";
+                    if ($shade=='shade1') $shade='shade2';
+                    else $shade='shade1';
+                }
+                echo "</table>\n";
+            }
         }
 
     }
     else echo "<p class='error'>No matching product</p>";
 
-    echo "<p align='center'><a href='{$_SERVER['PHP_SELF']}'>Back to list of products</a></p>";
+    echo "<p align='center'><a href='{$_SERVER['PHP_SELF']}#{$productid}'>Back to list of products</a></p>";
 }
 
 echo "<p align='center'><a href='add_vendor.php'>Add Vendor</a> | <a href='add_product.php'>Add Product</a> | <a href='add_software.php'>Add Software</a></p>";

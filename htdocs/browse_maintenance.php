@@ -24,6 +24,7 @@ $productid = cleanvar($_REQUEST['productid']);
 $search_string = cleanvar($_REQUEST['search_string']);
 $sort = cleanvar($_REQUEST['sort']);
 $order = cleanvar($_REQUEST['order']);
+$activeonly = cleanvar($_REQUEST['activeonly']);
 
 include('htmlheader.inc.php');
 ?>
@@ -38,12 +39,17 @@ include('htmlheader.inc.php');
 <form action="<?php echo $_SERVER['PHP_SELF']; ?>" method="get">
 Browse Contracts by Site (or ID): <!--<input type="text" name="search_string" />-->
 <input dojoType='ComboBox' dataUrl='autocomplete.php?action=sites' style='width: 300px;' name='search_string' />
+<?php
+echo "<label><input type='checkbox' name='activeonly' value='yes' ";
+if ($activeonly=='yes') echo "checked='checked' ";
+echo "/> Show Active Only</label>";
+?>
 <br />
 and/or by product:
 <?php
 echo product_drop_down('productid', $productid)
 ?>
-<input type="submit" value="go" />
+<input type="submit" value="Go" />
 </form>
 </td>
 </tr>
@@ -98,6 +104,7 @@ $sql .= "licencetypes.name AS licence_type, expirydate, admincontact, contacts.f
 $sql .= "maintenance.term AS term, maintenance.productonly AS productonly ";
 $sql .= "FROM maintenance, sites, contacts, products, licencetypes, resellers ";
 $sql .= "WHERE (maintenance.site=sites.id AND product=products.id AND reseller=resellers.id AND licence_type=licencetypes.id AND admincontact=contacts.id) ";
+if ($activeonly=='yes') $sql .= "AND term!='yes' AND expirydate > $now ";
 if ($search_string != '*')
 {
     if (strlen($search_string)==1)
