@@ -19,7 +19,7 @@ require('auth.inc.php');
 // External variables
 $action = $_REQUEST['action'];
 $maintid = cleanvar($_REQUEST['maintid']);
-
+$changeproduct = cleanvar($_REQUEST['changeproduct']);
 
 if (empty($action) OR $action == "showform")
 {
@@ -78,7 +78,17 @@ if ($action == "edit")
         <form id='maintform' name='maintform' action="<?php echo $_SERVER['PHP_SELF']; ?>?action=update" method="post" onsubmit="return confirm_submit()">
         <table align='center' class='vertical'>
         <tr><th>Site: <sup class='red'>*</sup></th><td><?php echo site_name($maint["site"]) ?></td></tr>
-        <tr><th>Product: <sup class='red'>*</sup></th><td><?php echo product_name($maint["product"]) ?></td></tr>
+        <?php
+        echo "<tr><th>Product: <sup class='red'>*</sup></th><td>";
+        $productname=product_name($maint["product"]);
+        if (user_permission($sit[2], 22))
+        {
+            if ($changeproduct=='yes') echo product_drop_down("product", $maint['product']);
+            else echo "{$productname} (<a href='{$_SERVER['PHP_SELF']}?action=edit&amp;maintid={$maintid}&amp;changeproduct=yes'>Change</a>)";
+        }
+        else echo "{$productname}";
+        ?>
+        </td></tr>
         <tr><th>Reseller: <sup class='red'>*</sup></th><td><?php echo reseller_drop_down("reseller", $maint["reseller"]) ?></td></tr>
         <tr><th>Licence Quantity: <sup class='red'>*</sup></th><td><input maxlength="7" name="licence_quantity" size="5" value="<?php echo $maint["licence_quantity"] ?>" /></td></tr>
         <tr><th>Licence Type: <sup class='red'>*</sup></th><td><?php echo licence_type_drop_down("licence_type", $maint["licence_type"]) ?></td></tr>
@@ -122,6 +132,7 @@ else if ($action == "update")
     $servicelevelid = cleanvar($_POST['servicelevelid']);
     $incidentpoolid = cleanvar($_POST['incidentpoolid']);
     $expirydate = strtotime($_REQUEST['expirydate']);
+    $product = cleanvar($_POST['product']);
 
     // Update maintenance
     $errors = 0;
@@ -166,7 +177,9 @@ else if ($action == "update")
         $sql  = "UPDATE maintenance SET reseller='$reseller', expirydate='$expirydate', licence_quantity='$licence_quantity', ";
         $sql .= "licence_type='$licence_type', notes='$notes', admincontact=$admincontact, term='$terminated', servicelevelid='$servicelevelid', ";
         $sql .= "incident_quantity='$incident_quantity', ";
-        $sql .= "incidentpoolid='$incidentpoolid', productonly='$productonly' WHERE id='$maintid'";
+        $sql .= "incidentpoolid='$incidentpoolid', productonly='$productonly'";
+        if (!empty($product) AND user_permission($sit[2], 22)) $sql .= ", product='$product'";
+        $sql .= " WHERE id='$maintid'";
         $result = mysql_query($sql);
         if (mysql_error()) trigger_error(mysql_error(),E_USER_ERROR);
 

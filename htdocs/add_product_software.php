@@ -65,7 +65,7 @@ if (empty($action) OR $action == "showform")
     echo "/> Return to this page after saving</p>\n";
     echo "</form>";
 
-    echo "<p align='center'><a href='products.php'>Return to products list without saving</a></p>";
+    echo "<p align='center'><a href='products.php?productid={$productid}'>Return to product without saving</a></p>";
     include('htmlfooter.inc.php');
 }
 elseif ($action == "add")
@@ -113,7 +113,7 @@ elseif ($action == "add")
         {
             journal(CFG_LOGGING_NORMAL, 'Product Added', "Software $softwareid was added to product $productid", CFG_JOURNAL_PRODUCTS, $productid);
             if ($return=='true') confirmation_page("1", "add_product_software.php?productid={$productid}&return=true", "<h2>Software Linked to Product Successfully</h2><p align='center'>Please wait while you are returned...</p>");
-            else confirmation_page("1", "products.php", "<h2>Software Linked to Product Successfully</h2><p align='center'>Please wait while you are redirected...</p>");
+            else confirmation_page("1", "products.php?productid={$productid}", "<h2>Software Linked to Product Successfully</h2><p align='center'>Please wait while you are redirected...</p>");
         }
     }
     else
