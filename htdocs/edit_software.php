@@ -89,6 +89,10 @@ elseif($action=='delete')
         mysql_query($sql);
         if (mysql_error()) trigger_error(mysql_error(),E_USER_ERROR);
 
+        $sql = "DELETE FROM usersoftware WHERE softwareid='$id'";
+        mysql_query($sql);
+        if (mysql_error()) trigger_error(mysql_error(),E_USER_ERROR);
+
         journal(CFG_LOGGING_DEBUG, 'Software Deleted', "Software $id was deleted", CFG_JOURNAL_DEBUG, $id);
         confirmation_page("2", "products.php", "<h2>Software Deleted Successfully</h2><p align='center'>Please wait while you are redirected...</p>");
     }
