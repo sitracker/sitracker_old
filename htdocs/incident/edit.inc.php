@@ -29,9 +29,9 @@ echo "<tr><th>Contact:</th><td>".contact_drop_down("contact", $incident->contact
 flush();
 echo "<tr><th>Product:</th><td>".supported_product_drop_down("product", $incident->contact, $incident->product)."</td></tr>";
 flush();
-echo "<tr><th>Software:</th><td>".software_drop_down("software", $incident->softwareid)."</td></tr>";
+echo "<tr><th>Skill:</th><td>".software_drop_down("software", $incident->softwareid)."</td></tr>";
 flush();
-echo "<tr><th>Software Version:</th><td><input maxlength='50' name='productversion' size='30' type='text' value='{$incident->productversion}' /></td></tr>";
+echo "<tr><th>Version:</th><td><input maxlength='50' name='productversion' size='30' type='text' value='{$incident->productversion}' /></td></tr>";
 echo "<tr><th>Service Packs Applied:</th><td><input maxlength='100' name='productservicepacks' size='30' type='text' value='{$incident->productservicepacks}' /></td></tr>";
 echo "<tr><th>External ID:</th><td><input maxlength='50' name='externalid' size='30' type='text' value='{$incident->externalid}' /></td></tr>";
 echo "<tr><th>External Engineers Name:</th><td><input maxlength='80' name='externalengineer' size='30' type='text' value='{$incident->externalengineer}' /></td></tr>";

@@ -24,7 +24,7 @@ $formid=$CONFIG['feedback_form'];
 $now = time();
 
 echo "<div style='margin: 20px'>";
-echo "<h2><a href='/reports/feedback.php'>Feedback</a> Scores: By Software</h2>";
+echo "<h2><a href='/reports/feedback.php'>Feedback</a> Scores: By Skill</h2>";
 echo "<p>This report shows average customer responses and a percentage figure indicating the overall positivity of sites regarding ";
 echo "incidents logged:</p>";
 

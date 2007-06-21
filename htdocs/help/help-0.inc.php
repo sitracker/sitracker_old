@@ -12,7 +12,7 @@
     </li>
     <li><a href='#customers'>Customers</a></li>
     <li><a href='#contracts'>Contracts</a></li>
-    <li><a href='#softwareproducts'>Software &amp; Products</a></li>
+    <li><a href='#softwareproducts'>Skills &amp; Products</a></li>
     <li>Control Panel
     <ul>
         <li><a href='#adduser'>Adding Users</a></li>
@@ -213,11 +213,11 @@ with the contract and the expiration date.</p>
 only people who can log incidents.</p>
 
 
-<h3><a name='softwareproducts'>Software &amp; Products</a></h3>
-<p>Each item of software that is supported by SiT! should have it's own software record.  For example if you plan to
-support software called 'Debian GNU/Linux' you should add a software record by selecting <strong>Customers</strong> |
-<strong>Maintenance</strong> | <strong>Products &amp; Software</strong> | <strong>Add Software</strong>.</p>
-<p>Don't add different versions of the same software as seperate records unless you do treat them differently in the
+<h3><a name='softwareproducts'>Skills &amp; Products</a></h3>
+<p>Each item that is supported by SiT! is called a skill and each should have it's own skill record.  For example if
+you plan to support software called 'Debian GNU/Linux' you should add a skill record by selecting <strong>Customers</strong> |
+<strong>Maintenance</strong> | <strong>Products &amp; Skills</strong> | <strong>Add Skill</strong>.</p>
+<p>Don't add different versions of the same item as seperate records unless you do treat them differently in the
 way you support them (e.g. you plan to phase out support for an older version).  You'll be prompted for a version
 number when <a href='#addincident'>adding an incident</a>.</p>
 
@@ -226,14 +226,14 @@ products can be thought of as groups of software.  For example, you may support 
 'Debian GNU/Linux', 'SUSE Linux' and 'Mandriva Linux' but want to offer support for all three as one product called
 'Linux'.</p>
 <p>To add a product go to <strong>Customers</strong> |
-<strong>Maintenance</strong> | <strong>Products &amp; Software</strong> | <strong>Add Product</strong>, select a vendor
+<strong>Maintenance</strong> | <strong>Products &amp; Skills</strong> | <strong>Add Product</strong>, select a vendor
 enter a product name a description then click <strong>Add Product</strong>.
 Then to link software to that, go to <strong>Customers</strong> |
-<strong>Maintenance</strong> | <strong>Products &amp; Software</strong> | <strong>Link Products/Software</strong>.</p>
+<strong>Maintenance</strong> | <strong>Products &amp; Skills</strong> | <strong>Link Products/Software</strong>.</p>
 <p>To list existing products and the software associated with them go to <strong>Customers</strong> |
-<strong>Maintenance</strong> | <strong>Products &amp; Software</strong> | <strong>List Products</strong>.</p>
+<strong>Maintenance</strong> | <strong>Products &amp; Skills</strong> | <strong>List Products</strong>.</p>
 <p>Products can also be grouped by vendor, you can add vendors by going to <strong>Customers</strong> |
-<strong>Maintenance</strong> | <strong>Products &amp; Software</strong> | <strong>Add Vendor</strong>.</p>
+<strong>Maintenance</strong> | <strong>Products &amp; Skills</strong> | <strong>Add Vendor</strong>.</p>
 
 <h3><a name='adduser'>Adding Users</a></h3>
 <p>If you have appropriate permission you can create additional SiT users. (The 'admin' user always has this
