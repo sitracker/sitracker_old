@@ -10,7 +10,7 @@
 
 // Author: Ivan Lucas <ivanlucas[at]users.sourceforge.net>
 
-$permission=56; // Add Software
+$permission=56; // Add Skills
 
 require('db_connect.inc.php');
 require('functions.inc.php');
@@ -28,15 +28,15 @@ if (empty($submit))
     <script type="text/javascript">
     function confirm_submit()
     {
-        return window.confirm('Are you sure you want to add this software?');
+        return window.confirm('Are you sure you want to add this skill?');
     }
     </script>
 
-    <h2>Add New Software</h2>
+    <h2>Add New Skill</h2>
     <p align='center'>Mandatory fields are marked <sup class='red'>*</sup></p>
     <form name='addsoftware' action="<?php echo $_SERVER['PHP_SELF']; ?>" method="post" onsubmit="return confirm_submit()">
     <table class='vertical'>
-    <tr><th>Software Name: <sup class='red'>*</sup></th><td><input maxlength="50" name="name" size="30" /></td></tr>
+    <tr><th>Skill Name: <sup class='red'>*</sup></th><td><input maxlength="50" name="name" size="30" /></td></tr>
     <?php
         echo "<tr><th>Lifetime:</th><td>";
     echo "<input type='text' name='lifetime_start' id='lifetime_start' size='10' value='' /> ";
@@ -47,8 +47,8 @@ if (empty($submit))
     ?>
     </td></tr>
     </table>
-    <p align='center'><input name="submit" type="submit" value="Add Software" /></p>
-    <p class='warning'>Please check that the software does not already exist <em>before</em> adding it</p>
+    <p align='center'><input name="submit" type="submit" value="Add Skill" /></p>
+    <p class='warning'>Please check that the skill does not already exist <em>before</em> adding it</p>
     </form>
     <?php
     echo "<p align='center'><a href='products.php'>Return to products list without saving</a></p>";
@@ -88,12 +88,12 @@ else
         $result = mysql_query($sql);
         if (mysql_error()) trigger_error("MySQL Query Error ".mysql_error(), E_USER_ERROR);
 
-        if (!$result) echo "<p class='error'>Addition of Software Failed\n";
+        if (!$result) echo "<p class='error'>Addition of Skill Failed\n";
         else
         {
             $id=mysql_insert_id();
-            journal(CFG_LOGGING_DEBUG, 'Software Added', "Software $id was added", CFG_JOURNAL_DEBUG, $id);
-            confirmation_page("2", "products.php", "<h2>Software Addition Successful</h2><p align='center'>Please wait while you are redirected...</p>");
+            journal(CFG_LOGGING_DEBUG, 'Skill Added', "Skill $id was added", CFG_JOURNAL_DEBUG, $id);
+            confirmation_page("2", "products.php", "<h2>Skill Addition Successful</h2><p align='center'>Please wait while you are redirected...</p>");
         }
     }
     else

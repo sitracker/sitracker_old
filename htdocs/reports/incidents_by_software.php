@@ -16,7 +16,7 @@
 //  Counts activate calls withing the specified period (i.e. those with a lastupdate time > timespecified)
 
 $permission=37; // Run Reports
-$title='Incidents by Software';
+$title='Incidents by Skill';
 require('db_connect.inc.php');
 require('functions.inc.php');
 
@@ -36,7 +36,7 @@ if (empty($_REQUEST['mode']))
     echo date_picker('incidentsbysoftware.startdate');
     echo "</td></tr>\n";
     echo "<tr><th>Month breakdown:</th><td><input type='checkbox' name='monthbreakdown' /></td></tr>\n";
-    echo "<tr><th>Software name</th><td><input type='text' name='software' id='software' size='20'/></td></tr>\n";
+    echo "<tr><th>Skill name</th><td><input type='text' name='software' id='software' size='20'/></td></tr>\n";
     echo "</table>\n";
     echo "<p align='center'>";
     echo "<input type='hidden' name='mode' value='report' />";
@@ -84,7 +84,7 @@ else
     echo "</h2>";
     echo "<p>";
     echo "<table class='vertical' align='center'>";
-    echo "<tr><th>Number of calls</th><th>%</th><th>Software</th>";
+    echo "<tr><th>Number of calls</th><th>%</th><th>Skill</th>";
     while($sla = mysql_fetch_object($resultSLA))
     {
         echo "<th>".$sla->tag."</th>";

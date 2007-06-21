@@ -23,14 +23,14 @@ $action = cleanvar($_REQUEST['action']);
 
 if (empty($action) OR $action=='edit')
 {
-    $title='Edit Software';
+    $title='Edit Skill';
     // Show add product form
     include('htmlheader.inc.php');
     ?>
     <script type="text/javascript">
     function confirm_submit()
     {
-        return window.confirm('Are you sure you want to edit this software?');
+        return window.confirm('Are you sure you want to edit this Skill?');
     }
     </script>
     <?php
@@ -43,7 +43,7 @@ if (empty($action) OR $action=='edit')
         echo "<p align='center'>Mandatory fields are marked <sup class='red'>*</sup></p>";
         echo "<form name='editsoftware' action='{$_SERVER['PHP_SELF']}' method='post' onsubmit='return confirm_submit()'>";
         echo "<table class='vertical'>";
-        echo "<tr><th>Software Name: <sup class='red'>*</sup></th><td><input maxlength='50' name='name' size='30' value='".stripslashes($software->name)."' /></td></tr>";
+        echo "<tr><th>Skill Name: <sup class='red'>*</sup></th><td><input maxlength='50' name='name' size='30' value='".stripslashes($software->name)."' /></td></tr>";
         echo "<tr><th>Lifetime:</th><td>";
         echo "<input type='text' name='lifetime_start' id='lifetime_start' size='10' value='";
         if ($software->lifetime_start > 1) echo date('Y-m-d',mysql2date($software->lifetime_start));
@@ -75,7 +75,7 @@ elseif($action=='delete')
     if ($countincidents >=1 )
     {
         include('htmlheader.inc.php');
-        echo "<p class='error'>Sorry, this software cannot be deleted because it has been associated with one or more incidents</p>";
+        echo "<p class='error'>Sorry, this skill cannot be deleted because it has been associated with one or more incidents</p>";
         echo "<p align='center'><a href='products.php?display=skills'>Return to products list</a></p>";
         include('htmlfooter.inc.php');
     }
@@ -93,8 +93,8 @@ elseif($action=='delete')
         mysql_query($sql);
         if (mysql_error()) trigger_error(mysql_error(),E_USER_ERROR);
 
-        journal(CFG_LOGGING_DEBUG, 'Software Deleted', "Software $id was deleted", CFG_JOURNAL_DEBUG, $id);
-        confirmation_page("2", "products.php?display=skills", "<h2>Software Deleted Successfully</h2><p align='center'>Please wait while you are redirected...</p>");
+        journal(CFG_LOGGING_DEBUG, 'Skill Deleted', "Skill $id was deleted", CFG_JOURNAL_DEBUG, $id);
+        confirmation_page("2", "products.php?display=skills", "<h2>Skill Deleted Successfully</h2><p align='center'>Please wait while you are redirected...</p>");
     }
 }
 else
@@ -127,8 +127,8 @@ else
         else
         {
             $id=mysql_insert_id();
-            journal(CFG_LOGGING_DEBUG, 'Software Edited', "Software $id was edited", CFG_JOURNAL_DEBUG, $id);
-            confirmation_page("2", "products.php?display=skills", "<h2>Software Edit Successful</h2><p align='center'>Please wait while you are redirected...</p>");
+            journal(CFG_LOGGING_DEBUG, 'Skill Edited', "Skill $id was edited", CFG_JOURNAL_DEBUG, $id);
+            confirmation_page("2", "products.php?display=skills", "<h2>Skill Edit Successful</h2><p align='center'>Please wait while you are redirected...</p>");
         }
     }
     else

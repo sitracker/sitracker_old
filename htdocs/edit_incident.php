@@ -57,9 +57,9 @@ if (empty($submit))
         $maintid=maintenance_siteid($incident['maintenanceid']);
         echo "<tr><th>Site:</th><td>".site_name($maintid)."</td></tr>";
         ?>
-        <tr><th>Software:</th>
+        <tr><th>Skill:</th>
         <td><?php echo software_drop_down("software", $incident["softwareid"]); flush(); ?></td></tr>
-        <tr><th>Software Version:</th>
+        <tr><th>Version:</th>
         <td><input maxlength='50' name="productversion" size='30' type="text" value="<?php echo $incident["productversion"] ?>" /></td></tr>
         <tr><th>Service Packs Applied:</th>
         <td><input maxlength='100' name="productservicepacks" size='30' type="text" value="<?php echo $incident["productservicepacks"] ?>" /></td></tr>
@@ -205,8 +205,8 @@ else
                 if ($oldescalationpath != $escalationpath) $header .= "Escalation: " . $oldescalationpath . " -&gt; <b>" . $escalationpath . "</b>\n";
                 if ($oldexternalengineer != $externalengineer) $header .= "External Engineer: " . $oldexternalengineer . " -&gt; <b>" . $externalengineer . "</b>\n";
                 if ($oldexternalemail != $externalemail) $header .= "External email: " . $oldexternalemail . " -&gt; <b>" . $externalemail . "</b>\n";
-                if ($oldsoftware != $software) $header .= "Software: ".software_name($oldsoftware)." -&gt; <b>".software_name($software)."</b>\n";
-                if ($oldproductversion != $productversion) $header .= "Software Version: $oldproductversion -&gt; <b>$productversion</b>\n";
+                if ($oldsoftware != $software) $header .= "Skill: ".software_name($oldsoftware)." -&gt; <b>".software_name($software)."</b>\n";
+                if ($oldproductversion != $productversion) $header .= "Version: $oldproductversion -&gt; <b>$productversion</b>\n";
                 if ($oldproductservicepacks != $productservicepacks) $header .= "Service Packs Applied: $oldproductservicepacks -&gt; <b>$productservicepacks</b>\n";
 
                 if (!empty($header)) $header .= "<hr>";

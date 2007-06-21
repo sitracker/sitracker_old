@@ -83,7 +83,7 @@ if (strlen($search_string) > 4)
     $sql = "SELECT * FROM software WHERE name LIKE '%{$search_string}%' LIMIT 20";
     $result = mysql_query($sql);
     if (mysql_error()) trigger_error("MySQL Query Error ".mysql_error(), E_USER_ERROR);
-    echo "<p align='center'><strong>Matching Software</strong>: ";
+    echo "<p align='center'><strong>Matching Skills</strong>: ";
     $softcount=mysql_num_rows($result);
     $count=1;
     $colcount=1;

@@ -82,8 +82,8 @@ Report showing the average length of time taken to close incidents <em>(May take
 A 'league' style table showing sites that have logged incidents recently.
 </td></tr>
 
-<tr><td><a href='reports/incidents_by_software.php'>Incidents by Software</a><br />
-Table and chart showing the number of incidents logged under different software.
+<tr><td><a href='reports/incidents_by_software.php'>Incidents by Skill</a><br />
+Table and chart showing the number of incidents logged under different skills.
 </td></tr>
 
 
