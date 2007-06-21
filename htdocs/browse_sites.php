@@ -21,6 +21,7 @@ require('auth.inc.php');
 // External variables
 $search_string = cleanvar($_REQUEST['search_string']);
 $submit_value = cleanvar($_REQUEST['submit']);
+if (empty($search_string)) $search_string='A';
 
 if($submit_value == "go")
 {
@@ -57,7 +58,7 @@ if($submit_value == "go")
 
     if(mysql_num_rows($result) == 1)
     {
-            //go straight to the site 
+            //go straight to the site
             $row = mysql_fetch_array($result);
             $url = "site_details.php?id=".$row["id"];
             header("Location: $url");
@@ -138,7 +139,7 @@ if ($errors == 0)
         // Don't  need to do this again, already done above, us the results of that
         // build SQL
         $sql  = "SELECT id, name, department FROM sites ";
-    
+
         if ($search_string != '*')
         {
             $sql .= "WHERE ";
