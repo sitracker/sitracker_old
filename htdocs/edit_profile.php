@@ -110,14 +110,18 @@ if (empty($submit))
     </th><td><textarea name="message" rows="4" cols="40"><?php echo strip_tags($user->message); ?></textarea></td></tr>
 
     <tr><th colspan='2'>CONTACT DETAILS</td></tr>
-    <tr><th>Email:<sup class='red'>*</sup></th><td><input maxlength="50" name="email" size="30" type="text" value="<?php echo strip_tags($user->email); ?>" /></td></tr>
-    <tr><th>Phone:</th><td><input maxlength="50" name="phone" size="30" type="text" value="<?php echo strip_tags($user->phone); ?>" /></td></tr>
+    <tr id='email'><th>Email:<sup class='red'>*</sup></th><td><input maxlength="50" name="email" size="30" type="text" value="<?php echo strip_tags($user->email); ?>" /></td></tr>
+    <tr id='phone'><th>Phone:</th><td><input maxlength="50" name="phone" size="30" type="text" value="<?php echo strip_tags($user->phone); ?>" /></td></tr>
     <tr><th>Fax:</th><td><input maxlength="50" name="fax" size="30" type="text" value="<?php echo strip_tags($user->fax); ?>" /></td></tr>
     <tr><th>Mobile:</th><td><input maxlength="50" name="mobile" size="30" type="text" value="<?php echo user_mobile($userid) ?>" /></td></tr>
-    <tr><th>AIM: <img src="images/icons/kdeclassic/16x16/apps/ksmiletris.png" width="16" height="16" alt="AIM" /></th><td><input maxlength="50" name="aim" size="30" type="text" value="<?php echo strip_tags($user->aim); ?>" /></td></tr>
-    <tr><th>ICQ: <img src="images/icons/kdeclassic/16x16/apps/licq.png" width="16" height="16" alt="ICQ" /></th><td><input maxlength="50" name="icq" size="30" type="text" value="<?php echo strip_tags($user->icq); ?>" /></td></tr>
-    <tr><th>MSN: <img src="images/icons/kdeclassic/16x16/apps/personal.png" width="16" height="16" alt="MSN" /></th><td><input maxlength="50" name="msn" size="30" type="text" value="<?php echo strip_tags($user->msn); ?>" /></td></tr>
-
+    <?php
+    echo "<tr><th>AIM: <img src=\"images/icons/{$iconset}/16x16/apps/ksmiletris.png\" width=\"16\" height=\"16\" alt=\"AIM\" /></th>";
+    echo "<td><input maxlength=\"50\" name=\"aim\" size=\"30\" type=\"text\" value=\"".strip_tags($user->aim)."\" /></td></tr>";
+    echo "<tr><th>ICQ: <img src=\"images/icons/{$iconset}/16x16/apps/licq.png\" width=\"16\" height=\"16\" alt=\"ICQ\" /></th>";
+    echo "<td><input maxlength=\"50\" name=\"icq\" size=\"30\" type=\"text\" value=\"".strip_tags($user->icq)."\" /></td></tr>";
+    echo "<tr><th>MSN: <img src=\"images/icons/{$iconset}/16x16/apps/personal.png\" width=\"16\" height=\"16\" alt=\"MSN\" /></th>";
+    echo "<td><input maxlength=\"50\" name=\"msn\" size=\"30\" type=\"text\" value=\"".strip_tags($user->msn)."\" /></td></tr>";
+    ?>
     <tr><th colspan='2'>DISPLAY PREFERENCES</td></tr>
     <tr><th>Interface Style (Theme):</th><td>
     <?php interfacestyle_drop_down('style', $user->var_style) ?>
@@ -141,11 +145,11 @@ if (empty($submit))
 
     if ($CONFIG['trusted_server']==FALSE AND $userid==$sit[2])
     {
-        echo "<tr><th colspan='2'>CHANGE PASSWORD</td></tr>";
-        echo "<tr><th>&nbsp;</th><td>To change your password - first enter your existing password and then type your new password twice to confirm it.</td></tr>";
-        echo "<tr><th>Old Password:</th><td><input maxlength='50' name='password' size='30' type='password' /></td></tr>";
-        echo "<tr><th>New Password:</th><td><input maxlength='50' name='newpassword1' size='30' type='password' /></td></tr>";
-        echo "<tr><th>Confirm New Password:</th><td><input maxlength='50' name='newpassword2' size='30' type='password' /></td></tr>";
+        echo "<tr class='password'><th colspan='2'>CHANGE PASSWORD</td></tr>";
+        echo "<tr class='password'><th>&nbsp;</th><td>To change your password - first enter your existing password and then type your new password twice to confirm it.</td></tr>";
+        echo "<tr class='password'><th>Old Password:</th><td><input maxlength='50' name='password' size='30' type='password' /></td></tr>";
+        echo "<tr class='password'><th>New Password:</th><td><input maxlength='50' name='newpassword1' size='30' type='password' /></td></tr>";
+        echo "<tr class='password'><th>Confirm New Password:</th><td><input maxlength='50' name='newpassword2' size='30' type='password' /></td></tr>";
     }
     echo "</table>\n";
     echo "<input type='hidden' name='userid' value='{$userid}' />";
