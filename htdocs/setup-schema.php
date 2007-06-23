@@ -1166,7 +1166,7 @@ CREATE TABLE `users` (
   KEY `groupid` (`groupid`)
 ) ENGINE=MyISAM;
 
-INSERT INTO `users` VALUES (1, 'admin', MD5('{$adminpw}'), 'Administrator', 1, 0, 'Administrator', 'Regards,\r\n\r\nAdministrator', '', '', '', '', '', '', '', 1, '', 'Yes', 60, 'desc', 8, 'false', 'false', 'false', 'false', 'false', '', 32, '');
+INSERT INTO `users` VALUES (1, 'admin', MD5('{$adminpw}'), 'Administrator', 1, 3, 'Administrator', 'Regards,\r\n\r\nAdministrator', '', '', '', '.', '', '', '', 1, '', 'Yes', 60, 'desc', 15, 8, 'true', 'false', 'false', 'false', 'false', '', '', '', '', '', 32, '', '0-3,1-14,2-4,2-2,2-1,');
 
 
 CREATE TABLE `usersoftware` (
