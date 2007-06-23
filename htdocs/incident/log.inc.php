@@ -8,6 +8,7 @@
 // of the GNU General Public License, incorporated herein by reference.
 //
 // Author: Ivan Lucas <ivanlucas[at]users.sourceforge.net>
+//         Paul Heaney <paulheaney[at]users.sourceforge.net>
 
 // Included by ../incident.php
 
@@ -17,12 +18,108 @@ if (realpath(__FILE__) == realpath($_SERVER['SCRIPT_FILENAME']))
     exit;
 }
 
+function more_updates_previous($id)
+{
+    global $incidentid;
+    global $firstid;
+    global $updateid;
+
+    $sql  = "SELECT * FROM updates WHERE incidentid='{$incidentid}' ";
+    // Don't show hidden updates if we're on the customer view tab
+    if (strtolower($selectedtab)=='customer_view') $sql .= "AND customervisibility='show' ";
+    if(!empty($id))
+    {
+        $sql .= "AND id ";
+        if($_SESSION['update_order'] == 'desc') $sql .= " > ";
+        else $sql .= " < ";
+
+        $sql .= " '{$id}' ";
+    }
+    $sql .= "ORDER BY timestamp {$_SESSION['update_order']}, id {$_SESSION['update_order']} ";
+    $sql .= "LIMIT 1";
+
+    $result = mysql_query($sql);
+    if (mysql_error()) trigger_error("MySQL Query Error ".mysql_error(), E_USER_ERROR);
+
+    if(mysql_num_rows($result) > 0) return true;
+    else return false;
+}
+
+function more_updates_next($id)
+{
+    $sql  = "SELECT * FROM updates WHERE incidentid='{$incidentid}' ";
+    // Don't show hidden updates if we're on the customer view tab
+    if (strtolower($selectedtab)=='customer_view') $sql .= "AND customervisibility='show' ";
+    if(!empty($id))
+    {
+        $sql .= "AND id ";
+        if($_SESSION['update_order'] == 'desc') $sql .= " < ";
+        else $sql .= " > ";
+
+        $sql .= " '{$id}' ";
+    }
+    $sql .= "ORDER BY timestamp {$_SESSION['update_order']}, id {$_SESSION['update_order']} ";
+    $sql .= "LIMIT {$_SESSION['num_update_view']}";
+
+    $result = mysql_query($sql);
+    if (mysql_error()) trigger_error("MySQL Query Error ".mysql_error(), E_USER_ERROR);
+
+    if(mysql_num_rows($result) > 0) return true;
+    else return false;
+}
+
+function log_nav_bar()
+{
+    global $incidentid;
+    global $firstid;
+    global $updateid;
+
+    $nav .= "<table width='98%'><tr>";
+
+    if(more_updates_previous($firstid))
+    {
+        $nav .= "<td align='left'><a href='{$_SERVER['PHP_SELF']}?id={$incidentid}&javascript=enabled&recordupto={$firstid}&direction=previous'><< Previous</a></td>";
+    }
+
+    if(more_updates_next($updateid))
+    {
+        $nav .= "<td align='right'><a href='{$_SERVER['PHP_SELF']}?id={$incidentid}&javascript=enabled&recordupto={$updateid}&direction=next'>Next >></a></td>";
+    }
+
+    $nav .= "</tr></table>";
+
+    return $nav;
+}
+
+$upto = $_REQUEST['recordupto'];
+$direction = $_REQUEST['direction'];
+
 if ($incidentid=='' OR $incidentid < 1) trigger_error("Incident ID cannot be zero or blank", E_USER_ERROR);
 
 $sql  = "SELECT * FROM updates WHERE incidentid='{$incidentid}' ";
 // Don't show hidden updates if we're on the customer view tab
 if (strtolower($selectedtab)=='customer_view') $sql .= "AND customervisibility='show' ";
-$sql .= "ORDER BY timestamp DESC, id DESC";
+if(!empty($upto))
+{
+    $sql .= "AND id ";
+    switch ($direction)
+    {
+        case 'previous':
+            if($_SESSION['update_order'] == 'desc') $sql .= " > ";
+            else $sql .= " < ";
+            break;
+        case 'next':
+        default:
+            if($_SESSION['update_order'] == 'desc') $sql .= " < ";
+            else $sql .= " > ";
+            break;
+    }
+
+    $sql .= " '{$upto}' ";
+}
+$sql .= "ORDER BY timestamp {$_SESSION['update_order']}, id {$_SESSION['update_order']} ";
+$sql .= "LIMIT {$_SESSION['num_update_view']}";
+
 $result = mysql_query($sql);
 if (mysql_error()) trigger_error("MySQL Query Error ".mysql_error(), E_USER_ERROR);
 
@@ -49,8 +146,12 @@ foreach($keeptags AS $keeptag)
     }
 }
 
+//echo log_nav_bar();
+$count=0;
 while ($update = mysql_fetch_object($result))
 {
+    if(empty($firstid)) $firstid = $update->id;
+    $updateid = $update->id;
     $updatebody=trim($update->bodytext);
     $updatebodylen=strlen($updatebody);
 
@@ -63,7 +164,7 @@ while ($update = mysql_fetch_object($result))
     //                           "<a href = '/attachments/updates/{$update->id}/$1'>$1</a> ",
     //                           $updatebody);
     $updatebody = preg_replace("/\[\[att\]\](.*?)\[\[\/att\]\]/",
-                               "<a href = '/attachments/{$update->incidentid}/{$update->timestamp}/$1'>$1</a>",
+                               "<a href = '{$CONFIG['attachment_webpath']}{$update->incidentid}/{$update->timestamp}/$1'>$1</a>",
                                $updatebody);
 
     // Put the header part (up to the <hr /> in a seperate DIV)
@@ -107,7 +208,7 @@ while ($update = mysql_fetch_object($result))
     //$replace = array("<a href=\"\\1\">\\1</a>"); // , "<a href=\"mailto:$0\">$0</a>"
     //$updatebody = preg_replace("/href=\"www/i", "href=\"http://www", preg_replace ($search, $replace, $updatebody));
 
-    // $updatebody = bbcode($updatebody);
+    $updatebody = bbcode($updatebody);
 
     //$updatebody = emotion($updatebody);
 
@@ -129,15 +230,43 @@ while ($update = mysql_fetch_object($result))
     $updateheadertext = str_replace('currentowner', $currentowner, $updateheadertext);
     $updateheadertext = str_replace('updateuser', $updateuser, $updateheadertext);
 
+    echo "<a name='update{$count}'></a>";
+
     // Print a header row for the update
     if ($updatebody=='' AND $update->customervisibility=='show') echo "<div class='detailinfo'>";
     elseif ($updatebody=='' AND $update->customervisibility!='show') echo "<div class='detailinfohidden'>";
     elseif ($updatebody!='' AND $update->customervisibility=='show') echo "<div class='detailhead'>";
     else echo "<div class='detailheadhidden'>";
 
+    echo "<div class='detaildate'>";
+    if($count==0)
+    {
+        if(more_updates_previous($update->id))
+        {
+            echo "<a href='{$_SERVER['PHP_SELF']}?id={$incidentid}&javascript=enabled&recordupto={$firstid}&direction=previous' class='info'><img src='{$CONFIG['application_webpath']}images/icons/{$iconset}/16x16/actions/1uparrow.png' alt='Previous update' /></a>";
+        }
+    }
+    else
+    {
+        echo "<a href='#update".($count-1)."' class='info'><img src='{$CONFIG['application_webpath']}images/icons/{$iconset}/16x16/actions/1uparrow.png' alt='Previous update' /></a>";
+    }
+
+    if($count==($_SESSION['num_update_view']-1) OR $count==mysql_num_rows($result)-1)
+    {
+        if(more_updates_next($update->id))
+        {
+            echo "<a href='{$_SERVER['PHP_SELF']}?id={$incidentid}&javascript=enabled&recordupto={$updateid}&direction=next' class='info'><img src='{$CONFIG['application_webpath']}images/icons/{$iconset}/16x16/actions/1downarrow.png' alt='Next update' /></a>";
+        }
+    }
+    else
+    {
+        echo "<a href='#update".($count+1)."' class='info'><img src='{$CONFIG['application_webpath']}images/icons/{$iconset}/16x16/actions/1downarrow.png' alt='Next update' /></a>";
+    }
+    echo "</div>";
+
     // Specific header
     // $updatetypes['email'] = array('icon' => 'email.png', 'text' => 'Email sent');
-    echo " <div class='detaildate'>{$updatetime}</div>";
+    echo "<div class='detaildate'>{$updatetime}</div>";
 
     if ($update->customervisibility=='show') $newmode='hide';
     else $newmode='show';
@@ -145,14 +274,16 @@ while ($update = mysql_fetch_object($result))
 
     if (array_key_exists($update->type, $updatetypes))
     {
-        echo "<img src='{$CONFIG['application_webpath']}images/icons/kdeclassic/16x16/{$updatetypes[$update->type]['icon']}' width='16' height='16' alt='{$update->type}' />";
+        echo "<img src='{$CONFIG['application_webpath']}images/icons/{$iconset}/16x16/{$updatetypes[$update->type]['icon']}' width='16' height='16' alt='{$update->type}' />";
         echo "<span>Click here to {$newmode} this update</span></a> ";
+        if($update->sla != '') echo "<img src='{$CONFIG['application_webpath']}images/icons/{$iconset}/16x16/{$updatetypes['slamet']['icon']}' width='16' height='16' alt='{$update->type}' />";
         echo "{$updateheadertext}"; //  by {$updateuser}
     }
     else
     {
-        echo "<img src='{$CONFIG['application_webpath']}images/icons/kdeclassic/16x16/{$updatetypes['research']['icon']}' width='16' height='16' alt='Research' />";
+        echo "<img src='{$CONFIG['application_webpath']}images/icons/{$iconset}/16x16/{$updatetypes['research']['icon']}' width='16' height='16' alt='Research' />";
         echo "<span>Click to {$newmode}</span></a> ";
+        if($update->sla != '') echo "<img src='{$CONFIG['application_webpath']}images/icons/{$iconset}/16x16/{$updatetypes['slamet']['icon']}' width='16' height='16' alt='{$update->type}' />";
         echo "Updated ({$update->type}) by {$updateuser}";
     }
 
@@ -166,6 +297,10 @@ while ($update = mysql_fetch_object($result))
         if (!empty($update->nextaction)) echo "<div class='detailhead'>Next action: ".stripslashes($update->nextaction)."</div>";
         echo "</div>\n"; // detailentry
     }
+
+    $count++;
 }
+
+echo log_nav_bar();
 
 ?>
