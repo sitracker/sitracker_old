@@ -1,15 +1,16 @@
 /* Javascript/ECMAscript Functions for SiT (previously known as Webtrack) by Ivan Lucas */
 /* Since v3.30 this requires prototype.js */
 
+var popwin;
+
 function incident_details_window(incidentid,win)
 {
-    // URL = "incident.php?popup=yes&id=" + incidentid;
-    if(win=='holdingview')
-        URL = "incident_details.php?id=" + incidentid + "&javascript=enabled&view=lockedview";
-    else
-        URL = "incident_details.php?id=" + incidentid + "&javascript=enabled";
-    window.open(URL, "sit_popup", "toolbar=yes,status=yes,menubar=no,scrollbars=yes,resizable=yes,width=700,height=600");
+    // URL = "incident.php?popup=yes&id=" + incidentid;
+    URL = "incident_details.php?id=" + incidentid;
+    if(popwin) { popwin.close(); }
+    popwin = window.open(URL, "sit_popup", "toolbar=yes,status=yes,menubar=no,scrollbars=yes,resizable=yes,width=700,height=600");
 }
+
 
 function wt_winpopup(url,mini)
 {
