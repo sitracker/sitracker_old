@@ -259,6 +259,7 @@ else
             $_SESSION['email'] = $email;
             $_SESSION['incident_refresh'] = $incidentrefresh;
             $_SESSION['update_order'] = $updateorder;
+            $_SESSION['num_update_view'] = $updatesperpage;
         }
 
         //only want to reassign to backup if you've changed you status
