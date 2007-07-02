@@ -4528,7 +4528,7 @@ function dashboard_do($context, $row=0, $dashboardid=0)
     $action = $DASHBOARDCOMP[$context];
     if($action != NULL || $action != "")
     {
-        $action($row,$dashboardid);
+        if (function_exists($action)) $action($row,$dashboardid);
     }
 }
 

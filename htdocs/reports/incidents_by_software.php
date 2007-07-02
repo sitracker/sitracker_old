@@ -206,7 +206,7 @@ else
     }
 
     $data .= $others."|";
-    $percentage = number_format(($others/$count) * 100,1);
+    $percentage = @number_format(($others/$count) * 100,1);
     $legend .= "Others ($percentage)|";
 
 

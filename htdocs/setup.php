@@ -496,7 +496,7 @@ switch ($_REQUEST['action'])
                         {
                             if (!empty($_SESSION['adminpw']))
                             {
-                                echo "<p>SiT! is initially configured with just one user, <var><strong>admin</strong></var> with an automatically generated password of <var><strong>{$_SESSION['adminpw']}</strong></var>, ";
+                                echo "<p><span style='color: red; font-weight: bolder;'>Important:</span> SiT! is initially configured with just one user, <var><strong>admin</strong></var> with an automatically generated password of <var><strong>{$_SESSION['adminpw']}</strong></var>, ";
                                 echo "you should make a note of this password and change it as soon as you have logged in.</p>";
                             }
                             else
