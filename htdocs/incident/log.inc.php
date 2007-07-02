@@ -47,7 +47,8 @@ function more_updates_previous($id)
 
 function more_updates_next($id)
 {
-    $sql  = "SELECT * FROM updates WHERE incidentid='{$incidentid}' ";
+    global $incidentid;
+    $sql  = "SELECT id FROM updates WHERE incidentid='{$incidentid}' ";
     // Don't show hidden updates if we're on the customer view tab
     if (strtolower($selectedtab)=='customer_view') $sql .= "AND customervisibility='show' ";
     if(!empty($id))
