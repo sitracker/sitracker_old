@@ -421,7 +421,7 @@ elseif ($action=='incidentform')
     if (empty($updateid))
     {
         echo "<tr><th>Visible To Customer:</th>\n";
-        echo "<td><input name='cust_vis' type=radio value='no' /> No <input name='cust_vis' type='radio' value='yes' checked='checked' /> Yes</td></tr>\n";
+        echo "<td><input name='cust_vis' type='radio' value='no' /> No <input name='cust_vis' type='radio' value='yes' checked='checked' /> Yes</td></tr>\n";
     }
     ?>
     <tr><th>Send Opening Email: <sup class='red'>*</sup></th>
@@ -460,6 +460,7 @@ elseif ($action=='assign')
         $productservicepacks = cleanvar($_REQUEST['productservicepacks']);
         $bodytext = cleanvar($_REQUEST['bodytext']);
         $send_email = cleanvar($_REQUEST['send_email']);
+        $cust_vis = cleanvar($_REQUEST['cust_vis']);
 
         // check form input
         $errors = 0;
@@ -532,8 +533,8 @@ elseif ($action=='assign')
             if ($probreproduction != "") $updatetext .= "<b>Problem Reproduction</b>\n" . $probreproduction . "\n\n";
             if ($custimpact != "") $updatetext .= "<b>Customer Impact</b>\n" . $custimpact . "\n\n";
             if ($other != "") $updatetext .= "<b>Other Details</b>\n" . $other . "\n";
-            if ($cust_vis == "yes") { $customervisibility='show'; }
-            else { $customervisibility='hide'; }
+            if ($cust_vis == "yes") $customervisibility='show';
+            else $customervisibility='hide';
 
             if (!empty($updateid))
             {
@@ -560,7 +561,7 @@ elseif ($action=='assign')
                 // Create a new update from details entered
                 $sql  = "INSERT INTO updates (incidentid, userid, type, bodytext, timestamp, currentowner, ";
                 $sql .= "currentstatus, customervisibility, nextaction) ";
-                $sql .= "VALUES ('$incidentid', '".$sit[2]."', 'opening', '$updatetext', '$now', '".$sit[2]."', ";
+                $sql .= "VALUES ('$incidentid', '{$sit[2]}', 'opening', '$updatetext', '$now', '{$sit[2]}', ";
                 $sql .= "'1', '$customervisibility', '$nextaction')";
                 $result = mysql_query($sql);
                 if (mysql_error()) trigger_error("MySQL Query Error ".mysql_error(), E_USER_ERROR);
