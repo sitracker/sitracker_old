@@ -40,7 +40,7 @@ switch($action)
         if(!$result) echo "<p class='error'>Failed to add RSS feed</p>";
         else
         {
-            confirmation_page("2", "edit_rss_feeds.php", "<h2>Feeded added</h2><h5>Please wait while you are redirected...</h5>");
+            confirmation_page("2", "edit_rss_feeds.php", "<h2>Feed added</h2><h5>Please wait while you are redirected...</h5>");
         }
         break;
     case 'enable':
