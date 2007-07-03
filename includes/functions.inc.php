@@ -1743,6 +1743,27 @@ function incident_lastupdate($id)
 }
 
 
+// Returns a string containing the body of the first update (that is visible to customer)
+// in a format suitable for including in an email
+function incident_firstupdate($id)
+{
+    $sql = "SELECT bodytext FROM updates WHERE incidentid='$id' AND customervisibility='show' ORDER BY timestamp ASC, id ASC LIMIT 1";
+    $result = mysql_query($sql);
+    if (mysql_error()) trigger_error(mysql_error(),E_USER_WARNING);
+    if (mysql_num_rows($result) >= 1)
+    {
+        list($bodytext) = mysql_fetch_row($result);
+        $bodytext = stripslashes(strip_tags($bodytext));
+    }
+    else
+    {
+        $bodytext = '';
+    }
+
+    return $bodytext;
+}
+
+
 /* Returns a string representing the name of   */
 /* the given incident status. Returns an empty string if the  */
 /* status does not exist.                                     */
@@ -1846,7 +1867,8 @@ function emailtype_replace_specials($string, $incidentid, $userid=0)
                     25 => '/<signature>/s',
                     26 => '/<globalsignature>/s',
                     27 => '/<todaysdate>/s',
-                    28 => '/<salespersonemail>/s'
+                    28 => '/<salespersonemail>/s',
+                    29 => '/<incidentfirstupdate>/s'
                 );
 
     $email_replace = array(0 => contact_email($contactid),
@@ -1877,7 +1899,8 @@ function emailtype_replace_specials($string, $incidentid, $userid=0)
                     25 => user_signature($userid),
                     26 => global_signature(),
                     27 => date("jS F Y"),
-                    28 => user_email(db_read_column('owner', 'sites', db_read_column('siteid','contacts',$contactid)))
+                    28 => user_email(db_read_column('owner', 'sites', db_read_column('siteid','contacts',$contactid))),
+                    29 => incident_firstupdate($incidentid)
                 );
 
     if($incident->towner != 0)
