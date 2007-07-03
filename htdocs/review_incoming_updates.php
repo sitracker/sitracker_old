@@ -161,14 +161,14 @@ if(!empty($selected))
         }
     -->
     </script>
-    
+
     <script type="text/javascript">
     <!--
     function submitform()
     {
     document.held_emails.submit();
     }
-    
+
     function checkAll(checkStatus)
     {
         var frm = document.held_emails.elements;
@@ -205,9 +205,9 @@ $spamcount=0;
 if($countresults > 0)
 {
     if ($countresults) mysql_data_seek($result, 0);
-    
+
     while ($updates = mysql_fetch_array($result))
-        if (!stristr($updates['subject'],$CONFIG['spam_email_subject'])) $queuerows[$updates->timestamp] = generate_row($updates);
+        if (!stristr($updates['subject'],$CONFIG['spam_email_subject'])) $queuerows[$updates['timestamp']] = generate_row($updates);
         else $spamcount++;
 }
 
@@ -278,15 +278,15 @@ if($spamcount > 0)
     if($spamcount > 1) echo "s";
     echo " ({$spamcount} total)</h2>\n";
     echo "<p align='center'>Incoming email that is suspected to be spam</p>";
-    
+
     // Reset back for 'nasty' emails
     if ($countresults) mysql_data_seek($result, 0);
-    
+
     echo "<table align='center' style='width: 95%;'>";
     echo "<tr><th /><th>Date</th><th>From</th>";
     echo "<th>Subject</th><th>Reason</th>";
     echo "<th>Operation</th></tr>\n";
-    
+
     while ($updates = mysql_fetch_array($result))
     {
         if (stristr($updates['subject'],$CONFIG['spam_email_subject']))
@@ -297,8 +297,8 @@ if($spamcount > 0)
     }
     echo "</table>";
     if (is_array($spam_array)) echo "<p align='center'><a href={$_SERVER['PHP_SELF']}?delete_all_spam=".implode(',',$spam_array).'>Delete all mail from spam queue</a></p>';
-    
-    
+
+
     echo "<br /><br />"; //gap
 }
 
@@ -310,7 +310,7 @@ $result = mysql_query($sql);
 if (mysql_num_rows($result) >= 1)
 {
     echo "<br /><br />\n";
-    
+
     echo "<h2>Pending Re-Assignments</h2>";
     echo "<p align='center'>Automatic reassignments that could not be made because users were set to 'not accepting'</p>";
     echo "<table align='center' style='width: 95%;'>";
