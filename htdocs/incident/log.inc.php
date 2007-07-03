@@ -18,81 +18,52 @@ if (realpath(__FILE__) == realpath($_SERVER['SCRIPT_FILENAME']))
     exit;
 }
 
-function more_updates_previous($id)
+$offset = cleanvar($_REQUEST['offset']);
+if (empty($offset)) $offset=0;
+
+function count_updates($incidentid)
 {
-    global $incidentid;
-    global $firstid;
-    global $updateid;
-
-    $sql  = "SELECT * FROM updates WHERE incidentid='{$incidentid}' ";
-    // Don't show hidden updates if we're on the customer view tab
-    if (strtolower($selectedtab)=='customer_view') $sql .= "AND customervisibility='show' ";
-    if(!empty($id))
-    {
-        $sql .= "AND id ";
-        if($_SESSION['update_order'] == 'desc') $sql .= " > ";
-        else $sql .= " < ";
-
-        $sql .= " '{$id}' ";
-    }
-    $sql .= "ORDER BY timestamp {$_SESSION['update_order']}, id {$_SESSION['update_order']} ";
-    $sql .= "LIMIT 1";
-
+    $count_updates = 0;
+    $sql = "SELECT COUNT(id) FROM updates WHERE incidentid='{$incidentid}'";
     $result = mysql_query($sql);
     if (mysql_error()) trigger_error("MySQL Query Error ".mysql_error(), E_USER_ERROR);
+    list ($count_updates) = mysql_fetch_row($result);
 
-    if(mysql_num_rows($result) > 0) return true;
-    else return false;
+    return $count_updates;
 }
 
-function more_updates_next($id)
-{
-    global $incidentid;
-    $sql  = "SELECT id FROM updates WHERE incidentid='{$incidentid}' ";
-    // Don't show hidden updates if we're on the customer view tab
-    if (strtolower($selectedtab)=='customer_view') $sql .= "AND customervisibility='show' ";
-    if(!empty($id))
-    {
-        $sql .= "AND id ";
-        if($_SESSION['update_order'] == 'desc') $sql .= " < ";
-        else $sql .= " > ";
-
-        $sql .= " '{$id}' ";
-    }
-    $sql .= "ORDER BY timestamp {$_SESSION['update_order']}, id {$_SESSION['update_order']} ";
-    $sql .= "LIMIT {$_SESSION['num_update_view']}";
-
-    $result = mysql_query($sql);
-    if (mysql_error()) trigger_error("MySQL Query Error ".mysql_error(), E_USER_ERROR);
-
-    if(mysql_num_rows($result) > 0) return true;
-    else return false;
-}
+$count_updates = count_updates($incidentid);
 
 function log_nav_bar()
 {
     global $incidentid;
     global $firstid;
     global $updateid;
+    global $offset;
+    global $count_updates;
+
+    if ($offset > $_SESSION['num_update_view']) $previous = $offset - $_SESSION['num_update_view'];
+    else $previous=0;
+    $next = $offset + $_SESSION['num_update_view'];
 
     $nav .= "<table width='98%'><tr>";
 
-    if(more_updates_previous($firstid))
+    if ($offset > 0)
     {
-        $nav .= "<td align='left'><a href='{$_SERVER['PHP_SELF']}?id={$incidentid}&javascript=enabled&recordupto={$firstid}&direction=previous'><< Previous</a></td>";
+        $nav .= "<td align='left'><a href='{$_SERVER['PHP_SELF']}?id={$incidentid}&amp;javascript=enabled&amp;offset={$previous}&amp;direction=previous'>&lt;&lt; Previous</a></td>";
     }
 
-    if(more_updates_next($updateid))
+    if ($offset < ($count_updates - $_SESSION['num_update_view']))
     {
-        $nav .= "<td align='right'><a href='{$_SERVER['PHP_SELF']}?id={$incidentid}&javascript=enabled&recordupto={$updateid}&direction=next'>Next >></a></td>";
+        $nav .= "<td align='right'><a href='{$_SERVER['PHP_SELF']}?id={$incidentid}&amp;javascript=enabled&amp;offset={$next}&amp;direction=next'>Next &gt;&gt;</a></td>";
     }
 
-    $nav .= "</tr></table>";
+    $nav .= "</tr></table>\n";
 
     return $nav;
 }
 
-$upto = $_REQUEST['recordupto'];
+
 $direction = $_REQUEST['direction'];
 
 if ($incidentid=='' OR $incidentid < 1) trigger_error("Incident ID cannot be zero or blank", E_USER_ERROR);
@@ -100,27 +71,8 @@ if ($incidentid=='' OR $incidentid < 1) trigger_error("Incident ID cannot be zer
 $sql  = "SELECT * FROM updates WHERE incidentid='{$incidentid}' ";
 // Don't show hidden updates if we're on the customer view tab
 if (strtolower($selectedtab)=='customer_view') $sql .= "AND customervisibility='show' ";
-if(!empty($upto))
-{
-    $sql .= "AND id ";
-    switch ($direction)
-    {
-        case 'previous':
-            if($_SESSION['update_order'] == 'desc') $sql .= " > ";
-            else $sql .= " < ";
-            break;
-        case 'next':
-        default:
-            if($_SESSION['update_order'] == 'desc') $sql .= " < ";
-            else $sql .= " > ";
-            break;
-    }
-
-    $sql .= " '{$upto}' ";
-}
 $sql .= "ORDER BY timestamp {$_SESSION['update_order']}, id {$_SESSION['update_order']} ";
-$sql .= "LIMIT {$_SESSION['num_update_view']}";
-
+$sql .= "LIMIT {$offset},{$_SESSION['num_update_view']}";
 $result = mysql_query($sql);
 if (mysql_error()) trigger_error("MySQL Query Error ".mysql_error(), E_USER_ERROR);
 
@@ -239,12 +191,16 @@ while ($update = mysql_fetch_object($result))
     elseif ($updatebody!='' AND $update->customervisibility=='show') echo "<div class='detailhead'>";
     else echo "<div class='detailheadhidden'>";
 
+    if ($offset > $_SESSION['num_update_view']) $previous = $offset - $_SESSION['num_update_view'];
+    else $previous=0;
+    $next = $offset + $_SESSION['num_update_view'];
+
     echo "<div class='detaildate'>";
     if($count==0)
     {
-        if(more_updates_previous($update->id))
+        if ($offset > 0)
         {
-            echo "<a href='{$_SERVER['PHP_SELF']}?id={$incidentid}&javascript=enabled&recordupto={$firstid}&direction=previous' class='info'><img src='{$CONFIG['application_webpath']}images/icons/{$iconset}/16x16/actions/1uparrow.png' alt='Previous update' /></a>";
+            echo "<a href='{$_SERVER['PHP_SELF']}?id={$incidentid}&amp;javascript=enabled&amp;offset={$previous}&amp;direction=previous' class='info'><img src='{$CONFIG['application_webpath']}images/icons/{$iconset}/16x16/actions/1uparrow.png' alt='Previous update' /></a>";
         }
     }
     else
@@ -252,11 +208,11 @@ while ($update = mysql_fetch_object($result))
         echo "<a href='#update".($count-1)."' class='info'><img src='{$CONFIG['application_webpath']}images/icons/{$iconset}/16x16/actions/1uparrow.png' alt='Previous update' /></a>";
     }
 
-    if($count==($_SESSION['num_update_view']-1) OR $count==mysql_num_rows($result)-1)
+    if ($count==($_SESSION['num_update_view']-1) OR $count==mysql_num_rows($result)-1)
     {
-        if(more_updates_next($update->id))
+        if ($offset < ($count_updates - $_SESSION['num_update_view']))
         {
-            echo "<a href='{$_SERVER['PHP_SELF']}?id={$incidentid}&javascript=enabled&recordupto={$updateid}&direction=next' class='info'><img src='{$CONFIG['application_webpath']}images/icons/{$iconset}/16x16/actions/1downarrow.png' alt='Next update' /></a>";
+            echo "<a href='{$_SERVER['PHP_SELF']}?id={$incidentid}&amp;javascript=enabled&amp;offset={$next}&amp;direction=next' class='info'><img src='{$CONFIG['application_webpath']}images/icons/{$iconset}/16x16/actions/1downarrow.png' alt='Next update' /></a>";
         }
     }
     else
