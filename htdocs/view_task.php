@@ -89,6 +89,9 @@ if (mysql_num_rows($result) >= 1)
         if ($task->completion < 100) echo " | <a href='edit_task.php?id={$id}&amp;action=markcomplete'>Mark Complete</a>";
         echo "</p>";
 
+/*
+        // Temporarily disabled for 3.30 beta1 release
+
         echo "<div style='border: 1px solid #CCCCFF; padding: 5px;'>";
         echo "<p><strong>Links</strong>:</p>";
         // Draw links tree
@@ -101,12 +104,14 @@ if (mysql_num_rows($result) >= 1)
         echo "</div>";
 
         echo show_create_links('tasks', $task->id);
-        echo "</div>";
+        */
 
+        echo "</div>";
         // Notes
         echo "<div style='width: 48%; float: right; border: 1px solid #CCCCFF;'>";
         echo add_note_form(10, $id);
         echo show_notes(10, $id);
+
         echo "</div>";
     }
 }
