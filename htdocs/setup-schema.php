@@ -1412,20 +1412,6 @@ INSERT INTO `linktypes` VALUES (1,'Task','Subtask','Parent Task','tasks','id','t
 ALTER TABLE `users` ADD `var_num_updates_view` INT NOT NULL DEFAULT '15' AFTER `var_update_order` ;
 INSERT INTO `emailtype` (`name`, `type`, `description`, `tofield`, `fromfield`, `replytofield`, `ccfield`, `bccfield`, `subjectfield`, `body`, `customervisibility`, `storeinlog`) VALUES ('NEARING_SLA', 'system', 'Notification when an incident nears its SLA target', '<supportmanageremail>', '<supportemail>', '<supportemail>', '<useremail>', '', '<applicationshortname> SLA: Incident <incidentid> about to breach SLA', 'This is an automatic notification that this incident is about to breach it\'s SLA.  The SLA target <info1> will expire in <info2> minutes.\r\n\r\nIncident: [<incidentid>] - <incidenttitle>\r\nOwner: <incidentowner>\r\nPriority: <incidentpriority>\r\nExternal Id: <incidentexternalid>\r\nExternal Engineer: <incidentexternalengineer>\r\nSite: <contactsite>\r\nContact: <contactname>\r\n\r\n--\r\n<applicationshortname> v<applicationversion>\r\n<todaysdate>\r\n', 'hide', 'Yes');
 
-
-CREATE TABLE `tags` (
-  `tagid` int(11) NOT NULL auto_increment,
-  `name` varchar(255) NOT NULL default '',
-  PRIMARY KEY  (`tagid`)
-) ENGINE=MyISAM;
-
-CREATE TABLE `set_tags` (
-`id` INT NOT NULL ,
-`type` MEDIUMINT NOT NULL ,
-`tagid` INT NOT NULL ,
-PRIMARY KEY ( `id` , `type` , `tagid` )
-) ENGINE=MYISAM;
-
 INSERT INTO `permissions` VALUES (65, 'Delete Products');
 INSERT INTO `rolepermissions` (`roleid`, `permissionid`, `granted`) VALUES (1, 65, 'true');
 INSERT INTO `userpermissions` VALUES (1, 65, 'true');
