@@ -17,10 +17,11 @@ require('functions.inc.php');
 // This page requires authentication
 require('auth.inc.php');
 
+$mode = cleanvar($_REQUEST['mode']);
 
 function give_overview()
 {
-    global $todayrecent;
+    global $todayrecent, $mode, $CONFIG;
 
     // Show Open, Closed, Updated today, this week, this month etc.
     function count_incidents($startdate, $enddate)
@@ -135,20 +136,23 @@ function give_overview()
     echo stats_period_row('Past 7 days', mktime(0,0,0,date('m'),date('d')-6,date('Y')),mktime(23,59,59,date('m'),date('d'),date('Y')));
     echo stats_period_row('Previous 7 days', mktime(0,0,0,date('m'),date('d')-13,date('Y')),mktime(23,59,59,date('m'),date('d')-7,date('Y')));
     echo "<tr><td colspan='*'></td></tr>";
-    echo stats_period_row('This month', mktime(0,0,0,date('m'),1,date('Y')),mktime(23,59,59,date('m'),date('d'),date('Y')));
-    echo stats_period_row('Last month', mktime(0,0,0,date('m')-1,date('d'),date('Y')),mktime(23,59,59,date('m'),0,date('Y')));
-    echo stats_period_row(date('F y',mktime(0,0,0,date('m')-2,1,date('Y'))), mktime(0,0,0,date('m')-2,date('d'),date('Y')),mktime(23,59,59,date('m')-1,0,date('Y')));
-    echo stats_period_row(date('F y',mktime(0,0,0,date('m')-3,1,date('Y'))), mktime(0,0,0,date('m')-3,date('d'),date('Y')),mktime(23,59,59,date('m')-2,0,date('Y')));
-    echo stats_period_row(date('F y',mktime(0,0,0,date('m')-4,1,date('Y'))), mktime(0,0,0,date('m')-4,date('d'),date('Y')),mktime(23,59,59,date('m')-3,0,date('Y')));
-    echo stats_period_row(date('F y',mktime(0,0,0,date('m')-5,1,date('Y'))), mktime(0,0,0,date('m')-5,date('d'),date('Y')),mktime(23,59,59,date('m')-4,0,date('Y')));
-    echo stats_period_row(date('F y',mktime(0,0,0,date('m')-6,1,date('Y'))), mktime(0,0,0,date('m')-6,date('d'),date('Y')),mktime(23,59,59,date('m')-5,0,date('Y')));
-    echo "<tr><td colspan='*'></td></tr>";
-    echo stats_period_row('This year', mktime(0,0,0,1,1,date('Y')),mktime(23,59,59,date('m'),date('d'),date('Y')));
-    echo stats_period_row('Last year', mktime(0,0,0,1,1,date('Y')-1),mktime(23,59,59,12,31,date('Y')-1));
-    echo stats_period_row(date('Y',mktime(0,0,0,1,1,date('Y')-2)), mktime(0,0,0,1,1,date('Y')-2),mktime(23,59,59,12,31,date('Y')-2));
-    echo stats_period_row(date('Y',mktime(0,0,0,1,1,date('Y')-3)), mktime(0,0,0,1,1,date('Y')-3),mktime(23,59,59,12,31,date('Y')-3));
-    echo stats_period_row(date('Y',mktime(0,0,0,1,1,date('Y')-4)), mktime(0,0,0,1,1,date('Y')-4),mktime(23,59,59,12,31,date('Y')-4));
-    echo stats_period_row(date('Y',mktime(0,0,0,1,1,date('Y')-5)), mktime(0,0,0,1,1,date('Y')-5),mktime(23,59,59,12,31,date('Y')-5));
+    if ($mode=='detail')
+    {
+        echo stats_period_row('This month', mktime(0,0,0,date('m'),1,date('Y')),mktime(23,59,59,date('m'),date('d'),date('Y')));
+        echo stats_period_row('Last month', mktime(0,0,0,date('m')-1,date('d'),date('Y')),mktime(23,59,59,date('m'),0,date('Y')));
+        echo stats_period_row(date('F y',mktime(0,0,0,date('m')-2,1,date('Y'))), mktime(0,0,0,date('m')-2,date('d'),date('Y')),mktime(23,59,59,date('m')-1,0,date('Y')));
+        echo stats_period_row(date('F y',mktime(0,0,0,date('m')-3,1,date('Y'))), mktime(0,0,0,date('m')-3,date('d'),date('Y')),mktime(23,59,59,date('m')-2,0,date('Y')));
+        echo stats_period_row(date('F y',mktime(0,0,0,date('m')-4,1,date('Y'))), mktime(0,0,0,date('m')-4,date('d'),date('Y')),mktime(23,59,59,date('m')-3,0,date('Y')));
+        echo stats_period_row(date('F y',mktime(0,0,0,date('m')-5,1,date('Y'))), mktime(0,0,0,date('m')-5,date('d'),date('Y')),mktime(23,59,59,date('m')-4,0,date('Y')));
+        echo stats_period_row(date('F y',mktime(0,0,0,date('m')-6,1,date('Y'))), mktime(0,0,0,date('m')-6,date('d'),date('Y')),mktime(23,59,59,date('m')-5,0,date('Y')));
+        echo "<tr><td colspan='*'></td></tr>";
+        echo stats_period_row('This year', mktime(0,0,0,1,1,date('Y')),mktime(23,59,59,date('m'),date('d'),date('Y')));
+        echo stats_period_row('Last year', mktime(0,0,0,1,1,date('Y')-1),mktime(23,59,59,12,31,date('Y')-1));
+        echo stats_period_row(date('Y',mktime(0,0,0,1,1,date('Y')-2)), mktime(0,0,0,1,1,date('Y')-2),mktime(23,59,59,12,31,date('Y')-2));
+        echo stats_period_row(date('Y',mktime(0,0,0,1,1,date('Y')-3)), mktime(0,0,0,1,1,date('Y')-3),mktime(23,59,59,12,31,date('Y')-3));
+        echo stats_period_row(date('Y',mktime(0,0,0,1,1,date('Y')-4)), mktime(0,0,0,1,1,date('Y')-4),mktime(23,59,59,12,31,date('Y')-4));
+        echo stats_period_row(date('Y',mktime(0,0,0,1,1,date('Y')-5)), mktime(0,0,0,1,1,date('Y')-5),mktime(23,59,59,12,31,date('Y')-5));
+    }
     echo "</table>\n";
 
     echo "<br />\n";
@@ -286,12 +290,60 @@ function give_overview()
 
     mysql_free_result($result);
 
+    $string .= "<h2>Overall Feedback</h2>";
+    $totalresult=0;
+    $numquestions=0;
+    $qsql = "SELECT * FROM feedbackquestions WHERE formid='1' AND type='rating' ORDER BY taborder";
+    $qresult = mysql_query($qsql);
+    if (mysql_error()) trigger_error(mysql_error(), E_USER_ERROR);
+
+    if (mysql_num_rows($qresult) >= 1)
+    {
+        $string .= "<table align='center' class='vertical'>";
+        while ($qrow = mysql_fetch_object($qresult))
+        {
+            $numquestions++;
+            $string .= "<tr><th>Q{$qrow->taborder}: {$qrow->question}</th>";
+            $sql = "SELECT * FROM feedbackrespondents, incidents, users, feedbackresults ";
+            $sql .= "WHERE feedbackrespondents.incidentid=incidents.id ";
+            $sql .= "AND incidents.owner=users.id ";
+            $sql .= "AND feedbackrespondents.id=feedbackresults.respondentid ";
+            $sql .= "AND feedbackresults.questionid='$qrow->id' ";
+            $sql .= "AND feedbackrespondents.completed = 'yes' \n";
+            $sql .= "ORDER BY incidents.owner, incidents.id";
+            $result = mysql_query($sql);
+            if (mysql_error()) trigger_error(mysql_error(), E_USER_ERROR);
+            $numsurveys=mysql_num_rows($result);
+            $numresults=0;
+            $cumul=0;
+            $percent=0;
+            $average=0;
+            while ($row = mysql_fetch_object($result))
+            {
+                if (!empty($row->result))
+                {
+                    $cumul+=$row->result;
+                    $numresults++;
+                }
+            }
+            if ($numresults>0) $average=number_format(($cumul/$numresults), 2);
+            $percent =number_format((($average / $CONFIG['feedback_max_score']) * 100), 0);
+            $totalresult+=$average;
+            $string .= "<td>{$average}</td></tr>";
+            // <strong>({$percent}%)</strong><br />";
+        }
+        $string .= "</table>\n";
+        $total_average=number_format($totalresult/$numquestions,2);
+        $total_percent=number_format((($total_average / $CONFIG['feedback_max_score']) * 100), 0);
+        $string .= "<p align='center'>Positivity: {$total_average} <strong>({$total_percent}%)</strong> from $numsurveys results.</p>";
+        $surveys+=$numresults;
+    }
+    else $string .= "<p class='error'>No feedback responses found</p>";
+
     return $string;
 }
 
 include('htmlheader.inc.php');
-
-$mode = cleanvar($_REQUEST['mode']);
 
 switch($mode)
 {
@@ -301,6 +353,9 @@ switch($mode)
         echo give_overview();
         break;
 }
+
+
+
 
 include('htmlfooter.inc.php');
 ?>
