@@ -143,7 +143,7 @@ function search_build_query($column, $sterms)
                 $i++;
             }
 
-            else $sql .= "OR ";
+            else $sql .= "AND ";
         }
         if (!empty($sterms[$i])) $sql .= "{$column} LIKE '%".str_replace('_',' ',$sterms[$i])."%' ";
     }
