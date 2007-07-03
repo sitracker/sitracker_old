@@ -2,7 +2,7 @@
 // incidents_rss.php - Output an RSS representation of a users incident queue
 //
 // SiT (Support Incident Tracker) - Support call tracking system
-// Copyright (C) 2006 Salford Software Ltd.
+// Copyright (C) 2006-2007 Salford Software Ltd. and Contributors
 //
 // This software may be used and distributed according to the terms
 // of the GNU General Public License, incorporated herein by reference.

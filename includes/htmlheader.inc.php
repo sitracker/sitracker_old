@@ -2,7 +2,7 @@
 // htmlheader.inc.php - Header html to be included at the top of pages
 //
 // SiT (Support Incident Tracker) - Support call tracking system
-// Copyright (C) 2000-2006 Salford Software Ltd.
+// Copyright (C) 2000-2007 Salford Software Ltd. and Contributors
 //
 // This software may be used and distributed according to the terms
 // of the GNU General Public License, incorporated herein by reference.
@@ -15,7 +15,7 @@
 <html xmlns="http://www.w3.org/1999/xhtml" xml:lang="en" lang="en">
 <head>
 <!-- SiT (Support Incident Tracker) - Support call tracking system
-     Copyright (C) 2000-2006 Salford Software Ltd.
+     Copyright (C) 2000-2007 Salford Software Ltd. and Contributors
 
      This software may be used and distributed according to the terms
      of the GNU General Public License, incorporated herein by reference. -->

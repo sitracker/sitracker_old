@@ -2,7 +2,7 @@
 // about.php - Credit, Copyright and Licence page
 //
 // SiT (Support Incident Tracker) - Support call tracking system
-// Copyright (C) 2000-2006 Salford Software Ltd.
+// Copyright (C) 2000-2007 Salford Software Ltd. and Contributors
 //
 // This software may be used and distributed according to the terms
 // of the GNU General Public License, incorporated herein by reference.
@@ -41,7 +41,7 @@ Lucas, Tom Gerrard, Paul Heaney</td></tr>
 
 <tr><td class='shade1' colspan="2">Copyright Information:</td></tr>
 <tr><td class='shade2' colspan='2'>
-<p align='center'><a href='http://sitracker.sourceforge.net'>SiT! Support Incident Tracker</a> is Copyright &copy; 2000-<?php echo date('Y'); ?> <a href='http://www.salfordsoftware.co.uk/'>Salford Software Ltd.</a><br />
+<p align='center'><a href='http://sitracker.sourceforge.net'>SiT! Support Incident Tracker</a> is Copyright &copy; 2000-<?php echo date('Y'); ?> <a href='http://www.salfordsoftware.co.uk/'>Salford Software Ltd.</a> and Contributors<br />
 Licensed under the GNU General Public License.<br />
 Salford Software, Lancastrian Office Centre, Talbot Road, Old Trafford, Manchester. M32 0FP.</p>
 
