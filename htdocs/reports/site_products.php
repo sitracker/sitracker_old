@@ -2,7 +2,7 @@
 // site_products.php - List products that sites have under contract
 //
 // SiT (Support Incident Tracker) - Support call tracking system
-// Copyright (C) 2000-2006 Salford Software Ltd.
+// Copyright (C) 2000-2007 Salford Software Ltd. and Contributors
 //
 // This software may be used and distributed according to the terms
 // of the GNU General Public License, incorporated herein by reference.
