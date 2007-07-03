@@ -43,6 +43,7 @@ if (empty($submit))
         <form action="<?php echo $_SERVER['PHP_SELF'] ?>" method="post" name="editform">
         <table class='vertical'>
         <tr><th>Title:</th><td><input maxlength='150' name="title" size='40' type="text" value="<?php echo stripslashes($incident['title']) ?>" /></td></tr>
+        <tr><th>Tags:</th><td><textarea rows='2' cols='40' name='tags'><?php  echo list_tags($id, 2, false); ?></textarea></td></tr>
         <tr><th>Important:</th>
         <td>Changing the contact or software will not reassign this incident to another contract.
         <?php
@@ -128,6 +129,7 @@ else
     $oldccemail = cleanvar($_POST['oldccemail']);
     $oldexternalengineer = cleanvar($_POST['oldexternalengineer']);
     $oldsoftware = cleanvar($_POST['oldsoftware']);
+    $tags = cleanvar($_POST['tags']);
 
     // Edit the incident
     if ($type == "Support")  // FIXME: This IF might not be needed since sales incidents are obsolete INL 29Apr03
@@ -156,6 +158,8 @@ else
         if ($errors == 0)
         {
             $addition_errors = 0;
+
+            replace_tags(2, $id, $tags);
 
             // update support incident
             $sql = "UPDATE incidents SET externalid='$externalid', ccemail='$ccemail', ";
