@@ -9,7 +9,7 @@
 //
 // Author: Paul Heaney <paulheaney[at]users.sourceforge.net>
 
-$permission=66; // Edit profile
+$permission=66; // Install dashboard components
 require('db_connect.inc.php');
 require('functions.inc.php');
 
