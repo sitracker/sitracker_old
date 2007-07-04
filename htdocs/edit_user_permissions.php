@@ -310,9 +310,9 @@ elseif ($action == "check")
             while($user = mysql_fetch_object($result))
             {
                 echo "<tr class='$shade'><td>&#10004; ";
-                if ($user->roleid != 1) echo "<a href='edit_profile.php?user={$user->userid}'>";
+                echo "<a href='edit_profile.php?userid={$user->userid}'>";
                 echo "{$user->realname}";
-                if ($user->roleid != 1) echo "</a>";
+                echo "</a>";
                 echo " ({$user->username})</td><td>{$user->rolename}</td></tr>\n";
                 if ($shade=='shade1') $shade='shade2';
                 else $shade='shade1';
@@ -335,7 +335,7 @@ elseif ($action == "check")
             $shade='shade1';
             while($user = mysql_fetch_object($result))
             {
-                echo "<tr class='$shade'><td>&#10004; <a href='{$_SERVER['PHP_SELF']}?action=edit&amp;user={$user->userid}#perm{$perm}'>{$user->realname}</a> ({$user->username})</td></tr>\n";
+                echo "<tr class='$shade'><td>&#10004; <a href='{$_SERVER['PHP_SELF']}?action=edit&amp;userid={$user->userid}#perm{$perm}'>{$user->realname}</a> ({$user->username})</td></tr>\n";
                 if ($shade=='shade1') $shade='shade2';
                 else $shade='shade1';
             }
