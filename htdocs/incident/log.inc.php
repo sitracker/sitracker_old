@@ -41,30 +41,39 @@ function log_nav_bar()
     global $updateid;
     global $offset;
     global $count_updates;
+    global $records;
 
     if ($offset > $_SESSION['num_update_view']) $previous = $offset - $_SESSION['num_update_view'];
     else $previous=0;
     $next = $offset + $_SESSION['num_update_view'];
 
-    $nav .= "<table width='98%'><tr>";
-
+    $nav .= "<table width='98%' align='center'><tr>";
+    $nav .= "<td align='left' style='width: 33%;'>";
     if ($offset > 0)
     {
-        $nav .= "<td align='left'><a href='{$_SERVER['PHP_SELF']}?id={$incidentid}&amp;javascript=enabled&amp;offset={$previous}&amp;direction=previous'>&lt;&lt; Previous</a></td>";
+        $nav .= "<a href='{$_SERVER['PHP_SELF']}?id={$incidentid}&amp;javascript=enabled&amp;offset={$previous}&amp;'>&lt;&lt; Previous</a>";
     }
-
-    if ($offset < ($count_updates - $_SESSION['num_update_view']))
+    $nav .= "</td>";
+    $nav .= "<td align='center' style='width: 34%;'>";
+    if ($count_updates > $_SESSION['num_update_view'])
     {
-        $nav .= "<td align='right'><a href='{$_SERVER['PHP_SELF']}?id={$incidentid}&amp;javascript=enabled&amp;offset={$next}&amp;direction=next'>Next &gt;&gt;</a></td>";
+        if ($records != 'all') $nav .= "<a href='{$_SERVER['PHP_SELF']}?id={$incidentid}&amp;javascript=enabled&amp;offset=0&amp;records=all'>Show All</a>";
+        else $nav .= "<a href='{$_SERVER['PHP_SELF']}?id={$incidentid}&amp;javascript=enabled&amp;offset=0&amp;'>Show Paged</a>";
     }
-
+    $nav .= "</td>";
+    $nav .= "<td align='right' style='width: 33%;'>";
+    if ($offset < ($count_updates - $_SESSION['num_update_view']) AND $records!='all')
+    {
+        $nav .= "<a href='{$_SERVER['PHP_SELF']}?id={$incidentid}&amp;javascript=enabled&amp;offset={$next}&amp;'>Next &gt;&gt;</a>";
+    }
+    $nav .= "</td>";
     $nav .= "</tr></table>\n";
 
     return $nav;
 }
 
 
-$direction = $_REQUEST['direction'];
+$records = strtolower(cleanvar($_REQUEST['records']));
 
 if ($incidentid=='' OR $incidentid < 1) trigger_error("Incident ID cannot be zero or blank", E_USER_ERROR);
 
@@ -72,7 +81,8 @@ $sql  = "SELECT * FROM updates WHERE incidentid='{$incidentid}' ";
 // Don't show hidden updates if we're on the customer view tab
 if (strtolower($selectedtab)=='customer_view') $sql .= "AND customervisibility='show' ";
 $sql .= "ORDER BY timestamp {$_SESSION['update_order']}, id {$_SESSION['update_order']} ";
-$sql .= "LIMIT {$offset},{$_SESSION['num_update_view']}";
+if (empty($records)) $sql .= "LIMIT {$offset},{$_SESSION['num_update_view']}";
+elseif (is_numeric($records)) $sql .= "LIMIT {$offset},{$records}";
 $result = mysql_query($sql);
 if (mysql_error()) trigger_error("MySQL Query Error ".mysql_error(), E_USER_ERROR);
 
