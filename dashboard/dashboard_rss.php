@@ -58,18 +58,24 @@ function dashboard_rss($row,$dashboardid)
     echo "</div>";
 }
 
-function dashboard_rss_install(){
+function dashboard_rss_install()
+{
+    $schema = "CREATE TABLE `dashboard_rss` (
+    `owner` TINYINT NOT NULL ,
+    `url` VARCHAR( 255 ) NOT NULL ,
+    `enabled` ENUM( 'true', 'false' ) NOT NULL ,
+    INDEX ( `owner` , `url` )
+    ) ENGINE = MYISAM ;";
 
-$schema = "CREATE TABLE `dashboard_rss` (
-`owner` TINYINT NOT NULL ,
-`url` VARCHAR( 255 ) NOT NULL ,
-`enabled` ENUM( 'true', 'false' ) NOT NULL ,
-INDEX ( `owner` , `url` )
-) ENGINE = MYISAM ;";
+    $result = mysql_query($schema);
+    if (mysql_error())
+    {
+        echo "<p>Dashboard RSS failed to install, please run the following SQL statement on the SiT database to create the required schema.</p>";
+        echo "<pre>{$schema}</pre>";
+        $res=FALSE;
+    } else $res=TRUE;
 
-$result = mysql_query($schema);
-if (mysql_error()) trigger_error(mysql_error(),E_USER_ERROR);
-
+    return $res;
 }
 
 ?>

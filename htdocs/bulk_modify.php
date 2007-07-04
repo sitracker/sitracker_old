@@ -38,8 +38,8 @@ $action = cleanvar($_REQUEST['action']);
                 echo "<td><select name='oldexternalemail'>";
                 while($row = mysql_fetch_array($result))
                 {
-                    echo "<option value='".$row['externalengineer'].",".$row['externalemail']."'>";
-                    echo $row['externalengineer']." - ".$row['externalemail']."</option>\n";
+                    echo "<option value='".stripslashes($row['externalengineer']).",".$row['externalemail']."'>";
+                    echo stripslashes($row['externalengineer'])." - ".$row['externalemail']."</option>\n";
                 }
                 echo "</select></td></tr>";
                 echo "<tr><th>External Engineers Name:</th>";

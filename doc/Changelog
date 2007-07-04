@@ -1,7 +1,7 @@
 Changes in v3.30 - Unreleased
 
 * Users with disabled accounts are now displayed with strikethrough text style
-* Improved search, now supports AND, OR and NOT operators, default is OR
+* Improved search, now supports AND, OR and NOT operators, default is AND
 * Adds forgotten password functionality for portal users
 * Interface to manage dashboard
 * Adds a skills matrix
