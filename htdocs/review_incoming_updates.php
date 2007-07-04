@@ -31,7 +31,19 @@ function generate_row($update)
     $updatebodytext=htmlspecialchars(str_replace($search, $replace, $updatebodytext));
     if ($updatebodytext=='') $updatebodytext='&nbsp;';
 
-    $html_row="<tr class='shade1'>";
+    $shade='shade1';
+    if (!empty($update['fromaddr']))
+    {
+        // Have a look if we've got a customer or user with this email address
+        $sql = "SELECT COUNT(id) FROM contacts WHERE email LIKE '%{$update['fromaddr']}%'";
+        $result = mysql_query($sql);
+        if (mysql_error()) trigger_error(mysql_error(),E_USER_WARNING);
+        list($contactmatches) = mysql_fetch_row($result);
+        if ($contactmatches > 0) $shade='idle';
+    }
+    $pluginshade = plugin_do('holdingqueue_rowshade',$update);
+    $shade = $pluginshade ? $pluginshade : $shade;
+    $html_row="<tr class='$shade'>";
     $html_row.="<td style='text-align: center'><input type='checkbox' name='selected[]' value='".$update['id']."' /></td>";
     $html_row.="<td align='center' width='20%'>".date($CONFIG['dateformat_datetime'],$update['timestamp']).'</td>';
     $html_row.="<td width='20%'>".htmlentities($update['emailfrom'],ENT_QUOTES)."</td>";
@@ -195,7 +207,7 @@ if(!empty($selected))
 // extract updates
 $sql  = 'SELECT updates.id as id, updates.bodytext as bodytext, tempincoming.emailfrom as emailfrom, tempincoming.subject as subject, ';
 $sql .= 'updates.timestamp as timestamp, tempincoming.incidentid as incidentid, tempincoming.id as tempid, tempincoming.locked as locked, ';
-$sql .= 'tempincoming.reason as reason, tempincoming.contactid as contactid ';
+$sql .= 'tempincoming.reason as reason, tempincoming.contactid as contactid, tempincoming.`from` as fromaddr ';
 $sql .= 'FROM updates, tempincoming WHERE updates.incidentid=0 AND tempincoming.updateid=updates.id ';
 $sql .= 'ORDER BY timestamp ASC, id ASC';
 $result = mysql_query($sql);
