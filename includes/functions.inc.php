@@ -100,7 +100,7 @@ $hmenu[1031] = array (10=> array ( 'perm'=> 0, 'name'=> "Option1", 'url'=>""),
 //
 //////////////////
 $hmenu[0] = array (10=> array ( 'perm'=> 0, 'name'=> "{$CONFIG['application_shortname']}", 'url'=>"{$CONFIG['application_webpath']}main.php", 'submenu'=>"10"),
-                   20=> array ( 'perm'=> 11, 'name'=> "Customers", 'url'=>"{$CONFIG['application_webpath']}customers.php", 'submenu'=>"20"),
+                   20=> array ( 'perm'=> 11, 'name'=> "Customers", 'url'=>"{$CONFIG['application_webpath']}browse_sites.php", 'submenu'=>"20"),
                    30=> array ( 'perm'=> 6, 'name'=> "Support", 'url'=>"{$CONFIG['application_webpath']}incidents.php?user=current&amp;queue=1&amp;type=support", 'submenu'=>"30"),
                    40=> array ( 'perm'=> 0, 'name'=> "Tasks", 'url'=>"{$CONFIG['application_webpath']}tasks.php", 'submenu'=>"40"),
                    50=> array ( 'perm'=> 54, 'name'=> "KnowledgeBase", 'url'=>"{$CONFIG['application_webpath']}browse_kb.php", 'submenu'=>"50"),
