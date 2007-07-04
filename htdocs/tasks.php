@@ -134,7 +134,7 @@ if (mysql_num_rows($result) >=1 )
         if ($show=='completed')
         {
             echo "<td>";
-            if ($duedate > 0) echo date($CONFIG['dateformat_date'],$enddate);
+            if ($enddate > 0) echo date($CONFIG['dateformat_date'],$enddate);
             echo "</td>";
         }
         echo "</tr>\n";
