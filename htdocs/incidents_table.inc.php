@@ -287,7 +287,8 @@ while ($incidents = mysql_fetch_array($result))
         elseif ($reviewremain<=0)
         {
             echo "<td align='center' valign='top' class='review'>";
-            echo "Review Due Now!";
+            if ($reviewremain > -3600) echo "Review Due Now!";
+            else echo "Review Due ".format_workday_minutes($reviewremain*-1)." ago!";
         }
         else
         {
