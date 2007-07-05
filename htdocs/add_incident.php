@@ -636,26 +636,20 @@ elseif ($action=='assign')
                 <th>Telephone</th>
                 <th>Status</th>
                 <th>Message</th>
-		<th colspan='5'>Incidents in Queue</th>
-                <!--<th align='center'>Action Needed</th>
-		<th align='center'>Other</th>
-    		<th align='center'>Critical</th>
-    		<th align='center'>High</th>
-    		<th align='center'>Medium</th>
-    		<th align='center'>Low</th>-->
+                <th colspan='5'>Incidents in Queue</th>
                 <th>Accepting?</th>
             </tr>
-	    <tr>
-		<th colspan='5'></th>
-		<th align='center'>Action Needed / Other</th>
-    		<?php
-    		echo "<th align='center'>".priority_icon(4)."</th>";
-    		echo "<th align='center'>".priority_icon(3)."</th>";
-    		echo "<th align='center'>".priority_icon(2)."</th>";
-    		echo "<th align='center'>".priority_icon(1)."</th>";
-    		?>
-		<th></th>
-	    </tr>
+            <tr>
+            <th colspan='5'></th>
+            <th align='center'>Action Needed / Other</th>
+            <?php
+            echo "<th align='center'>".priority_icon(4)."</th>";
+            echo "<th align='center'>".priority_icon(3)."</th>";
+            echo "<th align='center'>".priority_icon(2)."</th>";
+            echo "<th align='center'>".priority_icon(1)."</th>";
+            ?>
+            <th></th>
+            </tr>
             <?php
             $shade='shade2';
             while ($userrow = mysql_fetch_array($result))
@@ -668,7 +662,7 @@ elseif ($action=='assign')
                     // if ($priority >= 3) echo " onclick=\"alertform.submit();\"";
                     echo ">Assign To</a></td>";
                 }
-                elseif (user_permission($sit[2],40))
+                elseif (user_permission($sit[2],40) OR $userrow['id']==$sit[2])
                 {
                     echo "<td align='right'><a href=\"{$_SERVER['PHP_SELF']}?action=reassign&userid=".$userrow['id']."&incidentid=$incidentid&nextaction=".urlencode($nextaction)."\" ";
                     // if ($priority >= 3) echo " onclick=\"alertform.submit();\"";
