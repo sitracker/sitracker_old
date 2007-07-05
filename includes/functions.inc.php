@@ -477,7 +477,8 @@ function user_incidents($id){
 function user_holiday($userid, $type=0, $year, $month, $day, $length=FALSE)
 {
     $startdate=mktime(0,0,0,$month,$day,$year);
-    $sql = "SELECT * FROM holidays WHERE startdate='$startdate' ";
+    $enddate=mktime(23,59,59,$month,$day,$year);
+    $sql = "SELECT * FROM holidays WHERE startdate >= '$startdate' AND startdate < '$enddate' ";
     if ($type!=0)
     {
         $sql .= "AND (type='$type' OR type='10' OR type='5') ";
@@ -3088,11 +3089,11 @@ function holiday_approval_status($approvedid)
         case 0: $status = "Requested"; break;
         case 1: $status = "Approved"; break;
         case 2: $status = "Approved 'Free'"; break;
-        case 8: $status = "Archived. Not Requested";
-        case 9: $status = "Archived. Denied";
-        case 10: $status = "Archived. Requested";
-        case 11: $status = "Archived. Approved";
-        case 12: $status = "Archived. Approved 'Free'";
+        case 8: $status = "Archived. Not Requested"; break;
+        case 9: $status = "Archived. Denied"; break;
+        case 10: $status = "Archived. Requested"; break;
+        case 11: $status = "Archived. Approved"; break;
+        case 12: $status = "Archived. Approved 'Free'"; break;
         default: $status = "Approval Status Unknown"; break;
     }
     return $status;
