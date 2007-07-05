@@ -47,7 +47,7 @@ function feedback_html_rating($name, $required, $options, $answer='')
         else $html.="<th width='$colwidth%'>&nbsp;</th>";
         }
         */
-        $html.="<th colspan=$score_max><div style='float: right;'>$promptright</div><div>$promptleft</div></th>";
+        $html.="<th colspan='$score_max' style='text-align: left;'><div style='float: right;'>$promptright</div><div>$promptleft</div></th>";
         if ($required!='true') $html .= "<th>&nbsp;</th>";
         $html .= "</tr>\n";
     }
@@ -123,7 +123,7 @@ switch ($_REQUEST['action'])
         // FIXME external vars
         // Have a look to see if this respondant has already responded to this form
         // Get respondentid
-        print_r($_REQUEST);
+        //print_r($_REQUEST);
         $sql = "SELECT id AS respondentid FROM feedbackrespondents WHERE contactid='$contactid' AND formid='$formid' AND incidentid='$incidentid'";
         $result = mysql_query($sql);
         if (mysql_error()) trigger_error(mysql_error(),E_USER_ERROR);

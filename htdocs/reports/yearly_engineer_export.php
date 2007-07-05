@@ -296,6 +296,8 @@ elseif ($_REQUEST['mode']=='report')
             $incsql .= ")";
 	        $incsql_esc .= ")";
         }
+        $incsql .= ")";
+        $incsql_esc .= ")";
     }
 //
     $sql = "SELECT incidents.id AS incid, incidents.title AS title,users.realname AS realname, users.id AS userid, ";
@@ -307,10 +309,10 @@ elseif ($_REQUEST['mode']=='report')
     if (empty($incsql)==FALSE AND empty($excsql)==FALSE) $sql .= " AND ";
     if (!empty($excsql)) $sql .= "$excsql";
 
-    $sql .= " ORDER BY realname, incid ASC ";
+    $sql .= " ORDER BY realname, incidents.id ASC ";
 
     $result = mysql_query($sql);
-    if (mysql_error()) trigger_error("MySQL Query Error ".mysql_error(), E_USER_ERROR);
+    if (mysql_error()) trigger_error("MySQL Query Error: $sql ".mysql_error(), E_USER_ERROR);
     $numrows = mysql_num_rows($result);
 
     $sql_esc = "SELECT distinct(incidentid) AS incid FROM updates, incidents WHERE updates.incidentid = incidents.id AND incidents.opened > ($now-60*60*24*365.25)  AND updates.bodytext LIKE \"External ID%\"";
@@ -320,7 +322,7 @@ elseif ($_REQUEST['mode']=='report')
     if (empty($incsql_sc)==FALSE AND empty($excsql)==FALSE) $sql_esc .= " AND ";
     if (!empty($excsql)) $sql_esc .= "$excsql";
 
-    $sql_esc .= " GROUP BY incidentID";
+    $sql_esc .= " GROUP BY incidentid";
 
     $result_esc = mysql_query($sql_esc);
     if (mysql_error()) throw_error("!Error: MySQL Query Error in ($sql_esc)",mysql_error());
