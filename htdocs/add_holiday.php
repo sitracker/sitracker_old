@@ -30,6 +30,7 @@ $return = cleanvar($_REQUEST['return']);
 
 // startdate in unix format
 $startdate=mktime(0,0,0,$month,$day,$year);
+$enddate=mktime(23,59,59,$month,$day,$year);
 if ($length=='') $length='day';
 
 // check to see that we're not booking holiday for the past
@@ -51,25 +52,30 @@ exit;
 if (user_permission($sit[2],50)) $approver=TRUE;
 
 // check to see if there is a holiday on this day already.
-list($dtype, $dlength, $dapproved)=user_holiday($user, 0, $year, $month, $day, FALSE);
+list($dtype, $dlength, $dapproved, $dapprovedby)=user_holiday($user, 0, $year, $month, $day, FALSE);
 // type above
 
-if ($dapproved==1)
+if ($dapproved==1 OR $dapproved==2 OR $dapproved==11 OR $dapproved==12)
 {
     // the holiday has been approved - so don't do anything to it
     // DO NOTHING
 
     // allow approver to unbook holidays already approved
-    if ($length=='0' && $approver==TRUE)
+    if ($length=='0' AND $approver==TRUE AND $dapprovedby=$sit[2])
     {
         $sql = "DELETE FROM holidays ";
-        $sql .= "WHERE userid='$user' AND startdate='$startdate' AND type='$type' AND approvedby='$sit[2]' ";
+        $sql .= "WHERE userid='$user' AND startdate >= '$startdate' AND startdate < '$enddate' AND type='$type' AND approvedby='$sit[2]' ";
         $result = mysql_query($sql);
         // echo $sql;
         if (mysql_error()) trigger_error("MySQL Query Error ".mysql_error(), E_USER_ERROR);
         $dlength=0;
         $dapproved=0;
     }
+    else echo "not deleted";
+}
+elseif ($dapproved=='')
+{
+    // Holiday not found, no nothing
 }
 else
 {
@@ -109,7 +115,7 @@ else
 }
 if ($return=='list')
 {
-    header("Location: holiday_calendar.php?display=list&type=$type");
+    header("Location: holiday_calendar.php?display=list&type=$type&user=$user");
     exit;
 }
 else

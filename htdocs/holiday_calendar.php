@@ -672,7 +672,10 @@ elseif ($display=='list')
     echo "</select></form>";
     echo "<h3>Descending date order</h3>";
     if (empty($type)) $type=1;
-    $sql = "SELECT * from holidays, holidaytypes, users WHERE holidays.type=holidaytypes.id AND holidays.userid=users.id AND holidays.type=$type ORDER BY startdate DESC";
+    $sql = "SELECT * from holidays, holidaytypes, users WHERE holidays.type=holidaytypes.id ";
+    $sql .= "AND holidays.userid=users.id AND holidays.type=$type ";
+    if (!empty($user) AND $user!='all') $sql .= "AND users.id='{$user}' ";
+    $sql .= "ORDER BY startdate DESC";
     $result = mysql_query($sql);
     if (mysql_error()) trigger_error("MySQL Query Error ".mysql_error(), E_USER_ERROR);
     if (mysql_num_rows($result))
@@ -695,7 +698,7 @@ elseif ($display=='list')
             elseif ($dates['approvedby'] > 0 AND empty($dates['approved'])) echo " of ".user_realname($dates['approvedby']);
             echo "</td>";
             echo "<td>";
-            if ($approver==TRUE) echo "<a href='add_holiday.php?year=".date('Y',$dates['startdate'])."&amp;month=".date('m',$dates['startdate'])."&amp;day=".date('d',$dates['startdate'])."&amp;user={$dates['userid']}&amp;type={$dates['type']}&amp;length=0&return=list' onclick=\"return window.confirm('".date('l jS F Y', $dates['startdate']).": Are you sure you want to delete this?');\">Delete</a>";
+            if ($approver==TRUE) echo "<a href='add_holiday.php?year=".date('Y',$dates['startdate'])."&amp;month=".date('m',$dates['startdate'])."&amp;day=".date('d',$dates['startdate'])."&amp;user={$dates['userid']}&amp;type={$dates['type']}&amp;length=0&return=list' onclick=\"return window.confirm('{$dates['realname']}: ".date('l jS F Y', $dates['startdate']).": Are you sure you want to delete this?');\">Delete</a>";
             echo "</td></tr>\n";
             if ($shade=='shade1') $shade='shade2';
             else $shade='shade1';
