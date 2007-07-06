@@ -4682,7 +4682,10 @@ function draw_chart_image($type, $width, $height, $data, $legends, $title='')
 
     $white = imagecolorallocate($img, 255, 255, 255);
     $blue = imagecolorallocate($img, 240, 240, 255);
+    $midblue = imagecolorallocate($img, 204, 204, 255);
+    $darkblue = imagecolorallocate($img, 32, 56, 148);
     $black = imagecolorallocate($img, 0, 0, 0);
+    $grey = imagecolorallocate($img, 224, 224, 224);
     $red = imagecolorallocate($img, 255, 0, 0);
 
     imagefill($img, 0, 0, $white);
@@ -4785,7 +4788,60 @@ function draw_chart_image($type, $width, $height, $data, $legends, $title='')
             }
         break;
 
+        case 'line':
+            $maxdata = 0;
+            $colwidth=round($width/$countdata);
+            $rowheight=round($height/10);
+            foreach ($data AS $dataval)
+            {
+                if ($dataval > $maxdata) $maxdata = $dataval;
+            }
+
+            imagerectangle($img, $width-1, $height-1, 0, 0, $black);
+            for ($i=1; $i<$countdata; $i++)
+            {
+                imageline($img, $i*$colwidth, 0, $i*$colwidth, $width, $grey);
+                imageline($img, 2, $i*$rowheight, $width-2, $i*$rowheight, $grey);
+            }
+            for ($i=0; $i<$countdata; $i++)
+            {
+                $dataheight=($height-($data[$i] / $maxdata) * $height);
+                $legendheight = $dataheight > ($height - 15) ? $height - 15 : $dataheight;
+                $nextdataheight=($height-($data[$i+1] / $maxdata) * $height);
+                imageline($img, $i*$colwidth, $dataheight, ($i+1)*$colwidth, $nextdataheight, $red);
+                imagestring($img, 3, $i*$colwidth, $legendheight, substr($legends[$i],0,6), $darkblue);
+            }
+            imagestring($img,3, 10, 10, $title, $red);
+        break;
+
+        case 'bar':
+            $maxdata = 0;
+            $colwidth=round($width/$countdata);
+            $rowheight=round($height/10);
+            foreach ($data AS $dataval)
+            {
+                if ($dataval > $maxdata) $maxdata = $dataval;
+            }
+            imagerectangle($img, $width-1, $height-1, 0, 0, $black);
+            for ($i=1; $i<$countdata; $i++)
+            {
+                imageline($img, $i*$colwidth, 0, $i*$colwidth, $width, $grey);
+                imageline($img, 2, $i*$rowheight, $width-2, $i*$rowheight, $grey);
+            }
+            for ($i=0; $i<$countdata; $i++)
+            {
+                $dataheight=($height-($data[$i] / $maxdata) * $height);
+                $legendheight = $dataheight > ($height - 15) ? $height - 15 : $dataheight;
+                imagefilledrectangle($img, $i*$colwidth, $dataheight, ($i+1)*$colwidth, $height, $darkblue);
+                imagefilledrectangle($img, ($i*$colwidth)+1, $dataheight+1, (($i+1)*$colwidth)-3, ($height-2), $midblue);
+                imagestring($img, 3, ($i*$colwidth)+4, $legendheight, substr($legends[$i],0,5), $darkblue);
+            }
+            imagestring($img,3, 10, 10, $title, $red);
+        break;
+
+
         default:
+            imagerectangle($img, $width-1, $height-1, 1, 1, $red);
             imagestring($img,3, 10, 10, "Invalid chart type", $red);
     }
 
