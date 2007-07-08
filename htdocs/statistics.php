@@ -19,119 +19,150 @@ require('auth.inc.php');
 
 $mode = cleanvar($_REQUEST['mode']);
 
+function get_sql_statement($startdate,$enddate,$statementnumber,$count=TRUE)
+{
+    if($count) $count = "count(*)";
+    else $count = "*";
+    $sql[0] = "SELECT {$count} FROM incidents WHERE opened BETWEEN '{$startdate}' AND '{$enddate}'";
+    $sql[1] = "SELECT {$count} FROM incidents WHERE closed BETWEEN '{$startdate}' AND '{$enddate}'";
+    $sql[2] = "SELECT {$count} FROM incidents WHERE lastupdated BETWEEN '{$startdate}' AND '{$enddate}'";
+    $sql[3] = "SELECT {$count} FROM incidents WHERE opened <= '{$enddate}' AND (closed >= '$startdate' OR closed = 0)";
+    $sql[4] = "SELECT count(*), count(DISTINCT userid) FROM updates WHERE timestamp >= '$startdate' AND timestamp <= '$enddate'";
+    $sql[5] = "SELECT count(DISTINCT softwareid), count(DISTINCT owner) FROM incidents WHERE opened <= '{$enddate}' AND (closed >= '$startdate' OR closed = 0)";
+    $sql[6] = "SELECT {$count} FROM updates WHERE timestamp >= '$startdate' AND timestamp <= '$enddate' AND type='email'";
+    $sql[7] = "SELECT {$count} FROM updates WHERE timestamp >= '$startdate' AND timestamp <= '$enddate' AND type='emailin'";
+    $sql[8] = "SELECT {$count} FROM incidents WHERE opened <= '{$enddate}' AND (closed >= '$startdate' OR closed = 0) AND priority >= 3";
+    return $sql[$statementnumber];
+}
+
+
+// Show Open, Closed, Updated today, this week, this month etc.
+function count_incidents($startdate, $enddate)
+{
+    // Counts the number of incidents opened between a start date and an end date
+    // Returns an associative array
+    // 0
+    $sql = get_sql_statement($startdate,$enddate,0);
+    $result= mysql_query($sql);
+    list($count['opened'])=mysql_fetch_row($result);
+    mysql_free_result($result);
+
+    // 1
+    $sql = get_sql_statement($startdate,$enddate,1);
+    $result= mysql_query($sql);
+    list($count['closed'])=mysql_fetch_row($result);
+    mysql_free_result($result);
+
+    // 2
+    $sql = get_sql_statement($startdate,$enddate,2);
+    $result= mysql_query($sql);
+    list($count['updated'])=mysql_fetch_row($result);
+    mysql_free_result($result);
+
+    // 3
+    $sql = get_sql_statement($startdate,$enddate,3);
+    $result= mysql_query($sql);
+    list($count['handled'])=mysql_fetch_row($result);
+    mysql_free_result($result);
+
+    // 4
+    $sql = get_sql_statement($startdate,$enddate,4);
+    $result= mysql_query($sql);
+    if (mysql_error()) trigger_error(mysql_error(),E_USER_ERROR);
+    list($count['updates'],$count['users'])=mysql_fetch_row($result);
+    mysql_free_result($result);
+
+    // 5
+    $sql = get_sql_statement($startdate,$enddate,5); 
+    $result= mysql_query($sql);
+    if (mysql_error()) trigger_error(mysql_error(),E_USER_ERROR);
+    list($count['skills'], $count['owners'])=mysql_fetch_row($result);
+    mysql_free_result($result);
+
+    // 6
+    $sql = get_sql_statement($startdate,$enddate,6); 
+    $result= mysql_query($sql);
+    if (mysql_error()) trigger_error(mysql_error(),E_USER_ERROR);
+    list($count['emailtx'])=mysql_fetch_row($result);
+    mysql_free_result($result);
+
+    // 7
+    $sql = get_sql_statement($startdate,$enddate,7); 
+    $result= mysql_query($sql);
+    if (mysql_error()) trigger_error(mysql_error(),E_USER_ERROR);
+    list($count['emailrx'])=mysql_fetch_row($result);
+    mysql_free_result($result);
+
+    // 8
+    $sql = get_sql_statement($startdate,$enddate,8); 
+    $result= mysql_query($sql);
+    list($count['higherpriority'])=mysql_fetch_row($result);
+    mysql_free_result($result);
+
+    return $count;
+}
+
+function stats_period_row($desc, $start, $end)
+{
+    global $shade;
+    if ($shade=='') $shade='shade1';
+    $count = count_incidents($start,$end);
+    $updatesperuser = @number_format($count['updates']/$count['users'], 2);
+    $updatesperincident = @number_format($count['updates']/$count['updated'], 2);
+    $incidentsperowner = @number_format($count['handled']/$count['owners'], 2);
+/*
+    $workload = $count['handled'] + $count['emailrx'] + $count['skills'] + $count['updates'] + $count['higherpriority'];
+    $resource = $count['owners'] + $count['users'] + $count['emailtx'] + ($count['opened'] - $count['closed']);
+    $busyrating = ($resource / $workload * 100);
+    $busyrating = @number_format($busyrating * 4.5,1);
+*/
+    if ($count['updated'] > 10) $freshness = ($count['updated'] / $count['handled'] * 100);
+    else $freshness=$count['updated'];
+    if ($count['owners'] > 0) $load = (($count['handled'] / $count['owners']) / $count['handled'] * 100);
+    else $load = 0;
+    if ($count['updates'] > 10) $busyness = (($count['updates'] / $count['users']) / $count['updates'] * 100);
+    else $busyness=$count['updates'];
+    if ($count['users'] > 0) $busyness2 = (($count['emailtx'] / $count['users']) / $count['handled'] * 100);
+    else $busyness2 = 0;
+    $activity = ($freshness+$load+$busyness+$busyness2 / 400 * 100);
+    $activity = @number_format($activity,1);
+    if ($activity > 100) $activity=100;
+    if ($activity < 0) $activity = 0;
+
+    $html = "<tr class='$shade'><td>$desc</td>";
+    $html .= "<td><a href='{$_SERVER['PHP_SELF']}?mode=breakdown&query=0&start={$start}&end={$end}'>{$count['opened']}</a></td>";
+    $html .= "<td><a href='{$_SERVER['PHP_SELF']}?mode=breakdown&query=2&start={$start}&end={$end}'>{$count['updated']}</a></td>";
+    $html .= "<td><a href='{$_SERVER['PHP_SELF']}?mode=breakdown&query=1&start={$start}&end={$end}'>{$count['closed']}</a></td>";
+    $html .= "<td>{$count['handled']}</td>";
+    $html .= "<td>{$count['updates']}</td>";
+    $html .= "<td>{$updatesperincident}</td>";
+    $html .= "<td>{$count['skills']}</td>";
+    $html .= "<td>{$count['owners']}</td>";
+    $html .= "<td>{$count['users']}</td>";
+    $html .= "<td>{$updatesperuser}</td>";
+    $html .= "<td>{$incidentsperowner}</td>";
+    $html .= "<td>{$count['emailrx']}</td><td>{$count['emailtx']}</td>";
+    $html .= "<td>{$count['higherpriority']}</td>";
+    $html .= "<td>".percent_bar($activity)."</td>";
+    $html .= "</tr>\n";
+    if ($shade=='shade1') $shade='shade2';
+    else $shade='shade1';
+    return $html;
+}
+
 function give_overview()
 {
     global $todayrecent, $mode, $CONFIG;
 
-    // Show Open, Closed, Updated today, this week, this month etc.
-    function count_incidents($startdate, $enddate)
-    {
-        // Counts the number of incidents opened between a start date and an end date
-        // Returns an associative array
-        $sql = "SELECT count(*) FROM incidents ";
-        $sql .= "WHERE opened BETWEEN '{$startdate}' AND '{$enddate}' ";
-        $result= mysql_query($sql);
-        list($count['opened'])=mysql_fetch_row($result);
-        mysql_free_result($result);
-
-        $sql = "SELECT count(*) FROM incidents ";
-        $sql .= "WHERE closed BETWEEN '{$startdate}' AND '{$enddate}' ";
-        $result= mysql_query($sql);
-        list($count['closed'])=mysql_fetch_row($result);
-        mysql_free_result($result);
-
-        $sql = "SELECT count(*) FROM incidents ";
-        $sql .= "WHERE lastupdated BETWEEN '{$startdate}' AND '{$enddate}' ";
-        $result= mysql_query($sql);
-        list($count['updated'])=mysql_fetch_row($result);
-        mysql_free_result($result);
-
-        $sql = "SELECT count(*) FROM incidents WHERE opened <= '{$enddate}' AND (closed >= '$startdate' OR closed = 0) ";
-        $result= mysql_query($sql);
-        list($count['handled'])=mysql_fetch_row($result);
-        mysql_free_result($result);
-
-        $sql = "SELECT count(*), count(DISTINCT userid) FROM updates WHERE timestamp >= '$startdate' AND timestamp <= '$enddate' ";
-        $result= mysql_query($sql);
-        if (mysql_error()) trigger_error(mysql_error(),E_USER_ERROR);
-        list($count['updates'],$count['users'])=mysql_fetch_row($result);
-        mysql_free_result($result);
-
-        $sql = "SELECT count(DISTINCT softwareid), count(DISTINCT owner) FROM incidents WHERE opened <= '{$enddate}' AND (closed >= '$startdate' OR closed = 0) ";
-        $result= mysql_query($sql);
-        if (mysql_error()) trigger_error(mysql_error(),E_USER_ERROR);
-        list($count['skills'], $count['owners'])=mysql_fetch_row($result);
-        mysql_free_result($result);
-
-        $sql = "SELECT count(*) FROM updates WHERE timestamp >= '$startdate' AND timestamp <= '$enddate' AND type='email'";
-        $result= mysql_query($sql);
-        if (mysql_error()) trigger_error(mysql_error(),E_USER_ERROR);
-        list($count['emailtx'])=mysql_fetch_row($result);
-        mysql_free_result($result);
-
-        $sql = "SELECT count(*) FROM updates WHERE timestamp >= '$startdate' AND timestamp <= '$enddate' AND type='emailin'";
-        $result= mysql_query($sql);
-        if (mysql_error()) trigger_error(mysql_error(),E_USER_ERROR);
-        list($count['emailrx'])=mysql_fetch_row($result);
-        mysql_free_result($result);
-
-        $sql = "SELECT count(*) FROM incidents WHERE opened <= '{$enddate}' AND (closed >= '$startdate' OR closed = 0) AND priority >= 3";
-        $result= mysql_query($sql);
-        list($count['higherpriority'])=mysql_fetch_row($result);
-        mysql_free_result($result);
-
-        return $count;
-    }
-
-    function stats_period_row($desc, $start, $end)
-    {
-        global $shade;
-        if ($shade=='') $shade='shade1';
-        $count = count_incidents($start,$end);
-        $updatesperuser = @number_format($count['updates']/$count['users'], 2);
-        $updatesperincident = @number_format($count['updates']/$count['updated'], 2);
-        $incidentsperowner = @number_format($count['handled']/$count['owners'], 2);
-/*
-        $workload = $count['handled'] + $count['emailrx'] + $count['skills'] + $count['updates'] + $count['higherpriority'];
-        $resource = $count['owners'] + $count['users'] + $count['emailtx'] + ($count['opened'] - $count['closed']);
-        $busyrating = ($resource / $workload * 100);
-        $busyrating = @number_format($busyrating * 4.5,1);
-*/
-        if ($count['updated'] > 10) $freshness = ($count['updated'] / $count['handled'] * 100);
-        else $freshness=$count['updated'];
-        if ($count['owners'] > 0) $load = (($count['handled'] / $count['owners']) / $count['handled'] * 100);
-        else $load = 0;
-        if ($count['updates'] > 10) $busyness = (($count['updates'] / $count['users']) / $count['updates'] * 100);
-        else $busyness=$count['updates'];
-        if ($count['users'] > 0) $busyness2 = (($count['emailtx'] / $count['users']) / $count['handled'] * 100);
-        else $busyness2 = 0;
-        $activity = ($freshness+$load+$busyness+$busyness2 / 400 * 100);
-        $activity = @number_format($activity,1);
-        if ($activity > 100) $activity=100;
-        if ($activity < 0) $activity = 0;
-
-        $html = "<tr class='$shade'><td>$desc</td><td>{$count['opened']}</td><td>{$count['updated']}</td><td>{$count['closed']}</td>";
-        $html .= "<td>{$count['handled']}</td><td>{$count['updates']}</td><td>{$updatesperincident}</td>";
-        $html .= "<td>{$count['skills']}</td><td>{$count['owners']}</td><td>{$count['users']}</td>";
-        $html .= "<td>{$updatesperuser}</td><td>{$incidentsperowner}</td>";
-        $html .= "<td>{$count['emailrx']}</td><td>{$count['emailtx']}</td>";
-        $html .= "<td>{$count['higherpriority']}</td>";
-        $html .= "<td>".percent_bar($activity)."</td>";
-        $html .= "</tr>\n";
-        if ($shade=='shade1') $shade='shade2';
-        else $shade='shade1';
-        return $html;
-    }
-
     echo "<table align='center'>";
     echo "<tr><th>Period</th><th>Opened</th><th>Updated</th><th>Closed</th><th>Handled</th><th>Updates</th><th>per incident</th><th>Skills</th><th>Owners</th><th>Users</th><th>upd per user</th><th>inc per owner</th><th>Email Rx</th><th>Email Tx</th><th>Higher Priority</th><th>Activity</th></tr>\n";
-    echo stats_period_row('Today', mktime(0,0,0,date('m'),date('d'),date('Y')),mktime(23,59,59,date('m'),date('d'),date('Y')));
-    echo stats_period_row('Yesterday', mktime(0,0,0,date('m'),date('d')-1,date('Y')),mktime(23,59,59,date('m'),date('d')-1,date('Y')));
-    echo stats_period_row(date('l',mktime(0,0,0,date('m'),date('d')-2,date('Y'))), mktime(0,0,0,date('m'),date('d')-2,date('Y')),mktime(23,59,59,date('m'),date('d')-2,date('Y')));
-    echo stats_period_row(date('l',mktime(0,0,0,date('m'),date('d')-3,date('Y'))), mktime(0,0,0,date('m'),date('d')-3,date('Y')),mktime(23,59,59,date('m'),date('d')-3,date('Y')));
-    echo stats_period_row(date('l',mktime(0,0,0,date('m'),date('d')-4,date('Y'))), mktime(0,0,0,date('m'),date('d')-4,date('Y')),mktime(23,59,59,date('m'),date('d')-4,date('Y')));
-    echo stats_period_row(date('l',mktime(0,0,0,date('m'),date('d')-5,date('Y'))), mktime(0,0,0,date('m'),date('d')-5,date('Y')),mktime(23,59,59,date('m'),date('d')-5,date('Y')));
-    echo stats_period_row(date('l',mktime(0,0,0,date('m'),date('d')-6,date('Y'))), mktime(0,0,0,date('m'),date('d')-6,date('Y')),mktime(23,59,59,date('m'),date('d')-6,date('Y')));
+    echo stats_period_row("<a href='{$_SERVER['PHP_SELF']}?mode=daybreakdown&offset=0'>Today</a>", mktime(0,0,0,date('m'),date('d'),date('Y')),mktime(23,59,59,date('m'),date('d'),date('Y')));
+    echo stats_period_row("<a href='{$_SERVER['PHP_SELF']}?mode=daybreakdown&offset=1'>Yesterday</a>", mktime(0,0,0,date('m'),date('d')-1,date('Y')),mktime(23,59,59,date('m'),date('d')-1,date('Y')));
+    echo stats_period_row("<a href='{$_SERVER['PHP_SELF']}?mode=daybreakdown&offset=2'>".date('l',mktime(0,0,0,date('m'),date('d')-2,date('Y')))."</a>", mktime(0,0,0,date('m'),date('d')-2,date('Y')),mktime(23,59,59,date('m'),date('d')-2,date('Y')));
+    echo stats_period_row("<a href='{$_SERVER['PHP_SELF']}?mode=daybreakdown&offset=3'>".date('l',mktime(0,0,0,date('m'),date('d')-3,date('Y')))."</a>", mktime(0,0,0,date('m'),date('d')-3,date('Y')),mktime(23,59,59,date('m'),date('d')-3,date('Y')));
+    echo stats_period_row("<a href='{$_SERVER['PHP_SELF']}?mode=daybreakdown&offset=4'>".date('l',mktime(0,0,0,date('m'),date('d')-4,date('Y')))."</a>", mktime(0,0,0,date('m'),date('d')-4,date('Y')),mktime(23,59,59,date('m'),date('d')-4,date('Y')));
+    echo stats_period_row("<a href='{$_SERVER['PHP_SELF']}?mode=daybreakdown&offset=5'>".date('l',mktime(0,0,0,date('m'),date('d')-5,date('Y')))."</a>", mktime(0,0,0,date('m'),date('d')-5,date('Y')),mktime(23,59,59,date('m'),date('d')-5,date('Y')));
+    echo stats_period_row("<a href='{$_SERVER['PHP_SELF']}?mode=daybreakdown&offset=6'>".date('l',mktime(0,0,0,date('m'),date('d')-6,date('Y')))."</a>", mktime(0,0,0,date('m'),date('d')-6,date('Y')),mktime(23,59,59,date('m'),date('d')-6,date('Y')));
     echo "<tr><td colspan='*'></td></tr>";
     echo stats_period_row('Past 7 days', mktime(0,0,0,date('m'),date('d')-6,date('Y')),mktime(23,59,59,date('m'),date('d'),date('Y')));
     echo stats_period_row('Previous 7 days', mktime(0,0,0,date('m'),date('d')-13,date('Y')),mktime(23,59,59,date('m'),date('d')-7,date('Y')));
@@ -347,6 +378,16 @@ include('htmlheader.inc.php');
 
 switch($mode)
 {
+    case 'breakdown':
+        $query = $_REQUEST['query'];
+        $startdate = $_REQUEST['start'];
+        $enddate = $_REQUEST['end'];
+        include('statistics/breakdown.inc.php');
+        break;
+    case 'daybreakdown':
+        $offset = $_REQUEST['offset'];
+        include('statistics/daybreakdown.inc.php');
+        break;
     case 'overview': //this is the default so just fall though
     default:
         echo "<h2>$title - Overview</h2>";
