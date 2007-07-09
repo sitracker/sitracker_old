@@ -27,6 +27,7 @@ $search_title = cleanvar($_REQUEST['search_title']);
 $search_id = cleanvar($_REQUEST['search_id']);
 $search_externalid = cleanvar($_REQUEST['search_externalid']);
 $search_contact = cleanvar($_REQUEST['search_contact']);
+$search_servicelevel = cleanvar($_REQUEST['search_servicelevel']);
 $search_details = cleanvar($_REQUEST['search_details']);
 $search_range = cleanvar($_REQUEST['search_range']);
 $search_date = cleanvar($_REQUEST['search_date']);
@@ -45,6 +46,7 @@ if (empty($action))
     <tr><th>Title:</th><td><input maxlength='100' name="search_title" size='30' type='text' /></td></tr>
     <tr><th>Incident ID:</th><td><input maxlength='100' name='search_id' size='30' type="text" /></td></tr>
     <tr><th>External ID:</th><td><input maxlength='100' name="search_externalid" size='30' type="text" /></td></tr>
+    <tr><th>Service Level:</th><td><?php echo serviceleveltag_drop_down('search_servicelevel', 0, TRUE); ?></td></tr>
     <tr><th>Contact:</th><td><input maxlength='100' name="search_contact" size='30' type="text" /></td></tr>
     <tr><th>Priority:</th><td><?php echo priority_drop_down('search_priority', 0); ?></td></tr>
     <tr><th>Product:</th><td><?php echo product_drop_down('search_product', 0) ?></td></tr>
@@ -114,7 +116,7 @@ else
         $recent_today = time() - (1 * 86400);
         $recent_hour = time() - (3600);
 
-        if ($search_details =='') $sql = "SELECT DISTINCT incidents.id, externalid, title, priority, siteid, owner, type, forenames, surname, lastupdated, status, opened FROM incidents, contacts WHERE incidents.contact=contacts.id  ";
+        if ($search_details =='') $sql = "SELECT DISTINCT incidents.id, externalid, title, priority, siteid, owner, type, forenames, surname, lastupdated, status, opened, servicelevel FROM incidents, contacts WHERE incidents.contact=contacts.id  ";
         if ($search_details !='')
         {
             //           $sql = "SELECT incidents.id, externalid, title, priority, site, owner, incidents.type, realname, lastupdated, status FROM incidents, contacts ";
@@ -126,6 +128,7 @@ else
         if ($search_id != '') $sql.= "AND incidents.id LIKE ('%$search_id%') ";
         if ($search_externalid !='') $sql.= "AND externalid LIKE ('%$search_externalid%') ";
         if ($search_contact != '') $sql.= "AND (contacts.surname LIKE '%$search_contact%' OR forenames LIKE '%$search_contact%') ";
+        if ($search_servicelevel != '') $sql.= "AND (incidents.servicelevel = '{$search_servicelevel}') ";
         if ($search_range == 'Closed') $sql.= "AND closed != '0' ";
         if ($search_range == 'Open') $sql.= "AND closed = '0' ";
         if ($search_date == 'Recent180') $sql.= "AND lastupdated >= '$recent_sixmonth' ";
@@ -142,7 +145,6 @@ else
         if ($search_date == 'OldHour') $sql.= "AND lastupdated <= '$recent_hour' ";
         if ($search_user != 0) $sql.= "AND owner = '$search_user' ";
         if ($search_priority != 0) $sql.= "AND priority = '$search_priority' ";
-        // if ($search_servicelevel != 0) $sql.="AND servicelevelid = '$search_servicelevel' ";
         if ($search_product != 0) $sql.="AND product = '$search_product' ";
 
         // Sorting
@@ -195,7 +197,7 @@ else
                 <td width='150'><a href="javascript:incident_details_window('<?php echo $results["id"] ?>')"><?php echo $results["title"] ?></a></td>
                 <td align='center' width='100'><?php echo stripslashes($results['forenames'].' '.$results['surname']); ?></td>
                 <td align='center' width='100'><?php echo site_name($results['siteid']) ?></td>
-                <td align='center' width='50'><?php echo servicelevel_name($results['servicelevelid'])."<br />".priority_name($results["priority"]); ?></td>
+                <td align='center' width='50'><?php echo $results['servicelevel']."<br />".priority_name($results["priority"]); ?></td>
                 <td align='center' width='100'><?php echo user_realname($results['owner'],TRUE) ?></td>
                 <td align='center' width='150'><?php echo date($CONFIG['dateformat_datetime'], $results["opened"]); ?></td>
                 <td align='center' width='150'><?php echo date($CONFIG['dateformat_datetime'], $results["lastupdated"]); ?></td>
