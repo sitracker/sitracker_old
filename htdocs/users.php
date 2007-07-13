@@ -155,7 +155,7 @@ while ($users = mysql_fetch_array($result))
     <td align='center'><?php echo $users["accepting"]=='Yes' ? 'Yes' : "<span class='error'>No</span>"; ?></td>
     <?php
     echo "<td>";
-    echo "<a href='holiday_calendar.php?type=1&amp;user={$users['id']}' title='Holiday Calendar'><img src='{$CONFIG['application_webpath']}images/icons/{$iconset}/16x16/apps/date.png' width='16' height='16' alt='Calendar icon' style='border:none;' /></a> ";
+    echo "<a href='holidays.php?user={$users['id']}' title='Holidays'><img src='{$CONFIG['application_webpath']}images/icons/{$iconset}/16x16/apps/date.png' width='16' height='16' alt='Calendar icon' style='border:none;' /></a> ";
     echo "<a href='tasks.php?user={$users['id']}' title='Tasks'><img src='{$CONFIG['application_webpath']}images/icons/{$iconset}/16x16/actions/todo.png' width='16' height='16' alt='Todo icon' style='border:none;' /></a> ";
     echo "</td>";
     echo "</tr>";

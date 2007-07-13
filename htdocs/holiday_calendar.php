@@ -34,8 +34,9 @@ $display = cleanvar($_REQUEST['display']);
 
 include('htmlheader.inc.php');
 
-if ($user=='current' || $user=='0') $user=$sit[2];
-elseif ($user=='' || $user=='all') $user='';
+if (empty($user) || $user=='current') $user=$sit[2];
+elseif ($user=='all') $user='';
+if (empty($type)) $type=1;
 if (user_permission($sit[2],50)) $approver=TRUE; else $approver=FALSE;
 
 function draw_calendar($nmonth, $nyear)
@@ -282,7 +283,7 @@ function appointment_popup($mode, $year, $month, $day, $time, $group, $user)
 // modes: month, week, day
 function draw_chart($mode, $year, $month='', $day='', $groupid='', $userid='')
 {
-    global $plugin_calendar;
+    global $plugin_calendar, $sit;
     if (empty($day)) $day = date('d');
 
     if ($mode=='month')
@@ -442,7 +443,7 @@ function draw_chart($mode, $year, $month='', $day='', $groupid='', $userid='')
                                 OR $happroved[$cday] == 12)) $html .= "<td class='notice'>"; // Approved Free
                         elseif ($happroved[$cday] == -1 OR $happroved[$cday]==9) $html .= "<td class='urgent'>"; // Denied
                         else $html .= "<td class='shade2'>";
-                        $html .= appointment_popup('cancel', $year, $month, $cday, 'am', $group, $user->id);
+                        if ($user->id == $sit[2]) $html .= appointment_popup('cancel', $year, $month, $cday, 'am', $group, $user->id);
                         $html .= "<span title='{$holidaytype[$htypes[$cday]]}'>".substr($holidaytype[$htypes[$cday]],0,$daywidth)."</span>";
                         // This plugin function takes an optional param with an associative array containing the day
                         $pluginparams = array('plugin_calendar' => $plugin_calendar,
@@ -460,7 +461,7 @@ function draw_chart($mode, $year, $month='', $day='', $groupid='', $userid='')
                         else
                         {
                             $html .= "<td class='shade2'>";
-                            $html .= appointment_popup('book', $year, $month, $cday, 'am', $group, $user->id);
+                            if ($user->id == $sit[2]) $html .= appointment_popup('book', $year, $month, $cday, 'am', $group, $user->id);
                             $html .= '&nbsp;';
                             // This plugin function takes an optional param with an associative array containing the day
                             $pluginparams = array('plugin_calendar' => $plugin_calendar,
@@ -516,7 +517,7 @@ function draw_chart($mode, $year, $month='', $day='', $groupid='', $userid='')
                                 OR $happroved[$cday] == 12)) $html .= "<td class='notice'>"; // Approved Free
                         elseif ($happroved[$cday] == -1 OR $happroved[$cday]==9) $html .= "<td class='urgent'>"; // Denied
                         else $html .= "<td class='shade2'>";
-                        $html .= appointment_popup('cancel', $year, $month, $cday, 'pm', $group, $user->id);
+                        if ($user->id == $sit[2]) $html .= appointment_popup('cancel', $year, $month, $cday, 'pm', $group, $user->id);
                         $html .= "<span title='{$holidaytype[$htypes[$cday]]}'>".substr($holidaytype[$htypes[$cday]],0,$daywidth)."</span>";
                         // This plugin function takes an optional param with an associative array containing the day
                         $pluginparams = array('plugin_calendar' => $plugin_calendar,
@@ -533,7 +534,7 @@ function draw_chart($mode, $year, $month='', $day='', $groupid='', $userid='')
                         else
                         {
                             $html .= "<td class='shade2'>";
-                            $html .= appointment_popup('book', $year, $month, $cday, 'pm', $group, $user->id);
+                            if ($user->id == $sit[2]) $html .= appointment_popup('book', $year, $month, $cday, 'pm', $group, $user->id);
                             $html .= '&nbsp;';
                             // This plugin function takes an optional param with an associative array containing the day
                             $pluginparams = array('plugin_calendar' => $plugin_calendar,

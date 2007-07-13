@@ -3079,14 +3079,17 @@ function holiday_type($id)
 }
 
 
-function holiday_approval_status($approvedid)
+function holiday_approval_status($approvedid, $approvedby=-1)
 {
     // We add 10 to normal status when we archive holiday
     switch ($approvedid)
     {
         case -2: $status = "Not requested"; break;
         case -1: $status = "Denied"; break;
-        case 0: $status = "Requested"; break;
+        case 0:
+            if ($approvedby == 0) $status = "Not requested";
+            else $status = "Requested";
+        break;
         case 1: $status = "Approved"; break;
         case 2: $status = "Approved 'Free'"; break;
         case 8: $status = "Archived. Not Requested"; break;

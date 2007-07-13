@@ -20,6 +20,8 @@ require('auth.inc.php');
 // External variables
 $step = $_REQUEST['step'];
 $date = cleanvar($_REQUEST['date']);
+if (!empty($_REQUEST['user']) AND user_permission($sit[2], 50)) $user = cleanvar($_REQUEST['user']);
+else $user = $sit[2];
 
 if (empty($step))
 {
@@ -29,9 +31,10 @@ if (empty($step))
     // The website states
     // "You may use the strategies and code in these articles license and royalty free unless otherwise directed.
     // "If I helped you build something cool I'd like to hear about it. Drop me a line at tom@dagblastit.com."
-    ?>
-    <h2>Book Holidays</h2>
 
+    if ($user==$sit[2]) echo "<h2>Book Holidays</h2>";
+    else echo "<h2>Book Holidays for ".user_realname($user)."</h2>";
+    ?>
     <form name="date" action="<?php echo $_SERVER['PHP_SELF']; ?>" method="post">
     <table class='vertical'>
     <tr><th>Holiday Type:</th><td><?php holidaytype_drop_down('type', 1) ?></td></tr>
@@ -48,6 +51,9 @@ if (empty($step))
     </td></tr>
     </table>
     <p align='center'>
+    <?php
+    echo "<input type='hidden' name='user' value='{$user}' />";
+    ?>
     <input type='hidden' name='step' value='1' />
     <input type='submit' value='Book' /></p>
     </form>
@@ -69,15 +75,17 @@ elseif ($step=='1')
     elseif ($end==0 && $start>0) $end=$start;
     elseif ($start==0 && $end>0) $start=$end;
 
-    echo "<h2>Book ".holiday_type($type)."</h2>";
+    if ($user==$sit[2]) echo "<h2>Book ".holiday_type($type)."</h2>";
+    else echo "<h2>Book ".holiday_type($type)." for ".user_realname($user)."</h2>";
+
     if ($type=='2') echo "<p align='center'>Sickness, can of course only be booked for days that have passed.</p>";
 
     if ($type=='1')
     {
-        $entitlement=user_holiday_entitlement($sit[2]);
-        $holidaystaken=user_count_holidays($sit[2], 1);
+        $entitlement=user_holiday_entitlement($user);
+        $holidaystaken=user_count_holidays($user, 1);
         if (($entitlement-$holidaystaken) <= 0 )
-        echo "<p class='error'>You have used up all your holiday entitlement for this year</p>";
+        echo "<p class='error'>No holiday entitlement remaining for this year</p>";
     }
 
     // swap dates around if end is before start
@@ -111,7 +119,7 @@ elseif ($step=='1')
     {
         if (date('D',$day)!='Sat' && date('D',$day)!='Sun')
         {
-            $sql = "SELECT * FROM holidays WHERE startdate = '$day' AND userid='{$sit[2]}'";
+            $sql = "SELECT * FROM holidays WHERE startdate = '$day' AND userid='{$user}'";
             $result = mysql_query($sql);
             if (mysql_error()) trigger_error("MySQL Query Error ".mysql_error(), E_USER_ERROR);
 
@@ -210,7 +218,7 @@ elseif ($step=='1')
 
     echo "<br />";
 
-    echo "<p align='center'><a href='book_holidays.php'>Abandon this booking and try again</a></p>";
+    echo "<p align='center'><a href='book_holidays.php?user={$user}'>Abandon this booking and try again</a></p>";
     include('htmlfooter.inc.php');
 }
 else
@@ -238,11 +246,11 @@ else
             // check to see if there is other holiday booked on this day
             // and modify that where required.
             $sql = "INSERT INTO holidays (userid, type, startdate, length, approved, approvedby) ";
-            $sql .= "VALUES ('{$sit[2]}', '$type', '{$$d}', '{$$len}', '0', '$approvaluser') ";
+            $sql .= "VALUES ('{$user}', '$type', '{$$d}', '{$$len}', '0', '$approvaluser') ";
             mysql_query($sql);
             if (mysql_error()) trigger_error("MySQL Query Error ".mysql_error(), E_USER_ERROR);
         }
     }
-    header('location:holiday_request.php');
+    header("location:holiday_request.php?user={$user}");
 }
 ?>
