@@ -111,8 +111,10 @@ if (!$sent)
         else
         {
             // extract users (only show users with permission to approve that are not disabled accounts)
-            $sql  = "SELECT id, realname, accepting FROM users, userpermissions ";
-            $sql .= "WHERE users.id=userpermissions.userid AND permissionid=50 AND granted='true' ";
+            $sql  = "SELECT DISTINCT id, realname, accepting FROM users, userpermissions, rolepermissions ";
+            $sql .= "WHERE users.id=userpermissions.userid AND users.roleid=rolepermissions.roleid ";
+            $sql .= "AND (userpermissions.permissionid=50 AND userpermissions.granted='true' OR ";
+            $sql .= "rolepermissions.permissionid=50 AND rolepermissions.granted='true') ";
             $sql .= "AND users.id != {$sit[2]} AND users.status > 0 ORDER BY realname ASC";
             $result = mysql_query($sql);
             if (mysql_error()) trigger_error(mysql_error(),E_USER_ERROR);
