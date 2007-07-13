@@ -27,7 +27,7 @@ $memo = cleanvar($_REQUEST['memo']);
 $approvaluser = cleanvar($_REQUEST['approvaluser']);
 
 include('htmlheader.inc.php');
-if (empty($user) || $user=='0') $user=$sit[2];
+if (empty($user)) $user=$sit[2];
 if (!$sent)
 {
     // check to see if this user has approve permission
@@ -39,7 +39,7 @@ if (!$sent)
     else echo user_realname($user,TRUE);
     echo " - Holiday Requests</h2>";
 
-    if ($approver==TRUE AND $mode!='approval') echo "<p align='center'><a href='holiday_request.php?user=all&amp;mode=approval'>Approve holiday requests</a></p>";
+    if ($approver==TRUE AND $mode!='approval' AND $user==$sit[2]) echo "<p align='center'><a href='holiday_request.php?user=all&amp;mode=approval'>Approve holiday requests</a></p>";
     if ($approver==TRUE AND $mode=='approval' AND $user!='all') echo "<p align='center'><a href='holiday_request.php?user=all&amp;mode=approval'>Show all requests</a></p>";
 
     $sql = "SELECT * FROM holidays, holidaytypes WHERE holidays.type=holidaytypes.id AND approved=0 ";
@@ -55,7 +55,8 @@ if (!$sent)
         echo "<tr>";
         if ($user=='all' && $approver==TRUE) echo "<th>Name</th>";
         echo "<th>Date</th><th>Length</th><th>Type</th>";
-        if ($approver) echo "<th>Approval</th><th>Group Members Away</th>";
+        if ($approver AND $mode=='approval') echo "<th>Approval</th><th>Group Members Away</th>";
+        else echo "<th>Status</th>";
 
         echo "</tr>";
         while ($holiday=mysql_fetch_object($result))
@@ -76,7 +77,7 @@ if (!$sent)
             echo "<td>".$holiday->name."</td>";
             if ($approver==TRUE)
             {
-                if ($sit[2]!=$holiday->userid)
+                if ($sit[2]!=$holiday->userid AND $mode=='approval')
                 {
                     echo "<td>";
                     $approvetext='Approve';
@@ -97,7 +98,7 @@ if (!$sent)
                     }
                     echo "</td>";
                 }
-                if ($approver==TRUE)
+                if ($approver==TRUE AND $mode=='approval')
                 {
                     echo "<td>";
                     echo check_group_holiday($holiday->userid, $holiday->startdate, $holiday->length);
@@ -107,7 +108,7 @@ if (!$sent)
             echo "</tr>";
         }
         echo "</table>";
-        if ($mode=='approval') echo "<p align='center'><a href='holiday_approve.php?approve=TRUE&user=$user&view=$user&startdate=all&type=all'>Approve all</a></p>";
+        if ($mode=='approval') echo "<p align='center'><a href='holiday_approve.php?approve=TRUE&amp;user=$user&amp;view=$user&amp;startdate=all&amp;type=all'>Approve all</a></p>";
         else
         {
             // extract users (only show users with permission to approve that are not disabled accounts)
@@ -152,7 +153,7 @@ if (!$sent)
     }
     else
     {
-        echo "<p class='info'>There are no holidays that are booked but not yet approved</p>";
+        echo "<p class='info'>There are currently no holidays waiting for your approval</p>";
     }
 }
 else
@@ -187,7 +188,7 @@ else
             }
             $url = parse_url($_SERVER['HTTP_REFERER']);
             $approveurl = "{$url['scheme']}://{$url['host']}{$url['path']}";
-            $bodytext .= "Please point your browser to\n<{$approveurl}?user={$user}&mode=approval>\n ";
+            $bodytext .= "Please point your browser to\n<{$approveurl}?user={$user}&amp;mode=approval>\n ";
             $bodytext .= "to approve or decline these requests.";
         }
         // Mark the userid of the person who will approve the request so that they can see them
@@ -210,7 +211,7 @@ else
         }
         else echo "<p class='error'>There was a problem sending your request</p>";
     }
-    echo "<p align='center'><a href='holidays.php?type=1&user=$user'>Back to your holidays page</p></p>";
+    echo "<p align='center'><a href='holidays.php?user={$user}'>Back to holidays page</p></p>";
 }
 include('htmlfooter.inc.php');
 ?>

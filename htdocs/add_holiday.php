@@ -33,86 +33,74 @@ $startdate=mktime(0,0,0,$month,$day,$year);
 $enddate=mktime(23,59,59,$month,$day,$year);
 if ($length=='') $length='day';
 
-// check to see that we're not booking holiday for the past
-/*
-if ($startdate < $todayrecent && $type==1)
-header("Location: holiday_calendar.php?selectedyear=$year&selectedmonth=$month&selectedday=$day&type=$type&length=0&approved=0");
-exit;
-// -------------------
-*/
+if (user_permission($sit[2],50)) $approver=TRUE;
 
-// Holiday types
+// Holiday types (for reference)
 // 1 = Holiday
 // 2 = Sickness
 // 3 = Working Away
 // 4 = Training
 // 5 - Compassionate/Free
 
-
-if (user_permission($sit[2],50)) $approver=TRUE;
-
-// check to see if there is a holiday on this day already.
+// check to see if there is a holiday on this day already, if there is retreive it
 list($dtype, $dlength, $dapproved, $dapprovedby)=user_holiday($user, 0, $year, $month, $day, FALSE);
-// type above
 
-if ($dapproved==1 OR $dapproved==2 OR $dapproved==11 OR $dapproved==12)
+// allow approver to unbook holidays already approved
+if ($length=='0' AND $approver==TRUE AND $dapprovedby=$sit[2])
 {
-    // the holiday has been approved - so don't do anything to it
-    // DO NOTHING
-
-    // allow approver to unbook holidays already approved
-    if ($length=='0' AND $approver==TRUE AND $dapprovedby=$sit[2])
-    {
-        $sql = "DELETE FROM holidays ";
-        $sql .= "WHERE userid='$user' AND startdate >= '$startdate' AND startdate < '$enddate' AND type='$type' AND approvedby='$sit[2]' ";
-        $result = mysql_query($sql);
-        // echo $sql;
-        if (mysql_error()) trigger_error("MySQL Query Error ".mysql_error(), E_USER_ERROR);
-        $dlength=0;
-        $dapproved=0;
-    }
-    else echo "not deleted";
-}
-elseif ($dapproved=='')
-{
-    // Holiday not found, no nothing
+    // Delete the holiday
+    $sql = "DELETE FROM holidays ";
+    $sql .= "WHERE userid='$user' AND startdate >= '$startdate' AND startdate < '$enddate' AND type='$type' AND (approvedby='{$sit[2]}' OR userid={$sit[2]}) ";
+    $result = mysql_query($sql);
+    // echo $sql;
+    if (mysql_error()) trigger_error("MySQL Query Error ".mysql_error(), E_USER_ERROR);
+    $dlength=0;
+    $dapproved=0;
 }
 else
 {
-    if ($dtype==1 || $dtype==3 || $dtype==4)
+    if (empty($dapproved))
     {
-        if ($length=='0')
+        // Only allow these types to be modified
+        if ($dtype==1 || $dtype==3 || $dtype==4)
         {
-            // FIXME: doesn't check permission or anything
-            $sql = "DELETE FROM holidays ";
-            $sql .= "WHERE userid='$user' AND startdate='$startdate' AND type='$type' ";
-            $result = mysql_query($sql);
-            // echo $sql;
-            if (mysql_error()) trigger_error("MySQL Query Error ".mysql_error(), E_USER_ERROR);
-            $dlength=0;
-            $dapproved=0;
+            if ($length=='0')
+            {
+                // FIXME: doesn't check permission or anything
+                $sql = "DELETE FROM holidays ";
+                $sql .= "WHERE userid='$user' AND startdate='$startdate' AND type='$type' ";
+                $result = mysql_query($sql);
+                // echo $sql;
+                if (mysql_error()) trigger_error("MySQL Query Error ".mysql_error(), E_USER_ERROR);
+                $dlength=0;
+                $dapproved=0;
+            }
+            else
+            {
+                // there is an existing booking so alter it
+                $sql = "UPDATE holidays SET length='$length' ";
+                $sql .= "WHERE userid='$user' AND startdate='$startdate' AND type='$type' AND length='$dlength'";
+                $result = mysql_query($sql);
+//                 echo $sql;
+                if (mysql_error()) trigger_error("MySQL Query Error ".mysql_error(), E_USER_ERROR);
+                $dlength=$length;
+            }
         }
         else
         {
-            // there is an existing booking so alter it
-            $sql = "UPDATE holidays SET length='$length' ";
-            $sql .= "WHERE userid='$user' AND startdate='$startdate' AND type='$type' AND length='$dlength'";
+            // there is no holiday on this day, so make one
+            $sql = "INSERT INTO holidays ";
+            $sql .= "SET userid='$user', type='$type', startdate='$startdate', length='$length' ";
             $result = mysql_query($sql);
-            // echo $sql;
-            if (mysql_error()) trigger_error("MySQL Query Error ".mysql_error(), E_USER_ERROR);
             $dlength=$length;
+            $approved=0;
         }
     }
-    else
-    {
-        // there is no holiday on this day, so make one
-        $sql = "INSERT INTO holidays ";
-        $sql .= "SET userid='$user', type='$type', startdate='$startdate', length='$length' ";
-        $result = mysql_query($sql);
-        $dlength=$length;
-        $approved=0;
-    }
 }
+
+// echo "type: $dtype, len: $dlength, app: $dapproved, by: $dapprovedby <br />";
+
+
 if ($return=='list')
 {
     header("Location: holiday_calendar.php?display=list&type=$type&user=$user");
