@@ -71,7 +71,8 @@ echo "<tr><th align='right' colspan='4'>HOLIDAY LIST</th></tr>\n";
 $sql = "SELECT * from holidays, holidaytypes WHERE holidays.type=holidaytypes.id AND userid='{$user}' AND approved=0 ORDER BY startdate ASC";
 $result = mysql_query($sql);
 if (mysql_error()) trigger_error("MySQL Query Error ".mysql_error(), E_USER_ERROR);
-if (mysql_num_rows($result))
+$numwaiting=mysql_num_rows($result);
+if ($numwaiting > 0)
 {
     if ($user==$sit[2])
     {
@@ -87,7 +88,6 @@ if (mysql_num_rows($result))
             echo "</td>";
             echo "<td>";
             echo holiday_approval_status($dates['approved'], $dates['approvedby']);
-            // if (empty($dates['approvedby'])) echo "(not requested)</em>";
             echo "</td>";
             echo "<td>";
             if ($dates['length']=='pm' OR $dates['length']=='day') echo "<a href='add_holiday.php?type={$dates['type']}&amp;user=$user&amp;year=".date('Y',$dates['startdate'])."&amp;month=".date('m',$dates['startdate'])."&amp;day=".date('d',$dates['startdate'])."&amp;length=am' onclick=\"return window.confirm('".date('l jS F Y', $dates['startdate']).": Are you sure you want to make this Morning only?');\" title='Make this Morning only'>am</a> | ";
@@ -110,7 +110,8 @@ while ($holidaytype=mysql_fetch_array($tresult))
     $sql.= "AND (approved=1 OR (approved=11 AND startdate >= $now)) ORDER BY startdate ASC ";
     $result = mysql_query($sql);
     if (mysql_error()) trigger_error("MySQL Query Error ".mysql_error(), E_USER_ERROR);
-    if (mysql_num_rows($result))
+    $numtaken = mysql_num_rows($result);
+    if ($numtaken > 0)
     {
         echo "<tr class='shade2'><td colspan='4'><strong>{$holidaytype['name']}</strong>:</td></tr>";
         while ($dates = mysql_fetch_array($result))
@@ -128,6 +129,8 @@ while ($holidaytype=mysql_fetch_array($tresult))
     }
     mysql_free_result($result);
 }
+
+if ($numtaken < 1 AND $numwaiting < 1) echo "<tr class='shade2'><td colspan='4'><em>None</em</td></tr>\n";
 echo "</table>\n";
 
 
