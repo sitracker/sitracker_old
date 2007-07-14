@@ -81,10 +81,13 @@ $sql  = "SELECT * FROM updates WHERE incidentid='{$incidentid}' ";
 // Don't show hidden updates if we're on the customer view tab
 if (strtolower($selectedtab)=='customer_view') $sql .= "AND customervisibility='show' ";
 $sql .= "ORDER BY timestamp {$_SESSION['update_order']}, id {$_SESSION['update_order']} ";
-if (empty($records)) $sql .= "LIMIT {$offset},{$_SESSION['num_update_view']}";
-elseif (is_numeric($records)) $sql .= "LIMIT {$offset},{$records}";
+if ($offset > 0)
+{
+    if (empty($records)) $sql .= "LIMIT {$offset},{$_SESSION['num_update_view']}";
+    elseif (is_numeric($records)) $sql .= "LIMIT {$offset},{$records}";
+}
 $result = mysql_query($sql);
-if (mysql_error()) trigger_error("MySQL Query Error ".mysql_error(), E_USER_ERROR);
+if (mysql_error()) trigger_error("MySQL Query Error $sql".mysql_error(), E_USER_ERROR);
 
 $keeptags=array('b','i','u','hr','&lt;', '&gt;');
 foreach($keeptags AS $keeptag)
@@ -268,6 +271,6 @@ while ($update = mysql_fetch_object($result))
     $count++;
 }
 
-echo log_nav_bar();
+if ($_SESSION['num_update_view'] > 0) echo log_nav_bar();
 
 ?>
