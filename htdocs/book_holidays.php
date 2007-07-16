@@ -20,7 +20,7 @@ require('auth.inc.php');
 // External variables
 $step = $_REQUEST['step'];
 $date = cleanvar($_REQUEST['date']);
-if (!empty($_REQUEST['user']) AND user_permission($sit[2], 50)) $user = cleanvar($_REQUEST['user']);
+if (!empty($_REQUEST['user']) AND user_permission($sit[2], 68)) $user = cleanvar($_REQUEST['user']); // Manage holidays
 else $user = $sit[2];
 
 if (empty($step))

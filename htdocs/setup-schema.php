@@ -612,7 +612,8 @@ INSERT INTO `permissions` VALUES (63, 'Add Reseller');
 INSERT INTO `permissions` VALUES (64, 'Manage Escalation Paths');
 INSERT INTO `permissions` VALUES (65, 'Delete Products');
 INSERT INTO `permissions` VALUES (66, 'Install Dashboard Components');
-INSERT INTO `permissions` VALUES (67, 'Management Reports');
+INSERT INTO `permissions` VALUES (67, 'Run Management Reports');
+INSERT INTO `permissions` VALUES (68, 'Manage Holidays');
 
 
 CREATE TABLE `priority` (
@@ -1428,11 +1429,16 @@ INSERT INTO `userpermissions` VALUES (1, 66, 'true');
 INSERT INTO `closingstatus` ( `id` , `name` ) VALUES ( NULL , 'Escalated' );
 ALTER TABLE `tasks` ADD `enddate` DATETIME NULL AFTER `startdate` ;
 
-INSERT INTO `permissions` VALUES (67, 'Management Reports');
+INSERT INTO `permissions` VALUES (67, 'Run Management Reports');
 
 INSERT INTO `rolepermissions` (`roleid`, `permissionid`, `granted`) VALUES (1, 67, 'true');
 INSERT INTO `rolepermissions` (`roleid`, `permissionid`, `granted`) VALUES (2, 67, 'true');
 INSERT INTO `userpermissions` VALUES (1, 67, 'true');
+
+INSERT INTO `permissions` VALUES (68, 'Manage Holidays');
+INSERT INTO `rolepermissions` (`roleid`, `permissionid`, `granted`) VALUES (1, 68, 'true');
+INSERT INTO `rolepermissions` (`roleid`, `permissionid`, `granted`) VALUES (2, 68, 'true');
+INSERT INTO `userpermissions` VALUES (1, 68, 'true');
 
 ";
 
