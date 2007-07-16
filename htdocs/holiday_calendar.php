@@ -705,6 +705,7 @@ elseif ($display=='list')
             else $shade='shade1';
         }
         echo "</table>";
+        if ($approver) echo "<p align='center'><a href='{$_SERVER['PHP_SELF']}?display=list&amp;type={$type}&amp;user=all'>Show All Users</a></p>";
     }
     else echo "<p>No results</p>";
     mysql_free_result($result);
