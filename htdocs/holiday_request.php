@@ -163,7 +163,7 @@ else
     {
         $sql = "SELECT * FROM holidays, holidaytypes WHERE holidays.type=holidaytypes.id AND approved=0 ";
         if ($action!='resend') $sql .= "AND approvedby=0 ";
-        if ($user!='all' || $approver==FALSE) $sql .= "AND userid='".$sit[2]."' ";
+        if ($user!='all' || $approver==FALSE) $sql .= "AND userid='{$user}' ";
         $sql .= "ORDER BY startdate, length";
         $result = mysql_query($sql);
         if (mysql_error()) trigger_error("MySQL Query Error ".mysql_error(), E_USER_WARNING);
@@ -192,7 +192,7 @@ else
             $bodytext .= "to approve or decline these requests.";
         }
         // Mark the userid of the person who will approve the request so that they can see them
-        $sql = "UPDATE holidays SET approvedby='{$approvaluser}' WHERE userid='{$sit[2]}' AND approved=0";
+        $sql = "UPDATE holidays SET approvedby='{$approvaluser}' WHERE userid='{$user}' AND approved=0";
         mysql_query($sql);
         if (mysql_error()) trigger_error(mysql_error(),E_USER_ERROR);
 
