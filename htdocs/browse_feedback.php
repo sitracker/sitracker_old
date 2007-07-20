@@ -62,7 +62,7 @@ switch($mode)
                 $sql .= "WHERE feedbackrespondents.incidentid=incidents.id ";
                 $sql .= "AND incidents.owner=users.id ";
                 $sql .= "AND feedbackrespondents.id=feedbackresults.respondentid ";
-                $sql .= "AND feedbackresults.questionid='$qrow->id' ";
+                $sql .= "AND feedbackresults.questionid='{$qrow->id}' ";
                 $sql .= "AND feedbackrespondents.id='$responseid' ";
                 $sql .= "AND feedbackrespondents.completed = 'yes' \n";
                 $sql .= "ORDER BY incidents.owner, incidents.id";
@@ -89,9 +89,40 @@ switch($mode)
             $html .= "</table>\n";
             $total_average=number_format($totalresult/$numquestions,2);
             $total_percent=number_format((($total_average / $CONFIG['feedback_max_score']) * 100), 0);
+
+            $qsql = "SELECT * FROM feedbackquestions WHERE formid='{$response->formid}' AND type='text' ORDER BY taborder";
+            $qresult = mysql_query($qsql);
+            if (mysql_error()) trigger_error(mysql_error(), E_USER_ERROR);
+
+            if (mysql_num_rows($qresult) >= 1)
+            {
+                while ($qrow = mysql_fetch_object($qresult))
+                {
+
+                    $sql = "SELECT * FROM feedbackrespondents, incidents, users, feedbackresults ";
+                    $sql .= "WHERE feedbackrespondents.incidentid=incidents.id ";
+                    $sql .= "AND incidents.owner=users.id ";
+                    $sql .= "AND feedbackrespondents.id=feedbackresults.respondentid ";
+                    $sql .= "AND feedbackresults.questionid='{$qrow->id}' ";
+                    $sql .= "AND feedbackrespondents.id='$responseid' ";
+                    $sql .= "AND feedbackrespondents.completed = 'yes' \n";
+                    $sql .= "ORDER BY incidents.owner, incidents.id";
+                    $result = mysql_query($sql);
+                    if (mysql_error()) trigger_error(mysql_error(), E_USER_ERROR);
+                    while ($row = mysql_fetch_object($result))
+                    {
+                        $html .= "<p align='center'><strong>Q{$qrow->taborder}: {$qrow->question}</strong></p>";
+                        if (!empty($row->result))
+                        {
+                            $html .= "<p align='center'>{$row->result}</p>";
+                        }
+                        else $html .= "<p align='center'><em>No answer given</em></p>";
+                    }
+                }
+            }
+
             $html .= "<p align='center'>Positivity: {$total_average} <strong>({$total_percent}%)</strong></p>";
             $surveys+=$numresults;
-            $html .= "<hr />\n";
 
             //if ($total_average>0)
             echo $html;
