@@ -188,7 +188,7 @@ else
             }
             $url = parse_url($_SERVER['HTTP_REFERER']);
             $approveurl = "{$url['scheme']}://{$url['host']}{$url['path']}";
-            $bodytext .= "Please point your browser to\n<{$approveurl}?user={$user}&amp;mode=approval>\n ";
+            $bodytext .= "Please point your browser to\n<{$approveurl}?user={$user}&mode=approval>\n ";
             $bodytext .= "to approve or decline these requests.";
         }
         // Mark the userid of the person who will approve the request so that they can see them
