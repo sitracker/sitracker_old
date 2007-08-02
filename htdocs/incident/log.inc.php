@@ -126,12 +126,13 @@ while ($update = mysql_fetch_object($result))
     $updatebody = str_replace($temptag, $origtag, $updatebody);
 
     // Insert path to attachments
-    //$updatebody = preg_replace("/\[\[att\]\](.*?)\[\[\/att\]\]/",
-    //                           "<a href = '/attachments/updates/{$update->id}/$1'>$1</a> ",
-    //                           $updatebody);
-    $updatebody = preg_replace("/\[\[att\]\](.*?)\[\[\/att\]\]/",
-                               "<a href = '{$CONFIG['attachment_webpath']}{$update->incidentid}/{$update->timestamp}/$1'>$1</a>",
-                               $updatebody);
+//     $updatebody = preg_replace("/\[\[att\]\](.*?)\[\[\/att\]\]/",
+//                                "<a href = '{$CONFIG['attachment_webpath']}updates/{$update->id}/$1'>$1</a>",
+//                                $updatebody);
+    if (file_exists("{$CONFIG['attachment_webpath']}{$update->incidentid}/{$update->timestamp}"))
+        $attachment_webpath = "{$CONFIG['attachment_webpath']}{$update->incidentid}/{$update->timestamp}";
+    else $attachment_webpath = "{$CONFIG['attachment_webpath']}updates/{$update->id}";
+    $updatebody = preg_replace("/\[\[att\]\](.*?)\[\[\/att\]\]/", "<a href = '{$attachment_webpath}/$1'>$1</a>", $updatebody);
 
     // Put the header part (up to the <hr /> in a seperate DIV)
     if (strpos($updatebody, '<hr>')!==FALSE)
