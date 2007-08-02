@@ -49,7 +49,7 @@ echo colheader('title','Title',$sort, $order, $filter);
 echo colheader('contact','Contact',$sort, $order, $filter);
 echo colheader('priority','Priority',$sort, $order, $filter);
 if(empty($incidents_minimal)) echo colheader('status','Status',$sort, $order, $filter);
-echo colheader('lastupdate','Last Updated',$sort, $order, $filter);
+echo colheader('lastupdated','Last Updated',$sort, $order, $filter);
 if(empty($incidents_minimal)) echo colheader('nextaction','SLA Target',$sort, $order, $filter);
 if(empty($incidents_minimal)) echo colheader('duration','Info',$sort, $order, $filter);
 echo "</tr>";
