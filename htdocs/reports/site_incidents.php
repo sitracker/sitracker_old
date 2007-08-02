@@ -34,7 +34,7 @@ if(empty($mode))
     echo "<input name='start' size='10' value='{$date}' /> ";
     echo date_picker('date.start');
     echo "</td></tr>";
-    echo "<tr><th>End Date:</th><td align='left' class='shade1' title='date picker'>";
+    echo "<tr><th>End Date:</th><td align='left' class='shade1' title='date picker'> ";
     echo "<input name='end' size='10' />";
     echo date_picker('date.end');
     echo "</td></tr>";
@@ -43,7 +43,7 @@ if(empty($mode))
     echo "<p align='center'>";
     echo "<input type='hidden' name='user' value='{$user}' />";
     echo "<input type='hidden' name='step' value='1' />";
-    echo "<input type='submit' value='Book' /></p>";
+    echo "<input type='submit' value='Run Report' /></p>";
     echo "</form>";
 
     include('htmlfooter.inc.php');
