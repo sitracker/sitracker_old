@@ -114,7 +114,7 @@ switch($mode)
                         $html .= "<p align='center'><strong>Q{$qrow->taborder}: {$qrow->question}</strong></p>";
                         if (!empty($row->result))
                         {
-                            $html .= "<p align='center'>{$row->result}</p>";
+                            $html .= "<p align='center'>".stripslashes($row->result)."</p>";
                         }
                         else $html .= "<p align='center'><em>No answer given</em></p>";
                     }
