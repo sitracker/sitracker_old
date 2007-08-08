@@ -32,12 +32,12 @@ if (empty($action) || $action == "showform")
     <h2>Link a contract with a support contact</h2>
     <form action="<?php echo $_SERVER['PHP_SELF'] ?>?action=add" method="post">
     <input type="hidden" name="context" value="<?php echo $context ?>" />
-    <table>
+    <table align='center' class='vertical'>
     <?php
     if (empty($maintid))
     {
         ?>
-        <tr><th>Contract:</th><td width=400><?php echo maintenance_drop_down("maintid", 0) ?></td></tr>
+        <tr><th>Contract:</th><td width='400'><?php echo maintenance_drop_down("maintid", 0) ?></td></tr>
         <?php
     }
     else
@@ -60,8 +60,9 @@ if (empty($action) || $action == "showform")
     }
     else
     {
-        echo "<tr><th>Contact:</th><td>$contactid - ".contact_realname($contactid).", ".site_name(contact_site($contactid))."</td></tr>";
+        echo "<tr><th>Contact:</th><td>$contactid - ".contact_realname($contactid).", ".site_name(contact_site($contactid));
         echo "<input name=\"contactid\" type=\"hidden\" value=\"$contactid\" />";
+        echo "</td></tr>";
     }
     ?>
     </table>
