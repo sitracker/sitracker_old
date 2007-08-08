@@ -77,6 +77,8 @@ if (empty($_REQUEST['mode']))
     // echo "<tr><td align='right' width='200' class='shade1'><b>Limit to</b>:</td>";
     // echo "<td width=400 class='shade2'><input type='text' name='limit' value='9999' size='4' /> Records</td></tr>";
 
+    echo "<tr><td  colspan='2'><label><input type='checkbox' name='activeonly' value='yes' /> Only show contacts with current/active contracts.</td></tr>";
+
     echo "<tr><td colspan='2'>Output: <select name='output'>";
     echo "<option value='screen'>Screen</option>";
     // echo "<option value='printer'>Printer</option>";
@@ -145,7 +147,12 @@ elseif ($_REQUEST['mode']=='report')
     $sql .= "LEFT JOIN contacts ON supportcontacts.contactid=contacts.id ";
     $sql .= "LEFT JOIN sites ON contacts.siteid = sites.id ";
 
-    if (empty($incsql)==FALSE OR empty($excsql)==FALSE) $sql .= "WHERE ";
+    if (empty($incsql)==FALSE OR empty($excsql)==FALSE OR $_REQUEST['activeonly']=='yes') $sql .= "WHERE ";
+    if ($_REQUEST['activeonly']=='yes')
+    {
+        $sql .= "maintenance.term!='yes' AND maintenance.expirydate > '$now' ";
+        if (empty($incsql)==FALSE OR empty($excsql)==FALSE) $sql .= "AND ";
+    }
     if (!empty($incsql)) $sql .= "$incsql";
     if (empty($incsql)==FALSE AND empty($excsql)==FALSE) $sql .= " AND ";
     if (!empty($excsql)) $sql .= "$excsql";
@@ -156,8 +163,10 @@ elseif ($_REQUEST['mode']=='report')
     if (mysql_error()) trigger_error(mysql_error(),E_USER_ERROR);
     $numrows = mysql_num_rows($result);
 
-    $html .= "<p align='center'>This report is a list of contact details for all customers that have currently (or at some time in the past had) a contract ";
-    $html .= "for the products you selected - if you selected to exclude any products then customers who have contracts for those products are not shown.</p>";
+    $html .= "<p align='center'>This report is a list of contact details for all customers ";
+    if ($_REQUEST['activeonly']=='yes') $html .= "with <strong>current</strong> ";
+    else $html .= "that have currently got (or at some time in the past had) ";
+    $html .= "contracts for the products you selected - if you selected to exclude any products then customers who have contracts for those products are not shown.</p>";
     $html .= "<table width='99%' align='center'>";
     $html .= "<tr><th>Forenames</th><th>Surname</th><th>Email</th><th>Site</th><th>Address Line 1</th>";
     $html .= "<th>Address Line 2</th><th>City</th><th>County</th><th>Postcode</th><th>Country</th><th>Telephone</th><th>Products</th></tr>";
