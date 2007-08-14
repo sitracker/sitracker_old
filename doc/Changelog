@@ -72,8 +72,42 @@ Changes in v3.30 - Unreleased
 * Fixed feedback results when the rating is not 1 to 9
 * Fixed missing field 'store in log' which appears in edit email template but was missing from add email template
 * Enable users to delete/cancel unrequested holiday
+* Improved, more detailed statistics page
+* Last updated time is now x minutes ago up to an hour, then absolute time.
+  first bold, italic and red, then italic and red, and finally just italic.
+  Should make it easier to spot which incidents have been updated recently
+* Fix plurality bug with formatting seconds to minutes
+* Fix feedback results when the rating is not 1 to 9
+* Fix missing field 'store in log' which appears in edit email
+  template but was missing from add email template
+* Allow users to delete/cancel unrequested holiday
+* Improvements to product and software editing and display
+* Paging in the incidents log
+* Added ability to jump between next and previous updates in incident log
+* Close a popup and re-opens it if it's already open to help prevent the
+  window being hidden behind other windows.
+* Make default password more obvious to users on new installation
+* Suppress dashboard errors if dashboards aren't properly configured
+* Suppress div by zero errors for incidents by software report when there are no incidents
+* Fix bug where new incidents marked as visible to customer were still hidden
+* New email template <incidentfirstupdate> that will expand to the text of the first
+  update in the incident log that is visible to customers
+* Fix issue that caused only one held email to show in holding queue
+* Fix missing :// from URL in holiday request emails
+* Colour email rows in the holding queue if they are from recognised email
+  addresses, and add support for plugins to do further row shading if needed
+* Fix missing website URL on site details page
+* Show number of days an incident has been due a review rather than just saying 'Now'
+  Still says 'Now' for the first day
+* Allow searching expired contracts beyond 999 days
+* Allow user who adds an incident to force to self if not accepting
+* Allow advanced search to search by service level and display correct service level tag in results
+* Fixed links to attachments within the incident log, even when updates have been moved
+  or held in the holding queue
+* Fixed column name lastupdated which means sorting by that column is now working again
 * Removed a lot of old unused code
 * Plus many more minor changes and fixes
+
 
 Changes in v3.24 - Released 6 November 2006
 -----------------------------------------------------------------------
