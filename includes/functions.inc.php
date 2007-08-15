@@ -1870,7 +1870,10 @@ function emailtype_replace_specials($string, $incidentid, $userid=0)
                     26 => '/<globalsignature>/s',
                     27 => '/<todaysdate>/s',
                     28 => '/<salespersonemail>/s',
-                    29 => '/<incidentfirstupdate>/s'
+                    29 => '/<incidentfirstupdate>/s',
+                    30 => '/<contactnotify2>/s',
+                    31 => '/<contactnotify3>/s',
+                    32 => '/<contactnotify4>/s'
                 );
 
     $email_replace = array(0 => contact_email($contactid),
@@ -1902,7 +1905,10 @@ function emailtype_replace_specials($string, $incidentid, $userid=0)
                     26 => global_signature(),
                     27 => date("jS F Y"),
                     28 => user_email(db_read_column('owner', 'sites', db_read_column('siteid','contacts',$contactid))),
-                    29 => incident_firstupdate($incidentid)
+                    29 => incident_firstupdate($incidentid),
+                    30 => contact_email(contact_notify($contactid, 2)),
+                    31 => contact_email(contact_notify($contactid, 3)),
+                    32 => contact_email(contact_notify($contactid, 4))
                 );
 
     if($incident->towner != 0)
@@ -3928,6 +3934,32 @@ function contact_notify_email($contactid)
 
     return $email;
 }
+
+// Returns the contactid of the notify contact for the contactid
+// specified as a parameter.
+// If Level is specified and is >= 1 then the notify contact is
+// found recursively, ie. the notify contact of the notify contact etc.
+function contact_notify($contactid, $level=0)
+{
+    $notify_contactid = 0;
+    if ($level == 0) return $contactid;
+    else
+    {
+        $sql = "SELECT notify_contactid FROM contacts WHERE id='$contactid' LIMIT 1";
+        $result = mysql_query($sql);
+        if (mysql_error()) trigger_error(mysql_error(),E_USER_WARNING);
+        list($notify_contactid) = mysql_fetch_row($result);
+
+        if ($level > 0)
+        {
+            $newlevel = $level -1;
+            $notify_contactid = contact_notify($notify_contactid, $newlevel);
+
+        }
+        return $notify_contactid;
+    }
+}
+
 
 
 function software_backup_dropdown($name, $userid, $softwareid, $backupid)

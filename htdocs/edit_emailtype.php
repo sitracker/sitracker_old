@@ -116,6 +116,7 @@ elseif ($action == "edit")
         <tr><th>&lt;contactphone&gt;</th><td>Phone number of incident contact</td></tr>
         <tr><th>&lt;contactmanager&gt;</th><td>Email address(es) of incident contacts Manager (as defined by a flag)</td></tr>
         <tr><th>&lt;contactnotify&gt;</th><td>The 'Notify Contact' email address (if set)</td></tr>
+        <tr><th>&lt;contactnotify2&gt;</th><td>(or 3 or 4) The 'Notify Contact' email address (if set) of the notify contact recursively</td></tr>
         <tr><th>&lt;incidentid&gt;</th><td>ID number of incident</td></tr>
         <tr><th>&lt;incidentexternalid&gt;</th><td>External ID number of incident</td></tr>
         <tr><th>&lt;incidentexternalengineer&gt;</th><td>Name of External engineer dealing with incident</td></tr>

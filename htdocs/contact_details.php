@@ -109,6 +109,12 @@ while ($contactrow=mysql_fetch_array($contactresult))
     {
         echo "<tr><th>Notify Contact:</th><td>";
         echo contact_realname($contactrow['notify_contactid']);
+        $notify_contact1 = contact_notify($contactrow['notify_contactid'], 1);
+        if ($notify_contact1 > 0) echo " -&gt; ".contact_realname($notify_contact1);
+        $notify_contact2 = contact_notify($contactrow['notify_contactid'], 2);
+        if ($notify_contact2 > 0) echo " -&gt; ".contact_realname($notify_contact2);
+        $notify_contact3 = contact_notify($contactrow['notify_contactid'], 3);
+        if ($notify_contact3 > 0) echo " -&gt; ".contact_realname($notify_contact3);
         echo "</td></tr>";
     }
 
