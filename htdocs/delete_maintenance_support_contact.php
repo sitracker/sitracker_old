@@ -44,7 +44,7 @@ if (empty($action) OR $action == "showform")
     <p align='center'>This will mean that the contact will not be able to log any further support incidents for the related product</p>
     <form action="<?php echo $_SERVER['PHP_SELF']; ?>?action=delete" method="post" onsubmit="return confirm_submit()">
     <input type="hidden" name="context" value="<?php echo $context ?>" />
-    <table>
+    <table align='center' class='vertical'>
     <?php
     if (empty($maintid))
     {
