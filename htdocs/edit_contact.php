@@ -100,7 +100,7 @@ elseif ($action == "edit" && isset($contact))
         echo "<tr><th>Country:</th><td>";
         echo country_drop_down('country', $contactrow['country'], $extraattributes);
         echo "</td></tr>\n";
-        echo "<tr><th>Notify contact:</th><td>".contact_site_drop_down('notify_contactid', $contactrow['notify_contactid'], $contactrow['siteid'])."</td></tr>\n";
+        echo "<tr><th>Notify contact:</th><td>".contact_site_drop_down('notify_contactid', $contactrow['notify_contactid'], $contactrow['siteid'], $contact)."</td></tr>\n";
         echo "<tr><th>Notes:</th><td><textarea rows='5' cols='60' name='notes'>{$contactrow['notes']}</textarea></td></tr>\n";
 
         plugin_do('edit_contact_form');
