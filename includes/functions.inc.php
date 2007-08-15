@@ -1041,11 +1041,10 @@ function contact_drop_down($name, $id, $showsite=FALSE)
 }
 
 
-
 /*  prints the HTML for a drop down list of     */
 /* contacts along with their site, with the given name and    */
 /* with the given id selected.                                */
-function contact_site_drop_down($name, $id, $siteid='')
+function contact_site_drop_down($name, $id, $siteid='', $exclude='')
 {
    $sql  = "SELECT contacts.id AS contactid, forenames, surname, siteid, sites.name AS sitename FROM contacts, sites ";
    $sql .= "WHERE contacts.siteid=sites.id ";
@@ -1058,17 +1057,19 @@ function contact_site_drop_down($name, $id, $siteid='')
    if ($id == 0) $html .= "<option selected='selected' value='0'></option>\n";
    while ($contacts = mysql_fetch_object($result))
    {
-        $html .= "<option ";
-        if ($contacts->contactid == $id) $html .= "selected='selected' ";
-        $html .= "value='{$contacts->contactid}'>";
-        $html .= htmlspecialchars("{$contacts->surname}, {$contacts->forenames} of {$contacts->sitename}");
-        $html .= "</option>\n";
+        if ($contacts->contactid != $exclude)
+        {
+            $html .= "<option ";
+            if ($contacts->contactid == $id) $html .= "selected='selected' ";
+            $html .= "value='{$contacts->contactid}'>";
+            $html .= htmlspecialchars("{$contacts->surname}, {$contacts->forenames} of {$contacts->sitename}");
+            $html .= "</option>\n";
+        }
    }
    $html .= "</select>\n";
 
    return $html;
 }
-
 
 
 /*  prints the HTML for a drop down list of     */
