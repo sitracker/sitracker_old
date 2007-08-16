@@ -78,7 +78,7 @@ if (empty($productid) AND $display!='skills')
             else echo "<p class='warning'>No products for this vendor</p>\n";
         }
     }
-    else echo "<p class='error'>No software vendors defined</p>";
+    else echo "<p class='error'>No vendors defined</p>";
 
     echo "<h2>Skills not linked</h2>";
     echo "<p align='center'>These skills are not linked to any product</p>";
@@ -229,10 +229,10 @@ else
             }
             else
             {
-                echo "<tr><td>&nbsp;</td><td><em>No software linked to this product</em></td><td>&nbsp;</td></tr>\n";
+                echo "<tr><td>&nbsp;</td><td><em>No skills linked to this product</em></td><td>&nbsp;</td></tr>\n";
             }
             echo "</table>\n";
-            echo "<p align='center'><a href='add_product_software.php?productid={$product->id}'>Link software to {$product->name}</a></p>\n";
+            echo "<p align='center'><a href='add_product_software.php?productid={$product->id}'>Link skill to {$product->name}</a></p>\n";
 
             $sql = "SELECT * FROM maintenance WHERE product='{$product->id}' ORDER BY id DESC";
             $result = mysql_query($sql);
@@ -241,12 +241,14 @@ else
             {
                 echo "<h3>Related Contracts</h3>";
                 echo "<table align='center'>";
+                echo "<tr><th>Contract</th><th>Site</th></tr>";
                 $shade = 'shade1';
                 while ($contract = mysql_fetch_object($result))
                 {
                     if ($contract->term=='yes' OR $contract->expirydate < $now) $shade = "expired";
                     echo "<tr class='{$shade}'>";
                     echo "<td><a href='maintenance_details.php?id={$contract->id}'>Contract {$contract->id}</a></td>";
+                    echo "<td>".site_name($contract->site)."</td>";
                     echo "</tr>\n";
                     if ($shade=='shade1') $shade='shade2';
                     else $shade='shade1';
@@ -261,11 +263,14 @@ else
             {
                 echo "<h3>Related Incidents</h3>";
                 echo "<table align='center'>";
+                echo "<tr><th>Incident</th><th>Contact</th><th>Site</th><th>Title</th></tr>";
                 $shade = 'shade1';
                 while ($incident = mysql_fetch_object($result))
                 {
                     echo "<tr class='{$shade}'>";
                     echo "<td><a href=\"javascript:incident_details_window('{$incident->id}','incident{$incident->id}');\">Incident {$incident->id}</a></td>";
+                    echo "<td>".contact_realname($incident->contact)."</td><td>".contact_site($incident->contact)."</td>";
+                    echo "<td>".stripslashes($incident->title)."</td>";
                     echo "</tr>\n";
                     if ($shade=='shade1') $shade='shade2';
                     else $shade='shade1';
