@@ -104,13 +104,13 @@ mysql_free_result($result);
 $sql = "SELECT * from holidaytypes";
 $tresult = mysql_query($sql);
 if (mysql_error()) trigger_error("MySQL Query Error ".mysql_error(), E_USER_ERROR);
+$numtaken = mysql_num_rows($tresult);
 while ($holidaytype=mysql_fetch_array($tresult))
 {
     $sql = "SELECT *, from_unixtime(startdate) AS start FROM holidays WHERE userid='{$user}' AND type={$holidaytype['id']} ";
     $sql.= "AND (approved=1 OR (approved=11 AND startdate >= $now)) ORDER BY startdate ASC ";
     $result = mysql_query($sql);
     if (mysql_error()) trigger_error("MySQL Query Error ".mysql_error(), E_USER_ERROR);
-    $numtaken = mysql_num_rows($result);
     if ($numtaken > 0)
     {
         echo "<tr class='shade2'><td colspan='4'><strong>{$holidaytype['name']}</strong>:</td></tr>";
