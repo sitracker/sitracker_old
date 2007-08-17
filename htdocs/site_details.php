@@ -89,15 +89,21 @@ if ($countcontacts > 0)
         echo "<td><a href=\"contact_details.php?id=".$contactrow['id']."\">".$contactrow['forenames'].' '.$contactrow['surname']."</a></td>";
         echo "<td>{$contactrow['jobtitle']}</td>";
         echo "<td>{$contactrow['department']}</td>";
-        echo "<td>{$contactrow['phone']}</td>";
-        echo "<td>{$contactrow['email']}</td>";
+        if ($contactrow['dataprotection_phone']!='Yes') echo "<td>{$contactrow['phone']}</td>";
+        else echo "<td><strong>withheld</strong></td>";
+        if ($contactrow['dataprotection_email']!='Yes') echo "<td>{$contactrow['email']}</td>";
+        else echo "<td><strong>withheld</strong></td>";
+        if ($contactrow['dataprotection_email']!='Yes')
+        {
+            echo "<td>";
+            if (!empty($contactrow['address1'])) echo "{$contactrow['address1']}";
+            echo "</td>";
+        }
+        else echo "<td><strong>withheld</strong></td>";
         echo "<td>";
-        if (!empty($contactrow['address1'])) echo "{$contactrow['address1']}";
-        echo "</td>";
-        echo "<td>";
-        if ($contactrow['dataprotection_email']=='yes') { echo "<strong>No Email</strong>, "; }
-        if ($contactrow['dataprotection_phone']=='yes') { echo "<strong>No Calls</strong>, "; }
-        if ($contactrow['dataprotection_address']=='yes') { echo "<strong>No Post</strong>"; }
+        if ($contactrow['dataprotection_email']=='Yes') { echo "<strong>No Email</strong>, "; }
+        if ($contactrow['dataprotection_phone']=='Yes') { echo "<strong>No Calls</strong>, "; }
+        if ($contactrow['dataprotection_address']=='Yes') { echo "<strong>No Post</strong>"; }
         echo "</td>";
         echo "<td>{$contactrow['notes']}</td>";
         echo "</tr>";
