@@ -183,16 +183,14 @@ while ($incidents = mysql_fetch_array($result))
         $externalid = "<a href='{$epathurl}' title='{$epath[$escalationpath]['url_title']}'>{$epath[$escalationpath]['name']}</a>";
     }
     elseif (empty($incidents['escalationpath']) AND !empty($incidents['externalid'])) $externalid = format_external_id($incidents['externalid']);
-    ?>
-    <tr class='<?php echo $class; ?>'>
-    <td align='center'>
-    <?php
+    echo "<tr class='{$class}'>";
+    echo "<td align='center'>";
     // Note: Sales incident type is obsolete
     if ($incidents['type']!='Support') echo "<strong>".ucfirst($incidents['type'])."</strong>: ";
     echo "<a href='incident_details.php?id={$incidents['id']}' style='color: #000000;'>{$incidents['id']}</a>";
-    ?><br /><?php if ($externalid != "") echo $externalid ?></td>
-    <td>
-    <?php
+    if ($externalid != "") echo "<br />{$externalid}";
+    echo "</td>";
+    echo "<td onclick=\"incident_details_window({$incidents["id"]});\">";
     if (!empty($incidents['softwareid'])) echo software_name($incidents['softwareid'])."<br />";
     ?>
     <a href="javascript:incident_details_window('<?php echo $incidents["id"] ?>','incident<?php echo $incidents["id"] ?>')" class='info'>
