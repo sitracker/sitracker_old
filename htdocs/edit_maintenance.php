@@ -105,7 +105,7 @@ if ($action == "edit")
         echo "<td>".array_drop_down($incident_pools,'incident_poolid',$maint['incident_quantity'])."</td></tr>";
         ?>
         <tr><th>Admin Contact: <sup class='red'>*</sup></th><td><?php echo contact_drop_down("admincontact", $maint["admincontact"], true) ?></td></tr>
-        <tr><th>Notes:</th><td><textarea cols="40" name="notes" rows="5"><?php echo $maint["notes"] ?></textarea></td></tr>
+        <tr><th>Notes:</th><td><textarea cols="40" name="notes" rows="5"><?php echo stripslashes($maint["notes"]); ?></textarea></td></tr>
         <tr><th>Terminated:</th><td><input name="terminated" id="terminated" type="checkbox" value="yes"<?php if ($maint["term"] == "yes") echo " checked" ?> /></td></tr>
         <tr><th>Product Only:</th><td><input name="productonly" type="checkbox" value="yes" onclick="set_terminated();" <?php if ($maint["productonly"] == "yes") echo " checked" ?> /></td></tr>
         </table>
