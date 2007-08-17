@@ -44,7 +44,7 @@ if(empty($dashboardid))
     $result = mysql_query($sql);
     if (mysql_error()) trigger_error(mysql_error(),E_USER_ERROR);
 
-    echo "<h2>Add to dashboard</h2>\n";
+    echo "<h2>".user_realname($sit[2])."'s Dashboard</h2>\n";
 
     if(mysql_num_rows($result) > 0)
     {
