@@ -54,8 +54,8 @@ else echo "{$maintrow['incident_quantity']} Incidents ($incidents_remaining Rema
 echo "</td></tr>";
 echo "<tr><th>License:</th><td>".$maintrow['licence_quantity'].' '.licence_type($maintrow['licence_type'])."</td></tr>";
 echo "<tr><th>Service Level:</th><td>".servicelevel_name($maintrow['servicelevelid'])."</td></tr>";
-echo "<tr><th>Expires:</th><td>".date("jS M Y", $maintrow['expirydate'])."</td></tr>";
-echo "<tr><th>Notes:</th><td>".$maintrow['maintnotes']."</td></tr>";
+echo "<tr><th>Expires:</th><td>".date($CONFIG['dateformat_date'], $maintrow['expirydate'])."</td></tr>";
+echo "<tr><th>Notes:</th><td>".stripslashes($maintrow['maintnotes'])."</td></tr>";
 ?>
 </table>
 <?php
