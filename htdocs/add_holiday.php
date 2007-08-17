@@ -34,6 +34,9 @@ $enddate=mktime(23,59,59,$month,$day,$year);
 if ($length=='') $length='day';
 
 if (user_permission($sit[2],50)) $approver=TRUE;
+else $approver=FALSE;
+if (user_permission($sit[2],22)) $adminuser=TRUE;
+else $adminuser=FALSE;
 
 // Holiday types (for reference)
 // 1 = Holiday
@@ -45,12 +48,13 @@ if (user_permission($sit[2],50)) $approver=TRUE;
 // check to see if there is a holiday on this day already, if there is retreive it
 list($dtype, $dlength, $dapproved, $dapprovedby)=user_holiday($user, 0, $year, $month, $day, FALSE);
 
-// allow approver to unbook holidays already approved
-if ($length=='0' AND $approver==TRUE AND $dapprovedby=$sit[2])
+// allow approver (or admin) to unbook holidays already approved
+if ($length=='0' AND ($approver==TRUE AND $dapprovedby=$sit[2]) OR $adminuser==TRUE)
 {
     // Delete the holiday
     $sql = "DELETE FROM holidays ";
-    $sql .= "WHERE userid='$user' AND startdate >= '$startdate' AND startdate < '$enddate' AND type='$type' AND (approvedby='{$sit[2]}' OR userid={$sit[2]}) ";
+    $sql .= "WHERE userid='$user' AND startdate >= '$startdate' AND startdate < '$enddate' AND type='$type' ";
+    if (!$adminuser) $sql .= "AND (approvedby='{$sit[2]}' OR userid={$sit[2]}) ";
     $result = mysql_query($sql);
     // echo $sql;
     if (mysql_error()) trigger_error("MySQL Query Error ".mysql_error(), E_USER_ERROR);
