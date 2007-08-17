@@ -76,16 +76,25 @@ while ($contactrow=mysql_fetch_array($contactresult))
     echo "<tr><th>Job Title:</th><td>".$contactrow['jobtitle']."</td></tr>";
     echo "<tr><th>Site:</th><td><a href=\"site_details.php?id=".$contactrow['siteid']."\">".site_name($contactrow['siteid'])."</a></td></tr>";
     if (!empty($contactrow['department'])) echo "<tr><th>Department:</th><td>".$contactrow['department']."</td></tr>";
-    echo "<tr><th>Address1:</th><td>{$address1}</td></tr>";
-    echo "<tr><th>Address2:</th><td>{$address2}</td></tr>";
-    echo "<tr><th>City:</th><td>{$city}</td></tr>";
-    echo "<tr><th>County:</th><td>{$county}</td></tr>";
-    echo "<tr><th>Postcode:</th><td>{$postcode}</td></tr>";
-    echo "<tr><th>Country:</th><td>{$country}</td></tr>";
-    echo "<tr><th>Email:</th><td><a href=\"mailto:".$contactrow['email']."\">".$contactrow['email']."</a></td></tr>";
-    echo "<tr><th>Phone:</th><td>".$contactrow['phone']."</td></tr>";
-    echo "<tr><th>Mobile:</th><td>".$contactrow['mobile']."</td></tr>";
-    echo "<tr><th>Fax:</th><td>".$contactrow['fax']."</td></tr>";
+    if ($contactrow['dataprotection_address']!='Yes')
+    {
+        echo "<tr><th>Address1:</th><td>{$address1}</td></tr>";
+        echo "<tr><th>Address2:</th><td>{$address2}</td></tr>";
+        echo "<tr><th>City:</th><td>{$city}</td></tr>";
+        echo "<tr><th>County:</th><td>{$county}</td></tr>";
+        echo "<tr><th>Postcode:</th><td>{$postcode}</td></tr>";
+        echo "<tr><th>Country:</th><td>{$country}</td></tr>";
+    }
+    if ($contactrow['dataprotection_email']!='Yes')
+    {
+        echo "<tr><th>Email:</th><td><a href=\"mailto:".$contactrow['email']."\">".$contactrow['email']."</a></td></tr>";
+    }
+    if ($contactrow['dataprotection_phone']!='Yes')
+    {
+        echo "<tr><th>Phone:</th><td>".$contactrow['phone']."</td></tr>";
+        echo "<tr><th>Mobile:</th><td>".$contactrow['mobile']."</td></tr>";
+        echo "<tr><th>Fax:</th><td>".$contactrow['fax']."</td></tr>";
+    }
     echo "<tr><th>Data Protection:</th><td> ";
     if ($contactrow['dataprotection_email']=='Yes') { echo "<strong>No Email</strong>, "; } else { echo "Email OK, ";}
     if ($contactrow['dataprotection_phone']=='Yes') { echo "<strong>No Calls</strong>, "; } else { echo "Calls OK, ";}
