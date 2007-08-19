@@ -22,6 +22,8 @@ require('auth.inc.php');
 // External variables
 $search_string = cleanvar($_REQUEST['search_string']);
 $submit_value = cleanvar($_REQUEST['submit']);
+$displayinactive = cleanvar($_REQUEST['displayinactive']);
+if(empty($displayinactive)) $displayinactive = "false";
 
 if($submit_value == 'go')
 {
@@ -81,38 +83,54 @@ window.open(URL, "contact_products_window", "toolbar=no,status=yes,menubar=no,sc
     <p>Browse contacts: <input dojoType='ComboBox' dataUrl='autocomplete.php?action=contact' style='width: 300px;' name='search_string' />
     <input name="submit" type="submit" value="go" /></p>
     </form>
+    <?php
+        if($displayinactive=="true")
+        {
+            echo "<a href='".$_SERVER['PHP_SELF']."?displayinactive=false";
+            if(!empty($search_string)) echo "&search_string={$search_string}";
+            echo "'>Hide inactive</a>";
+            $inactivestring="displayinactive=true";
+        }
+        else
+        {
+            echo "<a href='".$_SERVER['PHP_SELF']."?displayinactive=true";
+            if(!empty($search_string)) echo "&search_string={$search_string}";
+            echo "'>Show inactive</a>";
+            $inactivestring="displayinactive=false";
+        }
+    ?>
 </td>
 </tr>
 <tr>
 <td valign="middle">
     <a href="add_contact.php">Add Contact</a> |
-    <a href="<?php echo $_SERVER['PHP_SELF'] ?>?search_string=A">A</a> |
-    <a href="<?php echo $_SERVER['PHP_SELF'] ?>?search_string=B">B</a> |
-    <a href="<?php echo $_SERVER['PHP_SELF'] ?>?search_string=C">C</a> |
-    <a href="<?php echo $_SERVER['PHP_SELF'] ?>?search_string=D">D</a> |
-    <a href="<?php echo $_SERVER['PHP_SELF'] ?>?search_string=E">E</a> |
-    <a href="<?php echo $_SERVER['PHP_SELF'] ?>?search_string=F">F</a> |
-    <a href="<?php echo $_SERVER['PHP_SELF'] ?>?search_string=G">G</a> |
-    <a href="<?php echo $_SERVER['PHP_SELF'] ?>?search_string=H">H</a> |
-    <a href="<?php echo $_SERVER['PHP_SELF'] ?>?search_string=I">I</a> |
-    <a href="<?php echo $_SERVER['PHP_SELF'] ?>?search_string=J">J</a> |
-    <a href="<?php echo $_SERVER['PHP_SELF'] ?>?search_string=K">K</a> |
-    <a href="<?php echo $_SERVER['PHP_SELF'] ?>?search_string=L">L</a> |
-    <a href="<?php echo $_SERVER['PHP_SELF'] ?>?search_string=M">M</a> |
-    <a href="<?php echo $_SERVER['PHP_SELF'] ?>?search_string=N">N</a> |
-    <a href="<?php echo $_SERVER['PHP_SELF'] ?>?search_string=O">O</a> |
-    <a href="<?php echo $_SERVER['PHP_SELF'] ?>?search_string=P">P</a> |
-    <a href="<?php echo $_SERVER['PHP_SELF'] ?>?search_string=Q">Q</a> |
-    <a href="<?php echo $_SERVER['PHP_SELF'] ?>?search_string=R">R</a> |
-    <a href="<?php echo $_SERVER['PHP_SELF'] ?>?search_string=S">S</a> |
-    <a href="<?php echo $_SERVER['PHP_SELF'] ?>?search_string=T">T</a> |
-    <a href="<?php echo $_SERVER['PHP_SELF'] ?>?search_string=U">U</a> |
-    <a href="<?php echo $_SERVER['PHP_SELF'] ?>?search_string=V">V</a> |
-    <a href="<?php echo $_SERVER['PHP_SELF'] ?>?search_string=W">W</a> |
-    <a href="<?php echo $_SERVER['PHP_SELF'] ?>?search_string=X">X</a> |
-    <a href="<?php echo $_SERVER['PHP_SELF'] ?>?search_string=Y">Y</a> |
-    <a href="<?php echo $_SERVER['PHP_SELF'] ?>?search_string=Z">Z</a> |
-    <a href="<?php echo $_SERVER['PHP_SELF'] ?>?search_string=*">All</a>
+    <a href="<?php echo $_SERVER['PHP_SELF'] ?>?search_string=A&<?php echo $inactivestring; ?>">A</a> |
+    <a href="<?php echo $_SERVER['PHP_SELF'] ?>?search_string=B&<?php echo $inactivestring; ?>">B</a> |
+    <a href="<?php echo $_SERVER['PHP_SELF'] ?>?search_string=C&<?php echo $inactivestring; ?>">C</a> |
+    <a href="<?php echo $_SERVER['PHP_SELF'] ?>?search_string=D&<?php echo $inactivestring; ?>">D</a> |
+    <a href="<?php echo $_SERVER['PHP_SELF'] ?>?search_string=E&<?php echo $inactivestring; ?>">E</a> |
+    <a href="<?php echo $_SERVER['PHP_SELF'] ?>?search_string=F&<?php echo $inactivestring; ?>">F</a> |
+    <a href="<?php echo $_SERVER['PHP_SELF'] ?>?search_string=G&<?php echo $inactivestring; ?>">G</a> |
+    <a href="<?php echo $_SERVER['PHP_SELF'] ?>?search_string=H&<?php echo $inactivestring; ?>">H</a> |
+    <a href="<?php echo $_SERVER['PHP_SELF'] ?>?search_string=I&<?php echo $inactivestring; ?>">I</a> |
+    <a href="<?php echo $_SERVER['PHP_SELF'] ?>?search_string=J&<?php echo $inactivestring; ?>">J</a> |
+    <a href="<?php echo $_SERVER['PHP_SELF'] ?>?search_string=K&<?php echo $inactivestring; ?>">K</a> |
+    <a href="<?php echo $_SERVER['PHP_SELF'] ?>?search_string=L&<?php echo $inactivestring; ?>">L</a> |
+    <a href="<?php echo $_SERVER['PHP_SELF'] ?>?search_string=M&<?php echo $inactivestring; ?>">M</a> |
+    <a href="<?php echo $_SERVER['PHP_SELF'] ?>?search_string=N&<?php echo $inactivestring; ?>">N</a> |
+    <a href="<?php echo $_SERVER['PHP_SELF'] ?>?search_string=O&<?php echo $inactivestring; ?>">O</a> |
+    <a href="<?php echo $_SERVER['PHP_SELF'] ?>?search_string=P&<?php echo $inactivestring; ?>">P</a> |
+    <a href="<?php echo $_SERVER['PHP_SELF'] ?>?search_string=Q&<?php echo $inactivestring; ?>">Q</a> |
+    <a href="<?php echo $_SERVER['PHP_SELF'] ?>?search_string=R&<?php echo $inactivestring; ?>">R</a> |
+    <a href="<?php echo $_SERVER['PHP_SELF'] ?>?search_string=S&<?php echo $inactivestring; ?>">S</a> |
+    <a href="<?php echo $_SERVER['PHP_SELF'] ?>?search_string=T&<?php echo $inactivestring; ?>">T</a> |
+    <a href="<?php echo $_SERVER['PHP_SELF'] ?>?search_string=U&<?php echo $inactivestring; ?>">U</a> |
+    <a href="<?php echo $_SERVER['PHP_SELF'] ?>?search_string=V&<?php echo $inactivestring; ?>">V</a> |
+    <a href="<?php echo $_SERVER['PHP_SELF'] ?>?search_string=W&<?php echo $inactivestring; ?>">W</a> |
+    <a href="<?php echo $_SERVER['PHP_SELF'] ?>?search_string=X&<?php echo $inactivestring; ?>">X</a> |
+    <a href="<?php echo $_SERVER['PHP_SELF'] ?>?search_string=Y&<?php echo $inactivestring; ?>">Y</a> |
+    <a href="<?php echo $_SERVER['PHP_SELF'] ?>?search_string=Z&<?php echo $inactivestring; ?>">Z</a> |
+    <a href="<?php echo $_SERVER['PHP_SELF'] ?>?search_string=*&<?php echo $inactivestring; ?>">All</a>
     </td>
 </tr>
 </table>
@@ -138,24 +156,30 @@ else
         {
             // Don't  need to do this again, already done above, us the results of that
             // build SQL
-            $sql  = "SELECT * FROM contacts ";
+            $sql  = "SELECT contacts.* FROM contacts,sites ";
+            $sql .= "WHERE contacts.siteid = sites.id ";
             $search_string_len=strlen($search_string);
             if ($search_string != '*')
             {
-                $sql .= "WHERE ";
-                if ($search_string_len<=6) $sql .= "id=('$search_string') OR ";
+                $sql .= " AND (";
+                if ($search_string_len<=6) $sql .= "contacts.id=('$search_string') OR ";
                 if ($search_string_len<=2)
                 {
-                    $sql .= "SUBSTRING(surname,1,$search_string_len)=('$search_string') ";
+                    $sql .= "SUBSTRING(contacts.surname,1,$search_string_len)=('$search_string') ";
                 }
                 else
                 {
-                    $sql .= "surname LIKE '%$search_string%' OR forenames LIKE '%$search_string%' OR ";
-                    $sql .= "CONCAT(forenames,' ',surname) LIKE '%$search_string%'";
+                    $sql .= "contacts.surname LIKE '%$search_string%' OR contacts.forenames LIKE '%$search_string%' OR ";
+                    $sql .= "CONCAT(contacts.forenames,' ',contacts.surname) LIKE '%$search_string%'";
                 }
+                $sql .= " ) ";
+            }
+            if($displayinactive=="false")
+            {
+                $sql .= " AND contacts.active = 'true' AND sites.active = 'true'";
             }
             $sql .= " ORDER BY surname ASC";
-    
+
             // execute query
             $result = mysql_query($sql);
             if (mysql_error()) trigger_error("MySQL Query Error ".mysql_error(), E_USER_ERROR);

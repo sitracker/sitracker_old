@@ -1011,10 +1011,18 @@ function contact_drop_down($name, $id, $showsite=FALSE)
 {
     if ($showsite)
     {
-        $sql  = "SELECT contacts.id AS contactid, sites.id AS siteid, surname, forenames, sites.name AS sitename, sites.department AS department ";
-        $sql .= "FROM contacts, sites WHERE contacts.siteid=sites.id ORDER BY sites.name, surname ASC, forenames ASC";
+        $sql  = "SELECT contacts.id AS contactid, sites.id AS siteid, surname, forenames, ";
+        $sql .= "sites.name AS sitename, sites.department AS department ";
+        $sql .= "FROM contacts, sites WHERE contacts.siteid=sites.id AND contacts.active = 'true' ";
+        $sql .= "AND sites.active = 'true' ";
+        $sql .= "ORDER BY sites.name, surname ASC, forenames ASC";
     }
-    else $sql  = "SELECT id AS contactid, surname, forenames FROM contacts ORDER BY forenames ASC, surname ASC";
+    else
+    {
+        $sql  = "SELECT id AS contactid, surname, forenames FROM contacts,sites ";
+        $sql .= "WHERE contacts.siteid = sites.id AND sites.active = 'true' AND contacts.active = 'true' ";
+        $sql .= "ORDER BY forenames ASC, surname ASC";
+    }
 
     $result = mysql_query($sql);
     if (mysql_error()) trigger_error(mysql_error(),E_USER_WARNING);

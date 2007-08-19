@@ -106,6 +106,7 @@ Changes in v3.30 - Unreleased
   or held in the holding queue
 * Fixed column name lastupdated which means sorting by that column is now working again
 * Added dashboard component to watch sites, contacts and engineers calls
+* Added ability to make sites and contacts as inactive so they dont show in the default view
 * Removed a lot of old unused code
 * Plus many more minor changes and fixes
 

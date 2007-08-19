@@ -21,7 +21,7 @@ require('auth.inc.php');
 
 // External variables
 $contact = cleanvar($_REQUEST['contact']);
-$action = $_REQUEST['action'];
+$action = cleanvar($_REQUEST['action']);
 
 include('htmlheader.inc.php');
 ?>
@@ -78,6 +78,7 @@ elseif ($action == "edit" && isset($contact))
         <tr><th>Data Protection Email:</th><td><?php html_checkbox('dataprotection_email', $contactrow['dataprotection_email']); ?> Don't send email</td></tr>
         <tr><th>Data Protection Phone:</th><td><?php html_checkbox('dataprotection_phone', $contactrow['dataprotection_phone']); ?> Don't call</td></tr>
         <tr><th>Data Protection Address:</th><td><?php html_checkbox('dataprotection_address', $contactrow['dataprotection_address']); ?> Don't write</td></tr>
+        <tr><th>Active:</th><td><input type='checkbox' name='active' <?php if($contactrow['active']=='true') echo "checked='".$siterow['active']."'"; ?> value='true' /></td></tr>
         <tr><th></th><td>
         <?php
         echo "<input type='checkbox' name='usesiteaddress' value='yes' onclick='togglecontactaddress();' ";
@@ -134,6 +135,7 @@ else if ($action == "update")
     $dataprotection_email = cleanvar($_POST['dataprotection_email']);
     $dataprotection_address = cleanvar($_POST['dataprotection_address']);
     $dataprotection_phone = cleanvar($_POST['dataprotection_phone']);
+    $active = cleanvar($_POST['active']);
     $jobtitle = cleanvar($_POST['jobtitle']);
     $department = cleanvar($_POST['department']);
     $notify_contactid = cleanvar($_POST['notify_contactid']);
@@ -177,6 +179,9 @@ else if ($action == "update")
         if ($dataprotection_phone  != '') $dataprotection_phone='Yes'; else $dataprotection_phone='No';
         if ($dataprotection_address  != '') $dataprotection_address='Yes'; else $dataprotection_address='No';
 
+        if($active=='true') $activeStr = 'true';
+        else $activeStr = 'false';
+
         /*
             TAGS
         */
@@ -187,6 +192,7 @@ else if ($action == "update")
         $sql .= "country='$country', dataprotection_email='$dataprotection_email', dataprotection_phone='$dataprotection_phone', ";
         $sql .= "notes='$notes', dataprotection_address='$dataprotection_address' , department='$department' , jobtitle='$jobtitle', ";
         $sql .= "notify_contactid='$notify_contactid', ";
+        $sql .= "active = {$activeStr}, ";
         $sql .= "timestamp_modified=$now WHERE id='$contact'";
         $result = mysql_query($sql);
         if (mysql_error()) trigger_error("MySQL Query Error ".mysql_error(), E_USER_ERROR);

@@ -78,6 +78,7 @@ CREATE TABLE `contacts` (
   `timestamp_added` int(11) default NULL,
   `timestamp_modified` int(11) default NULL,
   `notes` blob NOT NULL,
+  `active` enum('true','false') NOT NULL default 'true',
   PRIMARY KEY  (`id`),
   KEY `siteid` (`siteid`),
   KEY `username` (`username`),
@@ -895,6 +896,7 @@ CREATE TABLE `sites` (
   `licenserx` int(5) NOT NULL default '0',
   `ftnpassword` varchar(40) NOT NULL default '',
   `owner` tinyint(4) NOT NULL default '0',
+  `active` enum('true','false') NOT NULL default 'true',
   PRIMARY KEY  (`id`),
   KEY `typeid` (`typeid`),
   KEY `owner` (`owner`)
@@ -1440,6 +1442,9 @@ INSERT INTO `rolepermissions` (`roleid`, `permissionid`, `granted`) VALUES (1, 6
 INSERT INTO `rolepermissions` (`roleid`, `permissionid`, `granted`) VALUES (2, 68, 'true');
 INSERT INTO `userpermissions` VALUES (1, 68, 'true');
 
+ALTER TABLE `sites` ADD `active` ENUM( 'true', 'false' ) NOT NULL DEFAULT 'true';
+
+ALTER TABLE `contacts` ADD `active` ENUM( 'true', 'false' ) NOT NULL DEFAULT 'true';
 ";
 
 
