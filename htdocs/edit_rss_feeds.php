@@ -25,7 +25,7 @@ switch($action)
         echo "<h2>Add RSS feed</h2>";
         echo "<form action='{$_SERVER['PHP_SELF']}?action=do_add' method='post'>";
         echo "<table class='vertical'>";
-        echo "<tr><td><input type='text' name='url' size='30' /></td><tr>";
+        echo "<tr><td>RSS Feed URL: <input type='text' name='url' size='30' /></td><tr>";
         echo "</table>";
         echo "<p align='center'><input name='submit' type='submit' value='Add' /></p>";
         include('htmlfooter.inc.php');
