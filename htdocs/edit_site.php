@@ -93,6 +93,7 @@ elseif ($action == "edit")
             if (array_key_exists($siterow['freesupport'], $incident_pools)==FALSE) array_unshift($incident_pools,$siterow['freesupport']);
             echo "<td>".array_drop_down($incident_pools,'incident_poolid',$siterow['freesupport'])."</td></tr>";
             ?>
+            <tr><th>Active:</th><td><input type='checkbox' name='active' <?php if($siterow['active']=='true') echo "checked='".$siterow['active']."'"; ?> value='true' /></td></tr>
             <tr><th>Notes:</th><td><textarea rows="5" cols="30" name="notes"><?php echo $siterow['notes'] ?></textarea></td></tr>
             <?php
             plugin_do('edit_site_form');
@@ -125,6 +126,7 @@ elseif ($action == "update")
     $owner = cleanvar($_POST['owner']);
     $site = cleanvar($_POST['site']);
     $tags = cleanvar($_POST['tags']);
+    $active = cleanvar($_POST['active']);
 
     // Edit site, update the database
     $errors = 0;
@@ -142,9 +144,13 @@ elseif ($action == "update")
         replace_tags(3, $site, $tags);
         if (isset($licenserx)) $licenserx='1'; else $licenserx='0';
         // update site
+
+        if($active=='true') $activeStr = 'true';
+        else $activeStr = 'false';
+
         $sql = "UPDATE sites SET name='$name', department='$department', address1='$address1', address2='$address2', city='$city', ";
         $sql .= "county='$county', postcode='$postcode', country='$country', telephone='$telephone', fax='$fax', email='$email', ";
-        $sql .= "websiteurl='$websiteurl', notes='$notes', typeid='$typeid', owner='$owner', freesupport='$incident_quantity' WHERE id='$site' LIMIT 1";
+        $sql .= "websiteurl='$websiteurl', notes='$notes', typeid='$typeid', owner='$owner', freesupport='$incident_quantity', active='$activeStr' WHERE id='$site' LIMIT 1";
 
         // licenserx='$licenserx'
         $result = mysql_query($sql);
