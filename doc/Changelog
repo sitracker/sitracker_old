@@ -105,6 +105,7 @@ Changes in v3.30 - Unreleased
 * Fixed links to attachments within the incident log, even when updates have been moved
   or held in the holding queue
 * Fixed column name lastupdated which means sorting by that column is now working again
+* Added dashboard component to watch sites, contacts and engineers calls
 * Removed a lot of old unused code
 * Plus many more minor changes and fixes
 
