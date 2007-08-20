@@ -109,7 +109,7 @@ function dashboard_watch_incidents_install()
         `type` tinyint(4) NOT NULL,
         `id` int(11) NOT NULL,
         PRIMARY KEY  (`userid`,`type`,`id`)
-        ) ENGINE=MyISAM DEFAULT;";
+        ) ENGINE=MyISAM ;";
 
     $result = mysql_query($schema);
     if (mysql_error())
