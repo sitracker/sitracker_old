@@ -185,11 +185,11 @@ if ($countproducts >= 1 OR $contactcontacts >= 1)
         echo "<img src='chart.php?type=pie&data=$data&legends=$legends&title=$title' />";
         echo "</div>";
 
-        // Incidents by software chart
+        // Incidents by skill chart
         $data = implode('|',$softwarelist);
         $keys = array_keys($softwarelist);
         $legends = implode('|', $softwarelegends);
-        $title = urlencode('Incidents by Software');
+        $title = urlencode('Incidents by Skill');
         //$data="1,2,3";
         echo "<div style='text-align:center;'>";
         echo "<img src='chart.php?type=pie&data=$data&legends=$legends&title=$title' />";

@@ -169,13 +169,13 @@ $hmenu[2030] = array (10=> array ( 'perm'=> 19, 'name'=> "Browse", 'url'=>"{$CON
                       40=> array ( 'perm'=> 2, 'name'=> "New Reseller", 'url'=>"{$CONFIG['application_webpath']}add_reseller.php"),
                       50=> array ( 'perm'=> 19, 'name'=> "Show Renewals", 'url'=>"{$CONFIG['application_webpath']}search_renewals.php?action=showform"),
                       60=> array ( 'perm'=> 19, 'name'=> "Show Expired", 'url'=>"{$CONFIG['application_webpath']}search_expired.php?action=showform"),
-                      70=> array ( 'perm'=> 0, 'name'=> "Products &amp; Software", 'url'=>"{$CONFIG['application_webpath']}products.php", 'submenu'=>"203010"),
+                      70=> array ( 'perm'=> 0, 'name'=> "Products &amp; Skills", 'url'=>"{$CONFIG['application_webpath']}products.php", 'submenu'=>"203010"),
 );
 
 $hmenu[203010] = array (10=> array ( 'perm'=> 56, 'name'=> "Add Vendor", 'url'=>"{$CONFIG['application_webpath']}add_vendor.php"),
                         20=> array ( 'perm'=> 24, 'name'=> "Add Product", 'url'=>"{$CONFIG['application_webpath']}add_product.php"),
                         30=> array ( 'perm'=> 28, 'name'=> "List Products", 'url'=>"{$CONFIG['application_webpath']}products.php"),
-                        40=> array ( 'perm'=> 56, 'name'=> "Add Software", 'url'=>"{$CONFIG['application_webpath']}add_software.php"),
+                        40=> array ( 'perm'=> 56, 'name'=> "Add Skill", 'url'=>"{$CONFIG['application_webpath']}add_software.php"),
                         50=> array ( 'perm'=> 24, 'name'=> "Link Products", 'url'=>"{$CONFIG['application_webpath']}add_product_software.php"),
                         60=> array ( 'perm'=> 25, 'name'=> "Add Product Question", 'url'=>"{$CONFIG['application_webpath']}add_productinfo.php"),
                         70=> array ('perm'=> 56, 'name'=> "Edit Vendor", 'url'=>"{$CONFIG['application_webpath']}edit_vendor.php")
@@ -215,7 +215,7 @@ $hmenu[60] = array (10=> array ( 'perm'=> 37, 'name'=> "Marketing Mailshot", 'ur
                     100=> array ( 'perm'=> 37, 'name'=> "Recent Incidents", 'url'=>"{$CONFIG['application_webpath']}reports/recent_incidents_table.php"),
                     110=> array ( 'perm'=> 37, 'name'=> "Incidents Logged (Open/Closed)", 'url'=>"{$CONFIG['application_webpath']}reports/incident_graph.php"),
                     120=> array ( 'perm'=> 37, 'name'=> "Average Incident Duration", 'url'=>"{$CONFIG['application_webpath']}reports/average_incident_duration.php"),
-                    130=> array ( 'perm'=> 37, 'name'=> "Incidents by Software", 'url'=>"{$CONFIG['application_webpath']}reports/incidents_by_software.php",
+                    130=> array ( 'perm'=> 37, 'name'=> "Incidents by Skill", 'url'=>"{$CONFIG['application_webpath']}reports/incidents_by_software.php",
                     140=> array ( 'perm'=> 37, 'name'=> "Incidents by Vendor", 'url'=>"{$CONFIG['application_webpath']}reports/incidents_by_vendor.php")
 ));
 

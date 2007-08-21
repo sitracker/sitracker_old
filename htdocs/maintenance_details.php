@@ -98,7 +98,7 @@ else
 <?php
 
 echo "<br />";
-echo "<h3>Software supported under this contract:</h3>";
+echo "<h3>Skills supported under this contract:</h3>";
 // supported software
 $sql = "SELECT * FROM softwareproducts, software WHERE softwareproducts.softwareid=software.id AND productid='{$maintrow['product']}' ";
 $result=mysql_query($sql);

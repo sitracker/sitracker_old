@@ -41,7 +41,7 @@ switch($_REQUEST['action'])
             $url = parse_url($_SERVER['HTTP_REFERER']);
             $hash = md5($row->username.'.'.$row->password);
             $reseturl = "{$url['scheme']}://{$url['host']}{$url['path']}?action=confirmreset&amp;userid={$row->id}&amp;hash={$hash}";
-            $bodytext .= "";
+            $bodytext .= "{$reseturl}";
             mail($email, "Information for resetting your password", stripslashes($bodytext), $extra_headers);
             echo "<h3>Information sent</h3>";
             echo "<p>We have sent instructions how to reset your password to the email address you provided.</p>";
@@ -98,10 +98,15 @@ switch($_REQUEST['action'])
     break;
 
     case 'resetuserpassword':
+        include('htmlheader.inc.php');
+        echo "<h2>Password Reset</h2>";
         // TODO password reset needs completing, and some parts need disabling if customer portal is not enabled INL 19Nov06
-        echo "<h3>Sorry</h3>";
-        echo "<p>Password reset feature not yet available.</p>";
+//         echo "<h3>Sorry</h3>";
+//         echo "<p>Password reset feature not yet available.</p>";
+        echo "<tr class='password'><th>New Password:</th><td><input maxlength='50' name='newpassword1' size='30' type='password' /></td></tr>";
+        echo "<tr class='password'><th>Confirm New Password:</th><td><input maxlength='50' name='newpassword2' size='30' type='password' /></td></tr>";
         echo "<p><a href='index.php'>Back to login page</a></p>";
+        include('htmlfooter.inc.php');
     break;
 
     case 'form':

@@ -72,7 +72,7 @@ while ($users = mysql_fetch_array($result))
             if ($c < $countskills) echo ", ";
             else
             {
-                echo "<br />&bull; $countskills Software skills";
+                echo "<br />&bull; $countskills skills";
                 if (($nobackup+1) >= $countskills) echo ", <strong>No substitute engineers defined</strong>.";
                 elseif ($nobackup > 0) echo ", <strong>{$nobackup} need substitute engineers to be defined</strong>.";
             }

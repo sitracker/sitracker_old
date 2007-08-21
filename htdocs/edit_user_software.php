@@ -88,8 +88,8 @@ if (empty($submit))
             $expertise[]=$software->id;
         }
     }
-    echo "<h2>Software Skills for ".user_realname($user,TRUE)."</h2>";
-    echo "<p align='center'>Select the software that you have the skills to support</p>";
+    echo "<h2>Skills for ".user_realname($user,TRUE)."</h2>";
+    echo "<p align='center'>Select your support skills</p>";
     echo "<form name='softwareform' action='{$_SERVER['PHP_SELF']}' method='post' onsubmit=\"populateHidden(document.softwareform.elements['expertise[]'],document.softwareform.choices)\">";
     echo "<table align='center'>";
     echo "<tr><th>NO Skills</th><th>&nbsp;</th><th>HAVE Skills</th></tr>";
