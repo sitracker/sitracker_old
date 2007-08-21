@@ -53,7 +53,7 @@ switch($action)
     case 'do_add':
         $id = $_REQUEST['id'];
         $type = $_REQUEST['type'];
-        $sql = "INSERT INTO dashboard_watch_incidents VALUES ({$sit[2]},'{$type}','{$id}')"; 
+        $sql = "INSERT INTO dashboard_watch_incidents VALUES ({$sit[2]},'{$type}','{$id}')";
         $result = mysql_query($sql);
         if (mysql_error()) trigger_error(mysql_error(),E_USER_ERROR);
 
@@ -141,7 +141,7 @@ switch($action)
                             $name = $iobj->realname;
                             break;
                     }
-    
+
                     echo "<tr class='$shade'><td>{$name}</td><td><a href='{$_SERVER['PHP_SELF']}?type={$obj->type}&id={$obj->id}&action=delete'>Remove</a></td></tr>";
                     if ($shade=='shade1') $shade='shade2';
                     else $shade='shade1';
@@ -149,7 +149,7 @@ switch($action)
             }
             else
             {
-                echo "<tr><td colspan='2'>No watchs set up for this type</td></tr>";
+                echo "<tr><td colspan='2'>No watches set up for this type</td></tr>";
             }
 
             echo "</table>";
