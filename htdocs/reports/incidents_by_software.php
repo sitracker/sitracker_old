@@ -216,7 +216,7 @@ else
     {
         $data = substr($data,0,strlen($data)-1);
         $legend = substr($legend,0,strlen($legend)-1);
-        $title = urlencode("Incidents by software");
+        $title = urlencode("Incidents by skill");
         echo "\n<br /><p><div style='text-align:center;'>";
         echo "\n<img src='../chart.php?type=pie&data=$data&legends=$legend&title=$title' />";
         echo "\n</div></p>";

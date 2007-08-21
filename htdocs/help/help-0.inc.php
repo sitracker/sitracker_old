@@ -228,8 +228,8 @@ products can be thought of as groups of software.  For example, you may support 
 <p>To add a product go to <strong>Customers</strong> |
 <strong>Maintenance</strong> | <strong>Products &amp; Skills</strong> | <strong>Add Product</strong>, select a vendor
 enter a product name a description then click <strong>Add Product</strong>.
-Then to link software to that, go to <strong>Customers</strong> |
-<strong>Maintenance</strong> | <strong>Products &amp; Skills</strong> | <strong>Link Products/Software</strong>.</p>
+Then to link skills to that, go to <strong>Customers</strong> |
+<strong>Maintenance</strong> | <strong>Products &amp; Skills</strong> | <strong>Link Products/Skills</strong>.</p>
 <p>To list existing products and the software associated with them go to <strong>Customers</strong> |
 <strong>Maintenance</strong> | <strong>Products &amp; Skills</strong> | <strong>List Products</strong>.</p>
 <p>Products can also be grouped by vendor, you can add vendors by going to <strong>Customers</strong> |

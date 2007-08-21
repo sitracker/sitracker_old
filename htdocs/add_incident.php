@@ -310,17 +310,17 @@ elseif ($action=='incidentform')
     if ($type == 'free')
     {
         echo "<tr><th>Service Level:</th><td>".serviceleveltag_drop_down('servicelevel',$CONFIG['default_service_level'], TRUE)."</td></tr>";
-        echo "<tr><th>Software:</th><td>".software_drop_down('software', 0)."</td></tr>";
+        echo "<tr><th>Skill:</th><td>".software_drop_down('software', 0)."</td></tr>";
     }
     else
     {
         echo "<tr><th>Contract:</th><td>{$maintid} - ".urldecode($producttext)."</td></tr>";
-        echo "<tr><th>Software:</th><td>".softwareproduct_drop_down('software', 1, $productid)."</td></tr>";
+        echo "<tr><th>Skill:</th><td>".softwareproduct_drop_down('software', 1, $productid)."</td></tr>";
     }
 
     plugin_do('new_incident_form');
     ?>
-    <tr><th>Software Version:</th><td><input maxlength='50' name='productversion' size='40' type='text' /></td></tr>
+    <tr><th>Version:</th><td><input maxlength='50' name='productversion' size='40' type='text' /></td></tr>
     <tr><th>Service Packs Applied:</th><td><input maxlength='100' name="productservicepacks" size=40 type="text" /></td></tr>
     <tr><td colspan='2'>&nbsp;</td></tr>
     <?php
