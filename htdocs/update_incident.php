@@ -263,10 +263,10 @@ if (empty($action))
     <input maxlength='2' name="timetonextaction_minutes" value="<?php echo $na_minutes ?>" onclick="window.document.updateform.timetonextaction_none[0].checked = true;" size='3' /> Minutes<br />
     <input type="radio" name="timetonextaction_none" value="date">On specified Date<br />&nbsp;&nbsp;&nbsp;
     <?php
-        echo "<input name='date' size='10' value='{$date}' />";
+        echo "<input name='date' size='10' value='{$date}' onclick=\"window.document.updateform.timetonextaction_none[1].checked = true;\"/> ";
         echo date_picker('updateform.date');
-    ?>    
-    <select name="timeoffset" class='dropdown'>
+    ?>
+    <select name="timeoffset" onchange="window.document.updateform.timetonextaction_none[1].checked = true;">
     <option value="0">9:00 AM</option>
     <option value="1">10:00 AM</option>
     <option value="2">11:00 AM</option>
@@ -317,7 +317,7 @@ else
     $cust_vis = cleanvar($_POST['cust_vis']);
     $timetonextaction_none = cleanvar($_POST['timetonextaction_none']);
     $date = cleanvar($_POST['date']);
-    $timeoffset = cleanvar($_POST['timeoffset']);    
+    $timeoffset = cleanvar($_POST['timeoffset']);
 
     if (empty($newpriority)) $newpriority  = incident_priority($id);
 
