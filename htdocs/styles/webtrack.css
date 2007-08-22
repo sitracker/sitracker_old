@@ -68,6 +68,7 @@ a.info:hover span
 }
 
 code { background: #F7F7F7; }
+abbr { cursor: help; }
 
 th, td { padding: 1px 5px; }
 th, tfoot td { background: #F2F2F2; }
