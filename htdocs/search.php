@@ -258,15 +258,14 @@ if (!empty($search_string))
         break;
 
         case 'customers':
-            $sql = "SELECT *,sites.id AS siteid FROM contacts,sites WHERE contacts.siteid=sites.id AND (";
+            $sql = "SELECT *, contacts.id AS contactid FROM contacts WHERE ";
             $sql .= search_build_query("CONCAT(forenames,' ',surname)", $sterms);
-            $sql .= ")";
 //             echo "<pre>$sql</pre>";
             $result = mysql_query($sql);
             if (mysql_error()) trigger_error(mysql_error(),E_USER_WARNING);
             while ($sresult = mysql_fetch_object($result))
             {
-                $entry['id']=$sresult->id;
+                $entry['id']=$sresult->contactid;
                 $entry['ref']="contact-{$sresult->id}";
                 $entry['string'] = stripslashes("{$sresult->forenames} {$sresult->surname}");
                 $entry['score'] = 10 + search_score_adjust($sterms, $entry['string']);
