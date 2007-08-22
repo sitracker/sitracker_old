@@ -263,38 +263,19 @@ if (empty($action))
     <input maxlength='2' name="timetonextaction_minutes" value="<?php echo $na_minutes ?>" onclick="window.document.updateform.timetonextaction_none[0].checked = true;" size='3' /> Minutes<br />
     <input type="radio" name="timetonextaction_none" value="date">On specified Date<br />&nbsp;&nbsp;&nbsp;
     <?php
-    // Print Listboxes for a date selection
-    ?><select name='day' class='dropdown' onclick="window.document.updateform.timetonextaction_none[1].checked = true;"><?php
-    for ($t_day=1;$t_day<=31;$t_day++)
-    {
-        echo "<option value=\"$t_day\" ";
-        if ($t_day==date("j"))
-        {
-            echo "selected='selected'";
-        }
-        echo ">$t_day</option>\n";
-    }
-    ?></select><select name='month' class='dropdown' onclick="window.document.updateform.timetonextaction_none[1].checked = true;"><?php
-    for ($t_month=1;$t_month<=12;$t_month++)
-    {
-        echo "<option value=\"$t_month\"";
-        if ($t_month==date("n"))
-        {
-            echo " selected='selected'";
-        }
-        echo ">". date ("F", mktime(0,0,0,$t_month,1,2000)) ."</option>\n";
-    }
-    ?></select><select name='year' class='dropdown' onclick="window.document.updateform.timetonextaction_none[1].checked = true;"><?php
-    for ($t_year=(date("Y")-1);$t_year<=(date("Y")+5);$t_year++)
-    {
-        echo "<option value=\"$t_year\"";
-        if ($t_year==date("Y"))
-        {
-            echo " selected='selected'";
-        }
-        echo ">$t_year</option>\n";
-    }
-    ?></select>
+        echo "<input name='date' size='10' value='{$date}' />";
+        echo date_picker('updateform.date');
+    ?>    
+    <select name="timeoffset" class='dropdown'>
+    <option value="0">9:00 AM</option>
+    <option value="1">10:00 AM</option>
+    <option value="2">11:00 AM</option>
+    <option value="3">12:00 PM</option>
+    <option value="4">1:00 PM</option>
+    <option value="5">2:00 PM</option>
+    <option value="6">3:00 PM</option>
+    <option value="7">4:00 PM</option>
+    </select>
     <br />
     <input checked type="radio" name="timetonextaction_none" onclick="window.document.updateform.timetonextaction_days.value = ''; window.document.updateform.timetonextaction_hours.value = ''; window.document.updateform.timetonextaction_minutes.value = '';" value="None" /> Unspecified
     </td></tr>
@@ -335,12 +316,8 @@ else
     $newpriority = cleanvar($_POST['newpriority']);
     $cust_vis = cleanvar($_POST['cust_vis']);
     $timetonextaction_none = cleanvar($_POST['timetonextaction_none']);
-    $timetonextaction_days = cleanvar($_POST['timetonextaction_days']);
-    $timetonextaction_hours = cleanvar($_POST['timetonextaction_hours']);
-    $timetonextaction_minutes = cleanvar($_POST['timetonextaction_minutes']);
-    $year = cleanvar($_POST['year']);
-    $month = cleanvar($_POST['month']);
-    $day = cleanvar($_POST['day']);
+    $date = cleanvar($_POST['date']);
+    $timeoffset = cleanvar($_POST['timeoffset']);    
 
     if (empty($newpriority)) $newpriority  = incident_priority($id);
 
@@ -363,10 +340,10 @@ else
         break;
 
         case 'date':
-            // $now + ($days * 86400) + ($hours * 3600) + ($minutes * 60);
-            $unixdate=mktime(9,0,0,$month,$day,$year);
+            // kh: parse date from calendar picker, format: 200-12-31
+	    $date=explode("-", $date);
+            $timeofnextaction=mktime(9 + $timeoffset,0,0,$date[1],$date[2],$date[0]);
             $now = time();
-            $timeofnextaction = $unixdate;
             if ($timeofnextaction<0) $timeofnextaction=0;
         break;
 
