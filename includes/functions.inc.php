@@ -299,7 +299,18 @@ function permission_name($permissionid)
 
 function software_name($softwareid)
 {
-    return db_read_column('name', 'software', $softwareid);
+    global $now;
+// <span class='deleted'>
+    $sql = "SELECT * FROM software WHERE id = '{$softwareid}'";
+    $result = mysql_query($sql);
+    if (mysql_num_rows($result) >= 1)
+    {
+        $software = mysql_fetch_object($result);
+        if ($software->lifetime_end > 0 AND $software->lifetime_end < $now) $name = "<span class='deleted'>".stripslashes($software->name)."</span> (<abbr title='End of Life'>EOL</abbr>)";
+        else $name = stripslashes($software->name);
+    } else $name = 'Unknown';
+
+    return $name;
 }
 
 
