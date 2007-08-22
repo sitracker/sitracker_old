@@ -299,7 +299,8 @@ while ($incidents = mysql_fetch_array($result))
     echo "</tr>\n";
 }
 echo "</table>\n\n";
-if(empty($incidents_minimal) && $user != 'all' && $rowcount != 1) echo "<p align='center'>{$rowcount} Incidents</p>";
-else echo "<p align='center'>{$rowcount} Incident</p>";
+if(empty($incidents_minimal) && $user != 'all') 
+    if($rowcount != 1) echo "<p align='center'>{$rowcount} Incidents</p>";
+    else echo "<p align='center'>{$rowcount} Incident</p>";
 if ($CONFIG['debug']) echo "<!-- End of Support Incidents Table -->\n";
 ?>
