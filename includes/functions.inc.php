@@ -9,7 +9,7 @@
 //
 // Authors: Ivan Lucas, Tom Gerrard - 2001 onwards
 //          Martin Kilcoyne - 2000
-// Just a small change
+
 // Many functions here simply extract various snippets of information from
 // the database
 // Most are legacy and can replaced by improving the pages that call them to
