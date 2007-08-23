@@ -306,7 +306,8 @@ function software_name($softwareid)
     if (mysql_num_rows($result) >= 1)
     {
         $software = mysql_fetch_object($result);
-        if ($software->lifetime_end > 0 AND $software->lifetime_end < $now) $name = "<span class='deleted'>".stripslashes($software->name)."</span> (<abbr title='End of Life'>EOL</abbr>)";
+        $lifetime_end = mysql2date($software->lifetime_end);
+        if ($lifetime_end > 0 AND $lifetime_end < $now) $name = "<span class='deleted'>".stripslashes($software->name)."</span> (<abbr title='End of Life'>EOL</abbr>)";
         else $name = stripslashes($software->name);
     } else $name = 'Unknown';
 
