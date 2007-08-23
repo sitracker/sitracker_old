@@ -28,7 +28,7 @@ function dashboard_watch_incidents($row,$dashboardid)
         switch($obj->type)
         {
             case '0': //Site
-                $sql = "SELECT incidents.id, incidents.title, incidents.status, contacts.forenames, contacts.surname ";
+                $sql = "SELECT incidents.id, incidents.title, incidents.status, incidents.servicelevel, incidents.maintenanceid, incidents.priority, contacts.forenames, contacts.surname, contacts.siteid ";
                 $sql .= "FROM incidents, contacts ";
                 $sql .= "WHERE incidents.contact = contacts.id AND contacts.siteid = {$obj->id} ";
                 $sql .= "AND incidents.status != 2 AND incidents.status != 7";
@@ -40,7 +40,7 @@ function dashboard_watch_incidents($row,$dashboardid)
                 echo "<tr><th colspan='3'>Incidents for ".stripslashes($lobj->name)." (site)</th></tr>";
                 break;
             case '1': //contact
-                $sql = "SELECT incidents.id, incidents.title, incidents.status, contacts.forenames, contacts.surname ";
+                $sql = "SELECT incidents.id, incidents.title, incidents.status, incidents.servicelevel, incidents.maintenanceid, incidents.priority, contacts.forenames, contacts.surname, contacts.siteid ";
                 $sql .= "FROM incidents, contacts ";
                 $sql .= "WHERE incidents.contact = contacts.id AND incidents.contact = {$obj->id} ";
                 $sql .= "AND incidents.status != 2 AND incidents.status != 7";
@@ -52,7 +52,7 @@ function dashboard_watch_incidents($row,$dashboardid)
                 echo "<tr><th colspan='3'>Incidents for ".stripslashes($lobj->forenames)." ".stripslashes($lobj->surname)." (contact)</th></tr>";
                 break;
             case '2': //engineer
-                $sql = "SELECT incidents.id, incidents.title, incidents.status, contacts.forenames, contacts.surname ";
+                $sql = "SELECT incidents.id, incidents.title, incidents.status, incidents.servicelevel, incidents.maintenanceid, incidents.priority, contacts.forenames, contacts.surname, contacts.siteid ";
                 $sql .= "FROM incidents, contacts ";
                 $sql .= "WHERE incidents.contact = contacts.id AND (incidents.owner = {$obj->id} OR incidents.towner = {$obj->id}) ";
                 $sql .= "AND incidents.status != 2 AND incidents.status != 7";
@@ -88,7 +88,7 @@ function dashboard_watch_incidents($row,$dashboardid)
                 echo "<tr class='$shade'>";
                 echo "<td>{$incident->id}</td>";
                 echo "<td><a href='javascript:incident_details_window({$incident->id}) '  class='info'>".stripslashes($incident->title);
-                echo "<span><strong>Customer:</strong> {$incident->forenames} {$incident->surname} of ".site_name($incident>siteid);
+                echo "<span><strong>Customer:</strong> {$incident->forenames} {$incident->surname} of ".site_name($incident->siteid);
                 list($update_userid, $update_type, $update_currentowner, $update_currentstatus, $update_body, $update_timestamp, $update_nextaction, $update_id)=incident_lastupdate($incident->id);
                 $update_body = parse_updatebody($update_body);
                 if (!empty($update_body) AND $update_body!='...') echo "<br />{$update_body}";
