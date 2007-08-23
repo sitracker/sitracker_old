@@ -83,14 +83,14 @@ elseif ($action == "edit")
         echo "/>";
         echo "</td></tr>\n";
         ?>
-        <tr><th>Description: <sup class='red'>*</sup></th><td><input  name="description" size='50' value="<?php echo $emailtype["description"] ?>" /></td></tr>
+        <tr><th>Description: <sup class='red'>*</sup></th><td><input  name="description" size='50' value="<?php echo stripslashes($emailtype["description"]) ?>" /></td></tr>
         <tr><th>&nbsp;</th><td>&nbsp;</td></tr>
-        <tr><th>'To' Field: <sup class='red'>*</sup></th><td><input maxlength='100' name="tofield" size='30' value="<?php echo $emailtype["tofield"] ?>" /></td></tr>
-        <tr><th>'From' Field: <sup class='red'>*</sup></th><td><input maxlength='100' name="fromfield" size='30' value="<?php echo $emailtype["fromfield"] ?>" /></td></tr>
-        <tr><th>'Reply To' Field: <sup class='red'>*</sup></th><td><input maxlength='100' name="replytofield" size='30' value="<?php echo $emailtype["replytofield"] ?>" /></td></tr>
-        <tr><th>'CC' Field:</th><td><input maxlength='100' name="ccfield" size='30' value="<?php echo $emailtype["ccfield"] ?>" /></td></tr>
-        <tr><th>'BCC' Field:</th><td><input maxlength='100' name="bccfield" size='30' value="<?php echo $emailtype["bccfield"] ?>" /></td></tr>
-        <tr><th>'Subject' Field:</th><td><input maxlength='255' name="subjectfield" size='50' value="<?php echo $emailtype["subjectfield"] ?>" /></td></tr>
+        <tr><th>'To' Field: <sup class='red'>*</sup></th><td><input maxlength='100' name="tofield" size='30' value="<?php echo stripslashes($emailtype["tofield"]) ?>" /></td></tr>
+        <tr><th>'From' Field: <sup class='red'>*</sup></th><td><input maxlength='100' name="fromfield" size='30' value="<?php echo stripslashes($emailtype["fromfield"]) ?>" /></td></tr>
+        <tr><th>'Reply To' Field: <sup class='red'>*</sup></th><td><input maxlength='100' name="replytofield" size='30' value="<?php echo stripslashes($emailtype["replytofield"]) ?>" /></td></tr>
+        <tr><th>'CC' Field:</th><td><input maxlength='100' name="ccfield" size='30' value="<?php echo stripslashes($emailtype["ccfield"]) ?>" /></td></tr>
+        <tr><th>'BCC' Field:</th><td><input maxlength='100' name="bccfield" size='30' value="<?php echo stripslashes($emailtype["bccfield"]) ?>" /></td></tr>
+        <tr><th>'Subject' Field:</th><td><input maxlength='255' name="subjectfield" size='50' value="<?php echo stripslashes($emailtype["subjectfield"]) ?>" /></td></tr>
         <tr><th>Store in Log:</th><td><input type="checkbox" name="storeinlog" value="Yes" <?php if ($emailtype['storeinlog']=='Yes') echo "checked='checked'"; ?> /> Store the email in the incident log</td></tr>
         <tr><th>Visibility:</th><td><input type="checkbox" name="cust_vis" value="yes" <?php if ($emailtype['customervisibility']=='show') echo "checked='checked'"; ?> /> Make the update to the incident log visible to the customer</td></tr>
         </table>
