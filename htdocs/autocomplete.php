@@ -33,7 +33,7 @@ switch($action)
         }
         break;
     case 'contact' :
-        $sql = "SELECT DISTINCT forenames,surname FROM contacts";
+        $sql = "SELECT DISTINCT forenames,surname FROM contacts WHERE active='true'";
         $result = mysql_query($sql);
         if (mysql_error()) trigger_error(mysql_error(),E_USER_ERROR);
         if(mysql_num_rows($result) > 0)
@@ -46,7 +46,7 @@ switch($action)
         }
         break;
     case 'sites':
-        $sql = "SELECT DISTINCT name FROM sites";
+        $sql = "SELECT DISTINCT name FROM sites WHERE active='true'";
         $result = mysql_query($sql);
         if (mysql_error()) trigger_error(mysql_error(),E_USER_ERROR);
         if(mysql_num_rows($result) > 0)
