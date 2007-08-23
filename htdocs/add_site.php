@@ -50,6 +50,11 @@ if ($action == "showform" OR $action == '')
     <tr><th>Site Type:</th><td>
     <?php echo sitetype_drop_down('typeid', 1) ?>
     </td></tr>
+    <tr><th>Salesperson:</th><td>
+    <?php
+    user_drop_down('owner', 0, $accepting=FALSE)
+    ?>
+    </td></tr>
     <tr><th>Notes:</th><td><textarea cols="30" name="notes" rows="5"></textarea></td></tr>
     </table>
     <p><input name="submit" type="submit" value="Add Site" /></p>
@@ -75,6 +80,7 @@ elseif ($action == "add")
     $websiteurl = cleanvar($_POST['websiteurl']);
     $notes = cleanvar($_POST['notes']);
     $typeid = cleanvar($_POST['typeid']);
+    $owner = cleanvar($_POST['owner']);
 
     // Add new site
     include('htmlheader.inc.php');
@@ -90,9 +96,10 @@ elseif ($action == "add")
     // add site if no errors
     if ($errors == 0)
     {
-        $sql  = "INSERT INTO sites (name, department, address1, address2, city, county, country, postcode, telephone, fax, email, websiteurl, notes, typeid) ";
+        if ($owner=='') $owner=0;
+        $sql  = "INSERT INTO sites (name, department, address1, address2, city, county, country, postcode, telephone, fax, email, websiteurl, notes, typeid, owner) ";
         $sql .= "VALUES ('$name', '$department' ,'$address1', '$address2', '$city', '$county', '$country', '$postcode', ";
-        $sql .= "'$telephone', '$fax', '$email', '$websiteurl', '$notes', '$typeid')";
+        $sql .= "'$telephone', '$fax', '$email', '$websiteurl', '$notes', '$typeid','$owner')";
         $result = mysql_query($sql);
         if (mysql_error()) trigger_error("MySQL Query Error ".mysql_error(), E_USER_ERROR);
 
