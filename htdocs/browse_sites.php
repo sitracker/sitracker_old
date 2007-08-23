@@ -20,6 +20,7 @@ require('auth.inc.php');
 
 // External variables
 $search_string = cleanvar($_REQUEST['search_string']);
+$owner = cleanvar($_REQUEST['owner']);
 $submit_value = cleanvar($_REQUEST['submit']);
 $displayinactive = cleanvar($_REQUEST['displayinactive']);
 if(empty($displayinactive)) $displayinactive = "false";
@@ -28,8 +29,11 @@ if($submit_value == "go")
 {
 // build SQL
     $sql  = "SELECT id, name, department FROM sites ";
-
-    if ($search_string != '*')
+    if (!empty($owner))
+    {
+        $sql .= "WHERE owner = '{$owner}' ";
+    }
+    elseif ($search_string != '*')
     {
         $sql .= "WHERE ";
         if (strlen($search_string)==1)
@@ -68,6 +72,7 @@ if($submit_value == "go")
 }
 
 include('htmlheader.inc.php');
+if (empty($search_string)) $search_string='a';
 ?>
 <script type="text/javascript" src="scripts/dojo/dojo.js"></script>
 <script type="text/javascript">
@@ -85,14 +90,14 @@ include('htmlheader.inc.php');
         if($displayinactive=="true")
         {
             echo "<a href='".$_SERVER['PHP_SELF']."?displayinactive=false";
-            if(!empty($search_string)) echo "&search_string={$search_string}";
+            if(!empty($search_string)) echo "&amp;search_string={$search_string}&amp;owner={$owner}";
             echo "'>Hide inactive</a>";
             $inactivestring="displayinactive=true";
         }
         else
         {
             echo "<a href='".$_SERVER['PHP_SELF']."?displayinactive=true";
-            if(!empty($search_string)) echo "&search_string={$search_string}";
+            if(!empty($search_string)) echo "&amp;search_string={$search_string}&amp;owner={$owner}";
             echo "'>Show inactive</a>";
             $inactivestring="displayinactive=false";
         }
@@ -130,6 +135,13 @@ include('htmlheader.inc.php');
     <a href="<?php echo $_SERVER['PHP_SELF'] ?>?search_string=Z&<?php echo $inactivestring; ?>">Z</a> |
     <a href="<?php echo $_SERVER['PHP_SELF'] ?>?search_string=0&<?php echo $inactivestring; ?>">#</a> |
     <a href="<?php echo $_SERVER['PHP_SELF'] ?>?search_string=*&<?php echo $inactivestring; ?>">All</a>
+<?php
+$sitesql = "SELECT COUNT(id) FROM sites WHERE owner='{$sit[2]}'";
+$siteresult = mysql_query($sitesql);
+if (mysql_error()) trigger_error(mysql_error(),E_USER_WARNING);
+list($ownedsites) = mysql_fetch_row($siteresult);
+if ($ownedsites > 0) echo " | <a href='browse_sites.php?owner={$sit[2]}' title='Sites'>Mine</a> ";
+?>
     </td>
 </tr>
 </table>
@@ -158,7 +170,11 @@ if ($errors == 0)
         // build SQL
         $sql  = "SELECT id, name, department FROM sites ";
 
-        if ($search_string != '*')
+        if (!empty($owner))
+        {
+            $sql .= "WHERE owner = '{$owner}' ";
+        }
+        elseif ($search_string != '*')
         {
             $sql .= "WHERE ";
             if (strlen($search_string)==1)
@@ -180,7 +196,7 @@ if ($errors == 0)
                 $sql .= "name LIKE '%$search_string%' ";
             }
         }
-        if($displayinactive=="false")
+        if ($displayinactive=="false")
         {
             if ($search_string == '*') $sql .= " WHERE ";
             else $sql .= " AND ";
@@ -196,13 +212,19 @@ if ($errors == 0)
 
     if (mysql_num_rows($result) == 0)
     {
-        echo "<p align='center'>Sorry, unable to find any sites matching <strong>'$search_string</strong>'</p>\n";
+        echo "<p align='center'>Sorry, unable to find any sites ";
+        if ($owner > 0) echo " owned by <strong>".user_realname($owner)."</strong></p>\n";
+        else echo "matching <strong>'$search_string</strong>'</p>\n";
     }
     else
     {
+        $countsites = mysql_num_rows($result);
+        echo "<p align='center'>Displaying $countsites site";
+        if ($countsites > 1) echo "s";
+        if ($owner > 0) echo " owned by <strong>".user_realname($owner)."</strong>";
+        else echo " matching <strong>'{$search_string}'</strong>";
+        echo "</p>";
         ?>
-        <p align='center'>Displaying <?php echo mysql_num_rows($result) ?> site(s) matching <strong>'<?php echo $search_string; ?>'</strong></p>
-
         <table align='center'>
         <tr>
             <th>ID</th>

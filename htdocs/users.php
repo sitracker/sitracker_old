@@ -157,6 +157,11 @@ while ($users = mysql_fetch_array($result))
     echo "<td>";
     echo "<a href='holidays.php?user={$users['id']}' title='Holidays'><img src='{$CONFIG['application_webpath']}images/icons/{$iconset}/16x16/apps/date.png' width='16' height='16' alt='Calendar icon' style='border:none;' /></a> ";
     echo "<a href='tasks.php?user={$users['id']}' title='Tasks'><img src='{$CONFIG['application_webpath']}images/icons/{$iconset}/16x16/actions/todo.png' width='16' height='16' alt='Todo icon' style='border:none;' /></a> ";
+    $sitesql = "SELECT COUNT(id) FROM sites WHERE owner='{$users['id']}'";
+    $siteresult = mysql_query($sitesql);
+    if (mysql_error()) trigger_error(mysql_error(),E_USER_WARNING);
+    list($ownedsites) = mysql_fetch_row($siteresult);
+    if ($ownedsites > 0) echo "<a href='browse_sites.php?owner={$users['id']}' title='Sites'><img src='{$CONFIG['application_webpath']}images/icons/{$iconset}/16x16/actions/abentry.png' width='16' height='16' alt='Sites icon' style='border:none;' /></a> ";
     echo "</td>";
     echo "</tr>";
 
