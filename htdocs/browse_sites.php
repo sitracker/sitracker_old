@@ -168,7 +168,7 @@ if ($errors == 0)
     {
         // Don't  need to do this again, already done above, us the results of that
         // build SQL
-        $sql  = "SELECT id, name, department FROM sites ";
+        $sql  = "SELECT id, name, department, active FROM sites ";
 
         if (!empty($owner))
         {
@@ -241,6 +241,7 @@ if ($errors == 0)
             // define class for table row shading
             if ($shade) $class = "shade1";
             else $class = "shade2";
+            if ($results['active']=='false') $class='expired';
             ?>
             <tr class='<?php echo $class ?>'>
                 <td align='center'><?php echo $results['id'] ?></td>
