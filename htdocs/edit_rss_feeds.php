@@ -25,7 +25,7 @@ switch($action)
         echo "<h2>Add RSS feed</h2>";
         echo "<form action='{$_SERVER['PHP_SELF']}?action=do_add' method='post'>";
         echo "<table class='vertical'>";
-        echo "<tr><td>RSS Feed URL: <input type='text' name='url' size='30' /></td><tr>";
+        echo "<tr><td><img src='{$CONFIG['application_webpath']}images/feed-icon-12x12.jpg' style='border: 0px;' alt='Feed Icon' /> RSS Feed URL: <input type='text' name='url' size='30' /></td><tr>";
         echo "</table>";
         echo "<p align='center'><input name='submit' type='submit' value='Add' /></p>";
         include('htmlfooter.inc.php');
@@ -85,7 +85,7 @@ switch($action)
             {
                 if($obj->enabled == "true") $opposite = "false";
                 else $opposite = "true";
-                echo "<tr><td align='left'>{$obj->url}</td><td>";
+                echo "<tr><td align='left'><img src='{$CONFIG['application_webpath']}images/feed-icon-12x12.jpg' style='border: 0px;' alt='Feed Icon' /> {$obj->url}</td><td>";
                 echo "<a href='{$_SERVER['PHP_SELF']}?action=enable&amp;url=".urlencode($obj->url)."&amp;enable={$opposite}'>{$obj->enabled}</a></td>";
                 echo "<td><a href='{$_SERVER['PHP_SELF']}?action=delete&amp;url=".urlencode($obj->url)."'>Remove</a></td></tr>";
             }
