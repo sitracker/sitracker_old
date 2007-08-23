@@ -36,7 +36,7 @@ function dashboard_rss($row,$dashboardid)
                 //echo '<pre>';
                 //print_r($rs);
                 //echo '</pre>';
-                echo "<table align='center' 'width=100%'>";
+                echo "<table align='center' style='width: 100%'>";
                 echo "<tr><th><span style='float: right;'><a href='{$url}'><img src='{$CONFIG['application_webpath']}images/feed-icon-12x12.jpg' style='border: 0px;' alt='Feed Icon' /></a></span>{$rss->channel['title']}</th></tr>";
                 foreach($rss->items as $item)
                 {
