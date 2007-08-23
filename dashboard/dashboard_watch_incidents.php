@@ -37,7 +37,7 @@ function dashboard_watch_incidents($row,$dashboardid)
                 $lresult = mysql_query($lsql);
                 if (mysql_error()) trigger_error(mysql_error(),E_USER_ERROR);
                 $lobj = mysql_fetch_object($lresult);
-                echo "<tr><th colspan='3'>Incidents for {$lobj->name} (site)</th></tr>";
+                echo "<tr><th colspan='3'>Incidents for ".stripslashes($lobj->name)". (site)</th></tr>";
                 break;
             case '1': //contact
                 $sql = "SELECT incidents.id, incidents.title, incidents.status, contacts.forenames, contacts.surname ";
@@ -49,7 +49,7 @@ function dashboard_watch_incidents($row,$dashboardid)
                 $lresult = mysql_query($lsql);
                 if (mysql_error()) trigger_error(mysql_error(),E_USER_ERROR);
                 $lobj = mysql_fetch_object($lresult);
-                echo "<tr><th colspan='3'>Incidents for {$lobj->forenames} {$lobj->surname} (contact)</th></tr>";
+                echo "<tr><th colspan='3'>Incidents for ".stripslashes($lobj->forenames)." ".stripslashes($lobj->surname)." (contact)</th></tr>";
                 break;
             case '2': //engineer
                 $sql = "SELECT incidents.id, incidents.title, incidents.status, contacts.forenames, contacts.surname ";
@@ -62,7 +62,7 @@ function dashboard_watch_incidents($row,$dashboardid)
                 $lresult = mysql_query($lsql);
                 if (mysql_error()) trigger_error(mysql_error(),E_USER_ERROR);
                 $lobj = mysql_fetch_object($lresult);
-                echo "<tr><th colspan='3'>Incidents for {$lobj->realname} (Engineer)</th></tr>";
+                echo "<tr><th colspan='3'>Incidents for ".stripslashes($lobj->realname)." (Engineer)</th></tr>";
 
                 break;
         }
