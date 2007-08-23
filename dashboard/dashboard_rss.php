@@ -12,7 +12,7 @@
 
 function dashboard_rss($row,$dashboardid)
 {
-    global $sit;
+    global $sit, $CONFIG;
     require_once('magpierss/rss_fetch.inc');
 
     $sql = "SELECT url FROM dashboard_rss WHERE owner = {$sit[2]} AND enabled = 'true'";
@@ -20,6 +20,7 @@ function dashboard_rss($row,$dashboardid)
     if (mysql_error()) trigger_error(mysql_error(),E_USER_ERROR);
 
     define('MAGPIE_CACHE_ON',TRUE);
+    define('MAGPIE_CACHE_DIR', $CONFIG['attachment_fspath'].'feeds');
 
     echo "<div class='windowbox' style='width: 95%' id='$row-$dashboardid'>";
     echo "<div class='windowtitle'><div style='float: right'><a href='edit_rss_feeds.php'>edit</a></div>Feeds</div>";
