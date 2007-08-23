@@ -24,7 +24,7 @@ function dashboard_watch_incidents($row,$dashboardid)
 
     while($obj = mysql_fetch_object($result))
     {
-        echo "<table align='center' width='100%'>";
+        echo "<table align='center' style='width: 100%'>";
         switch($obj->type)
         {
             case '0': //Site
@@ -91,7 +91,7 @@ function dashboard_watch_incidents($row,$dashboardid)
                 echo "<span><strong>Customer:</strong> {$incident->forenames} {$incident->surname} of ".site_name($incident>siteid);
                 list($update_userid, $update_type, $update_currentowner, $update_currentstatus, $update_body, $update_timestamp, $update_nextaction, $update_id)=incident_lastupdate($incident->id);
                 $update_body = parse_updatebody($update_body);
-                if (!empty($update_body) AND $update_body!='...') echo "<hr /><br />{$update_body}";
+                if (!empty($update_body) AND $update_body!='...') echo "<br />{$update_body}";
                 echo "</span></a></td>";
                 echo "<td>".incidentstatus_name($incident->status)."</td>";
                 echo "</tr>\n";
