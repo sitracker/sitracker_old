@@ -72,7 +72,7 @@ if($submit_value == "go")
 }
 
 include('htmlheader.inc.php');
-if (empty($search_string)) $search_string='a';
+if ($search_string=='') $search_string='a';
 ?>
 <script type="text/javascript" src="scripts/dojo/dojo.js"></script>
 <script type="text/javascript">
@@ -214,6 +214,7 @@ if ($errors == 0)
     {
         echo "<p align='center'>Sorry, unable to find any sites ";
         if ($owner > 0) echo " owned by <strong>".user_realname($owner)."</strong></p>\n";
+        elseif ($search_string=='0') echo " matching <strong><em>Number</em></strong>";
         else echo "matching <strong>'$search_string</strong>'</p>\n";
     }
     else
@@ -222,6 +223,7 @@ if ($errors == 0)
         echo "<p align='center'>Displaying $countsites site";
         if ($countsites > 1) echo "s";
         if ($owner > 0) echo " owned by <strong>".user_realname($owner)."</strong>";
+        elseif ($search_string=='0') echo " matching <strong><em>Number</em></strong>";
         else echo " matching <strong>'{$search_string}'</strong>";
         echo "</p>";
         ?>

@@ -52,7 +52,7 @@ if($submit_value == 'go')
 
         if(mysql_num_rows($result) == 1)
         {
-            //go straight to the contact 
+            //go straight to the contact
             $row = mysql_fetch_array($result);
             $url = "contact_details.php?id=".$row["id"];
             header("Location: $url");
@@ -61,7 +61,7 @@ if($submit_value == 'go')
 
 include('htmlheader.inc.php');
 
-if (empty($search_string)) $search_string='a';
+if ($search_string=='') $search_string='a';
 ?>
 <script type="text/javascript">
 function contact_products_window(contactid)
