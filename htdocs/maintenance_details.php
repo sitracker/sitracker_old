@@ -111,7 +111,11 @@ if (mysql_num_rows($result)>0)
     <?php
     while ($software=mysql_fetch_array($result))
     {
-        echo "<tr><td>{$software['name']}</td></tr>\n";
+        echo "<tr><td>";
+        if ($software->lifetime_end > 0 AND $software->lifetime_end < $now) echo "<span class='deleted'>";
+        echo stripslashes($software['name']);
+        if ($software->lifetime_end > 0 AND $software->lifetime_end < $now) echo "</span>";
+        echo "</td></tr>\n";
     }
     echo "</table>\n";
 }

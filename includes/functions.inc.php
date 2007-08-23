@@ -1117,8 +1117,9 @@ function product_drop_down($name, $id)
 
 function software_drop_down($name, $id)
 {
+    global $now;
    // extract software
-   $sql  = "SELECT id, name FROM software ";
+   $sql  = "SELECT id, name, lifetime_end FROM software ";
    $sql .= "ORDER BY name ASC";
    $result = mysql_query($sql);
    if (mysql_error()) trigger_error(mysql_error(),E_USER_WARNING);
@@ -1131,7 +1132,9 @@ function software_drop_down($name, $id)
    {
         $html .= "<option value='{$software['id']}'";
         if ($software['id']==$id) $html .= " selected='selected'";
-        $html .= ">{$software['name']}</option>\n";
+        $html .= ">{$software['name']}";
+        if ($software['lifetime_end'] > 0 AND $software['lifetime_end'] < $now) $html .= " (EOL)";
+        $html .= "</option>\n";
    }
    $html .= "</select>\n";
 

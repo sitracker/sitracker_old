@@ -1,4 +1,4 @@
-<?php
+// <?php
 /*
 incident/details.inc.php - Performs incident tasks, included by ../incident.php
 
@@ -62,7 +62,7 @@ if ($incident->owner != $sit[2] OR ($incident->towner > 0 AND $incident->towner 
 }
 if ($software_name!='' OR $incident->productversion != '' OR $incident->productservicepacks!='')
 {
-    echo "{$software_name}";
+    echo stripslashes($software_name);
     if ($incident->productversion != '' OR $incident->productservicepacks!='')
     {
         echo " ({$incident->productversion}";
