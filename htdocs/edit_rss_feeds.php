@@ -22,10 +22,10 @@ switch($action)
 {
     case 'add':
         include('htmlheader.inc.php');
-        echo "<h2>Add RSS feed</h2>";
+        echo "<h2>Add RSS/Atom feed</h2>";
         echo "<form action='{$_SERVER['PHP_SELF']}?action=do_add' method='post'>";
         echo "<table class='vertical'>";
-        echo "<tr><td><img src='{$CONFIG['application_webpath']}images/feed-icon-12x12.jpg' style='border: 0px;' alt='Feed Icon' /> RSS Feed URL: <input type='text' name='url' size='45' /></td></tr>\n";
+        echo "<tr><td><img src='{$CONFIG['application_webpath']}images/feed-icon-12x12.jpg' style='border: 0px;' alt='Feed Icon' /> RSS/Atom Feed URL: <input type='text' name='url' size='45' /></td></tr>\n";
         echo "</table>";
         echo "<p align='center'><input name='submit' type='submit' value='Add' /></p>";
         echo "</form>";
@@ -38,7 +38,7 @@ switch($action)
         $result = mysql_query($sql);
         if (mysql_error()) trigger_error(mysql_error(),E_USER_ERROR);
 
-        if(!$result) echo "<p class='error'>Failed to add RSS feed</p>";
+        if(!$result) echo "<p class='error'>Failed to add feed</p>";
         else
         {
             confirmation_page("2", "edit_rss_feeds.php", "<h2>Feed added</h2><h5>Please wait while you are redirected...</h5>");
@@ -72,7 +72,7 @@ switch($action)
         break;
     default:
         include('htmlheader.inc.php');
-        echo "<h2>Edit RSS feeds<h2>";
+        echo "<h2>Edit RSS/Atom feeds<h2>";
 
         $sql = "SELECT * FROM dashboard_rss WHERE owner = {$sit[2]}";
         $result = mysql_query($sql);

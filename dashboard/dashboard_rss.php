@@ -22,7 +22,7 @@ function dashboard_rss($row,$dashboardid)
     define('MAGPIE_CACHE_ON',TRUE);
 
     echo "<div class='windowbox' style='width: 95%' id='$row-$dashboardid'>";
-    echo "<div class='windowtitle'><div style='float: right'><a href='edit_rss_feeds.php'>edit</a></div>RSS feeds</div>";
+    echo "<div class='windowtitle'><div style='float: right'><a href='edit_rss_feeds.php'>edit</a></div>Feeds</div>";
     echo "<div class='window'>";
 
     if(mysql_num_rows($result) > 0)
