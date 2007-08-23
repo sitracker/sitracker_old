@@ -15,7 +15,7 @@
 $permission=24;  // Add Product
 require('db_connect.inc.php');
 require('functions.inc.php');
-$title="Associate software with a product";
+$title="Associate skill with a product";
 // This page requires authentication
 require('auth.inc.php');
 
@@ -30,14 +30,14 @@ if (empty($action) OR $action == "showform")
 {
     include('htmlheader.inc.php');
     ?>
-    <h2>Link software with a product</h2>
+    <h2>Link skill with a product</h2>
     <form action="<?php echo $_SERVER['PHP_SELF'] ?>?action=add" method="post">
     <input type="hidden" name="context" value="<?php echo $context; ?>" />
     <?php
     if (empty($productid))
     {
         $name = db_read_column('name', 'software', $softwareid);
-        echo "<h3>Software: $name</h3>";
+        echo "<h3>Skill: $name</h3>";
         echo "<input name=\"softwareid\" type=\"hidden\" value=\"$softwareid\" />\n";
         echo "<p align='center'>Link Product: ";
         echo product_drop_down("productid", 0);
@@ -55,7 +55,7 @@ if (empty($action) OR $action == "showform")
     }
     if (empty($softwareid))
     {
-        echo "<p align='center'>Link Software: ";
+        echo "<p align='center'>Link Skill: ";
         echo software_drop_down("softwareid", 0);
         echo "</p>\n";
     }
@@ -81,7 +81,7 @@ elseif ($action == "add")
     if ($softwareid == 0)
     {
         $errors = 1;
-        $errors_string .= "<p class='error'>Software ID cannot be blank</p>\n";
+        $errors_string .= "<p class='error'>Skill ID cannot be blank</p>\n";
     }
 
     // add record if no errors
@@ -105,15 +105,15 @@ elseif ($action == "add")
         if (!$result)
         {
             include('htmlheader.inc.php');
-            throw_error("Addition of software product failed",$sql);
+            throw_error("Addition of skill/product failed",$sql);
             include('htmlfooter.inc.php');
         }
         // update db and show success message
         else
         {
-            journal(CFG_LOGGING_NORMAL, 'Product Added', "Software $softwareid was added to product $productid", CFG_JOURNAL_PRODUCTS, $productid);
-            if ($return=='true') confirmation_page("1", "add_product_software.php?productid={$productid}&return=true", "<h2>Software Linked to Product Successfully</h2><p align='center'>Please wait while you are returned...</p>");
-            else confirmation_page("1", "products.php?productid={$productid}", "<h2>Software Linked to Product Successfully</h2><p align='center'>Please wait while you are redirected...</p>");
+            journal(CFG_LOGGING_NORMAL, 'Product Added', "Skill $softwareid was added to product $productid", CFG_JOURNAL_PRODUCTS, $productid);
+            if ($return=='true') confirmation_page("1", "add_product_software.php?productid={$productid}&return=true", "<h2>Skill Linked to Product Successfully</h2><p align='center'>Please wait while you are returned...</p>");
+            else confirmation_page("1", "products.php?productid={$productid}", "<h2>Skill Linked to Product Successfully</h2><p align='center'>Please wait while you are redirected...</p>");
         }
     }
     else
