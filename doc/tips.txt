@@ -9,3 +9,5 @@ Incidents can be logged with varying priorities these relate to the impact the i
 When you go away from the office, set your status using the drop-down box on the front page, this will automatically assign your incidents to your backup engineer(s)
 When you mark a Task as Private it is visible only to you, a useful feature for brief reminders
 Did you know that you can assign arbitary tags to incidents, tasks, contacts and other items
+Did you know you position this tips box and other dashboard items by dragging the title bar
+Did you know that you can add or remove dashboard items by clicking 'Manage your Dashboard' at the top/right of this page
