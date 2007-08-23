@@ -21,6 +21,7 @@ function dashboard_rss($row,$dashboardid)
 
     define('MAGPIE_CACHE_ON',TRUE);
     define('MAGPIE_CACHE_DIR', $CONFIG['attachment_fspath'].'feeds');
+    define('MAGPIE_OUTPUT_ENCODING', 'UTF-8');
 
     echo "<div class='windowbox' style='width: 95%' id='$row-$dashboardid'>";
     echo "<div class='windowtitle'><div style='float: right'><a href='edit_rss_feeds.php'>edit</a></div>Feeds</div>";
