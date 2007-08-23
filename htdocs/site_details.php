@@ -89,6 +89,7 @@ if ($countcontacts > 0)
     $shade='shade1';
     while ($contactrow=mysql_fetch_array($contactresult))
     {
+        if ($contactrow['active']=='false') $shade='expired';
         echo "<tr class='$shade'>";
         echo "<td><a href=\"contact_details.php?id=".$contactrow['id']."\">".$contactrow['forenames'].' '.$contactrow['surname']."</a></td>";
         echo "<td>{$contactrow['jobtitle']}</td>";
