@@ -74,7 +74,7 @@ else
         {
             echo "<p align='center'>In order to delete this site you must select another site to recieve the records that are assigned to this one</p>";
             echo "<form action='{$_SERVER['PHP_SELF']}?action=delete' method='post'>";
-            echo "<table>";
+            echo "<table align='center'>";
             echo "<tr><th>Transfer records to:</th><td>".site_drop_down('destinationid', 0)."</td></tr>";
             echo "</table>";
             echo "<input type='hidden' name='id' value='$id' />";
