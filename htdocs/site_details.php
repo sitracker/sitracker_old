@@ -38,6 +38,10 @@ if (mysql_error()) trigger_error(mysql_error(),E_USER_WARNING);
 while ($siterow=mysql_fetch_array($siteresult))
 {
     echo "<tr><th>Site:</th><td><h3>".$siterow['name']."</h3></td></tr>";
+    if ($siterow['active']=='false')
+    {
+        echo "<tr><th>Status:</th><td><span class='expired'>Inactive</span></td></tr>";
+    }
     echo "<tr><th>Department:</th><td>".$siterow['department']."</td></tr>";
     echo "<tr><th>Address1:</th><td>".$siterow['address1']."</td></tr>";
     echo "<tr><th>Address2:</th><td>".$siterow['address2']."</td></tr>";
