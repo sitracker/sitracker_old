@@ -99,7 +99,7 @@ switch($action)
                     break;
             }
             echo "</b></td><td align='right'>";
-            echo "<a href='{$_SERVER['PHP_SELF']}?type={$i}&action=add'>";
+            echo "<a href='{$_SERVER['PHP_SELF']}?type={$i}&amp;action=add'>";
             switch($i)
             {
                 case 0: echo "Add Site";
@@ -142,7 +142,7 @@ switch($action)
                             break;
                     }
 
-                    echo "<tr class='$shade'><td>{$name}</td><td><a href='{$_SERVER['PHP_SELF']}?type={$obj->type}&id={$obj->id}&action=delete'>Remove</a></td></tr>";
+                    echo "<tr class='$shade'><td>{$name}</td><td><a href='{$_SERVER['PHP_SELF']}?type={$obj->type}&amp;id={$obj->id}&amp;action=delete'>Remove</a></td></tr>";
                     if ($shade=='shade1') $shade='shade2';
                     else $shade='shade1';
                 }
