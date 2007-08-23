@@ -37,7 +37,7 @@ function dashboard_watch_incidents($row,$dashboardid)
                 $lresult = mysql_query($lsql);
                 if (mysql_error()) trigger_error(mysql_error(),E_USER_ERROR);
                 $lobj = mysql_fetch_object($lresult);
-                echo "<tr><th colspan='3'>Incidents for ".stripslashes($lobj->name)". (site)</th></tr>";
+                echo "<tr><th colspan='3'>Incidents for ".stripslashes($lobj->name)." (site)</th></tr>";
                 break;
             case '1': //contact
                 $sql = "SELECT incidents.id, incidents.title, incidents.status, contacts.forenames, contacts.surname ";
@@ -87,8 +87,12 @@ function dashboard_watch_incidents($row,$dashboardid)
             {
                 echo "<tr class='$shade'>";
                 echo "<td>{$incident->id}</td>";
-                echo "<td><a href='javascript:incident_details_window({$incident->id}) '  class='info'>{$incident->title}";
-                echo "<span><strong>Customer:</strong> {$incident->forenames} {$incident->surname}</span></a></td>";
+                echo "<td><a href='javascript:incident_details_window({$incident->id}) '  class='info'>".stripslashes($incident->title);
+                echo "<span><strong>Customer:</strong> {$incident->forenames} {$incident->surname} of ".site_name($incident>siteid);
+                list($update_userid, $update_type, $update_currentowner, $update_currentstatus, $update_body, $update_timestamp, $update_nextaction, $update_id)=incident_lastupdate($incident->id);
+                $update_body = parse_updatebody($update_body);
+                if (!empty($update_body) AND $update_body!='...') echo "<hr /><br />{$update_body}";
+                echo "</span></a></td>";
                 echo "<td>".incidentstatus_name($incident->status)."</td>";
                 echo "</tr>\n";
                 if ($shade=='shade1') $shade='shade2';
