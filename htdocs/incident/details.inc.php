@@ -1,4 +1,4 @@
-// <?php
+<?php
 /*
 incident/details.inc.php - Performs incident tasks, included by ../incident.php
 
