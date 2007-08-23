@@ -55,7 +55,7 @@ $CFGVAR['closure_delay']['help'] = 'The amount of time (in seconds) to wait befo
 $CFGVAR['working_days']['title'] = 'Array containing working days (0=Sun, 1=Mon ... 6=Sat)';
 $CFGVAR['start_working_day']['title'] = 'Time of the start of the working day (in seconds)';
 $CFGVAR['end_working_day']['title'] = 'Time of the end of the working day (in seconds)';
-$CFGVAR['attachment_fspath']['title'] = "The full absolute file system path to the attachments directory";
+$CFGVAR['attachment_fspath']['title'] = "The full absolute file system path to the attachments directory (with a trailing slash)";
 $CFGVAR['attachment_fspath']['help'] = "This directory should be writable";
 $CFGVAR['attachment_webpath']['title'] = "The path to the attachments directory from the browsers perspective";
 $CFGVAR['mailin_spool_path']['title'] = "Incoming mail spool directory, the location of mail processed by mailfilter shell script";
