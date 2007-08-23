@@ -70,6 +70,10 @@ while ($contactrow=mysql_fetch_array($contactresult))
 
     echo "<table align='center' class='vertical'>";
     echo "<tr><th colspan='2'><h3>".stripslashes($contactrow['forenames']).' '.stripslashes($contactrow['surname'])."</h3></th></tr>";
+    if ($contactrow['active']=='false')
+    {
+        echo "<tr><th>Status:</th><td><span class='expired'>Inactive</span></td></tr>";
+    }
     echo "<tr><th>Flags:</th><td>";
     print_contact_flags($id);
     echo "</td></tr>";
