@@ -85,7 +85,12 @@ function dashboard_user_incidents($row,$dashboardid)
         echo "<table style=\"width: 100%\">";
         while($row = mysql_fetch_array($result))
         {
-            echo "<tr><td class='shade1'><a href='javascript:incident_details_window({$row['id']}) '>".stripslashes("{$row['id']} - {$row['title']} for {$row['forenames']}   {$row['surname']}")."</a></td></tr>\n";
+            list($update_userid, $update_type, $update_currentowner, $update_currentstatus, $update_body, $update_timestamp, $update_nextaction, $update_id)=incident_lastupdate($row['id']);
+            $update_body = parse_updatebody($update_body);
+            echo "<tr><td class='shade1'>";
+            echo "<a href='javascript:incident_details_window({$row['id']})' class='info'>".stripslashes("{$row['id']} - {$row['title']} for {$row['forenames']}   {$row['surname']}");
+            if (!empty($update_body) AND $update_body!='...') echo "<span>{$update_body}</span>";
+            echo "</a>";
         }
         echo "</table>";
     }
