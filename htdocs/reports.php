@@ -21,6 +21,22 @@ include('htmlheader.inc.php');
 <h2><?php echo $CONFIG['application_shortname']; ?> Reports</h2>
 <table align='center'>
 <thead>
+<tr><th>KIERAN'S NEW REPORTS</th></tr>
+</thead>
+<tbody>
+<td><a href='reports/incidents_exceeded_sla.php'>Incidents that didn't meet their SLA this month</a><br />
+Design your own report
+</td></tr>
+
+<td><a href='reports/incidents_opened_by_engineer.php'>Incidents opened by engineer</a><br />
+Design your own report
+</td></tr>
+
+
+</table>
+
+<table align='center'>
+<thead>
 <tr><th>REPORTS</th></tr>
 </thead>
 <tbody>
