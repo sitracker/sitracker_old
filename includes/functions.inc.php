@@ -1031,7 +1031,7 @@ function contact_drop_down($name, $id, $showsite=FALSE)
     }
     else
     {
-        $sql  = "SELECT id AS contactid, surname, forenames FROM contacts,sites ";
+        $sql  = "SELECT contacts.id AS contactid, surname, forenames FROM contacts,sites ";
         $sql .= "WHERE contacts.siteid = sites.id AND sites.active = 'true' AND contacts.active = 'true' ";
         $sql .= "ORDER BY forenames ASC, surname ASC";
     }
