@@ -14,10 +14,10 @@ $CONFIG['application_name'] = 'SiT! Support Incident Tracker';
 $CONFIG['application_shortname'] = 'SiT!';
 
 // The path to SiT! in your filesystem (e.g. /var/www/vhtdocs/sit/
-$CONFIG['application_fspath'] = '/home/kieran/Code/sitracker/trunk/';
-$CONFIG['application_webpath'] = '/sitracker/trunk/htdocs/';
+$CONFIG['application_fspath'] = '';
+$CONFIG['application_webpath'] = '/';
 
-$CONFIG['application_uriprefix'] = "http://{$_SERVER['HTTP_HOST']}/sitracker/trunk/htdocs/";
+$CONFIG['application_uriprefix'] = "http://{$_SERVER['HTTP_HOST']}";
 
 $CONFIG['db_hostname'] = 'localhost';
 $CONFIG['db_username'] = '';
