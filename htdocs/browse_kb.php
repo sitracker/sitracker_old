@@ -131,15 +131,22 @@ if (mysql_num_rows($result) >= 1)
 {
     echo "<p align='center'><strong>Matching Articles</strong> :</p>";
     echo "<table align='center' width='98%'>";
-    $shade = 0;
+    echo "<tr>";
+    echo colheader('id','KB ID',FALSE);
+    echo colheader('title','Title',FALSE);
+    echo colheader('date','Date',FALSE);
+    echo colheader('author','Author',FALSE);
+    echo colheader('keywords','Keywords',FALSE);
+    echo "</tr>\n";
+    $shade = 'shade1';
     while ($kbarticle = mysql_fetch_object($result))
     {
         // FIXME: These styles and colours need moving to the webtrack.css file really so they can be customised
         if (empty($kbarticle->title)) $kbarticle->title='Untitled';
         else $kbarticle->title=stripslashes($kbarticle->title);
-        echo "<tr class='mainshade'>";
-        echo "<td style='font-size: 120%'>&bull; {$CONFIG['kb_id_prefix']}".leading_zero(4,$kbarticle->docid);
-        echo " <a href='kb_view_article.php?id={$kbarticle->docid}'>{$kbarticle->title}</a>";
+        echo "<tr class='{$shade}'>";
+        echo "<td>{$CONFIG['kb_id_prefix']}".leading_zero(4,$kbarticle->docid)."</td>";
+        echo "<td>";
         // Lookup what software this applies to
         $ssql = "SELECT * FROM kbsoftware, software WHERE kbsoftware.softwareid=software.id ";
         $ssql .= "AND kbsoftware.docid='{$kbarticle->docid}' ORDER BY software.name";
@@ -148,28 +155,33 @@ if (mysql_num_rows($result) >= 1)
         $rowcount = mysql_num_rows($sresult);
         if ($rowcount >= 1 AND $rowcount < 3)
         {
+            $count=1;
             while ($kbsoftware = mysql_fetch_object($sresult))
             {
-                echo " : {$kbsoftware->name}";
+                echo "{$kbsoftware->name}";
+                if ($count < $rowcount) echo ", ";
+                $count++;
             }
         }
         elseif ($rowcount >= 4)
         {
-            echo " : Various Software";
+            echo "Various Software";
         }
-        echo "</td>";
-        echo "</tr>\n";
-
+        echo "<br /><a href='kb_view_article.php?id={$kbarticle->docid}' class='info'>{$kbarticle->title}";
         $asql = "SELECT LEFT(content,400) FROM kbcontent WHERE docid='{$kbarticle->docid}' ORDER BY id ASC LIMIT 1";
         $aresult = mysql_query($asql);
         if (mysql_error()) trigger_error("MySQL Query Error ".mysql_error(), E_USER_ERROR);
         list($content)=mysql_fetch_row($aresult);
         $content=strip_tags(remove_slashes($content));
-        if (!empty($_REQUEST['search_string'])) $content=str_replace($_REQUEST['search_string'],"<strong>{$_REQUEST['search_string']}</strong>",$content);
-        echo "<tr class='shade1'>";
-        echo "<td colspan='0'>$content : <strong style='color: #708090;'>{$kbarticle->keywords}</strong> : <strong>".date('j F Y', mysql2date($kbarticle->published))."</strong>";
-        echo "<br /><br />\n</td>";
+        echo "<span>{$content}</span>";
+        echo "</a>";
+        echo "</td>";
+        echo "<td>".date($CONFIG['dateformat_date'], mysql2date($kbarticle->published))."</td>";
+        echo "<td>".user_realname($kbarticle->author)."</td>";
+        echo "<td>{$kbarticle->keywords}</td>";
         echo "</tr>\n";
+        if ($shade=='shade1') $shade='shade2';
+        else $shade='shade1';
     }
     echo "</table>\n";
 }
@@ -178,7 +190,7 @@ else
     echo "<p align='center'>No matching articles</p>";
 }
 
-echo "<!---SQL === $sql --->";
+// echo "<!---SQL === $sql --->";
 echo "<p align='center'><a href='kb_add_article.php'>Add a knowledge base article</a></p>";
 
 include('htmlfooter.inc.php');
