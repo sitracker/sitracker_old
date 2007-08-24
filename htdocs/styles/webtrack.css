@@ -261,7 +261,7 @@ tr.shade1 { background-color: #CCCCFF; }
 tr.shade2 { background-color: #DDDDFF; }
 tr.critical { background-color: #FF4433; }
 tr.urgent { background-color: #f08080; }
-tr.expired { background-color: #DDDDDF; text-decoration: line-through}
+tr.expired { background-color: #DDDDDF; }
 tr.notice { background-color: #FFFFB0; }
 
 
