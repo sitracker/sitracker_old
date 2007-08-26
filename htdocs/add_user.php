@@ -167,6 +167,9 @@ else
             mysql_query($psql);
             if (mysql_error()) trigger_error("MySQL Query Error ".mysql_error(), E_USER_ERROR);
         }
+
+        plugin_do('user_created');
+
         if (!$result) echo "<p class='error'>Addition of user failed\n";
         else
         {

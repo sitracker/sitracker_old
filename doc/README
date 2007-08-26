@@ -205,6 +205,8 @@ holiday_chart_cal           Add to the top of the holiday chart page
 add_user_form               Add to the add user form
 statistics_table_overview   Add to the statistics table
 about                       Add to the about page
+user_created                Perform an action after a user has been
+                             created
 
 If your plugin needs to use additional pages, put those pages in a
 subdirectory (named for your plugin) inside htdocs/ext
