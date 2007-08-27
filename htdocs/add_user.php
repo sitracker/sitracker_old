@@ -79,6 +79,7 @@ if (empty($submit))
     <tr><th>Job Title: <sup class='red'>*</sup></th><td><input maxlength="50" name="jobtitle" size="30" /></td></tr>
     <tr id='email'><th>Email: <sup class='red'>*</sup></th><td><input maxlength="50" name="email" size="30" /></td></tr>
     <tr><th>Phone:</th><td><input maxlength="50" name="phone" size="30" /></td></tr>
+    <tr><th>Mobile:</th><td><input maxlength="50" name="mobile" size="30" /></td></tr>
     <tr><th>Fax:</th><td><input maxlength="50" name="fax" size="30" /></td></tr>
     <tr><th>Holiday Entitlement:</th><td><input maxlength="3" name="holiday_entitlement" size="3" /> days</td></tr>
     <?php
@@ -100,6 +101,7 @@ else
     $jobtitle = cleanvar($_REQUEST['jobtitle']);
     $email = cleanvar($_REQUEST['email']);
     $phone = cleanvar($_REQUEST['phone']);
+    $mobile = cleanvar($_REQUEST['mobile']);
     $fax = cleanvar($_REQUEST['fax']);
     $holiday_entitlement = cleanvar($_REQUEST['holiday_entitlement']);
 
@@ -150,8 +152,8 @@ else
     if ($errors == 0)
     {
         $password=strtoupper(md5($password));
-        $sql = "INSERT INTO users (username, password, realname, roleid, groupid, title, email, phone, fax, status, var_style, holiday_entitlement) ";
-        $sql .= "VALUES ('$username', '$password', '$realname', '$roleid', '$groupid', '$jobtitle', '$email', '$phone', '$fax', 1, '{$CONFIG['default_interface_style']}', '$holiday_entitlement')";
+        $sql = "INSERT INTO users (username, password, realname, roleid, groupid, title, email, phone, mobile, fax, status, var_style, holiday_entitlement) ";
+        $sql .= "VALUES ('$username', '$password', '$realname', '$roleid', '$groupid', '$jobtitle', '$email', '$phone', '$mobile', '$fax', 1, '{$CONFIG['default_interface_style']}', '$holiday_entitlement')";
         $result = mysql_query($sql);
         if (mysql_error()) trigger_error("MySQL Query Error ".mysql_error(), E_USER_ERROR);
         $newuserid = mysql_insert_id();
