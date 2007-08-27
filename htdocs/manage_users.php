@@ -26,7 +26,7 @@ $sql .= "WHERE users.roleid=roles.id ";
 if (!isset($sort) || $sort == "realname") $sql .= " ORDER BY IF(status> 0,1,0) DESC, realname ASC";
 else if ($sort == "username") $sql .= " ORDER BY IF(status> 0,1,0) DESC, username ASC";
 
-    else if ($sort == "role") $sql .= " ORDER BY roleid ASC";
+else if ($sort == "role") $sql .= " ORDER BY roleid ASC";
 // sort incidents by job title
 else if ($sort == "jobtitle") $sql .= " ORDER BY title ASC";
 
@@ -62,6 +62,7 @@ if (mysql_error()) trigger_error(mysql_error(),E_USER_WARNING);
 
     <th><a href="<?php echo $_SERVER['PHP_SELF'] ?>?sort=email">Email</a></th>
     <th><a href="<?php echo $_SERVER['PHP_SELF'] ?>?sort=phone">Phone</a></th>
+    <th><a href="<?php echo $_SERVER['PHP_SELF'] ?>?sort=mobile">Mobile</a></th>
     <th><a href="<?php echo $_SERVER['PHP_SELF'] ?>?sort=fax">Fax</a></th>
     <th><a href="<?php echo $_SERVER['PHP_SELF'] ?>?sort=status">Status</a></th>
     <th><a href="<?php echo $_SERVER['PHP_SELF'] ?>?sort=accepting">Accepting</a></th>
@@ -92,9 +93,9 @@ while ($users = mysql_fetch_array($result))
     else echo "Disabled";
     }
     else echo "-";
-    ?>
-    </td>
-    <?php
+
+    echo "</td>";
+
     echo "<td>";
     echo "<a href='edit_profile.php?userid={$users['userid']}'>Edit</a>";
     if ($users['status']>0)
@@ -106,15 +107,27 @@ while ($users = mysql_fetch_array($result))
         if ($users['userid'] >1) echo " | <a href='edit_user_permissions.php?action=edit&amp;user={$users['userid']}'>Permissions</a>";
     }
     echo "</td>";
-    ?>
 
-    <td><?php echo $users["email"] ?></td>
-    <td><?php if ($users["phone"] == "") { ?>None<?php } else { echo $users["phone"]; } ?></td>
-    <td><?php if ($users["fax"] == "") { ?>None<?php } else { echo $users["fax"]; } ?></td>
-    <td><?php echo userstatus_name($users["status"]) ?></td>
-    <td><?php echo $users["accepting"]=='Yes' ? 'Yes' : "<span class='error'>No</span>"; ?></td>
-    </tr>
-    <?php
+
+    echo "<td>";
+    echo $users["email"];
+
+
+    echo "</td><td>";
+    if ($users["phone"] == "") echo "None";
+    else echo $users["phone"]; 
+    echo "</td><td>";
+    if ($users["mobile"] == "") echo "None";
+    else echo $users["mobile"]; 
+    echo "</td><td>";
+    if ($users["fax"] == "") echo "None";
+    else echo $users["fax"];
+    echo "</td><td>";
+    echo userstatus_name($users["status"]);
+    echo "</td><td>";
+    if($users["accepting"]=='Yes') echo "Yes";
+    else echo "<span class='error'>No</span>";
+    echo "</td></tr>";
     // invert shade
     if ($shade == 1) $shade = 0;
     else $shade = 1;
