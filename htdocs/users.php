@@ -147,8 +147,18 @@ while ($users = mysql_fetch_array($result))
     echo "<td align='center'>".$incpriority['2']."</td>";
     echo "<td align='center'>".$incpriority['1']."</td>";
     ?>
-    <td align='center'><?php if ($users["phone"] == "") { ?>None<?php } else { echo $users["phone"]; } ?></td>
-    <td align='center'><?php if ($users["phone"] == "") { ?>None<?php } else { if ($users['mobile']!='') echo $users["mobile"]; else echo '&nbsp;'; } ?></td>
+    <td align='center'>
+    <?php 
+        if ($users["phone"] == "") echo "None";
+        else echo $users["phone"]; 
+
+        echo "</td>";
+        echo "<td align='center'>";
+
+        if ($users["mobile"] == "") echo "None";
+        else echo $users["mobile"];
+    ?>
+    </td>
     <td>
     <?php
     echo userstatus_name($users["status"]) ?></td>
