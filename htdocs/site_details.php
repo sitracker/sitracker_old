@@ -38,7 +38,6 @@ if (mysql_error()) trigger_error(mysql_error(),E_USER_WARNING);
 while ($siterow=mysql_fetch_array($siteresult))
 {
     echo "<tr><th>Site:</th><td><h3>".$siterow['name']."</h3>";
-    if ($siterow['active']=='false') echo "<h4>(Inactive)</h4>";
     echo "</td></tr>";
     if ($siterow['active']=='false')
     {
