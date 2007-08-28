@@ -37,7 +37,9 @@ $siteresult = mysql_query($sql);
 if (mysql_error()) trigger_error(mysql_error(),E_USER_WARNING);
 while ($siterow=mysql_fetch_array($siteresult))
 {
-    echo "<tr><th>Site:</th><td><h3>".$siterow['name']."</h3></td></tr>";
+    echo "<tr><th>Site:</th><td><h3>".$siterow['name']."</h3>";
+    if ($siterow['active']=='false') echo "<h4>(Inactive)</h4>";
+    echo "</td></tr>";
     if ($siterow['active']=='false')
     {
         echo "<tr><th>Status:</th><td><span class='expired'>Inactive</span></td></tr>";
@@ -98,7 +100,7 @@ if ($countcontacts > 0)
         else echo "<td><strong>withheld</strong></td>";
         if ($contactrow['dataprotection_email']!='Yes') echo "<td>{$contactrow['email']}</td>";
         else echo "<td><strong>withheld</strong></td>";
-        if ($contactrow['dataprotection_email']!='Yes')
+        if ($contactrow['dataprotection_address']!='Yes')
         {
             echo "<td>";
             if (!empty($contactrow['address1'])) echo "{$contactrow['address1']}";
