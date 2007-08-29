@@ -29,7 +29,7 @@ $title='Skills Matrix';
 include('htmlheader.inc.php');
 
 echo "<h2>$title</h2>";
-if(empty($legacy)) echo "<p align='center'><a href='{$_SERVER['PHP_SELF']}?legacy=yes&gid={$groupid}'>Show legacy software</a></p>";
+if(empty($legacy)) echo "<p align='center'><a href='{$_SERVER['PHP_SELF']}?legacy=yes&amp;gid={$groupid}'>Show legacy software</a></p>";
 else echo "<p align='center'><a href='{$_SERVER['PHP_SELF']}?gid={$groupid}'>Hide legacy software</a></p>";
 
 $gsql = "SELECT * FROM groups ORDER BY name";
@@ -123,23 +123,20 @@ if (mysql_error()) trigger_error(mysql_error(),E_USER_WARNING);
 
 $countskills = mysql_num_rows($result);
 
-if($countskills > 0)
+if($countskills > 0 AND $countusers > 0)
 {
     $previous = "";
     while($row = mysql_fetch_object($result))
     {
         if(($row->realname != NULL) AND ($row->realname != '')) $skills[$row->name][$row->realname] = $row->realname;
     }
-/*echo "<pre>";
-print_r($skills);
-echo "</pre>";*/
     mysql_data_seek($result, 0);
     echo "<table align='center' class='vertical'>";
     $shade='shade1';
-    echo "<tr><thead><td>Skill</td>";
+    echo "<thead><tr><td>Skill</td>";
     foreach($users AS $u) echo "<th>$u</th>";
     echo "<th>Count</th>";
-    echo "</thead></tr>\n";
+    echo "</tr></thead>\n";
     $previous = "";
     while($row = mysql_fetch_object($result))
     {
@@ -167,7 +164,7 @@ echo "</pre>";*/
                     }
                 }
             }
-            echo "<td align='center'><b>$count</b></td>";
+            echo "<td align='center'><strong>$count</strong></td>";
             echo "</tr>\n";
             $started = true;
             if ($shade=='shade1') $shade='shade2';
@@ -180,7 +177,7 @@ echo "</pre>";*/
     echo "<th align='right'>COUNT</th>";
     foreach($counting AS $c) echo "<td align='center'>{$c}</td>";
     echo "</table>";
-}
+} echo "<p align='center'>Nothing to display</p>";
 
 include('htmlfooter.inc.php');
 
