@@ -267,14 +267,16 @@ if (empty($action))
         echo date_picker('updateform.date');
     ?>
     <select name="timeoffset" onchange="window.document.updateform.timetonextaction_none[1].checked = true;">
-    <option value="0">9:00 AM</option>
-    <option value="1">10:00 AM</option>
-    <option value="2">11:00 AM</option>
-    <option value="3">12:00 PM</option>
-    <option value="4">1:00 PM</option>
-    <option value="5">2:00 PM</option>
-    <option value="6">3:00 PM</option>
-    <option value="7">4:00 PM</option>
+    <option value="0">8:00 AM</option>
+    <option value="1">9:00 AM</option>
+    <option value="2">10:00 AM</option>
+    <option value="3">11:00 AM</option>
+    <option value="4">12:00 PM</option>
+    <option value="5">1:00 PM</option>
+    <option value="6">2:00 PM</option>
+    <option value="7">3:00 PM</option>
+    <option value="8">4:00 PM</option>
+    <option value="9">5:00 PM</option>
     </select>
     <br />
     <input checked type="radio" name="timetonextaction_none" onclick="window.document.updateform.timetonextaction_days.value = ''; window.document.updateform.timetonextaction_hours.value = ''; window.document.updateform.timetonextaction_minutes.value = '';" value="None" /> Unspecified
@@ -342,7 +344,7 @@ else
         case 'date':
             // kh: parse date from calendar picker, format: 200-12-31
 	    $date=explode("-", $date);
-            $timeofnextaction=mktime(9 + $timeoffset,0,0,$date[1],$date[2],$date[0]);
+            $timeofnextaction=mktime(8 + $timeoffset,0,0,$date[1],$date[2],$date[0]);
             $now = time();
             if ($timeofnextaction<0) $timeofnextaction=0;
         break;
