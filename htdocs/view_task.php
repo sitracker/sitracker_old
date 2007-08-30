@@ -82,7 +82,7 @@ if (mysql_num_rows($result) >= 1)
         echo "<tr><th>Privacy</th>";
         echo "<td>";
         if ($task->distribution=='public') echo "Public";
-        if ($task->distribution=='private') echo "Private <img src='{$CONFIG['application_webpath']}images/icons/{$iconset}/16x16/apps/password.png' width='16' height='16' title='Private' alt='Private' />";
+        if ($task->distribution=='private') echo "Private <img src='{$CONFIG['application_webpath']}images/icons/{$iconset}/16x16/private.png' width='16' height='16' title='Private' alt='Private' />";
         echo "</td></tr>";
         echo "</table>";
         echo "<p align='center'><a href='edit_task.php?id={$id}'>Edit Task</a>";

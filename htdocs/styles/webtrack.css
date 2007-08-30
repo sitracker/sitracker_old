@@ -108,6 +108,8 @@ div.windowtitle
     color: white;
     padding: 1px;
 }
+.windowtitle img { vertical-align: middle; }
+.windowtitle div { padding-right: 3px; }
 .windowtitle a { color: white; font-weight: normal;}
 div.window
 {

@@ -59,26 +59,26 @@ $todayrecent=$now-(16*3600);  // past 16 hours
 $CONFIG['upload_max_filesize'] = return_bytes($CONFIG['upload_max_filesize']);
 
 // Non specific update types
-$updatetypes['actionplan'] = array('icon' => 'actions/enum_list.png', 'text' => 'Action Plan by updateuser');
-$updatetypes['auto'] = array('icon' => 'actions/info.png', 'text' => 'Updated automatically by updateuser');
-$updatetypes['closing'] = array('icon' => 'actions/fileclose.png', 'text' => 'Marked for closure by updateuser');
-$updatetypes['editing'] = array('icon' => 'actions/edit.png', 'text' => 'Edited by updateuser');
-$updatetypes['email'] = array('icon' => 'actions/mail_send.png', 'text' => 'Email sent by updateuser');
-$updatetypes['emailin'] = array('icon' => 'actions/mail_generic.png', 'text' => 'Email received by updateuser');
-$updatetypes['emailout'] = array('icon' => 'actions/mail_send.png', 'text' => 'Email sent by updateuser');
-$updatetypes['externalinfo'] = array('icon' => 'actions/ktip.png', 'text' => 'External info added by updateuser');
-$updatetypes['probdef'] = array('icon' => 'actions/enum_list.png', 'text' => 'Problem Definition by updateuser');
-$updatetypes['research'] = array('icon' => 'actions/idea.png', 'text' => 'Researched by updateuser');
-$updatetypes['reassigning'] = array('icon' => 'actions/2rightarrow.png', 'text' => 'Reassigned to currentowner by updateuser');
-$updatetypes['reviewmet'] = array('icon' => 'actions/flag.png', 'text' => 'Review Period by updateuser'); // conditional
-$updatetypes['tempassigning'] = array('icon' => 'actions/1rightarrow.png', 'text' => 'Temporarily assigned to currentowner by updateuser');
-$updatetypes['opening'] = array('icon' => 'actions/filenew.png', 'text' => 'Opened by updateuser');
-$updatetypes['phonecallout'] = array('icon' => 'actions/forward.png', 'text' => 'Phone call made by updateuser');
-$updatetypes['phonecallin'] = array('icon' => 'actions/back.png', 'text' => 'Phone call taken by updateuser');
-$updatetypes['reopening'] = array('icon' => 'actions/filenew.png', 'text' => 'Reopened by updateuser');
-$updatetypes['slamet'] = array('icon' => 'actions/flag.png', 'text' => 'SLA Met by updateuser');
-$updatetypes['solution'] = array('icon' => 'actions/endturn.png', 'text' => 'Resolved by updateuser');
-$updatetypes['webupdate'] = array('icon' => 'actions/comment.png', 'text' => 'Web update');
+$updatetypes['actionplan'] = array('icon' => 'actionplan.png', 'text' => 'Action Plan by updateuser');
+$updatetypes['auto'] = array('icon' => 'auto.png', 'text' => 'Updated automatically by updateuser');
+$updatetypes['closing'] = array('icon' => 'close.png', 'text' => 'Marked for closure by updateuser');
+$updatetypes['editing'] = array('icon' => 'edit.png', 'text' => 'Edited by updateuser');
+$updatetypes['email'] = array('icon' => 'emailout.png', 'text' => 'Email sent by updateuser');
+$updatetypes['emailin'] = array('icon' => 'emailin.png', 'text' => 'Email received by updateuser');
+$updatetypes['emailout'] = array('icon' => 'emailout.png', 'text' => 'Email sent by updateuser');
+$updatetypes['externalinfo'] = array('icon' => 'externalinfo.png', 'text' => 'External info added by updateuser');
+$updatetypes['probdef'] = array('icon' => 'probdef.png', 'text' => 'Problem Definition by updateuser');
+$updatetypes['research'] = array('icon' => 'research.png', 'text' => 'Researched by updateuser');
+$updatetypes['reassigning'] = array('icon' => 'reassign.png', 'text' => 'Reassigned to currentowner by updateuser');
+$updatetypes['reviewmet'] = array('icon' => 'review.png', 'text' => 'Review Period by updateuser'); // conditional
+$updatetypes['tempassigning'] = array('icon' => 'tempassign.png', 'text' => 'Temporarily assigned to currentowner by updateuser');
+$updatetypes['opening'] = array('icon' => 'open.png', 'text' => 'Opened by updateuser');
+$updatetypes['phonecallout'] = array('icon' => 'callout.png', 'text' => 'Phone call made by updateuser');
+$updatetypes['phonecallin'] = array('icon' => 'callin.png', 'text' => 'Phone call taken by updateuser');
+$updatetypes['reopening'] = array('icon' => 'reopen.png', 'text' => 'Reopened by updateuser');
+$updatetypes['slamet'] = array('icon' => 'sla.png', 'text' => 'SLA Met by updateuser');
+$updatetypes['solution'] = array('icon' => 'solution.png', 'text' => 'Resolved by updateuser');
+$updatetypes['webupdate'] = array('icon' => 'webupdate.png', 'text' => 'Web update');
 
 // Set a string to be the full version number and revision of the application
 $application_version_string=trim("v{$application_version} {$application_revision}");
@@ -4452,7 +4452,7 @@ function date_picker($formelement)
     global $CONFIG, $iconset;
 
     $divid = "datediv".str_replace('.','',$formelement);
-    $html = "<img src='{$CONFIG['application_webpath']}images/icons/{$iconset}/16x16/actions/1day.png' ";
+    $html = "<img src='{$CONFIG['application_webpath']}images/icons/{$iconset}/16x16/pickdate.png' ";
     $html .= "onmouseup=\"toggleDatePicker('$divid','$formelement')\" width='16' height='16' alt='date picker' style='cursor: pointer;' />";
     $html .= "<div id='$divid' style='position: absolute;'></div>";
     return $html;
@@ -4565,7 +4565,7 @@ function add_note_form($linkid, $refid)
     global $now, $sit, $iconset;
     $html = "<form name='addnote' action='add_note.php' method='post'>";
     $html .= "<div class='detailhead note'> <div class='detaildate'>".readable_date($now)."</div>\n";
-    $html .= "<img src='{$CONFIG['application_webpath']}images/icons/{$iconset}/16x16/mimetypes/document2.png' width='16' height='16' alt='Note icon' /> ";
+    $html .= "<img src='{$CONFIG['application_webpath']}images/icons/{$iconset}/16x16/note.png' width='16' height='16' alt='Note icon' /> ";
     $html .= "New Note by ".user_realname($sit[2])."</div>\n";
     $html .= "<div class='detailentry note'>";
     $html .= "<textarea rows='3' cols='40' name='bodytext' style='width: 94%; margin-top: 5px; margin-bottom: 5px; margin-left: 3%; margin-right: 3%; background-color: transparent; border: 1px dashed #A2A86A;'></textarea>";
@@ -4593,9 +4593,9 @@ function show_notes($linkid, $refid)
         while ($note = mysql_fetch_object($result))
         {
             $html .= "<div class='detailhead note'> <div class='detaildate'>".readable_date(mysqlts2date($note->timestamp));
-            if ($sit[2]==$note->userid) $html .= "<a href='delete_note.php?id={$note->id}&amp;rpath={$_SERVER['PHP_SELF']}?{$_SERVER['QUERY_STRING']}' onclick='return confirm_delete();'><img src='{$CONFIG['application_webpath']}images/icons/{$iconset}/16x16/actions/eventdelete.png' width='16' height='16' alt='Delete icon' style='border: 0px;' /></a>";
+            if ($sit[2]==$note->userid) $html .= "<a href='delete_note.php?id={$note->id}&amp;rpath={$_SERVER['PHP_SELF']}?{$_SERVER['QUERY_STRING']}' onclick='return confirm_delete();'><img src='{$CONFIG['application_webpath']}images/icons/{$iconset}/16x16/delete.png' width='16' height='16' alt='Delete icon' style='border: 0px;' /></a>";
             $html .= "</div>\n";
-            $html .= "<img src='{$CONFIG['application_webpath']}images/icons/{$iconset}/16x16/mimetypes/document2.png' width='16' height='16' alt='Note icon' /> ";
+            $html .= "<img src='{$CONFIG['application_webpath']}images/icons/{$iconset}/16x16/note.png' width='16' height='16' alt='Note icon' /> ";
             $html .= "Note added by ".user_realname($note->userid,TRUE)."</div>\n";
             $html .= "<div class='detailentry note'>";
             $html .= nl2br(bbcode(stripslashes($note->bodytext)));

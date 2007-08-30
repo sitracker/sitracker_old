@@ -194,7 +194,7 @@ switch ($action)
                 echo "value='public' /> Public<br />";
                 echo "<input type='radio' name='distribution' ";
                 if ($task->distribution=='private') echo "checked='checked' ";
-                echo "value='private' /> Private <img src='{$CONFIG['application_webpath']}images/icons/{$iconset}/16x16/apps/password.png' width='16' height='16' title='Private' alt='Private' /></td></tr>";
+                echo "value='private' /> Private <img src='{$CONFIG['application_webpath']}images/icons/{$iconset}/16x16/private.png' width='16' height='16' title='Private' alt='Private' /></td></tr>";
                 echo "</table>";
                 echo "<p><input name='submit' type='submit' value='Save' /></p>";
                 echo "<input type='hidden' name='action' value='edittask' />";
