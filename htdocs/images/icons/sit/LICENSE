@@ -3,8 +3,42 @@ The images inside this directory are from various sources, see below for license
 Icon                                      Source
 ===================================================================================================
 12x12/feed-icon.png                       Originally designed by Mozilla Foundation for the Firefox browser.
+16x16/actionplan.png                      KDE Classic
+16x16/callin.png                          KDE Classic
+16x16/delete.png                          KDE Classic
+16x16/emailout.png                        KDE Classic
+16x16/holiday.png                         KDE Classic
+16x16/msn.png                             KDE Classic
+16x16/navup.png                           KDE Classic
+16x16/pickdate.png                        KDE Classic
+16x16/reassign.png                        KDE Classic
+16x16/review.png                          KDE Classic
+16x16/solution.png                        KDE Classic
+16x16/tick.png                            KDE Classic
+16x16/aim.png                             KDE Classic
+16x16/callout.png                         KDE Classic
+16x16/edit.png                            KDE Classic
+16x16/email.png                           KDE Classic
+16x16/icq.png                             KDE Classic
+16x16/navdown.png                         KDE Classic
 16x16/note.png                            KDE Classic
-
+16x16/private.png                         KDE Classic
+16x16/reopen.png                          KDE Classic
+16x16/site.png                            KDE Classic
+16x16/task.png                            KDE Classic
+16x16/webupdate.png                       KDE Classic
+16x16/auto.png                            KDE Classic
+16x16/close.png                           KDE Classic
+16x16/emailin.png                         KDE Classic
+16x16/externalinfo.png                    KDE Classic
+16x16/messageflag.png                     KDE Classic
+16x16/navright.png                        KDE Classic
+16x16/open.png                            KDE Classic
+16x16/probdef.png                         KDE Classic
+16x16/research.png                        KDE Classic
+16x16/sla.png                             KDE Classic
+16x16/tempassign.png                      KDE Classic
+32x32/mimetypes/*                         KDE Classic
 KDE Classic
 ===========
 The following license applies to Icons from the KDE Classic theme:
@@ -12,4 +46,10 @@ The following license applies to Icons from the KDE Classic theme:
 "The images inside this directory are COMPLETELY FREE for commercial and non-commercial use.
 Clarification: this means you can copy, modify and redistribute them."
 
+Icons from: http://webcvs.kde.org/kdeartwork/IconThemes/kdeclassic/
 
+
+
+SiT
+===
+These icons were created by SiT contributors and are licensed under GPL 2 or later
