@@ -12,7 +12,7 @@
 
 function dashboard_rss($row,$dashboardid)
 {
-    global $sit, $CONFIG;
+    global $sit, $CONFIG, $iconset;
     require_once('magpierss/rss_fetch.inc');
 
     $sql = "SELECT url FROM dashboard_rss WHERE owner = {$sit[2]} AND enabled = 'true'";
@@ -39,7 +39,7 @@ function dashboard_rss($row,$dashboardid)
                 //print_r($rs);
                 //echo '</pre>';
                 echo "<table align='center' style='width: 100%'>";
-                echo "<tr><th><span style='float: right;'><a href='".htmlspecialchars($url)."'><img src='{$CONFIG['application_webpath']}images/feed-icon-12x12.jpg' style='border: 0px;' alt='Feed Icon' /></a></span>{$rss->channel['title']}</th></tr>";
+                echo "<tr><th><span style='float: right;'><a href='".htmlspecialchars($url)."'><img src='{$CONFIG['application_webpath']}images/icons/{$iconset}/12x12/feed-icon.png' style='border: 0px;' alt='Feed Icon' /></a></span>{$rss->channel['title']}</th></tr>";
                 foreach($rss->items as $item)
                 {
                     echo "<tr><td><a href='{$item['link']}' class='info'>{$item['title']}";
