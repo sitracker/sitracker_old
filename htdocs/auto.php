@@ -81,6 +81,93 @@ if ($actions[0]=='' OR in_array('TimeCalc',$actions))
     require('auto/timecalc.php');
 }
 
+
+if ($actions[0]=='' OR in_array('SetUserStatus',$actions))
+{
+    // Find users with holidays today who don't have correct status
+    $startdate=mktime(0,0,0,date('m'),date('d'),date('Y'));
+    $enddate=mktime(23,59,59,date('m'),date('d'),date('Y'));
+    $sql = "SELECT * FROM holidays ";
+    $sql .= "WHERE startdate >= '$startdate' AND startdate < '$enddate' AND (type >='1' AND type <= 5) ";
+    $sql .= "AND (approved=1 OR approved=2 OR approved=11 OR approved=12)";
+    $result = mysql_query($sql);
+    if (mysql_error()) trigger_error(mysql_error(),E_USER_ERROR);
+    while ($huser = mysql_fetch_object($result))
+    {
+        if ($huser->length == 'day'
+            OR ($huser->length == 'am' AND date('H') < 12)
+            OR ($huser->length == 'pm' AND date('H') < 12))
+        {
+            $currentstatus = user_status($huser->userid);
+            $newstatus = $currentstatus;
+            // Only enabled users
+            if ($currentstatus > 0)
+            {
+                if ($huser->type == 1 AND $currentstatus != 5) $newstatus = 5; // Holiday
+                if ($huser->type == 2 AND $currentstatus != 8) $newstatus = 8; // Sickness
+                if ($huser->type == 3 AND ($currentstatus != 6 AND $currentstatus != 9)) $newstatus = 9; // Work away
+                if ($huser->type == 4 AND $currentstatus != 7) $newstatus = 7; // Training
+                if ($huser->type == 5 AND ($currentstatus != 2 AND $currentstatus != 8)) $newstatus = 8; // Compassionate
+            }
+            if ($newstatus != $currentstatus)
+            {
+                // FIXME: This should set the status
+                $accepting='';
+                switch ($newstatus)
+                {
+                    case 1: // in office
+                        $accepting='Yes';
+                    break;
+
+                    case 2: // Not in office
+                        $accepting='No';
+                    break;
+
+                    case 3: // In Meeting
+                        // don't change
+                        $accepting='';
+                    break;
+
+                    case 4: // At Lunch
+                        $accepting='';
+                    break;
+
+                    case 5: // On Holiday
+                        $accepting='No';
+                    break;
+
+                    case 6: // Working from home
+                        $accepting='Yes';
+                    break;
+
+                    case 7: // On training course
+                        $accepting='No';
+                    break;
+
+                    case 8: // Absent Sick
+                        $accepting='No';
+                    break;
+
+                    case 9: // Working Away
+                        // don't change
+                        $accepting='';
+                    break;
+                }
+                $usql = "UPDATE users SET status='{$newstatus}'";
+                if ($accepting!='') $usql .= ", accepting='{$accepting}'";
+                $usql .= " WHERE id='{$huser->userid}' LIMIT 1";
+                // if ($accepting=='No') incident_backup_switchover($huser->userid, 'no');
+                if ($verbose) echo user_realname($huser->userid).': '.userstatus_name($currentstatus).' -> '.userstatus_name($newstatus).$crlf;
+                echo $usql.$crlf;
+            }
+        }
+    }
+    // Find users who are set away but have no entry in the holiday calendar
+    $sql = "SELECT * FROM users WHERE status=5 OR status=7 OR status=8 OR status=9 ";
+    $result = mysql_query($sql);
+    if (mysql_error()) trigger_error(mysql_error(),E_USER_ERROR);
+}
+
 plugin_do('automata');
 
 ?>
