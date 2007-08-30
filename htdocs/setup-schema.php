@@ -385,26 +385,26 @@ CREATE TABLE `interfacestyles` (
   `id` int(5) NOT NULL,
   `name` varchar(50) NOT NULL default '',
   `cssurl` varchar(255) NOT NULL default '',
-  `iconset` varchar(255) NOT NULL default 'kdeclassic',
+  `iconset` varchar(255) NOT NULL default 'sit',
   `headerhtml` text NOT NULL,
   PRIMARY KEY  (`id`)
 ) TYPE=MyISAM AUTO_INCREMENT=16 ;
 
-INSERT INTO `interfacestyles` (`id`, `name`, `cssurl`, `iconset`, `headerhtml`) VALUES (1, 'Light Blue', 'webtrack1.css', 'kdeclassic', ''),
-(2, 'Grey', 'webtrack2.css', 'kdeclassic', ''),
-(3, 'Green', 'webtrack3.css', 'kdeclassic', ''),
-(4, 'Silver Blue', 'webtrack4.css', 'kdeclassic', ''),
-(5, 'Classic', 'webtrack5.css', 'kdeclassic', ''),
-(6, 'Orange', 'webtrack_ph2.css', 'kdeclassic', ''),
-(7, 'Yellow and Blue', 'webtrack7.css', 'kdeclassic', ''),
-(8, 'Neoteric', 'webtrack8.css', 'kdeclassic', ''),
-(9, 'Toms Linux Style', 'webtrack9.css', 'kdeclassic', ''),
-(10, 'Cool Blue', 'webtrack_ph.css', 'kdeclassic', ''),
-(11, 'Just Light', 'webtrack10.css', 'kdeclassic', ''),
-(12, 'Ex Pea', 'webtrack11.css', 'kdeclassic', ''),
-(13, 'GUI Colours', 'webtrack12.css', 'kdeclassic', ''),
-(14, 'Flashy', 'webtrack14/webtrack14.css', 'kdeclassic', ''),
-(15, 'Richard', 'webtrack15.css', 'kdeclassic', '');
+INSERT INTO `interfacestyles` (`id`, `name`, `cssurl`, `iconset`, `headerhtml`) VALUES (1, 'Light Blue', 'webtrack1.css', 'sit', ''),
+(2, 'Grey', 'webtrack2.css', 'sit', ''),
+(3, 'Green', 'webtrack3.css', 'sit', ''),
+(4, 'Silver Blue', 'webtrack4.css', 'sit', ''),
+(5, 'Classic', 'webtrack5.css', 'sit', ''),
+(6, 'Orange', 'webtrack_ph2.css', 'sit', ''),
+(7, 'Yellow and Blue', 'webtrack7.css', 'sit', ''),
+(8, 'Neoteric', 'webtrack8.css', 'sit', ''),
+(9, 'Toms Linux Style', 'webtrack9.css', 'sit', ''),
+(10, 'Cool Blue', 'webtrack_ph.css', 'sit', ''),
+(11, 'Just Light', 'webtrack10.css', 'sit', ''),
+(12, 'Ex Pea', 'webtrack11.css', 'sit', ''),
+(13, 'GUI Colours', 'webtrack12.css', 'sit', ''),
+(14, 'Flashy', 'webtrack14/webtrack14.css', 'sit', ''),
+(15, 'Richard', 'webtrack15.css', 'sit', '');
 
 
 CREATE TABLE `journal` (
@@ -1371,7 +1371,7 @@ UPDATE `interfacestyles` SET `name` = 'Light Blue' WHERE `id` =1 LIMIT 1 ;
 */
 
 $upgrade_schema[325] = "
-ALTER TABLE `interfacestyles` ADD `iconset` VARCHAR( 255 ) NOT NULL DEFAULT 'kdeclassic' AFTER `cssurl` ;
+ALTER TABLE `interfacestyles` ADD `iconset` VARCHAR( 255 ) NOT NULL DEFAULT 'sit' AFTER `cssurl` ;
 ALTER TABLE `sites` ADD `websiteurl` VARCHAR( 255 ) NULL AFTER `email` ;
 
 CREATE TABLE `tags` (
@@ -1445,6 +1445,10 @@ INSERT INTO `userpermissions` VALUES (1, 68, 'true');
 ALTER TABLE `sites` ADD `active` ENUM( 'true', 'false' ) NOT NULL DEFAULT 'true';
 
 ALTER TABLE `contacts` ADD `active` ENUM( 'true', 'false' ) NOT NULL DEFAULT 'true';
+
+-- beta 3
+UPDATE `interfacestyles` SET `iconset` = 'sit';
+
 ";
 
 
