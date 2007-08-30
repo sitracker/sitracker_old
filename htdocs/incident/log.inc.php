@@ -214,24 +214,24 @@ while ($update = mysql_fetch_object($result))
     {
         if ($offset > 0)
         {
-            echo "<a href='{$_SERVER['PHP_SELF']}?id={$incidentid}&amp;javascript=enabled&amp;offset={$previous}&amp;direction=previous' class='info'><img src='{$CONFIG['application_webpath']}images/icons/{$iconset}/16x16/actions/1uparrow.png' alt='Previous update' /></a>";
+            echo "<a href='{$_SERVER['PHP_SELF']}?id={$incidentid}&amp;javascript=enabled&amp;offset={$previous}&amp;direction=previous' class='info'><img src='{$CONFIG['application_webpath']}images/icons/{$iconset}/16x16/navup.png' alt='Previous update' /></a>";
         }
     }
     else
     {
-        echo "<a href='#update".($count-1)."' class='info'><img src='{$CONFIG['application_webpath']}images/icons/{$iconset}/16x16/actions/1uparrow.png' alt='Previous update' /></a>";
+        echo "<a href='#update".($count-1)."' class='info'><img src='{$CONFIG['application_webpath']}images/icons/{$iconset}/16x16/navup.png' alt='Previous update' /></a>";
     }
 
     if ($count==($_SESSION['num_update_view']-1) OR $count==mysql_num_rows($result)-1)
     {
         if ($offset < ($count_updates - $_SESSION['num_update_view']))
         {
-            echo "<a href='{$_SERVER['PHP_SELF']}?id={$incidentid}&amp;javascript=enabled&amp;offset={$next}&amp;direction=next' class='info'><img src='{$CONFIG['application_webpath']}images/icons/{$iconset}/16x16/actions/1downarrow.png' alt='Next update' /></a>";
+            echo "<a href='{$_SERVER['PHP_SELF']}?id={$incidentid}&amp;javascript=enabled&amp;offset={$next}&amp;direction=next' class='info'><img src='{$CONFIG['application_webpath']}images/icons/{$iconset}/16x16/navdown.png' alt='Next update' /></a>";
         }
     }
     else
     {
-        echo "<a href='#update".($count+1)."' class='info'><img src='{$CONFIG['application_webpath']}images/icons/{$iconset}/16x16/actions/1downarrow.png' alt='Next update' /></a>";
+        echo "<a href='#update".($count+1)."' class='info'><img src='{$CONFIG['application_webpath']}images/icons/{$iconset}/16x16/navdown.png' alt='Next update' /></a>";
     }
     echo "</div>";
 

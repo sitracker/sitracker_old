@@ -158,7 +158,7 @@ if($countskills > 0 AND $countusers > 0)
                     {
                         //Skill in software
                         // echo "<td align='center'>&#10004;</td>"; // Doesn't work in Windows (fonts!) rubbishy O/S
-                        echo "<td align='center'><img src='{$CONFIG['application_webpath']}images/icons/{$iconset}/16x16/actions/endturn.png' alt='' /></td>";
+                        echo "<td align='center'><img src='{$CONFIG['application_webpath']}images/icons/{$iconset}/16x16/tick.png' alt='' /></td>";
                         $counting[$user->realname]++;
                         $count++;
                     }
