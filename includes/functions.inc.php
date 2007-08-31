@@ -1516,7 +1516,7 @@ function emailtype_drop_down($name, $id)
   {
       echo "<option ";
       if (!empty($emailtypes['description'])) echo "title='{$emailtypes['description']}' ";
-      if ($emailtypes["id"] == $id) { echo "selected='selected '"; }
+      if ($emailtypes["id"] == $id) { echo "selected='selected' "; }
       echo "value='{$emailtypes['id']}'>{$emailtypes['name']}</option>";
       echo "\n";
   }
