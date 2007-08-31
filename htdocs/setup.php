@@ -22,6 +22,15 @@ $DEFAULTS = $CONFIG;
 @include('/etc/webtrack.conf'); // for legacy systems
 @include('/etc/sit.conf');
 
+// Some actions require authentication
+if ($_REQUEST['action']=='reconfigure')
+{
+    $permission=22;
+    $_REQUEST['config']='advanced'; // set advanced mode
+    require('functions.inc.php');
+    require('auth.inc.php');
+}
+
 // These are the required variables we want to configure during installation
 $SETUP=array('db_hostname','db_database','db_username','db_password','application_fspath','application_webpath');
 
@@ -45,6 +54,7 @@ $CFGVAR['support_manager_email']['title'] = 'The email address of the person in 
 $CFGVAR['bugtracker_name']['title'] = 'Bug tracker name';
 $CFGVAR['bugtracker_url']['title'] = 'Bug tracker url';
 $CFGVAR['dateformat_datetime']['title'] = 'Date and Time format';
+$CFGVAR['dateformat_datetime']['help'] = "See <a href='http://www.php.net/manual/en/function.date.php'>http://www.php.net/manual/en/function.date.php</a> for help with date formats";
 $CFGVAR['dateformat_filedatetime']['title'] = 'Date and Time format to use for files';
 $CFGVAR['dateformat_shortdate']['title'] = 'Short date format';
 $CFGVAR['dateformat_shorttime']['title'] = 'Short time format';
@@ -124,18 +134,18 @@ function setup_configure()
     if ($cfg_file_exists)
     {
         $html .= "<h2>Found an existing <var>config.inc.php</var> file</h2>";
-        $html .= "<p>Since you already have a config.inc.php file we assume you are upgrading or reconfiguring, if this is not the case please delete the file config.inc.php</p>";
+        $html .= "<p>Since you already have a <var>config.inc.php</var> file we assume you are upgrading or reconfiguring, if this is not the case please delete the file <var>config.inc.php</var></p>";
         if ($cfg_file_writable)
         {
-            $html .= "<p class='warning'>Important: The file permissions on the file config.inc.php allow the file to be modified, we recommend you make this file read-only once SiT! is configured.</p>";
+            $html .= "<p class='warning'>Important: The file permissions on the file <var>config.inc.php</var> allow the file to be modified, we recommend you make this file read-only once SiT! is configured.</p>";
         }
         else
         {
             $html .= "<p class='error'>A config file already exists but it is not writable</p>";
-            $html .= "<p>For security we won't show your existing settings here unless the config.inc.php is writable.</p>";
+            $html .= "<p>For security we won't show your existing settings here unless the <var>config.inc.php</var> is writable.</p>";
         }
     }
-    else $html .= "<h2>Configuration</h2><p>Please complete this form to create a new config.inc.php configuration file for SiT!</p>";
+    else $html .= "<h2>Configuration</h2><p>Please complete this form to create a new <var>config.inc.php</var> configuration file for SiT!</p>";
 
     $html .= "<form action='setup.php' method='post'>\n";
 
@@ -153,7 +163,7 @@ function setup_configure()
         if ($CFGVAR[$setupvar]['title']!='') $title = $CFGVAR[$setupvar]['title'];
         else $title = $setupvar;
         $html .= "<h4>{$title}</h4>";
-        if ($CFGVAR[$setupvar]['help']!='') $html .= "<p>{$CFGVAR[$setupvar]['help']}</p>\n";
+        if ($CFGVAR[$setupvar]['help']!='') $html .= "<p class='helptip'>{$CFGVAR[$setupvar]['help']}</p>\n";
 
         $html .= "\$CONFIG['$setupvar'] = <input type='text' name='$setupvar' size='60' value='";
         if (!$cfg_file_exists OR ($cfg_file_exists AND $cfg_file_writable))
@@ -164,7 +174,11 @@ function setup_configure()
                 if ($value==TRUE) $value='TRUE';
                 else $value='FALSE';
             }
-            if ($setupvar=='db_password') $value='';
+            elseif (is_array($value))
+            {
+                $value="array(".implode(',',$value).")";
+            }
+            if ($setupvar=='db_password' AND $_REQUEST['action']!='reconfigure') $value='';
             $html .= $value;
         }
         $html .= "' />";
@@ -215,6 +229,7 @@ echo "h1,h2,h3,h4,h5 { background-color: #203894; padding: 0.1em; border: 1px so
 echo "h4 {background-color: #F7FAFF; color: #000; border: 1px solid #3165CD; }\n";
 echo ".error {background: #FFFFCC; border: 1px solid red; color: red; padding: 2px;}\n";
 echo ".help {background: #F7FAFF; border: 1px solid #3165CD; color: #203894; padding: 2px;}\n";
+echo ".helptip { color: #203894;}\n";
 echo ".warning {background: #FFFFE6; border: 2px solid #FFFF31; color: red; padding: 2px;}\n";
 echo "pre {background:#FFF; border:#999; padding: 1em;}\n";
 echo "a:link,a:visited { color: #000099; }\n";
@@ -278,6 +293,7 @@ switch ($_REQUEST['action'])
             $newcfgfile .= "\$CONFIG['$setupvar'] = ";
             if (is_numeric($setupval)) $newcfgfile .= "{$setupval}";
             elseif (is_bool($setupval)) $newcfgfile .= $setupval == TRUE ? "TRUE" : "FALSE";
+            elseif (substr($setupval, 0, 6)=='array(') $newcfgfile .= stripslashes("{$setupval}");
             else $newcfgfile .= "'{$setupval}'";
             $newcfgfile .= ";\n\n";
         }
@@ -301,11 +317,18 @@ switch ($_REQUEST['action'])
             fwrite($fp, $newcfgfile);
             fclose($fp);
             echo "<p>Config file modified</p>";
-            echo "<p class='warning'>Important: The file permissions on the file config.inc.php allow the file to be modified, we recommend you now make this file read-only.</p>";
+            echo "<p class='warning'>Important: The file permissions on the file <var>config.inc.php</var> allow the file to be modified, we recommend you now make this file read-only.</p>";
         }
-        echo "<h2>After creating your config.inc.php file</h2>";
+        echo "<h2>After creating your <var>config.inc.php</var> file</h2>";
         echo "<p>Now run <a href='setup.php'>setup</a> again</p>";
     break;
+
+    case 'reconfigure':
+        echo "<h2>Reconfigure</h2>";
+        echo "<p>With this page administrators can set every available config file setting.  Please take care or you may break your SiT! installation.</p>";
+        echo setup_configure();
+    break;
+
 
     default:
         // Check we have the mysql extension
@@ -488,7 +511,7 @@ switch ($_REQUEST['action'])
                         echo "<code>chmod -R 777 {$CONFIG['attachment_fspath']}</code>";
                         echo "</p>";
                     }
-                    elseif(!isset($_REQUEST)) echo "<p class='error'>SiT! requires PHP 4.1.0 or later</p>";
+                    elseif(!isset($_REQUEST)) echo "<p class='error'>SiT! requires PHP 4.2.0 or later</p>";
                     elseif(@ini_get('register_globals')==1) echo "<p class='error'>SiT! strongly recommends that you change your php.ini setting <code>register_globals</code> to OFF.</p>";
                     else
                     {

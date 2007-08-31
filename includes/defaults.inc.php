@@ -34,6 +34,7 @@ $CONFIG['support_manager_email'] = 'support_manager@localhost';
 $CONFIG['bugtracker_name'] = '';
 $CONFIG['bugtracker_url'] = '';
 
+// See http://www.php.net/manual/en/function.date.php for help with date formats
 $CONFIG['dateformat_datetime'] = 'jS M Y @ g:ia';
 $CONFIG['dateformat_filedatetime'] = 'd/m/Y H:i';
 $CONFIG['dateformat_shortdate'] = 'd/m/y';
