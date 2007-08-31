@@ -64,8 +64,10 @@ if (user_permission($sit[2],$permission))
     {
         switch ($kbcontent->distribution)
         {
-            case 'private': echo "<div style='color: blue; background: #FFD8DE;' title='This paragraph is marked PRIVATE'>"; break;
-            case 'restricted': echo "<div style='color: red; background: #FFD8DE' title='This paragraph is marked RESTRICTED'>";  break;
+            case 'private':
+                echo "<div style='color: blue; background: #FFD8DE; background-image:url({$CONFIG['application_webpath']}images/icons/{$iconset}/16x16/private.png); background-repeat: no-repeat; background-position: top right;' title='This paragraph is marked PRIVATE'>";
+                break;
+            case 'restricted': echo "<div style='color: red; background: #FFD8DE; background: #FFD8DE; background-image:url({$CONFIG['application_webpath']}images/icons/{$iconset}/16x16/private.png); background-repeat: no-repeat; background-position: top right;' title='This paragraph is marked RESTRICTED'>";  break;
             default: echo "<div>";
         }
         echo "<{$kbcontent->headerstyle}>{$kbcontent->header}</{$kbcontent->headerstyle}>\n";
