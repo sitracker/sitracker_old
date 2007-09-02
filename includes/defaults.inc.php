@@ -186,4 +186,8 @@ $CONFIG['ext_esc_partners'] = array('novell' => array('name' => 'Novell',
                                             'ext_url' => 'https://support.microsoft.com/oas/default.aspx?tp=re&amp;incno=%externalid%',
                                             'ext_url_title' => 'Microsoft Help and Support',
                                             'email_domain' => 'microsoft.com'));
+
+$CONFIG['no_feedback_contracts'] = array(1 => 2);
+
+$CONFIG['preferred_maintence'] = array(1 => "Dedicated");
 ?>
