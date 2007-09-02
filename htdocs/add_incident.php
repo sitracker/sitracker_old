@@ -127,6 +127,7 @@ elseif ($action=='findcontact')
         <?php
         function to_row($contactrow)
         {
+            global $now;
             $str = "";
             if ($contactrow['expirydate']<$now || $contactrow['term']=='yes') $class = 'expired';
             else $class = "shade2";
