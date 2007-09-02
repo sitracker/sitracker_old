@@ -100,7 +100,7 @@ elseif ($action=='findcontact')
         $sql .= "AND supportcontacts.contactid = '$contactid' ";
     }
 
-    $sql .= "ORDER by contacts.forenames, contacts.surname ";
+    $sql .= "ORDER by contacts.forenames, contacts.surname, productname, expirydate ";
     $result=mysql_query($sql);
     if (mysql_error()) trigger_error("MySQL Query Error ".mysql_error(), E_USER_ERROR);
     if (mysql_num_rows($result)>0)
@@ -125,44 +125,72 @@ elseif ($action=='findcontact')
         Click on the appropriate 'Add Incident' link to begin adding the incident.</p>
 
         <?php
-        echo "<table align='center'>";
-        ?>
-        <tr>
-            <th>&nbsp;</th>
-            <th>Name</th>
-            <th>Site</th>
-            <th>Contract</th>
-            <th>Service Level</th>
-            <th>Expiry</th>
-        </tr>
-        <?php
-        while($contactrow=mysql_fetch_array($result))
+        function to_row($contactrow)
         {
+            $str = "";
             if ($contactrow['expirydate']<$now || $contactrow['term']=='yes') $class = 'expired';
             else $class = "shade2";
 
             $incidents_remaining = $contactrow['incident_quantity'] - $contactrow['incidents_used'];
 
-            echo "<tr class='$class'>";
-            if ($contactrow['expirydate']<$now) echo "<td>Expired</td>";
-            elseif ($contactrow['term']=='yes') echo "<td>Terminated</td>";
+            $str = "<tr class='$class'>";
+            if ($contactrow['expirydate']<$now) $str .=  "<td>Expired</td>";
+            elseif ($contactrow['term']=='yes') $str .=  "<td>Terminated</td>";
             elseif ($contactrow['incident_quantity'] >= 1 AND $contactrow['incidents_used'] >= $contactrow['incident_quantity'])
-                echo "<td class='expired'>Zero remaining ({$contactrow['incidents_used']}/{$contactrow['incident_quantity']} Used)</td>";
+                $str .=  "<td class='expired'>Zero remaining ({$contactrow['incidents_used']}/{$contactrow['incident_quantity']} Used)</td>";
             else
             {
-                echo "<td><a href=\"{$_SERVER['PHP_SELF']}?action=incidentform&amp;type=support&amp;contactid=".$contactrow['contactid']."&amp;maintid=".$contactrow['maintenanceid']."&amp;producttext=".urlencode($contactrow['productname'])."&amp;productid=".$contactrow['productid']."&amp;updateid=$updateid&amp;siteid=".$contactrow['siteid']."\" onclick=\"return confirm_support();\">Add Incident</a> ";
-                if ($contactrow['incident_quantity']==0) echo "(Unlimited)";
-                else echo "({$incidents_remaining} Left)";
+                $str .=  "<td><a href=\"{$_SERVER['PHP_SELF']}?action=incidentform&amp;type=support&amp;contactid=".$contactrow['contactid']."&amp;maintid=".$contactrow['maintenanceid']."&amp;producttext=".urlencode($contactrow['productname'])."&amp;productid=".$contactrow['productid']."&amp;updateid=$updateid&amp;siteid=".$contactrow['siteid']."\" onclick=\"return confirm_support();\">Add Incident</a> ";
+                if ($contactrow['incident_quantity']==0) $str .=  "(Unlimited)";
+                else $str .=  "({$incidents_remaining} Left)";
             }
-            echo "</td>";
-            echo '<td>'.$contactrow['forenames'].' '.$contactrow['surname'].'</td>';
-            echo '<td>'.$contactrow['name'].'</td>';
-            echo '<td><strong>'.$contactrow['maintid'].'</strong>&nbsp;'.$contactrow['productname'].'</td>';
-            echo '<td>'.servicelevel_id2tag($contactrow['servicelevelid']).'</td>';
-            echo '<td>'.date("jS M Y", $contactrow['expirydate']).'</td>';
-            echo "</tr>\n";
+            $str .=  "</td>";
+            $str .=  '<td>'.$contactrow['forenames'].' '.$contactrow['surname'].'</td>';
+            $str .=  '<td>'.$contactrow['name'].'</td>';
+            $str .=  '<td><strong>'.$contactrow['maintid'].'</strong>&nbsp;'.$contactrow['productname'].'</td>';
+            $str .=  '<td>'.servicelevel_id2tag($contactrow['servicelevelid']).'</td>';
+            $str .=  '<td>'.date("jS M Y", $contactrow['expirydate']).'</td>';
+            $str .=  "</tr>\n";
+
+            return $str;
         }
-        echo "</table>\n";
+
+        $str_prefered = "";
+        $str_alternative = "";
+
+        $headers = "<tr><th>&nbsp;</th><th>Name</th><th>Site</th><th>Contract</th><th>Service Level</th><th>Expiry</th></tr>";
+
+        while($contactrow=mysql_fetch_array($result))
+        {
+            if(in_array(servicelevel_id2tag($contactrow['servicelevelid']), $CONFIG['preferred_maintence']))
+            {
+                $str_prefered .= to_row($contactrow);
+            }
+            else
+            {
+                $str_alternative .= to_row($contactrow);
+            }
+        }
+
+        if(!empty($str_prefered))
+        {
+            echo "<p><h3>Preferred</h3>";
+            echo "<table align='center'>";
+            echo $headers;
+            echo $str_prefered;
+            echo "</table></p>";
+        }
+
+        if(!empty($str_alternative))
+        {
+            if(!empty($str_prefered)) echo "<h3>Alternative</h3>";
+            echo "<table align='center'>";
+            echo $headers;
+            echo $str_alternative;
+            echo "</table>";
+            if(!empty($str_prefered)) echo "<p align='center'><strong>NOTE:</strong> You probably wish to log the incident under a preferred contract</p>";
+        }
+
         // Select the contact from the list of contacts as well
         $sql = "SELECT *, contacts.id AS contactid FROM contacts, sites WHERE contacts.siteid=sites.id ";
         if (empty($contactid))

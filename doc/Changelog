@@ -107,6 +107,7 @@ Changes in v3.30 - Unreleased
 * Fixed column name lastupdated which means sorting by that column is now working again
 * Added dashboard component to watch sites, contacts and engineers calls
 * Added ability to make sites and contacts as inactive so they dont show in the default view
+* Added ability to define 'prefered' contracts which show seperatly from 'normal' contracts 
 * Removed a lot of old unused code
 * Plus many more minor changes and fixes
 
