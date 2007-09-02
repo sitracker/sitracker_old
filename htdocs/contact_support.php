@@ -232,8 +232,6 @@ if ($countproducts >= 1 OR $contactcontacts >= 1)
         echo "<div style='text-align:center;'>";
         echo "<img src='chart.php?type=pie&data=$data&legends=$legends&title=$title' />";
         echo "</div>";
-
-
     }
 }
 
