@@ -1067,7 +1067,7 @@ function contact_drop_down($name, $id, $showsite=FALSE)
 function contact_site_drop_down($name, $id, $siteid='', $exclude='')
 {
    $sql  = "SELECT contacts.id AS contactid, forenames, surname, siteid, sites.name AS sitename FROM contacts, sites ";
-   $sql .= "WHERE contacts.siteid=sites.id ";
+   $sql .= "WHERE contacts.siteid=sites.id AND contacts.active = 'true' AND sites.active = 'true' ";
    if (!empty($siteid)) $sql .= "AND sites.id='$siteid' ";
    $sql .= "ORDER BY surname ASC";
    $result = mysql_query($sql);
@@ -4294,6 +4294,20 @@ function draw_tabs($tabsarray, $selected='')
   return ($html);
 }
 
+
+function send_feedback($contractid)
+{
+    global $CONFIG;
+    foreach($CONFIG['no_feedback_contracts'] AS $contract)
+    {
+        if($contract == $contractid)
+        {
+            return FALSE;
+        }
+    }
+
+    return TRUE;
+}
 
 // Creates a blank feedback form response
 function create_incident_feedback($formid, $incidentid)
