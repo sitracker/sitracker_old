@@ -115,12 +115,15 @@ while ($row=mysql_fetch_object($result))
     else echo "<td colspan='2'>-</td>";
     echo "<td>";
     $slahistory = incident_sla_history($row->incidentid);
-    foreach($slahistory AS $history)
+    if (is_array($slahistory))
     {
-        if ($history['targetmet'] == FALSE) $targetmet = FALSE;
-    }
-    if ($targetmet == TRUE) echo "Met";
-    else { $countslaexceeded++; echo "Exceeded"; }
+        foreach($slahistory AS $history)
+        {
+            if ($history['targetmet'] == FALSE) $targetmet = FALSE;
+        }
+        if ($targetmet == TRUE) echo "Met";
+        else { $countslaexceeded++; echo "Exceeded"; }
+    } else echo "No SLA";
     echo "</td>";
 
     if (!array_key_exists($row->product, $productlist)) $productlist[$row->product] = 1;
