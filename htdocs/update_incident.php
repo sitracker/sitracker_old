@@ -320,9 +320,12 @@ else
     $timetonextaction_none = cleanvar($_POST['timetonextaction_none']);
     $date = cleanvar($_POST['date']);
     $timeoffset = cleanvar($_POST['timeoffset']);
+    $timetonextaction_days = cleanvar($_POST['timetonextaction_days']);
+    $timetonextaction_hours = cleanvar($_POST['timetonextaction_hours']);
+    $timetonextaction_minutes = cleanvar($_POST['timetonextaction_minutes']);
 
     if (empty($newpriority)) $newpriority  = incident_priority($id);
-
+    echo "method is: $timetonextaction_none";
     // update incident
     switch ($timetonextaction_none)
     {
@@ -333,11 +336,13 @@ else
         case 'time':
             if ($timetonextaction_days<1 && $timetonextaction_hours<1 && $timetonextaction_minutes<1)
             {
+                echo "$timetonextaction_days $timetonextaction_hours $timetonextaction_minutes";
                 $timeofnextaction = 0;
             }
             else
             {
                 $timeofnextaction = calculate_time_of_next_action($timetonextaction_days, $timetonextaction_hours, $timetonextaction_minutes);
+                echo "time of next action: $timeofnextaction";
             }
         break;
 
