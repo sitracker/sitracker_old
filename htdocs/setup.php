@@ -120,6 +120,8 @@ $CFGVAR['access_logfile']['telp'] = "This file must be writable of course";
 $CFGVAR['plugins']['title'] = "An array of plugin names";
 $CFGVAR['plugins']['help'] = "e.g. 'array('magic_plugin', 'lookup_plugin')'";
 $CFGVAR['error_notavailable_url']['title']="The URL to redirect too for pages that do not exist yet.";
+$CFGVAR['tag_icons']['title'] = "An array of tags and associated icons";
+$CFGVAR['tag_icons']['help'] = "Set up an array to use an icon for specified tags, format: array('tag' => 'icon', 'tag2' => 'icon2')";
 
 $upgradeok = FALSE;
 $config_filename='../includes/config.inc.php';

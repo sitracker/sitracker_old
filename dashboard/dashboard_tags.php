@@ -12,7 +12,7 @@
 function dashboard_tags($row,$dashboardid)
 {
     echo "<div class='windowbox' style='width: 95%' id='$row-$dashboardid'>";
-    echo "<div class='windowtitle'>Tags</div>";
+    echo "<div class='windowtitle'><a href='view_tags.php'>Tags</a></div>";
     echo "<div class='window'>";
     echo show_tag_cloud();
     echo "</div>";

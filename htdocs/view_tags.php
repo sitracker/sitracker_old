@@ -37,7 +37,9 @@ else
     list($tagname)=mysql_fetch_row($result);
 
     include('htmlheader.inc.php');
-    echo "<h2><a href='view_tags.php'>Tag</a>: $tagname</h2>";
+    echo "<h2><a href='view_tags.php'>Tag</a>: $tagname";
+    if (array_key_exists($tagname, $CONFIG['tag_icons'])) echo "&nbsp;<img src='images/icons/sit/32x32/{$CONFIG['tag_icons'][$tagname]}.png' style='border:0px;' alt='' />";
+    echo "</h2>";
 
 
     //show only this tag
