@@ -4998,6 +4998,7 @@ function list_tags($recordid, $type, $html=TRUE)
 
 function show_tag_cloud($orderby="name")
 {
+    global $CONFIG;
     $sql = "SELECT COUNT(name) AS occurrences, name, tags.tagid FROM tags, set_tags WHERE tags.tagid = set_tags.tagid GROUP BY name ORDER BY $orderby";
     if($orderby == "occurrences") $sql .= " DESC";
     $result = mysql_query($sql);
@@ -5024,7 +5025,16 @@ function show_tag_cloud($orderby="name")
         {
             $size = (($obj->occurrences) * 300 / $max) +100;
             if ($size==0) $size=100;
-            $html .= "<a href='view_tags.php?tagid=$obj->tagid' style='font-size: {$size}%;' title='{$obj->occurrences}'>{$obj->name}</a> &nbsp;";
+            $html .= "<a href='view_tags.php?tagid=$obj->tagid' style='font-size: {$size}%;' title='{$obj->occurrences}'>";
+            if (array_key_exists($obj->name, $CONFIG['tag_icons']))
+            {
+                $html .= "{$obj->name}&nbsp;<img src='images/icons/sit/";
+                if ($size <= 200) $html .= "16x16";
+                else $html .= "32x32";
+                $html .= "/{$CONFIG['tag_icons'][$obj->name]}.png' style='border:0px;' alt='' />";
+            }
+            else $html .= "{$obj->name}";
+            $html .= "</a> &nbsp;";
         }
         $html .= "</td></tr></table>";
     }
