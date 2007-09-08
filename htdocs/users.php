@@ -128,7 +128,7 @@ while ($users = mysql_fetch_array($result))
     if (strlen($users['aim']) > 3) echo "<img src='{$CONFIG['application_webpath']}images/icons/{$iconset}/16x16/aim.png' width='16' height='16' alt='{$users['aim']}' /> <strong>AIM</strong>: {$users['aim']}<br />";
     if (strlen($users['icq']) > 3) echo "<img src='{$CONFIG['application_webpath']}images/icons/{$iconset}/16x16/icq.png' width='16' height='16' alt='{$users['icq']}' /> <strong>ICQ</strong>: {$users['icq']}<br />";
     if (strlen($users['msn']) > 3) echo "<img src='{$CONFIG['application_webpath']}images/icons/{$iconset}/16x16/msn.png' width='16' height='16' alt='{$users['msn']}' /> <strong>MSN</strong>: {$users['msn']}<br />";
-    if (!empty($users['message'])) echo "<br /><strong>Message</strong>: {$users['message']}";
+    if (!empty($users['message'])) echo "<br /><img src='{$CONFIG['application_webpath']}images/icons/{$iconset}/16x16/messageflag.png' width='16' height='16' alt='' /> <strong>Message</strong>: {$users['message']}";
     echo "</span>";
     echo "</a>";
     echo "</td>";
