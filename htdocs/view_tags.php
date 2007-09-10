@@ -74,7 +74,6 @@ else
                     if(mysql_num_rows($resultinc) > 0)
                     {
                         $objinc = mysql_fetch_object($resultinc);
-//javascript:incident_details_window('119','incident119')
                         echo "<th>INCIDENT</th><td><a href=\"javascript:incident_details_window('{$obj->id}','incident{$obj->id}')\">";
                         echo $objinc->title."</a></td>";
                     }
@@ -87,9 +86,10 @@ else
                     if(mysql_num_rows($resultsite) > 0)
                     {
                         $objsite = mysql_fetch_object($resultsite);
-                         echo "<th>SITE</th><td><a href='site_details.php?id={$obj->id}&action=show'>";
+                         echo "<th>SITE</th><td><a href='site_details.php?id={$obj->id}&amp;action=show'>";
                         echo $objsite->name."</a></td>";
                     }
+                break;
 
                 case 4: // task
                     $sql = "SELECT name FROM tasks WHERE id = '{$obj->id}'";
