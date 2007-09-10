@@ -25,7 +25,10 @@ echo "<div id='detailsummary'>";
 echo "<table>";
 echo "<tr><td>";
 // First column: Contact Details
-echo "<a href='contact_details.php?id={$incident->contactid}' title='Contact Details' target='top.opener'>{$incident->forenames} {$incident->surname}</a> of <a href='site_details.php?id={$incident->siteid}' title='Site Details' target='top.opener'>{$site_name}</a><br />\n";
+echo "<a href='contact_details.php?id={$incident->contactid}' title='Contact Details' target='top.opener'>{$incident->forenames} {$incident->surname}</a> ";
+echo "of <a href='site_details.php?id={$incident->siteid}' title='Site Details' target='top.opener'>{$site_name}</a> ";
+echo list_tag_icons($incident->siteid, 3); // site tag icons
+echo "<br />\n";
 echo "<a href='mailto:{$incident->email}'>{$incident->email}</a><br />\n";
 if ($incident->ccemail != '') echo "CC: <a href='mailto:{$incident->ccemail}'>{$incident->ccemail}</a><br />\n";
 if ($incident->phone!='' OR $incident->phone!='')
@@ -45,6 +48,8 @@ if ($incident->externalengineer != '')
     if ($incident->externalemail != '') echo ", <a href='mailto:{$incident->externalemail}'>{$incident->externalemail}</a>";
     echo "<br />\n";
 }
+$tags = list_tags($id, 2, TRUE);
+if (!empty($tags)) echo "{$tags}\n";
 echo "</td>";
 
 echo "<td>";

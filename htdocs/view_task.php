@@ -29,7 +29,7 @@ echo "<h2>$title</h2>";
 
 echo "<div style='width: 90%; margin-left: auto; margin-right: auto;'>";
 
-$sql = "SELECT * FROM tasks WHERE id='$id'";
+$sql = "SELECT * FROM tasks WHERE id='{$id}'";
 $result = mysql_query($sql);
 if (mysql_error()) trigger_error(mysql_error(),E_USER_ERROR);
 if (mysql_num_rows($result) >= 1)
