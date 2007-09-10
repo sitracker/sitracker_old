@@ -8,6 +8,7 @@
 // of the GNU General Public License, incorporated herein by reference.
 //
 
+// DEPRECATED as of v3.30
 
 // Author: Ivan Lucas <ivanlucas[at]users.sourceforge.net>
 
@@ -78,6 +79,7 @@ while ($cflag = mysql_fetch_object($cresult))
 }
 
 echo "<h2>Available Flags</h2>";
+echo "<p class='warning'>Please note that 'contact flags' are a deprecated feature as of SiT v3.30, we recommend to use 'tags' instead.</p>";
 echo "<table align='center'><tr>";
 
 $sql="SELECT * FROM flags ORDER BY flag";
