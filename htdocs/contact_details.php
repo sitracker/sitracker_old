@@ -74,9 +74,12 @@ while ($contactrow=mysql_fetch_array($contactresult))
     {
         echo "<tr><th>Status:</th><td><span class='expired'>Inactive</span></td></tr>";
     }
-    echo "<tr><th>Flags:</th><td>";
-    print_contact_flags($id);
-    echo "</td></tr>";
+    $tags = list_tags($id, 1, TRUE);
+    if (!empty($tags)) echo "<tr><th>Tags:</th><td>{$tags}</td></tr>";
+    // Flags are deprecated as of v3.30 in favour of tags - INL
+    // echo "<tr><th>Flags:</th><td>";
+    // print_contact_flags($id);
+    //echo "</td></tr>";
     echo "<tr><th>Job Title:</th><td>".$contactrow['jobtitle']."</td></tr>";
     echo "<tr><th>Site:</th><td><a href=\"site_details.php?id=".$contactrow['siteid']."\">".site_name($contactrow['siteid'])."</a></td></tr>";
     if (!empty($contactrow['department'])) echo "<tr><th>Department:</th><td>".$contactrow['department']."</td></tr>";

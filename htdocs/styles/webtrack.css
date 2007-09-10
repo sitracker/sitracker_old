@@ -533,6 +533,17 @@ div.appointmentdata h2 a:hover {background: white;}
 
 .dojoComboBox { height: 1.5em; }
 
+
+div.taglist
+{
+    border: 1px solid #808080;
+    background: #F7FAFF;  /* #C5B2D5; */
+    padding: 0.2em 0.7em;
+    font-size: 120%;
+    -moz-border-radius: 6px;
+}
+
+
 @media print
 {
     #menu, #statusbar, h1#apptitle, #menulist, .contextmenu {visibility:hidden; display:none;}

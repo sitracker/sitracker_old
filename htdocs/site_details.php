@@ -43,6 +43,8 @@ while ($siterow=mysql_fetch_array($siteresult))
     {
         echo "<tr><th>Status:</th><td><span class='expired'>Inactive</span></td></tr>";
     }
+    $tags = list_tags($id, 3, TRUE);
+    if (!empty($tags)) echo "<tr><th>Tags:</th><td>{$tags}</td></tr>";
     echo "<tr><th>Department:</th><td>".$siterow['department']."</td></tr>";
     echo "<tr><th>Address1:</th><td>".$siterow['address1']."</td></tr>";
     echo "<tr><th>Address2:</th><td>".$siterow['address2']."</td></tr>";

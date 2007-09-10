@@ -175,6 +175,7 @@ $hmenu[2030] = array (10=> array ( 'perm'=> 19, 'name'=> "Browse", 'url'=>"{$CON
 $hmenu[203010] = array (10=> array ( 'perm'=> 56, 'name'=> "Add Vendor", 'url'=>"{$CONFIG['application_webpath']}add_vendor.php"),
                         20=> array ( 'perm'=> 24, 'name'=> "Add Product", 'url'=>"{$CONFIG['application_webpath']}add_product.php"),
                         30=> array ( 'perm'=> 28, 'name'=> "List Products", 'url'=>"{$CONFIG['application_webpath']}products.php"),
+                        35=> array ( 'perm'=> 28, 'name'=> "List Skills", 'url'=>"{$CONFIG['application_webpath']}products.php?display=skills"),
                         40=> array ( 'perm'=> 56, 'name'=> "Add Skill", 'url'=>"{$CONFIG['application_webpath']}add_software.php"),
                         50=> array ( 'perm'=> 24, 'name'=> "Link Products", 'url'=>"{$CONFIG['application_webpath']}add_product_software.php"),
                         60=> array ( 'perm'=> 25, 'name'=> "Add Product Question", 'url'=>"{$CONFIG['application_webpath']}add_productinfo.php"),
@@ -4984,17 +4985,64 @@ function replace_tags($type, $id, $tagstring)
 
 function list_tags($recordid, $type, $html=TRUE)
 {
+    global $CONFIG;
     $sql = "SELECT tags.name, tags.tagid FROM set_tags, tags WHERE set_tags.tagid = tags.tagid AND ";
     $sql .= "set_tags.type = '$type' AND set_tags.id = '$recordid'";
     $result = mysql_query($sql);
     if (mysql_error()) trigger_error(mysql_error(),E_USER_ERROR);
+    $numtags = mysql_num_rows($result);
+    if ($html AND $numtags > 0) $str .= "<div class='taglist'>";
+    $count=1;
     while($tags = mysql_fetch_object($result))
     {
-        if($html) $str .= "<a href='view_tags.php?tagid={$tags->tagid}'>{$tags->name}</a>, ";
-        else $str .= $tags->name.", ";
+        if($html)
+        {
+            $str .= "<a href='view_tags.php?tagid={$tags->tagid}'>{$tags->name}";
+            if (array_key_exists($tags->name, $CONFIG['tag_icons']))
+            {
+                $str .= "&nbsp;<img src='images/icons/sit/16x16/{$CONFIG['tag_icons'][$tags->name]}.png' style='border:0px;' alt='' />";
+            }
+            $str .= "</a>";
+        }
+        else $str .= $tags->name;
+        if ($count < $numtags) $str .= ", ";
+        if ($html AND !($count%5)) $str .= "<br />\n";
+        $count++;
     }
-    return trim(substr($str, 0, strlen($str)-2));
+    if ($html AND $numtags > 0) $str .= "</div>";
+    return trim($str);
 }
+
+
+function list_tag_icons($recordid, $type)
+{
+    global $CONFIG;
+    $sql = "SELECT tags.name, tags.tagid FROM set_tags, tags WHERE set_tags.tagid = tags.tagid AND ";
+    $sql .= "set_tags.type = '$type' AND set_tags.id = '$recordid' AND (";
+    $counticons = count($CONFIG['tag_icons']);
+    $count=1;
+    foreach ($CONFIG['tag_icons'] AS $icon)
+    {
+        $sql .= "tags.name = '{$icon}'";
+        if ($count < $counticons) $sql .= " OR ";
+        $count++;
+    }
+    $sql .= ")";
+    $result = mysql_query($sql);
+    if (mysql_error()) trigger_error(mysql_error(),E_USER_ERROR);
+    $numtags = mysql_num_rows($result);
+    if ($numtags > 0)
+    {
+        while($tags = mysql_fetch_object($result))
+        {
+            $str .= "<a href='view_tags.php?tagid={$tags->tagid}' title='{$tags->name}'>";
+            $str .= "<img src='images/icons/sit/16x16/{$CONFIG['tag_icons'][$tags->name]}.png' style='border:0px;' alt='{$tags->name}' />";
+            $str .= "</a> ";
+        }
+    }
+    return $str;
+}
+
 
 function show_tag_cloud($orderby="name")
 {
@@ -5038,7 +5086,7 @@ function show_tag_cloud($orderby="name")
         }
         $html .= "</td></tr></table>";
     }
-    else $html .= "<p>No tags to display</p>";
+    else $html .= "<p align='center'>No tags to display</p>";
     return $html;
 }
 
