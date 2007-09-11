@@ -31,7 +31,9 @@ if (count($slahistory) >= 1)
         if ($history['targetmet']==FALSE) $class='critical';
         else $class='shade2';
         echo "<tr class='$class'>";
-        echo "<td>".target_type_name($history['targetsla'])."</td>";
+        echo "<td>";
+        echo "<img src='{$CONFIG['application_webpath']}images/icons/{$iconset}/16x16/{$slatypes[$history['targetsla']]['icon']}' width='16' height='16' alt='' /> ";
+        echo target_type_name($history['targetsla'])."</td>";
         echo "<td>";
         if (!empty($history['userid'])) echo user_realname($history['userid'],TRUE);
         echo "</td>";
