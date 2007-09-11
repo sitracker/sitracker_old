@@ -70,15 +70,21 @@ $updatetypes['externalinfo'] = array('icon' => 'externalinfo.png', 'text' => 'Ex
 $updatetypes['probdef'] = array('icon' => 'probdef.png', 'text' => 'Problem Definition by updateuser');
 $updatetypes['research'] = array('icon' => 'research.png', 'text' => 'Researched by updateuser');
 $updatetypes['reassigning'] = array('icon' => 'reassign.png', 'text' => 'Reassigned to currentowner by updateuser');
-$updatetypes['reviewmet'] = array('icon' => 'review.png', 'text' => 'Review Period by updateuser'); // conditional
+$updatetypes['reviewmet'] = array('icon' => 'review.png', 'text' => 'Review updatereview by updateuser'); // conditional
 $updatetypes['tempassigning'] = array('icon' => 'tempassign.png', 'text' => 'Temporarily assigned to currentowner by updateuser');
 $updatetypes['opening'] = array('icon' => 'open.png', 'text' => 'Opened by updateuser');
 $updatetypes['phonecallout'] = array('icon' => 'callout.png', 'text' => 'Phone call made by updateuser');
 $updatetypes['phonecallin'] = array('icon' => 'callin.png', 'text' => 'Phone call taken by updateuser');
 $updatetypes['reopening'] = array('icon' => 'reopen.png', 'text' => 'Reopened by updateuser');
-$updatetypes['slamet'] = array('icon' => 'sla.png', 'text' => 'SLA Met by updateuser');
+$updatetypes['slamet'] = array('icon' => 'sla.png', 'text' => 'SLA: updatesla by updateuser');
 $updatetypes['solution'] = array('icon' => 'solution.png', 'text' => 'Resolved by updateuser');
 $updatetypes['webupdate'] = array('icon' => 'webupdate.png', 'text' => 'Web update');
+$slatypes['opened'] = array('icon' => 'open.png', 'text' => 'Opened');
+$slatypes['initialresponse'] = array('icon' => 'initialresponse.png', 'text' => 'Initial Response');
+$slatypes['probdef'] = array('icon' => 'probdef.png', 'text' => 'Problem Definition');
+$slatypes['actionplan'] = array('icon' => 'actionplan.png', 'text' => 'Action Plan');
+$slatypes['solution'] = array('icon' => 'solution.png', 'text' => 'Solution');
+$slatypes['closed'] = array('icon' => 'close.png', 'text' => 'Closed');
 
 // Set a string to be the full version number and revision of the application
 $application_version_string=trim("v{$application_version} {$application_revision}");
