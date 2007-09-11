@@ -266,7 +266,7 @@ if (empty($action))
         echo "<input name='date' size='10' value='{$date}' onclick=\"window.document.updateform.timetonextaction_none[1].checked = true;\"/> ";
         echo date_picker('updateform.date');
     ?>
-    <select title="Choose Time" name="timeoffset" onchange="window.document.updateform.timetonextaction_none[1].checked = true;">
+    <select name="timeoffset" onchange="window.document.updateform.timetonextaction_none[1].checked = true;">
     <option>Choose Time</option>
     <option value="0">8:00 AM</option>
     <option value="1">9:00 AM</option>
