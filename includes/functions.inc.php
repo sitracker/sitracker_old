@@ -1536,7 +1536,7 @@ function priority_drop_down($name, $id, $max=4, $disable=FALSE)
     if ($disable) $html .= "disabled='disabled'";
     $html .= ">";
     if ($id == 0) $html .= "<option selected='selected' value='0'></option>\n";
-    $html .= "<option style='text-indent: 14px; background-image: url({$CONFIG['application_webpath']}/images/{$iconset}/16x16/low_priority.gif); background-repeat:no-repeat;' value='1'";
+    $html .= "<option style='text-indent: 14px; background-image: url({$CONFIG['application_webpath']}/images/low_priority.gif); background-repeat:no-repeat;' value='1'";
     if ($id==1) $html .= " selected='selected'";
     $html .= ">Low</option>\n";
     $html .= "<option style='text-indent: 14px; background-image: url({$CONFIG['application_webpath']}/images/med_priority.gif); background-repeat:no-repeat;' value='2'";

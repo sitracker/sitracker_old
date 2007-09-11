@@ -195,14 +195,14 @@ if (empty($action))
     if ($target->type!='solution')
         echo "<option value='actionplan'>Action Plan</option>\n";
     */
+    echo "<option value='research' selected='selected' style='text-indent: 15px; height: 17px; background-image: url({$CONFIG['application_webpath']}/images/icons/{$iconset}/16x16/research.png); background-repeat: no-repeat;'>Research Notes</option>\n";
+    echo "<option value='emailin' style='text-indent: 15px; height: 17px; background-image: url({$CONFIG['application_webpath']}/images/icons/{$iconset}/16x16/emailin.png); background-repeat: no-repeat;'>Email from Customer</option>\n";
+    echo "<option value='emailout' style='text-indent: 15px; height: 17px; background-image: url({$CONFIG['application_webpath']}/images/icons/{$iconset}/16x16/emailout.png); background-repeat: no-repeat;'>Email to Customer</option>\n";
+    echo "<option value='phonecallin' style='text-indent: 15px; height: 17px; background-image: url({$CONFIG['application_webpath']}/images/icons/{$iconset}/16x16/callin.png); background-repeat: no-repeat;'>Phone call from Customer</option>\n";
+    echo "<option value='phonecallout' style='text-indent: 15px; height: 17px; background-image: url({$CONFIG['application_webpath']}/images/icons/{$iconset}/16x16/callout.png); background-repeat: no-repeat;'>Phone call to Customer</option>\n";
+    echo "<option value='externalinfo' style='text-indent: 15px; height: 17px; background-image: url({$CONFIG['application_webpath']}/images/icons/{$iconset}/16x16/externalinfo.png); background-repeat: no-repeat;'>External Escalation Info</option>\n";
+    echo "<option value='reviewmet' style='text-indent: 15px; height: 17px; background-image: url({$CONFIG['application_webpath']}/images/icons/{$iconset}/16x16/review.png); background-repeat: no-repeat;'>Incident Review</option>\n";
     ?>
-    <option value="research" selected>Research Notes</option>
-    <option value="emailin">Email from Customer</option>
-    <option value="emailout">Email to Customer</option>
-    <option value="phonecallin">Phone call from Customer</option>
-    <option value="phonecallout">Phone call to Customer</option>
-    <option value="externalinfo">External Escalation Info</option>
-    <option value="reviewmet">Incident Review</option>
     </select>
     </td>
     </tr>
@@ -211,17 +211,17 @@ if (empty($action))
     New information, relevent to the incident.  Please be as detailed as possible and include full descriptions of any work you have performed.<br />
     <br />
     Check here <input type="checkbox" name="cust_vis" checked='checked' value="yes" /> to make this update visible to the customer.
-    </td>
+    </th>
     <td class="shade1"><textarea name="bodytext" rows="13" cols="50"></textarea></td>
     </tr>
     <?php
-    echo "<input type='hidden' name='storepriority' value='".incident_priority($id)."'>";
+
     if ($target->type=='initialresponse')
     {
         $disable_priority=TRUE;
     }
     else $disable_priority=FALSE;
-    echo "<tr><th align='right' valign='top'>New Priority:</td>";
+    echo "<tr><th align='right' valign='top'>New Priority:</th>";
     echo "<td class='shade1'>";
 
     // FIXME fix maximum priority
@@ -237,7 +237,7 @@ if (empty($action))
     <td class="shade1"><?php echo incidentstatus_drop_down("newstatus", incident_status($id)); ?></td>
     </tr>
     <tr>
-    <th align='right' valign=top>Next Action:</th>
+    <th align='right' valign='top'>Next Action:</th>
     <td class="shade2"><input type="text" name="nextaction" maxlength="50" size="30" value="" /></td></tr>
     <tr>
     <th align='right'>
@@ -261,7 +261,7 @@ if (empty($action))
     <input maxlength='3' name="timetonextaction_days" value="<?php echo $na_days ?>" onclick="window.document.updateform.timetonextaction_none[0].checked = true;" size='3' /> Days&nbsp;
     <input maxlength='2' name="timetonextaction_hours" value="<?php echo $na_hours ?>" onclick="window.document.updateform.timetonextaction_none[0].checked = true;" size='3' /> Hours&nbsp;
     <input maxlength='2' name="timetonextaction_minutes" value="<?php echo $na_minutes ?>" onclick="window.document.updateform.timetonextaction_none[0].checked = true;" size='3' /> Minutes<br />
-    <input type="radio" name="timetonextaction_none" value="date">On specified Date<br />&nbsp;&nbsp;&nbsp;
+    <input type="radio" name="timetonextaction_none" value="date" />On specified Date<br />&nbsp;&nbsp;&nbsp;
     <?php
         echo "<input name='date' size='10' value='{$date}' onclick=\"window.document.updateform.timetonextaction_none[1].checked = true;\"/> ";
         echo date_picker('updateform.date');
@@ -279,7 +279,7 @@ if (empty($action))
     <option value="9">5:00 PM</option>
     </select>
     <br />
-    <input checked type="radio" name="timetonextaction_none" onclick="window.document.updateform.timetonextaction_days.value = ''; window.document.updateform.timetonextaction_hours.value = ''; window.document.updateform.timetonextaction_minutes.value = '';" value="None" /> Unspecified
+    <input checked='checked' type="radio" name="timetonextaction_none" onclick="window.document.updateform.timetonextaction_days.value = ''; window.document.updateform.timetonextaction_hours.value = ''; window.document.updateform.timetonextaction_minutes.value = '';" value="None" /> Unspecified
     </td></tr>
     <tr>
     <?php
@@ -299,6 +299,9 @@ if (empty($action))
     </table>
     <p class='center'>
     <input type="hidden" name='action' value="update" />
+    <?php
+    echo "<input type='hidden' name='storepriority' value='".incident_priority($id)."' />";
+    ?>
     <input type="submit" name="submit" value="Update Incident" /></p>
     </form>
     <?php
