@@ -194,8 +194,18 @@ while ($update = mysql_fetch_object($result))
     $currentstatus=incident_status($update->currentstatus);
 
     $updateheadertext = $updatetypes[$update->type]['text'];
-    $updateheadertext = str_replace('currentowner', $currentowner, $updateheadertext);
+    if ($currentowner != $updateuser)
+    {
+        $updateheadertext = str_replace('currentowner', $currentowner, $updateheadertext);
+    }
+    else
+    {
+        $updateheadertext = str_replace('currentowner', 'Self', $updateheadertext);
+    }
     $updateheadertext = str_replace('updateuser', $updateuser, $updateheadertext);
+    if ($update->type=='reviewmet' AND $update->sla=='opened') $updateheadertext = str_replace('updatereview', 'Period Started', $updateheadertext);
+    elseif ($update->type=='reviewmet' AND $update->sla=='')  $updateheadertext = str_replace('updatereview', 'Completed', $updateheadertext);
+    if ($update->type=='slamet') $updateheadertext = str_replace('updatesla', $slatypes[$update->sla]['text'], $updateheadertext);
 
     echo "<a name='update{$count}'></a>";
 
@@ -241,20 +251,21 @@ while ($update = mysql_fetch_object($result))
 
     if ($update->customervisibility=='show') $newmode='hide';
     else $newmode='show';
+//      echo "({$update->sla}/{$update->type})";
     echo "<a href='incident_showhide_update.php?mode={$newmode}&amp;incidentid={$incidentid}&amp;updateid={$update->id}&amp;view={$view}&amp;expand={$expand}' name='{$update->id}' class='info'>";
 
     if (array_key_exists($update->type, $updatetypes))
     {
+        if (!empty($update->sla) AND $update->type=='slamet') echo "<img src='{$CONFIG['application_webpath']}images/icons/{$iconset}/16x16/{$slatypes[$update->sla]['icon']}' width='16' height='16' alt='{$update->type}' />";
         echo "<img src='{$CONFIG['application_webpath']}images/icons/{$iconset}/16x16/{$updatetypes[$update->type]['icon']}' width='16' height='16' alt='{$update->type}' />";
         echo "<span>Click here to {$newmode} this update</span></a> ";
-        // if($update->sla != '') echo "<img src='{$CONFIG['application_webpath']}images/icons/{$iconset}/16x16/{$updatetypes['slamet']['icon']}' width='16' height='16' alt='{$update->type}' />";
         echo "{$updateheadertext}"; //  by {$updateuser}
     }
     else
     {
         echo "<img src='{$CONFIG['application_webpath']}images/icons/{$iconset}/16x16/{$updatetypes['research']['icon']}' width='16' height='16' alt='Research' />";
         echo "<span>Click to {$newmode}</span></a> ";
-        if($update->sla != '') echo "<img src='{$CONFIG['application_webpath']}images/icons/{$iconset}/16x16/{$updatetypes['slamet']['icon']}' width='16' height='16' alt='{$update->type}' />";
+        if($update->sla != '') echo "<img src='{$CONFIG['application_webpath']}images/icons/{$iconset}/16x16/{$slatypes[$update->sla]['icon']}' width='16' height='16' alt='{$update->type}' />";
         echo "Updated ({$update->type}) by {$updateuser}";
     }
 
