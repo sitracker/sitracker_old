@@ -16,7 +16,8 @@ if (realpath(__FILE__) == realpath($_SERVER['SCRIPT_FILENAME']))
     exit;
 }
 
-echo "<h2>Service Level History</h2>";
+echo "<h2><img src='{$CONFIG['application_webpath']}images/icons/{$iconset}/32x32/sla.png' width='32' height='32' alt='' /> ";
+echo "Service Level History</h2>";
 echo "<p align='center'>Current Service Level: {$servicelevel_tag}</p>";
 
 // Create an array containing the service level history
