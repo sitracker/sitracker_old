@@ -11,11 +11,17 @@ echo "<div id='statusbar'>";
 if ($_SESSION['auth']==TRUE) echo "<a href='about.php'>";
 echo "<img src='{$CONFIG['application_webpath']}images/sitting_man_logo16x16.png' width='16' height='16' border='0' alt='About {$CONFIG['application_shortname']}' />";
 if ($_SESSION['auth']==TRUE) echo "</a>";
-echo " <strong><a href='http://sitracker.sourceforge.net/'>Support Incident Tracker</a> {$application_version_string} </strong> running ";
-if ($CONFIG['demo']) echo "in DEMO mode ";
-echo "on ".strip_tags($_SERVER["SERVER_SOFTWARE"]);
-echo " at ".date('H:i',$now);
-if ($CONFIG['bugtracker_url']!='') echo ", Report bugs in <a href='{$CONFIG['bugtracker_url']}' class='barlink'>{$CONFIG['bugtracker_name']}</a>";
+echo " <strong><a href='http://sitracker.sourceforge.net/'>Support Incident Tracker</a>";
+if ($_SESSION['auth']==TRUE) echo " {$application_version_string}";
+echo "</strong>";
+if ($_SESSION['auth']==TRUE)
+{
+    echo " running ";
+    if ($CONFIG['demo']) echo "in DEMO mode ";
+    echo "on ".strip_tags($_SERVER["SERVER_SOFTWARE"]);
+    echo " at ".date('H:i',$now);
+    if ($CONFIG['bugtracker_url']!='') echo ", Report bugs in <a href='{$CONFIG['bugtracker_url']}' class='barlink'>{$CONFIG['bugtracker_name']}</a>";
+ }
 echo "</div>\n";
 echo "</body>\n</html>\n";
 ?>
