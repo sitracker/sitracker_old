@@ -4966,6 +4966,19 @@ function add_tag($id, $type, $tag)
 }
 
 
+function remove_tag($id, $type, $tag)
+{
+   if ($tag!='')
+    {
+        $tagid = get_tag_id($tag);
+        // Ignore errors, die silently
+        $sql = "DELETE FROM set_tags WHERE id = '$id' AND type = '$type' AND tagid = '$tagid')";
+        $result = @mysql_query($sql);
+    }
+    return true;
+}
+
+
 function replace_tags($type, $id, $tagstring)
 {
     // first remove old tags
