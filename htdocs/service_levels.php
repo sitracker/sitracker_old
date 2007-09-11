@@ -21,7 +21,8 @@ require('auth.inc.php');
 
 include('htmlheader.inc.php');
 
-echo "<h2>$title</h2>";
+echo "<h2><img src='{$CONFIG['application_webpath']}images/icons/{$iconset}/32x32/sla.png' width='32' height='32' alt='' /> ";
+echo "$title</h2>";
 
 echo "<p align='center'><a href='add_service_level.php'>Add a service level</a></p>";
 
