@@ -182,41 +182,25 @@ switch ($step)
         <input maxlength="3" name="timetonextaction_days" onclick="window.document.updateform.timetonextaction_none[1].checked = true;" size="3" /> Days&nbsp;
         <input maxlength="2" name="timetonextaction_hours" onclick="window.document.updateform.timetonextaction_none[1].checked = true;" size="3" /> Hours&nbsp;
         <input maxlength="2" name="timetonextaction_minutes" onclick="window.document.updateform.timetonextaction_none[1].checked = true;" size="3" /> Minutes<br />
-        <input type="radio" name="timetonextaction_none" value="date" />On specified Date<br />&nbsp;&nbsp;&nbsp;
+        <input type="radio" name="timetonextaction_none" value="date" />At specific date and time<br />&nbsp;&nbsp;&nbsp;
         <?php
-        // Print Listboxes for a date selection
-        ?><select name='day' onclick="window.document.updateform.timetonextaction_none[2].checked = true;"><?php
-        for ($t_day=1;$t_day<=31;$t_day++)
-        {
-            echo "<option value=\"$t_day\" ";
-            if ($t_day==date("j"))
-            {
-                echo "selected='selected'";
-            }
-            echo ">$t_day</option>\n";
-        }
-        ?></select><select name='month' onclick="window.document.updateform.timetonextaction_none[2].checked = true;"><?php
-        for ($t_month=1;$t_month<=12;$t_month++)
-        {
-            echo "<option value=\"$t_month\"";
-            if ($t_month==date("n"))
-            {
-                echo " selected='selected'";
-            }
-            echo ">". date ("F", mktime(0,0,0,$t_month,1,2000)) ."</option>\n";
-        }
-        ?></select>
-        <select name='year' onclick="window.document.updateform.timetonextaction_none[2].checked = true;"><?php
-        for ($t_year=(date("Y")-1);$t_year<=(date("Y")+5);$t_year++)
-        {
-            echo "<option value=\"$t_year\" ";
-            if ($t_year==date("Y"))
-            {
-                echo " selected='selected'";
-            }
-            echo ">$t_year</option>\n";
-        }
-        ?></select>
+                echo "<input name='date' size='10' value='{$date}' onclick=\"window.document.updateform.timetonextaction_none[2].checked = true;\"/> ";
+        echo date_picker('updateform.date');
+        ?>
+                <select name="timeoffset" onchange="window.document.updateform.timetonextaction_none[2].checked = true;">
+                <option>Choose Time</option>
+                <option value="0">8:00 AM</option>
+                <option value="1">9:00 AM</option>
+                <option value="2">10:00 AM</option>
+                <option value="3">11:00 AM</option>
+                <option value="4">12:00 PM</option>
+                <option value="5">1:00 PM</option>
+                <option value="6">2:00 PM</option>
+                <option value="7">3:00 PM</option>
+                <option value="8">4:00 PM</option>
+                <option value="9">5:00 PM</option>
+                </select>
+                <br />
         </td></tr>
         </table>
         <p align='center'>
