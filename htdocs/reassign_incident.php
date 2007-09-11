@@ -228,6 +228,8 @@ else
         elseif ($_REQUEST['assign']=='permassign') $sql .= "owner='{$permnewowner}', towner='0', "; // perm assign removed temp one
         else $sql .= "owner='{$permnewowner}', towner='0', "; // perm assign removed temp one
         $sql .= "status='$newstatus', lastupdated='$now' WHERE id='$id' LIMIT 1";
+        echo $sql;
+        echo $permnewowner;
         mysql_query($sql);
         if (mysql_error()) trigger_error("MySQL Query Error ".mysql_error(), E_USER_ERROR);
 
@@ -237,6 +239,10 @@ else
             $assigntype='tempassigning';
             if (strtolower(user_accepting($tempnewowner)) != "yes")
                 $bodytext = "(Incident temp assignment was forced because the user was not accepting)<hr>\n" . $bodytext;
+        }
+        else if ($_REQUEST['assign']=='deltempassign')
+        {
+            $assigntype='reassigning';
         }
         else
         {
