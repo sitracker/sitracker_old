@@ -261,12 +261,13 @@ if (empty($action))
     <input maxlength='3' name="timetonextaction_days" value="<?php echo $na_days ?>" onclick="window.document.updateform.timetonextaction_none[0].checked = true;" size='3' /> Days&nbsp;
     <input maxlength='2' name="timetonextaction_hours" value="<?php echo $na_hours ?>" onclick="window.document.updateform.timetonextaction_none[0].checked = true;" size='3' /> Hours&nbsp;
     <input maxlength='2' name="timetonextaction_minutes" value="<?php echo $na_minutes ?>" onclick="window.document.updateform.timetonextaction_none[0].checked = true;" size='3' /> Minutes<br />
-    <input type="radio" name="timetonextaction_none" value="date" />On specified Date<br />&nbsp;&nbsp;&nbsp;
+    <input type="radio" name="timetonextaction_none" value="date" />At specific date and time<br />
     <?php
         echo "<input name='date' size='10' value='{$date}' onclick=\"window.document.updateform.timetonextaction_none[1].checked = true;\"/> ";
         echo date_picker('updateform.date');
     ?>
-    <select name="timeoffset" onchange="window.document.updateform.timetonextaction_none[1].checked = true;">
+    <select title="Choose Time" name="timeoffset" onchange="window.document.updateform.timetonextaction_none[1].checked = true;">
+    <option>Choose Time</option>
     <option value="0">8:00 AM</option>
     <option value="1">9:00 AM</option>
     <option value="2">10:00 AM</option>
