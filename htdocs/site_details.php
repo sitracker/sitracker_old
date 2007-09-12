@@ -58,7 +58,7 @@ while ($siterow=mysql_fetch_array($siteresult))
     echo "<tr><th>Website:</th><td>";
     if (!empty($siterow['websiteurl'])) echo "<a href='{$siterow['websiteurl']}'>{$siterow['websiteurl']}</a>";
     echo "</td></tr>";
-    echo "<tr><th>Notes:</th><td>".$siterow['notes']."</td></tr>";
+    echo "<tr><th>Notes:</th><td>".stripslashes($siterow['notes'])."</td></tr>";
     echo "<tr><td colspan='2'>&nbsp;</td></tr>";
     echo "<tr><th>Support Incidents:</th><td>See <a href=\"contact_support.php?id=".$siterow['id']."&amp;mode=site\">here</a></td></tr>";
     echo "<tr><th>Site Incident Pool:</th><td>{$siterow['freesupport']} Incidents remaining</td></tr>";
