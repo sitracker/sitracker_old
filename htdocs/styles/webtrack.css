@@ -109,7 +109,7 @@ div.windowtitle
     color: white;
     padding: 1px;
 }
-.windowtitle img { vertical-align: middle; }
+.windowtitle img { vertical-align: middle; border: 0px; }
 .windowtitle div { padding-right: 3px; }
 .windowtitle a { color: white; font-weight: normal;}
 div.window

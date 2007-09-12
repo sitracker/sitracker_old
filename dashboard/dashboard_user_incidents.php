@@ -14,6 +14,7 @@ function dashboard_user_incidents($row,$dashboardid)
     global $sit;
     global $now;
     global $CONFIG;
+    global $iconset;
     $user = "current";
 
 
@@ -42,7 +43,7 @@ function dashboard_user_incidents($row,$dashboardid)
     $sql .= "OR IF (status='1' OR status='3' OR status='4', 1=1 , 1=2) ";  // active, research, left message - show all
     $sql .= ") AND timeofnextaction < $now ) ";
     echo "<div class='windowbox' style='width: 95%' id='$row-$dashboardid'>";
-    echo "<div class='windowtitle'><a href='incidents.php?user=current&amp;queue=1&amp;type=support'>".user_realname($user,TRUE)."'s Incidents</a> (Action Needed)</div>";
+    echo "<div class='windowtitle'><a href='incidents.php?user=current&amp;queue=1&amp;type=support'><img src='{$CONFIG['application_webpath']}images/icons/{$iconset}/16x16/support.png' width='16' height='16' alt='' /> ".user_realname($user,TRUE)."'s Incidents</a> (Action Needed)</div>";
     echo "<div class='window'>";
 
     $selectsql = "SELECT incidents.id, externalid, title, owner, towner, priority, status, siteid, forenames, surname, email, incidents.maintenanceid, ";
@@ -82,15 +83,18 @@ function dashboard_user_incidents($row,$dashboardid)
         // Incidents Table
         $incidents_minimal = true;
         //include('incidents_table.inc.php');
+        $shade='shade1';
         echo "<table style='width: 100%;'>";
         while($row = mysql_fetch_array($result))
         {
             list($update_userid, $update_type, $update_currentowner, $update_currentstatus, $update_body, $update_timestamp, $update_nextaction, $update_id)=incident_lastupdate($row['id']);
             $update_body = parse_updatebody($update_body);
-            echo "<tr><td class='shade1'>";
+            echo "<tr><td class='$shade'>";
             echo "<a href='javascript:incident_details_window({$row['id']})' class='info'>".stripslashes("{$row['id']} - {$row['title']} for {$row['forenames']}   {$row['surname']}");
             if (!empty($update_body) AND $update_body!='...') echo "<span>{$update_body}</span>";
             echo "</a></td></tr>\n";
+            if ($shade=='shade1') $shade='shade2';
+            else $shade='shade1';
         }
         echo "</table>";
     }

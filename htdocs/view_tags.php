@@ -25,7 +25,8 @@ if(empty($tagid))
 {
     //show all tags
     include('htmlheader.inc.php');
-    echo "<h2>Tags</h2>";
+    echo "<h2><img src='{$CONFIG['application_webpath']}images/icons/{$iconset}/32x32/tag.png' width='32' height='32' alt='' /> ";
+    echo "Tags</h2>";
     echo show_tag_cloud($orderby);
     include('htmlfooter.inc.php');
 }
@@ -37,7 +38,7 @@ else
     list($tagname)=mysql_fetch_row($result);
 
     include('htmlheader.inc.php');
-    echo "<h2><a href='view_tags.php'>Tag</a>: $tagname";
+    echo "<h2><img src='{$CONFIG['application_webpath']}images/icons/{$iconset}/32x32/tag.png' width='32' height='32' alt='' /> <a href='view_tags.php'>Tag</a>: $tagname";
     if (array_key_exists($tagname, $CONFIG['tag_icons'])) echo "&nbsp;<img src='images/icons/sit/32x32/{$CONFIG['tag_icons'][$tagname]}.png' style='border:0px;' alt='' />";
     echo "</h2>";
 
@@ -52,7 +53,7 @@ else
         echo "<table align='center'>";
         while($obj = mysql_fetch_object($result))
         {
-            echo "<tr>";
+            echo "<tr style='text-align: left;'>";
             switch($obj->type)
             {
                 case 1: //contact
@@ -62,8 +63,8 @@ else
                     if(mysql_num_rows($resultcon) > 0)
                     {
                         $objcon = mysql_fetch_object($resultcon);
-                        echo "<th>CONTACT</th><td><a href='contact_details.php?id={$obj->id}'>";
-                        echo $objcon->forenames." ".$objcon->surname."</a></td>";
+                        echo "<th><img src='{$CONFIG['application_webpath']}images/icons/{$iconset}/16x16/contact.png' width='16' height='16' alt='' /> Contact</th><td><a href='contact_details.php?id={$obj->id}'>";
+                        echo stripslashes($objcon->forenames." ".$objcon->surname)."</a></td>";
                     }
                 break;
 
@@ -74,8 +75,8 @@ else
                     if(mysql_num_rows($resultinc) > 0)
                     {
                         $objinc = mysql_fetch_object($resultinc);
-                        echo "<th>INCIDENT</th><td><a href=\"javascript:incident_details_window('{$obj->id}','incident{$obj->id}')\">";
-                        echo $objinc->title."</a></td>";
+                        echo "<th><img src='{$CONFIG['application_webpath']}images/icons/{$iconset}/16x16/support.png' width='16' height='16' alt='' /> Incident</th><td><a href=\"javascript:incident_details_window('{$obj->id}','incident{$obj->id}')\">";
+                        echo "{$obj->id}: ".stripslashes($objinc->title)."</a></td>";
                     }
                 break;
 
@@ -86,8 +87,8 @@ else
                     if(mysql_num_rows($resultsite) > 0)
                     {
                         $objsite = mysql_fetch_object($resultsite);
-                         echo "<th>SITE</th><td><a href='site_details.php?id={$obj->id}&amp;action=show'>";
-                        echo $objsite->name."</a></td>";
+                        echo "<th><img src='{$CONFIG['application_webpath']}images/icons/{$iconset}/16x16/site.png' width='16' height='16' alt='' /> Site</th><td><a href='site_details.php?id={$obj->id}&amp;action=show'>";
+                        echo stripslashes($objsite->name)."</a></td>";
                     }
                 break;
 
@@ -98,13 +99,13 @@ else
                     if(mysql_num_rows($resulttask) > 0)
                     {
                         $objtask = mysql_fetch_object($resulttask);
-                         echo "<th>TASK</th><td><a href='view_task.php?id={$obj->id}'>";
-                        echo $objtask->name."</a></td>";
+                        echo "<th><img src='{$CONFIG['application_webpath']}images/icons/{$iconset}/16x16/task.png' width='16' height='16' alt='' /> Task</th><td><a href='view_task.php?id={$obj->id}'>";
+                        echo stripslashes($objtask->name)."</a></td>";
                     }
                 break;
 
                 default:
-                    echo "<th>Other</th><td>{$obj->id}</td>";
+                    echo "<th>Other</th><td>{$obj->id}/{$obj->type}</td>";
             }
             echo "</tr>\n";
         }

@@ -45,20 +45,20 @@ while ($siterow=mysql_fetch_array($siteresult))
     }
     $tags = list_tags($id, 3, TRUE);
     if (!empty($tags)) echo "<tr><th>Tags:</th><td>{$tags}</td></tr>";
-    echo "<tr><th>Department:</th><td>".$siterow['department']."</td></tr>";
-    echo "<tr><th>Address1:</th><td>".$siterow['address1']."</td></tr>";
-    echo "<tr><th>Address2:</th><td>".$siterow['address2']."</td></tr>";
-    echo "<tr><th>City:</th><td>".$siterow['city']."</td></tr>";
-    echo "<tr><th>County:</th><td>".$siterow['county']."</td></tr>";
-    echo "<tr><th>Country:</th><td>".$siterow['country']."</td></tr>";
-    echo "<tr><th>Postcode:</th><td>".$siterow['postcode']."</td></tr>";
-    echo "<tr><th>Telephone:</th><td>".$siterow['telephone']."</td></tr>";
-    echo "<tr><th>Fax:</th><td>".$siterow['fax']."</td></tr>";
+    echo "<tr><th>Department:</th><td>".stripslashes($siterow['department'])."</td></tr>";
+    echo "<tr><th>Address1:</th><td>".stripslashes($siterow['address1'])."</td></tr>";
+    echo "<tr><th>Address2:</th><td>".stripslashes($siterow['address2'])."</td></tr>";
+    echo "<tr><th>City:</th><td>".stripslashes($siterow['city'])."</td></tr>";
+    echo "<tr><th>County:</th><td>".stripslashes($siterow['county'])."</td></tr>";
+    echo "<tr><th>Country:</th><td>".stripslashes($siterow['country'])."</td></tr>";
+    echo "<tr><th>Postcode:</th><td>".stripslashes($siterow['postcode'])."</td></tr>";
+    echo "<tr><th>Telephone:</th><td>".stripslashes($siterow['telephone'])."</td></tr>";
+    echo "<tr><th>Fax:</th><td>".stripslashes($siterow['fax'])."</td></tr>";
     echo "<tr><th>Email:</th><td><a href=\"mailto:".$siterow['email']."\">".$siterow['email']."</a></td></tr>";
     echo "<tr><th>Website:</th><td>";
-    if (!empty($siterow['websiteurl'])) echo "<a href='{$siterow['websiteurl']}'>{$siterow['websiteurl']}</a>";
+    if (!empty($siterow['websiteurl'])) echo "<a href='".stripslashes($siterow['websiteurl'])."'>".stripslashes($siterow['websiteurl'])."</a>";
     echo "</td></tr>";
-    echo "<tr><th>Notes:</th><td>".stripslashes($siterow['notes'])."</td></tr>";
+    echo "<tr><th>Notes:</th><td>".nl2br(stripslashes($siterow['notes']))."</td></tr>";
     echo "<tr><td colspan='2'>&nbsp;</td></tr>";
     echo "<tr><th>Support Incidents:</th><td>See <a href=\"contact_support.php?id=".$siterow['id']."&amp;mode=site\">here</a></td></tr>";
     echo "<tr><th>Site Incident Pool:</th><td>{$siterow['freesupport']} Incidents remaining</td></tr>";
@@ -95,16 +95,16 @@ if ($countcontacts > 0)
         if ($contactrow['active']=='false') $shade='expired';
         echo "<tr class='$shade'>";
         echo "<td><img src='{$CONFIG['application_webpath']}images/icons/{$iconset}/16x16/contact.png' width='16' height='16' alt='' /> <a href=\"contact_details.php?id=".$contactrow['id']."\">".stripslashes($contactrow['forenames']).' '.stripslashes($contactrow['surname'])."</a></td>";
-        echo "<td>{$contactrow['jobtitle']}</td>";
-        echo "<td>{$contactrow['department']}</td>";
-        if ($contactrow['dataprotection_phone']!='Yes') echo "<td>{$contactrow['phone']}</td>";
+        echo "<td>".stripslashes($contactrow['jobtitle'])."</td>";
+        echo "<td>".stripslashes($contactrow['department'])."</td>";
+        if ($contactrow['dataprotection_phone']!='Yes') echo "<td>".stripslashes($contactrow['phone'])."</td>";
         else echo "<td><strong>withheld</strong></td>";
-        if ($contactrow['dataprotection_email']!='Yes') echo "<td>{$contactrow['email']}</td>";
+        if ($contactrow['dataprotection_email']!='Yes') echo "<td>".stripslashes($contactrow['email'])."</td>";
         else echo "<td><strong>withheld</strong></td>";
         if ($contactrow['dataprotection_address']!='Yes')
         {
             echo "<td>";
-            if (!empty($contactrow['address1'])) echo "{$contactrow['address1']}";
+            if (!empty($contactrow['address1'])) echo stripslashes($contactrow['address1']);
             echo "</td>";
         }
         else echo "<td><strong>withheld</strong></td>";
@@ -113,7 +113,7 @@ if ($countcontacts > 0)
         if ($contactrow['dataprotection_phone']=='Yes') { echo "<strong>No Calls</strong>, "; }
         if ($contactrow['dataprotection_address']=='Yes') { echo "<strong>No Post</strong>"; }
         echo "</td>";
-        echo "<td>{$contactrow['notes']}</td>";
+        echo "<td>".nl2br(stripslashes(substr($contactrow['notes'], 0, 500)))."</td>";
         echo "</tr>";
         if ($shade=='shade1') $shade='shade2';
         else $shade='shade1';
@@ -182,12 +182,12 @@ if (user_permission($sit[2],19)) // View contracts
                 echo "<td class='<?php echo $class ?>'><img src='{$CONFIG['application_webpath']}images/icons/{$iconset}/16x16/contract.png' width='16' height='16' alt='' /> ";
                 echo "<a href='maintenance_details.php?id={$results['maintid']}'>Contract {$results['maintid']}</a></td>";
                 ?>
-                <td class='<?php echo $class ?>'><?php echo $results["product"] ?></td>
-                <td class='<?php echo $class ?>'><?php echo $results["reseller"] ?></td>
-                <td class='<?php echo $class ?>'><?php echo $results["licence_quantity"] ?> <?php echo $results["licence_type"] ?></td>
+                <td class='<?php echo $class ?>'><?php echo stripslashes($results["product"]); ?></td>
+                <td class='<?php echo $class ?>'><?php echo stripslashes($results["reseller"]); ?></td>
+                <td class='<?php echo $class ?>'><?php echo $results["licence_quantity"] ?> <?php echo stripslashes($results["licence_type"]); ?></td>
                 <td class='<?php echo $class ?>'><?php echo date($CONFIG['dateformat_date'], $results["expirydate"]); ?></td>
-                <td class='<?php echo $class ?>'><?php echo $results['admincontactsforenames'].' '.$results['admincontactssurname'] ?></td>
-                <td class='<?php echo $class ?>'><?php if ($results['maintnotes'] == '') echo '&nbsp;'; else echo nl2br($results['maintnotes']); ?></td>
+                <td class='<?php echo $class ?>'><?php echo stripslashes($results['admincontactsforenames'].' '.$results['admincontactssurname']); ?></td>
+                <td class='<?php echo $class ?>'><?php if ($results['maintnotes'] == '') echo '&nbsp;'; else echo nl2br(stripslashes($results['maintnotes'])); ?></td>
             </tr>
             <?php
             // invert shade

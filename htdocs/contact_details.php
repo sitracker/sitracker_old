@@ -51,21 +51,21 @@ while ($contactrow=mysql_fetch_array($contactresult))
         $siteresult = mysql_query($sitesql);
         if (mysql_error()) trigger_error("MySQL Query Error ".mysql_error(), E_USER_WARNING);
         $site = mysql_fetch_object($siteresult);
-        $address1 = $site->address1;
-        $address2 = $site->address2;
-        $city = $site->city;
-        $county = $site->county;
-        $country = $site->country;
-        $postcode = $site->postcode;
+        $address1 = stripslashes($site->address1);
+        $address2 = stripslashes($site->address2);
+        $city = stripslashes($site->city);
+        $county = stripslashes($site->county);
+        $country = stripslashes($site->country);
+        $postcode = stripslashes($site->postcode);
     }
     else
     {
-        $address1 = $contactrow['address1'];
-        $address2 = $contactrow['address2'];
-        $city = $contactrow['city'];
-        $county = $contactrow['county'];
-        $country = $contactrow['country'];
-        $postcode = $contactrow['postcode'];
+        $address1 = stripslashes($contactrow['address1']);
+        $address2 = stripslashes($contactrow['address2']);
+        $city = stripslashes($contactrow['city']);
+        $county = stripslashes($contactrow['county']);
+        $country = stripslashes($contactrow['country']);
+        $postcode = stripslashes($contactrow['postcode']);
     }
 
     echo "<table align='center' class='vertical'>";
@@ -80,9 +80,9 @@ while ($contactrow=mysql_fetch_array($contactresult))
     // echo "<tr><th>Flags:</th><td>";
     // print_contact_flags($id);
     //echo "</td></tr>";
-    echo "<tr><th>Job Title:</th><td>".$contactrow['jobtitle']."</td></tr>";
+    echo "<tr><th>Job Title:</th><td>".stripslashes($contactrow['jobtitle'])."</td></tr>";
     echo "<tr><th>Site:</th><td><a href=\"site_details.php?id=".$contactrow['siteid']."\">".site_name($contactrow['siteid'])."</a></td></tr>";
-    if (!empty($contactrow['department'])) echo "<tr><th>Department:</th><td>".$contactrow['department']."</td></tr>";
+    if (!empty($contactrow['department'])) echo "<tr><th>Department:</th><td>".stripslashes($contactrow['department'])."</td></tr>";
     if ($contactrow['dataprotection_address']!='Yes')
     {
         echo "<tr><th>Address1:</th><td>{$address1}</td></tr>";
@@ -94,20 +94,20 @@ while ($contactrow=mysql_fetch_array($contactresult))
     }
     if ($contactrow['dataprotection_email']!='Yes')
     {
-        echo "<tr><th>Email:</th><td><a href=\"mailto:".$contactrow['email']."\">".$contactrow['email']."</a></td></tr>";
+        echo "<tr><th>Email:</th><td><a href=\"mailto:".stripslashes($contactrow['email'])."\">".stripslashes($contactrow['email'])."</a></td></tr>";
     }
     if ($contactrow['dataprotection_phone']!='Yes')
     {
-        echo "<tr><th>Phone:</th><td>".$contactrow['phone']."</td></tr>";
-        echo "<tr><th>Mobile:</th><td>".$contactrow['mobile']."</td></tr>";
-        echo "<tr><th>Fax:</th><td>".$contactrow['fax']."</td></tr>";
+        echo "<tr><th>Phone:</th><td>".stripslashes($contactrow['phone'])."</td></tr>";
+        echo "<tr><th>Mobile:</th><td>".stripslashes($contactrow['mobile'])."</td></tr>";
+        echo "<tr><th>Fax:</th><td>".stripslashes($contactrow['fax'])."</td></tr>";
     }
     echo "<tr><th>Data Protection:</th><td> ";
     if ($contactrow['dataprotection_email']=='Yes') { echo "<strong>No Email</strong>, "; } else { echo "Email OK, ";}
     if ($contactrow['dataprotection_phone']=='Yes') { echo "<strong>No Calls</strong>, "; } else { echo "Calls OK, ";}
     if ($contactrow['dataprotection_address']=='Yes') { echo "<strong>No Post</strong>"; } else { echo "Post OK ";}
     echo "</td></tr>";
-    echo "<tr><th>Notes:</th><td>".$contactrow['notes']."</td></tr>";
+    echo "<tr><th>Notes:</th><td>".nl2br(stripslashes($contactrow['notes']))."</td></tr>";
 
     echo "<tr><td colspan='2'>&nbsp;</td></tr>";
     echo "<tr><th>Access Details:</th><td>username: <code>".$contactrow['username']."</code>";
