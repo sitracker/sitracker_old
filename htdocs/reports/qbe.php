@@ -60,7 +60,7 @@ elseif ($_REQUEST['mode']=='selectfields')
     include('htmlheader.inc.php');
     echo "<h2>QBE - Query by Example</h2>";
     echo "<form action='{$_SERVER['PHP_SELF']}' method='post'>";
-    echo "<table>";
+    echo "<table align='center'>";
     echo "<tr><th>Table:</th>";
     echo "<td class='shade2'>{$table1}</td></tr>";
     echo "<tr><th valign='top' class='shade1'>Fields:</td>";
@@ -136,7 +136,7 @@ elseif ($_REQUEST['mode']=='report')
     $columns=count($_POST[fields]);
     if ($columns >= 1)
     {
-        $htmlfieldheaders="<tr class='shade1'>";
+        $htmlfieldheaders="<tr>";
         for ($i = 0; $i < $columns; $i++)
         {
             $fieldname=cleanvar($_POST[fields][$i]);
@@ -161,10 +161,11 @@ elseif ($_REQUEST['mode']=='report')
     $html .= "<p align='center'><code>$sql</code></p>\n";
     $html .= "<table width='100%'>";
     $html .= $htmlfieldheaders;
+    $shade='shade1';
     while ($row = mysql_fetch_row($result))
     {
         $columns = count($row);
-        $html .= "<tr class='shade2'>";
+        $html .= "<tr class='$shade'>";
         for ($i = 0; $i < $columns; $i++)
         {
             $html .= "<td>".$row[$i]."</td>";
@@ -172,6 +173,8 @@ elseif ($_REQUEST['mode']=='report')
             if ($i < ($columns-1)) $csv .= ",";
         }
         $html .= "</tr>\n";
+        if ($shade=='shade1') $shade='shade2';
+        else $shade='shade1';
         $csv.="\r\n";
     }
     $html .= "</table>";

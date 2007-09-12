@@ -244,7 +244,7 @@ $incidentid=$id;
 // Retrieve incident
 // extract incident details
 $sql  = "SELECT *, incidents.id AS incidentid, ";
-$sql .= "contacts.id AS contactid ";
+$sql .= "contacts.id AS contactid, contacts.notes AS contactnotes ";
 $sql .= "FROM incidents, contacts ";
 $sql .= "WHERE (incidents.id='{$incidentid}' AND incidents.contact=contacts.id) ";
 $sql .= " OR incidents.contact=NULL ";
@@ -256,9 +256,11 @@ $siteresult = mysql_query($sitesql);
 if (mysql_error()) trigger_error(mysql_error(),E_USER_WARNING);
 $site = mysql_fetch_object($siteresult);
 $site_name=$site->name;
-if (!empty($site->notes)) $site_notes="<strong>Site Notes:</strong><br />{$site->notes}";
+if (!empty($site->notes)) $site_notes="<img src='{$CONFIG['application_webpath']}images/icons/{$iconset}/16x16/site.png' width='16' height='16' alt='' /> <strong>Site Notes:</strong><br />".nl2br($site->notes);
 else $site_notes='';
 unset($site);
+if (!empty($incident->contactnotes)) $contact_notes="<img src='{$CONFIG['application_webpath']}images/icons/{$iconset}/16x16/contact.png' width='16' height='16' alt='' /> <strong>Contact Notes:</strong><br />".nl2br($incident->contactnotes);
+else $contact_notes='';
 $product_name=product_name($incident->product);
 if ($incident->softwareid > 0) $software_name=software_name($incident->softwareid);
 $servicelevel_id=maintenance_servicelevel($incident->maintenanceid);

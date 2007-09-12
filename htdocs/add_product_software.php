@@ -93,7 +93,7 @@ elseif ($action == "add")
         if (mysql_error()) trigger_error("MySQL Query Error ".mysql_error(), E_USER_ERROR);
         if (mysql_num_rows($result) >= 1)
         {
-            confirmation_page("1", "add_product_software.php?productid={$productid}&return=$return", "<h2>Software Link Already Exists</h2><p align='center'>Please wait while you are redirected...</p>");
+            confirmation_page("1", "add_product_software.php?productid={$productid}&return=$return", "<h2>Skill Link Already Exists</h2><p align='center'>Please wait while you are redirected...</p>");
             exit;
         }
 

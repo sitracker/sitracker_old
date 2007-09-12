@@ -125,7 +125,7 @@ elseif ($action == "edit")
         <tr><th>&lt;incidentccemail&gt;</th><td>Extra email addresses to CC regarding incidents</td></tr>
         <tr><th>&lt;incidenttitle&gt;</th><td>Title of incident</td></tr>
         <tr><th>&lt;incidentpriority&gt;</th><td>Priority of incident</td></tr>
-        <tr><th>&lt;incidentsoftware&gt;</th><td>Software assigned to an incident</td></tr>
+        <tr><th>&lt;incidentsoftware&gt;</th><td>Skill assigned to an incident</td></tr>
         <tr><th>&lt;incidentowner&gt;</th><td>The full name of the person who owns the incident</td></tr>
         <tr><th>&lt;incidentreassignemailaddress&gt;</th><td>The email address of the person a call has been reassigned to</td></tr>
         <tr><th>&lt;incidentfirstupdate&gt;</th><td>The first customer visible update in the incident log</td></tr>
