@@ -602,6 +602,7 @@ function contact_site($id)
     {
         list($contactsite) = mysql_fetch_row($result);
         mysql_free_result($result);
+        $contactsite=stripslashes($contactsite);
         return($contactsite);
     }
 }
@@ -1054,8 +1055,8 @@ function contact_drop_down($name, $id, $showsite=FALSE)
     while ($contacts = mysql_fetch_array($result))
     {
         if ($showsite AND $prevsite!= $contacts['siteid'] AND $prevsite!=0) $html .= "</optgroup>\n";
-        if ($showsite AND $prevsite!= $contacts['siteid']) $html .= "<optgroup label='".htmlentities($contacts['sitename'], ENT_COMPAT, 'UTF-8').", ".htmlentities($contacts['department'], ENT_COMPAT, 'UTF-8')."'>";
-        $realname=$contacts['forenames'].' '.$contacts['surname'];
+        if ($showsite AND $prevsite!= $contacts['siteid']) $html .= "<optgroup label='".htmlentities(stripslashes($contacts['sitename']), ENT_COMPAT, 'UTF-8').", ".htmlentities(stripslashes($contacts['department']), ENT_COMPAT, 'UTF-8')."'>";
+        $realname=stripslashes($contacts['forenames'].' '.$contacts['surname']);
         $html .= "<option ";
         if ($contacts['contactid'] == $id) $html .= "selected='selected' ";
         $html .= "value='{$contacts['contactid']}'>{$realname}";
@@ -2478,7 +2479,7 @@ function maintenance_drop_down($name, $id)
         echo "<option selected='selected' value='0'></option>\n";
     while ($maintenance = mysql_fetch_array($result))
     {
-        ?><option <?php if ($maintenance["id"] == $id) { ?>selected='selected' <?php } ?>value='<?php echo $maintenance["id"] ?>'><?php echo $maintenance["sitename"] ?> | <?php echo $maintenance["productname"] ?></option><?php
+        ?><option <?php if ($maintenance["id"] == $id) { ?>selected='selected' <?php } ?>value='<?php echo $maintenance["id"] ?>'><?php echo stripslashes($maintenance["sitename"]) ?> | <?php echo stripslashes($maintenance["productname"]); ?></option><?php
         echo "\n";
     }
     ?>
@@ -5017,14 +5018,14 @@ function list_tags($recordid, $type, $html=TRUE)
     {
         if($html)
         {
-            $str .= "<a href='view_tags.php?tagid={$tags->tagid}'>{$tags->name}";
+            $str .= "<a href='view_tags.php?tagid={$tags->tagid}'>".stripslashes($tags->name);
             if (array_key_exists($tags->name, $CONFIG['tag_icons']))
             {
                 $str .= "&nbsp;<img src='images/icons/sit/16x16/{$CONFIG['tag_icons'][$tags->name]}.png' style='border:0px;' alt='' />";
             }
             $str .= "</a>";
         }
-        else $str .= $tags->name;
+        else $str .= stripslashes($tags->name);
         if ($count < $numtags) $str .= ", ";
         if ($html AND !($count%5)) $str .= "<br />\n";
         $count++;
@@ -5101,7 +5102,7 @@ function show_tag_cloud($orderby="name")
                 else $html .= "32x32";
                 $html .= "/{$CONFIG['tag_icons'][$obj->name]}.png' style='border:0px;' alt='' />";
             }
-            else $html .= "{$obj->name}";
+            else $html .= stripslashes($obj->name);
             $html .= "</a> &nbsp;";
         }
         $html .= "</td></tr></table>";

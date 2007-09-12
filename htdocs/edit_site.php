@@ -66,21 +66,21 @@ elseif ($action == "edit")
             <form name='edit_site' action="<?php echo $_SERVER['PHP_SELF'] ?>?action=update" method="post" onsubmit="return confirm_submit()">
             <p align='center'>Mandatory fields are marked <sup class='red'>*</sup></p>
             <table align='center' class='vertical'>
-            <tr><th>Name: <sup class='red'>*</sup></th><td><input maxlength="50" name="name" size="40" value="<?php echo $siterow['name'] ?>" /></td></tr>
+            <tr><th>Name: <sup class='red'>*</sup></th><td><input maxlength="50" name="name" size="40" value="<?php echo stripslashes($siterow['name']); ?>" /></td></tr>
             <tr><th>Tags:</th><td><textarea rows='2' cols='60' name='tags'><?php echo list_tags($site, 3, false); ?></textarea>
-            <tr><th>Department: <sup class='red'>*</sup></th><td><input maxlength="50" name="department" size="40" value="<?php echo $siterow['department'] ?>" /></td></tr>
-            <tr><th>Address1: <sup class='red'>*</sup></th><td><input maxlength="50" name="address1" size="40" value="<?php echo $siterow['address1'] ?>" /></td></tr>
-            <tr><th>Address2: </th><td><input maxlength="50" name="address2" size="40" value="<?php echo $siterow['address2'] ?>" /></td></tr>
-            <tr><th>City:</th><td><input maxlength="255" name="city" size="40" value="<?php echo $siterow['city'] ?>" /></td></tr>
-            <tr><th>County:</th><td><input maxlength="255" name="county" size="40" value="<?php echo $siterow['county'] ?>" /></td></tr>
-            <tr><th>Postcode:</th><td><input maxlength="255" name="postcode" size="40" value="<?php echo $siterow['postcode'] ?>" /></td></tr>
+            <tr><th>Department: <sup class='red'>*</sup></th><td><input maxlength="50" name="department" size="40" value="<?php echo stripslashes($siterow['department']); ?>" /></td></tr>
+            <tr><th>Address1: <sup class='red'>*</sup></th><td><input maxlength="50" name="address1" size="40" value="<?php echo stripslashes($siterow['address1']); ?>" /></td></tr>
+            <tr><th>Address2: </th><td><input maxlength="50" name="address2" size="40" value="<?php echo stripslashes($siterow['address2']); ?>" /></td></tr>
+            <tr><th>City:</th><td><input maxlength="255" name="city" size="40" value="<?php echo stripslashes($siterow['city']); ?>" /></td></tr>
+            <tr><th>County:</th><td><input maxlength="255" name="county" size="40" value="<?php echo stripslashes($siterow['county']); ?>" /></td></tr>
+            <tr><th>Postcode:</th><td><input maxlength="255" name="postcode" size="40" value="<?php echo stripslashes( $siterow['postcode']); ?>" /></td></tr>
             <tr><th>Country:</th><td>
             <?php echo country_drop_down('country', $siterow['country']) ?>
             </td></tr>
-            <tr><th>Telephone:</th><td><input maxlength="255" name="telephone" size="40" value="<?php echo $siterow['telephone'] ?>" /></td></tr>
-            <tr><th>Fax:</th><td><input maxlength="255" name="fax" size="40" value="<?php echo $siterow['fax'] ?>" /></td></tr>
-            <tr><th>Email:</th><td><input maxlength="255" name="email" size="40" value="<?php echo $siterow['email'] ?>" /></td></tr>
-            <tr><th>Website:</th><td><input maxlength="255" name="websiteurl" size="40" value="<?php echo $siterow['websiteurl'] ?>" /></td></tr>
+            <tr><th>Telephone:</th><td><input maxlength="255" name="telephone" size="40" value="<?php echo stripslashes($siterow['telephone']); ?>" /></td></tr>
+            <tr><th>Fax:</th><td><input maxlength="255" name="fax" size="40" value="<?php echo stripslashes($siterow['fax']); ?>" /></td></tr>
+            <tr><th>Email:</th><td><input maxlength="255" name="email" size="40" value="<?php echo stripslashes($siterow['email']); ?>" /></td></tr>
+            <tr><th>Website:</th><td><input maxlength="255" name="websiteurl" size="40" value="<?php echo stripslashes($siterow['websiteurl']); ?>" /></td></tr>
             <tr><th>Site Type:</th><td>
             <?php echo sitetype_drop_down('typeid', $siterow['typeid']) ?>
             </td></tr>

@@ -5,7 +5,7 @@ Icon                                      Source
 12x12/feed-icon.png                       Mozilla Foundation Feed Icons
 16x16/aim.png                             Crystal Project
 16x16/actionplan.png                      Crystal Project
-16x16/callin.png                          KDE Classic
+16x16/callin.png                          KDE Classic (modified)
 16x16/delete.png                          KDE Classic
 16x16/emailout.png                        Crystal Project
 16x16/holiday.png                         Crystal Project
@@ -52,6 +52,9 @@ Icon                                      Source
 16x16/kb.png                              Crystal Project
 16x16/user.png                            Crystal Project
 16x16/dashboard.png                       Crystal Project
+16x16/support.png                         Crystal Project
+16x16/feed-icon.png                       Mozilla Foundation Feed Icons
+16x16/tag.png                             Crystal Project (Modified)
 32x32/mimetypes/*                         KDE Classic
 32x32/blackflag.png                       SiT
 32x32/whiteflag.png                       SiT
@@ -70,6 +73,9 @@ Icon                                      Source
 32x32/kb.png                              Crystal Project
 32x32/user.png                            Crystal Project
 32x32/dashboard.png                       Crystal Project
+32x32/support.png                         Crystal Project
+32x32/feed-icon.png                       Mozilla Foundation Feed Icons
+32x32/tag.png                             Crystal Project (Modified)
 
 
 KDE Classic
@@ -91,6 +97,7 @@ Mozilla Foundation Feed Icons
 =============================
 Originally designed by Mozilla Foundation for the Firefox browser.
 The Mozilla Foundation has made these icons freely available for use by others.
+We are using these icons in compliance with the usage guidelines.
 See http://www.mozilla.org/foundation/feed-icon-guidelines/ for usage guidelines
 
 

@@ -11,14 +11,14 @@
 
 function dashboard_watch_incidents($row,$dashboardid)
 {
-    global $sit;
+    global $sit, $CONFIG, $iconset;
 
     $sql = "SELECT type, id FROM dashboard_watch_incidents WHERE userid = {$sit[2]}";
     $result = mysql_query($sql);
     if (mysql_error()) trigger_error(mysql_error(),E_USER_ERROR);
 
     echo "<div class='windowbox' style='width: 95%' id='$row-$dashboardid'>";
-    echo "<div class='windowtitle'><div style='float: right'><a href='edit_watch_incidents.php'>edit</a></div>Watch Incidents</div>";
+    echo "<div class='windowtitle'><div style='float: right'><a href='edit_watch_incidents.php'>edit</a></div><img src='{$CONFIG['application_webpath']}images/icons/{$iconset}/16x16/support.png' width='16' height='16' alt='' /> Watch Incidents</div>";
     echo "<div class='window'>";
 
 
@@ -77,7 +77,7 @@ function dashboard_watch_incidents($row,$dashboardid)
         else
         {
             echo "<tr>";
-            echo colheader('id', 'ID');
+            echo colheader('id', "ID");
             echo colheader('title', 'Title');
             //echo colheader('customer', 'Customer');
             echo colheader('status', 'Status');

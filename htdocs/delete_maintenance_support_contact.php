@@ -40,7 +40,7 @@ if (empty($action) OR $action == "showform")
         return window.confirm('This will remove the ability to log incidents for this contact regarding the product which this contract is for. Are you sure you want to delete this maintenance support contact?');
     }
     </script>
-    <h2>Remove the link between a maintenance contract and a support contact</h2>
+    <h2>Remove the link between a contract and a support contact</h2>
     <p align='center'>This will mean that the contact will not be able to log any further support incidents for the related product</p>
     <form action="<?php echo $_SERVER['PHP_SELF']; ?>?action=delete" method="post" onsubmit="return confirm_submit()">
     <input type="hidden" name="context" value="<?php echo $context ?>" />
@@ -48,25 +48,26 @@ if (empty($action) OR $action == "showform")
     <?php
     if (empty($maintid))
     {
-        ?>
-        <tr><th>Maintenance Contract:</th><td><?php echo maintenance_drop_down("maintid", 0); ?></td></tr>
-        <?php
+        echo "<tr><th>Contract <img src='{$CONFIG['application_webpath']}images/icons/{$iconset}/16x16/contract.png' width='16' height='16' alt='' /></th>";
+        echo "<td>";
+        maintenance_drop_down("maintid", 0);
+        echo "</td></tr>";
     }
     else
     {
-        echo "<tr><th>Maintenance Contract:</th><td>$maintid";
+        echo "<tr><th>Contract <img src='{$CONFIG['application_webpath']}images/icons/{$iconset}/16x16/contract.png' width='16' height='16' alt='' /></th>";
+        echo "<td>$maintid";
         echo "<input name=\"maintid\" type=\"hidden\" value=\"$maintid\" /></td></tr>";
     }
 
     if (empty($contactid))
     {
-        ?>
-        <tr><th>Support Contact:</th><td width='400'><?php echo contact_drop_down("contactid", 0); ?></td></tr>
-        <?php
+        echo "<tr><th>Support Contact <img src='{$CONFIG['application_webpath']}images/icons/{$iconset}/16x16/contact.png' width='16' height='16' alt='' /></th><td width='400'>";
+        echo contact_drop_down("contactid", 0)."</td></tr>";
     }
     else
     {
-        echo "<tr><th>Contact:</th><td>$contactid";
+        echo "<tr><th>Contact <img src='{$CONFIG['application_webpath']}images/icons/{$iconset}/16x16/contact.png' width='16' height='16' alt='' /></th><td>$contactid";
         echo "<input name=\"contactid\" type=\"hidden\" value=\"$contactid\" /></td></tr>";
     }
     ?>

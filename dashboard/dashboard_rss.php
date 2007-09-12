@@ -24,7 +24,7 @@ function dashboard_rss($row,$dashboardid)
     define('MAGPIE_OUTPUT_ENCODING', 'UTF-8');
 
     echo "<div class='windowbox' style='width: 95%' id='$row-$dashboardid'>";
-    echo "<div class='windowtitle'><div style='float: right'><a href='edit_rss_feeds.php'>edit</a></div>Feeds</div>";
+    echo "<div class='windowtitle'><div style='float: right'><a href='edit_rss_feeds.php'>edit</a></div><img src='{$CONFIG['application_webpath']}images/icons/{$iconset}/16x16/feed-icon.png' width='16' height='16' alt='' /> Feeds</div>";
     echo "<div class='window'>";
 
     if(mysql_num_rows($result) > 0)

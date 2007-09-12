@@ -63,20 +63,18 @@ elseif ($action == "edit" && isset($contact))
         <p align='center'>Mandatory fields are marked <sup class='red'>*</sup></p>
         <table align='center' class='vertical'>
         <tr><th>Contact Name: <sup class='red'>*</sup><br />Title, Forenames, Surname</th>
-        <td><input maxlength="50" name="salutation" title="Salutation (Mr, Mrs, Miss, Dr. etc.)" size="7" value="<?php echo $contactrow['salutation'] ?>" />
-        <input maxlength="100" name="forenames" size="15" title="Firstnames (or initials)" value="<?php echo $contactrow['forenames'] ?>" />
-        <input maxlength="100" name="surname" size="20" title="Surname/Last Name" value="<?php echo $contactrow['surname'] ?>" /></td></tr>
+        <td><input maxlength="50" name="salutation" title="Salutation (Mr, Mrs, Miss, Dr. etc.)" size="7" value="<?php echo stripslashes($contactrow['salutation']); ?>" />
+        <input maxlength="100" name="forenames" size="15" title="Firstnames (or initials)" value="<?php echo stripslashes($contactrow['forenames']); ?>" />
+        <input maxlength="100" name="surname" size="20" title="Surname/Last Name" value="<?php echo stripslashes($contactrow['surname']); ?>" /></td></tr>
         <tr><th>Tags:</th><td><textarea rows='2' cols='60' name='tags'><?php echo list_tags($contact, 1, false); ?></textarea>
-        <!-- <a href="edit_tags.php?recordid=<?php echo $contact ?>&amp;tagtype=1">Edit</a>
-        <a href="add_tag.php?recordid=<?php echo $contact ?>&amp;tagtype=1">Add</a> -->
         </td></tr>
-        <tr><th>Job Title:</th><td><input maxlength="255" name="jobtitle" size="40" value="<?php echo $contactrow['jobtitle'] ?>" /></td></tr>
+        <tr><th>Job Title:</th><td><input maxlength="255" name="jobtitle" size="40" value="<?php echo stripslashes($contactrow['jobtitle']); ?>" /></td></tr>
         <tr><th>Site: <sup class='red'>*</sup></th><td><?php echo site_drop_down('siteid',$contactrow['siteid']); ?></td></tr>
-        <tr><th>Department:</th><td><input maxlength="100" name="department" size="40" value="<?php echo $contactrow['department'] ?>" /></td></tr>
-        <tr><th>Email: <sup class='red'>*</sup></th><td><input maxlength="100" name="email" size="40" value="<?php  echo $contactrow['email'] ?>" /></td></tr>
-        <tr><th>Phone:</th><td><input maxlength="50" name="phone" size="40" value="<?php  echo $contactrow['phone'] ?>" /></td></tr>
-        <tr><th>Mobile:</th><td><input maxlength="50" name="mobile" size="40" value="<?php  echo $contactrow['mobile'] ?>" /></td></tr>
-        <tr><th>Fax:</th><td><input maxlength="50" name="fax" size="40" value="<?php  echo $contactrow['fax'] ?>" /></td></tr>
+        <tr><th>Department:</th><td><input maxlength="100" name="department" size="40" value="<?php echo stripslashes($contactrow['department']); ?>" /></td></tr>
+        <tr><th>Email: <sup class='red'>*</sup></th><td><input maxlength="100" name="email" size="40" value="<?php  echo stripslashes($contactrow['email']); ?>" /></td></tr>
+        <tr><th>Phone:</th><td><input maxlength="50" name="phone" size="40" value="<?php  echo stripslashes($contactrow['phone']); ?>" /></td></tr>
+        <tr><th>Mobile:</th><td><input maxlength="50" name="mobile" size="40" value="<?php  echo stripslashes($contactrow['mobile']); ?>" /></td></tr>
+        <tr><th>Fax:</th><td><input maxlength="50" name="fax" size="40" value="<?php  echo stripslashes($contactrow['fax']); ?>" /></td></tr>
         <tr><th>Data Protection Email:</th><td><?php html_checkbox('dataprotection_email', $contactrow['dataprotection_email']); ?> Don't send email</td></tr>
         <tr><th>Data Protection Phone:</th><td><?php html_checkbox('dataprotection_phone', $contactrow['dataprotection_phone']); ?> Don't call</td></tr>
         <tr><th>Data Protection Address:</th><td><?php html_checkbox('dataprotection_address', $contactrow['dataprotection_address']); ?> Don't write</td></tr>
@@ -95,16 +93,16 @@ elseif ($action == "edit" && isset($contact))
         }
         echo "/> ";
         echo "Specifiy an address for this contact that is different to the site</td></tr>\n";
-        echo "<tr><th>Address1:</th><td><input maxlength='255' name='address1' size='40' value='{$contactrow['address1']}' {$extraattributes} /></td></tr>\n";
-        echo "<tr><th>Address2:</th><td><input maxlength='255' name='address2' size='40' value='{$contactrow['address2']}' {$extraattributes} /></td></tr>\n";
-        echo "<tr><th>City:</th><td><input maxlength=255' name='city' size='40' value='{$contactrow['city']}' {$extraattributes} /></td></tr>\n";
-        echo "<tr><th>County:</th><td><input maxlength='255' name='county' size='40' value='{$contactrow['county']}' {$extraattributes} /></td></tr>\n";
-        echo "<tr><th>Postcode:</th><td><input maxlength='255' name='postcode' size='40' value='{$contactrow['postcode']}' {$extraattributes} /></td></tr>\n";
+        echo "<tr><th>Address1:</th><td><input maxlength='255' name='address1' size='40' value=\"".stripslashes($contactrow['address1'])."\" {$extraattributes} /></td></tr>\n";
+        echo "<tr><th>Address2:</th><td><input maxlength='255' name='address2' size='40' value=\"".stripslashes($contactrow['address2'])."\" {$extraattributes} /></td></tr>\n";
+        echo "<tr><th>City:</th><td><input maxlength=255' name='city' size='40' value=\"".stripslashes($contactrow['city'])."\" {$extraattributes} /></td></tr>\n";
+        echo "<tr><th>County:</th><td><input maxlength='255' name='county' size='40' value=\"".stripslashes($contactrow['county'])."\" {$extraattributes} /></td></tr>\n";
+        echo "<tr><th>Postcode:</th><td><input maxlength='255' name='postcode' size='40' value=\"".stripslashes($contactrow['postcode'])."\" {$extraattributes} /></td></tr>\n";
         echo "<tr><th>Country:</th><td>";
         echo country_drop_down('country', $contactrow['country'], $extraattributes);
         echo "</td></tr>\n";
         echo "<tr><th>Notify contact:</th><td>".contact_site_drop_down('notify_contactid', $contactrow['notify_contactid'], $contactrow['siteid'], $contact)."</td></tr>\n";
-        echo "<tr><th>Notes:</th><td><textarea rows='5' cols='60' name='notes'>{$contactrow['notes']}</textarea></td></tr>\n";
+        echo "<tr><th>Notes:</th><td><textarea rows='5' cols='60' name='notes'>".stripslashes($contactrow['notes'])."</textarea></td></tr>\n";
 
         plugin_do('edit_contact_form');
         echo "</table>";
