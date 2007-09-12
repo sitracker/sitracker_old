@@ -40,7 +40,8 @@ if (!is_number($user) AND $user!='current' AND $user!='all')
 
 include('htmlheader.inc.php');
 
-echo "<h2>".user_realname($user,TRUE) . "'s Tasks:</h2>";
+echo "<h2><img src='{$CONFIG['application_webpath']}images/icons/{$iconset}/32x32/task.png' width='32' height='32' alt='' /> ";
+echo user_realname($user,TRUE) . "'s Tasks:</h2>";
 
 // show drop down select for task view options
 echo "<form action='{$_SERVER['PHP_SELF']}' style='text-align: center;'>";

@@ -78,7 +78,10 @@ if ($search_string=='') $search_string='a';
 <script type="text/javascript">
     dojo.require("dojo.widget.ComboBox");
 </script>
-<h2>Browse Sites</h2>
+<?php
+echo "<h2><img src='{$CONFIG['application_webpath']}images/icons/{$iconset}/32x32/site.png' width='32' height='32' alt='' /> ";
+echo "Browse Sites</h2>";
+?>
 <table summary="alphamenu" align="center">
 <tr>
 <td align="center">

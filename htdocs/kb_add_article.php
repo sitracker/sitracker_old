@@ -38,8 +38,10 @@ if (user_permission($sit[2],$permission))
         }
         -->
         </script>
-
-        <h2>Add KB Article</h2>
+        <?php
+        echo "<h2><img src='{$CONFIG['application_webpath']}images/icons/{$iconset}/32x32/kb.png' width='32' height='32' alt='' /> ";
+        echo "Add KB Article</h2>";
+        ?>
         <p align='center'>Mandatory fields are marked <sup class='red'>*</sup></p>
         <form name="articleform" action="<?php echo $_SERVER['PHP_SELF']; ?>" method="post">
         <table align='center' class='vertical' width='600'>

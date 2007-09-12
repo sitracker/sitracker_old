@@ -35,7 +35,8 @@ if (empty($productid) AND $display!='skills')
     {
         while ($vendor = mysql_fetch_object($result))
         {
-            echo "<h2>{$vendor->name}</h2>";
+            echo "<h2><img src='{$CONFIG['application_webpath']}images/icons/{$iconset}/32x32/product.png' width='32' height='32' alt='' /> ";
+            echo "{$vendor->name}</h2>";
             $psql = "SELECT * FROM products WHERE vendorid='{$vendor->id}' ORDER BY name";
             $presult = mysql_query($psql);
             if (mysql_error()) trigger_error("MySQL Query Error ".mysql_error(), E_USER_ERROR);
@@ -86,7 +87,7 @@ if (empty($productid) AND $display!='skills')
     if (mysql_error()) trigger_error(mysql_error(),E_USER_ERROR);
     if (mysql_num_rows($result) >= 1)
     {
-        echo "<h2>Skills not linked</h2>";
+        echo "<h2><img src='{$CONFIG['application_webpath']}images/icons/{$iconset}/32x32/skill.png' width='32' height='32' alt='' /> Skills not linked</h2>";
         echo "<p align='center'>These skills are not linked to any product</p>";
         echo "<table summary='' align='center' width='55%'>";
         echo "<tr><th>Skill</th><th>Lifetime</th><th>Engineers</th><th>Incidents</th><th>Actions</th></tr>";
@@ -102,7 +103,8 @@ if (empty($productid) AND $display!='skills')
             if (mysql_error()) trigger_error(mysql_error(),E_USER_ERROR);
             list($countincidents) = mysql_fetch_row($sresult);
 
-            echo "<tr class='$shade'><td>{$software['name']}</td>";
+            echo "<tr class='$shade'><td><img src='{$CONFIG['application_webpath']}images/icons/{$iconset}/16x16/skill.png' width='16' height='16' alt='' /> ";
+            echo "{$software['name']}</td>";
             echo "<td>";
             if ($software['lifetime_start'] > 1) echo date($CONFIG['dateformat_shortdate'],mysql2date($software['lifetime_start'])).' to ';
             else echo "&#8734;";
@@ -124,7 +126,7 @@ if (empty($productid) AND $display!='skills')
 }
 elseif (empty($productid) AND ($display=='skills' OR $display=='software'))
 {
-    echo "<h2>Skills</h2>";
+    echo "<h2><img src='{$CONFIG['application_webpath']}images/icons/{$iconset}/32x32/skill.png' width='32' height='32' alt='' /> Skills</h2>";
     $sql = "SELECT * FROM software ORDER BY name";
     $result = mysql_query($sql);
     if (mysql_error()) trigger_error(mysql_error(),E_USER_ERROR);
@@ -192,7 +194,7 @@ else
         while ($product = mysql_fetch_object($presult))
         {
             echo "<table summary='List of skills linked to product' align='center'>";
-            echo "<tr><thead><th colspan='0'>Product: {$product->name} (<a href='edit_product.php?id={$product->id}'>Edit</a> | <a href='delete_product.php?id={$product->id}'>Delete</a>)</th></thead></tr>";
+            echo "<tr><thead><th colspan='0'><img src='{$CONFIG['application_webpath']}images/icons/{$iconset}/32x32/product.png' width='32' height='32' alt='' /> Product: {$product->name} (<a href='edit_product.php?id={$product->id}'>Edit</a> | <a href='delete_product.php?id={$product->id}'>Delete</a>)</th></thead></tr>";
             if (!empty($product->description)) echo "<tr class='shade1'><td colspan='0'>".nl2br($product->description)."</td></tr>";
 
             $swsql = "SELECT * FROM softwareproducts, software WHERE softwareproducts.softwareid=software.id AND productid='{$product->id}' ORDER BY name";
@@ -215,7 +217,8 @@ else
                     if (mysql_error()) trigger_error(mysql_error(),E_USER_ERROR);
                     list($countincidents) = mysql_fetch_row($sresult);
 
-                    echo "<tr class='$shade'><td>{$software['name']}</td>";
+                    echo "<tr class='$shade'><td><img src='{$CONFIG['application_webpath']}images/icons/{$iconset}/16x16/skill.png' width='16' height='16' alt='' /> ";
+                    echo "{$software['name']}</td>";
                     echo "<td>";
                     if ($software['lifetime_start'] > 1) echo date($CONFIG['dateformat_shortdate'],mysql2date($software['lifetime_start'])).' to ';
                     else echo "&#8734;";
@@ -253,7 +256,8 @@ else
                 {
                     if ($contract->term=='yes' OR $contract->expirydate < $now) $shade = "expired";
                     echo "<tr class='{$shade}'>";
-                    echo "<td><a href='maintenance_details.php?id={$contract->id}'>Contract {$contract->id}</a></td>";
+                    echo "<td><img src='{$CONFIG['application_webpath']}images/icons/{$iconset}/16x16/contract.png' width='16' height='16' alt='' /> ";
+                    echo "<a href='maintenance_details.php?id={$contract->id}'>Contract {$contract->id}</a></td>";
                     echo "<td>".site_name($contract->site)."</td>";
                     echo "</tr>\n";
                     if ($shade=='shade1') $shade='shade2';

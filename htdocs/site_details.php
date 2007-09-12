@@ -37,7 +37,7 @@ $siteresult = mysql_query($sql);
 if (mysql_error()) trigger_error(mysql_error(),E_USER_WARNING);
 while ($siterow=mysql_fetch_array($siteresult))
 {
-    echo "<tr><th>Site:</th><td><h3>".$siterow['name']."</h3>";
+    echo "<tr><th>Site:</th><td><h3><img src='{$CONFIG['application_webpath']}images/icons/{$iconset}/32x32/site.png' width='32' height='32' alt='' /> ".$siterow['name']."</h3>";
     echo "</td></tr>";
     if ($siterow['active']=='false')
     {
@@ -94,7 +94,7 @@ if ($countcontacts > 0)
     {
         if ($contactrow['active']=='false') $shade='expired';
         echo "<tr class='$shade'>";
-        echo "<td><a href=\"contact_details.php?id=".$contactrow['id']."\">".$contactrow['forenames'].' '.$contactrow['surname']."</a></td>";
+        echo "<td><img src='{$CONFIG['application_webpath']}images/icons/{$iconset}/16x16/contact.png' width='16' height='16' alt='' /> <a href=\"contact_details.php?id=".$contactrow['id']."\">".stripslashes($contactrow['forenames']).' '.stripslashes($contactrow['surname'])."</a></td>";
         echo "<td>{$contactrow['jobtitle']}</td>";
         echo "<td>{$contactrow['department']}</td>";
         if ($contactrow['dataprotection_phone']!='Yes') echo "<td>{$contactrow['phone']}</td>";
@@ -178,9 +178,10 @@ if (user_permission($sit[2],19)) // View contracts
             if ($shade) $class = "shade1";
             else $class = "shade2";
             if ($results['term']=='yes' || $results['expirydate']<$now) $class = "expired";
-            ?>
-            <tr>
-                <td class='<?php echo $class ?>'><a href="maintenance_details.php?id=<?php echo $results['maintid'] ?>">Contract <?php echo $results['maintid'] ?></a></td>
+            echo "<tr>";
+                echo "<td class='<?php echo $class ?>'><img src='{$CONFIG['application_webpath']}images/icons/{$iconset}/16x16/contract.png' width='16' height='16' alt='' /> ";
+                echo "<a href='maintenance_details.php?id={$results['maintid']}'>Contract {$results['maintid']}</a></td>";
+                ?>
                 <td class='<?php echo $class ?>'><?php echo $results["product"] ?></td>
                 <td class='<?php echo $class ?>'><?php echo $results["reseller"] ?></td>
                 <td class='<?php echo $class ?>'><?php echo $results["licence_quantity"] ?> <?php echo $results["licence_type"] ?></td>

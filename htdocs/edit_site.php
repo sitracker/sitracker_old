@@ -59,7 +59,10 @@ elseif ($action == "edit")
                 return window.confirm('Are you sure you want to make these changes?');
             }
             </script>
-            <h2>Edit Site <?php echo "$site - ".site_name($site); ?></h2>
+            <?php
+            echo "<h2><img src='{$CONFIG['application_webpath']}images/icons/{$iconset}/32x32/site.png' width='32' height='32' alt='' /> ";
+            echo "Edit Site {$site} - ".site_name($site)."</h2>";
+            ?>
             <form name='edit_site' action="<?php echo $_SERVER['PHP_SELF'] ?>?action=update" method="post" onsubmit="return confirm_submit()">
             <p align='center'>Mandatory fields are marked <sup class='red'>*</sup></p>
             <table align='center' class='vertical'>

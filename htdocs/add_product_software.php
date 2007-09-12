@@ -37,9 +37,9 @@ if (empty($action) OR $action == "showform")
     if (empty($productid))
     {
         $name = db_read_column('name', 'software', $softwareid);
-        echo "<h3>Skill: $name</h3>";
+        echo "<h3><img src='{$CONFIG['application_webpath']}images/icons/{$iconset}/16x16/skill.png' width='16' height='16' alt='' /> Skill: $name</h3>";
         echo "<input name=\"softwareid\" type=\"hidden\" value=\"$softwareid\" />\n";
-        echo "<p align='center'>Link Product: ";
+        echo "<p align='center'>Link Product: <img src='{$CONFIG['application_webpath']}images/icons/{$iconset}/16x16/product.png' width='16' height='16' alt='' /> ";
         echo product_drop_down("productid", 0);
         echo "</p>";
     }
@@ -55,7 +55,7 @@ if (empty($action) OR $action == "showform")
     }
     if (empty($softwareid))
     {
-        echo "<p align='center'>Link Skill: ";
+        echo "<p align='center'>Link Skill: <img src='{$CONFIG['application_webpath']}images/icons/{$iconset}/16x16/skill.png' width='16' height='16' alt='' /> ";
         echo software_drop_down("softwareid", 0);
         echo "</p>\n";
     }

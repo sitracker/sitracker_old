@@ -31,8 +31,10 @@ if (empty($submit))
         return window.confirm('Are you sure you want to add this skill?');
     }
     </script>
-
-    <h2>Add New Skill</h2>
+    <?php
+    echo "<h2><img src='{$CONFIG['application_webpath']}images/icons/{$iconset}/32x32/skill.png' width='32' height='32' alt='' /> ";
+    echo "Add New Skill</h2>";
+    ?>
     <p align='center'>Mandatory fields are marked <sup class='red'>*</sup></p>
     <form name='addsoftware' action="<?php echo $_SERVER['PHP_SELF']; ?>" method="post" onsubmit="return confirm_submit()">
     <table class='vertical'>

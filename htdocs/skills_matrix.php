@@ -28,9 +28,10 @@ $title='Skills Matrix';
 
 include('htmlheader.inc.php');
 
-echo "<h2>$title</h2>";
-if(empty($legacy)) echo "<p align='center'><a href='{$_SERVER['PHP_SELF']}?legacy=yes&amp;gid={$groupid}'>Show legacy software</a></p>";
-else echo "<p align='center'><a href='{$_SERVER['PHP_SELF']}?gid={$groupid}'>Hide legacy software</a></p>";
+echo "<h2><img src='{$CONFIG['application_webpath']}images/icons/{$iconset}/32x32/skill.png' width='32' height='32' alt='' /> ";
+echo "$title</h2>";
+if(empty($legacy)) echo "<p align='center'><a href='{$_SERVER['PHP_SELF']}?legacy=yes&amp;gid={$groupid}'>Show legacy skills</a></p>";
+else echo "<p align='center'><a href='{$_SERVER['PHP_SELF']}?gid={$groupid}'>Hide legacy skills</a></p>";
 
 $gsql = "SELECT * FROM groups ORDER BY name";
 $gresult = mysql_query($gsql);

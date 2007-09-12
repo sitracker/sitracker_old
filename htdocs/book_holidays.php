@@ -32,8 +32,8 @@ if (empty($step))
     // "You may use the strategies and code in these articles license and royalty free unless otherwise directed.
     // "If I helped you build something cool I'd like to hear about it. Drop me a line at tom@dagblastit.com."
 
-    if ($user==$sit[2]) echo "<h2>Book Holidays</h2>";
-    else echo "<h2>Book Holidays for ".user_realname($user)."</h2>";
+    if ($user==$sit[2]) echo "<h2><img src='{$CONFIG['application_webpath']}images/icons/{$iconset}/32x32/holiday.png' width='32' height='32' alt='' /> Book Holidays</h2>";
+    else echo "<h2><img src='{$CONFIG['application_webpath']}images/icons/{$iconset}/32x32/holiday.png' width='32' height='32' alt='' /> Book Holidays for ".user_realname($user)."</h2>";
     ?>
     <form name="date" action="<?php echo $_SERVER['PHP_SELF']; ?>" method="post">
     <table class='vertical'>

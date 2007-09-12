@@ -48,7 +48,8 @@ else
     $title='Edit Product';
     include('htmlheader.inc.php');
 
-    echo "<h2>$title</h2>\n";
+    echo "<h2><img src='{$CONFIG['application_webpath']}images/icons/{$iconset}/32x32/product.png' width='32' height='32' alt='' /> ";
+    echo "$title</h2>\n";
 
     echo "<form action='{$_SERVER['PHP_SELF']}' method='post' >";
     echo "<table align='center' class='vertical'>";

@@ -33,7 +33,10 @@ if ($action == "showform" OR $action=='')
         return window.confirm('Are you sure you want to add this contract?');
     }
     </script>
-    <h2>Add Contract</h2>
+    <?php
+    echo "<h2><img src='{$CONFIG['application_webpath']}images/icons/{$iconset}/32x32/contract.png' width='32' height='32' alt='' /> ";
+    echo "Add Contract</h2>";
+    ?>
     <p align='center'>Mandatory fields are marked <sup class='red'>*</sup></p>
     <form name='addcontract' action="<?php echo $_SERVER['PHP_SELF']; ?>?action=add" method="post" onsubmit="return confirm_submit()">
     <table align='center' class='vertical'>

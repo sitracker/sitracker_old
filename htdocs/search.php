@@ -31,7 +31,8 @@ $order = cleanvar($_REQUEST['order']);
 if (empty($order)) $order='d';
 
 include('htmlheader.inc.php');
-echo "<h2>Search {$CONFIG['application_shortname']}</h2>\n";
+echo "<h2><img src='{$CONFIG['application_webpath']}images/icons/{$iconset}/32x32/search.png' width='32' height='32' alt='' /> ";
+echo "Search {$CONFIG['application_shortname']}</h2>\n";
 echo "<form action='{$_SERVER['PHP_SELF']}' method='get'>";
 echo "<table align='center'>";
 echo "<tr><th>";

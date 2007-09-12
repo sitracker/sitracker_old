@@ -26,9 +26,8 @@ $title="Browse Knowledge Base";
 include('htmlheader.inc.php');
 if (empty($mode) && empty($search_string)) $mode='RECENT';
 if (empty($search_string) AND empty($mode)) $search_string='a';
-?>
-<h2>Browse Knowledge Base</h2>
-<?php
+echo "<h2><img src='{$CONFIG['application_webpath']}images/icons/{$iconset}/32x32/kb.png' width='32' height='32' alt='' /> ";
+echo "Browse Knowledge Base</h2>";
 if (strtolower($mode)=='recent') echo "<h4>Articles published recently</h4>";
 elseif (strtolower($mode)=='today') echo "<h4>Articles published today</h4>";
 ?>

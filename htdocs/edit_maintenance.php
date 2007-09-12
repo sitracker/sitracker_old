@@ -24,8 +24,9 @@ $changeproduct = cleanvar($_REQUEST['changeproduct']);
 if (empty($action) OR $action == "showform")
 {
     include('htmlheader.inc.php');
+    echo "<h2><img src='{$CONFIG['application_webpath']}images/icons/{$iconset}/32x32/contract.png' width='32' height='32' alt='' /> ";
+    echo "Select Contract to Edit</h2>";
     ?>
-    <h2>Select Contract to Edit</h2>
     <form action="<?php echo $_SERVER['PHP_SELF']; ?>?action=edit" method="post">
     <table align='center' class='vertical'>
     <tr><th>Contract:</th><td><?php echo maintenance_drop_down("maintid", 0); ?></td></tr>
@@ -72,7 +73,8 @@ if ($action == "edit")
         //-->
         </script>
         <?php
-        echo "<h2>Edit Contract {$maintid}</h2>";
+        echo "<h2><img src='{$CONFIG['application_webpath']}images/icons/{$iconset}/32x32/contract.png' width='32' height='32' alt='' /> ";
+        echo "Edit Contract {$maintid}</h2>";
         ?>
         <p align='center'>Mandatory fields are marked <sup class='red'>*</sup></p>
         <form id='maintform' name='maintform' action="<?php echo $_SERVER['PHP_SELF']; ?>?action=update" method="post" onsubmit="return confirm_submit()">

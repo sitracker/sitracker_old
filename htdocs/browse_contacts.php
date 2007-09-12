@@ -74,7 +74,10 @@ window.open(URL, "contact_products_window", "toolbar=no,status=yes,menubar=no,sc
 <script type="text/javascript">
     dojo.require("dojo.widget.ComboBox");
 </script>
-<h2>Browse Contacts</h2>
+<?php
+echo "<h2><img src='{$CONFIG['application_webpath']}images/icons/{$iconset}/32x32/contact.png' width='32' height='32' alt='' /> ";
+echo "Browse Contacts</h2>";
+?>
 <table summary="alphamenu" align="center">
 <tr>
 <td align="center">

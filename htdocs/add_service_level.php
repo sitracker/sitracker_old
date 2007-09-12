@@ -26,7 +26,8 @@ if (empty($action) OR $action == "showform")
 {
     $title = 'Add Service Level';
     include('htmlheader.inc.php');
-    echo "<h2>$title</h2>";
+    echo "<h2><img src='{$CONFIG['application_webpath']}images/icons/{$iconset}/32x32/sla.png' width='32' height='32' alt='' /> ";
+    echo "$title</h2>";
     echo "<form name='add_servicelevel' action='{$_SERVER['PHP_SELF']}' method='post'>";
 
     echo "<p align='center'>Tag: <input type='text' name='tag' value='' /></p>";

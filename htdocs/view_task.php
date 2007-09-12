@@ -25,7 +25,7 @@ $action = $_REQUEST['action'];
 $id = cleanvar($_REQUEST['id']);
 
 include('htmlheader.inc.php');
-echo "<h2>$title</h2>";
+echo "<h2><img src='{$CONFIG['application_webpath']}images/icons/{$iconset}/32x32/task.png' width='32' height='32' alt='' /> $title</h2>";
 
 echo "<div style='width: 90%; margin-left: auto; margin-right: auto;'>";
 
