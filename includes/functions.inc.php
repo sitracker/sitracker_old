@@ -48,6 +48,7 @@ define('CFG_JOURNAL_PRODUCTS', 9);
 define('CFG_JOURNAL_OTHER', 10);
 define('CFG_JOURNAL_KB', 11);    // Knowledge Base
 
+ini_set('default_charset', 'UTF-8');
 
 // Time settings
 $now = time();
@@ -1010,7 +1011,7 @@ function array_drop_down($array, $name, $setting='', $enablefield='')
     else $usekey=FALSE;
     foreach($array AS $key => $value)
     {
-        $value=htmlentities($value);
+        $value=htmlentities($value, ENT_COMPAT, 'UTF-8');
         if ($usekey) $html .= "<option value='$key'";
         else $html .= "<option value='$value'";
         if ($usekey) { if ($key==$setting) $html .= " selected='selected'"; }
@@ -1053,7 +1054,7 @@ function contact_drop_down($name, $id, $showsite=FALSE)
     while ($contacts = mysql_fetch_array($result))
     {
         if ($showsite AND $prevsite!= $contacts['siteid'] AND $prevsite!=0) $html .= "</optgroup>\n";
-        if ($showsite AND $prevsite!= $contacts['siteid']) $html .= "<optgroup label='".htmlentities($contacts['sitename']).", ".htmlentities($contacts['department'])."'>";
+        if ($showsite AND $prevsite!= $contacts['siteid']) $html .= "<optgroup label='".htmlentities($contacts['sitename'], ENT_COMPAT, 'UTF-8').", ".htmlentities($contacts['department'], ENT_COMPAT, 'UTF-8')."'>";
         $realname=$contacts['forenames'].' '.$contacts['surname'];
         $html .= "<option ";
         if ($contacts['contactid'] == $id) $html .= "selected='selected' ";
@@ -4397,7 +4398,7 @@ function file_permissions_info($perms)
 function cleanvar($var,$striphtml=TRUE, $transentities=TRUE)
 {
     if ($striphtml) $var = strip_tags($var);
-    if ($transentities) $var = htmlentities($var);
+    if ($transentities) $var = htmlentities($var, ENT_COMPAT, 'UTF-8');
     else $var = htmlspecialchars($var);
 
     $var = mysql_escape_string($var);
