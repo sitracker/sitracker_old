@@ -48,8 +48,9 @@ else if ($sort == "accepting") $sql .= " ORDER BY accepting ASC";
 $result = mysql_query($sql);
 if (mysql_error()) trigger_error(mysql_error(),E_USER_WARNING);
 
+echo "<h2><img src='{$CONFIG['application_webpath']}images/icons/{$iconset}/32x32/user.png' width='32' height='32' alt='' /> ";
+echo "Manage Users</h2>";
 ?>
-<h2>Manage Users</h2>
 <p class='contextmenu' align='center'><a href="add_user.php?action=showform">Add User</a> |
 <a href="edit_user_permissions.php">Set Role Permissions</a>
 </p>
@@ -115,10 +116,10 @@ while ($users = mysql_fetch_array($result))
 
     echo "</td><td>";
     if ($users["phone"] == "") echo "None";
-    else echo $users["phone"]; 
+    else echo $users["phone"];
     echo "</td><td>";
     if ($users["mobile"] == "") echo "None";
-    else echo $users["mobile"]; 
+    else echo $users["mobile"];
     echo "</td><td>";
     if ($users["fax"] == "") echo "None";
     else echo $users["fax"];

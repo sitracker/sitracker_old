@@ -32,20 +32,17 @@ function dashboard_rss($row,$dashboardid)
         while($row = mysql_fetch_row($result))
         {
             $url = $row[0];
-            //if($rs = $rss->get($url))
             if($rss = fetch_rss( $url ))
             {
-                //echo '<pre>';
-                //print_r($rs);
-                //echo '</pre>';
+//                 echo "<pre>".print_r($rss,true)."</pre>";
                 echo "<table align='center' style='width: 100%'>";
                 echo "<tr><th><span style='float: right;'><a href='".htmlspecialchars($url)."'><img src='{$CONFIG['application_webpath']}images/icons/{$iconset}/12x12/feed-icon.png' style='border: 0px;' alt='Feed Icon' /></a></span>{$rss->channel['title']}</th></tr>";
                 foreach($rss->items as $item)
                 {
+//                     echo "<pre>".print_r($item,true)."</pre>";
                     echo "<tr><td><a href='{$item['link']}' class='info'>{$item['title']}";
-                    //echo $rss->feed_type;
                     if($rss->feed_type == 'RSS') $d = parse_updatebody($item['description']);
-                    else if($rss->feed_type == 'Atom') $d = parse_updatebody($item['summary']);
+                    else if($rss->feed_type == 'Atom') $d = parse_updatebody($item['atom_content']);
                     echo "<span>{$d}</span></a></td></tr>";
                 }
                 echo "</table>";
