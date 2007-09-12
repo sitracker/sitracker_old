@@ -50,6 +50,8 @@ Icon                                      Source
 16x16/skill.png                           Crystal Project
 16x16/product.png                         Crystal Project
 16x16/kb.png                              Crystal Project
+16x16/user.png                            Crystal Project
+16x16/dashboard.png                       Crystal Project
 32x32/mimetypes/*                         KDE Classic
 32x32/blackflag.png                       SiT
 32x32/whiteflag.png                       SiT
@@ -66,6 +68,8 @@ Icon                                      Source
 32x32/skill.png                           Crystal Project
 32x32/product.png                         Crystal Project
 32x32/kb.png                              Crystal Project
+32x32/user.png                            Crystal Project
+32x32/dashboard.png                       Crystal Project
 
 
 KDE Classic

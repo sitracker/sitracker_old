@@ -38,8 +38,9 @@ if (empty($submit))
     // This form should use one SQL query really, not call all these functions to lookup each field
     // Need to change this sometime.
 
+    echo "<h2><img src='{$CONFIG['application_webpath']}images/icons/{$iconset}/32x32/user.png' width='32' height='32' alt='' /> ";
+    echo "Edit User Profile For {$user->realname}</h2>";
     ?>
-    <h2>Edit User Profile For <?php echo $user->realname ?></h2>
     <form action="<?php echo $_SERVER['PHP_SELF'] ?>" method="post">
     <table align='center' class='vertical'>
     <col width="250"></col><col width="*"></col>
