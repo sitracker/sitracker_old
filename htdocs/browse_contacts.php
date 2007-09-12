@@ -44,7 +44,7 @@ if($submit_value == 'go')
                 $sql .= "CONCAT(forenames,' ',surname) LIKE '%$search_string%'";
             }
         }
-        $sql .= " ORDER BY surname ASC";
+        $sql .= " ORDER BY surname ASC, forenames ASC";
 
         // execute query
         $result = mysql_query($sql);
