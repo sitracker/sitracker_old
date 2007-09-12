@@ -203,7 +203,7 @@ while ($update = mysql_fetch_object($result))
         $updateheadertext = str_replace('currentowner', 'Self', $updateheadertext);
     }
     $updateheadertext = str_replace('updateuser', $updateuser, $updateheadertext);
-    if ($update->type=='reviewmet' AND $update->sla=='opened') $updateheadertext = str_replace('updatereview', 'Period Started', $updateheadertext);
+    if ($update->type=='reviewmet' AND ($update->sla=='opened' OR $update->userid==0)) $updateheadertext = str_replace('updatereview', 'Period Started', $updateheadertext);
     elseif ($update->type=='reviewmet' AND $update->sla=='')  $updateheadertext = str_replace('updatereview', 'Completed', $updateheadertext);
     if ($update->type=='slamet') $updateheadertext = str_replace('updatesla', $slatypes[$update->sla]['text'], $updateheadertext);
 
@@ -251,7 +251,7 @@ while ($update = mysql_fetch_object($result))
 
     if ($update->customervisibility=='show') $newmode='hide';
     else $newmode='show';
-//      echo "({$update->sla}/{$update->type})";
+//       echo "({$update->sla}/{$update->type})";
     echo "<a href='incident_showhide_update.php?mode={$newmode}&amp;incidentid={$incidentid}&amp;updateid={$update->id}&amp;view={$view}&amp;expand={$expand}' name='{$update->id}' class='info'>";
 
     if (array_key_exists($update->type, $updatetypes))

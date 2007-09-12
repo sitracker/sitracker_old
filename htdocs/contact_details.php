@@ -69,7 +69,7 @@ while ($contactrow=mysql_fetch_array($contactresult))
     }
 
     echo "<table align='center' class='vertical'>";
-    echo "<tr><th colspan='2'><h3>".stripslashes($contactrow['forenames']).' '.stripslashes($contactrow['surname'])."</h3></th></tr>";
+    echo "<tr><th colspan='2'><h3><img src='{$CONFIG['application_webpath']}images/icons/{$iconset}/32x32/contact.png' width='32' height='32' alt='' /> ".stripslashes($contactrow['forenames']).' '.stripslashes($contactrow['surname'])."</h3></th></tr>";
     if ($contactrow['active']=='false')
     {
         echo "<tr><th>Status:</th><td><span class='expired'>Inactive</span></td></tr>";
@@ -182,7 +182,7 @@ while ($contactrow=mysql_fetch_array($contactresult))
                 if ($supportedrow['term']=='yes') $shade='expired';
                 if ($supportedrow['expirydate']<$now) $shade='expired';
 
-                echo "<tr><td class='$shade'><a href=\"maintenance_details.php?id=".$supportedrow['maintenanceid']."\">Contract: ".$supportedrow['maintenanceid']."</a></td>";
+                echo "<tr><td class='$shade'><img src='{$CONFIG['application_webpath']}images/icons/{$iconset}/16x16/contract.png' width='16' height='16' alt='' /> <a href=\"maintenance_details.php?id=".$supportedrow['maintenanceid']."\">Contract: ".$supportedrow['maintenanceid']."</a></td>";
                 echo "<td class='$shade'>".$supportedrow['productname']."</td>";
                 echo "<td class='$shade'>".date("jS M Y", $supportedrow['expirydate']);
                 if ($supportedrow['term']=='yes') echo " Terminated";

@@ -35,8 +35,9 @@ function contact_products_window(contactid)
 // show add incident form
 if (empty($search_string))
 {
+    echo "<h2><img src='{$CONFIG['application_webpath']}images/icons/{$iconset}/32x32/search.png' width='32' height='32' alt='' /> ";
+    echo "Search Contacts</h2>
     ?>
-    <h2>Search Contacts</h2>
     <form action="<?php echo $_SERVER['PHP_SELF']; ?>" method="post">
     <table align='center' class='vertical'>
     <tr><th>Search String:</th><td><input maxlength='100' name="search_string" size=30 type="text" /></td></tr>

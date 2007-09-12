@@ -27,7 +27,8 @@ if ($user==$sit[2]) $title="{$_SESSION['realname']}'s Holidays";
 else $title = user_realname($user)."'s Holidays";
 
 include('htmlheader.inc.php');
-echo "<h2>$title</h2>";
+echo "<h2><img src='{$CONFIG['application_webpath']}images/icons/{$iconset}/32x32/holiday.png' width='32' height='32' alt='' /> ";
+echo "$title</h2>";
 
 echo "<p align='center'>";
 echo "<a href='book_holidays.php?user={$user}'>Book Holidays</a>";

@@ -141,7 +141,8 @@ switch ($action)
     case '':
     default:
         include('htmlheader.inc.php');
-        echo "<h2>$title</h2>";
+        echo "<h2><img src='{$CONFIG['application_webpath']}images/icons/{$iconset}/32x32/task.png' width='32' height='32' alt='' /> ";
+        echo "$title</h2>";
         $sql = "SELECT * FROM tasks WHERE id='$id'";
         $result = mysql_query($sql);
         if (mysql_error()) trigger_error(mysql_error(),E_USER_ERROR);

@@ -35,7 +35,8 @@ $maintrow=mysql_fetch_array($maintresult);
 ?>
 <table align='center' class='vertical'>
 <?php
-echo "<tr><th>Contract ID:</th><td><h3>".$maintrow['id']."</h3></td></tr>";
+echo "<tr><th>Contract ID:</th><td><h3><img src='{$CONFIG['application_webpath']}images/icons/{$iconset}/32x32/contract.png' width='32' height='32' alt='' /> ";
+echo "{$maintrow['id']}</h3></td></tr>";
 echo "<tr><th>Status:</th><td>";
 if ($maintrow['term']=='yes') echo '<strong>Terminated</strong>';
 else echo 'Active';
@@ -80,7 +81,7 @@ if (mysql_num_rows($result)>0)
     $supportcount=1;
     while ($supportedrow=mysql_fetch_array($result))
     {
-        echo "<tr><th>Contact #$supportcount:</th><td><a href=\"contact_details.php?id=".$supportedrow['contactid']."\">".$supportedrow['forenames'].' '.$supportedrow['surname']."</a>, ";
+        echo "<tr><th>Contact #$supportcount:</th><td><img src='{$CONFIG['application_webpath']}images/icons/{$iconset}/16x16/contact.png' width='16' height='16' alt='' /> <a href=\"contact_details.php?id=".$supportedrow['contactid']."\">".$supportedrow['forenames'].' '.$supportedrow['surname']."</a>, ";
         echo contact_site($supportedrow['contactid']). "</td>";
         echo "<td><a href=\"delete_maintenance_support_contact.php?contactid=".$supportedrow['contactid']."&amp;maintid=$id&amp;context=maintenance\">Remove</a></td></tr>\n";
         $supportcount++;

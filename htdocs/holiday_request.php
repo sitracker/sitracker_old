@@ -34,7 +34,7 @@ if (!$sent)
     $approver=user_permission($sit[2], 50);
 
     $waiting=FALSE;
-    echo "<h2>";
+    echo "<h2><img src='{$CONFIG['application_webpath']}images/icons/{$iconset}/32x32/holiday.png' width='32' height='32' alt='' /> ";
     if ($user=='all') echo "All";
     else echo user_realname($user,TRUE);
     echo " - Holiday Requests</h2>";

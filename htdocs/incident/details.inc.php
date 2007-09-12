@@ -26,7 +26,9 @@ echo "<table>";
 echo "<tr><td>";
 // First column: Contact Details
 echo "<a href='contact_details.php?id={$incident->contactid}' title='Contact Details' target='top.opener'>{$incident->forenames} {$incident->surname}</a> ";
-echo "of <a href='site_details.php?id={$incident->siteid}' title='Site Details' target='top.opener'>{$site_name}</a> ";
+echo "of <a href='site_details.php?id={$incident->siteid}' title='Site Details' target='top.opener' class='info'>{$site_name}";
+if (!empty($site_notes)) echo "<span>".stripslashes($site_notes)."</span>";
+echo "</a> ";
 echo list_tag_icons($incident->siteid, 3); // site tag icons
 echo "<br />\n";
 echo "<a href='mailto:{$incident->email}'>{$incident->email}</a><br />\n";

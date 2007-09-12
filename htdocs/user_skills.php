@@ -31,8 +31,9 @@ if (empty($sort) || $sort == "realname")  $sql .= " ORDER BY realname ASC";
 $result = mysql_query($sql);
 if (mysql_error()) trigger_error("MySQL Query Error ".mysql_error(), E_USER_ERROR);
 
+echo "<h2><img src='{$CONFIG['application_webpath']}images/icons/{$iconset}/32x32/user.png' width='32' height='32' alt='' /> ";
+echo "User Skills Listing <img src='{$CONFIG['application_webpath']}images/icons/{$iconset}/32x32/skill.png' width='32' height='32' alt='' /></h2>";
 ?>
-<h2>User Skills Listing</h2>
 <table align="center" style="width:95%;">
 <tr>
     <th><a href="<?php echo $_SERVER['PHP_SELF'] ?>?sort=realname">Name</a></th>

@@ -88,7 +88,8 @@ if (empty($submit))
             $expertise[]=$software->id;
         }
     }
-    echo "<h2>Skills for ".user_realname($user,TRUE)."</h2>";
+    echo "<h2><img src='{$CONFIG['application_webpath']}images/icons/{$iconset}/32x32/skill.png' width='32' height='32' alt='' /> ";
+    echo "Skills for ".user_realname($user,TRUE)."</h2>";
     echo "<p align='center'>Select your support skills</p>";
     echo "<form name='softwareform' action='{$_SERVER['PHP_SELF']}' method='post' onsubmit=\"populateHidden(document.softwareform.elements['expertise[]'],document.softwareform.choices)\">";
     echo "<table align='center'>";
@@ -98,7 +99,7 @@ if (empty($submit))
     $result = mysql_query($sql);
     if (mysql_num_rows($result) >= 1)
     {
-        echo "<select name='noskills[]' multiple='multiple' size='20'>";
+        echo "<select name='noskills[]' multiple='multiple' size='20' style='width: 100%; min-width: 200px;'>";
         while ($software = mysql_fetch_object($result))
         {
             if (is_array($expertise)) { if (!in_array($software->id,$expertise)) echo "<option value='{$software->id}'>$software->name</option>\n";  }
@@ -117,7 +118,7 @@ if (empty($submit))
     echo "<td class='shade1'>";
     $sql = "SELECT * FROM usersoftware, software WHERE usersoftware.softwareid=software.id AND userid='{$user}' ORDER BY name";
     $result = mysql_query($sql);
-    echo "<select name='expertise[]' multiple='multiple' size='20'>";
+    echo "<select name='expertise[]' multiple='multiple' size='20' style='width: 100%;  min-width: 200px;'>";
     while ($software = mysql_fetch_object($result))
     {
         echo "<option value='{$software->id}'>$software->name</option>\n";

@@ -37,8 +37,9 @@ function confirm_submit()
 if (empty($action) OR $action == "showform" OR empty($contact))
 {
     // Show select contact form
+    echo "<h2><img src='{$CONFIG['application_webpath']}images/icons/{$iconset}/32x32/contact.png' width='32' height='32' alt='' /> ";
+    echo "Select Contact To Edit</h2>";
     ?>
-    <h2>Select Contact To Edit</h2>
     <form action="<?php echo $_SERVER['PHP_SELF'] ?>?action=edit" method="post">
     <table align='center'>
     <tr><th>Contact:</th><td><?php echo contact_site_drop_down("contact", 0); ?></td></tr>
@@ -55,8 +56,9 @@ elseif ($action == "edit" && isset($contact))
     if (mysql_error()) trigger_error("MySQL Query Error ".mysql_error(), E_USER_ERROR);
     while ($contactrow=mysql_fetch_array($contactresult))
     {                                                   // User does not have access
+        echo "<h2><img src='{$CONFIG['application_webpath']}images/icons/{$iconset}/32x32/contact.png' width='32' height='32' alt='' /> ";
+        echo "Edit Contact {$contact}</h2>";
         ?>
-        <h2>Edit Contact <?php  echo $contact; ?></h2>
         <form name='contactform' action="<?php echo $_SERVER['PHP_SELF'] ?>?action=update" method="post" onsubmit="return confirm_submit()">
         <p align='center'>Mandatory fields are marked <sup class='red'>*</sup></p>
         <table align='center' class='vertical'>

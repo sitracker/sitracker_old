@@ -31,7 +31,10 @@ if ($action == "showform" OR $action == '')
         return window.confirm('Are you sure you want to add this site?');
     }
     </script>
-    <h2>Add New Site</h2>
+    <?php
+    echo "<h2><img src='{$CONFIG['application_webpath']}images/icons/{$iconset}/32x32/site.png' width='32' height='32' alt='' /> ";
+    echo "Add New Site</h2>";
+    ?>
     <h5>Mandatory fields are marked <sup class='red'>*</sup></h5>
     <form action="<?php echo $_SERVER['PHP_SELF']; ?>?action=add" method="post" onsubmit="return confirm_submit()">
     <table align='center'>

@@ -35,7 +35,7 @@ if (empty($submit))
     <h2>Add New Vendor</h2>
     <p align='center'>Mandatory fields are marked <sup class='red'>*</sup></p>
     <form action="<?php echo $_SERVER['PHP_SELF']; ?>" method="post" onsubmit="return confirm_submit()">
-    <table>
+    <table align='center'>
     <tr><th>Vendor Name: <sup class='red'>*</sup></th><td><input maxlength="50" name="name" size="30" /></td></tr>
     </table>
     <p align='center'><input name="submit" type="submit" value="Add Vendor" /></p>

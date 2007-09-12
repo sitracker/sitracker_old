@@ -39,8 +39,9 @@ include('htmlheader.inc.php');
 // show search incidents form
 if (empty($action))
 {
+    echo "<h2><img src='{$CONFIG['application_webpath']}images/icons/{$iconset}/32x32/search.png' width='32' height='32' alt='' /> ";
+    echo "Advanced Incidents Search</h2>";
     ?>
-    <h2>Advanced Incidents Search</h2>
     <form action="<?php echo $_SERVER['PHP_SELF'] ?>" method="get">
     <table class='vertical'>
     <tr><th>Title:</th><td><input maxlength='100' name="search_title" size='30' type='text' /></td></tr>

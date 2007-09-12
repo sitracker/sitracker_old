@@ -32,7 +32,10 @@ include('htmlheader.inc.php');
 <script type="text/javascript">
     dojo.require("dojo.widget.ComboBox");
 </script>
-<h2>Browse Maintenance</h2>
+<?php
+echo "<h2><img src='{$CONFIG['application_webpath']}images/icons/{$iconset}/32x32/contract.png' width='32' height='32' alt='' /> ";
+echo "Browse Maintenance</h2>";
+?>
 <table summary="alphamenu" align="center">
 <tr>
 <td align="center">

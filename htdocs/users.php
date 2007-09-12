@@ -41,7 +41,8 @@ while ($group = mysql_fetch_object($gresult))
     $grouparr[$group->id]=$group->name;
 }
 $numgroups = count($grouparr);
-echo "<h2>User Listing</h2>";
+echo "<h2><img src='{$CONFIG['application_webpath']}images/icons/{$iconset}/32x32/user.png' width='32' height='32' alt='' /> ";
+echo "User Listing</h2>";
 if ($numgroups >= 1)
 {
     echo "<form action='{$_SERVER['PHP_SELF']}' style='text-align: center;' method='get'>";

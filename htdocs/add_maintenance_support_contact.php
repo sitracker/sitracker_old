@@ -36,9 +36,10 @@ if (empty($action) || $action == "showform")
     <?php
     if (empty($maintid))
     {
-        ?>
-        <tr><th>Contract:</th><td width='400'><?php echo maintenance_drop_down("maintid", 0) ?></td></tr>
-        <?php
+        echo "<tr><th>Contract <img src='{$CONFIG['application_webpath']}images/icons/{$iconset}/16x16/contract.png' width='16' height='16' alt='' /></th>";
+        echo "<td width='400'>";
+        maintenance_drop_down("maintid", 0);
+        echo "</td></tr>";
     }
     else
     {
@@ -48,19 +49,18 @@ if (empty($action) || $action == "showform")
         if (mysql_error()) trigger_error("MySQL Query Error ".mysql_error(), E_USER_ERROR);
         list($sitename, $product)=mysql_fetch_row($result);
 
-        echo "<tr><th>Contract:</th><td>$maintid - $sitename, $product</td></tr>";
+        echo "<tr><th>Contract <img src='{$CONFIG['application_webpath']}images/icons/{$iconset}/16x16/contract.png' width='16' height='16' alt='' /></th><td>$maintid - $sitename, $product</td></tr>";
         echo "<input name=\"maintid\" type=\"hidden\" value=\"$maintid\" />";
     }
 
     if (empty($contactid))
     {
-        ?>
-        <tr><th>Support Contact:</th><td><?php echo contact_drop_down("contactid", 0, TRUE); ?></td></tr>
-        <?php
+        echo "<tr><th>Support Contact <img src='{$CONFIG['application_webpath']}images/icons/{$iconset}/16x16/contact.png' width='16' height='16' alt='' /></th>";
+        echo "<td>".contact_drop_down("contactid", 0, TRUE)."</td></tr>";
     }
     else
     {
-        echo "<tr><th>Contact:</th><td>$contactid - ".contact_realname($contactid).", ".site_name(contact_site($contactid));
+        echo "<tr><th>Contact <img src='{$CONFIG['application_webpath']}images/icons/{$iconset}/16x16/contact.png' width='16' height='16' alt='' /></th><td>$contactid - ".contact_realname($contactid).", ".site_name(contact_site($contactid));
         echo "<input name=\"contactid\" type=\"hidden\" value=\"$contactid\" />";
         echo "</td></tr>";
     }

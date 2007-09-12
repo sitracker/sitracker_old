@@ -31,7 +31,10 @@ if (empty($submit))
         return window.confirm('Are you sure you want to add this product?');
     }
     </script>
-    <h2>Add New Product</h2>
+    <?php
+    echo "<h2><img src='{$CONFIG['application_webpath']}images/icons/{$iconset}/32x32/product.png' width='32' height='32' alt='' /> ";
+    echo "Add New Product</h2>";
+    ?>
     <p align='center'>Mandatory fields are marked <sup class='red'>*</sup></p>
     <form action="<?php echo $_SERVER['PHP_SELF']; ?>" method="post" onsubmit="return confirm_submit()">
     <table align='center'>
