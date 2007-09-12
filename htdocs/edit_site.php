@@ -97,7 +97,7 @@ elseif ($action == "edit")
             echo "<td>".array_drop_down($incident_pools,'incident_poolid',$siterow['freesupport'])."</td></tr>";
             ?>
             <tr><th>Active:</th><td><input type='checkbox' name='active' <?php if($siterow['active']=='true') echo "checked='".$siterow['active']."'"; ?> value='true' /></td></tr>
-            <tr><th>Notes:</th><td><textarea rows="5" cols="30" name="notes"><?php echo $siterow['notes'] ?></textarea></td></tr>
+            <tr><th>Notes:</th><td><textarea rows="5" cols="30" name="notes"><?php echo stripslashes($siterow['notes']); ?></textarea></td></tr>
             <?php
             plugin_do('edit_site_form');
             echo "</table>\n";
