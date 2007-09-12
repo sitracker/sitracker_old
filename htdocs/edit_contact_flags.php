@@ -23,7 +23,7 @@ require('auth.inc.php');
 // External variables
 $mode = $_REQUEST['mode'];
 $contactid=mysql_escape_string($_REQUEST['id']);
-$flag=htmlentities(strip_tags(mysql_escape_string($_REQUEST['flag'])));
+$flag=cleanvar($_REQUEST['flag']);
 
 switch($mode)
 {

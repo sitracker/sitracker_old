@@ -71,7 +71,7 @@ Copyright &copy; 2005-2007 Sam Stephenson. Licensed under the MIT license.</p>
 <textarea cols="100%" rows="10" readonly="readonly" style="background: transparent;">
 <?php
 $fp = fopen($CONFIG['licensefile'], "r");
-$contents = htmlentities(fread($fp, filesize($CONFIG['licensefile'])));
+$contents = htmlentities(fread($fp, filesize($CONFIG['licensefile'])), ENT_COMPAT, 'UTF-8');
 fclose($fp);
 echo $contents;
 ?>
@@ -82,7 +82,7 @@ echo $contents;
 <textarea cols="100%" rows="10" readonly="readonly" style="background: transparent;">
 <?php
 $fp = fopen($CONFIG['changelogfile'], "r");
-$contents = htmlentities(fread($fp, filesize($CONFIG['changelogfile'])));
+$contents = htmlentities(fread($fp, filesize($CONFIG['changelogfile'])), ENT_COMPAT, 'UTF-8');
 fclose($fp);
 echo $contents;
 ?>

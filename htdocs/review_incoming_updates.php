@@ -46,10 +46,10 @@ function generate_row($update)
     $html_row="<tr class='$shade'>";
     $html_row.="<td style='text-align: center'><input type='checkbox' name='selected[]' value='".$update['id']."' /></td>";
     $html_row.="<td align='center' width='20%'>".date($CONFIG['dateformat_datetime'],$update['timestamp']).'</td>';
-    $html_row.="<td width='20%'>".htmlentities($update['emailfrom'],ENT_QUOTES)."</td>";
+    $html_row.="<td width='20%'>".htmlentities($update['emailfrom'],ENT_QUOTES, 'UTF-8')."</td>";
     $html_row.="<td width='20%'><a id='update{$update['id']}' class='info' style='cursor:help;'>";
     if (empty($update['subject'])) $update['subject']='Untitled';
-    $html_row.=htmlentities($update['subject'],ENT_QUOTES);
+    $html_row.=htmlentities($update['subject'],ENT_QUOTES, 'UTF-8');
     $html_row.='<span>'.parse_updatebody($updatebodytext).'</span></a></td>';
     $html_row.="<td align='center' width='20%'>".$update['reason'].'</td>';
     $html_row.="<td align='center' width='20%'>";
