@@ -25,7 +25,9 @@ echo "<div id='detailsummary'>";
 echo "<table>";
 echo "<tr><td>";
 // First column: Contact Details
-echo "<a href='contact_details.php?id={$incident->contactid}' title='Contact Details' target='top.opener'>{$incident->forenames} {$incident->surname}</a> ";
+echo "<a href='contact_details.php?id={$incident->contactid}' title='Contact Details' target='top.opener' class='info'>{$incident->forenames} {$incident->surname}";
+if (!empty($contact_notes)) echo "<span>".stripslashes($contact_notes)."</span>";
+echo "</a> ";
 echo "of <a href='site_details.php?id={$incident->siteid}' title='Site Details' target='top.opener' class='info'>{$site_name}";
 if (!empty($site_notes)) echo "<span>".stripslashes($site_notes)."</span>";
 echo "</a> ";

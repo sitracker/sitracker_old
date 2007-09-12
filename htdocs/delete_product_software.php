@@ -16,7 +16,7 @@
 $permission=24;  // Add Product
 require('db_connect.inc.php');
 require('functions.inc.php');
-$title="Disassociate software with a product";
+$title="Disassociate skill with a product";
 
 // This page requires authentication
 require('auth.inc.php');
@@ -30,8 +30,8 @@ if (!empty($productid) && !empty($softwareid))
     $sql = "DELETE FROM softwareproducts WHERE productid='$productid' AND softwareid='$softwareid' LIMIT 1";
     mysql_query($sql);
     if (mysql_error()) trigger_error("MySQL Query Error ".mysql_error(), E_USER_ERROR);
-    journal(CFG_LOGGING_NORMAL, 'Software Unlinked', "Software $softwareid was unlinked from Product $productid", CFG_JOURNAL_PRODUCTS, $productid);
-    confirmation_page("2", "products.php", "<h2>Linked software removed Successfully</p><p align='center'>Please wait while you are redirected...</h2>");
+    journal(CFG_LOGGING_NORMAL, 'Skill Unlinked', "Skill $softwareid was unlinked from Product $productid", CFG_JOURNAL_PRODUCTS, $productid);
+    confirmation_page("2", "products.php", "<h2>Linked skill removed Successfully</p><p align='center'>Please wait while you are redirected...</h2>");
 }
 else
 {

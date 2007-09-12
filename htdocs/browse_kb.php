@@ -164,7 +164,7 @@ if (mysql_num_rows($result) >= 1)
         }
         elseif ($rowcount >= 4)
         {
-            echo "Various Software";
+            echo "Various";
         }
         echo "<br /><a href='kb_view_article.php?id={$kbarticle->docid}' class='info'>{$kbarticle->title}";
         $asql = "SELECT LEFT(content,400) FROM kbcontent WHERE docid='{$kbarticle->docid}' ORDER BY id ASC LIMIT 1";
