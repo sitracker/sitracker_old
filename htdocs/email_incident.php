@@ -153,22 +153,22 @@ switch ($step)
         switch ($target->type)
         {
             case 'initialresponse':
-                echo "<option value='initialresponse' onclick='initialresponse(this.form)' >Initial Response</option>\n";
-                echo "<option value='probdef' onclick='probdef(this.form)'>Problem Definition</option>\n";
-                echo "<option value='actionplan' onclick='actionplan(this.form)'>Action Plan</option>\n";
-                echo "<option value='solution' onclick='reprioritise(this.form)'>Resolution/Reprioritisation</option>\n";
+                echo "<option value='initialresponse' style='text-indent: 15px; height: 17px; background-image: url({$CONFIG['application_webpath']}/images/icons/{$iconset}/16x16/initialresponse.png); background-repeat: no-repeat;' onclick='initialresponse(this.form)' >Initial Response</option>\n";
+                echo "<option value='probdef' style='text-indent: 15px; height: 17px; background-image: url({$CONFIG['application_webpath']}/images/icons/{$iconset}/16x16/probdef.png); background-repeat: no-repeat;' onclick='probdef(this.form)'>Problem Definition</option>\n";
+                echo "<option value='actionplan' style='text-indent: 15px; height: 17px; background-image: url({$CONFIG['application_webpath']}/images/icons/{$iconset}/16x16/actionplan.png); background-repeat: no-repeat;' onclick='actionplan(this.form)'>Action Plan</option>\n";
+                echo "<option value='solution' style='text-indent: 15px; height: 17px; background-image: url({$CONFIG['application_webpath']}/images/icons/{$iconset}/16x16/solution.png); background-repeat: no-repeat;' onclick='reprioritise(this.form)'>Resolution/Reprioritisation</option>\n";
             break;
             case 'probdef':
-                echo "<option value='probdef' onclick='probdef(this.form)'>Problem Definition</option>\n";
-                echo "<option value='actionplan' onclick='actionplan(this.form)'>Action Plan</option>\n";
-                echo "<option value='solution' onclick='reprioritise(this.form)'>Resolution/Reprioritisation</option>\n";
+                echo "<option value='probdef' style='text-indent: 15px; height: 17px; background-image: url({$CONFIG['application_webpath']}/images/icons/{$iconset}/16x16/probdef.png); background-repeat: no-repeat;' onclick='probdef(this.form)'>Problem Definition</option>\n";
+                echo "<option value='actionplan' style='text-indent: 15px; height: 17px; background-image: url({$CONFIG['application_webpath']}/images/icons/{$iconset}/16x16/actionplan.png); background-repeat: no-repeat;' onclick='actionplan(this.form)'>Action Plan</option>\n";
+                echo "<option value='solution' style='text-indent: 15px; height: 17px; background-image: url({$CONFIG['application_webpath']}/images/icons/{$iconset}/16x16/solution.png); background-repeat: no-repeat;' onclick='reprioritise(this.form)'>Resolution/Reprioritisation</option>\n";
             break;
             case 'actionplan':
-                echo "<option value='actionplan' onclick='actionplan(this.form)'>Action Plan</option>\n";
-                echo "<option value='solution' onclick='reprioritise(this.form)'>Resolution/Reprioritisation</option>\n";
+                echo "<option value='actionplan' style='text-indent: 15px; height: 17px; background-image: url({$CONFIG['application_webpath']}/images/icons/{$iconset}/16x16/actionplan.png); background-repeat: no-repeat;' onclick='actionplan(this.form)'>Action Plan</option>\n";
+                echo "<option value='solution' style='text-indent: 15px; height: 17px; background-image: url({$CONFIG['application_webpath']}/images/icons/{$iconset}/16x16/solution.png); background-repeat: no-repeat;' onclick='reprioritise(this.form)'>Resolution/Reprioritisation</option>\n";
             break;
                 case 'solution':
-                echo "<option value='solution' onclick='reprioritise(this.form)'>Resolution/Reprioritisation</option>\n";
+                echo "<option value='solution' style='text-indent: 15px; height: 17px; background-image: url({$CONFIG['application_webpath']}/images/icons/{$iconset}/16x16/solution.png); background-repeat: no-repeat;' onclick='reprioritise(this.form)'>Resolution/Reprioritisation</option>\n";
             break;
         }
         echo "</select>\n";
