@@ -111,7 +111,6 @@ if ($actions[0]=='' OR in_array('SetUserStatus',$actions))
             }
             if ($newstatus != $currentstatus)
             {
-                // FIXME: This should set the status
                 $accepting='';
                 switch ($newstatus)
                 {

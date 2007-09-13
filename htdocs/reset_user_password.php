@@ -10,6 +10,8 @@
 
 // FIXME This isn't a very secure way of handling forgotten passwords
 // We should do something better really
+// FIXME with the new forgotten password feature introduced for 3.30
+// we may not need this now?
 
 
 $permission=9; // change user permissions

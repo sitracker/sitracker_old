@@ -160,7 +160,7 @@ else
         $result = mysql_query($sql);
         if (mysql_error()) trigger_error("MySQL Query Error ".mysql_error(), E_USER_ERROR);
 
-        if (!$result) echo "<p class='error'>Addition of Email Type Failed\n"; // FIXME throw
+        if (!$result) echo "<p class='error'>Addition of Email Type Failed\n";
         else
         {
             $id=mysql_insert_id();

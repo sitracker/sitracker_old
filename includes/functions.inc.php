@@ -52,7 +52,6 @@ ini_set('default_charset', 'UTF-8');
 
 // Time settings
 $now = time();
-$soon = $now-900; // in 15 minutes time (bugbug: think this should be a plus, need to check - 28aug01 INL)
 $today=$now+(16*3600);  // next 16 hours, based on reminders being run at midnight this is today
 $lastweek=$now - (7 * 86400); // the previous seven days
 $todayrecent=$now-(16*3600);  // past 16 hours
@@ -1222,7 +1221,7 @@ function sitetype_drop_down($name, $id)
 // Prints the HTML for a drop down list of
 // supported products for the given contact and with the
 // given name and with the given product selected
-// FIXME this should use the contract and not he contact
+// FIXME this should use the contract and not the contact
 function supported_product_drop_down($name, $contactid, $productid)
 {
     global $CONFIG;
@@ -2955,9 +2954,6 @@ function getattachmenticon($filename)
     $filetype[]="nfo";    $imgurl[]="{$CONFIG['application_webpath']}images/icons/{$iconset}/32x32/mimetypes/info.png";
     $filetype[]="pal";    $imgurl[]="{$CONFIG['application_webpath']}images/icons/{$iconset}/32x32/mimetypes/colorscm.png";
 
-
-    // bugbug: think there is an inifinate loop here if a filetype
-    // is not recognised.
     $cnt = count($filetype);
     if ( $cnt > 0 )
     {

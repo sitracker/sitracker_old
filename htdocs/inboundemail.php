@@ -104,8 +104,7 @@ if ($decoded_email->contenttype=='multipart/mixed'
                         fclose($fwp);
                     }
                     else echo "NOT WRITABLE $filename\n";
-
-                    }
+               }
         }
         else
         {

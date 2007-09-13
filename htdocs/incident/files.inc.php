@@ -9,8 +9,7 @@ This software may be used and distributed according to the terms
 of the GNU General Public License, incorporated herein by reference.
 */
 
-// FIXME
-// Need to link back into ftp_publish.php to publish these files
+// FIXME Need to link back into ftp_publish.php to publish these files
 
 // Prevent script from being run directly (ie. it must always be included
 if (realpath(__FILE__) == realpath($_SERVER['SCRIPT_FILENAME']))

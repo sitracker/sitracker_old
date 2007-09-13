@@ -9,6 +9,8 @@ This software may be used and distributed according to the terms
 of the GNU General Public License, incorporated herein by reference.
 */
 
+// FIXME this code isn't used
+
 // Prevent script from being run directly (ie. it must always be included
 if (realpath(__FILE__) == realpath($_SERVER['SCRIPT_FILENAME']))
 {
