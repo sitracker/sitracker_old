@@ -88,7 +88,7 @@ function dashboard_watch_incidents($row,$dashboardid)
                 echo "<tr class='$shade'>";
                 echo "<td>{$incident->id}</td>";
                 echo "<td><a href='javascript:incident_details_window({$incident->id}) '  class='info'>".stripslashes($incident->title);
-                echo "<span><strong>Customer:</strong> {$incident->forenames} {$incident->surname} of ".site_name($incident->siteid);
+                echo "<span><strong>Customer:</strong> ".stripslashes($incident->forenames.' '.$incident->surname)." of ".site_name($incident->siteid);
                 list($update_userid, $update_type, $update_currentowner, $update_currentstatus, $update_body, $update_timestamp, $update_nextaction, $update_id)=incident_lastupdate($incident->id);
                 $update_body = parse_updatebody($update_body);
                 if (!empty($update_body) AND $update_body!='...') echo "<br />{$update_body}";
