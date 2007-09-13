@@ -44,7 +44,7 @@ a:active
 
 /* tooltip */
 a.info img { border: 0px; text-decoration:none;}
-a.info span { display: none;  }
+a.info span { display: none; z-index: 15; }
 a.info:hover { text-decoration: none; }
 a.info:hover span
 {
