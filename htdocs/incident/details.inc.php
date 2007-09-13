@@ -33,23 +33,23 @@ if (!empty($site_notes)) echo "<span>".stripslashes($site_notes)."</span>";
 echo "</a> ";
 echo list_tag_icons($incident->siteid, 3); // site tag icons
 echo "<br />\n";
-echo "<a href='mailto:{$incident->email}'>{$incident->email}</a><br />\n";
-if ($incident->ccemail != '') echo "CC: <a href='mailto:{$incident->ccemail}'>{$incident->ccemail}</a><br />\n";
+echo "<a href='mailto:".stripslashes($incident->email)."'>".stripslashes($incident->email)."</a><br />\n";
+if ($incident->ccemail != '') echo "CC: <a href='mailto:".stripslashes($incident->ccemail)."'>".stripslashes($incident->ccemail)."</a><br />\n";
 if ($incident->phone!='' OR $incident->phone!='')
 {
-    if ($incident->phone!='') echo "Tel: {$incident->phone}";
-    if ($incident->mobile!='') echo " Mob: {$incident->mobile}";
+    if ($incident->phone!='') echo "Tel: ".stripslashes($incident->phone);
+    if ($incident->mobile!='') echo " Mob: ".stripslashes($incident->mobile);
     echo "<br />\n";
 }
 if ($incident->externalid != '' OR $incident->escalationpath > 0)
 {
     echo "Escalated: ";
-    echo format_external_id($incident->externalid,$incident->escalationpath)."<br />\n";
+    echo format_external_id(stripslashes($incident->externalid),$incident->escalationpath)."<br />\n";
 }
 if ($incident->externalengineer != '')
 {
-    echo "{$incident->externalengineer}";
-    if ($incident->externalemail != '') echo ", <a href='mailto:{$incident->externalemail}'>{$incident->externalemail}</a>";
+    echo stripslashes($incident->externalengineer);
+    if ($incident->externalemail != '') echo ", <a href='mailto:".stripslashes($incident->externalemail)."'>".stripslashes($incident->externalemail)."</a>";
     echo "<br />\n";
 }
 $tags = list_tags($id, 2, TRUE);
@@ -74,8 +74,8 @@ if ($software_name!='' OR $incident->productversion != '' OR $incident->products
     echo stripslashes($software_name);
     if ($incident->productversion != '' OR $incident->productservicepacks!='')
     {
-        echo " ({$incident->productversion}";
-        if ($incident->productservicepacks!='') echo "{$incident->productservicepacks}";
+        echo " (".stripslashes($incident->productversion);
+        if ($incident->productservicepacks!='') echo stripslashes($incident->productservicepacks);
         echo ")";
     }
     echo "<br />\n";

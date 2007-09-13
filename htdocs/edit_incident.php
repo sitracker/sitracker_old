@@ -61,21 +61,21 @@ if (empty($submit))
         <tr><th>Skill:</th>
         <td><?php echo software_drop_down("software", $incident["softwareid"]); flush(); ?></td></tr>
         <tr><th>Version:</th>
-        <td><input maxlength='50' name="productversion" size='30' type="text" value="<?php echo $incident["productversion"] ?>" /></td></tr>
+        <td><input maxlength='50' name="productversion" size='30' type="text" value="<?php echo stripslashes($incident["productversion"]); ?>" /></td></tr>
         <tr><th>Service Packs Applied:</th>
-        <td><input maxlength='100' name="productservicepacks" size='30' type="text" value="<?php echo $incident["productservicepacks"] ?>" /></td></tr>
+        <td><input maxlength='100' name="productservicepacks" size='30' type="text" value="<?php echo stripslashes($incident["productservicepacks"]); ?>" /></td></tr>
         <tr><th>CC Email:</th>
-        <td><input maxlength='255' name="ccemail" size='30' type="text" value="<?php echo $incident["ccemail"] ?>" /></td></tr>
+        <td><input maxlength='255' name="ccemail" size='30' type="text" value="<?php echo stripslashes($incident["ccemail"]); ?>" /></td></tr>
         <?php
         echo "<tr><th>Escalation</th>";
         echo "<td>".escalation_path_drop_down('escalationpath', $incident['escalationpath'])."</td></tr>";
         ?>
         <tr><th>External ID:</th>
-        <td><input maxlength='50' name="externalid" size='30' type="text" value="<?php echo $incident["externalid"] ?>" /></td></tr>
+        <td><input maxlength='50' name="externalid" size='30' type="text" value="<?php echo stripslashes($incident["externalid"]); ?>" /></td></tr>
         <tr><th>External Engineers Name:</th>
-        <td><input maxlength='80' name="externalengineer" size='30' type="text" value="<?php echo $incident["externalengineer"] ?>" /></td></tr>
+        <td><input maxlength='80' name="externalengineer" size='30' type="text" value="<?php echo stripslashes($incident["externalengineer"]); ?>" /></td></tr>
         <tr><th>External Email:</th>
-        <td><input maxlength='255' name="externalemail" size='30' type="text" value="<?php echo $incident["externalemail"] ?>" /></td></tr>
+        <td><input maxlength='255' name="externalemail" size='30' type="text" value="<?php echo stripslashes($incident["externalemail"]); ?>" /></td></tr>
         <?php
             plugin_do('edit_incident_form');
         ?>
@@ -84,17 +84,17 @@ if (empty($submit))
         <p align='center'>
         <input name="type" type="hidden" value="Support" />
         <input name="id" type="hidden" value="<?php echo $id; ?>" />
-        <input name="oldtitle" type="hidden" value="<?php echo $incident["title"] ?>" />
-        <input name="oldcontact" type="hidden" value="<?php echo $incident["contact"] ?>" />
-        <input name="oldccemail" type="hidden" value="<?php echo $incident["ccemail"] ?>" />
+        <input name="oldtitle" type="hidden" value="<?php echo stripslashes($incident["title"]); ?>" />
+        <input name="oldcontact" type="hidden" value="<?php echo stripslashes($incident["contact"]); ?>" />
+        <input name="oldccemail" type="hidden" value="<?php echo stripslashes($incident["ccemail"]); ?>" />
         <input name="oldescalationpath" type="hidden" value="<?php echo db_read_column('name', 'escalationpaths', $incident["escalationpath"]) ?>" />
-        <input name="oldexternalid" type="hidden" value="<?php echo $incident["externalid"] ?>" />
-        <input name="oldexternalengineer" type="hidden" value="<?php echo $incident["externalengineer"] ?>" />
-        <input name="oldexternalemail" type="hidden" value="<?php echo $incident["externalemail"] ?>" />
-        <input name="oldpriority" type="hidden" value="<?php echo $incident["priority"] ?>" />
-        <input name="oldstatus" type="hidden" value="<?php echo $incident["status"] ?>" />
-        <input name="oldproductversion" type="hidden" value="<?php echo $incident["productversion"] ?>" />
-        <input name="oldproductservicepacks" type="hidden" value="<?php echo $incident["productservicepacks"] ?>" />
+        <input name="oldexternalid" type="hidden" value="<?php echo stripslashes($incident["externalid"]); ?>" />
+        <input name="oldexternalengineer" type="hidden" value="<?php echo stripslashes($incident["externalengineer"]); ?>" />
+        <input name="oldexternalemail" type="hidden" value="<?php echo stripslashes($incident["externalemail"]); ?>" />
+        <input name="oldpriority" type="hidden" value="<?php echo stripslashes($incident["priority"]); ?>" />
+        <input name="oldstatus" type="hidden" value="<?php echo stripslashes($incident["status"]); ?>" />
+        <input name="oldproductversion" type="hidden" value="<?php echo stripslashes($incident["productversion"]); ?>" />
+        <input name="oldproductservicepacks" type="hidden" value="<?php echo stripslashes($incident["productservicepacks"]); ?>" />
         <input name="oldsoftware" type="hidden" value="<?php echo $incident["softwareid"] ?>" />
         <input name="submit" type="submit" value="Save" /></p>
         </form>
@@ -194,24 +194,24 @@ else
                 {
                     $header .= "External ID: ";
                     if ($oldexternalid != "")
-                        $header .= $oldexternalid;
+                        $header .= stripslashes($oldexternalid);
                     else
                         $header .= "None";
                     $header .= " -&gt; <b>";
                     if ($externalid != "")
-                        $header .= $externalid;
+                        $header .= stripslashes($externalid);
                     else
                         $header .= "None";
                     $header .= "</b>\n";
                 }
                 $escalationpath=db_read_column('name', 'escalationpaths', $escalationpath);
-                if ($oldccemail != $ccemail) $header .= "CC Email: " . $oldccemail . " -&gt; <b>" . $ccemail . "</b>\n";
-                if ($oldescalationpath != $escalationpath) $header .= "Escalation: " . $oldescalationpath . " -&gt; <b>" . $escalationpath . "</b>\n";
-                if ($oldexternalengineer != $externalengineer) $header .= "External Engineer: " . $oldexternalengineer . " -&gt; <b>" . $externalengineer . "</b>\n";
-                if ($oldexternalemail != $externalemail) $header .= "External email: " . $oldexternalemail . " -&gt; <b>" . $externalemail . "</b>\n";
+                if ($oldccemail != $ccemail) $header .= "CC Email: " . stripslashes($oldccemail) . " -&gt; <b>" . stripslashes($ccemail) . "</b>\n";
+                if ($oldescalationpath != $escalationpath) $header .= "Escalation: " . stripslashes($oldescalationpath) . " -&gt; <b>" . stripslashes($escalationpath) . "</b>\n";
+                if ($oldexternalengineer != $externalengineer) $header .= "External Engineer: " . stripslashes($oldexternalengineer) . " -&gt; <b>" . stripslashes($externalengineer) . "</b>\n";
+                if ($oldexternalemail != $externalemail) $header .= "External email: " . stripslashes($oldexternalemail) . " -&gt; <b>" . stripslashes($externalemail) . "</b>\n";
                 if ($oldsoftware != $software) $header .= "Skill: ".software_name($oldsoftware)." -&gt; <b>".software_name($software)."</b>\n";
-                if ($oldproductversion != $productversion) $header .= "Version: $oldproductversion -&gt; <b>$productversion</b>\n";
-                if ($oldproductservicepacks != $productservicepacks) $header .= "Service Packs Applied: $oldproductservicepacks -&gt; <b>$productservicepacks</b>\n";
+                if ($oldproductversion != $productversion) $header .= "Version: ".stripslashes($oldproductversion)." -&gt; <b>".stripslashes($productversion)."</b>\n";
+                if ($oldproductservicepacks != $productservicepacks) $header .= "Service Packs Applied: ".stripslashes($oldproductservicepacks)." -&gt; <b>".stripslashes($productservicepacks)."</b>\n";
 
                 if (!empty($header)) $header .= "<hr>";
                 $bodytext = $header . $bodytext;
