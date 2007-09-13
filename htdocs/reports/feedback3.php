@@ -85,14 +85,16 @@ if (mysql_num_rows($mresult) >= 1)
                 {
                     if ($storeone[$c]>0) $qr=number_format($storeone[$c]/$storetwo[$c],2);
                     else $qr=0;
-                    if ($storeone[$c]>0) $qp=number_format((($storeone[$c] / ($maxscore * $storetwo[$c])) * 100), 0);
+                    if ($storeone[$c]>0) $qp=number_format((($qr -1) * (100 / ($maxscore -1))), 0);
                     else $qp=0;
                     $html .= "Q$c: {$q[$c]->question} {$qr} <strong>({$qp}%)</strong><br />";
                     $gtotal+=$qr;
                 }
                 if ($c>0) $c--;
                 $total_average=number_format($gtotal/$c,2);
-                $total_percent=number_format((($gtotal / ($maxscore * $c)) * 100), 0);
+                // $total_percent=number_format((($gtotal / ($maxscore * $c)) * 100), 0);
+                $total_percent=number_format((($total_average -1) * (100 / ($maxscore -1))), 0);
+                if ($total_percent < 0) $total_percent=0;
 
                 $html .= "<p>Positivity: {$total_average} <strong>({$total_percent}%)</strong>, after $surveys survey";
                 if ($surveys<>1) $html.='s';

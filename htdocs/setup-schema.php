@@ -1448,7 +1448,6 @@ ALTER TABLE `contacts` ADD `active` ENUM( 'true', 'false' ) NOT NULL DEFAULT 'tr
 
 -- beta 3
 UPDATE `interfacestyles` SET `iconset` = 'sit';
-
 ";
 
 

@@ -60,10 +60,14 @@ Completely free for commercial and non-commercial use.</p>
 Copyright &copy; 2004-2006 The Dojo Foundation. Licensed under the BSD license.</p>
 
 <p align='center'>MagpieRSS 0.72 by <a href='http://magpierss.sourceforge.net/'>Kellan Elliott-McCrea</a><br />
-Copyright &copy; Kellan Elliott-McCrea. Licensed under the GPL license.</p>
+Copyright &copy; Kellan Elliott-McCrea. Licensed under the GPL.</p>
 
 <p align='center'>Prototype JavaScript framework 1.5.1 by <a href='http://www.prototypejs.org/'>Sam Stephenson</a><br />
 Copyright &copy; 2005-2007 Sam Stephenson. Licensed under the MIT license.</p>
+
+<p align='center'>Icons from the Crystal Project by <a href='http://www.everaldo.com/'>Everaldo Coelho</a><br />
+Copyright (c)  2006-2007 Everaldo Coelho. Licensed under the LGPL</p>
+
 
 </td></tr>
 <tr><td class='shade1' colspan="2">Licence:</td></tr>
