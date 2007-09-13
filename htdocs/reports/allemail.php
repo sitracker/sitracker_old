@@ -9,30 +9,33 @@
 //
 
 // Author:   Ivan Lucas
-// Email:    ivan.lucas@salfordsoftware.co.uk
+// Author: Ivan Lucas <ivanlucas[at]users.sourceforge.net>
 // Comments: Email Addresses of Customers
 
 // FIXME Not on menu
 
+$permission=37; // Run Reports
+
 require('db_connect.inc.php');
 require('functions.inc.php');
+
+// This page requires authentication
+require('auth.inc.php');
 
 include('htmlheader.inc.php');
 
 echo "<h2>Report: Email Address of Supported Customers</h2>";
-echo "<h4><i>(Doesn't check for expiry)</i></h4>";
+echo "<h4><em>(Doesn't check for expiry)</em></h4>";
 
 $sql  = "SELECT DISTINCT contacts.email ";
 $sql .= "FROM contacts LEFT JOIN contactproducts ON contacts.id=contactproducts.contactid ";
 $sql .= "WHERE dataprotection_email != 'Yes' ";
-/*$sql.="WHERE productid='1' OR productid='77' OR productid='55' ";
-*/
-$sql.="ORDER BY email ASC ";
+$sql .="ORDER BY email ASC ";
 //$sql.="LIMIT 100";
 $result=mysql_query($sql);
 if (mysql_error()) trigger_error("MySQL Query Error ".mysql_error(), E_USER_ERROR);
 $count=mysql_num_rows($result);
-echo "<b>Found $count records</b><br><br>";
+echo "<strong>Found $count records</strong><br /><br />";
 if($result)
 {
     while(list($email)=mysql_fetch_row($result))
