@@ -1143,7 +1143,9 @@ function software_drop_down($name, $id)
         $html .= "<option value='{$software['id']}'";
         if ($software['id']==$id) $html .= " selected='selected'";
         $html .= ">{$software['name']}";
-        if ($software['lifetime_end'] > 0 AND $software['lifetime_end'] < $now) $html .= " (EOL)";
+        $lifetime_start=mysql2date($software->lifetime_start);
+        $lifetime_end=mysql2date($software->lifetime_end);
+        if ($lifetime_end > 0 AND $lifetime_end < $now) $html .= " (EOL)";
         $html .= "</option>\n";
    }
    $html .= "</select>\n";
