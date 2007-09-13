@@ -73,28 +73,28 @@ function count_incidents($startdate, $enddate)
     mysql_free_result($result);
 
     // 5
-    $sql = get_sql_statement($startdate,$enddate,5); 
+    $sql = get_sql_statement($startdate,$enddate,5);
     $result= mysql_query($sql);
     if (mysql_error()) trigger_error(mysql_error(),E_USER_ERROR);
     list($count['skills'], $count['owners'])=mysql_fetch_row($result);
     mysql_free_result($result);
 
     // 6
-    $sql = get_sql_statement($startdate,$enddate,6); 
+    $sql = get_sql_statement($startdate,$enddate,6);
     $result= mysql_query($sql);
     if (mysql_error()) trigger_error(mysql_error(),E_USER_ERROR);
     list($count['emailtx'])=mysql_fetch_row($result);
     mysql_free_result($result);
 
     // 7
-    $sql = get_sql_statement($startdate,$enddate,7); 
+    $sql = get_sql_statement($startdate,$enddate,7);
     $result= mysql_query($sql);
     if (mysql_error()) trigger_error(mysql_error(),E_USER_ERROR);
     list($count['emailrx'])=mysql_fetch_row($result);
     mysql_free_result($result);
 
     // 8
-    $sql = get_sql_statement($startdate,$enddate,8); 
+    $sql = get_sql_statement($startdate,$enddate,8);
     $result= mysql_query($sql);
     list($count['higherpriority'])=mysql_fetch_row($result);
     mysql_free_result($result);
@@ -358,14 +358,15 @@ function give_overview()
                 }
             }
             if ($numresults>0) $average=number_format(($cumul/$numresults), 2);
-            $percent =number_format((($average / $CONFIG['feedback_max_score']) * 100), 0);
+            $percent =number_format((($average -1) * (100 / ($CONFIG['feedback_max_score'] -1))), 0);
             $totalresult+=$average;
             $string .= "<td>{$average}</td></tr>";
             // <strong>({$percent}%)</strong><br />";
         }
         $string .= "</table>\n";
         $total_average=number_format($totalresult/$numquestions,2);
-        $total_percent=number_format((($total_average / $CONFIG['feedback_max_score']) * 100), 0);
+        $total_percent=number_format((($total_average -1) * (100 / ($CONFIG['feedback_max_score'] -1))), 0);
+        if ($total_percent < 0) $total_percent=0;
         $string .= "<p align='center'>Positivity: {$total_average} <strong>({$total_percent}%)</strong> from $numsurveys results.</p>";
         $surveys+=$numresults;
     }

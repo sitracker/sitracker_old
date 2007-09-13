@@ -10,6 +10,41 @@ Further instructions and notes about specific upgrades follow, if you
 upgrading and skipping several versions listed below you should read
 everything carefully to make sure you've met all the requirements:
 
+Upgrading to 3.30
+-----------------
+The minimum supported MySQL version is now 4.0.18, if you have a
+version older than this you MUST upgrade it before upgrading SiT.
+
+Previous versions of SiT referred to 'Products' and 'Software', in v3.30
+'Software' has been renamed to 'Skills'.  This is because SiT gets
+used for supporting more than just software and the more generic term
+'skill' seemed more appropriate to how it's used with SiT.
+Similarly the term 'Backup Engineer' has been renamed to 'Subsitute
+Engineer' to avoid confusion with engineers specialising in backup
+software.
+
+There is a new system email 'NEARING_SLA' that is sent to the
+configured support manager email and to engineers when an
+incident is getting close to going past it's SLA target.
+You may want to alter the text of this template or change it's
+destinations.
+
+The old search plugin for Firefox 1.x versions has been discontinued
+in favour of a new OpenSearch plugin.compatable with Firefox 2 and IE7
+
+The dashboard in this version is much more usable, after upgrading
+you may want to visit SiT! -> Control Panel -> Manage Dashboard
+Components to install and enable the components that are available
+and that you would like your users to be able to access.
+
+This releases adds four new permissions, 'Delete Products',
+'Install Dashboard Components', 'Run Management Reports' and
+'Manage Holidays' by default only the Administrator and users
+with the Administrator role will have these permissions you may
+want to review individual users permissions to ensure they
+meet your needs.
+
+
 Upgrading to 3.24
 -----------------
 Permissions have been added for the new 'Add Reseller' and

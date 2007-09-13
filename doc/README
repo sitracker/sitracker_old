@@ -37,6 +37,7 @@ Maintainers:
     Ivan Lucas <ivanlucas[at]users.sourceforge.net>
     Tom Gerrard
 
+
 Security Recommendations
 ------------------------
 SiT! Versions 3.23 and later no longer require the php.ini setting
@@ -136,6 +137,10 @@ Actions:
                         OUT_OF_SLA and OUT_OF_REVIEW system email
                         templates where appropriate.
 
+    SetUserStatus       (Experimental!) This will set users status
+                        based on data from their holiday calendar.
+                        e.g. Out of Office/Away sick.
+
 An example crontab might look like this:
 6 * * * * /usr/bin/php -f /var/www/sit/htdocs/auto.php TimeCalc
 30 * * * * /usr/bin/php -f /var/www/sit/htdocs/auto.php CloseIncidents,PurgeJournal
@@ -143,7 +148,15 @@ An example crontab might look like this:
 
 Inbound email
 -------------
-TODO Documentation to be written
+SiT is perfectly usable without automatic inclusion of inbound email into the database.
+Not everybody will be able to use this feature because it currently requires access to
+an MTA on your server, shell access to the server and PHP compiled as a CGI binary.
+
+All that is required is to configure your MTA to pipe emails through the inbound_email.php
+script included with SiT.
+
+Some helpful information regarding configuring your MTA to pipe emails to a PHP script
+is available here http://evolt.org/incoming_mail_and_php
 
 
 Creating Plugins
@@ -170,6 +183,10 @@ $PLUGININFO['myplugin']['description']
 $PLUGININFO['myplugin']['author']
 $PLUGININFO['myplugin']['legal']
 $PLUGININFO['myplugin']['sitminversion']
+$PLUGININFO['myplugin']['sitmaxversion']
+
+sitminversion and sitmaxversion should be floats that define the minimum version of SiT
+required for your plugin to run, and the maximum version you're plugin is likely to support.
 
 
 Available Plugin Contexts
@@ -242,7 +259,7 @@ project, please do not hesitate to contact the developers. There are
 many ways in which you can help Support Incident Tracker:
 
     * Reporting bugs or suggesting improvements
-    * Fixing bugs or adding features
+    * Submitting patches to fix bugs or ad features
     * Writing good documentation or translating it to other languages
     * Helping others to install and use SiT!
 

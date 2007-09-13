@@ -81,14 +81,14 @@ switch($mode)
                     }
                 }
                 if ($numresults>0) $average=number_format(($cumul/$numresults), 2);
-                $percent =number_format((($average / $CONFIG['feedback_max_score']) * 100), 0);
+                $percent =number_format((($average-1) * (100 / ($CONFIG['feedback_max_score'] -1))), 0);
                 $totalresult+=$average;
                 $html .= "<td>{$average}</td></tr>";
                 // <strong>({$percent}%)</strong><br />";
             }
             $html .= "</table>\n";
             $total_average=number_format($totalresult/$numquestions,2);
-            $total_percent=number_format((($total_average / $CONFIG['feedback_max_score']) * 100), 0);
+            $total_percent=number_format((($total_average-1) * (100 / ($CONFIG['feedback_max_score'] -1))), 0);
 
             $qsql = "SELECT * FROM feedbackquestions WHERE formid='{$response->formid}' AND type='text' ORDER BY taborder";
             $qresult = mysql_query($qsql);

@@ -184,7 +184,9 @@ $cols2 = substr($cols2, 0, -1);
 </script>
 <?php
 
-echo "<p align='right'><a href='manage_user_dashboard.php'>Manage your Dashboard</a></p>";
+echo "<p style='float: right; top: -10px; position: relative;'><a href='manage_user_dashboard.php' title='Manage your Dashboard'>";
+echo "<img src='{$CONFIG['application_webpath']}images/icons/{$iconset}/16x16/dashboard.png' width='16' height='16' alt='' style='border: 0px;' /></a> ";
+echo "<a href=\"javascript:save_layout();\" title='Save Dashboard Layout'><img src='{$CONFIG['application_webpath']}images/icons/{$iconset}/16x16/save.png' width='16' height='16' alt='' style='border: 0px;' /></a></p>";
 echo "<table border=\"0\" width=\"99%\" id='cols'><tr>";
 echo "<td width=\"33%\" valign='top' id='col0'>";
 
@@ -215,8 +217,6 @@ echo "</td></tr></table>\n";
 // Check users email address
 if (empty($_SESSION['email']) OR !preg_match('/^[A-z0-9][\w.-]*@[A-z0-9][\w\-\.]+\.[A-z0-9]{2,6}$/',$_SESSION['email']))
     echo "<p class='error'>Please <a href='edit_profile.php'>edit your profile</a> and set a valid email address</p>";
-
-echo "<p align='right'><a href=\"#\" onclick=\"save_layout();\">Save</a></p>";
 
 //  Users Login Details
 echo "<div id='userbar'>Logged in as: <strong>{$sit[0]}</strong>, ";

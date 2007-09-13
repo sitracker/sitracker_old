@@ -75,19 +75,19 @@ while ($mrow = mysql_fetch_object($mresult))
         }
         if ($numresults>0) $average=($cumul/$numresults);
 
-        $percent =number_format((($average / 9) * 100), 0);
+        $percent =number_format((($average / $CONFIG['feedback_max_score']) * 100), 0);
         $totalresult+=$average;
         $qanswer[$qrow->taborder]+=$average;
         $qavgavg=$qanswer[$qrow->taborder];
         $rowresult=number_format(($qavgavg/$rcount),2);
-        $rowpercent =number_format((($rowresult / 9) * 100), 0);
+        $rowpercent =number_format((($rowresult / $CONFIG['feedback_max_score']) * 100), 0);
         $totalrowresult=$rowresult;
         ## {$average} <strong>({$percent}%)</strong>   ...
         $html .= "($rowresult) <strong>({$rowpercent}%)</strong><br />";
     }
     $total_average=number_format($totalresult/$numquestions,2);
     $total_rowaverage=number_format(($totalrowresult/$numquestions)*10,2);
-    $total_percent=number_format((($total_average / 9) * 100), 0);
+    $total_percent=number_format((($total_average / $CONFIG['feedback_max_score']) * 100), 0);
 
     $qcount = (count($qanswer)-1);
     for ($i=1;$i<=$qcount;$i++)
@@ -95,7 +95,7 @@ while ($mrow = mysql_fetch_object($mresult))
         $qtotal+=$qanswer[$i];
     }
     $qtotal = number_format((($qtotal / $qcount) / $rcount),2);
-    $qtotal_percent=number_format((($qtotal / 9) * 100), 0);
+    $qtotal_percent=number_format((($qtotal / $CONFIG['feedback_max_score']) * 100), 0);
 
     $html .= "<p>Positivity: {$qtotal} <strong>({$qtotal_percent}%)</strong>, after $rcount survey(s).</p>";
     ## ... ($rcount -- $total_rowaverage)

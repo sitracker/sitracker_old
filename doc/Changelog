@@ -107,7 +107,46 @@ Changes in v3.30 - Unreleased
 * Fixed column name lastupdated which means sorting by that column is now working again
 * Added dashboard component to watch sites, contacts and engineers calls
 * Added ability to make sites and contacts as inactive so they dont show in the default view
-* Added ability to define 'prefered' contracts which show seperatly from 'normal' contracts 
+* Added ability to define 'prefered' contracts which show seperatly from 'normal' contracts
+* Added calendar widget for time of next action on the update and email page
+* Fixed bug with searching contacts
+* Fixed mysql error during installation, failed to create example contact record
+* Display skills that are past the end of service lifetime with strikeout text style
+  and the suffix (EOL) = end of life
+* Allow browsing of all sites owned by a particular user (salesperson)
+  Add a link (with icon) on the users page to browse those sites
+* Add link to browse sites 'mine' to view sites owned by self (only displayed when there are some)
+* Fixed browsing by number
+* Allow setting of salesperson while adding site
+* Made user incidents dashboard component show last update again (SF #1780166)
+* RSS Dashboard component supports Atom
+* Enable feed caching (into 'feeds' directory below the attachment directory)
+* Fix Feed character translation
+* Display clearly which sites/contacts are marked inactive
+* Fix error when listing contacts without site for dropdown
+* Completed the forgotten password procedure.  It's now possible to get a reminder of contact passwords and to reset
+  user passwords.
+* Fixed bug where mobile number wasn't shown if the user didn't have a normal phone number
+* Fixed bug where errors would be displayed when no users had skills to show in the skills matrix
+* New iconset based mainly on icons from the Crystal Project by Everaldo
+* Initial commit of code to automatically change users' status depending on their holiday calendar status, not recommended for production use as yet
+* Added reconfigure option to setup script, this allows setting of any config file variable with a GUI interface
+  just access setup.php?action=reconfigure
+* Fix bug where incidents without an SLA (legacy incidents) would cause an error, such incidents now show "No SLA" in the SLA column
+* Fixed the background image in the coolblue theme
+* fix sf bug 1787061
+* Display icons next to tags based on the new $CONFIG['tag_icons'] config variable, by default a set of coloured flags
+  is configured: blackflag, blueflag, greenflag, redflag, whiteflag and yellowflag
+* Display tags on details pages
+* Display site tag icons on incident details page
+* Fixed the SLA met icons and the update text on the incident details page
+* Changed the status bar text shown before login
+* Tweak order on browse contacts page, order by forename as well
+* Made the review period start update by owned by the user adding the incident
+* Made the site notes field appear in a popup in the incident details window when hovering over the site name
+  same for contact notes when hovering over the contact name
+* Fixed some character set issues, especially visible with uk pound sign etc.
+* Fixed bug with the storage of sent emails with text that looked like html tags
 * Removed a lot of old unused code
 * Plus many more minor changes and fixes
 
