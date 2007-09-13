@@ -467,6 +467,7 @@ switch ($step)
                     if (mysql_error()) trigger_error("MySQL Query Error ".mysql_error(), E_USER_ERROR);
                 }
                 // add update
+                $bodytext=htmlentities($bodytext, ENT_COMPAT, 'UTF-8');
                 $updateheader .= "To: <b>$tofield</b>\nFrom: <b>$fromfield</b>\nReply-To: <b>$replytofield</b>\n";
                 if ($ccfield!="") $updateheader .=   "CC: <b>$ccfield</b>\n";
                 if ($bccfield!="") $updateheader .= "BCC: <b>$bccfield</b>\n";
@@ -476,6 +477,7 @@ switch ($step)
                 if (!empty($updateheader)) $updateheader .= "<hr>";
                 $updatebody = $updateheader . $bodytext;
                 $updatebody=mysql_escape_string($updatebody);
+
                 $sql  = "INSERT INTO updates (incidentid, userid, bodytext, type, timestamp, currentstatus,customervisibility) ";
                 $sql .= "VALUES ($id, $sit[2], '$updatebody', 'email', '$now', '$newincidentstatus', '{$emailtype->customervisibility}')";
                 mysql_query($sql);
