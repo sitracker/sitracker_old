@@ -14,6 +14,8 @@
 
 // FIXME Not on menu
 
+$permission=37; // Run Reports
+
 require('db_connect.inc.php');
 require('functions.inc.php');
 
