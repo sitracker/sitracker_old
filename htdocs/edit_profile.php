@@ -192,7 +192,13 @@ else
     $newpassword1 = cleanvar($_POST['newpassword1']);
     $newpassword2 = cleanvar($_POST['newpassword2']);
 
-    // TODO target v3.24 Add some extra checking here so that users can't edit other peoples profiles
+    // Some extra checking here so that users can't edit other peoples profiles
+    $edituserpermission = user_permission($sit[2],23); // edit user
+    if ($userid != $sit[2] AND $edituserpermission==FALSE)
+    {
+        trigger_error('Error: No permission to edit this users profile', E_USER_ERROR);
+        exit;
+    }
 
     // If users status is set to 0 (disabled) force 'accepting' to no
     if ($status==0) $accepting='No';
