@@ -31,6 +31,7 @@ $search_string = cleanvar($_REQUEST['search_string']);
 $type = cleanvar($_REQUEST['type']);
 $maintid = cleanvar($_REQUEST['maintid']);
 $productid = cleanvar($_REQUEST['productid']);
+$producttext = cleanvar($_REQUEST['producttext']);
 
 if (empty($action) OR $action=='showform')
 {
@@ -146,8 +147,8 @@ elseif ($action=='findcontact')
                 else $str .=  "({$incidents_remaining} Left)";
             }
             $str .=  "</td>";
-            $str .=  '<td>'.$contactrow['forenames'].' '.$contactrow['surname'].'</td>';
-            $str .=  '<td>'.$contactrow['name'].'</td>';
+            $str .=  '<td>'.stripslashes($contactrow['forenames'].' '.$contactrow['surname']).'</td>';
+            $str .=  '<td>'.stripslashes($contactrow['name']).'</td>';
             $str .=  '<td><strong>'.$contactrow['maintid'].'</strong>&nbsp;'.$contactrow['productname'].'</td>';
             $str .=  '<td>'.servicelevel_id2tag($contactrow['servicelevelid']).'</td>';
             $str .=  '<td>'.date("jS M Y", $contactrow['expirydate']).'</td>';
@@ -343,7 +344,7 @@ elseif ($action=='incidentform')
     }
     else
     {
-        echo "<tr><th>Contract:</th><td>{$maintid} - ".urldecode($producttext)."</td></tr>";
+        echo "<tr><th>Contract:</th><td>{$maintid} - ".strip_tags($producttext)."</td></tr>";
         echo "<tr><th>Skill:</th><td>".softwareproduct_drop_down('software', 1, $productid)."</td></tr>";
     }
 
