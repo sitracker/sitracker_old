@@ -1090,7 +1090,7 @@ function contact_site_drop_down($name, $id, $siteid='', $exclude='')
             $html .= "<option ";
             if ($contacts->contactid == $id) $html .= "selected='selected' ";
             $html .= "value='{$contacts->contactid}'>";
-            $html .= htmlspecialchars("{$contacts->surname}, {$contacts->forenames} of {$contacts->sitename}");
+            $html .= htmlspecialchars(stripslashes("{$contacts->surname}, {$contacts->forenames} of {$contacts->sitename}"));
             $html .= "</option>\n";
         }
    }
@@ -2437,9 +2437,8 @@ function site_drop_down($name, $id)
     if ($id == 0) $html .="<option selected='selected' value='0'></option>\n";
     while ($sites = mysql_fetch_object($result))
     {
-        $text=$sites->name;
-        if (!empty($sites->department)) $text.= ", {$sites->department}";
-        if (empty($text)) $text = $sites->name;
+        $text=stripslashes($sites->name);
+        if (!empty($sites->department)) $text.= ", ".stripslashes($sites->department);
         if (strlen($text) >= 55) $text=htmlspecialchars(substr(trim($text), 0, 55))."&hellip;";
         else $text=htmlspecialchars($text);
         $html .= "<option ";
