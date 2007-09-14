@@ -75,7 +75,9 @@ $colstr = $col0.",".$col1.",".$col2;
 $cols0 = substr($cols0, 0, -1);
 $cols1 = substr($cols1, 0, -1);
 $cols2 = substr($cols2, 0, -1);
-
+echo "<p style='float: right; top: -10px; position: relative;'><a href='manage_user_dashboard.php' title='Manage your Dashboard'>";
+echo "<img src='{$CONFIG['application_webpath']}images/icons/{$iconset}/16x16/dashboard.png' width='16' height='16' alt='' style='border: 0px;' /></a> ";
+echo "<a href=\"javascript:save_layout();\" id='savelayout' title='Save Dashboard Layout Manually'><img src='{$CONFIG['application_webpath']}images/icons/{$iconset}/16x16/save.png' width='16' height='16' alt='' style='border: 0px;' /></a></p>";
 ?>
 <script type="text/javascript">
 /* <![CDATA[ */
@@ -96,7 +98,13 @@ $cols2 = substr($cols2, 0, -1);
 
         // list one
         var dl = byId("col0");
-        new dojo.dnd.HtmlDropTarget(dl, ["li1"]);
+        var dt1=new dojo.dnd.HtmlDropTarget(dl, ["li1"]);
+
+        dojo.event.connect(dt1, "onDrop", function(e) {
+        $('savelayout').style.display='inline';
+        //      window.alert(e.dragObject.domNode.id + ' was dropped on ' + e.target.id);
+        save_layout();
+        });
         for(var x=0; x<cols0.length; x++){
             new dojo.dnd.HtmlDragSource(byId('db_0-'+cols0[x]),"li1");
         }
@@ -104,13 +112,21 @@ $cols2 = substr($cols2, 0, -1);
         // list two
         var dl = byId("col1");
         var dt2 = new dojo.dnd.HtmlDropTarget(dl, ["li1"]);
+        dojo.event.connect(dt2, "onDrop", function(e) {
+        $('savelayout').style.display='inline';
+        save_layout();
+        });
         for(var x=0; x<cols1.length; x++){
             new dojo.dnd.HtmlDragSource(byId('db_1-'+cols1[x]),"li1");
         }
 
         // list three
         var dl = byId("col2");
-        new dojo.dnd.HtmlDropTarget(dl, ["li1"]);
+        var dt3 = new dojo.dnd.HtmlDropTarget(dl, ["li1"]);
+        dojo.event.connect(dt3, "onDrop", function(e) {
+        $('savelayout').style.display='inline';
+        save_layout();
+        });
         for(var x=0; x<cols2.length; x++){
             new dojo.dnd.HtmlDragSource(byId('db_2-'+cols2[x]),"li1");
         }
@@ -176,17 +192,13 @@ $cols2 = substr($cols2, 0, -1);
             }
         }
         xmlhttp.send(null);
+        $('savelayout').style.display='none';
     }
-
     window.onunload = save_layout;
 
 /* ]]> */
 </script>
 <?php
-
-echo "<p style='float: right; top: -10px; position: relative;'><a href='manage_user_dashboard.php' title='Manage your Dashboard'>";
-echo "<img src='{$CONFIG['application_webpath']}images/icons/{$iconset}/16x16/dashboard.png' width='16' height='16' alt='' style='border: 0px;' /></a> ";
-echo "<a href=\"javascript:save_layout();\" title='Save Dashboard Layout'><img src='{$CONFIG['application_webpath']}images/icons/{$iconset}/16x16/save.png' width='16' height='16' alt='' style='border: 0px;' /></a></p>";
 echo "<table border=\"0\" width=\"99%\" id='cols'><tr>";
 echo "<td width=\"33%\" valign='top' id='col0'>";
 

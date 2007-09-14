@@ -56,7 +56,8 @@ Icon                                      Source
 16x16/feed-icon.png                       Mozilla Foundation Feed Icons
 16x16/tag.png                             Crystal Project (Modified)
 16x16/save.png                            Crystal Project
-32x32/mimetypes/*                         KDE Classic
+16x16/folder.png                          Crystal Project
+32x32/mimetypes/*                         Crystal Project
 32x32/blackflag.png                       SiT
 32x32/whiteflag.png                       SiT
 32x32/yellowflag.png                      SiT
@@ -77,6 +78,7 @@ Icon                                      Source
 32x32/support.png                         Crystal Project
 32x32/feed-icon.png                       Mozilla Foundation Feed Icons
 32x32/tag.png                             Crystal Project (Modified)
+32x32/folder.png                          Crystal Project
 
 
 KDE Classic
