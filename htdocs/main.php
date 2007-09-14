@@ -195,6 +195,7 @@ echo "<a href=\"javascript:save_layout();\" id='savelayout' title='Save Dashboar
         $('savelayout').style.display='none';
     }
     window.onunload = save_layout;
+    $('savelayout').style.display='none';
 
 /* ]]> */
 </script>
