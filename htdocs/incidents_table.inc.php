@@ -175,7 +175,7 @@ while ($incidents = mysql_fetch_array($result))
     if (!empty($incidents['escalationpath']) AND !empty($incidents['externalid']))
     {
         $epathurl = str_replace('%externalid%',$incidents['externalid'],$epath[$escalationpath]['track_url']);
-        $externalid = "<a href='{$epathurl}' title='{$epath[$escalationpath]['url_title']}'>{$incidents['externalid']}</a>";
+        $externalid = "<a href='{$epathurl}' title='{$epath[$escalationpath]['url_title']}'>".stripslashes($incidents['externalid'])."</a>";
     }
     elseif (empty($incidents['externalid']) AND $incidents['escalationpath']>=1)
     {
@@ -207,7 +207,7 @@ while ($incidents = mysql_fetch_array($result))
     echo "</a></td>";
 
     echo "<td valign='top'>";
-    echo $incidents['forenames'].' '.$incidents['surname']."<br />".htmlspecialchars($site)." </td>";
+    echo stripslashes($incidents['forenames'].' '.$incidents['surname'])."<br />".htmlspecialchars($site)." </td>";
     ?>
     <td align='center' valign="top" ><?php
     // Service Level / Priority
