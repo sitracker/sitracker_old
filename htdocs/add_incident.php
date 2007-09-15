@@ -51,8 +51,8 @@ if (empty($action) OR $action=='showform')
         <input type="hidden" name="context" value="<?php echo $context ?>" />
         <input type="hidden" name="updateid" value="<?php echo $updateid ?>" />
         <table class='vertical'>
-        <tr><th>Contact:</th><td>
         <?php
+        echo "<tr><th>Contact <img src='{$CONFIG['application_webpath']}images/icons/{$iconset}/16x16/contact.png' width='16' height='16' alt='' /></th><td>";
         //echo "<input type='text' name='search_string' size='30' value='{$query}' />\n";
         echo "<input dojoType='ComboBox' value='{$query}' dataUrl='autocomplete.php?action=contact' style='width: 300px;' name='search_string' />";
         ?>
@@ -121,7 +121,10 @@ elseif ($action=='findcontact')
         </script>
 
         <h2>Add Incident - Select Person / Contract</h2>
-        <h3>Contracts</h3>
+        <?php
+        echo "<h3><img src='{$CONFIG['application_webpath']}images/icons/{$iconset}/32x32/contract.png' width='32' height='32' alt='' />  ";
+        echo "Contracts</h3>";
+        ?>
         <p align='center'>This list shows contracts, i.e. supported people and the products they are supported for.<br />
         Click on the appropriate 'Add Incident' link to begin adding the incident.</p>
 
@@ -208,7 +211,7 @@ elseif ($action=='findcontact')
 
         if (mysql_num_rows($result)>0)
         {
-            echo "<h3>People</h3>\n";
+            echo "<h3><img src='{$CONFIG['application_webpath']}images/icons/{$iconset}/32x32/contact.png' width='32' height='32' alt='' /> People</h3>\n";
             echo "<p align='center'>This list shows people that matched your search, if site-support is available you can add incidents for the site.</p>";
             echo "<table align='center'>";
             echo "<tr>";
@@ -230,7 +233,7 @@ elseif ($action=='findcontact')
                 {
                     echo "<td class='expired'>Zero remaining</td>";
                 }
-                echo '<td>'.$contactrow['forenames'].' '.$contactrow['surname'].'</td>';
+                echo '<td>'.stripslashes($contactrow['forenames'].' '.$contactrow['surname']).'</td>';
                 echo '<td>'.site_name($contactrow['siteid']).'</td>';
                 echo "</tr>\n";
             }
