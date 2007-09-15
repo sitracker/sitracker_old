@@ -5103,7 +5103,7 @@ function show_tag_cloud($orderby="name")
                 $html .= "/{$CONFIG['tag_icons'][$obj->name]}.png' style='border:0px;' alt='' />";
             }
             else $html .= stripslashes($obj->name);
-            $html .= "</a> &nbsp;";
+            $html .= "</a> &nbsp;\n";
         }
         $html .= "</td></tr></table>";
     }
