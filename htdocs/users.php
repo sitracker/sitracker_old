@@ -121,7 +121,7 @@ while ($users = mysql_fetch_array($result))
     echo "<td>";
     echo "<a href='mailto:{$users['email']}' title='Email {$users['realname']}'><img src='{$CONFIG['application_webpath']}images/icons/{$iconset}/16x16/email.png' width='16' height='16' alt='Email icon' style='border:none;' /></a> ";
     echo "<a href='incidents.php?user={$users['id']}&amp;queue=1&amp;type=support' class='info'>";
-    if (!empty($users['message'])) echo "<img src='{$CONFIG['application_webpath']}images/icons/{$iconset}/16x16/messageflag.png' width='16' height='16' title='{$users['message']}' alt='Flag' />";
+    if (!empty($users['message'])) echo "<img src='{$CONFIG['application_webpath']}images/icons/{$iconset}/16x16/messageflag.png' width='16' height='16' title='{$users['message']}' alt='Flag' /> ";
     echo "{$users['realname']}";
     echo "<span>";
     if (!empty($users['title'])) echo "<strong>{$users['title']}</strong><br />";
