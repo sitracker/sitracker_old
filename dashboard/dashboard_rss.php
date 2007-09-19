@@ -23,6 +23,8 @@ function dashboard_rss($row,$dashboardid)
     define('MAGPIE_CACHE_DIR', $CONFIG['attachment_fspath'].'feeds');
     define('MAGPIE_OUTPUT_ENCODING', 'UTF-8');
 
+    $feedallowedtags = '<img><strong><em><br><p>';
+
     echo "<div class='windowbox' style='width: 95%' id='$row-$dashboardid'>";
     echo "<div class='windowtitle'><div style='float: right'><a href='edit_rss_feeds.php'>edit</a></div><img src='{$CONFIG['application_webpath']}images/icons/{$iconset}/16x16/feed-icon.png' width='16' height='16' alt='' /> Feeds</div>";
     echo "<div class='window'>";
@@ -34,16 +36,40 @@ function dashboard_rss($row,$dashboardid)
             $url = $row[0];
             if($rss = fetch_rss( $url ))
             {
-//                 echo "<pre>".print_r($rss,true)."</pre>";
+//                  echo "<pre>".print_r($rss,true)."</pre>";
                 echo "<table align='center' style='width: 100%'>";
-                echo "<tr><th><span style='float: right;'><a href='".htmlspecialchars($url)."'><img src='{$CONFIG['application_webpath']}images/icons/{$iconset}/12x12/feed-icon.png' style='border: 0px;' alt='Feed Icon' /></a></span>{$rss->channel['title']}</th></tr>";
+                echo "<tr><th><span style='float: right;'><a href='".htmlspecialchars($url)."'>";
+                echo "<img src='{$CONFIG['application_webpath']}images/icons/{$iconset}/12x12/feed-icon.png' style='border: 0px;' alt='Feed Icon' />";
+                echo "</a></span>";
+                echo "<a href='{$rss->channel['link']}' style='color: #000;' class='info'>{$rss->channel['title']}";
+                if (!empty($rss->image['url']) OR !empty($rss->channel['description']))
+                {
+                    echo "<span>";
+                    if (!empty($rss->image['url'])) echo "<img src='{$rss->image['url']}' alt='{$rss->image['title']}' style='float: right; margin-right: 2px; margin-left: 5px; margin-top: 2px;' />";
+                    echo "{$rss->channel['description']}</span>";
+                }
+                echo "</a>";
+                echo "</th></tr>";
                 foreach($rss->items as $item)
                 {
-//                     echo "<pre>".print_r($item,true)."</pre>";
+//                      echo "<pre>".print_r($item,true)."</pre>";
                     echo "<tr><td><a href='{$item['link']}' class='info'>{$item['title']}";
-                    if($rss->feed_type == 'RSS') $d = parse_updatebody($item['description']);
-                    else if($rss->feed_type == 'Atom') $d = parse_updatebody($item['atom_content']);
-                    echo "<span>{$d}</span></a></td></tr>";
+                    if($rss->feed_type == 'RSS')
+                    {
+                        if (!empty($item['pubdate'])) $itemdate = strtotime($item['pubdate']);
+                        elseif (!empty($item['dc']['date'])) $itemdate = strtotime($item['dc']['date']);
+                        else $itemdate = '';
+                        $d = strip_tags($item['description'],$feedallowedtags);
+                    }
+                    elseif($rss->feed_type == 'Atom')
+                    {
+                        if (!empty($item['issued'])) $itemdate = strtotime($item['issued']);
+                        $d = strip_tags($item['atom_content'],$feedallowedtags);
+                    }
+                    if ($itemdate > 10000) $itemdate = date($CONFIG['dateformat_datetime'], $itemdate);
+                    echo "<span>";
+                    if (!empty($itemdate)) echo "<strong>{$itemdate}</strong><br />";
+                    echo "{$d}</span></a></td></tr>";
                 }
                 echo "</table>";
             }
