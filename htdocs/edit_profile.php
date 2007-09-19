@@ -219,7 +219,7 @@ else
             $result = mysql_query($sql);
             if (mysql_error()) trigger_error("MySQL Query Error ".mysql_error(), E_USER_ERROR);
 
-            if (mysql_affected_rows() < 1) { throw_error('!Error password change failed - new password', '$newpassword1'); }
+            if (mysql_affected_rows() < 1) { throw_error("!Error password change failed - new password", "$newpassword1"); }
             $confirm_message = "<h2>Password Changed</h2>\n<p align='center'>You should log out and log back in again</p>\n<p align='center'>Please wait while you are redirected.</p>";
         }
         else
