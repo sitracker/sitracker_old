@@ -247,7 +247,13 @@ switch ($step)
             <table align='center' class='vertical' width='95%'>
             <tr><th width='30%'>From:</th><td><input maxlength='100' name="fromfield" size='40' value="<?php echo emailtype_replace_specials(emailtype_from($emailtype), $id, $sit[2]) ?>" /></td></tr>
             <tr><th>Reply To:</th><td><input maxlength='100' name="replytofield" size='40' value="<?php echo emailtype_replace_specials(emailtype_replyto($emailtype), $id, $sit[2]) ?>" /></td></tr>
-            <tr><th>CC:</th><td><input maxlength='100' name="ccfield" size='40' value="<?php echo emailtype_replace_specials(emailtype_cc($emailtype), $id, $sit[2]) ?>" /></td></tr>
+            <tr><th>CC:</th><td><input maxlength='100' name="ccfield" size='40' value="
+            <?php 
+                if(emailtype_cc($emailtype)!=",")
+                {
+                    echo emailtype_replace_specials(emailtype_cc($emailtype), $id, $sit[2]);
+                }
+            ?>" /></td></tr>
             <tr><th>BCC:</th><td><input maxlength='100' name="bccfield" size='40' value="<?php echo emailtype_replace_specials(emailtype_bcc($emailtype), $id, $sit[2]) ?>" /></td></tr>
             <tr><th>To:</th><td><input maxlength='100' name="tofield" size='40' value="<?php echo emailtype_replace_specials(emailtype_to($emailtype), $id, $sit[2]) ?>" /></td></tr>
             <tr><th>Subject:</th><td><input maxlength='255' name="subjectfield" size='40' value="<?php echo emailtype_replace_specials(emailtype_subject($emailtype), $id, $sit[2]) ?>" /></td></tr>
