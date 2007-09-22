@@ -30,17 +30,77 @@ switch ($_REQUEST['action'])
         $description = cleanvar($_REQUEST['description']);
         $introduction = cleanvar($_REQUEST['introduction']);
         $thanks = cleanvar($_REQUEST['thanks']);
+        $isnew = cleanvar($_REQUEST['isnew']);
 
-        $sql = "UPDATE feedbackforms ";
-        $sql .= "SET name='$name', description='$description', introduction='$introduction', thanks='$thanks' ";
-        $sql .= "WHERE id='$formid' LIMIT 1";
-        mysql_query($sql);
-        if (mysql_error()) trigger_error(mysql_error(),E_USER_ERROR);
+        if($isnew == "yes")
+        {
+            // need to insert
+            $sql = "INSERT INTO feedbackforms (name,introduction,thanks,description) VALUES ";
+            $sql .= "('{$name}','[$introduction}','{$thanks}','{$description}')";
+            mysql_query($sql);
+            if (mysql_error()) trigger_error(mysql_error(),E_USER_ERROR);
+            $formid = mysql_insert_id();
+        }
+        else
+        {
+            $sql = "UPDATE feedbackforms ";
+            $sql .= "SET name='$name', description='$description', introduction='$introduction', thanks='$thanks' ";
+            $sql .= "WHERE id='$formid' LIMIT 1";
+            mysql_query($sql);
+            if (mysql_error()) trigger_error(mysql_error(),E_USER_ERROR);
+        }
 
-        header("Location: edit_feedback_form.php");
+        header("Location: edit_feedback_form.php?formid={$formid}");
         exit;
     break;
 
+    case 'new':
+        include('htmlheader.inc.php');
+        echo "<h3>Create feedback form</h3>";
+        echo "<form action='{$_SERVER['PHP_SELF']}' method='post'>";
+        echo "<table summary='Form' align='center'>";
+        echo "<tr>";
+
+        /*echo "<th>Form ID:</th>";
+        echo "<td><strong>{$form->id}</strong></td>";
+        echo "</tr>\n<tr>";*/
+
+        echo "<th>Name:</th>";
+        echo "<td><input type='text' name='name' size='35' maxlength='255' value='' /></td>";
+        echo "</tr>\n<tr>";
+
+        echo "<th>Description:<br />(For Staff Use, not displayed)</th>";
+        echo "<td><textarea name='description' cols='80' rows='6'>";
+        echo "</textarea></td>";
+        echo "</tr>\n<tr>";
+
+        echo "<th>Introduction:<br />(Simple HTML Allowed)</th>";
+        echo "<td><textarea name='introduction' cols='80' rows='10'>";
+        echo "</textarea></td>";
+        echo "</tr>\n<tr>";
+
+        echo "<th>Closing Thanks:<br />(Simple HTML Allowed)</th>";
+        echo "<td><textarea name='thanks' cols='80' rows='10'>";
+        echo "</textarea></td>";
+        echo "</tr>\n";
+
+        // If there are no reponses to this feedback form, allow questions to be modified also
+        echo "<tr>";
+        echo "<th>Questions:</th>";
+        echo "<td>";
+        //echo "<p><a href='add_feedback_question.php?fid=$formid'>Add Question</a><br />Save the main form first</p>";
+        echo "<p>Save the main form first</p>";
+        echo "</td></tr>\n";
+        echo "<tr>";
+        echo "<td><input type='hidden' name='formid' value='{$formid}' />";
+        echo "<input type='hidden' name='isnew' value='yes' /></td>";
+        echo "<input type='hidden' name='action' value='save' /></td>";
+        echo "<td><input type='submit' value='Save' /></td>";
+        echo "</tr>";
+        echo "</table>";
+        echo "</form>";
+        include('htmlfooter.inc.php');
+        break;
     default:
         $sql = "SELECT * FROM feedbackforms WHERE id='{$formid}'";
         $result = mysql_query($sql);
