@@ -134,120 +134,123 @@ switch($mode)
     break;
 
     default:
-    if (empty($formid) AND !empty($CONFIG['feedback_form'])) $formid=$CONFIG['feedback_form'];
-    else $formid=1;
+        $sql = "SELECT * FROM feedbackforms";
+        $result = mysql_query($sql);
+        if (mysql_error()) trigger_error(mysql_error(),E_USER_WARNING);
 
-    $sql  = "SELECT *, feedbackrespondents.id AS respid FROM feedbackrespondents, feedbackforms ";
-    $sql .= "WHERE feedbackrespondents.formid=feedbackforms.id ";
-    if ($completed=='no') $sql .= "AND completed='no' ";
-    else $sql .= "AND completed='yes' ";
-    if (!empty($formid)) $sql .= "AND formid='$formid'";
-    //, feedbackforms ";
-    //$sql .= "WHERE feedbackrespondents.formid=feedbackforms.id ";
-    //$sql .= "AND formid='{$formid}' ";
-    //$sql .= "AND completed='no' ";
-    //$sql .= "ORDER BY respondent, respondentref";
-
-
-    if ($order=='a' OR $order=='ASC' OR $order='') $sortorder = "ASC";
-    else $sortorder = "DESC";
-    switch($sort)
-    {
-        case 'created': $sql .= " ORDER BY created $sortorder"; break;
-        case 'contactid': $sql .= " ORDER BY contactid $sortorder"; break;
-        case 'incidentid': $sql .= " ORDER BY incidentid $sortorder"; break;
-        default:   $sql .= " ORDER BY created DESC"; break;
-    }
-    //if ($sort=='email') $sql .= "ORDER BY email ";
-    //if ($sort=='date') $sql .= "ORDER BY created ";
-    //if ($sort=='respondent') $sql .= "ORDER BY respondent ";
-    //if ($sort=='a') $sql .= "ASC";
-    //elseif ($_REQUEST['order']=='d') $sql .= "DESC";
-    $result = mysql_query($sql);
-    if (mysql_error()) trigger_error(mysql_error(),E_USER_WARNING);
-
-    $countrows = mysql_num_rows($result);
-
-    if (!empty($formid))
-    {
-        if ($completed=='no') echo "<h3>Feedback requested but not yet received for form: $formid</h3>";
-        else echo "<h3>Responses to Feedback Form: $formid</h3>";
-        echo "<p align='center'><a href='edit_feedback_form.php?formid={$formid}'>Edit this form</a></p>";
-    }
-    else echo "<h3>Responses to all Feedback Forms</h3>";
-
-    if ($countrows >= 1)
-    {
-        echo "<table summary='feedback forms' width='95%' align='center'>";
-        echo "<tr>";
-        echo colheader('created','Feedback Requested',$sort, $order, $filter);
-        echo colheader('contactid','Contact',$sort, $order, $filter);
-        echo colheader('incidentid','Incident',$sort, $order, $filter);
-        echo "<th>Action</th>";
-        echo "</tr>\n";
-        $shade='shade1';
-        while ($resp = mysql_fetch_object($result))
+        if(mysql_num_rows($result) == 0)
         {
-            $respondentarr=explode('-',$resp->respondent);
-            $responserefarr=explode('-',$resp->responseref);
+            // no feedback forms
+            echo "<h3>Browse feedback</h3>";
+            echo "<p align='center'>No feedback forms defined</p>";
+            echo "<p align='center'><a href='edit_feedback_form.php?action=new'>Create new form</a></p>";
+        }
+        else
+        {
+            if (empty($formid) AND !empty($CONFIG['feedback_form'])) $formid=$CONFIG['feedback_form'];
+            else $formid=1;
 
-            $hashtext=urlencode($resp->formid)."&&".urlencode($resp->contactid)."&&".urlencode($resp->incidentid);
-            // $hashcode=urlencode(trim(base64_encode(gzcompress(str_rot13($hashtext)))));
-            $hashcode4=str_rot13($hashtext);
-            $hashcode3=gzcompress($hashcode4);
-            $hashcode2=base64_encode($hashcode3);
-            $hashcode1=trim($hashcode2);
-            $hashcode=urlencode($hashcode1);
-            echo "<tr class='$shade'>";
-            echo "<td>".date($CONFIG['dateformat_datetime'],mysqlts2date($resp->created))."</td>";
-            echo "<td><a href='contact_details.php?id={$resp->contactid}' title='{$resp->email}'>".contact_realname($resp->contactid)."</a></td>";
-            echo "<td><a href=\"javascript:incident_details_window('{$resp->incidentid}','incident{$resp->incidentid}')\">Incident [{$resp->incidentid}]</a> - ";
-            echo incident_title($resp->incidentid)."</td>";
-            $url = "feedback.php?ax={$hashcode}";
-            if ($resp->multi=='yes') $url .= "&amp;rr=1";
+            $sql  = "SELECT *, feedbackrespondents.id AS respid FROM feedbackrespondents, feedbackforms ";
+            $sql .= "WHERE feedbackrespondents.formid=feedbackforms.id ";
+            if ($completed=='no') $sql .= "AND completed='no' ";
+            else $sql .= "AND completed='yes' ";
+            if (!empty($formid)) $sql .= "AND formid='$formid'";
 
-            echo "<td>";
-            if ($resp->completed=='no') echo "<a href='$url' title='$url' target='_blank'>URL</a>";
-            $eurl=urlencode($url);
-            $eref=urlencode($resp->responseref);
-            if ($resp->completed=='no')
+            if ($order=='a' OR $order=='ASC' OR $order='') $sortorder = "ASC";
+            else $sortorder = "DESC";
+            switch($sort)
             {
-                //if ($resp->remind<1) echo "<a href='formactions.php?action=remind&amp;id={$resp->respid}&amp;url={$eurl}&amp;ref={$eref}' title='Send a reminder by email'>Remind</a>";
-                //elseif ($resp->remind==1) echo "<a href='formactions.php?action=remind&amp;id={$resp->respid}&amp;url={$eurl}&amp;ref={$eref}' title='Send a Second reminder by email'>Remind Again</a>";
-                //elseif ($resp->remind==2) echo "<a href='formactions.php?action=callremind&amp;id={$resp->respid}&amp;url={$eurl}&amp;ref={$eref}' title='Send a Third reminder by phone call, click here when its done'>Remind by Phone</a>";
-                //else echo "<strike title='Already sent 3 reminders'>Remind</strike>";
-                //echo " &bull; ";
-                //echo "<a href='formactions.php?action=delete&amp;id={$resp->respid}' title='Remove this form'>Delete</a>";
+                case 'created': $sql .= " ORDER BY created $sortorder"; break;
+                case 'contactid': $sql .= " ORDER BY contactid $sortorder"; break;
+                case 'incidentid': $sql .= " ORDER BY incidentid $sortorder"; break;
+                default:   $sql .= " ORDER BY created DESC"; break;
+            }
+            $result = mysql_query($sql);
+            if (mysql_error()) trigger_error(mysql_error(),E_USER_WARNING);
+
+            $countrows = mysql_num_rows($result);
+
+            if (!empty($formid))
+            {
+                if ($completed=='no') echo "<h3>Feedback requested but not yet received for form: $formid</h3>";
+                else echo "<h3>Responses to Feedback Form: $formid</h3>";
+                echo "<p align='center'><a href='edit_feedback_form.php?formid={$formid}'>Edit this form</a></p>";
+            }
+            else echo "<h3>Responses to all Feedback Forms</h3>";
+
+            if ($countrows >= 1)
+            {
+                echo "<table summary='feedback forms' width='95%' align='center'>";
+                echo "<tr>";
+                echo colheader('created','Feedback Requested',$sort, $order, $filter);
+                echo colheader('contactid','Contact',$sort, $order, $filter);
+                echo colheader('incidentid','Incident',$sort, $order, $filter);
+                echo "<th>Action</th>";
+                echo "</tr>\n";
+                $shade='shade1';
+                while ($resp = mysql_fetch_object($result))
+                {
+                    $respondentarr=explode('-',$resp->respondent);
+                    $responserefarr=explode('-',$resp->responseref);
+
+                    $hashtext=urlencode($resp->formid)."&&".urlencode($resp->contactid)."&&".urlencode($resp->incidentid);
+                    // $hashcode=urlencode(trim(base64_encode(gzcompress(str_rot13($hashtext)))));
+                    $hashcode4=str_rot13($hashtext);
+                    $hashcode3=gzcompress($hashcode4);
+                    $hashcode2=base64_encode($hashcode3);
+                    $hashcode1=trim($hashcode2);
+                    $hashcode=urlencode($hashcode1);
+                    echo "<tr class='$shade'>";
+                    echo "<td>".date($CONFIG['dateformat_datetime'],mysqlts2date($resp->created))."</td>";
+                    echo "<td><a href='contact_details.php?id={$resp->contactid}' title='{$resp->email}'>".contact_realname($resp->contactid)."</a></td>";
+                    echo "<td><a href=\"javascript:incident_details_window('{$resp->incidentid}','incident{$resp->incidentid}')\">Incident [{$resp->incidentid}]</a> - ";
+                    echo incident_title($resp->incidentid)."</td>";
+                    $url = "feedback.php?ax={$hashcode}";
+                    if ($resp->multi=='yes') $url .= "&amp;rr=1";
+
+                    echo "<td>";
+                    if ($resp->completed=='no') echo "<a href='$url' title='$url' target='_blank'>URL</a>";
+                    $eurl=urlencode($url);
+                    $eref=urlencode($resp->responseref);
+                    if ($resp->completed=='no')
+                    {
+                        //if ($resp->remind<1) echo "<a href='formactions.php?action=remind&amp;id={$resp->respid}&amp;url={$eurl}&amp;ref={$eref}' title='Send a reminder by email'>Remind</a>";
+                        //elseif ($resp->remind==1) echo "<a href='formactions.php?action=remind&amp;id={$resp->respid}&amp;url={$eurl}&amp;ref={$eref}' title='Send a Second reminder by email'>Remind Again</a>";
+                        //elseif ($resp->remind==2) echo "<a href='formactions.php?action=callremind&amp;id={$resp->respid}&amp;url={$eurl}&amp;ref={$eref}' title='Send a Third reminder by phone call, click here when its done'>Remind by Phone</a>";
+                        //else echo "<strike title='Already sent 3 reminders'>Remind</strike>";
+                        //echo " &bull; ";
+                        //echo "<a href='formactions.php?action=delete&amp;id={$resp->respid}' title='Remove this form'>Delete</a>";
+                    }
+                    else
+                    {
+                        echo "<a href='{$_SERVER['PHP_SELF']}?mode=viewresponse&amp;responseid={$resp->respid}'>View response</a>";
+                    }
+                    echo "</td>";
+                    echo "</tr>\n";
+                    if ($shade=='shade1') $shade='shade2';
+                    else $shade='shade1';
+                }
+                echo "</table>\n";
             }
             else
             {
-                echo "<a href='{$_SERVER['PHP_SELF']}?mode=viewresponse&amp;responseid={$resp->respid}'>View response</a>";
+                echo "<p class='error' align='center'>No feedback responses</p>";
             }
-            echo "</td>";
-            echo "</tr>\n";
-            if ($shade=='shade1') $shade='shade2';
-            else $shade='shade1';
+            if ($completed=='no')
+            {
+                $sql = "SELECT COUNT(id) FROM feedbackrespondents WHERE formid='{$formid}' AND completed='yes'";
+                $result = mysql_query($sql);
+                list($completedforms) = mysql_fetch_row($result);
+                if ($completedforms > 0) echo "<p align='center'>There are <a href='{$_SERVER['PHP_SELF']}'>{$completedforms} feedback forms</a> that have been returned already.</p>";
+            }
+            else
+            {
+                $sql = "SELECT COUNT(id) FROM feedbackrespondents WHERE formid='{$formid}' AND completed='no'";
+                $result = mysql_query($sql);
+                list($waiting) = mysql_fetch_row($result);
+                if ($waiting > 0) echo "<p align='center'>There are <a href='{$_SERVER['PHP_SELF']}?completed=no'>{$waiting} feedback forms</a> that have not been returned yet.</p>";
+            }
         }
-        echo "</table>\n";
-    }
-    else
-    {
-        echo "<p class='error' align='center'>No feedback responses</p>";
-    }
-    if ($completed=='no')
-    {
-        $sql = "SELECT COUNT(id) FROM feedbackrespondents WHERE formid='{$formid}' AND completed='yes'";
-        $result = mysql_query($sql);
-        list($completedforms) = mysql_fetch_row($result);
-        if ($completedforms > 0) echo "<p align='center'>There are <a href='{$_SERVER['PHP_SELF']}'>{$completedforms} feedback forms</a> that have been returned already.</p>";
-    }
-    else
-    {
-        $sql = "SELECT COUNT(id) FROM feedbackrespondents WHERE formid='{$formid}' AND completed='no'";
-        $result = mysql_query($sql);
-        list($waiting) = mysql_fetch_row($result);
-        if ($waiting > 0) echo "<p align='center'>There are <a href='{$_SERVER['PHP_SELF']}?completed=no'>{$waiting} feedback forms</a> that have not been returned yet.</p>";
-    }
 }
 include('htmlfooter.inc.php');
 ?>
