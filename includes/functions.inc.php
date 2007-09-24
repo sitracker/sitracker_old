@@ -135,7 +135,7 @@ $hmenu[1030] = array (10=> array ( 'perm'=> 22, 'name'=> "Users", 'url'=>"{$CONF
                       60=> array ( 'perm'=> 7, 'name'=> "Bulk Modify", 'url'=>"{$CONFIG['application_webpath']}bulk_modify.php?action=external_esc"),
                       70=> array ( 'perm'=> 64, 'name'=> "Escalation Paths", 'url'=>"{$CONFIG['application_webpath']}escalation_paths.php"),
                       80=> array ( 'perm'=> 66, 'name'=> "Manage Dashboard Components", 'url'=>"{$CONFIG['application_webpath']}manage_dashboard.php"),
-                      90=> array ( 'perm'=> 49, 'name'=> "Feedback forms", 'url'=>"", 'submenu'=>"103090")
+                      90=> array ( 'perm'=> 49, 'name'=> "Feedback Forms", 'url'=>"", 'submenu'=>"103090")
 );
 $hmenu[103010] = array (10=> array ( 'perm'=> 22, 'name'=> "Manage Users", 'url'=>"{$CONFIG['application_webpath']}manage_users.php"),
                         20=> array ( 'perm'=> 20, 'name'=> "Add User", 'url'=>"{$CONFIG['application_webpath']}add_user.php?action=showform"),
@@ -147,8 +147,8 @@ $hmenu[103020] = array (10=> array ( 'perm'=> 16, 'name'=> "Add Template", 'url'
                         20=> array ( 'perm'=> 17, 'name'=> "Edit Template", 'url'=>"{$CONFIG['application_webpath']}edit_emailtype.php?action=showform"),
                         30=> array ( 'perm'=> 43, 'name'=> "Global Signature", 'url'=>"{$CONFIG['application_webpath']}edit_global_signature.php")
 );
-$hmenu[103090] = array (10=> array ( 'perm'=> 49, 'name'=> "Add feedback form", 'url'=>"{$CONFIG['application_webpath']}edit_feedback_form.php?action=new"),
-                        20=> array ( 'perm'=> 49, 'name'=> "Browse feedback forms", 'url'=>"{$CONFIG['application_webpath']}browse_feedback_forms.php")
+$hmenu[103090] = array (10=> array ( 'perm'=> 49, 'name'=> "Add Feedback Form", 'url'=>"{$CONFIG['application_webpath']}edit_feedback_form.php?action=new"),
+                        20=> array ( 'perm'=> 49, 'name'=> "Browse Feedback Forms", 'url'=>"{$CONFIG['application_webpath']}browse_feedback_forms.php")
 );
 $hmenu[1040] = array (10=> array ( 'perm'=> 0, 'name'=> "View Users", 'url'=>"{$CONFIG['application_webpath']}users.php"),
                       20=> array ( 'perm'=> 0, 'name'=> "List Skills", 'url'=>"{$CONFIG['application_webpath']}user_skills.php"),
