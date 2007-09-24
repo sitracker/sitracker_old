@@ -1870,6 +1870,9 @@ function emailtype_replace_specials($string, $incidentid, $userid=0)
     $contactid=incident_contact($incidentid);
     if ($contactid==0) throw_error('cannot obtain contact ID in email_replace_specials()',$contactid);
 
+    $url = parse_url($_SERVER['HTTP_REFERER']);
+    $baseurl = "{$url['scheme']}://{$url['host']}{$CONFIG['application_webpath']}";
+
     // INL 13Jun03 Do one query to grab the incident details instead of doing a query
     // per replace-keyword - this should save a few queries
 
@@ -1910,8 +1913,11 @@ function emailtype_replace_specials($string, $incidentid, $userid=0)
                     29 => '/<incidentfirstupdate>/s',
                     30 => '/<contactnotify2>/s',
                     31 => '/<contactnotify3>/s',
-                    32 => '/<contactnotify4>/s'
+                    32 => '/<contactnotify4>/s',
+                    33 => '/<feedbackurl>/s'
                 );
+
+// 5 => contact_manager_email($contactid), is DEPRECATED as of v3.30
 
     $email_replace = array(0 => contact_email($contactid),
                     1 => contact_realname($contactid),
@@ -1945,7 +1951,8 @@ function emailtype_replace_specials($string, $incidentid, $userid=0)
                     29 => incident_firstupdate($incidentid),
                     30 => contact_email(contact_notify($contactid, 2)),
                     31 => contact_email(contact_notify($contactid, 3)),
-                    32 => contact_email(contact_notify($contactid, 4))
+                    32 => contact_email(contact_notify($contactid, 4)),
+                    33 => $baseurl.'feedback.php?ax='.urlencode(trim(base64_encode(gzcompress(str_rot13(urlencode($CONFIG['feedback_form']).'&&'.urlencode($contactid).'&&'.urlencode($incidentid))))))
                 );
 
     if($incident->towner != 0)
@@ -3934,6 +3941,7 @@ function remove_slashes($string)
 
 
 // Uses flag MGR to determine manager
+// DEPRECATED as of v3.30
 function contact_manager_email($contactid)
 {
     $sql = "SELECT siteid FROM contacts WHERE id='$contactid' LIMIT 1";

@@ -155,9 +155,9 @@ if ($actions[0]=='' OR in_array('SetUserStatus',$actions))
                 $usql = "UPDATE users SET status='{$newstatus}'";
                 if ($accepting!='') $usql .= ", accepting='{$accepting}'";
                 $usql .= " WHERE id='{$huser->userid}' LIMIT 1";
-                // if ($accepting=='No') incident_backup_switchover($huser->userid, 'no');
+                if ($accepting=='No') incident_backup_switchover($huser->userid, 'no');
                 if ($verbose) echo user_realname($huser->userid).': '.userstatus_name($currentstatus).' -> '.userstatus_name($newstatus).$crlf;
-                echo $usql.$crlf;
+                if ($verbose) echo $usql.$crlf;
             }
         }
     }

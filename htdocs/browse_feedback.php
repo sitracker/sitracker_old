@@ -142,7 +142,7 @@ switch($mode)
         {
             // no feedback forms
             echo "<h3>Browse feedback</h3>";
-            echo "<p align='center'>No feedback forms defined</p>";
+            echo "<p class='error' align='center'>No feedback forms defined</p>";
             echo "<p align='center'><a href='edit_feedback_form.php?action=new'>Create new form</a></p>";
         }
         else
