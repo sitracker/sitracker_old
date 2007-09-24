@@ -134,13 +134,14 @@ while ($contactrow=mysql_fetch_array($contactresult))
         echo "</td></tr>";
     }
 
-    $contact_manager=contact_manager_email($id);
-    if ($contact_manager != '')
-    {
-        echo "<tr><th>Managers Email:</th><td>";
-        echo contact_manager_email($id);
-        echo "</td></tr>";
-    }
+//      DEPRECATED as of v3.30 in favour of Notify contacts (see above)
+//     $contact_manager=contact_manager_email($id);
+//     if ($contact_manager != '')
+//     {
+//         echo "<tr><th>Managers Email:</th><td>";
+//         echo contact_manager_email($id);
+//         echo "</td></tr>";
+//     }
 
     plugin_do('contact_details');
 

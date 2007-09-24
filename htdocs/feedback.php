@@ -281,7 +281,7 @@ body { font:10pt Arial, Helvetia, sans-serif; }
 
         if ($waitingforms<1)
         {
-            echo "<h1>Error</h1>";
+            echo "<h2>Error</h2>";
             echo "<p>There is no feedback form waiting to be completed at this address, this could be because you have ";
             echo "already provided feedback.  Please check that the URL you entered is correct.</p>";
             echo "\n\n<!-- f: $formid r:$respondent rr:$responseref dh:$decodehash  hc:$hashcode -->\n\n";
