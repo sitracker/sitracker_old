@@ -78,7 +78,6 @@ echo "<h3>Status Summary</h3>";
 echo "<table align='center'>";
 echo "<tr><th>Status</th><th>Time</th></tr>\n";
 $data = array();
-//$keys = array();
 $legends;
 foreach($updatearray as $row)
 {
@@ -89,12 +88,10 @@ foreach($updatearray as $row)
 
 if (extension_loaded('gd'))
 {
-    // Incidents by product chart
     $data = implode('|',$data);
     $title = urlencode('Time in each Status');
-    //$data="1,2,3";
     echo "<div style='text-align:center;'>";
-    echo "<img src='chart.php?type=pie&data=$data&legends=$legends&title=$title&units=seconds' />";
+    echo "<img src='chart.php?type=pie&data=$data&legends=$legends&title=$title' />";
     echo "</div>";
 }
 
