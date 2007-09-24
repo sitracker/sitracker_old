@@ -45,6 +45,60 @@ $opened_for=format_seconds(time() - $incident->opened);
 
 include('incident_html_top.inc.php');
 include('incident/sla.inc.php');
+
+//start status summary
+$sql = "SELECT updates.id as updatesid, incidentid, userid, type, timestamp, currentstatus, incidentstatus.id, incidentstatus.name as name ";
+$sql .= "FROM updates, incidentstatus ";
+$sql .= " WHERE incidentid='{$incidentid}' ";
+$sql .= " AND updates.currentstatus=incidentstatus.id ";
+$sql .= " ORDER BY timestamp ASC";
+
+$result = mysql_query($sql);
+if (mysql_error()) trigger_error(mysql_error(), E_USER_ERROR);
+
+$updatearray = array();
+$last = -1;
+$laststatus;
+while($row = mysql_fetch_object($result))
+{
+    $updatearray[$row->currentstatus]['name'] = $row->name;
+    if($last == -1)
+    {
+        $last = $row->timestamp;
+        $updatearray[$row->currentstatus]['time'] = 0;
+    }
+    else
+        $updatearray[$row->currentstatus]['time'] = calculate_working_time($last, $row->timestamp);
+    $laststatus = $row->currentstatus;    
+}
+
+$updatearray[$laststatus]['time'] += calculate_working_time($updatearray[$laststatus]['time'], time());
+
+echo "<h3>Status Summary</h3>";
+echo "<table align='center'>";
+echo "<tr><th>Status</th><th>Time</th></tr>\n";
+$data = array();
+//$keys = array();
+$legends;
+foreach($updatearray as $row)
+{
+    echo "<tr><td>".$row['name']. "</td><td>".format_seconds($row['time'])."</td></tr>";
+    array_push($data, $row['time']);
+    $legends .= $row['name']."|";
+}
+
+if (extension_loaded('gd'))
+{
+    // Incidents by product chart
+    $data = implode('|',$data);
+    $title = urlencode('Time in each Status');
+    //$data="1,2,3";
+    echo "<div style='text-align:center;'>";
+    echo "<img src='chart.php?type=pie&data=$data&legends=$legends&title=$title&units=seconds' />";
+    echo "</div>";
+}
+
+
 include('incident_html_bottom.inc.php');
 exit;
 
