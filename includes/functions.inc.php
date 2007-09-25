@@ -4758,7 +4758,7 @@ function show_create_links($table, $ref)
 // Function to create a PNG chart
 // Returns an image resource
 // Currently only has support for pie charts (type='pie')
-function draw_chart_image($type, $width, $height, $data, $legends, $title='')
+function draw_chart_image($type, $width, $height, $data, $legends, $title='', $unit='')
 {
     global $CONFIG;
     // Graph settings
@@ -4877,6 +4877,7 @@ function draw_chart_image($type, $width, $height, $data, $legends, $title='')
                 imagefilledarc($img,$cx,$cy,$sx,$sy,$angle_sum[$i-1] ,$angle_sum[$i], $colors[$i], IMG_ARC_PIE);
                 imagefilledrectangle($img, 255, ($legendY+1), 264, ($legendY+9), $colors[$i]);
                 // Legend
+                if ($unit=='seconds') $data[$i]=format_seconds($data[$i]);
                 if ($use_ttf) imagettftext($img, 8, 0, 270, ($legendY+9), $black, $fontfile, substr(urldecode($legends[$i]),0,27)." ({$data[$i]})");
                 else imagestring($img,2, 270, ($legendY-1), substr(urldecode($legends[$i]),0,27)." ({$data[$i]})", $black);
                 // imagearc($img,$cx,$cy,$sx,$sy,$angle_sum[$i1] ,$angle_sum[$i], $blue);

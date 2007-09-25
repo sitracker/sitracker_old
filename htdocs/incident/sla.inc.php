@@ -93,7 +93,7 @@ if (extension_loaded('gd'))
     $data = implode('|',$data);
     $title = urlencode('Time in each Status');
     echo "<div style='text-align:center;'>";
-    echo "<img src='chart.php?type=pie&data=$data&legends=$legends&title=$title' />";
+    echo "<img src='chart.php?type=pie&data=$data&legends=$legends&title=$title&unit=seconds' />";
     echo "</div>";
 }
 
