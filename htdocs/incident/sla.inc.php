@@ -65,29 +65,29 @@ while($row = mysql_fetch_object($result))
 {
     $updatearray[$row->currentstatus]['name'] = $row->name;
     if($last == -1)
-    {
-        $last = $row->timestamp;
         $updatearray[$row->currentstatus]['time'] = 0;
-    }
     else
-        $updatearray[$row->currentstatus]['time'] = calculate_working_time($last, $row->timestamp);
+        $updatearray[$laststatus]['time'] += 60 * calculate_working_time($last, $row->timestamp);
+
     $laststatus = $row->currentstatus;
+    $last = $row->timestamp;
 }
 
-$updatearray[$laststatus]['time'] += calculate_working_time($updatearray[$laststatus]['time'], time());
-
+//calculate the last update
+$updatearray[$laststatus]['time'] += 60 * calculate_working_time($last, time());
 echo "<h3>Status Summary</h3>";
 echo "<table align='center'>";
 echo "<tr><th>Status</th><th>Time</th></tr>\n";
 $data = array();
 $legends;
+
 foreach($updatearray as $row)
 {
     echo "<tr><td>".$row['name']. "</td><td>".format_seconds($row['time'])."</td></tr>";
     array_push($data, $row['time']);
     $legends .= $row['name']."|";
 }
-
+echo '</table>';
 if (extension_loaded('gd'))
 {
     $data = implode('|',$data);
