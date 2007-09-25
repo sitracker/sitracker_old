@@ -1035,7 +1035,7 @@ CREATE TABLE `updates` (
   `id` int(11) NOT NULL auto_increment,
   `incidentid` int(11) default NULL,
   `userid` int(11) default NULL,
-  `type` enum('default','editing','opening','email','reassigning','closing','reopening','auto','phonecallout','phonecallin','research','webupdate','emailout','emailin','externalinfo','probdef','solution','actionplan','slamet','reviewmet','tempassigning') default 'default',
+  `type` enum('default','editing','opening','email','reassigning','closing','reopening','auto','phonecallout','phonecallin','research','webupdate','emailout','emailin','externalinfo','probdef','solution','actionplan','slamet','reviewmet','tempassigning', 'auto_chase_email', 'auto_chase_phone', 'auto_chase_manager','auto_chased_phone','auto_chased_manager','auto_chase_managers_manager') default 'default',
   `currentowner` tinyint(4) NOT NULL default '0',
   `currentstatus` int(11) NOT NULL default '0',
   `bodytext` text,
@@ -1448,6 +1448,8 @@ ALTER TABLE `contacts` ADD `active` ENUM( 'true', 'false' ) NOT NULL DEFAULT 'tr
 
 -- beta 3
 UPDATE `interfacestyles` SET `iconset` = 'sit';
+
+ALTER TABLE `updates` CHANGE `type` `type` ENUM( 'default', 'editing', 'opening', 'email', 'reassigning', 'closing', 'reopening', 'auto', 'phonecallout', 'phonecallin', 'research', 'webupdate', 'emailout', 'emailin', 'externalinfo', 'probdef', 'solution', 'actionplan', 'slamet', 'reviewmet', 'tempassigning', 'auto_chase_email', 'auto_chase_phone', 'auto_chase_manager', 'auto_chased_phone','auto_chased_manager','auto_chase_managers_manager') CHARACTER SET latin1 COLLATE latin1_swedish_ci NULL DEFAULT 'default';
 ";
 
 
