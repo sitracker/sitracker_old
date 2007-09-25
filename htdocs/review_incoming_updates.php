@@ -315,13 +315,54 @@ if($spamcount > 0)
 }
 
 
+$sql = "SELECT incidents.id, incidents.title, contacts.forenames, contacts.surname, sites.name FROM incidents,contacts,sites ";
+$sql .= "WHERE incidents.status = 8 AND incidents.contact = contacts.id AND contacts.siteid = sites.id ORDER BY sites.id, incidents.contact"; //awaiting customer action
+$resultchase = mysql_query($sql);
+if(mysql_num_rows($resultchase) >= 1)
+{
+    $shade='shade1';
+    while($chase = mysql_fetch_object($resultchase))
+    {
+        $sql_update = "SELECT * FROM updates WHERE incidentid = {$chase	->id} ORDER BY timestamp DESC LIMIT 1";
+        $result_update = mysql_query($sql_update);
+        if (mysql_error()) trigger_error("MySQL Query Error ".mysql_error(), E_USER_ERROR);
+
+        $obj_update = mysql_fetch_object($result_update);
+
+        if($obj_update ->type == 'auto_chase_phone' OR $obj_update ->type == 'auto_chase_manager')
+        {
+            if(empty($html_chase))
+            {
+                $html_chase .= "<br />";
+                $html_chase .= "<h2>Incidents requiring chasing by phone</h2>";
+                $html_chase .= "<table align='center' style='width: 95%'>";
+                $html_chase .= "<tr><th>Incident ID</th><th>Incident title</th><th>Contact</th><th>Site</th><th>Type</th></tr>";
+            }
+
+            if($obj_update->type == "auto_chase_phone") $type = "Chase phone";
+            else $type = "Chase manager";
+
+            // show
+            $html_chase .= "<tr class='{$shade}'><td><a href=\"javascript:incident_details_window('{$obj_update->incidentid}','incident{$obj_update->incidentid}')\" class='info'>{$obj_update->incidentid}</a></td><td>{$chase->title}</td><td>{$chase->forenames} {$chase->surname}</td><td>{$chase->name}</td><td>{$type}</td></tr>";
+
+            if($shade=='shade1') $shade='shade2';
+            else $shade='shade1';
+        }
+    }
+}
+
+if(!empty($html_chase))
+{
+    echo $html_chase;
+    echo "</table>";
+}
 
 $sql = "SELECT * FROM tempassigns,incidents WHERE tempassigns.incidentid=incidents.id AND assigned='no' ";
 $result = mysql_query($sql);
 
 if (mysql_num_rows($result) >= 1)
 {
-    echo "<br /><br />\n";
+    echo "<br />\n";
 
     echo "<h2>Pending Re-Assignments</h2>";
     echo "<p align='center'>Automatic reassignments that could not be made because users were set to 'not accepting'</p>";
