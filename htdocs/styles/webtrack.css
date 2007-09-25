@@ -116,6 +116,7 @@ div.window
 {
     max-width: 380px;
     padding: 3px;
+    overflow: hidden;
 }
 
 #apptitle { height: 50px;}
