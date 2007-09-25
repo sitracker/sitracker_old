@@ -20,16 +20,26 @@ require('auth.inc.php');
 // External variables
 $incidentid = cleanvar($_REQUEST['id']);
 $id = $incidentid;
-$title='Details';
-include('incident_html_top.inc.php');
 
 ?>
 
 <?php
+if ($_REQUEST['win']=='incomingview')
+{
+    $title='Incoming';
+    $incidentid='';
+    include('incident_html_top.inc.php');
+    include('incident/incoming.inc.php');
+}
+else
+{
+    $title='Details';
+    include('incident_html_top.inc.php');
 
-include('incident/details.inc.php');
+    include('incident/details.inc.php');
 
-include('incident/log.inc.php');
+    include('incident/log.inc.php');
+}
 
 include('incident_html_bottom.inc.php');
 ?>
