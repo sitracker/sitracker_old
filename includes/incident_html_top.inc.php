@@ -3,7 +3,7 @@ session_name($CONFIG['session_name']);
 session_start();
 echo "<!DOCTYPE html PUBLIC \"-//W3C//DTD XHTML 1.0 Transitional//EN\" \"http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd\">";
 echo "<html xmlns=\"http://www.w3.org/1999/xhtml\" xml:lang=\"en\" lang=\"en\"><head><title>";
-echo "{$incidentid} - ";
+if (!empty($incidentid)) echo "{$incidentid} - ";
 if (isset($title)) echo $title;
 else echo $CONFIG['application_shortname'];
 echo "</title>";
@@ -312,17 +312,20 @@ if ($slaremain <> 0 AND $incident->status!=2)
 
 // Print a table showing summary details of the incident
 
-// Tempory hack, don't show this for old incident details page
-//if (strpos($_SERVER['PHP_SELF'], 'incident_details.php')===FALSE)
-//{
-    echo "<h1 class='$class'>{$title}: {$incidentid} - ".stripslashes($incident->title)."</h1>";
-//}
+if ($_REQUEST['win']=='incomingview') echo "<h1 class='$class'>Incoming</h1>";
+else echo "<h1 class='$class'>{$title}: {$incidentid} - ".stripslashes($incident->title)."</h1>";
 
-// echo "<h1>$title</h1>";
 echo "<div id='navmenu'>";
 if ($menu != 'hide')
 {
-    if (incident_status($id) != 2)
+    if ($_REQUEST['win']=='incomingview')
+    {
+        echo "<a class='barlink' href='#'>Unlock</a> | ";
+        echo "<a class='barlink' href='#'>Assign</a> | ";
+        echo "<a class='barlink' href='#'>Create</a> | ";
+        echo "<a class='barlink' href='#'>Delete</a>";
+    }
+    elseif (incident_status($id) != 2)
     {
         echo "<a class='barlink' href='update_incident.php?id={$id}&amp;popup={$popup}' accesskey='U'><em>U</em>pdate</a> | ";
         echo "<a class='barlink' href='javascript:close_window({$id});'>Close</a> | ";
