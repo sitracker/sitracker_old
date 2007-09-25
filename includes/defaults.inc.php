@@ -194,5 +194,13 @@ $CONFIG['preferred_maintence'] = array(1 => "Dedicated");
 // Use an icon for specified tags, format: array('tag' => 'icon', 'tag2' => 'icon2')";
 $CONFIG['tag_icons'] = array ('redflag' => 'redflag', 'yellowflag' => 'yellowflag', 'blueflag' => 'blueflag', 'greenflag' => 'greenflag', 'whiteflag' => 'whiteflag', 'blackflag' => 'blackflag');
 
+// Following is still BETA
+$CONFIG['auto_chase'] = FALSE;
+$CONFIG['chase_email_minutes'] = 0; // number of minutes incident has been 'awaiting customer action' before sending a chasing email, 0 is disabled
+$CONFIG['chase_phone_minutes'] = 0; // number of minutes incident has been 'awaiting customer action' before putting in the 'chase by phone queue', 0 is disabled
+$CONFIG['chase_manager_minutes'] = 0; // number of minutes incident has been 'awaiting customer action' before putting in the 'chase manager queue', 0 is disabled
+$CONFIG['chase_managers_manager_minutes'] = 0; // number of minutes incident has been 'awaiting customer action' before putting in the 'chase managers_manager queue', 0 is disabled
+$CONFIG['chase_email_template'] = ''; // The template to use to send chase email
+$CONFIG['dont_chase_maintids'] = array(1 => 1); // maintence IDs not to chase
 
 ?>
