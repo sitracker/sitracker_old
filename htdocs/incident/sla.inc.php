@@ -76,25 +76,30 @@ while($row = mysql_fetch_object($result))
 //calculate the last update
 $updatearray[$laststatus]['time'] += 60 * calculate_working_time($last, time());
 echo "<h3>Status Summary</h3>";
-echo "<table align='center'>";
-echo "<tr><th>Status</th><th>Time</th></tr>\n";
-$data = array();
-$legends;
-
-foreach($updatearray as $row)
-{
-    echo "<tr><td>".$row['name']. "</td><td>".format_seconds($row['time'])."</td></tr>";
-    array_push($data, $row['time']);
-    $legends .= $row['name']."|";
-}
-echo '</table>';
 if (extension_loaded('gd'))
 {
+    $data = array();
+    $legends;
+    foreach($updatearray as $row)
+    {
+        array_push($data, $row['time']);
+        $legends .= $row['name']."|";
+    }
     $data = implode('|',$data);
-    $title = urlencode('Time in each Status');
+    $title = urlencode('Status Summary');
     echo "<div style='text-align:center;'>";
     echo "<img src='chart.php?type=pie&data=$data&legends=$legends&title=$title&unit=seconds' />";
     echo "</div>";
+}
+else
+{
+    echo "<table align='center'>";
+    echo "<tr><th>Status</th><th>Time</th></tr>\n";
+    foreach($updatearray as $row)
+    {
+        echo "<tr><td>".$row['name']. "</td><td>".format_seconds($row['time'])."</td></tr>";
+    }
+    echo '</table>';
 }
 
 ?>
