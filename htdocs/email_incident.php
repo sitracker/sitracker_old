@@ -171,9 +171,34 @@ switch ($step)
                 echo "<option value='solution' style='text-indent: 15px; height: 17px; background-image: url({$CONFIG['application_webpath']}/images/icons/{$iconset}/16x16/solution.png); background-repeat: no-repeat;' onclick='reprioritise(this.form)'>Resolution/Reprioritisation</option>\n";
             break;
         }
-        echo "</select>\n";
+        echo "</select>\n</td></tr>";
+
+        if($CONFIG['auto_chase'] == TRUE)
+        {
+            $sql = "SELECT * FROM updates WHERE incidentid = {$id} ORDER BY timestamp DESC LIMIT 1";
+            $result = mysql_query($sql);
+            if (mysql_error()) trigger_error("MySQL Query Error ".mysql_error(), E_USER_ERROR);
+
+            $obj = mysql_fetch_object($result);
+
+            if($obj->type == 'auto_chase_phone')
+            {
+                echo "<tr><th>Was this a customer chase?</th><td>";
+                echo "<input type='radio' name='chase_customer' value='no' checked='yes' />No ";
+                echo "<input type='radio' name='chase_customer' value='yes' />Yes";
+                echo "</td></tr>";
+            }
+
+            if($obj->type == 'auto_chase_manager')
+            {
+                echo "<tr><th>Was this a manager chase?</th>";
+                echo "<input type='radio' name='chase_manager' value='no' checked='yes' />No ";
+                echo "<input type='radio' name='chase_manager' value='yes' />Yes";
+                echo "</td></tr>";
+            }
+        }
+
         ?>
-        </td></tr>
         <tr><th>New Incident Status:</th><td><?php echo incidentstatus_drop_down("newincidentstatus", incident_status($id)); ?></td></tr>
         <tr><th>Time To Next Action:<br />Or date:</th>
         <td>
@@ -234,6 +259,8 @@ switch ($step)
         $month = cleanvar($_REQUEST['month']);
         $year = cleanvar($_REQUEST['year']);
         $target = cleanvar($_REQUEST['target']);
+        $chase_customer = cleanvar($_REQUEST['chase_customer']);
+        $chase_manager = cleanvar($_REQUEST['chase_manager']);
 
         if ($emailtype == 0)
         {
@@ -289,6 +316,8 @@ switch ($step)
             <input name="timetonextaction_days" type="hidden" value="<?php echo $timetonextaction_days; ?>" />
             <input name="timetonextaction_hours" type="hidden" value="<?php echo $timetonextaction_hours; ?>" />
             <input name="timetonextaction_minutes" type="hidden" value="<?php echo $timetonextaction_minutes; ?>" />
+            <input name="chase_customer" type="hidden" value="<?php echo $chase_customer; ?>" />
+            <input name="chase_manager" type="hidden" value="<?php echo $chase_manager; ?>" />
             <input name="day" type="hidden" value="<?php echo $day; ?>" />
             <input name="month" type="hidden" value="<?php echo $month; ?>" />
             <input name="year" type="hidden" value="<?php echo $year; ?>" />
@@ -324,6 +353,9 @@ switch ($step)
         $month = cleanvar($_REQUEST['month']);
         $year = cleanvar($_REQUEST['year']);
         $target = cleanvar($_REQUEST['target']);
+        $chase_customer = cleanvar($_REQUEST['chase_customer']);
+        $chase_manager = cleanvar($_REQUEST['chase_manager']);
+
 
         // move attachment to a safe place for processing later
         if ($_FILES['attachment']['name']!='')       // Should be using this format throughout TPG 13/08/2002
@@ -475,7 +507,7 @@ switch ($step)
                 // add update
                 $bodytext=htmlentities($bodytext, ENT_COMPAT, 'UTF-8');
                 $updateheader .= "To: <b>$tofield</b>\nFrom: <b>$fromfield</b>\nReply-To: <b>$replytofield</b>\n";
-                if ($ccfield!="") $updateheader .=   "CC: <b>$ccfield</b>\n";
+                if ($ccfield!="" AND $ccfield!=",") $updateheader .=   "CC: <b>$ccfield</b>\n";
                 if ($bccfield!="") $updateheader .= "BCC: <b>$bccfield</b>\n";
                 if ($filename!="") $updateheader .= "Attachment: <b>".$filename_end_part."</b>\n";
                 $updateheader .= "Subject: <b>$subjectfield</b>\n";
@@ -527,6 +559,28 @@ switch ($step)
                     // Reset the slaemail sent column, so that email reminders can be sent if the new sla target goes out
                     $sql = "UPDATE incidents SET slaemail='0' WHERE id='$id' LIMIT 1";
                     mysql_query($sql);
+                    if (mysql_error()) trigger_error("MySQL Query Error ".mysql_error(), E_USER_ERROR);
+                }
+
+                if(!empty($chase_customer))
+                {
+                    $sql_insert = "INSERT INTO updates (incidentid, userid, type, bodytext, timestamp, customervisibility) VALUES ('{$id}','{$sit['2']}','auto_chased_phone','Customer has been called to chase','{$now}','hide')";
+                    mysql_query($sql_insert);
+                    if (mysql_error()) trigger_error("MySQL Query Error ".mysql_error(), E_USER_ERROR);
+
+                    $sql_update = "UPDATE incidents SET lastupdated = '{$now}' WHERE id = {$id}";
+                    mysql_query($sql_update);
+                    if (mysql_error()) trigger_error("MySQL Query Error ".mysql_error(), E_USER_ERROR);
+                }
+
+                if(!empty($chase_manager))
+                {
+                    $sql_insert = "INSERT INTO updates (incidentid, userid, type, bodytext, timestamp, customervisibility) VALUES ('{$id}','{$sit['2']}','auto_chased_manager','Manager has been called to chase','{$now}','hide')";
+                    mysql_query($sql_insert);
+                    if (mysql_error()) trigger_error("MySQL Query Error ".mysql_error(), E_USER_ERROR);
+
+                    $sql_update = "UPDATE incidents SET lastupdated = '{$now}' WHERE id = {$id}";
+                    mysql_query($sql_update);
                     if (mysql_error()) trigger_error("MySQL Query Error ".mysql_error(), E_USER_ERROR);
                 }
 
