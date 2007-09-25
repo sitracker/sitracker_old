@@ -5176,6 +5176,14 @@ function string_find_all($haystack, $needle, $limit=0)
     return $positions;
 }
 
+// Implode assocative array
+function implode_assoc($glue1, $glue2, $array)
+{
+    foreach($array as $key => $val) $array2[] = $key.$glue1.$val;
+    return implode($glue2, $array2);
+}
+
+
 // -------------------------- // -------------------------- // --------------------------
 // leave this section at the bottom of functions.inc.php ================================
 

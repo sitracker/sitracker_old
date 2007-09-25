@@ -178,7 +178,8 @@ function setup_configure()
             }
             elseif (is_array($value))
             {
-                $value="array(".implode(',',$value).")";
+                $value="array(".implode_assoc('=>',',',$value).")";
+                // $value="array(".implode(',',$value).")";
             }
             if ($setupvar=='db_password' AND $_REQUEST['action']!='reconfigure') $value='';
             $html .= $value;
