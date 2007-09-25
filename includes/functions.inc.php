@@ -79,6 +79,12 @@ $updatetypes['reopening'] = array('icon' => 'reopen.png', 'text' => 'Reopened by
 $updatetypes['slamet'] = array('icon' => 'sla.png', 'text' => 'SLA: updatesla by updateuser');
 $updatetypes['solution'] = array('icon' => 'solution.png', 'text' => 'Resolved by updateuser');
 $updatetypes['webupdate'] = array('icon' => 'webupdate.png', 'text' => 'Web update');
+$updatetypes['auto_chase_phone'] = array('icon' => 'chase.png', 'text' => 'Chase');
+$updatetypes['auto_chase_manager'] = array('icon' => 'chase.png', 'text' => 'Chase');
+$updatetypes['auto_chase_email'] = array('icon' => 'chased.png', 'text' => 'Chased');
+$updatetypes['auto_chased_phone'] = array('icon' => 'chased.png', 'text' => 'Chased');
+$updatetypes['auto_chased_manager'] = array('icon' => 'chased.png', 'text' => 'Chased');
+$updatetypes['auto_chased_managers_manager'] = array('icon' => 'chased.png', 'text' => 'Chased');
 $slatypes['opened'] = array('icon' => 'open.png', 'text' => 'Opened');
 $slatypes['initialresponse'] = array('icon' => 'initialresponse.png', 'text' => 'Initial Response');
 $slatypes['probdef'] = array('icon' => 'probdef.png', 'text' => 'Problem Definition');
