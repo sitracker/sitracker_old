@@ -20,8 +20,9 @@ $type = $_REQUEST['type'];
 $data = explode('|',cleanvar($_REQUEST['data']));
 $legends = explode('|',cleanvar($_REQUEST['legends']));
 $title = urldecode(cleanvar($_REQUEST['title']));
+$unit = cleanvar($_REQUEST['unit']);
 
-$img = draw_chart_image($type, 500, 150, $data, $legends, $title);
+$img = draw_chart_image($type, 500, 150, $data, $legends, $title, $unit);
 
 // output to browser
 // flush image
