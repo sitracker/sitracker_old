@@ -167,6 +167,11 @@ if ($actions[0]=='' OR in_array('SetUserStatus',$actions))
     if (mysql_error()) trigger_error(mysql_error(),E_USER_ERROR);
 }
 
+if ($actions[0]=='' OR in_array('ChaseCustomers',$actions))
+{
+    require('auto/chase_customer.php');
+}
+
 plugin_do('automata');
 
 ?>
