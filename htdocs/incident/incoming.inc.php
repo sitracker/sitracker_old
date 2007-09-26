@@ -41,9 +41,10 @@ while ($incoming = mysql_fetch_object($result))
     }
     else
         $lockedby = "you";
-    
-    echo "<p>Locked by: $lockedby</p>";
-    echo "<p>Reason: ".$incoming->reason."</p>";
+
+    echo "<div class='detailinfo'>";
+    if (!empty($incoming->reason)) echo "<div class='detaildate'>{$incoming->reason}</div>";
+    echo "Locked by: {$lockedby}</div>";
 
     //echo "<pre>".print_r($incoming,true)."</pre>";
     $usql = "SELECT * FROM updates WHERE id='{$incoming->updateid}'";
