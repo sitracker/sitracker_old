@@ -79,11 +79,6 @@ function generate_row($update)
         if ($update['locked'] == $sit[2])
         {
             $html_row.="<a href='{$_SERVER['PHP_SELF']}?unlock={$update['tempid']}' title='Unlock this update so it can be modified by someone else'> Unlock</a> | ";
-            $html_row.="<a href=\"move_update.php?updateid=".$update['id']."&amp;incidentidnumber=".$update['incidentid']."\" title=\"Assign this text to an existing incident\">Assign</a> | ";
-            $html_row.="<a href='add_incident.php?action=findcontact&amp;updateid=".$update['id']."&amp;search_string=".urlencode($update['emailfrom']);
-            if ($update['contactid'])
-                $html_row.="&amp;contactid=".$update['contactid'];
-            $html_row.= "' title=\"Add a new incident from this text\">Create</a> | ";
         }
         else $html_row.= "<a href='{$_SERVER['PHP_SELF']}?lock={$update['tempid']}' title='Lock this update so it cannot be modified by anyone else'> Lock</a> | ";
         $html_row.= "<a href='delete_update.php?updateid=".$update['id']."&amp;tempid=".$update['tempid']."&amp;timestamp=".$update['timestamp']."' title='Remove this item permanently' onclick='return confirm_delete();'> Delete</a>";
