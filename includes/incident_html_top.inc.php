@@ -320,11 +320,12 @@ if ($menu != 'hide')
 {
     if ($_REQUEST['win']=='incomingview')
     {
-        $insql = "SELECT emailfrom, contactid, updateid, id, timestamp 
+        $insql = "SELECT emailfrom, contactid, updateid, tempincoming.id, timestamp
                 FROM tempincoming, updates
-                WHERE id={$id}
-                AND tempincoming.incidentid=updates";
+                WHERE tempincoming.id={$id}
+                AND tempincoming.incidentid=updates.incidentid";
         $query = mysql_query($insql);
+        if (mysql_error()) trigger_error(mysql_error(),E_USER_WARNING);
         while($inupdate = mysql_fetch_object($query))
         {
             echo "<a class='barlink' href='unlock_update.php?id={$id}'>Unlock</a> | ";
