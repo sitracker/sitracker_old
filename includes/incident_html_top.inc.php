@@ -331,7 +331,7 @@ if ($menu != 'hide')
             echo "<a class='barlink' href='unlock_update.php?id={$id}'>Unlock</a> | ";
             echo "<a class='barlink' href='#'>Assign</a> | ";
             echo "<a class='barlink' href='add_incident.php?action=findcontact&updateid={$id}&search_string={$inupdate->emailfrom}&contactid={$inupdate->contactid}'>Create</a> | ";
-            echo "<a href='#'>Delete</a>";
+            echo "<a class='barlink' href='delete_update.php?updateid={$inupdate->updateid}&amp;tempid={$inupdate->id}&amp;timestamp={$inupdate->timestamp}'>Delete</a>";
         }
     }
     elseif (incident_status($id) != 2)
