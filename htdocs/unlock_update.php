@@ -1,0 +1,28 @@
+<?php
+// unlock_update.php - Unlocks incident updates
+//
+// SiT (Support Incident Tracker) - Support call tracking system
+// Copyright (C) 2000-2007 Salford Software Ltd. and Contributors
+//
+// This software may be used and distributed according to the terms
+// of the GNU General Public License, incorporated herein by reference.
+//
+// This page is called from includes/incident_html_top.inc.php
+
+$permission=42;
+require('db_connect.inc.php');
+require('functions.inc.php');
+
+// This page requires authentication
+require('auth.inc.php');
+
+// External variables
+$incomingid = cleanvar($_REQUEST['id']);
+
+if (empty($incomingid)) throw_error('!Error: Update ID was not set', $updateid);
+
+$sql = "UPDATE tempincoming SET locked=NULL, lockeduntil=NULL WHERE tempincoming.id='{$incomingid}' AND locked = '{$sit[2]}'";
+$result = mysql_query($sql);
+if (mysql_error()) trigger_error("MySQL Query Error ".mysql_error(), E_USER_ERROR);
+echo "<body onLoad='javascript:window.close();'>";
+?>
