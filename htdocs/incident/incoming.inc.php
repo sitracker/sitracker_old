@@ -33,18 +33,23 @@ while ($incoming = mysql_fetch_object($result))
         $sql = "UPDATE tempincoming SET locked='{$sit[2]}', lockeduntil='{$lockeduntil}' WHERE tempincoming.id='{$incomingid}' AND (locked = 0 OR locked IS NULL)";
         $result = mysql_query($sql);
         if (mysql_error()) trigger_error("MySQL Query Error ".mysql_error(), E_USER_ERROR);
-        $lockedby = "you";
+        $lockedbyname = "you";
     }
     elseif($incoming->locked != $sit[2])
     {
-        $lockedby = $row->locked;
+        $lockedby = $incoming->locked;
+        $lockedbysql = "SELECT realname FROM users WHERE id={$lockedby}";
+        $lockedbyresult = mysql_query($lockedbysql);
+        //if (mysql_error()) trigger_error("MySQL Query Error ".mysql_error(), E_USER_ERROR);
+        while($row = mysql_fetch_object($lockedbyresult))
+            $lockedbyname = $row->realname;
     }
     else
-        $lockedby = "you";
+        $lockedbyname = "you";
 
-    echo "<div class='detailinfo'><img src='{$CONFIG['application_webpath']}images/icons/{$iconset}/16x16/locked.png' alt='Locked' /> ";
+    echo "<div class='detailinfo'>";
     if (!empty($incoming->reason)) echo "<div class='detaildate'>{$incoming->reason}</div>";
-    echo "Locked by: {$lockedby}</div>";
+    echo "<img src='{$CONFIG['application_webpath']}images/icons/{$iconset}/16x16/locked.png' alt='Locked' /> Locked by {$lockedbyname}</div>";
 
     //echo "<pre>".print_r($incoming,true)."</pre>";
     $usql = "SELECT * FROM updates WHERE id='{$incoming->updateid}'";
