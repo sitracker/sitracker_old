@@ -320,10 +320,18 @@ if ($menu != 'hide')
 {
     if ($_REQUEST['win']=='incomingview')
     {
-        echo "<a class='barlink' href='#'>Unlock</a> | ";
-        echo "<a class='barlink' href='#'>Assign</a> | ";
-        echo "<a class='barlink' href='#'>Create</a> | ";
-        echo "<a class='barlink' href='#'>Delete</a>";
+        $insql = "SELECT emailfrom, contactid, updateid, id, timestamp 
+                FROM tempincoming, updates
+                WHERE id={$id}
+                AND tempincoming.incidentid=updates";
+        $query = mysql_query($insql);
+        while($inupdate = mysql_fetch_object($query))
+        {
+            echo "<a class='barlink' href='unlock_update.php?id={$id}'>Unlock</a> | ";
+            echo "<a class='barlink' href='#'>Assign</a> | ";
+            echo "<a class='barlink' href='add_incident.php?action=findcontact&updateid={$id}&search_string={$inupdate->emailfrom}&contactid={$inupdate->contactid}'>Create</a> | ";
+            echo "<a href='#'>Delete</a>";
+        }
     }
     elseif (incident_status($id) != 2)
     {
