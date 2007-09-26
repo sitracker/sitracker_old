@@ -138,6 +138,20 @@ switch ($action)
         confirmation_page("2", "view_task.php?id={$id}", "<h2>Task marked complete successfully</h2><p align='center'>Please wait while you are redirected...</p>");
     break;
 
+    case 'delete':
+        $sql = "DELETE FROM tasks ";
+        $sql .= "WHERE id='$id' LIMIT 1";
+        mysql_query($sql);
+        if (mysql_error()) trigger_error(mysql_error(),E_USER_ERROR);
+
+        $sql = "DELETE FROM notes ";
+        $sql .= "WHERE link=10 AND refid='$id' ";
+        mysql_query($sql);
+        if (mysql_error()) trigger_error(mysql_error(),E_USER_ERROR);
+
+        confirmation_page("2", "view_task.php?id={$id}", "<h2>Task deleted successfully</h2><p align='center'>Please wait while you are redirected...</p>");
+    break;
+
     case '':
     default:
         include('htmlheader.inc.php');
