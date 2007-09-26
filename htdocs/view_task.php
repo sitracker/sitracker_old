@@ -86,6 +86,7 @@ if (mysql_num_rows($result) >= 1)
         echo "</td></tr>";
         echo "</table>";
         echo "<p align='center'><a href='edit_task.php?id={$id}'>Edit Task</a>";
+        if ($task->owner != $sit[2]) echo " | <a href='edit_task.php?id={$id}&amp;action=delete'>Delete Task</a>";
         if ($task->completion < 100) echo " | <a href='edit_task.php?id={$id}&amp;action=markcomplete'>Mark Complete</a>";
         echo "</p>";
 
