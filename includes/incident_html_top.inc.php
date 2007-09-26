@@ -323,7 +323,7 @@ if ($menu != 'hide')
         $insql = "SELECT emailfrom, contactid, updateid, tempincoming.id, timestamp
                 FROM tempincoming, updates
                 WHERE tempincoming.id={$id}
-                AND tempincoming.incidentid=updates.incidentid";
+                AND tempincoming.updateid=updates.id";
         $query = mysql_query($insql);
         if (mysql_error()) trigger_error(mysql_error(),E_USER_WARNING);
         while($inupdate = mysql_fetch_object($query))
