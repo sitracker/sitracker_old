@@ -86,16 +86,17 @@ if (mysql_error()) trigger_error(mysql_error(),E_USER_ERROR);
 
 if (mysql_num_rows($result) >=1 )
 {
+    $filter=array('show' => $show);
     echo "<table align='center'>";
     echo "<tr>";
-    if ($user == $sit[2]) echo colheader('distribution', "<img src='{$CONFIG['application_webpath']}images/icons/{$iconset}/16x16/private.png' width='16' height='16' title='Public/Private' alt='Private' style='border: 0px;' />", $sort, $order);
-    echo colheader('id', 'ID', $sort, $order);
-    echo colheader('name', 'Task', $sort, $order);
-    echo colheader('priority', 'Priority', $sort, $order);
-    echo colheader('completion', 'Completion', $sort, $order);
-    echo colheader('startdate', 'Start Date', $sort, $order);
-    echo colheader('duedate', 'Due Date', $sort, $order);
-    if ($show=='completed') echo colheader('enddate', 'End Date', $sort, $order);
+    if ($user == $sit[2]) echo colheader('distribution', "<img src='{$CONFIG['application_webpath']}images/icons/{$iconset}/16x16/private.png' width='16' height='16' title='Public/Private' alt='Private' style='border: 0px;' />", $sort, $order, $filter);
+    echo colheader('id', 'ID', $sort, $order, $filter);
+    echo colheader('name', 'Task', $sort, $order, $filter);
+    echo colheader('priority', 'Priority', $sort, $order, $filter);
+    echo colheader('completion', 'Completion', $sort, $order, $filter);
+    echo colheader('startdate', 'Start Date', $sort, $order, $filter);
+    echo colheader('duedate', 'Due Date', $sort, $order, $filter);
+    if ($show=='completed') echo colheader('enddate', 'End Date', $sort, $order, $filter);
     echo "</tr>\n";
     $shade='shade1';
     while ($task = mysql_fetch_object($result))
