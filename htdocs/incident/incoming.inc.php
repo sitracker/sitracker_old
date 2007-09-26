@@ -42,7 +42,7 @@ while ($incoming = mysql_fetch_object($result))
     else
         $lockedby = "you";
 
-    echo "<div class='detailinfo'>";
+    echo "<div class='detailinfo'><img src='{$CONFIG['application_webpath']}images/icons/{$iconset}/16x16/locked.png' alt='Locked' /> ";
     if (!empty($incoming->reason)) echo "<div class='detaildate'>{$incoming->reason}</div>";
     echo "Locked by: {$lockedby}</div>";
 
