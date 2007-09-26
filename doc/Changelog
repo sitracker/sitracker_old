@@ -148,6 +148,7 @@ Changes in v3.30 - Unreleased
 * Fixed some character set issues, especially visible with uk pound sign etc.
 * Fixed bug with the storage of sent emails with text that looked like html tags
 * Added interface to add new feedback forms, including menu links
+* Completed tasks can now be deleted by their owner
 * Fixed issue surrounding browse_feedback when no feedback forms defined (see above)
 * Removed a lot of old unused code
 * Plus many more minor changes and fixes
