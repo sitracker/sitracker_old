@@ -49,12 +49,22 @@ function generate_row($update)
     $html_row.="<td width='20%'>";
     if (!empty($update['contactid']) AND strtolower($update['fromaddr'])==strtolower(contact_email($update['contactid'])))
     {
-        $html_row .= contact_realname($update['contactid']);
+        $contact_realname = contact_realname($update['contactid']);
+        $html_row .= $contact_realname;
         $html_row .= " of ".contact_site($update['contactid']);
-        $html_row .= "<br />\n";
+        if ($update['emailfrom'] != $contact_realname)
+        {
+            $html_row .= "<br />\n";
+            $html_row.= htmlentities($update['emailfrom'],ENT_QUOTES, 'UTF-8');
+        }
     }
-    else $html_row .= "{$update['fromaddr']}<br />\n";
-    $html_row.= htmlentities($update['emailfrom'],ENT_QUOTES, 'UTF-8')."</td>";
+    else
+    {
+        $html_row .= "{$update['fromaddr']}<br />\n";
+        $html_row.= htmlentities($update['emailfrom'],ENT_QUOTES, 'UTF-8');
+    }
+    $html_row .= "</td>";
+
     $html_row.="<td width='20%'><a href=\"javascript:incident_details_window('{$update['tempid']}','incomingview');\" id='update{$update['id']}' class='info' style='cursor:help;'>";
 //     $html_row.="<td width='20%'><a href=\"javascript:void();\" id='update{$update['id']}' class='info' style='cursor:help;'>";
     if (empty($update['subject'])) $update['subject']='Untitled';
