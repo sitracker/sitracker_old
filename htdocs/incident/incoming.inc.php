@@ -22,10 +22,30 @@ $incomingid = cleanvar($_REQUEST['id']);
 $sql = "SELECT * FROM tempincoming WHERE id='{$incomingid}'";
 $result = mysql_query($sql);
 if (mysql_error()) trigger_error(mysql_error(),E_USER_ERROR);
+$action = cleanvar($_REQUEST['action']);
 
 while ($incoming = mysql_fetch_object($result))
 {
-//     echo "<pre>".print_r($incoming,true)."</pre>";
+    if(!$incoming->locked)
+    {
+        //it's not locked, lock for this user
+        $lockeduntil=date('Y-m-d H:i:s',$now+$CONFIG['record_lock_delay']);
+        $sql = "UPDATE tempincoming SET locked='{$sit[2]}', lockeduntil='{$lockeduntil}' WHERE tempincoming.id='{$incomingid}' AND (locked = 0 OR locked IS NULL)";
+        $result = mysql_query($sql);
+        if (mysql_error()) trigger_error("MySQL Query Error ".mysql_error(), E_USER_ERROR);
+        $lockedby = "you";
+    }
+    elseif($incoming->locked != $sit[2])
+    {
+        $lockedby = $row->locked;
+    }
+    else
+        $lockedby = "you";
+    
+    echo "<p>Locked by: $lockedby</p>";
+    echo "<p>Reason: ".$incoming->reason."</p>";
+
+    //echo "<pre>".print_r($incoming,true)."</pre>";
     $usql = "SELECT * FROM updates WHERE id='{$incoming->updateid}'";
     $uresult = mysql_query($usql);
     while ($update = mysql_fetch_object($uresult))
