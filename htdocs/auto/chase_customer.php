@@ -87,11 +87,11 @@ if($CONFIG['auto_chase'] == TRUE)
                 if($obj_update->type == 'auto_chase_email' AND  (($obj->timeofnextaction == 0 AND calculate_working_time($obj_update->timestamp, $now) >= $CONFIG['chase_phone_minutes']) OR ($obj->timeofnextaction != 0 AND calculate_working_time($obj->timeofnextupdate, $now) >= $CONFIG['chase_phone_minutes'])))
 
                 {
-                    $sql_insert = "INSERT INTO updates (incidentid, userid, type, bodytext, timestamp, customervisibility) VALUES ('{$obj_update->incidentid}','{$sit['2']}','auto_chase_phone','Please phone the customer to get an update on this call as {$CONFIG['chase_phone_minutes']} have passed since the auto chase email was sent. Once you have done this please use the update type \"Chased customer - phone\"','{$now}','hide')";
+                    $sql_insert = "INSERT INTO updates (incidentid, userid, type, bodytext, timestamp, customervisibility) VALUES ('{$obj_update->incidentid}','{$sit['2']}','auto_chase_phone','Status: Awaiting Customer Action -&gt; <b>Active</b><hr>Please phone the customer to get an update on this call as {$CONFIG['chase_phone_minutes']} have passed since the auto chase email was sent. Once you have done this please use the update type \"Chased customer - phone\"','{$now}','hide')";
                     mysql_query($sql_insert);
                     if (mysql_error()) trigger_error("MySQL Query Error ".mysql_error(), E_USER_ERROR);
 
-                    $sql_update = "UPDATE incidents SET lastupdated = '{$now}', nextactiontime = 0 WHERE id = {$obj->id}";
+                    $sql_update = "UPDATE incidents SET lastupdated = '{$now}', nextactiontime = 0, status = 1 WHERE id = {$obj->id}";
                     mysql_query($sql_update);
                     if (mysql_error()) trigger_error("MySQL Query Error ".mysql_error(), E_USER_ERROR);
                 }
@@ -102,7 +102,8 @@ if($CONFIG['auto_chase'] == TRUE)
                 //if($obj_update->type == 'auto_chased_phone' AND $obj_update->timestamp <= ($now-$CONFIG['chase_manager_minutes']*60))
                 if($obj_update->type == 'auto_chased_phone' AND (($obj->timeofnextaction == 0 AND calculate_working_time($obj_update->timestamp, $now) >= $CONFIG['chase_manager_minutes']) OR ($obj->timeofnextaction != 0 AND calculate_working_time($obj->timeofnextupdate, $now) >= $CONFIG['chase_manager_minutes'])))
                 {
-                    $update = "Please phone the customers MANAGER to get an update on this call as ".$CONFIG['chase_manager_minutes']." have passed since the auto chase email was sent.<br />";
+                    $update = "Status: Awaiting Customer Action -&gt; <b>Active</b><hr>";
+                    $update .= "Please phone the customers MANAGER to get an update on this call as ".$CONFIG['chase_manager_minutes']." have passed since the auto chase email was sent.<br />";
                     $update .= "The manager is <a href='contact_details.php?id={$obj->managerid}'>{$obj->forenames} {$obj->surname}</a><br />";
                     $update .= " Once you have done this please email the actions to the customer and select the \"Was this a customer chase?\"'";
 
@@ -110,7 +111,7 @@ if($CONFIG['auto_chase'] == TRUE)
                     mysql_query($sql_insert);
                     if (mysql_error()) trigger_error("MySQL Query Error ".mysql_error(), E_USER_ERROR);
 
-                    $sql_update = "UPDATE incidents SET lastupdated = '{$now}', nextactiontime = 0 WHERE id = {$obj->id}";
+                    $sql_update = "UPDATE incidents SET lastupdated = '{$now}', nextactiontime = 0, status = 1 WHERE id = {$obj->id}";
                     mysql_query($sql_update);
                     if (mysql_error()) trigger_error("MySQL Query Error ".mysql_error(), E_USER_ERROR);
                 }
@@ -121,11 +122,11 @@ if($CONFIG['auto_chase'] == TRUE)
                 //if($obj_update->type == 'auto_chased_manager' AND $obj_update->timestamp <= ($now-$CONFIG['chase_managers_manager_minutes']*60))
                 if($obj_update->type == 'auto_chased_manager' AND (($obj->timeofnextaction == 0 AND calculate_working_time($obj_update->timestamp, $now) >= $CONFIG['chase_amanager_manager_minutes']) OR ($obj->timeofnextaction != 0 AND calculate_working_time($obj->timeofnextupdate, $now) >= $CONFIG['chase_amanager_manager_minutes'])))
                 {
-                    $sql_insert = "INSERT INTO updates (incidentid, userid, type, bodytext, timestamp, customervisibility) VALUES ('{$obj_update->incidentid}','{$sit['2']}','auto_chase_managers_manager','Please phone the customers managers manager to get an update on this call as {$CONFIG['chase_manager_minutes']} have passed since the auto chase email was sent. Once you have done this please email the actions to the customer and manager and select the \"Was this a manager chase?\"','{$now}','hide')";
+                    $sql_insert = "INSERT INTO updates (incidentid, userid, type, bodytext, timestamp, customervisibility) VALUES ('{$obj_update->incidentid}','{$sit['2']}','auto_chase_managers_manager','Status: Awaiting Customer Action -&gt; <b>Active</b><hr>Please phone the customers managers manager to get an update on this call as {$CONFIG['chase_manager_minutes']} have passed since the auto chase email was sent. Once you have done this please email the actions to the customer and manager and select the \"Was this a manager chase?\"','{$now}','hide')";
                     mysql_query($sql_insert);
                     if (mysql_error()) trigger_error("MySQL Query Error ".mysql_error(), E_USER_ERROR);
 
-                    $sql_update = "UPDATE incidents SET lastupdated = '{$now}', nextactiontime = 0 WHERE id = {$obj->id}";
+                    $sql_update = "UPDATE incidents SET lastupdated = '{$now}', nextactiontime = 0, status = 1 WHERE id = {$obj->id}";
                     mysql_query($sql_update);
                     if (mysql_error()) trigger_error("MySQL Query Error ".mysql_error(), E_USER_ERROR);
                 }
