@@ -71,6 +71,63 @@ function feedback_html_rating($name, $required, $options, $answer='')
 }
 
 
+function feedback_html_options($name, $required, $options, $answer='')
+{
+    $option_list=explode('{@}', $options);
+    $option_count=count($option_list);
+    if ($option_count > 3)
+    {
+        $html .= "<select name='$name'>\n";
+        foreach($option_list AS $key=>$option)
+        {
+            $value=strtolower(trim(str_replace(' ', '_', $option)));
+            $html .= "<option value='$value'";
+            if ($answer==$value) $html .= " selected='selected'";
+            $html .= ">".trim($option)."</option>\n";
+        }
+        $html .= "</select>\n";
+    }
+    else
+    {
+        foreach($option_list AS $key=>$option)
+        {
+            $value=strtolower(trim(str_replace(' ', '_', $option)));
+            $html .= "<input type='radio' name='$name' value='$value'";
+            if ($answer==$value) $html .= " selected='selected'";
+            $html .= " />".trim($option)." &nbsp; \n";
+        }
+    }
+    return $html;
+}
+
+
+
+function html_multioptions($name, $required, $options)
+{
+    $option_list=explode('{@}', $options);
+    $option_count=count($option_list);
+    if ($option_count > 3)
+    {
+        $html .= "<select name='{$name}[]' multiple='multiple'>\n";
+        foreach($option_list AS $key=>$option)
+        {
+            $value=strtolower(trim(str_replace(' ', '_', $option)));
+            $html .= "<option value='$value'>".trim($option)."</option>\n";
+        }
+        $html .= "</select>\n";
+    }
+    else
+    {
+        foreach($option_list AS $key=>$option)
+        {
+            $value=strtolower(trim(str_replace(' ', '_', $option)));
+            $html .= "<input type='checkbox' name='$name' value='$value' />".trim($option)." &nbsp; \n";
+        }
+    }
+    return $html;
+}
+
+
 function feedback_html_text($name, $required, $options, $answer='')
 {
     $option_list=explode('{@}', $options);
