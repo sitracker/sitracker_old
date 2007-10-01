@@ -86,10 +86,15 @@ if (mysql_error()) trigger_error(mysql_error(),E_USER_ERROR);
 
 if (mysql_num_rows($result) >=1 )
 {
-    $filter=array('show' => $show);
+    if($show) $filter=array('show' => $show);
     echo "<table align='center'>";
     echo "<tr>";
-    if ($user == $sit[2]) echo colheader('distribution', "<img src='{$CONFIG['application_webpath']}images/icons/{$iconset}/16x16/private.png' width='16' height='16' title='Public/Private' alt='Private' style='border: 0px;' />", $sort, $order, $filter);
+    if ($user == $sit[2]) 
+    {
+        echo colheader('distribution', "<img src='{$CONFIG['application_webpath']}images/icons/{$iconset}/16x16/private.png' width='16' height='16' title='Public/Private' alt='Private' style='border: 0px;' />", $sort, $order, $filter);
+    }
+    else $filter['user'] = $user;
+
     echo colheader('id', 'ID', $sort, $order, $filter);
     echo colheader('name', 'Task', $sort, $order, $filter);
     echo colheader('priority', 'Priority', $sort, $order, $filter);
