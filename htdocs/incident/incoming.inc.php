@@ -16,8 +16,17 @@ if (realpath(__FILE__) == realpath($_SERVER['SCRIPT_FILENAME']))
 {
     exit;
 }
-
 $incomingid = cleanvar($_REQUEST['id']);
+
+if($_REQUEST['action'] == "updatereason")
+{
+    $newreason = cleanvar($_REQUEST['newreason']);
+    $update = "UPDATE tempincoming SET reason='{$newreason}' WHERE id={$incomingid}";
+    $result = mysql_query($update);
+    if (mysql_error()) trigger_error(mysql_error(),E_USER_ERROR);
+
+}
+
 
 $sql = "SELECT * FROM tempincoming WHERE id='{$incomingid}'";
 $result = mysql_query($sql);
@@ -48,7 +57,23 @@ while ($incoming = mysql_fetch_object($result))
         $lockedbyname = "you";
 
     echo "<div class='detailinfo'>";
-    if (!empty($incoming->reason)) echo "<div class='detaildate'>{$incoming->reason}</div>";
+    if (!empty($incoming->reason))
+    {
+        if($lockedbyname == "you")
+        {
+            echo "<div class='detaildate'>
+                    <form method='POST' action='{$_SERVER['PHP_SELF']}?id={$incomingid}&win=incomingview&action=updatereason'>
+                    <input name='newreason' value='{$incoming->reason}'>
+                    <input type='submit' value='Save'>
+                    </form>
+                </div>";
+        }
+        else
+        {
+            echo "<div class='detaildate'>{$incoming->reason}</div>";
+        }
+    }
+    
     echo "<img src='{$CONFIG['application_webpath']}images/icons/{$iconset}/16x16/locked.png' alt='Locked' /> Locked by {$lockedbyname}</div>";
 
     //echo "<pre>".print_r($incoming,true)."</pre>";
