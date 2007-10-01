@@ -20,8 +20,9 @@ require('auth.inc.php');
 
 // External variables
 $file = cleanvar($_REQUEST['file']);
+$action = cleanvar($_REQUEST['action']);
 
-if (empty($file))
+if (empty($action))
 {
     include('htmlheader.inc.php');
     ?>
@@ -78,21 +79,25 @@ if (empty($file))
     </td>
     </tr>
     </table>
-    <p align='center'><input type="submit" value="publish" /></p>
+    <p align='center'><input type="submit" value="Publish" /><input type="hidden" name="action" value="publish" /></p>
+    <p align='center'><a href='ftp_list_files.php'>Back to list</a></p>
     </form>
     <?php
     include('htmlfooter.inc.php');
 }
 else
 {
+//     echo "<pre>".print_r($_REQUEST,true)."</pre>";
+//     echo "<pre>".print_r($_FILES,true)."</pre>";
 
     // TODO v3.2x ext variables
+    $file_name = $_FILES['file']['name'];
 
     // receive the uploaded file to a temp directory on the local server
-    if ($file!='')
+    if ($_FILES['file']['error']==0)
     {
         $filepath = $CONFIG['attachment_fspath'].$file_name;
-        $mv=move_uploaded_file($file, $filepath);
+        $mv=move_uploaded_file($_FILES['file']['tmp_name'], $filepath);
         if (!mv) throw_error('!Error: Problem moving uploaded file from temp directory:',$filepath);
 
         if (!file_exists($filepath)) throw_error("Error the temporary upload file ($file) was not found at: ",$filepath);
@@ -112,7 +117,7 @@ else
         $conn_id = ftp_connect($CONFIG['ftp_hostname']);
 
         // login with username and password
-        $login_result = ftp_login($conn_id, $CONFIG['ftp_user_name'], $CONFIG['ftp_user_pass']);
+        $login_result = ftp_login($conn_id, $CONFIG['ftp_username'], $CONFIG['ftp_password']);
 
         // check connection
         if ((!$conn_id) || (!$login_result))
@@ -135,7 +140,7 @@ else
         // check upload status
         if (!$upload)
         {
-            throw_error("Ftp upload has failed!",'');
+            trigger_error("FTP upload has failed!",E_USER_ERROR);
         }
         else
         {
@@ -155,6 +160,7 @@ else
         // close the FTP stream
         ftp_quit($conn_id);
     }
+    else echo "<p class='error'>An error has occurred.</p>";
 
 }
 ?>

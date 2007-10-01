@@ -34,9 +34,10 @@ function upload_window()
         window.open(URL, "upload_window", "toolbar=yes,status=yes,menubar=no,scrollbars=yes,resizable=yes,width=700,height=600");
 }
 </script>
-<h2><?php echo $title  ?></h2>
-
-<p align='center'><a href="javascript:upload_window();">Upload a new file</a></p>
+<?php 
+echo "<h2>$title</h2>";  
+if (!empty($CONFIG['ftp_hostname']) AND !empty($CONFIG['ftp_username'])) echo "<p align='center'><a href='ftp_upload_file.php'>Upload a new file</a></p>";
+?>
 
 <table summary='files' align='center'>
 <tr>
