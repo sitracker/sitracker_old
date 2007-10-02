@@ -218,7 +218,7 @@ function setup_exec_sql($sqlquerylist)
     return $html;
 }
 
-
+session_name($CONFIG['session_name']);
 session_start();
 
 echo "<!DOCTYPE html PUBLIC \"-//W3C//DTD XHTML 1.0 Transitional//EN\"\n";
@@ -533,6 +533,7 @@ switch ($_REQUEST['action'])
                             $_SESSION['adminpw']='';
                         }
                         echo "<p>SiT! v".number_format($installed_version,2)." is installed and ready to <a href='index.php'>run</a>.</p>";
+                        if ($_SESSION['userid']==1) echo "<p>As administrator you can <a href='{$_SERVER['PHP_SELF']}?action=reconfigure'>reconfigure</a> SiT!</p>";
                     }
                 }
             }
