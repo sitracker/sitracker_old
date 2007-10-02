@@ -79,7 +79,9 @@ while ($incoming = mysql_fetch_object($result))
     while ($update = mysql_fetch_object($uresult))
     {
         $updatetime = readable_date($update->timestamp);
-        echo "<div class='detailhead'><div class='detaildate'>{$updatetime}</div>From <strong>".stripslashes($incoming->emailfrom)."</strong></div>";
+        echo "<div class='detailhead'><div class='detaildate'>{$updatetime}</div>";
+        echo "<img src='{$CONFIG['application_webpath']}images/icons/{$iconset}/16x16/emailin.png' alt='' /> ";
+        echo "From <strong>".stripslashes($incoming->emailfrom)."</strong></div>";
         echo "<div class='detailentry'>";
         echo parse_updatebody($update->bodytext);
         echo "</div>";
