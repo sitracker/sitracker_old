@@ -24,16 +24,15 @@ if($_REQUEST['action'] == "updatereason")
     $update = "UPDATE tempincoming SET reason='{$newreason}' WHERE id={$incomingid}";
     $result = mysql_query($update);
     if (mysql_error()) trigger_error(mysql_error(),E_USER_ERROR);
-
+    unset($result);
 }
 
-
+$action = cleanvar($_REQUEST['action']);
 $sql = "SELECT * FROM tempincoming WHERE id='{$incomingid}'";
 $result = mysql_query($sql);
 if (mysql_error()) trigger_error(mysql_error(),E_USER_ERROR);
-$action = cleanvar($_REQUEST['action']);
 
-while ($incoming = mysql_fetch_object($result))
+while ($incoming = @mysql_fetch_object($result))
 {
     if(!$incoming->locked)
     {
@@ -60,7 +59,7 @@ while ($incoming = mysql_fetch_object($result))
     if($lockedbyname == "you")
     {
         echo "<div class='detaildate'>
-                <form method='POST' action='{$_SERVER['PHP_SELF']}?id={$incomingid}&win=incomingview&action=updatereason'>
+                <form method='POST' action='{$_SERVER['PHP_SELF']}?id={$incomingid}&win=incomingcreate&action=updatereason'>
                 Reason: <input name='newreason' type='text' value='{$incoming->reason}' size='25' maxlength='100' />
                 <input type='submit' value='Save' />
                 </form>
@@ -87,5 +86,7 @@ while ($incoming = mysql_fetch_object($result))
         echo "</div>";
     }
 }
+unset($result);
+unset($uresult);
 
 ?>

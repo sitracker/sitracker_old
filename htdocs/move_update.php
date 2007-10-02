@@ -36,7 +36,7 @@ if ($incidentid=='')
     <div align='center'>
     <form action="<?php echo $_SERVER['PHP_SELF']; ?>" method='post'>
     To Incident ID: <input type="text" name="incidentid" value="<?php echo $incidentid; ?>" />
-    <input type="submit" value="move" /><br />
+    <input type="submit" value="Move" /><br />
     Check here <input type="checkbox" name="send_email" checked='checked' value="yes" /> to send an email reply to the customer.
     <input type="hidden" name="updateid" value="<?php echo $updateid; ?>" />
     </form>
@@ -49,10 +49,11 @@ if ($incidentid=='')
 
     while ($updates = mysql_fetch_array($result))
     {
-        $update_timestamp_string = date("D jS M Y @ g:i A", $updates["timestamp"]);
+        $update_timestamp_string = date($CONFIG['dateformat_datetime'], $updates["timestamp"]);
         ?>
+        <br />
         <table align='center' width="95%">
-        <tr><td class='shade1' width="*">
+        <tr><th>
         <?php
         // Header bar for each update
         switch ($updates['type'])
@@ -127,54 +128,11 @@ if ($incidentid=='')
             break;
         }
         if ($updates['nextaction']!='') echo " Next Action: <strong>".$updates['nextaction'].'</strong>';
-        ?>
-        </td><td align='right' class='shade1' width='200'><strong><?php echo $update_timestamp_string ?></strong>
-        </td></tr>
-        </table>
-        <table align='center' border='0' width="95%">
-        <tr><td class='shade2' width="100%">
-        <?php
+
+        echo " - ".$update_timestamp_string."</th></tr>";
+        echo "<tr><td class='shade2' width='100%'>";
         $updatecounter++;
-        // strip tags from update body (convert to html entities)
-        $updatebodytext = $updates['bodytext'];
-
-        $updatebodytext = str_replace( "<b>", "[[b]]", $updatebodytext );
-        $updatebodytext = str_replace( "</b>", "[[/b]]", $updatebodytext );
-        $updatebodytext = str_replace( "<B>", "[[b]]", $updatebodytext );
-        $updatebodytext = str_replace( "</B>", "[[/b]]", $updatebodytext );
-        $updatebodytext = str_replace( "<i>", "[[i]]", $updatebodytext );
-        $updatebodytext = str_replace( "</i>", "[[/i]]", $updatebodytext );
-        $updatebodytext = str_replace( "<I>", "[[i]]", $updatebodytext );
-        $updatebodytext = str_replace( "</I>", "[[/i]]", $updatebodytext );
-        $updatebodytext = str_replace( "<u>", "[[u]]", $updatebodytext );
-        $updatebodytext = str_replace( "</u>", "[[/u]]", $updatebodytext );
-        $updatebodytext = str_replace( "<U>", "[[u]]", $updatebodytext );
-        $updatebodytext = str_replace( "</U>", "[[/u]]", $updatebodytext );
-        $updatebodytext = str_replace( "&lt;", "[[lt]]", $updatebodytext );
-        $updatebodytext = str_replace( "&gt;", "[[gt]]", $updatebodytext );
-
-        $updatebodytext=htmlspecialchars($updatebodytext);
-        $updatebodytext = preg_replace("/\[\[att\]\](.*?)\[\[\/att\]\]/",
-                               "<a href = '/attachments/{$updateid}/{$updates["timestamp"]}/$1'>$1</a>",
-                               $updatebodytext);
-        // Bold, Italic, Underline
-        $updatebodytext = bbcode($updatebodytext);
-        $updatebodytext = str_replace( "[[b]]", "<b>", $updatebodytext );
-        $updatebodytext = str_replace( "[[/b]]", "</b>", $updatebodytext );
-        $updatebodytext = str_replace( "[[B]]", "<b>", $updatebodytext );
-        $updatebodytext = str_replace( "[[/B]]", "</b>", $updatebodytext );
-        $updatebodytext = str_replace( "[[i]]", "<i>", $updatebodytext );
-        $updatebodytext = str_replace( "[[/i]]", "</i>", $updatebodytext );
-        $updatebodytext = str_replace( "[[I]]", "<i>", $updatebodytext );
-        $updatebodytext = str_replace( "[[/I]]", "</i>", $updatebodytext );
-        $updatebodytext = str_replace( "[[u]]", "<u>", $updatebodytext );
-        $updatebodytext = str_replace( "[[/u]]", "</u>", $updatebodytext );
-        $updatebodytext = str_replace( "[[U]]", "<u>", $updatebodytext );
-        $updatebodytext = str_replace( "[[/U]]", "</u>", $updatebodytext );
-        $updatebodytext = str_replace( "[[lt]]", "&lt;", $updatebodytext );
-        $updatebodytext = str_replace( "[[gt]]", "&gt;", $updatebodytext );
-        if ($updatebodytext=='') $updatebodytext='&nbsp;';
-        echo nl2br($updatebodytext);
+        echo parse_updatebody($updates['bodytext']);
         ?>
         </td></tr>
         </table>

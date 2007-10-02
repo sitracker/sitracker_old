@@ -248,9 +248,9 @@ $sql .= "contacts.id AS contactid, contacts.notes AS contactnotes ";
 $sql .= "FROM incidents, contacts ";
 $sql .= "WHERE (incidents.id='{$incidentid}' AND incidents.contact=contacts.id) ";
 $sql .= " OR incidents.contact=NULL ";
-$result = mysql_query($sql);
+$incidentresult = mysql_query($sql);
 if (mysql_error()) trigger_error("MySQL Query Error ".mysql_error(), E_USER_ERROR);
-$incident = mysql_fetch_object($result);
+$incident = mysql_fetch_object($incidentresult);
 $sitesql = "SELECT name, notes FROM sites WHERE id = '{$incident->siteid}'";
 $siteresult = mysql_query($sitesql);
 if (mysql_error()) trigger_error(mysql_error(),E_USER_WARNING);
@@ -329,10 +329,14 @@ if ($menu != 'hide')
         while($inupdate = mysql_fetch_object($query))
         {
             echo "<a class='barlink' href='unlock_update.php?id={$id}'>Unlock</a> | ";
-            echo "<a class='barlink' href='#'>Assign</a> | ";
-            echo "<a class='barlink' href='add_incident.php?action=findcontact&amp;updateid={$id}&amp;search_string={$inupdate->emailfrom}&amp;contactid={$inupdate->contactid}'&amp;win=incomingview>Create</a> | ";
+            echo "<a class='barlink' href='move_update.php?updateid={$inupdate->updateid}&amp;incidentidnumber={$update['incidentid']}' target='top.opener'>Assign</a> | ";
+            echo "<a class='barlink' href='add_incident.php?action=findcontact&amp;updateid={$id}&amp;search_string={$inupdate->emailfrom}&amp;contactid={$inupdate->contactid}&amp;win=incomingcreate' target='top.opener'>Create</a> | ";
             echo "<a class='barlink' href='delete_update.php?updateid={$inupdate->updateid}&amp;tempid={$inupdate->id}&amp;timestamp={$inupdate->timestamp}'>Delete</a>";
         }
+    }
+    elseif ($_REQUEST['win']=='incomingcreate')
+    {
+        // Do nothing for now
     }
     elseif (incident_status($id) != 2)
     {
