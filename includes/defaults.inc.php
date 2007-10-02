@@ -189,7 +189,7 @@ $CONFIG['ext_esc_partners'] = array('novell' => array('name' => 'Novell',
 
 $CONFIG['no_feedback_contracts'] = array(1 => 2);
 
-$CONFIG['preferred_maintence'] = array(1 => "Dedicated");
+$CONFIG['preferred_maintenance'] = array(1 => "Dedicated");
 
 // Use an icon for specified tags, format: array('tag' => 'icon', 'tag2' => 'icon2')";
 $CONFIG['tag_icons'] = array ('redflag' => 'redflag', 'yellowflag' => 'yellowflag', 'blueflag' => 'blueflag', 'greenflag' => 'greenflag', 'whiteflag' => 'whiteflag', 'blackflag' => 'blackflag');

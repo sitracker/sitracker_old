@@ -32,6 +32,7 @@ $type = cleanvar($_REQUEST['type']);
 $maintid = cleanvar($_REQUEST['maintid']);
 $productid = cleanvar($_REQUEST['productid']);
 $producttext = cleanvar($_REQUEST['producttext']);
+$win=cleanvar($_REQUEST['win']);
 
 if (empty($action) OR $action=='showform')
 {
@@ -55,6 +56,7 @@ if (empty($action) OR $action=='showform')
         echo "<tr><th>Contact <img src='{$CONFIG['application_webpath']}images/icons/{$iconset}/16x16/contact.png' width='16' height='16' alt='' /></th><td>";
         //echo "<input type='text' name='search_string' size='30' value='{$query}' />\n";
         echo "<input dojoType='ComboBox' value='{$query}' dataUrl='autocomplete.php?action=contact' style='width: 300px;' name='search_string' />";
+        echo "<input type='hidden' name='win' value='{$win}' />";
         ?>
         <input name="submit" type="submit" value="Find Contact" />
         </td></tr>
@@ -102,6 +104,7 @@ elseif ($action=='findcontact')
     }
 
     $sql .= "ORDER by contacts.forenames, contacts.surname, productname, expirydate ";
+
     $result=mysql_query($sql);
     if (mysql_error()) trigger_error("MySQL Query Error ".mysql_error(), E_USER_ERROR);
     if (mysql_num_rows($result)>0)
@@ -131,7 +134,7 @@ elseif ($action=='findcontact')
         <?php
         function to_row($contactrow)
         {
-            global $now, $updateid;
+            global $now, $updateid, $CONFIG;
             $str = "";
             if ($contactrow['expirydate']<$now || $contactrow['term']=='yes') $class = 'expired';
             else $class = "shade2";
@@ -145,7 +148,7 @@ elseif ($action=='findcontact')
                 $str .=  "<td class='expired'>Zero remaining ({$contactrow['incidents_used']}/{$contactrow['incident_quantity']} Used)</td>";
             else
             {
-                $str .=  "<td><a href=\"{$_SERVER['PHP_SELF']}?action=incidentform&amp;type=support&amp;contactid=".$contactrow['contactid']."&amp;maintid=".$contactrow['maintenanceid']."&amp;producttext=".urlencode($contactrow['productname'])."&amp;productid=".$contactrow['productid']."&amp;updateid=$updateid&amp;siteid=".$contactrow['siteid']."\" onclick=\"return confirm_support();\">Add Incident</a> ";
+                $str .=  "<td><a href=\"{$_SERVER['PHP_SELF']}?action=incidentform&amp;type=support&amp;contactid=".$contactrow['contactid']."&amp;maintid=".$contactrow['maintenanceid']."&amp;producttext=".urlencode($contactrow['productname'])."&amp;productid=".$contactrow['productid']."&amp;updateid=$updateid&amp;siteid=".$contactrow['siteid']."&amp;win={$win}\" onclick=\"return confirm_support();\">Add Incident</a> ";
                 if ($contactrow['incident_quantity']==0) $str .=  "(Unlimited)";
                 else $str .=  "({$incidents_remaining} Left)";
             }
@@ -154,9 +157,8 @@ elseif ($action=='findcontact')
             $str .=  '<td>'.stripslashes($contactrow['name']).'</td>';
             $str .=  '<td><strong>'.$contactrow['maintid'].'</strong>&nbsp;'.$contactrow['productname'].'</td>';
             $str .=  '<td>'.servicelevel_id2tag($contactrow['servicelevelid']).'</td>';
-            $str .=  '<td>'.date("jS M Y", $contactrow['expirydate']).'</td>';
+            $str .=  '<td>'.date($CONFIG['dateformat_date'], $contactrow['expirydate']).'</td>';
             $str .=  "</tr>\n";
-
             return $str;
         }
 
@@ -167,7 +169,8 @@ elseif ($action=='findcontact')
 
         while($contactrow=mysql_fetch_array($result))
         {
-            if(in_array(servicelevel_id2tag($contactrow['servicelevelid']), $CONFIG['preferred_maintence']))
+            if (empty($CONFIG['preferred_maintenance'])
+                OR in_array(servicelevel_id2tag($contactrow['servicelevelid']), $CONFIG['preferred_maintenance']))
             {
                 $str_prefered .= to_row($contactrow);
             }
@@ -179,11 +182,11 @@ elseif ($action=='findcontact')
 
         if(!empty($str_prefered))
         {
-            echo "<p><h3>Preferred</h3>";
+            echo "<h3>Preferred</h3>";
             echo "<table align='center'>";
             echo $headers;
             echo $str_prefered;
-            echo "</table></p>";
+            echo "</table>\n";
         }
 
         if(!empty($str_alternative))
@@ -192,7 +195,7 @@ elseif ($action=='findcontact')
             echo "<table align='center'>";
             echo $headers;
             echo $str_alternative;
-            echo "</table>";
+            echo "</table>\n";
             if(!empty($str_prefered)) echo "<p align='center'><strong>NOTE:</strong> You probably wish to log the incident under a preferred contract</p>";
         }
 
@@ -226,7 +229,7 @@ elseif ($action=='findcontact')
                 $site_incident_pool=db_read_column('freesupport', 'sites', $contactrow['siteid']);
                 if ($site_incident_pool > 0)
                 {
-                    echo "<td><a href=\"{$_SERVER['PHP_SELF']}?action=incidentform&amp;type=free&amp;contactid=".$contactrow['contactid']."&amp;updateid=$updateid\" onclick=\"return confirm_free();\">";
+                    echo "<td><a href=\"{$_SERVER['PHP_SELF']}?action=incidentform&amp;type=free&amp;contactid=".$contactrow['contactid']."&amp;updateid=$updateid&amp;win={$win}\" onclick=\"return confirm_free();\">";
                     echo "Add Site Support Incident</a> ({$site_incident_pool} Left)</td>";
                 }
                 else
@@ -245,7 +248,7 @@ elseif ($action=='findcontact')
             echo "<h3>No matching contacts found</h3>";
             echo "<p align='center'><a href=\"add_contact.php\">Add a contact</a></p>";
         }
-        echo "<p align='center'><a href=\"{$_SERVER['PHP_SELF']}?updateid=$updateid\">Search again</a></p>";
+        echo "<p align='center'><a href=\"{$_SERVER['PHP_SELF']}?updateid={$updateid}&amp;win={$win}\">Search again</a></p>";
         include('htmlfooter.inc.php');
     }
     else
@@ -256,7 +259,7 @@ elseif ($action=='findcontact')
         if (!empty($search_string)) echo "'$search_string' ";
         if (!empty($contactid)) echo "contact id $contactid ";
         echo "</h2>\n";
-        echo "<p align='center'><a href=\"add_incident.php?updateid=$updateid\">Try again</a></p>";
+        echo "<p align='center'><a href=\"add_incident.php?updateid=$updateid&amp;win={$win}\">Try again</a></p>";
         // Select the contact from the list of contacts as well
         $sql = "SELECT *, contacts.id AS contactid FROM contacts, sites WHERE contacts.siteid=sites.id ";
         if (empty($contactid))
@@ -286,7 +289,7 @@ elseif ($action=='findcontact')
                 $site_incident_pool=db_read_column('freesupport', 'sites', $contactrow['siteid']);
                 if ($site_incident_pool > 0)
                 {
-                    echo "<td><a href=\"{$_SERVER['PHP_SELF']}?action=incidentform&amp;type=free&amp;contactid=".$contactrow['contactid']."&amp;updateid=$updateid\" onclick=\"return confirm_free();\">";
+                    echo "<td><a href=\"{$_SERVER['PHP_SELF']}?action=incidentform&amp;type=free&amp;contactid=".$contactrow['contactid']."&amp;updateid=$updateid&amp;win={$win}\" onclick=\"return confirm_free();\">";
                     echo "Add Site Support Incident</a> ({$site_incident_pool})</td>";
                 }
                 else echo "<td class='expired'>Zero remaining</td>";
@@ -335,7 +338,7 @@ elseif ($action=='incidentform')
     if (!empty($updateid)) echo "<input type='hidden' name='updateid' value='$updateid' />";
     ?>
     <table align='center' class='vertical' width='60%'>
-    <tr><th>Name:<br /><a href="edit_contact.php?action=edit&contact=<?php echo $contactid; ?>">Edit</a></th><td><h3><?php echo contact_realname($contactid); ?></h3></td></tr>
+    <tr><th>Name:<br /><a href="edit_contact.php?action=edit&amp;contact=<?php echo $contactid; ?>">Edit</a></th><td><h3><?php echo contact_realname($contactid); ?></h3></td></tr>
     <tr><th>Email:</th><td><?php echo contact_email($contactid); ?></td></tr>
     <tr><th>Telephone:</th><td><?php echo contact_phone($contactid); ?></td></tr>
     <tr><th>Fax:</th><td><?php echo contact_fax($contactid); ?></td></tr>
@@ -408,7 +411,7 @@ elseif ($action=='incidentform')
         $updaterow=mysql_fetch_array($result);
         $mailed_subject=$updaterow['subject'];
 
-        echo "<tr><th>Incident Title>: <sup class='red'>*</sup></th><td><input name='incidenttitle' size='40' type='text' value='".htmlspecialchars($mailed_subject,ENT_QUOTES)."'></td></tr>\n";
+        echo "<tr><th>Incident Title: <sup class='red'>*</sup></th><td><input name='incidenttitle' size='40' type='text' value='".htmlspecialchars($mailed_subject,ENT_QUOTES)."'></td></tr>\n";
         echo "<tr><td colspan='2'>&nbsp;</td></tr>\n";
 
         echo "<tr><th>Problem Description:<br />This information was received in the email.  It is not editable.</th>";
@@ -451,7 +454,9 @@ elseif ($action=='incidentform')
     <td><input name="send_email" checked='checked' type="radio" value="no" />No <input name="send_email" type="radio" value="email" />Yes, "Re: Email" <input name="send_email" type="radio" value="call" />Yes, "Re: Call"</td></tr>
     <tr><th>Incident Priority:</th><td><?php echo priority_drop_down("priority", 1, 4, FALSE); ?> Based on the customers Business Impact</td></tr>
     </table>
-
+    <?php
+    echo "<input type='hidden' name='win' value='{$win}' />";
+    ?>
     <p align='center'><input name="submit" type="submit" value="Add Incident" /></p>
     </form>
     <?php
@@ -681,13 +686,13 @@ elseif ($action=='assign')
                 // display reassign link only if person is accepting or if the current user has 'reassign when not accepting' permission
                 if ($userrow['accepting']=='Yes')
                 {
-                    echo "<td align='right'><a href=\"{$_SERVER['PHP_SELF']}?action=reassign&userid=".$userrow['id']."&incidentid=$incidentid&nextaction=".urlencode($nextaction)."\" ";
+                    echo "<td align='right'><a href=\"{$_SERVER['PHP_SELF']}?action=reassign&amp;userid=".$userrow['id']."&amp;incidentid=$incidentid&amp;nextaction=".urlencode($nextaction)."&amp;win={$win}\" ";
                     // if ($priority >= 3) echo " onclick=\"alertform.submit();\"";
                     echo ">Assign To</a></td>";
                 }
                 elseif (user_permission($sit[2],40) OR $userrow['id']==$sit[2])
                 {
-                    echo "<td align='right'><a href=\"{$_SERVER['PHP_SELF']}?action=reassign&userid=".$userrow['id']."&incidentid=$incidentid&nextaction=".urlencode($nextaction)."\" ";
+                    echo "<td align='right'><a href=\"{$_SERVER['PHP_SELF']}?action=reassign&amp;userid=".$userrow['id']."&amp;incidentid=$incidentid&amp;nextaction=".urlencode($nextaction)."&amp;win={$win}\" ";
                     // if ($priority >= 3) echo " onclick=\"alertform.submit();\"";
                     echo ">Force To</a></td>";
                 }
