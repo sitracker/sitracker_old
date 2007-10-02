@@ -505,6 +505,8 @@ div.detaildate
     position: relative;
     top: 3px;
 }
+div.detaildate input[type=text] { color: #06377F; border: 1px dotted #06377F; background: transparent; }
+
 div.detailfoot
 {
     border: 1px solid black;
