@@ -57,23 +57,20 @@ while ($incoming = mysql_fetch_object($result))
         $lockedbyname = "you";
 
     echo "<div class='detailinfo'>";
-    if (!empty($incoming->reason))
+    if($lockedbyname == "you")
     {
-        if($lockedbyname == "you")
-        {
-            echo "<div class='detaildate'>
-                    <form method='POST' action='{$_SERVER['PHP_SELF']}?id={$incomingid}&win=incomingview&action=updatereason'>
-                    <input name='newreason' value='{$incoming->reason}'>
-                    <input type='submit' value='Save'>
-                    </form>
-                </div>";
-        }
-        else
-        {
-            echo "<div class='detaildate'>{$incoming->reason}</div>";
-        }
+        echo "<div class='detaildate'>
+                <form method='POST' action='{$_SERVER['PHP_SELF']}?id={$incomingid}&win=incomingview&action=updatereason'>
+                <input name='newreason' value='{$incoming->reason}'>
+                <input type='submit' value='Save'>
+                </form>
+            </div>";
     }
-    
+    else
+    {
+        echo "<div class='detaildate'>{$incoming->reason}</div>";
+    }
+
     echo "<img src='{$CONFIG['application_webpath']}images/icons/{$iconset}/16x16/locked.png' alt='Locked' /> Locked by {$lockedbyname}</div>";
 
     //echo "<pre>".print_r($incoming,true)."</pre>";
