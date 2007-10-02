@@ -312,7 +312,7 @@ if ($slaremain <> 0 AND $incident->status!=2)
 
 // Print a table showing summary details of the incident
 
-if ($_REQUEST['win']=='incomingview') echo "<h1 class='$class'>Incoming</h1>";
+if ($_REQUEST['win']=='incomingview') echo "<h1 class='review'>Incoming</h1>";
 else echo "<h1 class='$class'>{$title}: {$incidentid} - ".stripslashes($incident->title)."</h1>";
 
 echo "<div id='navmenu'>";
@@ -330,7 +330,7 @@ if ($menu != 'hide')
         {
             echo "<a class='barlink' href='unlock_update.php?id={$id}'>Unlock</a> | ";
             echo "<a class='barlink' href='#'>Assign</a> | ";
-            echo "<a class='barlink' href='add_incident.php?action=findcontact&updateid={$id}&search_string={$inupdate->emailfrom}&contactid={$inupdate->contactid}'>Create</a> | ";
+            echo "<a class='barlink' href='add_incident.php?action=findcontact&amp;updateid={$id}&amp;search_string={$inupdate->emailfrom}&amp;contactid={$inupdate->contactid}'&amp;win=incomingview>Create</a> | ";
             echo "<a class='barlink' href='delete_update.php?updateid={$inupdate->updateid}&amp;tempid={$inupdate->id}&amp;timestamp={$inupdate->timestamp}'>Delete</a>";
         }
     }
