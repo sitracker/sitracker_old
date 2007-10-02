@@ -144,7 +144,7 @@ if($countskills > 0 AND $countusers > 0)
         if($previous != $row->name)
         {
             $count = 0;
-            echo "<tr class='$shade'><th width='20%;'>{$row->name}</th>";
+            echo "<tr><th width='20%;'>{$row->name}</th>";
             while($user = mysql_fetch_object($usersresult))
             {
                 if(($user->realname != NULL) AND ($user->realname != ''))
@@ -153,19 +153,19 @@ if($countskills > 0 AND $countusers > 0)
                     if(empty($skills[$row->name][$user->realname]))
                     {
                         // No skill in this software
-                        echo "<td align='center'></td>"; // &#215;
+                        echo "<td align='center' class='$shade'></td>"; // &#215;
                     }
                     else
                     {
                         //Skill in software
                         // echo "<td align='center'>&#10004;</td>"; // Doesn't work in Windows (fonts!) rubbishy O/S
-                        echo "<td align='center'><img src='{$CONFIG['application_webpath']}images/icons/{$iconset}/16x16/tick.png' alt='' /></td>";
+                        echo "<td align='center' class='$shade'><img src='{$CONFIG['application_webpath']}images/icons/{$iconset}/16x16/tick.png' alt='' /></td>";
                         $counting[$user->realname]++;
                         $count++;
                     }
                 }
             }
-            echo "<td align='center'><strong>$count</strong></td>";
+            echo "<td align='center' class='$shade'><strong>$count</strong></td>";
             echo "</tr>\n";
             $started = true;
             if ($shade=='shade1') $shade='shade2';
@@ -176,7 +176,7 @@ if($countskills > 0 AND $countusers > 0)
         $previous = $row->name;
     }
     echo "<th align='right'>COUNT</th>";
-    foreach($counting AS $c) echo "<td align='center'>{$c}</td>";
+    foreach($counting AS $c) echo "<td align='center'><strong>{$c}</strong></td>";
     echo "</table>";
 } echo "<p align='center'>Nothing to display</p>";
 
