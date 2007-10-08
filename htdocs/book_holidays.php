@@ -78,7 +78,7 @@ elseif ($step=='1')
     if ($user==$sit[2]) echo "<h2>Book ".holiday_type($type)."</h2>";
     else echo "<h2>Book ".holiday_type($type)." for ".user_realname($user)."</h2>";
 
-    if ($type=='2') echo "<p align='center'>Sickness, can of course only be booked for days that have passed.</p>";
+    if ($type=='2') echo "<p align='center'>Sickness, can of course only be booked for today or days that have passed.</p>";
 
     if ($type=='1')
     {
@@ -186,7 +186,7 @@ elseif ($step=='1')
                 {
                     echo "<tr><td class='shade2' align='right'>".date('l jS M y',$day)." </td>";
                     // Don't allow booking sickness in the future, still not sure whether we should allow this or not, it could be useful in the case of long term illness
-                    if (($type=='2' && $day < $now) || ($type!=2))
+                    if (($type=='2' && $day <= $now) || ($type!=2))
                     {
                         echo "<td class='shade1' align='center'><input type='radio' name='length{$daynumber}' value='none' /></td>";
                         echo "<td class='shade1' align='center'><input type='radio' name='length{$daynumber}' value='day' checked='checked' /></td>";
@@ -195,7 +195,7 @@ elseif ($step=='1')
                         $options++;
                     }
                     else
-                        echo "<td class='shade1' align='center'>-</td><td class='shade2' align='center'>-</td><td class='shade1' align='center'>-</td>";
+                        echo "<td class='shade1' align='center'>-</td><td class='shade2' align='center'>-</td><td class='shade1' align='center'>-</td><td class='shade2' align='center'>-</td>";
                     echo "</tr>\n";
                 }
             }
