@@ -13,6 +13,7 @@
     <li><a href='#customers'>Customers</a></li>
     <li><a href='#contracts'>Contracts</a></li>
     <li><a href='#softwareproducts'>Skills &amp; Products</a></li>
+    <li><a href='#tags'>Tags</a></li>
     <li>Control Panel
     <ul>
         <li><a href='#adduser'>Adding Users</a></li>
@@ -234,6 +235,12 @@ Then to link skills to that, go to <strong>Customers</strong> |
 <strong>Maintenance</strong> | <strong>Products &amp; Skills</strong> | <strong>List Products</strong>.</p>
 <p>Products can also be grouped by vendor, you can add vendors by going to <strong>Customers</strong> |
 <strong>Maintenance</strong> | <strong>Products &amp; Skills</strong> | <strong>Add Vendor</strong>.</p>
+
+<h3><a name='tags'>Tags</a></h3>
+<p>Incidents, contacts, sites and tasks can all be 'tagged' with keywords, tagging lets you quickly group or
+categorise data in any way you like.  Add tags from the edit page of the relevant record, simply seperate
+a list of single word keywords with space or comma.</p>
+<p>The tags dashboard component, when enabled, displays a tag 'cloud' on your dashboard.</p>
 
 <h3><a name='adduser'>Adding Users</a></h3>
 <p>If you have appropriate permission you can create additional SiT users. (The 'admin' user always has this
