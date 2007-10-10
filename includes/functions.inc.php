@@ -5001,6 +5001,17 @@ function remove_tag($id, $type, $tag)
         // Ignore errors, die silently
         $sql = "DELETE FROM set_tags WHERE id = '$id' AND type = '$type' AND tagid = '$tagid')";
         $result = @mysql_query($sql);
+
+        // Check tag usage count and remove disused tags completely
+        $sql = "SELECT COUNT(id) FROM set_tags WHERE tagid = '$tagid'";
+        $result = mysql_query($sql);
+        list($count) = mysql_fetch_row($result);
+        if ($count == 0)
+        {
+            $sql = "DELETE FROM tags WHERE tagid = '$tagid' LIMIT 1";
+            @mysql_query($sql);
+        }
+        purge_tag($tagid);
     }
     return true;
 }
@@ -5023,9 +5034,42 @@ function replace_tags($type, $id, $tagstring)
     }
 }
 
+
+// Purge a single tag (if needed)
+function purge_tag($tagid)
+{
+    // Check tag usage count and remove disused tag completely
+    $sql = "SELECT COUNT(id) FROM set_tags WHERE tagid = '$tagid'";
+    $result = mysql_query($sql);
+    list($count) = mysql_fetch_row($result);
+    if ($count == 0)
+    {
+        $sql = "DELETE FROM tags WHERE tagid = '$tagid' LIMIT 1";
+        @mysql_query($sql);
+    }
+}
+
+
+// Purge all tags (if needed)
+function purge_tags()
+{
+    $sql = "SELECT tagid FROM tags";
+    $result = mysql_query($sql);
+    if (mysql_error()) trigger_error(mysql_error(),E_USER_ERROR);
+    if (mysql_num_rows($result) > 0)
+    {
+        while($tag = mysql_fetch_object($result))
+        {
+            purge_tag($tag->tagid);
+        }
+    }
+}
+
+
 function list_tags($recordid, $type, $html=TRUE)
 {
     global $CONFIG;
+
     $sql = "SELECT tags.name, tags.tagid FROM set_tags, tags WHERE set_tags.tagid = tags.tagid AND ";
     $sql .= "set_tags.type = '$type' AND set_tags.id = '$recordid'";
     $result = mysql_query($sql);
@@ -5087,6 +5131,9 @@ function list_tag_icons($recordid, $type)
 function show_tag_cloud($orderby="name")
 {
     global $CONFIG;
+
+    // First purge any disused tags
+    purge_tags();
     $sql = "SELECT COUNT(name) AS occurrences, name, tags.tagid FROM tags, set_tags WHERE tags.tagid = set_tags.tagid GROUP BY name ORDER BY $orderby";
     if($orderby == "occurrences") $sql .= " DESC";
     $result = mysql_query($sql);
