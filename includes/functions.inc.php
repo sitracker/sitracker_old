@@ -3187,14 +3187,13 @@ function holidaytype_drop_down($name, $id)
 function check_group_holiday($userid, $date, $length='day')
 {
     // get groupid
-    $sql = "SELECT groupid FROM usergroups WHERE userid='$userid' ";
+    $sql = "SELECT groupid FROM users WHERE id='$userid' ";
     $result = mysql_query($sql);
     if (mysql_error()) trigger_error(mysql_error(),E_USER_WARNING);
-
     while ($group = mysql_fetch_object($result))
     {
         // list group members
-        $msql = "SELECT userid FROM usergroups WHERE groupid='{$group->groupid}' AND userid!='$userid' ";
+        $msql = "SELECT id AS userid FROM users WHERE groupid='{$group->groupid}' AND id!='$userid' ";
         $mresult = mysql_query($msql);
         if (mysql_error()) trigger_error(mysql_error(),E_USER_WARNING);
         while ($member = mysql_fetch_object($mresult))
@@ -5128,7 +5127,7 @@ function list_tag_icons($recordid, $type)
 }
 
 
-function show_tag_cloud($orderby="name")
+function show_tag_cloud($orderby="name", $showcount=FALSE)
 {
     global $CONFIG;
 
@@ -5169,7 +5168,9 @@ function show_tag_cloud($orderby="name")
                 $html .= "/{$CONFIG['tag_icons'][$obj->name]}.png' style='border:0px;' alt='' />";
             }
             else $html .= stripslashes($obj->name);
-            $html .= "</a> &nbsp;\n";
+            $html .= "</a>";
+            if ($showcount) $html .= "({$obj->occurrences})";
+            $html .= " &nbsp;\n";
         }
         $html .= "</td></tr></table>";
     }
