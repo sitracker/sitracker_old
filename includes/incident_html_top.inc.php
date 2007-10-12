@@ -330,7 +330,7 @@ if ($menu != 'hide')
         {
             echo "<a class='barlink' href='unlock_update.php?id={$id}'>Unlock</a> | ";
             echo "<a class='barlink' href=\"javascript:window.opener.location='move_update.php?updateid={$inupdate->updateid}&amp;incidentidnumber={$update['incidentid']}'; window.close();\" >Assign</a> | ";
-            echo "<a class='barlink' href=\"javascript:window.opener.location='add_incident.php?action=findcontact&amp;updateid={$id}&amp;search_string={$inupdate->emailfrom}&amp;contactid={$inupdate->contactid}&amp;win=incomingcreate'; window.close();\">Create</a> | ";
+            echo "<a class='barlink' href=\"javascript:window.opener.location='add_incident.php?action=findcontact&amp;incomingid={$id}&amp;search_string={$inupdate->emailfrom}&amp;contactid={$inupdate->contactid}&amp;win=incomingcreate'; window.close();\">Create</a> | ";
             echo "<a class='barlink' href=\"javascript:window.opener.location='delete_update.php?updateid={$inupdate->updateid}&amp;tempid={$inupdate->id}&amp;timestamp={$inupdate->timestamp}'; window.close(); \">Delete</a>";
         }
     }

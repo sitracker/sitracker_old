@@ -24,6 +24,7 @@ require('auth.inc.php');
 $action = $_REQUEST['action'];
 $context = cleanvar($_REQUEST['context']);
 $updateid = cleanvar($_REQUEST['updateid']);
+$incomingid = cleanvar($_REQUEST['incomingid']);
 $query = cleanvar($_REQUEST['query']);
 $siteid = cleanvar($_REQUEST['siteid']);
 $contactid = cleanvar($_REQUEST['contactid']);
@@ -33,6 +34,8 @@ $maintid = cleanvar($_REQUEST['maintid']);
 $productid = cleanvar($_REQUEST['productid']);
 $producttext = cleanvar($_REQUEST['producttext']);
 $win=cleanvar($_REQUEST['win']);
+
+if (!empty($incomingid) AND empty($updateid)) $updateid = db_read_column('updateid', 'tempincoming', $incomingid);
 
 if (empty($action) OR $action=='showform')
 {
@@ -403,7 +406,7 @@ elseif ($action=='incidentform')
         $result=mysql_query($sql);
         if (mysql_error()) trigger_error("MySQL Query Error ".mysql_error(), E_USER_ERROR);
         $updaterow=mysql_fetch_array($result);
-        $mailed_body_text=$updaterow['bodytext'];
+        $mailed_body_text = $updaterow['bodytext'];
 
         $sql="SELECT subject FROM tempincoming WHERE updateid=$updateid";
         $result=mysql_query($sql);
@@ -415,7 +418,7 @@ elseif ($action=='incidentform')
         echo "<tr><td colspan='2'>&nbsp;</td></tr>\n";
 
         echo "<tr><th>Problem Description:<br />This information was received in the email.  It is not editable.</th>";
-        echo "<td>".nl2br($mailed_body_text)."</td></tr>\n";
+        echo "<td>".parse_updatebody($mailed_body_text)."</td></tr>\n";
         echo "<tr><td class='shade1' colspan=2>&nbsp;</td></tr>\n";
     }
     ?>
@@ -429,7 +432,7 @@ elseif ($action=='incidentform')
     <input maxlength="2" name="timetonextaction_minutes" onclick="window.document.supportdetails.timetonextaction_none[1].checked = true;" size="3"> Minutes<br />
     <input type="radio" name="timetonextaction_none" value="date">On specified Date<br />&nbsp;&nbsp;&nbsp;
     <?php
-        echo "<input name='date' size='10' value='{$date}' onclick=\"window.document.updateform.timetonextaction_none[1].checked = true;\"/>";
+        echo "<input name='date' size='10' value='{$date}' onclick=\"window.document.updateform.timetonextaction_none[1].checked = true;\"/> ";
         echo date_picker('supportdetails.date');
     ?>
     <select name="timeoffset" onchange="window.document.updateform.timetonextaction_none[1].checked = true;" >
