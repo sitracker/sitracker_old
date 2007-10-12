@@ -24,5 +24,6 @@ if (empty($incomingid)) throw_error('!Error: Update ID was not set', $updateid);
 $sql = "UPDATE tempincoming SET locked=NULL, lockeduntil=NULL WHERE tempincoming.id='{$incomingid}' AND locked = '{$sit[2]}'";
 $result = mysql_query($sql);
 if (mysql_error()) trigger_error("MySQL Query Error ".mysql_error(), E_USER_ERROR);
-echo "<body onload=\"window.opener.location='review_incoming_updates.php'; window.close();\">";
+echo "<html><head><title></title></head><body onload=\"window.opener.location='review_incoming_updates.php'; window.close();\">";
+echo "</body><html>\n";
 ?>
