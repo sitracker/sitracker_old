@@ -70,7 +70,7 @@ function generate_row($update)
     if (empty($update['subject'])) $update['subject']='Untitled';
     $html_row.=htmlentities($update['subject'],ENT_QUOTES, 'UTF-8');
     $html_row.='<span>'.parse_updatebody($updatebodytext).'</span></a></td>';
-    $html_row.="<td align='center' width='20%'>".$update['reason'].'</td>';
+    $html_row.="<td align='center' width='20%'>".stripslashes($update['reason']).'</td>';
     $html_row.="<td align='center' width='20%'>";
     if (($update['locked'] != $sit[2]) && ($update['locked']>0))
     $html_row.= "Locked by ".user_realname($update['locked'],TRUE);
