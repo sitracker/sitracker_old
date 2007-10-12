@@ -592,10 +592,11 @@ switch ($step)
                 function confirm_close_window()
                 {
                     if (window.confirm('The email was sent successfully, click OK to close this window'))
+                    window.opener.location='incident_details.php?id=<?php echo $id; ?>';
                     window.close();
                 }
                 </script>
-                <body onLoad="confirm_close_window();">
+                <body onload="confirm_close_window();">
                 </body>
                 </html>
                 <?php

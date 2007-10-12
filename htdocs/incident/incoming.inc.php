@@ -59,7 +59,7 @@ while ($incoming = @mysql_fetch_object($result))
     if($lockedbyname == "you")
     {
         echo "<div class='detaildate'>
-                <form method='POST' action='{$_SERVER['PHP_SELF']}?id={$incomingid}&win=incomingcreate&action=updatereason'>
+                <form method='POST' action='{$_SERVER['PHP_SELF']}?id={$incomingid}&win=incomingview&action=updatereason'>
                 Reason: <input name='newreason' type='text' value='{$incoming->reason}' size='25' maxlength='100' />
                 <input type='submit' value='Save' />
                 </form>

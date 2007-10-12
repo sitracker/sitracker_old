@@ -329,23 +329,19 @@ if ($menu != 'hide')
         while($inupdate = mysql_fetch_object($query))
         {
             echo "<a class='barlink' href='unlock_update.php?id={$id}'>Unlock</a> | ";
-            echo "<a class='barlink' href='move_update.php?updateid={$inupdate->updateid}&amp;incidentidnumber={$update['incidentid']}' target='top.opener'>Assign</a> | ";
-            echo "<a class='barlink' href='add_incident.php?action=findcontact&amp;updateid={$id}&amp;search_string={$inupdate->emailfrom}&amp;contactid={$inupdate->contactid}&amp;win=incomingcreate' target='top.opener'>Create</a> | ";
-            echo "<a class='barlink' href='delete_update.php?updateid={$inupdate->updateid}&amp;tempid={$inupdate->id}&amp;timestamp={$inupdate->timestamp}'>Delete</a>";
+            echo "<a class='barlink' href=\"javascript:window.opener.location='move_update.php?updateid={$inupdate->updateid}&amp;incidentidnumber={$update['incidentid']}'; window.close();\" >Assign</a> | ";
+            echo "<a class='barlink' href=\"javascript:window.opener.location='add_incident.php?action=findcontact&amp;updateid={$id}&amp;search_string={$inupdate->emailfrom}&amp;contactid={$inupdate->contactid}&amp;win=incomingcreate'; window.close();\">Create</a> | ";
+            echo "<a class='barlink' href=\"javascript:window.opener.location='delete_update.php?updateid={$inupdate->updateid}&amp;tempid={$inupdate->id}&amp;timestamp={$inupdate->timestamp}'; window.close(); \">Delete</a>";
         }
-    }
-    elseif ($_REQUEST['win']=='incomingcreate')
-    {
-        // Do nothing for now
     }
     elseif (incident_status($id) != 2)
     {
         echo "<a class='barlink' href='update_incident.php?id={$id}&amp;popup={$popup}' accesskey='U'><em>U</em>pdate</a> | ";
-        echo "<a class='barlink' href='javascript:close_window({$id});'>Close</a> | ";
+        echo "<a class='barlink' href='javascript:close_window({$id});' accesskey='C'><em>C</em>lose</a> | ";
         echo "<a class='barlink' href='reassign_incident.php?id={$id}&amp;popup={$popup}' accesskey='R'><em>R</em>eassign</a> | ";
-        echo "<a class='barlink' href='edit_incident.php?id={$id}&amp;popup={$popup}'>Edit</a> | ";
+        echo "<a class='barlink' href='edit_incident.php?id={$id}&amp;popup={$popup}' accesskey='T'>Edi<em>t</em></a> | ";
         echo "<a class='barlink' href='incident_service_levels.php?id={$id}&amp;popup={$popup}' accesskey='S'><em>S</em>ervice</a> | ";
-        echo "<a class='barlink' href='incident_relationships.php?id={$id}&amp;tab=relationships'>Relations</a> | ";
+        echo "<a class='barlink' href='incident_relationships.php?id={$id}&amp;tab=relationships' accesskey='L'>Re<em>l</em>ations</a> | ";
         echo "<a class='barlink' href='javascript:email_window({$id})' accesskey='E'><em>E</em>mail</a> | ";
         echo "<a class='barlink' href='incident_attachments.php?id={$id}&amp;popup={$popup}' accesskey='F'><em>F</em>iles</a> | ";
         echo "<a class='barlink' href='incident_details.php?id={$id}&amp;popup={$popup}' accesskey='D'><em>D</em>etails And Log</a> | ";
