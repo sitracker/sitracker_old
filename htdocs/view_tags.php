@@ -27,7 +27,7 @@ if(empty($tagid))
     include('htmlheader.inc.php');
     echo "<h2><img src='{$CONFIG['application_webpath']}images/icons/{$iconset}/32x32/tag.png' width='32' height='32' alt='' /> ";
     echo "Tags</h2>";
-    echo show_tag_cloud($orderby);
+    echo show_tag_cloud($orderby,TRUE);
     include('htmlfooter.inc.php');
 }
 else

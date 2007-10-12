@@ -39,7 +39,11 @@ if (count($slahistory) >= 1)
         if (!empty($history['userid'])) echo user_realname($history['userid'],TRUE);
         echo "</td>";
         echo "<td>".format_workday_minutes($history['targettime'])."</td>";
-        echo "<td>".format_workday_minutes($history['actualtime'])."</td>";
+        echo "<td>";
+        if ($history['timestamp'] == 0) echo "<em>";
+        echo format_workday_minutes($history['actualtime']);
+        if ($history['timestamp'] == 0) echo "</em>";
+        echo "</td>";
         echo "<td>";
         if ($history['timestamp'] > 0) echo date($CONFIG['dateformat_datetime'],$history['timestamp']);
         echo "</td>";
