@@ -1,5 +1,9 @@
-Changes in v3.30 - Released 15 October 2007
+Changes in v3.31 - Unreleased
+-----------------------------------------------------------------------
 
+
+Changes in v3.30 - Released 15 October 2007
+-----------------------------------------------------------------------
 * Users with disabled accounts are now displayed with strikethrough text style
 * Improved search, now supports AND, OR and NOT operators, default is AND
 * Adds forgotten password functionality for portal users
