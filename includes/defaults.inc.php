@@ -100,7 +100,7 @@ $CONFIG['regular_contact_days'] = 7;
 $CONFIG['free_support_limit'] = 2;
 
 // Comma seperated list specifying the numbers of incidents to assign to contracts
-$CONFIG['incident_pools'] = '1,2,3,4,5,10,25,50,100,150,200,250,500,1000';
+$CONFIG['incident_pools'] = '1,2,3,4,5,10,20,25,50,100,150,200,250,500,1000';
 
 // Incident feedback form (the id number of the feedback form to use or empty to disable sending feedback forms out)
 $CONFIG['feedback_form'] = '';
