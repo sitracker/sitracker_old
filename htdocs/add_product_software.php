@@ -59,7 +59,7 @@ if (empty($action) OR $action == "showform")
         echo software_drop_down("softwareid", 0);
         echo "</p>\n";
     }
-    echo "<p align='center'><input name='submit' type='submit' value='Save Link' />";
+    echo "<p align='center'><input name='submit' type='submit' value='{$strSave}' />";
     echo "<input type='checkbox' name='return' value='true' ";
     if ($return=='true') echo "checked='checked' ";
     echo "/> Return to this page after saving</p>\n";

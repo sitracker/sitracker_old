@@ -51,7 +51,7 @@ if (empty($action) OR $action == "showform")
     echo "<input type='hidden' name='action' value='edit' />";
     echo "<input type='hidden' name='tag' value='{$tag}' />";
     echo "<input type='hidden' name='priority' value='{$priority}' />";
-    echo "<p align='center'><input type='submit' value='Save' /></p>";
+    echo "<p align='center'><input type='submit' value='{$strSave}' /></p>";
     echo "</form>";
     include('htmlfooter.inc.php');
 }

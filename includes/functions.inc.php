@@ -49,7 +49,7 @@ define('CFG_JOURNAL_OTHER', 10);
 define('CFG_JOURNAL_KB', 11);    // Knowledge Base
 
 require('i18n/en-gb.inc.php');
-if ($CONFIG['i18n']!='en-gb') @include("i18n/{$CONFIG['i18n']}.inc.php");
+if ($CONFIG['default_i18n']!='en-gb') @include("i18n/{$CONFIG['default_i18n']}.inc.php");
 ini_set('default_charset', $i18ncharset);
 
 
@@ -195,7 +195,7 @@ $hmenu[2030] = array (10=> array ( 'perm'=> 19, 'name'=> $strBrowse, 'url'=>"{$C
 $hmenu[203010] = array (10=> array ( 'perm'=> 56, 'name'=> "Add Vendor", 'url'=>"{$CONFIG['application_webpath']}add_vendor.php"),
                         20=> array ( 'perm'=> 24, 'name'=> "Add Product", 'url'=>"{$CONFIG['application_webpath']}add_product.php"),
                         30=> array ( 'perm'=> 28, 'name'=> "List Products", 'url'=>"{$CONFIG['application_webpath']}products.php"),
-                        35=> array ( 'perm'=> 28, 'name'=> "List Skills", 'url'=>"{$CONFIG['application_webpath']}products.php?display=skills"),
+                        35=> array ( 'perm'=> 28, 'name'=> $strListSkills, 'url'=>"{$CONFIG['application_webpath']}products.php?display=skills"),
                         40=> array ( 'perm'=> 56, 'name'=> "Add Skill", 'url'=>"{$CONFIG['application_webpath']}add_software.php"),
                         50=> array ( 'perm'=> 24, 'name'=> "Link Products", 'url'=>"{$CONFIG['application_webpath']}add_product_software.php"),
                         60=> array ( 'perm'=> 25, 'name'=> "Add Product Question", 'url'=>"{$CONFIG['application_webpath']}add_productinfo.php"),
@@ -330,7 +330,7 @@ function software_name($softwareid)
         $lifetime_end = mysql2date($software->lifetime_end);
         if ($lifetime_end > 0 AND $lifetime_end < $now) $name = "<span class='deleted'>".stripslashes($software->name)."</span> (<abbr title='End of Life'>EOL</abbr>)";
         else $name = stripslashes($software->name);
-    } else $name = 'Unknown';
+    } else $name = $GLOBALS['StrUnknown'];
 
     return $name;
 }

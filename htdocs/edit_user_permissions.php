@@ -82,7 +82,7 @@ if (empty($action) OR $action == "showform")
         echo "</table>";
         echo "<p><input name='reset' type='reset' value='Reset' />";
         echo "<input type='hidden' name='action' value='update' />";
-        echo "<input name='submit' type='submit' value='Save' /></p>";
+        echo "<input name='submit' type='submit' value='{$strSave}' /></p>";
         echo "</form>";
     }
 }
@@ -160,7 +160,7 @@ elseif ($action == "edit" && (!empty($user) OR !empty($role)))
     echo "</table>";
     echo "<p><input name='user' type='hidden' value='{$user}' />";
     echo "<input name='role' type='hidden' value='{$role}' />";
-    echo "<input name='submit' type='submit' value='Save' /></p>";
+    echo "<input name='submit' type='submit' value='{$strSave}' /></p>";
     echo "</form>";
 }
 elseif ($action == "update")

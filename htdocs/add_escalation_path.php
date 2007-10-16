@@ -20,7 +20,7 @@ require('auth.inc.php');
 
 $submit = $_REQUEST['submit'];
 
-$title = "Add escalation path";
+$title = $strNewEscalationPath;
 
 
 
@@ -49,7 +49,7 @@ if(empty($submit))
 
     echo "</table>";
 
-    echo "<p align='center'><input type='submit' name='submit' value='Add' /></p>";
+    echo "<p align='center'><input type='submit' name='submit' value='{$strAdd}' /></p>";
 
     echo "</form>";
 

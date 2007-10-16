@@ -285,7 +285,7 @@ if (empty($_POST['process']))
     echo "<input type='hidden' name='idlist' value='$id_list' />";
     echo "<input type='hidden' name='process' value='true' />";
     echo "</td></tr></table>";
-    echo "<p><input type='submit' value='Save Changes' /></p>";
+    echo "<p><input type='submit' value='{$strSave}' /></p>";
     echo "</form>";
 
     echo "</td></tr></table>";

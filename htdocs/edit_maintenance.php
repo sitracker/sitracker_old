@@ -112,9 +112,10 @@ if ($action == "edit")
         <tr><th>Product Only:</th><td><input name="productonly" type="checkbox" value="yes" onclick="set_terminated();" <?php if ($maint["productonly"] == "yes") echo " checked" ?> /></td></tr>
         </table>
         <input name="maintid" type="hidden" value="<?php echo $maintid ?>" />
-        <p align='center'><input name="submit" type="submit" value="Save" /></p>
-        </form>
         <?php
+        echo "<p align='center'><input name='submit' type='submit' value='{$strSave}' /></p>";
+        echo "</form>\n";
+
         echo "<p align='center'><a href='maintenance_details.php?id={$maintid}'>View contract</a></p>";
         mysql_free_result($result);
     }

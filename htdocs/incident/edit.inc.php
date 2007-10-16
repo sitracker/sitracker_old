@@ -50,6 +50,6 @@ echo "<input name='oldproductversion' type='hidden' value='{$incident->productve
 echo "<input name='oldproductservicepacks' type='hidden' value='{$incident->productservicepacks}' />";
 echo "<input name='id' type='hidden' value='{$id}' />";
 echo "<input name='action' type='hidden' value='save-edit' />";
-echo "<p align='center'><input name='submit' type='submit' value='Save' /></p>";
+echo "<p align='center'><input name='submit' type='submit' value='{$strSave}' /></p>";
 echo "</form>\n";
 ?>

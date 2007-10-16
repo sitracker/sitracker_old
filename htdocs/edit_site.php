@@ -102,7 +102,7 @@ elseif ($action == "edit")
             plugin_do('edit_site_form');
             echo "</table>\n";
             echo "<input name='site' type='hidden' value='$site' />";
-            echo "<p><input name='submit' type='submit' value='Save' /></p>";
+            echo "<p><input name='submit' type='submit' value='{$strSave}' /></p>";
             echo "</form>";
         }
     }

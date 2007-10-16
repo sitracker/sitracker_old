@@ -125,7 +125,7 @@ switch ($_REQUEST['action'])
         echo "<td><input type='hidden' name='id' value='{$qid}' />";
         echo "<input type='hidden' name='formid' value='{$fid}' />";
         echo "<input type='hidden' name='action' value='save' /></td>";
-        echo "<td><input type='submit' value='Save' /></td>";
+        echo "<td><input type='submit' value='{$strSave}' /></td>";
         echo "</tr>";
         echo "</table>";
         echo "</form>";
