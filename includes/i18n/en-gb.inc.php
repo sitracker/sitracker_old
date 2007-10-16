@@ -26,6 +26,7 @@ $strCustomers = "Customers";
 $strCurrentlyOpen = "currently open";
 
 $strDashboard = "Dashboard";
+$strDelete = 'Delete';
 
 $strEdit = "edit";
 $strEditContract = "Edit Contract";
