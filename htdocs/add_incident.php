@@ -13,9 +13,9 @@
 // 7Oct02 INL  Added support for maintenanceid to be put into incidents table
 
 $permission=5;
-$title='Add Incident';
 require('db_connect.inc.php');
 require('functions.inc.php');
+$title=$strAddIncident;
 
 // This page requires authentication
 require('auth.inc.php');
@@ -47,7 +47,7 @@ if (empty($action) OR $action=='showform')
         dojo.require("dojo.widget.ComboBox");
     </script>
     <?php
-    echo "<h2>Add Incident - Find Contact</h2>";
+    echo "<h2>{$strAddIncident} - {$strFindContact}</h2>";
     if (empty($siteid))
     {
         ?>
@@ -56,16 +56,14 @@ if (empty($action) OR $action=='showform')
         <input type="hidden" name="updateid" value="<?php echo $updateid ?>" />
         <table class='vertical'>
         <?php
-        echo "<tr><th>Contact <img src='{$CONFIG['application_webpath']}images/icons/{$iconset}/16x16/contact.png' width='16' height='16' alt='' /></th><td>";
+        echo "<tr><th>{$strContact} <img src='{$CONFIG['application_webpath']}images/icons/{$iconset}/16x16/contact.png' width='16' height='16' alt='' /></th><td>";
         //echo "<input type='text' name='search_string' size='30' value='{$query}' />\n";
         echo "<input dojoType='ComboBox' value='{$query}' dataUrl='autocomplete.php?action=contact' style='width: 300px;' name='search_string' />";
         echo "<input type='hidden' name='win' value='{$win}' />";
-        ?>
-        <input name="submit" type="submit" value="Find Contact" />
-        </td></tr>
-        </table>
-        <p align='center'><a href='browse_contacts.php'>Browse contacts</a>...</p>
-        <?php
+        echo "<input name='submit' type='submit' value='{$strFindContact}' />";
+        echo "</td></tr>";
+        echo "</table>";
+        echo "<p align='center'><a href='browse_contacts.php'>{$strBrowseContacts}</a>...</p>";
         echo "<input name='siteid' type='hidden' value='$siteid' />";
         echo "</form>\n";
     }
@@ -126,15 +124,13 @@ elseif ($action=='findcontact')
         }
         </script>
 
-        <h2>Add Incident - Select Person / Contract</h2>
+        
         <?php
+        echo "<h2>{$strAddIncident} - Select Person / Contract</h2>";
         echo "<h3><img src='{$CONFIG['application_webpath']}images/icons/{$iconset}/32x32/contract.png' width='32' height='32' alt='' />  ";
         echo "Contracts</h3>";
-        ?>
-        <p align='center'>This list shows contracts, i.e. supported people and the products they are supported for.<br />
-        Click on the appropriate 'Add Incident' link to begin adding the incident.</p>
-
-        <?php
+        echo "<p align='center'>This list shows contracts, i.e. supported people and the products they are supported for.<br />
+        Click on the appropriate '{$strAddIncident}' link to begin adding the incident.</p>";
         function to_row($contactrow)
         {
             global $now, $updateid, $CONFIG;
@@ -151,7 +147,7 @@ elseif ($action=='findcontact')
                 $str .=  "<td class='expired'>Zero remaining ({$contactrow['incidents_used']}/{$contactrow['incident_quantity']} Used)</td>";
             else
             {
-                $str .=  "<td><a href=\"{$_SERVER['PHP_SELF']}?action=incidentform&amp;type=support&amp;contactid=".$contactrow['contactid']."&amp;maintid=".$contactrow['maintenanceid']."&amp;producttext=".urlencode($contactrow['productname'])."&amp;productid=".$contactrow['productid']."&amp;updateid=$updateid&amp;siteid=".$contactrow['siteid']."&amp;win={$win}\" onclick=\"return confirm_support();\">Add Incident</a> ";
+                $str .=  "<td><a href=\"{$_SERVER['PHP_SELF']}?action=incidentform&amp;type=support&amp;contactid=".$contactrow['contactid']."&amp;maintid=".$contactrow['maintenanceid']."&amp;producttext=".urlencode($contactrow['productname'])."&amp;productid=".$contactrow['productid']."&amp;updateid=$updateid&amp;siteid=".$contactrow['siteid']."&amp;win={$win}\" onclick=\"return confirm_support();\">{$strAddIncident}</a> ";
                 if ($contactrow['incident_quantity']==0) $str .=  "(Unlimited)";
                 else $str .=  "({$incidents_remaining} Left)";
             }
@@ -251,7 +247,7 @@ elseif ($action=='findcontact')
             echo "<h3>No matching contacts found</h3>";
             echo "<p align='center'><a href=\"add_contact.php\">Add a contact</a></p>";
         }
-        echo "<p align='center'><a href=\"{$_SERVER['PHP_SELF']}?updateid={$updateid}&amp;win={$win}\">Search again</a></p>";
+        echo "<p align='center'><a href=\"{$_SERVER['PHP_SELF']}?updateid={$updateid}&amp;win={$win}\">{$strSearchAgain}</a></p>";
         include('htmlfooter.inc.php');
     }
     else
@@ -317,7 +313,7 @@ elseif ($action=='incidentform')
     // Display form to get details of the actual incident
     include('htmlheader.inc.php');
 
-    echo "<h2>Add Incident - Get Details</h2>";
+    echo "<h2>{$strAddIncident} - Get Details</h2>";
     ?>
     <script type="text/javascript">
     function validateForm(form)
@@ -348,7 +344,7 @@ elseif ($action=='incidentform')
     <?php
     if ($type == 'free')
     {
-        echo "<tr><th>Service Level:</th><td>".serviceleveltag_drop_down('servicelevel',$CONFIG['default_service_level'], TRUE)."</td></tr>";
+        echo "<tr><th>{$strServiceLevel}:</th><td>".serviceleveltag_drop_down('servicelevel',$CONFIG['default_service_level'], TRUE)."</td></tr>";
         echo "<tr><th>Skill:</th><td>".software_drop_down('software', 0)."</td></tr>";
     }
     else
@@ -459,8 +455,8 @@ elseif ($action=='incidentform')
     </table>
     <?php
     echo "<input type='hidden' name='win' value='{$win}' />";
+    echo "<p align='center'><input name='submit' type='submit' value='{$strAddIncident}' /></p>";
     ?>
-    <p align='center'><input name="submit" type="submit" value="Add Incident" /></p>
     </form>
     <?php
     include('htmlfooter.inc.php');
@@ -470,7 +466,7 @@ elseif ($action=='assign')
     include('htmlheader.inc.php');
     if ($type == "support" || $type == "free")
     {
-        echo "<h2>Add Incident - Assign</h2>";
+        echo "<h2>{$strAddIncident} - Assign</h2>";
 
         // Assign SUPPORT incident
         // The incident will be added to the database assigned to the current user, and then a list of engineers

@@ -18,8 +18,6 @@ require('functions.inc.php');
 // This page requires authentication
 require('auth.inc.php');
 
-$title='Add Note';
-
 // External variables
 $action = $_REQUEST['action'];
 

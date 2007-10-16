@@ -194,16 +194,16 @@ else
         {
             ?>
             <p align='center'>Displaying <?php echo mysql_num_rows($result) ?> contact(s) matching <em>'<?php echo $search_string; ?>'</em></p>
-            <table align='center'>
+            <?php
+            echo "<table align='center'>
             <tr>
             <th>Contact Name</th>
             <th>Site</th>
             <th>Email</th>
             <th>Phone</th>
             <th>Fax</th>
-            <th>Add Incident</th>
-            </tr>
-            <?php
+            <th>{$strAddIncident}</th>
+            </tr>";
             $shade = 0;
             while ($results = mysql_fetch_array($result))
             {
@@ -218,7 +218,7 @@ else
                     <td><?php echo stripslashes($results["email"]); ?></td>
                     <td><?php if ($results["phone"] == "") { ?><em>None</em><?php } else { echo stripslashes($results["phone"]); } ?></td>
                     <td><?php if ($results["fax"] == "") { ?><em>None</em><?php } else { echo stripslashes($results["fax"]); } ?></td>
-                    <td><a href="add_incident.php?action=findcontact&amp;contactid=<?php echo $results['id'] ?>">Add Incident</a></td>
+                    <?php echo "<td><a href='add_incident.php?action=findcontact&amp;contactid={$results['id']}'>{$strAddIncident}</a></td>"; ?>
                 </tr>
                 <?php
                 // invert shade
