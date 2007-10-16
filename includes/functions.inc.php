@@ -49,7 +49,8 @@ define('CFG_JOURNAL_OTHER', 10);
 define('CFG_JOURNAL_KB', 11);    // Knowledge Base
 
 require('i18n/en-gb.inc.php');
-ini_set('default_charset', 'UTF-8');
+if ($CONFIG['i18n']!='en-gb') @include("i18n/{$CONFIG['i18n']}.inc.php")
+ini_set('default_charset', $i18ncharset);
 
 
 
@@ -115,9 +116,9 @@ $hmenu[1031] = array (10=> array ( 'perm'=> 0, 'name'=> "Option1", 'url'=>""),
 //
 //////////////////
 $hmenu[0] = array (10=> array ( 'perm'=> 0, 'name'=> "{$CONFIG['application_shortname']}", 'url'=>"{$CONFIG['application_webpath']}main.php", 'submenu'=>"10"),
-                   20=> array ( 'perm'=> 11, 'name'=> "Customers", 'url'=>"{$CONFIG['application_webpath']}browse_sites.php", 'submenu'=>"20"),
-                   30=> array ( 'perm'=> 6, 'name'=> "Support", 'url'=>"{$CONFIG['application_webpath']}incidents.php?user=current&amp;queue=1&amp;type=support", 'submenu'=>"30"),
-                   40=> array ( 'perm'=> 0, 'name'=> "Tasks", 'url'=>"{$CONFIG['application_webpath']}tasks.php", 'submenu'=>"40"),
+                   20=> array ( 'perm'=> 11, 'name'=> $strCustomers, 'url'=>"{$CONFIG['application_webpath']}browse_sites.php", 'submenu'=>"20"),
+                   30=> array ( 'perm'=> 6, 'name'=> $strSupport, 'url'=>"{$CONFIG['application_webpath']}incidents.php?user=current&amp;queue=1&amp;type=support", 'submenu'=>"30"),
+                   40=> array ( 'perm'=> 0, 'name'=> $strTasks, 'url'=>"{$CONFIG['application_webpath']}tasks.php", 'submenu'=>"40"),
                    50=> array ( 'perm'=> 54, 'name'=> "KnowledgeBase", 'url'=>"{$CONFIG['application_webpath']}browse_kb.php", 'submenu'=>"50"),
                    60=> array ( 'perm'=> 37, 'name'=> "Reports", 'url'=>"{$CONFIG['application_webpath']}reports.php", 'submenu'=>"60"),
                    70=> array ( 'perm'=> 0, 'name'=> "Help", 'url'=>"{$CONFIG['application_webpath']}help.php", 'submenu'=>"70")
