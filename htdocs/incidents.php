@@ -97,7 +97,7 @@ switch($type)
         switch($queue)
         {
             case 1: // Action Needed
-                echo "<span style='color: Red'>Action Needed</span>";
+                echo "<span style='color: Red'>{$strActionNeeded}</span>";
 
                 $sql .= "AND (status!='2') ";  // not closed
                 // the "1=2" obviously false else expression is to prevent records from showing unless the IF condition is true
@@ -108,17 +108,17 @@ switch($type)
             break;
 
             case 2: // Waiting
-                echo "<span style='color: Green'>Waiting</span>";
+                echo "<span style='color: Green'>{$strWaiting}</span>";
                 $sql .= "AND (status >= 4 AND status <= 8) ";
             break;
 
             case 3: // All Open
-                echo "<span style='color: Blue'>All Open</span>";
+                echo "<span style='color: Blue'>{$strAllOpen}</span>";
                 $sql .= "AND status!='2' ";
             break;
 
             case 4: // All Closed
-                echo "<span style='color: Gray'>All Closed</span>";
+                echo "<span style='color: Gray'>{$strAllClosed}</span>";
                 $sql .= "AND status='2' ";
             break;
 
@@ -166,15 +166,15 @@ switch($type)
         echo "value='{$_SERVER['PHP_SELF']}?user=$user&amp;type=$type&amp;queue=1'>{$strActionNeeded}</option>\n";
         echo "<option ";
         if ($queue == 2) echo "selected='selected' ";
-        echo "value='{$_SERVER['PHP_SELF']}?user=$user&amp;type=$type&amp;queue=2'>Waiting</option>\n";
+        echo "value='{$_SERVER['PHP_SELF']}?user=$user&amp;type=$type&amp;queue=2'>{$strWaiting}</option>\n";
         echo "<option ";
         if ($queue == 3) echo "selected='selected' ";
-        echo "value='{$_SERVER['PHP_SELF']}?user=$user&amp;type=$type&amp;queue=3'>All Open</option>\n";
+        echo "value='{$_SERVER['PHP_SELF']}?user=$user&amp;type=$type&amp;queue=3'>{$strAllOpen}</option>\n";
         if ($user!='all')
         {
             echo "<option ";
             if ($queue == 4) echo "selected='selected' ";
-            echo "value='{$_SERVER['PHP_SELF']}?user=$user&amp;type=$type&amp;queue=4'>All Closed</option>\n";
+            echo "value='{$_SERVER['PHP_SELF']}?user=$user&amp;type=$type&amp;queue=4'>{$strAllClosed}</option>\n";
         }
         echo "</select>\n";
         echo "</form>";
@@ -232,7 +232,7 @@ switch($type)
             switch($queue)
             {
                 case 1: // Action Needed
-                    echo "<h2>Other Incidents: <span style='color: Red'>Action Needed</span></h2>\n";
+                    echo "<h2>{$strOtherIncidents}: <span style='color: Red'>{$strActionNeeded}</span></h2>\n";
                     $sql .= "AND (status!='2') ";  // not closed
                     // the "1=2" obviously false else expression is to prevent records from showing unless the IF condition is true
                     $sql .= "AND ((timeofnextaction > 0 AND timeofnextaction < $now) OR ";
@@ -243,17 +243,17 @@ switch($type)
                 break;
 
                 case 2: // Waiting
-                    echo "<h2>Other Incidents: <span style='color: Green'>Waiting</span></h2>\n";
+                    echo "<h2>{$strOtherIncidents}: <span style='color: Green'>{$strWaiting}</span></h2>\n";
                     $sql .= "AND (status >= 4 AND status <= 8) ";
                 break;
 
                 case 3: // All Open
-                    echo "<h2>Other Incidents: <span style='color: Blue'>All Open</span></h2>\n";
+                    echo "<h2>{$strOtherIncidents}: <span style='color: Blue'>{$strAllOpen}</span></h2>\n";
                     $sql .= "AND status!='2' ";
                 break;
 
                 case 4: // All Closed
-                    echo "<h2>Other Incidents: <span style='color: Gray'>All Closed</span></h2>\n";
+                    echo "<h2>{$strOtherIncidents}: <span style='color: Gray'>{$strAllClosed}</span></h2>\n";
                     $sql .= "AND status='2' ";
                 break;
 
@@ -286,7 +286,7 @@ switch($type)
                 // Incidents Table
                 include('incidents_table.inc.php');
             }
-            else echo "<h5>No incidents in this queue</h5>";
+            else echo "<h5>{$strNoIncidents}</h5>";
 
             // end of expertise queue
             // ***

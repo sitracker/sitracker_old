@@ -45,13 +45,13 @@ $filter=array('queue' => $queue,
               'user' => $user,
               'type' => $type);
 echo colheader('id','ID',$sort, $order, $filter);
-echo colheader('title','Title',$sort, $order, $filter);
-echo colheader('contact','Contact',$sort, $order, $filter);
-echo colheader('priority','Priority',$sort, $order, $filter);
-if(empty($incidents_minimal)) echo colheader('status','Status',$sort, $order, $filter);
-echo colheader('lastupdated','Last Updated',$sort, $order, $filter);
-if(empty($incidents_minimal)) echo colheader('nextaction','SLA Target',$sort, $order, $filter);
-if(empty($incidents_minimal)) echo colheader('duration','Info',$sort, $order, $filter);
+echo colheader('title',$strTitle,$sort, $order, $filter);
+echo colheader('contact',$strContact,$sort, $order, $filter);
+echo colheader('priority',$strPriority,$sort, $order, $filter);
+if(empty($incidents_minimal)) echo colheader('status',$strStatus,$sort, $order, $filter);
+echo colheader('lastupdated',$strLastUpdated,$sort, $order, $filter);
+if(empty($incidents_minimal)) echo colheader('nextaction',$strSLATarget,$sort, $order, $filter);
+if(empty($incidents_minimal)) echo colheader('duration',$strInfo,$sort, $order, $filter);
 echo "</tr>";
 // Display the Support Incidents Themselves
 $shade = 0;
@@ -62,7 +62,7 @@ while ($incidents = mysql_fetch_array($result))
     else
     {
         if (($incidents["timeofnextaction"] - $now) > 0) $timetonextaction_string = format_seconds($incidents["timeofnextaction"] - $now);
-        else $timetonextaction_string = "<strong>Now</strong>";
+        else $timetonextaction_string = "<strong>{$strNow}</strong>";
     }
     // Make a readable site name
     $site = site_name($incidents['siteid']);
@@ -70,15 +70,15 @@ while ($incidents = mysql_fetch_array($result))
 
     // Make a readble last updated field
     if ($incidents['lastupdated'] > $now - 300)
-        $updated = "<em style='color: #640000; font-weight: bolder;'>".format_seconds($now - $incidents['lastupdated'])." ago</em>";
+        $updated = "<em style='color: #640000; font-weight: bolder;'>".sprintf($strAgo, format_seconds($now - $incidents['lastupdated']))."</em>";
     elseif ($incidents['lastupdated'] > $now - 1800)
-        $updated = "<em style='color: #640000;'>".format_seconds($now - $incidents['lastupdated'])." ago</em>";
+        $updated = "<em style='color: #640000;'>".sprintf($strAgo, format_seconds($now - $incidents['lastupdated']))."</em>";
     elseif ($incidents['lastupdated'] > $now - 3600)
-        $updated = "<em>".format_seconds($now - $incidents['lastupdated'])." ago</em>";
+        $updated = "<em>".sprintf($strAgo, format_seconds($now - $incidents['lastupdated']))."</em>";
     elseif (date('dmy', $incidents['lastupdated']) == date('dmy', $now))
-        $updated = "Today @ ".date($CONFIG['dateformat_time'], $incidents['lastupdated']);
+        $updated = "{$strToday} @ ".date($CONFIG['dateformat_time'], $incidents['lastupdated']);
     elseif (date('dmy', $incidents['lastupdated']) == date('dmy', ($now-86400)))
-        $updated = "Yesterday @ ".date($CONFIG['dateformat_time'], $incidents['lastupdated']);
+        $updated = "{$strYesterday} @ ".date($CONFIG['dateformat_time'], $incidents['lastupdated']);
     elseif ($incidents['lastupdated'] < $now-86400 AND
             $incidents['lastupdated'] > $now-(86400*6))
         $updated = date('l', $incidents['lastupdated'])." @ ".date($CONFIG['dateformat_time'], $incidents['lastupdated']);
@@ -89,7 +89,7 @@ while ($incidents = mysql_fetch_array($result))
     $tag = $incidents['servicelevel'];
     if ($tag=='') $tag = servicelevel_id2tag(maintenance_servicelevel($incidents['maintenanceid']));
 
-    $slsql = "select * from servicelevels where tag='{$tag}' and priority='{$incidents['priority']}' ";
+    $slsql = "SELECT * FROM servicelevels WHERE tag='{$tag}' AND priority='{$incidents['priority']}' ";
     $slresult = mysql_query($slsql);
     if (mysql_error()) trigger_error("mysql query error ".mysql_error(), E_USER_ERROR);
     $servicelevel = mysql_fetch_object($slresult);
@@ -232,7 +232,7 @@ while ($incidents = mysql_fetch_array($result))
     if(empty($incidents_minimal))
     {
         if ($incidents['towner'] > 0 AND $incidents['towner']!=$user) echo "<br />Temp: <strong>".user_realname($incidents['towner'],TRUE)."</strong>";
-        elseif ($incidents['owner']!=$user) echo '<br />Owner: <strong>'.user_realname($incidents['owner'],TRUE)."</strong>";
+        elseif ($incidents['owner']!=$user) echo "<br />{$strOwner}: <strong>".user_realname($incidents['owner'],TRUE)."</strong>";
     }
     echo "</td>\n";
 
@@ -300,7 +300,7 @@ while ($incidents = mysql_fetch_array($result))
 }
 echo "</table>\n\n";
 if(empty($incidents_minimal) && $user != 'all')
-    if($rowcount != 1) echo "<p align='center'>{$rowcount} Incidents</p>";
-    else echo "<p align='center'>{$rowcount} Incident</p>";
+    if($rowcount != 1) echo "<p align='center'>".sprintf($strNumIncidents, $rowcount)."</p>";
+    else echo "<p align='center'>".sprintf($strSingleIncident, $rowcount)."</p>";
 if ($CONFIG['debug']) echo "<!-- End of Support Incidents Table -->\n";
 ?>

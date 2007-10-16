@@ -64,7 +64,7 @@ $CONFIG['upload_max_filesize'] = return_bytes($CONFIG['upload_max_filesize']);
 
 // Non specific update types
 $updatetypes['actionplan'] = array('icon' => 'actionplan.png', 'text' => "{$strActionPlanBy} updateuser");
-$updatetypes['auto'] = array('icon' => 'auto.png', 'text' => 'Updated automatically by updateuser');
+$updatetypes['auto'] = array('icon' => 'auto.png', 'text' => "{$strUpdatedAutomaticallyBy} updateuser");
 $updatetypes['closing'] = array('icon' => 'close.png', 'text' => 'Marked for closure by updateuser');
 $updatetypes['editing'] = array('icon' => 'edit.png', 'text' => "{$strEditedBy} updateuser");
 $updatetypes['email'] = array('icon' => 'emailout.png', 'text' => 'Email sent by updateuser');

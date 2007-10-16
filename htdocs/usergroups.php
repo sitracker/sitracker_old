@@ -107,7 +107,7 @@ switch ($action)
         echo "</table>";
         echo "</form>";
 
-        echo "<h3>Membership</h3>";
+        echo "<h3>{$strGroupMembership}</h3>";
 
         $sql = "SELECT * FROM users WHERE status !=0 ORDER BY realname";  // status=0 means left company
         $result = mysql_query($sql);
