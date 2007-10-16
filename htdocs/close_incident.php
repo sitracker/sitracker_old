@@ -22,7 +22,7 @@ $incidentid=$id;
 // No submit detected show closure form
 if (empty($_REQUEST['process']))
 {
-    $title = 'Close';
+    $title = $strClose;
     include('incident_html_top.inc.php');
     ?>
     <script type="text/javascript">

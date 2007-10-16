@@ -149,7 +149,8 @@ if (empty($action))
     <form action="<?php echo $_SERVER['PHP_SELF']; ?>?id=<?php echo $id ?>" method="post" name="updateform" id="updateform" enctype="multipart/form-data">
     <table class='vertical'>
     <tr>
-    <th align="right" valign="top">Does this update meet an SLA target?:<?php
+    <?php
+    echo "<th align='right' valign='top'>{$strDoesThisUpdateMeetSLA}:";
     echo "<img src='{$CONFIG['application_webpath']}/images/icons/{$iconset}/16x16/sla.png' width='16' height='16' alt='' /></th>";
     echo "<td class='shade2'>";
     $target = incident_get_next_target($id);
@@ -178,14 +179,10 @@ if (empty($action))
         break;
     }
     echo "</select>\n";
-    ?>
-    </td>
-    </tr>
-    <tr>
-    <th align="right" valign="top">Update Type:</th>
-    <td class="shade1">
-    <select name="updatetype" class='dropdown'>
-    <?php
+    echo "</td></tr>\n";
+    echo "<tr><th align='right' valign='top'>{$strUpdateType}:</th>";
+    echo "<td class='shade1'>";
+    echo "<select name='updatetype' class='dropdown'>";
     /*
     if ($target->type!='actionplan' && $target->type!='solution')
         echo "<option value='probdef'>Problem Definition</option>\n";

@@ -39,20 +39,20 @@ if (empty($submit))
     // Need to change this sometime.
 
     echo "<h2><img src='{$CONFIG['application_webpath']}images/icons/{$iconset}/32x32/user.png' width='32' height='32' alt='' /> ";
-    echo "Edit User Profile For {$user->realname}</h2>";
+    echo sprintf($strEditProfileFor, $user->realname)."</h2>";
     ?>
     <form action="<?php echo $_SERVER['PHP_SELF'] ?>" method="post">
     <table align='center' class='vertical'>
     <col width="250"></col><col width="*"></col>
     <tr><th colspan='2'>ABOUT <?php if ($userid==$sit[2]) echo "YOU"; else echo strtoupper($user->realname); ?></td></tr>
-    <tr><th>Username:</th><td><?php echo $user->username; ?></td></tr>
     <?php
-    echo "<tr><th>Role:</th>";
+    echo "<tr><th>{$strUsername}:</th><td>{$user->username}</td></tr>";
+    echo "<tr><th>{$strRole}:</th>";
     if ($userid==$sit[2] OR $userid==1) echo "<td>".db_read_column('rolename', 'roles', $user->roleid)."</td>";
     else echo "<td>".role_drop_down('roleid', $user->roleid)."</td>";
     echo "</tr>";
+    echo "<tr><th>{$strRealName}:</th><td><input maxlength='50' name='realname' size='30' type='text' value=\"".stripslashes($user->realname)."\" /></td></tr>";
     ?>
-    <tr><th>Real Name:</th><td><input maxlength="50" name="realname" size="30" type="text" value="<?php echo $user->realname; ?>" /></td></tr>
     <tr><th>Job Title:</th><td><input maxlength="50" name="jobtitle" size="30" type="text" value="<?php echo $user->title; ?>" /></td></tr>
     <tr><th>Qualifications:<br />
     Enter a comma seperated list of each of the professional qualifications you hold
@@ -64,14 +64,14 @@ if (empty($submit))
     $entitlement=user_holiday_entitlement($userid);
     if ($edituserpermission && $userid!=$sit[2])
     {
-        echo "<tr><th>Holiday Entitlement:</th><td>";
+        echo "<tr><th>{$strHolidayEntitlement}:</th><td>";
         echo "<input type='text' name='holiday_entitlement' value='$entitlement' size='2' /> days";
         echo "</td></tr>";
     }
     elseif ($entitlement > 0)
     {
         $holidaystaken=user_count_holidays($userid, 1);
-        echo "<tr><th>Holiday Entitlement:</th><td>";
+        echo "<tr><th>{$strHolidayEntitlement}:</th><td>";
         echo "$entitlement days, ";
         echo "$holidaystaken taken, ";
         echo $entitlement-$holidaystaken." Remaining";
@@ -84,7 +84,7 @@ if (empty($submit))
         echo user_count_holidays($userid, 5)." days other leave";
         echo "</td></tr>";
     }
-    echo "<tr><th>Group Membership:</th><td valign='top'>";
+    echo "<tr><th>{$strGroupMembership}:</th><td valign='top'>";
     if ($user->groupid >= 1)
     {
         $sql="SELECT name FROM groups WHERE id='{$user->groupid}' ";
@@ -154,7 +154,7 @@ if (empty($submit))
     }
     echo "</table>\n";
     echo "<input type='hidden' name='userid' value='{$userid}' />";
-    echo "<p><input name='reset' type='reset' value='Reset' /> <input name='submit' type='submit' value='{$strSave}' /></p>";
+    echo "<p><input name='reset' type='reset' value='{$strReset}' /> <input name='submit' type='submit' value='{$strSave}' /></p>";
     echo "</form>\n";
 
     include('htmlfooter.inc.php');
