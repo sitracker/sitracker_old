@@ -33,7 +33,7 @@ function confirm_submit()
 if (empty($submit))
 {
     echo "<h2><img src='{$CONFIG['application_webpath']}images/icons/{$iconset}/32x32/contact.png' width='32' height='32' alt='' /> ";
-    echo "Add New Contact</h2>";
+    echo "{$strNewContact}</h2>";
     ?>
     <h5>Mandatory fields are marked <sup class='red'>*</sup></h5>
     <form name='contactform' action="<?php echo $_SERVER['PHP_SELF']; ?>" method="post" onsubmit="return confirm_submit()">

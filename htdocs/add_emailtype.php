@@ -34,8 +34,8 @@ function confirm_submit()
 // Show add email type form
 if (empty($submit))
 {
+    echo "<h2>{$strNewTemplate}</h2>";
     ?>
-    <h2>Add New Email Template</h2>
     <p align='center'>Mandatory fields are marked <sup class='red'>*</sup></p>
     <p align='center'>The following special identifiers can be used in these fields:</p>
     <table align='center' class='vertical'>

@@ -211,7 +211,7 @@ switch ($action)
                 if ($task->distribution=='private') echo "checked='checked' ";
                 echo "value='private' /> Private <img src='{$CONFIG['application_webpath']}images/icons/{$iconset}/16x16/private.png' width='16' height='16' title='Private' alt='Private' /></td></tr>";
                 echo "</table>";
-                echo "<p><input name='submit' type='submit' value='Save' /></p>";
+                echo "<p><input name='submit' type='submit' value='{$strSave}' /></p>";
                 echo "<input type='hidden' name='action' value='edittask' />";
                 echo "<input type='hidden' name='id' value='{$id}' />";
                 // Send copy of existing data so we can see when it is changed

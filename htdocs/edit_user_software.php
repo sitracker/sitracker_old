@@ -130,9 +130,10 @@ if (empty($submit))
     ?>
     </table>
     <input type="hidden" name="choices" />
-    <p align='center'><input name="submit" type="submit" value="Save Changes" /></p>
-    </form>
     <?php
+    echo "<p align='center'><input name='submit' type='submit' value='{$strSave}' /></p>";
+    echo "</form>\n";
+
     include('htmlfooter.inc.php');
 }
 else

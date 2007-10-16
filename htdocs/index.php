@@ -35,17 +35,17 @@ if ($_SESSION['auth'] != TRUE)
     if ($id==3) throw_user_error("Invalid username/password combination");
 
     echo "<div class='windowbox' style='width: 220px;'>";
-    echo "<div class='windowtitle'>{$CONFIG['application_shortname']} - Login</div>";
+    echo "<div class='windowtitle'>{$CONFIG['application_shortname']} - {$strLogin}</div>";
     echo "<div class='window'>";
     echo "<form action='login.php' method='post'>";
-    echo "<label>Username:<br /><input name='username' size='28' type='text' /></label><br />";
-    echo "<label>Password:<br /><input name='password' size='28' type='password' /></label><br /><br />";
+    echo "<label>{$strUsername}:<br /><input name='username' size='28' type='text' /></label><br />";
+    echo "<label>{$strPassword}:<br /><input name='password' size='28' type='password' /></label><br /><br />";
     echo "<input type='hidden' name='page' value='$page' />";
-    echo "<input type='submit' value='Log In' /><br />";
+    echo "<input type='submit' value='{$strLogIn}' /><br />";
 
     if($CONFIG['portal'] == TRUE)
     {
-        echo "<br /><a href='forgotpwd.php'>Forgotten your details?</a>";
+        echo "<br /><a href='forgotpwd.php'>{$strForgottenDetails}</a>";
     }
     echo "</form>";
     echo "</div>\n</div>\n";

@@ -46,7 +46,7 @@ $action = cleanvar($_REQUEST['action']);
                 echo "<td><input maxlength='80' name='externalengineer' size='30' type='text' value='' /></td></tr>";
                 echo "<tr><th>External Email:</th>";
                 echo "<td><input maxlength='255' name='externalemail' size='30' type='text' value='' /></td></tr>";
-                echo "</table><p align='center'><input name='submit' type='submit' value='Save' /></p></form>";
+                echo "</table><p align='center'><input name='submit' type='submit' value='{$strSave}' /></p></form>";
             }
             else echo "<p align='center'>There are currently no escalated incidents to modify</p>";
         break;

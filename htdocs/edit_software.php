@@ -60,7 +60,7 @@ if (empty($action) OR $action=='edit')
     }
     echo "<input type='hidden' name='id' value='$id' />";
     echo "<input type='hidden' name='action' value='save' />";
-    echo "<p align='center'><input name='submit' type='submit' value='Save' /></p>";
+    echo "<p align='center'><input name='submit' type='submit' value='{$strSave}' /></p>";
     echo "</form>\n";
     echo "<p align='center'><a href='products.php'>Return to products list without saving</a></p>";
     include('htmlfooter.inc.php');

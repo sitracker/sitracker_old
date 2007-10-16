@@ -75,7 +75,7 @@ else
     echo "</table>";
     echo "<input type='hidden' name='productid' value='$id' />";
     echo "<input type='hidden' name='action' value='save' />";
-    echo "<p align='center'><input type='submit' value='Save' /></p>";
+    echo "<p align='center'><input type='submit' value='{$strSave}' /></p>";
     echo "</td></tr>";
     echo "</form>";
 

@@ -108,8 +108,9 @@ elseif ($action == "edit" && isset($contact))
         echo "</table>";
         ?>
         <input name="contact" type="hidden" value="<?php echo $contact ?>" />
-        <p align='center'><input name="submit" type="submit" value="Save" /></p>
+
         <?php
+        echo "<p align='center'><input name='submit' type='submit' value='{$strSave}' /></p>";
         echo "</form>\n";
     }
 }

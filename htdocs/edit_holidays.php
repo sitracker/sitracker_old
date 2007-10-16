@@ -99,7 +99,7 @@ switch($_REQUEST['action'])
         echo "</table>";
         echo "<p>";
         echo "<input type='hidden' name='action' value='save' />";
-        echo "<input type='submit' name='submit' value='Save' /></p>";
+        echo "<input type='submit' name='submit' value='{$strSave}' /></p>";
         echo "</form>";
         include('htmlfooter.inc.php');
     break;

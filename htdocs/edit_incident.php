@@ -96,9 +96,9 @@ if (empty($submit))
         <input name="oldproductversion" type="hidden" value="<?php echo stripslashes($incident["productversion"]); ?>" />
         <input name="oldproductservicepacks" type="hidden" value="<?php echo stripslashes($incident["productservicepacks"]); ?>" />
         <input name="oldsoftware" type="hidden" value="<?php echo $incident["softwareid"] ?>" />
-        <input name="submit" type="submit" value="Save" /></p>
-        </form>
         <?php
+        echo "<input name='submit' type='submit' value='{$strSave}' /></p>";
+        echo "</form>\n";
     }
     include('incident_html_bottom.inc.php');
 }

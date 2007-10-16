@@ -123,7 +123,7 @@ switch ($action)
         }
         echo "</table>\n";
 
-        echo "<p><input type='hidden' name='action' value='savemembers' /><input type='submit' value='Save' /></p>";
+        echo "<p><input type='hidden' name='action' value='savemembers' /><input type='submit' value='{$strSave}' /></p>";
         echo "</form>";
 
         include('htmlfooter.inc.php');

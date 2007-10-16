@@ -154,10 +154,9 @@ if (empty($submit))
     }
     echo "</table>\n";
     echo "<input type='hidden' name='userid' value='{$userid}' />";
-    ?>
-    <p><input name="reset" type="reset" value="Reset" /> <input name="submit" type="submit" value="Save" /></p>
-    </form>
-    <?php
+    echo "<p><input name='reset' type='reset' value='Reset' /> <input name='submit' type='submit' value='{$strSave}' /></p>";
+    echo "</form>\n";
+
     include('htmlfooter.inc.php');
 }
 else
