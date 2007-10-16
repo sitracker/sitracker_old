@@ -112,16 +112,16 @@ else
         {
             ?>
             <h2>Search yielded <?php echo mysql_num_rows($result) ?> result(s)</h2>
-            <table align='center'>
+            <?php
+            echo "<table align='center'>
             <tr>
             <th>Contact Name</th>
             <th>Site</th>
             <th>Email</th>
             <th>Phone</th>
             <th>Fax</th>
-            <th>Add Incident</th>
-            </tr>
-            <?php
+            <th>{$strAddIncident}</th>
+            </tr>";
             $shade = 0;
             while ($results = mysql_fetch_array($result))
             {

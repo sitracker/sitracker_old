@@ -63,10 +63,10 @@ $todayrecent=$now-(16*3600);  // past 16 hours
 $CONFIG['upload_max_filesize'] = return_bytes($CONFIG['upload_max_filesize']);
 
 // Non specific update types
-$updatetypes['actionplan'] = array('icon' => 'actionplan.png', 'text' => 'Action Plan by updateuser');
+$updatetypes['actionplan'] = array('icon' => 'actionplan.png', 'text' => "{$strActionPlanBy} updateuser");
 $updatetypes['auto'] = array('icon' => 'auto.png', 'text' => 'Updated automatically by updateuser');
 $updatetypes['closing'] = array('icon' => 'close.png', 'text' => 'Marked for closure by updateuser');
-$updatetypes['editing'] = array('icon' => 'edit.png', 'text' => 'Edited by updateuser');
+$updatetypes['editing'] = array('icon' => 'edit.png', 'text' => "{$strEditedBy} updateuser");
 $updatetypes['email'] = array('icon' => 'emailout.png', 'text' => 'Email sent by updateuser');
 $updatetypes['emailin'] = array('icon' => 'emailin.png', 'text' => 'Email received by updateuser');
 $updatetypes['emailout'] = array('icon' => 'emailout.png', 'text' => 'Email sent by updateuser');
@@ -138,57 +138,57 @@ $hmenu[1020] = array (10=> array ( 'perm'=> 4, 'name'=> $strMyProfile, 'url'=>"{
 );
 // configure
 $hmenu[1030] = array (10=> array ( 'perm'=> 22, 'name'=> $strUsers, 'url'=>"{$CONFIG['application_webpath']}manage_users.php", 'submenu'=>"103010"),
-                      20=> array ( 'perm'=> 0, 'name'=> "Email Settings", 'url'=>"", 'submenu'=>"103020"),
-                      30=> array ( 'perm'=> 22, 'name'=> "Set Public Holidays", 'url'=>"{$CONFIG['application_webpath']}holiday_calendar.php?type=10"),
-                      40=> array ( 'perm'=> 22, 'name'=> "FTP Files DB", 'url'=>"{$CONFIG['application_webpath']}ftp_list_files.php"),
-                      50=> array ( 'perm'=> 22, 'name'=> "Service Levels", 'url'=>"{$CONFIG['application_webpath']}service_levels.php"),
-                      60=> array ( 'perm'=> 7, 'name'=> "Bulk Modify", 'url'=>"{$CONFIG['application_webpath']}bulk_modify.php?action=external_esc"),
-                      70=> array ( 'perm'=> 64, 'name'=> "Escalation Paths", 'url'=>"{$CONFIG['application_webpath']}escalation_paths.php"),
-                      80=> array ( 'perm'=> 66, 'name'=> "Manage Dashboard Components", 'url'=>"{$CONFIG['application_webpath']}manage_dashboard.php"),
-                      90=> array ( 'perm'=> 49, 'name'=> "Feedback Forms", 'url'=>"", 'submenu'=>"103090")
+                      20=> array ( 'perm'=> 0, 'name'=> $strEmailSettings, 'url'=>"", 'submenu'=>"103020"),
+                      30=> array ( 'perm'=> 22, 'name'=> $strSetPublicHolidays, 'url'=>"{$CONFIG['application_webpath']}holiday_calendar.php?type=10"),
+                      40=> array ( 'perm'=> 22, 'name'=> $strFTPFilesDB, 'url'=>"{$CONFIG['application_webpath']}ftp_list_files.php"),
+                      50=> array ( 'perm'=> 22, 'name'=> $strServiceLevels, 'url'=>"{$CONFIG['application_webpath']}service_levels.php"),
+                      60=> array ( 'perm'=> 7, 'name'=> $strBulkModify, 'url'=>"{$CONFIG['application_webpath']}bulk_modify.php?action=external_esc"),
+                      70=> array ( 'perm'=> 64, 'name'=> $strEscalationPaths, 'url'=>"{$CONFIG['application_webpath']}escalation_paths.php"),
+                      80=> array ( 'perm'=> 66, 'name'=> $strManageDashboardComponents, 'url'=>"{$CONFIG['application_webpath']}manage_dashboard.php"),
+                      90=> array ( 'perm'=> 49, 'name'=> $strFeedbackForms, 'url'=>"", 'submenu'=>"103090")
 );
-$hmenu[103010] = array (10=> array ( 'perm'=> 22, 'name'=> "Manage Users", 'url'=>"{$CONFIG['application_webpath']}manage_users.php"),
-                        20=> array ( 'perm'=> 20, 'name'=> "Add User", 'url'=>"{$CONFIG['application_webpath']}add_user.php?action=showform"),
-                        30=> array ( 'perm'=> 9, 'name'=> "Set Permissions", 'url'=>"{$CONFIG['application_webpath']}edit_user_permissions.php"),
-                        40=> array ( 'perm'=> 23, 'name'=> "User Groups", 'url'=>"{$CONFIG['application_webpath']}usergroups.php"),
-                        50=> array ( 'perm'=> 22, 'name'=> "Edit Holiday Entitlement", 'url'=>"{$CONFIG['application_webpath']}edit_holidays.php")
+$hmenu[103010] = array (10=> array ( 'perm'=> 22, 'name'=> $strManageUsers, 'url'=>"{$CONFIG['application_webpath']}manage_users.php"),
+                        20=> array ( 'perm'=> 20, 'name'=> $strAddUser, 'url'=>"{$CONFIG['application_webpath']}add_user.php?action=showform"),
+                        30=> array ( 'perm'=> 9, 'name'=> $strSetPermissions, 'url'=>"{$CONFIG['application_webpath']}edit_user_permissions.php"),
+                        40=> array ( 'perm'=> 23, 'name'=> $strUserGroups, 'url'=>"{$CONFIG['application_webpath']}usergroups.php"),
+                        50=> array ( 'perm'=> 22, 'name'=> $strEditHolidyEntitlement, 'url'=>"{$CONFIG['application_webpath']}edit_holidays.php")
 );
-$hmenu[103020] = array (10=> array ( 'perm'=> 16, 'name'=> "Add Template", 'url'=>"{$CONFIG['application_webpath']}add_emailtype.php?action=showform"),
-                        20=> array ( 'perm'=> 17, 'name'=> "Edit Template", 'url'=>"{$CONFIG['application_webpath']}edit_emailtype.php?action=showform"),
-                        30=> array ( 'perm'=> 43, 'name'=> "Global Signature", 'url'=>"{$CONFIG['application_webpath']}edit_global_signature.php")
+$hmenu[103020] = array (10=> array ( 'perm'=> 16, 'name'=> $strAddTemplate, 'url'=>"{$CONFIG['application_webpath']}add_emailtype.php?action=showform"),
+                        20=> array ( 'perm'=> 17, 'name'=> $strEditTemplate, 'url'=>"{$CONFIG['application_webpath']}edit_emailtype.php?action=showform"),
+                        30=> array ( 'perm'=> 43, 'name'=> $strGlobalSignature, 'url'=>"{$CONFIG['application_webpath']}edit_global_signature.php")
 );
 $hmenu[103090] = array (10=> array ( 'perm'=> 49, 'name'=> "Add Feedback Form", 'url'=>"{$CONFIG['application_webpath']}edit_feedback_form.php?action=new"),
                         20=> array ( 'perm'=> 49, 'name'=> "Browse Feedback Forms", 'url'=>"{$CONFIG['application_webpath']}browse_feedback_forms.php")
 );
-$hmenu[1040] = array (10=> array ( 'perm'=> 0, 'name'=> "View Users", 'url'=>"{$CONFIG['application_webpath']}users.php"),
-                      20=> array ( 'perm'=> 0, 'name'=> "List Skills", 'url'=>"{$CONFIG['application_webpath']}user_skills.php"),
-                      21=> array ( 'perm'=> 0, 'name'=> "Skills Matrix", 'url'=>"{$CONFIG['application_webpath']}skills_matrix.php"),
-                      30=> array ( 'perm'=> 27, 'name'=> "Holiday Planner", 'url'=>"{$CONFIG['application_webpath']}holiday_calendar.php?display=month"),
-                      40=> array ( 'perm'=> 50, 'name'=> "Approve Holidays", 'url'=>"{$CONFIG['application_webpath']}holiday_request.php?user=all&amp;mode=approval")
+$hmenu[1040] = array (10=> array ( 'perm'=> 0, 'name'=> $strViewUsers, 'url'=>"{$CONFIG['application_webpath']}users.php"),
+                      20=> array ( 'perm'=> 0, 'name'=> $strListSkills, 'url'=>"{$CONFIG['application_webpath']}user_skills.php"),
+                      21=> array ( 'perm'=> 0, 'name'=> $strSkillsMatrix, 'url'=>"{$CONFIG['application_webpath']}skills_matrix.php"),
+                      30=> array ( 'perm'=> 27, 'name'=> $strHolidayPlanner, 'url'=>"{$CONFIG['application_webpath']}holiday_calendar.php?display=month"),
+                      40=> array ( 'perm'=> 50, 'name'=> $strApproveHolidays, 'url'=>"{$CONFIG['application_webpath']}holiday_request.php?user=all&amp;mode=approval")
 );
 
 
 
 // Customers
-$hmenu[20] = array (10=> array ( 'perm'=> 0, 'name'=> "Sites", 'url'=>"{$CONFIG['application_webpath']}browse_sites.php", 'submenu'=>"2010"),
-                    20=> array ( 'perm'=> 0, 'name'=> "Contacts", 'url'=>"{$CONFIG['application_webpath']}browse_contacts.php?search_string=A", 'submenu'=>"2020"),
-                    30=> array ( 'perm'=> 0, 'name'=> "Maintainance", 'url'=>"{$CONFIG['application_webpath']}browse_maintenance.php?search_string=A", 'submenu'=>"2030"),
-                    40=> array ( 'perm'=> 0, 'name'=> "Browse Feedback", 'url'=>"{$CONFIG['application_webpath']}browse_feedback.php")
+$hmenu[20] = array (10=> array ( 'perm'=> 0, 'name'=> $strSites, 'url'=>"{$CONFIG['application_webpath']}browse_sites.php", 'submenu'=>"2010"),
+                    20=> array ( 'perm'=> 0, 'name'=> $strContacts, 'url'=>"{$CONFIG['application_webpath']}browse_contacts.php?search_string=A", 'submenu'=>"2020"),
+                    30=> array ( 'perm'=> 0, 'name'=> $strMaintenance, 'url'=>"{$CONFIG['application_webpath']}browse_maintenance.php?search_string=A", 'submenu'=>"2030"),
+                    40=> array ( 'perm'=> 0, 'name'=> $strBrowseFeedback, 'url'=>"{$CONFIG['application_webpath']}browse_feedback.php")
 );
 
-$hmenu[2010] = array (10=> array ( 'perm'=> 11, 'name'=> "Browse", 'url'=>"{$CONFIG['application_webpath']}browse_sites.php"),
-                      20=> array ( 'perm'=> 2, 'name'=> "New Site", 'url'=>"{$CONFIG['application_webpath']}add_site.php?action=showform")
+$hmenu[2010] = array (10=> array ( 'perm'=> 11, 'name'=> $strBrowse, 'url'=>"{$CONFIG['application_webpath']}browse_sites.php"),
+                      20=> array ( 'perm'=> 2, 'name'=> $strNewSite, 'url'=>"{$CONFIG['application_webpath']}add_site.php?action=showform")
 );
-$hmenu[2020] = array (10=> array ( 'perm'=> 11, 'name'=> "Browse", 'url'=>"{$CONFIG['application_webpath']}browse_contacts.php?search_string=A"),
-                      20=> array ( 'perm'=> 1, 'name'=> "New Contact", 'url'=>"{$CONFIG['application_webpath']}add_contact.php?action=showform")
+$hmenu[2020] = array (10=> array ( 'perm'=> 11, 'name'=> $strBrowse, 'url'=>"{$CONFIG['application_webpath']}browse_contacts.php?search_string=A"),
+                      20=> array ( 'perm'=> 1, 'name'=> $strNewContact, 'url'=>"{$CONFIG['application_webpath']}add_contact.php?action=showform")
 );
 
-$hmenu[2030] = array (10=> array ( 'perm'=> 19, 'name'=> "Browse", 'url'=>"{$CONFIG['application_webpath']}browse_maintenance.php?search_string=A"),
-                      20=> array ( 'perm'=> 39, 'name'=> "New Contract", 'url'=>"{$CONFIG['application_webpath']}add_maintenance.php?action=showform"),
-                      30=> array ( 'perm'=> 21, 'name'=> "Edit Contract", 'url'=>"{$CONFIG['application_webpath']}edit_maintenance.php?action=showform"),
-                      40=> array ( 'perm'=> 2, 'name'=> "New Reseller", 'url'=>"{$CONFIG['application_webpath']}add_reseller.php"),
-                      50=> array ( 'perm'=> 19, 'name'=> "Show Renewals", 'url'=>"{$CONFIG['application_webpath']}search_renewals.php?action=showform"),
-                      60=> array ( 'perm'=> 19, 'name'=> "Show Expired", 'url'=>"{$CONFIG['application_webpath']}search_expired.php?action=showform"),
+$hmenu[2030] = array (10=> array ( 'perm'=> 19, 'name'=> $strBrowse, 'url'=>"{$CONFIG['application_webpath']}browse_maintenance.php?search_string=A"),
+                      20=> array ( 'perm'=> 39, 'name'=> $strNewContract, 'url'=>"{$CONFIG['application_webpath']}add_maintenance.php?action=showform"),
+                      30=> array ( 'perm'=> 21, 'name'=> $strEditContract, 'url'=>"{$CONFIG['application_webpath']}edit_maintenance.php?action=showform"),
+                      40=> array ( 'perm'=> 2, 'name'=> $strNewReseller, 'url'=>"{$CONFIG['application_webpath']}add_reseller.php"),
+                      50=> array ( 'perm'=> 19, 'name'=> $strShowRenewals, 'url'=>"{$CONFIG['application_webpath']}search_renewals.php?action=showform"),
+                      60=> array ( 'perm'=> 19, 'name'=> $strShowExpired, 'url'=>"{$CONFIG['application_webpath']}search_expired.php?action=showform"),
                       70=> array ( 'perm'=> 0, 'name'=> "Products &amp; Skills", 'url'=>"{$CONFIG['application_webpath']}products.php", 'submenu'=>"203010"),
 );
 
@@ -204,21 +204,21 @@ $hmenu[203010] = array (10=> array ( 'perm'=> 56, 'name'=> "Add Vendor", 'url'=>
 
 
 // Support
-$hmenu[30] = array (10=> array ( 'perm'=> 5, 'name'=> "Add Incident", 'url'=>"{$CONFIG['application_webpath']}add_incident.php"),
-                    20=> array ( 'perm'=> 0, 'name'=> "View Incidents", 'url'=>"{$CONFIG['application_webpath']}incidents.php?user=current&amp;queue=1&amp;type=support"),
-                    30=> array ( 'perm'=> 0, 'name'=> "Watch Incidents", 'url'=>"{$CONFIG['application_webpath']}incidents.php?user=all&amp;queue=1&amp;type=support"),
-                    40=> array ( 'perm'=> 42, 'name'=> "Holding Queue", 'url'=>"{$CONFIG['application_webpath']}review_incoming_updates.php")
+$hmenu[30] = array (10=> array ( 'perm'=> 5, 'name'=> $strAddIncident, 'url'=>"{$CONFIG['application_webpath']}add_incident.php"),
+                    20=> array ( 'perm'=> 0, 'name'=> $strViewIncidents, 'url'=>"{$CONFIG['application_webpath']}incidents.php?user=current&amp;queue=1&amp;type=support"),
+                    30=> array ( 'perm'=> 0, 'name'=> $strWatchIncidents, 'url'=>"{$CONFIG['application_webpath']}incidents.php?user=all&amp;queue=1&amp;type=support"),
+                    40=> array ( 'perm'=> 42, 'name'=> $strHoldingQueue, 'url'=>"{$CONFIG['application_webpath']}review_incoming_updates.php")
 );
 
 
 // Tasks
-$hmenu[40] = array (10=> array ( 'perm'=> 0, 'name'=> "Add Task", 'url'=>"{$CONFIG['application_webpath']}add_task.php"),
-                    20=> array ( 'perm'=> 0, 'name'=> "View Tasks", 'url'=>"{$CONFIG['application_webpath']}tasks.php")
+$hmenu[40] = array (10=> array ( 'perm'=> 0, 'name'=> $strAddTask, 'url'=>"{$CONFIG['application_webpath']}add_task.php"),
+                    20=> array ( 'perm'=> 0, 'name'=> $strViewTasks, 'url'=>"{$CONFIG['application_webpath']}tasks.php")
 );
 
 // KB
-$hmenu[50] = array (10=> array ( 'perm'=> 54, 'name'=> "New Article", 'url'=>"{$CONFIG['application_webpath']}kb_add_article.php"),
-                    20=> array ( 'perm'=> 54, 'name'=> "Browse", 'url'=>"{$CONFIG['application_webpath']}browse_kb.php")
+$hmenu[50] = array (10=> array ( 'perm'=> 54, 'name'=> $strNewKBArticle, 'url'=>"{$CONFIG['application_webpath']}kb_add_article.php"),
+                    20=> array ( 'perm'=> 54, 'name'=> $strBrowse, 'url'=>"{$CONFIG['application_webpath']}browse_kb.php")
 );
 
 
@@ -241,8 +241,8 @@ $hmenu[60] = array (10=> array ( 'perm'=> 37, 'name'=> "Marketing Mailshot", 'ur
 ));
 
 
-$hmenu[70] = array (10=> array ( 'perm'=> 0, 'name'=> "Help Contents...", 'url'=>"{$CONFIG['application_webpath']}help.php"),
-                    20=> array ( 'perm'=> 41, 'name'=> "About", 'url'=>"{$CONFIG['application_webpath']}about.php")
+$hmenu[70] = array (10=> array ( 'perm'=> 0, 'name'=> "{$strHelpContents}...", 'url'=>"{$CONFIG['application_webpath']}help.php"),
+                    20=> array ( 'perm'=> 41, 'name'=> $strHelpAbout, 'url'=>"{$CONFIG['application_webpath']}about.php")
 );
 
 if (!function_exists('authenticate'))
@@ -587,7 +587,7 @@ function contact_realname($id)
     if (mysql_num_rows($result) == 0)
     {
         mysql_free_result($result);
-        return('Unknown');
+        return($GLOBALS['strUnknown']);
     }
     else
     {
@@ -609,7 +609,7 @@ function contact_site($id)
     if (mysql_num_rows($result) == 0)
     {
         mysql_free_result($result);
-        return('Unknown');
+        return($GLOBALS['strUnknown']);
     }
     else
     {
@@ -1710,7 +1710,7 @@ function priority_name($id)
         case 3: $value = 'High'; break;
         case 4: $value = 'Critical'; break;
         case '': $value = 'Not set'; break;
-        default: $value = 'Unknown'; break;
+        default: $value = $GLOBALS['strUnknown']; break;
    }
    return $value;
 }
@@ -2475,7 +2475,7 @@ function site_drop_down($name, $id)
 function site_name($id)
 {
     $sitename = stripslashes(db_read_column('name', 'sites', $id));
-    if (empty($sitename)) $sitename="Unknown";
+    if (empty($sitename)) $sitename=$GLOBALS['strUnknown'];
 
     return($sitename);
 }

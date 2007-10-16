@@ -160,10 +160,10 @@ switch($type)
 
         // show drop down of incident status
         echo "<form action='{$_SERVER['PHP_SELF']}' style='text-align: center;'>";
-        echo "Queue: <select class='dropdown' name='queue' onchange='window.location.href=this.options[this.selectedIndex].value'>\n";
+        echo "{$strQueue}: <select class='dropdown' name='queue' onchange='window.location.href=this.options[this.selectedIndex].value'>\n";
         echo "<option ";
         if ($queue == 1) echo "selected='selected' ";
-        echo "value='{$_SERVER['PHP_SELF']}?user=$user&amp;type=$type&amp;queue=1'>Action Needed</option>\n";
+        echo "value='{$_SERVER['PHP_SELF']}?user=$user&amp;type=$type&amp;queue=1'>{$strActionNeeded}</option>\n";
         echo "<option ";
         if ($queue == 2) echo "selected='selected' ";
         echo "value='{$_SERVER['PHP_SELF']}?user=$user&amp;type=$type&amp;queue=2'>Waiting</option>\n";
