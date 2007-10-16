@@ -48,7 +48,10 @@ define('CFG_JOURNAL_PRODUCTS', 9);
 define('CFG_JOURNAL_OTHER', 10);
 define('CFG_JOURNAL_KB', 11);    // Knowledge Base
 
+require('i18n/en-gb.inc.php');
 ini_set('default_charset', 'UTF-8');
+
+
 
 // Time settings
 $now = time();

@@ -3,14 +3,6 @@
 function dashboard_statistics($row,$dashboardid)
 {
     global $todayrecent;
-    global $i18n_TODAYS_STATS;
-    global $i18n_NO_INCIDENTS;
-    global $i18n_LOGGED;
-    global $i18n_UPDATED;
-    global $i18n_CLOSED;
-    global $i18n_CURRENTLY_OPEN;
-    global $i18n_NO_KB_ARTICLES;
-    global $i18n_PUBLISHED;
     // Count incidents logged today
     $sql = "SELECT id FROM incidents WHERE opened > '$todayrecent'";
     $result = mysql_query($sql);
@@ -47,32 +39,32 @@ function dashboard_statistics($row,$dashboardid)
     mysql_free_result($result);
 
     echo "<div class='windowbox' style='width: 95%' id='$row-$dashboardid'>";
-    echo "<div class='windowtitle'><a href='statistics.php'>{$i18n_TODAYS_STATS}</a></div>";
+    echo "<div class='windowtitle'><a href='statistics.php'>{$GLOBALS['strTodaysStats']}</a></div>";
     echo "<div class='window'>";
-    if ($todaysincidents == 0) echo $i18n_NO_INCIDENTS;
+    if ($todaysincidents == 0) echo $GLOBALS['strNoIncidents'];
     elseif ($todaysincidents == 1) echo "<a href='statistics.php'>{$todaysincidents}</a> Incident";
     elseif ($todaysincidents > 1) echo "<a href='statistics.php'>{$todaysincidents}</a> Incidents";
-    echo " {$i18n_LOGGED}<br />";
+    echo " {$GLOBALS['strLogged']}<br />";
 
-    if ($todaysupdated == 0) echo $i18n_NO_INCIDENTS;
+    if ($todaysupdated == 0) echo $GLOBALS['strNoIncidents'];
     elseif ($todaysupdated == 1) echo "{$todaysupdated} Incident";
     elseif ($todaysupdated > 1) echo "{$todaysupdated} Incidents";
-    echo " {$i18n_UPDATED}<br />";
+    echo " {$GLOBALS['strUpdated']}<br />";
 
-    if ($todaysclosed == 0) echo $i18n_NO_INCIDENTS;
+    if ($todaysclosed == 0) echo $GLOBALS['strNoIncidents'];
     elseif ($todaysclosed == 1) echo "<a href='statistics.php'>{$todaysclosed}</a> Incident";
     elseif ($todaysclosed > 1) echo "<a href='statistics.php'>{$todaysclosed}</a> Incidents";
-    echo " {$i18n_CLOSED}<br />";
+    echo " {$GLOBALS['strClosed']}<br />";
 
-    if ($supportopen == 0) echo $i18n_NO_INCIDENTS;
+    if ($supportopen == 0) echo $GLOBALS['strNoIncidents'];
     elseif ($supportopen == 1) echo "{$supportopen} Incident";
     elseif ($supportopen > 1) echo "{$supportopen} Incidents";
-    echo " {$i18n_CURRENTLY_OPEN}<br />";
+    echo " {$GLOBALS['strCurrentlyOpen']}<br />";
 
-    if ($kbpublished == 0) echo $i18n_NO_KB_ARTICLES;
+    if ($kbpublished == 0) echo $GLOBALS['strNoKBArticles'];
     elseif ($kbpublished == 1) echo "<a href='browse_kb.php?mode=today' title='View articles published today'>{$kbpublished}</a> KB Article";
     elseif ($kbpublished > 1) echo "<a href='browse_kb.php?mode=today' title='View articles published today'>{$kbpublished}</a> KB Articles";
-    echo " {$i18n_PUBLISHED}<br />";
+    echo " {$GLOBALS['strPublished']}<br />";
 
     echo "</div>";
     echo "</div>";
