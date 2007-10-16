@@ -49,7 +49,7 @@ define('CFG_JOURNAL_OTHER', 10);
 define('CFG_JOURNAL_KB', 11);    // Knowledge Base
 
 require('i18n/en-gb.inc.php');
-if ($CONFIG['i18n']!='en-gb') @include("i18n/{$CONFIG['i18n']}.inc.php")
+if ($CONFIG['i18n']!='en-gb') @include("i18n/{$CONFIG['i18n']}.inc.php");
 ini_set('default_charset', $i18ncharset);
 
 
@@ -119,25 +119,25 @@ $hmenu[0] = array (10=> array ( 'perm'=> 0, 'name'=> "{$CONFIG['application_shor
                    20=> array ( 'perm'=> 11, 'name'=> $strCustomers, 'url'=>"{$CONFIG['application_webpath']}browse_sites.php", 'submenu'=>"20"),
                    30=> array ( 'perm'=> 6, 'name'=> $strSupport, 'url'=>"{$CONFIG['application_webpath']}incidents.php?user=current&amp;queue=1&amp;type=support", 'submenu'=>"30"),
                    40=> array ( 'perm'=> 0, 'name'=> $strTasks, 'url'=>"{$CONFIG['application_webpath']}tasks.php", 'submenu'=>"40"),
-                   50=> array ( 'perm'=> 54, 'name'=> "KnowledgeBase", 'url'=>"{$CONFIG['application_webpath']}browse_kb.php", 'submenu'=>"50"),
-                   60=> array ( 'perm'=> 37, 'name'=> "Reports", 'url'=>"{$CONFIG['application_webpath']}reports.php", 'submenu'=>"60"),
-                   70=> array ( 'perm'=> 0, 'name'=> "Help", 'url'=>"{$CONFIG['application_webpath']}help.php", 'submenu'=>"70")
+                   50=> array ( 'perm'=> 54, 'name'=> $strKnowledgeBase, 'url'=>"{$CONFIG['application_webpath']}browse_kb.php", 'submenu'=>"50"),
+                   60=> array ( 'perm'=> 37, 'name'=> $strReports, 'url'=>"{$CONFIG['application_webpath']}reports.php", 'submenu'=>"60"),
+                   70=> array ( 'perm'=> 0, 'name'=> $strHelp, 'url'=>"{$CONFIG['application_webpath']}help.php", 'submenu'=>"70")
 );
-$hmenu[10] = array (1=> array ( 'perm'=> 0, 'name'=> "Main Page", 'url'=>"{$CONFIG['application_webpath']}main.php"),
-                    10=> array ( 'perm'=> 60, 'name'=> "Search", 'url'=>"{$CONFIG['application_webpath']}search.php"),
-                    20=> array ( 'perm'=> 4, 'name'=> "My Details", 'url'=>"{$CONFIG['application_webpath']}edit_profile.php", 'submenu'=>"1020"),
-                    30=> array ( 'perm'=> 4, 'name'=> "Control Panel", 'url'=>"{$CONFIG['application_webpath']}control_panel.php", 'submenu'=>"1030"),
-                    40=> array ( 'perm'=> 14, 'name'=> "Users", 'url'=>"{$CONFIG['application_webpath']}users.php", 'submenu'=>"1040"),
-                    50=> array ( 'perm'=> 0, 'name'=> "Logout", 'url'=>"{$CONFIG['application_webpath']}logout.php")
+$hmenu[10] = array (1=> array ( 'perm'=> 0, 'name'=> $strDashboard, 'url'=>"{$CONFIG['application_webpath']}main.php"),
+                    10=> array ( 'perm'=> 60, 'name'=> $strSearch, 'url'=>"{$CONFIG['application_webpath']}search.php"),
+                    20=> array ( 'perm'=> 4, 'name'=> $strMyDetails, 'url'=>"{$CONFIG['application_webpath']}edit_profile.php", 'submenu'=>"1020"),
+                    30=> array ( 'perm'=> 4, 'name'=> $strControlPanel, 'url'=>"{$CONFIG['application_webpath']}control_panel.php", 'submenu'=>"1030"),
+                    40=> array ( 'perm'=> 14, 'name'=> $strUsers, 'url'=>"{$CONFIG['application_webpath']}users.php", 'submenu'=>"1040"),
+                    50=> array ( 'perm'=> 0, 'name'=> $strLogout, 'url'=>"{$CONFIG['application_webpath']}logout.php")
 );
-$hmenu[1020] = array (10=> array ( 'perm'=> 4, 'name'=> "My Profile", 'url'=>"{$CONFIG['application_webpath']}edit_profile.php"),
-                      20=> array ( 'perm'=> 58, 'name'=> "My Skills", 'url'=>"{$CONFIG['application_webpath']}edit_user_software.php"),
-                      30=> array ( 'perm'=> 58, 'name'=> "My Substitutes", 'url'=>"{$CONFIG['application_webpath']}edit_backup_users.php"),
-                      40=> array ( 'perm'=> 27, 'name'=> "My Holidays", 'url'=>"{$CONFIG['application_webpath']}holidays.php"),
-                      50=> array ( 'perm'=> 4, 'name'=> "My Dashboard", 'url'=>"{$CONFIG['application_webpath']}manage_user_dashboard.php")
+$hmenu[1020] = array (10=> array ( 'perm'=> 4, 'name'=> $strMyProfile, 'url'=>"{$CONFIG['application_webpath']}edit_profile.php"),
+                      20=> array ( 'perm'=> 58, 'name'=> $strMySkills, 'url'=>"{$CONFIG['application_webpath']}edit_user_software.php"),
+                      30=> array ( 'perm'=> 58, 'name'=> $strMySubstitutes, 'url'=>"{$CONFIG['application_webpath']}edit_backup_users.php"),
+                      40=> array ( 'perm'=> 27, 'name'=> $strMyHolidays, 'url'=>"{$CONFIG['application_webpath']}holidays.php"),
+                      50=> array ( 'perm'=> 4, 'name'=> $strMyDashboard, 'url'=>"{$CONFIG['application_webpath']}manage_user_dashboard.php")
 );
 // configure
-$hmenu[1030] = array (10=> array ( 'perm'=> 22, 'name'=> "Users", 'url'=>"{$CONFIG['application_webpath']}manage_users.php", 'submenu'=>"103010"),
+$hmenu[1030] = array (10=> array ( 'perm'=> 22, 'name'=> $strUsers, 'url'=>"{$CONFIG['application_webpath']}manage_users.php", 'submenu'=>"103010"),
                       20=> array ( 'perm'=> 0, 'name'=> "Email Settings", 'url'=>"", 'submenu'=>"103020"),
                       30=> array ( 'perm'=> 22, 'name'=> "Set Public Holidays", 'url'=>"{$CONFIG['application_webpath']}holiday_calendar.php?type=10"),
                       40=> array ( 'perm'=> 22, 'name'=> "FTP Files DB", 'url'=>"{$CONFIG['application_webpath']}ftp_list_files.php"),

@@ -17,9 +17,8 @@ require('functions.inc.php');
 require('auth.inc.php');
 
 include('htmlheader.inc.php');
+echo "<h2>{$CONFIG['application_shortname']} {$strControlPanel}</h2>";
 ?>
-<h2><?php echo $CONFIG['application_shortname']; ?> Control Panel</h2>
-
 <table align='center'>
 <thead>
 <tr><th>USER SETTINGS</th></tr>
