@@ -11,9 +11,8 @@
 
 function dashboard_random_tip($row,$dashboardid)
 {
-    global $i18n_RANDOM_TIP;
     echo "<div class='windowbox' style='width: 95%' id='$row-$dashboardid'>";
-    echo "<div class='windowtitle'>{$i18n_RANDOM_TIP}</div>";
+    echo "<div class='windowtitle'>{$GLOBALS['strRandomTip']}</div>";
     echo "<div class='window'>";
     echo random_tip();
     echo "</div>";
