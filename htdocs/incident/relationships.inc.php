@@ -140,7 +140,7 @@ echo "</table>\n";
 echo "<input type='hidden' name='action' value='add' />";
 echo "<input type='hidden' name='id' value='{$id}' />";
 echo "<input type='hidden' name='relation' value='sibling' />";
-echo "<p><input type='submit' value='Add' /></p>";
+echo "<p><input type='submit' value='{$strAdd}' /></p>";
 echo "</form>";
 
 

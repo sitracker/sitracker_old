@@ -27,7 +27,7 @@ switch($action)
         echo "<table class='vertical'>";
         echo "<tr><td><img src='{$CONFIG['application_webpath']}images/icons/{$iconset}/12x12/feed-icon.png' style='border: 0px;' alt='Feed Icon' /> RSS/Atom Feed URL: <input type='text' name='url' size='45' /></td></tr>\n";
         echo "</table>";
-        echo "<p align='center'><input name='submit' type='submit' value='Add' /></p>";
+        echo "<p align='center'><input name='submit' type='submit' value='{$strAdd}' /></p>";
         echo "</form>";
         include('htmlfooter.inc.php');
         break;

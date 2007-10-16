@@ -103,7 +103,7 @@ switch ($action)
         }
         echo "<tr><td><input type='text' name='group' value='' size='10' maxlength='255' />";
         echo "<input type='hidden' name='action' value='addgroup' />";
-        echo "</td><td><input type='submit' name='add' value='Add' /></td></tr>\n";
+        echo "</td><td><input type='submit' name='add' value='{$strAdd}' /></td></tr>\n";
         echo "</table>";
         echo "</form>";
 

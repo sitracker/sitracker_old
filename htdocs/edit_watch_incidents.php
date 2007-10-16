@@ -47,7 +47,7 @@ switch($action)
 
         echo "</td><tr>";
         echo "</table>";
-        echo "<p align='center'><input name='submit' type='submit' value='Add' /></p>";
+        echo "<p align='center'><input name='submit' type='submit' value='{$strAdd}' /></p>";
         include('htmlfooter.inc.php');
         break;
     case 'do_add':
