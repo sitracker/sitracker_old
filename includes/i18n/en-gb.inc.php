@@ -72,19 +72,21 @@ $strDescription = 'Description';
 $strDoesThisUpdateMeetSLA = 'Does this update meet an SLA target?';
 $strDueDate = 'Due Date';
 
+<<<<<<< .mine
 $strEdit = 'Edit';
 $strEditContract = 'Edit Contract';
 $strEditedBy = 'Edited by';
 $strEditHolidyEntitlement = 'Edit Holiday Entitlement';
+$strEditProfileFor = 'Edit User Profile for %s';
 $strEditProduct = 'Edit Product';
 $strEditSkill = 'Edit Skill';
-$strEditProfileFor = 'Edit User Profile for %s';
 $strEditTask = 'Edit Task';
 $strEditTemplate = 'Edit Template';
 $strEmail = 'Email';
 $strEmailSettings = 'Email Settings';
 $strEnabled = 'Enabled';
 $strEndDate = 'End Date';
+$strEntitlement = 'Entitlement';
 $strEngineer = 'Engineer';
 $strEngineers = 'Engineers';
 $strEscalationPaths = 'Escalation Paths';
@@ -198,7 +200,6 @@ $strReset = 'Reset';
 $strReview = 'Review';
 $strRole = 'Role';
 
-<<<<<<< .mine
 $strSalesperson = 'Salesperson';
 $strSave = 'Save';
 $strSearch = 'Search';
