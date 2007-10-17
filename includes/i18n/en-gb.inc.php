@@ -202,6 +202,7 @@ $strQueue = 'Queue';
 
 $strRandomTip = 'Random Tip';
 $strRealName = 'Real Name';
+$strRemaining = 'Remaining';
 $strRemove = 'Remove';
 $strReports = 'Reports';
 $strReset = 'Reset';
@@ -252,6 +253,7 @@ $strUpdateIncident = 'Update Incident';
 $strUpdateType = 'Update Type';
 $strUnknown = 'Unknown';
 $strUnlimited = 'Unlimited';
+$strUsed = 'Used';
 $strUserGroups = 'User Groups';
 $strUsername = 'Username';
 $strUsers = 'Users';
