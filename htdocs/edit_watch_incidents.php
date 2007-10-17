@@ -88,7 +88,7 @@ switch($action)
             if (mysql_error()) trigger_error(mysql_error(),E_USER_ERROR);
 
             echo "<table align='center'>";
-            echo "<tr><td align='left'><b>";
+            echo "<tr><td align='left'><strong>";
             switch($i)
             {
                 case 0: echo $strSites;
@@ -98,7 +98,7 @@ switch($action)
                 case 2: echo $strEngineers;
                     break;
             }
-            echo "</b></td><td align='right'>";
+            echo "</strong></td><td align='right'>";
             echo "<a href='{$_SERVER['PHP_SELF']}?type={$i}&amp;action=add'>";
             switch($i)
             {
