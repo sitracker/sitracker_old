@@ -41,11 +41,11 @@ if (!is_number($user) AND $user!='current' AND $user!='all')
 include('htmlheader.inc.php');
 
 echo "<h2><img src='{$CONFIG['application_webpath']}images/icons/{$iconset}/32x32/task.png' width='32' height='32' alt='' /> ";
-echo user_realname($user,TRUE) . "'s Tasks:</h2>";
+echo user_realname($user,TRUE) . "'s {$strTasks}:</h2>";
 
 // show drop down select for task view options
 echo "<form action='{$_SERVER['PHP_SELF']}' style='text-align: center;'>";
-echo "View: <select class='dropdown' name='queue' onchange='window.location.href=this.options[this.selectedIndex].value'>\n";
+echo "{$strView}: <select class='dropdown' name='queue' onchange='window.location.href=this.options[this.selectedIndex].value'>\n";
 echo "<option ";
 if ($show == '' OR $show == 'active') echo "selected='selected' ";
 echo "value='{$_SERVER['PHP_SELF']}?user=$user&amp;show=active&amp;sort=$sort&amp;order=$order'>Active</option>\n";
@@ -89,18 +89,18 @@ if (mysql_num_rows($result) >=1 )
     if($show) $filter=array('show' => $show);
     echo "<table align='center'>";
     echo "<tr>";
-    if ($user == $sit[2]) 
+    if ($user == $sit[2])
     {
         echo colheader('distribution', "<img src='{$CONFIG['application_webpath']}images/icons/{$iconset}/16x16/private.png' width='16' height='16' title='Public/Private' alt='Private' style='border: 0px;' />", $sort, $order, $filter);
     }
     else $filter['user'] = $user;
 
     echo colheader('id', 'ID', $sort, $order, $filter);
-    echo colheader('name', 'Task', $sort, $order, $filter);
-    echo colheader('priority', 'Priority', $sort, $order, $filter);
-    echo colheader('completion', 'Completion', $sort, $order, $filter);
-    echo colheader('startdate', 'Start Date', $sort, $order, $filter);
-    echo colheader('duedate', 'Due Date', $sort, $order, $filter);
+    echo colheader('name', $strTask, $sort, $order, $filter);
+    echo colheader('priority', $strPriority, $sort, $order, $filter);
+    echo colheader('completion', $strCompletion, $sort, $order, $filter);
+    echo colheader('startdate', $strStartDate, $sort, $order, $filter);
+    echo colheader('duedate', $strDueDate, $sort, $order, $filter);
     if ($show=='completed') echo colheader('enddate', 'End Date', $sort, $order, $filter);
     echo "</tr>\n";
     $shade='shade1';

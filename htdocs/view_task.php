@@ -73,7 +73,7 @@ if (mysql_num_rows($result) >= 1)
         echo "</td></tr>";
         echo "<tr><th>{$strCompletion}</th>";
         echo "<td>".percent_bar($task->completion)."</td></tr>";
-        echo "<tr><th>End Date</th>";
+        echo "<tr><th>{$strEndDate}</th>";
         echo "<td>";
         if ($enddate > 0) echo date('Y-m-d',$enddate);
         echo "</td></tr>";
@@ -81,8 +81,8 @@ if (mysql_num_rows($result) >= 1)
         echo "<td>{$task->value}</td></tr>";
         echo "<tr><th>{$strPrivacy}</th>";
         echo "<td>";
-        if ($task->distribution=='public') echo "Public";
-        if ($task->distribution=='private') echo "Private <img src='{$CONFIG['application_webpath']}images/icons/{$iconset}/16x16/private.png' width='16' height='16' title='Private' alt='Private' />";
+        if ($task->distribution=='public') echo $strPublic;
+        if ($task->distribution=='private') echo "{$strPrivate} <img src='{$CONFIG['application_webpath']}images/icons/{$iconset}/16x16/private.png' width='16' height='16' title='{$strPrivate}' alt='{$strPrivate}' />";
         echo "</td></tr>";
         echo "</table>";
         echo "<p align='center'><a href='edit_task.php?id={$id}'>{$strEditTask}</a>";
