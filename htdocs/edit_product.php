@@ -45,7 +45,7 @@ if ($action == 'save')
 }
 else
 {
-    $title='Edit Product';
+    $title = $strEditProduct;
     include('htmlheader.inc.php');
 
     echo "<h2><img src='{$CONFIG['application_webpath']}images/icons/{$iconset}/32x32/product.png' width='32' height='32' alt='' /> ";
@@ -60,7 +60,7 @@ else
 
     $row = mysql_fetch_object($result);
 
-    echo "<tr><th>Vendor: <sup class='red'>*</sup></th>";
+    echo "<tr><th>{$strVendor}: <sup class='red'>*</sup></th>";
     echo "<td>";
     echo vendor_drop_down('vendor', $row->vendorid);
     echo "</td></tr>";

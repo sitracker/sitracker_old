@@ -24,7 +24,7 @@ $action = $_REQUEST['action'];
 
 if (empty($action) OR $action == "showform")
 {
-    $title = 'Add Service Level';
+    $title = $strAddServiceLevel;
     include('htmlheader.inc.php');
     echo "<h2><img src='{$CONFIG['application_webpath']}images/icons/{$iconset}/32x32/sla.png' width='32' height='32' alt='' /> ";
     echo "$title</h2>";
@@ -33,9 +33,9 @@ if (empty($action) OR $action == "showform")
     echo "<p align='center'>Tag: <input type='text' name='tag' value='' /></p>";
 
     echo "<table align='center'>";
-    echo "<tr><th>Priority</th><th>Initial Response</th>";
-    echo "<th>Problem Determination</th><th>Action Plan</th><th>Resolution</th>";
-    echo "<th>Review</th></tr>";
+    echo "<tr><th>{$strPriority}</th><th>{$strInitialResponse}</th>";
+    echo "<th>Problem Determination</th><th>{$strActionPlan}</th><th>Resolution</th>";
+    echo "<th>{$strReview}</th></tr>";
     echo "<tr>";
     echo "<td>Low</td>";
     echo "<td><input type='text' size='5' name='low_initial_response_mins' maxlength='5' value='320' /> Minutes</td>";

@@ -90,7 +90,7 @@ if (empty($productid) AND $display!='skills')
         echo "<h2><img src='{$CONFIG['application_webpath']}images/icons/{$iconset}/32x32/skill.png' width='32' height='32' alt='' /> Skills not linked</h2>";
         echo "<p align='center'>These skills are not linked to any product</p>";
         echo "<table summary='' align='center' width='55%'>";
-        echo "<tr><th>Skill</th><th>Lifetime</th><th>Engineers</th><th>Incidents</th><th>Actions</th></tr>";
+        echo "<tr><th>{$strSkill}</th><th>{$strLifetime}</th><th>Engineers</th><th>{$strIncidents}</th><th>Actions</th></tr>";
         while ($software = mysql_fetch_array($result))
         {
             $ssql = "SELECT COUNT(userid) FROM usersoftware, users WHERE usersoftware.userid = users.id AND users.status!=0 AND usersoftware.softwareid='{$software['id']}'";
@@ -113,9 +113,9 @@ if (empty($productid) AND $display!='skills')
             echo "</td>";
             echo "<td>{$countengineers}</td>";
             echo "<td>{$countincidents}</td>";
-            echo "<td><a href='add_product_software.php?softwareid={$software['id']}'>Link</a> ";
-            echo "| <a href='edit_software.php?id={$software['id']}'>Edit</a> ";
-            echo "| <a href='edit_software.php?id={$software['id']}&amp;action=delete'>Delete</a>";
+            echo "<td><a href='add_product_software.php?softwareid={$software['id']}'>{$strLink}</a> ";
+            echo "| <a href='edit_software.php?id={$software['id']}'>{$strEdit}</a> ";
+            echo "| <a href='edit_software.php?id={$software['id']}&amp;action=delete'>{$strDelete}</a>";
             echo "</td>";
             echo "</tr>\n";
             if ($shade=='shade1') $shade='shade2';
@@ -126,14 +126,14 @@ if (empty($productid) AND $display!='skills')
 }
 elseif (empty($productid) AND ($display=='skills' OR $display=='software'))
 {
-    echo "<h2><img src='{$CONFIG['application_webpath']}images/icons/{$iconset}/32x32/skill.png' width='32' height='32' alt='' /> Skills</h2>";
+    echo "<h2><img src='{$CONFIG['application_webpath']}images/icons/{$iconset}/32x32/skill.png' width='32' height='32' alt='' /> {$strSkills}</h2>";
     $sql = "SELECT * FROM software ORDER BY name";
     $result = mysql_query($sql);
     if (mysql_error()) trigger_error(mysql_error(),E_USER_ERROR);
     if (mysql_num_rows($result) >= 1)
     {
         echo "<table align='center'>";
-        echo "<tr><th>Skill</th><th>Lifetime</th><th>Linked to # Products</th><th>Engineers</th><th>Incidents</th><th>Actions</th></tr>";
+        echo "<tr><th>{$strSkill}</th><th>{$strLifetime}</th><th>Linked to # Products</th><th>Engineers</th><th>{$strIncidents}</th><th>Actions</th></tr>";
         $shade='shade1';
         while ($software = mysql_fetch_object($result))
         {
@@ -171,9 +171,9 @@ elseif (empty($productid) AND ($display=='skills' OR $display=='software'))
             echo "<td>{$countlinked}</td>";
             echo "<td>{$countengineers}</td>";
             echo "<td>{$countincidents}</td>";
-            echo "<td><a href='add_product_software.php?softwareid={$software->id}'>Link</a> ";
-            echo "| <a href='edit_software.php?id={$software->id}'>Edit</a> ";
-            echo "| <a href='edit_software.php?id={$software->id}&amp;action=delete'>Delete</a>";
+            echo "<td><a href='add_product_software.php?softwareid={$software->id}'>{$strLink}</a> ";
+            echo "| <a href='edit_software.php?id={$software->id}'>{$strEdit}</a> ";
+            echo "| <a href='edit_software.php?id={$software->id}&amp;action=delete'>{$strDelete}</a>";
             echo "</td>";
             echo "</tr>\n";
             if ($shade=='shade1') $shade='shade2';
@@ -203,7 +203,7 @@ else
 
             if (mysql_num_rows($swresult) > 0)
             {
-                echo "<tr><th>Skill</th><th>Lifetime</th><th>Engineers</th><th>Incidents</th><th>Actions</th></tr>";
+                echo "<tr><th>{$strSkill}</th><th>{$strLifetime}</th><th>{$strEngineers}</th><th>{$strIncidents}</th><th>Actions</th></tr>";
                 $shade='shade2';
                 while ($software=mysql_fetch_array($swresult))
                 {
@@ -250,7 +250,7 @@ else
             {
                 echo "<h3>Related Contracts</h3>";
                 echo "<table align='center'>";
-                echo "<tr><th>Contract</th><th>Site</th></tr>";
+                echo "<tr><th>{$strContract}</th><th>{$strSite}</th></tr>";
                 $shade = 'shade1';
                 while ($contract = mysql_fetch_object($result))
                 {
@@ -273,7 +273,7 @@ else
             {
                 echo "<h3>Related Incidents</h3>";
                 echo "<table align='center'>";
-                echo "<tr><th>Incident</th><th>Contact</th><th>Site</th><th>Title</th></tr>";
+                echo "<tr><th>{$strIncident}</th><th>{$strContact}</th><th>{$strSite}</th><th>{$strTitle}</th></tr>";
                 $shade = 'shade1';
                 while ($incident = mysql_fetch_object($result))
                 {
@@ -296,9 +296,9 @@ else
     echo "<p align='center'><a href='{$_SERVER['PHP_SELF']}#{$productid}'>Back to list of products</a></p>";
 }
 
-echo "<p align='center'><a href='add_vendor.php'>Add Vendor</a> | <a href='add_product.php'>Add Product</a> | <a href='add_software.php'>Add Skill</a>";
-if ($display=='skills' OR $display=='software') echo " | <a href='products.php'>List Products</a>";
-else echo " | <a href='products.php?display=skills'>List Skills</a>";
+echo "<p align='center'><a href='add_vendor.php'>{$strAddVendor}</a> | <a href='add_product.php'>{$strAddProduct}</a> | <a href='add_software.php'>{$strAddSkill}</a>";
+if ($display=='skills' OR $display=='software') echo " | <a href='products.php'>{$strListProducts}</a>";
+else echo " | <a href='products.php?display=skills'>{$strListSkills}</a>";
 echo "</p>";
 
 include('htmlfooter.inc.php');

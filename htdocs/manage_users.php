@@ -49,7 +49,7 @@ $result = mysql_query($sql);
 if (mysql_error()) trigger_error(mysql_error(),E_USER_WARNING);
 
 echo "<h2><img src='{$CONFIG['application_webpath']}images/icons/{$iconset}/32x32/user.png' width='32' height='32' alt='' /> ";
-echo "Manage Users</h2>";
+echo "{$strManageUsers}</h2>";
 ?>
 <p class='contextmenu' align='center'><a href="add_user.php?action=showform">Add User</a> |
 <a href="edit_user_permissions.php">Set Role Permissions</a>
@@ -98,14 +98,14 @@ while ($users = mysql_fetch_array($result))
     echo "</td>";
 
     echo "<td>";
-    echo "<a href='edit_profile.php?userid={$users['userid']}'>Edit</a>";
+    echo "<a href='edit_profile.php?userid={$users['userid']}'>{$strEdit}</a>";
     if ($users['status']>0)
     {
         echo " | ";
         if ($users['userid'] >1) echo "<a href='reset_user_password.php?id={$users['userid']}'>Reset Password</a> | ";
-        echo "<a href='edit_user_software.php?user={$users['userid']}'>Skills</a>";
+        echo "<a href='edit_user_software.php?user={$users['userid']}'>{$strSkills</a>";
         echo " | <a href='edit_backup_users.php?user={$users['userid']}'>Substitutes</a>";
-        if ($users['userid'] >1) echo " | <a href='edit_user_permissions.php?action=edit&amp;user={$users['userid']}'>Permissions</a>";
+        if ($users['userid'] >1) echo " | <a href='edit_user_permissions.php?action=edit&amp;user={$users['userid']}'>{$strPermissions}</a>";
     }
     echo "</td>";
 
@@ -115,19 +115,19 @@ while ($users = mysql_fetch_array($result))
 
 
     echo "</td><td>";
-    if ($users["phone"] == "") echo "None";
+    if ($users["phone"] == "") echo $strNone;
     else echo $users["phone"];
     echo "</td><td>";
-    if ($users["mobile"] == "") echo "None";
+    if ($users["mobile"] == "") echo $strNone;
     else echo $users["mobile"];
     echo "</td><td>";
-    if ($users["fax"] == "") echo "None";
+    if ($users["fax"] == "") echo $strNone;
     else echo $users["fax"];
     echo "</td><td>";
     echo userstatus_name($users["status"]);
     echo "</td><td>";
-    if($users["accepting"]=='Yes') echo "Yes";
-    else echo "<span class='error'>No</span>";
+    if($users["accepting"]=='Yes') echo $strYes;
+    else echo "<span class='error'>{$strNo}</span>";
     echo "</td></tr>";
     // invert shade
     if ($shade == 1) $shade = 0;

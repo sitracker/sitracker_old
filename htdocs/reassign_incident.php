@@ -85,7 +85,7 @@ if (empty($bodytext))
                 }
                 echo "</td>";
             }
-            else echo "<td>None</td>";
+            else echo "<td>{$strNone}</td>";
 
             echo "</tr>\n";
         }

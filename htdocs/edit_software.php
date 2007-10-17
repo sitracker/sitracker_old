@@ -23,7 +23,7 @@ $action = cleanvar($_REQUEST['action']);
 
 if (empty($action) OR $action=='edit')
 {
-    $title='Edit Skill';
+    $title = $strEditSkill;
     // Show add product form
     include('htmlheader.inc.php');
     ?>
@@ -45,7 +45,7 @@ if (empty($action) OR $action=='edit')
         echo "<form name='editsoftware' action='{$_SERVER['PHP_SELF']}' method='post' onsubmit='return confirm_submit()'>";
         echo "<table class='vertical'>";
         echo "<tr><th>Skill Name: <sup class='red'>*</sup></th><td><input maxlength='50' name='name' size='30' value='".stripslashes($software->name)."' /></td></tr>";
-        echo "<tr><th>Lifetime:</th><td>";
+        echo "<tr><th>{$strLifetime}:</th><td>";
         echo "<input type='text' name='lifetime_start' id='lifetime_start' size='10' value='";
         if ($software->lifetime_start > 1) echo date('Y-m-d',mysql2date($software->lifetime_start));
         echo "' /> ";

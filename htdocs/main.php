@@ -75,7 +75,7 @@ $colstr = $col0.",".$col1.",".$col2;
 $cols0 = substr($cols0, 0, -1);
 $cols1 = substr($cols1, 0, -1);
 $cols2 = substr($cols2, 0, -1);
-echo "<p style='float: right; top: -10px; position: relative;'><a href='manage_user_dashboard.php' title='Manage your Dashboard'>";
+echo "<p style='float: right; top: -10px; position: relative;'><a href='manage_user_dashboard.php' title='{$strManageYourDashboard}'>";
 echo "<img src='{$CONFIG['application_webpath']}images/icons/{$iconset}/16x16/dashboard.png' width='16' height='16' alt='' style='border: 0px;' /></a> ";
 echo "<a href=\"javascript:save_layout();\" id='savelayout' title='Save Dashboard Layout Manually'><img src='{$CONFIG['application_webpath']}images/icons/{$iconset}/16x16/save.png' width='16' height='16' alt='' style='border: 0px;' /></a></p>";
 ?>
@@ -232,16 +232,16 @@ if (empty($_SESSION['email']) OR !preg_match('/^[A-z0-9][\w.-]*@[A-z0-9][\w\-\.]
     echo "<p class='error'>Please <a href='edit_profile.php'>edit your profile</a> and set a valid email address</p>";
 
 //  Users Login Details
-echo "<div id='userbar'>Logged in as: <strong>{$sit[0]}</strong>, ";
+echo "<div id='userbar'>".sprintf($strLoggedInAs, "<strong>{$sit[0]}</strong>");
 echo "currently <strong>".userstatus_name(user_status($sit[2]))."</strong> and ";
 
 if (user_accepting($sit[2])!='Yes')
 {
-    echo "<span class=\"error\">Not Accepting</span>";
+    echo "<span class=\"error\">{$strNotAccepting}</span>";
 }
 else
 {
-    echo "<strong>Accepting</strong>";
+    echo "<strong>{$strAccepting}</strong>";
 }
 echo " calls";
 if ($sit[3]=='public')
@@ -249,18 +249,12 @@ if ($sit[3]=='public')
     echo "- Public/Shared Computer (Increased Security)";
 }
 
-?>
-
-
-
-</div>
-<br />
-<div id='footerbar'>
-<?php
+echo "</div>\n<br />\n";
+echo "<div id='footerbar'>";
 echo "<form style='margin: 0px;' action='{$_SERVER['PHP_SELF']}'>";
-?>
-Set your Status: <?php if(isset($sit[2])) userstatus_bardrop_down("status", user_status($sit[2])); ?></form>
-</div>
-<?php
+echo "{$strSetYourStatus}: ";
+if(isset($sit[2])) userstatus_bardrop_down("status", user_status($sit[2]));
+echo "</form>\n";
+echo "</div>\n";
 include('htmlfooter.inc.php');
 ?>

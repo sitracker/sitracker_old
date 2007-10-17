@@ -52,7 +52,7 @@ switch ($action)
         echo "<h2>Edit vendor {$vendorname}</h2>";
         echo "<form action='{$_SERVER['PHP_SELF']}' name'editvendor'>";
         echo "<table align='center'>";
-        echo "<tr><th>Vendor Name:</th><td><input maxlength='50' name='name' size='30' value='$vendorname'/></td></tr>";
+        echo "<tr><th>{$strVendor} Name:</th><td><input maxlength='50' name='name' size='30' value='$vendorname'/></td></tr>";
         echo "</table>";
         echo "<input type='hidden' name='action' value='save' />";
         echo "<input type='hidden' name='vendorid' value='{$vendorid}' />";
@@ -73,7 +73,7 @@ switch ($action)
             while($row = mysql_fetch_object($result))
             {
                 echo "<tr class='{$shade}'><td><a href={$_SERVER['PHP_SELF']}?action=edit&vendorid=$row->id&vendorname=".urlencode($row->name).">$row->name</a></td></tr>";
-                
+
                 if($shade=='shade1') $shade='shade2';
                 else $shade='shade1';
             }

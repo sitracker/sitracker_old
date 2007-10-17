@@ -52,7 +52,7 @@ if (empty($action) OR $action == "showform")
         echo "<form action='{$_SERVER['PHP_SELF']}' method='post' onsubmit='return confirm_submit()'>";
         echo "<table align='center'>";
         echo "<tr>";
-        echo "<th>Permission</th>";
+        echo "<th>{$strPermission}</th>";
         while ($rolerow = mysql_fetch_object($result))
         {
             echo "<th>{$rolerow->rolename}</th>";
@@ -80,7 +80,7 @@ if (empty($action) OR $action == "showform")
             else $class = "shade2";
         }
         echo "</table>";
-        echo "<p><input name='reset' type='reset' value='Reset' />";
+        echo "<p><input name='reset' type='reset' value='$strReset' />";
         echo "<input type='hidden' name='action' value='update' />";
         echo "<input name='submit' type='submit' value='{$strSave}' /></p>";
         echo "</form>";
@@ -108,13 +108,11 @@ elseif ($action == "edit" && (!empty($user) OR !empty($role)))
         }
     }
     echo "<form action='{$_SERVER['PHP_SELF']}?action=update' method='post' onsubmit='return confirm_submit()'>";
-    ?>
-    <table align='center'>
+    echo "<table align='center'>
     <tr>
     <th>ID</th>
-    <th>Permission</th>
-    </tr>
-    <?php
+    <th>{$strPermission}</th>
+    </tr>\n";
     if (empty($role) AND !empty($user))
     {
         $sql = "SELECT id, name, userpermissions.granted AS granted FROM permissions, userpermissions ";
@@ -305,7 +303,7 @@ elseif ($action == "check")
         if (mysql_num_rows($result) >= 1)
         {
             echo "<table align='center'>";
-            echo "<tr><th>User</th><th>Role</th></tr>";
+            echo "<tr><th>{$strUser}</th><th>{$strRole}</th></tr>";
             $shade='shade1';
             while($user = mysql_fetch_object($result))
             {
@@ -318,7 +316,7 @@ elseif ($action == "check")
                 else $shade='shade1';
             }
             echo "</table>";
-        } else echo "<p align='center'>None</p>";
+        } else echo "<p align='center'>{$strNone}</p>";
 
         echo "<p align='center'><a href='edit_user_permissions.php'>Set role permissions</a></p>";
 
@@ -331,7 +329,7 @@ elseif ($action == "check")
         if (mysql_num_rows($result) >= 1)
         {
             echo "<table align='center'>";
-            echo "<tr><th>User</th></tr>";
+            echo "<tr><th>{$strUser}</th></tr>";
             $shade='shade1';
             while($user = mysql_fetch_object($result))
             {
@@ -340,7 +338,7 @@ elseif ($action == "check")
                 else $shade='shade1';
             }
             echo "</table>";
-        } else echo "<p align='center'>None</p>";
+        } else echo "<p align='center'>{$strNone}</p>";
     }
     else echo "<p class='error'>No permission specified</p>";
 }

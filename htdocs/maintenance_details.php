@@ -35,32 +35,32 @@ $maintrow=mysql_fetch_array($maintresult);
 ?>
 <table align='center' class='vertical'>
 <?php
-echo "<tr><th>Contract ID:</th><td><h3><img src='{$CONFIG['application_webpath']}images/icons/{$iconset}/32x32/contract.png' width='32' height='32' alt='' /> ";
+echo "<tr><th>{$strContract} ID:</th><td><h3><img src='{$CONFIG['application_webpath']}images/icons/{$iconset}/32x32/contract.png' width='32' height='32' alt='' /> ";
 echo "{$maintrow['id']}</h3></td></tr>";
-echo "<tr><th>Status:</th><td>";
-if ($maintrow['term']=='yes') echo '<strong>Terminated</strong>';
-else echo 'Active';
-if ($maintrow['expirydate']<$now) echo "<span class='expired'>, Expired</span>";
+echo "<tr><th>{$strStatus}:</th><td>";
+if ($maintrow['term']=='yes') echo '<strong>{$strTerminated}</strong>';
+else echo $strActive;
+if ($maintrow['expirydate']<$now) echo "<span class='expired'>, {$strExpired}</span>";
 echo "</td></tr>";
-echo "<tr><th>Site:</th><td><a href=\"site_details.php?id=".$maintrow['site']."\">".stripslashes($maintrow['sitename'])."</a></td></tr>";
-echo "<tr><th>Admin Contact:</th><td><a href=\"contact_details.php?id=".$maintrow['admincontact']."\">".contact_realname($maintrow['admincontact'])."</a></td></tr>";
-echo "<tr><th>Reseller:</th><td>".reseller_name($maintrow['reseller'])."</td></tr>";
-echo "<tr><th>Product:</th><td>".product_name($maintrow['product'])."</td></tr>";
-echo "<tr><th>Incidents:</th>";
+echo "<tr><th>{$strSite}:</th><td><a href=\"site_details.php?id=".$maintrow['site']."\">".stripslashes($maintrow['sitename'])."</a></td></tr>";
+echo "<tr><th>{$strAdminContact}:</th><td><a href=\"contact_details.php?id=".$maintrow['admincontact']."\">".contact_realname($maintrow['admincontact'])."</a></td></tr>";
+echo "<tr><th>{$strReseller}:</th><td>".reseller_name($maintrow['reseller'])."</td></tr>";
+echo "<tr><th>{$strProduct}:</th><td>".product_name($maintrow['product'])."</td></tr>";
+echo "<tr><th>{$strIncidents}:</th>";
 echo "<td>";
 $incidents_remaining = $maintrow['incident_quantity'] - $maintrow['incidents_used'];
 if ($maintrow['incident_quantity']==0) echo "Unlimited Incidents ({$maintrow['incidents_used']} Used)";
 elseif ($maintrow['incident_quantity']==1) echo "{$maintrow['incident_quantity']} Incident ($incidents_remaining Remaining)";
 else echo "{$maintrow['incident_quantity']} Incidents ($incidents_remaining Remaining)";
 echo "</td></tr>";
-echo "<tr><th>License:</th><td>".$maintrow['licence_quantity'].' '.licence_type($maintrow['licence_type'])."</td></tr>";
-echo "<tr><th>Service Level:</th><td>".servicelevel_name($maintrow['servicelevelid'])."</td></tr>";
-echo "<tr><th>Expires:</th><td>".date($CONFIG['dateformat_date'], $maintrow['expirydate'])."</td></tr>";
-echo "<tr><th>Notes:</th><td>".stripslashes($maintrow['maintnotes'])."</td></tr>";
+echo "<tr><th>{$strLicense}:</th><td>".$maintrow['licence_quantity'].' '.licence_type($maintrow['licence_type'])."</td></tr>";
+echo "<tr><th>{$strServiceLevel}:</th><td>".servicelevel_name($maintrow['servicelevelid'])."</td></tr>";
+echo "<tr><th>{$strExpiryDate}:</th><td>".date($CONFIG['dateformat_date'], $maintrow['expirydate'])."</td></tr>";
+echo "<tr><th>{$strNotes}:</th><td>".stripslashes($maintrow['maintnotes'])."</td></tr>";
 ?>
 </table>
 <?php
-echo "<p align='center'><a href=\"edit_maintenance.php?action=edit&amp;maintid=$id\">Edit this contract</a></p>";
+echo "<p align='center'><a href=\"edit_maintenance.php?action=edit&amp;maintid=$id\">{$strEditContract}</a></p>";
 
 if (mysql_num_rows($maintresult)<1)
 {
@@ -81,10 +81,10 @@ if (mysql_num_rows($result)>0)
     $supportcount=1;
     while ($supportedrow=mysql_fetch_array($result))
     {
-        echo "<tr><th>Contact #$supportcount:</th><td><img src='{$CONFIG['application_webpath']}images/icons/{$iconset}/16x16/contact.png' width='16' height='16' alt='' /> ";
+        echo "<tr><th>{$strContact} #$supportcount:</th><td><img src='{$CONFIG['application_webpath']}images/icons/{$iconset}/16x16/contact.png' width='16' height='16' alt='' /> ";
         echo "<a href=\"contact_details.php?id=".$supportedrow['contactid']."\">".stripslashes($supportedrow['forenames'].' '.$supportedrow['surname'])."</a>, ";
         echo contact_site($supportedrow['contactid']). "</td>";
-        echo "<td><a href=\"delete_maintenance_support_contact.php?contactid=".$supportedrow['contactid']."&amp;maintid=$id&amp;context=maintenance\">Remove</a></td></tr>\n";
+        echo "<td><a href=\"delete_maintenance_support_contact.php?contactid=".$supportedrow['contactid']."&amp;maintid=$id&amp;context=maintenance\">{$strRemove}</a></td></tr>\n";
         $supportcount++;
     }
     ?>
@@ -123,7 +123,7 @@ if (mysql_num_rows($result)>0)
 }
 else
 {
-    echo "<p align='center'>None / Unknown<p>";
+    echo "<p align='center'>{$strNone} / {$strUnknown}<p>";
 }
 include('htmlfooter.inc.php');
 ?>

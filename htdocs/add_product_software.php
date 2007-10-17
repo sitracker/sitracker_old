@@ -37,7 +37,8 @@ if (empty($action) OR $action == "showform")
     if (empty($productid))
     {
         $name = db_read_column('name', 'software', $softwareid);
-        echo "<h3><img src='{$CONFIG['application_webpath']}images/icons/{$iconset}/16x16/skill.png' width='16' height='16' alt='' /> Skill: $name</h3>";
+        echo "<h3><img src='{$CONFIG['application_webpath']}images/icons/{$iconset}/16x16/skill.png' width='16' height='16' alt='' /> ";
+        echo "{$strSkill}: $name</h3>";
         echo "<input name=\"softwareid\" type=\"hidden\" value=\"$softwareid\" />\n";
         echo "<p align='center'>Link Product: <img src='{$CONFIG['application_webpath']}images/icons/{$iconset}/16x16/product.png' width='16' height='16' alt='' /> ";
         echo product_drop_down("productid", 0);
@@ -50,7 +51,7 @@ if (empty($action) OR $action == "showform")
         if (mysql_error()) trigger_error("MySQL Query Error ".mysql_error(), E_USER_ERROR);
 
         list($product) = mysql_fetch_row($result);
-        echo "<h3>Product: $product</h3>";
+        echo "<h3>{$strProduct}: $product</h3>";
         echo "<input name=\"productid\" type=\"hidden\" value=\"$productid\" />\n";
     }
     if (empty($softwareid))
