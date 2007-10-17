@@ -32,15 +32,15 @@ switch($action)
         switch($type)
         {
             case '0': //site
-                echo "Site: ";
+                echo "{$strSite}: ";
                 echo site_drop_down('id','');
                 break;
             case '1': //contact
-                echo "Contact: ";
+                echo "{$strContact}: ";
                 echo contact_drop_down('id','');
                 break;
             case '2': //engineer
-                echo "Engineer: ";
+                echo "{$strEngineer}: ";
                 echo user_drop_down('id','');
                 break;
         }
@@ -91,20 +91,20 @@ switch($action)
             echo "<tr><td align='left'><b>";
             switch($i)
             {
-                case 0: echo "Sites";
+                case 0: echo $strSites;
                     break;
-                case 1: echo "Contacts";
+                case 1: echo $strContacts;
                     break;
-                case 2: echo "Engineers";
+                case 2: echo $strEngineers;
                     break;
             }
             echo "</b></td><td align='right'>";
             echo "<a href='{$_SERVER['PHP_SELF']}?type={$i}&amp;action=add'>";
             switch($i)
             {
-                case 0: echo "Add Site";
+                case 0: echo $strAddSite;
                     break;
-                case 1: echo "Add Contact";
+                case 1: echo $strAddContact;
                     break;
                 case 2: echo "Add Engineer";
                     break;

@@ -149,11 +149,11 @@ switch ($step)
         <?php
         $target = incident_get_next_target($id);
         echo "<select name='target' class='dropdown'>\n";
-        echo "<option value='none' onclick='notarget(this.form)'>No</option>\n";
+        echo "<option value='none' onclick='notarget(this.form)'>{$strNo}</option>\n";
         switch ($target->type)
         {
             case 'initialresponse':
-                echo "<option value='initialresponse' style='text-indent: 15px; height: 17px; background-image: url({$CONFIG['application_webpath']}/images/icons/{$iconset}/16x16/initialresponse.png); background-repeat: no-repeat;' onclick='initialresponse(this.form)' >Initial Response</option>\n";
+                echo "<option value='initialresponse' style='text-indent: 15px; height: 17px; background-image: url({$CONFIG['application_webpath']}/images/icons/{$iconset}/16x16/initialresponse.png); background-repeat: no-repeat;' onclick='initialresponse(this.form)' >{$strInitialResponse}</option>\n";
                 echo "<option value='probdef' style='text-indent: 15px; height: 17px; background-image: url({$CONFIG['application_webpath']}/images/icons/{$iconset}/16x16/probdef.png); background-repeat: no-repeat;' onclick='probdef(this.form)'>Problem Definition</option>\n";
                 echo "<option value='actionplan' style='text-indent: 15px; height: 17px; background-image: url({$CONFIG['application_webpath']}/images/icons/{$iconset}/16x16/actionplan.png); background-repeat: no-repeat;' onclick='actionplan(this.form)'>Action Plan</option>\n";
                 echo "<option value='solution' style='text-indent: 15px; height: 17px; background-image: url({$CONFIG['application_webpath']}/images/icons/{$iconset}/16x16/solution.png); background-repeat: no-repeat;' onclick='reprioritise(this.form)'>Resolution/Reprioritisation</option>\n";
@@ -184,16 +184,16 @@ switch ($step)
             if($obj->type == 'auto_chase_phone')
             {
                 echo "<tr><th>Was this a customer chase?</th><td>";
-                echo "<input type='radio' name='chase_customer' value='no' checked='yes' />No ";
-                echo "<input type='radio' name='chase_customer' value='yes' />Yes";
+                echo "<input type='radio' name='chase_customer' value='no' checked='yes' />{$strNo} ";
+                echo "<input type='radio' name='chase_customer' value='yes' />{$strYes}";
                 echo "</td></tr>";
             }
 
             if($obj->type == 'auto_chase_manager')
             {
                 echo "<tr><th>Was this a manager chase?</th>";
-                echo "<input type='radio' name='chase_manager' value='no' checked='yes' />No ";
-                echo "<input type='radio' name='chase_manager' value='yes' />Yes";
+                echo "<input type='radio' name='chase_manager' value='no' checked='yes' />{$strNo} ";
+                echo "<input type='radio' name='chase_manager' value='yes' />{$strYes}";
                 echo "</td></tr>";
             }
         }
@@ -275,7 +275,7 @@ switch ($step)
             <tr><th width='30%'>From:</th><td><input maxlength='100' name="fromfield" size='40' value="<?php echo emailtype_replace_specials(emailtype_from($emailtype), $id, $sit[2]) ?>" /></td></tr>
             <tr><th>Reply To:</th><td><input maxlength='100' name="replytofield" size='40' value="<?php echo emailtype_replace_specials(emailtype_replyto($emailtype), $id, $sit[2]) ?>" /></td></tr>
             <tr><th>CC:</th><td><input maxlength='100' name="ccfield" size='40' value="
-            <?php 
+            <?php
                 if(emailtype_cc($emailtype)!=",")
                 {
                     echo emailtype_replace_specials(emailtype_cc($emailtype), $id, $sit[2]);

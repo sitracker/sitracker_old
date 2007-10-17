@@ -100,8 +100,8 @@ elseif ($step=='1')
     echo "<p align='center'><strong>Select Days</strong></p>";
 
     echo "<table align='center' width='550' class='vertical'>";
-    echo "<tr><th>Start Date</th><td>".date($CONFIG['dateformat_date'],$start)."</td></tr>";
-    echo "<tr><th>End Date</th><td>".date($CONFIG['dateformat_date'],$end)."</td></tr>";
+    echo "<tr><th>{$strStartDate}</th><td>".date($CONFIG['dateformat_date'],$start)."</td></tr>";
+    echo "<tr><th>{$strEndDate}</th><td>".date($CONFIG['dateformat_date'],$end)."</td></tr>";
     echo "</table><br />";
 
     echo "<form name='date' action='{$_SERVER['PHP_SELF']}' method='post'>";
@@ -109,7 +109,7 @@ elseif ($step=='1')
     echo "<input type='hidden' name='type' value='$type' />";
 
     echo "<table align='center' width='550'>";
-    echo "<tr><th>Date</th><th>None</th><th>Day</th><th>AM</th><th>PM</th></tr>\n";
+    echo "<tr><th>{$strDate}</th><th>{$strNone}</th><th>Day</th><th>AM</th><th>PM</th></tr>\n";
 
     $daynumber=1;
     $options=0;

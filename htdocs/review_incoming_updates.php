@@ -80,8 +80,8 @@ function generate_row($update)
         {
             $html_row.="<a href='{$_SERVER['PHP_SELF']}?unlock={$update['tempid']}' title='Unlock this update so it can be modified by someone else'> Unlock</a> | ";
         }
-        else $html_row.= "<a href=\"javascript:incident_details_window('{$update['tempid']}','incomingview');\" id='update{$update['id']}' class='info' title='View and lock this held e-mail'> View</a> | ";
-        $html_row.= "<a href='delete_update.php?updateid=".$update['id']."&amp;tempid=".$update['tempid']."&amp;timestamp=".$update['timestamp']."' title='Remove this item permanently' onclick='return confirm_delete();'> Delete</a>";
+        else $html_row.= "<a href=\"javascript:incident_details_window('{$update['tempid']}','incomingview');\" id='update{$update['id']}' class='info' title='View and lock this held e-mail'> {$strView}</a> | ";
+        $html_row.= "<a href='delete_update.php?updateid=".$update['id']."&amp;tempid=".$update['tempid']."&amp;timestamp=".$update['timestamp']."' title='Remove this item permanently' onclick='return confirm_delete();'> {$strDelete}</a>";
     }
     $html_row.="</td></tr>\n";
     return $html_row;

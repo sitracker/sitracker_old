@@ -1,5 +1,5 @@
 <?php
-//Translation by Camille Clymer <camille.clymer@gmail.com>
+// Translation by Camille Clymer <camille.clymer[at]gmail.com>
 $languagestring="French";
 $i18ncharset="UTF-8";
 

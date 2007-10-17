@@ -29,7 +29,7 @@ if (empty($id))
     echo "<h2>Select Site To Delete</h2>";
     echo "<form action='{$_SERVER['PHP_SELF']}?action=delete' method='post'>";
     echo "<table>";
-    echo "<tr><th>Site:</th><td>".site_drop_down('id', 0)."</td></tr>";
+    echo "<tr><th>{$strSite}:</th><td>".site_drop_down('id', 0)."</td></tr>";
     echo "</table>";
     echo "<p><input name='submit' type='submit' value='Continue' /></p>";
     echo "</form>";
@@ -46,9 +46,9 @@ else
         $site=mysql_fetch_object($siteresult);
         if (mysql_error()) trigger_error(mysql_error(),E_USER_ERROR);
         echo "<table align='center' class='vertical'>";
-        echo "<tr><th>Site:</th><td><h3>".$site->name."</h3></td></tr>";
-        echo "<tr><th>Department:</th><td>".$site->department."</td></tr>";
-        echo "<tr><th>Address1:</th><td>".$site->address1."</td></tr>";
+        echo "<tr><th>{$strSite}:</th><td><h3>".$site->name."</h3></td></tr>";
+        echo "<tr><th>{$strDepartment}:</th><td>".$site->department."</td></tr>";
+        echo "<tr><th>{$strAddress1}:</th><td>".$site->address1."</td></tr>";
         echo "</table>";
 
         // Look for associated contacts

@@ -37,7 +37,7 @@ if (empty($action) OR $action == "showform")
 
     echo "<form name='edit_servicelevel' action='{$_SERVER['PHP_SELF']}' method='post'>";
     echo "<table class='vertical'>";
-    echo "<tr><th>Initial Response <img src='{$CONFIG['application_webpath']}images/icons/{$iconset}/16x16/initialresponse.png' width='16' height='16' alt='' /></th>";
+    echo "<tr><th>{$strInitialResponse} <img src='{$CONFIG['application_webpath']}images/icons/{$iconset}/16x16/initialresponse.png' width='16' height='16' alt='' /></th>";
     echo "<td><input type='text' size='5' name='initial_response_mins' maxlength='5' value='{$sla->initial_response_mins}' /> Minutes</td></tr>";
     echo "<tr><th>Problem Determination <img src='{$CONFIG['application_webpath']}images/icons/{$iconset}/16x16/probdef.png' width='16' height='16' alt='' /></th>";
     echo "<td><input type='text' size='5' name='prob_determ_mins' maxlength='5' value='{$sla->prob_determ_mins}' /> Minutes</td></tr>";

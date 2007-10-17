@@ -58,12 +58,12 @@ if (empty($process))
             ?>
             <table align='center' class='vertical'>
             <?php
-            echo "<tr><th>Name:</th><td><h3>".$contactrow['forenames'].' '.$contactrow['surname']."</h3></td></tr>";
-            echo "<tr><th>Site:</th><td><a href=\"site_details.php?id=".$contactrow['siteid']."\">".site_name($contactrow['siteid'])."</a></td></tr>";
-            echo "<tr><th>Department:</th><td>".$contactrow['department']."</td></tr>";
-            echo "<tr><th>Email:</th><td><a href=\"mailto:".$contactrow['email']."\">".$contactrow['email']."</a></td></tr>";
-            echo "<tr><th>Phone:</th><td>".$contactrow['phone']."</td></tr>";
-            echo "<tr><th>Notes:</th><td>".$contactrow['notes']."</td></tr>";
+            echo "<tr><th>{$strName}:</th><td><h3>".$contactrow['forenames'].' '.$contactrow['surname']."</h3></td></tr>";
+            echo "<tr><th>{$strSite}:</th><td><a href=\"site_details.php?id=".$contactrow['siteid']."\">".site_name($contactrow['siteid'])."</a></td></tr>";
+            echo "<tr><th>{$strDepartment}:</th><td>".$contactrow['department']."</td></tr>";
+            echo "<tr><th>{$strEmail}:</th><td><a href=\"mailto:".$contactrow['email']."\">".$contactrow['email']."</a></td></tr>";
+            echo "<tr><th>{$strTelephone}:</th><td>".$contactrow['phone']."</td></tr>";
+            echo "<tr><th>{$strNotes}:</th><td>".$contactrow['notes']."</td></tr>";
         }
         mysql_free_result($contactresult);
         echo "</table>\n";
@@ -116,7 +116,7 @@ if (empty($process))
             <?php
             echo "<input type='hidden' name='id' value='$id' />";
             echo "<input type='hidden' name='process' value='true' />";
-            echo "<input type='submit' value='Delete' />";
+            echo "<input type='submit' value='{$strDelete}' />";
             echo "</p>";
             echo "</form>";
         }
@@ -129,7 +129,7 @@ if (empty($process))
             echo "<input type='hidden' name='id' value='$id' />";
             echo "<input type='hidden' name='process' value='true' />";
             echo "<p align='center'>";
-            echo "<input type='submit' value='Delete' />";
+            echo "<input type='submit' value='{$strDelete}' />";
             echo "</p>";
             echo "</form>\n";
         }

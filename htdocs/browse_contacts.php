@@ -76,7 +76,7 @@ window.open(URL, "contact_products_window", "toolbar=no,status=yes,menubar=no,sc
 </script>
 <?php
 echo "<h2><img src='{$CONFIG['application_webpath']}images/icons/{$iconset}/32x32/contact.png' width='32' height='32' alt='' /> ";
-echo "Browse Contacts</h2>";
+echo "{$strBrowseContacts}</h2>";
 ?>
 <table summary="alphamenu" align="center">
 <tr>
@@ -197,11 +197,11 @@ else
             <?php
             echo "<table align='center'>
             <tr>
-            <th>Contact Name</th>
-            <th>Site</th>
-            <th>Email</th>
-            <th>Phone</th>
-            <th>Fax</th>
+            <th>{$strName}</th>
+            <th>{$strSite}</th>
+            <th>{$strEmail}</th>
+            <th>{$strTelephone}</th>
+            <th>{$strFax}</th>
             <th>{$strAddIncident}</th>
             </tr>";
             $shade = 0;

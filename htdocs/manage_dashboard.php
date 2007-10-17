@@ -74,7 +74,7 @@ switch($_REQUEST['action'])
             echo "</select>\n";
             echo "</td></tr></table>\n";
             echo "<input type='hidden' name='action' value='installdashboard' />";
-            echo "<p align='center'><input type='submit' value='Install' /></p>";
+            echo "<p align='center'><input type='submit' value='{$strInstall}' /></p>";
             echo "</form>\n";
         }
 
@@ -134,8 +134,8 @@ switch($_REQUEST['action'])
         echo "View dashboard components</h2>";
         echo "<table class='vertical' align='center'><tr>";
         echo colheader('id','ID');
-        echo colheader('name','Name');
-        echo colheader('enabled','Enabled');
+        echo colheader('name',$strName);
+        echo colheader('enabled',$strEnabled);
         echo "</tr>";
         while($dashboardnames = mysql_fetch_object($result))
         {
@@ -147,7 +147,7 @@ switch($_REQUEST['action'])
         }
         echo "</table>";
 
-        echo "<p align='center'><a href='".$_SERVER['PHP_SELF']."?action=install'>Install</a></p>";
+        echo "<p align='center'><a href='".$_SERVER['PHP_SELF']."?action=install'>{$strInstall}</a></p>";
 
         include('htmlfooter.inc.php');
         break;

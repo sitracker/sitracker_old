@@ -22,12 +22,12 @@ require('auth.inc.php');
 $search_string = cleanvar($_REQUEST['search_string']);
 $mode = cleanvar($_REQUEST['mode']);
 
-$title="Browse Knowledge Base";
+$title = $strBrowseKB;
 include('htmlheader.inc.php');
 if (empty($mode) && empty($search_string)) $mode='RECENT';
 if (empty($search_string) AND empty($mode)) $search_string='a';
 echo "<h2><img src='{$CONFIG['application_webpath']}images/icons/{$iconset}/32x32/kb.png' width='32' height='32' alt='' /> ";
-echo "Browse Knowledge Base</h2>";
+echo "{$title}</h2>";
 if (strtolower($mode)=='recent') echo "<h4>Articles published recently</h4>";
 elseif (strtolower($mode)=='today') echo "<h4>Articles published today</h4>";
 ?>
@@ -132,9 +132,9 @@ if (mysql_num_rows($result) >= 1)
     echo "<table align='center' width='98%'>";
     echo "<tr>";
     echo colheader('id','KB ID',FALSE);
-    echo colheader('title','Title',FALSE);
-    echo colheader('date','Date',FALSE);
-    echo colheader('author','Author',FALSE);
+    echo colheader('title', $strTitle,FALSE);
+    echo colheader('date', $strDate,FALSE);
+    echo colheader('author', $strAuthor,FALSE);
     echo colheader('keywords','Keywords',FALSE);
     echo "</tr>\n";
     $shade = 'shade1';

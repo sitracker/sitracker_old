@@ -58,13 +58,13 @@ switch($action)
             return window.confirm('Are you sure you want to add this reseller?');
         }
         </script>";
-        echo "<h2>Add Reseller</h2>";
+        echo "<h2>{$strAddReseller}</h2>";
         echo "<p align='center'>Mandatory fields are marked <sup class='red'>*</sup></p>";
         echo "<form action=\"".$_SERVER['PHP_SELF']."?action=add\" method=\"post\" onsubmit=\"return confirm_submit()\">";
         echo "<table align='center' class='vertical'>";
-        echo "<tr><th>Name: <sup class='red'>*</sup></th><td><input type='text' name='reseller_name' /></td></tr>";
+        echo "<tr><th>{$strName}: <sup class='red'>*</sup></th><td><input type='text' name='reseller_name' /></td></tr>";
         echo "</table>";
-        echo "<p align='center'><input name=\"submit\" type=\"submit\" value=\"Add Reseller\" /></p>";
+        echo "<p align='center'><input name=\"submit\" type=\"submit\" value=\{$strAddReseller}\" /></p>";
         echo "<input type='hidden' value='add_reseller' name='action' />";
         echo "</form>";
         include('htmlfooter.inc.php');

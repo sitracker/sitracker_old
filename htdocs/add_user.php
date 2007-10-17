@@ -46,7 +46,7 @@ if (empty($submit))
     {
         global $grouparr, $numgroups;
         $html = "<select name='$name'>";
-        $html .= "<option value='0'>None</option>\n";
+        $html .= "<option value='0'>{$strNone}</option>\n";
         if ($numgroups >= 1)
         {
             foreach($grouparr AS $groupid => $groupname)
@@ -60,7 +60,7 @@ if (empty($submit))
         return $html;
     }
     echo "<h2><img src='{$CONFIG['application_webpath']}images/icons/{$iconset}/32x32/user.png' width='32' height='32' alt='' /> ";
-    echo "Add User</h2>";
+    echo "{$strNewUser}</h2>";
     ?>
     <p align='center'>Mandatory fields are marked <sup class='red'>*</sup></p>
     <form action="<?php echo $_SERVER['PHP_SELF'] ?>" method="post" onsubmit="return confirm_submit()">
@@ -69,10 +69,10 @@ if (empty($submit))
     <tr><th>Username: <sup class='red'>*</sup></th><td><input maxlength="50" name="username" size="30" /></td></tr>
     <tr id='password'><th>Password: <sup class='red'>*</sup></th><td><input maxlength="50" name="password" size="30" /></td></tr>
     <?php
-    echo "<tr><th>Group:</th>";
+    echo "<tr><th>{$strGroup}:</th>";
     echo "<td>".group_drop_down('groupid', 0)."</td>";
     echo "</tr>";
-    echo "<tr><th>Role:</th>";
+    echo "<tr><th>{$strRole}:</th>";
     echo "<td>".role_drop_down('roleid', 1)."</td>";
     echo "</tr>";
     ?>
