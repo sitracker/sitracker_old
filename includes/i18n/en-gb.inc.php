@@ -4,6 +4,7 @@ $languagestring='English (GB)';
 $i18ncharset='UTF-8';
 
 // list of strings (Alphabetical)
+$strAbout = 'About';
 $strAccepting = 'Accepting';
 $strActionNeeded = 'Action Needed';
 $strActionPlan = 'Action Plan';
@@ -183,6 +184,7 @@ $strProblemReproductionCustomerText = 'Does the problem exist with more than one
 $strPassword = 'Password';
 $strPermission = 'Permission';
 $strPermissions = 'Permissions';
+$strPlugins = 'Plugins';
 $strPostcode = 'Postcode';
 $strPriority = 'Priority';
 $strPrivacy = 'Privacy';
@@ -245,6 +247,7 @@ $strUsers = 'Users';
 
 $strValue = 'Value';
 $strVendor = 'Vendor';
+$strVersion = 'Version';
 $strView = 'View';
 $strViewIncidents = 'View Incidents';
 $strViewTask = 'View Task';

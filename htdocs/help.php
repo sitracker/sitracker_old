@@ -22,7 +22,7 @@ $id = cleanvar($_REQUEST['id']);
 
 include('htmlheader.inc.php');
 journal(CFG_LOGGING_MAX, 'Help Viewed', "Help document $id was viewed", CFG_JOURNAL_OTHER, $id);
-echo "<h2>".permission_name($id)." Help</h2>";
+echo "<h2>".permission_name($id)." {$strHelp}</h2>";
 echo "<div id='help'>";
 if ($id<0 OR $id>200 OR $id=='' OR strlen($id)>3) $id=0;
 include("help/help-$id.inc.php");

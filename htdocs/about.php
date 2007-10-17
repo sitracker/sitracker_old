@@ -19,14 +19,14 @@ require('functions.inc.php');
 require('auth.inc.php');
 
 include('htmlheader.inc.php');
-?>
-<table summary="by Ivan Lucas" align="center">
-<tr><td class='shade1' colspan="2">About <?php echo $CONFIG['application_shortname']; ?>...</td></tr>
-<tr><td class='shade2' colspan="2" style='background-image: url(images/sitting_man_logo64x64.png); background-repeat: no-repeat; background-position: 1% bottom;'>
-<?php
+
+echo "<table summary='by Ivan Lucas' align='center'>\n";
+echo "<tr><td class='shade1' colspan='2'>{$strAbout} {$CONFIG['application_shortname']}&hellip;</td></tr>\n";
+echo "<tr><td class='shade2' colspan='2' style='background-image: url(images/sitting_man_logo64x64.png); ";
+echo "background-repeat: no-repeat; background-position: 1% bottom;'>";
 echo "<h2>{$CONFIG['application_name']}</h2>";
 echo "<p align='center'>";
-echo "Version: {$application_version} {$application_revision}</p><br />";
+echo "{$strVersion}: {$application_version} {$application_revision}</p><br />";
 ?>
 </td>
 </tr>
@@ -70,7 +70,9 @@ Copyright (c)  2006-2007 Everaldo Coelho. Licensed under the LGPL</p>
 
 
 </td></tr>
-<tr><td class='shade1' colspan="2">Licence:</td></tr>
+<?php
+echo "<tr><td class='shade1' colspan='2'>{$strLicense}:</td></tr>";
+?>
 <tr><td class='shade2' colspan='2'>
 <textarea cols="100%" rows="10" readonly="readonly" style="background: transparent;">
 <?php
@@ -93,7 +95,7 @@ echo $contents;
 </textarea>
 </td></tr>
 <?php
-echo "<tr><td class='shade1' colspan='2'>Plugins:</td></tr>";
+echo "<tr><td class='shade1' colspan='2'>{$strPlugins}:</td></tr>";
 echo "<tr><td class='shade2' colspan='2'>";
 if (count($CONFIG['plugins']) >= 1)
 {
@@ -104,14 +106,14 @@ if (count($CONFIG['plugins']) >= 1)
         else echo "<br />";
 
         if ($PLUGININFO[$plugin]['description'] != '') echo "{$PLUGININFO[$plugin]['description']}<br />";
-        if ($PLUGININFO[$plugin]['author'] != '') echo "Author: {$PLUGININFO[$plugin]['author']}<br />";
+        if ($PLUGININFO[$plugin]['author'] != '') echo "{$strAuthor}: {$PLUGININFO[$plugin]['author']}<br />";
         if ($PLUGININFO[$plugin]['legal'] != '') echo "{$PLUGININFO[$plugin]['legal']}<br />";
         if ($PLUGININFO[$plugin]['sitminversion'] > $application_version) echo "<strong class='error'>This plugin was designed for {$CONFIG['application_name']} version {$PLUGININFO[$plugin]['sitminversion']} or later</strong><br />";
         if (!empty($PLUGININFO[$plugin]['sitmaxversion']) AND $PLUGININFO[$plugin]['sitmaxversion'] < $application_version) echo "<strong class='error'>This plugin was designed for {$CONFIG['application_name']} version {$PLUGININFO[$plugin]['sitmaxversion']} or earlier</strong><br />";
         echo "</p>";
     }
 }
-else echo "<p>None</p>";
+else echo "<p>{$strNone}</p>";
 echo "</td></tr>";
 echo "</table>\n";
 
