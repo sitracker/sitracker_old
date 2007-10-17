@@ -69,7 +69,7 @@ if (empty($action) OR $action=='showform')
     }
     else
     {
-        echo "<p align='center'>Contact $contactid</p>";
+        echo "<p align='center'>{$strContact} $contactid</p>";
     }
     include('htmlfooter.inc.php');
 }
@@ -126,9 +126,9 @@ elseif ($action=='findcontact')
 
         
         <?php
-        echo "<h2>{$strAddIncident} - Select Person / Contract</h2>";
+        echo "<h2>{$strAddIncident} - Select Person / {$strContract}</h2>";
         echo "<h3><img src='{$CONFIG['application_webpath']}images/icons/{$iconset}/32x32/contract.png' width='32' height='32' alt='' />  ";
-        echo "Contracts</h3>";
+        echo "{$strContracts}</h3>";
         echo "<p align='center'>This list shows contracts, i.e. supported people and the products they are supported for.<br />
         Click on the appropriate '{$strAddIncident}' link to begin adding the incident.</p>";
         function to_row($contactrow)
@@ -141,14 +141,14 @@ elseif ($action=='findcontact')
             $incidents_remaining = $contactrow['incident_quantity'] - $contactrow['incidents_used'];
 
             $str = "<tr class='$class'>";
-            if ($contactrow['expirydate']<$now) $str .=  "<td>Expired</td>";
-            elseif ($contactrow['term']=='yes') $str .=  "<td>Terminated</td>";
+            if ($contactrow['expirydate']<$now) $str .=  "<td>{$strExpired}</td>";
+            elseif ($contactrow['term']=='yes') $str .=  "<td>{$strTerminated}</td>";
             elseif ($contactrow['incident_quantity'] >= 1 AND $contactrow['incidents_used'] >= $contactrow['incident_quantity'])
-                $str .=  "<td class='expired'>Zero remaining ({$contactrow['incidents_used']}/{$contactrow['incident_quantity']} Used)</td>";
+                $str .=  "<td class='expired'>{$strZeroRemaining} ({$contactrow['incidents_used']}/{$contactrow['incident_quantity']} Used)</td>";
             else
             {
                 $str .=  "<td><a href=\"{$_SERVER['PHP_SELF']}?action=incidentform&amp;type=support&amp;contactid=".$contactrow['contactid']."&amp;maintid=".$contactrow['maintenanceid']."&amp;producttext=".urlencode($contactrow['productname'])."&amp;productid=".$contactrow['productid']."&amp;updateid=$updateid&amp;siteid=".$contactrow['siteid']."&amp;win={$win}\" onclick=\"return confirm_support();\">{$strAddIncident}</a> ";
-                if ($contactrow['incident_quantity']==0) $str .=  "(Unlimited)";
+                if ($contactrow['incident_quantity']==0) $str .=  "({$strUnlimited})";
                 else $str .=  "({$incidents_remaining} Left)";
             }
             $str .=  "</td>";
@@ -164,7 +164,7 @@ elseif ($action=='findcontact')
         $str_prefered = "";
         $str_alternative = "";
 
-        $headers = "<tr><th>&nbsp;</th><th>Name</th><th>Site</th><th>Contract</th><th>Service Level</th><th>Expiry</th></tr>";
+        $headers = "<tr><th>&nbsp;</th><th>{$strName}</th><th>{$strSite}</th><th>{$strContract}</th><th>{$strServiceLevel}</th><th>{$strExpiryDate}</th></tr>";
 
         while($contactrow=mysql_fetch_array($result))
         {
@@ -218,8 +218,8 @@ elseif ($action=='findcontact')
             echo "<table align='center'>";
             echo "<tr>";
             echo "<th>&nbsp;</th>";
-            echo "<th>Name</th>";
-            echo "<th>Site</th>";
+            echo "<th>{$strName}</th>";
+            echo "<th>{$strSite}</th>";
             echo "</tr>\n";
 
             while($contactrow=mysql_fetch_array($result))
@@ -233,19 +233,19 @@ elseif ($action=='findcontact')
                 }
                 else
                 {
-                    echo "<td class='expired'>Zero remaining</td>";
+                    echo "<td class='expired'>{$strZeroRemaining}</td>";
                 }
                 echo '<td>'.stripslashes($contactrow['forenames'].' '.$contactrow['surname']).'</td>';
                 echo '<td>'.site_name($contactrow['siteid']).'</td>';
                 echo "</tr>\n";
             }
             echo "</table>\n";
-            echo "<p align='center'><a href='add_contact.php'>Add a contact</a></p>";
+            echo "<p align='center'><a href='add_contact.php'>{$strAddContact}</a></p>";
         }
         else
         {
             echo "<h3>No matching contacts found</h3>";
-            echo "<p align='center'><a href=\"add_contact.php\">Add a contact</a></p>";
+            echo "<p align='center'><a href=\"add_contact.php\">{$strAddContact}</a></p>";
         }
         echo "<p align='center'><a href=\"{$_SERVER['PHP_SELF']}?updateid={$updateid}&amp;win={$win}\">{$strSearchAgain}</a></p>";
         include('htmlfooter.inc.php');
@@ -258,7 +258,7 @@ elseif ($action=='findcontact')
         if (!empty($search_string)) echo "'$search_string' ";
         if (!empty($contactid)) echo "contact id $contactid ";
         echo "</h2>\n";
-        echo "<p align='center'><a href=\"add_incident.php?updateid=$updateid&amp;win={$win}\">Try again</a></p>";
+        echo "<p align='center'><a href=\"add_incident.php?updateid=$updateid&amp;win={$win}\">{$strSearchAgain}</a></p>";
         // Select the contact from the list of contacts as well
         $sql = "SELECT *, contacts.id AS contactid FROM contacts, sites WHERE contacts.siteid=sites.id ";
         if (empty($contactid))
@@ -273,13 +273,13 @@ elseif ($action=='findcontact')
 
         if (mysql_num_rows($result)>0)
         {
-            echo "<h3>People</h3>\n";
-            echo "<p align='center'>This list shows people that matched your search, if site-support is available you can add incidents for the site.</p>";
+            echo "<h3>{$strCustomers}</h3>\n";
+            echo "<p align='center'>This list shows customers that matched your search, if site-support is available you can add incidents for the site.</p>";
             echo "<table align='center'>";
             echo "<tr>";
             echo "<th>&nbsp;</th>";
-            echo "<th>Name</th>";
-            echo "<th>Site</th>";
+            echo "<th>{$strName}</th>";
+            echo "<th>{$strSite}</th>";
             echo "</tr>\n";
 
             while($contactrow=mysql_fetch_array($result))
@@ -291,19 +291,19 @@ elseif ($action=='findcontact')
                     echo "<td><a href=\"{$_SERVER['PHP_SELF']}?action=incidentform&amp;type=free&amp;contactid=".$contactrow['contactid']."&amp;updateid=$updateid&amp;win={$win}\" onclick=\"return confirm_free();\">";
                     echo "Add Site Support Incident</a> ({$site_incident_pool})</td>";
                 }
-                else echo "<td class='expired'>Zero remaining</td>";
+                else echo "<td class='expired'>{$strZeroRemaining}</td>";
                 echo '<td>'.$contactrow['forenames'].' '.$contactrow['surname'].'</td>';
                 echo '<td>'.site_name($contactrow['siteid']).'</td>';
                 echo "</tr>\n";
             }
             echo "</table>\n";
 
-            echo "<p align='center'><a href='add_contact.php'>Add a contact</a></p>\n";
+            echo "<p align='center'><a href='add_contact.php'>{$strAddContact}</a></p>\n";
         }
         else
         {
             echo "<h3>No matching contacts found</h3>";
-            echo "<p align='center'><a href=\"add_contact.php\">Add a contact</a></p>\n";
+            echo "<p align='center'><a href=\"add_contact.php\">{$strAddContact}</a></p>\n";
         }
         include('htmlfooter.inc.php');
     }
@@ -752,9 +752,10 @@ elseif ($action=='reassign')
 
     include('htmlheader.inc.php');
     echo "<h2>Incident Added - Summary</h2>";
-    echo "<p align='center'>Incident <a href=\"javascript:incident_details_window('$incidentid','incident{$incidentid}');\">$incidentid</a> has been moved to ".user_realname($uid)."'s <strong style='color: red'>Action Needed</strong> queue</p>";
+    echo "<p align='center'>Incident <a href=\"javascript:incident_details_window('$incidentid','incident{$incidentid}');\">$incidentid</a> has been moved to ";
+    echo user_realname($uid)."'s <strong style='color: red'>{$strActionNeeded}</strong> queue</p>";
     $userphone = user_phone($userid);
-    if ($userphone!='') echo "<p align='center'>Telephone: {$userphone}</p>";
+    if ($userphone!='') echo "<p align='center'>{$strTelephone}: {$userphone}</p>";
     $sql = "UPDATE incidents SET owner='$uid', lastupdated='$now' WHERE id='$incidentid'";
     mysql_query($sql);
     if (mysql_error()) trigger_error("MySQL Query Error ".mysql_error(), E_USER_ERROR);

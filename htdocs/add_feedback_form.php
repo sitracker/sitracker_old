@@ -54,7 +54,7 @@ switch ($action)
         echo "<td><input type='text' name='name' size='35' maxlength='255' value='".stripslashes($form->name)."' /></td>";
         echo "</tr>\n<tr>";
 
-        echo "<th>Description:<br />(For Internal Use, not displayed)</th>";
+        echo "<th>{$strDescription}:<br />(For Internal Use, not displayed)</th>";
         echo "<td><textarea name='description' cols='80' rows='6'>";
         echo stripslashes($form->description)."</textarea></td>";
         echo "</tr>\n<tr>";

@@ -43,7 +43,7 @@ if (empty($productid) AND $display!='skills')
             if (mysql_num_rows($presult) >= 1)
             {
                 echo "<table summary='List of products' align='center' width='95%'>";
-                echo "<tr><th width='20%'>Product Name</th><th width='60%'>Description</th><th width='10%'>Linked Skills</th><th width='10%'>Active Contracts</th></tr>\n";
+                echo "<tr><th width='20%'>Product Name</th><th width='60%'>{$strDescription}</th><th width='10%'>Linked Skills</th><th width='10%'>Active Contracts</th></tr>\n";
                 $shade='shade1';
                 while ($product = mysql_fetch_object($presult))
                 {

@@ -169,30 +169,30 @@ switch ($action)
                 $enddate=mysql2date($task->enddate);
                 echo "<form id='edittask' action='{$_SERVER['PHP_SELF']}' method='post'>";
                 echo "<table class='vertical'>";
-                echo "<tr><th>Title</th>";
+                echo "<tr><th>{$strTitle}</th>";
                 echo "<td><input type='text' name='name' size='35' maxlength='255' value=\"".stripslashes($task->name)."\" /></td></tr>";
-                echo "<tr><th>Description</th>";
+                echo "<tr><th>{$strDescription}</th>";
                 echo "<td><textarea name='description' rows='4' cols='30'>".stripslashes($task->description)."</textarea></td></tr>";
                 if ($task->distribution=='public')
                 {
-                    echo "<tr><th>Tags:</th>";
+                    echo "<tr><th>{$strTags}:</th>";
                     echo "<td><textarea rows='2' cols='30' name='tags'>".list_tags($id, 4, false)."</textarea></td></tr>";
                 }
-                echo "<tr><th>Priority</th>";
+                echo "<tr><th>{$strPriority}</th>";
                 echo "<td>".priority_drop_down('priority',$task->priority)."</td></tr>";
-                echo "<tr><th>Start Date</th>";
+                echo "<tr><th>{$strStartDate}</th>";
                 echo "<td><input type='text' name='startdate' id='startdate' size='10' value='";
                 if ($startdate > 0) echo date('Y-m-d',$startdate);
                 echo "' /> ";
                 echo date_picker('edittask.startdate');
                 echo "</td></tr>";
-                echo "<tr><th>Due Date</th>";
+                echo "<tr><th>{$strDueDate}</th>";
                 echo "<td><input type='text' name='duedate' id='duedate' size='10' value='";
                 if ($duedate > 0) echo date('Y-m-d',$duedate);
                 echo "' /> ";
                 echo date_picker('edittask.duedate');
                 echo "</td></tr>";
-                echo "<tr><th>Completion</th>";
+                echo "<tr><th>{$strCompletion}</th>";
                 echo "<td><input type='text' name='completion' size='3' maxlength='3' value='{$task->completion}' />&#037;</td></tr>";
                 echo "<tr><th>End Date</th>";
                 echo "<td><input type='text' name='enddate' id='enddate' size='10' value='";
@@ -200,9 +200,9 @@ switch ($action)
                 echo "' /> ";
                 echo date_picker('edittask.enddate');
                 echo "</td></tr>";
-                echo "<tr><th>Value</th>";
+                echo "<tr><th>{$strValue}</th>";
                 echo "<td><input type='text' name='value' size='6' maxlength='12' value='{$task->value}' /></td></tr>";
-                echo "<tr><th>Privacy</th>";
+                echo "<tr><th>{$strPrivacy}</th>";
                 echo "<td>";
                 echo "<input type='radio' name='distribution' ";
                 if ($task->distribution=='public') echo "checked='checked' ";
@@ -230,7 +230,7 @@ switch ($action)
         else echo "<p class='error'>No matching task found</p>";
 
 
-        echo "<p align='center'><a href='tasks.php'>Tasks List</a></p>";
+        echo "<p align='center'><a href='tasks.php'>{$strTaskList}</a></p>";
         include('htmlfooter.inc.php');
 }
 

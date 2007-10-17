@@ -35,7 +35,7 @@ if ($action == "showform" OR $action=='')
     </script>
     <?php
     echo "<h2><img src='{$CONFIG['application_webpath']}images/icons/{$iconset}/32x32/contract.png' width='32' height='32' alt='' /> ";
-    echo "Add Contract</h2>";
+    echo "{$strAddContract}</h2>";
     ?>
     <p align='center'>Mandatory fields are marked <sup class='red'>*</sup></p>
     <form name='addcontract' action="<?php echo $_SERVER['PHP_SELF']; ?>?action=add" method="post" onsubmit="return confirm_submit()">

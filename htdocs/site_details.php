@@ -37,32 +37,32 @@ $siteresult = mysql_query($sql);
 if (mysql_error()) trigger_error(mysql_error(),E_USER_WARNING);
 while ($siterow=mysql_fetch_array($siteresult))
 {
-    echo "<tr><th>Site:</th><td><h3><img src='{$CONFIG['application_webpath']}images/icons/{$iconset}/32x32/site.png' width='32' height='32' alt='' /> ".$siterow['name']."</h3>";
+    echo "<tr><th>{$strSite}:</th><td><h3><img src='{$CONFIG['application_webpath']}images/icons/{$iconset}/32x32/site.png' width='32' height='32' alt='' /> ".$siterow['name']."</h3>";
     echo "</td></tr>";
     if ($siterow['active']=='false')
     {
-        echo "<tr><th>Status:</th><td><span class='expired'>Inactive</span></td></tr>";
+        echo "<tr><th>{$strStatus}:</th><td><span class='expired'>{$strInactive}</span></td></tr>";
     }
     $tags = list_tags($id, 3, TRUE);
     if (!empty($tags)) echo "<tr><th>Tags:</th><td>{$tags}</td></tr>";
-    echo "<tr><th>Department:</th><td>".stripslashes($siterow['department'])."</td></tr>";
-    echo "<tr><th>Address1:</th><td>".stripslashes($siterow['address1'])."</td></tr>";
-    echo "<tr><th>Address2:</th><td>".stripslashes($siterow['address2'])."</td></tr>";
-    echo "<tr><th>City:</th><td>".stripslashes($siterow['city'])."</td></tr>";
-    echo "<tr><th>County:</th><td>".stripslashes($siterow['county'])."</td></tr>";
-    echo "<tr><th>Country:</th><td>".stripslashes($siterow['country'])."</td></tr>";
-    echo "<tr><th>Postcode:</th><td>".stripslashes($siterow['postcode'])."</td></tr>";
-    echo "<tr><th>Telephone:</th><td>".stripslashes($siterow['telephone'])."</td></tr>";
-    echo "<tr><th>Fax:</th><td>".stripslashes($siterow['fax'])."</td></tr>";
-    echo "<tr><th>Email:</th><td><a href=\"mailto:".$siterow['email']."\">".$siterow['email']."</a></td></tr>";
-    echo "<tr><th>Website:</th><td>";
+    echo "<tr><th>{$strDepartment}:</th><td>".stripslashes($siterow['department'])."</td></tr>";
+    echo "<tr><th>{$strAddress1}:</th><td>".stripslashes($siterow['address1'])."</td></tr>";
+    echo "<tr><th>{$strAddress2}:</th><td>".stripslashes($siterow['address2'])."</td></tr>";
+    echo "<tr><th>{$strCity}:</th><td>".stripslashes($siterow['city'])."</td></tr>";
+    echo "<tr><th>{$strCounty}:</th><td>".stripslashes($siterow['county'])."</td></tr>";
+    echo "<tr><th>{$strCountry}:</th><td>".stripslashes($siterow['country'])."</td></tr>";
+    echo "<tr><th>{$strPostcode}:</th><td>".stripslashes($siterow['postcode'])."</td></tr>";
+    echo "<tr><th>{$strTelephone}:</th><td>".stripslashes($siterow['telephone'])."</td></tr>";
+    echo "<tr><th>{$strFax}:</th><td>".stripslashes($siterow['fax'])."</td></tr>";
+    echo "<tr><th>{$strEmail}:</th><td><a href=\"mailto:".$siterow['email']."\">".$siterow['email']."</a></td></tr>";
+    echo "<tr><th>{$strWebsite}:</th><td>";
     if (!empty($siterow['websiteurl'])) echo "<a href='".stripslashes($siterow['websiteurl'])."'>".stripslashes($siterow['websiteurl'])."</a>";
     echo "</td></tr>";
-    echo "<tr><th>Notes:</th><td>".nl2br(stripslashes($siterow['notes']))."</td></tr>";
+    echo "<tr><th>{$strNotes}:</th><td>".nl2br(stripslashes($siterow['notes']))."</td></tr>";
     echo "<tr><td colspan='2'>&nbsp;</td></tr>";
-    echo "<tr><th>Support Incidents:</th><td>See <a href=\"contact_support.php?id=".$siterow['id']."&amp;mode=site\">here</a></td></tr>";
+    echo "<tr><th>{$strIncidents}:</th><td>See <a href=\"contact_support.php?id=".$siterow['id']."&amp;mode=site\">here</a></td></tr>";
     echo "<tr><th>Site Incident Pool:</th><td>{$siterow['freesupport']} Incidents remaining</td></tr>";
-    echo "<tr><th>Salesperson:</th><td>";
+    echo "<tr><th>{$strSalesperson}:</th><td>";
     if ($siterow['owner']>=1) echo user_realname($siterow['owner'],TRUE);
     else echo 'Not Set';
     echo "</td></tr>\n";
@@ -72,12 +72,12 @@ mysql_free_result($siteresult);
 plugin_do('site_details');
 
 echo "</table>\n";
-echo "<p align='center'><a href='edit_site.php?action=edit&amp;site={$id}'>Edit</a> | ";
-echo "<a href='delete_site.php?id={$id}'>Delete</a>";
+echo "<p align='center'><a href='edit_site.php?action=edit&amp;site={$id}'>{$strEdit}</a> | ";
+echo "<a href='delete_site.php?id={$id}'>{$strDelete}</a>";
 echo "</p>";
 
 // Display Contacts
-echo "<h3>Contacts</h3>";
+echo "<h3>{$strContacts}</h3>";
 
 // List Contacts
 $sql="SELECT * FROM contacts WHERE siteid='$id' ORDER BY surname, forenames";
@@ -88,7 +88,7 @@ if ($countcontacts > 0)
 {
     echo "<p align='center'>{$countcontacts} Contact(s)</p>";
     echo "<table align='center'>";
-    echo "<tr><th>Name</th><th>Job Title</th><th>Department</th><th>Phone</th><th>Email</th><th>Address</th><th>Data Protection</th><th>Notes</th></tr>";
+    echo "<tr><th>{$strName}</th><th>{$strJobTitle}</th><th>{$strDepartment}</th><th>{$strTelephone}</th><th>{$strEmail}</th><th>{$strAddress}</th><th>{$strDataProtection}</th><th>{$strNotes}</th></tr>";
     $shade='shade1';
     while ($contactrow=mysql_fetch_array($contactresult))
     {
@@ -98,16 +98,16 @@ if ($countcontacts > 0)
         echo "<td>".stripslashes($contactrow['jobtitle'])."</td>";
         echo "<td>".stripslashes($contactrow['department'])."</td>";
         if ($contactrow['dataprotection_phone']!='Yes') echo "<td>".stripslashes($contactrow['phone'])."</td>";
-        else echo "<td><strong>withheld</strong></td>";
+        else echo "<td><strong>{$strWithheld}</strong></td>";
         if ($contactrow['dataprotection_email']!='Yes') echo "<td>".stripslashes($contactrow['email'])."</td>";
-        else echo "<td><strong>withheld</strong></td>";
+        else echo "<td><strong>{$strWithheld}</strong></td>";
         if ($contactrow['dataprotection_address']!='Yes')
         {
             echo "<td>";
             if (!empty($contactrow['address1'])) echo stripslashes($contactrow['address1']);
             echo "</td>";
         }
-        else echo "<td><strong>withheld</strong></td>";
+        else echo "<td><strong>{$strWithheld}</strong></td>";
         echo "<td>";
         if ($contactrow['dataprotection_email']=='Yes') { echo "<strong>No Email</strong>, "; }
         if ($contactrow['dataprotection_phone']=='Yes') { echo "<strong>No Calls</strong>, "; }
@@ -124,7 +124,7 @@ else
 {
     echo "<p align='center'>There are no contacts associated with this site</p>";
 }
-echo "<p align='center'><a href='add_contact.php?siteid={$id}'>Add Contact</a></p>";
+echo "<p align='center'><a href='add_contact.php?siteid={$id}'>{$strAddContact}</a></p>";
 
 
 // Valid user, check perms
@@ -197,7 +197,7 @@ if (user_permission($sit[2],19)) // View contracts
         echo "</table>\n";
     }
     else echo "<p align='center'>There are no contracts associated with this site</p>";
-    echo "<p align='center'><a href='add_maintenance.php?action=showform&siteid=$id'>Add Contract</a></p>";
+    echo "<p align='center'><a href='add_maintenance.php?action=showform&amp;siteid=$id'>{$strAddContract}</a></p>";
 }
 
 include('htmlfooter.inc.php');
