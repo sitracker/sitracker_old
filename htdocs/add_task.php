@@ -101,8 +101,8 @@ switch ($action)
         echo "<tr><th>{$strValue}</th>";
         echo "<td><input type='text' name='value' size='6' maxlength='12' /></td></tr>";
         echo "<tr><th>{$strPrivacy}</th>";
-        echo "<td><input type='radio' name='distribution' value='public' /> Public<br />";
-        echo "<input type='radio' name='distribution' checked='checked' value='private' /> Private </td></tr>";
+        echo "<td><input type='radio' name='distribution' value='public' /> {$strPublic}<br />";
+        echo "<input type='radio' name='distribution' checked='checked' value='private' /> {$strPrivate} </td></tr>";
         echo "</table>";
         echo "<p><input name='submit' type='submit' value='{$strAddTask}' /></p>";
         echo "<input type='hidden' name='action' value='addtask' />";

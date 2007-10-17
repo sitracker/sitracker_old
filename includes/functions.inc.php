@@ -157,7 +157,7 @@ $hmenu[103020] = array (10=> array ( 'perm'=> 16, 'name'=> $strAddTemplate, 'url
                         20=> array ( 'perm'=> 17, 'name'=> $strEditTemplate, 'url'=>"{$CONFIG['application_webpath']}edit_emailtype.php?action=showform"),
                         30=> array ( 'perm'=> 43, 'name'=> $strGlobalSignature, 'url'=>"{$CONFIG['application_webpath']}edit_global_signature.php")
 );
-$hmenu[103090] = array (10=> array ( 'perm'=> 49, 'name'=> "Add Feedback Form", 'url'=>"{$CONFIG['application_webpath']}edit_feedback_form.php?action=new"),
+$hmenu[103090] = array (10=> array ( 'perm'=> 49, 'name'=> $strAddFeedbackForm, 'url'=>"{$CONFIG['application_webpath']}edit_feedback_form.php?action=new"),
                         20=> array ( 'perm'=> 49, 'name'=> "Browse Feedback Forms", 'url'=>"{$CONFIG['application_webpath']}browse_feedback_forms.php")
 );
 $hmenu[1040] = array (10=> array ( 'perm'=> 0, 'name'=> $strViewUsers, 'url'=>"{$CONFIG['application_webpath']}users.php"),
@@ -189,17 +189,17 @@ $hmenu[2030] = array (10=> array ( 'perm'=> 19, 'name'=> $strBrowse, 'url'=>"{$C
                       40=> array ( 'perm'=> 2, 'name'=> $strNewReseller, 'url'=>"{$CONFIG['application_webpath']}add_reseller.php"),
                       50=> array ( 'perm'=> 19, 'name'=> $strShowRenewals, 'url'=>"{$CONFIG['application_webpath']}search_renewals.php?action=showform"),
                       60=> array ( 'perm'=> 19, 'name'=> $strShowExpired, 'url'=>"{$CONFIG['application_webpath']}search_expired.php?action=showform"),
-                      70=> array ( 'perm'=> 0, 'name'=> "Products &amp; Skills", 'url'=>"{$CONFIG['application_webpath']}products.php", 'submenu'=>"203010"),
+                      70=> array ( 'perm'=> 0, 'name'=> "{$strProducts} &amp; {$strSkills}", 'url'=>"{$CONFIG['application_webpath']}products.php", 'submenu'=>"203010"),
 );
 
-$hmenu[203010] = array (10=> array ( 'perm'=> 56, 'name'=> "Add Vendor", 'url'=>"{$CONFIG['application_webpath']}add_vendor.php"),
-                        20=> array ( 'perm'=> 24, 'name'=> "Add Product", 'url'=>"{$CONFIG['application_webpath']}add_product.php"),
-                        30=> array ( 'perm'=> 28, 'name'=> "List Products", 'url'=>"{$CONFIG['application_webpath']}products.php"),
+$hmenu[203010] = array (10=> array ( 'perm'=> 56, 'name'=> $strAddVendor, 'url'=>"{$CONFIG['application_webpath']}add_vendor.php"),
+                        20=> array ( 'perm'=> 24, 'name'=> $strAddProduct, 'url'=>"{$CONFIG['application_webpath']}add_product.php"),
+                        30=> array ( 'perm'=> 28, 'name'=> $strListProducts, 'url'=>"{$CONFIG['application_webpath']}products.php"),
                         35=> array ( 'perm'=> 28, 'name'=> $strListSkills, 'url'=>"{$CONFIG['application_webpath']}products.php?display=skills"),
-                        40=> array ( 'perm'=> 56, 'name'=> "Add Skill", 'url'=>"{$CONFIG['application_webpath']}add_software.php"),
+                        40=> array ( 'perm'=> 56, 'name'=> $strAddSkill, 'url'=>"{$CONFIG['application_webpath']}add_software.php"),
                         50=> array ( 'perm'=> 24, 'name'=> "Link Products", 'url'=>"{$CONFIG['application_webpath']}add_product_software.php"),
                         60=> array ( 'perm'=> 25, 'name'=> "Add Product Question", 'url'=>"{$CONFIG['application_webpath']}add_productinfo.php"),
-                        70=> array ('perm'=> 56, 'name'=> "Edit Vendor", 'url'=>"{$CONFIG['application_webpath']}edit_vendor.php")
+                        70=> array ('perm'=> 56, 'name'=> $strEditVendor, 'url'=>"{$CONFIG['application_webpath']}edit_vendor.php")
 );
 
 
@@ -391,7 +391,7 @@ function user_realname($id,$allowhtml=FALSE)
         {
             $frommail = strtolower(substr(strstr($from[0], '@'), 1));
             $customerdomain = strtolower(substr(strstr($incidents['email'], '@'), 1));
-            if($frommail == $customerdomain) return "Customer";
+            if($frommail == $customerdomain) return $GLOBALS['strCustomer'];
             foreach($CONFIG['ext_esc_partners'] AS $partner)
             {
                 if(strstr(strtolower($frommail), strtolower($partner['email_domain'])))
@@ -1307,7 +1307,7 @@ function user_drop_down($name, $id, $accepting=TRUE, $exclude=FALSE, $attribs=""
             if ($users['accepting']=='No' AND $accepting==TRUE) echo " class='expired' ";
             echo "value='{$users['id']}'>";
             echo "{$users['realname']}";
-            if ($users['accepting']=='No' AND $accepting==TRUE) echo ", Not Accepting";
+            if ($users['accepting']=='No' AND $accepting==TRUE) echo ", {$GLOBALS['strNotAccepting']}";
             echo "</option>\n";
         }
     }
@@ -1423,7 +1423,7 @@ function incidentstatus_drop_down_all($name, $id)
    if ($id == 0)
       echo "<option selected='selected' value=\"all\">All</option>\n";
    else
-      echo "<option value=\"all\">All</option>\n";
+      echo "<option value=\"all\">{$GLOBALS['strAll']}</option>\n";
    while ($statuses = mysql_fetch_array($result))
       {
       ?><option <?php if ($statuses["id"] == $id) { ?>selected='selected' <?php } ?>value='<?php echo $statuses["id"] ?>'><?php echo $statuses["name"] ?></option><?php
@@ -1511,11 +1511,9 @@ function userstatus_bardrop_down($name, $id)
       echo "\n";
     }
    // <option value='set_user_status.php?mode=return' style="color: #404040; border-bottom: 1px solid black;"></option>
-   ?>
-   <option value='set_user_status.php?mode=setaccepting&amp;accepting=Yes' style="color: #00AA00; border-top: 1px solid black;">Accepting</option>
-   <option value='set_user_status.php?mode=setaccepting&amp;accepting=No' style="color: #FF0000;">Not Accepting</option>
-   </select>
-   <?php
+   echo "<option value='set_user_status.php?mode=setaccepting&amp;accepting=Yes' style='color: #00AA00; border-top: 1px solid black;'>{$GLOBALS['strAccepting']}</option>";
+   echo "<option value='set_user_status.php?mode=setaccepting&amp;accepting=No' style='color: #FF0000;'>{$GLOBALS['strNotAccepting']}</option>";
+   echo "</select>\n";
 }
 
 
@@ -1612,19 +1610,19 @@ function contactproducts_drop_down($name, $contactid)
 function accepting_drop_down($name, $userid)
 {
    if (user_accepting($userid) == "Yes")
-      {
+   {
       echo "<select name=\"$name\">\n";
-      echo "<option selected='selected' value=\"Yes\">Yes</option>\n";
-      echo "<option value=\"No\">No</option>\n";
+      echo "<option selected='selected' value=\"Yes\">{$GLOBALS['strYes']}</option>\n";
+      echo "<option value=\"No\">{$GLOBALS['strNo']}</option>\n";
       echo "</select>\n";
-      }
+   }
    else
-      {
+   {
       echo "<select name=\"$name\">\n";
       echo "<option value=\"Yes\">Yes</option>\n";
-      echo "<option selected='selected' value=\"No\">No</option>\n";
+      echo "<option selected='selected' value=\"No\">{$GLOBALS['strNo']}</option>\n";
       echo "</select>\n";
-      }
+   }
 }
 
 
@@ -3904,9 +3902,9 @@ function readable_date($date)
     // Takes a UNIX Timestamp and resturns a string with a pretty readable date
     // e.g. Yesterday @ 5:28pm
     if (date('dmy', $date) == date('dmy', time()))
-        $datestring = "Today @ ".date('g:ia', $date);
+        $datestring = "{$GLOBALS['strToday']} @ ".date('g:ia', $date);
     elseif (date('dmy', $date) == date('dmy', (time()-86400)))
-        $datestring = "Yesterday @ ".date('g:ia', $date);
+        $datestring = "{$GLOBALS['strYesterday']} @ ".date('g:ia', $date);
     else
         $datestring = date("l jS M y @ g:ia", $date);
     return $datestring;
@@ -4032,7 +4030,7 @@ function software_backup_dropdown($name, $userid, $softwareid, $backupid)
         $html = "<select name='$name'>\n";
         $html .= "<option value='0'";
         if ($user->userid==0) $html .= " selected='selected'";
-        $html .= ">None</option>\n";
+        $html .= ">{$GLOBALS['strNone']}</option>\n";
         while ($user = mysql_fetch_object($result))
         {
             $html .= "<option value='{$user->userid}'";
@@ -4523,7 +4521,7 @@ function incident_open($incidentid)
     if (mysql_error()) trigger_error("MySQL Query Error ".mysql_error(), E_USER_ERROR);
     if (mysql_num_rows($result) > 0)
     {
-        return "Yes";
+        return $GLOBALS['strYes'];
     }
     else
     {
@@ -4533,7 +4531,7 @@ function incident_open($incidentid)
         if (mysql_num_rows($result) > 0)
         {
             //closed
-            return "No";
+            return $GLOBALS['strNo'];
         }
         else
         {
@@ -4565,12 +4563,12 @@ function colheader($colname, $coltitle, $sort=FALSE, $order='', $filter='', $def
         if ($order=='a')
         {
             $html .= "<a href='{$_SERVER['PHP_SELF']}?sort=$colname&amp;order=d{$qsappend}'>{$coltitle}</a> ";
-            $html .= "<img src='{$CONFIG['application_webpath']}images/sort_a.png' width='5' height='5' alt='Sort Ascending' style='border: 0px;' /> ";
+            $html .= "<img src='{$CONFIG['application_webpath']}images/sort_a.png' width='5' height='5' alt='{$GLOBALS['SortAscending']}' style='border: 0px;' /> ";
         }
         else
         {
             $html .= "<a href='{$_SERVER['PHP_SELF']}?sort=$colname&amp;order=a{$qsappend}'>{$coltitle}</a> ";
-            $html .= "<img src='{$CONFIG['application_webpath']}images/sort_d.png' width='5' height='5' alt='Sort Descending' style='border: 0px;' /> ";
+            $html .= "<img src='{$CONFIG['application_webpath']}images/sort_d.png' width='5' height='5' alt='{$GLOBALS['SortDescending']}' style='border: 0px;' /> ";
         }
     }
     else
@@ -4621,7 +4619,7 @@ function add_note_form($linkid, $refid)
     else $html .= "&nbsp;Ref ID <input type='text' name='refid' size='4' />";
     $html .= "<input type='hidden' name='action' value='addnote' />";
     $html .= "<input type='hidden' name='rpath' value='{$_SERVER['PHP_SELF']}?{$_SERVER['QUERY_STRING']}' />";
-    $html .= "<div style='text-align: right'><input type='submit' value='Add note' /></div>\n";
+    $html .= "<div style='text-align: right'><input type='submit' value='{$GLOBALS['strAddnote']}' /></div>\n";
     $html .= "</div>\n";
     $html .= "</form>";
     return $html;
