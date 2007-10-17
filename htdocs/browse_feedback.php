@@ -17,7 +17,7 @@ require('functions.inc.php');
 // This page requires authentication
 require('auth.inc.php');
 
-$title = "Browse Feedback";
+$title = $strBrowseFeedback;
 include('htmlheader.inc.php');
 
 // External variables
@@ -31,17 +31,17 @@ $completed = cleanvar($_REQUEST['completed']);
 switch($mode)
 {
     case 'viewresponse':
-        echo "<h2>Feedback</h2>";
+        echo "<h2>{$strFeedback}</h2>";
         $sql = "SELECT * FROM feedbackrespondents WHERE id='{$responseid}'";
         $result = mysql_query($sql);
         if (mysql_error()) trigger_error(mysql_error(),E_USER_WARNING);
         $response = mysql_fetch_object($result);
         echo "<table class='vertical' align='center'>";
-        echo "<tr><th>Contact</th><td>{$response->contactid} - ".contact_realname($response->contactid)."</td></tr>\n";
-        echo "<tr><th>Incident</th><td><a href=\"javascript:incident_details_window('{$response->incidentid}','incident{$response->incidentid}')\">{$response->incidentid} - ".incident_title($response->incidentid)."</a></td>\n";
-        echo "<tr><th>Form</th><td>{$response->formid}</td>\n";
-        echo "<tr><th>Date</th><td>{$response->created}</td>\n";
-        echo "<tr><th>Completed</th><td>{$response->completed}</td>\n";
+        echo "<tr><th>{$strContact}</th><td>{$response->contactid} - ".contact_realname($response->contactid)."</td></tr>\n";
+        echo "<tr><th>{$strIncident}</th><td><a href=\"javascript:incident_details_window('{$response->incidentid}','incident{$response->incidentid}')\">{$response->incidentid} - ".incident_title($response->incidentid)."</a></td>\n";
+        echo "<tr><th>{$strForm}</th><td>{$response->formid}</td>\n";
+        echo "<tr><th>{$strDate}</th><td>{$response->created}</td>\n";
+        echo "<tr><th>{$strCompleted}</th><td>{$response->completed}</td>\n";
         echo "</table>\n";
 
         echo "<h3>Response</h3>";

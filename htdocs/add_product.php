@@ -33,7 +33,7 @@ if (empty($submit))
     </script>
     <?php
     echo "<h2><img src='{$CONFIG['application_webpath']}images/icons/{$iconset}/32x32/product.png' width='32' height='32' alt='' /> ";
-    echo "Add New Product</h2>";
+    echo "{$strNewProduct}</h2>";
     ?>
     <p align='center'>Mandatory fields are marked <sup class='red'>*</sup></p>
     <form action="<?php echo $_SERVER['PHP_SELF']; ?>" method="post" onsubmit="return confirm_submit()">
@@ -41,7 +41,7 @@ if (empty($submit))
     <tr><th>Vendor: <sup class='red'>*</sup></th><td><?php echo vendor_drop_down('vendor', 0); ?></td></tr>
     <tr><th>Product Name: <sup class='red'>*</sup></th><td><input maxlength="50" name="name" size="40" /></td></tr>
     <?php
-    echo "<tr><th>Description:</th>";
+    echo "<tr><th>{$strDescription}:</th>";
     echo "<td>";
     echo "<textarea name='description' cols='40' rows='6'></textarea>";
     echo "</td></tr>";

@@ -68,7 +68,7 @@ else
     echo "<td>";
     echo "<input class='textbox' maxlength='255' name='name' size='40' value='{$row->name}' />";
     echo "</td></tr>";
-    echo "<tr><th>Description:</th>";
+    echo "<tr><th>{$strDescription}:</th>";
     echo "<td>";
     echo "<textarea name='description' cols='40' rows='6'>{$row->description}</textarea>";
     echo "</td></tr>";

@@ -80,36 +80,38 @@ if ($search_string=='') $search_string='a';
 </script>
 <?php
 echo "<h2><img src='{$CONFIG['application_webpath']}images/icons/{$iconset}/32x32/site.png' width='32' height='32' alt='' /> ";
-echo "Browse Sites</h2>";
+echo "{$strBrowseSites}</h2>";
 ?>
 <table summary="alphamenu" align="center">
 <tr>
 <td align="center">
     <form action="<?php echo $_SERVER['PHP_SELF']; ?>" method="get">
     <!-- <p>Browse sites: <input type="text" name="search_string" /><input type="submit" value="go" /></p>-->
-    <p>Browse sites: <input dojoType='ComboBox' dataUrl='autocomplete.php?action=sites' style='width: 300px;' name='search_string' /><input name="submit" type="submit" value="go" /></p>
-    </form>
     <?php
-        if($displayinactive=="true")
-        {
-            echo "<a href='".$_SERVER['PHP_SELF']."?displayinactive=false";
-            if(!empty($search_string)) echo "&amp;search_string={$search_string}&amp;owner={$owner}";
-            echo "'>Hide inactive</a>";
-            $inactivestring="displayinactive=true";
-        }
-        else
-        {
-            echo "<a href='".$_SERVER['PHP_SELF']."?displayinactive=true";
-            if(!empty($search_string)) echo "&amp;search_string={$search_string}&amp;owner={$owner}";
-            echo "'>Show inactive</a>";
-            $inactivestring="displayinactive=false";
-        }
+    echo "<p>{$strBrowseSites}: ";
+    echo "<input dojoType='ComboBox' dataUrl='autocomplete.php?action=sites' style='width: 300px;' name='search_string' />";
+    echo "<input name='submit' type='submit' value='{$strGo}' /></p>";
+    echo "</form>\n";
+    if($displayinactive=="true")
+    {
+        echo "<a href='".$_SERVER['PHP_SELF']."?displayinactive=false";
+        if(!empty($search_string)) echo "&amp;search_string={$search_string}&amp;owner={$owner}";
+        echo "'>Hide inactive</a>";
+        $inactivestring="displayinactive=true";
+    }
+    else
+    {
+        echo "<a href='".$_SERVER['PHP_SELF']."?displayinactive=true";
+        if(!empty($search_string)) echo "&amp;search_string={$search_string}&amp;owner={$owner}";
+        echo "'>Show inactive</a>";
+        $inactivestring="displayinactive=false";
+    }
     ?>
 </td>
 </tr>
 <tr>
 <td valign="middle">
-    <a href="add_site.php">Add Site</a> |
+    <?php echo "<a href='add_site.php'>{$strAddSite}</a> | "; ?>
     <a href="<?php echo $_SERVER['PHP_SELF'] ?>?search_string=A&<?php echo $inactivestring; ?>">A</a> |
     <a href="<?php echo $_SERVER['PHP_SELF'] ?>?search_string=B&<?php echo $inactivestring; ?>">B</a> |
     <a href="<?php echo $_SERVER['PHP_SELF'] ?>?search_string=C&<?php echo $inactivestring; ?>">C</a> |
@@ -143,7 +145,7 @@ $sitesql = "SELECT COUNT(id) FROM sites WHERE owner='{$sit[2]}'";
 $siteresult = mysql_query($sitesql);
 if (mysql_error()) trigger_error(mysql_error(),E_USER_WARNING);
 list($ownedsites) = mysql_fetch_row($siteresult);
-if ($ownedsites > 0) echo " | <a href='browse_sites.php?owner={$sit[2]}' title='Sites'>Mine</a> ";
+if ($ownedsites > 0) echo " | <a href='browse_sites.php?owner={$sit[2]}' title='Sites'>{$strMine}</a> ";
 ?>
     </td>
 </tr>
@@ -229,15 +231,12 @@ if ($errors == 0)
         elseif ($search_string=='0') echo " matching <strong><em>Number</em></strong>";
         else echo " matching <strong>'{$search_string}'</strong>";
         echo "</p>";
-        ?>
-        <table align='center'>
+        echo "<table align='center'>
         <tr>
             <th>ID</th>
-            <th>Site Name</th>
-            <th>Department</th>
-        </tr>
-        <?php
-
+            <th>{$strSiteName}</th>
+            <th>{$strDepartment}</th>
+        </tr>";
         $shade = 0;
         while ($results = mysql_fetch_array($result))
         {

@@ -72,48 +72,48 @@ while ($contactrow=mysql_fetch_array($contactresult))
     echo "<tr><th colspan='2'><h3><img src='{$CONFIG['application_webpath']}images/icons/{$iconset}/32x32/contact.png' width='32' height='32' alt='' /> ".stripslashes($contactrow['forenames']).' '.stripslashes($contactrow['surname'])."</h3></th></tr>";
     if ($contactrow['active']=='false')
     {
-        echo "<tr><th>Status:</th><td><span class='expired'>Inactive</span></td></tr>";
+        echo "<tr><th>{$strStatus}:</th><td><span class='expired'>{$strInactive}</span></td></tr>";
     }
     $tags = list_tags($id, 1, TRUE);
-    if (!empty($tags)) echo "<tr><th>Tags:</th><td>{$tags}</td></tr>";
+    if (!empty($tags)) echo "<tr><th>{$strTags}:</th><td>{$tags}</td></tr>";
     // Flags are deprecated as of v3.30 in favour of tags - INL
     // echo "<tr><th>Flags:</th><td>";
     // print_contact_flags($id);
     //echo "</td></tr>";
-    echo "<tr><th>Job Title:</th><td>".stripslashes($contactrow['jobtitle'])."</td></tr>";
-    echo "<tr><th>Site:</th><td><a href=\"site_details.php?id=".$contactrow['siteid']."\">".site_name($contactrow['siteid'])."</a></td></tr>";
-    if (!empty($contactrow['department'])) echo "<tr><th>Department:</th><td>".stripslashes($contactrow['department'])."</td></tr>";
+    echo "<tr><th>{$strJobTitle}:</th><td>".stripslashes($contactrow['jobtitle'])."</td></tr>";
+    echo "<tr><th>{$strSite}:</th><td><a href=\"site_details.php?id=".$contactrow['siteid']."\">".site_name($contactrow['siteid'])."</a></td></tr>";
+    if (!empty($contactrow['department'])) echo "<tr><th>{$strDepartment}:</th><td>".stripslashes($contactrow['department'])."</td></tr>";
     if ($contactrow['dataprotection_address']!='Yes')
     {
-        echo "<tr><th>Address1:</th><td>{$address1}</td></tr>";
-        echo "<tr><th>Address2:</th><td>{$address2}</td></tr>";
-        echo "<tr><th>City:</th><td>{$city}</td></tr>";
-        echo "<tr><th>County:</th><td>{$county}</td></tr>";
-        echo "<tr><th>Postcode:</th><td>{$postcode}</td></tr>";
-        echo "<tr><th>Country:</th><td>{$country}</td></tr>";
+        echo "<tr><th>{$strAddress1}:</th><td>{$address1}</td></tr>";
+        echo "<tr><th>{$strAddress2}:</th><td>{$address2}</td></tr>";
+        echo "<tr><th>{$strCity}:</th><td>{$city}</td></tr>";
+        echo "<tr><th>{$strCounty}:</th><td>{$county}</td></tr>";
+        echo "<tr><th>{$strPostcode}:</th><td>{$postcode}</td></tr>";
+        echo "<tr><th>{$strCountry}:</th><td>{$country}</td></tr>";
     }
     if ($contactrow['dataprotection_email']!='Yes')
     {
-        echo "<tr><th>Email:</th><td><a href=\"mailto:".stripslashes($contactrow['email'])."\">".stripslashes($contactrow['email'])."</a></td></tr>";
+        echo "<tr><th>{$strEmail}:</th><td><a href=\"mailto:".stripslashes($contactrow['email'])."\">".stripslashes($contactrow['email'])."</a></td></tr>";
     }
     if ($contactrow['dataprotection_phone']!='Yes')
     {
-        echo "<tr><th>Phone:</th><td>".stripslashes($contactrow['phone'])."</td></tr>";
-        echo "<tr><th>Mobile:</th><td>".stripslashes($contactrow['mobile'])."</td></tr>";
-        echo "<tr><th>Fax:</th><td>".stripslashes($contactrow['fax'])."</td></tr>";
+        echo "<tr><th>{$strTelephone}:</th><td>".stripslashes($contactrow['phone'])."</td></tr>";
+        echo "<tr><th>{$strMobile}:</th><td>".stripslashes($contactrow['mobile'])."</td></tr>";
+        echo "<tr><th>{$strFax}:</th><td>".stripslashes($contactrow['fax'])."</td></tr>";
     }
-    echo "<tr><th>Data Protection:</th><td> ";
+    echo "<tr><th>{$strDataProtection}:</th><td> ";
     if ($contactrow['dataprotection_email']=='Yes') { echo "<strong>No Email</strong>, "; } else { echo "Email OK, ";}
     if ($contactrow['dataprotection_phone']=='Yes') { echo "<strong>No Calls</strong>, "; } else { echo "Calls OK, ";}
     if ($contactrow['dataprotection_address']=='Yes') { echo "<strong>No Post</strong>"; } else { echo "Post OK ";}
     echo "</td></tr>";
-    echo "<tr><th>Notes:</th><td>".nl2br(stripslashes($contactrow['notes']))."</td></tr>";
+    echo "<tr><th>{$strNotes}:</th><td>".nl2br(stripslashes($contactrow['notes']))."</td></tr>";
 
     echo "<tr><td colspan='2'>&nbsp;</td></tr>";
-    echo "<tr><th>Access Details:</th><td>username: <code>".$contactrow['username']."</code>";
+    echo "<tr><th>Access Details:</th><td>{$strUsername}: <code>".$contactrow['username']."</code>";
     // echo ", password: <code>".$contactrow['password']."</code>";  ## Passwords no longer controlled from SiT INL 23Nov04
     echo "</td></tr>";
-    echo "<tr><th>Support Incidents:</th><td>";
+    echo "<tr><th>{$strIncidents}:</th><td>";
     $openincidents=contact_count_open_incidents($id);
     $totalincidents=contact_count_incidents($id);
     if ($totalincidents==0) echo "None";
@@ -147,15 +147,15 @@ while ($contactrow=mysql_fetch_array($contactresult))
 
     if ($contactrow['timestamp_modified']>0)
     {
-        echo "<tr><td>Record Modified:</td><td>".date("jS M Y",$contactrow['timestamp_modified'])."</td></tr>";
+        echo "<tr><td>{$strLastUpdated}:</td><td>".date("jS M Y",$contactrow['timestamp_modified'])."</td></tr>";
     }
     echo "</table>\n";
 
     echo "<p align='center'>";
     echo "<a href=\"add_incident.php?action=findcontact&amp;contactid=$id\">{$strAddIncident}</a> | ";
     echo "<a href=\"contact_details.php?id=$id&amp;output=vcard\">vCard</a> | ";
-    echo "<a href=\"edit_contact.php?action=edit&amp;contact=$id\">Edit</a> | ";
-    echo "<a href=\"delete_contact.php?id=$id\">Delete</a>";
+    echo "<a href=\"edit_contact.php?action=edit&amp;contact=$id\">{$strEdit}</a> | ";
+    echo "<a href=\"delete_contact.php?id=$id\">{$strDelete}</a>";
     echo "</p>\n";
 
 
@@ -173,7 +173,7 @@ while ($contactrow=mysql_fetch_array($contactresult))
         {
             echo "<table align='center' class='vertical'>";
             echo "<tr>";
-            echo "<th>ID</th><th>Product</th><th>Expires</th>";
+            echo "<th>ID</th><th>{$strProduct}</th><th>{$strExpiryDate}</th>";
             echo "</tr>\n";
 
             $supportcount=1;

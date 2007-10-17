@@ -18,7 +18,7 @@ require('functions.inc.php');
 // This page requires authentication
 require('auth.inc.php');
 
-$title='View Task';
+$title = $strViewTask;
 
 // External variables
 $action = $_REQUEST['action'];
@@ -46,48 +46,48 @@ if (mysql_num_rows($result) >= 1)
         $duedate=mysql2date($task->duedate);
         $enddate=mysql2date($task->enddate);
         echo "<table class='vertical' width='100%'>";
-        echo "<tr><th>Title</th>";
+        echo "<tr><th>{$strTitle}</th>";
         echo "<td>".stripslashes($task->name)."</td></tr>";
-        echo "<tr><th>Description</th>";
+        echo "<tr><th>{$strDescription}</th>";
         echo "<td>".nl2br(stripslashes($task->description))."</td></tr>";
         if ($task->distribution=='public')
         {
-            echo "<tr><th>Tags:</th><td>";
+            echo "<tr><th>{$strTags}:</th><td>";
             echo list_tags($id, 4);
             echo "</td></tr>";
         }
         if ($task->owner != $sit[2])
         {
-            echo "<tr><th>Owner</th>";
+            echo "<tr><th>{$strOwner}</th>";
             echo "<td>".user_realname($task->owner,TRUE)."</td></tr>";
         }
-        echo "<tr><th>Priority</th>";
+        echo "<tr><th>{$strPriority}</th>";
         echo "<td>".priority_icon($task->priority).' '.priority_name($task->priority)."</td></tr>";
-        echo "<tr><th>Start Date</th>";
+        echo "<tr><th>{$strStartDate}</th>";
         echo "<td>";
         if ($startdate > 0) echo date('Y-m-d',$startdate);
         echo "</td></tr>";
-        echo "<tr><th>Due Date</th>";
+        echo "<tr><th>{$strDueDate}</th>";
         echo "<td>";
         if ($duedate > 0) echo date('Y-m-d',$duedate);
         echo "</td></tr>";
-        echo "<tr><th>Completion</th>";
+        echo "<tr><th>{$strCompletion}</th>";
         echo "<td>".percent_bar($task->completion)."</td></tr>";
         echo "<tr><th>End Date</th>";
         echo "<td>";
         if ($enddate > 0) echo date('Y-m-d',$enddate);
         echo "</td></tr>";
-        echo "<tr><th>Value</th>";
+        echo "<tr><th>{$strValue}</th>";
         echo "<td>{$task->value}</td></tr>";
-        echo "<tr><th>Privacy</th>";
+        echo "<tr><th>{$strPrivacy}</th>";
         echo "<td>";
         if ($task->distribution=='public') echo "Public";
         if ($task->distribution=='private') echo "Private <img src='{$CONFIG['application_webpath']}images/icons/{$iconset}/16x16/private.png' width='16' height='16' title='Private' alt='Private' />";
         echo "</td></tr>";
         echo "</table>";
-        echo "<p align='center'><a href='edit_task.php?id={$id}'>Edit Task</a>";
-        if ($task->owner == $sit[2] AND $task->completion==100) echo " | <a href='edit_task.php?id={$id}&amp;action=delete'>Delete Task</a>";
-        if ($task->completion < 100) echo " | <a href='edit_task.php?id={$id}&amp;action=markcomplete'>Mark Complete</a>";
+        echo "<p align='center'><a href='edit_task.php?id={$id}'>{$strEditTask}</a>";
+        if ($task->owner == $sit[2] AND $task->completion==100) echo " | <a href='edit_task.php?id={$id}&amp;action=delete'>{$strDeleteTask}</a>";
+        if ($task->completion < 100) echo " | <a href='edit_task.php?id={$id}&amp;action=markcomplete'>{$strMarkComplete}</a>";
         echo "</p>";
 
 /*
@@ -120,7 +120,7 @@ else echo "<p class='error'>No matching task found</p>";
 
 echo "</div>";
 echo "<div style='clear:both; padding-top: 20px;'>";
-echo "<p align='center'><a href='tasks.php'>Tasks List</a></p>";
+echo "<p align='center'><a href='tasks.php'>{$strTaskList}</a></p>";
 echo "</div>";
 
 include('htmlfooter.inc.php');

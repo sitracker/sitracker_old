@@ -60,7 +60,7 @@ switch ($mode)
         echo "<tr><th>Web Category:</th><td>";
         echo "<input type='text' size='40' name='webcategory' value='".$frow['webcategory']."' />";
         echo "</td></tr>\n";
-        echo "<tr><th>Description:</th><td>";
+        echo "<tr><th>{$strDescription}:</th><td>";
         echo "<textarea rows='6' cols='40' name='longdescription'>{$frow['longdescription']}</textarea>";
         echo "</td></tr>\n";
         echo "<tr><th>File Version:</th><td>";

@@ -41,11 +41,11 @@ if(empty($submit))
     echo "<form action='".$_SERVER['PHP_SELF']."' method='post' onsubmit='return confirm_submit()'>";
     echo "<table class='vertical'>";
 
-    echo "<tr><td class='shade2' align='right'><b>Name:</b></td><td><input name='name' /></td></tr>";
-    echo "<tr><td class='shade2' align='right'><b>Track URL:</b><br />Note: insert '%externalid%' for automatic incident number insertion</td><td><input name='trackurl' /></td></tr>";
-    echo "<tr><td class='shade2' align='right'><b>Home URL:</b></td><td><input name='homeurl' /></td></tr>";
-    echo "<tr><td class='shade2' align='right'><b>Title:</b></td><td><input name='title' /></td></tr>";
-    echo "<tr><td class='shade2' align='right'><b>Email domain:</b></td><td><input name='emaildomain' /></td></tr>";
+    echo "<tr><th>{$strName}:</th><td><input name='name' /></td></tr>";
+    echo "<tr><th>Track URL:<br />Note: insert '%externalid%' for automatic incident number insertion</th><td><input name='trackurl' /></td></tr>";
+    echo "<tr><th>Home URL:</th><td><input name='homeurl' /></td></tr>";
+    echo "<tr><th>{$strTitle}:</th><td><input name='title' /></td></tr>";
+    echo "<tr><th>Email domain:</th><td><input name='emaildomain' /></td></tr>";
 
     echo "</table>";
 
