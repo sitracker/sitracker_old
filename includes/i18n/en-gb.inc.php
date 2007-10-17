@@ -72,7 +72,6 @@ $strDescription = 'Description';
 $strDoesThisUpdateMeetSLA = 'Does this update meet an SLA target?';
 $strDueDate = 'Due Date';
 
-<<<<<<< .mine
 $strEdit = 'Edit';
 $strEditContract = 'Edit Contract';
 $strEditedBy = 'Edited by';
