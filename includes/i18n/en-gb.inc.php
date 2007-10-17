@@ -238,6 +238,7 @@ $strToday = 'Today';
 
 $strUpdated = 'updated';
 $strUpdatedAutomaticallyBy = 'Updated automatically by';
+$strUpdateIncident = 'Update Incident';
 $strUpdateType = 'Update Type';
 $strUnknown = 'Unknown';
 $strUnlimited = 'Unlimited';
