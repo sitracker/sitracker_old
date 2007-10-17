@@ -126,7 +126,7 @@ switch ($page)
             while ($incident = mysql_fetch_object($result))
             {
                 echo "<tr class='$shade'><td>{$incident->id}</td>";
-                echo "<td>Product<br /><strong>{$incident->title}</strong></td>";
+                echo "<td>Product<br /><strong>".stripslashes($incident->title)."</strong></td>"; // FIXME product name
                 echo "<td>".format_date_friendly($incident->lastupdated)."</td>";
                 echo "<td>".incidentstatus_name($incident->status)."</td>";
                 echo "<td><a href='{$_SERVER[PHP_SELF]}?page=update&id={$incident->id}'>Update</a> | ";
@@ -138,7 +138,7 @@ switch ($page)
             echo "</table>";
         }
         else echo "<p class='info'>{$strNoIncidents}</p>";
-        
+
         echo "<p align='center'><a href='{$_SERVER[PHP_SELF]}?page=entitlement'>{$strAddIncident}</a></p>";
     break;
 
@@ -157,18 +157,18 @@ switch ($page)
             $result = mysql_query($usersql);
             $user = mysql_fetch_object($result);
             if (mysql_error()) trigger_error("MySQL Query Error ".mysql_error(), E_USER_ERROR);
-            
+
             $update = "Updated via the portal by <b>{$user->forenames} {$user->surname}</b>\n\n";
             $update .= $_REQUEST['update'];
             $sql = "INSERT into updates VALUES('', '{$_REQUEST['id']}', '{$_SESSION['contactid']}', 'webupdate', '', '1', '{$update}',
                     '{$now}', '', '', '', '', '', '', '')";
             mysql_query($sql);
             if (mysql_error()) trigger_error("MySQL Query Error ".mysql_error(), E_USER_ERROR);
-            
+
             confirmation_page("2", "portal.php?page=incidents", "<h2>Update Successful</h2><p align='center'>Please wait while you are redirected...</p>");
         }
         break;
-        
+
     case 'close':
         if(empty($_REQUEST['reason']))
         {
@@ -184,18 +184,18 @@ switch ($page)
             $result = mysql_query($usersql);
             $user = mysql_fetch_object($result);
             if (mysql_error()) trigger_error("MySQL Query Error ".mysql_error(), E_USER_ERROR);
-            
+
             $reason = "Incident closure requested via the portal by <b>{$user->forenames} {$user->surname}</b>\n\n";
             $reason .= "<b>Reason:</b> {$_REQUEST['reason']}";
             $sql = "INSERT into updates VALUES('', '{$_REQUEST['id']}', '{$_SESSION['contactid']}', 'webupdate', '', '1', '{$reason}',
             '{$now}', '', '', '', '', '', '', '')";
             mysql_query($sql);
             if (mysql_error()) trigger_error("MySQL Query Error ".mysql_error(), E_USER_ERROR);
-            
+
             confirmation_page("2", "portal.php?page=incidents", "<h2>Closure request Successful</h2><p align='center'>Please wait while you are redirected...</p>");
         }
         break;
-        
+
     case 'add':
         if(!$_REQUEST['action'])
         {
@@ -210,7 +210,7 @@ switch ($page)
             echo "<tr><th>{$strWorkAroundsAttempted}:<br />{$strWorkAroundsAttemptedCustomerText}</th><td><textarea name='workarounds' rows='10' cols='60'></textarea></td></tr>";
             echo "<tr><th>{$strProblemReproduction}:<br />{$strProblemReproductionCustomerText}</th><td><textarea name='reproduction' rows='10' cols='60'></textarea></td></tr>";
             echo "<tr><th>$strCustomerImpact:<br />{$strCustomerImpactCustomerText}</th><td><textarea name='impact' rows='10' cols='60'></textarea></td></tr>";
-    
+
             echo "</table>";
             echo "<input name='contractid' value='{$_REQUEST['contractid']}' type='hidden'>";
             echo "<p align='center'><input type='submit' value='{$strAddIncident}' /></p>";
@@ -229,14 +229,14 @@ switch ($page)
             $workarounds = cleanvar($_REQUEST['workarounds']);
             $reproduction = cleanvar($_REQUEST['reproduction']);
             $impact = cleanvar($_REQUEST['impact']);
-            $servicelevel = maintenance_servicelevel($contractid);
-                        
+            $servicelevel = servicelevel_id2tag(maintenance_servicelevel($contractid));
+
             $updatetext = "Opened via the portal by <b>".contact_realname($contactid)."</b>\n\n";
             if(!empty($probdesc)) $updatetext .= "<b>Problem Description</b>\n{$probdesc}\n\n";
             if(!empty($workarounds))  $updatetext .= "<b>Workarounds Attempted</b>\n{$workarounds}\n\n";
             if(!empty($reproduction)) $updatetext .= "<b>Problem Reproduction</b>\n{$reproduction}\n\n";
             if(!empty($impact)) $updatetext .= "<b>Customer Impact</b>\n{$impact}\n\n";
-            
+
             //create new incident
             $sql  = "INSERT INTO incidents (title, owner, contact, priority, servicelevel, status, type, maintenanceid, ";
             $sql .= "product, softwareid, productversion, productservicepacks, opened, lastupdated) ";
@@ -244,10 +244,10 @@ switch ($page)
             $sql .= "'$contractid', '$software', '$softwareversion', '$softwareservicepacks', '$now', '$now')";
             $result = mysql_query($sql);
             if (mysql_error()) trigger_error("MySQL Query Error ".mysql_error(), E_USER_ERROR);
-            
+
             $incidentid = mysql_insert_id();
             $_SESSION['incidentid'] = $incidentid;
-            
+
             // Create a new update
             $sql  = "INSERT INTO updates (incidentid, userid, type, bodytext, timestamp, currentowner, ";
             $sql .= "currentstatus, customervisibility) ";
@@ -255,7 +255,7 @@ switch ($page)
             $sql .= "'1', 'show')";
             $result = mysql_query($sql);
             if (mysql_error()) trigger_error("MySQL Query Error ".mysql_error(), E_USER_ERROR);
-            
+
             // get the service level
             // find out when the initial response should be according to the service level
             if (empty($servicelevel) OR $servicelevel==0)
@@ -304,11 +304,11 @@ switch ($page)
                 plugin_do('incident_created_contract');
             }*/
 
- 
-            
+
+
         }
         break;
-    
+
     case '':
     default:
         echo "<p align='center'>{$strWelcome} ".contact_realname($_SESSION['contactid'])."</p>";
