@@ -90,11 +90,11 @@ $updatetypes['auto_chased_phone'] = array('icon' => 'chased.png', 'text' => 'Cha
 $updatetypes['auto_chased_manager'] = array('icon' => 'chased.png', 'text' => 'Chased');
 $updatetypes['auto_chased_managers_manager'] = array('icon' => 'chased.png', 'text' => 'Chased');
 $slatypes['opened'] = array('icon' => 'open.png', 'text' => 'Opened');
-$slatypes['initialresponse'] = array('icon' => 'initialresponse.png', 'text' => 'Initial Response');
-$slatypes['probdef'] = array('icon' => 'probdef.png', 'text' => 'Problem Definition');
-$slatypes['actionplan'] = array('icon' => 'actionplan.png', 'text' => 'Action Plan');
-$slatypes['solution'] = array('icon' => 'solution.png', 'text' => 'Solution');
-$slatypes['closed'] = array('icon' => 'close.png', 'text' => 'Closed');
+$slatypes['initialresponse'] = array('icon' => 'initialresponse.png', 'text' => $strInitialResponse);
+$slatypes['probdef'] = array('icon' => 'probdef.png', 'text' => $strProblemDefinition);
+$slatypes['actionplan'] = array('icon' => 'actionplan.png', 'text' => $strActionPlan);
+$slatypes['solution'] = array('icon' => 'solution.png', 'text' => $strSolution);
+$slatypes['closed'] = array('icon' => 'close.png', 'text' => $strClosed);
 
 // Set a string to be the full version number and revision of the application
 $application_version_string=trim("v{$application_version} {$application_revision}");
