@@ -49,6 +49,7 @@ $strBulkModify = 'Bulk Modify';
 $strCity = 'City';
 $strClose = 'Close';
 $strClosed = 'closed';
+$strConfirmNewPassword = 'Confirm New Password';
 $strContact = 'Contact';
 $strContacts = 'Contacts';
 $strContract = 'Contract';
@@ -89,6 +90,8 @@ $strEditTemplate = 'Edit Template';
 $strEditVendor = 'Edit Vendor';
 $strEmail = 'Email';
 $strEmailSettings = 'Email Settings';
+$strEmailSignature = 'Email Signature';
+$strEmailSignatureTip = 'Inserted automatically at the bottom of your outgoing emails.';
 $strEnabled = 'Enabled';
 $strEndDate = 'End Date';
 $strEntitlement = 'Entitlement';
@@ -150,6 +153,8 @@ $strManageDashboardComponents = 'Manage Dashboard Components';
 $strManageUsers = 'Manage Users';
 $strManageYourDashboard = 'Manage your Dashboard';
 $strMarkComplete = 'Mark Complete';
+$strMessage = 'Message';
+$strMessageTip = 'e.g. &quot;In france until Tue 22nd&quot;<br />Displayed on the \'view users\' page for the benefit of your colleagues.';
 $strMine = 'Mine';
 $strMobile = 'Mobile';
 $strMultiIncidents = '%d Incidents';
@@ -165,6 +170,7 @@ $strNewContact = 'New Contact';
 $strNewContract = 'New Contract';
 $strNewEscalationPath = 'New Escalation Path';
 $strNewKBArticle = 'New Article';
+$strNewPassword = 'New Password';
 $strNewProduct = 'New Product';
 $strNewReseller = 'New Reseller';
 $strNewSite = 'New Site';
@@ -179,6 +185,7 @@ $strNotAccepting = 'Not Accepting';
 $strNotes = 'Notes';
 $strNow = 'Now';
 
+$strOldPassword = 'Old Password';
 $strOtherIncidents = 'Other Incidents';
 $strOwner = 'Owner';
 
@@ -198,11 +205,13 @@ $strProduct = 'Product';
 $strPublic = 'Public';
 $strPublished = 'published';
 
+$strQualifications = 'Qualifications';
+$strQualificationsTip = 'Enter a comma seperated list of each of the professional qualifications you hold';
 $strQueue = 'Queue';
 
 $strRandomTip = 'Random Tip';
 $strRealName = 'Real Name';
-$strRemaining = 'Remaining';
+$strRemaining = '%s Remaining';
 $strRemove = 'Remove';
 $strReports = 'Reports';
 $strReset = 'Reset';
@@ -277,6 +286,7 @@ $strWithheld = 'Withheld';
 
 $strYes = 'Yes';
 $strYesterday = 'Yesterday';
+$strYou = 'You';
 $strYourCurrentIncidents = 'Your current incidents';
 $strYourSupportEntitlement = 'Your support entitlement';
 

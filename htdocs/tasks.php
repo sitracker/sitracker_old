@@ -158,7 +158,7 @@ else
     echo "</p>";
 }
 
-echo "<p align='center'><a href='add_task.php'>Add Task</a></p>";
+echo "<p align='center'><a href='add_task.php'>{$strAddTask}</a></p>";
 
 include('htmlfooter.inc.php');
 
