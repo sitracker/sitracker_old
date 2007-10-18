@@ -127,9 +127,15 @@ elseif($_REQUEST['mode'] == "save")
     $i18nfile .= "\$languagestring = '{$_REQUEST['lang']}';\n";
     $i18nfile .= "\$i18ncharset = 'UTF-8';\n\n";
 
+    $lastchar='';
     foreach(array_keys($_POST) as $key)
     {
-        if(!empty($_POST[$key]) AND substr($key, 0, 3) == "str") $i18nfile .= "\${$key} = '{$_POST[$key]};'\n";
+        if(!empty($_POST[$key]) AND substr($key, 0, 3) == "str")
+        {
+            if ($lastchar!='' AND substr($key, 4, 1) != $lastchar) $i18nfile .= "\n";
+            $i18nfile .= "\${$key} = '{$_POST[$key]};'\n";
+            $lastchar = substr($key, 4, 1);
+        }
     }
     $i18nfile .= "?>\n";
     echo "<div style='margin-left: 5%; margin-right: 5%; background-color: white; border: 1px solid #ccc; padding: 1em;'>";
