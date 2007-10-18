@@ -121,19 +121,20 @@ echo "</form>\n";
 }
 elseif($_REQUEST['mode'] == "save")
 {
-
     printf($strSendTranslation, $_REQUEST['lang']);
-    echo "--------------<br />";
-    echo "&lt;?php<br /><br />";
-    echo "&#36;languagestring='{$_REQUEST['lang']}'&#59;<br />";
-    echo "&#36;i18ncharset='UTF-8'&#59;<br /><br />";
+    $i18nfile = '';
+    $i18nfile .= "<?php\n";
+    $i18nfile .= "\$languagestring = '{$_REQUEST['lang']}';\n";
+    $i18nfile .= "\$i18ncharset = 'UTF-8';\n\n";
 
     foreach(array_keys($_POST) as $key)
     {
-        if(!empty($_POST[$key]) AND $key != "lang") echo "&#36;{$key} = '{$_POST[$key]}'&#59;<br />";
+        if(!empty($_POST[$key]) AND substr($key, 0, 3) == "str") $i18nfile .= "\${$key} = '{$_POST[$key]};'\n";
     }
-
-    echo "<br />?&gt;<br />";
+    $i18nfile .= "?>\n";
+    echo "<div style='margin-left: 5%; margin-right: 5%; background-color: white; border: 1px solid #ccc; padding: 1em;'>";
+    highlight_string($i18nfile);
+    echo "</div>";
 }
 else
 {
