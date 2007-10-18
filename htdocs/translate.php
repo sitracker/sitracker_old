@@ -69,12 +69,12 @@ $languages = array('ar' => 'Arabic',
 if(!$_REQUEST['mode'])
 {
     echo "<h2>{$strTranslation}</h2>";
-    echo "<div align='center'><p><{$strHelpToTranslate}</p>";
+    echo "<div align='center'><p>{$strHelpToTranslate}</p>";
     echo "<p>{$strChooseLanguage}</p>";
-    echo "<form action='{$_SERVER['PHP_SELF']}?mode=show&' method='get'>";
+    echo "<form action='{$_SERVER['PHP_SELF']}?mode=show' method='get'>";
     //FIXME
-    echo "<input name='mode' value='show' type='hidden'>";
-    echo "<select name='lang'></div>";
+    echo "<input name='mode' value='show' type='hidden' />";
+    echo "<select name='lang'>";
     if ($handle = opendir($i18npath))
     {
         while (false !== ($file = readdir($handle)))
@@ -87,7 +87,7 @@ if(!$_REQUEST['mode'])
     }
     echo "</select><br /><br />";
     echo "<input type='submit' value='$strTranslate' />";
-    echo "</form>";
+    echo "</form></div>\n";
 }
 elseif($_REQUEST['mode'] == "show")
 {
