@@ -5,9 +5,13 @@ $i18ncharset='UTF-8';
 
 $strCounty = 'State';
 
+$strHolidayEntitlement = 'Vacation Entitlement';
+$strHolidayPlanner = 'Vacation Planner';
+
 $strLicense = 'License';
 
 $strMobile = 'Cell Phone';
+$strMyHolidays = 'My Vacations';
 
 $strPostcode = 'Zip Code';
 ?>

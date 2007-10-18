@@ -31,8 +31,8 @@ $CONFIG['support_email'] = 'support@localhost';
 $CONFIG['sales_email'] = 'sales@localhost';
 $CONFIG['support_manager_email'] = 'support_manager@localhost';
 
-$CONFIG['bugtracker_name'] = '';
-$CONFIG['bugtracker_url'] = '';
+$CONFIG['bugtracker_name'] = 'SourceForge Bug Tracker';
+$CONFIG['bugtracker_url'] = 'http://sourceforge.net/tracker/?group_id=160319&atid=815372';
 
 // See http://www.php.net/manual/en/function.date.php for help with date formats
 $CONFIG['dateformat_datetime'] = 'jS M Y @ g:ia';

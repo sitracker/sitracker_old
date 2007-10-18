@@ -216,6 +216,7 @@ $strRandomTip = 'Random Tip';
 $strRealName = 'Real Name';
 $strRemaining = '%s Remaining';
 $strRemove = 'Remove';
+$strReportBug = 'Report Bug';
 $strReports = 'Reports';
 $strReset = 'Reset';
 $strReview = 'Review';

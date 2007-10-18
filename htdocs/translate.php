@@ -106,7 +106,7 @@ elseif($_REQUEST['mode'] == "show")
 echo "<h2>Word List</h2>";
 echo "<p align='center'>{$strTranslateTheString}</p>";
 echo "<form method='post' action='{$_SERVER[PHP_SELF]}?mode=save'>";
-echo "<table align='center'><tr><th>{$strVariable}</th><th>{$strEnglish}</th><th>{$_REQUEST['lang']}</th></tr>";
+echo "<table align='center'><tr><th>{$strVariable}</th><th>en-GB ({$strEnglish})</th><th>{$_REQUEST['lang']}</th></tr>";
 
 $shade = 'shade1';
 foreach(array_keys($englishvalues) as $key)

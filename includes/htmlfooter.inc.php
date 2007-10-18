@@ -20,8 +20,7 @@ if ($_SESSION['auth']==TRUE)
     if ($CONFIG['demo']) echo "in DEMO mode ";
     echo "on ".strip_tags($_SERVER["SERVER_SOFTWARE"]);
     echo " at ".date('H:i',$now);
-    if ($CONFIG['bugtracker_url']!='') echo ", Report bugs in <a href='{$CONFIG['bugtracker_url']}' class='barlink'>{$CONFIG['bugtracker_name']}</a>";
- }
+}
 echo "</div>\n";
 echo "</body>\n</html>\n";
 ?>
