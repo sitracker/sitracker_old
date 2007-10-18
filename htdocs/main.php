@@ -233,7 +233,7 @@ if (empty($_SESSION['email']) OR !preg_match('/^[A-z0-9][\w.-]*@[A-z0-9][\w\-\.]
 
 //  Users Login Details
 echo "<div id='userbar'>".sprintf($strLoggedInAs, "<strong>{$sit[0]}</strong>");
-echo "currently <strong>".userstatus_name(user_status($sit[2]))."</strong> and ";
+echo " currently <strong>".userstatus_name(user_status($sit[2]))."</strong> and ";
 
 if (user_accepting($sit[2])!='Yes')
 {
