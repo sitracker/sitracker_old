@@ -17,18 +17,15 @@ require('functions.inc.php');
 require('auth.inc.php');
 include('htmlheader.inc.php');
 
-echo "<body>";
-global $lang;
-
 if(!$_REQUEST['mode'])
 {
-    echo "<h2>Translation</h2>";
-    echo "<div align='center'><p>This page is to help translators translate SiT!</p>";
-    echo "<p>Please choose your language</p>";
+    echo "<h2>{$strTranslation}</h2>";
+    echo "<div align='center'><p><{$strHelpToTranslate}</p>";
+    echo "<p>{$strChooseLanguage}</p>";
     echo "<form action='{$_SERVER['PHP_SELF']}?mode=show&' method='get'>";
     //FIXME
     echo "<input name='mode' value='show' type='hidden'>";
-    echo "<select name='lang'>";
+    echo "<select name='lang'></div>";
     if ($handle = opendir('.')) 
     {
         while (false !== ($file = readdir($handle))) 
@@ -40,7 +37,7 @@ if(!$_REQUEST['mode'])
         closedir($handle);
     }
     echo "</select><br />";
-    echo "<input type='submit' value='translate'>";
+    echo "<input type='submit' value='$strTranslate'>";
 }
 elseif($_REQUEST['mode'] == "show")
 {
@@ -104,23 +101,23 @@ elseif($_REQUEST['mode'] == "show")
     }
     
 echo "<h2>Word List</h2>";
-echo "<p align='center'>Translate the english string on the left to your requested language on the right.</p>";
-echo "<table align='center'><th>Variable</th><th>English</th><th>{$_REQUEST['lang']}</th>";
+echo "<p align='center'>{$strTranslateTheString}</p>";
 echo "<form method='post' action='{$_SERVER[PHP_SELF]}?mode=save'>";
+echo "<table align='center'><tr><th>{$strVariable}</th><th>{$strEnglish}</th><th>{$_REQUEST['lang']}</th></tr>";
+
 foreach(array_keys($englishvalues) as $key)
 {
-    echo "<tr><td>$key</td><td><input value=\"$englishvalues[$key]\" size=\"40\"></input></td><td><input name=\"$key\" value=\"$foreignvalues[$key]\" size=\"40\"></td></tr>\n";
+    echo "<tr><td>$key</td><td><input value=\"$englishvalues[$key]\" size=\"40\" /></td><td><input name=\"$key\" value=\"$foreignvalues[$key]\" size=\"40\" /></td></tr>\n";
 }
 
 echo "</table>";
-echo "<input name='lang' value='{$_REQUEST['lang']}' type='hidden'>";
-echo "<div align='center'><input type='submit' value='Update translations'></div>";
-echo "</form></body></html>";
+echo "<input name='lang' value='{$_REQUEST['lang']}' type='hidden' /></form>";
+echo "<div align='center'><input type='submit' value='{$strUpdate}' /></div>";
 }
 elseif($_REQUEST['mode'] == "save")
 {
  
-    echo "Copy and paste this below and save to {$_REQUEST['lang']}.inc.php then send to ivanlucas[at]users.sourceforge.net<br />";
+    sprintf($strSendTranslation, $_REQUEST['lang']);
     echo "--------------<br />";
     echo "&lt;?php<br /><br />";
     echo "&#36;languagestring='{$_REQUEST['lang']}'&#59;<br />";
