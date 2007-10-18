@@ -95,7 +95,7 @@ else
         {
             $id=mysql_insert_id();
             journal(CFG_LOGGING_DEBUG, 'Skill Added', "Skill $id was added", CFG_JOURNAL_DEBUG, $id);
-            confirmation_page("2", "products.php", "<h2>Skill Addition Successful</h2><p align='center'>Please wait while you are redirected...</p>");
+            confirmation_page("2", "products.php", "<h2>Skill Addition Successful</h2><p align='center'>{$strPleaseWaitRedirect}...</p>");
         }
     }
     else

@@ -176,7 +176,7 @@ else
         else
         {
             journal(CFG_LOGGING_NORMAL, 'User Added', "User $username was added", CFG_JOURNAL_ADMIN, $id);
-            confirmation_page("2", "manage_users.php?#userid{$newuserid}", "<h2>New User Added Successfully</h2><p align='center'>Please wait while you are redirected...</p>");
+            confirmation_page("2", "manage_users.php?#userid{$newuserid}", "<h2>New User Added Successfully</h2><p align='center'>{$strPleaseWaitRedirect}...</p>");
         }
     }
 }

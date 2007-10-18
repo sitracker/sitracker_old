@@ -161,10 +161,10 @@ else
 
     journal(CFG_LOGGING_NORMAL, 'Contact Deleted', "Contact $id was deleted", CFG_JOURNAL_CONTACTS, $id);
 
-    if (!empty($newcontact)) confirmation_page("2", "contact_details.php?id=$newcontact", "<h2>Contact Deleted Successfully and Records Moved</h2><p align='center'>Please wait while you are redirected...</p>");
+    if (!empty($newcontact)) confirmation_page("2", "contact_details.php?id=$newcontact", "<h2>Contact Deleted Successfully and Records Moved</h2><p align='center'>{$strPleaseWaitRedirect}...</p>");
     else
     {
-        confirmation_page("2", "browse_contacts.php?search_string=A", "<h2>Contact Deleted Successfully</h2><p align='center'>Please wait while you are redirected...</p>");
+        confirmation_page("2", "browse_contacts.php?search_string=A", "<h2>Contact Deleted Successfully</h2><p align='center'>{$strPleaseWaitRedirect}...</p>");
     }
 }
 ?>

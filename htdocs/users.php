@@ -42,11 +42,11 @@ while ($group = mysql_fetch_object($gresult))
 }
 $numgroups = count($grouparr);
 echo "<h2><img src='{$CONFIG['application_webpath']}images/icons/{$iconset}/32x32/user.png' width='32' height='32' alt='' /> ";
-echo "User Listing</h2>";
+echo "{$strUsers}</h2>";
 if ($numgroups >= 1)
 {
     echo "<form action='{$_SERVER['PHP_SELF']}' style='text-align: center;' method='get'>";
-    echo "Group: <select name='choosegroup' onchange='window.location.href=this.options[this.selectedIndex].value'>";
+    echo "{$strGroup}: <select name='choosegroup' onchange='window.location.href=this.options[this.selectedIndex].value'>";
     echo "<option value='{$_SERVER['PHP_SELF']}?gid=all'";
     if ($filtergroup=='all') echo " selected='selected'";
     echo ">All</option>\n";
@@ -91,16 +91,16 @@ if (mysql_error()) trigger_error("MySQL Query Error ".mysql_error(), E_USER_ERRO
 echo "<table align='center' style='width: 95%;'>";
 echo "<tr>";
 $filter=array('gid' => $filtergroup);
-echo colheader('realname', 'Name', $sort, $order, $filter);
-echo "<th colspan='5'>Incidents in Queue</th>";
-echo colheader('phone','Phone',$sort, $order, $filter);
-echo colheader('mobile','Mobile',$sort, $order, $filter);
-echo colheader('status','Status',$sort, $order, $filter);
-echo colheader('accepting','Accepting',$sort, $order, $filter);
-echo "<th>Jump to</th>";
+echo colheader('realname', $strName, $sort, $order, $filter);
+echo "<th colspan='5'>{$strIncidentsinQueue}</th>";
+echo colheader('phone',$strTelephone,$sort, $order, $filter);
+echo colheader('mobile',$strMobile,$sort, $order, $filter);
+echo colheader('status',$strStatus,$sort, $order, $filter);
+echo colheader('accepting',$strAccepting,$sort, $order, $filter);
+echo "<th>{$strJumpTo}</th>";
 echo "</tr><tr>";
 echo "<th></th>";
-echo "<th align='center'>Action Needed / Waiting</th>";
+echo "<th align='center'>{$strActionNeeded} / {$strWaiting}</th>";
 echo "<th align='center'>".priority_icon(4)."</th>";
 echo "<th align='center'>".priority_icon(3)."</th>";
 echo "<th align='center'>".priority_icon(2)."</th>";
@@ -119,9 +119,9 @@ while ($users = mysql_fetch_array($result))
     // print HTML for rows
     echo "<tr class='$class'>";
     echo "<td>";
-    echo "<a href='mailto:{$users['email']}' title='Email {$users['realname']}'><img src='{$CONFIG['application_webpath']}images/icons/{$iconset}/16x16/email.png' width='16' height='16' alt='Email icon' style='border:none;' /></a> ";
+    echo "<a href='mailto:{$users['email']}' title='{$strEmail} {$users['realname']}'><img src='{$CONFIG['application_webpath']}images/icons/{$iconset}/16x16/email.png' width='16' height='16' alt='{$strEmail}' style='border:none;' /></a> ";
     echo "<a href='incidents.php?user={$users['id']}&amp;queue=1&amp;type=support' class='info'>";
-    if (!empty($users['message'])) echo "<img src='{$CONFIG['application_webpath']}images/icons/{$iconset}/16x16/messageflag.png' width='16' height='16' title='{$users['message']}' alt='Flag' /> ";
+    if (!empty($users['message'])) echo "<img src='{$CONFIG['application_webpath']}images/icons/{$iconset}/16x16/messageflag.png' width='16' height='16' title='{$users['message']}' alt='{$strMessage}' /> ";
     echo "{$users['realname']}";
     echo "<span>";
     if (!empty($users['title'])) echo "<strong>{$users['title']}</strong><br />";
@@ -129,7 +129,7 @@ while ($users = mysql_fetch_array($result))
     if (strlen($users['aim']) > 3) echo "<img src='{$CONFIG['application_webpath']}images/icons/{$iconset}/16x16/aim.png' width='16' height='16' alt='{$users['aim']}' /> <strong>AIM</strong>: {$users['aim']}<br />";
     if (strlen($users['icq']) > 3) echo "<img src='{$CONFIG['application_webpath']}images/icons/{$iconset}/16x16/icq.png' width='16' height='16' alt='{$users['icq']}' /> <strong>ICQ</strong>: {$users['icq']}<br />";
     if (strlen($users['msn']) > 3) echo "<img src='{$CONFIG['application_webpath']}images/icons/{$iconset}/16x16/msn.png' width='16' height='16' alt='{$users['msn']}' /> <strong>MSN</strong>: {$users['msn']}<br />";
-    if (!empty($users['message'])) echo "<br /><img src='{$CONFIG['application_webpath']}images/icons/{$iconset}/16x16/messageflag.png' width='16' height='16' alt='' /> <strong>Message</strong>: {$users['message']}";
+    if (!empty($users['message'])) echo "<br /><img src='{$CONFIG['application_webpath']}images/icons/{$iconset}/16x16/messageflag.png' width='16' height='16' alt='' /> <strong>{$strMessage}</strong>: {$users['message']}";
     echo "</span>";
     echo "</a>";
     echo "</td>";
@@ -150,29 +150,29 @@ while ($users = mysql_fetch_array($result))
     ?>
     <td align='center'>
     <?php
-        if ($users["phone"] == "") echo "None";
+        if ($users["phone"] == "") echo $strNone;
         else echo $users["phone"];
 
         echo "</td>";
         echo "<td align='center'>";
 
-        if ($users["mobile"] == "") echo "None";
+        if ($users["mobile"] == "") echo $strNone;
         else echo $users["mobile"];
     ?>
     </td>
     <td>
     <?php
     echo userstatus_name($users["status"]) ?></td>
-    <td align='center'><?php echo $users["accepting"]=='Yes' ? 'Yes' : "<span class='error'>No</span>"; ?></td>
+    <td align='center'><?php echo $users["accepting"]=='Yes' ? $strYes : "<span class='error'>{$strNo}</span>"; ?></td>
     <?php
     echo "<td>";
-    echo "<a href='holidays.php?user={$users['id']}' title='Holidays'><img src='{$CONFIG['application_webpath']}images/icons/{$iconset}/16x16/holiday.png' width='16' height='16' alt='Calendar icon' style='border:none;' /></a> ";
-    echo "<a href='tasks.php?user={$users['id']}' title='Tasks'><img src='{$CONFIG['application_webpath']}images/icons/{$iconset}/16x16/task.png' width='16' height='16' alt='Todo icon' style='border:none;' /></a> ";
+    echo "<a href='holidays.php?user={$users['id']}' title='{$strHolidays}'><img src='{$CONFIG['application_webpath']}images/icons/{$iconset}/16x16/holiday.png' width='16' height='16' alt='{$strHolidays}' style='border:none;' /></a> ";
+    echo "<a href='tasks.php?user={$users['id']}' title='{$strTasks}'><img src='{$CONFIG['application_webpath']}images/icons/{$iconset}/16x16/task.png' width='16' height='16' alt='Todo icon' style='border:none;' /></a> ";
     $sitesql = "SELECT COUNT(id) FROM sites WHERE owner='{$users['id']}'";
     $siteresult = mysql_query($sitesql);
     if (mysql_error()) trigger_error(mysql_error(),E_USER_WARNING);
     list($ownedsites) = mysql_fetch_row($siteresult);
-    if ($ownedsites > 0) echo "<a href='browse_sites.php?owner={$users['id']}' title='Sites'><img src='{$CONFIG['application_webpath']}images/icons/{$iconset}/16x16/site.png' width='16' height='16' alt='Sites icon' style='border:none;' /></a> ";
+    if ($ownedsites > 0) echo "<a href='browse_sites.php?owner={$users['id']}' title='{$strSites}'><img src='{$CONFIG['application_webpath']}images/icons/{$iconset}/16x16/site.png' width='16' height='16' alt='Sites icon' style='border:none;' /></a> ";
     echo "</td>";
     echo "</tr>";
 

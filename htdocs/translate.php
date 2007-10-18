@@ -122,6 +122,7 @@ elseif($_REQUEST['mode'] == "show")
                 $i18ncharset=$values;
         }
     }
+    $origcount = count($englishvalues);
     unset($lines);
 
     //open foreign file
@@ -164,13 +165,16 @@ foreach(array_keys($englishvalues) as $key)
 }
 
 echo "</table>";
+echo "<input type='hidden' name='origcount' value='{$origcount}' />";
 echo "<input name='lang' value='{$_REQUEST['lang']}' type='hidden' /><input name='mode' value='save' type='hidden' />";
 echo "<div align='center'><input type='submit' value='{$strSave}' /></div>";
+
 echo "</form>\n";
 }
 elseif($_REQUEST['mode'] == "save")
 {
     $lang = cleanvar($_REQUEST['lang']);
+    $origcount = cleanvar($_REQUEST['origcount']);
     $filename = "{$lang}.inc.php";
     echo "<p>".sprintf($strSendTranslation, "<code>{$filename}</code>", "<code>{$i18npath}</code>", 'ivanlucas[at]users.sourceforge.net')." </p>";
     $i18nfile = '';
@@ -179,6 +183,7 @@ elseif($_REQUEST['mode'] == "save")
     $i18nfile .= "\$i18ncharset = 'UTF-8';\n\n";
 
     $lastchar='';
+    $translatedcount=0;
     foreach(array_keys($_POST) as $key)
     {
         if(!empty($_POST[$key]) AND substr($key, 0, 3) == "str")
@@ -186,8 +191,11 @@ elseif($_REQUEST['mode'] == "save")
             if ($lastchar!='' AND substr($key, 4, 1) != $lastchar) $i18nfile .= "\n";
             $i18nfile .= "\${$key} = '{$_POST[$key]}';\n";
             $lastchar = substr($key, 4, 1);
+            $translatedcount++;
         }
     }
+    $percent = number_format($translatedcount / $origcount * 100,2);
+    echo "<p>{$strTranslation}: <strong>{$translatedcount}</strong>/{$origcount} = {$percent}% {$strComplete}.</p>";
     $i18nfile .= "?>\n";
     echo "<div style='margin-left: 5%; margin-right: 5%; background-color: white; border: 1px solid #ccc; padding: 1em;'>";
     highlight_string($i18nfile);

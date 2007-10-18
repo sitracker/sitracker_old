@@ -284,7 +284,7 @@ else
             plugin_do('save_profile_form');
 
             // password was not changed
-            if (!isset($confirm_message)) confirmation_page("2", $redirecturl, "<h2>Profile Modification Successful</h2><h5>Please wait while you are redirected...</h5>");
+            if (!isset($confirm_message)) confirmation_page("2", $redirecturl, "<h2>Profile Modification Successful</h2><h5>{$strPleaseWaitRedirect}...</h5>");
             // password was changed
             else
             {

@@ -67,7 +67,7 @@ switch ($action)
             mysql_query($sql);
             if (mysql_error()) trigger_error(mysql_error(),E_USER_ERROR);
             if (mysql_affected_rows() < 1) trigger_error("Task insert failed",E_USER_ERROR);
-            confirmation_page("2", "tasks.php", "<h2>Task added successfully</h2><p align='center'>Please wait while you are redirected...</p>");
+            confirmation_page("2", "tasks.php", "<h2>Task added successfully</h2><p align='center'>{$strPleaseWaitRedirect}...</p>");
         }
     break;
 

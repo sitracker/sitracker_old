@@ -114,11 +114,11 @@ elseif ($action == "delete")
 
             if ($context=='maintenance')
             {
-                confirmation_page("3", "maintenance_details.php?id=$maintid", "<h2>Maintenance Support Contact Deletion Successful</h2><p align='center'>Please wait while you are redirected...</p>");
+                confirmation_page("3", "maintenance_details.php?id=$maintid", "<h2>Maintenance Support Contact Deletion Successful</h2><p align='center'>{$strPleaseWaitRedirect}...</p>");
             }
             else
             {
-                confirmation_page("3", "contact_details.php?id=$contactid", "<h2>Maintenance Support Contact Deletion Successful</h2><p align='center'>Please wait while you are redirected...</p>");
+                confirmation_page("3", "contact_details.php?id=$contactid", "<h2>Maintenance Support Contact Deletion Successful</h2><p align='center'>{$strPleaseWaitRedirect}...</p>");
             }
         }
     }

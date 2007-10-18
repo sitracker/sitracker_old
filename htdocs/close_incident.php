@@ -411,7 +411,7 @@ else
                     // send awaiting closure email
                     $eml=send_template_email('INCIDENT_CLOSURE', $id);  // awaiting closure
                     if (!$eml) throw_error('!Error: Failed while sending awaiting closure email to customer, error code:', $eml);
-                    // confirmation_page("2", "incident_details.php?id=" . $id, "<p class=pagetitle>Incident $id Marked for Closure and Email Sent</p><p align='center'>Please wait while you are redirected...</p>");
+                    // confirmation_page("2", "incident_details.php?id=" . $id, "<p class=pagetitle>Incident $id Marked for Closure and Email Sent</p><p align='center'>{$strPleaseWaitRedirect}...</p>");
                 }
                 else
                 {
@@ -475,9 +475,9 @@ else
 
                 journal(CFG_LOGGING_NORMAL, 'KB Article Added', "KB Article $docid was added", CFG_JOURNAL_KB, $docid);
 
-                confirmation_page("5", "incident_details.php?id=" . $id, "<h2>Incident $id Closure Requested<h2><p align='center'>Knowledge Base Article {$CONFIG['kb_id_prefix']}{$docid} created.</h2><p align='center'>Please wait while you are redirected...</p>");
+                confirmation_page("5", "incident_details.php?id=" . $id, "<h2>Incident $id Closure Requested<h2><p align='center'>Knowledge Base Article {$CONFIG['kb_id_prefix']}{$docid} created.</h2><p align='center'>{$strPleaseWaitRedirect}...</p>");
             }
-            else confirmation_page("2", "incident_details.php?id=" . $id, "<h2>Incident $id Closure Requested</h2><p align='center'>Please wait while you are redirected...</p>");
+            else confirmation_page("2", "incident_details.php?id=" . $id, "<h2>Incident $id Closure Requested</h2><p align='center'>{$strPleaseWaitRedirect}...</p>");
         }
         else
         {

@@ -84,7 +84,7 @@ External email:  -&gt; <b>foo@pheaney.co.uk</b>
 
             $result = mysql_query($sql);
             if (mysql_error()) trigger_error(mysql_error(),E_USER_ERROR);
-            confirmation_page("2", "main.php", "<h2>Update Successful</h2><p align='center'>Please wait while you are redirected...</p>");
+            confirmation_page("2", "main.php", "<h2>Update Successful</h2><p align='center'>{$strPleaseWaitRedirect}...</p>");
             break;
         default:
             echo '<h1>No action specified</h1>';

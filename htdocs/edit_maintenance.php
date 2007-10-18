@@ -197,7 +197,7 @@ else if ($action == "update")
         else
         {
             journal(CFG_LOGGING_NORMAL, 'Contract Edited', "contract $maintid modified", CFG_JOURNAL_MAINTENANCE, $maintid);
-            confirmation_page("2", "maintenance_details.php?id=$maintid", "<h2>Contract Update Successful</h2><p align='center'>Please wait while you are redirected...</p>");
+            confirmation_page("2", "maintenance_details.php?id=$maintid", "<h2>Contract Update Successful</h2><p align='center'>{$strPleaseWaitRedirect}...</p>");
         }
     }
     // show error message if errors

@@ -164,7 +164,7 @@ else
         {
             $id=mysql_insert_id();
             journal(CFG_LOGGING_FULL, 'Administration', 'Email template $id was added', CFG_JOURNAL_ADMIN, $id);
-            confirmation_page("2", "edit_emailtype.php?action=showform", "<h2>Email Template added</h2><h5>Please wait while you are redirected...</h5>");
+            confirmation_page("2", "edit_emailtype.php?action=showform", "<h2>Email Template added</h2><h5>{$strPleaseWaitRedirect}...</h5>");
         }
     }
 }

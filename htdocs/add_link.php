@@ -41,7 +41,7 @@ switch ($action)
         mysql_query($sql);
         if (mysql_error()) trigger_error(mysql_error(),E_USER_ERROR);
 
-        confirmation_page("2", "main.php", "<h2>Link Added Successfully</p><p align='center'>Please wait while you are redirected...</p>");
+        confirmation_page("2", "main.php", "<h2>Link Added Successfully</p><p align='center'>{$strPleaseWaitRedirect}...</p>");
     break;
 
     case '':

@@ -30,7 +30,7 @@ function delete_signature($sig_id)
     if (mysql_error()) trigger_error("MySQL Query Error ".mysql_error(), E_USER_ERROR);
 
     journal(CFG_LOGGING_NORMAL, 'Global Signature deleted', "A global signature was deleted", CFG_JOURNAL_ADMIN, 0);
-    confirmation_page("2", "edit_global_signature.php" . $id, "<h2>Edit Successful</h2><p align='center'>Please wait while you are redirected...</p>");
+    confirmation_page("2", "edit_global_signature.php" . $id, "<h2>Edit Successful</h2><p align='center'>{$strPleaseWaitRedirect}...</p>");
 }
 
 $permission=43; // Edit global signature
@@ -61,7 +61,7 @@ if(!empty($signature))
 
             journal(CFG_LOGGING_NORMAL, 'Global Signature added', "A new global signature was added", CFG_JOURNAL_ADMIN, 0);
             include('htmlheader.inc.php');
-            confirmation_page("2", "edit_global_signature.php" . $id, "<h2>Edit Successful</h2><p align='center'>Please wait while you are redirected...</p>");
+            confirmation_page("2", "edit_global_signature.php" . $id, "<h2>Edit Successful</h2><p align='center'>{$strPleaseWaitRedirect}...</p>");
             include('htmlfooter.inc.php');
         break;
 
@@ -72,7 +72,7 @@ if(!empty($signature))
 
             journal(CFG_LOGGING_NORMAL, 'Global Signature updated', "A global signature was updated", CFG_JOURNAL_ADMIN, 0);
             include('htmlheader.inc.php');
-            confirmation_page("2", "edit_global_signature.php" . $id, "<h2>Edit Successful</h2><p align='center'>Please wait while you are redirected...</p>");
+            confirmation_page("2", "edit_global_signature.php" . $id, "<h2>Edit Successful</h2><p align='center'>{$strPleaseWaitRedirect}...</p>");
             include('htmlfooter.inc.php');
       break;
   }

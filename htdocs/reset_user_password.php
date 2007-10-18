@@ -27,7 +27,7 @@ $id = cleanvar($_REQUEST['id']);
 // Don't allow resetting in DEMO MODE
 if ($CONFIG['demo'])
 {
-    confirmation_page("3", "manage_users.php", "<h2>You cannot reset passwords while in DEMO MODE</h2><p align='center'>Please wait while you are redirected...</p>");
+    confirmation_page("3", "manage_users.php", "<h2>You cannot reset passwords while in DEMO MODE</h2><p align='center'>{$strPleaseWaitRedirect}...</p>");
     exit;
 }
 
@@ -46,6 +46,6 @@ if ($id > 1)
 }
 else
 {
-    confirmation_page("3", "manage_users.php", "<h2>You cannot reset this users password</h2><p align='center'>Please wait while you are redirected...</p>");
+    confirmation_page("3", "manage_users.php", "<h2>You cannot reset this users password</h2><p align='center'>{$strPleaseWaitRedirect}...</p>");
 }
 ?>

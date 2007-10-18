@@ -74,5 +74,5 @@ mysql_query($sql);
 if (mysql_error()) trigger_error("MySQL Query Error ".mysql_error(), E_USER_ERROR);
 journal(CFG_JOURNAL_OTHER, 'FTP File Deleted', "File {$frow['filename']} was deleted from FTP", CFG_JOURNAL_PRODUCTS, 0);
 
-confirmation_page("2", "ftp_list_files.php", "<h2>FTP File Deleted Successfully</h2><p align='center'>Please wait while you are redirected...</p>");
+confirmation_page("2", "ftp_list_files.php", "<h2>FTP File Deleted Successfully</h2><p align='center'>{$strPleaseWaitRedirect}...</p>");
 ?>
