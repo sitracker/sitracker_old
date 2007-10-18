@@ -194,8 +194,8 @@ $CONFIG['preferred_maintenance'] = array(1 => "Dedicated");
 // Use an icon for specified tags, format: array('tag' => 'icon', 'tag2' => 'icon2')";
 $CONFIG['tag_icons'] = array ('redflag' => 'redflag', 'yellowflag' => 'yellowflag', 'blueflag' => 'blueflag', 'greenflag' => 'greenflag', 'whiteflag' => 'whiteflag', 'blackflag' => 'blackflag');
 
-// Default Internationalisation (ISO 639 code), note the corresponding i18n file must exist in includes/i18n before you can use it
-$CONFIG['default_i18n'] = 'en-gb';
+// Default Internationalisation tag (rfc4646/rfc4647/ISO 639 code), note the corresponding i18n file must exist in includes/i18n before you can use it
+$CONFIG['default_i18n'] = 'en-GB';
 
 // Following is still BETA
 $CONFIG['auto_chase'] = FALSE;

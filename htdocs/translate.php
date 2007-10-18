@@ -28,7 +28,7 @@ if(!$_REQUEST['mode'])
     //FIXME
     echo "<input name='mode' value='show' type='hidden'>";
     echo "<select name='lang'></div>";
-    if ($handle = opendir($path))
+    if ($handle = opendir($i18npath))
     {
         while (false !== ($file = readdir($handle)))
         {
