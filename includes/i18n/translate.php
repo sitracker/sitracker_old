@@ -106,7 +106,7 @@ elseif($_REQUEST['mode'] == "show")
 echo "<h2>Word List</h2>";
 echo "<p align='center'>Translate the english string on the left to your requested language on the right.</p>";
 echo "<table align='center'><th>Variable</th><th>English</th><th>{$_REQUEST['lang']}</th>";
-echo "<form method='post' action='{$_SERVER[PHP_SELF]}?mode=save&charset=$i18ncharset&lang=$languagestring'>";
+echo "<form method='post' action='{$_SERVER[PHP_SELF]}?mode=save'>";
 foreach(array_keys($englishvalues) as $key)
 {
     echo "<tr><td>$key</td><td><input value=\"$englishvalues[$key]\" size=\"40\"></input></td><td><input name=\"$key\" value=\"$foreignvalues[$key]\" size=\"40\"></td></tr>\n";
