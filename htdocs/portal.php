@@ -12,7 +12,6 @@
 $permission=0; // not required
 require('db_connect.inc.php');
 require('functions.inc.php');
-
 session_name($CONFIG['session_name']);
 session_start();
 
@@ -125,7 +124,7 @@ switch ($page)
             echo colheader('actions', $strActions);
             while ($incident = mysql_fetch_object($result))
             {
-                echo "<tr class='$shade'><td>{$incident->id}</td>";
+                echo "<tr class='$shade'><td><a href='javascript:customer_incident_details({$incident->id}, incident{$incident->id});'>{$incident->id}</a></td>";
                 echo "<td>Product<br /><strong>".stripslashes($incident->title)."</strong></td>"; // FIXME product name
                 echo "<td>".format_date_friendly($incident->lastupdated)."</td>";
                 echo "<td>".incidentstatus_name($incident->status)."</td>";
@@ -187,10 +186,15 @@ switch ($page)
 
             $reason = "Incident closure requested via the portal by <b>{$user->forenames} {$user->surname}</b>\n\n";
             $reason .= "<b>Reason:</b> {$_REQUEST['reason']}";
-            $sql = "INSERT into updates VALUES('', '{$_REQUEST['id']}', '{$_SESSION['contactid']}', 'webupdate', '', '1', '{$reason}',
+            $sql = "INSERT into updates VALUES('', '{$_REQUEST['id']}', '{$_SESSION['contactid']}', 'customerclosurerequest', '', '1', '{$reason}',
             '{$now}', '', '', '', '', '', '', '')";
             mysql_query($sql);
             if (mysql_error()) trigger_error("MySQL Query Error ".mysql_error(), E_USER_ERROR);
+            
+            /*change closing status to 999
+            $sql = "INSERT into incidents('closingstatus') VALUES(999) WHERE id={$_REQUEST['id']}";
+            mysql_query($sql);
+            if (mysql_error()) trigger_error("MySQL Query Error ".mysql_error(), E_USER_ERROR);*/
 
             confirmation_page("2", "portal.php?page=incidents", "<h2>Closure request Successful</h2><p align='center'>Please wait while you are redirected...</p>");
         }
