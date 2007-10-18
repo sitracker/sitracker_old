@@ -10,14 +10,23 @@
 
 // Author: Kieran Hogg <kieran_hogg[at]users.sourceforge.net>
 
-echo "<html><head><title></title><meta http-equiv=\"Content-Type\" content=\"text/html; charset=utf-8\"></head>";
+$permission=0; // not required
+require('db_connect.inc.php');
+require('functions.inc.php');
+
+require('auth.inc.php');
+include('htmlheader.inc.php');
+
 echo "<body>";
 global $lang;
 
 if(!$_REQUEST['mode'])
 {
-    echo "<h1>Choose Language</h1>";
+    echo "<h2>Translation</h2>";
+    echo "<div align='center'><p>This page is to help translators translate SiT!</p>";
+    echo "<p>Please choose your language</p>";
     echo "<form action='{$_SERVER['PHP_SELF']}?mode=show&' method='get'>";
+    //FIXME
     echo "<input name='mode' value='show' type='hidden'>";
     echo "<select name='lang'>";
     if ($handle = opendir('.')) 
@@ -30,11 +39,12 @@ if(!$_REQUEST['mode'])
         }
         closedir($handle);
     }
-    echo "<input type='submit'>";
+    echo "</select><br />";
+    echo "<input type='submit' value='translate'>";
 }
 elseif($_REQUEST['mode'] == "show")
 {
-
+    //open english file
     $englishfile = "en-gb.inc.php";
     $fh = fopen($englishfile, 'r');
     $theData = fread($fh, filesize($englishfile));
@@ -71,6 +81,7 @@ elseif($_REQUEST['mode'] == "show")
         }
     }
 
+    //open foreign file
     $myFile = "{$_REQUEST['lang']}.inc.php";
     $fh = fopen($myFile, 'r');
     $theData = fread($fh, filesize($myFile));
@@ -92,9 +103,9 @@ elseif($_REQUEST['mode'] == "show")
         }
     }
     
-
-
-echo "<table><th>Variable</th><th>English</th><th>{$_REQUEST['lang']}</th>";
+echo "<h2>Word List</h2>";
+echo "<p align='center'>Translate the english string on the left to your requested language on the right.</p>";
+echo "<table align='center'><th>Variable</th><th>English</th><th>{$_REQUEST['lang']}</th>";
 echo "<form method='post' action='{$_SERVER[PHP_SELF]}?mode=save&charset=$i18ncharset&lang=$languagestring'>";
 foreach(array_keys($englishvalues) as $key)
 {
@@ -103,22 +114,16 @@ foreach(array_keys($englishvalues) as $key)
 
 echo "</table>";
 echo "<input name='lang' value='{$_REQUEST['lang']}' type='hidden'>";
-echo "<input type='submit' value='Update translations'>";
+echo "<div align='center'><input type='submit' value='Update translations'></div>";
 echo "</form></body></html>";
 }
 elseif($_REQUEST['mode'] == "save")
 {
-    /*$myFile = "{$_REQUEST['lang']}.inc.php.2";
-    $fh = fopen($myFile, 'w') or die("can't open file");
-    $stringData = "Bobby Bopper\n";
-    fwrite($fh, $stringData);
-    fclose($fh);*/
-    //print_r($GLOBALS);
-    
+ 
     echo "Copy and paste this below and save to {$_REQUEST['lang']}.inc.php then send to ivanlucas[at]users.sourceforge.net<br />";
     echo "--------------<br />";
     echo "&lt;?php<br /><br />";
-    echo "&#36;languagestring={$_REQUEST['languagestring']}&#59;<br />";
+    echo "&#36;languagestring='{$_REQUEST['lang']}'&#59;<br />";
     echo "&#36;i18ncharset='UTF-8'&#59;<br /><br />";
     
     foreach(array_keys($_POST) as $key)
@@ -132,4 +137,5 @@ else
 {
     die('Invalid mode');
 }
+include('htmlfooter.inc.php');
 ?>
