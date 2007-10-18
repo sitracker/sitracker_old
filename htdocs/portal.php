@@ -129,7 +129,12 @@ switch ($page)
                 echo "<td>".format_date_friendly($incident->lastupdated)."</td>";
                 echo "<td>".incidentstatus_name($incident->status)."</td>";
                 echo "<td><a href='{$_SERVER[PHP_SELF]}?page=update&id={$incident->id}'>Update</a> | ";
-                echo "<a href='{$_SERVER[PHP_SELF]}?page=close&id={$incident->id}'>Request Close</a></td>";
+                
+                //check if the customer has requested a closure
+                $lastupdate = list($update_userid, $update_type, $update_currentowner, $update_currentstatus, $update_body, $update_timestamp, $update_nextaction, $update_id)=incident_lastupdate($incident->id);
+                
+                if($lastupdate[1] == "customerclosurerequest") echo "Closure Requested</td>";
+                else echo "<a href='{$_SERVER[PHP_SELF]}?page=close&id={$incident->id}'>Request Close</a></td>";
                 echo "</tr>";
                 if ($shade=='shade1') $shade='shade2';
                 else $shade='shade1';
@@ -186,7 +191,7 @@ switch ($page)
 
             $reason = "Incident closure requested via the portal by <b>{$user->forenames} {$user->surname}</b>\n\n";
             $reason .= "<b>Reason:</b> {$_REQUEST['reason']}";
-            $sql = "INSERT into updates VALUES('', '{$_REQUEST['id']}', '{$_SESSION['contactid']}', 'customerclosurerequest', '', '1', '{$reason}',
+            $sql = "INSERT into updates VALUES('', '{$_REQUEST['id']}', '0', 'customerclosurerequest', '', '1', '{$reason}',
             '{$now}', '', '', '', '', '', '', '')";
             mysql_query($sql);
             if (mysql_error()) trigger_error("MySQL Query Error ".mysql_error(), E_USER_ERROR);
