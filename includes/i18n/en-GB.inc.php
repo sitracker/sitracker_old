@@ -57,6 +57,7 @@ $strContacts = 'Contacts';
 $strContract = 'Contract';
 $strContracts = 'Contracts';
 $strControlPanel = 'Control Panel';
+$strComplete = 'Complete';
 $strCompleted = 'Completed';
 $strCompletion = 'Completion';
 $strCustomer = 'Customer';
@@ -123,6 +124,7 @@ $strHelpAbout = 'About';
 $strHelpContents = 'Help Contents';
 $strHelpToTranslate = 'This page is to help translators translate SiT!';
 $strHoldingQueue = 'Holding Queue';
+$strHolidays = 'Holidays';
 $strHolidayEntitlement = 'Holiday Entitlement';
 $strHolidayPlanner = 'Holiday Planner';
 
@@ -133,12 +135,15 @@ $strIncidentsUsed = 'Incidents Used';
 $strInactive = 'Inactive';
 $strIncident = 'Incident';
 $strIncidents = 'Incidents';
+$strIncidentsinQueue = 'Incidents in Queue';
 $strInfo = 'Info';
 $strInstall = 'Install';
 $strInitialResponse = 'Inital Response';
 
 $strKnowledgeBase = 'Knowledge Base';
+
 $strJobTitle = 'Job Title';
+$strJumpTo = 'Jump to';
 
 $strLastUpdated = 'Last Updated';
 $strLicense = 'Licence';
@@ -200,6 +205,7 @@ $strProblemReproductionCustomerText = 'Does the problem exist with more than one
 $strPassword = 'Password';
 $strPermission = 'Permission';
 $strPermissions = 'Permissions';
+$strPleaseWaitRedirect = 'Please wait while you are redirected';
 $strPlugins = 'Plugins';
 $strPostcode = 'Postcode';
 $strPriority = 'Priority';

@@ -286,11 +286,11 @@ else
             echo "<p class='error'>Reassignment Failed</p>\n";
             include('includes/incident_htmlfooter.inc.php');
         }
-        else  confirmation_page("2", "incident_details.php?id=" . $id, "<h2>Reassignment Successful</h2><h5>Please wait while you are redirected...</h5>");
+        else  confirmation_page("2", "incident_details.php?id=" . $id, "<h2>Reassignment Successful</h2><h5>{$strPleaseWaitRedirect}...</h5>");
     }
     else
     {
-        confirmation_page("4", "reassign_incident.php?id={$id}", "<h2 class='error'>Error</h2><h3>That user is not accepting incidents.</h3><h5>Please wait while you are returned...</h5>");
+        confirmation_page("4", "reassign_incident.php?id={$id}", "<h2 class='error'>Error</h2><h3>That user is not accepting incidents.</h3><h5>{$strPleaseWaitRedirect}...</h5>");
     }
 }
 ?>

@@ -168,7 +168,7 @@ else
             if (mysql_error()) trigger_error("MySQL Query Error ".mysql_error(), E_USER_ERROR);
             $newcontact = mysql_fetch_array($result);
             journal(CFG_LOGGING_NORMAL,'Contact Added',"$forenames $surname was Added",CFG_JOURNAL_CONTACTS,$newid);
-            confirmation_page("2", "contact_details.php?id=$newid", "<h2>Contact Added Successfully</p><p align='center'>Please wait while you are redirected...</p>");
+            confirmation_page("2", "contact_details.php?id=$newid", "<h2>Contact Added Successfully</p><p align='center'>{$strPleaseWaitRedirect}...</p>");
         }
     }
 }

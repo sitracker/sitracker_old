@@ -73,7 +73,7 @@ else
         mysql_query($sql);
 
         // show success and redirect
-        confirmation_page("2", "incident_details.php?id=$id", "<h2>Email Sent Successfully</h2><p align='center'>Please wait while you are redirected...</p>");
+        confirmation_page("2", "incident_details.php?id=$id", "<h2>Email Sent Successfully</h2><p align='center'>{$strPleaseWaitRedirect}...</p>");
     }
 }
 ?>

@@ -153,7 +153,7 @@ else
 
             journal(CFG_LOGGING_NORMAL, 'FTP File Uploaded', "FTP File $file_name Uploaded", CFG_JOURNAL_OTHER, 0);
 
-            confirmation_page('2', 'ftp_upload_file.php', "<h2>Upload Successful</h2><p align='center'><code>$ftp_url</code></code><p align='center'>Please wait while you are redirected...</p>");
+            confirmation_page('2', 'ftp_upload_file.php', "<h2>Upload Successful</h2><p align='center'><code>$ftp_url</code><p align='center'>{$strPleaseWaitRedirect}...</p>");
             echo "<code>$ftp_url</code>";
         }
 

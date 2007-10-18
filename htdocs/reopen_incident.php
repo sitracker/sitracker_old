@@ -77,7 +77,7 @@ else
     }
     else
     {
-        confirmation_page("2", "incident_details.php?id=" . $id, "<h2>Incident Reopened</h2><p align='center'>Please wait while you are redirected...</p>");
+        confirmation_page("2", "incident_details.php?id=" . $id, "<h2>Incident Reopened</h2><p align='center'>{$strPleaseWaitRedirect}...</p>");
     }
 }
 ?>

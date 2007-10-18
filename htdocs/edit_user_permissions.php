@@ -21,7 +21,7 @@ require('auth.inc.php');
 // Restrict resetting passwords in demo mode for all but the first user (usually admin)
 if ($CONFIG['demo'] AND $_SESSION['userid']!=1)
 {
-    confirmation_page("3", "manage_users.php", "<h2>You cannot reset passwords while in DEMO MODE</h2><p align='center'>Please wait while you are redirected...</p>");
+    confirmation_page("3", "manage_users.php", "<h2>You cannot reset passwords while in DEMO MODE</h2><p align='center'>{$strPleaseWaitRedirect}...</p>");
 }
 
 
@@ -204,7 +204,7 @@ elseif ($action == "update")
             }
 
         }
-        confirmation_page("2", "manage_users.php", "<h2>Role Permissions Successfully Set</h2><p align='center'>Please wait while you are redirected...</p>");
+        confirmation_page("2", "manage_users.php", "<h2>Role Permissions Successfully Set</h2><p align='center'>{$strPleaseWaitRedirect}...</p>");
         exit;
     }
 
@@ -224,7 +224,7 @@ elseif ($action == "update")
             if (mysql_error()) trigger_error(mysql_error(),E_USER_ERROR);
 
             if (!$result) echo "<p class='error'>Update of user permissions failed on pass 1\n";
-            else confirmation_page("2", "manage_users.php", "<h2>Permissions Successfully Set</h2><p align='center'>Please wait while you are redirected...</p>");
+            else confirmation_page("2", "manage_users.php", "<h2>Permissions Successfully Set</h2><p align='center'>{$strPleaseWaitRedirect}...</p>");
 
             // Second pass, loop through checkbox array setting access to true where boxes are checked
             if (is_array($perm))
@@ -258,7 +258,7 @@ elseif ($action == "update")
             if (mysql_error()) trigger_error(mysql_error(),E_USER_ERROR);
 
             if (!$result) echo "<p class='error'>Update of role permissions failed on pass 1\n";
-            else confirmation_page("2", "manage_users.php", "<h2>Permissions Successfully Set</h2><p align='center'>Please wait while you are redirected...</p>");
+            else confirmation_page("2", "manage_users.php", "<h2>Permissions Successfully Set</h2><p align='center'>{$strPleaseWaitRedirect}...</p>");
 
             // Second pass, loop through checkbox array setting access to true where boxes are checked
             if (is_array($perm))

@@ -31,7 +31,7 @@ if (!empty($productid) && !empty($softwareid))
     mysql_query($sql);
     if (mysql_error()) trigger_error("MySQL Query Error ".mysql_error(), E_USER_ERROR);
     journal(CFG_LOGGING_NORMAL, 'Skill Unlinked', "Skill $softwareid was unlinked from Product $productid", CFG_JOURNAL_PRODUCTS, $productid);
-    confirmation_page("2", "products.php", "<h2>Linked skill removed Successfully</p><p align='center'>Please wait while you are redirected...</h2>");
+    confirmation_page("2", "products.php", "<h2>Linked skill removed Successfully</p><p align='center'>{$strPleaseWaitRedirect}...</p>");
 }
 else
 {

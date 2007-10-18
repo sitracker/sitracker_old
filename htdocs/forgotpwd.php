@@ -67,7 +67,7 @@ switch($_REQUEST['action'])
 
                     $bodytext = "Username: {$row->username}\nPassword: {$row->password}";
                     mail($email, "Forgotten password details", stripslashes($bodytext), $extra_headers);
-                    confirmation_page("8", "index.php", "<h2>Details sent</h2><p align='center'>Please wait while you are redirected...</p>");
+                    confirmation_page("8", "index.php", "<h2>Details sent</h2><p align='center'>{$strPleaseWaitRedirect}...</p>");
                 }
             }
             else

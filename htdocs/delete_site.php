@@ -88,7 +88,7 @@ else
             if (mysql_error()) trigger_error(mysql_error(),E_USER_ERROR);
             else
             {
-                confirmation_page("2", "browse_sites.php?search_string=A", "<h2>Site $id Deleted Successfully</h2><p align='center'>Please wait while you are redirected...</p>");
+                confirmation_page("2", "browse_sites.php?search_string=A", "<h2>Site $id Deleted Successfully</h2><p align='center'>{$strPleaseWaitRedirect}...</p>");
             }
         }
         include('htmlfooter.inc.php');
@@ -112,7 +112,7 @@ else
 
         journal(CFG_LOGGING_NORMAL, 'Site Deleted', "Site $id was deleted", CFG_JOURNAL_SITES, $id);
 
-        confirmation_page("2", "browse_sites.php?search_string=A", "<h2>Site Deleted Successfully</h2><p align='center'>Please wait while you are redirected...</p>");
+        confirmation_page("2", "browse_sites.php?search_string=A", "<h2>Site Deleted Successfully</h2><p align='center'>{$strPleaseWaitRedirect}...</p>");
     }
 }
 

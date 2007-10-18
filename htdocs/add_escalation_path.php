@@ -81,7 +81,7 @@ else
         if(!$result) echo "<p class='error'>Addition of escalation path failed</p>";
         else
         {
-            confirmation_page("2", "escalation_paths.php", "<h2>Escalation path added</h2><h5>Please wait while you are redirected...</h5>");
+            confirmation_page("2", "escalation_paths.php", "<h2>Escalation path added</h2><h5>{$strPleaseWaitRedirect}...</h5>");
         }
     }
 }

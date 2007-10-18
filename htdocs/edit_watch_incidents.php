@@ -60,7 +60,7 @@ switch($action)
         if(!$result) echo "<p class='error'>Failed to add watch incident</p>";
         else
         {
-            confirmation_page("2", "edit_watch_incidents.php", "<h2>Watch Incidents added</h2><h5>Please wait while you are redirected...</h5>");
+            confirmation_page("2", "edit_watch_incidents.php", "<h2>Watch Incidents added</h2><h5>{$strPleaseWaitRedirect}...</h5>");
         }
         break;
     case 'delete':
@@ -73,7 +73,7 @@ switch($action)
         if(!$result) echo "<p class='error'>Delete watch failed</p>";
         else
         {
-            confirmation_page("2", "edit_watch_incidents.php", "<h2>Watch incidents removal succeded</h2><h5>Please wait while you are redirected...</h5>");
+            confirmation_page("2", "edit_watch_incidents.php", "<h2>Watch incidents removal succeded</h2><h5>{$strPleaseWaitRedirect}...</h5>");
         }
         break;
     default:

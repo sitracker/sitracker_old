@@ -41,7 +41,7 @@ switch($action)
         if(!$result) echo "<p class='error'>Failed to add feed</p>";
         else
         {
-            confirmation_page("2", "edit_rss_feeds.php", "<h2>Feed added</h2><h5>Please wait while you are redirected...</h5>");
+            confirmation_page("2", "edit_rss_feeds.php", "<h2>Feed added</h2><h5>{$strPleaseWaitRedirect}...</h5>");
         }
         break;
     case 'enable':
@@ -54,7 +54,7 @@ switch($action)
         if(!$result) echo "<p class='error'>Changed enabled state failed</p>";
         else
         {
-            confirmation_page("2", "edit_rss_feeds.php", "<h2>RSS feed change succeded</h2><h5>Please wait while you are redirected...</h5>");
+            confirmation_page("2", "edit_rss_feeds.php", "<h2>RSS feed change succeded</h2><h5>{$strPleaseWaitRedirect}...</h5>");
         }
         break;
     case 'delete':
@@ -67,7 +67,7 @@ switch($action)
         if(!$result) echo "<p class='error'>Delete feedfailed</p>";
         else
         {
-            confirmation_page("2", "edit_rss_feeds.php", "<h2>RSS feed removal succeded</h2><h5>Please wait while you are redirected...</h5>");
+            confirmation_page("2", "edit_rss_feeds.php", "<h2>RSS feed removal succeded</h2><h5>{$strPleaseWaitRedirect}...</h5>");
         }
         break;
     default:

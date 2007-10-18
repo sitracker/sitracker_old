@@ -27,10 +27,10 @@ mysql_query($sql);
 if (mysql_error()) trigger_error(mysql_error(),E_USER_ERROR);
 if (mysql_affected_rows() >= 1)
 {
-    confirmation_page("2", "$rpath", "<h2>Note deleted successfully</h2><p align='center'>Please wait while you are redirected...</p>");
+    confirmation_page("2", "$rpath", "<h2>Note deleted successfully</h2><p align='center'>{$strPleaseWaitRedirect}...</p>");
 }
 else
 {
-    confirmation_page("2", "$rpath", "<h2>Note was not deleted</h2><p align='center'>Please wait while you are redirected...</p>");
+    confirmation_page("2", "$rpath", "<h2>Note was not deleted</h2><p align='center'>{$strPleaseWaitRedirect}...</p>");
 }
 ?>

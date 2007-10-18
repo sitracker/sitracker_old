@@ -201,14 +201,14 @@ else
     $lacking=mysql_num_rows($result);
     if ($lacking >= 1)
     {
-        confirmation_page("3", "edit_backup_users.php?user={$_POST['userid']}", "<h2>Changes Saved</h2><h3>You should now define a substitute engineer for each piece of software.</h3><h5>Please wait while you are redirected...</h5>");
+        confirmation_page("3", "edit_backup_users.php?user={$_POST['userid']}", "<h2>Changes Saved</h2><h3>You should now define a substitute engineer for each piece of software.</h3><h5>{$strPleaseWaitRedirect}...</h5>");
     }
     else
     {
         if ($_POST['userid']==$_COOKIE['sit'][2])
-            confirmation_page("2", "control_panel.php", "<h2>Update Successful</h2><p align='center'>Please wait while you are redirected...</p>");
+            confirmation_page("2", "control_panel.php", "<h2>Update Successful</h2><p align='center'>{$strPleaseWaitRedirect}...</p>");
         else
-            confirmation_page("2", "manage_users.php", "<h2>Update Successful</h2><p align='center'>Please wait while you are redirected...</p>");
+            confirmation_page("2", "manage_users.php", "<h2>Update Successful</h2><p align='center'>{$strPleaseWaitRedirect}...</p>");
     }
 }
 ?>

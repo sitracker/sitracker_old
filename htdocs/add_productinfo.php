@@ -78,7 +78,7 @@ else
         else
         {
             journal(CFG_LOGGING_NORMAL, 'Product Info Added', "Info was added to Product $product", CFG_JOURNAL_PRODUCTS, $product);
-            confirmation_page("2", "products.php", "<h2>Product Information Added</h2><p align='center'>Please wait while you are redirected...</p>");
+            confirmation_page("2", "products.php", "<h2>Product Information Added</h2><p align='center'>{$strPleaseWaitRedirect}...</p>");
         }
     }
 }

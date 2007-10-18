@@ -93,7 +93,7 @@ switch ($page)
                 echo "</td>";
                 echo "<td>{$contract->incidents_used}</td>";
                 echo "<td>".date($CONFIG['dateformat_date'],$contract->expirydate)."</td>";
-                echo "<td><a href='$_SERVER[PHP_SELF]?page=add&contractid={$contract->id}'>Add Incident</a></td></tr>\n";
+                echo "<td><a href='$_SERVER[PHP_SELF]?page=add&amp;contractid={$contract->id}'>Add Incident</a></td></tr>\n";
                 if ($shade=='shade1') $shade='shade2';
                 else $shade='shade1';
             }
@@ -128,13 +128,13 @@ switch ($page)
                 echo "<td>Product<br /><strong>".stripslashes($incident->title)."</strong></td>"; // FIXME product name
                 echo "<td>".format_date_friendly($incident->lastupdated)."</td>";
                 echo "<td>".incidentstatus_name($incident->status)."</td>";
-                echo "<td><a href='{$_SERVER[PHP_SELF]}?page=update&id={$incident->id}'>Update</a> | ";
-                
+                echo "<td><a href='{$_SERVER[PHP_SELF]}?page=update&amp;id={$incident->id}'>Update</a> | ";
+
                 //check if the customer has requested a closure
                 $lastupdate = list($update_userid, $update_type, $update_currentowner, $update_currentstatus, $update_body, $update_timestamp, $update_nextaction, $update_id)=incident_lastupdate($incident->id);
-                
+
                 if($lastupdate[1] == "customerclosurerequest") echo "Closure Requested</td>";
-                else echo "<a href='{$_SERVER[PHP_SELF]}?page=close&id={$incident->id}'>Request Close</a></td>";
+                else echo "<a href='{$_SERVER[PHP_SELF]}?page=close&amp;id={$incident->id}'>Request Close</a></td>";
                 echo "</tr>";
                 if ($shade=='shade1') $shade='shade2';
                 else $shade='shade1';
@@ -151,7 +151,7 @@ switch ($page)
         {
             $id = $_REQUEST['id'];
             echo "<h2>{$strUpdateIncident} {$_REQUEST['id']}</h2>";
-            echo "<div id='update' align='center'><form action='{$_SERVER[PHP_SELF]}?page=update&id=$id' method='POST'>";
+            echo "<div id='update' align='center'><form action='{$_SERVER[PHP_SELF]}?page=update&amp;id=$id' method='POST'>";
             echo "<p>Update:</p><textarea cols='50' rows='10' name='update'></textarea><br />";
             echo "<input type='submit'></form></div>";
         }
@@ -169,7 +169,7 @@ switch ($page)
             mysql_query($sql);
             if (mysql_error()) trigger_error("MySQL Query Error ".mysql_error(), E_USER_ERROR);
 
-            confirmation_page("2", "portal.php?page=incidents", "<h2>Update Successful</h2><p align='center'>Please wait while you are redirected...</p>");
+            confirmation_page("2", "portal.php?page=incidents", "<h2>Update Successful</h2><p align='center'>{$strPleaseWaitRedirect}...</p>");
         }
         break;
 
@@ -178,7 +178,7 @@ switch ($page)
         {
             $id = $_REQUEST['id'];
             echo "<h2>{$strClosureRequestForIncident} {$_REQUEST['id']}</h2>";
-            echo "<div id='update' align='center'><form action='{$_SERVER[PHP_SELF]}?page=close&id=$id' method='POST'>";
+            echo "<div id='update' align='center'><form action='{$_SERVER[PHP_SELF]}?page=close&amp;id=$id' method='POST'>";
             echo "<p>Reason:</p><textarea name='reason' cols='50' rows='10'></textarea><br />";
             echo "<input type='submit'></form></div>";
         }
@@ -195,13 +195,13 @@ switch ($page)
             '{$now}', '', '', '', '', '', '', '')";
             mysql_query($sql);
             if (mysql_error()) trigger_error("MySQL Query Error ".mysql_error(), E_USER_ERROR);
-            
+
             /*change closing status to 999
             $sql = "INSERT into incidents('closingstatus') VALUES(999) WHERE id={$_REQUEST['id']}";
             mysql_query($sql);
             if (mysql_error()) trigger_error("MySQL Query Error ".mysql_error(), E_USER_ERROR);*/
 
-            confirmation_page("2", "portal.php?page=incidents", "<h2>Closure request Successful</h2><p align='center'>Please wait while you are redirected...</p>");
+            confirmation_page("2", "portal.php?page=incidents", "<h2>Closure request Successful</h2><p align='center'>{$strPleaseWaitRedirect}...</p>");
         }
         break;
 

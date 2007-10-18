@@ -46,7 +46,7 @@ if (!empty($productid))
         $result = mysql_query($sql);
         if (mysql_error()) trigger_error(mysql_error(),E_USER_ERROR);
         journal(CFG_LOGGING_NORMAL, 'Product Removed', "Product $productid was removed", CFG_JOURNAL_PRODUCTS, $productid);
-        confirmation_page("2", "products.php", "<h2>Product removed Successfully</p><p align='center'>Please wait while you are redirected...</h2>");
+        confirmation_page("2", "products.php", "<h2>Product removed Successfully</p><p align='center'>{$strPleaseWaitRedirect}...</h2>");
     }
     else
     {

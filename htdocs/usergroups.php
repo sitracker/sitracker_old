@@ -33,7 +33,7 @@ switch ($action)
             mysql_query($usql);
             if (mysql_error()) trigger_error(mysql_error(),E_USER_ERROR);
         }
-        confirmation_page("2", "usergroups.php", "<h2>Group Membership Saved</h2><p align='center'>Please wait while you are redirected...</p>");
+        confirmation_page("2", "usergroups.php", "<h2>Group Membership Saved</h2><p align='center'>{$strPleaseWaitRedirect}...</p>");
     break;
 
     case 'addgroup':
@@ -41,7 +41,7 @@ switch ($action)
         $sql = "INSERT INTO groups (name) VALUES ('{$group}')";
         mysql_query($sql);
         if (mysql_error()) trigger_error(mysql_error(),E_USER_ERROR);
-        confirmation_page("2", "usergroups.php", "<h2>User Group Added</h2><p align='center'>Please wait while you are redirected...</p>");
+        confirmation_page("2", "usergroups.php", "<h2>User Group Added</h2><p align='center'>{$strPleaseWaitRedirect}...</p>");
     break;
 
     case 'deletegroup':
@@ -55,7 +55,7 @@ switch ($action)
         $sql = "DELETE FROM groups WHERE id='{$groupid}' LIMIT 1";
         mysql_query($sql);
         if (mysql_error()) trigger_error(mysql_error(),E_USER_ERROR);
-        confirmation_page("2", "usergroups.php", "<h2>User Group Deleted</h2><p align='center'>Please wait while you are redirected...</p>");
+        confirmation_page("2", "usergroups.php", "<h2>User Group Deleted</h2><p align='center'>{$strPleaseWaitRedirect}...</p>");
     break;
 
     default:
