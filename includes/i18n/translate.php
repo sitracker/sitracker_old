@@ -34,9 +34,7 @@ if(!$_REQUEST['mode'])
 }
 elseif($_REQUEST['mode'] == "show")
 {
-    $lang = "fr";
-    $GLOBALS['lang'] = "fr";
-    
+
     $englishfile = "en-gb.inc.php";
     $fh = fopen($englishfile, 'r');
     $theData = fread($fh, filesize($englishfile));
@@ -105,7 +103,6 @@ foreach(array_keys($englishvalues) as $key)
 
 echo "</table>";
 echo "<input name='lang' value='{$_REQUEST['lang']}' type='hidden'>";
-
 echo "<input type='submit' value='Update translations'>";
 echo "</form></body></html>";
 }
@@ -118,15 +115,15 @@ elseif($_REQUEST['mode'] == "save")
     fclose($fh);*/
     //print_r($GLOBALS);
     
-    echo "Copy and paste this below and save to {$GLOBALS[$lang]}.inc.php then send to ivanlucas[at]users.sourceforge.net<br />";
+    echo "Copy and paste this below and save to {$_REQUEST['lang']}.inc.php then send to ivanlucas[at]users.sourceforge.net<br />";
     echo "--------------<br />";
     echo "&lt;?php<br /><br />";
     echo "&#36;languagestring={$_REQUEST['languagestring']}&#59;<br />";
-    echo "&#36;i18ncharset={$_REQUEST['i18ncharset']}&#59;<br /><br />";
+    echo "&#36;i18ncharset='UTF-8'&#59;<br /><br />";
     
     foreach(array_keys($_POST) as $key)
     {
-        echo "&#36;{$key} = &#39;{$_POST[$key]}&#39;<br />";
+        if(!empty($_POST[$key]) AND $key != "lang") echo "&#36;{$key} = '{$_POST[$key]}'&#59;<br />";
     }
     
     echo "<br />?&gt;<br />";
