@@ -40,27 +40,23 @@ if (empty($submit))
 
     echo "<h2><img src='{$CONFIG['application_webpath']}images/icons/{$iconset}/32x32/user.png' width='32' height='32' alt='' /> ";
     echo sprintf($strEditProfileFor, $user->realname)."</h2>";
-    ?>
-    <form action="<?php echo $_SERVER['PHP_SELF'] ?>" method="post">
-    <table align='center' class='vertical'>
-    <col width="250"></col><col width="*"></col>
-    <tr><th colspan='2'>ABOUT <?php if ($userid==$sit[2]) echo "YOU"; else echo strtoupper($user->realname); ?></td></tr>
-    <?php
+    echo "<form action='{$_SERVER['PHP_SELF']' method='post'>";
+    echo "<table align='center' class='vertical'>";
+    echo "<col width='250'></col><col width='*'></col>";
+    echo "<tr><th colspan='2'>".strtoupper($strAbout).' '
+    if ($userid==$sit[2]) echo strtoupper($strYou); else echo strtoupper($user->realname);
+    echo "</td></tr>\n";
     echo "<tr><th>{$strUsername}:</th><td>{$user->username}</td></tr>";
     echo "<tr><th>{$strRole}:</th>";
     if ($userid==$sit[2] OR $userid==1) echo "<td>".db_read_column('rolename', 'roles', $user->roleid)."</td>";
     else echo "<td>".role_drop_down('roleid', $user->roleid)."</td>";
     echo "</tr>";
-    echo "<tr><th>{$strRealName}:</th><td><input maxlength='50' name='realname' size='30' type='text' value=\"".stripslashes($user->realname)."\" /></td></tr>";
-    ?>
-    <tr><th>Job Title:</th><td><input maxlength="50" name="jobtitle" size="30" type="text" value="<?php echo $user->title; ?>" /></td></tr>
-    <tr><th>Qualifications:<br />
-    Enter a comma seperated list of each of the professional qualifications you hold
-    </th><td><textarea name="qualifications" rows="3" cols="40"><?php echo $user->qualifications; ?></textarea></td></tr>
-    <tr><th>Email Signature:<br />
-    Inserted automatically at the bottom of your outgoing emails.
-    </th><td><textarea name="signature" rows="4" cols="40"><?php echo strip_tags(stripslashes($user->signature)); ?></textarea></td></tr>
-    <?php
+    echo "<tr><th>{$strRealName}:</th><td><input maxlength='50' name='realname' size='30' type='text' value=\"".stripslashes($user->realname)."\" /></td></tr>\n";
+    echo "<tr><th>{$strJobTitle}:</th><td><input maxlength='50' name='jobtitle' size='30' type='text' value=\"".stripslashes($user->title)."\" /></td></tr>\n";
+    echo "<tr><th>{$strQualifications}:<br />{$strQualificationsTip}</th>";
+    echo "<td><textarea name='qualifications' rows='3' cols='40'>".stripslashes($user->qualifications)."</textarea></td></tr>\n";
+    echo "<tr><th>{$strEmailSignature}:<br />{$strEmailSignatureTip}</th>";
+    echo "<td><textarea name='signature' rows='4' cols='40'>".strip_tags(stripslashes($user->signature))."</textarea></td></tr>\n";
     $entitlement=user_holiday_entitlement($userid);
     if ($edituserpermission && $userid!=$sit[2])
     {
@@ -74,7 +70,7 @@ if (empty($submit))
         echo "<tr><th>{$strHolidayEntitlement}:</th><td>";
         echo "$entitlement days, ";
         echo "$holidaystaken taken, ";
-        echo $entitlement-$holidaystaken." Remaining";
+        echo sprintf($strRemaining, $entitlement-$holidaystaken);
         echo "</td></tr>\n";
         echo "<tr><th>Other Leave:</th><td>";
         echo user_count_holidays($userid, 2)." days sick leave, ";
@@ -103,13 +99,12 @@ if (empty($submit))
     <?php
     if ($edituserpermission AND $userid != $sit[2]) $userdisable=TRUE;
     else $userdisable=FALSE;
-    ?>
-    <tr><th>Status:</th><td><?php userstatus_drop_down("status", $user->status, $userdisable); ?></td></tr>
-    <tr><th>Accepting Incidents:</th><td><?php accepting_drop_down("accepting", $userid); ?></td></tr>
-    <tr><th>Message:<br />
-    e.g. &quot;In france until Tue 22nd&quot;<br />Displayed on the 'view users' page for the benefit of your colleagues.
-    </th><td><textarea name="message" rows="4" cols="40"><?php echo strip_tags($user->message); ?></textarea></td></tr>
 
+    echo "<tr><th>{$strStatus}:</th><td>".userstatus_drop_down("status", $user->status, $userdisable)."</td></tr>\n";
+    echo "<tr><th>{$strAccepting} {$strIncidents}:</th><td>".accepting_drop_down("accepting", $userid)."</td></tr>\n";
+    echo "<tr><th>{$strMessage}:<br />{$strMessageTip}</th>";
+    echo "<td><textarea name='message' rows='4' cols='40'>".strip_tags($user->message)."</textarea></td></tr>\n";
+    ?>
     <tr><th colspan='2'>CONTACT DETAILS</td></tr>
     <tr id='email'><th>Email:<sup class='red'>*</sup></th><td><input maxlength="50" name="email" size="30" type="text" value="<?php echo strip_tags($user->email); ?>" /></td></tr>
     <tr id='phone'><th>Phone:</th><td><input maxlength="50" name="phone" size="30" type="text" value="<?php echo strip_tags($user->phone); ?>" /></td></tr>
@@ -148,9 +143,9 @@ if (empty($submit))
     {
         echo "<tr class='password'><th colspan='2'>CHANGE PASSWORD</td></tr>";
         echo "<tr class='password'><th>&nbsp;</th><td>To change your password - first enter your existing password and then type your new password twice to confirm it.</td></tr>";
-        echo "<tr class='password'><th>Old Password:</th><td><input maxlength='50' name='password' size='30' type='password' /></td></tr>";
-        echo "<tr class='password'><th>New Password:</th><td><input maxlength='50' name='newpassword1' size='30' type='password' /></td></tr>";
-        echo "<tr class='password'><th>Confirm New Password:</th><td><input maxlength='50' name='newpassword2' size='30' type='password' /></td></tr>";
+        echo "<tr class='password'><th>{$strOldPassword}:</th><td><input maxlength='50' name='password' size='30' type='password' /></td></tr>";
+        echo "<tr class='password'><th>{$strNewPassword}:</th><td><input maxlength='50' name='newpassword1' size='30' type='password' /></td></tr>";
+        echo "<tr class='password'><th>{$strConfirmNewPassword}:</th><td><input maxlength='50' name='newpassword2' size='30' type='password' /></td></tr>";
     }
     echo "</table>\n";
     echo "<input type='hidden' name='userid' value='{$userid}' />";
