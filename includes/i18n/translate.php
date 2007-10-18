@@ -26,9 +26,9 @@ if(!$_REQUEST['mode'])
     //FIXME
     echo "<input name='mode' value='show' type='hidden'>";
     echo "<select name='lang'></div>";
-    if ($handle = opendir('.')) 
+    if ($handle = opendir('.'))
     {
-        while (false !== ($file = readdir($handle))) 
+        while (false !== ($file = readdir($handle)))
         {
             $ext = explode(".", $file);
             if($ext[1] == "inc" && $ext[2] == "php")
@@ -53,14 +53,14 @@ elseif($_REQUEST['mode'] == "show")
     {
         $badchars = array("$", "\"", "\\", "<?php", "?>");
         $values = trim(str_replace($badchars, '', $values));
-        
+
         //get variable and value
         $vars = explode("=", $values);
-         
+
         //remove spaces
         $vars[0] = trim($vars[0]);
         $vars[1] = trim($vars[1]);
-        
+
         if(substr($vars[0], 0, 3) == "str")
         {
             //remove leading and trailing quotation marks
@@ -99,15 +99,18 @@ elseif($_REQUEST['mode'] == "show")
             $foreignvalues[$vars[0]] = $vars[1];
         }
     }
-    
+
 echo "<h2>Word List</h2>";
 echo "<p align='center'>{$strTranslateTheString}</p>";
 echo "<form method='post' action='{$_SERVER[PHP_SELF]}?mode=save'>";
 echo "<table align='center'><tr><th>{$strVariable}</th><th>{$strEnglish}</th><th>{$_REQUEST['lang']}</th></tr>";
 
+$shade = 'shade1';
 foreach(array_keys($englishvalues) as $key)
 {
-    echo "<tr><td>$key</td><td><input value=\"$englishvalues[$key]\" size=\"40\" /></td><td><input name=\"$key\" value=\"$foreignvalues[$key]\" size=\"40\" /></td></tr>\n";
+    echo "<tr class='$shade'><td><code>{$key}</code></td><td><input value=\"{$englishvalues[$key]}\" size=\"40\" /></td><td><input name=\"{$key}\" value=\"{$foreignvalues[$key]}\" size=\"40\" /></td></tr>\n";
+    if ($shade=='shade1') $shade='shade2';
+    else $shade='shade1';
 }
 
 echo "</table>";
@@ -116,18 +119,18 @@ echo "<div align='center'><input type='submit' value='{$strUpdate}' /></div>";
 }
 elseif($_REQUEST['mode'] == "save")
 {
- 
+
     sprintf($strSendTranslation, $_REQUEST['lang']);
     echo "--------------<br />";
     echo "&lt;?php<br /><br />";
     echo "&#36;languagestring='{$_REQUEST['lang']}'&#59;<br />";
     echo "&#36;i18ncharset='UTF-8'&#59;<br /><br />";
-    
+
     foreach(array_keys($_POST) as $key)
     {
         if(!empty($_POST[$key]) AND $key != "lang") echo "&#36;{$key} = '{$_POST[$key]}'&#59;<br />";
     }
-    
+
     echo "<br />?&gt;<br />";
 }
 else
