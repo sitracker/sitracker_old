@@ -17,6 +17,8 @@ require('functions.inc.php');
 require('auth.inc.php');
 include('htmlheader.inc.php');
 
+$i18npath = '../includes/i18n/';
+
 if(!$_REQUEST['mode'])
 {
     echo "<h2>{$strTranslation}</h2>";
@@ -26,7 +28,7 @@ if(!$_REQUEST['mode'])
     //FIXME
     echo "<input name='mode' value='show' type='hidden'>";
     echo "<select name='lang'></div>";
-    if ($handle = opendir('.'))
+    if ($handle = opendir($path))
     {
         while (false !== ($file = readdir($handle)))
         {
@@ -43,7 +45,7 @@ if(!$_REQUEST['mode'])
 elseif($_REQUEST['mode'] == "show")
 {
     //open english file
-    $englishfile = "en-gb.inc.php";
+    $englishfile = "{$i18npath}/en-gb.inc.php";
     $fh = fopen($englishfile, 'r');
     $theData = fread($fh, filesize($englishfile));
     fclose($fh);
@@ -80,7 +82,7 @@ elseif($_REQUEST['mode'] == "show")
     }
 
     //open foreign file
-    $myFile = "{$_REQUEST['lang']}.inc.php";
+    $myFile = "$i18npath/{$_REQUEST['lang']}.inc.php";
     $fh = fopen($myFile, 'r');
     $theData = fread($fh, filesize($myFile));
     fclose($fh);
