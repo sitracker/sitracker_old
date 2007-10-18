@@ -9,5 +9,5 @@ $strLicense = 'License';
 
 $strMobile = 'Cell Phone';
 
-$strPostcode = "Zip Code";
+$strPostcode = 'Zip Code';
 ?>
