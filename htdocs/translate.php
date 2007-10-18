@@ -45,12 +45,12 @@ if(!$_REQUEST['mode'])
 elseif($_REQUEST['mode'] == "show")
 {
     //open english file
-    $englishfile = "{$i18npath}/en-gb.inc.php";
+    $englishfile = "{$i18npath}/en-GB.inc.php";
     $fh = fopen($englishfile, 'r');
     $theData = fread($fh, filesize($englishfile));
     fclose($fh);
     $lines = explode(";", $theData);
-    $langstrings['en-gb'];
+    $langstrings['en-GB'];
     $englishvalues = array();
     foreach($lines as $values)
     {
