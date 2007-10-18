@@ -12,6 +12,7 @@
 
 echo "<html><head><title></title><meta http-equiv=\"Content-Type\" content=\"text/html; charset=utf-8\"></head>";
 echo "<body>";
+global $lang;
 
 if(!$_REQUEST['mode'])
 {
@@ -33,6 +34,9 @@ if(!$_REQUEST['mode'])
 }
 elseif($_REQUEST['mode'] == "show")
 {
+    $lang = "fr";
+    $GLOBALS['lang'] = "fr";
+    
     $englishfile = "en-gb.inc.php";
     $fh = fopen($englishfile, 'r');
     $theData = fread($fh, filesize($englishfile));
@@ -42,27 +46,30 @@ elseif($_REQUEST['mode'] == "show")
     $englishvalues = array();
     foreach($lines as $values)
     {
-        if(substr($values, 0, 4) == "lang")
-            $languagestring=$values;
-        if(substr($values, 0, 4) == "i18n")
-           $i18ncharset=$values;
-        echo $languagestring;
-        echo $i18ncharset;
         $badchars = array("$", "\"", "\\", "<?php", "?>");
         $values = trim(str_replace($badchars, '', $values));
-        if(substr($values, 0, 3) == "str")
+        
+        //get variable and value
+        $vars = explode("=", $values);
+         
+        //remove spaces
+        $vars[0] = trim($vars[0]);
+        $vars[1] = trim($vars[1]);
+        
+        if(substr($vars[0], 0, 3) == "str")
         {
-            //get variable and value
-            $vars = explode("=", $values);
-            
-            //remove spaces
-            $vars[0] = trim($vars[0]);
-            
             //remove leading and trailing quotation marks
-            $vars[1] = trim(substr_replace($vars[1], "",-1));
+            $vars[1] = substr_replace($vars[1], "",-1);
             $vars[1] = substr_replace($vars[1], "",0, 1);
 
             $englishvalues[$vars[0]] = $vars[1];
+        }
+        else
+        {
+            if(substr($values, 0, 4) == "lang")
+                $languagestring=$values;
+            if(substr($values, 0, 4) == "i18n")
+                $i18ncharset=$values;
         }
     }
 
@@ -90,19 +97,39 @@ elseif($_REQUEST['mode'] == "show")
 
 
 echo "<table><th>Variable</th><th>English</th><th>{$_REQUEST['lang']}</th>";
-echo "<form method='post' action='{$_SERVER[PHP_SELF]}?mode=save&'>";
+echo "<form method='post' action='{$_SERVER[PHP_SELF]}?mode=save&charset=$i18ncharset&lang=$languagestring'>";
 foreach(array_keys($englishvalues) as $key)
 {
     echo "<tr><td>$key</td><td><input value=\"$englishvalues[$key]\" size=\"40\"></input></td><td><input name=\"$key\" value=\"$foreignvalues[$key]\" size=\"40\"></td></tr>\n";
 }
 
 echo "</table>";
+echo "<input name='lang' value='{$_REQUEST['lang']}' type='hidden'>";
+
 echo "<input type='submit' value='Update translations'>";
 echo "</form></body></html>";
 }
 elseif($_REQUEST['mode'] == "save")
 {
+    /*$myFile = "{$_REQUEST['lang']}.inc.php.2";
+    $fh = fopen($myFile, 'w') or die("can't open file");
+    $stringData = "Bobby Bopper\n";
+    fwrite($fh, $stringData);
+    fclose($fh);*/
+    //print_r($GLOBALS);
     
+    echo "Copy and paste this below and save to {$GLOBALS[$lang]}.inc.php then send to ivanlucas[at]users.sourceforge.net<br />";
+    echo "--------------<br />";
+    echo "&lt;?php<br /><br />";
+    echo "&#36;languagestring={$_REQUEST['languagestring']}&#59;<br />";
+    echo "&#36;i18ncharset={$_REQUEST['i18ncharset']}&#59;<br /><br />";
+    
+    foreach(array_keys($_POST) as $key)
+    {
+        echo "&#36;{$key} = &#39;{$_POST[$key]}&#39;<br />";
+    }
+    
+    echo "<br />?&gt;<br />";
 }
 else
 {
