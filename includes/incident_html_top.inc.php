@@ -329,39 +329,39 @@ if ($menu != 'hide')
         while($inupdate = mysql_fetch_object($query))
         {
             echo "<a class='barlink' href='unlock_update.php?id={$id}'>Unlock</a> | ";
-            echo "<a class='barlink' href=\"javascript:window.opener.location='move_update.php?updateid={$inupdate->updateid}&amp;incidentidnumber={$update['incidentid']}'; window.close();\" >Assign</a> | ";
-            echo "<a class='barlink' href=\"javascript:window.opener.location='add_incident.php?action=findcontact&amp;incomingid={$id}&amp;search_string={$inupdate->emailfrom}&amp;contactid={$inupdate->contactid}&amp;win=incomingcreate'; window.close();\">Create</a> | ";
-            echo "<a class='barlink' href=\"javascript:window.opener.location='delete_update.php?updateid={$inupdate->updateid}&amp;tempid={$inupdate->id}&amp;timestamp={$inupdate->timestamp}'; window.close(); \">Delete</a>";
+            echo "<a class='barlink' href=\"javascript:window.opener.location='move_update.php?updateid={$inupdate->updateid}&amp;incidentidnumber={$update['incidentid']}'; window.close();\" >{$strAssign}</a> | ";
+            echo "<a class='barlink' href=\"javascript:window.opener.location='add_incident.php?action=findcontact&amp;incomingid={$id}&amp;search_string={$inupdate->emailfrom}&amp;contactid={$inupdate->contactid}&amp;win=incomingcreate'; window.close();\">{$strCreate}</a> | ";
+            echo "<a class='barlink' href=\"javascript:window.opener.location='delete_update.php?updateid={$inupdate->updateid}&amp;tempid={$inupdate->id}&amp;timestamp={$inupdate->timestamp}'; window.close(); \">{$strDelete}</a>";
         }
     }
     elseif (incident_status($id) != 2)
     {
-        echo "<a class='barlink' href='update_incident.php?id={$id}&amp;popup={$popup}' accesskey='U'><em>U</em>pdate</a> | ";
-        echo "<a class='barlink' href='javascript:close_window({$id});' accesskey='C'><em>C</em>lose</a> | ";
-        echo "<a class='barlink' href='reassign_incident.php?id={$id}&amp;popup={$popup}' accesskey='R'><em>R</em>eassign</a> | ";
-        echo "<a class='barlink' href='edit_incident.php?id={$id}&amp;popup={$popup}' accesskey='T'>Edi<em>t</em></a> | ";
-        echo "<a class='barlink' href='incident_service_levels.php?id={$id}&amp;popup={$popup}' accesskey='S'><em>S</em>ervice</a> | ";
-        echo "<a class='barlink' href='incident_relationships.php?id={$id}&amp;tab=relationships' accesskey='L'>Re<em>l</em>ations</a> | ";
-        echo "<a class='barlink' href='javascript:email_window({$id})' accesskey='E'><em>E</em>mail</a> | ";
-        echo "<a class='barlink' href='incident_attachments.php?id={$id}&amp;popup={$popup}' accesskey='F'><em>F</em>iles</a> | ";
-        echo "<a class='barlink' href='incident_details.php?id={$id}&amp;popup={$popup}' accesskey='D'><em>D</em>etails And Log</a> | ";
-        echo "<a class='barlink' href='javascript:help_window({$permission});'>?</a>";
-        if (!empty($_REQUEST['popup'])) echo " | <a class=barlink href='javascript:window.close();'>Close Window</a>";
+        echo "<a class='barlink' href='update_incident.php?id={$id}&amp;popup={$popup}' accesskey='U'>{$strUpdate}</a> | ";
+        echo "<a class='barlink' href='javascript:close_window({$id});' accesskey='C'>{$strClose}</a> | ";
+        echo "<a class='barlink' href='reassign_incident.php?id={$id}&amp;popup={$popup}' accesskey='R'>{$strReassign}</a> | ";
+        echo "<a class='barlink' href='edit_incident.php?id={$id}&amp;popup={$popup}' accesskey='T'>{$strEdit}</a> | ";
+        echo "<a class='barlink' href='incident_service_levels.php?id={$id}&amp;popup={$popup}' accesskey='S'>{$strService}</a> | ";
+        echo "<a class='barlink' href='incident_relationships.php?id={$id}&amp;tab=relationships' accesskey='L'>{$strRelations}</a> | ";
+        echo "<a class='barlink' href='javascript:email_window({$id})' accesskey='E'>{$strEmail}</a> | ";
+        echo "<a class='barlink' href='incident_attachments.php?id={$id}&amp;popup={$popup}' accesskey='F'>{$strFiles}</a> | ";
+        echo "<a class='barlink' href='incident_details.php?id={$id}&amp;popup={$popup}' accesskey='D'>{$strDetailsAndLog}</a> | ";
+        echo "<a class='barlink' href='javascript:help_window({$permission});'>{$strHelpChar}</a>";
+        if (!empty($_REQUEST['popup'])) echo " | <a class=barlink href='javascript:window.close();'>{$strCloseWindow}</a>";
     }
     else
     {
-        echo "<a class='barlink' href='reopen_incident.php?id={$id}&amp;popup={$popup}'>Reopen</a> | ";
-        echo "<a class='barlink' href='incident_service_levels.php?id={$id}&amp;popup={$poup}' accesskey='S'><em>S</em>ervice</a> | ";
-        echo "<a class='barlink' href='incident_relationships.php?id={$id}&amp;tab=relationships'>Relations</a> | ";
-        echo "<a class='barlink' href='incident_attachments.php?id={$id}&amp;popup={$popup}' accesskey='F'><em>F</em>iles</a> | ";
-        echo "<a class='barlink' href='incident_details.php?id={$id}&amp;popup={$popup}' accesskey='D'><em>D</em>etails And Log</a> | ";
-        echo "<a class='barlink' href='javascript:help_window({$permission});'>?</a>";
-        if (!empty($_REQUEST['popup'])) echo " | <a class='barlink' href='javascript:window.close();'>Close Window</a>";
+        echo "<a class='barlink' href='reopen_incident.php?id={$id}&amp;popup={$popup}'>{$strReopen}</a> | ";
+        echo "<a class='barlink' href='incident_service_levels.php?id={$id}&amp;popup={$poup}' accesskey='S'>{$strService}</a> | ";
+        echo "<a class='barlink' href='incident_relationships.php?id={$id}&amp;tab=relationships'>{$strRelations}</a> | ";
+        echo "<a class='barlink' href='incident_attachments.php?id={$id}&amp;popup={$popup}' accesskey='F'>{$strFiles}</a> | ";
+        echo "<a class='barlink' href='incident_details.php?id={$id}&amp;popup={$popup}' accesskey='D'>{$strDetailsAndLog}</a> | ";
+        echo "<a class='barlink' href='javascript:help_window({$permission});'>{$strHelpChar}</a>";
+        if (!empty($_REQUEST['popup'])) echo " | <a class='barlink' href='javascript:window.close();'>{$strCloseWindow}</a>";
     }
 }
 else
 {
-    echo "<a class='barlink' href='javascript:window.close();'>Close Window</a>";
+    echo "<a class='barlink' href='javascript:window.close();'>{$strCloseWindow}</a>";
 }
 echo "</div>";
 
