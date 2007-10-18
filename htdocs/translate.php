@@ -74,16 +74,11 @@ if(!$_REQUEST['mode'])
     echo "<form action='{$_SERVER['PHP_SELF']}?mode=show' method='get'>";
     //FIXME
     echo "<input name='mode' value='show' type='hidden' />";
+
     echo "<select name='lang'>";
-    if ($handle = opendir($i18npath))
+    foreach ($languages AS $langcode => $language)
     {
-        while (false !== ($file = readdir($handle)))
-        {
-            $ext = explode(".", $file);
-            if($ext[1] == "inc" && $ext[2] == "php")
-                echo "<option value='{$ext[0]}'>{$ext[0]}</option>\n";
-        }
-        closedir($handle);
+        if ($langcode!='en-GB') echo "<option value='{$langcode}'>{$langcode} - {$language}</option>\n";
     }
     echo "</select><br /><br />";
     echo "<input type='submit' value='$strTranslate' />";
@@ -127,31 +122,33 @@ elseif($_REQUEST['mode'] == "show")
                 $i18ncharset=$values;
         }
     }
+    unset($lines);
 
     //open foreign file
     $myFile = "$i18npath/{$_REQUEST['lang']}.inc.php";
-    $foreignvalues = array();
-
-    $fh = fopen($myFile, 'r');
-    $theData = fread($fh, filesize($myFile));
-    fclose($fh);
-    $lines = explode(";", $theData);
-    //print_r($lines);
-
-    foreach($lines as $values)
+    if (file_exists($myFile))
     {
-        $badchars = array("$", "\"", "\\", "<?php", "?>");
-        $values = trim(str_replace($badchars, '', $values));
-        if(substr($values, 0, 3) == "str")
+        $foreignvalues = array();
+
+        $fh = fopen($myFile, 'r');
+        $theData = fread($fh, filesize($myFile));
+        fclose($fh);
+        $lines = explode(";", $theData);
+        //print_r($lines);
+        foreach($lines as $values)
         {
-            $vars = explode("=", $values);
-            $vars[0] = trim($vars[0]);
-            $vars[1] = trim(substr_replace($vars[1], "",-1));
-            $vars[1] = substr_replace($vars[1], "",0, 1);
-            $foreignvalues[$vars[0]] = $vars[1];
+            $badchars = array("$", "\"", "\\", "<?php", "?>");
+            $values = trim(str_replace($badchars, '', $values));
+            if(substr($values, 0, 3) == "str")
+            {
+                $vars = explode("=", $values);
+                $vars[0] = trim($vars[0]);
+                $vars[1] = trim(substr_replace($vars[1], "",-1));
+                $vars[1] = substr_replace($vars[1], "",0, 1);
+                $foreignvalues[$vars[0]] = $vars[1];
+            }
         }
     }
-
 echo "<h2>Word List</h2>";
 echo "<p align='center'>{$strTranslateTheString}</p>";
 echo "<form method='post' action='{$_SERVER[PHP_SELF]}?mode=save'>";
@@ -173,10 +170,12 @@ echo "</form>\n";
 }
 elseif($_REQUEST['mode'] == "save")
 {
-    echo "<p>".sprintf($strSendTranslation, $_REQUEST['lang'])." ivanlucas[at]users.sourceforge.net</p>";
+    $lang = cleanvar($_REQUEST['lang']);
+    $filename = "{$lang}.inc.php";
+    echo "<p>".sprintf($strSendTranslation, "<code>{$filename}</code>", "<code>{$i18npath}</code>", 'ivanlucas[at]users.sourceforge.net')." </p>";
     $i18nfile = '';
     $i18nfile .= "<?php\n";
-    $i18nfile .= "\$languagestring = '{$_REQUEST['lang']}';\n";
+    $i18nfile .= "\$languagestring = '{$languages[$lang]} ($lang)';\n";
     $i18nfile .= "\$i18ncharset = 'UTF-8';\n\n";
 
     $lastchar='';

@@ -1,4 +1,5 @@
 <?php
+// Master SiT! Language File - English (GB)
 
 $languagestring='English (GB)';
 $i18ncharset='UTF-8';
@@ -226,7 +227,7 @@ $strSalesperson = 'Salesperson';
 $strSave = 'Save';
 $strSearch = 'Search';
 $strSearchAgain = 'Search Again';
-$strSendTranslation = 'Copy and paste this below and save to %s.inc.php then send to';
+$strSendTranslation = 'Save the text below as %s and place in the %s directory to use it. Send it to %s for it to be included with future SiT! releases for the benefit of other users.';
 $strServiceLevel = 'Service Level';
 $strServiceLevels = 'Service Levels';
 $strServicePacksApplied = 'Service Packs Applied';
