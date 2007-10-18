@@ -32,12 +32,13 @@ if(!$_REQUEST['mode'])
         {
             $ext = explode(".", $file);
             if($ext[1] == "inc" && $ext[2] == "php")
-                echo "<option value='$ext[0]'>$ext[0]<br />";
+                echo "<option value='{$ext[0]}'>{$ext[0]}</option>\n";
         }
         closedir($handle);
     }
-    echo "</select><br />";
-    echo "<input type='submit' value='$strTranslate'>";
+    echo "</select><br /><br />";
+    echo "<input type='submit' value='$strTranslate' />";
+    echo "</form>";
 }
 elseif($_REQUEST['mode'] == "show")
 {
@@ -108,8 +109,8 @@ echo "<table align='center'><tr><th>{$strVariable}</th><th>{$strEnglish}</th><th
 $shade = 'shade1';
 foreach(array_keys($englishvalues) as $key)
 {
-    echo "<tr class='$shade'><td><code>{$key}</code></td><td><input name='english_{$key}' value=\"".htmlentities($englishvalues[$key], ENT_QUOTES, 'UTF-8')."\" size=\"40\" /></td>";
-    echo "<td><input name=\"{$key}\" value=\"".htmlentities($foreignvalues[$key], ENT_QUOTES, 'UTF-8')."\" size=\"40\" /></td></tr>\n";
+    echo "<tr class='$shade'><td><label for=\"{$key}\"><code>{$key}</code></td><td><input name='english_{$key}' value=\"".htmlentities($englishvalues[$key], ENT_QUOTES, 'UTF-8')."\" size=\"40\" readonly='readonly' /></td>";
+    echo "<td><input id=\"{$key}\" name=\"{$key}\" value=\"".htmlentities($foreignvalues[$key], ENT_QUOTES, 'UTF-8')."\" size=\"40\" /></td></tr>\n";
     if ($shade=='shade1') $shade='shade2';
     else $shade='shade1';
 }
@@ -121,7 +122,7 @@ echo "</form>\n";
 }
 elseif($_REQUEST['mode'] == "save")
 {
-    printf($strSendTranslation, $_REQUEST['lang']);
+    echo "<p>".sprintf($strSendTranslation, $_REQUEST['lang'])." ivanlucas[at]users.sourceforge.net</p>";
     $i18nfile = '';
     $i18nfile .= "<?php\n";
     $i18nfile .= "\$languagestring = '{$_REQUEST['lang']}';\n";
@@ -133,7 +134,7 @@ elseif($_REQUEST['mode'] == "save")
         if(!empty($_POST[$key]) AND substr($key, 0, 3) == "str")
         {
             if ($lastchar!='' AND substr($key, 4, 1) != $lastchar) $i18nfile .= "\n";
-            $i18nfile .= "\${$key} = '{$_POST[$key]};'\n";
+            $i18nfile .= "\${$key} = '{$_POST[$key]}';\n";
             $lastchar = substr($key, 4, 1);
         }
     }
