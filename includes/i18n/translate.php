@@ -108,19 +108,21 @@ echo "<table align='center'><tr><th>{$strVariable}</th><th>{$strEnglish}</th><th
 $shade = 'shade1';
 foreach(array_keys($englishvalues) as $key)
 {
-    echo "<tr class='$shade'><td><code>{$key}</code></td><td><input value=\"{$englishvalues[$key]}\" size=\"40\" /></td><td><input name=\"{$key}\" value=\"{$foreignvalues[$key]}\" size=\"40\" /></td></tr>\n";
+    echo "<tr class='$shade'><td><code>{$key}</code></td><td><input name='english_{$key}' value=\"".htmlentities($englishvalues[$key], ENT_QUOTES, 'UTF-8')."\" size=\"40\" /></td>";
+    echo "<td><input name=\"{$key}\" value=\"".htmlentities($foreignvalues[$key], ENT_QUOTES, 'UTF-8')."\" size=\"40\" /></td></tr>\n";
     if ($shade=='shade1') $shade='shade2';
     else $shade='shade1';
 }
 
 echo "</table>";
-echo "<input name='lang' value='{$_REQUEST['lang']}' type='hidden' /></form>";
-echo "<div align='center'><input type='submit' value='{$strUpdate}' /></div>";
+echo "<input name='lang' value='{$_REQUEST['lang']}' type='hidden' /><input name='mode' value='save' type='hidden' />";
+echo "<div align='center'><input type='submit' value='{$strSave}' /></div>";
+echo "</form>\n";
 }
 elseif($_REQUEST['mode'] == "save")
 {
 
-    sprintf($strSendTranslation, $_REQUEST['lang']);
+    printf($strSendTranslation, $_REQUEST['lang']);
     echo "--------------<br />";
     echo "&lt;?php<br /><br />";
     echo "&#36;languagestring='{$_REQUEST['lang']}'&#59;<br />";
