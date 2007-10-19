@@ -21,7 +21,7 @@ $step = cleanvar($_REQUEST['step']);
 $id = cleanvar($_REQUEST['id']);
 $incidentid=$id;
 
-$title = 'Email';
+$title = $strEmail;
 
 if (empty($step)) $step=1;
 
@@ -154,21 +154,21 @@ switch ($step)
         {
             case 'initialresponse':
                 echo "<option value='initialresponse' style='text-indent: 15px; height: 17px; background-image: url({$CONFIG['application_webpath']}/images/icons/{$iconset}/16x16/initialresponse.png); background-repeat: no-repeat;' onclick='initialresponse(this.form)' >{$strInitialResponse}</option>\n";
-                echo "<option value='probdef' style='text-indent: 15px; height: 17px; background-image: url({$CONFIG['application_webpath']}/images/icons/{$iconset}/16x16/probdef.png); background-repeat: no-repeat;' onclick='probdef(this.form)'>Problem Definition</option>\n";
-                echo "<option value='actionplan' style='text-indent: 15px; height: 17px; background-image: url({$CONFIG['application_webpath']}/images/icons/{$iconset}/16x16/actionplan.png); background-repeat: no-repeat;' onclick='actionplan(this.form)'>Action Plan</option>\n";
-                echo "<option value='solution' style='text-indent: 15px; height: 17px; background-image: url({$CONFIG['application_webpath']}/images/icons/{$iconset}/16x16/solution.png); background-repeat: no-repeat;' onclick='reprioritise(this.form)'>Resolution/Reprioritisation</option>\n";
+                echo "<option value='probdef' style='text-indent: 15px; height: 17px; background-image: url({$CONFIG['application_webpath']}/images/icons/{$iconset}/16x16/probdef.png); background-repeat: no-repeat;' onclick='probdef(this.form)'>{$strProblemDefinition}</option>\n";
+                echo "<option value='actionplan' style='text-indent: 15px; height: 17px; background-image: url({$CONFIG['application_webpath']}/images/icons/{$iconset}/16x16/actionplan.png); background-repeat: no-repeat;' onclick='actionplan(this.form)'>{$strActionPlan}</option>\n";
+                echo "<option value='solution' style='text-indent: 15px; height: 17px; background-image: url({$CONFIG['application_webpath']}/images/icons/{$iconset}/16x16/solution.png); background-repeat: no-repeat;' onclick='reprioritise(this.form)'>{$strResolutionReprioritisation}</option>\n";
             break;
             case 'probdef':
-                echo "<option value='probdef' style='text-indent: 15px; height: 17px; background-image: url({$CONFIG['application_webpath']}/images/icons/{$iconset}/16x16/probdef.png); background-repeat: no-repeat;' onclick='probdef(this.form)'>Problem Definition</option>\n";
-                echo "<option value='actionplan' style='text-indent: 15px; height: 17px; background-image: url({$CONFIG['application_webpath']}/images/icons/{$iconset}/16x16/actionplan.png); background-repeat: no-repeat;' onclick='actionplan(this.form)'>Action Plan</option>\n";
-                echo "<option value='solution' style='text-indent: 15px; height: 17px; background-image: url({$CONFIG['application_webpath']}/images/icons/{$iconset}/16x16/solution.png); background-repeat: no-repeat;' onclick='reprioritise(this.form)'>Resolution/Reprioritisation</option>\n";
+                echo "<option value='probdef' style='text-indent: 15px; height: 17px; background-image: url({$CONFIG['application_webpath']}/images/icons/{$iconset}/16x16/probdef.png); background-repeat: no-repeat;' onclick='probdef(this.form)'>{$strProblemDefinition}</option>\n";
+                echo "<option value='actionplan' style='text-indent: 15px; height: 17px; background-image: url({$CONFIG['application_webpath']}/images/icons/{$iconset}/16x16/actionplan.png); background-repeat: no-repeat;' onclick='actionplan(this.form)'>{$strActionPlan}</option>\n";
+                echo "<option value='solution' style='text-indent: 15px; height: 17px; background-image: url({$CONFIG['application_webpath']}/images/icons/{$iconset}/16x16/solution.png); background-repeat: no-repeat;' onclick='reprioritise(this.form)'>{$strResolutionReprioritisation}</option>\n";
             break;
             case 'actionplan':
-                echo "<option value='actionplan' style='text-indent: 15px; height: 17px; background-image: url({$CONFIG['application_webpath']}/images/icons/{$iconset}/16x16/actionplan.png); background-repeat: no-repeat;' onclick='actionplan(this.form)'>Action Plan</option>\n";
-                echo "<option value='solution' style='text-indent: 15px; height: 17px; background-image: url({$CONFIG['application_webpath']}/images/icons/{$iconset}/16x16/solution.png); background-repeat: no-repeat;' onclick='reprioritise(this.form)'>Resolution/Reprioritisation</option>\n";
+                echo "<option value='actionplan' style='text-indent: 15px; height: 17px; background-image: url({$CONFIG['application_webpath']}/images/icons/{$iconset}/16x16/actionplan.png); background-repeat: no-repeat;' onclick='actionplan(this.form)'>{$strActionPlan}</option>\n";
+                echo "<option value='solution' style='text-indent: 15px; height: 17px; background-image: url({$CONFIG['application_webpath']}/images/icons/{$iconset}/16x16/solution.png); background-repeat: no-repeat;' onclick='reprioritise(this.form)'>{$strResolutionReprioritisation}</option>\n";
             break;
                 case 'solution':
-                echo "<option value='solution' style='text-indent: 15px; height: 17px; background-image: url({$CONFIG['application_webpath']}/images/icons/{$iconset}/16x16/solution.png); background-repeat: no-repeat;' onclick='reprioritise(this.form)'>Resolution/Reprioritisation</option>\n";
+                echo "<option value='solution' style='text-indent: 15px; height: 17px; background-image: url({$CONFIG['application_webpath']}/images/icons/{$iconset}/16x16/solution.png); background-repeat: no-repeat;' onclick='reprioritise(this.form)'>{$strResolutionReprioritisation}</option>\n";
             break;
         }
         echo "</select>\n</td></tr>";
@@ -183,7 +183,7 @@ switch ($step)
 
             if($obj->type == 'auto_chase_phone')
             {
-                echo "<tr><th>Was this a customer chase?</th><td>";
+                echo "<tr><th>{$strCustomerChaseUpdate}</th><td>";
                 echo "<input type='radio' name='chase_customer' value='no' checked='yes' />{$strNo} ";
                 echo "<input type='radio' name='chase_customer' value='yes' />{$strYes}";
                 echo "</td></tr>";
@@ -191,16 +191,18 @@ switch ($step)
 
             if($obj->type == 'auto_chase_manager')
             {
-                echo "<tr><th>Was this a manager chase?</th>";
+                echo "<tr><th>{$strManagerChaseUpdate}</th>";
                 echo "<input type='radio' name='chase_manager' value='no' checked='yes' />{$strNo} ";
                 echo "<input type='radio' name='chase_manager' value='yes' />{$strYes}";
                 echo "</td></tr>";
             }
         }
 
+        echo "<tr><th>{$strNewIncidentStatus}:</th><td>";
+        echo incidentstatus_drop_down("newincidentstatus", incident_status($id));
+        echo "</td></tr>\n";
+        echo "<tr><th>{$strTimeToNextAction}:</th>";
         ?>
-        <tr><th>New Incident Status:</th><td><?php echo incidentstatus_drop_down("newincidentstatus", incident_status($id)); ?></td></tr>
-        <tr><th>Time To Next Action:<br />Or date:</th>
         <td>
         <input type="radio" name="timetonextaction_none" value="none" checked='checked' />None<br />
         <input type="radio" name="timetonextaction_none" value="time" />In <em>x</em> days, hours, minutes<br />&nbsp;&nbsp;&nbsp;
@@ -230,10 +232,9 @@ switch ($step)
         </table>
         <p align='center'>
         <input type='hidden' name='step' value='2' />
-        <?php echo "<input type='hidden' name='menu' value='$menu' />"; ?>
-        <input name="submit1" type="submit" value="Continue" /></p>
-        </form>
-        <?php
+        <?php echo "<input type='hidden' name='menu' value='$menu' />";
+        echo "<input name='submit1' type='submit' value=\"{$strContinue}\" /></p>";
+        echo "</form>\n";
         include('incident_html_bottom.inc.php');
     break;
 
@@ -269,23 +270,21 @@ switch ($step)
         else
         {
             // encoding is multipart/form-data again as it no longer works without (why was this disabled?) - TPG 13/08/2002
-            ?>
-            <form action="<?php echo $_SERVER['PHP_SELF'] ?>?id=<?php echo $id ?>" method="post" enctype="multipart/form-data" onsubmit="return confirm_send_mail()" >
-            <table align='center' class='vertical' width='95%'>
-            <tr><th width='30%'>From:</th><td><input maxlength='100' name="fromfield" size='40' value="<?php echo emailtype_replace_specials(emailtype_from($emailtype), $id, $sit[2]) ?>" /></td></tr>
-            <tr><th>Reply To:</th><td><input maxlength='100' name="replytofield" size='40' value="<?php echo emailtype_replace_specials(emailtype_replyto($emailtype), $id, $sit[2]) ?>" /></td></tr>
-            <tr><th>CC:</th><td><input maxlength='100' name="ccfield" size='40' value="
-            <?php
+            echo "<form action='{$_SERVER['PHP_SELF']}?id={$id}' method='post' enctype='multipart/form-data' onsubmit='return confirm_send_mail();' >";
+            echo "<table align='center' class='vertical' width='95%'>";
+            echo "<tr><th width='30%'>{$strFrom}:</th><td><input maxlength='100' name='fromfield' size='40' value=\"".emailtype_replace_specials(emailtype_from($emailtype), $id, $sit[2])."\" /></td></tr>\n";
+            echo "<tr><th>{$strReplyTo}:</th><td><input maxlength='100' name='replytofield' size='40' value=\"".emailtype_replace_specials(emailtype_replyto($emailtype), $id, $sit[2])."\" /></td></tr>\n";
+            echo "<tr><th>CC:</th><td><input maxlength='100' name='ccfield' size='40' value=\"";
                 if(emailtype_cc($emailtype)!=",")
                 {
                     echo emailtype_replace_specials(emailtype_cc($emailtype), $id, $sit[2]);
                 }
             ?>" /></td></tr>
             <tr><th>BCC:</th><td><input maxlength='100' name="bccfield" size='40' value="<?php echo emailtype_replace_specials(emailtype_bcc($emailtype), $id, $sit[2]) ?>" /></td></tr>
-            <tr><th>To:</th><td><input maxlength='100' name="tofield" size='40' value="<?php echo emailtype_replace_specials(emailtype_to($emailtype), $id, $sit[2]) ?>" /></td></tr>
-            <tr><th>Subject:</th><td><input maxlength='255' name="subjectfield" size='40' value="<?php echo emailtype_replace_specials(emailtype_subject($emailtype), $id, $sit[2]) ?>" /></td></tr>
-            <tr><th>Attachment
             <?php
+            echo "<tr><th>{$strTo}:</th><td><input maxlength='100' name='tofield' size='40' value=\"".emailtype_replace_specials(emailtype_to($emailtype), $id, $sit[2])."\" /></td></tr>\n";
+            echo "<tr><th>{$strSubject}:</th><td><input maxlength='255' name='subjectfield' size='40' value=\"".emailtype_replace_specials(emailtype_subject($emailtype), $id, $sit[2])."\" /></td></tr>\n";
+            echo "<tr><th>{$strAttachment}";
             // calculate filesize
             $j = 0;
             $ext =
@@ -299,8 +298,9 @@ switch ($step)
             <input type="hidden" name="MAX_FILE_SIZE" value="<?php echo $CONFIG['upload_max_filesize'] ?>" />
             <input type="file" name="attachment" size="40" maxfilesize="<?php echo $CONFIG['upload_max_filesize'] ?>" />
             </td></tr>
-            <tr><th>Message:</th><td>
-            <textarea name="bodytext" rows="20" cols="65"><?php
+            <?php
+            echo "<tr><th>{$strMessage}:</th><td>";
+            echo "<textarea name='bodytext' rows='20' cols='65'>";
             // Attempt to restore email body from session in case there was an error submitting previously
             if (!empty($_SESSION['temp-emailbody'])) echo $_SESSION['temp-emailbody'];
             else echo emailtype_replace_specials(emailtype_body($emailtype), $id, $sit[2])
@@ -324,10 +324,9 @@ switch ($step)
             <input name="target" type="hidden" value="<?php echo $target; ?>" />
             <input type="hidden" name="step" value="3" />
             <input type="hidden" name="emailtype" value="<?php echo $emailtype; ?>" />
-            <input name="submit2" type="submit" value="Send Email" />
-            </p>
-            </form>
             <?php
+            echo "<input name='submit2' type='submit' value=\"$strSendEmail\" />";
+            echo "</p>\n</form>\n";
         }
         include('incident_html_bottom.inc.php');
     break;
