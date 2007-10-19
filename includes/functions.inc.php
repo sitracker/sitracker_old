@@ -89,6 +89,7 @@ $updatetypes['auto_chase_email'] = array('icon' => 'chased.png', 'text' => 'Chas
 $updatetypes['auto_chased_phone'] = array('icon' => 'chased.png', 'text' => 'Chased');
 $updatetypes['auto_chased_manager'] = array('icon' => 'chased.png', 'text' => 'Chased');
 $updatetypes['auto_chased_managers_manager'] = array('icon' => 'chased.png', 'text' => 'Chased');
+$updatetypes['customerclosurerequest'] = array('icon' => 'close.png', 'text' => 'Customer requested incident closure');
 $slatypes['opened'] = array('icon' => 'open.png', 'text' => 'Opened');
 $slatypes['initialresponse'] = array('icon' => 'initialresponse.png', 'text' => $strInitialResponse);
 $slatypes['probdef'] = array('icon' => 'probdef.png', 'text' => $strProblemDefinition);
@@ -207,7 +208,9 @@ $hmenu[203010] = array (10=> array ( 'perm'=> 56, 'name'=> $strAddVendor, 'url'=
 $hmenu[30] = array (10=> array ( 'perm'=> 5, 'name'=> $strAddIncident, 'url'=>"{$CONFIG['application_webpath']}add_incident.php"),
                     20=> array ( 'perm'=> 0, 'name'=> $strViewIncidents, 'url'=>"{$CONFIG['application_webpath']}incidents.php?user=current&amp;queue=1&amp;type=support"),
                     30=> array ( 'perm'=> 0, 'name'=> $strWatchIncidents, 'url'=>"{$CONFIG['application_webpath']}incidents.php?user=all&amp;queue=1&amp;type=support"),
-                    40=> array ( 'perm'=> 42, 'name'=> $strHoldingQueue, 'url'=>"{$CONFIG['application_webpath']}review_incoming_updates.php")
+                    40=> array ( 'perm'=> 42, 'name'=> $strHoldingQueue, 'url'=>"{$CONFIG['application_webpath']}review_incoming_updates.php"),
+                    50=> array ( 'perm'=> 0, 'name'=> $strJumpToIncident,
+                                 'url'=>"javascript:var id = prompt(%22Enter the call ID%22); window.location = %22{$CONFIG['application_webpath']}incident_details.php?id=%22 + id;")
 );
 
 
@@ -796,7 +799,8 @@ function emailtype_to($id)
 
 
 function emailtype_from($id)
-{
+{ 
+    echo db_read_column('fromfield', 'emailtype', $id);    
     return db_read_column('fromfield', 'emailtype', $id);
 }
 
@@ -809,7 +813,11 @@ function emailtype_replyto($id)
 
 function emailtype_cc($id)
 {
-    return db_read_column('ccfield', 'emailtype', $id);
+    echo db_read_column('ccfield', 'emailtype', $id);
+    if(db_read_column('ccfield', 'emailtype', $id) != ",")
+        return db_read_column('ccfield', 'emailtype', $id);
+    else
+        return "";
 }
 
 
@@ -905,7 +913,7 @@ function incident_externalemail($id)
 
 function incident_ccemail($id)
 {
-    return db_read_column('ccemail', 'incidents', $id);
+    //return db_read_column('ccemail', 'incidents', $id);
 }
 
 function incident_timeofnextaction($id)
