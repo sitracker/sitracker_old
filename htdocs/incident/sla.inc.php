@@ -17,8 +17,8 @@ if (realpath(__FILE__) == realpath($_SERVER['SCRIPT_FILENAME']))
 }
 
 echo "<h2><img src='{$CONFIG['application_webpath']}images/icons/{$iconset}/32x32/sla.png' width='32' height='32' alt='' /> ";
-echo "Service Level History</h2>";
-echo "<p align='center'>Current Service Level: {$servicelevel_tag}</p>";
+echo "{$strServiceHistory}</h2>";
+echo "<p align='center'>{$strServiceLevel}: {$servicelevel_tag}</p>";
 
 // Create an array containing the service level history
 $slahistory = incident_sla_history($incidentid);
@@ -26,7 +26,7 @@ $slahistory = incident_sla_history($incidentid);
 if (count($slahistory) >= 1)
 {
     echo "<table align='center'>";
-    echo "<tr><th>Event</th><th>User</th><th>Target</th><th>Actual</th><th>Date &amp; Time</th></tr>\n";
+    echo "<tr><th>{$strEvent}</th><th>{$strUser}</th><th>{$strTarget}</th><th>Actual</th><th>Date &amp; Time</th></tr>\n";
     foreach($slahistory AS $history)
     {
         if ($history['targetmet']==FALSE) $class='critical';
@@ -79,7 +79,7 @@ while($row = mysql_fetch_object($result))
 
 //calculate the last update
 $updatearray[$laststatus]['time'] += 60 * calculate_working_time($last, time());
-echo "<h3>Status Summary</h3>";
+echo "<h3>{$strStatusSummary}</h3>";
 if (extension_loaded('gd'))
 {
     $data = array();
@@ -90,7 +90,7 @@ if (extension_loaded('gd'))
         $legends .= $row['name']."|";
     }
     $data = implode('|',$data);
-    $title = urlencode('Status Summary');
+    $title = urlencode($strStatusSummary);
     echo "<div style='text-align:center;'>";
     echo "<img src='chart.php?type=pie&data=$data&legends=$legends&title=$title&unit=seconds' />";
     echo "</div>";
@@ -98,7 +98,7 @@ if (extension_loaded('gd'))
 else
 {
     echo "<table align='center'>";
-    echo "<tr><th>Status</th><th>Time</th></tr>\n";
+    echo "<tr><th>{$strStatus}</th><th>{$strTime}</th></tr>\n";
     foreach($updatearray as $row)
     {
         echo "<tr><td>".$row['name']. "</td><td>".format_seconds($row['time'])."</td></tr>";

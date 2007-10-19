@@ -115,22 +115,19 @@ elseif ($action=='findcontact')
         <script type="text/javascript">
         function confirm_support()
         {
-            return window.confirm("This incident will be logged against the customers CONTRACT. Are you sure you want to continue?");
+            return window.confirm("<?php echo $strContractAreYouSure; ?>");
         }
 
         function confirm_free()
         {
-            return window.confirm("This incident will be logged against the customers SITE and NOT against a contract, you will be prompted to choose a service level. Are you sure you want to continue?");
+            return window.confirm("<?php echo $strSiteAreYouSure; ?>");
         }
         </script>
-
-        
         <?php
-        echo "<h2>{$strAddIncident} - Select Person / {$strContract}</h2>";
+        echo "<h2>{$strAddIncident} - {$strSelect} {$strContract} / {$strContact}</h2>";
         echo "<h3><img src='{$CONFIG['application_webpath']}images/icons/{$iconset}/32x32/contract.png' width='32' height='32' alt='' />  ";
         echo "{$strContracts}</h3>";
-        echo "<p align='center'>This list shows contracts, i.e. supported people and the products they are supported for.<br />
-        Click on the appropriate '{$strAddIncident}' link to begin adding the incident.</p>";
+        echo "<p align='center'>".sprintf($strListShowsContracts, $strAddIncident).".</p>";
         function to_row($contactrow)
         {
             global $now, $updateid, $CONFIG;
@@ -141,15 +138,15 @@ elseif ($action=='findcontact')
             $incidents_remaining = $contactrow['incident_quantity'] - $contactrow['incidents_used'];
 
             $str = "<tr class='$class'>";
-            if ($contactrow['expirydate']<$now) $str .=  "<td>{$strExpired}</td>";
-            elseif ($contactrow['term']=='yes') $str .=  "<td>{$strTerminated}</td>";
+            if ($contactrow['expirydate']<$now) $str .=  "<td>{$GLOBALS['strExpired']}</td>";
+            elseif ($contactrow['term']=='yes') $str .=  "<td>{$GLOBALS['strTerminated']}</td>";
             elseif ($contactrow['incident_quantity'] >= 1 AND $contactrow['incidents_used'] >= $contactrow['incident_quantity'])
-                $str .=  "<td class='expired'>{$strZeroRemaining} ({$contactrow['incidents_used']}/{$contactrow['incident_quantity']} Used)</td>";
+                $str .=  "<td class='expired'>{$GLOBALS['strZeroRemaining']} ({$contactrow['incidents_used']}/{$contactrow['incident_quantity']} {$strUsed})</td>";
             else
             {
-                $str .=  "<td><a href=\"{$_SERVER['PHP_SELF']}?action=incidentform&amp;type=support&amp;contactid=".$contactrow['contactid']."&amp;maintid=".$contactrow['maintenanceid']."&amp;producttext=".urlencode($contactrow['productname'])."&amp;productid=".$contactrow['productid']."&amp;updateid=$updateid&amp;siteid=".$contactrow['siteid']."&amp;win={$win}\" onclick=\"return confirm_support();\">{$strAddIncident}</a> ";
-                if ($contactrow['incident_quantity']==0) $str .=  "({$strUnlimited})";
-                else $str .=  "({$incidents_remaining} Left)";
+                $str .=  "<td><a href=\"{$_SERVER['PHP_SELF']}?action=incidentform&amp;type=support&amp;contactid=".$contactrow['contactid']."&amp;maintid=".$contactrow['maintenanceid']."&amp;producttext=".urlencode($contactrow['productname'])."&amp;productid=".$contactrow['productid']."&amp;updateid=$updateid&amp;siteid=".$contactrow['siteid']."&amp;win={$win}\" onclick=\"return confirm_support();\">{$GLOBALS['strAddIncident']}</a> ";
+                if ($contactrow['incident_quantity']==0) $str .=  "({$GLOBALS['strUnlimited']})";
+                else $str .= "(".sprintf($strRemaining, $incidents_remaining).")";
             }
             $str .=  "</td>";
             $str .=  '<td>'.stripslashes($contactrow['forenames'].' '.$contactrow['surname']).'</td>';
@@ -181,7 +178,7 @@ elseif ($action=='findcontact')
 
         if(!empty($str_prefered))
         {
-            echo "<h3>Preferred</h3>";
+            echo "<h3>{$strPreferred}</h3>";
             echo "<table align='center'>";
             echo $headers;
             echo $str_prefered;
@@ -190,12 +187,11 @@ elseif ($action=='findcontact')
 
         if(!empty($str_alternative))
         {
-            if(!empty($str_prefered)) echo "<h3>Alternative</h3>";
+            if(!empty($str_prefered)) echo "<h3>{$strAlternative}</h3>";
             echo "<table align='center'>";
             echo $headers;
             echo $str_alternative;
             echo "</table>\n";
-            if(!empty($str_prefered)) echo "<p align='center'><strong>NOTE:</strong> You probably wish to log the incident under a preferred contract</p>";
         }
 
         // Select the contact from the list of contacts as well
@@ -213,8 +209,9 @@ elseif ($action=='findcontact')
 
         if (mysql_num_rows($result)>0)
         {
-            echo "<h3><img src='{$CONFIG['application_webpath']}images/icons/{$iconset}/32x32/contact.png' width='32' height='32' alt='' /> People</h3>\n";
-            echo "<p align='center'>This list shows people that matched your search, if site-support is available you can add incidents for the site.</p>";
+            echo "<h3><img src='{$CONFIG['application_webpath']}images/icons/{$iconset}/32x32/contact.png' width='32' height='32' alt='' /> ";
+            echo "{$strContacts}</h3>\n";
+            echo "<p align='center'>{$strListShowsContacts}.</p>";
             echo "<table align='center'>";
             echo "<tr>";
             echo "<th>&nbsp;</th>";
@@ -345,29 +342,23 @@ elseif ($action=='incidentform')
     if ($type == 'free')
     {
         echo "<tr><th>{$strServiceLevel}:</th><td>".serviceleveltag_drop_down('servicelevel',$CONFIG['default_service_level'], TRUE)."</td></tr>";
-        echo "<tr><th>Skill:</th><td>".software_drop_down('software', 0)."</td></tr>";
+        echo "<tr><th>{$strSkill}:</th><td>".software_drop_down('software', 0)."</td></tr>";
     }
     else
     {
-        echo "<tr><th>Contract:</th><td>{$maintid} - ".strip_tags($producttext)."</td></tr>";
-        echo "<tr><th>Skill:</th><td>".softwareproduct_drop_down('software', 1, $productid)."</td></tr>";
+        echo "<tr><th>{$strContract}:</th><td>{$maintid} - ".strip_tags($producttext)."</td></tr>";
+        echo "<tr><th>{$strSkill}:</th><td>".softwareproduct_drop_down('software', 1, $productid)."</td></tr>";
     }
 
     plugin_do('new_incident_form');
-    ?>
-    <tr><th>Version:</th><td><input maxlength='50' name='productversion' size='40' type='text' /></td></tr>
-    <tr><th>Service Packs Applied:</th><td><input maxlength='100' name="productservicepacks" size=40 type="text" /></td></tr>
-    <tr><td colspan='2'>&nbsp;</td></tr>
-    <?php
+    echo "<tr><th>{$strVersion}:</th><td><input maxlength='50' name='productversion' size='40' type='text' /></td></tr>\n";
+    echo "<tr><th>{$strServicePacksApplied}:</th><td><input maxlength='100' name='productservicepacks' size='40' type='text' /></td></tr>\n";
+    echo "<tr><td colspan='2'>&nbsp;</td></tr>";
     if (empty($updateid))
     {
-        ?>
-        <tr><th>Incident Title: <sup class='red'>*</sup></th><td><input maxlength='150' name="incidenttitle" size='40' type="text" /></td></tr>
-        <tr><th>Problem Description:<br />
-        As much information as possible about the problem, enough for an engineer to begin researching the issue without
-        having to contact the customer first.</td>
-        <td><textarea name='probdesc' rows='10' cols='60'></textarea></td></tr>
-        <?php
+        echo "<tr><th>{$strIncidentTitle}: <sup class='red'>*</sup></th><td><input maxlength='150' name='incidenttitle' size='40' type='text' /></td></tr>\n";
+        echo "<tr><th>{$strProblemDescription}:<br />{$strProblemDescriptionEngineerText}</th>";
+        echo "<td><textarea name='probdesc' rows='10' cols='60'></textarea></td></tr>\n";
         // Insert pre-defined per-product questions from the database, these should be required fields
         // These 'productinfo' questions don't have a GUI as of 27Oct05
         $sql = "SELECT * FROM productinfo WHERE productid='$productid'";
@@ -382,19 +373,12 @@ elseif ($action=='incidentform')
             echo "</th>";
             echo "<td><input maxlength='100' name='{$productinforow['id']}' size='40' type='text' /></td></tr>\n";
         }
-        ?>
-        <tr><th>Workarounds Attempted:
-            What has the customer done to try and solve the issue?  What config changes were made?  What patches/service packs were installed?</th>
-        <td><textarea name='workarounds' rows='10' cols='60'></textarea></td></tr>
-
-        <tr><th>Problem Reproduction:
-            Does the problem exist with more than one machine?  What steps will an engineer need to take to reproduce this issue?</th>
-        <td><textarea name='probreproduction' rows='10' cols='60'></textarea></td></tr>
-
-        <tr><th>Customer Impact:<br />
-            How many users are affected by this issue?  Is this an issue of downtime or a minor niggle?  Does the issue prevent people from working?</th>
-        <td><textarea name='custimpact' rows='10' cols='60'></textarea></td></tr>
-        <?php
+        echo "<tr><th>{$strWorkAroundsAttempted}:<br />{$strWorkAroundsAttemptedEngineerText}</th>";
+        echo "<td><textarea name='workarounds' rows='10' cols='60'></textarea></td></tr>\n";
+        echo "<tr><th>{$strProblemReproduction}:<br />{$strProblemReproductionEngineerText}</th>";
+        echo "<td><textarea name='probreproduction' rows='10' cols='60'></textarea></td></tr>\n";
+        echo "<tr><th>{$strCustomerImpact}:<br />{$strCustomerImpactEngineerText}</th>";
+        echo "<td><textarea name='custimpact' rows='10' cols='60'></textarea></td></tr>\n";
     }
     else
     {
@@ -410,15 +394,15 @@ elseif ($action=='incidentform')
         $updaterow=mysql_fetch_array($result);
         $mailed_subject=$updaterow['subject'];
 
-        echo "<tr><th>Incident Title: <sup class='red'>*</sup></th><td><input name='incidenttitle' size='40' type='text' value='".htmlspecialchars($mailed_subject,ENT_QUOTES)."'></td></tr>\n";
+        echo "<tr><th>{$strIncidentTitle}: <sup class='red'>*</sup></th><td><input name='incidenttitle' size='40' type='text' value='".htmlspecialchars($mailed_subject,ENT_QUOTES)."'></td></tr>\n";
         echo "<tr><td colspan='2'>&nbsp;</td></tr>\n";
 
-        echo "<tr><th>Problem Description:<br />This information was received in the email.  It is not editable.</th>";
+        echo "<tr><th>{$strProblemDescription}:<br />{$strReceivedByEmail}</th>";
         echo "<td>".parse_updatebody($mailed_body_text)."</td></tr>\n";
         echo "<tr><td class='shade1' colspan=2>&nbsp;</td></tr>\n";
     }
+    echo "<tr><th>{$strNextAction}:<br />If there is a time limit on the next action, please specify it here.</td>";
     ?>
-    <tr><th>Next Action:<br />If there is a time limit on the next action, please specify it here.</td>
     <td>
     <input type="text" name="nextaction" maxlength="50" size="30" value="Initial Response" /><br /><br />
     <input type="radio" name="timetonextaction_none" value="none" checked='checked' />None<br />
@@ -445,8 +429,8 @@ elseif ($action=='incidentform')
     <?php
     if (empty($updateid))
     {
-        echo "<tr><th>Visible To Customer:</th>\n";
-        echo "<td><input name='cust_vis' type='radio' value='no' /> No <input name='cust_vis' type='radio' value='yes' checked='checked' /> Yes</td></tr>\n";
+        echo "<tr><th>{$strVisibleToCustomer}:</th>\n";
+        echo "<td><input name='cust_vis' type='radio' value='no' /> {$strNo} <input name='cust_vis' type='radio' value='yes' checked='checked' /> {$strYes}</td></tr>\n";
     }
     ?>
     <tr><th>Send Opening Email: <sup class='red'>*</sup></th>
@@ -537,7 +521,7 @@ elseif ($action=='assign')
             list($highestpriority) = mysql_fetch_row($result);
             if ($priority > $highestpriority)
             {
-                $prioritychangedmessage = " (Reduced from ".priority_name($priority)." according to SLA)";
+                $prioritychangedmessage = " (".sprintf($strReducedPrioritySLA, priority_name($priority)).")";
                 $priority = $highestpriority;
             }
 
@@ -645,9 +629,8 @@ elseif ($action=='assign')
             elseif ($send_email == "email") send_template_email('INCIDENT_LOGGED_EMAIL', $incidentid);
 
 
-            echo "<h3>Incident: $incidentid</h3>";
-            echo "<p align='center'>An incident has now been added as incident number $incidentid and logged to your account, ";
-            echo "you should now assign an engineer who is to deal with the incident</p>\n";
+            echo "<h3>{$strIncident}: $incidentid</h3>";
+            echo "<p align='center'>{$strIncidentLoggedEngineer}</p>\n";
 
             // List Engineers
             // We need a user type 'engineer' so we don't just list everybody
@@ -655,21 +638,20 @@ elseif ($action=='assign')
             $sql = "SELECT * FROM users WHERE status!=0 ORDER BY realname";
             $result = mysql_query($sql);
             if (mysql_error()) trigger_error("MySQL Query Error ".mysql_error(), E_USER_ERROR);
-            ?><h3>Users</h3>
-            <table align="center">
+            echo "<h3>{$strUsers}</h3>
+            <table align='center'>
             <tr>
                 <th>&nbsp;</th>
-                <th>Name</th>
-                <th>Telephone</th>
-                <th>Status</th>
-                <th>Message</th>
-                <th colspan='5'>Incidents in Queue</th>
-                <th>Accepting?</th>
-            </tr>
-            <tr>
+                <th>{$strName}</th>
+                <th>{$strTelephone}</th>
+                <th>{$strStatus}</th>
+                <th>{$strMessage}</th>
+                <th colspan='5'>{$strIncidentsinQueue}</th>
+                <th>{$strAccepting}</th>
+            </tr>";
+            echo "<tr>
             <th colspan='5'></th>
-            <th align='center'>Action Needed / Other</th>
-            <?php
+            <th align='center'>{$strActionNeeded} / {$strOther}</th>";
             echo "<th align='center'>".priority_icon(4)."</th>";
             echo "<th align='center'>".priority_icon(3)."</th>";
             echo "<th align='center'>".priority_icon(2)."</th>";
@@ -687,13 +669,13 @@ elseif ($action=='assign')
                 {
                     echo "<td align='right'><a href=\"{$_SERVER['PHP_SELF']}?action=reassign&amp;userid=".$userrow['id']."&amp;incidentid=$incidentid&amp;nextaction=".urlencode($nextaction)."&amp;win={$win}\" ";
                     // if ($priority >= 3) echo " onclick=\"alertform.submit();\"";
-                    echo ">Assign To</a></td>";
+                    echo ">{$strAssignTo}</a></td>";
                 }
                 elseif (user_permission($sit[2],40) OR $userrow['id']==$sit[2])
                 {
                     echo "<td align='right'><a href=\"{$_SERVER['PHP_SELF']}?action=reassign&amp;userid=".$userrow['id']."&amp;incidentid=$incidentid&amp;nextaction=".urlencode($nextaction)."&amp;win={$win}\" ";
                     // if ($priority >= 3) echo " onclick=\"alertform.submit();\"";
-                    echo ">Force To</a></td>";
+                    echo ">{$strForceTo}</a></td>";
                 }
                 else
                 {
@@ -727,14 +709,14 @@ elseif ($action=='assign')
     		echo "<td align='center'>".$incpriority['1']."</td>";
 
                 echo "<td align='center'>";
-                echo $userrow['accepting']=='Yes' ? 'Yes' : "<span class='error'>No</span>";
+                echo $userrow['accepting']=='Yes' ? $strYes : "<span class='error'>{$strNo}</span>";
                 echo "</td>";
                 echo "</tr>\n";
                 if ($shade=='shade2') $shade='shade1';
                 else $shade='shade2';
             }
             echo "</table>";
-            echo "<p align='center'>Users shows in <strong>bold</strong> typeface are known to have relevant software skills.</p>";
+            echo "<p align='center'>{$strUsersBoldSkills}.</p>";
         }
         else
         {
@@ -751,8 +733,9 @@ elseif ($action=='reassign')
     $nextaction = cleanvar($_REQUST['nextaction']);
 
     include('htmlheader.inc.php');
-    echo "<h2>Incident Added - Summary</h2>";
-    echo "<p align='center'>Incident <a href=\"javascript:incident_details_window('$incidentid','incident{$incidentid}');\">$incidentid</a> has been moved to ";
+    echo "<h2>{$strIncidentAdded} - {$strSummary}</h2>";
+    echo "<p align='center'>{$strIncident} <a href=\"javascript:incident_details_window('$incidentid','incident{$incidentid}');\">";
+    echo "{$incidentid}</a> has been moved to ";
     echo user_realname($uid)."'s <strong style='color: red'>{$strActionNeeded}</strong> queue</p>";
     $userphone = user_phone($userid);
     if ($userphone!='') echo "<p align='center'>{$strTelephone}: {$userphone}</p>";
