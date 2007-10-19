@@ -39,38 +39,32 @@ if (empty($submit))
     // SUPPORT INCIDENT
     if ($incident["type"] == "Support")
     {
-        ?>
-        <form action="<?php echo $_SERVER['PHP_SELF'] ?>" method="post" name="editform">
-        <table class='vertical'>
-        <tr><th>Title:</th><td><input maxlength='150' name="title" size='40' type="text" value="<?php echo stripslashes($incident['title']) ?>" /></td></tr>
-        <tr><th>Tags:</th><td><textarea rows='2' cols='40' name='tags'><?php  echo list_tags($id, 2, false); ?></textarea></td></tr>
-        <tr><th>Important:</th>
-        <td>Changing the contact or software will not reassign this incident to another contract.
-        <?php
-        if ($incident['maintenanceid'] >= 1) echo "This incident is logged under contract {$incident['maintenanceid']}. ";
-        else echo "This incident is not logged under contract. ";
-        echo "To change the contract log a new incident and close this one.";
-        ?>
-        </td></tr>
-        <tr><th>Contact:</th><td><?php echo contact_drop_down("contact", $incident["contact"], TRUE); ?></td></tr>
-        <?php
+        echo "<form action='{$_SERVER['PHP_SELF']}' method='post' name='editform'>";
+        echo "<table class='vertical'>";
+        echo "<tr><th>{$strTitle}:</th><td><input maxlength='150' name='title' size='40' type='text' value=\"".stripslashes($incident['title'])."\" /></td></tr>\n";
+        echo "<tr><th>{$strTags}:</th><td><textarea rows='2' cols='40' name='tags'>".list_tags($id, 2, false)."</textarea></td></tr>\n";
+        echo "<tr><th>{$strImportant}:</th>";
+        echo "<td>{$strChangingContact}. ";
+        if ($incident['maintenanceid'] >= 1) echo sprintf($strLoggedUnder, $incident['maintenanceid']).". ";
+        else echo "{$strIncidentNoContract}. ";
+        echo "{$strToChangeContract}.";
+        echo "</td></tr>\n";
+        echo "<tr><th>{$strContact}:</th><td>";
+        echo contact_drop_down("contact", $incident["contact"], TRUE)."</td></tr>\n";
         flush();
         $maintid=maintenance_siteid($incident['maintenanceid']);
-        echo "<tr><th>Site:</th><td>".site_name($maintid)."</td></tr>";
-        ?>
-        <tr><th>Skill:</th>
-        <td><?php echo software_drop_down("software", $incident["softwareid"]); flush(); ?></td></tr>
-        <tr><th>Version:</th>
-        <td><input maxlength='50' name="productversion" size='30' type="text" value="<?php echo stripslashes($incident["productversion"]); ?>" /></td></tr>
-        <tr><th>Service Packs Applied:</th>
-        <td><input maxlength='100' name="productservicepacks" size='30' type="text" value="<?php echo stripslashes($incident["productservicepacks"]); ?>" /></td></tr>
-        <tr><th>CC Email:</th>
-        <td><input maxlength='255' name="ccemail" size='30' type="text" value="<?php echo stripslashes($incident["ccemail"]); ?>" /></td></tr>
-        <?php
-        echo "<tr><th>Escalation</th>";
+        echo "<tr><th>{$strSite}:</th><td>".site_name($maintid)."</td></tr>";
+        echo "<tr><th>{$strSkill}:</th><td>".software_drop_down("software", $incident["softwareid"])."</td></tr>\n";
+        echo "<tr><th>{$strVersion}:</th>";
+        echo "<td><input maxlength='50' name='productversion' size='30' type='text' value=\"".stripslashes($incident["productversion"])."\" /></td></tr>\n";
+        echo "<tr><th>{$strServicePacksApplied}:</th>";
+        echo "<td><input maxlength='100' name='productservicepacks' size='30' type='text' value=\"".stripslashes($incident["productservicepacks"])."\" /></td></tr>\n";
+        echo "<tr><th>CC {$strEmail}:</th>";
+        echo "<td><input maxlength='255' name='ccemail' size='30' type='text' value=\"".stripslashes($incident["ccemail"])."\" /></td></tr>\n";
+        echo "<tr><th>{$strEscalation}</th>";
         echo "<td>".escalation_path_drop_down('escalationpath', $incident['escalationpath'])."</td></tr>";
+        echo "<tr><th>{$strExternalID}:</th>";
         ?>
-        <tr><th>External ID:</th>
         <td><input maxlength='50' name="externalid" size='30' type="text" value="<?php echo stripslashes($incident["externalid"]); ?>" /></td></tr>
         <tr><th>External Engineers Name:</th>
         <td><input maxlength='80' name="externalengineer" size='30' type="text" value="<?php echo stripslashes($incident["externalengineer"]); ?>" /></td></tr>

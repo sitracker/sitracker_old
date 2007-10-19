@@ -38,15 +38,13 @@ if (empty($action) OR $action == "showform" OR empty($contact))
 {
     // Show select contact form
     echo "<h2><img src='{$CONFIG['application_webpath']}images/icons/{$iconset}/32x32/contact.png' width='32' height='32' alt='' /> ";
-    echo "Select Contact To Edit</h2>";
-    ?>
-    <form action="<?php echo $_SERVER['PHP_SELF'] ?>?action=edit" method="post">
-    <table align='center'>
-    <tr><th>Contact:</th><td><?php echo contact_site_drop_down("contact", 0); ?></td></tr>
-    </table>
-    <p align='center'><input name="submit" type="submit" value="Continue" /></p>
-    </form>
-    <?php
+    echo "{$strEditContact}</h2>";
+    echo "<form action='{$_SERVER['PHP_SELF']}?action=edit' method='post'>";
+    echo "<table align='center'>";
+    echo "<tr><th>{$strContact}:</th><td>".contact_site_drop_down("contact", 0)."</td></tr>";
+    echo "</table>";
+    echo "<p align='center'><input name='submit' type='submit' value=\"$strContinue\" /></p>";
+    echo "</form>\n";
 }
 elseif ($action == "edit" && isset($contact))
 {
@@ -57,12 +55,12 @@ elseif ($action == "edit" && isset($contact))
     while ($contactrow=mysql_fetch_array($contactresult))
     {                                                   // User does not have access
         echo "<h2><img src='{$CONFIG['application_webpath']}images/icons/{$iconset}/32x32/contact.png' width='32' height='32' alt='' /> ";
-        echo "Edit Contact {$contact}</h2>";
+        echo "{$strEditContact} {$contact}</h2>";
+        echo "<form name='contactform' action='{$_SERVER['PHP_SELF']}?action=update' method='post' onsubmit='return confirm_submit();'>";
+        echo "<p align='center'>".sprintf($strMandatoryMarked, "<sup class='red'>*</sup>")."</p>";
+        echo "<table align='center' class='vertical'>";
+        echo "<tr><th>{$strName}: <sup class='red'>*</sup><br />{$strTitle}, {$strForenames}, {$strSurname}</th>";
         ?>
-        <form name='contactform' action="<?php echo $_SERVER['PHP_SELF'] ?>?action=update" method="post" onsubmit="return confirm_submit()">
-        <p align='center'>Mandatory fields are marked <sup class='red'>*</sup></p>
-        <table align='center' class='vertical'>
-        <tr><th>Contact Name: <sup class='red'>*</sup><br />Title, Forenames, Surname</th>
         <td><input maxlength="50" name="salutation" title="Salutation (Mr, Mrs, Miss, Dr. etc.)" size="7" value="<?php echo stripslashes($contactrow['salutation']); ?>" />
         <input maxlength="100" name="forenames" size="15" title="Firstnames (or initials)" value="<?php echo stripslashes($contactrow['forenames']); ?>" />
         <input maxlength="100" name="surname" size="20" title="Surname/Last Name" value="<?php echo stripslashes($contactrow['surname']); ?>" /></td></tr>
@@ -92,17 +90,17 @@ elseif ($action == "edit" && isset($contact))
           $extraattributes = "disabled='disabled' ";
         }
         echo "/> ";
-        echo "Specifiy an address for this contact that is different to the site</td></tr>\n";
-        echo "<tr><th>Address1:</th><td><input maxlength='255' name='address1' size='40' value=\"".stripslashes($contactrow['address1'])."\" {$extraattributes} /></td></tr>\n";
-        echo "<tr><th>Address2:</th><td><input maxlength='255' name='address2' size='40' value=\"".stripslashes($contactrow['address2'])."\" {$extraattributes} /></td></tr>\n";
-        echo "<tr><th>City:</th><td><input maxlength=255' name='city' size='40' value=\"".stripslashes($contactrow['city'])."\" {$extraattributes} /></td></tr>\n";
-        echo "<tr><th>County:</th><td><input maxlength='255' name='county' size='40' value=\"".stripslashes($contactrow['county'])."\" {$extraattributes} /></td></tr>\n";
-        echo "<tr><th>Postcode:</th><td><input maxlength='255' name='postcode' size='40' value=\"".stripslashes($contactrow['postcode'])."\" {$extraattributes} /></td></tr>\n";
-        echo "<tr><th>Country:</th><td>";
+        echo "{$strSpecifiyAddress}</td></tr>\n";
+        echo "<tr><th>{$strAddress1}:</th><td><input maxlength='255' name='address1' size='40' value=\"".stripslashes($contactrow['address1'])."\" {$extraattributes} /></td></tr>\n";
+        echo "<tr><th>{$strAddress2}:</th><td><input maxlength='255' name='address2' size='40' value=\"".stripslashes($contactrow['address2'])."\" {$extraattributes} /></td></tr>\n";
+        echo "<tr><th>{$strCity}:</th><td><input maxlength=255' name='city' size='40' value=\"".stripslashes($contactrow['city'])."\" {$extraattributes} /></td></tr>\n";
+        echo "<tr><th>{$strCounty}:</th><td><input maxlength='255' name='county' size='40' value=\"".stripslashes($contactrow['county'])."\" {$extraattributes} /></td></tr>\n";
+        echo "<tr><th>{$strPostcode}:</th><td><input maxlength='255' name='postcode' size='40' value=\"".stripslashes($contactrow['postcode'])."\" {$extraattributes} /></td></tr>\n";
+        echo "<tr><th>{$strCountry}:</th><td>";
         echo country_drop_down('country', $contactrow['country'], $extraattributes);
         echo "</td></tr>\n";
         echo "<tr><th>Notify contact:</th><td>".contact_site_drop_down('notify_contactid', $contactrow['notify_contactid'], $contactrow['siteid'], $contact)."</td></tr>\n";
-        echo "<tr><th>Notes:</th><td><textarea rows='5' cols='60' name='notes'>".stripslashes($contactrow['notes'])."</textarea></td></tr>\n";
+        echo "<tr><th>{$strNotes}:</th><td><textarea rows='5' cols='60' name='notes'>".stripslashes($contactrow['notes'])."</textarea></td></tr>\n";
 
         plugin_do('edit_contact_form');
         echo "</table>";
