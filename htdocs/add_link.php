@@ -71,7 +71,7 @@ switch ($action)
                 }
                 echo "</select>";
                 echo "</p>";
-                echo "<p><input name='submit' type='submit' value='Add Link' /></p>";
+                echo "<p><input name='submit' type='submit' value='{$strAdd}' /></p>";
                 echo "<input type='hidden' name='action' value='addlink' />";
                 echo "<input type='hidden' name='origtab' value='$origtab' />";
                 echo "<input type='hidden' name='origref' value='$origref' />";

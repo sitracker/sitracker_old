@@ -64,18 +64,15 @@ if (empty($submit))
         echo "<tr><th>{$strEscalation}</th>";
         echo "<td>".escalation_path_drop_down('escalationpath', $incident['escalationpath'])."</td></tr>";
         echo "<tr><th>{$strExternalID}:</th>";
+        echo "<td><input maxlength='50' name='externalid' size='30' type='text' value=\"".stripslashes($incident["externalid"])."\" /></td></tr>\n";
+        echo "<tr><th>{$strExternalEngineersName}:</th>";
+        echo "<td><input maxlength='80' name='externalengineer' size='30' type='text' value=\"".stripslashes($incident["externalengineer"])."\" /></td></tr>\n";
+        echo "<tr><th>{$strExternalEmail}:</th>";
+        echo "<td><input maxlength='255' name='externalemail' size='30' type='text' value=\"".stripslashes($incident["externalemail"])."\" /></td></tr>\n";
+        plugin_do('edit_incident_form');
+        echo "</table>\n";
+        echo "<p align='center'>";
         ?>
-        <td><input maxlength='50' name="externalid" size='30' type="text" value="<?php echo stripslashes($incident["externalid"]); ?>" /></td></tr>
-        <tr><th>External Engineers Name:</th>
-        <td><input maxlength='80' name="externalengineer" size='30' type="text" value="<?php echo stripslashes($incident["externalengineer"]); ?>" /></td></tr>
-        <tr><th>External Email:</th>
-        <td><input maxlength='255' name="externalemail" size='30' type="text" value="<?php echo stripslashes($incident["externalemail"]); ?>" /></td></tr>
-        <?php
-            plugin_do('edit_incident_form');
-        ?>
-	</table>
-
-        <p align='center'>
         <input name="type" type="hidden" value="Support" />
         <input name="id" type="hidden" value="<?php echo $id; ?>" />
         <input name="oldtitle" type="hidden" value="<?php echo stripslashes($incident["title"]); ?>" />

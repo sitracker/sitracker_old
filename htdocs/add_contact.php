@@ -34,39 +34,45 @@ if (empty($submit))
 {
     echo "<h2><img src='{$CONFIG['application_webpath']}images/icons/{$iconset}/32x32/contact.png' width='32' height='32' alt='' /> ";
     echo "{$strNewContact}</h2>";
-    ?>
-    <h5>Mandatory fields are marked <sup class='red'>*</sup></h5>
-    <form name='contactform' action="<?php echo $_SERVER['PHP_SELF']; ?>" method="post" onsubmit="return confirm_submit()">
-    <table align='center'>
-    <tr><th>Contact Name: <sup class='red'>*</sup><br />Title, Forenames, Surname</th>
-    <td><input maxlength="50" name="salutation" title="Salutation (Mr, Mrs, Miss, Dr. etc.)" size="7" />
-    <input maxlength="100" name="forenames" size="15" title="Firstnames (or initials)" />
-    <input maxlength="100" name="surname" size="20" title="Surname/Last Name" /></td></tr>
-    <tr><th>Job Title:</th><td><input maxlength="255" name="jobtitle" size="35" title='e.g. Purchasing Manager' /></td></tr>
-    <tr><th>Site: <sup class='red'>*</sup></th><td><?php echo site_drop_down('siteid',$siteid); ?></td></tr>
-    <tr><th>Department:</th><td><input maxlength="255" name="department" size="35" /></td></tr>
-    <tr><th>Email: <sup class='red'>*</sup></th><td><input maxlength="100" name="email" size="35" /></td></tr>
-    <tr><th>Phone:</th><td><input maxlength="50" name="phone" size="35" /></td></tr>
-    <tr><th>Mobile:</th><td><input maxlength="100" name="mobile" size="35" value="" /></td></tr>
-    <tr><th>Fax:</th><td><input maxlength="50" name="fax" size="35" /></td></tr>
-    <tr><th>Data Protection Email:</th><td><?php html_checkbox('dataprotection_email', 'No'); ?> Don't send email</td></tr>
-    <tr><th>Data Protection Phone:</th><td><?php html_checkbox('dataprotection_phone', 'No'); ?> Don't call</td></tr>
-    <tr><th>Data Protection Address:</th><td><?php html_checkbox('dataprotection_address', 'No'); ?> Don't write</td></tr>
-    <tr><th></th><td><input type='checkbox' name='usesiteaddress' value='yes' onclick='togglecontactaddress();' /> Specifiy an address for this contact that is different to the site</td></tr>
-    <tr><th>Address 1:</th><td><input maxlength="255" name="address1" size="35" disabled='disabled' /></td></tr>
-    <tr><th>Address 2:</th><td><input maxlength="255" name="address2" size="35" disabled='disabled' /></td></tr>
-    <tr><th>City:</th><td><input maxlength="255" name="city" size="35" disabled='disabled' /></td></tr>
-    <tr><th>County:</th><td><input maxlength="255" name="county" size="35" disabled='disabled' /></td></tr>
-    <tr><th>Country:</th><td><?php echo country_drop_down('country', $CONFIG['home_country'], "disabled='disabled'") ?></td></tr>
-    <tr><th>Postcode:</th><td><input maxlength="255" name="postcode" size="35" disabled='disabled' /></td></tr>
+    echo "<h5>{$strMandatoryMarked} <sup class='red'>*</sup></h5>";
+    echo "<form name='contactform' action='{$_SERVER['PHP_SELF']}' method='post' onsubmit='return confirm_submit();'>";
+    echo "<table align='center'>";
+    echo "<tr><th>{$strName}: <sup class='red'>*</sup><br />{$strTitle}, {$strForenames}, {$strSurname}</th>";
+    echo "<td><input maxlength='50' name='salutation' title='Salutation (Mr, Mrs, Miss, Dr. etc.)' size='7' />";
+    echo "<input maxlength='100' name='forenames' size='15' title='Firstnames (or initials)' />";
+    echo "<input maxlength='100' name='surname' size='20' title=\"{$strSurname}\" /></td></tr>\n";
+    echo "<tr><th>{$strJobTitle}:</th><td><input maxlength='255' name='jobtitle' size='35' title='e.g. Purchasing Manager' /></td></tr>\n";
+    echo "<tr><th>{$strSite}: <sup class='red'>*</sup></th><td>".site_drop_down('siteid',$siteid)."</td></tr>\n";
+    echo "<tr><th>{$strDepartment}:</th><td><input maxlength='255' name='department' size='35' /></td></tr>\n";
+    echo "<tr><th>{$strEmail}: <sup class='red'>*</sup></th><td><input maxlength='100' name='email' size='35' /> ";
+    echo "<label>";
+    html_checkbox('dataprotection_email', 'No');
+    echo "{$strEmail} {$strDataProtection}</label>";
+    echo "</td></tr>\n";
+    echo "<tr><th>{$strTelephone}:</th><td><input maxlength='50' name='phone' size='35' /> ";
+    echo "<label>";
+    html_checkbox('dataprotection_phone', 'No');
+    echo "{$strTelephone} {$strDataProtection}</label>";
+    echo "</td></tr>\n";
+    echo "</td></tr>\n";
+    echo "<tr><th>{$strMobile}:</th><td><input maxlength='100' name='mobile' size='35' value='' /></td></tr>\n";
+    echo "<tr><th>{$strFax}:</th><td><input maxlength='50' name='fax' size='35' /></td></tr>\n";
+    echo "<tr><th>{$strAddress}:</th><td><label>";
+    html_checkbox('dataprotection_address', 'No');
+    echo " {$strAddress} {$strDataProtection}</label></td></tr>\n";
+    echo "<tr><th></th><td><label><input type='checkbox' name='usesiteaddress' value='yes' onclick='togglecontactaddress();' /> {$strSpecifiyAddress}</label></td></tr>\n";
+    echo "<tr><th>{$strAddress1}:</th><td><input maxlength='255' name='address1' size='35' disabled='disabled' /></td></tr>\n";
+    echo "<tr><th>{$strAddress2}:</th><td><input maxlength='255' name='address2' size='35' disabled='disabled' /></td></tr>\n";
+    echo "<tr><th>{$strCity}:</th><td><input maxlength='255' name='city' size='35' disabled='disabled' /></td></tr>\n";
+    echo "<tr><th>{$strCounty}:</th><td><input maxlength='255' name='county' size='35' disabled='disabled' /></td></tr>\n";
+    echo "<tr><th>{$strCountry}:</th><td>".country_drop_down('country', $CONFIG['home_country'], "disabled='disabled'")."</td></tr>\n";
+    echo "<tr><th>{$strPostcode}:</th><td><input maxlength='255' name='postcode' size='35' disabled='disabled' /></td></tr>\n";
+    echo "<tr><th>{$strNotes}:</th><td><textarea cols='60' rows='5' name='notes'></textarea></td></tr>\n";
+    echo "</table>\n\n";
+    echo "<p><input name='submit' type='submit' value=\"{$strAddContact}\" /></p>";
+    echo "</form>\n";
 
-    <tr><th>notes:</th><td><textarea cols="60" rows="5" name="notes"></textarea></td></tr>
-    </table>
-    <p><input name="submit" type="submit" value="Add Contact" /></p>
-    </form>
-
-    <h5 class='warning'>Please ensure that the contact does not already exist before adding a new contact.</h5>
-    <?php
+    echo "<h5 class='warning'>{$strAvoidDupes}.</h5>";
     include('htmlfooter.inc.php');
 }
 else
