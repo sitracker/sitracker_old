@@ -115,6 +115,7 @@ $strEntitlement = 'Entitlement';
 $strEngineer = 'Engineer';
 $strEngineers = 'Engineers';
 $strEnglish = 'English';
+$strEnterTheCallID = 'Enter the call ID';
 $strEscalation = 'Escalation';
 $strEscalationPaths = 'Escalation Paths';
 $strEvent = 'Event';
@@ -169,10 +170,11 @@ $strInfo = 'Info';
 $strInstall = 'Install';
 $strInitialResponse = 'Inital Response';
 
-$strKnowledgeBase = 'Knowledge Base';
-
 $strJobTitle = 'Job Title';
 $strJumpTo = 'Jump to';
+$strJumpToIncident = 'Jump to Incident';
+
+$strKnowledgeBase = 'Knowledge Base';
 
 $strLastUpdated = 'Last Updated';
 $strLicense = 'Licence';
