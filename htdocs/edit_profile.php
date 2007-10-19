@@ -40,11 +40,12 @@ if (empty($submit))
 
     echo "<h2><img src='{$CONFIG['application_webpath']}images/icons/{$iconset}/32x32/user.png' width='32' height='32' alt='' /> ";
     echo sprintf($strEditProfileFor, $user->realname)."</h2>";
-    echo "<form action='{$_SERVER['PHP_SELF']' method='post'>";
+    echo "<form action='{$_SERVER['PHP_SELF']}' method='post'>";
     echo "<table align='center' class='vertical'>";
     echo "<col width='250'></col><col width='*'></col>";
-    echo "<tr><th colspan='2'>".strtoupper($strAbout).' '
-    if ($userid==$sit[2]) echo strtoupper($strYou); else echo strtoupper($user->realname);
+    echo "<tr><th colspan='2'>".strtoupper($strAbout).' ';
+    if ($userid==$sit[2]) echo strtoupper($strYou);
+    else echo strtoupper($user->realname);
     echo "</td></tr>\n";
     echo "<tr><th>{$strUsername}:</th><td>{$user->username}</td></tr>";
     echo "<tr><th>{$strRole}:</th>";
@@ -100,8 +101,12 @@ if (empty($submit))
     if ($edituserpermission AND $userid != $sit[2]) $userdisable=TRUE;
     else $userdisable=FALSE;
 
-    echo "<tr><th>{$strStatus}:</th><td>".userstatus_drop_down("status", $user->status, $userdisable)."</td></tr>\n";
-    echo "<tr><th>{$strAccepting} {$strIncidents}:</th><td>".accepting_drop_down("accepting", $userid)."</td></tr>\n";
+    echo "<tr><th>{$strStatus}:</th><td>";
+    userstatus_drop_down("status", $user->status, $userdisable);
+    echo "</td></tr>\n";
+    echo "<tr><th>{$strAccepting} {$strIncidents}:</th><td>";
+    accepting_drop_down("accepting", $userid);
+    echo "</td></tr>\n";
     echo "<tr><th>{$strMessage}:<br />{$strMessageTip}</th>";
     echo "<td><textarea name='message' rows='4' cols='40'>".strip_tags($user->message)."</textarea></td></tr>\n";
     ?>
