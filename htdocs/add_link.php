@@ -18,7 +18,7 @@ require('functions.inc.php');
 // This page requires authentication
 require('auth.inc.php');
 
-$title='Add Link';
+$title = $strAddLink;
 
 // External variables
 $action = $_REQUEST['action'];

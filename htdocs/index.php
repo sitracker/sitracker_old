@@ -30,9 +30,9 @@ if ($_SESSION['auth'] != TRUE)
 
     // Invalid user, show log in form
     include('htmlheader.inc.php');
-    if ($id==1) echo "<p class='error'>Enter your credentials to login to {$CONFIG['application_shortname']}</p><br />";
-    if ($id==2) echo "<p class='error'>Your session has expired or you have not yet logged in</p><br />";
-    if ($id==3) throw_user_error("Invalid username/password combination");
+    if ($id==1) echo "<p class='error'>".sprintf($strEnterCredentials, $CONFIG['application_shortname'])."</p><br />";
+    if ($id==2) echo "<p class='error'>{$strSessionExpired}</p><br />";
+    if ($id==3) throw_user_error("{$strInvalidCredentials}");
 
     echo "<div class='windowbox' style='width: 220px;'>";
     echo "<div class='windowtitle'>{$CONFIG['application_shortname']} - {$strLogin}</div>";
