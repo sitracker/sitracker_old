@@ -406,14 +406,12 @@ if (empty($action))
         //No previous updates - just display the page
         display_update_page();
     }
-    include('incident_html_bottom.inc.php');
 }
 else if($action == "editdraft")
 {
     include('incident_html_top.inc.php');
     $draftid = cleanvar($_REQUEST['draftid']);
     display_update_page($draftid);
-    include('incident_html_bottom.inc.php');
 }
 else if($action == "deletedraft")
 {
@@ -430,7 +428,6 @@ else if($action == "newupdate")
 {
     include('incident_html_top.inc.php');
     display_update_page();
-    include('incident_html_bottom.inc.php');
 }
 else
 {
