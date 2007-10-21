@@ -81,6 +81,11 @@ function appointment(id)
     }
 }
 
+
+function byId(id){
+    return document.getElementById(id);
+}
+
 function get_and_display(page, component){
     var xmlhttp=false;
     /*@cc_on @*/

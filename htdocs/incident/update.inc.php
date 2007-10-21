@@ -1,0 +1,645 @@
+<?php
+// update.inc.php - Displays a page for updating the incident log
+//
+// SiT (Support Incident Tracker) - Support call tracking system
+// Copyright (C) 2000-2007 Salford Software Ltd. and Contributors
+//
+// This software may be used and distributed according to the terms
+// of the GNU General Public License, incorporated herein by reference.
+//
+
+// Included by ../incident.php
+
+// Prevent script from being run directly (ie. it must always be included
+if (realpath(__FILE__) == realpath($_SERVER['SCRIPT_FILENAME']))
+{
+    exit;
+}
+
+$title = $strUpdate;
+
+function display_update_page($draftid=-1)
+{
+    global $id;
+    global $incidentid;
+    global $action;
+    global $CONFIG;
+
+    if($draftid != -1)
+    {
+        $draftsql = "SELECT * FROM drafts WHERE id = {$draftid}";
+        $draftresult = mysql_query($draftsql);
+        if (mysql_error()) trigger_error(mysql_error(),E_USER_ERROR);
+        $draftobj = mysql_fetch_object($draftresult);
+    }
+
+    // No update body text detected show update form
+    echo "<script type=\"text/javascript\" src=\"scripts/dojo/dojo.js\"></script>";
+    ?>
+    <script type="text/javascript">
+    <!--
+    dojo.require("dojo.widget.Dialog");
+    dojo.require("dojo.widget.Button");
+    function deleteOption(object) {
+        var Current = object.updatetype.selectedIndex;
+        object.updatetype.options[Current] = null;
+    }
+
+    function notarget(object)
+    {
+        // remove last option
+        var length = object.updatetype.length;
+        if (length > 6)
+        {
+            object.updatetype.selectedIndex=6;
+            var Current = object.updatetype.selectedIndex;
+            object.updatetype.options[Current] = null;
+        }
+        object.priority.value=object.storepriority.value;
+        //object.priority.disabled=true;
+        object.priority.disabled=false;
+        object.updatetype.selectedIndex=0;
+        object.updatetype.disabled=false;
+    }
+
+
+    function initialresponse(object)
+    {
+        // remove last option
+        var length = object.updatetype.length;
+        if (length > 6)
+        {
+            object.updatetype.selectedIndex=6;
+            var Current = object.updatetype.selectedIndex;
+            object.updatetype.options[Current] = null;
+        }
+        object.priority.value=object.storepriority.value;
+        object.priority.disabled=true;
+        object.updatetype.selectedIndex=0;
+        object.updatetype.disabled=false;
+    }
+
+
+    function actionplan(object)
+    {
+        // remove last option
+        var length = object.updatetype.length;
+        if (length > 6)
+        {
+            object.updatetype.selectedIndex=6;
+            var Current = object.updatetype.selectedIndex;
+            object.updatetype.options[Current] = null;
+        }
+
+        var defaultSelected = true;
+        var selected = true;
+        var optionName = new Option('Action Plan', 'actionplan', defaultSelected, selected)
+        var length = object.updatetype.length;
+        object.updatetype.options[length] = optionName;
+        object.priority.value=object.storepriority.value;
+        object.priority.disabled=true;
+        object.updatetype.disabled=true;
+    }
+
+    function reprioritise(object)
+    {
+        // remove last option
+        var length = object.updatetype.length;
+        if (length > 6)
+        {
+            object.updatetype.selectedIndex=6;
+            var Current = object.updatetype.selectedIndex;
+            object.updatetype.options[Current] = null;
+        }
+        // add new option
+        var defaultSelected = true;
+        var selected = true;
+        var optionName = new Option('Reprioritise', 'solution', defaultSelected, selected)
+        var length = object.updatetype.length;
+        object.updatetype.options[length] = optionName;
+        object.priority.disabled=false;
+        document.updateform.priority.disabled=false;
+        object.updatetype.disabled=true;
+    }
+
+    function probdef(object)
+    {
+        // remove last option
+        var length = object.updatetype.length;
+        if (length > 6)
+        {
+            object.updatetype.selectedIndex=6;
+            var Current = object.updatetype.selectedIndex;
+            object.updatetype.options[Current] = null;
+        }
+
+        var defaultSelected = true;
+        var selected = true;
+        var optionName = new Option('Problem Definition', 'probdef', defaultSelected, selected)
+        var length = object.updatetype.length;
+        object.updatetype.options[length] = optionName;
+        object.priority.value=object.storepriority.value;
+        object.priority.disabled=true;
+        object.updatetype.disabled=true;
+    }
+
+    function replaceOption(object) {
+        var Current = object.updatetype.selectedIndex;
+        object.updatetype.options[Current].text = object.currentText.value;
+        object.updatetype.options[Current].value = object.currentText.value;
+    }
+
+    <?php
+        echo "var draftid = {$draftid}";
+    ?>
+
+    // Auto save
+    function save_content(){
+        var xmlhttp=false;
+
+        if (!xmlhttp && typeof XMLHttpRequest!='undefined') {
+            try {
+                xmlhttp = new XMLHttpRequest();
+            } catch (e) {
+                xmlhttp=false;
+            }
+        }
+        if (!xmlhttp && window.createRequest) {
+            try {
+                xmlhttp = window.createRequest();
+            } catch (e) {
+                xmlhttp=false;
+            }
+        }
+
+        var toPass = byId('updatelog').value;
+        //alert(toPass.value);
+
+        if(toPass != "")
+        {
+            xmlhttp.open("GET", "auto_save.php?userid="+<?php echo $_SESSION['userid']; ?>+"&type=update&incidentid="+<?php echo $id; ?>+"&draftid="+draftid+"&meta=&content="+escape(toPass), true);
+
+            xmlhttp.onreadystatechange=function() {
+                //remove this in the future after testing
+                if (xmlhttp.readyState==4) {
+                    if(xmlhttp.responseText != ""){
+                        //alert(xmlhttp.responseText);
+                        if(draftid == -1)
+                        {
+                            draftid = xmlhttp.responseText;
+                        }
+                        var currentTime = new Date();
+                        var hours = currentTime.getHours();
+                        var minutes = currentTime.getMinutes();
+                        if(minutes < 10)
+                        {
+                            minutes = "0"+minutes;
+                        }
+                        if(seconds < 10)
+                        {
+                            seconds = "0"+seconds;
+                        }
+                        var seconds = currentTime.getSeconds();
+                        byId('updatestr').innerHTML = "<?php echo $GLOBALS['strDraftLastSaved'] ?>: "+hours+":"+minutes+":"+seconds;
+                    }
+                }
+            }
+            xmlhttp.send(null);
+        }
+    }
+
+    setInterval("save_content()", 10000); //every 10 seconds
+
+
+    var dlg0, dlg1, dlg2, dlg3;
+    function init(e) {
+        dlg0 = dojo.widget.byId("dialog0");
+        var btn = document.getElementById("hider0");
+        dlg0.setCloseControl(btn);
+    }
+    dojo.addOnLoad(init);
+
+    //-->
+    </script>
+    <?php
+    echo "<form action='".$_SERVER['PHP_SELF']."?id={$id}&amp;draftid={$draftid}' method='post' name='updateform' id='updateform' enctype='multipart/form-data'>";
+    echo "<table class='vertical'>";
+    echo "<tr>";
+    echo "<th align='right' valign='top'>{$GLOBALS['strDoesThisUpdateMeetSLA']}:";
+    echo "<img src='{$CONFIG['application_webpath']}/images/icons/{$iconset}/16x16/sla.png' width='16' height='16' alt='' /></th>";
+    echo "<td class='shade2'>";
+    $target = incident_get_next_target($id);
+
+    echo "<select name='target' class='dropdown'>\n";
+    echo "<option value='none' onclick='notarget(this.form)'>No</option>\n";
+    switch ($target->type)
+    {
+        case 'initialresponse':
+            echo "<option value='initialresponse' style='text-indent: 15px; height: 17px; background-image: url({$CONFIG['application_webpath']}/images/icons/{$iconset}/16x16/initialresponse.png); background-repeat: no-repeat;' onclick='initialresponse(this.form)' >Initial Response</option>\n";
+            echo "<option value='probdef' style='text-indent: 15px; height: 17px; background-image: url({$CONFIG['application_webpath']}/images/icons/{$iconset}/16x16/probdef.png); background-repeat: no-repeat;' onclick='probdef(this.form)'>Problem Definition</option>\n";
+            echo "<option value='actionplan' style='text-indent: 15px; height: 17px; background-image: url({$CONFIG['application_webpath']}/images/icons/{$iconset}/16x16/actionplan.png); background-repeat: no-repeat;' onclick='actionplan(this.form)'>Action Plan</option>\n";
+            echo "<option value='solution' style='text-indent: 15px; height: 17px; background-image: url({$CONFIG['application_webpath']}/images/icons/{$iconset}/16x16/solution.png); background-repeat: no-repeat;' onclick='reprioritise(this.form)'>Resolution/Reprioritisation</option>\n";
+        break;
+        case 'probdef':
+            echo "<option value='probdef' style='text-indent: 15px; height: 17px; background-image: url({$CONFIG['application_webpath']}/images/icons/{$iconset}/16x16/probdef.png); background-repeat: no-repeat;' onclick='probdef(this.form)'>Problem Definition</option>\n";
+            echo "<option value='actionplan' style='text-indent: 15px; height: 17px; background-image: url({$CONFIG['application_webpath']}/images/icons/{$iconset}/16x16/actionplan.png); background-repeat: no-repeat;' onclick='actionplan(this.form)'>Action Plan</option>\n";
+            echo "<option value='solution' style='text-indent: 15px; height: 17px; background-image: url({$CONFIG['application_webpath']}/images/icons/{$iconset}/16x16/solution.png); background-repeat: no-repeat;' onclick='reprioritise(this.form)'>Resolution/Reprioritisation</option>\n";
+        break;
+        case 'actionplan':
+            echo "<option value='actionplan' style='text-indent: 15px; height: 17px; background-image: url({$CONFIG['application_webpath']}/images/icons/{$iconset}/16x16/actionplan.png); background-repeat: no-repeat;' onclick='actionplan(this.form)'>Action Plan</option>\n";
+            echo "<option value='solution' style='text-indent: 15px; height: 17px; background-image: url({$CONFIG['application_webpath']}/images/icons/{$iconset}/16x16/solution.png); background-repeat: no-repeat;' onclick='reprioritise(this.form)'>Resolution/Reprioritisation</option>\n";
+        break;
+            case 'solution':
+            echo "<option value='solution' style='text-indent: 15px; height: 17px; background-image: url({$CONFIG['application_webpath']}/images/icons/{$iconset}/16x16/solution.png); background-repeat: no-repeat;' onclick='reprioritise(this.form)'>Resolution/Reprioritisation</option>\n";
+        break;
+    }
+    echo "</select>\n";
+    echo "</td></tr>\n";
+    echo "<tr><th align='right' valign='top'>{$GLOBALS['strUpdateType']}:</th>";
+    echo "<td class='shade1'>";
+    echo "<select name='updatetype' class='dropdown'>";
+    /*
+    if ($target->type!='actionplan' && $target->type!='solution')
+        echo "<option value='probdef'>Problem Definition</option>\n";
+    if ($target->type!='solution')
+        echo "<option value='actionplan'>Action Plan</option>\n";
+    */
+    echo "<option value='research' selected='selected' style='text-indent: 15px; height: 17px; background-image: url({$CONFIG['application_webpath']}/images/icons/{$iconset}/16x16/research.png); background-repeat: no-repeat;'>Research Notes</option>\n";
+    echo "<option value='emailin' style='text-indent: 15px; height: 17px; background-image: url({$CONFIG['application_webpath']}/images/icons/{$iconset}/16x16/emailin.png); background-repeat: no-repeat;'>Email from Customer</option>\n";
+    echo "<option value='emailout' style='text-indent: 15px; height: 17px; background-image: url({$CONFIG['application_webpath']}/images/icons/{$iconset}/16x16/emailout.png); background-repeat: no-repeat;'>Email to Customer</option>\n";
+    echo "<option value='phonecallin' style='text-indent: 15px; height: 17px; background-image: url({$CONFIG['application_webpath']}/images/icons/{$iconset}/16x16/callin.png); background-repeat: no-repeat;'>Phone call from Customer</option>\n";
+    echo "<option value='phonecallout' style='text-indent: 15px; height: 17px; background-image: url({$CONFIG['application_webpath']}/images/icons/{$iconset}/16x16/callout.png); background-repeat: no-repeat;'>Phone call to Customer</option>\n";
+    echo "<option value='externalinfo' style='text-indent: 15px; height: 17px; background-image: url({$CONFIG['application_webpath']}/images/icons/{$iconset}/16x16/externalinfo.png); background-repeat: no-repeat;'>External Escalation Info</option>\n";
+    echo "<option value='reviewmet' style='text-indent: 15px; height: 17px; background-image: url({$CONFIG['application_webpath']}/images/icons/{$iconset}/16x16/review.png); background-repeat: no-repeat;'>Incident Review</option>\n";
+
+    echo "</select>";
+    echo "</td>";
+    echo "</tr>";
+    echo "<tr>";
+    echo "<th align='right' valign='top'>Update Log:<br />";
+    echo "New information, relevent to the incident.  Please be as detailed as possible and include full descriptions of any work you have performed.<br />";
+    echo "<br />";
+    echo "Check here <input type='checkbox' name='cust_vis' checked='checked' value='yes' /> to make this update visible to the customer.";
+    echo "</th>";
+    echo "<td class='shade1'><textarea name='bodytext' id='updatelog' rows='13' cols='50'>";
+    if($draftid != -1) echo $draftobj->content;
+    echo "</textarea>";
+    echo "<div id='updatestr'></div>";
+    echo "</td></tr>";
+
+    if ($target->type=='initialresponse')
+    {
+        $disable_priority=TRUE;
+    }
+    else $disable_priority=FALSE;
+    echo "<tr><th align='right' valign='top'>New Priority:</th>";
+    echo "<td class='shade1'>";
+
+    // FIXME fix maximum priority
+    $servicelevel=maintenance_servicelevel(incident_maintid($id));
+    if ($servicelevel==2 || $servicelevel==5) $maxpriority=4;
+    else $maxpriority=3;
+    echo priority_drop_down("newpriority", incident_priority($id), $maxpriority, $disable_priority);
+    echo "</td></tr>\n";
+
+    echo "<tr>";
+    echo "<th align='right' valign='top'>New Status:</th>";
+    echo "<td class='shade1'>".incidentstatus_drop_down("newstatus", incident_status($id))."</td>";
+    echo "</tr>";
+    echo "<tr>";
+    echo "<th align='right' valign='top'>Next Action:</th>";
+    echo "<td class='shade2'><input type='text' name='nextaction' maxlength='50' size='30' value='' /></td></tr>";
+    echo "<tr>";
+    echo "<th align='right'>";
+    echo "<strong>{$GLOBALS['$strTimeToNextAction']}</strong>:<br />The incident will be placed in the waiting queue until the time specified.</th>";
+    echo "<td class='shade2'>";
+    $oldtimeofnextaction=incident_timeofnextaction($id);
+    if ($oldtimeofnextaction<1) $oldtimeofnextaction=$now;
+    $wait_time=($oldtimeofnextaction-$now);
+
+    $na_days=floor($wait_time / 86400);
+    $na_remainder=$wait_time % 86400;
+    $na_hours=floor($na_remainder / 3600);
+    $na_remainder=$wait_time % 3600;
+    $na_minutes=floor($na_remainder / 60);
+    if ($na_days<0) $na_days=0;
+    if ($na_hours<0) $na_hours=0;
+    if ($na_minutes<0) $na_minutes=0;
+    echo "<input type='radio' name='timetonextaction_none' value='time' />In <em>x</em> days, hours, minutes<br />&nbsp;&nbsp;&nbsp;";
+    echo "<input maxlength='3' name='timetonextaction_days' value='{$na_days}' onclick='window.document.updateform.timetonextaction_none[0].checked = true;' size='3' /> Days&nbsp;";
+    echo "<input maxlength='2' name='timetonextaction_hours' value='{$na_hours}' onclick='window.document.updateform.timetonextaction_none[0].checked = true;' size='3' /> Hours&nbsp;";
+    echo "<input maxlength='2' name='timetonextaction_minutes' value='{$na_minutes}' onclick='window.document.updateform.timetonextaction_none[0].checked = true;' size='3' /> Minutes<br />";
+    echo "<input type='radio' name='timetonextaction_none' value='date; />At specific date and time<br />";
+    echo "<input name='date' size='10' value='{$date}' onclick=\"window.document.updateform.timetonextaction_none[1].checked = true;\"/> ";
+    echo date_picker('updateform.date');
+    echo "<select name='timeoffset' onchange='window.document.updateform.timetonextaction_none[1].checked = true;'>";
+    echo "<option>Choose Time</option>";
+    echo "<option value='0'>8:00 AM</option>";
+    echo "<option value='1'>9:00 AM</option>";
+    echo "<option value='2'>10:00 AM</option>";
+    echo "<option value='3'>11:00 AM</option>";
+    echo "<option value='4'>12:00 PM</option>";
+    echo "<option value='5'>1:00 PM</option>";
+    echo "<option value='6'>2:00 PM</option>";
+    echo "<option value='7'>3:00 PM</option>";
+    echo "<option value='8'>4:00 PM</option>";
+    echo "<option value='9'>5:00 PM</option>";
+    echo "</select>";
+    echo "<br />";
+    
+    echo "<input checked='checked' type='radio' name='timetonextaction_none' onclick=\"window.document.updateform.timetonextaction_days.value = ''; window.document.updateform.timetonextaction_hours.value = ''; window.document.updateform.timetonextaction_minutes.value = '';\" value='None' /> Unspecified";
+    
+    echo "</td></tr>";
+    echo "<tr>";
+    // calculate upload filesize
+    $j = 0;
+    $ext = array("Bytes","KBytes","MBytes","GBytes","TBytes");
+    $att_file_size = $CONFIG['upload_max_filesize'];
+    while ($att_file_size >= pow(1024,$j)) ++$j;
+    $att_file_size = round($att_file_size / pow(1024,$j-1) * 100) / 100 . ' ' . $ext[$j-1];
+
+    echo "<th align='right' valign='top'>{$GLOBALS['strAttachFile']}";
+    echo "(&lt;{$att_file_size}):</th>";
+    
+    echo "<td class='shade1'><input type='hidden' name='MAX_FILE_SIZE' value='{$CONFIG['upload_max_filesize']}' />";
+    echo "<input type='file' name='attachment' size='40' maxfilesize='{$CONFIG['upload_max_filesize']}' /></td>";
+    echo "</tr>";
+    echo "</table>";
+    echo "<p class='center'>";
+    echo "<input type='hidden' name='action' value='update' />";
+    echo "<input type='hidden' name='storepriority' value='".incident_priority($id)."' />";
+    echo "<input type='submit' name='submit' value='{$GLOBALS['strUpdateIncident']}' /></p>";
+    echo "</form>";
+}
+
+
+if (empty($action))
+{
+    $sql = "SELECT * FROM drafts WHERE type = 'update' AND userid = '{$sit[2]}' AND incidentid = '{$id}'";
+    $result = mysql_query($sql);
+    if (mysql_error()) trigger_error(mysql_error(),E_USER_ERROR);
+
+    include('incident_html_top.inc.php');
+
+    if(mysql_num_rows($result) > 0)
+    {
+        echo "<h2>{$title}</h2>";
+        echo "<p align='center'>{$strUpdateChooseDraft}</p>";
+
+        while($obj = mysql_fetch_object($result))
+        {
+            echo "<div class='detailhead'>";
+            echo "<div class='detaildate'>".date($CONFIG['dateformat_datetime'], $obj->lastupdate);
+            echo "</div>";
+            echo "<a href='".$_SERVER['PHP_SELF']."?action=editdraft&amp;draftid={$obj->id}&amp;id={$id}' class='info'>";
+            echo "<img src='{$CONFIG['application_webpath']}images/icons/{$iconset}/16x16/edit.png' alt='{$strDraftEdit}' /></a>";
+            echo "<a href='".$_SERVER['PHP_SELF']."?action=deletedraft&amp;draftid={$obj->id}&amp;id={$id}' class='info'>";
+            echo "<img src='{$CONFIG['application_webpath']}images/icons/{$iconset}/16x16/delete.png' alt='{$strDraftDelete}' /></a>";
+            echo "</div>";
+            echo "<div class='detailentry'>";
+            echo nl2br($obj->content)."</div>";
+        }
+        echo "<p align='center'><a href='".$_SERVER['PHP_SELF']."?action=newupdate&amp;id={$id}'>{$strUpdateNewUpdate}</a></p>";
+    }
+    else
+    {
+        //No previous updates - just display the page
+        display_update_page();
+    }
+    include('incident_html_bottom.inc.php');
+}
+else if($action == "editdraft")
+{
+    include('incident_html_top.inc.php');
+    $draftid = cleanvar($_REQUEST['draftid']);
+    display_update_page($draftid);
+    include('incident_html_bottom.inc.php');
+}
+else if($action == "deletedraft")
+{
+    $draftid = cleanvar($_REQUEST['draftid']);
+    if($draftid != -1)
+    {
+        $sql = "DELETE FROM drafts WHERE id = {$draftid}";
+        $result = mysql_query($sql);
+        if (mysql_error()) trigger_error(mysql_error(),E_USER_ERROR);
+    }
+    confirmation_page("2", "update_incident.php?id=" . $id, "<h2>Update Successful</h2><p align='center'>{$strPleaseWaitRedirect}...</p>");
+}
+else if($action == "newupdate")
+{
+    include('incident_html_top.inc.php');
+    display_update_page();
+    include('incident_html_bottom.inc.php');
+}
+else
+{
+    // Update the incident
+
+    $time = time();
+    // External variables
+    $target = cleanvar($_POST['target']);
+    $updatetype = cleanvar($_POST['updatetype']);
+    $newstatus = cleanvar($_POST['newstatus']);
+    $nextaction = cleanvar($_POST['nextaction']);
+    $newpriority = cleanvar($_POST['newpriority']);
+    $cust_vis = cleanvar($_POST['cust_vis']);
+    $timetonextaction_none = cleanvar($_POST['timetonextaction_none']);
+    $date = cleanvar($_POST['date']);
+    $timeoffset = cleanvar($_POST['timeoffset']);
+    $timetonextaction_days = cleanvar($_POST['timetonextaction_days']);
+    $timetonextaction_hours = cleanvar($_POST['timetonextaction_hours']);
+    $timetonextaction_minutes = cleanvar($_POST['timetonextaction_minutes']);
+    $draftid = cleanvar($_REQUEST['draftid']);
+
+    if (empty($newpriority)) $newpriority  = incident_priority($id);
+    // update incident
+    switch ($timetonextaction_none)
+    {
+        case 'none':
+            $timeofnextaction = 0;
+        break;
+
+        case 'time':
+            if ($timetonextaction_days<1 && $timetonextaction_hours<1 && $timetonextaction_minutes<1)
+            {
+                $timeofnextaction = 0;
+            }
+            else
+            {
+                $timeofnextaction = calculate_time_of_next_action($timetonextaction_days, $timetonextaction_hours, $timetonextaction_minutes);
+            }
+        break;
+
+        case 'date':
+            // kh: parse date from calendar picker, format: 200-12-31
+            $date=explode("-", $date);
+            $timeofnextaction=mktime(8 + $timeoffset,0,0,$date[1],$date[2],$date[0]);
+            $now = time();
+            if ($timeofnextaction<0) $timeofnextaction=0;
+        break;
+
+        default:
+            $timeofnextaction = 0;
+        break;
+    }
+
+    // Put text into body of update for field changes (reverse order)
+    // delim first
+    $bodytext = "<hr>" . $bodytext;
+    $oldstatus=incident_status($id);
+    $oldtimeofnextaction=incident_timeofnextaction($id);
+    if ($newstatus != $oldstatus)
+    {
+        $bodytext = "Status: ".incidentstatus_name($oldstatus)." -&gt; <b>" . incidentstatus_name($newstatus) . "</b>\n\n" . $bodytext;
+    }
+    if ($newpriority != incident_priority($id))
+    {
+        $bodytext = "New Priority: <b>" . priority_name($newpriority) . "</b>\n\n" . $bodytext;
+    }
+    if ($timeofnextaction > ($oldtimeofnextaction+60))
+    {
+        $timetext = "Next Action Time: ";
+        if (($oldtimeofnextaction-$now)<1) $timetext.="None";
+        else $timetext.=date("D jS M Y @ g:i A", $oldtimeofnextaction);
+        $timetext.=" -&gt; <b>";
+        if ($timeofnextaction<1) $timetext.="None";
+        else $timetext.=date("D jS M Y @ g:i A", $timeofnextaction);
+            $timetext.="</b>\n\n";
+        $bodytext=$timetext.$bodytext;
+    }
+    // was '$attachment'
+    if ($_FILES['attachment']['name']!='' && isset($_FILES['attachment']['name'])==TRUE)
+    {
+        $bodytext = "Attachment: [[att]]{$_FILES['attachment']['name']}[[/att]]\n".$bodytext;
+    }
+    // Debug
+    ## if ($target!='') $bodytext = "Target: $target\n".$bodytext;
+
+    // Check the updatetype field, if it's blank look at the target
+    if (empty($updatetype))
+    {
+        switch($target)
+        {
+            case 'actionplan': $updatetype='actionplan';  break;
+            case 'probdef': $updatetype='probdef';  break;
+            case 'solution': $updatetype='solution';  break;
+            default: $updatetype='research';  break;
+        }
+    }
+
+    // Force reviewmet to be visible
+    if ($updatetype=='reviewmet') $cust_vis='yes';
+
+    // visible update
+    if ($cust_vis == "yes")
+    {
+        $sql  = "INSERT INTO updates (incidentid, userid, type, bodytext, timestamp, currentstatus, customervisibility, nextaction) ";
+        $sql .= "VALUES ('$id', '$sit[2]', '$updatetype', '$bodytext', '$time', '$newstatus', 'show' , '$nextaction')";
+    }
+    // invisible update
+    else
+    {
+        $sql  = "INSERT INTO updates (incidentid, userid, type, bodytext, timestamp, currentstatus, nextaction) ";
+        $sql .= "VALUES ($id, $sit[2], '$updatetype', '$bodytext', $time, '$newstatus', '$nextaction')";
+    }
+    $result = mysql_query($sql);
+    if (mysql_error()) trigger_error("MySQL Query Error ".mysql_error(), E_USER_ERROR);
+
+    $sql = "UPDATE incidents SET status='$newstatus', priority='$newpriority', lastupdated='$time', timeofnextaction='$timeofnextaction' WHERE id='$id'";
+    mysql_query($sql);
+    if (mysql_error()) trigger_error("MySQL Query Error ".mysql_error(), E_USER_ERROR);
+
+    // Handle meeting of service level targets
+    switch ($target)
+    {
+        case 'none':
+            // do nothing
+            $sql = '';
+        break;
+
+        case 'initialresponse':
+            $sql  = "INSERT INTO updates (incidentid, userid, type, timestamp, currentowner, currentstatus, customervisibility, sla, bodytext) ";
+            $sql .= "VALUES ('$id', '".$sit[2]."', 'slamet', '$now', '".$sit[2]."', '$newstatus', 'show', 'initialresponse','The Initial Response has been made.')";
+        break;
+
+        case 'probdef':
+            $sql  = "INSERT INTO updates (incidentid, userid, type, timestamp, currentowner, currentstatus, customervisibility, sla, bodytext) ";
+            $sql .= "VALUES ('$id', '".$sit[2]."', 'slamet', '$now', '".$sit[2]."', '$newstatus', 'show', 'probdef','The problem has been defined.')";
+        break;
+
+        case 'actionplan':
+            $sql  = "INSERT INTO updates (incidentid, userid, type, timestamp, currentowner, currentstatus, customervisibility, sla, bodytext) ";
+            $sql .= "VALUES ('$id', '".$sit[2]."', 'slamet', '$now', '".$sit[2]."', '$newstatus', 'show', 'actionplan','An action plan has been made.')";
+        break;
+
+        case 'solution':
+            $sql  = "INSERT INTO updates (incidentid, userid, type, timestamp, currentowner, currentstatus, customervisibility, sla, bodytext) ";
+            $sql .= "VALUES ('$id', '".$sit[2]."', 'slamet', '$now', '".$sit[2]."', '$newstatus', 'show', 'solution','The incident has been resolved or reprioritised.\nThe issue should now be brought to a close or a new problem definition created within the service level.')";
+        break;
+    }
+    if (!empty($sql))
+    {
+        mysql_query($sql);
+        if (mysql_error()) trigger_error("MySQL Query Error ".mysql_error(), E_USER_ERROR);
+    }
+    if ($target!='none')
+    {
+        // Reset the slaemail sent column, so that email reminders can be sent if the new sla target goes out
+        $sql = "UPDATE incidents SET slaemail='0' WHERE id='$id' LIMIT 1";
+        mysql_query($sql);
+        if (mysql_error()) trigger_error("MySQL Query Error ".mysql_error(), E_USER_ERROR);
+    }
+
+    // attach file
+    $att_max_filesize = return_bytes($CONFIG['upload_max_filesize']);
+    $incident_attachment_fspath = $CONFIG['attachment_fspath'] . $id;
+    if ($_FILES['attachment']['name'] != "")
+    {
+        // make incident attachment dir if it doesn't exist
+        $umask=umask(0000);
+        if (!file_exists($CONFIG['attachment_fspath'] . "$id"))
+        {
+            $mk=@mkdir($CONFIG['attachment_fspath'] ."$id", 0770);
+            if (!$mk) throw_error('Failed creating incident attachment directory: ',$incident_attachment_fspath .$id);
+        }
+        $mk=@mkdir($CONFIG['attachment_fspath'] .$id . "/$now", 0770);
+        if (!$mk) throw_error('Failed creating incident attachment (timestamp) directory: ',$incident_attachment_fspath .$id . "/$now");
+        umask($umask);
+        $newfilename = $incident_attachment_fspath.'/'.$now.'/'.$_FILES['attachment']['name'];
+
+        // Move the uploaded file from the temp directory into the incidents attachment dir
+        $mv=move_uploaded_file($_FILES['attachment']['tmp_name'], $newfilename);
+        if (!$mv) trigger_error('!Error: Problem moving attachment from temp directory to: '.$newfilename, E_USER_WARNING);
+
+        //$mv=move_uploaded_file($attachment, "$filename");
+        //if (!mv) throw_error('!Error: Problem moving attachment from temp directory:',$filename);
+
+        // Check file size before attaching
+        if ($_FILES['attachment']['size'] > $att_max_filesize)
+        {
+            throw_error('User Error: Attachment too large or file upload error - size:',$_FILES['attachment']['size']);
+            // throwing an error isn't the nicest thing to do for the user but there seems to be no guaranteed
+            // way of checking file sizes at the client end before the attachment is uploaded. - INL
+        }
+    }
+    if (!$result)
+    {
+        include('includes/incident_html_top.inc');
+        echo "<p class='error'>Update Failed</p>\n";
+        include('includes/incident_html_bottom.inc');
+    }
+    else
+    {
+        if($draftid != -1)
+        {
+            $sql = "DELETE FROM drafts WHERE id = {$draftid}";
+            $result = mysql_query($sql);
+            if (mysql_error()) trigger_error(mysql_error(),E_USER_ERROR);
+        }
+        journal(4,'Incident Updated', "Incident $id Updated", 2, $id);
+        confirmation_page("2", "incident_details.php?id=" . $id, "<h2>Update Successful</h2><p align='center'>{$strPleaseWaitRedirect}...</p>");
+    }
+}
+
+?>
