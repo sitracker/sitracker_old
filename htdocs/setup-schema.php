@@ -102,6 +102,17 @@ INSERT INTO `dashboard` (`id`, `name`, `enabled`) VALUES (1, 'random_tip', 'true
 (3, 'tasks', 'true'),
 (4, 'user_incidents', 'true');
 
+CREATE TABLE `drafts` (
+  `id` int(11) NOT NULL auto_increment,
+  `userid` int(11) NOT NULL,
+  `incidentid` int(11) NOT NULL,
+  `type` enum('update','email') NOT NULL,
+  `content` text NOT NULL,
+  `meta` text NOT NULL,
+  `lastupdate` int(11) NOT NULL,
+  PRIMARY KEY  (`id`)
+) ENGINE=MyISAM ;
+
 CREATE TABLE `emailsig` (
   `id` int(11) NOT NULL auto_increment,
   `signature` text NOT NULL,
@@ -1454,6 +1465,17 @@ ALTER TABLE `updates` CHANGE `type` `type` ENUM( 'default', 'editing', 'opening'
 
 $upgrade_schema[330] = "
 ALTER TABLE `updates` CHANGE `type` `type` ENUM( 'default', 'editing', 'opening', 'email', 'reassigning', 'closing', 'reopening', 'auto', 'phonecallout', 'phonecallin', 'research', 'webupdate', 'emailout', 'emailin', 'externalinfo', 'probdef', 'solution', 'actionplan', 'slamet', 'reviewmet', 'tempassigning', 'auto_chase_email', 'auto_chase_phone', 'auto_chase_manager', 'auto_chased_phone','auto_chased_manager','auto_chase_managers_manager','customerclosurerequest') CHARACTER SET latin1 COLLATE latin1_swedish_ci NULL DEFAULT 'default';
+
+CREATE TABLE IF NOT EXISTS `drafts` (
+  `id` int(11) NOT NULL auto_increment,
+  `userid` int(11) NOT NULL,
+  `incidentid` int(11) NOT NULL,
+  `type` enum('update','email') NOT NULL,
+  `content` text NOT NULL,
+  `meta` text NOT NULL,
+  `lastupdate` int(11) NOT NULL,
+  PRIMARY KEY  (`id`)
+) ENGINE=MyISAM ;
 ";
 
 
