@@ -127,13 +127,14 @@ if (empty($productid) AND $display!='skills')
 elseif (empty($productid) AND ($display=='skills' OR $display=='software'))
 {
     echo "<h2><img src='{$CONFIG['application_webpath']}images/icons/{$iconset}/32x32/skill.png' width='32' height='32' alt='' /> {$strSkills}</h2>";
-    $sql = "SELECT * FROM software ORDER BY name";
+    //$sql = "SELECT * FROM software ORDER BY name";
+    $sql = "SELECT software.*, vendors.name AS vendorname FROM software left join vendors ON software.vendorid = vendors.id ORDER BY name";
     $result = mysql_query($sql);
     if (mysql_error()) trigger_error(mysql_error(),E_USER_ERROR);
     if (mysql_num_rows($result) >= 1)
     {
         echo "<table align='center'>";
-        echo "<tr><th>{$strSkill}</th><th>{$strLifetime}</th><th>Linked to # Products</th><th>Engineers</th><th>{$strIncidents}</th><th>Actions</th></tr>";
+        echo "<tr><th>{$strSkill}</th><th>{$strVendor}</th><th>{$strLifetime}</th><th>Linked to # Products</th><th>Engineers</th><th>{$strIncidents}</th><th>Actions</th></tr>";
         $shade='shade1';
         while ($software = mysql_fetch_object($result))
         {
@@ -162,6 +163,7 @@ elseif (empty($productid) AND ($display=='skills' OR $display=='software'))
             if ($lifetime_start > $now OR ($lifetime_end > 1 AND $lifetime_end < $now)) $shade='expired';
             echo "<tr class='$shade'>";
             echo "<td>{$software->name}</td>";
+            echo "<td>{$software->vendorname}</td>";
             echo "<td>";
             if ($software->lifetime_start > 1) echo date($CONFIG['dateformat_shortdate'],$lifetime_start).' to ';
             else echo "&#8734;";
