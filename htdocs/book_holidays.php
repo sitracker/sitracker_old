@@ -34,31 +34,24 @@ if (empty($step))
 
     if ($user==$sit[2]) echo "<h2><img src='{$CONFIG['application_webpath']}images/icons/{$iconset}/32x32/holiday.png' width='32' height='32' alt='' /> Book Holidays</h2>";
     else echo "<h2><img src='{$CONFIG['application_webpath']}images/icons/{$iconset}/32x32/holiday.png' width='32' height='32' alt='' /> Book Holidays for ".user_realname($user)."</h2>";
-    ?>
-    <form name="date" action="<?php echo $_SERVER['PHP_SELF']; ?>" method="post">
-    <table class='vertical'>
-    <tr><th>Holiday Type:</th><td><?php holidaytype_drop_down('type', 1) ?></td></tr>
-    <tr><th>Start Date:</th><td title='date picker'>
-    <?php echo "<input name='start' size='10' value='{$date}' /> ";
-    echo date_picker('date.start');
-    ?>
-    </td></tr>
-    <tr><th>End Date:</th><td align='left' class='shade1' title='date picker'>
-    <input name='end' size="10" />
-    <?php
-    echo date_picker('date.end');
-    ?>
-    </td></tr>
-    </table>
-    <p align='center'>
-    <?php
-    echo "<input type='hidden' name='user' value='{$user}' />";
-    ?>
-    <input type='hidden' name='step' value='1' />
-    <input type='submit' value='Book' /></p>
-    </form>
 
-    <?php
+    echo "<form name='date' action='{$_SERVER['PHP_SELF']}' method='post'>\n";
+    echo "<table class='vertical'>";
+    echo "<tr><th>{$strHolidayType}:</th><td>".holidaytype_drop_down('type', 1)."</td></tr>";
+    echo "<tr><th>{$strStartDate}:</th><td title='date picker'>";
+    echo "<input name='start' size='10' value='{$date}' /> ";
+    echo date_picker('date.start');
+    echo "</td></tr>\n";
+    echo "<tr><th>{$strEndDate}:</th><td align='left' class='shade1' title='date picker'>";
+    echo "<input name='end' size="10" />";
+    echo date_picker('date.end');
+    echo "</td></tr>\n";
+    echo "</table>\n";
+    echo "<p align='center'>";
+    echo "<input type='hidden' name='user' value='{$user}' />";
+    echo "<input type='hidden' name='step' value='1' />";
+    echo "<input type='submit' value=\"{$strBookHoliday}\" /></p>";
+    echo "</form>";
     include('htmlfooter.inc.php');
 }
 elseif ($step=='1')

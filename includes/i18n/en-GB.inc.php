@@ -47,6 +47,7 @@ $strAttachment = 'Attachment';
 $strAuthor = 'Author';
 $strAvoidDupes = 'Please help avoid duplicates by checking that the record you are adding does not already exist';
 
+$strBookHoliday = 'Book Holiday';
 $strBrowse = 'Browse';
 $strBrowseContacts = 'Browse contacts';
 $strBrowseFeedback = 'Browse feedback';
@@ -157,6 +158,7 @@ $strHelpContents = 'Help Contents';
 $strHelpToTranslate = 'This page is to help translators translate SiT!';
 $strHoldingQueue = 'Holding Queue';
 $strHolidays = 'Holidays';
+$strHolidayType = 'Holiday Type';
 $strHolidayEntitlement = 'Holiday Entitlement';
 $strHolidayPlanner = 'Holiday Planner';
 
@@ -262,6 +264,7 @@ $strPriority = 'Priority';
 $strPrivacy = 'Privacy';
 $strPrivate = 'Private';
 $strProduct = 'Product';
+$strProducts = 'Products';
 $strPublic = 'Public';
 $strPublished = 'published';
 
