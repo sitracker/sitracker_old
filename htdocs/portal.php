@@ -22,7 +22,7 @@ if($CONFIG['portal'] == FALSE)
     $page = $_SERVER['PHP_SELF'];
     if (!empty($_SERVER['QUERY_STRING'])) $page .= '?'.$_SERVER['QUERY_STRING'];
     $page = urlencode($page);
-    header("Location: </td><td>{$CONFIG['application_webpath']}index.php?id=2&page=$page");
+    header("Location: {$CONFIG['application_webpath']}index.php?id=2&page=$page");
     exit;
 }
 
@@ -34,7 +34,7 @@ if (!isset($_SESSION['portalauth']) OR $_SESSION['portalauth'] == FALSE)
     $page = $_SERVER['PHP_SELF'];
     if (!empty($_SERVER['QUERY_STRING'])) $page .= '?'.$_SERVER['QUERY_STRING'];
     $page = urlencode($page);
-    header("Location: </td><td>{$CONFIG['application_webpath']}index.php?id=2&page=$page");
+    header("Location: {$CONFIG['application_webpath']}index.php?id=2&page=$page");
     exit;
 }
 else
@@ -156,7 +156,7 @@ switch ($page)
             $id = $_REQUEST['id'];
             echo "<h2>{$strUpdateIncident} {$_REQUEST['id']}</h2>";
             echo "<div id='update' align='center'><form action='{$_SERVER[PHP_SELF]}?page=update&amp;id=$id' method='POST'>";
-            echo "<tr><td>Update:</p><textarea cols='50' rows='10' name='update'></textarea><br />";
+            echo "<p>Update:</p><textarea cols='50' rows='10' name='update'></textarea><br />";
             echo "<input type='submit'></form></div>";
         }
         else
@@ -184,7 +184,7 @@ switch ($page)
             $id = $_REQUEST['id'];
             echo "<h2>{$strClosureRequestForIncident} {$_REQUEST['id']}</h2>";
             echo "<div id='update' align='center'><form action='{$_SERVER[PHP_SELF]}?page=close&amp;id=$id' method='POST'>";
-            echo "<tr><td>Reason:</p><textarea name='reason' cols='50' rows='10'></textarea><br />";
+            echo "<p>Reason:</p><textarea name='reason' cols='50' rows='10'></textarea><br />";
             echo "<input type='submit'></form></div>";
         }
         else
@@ -274,7 +274,7 @@ switch ($page)
             // find out when the initial response should be according to the service level
             if (empty($servicelevel) OR $servicelevel==0)
             {
-                // FIXME: </td><td>for now we use id but in future use tag, once maintenance uses tag
+                // FIXME: for now we use id but in future use tag, once maintenance uses tag
                 $servicelevel=maintenance_servicelevel($contractid);
                 $sql = "SELECT * FROM servicelevels WHERE id='$servicelevel' AND priority='$priority' ";
             }
@@ -303,28 +303,12 @@ switch ($page)
 
             plugin_do('incident_created');
 
-            //TODO
-            /*
-            // Decrement free support, where appropriate
-           if ($type=='free')
-            {
-                decrement_free_incidents(contact_siteid($contactid));
-                plugin_do('incident_created_site');
-            }
-            else
-            {
-                // decrement contract incident by incrementing the number of incidents used
-                increment_incidents_used($contractid);
-                plugin_do('incident_created_contract');
-            }*/
-
-
-
         }
         break;
         
     //show user's details
     case 'details':
+        echo "<h2>{$strYourDetails}</h2>";
         $sql = "SELECT contacts.forenames, contacts.surname, contacts.department, contacts.address1, contacts.address2, contacts.county, contacts.country, contacts.postcode, contacts.phone, contacts.fax, contacts.email ";
         $sql .= "FROM contacts, sites ";
         $sql .= "WHERE contacts.siteid=sites.id ";
@@ -508,7 +492,7 @@ switch ($page)
         
     case '':
     default:
-        echo "<p align='center'>{$strWelcome} ".contact_realname($_SESSION['contactid'])."</td></tr>";
+        echo "<p align='center'>{$strWelcome} ".contact_realname($_SESSION['contactid'])."</p>";
 }
 
 include('htmlfooter.inc.php');
