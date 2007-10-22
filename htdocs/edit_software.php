@@ -56,6 +56,9 @@ if (empty($action) OR $action=='edit')
         echo "' /> ";
         echo date_picker('editsoftware.lifetime_end');
         echo "</td></tr>";
+        echo "<tr>";
+        echo "<th>{$strVendor}</th><td>".vendor_drop_down('vendor',$software->vendorid)."</td>";
+        echo "</tr>";
         echo "</table>";
     }
     echo "<input type='hidden' name='id' value='$id' />";
@@ -103,6 +106,7 @@ else
       // Save
     // External variables
     $name = cleanvar($_REQUEST['name']);
+    $vendor = cleanvar($_REQUEST['vendor']);
     if (!empty($_REQUEST['lifetime_start'])) $lifetime_start = date('Y-m-d',strtotime($_REQUEST['lifetime_start']));
     else $lifetime_start = '';
     if (!empty($_REQUEST['lifetime_end'])) $lifetime_end = date('Y-m-d',strtotime($_REQUEST['lifetime_end']));
@@ -121,7 +125,7 @@ else
     if ($errors == 0)
     {
         $sql = "UPDATE software SET ";
-        $sql .= "name='$name', lifetime_start='$lifetime_start', lifetime_end='$lifetime_end' ";
+        $sql .= "name='$name', vendorid='{$vendor}', lifetime_start='$lifetime_start', lifetime_end='$lifetime_end' ";
         $sql .= "WHERE id = '$id'";
         mysql_query($sql);
         if (mysql_error()) trigger_error("MySQL Query Error ".mysql_error(), E_USER_ERROR);

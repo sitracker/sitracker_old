@@ -932,6 +932,7 @@ INSERT INTO `sitetypes` VALUES (3, 'Academic');
 CREATE TABLE `software` (
   `id` int(5) NOT NULL auto_increment,
   `name` varchar(255) NOT NULL default '',
+  `software` int(5) NOT NULL default '0',
   `lifetime_start` date default NULL,
   `lifetime_end` date default NULL,
   PRIMARY KEY  (`id`)
@@ -1476,6 +1477,9 @@ CREATE TABLE IF NOT EXISTS `drafts` (
   `lastupdate` int(11) NOT NULL,
   PRIMARY KEY  (`id`)
 ) ENGINE=MyISAM ;
+
+ALTER TABLE `software` ADD `vendorid` INT( 5 ) NOT NULL AFTER `name` ;
+
 ";
 
 
