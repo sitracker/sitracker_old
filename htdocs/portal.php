@@ -22,7 +22,7 @@ if($CONFIG['portal'] == FALSE)
     $page = $_SERVER['PHP_SELF'];
     if (!empty($_SERVER['QUERY_STRING'])) $page .= '?'.$_SERVER['QUERY_STRING'];
     $page = urlencode($page);
-    header("Location: {$CONFIG['application_webpath']}index.php?id=2&page=$page");
+    header("Location: </td><td>{$CONFIG['application_webpath']}index.php?id=2&page=$page");
     exit;
 }
 
@@ -34,7 +34,7 @@ if (!isset($_SESSION['portalauth']) OR $_SESSION['portalauth'] == FALSE)
     $page = $_SERVER['PHP_SELF'];
     if (!empty($_SERVER['QUERY_STRING'])) $page .= '?'.$_SERVER['QUERY_STRING'];
     $page = urlencode($page);
-    header("Location: {$CONFIG['application_webpath']}index.php?id=2&page=$page");
+    header("Location: </td><td>{$CONFIG['application_webpath']}index.php?id=2&page=$page");
     exit;
 }
 else
@@ -56,11 +56,13 @@ echo "<ul id='menuList'>\n";
 echo "<li><a href='logout.php'>{$strLogout}</a></li>";
 echo "<li><a href='portal.php?page=entitlement'>{$strEntitlement}</a></li>";
 echo "<li><a href='portal.php?page=incidents'>{$strIncidents}</a></li>";
+echo "<li><a href='portal.php?page=details'>{$strDetails}</a></li>";
 echo "</ul>";
 echo "</div>";
 
 switch ($page)
 {
+    //show the user's contracts
     case 'entitlement':
         echo "<h2>{$strYourSupportEntitlement}</h2>";
         $sql = "SELECT maintenance.*, products.*, ";
@@ -105,6 +107,7 @@ switch ($page)
         }
     break;
 
+    //show their open incidents
     case 'incidents':
         echo "<h2>{$strYourCurrentIncidents}</h2>";
         $sql = "SELECT * FROM incidents WHERE status!=2 AND contact = '{$_SESSION['contactid']}'";
@@ -124,8 +127,8 @@ switch ($page)
             echo colheader('actions', $strActions);
             while ($incident = mysql_fetch_object($result))
             {
-                echo "<tr class='$shade'><td><a href='javascript:customer_incident_details({$incident->id}, incident{$incident->id});'>{$incident->id}</a></td>";
-                echo "<td>Product<br /><strong>".stripslashes($incident->title)."</strong></td>"; // FIXME product name
+                echo "<tr class='$shade'><td><a href='portal.php?page=showincident&id={$incident->id}'>{$incident->id}</a></td>";
+                echo "<td>Product<br /><strong><a href='portal.php?page=showincident&id={$incident->id}'>".stripslashes($incident->title)."</a></strong></td>"; // FIXME product name
                 echo "<td>".format_date_friendly($incident->lastupdated)."</td>";
                 echo "<td>".incidentstatus_name($incident->status)."</td>";
                 echo "<td><a href='{$_SERVER[PHP_SELF]}?page=update&amp;id={$incident->id}'>Update</a> | ";
@@ -146,13 +149,14 @@ switch ($page)
         echo "<p align='center'><a href='{$_SERVER[PHP_SELF]}?page=entitlement'>{$strAddIncident}</a></p>";
     break;
 
+    //update an open incident
     case 'update':
         if(empty($_REQUEST['update']))
         {
             $id = $_REQUEST['id'];
             echo "<h2>{$strUpdateIncident} {$_REQUEST['id']}</h2>";
             echo "<div id='update' align='center'><form action='{$_SERVER[PHP_SELF]}?page=update&amp;id=$id' method='POST'>";
-            echo "<p>Update:</p><textarea cols='50' rows='10' name='update'></textarea><br />";
+            echo "<tr><td>Update:</p><textarea cols='50' rows='10' name='update'></textarea><br />";
             echo "<input type='submit'></form></div>";
         }
         else
@@ -172,14 +176,15 @@ switch ($page)
             confirmation_page("2", "portal.php?page=incidents", "<h2>Update Successful</h2><p align='center'>{$strPleaseWaitRedirect}...</p>");
         }
         break;
-
+    
+    //close an open incident
     case 'close':
         if(empty($_REQUEST['reason']))
         {
             $id = $_REQUEST['id'];
             echo "<h2>{$strClosureRequestForIncident} {$_REQUEST['id']}</h2>";
             echo "<div id='update' align='center'><form action='{$_SERVER[PHP_SELF]}?page=close&amp;id=$id' method='POST'>";
-            echo "<p>Reason:</p><textarea name='reason' cols='50' rows='10'></textarea><br />";
+            echo "<tr><td>Reason:</p><textarea name='reason' cols='50' rows='10'></textarea><br />";
             echo "<input type='submit'></form></div>";
         }
         else
@@ -205,6 +210,7 @@ switch ($page)
         }
         break;
 
+    //add a new incident
     case 'add':
         if(!$_REQUEST['action'])
         {
@@ -227,7 +233,6 @@ switch ($page)
         }
         else //submit
         {
-            print_r($_REQUEST);
             $contactid = $_SESSION['contactid'];
             $contractid = cleanvar($_REQUEST['contractid']);
             $software = cleanvar($_REQUEST['software']);
@@ -269,7 +274,7 @@ switch ($page)
             // find out when the initial response should be according to the service level
             if (empty($servicelevel) OR $servicelevel==0)
             {
-                // FIXME: for now we use id but in future use tag, once maintenance uses tag
+                // FIXME: </td><td>for now we use id but in future use tag, once maintenance uses tag
                 $servicelevel=maintenance_servicelevel($contractid);
                 $sql = "SELECT * FROM servicelevels WHERE id='$servicelevel' AND priority='$priority' ";
             }
@@ -317,10 +322,193 @@ switch ($page)
 
         }
         break;
+        
+    //show user's details
+    case 'details':
+        $sql = "SELECT contacts.forenames, contacts.surname, contacts.department, contacts.address1, contacts.address2, contacts.county, contacts.country, contacts.postcode, contacts.phone, contacts.fax, contacts.email ";
+        $sql .= "FROM contacts, sites ";
+        $sql .= "WHERE contacts.siteid=sites.id ";
+        $sql .= "AND contacts.id={$_SESSION['contactid']}";
+        $query = mysql_query($sql);            
+        if (mysql_error()) trigger_error("MySQL Query Error ".mysql_error(), E_USER_ERROR);
+        $user = mysql_fetch_object($query);
+        
+        echo "<table align='center' class='vertical'>";
+        echo "<tr><th colspan='2'><h3><img src='{$CONFIG['application_webpath']}images/icons/{$iconset}/32x32/contact.png' width='32' height='32' alt='' /> ".stripslashes($user->forenames).' '.stripslashes($user->surname)."</h3></th></tr>";
+        echo "<form>";
+        echo "<tr><th>{$strForenames}: </th><td><input name='forenames' value='{$user->forenames}' /></td></tr>";
+        echo "<tr><th>{$strSurname}: </th><td><input name='forenames' value='{$user->surname}' /></td></tr>";
+        echo "<tr><th>{$strDepartment}: </th><td><input name='forenames' value='{$user->department}' /></td></tr>";
+        echo "<tr><th>{$strAddress1}: </th><td><input name='forenames' value='{$user->address1}' /></td></tr>";
+        echo "<tr><th>{$strAddress2}: </th><td><input name='forenames' value='{$user->address2}' /></td></tr>";
+        echo "<tr><th>{$strCounty}: </th><td><input name='forenames' value='{$user->county}' /></td></tr>";
+        echo "<tr><th>{$strCountry}: </th><td><input name='forenames' value='{$user->country}' /></td></tr>";
+        echo "<tr><th>{$strPostcode}: </th><td><input name='forenames' value='{$user->postcode}' /></td></tr>";
+        echo "<tr><th>{$strTelephone}: </th><td><input name='forenames' value='{$user->phone}' /></td></tr>";
+        echo "<tr><th>{$strFax}: </th><td><input name='forenames' value='{$user->fax}' /></td></tr>";
+        echo "<tr><th>{$strEmail}: </th><td><input name='forenames' value='{$user->email}' /></td></tr>";
+        echo "</table>";
+        echo "<p align='center'><input type='submit' value='{$strUpdate}' /></p>";
 
+        break;
+        
+    //show specified incident
+    case 'showincident':
+        $incidentid = $_REQUEST['id'];
+
+        $sql = "SELECT contact FROM incidents WHERE id={$incidentid}";
+        $result = mysql_query($sql);
+        $user = mysql_fetch_object($result);
+        /*
+        //check if this user owns the incident
+        if($user->contact != $_SESSION['contactid'])
+        {
+            echo "<p align='center'>$strNoPermission.</p>"; 
+            include('htmlfooter.inc.php');
+            exit;
+        }*/
+
+        $records = strtolower(cleanvar($_REQUEST['records']));
+
+        if ($incidentid=='' OR $incidentid < 1) trigger_error("Incident ID cannot be zero or blank", E_USER_ERROR);
+
+        $sql  = "SELECT * FROM updates WHERE incidentid='{$incidentid}' AND customervisibility='show' ";
+        $sql .= "ORDER BY timestamp DESC, id DESC";
+        if ($offset > 0)
+        {
+            if (empty($records)) $sql .= "LIMIT {$offset},{$_SESSION['num_update_view']}";
+            elseif (is_numeric($records)) $sql .= "LIMIT {$offset},{$records}";
+        }
+        $result = mysql_query($sql);
+        if (mysql_error()) trigger_error("MySQL Query Error $sql".mysql_error(), E_USER_ERROR);
+
+        $keeptags=array('b','i','u','hr','&lt;', '&gt;');
+        foreach($keeptags AS $keeptag)
+        {
+            if (substr($keeptag,0,1)=='&')
+            {
+                $origtag[]="$keeptag";
+                $temptag[]="[[".substr($keeptag, 1, strlen($keeptag)-1)."]]";
+                $origtag[]=strtoupper("$keeptag");
+                $temptag[]="[[".strtoupper(substr($keeptag, 1, strlen($keeptag)-1))."]]";
+            }
+            else
+            {
+                $origtag[]="<{$keeptag}>";
+                $origtag[]="</{$keeptag}>";
+                $origtag[]="<'.strtoupper($keeptag).'>";
+                $origtag[]="</'.strtoupper($keeptag).'>";
+                $temptag[]="[[{$keeptag}]]";
+                $temptag[]="[[/{$keeptag}]]";
+                $temptag[]="[['.strtoupper($keeptag).']]";
+                $temptag[]="[[/'.strtoupper($keeptag).']]";
+            }
+        }
+
+        $count=0;
+        while ($update = mysql_fetch_object($result))
+        {
+            if(empty($firstid)) $firstid = $update->id;
+            $updateid = $update->id;
+            $updatebody=trim($update->bodytext);
+            $updatebodylen=strlen($updatebody);
+
+            $updatebody = str_replace($origtag, $temptag, $updatebody);
+            // $updatebody = htmlspecialchars($updatebody);
+            $updatebody = str_replace($temptag, $origtag, $updatebody);
+
+        // Insert path to attachments
+        //     $updatebody = preg_replace("/\[\[att\]\](.*?)\[\[\/att\]\]/",
+        //                                "<a href = '{$CONFIG['attachment_webpath']}updates/{$update->id}/$1'>$1</a>",
+        //                                $updatebody);
+        if (file_exists("{$CONFIG['attachment_webpath']}{$update->incidentid}/{$update->timestamp}"))
+                $attachment_webpath = "{$CONFIG['attachment_webpath']}{$update->incidentid}/{$update->timestamp}";
+        else $attachment_webpath = "{$CONFIG['attachment_webpath']}updates/{$update->id}";
+        $updatebody = preg_replace("/\[\[att\]\](.*?)\[\[\/att\]\]/", "<a href = '{$attachment_webpath}/$1'>$1</a>", $updatebody);
+    
+        // Put the header part (up to the <hr /> in a seperate DIV)
+                if (strpos($updatebody, '<hr>')!==FALSE)
+        {
+            $updatebody = "<div class='iheader'>".str_replace('<hr>',"</div>",$updatebody);
+        }
+
+        // Style quoted text
+        // $quote[0]="/^(&gt;\s.*)\W$/m";
+        // $quote[0]="/^(&gt;[\s]*.*)[\W]$/m";
+        $quote[0]="/^(&gt;([\s][\d\w]).*)[\n\r]$/m";
+        $quote[1]="/^(&gt;&gt;([\s][\d\w]).*)[\n\r]$/m";
+        $quote[2]="/^(&gt;&gt;&gt;+([\s][\d\w]).*)[\n\r]$/m";
+        $quote[3]="/^(&gt;&gt;&gt;(&gt;)+([\s][\d\w]).*)[\n\r]$/m";
+    
+        //$quote[3]="/(--\s?\s.+-{8,})/U";  // Sigs
+                $quote[4]="/(-----\s?Original Message\s?-----.*-{3,})/s";
+        $quote[5]="/(-----BEGIN PGP SIGNED MESSAGE-----)/s";
+        $quote[6]="/(-----BEGIN PGP SIGNATURE-----.*-----END PGP SIGNATURE-----)/s";
+        $quote[7]="/^(&gt;)[\r]*$/m";
+        $quote[8]="/^(&gt;&gt;)[\r]*$/m";
+        $quote[9]="/^(&gt;&gt;(&gt;){1,8})[\r]*$/m";
+    
+        $quotereplace[0]="<span class='quote1'>\\1</span>";
+        $quotereplace[1]="<span class='quote2'>\\1</span>";
+        $quotereplace[2]="<span class='quote3'>\\1</span>";
+        $quotereplace[3]="<span class='quote4'>\\1</span>";
+        //$quotereplace[3]="<span class='sig'>\\1</span>";
+        $quotereplace[4]="<span class='quoteirrel'>\\1</span>";
+        $quotereplace[5]="<span class='quoteirrel'>\\1</span>";
+        $quotereplace[6]="<span class='quoteirrel'>\\1</span>";
+        $quotereplace[7]="<span class='quote1'>\\1</span>";
+        $quotereplace[8]="<span class='quote2'>\\1</span>";
+        $quotereplace[9]="<span class='quote3'>\\1</span>";
+    
+        $updatebody=preg_replace($quote, $quotereplace, $updatebody);
+    
+        $updatebody = bbcode($updatebody);
+         
+        //$updatebody = emotion($updatebody);
+
+        //"!(http:/{2}[\w\.]{2,}[/\w\-\.\?\&\=\#]*)!e"
+        // [\n\t ]+
+        $updatebody = preg_replace("!([\n\t ]+)(http[s]?:/{2}[\w\.]{2,}[/\w\-\.\?\&\=\#\$\%|;|\[|\]~:]*)!e", "'\\1<a href=\"\\2\" title=\"\\2\">'.(strlen('\\2')>=70 ? substr('\\2',0,70).'...':'\\2').'</a>'", $updatebody);
+
+
+        // Lookup some extra data
+        $updateuser=user_realname($update->userid,TRUE);
+        $updatetime = readable_date($update->timestamp);
+        $currentowner=user_realname($update->currentowner,TRUE);
+        $currentstatus=incident_status($update->currentstatus);
+
+        echo "<div class='detailhead' align='center'>";
+        //show update type icon
+        if (array_key_exists($update->type, $updatetypes))
+        {
+            if (!empty($update->sla) AND $update->type=='slamet') echo "<img src='{$CONFIG['application_webpath']}images/icons/{$iconset}/16x16/{$slatypes[$update->sla]['icon']}' width='16' height='16' alt='{$update->type}' />";
+            echo "<img src='{$CONFIG['application_webpath']}images/icons/{$iconset}/16x16/{$updatetypes[$update->type]['icon']}' width='16' height='16' alt='{$update->type}' />";
+        }
+        else
+        {
+            echo "<img src='{$CONFIG['application_webpath']}images/icons/{$iconset}/16x16/{$updatetypes['research']['icon']}' width='16' height='16' alt='Research' />";
+            echo "<span>Click to {$newmode}</span></a> ";
+            if($update->sla != '') echo "<img src='{$CONFIG['application_webpath']}images/icons/{$iconset}/16x16/{$slatypes[$update->sla]['icon']}' width='16' height='16' alt='{$update->type}' />";
+        }
+        echo " {$updatetime}</div>";
+        echo "</div>\n";
+        if ($updatebody!='')
+        {
+            if ($update->customervisibility=='show') echo "<div class='detailentry'>\n";
+            else echo "<div class='detailentryhidden'>\n";
+            if ($updatebodylen > 5) echo stripslashes(nl2br($updatebody));
+            else echo stripslashes($updatebody);
+            if (!empty($update->nextaction)) echo "<div class='detailhead'>Next action: ".stripslashes($update->nextaction)."</div>";
+            echo "</div>\n"; // detailentry
+        }
+
+        }
+        break;
+        
+        
     case '':
     default:
-        echo "<p align='center'>{$strWelcome} ".contact_realname($_SESSION['contactid'])."</p>";
+        echo "<p align='center'>{$strWelcome} ".contact_realname($_SESSION['contactid'])."</td></tr>";
 }
 
 include('htmlfooter.inc.php');
