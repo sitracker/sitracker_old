@@ -339,10 +339,13 @@ switch ($page)
     //show specified incident
     case 'showincident':
         $incidentid = $_REQUEST['id'];
-
-        $sql = "SELECT contact FROM incidents WHERE id={$incidentid}";
+        $sql = "SELECT title, contact FROM incidents WHERE id={$incidentid}";
         $result = mysql_query($sql);
         $user = mysql_fetch_object($result);
+
+        echo "<h2>Details: {$incidentid} - {$user->title}</h2>";
+        
+
         /*
         //check if this user owns the incident
         if($user->contact != $_SESSION['contactid'])
@@ -389,103 +392,97 @@ switch ($page)
             }
         }
 
-        $count=0;
         while ($update = mysql_fetch_object($result))
         {
             if(empty($firstid)) $firstid = $update->id;
             $updateid = $update->id;
             $updatebody=trim($update->bodytext);
-            $updatebodylen=strlen($updatebody);
-
-            $updatebody = str_replace($origtag, $temptag, $updatebody);
-            // $updatebody = htmlspecialchars($updatebody);
-            $updatebody = str_replace($temptag, $origtag, $updatebody);
-
-        // Insert path to attachments
-        //     $updatebody = preg_replace("/\[\[att\]\](.*?)\[\[\/att\]\]/",
-        //                                "<a href = '{$CONFIG['attachment_webpath']}updates/{$update->id}/$1'>$1</a>",
-        //                                $updatebody);
-        if (file_exists("{$CONFIG['attachment_webpath']}{$update->incidentid}/{$update->timestamp}"))
-                $attachment_webpath = "{$CONFIG['attachment_webpath']}{$update->incidentid}/{$update->timestamp}";
-        else $attachment_webpath = "{$CONFIG['attachment_webpath']}updates/{$update->id}";
-        $updatebody = preg_replace("/\[\[att\]\](.*?)\[\[\/att\]\]/", "<a href = '{$attachment_webpath}/$1'>$1</a>", $updatebody);
-    
-        // Put the header part (up to the <hr /> in a seperate DIV)
+            
+            //remove empty updates
+            if(!empty($updatebody) AND $updatebody != "<hr>")
+            {
+                $updatebodylen=strlen($updatebody);
+  
+                $updatebody = str_replace($origtag, $temptag, $updatebody);
+                // $updatebody = htmlspecialchars($updatebody);
+                $updatebody = str_replace($temptag, $origtag, $updatebody);
+      
+                // Put the header part (up to the <hr /> in a seperate DIV)
                 if (strpos($updatebody, '<hr>')!==FALSE)
-        {
-            $updatebody = "<div class='iheader'>".str_replace('<hr>',"</div>",$updatebody);
-        }
-
-        // Style quoted text
-        // $quote[0]="/^(&gt;\s.*)\W$/m";
-        // $quote[0]="/^(&gt;[\s]*.*)[\W]$/m";
-        $quote[0]="/^(&gt;([\s][\d\w]).*)[\n\r]$/m";
-        $quote[1]="/^(&gt;&gt;([\s][\d\w]).*)[\n\r]$/m";
-        $quote[2]="/^(&gt;&gt;&gt;+([\s][\d\w]).*)[\n\r]$/m";
-        $quote[3]="/^(&gt;&gt;&gt;(&gt;)+([\s][\d\w]).*)[\n\r]$/m";
-    
-        //$quote[3]="/(--\s?\s.+-{8,})/U";  // Sigs
-                $quote[4]="/(-----\s?Original Message\s?-----.*-{3,})/s";
-        $quote[5]="/(-----BEGIN PGP SIGNED MESSAGE-----)/s";
-        $quote[6]="/(-----BEGIN PGP SIGNATURE-----.*-----END PGP SIGNATURE-----)/s";
-        $quote[7]="/^(&gt;)[\r]*$/m";
-        $quote[8]="/^(&gt;&gt;)[\r]*$/m";
-        $quote[9]="/^(&gt;&gt;(&gt;){1,8})[\r]*$/m";
-    
-        $quotereplace[0]="<span class='quote1'>\\1</span>";
-        $quotereplace[1]="<span class='quote2'>\\1</span>";
-        $quotereplace[2]="<span class='quote3'>\\1</span>";
-        $quotereplace[3]="<span class='quote4'>\\1</span>";
-        //$quotereplace[3]="<span class='sig'>\\1</span>";
-        $quotereplace[4]="<span class='quoteirrel'>\\1</span>";
-        $quotereplace[5]="<span class='quoteirrel'>\\1</span>";
-        $quotereplace[6]="<span class='quoteirrel'>\\1</span>";
-        $quotereplace[7]="<span class='quote1'>\\1</span>";
-        $quotereplace[8]="<span class='quote2'>\\1</span>";
-        $quotereplace[9]="<span class='quote3'>\\1</span>";
-    
-        $updatebody=preg_replace($quote, $quotereplace, $updatebody);
-    
-        $updatebody = bbcode($updatebody);
-         
-        //$updatebody = emotion($updatebody);
-
-        //"!(http:/{2}[\w\.]{2,}[/\w\-\.\?\&\=\#]*)!e"
-        // [\n\t ]+
-        $updatebody = preg_replace("!([\n\t ]+)(http[s]?:/{2}[\w\.]{2,}[/\w\-\.\?\&\=\#\$\%|;|\[|\]~:]*)!e", "'\\1<a href=\"\\2\" title=\"\\2\">'.(strlen('\\2')>=70 ? substr('\\2',0,70).'...':'\\2').'</a>'", $updatebody);
-
-
-        // Lookup some extra data
-        $updateuser=user_realname($update->userid,TRUE);
-        $updatetime = readable_date($update->timestamp);
-        $currentowner=user_realname($update->currentowner,TRUE);
-        $currentstatus=incident_status($update->currentstatus);
-
-        echo "<div class='detailhead' align='center'>";
-        //show update type icon
-        if (array_key_exists($update->type, $updatetypes))
-        {
-            if (!empty($update->sla) AND $update->type=='slamet') echo "<img src='{$CONFIG['application_webpath']}images/icons/{$iconset}/16x16/{$slatypes[$update->sla]['icon']}' width='16' height='16' alt='{$update->type}' />";
-            echo "<img src='{$CONFIG['application_webpath']}images/icons/{$iconset}/16x16/{$updatetypes[$update->type]['icon']}' width='16' height='16' alt='{$update->type}' />";
-        }
-        else
-        {
-            echo "<img src='{$CONFIG['application_webpath']}images/icons/{$iconset}/16x16/{$updatetypes['research']['icon']}' width='16' height='16' alt='Research' />";
-            echo "<span>Click to {$newmode}</span></a> ";
-            if($update->sla != '') echo "<img src='{$CONFIG['application_webpath']}images/icons/{$iconset}/16x16/{$slatypes[$update->sla]['icon']}' width='16' height='16' alt='{$update->type}' />";
-        }
-        echo " {$updatetime}</div>";
-        echo "</div>\n";
-        if ($updatebody!='')
-        {
-            if ($update->customervisibility=='show') echo "<div class='detailentry'>\n";
-            else echo "<div class='detailentryhidden'>\n";
-            if ($updatebodylen > 5) echo stripslashes(nl2br($updatebody));
-            else echo stripslashes($updatebody);
-            if (!empty($update->nextaction)) echo "<div class='detailhead'>Next action: ".stripslashes($update->nextaction)."</div>";
-            echo "</div>\n"; // detailentry
-        }
-
+                {
+                    $updatebody = "<div class='iheader'>".str_replace('<hr>',"</div>",$updatebody);
+                }
+                // Style quoted text
+                // $quote[0]="/^(&gt;\s.*)\W$/m";
+                // $quote[0]="/^(&gt;[\s]*.*)[\W]$/m";
+                $quote[0]="/^(&gt;([\s][\d\w]).*)[\n\r]$/m";
+                $quote[1]="/^(&gt;&gt;([\s][\d\w]).*)[\n\r]$/m";
+                $quote[2]="/^(&gt;&gt;&gt;+([\s][\d\w]).*)[\n\r]$/m";
+                $quote[3]="/^(&gt;&gt;&gt;(&gt;)+([\s][\d\w]).*)[\n\r]$/m";
+            
+                //$quote[3]="/(--\s?\s.+-{8,})/U";  // Sigs
+                        $quote[4]="/(-----\s?Original Message\s?-----.*-{3,})/s";
+                $quote[5]="/(-----BEGIN PGP SIGNED MESSAGE-----)/s";
+                $quote[6]="/(-----BEGIN PGP SIGNATURE-----.*-----END PGP SIGNATURE-----)/s";
+                $quote[7]="/^(&gt;)[\r]*$/m";
+                $quote[8]="/^(&gt;&gt;)[\r]*$/m";
+                $quote[9]="/^(&gt;&gt;(&gt;){1,8})[\r]*$/m";
+            
+                $quotereplace[0]="<span class='quote1'>\\1</span>";
+                $quotereplace[1]="<span class='quote2'>\\1</span>";
+                $quotereplace[2]="<span class='quote3'>\\1</span>";
+                $quotereplace[3]="<span class='quote4'>\\1</span>";
+                //$quotereplace[3]="<span class='sig'>\\1</span>";
+                $quotereplace[4]="<span class='quoteirrel'>\\1</span>";
+                $quotereplace[5]="<span class='quoteirrel'>\\1</span>";
+                $quotereplace[6]="<span class='quoteirrel'>\\1</span>";
+                $quotereplace[7]="<span class='quote1'>\\1</span>";
+                $quotereplace[8]="<span class='quote2'>\\1</span>";
+                $quotereplace[9]="<span class='quote3'>\\1</span>";
+            
+                $updatebody=preg_replace($quote, $quotereplace, $updatebody);
+            
+                $updatebody = bbcode($updatebody);
+                
+                //$updatebody = emotion($updatebody);
+        
+                //"!(http:/{2}[\w\.]{2,}[/\w\-\.\?\&\=\#]*)!e"
+                // [\n\t ]+
+                $updatebody = preg_replace("!([\n\t ]+)(http[s]?:/{2}[\w\.]{2,}[/\w\-\.\?\&\=\#\$\%|;|\[|\]~:]*)!e", "'\\1<a href=\"\\2\" title=\"\\2\">'.(strlen('\\2')>=70 ? substr('\\2',0,70).'...':'\\2').'</a>'", $updatebody);
+        
+        
+                // Lookup some extra data
+                $updateuser=user_realname($update->userid,TRUE);
+                $updatetime = readable_date($update->timestamp);
+                $currentowner=user_realname($update->currentowner,TRUE);
+                $currentstatus=incident_status($update->currentstatus);
+        
+                echo "<div class='detailhead' align='center'>";
+                //show update type icon
+                if (array_key_exists($update->type, $updatetypes))
+                {
+                    if (!empty($update->sla) AND $update->type=='slamet') echo "<img src='{$CONFIG['application_webpath']}images/icons/{$iconset}/16x16/{$slatypes[$update->sla]['icon']}' width='16' height='16' alt='{$update->type}' />";
+                    echo "<img src='{$CONFIG['application_webpath']}images/icons/{$iconset}/16x16/{$updatetypes[$update->type]['icon']}' width='16' height='16' alt='{$update->type}' />";
+                }
+                else
+                {
+                    echo "<img src='{$CONFIG['application_webpath']}images/icons/{$iconset}/16x16/{$updatetypes['research']['icon']}' width='16' height='16' alt='Research' />";
+                    echo "<span>Click to {$newmode}</span></a> ";
+                    if($update->sla != '') echo "<img src='{$CONFIG['application_webpath']}images/icons/{$iconset}/16x16/{$slatypes[$update->sla]['icon']}' width='16' height='16' alt='{$update->type}' />";
+                }
+                echo " {$updatetime}</div>";
+                echo "</div>\n";
+                if ($updatebody!='')
+                {
+                    if ($update->customervisibility=='show') echo "<div class='detailentry'>\n";
+                    else echo "<div class='detailentryhidden'>\n";
+                    if ($updatebodylen > 5) echo stripslashes(nl2br($updatebody));
+                    else echo stripslashes($updatebody);
+                    if (!empty($update->nextaction)) echo "<div class='detailhead'>Next action: ".stripslashes($update->nextaction)."</div>";
+                    echo "</div>\n"; // detailentry
+                }
+        
+            }
         }
         break;
         
