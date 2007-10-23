@@ -166,7 +166,7 @@ switch ($page)
             $user = mysql_fetch_object($result);
             if (mysql_error()) trigger_error("MySQL Query Error ".mysql_error(), E_USER_ERROR);
             
-            //ad the update
+            //add the update
             $update = "Updated via the portal by <b>{$user->forenames} {$user->surname}</b>\n\n";
             $update .= $_REQUEST['update'];
             $sql = "INSERT into updates VALUES('', '{$_REQUEST['id']}', '0', 'webupdate', '', '1', '{$update}', '{$now}', '', 'show', 'NULL', 'NULL', '', '', '')";
@@ -208,14 +208,10 @@ switch ($page)
             if (mysql_error()) trigger_error("MySQL Query Error ".mysql_error(), E_USER_ERROR);
             
             //set incident back to active
-                    $sql = "UPDATE incidents SET status=1, lastupdated=$now WHERE id={$_REQUEST['id']}";
+            $sql = "UPDATE incidents SET status=1, lastupdated=$now WHERE id={$_REQUEST['id']}";
             mysql_query($sql);
             if (mysql_error()) trigger_error("MySQL Query Error ".mysql_error(), E_USER_ERROR);
 
-            /*change closing status to 999
-            $sql = "INSERT into incidents('closingstatus') VALUES(999) WHERE id={$_REQUEST['id']}";
-            mysql_query($sql);
-            if (mysql_error()) trigger_error("MySQL Query Error ".mysql_error(), E_USER_ERROR);*/
 
             confirmation_page("2", "portal.php?page=incidents", "<h2>Closure request Successful</h2><p align='center'>{$strPleaseWaitRedirect}...</p>");
         }
