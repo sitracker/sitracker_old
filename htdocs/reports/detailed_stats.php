@@ -32,7 +32,7 @@ if(empty($startdate))
     echo "<td><input type='text' name='startdate' id='startdate' size='10' /> ";
     echo date_picker('incidentsbysoftware.startdate');
     echo "</td></tr>\n";
-    echo "<tr><th{$strEndDate}:</th>";
+    echo "<tr><th>{$strEndDate}:</th>";
     echo "<td><input type='text' name='enddate' id='enddate' size='10' /> ";
     echo date_picker('incidentsbysoftware.enddate');
     echo "</td></tr>\n";

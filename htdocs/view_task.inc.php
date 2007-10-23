@@ -118,7 +118,7 @@ if($mode != 'incident')echo "</div>";
 echo "<div style='clear:both; padding-top: 20px;'>";
 
 if($mode != 'incident') echo "<p align='center'><a href='tasks.php'>{$strTaskList}</a></p>";
-else echo "<p align='center'><a href=edit_task.php?id={$taskid}&action=markcomplete&incident={$incidentid}>Mark Complete</a> | <a href='tasks.php?incident={$id}'>{$strTaskList}</a></p>";
+else echo "<p align='center'><a href=edit_task.php?id={$taskid}&amp;action=markcomplete&amp;incident={$incidentid}>Mark Complete</a> | <a href='tasks.php?incident={$id}'>{$strTaskList}</a></p>";
 echo "</div>";
 
 ?>
