@@ -4629,7 +4629,7 @@ function add_note_form($linkid, $refid)
     else $html .= "&nbsp;Ref ID <input type='text' name='refid' size='4' />";
     $html .= "<input type='hidden' name='action' value='addnote' />";
     $html .= "<input type='hidden' name='rpath' value='{$_SERVER['PHP_SELF']}?{$_SERVER['QUERY_STRING']}' />";
-    $html .= "<div style='text-align: right'><input type='submit' value='{$GLOBALS['strAddnote']}' /></div>\n";
+    $html .= "<div style='text-align: right'><input type='submit' value='{$GLOBALS['strAddNote']}' /></div>\n";
     $html .= "</div>\n";
     $html .= "</form>";
     return $html;
