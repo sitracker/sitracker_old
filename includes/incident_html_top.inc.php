@@ -244,7 +244,7 @@ $incidentid=$id;
 // Retrieve incident
 // extract incident details
 $sql  = "SELECT *, incidents.id AS incidentid, ";
-$sql .= "contacts.id AS contactid, contacts.notes AS contactnotes ";
+$sql .= "contacts.id AS contactid, contacts.notes AS contactnotes, servicelevel ";
 $sql .= "FROM incidents, contacts ";
 $sql .= "WHERE (incidents.id='{$incidentid}' AND incidents.contact=contacts.id) ";
 $sql .= " OR incidents.contact=NULL ";
@@ -344,7 +344,9 @@ if ($menu != 'hide')
         echo "<a class='barlink' href='incident_relationships.php?id={$id}&amp;tab=relationships' accesskey='L'>{$strRelations}</a> | ";
         echo "<a class='barlink' href='javascript:email_window({$id})' accesskey='E'>{$strEmail}</a> | ";
         echo "<a class='barlink' href='incident_attachments.php?id={$id}&amp;popup={$popup}' accesskey='F'>{$strFiles}</a> | ";
+        if(($incident->servicelevel) == "Remote") echo "<a class='barlink' href='tasks.php?incident={$id}'>Tasks</a> | ";
         echo "<a class='barlink' href='incident_details.php?id={$id}&amp;popup={$popup}' accesskey='D'>{$strDetailsAndLog}</a> | ";
+        
         echo "<a class='barlink' href='javascript:help_window({$permission});'>{$strHelpChar}</a>";
         if (!empty($_REQUEST['popup'])) echo " | <a class=barlink href='javascript:window.close();'>{$strCloseWindow}</a>";
     }

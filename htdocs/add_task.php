@@ -36,7 +36,7 @@ if($incident)
     $sql = "INSERT into links VALUES(4, {$taskid}, {$incident}, 'left', {$sit[2]})";
     mysql_query($sql);
     if (mysql_error()) trigger_error(mysql_error(),E_USER_ERROR);
-    confirmation_page(2, "tasks.php?incident=".$incident, "<h2>Task Added</h2><p align='center'>{$strPleaseWaitRedirect}...</p>");
+    confirmation_page(2, "tasks.php?incident=".$incident, "<h2>{$strTask} {$strAdded}</h2><p align='center'>{$strPleaseWaitRedirect}...</p>");
 
 }    
 
@@ -65,7 +65,7 @@ else
             if (count($error) >= 1)
             {
                 include('htmlheader.inc.php');
-                echo "<p class='error'>Please check the data you entered</p>";
+                echo "<p class='error'>$strPleaseCheckData</p>";
                 echo "<ul class='error'>";
                 foreach ($error AS $err)
                 {
