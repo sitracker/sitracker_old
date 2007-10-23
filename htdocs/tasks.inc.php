@@ -132,7 +132,8 @@ else
             echo colheader('id', 'ID', $sort, $order, $filter);
             echo colheader('startdate', $strStartDate, $sort, $order, $filter);
             echo colheader('completeddate', $strCompleted, $sort, $order, $filter);
-            echo colheader('duration', $strDuration, $sort, $order, $filer);
+            echo colheader('duration', $strDuration, $sort, $order, $filter);
+            echo colheader('lastupdated', $strLastUpdated, $sort, $order, $filter);
             echo colheader('owner', $strOwner, $sort, $order, $filter);
         }
         echo "</tr>\n";
@@ -142,6 +143,7 @@ else
             $duedate = mysql2date($task->duedate);
             $startdate = mysql2date($task->startdate);
             $enddate = mysql2date($task->enddate);
+            $lastupdated = mysql2date($task->lastupdated);
             echo "<tr class='$shade'>";
             if ($user == $sit[2])
             {
@@ -184,15 +186,22 @@ else
             else
             {
                 echo "<td>".format_date_friendly($startdate)."</td>";
-                if($enddate == '0') echo "<td>Not Completed</td><td></td>";
-                else 
+                if($enddate == '0') 
                 {
+                    echo "<td>Not Completed</td>";
+                    $duration = $now - $startdate;                    
+                    echo "<td><em>".format_seconds($duration)."</em></td>";
+
+                }
+                else
+                {
+                    $duration = $enddate - $startdate;   
                     echo "<td>".format_date_friendly($enddate)."</td>";
-                    $duration = $enddate - $startdate;
                     echo "<td>".format_seconds($duration)."</td>";
                 }
-
                 
+                
+                echo "<td>".format_date_friendly($lastupdated)."</td>";
             }
             
             if ($show=='completed')
@@ -203,7 +212,6 @@ else
             }
             if($mode == 'incident')
             {
-                echo "<td></td>";
                 echo "<td>".user_realname($task->owner)."</td>";
             }
             echo "</tr>\n";
