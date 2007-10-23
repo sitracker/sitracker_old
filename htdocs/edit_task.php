@@ -116,7 +116,7 @@ switch ($action)
                 mysql_query($sql);
                 if (mysql_error()) trigger_error(mysql_error(),E_USER_ERROR);
             }
-            confirmation_page("2", "view_task.php?id={$id}", "<h2>{$strTask} {$strEdited} {$strSuccessfully}</h2><p align='center'>{$strPleaseWaitRedirect}...</p>");
+            confirmation_page("2", "view_task.php?id={$id}", "<h2>{$strTaskEditedSuccessfully}</h2><p align='center'>{$strPleaseWaitRedirect}...</p>");
         }
     break;
 
@@ -136,7 +136,7 @@ switch ($action)
         mysql_query($sql);
         if (mysql_error()) trigger_error(mysql_error(),E_USER_ERROR);
 
-        confirmation_page("2", "tasks.php?incident={$incident}", "<h2>{$strTask} {$strMarkedComplete} {$strSuccessfully}</h2><p align='center'>{$strPleaseWaitRedirect}...</p>");
+        confirmation_page("2", "tasks.php?incident={$incident}", "<h2>{$strTaskMarkedCompleteSuccessfully}</h2><p align='center'>{$strPleaseWaitRedirect}...</p>");
     break;
 
     case 'delete':
@@ -150,7 +150,7 @@ switch ($action)
         mysql_query($sql);
         if (mysql_error()) trigger_error(mysql_error(),E_USER_ERROR);
 
-        confirmation_page("2", "tasks.php?incident={$id}", "<h2>{$strTask} {$strDeleted} {$strSuccessfully}</h2><p align='center'>{$strPleaseWaitRedirect}...</p>");
+        confirmation_page("2", "tasks.php?incident={$id}", "<h2>{$strTaskDeletedSuccessfully}</h2><p align='center'>{$strPleaseWaitRedirect}...</p>");
     break;
 
     case '':
