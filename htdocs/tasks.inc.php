@@ -188,7 +188,7 @@ else
                 echo "<td>".format_date_friendly($startdate)."</td>";
                 if($enddate == '0') 
                 {
-                    echo "<td>Not Completed</td>";
+                    echo "<td>$strNotCompleted</td>";
                     $duration = $now - $startdate;                    
                     echo "<td><em>".format_seconds($duration)."</em></td>";
 
