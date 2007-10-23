@@ -57,7 +57,6 @@ switch ($action)
             if (mysql_affected_rows() < 1) trigger_error("Note insert failed",E_USER_ERROR);
             
             $sql = "UPDATE tasks SET lastupdated=NOW() WHERE id=$refid";
-            echo $sql;
             mysql_query($sql);
             if (mysql_error()) trigger_error(mysql_error(),E_USER_ERROR);
             
