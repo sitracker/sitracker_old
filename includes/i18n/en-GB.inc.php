@@ -60,7 +60,7 @@ $strChangingContact = 'Changing the contact or skill will not reassign this inci
 $strChooseLanguage = 'Please choose your language';
 $strCity = 'City';
 $strClose = 'Close';
-$strClosed = 'closed';
+$strClosed = 'Closed';
 $strCloseWindow = 'Close Window';
 $strClosureRequestForIncident = 'Closure request for Incident';
 $strConfirmNewPassword = 'Confirm New Password';
@@ -253,6 +253,7 @@ $strNow = 'Now';
 $strOldPassword = 'Old Password';
 $strOther = 'Other';
 $strOtherIncidents = 'Other Incidents';
+$strOpened = 'Opened';
 $strOwner = 'Owner';
 
 $strPreferred = 'Preferred';

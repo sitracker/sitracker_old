@@ -28,11 +28,11 @@ if(empty($startdate))
     echo "<h2>$title</h2>";
     echo "<form action='{$_SERVER['PHP_SELF']}' id='incidentsbysoftware' method='post'>";
     echo "<table class='vertical'>";
-    echo "<tr><th>Start Date:</th>";
+    echo "<tr><th>{$strStartDate}:</th>";
     echo "<td><input type='text' name='startdate' id='startdate' size='10' /> ";
     echo date_picker('incidentsbysoftware.startdate');
     echo "</td></tr>\n";
-    echo "<tr><th>End Date:</th>";
+    echo "<tr><th{$strEndDate}:</th>";
     echo "<td><input type='text' name='enddate' id='enddate' size='10' /> ";
     echo date_picker('incidentsbysoftware.enddate');
     echo "</td></tr>\n";
@@ -52,7 +52,7 @@ else
 
         while($incident = mysql_fetch_object($result))
         {
-            $stats[date('Y-m-d', $incident->opened)]['date']=date('Y-m-d', $incident->opened);
+            $stats[date('Y-m-d', $incident->opened)]['date']=date('l d/m/Y', $incident->opened);
             $stats[date('Y-m-d', $incident->opened)][$incident->id]['opened']['id'] = $incident->id;
             $stats[date('Y-m-d', $incident->opened)][$incident->id]['opened']['owner'] = $incident->owner;
             $stats[date('Y-m-d', $incident->opened)][$incident->id]['opened']['title'] = $incident->title;
@@ -69,7 +69,7 @@ else
 
         while($incident = mysql_fetch_object($result))
         {
-            $stats[date('Y-m-d', $incident->closed)]['date']=date('Y-m-d', $incident->closed);
+            $stats[date('Y-m-d', $incident->closed)]['date']=date('l d/m/Y', $incident->closed);
             $stats[date('Y-m-d', $incident->closed)][$incident->id]['closed']['id'] = $incident->id;
             $stats[date('Y-m-d', $incident->closed)][$incident->id]['closed']['owner'] = $incident->owner;
             $stats[date('Y-m-d', $incident->closed)][$incident->id]['closed']['title'] = $incident->title;
@@ -127,8 +127,8 @@ else
             }
 
             echo "<tr><td valign='top'><table>";
-            echo "<tr><td>Opened</td><td>{$opened}</td></tr>";
-            echo "<tr><td>Closed</td><td>{$closed}</td></tr>";
+            echo "<tr><td>{$strOpened}</td><td>{$opened}</td></tr>";
+            echo "<tr><td>{$strClosed}</td><td>{$closed}</td></tr>";
             echo "<table><tr><th>User</th><th>Opened</th><th>Closed</th></tr>";
             foreach($owners AS $o)
             {
