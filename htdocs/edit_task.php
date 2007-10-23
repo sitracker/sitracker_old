@@ -23,6 +23,7 @@ $title='Edit Task';
 // External variables
 $action = $_REQUEST['action'];
 $id = cleanvar($_REQUEST['id']);
+$incident = cleanvar($_REQUEST['incident']);
 
 switch ($action)
 {
@@ -135,7 +136,7 @@ switch ($action)
         mysql_query($sql);
         if (mysql_error()) trigger_error(mysql_error(),E_USER_ERROR);
 
-        confirmation_page("2", "view_task.php?id={$id}", "<h2>Task marked complete successfully</h2><p align='center'>{$strPleaseWaitRedirect}...</p>");
+        confirmation_page("2", "tasks.php?incident={$incident}", "<h2>Task marked complete successfully</h2><p align='center'>{$strPleaseWaitRedirect}...</p>");
     break;
 
     case 'delete':
@@ -149,7 +150,7 @@ switch ($action)
         mysql_query($sql);
         if (mysql_error()) trigger_error(mysql_error(),E_USER_ERROR);
 
-        confirmation_page("2", "tasks.php", "<h2>Task deleted successfully</h2><p align='center'>{$strPleaseWaitRedirect}...</p>");
+        confirmation_page("2", "tasks.php?incident={$id}", "<h2>Task deleted successfully</h2><p align='center'>{$strPleaseWaitRedirect}...</p>");
     break;
 
     case '':
