@@ -213,8 +213,13 @@ function give_overview()
 
     //count incidents by Vendor
 
+/*
     $sql = "SELECT DISTINCT products.vendorid, vendors.name FROM incidents, products, vendors ";
     $sql .= "WHERE (status != 2 AND status != 7) AND incidents.product = products.id AND vendors.id = products.vendorid ORDER BY vendorid";
+*/
+
+    $sql = "SELECT DISTINCT software.vendorid, vendors.name FROM incidents, software, vendors ";
+    $sql .= "WHERE (status != 2 AND status != 7) AND incidents.softwareid = software.id AND vendors.id = software.vendorid ORDER BY vendorid";
 
     $result = mysql_query($sql);
     if (mysql_error()) trigger_error("MySQL Query Error ".mysql_error(), E_USER_ERROR);
@@ -225,9 +230,16 @@ function give_overview()
         while($vendors = mysql_fetch_array($result))
         {
             // This should use the software and relate to the product and then to the vendor
+            /*
             $sqlVendor = "SELECT COUNT(incidents.id), incidentstatus.name FROM incidents, incidentstatus, products ";
             $sqlVendor .= "WHERE incidents.status = incidentstatus.id AND closed = 0 AND incidents.product = products.id ";
             $sqlVendor .= "AND products.vendorid = ".$vendors['vendorid']." ";
+            $sqlVendor .= "GROUP BY incidents.status";
+            */
+
+            $sqlVendor = "SELECT COUNT(incidents.id), incidentstatus.name FROM incidents, incidentstatus, software ";
+            $sqlVendor .= "WHERE incidents.status = incidentstatus.id AND closed = 0 AND incidents.softwareid = software.id ";
+            $sqlVendor .= "AND software.vendorid = ".$vendors['vendorid']." ";
             $sqlVendor .= "GROUP BY incidents.status";
 
             $resultVendor = mysql_query($sqlVendor);
