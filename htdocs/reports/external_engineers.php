@@ -30,7 +30,7 @@ function incident_details_window_l(incidentid,second)
 echo "</script>";
 
 include('htmlheader.inc.php');
-echo "<h2>External Engineer Call Distribution</h2>";
+echo "<h2>{$strExternalEngineerCallDistribution}</h2>";
 
 $sql = "SELECT id, name FROM escalationpaths";
 $escs = mysql_query($sql);
@@ -48,7 +48,7 @@ while($escalations = mysql_fetch_object($escs))
         while($obj = mysql_fetch_object($result))
         {
             $name = $obj->externalengineer;
-            if(empty($name)) $name='No name associated';
+            if(empty($name)) $name=$strNoNameAssociated;
             $name = stripslashes($name);
             $esc[$name]['name']=$name;
             $esc[$name]['count']++;
@@ -64,13 +64,13 @@ while($escalations = mysql_fetch_object($escs))
         if(!empty($esc))
         {
             $html .= "<p><table align='center'>";
-            $html .= "<tr><th>External Engineer</th><th># of calls</th>";
+            $html .= "<tr><th>External Engineer</th><th>{$strNumOfCalls}</th>";
             $html .= "<th align='center'>".priority_icon(4)."</th>";
             $html .= "<th align='center'>".priority_icon(3)."</th>";
             $html .= "<th align='center'>".priority_icon(2)."</th>";
             $html .= "<th align='center'>".priority_icon(1)."</th>";
             $html .= "<td>";
-            $html .= "<table width='100%'><tr><th width='50%'>Call</th><th width='12%'>Internal</th><th width='25%'>Software</th><th>Status</th></tr></table>";
+            $html .= "<table width='100%'><tr><th width='50%'>{$strIncident}</th><th width='12%'>{$strInternalEngineer}</th><th width='25%'>{$strSoftware}</th><th>{$strStatus}</th></tr></table>";
             $html .= "<td>";
             $html .= "</tr>";
         
@@ -105,7 +105,7 @@ while($escalations = mysql_fetch_object($escs))
                 $c['1']+=$engineer['1'];
                 $html .= "</tr>";
             }
-            $html .= "<tr><td>TOTAL:</td><td>{$total}</td>";
+            $html .= "<tr><td><{$strTotal}:</td><td>{$total}</td>";
             if(empty($c['4'])) $c['4']=0;
             if(empty($c['3'])) $c['3']=0;
             if(empty($c['2'])) $c['2']=0;
@@ -120,7 +120,7 @@ while($escalations = mysql_fetch_object($escs))
             
         }
         else
-            $html .= "<p align='center'>No incidents</p>";
+            $html .= "<p align='center'>{$strNoIncidents}</p>";
     unset($obj);
     unset($esc);
 }
