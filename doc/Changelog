@@ -1,6 +1,6 @@
 Changes in v3.31 - Unreleased
 -----------------------------------------------------------------------
-
+* Software now has a vendor (allows more accurate stats)
 
 Changes in v3.30 - Released 15 October 2007
 -----------------------------------------------------------------------
