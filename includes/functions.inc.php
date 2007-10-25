@@ -239,8 +239,10 @@ $hmenu[60] = array (10=> array ( 'perm'=> 37, 'name'=> "Marketing Mailshot", 'ur
                     100=> array ( 'perm'=> 37, 'name'=> "Recent Incidents", 'url'=>"{$CONFIG['application_webpath']}reports/recent_incidents_table.php"),
                     110=> array ( 'perm'=> 37, 'name'=> "Incidents Logged (Open/Closed)", 'url'=>"{$CONFIG['application_webpath']}reports/incident_graph.php"),
                     120=> array ( 'perm'=> 37, 'name'=> "Average Incident Duration", 'url'=>"{$CONFIG['application_webpath']}reports/average_incident_duration.php"),
-                    130=> array ( 'perm'=> 37, 'name'=> "Incidents by Skill", 'url'=>"{$CONFIG['application_webpath']}reports/incidents_by_software.php",
-                    140=> array ( 'perm'=> 37, 'name'=> "Incidents by Vendor", 'url'=>"{$CONFIG['application_webpath']}reports/incidents_by_vendor.php")
+                    130=> array ( 'perm'=> 37, 'name'=> "Incidents by Skill", 'url'=>"{$CONFIG['application_webpath']}reports/incidents_by_software.php"),
+                    140=> array ( 'perm'=> 37, 'name'=> "Incidents by Vendor", 'url'=>"{$CONFIG['application_webpath']}reports/incidents_by_vendor.php"),
+                    150=> array ( 'perm'=> 37, 'name'=> "Escalated Incident",
+                    'url'=>"{$CONFIG['application_webpath']}reports/external_engineers.php",
 ));
 
 
@@ -5034,7 +5036,7 @@ function replace_tags($type, $id, $tagstring)
     $sql = "DELETE FROM set_tags WHERE id = '$id' AND type = '$type'";
     $result = mysql_query($sql);
     if (mysql_error()) trigger_error("MySQL Query Error ".mysql_error(), E_USER_ERROR);
-
+    
     // Change seperators to spaces
     $seperators=array(', ',';',',');
     $tags=str_replace($seperators, ' ', trim($tagstring));
