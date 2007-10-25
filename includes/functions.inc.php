@@ -63,34 +63,34 @@ $todayrecent=$now-(16*3600);  // past 16 hours
 $CONFIG['upload_max_filesize'] = return_bytes($CONFIG['upload_max_filesize']);
 
 // Non specific update types
-$updatetypes['actionplan'] = array('icon' => 'actionplan.png', 'text' => "{$strActionPlanBy} updateuser");
-$updatetypes['auto'] = array('icon' => 'auto.png', 'text' => "{$strUpdatedAutomaticallyBy} updateuser");
-$updatetypes['closing'] = array('icon' => 'close.png', 'text' => 'Marked for closure by updateuser');
-$updatetypes['editing'] = array('icon' => 'edit.png', 'text' => "{$strEditedBy} updateuser");
-$updatetypes['email'] = array('icon' => 'emailout.png', 'text' => 'Email sent by updateuser');
-$updatetypes['emailin'] = array('icon' => 'emailin.png', 'text' => 'Email received by updateuser');
-$updatetypes['emailout'] = array('icon' => 'emailout.png', 'text' => 'Email sent by updateuser');
-$updatetypes['externalinfo'] = array('icon' => 'externalinfo.png', 'text' => 'External info added by updateuser');
-$updatetypes['probdef'] = array('icon' => 'probdef.png', 'text' => 'Problem Definition by updateuser');
-$updatetypes['research'] = array('icon' => 'research.png', 'text' => 'Researched by updateuser');
-$updatetypes['reassigning'] = array('icon' => 'reassign.png', 'text' => 'Reassigned to currentowner by updateuser');
-$updatetypes['reviewmet'] = array('icon' => 'review.png', 'text' => 'Review updatereview by updateuser'); // conditional
-$updatetypes['tempassigning'] = array('icon' => 'tempassign.png', 'text' => 'Temporarily assigned to currentowner by updateuser');
-$updatetypes['opening'] = array('icon' => 'open.png', 'text' => 'Opened by updateuser');
-$updatetypes['phonecallout'] = array('icon' => 'callout.png', 'text' => 'Phone call made by updateuser');
-$updatetypes['phonecallin'] = array('icon' => 'callin.png', 'text' => 'Phone call taken by updateuser');
-$updatetypes['reopening'] = array('icon' => 'reopen.png', 'text' => 'Reopened by updateuser');
-$updatetypes['slamet'] = array('icon' => 'sla.png', 'text' => 'SLA: updatesla by updateuser');
-$updatetypes['solution'] = array('icon' => 'solution.png', 'text' => 'Resolved by updateuser');
-$updatetypes['webupdate'] = array('icon' => 'webupdate.png', 'text' => 'Web update');
-$updatetypes['auto_chase_phone'] = array('icon' => 'chase.png', 'text' => 'Chase');
-$updatetypes['auto_chase_manager'] = array('icon' => 'chase.png', 'text' => 'Chase');
-$updatetypes['auto_chase_email'] = array('icon' => 'chased.png', 'text' => 'Chased');
-$updatetypes['auto_chased_phone'] = array('icon' => 'chased.png', 'text' => 'Chased');
-$updatetypes['auto_chased_manager'] = array('icon' => 'chased.png', 'text' => 'Chased');
-$updatetypes['auto_chased_managers_manager'] = array('icon' => 'chased.png', 'text' => 'Chased');
-$updatetypes['customerclosurerequest'] = array('icon' => 'close.png', 'text' => 'Customer requested incident closure');
-$slatypes['opened'] = array('icon' => 'open.png', 'text' => 'Opened');
+$updatetypes['actionplan'] = array('icon' => 'actionplan.png', 'text' => $strActionPlanBy);
+$updatetypes['auto'] = array('icon' => 'auto.png', 'text' => $strUpdatedAutomaticallyBy);
+$updatetypes['closing'] = array('icon' => 'close.png', 'text' => $strMarkedforclosureby);
+$updatetypes['editing'] = array('icon' => 'edit.png', 'text' => $strEditedBy);
+$updatetypes['email'] = array('icon' => 'emailout.png', 'text' => $strEmailsentby);
+$updatetypes['emailin'] = array('icon' => 'emailin.png', 'text' => $strEmailreceivedby);
+$updatetypes['emailout'] = array('icon' => 'emailout.png', 'text' => $Emailsentby);
+$updatetypes['externalinfo'] = array('icon' => 'externalinfo.png', 'text' => $strExternalinfoaddedby);
+$updatetypes['probdef'] = array('icon' => 'probdef.png', 'text' => $strProblemDefinitionby);
+$updatetypes['research'] = array('icon' => 'research.png', 'text' => $strResearchedby);
+$updatetypes['reassigning'] = array('icon' => 'reassign.png', 'text' => $srrReassignedtocurrentownerby);
+$updatetypes['reviewmet'] = array('icon' => 'review.png', 'text' => $strReviewby); // conditional
+$updatetypes['tempassigning'] = array('icon' => 'tempassign.png', 'text' => $strTemporarilyassignedto);
+$updatetypes['opening'] = array('icon' => 'open.png', 'text' => $strOpenedby);
+$updatetypes['phonecallout'] = array('icon' => 'callout.png', 'text' => $strPhonecallmadeby);
+$updatetypes['phonecallin'] = array('icon' => 'callin.png', 'text' => $strPhonecalltakenby);
+$updatetypes['reopening'] = array('icon' => 'reopen.png', 'text' => $strReopenedby);
+$updatetypes['slamet'] = array('icon' => 'sla.png', 'text' => $strSLAby);
+$updatetypes['solution'] = array('icon' => 'solution.png', 'text' => $strResolvedby);
+$updatetypes['webupdate'] = array('icon' => 'webupdate.png', 'text' => $strWebupdate);
+$updatetypes['auto_chase_phone'] = array('icon' => 'chase.png', 'text' => $strChase);
+$updatetypes['auto_chase_manager'] = array('icon' => 'chase.png', 'text' => $strChase);
+$updatetypes['auto_chase_email'] = array('icon' => 'chased.png', 'text' => $strChased);
+$updatetypes['auto_chased_phone'] = array('icon' => 'chased.png', 'text' => $strChased);
+$updatetypes['auto_chased_manager'] = array('icon' => 'chased.png', 'text' => $strChased);
+$updatetypes['auto_chased_managers_manager'] = array('icon' => 'chased.png', 'text' => $strChased);
+$updatetypes['customerclosurerequest'] = array('icon' => 'close.png', 'text' => $strCustomerRequestedClosure);
+$slatypes['opened'] = array('icon' => 'open.png', 'text' => $strOpened);
 $slatypes['initialresponse'] = array('icon' => 'initialresponse.png', 'text' => $strInitialResponse);
 $slatypes['probdef'] = array('icon' => 'probdef.png', 'text' => $strProblemDefinition);
 $slatypes['actionplan'] = array('icon' => 'actionplan.png', 'text' => $strActionPlan);
@@ -116,7 +116,7 @@ $hmenu[1031] = array (10=> array ( 'perm'=> 0, 'name'=> "Option1", 'url'=>""),
 */
 //
 //////////////////
-$hmenu[0] = array (10=> array ( 'perm'=> 0, 'name'=> "{$CONFIG['application_shortname']}", 'url'=>"{$CONFIG['application_webpath']}main.php", 'submenu'=>"10"),
+$hmenu[0] = array (10=> array ( 'perm'=> 0, 'name'=> $CONFIG['application_shortname'], 'url'=>"{$CONFIG['application_webpath']}main.php", 'submenu'=>"10"),
                    20=> array ( 'perm'=> 11, 'name'=> $strCustomers, 'url'=>"{$CONFIG['application_webpath']}browse_sites.php", 'submenu'=>"20"),
                    30=> array ( 'perm'=> 6, 'name'=> $strSupport, 'url'=>"{$CONFIG['application_webpath']}incidents.php?user=current&amp;queue=1&amp;type=support", 'submenu'=>"30"),
                    40=> array ( 'perm'=> 0, 'name'=> $strTasks, 'url'=>"{$CONFIG['application_webpath']}tasks.php", 'submenu'=>"40"),
@@ -198,8 +198,8 @@ $hmenu[203010] = array (10=> array ( 'perm'=> 56, 'name'=> $strAddVendor, 'url'=
                         30=> array ( 'perm'=> 28, 'name'=> $strListProducts, 'url'=>"{$CONFIG['application_webpath']}products.php"),
                         35=> array ( 'perm'=> 28, 'name'=> $strListSkills, 'url'=>"{$CONFIG['application_webpath']}products.php?display=skills"),
                         40=> array ( 'perm'=> 56, 'name'=> $strAddSkill, 'url'=>"{$CONFIG['application_webpath']}add_software.php"),
-                        50=> array ( 'perm'=> 24, 'name'=> "Link Products", 'url'=>"{$CONFIG['application_webpath']}add_product_software.php"),
-                        60=> array ( 'perm'=> 25, 'name'=> "Add Product Question", 'url'=>"{$CONFIG['application_webpath']}add_productinfo.php"),
+                        50=> array ( 'perm'=> 24, 'name'=> $strLinkProducts, 'url'=>"{$CONFIG['application_webpath']}add_product_software.php"),
+                        60=> array ( 'perm'=> 25, 'name'=> $strAddProductQuestion, 'url'=>"{$CONFIG['application_webpath']}add_productinfo.php"),
                         70=> array ('perm'=> 56, 'name'=> $strEditVendor, 'url'=>"{$CONFIG['application_webpath']}edit_vendor.php")
 );
 
@@ -210,7 +210,7 @@ $hmenu[30] = array (10=> array ( 'perm'=> 5, 'name'=> $strAddIncident, 'url'=>"{
                     30=> array ( 'perm'=> 0, 'name'=> $strWatchIncidents, 'url'=>"{$CONFIG['application_webpath']}incidents.php?user=all&amp;queue=1&amp;type=support"),
                     40=> array ( 'perm'=> 42, 'name'=> $strHoldingQueue, 'url'=>"{$CONFIG['application_webpath']}review_incoming_updates.php"),
                     50=> array ( 'perm'=> 0, 'name'=> $strJumpToIncident,
-                                 'url'=>"javascript:var id = prompt(%22Enter the call ID%22); window.location = %22{$CONFIG['application_webpath']}incident_details.php?id=%22 + id;")
+                                 'url'=>"javascript:var id = prompt(%22{$strEnterTheIncidentID}%22); window.location = %22{$CONFIG['application_webpath']}incident_details.php?id=%22 + id;")
 );
 
 
