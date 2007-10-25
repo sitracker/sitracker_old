@@ -1,6 +1,14 @@
 Changes in v3.31 - Unreleased
 -----------------------------------------------------------------------
 * Software now has a vendor (allows more accurate stats)
+* Improved customer portal, customers can now read, open, update and request
+  to close their incidents, view their contracts and view and update their 
+  details
+* Enabled i18n to allow translation
+* Added translate page for users to translate strings
+* Added a 'jump to incident' link in the support menu
+* Added external engineer report which shows incidents that have been escalated
+
 
 Changes in v3.30 - Released 15 October 2007
 -----------------------------------------------------------------------
