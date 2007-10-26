@@ -24,6 +24,16 @@ require('auth.inc.php');
 $sort = cleanvar($_REQUEST['sort']);
 $order = cleanvar($_REQUEST['order']);
 $groupid = cleanvar($_REQUEST['gid']);
+$changeuser = cleanvar($_REQUEST['user']);
+$newstatus = cleanvar($_REQUEST['status']);
+
+//TODO: maybe put this in another file?
+if($changeuser AND $newstatus)
+{
+    $sql = "UPDATE users SET accepting='{$newstatus}' WHERE id={$changeuser}";
+    echo $sql;
+    @mysql_query($sql);
+}
 
 
 // By default show users in home group
@@ -163,7 +173,14 @@ while ($users = mysql_fetch_array($result))
     <td>
     <?php
     echo userstatus_name($users["status"]) ?></td>
-    <td align='center'><?php echo $users["accepting"]=='Yes' ? $strYes : "<span class='error'>{$strNo}</span>"; ?></td>
+    <td align='center'>
+    <?php 
+        if(user_permission(2, 69)) 
+        {
+            if($users["accepting"]=='Yes') echo "$strYes | <a href='{$_SERVER[PHP_SELF]}?user={$users['id']}&status=no'>No (Force)</a>";
+            else echo "<a href='{$_SERVER[PHP_SELF]}?user={$users['id']}&status=yes'>Yes (Force)</a> | $strNo";
+        }
+         else echo $users["accepting"]=='Yes' ? $strYes : "<span class='error'>{$strNo}</span>"; ?></td>
     <?php
     echo "<td>";
     echo "<a href='holidays.php?user={$users['id']}' title='{$strHolidays}'><img src='{$CONFIG['application_webpath']}images/icons/{$iconset}/16x16/holiday.png' width='16' height='16' alt='{$strHolidays}' style='border:none;' /></a> ";
