@@ -626,6 +626,7 @@ INSERT INTO `permissions` VALUES (65, 'Delete Products');
 INSERT INTO `permissions` VALUES (66, 'Install Dashboard Components');
 INSERT INTO `permissions` VALUES (67, 'Run Management Reports');
 INSERT INTO `permissions` VALUES (68, 'Manage Holidays');
+INSERT INTO `permissions` VALUES (69, 'Change User Statuses');
 
 
 CREATE TABLE `priority` (
