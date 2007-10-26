@@ -31,7 +31,6 @@ $newstatus = cleanvar($_REQUEST['status']);
 if($changeuser AND $newstatus)
 {
     $sql = "UPDATE users SET accepting='{$newstatus}' WHERE id={$changeuser}";
-    echo $sql;
     @mysql_query($sql);
 }
 
