@@ -16,7 +16,7 @@ $permission=60; // Perform Searches
 $limit_results=2000;
 
 //FIXME make search_string safe
-if($searchmode != 'include')
+if($searchmode != 'related')
 {
     $search_string = $_REQUEST['search_string'];
     $search_domain = cleanvar($_REQUEST['search_domain']);
@@ -208,7 +208,7 @@ if (!empty($search_string))
             $sql = "SELECT * FROM incidents WHERE ";
             if (is_numeric($sterms[0])) $sql .= search_build_query('id', $sterms)."OR ";
             $sql .= search_build_query('title', $sterms);
-            if($product) $sql .= "AND product = {$product}";
+            if(!empty($software) AND $software != '0') $sql .= "AND softwareid = {$software}";
 //             echo "<pre>$sql</pre>";
             $result = mysql_query($sql);
             if (mysql_error()) trigger_error(mysql_error(),E_USER_WARNING);
@@ -232,27 +232,30 @@ if (!empty($search_string))
                 search_build_results($srch_results,$entry);
                 unset($entry);
             }
+            if($searchmode != 'related')
+            {    
             // Incident updates
-                    $sql = "SELECT DISTINCT incidents.id AS incidentid, incidents.title, updates.bodytext, updates.timestamp, incidents.opened, incidents.closed FROM incidents,updates WHERE ";
-            $sql .= "updates.incidentid = incidents.id AND (";
-            $sql .= search_build_query('updates.bodytext', $sterms);
-            $sql .= ") GROUP BY incidents.id";
-            $result = mysql_query($sql);
-            if (mysql_error()) trigger_error(mysql_error(),E_USER_WARNING);
-            while ($sresult = mysql_fetch_object($result))
-            {
-                $entry['id']=$sresult->incidentid;
-                $entry['ref']="incident-{$sresult->incidentid}";
-                $entry['string'] = stripslashes(strip_tags($sresult->bodytext));
-                $entry['score'] = 8 + search_score_adjust($sterms, $entry['string']);
-                $entry['title'] = stripslashes($sresult->title);
-                $entry['date'] = $sresult->timestamp;
-                $entry['extra']['opened'] = date($CONFIG['dateformat_datetime'],$sresult->opened);
-                if ($sresult->status==2) $entry['extra']['closed'] = date($CONFIG['dateformat_datetime'],$sresult->closed);
-                search_build_results($srch_results,$entry);
-                unset($entry);
+                $sql = "SELECT DISTINCT incidents.id AS incidentid, incidents.title, updates.bodytext, updates.timestamp, incidents.opened, incidents.closed FROM incidents,updates WHERE ";
+                $sql .= "updates.incidentid = incidents.id AND (";
+                $sql .= search_build_query('updates.bodytext', $sterms);
+                $sql .= ") GROUP BY incidents.id";
+                $result = mysql_query($sql);
+                if (mysql_error()) trigger_error(mysql_error(),E_USER_WARNING);
+                while ($sresult = mysql_fetch_object($result))
+                {
+                    $entry['id']=$sresult->incidentid;
+                    $entry['ref']="incident-{$sresult->incidentid}";
+                    $entry['string'] = stripslashes(strip_tags($sresult->bodytext));
+                    $entry['score'] = 8 + search_score_adjust($sterms, $entry['string']);
+                    $entry['title'] = stripslashes($sresult->title);
+                    $entry['date'] = $sresult->timestamp;
+                    $entry['extra']['opened'] = date($CONFIG['dateformat_datetime'],$sresult->opened);
+                    if ($sresult->status==2) $entry['extra']['closed'] = date($CONFIG['dateformat_datetime'],$sresult->closed);
+                    search_build_results($srch_results,$entry);
+                    unset($entry);
+                }
+//                 echo "<pre>$sql</pre>";
             }
-//             echo "<pre>$sql</pre>";
         break;
 
         case 'customers':
@@ -406,7 +409,7 @@ if (!empty($search_string))
     }
     else echo "<p>No results</p>";
 }
-if($searchmode != 'include')
+if($searchmode != 'related')
 {
     echo "<p>See also the <a href='view_tags.php'>Tag Cloud</a></p>";
     echo "<p>Firefox 2 and IE 7 users: You can <a href=\"javascript:window.external.AddSearchProvider('{$CONFIG['application_uriprefix']}{$CONFIG['application_webpath']}opensearch.php')\">install this search plugin</a> to make searching easier.</p>";
