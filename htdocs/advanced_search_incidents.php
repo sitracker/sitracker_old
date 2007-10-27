@@ -41,65 +41,59 @@ if (empty($action))
 {
     echo "<h2><img src='{$CONFIG['application_webpath']}images/icons/{$iconset}/32x32/search.png' width='32' height='32' alt='' /> ";
     echo "Advanced Incidents Search</h2>";
-    ?>
-    <form action="<?php echo $_SERVER['PHP_SELF'] ?>" method="get">
-    <table class='vertical'>
-    <tr><th>Title:</th><td><input maxlength='100' name="search_title" size='30' type='text' /></td></tr>
-    <tr><th>Incident ID:</th><td><input maxlength='100' name='search_id' size='30' type="text" /></td></tr>
-    <tr><th>External ID:</th><td><input maxlength='100' name="search_externalid" size='30' type="text" /></td></tr>
-    <tr><th>Service Level:</th><td><?php echo serviceleveltag_drop_down('search_servicelevel', 0, TRUE); ?></td></tr>
-    <tr><th>Contact:</th><td><input maxlength='100' name="search_contact" size='30' type="text" /></td></tr>
-    <tr><th>Priority:</th><td><?php echo priority_drop_down('search_priority', 0); ?></td></tr>
-    <tr><th>Product:</th><td><?php echo product_drop_down('search_product', 0) ?></td></tr>
-    <tr><th>Incident Details:</th><td><input maxlength='100' name="search_details" size='30' type="text" /></td></tr>
-    <tr><th>Status<br />Open/Closed:</th><td>
-    <select size="1" name="search_range">
-    <option selected='selected' value="All">All Incidents</option>
-    <option value="Open">Open Incidents Only</option>
-    <option value="Closed">Closed Incidents Only</option>
-    </select>
-    </td></tr>
-
-    <tr><th>Last Update:</th><td width='300'>
-    <select size="1" name="search_date">
-    <option selected="selected" value="All">All dates</option>
-    <option value="Recent180">Updated in past six months only</option>
-    <option value="Recent90">Updated in past three months only</option>
-    <option value="Recent30">Updated in past month only</option>
-    <option value="Recent14">Updated in past fortnight only</option>
-    <option value="Recent7">Updated in past week only</option>
-    <option value="Recent1">Updated today</option>
-    <option value="RecentHour">Updated this hour</option>
-    <option value="OldHour">Not updated in the past hour</option>
-    <option value="Old7">Not updated this week</option>
-    <option value="Old30">Not updated this month</option>
-    <option value="Old90">Not updated in the past three months</option>
-    <option value="Old180">Not updated in the past six months</option>
-    </select>
-    </td></tr>
-    <tr><th>Owner:</th><td width='300'>
-    <?php user_drop_down('search_user',0); ?>
-    </td></tr>
-
-    <tr><th>Sort Results:</th><td width='300'>
-    <select size="1" name="sort_results">
-    <option selected='selected' value="DateDESC">By date, newest first</option>
-    <option value="DateASC">By Date, oldest first</option>
-    <option value="IDASC">By Incident ID</option>
-    <option value="TitleASC">By Title</option>
-    <option value="ContactASC">By Contact Name</option>
-    <option value="SiteASC">By Site Name</option>
-    </select>
-    </td></tr>
-    <tr>
-    <td>
-    </td><td>
-    <input type='hidden' name='action' value='search' />
-    <input name="reset" type="reset" value="Clear" />&nbsp;<input name="submit" type="submit" value="Search" />
-    </td></tr>
-    </table>
-    </form>
-    <?php
+    echo "<form action=\"{$_SERVER['PHP_SELF']}\" method='get'>";
+    echo "<table class='vertical'>";
+    echo "<tr><th>{$strTitle}:</th><td><input maxlength='100' name='search_title' size='30' type='text' /></td></tr>\n";
+    echo "<tr><th>{$strIncident} ID:</th><td><input maxlength='100' name='search_id' size='30' type='text' /></td></tr>\n";
+    echo "<tr><th>{$strExternalID}:</th><td><input maxlength='100' name='search_externalid' size='30' type='text' /></td></tr>\n";
+    echo "<tr><th>{$strServiceLevel}:</th><td>".serviceleveltag_drop_down('search_servicelevel', 0, TRUE)."</td></tr>\n";
+    echo "<tr><th>{$strContact}:</th><td><input maxlength='100' name='search_contact' size='30' type='text' /></td></tr>\n";
+    echo "<tr><th>{$strPriority}:</th><td>".priority_drop_down('search_priority', 0)."</td></tr>\n";
+    echo "<tr><th>{$strProduct}:</th><td>".product_drop_down('search_product', 0)."</td></tr>\n";
+    echo "<tr><th>{$strDetails}:</th><td><input maxlength='100' name='search_details' size='30' type='text' /></td></tr>\n";
+    echo "<tr><th>{$strStatus}<br />{$strOpen}/{$strClosed}:</th><td>";
+    echo "<select size='1' name='search_range'>";
+    echo "<option selected='selected' value='All'>{$strAll}</option>";
+    echo "<option value='Open'>{$strAllOpen}</option>";
+    echo "<option value='Closed'>{$strAllClosed}</option>";
+    echo "</select>\n";
+    echo "</td></tr>\n";
+    echo "<tr><th>{$strLastUpdated}:</th><td width='300'>";
+    echo "<select size='1' name='search_date'>
+    <option selected='selected' value='All'>All dates</option>
+    <option value='Recent180'>Updated in past six months only</option>
+    <option value='Recent90'>Updated in past three months only</option>
+    <option value='Recent30'>Updated in past month only</option>
+    <option value='Recent14'>Updated in past fortnight only</option>
+    <option value='Recent7'>Updated in past week only</option>
+    <option value='Recent1'>Updated today</option>
+    <option value='RecentHour'>Updated this hour</option>
+    <option value='OldHour'>Not updated in the past hour</option>
+    <option value='Old7'>Not updated this week</option>
+    <option value='Old30'>Not updated this month</option>
+    <option value='Old90'>Not updated in the past three months</option>
+    <option value='Old180'>Not updated in the past six months</option>
+    </select>"; // FIXME i18n
+    echo "</td></tr>\n";
+    echo "<tr><th>{$strOwner}:</th><td width='300'>";
+    user_drop_down('search_user',0);
+    echo "</td></tr>";
+    echo "<tr><th>{$strSortResults}:</th><td width='300'>";
+    echo "<select size='1' name='sort_results'>
+    <option selected='selected' value='DateDESC'>By date, newest first</option>
+    <option value='DateASC'>By Date, oldest first</option>
+    <option value='IDASC'>By Incident ID</option>
+    <option value='TitleASC'>By Title</option>
+    <option value='ContactASC'>By Contact Name</option>
+    <option value='SiteASC'>By Site Name</option>
+    </select>"; // i18n
+    echo "</td></tr>\n";
+    echo "<tr><td></td><td><input type='hidden' name='action' value='search' />";
+    echo "<input name='reset' type='reset' value=\"{$strReset}\" />&nbsp;";
+    echo "<input name='submit' type='submit' value=\"{$strSearch}\" />";
+    echo "</td></tr>\n";
+    echo "</table>\n";
+    echo "</form>\n";
 }
 else
 {
@@ -165,27 +159,25 @@ else
         $countresults=  mysql_num_rows($result);
         if ($countresults == 0)
         {
-            echo "<h2>Sorry, your search yielded no results</h2>\n";
+            echo "<h2>Sorry, your search yielded no results</h2>\n"; // FIXME i18n
             echo "<p align='center'><a href=\"advanced_search_incidents.php\">Search Again</a></p>";
         }
         else
         {
-            echo "<h2>Search yielded {$countresults} result(s)</h2>";
-            ?>
-            <table align='center'>
+            echo "<h2>Search yielded {$countresults} result(s)</h2>"; // FIXME 18n
+            echo "<table align='center'>
             <tr>
-            <th>ID (Ext ID)</th>
-            <th>Title</th>
-            <th>Contact</th>
-            <th>Site</th>
-            <th>Priority</th>
-            <th>Owner</th>
-            <th>Opened</th>
-            <th>Last Updated</th>
-            <th>Type</th>
-            <th>Status</th>
-            </tr>
-            <?php
+            <th>{$strID} (Ext ID)</th>
+            <th>{$strTitle}</th>
+            <th>{$strContact}</th>
+            <th>{$strSite}</th>
+            <th>{$strPriority}</th>
+            <th>{$strOwner}</th>
+            <th>{$strOpened}</th>
+            <th>{$strLastUpdated}</th>
+            <th>{$strType}</th>
+            <th>{$strStatus}</th>
+            </tr>";
             $shade = 0;
             while ($results = mysql_fetch_array($result))
             {
@@ -194,7 +186,7 @@ else
                 else $class = "shade2";
                 ?>
                 <tr class='<?php echo $class; ?>'>
-                <td align='center'  width='100'><?php echo $results["id"] ?> (<?php if ($results["externalid"] == "") echo "None"; else echo $results["externalid"] ?>)</td>
+                <td align='center'  width='100'><?php echo $results["id"] ?> (<?php if ($results["externalid"] == "") echo "None"; else echo stripslashes($results["externalid"]) ?>)</td>
                 <td width='150'><a href="javascript:incident_details_window('<?php echo $results["id"] ?>')"><?php echo $results["title"] ?></a></td>
                 <td align='center' width='100'><?php echo stripslashes($results['forenames'].' '.$results['surname']); ?></td>
                 <td align='center' width='100'><?php echo site_name($results['siteid']) ?></td>
@@ -213,8 +205,9 @@ else
         }
         echo "</table>";
         echo "<br />";
-        echo "<p align='center'><a href=\"advanced_search_incidents.php\">Search Again</a></p>";
+        echo "<p align='center'><a href=\"advanced_search_incidents.php\">{$strSearchAgain}</a></p>";
         // FIXME v3.2x Replace maxresults limit with paging
+        // FIXME i18n
         if ($countresults >= $maxresults) echo "<p class='info'>A maximum of {$maxresults} results are displayed, your search might have returned more.</p>";
     }
 }
