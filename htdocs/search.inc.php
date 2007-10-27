@@ -28,21 +28,22 @@ if($searchmode != 'related')
 
 
     echo "<h2><img src='{$CONFIG['application_webpath']}images/icons/{$iconset}/32x32/search.png' width='32' height='32' alt='' /> ";
-    echo "Search {$CONFIG['application_shortname']}</h2>\n";
+    echo "{$strSearch} {$CONFIG['application_shortname']}</h2>\n";
     echo "<form action='{$_SERVER['PHP_SELF']}' method='get'>";
     echo "<table align='center'>";
     echo "<tr><th>";
-    echo "Search ";
+    echo "{$strSearch} ";
     $domains=array('incidents'=>'Incidents', 'customers' => 'Customers', 'maintenance' => 'Maintenance', 'knowledgebase' => 'KnowlegeBase');
     echo array_drop_down($domains, 'search_domain', $search_domain);
     echo " for:";
     echo "</th>";
     echo "<td>";
-    echo "<input maxlength='100' name='search_string' size='35' type='text' value='".stripslashes(strip_tags(urldecode($search_string)))."' /> (<a href='advanced_search_incidents.php'>Advanced</a>)";
+    echo "<input maxlength='100' name='search_string' size='35' type='text' value='".stripslashes(strip_tags(urldecode($search_string)))."' /> ";
+    echo "(<a href='advanced_search_incidents.php'>{$strAdvanced}</a>)";
     echo "</td>";
     echo "</tr>\n";
     echo "</table>\n";
-    echo "<p><input name='submit' type='submit' value='Search' /></p>";
+    echo "<p><input name='submit' type='submit' value='{$strSearch}' /></p>";
     echo "</form>";
 }
 // echo "<table align='center'>";
@@ -233,7 +234,7 @@ if (!empty($search_string))
                 unset($entry);
             }
             if($searchmode != 'related')
-            {    
+            {
             // Incident updates
                 $sql = "SELECT DISTINCT incidents.id AS incidentid, incidents.title, updates.bodytext, updates.timestamp, incidents.opened, incidents.closed FROM incidents,updates WHERE ";
                 $sql .= "updates.incidentid = incidents.id AND (";
@@ -360,10 +361,10 @@ if (!empty($search_string))
         echo "<tr>";
         $filter = array('search_string' => $search_string,
                         'search_domain' => $search_domain);
-        echo colheader('id', 'ID', $sort, $order, $filter);
-        echo colheader('result', 'Result', $sort, $order, $filter);
-        echo colheader('score', 'Score', $sort, $order, $filter);
-        echo colheader('date', 'Date', $sort, $order, $filter);
+        echo colheader('id', $strID, $sort, $order, $filter);
+        echo colheader('result', $strResult, $sort, $order, $filter);
+        echo colheader('score', $strScore, $sort, $order, $filter);
+        echo colheader('date', $strDate, $sort, $order, $filter);
         echo "</tr>";
         $shade='shade1';
         foreach($srch_results AS $sresult)
