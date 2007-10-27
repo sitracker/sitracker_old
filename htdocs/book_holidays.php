@@ -102,7 +102,7 @@ elseif ($step=='1')
     echo "<input type='hidden' name='type' value='$type' />";
 
     echo "<table align='center' width='550'>";
-    echo "<tr><th>{$strDate}</th><th>{$strNone}</th><th>Day</th><th>AM</th><th>PM</th></tr>\n";
+    echo "<tr><th>{$strDate}</th><th>{$strNone}</th><th>{$strDay}</th><th>AM</th><th>PM</th></tr>\n";
 
     $daynumber=1;
     $options=0;
@@ -173,7 +173,7 @@ elseif ($step=='1')
                 if (mysql_error()) trigger_error("MySQL Query Error ".mysql_error(), E_USER_ERROR);
                 if (mysql_num_rows($result) > 0)
                 {
-                    echo "<tr><td class='shade1' align='right'>".date('l jS M y',$day)."</td><td colspan='4'>Public Holiday</td></tr>";
+                    echo "<tr><td class='shade1' align='right'>".date('l jS M y',$day)."</td><td colspan='4'>{$strPublicHoliday}</td></tr>";
                 }
                 else
                 {
@@ -203,7 +203,7 @@ elseif ($step=='1')
     if ($options > 0)
     {
         echo "<p align='center'>";
-        echo "<input type='submit' value='Select' />";
+        echo "<input type='submit' value='{$strSelect}' />";
         echo "</p>";
     } else echo "";
     echo "</form>";

@@ -97,6 +97,7 @@ $strCustomerRequestedClosure = 'Customer Requested Incident Closure';
 $strDashboard = 'Dashboard';
 $strDataProtection = 'Data Protection';
 $strDate = 'Date';
+$strDay = 'Day';
 $strDelete = 'Delete';
 $strDeleted = 'Deleted';
 $strDeleteTask = 'Delete Task';
@@ -301,6 +302,7 @@ $strPrivate = 'Private';
 $strProduct = 'Product';
 $strProducts = 'Products';
 $strPublic = 'Public';
+$strPublicHoliday = 'Public Holiday';
 $strPublished = 'published';
 
 $strQualifications = 'Qualifications';
