@@ -34,36 +34,30 @@ if ($action == "showform" OR $action == '')
     <?php
     echo "<h2><img src='{$CONFIG['application_webpath']}images/icons/{$iconset}/32x32/site.png' width='32' height='32' alt='' /> ";
     echo "{$strNewSite}</h2>";
-    ?>
-    <h5>Mandatory fields are marked <sup class='red'>*</sup></h5>
-    <form action="<?php echo $_SERVER['PHP_SELF']; ?>?action=add" method="post" onsubmit="return confirm_submit()">
-    <table align='center'>
-    <tr><th>Name: <sup class="red">*</sup></th><td><input maxlength="255" name="name" size="30" /></td></tr>
-    <tr><th>Department: <sup class="red">*</sup></th><td><input maxlength="255" name="department" size="30" /></td></tr>
-    <tr><th>Address1:<sup class="red">*</sup></th><td><input maxlength="255" name="address1" size="30" /></td></tr>
-    <tr><th>Address2:</th><td><input maxlength="255" name="address2" size="30" /></td></tr>
-    <tr><th>City:</th><td><input maxlength="255" name="city" size="30" /></td></tr>
-    <tr><th>County:</th><td><input maxlength="255" name="county" size="30" /></td></tr>
-    <tr><th>Country: <sup class="red">*</sup></th><td><?php echo country_drop_down('country', $CONFIG['home_country']); ?></td></tr>
-    <tr><th>Postcode:</th><td><input maxlength="255" name="postcode" size="30" /></td></tr>
-    <tr><th>Telephone:</th><td><input maxlength="255" name="telephone" size="30" /></td></tr>
-    <tr><th>Fax:</th><td><input maxlength="255" name="fax" size="30" /></td></tr>
-    <tr><th>Email: <sup class="red">*</sup></th><td><input maxlength="255" name="email" size="30" /></td></tr>
-    <tr><th>Website:</th><td><input maxlength="255" name="websiteurl" size="30" /></td></tr>
-    <tr><th>Site Type:</th><td>
-    <?php echo sitetype_drop_down('typeid', 1) ?>
-    </td></tr>
-    <tr><th>Salesperson:</th><td>
-    <?php
+    echo "<h5>".sprintf($strMandatoryMarked, "<sup class='red'>*</sup>")."</h5>";
+    echo "<form action='{$_SERVER['PHP_SELF']}?action=add' method='post' onsubmit='return confirm_submit();'>";
+    echo "<table align='center'>";
+    echo "<tr><th>{$strName}: <sup class='red'>*</sup></th><td><input maxlength='255' name='name' size='30' /></td></tr>\n";
+    echo "<tr><th>{$strDepartment}: <sup class='red'>*</sup></th><td><input maxlength='255' name='department' size='30' /></td></tr>\n";
+    echo "<tr><th>{$strAddress1}:<sup class='red'>*</sup></th><td><input maxlength='255' name='address1' size='30' /></td></tr>\n";
+    echo "<tr><th>{$strAddress2}:</th><td><input maxlength='255' name='address2' size='30' /></td></tr>\n";
+    echo "<tr><th>{$strCity}:</th><td><input maxlength='255' name='city' size='30' /></td></tr>\n";
+    echo "<tr><th>{$strCounty}:</th><td><input maxlength='255' name='county' size='30' /></td></tr>\n";
+    echo "<tr><th>{$strCountry}: <sup class='red'>*</sup></th><td>".country_drop_down('country', $CONFIG['home_country'])."</td></tr>\n";
+    echo "<tr><th>{$strPostcode}:</th><td><input maxlength='255' name='postcode' size='30' /></td></tr>\n";
+    echo "<tr><th>{$strTelephone}:</th><td><input maxlength='255' name='telephone' size='30' /></td></tr>\n";
+    echo "<tr><th>{$strFax}:</th><td><input maxlength='255' name='fax' size='30' /></td></tr>\n";
+    echo "<tr><th>{$strEmail}: <sup class='red'>*</sup></th><td><input maxlength='255' name='email' size='30' /></td></tr>\n";
+    echo "<tr><th>{$strWebsite}:</th><td><input maxlength='255' name='websiteurl' size='30' /></td></tr>\n";
+    echo "<tr><th>{$strSiteType}:</th><td>".sitetype_drop_down('typeid', 1)."</td></tr>\n";
+    echo "<tr><th>{$strSalesperson}:</th><td>";
     user_drop_down('owner', 0, $accepting=FALSE)
-    ?>
-    </td></tr>
-    <tr><th>Notes:</th><td><textarea cols="30" name="notes" rows="5"></textarea></td></tr>
-    </table>
-    <p><input name="submit" type="submit" value="Add Site" /></p>
-    <p class='warning'>Please ensure that the site does not already exist before adding a new site</p>
-    </form>
-    <?php
+    echo "</td></tr>\n";
+    echo "<tr><th>{$strNotes}:</th><td><textarea cols='30' name='notes' rows='5'></textarea></td></tr>\n";
+    echo "</table>\n";
+    echo "<p><input name='submit' type='submit' value=\"{$strAddSite}\" /></p>";
+    echo "<p class='warning'>{$strAvoidDupes}</p>\n";
+    echo "</form>\n";
     include('htmlfooter.inc.php');
 }
 elseif ($action == "add")

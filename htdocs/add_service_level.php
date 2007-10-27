@@ -34,10 +34,10 @@ if (empty($action) OR $action == "showform")
 
     echo "<table align='center'>";
     echo "<tr><th>{$strPriority}</th><th>{$strInitialResponse}</th>";
-    echo "<th>Problem Determination</th><th>{$strActionPlan}</th><th>Resolution</th>";
+    echo "<th>{$strProblemDefinition}</th><th>{$strActionPlan}</th><th>{$strResolutionReprioritisation}</th>";
     echo "<th>{$strReview}</th></tr>";
     echo "<tr>";
-    echo "<td>Low</td>";
+    echo "<td>{$strLow}</td>";
     echo "<td><input type='text' size='5' name='low_initial_response_mins' maxlength='5' value='320' /> Minutes</td>";
     echo "<td><input type='text' size='5' name='low_prob_determ_mins' maxlength='5' value='380' /> Minutes</td>";
     echo "<td><input type='text' size='5' name='low_action_plan_mins' maxlength='5' value='960' /> Minutes</td>";
@@ -45,7 +45,7 @@ if (empty($action) OR $action == "showform")
     echo "<td><input type='text' size='5' name='low_review_days' maxlength='3' value='28' /> Days</td>";
     echo "</tr>\n";
     echo "<tr>";
-    echo "<td>Medium</td>";
+    echo "<td>{$strMedium}</td>";
     echo "<td><input type='text' size='5' name='med_initial_response_mins' maxlength='5' value='240' /> Minutes</td>";
     echo "<td><input type='text' size='5' name='med_prob_determ_mins' maxlength='5' value='320' /> Minutes</td>";
     echo "<td><input type='text' size='5' name='med_action_plan_mins' maxlength='5' value='960' /> Minutes</td>";
@@ -53,7 +53,7 @@ if (empty($action) OR $action == "showform")
     echo "<td><input type='text' size='5' name='med_review_days' maxlength='3' value='20' /> Days</td>";
     echo "</tr>\n";
     echo "<tr>";
-    echo "<td>High</td>";
+    echo "<td>{$strHigh}</td>";
     echo "<td><input type='text' size='5' name='hi_initial_response_mins' maxlength='5' value='120' /> Minutes</td>";
     echo "<td><input type='text' size='5' name='hi_prob_determ_mins' maxlength='5' value='180' /> Minutes</td>";
     echo "<td><input type='text' size='5' name='hi_action_plan_mins' maxlength='5' value='480' /> Minutes</td>";
@@ -61,7 +61,7 @@ if (empty($action) OR $action == "showform")
     echo "<td><input type='text' size='5' name='hi_review_days' maxlength='3' value='14' /> Days</td>";
     echo "</tr>\n";
     echo "<tr>";
-    echo "<td>Critical</td>";
+    echo "<td>{$strCritical}</td>";
     echo "<td><input type='text' size='5' name='crit_initial_response_mins' maxlength='5' value='60' /> Minutes</td>";
     echo "<td><input type='text' size='5' name='crit_prob_determ_mins' maxlength='5' value='120' /> Minutes</td>";
     echo "<td><input type='text' size='5' name='crit_action_plan_mins' maxlength='5' value='240' /> Minutes</td>";
