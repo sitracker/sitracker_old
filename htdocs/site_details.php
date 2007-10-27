@@ -44,7 +44,7 @@ while ($siterow=mysql_fetch_array($siteresult))
         echo "<tr><th>{$strStatus}:</th><td><span class='expired'>{$strInactive}</span></td></tr>";
     }
     $tags = list_tags($id, 3, TRUE);
-    if (!empty($tags)) echo "<tr><th>Tags:</th><td>{$tags}</td></tr>";
+    if (!empty($tags)) echo "<tr><th>{$strTags}:</th><td>{$tags}</td></tr>";
     echo "<tr><th>{$strDepartment}:</th><td>".stripslashes($siterow['department'])."</td></tr>";
     echo "<tr><th>{$strAddress1}:</th><td>".stripslashes($siterow['address1'])."</td></tr>";
     echo "<tr><th>{$strAddress2}:</th><td>".stripslashes($siterow['address2'])."</td></tr>";
@@ -64,7 +64,7 @@ while ($siterow=mysql_fetch_array($siteresult))
     echo "<tr><th>Site Incident Pool:</th><td>{$siterow['freesupport']} Incidents remaining</td></tr>";
     echo "<tr><th>{$strSalesperson}:</th><td>";
     if ($siterow['owner']>=1) echo user_realname($siterow['owner'],TRUE);
-    else echo 'Not Set';
+    else echo $strNotSet;
     echo "</td></tr>\n";
 }
 mysql_free_result($siteresult);
@@ -159,18 +159,18 @@ if (user_permission($sit[2],19)) // View contracts
         }
         </script>
         <p align='center'>
-        <?php echo mysql_num_rows($result) ?> Contract(s)</p>
-        <table align='center'>
-        <tr>
-            <th>Contract ID</th>
-            <th>Product</th>
-            <th>Reseller</th>
-            <th>Licence</th>
-            <th>Expiry Date</th>
-            <th>Admin Contact</th>
-            <th>Notes</th>
-        </tr>
         <?php
+        echo mysql_num_rows($result)." $strContracts</p>";
+        echo "<table align='center'>
+        <tr>
+            <th>{$strContractID}</th>
+            <th>{$strProduct}</th>
+            <th>{$strReseller}</th>
+            <th>{$strLicense}</th>
+            <th>{$strExpiryDate}</th>
+            <th>{$strAdminContact}</th>
+            <th>{$strNotes}</th>
+        </tr>";
         $shade = 0;
         while ($results = mysql_fetch_array($result))
         {

@@ -134,7 +134,7 @@ if($countskills > 0 AND $countusers > 0)
     mysql_data_seek($result, 0);
     echo "<table align='center' class='vertical'>";
     $shade='shade1';
-    echo "<thead><tr><td>Skill</td>";
+    echo "<thead><tr><td>{$strSkill}</td>";
     foreach($users AS $u) echo "<th>$u</th>";
     echo "<th>Count</th>";
     echo "</tr></thead>\n";
