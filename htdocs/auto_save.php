@@ -20,7 +20,7 @@ $userid = cleanvar($_REQUEST['userid']);
 $incidentid = cleanvar($_REQUEST['incidentid']);
 $type = cleanvar($_REQUEST['type']);
 $draftid = cleanvar($_REQUEST['draftid']);
-$metacontent = cleanvar($_REQUEST['meta']);
+$meta = cleanvar($_REQUEST['meta']);
 $content = cleanvar($_REQUEST['content']);
 $now = time();
 

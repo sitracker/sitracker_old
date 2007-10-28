@@ -802,7 +802,7 @@ function emailtype_to($id)
 
 function emailtype_from($id)
 { 
-    echo db_read_column('fromfield', 'emailtype', $id);    
+    echo db_read_column('fromfield', 'emailtype', $id);
     return db_read_column('fromfield', 'emailtype', $id);
 }
 
@@ -5192,6 +5192,39 @@ function show_tag_cloud($orderby="name", $showcount=FALSE)
     return $html;
 }
 
+function display_drafts($type, $result)
+{
+    global $iconset;
+    global $id;
+    global $CONFIG;
+
+    if($type == 'update')
+    {
+        $page = "update_incident.php";
+        $editurlspecific = "";
+    }
+    else if($type == 'email')
+    {
+        $page = "email_incident.php";
+        $editurlspecific = "&amp;step=2";
+    }
+
+    echo "<p align='center'>{$GLOBALS['strDraftChoose']}</p>";
+
+    while($obj = mysql_fetch_object($result))
+    {
+        echo "<div class='detailhead'>";
+        echo "<div class='detaildate'>".date($CONFIG['dateformat_datetime'], $obj->lastupdate);
+        echo "</div>";
+        echo "<a href='{$page}?action=editdraft&amp;draftid={$obj->id}&amp;id={$id}{$editurlspecific}' class='info'>";
+        echo "<img src='{$CONFIG['application_webpath']}images/icons/{$iconset}/16x16/edit.png' alt='{$GLOBALS['strDraftEdit']}' /></a>";
+        echo "<a href='{$page}?action=deletedraft&amp;draftid={$obj->id}&amp;id={$id}' class='info'>";
+        echo "<img src='{$CONFIG['application_webpath']}images/icons/{$iconset}/16x16/delete.png' alt='{$GLOBALS['strDraftDelete']}' /></a>";
+        echo "</div>";
+        echo "<div class='detailentry'>";
+        echo stripslashes(nl2br($obj->content))."</div>";
+    }
+}
 
 function ansort($x,$var,$cmp='strcasecmp')
 {

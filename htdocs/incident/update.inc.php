@@ -195,11 +195,11 @@ function display_update_page($draftid=-1)
                         {
                             minutes = "0"+minutes;
                         }
+                        var seconds = currentTime.getSeconds();
                         if(seconds < 10)
                         {
                             seconds = "0"+seconds;
                         }
-                        var seconds = currentTime.getSeconds();
                         byId('updatestr').innerHTML = "<?php echo $GLOBALS['strDraftLastSaved'] ?>: "+hours+":"+minutes+":"+seconds;
                     }
                 }
@@ -384,21 +384,9 @@ if (empty($action))
     if(mysql_num_rows($result) > 0)
     {
         echo "<h2>{$title}</h2>";
-        echo "<p align='center'>{$strUpdateChooseDraft}</p>";
 
-        while($obj = mysql_fetch_object($result))
-        {
-            echo "<div class='detailhead'>";
-            echo "<div class='detaildate'>".date($CONFIG['dateformat_datetime'], $obj->lastupdate);
-            echo "</div>";
-            echo "<a href='".$_SERVER['PHP_SELF']."?action=editdraft&amp;draftid={$obj->id}&amp;id={$id}' class='info'>";
-            echo "<img src='{$CONFIG['application_webpath']}images/icons/{$iconset}/16x16/edit.png' alt='{$strDraftEdit}' /></a>";
-            echo "<a href='".$_SERVER['PHP_SELF']."?action=deletedraft&amp;draftid={$obj->id}&amp;id={$id}' class='info'>";
-            echo "<img src='{$CONFIG['application_webpath']}images/icons/{$iconset}/16x16/delete.png' alt='{$strDraftDelete}' /></a>";
-            echo "</div>";
-            echo "<div class='detailentry'>";
-            echo nl2br($obj->content)."</div>";
-        }
+        display_drafts('update', $result);
+
         echo "<p align='center'><a href='".$_SERVER['PHP_SELF']."?action=newupdate&amp;id={$id}'>{$strUpdateNewUpdate}</a></p>";
     }
     else
