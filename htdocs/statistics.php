@@ -122,7 +122,7 @@ function stats_period_row($desc, $start, $end)
     else $load = 0;
     if ($count['updates'] > 10) $busyness = (($count['updates'] / $count['users']) / $count['updates'] * 100);
     else $busyness=$count['updates'];
-    if ($count['users'] > 0) $busyness2 = (($count['emailtx'] / $count['users']) / $count['handled'] * 100);
+    if ($count['users'] > 0 && $count['emailtx'] > 0) $busyness2 = (($count['emailtx'] / $count['users']) / $count['handled'] * 100);
     else $busyness2 = 0;
     $activity = ($freshness+$load+$busyness+$busyness2 / 400 * 100);
     $activity = @number_format($activity,1);
