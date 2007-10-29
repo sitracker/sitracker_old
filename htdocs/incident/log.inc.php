@@ -211,7 +211,7 @@ while ($update = mysql_fetch_object($result))
     {
         $updateheadertext = str_replace('currentowner', 'Self', $updateheadertext);
     }
-    $updateheadertext = str_replace('updateuser', $updateuser, $updateheadertext);
+    $updateheadertext = str_replace('%s', $updateuser, $updateheadertext);
     if ($update->type=='reviewmet' AND ($update->sla=='opened' OR $update->userid==0)) $updateheadertext = str_replace('updatereview', 'Period Started', $updateheadertext);
     elseif ($update->type=='reviewmet' AND $update->sla=='')  $updateheadertext = str_replace('updatereview', 'Completed', $updateheadertext);
     if ($update->type=='slamet') $updateheadertext = str_replace('updatesla', $slatypes[$update->sla]['text'], $updateheadertext);
@@ -268,14 +268,15 @@ while ($update = mysql_fetch_object($result))
         if (!empty($update->sla) AND $update->type=='slamet') echo "<img src='{$CONFIG['application_webpath']}images/icons/{$iconset}/16x16/{$slatypes[$update->sla]['icon']}' width='16' height='16' alt='{$update->type}' />";
         echo "<img src='{$CONFIG['application_webpath']}images/icons/{$iconset}/16x16/{$updatetypes[$update->type]['icon']}' width='16' height='16' alt='{$update->type}' />";
         echo "<span>Click here to {$newmode} this update</span></a> ";
-        echo "{$updateheadertext}"; //  by {$updateuser}
+        printf($updateheadertext, $updateuser); //  by {$updateuser}
     }
     else
     {
         echo "<img src='{$CONFIG['application_webpath']}images/icons/{$iconset}/16x16/{$updatetypes['research']['icon']}' width='16' height='16' alt='Research' />";
         echo "<span>Click to {$newmode}</span></a> ";
         if($update->sla != '') echo "<img src='{$CONFIG['application_webpath']}images/icons/{$iconset}/16x16/{$slatypes[$update->sla]['icon']}' width='16' height='16' alt='{$update->type}' />";
-        echo "Updated ({$update->type}) by {$updateuser}";
+        printf($strUpdatedby, $update->type, $updateuser);
+        //echo "Updated ({$update->type}) by {$updateuser}";
     }
 
     echo "</div>\n";
@@ -285,7 +286,7 @@ while ($update = mysql_fetch_object($result))
         else echo "<div class='detailentryhidden'>\n";
         if ($updatebodylen > 5) echo stripslashes(nl2br($updatebody));
         else echo stripslashes($updatebody);
-        if (!empty($update->nextaction)) echo "<div class='detailhead'>Next action: ".stripslashes($update->nextaction)."</div>";
+        if (!empty($update->nextaction)) echo "<div class='detailhead'>{$strNextAction}: ".stripslashes($update->nextaction)."</div>";
         echo "</div>\n"; // detailentry
     }
 
