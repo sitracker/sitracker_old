@@ -9,7 +9,7 @@
 //
 
 // Author: Ivan Lucas <ivanlucas[at]users.sourceforge.net>
-// Hacked: Tom Gerrard <tom.gerrard@salfordsoftware.co.uk>
+// Hacked: Tom Gerrard <tom.gerrard[at]salfordsoftware.co.uk>
 
 $permission=37; // Run Reports
 

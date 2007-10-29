@@ -9,7 +9,7 @@
 //
 
 // Author:   Ivan Lucas
-// Email:    ivan.lucas@salfordsoftware.co.uk
+// Email:    ivanlucas[at]users.sourceforge.net
 // Comments: List supported contacts by contract
 
 $permission=19; /* View Maintenance Contracts */

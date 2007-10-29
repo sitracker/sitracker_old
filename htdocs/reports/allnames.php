@@ -9,7 +9,7 @@
 //
 
 //  Author:   Ivan Lucas
-//  Email:    ivan.lucas@salfordsoftware.co.uk
+//  Email:    ivanlucas[at]users.sourceforge.net
 //  Comments: Names of all customers in alphabetical order, for duplicate finding
 
 // FIXME Not on menu

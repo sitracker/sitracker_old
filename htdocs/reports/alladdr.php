@@ -9,7 +9,7 @@
 //
 
 // Author:   Paul Lees
-// Email:    paul.lees@salfordsoftware.co.uk
+// Email:    paul.lees[at]salfordsoftware.co.uk
 // Comments: hack of Ivan's code, Addresses of ALL Supported Customers
 
 $permission=37; // Run Reports
