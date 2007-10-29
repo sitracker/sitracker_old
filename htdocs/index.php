@@ -25,8 +25,8 @@ session_start();
 // List of *Available* languages
 $languages = array('en-GB' => 'English (British)',
                    'en-US' => 'English (US)',
-                   'fr-FR' => 'French',
-                   'lt-LT' => 'Lithuanian'
+                   'fr-FR' => 'Français',
+                   'lt-LT' => 'Lietuvių'
                   );
 
 if ($_SESSION['auth'] != TRUE)

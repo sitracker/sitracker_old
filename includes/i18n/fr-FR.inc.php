@@ -1,5 +1,7 @@
 <?php
-$languagestring = 'French (fr-FR)';
+// SiT! Language File - French
+
+$languagestring = 'Français (fr-FR)';
 $i18ncharset = 'UTF-8';
 
 $strAdd = 'Ajouter';
