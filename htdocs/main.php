@@ -20,6 +20,8 @@ require('auth.inc.php');
 
 // --------------------------------------------------------------------------------------------
 // Dashboard widgets
+        
+
 
 $sql = "SELECT * FROM dashboard WHERE enabled='true' ORDER BY id";
 $result = mysql_query($sql);
