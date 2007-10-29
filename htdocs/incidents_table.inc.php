@@ -280,18 +280,18 @@ while ($incidents = mysql_fetch_array($result))
         {
             // Only display if review is due in the next five days
             echo "<td align='center' valign='top'>";
-            echo "Review in ".format_workday_minutes($reviewremain);
+            echo sprintf($strReviewIn, format_workday_minutes($reviewremain));
         }
         elseif ($reviewremain<=0)
         {
             echo "<td align='center' valign='top' class='review'>";
-            if ($reviewremain > -86400) echo "<img src='{$CONFIG['application_webpath']}images/icons/{$iconset}/16x16/review.png' width='16' height='16' alt='' /> Review Due Now!";
-            else echo "<img src='{$CONFIG['application_webpath']}images/icons/{$iconset}/16x16/review.png' width='16' height='16' alt='' /> Review Due ".format_workday_minutes($reviewremain*-1)." ago!";
+            if ($reviewremain > -86400) echo "<img src='{$CONFIG['application_webpath']}images/icons/{$iconset}/16x16/review.png' width='16' height='16' alt='' /> {$strReviewDueNow}";
+            else echo "<img src='{$CONFIG['application_webpath']}images/icons/{$iconset}/16x16/review.png' width='16' height='16' alt='' /> ".sprintf($strReviewDueAgo ,format_workday_minutes($reviewremain*-1));
         }
         else
         {
             echo "<td align='center' valign='top'>";
-            if ($incidents['status'] == 2) echo "Age: ".format_seconds($incidents["duration_closed"]);
+            if ($incidents['status'] == 2) echo "{$strAge}: ".format_seconds($incidents["duration_closed"]);
             else echo format_seconds($incidents["duration"])." old";
         }
         echo "</td>";

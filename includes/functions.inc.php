@@ -635,7 +635,7 @@ function emailtype_to($id)
 
 
 function emailtype_from($id)
-{ 
+{
     echo db_read_column('fromfield', 'emailtype', $id);
     return db_read_column('fromfield', 'emailtype', $id);
 }
@@ -1549,11 +1549,11 @@ function priority_name($id)
     //db_read_column('name','priority',)
     switch ($id)
     {
-        case 1: $value = 'Low'; break;
-        case 2: $value = 'Medium'; break;
-        case 3: $value = 'High'; break;
-        case 4: $value = 'Critical'; break;
-        case '': $value = 'Not set'; break;
+        case 1: $value = $GLOBALS['strLow']; break;
+        case 2: $value = $GLOBALS['strMedium']; break;
+        case 3: $value = $GLOBALS['strHigh']; break;
+        case 4: $value = $GLOBALS['strCritical']; break;
+        case '': $value = $GLOBALS['strNotSet']; break;
         default: $value = $GLOBALS['strUnknown']; break;
    }
    return $value;
@@ -1949,9 +1949,9 @@ function format_date_friendly($date)
 {
     global $CONFIG;
     if (date('dmy', $date) == date('dmy', time()))
-        $datestring = "Today @ ".date($CONFIG['dateformat_time'], $date);
+        $datestring = "{$GLOBALS['strToday']} @ ".date($CONFIG['dateformat_time'], $date);
     elseif (date('dmy', $date) == date('dmy', (time()-86400)))
-        $datestring = "Yesterday @ ".date($CONFIG['dateformat_time'], $date);
+        $datestring = "{$GLOBALS['strYesterday']} @ ".date($CONFIG['dateformat_time'], $date);
     elseif ($date < $now-86400 AND
             $date > $now-(86400*6))
         $datestring = date('l', $date)." @ ".date($CONFIG['dateformat_time'], $date);
@@ -3371,11 +3371,11 @@ function target_type_name($targettype)
 {
     switch ($targettype)
     {
-        case 'opened': $name='Started'; break;
-        case 'initialresponse': $name='Initial Response'; break;
-        case 'probdef': $name='Problem Definition'; break;
-        case 'actionplan': $name='Action Plan'; break;
-        case 'solution': $name='Resolution/Reprioritisation'; break;
+        case 'opened': $name = $GLOBALS['strOpened']; break;
+        case 'initialresponse': $name = $GLOBALS['strInitialResponse']; break;
+        case 'probdef': $name = $GLOBALS['strProblemDefinition']; break;
+        case 'actionplan': $name = $GLOBALS['strActionPlan']; break;
+        case 'solution': $name = $GLOBALS['strResolutionReprioritisation']; break;
         case 'closed': $name=''; break;
         case 'regularcontact': $name=''; break; // Contact Customer
         default: $name=''; break;
@@ -3774,9 +3774,9 @@ function header_listbox($headersize,$header,$element)
 function distribution_listbox($name, $distribution)
 {
     $html  = "<select name='$name'>\n";
-    $html .= "<option value='public' ";  if ($distribution=='public') $html .= "selected='selected'";  $html .= ">Public</option>\n";
-    $html .= "<option value='private' style='color: blue;'";  if ($distribution=='private') $html .= "selected='selected'";  $html .= ">Private</option>\n";
-    $html .= "<option value='restricted' style='color: red;'";  if ($distribution=='restricted') $html .= "selected='selected'";  $html .= ">Restricted</option>\n";
+    $html .= "<option value='public' ";  if ($distribution=='public') $html .= "selected='selected'";  $html .= ">{$GLOBALS['strPublic']}</option>\n";
+    $html .= "<option value='private' style='color: blue;'";  if ($distribution=='private') $html .= "selected='selected'";  $html .= ">{$GLOBALS['strPrivate']}</option>\n";
+    $html .= "<option value='restricted' style='color: red;'";  if ($distribution=='restricted') $html .= "selected='selected'";  $html .= ">{$GLOBALS['strRestricted']}</option>\n";
     $html .= "</select>\n";
     return $html;
 }
@@ -4870,7 +4870,7 @@ function replace_tags($type, $id, $tagstring)
     $sql = "DELETE FROM set_tags WHERE id = '$id' AND type = '$type'";
     $result = mysql_query($sql);
     if (mysql_error()) trigger_error("MySQL Query Error ".mysql_error(), E_USER_ERROR);
-    
+
     // Change seperators to spaces
     $seperators=array(', ',';',',');
     $tags=str_replace($seperators, ' ', trim($tagstring));

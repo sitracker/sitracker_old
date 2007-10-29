@@ -1,5 +1,17 @@
 <?php
+// strings.inc.php - Set up strings
+//
+// SiT (Support Incident Tracker) - Support call tracking system
+// Copyright (C) 2000-2007 Salford Software Ltd. and Contributors
+//
+// This software may be used and distributed according to the terms
+// of the GNU General Public License, incorporated herein by reference.
+//
 
+
+//
+// Main Menu
+//
 $hmenu[0] = array (10=> array ( 'perm'=> 0, 'name'=> $CONFIG['application_shortname'], 'url'=>"{$CONFIG['application_webpath']}main.php", 'submenu'=>"10"),
                    20=> array ( 'perm'=> 11, 'name'=> $strCustomers, 'url'=>"{$CONFIG['application_webpath']}browse_sites.php", 'submenu'=>"20"),
                    30=> array ( 'perm'=> 6, 'name'=> $strSupport, 'url'=>"{$CONFIG['application_webpath']}incidents.php?user=current&amp;queue=1&amp;type=support", 'submenu'=>"30"),
@@ -137,7 +149,10 @@ $hmenu[70] = array (10=> array ( 'perm'=> 0, 'name'=> "{$strHelpContents}...", '
 );
 
 
+
+//
 // Non specific update types
+//
 $updatetypes['actionplan'] = array('icon' => 'actionplan.png', 'text' => $strActionPlanBy);
 $updatetypes['auto'] = array('icon' => 'auto.png', 'text' => $strUpdatedAutomaticallyBy);
 $updatetypes['closing'] = array('icon' => 'close.png', 'text' => $strMarkedforclosureby);
