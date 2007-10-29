@@ -51,7 +51,7 @@ if ($action == "showform" OR $action == '')
     echo "<tr><th>{$strWebsite}:</th><td><input maxlength='255' name='websiteurl' size='30' /></td></tr>\n";
     echo "<tr><th>{$strSiteType}:</th><td>".sitetype_drop_down('typeid', 1)."</td></tr>\n";
     echo "<tr><th>{$strSalesperson}:</th><td>";
-    user_drop_down('owner', 0, $accepting=FALSE)
+    user_drop_down('owner', 0, $accepting=FALSE);
     echo "</td></tr>\n";
     echo "<tr><th>{$strNotes}:</th><td><textarea cols='30' name='notes' rows='5'></textarea></td></tr>\n";
     echo "</table>\n";
