@@ -32,14 +32,13 @@ $result = mysql_query($sql);
 if (mysql_error()) trigger_error("MySQL Query Error ".mysql_error(), E_USER_ERROR);
 
 echo "<h2><img src='{$CONFIG['application_webpath']}images/icons/{$iconset}/32x32/user.png' width='32' height='32' alt='' /> ";
-echo "User Skills Listing <img src='{$CONFIG['application_webpath']}images/icons/{$iconset}/32x32/skill.png' width='32' height='32' alt='' /></h2>";
-?>
-<table align="center" style="width:95%;">
-<tr>
-    <th><a href="<?php echo $_SERVER['PHP_SELF'] ?>?sort=realname">Name</a></th>
-    <th>Qualifications / Skills</th>
-</tr>
-<?php
+echo "{$strListSkills} <img src='{$CONFIG['application_webpath']}images/icons/{$iconset}/32x32/skill.png' width='32' height='32' alt='' /></h2>";
+
+echo "<table align='center' style='width:95%;'>";
+echo "<tr>";
+echo "<th><a href='{$_SERVER['PHP_SELF']}?sort=realname'>{$strName}</a></th>";
+echo "<th>{$strQualifications} / {$strSkills}</th>";
+echo "</tr>";
 
 // show results
 $shade = 0;
@@ -67,14 +66,14 @@ while ($users = mysql_fetch_array($result))
         $c=1;
         while ($software = mysql_fetch_object($sresult))
         {
-            if ($software->backupid==0) echo "<u class='info' title='No substitute engineer'>{$software->name}</u>";
-            else echo "<span class='info' title='Backup: ".user_realname($software->backupid,TRUE)."'>{$software->name}</span>";
+            if ($software->backupid==0) echo "<u class='info' title='{$strNoSubstitute}'>{$software->name}</u>";
+            else echo "<span class='info' title='{$strSubstitute}: ".user_realname($software->backupid,TRUE)."'>{$software->name}</span>";
             if ($software->backupid==0) $nobackup++;
             if ($c < $countskills) echo ", ";
             else
             {
                 echo "<br />&bull; $countskills skills";
-                if (($nobackup+1) >= $countskills) echo ", <strong>No substitute engineers defined</strong>.";
+                if (($nobackup+1) >= $countskills) echo ", <strong>{$strNoSubstitutes}</strong>.";
                 elseif ($nobackup > 0) echo ", <strong>{$nobackup} need substitute engineers to be defined</strong>.";
             }
             $c++;
@@ -85,9 +84,7 @@ while ($users = mysql_fetch_array($result))
     if ($users['id']==$sit[2]) echo " <a href='edit_user_software.php'>Define your skills</a>";
 
     echo "</td>";
-    ?>
-    </tr>
-    <?php
+    echo "</tr>\n";
     // invert shade
     if ($shade == 1) $shade = 0;
     else $shade = 1;

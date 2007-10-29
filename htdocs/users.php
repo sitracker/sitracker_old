@@ -67,7 +67,7 @@ if ($numgroups >= 1)
 }
     echo "<option value='{$_SERVER['PHP_SELF']}?gid=0'";
     if ($filtergroup=='0') echo " selected='selected'";
-    echo ">Users with no group</option>\n";
+    echo ">{$strUsersNoGroup}</option>\n";
     echo "</select>\n";
     echo "</form>\n<br />";
 }
@@ -173,11 +173,11 @@ while ($users = mysql_fetch_array($result))
     <?php
     echo userstatus_name($users["status"]) ?></td>
     <td align='center'>
-    <?php 
-        if(user_permission(2, 69)) 
+    <?php
+        if(user_permission(2, 69))
         {
-            if($users["accepting"]=='Yes') echo "$strYes | <a href='{$_SERVER[PHP_SELF]}?user={$users['id']}&status=no'>No (Force)</a>";
-            else echo "<a href='{$_SERVER[PHP_SELF]}?user={$users['id']}&status=yes'>Yes (Force)</a> | $strNo";
+            if($users["accepting"]=='Yes') echo "$strYes | <a href='{$_SERVER[PHP_SELF]}?user={$users['id']}&status=no'>{$strNo} ({$strForce})</a>";
+            else echo "<a href='{$_SERVER[PHP_SELF]}?user={$users['id']}&status=yes'>{$strYes} ({$strForce})</a> | $strNo";
         }
          else echo $users["accepting"]=='Yes' ? $strYes : "<span class='error'>{$strNo}</span>"; ?></td>
     <?php
