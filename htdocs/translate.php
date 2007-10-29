@@ -179,8 +179,10 @@ elseif($_REQUEST['mode'] == "save")
     echo "<p>".sprintf($strSendTranslation, "<code>{$filename}</code>", "<code>{$i18npath}</code>", 'ivanlucas[at]users.sourceforge.net')." </p>";
     $i18nfile = '';
     $i18nfile .= "<?php\n";
+    $i18nfile .= "// SiT! Language File - {$languages[$lang]} ($lang) by {$_SESSION['realname']}\n\n";
     $i18nfile .= "\$languagestring = '{$languages[$lang]} ($lang)';\n";
     $i18nfile .= "\$i18ncharset = 'UTF-8';\n\n";
+    //$i18nfile .= "// list of strings (Alphabetical)\n";
 
     $lastchar='';
     $translatedcount=0;
@@ -188,9 +190,9 @@ elseif($_REQUEST['mode'] == "save")
     {
         if(!empty($_POST[$key]) AND substr($key, 0, 3) == "str")
         {
-            if ($lastchar!='' AND substr($key, 4, 1) != $lastchar) $i18nfile .= "\n";
+            if ($lastchar!='' AND substr($key, 3, 1) != $lastchar) $i18nfile .= "\n";
             $i18nfile .= "\${$key} = '{$_POST[$key]}';\n";
-            $lastchar = substr($key, 4, 1);
+            $lastchar = substr($key, 3, 1);
             $translatedcount++;
         }
     }

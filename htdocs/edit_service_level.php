@@ -11,7 +11,7 @@
 // Author: Ivan Lucas <ivanlucas[at]users.sourceforge.net>
 
 $permission=53; // Edit Service Levels
-$title = 'Edit Service Level';
+$title = $strEditServiceLevel;
 
 require('db_connect.inc.php');
 require('functions.inc.php');
@@ -35,18 +35,19 @@ if (empty($action) OR $action == "showform")
     if (mysql_error()) trigger_error(mysql_error(),E_USER_WARNING);
     $sla = mysql_fetch_object($result);
 
+    // FIXME i18n days/minutes
     echo "<form name='edit_servicelevel' action='{$_SERVER['PHP_SELF']}' method='post'>";
     echo "<table class='vertical'>";
     echo "<tr><th>{$strInitialResponse} <img src='{$CONFIG['application_webpath']}images/icons/{$iconset}/16x16/initialresponse.png' width='16' height='16' alt='' /></th>";
-    echo "<td><input type='text' size='5' name='initial_response_mins' maxlength='5' value='{$sla->initial_response_mins}' /> Minutes</td></tr>";
-    echo "<tr><th>Problem Determination <img src='{$CONFIG['application_webpath']}images/icons/{$iconset}/16x16/probdef.png' width='16' height='16' alt='' /></th>";
-    echo "<td><input type='text' size='5' name='prob_determ_mins' maxlength='5' value='{$sla->prob_determ_mins}' /> Minutes</td></tr>";
-    echo "<tr><th>Action Plan <img src='{$CONFIG['application_webpath']}images/icons/{$iconset}/16x16/actionplan.png' width='16' height='16' alt='' /></th>";
-    echo "<td><input type='text' size='5' name='action_plan_mins' maxlength='5' value='{$sla->action_plan_mins}' /> Minutes</td></tr>";
-    echo "<tr><th>Resolution <img src='{$CONFIG['application_webpath']}images/icons/{$iconset}/16x16/solution.png' width='16' height='16' alt='' /></th>";
-    echo "<td><input type='text' size='5' name='resolution_days' maxlength='3' value='{$sla->resolution_days}' /> Days</td></tr>";
-    echo "<tr><th>Review Days <img src='{$CONFIG['application_webpath']}images/icons/{$iconset}/16x16/review.png' width='16' height='16' alt='' /></th>";
-    echo "<td><input type='text' size='5' name='review_days' maxlength='3' value='{$sla->review_days}' /> Days</td></tr>";
+    echo "<td><input type='text' size='5' name='initial_response_mins' maxlength='5' value='{$sla->initial_response_mins}' /> {$strMinutes}</td></tr>";
+    echo "<tr><th>{$strProblemDefinition} <img src='{$CONFIG['application_webpath']}images/icons/{$iconset}/16x16/probdef.png' width='16' height='16' alt='' /></th>";
+    echo "<td><input type='text' size='5' name='prob_determ_mins' maxlength='5' value='{$sla->prob_determ_mins}' /> {$strMinutes}</td></tr>";
+    echo "<tr><th>{$strActionPlan} <img src='{$CONFIG['application_webpath']}images/icons/{$iconset}/16x16/actionplan.png' width='16' height='16' alt='' /></th>";
+    echo "<td><input type='text' size='5' name='action_plan_mins' maxlength='5' value='{$sla->action_plan_mins}' /> {$strMinutes}</td></tr>";
+    echo "<tr><th>{$strResolutionReprioritisation} <img src='{$CONFIG['application_webpath']}images/icons/{$iconset}/16x16/solution.png' width='16' height='16' alt='' /></th>";
+    echo "<td><input type='text' size='5' name='resolution_days' maxlength='3' value='{$sla->resolution_days}' /> {$strDays}</td></tr>";
+    echo "<tr><th>{$strReview} <img src='{$CONFIG['application_webpath']}images/icons/{$iconset}/16x16/review.png' width='16' height='16' alt='' /></th>";
+    echo "<td><input type='text' size='5' name='review_days' maxlength='3' value='{$sla->review_days}' /> {$strDays}</td></tr>";
     echo "</table>";
     echo "<input type='hidden' name='action' value='edit' />";
     echo "<input type='hidden' name='tag' value='{$tag}' />";
