@@ -18,6 +18,15 @@ if (realpath(__FILE__) == realpath($_SERVER['SCRIPT_FILENAME']))
     exit;
 }
 
+echo "<div align='center'><br /><a href=\"javascript: toggleDiv('hidden_update');\">Quick Update</a></div>";
+
+echo "<div id='hidden_update' style='display: none' align='center'>";
+echo "<form action='update_incident.php?id={$id}&draftid=-1' method='post'>";
+echo "<p>{$strUpdate}: </p><textarea></textarea><br />";
+echo "<input type='submit' name='update' value='{$strUpdate}'>";
+echo "<input type='hidden' name='id' value={$id}>";
+echo "</div>";
+
 $offset = cleanvar($_REQUEST['offset']);
 if (empty($offset)) $offset=0;
 
