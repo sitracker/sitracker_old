@@ -45,14 +45,13 @@ if ($_SESSION['auth'] != TRUE)
     echo "<div class='windowtitle'>{$CONFIG['application_shortname']} - {$strLogin}</div>";
     echo "<div class='window'>";
     echo "<form action='login.php' method='post'>";
-    echo "<label>{$strUsername}:<br /><input name='username' size='28' type='text' /></label><br />";
-    echo "<label>{$strPassword}:<br /><input name='password' size='28' type='password' /></label><br />";
+    echo "<label for='username'>{$strUsername}:<br /><input name='username' size='28' type='text' /></label><br />";
+    echo "<label for='password'>{$strPassword}:<br /><input name='password' size='28' type='password' /></label><br />";
     echo "<label for='lang'>{$strLanguage}: <br /><select name='lang'>";
     foreach($languages AS $langcode => $language)
     {
         if($langcode == $CONFIG['default_i18n']) echo "<option value='$langcode' selected>$language</option>\n";
-        echo "<option value='$langcode'>$language</option>\n";
-        print_r($langcode);
+        else echo "<option value='$langcode'>$language</option>\n";
     }
     echo "</select></label><br /><br />";
     echo "<input type='hidden' name='page' value='$page' />";
