@@ -155,7 +155,10 @@ function give_overview()
     global $todayrecent, $mode, $CONFIG;
 
     echo "<table align='center'>";
-    echo "<tr><th>Period</th><th>Opened</th><th>Updated</th><th>Closed</th><th>Handled</th><th>Updates</th><th>per incident</th><th>Skills</th><th>Owners</th><th>Users</th><th>upd per user</th><th>inc per owner</th><th>Email Rx</th><th>Email Tx</th><th>Higher Priority</th><th>Activity</th></tr>\n";
+    echo "<tr><th>{$strPeriod}</th><th>{$GLOBALS['strOpened']}</th><th>{$GLOBALS['strUpdated']}</th><th>{$GLOBALS['strClosed']}</th><th>{$GLOBALS['strHandled']}</th>";
+    echo "<th>{$GLOBALS['strUpdates']}</th><th>per incident</th><th>{$GLOBALS['strSkills']}</th><th>{$GLOBALS['strOwners']}</th><th>{$GLOBALS['strUsers']}</th>";
+    echo "<th>upd per user</th><th>inc per owner</th><th>{$GLOBALS['strEmail']} Rx</th><th>{$GLOBALS['strEmail']} Tx</th><th>{$GLOBALS['strHigherPriority']}</th>";
+    echo "<th>{$GLOBALS['strActivity']}</th></tr>\n";
     echo stats_period_row("<a href='{$_SERVER['PHP_SELF']}?mode=daybreakdown&offset=0'>Today</a>", mktime(0,0,0,date('m'),date('d'),date('Y')),mktime(23,59,59,date('m'),date('d'),date('Y')));
     echo stats_period_row("<a href='{$_SERVER['PHP_SELF']}?mode=daybreakdown&offset=1'>Yesterday</a>", mktime(0,0,0,date('m'),date('d')-1,date('Y')),mktime(23,59,59,date('m'),date('d')-1,date('Y')));
     echo stats_period_row("<a href='{$_SERVER['PHP_SELF']}?mode=daybreakdown&offset=2'>".date('l',mktime(0,0,0,date('m'),date('d')-2,date('Y')))."</a>", mktime(0,0,0,date('m'),date('d')-2,date('Y')),mktime(23,59,59,date('m'),date('d')-2,date('Y')));
@@ -193,7 +196,7 @@ function give_overview()
     $result = mysql_query($sql);
     if (mysql_error()) trigger_error("MySQL Query Error ".mysql_error(), E_USER_ERROR);
 
-    echo "<h2>Current Incidents</h2>";
+    echo "<h2>{$strCurrentlyOpen}</h2>";
     echo "<table class='vertical' align='center'>";
     if(mysql_num_rows($result) > 0)
     {
@@ -205,7 +208,7 @@ function give_overview()
             echo "<tr><th>".$row['name']."</th><td class='shade2' align='left'>".$row['COUNT(incidents.id)']."</td></tr>";
             if(strpos(strtolower($row['name']), "clos") === false) $openCalls += $row['COUNT(incidents.id)'];
         }
-        echo "<tr><th>Total Open</th><td class='shade2' align='left'><strong>$openCalls</strong></td></tr></table></td>";
+        echo "<tr><th>{$strTotal}</th><td class='shade2' align='left'><strong>$openCalls</strong></td></tr></table></td>";
     }
     plugin_do('statistics_table_overview');
     echo "</table>";
@@ -333,7 +336,7 @@ function give_overview()
 
     mysql_free_result($result);
 
-    $string .= "<h2>Overall Feedback</h2>";
+    $string .= "<h2>{$strCustomerFeedback}</h2>";
     $totalresult=0;
     $numquestions=0;
     $qsql = "SELECT * FROM feedbackquestions WHERE formid='1' AND type='rating' ORDER BY taborder";
