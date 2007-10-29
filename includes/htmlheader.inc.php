@@ -122,5 +122,28 @@ if ($sit[0]!='')
     echo "</ul>\n\n";
     echo "</div>\n";
 }
+//dismiss any notices
+$action = cleanvar($_REQUEST['action']);
+$noticeid = cleanvar($_REQUEST['noticeid']);
+
+if($action AND $noticeid)
+{
+    $sql = "UPDATE usernotices SET dismissed=1 WHERE noticeid={$noticeid} AND userid={$sit[2]}";
+    @mysql_query($sql);
+}
+
+//display global notices
+if($sit[0] != '')
+{
+    $sql = "SELECT * FROM notices, usernotices ";
+    $sql .= "WHERE userid={$sit[2]} AND dismissed!=1 AND notices.id=usernotices.noticeid";
+    $result = mysql_query($sql);
+    while($notice = mysql_fetch_object($result))
+    {
+        echo "<div class='info'><p class='info'>{$notice->text}";
+        echo "(<a href='{$_SERVER[PHP_SELF]}?action=dismiss&noticeid={$notice->id}'>$strDismiss</a>)";
+        echo "</p></div>";
+    }
+}
 echo "<div id='mainframe'>";
 ?>
