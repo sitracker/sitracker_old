@@ -217,6 +217,7 @@ $strJumpToIncident = 'Jump to Incident';
 
 $strKnowledgeBase = 'Knowledge Base';
 
+$strLanguage = 'Language';
 $strLastUpdated = 'Last Updated';
 $strLicense = 'Licence';
 $strLifetime = 'Lifetime';
