@@ -81,7 +81,7 @@ while ($users = mysql_fetch_array($result))
     }
     else echo "-";
 
-    if ($users['id']==$sit[2]) echo " <a href='edit_user_software.php'>Define your skills</a>";
+    if ($users['id']==$sit[2]) echo " <a href='edit_user_software.php'>{$strMySkills}</a>";
 
     echo "</td>";
     echo "</tr>\n";

@@ -93,12 +93,12 @@ switch ($action)
 
         echo "<form action='{$_SERVER['PHP_SELF']}' method='post'>";
         echo "<table summary='User Groups' align='center'>";
-        echo "<tr><th>Group</th><th>Action</th></tr>\n";
+        echo "<tr><th>{$strGroup}</th><th>{$strOperation}</th></tr>\n";
         if ($numgroups >= 1)
         {
             foreach($grouparr AS $groupid => $groupname)
             {
-                echo "<tr><td>$groupname</td><td><a href='usergroups.php?groupid={$groupid}&amp;action=deletegroup'>Delete</a></td></tr>\n";
+                echo "<tr><td>$groupname</td><td><a href='usergroups.php?groupid={$groupid}&amp;action=deletegroup'>{$strDelete}</a></td></tr>\n";
             }
         }
         echo "<tr><td><input type='text' name='group' value='' size='10' maxlength='255' />";
@@ -115,7 +115,7 @@ switch ($action)
 
         echo "<form action='{$_SERVER['PHP_SELF']}' method='post'>";
         echo "<table summary='User Group Membership' align='center'>";
-        echo "<tr><th>User</th><th>Group</th></tr>";
+        echo "<tr><th>{$strUser}</th><th>{$strGroup}</th></tr>";
         while ($user = mysql_fetch_object($result))
         {
             echo "<tr><td>{$user->realname} ({$user->username})</td>";
