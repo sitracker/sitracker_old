@@ -138,7 +138,7 @@ $hmenu[70] = array (10=> array ( 'perm'=> 0, 'name'=> "{$strHelpContents}...", '
 
 
 // Non specific update types
-        $updatetypes['actionplan'] = array('icon' => 'actionplan.png', 'text' => $strActionPlanBy);
+$updatetypes['actionplan'] = array('icon' => 'actionplan.png', 'text' => $strActionPlanBy);
 $updatetypes['auto'] = array('icon' => 'auto.png', 'text' => $strUpdatedAutomaticallyBy);
 $updatetypes['closing'] = array('icon' => 'close.png', 'text' => $strMarkedforclosureby);
 $updatetypes['editing'] = array('icon' => 'edit.png', 'text' => $strEditedBy);
@@ -150,7 +150,7 @@ $updatetypes['probdef'] = array('icon' => 'probdef.png', 'text' => $strProblemDe
 $updatetypes['research'] = array('icon' => 'research.png', 'text' => $strResearchedby);
 $updatetypes['reassigning'] = array('icon' => 'reassign.png', 'text' => $srtReassignedtocurrentownerby);
 $updatetypes['reviewmet'] = array('icon' => 'review.png', 'text' => $strReviewby); // conditional
-$updatetypes['tempassigning'] = array('icon' => 'tempassign.png', 'text' => $strTemporarilyassignedto);
+$updatetypes['tempassigning'] = array('icon' => 'tempassign.png', 'text' => $strTemporarilyAssignedto);
 $updatetypes['opening'] = array('icon' => 'open.png', 'text' => $strOpenedby);
 $updatetypes['phonecallout'] = array('icon' => 'callout.png', 'text' => $strPhonecallmadeby);
 $updatetypes['phonecallin'] = array('icon' => 'callin.png', 'text' => $strPhonecalltakenby);
@@ -165,10 +165,10 @@ $updatetypes['auto_chased_phone'] = array('icon' => 'chased.png', 'text' => $str
 $updatetypes['auto_chased_manager'] = array('icon' => 'chased.png', 'text' => $strChased);
 $updatetypes['auto_chased_managers_manager'] = array('icon' => 'chased.png', 'text' => $strChased);
 $updatetypes['customerclosurerequest'] = array('icon' => 'close.png', 'text' => $strCustomerRequestedClosure);
-$slatypes['opened'] = array('icon' => 'open.png', 'text' => $strOpened);
-$slatypes['initialresponse'] = array('icon' => 'initialresponse.png', 'text' => $strInitialResponse);
-$slatypes['probdef'] = array('icon' => 'probdef.png', 'text' => $strProblemDefinition);
-$slatypes['actionplan'] = array('icon' => 'actionplan.png', 'text' => $strActionPlan);
-$slatypes['solution'] = array('icon' => 'solution.png', 'text' => $strSolution);
-$slatypes['closed'] = array('icon' => 'close.png', 'text' => $strClosed);
+$slatypes['opened'] = array('icon' => 'open.png', 'text' => $strOpenedby);
+$slatypes['initialresponse'] = array('icon' => 'initialresponse.png', 'text' => $strInitialResponseby);
+$slatypes['probdef'] = array('icon' => 'probdef.png', 'text' => $strProblemDefinitionby);
+$slatypes['actionplan'] = array('icon' => 'actionplan.png', 'text' => $strActionPlanby);
+$slatypes['solution'] = array('icon' => 'solution.png', 'text' => $strSolutionby);
+$slatypes['closed'] = array('icon' => 'close.png', 'text' => $strClosedby);
 ?>
