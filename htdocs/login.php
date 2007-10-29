@@ -10,17 +10,22 @@
 // Author: Ivan Lucas <ivanlucas[at]users.sourceforge.net>
 
 require('db_connect.inc.php');
-require('functions.inc.php');
 
 session_name($CONFIG['session_name']);
 session_start();
 session_regenerate_id(TRUE);
+
+$language = $_REQUEST['lang'];
+$_SESSION['lang'] = $language;
+
+require('functions.inc.php');
 
 // External vars
 $password = md5($_REQUEST['password']);
 $username = cleanvar($_REQUEST['username']);
 $public_browser = cleanvar($_REQUEST['public_browser']);
 $page = strip_tags(str_replace('..','',str_replace('//','',str_replace(':','',urldecode($_REQUEST['page'])))));
+
 
 if (authenticate($username, $password) == 1)
 {
@@ -44,6 +49,7 @@ if (authenticate($username, $password) == 1)
     $_SESSION['num_update_view'] = $user->var_num_updates_view;
     $_SESSION['collapse'] = $user->var_collapse;
     $_SESSION['groupid'] = is_null($user->groupid) ? 0 : $user->groupid;
+    
 
     // Make an array full of users permissions
     // The zero permission is added to all users, zero means everybody can access

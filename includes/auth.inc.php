@@ -35,6 +35,8 @@ else
     $sit[0] = $_SESSION['username'];
     $sit[1] = 'obsolete'; // FIXME Check $sit[1] is unused then remove
     $sit[2] = $_SESSION['userid'];
+    include("i18n/{$_SESSION['lang']}.inc.php");
+    include('strings.inc.php');
 }
 
 if (!is_array($permission)) { $permission = array($permission); }
