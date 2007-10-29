@@ -50,25 +50,23 @@ if (mysql_error()) trigger_error(mysql_error(),E_USER_WARNING);
 
 echo "<h2><img src='{$CONFIG['application_webpath']}images/icons/{$iconset}/32x32/user.png' width='32' height='32' alt='' /> ";
 echo "{$strManageUsers}</h2>";
-?>
-<p class='contextmenu' align='center'><a href="add_user.php?action=showform">Add User</a> |
-<a href="edit_user_permissions.php">Set Role Permissions</a>
-</p>
-<table align='center'>
-<tr>
-    <th><a href="<?php echo $_SERVER['PHP_SELF'] ?>?sort=realname">Name</a> (<a href="<?php echo $_SERVER['PHP_SELF'] ?>?sort=username">Username</a>)</th>
-    <th><a href="<?php echo $_SERVER['PHP_SELF'] ?>?sort=role">Role</a></th>
-    <th>Account Status</th>
-    <th>Actions</th>
+echo "<p class='contextmenu' align='center'><a href='add_user.php?action=showform'>{$strAddUser}</a> | ";
+echo "<a href='edit_user_permissions.php'>Set Role Permissions</a>";
+echo "</p>";
+echo "<table align='center'>";
+echo "<tr>";
+echo "<th><a href='{$_SERVER['PHP_SELF']}?sort=realname'>{$strName}</a> (<a href='{$_SERVER['PHP_SELF']}?sort=username'>{$strUsername}</a>)</th>";
+echo "<th><a href='{$_SERVER['PHP_SELF']}?sort=role'>{$strRole}</a></th>";
+echo "<th>{$strAccountStatus}</th>";
+echo "<th>{$strOperation}</th>";
+echo "<th><a href='{$_SERVER['PHP_SELF']}?sort=email'>{$strEmail}</a></th>";
+echo "<th><a href='{$_SERVER['PHP_SELF']}?sort=phone'>{$strTelephone}</a></th>";
+echo "<th><a href='{$_SERVER['PHP_SELF']}?sort=mobile'>{$strMobile}</a></th>";
+echo "<th><a href='{$_SERVER['PHP_SELF']}?sort=fax'>{$strFax}</a></th>";
+echo "<th><a href='{$_SERVER['PHP_SELF']}?sort=status'>{$strStatus}</a></th>";
+echo "<th><a href='{$_SERVER['PHP_SELF']}?sort=accepting'>{$strAccepting}</a></th>";
+echo "</tr>\n";
 
-    <th><a href="<?php echo $_SERVER['PHP_SELF'] ?>?sort=email">Email</a></th>
-    <th><a href="<?php echo $_SERVER['PHP_SELF'] ?>?sort=phone">Phone</a></th>
-    <th><a href="<?php echo $_SERVER['PHP_SELF'] ?>?sort=mobile">Mobile</a></th>
-    <th><a href="<?php echo $_SERVER['PHP_SELF'] ?>?sort=fax">Fax</a></th>
-    <th><a href="<?php echo $_SERVER['PHP_SELF'] ?>?sort=status">Status</a></th>
-    <th><a href="<?php echo $_SERVER['PHP_SELF'] ?>?sort=accepting">Accepting</a></th>
-</tr>
-<?php
 // show results
 $shade = 0;
 while ($users = mysql_fetch_array($result))
@@ -90,8 +88,8 @@ while ($users = mysql_fetch_array($result))
     echo "<td>";
     if (user_permission($sit[2],57))
     {
-    if ($users['status']>0) echo "Enabled";  // echo "<a href=\"javascript:alert('You cannnot currently disable accounts from here, go to the raw database and set the users status to zero')\">Disable</a>";
-    else echo "Disabled";
+    if ($users['status']>0) echo "{$strEnabled}";  // echo "<a href=\"javascript:alert('You cannnot currently disable accounts from here, go to the raw database and set the users status to zero')\">Disable</a>";
+    else echo "{$strDisabled}";
     }
     else echo "-";
 
@@ -102,9 +100,9 @@ while ($users = mysql_fetch_array($result))
     if ($users['status']>0)
     {
         echo " | ";
-        if ($users['userid'] >1) echo "<a href='reset_user_password.php?id={$users['userid']}'>Reset Password</a> | ";
+        if ($users['userid'] >1) echo "<a href='reset_user_password.php?id={$users['userid']}'>{$strResetPassword}</a> | ";
         echo "<a href='edit_user_software.php?user={$users['userid']}'>{$strSkills}</a>";
-        echo " | <a href='edit_backup_users.php?user={$users['userid']}'>Substitutes</a>";
+        echo " | <a href='edit_backup_users.php?user={$users['userid']}'>{$strSubstitutes}</a>";
         if ($users['userid'] >1) echo " | <a href='edit_user_permissions.php?action=edit&amp;user={$users['userid']}'>{$strPermissions}</a>";
     }
     echo "</td>";
