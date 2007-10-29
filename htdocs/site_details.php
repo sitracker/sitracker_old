@@ -86,7 +86,7 @@ if (mysql_error()) trigger_error("MySQL Query Error ".mysql_error(), E_USER_ERRO
 $countcontacts = mysql_num_rows($contactresult);
 if ($countcontacts > 0)
 {
-    echo "<p align='center'>{$countcontacts} Contact(s)</p>";
+    echo "<p align='center'>".sprintf($strContactsMulti, $countcontacts)."</p>";
     echo "<table align='center'>";
     echo "<tr><th>{$strName}</th><th>{$strJobTitle}</th><th>{$strDepartment}</th><th>{$strTelephone}</th><th>{$strEmail}</th><th>{$strAddress}</th><th>{$strDataProtection}</th><th>{$strNotes}</th></tr>";
     $shade='shade1';
@@ -109,9 +109,9 @@ if ($countcontacts > 0)
         }
         else echo "<td><strong>{$strWithheld}</strong></td>";
         echo "<td>";
-        if ($contactrow['dataprotection_email']=='Yes') { echo "<strong>No Email</strong>, "; }
-        if ($contactrow['dataprotection_phone']=='Yes') { echo "<strong>No Calls</strong>, "; }
-        if ($contactrow['dataprotection_address']=='Yes') { echo "<strong>No Post</strong>"; }
+        if ($contactrow['dataprotection_email']=='Yes') { echo "<strong>{$strNoEmail}</strong>, "; }
+        if ($contactrow['dataprotection_phone']=='Yes') { echo "<strong>{$strNoCalls}</strong>, "; }
+        if ($contactrow['dataprotection_address']=='Yes') { echo "<strong>{$strNoPost}</strong>"; }
         echo "</td>";
         echo "<td>".nl2br(stripslashes(substr($contactrow['notes'], 0, 500)))."</td>";
         echo "</tr>";
@@ -122,7 +122,7 @@ if ($countcontacts > 0)
 }
 else
 {
-    echo "<p align='center'>There are no contacts associated with this site</p>";
+    echo "<p align='center'>{$strNoContactsForSite}</p>";
 }
 echo "<p align='center'><a href='add_contact.php?siteid={$id}'>{$strAddContact}</a></p>";
 
@@ -130,7 +130,7 @@ echo "<p align='center'><a href='add_contact.php?siteid={$id}'>{$strAddContact}<
 // Valid user, check perms
 if (user_permission($sit[2],19)) // View contracts
 {
-    echo "<h3>Related Contracts<a id='contracts'></a></h3>";
+    echo "<h3>{$strContracts}<a id='contracts'></a></h3>";
 
     // Display contracts
     $sql  = "SELECT maintenance.id AS maintid, maintenance.term AS term, products.name AS product, resellers.name AS reseller, licence_quantity, licencetypes.name AS licence_type, expirydate, admincontact, contacts.forenames AS admincontactsforenames, contacts.surname AS admincontactssurname, maintenance.notes AS maintnotes ";
