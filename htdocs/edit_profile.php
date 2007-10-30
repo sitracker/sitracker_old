@@ -302,6 +302,7 @@ else
                 if($sit[2] == '1')
                 {
                     $sql = "UPDATE usernotices SET dimissed=1 WHERE userid={$sit[2]} and updateid=1";
+                    @mysql_query($sql);
                 }
                 journal(CFG_LOGGING_NORMAL, 'User Profile Edited', "User Profile {$sit[2]} Edited", CFG_JOURNAL_USER, $sit[2]);
                 confirmation_page("2", $redirecturl, $confirm_message);
