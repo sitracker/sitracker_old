@@ -68,7 +68,7 @@ elseif ($action == "edit")
     $action_plan_mins = cleanvar($_POST['action_plan_mins']);
     $resolution_days = cleanvar($_POST['resolution_days']);
     $review_days = cleanvar($_POST['review_days']);
-    if($_POST['timed'] != 1) $timed = 0;
+    if($_POST['timed'] != 'on') $timed = 0;
     else $timed = 1;
 
     $sql = "UPDATE servicelevels SET initial_response_mins='$initial_response_mins', ";
