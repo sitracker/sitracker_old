@@ -5163,6 +5163,19 @@ function plugin_do($context, $optparams=FALSE)
     return $rtnvalue;
 }
 
+function quick_update($incidentid, $text)
+{
+    $incidentid = cleanvar($incidentid);
+    $text = cleanvar($text);
+    
+    $sql = "INSERT INTO updates('incidentid', 'userid', 'bodytext', 'currentstatus', 'timestamp') VALUES('{$incidentid}', 1, '{$sit[2]}', '{$text}', '')";
+    mysql_query($sql);
+    echo $sql;
+    if (mysql_error()){ trigger_error(mysql_error(),E_USER_ERROR); return FALSE;}
+    else return TRUE;
+
+}
+
 
 
 
