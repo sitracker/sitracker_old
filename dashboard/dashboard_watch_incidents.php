@@ -18,8 +18,8 @@ function dashboard_watch_incidents($row,$dashboardid)
     if (mysql_error()) trigger_error(mysql_error(),E_USER_ERROR);
 
     echo "<div class='windowbox' style='width: 95%' id='$row-$dashboardid'>";
-    echo "<div class='windowtitle'><div style='float: right'><a href='edit_watch_incidents.php'>{$GLOBALS['strEdit']}</a></div><img src='{$CONFIG['application_webpath']}images/icons/{$iconset}/16x16/support.png' width='16' height='16' alt='' /> {$GLOBALS['strWatchIncidents']}</div>";
-    echo "<div class='window'>";
+    echo "<div class='windowtitle'><div style='float: right'><a href='edit_watch_incidents.php'>{$GLOBALS['strEdit']}</a></div><img src='{$CONFIG['application_webpath']}images/icons/{$iconset}/16x16/support.png' width='16' height='16' alt='' />"; printf($GLOBALS['strWatchIncidents'], user_realname($user,TRUE));
+    echo "</div><div class='window'>";
 
 
     while($obj = mysql_fetch_object($result))
@@ -62,7 +62,9 @@ function dashboard_watch_incidents($row,$dashboardid)
                 $lresult = mysql_query($lsql);
                 if (mysql_error()) trigger_error(mysql_error(),E_USER_ERROR);
                 $lobj = mysql_fetch_object($lresult);
-                echo "<tr><th colspan='3'>Incidents for ".stripslashes($lobj->realname)." (Engineer)</th></tr>";
+                echo "<tr><th colspan='3'>";
+                printf($strIncidentsForEngineer, stripslashes($lobj->realname));
+                echo "</th></tr>";
 
                 break;
         }
@@ -72,15 +74,15 @@ function dashboard_watch_incidents($row,$dashboardid)
 
         if(mysql_num_rows($iresult) == 0)
         {
-            echo "<tr><td colspan='3'>No open incidents</td></tr>";
+            echo "<tr><td colspan='3'>$strNoOpenIncidents</td></tr>";
         }
         else
         {
             echo "<tr>";
-            echo colheader('id', "ID");
-            echo colheader('title', 'Title');
-            //echo colheader('customer', 'Customer');
-            echo colheader('status', 'Status');
+            echo colheader('id', $strID);
+            echo colheader('title', $strTitle});
+            //echo colheader('customer', $strCustomer);
+            echo colheader('status', $strStatis);
             echo "</tr>\n";
             $shade='shade1';
             while ($incident = mysql_fetch_object($iresult))
@@ -88,7 +90,7 @@ function dashboard_watch_incidents($row,$dashboardid)
                 echo "<tr class='$shade'>";
                 echo "<td>{$incident->id}</td>";
                 echo "<td><a href='javascript:incident_details_window({$incident->id}) '  class='info'>".stripslashes($incident->title);
-                echo "<span><strong>Customer:</strong> ".stripslashes($incident->forenames.' '.$incident->surname)." of ".site_name($incident->siteid);
+                echo "<span><strong>{$strCustomer}:</strong> ".stripslashes($incident->forenames.' '.$incident->surname)." of ".site_name($incident->siteid);
                 list($update_userid, $update_type, $update_currentowner, $update_currentstatus, $update_body, $update_timestamp, $update_nextaction, $update_id)=incident_lastupdate($incident->id);
                 $update_body = parse_updatebody($update_body);
                 if (!empty($update_body) AND $update_body!='...') echo "<br />{$update_body}";
