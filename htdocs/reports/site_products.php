@@ -9,7 +9,7 @@
 //
 
 $permission=37; // Run Reports
-$title='Site Products';
+$title = $strSiteProducts;
 require('db_connect.inc.php');
 require('functions.inc.php');
 
@@ -23,23 +23,23 @@ if (empty($_REQUEST['mode']))
     echo "<form action='{$_SERVER['PHP_SELF']}' method='post'>";
     echo "<table align='center'>";
 
-    echo "<tr><th>Site Type:</td>";
+    echo "<tr><th>{$strSiteType}:</td>";
     echo "<td>";
     echo sitetype_drop_down('type', 0);
     echo "</td></tr>";
 
-    echo "<tr><th>Output:</th>";
+    echo "<tr><th>{$strOutput}:</th>";
     echo "<td>";
     echo "<select name='output'>";
-    echo "<option value='screen'>Screen</option>";
-    echo "<option value='csv'>Disk - Comma Seperated (CSV) file</option>";
+    echo "<option value='screen'>{$strScreen}</option>";
+    echo "<option value='csv'>{$strCSVfile}</option>";
     echo "</select>";
     echo "</td></tr>";
     echo "</table>";
     echo "<p align='center'>";
     echo "<input type='hidden' name='table1' value='{$_POST['table1']}' />";
     echo "<input type='hidden' name='mode' value='report' />";
-    echo "<input type='submit' value='Run Report' />";
+    echo "<input type='submit' value=\"{$strRunReport}\" />";
     echo "</p>";
     echo "</form>";
 
@@ -67,7 +67,7 @@ elseif ($_REQUEST['mode']=='report')
 
     $html .= "<p align='center'>This report is a list of sites that you selected and the products they have (or have had) maintenance for.</p>";
     $html .= "<table width='99%' align='center'>";
-    $html .= "<tr><th>Site</th><th>Address1</th><th>Address2</th><th>City</th><th>County</th><th>Country</th><th>Postcode</th><th>Products</th></tr>";
+    $html .= "<tr><th>{$strSite}</th><th>{$strAddress1}</th><th>{$strAddress2}</th><th>{$strCity}</th><th>{$strCounty}</th><th>{$strCountry}</th><th>{$strPostcode}</th><th>{$strProducts}</th></tr>";
     $csvfieldheaders .= "site,address1,address2,city,county,country,postcode,products\r\n";
     $rowcount=0;
     while ($row = mysql_fetch_object($result))
