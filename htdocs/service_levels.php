@@ -34,14 +34,14 @@ if (mysql_num_rows($tresult) >= 1)
     echo "<table align='center'>";
     while ($tag = mysql_fetch_object($tresult))
     {
-        echo "<thead><tr><th colspan='8'>{$tag->tag}</th></tr></thead>";
+        echo "<thead><tr><th colspan='9'>{$tag->tag}</th></tr></thead>";
         $sql = "SELECT * FROM servicelevels WHERE tag='{$tag->tag}' ORDER BY priority";
         $result = mysql_query($sql);
         if (mysql_error()) trigger_error(mysql_error(),E_USER_WARNING);
 
         echo "<tr><th colspan='2'>{$strPriority}</th><th>{$strInitialResponse}</th>";
         echo "<th>{$strProblemDefinition}</th><th>{$strActionPlan}</th><th>{$strResolutionReprioritisation}</th>";
-        echo "<th>{$strReview}</th><th></th></tr>";
+        echo "<th>{$strReview}</th><th>{$strTimed}</th><th></th></tr>";
         while ($sla = mysql_fetch_object($result))
         {
             echo "<tr>";
@@ -51,6 +51,8 @@ if (mysql_num_rows($tresult) >= 1)
             echo "<td>".format_workday_minutes($sla->action_plan_mins)."</td>";
             echo "<td>".round($sla->resolution_days)." working days</td>"; // why is this a float?
             echo "<td>{$sla->review_days} days</td>";
+            if($sla->timed) echo "<td><input type='checkbox' name='timed' checked /></td>";
+            else echo "<td><input type='checkbox' name='timed' /></td>";
             echo "<td><a href='edit_service_level.php?tag={$sla->tag}&amp;priority={$sla->priority}'>{$strEdit}</a></th>";
             echo "</tr>\n";
         }

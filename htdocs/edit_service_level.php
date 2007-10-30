@@ -48,6 +48,10 @@ if (empty($action) OR $action == "showform")
     echo "<td><input type='text' size='5' name='resolution_days' maxlength='3' value='{$sla->resolution_days}' /> {$strDays}</td></tr>";
     echo "<tr><th>{$strReview} <img src='{$CONFIG['application_webpath']}images/icons/{$iconset}/16x16/review.png' width='16' height='16' alt='' /></th>";
     echo "<td><input type='text' size='5' name='review_days' maxlength='3' value='{$sla->review_days}' /> {$strDays}</td></tr>";
+    echo "<tr><th>{$strTimed} <img src='{$CONFIG['application_webpath']}images/icons/{$iconset}/16x16/sla.png' width='16' height='16' alt='' /></th><td>";    
+    if($sla->timed) echo "<input type='checkbox' name='timed' checked>";
+    else echo "<input type='checkbox' name='timed'>";
+    echo "</td></tr>";
     echo "</table>";
     echo "<input type='hidden' name='action' value='edit' />";
     echo "<input type='hidden' name='tag' value='{$tag}' />";
@@ -64,12 +68,15 @@ elseif ($action == "edit")
     $action_plan_mins = cleanvar($_POST['action_plan_mins']);
     $resolution_days = cleanvar($_POST['resolution_days']);
     $review_days = cleanvar($_POST['review_days']);
+    if($_POST['timed'] != 1) $timed = 0;
+    else $timed = 1;
 
     $sql = "UPDATE servicelevels SET initial_response_mins='$initial_response_mins', ";
     $sql .= "prob_determ_mins='$prob_determ_mins', ";
     $sql .= "action_plan_mins='$action_plan_mins', ";
     $sql .= "resolution_days='$resolution_days', ";
-    $sql .= "review_days='$review_days' ";
+    $sql .= "review_days='$review_days', ";
+    $sql .= "timed='$timed' ";
     $sql .= "WHERE tag='$tag' AND priority='$priority'";
     mysql_query($sql);
     if (mysql_error()) trigger_error(mysql_error(),E_USER_ERROR);
