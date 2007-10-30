@@ -1,7 +1,8 @@
 <?php
-// SiT! Language File - French (fr-FR)
 
-$languagestring = 'Français (fr-FR)';
+// SiT! Language File - Français (fr-FR)
+
+$languagestring = 'French (fr-FR)';
 $i18ncharset = 'UTF-8';
 
 $strAbsentSick = 'Malade';
@@ -20,7 +21,7 @@ $strAddLink = 'Ajouter Lien';
 $strAddNote = 'Ajouter Note';
 $strAddTask = 'Ajouter Tâche';
 $strAddTemplate = 'Ajouter Formulaire';
-$strAddUser = 'Ajouter Utilisant';
+$strAddUser = 'Ajouter Utilisateur';
 $strAddContact = 'Ajouter Contact';
 $strAddContract = 'Ajouter Accord';
 $strAddProduct = 'Ajouter Produit';
@@ -54,7 +55,6 @@ $strBrowseContacts = 'Parcourir contacts';
 $strBrowseFeedback = 'Parcourir commentaires';
 $strBrowseFeedbackForms = 'Parcourir Documents de Commentaire';
 $strBrowseKB = 'Parcourir Base de Connaissance';
-
 $strChooseLanguage = 'Veuillez choisir votre langue';
 $strCity = 'Ville';
 $strContact = 'Contact';
@@ -80,18 +80,20 @@ $strDeleteTask = 'Supprimer Tâche';
 $strEnglish = 'Anglais';
 $strExpiryDate = 'Date d\'Expiration';
 
+$strForgottenDetails = 'Mot de passe oublié?';
+
 $strGo = 'Aller';
 
-$strHelp = 'Au secours';
+$strHelp = 'Aide';
 $strHelpChar = '?';
-$strHelpToTranslate = 'Cette page se vise à aider les traducteurs pour
-        traduire SiT !';
+$strHelpToTranslate = 'Cette page se vise à aider les traducteurs pour traduire SiT !';
 
 $strKnowledgeBase = 'Base de Connaissance';
 
+$strLanguage = 'Langue';
 $strLogged = 'Connecté';
-$strLogIn = 'Se Connecter';
-$strLogin = 'Entrer';
+$strLogIn = 'Connexion';
+$strLogin = 'Connexion';
 $strLogout = 'Déconnexion';
 
 $strMyDashboard = 'Mon Panneau de Contrôle';
@@ -108,6 +110,7 @@ $strNow = 'Actuellement';
 
 $strOnHoliday = 'En Congé';
 
+$strPassword = 'Mot de passe';
 $strPostcode = 'Code Postale';
 $strPublished = 'Public';
 
@@ -131,7 +134,8 @@ $strTranslation = 'Traduction';
 $strUpdated = 'Mise à Jour';
 $strUnknown = 'Inconnu';
 $strUsed = 'Utilisé';
-$strUsers = 'Utilisants';
+$strUsers = 'Utilisateurs';
+$strUsername = 'Nom d\'utilisateur';
 $strUsersTasks = 'Tâches de %s';
 
 $strWelcome = 'Bienvenue';
