@@ -47,10 +47,10 @@ if ($_SESSION['auth'] != TRUE)
     echo "<form action='login.php' method='post'>";
     echo "<label for='username'>{$strUsername}:<br /><input name='username' size='28' type='text' /></label><br />";
     echo "<label for='password'>{$strPassword}:<br /><input name='password' size='28' type='password' /></label><br />";
-    echo "<label for='lang'>{$strLanguage}: <br /><select name='lang'>";
+    echo "<label for='lang'>{$strLanguage}: <br /><select name='lang' onchange='this.form.submit();'>";
     foreach($languages AS $langcode => $language)
     {
-        if($langcode == $CONFIG['default_i18n']) echo "<option value='$langcode' selected>$language</option>\n";
+        if($langcode == $_SESSION['lang']) echo "<option value='$langcode' selected>$language</option>\n";
         else echo "<option value='$langcode'>$language</option>\n";
     }
     echo "</select></label><br /><br />";

@@ -16,7 +16,6 @@ session_start();
 session_regenerate_id(TRUE);
 
 $language = $_REQUEST['lang'];
-$_SESSION['lang'] = $language;
 
 require('functions.inc.php');
 
@@ -132,7 +131,13 @@ else if($CONFIG['portal'] == TRUE)
 
     header ("Location: index.php?id=3");
     exit;
-}else
+}
+elseif(($language != $_SESSION['lang']) AND empty($_REQUEST['username']) AND empty($_REQUEST['password']))
+{
+    $_SESSION['lang'] = $language;
+    header ("Location: index.php");
+}
+else
 {
     //invalid user and portal disabled
     header ("Location: index.php?id=3");
