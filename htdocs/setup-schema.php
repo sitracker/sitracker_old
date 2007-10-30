@@ -1225,6 +1225,31 @@ CREATE TABLE `vendors` (
 
 INSERT INTO `vendors` VALUES (1,'Default');
 
+CREATE TABLE IF NOT EXISTS `notices` (
+  `id` int(11) NOT NULL auto_increment,
+  `text` tinytext NOT NULL,
+  `timestamp` date NOT NULL,
+  PRIMARY KEY  (`id`),
+  UNIQUE KEY `id` (`id`),
+  KEY `id_2` (`id`),
+  KEY `id_3` (`id`),
+  FULLTEXT KEY `text` (`text`)
+) ENGINE=MyISAM AUTO_INCREMENT=3 ;
+
+INSERT INTO `notices` (`id`, `text`, `timestamp`) VALUES 
+(1, 'My first notice.', '1970-01-01');
+
+CREATE TABLE IF NOT EXISTS `usernotices` (
+  `noticeid` int(11) NOT NULL,
+  `userid` tinyint(4) NOT NULL,
+  `dismissed` tinyint(1) default NULL,
+  PRIMARY KEY  (`noticeid`,`userid`)
+) ENGINE=MyISAM;
+
+INSERT INTO `usernotices` (`noticeid`, `userid`, `dismissed`) VALUES 
+(1, 1, 0);
+
+
 ";
 
 // ********************************************************************
@@ -1490,7 +1515,7 @@ CREATE TABLE IF NOT EXISTS `notices` (
   KEY `id_2` (`id`),
   KEY `id_3` (`id`),
   FULLTEXT KEY `text` (`text`)
-) ENGINE=MyISAM  DEFAULT CHARSET=latin1 AUTO_INCREMENT=3 ;
+) ENGINE=MyISAM AUTO_INCREMENT=3 ;
 
 INSERT INTO `notices` (`id`, `text`, `timestamp`) VALUES 
 (1, 'My first notice.', '1970-01-01');
@@ -1500,7 +1525,7 @@ CREATE TABLE IF NOT EXISTS `usernotices` (
   `userid` tinyint(4) NOT NULL,
   `dismissed` tinyint(1) default NULL,
   PRIMARY KEY  (`noticeid`,`userid`)
-) ENGINE=MyISAM DEFAULT CHARSET=latin1;
+) ENGINE=MyISAM;
 
 INSERT INTO `usernotices` (`noticeid`, `userid`, `dismissed`) VALUES 
 (1, 1, 0);
