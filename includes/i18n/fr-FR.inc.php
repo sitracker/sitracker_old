@@ -1,7 +1,7 @@
 <?php
 // SiT! Language File - French (fr-FR)
 
-$languagestring = 'French (fr-FR)';
+$languagestring = 'Français (fr-FR)';
 $i18ncharset = 'UTF-8';
 
 $strAbsentSick = 'Malade';
