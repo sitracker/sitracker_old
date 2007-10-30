@@ -239,7 +239,12 @@ else
         $errors = 1;
         $error_string .= "<h5 class='error'>You must enter an email address</h5>\n";
     }
-
+    else
+    {
+        //we updated our email
+        $sql = "UPDATE usernotices SET dismissed=1 WHERE userid={$sit[2]} and noticeid=2";
+        @mysql_query($sql);
+    }
     // update database if no errors
     if ($errors == 0)
     {
@@ -293,6 +298,11 @@ else
             // password was changed
             else
             {
+                //if this was the admin changing his password for the first time
+                if($sit[2] == '1')
+                {
+                    $sql = "UPDATE usernotices SET dimissed=1 WHERE userid={$sit[2]} and updateid=1";
+                }
                 journal(CFG_LOGGING_NORMAL, 'User Profile Edited', "User Profile {$sit[2]} Edited", CFG_JOURNAL_USER, $sit[2]);
                 confirmation_page("2", $redirecturl, $confirm_message);
             }

@@ -140,9 +140,28 @@ if($sit[0] != '')
     $result = mysql_query($sql);
     while($notice = @mysql_fetch_object($result))
     {
-        echo "<div class='info'><p class='info'>{$notice->text}";
-        echo " (<a href='{$_SERVER[PHP_SELF]}?action=dismiss&noticeid={$notice->id}'>$strDismiss</a>)";
+        //check for the two warning types, TODO: make this better
+        //if($notice->text == '$strFirstLogin') $notice->text = $strFirstLogin;
+        $notice->text = str_replace('$strFirstLogin', $strFirstLogin, $notice->text);
+        $notice->text = str_replace('$strNoEmailSet', $strNoEmailSet, $notice->text);
+        
+        //critical error
+        if($notice->type == '1') 
+        {
+            echo "<div class='error'><p class='error'>{$notice->text}";
+            if($notice->resolutionpage) $redirpage = $CONFIG['application_webpath'].$notice->resolutionpage;
+        }
+        else 
+        {
+            echo "<div class='info'><p class='info'>{$notice->text}";
+            echo " (<a href='{$_SERVER[PHP_SELF]}?action=dismiss&noticeid={$notice->id}'>$strDismiss</a>)";
+        }
         echo "</p></div>";
+    }
+    if($_SERVER[SCRIPT_NAME] != $redirpage)
+    {
+        confirmation_page(2, $redirpage, '<h2>Error</h2><p align="center">You are being redirected to fix an error.</p>');
+        exit;
     }
 }
 echo "<div id='mainframe'>";
