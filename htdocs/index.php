@@ -17,11 +17,11 @@ if (($fp = @fopen($filename, 'r', 1)) and fclose($fp) == FALSE)
 }
 
 require('db_connect.inc.php');
-require('functions.inc.php');
+
 
 session_name($CONFIG['session_name']);
 session_start();
-
+require('functions.inc.php');
 // List of *Available* languages
 $languages = array('en-GB' => 'English (British)',
                    'en-US' => 'English (US)',
