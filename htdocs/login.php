@@ -15,7 +15,7 @@ session_name($CONFIG['session_name']);
 session_start();
 session_regenerate_id(TRUE);
 
-$language = $_REQUEST['lang'];
+$language = $_POST['lang'];
 
 require('functions.inc.php');
 
@@ -25,8 +25,13 @@ $username = cleanvar($_REQUEST['username']);
 $public_browser = cleanvar($_REQUEST['public_browser']);
 $page = strip_tags(str_replace('..','',str_replace('//','',str_replace(':','',urldecode($_REQUEST['page'])))));
 
-
-if (authenticate($username, $password) == 1)
+if(empty($_REQUEST['username']) AND empty($_REQUEST['password']) AND $language != $_SESSION['lang'])
+{
+    $_SESSION['lang'] = $language;
+//     echo $_SESSION['lang'];
+    header ("Location: index.php");
+}
+elseif (authenticate($username, $password) == 1)
 {
     // Valid user
     $_SESSION['auth'] = TRUE;
@@ -48,7 +53,7 @@ if (authenticate($username, $password) == 1)
     $_SESSION['num_update_view'] = $user->var_num_updates_view;
     $_SESSION['collapse'] = $user->var_collapse;
     $_SESSION['groupid'] = is_null($user->groupid) ? 0 : $user->groupid;
-    
+
 
     // Make an array full of users permissions
     // The zero permission is added to all users, zero means everybody can access
@@ -91,7 +96,7 @@ if (authenticate($username, $password) == 1)
         exit;
     }
 }
-else if($CONFIG['portal'] == TRUE)
+elseif($CONFIG['portal'] == TRUE)
 {
     // Invalid user and portal enabled
     // Have a look if this is a contact trying to login
@@ -132,15 +137,10 @@ else if($CONFIG['portal'] == TRUE)
     header ("Location: index.php?id=3");
     exit;
 }
-elseif(($language != $_SESSION['lang']) AND empty($_REQUEST['username']) AND empty($_REQUEST['password']))
-{
-    $_SESSION['lang'] = $language;
-    header ("Location: index.php");
-}
 else
 {
     //invalid user and portal disabled
     header ("Location: index.php?id=3");
-    exit; 
+    exit;
 }
 ?>
