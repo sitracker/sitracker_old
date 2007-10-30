@@ -191,7 +191,7 @@ elseif($_REQUEST['mode'] == "save")
         if(!empty($_POST[$key]) AND substr($key, 0, 3) == "str")
         {
             if ($lastchar!='' AND substr($key, 3, 1) != $lastchar) $i18nfile .= "\n";
-            $i18nfile .= "\${$key} = '{$_POST[$key]}';\n";
+            $i18nfile .= "\${$key} = '".addslashes($_POST[$key])."';\n";
             $lastchar = substr($key, 3, 1);
             $translatedcount++;
         }
