@@ -1186,7 +1186,7 @@ CREATE TABLE `users` (
   KEY `groupid` (`groupid`)
 ) ENGINE=MyISAM;
 
-INSERT INTO `users` VALUES (1, 'admin', MD5('{$adminpw}'), 'Administrator', 1, 3, 'Administrator', 'Regards,\r\n\r\nAdministrator', '', '', '', '.', '', '', '', 1, '', 'Yes', 60, 'desc', 15, 8, 'true', 'false', 'false', 'false', 'false', '', 32, '', '0-3,1-14,2-4,2-2,2-1,');
+INSERT INTO `users` VALUES (1, 'admin', MD5(''), 'Administrator', 1, 3, 'Administrator', 'Regards,\r\n\r\nAdministrator', '', '', '', '.', '', '', '', 1, '', 'Yes', 60, 'desc', 15, 8, 'true', 'false', 'false', 'false', 'false', '', 32, '', '0-3,1-14,2-4,2-2,2-1,');
 
 
 CREATE TABLE `usersoftware` (
@@ -1236,8 +1236,10 @@ CREATE TABLE IF NOT EXISTS `notices` (
   FULLTEXT KEY `text` (`text`)
 ) ENGINE=MyISAM AUTO_INCREMENT=3 ;
 
-INSERT INTO `notices` (`id`, `text`, `timestamp`) VALUES 
-(1, 'My first notice.', '1970-01-01');
+INSERT INTO `notices` (`id`, `text`, `timestamp`, `type`, `resolutionpage`) VALUES 
+(1, '$strFirstLogin', NOW(), 1, 'edit_profile.php);
+INSERT INTO `notices` (`id`, `text`, `timestamp`, `type`, `resolutionpage`) VALUES 
+(2, '$strNoEmailSet', NOW(), 1, 'edit_profile.php);
 
 CREATE TABLE IF NOT EXISTS `usernotices` (
   `noticeid` int(11) NOT NULL,
@@ -1248,6 +1250,8 @@ CREATE TABLE IF NOT EXISTS `usernotices` (
 
 INSERT INTO `usernotices` (`noticeid`, `userid`, `dismissed`) VALUES 
 (1, 1, 0);
+INSERT INTO `usernotices` (`noticeid`, `userid`, `dismissed`) VALUES 
+(2, 1, 0);
 
 
 ";
