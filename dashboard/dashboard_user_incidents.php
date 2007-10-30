@@ -45,7 +45,8 @@ function dashboard_user_incidents($row,$dashboardid)
     echo "<div class='windowbox' style='width: 95%' id='$row-$dashboardid'>";
     echo "<div class='windowtitle'><a href='incidents.php?user=current&amp;queue=1&amp;type=support'>
         <img src='{$CONFIG['application_webpath']}images/icons/{$iconset}/16x16/support.png' width='16' height='16' alt='' /> ";
-    echo user_realname($user,TRUE)."'s {$GLOBALS['strIncidents']}</a> ({$GLOBALS['strActionNeeded']})</div>";
+    printf($GLOBALS['strUserIncidents'], user_realname($user,TRUE));
+    echo "</a> ({$GLOBALS['strActionNeeded']})</div>";
     echo "<div class='window'>";
 
     $selectsql = "SELECT incidents.id, externalid, title, owner, towner, priority, status, siteid, forenames, surname, email, incidents.maintenanceid, ";
