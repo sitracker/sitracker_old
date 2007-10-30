@@ -865,15 +865,16 @@ CREATE TABLE `servicelevels` (
   `resolution_days` float(5,2) NOT NULL default '0.00',
   `contact_days` int(11) NOT NULL default '0',
   `review_days` int(11) NOT NULL default '365',
+  `timed` tinyint(1) NOT NULL default '0',
   PRIMARY KEY  (`tag`,`priority`),
   KEY `id` (`id`),
   KEY `review_days` (`review_days`)) ENGINE=MyISAM;
 
 
-INSERT INTO `servicelevels` VALUES (0, 'standard', 1, 320, 380, 960, 14.00, 28, 90);
-INSERT INTO `servicelevels` VALUES (0, 'standard', 2, 240, 320, 960, 10.00, 20, 90);
-INSERT INTO `servicelevels` VALUES (0, 'standard', 3, 120, 180, 480, 7.00, 14, 90);
-INSERT INTO `servicelevels` VALUES (0, 'standard', 4, 60, 120, 240, 3.00, 6, 90);
+INSERT INTO `servicelevels` VALUES (0, 'standard', 1, 320, 380, 960, 14.00, 28, 90, 0);
+INSERT INTO `servicelevels` VALUES (0, 'standard', 2, 240, 320, 960, 10.00, 20, 90, 0);
+INSERT INTO `servicelevels` VALUES (0, 'standard', 3, 120, 180, 480, 7.00, 14, 90, 0);
+INSERT INTO `servicelevels` VALUES (0, 'standard', 4, 60, 120, 240, 3.00, 6, 90, 0);
 
 CREATE TABLE `set_tags` (
 `id` INT NOT NULL ,
@@ -1521,8 +1522,10 @@ CREATE TABLE IF NOT EXISTS `notices` (
   FULLTEXT KEY `text` (`text`)
 ) ENGINE=MyISAM AUTO_INCREMENT=3 ;
 
-INSERT INTO `notices` (`id`, `text`, `timestamp`) VALUES 
-(1, 'My first notice.', '1970-01-01');
+INSERT INTO `notices` (`id`, `text`, `timestamp`, `type`, `resolutionpage`) VALUES 
+(1, '$strFirstLogin', NOW(), 1, 'edit_profile.php);
+INSERT INTO `notices` (`id`, `text`, `timestamp`, `type`, `resolutionpage`) VALUES 
+(2, '$strNoEmailSet', NOW(), 1, 'edit_profile.php);
 
 CREATE TABLE IF NOT EXISTS `usernotices` (
   `noticeid` int(11) NOT NULL,
@@ -1533,6 +1536,10 @@ CREATE TABLE IF NOT EXISTS `usernotices` (
 
 INSERT INTO `usernotices` (`noticeid`, `userid`, `dismissed`) VALUES 
 (1, 1, 0);
+INSERT INTO `usernotices` (`noticeid`, `userid`, `dismissed`) VALUES 
+(2, 1, 0);
+
+ALTER TABLE `servicelevels` ADD `timed` BOOL NOT NULL DEFAULT '0'
 
 ";
 
