@@ -135,23 +135,23 @@ if($action AND $noticeid)
 //display global notices
 if($sit[0] != '')
 {
-    $sql = "SELECT * FROM notices, usernotices ";
-    $sql .= "WHERE userid={$sit[2]} AND dismissed!=1 AND notices.id=usernotices.noticeid";
-    $result = mysql_query($sql);
-    while($notice = @mysql_fetch_object($result))
+    $noticesql = "SELECT * FROM notices, usernotices ";
+    $noticesql .= "WHERE userid={$sit[2]} AND dismissed!=1 AND notices.id=usernotices.noticeid";
+    $noticeresult = mysql_query($noticesql);
+    while($notice = @mysql_fetch_object($noticeresult))
     {
         //check for the two warning types, TODO: make this better
         //if($notice->text == '$strFirstLogin') $notice->text = $strFirstLogin;
         $notice->text = str_replace('$strFirstLogin', $strFirstLogin, $notice->text);
         $notice->text = str_replace('$strNoEmailSet', $strNoEmailSet, $notice->text);
-        
+
         //critical error
-        if($notice->type == '1') 
+        if($notice->type == '1')
         {
             echo "<div class='error'><p class='error'>{$notice->text}";
             if($notice->resolutionpage) $redirpage = $CONFIG['application_webpath'].$notice->resolutionpage;
         }
-        else 
+        else
         {
             echo "<div class='info'><p class='info'>{$notice->text}";
             echo " (<a href='{$_SERVER[PHP_SELF]}?action=dismiss&noticeid={$notice->id}'>$strDismiss</a>)";
