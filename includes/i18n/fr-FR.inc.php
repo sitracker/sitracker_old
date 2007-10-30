@@ -1,5 +1,5 @@
 <?php
-// SiT! Language File - French (fr-FR) by Administrator
+// SiT! Language File - French (fr-FR)
 
 $languagestring = 'French (fr-FR)';
 $i18ncharset = 'UTF-8';
