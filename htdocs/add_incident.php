@@ -630,7 +630,9 @@ elseif ($action=='assign')
 
 
             echo "<h3>{$strIncident}: $incidentid</h3>";
-            echo "<p align='center'>{$strIncidentLoggedEngineer}</p>\n";
+            echo "<p align='center'>";
+            printf($strIncidentLoggedEngineer, $incidentid);
+            echo "</p>\n";
 
             // List Engineers
             // We need a user type 'engineer' so we don't just list everybody
