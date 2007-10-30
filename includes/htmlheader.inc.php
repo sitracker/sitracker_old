@@ -158,7 +158,7 @@ if($sit[0] != '')
         }
         echo "</p></div>";
     }
-    if($_SERVER[SCRIPT_NAME] != $redirpage)
+    if($redirpage && ($_SERVER[SCRIPT_NAME] != $redirpage))
     {
         confirmation_page(2, $redirpage, '<h2>Error</h2><p align="center">You are being redirected to fix an error.</p>');
         exit;
