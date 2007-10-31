@@ -42,7 +42,8 @@ $hmenu[1030] = array (10=> array ( 'perm'=> 22, 'name'=> $strUsers, 'url'=>"{$CO
                       60=> array ( 'perm'=> 7, 'name'=> $strBulkModify, 'url'=>"{$CONFIG['application_webpath']}bulk_modify.php?action=external_esc"),
                       70=> array ( 'perm'=> 64, 'name'=> $strEscalationPaths, 'url'=>"{$CONFIG['application_webpath']}escalation_paths.php"),
                       80=> array ( 'perm'=> 66, 'name'=> $strManageDashboardComponents, 'url'=>"{$CONFIG['application_webpath']}manage_dashboard.php"),
-                      90=> array ( 'perm'=> 49, 'name'=> $strFeedbackForms, 'url'=>"", 'submenu'=>"103090")
+                      90=> array ( 'perm'=> 70, 'name'=> $strNotices, 'url'=>"{$CONFIG['application_webpath']}notices.php"),
+                      100=> array ( 'perm'=> 49, 'name'=> $strFeedbackForms, 'url'=>"", 'submenu'=>"103090")
 );
 $hmenu[103010] = array (10=> array ( 'perm'=> 22, 'name'=> $strManageUsers, 'url'=>"{$CONFIG['application_webpath']}manage_users.php"),
                         20=> array ( 'perm'=> 20, 'name'=> $strAddUser, 'url'=>"{$CONFIG['application_webpath']}add_user.php?action=showform"),
@@ -181,6 +182,7 @@ $updatetypes['auto_chased_phone'] = array('icon' => 'chased.png', 'text' => $str
 $updatetypes['auto_chased_manager'] = array('icon' => 'chased.png', 'text' => $strChased);
 $updatetypes['auto_chased_managers_manager'] = array('icon' => 'chased.png', 'text' => $strChased);
 $updatetypes['customerclosurerequest'] = array('icon' => 'close.png', 'text' => $strCustomerRequestedClosure);
+$updatetypes['fromtask'] = array('icon' => 'webupdate.png', text => $strUpdatedFromTask);
 $slatypes['opened'] = array('icon' => 'open.png', 'text' => $strOpenedby);
 $slatypes['initialresponse'] = array('icon' => 'initialresponse.png', 'text' => $strInitialResponseby);
 $slatypes['probdef'] = array('icon' => 'probdef.png', 'text' => $strProblemDefinitionby);
