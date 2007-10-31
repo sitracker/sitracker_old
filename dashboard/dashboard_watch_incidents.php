@@ -80,7 +80,7 @@ function dashboard_watch_incidents($row,$dashboardid)
         {
             echo "<tr>";
             echo colheader('id', $strID);
-            echo colheader('title', $strTitle});
+            echo colheader('title', $strTitle);
             //echo colheader('customer', $strCustomer);
             echo colheader('status', $strStatis);
             echo "</tr>\n";
