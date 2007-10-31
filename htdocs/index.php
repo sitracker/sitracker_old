@@ -41,23 +41,27 @@ if ($_SESSION['auth'] != TRUE)
     if ($id==2) echo "<p class='error'>{$strSessionExpired}</p><br />";
     if ($id==3) throw_user_error("{$strInvalidCredentials}");
 
-    echo "<div class='windowbox' style='width: 220px;'>";
-    echo "<div class='windowtitle'>{$CONFIG['application_shortname']} - {$strLogin}</div>";
-    echo "<div class='window'>";
-    echo "<form action='login.php' method='post'>";
-    echo "<label for='username'>{$strUsername}:<br /><input name='username' size='28' type='text' /></label><br />";
-    echo "<label for='password'>{$strPassword}:<br /><input name='password' size='28' type='password' /></label><br />";
-    echo "<label for='lang'>{$strLanguage}: <br /><select name='lang' onchange='this.form.submit();'>";
+    echo "<div style='margin-left: auto; margin-right: auto; width: 380px; text-align: center; margin-top: 3em;'>";
+    echo "<form id='langselectform' action='login.php' method='post'>";
+    echo "<label for='lang'>{$strLanguage}:  <select name='lang' id='lang' onchange='this.form.submit();'>";
     foreach($languages AS $langcode => $language)
     {
-        if($langcode == $_SESSION['lang']) echo "<option value='$langcode' selected>$language</option>\n";
+        if($langcode == $_SESSION['lang']) echo "<option value='$langcode' selected='selected'>$language</option>\n";
         else echo "<option value='$langcode'>$language</option>\n";
     }
-    echo "</select></label><br /><br />";
+    echo "</select></label>";
+    echo "</form>";
+    echo "</div>";
+    echo "<div class='windowbox' style='width: 220px;'>\n";
+    echo "<div class='windowtitle'>{$CONFIG['application_shortname']} - {$strLogin}</div>\n";
+    echo "<div class='window'>\n";
+    echo "<form id='loginform' action='login.php' method='post'>";
+    echo "<label for='username'>{$strUsername}:<br /><input id='username' name='username' size='28' type='text' /></label><br />";
+    echo "<label for='password'>{$strPassword}:<br /><input id='password' name='password' size='28' type='password' /></label><br />";
     echo "<input type='hidden' name='page' value='$page' />";
     echo "<input type='submit' value='{$strLogIn}' /><br />";
     echo "<br /><a href='forgotpwd.php'>{$strForgottenDetails}</a>";
-    echo "</form>";
+    echo "</form>\n";
     echo "</div>\n</div>\n";
     include('htmlfooter.inc.php');
 }
