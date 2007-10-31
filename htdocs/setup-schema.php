@@ -627,6 +627,7 @@ INSERT INTO `permissions` VALUES (66, 'Install Dashboard Components');
 INSERT INTO `permissions` VALUES (67, 'Run Management Reports');
 INSERT INTO `permissions` VALUES (68, 'Manage Holidays');
 INSERT INTO `permissions` VALUES (69, 'Change User Statuses');
+INSERT INTO `permissions` VALUES (70, 'Post Global Notices');
 
 
 CREATE TABLE `priority` (
@@ -764,6 +765,8 @@ INSERT INTO `rolepermissions` (`roleid`, `permissionid`, `granted`) VALUES (1, 6
 INSERT INTO `rolepermissions` (`roleid`, `permissionid`, `granted`) VALUES (1, 65, 'true');
 INSERT INTO `rolepermissions` (`roleid`, `permissionid`, `granted`) VALUES (1, 66, 'true');
 INSERT INTO `rolepermissions` (`roleid`, `permissionid`, `granted`) VALUES (1, 67, 'true');
+INSERT INTO `rolepermissions` (`roleid`, `permissionid`, `granted`) VALUES (1, 68, 'true');
+INSERT INTO `rolepermissions` (`roleid`, `permissionid`, `granted`) VALUES (1, 69, 'true');
 INSERT INTO `rolepermissions` (`roleid`, `permissionid`, `granted`) VALUES (2, 1, 'true');
 INSERT INTO `rolepermissions` (`roleid`, `permissionid`, `granted`) VALUES (2, 2, 'true');
 INSERT INTO `rolepermissions` (`roleid`, `permissionid`, `granted`) VALUES (2, 3, 'true');
@@ -865,7 +868,7 @@ CREATE TABLE `servicelevels` (
   `resolution_days` float(5,2) NOT NULL default '0.00',
   `contact_days` int(11) NOT NULL default '0',
   `review_days` int(11) NOT NULL default '365',
-  `timed` tinyint(1) NOT NULL default '0',
+  `timed` enum('yes','no') NOT NULL default 'no',
   PRIMARY KEY  (`tag`,`priority`),
   KEY `id` (`id`),
   KEY `review_days` (`review_days`)) ENGINE=MyISAM;
@@ -1057,6 +1060,7 @@ CREATE TABLE `updates` (
   `nextaction` varchar(50) NOT NULL default '',
   `customervisibility` enum('show','hide','unset') default 'unset',
   `sla` enum('opened','initialresponse','probdef','actionplan','solution','closed') default NULL,
+  `duration` int(11) default NULL,
   PRIMARY KEY  (`id`),
   KEY `currentowner` (`currentowner`,`currentstatus`),
   KEY `incidentid` (`incidentid`),
@@ -1540,9 +1544,11 @@ INSERT INTO `usernotices` (`noticeid`, `userid`, `dismissed`) VALUES
 INSERT INTO `usernotices` (`noticeid`, `userid`, `dismissed`) VALUES
 (2, 1, 0);
 
-ALTER TABLE `servicelevels` ADD `timed` BOOL NOT NULL DEFAULT '0'
+ALTER TABLE `servicelevels` ADD `timed` enum('yes','no') NOT NULL DEFAULT 'no'
 
 ALTER TABLE `users` ADD `var_i18n` VARCHAR( 20 ) NULL AFTER `var_notify_on_reassign` ;
+
+ALTER TABLE `updates` ADD `duration` INT NULL ;
 ";
 
 

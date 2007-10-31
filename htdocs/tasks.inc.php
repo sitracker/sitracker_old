@@ -146,8 +146,10 @@ else
                 echo "</td>";
             }
             if($mode == 'incident')
-                echo "<td><a href='view_task.php?id={$task->id}&mode=incident&incident={$id}' class='info'>{$task->id}</td>";
-
+            {
+                if($enddate > 0) echo "<td>{$task->id}</td>";
+                else echo "<td><a href='view_task.php?id={$task->id}&mode=incident&incident={$id}' class='info'>{$task->id}</td>";
+            }
             else
             {
                 echo "<td>";

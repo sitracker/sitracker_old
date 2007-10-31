@@ -163,21 +163,18 @@ switch ($action)
             $updatehtml = "Update created from incident task <a href=\"tasks.php?incident={$incident}\">{$id}</a><br />Task started at: {$startdate}<br /><br />";
             for($i = $numnotes-1; $i >= 0; $i--)
             {   
-                echo "numnotes: $numnotes, i: $i<br />";
                 $updatehtml .= "<strong>".readable_date(mysql2date($notesarray[$i]->timestamp))."</strong><br />{$notesarray[$i]->bodytext}<br /><br />";
-                print_r($notesarray[$i]);
             }
             $updatehtml .= "Task completed at {$enddate}, duration was: ".format_seconds($duration);
             
             //create update
             $sql = "INSERT INTO updates (incidentid, userid, type, bodytext, timestamp, duration) ";
             $sql .= "VALUES('{$incident}', '{$sit[2]}', 'fromtask', '{$updatehtml}', '$now', '$duration')";
-            echo $sql;
             mysql_query($sql);
             if (mysql_error()) trigger_error(mysql_error(),E_USER_ERROR);
-//             echo $updatehtml;
         }
-        else {// Insert note to say what happened
+        else {
+            // Insert note to say what happened
             $bodytext="Task marked 100% complete by {$_SESSION['realname']}:\n\n".$bodytext;
             $sql = "INSERT INTO notes ";
             $sql .= "(userid, bodytext, link, refid) ";
@@ -195,7 +192,6 @@ switch ($action)
         
 
         confirmation_page("2", "tasks.php?incident={$incident}", "<h2>{$strTaskMarkedCompleteSuccessfully}</h2><p align='center'>{$strPleaseWaitRedirect}...</p>");
-        
     break;
 
     case 'delete':
