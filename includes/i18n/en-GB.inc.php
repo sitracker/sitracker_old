@@ -475,6 +475,7 @@ $strUpdatedAutomaticallyBy = 'Updated automatically by %s';
 $strUpdateIncident = 'Update Incident';
 $strUpdateNewUpdate = 'New update (none of the above)';
 $strUpdates = 'Updates';
+$strUpdatedFromTask = 'Updated from Task by %s';
 $strUpdateType = 'Update Type';
 $strUnknown = 'Unknown';
 $strUnlimited = 'Unlimited';
