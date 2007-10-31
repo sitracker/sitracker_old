@@ -28,7 +28,6 @@ $page = strip_tags(str_replace('..','',str_replace('//','',str_replace(':','',ur
 if(empty($_REQUEST['username']) AND empty($_REQUEST['password']) AND $language != $_SESSION['lang'])
 {
     $_SESSION['lang'] = $language;
-//     echo $_SESSION['lang'];
     header ("Location: index.php");
 }
 elseif (authenticate($username, $password) == 1)
@@ -53,7 +52,7 @@ elseif (authenticate($username, $password) == 1)
     $_SESSION['num_update_view'] = $user->var_num_updates_view;
     $_SESSION['collapse'] = $user->var_collapse;
     $_SESSION['groupid'] = is_null($user->groupid) ? 0 : $user->groupid;
-
+    if (!empty($user->var_i18n)) $_SESSION['lang'] = $user->var_i18n;
 
     // Make an array full of users permissions
     // The zero permission is added to all users, zero means everybody can access

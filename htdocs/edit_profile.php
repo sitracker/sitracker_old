@@ -122,8 +122,21 @@ if (empty($submit))
     echo "<td><input maxlength=\"50\" name=\"icq\" size=\"30\" type=\"text\" value=\"".strip_tags($user->icq)."\" /></td></tr>";
     echo "<tr><th>MSN: <img src=\"images/icons/{$iconset}/16x16/msn.png\" width=\"16\" height=\"16\" alt=\"MSN\" /></th>";
     echo "<td><input maxlength=\"50\" name=\"msn\" size=\"30\" type=\"text\" value=\"".strip_tags($user->msn)."\" /></td></tr>";
+
+    echo "<tr><th colspan='2'>DISPLAY PREFERENCES</td></tr>\n";
+    echo "<tr><th>{$strLanguage}</th><td>";
+    echo "<select name='vari18n' id='vari18n'>";
+    if (!empty($user->var_i18n)) $selectedlang = $user->var_i18n;
+    else $selectedlang = $_SESSION['lang'];
+    foreach($availablelanguages AS $langcode => $language)
+    {
+        if($langcode == $selectedlang) echo "<option value='$langcode' selected='selected'>$language</option>\n";
+        else echo "<option value='$langcode'>$language</option>\n";
+    }
+    echo "</select></label>";
+    echo "</td></tr>\n";
     ?>
-    <tr><th colspan='2'>DISPLAY PREFERENCES</td></tr>
+
     <tr><th>Interface Style (Theme):</th><td>
     <?php interfacestyle_drop_down('style', $user->var_style) ?>
     </td></tr>
@@ -184,6 +197,7 @@ else
     $collapse = cleanvar($_POST['collapse']);
     $emailonreassign = cleanvar($_POST['emailonreassign']);
     $style = cleanvar($_POST['style']);
+    $vari18n = cleanvar($_POST['vari18n']);
     $accepting = cleanvar($_POST['accepting']);
     $roleid = cleanvar($_POST['roleid']);
     $holiday_entitlement = cleanvar($_POST['holiday_entitlement']);
@@ -258,7 +272,7 @@ else
         if ($userid != 1 AND !empty($_REQUEST['roleid']) AND $edituserpermission==TRUE) $sql .= "roleid='{$roleid}', ";
         if (!empty($holiday_entitlement) AND $edituserpermission==TRUE) $sql .= "holiday_entitlement='{$holiday_entitlement}', ";
         $sql .= "var_update_order='$updateorder', var_num_updates_view='$updatesperpage', var_style='$style', signature='$signature', message='$message', status='$status', accepting='$accepting', ";
-        $sql .= "var_collapse='$collapse', var_notify_on_reassign='$emailonreassign' WHERE id='$userid' LIMIT 1";
+        $sql .= "var_collapse='$collapse', var_notify_on_reassign='$emailonreassign', var_i18n='{$vari18n}' WHERE id='$userid' LIMIT 1";
         $result = mysql_query($sql);
         if (mysql_error()) trigger_error("MySQL Query Error ".mysql_error(), E_USER_ERROR);
 
@@ -271,6 +285,7 @@ else
             $_SESSION['incident_refresh'] = $incidentrefresh;
             $_SESSION['update_order'] = $updateorder;
             $_SESSION['num_update_view'] = $updatesperpage;
+            $_SESSION['lang'] = $vari18n;
         }
 
         //only want to reassign to backup if you've changed you status
