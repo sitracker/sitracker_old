@@ -9,6 +9,7 @@
 //
 // This Page Is Valid XHTML 1.0 Transitional! 27Oct05
 
+// FIXME XHTML/XML lang needs to come from i18n file
 ?>
 <!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Transitional//EN"
      "http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd">

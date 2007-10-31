@@ -1176,6 +1176,7 @@ CREATE TABLE `users` (
   `var_hideheader` enum('true','false') NOT NULL default 'false',
   `var_monitor` enum('true','false') NOT NULL default 'true',
   `var_notify_on_reassign` enum('true','false') NOT NULL default 'false',
+  `var_i18n` varchar(20) default NULL,
   `listadmin` tinytext,
   `holiday_entitlement` float NOT NULL default '0',
   `qualifications` tinytext,
@@ -1237,9 +1238,9 @@ CREATE TABLE IF NOT EXISTS `notices` (
   FULLTEXT KEY `text` (`text`)
 ) ENGINE=MyISAM AUTO_INCREMENT=3 ;
 
-INSERT INTO `notices` (`id`, `text`, `timestamp`, `type`, `resolutionpage`) VALUES 
+INSERT INTO `notices` (`id`, `text`, `timestamp`, `type`, `resolutionpage`) VALUES
 (1, '$strFirstLogin', NOW(), 1, 'edit_profile.php);
-INSERT INTO `notices` (`id`, `text`, `timestamp`, `type`, `resolutionpage`) VALUES 
+INSERT INTO `notices` (`id`, `text`, `timestamp`, `type`, `resolutionpage`) VALUES
 (2, '$strNoEmailSet', NOW(), 1, 'edit_profile.php);
 
 CREATE TABLE IF NOT EXISTS `usernotices` (
@@ -1249,9 +1250,9 @@ CREATE TABLE IF NOT EXISTS `usernotices` (
   PRIMARY KEY  (`noticeid`,`userid`)
 ) ENGINE=MyISAM;
 
-INSERT INTO `usernotices` (`noticeid`, `userid`, `dismissed`) VALUES 
+INSERT INTO `usernotices` (`noticeid`, `userid`, `dismissed`) VALUES
 (1, 1, 0);
-INSERT INTO `usernotices` (`noticeid`, `userid`, `dismissed`) VALUES 
+INSERT INTO `usernotices` (`noticeid`, `userid`, `dismissed`) VALUES
 (2, 1, 0);
 
 
@@ -1522,9 +1523,9 @@ CREATE TABLE IF NOT EXISTS `notices` (
   FULLTEXT KEY `text` (`text`)
 ) ENGINE=MyISAM AUTO_INCREMENT=3 ;
 
-INSERT INTO `notices` (`id`, `text`, `timestamp`, `type`, `resolutionpage`) VALUES 
+INSERT INTO `notices` (`id`, `text`, `timestamp`, `type`, `resolutionpage`) VALUES
 (1, '$strFirstLogin', NOW(), 1, 'edit_profile.php);
-INSERT INTO `notices` (`id`, `text`, `timestamp`, `type`, `resolutionpage`) VALUES 
+INSERT INTO `notices` (`id`, `text`, `timestamp`, `type`, `resolutionpage`) VALUES
 (2, '$strNoEmailSet', NOW(), 1, 'edit_profile.php);
 
 CREATE TABLE IF NOT EXISTS `usernotices` (
@@ -1534,13 +1535,14 @@ CREATE TABLE IF NOT EXISTS `usernotices` (
   PRIMARY KEY  (`noticeid`,`userid`)
 ) ENGINE=MyISAM;
 
-INSERT INTO `usernotices` (`noticeid`, `userid`, `dismissed`) VALUES 
+INSERT INTO `usernotices` (`noticeid`, `userid`, `dismissed`) VALUES
 (1, 1, 0);
-INSERT INTO `usernotices` (`noticeid`, `userid`, `dismissed`) VALUES 
+INSERT INTO `usernotices` (`noticeid`, `userid`, `dismissed`) VALUES
 (2, 1, 0);
 
 ALTER TABLE `servicelevels` ADD `timed` BOOL NOT NULL DEFAULT '0'
 
+ALTER TABLE `users` ADD `var_i18n` VARCHAR( 20 ) NULL AFTER `var_notify_on_reassign` ;
 ";
 
 

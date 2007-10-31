@@ -18,16 +18,11 @@ if (($fp = @fopen($filename, 'r', 1)) and fclose($fp) == FALSE)
 
 require('db_connect.inc.php');
 
-
 session_name($CONFIG['session_name']);
 session_start();
+include('strings.inc.php');
 require('functions.inc.php');
-// List of *Available* languages
-$languages = array('en-GB' => 'English (British)',
-                   'en-US' => 'English (US)',
-                   'fr-FR' => 'Français',
-                   'lt-LT' => 'Lietuvių'
-                  );
+
 
 if ($_SESSION['auth'] != TRUE)
 {
@@ -44,7 +39,7 @@ if ($_SESSION['auth'] != TRUE)
     echo "<div style='margin-left: auto; margin-right: auto; width: 380px; text-align: center; margin-top: 3em;'>";
     echo "<form id='langselectform' action='login.php' method='post'>";
     echo "<label for='lang'>{$strLanguage}:  <select name='lang' id='lang' onchange='this.form.submit();'>";
-    foreach($languages AS $langcode => $language)
+    foreach($availablelanguages AS $langcode => $language)
     {
         if($langcode == $_SESSION['lang']) echo "<option value='$langcode' selected='selected'>$language</option>\n";
         else echo "<option value='$langcode'>$language</option>\n";

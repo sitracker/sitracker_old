@@ -187,4 +187,14 @@ $slatypes['probdef'] = array('icon' => 'probdef.png', 'text' => $strProblemDefin
 $slatypes['actionplan'] = array('icon' => 'actionplan.png', 'text' => $strActionPlanby);
 $slatypes['solution'] = array('icon' => 'solution.png', 'text' => $strSolutionby);
 $slatypes['closed'] = array('icon' => 'close.png', 'text' => $strClosedby);
+
+
+// List of *Available* languages, must match files in includes/i18n
+$availablelanguages = array('en-GB' => 'English (British)',
+                            'en-US' => 'English (US)',
+                            'fr-FR' => 'Français',
+                            'lt-LT' => 'Lietuvių'
+                           );
+
+
 ?>
