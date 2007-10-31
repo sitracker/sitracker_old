@@ -91,6 +91,7 @@ $strCritical = 'Critical';
 $strCustomer = 'Customer';
 $strCustomerFeedback = 'Customer Feedback';
 $strCustomers = 'Customers';
+$strCountContractsByProduct = 'Count contracts by product';
 $strCounty = 'County';
 $strCountry = 'Country';
 $strCreate = 'Create';
