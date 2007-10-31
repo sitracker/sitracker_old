@@ -49,7 +49,7 @@ if (empty($action) OR $action == "showform")
     echo "<tr><th>{$strReview} <img src='{$CONFIG['application_webpath']}images/icons/{$iconset}/16x16/review.png' width='16' height='16' alt='' /></th>";
     echo "<td><input type='text' size='5' name='review_days' maxlength='3' value='{$sla->review_days}' /> {$strDays}</td></tr>";
     echo "<tr><th>{$strTimed} <img src='{$CONFIG['application_webpath']}images/icons/{$iconset}/16x16/sla.png' width='16' height='16' alt='' /></th><td>";    
-    if($sla->timed) echo "<input type='checkbox' name='timed' checked>";
+    if($sla->timed == 'yes') echo "<input type='checkbox' name='timed' checked>";
     else echo "<input type='checkbox' name='timed'>";
     echo "</td></tr>";
     echo "</table>";

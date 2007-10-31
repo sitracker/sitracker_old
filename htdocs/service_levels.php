@@ -51,7 +51,7 @@ if (mysql_num_rows($tresult) >= 1)
             echo "<td>".format_workday_minutes($sla->action_plan_mins)."</td>";
             echo "<td>".round($sla->resolution_days)." working days</td>"; // why is this a float?
             echo "<td>{$sla->review_days} days</td>";
-            if($sla->timed) echo "<td><input type='checkbox' name='timed' checked /></td>";
+            if($sla->timed == 'yes') echo "<td><input type='checkbox' name='timed' checked /></td>";
             else echo "<td><input type='checkbox' name='timed' /></td>";
             echo "<td><a href='edit_service_level.php?tag={$sla->tag}&amp;priority={$sla->priority}'>{$strEdit}</a></th>";
             echo "</tr>\n";
