@@ -344,7 +344,7 @@ if ($menu != 'hide')
         echo "<a class='barlink' href='incident_relationships.php?id={$id}&amp;tab=relationships' accesskey='L'>{$strRelations}</a> | ";
         echo "<a class='barlink' href='javascript:email_window({$id})' accesskey='E'>{$strEmail}</a> | ";
         echo "<a class='barlink' href='incident_attachments.php?id={$id}&amp;popup={$popup}' accesskey='F'>{$strFiles}</a> | ";
-        if(($incident->servicelevel) == "Remote") echo "<a class='barlink' href='tasks.php?incident={$id}'>Tasks</a> | ";
+        if($servicelevel->timed =='yes') echo "<a class='barlink' href='tasks.php?incident={$id}'>Tasks</a> | ";
         echo "<a class='barlink' href='related_incidents.php?id={$id}&amp;pop={$popup}' accesskey='A'>{$strRelated}</a> | ";
         echo "<a class='barlink' href='incident_details.php?id={$id}&amp;popup={$popup}' accesskey='D'>{$strDetailsAndLog}</a> | ";
         

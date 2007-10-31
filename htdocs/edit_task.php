@@ -121,6 +121,70 @@ switch ($action)
     break;
 
     case 'markcomplete':
+        //this task is for an incident, enter an update from all the notes
+        if($incident)
+        {
+            $sql = "SELECT * FROM tasks WHERE id='$id'";
+            $result = mysql_query($sql);
+            if (mysql_error()) trigger_error(mysql_error(),E_USER_ERROR);
+            if (mysql_num_rows($result) >= 1)
+            {
+                $task = mysql_fetch_object($result);
+                $startdate=mysql2date($task->startdate);
+                $duedate=mysql2date($task->duedate);
+                $enddate=mysql2date($task->enddate);
+            }
+            
+            //get all the notes
+            $notearray = array();
+            $numnotes = 0;
+            $sql = "SELECT * FROM notes WHERE link='10' AND refid='{$id}'";
+            $result = mysql_query($sql);
+            if (mysql_error()) trigger_error(mysql_error(),E_USER_ERROR);
+            if (mysql_num_rows($result) >= 1)
+            {
+                while($notes = mysql_fetch_object($result))
+                {
+                    $notesarray[$numnotes] = $notes;
+                    $numnotes++;
+                }
+            }
+            //delete all the notes
+            $sql = "DELETE FROM notes WHERE refid='{$id}'";
+            $result = mysql_query($sql);
+            if (mysql_error()) trigger_error(mysql_error(),E_USER_ERROR);
+                    
+            $enddate = $now;
+            $duration = $enddate - $startdate;
+            
+            $startdate = readable_date($startdate);
+            $enddate = readable_date($enddate);
+            
+            $updatehtml = "Update created from incident task <a href=\"tasks.php?incident={$incident}\">{$id}</a><br />Task started at: {$startdate}<br /><br />";
+            for($i = $numnotes-1; $i >= 0; $i--)
+            {   
+                echo "numnotes: $numnotes, i: $i<br />";
+                $updatehtml .= "<strong>".readable_date(mysql2date($notesarray[$i]->timestamp))."</strong><br />{$notesarray[$i]->bodytext}<br /><br />";
+                print_r($notesarray[$i]);
+            }
+            $updatehtml .= "Task completed at {$enddate}, duration was: ".format_seconds($duration);
+            
+            //create update
+            $sql = "INSERT INTO updates (incidentid, userid, type, bodytext, timestamp, duration) ";
+            $sql .= "VALUES('{$incident}', '{$sit[2]}', 'fromtask', '{$updatehtml}', '$now', '$duration')";
+            echo $sql;
+            mysql_query($sql);
+            if (mysql_error()) trigger_error(mysql_error(),E_USER_ERROR);
+//             echo $updatehtml;
+        }
+        else {// Insert note to say what happened
+            $bodytext="Task marked 100% complete by {$_SESSION['realname']}:\n\n".$bodytext;
+            $sql = "INSERT INTO notes ";
+            $sql .= "(userid, bodytext, link, refid) ";
+            $sql .= "VALUES ('0', '{$bodytext}', '10',' $id')";
+            mysql_query($sql);
+            if (mysql_error()) trigger_error(mysql_error(),E_USER_ERROR);
+        }
         $enddate = date('Y-m-d H:i:s');
         $sql = "UPDATE tasks ";
         $sql .= "SET completion='100', enddate='$enddate' ";
@@ -128,15 +192,10 @@ switch ($action)
         mysql_query($sql);
         if (mysql_error()) trigger_error(mysql_error(),E_USER_ERROR);
 
-        // Insert note to say what happened
-        $bodytext="Task marked 100% complete by {$_SESSION['realname']}:\n\n".$bodytext;
-        $sql = "INSERT INTO notes ";
-        $sql .= "(userid, bodytext, link, refid) ";
-        $sql .= "VALUES ('0', '{$bodytext}', '10',' $id')";
-        mysql_query($sql);
-        if (mysql_error()) trigger_error(mysql_error(),E_USER_ERROR);
+        
 
         confirmation_page("2", "tasks.php?incident={$incident}", "<h2>{$strTaskMarkedCompleteSuccessfully}</h2><p align='center'>{$strPleaseWaitRedirect}...</p>");
+        
     break;
 
     case 'delete':
