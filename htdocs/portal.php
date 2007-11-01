@@ -131,7 +131,7 @@ switch ($page)
             while ($incident = mysql_fetch_object($result))
             {
                 echo "<tr class='$shade'><td><a href='portal.php?page=showincident&id={$incident->id}'>{$incident->id}</a></td>";
-                echo "<td>Product<br /><strong><a href='portal.php?page=showincident&id={$incident->id}'>".stripslashes($incident->title)."</a></strong></td>"; // FIXME product name
+                echo "<td>{$strProduct}<br /><strong><a href='portal.php?page=showincident&id={$incident->id}'>".stripslashes($incident->title)."</a></strong></td>"; // FIXME product name
                 echo "<td>".format_date_friendly($incident->lastupdated)."</td>";
                 echo "<td>".incidentstatus_name($incident->status)."</td>";
                 echo "<td><a href='{$_SERVER[PHP_SELF]}?page=update&amp;id={$incident->id}'>{$strUpdate}</a> | ";
@@ -139,8 +139,8 @@ switch ($page)
                 //check if the customer has requested a closure
                 $lastupdate = list($update_userid, $update_type, $update_currentowner, $update_currentstatus, $update_body, $update_timestamp, $update_nextaction, $update_id)=incident_lastupdate($incident->id);
 
-                if($lastupdate[1] == "customerclosurerequest") echo "Closure Requested</td>";
-                else echo "<a href='{$_SERVER[PHP_SELF]}?page=close&amp;id={$incident->id}'>Request Close</a></td>";
+                if($lastupdate[1] == "customerclosurerequest") echo "{$strClosureRequested}</td>";
+                else echo "<a href='{$_SERVER[PHP_SELF]}?page=close&amp;id={$incident->id}'>{$strRequestClosure}</a></td>";
                 echo "</tr>";
                 if ($shade=='shade1') $shade='shade2';
                 else $shade='shade1';
@@ -159,7 +159,7 @@ switch ($page)
             $id = $_REQUEST['id'];
             echo "<h2>{$strUpdateIncident} {$_REQUEST['id']}</h2>";
             echo "<div id='update' align='center'><form action='{$_SERVER[PHP_SELF]}?page=update&amp;id=$id' method='POST'>";
-            echo "<p>Update:</p><textarea cols='50' rows='10' name='update'></textarea><br />";
+            echo "<p>{$strUpdate}:</p><textarea cols='50' rows='10' name='update'></textarea><br />";
             echo "<input type='submit'></form></div>";
         }
         else
@@ -488,7 +488,6 @@ switch ($page)
                     else echo "<div class='detailentryhidden'>\n";
                     if ($updatebodylen > 5) echo stripslashes(nl2br($updatebody));
                     else echo stripslashes($updatebody);
-                    if (!empty($update->nextaction)) echo "<div class='detailhead'>Next action: ".stripslashes($update->nextaction)."</div>";
                     echo "</div>\n"; // detailentry
                 }
 
