@@ -1246,13 +1246,17 @@ INSERT INTO `notices` (`id`, `text`, `timestamp`, `type`, `resolutionpage`) VALU
 (1, 'strFirstLogin', NOW(), 1, 'edit_profile.php');
 INSERT INTO `notices` (`id`, `text`, `timestamp`, `type`, `resolutionpage`) VALUES
 (2, 'strNoEmailSet', NOW(), 1, 'edit_profile.php');
+INSERT INTO `notices` (`id`, `text`, `linktext`, `timestamp`, `type`, `link`) VALUES
+(3, 'strYourCurrentLanguage', 'strUseThisInFuture', NOW(), 2, 'edit_profile.php?mode=savesessionlang');
+
 
 CREATE TABLE IF NOT EXISTS `usernotices` (
   `noticeid` int(11) NOT NULL,
   `userid` tinyint(4) NOT NULL,
   `dismissed` tinyint(1) default NULL,
+  `durability` enum('sticky','session') NOT NULL default 'sticky',
   PRIMARY KEY  (`noticeid`,`userid`)
-) ENGINE=MyISAM;
+) TYPE=MyISAM;
 
 INSERT INTO `usernotices` (`noticeid`, `userid`, `dismissed`) VALUES
 (1, 1, 0);

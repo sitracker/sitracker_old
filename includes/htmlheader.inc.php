@@ -133,7 +133,7 @@ if($action AND $noticeid)
 if($sit[0] != '')
 {
     $noticesql = "SELECT * FROM notices, usernotices ";
-    $noticesql .= "WHERE userid={$sit[2]} AND dismissed!=1 AND notices.id=usernotices.noticeid";
+    $noticesql .= "WHERE userid={$sit[2]} AND dismissed < 1 AND notices.id=usernotices.noticeid";
     $noticeresult = mysql_query($noticesql);
     while($notice = @mysql_fetch_object($noticeresult))
     {
@@ -152,9 +152,23 @@ if($sit[0] != '')
         {
             echo "<div class='info'><p class='info'>";
             echo "<span>(<a href='{$_SERVER[PHP_SELF]}?action=dismiss&amp;noticeid={$notice->id}'>$strDismiss</a>)</span>";
-            echo "{$notice->text}";
-            echo " <a href=\"{$notice->link}\">{$notice->linktext}</a>";
-
+            if (substr($notice->text, 0, 4)=='$str')
+            {
+                $v = substr($notice->text, 1);
+                echo $GLOBALS[$v];
+            }
+            else echo "{$notice->text}";
+            if (!empty($notice->link))
+            {
+                echo " - <a href=\"{$notice->link}\">";
+                if (substr($notice->linktext, 0, 4)=='$str')
+                {
+                    $v = substr($notice->linktext, 1);
+                    echo $GLOBALS[$v];
+                }
+                else echo "{$notice->linktext}";
+                echo "</a>";
+            }
         }
         echo "</p></div>";
     }
