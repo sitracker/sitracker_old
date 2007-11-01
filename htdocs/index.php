@@ -23,7 +23,6 @@ session_start();
 include('strings.inc.php');
 require('functions.inc.php');
 
-
 if ($_SESSION['auth'] != TRUE)
 {
     // External variables
@@ -39,6 +38,9 @@ if ($_SESSION['auth'] != TRUE)
     echo "<div style='margin-left: auto; margin-right: auto; width: 380px; text-align: center; margin-top: 3em;'>";
     echo "<form id='langselectform' action='login.php' method='post'>";
     echo "<label for='lang'>{$strLanguage}:  <select name='lang' id='lang' onchange='this.form.submit();'>";
+    echo "<option value='default'";
+    if (empty($_SESSION['lang'])) echo " selected='selected'";
+    echo ">{$strDefault}</option>\n";
     foreach($availablelanguages AS $langcode => $language)
     {
         if($langcode == $_SESSION['lang']) echo "<option value='$langcode' selected='selected'>$language</option>\n";

@@ -112,6 +112,7 @@ $strDataProtection = 'Data Protection';
 $strDate = 'Date';
 $strDay = 'Day';
 $strDays = 'Days';
+$strDefault = 'Default';
 $strDelete = 'Delete';
 $strDeleted = 'Deleted';
 $strDeleteTask = 'Delete Task';
