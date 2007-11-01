@@ -53,6 +53,18 @@ elseif (authenticate($username, $password) == 1)
     $_SESSION['collapse'] = $user->var_collapse;
     $_SESSION['groupid'] = is_null($user->groupid) ? 0 : $user->groupid;
     if (!empty($user->var_i18n)) $_SESSION['lang'] = $user->var_i18n;
+    
+    //check if the session lang is different the their profiles
+    if($_SESSION['lang'] != $user->var_lang)
+    {
+        $sql = "INSERT INTO notices VALUES('', 'Your current language differs from your profile language. You can click <a href=\'".$CONFIG['application_webpath']."edit_profile.php\'>here</a> to change it.', NOW(), 0, '')";
+        mysql_query($sql);
+        if (mysql_error()) trigger_error(mysql_error(), E_USER_ERROR);
+        $noticeid = mysql_insert_id();
+        $sql = "INSERT INTO usernotices VALUES($noticeid, $user->id, '0')";
+        mysql_query($sql);
+        if (mysql_error()) trigger_error(mysql_error(), E_USER_ERROR);
+    }
 
     // Make an array full of users permissions
     // The zero permission is added to all users, zero means everybody can access
