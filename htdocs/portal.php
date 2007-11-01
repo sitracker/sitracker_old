@@ -490,7 +490,6 @@ switch ($page)
                     else echo stripslashes($updatebody);
                     echo "</div>\n"; // detailentry
                 }
-
             }
         }
         break;

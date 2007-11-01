@@ -35,7 +35,7 @@ elseif (authenticate($username, $password) == 1)
     // Valid user
     $_SESSION['auth'] = TRUE;
 
-    // Retreive users profile
+    // Retrieve users profile
     $sql = "SELECT * FROM users WHERE username='$username' AND password='$password' LIMIT 1";
     $result = mysql_query($sql);
     if (mysql_error()) trigger_error(mysql_error(), E_USER_ERROR);
@@ -54,14 +54,15 @@ elseif (authenticate($username, $password) == 1)
     $_SESSION['groupid'] = is_null($user->groupid) ? 0 : $user->groupid;
     if (!empty($user->var_i18n)) $_SESSION['lang'] = $user->var_i18n;
 
+    // Dismiss any old session user notices
+    $sql = "UPDATE usernotices SET dismissed=2 WHERE durability='session' AND userid={$_SESSION['userid']}";
+    mysql_query($sql);
+    if (mysql_error()) trigger_error(mysql_error(), E_USER_ERROR);
+
     //check if the session lang is different the their profiles
     if($_SESSION['lang'] != $user->var_lang)
     {
-/*        $sql = "INSERT INTO notices (text,linktext,link,timestamp,type) ";
-        $sql .= "VALUES('{$strYourCurrentLanguage}.', '{$strClickHereToChangeIt}', '".$CONFIG['application_webpath']."edit_profile.php', NOW(), 0) ";
-        mysql_query($sql);
-        if (mysql_error()) trigger_error(mysql_error(), E_USER_ERROR);*/
-        $sql = "INSERT INTO usernotices VALUES(3, $user->id, '0') ";
+        $sql = "INSERT INTO usernotices VALUES(3, $user->id, '0', 'session') ";
         $sql .= "ON DUPLICATE KEY UPDATE noticeid=3";
         mysql_query($sql);
         if (mysql_error()) trigger_error(mysql_error(), E_USER_ERROR);

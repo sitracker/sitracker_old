@@ -18,13 +18,13 @@ require('functions.inc.php');
 require('auth.inc.php');
 
 // External variables
-$submit = $_REQUEST['submit'];
+$mode = $_REQUEST['mode'];
 $edituserpermission = user_permission($sit[2],23); // edit user
 if (empty($_REQUEST['userid']) OR $_REQUEST['userid']=='current' OR $edituserpermission==FALSE) $userid = mysql_escape_string($sit[2]);
 else $userid = cleanvar($_REQUEST['userid']);
 
 
-if (empty($submit))
+if (empty($mode))
 {
     include('htmlheader.inc.php');
 
@@ -177,12 +177,13 @@ if (empty($submit))
     }
     echo "</table>\n";
     echo "<input type='hidden' name='userid' value='{$userid}' />";
+    echo "<input type='hidden' name='mode' value='save' />";
     echo "<p><input name='reset' type='reset' value='{$strReset}' /> <input name='submit' type='submit' value='{$strSave}' /></p>";
     echo "</form>\n";
 
     include('htmlfooter.inc.php');
 }
-else
+elseif($mode=='save')
 {
     // External variables
     $message = cleanvar($_POST['message']);
@@ -342,4 +343,18 @@ else
         include('htmlfooter.inc.php');
     }
 }
+elseif($mode='savesessionlang')
+{
+
+    $sql = "UPDATE users SET var_i18n = '{$_SESSION['lang']}' WHERE id = {$sit[2]}";
+    mysql_query($sql);
+    if (mysql_error()) trigger_error("MySQL Query Error ".mysql_error(), E_USER_ERROR);
+    $sql = "DELETE FROM usernotices WHERE noticeid=3";
+    mysql_query($sql);
+    if (mysql_error()) trigger_error("MySQL Query Error ".mysql_error(), E_USER_ERROR);
+    include('htmlheader.inc.php');
+    confirmation_page("2", "main.php", "<h2>Profile Modification Successful</h2><h5>{$strPleaseWaitRedirect}...</h5>");
+    include('htmlfooter.inc.php');
+}
+
 ?>
