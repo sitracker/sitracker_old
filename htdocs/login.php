@@ -57,7 +57,7 @@ elseif (authenticate($username, $password) == 1)
     //check if the session lang is different the their profiles
     if($_SESSION['lang'] != $user->var_lang)
     {
-        $sql = "INSERT INTO notices VALUES('', 'Your current language differs from your profile language. You can click <a href=\'".$CONFIG['application_webpath']."edit_profile.php\'>here</a> to change it.', NOW(), 0, '')";
+        $sql = "INSERT INTO notices VALUES('', '{$strYourCurrentLanguage}.', '{$strClickHereToChangeIt}', '".$CONFIG['application_webpath']."edit_profile.php', NOW(), 0, '')";
         mysql_query($sql);
         if (mysql_error()) trigger_error(mysql_error(), E_USER_ERROR);
         $noticeid = mysql_insert_id();
