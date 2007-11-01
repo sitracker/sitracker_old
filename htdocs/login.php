@@ -53,15 +53,16 @@ elseif (authenticate($username, $password) == 1)
     $_SESSION['collapse'] = $user->var_collapse;
     $_SESSION['groupid'] = is_null($user->groupid) ? 0 : $user->groupid;
     if (!empty($user->var_i18n)) $_SESSION['lang'] = $user->var_i18n;
-    
+
     //check if the session lang is different the their profiles
     if($_SESSION['lang'] != $user->var_lang)
     {
-        $sql = "INSERT INTO notices VALUES('', '{$strYourCurrentLanguage}.', '{$strClickHereToChangeIt}', '".$CONFIG['application_webpath']."edit_profile.php', NOW(), 0, '')";
+/*        $sql = "INSERT INTO notices (text,linktext,link,timestamp,type) ";
+        $sql .= "VALUES('{$strYourCurrentLanguage}.', '{$strClickHereToChangeIt}', '".$CONFIG['application_webpath']."edit_profile.php', NOW(), 0) ";
         mysql_query($sql);
-        if (mysql_error()) trigger_error(mysql_error(), E_USER_ERROR);
-        $noticeid = mysql_insert_id();
-        $sql = "INSERT INTO usernotices VALUES($noticeid, $user->id, '0')";
+        if (mysql_error()) trigger_error(mysql_error(), E_USER_ERROR);*/
+        $sql = "INSERT INTO usernotices VALUES(3, $user->id, '0') ";
+        $sql .= "ON DUPLICATE KEY UPDATE noticeid=3";
         mysql_query($sql);
         if (mysql_error()) trigger_error(mysql_error(), E_USER_ERROR);
     }

@@ -14,6 +14,9 @@ require('db_connect.inc.php');
 require('functions.inc.php');
 session_name($CONFIG['session_name']);
 session_start();
+// Load session language if it is set and different to the default language
+if (!empty($_SESSION['lang']) AND $_SESSION['lang'] != $CONFIG['default_i18n']) include("i18n/{$_SESSION['lang']}.inc.php");
+require('strings.inc.php');
 
 if($CONFIG['portal'] == FALSE)
 {
@@ -90,12 +93,12 @@ switch ($page)
             {
                 echo "<tr class='$shade'><td>{$contract->id}</td><td>{$contract->name}</td>";
                 echo "<td>";
-                if ($contract->incident_quantity==0) echo "&#8734; Unlimited";
+                if ($contract->incident_quantity==0) echo "&#8734; {$strUnlimited}";
                 else echo "{$contract->availableincidents}";
                 echo "</td>";
                 echo "<td>{$contract->incidents_used}</td>";
                 echo "<td>".date($CONFIG['dateformat_date'],$contract->expirydate)."</td>";
-                echo "<td><a href='$_SERVER[PHP_SELF]?page=add&amp;contractid={$contract->id}'>Add Incident</a></td></tr>\n";
+                echo "<td><a href='$_SERVER[PHP_SELF]?page=add&amp;contractid={$contract->id}'>{$strAddIncident}</a></td></tr>\n";
                 if ($shade=='shade1') $shade='shade2';
                 else $shade='shade1';
             }
@@ -103,7 +106,7 @@ switch ($page)
         }
         else
         {
-            echo "<p class='info'>No contracts</p>";
+            echo "<p class='info'>{$strNone}</p>";
         }
     break;
 
@@ -131,7 +134,7 @@ switch ($page)
                 echo "<td>Product<br /><strong><a href='portal.php?page=showincident&id={$incident->id}'>".stripslashes($incident->title)."</a></strong></td>"; // FIXME product name
                 echo "<td>".format_date_friendly($incident->lastupdated)."</td>";
                 echo "<td>".incidentstatus_name($incident->status)."</td>";
-                echo "<td><a href='{$_SERVER[PHP_SELF]}?page=update&amp;id={$incident->id}'>Update</a> | ";
+                echo "<td><a href='{$_SERVER[PHP_SELF]}?page=update&amp;id={$incident->id}'>{$strUpdate}</a> | ";
 
                 //check if the customer has requested a closure
                 $lastupdate = list($update_userid, $update_type, $update_currentowner, $update_currentstatus, $update_body, $update_timestamp, $update_nextaction, $update_id)=incident_lastupdate($incident->id);
@@ -165,24 +168,24 @@ switch ($page)
             $result = mysql_query($usersql);
             $user = mysql_fetch_object($result);
             if (mysql_error()) trigger_error("MySQL Query Error ".mysql_error(), E_USER_ERROR);
-            
+
             //add the update
             $update = "Updated via the portal by <b>{$user->forenames} {$user->surname}</b>\n\n";
             $update .= $_REQUEST['update'];
             $sql = "INSERT into updates VALUES('', '{$_REQUEST['id']}', '0', 'webupdate', '', '1', '{$update}', '{$now}', '', 'show', 'NULL', 'NULL', '', '', '')";
             mysql_query($sql);
             if (mysql_error()) trigger_error("MySQL Query Error ".mysql_error(), E_USER_ERROR);
-            
+
             //set incident back to active
             $sql = "UPDATE incidents SET status=1, lastupdated=$now WHERE id={$_REQUEST['id']}";
             mysql_query($sql);
             if (mysql_error()) trigger_error("MySQL Query Error ".mysql_error(), E_USER_ERROR);
-            
+
 
             confirmation_page("2", "portal.php?page=incidents", "<h2>Update Successful</h2><p align='center'>{$strPleaseWaitRedirect}...</p>");
         }
         break;
-    
+
     //close an open incident
     case 'close':
         if(empty($_REQUEST['reason']))
@@ -206,7 +209,7 @@ switch ($page)
             '{$now}', '', '', '', '', '', '', '')";
             mysql_query($sql);
             if (mysql_error()) trigger_error("MySQL Query Error ".mysql_error(), E_USER_ERROR);
-            
+
             //set incident back to active
             $sql = "UPDATE incidents SET status=1, lastupdated=$now WHERE id={$_REQUEST['id']}";
             mysql_query($sql);
@@ -312,7 +315,7 @@ switch ($page)
 
         }
         break;
-        
+
     //show user's details
     case 'details':
         echo "<h2>{$strYourDetails}</h2>";
@@ -320,10 +323,10 @@ switch ($page)
         $sql .= "FROM contacts, sites ";
         $sql .= "WHERE contacts.siteid=sites.id ";
         $sql .= "AND contacts.id={$_SESSION['contactid']}";
-        $query = mysql_query($sql);            
+        $query = mysql_query($sql);
         if (mysql_error()) trigger_error("MySQL Query Error ".mysql_error(), E_USER_ERROR);
         $user = mysql_fetch_object($query);
-        
+
         echo "<table align='center' class='vertical'>";
         echo "<tr><th colspan='2'><h3><img src='{$CONFIG['application_webpath']}images/icons/{$iconset}/32x32/contact.png' width='32' height='32' alt='' /> ".stripslashes($user->forenames).' '.stripslashes($user->surname)."</h3></th></tr>";
         echo "<form>";
@@ -342,7 +345,7 @@ switch ($page)
         echo "<p align='center'><input type='submit' value='{$strUpdate}' /></p>";
 
         break;
-        
+
     //show specified incident
     case 'showincident':
         $incidentid = $_REQUEST['id'];
@@ -351,13 +354,13 @@ switch ($page)
         $user = mysql_fetch_object($result);
 
         echo "<h2>Details: {$incidentid} - {$user->title}</h2>";
-        
+
 
         /*
         //check if this user owns the incident
         if($user->contact != $_SESSION['contactid'])
         {
-            echo "<p align='center'>$strNoPermission.</p>"; 
+            echo "<p align='center'>$strNoPermission.</p>";
             include('htmlfooter.inc.php');
             exit;
         }*/
@@ -404,16 +407,16 @@ switch ($page)
             if(empty($firstid)) $firstid = $update->id;
             $updateid = $update->id;
             $updatebody=trim($update->bodytext);
-            
+
             //remove empty updates
             if(!empty($updatebody) AND $updatebody != "<hr>")
             {
                 $updatebodylen=strlen($updatebody);
-  
+
                 $updatebody = str_replace($origtag, $temptag, $updatebody);
                 // $updatebody = htmlspecialchars($updatebody);
                 $updatebody = str_replace($temptag, $origtag, $updatebody);
-      
+
                 // Put the header part (up to the <hr /> in a seperate DIV)
                 if (strpos($updatebody, '<hr>')!==FALSE)
                 {
@@ -426,7 +429,7 @@ switch ($page)
                 $quote[1]="/^(&gt;&gt;([\s][\d\w]).*)[\n\r]$/m";
                 $quote[2]="/^(&gt;&gt;&gt;+([\s][\d\w]).*)[\n\r]$/m";
                 $quote[3]="/^(&gt;&gt;&gt;(&gt;)+([\s][\d\w]).*)[\n\r]$/m";
-            
+
                 //$quote[3]="/(--\s?\s.+-{8,})/U";  // Sigs
                         $quote[4]="/(-----\s?Original Message\s?-----.*-{3,})/s";
                 $quote[5]="/(-----BEGIN PGP SIGNED MESSAGE-----)/s";
@@ -434,7 +437,7 @@ switch ($page)
                 $quote[7]="/^(&gt;)[\r]*$/m";
                 $quote[8]="/^(&gt;&gt;)[\r]*$/m";
                 $quote[9]="/^(&gt;&gt;(&gt;){1,8})[\r]*$/m";
-            
+
                 $quotereplace[0]="<span class='quote1'>\\1</span>";
                 $quotereplace[1]="<span class='quote2'>\\1</span>";
                 $quotereplace[2]="<span class='quote3'>\\1</span>";
@@ -446,24 +449,24 @@ switch ($page)
                 $quotereplace[7]="<span class='quote1'>\\1</span>";
                 $quotereplace[8]="<span class='quote2'>\\1</span>";
                 $quotereplace[9]="<span class='quote3'>\\1</span>";
-            
+
                 $updatebody=preg_replace($quote, $quotereplace, $updatebody);
-            
+
                 $updatebody = bbcode($updatebody);
-                
+
                 //$updatebody = emotion($updatebody);
-        
+
                 //"!(http:/{2}[\w\.]{2,}[/\w\-\.\?\&\=\#]*)!e"
                 // [\n\t ]+
                 $updatebody = preg_replace("!([\n\t ]+)(http[s]?:/{2}[\w\.]{2,}[/\w\-\.\?\&\=\#\$\%|;|\[|\]~:]*)!e", "'\\1<a href=\"\\2\" title=\"\\2\">'.(strlen('\\2')>=70 ? substr('\\2',0,70).'...':'\\2').'</a>'", $updatebody);
-        
-        
+
+
                 // Lookup some extra data
                 $updateuser=user_realname($update->userid,TRUE);
                 $updatetime = readable_date($update->timestamp);
                 $currentowner=user_realname($update->currentowner,TRUE);
                 $currentstatus=incident_status($update->currentstatus);
-        
+
                 echo "<div class='detailhead' align='center'>";
                 //show update type icon
                 if (array_key_exists($update->type, $updatetypes))
@@ -488,12 +491,12 @@ switch ($page)
                     if (!empty($update->nextaction)) echo "<div class='detailhead'>Next action: ".stripslashes($update->nextaction)."</div>";
                     echo "</div>\n"; // detailentry
                 }
-        
+
             }
         }
         break;
-        
-        
+
+
     case '':
     default:
         echo "<p align='center'>{$strWelcome} ".contact_realname($_SESSION['contactid'])."</p>";

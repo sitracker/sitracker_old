@@ -135,26 +135,36 @@ if (empty($submit))
     }
     echo "</select></label>";
     echo "</td></tr>\n";
-    ?>
 
-    <tr><th>Interface Style (Theme):</th><td>
-    <?php interfacestyle_drop_down('style', $user->var_style) ?>
-    </td></tr>
-    <tr><th>Incident Refresh:</th><td><input maxlength="10" name="incidentrefresh" size="3" type="text" value="<?php echo $user->var_incident_refresh; ?>" /> Seconds</td></tr>
+    echo "<tr><th>{$strInterfaceStyle}:</th><td>";
+    interfacestyle_drop_down('style', $user->var_style);
+    echo "</td></tr>\n";
+    echo "<tr><th>{$strIncidentRefresh}:</th>";
+    echo "<td><input maxlength='10' name='incidentrefresh' size='3' type='text' value=\"{$user->var_incident_refresh}\" /> {$strSeconds}</td></tr>\n";
 
-    <tr><th>Incident Update Order:</th><td>
-    <select name="updateorder">
-    <option <?php if ($user->var_update_order == "desc") echo "selected='selected'" ?> value="desc">Most Recent At Top</option>
-    <option <?php if ($user->var_update_order == "asc") echo "selected='selected'" ?> value="asc">Most Recent At Bottom</option>
-    </select>
-    </td></tr>
-    <tr><th>Incident Updates per page:</th><td><input maxlength="5" name="updatesperpage" size="3" type="text" value="<?php echo $user->var_num_updates_view; ?>" /></td></tr>
-    <tr><th>Collapse Data:</th><td><?php html_checkbox('collapse', $user->var_collapse); ?></td></tr>
+    echo "<tr><th>{$strIncidentLogOrder}:</th><td>";
+    echo "<select name='updateorder'>";
+    echo "<option ";
+    if ($user->var_update_order == "desc") echo "selected='selected'";
+    echo " value='desc'>{$strNewestAtTop}</option>\n";
+    echo "<option ";
+    if ($user->var_update_order == "asc") echo "selected='selected'";
+    echo " value='asc'>{$strNewestAtBottom}</option>\n";
+    echo "</select>";
+    echo "</td></tr>\n";
 
-    <tr><th colspan='2'>NOTIFICATIONS</td></tr>
-    <tr><th>Email notification on reassign</th><td><?php html_checkbox('emailonreassign', $user->var_notify_on_reassign); ?></td><tr>
+    echo "<tr><th>{$strIncidentUpdatesPerPage}:</th>";
+    echo "<td><input maxlength='5' name='updatesperpage' size='3' type='text' value=\"".stripslashes($user->var_num_updates_view)."\" /></td></tr>\n";
 
-    <?php
+    echo "<tr><th>{$strCollapseData}:</th><td>";
+    html_checkbox('collapse', $user->var_collapse);
+    echo "</td></tr>\n";
+
+    echo "<tr><th colspan='2'>NOTIFICATIONS</td></tr>\n";
+    echo "<tr><th>{$strEmailNotificationReassign}</th><td>";
+    html_checkbox('emailonreassign', $user->var_notify_on_reassign);
+    echo "</td><tr>\n";
+
     plugin_do('edit_profile_form');
 
     if ($CONFIG['trusted_server']==FALSE AND $userid==$sit[2])

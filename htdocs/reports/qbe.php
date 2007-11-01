@@ -18,13 +18,15 @@ require('functions.inc.php');
 // This page requires authentication
 require('auth.inc.php');
 
+$title = $strQueryByExample;
+
 if (empty($_REQUEST['mode']))
 {
     include('htmlheader.inc.php');
-    echo "<h2>QBE - Query by Example</h2>";
+    echo "<h2>{$title}</h2>";
     echo "<form action='{$_SERVER['PHP_SELF']}' method='post'>";
     echo "<table align='center'>";
-    echo "<tr><th>Table:</th>";
+    echo "<tr><th>{$strTable}:</th>";
     echo "<td>";
     $result = mysql_list_tables($CONFIG['db_database']);
     echo "<select name='table1'>";
@@ -49,7 +51,7 @@ if (empty($_REQUEST['mode']))
     echo "</table>";
     echo "<p align='center'>";
     echo "<input type='hidden' name='mode' value='selectfields' />";
-    echo "<input type='submit' value='Run Report' />";
+    echo "<input type='submit' value='{$strRunReport}' />";
     echo "</p>";
     echo "</form>";
     include('htmlfooter.inc.php');
@@ -58,13 +60,14 @@ elseif ($_REQUEST['mode']=='selectfields')
 {
     $table1 = cleanvar($_REQUEST['table1']);
     include('htmlheader.inc.php');
-    echo "<h2>QBE - Query by Example</h2>";
+    echo "<h2>{$title}</h2>";
     echo "<form action='{$_SERVER['PHP_SELF']}' method='post'>";
     echo "<table align='center'>";
-    echo "<tr><th>Table:</th>";
+    echo "<tr><th>{$strTable}:</th>";
     echo "<td class='shade2'>{$table1}</td></tr>";
-    echo "<tr><th valign='top' class='shade1'>Fields:</td>";
-    echo "<td width=400 class='shade2'>";
+
+    echo "<tr><th valign='top'>{$strFields}:</th>";
+    echo "<td width='400' class='shade2'>";
     $result = mysql_list_fields($CONFIG['db_database'],$table1);
     $columns = mysql_num_fields($result);
     echo "<select name='fields[]' multiple='multiple'>";
@@ -74,9 +77,8 @@ elseif ($_REQUEST['mode']=='selectfields')
         echo "<option value='$fieldname'>$fieldname</option>\n";
     }
     echo "</select>";
-    echo "<br />Hold down CTRL to select multiple fields";
     echo "</td></tr>\n";
-    echo "<tr><th>Sort By:</th>";
+    echo "<tr><th>{$strSort}:</th>";
     echo "<td class='shade2'>";
     echo "<select name='sortby'>";
     for ($i = 0; $i < $columns; $i++)
@@ -86,15 +88,15 @@ elseif ($_REQUEST['mode']=='selectfields')
     }
     echo "</select>";
     echo "<select name='sortorder'>";
-    echo "<option value='none' selected>None</option>";
-    echo "<option value='ASC'>Ascending</option>";
-    echo "<option value='DESC'>Descending</option>";
+    echo "<option value='none' selected='selected'>{$strNone}</option>";
+    echo "<option value='ASC'>{$strSortAscending}</option>";
+    echo "<option value='DESC'>{$strSortDescending}</option>";
     echo "</select>";
     echo "</td></tr>";
 
-    echo "<tr><th>Criteria:</th>";
+    echo "<tr><th>{$strCriteria}:</th>";
     echo "<td class='shade2'>";
-    echo "WHERE <select name='criteriafield'>";
+    echo "<select name='criteriafield'>";
     for ($i = 0; $i < $columns; $i++)
     {
         $fieldname=mysql_field_name($result, $i);
@@ -110,22 +112,22 @@ elseif ($_REQUEST['mode']=='selectfields')
     echo "<input type='text' name='criteriaval' />";
     echo "</td></tr>";
 
-    echo "<tr><th>Limit to:</th>";
+    echo "<tr><th>{$strLimitTo}:</th>";
     echo "<td><input type='text' name='limit' value='1000' size='4' /> Records</td></tr>";
 
-    echo "<tr><th>Output:</th>";
+    echo "<tr><th>{$strOutput}:</th>";
     echo "<td>";
     echo "<select name='output'>";
-    echo "<option value='screen'>Screen</option>";
+    echo "<option value='screen'>{$strScreen}</option>";
     // echo "<option value='printer'>Printer</option>";
-    echo "<option value='csv'>Disk - Comma Seperated (CSV) file</option>";
+    echo "<option value='csv'>{$strCSVfile}</option>";
     echo "</select>";
     echo "</td></tr>";
     echo "</table>";
     echo "<p align='center'>";
     echo "<input type='hidden' name='table1' value='{$_POST['table1']}' />";
     echo "<input type='hidden' name='mode' value='report' />";
-    echo "<input type='submit' value='Report' />";
+    echo "<input type='submit' value='{$strRunReport}' />";
     echo "</p>";
     echo "</form>";
     include('htmlfooter.inc.php');
@@ -168,8 +170,8 @@ elseif ($_REQUEST['mode']=='report')
         $html .= "<tr class='$shade'>";
         for ($i = 0; $i < $columns; $i++)
         {
-            $html .= "<td>".$row[$i]."</td>";
-            $csv .= strip_comma($row[$i]);
+            $html .= "<td>".stripslashes($row[$i])."</td>";
+            $csv .= strip_comma(stripslashes($row[$i]));
             if ($i < ($columns-1)) $csv .= ",";
         }
         $html .= "</tr>\n";
