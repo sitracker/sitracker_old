@@ -54,8 +54,8 @@ elseif (authenticate($username, $password) == 1)
     $_SESSION['groupid'] = is_null($user->groupid) ? 0 : $user->groupid;
     if (!empty($user->var_i18n)) $_SESSION['lang'] = $user->var_i18n;
 
-    // Dismiss any old session user notices
-    $sql = "UPDATE usernotices SET dismissed=2 WHERE durability='session' AND userid={$_SESSION['userid']}";
+    // Delete any old session user notices
+    $sql = "DELETE FROM usernotices WHERE durability='session' AND userid={$_SESSION['userid']}";
     mysql_query($sql);
     if (mysql_error()) trigger_error(mysql_error(), E_USER_ERROR);
 

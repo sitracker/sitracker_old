@@ -266,8 +266,8 @@ elseif($mode=='save')
     }
     else
     {
-        //we updated our email
-        $sql = "UPDATE usernotices SET dismissed=1 WHERE userid={$sit[2]} and noticeid=2";
+        //we updated our email, dimiss notice
+        $sql = "DELETE FROM usernotices WHERE userid={$sit[2]} and noticeid=2";
         @mysql_query($sql);
     }
     // update database if no errors
