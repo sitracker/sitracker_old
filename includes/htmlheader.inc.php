@@ -10,18 +10,16 @@
 // This Page Is Valid XHTML 1.0 Transitional! 27Oct05
 
 // FIXME XHTML/XML lang needs to come from i18n file
-?>
-<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Transitional//EN"
-     "http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd">
-<html xmlns="http://www.w3.org/1999/xhtml" xml:lang="en" lang="en">
-<head>
-<!-- SiT (Support Incident Tracker) - Support call tracking system
-     Copyright (C) 2000-2007 Salford Software Ltd. and Contributors
 
-     This software may be used and distributed according to the terms
-     of the GNU General Public License, incorporated herein by reference. -->
-<meta http-equiv="Content-Type" content="text/html;charset=UTF-8" />
-<?php
+echo "<!DOCTYPE html PUBLIC \"-//W3C//DTD XHTML 1.0 Transitional//EN\"\n";
+echo "\"http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd\">\n";
+echo "<html xmlns=\"http://www.w3.org/1999/xhtml\" xml:lang=\"{$_SESSION['lang']}\" lang=\"{$_SESSION['lang']}\">\n";
+echo "<head>\n";
+echo "<!-- SiT (Support Incident Tracker) - Support call tracking system\n";
+echo "     Copyright (C) 2000-2007 Salford Software Ltd. and Contributors\n\n";
+echo "     This software may be used and distributed according to the terms\n";
+echo "     of the GNU General Public License, incorporated herein by reference. -->\n";
+echo "<meta http-equiv=\"Content-Type\" content=\"text/html;charset={$i18ncharset}\" />\n";
 echo "<meta name=\"GENERATOR\" content=\"{$CONFIG['application_name']} {$application_version_string}\" />\n";
 echo "<title>";
 if (isset($title)) { echo "$title - {$CONFIG['application_shortname']}"; } else { echo "{$CONFIG['application_name']}{$extratitlestring}"; }

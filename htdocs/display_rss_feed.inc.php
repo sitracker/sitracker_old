@@ -36,7 +36,7 @@ if (mysql_error()) trigger_error(mysql_error(),E_USER_ERROR);
 
 define('MAGPIE_CACHE_ON',TRUE);
 define('MAGPIE_CACHE_DIR', $CONFIG['attachment_fspath'].'feeds');
-define('MAGPIE_OUTPUT_ENCODING', 'UTF-8');
+define('MAGPIE_OUTPUT_ENCODING', $i18ncharset);
 
 $feedallowedtags = '<img><strong><em><br><p>';
 

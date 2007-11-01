@@ -55,20 +55,20 @@ function generate_row($update)
         if ($update['emailfrom'] != $contact_realname)
         {
             $html_row .= "<br />\n";
-            $html_row.= htmlentities($update['emailfrom'],ENT_QUOTES, 'UTF-8');
+            $html_row.= htmlentities($update['emailfrom'],ENT_QUOTES, $GLOBALS['i18ncharset']);
         }
     }
     else
     {
         $html_row .= "{$update['fromaddr']}<br />\n";
-        $html_row.= htmlentities($update['emailfrom'],ENT_QUOTES, 'UTF-8');
+        $html_row.= htmlentities($update['emailfrom'],ENT_QUOTES, $GLOBALS['i18ncharset']);
     }
     $html_row .= "</td>";
 
     $html_row.="<td width='20%'><a href=\"javascript:incident_details_window('{$update['tempid']}','incomingview');\" id='update{$update['id']}' class='info'>";
 //     $html_row.="<td width='20%'><a href=\"javascript:void();\" id='update{$update['id']}' class='info' style='cursor:help;'>";
     if (empty($update['subject'])) $update['subject']='Untitled';
-    $html_row.=htmlentities($update['subject'],ENT_QUOTES, 'UTF-8');
+    $html_row.=htmlentities($update['subject'],ENT_QUOTES, $GLOBALS['i18ncharset']);
     $html_row.='<span>'.parse_updatebody($updatebodytext).'</span></a></td>';
     $html_row.="<td align='center' width='20%'>".stripslashes($update['reason']).'</td>';
     $html_row.="<td align='center' width='20%'>";

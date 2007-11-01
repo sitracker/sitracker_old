@@ -77,7 +77,7 @@ echo "<tr><td class='shade1' colspan='2'>{$strLicense}:</td></tr>";
 <textarea cols="100%" rows="10" readonly="readonly" style="background: transparent;">
 <?php
 $fp = fopen($CONFIG['licensefile'], "r");
-$contents = htmlentities(fread($fp, filesize($CONFIG['licensefile'])), ENT_COMPAT, 'UTF-8');
+$contents = htmlentities(fread($fp, filesize($CONFIG['licensefile'])), ENT_COMPAT, $i18ncharset);
 fclose($fp);
 echo $contents;
 ?>
@@ -88,7 +88,7 @@ echo $contents;
 <textarea cols="100%" rows="10" readonly="readonly" style="background: transparent;">
 <?php
 $fp = fopen($CONFIG['changelogfile'], "r");
-$contents = htmlentities(fread($fp, filesize($CONFIG['changelogfile'])), ENT_COMPAT, 'UTF-8');
+$contents = htmlentities(fread($fp, filesize($CONFIG['changelogfile'])), ENT_COMPAT, $i18ncharset);
 fclose($fp);
 echo $contents;
 ?>

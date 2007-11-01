@@ -2,12 +2,12 @@
 session_name($CONFIG['session_name']);
 session_start();
 echo "<!DOCTYPE html PUBLIC \"-//W3C//DTD XHTML 1.0 Transitional//EN\" \"http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd\">\n";
-echo "<html xmlns=\"http://www.w3.org/1999/xhtml\" xml:lang=\"en\" lang=\"en\">\n<head><title>";
+echo "<html xmlns=\"http://www.w3.org/1999/xhtml\"  xml:lang=\"{$_SESSION['lang']}\" lang=\"{$_SESSION['lang']}\">\n<head><title>";
 if (!empty($incidentid)) echo "{$incidentid} - ";
 if (isset($title)) echo $title;
 else echo $CONFIG['application_shortname'];
 echo "</title>";
-echo "<meta http-equiv=\"Content-Type\" content=\"text/html; charset=utf-8\" />";
+echo "<meta http-equiv=\"Content-Type\" content=\"text/html; charset={$i18ncharset}\" />";
 echo "<meta name=\"GENERATOR\" content=\"{$CONFIG['application_name']} {$application_version_string}\" />\n";
 echo "<style type='text/css'>@import url('{$CONFIG['application_webpath']}styles/webtrack.css');</style>\n";
 if ($_SESSION['auth'] == TRUE)
@@ -347,7 +347,7 @@ if ($menu != 'hide')
         if($servicelevel->timed =='yes') echo "<a class='barlink' href='tasks.php?incident={$id}'>Tasks</a> | ";
         echo "<a class='barlink' href='related_incidents.php?id={$id}&amp;pop={$popup}' accesskey='A'>{$strRelated}</a> | ";
         echo "<a class='barlink' href='incident_details.php?id={$id}&amp;popup={$popup}' accesskey='D'>{$strDetailsAndLog}</a> | ";
-        
+
         echo "<a class='barlink' href='javascript:help_window({$permission});'>{$strHelpChar}</a>";
         if (!empty($_REQUEST['popup'])) echo " | <a class=barlink href='javascript:window.close();'>{$strCloseWindow}</a>";
     }
