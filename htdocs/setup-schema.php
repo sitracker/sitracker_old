@@ -1247,7 +1247,7 @@ INSERT INTO `notices` (`id`, `text`, `timestamp`, `type`, `resolutionpage`) VALU
 INSERT INTO `notices` (`id`, `text`, `timestamp`, `type`, `resolutionpage`) VALUES
 (2, '$strNoEmailSet', NOW(), 1, 'edit_profile.php');
 INSERT INTO `notices` (`id`, `text`, `linktext`, `timestamp`, `type`, `link`) VALUES
-(3, '$strYourCurrentLanguage', 'strUseThisInFuture', NOW(), 2, 'edit_profile.php?mode=savesessionlang');
+(3, '$strYourCurrentLanguage', '$strUseThisInFuture', NOW(), 2, 'edit_profile.php?mode=savesessionlang');
 
 
 CREATE TABLE IF NOT EXISTS `usernotices` (
@@ -1533,7 +1533,7 @@ INSERT INTO `notices` (`id`, `text`, `timestamp`, `type`, `resolutionpage`) VALU
 INSERT INTO `notices` (`id`, `text`, `timestamp`, `type`, `resolutionpage`) VALUES
 (2, '$strNoEmailSet', NOW(), 1, 'edit_profile.php');
 INSERT INTO `notices` (`id`, `text`, `linktext`, `timestamp`, `type`, `link`) VALUES
-(3, '$strYourCurrentLanguage', 'strUseThisInFuture', NOW(), 2, 'edit_profile.php?mode=savesessionlang');
+(3, '$strYourCurrentLanguage', '$strUseThisInFuture', NOW(), 2, 'edit_profile.php?mode=savesessionlang');
 
 
 CREATE TABLE IF NOT EXISTS `usernotices` (
