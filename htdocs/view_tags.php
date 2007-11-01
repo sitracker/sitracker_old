@@ -56,7 +56,7 @@ else
             echo "<tr style='text-align: left;'>";
             switch($obj->type)
             {
-                case 1: //contact
+                case TAG_CONTACT: //contact
                     $sql = "SELECT forenames, surname FROM contacts WHERE id = '{$obj->id}'";
                     $resultcon = mysql_query($sql);
                     if (mysql_error()) trigger_error(mysql_error(),E_USER_ERROR);
@@ -68,7 +68,7 @@ else
                     }
                 break;
 
-                case 2: //incident
+                case TAG_INCIDENT: //incident
                     $sql = "SELECT title FROM incidents WHERE id = '$obj->id'";
                     $resultinc = mysql_query($sql);
                     if (mysql_error()) trigger_error(mysql_error(),E_USER_ERROR);
@@ -80,7 +80,7 @@ else
                     }
                 break;
 
-                case 3: //site
+                case TAG_SITE: //site
                     $sql = "SELECT name FROM sites WHERE id = '{$obj->id}'";
                     $resultsite = mysql_query($sql);
                     if (mysql_error()) trigger_error(mysql_error(),E_USER_ERROR);
@@ -92,7 +92,7 @@ else
                     }
                 break;
 
-                case 4: // task
+                case TAG_TASK: // task
                     $sql = "SELECT name FROM tasks WHERE id = '{$obj->id}'";
                     $resulttask = mysql_query($sql);
                     if (mysql_error()) trigger_error(mysql_error(),E_USER_ERROR);
@@ -101,6 +101,18 @@ else
                         $objtask = mysql_fetch_object($resulttask);
                         echo "<th><img src='{$CONFIG['application_webpath']}images/icons/{$iconset}/16x16/task.png' width='16' height='16' alt='' /> {$strTask}</th><td><a href='view_task.php?id={$obj->id}'>";
                         echo stripslashes($objtask->name)."</a></td>";
+                    }
+                break;
+
+                case TAG_SKILL:
+                    $sql = "SELECT name FROM software WHERE id = '{$obj->id}'";
+                    $resulttask = mysql_query($sql);
+                    if (mysql_error()) trigger_error(mysql_error(),E_USER_ERROR);
+                    if(mysql_num_rows($resulttask) > 0)
+                    {
+                        $objtask = mysql_fetch_object($resulttask);
+                        echo "<th><img src='{$CONFIG['application_webpath']}images/icons/{$iconset}/16x16/skill.png' width='16' height='16' alt='' /> {$strSkill}</th><td>";
+                        echo stripslashes($objtask->name)."</td>";
                     }
                 break;
 
