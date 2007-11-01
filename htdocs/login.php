@@ -52,7 +52,6 @@ elseif (authenticate($username, $password) == 1)
     $_SESSION['num_update_view'] = $user->var_num_updates_view;
     $_SESSION['collapse'] = $user->var_collapse;
     $_SESSION['groupid'] = is_null($user->groupid) ? 0 : $user->groupid;
-    if (!empty($user->var_i18n)) $_SESSION['lang'] = $user->var_i18n;
 
     // Delete any old session user notices
     $sql = "DELETE FROM usernotices WHERE durability='session' AND userid={$_SESSION['userid']}";
@@ -60,14 +59,13 @@ elseif (authenticate($username, $password) == 1)
     if (mysql_error()) trigger_error(mysql_error(), E_USER_ERROR);
 
     //check if the session lang is different the their profiles
-    if($_SESSION['lang'] != $user->var_lang)
+    if($_SESSION['lang'] != $user->var_i18n)
     {
-        $sql = "INSERT INTO usernotices VALUES(3, $user->id, '0', 'session') ";
+        $sql = "INSERT INTO usernotices (noticeid, userid, durability) VALUES(3, $user->id, 'session') ";
         $sql .= "ON DUPLICATE KEY UPDATE noticeid=3";
         mysql_query($sql);
         if (mysql_error()) trigger_error(mysql_error(), E_USER_ERROR);
     }
-
     // Make an array full of users permissions
     // The zero permission is added to all users, zero means everybody can access
     $userpermissions[]=0;
