@@ -123,9 +123,9 @@ if ($sit[0]!='')
 $action = cleanvar($_REQUEST['action']);
 $noticeid = cleanvar($_REQUEST['noticeid']);
 
-if($action AND $noticeid)
+if($action=='dismiss_notice' AND is_numeric($noticeid))
 {
-    $sql = "UPDATE usernotices SET dismissed=1 WHERE noticeid={$noticeid} AND userid={$sit[2]}";
+    $sql = "DELETE FROM usernotices WHERE noticeid={$noticeid} AND userid={$sit[2]}";
     @mysql_query($sql);
 }
 
@@ -133,7 +133,7 @@ if($action AND $noticeid)
 if($sit[0] != '')
 {
     $noticesql = "SELECT * FROM notices, usernotices ";
-    $noticesql .= "WHERE userid={$sit[2]} AND dismissed < 1 AND notices.id=usernotices.noticeid";
+    $noticesql .= "WHERE userid={$sit[2]} AND notices.id=usernotices.noticeid";
     $noticeresult = mysql_query($noticesql);
     while($notice = @mysql_fetch_object($noticeresult))
     {
@@ -151,7 +151,7 @@ if($sit[0] != '')
         else
         {
             echo "<div class='info'><p class='info'>";
-            echo "<span>(<a href='{$_SERVER[PHP_SELF]}?action=dismiss&amp;noticeid={$notice->id}'>$strDismiss</a>)</span>";
+            echo "<span>(<a href='{$_SERVER[PHP_SELF]}?action=dismiss_notice&amp;noticeid={$notice->id}'>$strDismiss</a>)</span>";
             if (substr($notice->text, 0, 4)=='$str')
             {
                 $v = substr($notice->text, 1);
