@@ -1530,9 +1530,9 @@ CREATE TABLE IF NOT EXISTS `notices` (
 ) ENGINE=MyISAM AUTO_INCREMENT=3 ;
 
 INSERT INTO `notices` (`id`, `text`, `timestamp`, `type`, `resolutionpage`) VALUES
-(1, '$strFirstLogin', NOW(), 1, 'edit_profile.php);
+(1, 'strFirstLogin', NOW(), 1, 'edit_profile.php);
 INSERT INTO `notices` (`id`, `text`, `timestamp`, `type`, `resolutionpage`) VALUES
-(2, '$strNoEmailSet', NOW(), 1, 'edit_profile.php);
+(2, 'strNoEmailSet', NOW(), 1, 'edit_profile.php);
 
 CREATE TABLE IF NOT EXISTS `usernotices` (
   `noticeid` int(11) NOT NULL,
