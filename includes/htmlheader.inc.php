@@ -9,8 +9,6 @@
 //
 // This Page Is Valid XHTML 1.0 Transitional! 27Oct05
 
-// FIXME XHTML/XML lang needs to come from i18n file
-
 echo "<!DOCTYPE html PUBLIC \"-//W3C//DTD XHTML 1.0 Transitional//EN\"\n";
 echo "\"http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd\">\n";
 echo "<html xmlns=\"http://www.w3.org/1999/xhtml\" xml:lang=\"{$_SESSION['lang']}\" lang=\"{$_SESSION['lang']}\">\n";
@@ -152,8 +150,11 @@ if($sit[0] != '')
         }
         else
         {
-            echo "<div class='info'><p class='info'>{$notice->text}";
-            echo " (<a href='{$_SERVER[PHP_SELF]}?action=dismiss&noticeid={$notice->id}'>$strDismiss</a>)";
+            echo "<div class='info'><p class='info'>";
+            echo "<span>(<a href='{$_SERVER[PHP_SELF]}?action=dismiss&amp;noticeid={$notice->id}'>$strDismiss</a>)</span>";
+            echo "{$notice->text}";
+            echo " <a href=\"{$notice->link}\">{$notice->linktext}</a>";
+
         }
         echo "</p></div>";
     }

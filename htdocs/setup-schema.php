@@ -1233,21 +1233,19 @@ INSERT INTO `vendors` VALUES (1,'Default');
 
 CREATE TABLE IF NOT EXISTS `notices` (
   `id` int(11) NOT NULL auto_increment,
+  `type` tinyint(4) NOT NULL,
   `text` tinytext NOT NULL,
-   `linktext` varchar(50) default NULL,
+  `linktext` varchar(50) default NULL,
   `link` varchar(100) NOT NULL,
+  `resolutionpage` varchar(255) NULL,
   `timestamp` date NOT NULL,
-  PRIMARY KEY  (`id`),
-  UNIQUE KEY `id` (`id`),
-  KEY `id_2` (`id`),
-  KEY `id_3` (`id`),
-  FULLTEXT KEY `text` (`text`)
-) ENGINE=MyISAM AUTO_INCREMENT=3 ;
+  PRIMARY KEY  (`id`)
+) ENGINE=MyISAM AUTO_INCREMENT=1 ;
 
 INSERT INTO `notices` (`id`, `text`, `timestamp`, `type`, `resolutionpage`) VALUES
-(1, '$strFirstLogin', NOW(), 1, 'edit_profile.php);
+(1, 'strFirstLogin', NOW(), 1, 'edit_profile.php');
 INSERT INTO `notices` (`id`, `text`, `timestamp`, `type`, `resolutionpage`) VALUES
-(2, '$strNoEmailSet', NOW(), 1, 'edit_profile.php);
+(2, 'strNoEmailSet', NOW(), 1, 'edit_profile.php');
 
 CREATE TABLE IF NOT EXISTS `usernotices` (
   `noticeid` int(11) NOT NULL,
