@@ -147,8 +147,8 @@ else
             }
             if($mode == 'incident')
             {
-                if($enddate > 0) echo "<td>{$task->id}</td>";
-                else echo "<td><a href='view_task.php?id={$task->id}&mode=incident&incident={$id}' class='info'>{$task->id}</td>";
+                if($enddate == '0') echo "<td><a href='view_task.php?id={$task->id}&mode=incident&incident={$id}' class='info'>{$task->id}</td>"; 
+                else echo "<td>{$task->id}</td>";
             }
             else
             {
@@ -157,7 +157,6 @@ else
                 echo "</td>";
                 echo "<td>";
                 echo "<a href='view_task.php?id={$task->id}' class='info'>".stripslashes($task->name);
-                if (!empty($task->description)) echo "<span>".nl2br(stripslashes($task->description))."</span>";
                 echo "</a>";
 
                 echo "</td>";

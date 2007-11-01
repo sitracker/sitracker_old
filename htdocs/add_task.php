@@ -28,6 +28,7 @@ $incident = $_REQUEST['incident'];
 if($incident)
 {
     $sql = "INSERT into tasks(owner, name, priority, startdate, created, lastupdated) VALUES('$sit[2]', 'Task for Incident {$incident}', 1, NOW(), NOW(), NOW())";
+
     mysql_query($sql);
     if (mysql_error()) trigger_error(mysql_error(),E_USER_ERROR);
     
