@@ -871,7 +871,7 @@ function array_drop_down($array, $name, $setting='', $enablefield='')
     else $usekey=FALSE;
     foreach($array AS $key => $value)
     {
-        $value=htmlentities($value, ENT_COMPAT, 'UTF-8');
+        $value=htmlentities($value, ENT_COMPAT, $GLOBALS['i18ncharset']);
         if ($usekey) $html .= "<option value='$key'";
         else $html .= "<option value='$value'";
         if ($usekey) { if ($key==$setting) $html .= " selected='selected'"; }
@@ -914,7 +914,7 @@ function contact_drop_down($name, $id, $showsite=FALSE)
     while ($contacts = mysql_fetch_array($result))
     {
         if ($showsite AND $prevsite!= $contacts['siteid'] AND $prevsite!=0) $html .= "</optgroup>\n";
-        if ($showsite AND $prevsite!= $contacts['siteid']) $html .= "<optgroup label='".htmlentities(stripslashes($contacts['sitename']), ENT_COMPAT, 'UTF-8').", ".htmlentities(stripslashes($contacts['department']), ENT_COMPAT, 'UTF-8')."'>";
+        if ($showsite AND $prevsite!= $contacts['siteid']) $html .= "<optgroup label='".htmlentities(stripslashes($contacts['sitename']), ENT_COMPAT, 'UTF-8').", ".htmlentities(stripslashes($contacts['department']), ENT_COMPAT, $GLOBALS['i18ncharset'])."'>";
         $realname=stripslashes($contacts['forenames'].' '.$contacts['surname']);
         $html .= "<option ";
         if ($contacts['contactid'] == $id) $html .= "selected='selected' ";
@@ -4264,7 +4264,7 @@ function file_permissions_info($perms)
 function cleanvar($var,$striphtml=TRUE, $transentities=TRUE)
 {
     if ($striphtml) $var = strip_tags($var);
-    if ($transentities) $var = htmlentities($var, ENT_COMPAT, 'UTF-8');
+    if ($transentities) $var = htmlentities($var, ENT_COMPAT, $GLOBALS['i18ncharset']);
     else $var = htmlspecialchars($var);
 
     $var = mysql_escape_string($var);
@@ -5167,7 +5167,7 @@ function quick_update($incidentid, $text)
 {
     $incidentid = cleanvar($incidentid);
     $text = cleanvar($text);
-    
+
     $sql = "INSERT INTO updates('incidentid', 'userid', 'bodytext', 'currentstatus', 'timestamp') VALUES('{$incidentid}', 1, '{$sit[2]}', '{$text}', '')";
     mysql_query($sql);
     echo $sql;
