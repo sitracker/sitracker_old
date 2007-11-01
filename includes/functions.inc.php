@@ -48,6 +48,15 @@ define('CFG_JOURNAL_PRODUCTS', 9);
 define('CFG_JOURNAL_OTHER', 10);
 define('CFG_JOURNAL_KB', 11);    // Knowledge Base
 
+define('TAG_CONTACT', 1);
+define('TAG_INCIDENT', 2);
+define('TAG_SITE', 3);
+define('TAG_TASK', 4);
+define('TAG_PRODUCT', 5);
+define('TAG_SKILL', 6);
+define('TAG_KB_ARTICLE', 7);
+define('TAG_REPORT', 8);
+
 require('i18n/en-GB.inc.php');
 if ($CONFIG['default_i18n']!='en-GB') @include("i18n/{$CONFIG['default_i18n']}.inc.php");
 if(!empty($_SESSION['lang']) AND $_SESSION['lang'] != $CONFIG['default_i18n']) include("i18n/{$_SESSION['lang']}.inc.php");
@@ -4828,6 +4837,10 @@ function add_tag($id, $type, $tag)
     2 - incident
     3 - Site
     4 - task
+    5 - product
+    6 - skill
+    7 - kb article
+    8 - report
     */
     if ($tag!='')
     {

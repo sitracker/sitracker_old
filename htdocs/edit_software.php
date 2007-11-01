@@ -44,6 +44,7 @@ if (empty($action) OR $action=='edit')
         echo "<p align='center'>Mandatory fields are marked <sup class='red'>*</sup></p>";
         echo "<form name='editsoftware' action='{$_SERVER['PHP_SELF']}' method='post' onsubmit='return confirm_submit()'>";
         echo "<table class='vertical'>";
+        echo "<tr><th>{$strVendor}:</th><td>".vendor_drop_down('vendor',$software->vendorid)."</td></tr>\n";
         echo "<tr><th>Skill Name: <sup class='red'>*</sup></th><td><input maxlength='50' name='name' size='30' value='".stripslashes($software->name)."' /></td></tr>";
         echo "<tr><th>{$strLifetime}:</th><td>";
         echo "<input type='text' name='lifetime_start' id='lifetime_start' size='10' value='";
@@ -56,9 +57,8 @@ if (empty($action) OR $action=='edit')
         echo "' /> ";
         echo date_picker('editsoftware.lifetime_end');
         echo "</td></tr>";
-        echo "<tr>";
-        echo "<th>{$strVendor}</th><td>".vendor_drop_down('vendor',$software->vendorid)."</td>";
-        echo "</tr>";
+        echo "<tr><th>{$strTags}:</th>";
+        echo "<td><textarea rows='2' cols='30' name='tags'>".list_tags($id, TAG_SKILL, false)."</textarea></td></tr>";
         echo "</table>";
     }
     echo "<input type='hidden' name='id' value='$id' />";
@@ -107,6 +107,7 @@ else
     // External variables
     $name = cleanvar($_REQUEST['name']);
     $vendor = cleanvar($_REQUEST['vendor']);
+    $tags = cleanvar($_REQUEST['tags']);
     if (!empty($_REQUEST['lifetime_start'])) $lifetime_start = date('Y-m-d',strtotime($_REQUEST['lifetime_start']));
     else $lifetime_start = '';
     if (!empty($_REQUEST['lifetime_end'])) $lifetime_end = date('Y-m-d',strtotime($_REQUEST['lifetime_end']));
@@ -114,6 +115,8 @@ else
 
     // Add new
     $errors = 0;
+
+    replace_tags(TAG_SKILL, $id, $tags);
 
     // check for blank name
     if ($name == "")
