@@ -67,6 +67,8 @@ elseif (authenticate($username, $password) == 1)
         mysql_query($sql);
         if (mysql_error()) trigger_error(mysql_error(), E_USER_ERROR);
     }
+    if ($user->var_i18n != $CONFIG['default_i18n'] AND $_SESSION['lang']=='') $_SESSION['lang'] = $user->var_i18n;
+
     // Make an array full of users permissions
     // The zero permission is added to all users, zero means everybody can access
     $userpermissions[]=0;
