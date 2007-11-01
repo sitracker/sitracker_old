@@ -1234,6 +1234,8 @@ INSERT INTO `vendors` VALUES (1,'Default');
 CREATE TABLE IF NOT EXISTS `notices` (
   `id` int(11) NOT NULL auto_increment,
   `text` tinytext NOT NULL,
+   `linktext` varchar(50) default NULL,
+  `link` varchar(100) NOT NULL,
   `timestamp` date NOT NULL,
   PRIMARY KEY  (`id`),
   UNIQUE KEY `id` (`id`),
@@ -1549,6 +1551,10 @@ ALTER TABLE `servicelevels` ADD `timed` enum('yes','no') NOT NULL DEFAULT 'no'
 ALTER TABLE `users` ADD `var_i18n` VARCHAR( 20 ) NULL AFTER `var_notify_on_reassign` ;
 
 ALTER TABLE `updates` ADD `duration` INT NULL ;
+
+ALTER TABLE `update` ADD `linktext` VARCHAR(50) NULL AFTER `text`;
+
+ALTER TABLE `notices` ADD `link` VARCHAR(100) NULL AFTER `linktext`;
 ";
 
 
