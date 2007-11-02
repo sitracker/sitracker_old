@@ -160,6 +160,7 @@ $strEngineer = 'Engineer';
 $strEngineers = 'Engineers';
 $strEnglish = 'English';
 $strEnterTheCallID = 'Enter the incident number';
+$strEscalated = 'Escalated';
 $strEscalatedIncidents = 'Escalated Incidents';
 $strEscalation = 'Escalation';
 $strEscalationPaths = 'Escalation Paths';
