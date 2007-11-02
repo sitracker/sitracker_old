@@ -10,7 +10,6 @@ $strAccepting = 'Acceptant';
 $strActionNeeded = 'Action Nécessaire';
 $strActionPlan = 'Plan d\'Action';
 $strActionPlanBy = 'Plan d\'Action par %s';
-$strActions = 'Actions';
 $strActive = 'Actif';
 $strActivity = 'Activité';
 $strAdd = 'Ajouter';

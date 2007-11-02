@@ -767,6 +767,7 @@ INSERT INTO `rolepermissions` (`roleid`, `permissionid`, `granted`) VALUES (1, 6
 INSERT INTO `rolepermissions` (`roleid`, `permissionid`, `granted`) VALUES (1, 67, 'true');
 INSERT INTO `rolepermissions` (`roleid`, `permissionid`, `granted`) VALUES (1, 68, 'true');
 INSERT INTO `rolepermissions` (`roleid`, `permissionid`, `granted`) VALUES (1, 69, 'true');
+INSERT INTO `rolepermissions` (`roleid`, `permissionid`, `granted`) VALUES (1, 70, 'true');
 INSERT INTO `rolepermissions` (`roleid`, `permissionid`, `granted`) VALUES (2, 1, 'true');
 INSERT INTO `rolepermissions` (`roleid`, `permissionid`, `granted`) VALUES (2, 2, 'true');
 INSERT INTO `rolepermissions` (`roleid`, `permissionid`, `granted`) VALUES (2, 3, 'true');
@@ -1151,6 +1152,9 @@ INSERT INTO `userpermissions` VALUES (1, 64, 'true');
 INSERT INTO `userpermissions` VALUES (1, 65, 'true');
 INSERT INTO `userpermissions` VALUES (1, 66, 'true');
 INSERT INTO `userpermissions` VALUES (1, 67, 'true');
+INSERT INTO `userpermissions` VALUES (1, 68, 'true');
+INSERT INTO `userpermissions` VALUES (1, 69, 'true');
+INSERT INTO `userpermissions` VALUES (1, 70, 'true');
 
 CREATE TABLE `users` (
   `id` tinyint(4) NOT NULL auto_increment,
@@ -1555,6 +1559,11 @@ ALTER TABLE `users` ADD `var_i18n` VARCHAR( 20 ) NULL AFTER `var_notify_on_reass
 ALTER TABLE `updates` ADD `duration` INT NULL ;
 
 ALTER TABLE `update` ADD `linktext` VARCHAR(50) NULL AFTER `text`;
+
+INSERT INTO `rolepermissions` (`roleid`, `permissionid`, `granted`) VALUES (1, 70, 'true');
+INSERT INTO `userpermissions` VALUES (1, 68, 'true');
+INSERT INTO `userpermissions` VALUES (1, 69, 'true');
+INSERT INTO `userpermissions` VALUES (1, 70, 'true');
 ";
 
 
