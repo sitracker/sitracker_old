@@ -41,7 +41,7 @@ switch($action)
                 break;
             case '2': //engineer
                 echo "{$strEngineer}: ";
-                echo user_drop_down('id','');
+                echo user_drop_down('id','',FALSE);
                 break;
         }
 
