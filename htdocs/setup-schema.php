@@ -1189,6 +1189,7 @@ CREATE TABLE `users` (
   `holiday_entitlement` float NOT NULL default '0',
   `qualifications` tinytext,
   `dashboard` varchar(255) NOT NULL default '0-3,1-1,1-2,2-4',
+  `lastseen` TIMESTAMP NOT NULL,
   PRIMARY KEY  (`id`),
   KEY `username` (`username`),
   KEY `accepting` (`accepting`),
@@ -1564,6 +1565,8 @@ INSERT INTO `rolepermissions` (`roleid`, `permissionid`, `granted`) VALUES (1, 7
 INSERT INTO `userpermissions` VALUES (1, 68, 'true');
 INSERT INTO `userpermissions` VALUES (1, 69, 'true');
 INSERT INTO `userpermissions` VALUES (1, 70, 'true');
+
+ALTER TABLE `users` ADD `lastseen` TIMESTAMP NOT NULL ;
 ";
 
 
