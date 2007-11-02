@@ -39,6 +39,11 @@ else
     if (!empty($_SESSION['lang']) AND $_SESSION['lang'] != $CONFIG['default_i18n']) include("i18n/{$_SESSION['lang']}.inc.php");
     elseif (empty($_SESSION['lang'])) $_SESSION['lang'] = $CONFIG['default_i18n'];
     include('strings.inc.php');
+    
+    //update last seen
+    $lastseensql = "UPDATE users SET lastseen=NOW() WHERE id={$sit[2]}";
+    mysql_query($lastseensql);
+    if (mysql_error()) trigger_error(mysql_error(), E_USER_ERROR);
 }
 
 if (!is_array($permission)) { $permission = array($permission); }
