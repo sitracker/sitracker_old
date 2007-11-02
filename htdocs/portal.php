@@ -86,7 +86,7 @@ switch ($page)
             echo colheader('availableincidents',$strIncidentsAvailable);
             echo colheader('usedincidents',$strIncidentsUsed);
             echo colheader('expirydate', $strExpiryDate);
-            echo colheader('actions', $strActions);
+            echo colheader('actions', $strOperation);
             echo "</tr>";
             $shade='shade1';
             while ($contract = mysql_fetch_object($result))
@@ -127,7 +127,7 @@ switch ($page)
             echo colheader('title',$strTitle);
             echo colheader('lastupdated',$strLastUpdated);
             echo colheader('status',$strStatus);
-            echo colheader('actions', $strActions);
+            echo colheader('actions', $strOperation);
             while ($incident = mysql_fetch_object($result))
             {
                 echo "<tr class='$shade'><td><a href='portal.php?page=showincident&id={$incident->id}'>{$incident->id}</a></td>";
