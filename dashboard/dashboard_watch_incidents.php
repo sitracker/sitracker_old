@@ -103,7 +103,7 @@ function dashboard_watch_incidents($row,$dashboardid)
                 }
                 else echo "<tr><td colspan='3'>{$GLOBALS['strNoOpenIncidents']}</td></tr>\n";
             }
-            echo "</table>\n<br />";
+            echo "</table>\n";
         }
     }
     else echo "<p align='center'>{$GLOBALS['strNone']}</p>";;
