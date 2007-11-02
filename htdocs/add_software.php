@@ -17,6 +17,8 @@ require('functions.inc.php');
 // This page requires authentication
 require('auth.inc.php');
 
+$title = $strAddSkill;
+
 // External variables
 $submit = $_REQUEST['submit'];
 
@@ -34,26 +36,23 @@ if (empty($submit))
     <?php
     echo "<h2><img src='{$CONFIG['application_webpath']}images/icons/{$iconset}/32x32/skill.png' width='32' height='32' alt='' /> ";
     echo "{$strNewSkill}</h2>";
-    ?>
-    <p align='center'>Mandatory fields are marked <sup class='red'>*</sup></p>
-    <form name='addsoftware' action="<?php echo $_SERVER['PHP_SELF']; ?>" method="post" onsubmit="return confirm_submit()">
-    <table class='vertical'>
-    <tr><th>Skill Name: <sup class='red'>*</sup></th><td><input maxlength="50" name="name" size="30" /></td></tr>
-    <?php
-        echo "<tr><th>Lifetime:</th><td>";
+    echo "<h5>{$strMandatoryMarked} <sup class='red'>*</sup></h5>";
+    echo "<form name='addsoftware' action='{$_SERVER['PHP_SELF']}' method='post' onsubmit='return confirm_submit();'>";
+    echo "<table class='vertical'>";
+    echo "<tr><th>{$strVendor}:</th><td>".vendor_drop_down('vendor',$software->vendorid)."</td></tr>\n";
+    echo "<tr><th>{$strSkill}: <sup class='red'>*</sup></th><td><input maxlength='50' name='name' size='30' /></td></tr>\n";
+    echo "<tr><th>{$strLifetime}:</th><td>";
     echo "<input type='text' name='lifetime_start' id='lifetime_start' size='10' value='' /> ";
     echo date_picker('addsoftware.lifetime_start');
     echo " To: ";
     echo "<input type='text' name='lifetime_end' id='lifetime_end' size='10' value='' /> ";
     echo date_picker('addsoftware.lifetime_end');
-    ?>
-    </td></tr>
-    </table>
-    <p align='center'><input name="submit" type="submit" value="Add Skill" /></p>
-    <p class='warning'>Please check that the skill does not already exist <em>before</em> adding it</p>
-    </form>
-    <?php
-    echo "<p align='center'><a href='products.php'>Return to products list without saving</a></p>";
+    echo "</td></tr>\n";
+    echo "</table>";
+    echo "<p align='center'><input name='submit' type='submit' value=\"{$strAddSkill}\" /></p>";
+    echo "<p class='warning'>{$strAvoidDupes}</p>";
+    echo "</form>\n";
+    echo "<p align='center'><a href='products.php'>{$strReturnWithoutSaving}</a></p>";
     include('htmlfooter.inc.php');
 }
 else

@@ -70,8 +70,8 @@ elseif ($action == "edit")
         if (mysql_error()) trigger_error("MySQL Query Error ".mysql_error(), E_USER_ERROR);
         $emailtype = mysql_fetch_array($result);
         echo "<h2>{$strEdit} ".ucfirst($emailtype['type'])." Email Template</h2>";
+        echo "<h5>{$strMandatoryMarked} <sup class='red'>*</sup></h5>";
         ?>
-        <p align='center'>Mandatory fields are marked <sup class='red'>*</sup></p>
         <p align='center'>A list of special identifiers that can be used in these fields is given at the bottom of the page.</p>
         <form name='edittemplate' action="<?php echo $_SERVER['PHP_SELF'] ?>?action=update" method="post" onsubmit="return confirm_submit()">
 

@@ -17,6 +17,8 @@ require('functions.inc.php');
 // This page requires authentication
 require('auth.inc.php');
 
+$title = $strAddProduct;
+
 // External variables
 $submit = $_REQUEST['submit'];
 
@@ -34,24 +36,20 @@ if (empty($submit))
     <?php
     echo "<h2><img src='{$CONFIG['application_webpath']}images/icons/{$iconset}/32x32/product.png' width='32' height='32' alt='' /> ";
     echo "{$strNewProduct}</h2>";
-    ?>
-    <p align='center'>Mandatory fields are marked <sup class='red'>*</sup></p>
-    <form action="<?php echo $_SERVER['PHP_SELF']; ?>" method="post" onsubmit="return confirm_submit()">
-    <table align='center'>
-    <tr><th>Vendor: <sup class='red'>*</sup></th><td><?php echo vendor_drop_down('vendor', 0); ?></td></tr>
-    <tr><th>Product Name: <sup class='red'>*</sup></th><td><input maxlength="50" name="name" size="40" /></td></tr>
-    <?php
+    echo "<h5>{$strMandatoryMarked} <sup class='red'>*</sup></h5>";
+    echo "<form action='{$_SERVER['PHP_SELF']}' method='post' onsubmit='return confirm_submit();'>";
+    echo "<table align='center'>";
+    echo "<tr><th>{$strVendor}: <sup class='red'>*</sup></th><td>".vendor_drop_down('vendor', 0)."</td></tr>\n";
+    echo "<tr><th>{$Product}: <sup class='red'>*</sup></th><td><input maxlength='50' name='name' size='40' /></td></tr>\n";
     echo "<tr><th>{$strDescription}:</th>";
     echo "<td>";
     echo "<textarea name='description' cols='40' rows='6'></textarea>";
     echo "</td></tr>";
-    ?>
-    </table>
-    <p><input name="submit" type="submit" value="Add Product" /></p>
-    <p class='warning'>Please check that the product does not already exist <em>before</em> adding it</p>
-    </form>
-    <?php
-    echo "<p align='center'><a href='products.php'>Return to products list without saving</a></p>";
+    echo "</table>\n";
+    echo "<p><input name='submit' type='submit' value=\"{$strAddProduct}\" /></p>";
+    echo "<p class='warning'>{$strAvoidDupes}</p>";
+    echo "</form>\n";
+    echo "<p align='center'><a href='products.php'>{$strReturnWithoutSaving}</a></p>";
     include('htmlfooter.inc.php');
 }
 else

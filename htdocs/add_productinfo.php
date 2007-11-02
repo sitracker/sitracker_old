@@ -33,7 +33,9 @@ if (empty($_REQUEST['submit']))
 {
     ?>
     <h2>Add Product Question</h2>
-    <p align='center'>Mandatory fields are marked <sup class='red'>*</sup></p>
+    <?php
+    echo "<h5>{$strMandatoryMarked} <sup class='red'>*</sup></h5>";
+    ?>
     <form action="<?php echo $_SERVER['PHP_SELF']; ?>" method="post" onsubmit="return confirm_submit()">
     <table align='center'>
     <tr><th>Product:</th><td><?php echo product_drop_down("product", 0) ?></td></tr>

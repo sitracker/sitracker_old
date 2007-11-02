@@ -32,8 +32,10 @@ if (empty($submit))
     }
     </script>
 
-    <h2>Add New Vendor</h2>
-    <p align='center'>Mandatory fields are marked <sup class='red'>*</sup></p>
+    <?php
+    echo "<h2>Add New Vendor</h2>";
+    echo "<h5>{$strMandatoryMarked} <sup class='red'>*</sup></h5>";
+    ?>
     <form action="<?php echo $_SERVER['PHP_SELF']; ?>" method="post" onsubmit="return confirm_submit()">
     <table align='center'>
     <tr><th>Vendor Name: <sup class='red'>*</sup></th><td><input maxlength="50" name="name" size="30" /></td></tr>

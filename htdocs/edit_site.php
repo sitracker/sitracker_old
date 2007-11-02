@@ -10,6 +10,8 @@
 
 // This Page Is Valid XHTML 1.0 Transitional!  6Feb06
 
+// FIXME i18n
+
 $permission=3; // Edit existing site details
 require('db_connect.inc.php');
 require('functions.inc.php');
@@ -64,7 +66,7 @@ elseif ($action == "edit")
             echo "Edit Site {$site} - ".site_name($site)."</h2>";
             ?>
             <form name='edit_site' action="<?php echo $_SERVER['PHP_SELF'] ?>?action=update" method="post" onsubmit="return confirm_submit()">
-            <p align='center'>Mandatory fields are marked <sup class='red'>*</sup></p>
+            <?php echo "<h5>{$strMandatoryMarked} <sup class='red'>*</sup></h5>"; ?>
             <table align='center' class='vertical'>
             <tr><th>Name: <sup class='red'>*</sup></th><td><input maxlength="50" name="name" size="40" value="<?php echo stripslashes($siterow['name']); ?>" /></td></tr>
             <tr><th>Tags:</th><td><textarea rows='2' cols='60' name='tags'><?php echo list_tags($site, 3, false); ?></textarea>

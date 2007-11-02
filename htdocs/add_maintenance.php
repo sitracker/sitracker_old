@@ -17,6 +17,8 @@ require('functions.inc.php');
 // This page requires authentication
 require('auth.inc.php');
 
+$title = $strAddContract;
+
 // External variables
 $action = $_REQUEST['action'];
 $siteid = mysql_escape_string($_REQUEST['siteid']);
@@ -36,32 +38,29 @@ if ($action == "showform" OR $action=='')
     <?php
     echo "<h2><img src='{$CONFIG['application_webpath']}images/icons/{$iconset}/32x32/contract.png' width='32' height='32' alt='' /> ";
     echo "{$strAddContract}</h2>";
-    ?>
-    <p align='center'>Mandatory fields are marked <sup class='red'>*</sup></p>
-    <form name='addcontract' action="<?php echo $_SERVER['PHP_SELF']; ?>?action=add" method="post" onsubmit="return confirm_submit()">
-    <table align='center' class='vertical'>
-    <tr><th>Site: <sup class='red'>*</sup></th><td><?php echo site_drop_down("site", $siteid) ?></td></tr>
-    <tr><th>Product: <sup class='red'>*</sup></th><td><?php echo product_drop_down("product", 0); ?></td></tr>
-    <tr><th>Reseller: <sup class='red'>*</sup></th><td><?php echo reseller_drop_down("reseller", 0) ?></td></tr>
-    <tr><th>Licence Quantity: <sup class='red'>*</sup></th><td><input maxlength="7" name="licence_quantity" size="5" /></td></tr>
-    <tr><th>Licence Type: <sup class='red'>*</sup></th><td><?php echo licence_type_drop_down("licence_type", 0); ?></td></tr>
-    <tr><th>Expiry Date: <sup class='red'>*</sup></th>
-    <?php
+    echo "<h5>{$strMandatoryMarked} <sup class='red'>*</sup></h5>";
+    echo "<form name='addcontract' action='{$_SERVER['PHP_SELF']}?action=add' method='post' onsubmit='return confirm_submit();'>";
+    echo "<table align='center' class='vertical'>";
+    echo "<tr><th>{$strSite}: <sup class='red'>*</sup></th><td>".site_drop_down("site", $siteid)."</td></tr>\n";
+    echo "<tr><th>{$strProduct}: <sup class='red'>*</sup></th><td>".product_drop_down("product", 0)."</td></tr>\n";
+    echo "<tr><th>{$strReseller}: <sup class='red'>*</sup></th><td>";
+    reseller_drop_down("reseller", 0);
+    echo "</td></tr>\n";
+    echo "<tr><th>Licence Quantity: <sup class='red'>*</sup></th><td><input maxlength='7' name='licence_quantity' size='5' /></td></tr>\n";
+    echo "<tr><th>Licence Type: <sup class='red'>*</sup></th><td>";
+    licence_type_drop_down("licence_type", 0);
+    echo "</td></tr>\n";
+    echo "<tr><th>{$strExpiryDate}: <sup class='red'>*</sup></th>";
     echo "<td><input name='expiry' size='10' /> ".date_picker('addcontract.expiry')."</td></tr>\n";
-    ?>
-
-    <tr><th>Service Level:</th><td><?php echo servicelevel_drop_down('servicelevelid', 1, TRUE); ?></td></tr>
-    <?php
+    echo "<tr><th>{$strServiceLevel}:</th><td>".servicelevel_drop_down('servicelevelid', 1, TRUE)."</td></tr>\n";
     echo "<tr><th>Incident Pool:</th>";
     $incident_pools = explode(',', "Unlimited,{$CONFIG['incident_pools']}");
     echo "<td>".array_drop_down($incident_pools,'incident_poolid',$maint['incident_quantity'])."</td></tr>";
-    ?>
-    <tr><th>Admin Contact: <sup class='red'>*</sup></th><td><?php echo contact_drop_down("admincontact", 0, true) ?></td></tr>
-    <tr><th>Notes:</th><td><textarea cols="40" name="notes" rows="5"></textarea></td></tr>
-    <tr><th>Product Only:</th><td><input name="productonly" type="checkbox" value="yes" /></td></tr>
-    </table>
-    <p align='center'><input name="submit" type="submit" value="Add Contract" /></p>
-    <?php
+    echo "<tr><th>{$strAdminContact}: <sup class='red'>*</sup></th><td>".contact_drop_down("admincontact", 0, true)."</td></tr>\n";
+    echo "<tr><th>{$strNotes}:</th><td><textarea cols='40' name='notes' rows='5'></textarea></td></tr>\n";
+    echo "<tr><th>Product Only:</th><td><input name='productonly' type='checkbox' value='yes' /></td></tr>\n";
+    echo "</table>\n";
+    echo "<p align='center'><input name='submit' type='submit' value=\"{$strAddContract}\" /></p>";
     echo "</form>";
     include('htmlfooter.inc.php');
 }
