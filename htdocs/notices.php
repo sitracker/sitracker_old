@@ -27,7 +27,7 @@ if($action == 'new')
     echo '<tr><td>$CONFIG[\'application_shortname\']</td><td>'.$CONFIG['application_shortname'].'</td></tr>';
     echo "</table>";
     echo "<div align='center'><form action='{$_SERVER[PHP_SELF]}?action=post' method='post'>";
-    echo "<h3>{$strMessage}</h3>";
+    echo "<h3>{$strNotice}</h3>";
     echo "<textarea cols='60' rows='4' name='text'></textarea><br />";
     echo "<input type='submit' value='{$strSave}' />";
     echo "</form></div>";
@@ -86,13 +86,16 @@ else
     print_r($notice);
 
     echo "<table align='center'>";
-    echo "<tr><th>{$strID}</th><th>{$strDate}</th><th>{$strMessage}</th><th>{$strOperation}</th></tr>\n";
+    echo "<tr><th>{$strID}</th><th>{$strDate}</th><th>{$strNotice}</th><th>{$strOperation}</th></tr>\n";
     $shade='shade1';
     while($notice = mysql_fetch_object($result))
     {
         echo "<tr class='$shade'><td>{$notice->id}</td><td>{$notice->timestamp}</td>";
         echo "<td>".stripslashes($notice->text)."</td>";
-        echo "<td><a href='{$_SERVER[PHP_SELF]}?action=delete&amp;id={$notice->id}'>{$strDelete}</a></td></tr>\n";
+        echo "<td>";
+        // Don't allow deleting system messages
+        if ($type != 1) echo "<a href='{$_SERVER[PHP_SELF]}?action=delete&amp;id={$notice->id}'>{$strDelete}</a>";
+        echo "</td></tr>\n";
         if ($shade=='shade1') $shade='shade2';
         else $shade='shade1';
     }
