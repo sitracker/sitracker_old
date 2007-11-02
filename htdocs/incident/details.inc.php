@@ -31,7 +31,7 @@ echo "</a> ";
 echo "of <a href='site_details.php?id={$incident->siteid}' title=\"$strSite}\" target='top.opener' class='info'>{$site_name}";
 if (!empty($site_notes)) echo "<span>".stripslashes($site_notes)."</span>";
 echo "</a> ";
-echo list_tag_icons($incident->siteid, 3); // site tag icons
+echo list_tag_icons($incident->siteid, TAG_SITE); // site tag icons
 echo "<br />\n";
 echo "<a href='mailto:".stripslashes($incident->email)."'>".stripslashes($incident->email)."</a><br />\n";
 if ($incident->ccemail != '') echo "CC: <a href='mailto:".stripslashes($incident->ccemail)."'>".stripslashes($incident->ccemail)."</a><br />\n";
@@ -52,7 +52,7 @@ if ($incident->externalengineer != '')
     if ($incident->externalemail != '') echo ", <a href='mailto:".stripslashes($incident->externalemail)."'>".stripslashes($incident->externalemail)."</a>";
     echo "<br />\n";
 }
-$tags = list_tags($id, 2, TRUE);
+$tags = list_tags($id, TAG_INCIDENT, TRUE);
 if (!empty($tags)) echo "{$tags}\n";
 echo "</td>";
 

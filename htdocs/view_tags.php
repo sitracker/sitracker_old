@@ -48,7 +48,8 @@ else
     $result = mysql_query($sql);
     if (mysql_error()) trigger_error(mysql_error(),E_USER_WARNING);
 
-    if(mysql_num_rows($result) > 0)
+    $num_tags = mysql_num_rows($result);
+    if($num_tags > 0)
     {
         echo "<table align='center'>";
         while($obj = mysql_fetch_object($result))
@@ -106,13 +107,25 @@ else
 
                 case TAG_SKILL:
                     $sql = "SELECT name FROM software WHERE id = '{$obj->id}'";
-                    $resulttask = mysql_query($sql);
+                    $resultskill = mysql_query($sql);
                     if (mysql_error()) trigger_error(mysql_error(),E_USER_ERROR);
-                    if(mysql_num_rows($resulttask) > 0)
+                    if(mysql_num_rows($resultskill) > 0)
                     {
-                        $objtask = mysql_fetch_object($resulttask);
+                        $objtask = mysql_fetch_object($resultskill);
                         echo "<th><img src='{$CONFIG['application_webpath']}images/icons/{$iconset}/16x16/skill.png' width='16' height='16' alt='' /> {$strSkill}</th><td>";
                         echo stripslashes($objtask->name)."</td>";
+                    }
+                break;
+
+                case TAG_PRODUCT:
+                    $sql = "SELECT name FROM products WHERE id = '{$obj->id}'";
+                    $resultprod = mysql_query($sql);
+                    if (mysql_error()) trigger_error(mysql_error(),E_USER_ERROR);
+                    if(mysql_num_rows($resultprod) > 0)
+                    {
+                        $objtask = mysql_fetch_object($resultprod);
+                        echo "<th><img src='{$CONFIG['application_webpath']}images/icons/{$iconset}/16x16/product.png' width='16' height='16' alt='' /> {$strProduct}</th>";
+                        echo "<td><a href='products.php?productid={$obj->id}'>".stripslashes($objtask->name)."</a></td>";
                     }
                 break;
 
@@ -122,6 +135,7 @@ else
             echo "</tr>\n";
         }
         echo "</table>";
+        echo "<p align='center'>".sprintf($strTagsMulti, $num_tags)."</p>";
     }
     include('htmlfooter.inc.php');
 }

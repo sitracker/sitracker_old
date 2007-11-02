@@ -30,6 +30,9 @@ if ($action == 'save')
     $name = cleanvar($_POST['name']);
     $description = cleanvar($_POST['description']);
     $productid = cleanvar($_POST['productid']);
+    $tags = cleanvar($_POST['tags']);
+
+    replace_tags(TAG_PRODUCT, $productid, $tags);
 
     // update database
     $sql = "UPDATE products SET vendorid='$vendor', name='$name', description='$description' WHERE id='$productid' LIMIT 1 ";
@@ -72,6 +75,8 @@ else
     echo "<td>";
     echo "<textarea name='description' cols='40' rows='6'>{$row->description}</textarea>";
     echo "</td></tr>";
+    echo "<tr><th>{$strTags}:</th>";
+    echo "<td><textarea rows='2' cols='30' name='tags'>".list_tags($id, TAG_PRODUCT, false)."</textarea></td></tr>\n";
     echo "</table>";
     echo "<input type='hidden' name='productid' value='$id' />";
     echo "<input type='hidden' name='action' value='save' />";

@@ -35,8 +35,8 @@ function confirm_submit()
 if (empty($submit))
 {
     echo "<h2>{$strNewTemplate}</h2>";
+    echo "<h5>{$strMandatoryMarked} <sup class='red'>*</sup></h5>";
     ?>
-    <p align='center'>Mandatory fields are marked <sup class='red'>*</sup></p>
     <p align='center'>The following special identifiers can be used in these fields:</p>
     <table align='center' class='vertical'>
     <tr><th>&lt;contactemail&gt;</th><td>Email address of incident contact</td></tr>

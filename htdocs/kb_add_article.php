@@ -41,8 +41,8 @@ if (user_permission($sit[2],$permission))
         <?php
         echo "<h2><img src='{$CONFIG['application_webpath']}images/icons/{$iconset}/32x32/kb.png' width='32' height='32' alt='' /> ";
         echo "Add KB Article</h2>";
+        echo "<h5>{$strMandatoryMarked} <sup class='red'>*</sup></h5>";
         ?>
-        <p align='center'>Mandatory fields are marked <sup class='red'>*</sup></p>
         <form name="articleform" action="<?php echo $_SERVER['PHP_SELF']; ?>" method="post">
         <table align='center' class='vertical' width='600'>
         <tr><th>Title: <sup class='red'>*</sup></th><td><input type="text" name="title" size="50" maxlength="255" /></td></tr>

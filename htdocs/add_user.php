@@ -61,8 +61,8 @@ if (empty($submit))
     }
     echo "<h2><img src='{$CONFIG['application_webpath']}images/icons/{$iconset}/32x32/user.png' width='32' height='32' alt='' /> ";
     echo "{$strNewUser}</h2>";
+    echo "<h5>{$strMandatoryMarked} <sup class='red'>*</sup></h5>";
     ?>
-    <p align='center'>Mandatory fields are marked <sup class='red'>*</sup></p>
     <form action="<?php echo $_SERVER['PHP_SELF'] ?>" method="post" onsubmit="return confirm_submit()">
     <table align='center'>
     <tr><th>Real Name: <sup class='red'>*</sup></th><td><input maxlength="50" name="realname" size="30" /></td></tr>
