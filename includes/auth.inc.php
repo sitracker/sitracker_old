@@ -37,6 +37,7 @@ else
     $sit[2] = $_SESSION['userid'];
     // Load session language if it is set and different to the default language
     if (!empty($_SESSION['lang']) AND $_SESSION['lang'] != $CONFIG['default_i18n']) include("i18n/{$_SESSION['lang']}.inc.php");
+    elseif (empty($_SESSION['lang'])) $_SESSION['lang'] = $CONFIG['default_i18n'];
     include('strings.inc.php');
 }
 
