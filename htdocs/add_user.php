@@ -16,6 +16,8 @@ require('functions.inc.php');
 // This page requires authentication
 require('auth.inc.php');
 
+$title = $strAddUser;
+
 // External variables
 $submit = $_REQUEST['submit'];
 
@@ -62,33 +64,28 @@ if (empty($submit))
     echo "<h2><img src='{$CONFIG['application_webpath']}images/icons/{$iconset}/32x32/user.png' width='32' height='32' alt='' /> ";
     echo "{$strNewUser}</h2>";
     echo "<h5>{$strMandatoryMarked} <sup class='red'>*</sup></h5>";
-    ?>
-    <form action="<?php echo $_SERVER['PHP_SELF'] ?>" method="post" onsubmit="return confirm_submit()">
-    <table align='center'>
-    <tr><th>Real Name: <sup class='red'>*</sup></th><td><input maxlength="50" name="realname" size="30" /></td></tr>
-    <tr><th>Username: <sup class='red'>*</sup></th><td><input maxlength="50" name="username" size="30" /></td></tr>
-    <tr id='password'><th>Password: <sup class='red'>*</sup></th><td><input maxlength="50" name="password" size="30" /></td></tr>
-    <?php
+    echo "<form action='{$_SERVER['PHP_SELF']}' method='post' onsubmit='return confirm_submit();'>";
+    echo "<table align='center'>\n";
+    echo "<tr><th>{$strRealName}: <sup class='red'>*</sup></th><td><input maxlength='50' name='realname' size='30' /></td></tr>\n";
+    echo "<tr><th>{$strUsername}: <sup class='red'>*</sup></th><td><input maxlength='50' name='username' size='30' /></td></tr>\n";
+    echo "<tr id='password'><th>{$strPassword}: <sup class='red'>*</sup></th><td><input maxlength='50' name='password' size='30' /></td></tr>\n";
     echo "<tr><th>{$strGroup}:</th>";
     echo "<td>".group_drop_down('groupid', 0)."</td>";
     echo "</tr>";
     echo "<tr><th>{$strRole}:</th>";
     echo "<td>".role_drop_down('roleid', 1)."</td>";
     echo "</tr>";
-    ?>
-    <tr><th>Job Title: <sup class='red'>*</sup></th><td><input maxlength="50" name="jobtitle" size="30" /></td></tr>
-    <tr id='email'><th>Email: <sup class='red'>*</sup></th><td><input maxlength="50" name="email" size="30" /></td></tr>
-    <tr><th>Phone:</th><td><input maxlength="50" name="phone" size="30" /></td></tr>
-    <tr><th>Mobile:</th><td><input maxlength="50" name="mobile" size="30" /></td></tr>
-    <tr><th>Fax:</th><td><input maxlength="50" name="fax" size="30" /></td></tr>
-    <tr><th>Holiday Entitlement:</th><td><input maxlength="3" name="holiday_entitlement" size="3" /> days</td></tr>
-    <?php
+    echo "<tr><th>{$strJobTitle}: <sup class='red'>*</sup></th><td><input maxlength='50' name='jobtitle' size='30' /></td></tr>\n";
+    echo "<tr id='email'><th>{$strEmail}: <sup class='red'>*</sup></th><td><input maxlength='50' name='email' size='30' /></td></tr>\n";
+    echo "<tr><th>{$strTelephone}:</th><td><input maxlength='50' name='phone' size='30' /></td></tr>\n";
+    echo "<tr><th>{$strMobile}:</th><td><input maxlength='50' name='mobile' size='30' /></td></tr>\n";
+    echo "<tr><th>{$strFax}:</th><td><input maxlength='50' name='fax' size='30' /></td></tr>\n";
+    echo "<tr><th>{$strHolidayEntitlement} Entitlement:</th><td><input maxlength='3' name='holiday_entitlement' size='3' /> days</td></tr>\n";
+    // i18n ^^
     plugin_do('add_user_form');
-    ?>
-    </table>
-    <p><input name="submit" type="submit" value="Add User" /></p>
-    </form>
-    <?php
+    echo "</table>\n";
+    echo "<p><input name='submit' type='submit' value=\"$strAddUser}\" /></p>";
+    echo "</form>\n";
 }
 else
 {

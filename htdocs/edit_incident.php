@@ -27,7 +27,7 @@ $incidentid=$id;
 // No submit detected show edit form
 if (empty($submit))
 {
-    $title = 'Edit';
+    $title = $strEdit;
     include('incident_html_top.inc.php');
 
     // extract incident details

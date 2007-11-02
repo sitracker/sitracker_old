@@ -43,7 +43,7 @@ if ($incident->phone!='' OR $incident->phone!='')
 }
 if ($incident->externalid != '' OR $incident->escalationpath > 0)
 {
-    echo "Escalated: ";
+    echo "{$strEscalated}: ";
     echo format_external_id(stripslashes($incident->externalid),$incident->escalationpath)."<br />\n";
 }
 if ($incident->externalengineer != '')
@@ -60,7 +60,7 @@ echo "<td>";
 // Second column, Product and Incident details
 if ($incident->owner != $sit[2] OR ($incident->towner > 0 AND $incident->towner != $incident->owner))
 {
-    echo "Owner: <strong>".user_realname($incident->owner,TRUE)."</strong> ";
+    echo "{$strOwner}: <strong>".user_realname($incident->owner,TRUE)."</strong> ";
     $incidentowner_phone = user_phone($incident->owner);
     if ($incidentowner_phone != '') echo "(Tel: {$incidentowner_phone}) ";
     if ($incident->towner > 0 AND $incident->towner != $incident->owner)
@@ -105,12 +105,12 @@ if ($incident->status != 2 AND $incident->status!=7)
     {
         // Only display if review is due in the next five days
         if ($slaremain<>0) echo "<br />"; // only need a line sometimes
-        echo "Review in ".format_workday_minutes($reviewremain);
+        printf($strReviewIn,format_workday_minutes($reviewremain));
     }
     elseif ($reviewremain <= 0)
     {
         if ($slaremain <> 0) echo "<br />"; // only need a line sometimes
-        echo "Review Due Now!";
+        echo $strReviewDueNow;
     }
 }
 echo "</td>";
@@ -150,7 +150,5 @@ echo "</table>";
 plugin_do('incident_details');
 
 echo "</div>\n\n";
-
-
 
 ?>
