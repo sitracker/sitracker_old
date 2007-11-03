@@ -330,6 +330,8 @@ $strNumOfCalls = '# of calls';
 
 $strOldPassword = 'Old Password';
 $strOnHoliday = 'On Holiday';
+$strOffline = 'Offline';
+$strOnline = 'Online';
 $strOnTrainingCourse = 'On Training Course';
 $strOther = 'Other';
 $strOtherIncidents = 'Other Incidents';
