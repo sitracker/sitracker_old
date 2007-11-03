@@ -8,6 +8,10 @@ Changes in v3.31 - Unreleased
 * Added translate page for users to translate strings
 * Added a 'jump to incident' link in the support menu
 * Added external engineer report which shows incidents that have been escalated
+* New notice system, allows global notices as well as for informing users
+  of errors or information such as upgrades
+* The users page now contains an icon dispaying a user's online status
+* Changed the login page to allow for session-based language choice
 
 
 Changes in v3.30 - Released 15 October 2007
