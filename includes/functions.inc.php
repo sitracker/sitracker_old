@@ -5070,7 +5070,7 @@ function show_tag_cloud($orderby="name", $showcount=FALSE)
         {
             $size = log($obj->occurrences * 100) * 40;
             if ($size==0) $size=100;
-            $html .= "($size)<a href='view_tags.php?tagid=$obj->tagid' style='font-size: {$size}%;' title='{$obj->occurrences}'>";
+            $html .= "<a href='view_tags.php?tagid=$obj->tagid' style='font-size: {$size}%;' title='{$obj->occurrences}'>";
             if (array_key_exists($obj->name, $CONFIG['tag_icons']))
             {
                 $html .= "{$obj->name}&nbsp;<img src='images/icons/sit/";
