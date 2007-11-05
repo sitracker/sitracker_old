@@ -5047,27 +5047,30 @@ function show_tag_cloud($orderby="name", $showcount=FALSE)
     if (mysql_error()) trigger_error(mysql_error(),E_USER_ERROR);
 
     $countsql = "SELECT COUNT(*) AS counted FROM set_tags GROUP BY tagid ORDER BY counted DESC LIMIT 1";
-
     $countresult = mysql_query($countsql);
     if (mysql_error()) trigger_error(mysql_error(),E_USER_ERROR);
     list($max) = mysql_fetch_row($countresult);
 
+    $countsql = "SELECT COUNT(*) AS counted FROM set_tags GROUP BY tagid ORDER BY counted ASC LIMIT 1";
+    $countresult = mysql_query($countsql);
+    if (mysql_error()) trigger_error(mysql_error(),E_USER_ERROR);
+    list($min) = mysql_fetch_row($countresult);
+    unset($countsql, $countresult);
+
     if(substr($_SERVER['SCRIPT_NAME'],-8) != "main.php")
     {
         //not in the dashbaord
-        $html .= "<p align='center'>Sort: <a href='view_tags.php?orderby=name'>alphabetically</a> | ";
+        $html .= "<p align='center'>{$GLOBALS['strSort']}: <a href='view_tags.php?orderby=name'>alphabetically</a> | ";
         $html .= "<a href='view_tags.php?orderby=occurrences'>popularity</a></p>";
     }
     if(mysql_num_rows($result) > 0)
     {
         $html .= "<table align='center'><tr><td>";
-        $min=1;
-
         while($obj = mysql_fetch_object($result))
         {
-            $size = (($obj->occurrences) * 300 / $max) +100;
+            $size = log($obj->occurrences * 100) * 40;
             if ($size==0) $size=100;
-            $html .= "<a href='view_tags.php?tagid=$obj->tagid' style='font-size: {$size}%;' title='{$obj->occurrences}'>";
+            $html .= "($size)<a href='view_tags.php?tagid=$obj->tagid' style='font-size: {$size}%;' title='{$obj->occurrences}'>";
             if (array_key_exists($obj->name, $CONFIG['tag_icons']))
             {
                 $html .= "{$obj->name}&nbsp;<img src='images/icons/sit/";
@@ -5082,7 +5085,7 @@ function show_tag_cloud($orderby="name", $showcount=FALSE)
         }
         $html .= "</td></tr></table>";
     }
-    else $html .= "<p align='center'>No tags to display</p>";
+    else $html .= "<p align='center'>{$GLOBALS['strNothingToDisplay']}</p>";
     return $html;
 }
 
