@@ -320,6 +320,7 @@ $strNoSubstitutes = 'No substitute engineers set';
 $strNotAccepting = 'Not Accepting';
 $strNotCompleted = 'Not Completed';
 $strNoNameAssociated = 'No Name Associated';
+$strNothingToDisplay = 'Nothing to Display';
 $strNotice = 'Notice';
 $strNotices = 'Notices';
 $strNotInOffice = 'Not In Office';
