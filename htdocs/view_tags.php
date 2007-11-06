@@ -48,13 +48,16 @@ else
     $result = mysql_query($sql);
     if (mysql_error()) trigger_error(mysql_error(),E_USER_WARNING);
 
+    $col = 0;
+    $count = 0;
     $num_tags = mysql_num_rows($result);
     if($num_tags > 0)
     {
         echo "<table align='center'>";
         while($obj = mysql_fetch_object($result))
         {
-            echo "<tr style='text-align: left;'>";
+            if ($col == 0) echo "<tr style='text-align: left;'>";
+
             switch($obj->type)
             {
                 case TAG_CONTACT: //contact
@@ -132,7 +135,13 @@ else
                 default:
                     echo "<th>{$strOther}</th><td>{$obj->id}/{$obj->type}</td>";
             }
-            echo "</tr>\n";
+            $col++;
+            $count++;
+            if ($col >= 3 OR $count == $num_tags)
+            {
+                 echo "</tr>\n";
+                $col=0;
+            }
         }
         echo "</table>";
         echo "<p align='center'>".sprintf($strTagsMulti, $num_tags)."</p>";
