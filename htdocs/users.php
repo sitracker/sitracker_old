@@ -169,15 +169,14 @@ while ($users = mysql_fetch_array($result))
         else echo $users["mobile"];
     ?>
     </td>
-    <td align='center'>
+    <td align='left'>
     <?php
-    echo userstatus_name($users["status"]);
-    
-    //see if they have been active in the last 30mins
-    if(($now - mysql2date($users["lastseen"]) < (60 * 30))) 
-        echo " <img src='{$CONFIG['application_webpath']}images/icons/{$iconset}/16x16/online.png' width='16' height='16' alt='{$strOnline}' style='border:none;' /></a>";
+    //see if the users has been active in the last 30mins
+    if(($now - mysql2date($users["lastseen"]) < (60 * 30)))
+        echo "<img src='{$CONFIG['application_webpath']}images/icons/{$iconset}/16x16/online.png' width='16' height='16' alt=\"{$strOnline}\" /> ";
     else
-        echo " <img src='{$CONFIG['application_webpath']}images/icons/{$iconset}/16x16/offline.png' width='16' height='16' alt='{$strOffline}' style='border:none;' /></a>";
+        echo "<img src='{$CONFIG['application_webpath']}images/icons/{$iconset}/16x16/offline.png' width='16' height='16' alt=\"{$strOffline}\" /> ";
+    echo userstatus_name($users["status"]);
     ?></td>
     <td align='center'>
     <?php
