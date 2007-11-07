@@ -9,6 +9,7 @@
 //
 
 // Author: Ivan Lucas <ivanlucas[at]users.sourceforge.net>
+// FIXME i18n
 
 $permission=13; // Reassign Incident
 require('db_connect.inc.php');
@@ -27,7 +28,7 @@ $reason = cleanvar($_REQUEST['reason']);
 if (empty($bodytext))
 {
     // No submit detected show reassign form
-    $title = 'Reassign';
+    $title = $strReassign;
     include('incident_html_top.inc.php');
     ?>
     <form name='assignform' action="<?php echo $_SERVER['PHP_SELF']; ?>?id=<?php echo $id ?>" method="post">
@@ -40,7 +41,7 @@ if (empty($bodytext))
 
     if ($incident->owner!=0)
     {
-        echo "<tr><th>Current Owner:</th>";
+        echo "<tr><th>{$strOwner}:</th>";
         echo "<td>";
         if ($incident->towner==$sit[2])
         {
@@ -93,7 +94,7 @@ if (empty($bodytext))
         //
         // Radio Buttons, how should the incident be reassigned
         //
-        if ($incident->owner == 0) echo "<tr><th>Reassign:</th>";
+        if ($incident->owner == 0) echo "<tr><th>{$strReassign}:</th>";
         else echo "<tr><th>Reassign:</th>";
         echo "<td class='shade2'>";
         if ($incident->towner == $sit[2])
@@ -110,7 +111,7 @@ if (empty($bodytext))
             if ($incident->towner == 0)
             {
                 echo "<input type='radio' name='assign' value='tempassign' />Assign temporary ownership to ";
-                user_drop_down("tempnewowner", 0, TRUE, array($incident->owner,$incident->towner), "onclick=\"document.assignform.assign[0].checked=true;\"");
+                user_drop_down("tempnewowner", 0, TRUE, array($incident->owner,$incident->towner), "onclck=\"document.assignform.assign[0].checked=true;\"");
                 echo "<br />\n";
             }
             else
@@ -149,6 +150,7 @@ if (empty($bodytext))
             user_drop_down("permnewowner", 0, TRUE, array($incident->owner), "onclick=\"document.assignform.assign[1].checked=true;\"");
             $incident->status='1';
         }
+        echo "<br /><input type='radio' name='assign' value='auto' />Automatically select a person to reassign to";
         echo "</td></tr>\n";
 
         /*
@@ -160,7 +162,7 @@ if (empty($bodytext))
     }
     elseif (!empty($originalid))
     {
-        echo "<tr><th>Reassign:</th>";
+        echo "<tr><th>{$strReassign}:</th>";
         echo "<td>Reassign to original engineer (".user_realname($originalid,TRUE).")";
         echo "<input type='hidden' name='permnewowner' value='{$originalid}' />";
         echo "<input type='hidden' name='permassign' value='{$originalid}' />";
@@ -168,8 +170,8 @@ if (empty($bodytext))
     }
     elseif (!empty($backupid))
     {
-        echo "<tr><th>Reassign</strong>:</th>";
-        echo "<td>To Backup Engineer (".user_realname($backupid,TRUE).")";
+        echo "<tr><th>{$strReassign}:</strong>:</th>";
+        echo "<td>To Substitute Engineer (".user_realname($backupid,TRUE).")";
         echo "<input type='hidden' name='tempnewowner' value='{$backupid}' />";
         echo "<input type='hidden' name='tempassign' value='{$originalid}' />";
         echo "</td></tr>\n";
@@ -215,8 +217,10 @@ else
         OR ($_REQUEST['assign']=='permassign' AND $permnewowner == $sit[2])
         OR ($_REQUEST['assign']=='tempassign' AND $tempnewowner == $sit[2])
         OR ($_REQUEST['assign']=='deltempassign')
+        OR ($_REQUEST['assign']=='auto')
         OR (user_permission($sit[2],40)==TRUE))  // Force reassign
     {
+        if ($_REQUEST['assign']=='auto') $permnewowner = auto_reassign_userid($incidentid);
         $oldstatus=incident_status($id);
         if ($newstatus != $oldstatus)
         $bodytext = "Status: ".incidentstatus_name($oldstatus)." -&gt; <b>" . incidentstatus_name($newstatus) . "</b>\n\n" . $bodytext;

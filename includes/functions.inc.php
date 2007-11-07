@@ -4140,6 +4140,25 @@ function incident_backup_switchover($userid, $accepting)
 }
 
 
+// FIXME not written - INL ;)
+// Suggest the userid of a suitable person to handle the given incident
+// Users are chosen randomly in a weighted lottery depending on their
+// avilability and queue status
+function auto_reassign_userid($incidentid)
+{
+    // Find the skill needed for this incident
+    // FInd the users with this skill (or all users)
+    // Loop round the users
+    //  - How many items are critical
+    //  - How many items are high
+    //  - etc
+    // Add 1 or more lottery 'tickets' ;) for users depending on their calculated workload
+    // Busy users should get less tickets, quiet users more
+    // Choose a user to reassign to at random
+
+}
+
+
 function format_external_id($externalid, $escalationpath='')
 {
     global $CONFIG;
