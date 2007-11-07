@@ -3952,27 +3952,29 @@ function software_backup_dropdown($name, $userid, $softwareid, $backupid)
 function software_backup_userid($userid, $softwareid)
 {
     $backupid=0; // default
-    // Find out who is the backup for this
-    $sql = "SELECT backupid FROM usersoftware WHERE userid='$userid' AND userid!='$userid' AND softwareid='$softwareid'";
+    // Find out who is the substitute for this user/skill
+    $sql = "SELECT backupid FROM usersoftware WHERE userid='$userid' AND softwareid='$softwareid'";
     $result = mysql_query($sql);
     if (mysql_error()) trigger_error(mysql_error(),E_USER_WARNING);
     list($backupid)=mysql_fetch_row($result);
     $backup1=$backupid;
 
-    // Check to see if that user is accepting
+    // If that substitute is not accepting then try and find another
     if (empty($backupid) OR user_accepting($backupid)!='Yes')
     {
-        $sql = "SELECT backupid FROM usersoftware WHERE userid='$backupid' AND userid!='$userid' AND softwareid='$softwareid' AND backupid!='$backup1'";
+        $sql = "SELECT backupid FROM usersoftware WHERE userid='$backupid' AND userid!='$userid' ";
+        $sql .= "AND softwareid='$softwareid' AND backupid!='$backup1'";
         $result = mysql_query($sql);
         if (mysql_error()) trigger_error(mysql_error(),E_USER_WARNING);
         list($backupid)=mysql_fetch_row($result);
         $backup2=$backupid;
     }
 
-    // One more iteration, is the backup of the backup accepting?
+    // One more iteration, is the backup of the backup accepting?  If not try another
     if (empty($backupid) OR user_accepting($backupid)!='Yes')
     {
-        $sql = "SELECT backupid FROM usersoftware WHERE userid='$backupid' AND userid!='$userid' AND softwareid='$softwareid' AND backupid!='$backup1' AND backupid!='$backup2'";
+        $sql = "SELECT backupid FROM usersoftware WHERE userid='$backupid' AND userid!='$userid' ";
+        $sql .= "AND softwareid='$softwareid' AND backupid!='$backup1' AND backupid!='$backup2'";
         $result = mysql_query($sql);
         if (mysql_error()) trigger_error(mysql_error(),E_USER_WARNING);
         list($backupid)=mysql_fetch_row($result);
