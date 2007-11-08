@@ -11,10 +11,11 @@
 // Author: Ivan Lucas <ivanlucas[at]users.sourceforge.net>
 
 $permission=23; // Edit user
-$title = 'User Groups';
 
 require('db_connect.inc.php');
 require('functions.inc.php');
+
+$title = $strUserGroups;
 
 // This page requires authentication
 require('auth.inc.php');
@@ -82,7 +83,7 @@ switch ($action)
         {
             global $grouparr, $numgroups;
             $html = "<select name='$name'>";
-            $html .= "<option value='0'>None</option>\n";
+            $html .= "<option value='0'>{$GLOBALS['strNone']}</option>\n";
             if ($numgroups >= 1)
             {
                 foreach($grouparr AS $groupid => $groupname)
@@ -97,7 +98,7 @@ switch ($action)
         }
 
         echo "<form action='{$_SERVER['PHP_SELF']}' method='post'>";
-        echo "<table summary='User Groups' align='center'>";
+        echo "<table summary=\"{$strUserGroups}\" align='center'>";
         echo "<tr><th>{$strGroup}</th><th>{$strOperation}</th></tr>\n";
         if ($numgroups >= 1)
         {
@@ -119,7 +120,7 @@ switch ($action)
         if (mysql_error()) trigger_error(mysql_error(),E_USER_ERROR);
 
         echo "<form action='{$_SERVER['PHP_SELF']}' method='post'>";
-        echo "<table summary='User Group Membership' align='center'>";
+        echo "<table summary=\"$strGroupMembership\" align='center'>";
         echo "<tr><th>{$strUser}</th><th>{$strGroup}</th></tr>";
         while ($user = mysql_fetch_object($result))
         {
