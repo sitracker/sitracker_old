@@ -32,19 +32,19 @@ if (empty($_REQUEST['mode']))
     include('htmlheader.inc.php');
     echo "<h2>$title</h2>";
     echo "<form action='{$_SERVER['PHP_SELF']}' method='post' id='incidentsbyengineer'>";
-    echo "<table align='center'>";
-    echo "<tr><th>Start Date:</th>";
+    echo "<table align='center' class='vertical'>";
+    echo "<tr><th>{$strStartDate}:</th>";
     echo "<td><input type='text' name='startdate' id='startdate' size='10' /> ";
     echo date_picker('incidentsbyengineer.startdate');
     echo "</td></tr>\n";
-    echo "<tr><th>End Date:</th>";
+    echo "<tr><th>{$strEndDate}:</th>";
     echo "<td><input type='text' name='enddate' id='enddate' size='10' /> ";
     echo date_picker('incidentsbyengineer.enddate');
     echo "</td></tr>\n";
     echo "<tr><th>Dates are:</th><td>";
-    echo "<input type='radio' name='type' value='opened' />Opened ";
-    echo "<input type='radio' name='type' value='closed' />Closed ";
-    echo "<input type='radio' name='type' value='both' checked='yes' />Both";
+    echo "<label><input type='radio' name='type' value='opened' />{$strOpened}</label> ";
+    echo "<label><input type='radio' name='type' value='closed' />{$strClosed}</label> ";
+    echo "<label><input type='radio' name='type' value='both' checked='checked' />{$strBoth}</label>";
     echo "</td></tr>";
     echo "<tr><th colspan='2'>Include</th></tr>";
     echo "<tr><td align='center' colspan='2'>";
@@ -54,16 +54,16 @@ if (empty($_REQUEST['mode']))
     echo "<select name='inc[]' multiple='multiple' size='20'>";
     while ($row = mysql_fetch_object($result))
     {
-        echo "<option value='{$row->id}'>$row->realname</option>\n";
+        echo "<option value='{$row->id}'>{$row->realname}</option>\n";
     }
     echo "</select>";
     echo "</td>";
     echo "</tr>\n";
-    echo "<tr><th align='right' width='200'><strong>Output</strong>:</td>";
+    echo "<tr><th align='right' width='200'>{$strOutput}:</th>";
     echo "<td width='400'>";
     echo "<select name='output'>";
-    echo "<option value='screen'>Screen</option>";
-    echo "<option value='csv'>Disk - Comma Seperated (CSV) file</option>";
+    echo "<option value='screen'>{$strScreen}</option>";
+    echo "<option value='csv'>{$strCSVfile}</option>";
     echo "</select>";
     echo "</td></tr>";
     echo "<tr><th align='right' width='200'>Statistics only</th><td><input type='checkbox' name='statistics' /></td></tr>";
@@ -71,15 +71,18 @@ if (empty($_REQUEST['mode']))
     echo "<p align='center'>";
     echo "<input type='hidden' name='table1' value='{$_POST['table1']}' />";
     echo "<input type='hidden' name='mode' value='report' />";
-    echo "<input type='submit' value='Run Report' />";
+    echo "<input type='submit' value=\"{$strRunReport}\" />";
     echo "</p>";
     echo "</form>";
     include('htmlfooter.inc.php');
 }
 elseif ($_REQUEST['statistics'] == 'on')
 {
-    $startdate = strtotime($_POST['startdate']);
-    $enddate = strtotime($_POST['enddate']);
+    if (!empty($_POST['startdate'])) $startdate = strtotime($_POST['startdate']);
+    else $startdate = mktime(0,0,0,1,1,date('Y'));
+    if (!empty($_POST['enddate'])) $enddate = strtotime($_POST['enddate']);
+    else $enddate = mktime(23,59,59,31,12,date('Y'));
+
     $type = $_POST['type'];
     if (is_array($_POST['exc']) && is_array($_POST['exc'])) $_POST['inc']=array_values(array_diff($_POST['inc'],$_POST['exc']));  // don't include anything excluded
     $includecount=count($_POST['inc']);
@@ -102,7 +105,7 @@ elseif ($_REQUEST['statistics'] == 'on')
 
     $sql = "SELECT COUNT(DISTINCT incidents.id) AS numberOpened, users.id, users.realname ";
     $sql .= "FROM users, incidents ";
-    $sql .= "WHERE users.id=incidents.owner AND incidents.opened >= {$startdate} AND incidents.opened <= {$enddate} "; 
+    $sql .= "WHERE users.id=incidents.owner AND incidents.opened >= {$startdate} AND incidents.opened <= {$enddate} ";
     //$sql .= "WHERE users.id=incidents.owner AND incidents.opened > ($now-60*60*24*365.25) ";
     /*$sql .= "WHERE users.id=incidents.owner "; // AND incidents.opened > ($now-60*60*24*365.25) ";
     if($type == "opened")
@@ -226,17 +229,17 @@ elseif ($_REQUEST['statistics'] == 'on')
     {
         $html .= "<table align='center'>";
         $html .= "<tr>";
-        $html .= "<th>Engineer name</th>";
+        $html .= "<th>{$strUser}</th>";
         $html .= "<th>Assigned</th>";
-        $html .= "<th>Escalated</th>";
-        $html .= "<th>Closed</th>";
+        $html .= "<th>{$strEscalated}</th>";
+        $html .= "<th>{$strClosed}</th>";
         $html .= "<th>Avg Assigned (Month)</th>";
         $html .= "<th>Avg Escalated (Month)</th>";
         $html .= "<th>Avg Closed (Month)</th>";
         $html .= "<th>Percentage escalated</th>";
         $html .= "<tr>";
 
-        $csv .= "Engineer name,Assigned,Escalated,Closed,Avg Assigned (Month),Avg Escalated (Month),";
+        $csv .= "{$strUser},Assigned,{$strEscalated},{$strClosed},Avg Assigned (Month),Avg Escalated (Month),";
         $csv .= "Avg Closed (Month),Percentage escalated\n";
 
         $class="class='shade1'";
@@ -318,8 +321,10 @@ elseif ($_REQUEST['statistics'] == 'on')
 }
 elseif ($_REQUEST['mode']=='report')
 {
-    $startdate = strtotime($_POST['startdate']);
-    $enddate = strtotime($_POST['enddate']);
+    if (!empty($_POST['startdate'])) $startdate = strtotime($_POST['startdate']);
+    else $startdate = mktime(0,0,0,1,1,date('Y'));
+    if (!empty($_POST['enddate'])) $enddate = strtotime($_POST['enddate']);
+    else $enddate = mktime(23,59,59,31,12,date('Y'));
     $type = $_POST['type'];
     if (is_array($_POST['exc']) && is_array($_POST['exc'])) $_POST['inc']=array_values(array_diff($_POST['inc'],$_POST['exc']));  // don't include anything excluded
     $includecount=count($_POST['inc']);
@@ -416,7 +421,7 @@ elseif ($_REQUEST['mode']=='report')
 
     $html .= "<p align='center'>This report is a list of ($numrows) incidents for your selections of which ($numrows_esc) where escalated</p>";
     $html .= "<table width='99%' align='center'>";
-    $html .= "<tr><th>Opened</th><th>Closed</th><th>Incident</th><th>Title</th><th>Engineer</th><th>Escalated</th></tr>";
+    $html .= "<tr><th>{$strOpened}</th><th>{$strClosed}</th><th>{$strIncident}</th><th>{$strTitle}</th><th>{$strEngineer}</th><th>{$strEscalated}</th></tr>";
     $csvfieldheaders .= "opened,closed,id,title,engineer,escalated\r\n";
     $rowcount=0;
     while ($row = mysql_fetch_object($result))
