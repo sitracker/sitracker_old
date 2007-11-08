@@ -4144,18 +4144,103 @@ function incident_backup_switchover($userid, $accepting)
 // Suggest the userid of a suitable person to handle the given incident
 // Users are chosen randomly in a weighted lottery depending on their
 // avilability and queue status
-function auto_reassign_userid($incidentid)
+function suggest_reassign_userid($incidentid)
 {
-    // Find the skill needed for this incident
-    // FInd the users with this skill (or all users)
-    // Loop round the users
-    //  - How many items are critical
-    //  - How many items are high
-    //  - etc
-    // Add 1 or more lottery 'tickets' ;) for users depending on their calculated workload
-    // Busy users should get less tickets, quiet users more
-    // Choose a user to reassign to at random
+    $sql = "SELECT product, softwareid, priority, contact FROM incidents WHERE id={$incidentid} LIMIT 1";
+    $result = mysql_query($sql);
+    if (mysql_error()) trigger_error(mysql_error(),E_USER_ERROR);
 
+    if (!$result) $userid = FALSE;
+    else
+    {
+        $incident = mysql_fetch_object($result);
+        // If this is a critical incident the user we're assigning to must be online
+        if ($priority >= 4) $req_online=TRUE;
+        else $req_online=FALSE;
+
+        // Find the users with this skill (or all users)
+        if (!empty($incident->softwareid))
+        {
+            $sql = "SELECT usersoftware.userid, users.status, users.lastseen FROM usersoftware, users ";
+            $sql .= "WHERE users.id=usersoftware.userid AND users.accepting='Yes' ";
+            $sql .= "AND softwareid={$incident->softwareid}";
+        }
+        else $sql = "SELECT id AS userid, status, lastseen FROM users WHERE status > 0 AND users.accepting='Yes'";
+        $result = mysql_query($sql);
+        if (mysql_error()) trigger_error(mysql_error(),E_USER_ERROR);
+        while ($user = mysql_fetch_object($result))
+        {
+            // Get a ticket for being skilled
+            // Or in the case we don't know the skill, just get a ticket for accepting
+            $ticket[] = $user->userid;
+
+            // Get a ticket for being seen in the past 30 minutes
+            if (mysqlts2date($user->lastseen) > $now - 1800) $ticket[] = $user->userid;
+
+            // Get two tickets for being marked in-office or working at home
+            if ($user->status == 1 OR $user->status == 6)
+            {
+                $ticket[] = $user->userid;
+                $ticket[] = $user->userid;
+            }
+
+            // Get one ticket for being marked at lunch or in meeting
+            // BUT ONLY if the incident isn't critical
+            if ($incident->priority < 4 AND ($user->status == 3 OR $user->status == 4))
+            {
+                $ticket[] = $user->userid;
+            }
+
+            // Have a look at the users incident queue (owned)
+            $qsql = "SELECT id, priority, lastupdated, status, softwareid FROM incidents WHERE owner={$user->userid}";
+            $qresult = mysql_query($qsql);
+            if (mysql_error()) trigger_error(mysql_error(),E_USER_ERROR);
+            $queue_size = mysql_num_rows($qresult);
+            if ($queue_size > 0)
+            {
+                $queued_critical = 0;
+                $queued_high = 0;
+                $queue_lastupdated = 0;
+                $queue_samecontact = FALSE;
+                while ($queue = mysql_fetch_object($qresult))
+                {
+                    if ($queue->priority == 3) $queued_high++;
+                    if ($queue->priority >= 4) $queued_critical++;
+                    if ($queue->lastupdated > $queue_lastupdated) $queue_lastupdated = $queue->lastupdated;
+                    if ($queue->contact == $incident->contact) $queue_samecontact = TRUE;
+                }
+                // Get one ticket for your queue being updated in the past 4 hours
+                if ($queue_lastupdated > ($now - 14400)) $user->userid;
+
+                // Get two tickets for dealing with the same contact in your queue
+                if ($queue_samecontact == TRUE)
+                {
+                    $ticket[] = $user->userid;
+                    $ticket[] = $user->userid;
+                }
+
+                // Get one ticket for having five or less incidents
+                if ($queued_size <=5) $ticket[] = $user->userid;
+
+                // Get up to three tickets, one less ticket for each critical incident in queue
+                for($c=1;$c < (3 - $queued_critical);$c++) $ticket[] = $user->userid;
+
+                // Get up to three tickets, one less ticket for each high priority incident in queue
+                for($c=1;$c < (3 - $queued_high);$c++) $ticket[] = $user->userid;
+            }
+            else
+            {
+                // Get one ticket for having an empty queue
+                $ticket[] = $user->userid;
+            }
+        }
+
+        // Do the lottery - "Release the balls"
+        $numtickets = count($ticket);
+        $rand = mt_rand(0, $numtickets);
+        $userid = $ticket[$rand];
+    }
+    return $userid;
 }
 
 

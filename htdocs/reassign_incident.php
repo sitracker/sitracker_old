@@ -220,7 +220,7 @@ else
         OR ($_REQUEST['assign']=='auto')
         OR (user_permission($sit[2],40)==TRUE))  // Force reassign
     {
-        if ($_REQUEST['assign']=='auto') $permnewowner = auto_reassign_userid($incidentid);
+        if ($_REQUEST['assign']=='auto') $permnewowner = suggest_reassign_userid($id);
         $oldstatus=incident_status($id);
         if ($newstatus != $oldstatus)
         $bodytext = "Status: ".incidentstatus_name($oldstatus)." -&gt; <b>" . incidentstatus_name($newstatus) . "</b>\n\n" . $bodytext;
@@ -242,7 +242,11 @@ else
             if (strtolower(user_accepting($tempnewowner)) != "yes")
                 $bodytext = "(Incident temp assignment was forced because the user was not accepting)<hr>\n" . $bodytext;
         }
-        else if ($_REQUEST['assign']=='deltempassign')
+        elseif ($_REQUEST['assign']=='auto')
+        {
+            $bodytext = "(Automatically suggesting a user to reassign to {$permnewowner})<hr>\n" . $bodytext;
+        }
+        elseif ($_REQUEST['assign']=='deltempassign')
         {
             $assigntype='reassigning';
         }
