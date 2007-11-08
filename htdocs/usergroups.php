@@ -38,6 +38,11 @@ switch ($action)
 
     case 'addgroup':
         $group = cleanvar($_REQUEST['group']);
+        if (empty($group))
+        {
+            confirmation_page("2", "usergroups.php", "<h2>Error - group name must not be empty</h2><p align='center'>{$strPleaseWaitRedirect}...</p>");
+            exit;
+        }
         $sql = "INSERT INTO groups (name) VALUES ('{$group}')";
         mysql_query($sql);
         if (mysql_error()) trigger_error(mysql_error(),E_USER_ERROR);
