@@ -17,6 +17,8 @@ require('functions.inc.php');
 // This page requires authentication
 require('auth.inc.php');
 
+$forcepermission = user_permission($sit[2],40);
+
 // External variables
 $bodytext = cleanvar($_REQUEST['bodytext']);
 $id = cleanvar($_REQUEST['id']);
@@ -31,72 +33,103 @@ if (empty($bodytext))
     $title = $strReassign;
     include('incident_html_top.inc.php');
     ?>
-    <form name='assignform' action="<?php echo $_SERVER['PHP_SELF']; ?>?id=<?php echo $id ?>" method="post">
-    <table class='vertical'>
+
     <?php
     $sql = "SELECT * FROM incidents WHERE id='$id' LIMIT 1";
     $result = mysql_query($sql);
     if (mysql_error()) trigger_error("MySQL Query Error ".mysql_error(), E_USER_ERROR);
     $incident = mysql_fetch_object($result);
 
-    if ($incident->owner!=0)
-    {
-        echo "<tr><th>{$strOwner}:</th>";
-        echo "<td>";
+    echo "<form name='assignform' action='{$_SERVER['PHP_SELF']}?id={$id}' method='post'>";
+    $suggested = suggest_reassign_userid($id);
+    $sql = "SELECT * FROM users WHERE status!=0 AND NOT id=$sit[2] ";
+    if (!$forcepermission) $sql .= "AND accepting='Yes' ";
+    $sql .= "ORDER BY realname";
+    $result = mysql_query($sql);
+    if (mysql_error()) trigger_error("MySQL Query Error ".mysql_error(), E_USER_ERROR);
+
         if ($incident->towner==$sit[2])
         {
-            echo "You are the temporary owner of this incident.";
-            echo "<br />\n".user_realname($incident->owner,TRUE)." is the original owner.";
+            echo "<p>You are the temporary owner of this incident.";
+            echo "<br />\n".user_realname($incident->owner,TRUE)." is the original owner.</p>";
         }
         elseif ($incident->owner==$sit[2])
         {
-            echo "You are the owner of this incident.";
+            echo "<p>You are the owner of this incident.";
             if ($incident->towner > 0) echo "<br />\n".user_realname($incident->towner,TRUE)." also has temporary ownership.";
+            echo "</p>";
         }
         else
         {
-            echo user_realname($incident->owner,TRUE).".";
+            echo "<p>".user_realname($incident->owner,TRUE).".";
             if ($incident->towner > 0) echo "<br />\n".user_realname($incident->towner,TRUE)." also has temporary ownership.";
+            echo "</p>";
         }
-        echo "</td></tr>";
+
+
+    echo "<table align='center'>";
+    echo "<tr>
+                <th>{$strName}</th>
+                <th>{$strStatus}</th>
+                <th colspan='5'>{$strIncidentsinQueue}</th>
+                <th>{$strAccepting}</th>
+            </tr>";
+    echo "<tr>
+        <th colspan='2'></th>
+        <th align='center'>{$strActionNeeded} / {$strOther}</th>";
+    echo "<th align='center'>".priority_icon(4)."</th>";
+    echo "<th align='center'>".priority_icon(3)."</th>";
+    echo "<th align='center'>".priority_icon(2)."</th>";
+    echo "<th align='center'>".priority_icon(1)."</th>";
+    echo "<th></th></tr>\n";
+    $shade='shade1';
+    while ($users = mysql_fetch_object($result))
+    {
+        if ($users->id == $suggested) $shade='idle';
+        echo "<tr class='$shade'>";
+        echo "<td><label><input type='radio' name='userid' value='{$users->id}' /> ";
+        // Have a look if this user has skills with this software
+        $ssql = "SELECT softwareid FROM usersoftware WHERE userid={$users->id} AND softwareid={$incident->softwareid} ";
+        $sresult = mysql_query($ssql);
+        if (mysql_error()) trigger_error("MySQL Query Error ".mysql_error(), E_USER_ERROR);
+        if (mysql_num_rows($sresult) >=1 ) echo "<strong>".stripslashes($users->realname)."</strong>";
+        else echo stripslashes($users->realname);
+        echo "</label></td>";
+        echo "<td>".userstatus_name($users->status)."</td>";
+        $incpriority = user_incidents($users->id);
+        $countincidents = ($incpriority['1']+$incpriority['2']+$incpriority['3']+$incpriority['4']);
+
+        if ($countincidents >= 1) $countactive=user_activeincidents($users->id);
+        else $countactive=0;
+        $countdiff=$countincidents-$countactive;
+        echo "<td align='center'>$countactive / {$countdiff}</td>";
+        echo "<td align='center'>".$incpriority['4']."</td>";
+        echo "<td align='center'>".$incpriority['3']."</td>";
+        echo "<td align='center'>".$incpriority['2']."</td>";
+        echo "<td align='center'>".$incpriority['1']."</td>";
+        echo "<td align='center'>";
+        echo $users->accepting=='Yes' ? $strYes : "<span class='error'>{$strNo}</span>";
+        echo "</td>";
+        echo "</tr>\n";
+        if ($shade=='shade1') $shade='shade2';
+        else $shade='shade1';
     }
+    echo "</table>";
+    echo "<br />";
+
+    echo "<table class='vertical'>";
+
+
     if (empty($_REQUEST['backupid']) AND empty($_REQUEST['originalid']))
     {
-        if ($incident->softwareid > 0)
-        {
-            echo "<tr><th>Users with relevent skills:</th>";
-            $usql = "SELECT *,users.id AS userid FROM usersoftware, users WHERE usersoftware.userid=users.id AND usersoftware.softwareid={$incident->softwareid} ";
-            $usql .= "AND users.status != 0 "; //the account isn't disabled
-            $usql .= "ORDER BY realname";
-            $uresult = mysql_query($usql);
-            if (mysql_error()) trigger_error("MySQL Query Error ".mysql_error(), E_USER_ERROR);
-            $count_backup=mysql_num_rows($uresult);
-            if ($count_backup > 0)
-            {
-                $count=1;
-                echo "<td>";
-                while ($backup = mysql_fetch_object($uresult))
-                {
-                    $count++;
-                    if ($backup->userid!=$incident->owner)
-                    {
-                        echo "{$backup->realname}";
-                        if ($count <=  $count_backup) echo ", ";
-                    }
-                }
-                echo "</td>";
-            }
-            else echo "<td>{$strNone}</td>";
-
-            echo "</tr>\n";
-        }
-
         //
         // Radio Buttons, how should the incident be reassigned
         //
         if ($incident->owner == 0) echo "<tr><th>{$strReassign}:</th>";
         else echo "<tr><th>Reassign:</th>";
         echo "<td class='shade2'>";
+        $suggested = suggest_reassign_userid($id);
+        if (!empty($suggested)) echo user_realname($suggested)."<br />";
         if ($incident->towner == $sit[2])
         {
             // you are the temporary owner
@@ -150,7 +183,6 @@ if (empty($bodytext))
             user_drop_down("permnewowner", 0, TRUE, array($incident->owner), "onclick=\"document.assignform.assign[1].checked=true;\"");
             $incident->status='1';
         }
-        echo "<br /><input type='radio' name='assign' value='auto' />Automatically select a person to reassign to";
         echo "</td></tr>\n";
 
         /*
@@ -177,20 +209,15 @@ if (empty($bodytext))
         echo "</td></tr>\n";
     }
 
-    ?>
-    <tr>
-    <th>Update Log:<br />
-    Explain in detail why you are reassigning this incident and include instructions to the new owner as to what action should
-    be taken next.  Please be as detailed as possible and include full descriptions of any work you have performed.<br />
-    <br/>
-    Check here <input type="checkbox" name="cust_vis" value="yes" /> to make this reassign visible to the customer.
-    </th>
-    <td>
-    <?php
-    echo "<textarea name='bodytext' wrap='soft' rows='15' cols='65'>";
+    echo "<tr><td colspan='2'><br />Explain in detail why you are reassigning this incident and include instructions to the new owner as to what action should
+    be taken next.  Please be as detailed as possible and include full descriptions of any work you have performed.</td></tr>\n";
+    echo "<tr><th>Update Log:</th>";
+    echo "</th><td>";
+    echo "<textarea name='bodytext' wrap='soft' rows='10' cols='65'>";
     if (!empty($reason)) echo $reason;
     echo "</textarea>";
     echo "</td></tr>\n";
+    echo "<tr><th>Visibility:</th><td><label><input type='checkbox' name='cust_vis' value='yes' /> to make this reassign visible to the customer.</label></td></tr>\n";
 
     echo "<tr><th>New Status:</th>";
     ?>
@@ -217,10 +244,8 @@ else
         OR ($_REQUEST['assign']=='permassign' AND $permnewowner == $sit[2])
         OR ($_REQUEST['assign']=='tempassign' AND $tempnewowner == $sit[2])
         OR ($_REQUEST['assign']=='deltempassign')
-        OR ($_REQUEST['assign']=='auto')
         OR (user_permission($sit[2],40)==TRUE))  // Force reassign
     {
-        if ($_REQUEST['assign']=='auto') $permnewowner = suggest_reassign_userid($id);
         $oldstatus=incident_status($id);
         if ($newstatus != $oldstatus)
         $bodytext = "Status: ".incidentstatus_name($oldstatus)." -&gt; <b>" . incidentstatus_name($newstatus) . "</b>\n\n" . $bodytext;
@@ -241,10 +266,6 @@ else
             $assigntype='tempassigning';
             if (strtolower(user_accepting($tempnewowner)) != "yes")
                 $bodytext = "(Incident temp assignment was forced because the user was not accepting)<hr>\n" . $bodytext;
-        }
-        elseif ($_REQUEST['assign']=='auto')
-        {
-            $bodytext = "(Automatically suggesting a user to reassign to {$permnewowner})<hr>\n" . $bodytext;
         }
         elseif ($_REQUEST['assign']=='deltempassign')
         {
