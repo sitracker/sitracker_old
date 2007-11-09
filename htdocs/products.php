@@ -43,7 +43,8 @@ if (empty($productid) AND $display!='skills')
             if (mysql_num_rows($presult) >= 1)
             {
                 echo "<table summary='List of products' align='center' width='95%'>";
-                echo "<tr><th width='20%'>Product Name</th><th width='60%'>{$strDescription}</th><th width='10%'>Linked Skills</th><th width='10%'>Active Contracts</th></tr>\n";
+                echo "<tr><th width='20%'>{$strProduct}</th><th width='60%'>{$strDescription}</th><th width='10%'>{$strLinkedSkills}</th>";
+                echo "<th width='10%'>{$strActiveContracts}</th></tr>\n";
                 $shade='shade1';
                 while ($product = mysql_fetch_object($presult))
                 {
@@ -90,7 +91,7 @@ if (empty($productid) AND $display!='skills')
         echo "<h2><img src='{$CONFIG['application_webpath']}images/icons/{$iconset}/32x32/skill.png' width='32' height='32' alt='' /> Skills not linked</h2>";
         echo "<p align='center'>These skills are not linked to any product</p>";
         echo "<table summary='' align='center' width='55%'>";
-        echo "<tr><th>{$strSkill}</th><th>{$strLifetime}</th><th>Engineers</th><th>{$strIncidents}</th><th>Actions</th></tr>";
+        echo "<tr><th>{$strSkill}</th><th>{$strLifetime}</th><th>Engineers</th><th>{$strIncidents}</th><th>{$strOperation}</th></tr>";
         while ($software = mysql_fetch_array($result))
         {
             $ssql = "SELECT COUNT(userid) FROM usersoftware, users WHERE usersoftware.userid = users.id AND users.status!=0 AND usersoftware.softwareid='{$software['id']}'";
@@ -134,7 +135,7 @@ elseif (empty($productid) AND ($display=='skills' OR $display=='software'))
     if (mysql_num_rows($result) >= 1)
     {
         echo "<table align='center'>";
-        echo "<tr><th>{$strSkill}</th><th>{$strVendor}</th><th>{$strLifetime}</th><th>Linked to # Products</th><th>Engineers</th><th>{$strIncidents}</th><th>Actions</th></tr>";
+        echo "<tr><th>{$strSkill}</th><th>{$strVendor}</th><th>{$strLifetime}</th><th>Linked to # Products</th><th>Engineers</th><th>{$strIncidents}</th><th>{$strOperation}</th></tr>";
         $shade='shade1';
         while ($software = mysql_fetch_object($result))
         {
@@ -183,7 +184,7 @@ elseif (empty($productid) AND ($display=='skills' OR $display=='software'))
         }
         echo "</table>";
     }
-    else echo "<p class='warning'>No records to display</p>";
+    else echo "<p class='warning'>{$strNothingToDisplay}</p>";
 
 }
 else
@@ -197,7 +198,7 @@ else
         {
             echo "<table summary='List of skills linked to product' align='center'>";
             echo "<tr><thead><th colspan='0'><img src='{$CONFIG['application_webpath']}images/icons/{$iconset}/32x32/product.png' width='32' height='32' alt='' /> Product: {$product->name} ";
-            echo "(<a href='edit_product.php?id={$product->id}'>Edit</a> | <a href='delete_product.php?id={$product->id}'>Delete</a>)";
+            echo "(<a href='edit_product.php?id={$product->id}'>Edit</a> | <a href='delete_product.php?id={$product->id}'>{$strDelete}</a>)";
             $tags = list_tags($product->id, TAG_PRODUCT, TRUE);
             if (!empty($tags)) echo "<br /><br />{$tags}\n";
             echo "</th></thead></tr>\n";
@@ -233,9 +234,9 @@ else
                     echo "</td>";
                     echo "<td>{$countengineers}</td>";
                     echo "<td>{$countincidents}</td>";
-                    echo "<td><a href='delete_product_software.php?productid={$product->id}&amp;softwareid={$software['softwareid']}'>Unlink</a> ";
-                    echo "| <a href='edit_software.php?id={$software['softwareid']}'>Edit</a> ";
-                    echo "| <a href='edit_software.php?id={$software['softwareid']}&amp;action=delete'>Delete</a>";
+                    echo "<td><a href='delete_product_software.php?productid={$product->id}&amp;softwareid={$software['softwareid']}'>{$strUnlink}</a> ";
+                    echo "| <a href='edit_software.php?id={$software['softwareid']}'>{$strEdit}</a> ";
+                    echo "| <a href='edit_software.php?id={$software['softwareid']}&amp;action=delete'>{$strDelete}</a>";
                     echo "</td>";
                     echo "</tr>\n";
                     if ($shade=='shade1') $shade='shade2';
@@ -263,7 +264,7 @@ else
                     if ($contract->term=='yes' OR $contract->expirydate < $now) $shade = "expired";
                     echo "<tr class='{$shade}'>";
                     echo "<td><img src='{$CONFIG['application_webpath']}images/icons/{$iconset}/16x16/contract.png' width='16' height='16' alt='' /> ";
-                    echo "<a href='maintenance_details.php?id={$contract->id}'>Contract {$contract->id}</a></td>";
+                    echo "<a href='maintenance_details.php?id={$contract->id}'>".sprintf($strContractNum, $contract->id)."</a></td>";
                     echo "<td>".site_name($contract->site)."</td>";
                     echo "</tr>\n";
                     if ($shade=='shade1') $shade='shade2';
@@ -277,14 +278,14 @@ else
             if (mysql_error()) trigger_error(mysql_error(),E_USER_ERROR);
             if (mysql_num_rows($result) >= 1)
             {
-                echo "<h3>Related Incidents</h3>";
+                echo "<h3>{$strRelatedIncidents}</h3>";
                 echo "<table align='center'>";
                 echo "<tr><th>{$strIncident}</th><th>{$strContact}</th><th>{$strSite}</th><th>{$strTitle}</th></tr>";
                 $shade = 'shade1';
                 while ($incident = mysql_fetch_object($result))
                 {
                     echo "<tr class='{$shade}'>";
-                    echo "<td><a href=\"javascript:incident_details_window('{$incident->id}','incident{$incident->id}');\">Incident {$incident->id}</a></td>";
+                    echo "<td><a href=\"javascript:incident_details_window('{$incident->id}','incident{$incident->id}');\">".sprintf($strIncidentNum, $incident->id)."</a></td>";
                     echo "<td>".contact_realname($incident->contact)."</td><td>".contact_site($incident->contact)."</td>";
                     echo "<td>".stripslashes($incident->title)."</td>";
                     echo "</tr>\n";
