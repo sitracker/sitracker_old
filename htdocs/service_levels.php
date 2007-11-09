@@ -59,6 +59,6 @@ if (mysql_num_rows($tresult) >= 1)
     }
     echo "</table>";
     }
-    else echo "<p class='error'>No service levels defined.</p>";
+    else echo "<p class='error'>{$strNoRecords}</p>";
     include('htmlfooter.inc.php');
 ?>

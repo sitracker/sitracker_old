@@ -192,7 +192,7 @@ elseif ($action=='findcontact')
             echo $str_alternative;
             echo "</table>\n";
         }
-        else echo "<p class='error'>Nothing to display</p>";
+        else echo "<p class='error'>{$strNothingToDisplay}</p>";
 
         // Select the contact from the list of contacts as well
         $sql = "SELECT *, contacts.id AS contactid FROM contacts, sites WHERE contacts.siteid=sites.id ";
@@ -225,6 +225,7 @@ elseif ($action=='findcontact')
                 $site_incident_pool=db_read_column('freesupport', 'sites', $contactrow['siteid']);
                 if ($site_incident_pool > 0)
                 {
+                    // FIXME i18n
                     echo "<td><a href=\"{$_SERVER['PHP_SELF']}?action=incidentform&amp;type=free&amp;contactid=".$contactrow['contactid']."&amp;updateid=$updateid&amp;win={$win}\" onclick=\"return confirm_free();\">";
                     echo "Add Site Support Incident</a> ({$site_incident_pool} Left)</td>";
                 }

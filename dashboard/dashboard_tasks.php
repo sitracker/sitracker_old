@@ -44,10 +44,10 @@ function dashboard_tasks($row,$dashboardid)
     {
         echo "<table align='center' width='100%'>";
         echo "<tr>";
-        echo colheader('id', "ID");
-        echo colheader('name', 'Task');
-        echo colheader('priority', 'Priority');
-        echo colheader('completion', 'Completion');
+        echo colheader('id', $GLOBALS['strID']);
+        echo colheader('name', $GLOBALS['strTask']);
+        echo colheader('priority', $GLOBALS['strPriority']);
+        echo colheader('completion', $GLOBALS['strCompletion']);
         echo "</tr>\n";
         $shade='shade1';
         while ($task = mysql_fetch_object($result))
@@ -69,7 +69,7 @@ function dashboard_tasks($row,$dashboardid)
     }
     else
     {
-        echo "<p align='center'>No tasks</p>";
+        echo "<p align='center'>{$GLOBALS['strNoRecords']}</p>";
     }
 
     echo "</div>";
