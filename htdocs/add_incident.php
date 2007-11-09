@@ -634,6 +634,8 @@ elseif ($action=='assign')
             printf($strIncidentLoggedEngineer, $incidentid);
             echo "</p>\n";
 
+            $suggested_user = suggest_reassign_userid($incidentid);
+
             // List Engineers
             // We need a user type 'engineer' so we don't just list everybody
             // Status zero means account disabled
@@ -665,6 +667,7 @@ elseif ($action=='assign')
             $shade='shade2';
             while ($userrow = mysql_fetch_array($result))
             {
+                if ($userrow['id']==$suggested_user) $shade='idle';
                 echo "<tr class='$shade'>";
                 // display reassign link only if person is accepting or if the current user has 'reassign when not accepting' permission
                 if ($userrow['accepting']=='Yes')
@@ -693,7 +696,7 @@ elseif ($action=='assign')
                 echo "</td>";
                 echo "<td>".$userrow['phone']."</td>";
                 echo "<td>".userstatus_name($userrow['status'])."</td>";
-                echo "<td>".$userrow['message']."</td>";
+                echo "<td>".stripslashes($userrow['message'])."</td>";
                 echo "<td align='center'>";
 
     		$incpriority = user_incidents($userrow['id']);

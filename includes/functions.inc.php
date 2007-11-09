@@ -3071,18 +3071,16 @@ function holidaytype_drop_down($name, $id)
     $result = mysql_query($sql);
     if (mysql_error()) trigger_error(mysql_error(),E_USER_WARNING);
 
-    // print HTML
-    ?>
-    <select name="<?php echo $name ?>">
-    <?php
-    if ($id == 0)
-        echo "<option selected value='0'></option>\n";
+    $html = "<select name='$name'>";
+    if ($id == 0) $html .= "<option selected value='0'></option>\n";
     while ($holidays = mysql_fetch_array($result))
     {
-        ?><option <?php if ($holidays["id"] == $id) { ?>selected='selected' <?php } ?>value='<?php echo $holidays["id"] ?>'><?php echo $holidays["name"] ?></option><?php
-        echo "\n";
+        $html .= "<option";
+        if ($holidays["id"] == $id) $html .= " selected='selected'";
+        $html .= " value='{$holidays["id"]}'>{$holidays["name"]}</option>\n";
     }
-    echo "</select>";
+    $html .= "</select>\n";
+    return $html;
 }
 
 
