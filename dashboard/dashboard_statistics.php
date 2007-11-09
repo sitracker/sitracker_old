@@ -43,17 +43,17 @@ function dashboard_statistics($row,$dashboardid)
     echo "<div class='window'>";
     if ($todaysincidents == 0) echo $GLOBALS['strNoIncidents'];
     elseif ($todaysincidents == 1) echo "<a href='statistics.php'>{$todaysincidents}</a> Incident";
-    elseif ($todaysincidents > 1) echo "<a href='statistics.php'>{$todaysincidents}</a> Incidents";
+    elseif ($todaysincidents > 1) echo "<a href='statistics.php'>".sprintf($GLOBALS['strIncidentsMulti'], $todaysincidents)."</a>";
     echo " {$GLOBALS['strLogged']}<br />";
 
     if ($todaysupdated == 0) echo $GLOBALS['strNoIncidents'];
     elseif ($todaysupdated == 1) echo "{$todaysupdated} Incident";
-    elseif ($todaysupdated > 1) echo "{$todaysupdated} Incidents";
+    elseif ($todaysupdated > 1) echo sprintf($GLOBALS['strIncidentsMulti'],$todaysupdated);
     echo " {$GLOBALS['strUpdated']}<br />";
 
     if ($todaysclosed == 0) echo $GLOBALS['strNoIncidents'];
     elseif ($todaysclosed == 1) echo "<a href='statistics.php'>{$todaysclosed}</a> Incident";
-    elseif ($todaysclosed > 1) echo "<a href='statistics.php'>{$todaysclosed}</a> Incidents";
+    elseif ($todaysclosed > 1) echo "<a href='statistics.php'>".sprintf($GLOBALS['strIncidentsMulti'],$todaysclosed)."</a>";
     echo " {$GLOBALS['strClosed']}<br />";
 
     if ($supportopen == 0) echo $GLOBALS['strNoIncidents'];

@@ -46,19 +46,19 @@ if ($action == "showform" OR $action=='')
     echo "<tr><th>{$strReseller}: <sup class='red'>*</sup></th><td>";
     reseller_drop_down("reseller", 0);
     echo "</td></tr>\n";
-    echo "<tr><th>Licence Quantity: <sup class='red'>*</sup></th><td><input maxlength='7' name='licence_quantity' size='5' /></td></tr>\n";
-    echo "<tr><th>Licence Type: <sup class='red'>*</sup></th><td>";
+    echo "<tr><th>{$strLicenseQuantity}: <sup class='red'>*</sup></th><td><input maxlength='7' name='licence_quantity' size='5' /></td></tr>\n";
+    echo "<tr><th>{$strLicenseType}: <sup class='red'>*</sup></th><td>";
     licence_type_drop_down("licence_type", 0);
     echo "</td></tr>\n";
     echo "<tr><th>{$strExpiryDate}: <sup class='red'>*</sup></th>";
     echo "<td><input name='expiry' size='10' /> ".date_picker('addcontract.expiry')."</td></tr>\n";
     echo "<tr><th>{$strServiceLevel}:</th><td>".servicelevel_drop_down('servicelevelid', 1, TRUE)."</td></tr>\n";
-    echo "<tr><th>Incident Pool:</th>";
+    echo "<tr><th>{$strIncidentPool}:</th>";
     $incident_pools = explode(',', "Unlimited,{$CONFIG['incident_pools']}");
     echo "<td>".array_drop_down($incident_pools,'incident_poolid',$maint['incident_quantity'])."</td></tr>";
     echo "<tr><th>{$strAdminContact}: <sup class='red'>*</sup></th><td>".contact_drop_down("admincontact", 0, true)."</td></tr>\n";
     echo "<tr><th>{$strNotes}:</th><td><textarea cols='40' name='notes' rows='5'></textarea></td></tr>\n";
-    echo "<tr><th>Product Only:</th><td><input name='productonly' type='checkbox' value='yes' /></td></tr>\n";
+    echo "<tr><th>Product Only:</th><td><input name='productonly' type='checkbox' value='yes' /></td></tr>\n"; // FIXME i18n
     echo "</table>\n";
     echo "<p align='center'><input name='submit' type='submit' value=\"{$strAddContract}\" /></p>";
     echo "</form>";

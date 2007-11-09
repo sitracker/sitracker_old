@@ -209,25 +209,22 @@ if (empty($bodytext))
         echo "</td></tr>\n";
     }
 
-    echo "<tr><td colspan='2'><br />Explain in detail why you are reassigning this incident and include instructions to the new owner as to what action should
-    be taken next.  Please be as detailed as possible and include full descriptions of any work you have performed.</td></tr>\n";
-    echo "<tr><th>Update Log:</th>";
+    echo "<tr><td colspan='2'><br />{$strReassignText}</td></tr>\n";
+    echo "<tr><th>{$strUpdate}:</th>";
     echo "</th><td>";
     echo "<textarea name='bodytext' wrap='soft' rows='10' cols='65'>";
     if (!empty($reason)) echo $reason;
     echo "</textarea>";
     echo "</td></tr>\n";
-    echo "<tr><th>Visibility:</th><td><label><input type='checkbox' name='cust_vis' value='yes' /> to make this reassign visible to the customer.</label></td></tr>\n";
+    echo "<tr><th>{$strVisibility}:</th><td><label><input type='checkbox' name='cust_vis' value='yes' /> {$strVisibleToCustomer}</label></td></tr>\n";
 
-    echo "<tr><th>New Status:</th>";
+    echo "<tr><th>{$strNewIncidentStatus}:</th>";
     ?>
     <td><?php echo incidentstatus_drop_down("newstatus", $incident->status); ?></td></tr>
     </table>
     <?php
-    echo "<p align='center'><input name='submit' type='submit' value='Reassign Incident' /></p>";
-    ?>
-    </form>
-    <?php
+    echo "<p align='center'><input name='submit' type='submit' value=\"{$strReassign}\" /></p>";
+    echo "</form>\n";
     include('incident_html_bottom.inc.php');
 }
 else

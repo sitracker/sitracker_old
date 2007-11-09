@@ -136,7 +136,7 @@ if($countskills > 0 AND $countusers > 0)
     $shade='shade1';
     echo "<thead><tr><td>{$strSkill}</td>";
     foreach($users AS $u) echo "<th>$u</th>";
-    echo "<th>Count</th>";
+    echo "<th>{$strTotal}</th>";
     echo "</tr></thead>\n";
     $previous = "";
     while($row = mysql_fetch_object($result))
@@ -175,10 +175,10 @@ if($countskills > 0 AND $countusers > 0)
         //echo $row->realname." ";
         $previous = $row->name;
     }
-    echo "<th align='right'>COUNT</th>";
+    echo "<th align='right'>{$strTotal}</th>";
     foreach($counting AS $c) echo "<td align='center'><strong>{$c}</strong></td>";
     echo "</table>";
-} echo "<p align='center'>Nothing to display</p>";
+} else echo "<p align='center'>{$strNothingToDisplay}</p>";
 
 include('htmlfooter.inc.php');
 
