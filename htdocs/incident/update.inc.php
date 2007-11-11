@@ -187,6 +187,7 @@ function display_update_page($draftid=-1)
                         if(draftid == -1)
                         {
                             draftid = xmlhttp.responseText;
+                            byId('draftid').value = draftid;
                         }
                         var currentTime = new Date();
                         var hours = currentTime.getHours();
@@ -222,7 +223,8 @@ function display_update_page($draftid=-1)
     //-->
     </script>
     <?php
-    echo "<form action='".$_SERVER['PHP_SELF']."?id={$id}&amp;draftid={$draftid}' method='post' name='updateform' id='updateform' enctype='multipart/form-data'>";
+    //echo "<form action='".$_SERVER['PHP_SELF']."?id={$id}&amp;draftid={$draftid}' method='post' name='updateform' id='updateform' enctype='multipart/form-data'>";
+    echo "<form action='".$_SERVER['PHP_SELF']."?id={$id}' method='post' name='updateform' id='updateform' enctype='multipart/form-data'>";
     echo "<table class='vertical'>";
     echo "<tr>";
     echo "<th align='right' valign='top'>{$GLOBALS['strDoesThisUpdateMeetSLA']}:";
@@ -230,7 +232,7 @@ function display_update_page($draftid=-1)
     echo "<td class='shade2'>";
     $target = incident_get_next_target($id);
 
-    echo "<select name='target' class='dropdown'>\n";
+    echo "<select name='target' id='target' class='dropdown'>\n";
     echo "<option value='none' onclick='notarget(this.form)'>No</option>\n";
     switch ($target->type)
     {
@@ -257,7 +259,7 @@ function display_update_page($draftid=-1)
     echo "</td></tr>\n";
     echo "<tr><th align='right' valign='top'>{$GLOBALS['strUpdateType']}:</th>";
     echo "<td class='shade1'>";
-    echo "<select name='updatetype' class='dropdown'>";
+    echo "<select name='updatetype' id='updatetype' class='dropdown'>";
     /*
     if ($target->type!='actionplan' && $target->type!='solution')
         echo "<option value='probdef'>Problem Definition</option>\n";
@@ -279,7 +281,7 @@ function display_update_page($draftid=-1)
     echo "<th align='right' valign='top'>Update Log:<br />";
     echo "New information, relevent to the incident.  Please be as detailed as possible and include full descriptions of any work you have performed.<br />";
     echo "<br />";
-    echo "Check here <input type='checkbox' name='cust_vis' checked='checked' value='yes' /> to make this update visible to the customer.";
+    echo "Check here <input type='checkbox' name='cust_vis' id='cust_vis' checked='checked' value='yes' /> to make this update visible to the customer.";
     echo "</th>";
     echo "<td class='shade1'><textarea name='bodytext' id='updatelog' rows='13' cols='50'>";
     if($draftid != -1) echo $draftobj->content;
@@ -299,7 +301,7 @@ function display_update_page($draftid=-1)
     $servicelevel=maintenance_servicelevel(incident_maintid($id));
     if ($servicelevel==2 || $servicelevel==5) $maxpriority=4;
     else $maxpriority=3;
-    echo priority_drop_down("newpriority", incident_priority($id), $maxpriority, $disable_priority);
+    echo priority_drop_down("newpriority", incident_priority($id), $maxpriority, $disable_priority); //id='priority
     echo "</td></tr>\n";
 
     echo "<tr>";
@@ -308,10 +310,10 @@ function display_update_page($draftid=-1)
     echo "</tr>";
     echo "<tr>";
     echo "<th align='right' valign='top'>Next Action:</th>";
-    echo "<td class='shade2'><input type='text' name='nextaction' maxlength='50' size='30' value='' /></td></tr>";
+    echo "<td class='shade2'><input type='text' name='nextaction' id='nextaction' maxlength='50' size='30' value='' /></td></tr>";
     echo "<tr>";
     echo "<th align='right'>";
-    echo "<strong>{$GLOBALS['$strTimeToNextAction']}</strong>:<br />The incident will be placed in the waiting queue until the time specified.</th>";
+    echo "<strong>{$GLOBAL['$strTimeToNextAction']}</strong>:<br />The incident will be placed in the waiting queue until the time specified.</th>";
     echo "<td class='shade2'>";
     $oldtimeofnextaction=incident_timeofnextaction($id);
     if ($oldtimeofnextaction<1) $oldtimeofnextaction=$now;
@@ -325,14 +327,14 @@ function display_update_page($draftid=-1)
     if ($na_days<0) $na_days=0;
     if ($na_hours<0) $na_hours=0;
     if ($na_minutes<0) $na_minutes=0;
-    echo "<input type='radio' name='timetonextaction_none' value='time' />In <em>x</em> days, hours, minutes<br />&nbsp;&nbsp;&nbsp;";
-    echo "<input maxlength='3' name='timetonextaction_days' value='{$na_days}' onclick='window.document.updateform.timetonextaction_none[0].checked = true;' size='3' /> Days&nbsp;";
-    echo "<input maxlength='2' name='timetonextaction_hours' value='{$na_hours}' onclick='window.document.updateform.timetonextaction_none[0].checked = true;' size='3' /> Hours&nbsp;";
-    echo "<input maxlength='2' name='timetonextaction_minutes' value='{$na_minutes}' onclick='window.document.updateform.timetonextaction_none[0].checked = true;' size='3' /> Minutes<br />";
-    echo "<input type='radio' name='timetonextaction_none' value='date; />At specific date and time<br />";
-    echo "<input name='date' size='10' value='{$date}' onclick=\"window.document.updateform.timetonextaction_none[1].checked = true;\"/> ";
+    echo "<input type='radio' name='timetonextaction_none' id='timetonextaction_none' value='time' />In <em>x</em> days, hours, minutes<br />&nbsp;&nbsp;&nbsp;";
+    echo "<input maxlength='3' name='timetonextaction_days' id='timetonextaction_days' value='{$na_days}' onclick='window.document.updateform.timetonextaction_none[0].checked = true;' size='3' /> Days&nbsp;";
+    echo "<input maxlength='2' name='timetonextaction_hours' id='timetonextaction_hours' value='{$na_hours}' onclick='window.document.updateform.timetonextaction_none[0].checked = true;' size='3' /> Hours&nbsp;";
+    echo "<input maxlength='2' name='timetonextaction_minutes' id='timetonextaction_minutes' value='{$na_minutes}' onclick='window.document.updateform.timetonextaction_none[0].checked = true;' size='3' /> Minutes<br />";
+    echo "<input type='radio' name='timetonextaction_none' id='timetonextaction_none' value='date; />At specific date and time<br />";
+    echo "<input name='date' id='date' size='10' value='{$date}' onclick=\"window.document.updateform.timetonextaction_none[1].checked = true;\"/> ";
     echo date_picker('updateform.date');
-    echo "<select name='timeoffset' onchange='window.document.updateform.timetonextaction_none[1].checked = true;'>";
+    echo "<select name='timeoffset' id='timeoffset' onchange='window.document.updateform.timetonextaction_none[1].checked = true;'>";
     echo "<option>Choose Time</option>";
     echo "<option value='0'>8:00 AM</option>";
     echo "<option value='1'>9:00 AM</option>";
@@ -346,9 +348,9 @@ function display_update_page($draftid=-1)
     echo "<option value='9'>5:00 PM</option>";
     echo "</select>";
     echo "<br />";
-    
+
     echo "<input checked='checked' type='radio' name='timetonextaction_none' onclick=\"window.document.updateform.timetonextaction_days.value = ''; window.document.updateform.timetonextaction_hours.value = ''; window.document.updateform.timetonextaction_minutes.value = '';\" value='None' /> Unspecified";
-    
+
     echo "</td></tr>";
     echo "<tr>";
     // calculate upload filesize
@@ -367,6 +369,9 @@ function display_update_page($draftid=-1)
     echo "</table>";
     echo "<p class='center'>";
     echo "<input type='hidden' name='action' value='update' />";
+    if($draftid == -1) $localdraft = "";
+    else $localdraft = $draftid;
+    echo "<input type='hidden' name='draftid' id='draftid' value='{$localdraft}' />";
     echo "<input type='hidden' name='storepriority' value='".incident_priority($id)."' />";
     echo "<input type='submit' name='submit' value='{$GLOBALS['strUpdateIncident']}' /></p>";
     echo "</form>";
@@ -435,7 +440,7 @@ else
     $timetonextaction_days = cleanvar($_POST['timetonextaction_days']);
     $timetonextaction_hours = cleanvar($_POST['timetonextaction_hours']);
     $timetonextaction_minutes = cleanvar($_POST['timetonextaction_minutes']);
-    $draftid = cleanvar($_REQUEST['draftid']);
+    $draftid = cleanvar($_POST['draftid']);
 
     if (empty($newpriority)) $newpriority  = incident_priority($id);
     // update incident
