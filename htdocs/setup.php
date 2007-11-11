@@ -114,9 +114,9 @@ $CFGVAR['journal_loglevel']['help'] = '0 = none, 1 = minimal, 2 = normal, 3 = fu
 $CFGVAR['journal_purge_after']['title'] = 'How long should we keep journal entries (in seconds), entries older than this will be purged (deleted)';
 $CFGVAR['logout_url']['title'] = "The URL to redirect the user too after he/she logs out";
 $CFGVAR['error_logfile']['title'] = "Path to a file to log error messages";
-$CFGVAR['error_logfile']['telp'] = "This file must be writable of course";
+$CFGVAR['error_logfile']['help'] = "This file must be writable of course";
 $CFGVAR['access_logfile']['title'] = 'Filename to log authentication failures';
-$CFGVAR['access_logfile']['telp'] = "This file must be writable of course";
+$CFGVAR['access_logfile']['help'] = "This file must be writable of course";
 $CFGVAR['plugins']['title'] = "An array of plugin names";
 $CFGVAR['plugins']['help'] = "e.g. 'array('magic_plugin', 'lookup_plugin')'";
 $CFGVAR['error_notavailable_url']['title']="The URL to redirect too for pages that do not exist yet.";
@@ -218,6 +218,25 @@ function setup_exec_sql($sqlquerylist)
     return $html;
 }
 
+function user_notify_upgrade()
+{
+    $noticesql = "INSERT into notices(type, text, linktext, link, timestamp) ";
+    echo $application_version;
+    $noticesql .= "VALUES(2, '\$strSitUpgraded', '\$strSitUpgradedLink', 'releasenotes.php', NOW())";
+    mysql_query($noticesql);
+    if (mysql_error()) trigger_error(mysql_error(),E_USER_WARNING);
+    
+    $noticeid = mysql_insert_id();
+
+    $sql = "SELECT id FROM users WHERE status != 0";
+    $result = mysql_query($sql);
+    while($user = mysql_fetch_object($result))
+    {
+        $insertsql = "INSERT into usernotices(noticeid, userid) VALUES({$noticeid}, {$user->id})";
+        mysql_query($insertsql);
+        if (mysql_error()) trigger_error(mysql_error(),E_USER_WARNING);
+    }
+}
 session_name($CONFIG['session_name']);
 session_start();
 
@@ -534,6 +553,7 @@ switch ($_REQUEST['action'])
                         }
                         echo "<p>SiT! v".number_format($installed_version,2)." is installed and ready to <a href='index.php'>run</a>.</p>";
                         if ($_SESSION['userid']==1) echo "<p>As administrator you can <a href='{$_SERVER['PHP_SELF']}?action=reconfigure'>reconfigure</a> SiT!</p>";
+                        user_notify_upgrade();
                     }
                 }
             }
