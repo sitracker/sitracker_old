@@ -208,8 +208,8 @@ while ($incidents = mysql_fetch_array($result))
 
     echo "<td valign='top'>";
     echo stripslashes($incidents['forenames'].' '.$incidents['surname'])."<br />".htmlspecialchars($site)." </td>";
-    ?>
-    <td align='center' valign="top" ><?php
+    
+    echo "<td align='center' valign='top' >";
     // Service Level / Priority
     if (!empty($incidents['maintenanceid'])) echo $servicelevel->tag."<br />";
     elseif (!empty($incidents['servicelevel'])) echo $incidents['servicelevel']."<br />";
