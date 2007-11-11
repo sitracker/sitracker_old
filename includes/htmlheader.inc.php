@@ -141,7 +141,8 @@ if($sit[0] != '')
         //if($notice->text == '$strFirstLogin') $notice->text = $strFirstLogin;
         $notice->text = str_replace('$strFirstLogin', $strFirstLogin, $notice->text);
         $notice->text = str_replace('$strNoEmailSet', $strNoEmailSet, $notice->text);
-
+        $notice->text = str_replace('$strSitUpgraded', sprintf($strSitUpgraded, $CONFIG['application_shortname']), $notice->text);
+        $notice->text = str_replace('$strSitUpgradedLink', $strSitUpgradedLink, $notice->text);
         //critical error
         if($notice->type == '1')
         {

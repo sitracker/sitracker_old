@@ -1539,6 +1539,8 @@ INSERT INTO `notices` (`id`, `text`, `timestamp`, `type`, `resolutionpage`) VALU
 (2, '$strNoEmailSet', NOW(), 1, 'edit_profile.php');
 INSERT INTO `notices` (`id`, `text`, `linktext`, `timestamp`, `type`, `link`) VALUES
 (3, '$strYourCurrentLanguage', '$strUseThisInFuture', NOW(), 2, 'edit_profile.php?mode=savesessionlang');
+INSERT INTO `notices` (`id`, `text`, `linktext`, `timestamp`, `type`, `resolutionpage`) VALUES
+(4, '$strSitUpgraded', '$strSitUpgradedLink', NOW(), 2, 'releasenotes.php?v=331');
 
 
 CREATE TABLE IF NOT EXISTS `usernotices` (

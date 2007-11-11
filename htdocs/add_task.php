@@ -58,6 +58,7 @@ else
             $completion = cleanvar($_REQUEST['completion']);
             $value = cleanvar($_REQUEST['value']);
             $distribution = cleanvar($_REQUEST['distribution']);
+            $taskuser = cleanvar($_REQUEST['taskuser']);
     
             // Validate input
             $error=array();
@@ -84,7 +85,7 @@ else
                 if ($startdate < 1 AND $completion > 0) $startdate = date('Y-m-d H:i:s');
                 $sql = "INSERT INTO tasks ";
                 $sql .= "(name,description,priority,owner,duedate,startdate,completion,value,distribution,created) ";
-                $sql .= "VALUES ('$name','$description','$priority','{$sit[2]}','$duedate','$startdate','$completion','$value','$distribution','".date('Y-m-d H:i:s')."')";
+                $sql .= "VALUES ('$name','$description','$priority','$taskuser','$duedate','$startdate','$completion','$value','$distribution','".date('Y-m-d H:i:s')."')";
                 mysql_query($sql);
                 if (mysql_error()) trigger_error(mysql_error(),E_USER_ERROR);
                 if (mysql_affected_rows() < 1) trigger_error("Task insert failed",E_USER_ERROR);
@@ -121,6 +122,10 @@ else
             echo "</td></tr>";
             echo "<tr><th>{$strValue}</th>";
             echo "<td><input type='text' name='value' size='6' maxlength='12' /></td></tr>";
+            echo "<tr><th>{$strUser}</th>";
+            echo "<td>";
+            echo user_drop_down('taskuser', $sit[2], FALSE);
+            echo "</td></tr>"; 
             echo "<tr><th>{$strPrivacy}</th>";
             echo "<td><input type='radio' name='distribution' value='public' /> {$strPublic}<br />";
             echo "<input type='radio' name='distribution' checked='checked' value='private' /> {$strPrivate} </td></tr>";

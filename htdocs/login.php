@@ -147,7 +147,6 @@ elseif($CONFIG['portal'] == TRUE)
         unset($errlog);
     }
     // redirect
-
     header ("Location: index.php?id=3");
     exit;
 }
