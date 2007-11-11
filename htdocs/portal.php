@@ -112,8 +112,21 @@ switch ($page)
 
     //show their open incidents
     case 'incidents':
-        echo "<h2>{$strYourCurrentIncidents}</h2>";
-        $sql = "SELECT * FROM incidents WHERE status!=2 AND contact = '{$_SESSION['contactid']}'";
+        $showclosed = $_REQUEST['showclosed'];
+        if(empty($showclosed)) $showclosed = "false";
+
+        if($showclosed == "true")
+        {
+            echo "<h2>{$strYourClosedIncidents}</h2>";
+            echo "<p align='center'><a href='$_SERVER[PHP_SELF]?page=incidents&amp;showclosed=false'>{$strShowOpenIncidents}</a></p>";
+            $sql = "SELECT * FROM incidents WHERE status = 2 AND contact = '{$_SESSION['contactid']}'";
+        }
+        else
+        {
+            echo "<h2>{$strYourCurrentOpenIncidents}</h2>";
+            echo "<p align='center'><a href='$_SERVER[PHP_SELF]?page=incidents&amp;showclosed=true'>{$strShowClosedIncidents}</a></p>";
+            $sql = "SELECT * FROM incidents WHERE status != 2 AND contact = '{$_SESSION['contactid']}'";
+        }
         $result = mysql_query($sql);
         if (mysql_error()) trigger_error(mysql_error(),E_USER_ERROR);
         $numincidents = mysql_num_rows($result);
@@ -126,21 +139,27 @@ switch ($page)
             echo colheader('title',$strTitle);
             echo colheader('lastupdated',$strLastUpdated);
             echo colheader('status',$strStatus);
-            echo colheader('actions', $strOperation);
+            if($showclosed == "false") echo colheader('actions', $strOperation);
             echo "</tr>\n";
             while ($incident = mysql_fetch_object($result))
             {
                 echo "<tr class='$shade'><td><a href='portal.php?page=showincident&amp;id={$incident->id}'>{$incident->id}</a></td>";
-                echo "<td>{$strProduct}<br /><strong><a href='portal.php?page=showincident&amp;id={$incident->id}'>".stripslashes($incident->title)."</a></strong></td>"; // FIXME product name
+                echo "<td>";
+                if (!empty($incident->softwareid)) echo software_name($incident->softwareid)."<br />";
+                echo "<strong><a href='portal.php?page=showincident&amp;id={$incident->id}'>".stripslashes($incident->title)."</a></strong></td>";
                 echo "<td>".format_date_friendly($incident->lastupdated)."</td>";
                 echo "<td>".incidentstatus_name($incident->status)."</td>";
-                echo "<td><a href='{$_SERVER[PHP_SELF]}?page=update&amp;id={$incident->id}'>{$strUpdate}</a> | ";
 
-                //check if the customer has requested a closure
-                $lastupdate = list($update_userid, $update_type, $update_currentowner, $update_currentstatus, $update_body, $update_timestamp, $update_nextaction, $update_id)=incident_lastupdate($incident->id);
-
-                if($lastupdate[1] == "customerclosurerequest") echo "{$strClosureRequested}</td>";
-                else echo "<a href='{$_SERVER[PHP_SELF]}?page=close&amp;id={$incident->id}'>{$strRequestClosure}</a></td>";
+                if($showclosed == "false")
+                {
+                    echo "<td><a href='{$_SERVER[PHP_SELF]}?page=update&amp;id={$incident->id}'>{$strUpdate}</a> | ";
+    
+                    //check if the customer has requested a closure
+                    $lastupdate = list($update_userid, $update_type, $update_currentowner, $update_currentstatus, $update_body, $update_timestamp, $update_nextaction, $update_id)=incident_lastupdate($incident->id);
+    
+                    if($lastupdate[1] == "customerclosurerequest") echo "{$strClosureRequested}</td>";
+                    else echo "<a href='{$_SERVER[PHP_SELF]}?page=close&amp;id={$incident->id}'>{$strRequestClosure}</a></td>";
+                }
                 echo "</tr>";
                 if ($shade=='shade1') $shade='shade2';
                 else $shade='shade1';
@@ -170,10 +189,10 @@ switch ($page)
             if (mysql_error()) trigger_error("MySQL Query Error ".mysql_error(), E_USER_ERROR);
 
             //add the update
-            // FIXME Fatal error: MySQL Query Error Column count doesn't match value count at row 1 in /home/ivan/dev1/sit/trunk/htdocs/portal.php on line 177
             $update = "Updated via the portal by <b>{$user->forenames} {$user->surname}</b>\n\n";
             $update .= $_REQUEST['update'];
-            $sql = "INSERT INTO updates VALUES('', '{$_REQUEST['id']}', '0', 'webupdate', '', '1', '{$update}', '{$now}', '', 'show', 'NULL', 'NULL', '', '', '')";
+            $sql = "INSERT INTO updates (incidentid, userid, type, currentstatus, bodytext, timestamp, customervisibility) ";
+            $sql .= "VALUES('{$_REQUEST['id']}', '0', 'webupdate', '1', '{$update}', '{$now}', 'show')";
             mysql_query($sql);
             if (mysql_error()) trigger_error("MySQL Query Error ".mysql_error(), E_USER_ERROR);
 
@@ -206,8 +225,9 @@ switch ($page)
 
             $reason = "Incident closure requested via the portal by <b>{$user->forenames} {$user->surname}</b>\n\n";
             $reason .= "<b>Reason:</b> {$_REQUEST['reason']}";
-            $sql = "INSERT into updates VALUES('', '{$_REQUEST['id']}', '0', 'customerclosurerequest', '', '1', '{$reason}',
-            '{$now}', '', '', '', '', '', '', '')";
+            $sql = "INSERT into updates (incidentid, userid, type, currentstatus, bodytext, timestamp, customervisibility) ";
+            $sql .= "VALUES('{$_REQUEST['id']}', '0', 'customerclosurerequest',  '1', '{$reason}',
+            '{$now}', 'show')";
             mysql_query($sql);
             if (mysql_error()) trigger_error("MySQL Query Error ".mysql_error(), E_USER_ERROR);
 
@@ -314,6 +334,8 @@ switch ($page)
 
             plugin_do('incident_created');
 
+            confirmation_page("2","portal.php?page=incidents", "<h2>{$strIncidentAdded}</h2><p align='center'>{$strPleaseWaitRedirect}...</p>");
+
         }
         break;
 
@@ -350,12 +372,22 @@ switch ($page)
     //show specified incident
     case 'showincident':
         $incidentid = $_REQUEST['id'];
-        $sql = "SELECT title, contact FROM incidents WHERE id={$incidentid}";
+        $sql = "SELECT title, contact, status FROM incidents WHERE id={$incidentid}";
         $result = mysql_query($sql);
         $user = mysql_fetch_object($result);
 
         echo "<h2>Details: {$incidentid} - {$user->title}</h2>";
 
+        if($user->status != 2)
+        {
+            echo "<p align='center'><a href='{$_SERVER[PHP_SELF]}?page=update&amp;id={$incidentid}'>{$strUpdate}</a> | ";
+
+            //check if the customer has requested a closure
+            $lastupdate = list($update_userid, $update_type, $update_currentowner, $update_currentstatus, $update_body, $update_timestamp, $update_nextaction, $update_id)=incident_lastupdate($incidentid);
+
+            if($lastupdate[1] == "customerclosurerequest") echo "{$strClosureRequested}</td>";
+            else echo "<a href='{$_SERVER[PHP_SELF]}?page=close&amp;id={$incidentid}'>{$strRequestClosure}</a></p>";
+        }
 
         /*
         //check if this user owns the incident
