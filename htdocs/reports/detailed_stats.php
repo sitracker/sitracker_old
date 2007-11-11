@@ -37,7 +37,7 @@ if(empty($startdate))
     echo date_picker('incidentsbysoftware.enddate');
     echo "</td></tr>\n";
     echo "</table>";
-    echo "<p align='center'><input type='submit' value='Run Report' /></p>";
+    echo "<p align='center'><input type='submit' value='{$strRunReport}' /></p>";
     echo "</form>";
 }
 else
