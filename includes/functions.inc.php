@@ -1291,7 +1291,7 @@ function incidentstatus_drop_down($name, $id)
     if (mysql_error()) trigger_error(mysql_error(),E_USER_WARNING);
     if (mysql_num_rows($result) < 1) trigger_error("Zero rows returned",E_USER_WARNING);
 
-    $html = "<select name='{$name}'>";
+    $html = "<select id='{$name}' name='{$name}'>";
     // if ($id == 0) $html .= "<option selected='selected' value='0'></option>\n";
     while ($statuses = mysql_fetch_array($result))
     {
