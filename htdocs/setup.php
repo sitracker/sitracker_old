@@ -513,6 +513,9 @@ switch ($_REQUEST['action'])
                             echo "<p>Upgraded to v{$application_version}</p>";
                         }
                         else echo "<p class='error'>Upgrade failed.  Maybe you could try a fresh installation?</p>";
+                        
+                        //let's tell everyone we upgraded :)
+                        user_notify_upgrade();
                     }
                     else
                     {
@@ -552,8 +555,7 @@ switch ($_REQUEST['action'])
                             $_SESSION['adminpw']='';
                         }
                         echo "<p>SiT! v".number_format($installed_version,2)." is installed and ready to <a href='index.php'>run</a>.</p>";
-                        if ($_SESSION['userid']==1) echo "<p>As administrator you can <a href='{$_SERVER['PHP_SELF']}?action=reconfigure'>reconfigure</a> SiT!</p>";
-                        user_notify_upgrade();
+                        if ($_SESSION['userid']==1) echo "<p>As administrator you can <a href='{$_SERVER['PHP_SELF']}?action=reconfigure'>reconfigure</a> SiT!</p>";                        
                     }
                 }
             }
