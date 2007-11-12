@@ -548,7 +548,24 @@ div.taglist
     -moz-border-radius: 6px;
 }
 
+ div.img-dec {
+ background: url('../styles/images/shadow.gif') no-repeat bottom right;
+float: left;
+clear: both;
 
+ margin: 0 0 15px 25px;
+ padding: 0;
+ position: relative;
+ }
+  
+ div.img-dec img {
+ background-color: #fff;
+ border: 1px solid #a9a9a9;
+display: block;
+ margin: -5px 5px 5px -5px;
+ padding: 4px;
+ position: relative;
+ }
 @media print
 {
     #menu, #statusbar, h1#apptitle, #menulist, .contextmenu {visibility:hidden; display:none;}
