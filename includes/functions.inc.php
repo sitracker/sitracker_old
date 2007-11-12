@@ -576,6 +576,7 @@ function contact_count_open_incidents($id)
 // Returns "expired" = Contact did have support for product but it has now expired
 function contact_productsupport($contactid, $productid)
 {
+    global $now;
     // check support
     $sql = "SELECT id, expirydate FROM contactproducts WHERE contactid=$contactid AND productid=$productid";
     $result = mysql_query($sql);
@@ -584,7 +585,6 @@ function contact_productsupport($contactid, $productid)
         return("no");
     else
     {
-        $now = time();
         $product = mysql_fetch_array($result);
         if ($product["expirydate"] <= $now)
             return("expired");
@@ -2003,7 +2003,7 @@ function format_workday_minutes($minutes)
 // Make a readable and friendly date, i.e. say Today, or Yesterday if it is
 function format_date_friendly($date)
 {
-    global $CONFIG;
+    global $CONFIG, $now;
     if (date('dmy', $date) == date('dmy', time()))
         $datestring = "{$GLOBALS['strToday']} @ ".date($CONFIG['dateformat_time'], $date);
     elseif (date('dmy', $date) == date('dmy', (time()-86400)))
@@ -4144,6 +4144,7 @@ function incident_backup_switchover($userid, $accepting)
 // avilability and queue status
 function suggest_reassign_userid($incidentid)
 {
+    global $now;
     $sql = "SELECT product, softwareid, priority, contact, owner FROM incidents WHERE id={$incidentid} LIMIT 1";
     $result = mysql_query($sql);
     if (mysql_error()) trigger_error(mysql_error(),E_USER_ERROR);
