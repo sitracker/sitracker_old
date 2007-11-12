@@ -7,7 +7,7 @@ if (!empty($incidentid)) echo "{$incidentid} - ";
 if (isset($title)) echo $title;
 else echo $CONFIG['application_shortname'];
 echo "</title>";
-echo "<meta http-equiv=\"Content-Type\" content=\"text/html; charset={$i18ncharset}\" />";
+echo "<meta http-equiv=\"Content-Type\" content=\"text/html; charset={$i18ncharset}\" />\n";
 echo "<meta name=\"GENERATOR\" content=\"{$CONFIG['application_name']} {$application_version_string}\" />\n";
 echo "<style type='text/css'>@import url('{$CONFIG['application_webpath']}styles/webtrack.css');</style>\n";
 if ($_SESSION['auth'] == TRUE)
@@ -27,7 +27,7 @@ $cssresult = mysql_query($csssql);
 if (mysql_error()) trigger_error(mysql_error(),E_USER_WARNING);
 else list($cssurl, $iconset) = mysql_fetch_row($cssresult);
 unset($styleid);
-
+echo "<script src='{$CONFIG['application_webpath']}scripts/prototype/prototype.js' type='text/javascript'></script>\n";
 echo "<script src='{$CONFIG['application_webpath']}webtrack.js' type='text/javascript'></script>\n";
 // javascript popup date library
 echo "<script src='{$CONFIG['application_webpath']}calendar.js' type='text/javascript'></script>\n";
