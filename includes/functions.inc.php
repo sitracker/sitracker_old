@@ -1576,7 +1576,7 @@ function escalation_path_drop_down($name, $id)
    $result = mysql_query($sql);
    if (mysql_error()) trigger_error(mysql_error(),E_USER_WARNING);
    $html = "<select name='{$name}' id='{$name}' >";
-   $html .= "<option selected='selected' value='0'>None</option>\n";
+   $html .= "<option selected='selected' value='0'>{$GLOBALS['strNone']}</option>\n";
    while ($path = mysql_fetch_array($result))
    {
         $html .= "<option value='{$path['id']}'";

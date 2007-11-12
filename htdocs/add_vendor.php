@@ -17,6 +17,8 @@ require('functions.inc.php');
 // This page requires authentication
 require('auth.inc.php');
 
+$title = $strAddVendor;
+
 // External variables
 $submit = $_REQUEST['submit'];
 
@@ -33,18 +35,16 @@ if (empty($submit))
     </script>
 
     <?php
-    echo "<h2>Add New Vendor</h2>";
-    echo "<h5>{$strMandatoryMarked} <sup class='red'>*</sup></h5>";
-    ?>
-    <form action="<?php echo $_SERVER['PHP_SELF']; ?>" method="post" onsubmit="return confirm_submit()">
-    <table align='center'>
-    <tr><th>Vendor Name: <sup class='red'>*</sup></th><td><input maxlength="50" name="name" size="30" /></td></tr>
-    </table>
-    <p align='center'><input name="submit" type="submit" value="Add Vendor" /></p>
-    <p class='warning'>Please check that the vendor does not already exist <em>before</em> adding it</p>
-    </form>
-    <?php
-    echo "<p align='center'><a href='products.php'>Return to products list without saving</a></p>";
+    echo "<h2>{$strAddVendor}</h2>";
+    echo "<h5>".sprintf($strMandatoryMarked,"<sup class='red'>*</sup>")."</h5>";
+    echo "<form action='{$_SERVER['PHP_SELF']}' method='post' onsubmit='return confirm_submit()'>";
+    echo "<table align='center'>";
+    echo "<tr><th>{$strVendor}: <sup class='red'>*</sup></th><td><input maxlength='50' name='name' size='30' /></td></tr>\n";
+    echo "</table>";
+    echo "<p align='center'><input name='submit' type='submit' value=\"{$strSave}\" /></p>";
+    echo "<p class='warning'>{$strAvoidDupes}</p>";
+    echo "</form>\n";
+    echo "<p align='center'><a href='products.php'>{$strReturnWithoutSaving}</a></p>";
     include('htmlfooter.inc.php');
 }
 else

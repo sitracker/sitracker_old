@@ -44,7 +44,7 @@ if (empty($submit))
     echo "<tr><th>{$strLifetime}:</th><td>";
     echo "<input type='text' name='lifetime_start' id='lifetime_start' size='10' value='' /> ";
     echo date_picker('addsoftware.lifetime_start');
-    echo " To: ";
+    echo " {$strTo}: ";
     echo "<input type='text' name='lifetime_end' id='lifetime_end' size='10' value='' /> ";
     echo date_picker('addsoftware.lifetime_end');
     echo "</td></tr>\n";

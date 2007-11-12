@@ -468,6 +468,7 @@ $strSitUpgradedLink = 'What\'s new?';
 $strSkill = 'Skill';
 $strSkills = 'Skills';
 $strSkillsMatrix = 'Skills Matrix';
+$strSkillsSupportedUnderContract = 'Skills supported under this contract';
 $strSLAby = 'SLA: %s by %s';
 $strSLATarget = 'SLA Target';
 $strSoftware = 'Software';

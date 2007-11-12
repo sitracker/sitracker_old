@@ -30,7 +30,7 @@ if (empty($action) OR $action == "showform")
     echo "$title</h2>";
     echo "<form name='add_servicelevel' action='{$_SERVER['PHP_SELF']}' method='post'>";
 
-    echo "<p align='center'>Tag: <input type='text' name='tag' value='' /></p>";
+    echo "<p align='center'>{$strTag}: <input type='text' name='tag' value='' /></p>";
 
     echo "<table align='center'>";
     echo "<tr><th>{$strPriority}</th><th>{$strInitialResponse}</th>";
