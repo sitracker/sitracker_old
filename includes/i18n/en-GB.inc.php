@@ -288,6 +288,7 @@ $strMessageTip = 'e.g. &quot;In france until Tue 22nd&quot;<br />Displayed on th
 $strMine = 'Mine';
 $strMinutes = 'Minutes';
 $strMobile = 'Mobile';
+$strMore = 'More...';
 $strMultiIncidents = '%d Incidents';
 $strMyDashboard = 'My Dashboard';
 $strMyDetails = 'My Details';
