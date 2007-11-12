@@ -1197,6 +1197,7 @@ CREATE TABLE `users` (
   KEY `groupid` (`groupid`)
 ) ENGINE=MyISAM;
 
+
 CREATE TABLE `usersoftware` (
   `userid` tinyint(4) NOT NULL default '0',
   `softwareid` int(5) NOT NULL default '0',

@@ -237,6 +237,18 @@ function user_notify_upgrade()
         if (mysql_error()) trigger_error(mysql_error(),E_USER_WARNING);
     }
 }
+
+
+// Returns TRUE if an admin account exists, or false if not
+function setup_check_adminuser()
+{
+    $sql = "SELECT id FROM users WHERE id=1 OR username='admin' OR roleid='1'";
+    $result = @mysql_query($sql);
+    if (mysql_num_rows($result) >= 1) return TRUE;
+    else FALSE;
+}
+
+
 session_name($CONFIG['session_name']);
 session_start();
 
@@ -404,8 +416,6 @@ switch ($_REQUEST['action'])
             else
             {
                 require('functions.inc.php');
-                // Generate a random admin password to use for new schema installations
-                $adminpw = generate_password(10);
 
                 // Load the empty schema
                 require('setup-schema.php');
@@ -422,7 +432,6 @@ switch ($_REQUEST['action'])
                 }
                 if (mysql_num_rows($result) < 1)
                 {
-                    $_SESSION['adminpw'] = $adminpw;
                     echo "<h2>Creating new database schema...</h2>";
                     // No users table or empty users table, proceed to install
                     echo setup_exec_sql($schema);
@@ -511,17 +520,35 @@ switch ($_REQUEST['action'])
                             $installed_version = $application_version;
                             echo "<h2>Upgrade complete</h2>";
                             echo "<p>Upgraded to v{$application_version}</p>";
+                            //let's tell everyone we upgraded :)
+                            user_notify_upgrade();
                         }
                         else echo "<p class='error'>Upgrade failed.  Maybe you could try a fresh installation?</p>";
-                        
-                        //let's tell everyone we upgraded :)
-                        user_notify_upgrade();
                     }
                     else
                     {
                         echo "<p>Your database schema is v".number_format($installed_version,2);
                         if ($installed_version < $application_version) echo ", after making a backup you should <a href='setup.php?action=upgrade'>upgrade</a> your schema to v{$application_version}";
                         echo "</p>";
+                    }
+
+                    if ($_REQUEST['action'] == 'createadminuser' AND setup_check_adminuser()==FALSE)
+                    {
+                        $password = mysql_escape_string($_POST['password']);
+                        $passwordagain = mysql_escape_string($_POST['passwordagain']);
+                        if ($password == $passwordagain)
+                        {
+                            $password = md5($password);
+                            $email = mysql_escape_string($_POST['email']);
+                            $sql = "INSERT INTO `users` (`id`, `username`, `password`, `realname`, `roleid`, `title`, `signature`, `email`, `status`, `var_style`, `lastseen`) ";
+                            $sql .= "VALUES (1, 'admin', '$password', 'Administrator', 1, 'Administrator', 'Regards,\r\n\r\nSiT Administrator', '$email', '1', '8', NOW());";
+                            mysql_query($sql);
+                            if (mysql_error())
+                            {
+                               trigger_error(mysql_error(),E_USER_WARNING);
+                               echo "<p><strong>FAILED:</strong> $sql</p>";
+                            }
+                        } else echo "<p class='error'>Admin account not created, the passwords you entered did not match.</p>";
                     }
                     // Check installation
                     echo "<h2>Checking installation...</h2>";
@@ -538,24 +565,22 @@ switch ($_REQUEST['action'])
                     }
                     elseif(!isset($_REQUEST)) echo "<p class='error'>SiT! requires PHP 4.2.0 or later</p>";
                     elseif(@ini_get('register_globals')==1) echo "<p class='error'>SiT! strongly recommends that you change your php.ini setting <code>register_globals</code> to OFF.</p>";
+                    elseif (setup_check_adminuser()==FALSE)
+                    {
+                        echo "<p><span style='color: red; font-weight: bolder;'>Important:</span> you <strong>must</strong> create an admin account before you can use SiT</p>";
+                        echo "<form action='setup.php' method='post'>\n";
+                        echo "<p>Username:<br /><input type='text' name='username' value='admin' disabled='disabled' /> (cannot be changed)</p>";
+                        echo "<p><label>Password:<br /><input type='password' name='password' size='30' maxlength='50' /></label></p>";
+                        echo "<p><label>Confirm Password:<br /><input type='password' name='passwordagain' size='30' maxlength='50' /></label></p>";
+                        echo "<p><label>Email:<br /><input type='text' size='30' maxlength='255' /></label></p>";
+                        echo "<p><input type='submit' value='Create Admin' />";
+                        echo "<input type='hidden' name='action' value='createadminuser' />";
+                        echo "</form>";
+                    }
                     else
                     {
-                        if ($_REQUEST['action']=='checkinstallcomplete')
-                        {
-                            if (!empty($_SESSION['adminpw']))
-                            {
-                                echo "<p><span style='color: red; font-weight: bolder;'>Important:</span> SiT! is initially configured with just one user, <var><strong>admin</strong></var> with an automatically generated password of <var><strong>{$_SESSION['adminpw']}</strong></var>, ";
-                                echo "you should make a note of this password and change it as soon as you have logged in.</p>";
-                            }
-                            else
-                            {
-                                echo "<p class='error'>An error occurred during installation and we forgot the random admin password that was generated, this will prevent you logging in. Sorry. ";
-                                echo "Check your PHP session settings, in particular make sure you have '<code>sesion.auto.start = 0</code>' in your php.ini.</p>";
-                            }
-                            $_SESSION['adminpw']='';
-                        }
                         echo "<p>SiT! v".number_format($installed_version,2)." is installed and ready to <a href='index.php'>run</a>.</p>";
-                        if ($_SESSION['userid']==1) echo "<p>As administrator you can <a href='{$_SERVER['PHP_SELF']}?action=reconfigure'>reconfigure</a> SiT!</p>";                        
+                        if ($_SESSION['userid']==1) echo "<p>As administrator you can <a href='{$_SERVER['PHP_SELF']}?action=reconfigure'>reconfigure</a> SiT!</p>";
                     }
                 }
             }
