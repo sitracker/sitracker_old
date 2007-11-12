@@ -62,7 +62,7 @@ $strBrowse = 'Browse';
 $strBrowseContacts = 'Browse contacts';
 $strBrowseFeedback = 'Browse feedback';
 $strBrowseFeedbackForms = 'Browse Feedback Forms';
-$strBrowseKB = 'Browse Knowledge Base';
+$strBrowseKB = 'Browse KnowledgeBase';
 $strBrowseSites = 'Browse sites';
 $strBulkModify = 'Bulk Modify';
 
@@ -248,11 +248,12 @@ $strJobTitle = 'Job Title';
 $strJumpTo = 'Jump to';
 $strJumpToIncident = 'Jump to Incident';
 
-$strKnowledgeBase = 'Knowledge Base';
+$strKnowledgeBase = 'KnowledgeBase';
 
 $strLanguage = 'Language';
 $strLastUpdated = 'Last Updated';
 $strLicense = 'Licence';
+$strLicenseAndCopyright = 'License &amp; Copyright Information';
 $strLicenseType = 'Licence Type';
 $strLicenseQuantity = 'Licence Quantity';
 $strLifetime = 'Lifetime';

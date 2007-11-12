@@ -53,9 +53,9 @@ foreach ($credits AS $credit)
     if ($count <= $creditcount) echo ", ";
 }
 echo "</h4></td></tr>\n";
+echo "<tr><td class='shade1' colspan='2'>{$strLicenseAndCopyright}:</td></tr>";
+echo "<tr><td class='shade2' colspan='2'>";
 ?>
-<tr><td class='shade1' colspan="2">License &amp; Copyright Information:</td></tr>
-<tr><td class='shade2' colspan='2'>
 <p align='center'><a href='http://sitracker.sourceforge.net'>SiT! Support Incident Tracker</a> is Copyright &copy; 2000-<?php echo date('Y'); ?> <a href='http://www.salfordsoftware.co.uk/'>Salford Software Ltd.</a> and Contributors<br />
 Licensed under the GNU General Public License.<br />
 Salford Software, Lancastrian Office Centre, Talbot Road, Old Trafford, Manchester. M32 0FP.</p>
@@ -82,34 +82,18 @@ Copyright &copy; 2005-2007 Sam Stephenson. Licensed under the MIT license.</p>
 
 <p align='center'>Icons from the Crystal Project by <a href='http://www.everaldo.com/'>Everaldo Coelho</a><br />
 Copyright (c)  2006-2007 Everaldo Coelho. Licensed under the LGPL</p>
-
-
 </td></tr>
 <?php
 echo "<tr><td class='shade1' colspan='2'>{$strLicense}:</td></tr>";
-?>
-<tr><td class='shade2' colspan='2'>
-<textarea cols="100%" rows="10" readonly="readonly" style="background: transparent;">
-<?php
+echo "<tr><td class='shade2' colspan='2'>";
+echo "<textarea cols='100%' rows='10' readonly='readonly' style='background: transparent;'>";
 $fp = fopen($CONFIG['licensefile'], "r");
 $contents = htmlentities(fread($fp, filesize($CONFIG['licensefile'])), ENT_COMPAT, $i18ncharset);
 fclose($fp);
 echo $contents;
-?>
-</textarea>
-</td></tr>
-<tr><td class='shade1' colspan="2">Changelog:</td></tr>
-<tr><td colspan="2" class="shade2">
-<textarea cols="100%" rows="10" readonly="readonly" style="background: transparent;">
-<?php
-$fp = fopen($CONFIG['changelogfile'], "r");
-$contents = htmlentities(fread($fp, filesize($CONFIG['changelogfile'])), ENT_COMPAT, $i18ncharset);
-fclose($fp);
-echo $contents;
-?>
-</textarea>
-</td></tr>
-<?php
+echo "</textarea></td></tr>\n";
+echo "<tr><td class='shade1' colspan='2'>{$strReleaseNotes}:</td></tr>";
+echo "<tr><td class='shade2' colspan='2'><p align='center'><a href='releasenotes.php'>{$strReleaseNotes}</a></p></td></tr>\n";
 echo "<tr><td class='shade1' colspan='2'>{$strPlugins}:</td></tr>";
 echo "<tr><td class='shade2' colspan='2'>";
 if (count($CONFIG['plugins']) >= 1)
