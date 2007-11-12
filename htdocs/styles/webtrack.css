@@ -547,30 +547,11 @@ div.taglist
     font-size: 120%;
     -moz-border-radius: 6px;
 }
-/*
-div.img-dec {
-    background: url('../styles/images/shadow.gif') no-repeat bottom right;
-     float: right;
-    clear: both;
-    margin: 0 0 15px 25px;
-    padding: 0;
-    position: relative;
- }
-*/
- div.img-dec img {
- background-color: #fff;
- background: url('../styles/images/shadow.gif') no-repeat bottom right;
- border-top: 1px solid #a9a9a9;
- border-left: 1px solid #a9a9a9;
- /*border-top: 1px solid #a9a9a9;
- border-left: 1px solid #a9a9a9;
- border-right: 3px solid #777;
- border-bottom: 3px solid #777;
-d*/isplay: block;
-/*  margin: -5px 5px 5px -5px; */
-  padding: 7px;
- position: relative;
- }
+div.img-dec img
+{
+margin: 5px;
+border: 1px solid #808080;
+}
 @media print
 {
     #menu, #statusbar, h1#apptitle, #menulist, .contextmenu {visibility:hidden; display:none;}
