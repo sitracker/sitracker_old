@@ -8,6 +8,7 @@
 // of the GNU General Public License, incorporated herein by reference.
 //
 // Authors: Ivan Lucas <ivanlucas[at]users.sourceforge.net, Kieran Hogg <kieran_hogg[at]users.sourceforge.net>
+// XHTML 1.0 Transitional valid 12/11/07 - KMH
 
 $permission=0; // not required
 require('db_connect.inc.php');
@@ -386,10 +387,10 @@ switch ($page)
         $query = mysql_query($sql);
         if (mysql_error()) trigger_error("MySQL Query Error ".mysql_error(), E_USER_ERROR);
         $user = mysql_fetch_object($query);
-
+        
+        echo "<form action='$_SERVER[PHP_SELF]?page=details&amp;action=update' method='post'>";
         echo "<table align='center' class='vertical'>";
         echo "<tr><th colspan='2'><h3><img src='{$CONFIG['application_webpath']}images/icons/{$iconset}/32x32/contact.png' width='32' height='32' alt='' /> ".stripslashes($user->forenames).' '.stripslashes($user->surname)."</h3></th></tr>";
-        echo "<form action='$_SERVER[PHP_SELF]?page=details&action=update' method='post'>";
         echo "<tr><th>{$strForenames}: </th><td><input name='forenames' value='{$user->forenames}' /></td></tr>";
         echo "<tr><th>{$strSurname}: </th><td><input name='surname' value='{$user->surname}' /></td></tr>";
         echo "<tr><th>{$strDepartment}: </th><td><input name='department' value='{$user->department}' /></td></tr>";
@@ -402,7 +403,7 @@ switch ($page)
         echo "<tr><th>{$strFax}: </th><td><input name='fax' value='{$user->fax}' /></td></tr>";
         echo "<tr><th>{$strEmail}: </th><td><input name='email' value='{$user->email}' /></td></tr>";
         echo "</table>";
-        echo "<p align='center'><input type='submit' value='{$strUpdate}' /></p>";
+        echo "<p align='center'><input type='submit' value='{$strUpdate}' /></p></form>";
         break;
 
     //show specified incident
