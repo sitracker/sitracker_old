@@ -4144,7 +4144,7 @@ function incident_backup_switchover($userid, $accepting)
 // avilability and queue status
 function suggest_reassign_userid($incidentid)
 {
-    $sql = "SELECT product, softwareid, priority, contact FROM incidents WHERE id={$incidentid} LIMIT 1";
+    $sql = "SELECT product, softwareid, priority, contact, owner FROM incidents WHERE id={$incidentid} LIMIT 1";
     $result = mysql_query($sql);
     if (mysql_error()) trigger_error(mysql_error(),E_USER_ERROR);
 
@@ -4234,10 +4234,11 @@ function suggest_reassign_userid($incidentid)
         }
 
         // Do the lottery - "Release the balls"
-        $numtickets = count($ticket)-1;;
+        $numtickets = count($ticket)-1;
         $rand = mt_rand(0, $numtickets);
         $userid = $ticket[$rand];
     }
+    if (empty($userid)) $userid=FALSE;
     return $userid;
 }
 

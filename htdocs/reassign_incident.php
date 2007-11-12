@@ -36,7 +36,6 @@ if (empty($bodytext))
 
     <?php
     $suggested = suggest_reassign_userid($id);
-
     $sql = "SELECT * FROM incidents WHERE id='$id' LIMIT 1";
     $result = mysql_query($sql);
     if (mysql_error()) trigger_error("MySQL Query Error ".mysql_error(), E_USER_ERROR);
@@ -44,7 +43,8 @@ if (empty($bodytext))
 
     echo "<form name='assignform' action='{$_SERVER['PHP_SELF']}?id={$id}' method='post'>";
 
-    $sql = "SELECT * FROM users WHERE status!=0 AND NOT id=$sit[2] AND NOT id='$suggested' ";
+    $sql = "SELECT * FROM users WHERE status!=0 AND NOT id=$sit[2] ";
+    if ($suggested) $sql .= "AND NOT id='$suggested' ";
     if (!$forcepermission) $sql .= "AND accepting='Yes' ";
     $sql .= "ORDER BY realname";
     $result = mysql_query($sql);
@@ -86,19 +86,21 @@ if (empty($bodytext))
     echo "<th align='center'>".priority_icon(1)."</th>";
     echo "<th></th></tr>\n";
 
-    // Suggested user is shown as the first row
-    $sugsql = "SELECT * FROM users WHERE id='$suggested' LIMIT 1";
-    $sugresult = mysql_query($sugsql);
-    if (mysql_error()) trigger_error("MySQL Query Error ".mysql_error(), E_USER_ERROR);
-    $suguser = mysql_fetch_object($sugresult);
-    echo "<tr class='idle'>";
-    echo "<td><label><input type='radio' name='userid' checked='checked' value='{$suguser->id}' /> ";
-    // Have a look if this user has skills with this software
-    $ssql = "SELECT softwareid FROM usersoftware WHERE userid={$suguser->id} AND softwareid={$incident->softwareid} ";
-    $sresult = mysql_query($ssql);
-    if (mysql_error()) trigger_error("MySQL Query Error".mysql_error(), E_USER_ERROR);
-    if (mysql_num_rows($sresult) >=1 ) echo "<strong>".stripslashes($suguser->realname)."</strong>";
-    else echo stripslashes($users->realname);
+    if ($suggested)
+    {
+        // Suggested user is shown as the first row
+        $sugsql = "SELECT * FROM users WHERE id='$suggested' LIMIT 1";
+        $sugresult = mysql_query($sugsql);
+        if (mysql_error()) trigger_error("MySQL Query Error ".mysql_error(), E_USER_ERROR);
+        $suguser = mysql_fetch_object($sugresult);
+        echo "<tr class='idle'>";
+        echo "<td><label><input type='radio' name='userid' checked='checked' value='{$suguser->id}' /> ";
+        // Have a look if this user has skills with this software
+        $ssql = "SELECT softwareid FROM usersoftware WHERE userid={$suguser->id} AND softwareid={$incident->softwareid} ";
+        $sresult = mysql_query($ssql);
+        if (mysql_error()) trigger_error("MySQL Query Error".mysql_error(), E_USER_ERROR);
+        if (mysql_num_rows($sresult) >=1 ) echo "<strong>".stripslashes($suguser->realname)."</strong>";
+        else echo stripslashes($users->realname);
         echo "</label></td>";
         echo "<td>".userstatus_name($suguser->status)."</td>";
         $incpriority = user_incidents($suguser->id);
@@ -116,45 +118,48 @@ if (empty($bodytext))
         echo $suguser->accepting=='Yes' ? $strYes : "<span class='error'>{$strNo}</span>";
         echo "</td>";
         echo "</tr>\n";
-
-    // Other users are shown in a optional section
-    echo "<tbody id='moreusers' style='display:none;'>";
-    $shade='shade1';
-    $countusers = mysql_num_rows($result);
-    while ($users = mysql_fetch_object($result))
-    {
-        echo "<tr class='$shade'>";
-        echo "<td><label><input type='radio' name='userid' value='{$users->id}' /> ";
-        // Have a look if this user has skills with this software
-        $ssql = "SELECT softwareid FROM usersoftware WHERE userid={$users->id} AND softwareid={$incident->softwareid} ";
-        $sresult = mysql_query($ssql);
-        if (mysql_error()) trigger_error("MySQL Query Error ".mysql_error(), E_USER_ERROR);
-        if (mysql_num_rows($sresult) >=1 ) echo "<strong>".stripslashes($users->realname)."</strong>";
-        else echo stripslashes($users->realname);
-        echo "</label></td>";
-        echo "<td>".userstatus_name($users->status)."</td>";
-        $incpriority = user_incidents($users->id);
-        $countincidents = ($incpriority['1']+$incpriority['2']+$incpriority['3']+$incpriority['4']);
-
-        if ($countincidents >= 1) $countactive=user_activeincidents($users->id);
-        else $countactive=0;
-        $countdiff=$countincidents-$countactive;
-        echo "<td align='center'>$countactive / {$countdiff}</td>";
-        echo "<td align='center'>".$incpriority['4']."</td>";
-        echo "<td align='center'>".$incpriority['3']."</td>";
-        echo "<td align='center'>".$incpriority['2']."</td>";
-        echo "<td align='center'>".$incpriority['1']."</td>";
-        echo "<td align='center'>";
-        echo $users->accepting=='Yes' ? $strYes : "<span class='error'>{$strNo}</span>";
-        echo "</td>";
-        echo "</tr>\n";
-        if ($shade=='shade1') $shade='shade2';
-        else $shade='shade1';
     }
-    echo "</tbody>";
-    echo "</table><br />";
-    echo "<p id='morelink'><a href=\"#\" onclick=\"$('moreusers').toggle();$('morelink').toggle();\">{$countusers} {$strMore}</a></p>";
+    $countusers = mysql_num_rows($result);
+    if ($countusers >= 1)
+    {
+        // Other users are shown in a optional section
+        if ($suggested) echo "<tbody id='moreusers' style='display:none;'>";
+        $shade='shade1';
 
+        while ($users = mysql_fetch_object($result))
+        {
+            echo "<tr class='$shade'>";
+            echo "<td><label><input type='radio' name='userid' value='{$users->id}' /> ";
+            // Have a look if this user has skills with this software
+            $ssql = "SELECT softwareid FROM usersoftware WHERE userid={$users->id} AND softwareid={$incident->softwareid} ";
+            $sresult = mysql_query($ssql);
+            if (mysql_error()) trigger_error("MySQL Query Error ".mysql_error(), E_USER_ERROR);
+            if (mysql_num_rows($sresult) >=1 ) echo "<strong>".stripslashes($users->realname)."</strong>";
+            else echo stripslashes($users->realname);
+            echo "</label></td>";
+            echo "<td>".userstatus_name($users->status)."</td>";
+            $incpriority = user_incidents($users->id);
+            $countincidents = ($incpriority['1']+$incpriority['2']+$incpriority['3']+$incpriority['4']);
+
+            if ($countincidents >= 1) $countactive=user_activeincidents($users->id);
+            else $countactive=0;
+            $countdiff=$countincidents-$countactive;
+            echo "<td align='center'>$countactive / {$countdiff}</td>";
+            echo "<td align='center'>".$incpriority['4']."</td>";
+            echo "<td align='center'>".$incpriority['3']."</td>";
+            echo "<td align='center'>".$incpriority['2']."</td>";
+            echo "<td align='center'>".$incpriority['1']."</td>";
+            echo "<td align='center'>";
+            echo $users->accepting=='Yes' ? $strYes : "<span class='error'>{$strNo}</span>";
+            echo "</td>";
+            echo "</tr>\n";
+            if ($shade=='shade1') $shade='shade2';
+            else $shade='shade1';
+        }
+        if ($suggested) echo "</tbody>";
+        echo "</table><br />";
+        if ($suggested) echo "<p id='morelink'><a href=\"#\" onclick=\"$('moreusers').toggle();$('morelink').toggle();\">{$countusers} {$strMore}</a></p>";
+    }
     echo "<table class='vertical'>";
 
 
