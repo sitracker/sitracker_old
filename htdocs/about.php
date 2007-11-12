@@ -27,19 +27,34 @@ echo "background-repeat: no-repeat; background-position: 1% bottom;'>";
 echo "<h2>{$CONFIG['application_name']}</h2>";
 echo "<p align='center'>";
 echo "{$strVersion}: {$application_version} {$application_revision}</p><br />";
+echo "</td></tr>\n";
+echo "<tr><td class='shade1' colspan='2'>{$strCredits}:</td></tr>\n";
+$fp = fopen($CONFIG['creditsfile'], "r");
+while (!feof($fp))
+{
+    $line = trim(fgets($fp, 4096));
+    if (substr($line, 0, 1) != '#' AND substr($line, 0, 1) != ' ' AND substr($line, 0, 1) != '') $credits[] = $line;
+}
+fclose($fp);
+$creditcount = count($credits);
+shuffle($credits);
+$count = 1;
+// TODO would be nice to scroll these credits using Javascript (degrading nicely)
+echo "<tr><td class='shade2' colspan='2'><p align='center'>Many thanks to everybody that has offered comments, ideas, ";
+echo "suggestions, bug reports and helped with testing or has contributed code. In particular thanks go to: (in random order)</p><h4>";
+foreach ($credits AS $credit)
+{
+    $creditpart = explode('--',$credit);
+    $creditpart[0] = preg_replace("/\[at\]/", "@", $creditpart[0]);
+    $creditpart[0] = trim(preg_replace("/(.*?)\s<(.*?)>/", "<a href = 'mailto:$2'>$1</a>", $creditpart[0]));
+    $creditpart[1] = htmlentities(trim($creditpart[1]), ENT_COMPAT, $i18ncharset);
+    echo "{$creditpart[0]} <span style='font-size: 40%; font-weight: normal;'>({$creditpart[1]})</span>";
+    $count++;
+    if ($count <= $creditcount) echo ", ";
+}
+echo "</h4></td></tr>\n";
 ?>
-</td>
-</tr>
-<tr><td class='shade1' colspan="2">Credits:</td></tr>
-<tr><td class='shade2' width='20%' align='right'><strong>Code:</strong></td><td class='shade2'>Ivan
-Lucas, Tom Gerrard, Paul Heaney</td></tr>
-<tr><td class='shade2' width='20%' align='right'><strong>Design/Testing:</strong></td><td class='shade2'>Paul Lees, Peter Atkins, Tom Gerrard, Ivan Lucas, Micky Campbell and the Salford Software Staff</td></tr>
-<tr><td class='shade2' width='20%' align='right'><strong>CSS Styles:</strong></td><td class='shade2'>Ivan Lucas, Tom Gerrard, Paul Harrison</td></tr>
-<tr><td class='shade2' width='20%' align='right'><strong>Version 2:</strong></td><td class='shade2'>Martin Kilkoyne</td></tr>
-<tr><td class='shade2' width='20%' align='right'><strong>Version 1:</strong></td><td class='shade2'>Kevin Shrimpton</td></tr>
-<tr><td class='shade1' colspan="2">&nbsp;</td></tr>
-
-<tr><td class='shade1' colspan="2">Copyright Information:</td></tr>
+<tr><td class='shade1' colspan="2">License &amp; Copyright Information:</td></tr>
 <tr><td class='shade2' colspan='2'>
 <p align='center'><a href='http://sitracker.sourceforge.net'>SiT! Support Incident Tracker</a> is Copyright &copy; 2000-<?php echo date('Y'); ?> <a href='http://www.salfordsoftware.co.uk/'>Salford Software Ltd.</a> and Contributors<br />
 Licensed under the GNU General Public License.<br />

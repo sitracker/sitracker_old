@@ -99,6 +99,7 @@ $CFGVAR['feedback_max_score']['title']='The max score to use in rating fields fo
 $CFGVAR['tipsfile']['title']='Path to a file containing tips to be shown on the main page, one per line';
 $CFGVAR['changelogfile']['title']='Path to the Changelog file';
 $CFGVAR['licensefile']['title']='Path to the License file';
+$CFGVAR['creditsfile']['title']='Path to the Credits file';
 $CFGVAR['session_name']['title']='The session name for use in cookies and URLs, Must contain alphanumeric characters only';
 $CFGVAR['notice_threshold']['title']='Flag items as notice when they are this percentage complete.';
 $CFGVAR['notice_threshold']['help']='Enter a number between 0 and 100.';
@@ -224,7 +225,7 @@ function user_notify_upgrade()
     $noticesql .= "VALUES(2, '\$strSitUpgraded', '\$strSitUpgradedLink', 'releasenotes.php', NOW())";
     mysql_query($noticesql);
     if (mysql_error()) trigger_error(mysql_error(),E_USER_WARNING);
-    
+
     $noticeid = mysql_insert_id();
 
     $sql = "SELECT id FROM users WHERE status != 0";
