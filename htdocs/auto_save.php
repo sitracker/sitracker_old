@@ -22,13 +22,12 @@ $type = cleanvar($_REQUEST['type']);
 $draftid = cleanvar($_REQUEST['draftid']);
 $meta = cleanvar($_REQUEST['meta']);
 $content = cleanvar($_REQUEST['content']);
-$now = time();
 
 if($userid == $_SESSION['userid'])
 {
     if($draftid == -1)
     {
-    //check your changing your own
+        // FIXME check your changing your own
         $sql = "INSERT INTO drafts (userid,incidentid,type,meta,content,lastupdate) VALUES ('{$userid}','{$incidentid}','{$type}','{$meta}','{$content}','{$now}')";
     }
     else

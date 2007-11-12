@@ -2530,7 +2530,7 @@ function print_contact_flags($id, $editlink=FALSE)
         else echo "</span>";
         echo ' ';
     }
-    if (mysql_num_rows($result)==0) echo "<em>None</em>";
+    if (mysql_num_rows($result)==0) echo "<em>{$GLOBALS['strNone']}</em>";
     mysql_free_result($result);
     return TRUE;
 }
@@ -4736,7 +4736,7 @@ function show_links($origtab, $colref, $level=0, $parentlinktype='', $direction=
                     }
                     $html .= "</ul>\n";
                 }
-                else $html .= "<p>None</p>";
+                else $html .= "<p>{$GLOBALS['strNone']}</p>";
             }
         }
     }
