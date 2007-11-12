@@ -1197,9 +1197,6 @@ CREATE TABLE `users` (
   KEY `groupid` (`groupid`)
 ) ENGINE=MyISAM;
 
-INSERT INTO `users` VALUES (1, 'admin', MD5(''), 'Administrator', 1, 3, 'Administrator', 'Regards,\r\n\r\nAdministrator', '', '', '', '', '', '', '', 1, '', 'Yes', 60, 'desc', 15, 8, 'true', 'false', 'false', 'false', 'false', '', 32, '', '0-3,1-14,2-4,2-2,2-1,', NOW());
-
-
 CREATE TABLE `usersoftware` (
   `userid` tinyint(4) NOT NULL default '0',
   `softwareid` int(5) NOT NULL default '0',
@@ -1247,12 +1244,11 @@ CREATE TABLE IF NOT EXISTS `notices` (
   PRIMARY KEY  (`id`)
 ) ENGINE=MyISAM AUTO_INCREMENT=1 ;
 
-INSERT INTO `notices` (`id`, `text`, `timestamp`, `type`, `resolutionpage`) VALUES
-(1, '$strFirstLogin', NOW(), 1, 'edit_profile.php');
-INSERT INTO `notices` (`id`, `text`, `timestamp`, `type`, `resolutionpage`) VALUES
-(2, '$strNoEmailSet', NOW(), 1, 'edit_profile.php');
 INSERT INTO `notices` (`id`, `text`, `linktext`, `timestamp`, `type`, `link`) VALUES
-(3, '$strYourCurrentLanguage', '$strUseThisInFuture', NOW(), 2, 'edit_profile.php?mode=savesessionlang');
+(1, '$strYourCurrentLanguage', '$strUseThisInFuture', NOW(), 2, 'edit_profile.php?mode=savesessionlang');
+INSERT INTO `notices` (`id`, `text`, `linktext`, `timestamp`, `type`, `resolutionpage`) VALUES
+(2, '$strSitUpgraded', '$strSitUpgradedLink', NOW(), 2, 'releasenotes.php?v=331');
+
 
 
 CREATE TABLE IF NOT EXISTS `usernotices` (
@@ -1261,11 +1257,6 @@ CREATE TABLE IF NOT EXISTS `usernotices` (
   `durability` enum('sticky','session') NOT NULL default 'sticky',
   PRIMARY KEY  (`noticeid`,`userid`)
 ) TYPE=MyISAM;
-
-INSERT INTO `usernotices` (`noticeid`, `userid`) VALUES
-(1, 1);
-INSERT INTO `usernotices` (`noticeid`, `userid`) VALUES
-(2, 1);
 ";
 
 // ********************************************************************
@@ -1533,14 +1524,10 @@ CREATE TABLE IF NOT EXISTS `notices` (
   PRIMARY KEY  (`id`)
 ) ENGINE=MyISAM AUTO_INCREMENT=1 ;
 
-INSERT INTO `notices` (`id`, `text`, `timestamp`, `type`, `resolutionpage`) VALUES
-(1, '$strFirstLogin', NOW(), 1, 'edit_profile.php');
-INSERT INTO `notices` (`id`, `text`, `timestamp`, `type`, `resolutionpage`) VALUES
-(2, '$strNoEmailSet', NOW(), 1, 'edit_profile.php');
 INSERT INTO `notices` (`id`, `text`, `linktext`, `timestamp`, `type`, `link`) VALUES
-(3, '$strYourCurrentLanguage', '$strUseThisInFuture', NOW(), 2, 'edit_profile.php?mode=savesessionlang');
+(1, '$strYourCurrentLanguage', '$strUseThisInFuture', NOW(), 2, 'edit_profile.php?mode=savesessionlang');
 INSERT INTO `notices` (`id`, `text`, `linktext`, `timestamp`, `type`, `resolutionpage`) VALUES
-(4, '$strSitUpgraded', '$strSitUpgradedLink', NOW(), 2, 'releasenotes.php?v=331');
+(2, '$strSitUpgraded', '$strSitUpgradedLink', NOW(), 2, 'releasenotes.php?v=331');
 
 
 CREATE TABLE IF NOT EXISTS `usernotices` (
@@ -1549,11 +1536,6 @@ CREATE TABLE IF NOT EXISTS `usernotices` (
   `durability` enum('sticky','session') NOT NULL default 'sticky',
   PRIMARY KEY  (`noticeid`,`userid`)
 ) TYPE=MyISAM;
-
-INSERT INTO `usernotices` (`noticeid`, `userid`) VALUES
-(1, 1);
-INSERT INTO `usernotices` (`noticeid`, `userid`) VALUES
-(2, 1);
 
 ALTER TABLE `servicelevels` ADD `timed` enum('yes','no') NOT NULL DEFAULT 'no' ;
 
