@@ -221,7 +221,6 @@ function setup_exec_sql($sqlquerylist)
 function user_notify_upgrade()
 {
     $noticesql = "INSERT into notices(type, text, linktext, link, timestamp) ";
-    echo $application_version;
     $noticesql .= "VALUES(2, '\$strSitUpgraded', '\$strSitUpgradedLink', 'releasenotes.php', NOW())";
     mysql_query($noticesql);
     if (mysql_error()) trigger_error(mysql_error(),E_USER_WARNING);
