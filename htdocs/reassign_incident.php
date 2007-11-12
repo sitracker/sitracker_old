@@ -92,11 +92,11 @@ if (empty($bodytext))
     if (mysql_error()) trigger_error("MySQL Query Error ".mysql_error(), E_USER_ERROR);
     $suguser = mysql_fetch_object($sugresult);
     echo "<tr class='idle'>";
-    echo "<td><label><input type='radio' name='userid' selected='selected' value='{$suguser->id}' /> ";
+    echo "<td><label><input type='radio' name='userid' checked='checked' value='{$suguser->id}' /> ";
     // Have a look if this user has skills with this software
     $ssql = "SELECT softwareid FROM usersoftware WHERE userid={$suguser->id} AND softwareid={$incident->softwareid} ";
     $sresult = mysql_query($ssql);
-    if (mysql_error()) trigger_error("MySQL Query Error ".mysql_error(), E_USER_ERROR);
+    if (mysql_error()) trigger_error("MySQL Query Error".mysql_error(), E_USER_ERROR);
     if (mysql_num_rows($sresult) >=1 ) echo "<strong>".stripslashes($suguser->realname)."</strong>";
     else echo stripslashes($users->realname);
         echo "</label></td>";

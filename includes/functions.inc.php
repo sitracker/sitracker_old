@@ -4234,7 +4234,7 @@ function suggest_reassign_userid($incidentid)
         }
 
         // Do the lottery - "Release the balls"
-        $numtickets = count($ticket);
+        $numtickets = count($ticket)-1;;
         $rand = mt_rand(0, $numtickets);
         $userid = $ticket[$rand];
     }
