@@ -20,7 +20,7 @@ require('auth.inc.php');
 
 include('htmlheader.inc.php');
 
-echo "<table summary='by Ivan Lucas' align='center'>\n";
+echo "<table summary='by Ivan Lucas' align='center' width='50%'>\n";
 echo "<tr><td class='shade1' colspan='2'>{$strAbout} {$CONFIG['application_shortname']}&hellip;</td></tr>\n";
 echo "<tr><td class='shade2' colspan='2' style='background-image: url(images/sitting_man_logo64x64.png); ";
 echo "background-repeat: no-repeat; background-position: 1% bottom;'>";
