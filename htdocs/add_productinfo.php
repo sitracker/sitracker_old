@@ -34,7 +34,7 @@ if (empty($_REQUEST['submit']))
     ?>
     <h2>Add Product Question</h2>
     <?php
-    echo "<h5>{$strMandatoryMarked} <sup class='red'>*</sup></h5>";
+    echo "<h5>".sprint($strMandatoryMarked,"<sup class='red'>*</sup>")."</h5>";
     ?>
     <form action="<?php echo $_SERVER['PHP_SELF']; ?>" method="post" onsubmit="return confirm_submit()">
     <table align='center'>
