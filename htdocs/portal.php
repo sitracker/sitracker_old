@@ -154,10 +154,10 @@ switch ($page)
                 if($showclosed == "false")
                 {
                     echo "<td><a href='{$_SERVER[PHP_SELF]}?page=update&amp;id={$incident->id}'>{$strUpdate}</a> | ";
-    
+
                     //check if the customer has requested a closure
                     $lastupdate = list($update_userid, $update_type, $update_currentowner, $update_currentstatus, $update_body, $update_timestamp, $update_nextaction, $update_id)=incident_lastupdate($incident->id);
-    
+
                     if($lastupdate[1] == "customerclosurerequest") echo "{$strClosureRequested}</td>";
                     else echo "<a href='{$_SERVER[PHP_SELF]}?page=close&amp;id={$incident->id}'>{$strRequestClosure}</a></td>";
                 }
@@ -364,7 +364,7 @@ switch ($page)
             {
                 $errors = 1;
                 echo "<p class='error'>You must enter a surname</p>\n";
-            }            
+            }
             if ($email == "" OR $email=='none' OR $email=='n/a')
             {
                 $errors = 1;
@@ -378,7 +378,7 @@ switch ($page)
                 if (mysql_error()) trigger_error("MySQL Query Error ".mysql_error(), E_USER_ERROR);
             }
         }
-        
+
         echo "<h2>{$strYourDetails}</h2>";
         $sql = "SELECT contacts.forenames, contacts.surname, contacts.department, contacts.address1, contacts.address2, contacts.county, contacts.country, contacts.postcode, contacts.phone, contacts.fax, contacts.email ";
         $sql .= "FROM contacts, sites ";

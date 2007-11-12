@@ -91,6 +91,7 @@ $strControlPanel = 'Control Panel';
 $strComplete = 'Complete';
 $strCompleted = 'Completed';
 $strCompletion = 'Completion';
+$strCredits = 'Credits';
 $strCriteria = 'Criteria';
 $strCritical = 'Critical';
 $strCustomer = 'Customer';

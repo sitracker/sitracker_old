@@ -126,6 +126,7 @@ $CONFIG['feedback_max_score']=9;
 $CONFIG['tipsfile']= '../doc/tips.txt';
 $CONFIG['licensefile']= '../doc/LICENSE';
 $CONFIG['changelogfile']= '../doc/Changelog';
+$CONFIG['creditsfile']= '../doc/CREDITS';
 
 // The session name for use in cookies and URL's, Must contain alphanumeric characters only
 $CONFIG['session_name'] = 'SiTsessionID';
