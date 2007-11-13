@@ -26,7 +26,7 @@ $submit=$_REQUEST['submit'];
 <script type='text/javascript'>
 function confirm_submit()
 {
-    return window.confirm('Are you sure you want to add this email type?');
+    return window.confirm('<?php echo $AddEmailConfirm ?>');
 }
 </script>
 <?php
