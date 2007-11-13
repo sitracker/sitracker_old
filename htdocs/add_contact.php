@@ -25,7 +25,7 @@ $submit = $_REQUEST['submit'];
 <script type='text/javascript'>
 function confirm_submit()
 {
-    return window.confirm('Are you sure you want to add this contact?');
+    return window.confirm('<?php echo $strAddContractConfirm ?>');
 }
 </script>
 <?php
@@ -34,7 +34,7 @@ if (empty($submit))
 {
     echo "<h2><img src='{$CONFIG['application_webpath']}images/icons/{$iconset}/32x32/contact.png' width='32' height='32' alt='' /> ";
     echo "{$strNewContact}</h2>";
-    echo "<h5>{$strMandatoryMarked} <sup class='red'>*</sup></h5>";
+    echo "<h5>".sprintf($strMandatoryMarked, "<sup class='red'>*</sup>")."</h5>";
     echo "<form name='contactform' action='{$_SERVER['PHP_SELF']}' method='post' onsubmit='return confirm_submit();'>";
     echo "<table align='center'>";
     echo "<tr><th>{$strName}: <sup class='red'>*</sup><br />{$strTitle}, {$strForenames}, {$strSurname}</th>";
@@ -107,24 +107,24 @@ else
     if ($surname == "")
     {
         $errors = 1;
-        echo "<p class='error'>You must enter a contact Surname</p>\n";
+        echo "<p class='error'>{$strMustEnterSurname}</p>\n";
     }
     // check for blank site
     if ($siteid == '')
     {
         $errors = 1;
-        echo "<p class='error'>You must select a site for this customer</p>\n";
+        echo "<p class='error'>{$strMustSelectCustomerSite}</p>\n";
     }
     // check for blank email
     if ($email == "" OR $email=='none' OR $email=='n/a')
     {
         $errors = 1;
-        echo "<p class='error'>You must enter an email address</p>\n";
+        echo "<p class='error'>{$strMustEnterEmail}</p>\n";
     }
     if ($siteid==0 OR $siteid=='')
     {
         $errors++;
-        echo "<p class='error'>You must select a site</p>\n";
+        echo "<p class='error'>{$strMustSelectSite}</p>\n";
     }
     // Check this is not a duplicate
     $sql = "SELECT id FROM contacts WHERE email='$email' AND LCASE(surname)=LCASE('$surname') LIMIT 1";
@@ -132,7 +132,7 @@ else
     if (mysql_num_rows($result) >= 1)
     {
         $errors++;
-        echo "<p class='error'>A contact record already exists with that Surname and Email address</p>";
+        echo "<p class='error'>{$strContactRecordExists}</p>";
     }
 
 
@@ -174,7 +174,7 @@ else
             if (mysql_error()) trigger_error("MySQL Query Error ".mysql_error(), E_USER_ERROR);
             $newcontact = mysql_fetch_array($result);
             journal(CFG_LOGGING_NORMAL,'Contact Added',"$forenames $surname was Added",CFG_JOURNAL_CONTACTS,$newid);
-            confirmation_page("2", "contact_details.php?id=$newid", "<h2>Contact Added Successfully</p><p align='center'>{$strPleaseWaitRedirect}...</p>");
+            confirmation_page("2", "contact_details.php?id=$newid", "<h2>{$strContactAddedSuccessfully}</p><p align='center'>{$strPleaseWaitRedirect}...</p>");
         }
     }
 }
