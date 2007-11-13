@@ -8,6 +8,7 @@
 // of the GNU General Public License, incorporated herein by reference.
 //
 // Author: Paul Heaney <paulheaney[at]users.sourceforge.net>
+// FIXME i18n
 
 $permission=0; // not required
 require('db_connect.inc.php');
@@ -142,7 +143,7 @@ switch($action)
                             break;
                     }
 
-                    echo "<tr class='$shade'><td>{$name}</td><td><a href='{$_SERVER['PHP_SELF']}?type={$obj->type}&amp;id={$obj->id}&amp;action=delete'>Remove</a></td></tr>";
+                    echo "<tr class='$shade'><td>{$name}</td><td><a href='{$_SERVER['PHP_SELF']}?type={$obj->type}&amp;id={$obj->id}&amp;action=delete'>{$strRemove}</a></td></tr>";
                     if ($shade=='shade1') $shade='shade2';
                     else $shade='shade1';
                 }
