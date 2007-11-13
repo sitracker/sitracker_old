@@ -62,7 +62,7 @@ elseif (authenticate($username, $password) == 1)
     //check if the session lang is different the their profiles
     if($_SESSION['lang'] != '' AND $_SESSION['lang'] != $user->var_i18n)
     {
-        $sql = "INSERT INTO usernotices (noticeid, userid, durability) VALUES(3, $user->id, 'session') ";
+        $sql = "INSERT INTO usernotices (noticeid, userid, durability) VALUES(1, $user->id, 'session') ";
         $sql .= "ON DUPLICATE KEY UPDATE noticeid=3";
         mysql_query($sql);
         if (mysql_error()) trigger_error(mysql_error(), E_USER_ERROR);
