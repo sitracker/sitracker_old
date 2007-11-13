@@ -13,11 +13,13 @@
 // This Page Is Valid XHTML 1.0 Transitional! 27Oct05
 
 $permission=12; // View Contacts
-$title="Browse Contacts";
+
 require('db_connect.inc.php');
 require('functions.inc.php');
 // This page requires authentication
 require('auth.inc.php');
+
+$title = $strBrowseContacts;
 
 // External variables
 $search_string = cleanvar($_REQUEST['search_string']);
@@ -83,10 +85,11 @@ echo "{$strBrowseContacts}</h2>";
 <td align="center">
     <form action="<?php echo $_SERVER['PHP_SELF']; ?>" method="get">
     <!-- <input type="text" name="search_string" />-->
-    <p>Browse contacts: <input dojoType='ComboBox' dataUrl='autocomplete.php?action=contact' style='width: 300px;' name='search_string' />
-    <input name="submit" type="submit" value="go" /></p>
-    </form>
     <?php
+    echo "<p>{$strBrowseContacts}: "; ?>
+    <input dojoType='ComboBox' dataUrl='autocomplete.php?action=contact' style='width: 300px;' name='search_string' />
+    <?php echo "<input name='submit' type='submit' value=\"{$strGo}\" /></p>";
+    echo "</form>\n";
         if($displayinactive=="true")
         {
             echo "<a href='".$_SERVER['PHP_SELF']."?displayinactive=false";

@@ -265,41 +265,39 @@ $realemails = $countresults-$spamcount;
 if((mysql_num_rows($resultnew) > 0) OR ($realemails > 0))
 {
     $totalheld = $countresults + mysql_num_rows($resultnew) - $spamcount;
-    echo "<h2>Held Email";
-    if ($totalheld >1) echo 's';
-    echo " ($totalheld total) </h2>";
-    echo "<p align='center'>Incoming email that cannot be handled automatically</p>";
+    echo "<h2>".sprintf($strHeldEmailsNum, $totalheld)."</h2>";
+    echo "<p align='center'>{$strIncomingEmailText}</p>";
     ?>
     <form action='review_incoming_updates.php' name='held_emails'>
     <table align='center' style='width: 95%'>
     <tr>
     <th>
     <?php if($realemails > 0) echo "<input type='checkbox' name='selectAll' value='CheckAll' onclick=\"checkAll(this.checked);\" />"?>
-    </th>
-    <th>Date</th>
-    <th>From</th>
-    <th>Subject</th>
-    <th>Reason</th>
-    <th>Operation</th>
-    </tr>
-
     <?php
+    echo "</th>
+    <th>{$strDate}</th>
+    <th>{$strFrom}</th>
+    <th>{$strSubject}</th>
+    <th>{$strMessage}</th>
+    <th>{$strOperation}</th>
+    </tr>";
     sort($queuerows);
     foreach($queuerows AS $row)
     {
         echo $row;
     }
-    if($realemails > 0) echo "<tr><td><a href=\"javascript: submitform()\" onclick='return confirm_delete();'>Delete</a></td></tr>";
+    if($realemails > 0) echo "<tr><td><a href=\"javascript: submitform()\" onclick='return confirm_delete();'>{$strDelete}</a></td></tr>";
     echo "</table>\n";
     echo "</form>";
 }
 else if($spamcount == 0)
 {
-    echo "<h2>No emails pending</h2>";
+    echo "<h2>{$strNoRecords}</h2>";
 }
 
 if($spamcount > 0)
 {
+    // FIXME i18n
     echo "<h2>Spam Email";
     if($spamcount > 1) echo "s";
     echo " ({$spamcount} total)</h2>\n";
@@ -309,9 +307,9 @@ if($spamcount > 0)
     if ($countresults) mysql_data_seek($result, 0);
 
     echo "<table align='center' style='width: 95%;'>";
-    echo "<tr><th /><th>Date</th><th>From</th>";
-    echo "<th>Subject</th><th>Reason</th>";
-    echo "<th>Operation</th></tr>\n";
+    echo "<tr><th /><th>{$strDate}</th><th>{$strFrom}</th>";
+    echo "<th>{$strSubject}</th><th>{$strMessage}</th>";
+    echo "<th>{$strOperation}</th></tr>\n";
 
     while ($updates = mysql_fetch_array($result))
     {
@@ -322,6 +320,7 @@ if($spamcount > 0)
         }
     }
     echo "</table>";
+    // FIXME i18n
     if (is_array($spam_array)) echo "<p align='center'><a href={$_SERVER['PHP_SELF']}?delete_all_spam=".implode(',',$spam_array).'>Delete all mail from spam queue</a></p>';
 
 
