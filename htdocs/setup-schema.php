@@ -1526,9 +1526,9 @@ CREATE TABLE IF NOT EXISTS `notices` (
 ) ENGINE=MyISAM AUTO_INCREMENT=1 ;
 
 INSERT INTO `notices` (`id`, `text`, `linktext`, `timestamp`, `type`, `link`) VALUES
-(1, '$strYourCurrentLanguage', '$strUseThisInFuture', NOW(), 2, 'edit_profile.php?mode=savesessionlang');
+(1, '\$strYourCurrentLanguage', '\$strUseThisInFuture', NOW(), 2, 'edit_profile.php?mode=savesessionlang');
 INSERT INTO `notices` (`id`, `text`, `linktext`, `timestamp`, `type`, `resolutionpage`) VALUES
-(2, '$strSitUpgraded', '$strSitUpgradedLink', NOW(), 2, 'releasenotes.php?v=331');
+(2, '\$strSitUpgraded', '\$strSitUpgradedLink', NOW(), 2, 'releasenotes.php?v=331');
 
 
 CREATE TABLE IF NOT EXISTS `usernotices` (
