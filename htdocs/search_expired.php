@@ -32,17 +32,15 @@ if (empty($expired))
     <p>Show Contracts Expired Within <input maxlength='4' name="expired" size='3' type="text" /> Days</p>
     <p><input checked='checked' name="show" type='radio' value="terminated"> Terminated <input name="show" type='radio' value="nonterminated" /> Non-terminated</p>
     <?php
-    echo "<p align='center'>Output: ";
+    echo "<p align='center'>{$strOutput}: ";
     echo "<select name='output'>";
-    echo "<option value='screen'>Screen</option>";
+    echo "<option value='screen'>{$strScreen}</option>";
     // echo "<option value='printer'>Printer</option>";
-    echo "<option value='csv'>Disk - Comma Seperated (CSV) file</option>";
+    echo "<option value='csv'>{$strCSVfile}</option>";
     echo "</select>";
     echo "</p>";
-    ?>
-    <p><input name="submit" type="submit" value="Search" /></p>
-    </form>
-    <?php
+    echo "<p><input name='submit' type='submit' value=\"{$strSearch}\" /></p>\n";
+    echo "</form>\n";
     include('htmlfooter.inc.php');
 }
 else
@@ -84,6 +82,7 @@ else
         {
             include('htmlheader.inc.php');
             echo $pagetitle;
+            // FIXME i18n
             echo "<p class='error'>Sorry, your search yielded no results</p>\n";
             include('htmlfooter.inc.php');
         }
@@ -109,20 +108,21 @@ else
                 echo "<h2>$pagetitle</h2>";
                 ?>
                 <h3>Search yielded <?php echo mysql_num_rows($result) ?> result(s)</h3>
-                <table align='center'>
-                <tr>
-                <th>Contract ID</th>
-                <th>Site</th>
-                <th>Product</th>
-                <th>Reseller</th>
-                <th>Licence</th>
-                <th>Exipry Date</th>
-                <th>Admin Contact</th>
-                <th>Admin Tel</th>
-                <th>Admin Email</th>
-                <th>Notes</th>
-                </tr>
                 <?php
+                echo "<table align='center'>
+                <tr>
+                <th>{$strContract}</th>
+                <th>{$strSite}</th>
+                <th>{$strProduct}</th>
+                <th>{$strReseller}</th>
+                <th>{$strLicense}</th>
+                <th>{$strExpiryDate}</th>
+                <th>{$strAdminContact}</th>
+                <th>{$strTelephone}</th>
+                <th>{$strEmail}</th>
+                <th>{$strNotes}</th>
+                </tr>\n";
+                // FIXME check data protection fields for email and telephone
                 $shade = 0;
                 while ($results = mysql_fetch_array($result))
                 {
@@ -149,15 +149,13 @@ else
                     if ($shade == 1) $shade = 0;
                     else $shade = 1;
                 }
-                ?>
-                </table>
-                <p align='center'><a href="search.php?query=<?php echo $search_string; ?>&amp;context=maintenance">Search Again</a></p>
-                <?php
+                echo "</table>\n";
+                echo "<p align='center'><a href='search.php?query={$search_string}&amp;context=maintenance'>{$strSearchAgain}</a></p>\n";
                 include('htmlfooter.inc.php');
             }
             else
             {
-                $csvfieldheaders="Maintenance ID,Site,Product,Reseller,License,Expiry Date,Admin Contact,Admin Telephone,Admin Email,Notes\n";
+                $csvfieldheaders="{$strContract},{$strSite},{$strProduct},{$strReseller},{$strLicense},{$strExpiryDate},{$strAdminContact},{$strTelephone},{$strEmail},{$strNotes}\n";
                 while ($row = mysql_fetch_object($result))
                 {
                     $csv.= "{$row->maintid},{$row->site},{$row->product},{$row->reseller},{$row->license_quantity} {$row->licence_type},";

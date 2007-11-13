@@ -29,9 +29,10 @@ if (empty($expire))
     <h2><?php echo $title; ?></h2>
     <form action="<?php echo $_SERVER['PHP_SELF']; ?>" method="post">
     <p>Show Contracts Expiring Within <input maxlength='3' name="expire" size='3' type="text" /> Days</p>
-    <p><input name="submit" type="submit" value="Search" /></p>
-    </form>
     <?php
+    // FIXME i18n
+    echo "<p><input name='submit' type='submit' value=\"{$strSearch}\" /></p>";
+    echo "</form>\n";
     include('htmlfooter.inc.php');
 }
 else
