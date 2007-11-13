@@ -64,7 +64,7 @@ switch($action)
         echo "<table align='center' class='vertical'>";
         echo "<tr><th>{$strName}: <sup class='red'>*</sup></th><td><input type='text' name='reseller_name' /></td></tr>";
         echo "</table>";
-        echo "<p align='center'><input name=\"submit\" type=\"submit\" value=\{$strAddReseller}\" /></p>";
+        echo "<p align='center'><input name=\"submit\" type=\"submit\" value=\"{$strAddReseller}\" /></p>";
         echo "<input type='hidden' value='add_reseller' name='action' />";
         echo "</form>";
         include('htmlfooter.inc.php');

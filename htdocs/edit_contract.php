@@ -16,6 +16,8 @@ require('functions.inc.php');
 // This page requires authentication
 require('auth.inc.php');
 
+$title = $strEditContract;
+
 // External variables
 $action = $_REQUEST['action'];
 $maintid = cleanvar($_REQUEST['maintid']);
@@ -26,14 +28,14 @@ if (empty($action) OR $action == "showform")
     include('htmlheader.inc.php');
     echo "<h2><img src='{$CONFIG['application_webpath']}images/icons/{$iconset}/32x32/contract.png' width='32' height='32' alt='' /> ";
     echo "Select Contract to Edit</h2>";
-    ?>
-    <form action="<?php echo $_SERVER['PHP_SELF']; ?>?action=edit" method="post">
-    <table align='center' class='vertical'>
-    <tr><th>Contract:</th><td><?php echo maintenance_drop_down("maintid", 0); ?></td></tr>
-    </table>
-    <p align='center'><input name="submit" type="submit" value="Continue" /></p>
-    </form>
-    <?php
+    echo "<form action='{$_SERVER['PHP_SELF']}?action=edit' method='post'>";
+    echo "<table align='center' class='vertical'>";
+    echo "<tr><th>{$strContract}:</th><td>";
+    maintenance_drop_down("maintid", 0);
+    echo "</td></tr>\n";
+    echo "</table>\n";
+    echo "<p align='center'><input name='submit' type='submit' value=\"$strContinue\" /></p>\n";
+    echo "</form>\n";
     include('htmlfooter.inc.php');
 }
 
@@ -74,49 +76,60 @@ if ($action == "edit")
         </script>
         <?php
         echo "<h2><img src='{$CONFIG['application_webpath']}images/icons/{$iconset}/32x32/contract.png' width='32' height='32' alt='' /> ";
-        echo "Edit Contract {$maintid}</h2>";
-        echo "<h5>{$strMandatoryMarked} <sup class='red'>*</sup></h5>";
-        ?>
-        <form id='maintform' name='maintform' action="<?php echo $_SERVER['PHP_SELF']; ?>?action=update" method="post" onsubmit="return confirm_submit()">
-        <table align='center' class='vertical'>
-        <tr><th>Site: <sup class='red'>*</sup></th><td><?php echo site_name($maint["site"]) ?></td></tr>
+        echo "{$strEditContract}: {$maintid}</h2>";
+        echo "<h5>".sprintf($strMandatoryMarked,"<sup class='red'>*</sup>")."</h5>";
+        echo "<form id='maintform' name='maintform' action='{$_SERVER['PHP_SELF']}?action=update' method='post' onsubmit='return confirm_submit()'>\n";
+        echo "<table align='center' class='vertical'>";
+        echo "<tr><th>{$strSite}: <sup class='red'>*</sup></th><td>";
+        echo site_name($maint["site"]) ?></td></tr>
         <?php
-        echo "<tr><th>Product: <sup class='red'>*</sup></th><td>";
+        echo "<tr><th>{$strProduct}: <sup class='red'>*</sup></th><td>";
         $productname=product_name($maint["product"]);
         if (user_permission($sit[2], 22))
         {
+            // FIXME i18n
             if ($changeproduct=='yes') echo product_drop_down("product", $maint['product']);
             else echo "{$productname} (<a href='{$_SERVER['PHP_SELF']}?action=edit&amp;maintid={$maintid}&amp;changeproduct=yes'>Change</a>)";
         }
         else echo "{$productname}";
-        ?>
-        </td></tr>
-        <tr><th>Reseller: <sup class='red'>*</sup></th><td><?php echo reseller_drop_down("reseller", $maint["reseller"]) ?></td></tr>
-        <tr><th>Licence Quantity: <sup class='red'>*</sup></th><td><input maxlength="7" name="licence_quantity" size="5" value="<?php echo $maint["licence_quantity"] ?>" /></td></tr>
-        <tr><th>Licence Type: <sup class='red'>*</sup></th><td><?php echo licence_type_drop_down("licence_type", $maint["licence_type"]) ?></td></tr>
-        <tr><th>Expiry Date: <sup class='red'>*</sup></th>
-        <?php
+        echo "</td></tr>\n";
+        echo "<tr><th>{$strReseller}: <sup class='red'>*</sup></th><td>";
+        echo reseller_drop_down("reseller", $maint["reseller"]);
+        echo "</td></tr>\n";
+        echo "<tr><th>{$strLicenseQuantity}: <sup class='red'>*</sup></th>";
+        echo "<td><input maxlength='7' name='licence_quantity' size='5' value='{$maint['licence_quantity']}' /></td></tr>\n";
+        echo "<tr><th>{$strLicenseType}: <sup class='red'>*</sup></th><td>";
+        echo licence_type_drop_down("licence_type", $maint["licence_type"]);
+        echo "</td></tr>\n";
+        echo "<tr><th>{$strExpiryDate}: <sup class='red'>*</sup></th>";
         echo "<td><input name='expirydate' size='10' value='";
         if ($maint['expirydate'] > 0) echo date('Y-m-d',$maint['expirydate']);
         echo "' /> ".date_picker('maintform.expirydate')."</td></tr>\n";
-        ?>
-        <tr><th>Service Level:</th><td><?php echo servicelevel_drop_down('servicelevelid',$maint['servicelevelid'], TRUE); ?></td></tr>
-        <?php
-        echo "<tr><th>Incident Pool:</th>";
+        echo "<tr><th>{$strServiceLevel}:</th><td>";
+        echo servicelevel_drop_down('servicelevelid',$maint['servicelevelid'], TRUE);
+        echo "</td></tr>\n";
+        echo "<tr><th>{$strIncidentPool}:</th>";
         $incident_pools = explode(',', "Unlimited,{$CONFIG['incident_pools']}");
         echo "<td>".array_drop_down($incident_pools,'incident_poolid',$maint['incident_quantity'])."</td></tr>";
-        ?>
-        <tr><th>Admin Contact: <sup class='red'>*</sup></th><td><?php echo contact_drop_down("admincontact", $maint["admincontact"], true) ?></td></tr>
-        <tr><th>Notes:</th><td><textarea cols="40" name="notes" rows="5"><?php echo stripslashes($maint["notes"]); ?></textarea></td></tr>
-        <tr><th>Terminated:</th><td><input name="terminated" id="terminated" type="checkbox" value="yes"<?php if ($maint["term"] == "yes") echo " checked" ?> /></td></tr>
-        <tr><th>Product Only:</th><td><input name="productonly" type="checkbox" value="yes" onclick="set_terminated();" <?php if ($maint["productonly"] == "yes") echo " checked" ?> /></td></tr>
-        </table>
-        <input name="maintid" type="hidden" value="<?php echo $maintid ?>" />
-        <?php
+        echo "<tr><th>{$strAdminContact}: <sup class='red'>*</sup></th><td>";
+        echo contact_drop_down("admincontact", $maint["admincontact"], true);
+        echo "</td></tr>\n";
+        echo "<tr><th>{$strNotes}:</th><td><textarea cols='40' name='notes' rows='5'>";
+        echo stripslashes($maint["notes"]);
+        echo "</textarea></td></tr>\n";
+        echo "<tr><th>{$strTerminated}:</th><td><input name='terminated' id='terminated' type='checkbox' value='yes'";
+        if ($maint["term"] == "yes") echo " checked";
+        echo " /></td></tr>\n";
+        // FIXME i18n
+        echo "<tr><th>Product Only:</th><td><input name='productonly' type='checkbox' value='yes' onclick='set_terminated();' ";
+        if ($maint["productonly"] == "yes") echo " checked";
+        echo " /></td></tr>\n";
+        echo "</table>\n";
+        echo "<input name='maintid' type='hidden' value='{$maintid}' />";
         echo "<p align='center'><input name='submit' type='submit' value='{$strSave}' /></p>";
         echo "</form>\n";
 
-        echo "<p align='center'><a href='maintenance_details.php?id={$maintid}'>View contract</a></p>";
+        echo "<p align='center'><a href='maintenance_details.php?id={$maintid}'>View contract</a></p>"; // FIXME i18n
         mysql_free_result($result);
     }
     include('htmlfooter.inc.php');
