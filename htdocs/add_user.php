@@ -84,7 +84,7 @@ if (empty($submit))
     // i18n ^^
     plugin_do('add_user_form');
     echo "</table>\n";
-    echo "<p><input name='submit' type='submit' value=\"$strAddUser}\" /></p>";
+    echo "<p><input name='submit' type='submit' value=\"{$strAddUser}\" /></p>";
     echo "</form>\n";
 }
 else

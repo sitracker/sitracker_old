@@ -45,7 +45,7 @@ else $adminuser=FALSE;
 // 4 = Training
 // 5 - Compassionate/Free
 
-// check to see if there is a holiday on this day already, if there is retreive it
+// check to see if there is a holiday on this day already, if there is retrieve it
 list($dtype, $dlength, $dapproved, $dapprovedby)=user_holiday($user, 0, $year, $month, $day, FALSE);
 
 // allow approver (or admin) to unbook holidays already approved
