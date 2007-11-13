@@ -199,7 +199,7 @@ while ($contactrow=mysql_fetch_array($contactresult))
         {
             echo "<p align='center'>This contact is not supported via any contracts</p>\n";
         }
-        echo "<p align='center'><a href='add_maintenance_support_contact.php?contactid=$id&amp;context=contact'>Associate this contact with an existing contract</a></p>\n";
+        echo "<p align='center'><a href='add_contact_support_contract.php?contactid=$id&amp;context=contact'>Associate this contact with an existing contract</a></p>\n";
     }
     else
     {

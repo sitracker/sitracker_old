@@ -74,7 +74,7 @@ while ($users = mysql_fetch_array($result))
             {
                 echo "<br />&bull; $countskills skills";
                 if (($nobackup+1) >= $countskills) echo ", <strong>{$strNoSubstitutes}</strong>.";
-                elseif ($nobackup > 0) echo ", <strong>{$nobackup} need substitute engineers to be defined</strong>.";
+                elseif ($nobackup > 0) echo ", <strong>".sprintf($strNeedsSubstitueEngineers, $nobackup)."</strong>.";
             }
             $c++;
         }

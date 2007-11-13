@@ -1,5 +1,5 @@
 <?php
-// edit_maintenance.php - Form for editing maintenance contracts
+// edit_contract.php - Form for editing maintenance contracts
 //
 // SiT (Support Incident Tracker) - Support call tracking system
 // Copyright (C) 2000-2007 Salford Software Ltd. and Contributors

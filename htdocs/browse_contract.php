@@ -1,5 +1,5 @@
 <?php
-// browse_maintenance.php - List of contracts
+// browse_contracts.php - List of contracts
 //
 // SiT (Support Incident Tracker) - Support call tracking system
 // Copyright (C) 2000-2007 Salford Software Ltd. and Contributors
