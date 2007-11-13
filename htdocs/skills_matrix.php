@@ -24,7 +24,7 @@ if ($groupid=='all') $filtergroup = 'all';
 elseif ($groupid=='') $filtergroup = $_SESSION['groupid'];
 else $filtergroup = $groupid;
 
-$title='Skills Matrix';
+$title = $strSkillsMatrix;
 
 include('htmlheader.inc.php');
 
@@ -44,7 +44,7 @@ $numgroups = count($grouparr);
 if ($numgroups >= 1)
 {
     echo "<form action='{$_SERVER['PHP_SELF']}' style='text-align: center;' method='get'>";
-    echo "Group: <select name='choosegroup' onchange='window.location.href=this.options[this.selectedIndex].value'>";
+    echo "{$strGroup}: <select name='choosegroup' onchange='window.location.href=this.options[this.selectedIndex].value'>";
     echo "<option value='{$_SERVER['PHP_SELF']}?gid=all";
     if(empty($legacy)) echo "'";
     else echo "&legacy=yes'";

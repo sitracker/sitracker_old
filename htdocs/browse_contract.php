@@ -13,11 +13,13 @@
 // This Page Is Valid XHTML 1.0 Transitional! 27Oct05
 
 $permission=19; // View Maintenance Contracts
-$title='Browse Contracts';
+
 require('db_connect.inc.php');
 require('functions.inc.php');
 // This page requires authentication
 require('auth.inc.php');
+
+$title = $strBrowseContracts;
 
 // External variables
 $productid = cleanvar($_REQUEST['productid']);
@@ -34,7 +36,7 @@ include('htmlheader.inc.php');
 </script>
 <?php
 echo "<h2><img src='{$CONFIG['application_webpath']}images/icons/{$iconset}/32x32/contract.png' width='32' height='32' alt='' /> ";
-echo "Browse Maintenance</h2>";
+echo "{$title}</h2>";
 ?>
 <table summary="alphamenu" align="center">
 <tr>
@@ -58,7 +60,9 @@ echo product_drop_down('productid', $productid)
 </tr>
 <tr>
 <td valign="middle">
-    <a href="add_maintenance.php">Add Contract</a> |
+<?php
+    echo "<a href='add_maintenance.php'>{$strAddContract}</a> |";
+?>
     <a href="<?php echo $_SERVER['PHP_SELF'] ?>?search_string=A">A</a> |
     <a href="<?php echo $_SERVER['PHP_SELF'] ?>?search_string=B">B</a> |
     <a href="<?php echo $_SERVER['PHP_SELF'] ?>?search_string=C">C</a> |
@@ -85,7 +89,9 @@ echo product_drop_down('productid', $productid)
     <a href="<?php echo $_SERVER['PHP_SELF'] ?>?search_string=X">X</a> |
     <a href="<?php echo $_SERVER['PHP_SELF'] ?>?search_string=Y">Y</a> |
     <a href="<?php echo $_SERVER['PHP_SELF'] ?>?search_string=Z">Z</a> |
-    <a href="<?php echo $_SERVER['PHP_SELF'] ?>?search_string=*">All</a>
+    <?php
+    echo "<a href='{$_SERVER['PHP_SELF']}?search_string=*'>{$strAll}</a>";
+    ?>
 </td>
 </tr>
 </table>
@@ -169,13 +175,13 @@ else
         <?php
         $filter=array('search_string' => $search_string,
                       'productid' => $productid);
-        echo colheader('id', 'ID', $sort, $order, $filter);
-        echo colheader('product', 'Product', $sort, $order, $filter);
-        echo colheader('site', 'Site', $sort, $order, $filter);
-        echo colheader('reseller', 'Reseller', $sort, $order. $filter);
-        echo "<th>Licence</th>";
-        echo colheader('expiry', 'Expiry Date', $sort, $order, $filter);
-        echo "<th width='200'>Notes</th>";
+        echo colheader('id', $strID, $sort, $order, $filter);
+        echo colheader('product', $strProduct, $sort, $order, $filter);
+        echo colheader('site', $strSite, $sort, $order, $filter);
+        echo colheader('reseller', $strReseller, $sort, $order. $filter);
+        echo "<th>{$strLicense}</th>";
+        echo colheader('expiry', $strExpiryDate, $sort, $order, $filter);
+        echo "<th width='200'>{$strNotes}</th>";
     echo "</tr>\n";
     $shade = 0;
     while ($results = mysql_fetch_array($result))
@@ -205,9 +211,9 @@ else
 
         <td><?php echo $results["reseller"] ?></td>
         <td><?php echo $results["licence_quantity"] ?> <?php echo $results["licence_type"] ?></td>
-        <td><?php echo date("jS M Y", $results["expirydate"]); ?></td>
+        <td><?php echo date($CONFIG['dateformat_date'], $results["expirydate"]); ?></td>
 
-        <td><?php if ($results["notes"] == "") echo "&nbsp;"; else echo nl2br($results["notes"]); ?></td>
+        <td><?php if ($results["notes"] == "") echo "&nbsp;"; else echo nl2br(stripslashes($results["notes"])); ?></td>
         </tr>
         <?php
         // invert shade

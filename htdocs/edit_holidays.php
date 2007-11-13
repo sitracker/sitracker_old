@@ -73,10 +73,10 @@ switch($_REQUEST['action'])
 
         echo "<table align='center'>";
         echo "<tr><th></th>";
-        echo colheader('realname', 'Name', FALSE);
-        echo colheader('entitlement', 'Entitlement', FALSE);
-        echo colheader('holidaysused', 'Holidays Used', FALSE);
-        echo colheader('holidaysremaining', 'Holidays Remaining', FALSE);
+        echo colheader('realname', $strName, FALSE);
+        echo colheader('entitlement', $strEntitlement, FALSE);
+        echo colheader('holidaysused', $strUsed, FALSE);
+        echo colheader('holidaysremaining', $strRemaining, FALSE);
         echo "</tr>";
         while ($users = mysql_fetch_object($result))
         {
