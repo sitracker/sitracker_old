@@ -9,6 +9,7 @@
 //
 
 // Author: Ivan Lucas <ivanlucas[at]users.sourceforge.net>
+// FIXME i18n
 
 $permission=37; // Run Reports
 
@@ -35,7 +36,7 @@ if (!function_exists('strip_comma'))
 if (empty($_REQUEST['mode']))
 {
     include('htmlheader.inc.php');
-    echo "<h2>Marketing Report</h2>";
+    echo "<h2>{$strMarketingMailshot}</h2>";
     echo "<form action='{$_SERVER['PHP_SELF']}' method='post'>";
     echo "<table align='center'>";
     echo "<tr><th>Include</th><th>Exclude</th></tr>";
@@ -79,34 +80,34 @@ if (empty($_REQUEST['mode']))
 
     echo "<tr><td  colspan='2'><label><input type='checkbox' name='activeonly' value='yes' /> Only show contacts with current/active contracts.</td></tr>";
 
-    echo "<tr><td colspan='2'>Output: <select name='output'>";
-    echo "<option value='screen'>Screen</option>";
+    echo "<tr><td colspan='2'>{$strOutput}: <select name='output'>";
+    echo "<option value='screen'>{$strScreen}</option>";
     // echo "<option value='printer'>Printer</option>";
-    echo "<option value='csv'>Disk - Comma Seperated (CSV) file</option>";
+    echo "<option value='csv'>{$strCSVfile}</option>";
     echo "</select>";
     echo "</td></tr>";
     echo "</table>";
     echo "<p align='center'>";
     echo "<input type='hidden' name='table1' value='{$_POST['table1']}' />";
     echo "<input type='hidden' name='mode' value='report' />";
-    echo "<input type='reset' value='Reset Form' /> ";
-    echo "<input type='submit' value='Run Report' />";
+    echo "<input type='reset' value=\"{$strReset}\" /> ";
+    echo "<input type='submit' value=\"{$strRunReport}\" />";
     echo "</p>";
     echo "</form>";
     echo "<table align='center'><tr><td>";
     echo "<h4>When outputting to a CSV file the format is as follows:</h4>";
-    echo "<strong>Field 1:</strong> Forenames<br />";
-    echo "<strong>Field 2:</strong> Surname<br />";
-    echo "<strong>Field 3:</strong> Email Address<br />";
-    echo "<strong>Field 4:</strong> Site Name<br />";
-    echo "<strong>Field 5:</strong> Address Line 1<br />";
-    echo "<strong>Field 6:</strong> Address Line 2<br />";
-    echo "<strong>Field 7:</strong> City<br />";
-    echo "<strong>Field 8:</strong> County<br />";
-    echo "<strong>Field 9:</strong> Postcode<br />";
-    echo "<strong>Field 10:</strong> Country<br />";
-    echo "<strong>Field 11:</strong> Phone Number<br />";
-    echo "<strong>Field 12:</strong> Products <em>(Lists all the customers products regardless of selections made above)</em><br />";
+    echo "<strong>Field 1:</strong> {$strForenames}<br />";
+    echo "<strong>Field 2:</strong> {$strSurname}<br />";
+    echo "<strong>Field 3:</strong> {$strEmail}<br />";
+    echo "<strong>Field 4:</strong> {$strSite}<br />";
+    echo "<strong>Field 5:</strong> {$strAddress1}<br />";
+    echo "<strong>Field 6:</strong> {$strAddress2}<br />";
+    echo "<strong>Field 7:</strong> {$strCity}<br />";
+    echo "<strong>Field 8:</strong> {$strCounty}<br />";
+    echo "<strong>Field 9:</strong> {$strPostcode}<br />";
+    echo "<strong>Field 10:</strong> {$strCountry}<br />";
+    echo "<strong>Field 11:</strong> {$strTelephone}<br />";
+    echo "<strong>Field 12:</strong> {$strProducts} <em>(Lists all the customers products regardless of selections made above)</em><br />";
     echo "</td></tr></table>";
     include('htmlfooter.inc.php');
 }
@@ -163,14 +164,16 @@ elseif ($_REQUEST['mode']=='report')
     if (mysql_error()) trigger_error(mysql_error(),E_USER_ERROR);
     $numrows = mysql_num_rows($result);
 
+    // FIXME i18n
+    // FIXME strip slashes from output
     $html .= "<p align='center'>This report is a list of contact details for all customers ";
     if ($_REQUEST['activeonly']=='yes') $html .= "with <strong>current</strong> ";
     else $html .= "that have currently got (or at some time in the past had) ";
     $html .= "contracts for the products you selected - if you selected to exclude any products then customers who have contracts for those products are not shown.</p>";
     $html .= "<table width='99%' align='center'>";
-    $html .= "<tr><th>Forenames</th><th>Surname</th><th>Email</th><th>Site</th><th>Address Line 1</th>";
-    $html .= "<th>Address Line 2</th><th>City</th><th>County</th><th>Postcode</th><th>Country</th><th>Telephone</th><th>Products</th></tr>";
-    $csvfieldheaders .= "Forenames,Surname,Email,Site,Address Line 1,Address Line 2,City,County,Postcode,Country,Telephone,Products\r\n";
+    $html .= "<tr><th>{$strForenames}</th><th>{$strSurname}</th><th>{$strEmail}</th><th>{$strSite}</th><th>{$strAddress1}</th>";
+    $html .= "<th>{$strAddress2}</th><th>{$strCity}</th><th>{$strCounty}</th><th>{$strPostcode}</th><th>{$strCountry}</th><th>{$strTelephone}</th><th>{$strProducts}</th></tr>";
+    $csvfieldheaders .= "{$strForenames},{$strSurname},{$strEmail},{$strSite},{$strAddress1},{$strAddress2},{$strCity},{$strCounty},{$strPostcode},{$strCountry},{$strTelephone},{$strProducts}\r\n";
     $rowcount=0;
     while ($row = mysql_fetch_object($result))
     {
@@ -178,14 +181,14 @@ elseif ($_REQUEST['mode']=='report')
         {
             $html .= "<tr class='shade2'><td>{$row->forenames}</td><td>{$row->surname}</td>";
             if ($row->dataprotection_email!='Yes') $html .= "<td>{$row->contactemail}</td>";
-            else $html .= "<td><em style='color: red';>Withheld</em></td>";
+            else $html .= "<td><em style='color: red';>{$strWithheld}</em></td>";
             $html .= "<td>{$row->sitename}</td>";
             if ($row->dataprotection_address!='Yes')
                 $html .= "<td>{$row->address1}</td><td>{$row->address2}</td><td>{$row->city}</td><td>{$row->county}</td><td>{$row->postcode}</td><td>{$row->country}</td>";
             else
-                $html .= "<td colspan='6'><em style='color: red';>Withheld</em></td>";
+                $html .= "<td colspan='6'><em style='color: red';>{$strWithheld}</em></td>";
             if ($row->dataprotection_phone!='Yes') $html .= "<td>{$row->phone}</td>";
-            else $html .= "<td><em style='color: red';>Withheld</em></td>";
+            else $html .= "<td><em style='color: red';>{$strWithheld}</em></td>";
 
             $psql = "SELECT * FROM supportcontacts, maintenance, products WHERE ";
             $psql .= "supportcontacts.maintenanceid=maintenance.id AND ";
@@ -193,6 +196,7 @@ elseif ($_REQUEST['mode']=='report')
             $psql .= "AND supportcontacts.contactid='$row->contactid' ";
             $html .= "<td>";
 
+            // FIXME dataprotection_address for csv
             $csv .= strip_comma($row->forenames).','
                 . strip_comma($row->surname).',';
             if ($row->dataprotection_email!='Yes') $csv .= strip_comma(strtolower($row->contactemail)).',';
