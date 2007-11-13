@@ -1,5 +1,5 @@
 <?php
-// add_maintenance.php - Add a new maintenance contract
+// add_reseller.php - Add a new reseller contract
 //
 // SiT (Support Incident Tracker) - Support call tracking system
 // Copyright (C) 2000-2007 Salford Software Ltd. and Contributors

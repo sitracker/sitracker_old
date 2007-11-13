@@ -24,7 +24,7 @@ if (mysql_num_rows($result) >= 1)
     $task = mysql_fetch_object($result);
     if ($task->distribution == 'private' AND $task->owner != $sit[2])
     {
-        echo "<p class='error'>Sorry, you cannot view this task as it has been marked private and you are not the owner.</p>";
+        echo "<p class='error'>{$strTaskPrivateError}</p>";
     }
     elseif($mode != 'incident')
     {
@@ -112,13 +112,13 @@ if (mysql_num_rows($result) >= 1)
         echo "</div>";
     }
 }
-else echo "<p class='error'>No matching task found</p>";
+else echo "<p class='error'>{$strNoMatchingTask}</p>";
 
 if($mode != 'incident')echo "</div>";
 echo "<div style='clear:both; padding-top: 20px;'>";
 
 if($mode != 'incident') echo "<p align='center'><a href='tasks.php'>{$strTaskList}</a></p>";
-else echo "<p align='center'><a href=edit_task.php?id={$taskid}&amp;action=markcomplete&amp;incident={$incidentid}>Mark Complete</a> | <a href='tasks.php?incident={$id}'>{$strTaskList}</a></p>";
+else echo "<p align='center'><a href=edit_task.php?id={$taskid}&amp;action=markcomplete&amp;incident={$incidentid}>{$strMarkComplete}</a> | <a href='tasks.php?incident={$id}'>{$strTaskList}</a></p>";
 echo "</div>";
 
 ?>

@@ -1,5 +1,5 @@
 <?php
-// maintenance_details.php - Show contract details
+// contract_details.php - Show contract details
 //
 // SiT (Support Incident Tracker) - Support call tracking system
 // Copyright (C) 2000-2007 Salford Software Ltd. and Contributors
@@ -10,7 +10,7 @@
 
 // Author: Ivan Lucas <ivanlucas[at]users.sourceforge.net>
 // Created: 20th August 2001
-// Purpose: Show All Maintenance Contract Details
+// Purpose: Show All Contract Details
 // This Page Is Valid XHTML 1.0 Transitional! 27Oct05
 
 $permission=19;  // view Maintenance contracts
@@ -38,7 +38,7 @@ $maintrow=mysql_fetch_array($maintresult);
 echo "<tr><th>{$strContract} ID:</th><td><h3><img src='{$CONFIG['application_webpath']}images/icons/{$iconset}/32x32/contract.png' width='32' height='32' alt='' /> ";
 echo "{$maintrow['id']}</h3></td></tr>";
 echo "<tr><th>{$strStatus}:</th><td>";
-if ($maintrow['term']=='yes') echo "<strong>{$strTerminated}</strong>";
+if ($maintrow['term']=='yes') echo '<strong>{$strTerminated}</strong>';
 else echo $strActive;
 if ($maintrow['expirydate']<$now) echo "<span class='expired'>, {$strExpired}</span>";
 echo "</td></tr>";
@@ -93,14 +93,14 @@ if (mysql_num_rows($result)>0)
 }
 else
 {
-    echo "<p align='center'>{$strNoRecords}<p>";
+    echo "<p align='center'>This site has no supported contacts<p>";
 }
 ?>
-<p align='center'><a href="add_maintenance_support_contact.php?maintid=<?php echo $id; ?>&amp;siteid=<?php echo $maintrow['site'] ?>&amp;context=maintenance">Add a support contact to this contract</a></p>
+<p align='center'><a href="add_contact_support_contract.php?maintid=<?php echo $id; ?>&amp;siteid=<?php echo $maintrow['site'] ?>&amp;context=maintenance">Add a support contact to this contract</a></p>
 <?php
 
 echo "<br />";
-echo "<h3>{$strSkillsSupportedUnderContract}:</h3>";
+echo "<h3>Skills supported under this contract:</h3>";
 // supported software
 $sql = "SELECT * FROM softwareproducts, software WHERE softwareproducts.softwareid=software.id AND productid='{$maintrow['product']}' ";
 $result=mysql_query($sql);
