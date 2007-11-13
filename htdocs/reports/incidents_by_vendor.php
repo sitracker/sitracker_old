@@ -11,12 +11,14 @@
 // Authors: Paul Heaney <paulheaney[at]users.sourceforge.net>
 
 $permission=37; // Run Reports
-$title='Incidents by Vendor';
+
 require('db_connect.inc.php');
 require('functions.inc.php');
 
 // This page requires authentication
 require('auth.inc.php');
+
+$title = $strIncidentsByVendor;
 
 if (empty($_REQUEST['mode']))
 {
@@ -25,18 +27,18 @@ if (empty($_REQUEST['mode']))
     echo "<h2>$title</h2>";
     echo "<form action='{$_SERVER['PHP_SELF']}' id='incidentsbyvendor' method='post'>";
     echo "<table class='vertical'>";
-    echo "<tr><td class='shade2'>Start Date:</td>";
+    echo "<tr><td class='shade2'>{$strStartDate}:</td>";
     echo "<td class='shade2'><input type='text' name='startdate' id='startdate' size='10' /> ";
     echo date_picker('incidentsbyvendor.startdate');
     echo "</td></tr>";
-    echo "<tr><td class='shade2'>End Date:</td>";
+    echo "<tr><td class='shade2'>{$strEndDate}:</td>";
     echo "<td class='shade2'><input type='text' name='enddate' id='enddate' size='10' /> ";
     echo date_picker('incidentsbyvendor.enddate');
     echo "</td></tr>";
     echo "</table>";
     echo "<p align='center'>";
     echo "<input type='hidden' name='mode' value='report' />";
-    echo "<input type='submit' value='Run Report' />";
+    echo "<input type='submit' value=\"{$strRunReport}\" />";
     echo "</p>";
     echo "</form>";
 
@@ -65,13 +67,14 @@ LIMIT 0 , 30
 
     echo "<h2>$title</h2>";
 
+    // FIXME i18n
     echo "<p align='center'>For the period {$_REQUEST['startdate']} to {$_REQUEST['enddate']}</p>";
 
     if(mysql_num_rows($result) > 0)
     {
         echo "<p>";
         echo "<table class='vertical' align='center'>";
-        echo "<tr><th>Vendor</th><th>Number of calls</th></tr>";
+        echo "<tr><th>{$strVendor}</th><th>{$strIncidents}</th></tr>";
         while($row = mysql_fetch_array($result))
         {
             echo "<tr><td class='shade1'>".$row['name']."</td><td class='shade1'>".$row['volume']."</td></tr>";

@@ -40,20 +40,20 @@ if (empty($_REQUEST['mode']))
     echo "</select>";
     echo "</td>";
     echo "</tr>\n";
-    echo "<tr><th align='right'>Output:</th>";
+    echo "<tr><th align='right'>{$strOutput}:</th>";
     echo "<td width='400'>";
     echo "<input type='checkbox' name='showsitetotals' value='yes' /> Add a line after each site showing totals<br />";
     echo "<input type='checkbox' name='showtotals' value='yes' /> Add a line to the bottom of the report showing totals<br /><br />";
     echo "<select name='output'>";
-    echo "<option value='screen'>Screen</option>";
-    echo "<option value='csv'>Disk - Comma Seperated (CSV) file</option>";
+    echo "<option value='screen'>{$strScreen}</option>";
+    echo "<option value='csv'>{$strCSVfile}</option>";
     echo "</select>";
     echo "</td></tr>";
     echo "</table>";
     echo "<p align='center'>";
     echo "<input type='hidden' name='table1' value='{$_POST['table1']}' />";
     echo "<input type='hidden' name='mode' value='report' />";
-    echo "<input type='submit' value='report' />";
+    echo "<input type='submit' value=\"{$strRunReport}\" />";
     echo "</p>";
     echo "</form>";
     include('htmlfooter.inc.php');
@@ -102,10 +102,12 @@ elseif ($_REQUEST['mode']=='report')
     if (mysql_error()) trigger_error("MySQL Query Error ".mysql_error(), E_USER_ERROR);
     $numrows = mysql_num_rows($result);
 
+    // FIXME i18n
+
     $html .= "<p align='center'>This report is a list of ($numrows) incidents for all sites that you selected</p>";
     $html .= "<table width='99%' align='center'>";
-    $html .= "<tr><th>Opened</th><th>Incident</th><th>External ID</th><th>Title</th><th>Contact</th><th>Site</th><th>Type</th></tr>";
-    $csvfieldheaders .= "opened,id,externalid,title,contact,site,type\r\n";
+    $html .= "<tr><th>{$strOpened}</th><th>{$strIncident}</th><th>{$strExternalID}</th><th>{$strTitle}</th><th>{$strContact}</th><th>{$strSite}</th><th>{$strType}</th></tr>";
+    $csvfieldheaders .= "{$strOpened},{$strIncident},{$strExternalID},{$strTitle},{$strContact},{$strSite},{$strType}\r\n";
     $rowcount=0;
     $externalincidents=0;
     while ($row = mysql_fetch_object($result))
