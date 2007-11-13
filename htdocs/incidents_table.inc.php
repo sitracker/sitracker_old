@@ -44,7 +44,7 @@ echo "<tr>";
 $filter=array('queue' => $queue,
               'user' => $user,
               'type' => $type);
-echo colheader('id','ID',$sort, $order, $filter);
+echo colheader('id',$strID,$sort, $order, $filter);
 echo colheader('title',$strTitle,$sort, $order, $filter);
 echo colheader('contact',$strContact,$sort, $order, $filter);
 echo colheader('priority',$strPriority,$sort, $order, $filter);
@@ -208,7 +208,7 @@ while ($incidents = mysql_fetch_array($result))
 
     echo "<td valign='top'>";
     echo stripslashes($incidents['forenames'].' '.$incidents['surname'])."<br />".htmlspecialchars($site)." </td>";
-    
+
     echo "<td align='center' valign='top' >";
     // Service Level / Priority
     if (!empty($incidents['maintenanceid'])) echo $servicelevel->tag."<br />";

@@ -8,7 +8,8 @@
 // of the GNU General Public License, incorporated herein by reference.
 //
 
-// by Ivan Lucas, June 2004
+// by Ivan Lucas <ivanlucas[at]users.sourceforge.net>, June 2004
+// FIXME i18n
 
 $permission=51; // View Feedback
 
@@ -141,7 +142,7 @@ switch($mode)
         if(mysql_num_rows($result) == 0)
         {
             // no feedback forms
-            echo "<h3>Browse feedback</h3>";
+            echo "<h3>{$title}</h3>";
             echo "<p class='error' align='center'>No feedback forms defined</p>";
             echo "<p align='center'><a href='edit_feedback_form.php?action=new'>Create new form</a></p>";
         }
@@ -183,9 +184,9 @@ switch($mode)
                 echo "<table summary='feedback forms' width='95%' align='center'>";
                 echo "<tr>";
                 echo colheader('created','Feedback Requested',$sort, $order, $filter);
-                echo colheader('contactid','Contact',$sort, $order, $filter);
-                echo colheader('incidentid','Incident',$sort, $order, $filter);
-                echo "<th>Action</th>";
+                echo colheader('contactid',$strContact,$sort, $order, $filter);
+                echo colheader('incidentid',$strIncident,$sort, $order, $filter);
+                echo "<th>{$strOperation}</th>";
                 echo "</tr>\n";
                 $shade='shade1';
                 while ($resp = mysql_fetch_object($result))
