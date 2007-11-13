@@ -71,13 +71,13 @@ function draw_calendar($nmonth, $nyear)
         echo "<p>first day of the first week of $nmonth $nyear is $firstday (from 0 to 6) <p>\n";
         echo "The last day of $nmonth $nyear is $lastday\n<p>";
     }
-    $days[0] = 'Sun';
-    $days[1] = 'Mon';
-    $days[2] = 'Tue';
-    $days[3] = 'Wed';
-    $days[4] = 'Thu';
-    $days[5] = 'Fri';
-    $days[6] = 'Sat';
+    $days[0] = $strSun;
+    $days[1] = $strMon;
+    $days[2] = $strTue;
+    $days[3] = $strWed;
+    $days[4] = $strThu;
+    $days[5] = $strFri;
+    $days[6] = $strSat;
 
     $dayRow = 0;
     echo "\n<table summary='{$monthName} {$nyear}'>";
@@ -611,26 +611,26 @@ else $day=$_REQUEST['day'];
 
 
 // Navigation
-echo "<p>Display: ";
+echo "<p>{$strDisplay}: ";
 echo "<a href='{$_SERVER['PHP_SELF']}?display=list&amp;year={$year}&amp;month={$month}&amp;day={$day}'>";
 if ($display=='list') echo "<em>List</em>";
-else echo "List";
+else echo "{$strList}";
 echo "</a> |";
 echo " <a href='{$_SERVER['PHP_SELF']}?display=year&amp;year={$year}&amp;month={$month}&amp;day={$day}'>";
 if ($display=='year') echo "<em>Year</em>";
-else echo "Year";
+else echo "{$strYear}";
 echo "</a> |";
 echo " <a href='{$_SERVER['PHP_SELF']}?display=month&amp;year={$year}&amp;month={$month}&amp;day={$day}'>";
 if ($display=='month') echo "<em>Month</em>";
-else echo "Month";
+else echo "{$strMonth}";
 echo "</a> |";
 echo " <a href='{$_SERVER['PHP_SELF']}?display=week&amp;year={$year}&amp;month={$month}&amp;day={$day}'>";
 if ($display=='week') echo "<em>Week</em>";
-else echo "Week";
+else echo "{$strWeek}";
 echo "</a> |";
 echo " <a href='{$_SERVER['PHP_SELF']}?display=day&amp;year={$year}&amp;month={$month}&amp;day={$day}'>";
-if ($display=='day') echo "<em>Day</em>";
-else echo "Day";
+if ($display=='day') echo "<em>{$strDay}</em>";
+else echo "{$strDay}";
 echo "</a>";
 echo "</p>";
 
@@ -638,7 +638,7 @@ echo "</p>";
 if ($display=='chart' OR $display=='month')
 {
     // Display planner chart
-    echo "<h2>Month View</h2>";
+    echo "<h2>{$strMonthView}</h2>";
 
     $nextyear=$year;
     if ($month < 12) $nextmonth = $month +1;

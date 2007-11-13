@@ -227,7 +227,7 @@ elseif ($action=='findcontact')
                 {
                     // FIXME i18n
                     echo "<td><a href=\"{$_SERVER['PHP_SELF']}?action=incidentform&amp;type=free&amp;contactid=".$contactrow['contactid']."&amp;updateid=$updateid&amp;win={$win}\" onclick=\"return confirm_free();\">";
-                    echo "Add Site Support Incident</a> ({$site_incident_pool} Left)</td>";
+                    echo "{$strAddSiteSupportIncident}</a> ({$site_incident_pool} Left)</td>";
                 }
                 else
                 {
