@@ -12,6 +12,8 @@
 
 // This Page Is Valid XHTML 1.0 Transitional!  11Oct06
 
+// FIXME i18n
+
 $permission=24;  // Add Product
 require('db_connect.inc.php');
 require('functions.inc.php');
@@ -63,10 +65,10 @@ if (empty($action) OR $action == "showform")
     echo "<p align='center'><input name='submit' type='submit' value='{$strSave}' />";
     echo "<input type='checkbox' name='return' value='true' ";
     if ($return=='true') echo "checked='checked' ";
-    echo "/> Return to this page after saving</p>\n";
+    echo "/> {$strReturnAfterSaving}</p>\n";
     echo "</form>";
 
-    echo "<p align='center'><a href='products.php?productid={$productid}'>Return to product without saving</a></p>";
+    echo "<p align='center'><a href='products.php?productid={$productid}'>{$strReturnWithoutSaving}</a></p>";
     include('htmlfooter.inc.php');
 }
 elseif ($action == "add")
