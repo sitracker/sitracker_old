@@ -202,7 +202,7 @@ while ($update = mysql_fetch_object($result))
     {
         $updateheadertext = str_replace('currentowner', 'Self', $updateheadertext);
     }
-    $updateheadertext = str_replace('%s', $updateuser, $updateheadertext);
+    $updateheadertext = str_replace('updateuser', $updateuser, $updateheadertext);
     if ($update->type=='reviewmet' AND ($update->sla=='opened' OR $update->userid==0)) $updateheadertext = str_replace('updatereview', 'Period Started', $updateheadertext);
     elseif ($update->type=='reviewmet' AND $update->sla=='')  $updateheadertext = str_replace('updatereview', 'Completed', $updateheadertext);
     if ($update->type=='slamet') $updateheadertext = str_replace('updatesla', $slatypes[$update->sla]['text'], $updateheadertext);

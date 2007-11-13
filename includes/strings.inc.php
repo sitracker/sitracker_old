@@ -167,7 +167,7 @@ $updatetypes['probdef'] = array('icon' => 'probdef.png', 'text' => $strProblemDe
 $updatetypes['research'] = array('icon' => 'research.png', 'text' => $strResearchedby);
 $updatetypes['reassigning'] = array('icon' => 'reassign.png', 'text' => $srtReassignedtocurrentownerby);
 $updatetypes['reviewmet'] = array('icon' => 'review.png', 'text' => $strReviewby); // conditional
-$updatetypes['tempassigning'] = array('icon' => 'tempassign.png', 'text' => $strTemporarilyAssignedto);
+$updatetypes['tempassigning'] = array('icon' => 'tempassign.png', 'text' => sprintf($strTemporarilyAssignedto,'currentowner','updateuser'));
 $updatetypes['opening'] = array('icon' => 'open.png', 'text' => $strOpenedby);
 $updatetypes['phonecallout'] = array('icon' => 'callout.png', 'text' => $strPhonecallmadeby);
 $updatetypes['phonecallin'] = array('icon' => 'callin.png', 'text' => $strPhonecalltakenby);
