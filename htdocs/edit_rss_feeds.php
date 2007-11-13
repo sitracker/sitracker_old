@@ -8,6 +8,7 @@
 // of the GNU General Public License, incorporated herein by reference.
 //
 // Author: Paul Heaney <paulheaney[at]users.sourceforge.net>
+// FIXME i18n
 
 $permission=0; // not required
 require('db_connect.inc.php');
@@ -81,19 +82,19 @@ switch($action)
         if(mysql_num_rows($result) > 0)
         {
             echo "<table align='center'>";
-            echo "<tr><th>URL</th><th>enabled</th><th>actions</th></tr>";
+            echo "<tr><th>URL</th><th>{$strEnabled}</th><th>{$strOperation}</th></tr>";
             while($obj = mysql_fetch_object($result))
             {
                 if($obj->enabled == "true") $opposite = "false";
                 else $opposite = "true";
                 echo "<tr><td align='left'><img src='{$CONFIG['application_webpath']}images/icons/{$iconset}/12x12/feed-icon.png' style='border: 0px;' alt='Feed Icon' /> {$obj->url}</td><td>";
                 echo "<a href='{$_SERVER['PHP_SELF']}?action=enable&amp;url=".urlencode($obj->url)."&amp;enable={$opposite}'>{$obj->enabled}</a></td>";
-                echo "<td><a href='{$_SERVER['PHP_SELF']}?action=delete&amp;url=".urlencode($obj->url)."'>Remove</a></td></tr>";
+                echo "<td><a href='{$_SERVER['PHP_SELF']}?action=delete&amp;url=".urlencode($obj->url)."'>{$strRemove}</a></td></tr>";
             }
             echo "</table>";
         }
         else echo "<p align='center'>No feeds currently present</p>";
-        echo "<p align='center'><a href='{$_SERVER['PHP_SELF']}?action=add'>Add</a></p>";
+        echo "<p align='center'><a href='{$_SERVER['PHP_SELF']}?action=add'>{$strAdd}</a></p>";
         include('htmlfooter.inc.php');
         break;
 
