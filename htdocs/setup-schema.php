@@ -1247,7 +1247,7 @@ CREATE TABLE IF NOT EXISTS `notices` (
 
 INSERT INTO `notices` (`id`, `text`, `linktext`, `timestamp`, `type`, `link`) VALUES
 (1, '\$strYourCurrentLanguage', '\$strUseThisInFuture', NOW(), 2, 'edit_profile.php?mode=savesessionlang');
-INSERT INTO `notices` (`id`, `text`, `linktext`, `timestamp`, `type`, `resolutionpage`) VALUES
+INSERT INTO `notices` (`id`, `text`, `linktext`, `timestamp`, `type`, `link`) VALUES
 (2, '\$strSitUpgraded', '\$strSitUpgradedLink', NOW(), 2, 'releasenotes.php?v=331');
 
 
