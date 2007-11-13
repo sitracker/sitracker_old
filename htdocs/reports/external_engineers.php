@@ -40,10 +40,10 @@ while($escalations = mysql_fetch_object($escs))
         $sql = "SELECT incidents.*, software.name, contacts.forenames, contacts.surname, sites.name AS siteName FROM incidents, software, contacts, sites WHERE escalationpath = '{$escalations->id}' AND closed = '0' AND software.id = incidents.softwareid ";
         $sql .= " AND incidents.contact = contacts.id AND contacts.siteid = sites.id ";
         $sql .= "ORDER BY externalengineer";
-    
+
         $result = mysql_query($sql);
         if (mysql_error()) trigger_error(mysql_error(),E_USER_ERROR);
-    
+
         $i = 0;
         while($obj = mysql_fetch_object($result))
         {
@@ -64,7 +64,7 @@ while($escalations = mysql_fetch_object($escs))
         if(!empty($esc))
         {
             $html .= "<p><table align='center'>";
-            $html .= "<tr><th>External Engineer</th><th>{$strNumOfCalls}</th>";
+            $html .= "<tr><th>{$strExternalEngineersName}</th><th>{$strNumOfCalls}</th>";
             $html .= "<th align='center'>".priority_icon(4)."</th>";
             $html .= "<th align='center'>".priority_icon(3)."</th>";
             $html .= "<th align='center'>".priority_icon(2)."</th>";
@@ -73,14 +73,15 @@ while($escalations = mysql_fetch_object($escs))
             $html .= "<table width='100%'><tr><th width='50%'>{$strIncident}</th><th width='12%'>{$strInternalEngineer}</th><th width='25%'>{$strSoftware}</th><th>{$strStatus}</th></tr></table>";
             $html .= "<td>";
             $html .= "</tr>";
-        
+
+            // FIXME strip slashes
             foreach($esc AS $engineer)
             {
                 if(empty($engineer['4']))  $engineer['4'] = 0;
                 if(empty($engineer['3']))  $engineer['3'] = 0;
                 if(empty($engineer['2']))  $engineer['2'] = 0;
                 if(empty($engineer['1']))  $engineer['1'] = 0;
-            
+
                 $html .= "<tr>";
                 $html .= "<td class='shade1'>".stripslashes($engineer['name'])."</td><td class='shade1'>".$engineer['count']."</td>";
                 $html .= "<td class='shade1'>".$engineer['4']."</td>";
@@ -116,8 +117,8 @@ while($escalations = mysql_fetch_object($escs))
             $html .= "<td>".$c['1']."</td>";
             $html .= "</tr>";
             $html .= "</table></p>";
-            
-            
+
+
         }
         else
             $html .= "<p align='center'>{$strNoIncidents}</p>";

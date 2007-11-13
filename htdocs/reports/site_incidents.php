@@ -30,11 +30,11 @@ if(empty($mode))
 
     echo "<form name='date' action='".$_SERVER['PHP_SELF']."?mode=run' method='post'>";
     echo "<table class='vertical'>";
-    echo "<tr><th>Start Date:</th><td title='date picker'>";
+    echo "<tr><th>{$strStartDate}:</th><td title='date picker'>";
     echo "<input name='start' size='10' value='{$date}' /> ";
     echo date_picker('date.start');
     echo "</td></tr>";
-    echo "<tr><th>End Date:</th><td align='left' class='shade1' title='date picker'> ";
+    echo "<tr><th>{$strEndDate}:</th><td align='left' class='shade1' title='date picker'> ";
     echo "<input name='end' size='10' />";
     echo date_picker('date.end');
     echo "</td></tr>";
@@ -43,13 +43,14 @@ if(empty($mode))
     echo "<p align='center'>";
     echo "<input type='hidden' name='user' value='{$user}' />";
     echo "<input type='hidden' name='step' value='1' />";
-    echo "<input type='submit' value='Run Report' /></p>";
+    echo "<input type='submit' value=\"{$strRunReport}\" /></p>";
     echo "</form>";
 
     include('htmlfooter.inc.php');
 }
 else
 {
+    // FIXME handle crash were dates are blank
     $sql = "SELECT DISTINCT sites.id, sites.name as name, resellers.name as resel FROM sites, maintenance, resellers ";
     $sql.= "WHERE sites.id=maintenance.site AND resellers.id=maintenance.reseller AND maintenance.term<>'yes' ORDER BY name";
     $result = mysql_query($sql);

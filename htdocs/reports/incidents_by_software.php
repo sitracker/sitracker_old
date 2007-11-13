@@ -13,16 +13,17 @@
 // Requested by Tech Support team (26 Spet 06)
 
 // Notes:
-//  Counts activate calls withing the specified period (i.e. those with a lastupdate time > timespecified)
+//  Counts activate calls within the specified period (i.e. those with a lastupdate time > timespecified)
 
 $permission=37; // Run Reports
-$title='Incidents by Skill';
+
 require('db_connect.inc.php');
 require('functions.inc.php');
 
 // This page requires authentication
 require('auth.inc.php');
 
+$title = $strIncidentsBySkill;
 
 if (empty($_REQUEST['mode']))
 {
@@ -31,16 +32,17 @@ if (empty($_REQUEST['mode']))
     echo "<h2>$title</h2>";
     echo "<form action='{$_SERVER['PHP_SELF']}' id='incidentsbysoftware' method='post'>";
     echo "<table class='vertical'>";
-    echo "<tr><th>Start Date:</th>";
+    echo "<tr><th>{$strStartDate}:</th>";
     echo "<td><input type='text' name='startdate' id='startdate' size='10' /> ";
     echo date_picker('incidentsbysoftware.startdate');
     echo "</td></tr>\n";
+    // FIXME i18n
     echo "<tr><th>Month breakdown:</th><td><input type='checkbox' name='monthbreakdown' /></td></tr>\n";
-    echo "<tr><th>Skill name</th><td><input type='text' name='software' id='software' size='20'/></td></tr>\n";
+    echo "<tr><th>{$strSkill}</th><td><input type='text' name='software' id='software' size='20'/></td></tr>\n";
     echo "</table>\n";
     echo "<p align='center'>";
     echo "<input type='hidden' name='mode' value='report' />";
-    echo "<input type='submit' value='Run Report' />";
+    echo "<input type='submit' value=\"{$strRunReport}\" />";
     echo "</p>";
     echo "</form>\n";
 
@@ -74,6 +76,7 @@ else
     }
 
     include('htmlheader.inc.php');
+    // FIXME i18n
 
     $sqlSLA = "SELECT DISTINCT(tag) FROM servicelevels";
     $resultSLA = mysql_query($sqlSLA);
@@ -84,7 +87,7 @@ else
     echo "</h2>";
     echo "<p>";
     echo "<table class='vertical' align='center'>";
-    echo "<tr><th>Number of calls</th><th>%</th><th>Skill</th>";
+    echo "<tr><th>Number of calls</th><th>%</th><th>{$strSkill}</th>";
     while($sla = mysql_fetch_object($resultSLA))
     {
         echo "<th>".$sla->tag."</th>";
@@ -200,7 +203,7 @@ else
             if ($shade=='shade1') $shade='shade2';
             else $shade='shade1';
         }
-        echo "<tfoot><tr><th>Total</th><td align='center'><strong>{$total}</strong></td></tr></tfoot>";
+        echo "<tfoot><tr><th>{$strTotal}</th><td align='center'><strong>{$total}</strong></td></tr></tfoot>";
         echo "</table></p>";
 
     }
