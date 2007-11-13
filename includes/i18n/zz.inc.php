@@ -430,6 +430,7 @@ $strRealName = 'strRealName';
 $strReassign = 'strReassign';
 $strReassignText = 'strReassignText';
 $strReceivedByEmail = 'strReceivedByEmail';
+$strRecent = 'strRecent';
 $strRecentIncidents = 'strRecentIncidents';
 $strReducedPrioritySLA = 'strReducedPrioritySLA';
 $strRelated = 'strRelated';

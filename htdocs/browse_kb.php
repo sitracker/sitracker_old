@@ -35,13 +35,17 @@ elseif (strtolower($mode)=='today') echo "<h4>Articles published today</h4>";
     <tr>
         <td align="center">
         <form action="<?php echo $_SERVER['PHP_SELF']; ?>" method="get">
-        <input type="text" name="search_string" /><input type="submit" value="go" />
+        <?php
+        echo "<input type='text' name='search_string' /><input type='submit' value=\"{$strGo}\" />";
+        ?>
         </form>
         </td>
         </tr>
         <tr>
         <td valign="middle">
-        <a href="<?php echo $_SERVER['PHP_SELF'] ?>?mode=RECENT" title="Recent Articles">Recent</a> |
+        <?php
+        echo "<a href='{$_SERVER['PHP_SELF']}?mode=RECENT'>{$strRecent}</a> | ";
+        ?>
         <a href="<?php echo $_SERVER['PHP_SELF'] ?>?search_string=A">A</a> |
         <a href="<?php echo $_SERVER['PHP_SELF'] ?>?search_string=B">B</a> |
         <a href="<?php echo $_SERVER['PHP_SELF'] ?>?search_string=C">C</a> |
