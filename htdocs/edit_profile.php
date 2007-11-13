@@ -62,23 +62,23 @@ if (empty($mode))
     if ($edituserpermission && $userid!=$sit[2])
     {
         echo "<tr><th>{$strHolidayEntitlement}:</th><td>";
-        echo "<input type='text' name='holiday_entitlement' value='$entitlement' size='2' /> days";
+        echo "<input type='text' name='holiday_entitlement' value='$entitlement' size='2' /> {$strdays}";
         echo "</td></tr>";
     }
     elseif ($entitlement > 0)
     {
         $holidaystaken=user_count_holidays($userid, 1);
         echo "<tr><th>{$strHolidayEntitlement}:</th><td>";
-        echo "$entitlement days, ";
-        echo "$holidaystaken taken, ";
+        echo "{$entitlement} {$strdays}, ";
+        echo "{$holidaystaken} {$strtaken}, ";
         echo sprintf($strRemaining, $entitlement-$holidaystaken);
         echo "</td></tr>\n";
-        echo "<tr><th>Other Leave:</th><td>";
-        echo user_count_holidays($userid, 2)." days sick leave, ";
-        echo user_count_holidays($userid, 3)." days working away, ";
-        echo user_count_holidays($userid, 4)." days training";
+        echo "<tr><th>{$strOtherLeave}:</th><td>";
+        echo user_count_holidays($userid, 2)." {$strdayssick}, ";
+        echo user_count_holidays($userid, 3)." {$strdaysworkingaway}, ";
+        echo user_count_holidays($userid, 4)." {$strdaystraining}";
         echo "<br />";
-        echo user_count_holidays($userid, 5)." days other leave";
+        echo user_count_holidays($userid, 5)." {$strdaysother}";
         echo "</td></tr>";
     }
     echo "<tr><th>{$strGroupMembership}:</th><td valign='top'>";
@@ -94,10 +94,9 @@ if (empty($mode))
     {
         echo "None set";
     }
-    ?>
+    echo "
     </td></tr>
-    <tr><th colspan='2'>WORK STATUS</td></tr>
-    <?php
+    <tr><th colspan='2'>".strtoupper($strWorkStatus)."</td></tr>";
     if ($edituserpermission AND $userid != $sit[2]) $userdisable=TRUE;
     else $userdisable=FALSE;
 
@@ -109,13 +108,11 @@ if (empty($mode))
     echo "</td></tr>\n";
     echo "<tr><th>{$strMessage}:<br />{$strMessageTip}</th>";
     echo "<td><textarea name='message' rows='4' cols='40'>".strip_tags($user->message)."</textarea></td></tr>\n";
-    ?>
-    <tr><th colspan='2'>CONTACT DETAILS</td></tr>
-    <tr id='email'><th>Email:<sup class='red'>*</sup></th><td><input maxlength="50" name="email" size="30" type="text" value="<?php echo strip_tags($user->email); ?>" /></td></tr>
-    <tr id='phone'><th>Phone:</th><td><input maxlength="50" name="phone" size="30" type="text" value="<?php echo strip_tags($user->phone); ?>" /></td></tr>
-    <tr><th>Fax:</th><td><input maxlength="50" name="fax" size="30" type="text" value="<?php echo strip_tags($user->fax); ?>" /></td></tr>
-    <tr><th>Mobile:</th><td><input maxlength="50" name="mobile" size="30" type="text" value="<?php echo user_mobile($userid) ?>" /></td></tr>
-    <?php
+    echo "<tr><th colspan='2'>".strtoupper($strContactDetails)."</td></tr>";
+    echo "<tr id='email'><th>{$strEmail}:<sup class='red'>*</sup></th><td><input maxlength='50' name='email' size='30' type='text' value='".strip_tags($user->email)."'></td></tr>";
+    echo "<tr id='phone'><th>{$strTelephone}:</th><td><input maxlength='50' name='phone' size='30' type='text' value='".strip_tags($user->phone)."'></td></tr>";
+    echo "<tr><th>{$strFax}:</th><td><input maxlength='50' name='fax' size='30' type='text' value='".strip_tags($user->fax)."'></td></tr>";
+    echo "<tr><th>{$strMobile}:</th><td><input maxlength='50' name='mobile' size='30' type='text' value='".user_mobile($userid)."'></td></tr>";
     echo "<tr><th>AIM: <img src=\"images/icons/{$iconset}/16x16/aim.png\" width=\"16\" height=\"16\" alt=\"AIM\" /></th>";
     echo "<td><input maxlength=\"50\" name=\"aim\" size=\"30\" type=\"text\" value=\"".strip_tags($user->aim)."\" /></td></tr>";
     echo "<tr><th>ICQ: <img src=\"images/icons/{$iconset}/16x16/icq.png\" width=\"16\" height=\"16\" alt=\"ICQ\" /></th>";
@@ -123,7 +120,7 @@ if (empty($mode))
     echo "<tr><th>MSN: <img src=\"images/icons/{$iconset}/16x16/msn.png\" width=\"16\" height=\"16\" alt=\"MSN\" /></th>";
     echo "<td><input maxlength=\"50\" name=\"msn\" size=\"30\" type=\"text\" value=\"".strip_tags($user->msn)."\" /></td></tr>";
 
-    echo "<tr><th colspan='2'>DISPLAY PREFERENCES</td></tr>\n";
+    echo "<tr><th colspan='2'>".strtoupper($strDisplayPreferences)."</td></tr>\n";
     echo "<tr><th>{$strLanguage}</th><td>";
     echo "<select name='vari18n' id='vari18n'>";
     if (!empty($user->var_i18n)) $selectedlang = $user->var_i18n;
@@ -160,7 +157,7 @@ if (empty($mode))
     html_checkbox('collapse', $user->var_collapse);
     echo "</td></tr>\n";
 
-    echo "<tr><th colspan='2'>NOTIFICATIONS</td></tr>\n";
+    echo "<tr><th colspan='2'>".strtoupper($strNotifications)."</td></tr>\n";
     echo "<tr><th>{$strEmailNotificationReassign}</th><td>";
     html_checkbox('emailonreassign', $user->var_notify_on_reassign);
     echo "</td><tr>\n";
@@ -169,8 +166,8 @@ if (empty($mode))
 
     if ($CONFIG['trusted_server']==FALSE AND $userid==$sit[2])
     {
-        echo "<tr class='password'><th colspan='2'>CHANGE PASSWORD</td></tr>";
-        echo "<tr class='password'><th>&nbsp;</th><td>To change your password - first enter your existing password and then type your new password twice to confirm it.</td></tr>";
+        echo "<tr class='password'><th colspan='2'>".strtoupper($strChangePassword)."</td></tr>";
+        echo "<tr class='password'><th>&nbsp;</th><td>{$strToChangePassword}</td></tr>";
         echo "<tr class='password'><th>{$strOldPassword}:</th><td><input maxlength='50' name='password' size='30' type='password' /></td></tr>";
         echo "<tr class='password'><th>{$strNewPassword}:</th><td><input maxlength='50' name='newpassword1' size='30' type='password' /></td></tr>";
         echo "<tr class='password'><th>{$strConfirmNewPassword}:</th><td><input maxlength='50' name='newpassword2' size='30' type='password' /></td></tr>";
