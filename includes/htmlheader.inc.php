@@ -135,43 +135,45 @@ if($sit[0] != '')
     $noticesql = "SELECT * FROM notices, usernotices ";
     $noticesql .= "WHERE userid={$sit[2]} AND notices.id=usernotices.noticeid";
     $noticeresult = mysql_query($noticesql);
-    while($notice = @mysql_fetch_object($noticeresult))
+    if (mysql_error()) trigger_error(mysql_error(),E_USER_WARNING);
+    if(mysql_num_rows($noticeresult) > 0)
     {
-        //check for the two warning types, TODO: make this better
-        //if($notice->text == '$strFirstLogin') $notice->text = $strFirstLogin;
-        $notice->text = str_replace('$strFirstLogin', $strFirstLogin, $notice->text);
-        $notice->text = str_replace('$strNoEmailSet', $strNoEmailSet, $notice->text);
-        $notice->text = str_replace('$strSitUpgraded', sprintf($strSitUpgraded, $CONFIG['application_shortname'], "v{$application_version} {$application_revision}"), $notice->text);
-        $notice->text = str_replace('$strSitUpgradedLink', $strSitUpgradedLink, $notice->text);
-        //critical error
-        if($notice->type == '1')
+        while($notice = mysql_fetch_object($noticeresult))
         {
-            echo "<div class='error'><p class='error'>{$notice->text}";
-            if($notice->resolutionpage) $redirpage = $CONFIG['application_webpath'].$notice->resolutionpage;
-        }
-        else
-        {
-            echo "<div class='info'><p class='info'>";
-            echo "<span>(<a href='{$_SERVER[PHP_SELF]}?action=dismiss_notice&amp;noticeid={$notice->id}'>$strDismiss</a>)</span>";
-            if (substr($notice->text, 0, 4)=='$str')
+            //check for the two warning types, TODO: make this better
+            //if($notice->text == '$strFirstLogin') $notice->text = $strFirstLogin;
+            $notice->text = str_replace('$strSitUpgraded', sprintf($strSitUpgraded, $CONFIG['application_shortname'], "v{$application_version} {$application_revision}"), $notice->text);
+            $notice->text = str_replace('$strSitUpgradedLink', $strSitUpgradedLink, $notice->text);
+            //critical error
+            if($notice->type == '1')
             {
-                $v = substr($notice->text, 1);
-                echo $GLOBALS[$v];
+                echo "<div class='error'><p class='error'>{$notice->text}";
+                if($notice->resolutionpage) $redirpage = $CONFIG['application_webpath'].$notice->resolutionpage;
             }
-            else echo "{$notice->text}";
-            if (!empty($notice->link))
+            else
             {
-                echo " - <a href=\"{$notice->link}\">";
-                if (substr($notice->linktext, 0, 4)=='$str')
+                echo "<div class='info'><p class='info'>";
+                echo "<span>(<a href='{$_SERVER[PHP_SELF]}?action=dismiss_notice&amp;noticeid={$notice->id}'>$strDismiss</a>)</span>";
+                if (substr($notice->text, 0, 4)=='$str')
                 {
-                    $v = substr($notice->linktext, 1);
+                    $v = substr($notice->text, 1);
                     echo $GLOBALS[$v];
                 }
-                else echo "{$notice->linktext}";
-                echo "</a>";
+                else echo "{$notice->text}";
+                if (!empty($notice->link))
+                {
+                    echo " - <a href=\"{$notice->link}\">";
+                    if (substr($notice->linktext, 0, 4)=='$str')
+                    {
+                        $v = substr($notice->linktext, 1);
+                        echo $GLOBALS[$v];
+                    }
+                    else echo "{$notice->linktext}";
+                    echo "</a>";
+                }
             }
+            echo "</p></div>";
         }
-        echo "</p></div>";
     }
     if($redirpage && ($_SERVER[SCRIPT_NAME] != $redirpage))
     {
