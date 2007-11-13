@@ -137,6 +137,7 @@ $strDetails = 'Details';
 $strDetailsAndLog = 'Details and Log';
 $strDisabled = 'Disabled';
 $strDismiss = 'Dismiss';
+$strDisplay = 'Display';
 $strDisplayPreferences = 'Display Preferences';
 $strDoesThisUpdateMeetSLA = 'Does this update meet an SLA target?';
 $strDraftChoose = 'Multiple drafts exist please select one';
@@ -202,6 +203,9 @@ $strForceTo = 'Force To';
 $strForenames = 'Forenames';
 $strForgottenDetails = 'Forgotten your details?';
 $strForm = 'Form';
+//short for 'Friday'
+$strFri = 'Fri';
+$strFriday = 'Friday';
 $strFrom = 'From';
 $strFTPFilesDB = 'FTP Files DB';
 
@@ -275,6 +279,7 @@ $strLink = 'Link';
 $strLinkedSkills = 'Linked Skills';
 $strLinkProducts = 'Link Products';
 $strLimitTo = 'Limit to';
+$strList = 'List';
 $strListProducts = 'List Products';
 $strListShowsContacts = 'This list shows contacts that matched your search, if site-support is available you can add incidents for the site';
 $strListShowsContracts = 'This list shows contracts, i.e. supported contacts and the products they are supported for. Click on the appropriate \'%s\' link to begin adding the incident';
@@ -303,6 +308,10 @@ $strMessageTip = 'e.g. &quot;In france until Tue 22nd&quot;<br />Displayed on th
 $strMine = 'Mine';
 $strMinutes = 'Minutes';
 $strMobile = 'Mobile';
+//short for 'Monday'
+$strMon = 'Mon';
+$strMonday = 'Monday';
+$strMonthView = 'Month View';
 $strMore = 'More...';
 $strMultiIncidents = '%d Incidents';
 $strMustEnterEmail = 'You must enter an email address';
@@ -455,6 +464,9 @@ $strRole = 'Role';
 $strRunReport = 'Run Report';
 
 $strSalesperson = 'Salesperson';
+//short for 'Saturday'
+$strSat = 'Sat';
+$strSaturday = 'Saturday';
 $strSave = 'Save';
 $strScore = 'Score';
 $strScreen = 'Screen';
@@ -511,6 +523,9 @@ $strSubstitute = 'Substitute';
 $strSubstitutes = 'Substitutes';
 $strSuccessfully = 'Successfully';
 $strSummary = 'Summary';
+//short for 'Sunday'
+$strSun = 'Sun';
+$strSunday = 'Sunday';
 $strSupport = 'Support';
 $strSurname = 'Surname';
 
@@ -530,6 +545,9 @@ $strTaskMarkedCompleteSuccessfully = 'Task marked completed successfully';
 $strTelephone = 'Telephone';
 $strTemporarilyAssignedto = 'Temporarily assigned to %s by %s';
 $strTerminated = 'Terminated';
+//short for 'Thursday'
+$strThu = 'Thu';
+$strThursday = 'Thursday';
 $strTime = 'Time';
 $strTimed = 'Timed';
 $strTimeToNextAction = 'Time To Next Action';
@@ -543,6 +561,9 @@ $strTotal = 'Total';
 $strTranslate = 'Translate';
 $strTranslateTheString = 'Translate the english string on the left to your requested language on the right';
 $strTranslation = 'Translation';
+//short for 'Tuesday'
+$strTue = 'Tue';
+$strTuesday = 'Tuesday';
 $strType = 'Type';
 
 $strUpdate = 'Update';
@@ -584,6 +605,10 @@ $strWaiting = 'Waiting';
 $strWatchIncidents = 'Watch Incidents';
 $strWatchingAll = 'Watching All';
 $strWebupdate = 'Web update';
+$strWeek = 'Week';
+//short for 'Wednesday'
+$strWeds = 'Weds';
+$strWednesday = 'Wednesday';
 $strWelcome = 'Welcome';
 $strWorkAroundsAttempted = 'Workarounds Attempted';
 $strWorkAroundsAttemptedEngineerText = 'What has the customer done to try and solve the issue?  What config changes were made?  What patches/service packs were installed?';
@@ -594,6 +619,7 @@ $strWorkStatus = 'Work Status';
 $strWebsite = 'Website';
 $strWithheld = 'Withheld';
 
+$strYear = 'Year';
 $strYes = 'Yes';
 $strYesterday = 'Yesterday';
 $strYou = 'You';

@@ -91,8 +91,8 @@ switch($type)
         if(!empty($maintexclude)) $sql .= "AND incidents.maintenanceid != '{$maintexclude}' ";
 
         echo "<h2>";
-        if ($user!='all') echo user_realname($user,TRUE) . "'s Incidents: ";
-        else echo "Watching All ";
+        if ($user!='all') echo sprintf($strUserIncidents, user_realname($user,TRUE)).": ";
+        else echo "{$strWatchingAll} ";
 
         switch($queue)
         {
@@ -189,9 +189,9 @@ switch($type)
             // Incidents Table
             include('incidents_table.inc.php');
         }
-        else echo "<h5>No incidents in this queue</h5>";
+        else echo "<h5>{$strNoIncidents}</h5>";
 
-        if ($user=='all') echo "<p align='center'>There are <strong>{$rowcount}</strong> incidents in this list.</p>";
+        if ($user=='all') echo "<p align='center'>".sprintf($strNumOfIncidents, $rowcount)."</p>";
 
 
         // *********************************************************
