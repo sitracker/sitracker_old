@@ -11,15 +11,17 @@
 // Author: Ivan Lucas <ivanlucas[at]users.sourceforge.net>
 
 // This Page Is Valid XHTML 1.0 Transitional!  4Feb06
+// FIXME i18n
 
 $permission=37; // Run Reports
-$title='Customer Export Report';
+
 require('db_connect.inc.php');
 require('functions.inc.php');
 
 // This page requires authentication
 require('auth.inc.php');
 
+$title = $strCustomerExport;
 
 // Temporary: put in place so that this 3.07 feature can be used under 3.06
 if (!function_exists('strip_comma'))
@@ -70,33 +72,33 @@ if (empty($_REQUEST['mode']))
     echo "</tr>\n";
     echo "<tr>";
     echo "<td colspan='2'>";
-    echo "Output: <select name='output'>";
-    echo "<option value='screen'>Screen</option>";
+    echo "{$strOutput}: <select name='output'>";
+    echo "<option value='screen'>{$strScreen}</option>";
     // echo "<option value='printer'>Printer</option>";
-    echo "<option value='csv'>Disk - Comma Seperated (CSV) file</option>";
+    echo "<option value='csv'>{$strCSVfile}</option>";
     echo "</select>";
     echo "</td></tr>";
     echo "</table>";
     echo "<p align='center'>";
     echo "<input type='hidden' name='table1' value='{$_POST['table1']}' />";
     echo "<input type='hidden' name='mode' value='report' />";
-    echo "<input type='submit' value='Run Report' />";
+    echo "<input type='submit' value=\"{$strRunReport}\" />";
     echo "</p>";
     echo "</form>";
     echo "<table align='center'><tr><td>";
     echo "<h4>When outputting to a CSV file the format is as follows:</h4>";
-    echo "<strong>Field 1:</strong> Forenames<br />";
-    echo "<strong>Field 2:</strong> Surname<br />";
-    echo "<strong>Field 3:</strong> Email Address<br />";
-    echo "<strong>Field 4:</strong> Address Line 1<br />";
-    echo "<strong>Field 5:</strong> Address Line 2<br />";
-    echo "<strong>Field 6:</strong> City<br />";
-    echo "<strong>Field 7:</strong> County<br />";
-    echo "<strong>Field 8:</strong> Postcode<br />";
-    echo "<strong>Field 9:</strong> Country<br />";
-    echo "<strong>Field 10:</strong> Phone Number<br />";
-    echo "<strong>Field 11:</strong> Customers Site<br />";
-    echo "<strong>Field 12:</strong> Products <em>(Lists all the customers products regardless of selections made above)</em><br />";
+    echo "<strong>Field 1:</strong> {$strForenames}<br />";
+    echo "<strong>Field 2:</strong> {$strSurname}<br />";
+    echo "<strong>Field 3:</strong> {$strEmail}<br />";
+    echo "<strong>Field 4:</strong> {$strAddress1}<br />";
+    echo "<strong>Field 5:</strong> {$strAddress2}<br />";
+    echo "<strong>Field 6:</strong> {$strCity}<br />";
+    echo "<strong>Field 7:</strong> {$strCounty}<br />";
+    echo "<strong>Field 8:</strong> {$strPostcode}<br />";
+    echo "<strong>Field 9:</strong> {$strCountry}<br />";
+    echo "<strong>Field 10:</strong> {$strTelephone}<br />";
+    echo "<strong>Field 11:</strong> {$strSite}<br />";
+    echo "<strong>Field 12:</strong> {$strProducts} <em>(Lists all the customers products regardless of selections made above)</em><br />";
     echo "</td></tr></table>";
     include('htmlfooter.inc.php');
 }
@@ -145,11 +147,13 @@ elseif ($_REQUEST['mode']=='report')
     if (mysql_error()) trigger_error("MySQL Query Error ".mysql_error(), E_USER_ERROR);
     $numrows = mysql_num_rows($result);
 
+    // FIXME i18n
+    // FIXME strip slashes from output
     $html .= "<p align='center'>This report is a list of ($numrows) contact details for all sites that you selected</p>";
     $html .= "<table width='99%' align='center'>";
-    $html .= "<tr><th>Forenames</th><th>Surname</th><th>Email</th><th>Address Line 1</th>";
-    $html .= "<th>Address Line 2</th><th>City</th><th>County</th><th>Postcode</th><th>Country</th><th>Telephone</th><th>Site</th><th>Products</th></tr>";
-    $csvfieldheaders .= "Forenames,Surname,Email,Address Line 1,Address Line 2,City,County,Postcode,Country,Telephone,Site,Products\r\n";
+    $html .= "<tr><th>{$strForenames}</th><th>{$strSurname}</th><th>{$strEmail}</th><th>{$strAddress1}</th>";
+    $html .= "<th>{$strAddress2}</th><th>{$strCity}</th><th>{$strCounty}</th><th>{$strPostcode}</th><th>{$strCountry}</th><th>{$strTelephone}</th><th>{$strSite}</th><th>{$strProducts}</th></tr>";
+    $csvfieldheaders .= "{$strForenames},{$strSurname},{$strEmail},{$strAddress1},{$strAddress2},{$strCity},{$strCounty},{$strPostcode},{$strCountry},{$strTelephone},{$strSite},{$strProducts}\r\n";
     $rowcount=0;
     while ($row = mysql_fetch_object($result))
     {
@@ -157,21 +161,22 @@ elseif ($_REQUEST['mode']=='report')
         {
             $html .= "<tr class='shade2'><td>{$row->forenames}</td><td>{$row->surname}</td>";
             if ($row->dataprotection_email!='Yes') $html .= "<td>{$row->cemail}</td>";
-            else $html .= "<td><em style='color: red';>Withheld</em></td>";
+            else $html .= "<td><em style='color: red';>{$strWithheld}</em></td>";
             if ($row->dataprotection_address!='Yes')
                 $html .= "<td>{$row->address1}</td><td>{$row->address2}</td><td>{$row->city}</td><td>{$row->county}</td><td>{$row->postcode}</td><td>{$row->country}</td>";
             else
-                $html .= "<td colspan='6'><em style='color: red';>Withheld</em></td>";
+                $html .= "<td colspan='6'><em style='color: red';>{$strWithheld}</em></td>";
             if ($row->dataprotection_phone!='Yes') $html .= "<td>{$row->phone}</td>";
-            else $html .= "<td><em style='color: red';>Withheld</em></td>";
+            else $html .= "<td><em style='color: red';>{$strWithheld}</em></td>";
 
-            $html .= "<td>$row->site</td>";
+            $html .= "<td>{$row->site}</td>";
 
             $psql = "SELECT * FROM supportcontacts, maintenance, products WHERE ";
             $psql .= "supportcontacts.maintenanceid=maintenance.id AND ";
             $psql .= "maintenance.product=products.id ";
             $psql .= "AND supportcontacts.contactid='$row->contactid' ";
             $html .= "<td>";
+        // FIXME dataprotection_address csv
 
             $csv .= strip_comma($row->forenames).','
                 . strip_comma($row->surname).',';
