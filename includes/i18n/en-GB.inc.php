@@ -460,6 +460,7 @@ $strResolvedby = 'Resolved by %s';
 $strReseller = 'Reseller';
 $strRestricted = 'Restricted';
 $strResult = 'Result';
+$strReturnAfterSaving = 'Return to this page after saving';
 $strReturnWithoutSaving = 'Return without saving';
 $strReview = 'Review';
 $strReviewby = 'Review %s by %s';
