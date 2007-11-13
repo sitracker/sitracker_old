@@ -2225,10 +2225,12 @@ function sit_error_handler($errno, $errstr, $errfile, $errline, $errcontext)
 
     $trace_errors = array(E_ERROR, E_USER_ERROR);
 
-    if ($errno > 8)
+    $user_errors = E_USER_ERROR | E_USER_WARNING | E_USER_NOTICE;
+    $system_errors = E_ERROR | E_WARNING | E_CORE_ERROR | E_CORE_WARNING | E_COMPILE_ERROR | E_COMPILE_WARNING;
+    if (($errno & $user_errors) OR ($errno & $system_errors))
     {
-        echo "<p class='error'><strong>{$errortype[$errno]} {$errno}</strong><br />";
-        echo "{$errstr} in {$errfile}</p>";
+        echo "<p class='error'><strong>{$errortype[$errno]} [{$errno}]</strong><br />";
+        echo "{$errstr} in {$errfile} @ line {$errline}</p>";
     }
 }
 
