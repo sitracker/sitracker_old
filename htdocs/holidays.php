@@ -9,6 +9,7 @@
 //
 
 // This Page Is Valid XHTML 1.0 Transitional!  13Sep06
+// FIXME i18n
 
 $permission=4; // Edit your profile
 
@@ -31,14 +32,14 @@ echo "<h2><img src='{$CONFIG['application_webpath']}images/icons/{$iconset}/32x3
 echo "$title</h2>";
 
 echo "<p align='center'>";
-echo "<a href='book_holidays.php?user={$user}'>Book Holidays</a>";
-echo " | <a href='holiday_calendar.php'>Holiday Planner</a>";
+echo "<a href='book_holidays.php?user={$user}'>{$strBookHoliday}</a>";
+echo " | <a href='holiday_calendar.php'>{$strHolidayPlanner}</a>";
 if ($approver)
 {
     echo " | <a href='holiday_request.php?user=";
     if (user==$sit[2]) echo "all";
     else echo $user;
-    echo "&amp;mode=approval'>Approve/Decline Holiday Requests</a>";
+    echo "&amp;mode=approval'>{$strApproveHolidays}</a>";
 }
 
 // Entitlement
@@ -46,8 +47,8 @@ if ($user==$sit[2] OR $approver==TRUE)
 {
     // Only shown when viewing your own holidays or when you're an approver
     echo "<table align='center' width='450'>\n";
-    echo "<tr><th align='right'>HOLIDAYS</th></tr>\n";
-    echo "<tr class='shade1'><td><strong>Annual Holiday Entitlement</strong>:</td></tr>\n";
+    echo "<tr><th class='subhead'>{$strHolidays}</th></tr>\n";
+    echo "<tr class='shade1'><td><strong>{$strHolidayEntitlement}</strong>:</td></tr>\n";
     echo "<tr class='shade2'><td>";
     $entitlement=user_holiday_entitlement($user);
     $holidaystaken=user_count_holidays($user, 1);
@@ -68,7 +69,7 @@ if ($user==$sit[2] OR $approver==TRUE)
 
 // Holiday List
 echo "<table align='center' width='450'>\n";
-echo "<tr><th align='right' colspan='4'>HOLIDAY LIST</th></tr>\n";
+echo "<tr><th colspan='4' class='subhead'>{$strHolidayList}</th></tr>\n";
 $sql = "SELECT * from holidays, holidaytypes WHERE holidays.type=holidaytypes.id AND userid='{$user}' AND approved=0 ORDER BY startdate ASC";
 $result = mysql_query($sql);
 if (mysql_error()) trigger_error("MySQL Query Error ".mysql_error(), E_USER_ERROR);

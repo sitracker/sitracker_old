@@ -552,6 +552,9 @@ div.img-dec img
 margin: 5px;
 border: 1px solid #808080;
 }
+
+th.subhead { font-variant: small-caps; font-size: 120%; text-align: right; }
+
 @media print
 {
     #menu, #statusbar, h1#apptitle, #menulist, .contextmenu {visibility:hidden; display:none;}

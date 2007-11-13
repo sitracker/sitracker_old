@@ -233,7 +233,7 @@ if ($errors == 0)
         echo "</p>";
         echo "<table align='center'>
         <tr>
-            <th>ID</th>
+            <th>{$strID}</th>
             <th>{$strSiteName}</th>
             <th>{$strDepartment}</th>
         </tr>";
