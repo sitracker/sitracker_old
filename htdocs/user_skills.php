@@ -72,7 +72,7 @@ while ($users = mysql_fetch_array($result))
             if ($c < $countskills) echo ", ";
             else
             {
-                echo "<br />&bull; $countskills skills";
+                echo "<br />&bull; $countskills ".strtolower($strSkills);
                 if (($nobackup+1) >= $countskills) echo ", <strong>{$strNoSubstitutes}</strong>.";
                 elseif ($nobackup > 0) echo ", <strong>".sprintf($strNeedsSubstitueEngineers, $nobackup)."</strong>.";
             }
