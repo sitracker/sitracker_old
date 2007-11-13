@@ -23,6 +23,15 @@ $application_revision='alpha1';
 // Clean PHP_SELF server variable to avoid potential XSS security issue
 $_SERVER['PHP_SELF'] = substr($_SERVER['PHP_SELF'], 0, (strlen($_SERVER['PHP_SELF']) - @strlen($_SERVER['PATH_INFO'])));
 
+$oldeh = set_error_handler("sit_error_handler");
+
+if (version_compare(PHP_VERSION, "5.1.0", ">="))
+{
+    // FIXME the timezone should be in the config file
+    date_default_timezone_set('Europe/London');
+}
+
+
 // Journal Logging
 // 0 = No logging
 // 1 = Minimal Logging
@@ -2198,118 +2207,39 @@ function increment_incidents_used($maintid)
 
 
 // Functions to handle error reporting
-function error_handler($errno, $errstr, $errfile, $errline)
+function sit_error_handler($errno, $errstr, $errfile, $errline, $errcontext)
 {
-  switch ($errno)
-  {
-    case E_USER_ERROR:    // fatal
-      $errormessage="USER_FATAL [$errno] $errstr<br />\n";
-      $errordetails="  Warning in line ".$errline." of file ".$errfile;
-      $errordetails.=", PHP ".PHP_VERSION." (".PHP_OS.")<br />\n";
-      $errordetails.="Aborting...<br />\n";
-      throw_fatal_error($errormessage,$errordetails);
-    exit -1;
-    break;
+    $errortype = array(
+    E_ERROR          => 'Fatal Error',
+    E_WARNING        => 'Warning',
+    E_PARSE          => 'Parse Error',
+    E_NOTICE          => 'Notice',
+    E_CORE_ERROR      => 'Core Error',
+    E_CORE_WARNING    => 'Core Warning',
+    E_COMPILE_ERROR  => 'Compile Error',
+    E_COMPILE_WARNING => 'Compile Warning',
+    E_USER_ERROR      => 'Application Error',
+    E_USER_WARNING    => 'Application Warning',
+    E_USER_NOTICE    => 'Application Notice');
+    if(defined('E_STRICT')) $errortype[E_STRICT] = 'Strict Runtime notice';
 
-    case E_USER_WARNING:  // warning
-      $errormessage="USER WARNING [$errno] $errstr<br />\n";
-      $errordetails="  Warning in line ".$errline." of file ".$errfile;
-      $errordetails.=", PHP ".PHP_VERSION." (".PHP_OS.")<br />\n";
-      $errordetails.="Aborting...<br />\n";
-      throw_error($errormessage,$errordetails);
+    $trace_errors = array(E_ERROR, E_USER_ERROR);
 
-    break;
-
-    case E_USER_NOTICE:   // comment
-      $errormessage="USER NOTICE [$errno] $errstr<br />\n";
-      $errordetails="  Warning in line ".$errline." of file ".$errfile;
-      $errordetails.=", PHP ".PHP_VERSION." (".PHP_OS.")<br />\n";
-      $errordetails.="Aborting...<br />\n";
-      throw_error($errormessage,$errordetails);
-    break;
-
-    case E_NOTICE:
-      // do nothing, this is usually benign
-    break;
-
-    case E_WARNING:
-      $errormessage="WARNING [$errno] $errstr<br />\n";
-      $errordetails="  Warning in line ".$errline." of file ".$errfile;
-      $errordetails.=", PHP ".PHP_VERSION." (".PHP_OS.")<br />\n";
-      $errordetails.="Aborting...<br />\n";
-      throw_error($errormessage,$errordetails);
-    break;
-
-    case E_PARSE:
-      $errormessage="PARSE [$errno] $errstr<br />\n";
-      $errordetails="  Parse error in line ".$errline." of file ".$errfile;
-      $errordetails.=", PHP ".PHP_VERSION." (".PHP_OS.")<br />\n";
-      $errordetails.="Aborting...<br />\n";
-      throw_fatal_error($errormessage,$errordetails);
-    break;
-
-    case E_CORE_ERROR:
-      $errormessage="CORE ERROR [$errno] $errstr<br />\n";
-      $errordetails="  Error in line ".$errline." of file ".$errfile;
-      $errordetails.=", PHP ".PHP_VERSION." (".PHP_OS.")<br />\n";
-      $errordetails.="Aborting...<br />\n";
-      throw_fatal_error($errormessage,$errordetails);
-    break;
-
-    case E_CORE_WARNING:
-      $errormessage="CORE WARNING [$errno] $errstr<br />\n";
-      $errordetails="  Warning in line ".$errline." of file ".$errfile;
-      $errordetails.=", PHP ".PHP_VERSION." (".PHP_OS.")<br />\n";
-      $errordetails.="Aborting...<br />\n";
-      throw_error($errormessage,$errordetails);
-    break;
-
-
-    default:
-      $errormessage="[$errno] $errstr<br />\n";
-      $errordetails="  in line ".$errline." of file ".$errfile;
-      $errordetails.=", PHP ".PHP_VERSION." (".PHP_OS.")<br />\n";
-      $errordetails.="Aborting...<br />\n";
-      throw_error($errormessage,$errordetails);
-    break;
-  }
+    if ($errno > 8)
+    {
+        echo "<p class='error'><strong>{$errortype[$errno]} {$errno}</strong><br />";
+        echo "{$errstr} in {$errfile}</p>";
+    }
 }
 
-// FIXME improve this
 function throw_fatal_error($message,$details)
 {
     trigger_error("{$message}: {$details}", E_USER_ERROR);
 }
 
-// FIXME Don't use throw_error in new code, use trigger_error() php function instead
-// we'll have a proper trap eventually
 function throw_error($message, $details)
 {
-  global $CONFIG, $application_version_string, $sit;
-  echo "<hr style='color: red; background: red;' />";
-  echo "<strong>A system error has occured</strong>";
-  echo "<hr style='color: red; background: red;' />";
-  echo "<strong class='error'>ERROR:</strong><br />";
-  $errorstring=date("r")."\n";
-  $errorstring.=strip_tags($message);
-  $errorstring.=' ';
-  $errorstring.=strip_tags($details);
-  $errorstring.="\n";
-  $errorstring.="Application Version: {$CONFIG['application_shortname']} {$application_version_string}\n";
-  $errorstring.="User: ".$sit[0]."\n";
-  $errorstring.="USER_AGENT: ".getenv('HTTP_USER_AGENT')."\n";
-  $errorstring.="REMOTE_ADDR: ".getenv('REMOTE_ADDR')."\n";
-  $errorstring.="REQUEST_METHOD: ".getenv('REQUEST_METHOD')."\n";
-  $errorstring.="REQUEST_URI: ".getenv('REQUEST_URI')."\n";
-  $errorstring.="QUERY_STRING: ".getenv('QUERY_STRING')."\n";
-  $errorstring.="HTTP_REFERER: ".getenv('HTTP_REFERER')."\n";
-  $errorstring.="SERVER_SIGNATURE: ".strip_tags(getenv('SERVER_SIGNATURE'))."\n";
-  echo nl2br($errorstring);
-  $errlog=error_log("---\n$errorstring", 3, $CONFIG['error_logfile']);
-  if (!$errlog) echo "Fatal error logging this problem<br />";
-  echo "ABORTED!<br />\n";
-  echo "<hr style='color: red; background: red;' />";
-  exit;
+    trigger_error("{$message}: {$details}", E_USER_WARNING);
 }
 
 
