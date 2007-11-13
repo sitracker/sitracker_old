@@ -113,17 +113,17 @@ else
             }
             else $filter['user'] = $user;
 
-            echo colheader('id', 'ID', $sort, $order, $filter);
+            echo colheader('id', $strID, $sort, $order, $filter);
             echo colheader('name', $strTask, $sort, $order, $filter);
             echo colheader('priority', $strPriority, $sort, $order, $filter);
             echo colheader('completion', $strCompletion, $sort, $order, $filter);
             echo colheader('startdate', $strStartDate, $sort, $order, $filter);
             echo colheader('duedate', $strDueDate, $sort, $order, $filter);
-            if ($show=='completed') echo colheader('enddate', 'End Date', $sort, $order, $filter);
+            if ($show=='completed') echo colheader('enddate', $strEndDate, $sort, $order, $filter);
         }
         else
         {
-            echo colheader('id', 'ID', $sort, $order, $filter);
+            echo colheader('id', $strID, $sort, $order, $filter);
             echo colheader('startdate', $strStartDate, $sort, $order, $filter);
             echo colheader('completeddate', $strCompleted, $sort, $order, $filter);
             echo colheader('duration', $strDuration, $sort, $order, $filter);
@@ -147,7 +147,7 @@ else
             }
             if($mode == 'incident')
             {
-                if($enddate == '0') echo "<td><a href='view_task.php?id={$task->id}&mode=incident&incident={$id}' class='info'>{$task->id}</td>"; 
+                if($enddate == '0') echo "<td><a href='view_task.php?id={$task->id}&mode=incident&incident={$id}' class='info'>{$task->id}</td>";
                 else echo "<td>{$task->id}</td>";
             }
             else

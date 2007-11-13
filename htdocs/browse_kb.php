@@ -131,11 +131,11 @@ if (mysql_num_rows($result) >= 1)
     echo "<p align='center'><strong>Matching Articles</strong> :</p>";
     echo "<table align='center' width='98%'>";
     echo "<tr>";
-    echo colheader('id','KB ID',FALSE);
+    echo colheader('id',$strID,FALSE);
     echo colheader('title', $strTitle,FALSE);
     echo colheader('date', $strDate,FALSE);
     echo colheader('author', $strAuthor,FALSE);
-    echo colheader('keywords','Keywords',FALSE);
+    echo colheader('keywords',$strKeywords,FALSE);
     echo "</tr>\n";
     $shade = 'shade1';
     while ($kbarticle = mysql_fetch_object($result))

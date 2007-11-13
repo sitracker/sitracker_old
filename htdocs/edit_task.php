@@ -134,7 +134,7 @@ switch ($action)
                 $duedate=mysql2date($task->duedate);
                 $enddate=mysql2date($task->enddate);
             }
-            
+
             //get all the notes
             $notearray = array();
             $numnotes = 0;
@@ -153,20 +153,20 @@ switch ($action)
             $sql = "DELETE FROM notes WHERE refid='{$id}'";
             $result = mysql_query($sql);
             if (mysql_error()) trigger_error(mysql_error(),E_USER_ERROR);
-                    
+
             $enddate = $now;
             $duration = $enddate - $startdate;
-            
+
             $startdate = readable_date($startdate);
             $enddate = readable_date($enddate);
-            
+
             $updatehtml = "Update created from incident task <a href=\"tasks.php?incident={$incident}\">{$id}</a><br />Task started at: {$startdate}<br /><br />";
             for($i = $numnotes-1; $i >= 0; $i--)
-            {   
+            {
                 $updatehtml .= "<strong>".readable_date(mysql2date($notesarray[$i]->timestamp))."</strong><br />{$notesarray[$i]->bodytext}<br /><br />";
             }
             $updatehtml .= "Task completed at {$enddate}, duration was: ".format_seconds($duration);
-            
+
             //create update
             $sql = "INSERT INTO updates (incidentid, userid, type, bodytext, timestamp, duration) ";
             $sql .= "VALUES('{$incident}', '{$sit[2]}', 'fromtask', '{$updatehtml}', '$now', '$duration')";
@@ -189,7 +189,7 @@ switch ($action)
         mysql_query($sql);
         if (mysql_error()) trigger_error(mysql_error(),E_USER_ERROR);
 
-        
+
 
         confirmation_page("2", "tasks.php?incident={$incident}", "<h2>{$strTaskMarkedCompleteSuccessfully}</h2><p align='center'>{$strPleaseWaitRedirect}...</p>");
     break;
@@ -262,10 +262,10 @@ switch ($action)
                 echo "<td>";
                 echo "<input type='radio' name='distribution' ";
                 if ($task->distribution=='public') echo "checked='checked' ";
-                echo "value='public' /> Public<br />";
+                echo "value='public' /> {$strPublic}<br />";
                 echo "<input type='radio' name='distribution' ";
                 if ($task->distribution=='private') echo "checked='checked' ";
-                echo "value='private' /> Private <img src='{$CONFIG['application_webpath']}images/icons/{$iconset}/16x16/private.png' width='16' height='16' title='Private' alt='Private' /></td></tr>";
+                echo "value='private' /> {$strPrivate} <img src='{$CONFIG['application_webpath']}images/icons/{$iconset}/16x16/private.png' width='16' height='16' title='Private' alt='Private' /></td></tr>";
                 echo "</table>";
                 echo "<p><input name='submit' type='submit' value='{$strSave}' /></p>";
                 echo "<input type='hidden' name='action' value='edittask' />";

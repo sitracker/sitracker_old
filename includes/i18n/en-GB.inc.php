@@ -272,6 +272,7 @@ $strJobTitle = 'Job Title';
 $strJumpTo = 'Jump to';
 $strJumpToIncident = 'Jump to Incident';
 
+$strKeywords = 'Keywords';
 $strKnowledgeBase = 'KnowledgeBase';
 
 $strLanguage = 'Language';
