@@ -63,6 +63,7 @@ $strBookHoliday = 'Book Holiday';
 $strBoth = 'Both';
 $strBrowse = 'Browse';
 $strBrowseContacts = 'Browse contacts';
+$strBrowseContracts = 'Browse contracts';
 $strBrowseFeedback = 'Browse feedback';
 $strBrowseFeedbackForms = 'Browse Feedback Forms';
 $strBrowseKB = 'Browse KnowledgeBase';
@@ -466,6 +467,7 @@ $strReviewDueAgo = 'Review Due %s ago!';
 $strReviewDueNow = 'Review Due Now!';
 $strReviewIn = 'Review in %s';
 $strRole = 'Role';
+$strRolePermissions = 'Role Permissions';
 $strRunReport = 'Run Report';
 
 $strSalesperson = 'Salesperson';

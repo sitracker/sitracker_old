@@ -380,9 +380,9 @@ if (mysql_num_rows($result) >= 1)
     echo "<h2>Pending Re-Assignments</h2>";
     echo "<p align='center'>Automatic reassignments that could not be made because users were set to 'not accepting'</p>";
     echo "<table align='center' style='width: 95%;'>";
-    echo "<tr><th title='Last Updated'>Date</th><th title='Current Owner'>From</th>";
-    echo "<th title='Incident Title'>Subject</th><th>Reason</th>";
-    echo "<th>Operation</th></tr>\n";
+    echo "<tr><th title='Last Updated'>{$strDate}</th><th title='Current Owner'>{$strFrom}</th>";
+    echo "<th title='Incident Title'>{$strSubject}</th><th>{$strMessage}</th>";
+    echo "<th>{$strOperation}</th></tr>\n";
 
     while ($assign = mysql_fetch_object($result))
     {

@@ -51,7 +51,7 @@ if (mysql_error()) trigger_error(mysql_error(),E_USER_WARNING);
 echo "<h2><img src='{$CONFIG['application_webpath']}images/icons/{$iconset}/32x32/user.png' width='32' height='32' alt='' /> ";
 echo "{$strManageUsers}</h2>";
 echo "<p class='contextmenu' align='center'><a href='add_user.php?action=showform'>{$strAddUser}</a> | ";
-echo "<a href='edit_user_permissions.php'>Set Role Permissions</a>";
+echo "<a href='edit_user_permissions.php'>{$strRolePermissions}</a>";
 echo "</p>";
 echo "<table align='center'>";
 echo "<tr>";

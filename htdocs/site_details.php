@@ -24,7 +24,7 @@ $id=cleanvar($_REQUEST['id']);
 
 include('htmlheader.inc.php');
 
-if (empty($id))
+if ($id=='')
 {
     echo "<p class='error'>You must select a site</p>";
     exit;

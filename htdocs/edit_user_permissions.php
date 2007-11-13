@@ -10,13 +10,16 @@
 
 // Author: Ivan Lucas <ivanlucas[at]users.sourceforge.net>
 
-$permission=9;
-$title='Edit Permissions';
+// FIXME i18n
+
+$permission=9; // Edit User Permissions
 
 require('db_connect.inc.php');
 require('functions.inc.php');
 // This page requires authentication
 require('auth.inc.php');
+
+$title = $strSetPermissions;
 
 // Restrict resetting passwords in demo mode for all but the first user (usually admin)
 if ($CONFIG['demo'] AND $_SESSION['userid']!=1)
@@ -48,7 +51,7 @@ if (empty($action) OR $action == "showform")
 
     if(mysql_num_rows($result) >= 1)
     {
-        echo "<h2>Set Role Permissions</h2>";
+        echo "<h2>{$strRolePermissions}</h2>";
         echo "<form action='{$_SERVER['PHP_SELF']}' method='post' onsubmit='return confirm_submit()'>";
         echo "<table align='center'>";
         echo "<tr>";
