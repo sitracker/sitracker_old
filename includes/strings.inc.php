@@ -166,7 +166,7 @@ $updatetypes['externalinfo'] = array('icon' => 'externalinfo.png', 'text' => spr
 $updatetypes['probdef'] = array('icon' => 'probdef.png', 'text' => sprintf($strProblemDefinitionby,'updateuser'));
 $updatetypes['research'] = array('icon' => 'research.png', 'text' => sprintf($strResearchedby,'updateuser'));
 $updatetypes['reassigning'] = array('icon' => 'reassign.png', 'text' => sprintf($srtReassignedToBy,'currentowner','updateuser'));
-$updatetypes['reviewmet'] = array('icon' => 'review.png', 'text' => sprintf($strReviewby, 'updateuser')); // conditional
+$updatetypes['reviewmet'] = array('icon' => 'review.png', 'text' => sprintf($strReviewby, 'updatereview', 'updateuser')); // conditional
 $updatetypes['tempassigning'] = array('icon' => 'tempassign.png', 'text' => sprintf($strTemporarilyAssignedto,'currentowner','updateuser'));
 $updatetypes['opening'] = array('icon' => 'open.png', 'text' => sprintf($strOpenedby,'updateuser'));
 $updatetypes['phonecallout'] = array('icon' => 'callout.png', 'text' => sprintf($strPhonecallmadeby,'updateuser'));
@@ -174,7 +174,7 @@ $updatetypes['phonecallin'] = array('icon' => 'callin.png', 'text' => sprintf($s
 $updatetypes['reopening'] = array('icon' => 'reopen.png', 'text' => sprintf($strReopenedby,'updateuser'));
 $updatetypes['slamet'] = array('icon' => 'sla.png', 'text' => sprintf($strSLAby,'updatesla', 'updateuser'));
 $updatetypes['solution'] = array('icon' => 'solution.png', 'text' => sprintf($strResolvedby, 'updateuser'));
-$updatetypes['webupdate'] = array('icon' => 'webupdate.png', 'text' => sprintf($strWebupdate, 'updateuser'));
+$updatetypes['webupdate'] = array('icon' => 'webupdate.png', 'text' => sprintf($strWebupdate));
 $updatetypes['auto_chase_phone'] = array('icon' => 'chase.png', 'text' => $strChase);
 $updatetypes['auto_chase_manager'] = array('icon' => 'chase.png', 'text' => $strChase);
 $updatetypes['auto_chase_email'] = array('icon' => 'chased.png', 'text' => $strChased);
@@ -184,11 +184,11 @@ $updatetypes['auto_chased_managers_manager'] = array('icon' => 'chased.png', 'te
 $updatetypes['customerclosurerequest'] = array('icon' => 'close.png', 'text' => $strCustomerRequestedClosure);
 $updatetypes['fromtask'] = array('icon' => 'webupdate.png', text => $strUpdatedFromTask);
 $slatypes['opened'] = array('icon' => 'open.png', 'text' => sprintf($strOpenedby,'updateuser'));
-$slatypes['initialresponse'] = array('icon' => 'initialresponse.png', 'text' => sprintf($strInitialResponseBy, 'updateuser'));
-$slatypes['probdef'] = array('icon' => 'probdef.png', 'text' => $strProblemDefinitionby);
-$slatypes['actionplan'] = array('icon' => 'actionplan.png', 'text' => $strActionPlanby);
-$slatypes['solution'] = array('icon' => 'solution.png', 'text' => $strSolutionby);
-$slatypes['closed'] = array('icon' => 'close.png', 'text' => $strClosedby);
+$slatypes['initialresponse'] = array('icon' => 'initialresponse.png', 'text' => $strInitialResponse);
+$slatypes['probdef'] = array('icon' => 'probdef.png', 'text' => $strProblemDefinition);
+$slatypes['actionplan'] = array('icon' => 'actionplan.png', 'text' => $strActionPlan);
+$slatypes['solution'] = array('icon' => 'solution.png', 'text' => $strSolution);
+$slatypes['closed'] = array('icon' => 'close.png', 'text' => $strClosed);
 
 
 // List of *Available* languages, must match files in includes/i18n
