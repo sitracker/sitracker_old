@@ -39,7 +39,7 @@ if($searchmode != 'related')
     echo "</th>";
     echo "<td>";
     echo "<input maxlength='100' name='search_string' size='35' type='text' value='".stripslashes(strip_tags(urldecode($search_string)))."' /> ";
-    echo "(<a href='advanced_search_incidents.php'>{$strAdvanced}</a>)";
+    echo "(<a href='advanced_search_incidents.php'>{$strAdvanced}</a> | <a href='view_tags.php'>{$strTagCloud}</a>)";
     echo "</td>";
     echo "</tr>\n";
     echo "</table>\n";
@@ -412,7 +412,6 @@ if (!empty($search_string))
 }
 if($searchmode != 'related')
 {
-    echo "<p>See also the <a href='view_tags.php'>Tag Cloud</a></p>";
     echo "<p>Firefox 2 and IE 7 users: You can <a href=\"javascript:window.external.AddSearchProvider('{$CONFIG['application_uriprefix']}{$CONFIG['application_webpath']}opensearch.php')\">install this search plugin</a> to make searching easier.</p>";
 }
 ?>

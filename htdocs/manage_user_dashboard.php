@@ -45,7 +45,7 @@ if(empty($dashboardid))
     if (mysql_error()) trigger_error(mysql_error(),E_USER_ERROR);
 
     echo "<h2><img src='{$CONFIG['application_webpath']}images/icons/{$iconset}/32x32/dashboard.png' width='32' height='32' alt='' /> ";
-    echo user_realname($sit[2])."'s {$strDashboard}</h2>\n";
+    echo "{$strDashboard}: ".user_realname($sit[2])."</h2>\n";
 
     if(mysql_num_rows($result) > 0)
     {
@@ -62,7 +62,6 @@ if(empty($dashboardid))
                 echo "<tr><th>{$strName}:</th><td>{$obj->name}</td><td><a href='{$_SERVER['PHP_SELF']}?action=remove&amp;id=$obj->id'>{$strRemove}</a></td></tr>\n";
             }
         }
-
         echo "</table>\n";
     }
 
