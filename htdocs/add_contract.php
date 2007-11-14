@@ -60,7 +60,7 @@ if ($action == "showform" OR $action=='')
     echo "<td>".array_drop_down($incident_pools,'incident_poolid',$maint['incident_quantity'])."</td></tr>";
     echo "<tr><th>{$strAdminContact}: <sup class='red'>*</sup></th><td>".contact_drop_down("admincontact", 0, true)."</td></tr>\n";
     echo "<tr><th>{$strNotes}:</th><td><textarea cols='40' name='notes' rows='5'></textarea></td></tr>\n";
-    echo "<tr><th>Product Only:</th><td><input name='productonly' type='checkbox' value='yes' /></td></tr>\n"; // FIXME i18n
+    echo "<tr><th>Product Only:</th><td><input name='productonly' type='checkbox' value='yes' /></td></tr>\n"; // FIXME i18n product only
     echo "</table>\n";
     echo "<p align='center'><input name='submit' type='submit' value=\"{$strAddContract}\" /></p>";
     echo "</form>";

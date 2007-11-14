@@ -74,7 +74,6 @@ while($escalations = mysql_fetch_object($escs))
             $html .= "<td>";
             $html .= "</tr>";
 
-            // FIXME strip slashes
             foreach($esc AS $engineer)
             {
                 if(empty($engineer['4']))  $engineer['4'] = 0;
@@ -93,7 +92,7 @@ while($escalations = mysql_fetch_object($escs))
                 foreach($engineer['calls'] AS $call)
                 {
                     $replace = array("Response","Action");
-                    $html .= "<tr><td width='50%'>".$call['text']."</td><td width='12%'>".user_realname($call['localowner']);
+                    $html .= "<tr><td width='50%'>".stripslashes($call['text'])."</td><td width='12%'>".user_realname($call['localowner']);
                     if(!empty($call['salfordtowner'])) $html .= "<br />T: ".user_realname($call['salfordtowner']);
                     $html .= "</td><td width='25%'>".$call['software']."</td><td>".str_replace($replace,"",incidentstatus_name($call['status']))."</td></tr>";
                 }
@@ -117,8 +116,6 @@ while($escalations = mysql_fetch_object($escs))
             $html .= "<td>".$c['1']."</td>";
             $html .= "</tr>";
             $html .= "</table></p>";
-
-
         }
         else
             $html .= "<p align='center'>{$strNoIncidents}</p>";

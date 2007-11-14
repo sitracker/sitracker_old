@@ -154,8 +154,6 @@ elseif($_REQUEST['mode'] == "show")
             }
         }
     }
-//      echo "<pre>".print_r($comments,true)."</pre>";
-//       echo "<pre>".print_r($englishvalues,true)."</pre>";
     echo "<h2>Word List</h2>";
     echo "<p align='center'>{$strTranslateTheString}</p>";
     echo "<form method='post' action='{$_SERVER[PHP_SELF]}?mode=save'>";
