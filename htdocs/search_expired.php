@@ -131,12 +131,12 @@ else
                     else $class = "shade2";
                     ?>
                     <tr>
-                    <td align='center' class='<?php echo $class ?>' width='50'><a href="maintenance_details.php?id=<?php echo $results["maintid"] ?>"><?php echo $results["maintid"] ?></a></td>
+                    <td align='center' class='<?php echo $class ?>' width='50'><a href="contract_details.php?id=<?php echo $results["maintid"] ?>"><?php echo $results["maintid"] ?></a></td>
                     <td align='center' class='<?php echo $class ?>' width='100'><?php echo $results["site"] ?></td>
                     <td align='center' class='<?php echo $class ?>' width='100'><?php echo $results["product"] ?></td>
                     <td align='center' class='<?php echo $class ?>' width='100'><?php echo $results["reseller"] ?></td>
                     <td align='center' class='<?php echo $class ?>' width='75'><?php echo $results["licence_quantity"] ?> <?php echo $results["licence_type"] ?></td>
-                    <td align='center' class='<?php echo $class ?>' width='100'><?php echo date("jS M Y", $results["expirydate"]); ?></td>
+                    <td align='center' class='<?php echo $class ?>' width='100'><?php echo date($CONFIG['dateformat_date'], $results["expirydate"]); ?></td>
                     <td align='center' class='<?php echo $class ?>' width='100'><a href="javascript: contact_details_window(<?php echo $results['admincontact']?>)"><?php echo $results['admincontactforenames'].' '.$results['admincontactsurname'] ?></a></td>
                     <?php
                     echo "<td class='{$class}'>{$results['admincontactphone']}</td>";

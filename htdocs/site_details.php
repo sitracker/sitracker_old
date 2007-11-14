@@ -180,7 +180,7 @@ if (user_permission($sit[2],19)) // View contracts
             if ($results['term']=='yes' || $results['expirydate']<$now) $class = "expired";
             echo "<tr>";
                 echo "<td class='<?php echo $class ?>'><img src='{$CONFIG['application_webpath']}images/icons/{$iconset}/16x16/contract.png' width='16' height='16' alt='' /> ";
-                echo "<a href='maintenance_details.php?id={$results['maintid']}'>{$strContract} {$results['maintid']}</a></td>";
+                echo "<a href='contract_details.php?id={$results['maintid']}'>{$strContract} {$results['maintid']}</a></td>";
                 ?>
                 <td class='<?php echo $class ?>'><?php echo stripslashes($results["product"]); ?></td>
                 <td class='<?php echo $class ?>'><?php echo stripslashes($results["reseller"]); ?></td>

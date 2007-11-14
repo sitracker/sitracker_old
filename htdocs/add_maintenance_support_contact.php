@@ -111,7 +111,7 @@ else if ($action == "add")
             }
             else
             {
-                confirmation_page("3", "maintenance_details.php?id=$maintid", "<h2>Contact Successfully linked to contract</h2><p align='center'>{$strPleaseWaitRedirect}...</p>");
+                confirmation_page("3", "contract_details.php?id=$maintid", "<h2>Contact Successfully linked to contract</h2><p align='center'>{$strPleaseWaitRedirect}...</p>");
             }
         }
     }

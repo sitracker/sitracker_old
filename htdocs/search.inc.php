@@ -378,7 +378,7 @@ if (!empty($search_string))
                 case 'incident': $url = "javascript:incident_details_window('{$sresult['id']}', 'incident{$sresult['id']}')"; break;
                 case 'contact': $url = "contact_details.php?id={$sresult['id']}"; break;
                 case 'site': $url = "site_details.php?id={$sresult['id']}"; break;
-                case 'contract': $url = "maintenance_details.php?id={$sresult['id']}"; break;
+                case 'contract': $url = "contract_details.php?id={$sresult['id']}"; break;
                 case 'kb': $url = "kb_view_article.php?id={$sresult['id']}"; break;
                 default: $url = "javascript:alert('nothing to link to');";
             }

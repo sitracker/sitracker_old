@@ -177,7 +177,7 @@ elseif ($action == "add")
             $id=mysql_insert_id();
             journal(CFG_LOGGING_NORMAL, 'Contract Added', "Contract $id Added", CFG_JOURNAL_MAINTENANCE, $id);
 
-            confirmation_page("2", "maintenance_details.php?id=$maintid", "<h2>Contract Added Successfully</h2><h5>{$strPleaseWaitRedirect}...</h5>");
+            confirmation_page("2", "contract_details.php?id=$maintid", "<h2>Contract Added Successfully</h2><h5>{$strPleaseWaitRedirect}...</h5>");
         }
     }
     else
