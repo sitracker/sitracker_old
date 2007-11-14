@@ -66,7 +66,7 @@ if (empty($productid) AND $display!='skills')
                     echo "<td>{$product->description}</td>";
                     echo "<td align='right'>{$countlinked}</td>";
                     echo "<td align='right'>";
-                    if ($countcontracts > 0) echo "<a href='browse_maintenance.php?search_string=&amp;productid={$product->id}&amp;activeonly=yes'>{$countcontracts}</a>";
+                    if ($countcontracts > 0) echo "<a href='browse_contract.php?search_string=&amp;productid={$product->id}&amp;activeonly=yes'>{$countcontracts}</a>";
                     else echo "{$countcontracts}";
                     echo "</td>";
                     // FIXME
