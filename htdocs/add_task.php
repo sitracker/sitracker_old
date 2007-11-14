@@ -59,11 +59,14 @@ else
             $value = cleanvar($_REQUEST['value']);
             $distribution = cleanvar($_REQUEST['distribution']);
             $taskuser = cleanvar($_REQUEST['taskuser']);
+            $starttime = cleanvar($_REQUEST['starttime']);
+            $duetime = cleanvar($_REQUEST['duetime']);
+            $endtime = cleanvar($_REQUEST['endtime']);
     
             // Validate input
             $error=array();
             if ($name=='') $error[]='Task name must not be blank';
-            if ($startdate > $duedate AND $duedate != '' AND $duedate > 0 ) $startdate=$duedate;
+            if ($startdate > $duedate AND $duedate != '' AND $duedate > 0 ) $startdate=$duedate. " ".$duetime;
             if (count($error) >= 1)
             {
                 include('htmlheader.inc.php');
@@ -78,11 +81,11 @@ else
             }
             else
             {
-                if ($startdate > 0) $startdate = date('Y-m-d',$startdate);
+                if ($startdate > 0) $startdate = date('Y-m-d',$startdate)." ".$starttime;
                 else $startdate = '';
-                if ($duedate > 0) $duedate = date('Y-m-d',$duedate);
+                if ($duedate > 0) $duedate = date('Y-m-d',$duedate)." ".$duetime;
                 else $duedate='';
-                if ($startdate < 1 AND $completion > 0) $startdate = date('Y-m-d H:i:s');
+                if ($startdate < 1 AND $completion > 0) $startdate = date('Y-m-d H:i:s')." ".$starttime;
                 $sql = "INSERT INTO tasks ";
                 $sql .= "(name,description,priority,owner,duedate,startdate,completion,value,distribution,created) ";
                 $sql .= "VALUES ('$name','$description','$priority','$taskuser','$duedate','$startdate','$completion','$value','$distribution','".date('Y-m-d H:i:s')."')";
@@ -109,17 +112,21 @@ else
             echo "<tr><th>{$strStartDate}</th>";
             echo "<td><input type='text' name='startdate' id='startdate' size='10' /> ";
             echo date_picker('addtask.startdate');
+            echo " ".time_dropdown("starttime");
             echo "</td></tr>";
             echo "<tr><th>{$strDueDate}</th>";
             echo "<td><input type='text' name='duedate' id='duedate' size='10' /> ";
             echo date_picker('addtask.duedate');
+            echo " ".time_dropdown("duetime");
             echo "</td></tr>";
             echo "<tr><th>{$strCompletion}</th>";
             echo "<td><input type='text' name='completion' size='3' maxlength='3' value='0' />&#037;</td></tr>";
-            echo "<tr><th>{$strEndDate}</th>";
+            //FIXME: should this be available?
+            /*echo "<tr><th>{$strEndDate}</th>";
             echo "<td><input type='text' name='enddate' id='enddate' size='10' /> ";
             echo date_picker('addtask.enddate');
-            echo "</td></tr>";
+            echo " ".time_dropdown("endtime");
+            echo "</td></tr>";*/
             echo "<tr><th>{$strValue}</th>";
             echo "<td><input type='text' name='value' size='6' maxlength='12' /></td></tr>";
             echo "<tr><th>{$strUser}</th>";
