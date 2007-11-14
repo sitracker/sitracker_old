@@ -124,27 +124,25 @@ if (empty($_REQUEST['process']))
 
     -->
     </script>
+    <?php
+    // FIXME i18n
+    echo "<form name='closeform' action='{$_SERVER['PHP_SELF']}' method='post'>";
+    echo "<table class='vertical'>";
+    echo "<tr><th>{$strMarkForClosure}:<br />";
+    echo "Mark the incident as 'Awaiting Closure' and wait for a short while before closing this incident.</th>";
+    echo "<td><label><input type='radio' name='wait' value='yes' checked='checked' />{$strMarkForClosure}</label><br />";
+    echo "<label><input type='radio' name='wait' value='no' />{$strClose}</label></td></tr>\n";
+    echo "<tr><th>{$strKnowledgeBase}<br />";
+    echo "Check here <input type='checkbox' name='kbarticle' onchange='enablekb();' value='yes' /> and enter ";
+    echo "a title for an article to be created in the knowledge base.";
+    echo "</th><td><input type='text' name='kbtitle' id='kbtitle' size='30' value=\"".stripslashes($incident_title)."\" disabled='disabled' /></td></tr>\n";
+    echo "<tr><th>&nbsp;</th><td>";
+    echo "<span name='helptext' id='helptext'>Enter some details about the incident to be stored in the incident log for future use.";
+    echo "You should provide a summary of the problem and information about how it was resolved.<br /><strong>Final Update</strong>:</span></td></tr>";
 
-    <form name="closeform" action="<?php echo $_SERVER['PHP_SELF'] ?>" method="post">
-    <table class='vertical'>
-    <tr><th>Mark for Closure:<br />
-    Mark the incident as 'Awaiting Closure' and wait for a short while before closing this incident.<br />
-    </th>
-    <td><input type='radio' name='wait' value='yes' checked='checked' />Mark the incident for closure.<br />
-        <input type='radio' name='wait' value='no' />Close the incident immediately.
-    </td></tr>
-    <tr><th>Knowledge Base<br />
-    Check here <input type='checkbox' name='kbarticle' onchange='enablekb();' value='yes' /> and enter
-    a title for an article to be created in the knowledge base.
-    </th><td><input type="text" name="kbtitle" id="kbtitle" size="30" value="<?php echo $incident_title; ?>" disabled='disabled' /></td>
-    </tr>
-    <tr><th>&nbsp;</th><td>
-    <span name='helptext' id='helptext'>Enter some details about the incident to be stored in the incident log for future use.
-    You should provide a summary of the problem and information about how it was resolved.<br /><strong>Final Update</strong>:</span></td></tr>
-
-    <tr><th>Summary:<br />
-        A concise but full summary of the problem(s) that were encountered.<sup class='red'>*</sup>
-        <input type='checkbox' name='incsummary' onclick="if (this.checked) {document.closeform.summary.disabled = false; document.closeform.summary.style.display='';} else { saveValue=document.closeform.summary.value; document.closeform.summary.disabled = true; document.closeform.summary.style.display='none';}" checked='checked' disabled='disabled' /></td>
+    echo "<tr><th>{$strSummary}:<br />";
+    echo "A concise but full summary of the problem(s) that were encountered.<sup class='red'>*</sup> ";
+    ?><input type='checkbox' name='incsummary' onclick="if (this.checked) {document.closeform.summary.disabled = false; document.closeform.summary.style.display='';} else { saveValue=document.closeform.summary.value; document.closeform.summary.disabled = true; document.closeform.summary.style.display='none';}" checked='checked' disabled='disabled' /></td>
     <td><textarea id="summary" name="summary" cols='40' rows='8' onfocus="if (this.enabled) { this.value = saveValue; setTimeout('document.articlform.summary.blur()',1); } else saveValue=this.value;"><?php
     //  style="display: none;"
     $sql = "SELECT * FROM updates WHERE incidentid='$id' AND type='probdef' ORDER BY timestamp ASC";
@@ -156,6 +154,7 @@ if (empty($_REQUEST['process']))
         echo "\n\n";
     }
     echo "</textarea>\n";
+    // FIXME i18n
     ?></td></tr>
 
     <tr><th>Symptoms: <input type='checkbox' name='incsymptoms' onclick="if (this.checked) {document.closeform.symptoms.disabled = false; document.closeform.symptoms.style.display=''} else { saveValue=document.closeform.symptoms.value; document.closeform.symptoms.disabled = true; document.closeform.symptoms.style.display='none'}" disabled='disabled' /></th>
@@ -198,25 +197,29 @@ if (empty($_REQUEST['process']))
     <td><textarea id="references" name="references" cols='40' rows='8' style="display: none;" onfocus="if (this.enabled) { this.value = saveValue; setTimeout('document.articlform.references.blur()',1); } else saveValue=this.value;"></textarea></td></tr>
 
     <tr><th>Closing Status: <sup class='red'>*</sup></th><td><?php closingstatus_drop_down("closingstatus", 0) ?></td></tr>
-    <tr><th>Inform Customer:<br />
-    Send an email to the customer explaining that the incident has been (or will be) closed.</th>
-    <td><input name="send_email" checked type="radio" value="no" />No <input name="send_email" type="radio" value="yes" />Yes</td></tr>
+
     <?php
+    echo "<tr><th>Inform Customer:<br />";
+    echo "Send an email to the customer explaining that the incident has been (or will be) closed.</th>";
+    echo "<td><label><input name='send_email' checked type='radio' value='no' />{$strNo}</label> ";
+    echo "<input name='send_email' type='radio' value='yes' />{$strYes}</td></tr>\n";
     $externalemail=incident_externalemail($id);
     if ($externalemail)
     {
         ?>
         <tr><th>Inform External Engineer:<br />
         Send an email to <em><?php echo $externalemail; ?></em> asking for the external incident to be closed.
-        </th><td class='shade2'><input name="send_engineer_email" type="radio" value="no" />No <input name="send_engineer_email" type="radio" value="yes" checked='checked' />Yes</td></tr>
+        </th>
         <?php
+        echo "<td class='shade2'><label><input name='send_engineer_email' type='radio' value='no' />{$strNo}</label> ";
+        echo "<label><input name='send_engineer_email' type='radio' value='yes' checked='checked' />{$strYes}</label></td></tr>\n";
     }
     echo "</table>\n";
     echo "<p align='center'>";
     echo "<input name='type' type='hidden' value='Support' />";
     echo "<input name='id' type='hidden' value='$id' />";
     echo "<input type='hidden' name='process' value='closeincident' />";
-    echo "<input name='submit' type='submit' value='Close Incident' /></p>";
+    echo "<input name='submit' type='submit' value=\"{$strClose}\" /></p>";
     echo "</form>";
     include('incident_html_bottom.inc.php');
 }

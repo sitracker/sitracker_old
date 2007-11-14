@@ -317,6 +317,7 @@ $strManageYourDashboard = 'Manage your Dashboard';
 $strManagerChaseUpdate = 'Was this a manager chase?';
 $strMandatoryMarked = 'Mandatory fields are marked %s';
 $strMarkComplete = 'Mark Complete';
+$strMarkForClosure = 'Mark for Closure';
 $strMarkedComplete = 'Marked Complete';
 $strMarkedforclosureby = 'Marked for closure by %s';
 $strMarketingMailshot = 'Marketing Mailshot';
