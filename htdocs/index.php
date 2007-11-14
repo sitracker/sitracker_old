@@ -41,6 +41,7 @@ if ($_SESSION['auth'] != TRUE)
     echo "<option value='default'";
     if (empty($_SESSION['lang'])) echo " selected='selected'";
     echo ">{$strDefault}</option>\n";
+    if ($_GET['lang']=='zz') $availablelanguages['zz'] = 'Test Language (zz)';
     foreach($availablelanguages AS $langcode => $language)
     {
         if($langcode == $_SESSION['lang']) echo "<option value='$langcode' selected='selected'>$language</option>\n";
