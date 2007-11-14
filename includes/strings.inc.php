@@ -182,7 +182,7 @@ $updatetypes['auto_chased_phone'] = array('icon' => 'chased.png', 'text' => $str
 $updatetypes['auto_chased_manager'] = array('icon' => 'chased.png', 'text' => $strChased);
 $updatetypes['auto_chased_managers_manager'] = array('icon' => 'chased.png', 'text' => $strChased);
 $updatetypes['customerclosurerequest'] = array('icon' => 'close.png', 'text' => $strCustomerRequestedClosure);
-$updatetypes['fromtask'] = array('icon' => 'webupdate.png', text => $strUpdatedFromTask);
+$updatetypes['fromtask'] = array('icon' => 'webupdate.png', text => sprintf($strUpdatedFromActivity, 'updateuser'));
 $slatypes['opened'] = array('icon' => 'open.png', 'text' => sprintf($strOpenedby,'updateuser'));
 $slatypes['initialresponse'] = array('icon' => 'initialresponse.png', 'text' => $strInitialResponse);
 $slatypes['probdef'] = array('icon' => 'probdef.png', 'text' => $strProblemDefinition);
