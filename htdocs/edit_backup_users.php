@@ -39,7 +39,7 @@ if (empty($save))
 
     include('htmlheader.inc.php');
     // FIXME i18n
-    echo "<h2>Define Substitute Engineers for ".user_realname($user,TRUE)."</h2>\n";
+    echo "<h2>".sprintf($strDefineSubstituteEngineersFor, user_realname($user,TRUE))."</h2>\n";
     echo "<form name='def' action='{$_SERVER['PHP_SELF']}' method='post'>";
     echo "<input type='hidden' name='user' value='{$user}' />";
     echo "<p align='center'>{$strDefaultSubstitute}: ";
@@ -78,7 +78,7 @@ if (empty($save))
     }
     else
     {
-        echo "<h5 class='error'>No software skills defined</h5>";
+        echo "<h5 class='error'>{$strNoResults}</h5>";
     }
     include('htmlfooter.inc.php');
 }
@@ -96,7 +96,7 @@ else
         mysql_query($sql);
         if (mysql_error()) trigger_error(mysql_error(),E_USER_ERROR);
     }
-    confirmation_page("2", "control_panel.php", "<h2>Update Successful</h2><h5>{$strPleaseWaitRedirect}...</h5>");
+    confirmation_page("2", "control_panel.php", "<h2>{$strUpdateSuccessful}</h2><h5>{$strPleaseWaitRedirect}...</h5>");
 }
 
 ?>
