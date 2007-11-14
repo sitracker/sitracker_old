@@ -1015,7 +1015,7 @@ CREATE TABLE `tasks` (
   `enddate` datetime default NULL,
   `completion` tinyint(4) default NULL,
   `value` float(6,2) default NULL,
-  `distribution` enum('public','private') NOT NULL default 'public',
+  `distribution` enum('public','private', 'incident') NOT NULL default 'public',
   `created` datetime NOT NULL default '0000-00-00 00:00:00',
   `lastupdated` timestamp(14) NOT NULL,
   PRIMARY KEY  (`id`),
@@ -1552,6 +1552,8 @@ INSERT INTO `userpermissions` VALUES (1, 69, 'true');
 INSERT INTO `userpermissions` VALUES (1, 70, 'true');
 
 ALTER TABLE `users` ADD `lastseen` TIMESTAMP NOT NULL ;
+
+ALTER TABLE `tasks` CHANGE `distribution` `distribution` ENUM( 'public', 'private', 'incident' ) NOT NULL DEFAULT 'public' ;
 ";
 
 
