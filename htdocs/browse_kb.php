@@ -28,8 +28,8 @@ if (empty($mode) && empty($search_string)) $mode='RECENT';
 if (empty($search_string) AND empty($mode)) $search_string='a';
 echo "<h2><img src='{$CONFIG['application_webpath']}images/icons/{$iconset}/32x32/kb.png' width='32' height='32' alt='' /> ";
 echo "{$title}</h2>";
-if (strtolower($mode)=='recent') echo "<h4>Articles published recently</h4>";
-elseif (strtolower($mode)=='today') echo "<h4>Articles published today</h4>";
+if (strtolower($mode)=='recent') echo "<h4>{$strArticlesPublishedRecently}</h4>";
+elseif (strtolower($mode)=='today') echo "<h4>{$strArticlesPublishedToday}</h4>";
 ?>
 <table summary="alphamenu" align="center">
     <tr>
@@ -132,7 +132,7 @@ if (mysql_error()) trigger_error("MySQL Query Error ".mysql_error(), E_USER_ERRO
 
 if (mysql_num_rows($result) >= 1)
 {
-    echo "<p align='center'><strong>Matching Articles</strong> :</p>";
+    echo "<p align='center'><strong>{$strResults}strong> :</p>";
     echo "<table align='center' width='98%'>";
     echo "<tr>";
     echo colheader('id',$strID,FALSE);
@@ -190,11 +190,11 @@ if (mysql_num_rows($result) >= 1)
 }
 else
 {
-    echo "<p align='center'>No matching articles</p>";
+    echo "<p align='center'>{$strNoResults}</p>";
 }
 
 // echo "<!---SQL === $sql --->";
-echo "<p align='center'><a href='kb_add_article.php'>Add a knowledge base article</a></p>";
+echo "<p align='center'><a href='kb_add_article.php'>{$strAddNew}</a></p>";
 
 include('htmlfooter.inc.php');
 
