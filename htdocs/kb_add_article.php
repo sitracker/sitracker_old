@@ -40,60 +40,60 @@ if (user_permission($sit[2],$permission))
         </script>
         <?php
         echo "<h2><img src='{$CONFIG['application_webpath']}images/icons/{$iconset}/32x32/kb.png' width='32' height='32' alt='' /> ";
-        echo "Add KB Article</h2>";
-        echo "<h5>{$strMandatoryMarked} <sup class='red'>*</sup></h5>";
-        ?>
-        <form name="articleform" action="<?php echo $_SERVER['PHP_SELF']; ?>" method="post">
-        <table align='center' class='vertical' width='600'>
-        <tr><th>Title: <sup class='red'>*</sup></th><td><input type="text" name="title" size="50" maxlength="255" /></td></tr>
-        <tr><th>Keywords: <sup class='red'>*</sup></th><td><input type="text" name="keywords" size="50" maxlength="255" /></td></tr>
-        <tr><th>Distribution: <sup class='red'>*</sup></th><td>
-        <select name="distribution">
-        <option value="public">Public</option>
-        <option value="private" style='color: blue;'>Private</option>
-        <option value="restricted" style='color: red;'>Restricted</option>
-        </select>
-        </td></tr>
+        echo "{$strAddKBArticle}</h2>";
+        echo "<h5>".sprintf($strMandatoryMarked, "<sup class='red'>*</sup>")."</h5>";
+        echo "<form name='articleform' action=".$_SERVER['PHP_SELF']." method='post'>";
+        echo "<table align='center' class='vertical' width='600'>";
+        echo "<tr><th>{$strTitle}: <sup class='red'>*</sup></th><td><input type='text' name='title' size='50' maxlength='255' /></td></tr>";
+        echo "<tr><th>{$strKeywords}: <sup class='red'>*</sup></th><td><input type='text' name='keywords' size='50' maxlength='255' /></td></tr>";
+        echo "<tr><th>{$strDistribution}: <sup class='red'>*</sup></th><td>";
+        echo "<select name='distribution'>";
+        echo "<option value='public'>{$strPublic}</option>";
+        echo "<option value='private' style='color: blue;'>{$strPrivate}</option>";
+        echo "<option value='restricted' style='color: red;'>{$strRestricted}</option>";
+        echo "</select>";
+        echo "</td></tr>";
 
-        <tr><th>&nbsp;</th><td>Select the sections you'd like to include in the article by checking the boxes beside each heading, you can add further sections later.  You don't need to include all sections, just use the ones that are relevant.</td></tr>
+        echo <<<PRINT
+                <tr><th>&nbsp;</th><td>{$strKBSelectSectionsText}</td></tr>
 
-        <tr><th>Summary: <input type='checkbox' name='incsummary' onclick="if (this.checked) {document.articleform.summary.disabled = false; document.articleform.summary.style.display='';} else { saveValue=document.articleform.summary.value; document.articleform.summary.disabled = true; document.articleform.summary.style.display='none';}" /></th>
+        <tr><th>{$strSummary}: <input type='checkbox' name='incsummary' onclick="if (this.checked) {document.articleform.summary.disabled = false; document.articleform.summary.style.display='';} else { saveValue=document.articleform.summary.value; document.articleform.summary.disabled = true; document.articleform.summary.style.display='none';}" /></th>
         <td><textarea id="summary" name="summary" cols='100' rows='8' style="display: none;" onfocus="if (this.enabled) { this.value = saveValue; setTimeout('document.articlform.summary.blur()',1); } else saveValue=this.value;"></textarea></td></tr>
 
-        <tr><th>Symptoms: <input type='checkbox' name='incsymptoms' onclick="if (this.checked) {document.articleform.symptoms.disabled = false; document.articleform.symptoms.style.display=''} else { saveValue=document.articleform.symptoms.value; document.articleform.symptoms.disabled = true; document.articleform.symptoms.style.display='none'}" /></th>
+        <tr><th>{$strSymptoms}: <input type='checkbox' name='incsymptoms' onclick="if (this.checked) {document.articleform.symptoms.disabled = false; document.articleform.symptoms.style.display=''} else { saveValue=document.articleform.symptoms.value; document.articleform.symptoms.disabled = true; document.articleform.symptoms.style.display='none'}" /></th>
         <td><textarea id="symptoms" name="symptoms" cols='100' rows='8' style="display: none;" onfocus="if (this.enabled) { this.value = saveValue; setTimeout('document.articlform.symptoms.blur()',1); } else saveValue=this.value;"></textarea></td></tr>
 
-        <tr><th>Cause: <input type='checkbox' name='inccause' onclick="if (this.checked) {document.articleform.cause.disabled = false; document.articleform.cause.style.display=''} else { saveValue=document.articleform.cause.value; document.articleform.cause.disabled = true; document.articleform.cause.style.display='none'}" /></th>
+        <tr><th>{$strCause}: <input type='checkbox' name='inccause' onclick="if (this.checked) {document.articleform.cause.disabled = false; document.articleform.cause.style.display=''} else { saveValue=document.articleform.cause.value; document.articleform.cause.disabled = true; document.articleform.cause.style.display='none'}" /></th>
         <td><textarea id="cause" name="cause" cols='100' rows='8' style="display: none;" onfocus="if (this.enabled) { this.value = saveValue; setTimeout('document.articlform.cause.blur()',1); } else saveValue=this.value;"></textarea></td></tr>
 
-        <tr><th>Question: <input type='checkbox' name='incquestion' onclick="if (this.checked) {document.articleform.question.disabled = false; document.articleform.question.style.display=''} else { saveValue=document.articleform.question.value; document.articleform.question.disabled = true; document.articleform.question.style.display='none'}" /></th>
+        <tr><th>{$strQuestion}: <input type='checkbox' name='incquestion' onclick="if (this.checked) {document.articleform.question.disabled = false; document.articleform.question.style.display=''} else { saveValue=document.articleform.question.value; document.articleform.question.disabled = true; document.articleform.question.style.display='none'}" /></th>
         <td><textarea id="question" name="question" cols='100' rows='8' style="display: none;" onfocus="if (this.enabled) { this.value = saveValue; setTimeout('document.articlform.question.blur()',1); } else saveValue=this.value;"></textarea></td></tr>
 
-        <tr><th>Answer: <input type='checkbox' name='incanswer' onclick="if (this.checked) {document.articleform.answer.disabled = false; document.articleform.answer.style.display=''} else { saveValue=document.articleform.answer.value; document.articleform.answer.disabled = true; document.articleform.answer.style.display='none'}" /></th>
+        <tr><th>{$strAnswer}: <input type='checkbox' name='incanswer' onclick="if (this.checked) {document.articleform.answer.disabled = false; document.articleform.answer.style.display=''} else { saveValue=document.articleform.answer.value; document.articleform.answer.disabled = true; document.articleform.answer.style.display='none'}" /></th>
         <td><textarea id="answer" name="answer" cols='100' rows='8' style="display: none;" onfocus="if (this.enabled) { this.value = saveValue; setTimeout('document.articlform.answer.blur()',1); } else saveValue=this.value;"></textarea></td></tr>
 
-        <tr><th>Solution: <input type='checkbox' name='incsolution' onclick="if (this.checked) {document.articleform.solution.disabled = false; document.articleform.solution.style.display=''} else { saveValue=document.articleform.solution.value; document.articleform.solution.disabled = true; document.articleform.solution.style.display='none'}" /></th>
+        <tr><th>{$strSolution}: <input type='checkbox' name='incsolution' onclick="if (this.checked) {document.articleform.solution.disabled = false; document.articleform.solution.style.display=''} else { saveValue=document.articleform.solution.value; document.articleform.solution.disabled = true; document.articleform.solution.style.display='none'}" /></th>
         <td><textarea id="solution" name="solution" cols='100' rows='8' style="display: none;" onfocus="if (this.enabled) { this.value = saveValue; setTimeout('document.articlform.solution.blur()',1); } else saveValue=this.value;"></textarea></td></tr>
 
-        <tr><th>Workaround: <input type='checkbox' name='incworkaround' onclick="if (this.checked) {document.articleform.workaround.disabled = false; document.articleform.workaround.style.display=''} else { saveValue=document.articleform.workaround.value; document.articleform.workaround.disabled = true; document.articleform.workaround.style.display='none'}" /></th>
+        <tr><th>{$strWorkaround}: <input type='checkbox' name='incworkaround' onclick="if (this.checked) {document.articleform.workaround.disabled = false; document.articleform.workaround.style.display=''} else { saveValue=document.articleform.workaround.value; document.articleform.workaround.disabled = true; document.articleform.workaround.style.display='none'}" /></th>
         <td><textarea id="workaround" name="workaround" cols='100' rows='8' style="display: none;" onfocus="if (this.enabled) { this.value = saveValue; setTimeout('document.articlform.workaround.blur()',1); } else saveValue=this.value;"></textarea></td></tr>
 
-        <tr><th>Status: <input type='checkbox' name='incstatus' onclick="if (this.checked) {document.articleform.status.disabled = false; document.articleform.status.style.display=''} else { saveValue=document.articleform.status.value; document.articleform.status.disabled = true; document.articleform.status.style.display='none'}" /></th>
+        <tr><th>{$strStatus}: <input type='checkbox' name='incstatus' onclick="if (this.checked) {document.articleform.status.disabled = false; document.articleform.status.style.display=''} else { saveValue=document.articleform.status.value; document.articleform.status.disabled = true; document.articleform.status.style.display='none'}" /></th>
         <td><textarea id="status" name="status" cols='100' rows='8' style="display: none;" onfocus="if (this.enabled) { this.value = saveValue; setTimeout('document.articlform.status.blur()',1); } else saveValue=this.value;"></textarea></td></tr>
 
-        <tr><th>Additional Info: <input type='checkbox' name='incadditional' onclick="if (this.checked) {document.articleform.additional.disabled = false; document.articleform.additional.style.display=''} else { saveValue=document.articleform.additional.value; document.articleform.additional.disabled = true; document.articleform.additional.style.display='none'}" /></th>
+        <tr><th>{$strAdditionalInfo}: <input type='checkbox' name='incadditional' onclick="if (this.checked) {document.articleform.additional.disabled = false; document.articleform.additional.style.display=''} else { saveValue=document.articleform.additional.value; document.articleform.additional.disabled = true; document.articleform.additional.style.display='none'}" /></th>
         <td><textarea id="additional" name="additional" cols='100' rows='8' style="display: none;" onfocus="if (this.enabled) { this.value = saveValue; setTimeout('document.articlform.additional.blur()',1); } else saveValue=this.value;"></textarea></td></tr>
 
-        <tr><th>References: <input type='checkbox' name='increferences' onclick="if (this.checked) {document.articleform.references.disabled = false; document.articleform.references.style.display=''} else { saveValue=document.articleform.references.value; document.articleform.references.disabled = true; document.articleform.references.style.display='none'}" /></th>
+        <tr><th>{$strReferences}: <input type='checkbox' name='increferences' onclick="if (this.checked) {document.articleform.references.disabled = false; document.articleform.references.style.display=''} else { saveValue=document.articleform.references.value; document.articleform.references.disabled = true; document.articleform.references.style.display='none'}" /></th>
         <td><textarea id="references" name="references" cols='100' rows='8' style="display: none;" onfocus="if (this.enabled) { this.value = saveValue; setTimeout('document.articlform.references.blur()',1); } else saveValue=this.value;"></textarea></td></tr>
 
         </table>
         <p align='center'>
         <input type="hidden" name="process" value="true" />
-        <input type="submit" value="Add Article" />
+        <input type="submit" value="{$strAdd}" />
         </p>
         </form>
-        <?php
+PRINT;
         include('htmlfooter.inc.php');
     }
     else
