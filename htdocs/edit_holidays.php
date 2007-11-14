@@ -63,6 +63,7 @@ switch($_REQUEST['action'])
         $result = mysql_query($sql);
         if (mysql_error()) trigger_error(mysql_error(),E_USER_WARNING);
 
+        // FIXME i18n holidays
         echo "<form name='editholidays' action='{$_SERVER['PHP_SELF']}' method='post'>";
         echo "<p>Reset holiday entitlement and carry-over up to <em>n</em> days of unused holiday</p>";
         echo "<div align='center'>Default new entitlement: <input type='text' name='default_entitlement' value='20' size='4' />, ";

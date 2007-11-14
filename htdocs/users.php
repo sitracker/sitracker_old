@@ -134,7 +134,7 @@ while ($users = mysql_fetch_array($result))
     echo "{$users['realname']}";
     echo "<span>";
     if (!empty($users['title'])) echo "<strong>{$users['title']}</strong><br />";
-    if ($users['groupid'] > 0) echo "Group: {$grouparr[$users['groupid']]}<br />";
+    if ($users['groupid'] > 0) echo "{$strGroup}: {$grouparr[$users['groupid']]}<br />";
     if (strlen($users['aim']) > 3) echo "<img src='{$CONFIG['application_webpath']}images/icons/{$iconset}/16x16/aim.png' width='16' height='16' alt='{$users['aim']}' /> <strong>AIM</strong>: {$users['aim']}<br />";
     if (strlen($users['icq']) > 3) echo "<img src='{$CONFIG['application_webpath']}images/icons/{$iconset}/16x16/icq.png' width='16' height='16' alt='{$users['icq']}' /> <strong>ICQ</strong>: {$users['icq']}<br />";
     if (strlen($users['msn']) > 3) echo "<img src='{$CONFIG['application_webpath']}images/icons/{$iconset}/16x16/msn.png' width='16' height='16' alt='{$users['msn']}' /> <strong>MSN</strong>: {$users['msn']}<br />";
