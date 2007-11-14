@@ -96,7 +96,7 @@ if (mysql_num_rows($result) >= 1)
 
         echo "</div>";
         // Notes
-                
+
         echo "<div style='width: 48%; float: right; border: 1px solid #CCCCFF;'>";
         echo add_note_form(10, $taskid);
         echo show_notes(10, $taskid);
@@ -114,7 +114,7 @@ if (mysql_num_rows($result) >= 1)
 }
 else echo "<p class='error'>{$strNoMatchingTask}</p>";
 
-if($mode != 'incident')echo "</div>";
+if($mode != 'incident') echo "</div>";
 echo "<div style='clear:both; padding-top: 20px;'>";
 
 if($mode != 'incident') echo "<p align='center'><a href='tasks.php'>{$strTaskList}</a></p>";

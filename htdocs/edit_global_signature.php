@@ -35,12 +35,13 @@ function delete_signature($sig_id)
 
 $permission=43; // Edit global signature
 
-//$title='Edit Global Signature';
-$title = 'Global Signature';
+
 require('db_connect.inc.php');
 require('functions.inc.php');
 // This page requires authentication
 require('auth.inc.php');
+
+$title = $strGlobalSignature;
 
 // External variables
 $action = cleanvar($_REQUEST['action']);

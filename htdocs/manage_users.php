@@ -57,7 +57,7 @@ echo "<table align='center'>";
 echo "<tr>";
 echo "<th><a href='{$_SERVER['PHP_SELF']}?sort=realname'>{$strName}</a> (<a href='{$_SERVER['PHP_SELF']}?sort=username'>{$strUsername}</a>)</th>";
 echo "<th><a href='{$_SERVER['PHP_SELF']}?sort=role'>{$strRole}</a></th>";
-echo "<th>{$strAccountStatus}</th>";
+echo "<th>{$strStatus}</th>";
 echo "<th>{$strOperation}</th>";
 echo "<th><a href='{$_SERVER['PHP_SELF']}?sort=email'>{$strEmail}</a></th>";
 echo "<th><a href='{$_SERVER['PHP_SELF']}?sort=phone'>{$strTelephone}</a></th>";
