@@ -595,6 +595,7 @@ $strSymptoms = 'Symptoms';
 
 $strTable = 'Table';
 $strTag = 'Tag';
+$strTagCloud = 'Tag Cloud';
 $strTags = 'Tags';
 $strTagsMulti = '%d Tags';
 $strtaken = 'taken';
