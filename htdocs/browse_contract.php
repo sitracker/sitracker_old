@@ -52,9 +52,9 @@ echo "/> Show Active Only</label>";
 <br />
 and/or by product:
 <?php
-echo product_drop_down('productid', $productid)
+echo product_drop_down('productid', $productid);
+echo "<input type='submit' value=\"{$strGo}\" />";
 ?>
-<input type="submit" value="Go" />
 </form>
 </td>
 </tr>
@@ -202,7 +202,7 @@ else
         }
         ?>
         <tr class='<?php echo $class ?>'>
-        <td><a href="maintenance_details.php?&amp;id=<?php echo $results['maintid'] ?>">Contract <?php echo $results["maintid"] ?></a></td>
+        <td><a href="contract_details.php?&amp;id=<?php echo $results['maintid'] ?>">Contract <?php echo $results["maintid"] ?></a></td>
         <td><?php echo $results["product"] ?></td>
         <?php
         echo "<td><a href='site_details.php?id={$results['siteid']}#contracts'>".htmlspecialchars($results['site'])."</a><br />";

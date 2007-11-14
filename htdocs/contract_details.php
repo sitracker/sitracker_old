@@ -60,7 +60,7 @@ echo "<tr><th>{$strNotes}:</th><td>".stripslashes($maintrow['maintnotes'])."</td
 ?>
 </table>
 <?php
-echo "<p align='center'><a href=\"edit_maintenance.php?action=edit&amp;maintid=$id\">{$strEditContract}</a></p>";
+echo "<p align='center'><a href=\"edit_contract.php?action=edit&amp;maintid=$id\">{$strEditContract}</a></p>";
 
 if (mysql_num_rows($maintresult)<1)
 {
