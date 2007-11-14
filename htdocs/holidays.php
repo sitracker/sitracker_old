@@ -24,7 +24,7 @@ $approver = user_permission($sit[2],50); // Approve holidays
 if (!empty($_REQUEST['user'])) $user = cleanvar($_REQUEST['user']);
 else $user = $sit[2];
 
-if ($user==$sit[2]) $title="{$_SESSION['realname']}'s Holidays";
+if ($user==$sit[2]) $title= sprintf($strUsersHolidays, $_SESSION['realname']);
 else $title = user_realname($user)."'s Holidays";
 
 include('htmlheader.inc.php');
@@ -52,17 +52,17 @@ if ($user==$sit[2] OR $approver==TRUE)
     echo "<tr class='shade2'><td>";
     $entitlement=user_holiday_entitlement($user);
     $holidaystaken=user_count_holidays($user, 1);
-    echo "$entitlement days, ";
-    echo "$holidaystaken taken, ";
-    echo $entitlement-$holidaystaken." Remaining";
+    echo "$entitlement {$strdays}, ";
+    echo "$holidaystaken {$strtaken}, ";
+    echo $entitlement-$holidaystaken." {$strRemaining}";
     echo "</td></tr>\n";
     echo "<tr class='shade1'><td ><strong>Other Leave Taken</strong>:</td></tr>\n";
     echo "<tr class='shade2'><td>";
-    echo user_count_holidays($user, 2)." days sick leave, ";
-    echo user_count_holidays($user, 3)." days working away, ";
-    echo user_count_holidays($user, 4)." days training";
+    echo user_count_holidays($user, 2)." {$strdayssick}, ";
+    echo user_count_holidays($user, 3)." {$strdaysworkingaway}, ";
+    echo user_count_holidays($user, 4)." {$strdaystraining}";
     echo "<br />";
-    echo user_count_holidays($user, 5)." days other leave";
+    echo user_count_holidays($user, 5)." {$strdaysother}";
     echo "</td></tr>\n";
     echo "</table>\n";
 }
@@ -79,26 +79,26 @@ if ($numwaiting > 0)
     if ($user==$sit[2])
     {
         // Show dates waiting approval, but only to owner
-        echo "<tr class='shade2'><td colspan='4'><strong>Dates not yet approved</strong>:</td></tr>";
+        echo "<tr class='shade2'><td colspan='4'><strong>{$strDatesNotYetApproved}</strong>:</td></tr>";
         while ($dates = mysql_fetch_array($result))
         {
             echo "<tr class='shade1'><td>{$dates['name']}</td>";
             echo "<td>".date('l', $dates['startdate'])." ";
-            if ($dates['length']=='am') echo "<u>Morning</u> ";
-            if ($dates['length']=='pm') echo "<u>Afternoon</u> ";
+            if ($dates['length']=='am') echo "<u>{$strMorning}</u> ";
+            if ($dates['length']=='pm') echo "<u>{$strAfternoon}</u> ";
             echo date('jS F Y', $dates['startdate']);
             echo "</td>";
             echo "<td>";
             echo holiday_approval_status($dates['approved'], $dates['approvedby']);
             echo "</td>";
             echo "<td>";
-            if ($dates['length']=='pm' OR $dates['length']=='day') echo "<a href='add_holiday.php?type={$dates['type']}&amp;user=$user&amp;year=".date('Y',$dates['startdate'])."&amp;month=".date('m',$dates['startdate'])."&amp;day=".date('d',$dates['startdate'])."&amp;length=am' onclick=\"return window.confirm('".date('l jS F Y', $dates['startdate']).": Are you sure you want to make this Morning only?');\" title='Make this Morning only'>am</a> | ";
-            if ($dates['length']=='am' OR $dates['length']=='day') echo "<a href='add_holiday.php?type={$dates['type']}&amp;user=$user&amp;year=".date('Y',$dates['startdate'])."&amp;month=".date('m',$dates['startdate'])."&amp;day=".date('d',$dates['startdate'])."&amp;length=pm' onclick=\"return window.confirm('".date('l jS F Y', $dates['startdate']).": Are you sure you want to make this Afternoon only?');\" title='Make this Afternoon only'>pm</a> | ";
-            if ($dates['length']=='am' OR $dates['length']=='pm') echo "<a href='add_holiday.php?type={$dates['type']}&amp;user=$user&amp;year=".date('Y',$dates['startdate'])."&amp;month=".date('m',$dates['startdate'])."&amp;day=".date('d',$dates['startdate'])."&amp;length=day' onclick=\"return window.confirm('".date('l jS F Y', $dates['startdate']).": Are you sure you want to make this for the Full Day?');\" title='Make this for the Full Day'>all day</a> | ";
-            if ($sit[2]==$user) echo "<a href='add_holiday.php?year=".date('Y',$dates['startdate'])."&amp;month=".date('m',$dates['startdate'])."&amp;day=".date('d',$dates['startdate'])."&amp;user={$sit[2]}&amp;type={$dates['type']}&amp;length=0&return=holidays' onclick=\"return window.confirm('".date('l jS F Y', $dates['startdate']).": Are you sure you want to cancel this?');\" title='Cancel this holiday'>cancel</a>";
+            if ($dates['length']=='pm' OR $dates['length']=='day') echo "<a href='add_holiday.php?type={$dates['type']}&amp;user=$user&amp;year=".date('Y',$dates['startdate'])."&amp;month=".date('m',$dates['startdate'])."&amp;day=".date('d',$dates['startdate'])."&amp;length=am' onclick=\"return window.confirm('".date('l jS F Y', $dates['startdate']).": {$strHolidayMorningOnlyConfirm}');\" title='{$strHolidayMorningOnly}'>{$stram}</a> | ";
+            if ($dates['length']=='am' OR $dates['length']=='day') echo "<a href='add_holiday.php?type={$dates['type']}&amp;user=$user&amp;year=".date('Y',$dates['startdate'])."&amp;month=".date('m',$dates['startdate'])."&amp;day=".date('d',$dates['startdate'])."&amp;length=pm' onclick=\"return window.confirm('".date('l jS F Y', $dates['startdate']).": {$strHolidayAfternoonOnlyConfirm}');\" title='{$strHolidayAfternoonOnly}'>{$strpm}</a> | ";
+            if ($dates['length']=='am' OR $dates['length']=='pm') echo "<a href='add_holiday.php?type={$dates['type']}&amp;user=$user&amp;year=".date('Y',$dates['startdate'])."&amp;month=".date('m',$dates['startdate'])."&amp;day=".date('d',$dates['startdate'])."&amp;length=day' onclick=\"return window.confirm('".date('l jS F Y', $dates['startdate']).": {$strHolidayFullDayConfirm}');\" title='{$strHolidayFullDay}'>{$strallday}</a> | ";
+            if ($sit[2]==$user) echo "<a href='add_holiday.php?year=".date('Y',$dates['startdate'])."&amp;month=".date('m',$dates['startdate'])."&amp;day=".date('d',$dates['startdate'])."&amp;user={$sit[2]}&amp;type={$dates['type']}&amp;length=0&return=holidays' onclick=\"return window.confirm('".date('l jS F Y', $dates['startdate']).": {$strHolidayCancelConfirm}');\" title='{$strHolidayCancel}'>cancel</a>";
             echo "</td></tr>\n";
         }
-        echo "<tr class='shade1'><td colspan='4'><a href='holiday_request.php?action=resend'>Send reminder request</a></td></tr>";
+        echo "<tr class='shade1'><td colspan='4'><a href='holiday_request.php?action=resend'>{$strSendReminderRequest}</a></td></tr>";
     }
 }
 mysql_free_result($result);
@@ -120,8 +120,8 @@ while ($holidaytype=mysql_fetch_array($tresult))
         {
             echo "<tr class='shade1'>";
             echo "<td colspan='2'>".date('l', $dates['startdate'])." ";
-            if ($dates['length']=='am') echo "<u>Morning</u> ";
-            if ($dates['length']=='pm') echo "<u>Afternoon</u> ";
+            if ($dates['length']=='am') echo "<u>{$strMorning}</u> ";
+            if ($dates['length']=='pm') echo "<u>{$strAfternoon}</u> ";
             echo date('jS F Y', $dates['startdate']);
             echo "</td>";
             echo "<td colspan='2'>";
@@ -132,7 +132,7 @@ while ($holidaytype=mysql_fetch_array($tresult))
     mysql_free_result($result);
 }
 
-if ($numtaken < 1 AND $numwaiting < 1) echo "<tr class='shade2'><td colspan='4'><em>None</em</td></tr>\n";
+if ($numtaken < 1 AND $numwaiting < 1) echo "<tr class='shade2'><td colspan='4'><em>{$strNone}</em</td></tr>\n";
 echo "</table>\n";
 
 
@@ -144,7 +144,7 @@ if ($user==$sit[2])
     $result = mysql_query($sql);
     if (mysql_error()) trigger_error("MySQL Query Error ".mysql_error(), E_USER_ERROR);
     echo "<table align='center' width='450'>";
-    echo "<tr><th align='right'>WHO IS AWAY TODAY?</th></tr>\n";
+    echo "<tr><th align='right'>".strtoupper($strWhosAwayToday)."</th></tr>\n";
     if (mysql_num_rows($result) >=1)
     {
         while ($users = mysql_fetch_array($result))
@@ -152,16 +152,16 @@ if ($user==$sit[2])
             echo "<tr><td class='shade2'>";
             $title=userstatus_name($users["status"]);
             $title.=" - ";
-            if ($users['accepting']=='Yes') $title .= "Accepting";
-            else $title .= "Not Accepting";
-            $title .= " calls";
+            if ($users['accepting']=='Yes') $title .= "{$strAccepting}";
+            else $title .= "{$strNotAccepting}";
+            $title .= " {$strIncidents}";
             if (!empty($users['message'])) $title.="\n".$users['message'];
 
             echo "<strong>{$users['realname']}</strong>, $title";
             echo "</td></tr>\n";
         }
     }
-    else echo "<tr class='shade2'><td><em>Nobody</em></td></tr>\n";
+    else echo "<tr class='shade2'><td><em>{$strNobody}</em></td></tr>\n";
     echo "</table>";
 }
 include('htmlfooter.inc.php');

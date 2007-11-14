@@ -62,7 +62,7 @@ if ($numgroups >= 1)
     if(empty($legacy)) echo "'";
     else echo "&legacy=yes'";
     if ($filtergroup=='0') echo " selected='selected'";
-    echo ">Users with no group</option>\n";
+    echo ">{$strUsersWithNoGroup}</option>\n";
     echo "</select>\n";
     echo "</form>\n<br />";
 }
