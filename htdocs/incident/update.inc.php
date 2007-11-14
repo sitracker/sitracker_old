@@ -24,6 +24,7 @@ function display_update_page($draftid=-1)
     global $incidentid;
     global $action;
     global $CONFIG;
+    global $iconset;
 
     if($draftid != -1)
     {
@@ -272,7 +273,7 @@ function display_update_page($draftid=-1)
     echo "<option value='phonecallin' style='text-indent: 15px; height: 17px; background-image: url({$CONFIG['application_webpath']}/images/icons/{$iconset}/16x16/callin.png); background-repeat: no-repeat;'>{$GLOBALS['CallFromCustomer']}</option>\n";
     echo "<option value='phonecallout' style='text-indent: 15px; height: 17px; background-image: url({$CONFIG['application_webpath']}/images/icons/{$iconset}/16x16/callout.png); background-repeat: no-repeat;'>{$GLOBALS['strCallFromCustomer']}</option>\n";
     echo "<option value='externalinfo' style='text-indent: 15px; height: 17px; background-image: url({$CONFIG['application_webpath']}/images/icons/{$iconset}/16x16/externalinfo.png); background-repeat: no-repeat;'>{$GLOBALS['strExternalInfo']}</option>\n";
-    echo "<option value='reviewmet' style='text-indent: 15px; height: 17px; background-image: url({$CONFIG['application_webpath']}/images/icons/{$iconset}/16x16/review.png); background-repeat: no-repeat;'>Incident Review</option>\n";
+    echo "<option value='reviewmet' style='text-indent: 15px; height: 17px; background-image: url({$CONFIG['application_webpath']}/images/icons/{$iconset}/16x16/review.png); background-repeat: no-repeat;'>{$strReview}</option>\n";
 
     echo "</select>";
     echo "</td>";
@@ -294,7 +295,7 @@ function display_update_page($draftid=-1)
         $disable_priority=TRUE;
     }
     else $disable_priority=FALSE;
-    echo "<tr><th align='right' valign='top'>New Priority:</th>";
+    echo "<tr><th align='right' valign='top'>{$GLOBALS['strNewPriority']}:</th>";
     echo "<td class='shade1'>";
 
     // FIXME fix maximum priority
@@ -305,15 +306,15 @@ function display_update_page($draftid=-1)
     echo "</td></tr>\n";
 
     echo "<tr>";
-    echo "<th align='right' valign='top'>New Status:</th>";
+    echo "<th align='right' valign='top'>{$GLOBALS['strNewStatus']}:</th>";
     echo "<td class='shade1'>".incidentstatus_drop_down("newstatus", incident_status($id))."</td>";
     echo "</tr>";
     echo "<tr>";
-    echo "<th align='right' valign='top'>Next Action:</th>";
+    echo "<th align='right' valign='top'>{$GLOBALS['strNextAction']}:</th>";
     echo "<td class='shade2'><input type='text' name='nextaction' id='nextaction' maxlength='50' size='30' value='' /></td></tr>";
     echo "<tr>";
     echo "<th align='right'>";
-    echo "<strong>{$GLOBAL['$strTimeToNextAction']}</strong>:<br />The incident will be placed in the waiting queue until the time specified.</th>";
+    echo "<strong>{$GLOBALS['strTimeToNextAction']}</strong>:<br />The incident will be placed in the waiting queue until the time specified.</th>";
     echo "<td class='shade2'>";
     $oldtimeofnextaction=incident_timeofnextaction($id);
     if ($oldtimeofnextaction<1) $oldtimeofnextaction=$now;
@@ -335,6 +336,7 @@ function display_update_page($draftid=-1)
     echo "<input name='date' id='date' size='10' value='{$date}' onclick=\"window.document.updateform.timetonextaction_none[1].checked = true;\"/> ";
     echo date_picker('updateform.date');
     echo "<select name='timeoffset' id='timeoffset' onchange='window.document.updateform.timetonextaction_none[1].checked = true;'>";
+    // FIXME i18n choose time
     echo "<option>Choose Time</option>";
     echo "<option value='0'>8:00 AM</option>";
     echo "<option value='1'>9:00 AM</option>";
