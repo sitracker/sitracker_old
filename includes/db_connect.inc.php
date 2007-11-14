@@ -44,6 +44,9 @@ if (mysql_error())
     header("Location: setup.php");
     exit;
 }
+// mysql_query("SET CHARACTER SET utf8");
+mysql_query("SET NAMES utf8");
+
 // Select database
 mysql_select_db($CONFIG['db_database'], $db);
 if (mysql_error())
