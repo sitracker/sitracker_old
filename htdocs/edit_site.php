@@ -23,22 +23,20 @@ require('auth.inc.php');
 $action = $_REQUEST['action'];
 $site = cleanvar($_REQUEST['site']);
 
-$title="Edit Site";
+$title = $strEditSite;
 include('htmlheader.inc.php');
 
 
 // Show select site form
 if (empty($action) OR $action == "showform" OR empty($site))
 {
-    ?>
-    <h3>Select Site To Edit</h3>
-    <form action="<?php echo $_SERVER['PHP_SELF'] ?>?action=edit" method="post">
-    <table class='vertical'>
-    <tr><th>Site:</th><td><?php echo site_drop_down("site", 0); ?></td></tr>
-    </table>
-    <p><input name="submit" type="submit" value="Continue" /></p>
-    </form>
-    <?php
+    echo "<h3>{$title}</h3>";
+    echo "<form action='{$_SERVER['PHP_SELF']}?action=edit' method='post'>";
+    echo "<table class='vertical'>";
+    echo "<tr><th>{$strSite}:</th><td>".site_drop_down("site", 0)."</td></tr>\n";
+    echo "</table>\n";
+    echo "<p><input name='submit' type='submit' value=\"{$strContinue}\" /></p>\n";
+    echo "</form>\n";
 }
 elseif ($action == "edit")
 {
@@ -63,44 +61,39 @@ elseif ($action == "edit")
             </script>
             <?php
             echo "<h2><img src='{$CONFIG['application_webpath']}images/icons/{$iconset}/32x32/site.png' width='32' height='32' alt='' /> ";
-            echo "Edit Site {$site} - ".site_name($site)."</h2>";
+            echo "{$strEditSite}: {$site} - ".site_name($site)."</h2>";
             ?>
             <form name='edit_site' action="<?php echo $_SERVER['PHP_SELF'] ?>?action=update" method="post" onsubmit="return confirm_submit()">
-            <?php echo "<h5>{$strMandatoryMarked} <sup class='red'>*</sup></h5>"; ?>
-            <table align='center' class='vertical'>
-            <tr><th>Name: <sup class='red'>*</sup></th><td><input maxlength="50" name="name" size="40" value="<?php echo stripslashes($siterow['name']); ?>" /></td></tr>
-            <tr><th>Tags:</th><td><textarea rows='2' cols='60' name='tags'><?php echo list_tags($site, 3, false); ?></textarea>
-            <tr><th>Department: <sup class='red'>*</sup></th><td><input maxlength="50" name="department" size="40" value="<?php echo stripslashes($siterow['department']); ?>" /></td></tr>
-            <tr><th>Address1: <sup class='red'>*</sup></th><td><input maxlength="50" name="address1" size="40" value="<?php echo stripslashes($siterow['address1']); ?>" /></td></tr>
-            <tr><th>Address2: </th><td><input maxlength="50" name="address2" size="40" value="<?php echo stripslashes($siterow['address2']); ?>" /></td></tr>
-            <tr><th>City:</th><td><input maxlength="255" name="city" size="40" value="<?php echo stripslashes($siterow['city']); ?>" /></td></tr>
-            <tr><th>County:</th><td><input maxlength="255" name="county" size="40" value="<?php echo stripslashes($siterow['county']); ?>" /></td></tr>
-            <tr><th>Postcode:</th><td><input maxlength="255" name="postcode" size="40" value="<?php echo stripslashes( $siterow['postcode']); ?>" /></td></tr>
-            <tr><th>Country:</th><td>
-            <?php echo country_drop_down('country', $siterow['country']) ?>
-            </td></tr>
-            <tr><th>Telephone:</th><td><input maxlength="255" name="telephone" size="40" value="<?php echo stripslashes($siterow['telephone']); ?>" /></td></tr>
-            <tr><th>Fax:</th><td><input maxlength="255" name="fax" size="40" value="<?php echo stripslashes($siterow['fax']); ?>" /></td></tr>
-            <tr><th>Email:</th><td><input maxlength="255" name="email" size="40" value="<?php echo stripslashes($siterow['email']); ?>" /></td></tr>
-            <tr><th>Website:</th><td><input maxlength="255" name="websiteurl" size="40" value="<?php echo stripslashes($siterow['websiteurl']); ?>" /></td></tr>
-            <tr><th>Site Type:</th><td>
-            <?php echo sitetype_drop_down('typeid', $siterow['typeid']) ?>
-            </td></tr>
+            <?php echo "<h5>".sprintf($strMandatoryMarked,"<sup class='red'>*</sup>")."</h5>";
+            echo "<table align='center' class='vertical'>";
+            echo "<tr><th>{$strName}: <sup class='red'>*</sup></th><td><input maxlength='50' name='name' size='40' value=\"".stripslashes($siterow['name'])."\" /></td></tr>\n";
+            echo "<tr><th>{$strTags}:</th><td><textarea rows='2' cols='60' name='tags'>".list_tags($site, TAG_SITE, false)."</textarea>\n";
+            echo "<tr><th>{$strDepartment}: <sup class='red'>*</sup></th><td><input maxlength='50' name='department' size='40' value=\"".stripslashes($siterow['department'])."\" /></td></tr>\n";
+            echo "<tr><th>{$strAddress1}: <sup class='red'>*</sup></th><td><input maxlength='50' name='address1' size='40' value=\"".stripslashes($siterow['address1'])."\" /></td></tr>\n";
+            echo "<tr><th>{$strAddress2}: </th><td><input maxlength='50' name='address2' size='40' value=\"".stripslashes($siterow['address2'])."\" /></td></tr>\n";
+            echo "<tr><th>{$strCity}:</th><td><input maxlength='255' name='city' size='40' value=\"".stripslashes($siterow['city'])."\" /></td></tr>\n";
+            echo "<tr><th>{$strCounty}:</th><td><input maxlength='255' name='county' size='40' value=\"".stripslashes($siterow['county'])."\" /></td></tr>\n";
+            echo "<tr><th>{$strPostcode}:</th><td><input maxlength='255' name='postcode' size='40' value=\"".stripslashes($siterow['postcode'])."\" /></td></tr>\n";
+            echo "<tr><th>{$strCountry}:</th><td>".country_drop_down('country', $siterow['country'])."</td></tr>\n";
+            echo "<tr><th>{$strTelephone}:</th><td><input maxlength='255' name='telephone' size='40' value=\"".stripslashes($siterow['telephone'])."\" /></td></tr>\n";
+            echo "<tr><th>{$strFax}:</th><td><input maxlength='255' name='fax' size='40' value=\"".stripslashes($siterow['fax'])."\" /></td></tr>\n";
+            echo "<tr><th>{$strEmail}:</th><td><input maxlength='255' name='email' size='40' value=\"".stripslashes($siterow['email'])."\" /></td></tr>\n";
+            echo "<tr><th>{$strWebsite}:</th><td><input maxlength='255' name='websiteurl' size='40' value=\"".stripslashes($siterow['websiteurl'])."\" /></td></tr>\n";
+            echo "<tr><th>{$strSiteType}:</th><td>\n";
+            echo sitetype_drop_down('typeid', $siterow['typeid']);
+            echo "</td></tr>\n";
 
-            <tr><th>Salesperson:</th><td>
-            <?php
-            user_drop_down('owner', $siterow['owner'], $accepting=FALSE)
-            ?>
-            </td></tr>
-            <?php
-            echo "<tr><th>Site Incident Pool:</th>";
-            $incident_pools = explode(',', "None,{$CONFIG['incident_pools']}");
+            echo "<tr><th>{$strSalesperson}:</th><td>";
+            user_drop_down('owner', $siterow['owner'], $accepting=FALSE);
+            echo "</td></tr>\n";
+            echo "<tr><th>{$strIncidentPool}:</th>";
+            $incident_pools = explode(',', "{$strNone},{$CONFIG['incident_pools']}");
             if (array_key_exists($siterow['freesupport'], $incident_pools)==FALSE) array_unshift($incident_pools,$siterow['freesupport']);
             echo "<td>".array_drop_down($incident_pools,'incident_poolid',$siterow['freesupport'])."</td></tr>";
-            ?>
-            <tr><th>Active:</th><td><input type='checkbox' name='active' <?php if($siterow['active']=='true') echo "checked='".$siterow['active']."'"; ?> value='true' /></td></tr>
-            <tr><th>Notes:</th><td><textarea rows="5" cols="30" name="notes"><?php echo stripslashes($siterow['notes']); ?></textarea></td></tr>
-            <?php
+            echo "<tr><th>{$strActive}:</th><td><input type='checkbox' name='active' ";
+            if ($siterow['active']=='true') echo "checked='".$siterow['active']."'";
+            echo " value='true' /></td></tr>\n";
+            echo "<tr><th>{$strNotes}:</th><td><textarea rows='5' cols='30' name='notes'>".stripslashes($siterow['notes'])."</textarea></td></tr>\n";
             plugin_do('edit_site_form');
             echo "</table>\n";
             echo "<input name='site' type='hidden' value='$site' />";
