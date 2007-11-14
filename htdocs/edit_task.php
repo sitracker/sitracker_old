@@ -160,12 +160,12 @@ switch ($action)
             $startdate = readable_date($startdate);
             $enddate = readable_date($enddate);
 
-            $updatehtml = "Update created from incident task <a href=\"tasks.php?incident={$incident}\">{$id}</a><br />Task started at: {$startdate}<br /><br />";
+            $updatehtml = "Update created from activity <a href=\"tasks.php?incident={$incident}\">{$id}</a><br />A started at: {$startdate}<br /><br />";
             for($i = $numnotes-1; $i >= 0; $i--)
             {
                 $updatehtml .= "<strong>".readable_date(mysql2date($notesarray[$i]->timestamp))."</strong><br />{$notesarray[$i]->bodytext}<br /><br />";
             }
-            $updatehtml .= "Task completed at {$enddate}, duration was: ".format_seconds($duration);
+            $updatehtml .= "Activity completed at {$enddate}, duration was: ".format_seconds($duration);
 
             //create update
             $sql = "INSERT INTO updates (incidentid, userid, type, bodytext, timestamp, duration) ";
@@ -190,8 +190,8 @@ switch ($action)
         if (mysql_error()) trigger_error(mysql_error(),E_USER_ERROR);
 
 
-
-        confirmation_page("2", "tasks.php?incident={$incident}", "<h2>{$strTaskMarkedCompleteSuccessfully}</h2><p align='center'>{$strPleaseWaitRedirect}...</p>");
+        if($incident) confirmation_page("2", "incident_details.php?id={$incident}", "<h2>{$strActivityMarkedCompleteSuccessfully}</h2><p align='center'>{$strPleaseWaitRedirect}...</p>");
+        else confirmation_page("2", "tasks.php", "<h2>{$strTaskMarkedCompleteSuccessfully}</h2><p align='center'>{$strPleaseWaitRedirect}...</p>");
     break;
 
     case 'delete':
