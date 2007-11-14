@@ -70,7 +70,11 @@ while ($incidents = mysql_fetch_array($result))
 
     // Make a readble last updated field
     if ($incidents['lastupdated'] > $now - 300)
-        $updated = "<em style='color: #640000; font-weight: bolder;'>".sprintf($strAgo, format_seconds($now - $incidents['lastupdated']))."</em>";
+    {
+        $when = sprintf($strAgo, format_seconds($now - $incidents['lastupdated']));
+        if($when == 0) $when = $strJustNow;
+        $updated = "<em style='color: #640000; font-weight: bolder;'>{$when}</em>";
+    }
     elseif ($incidents['lastupdated'] > $now - 1800)
         $updated = "<em style='color: #640000;'>".sprintf($strAgo, format_seconds($now - $incidents['lastupdated']))."</em>";
     elseif ($incidents['lastupdated'] > $now - 3600)
