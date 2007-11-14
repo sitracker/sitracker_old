@@ -20,6 +20,9 @@ $strActivityList = 'Activity List';
 $strActivityMarkedCompleteSuccessfully = 'Activity Marked Complete Successfully';
 $strAdd = 'Add';
 $strAddActivity = 'Add Activity';
+$strAddContact = 'Add Contact';
+$strAddContract = 'Add Contract';
+$strAddContractConfirm = 'Are you sure you want to add this contact?';
 $strAdded = 'Added';
 $strAddEmailConfirm = 'Are you sure you want to add this email type?';
 $strAddFeedbackForm = 'Add Feedback Form';
@@ -28,15 +31,10 @@ $strAdditionalInfo = 'Additional Information';
 $strAddLink = 'Add Link';
 $strAddNew = 'Add New';
 $strAddNote = 'Add Note';
-$strAddTask = 'Add Task';
-$strAddTemplate = 'Add Template';
-$strAddUser = 'Add User';
-$strAddContact = 'Add Contact';
-$strAddContract = 'Add Contract';
-$strAddContractConfirm = 'Are you sure you want to add this contact?';
-$strAddIncident = 'Add Incident';
-$strAddProduct = 'Add Product';
 $strAddReseller = 'Add Reseller';
+$strAddress = 'Address';
+$strAddress1 = 'Address1';
+$strAddress2 = 'Address2';
 $strAddServiceLevel = 'Add Service Level';
 $strAddSite = 'Add Site';
 $strAddSiteSupportIncident = 'Add Site Support Incident';
@@ -45,9 +43,6 @@ $strAddTask = 'Add Task';
 $strAddTemplate = 'Add Template';
 $strAddUser = 'Add User';
 $strAddVendor = 'Add Vendor';
-$strAddress = 'Address';
-$strAddress1 = 'Address1';
-$strAddress2 = 'Address2';
 $strAdminContact = 'Admin Contact';
 $strAdvanced = 'Advanced';
 $strAfternoon = 'Afternoon';
@@ -55,11 +50,11 @@ $strAge = 'Age';
 $strAgo = '%s ago';
 $strAll = 'All';
 $strAllClosed = 'All Closed';
-$strallday = 'all day';
+$strAllDay = 'all day';
 $strAllOpen = 'All Open';
 $strAlternative = 'Alternative';
-//am = before noon
-$stram = 'am';
+# am = before noon
+$strAM = 'am';
 $strAnswer = 'Answer';
 $strApproveHolidays = 'Approve Holidays';
 $strArticlesPublishedRecently = 'Articles Published Recently';
@@ -222,13 +217,13 @@ $strFields = 'Fields';
 $strFiles = 'Files';
 $strFirstLogin = 'You are logged in as Admin which currently has a blank password, please change this now';
 $strFindContact = 'Find Contact';
-$strfor = 'for';
+$strFor = 'for';
 $strForce = 'Force';
 $strForceTo = 'Force To';
 $strForenames = 'Forenames';
 $strForgottenDetails = 'Forgotten your details?';
 $strForm = 'Form';
-//short for 'Friday'
+# Short for 'Friday'
 $strFri = 'Fri';
 $strFriday = 'Friday';
 $strFrom = 'From';
@@ -351,7 +346,7 @@ $strMessageTip = 'e.g. &quot;In france until Tue 22nd&quot;<br />Displayed on th
 $strMine = 'Mine';
 $strMinutes = 'Minutes';
 $strMobile = 'Mobile';
-//short for 'Monday'
+# Short for 'Monday'
 $strMon = 'Mon';
 $strMonday = 'Monday';
 $strMonthView = 'Month View';
@@ -460,8 +455,8 @@ $strPleaseWaitRedirect = 'Please wait while you are redirected';
 $strPlugins = 'Plugins';
 $strPostcode = 'Postcode';
 $strPostNewNotice = 'Post New Notice';
-//pm = After noon
-$strpm = 'pm';
+# pm = After noon
+$strPM = 'pm';
 $strPriority = 'Priority';
 $strPrivacy = 'Privacy';
 $strPrivate = 'Private';
@@ -475,6 +470,7 @@ $strPublished = 'published';
 $strQualifications = 'Qualifications';
 $strQualificationsTip = 'Enter a comma seperated list of each of the professional qualifications you hold';
 $strQueryByExample = 'Query By Example';
+$strQuestion = 'Question';
 $strQueue = 'Queue';
 
 $strRandomTip = 'Random Tip';
@@ -523,7 +519,7 @@ $strRolePermissions = 'Role Permissions';
 $strRunReport = 'Run Report';
 
 $strSalesperson = 'Salesperson';
-//short for 'Saturday'
+# short for 'Saturday'
 $strSat = 'Sat';
 $strSaturday = 'Saturday';
 $strSave = 'Save';
@@ -586,7 +582,7 @@ $strSubstitute = 'Substitute';
 $strSubstitutes = 'Substitutes';
 $strSuccessfully = 'Successfully';
 $strSummary = 'Summary';
-//short for 'Sunday'
+# Short for 'Sunday'
 $strSun = 'Sun';
 $strSunday = 'Sunday';
 $strSupport = 'Support';
@@ -610,7 +606,7 @@ $strTaskMarkedCompleteSuccessfully = 'Task marked completed successfully';
 $strTelephone = 'Telephone';
 $strTemporarilyAssignedto = 'Temporarily assigned to %s by %s';
 $strTerminated = 'Terminated';
-//short for 'Thursday'
+# Short for 'Thursday'
 $strThu = 'Thu';
 $strThursday = 'Thursday';
 $strTime = 'Time';
@@ -626,12 +622,10 @@ $strTotal = 'Total';
 $strTranslate = 'Translate';
 $strTranslateTheString = 'Translate the english string on the left to your requested language on the right';
 $strTranslation = 'Translation';
-//short for 'Tuesday'
+# Short for 'Tuesday'
 $strTue = 'Tue';
 $strTuesday = 'Tuesday';
 $strType = 'Type';
-
-$strQuestion = 'Question';
 
 $strUpdate = 'Update';
 $strUpdated = 'updated';
@@ -675,7 +669,7 @@ $strWatchIncidents = 'Watch Incidents';
 $strWatchingAll = 'Watching All';
 $strWebupdate = 'Web update';
 $strWeek = 'Week';
-//short for 'Wednesday'
+# Short for 'Wednesday'
 $strWeds = 'Weds';
 $strWednesday = 'Wednesday';
 $strWelcome = 'Welcome';

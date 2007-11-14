@@ -50,7 +50,7 @@ $strAgo = 'strAgo';
 $strAll = 'strAll';
 $strAllClosed = 'strAllClosed';
 
-$strallday = 'strallday';
+$strAllDay = 'strallday';
 
 $strAllOpen = 'strAllOpen';
 $strAlternative = 'strAlternative';
@@ -169,10 +169,10 @@ $strEditContact = 'strEditContact';
 $strEditContract = 'strEditContract';
 $strEdited = 'strEdited';
 $strEditedBy = 'strEditedBy';
-$strEditHolidays = 'strEditHolidays';
 $strEditHolidayEntitlement = 'strEditHolidayEntitlement';
-$strEditProfileFor = 'strEditProfileFor';
+$strEditHolidays = 'strEditHolidays';
 $strEditProduct = 'strEditProduct';
+$strEditProfileFor = 'strEditProfileFor';
 $strEditServiceLevel = 'strEditServiceLevel';
 $strEditSkill = 'strEditSkill';
 $strEditSite = 'strEditSite';
@@ -182,8 +182,8 @@ $strEditVendor = 'strEditVendor';
 $strEmail = 'strEmail';
 $strEmailFromCustomer = 'strEmailFromCustomer';
 $strEmailNotificationReassign = 'strEmailNotificationReassign';
-$strEmailsentby = 'strEmailsentby';
 $strEmailreceivedby = 'strEmailreceivedby';
+$strEmailsentby = 'strEmailsentby';
 $strEmailSettings = 'strEmailSettings';
 $strEmailSignature = 'strEmailSignature';
 $strEmailSignatureTip = 'strEmailSignatureTip';
@@ -218,9 +218,7 @@ $strFields = 'strFields';
 $strFiles = 'strFiles';
 $strFirstLogin = 'strFirstLogin';
 $strFindContact = 'strFindContact';
-
-$strfor = 'strfor';
-
+$strFor = 'strfor';
 $strForce = 'strForce';
 $strForceTo = 'strForceTo';
 $strForenames = 'strForenames';
