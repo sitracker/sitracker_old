@@ -56,7 +56,7 @@ if ($user==$sit[2] OR $approver==TRUE)
     echo "$holidaystaken {$strtaken}, ";
     echo $entitlement-$holidaystaken." {$strRemaining}";
     echo "</td></tr>\n";
-    echo "<tr class='shade1'><td ><strong>Other Leave Taken</strong>:</td></tr>\n";
+    echo "<tr class='shade1'><td ><strong>{$strOtherLeave}</strong>:</td></tr>\n";
     echo "<tr class='shade2'><td>";
     echo user_count_holidays($user, 2)." {$strdayssick}, ";
     echo user_count_holidays($user, 3)." {$strdaysworkingaway}, ";
