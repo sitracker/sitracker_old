@@ -37,10 +37,10 @@ if (!$sent)
     echo "<h2><img src='{$CONFIG['application_webpath']}images/icons/{$iconset}/32x32/holiday.png' width='32' height='32' alt='' /> ";
     if ($user=='all') echo "All";
     else echo user_realname($user,TRUE);
-    echo " - Holiday Requests</h2>";
+    echo " - {$strHolidayRequests}</h2>";
 
     if ($approver==TRUE AND $mode!='approval' AND $user==$sit[2]) echo "<p align='center'><a href='holiday_request.php?user=all&amp;mode=approval'>Approve holiday requests</a></p>";
-    if ($approver==TRUE AND $mode=='approval' AND $user!='all') echo "<p align='center'><a href='holiday_request.php?user=all&amp;mode=approval'>Show all requests</a></p>";
+    if ($approver==TRUE AND $mode=='approval' AND $user!='all') echo "<p align='center'><a href='holiday_request.php?user=all&amp;mode=approval'>{$strShowAll}</a></p>";
 
     $sql = "SELECT * FROM holidays, holidaytypes WHERE holidays.type=holidaytypes.id AND approved=0 ";
     if (!empty($type)) $sql .= "AND type='$type' ";

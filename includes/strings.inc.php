@@ -1,4 +1,4 @@
-f<?php
+<?php
 // strings.inc.php - Set up strings
 //
 // SiT (Support Incident Tracker) - Support call tracking system
