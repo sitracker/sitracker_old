@@ -1,5 +1,5 @@
 <?php
-// edit_user_software.php - Form to set users skills
+// edit_user_skills.php - Form to set users skills
 //
 // SiT (Support Incident Tracker) - Support call tracking system
 // Copyright (C) 2000-2007 Salford Software Ltd. and Contributors

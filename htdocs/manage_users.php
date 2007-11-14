@@ -101,7 +101,7 @@ while ($users = mysql_fetch_array($result))
     {
         echo " | ";
         if ($users['userid'] >1) echo "<a href='reset_user_password.php?id={$users['userid']}'>{$strResetPassword}</a> | ";
-        echo "<a href='edit_user_software.php?user={$users['userid']}'>{$strSkills}</a>";
+        echo "<a href='edit_user_skills.php?user={$users['userid']}'>{$strSkills}</a>";
         echo " | <a href='edit_backup_users.php?user={$users['userid']}'>{$strSubstitutes}</a>";
         if ($users['userid'] >1) echo " | <a href='edit_user_permissions.php?action=edit&amp;user={$users['userid']}'>{$strPermissions}</a>";
     }

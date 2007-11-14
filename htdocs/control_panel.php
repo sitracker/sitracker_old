@@ -24,7 +24,7 @@ echo "<tr><th>USER SETTINGS</th></tr>";
 echo "</thead>";
 echo "<tbody>";
 echo "<tr><td><a href='edit_profile.php'>{$strMyProfile}</a></td></tr>";
-echo "<tr><td><a href='edit_user_software.php'>{$strMySkills}</a></td></tr>";
+echo "<tr><td><a href='edit_user_skills.php'>{$strMySkills}</a></td></tr>";
 echo "<tr><td><a href='edit_backup_users.php'>{$strMySubstitutes}</a></td></tr>";
 echo "<tr><td><a href='holidays.php'>{$strMyHolidays}</a></td></tr>";
 echo "</tbody>\n";
