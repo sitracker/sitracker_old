@@ -91,7 +91,7 @@ elseif($_REQUEST['mode'] == "show")
     $fh = fopen($englishfile, 'r');
     $theData = fread($fh, filesize($englishfile));
     fclose($fh);
-    $lines = explode(";", $theData);
+    $lines = explode("\n", $theData);
     $langstrings['en-GB'];
     $englishvalues = array();
     foreach($lines as $values)
@@ -109,10 +109,13 @@ elseif($_REQUEST['mode'] == "show")
         if(substr($vars[0], 0, 3) == "str")
         {
             //remove leading and trailing quotation marks
-            $vars[1] = substr_replace($vars[1], "",-1);
+            $vars[1] = substr_replace($vars[1], "",-2);
             $vars[1] = substr_replace($vars[1], "",0, 1);
-
             $englishvalues[$vars[0]] = $vars[1];
+        }
+        elseif (substr($vars[0], 0, 2) == "# ")
+        {
+            $comments[$lastkey] = substr($vars[0], 2, 1024);
         }
         else
         {
@@ -121,6 +124,7 @@ elseif($_REQUEST['mode'] == "show")
             if(substr($values, 0, 4) == "i18n")
                 $i18ncharset=$values;
         }
+        $lastkey = $vars[0];
     }
     $origcount = count($englishvalues);
     unset($lines);
@@ -134,7 +138,7 @@ elseif($_REQUEST['mode'] == "show")
         $fh = fopen($myFile, 'r');
         $theData = fread($fh, filesize($myFile));
         fclose($fh);
-        $lines = explode(";", $theData);
+        $lines = explode("\n", $theData);
         //print_r($lines);
         foreach($lines as $values)
         {
@@ -150,27 +154,29 @@ elseif($_REQUEST['mode'] == "show")
             }
         }
     }
-echo "<h2>Word List</h2>";
-echo "<p align='center'>{$strTranslateTheString}</p>";
-echo "<form method='post' action='{$_SERVER[PHP_SELF]}?mode=save'>";
-echo "<table align='center'><tr><th>{$strVariable}</th><th>en-GB ({$strEnglish})</th><th>{$_REQUEST['lang']}</th></tr>";
+//      echo "<pre>".print_r($comments,true)."</pre>";
+//       echo "<pre>".print_r($englishvalues,true)."</pre>";
+    echo "<h2>Word List</h2>";
+    echo "<p align='center'>{$strTranslateTheString}</p>";
+    echo "<form method='post' action='{$_SERVER[PHP_SELF]}?mode=save'>";
+    echo "<table align='center'><tr><th>{$strVariable}</th><th>en-GB ({$strEnglish})</th><th>{$_REQUEST['lang']}</th></tr>";
 
-$shade = 'shade1';
-foreach(array_keys($englishvalues) as $key)
-{
-    if ($_REQUEST['lang']=='zz') $foreignvalues[$key] = $key;
-    echo "<tr class='$shade'><td><label for=\"{$key}\"><code>{$key}</code></td><td><input name='english_{$key}' value=\"".htmlentities($englishvalues[$key], ENT_QUOTES, 'UTF-8')."\" size=\"40\" readonly='readonly' /></td>";
-    echo "<td><input id=\"{$key}\" name=\"{$key}\" value=\"".htmlentities(stripslashes($foreignvalues[$key]), ENT_QUOTES, 'UTF-8')."\" size=\"40\" /></td></tr>\n";
-    if ($shade=='shade1') $shade='shade2';
-    else $shade='shade1';
-}
+    $shade = 'shade1';
+    foreach(array_keys($englishvalues) as $key)
+    {
+        if ($_REQUEST['lang']=='zz') $foreignvalues[$key] = $key;
+        echo "<tr class='$shade'><td><label for=\"{$key}\"><code>{$key}</code></td><td><input name='english_{$key}' value=\"".htmlentities($englishvalues[$key], ENT_QUOTES, 'UTF-8')."\" size=\"45\" readonly='readonly' /></td>";
+        echo "<td><input id=\"{$key}\" name=\"{$key}\" value=\"".htmlentities(stripslashes($foreignvalues[$key]), ENT_QUOTES, 'UTF-8')."\" size=\"45\" /></td></tr>\n";
+        if ($shade=='shade1') $shade='shade2';
+        else $shade='shade1';
+        if (!empty($comments[$key])) echo "<tr><td colspan=3' class='{$shade}'><strong>{$strNotes}:</strong> {$comments[$key]}</td><tr>\n";
+    }
+    echo "</table>";
+    echo "<input type='hidden' name='origcount' value='{$origcount}' />";
+    echo "<input name='lang' value='{$_REQUEST['lang']}' type='hidden' /><input name='mode' value='save' type='hidden' />";
+    echo "<div align='center'><input type='submit' value='{$strSave}' /></div>";
 
-echo "</table>";
-echo "<input type='hidden' name='origcount' value='{$origcount}' />";
-echo "<input name='lang' value='{$_REQUEST['lang']}' type='hidden' /><input name='mode' value='save' type='hidden' />";
-echo "<div align='center'><input type='submit' value='{$strSave}' /></div>";
-
-echo "</form>\n";
+    echo "</form>\n";
 }
 elseif($_REQUEST['mode'] == "save")
 {

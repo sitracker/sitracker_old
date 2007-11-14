@@ -35,7 +35,7 @@ if($searchmode != 'related')
     echo "{$strSearch} ";
     $domains=array('incidents'=>'Incidents', 'customers' => 'Customers', 'maintenance' => 'Maintenance', 'knowledgebase' => 'KnowlegeBase');
     echo array_drop_down($domains, 'search_domain', $search_domain);
-    echo " {$strfor}:";
+    echo " {$strFor}:";
     echo "</th>";
     echo "<td>";
     echo "<input maxlength='100' name='search_string' size='35' type='text' value='".stripslashes(strip_tags(urldecode($search_string)))."' /> ";
