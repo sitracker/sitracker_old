@@ -1,5 +1,5 @@
 <?php
-// SiT! Language File - ZZ (For testing)
+// SiT! Language File -  (zz) by Administrator
 
 $languagestring = ' (zz)';
 $i18ncharset = 'UTF-8';
@@ -14,12 +14,15 @@ $strActiveContracts = 'strActiveContracts';
 $strActivities = 'strActivities';
 $strActivity = 'strActivity';
 $strActivityAdded = 'strActivityAdded';
+$strActivityList = 'strActivityList';
+$strActivityMarkedCompleteSuccessfully = 'strActivityMarkedCompleteSuccessfully';
 $strAdd = 'strAdd';
 $strAddActivity = 'strAddActivity';
 $strAdded = 'strAdded';
 $strAddEmailConfirm = 'strAddEmailConfirm';
 $strAddFeedbackForm = 'strAddFeedbackForm';
 $strAddIncident = 'strAddIncident';
+$strAdditionalInfo = 'strAdditionalInfo';
 $strAddLink = 'strAddLink';
 $strAddNote = 'strAddNote';
 $strAddTask = 'strAddTask';
@@ -46,6 +49,7 @@ $strAll = 'strAll';
 $strAllClosed = 'strAllClosed';
 $strAllOpen = 'strAllOpen';
 $strAlternative = 'strAlternative';
+$strAnswer = 'strAnswer';
 $strApproveHolidays = 'strApproveHolidays';
 $strAssign = 'strAssign';
 $strAssignTo = 'strAssignTo';
@@ -68,6 +72,7 @@ $strBrowseSites = 'strBrowseSites';
 $strBulkModify = 'strBulkModify';
 
 $strCallFromCustomer = 'strCallFromCustomer';
+$strCause = 'strCause';
 $strChangePassword = 'strChangePassword';
 $strChangingContact = 'strChangingContact';
 $strChase = 'strChase';
@@ -141,6 +146,7 @@ $strDisabled = 'strDisabled';
 $strDismiss = 'strDismiss';
 $strDisplay = 'strDisplay';
 $strDisplayPreferences = 'strDisplayPreferences';
+$strDistribution = 'strDistribution';
 $strDoesThisUpdateMeetSLA = 'strDoesThisUpdateMeetSLA';
 $strDraftChoose = 'strDraftChoose';
 $strDraftDelete = 'strDraftDelete';
@@ -276,6 +282,7 @@ $strJobTitle = 'strJobTitle';
 $strJumpTo = 'strJumpTo';
 $strJumpToIncident = 'strJumpToIncident';
 
+$strKBSelectSectionsText = 'strKBSelectSectionsText';
 $strKeywords = 'strKeywords';
 $strKnowledgeBase = 'strKnowledgeBase';
 
@@ -310,6 +317,7 @@ $strManageYourDashboard = 'strManageYourDashboard';
 $strManagerChaseUpdate = 'strManagerChaseUpdate';
 $strMandatoryMarked = 'strMandatoryMarked';
 $strMarkComplete = 'strMarkComplete';
+$strMarkForClosure = 'strMarkForClosure';
 $strMarkedComplete = 'strMarkedComplete';
 $strMarkedforclosureby = 'strMarkedforclosureby';
 $strMarketingMailshot = 'strMarketingMailshot';
@@ -444,6 +452,7 @@ $strReceivedByEmail = 'strReceivedByEmail';
 $strRecent = 'strRecent';
 $strRecentIncidents = 'strRecentIncidents';
 $strReducedPrioritySLA = 'strReducedPrioritySLA';
+$strReferences = 'strReferences';
 $strRelated = 'strRelated';
 $strRelatedIncidents = 'strRelatedIncidents';
 $strRelations = 'strRelations';
@@ -538,6 +547,7 @@ $strSummary = 'strSummary';
 $strSunday = 'strSunday';
 $strSupport = 'strSupport';
 $strSurname = 'strSurname';
+$strSymptoms = 'strSymptoms';
 
 $strTable = 'strTable';
 $strTag = 'strTag';
@@ -574,6 +584,8 @@ $strTranslation = 'strTranslation';
 $strTuesday = 'strTuesday';
 $strType = 'strType';
 
+$strQuestion = 'strQuestion';
+
 $strUpdate = 'strUpdate';
 $strUpdated = 'strUpdated';
 $strUpdatedAutomaticallyBy = 'strUpdatedAutomaticallyBy';
@@ -581,6 +593,7 @@ $strUpdatedFromTask = 'strUpdatedFromTask';
 $strUpdateIncident = 'strUpdateIncident';
 $strUpdateNewUpdate = 'strUpdateNewUpdate';
 $strUpdates = 'strUpdates';
+$strUpdatedFromActivity = 'strUpdatedFromActivity';
 $strUpdateType = 'strUpdateType';
 $strUseThisInFuture = 'strUseThisInFuture';
 $strUnknown = 'strUnknown';
@@ -615,6 +628,7 @@ $strWebupdate = 'strWebupdate';
 $strWeek = 'strWeek';
 $strWednesday = 'strWednesday';
 $strWelcome = 'strWelcome';
+$strWorkaround = 'strWorkaround';
 $strWorkAroundsAttempted = 'strWorkAroundsAttempted';
 $strWorkAroundsAttemptedEngineerText = 'strWorkAroundsAttemptedEngineerText';
 $strWorkAroundsAttemptedCustomerText = 'strWorkAroundsAttemptedCustomerText';
