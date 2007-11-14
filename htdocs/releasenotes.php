@@ -37,7 +37,17 @@ echo '<div>
     <p><strong>User Status</strong></p>
     <div class="img-dec"><img src="images/changelog/331status.png" /></div>
     <p>The users page now contains an icon dispaying a user\'s online status</p><br /><br />
-
+        
+        
+    <p><strong>Activites</strong></p>
+    <div class="img-dec"><img src="images/changelog/331activitiesmenu.png" /></div>
+    <p>Incidents logged under SLAs that are set to \'Timed\' (in <a href="service_levels.php">service_levels.php</a>) have an \'Activities\' entry.</p>
+    <div class="img-dec"><img src="images/changelog/331activitieslist.png" /></div>
+    <p>List of all the activities related to an incident.</p>
+    <div class="img-dec"><img src="images/changelog/331activitieslog.png" /></div>
+    <p>When an activity is marked as complete, an entry is entered into the update log.</p><br /><br />
+        
+        
     <p><strong>Other Updates</strong></p>
     <ul><li>Added <a href="'.$CONFIG['application_webpath'].'reports/external_engineers.php">external engineer report</a> which shows incidents that have been escalated</li>
     <li>Software now has a vendor (allows more accurate stats)</li></ul>

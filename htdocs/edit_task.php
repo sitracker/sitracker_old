@@ -160,7 +160,7 @@ switch ($action)
             $startdate = readable_date($startdate);
             $enddate = readable_date($enddate);
 
-            $updatehtml = "Update created from activity <a href=\"tasks.php?incident={$incident}\">{$id}</a><br />A started at: {$startdate}<br /><br />";
+            $updatehtml = "Update created from activity <a href=\"tasks.php?incident={$incident}\">{$id}</a><br />Activity started at: {$startdate}<br /><br />";
             for($i = $numnotes-1; $i >= 0; $i--)
             {
                 $updatehtml .= "<strong>".readable_date(mysql2date($notesarray[$i]->timestamp))."</strong><br />{$notesarray[$i]->bodytext}<br /><br />";
