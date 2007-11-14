@@ -129,7 +129,7 @@ if ($action == "edit")
         echo "<p align='center'><input name='submit' type='submit' value='{$strSave}' /></p>";
         echo "</form>\n";
 
-        echo "<p align='center'><a href='maintenance_details.php?id={$maintid}'>View contract</a></p>"; // FIXME i18n
+        echo "<p align='center'><a href='contract_details.php?id={$maintid}'>View contract</a></p>"; // FIXME i18n
         mysql_free_result($result);
     }
     include('htmlfooter.inc.php');
@@ -210,7 +210,7 @@ else if ($action == "update")
         else
         {
             journal(CFG_LOGGING_NORMAL, 'Contract Edited', "contract $maintid modified", CFG_JOURNAL_MAINTENANCE, $maintid);
-            confirmation_page("2", "maintenance_details.php?id=$maintid", "<h2>Contract Update Successful</h2><p align='center'>{$strPleaseWaitRedirect}...</p>");
+            confirmation_page("2", "contract_details.php?id=$maintid", "<h2>Contract Update Successful</h2><p align='center'>{$strPleaseWaitRedirect}...</p>");
         }
     }
     // show error message if errors

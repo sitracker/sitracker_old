@@ -264,7 +264,7 @@ else
                     if ($contract->term=='yes' OR $contract->expirydate < $now) $shade = "expired";
                     echo "<tr class='{$shade}'>";
                     echo "<td><img src='{$CONFIG['application_webpath']}images/icons/{$iconset}/16x16/contract.png' width='16' height='16' alt='' /> ";
-                    echo "<a href='maintenance_details.php?id={$contract->id}'>".sprintf($strContractNum, $contract->id)."</a></td>";
+                    echo "<a href='contract_details.php?id={$contract->id}'>".sprintf($strContractNum, $contract->id)."</a></td>";
                     echo "<td>".site_name($contract->site)."</td>";
                     echo "</tr>\n";
                     if ($shade=='shade1') $shade='shade2';

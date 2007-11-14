@@ -10,6 +10,8 @@
 
 // This Page Is Valid XHTML 1.0 Transitional!  29Nov05
 
+// FIXME i18n whole page
+
 $permission=19; // View Contracts
 require('db_connect.inc.php');
 require('functions.inc.php');
@@ -173,7 +175,7 @@ else
                 else $class = "shade2";
                 echo "<tr class='$class'>";
                 ?>
-                <td><a href="maintenance_details.php?id=<?php echo $results['maintid'] ?>"><?php echo $results["maintid"] ?></a></td>
+                <td><a href="contract_details.php?id=<?php echo $results['maintid'] ?>"><?php echo $results["maintid"] ?></a></td>
                 <td><?php echo stripslashes($results["site"]); ?></td>
                 <td><?php echo stripslashes($results["product"]) ?></td>
                 <td><?php echo $results["reseller"] ?></td>

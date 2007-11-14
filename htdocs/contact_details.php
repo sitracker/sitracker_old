@@ -147,7 +147,7 @@ while ($contactrow=mysql_fetch_array($contactresult))
 
     if ($contactrow['timestamp_modified']>0)
     {
-        echo "<tr><td>{$strLastUpdated}:</td><td>".date("jS M Y",$contactrow['timestamp_modified'])."</td></tr>";
+        echo "<tr><td>{$strLastUpdated}:</td><td>".date($CONFIG['dateformat_datetime'],$contactrow['timestamp_modified'])."</td></tr>";
     }
     echo "</table>\n";
 
@@ -162,7 +162,7 @@ while ($contactrow=mysql_fetch_array($contactresult))
     // Check if user has permission to view maintenace contracts, if so display those related to this contact
     if (user_permission($sit[2],30)) // view supported products
     {
-        echo "<h4>Related Contracts:</h4>";
+        echo "<h4>{$strContracts}:</h4>";
         $sql  = "SELECT supportcontacts.maintenanceid AS maintenanceid, maintenance.product, products.name AS productname, ";
         $sql .= "maintenance.expirydate, maintenance.term ";
         $sql .= "FROM supportcontacts, maintenance, products ";
@@ -183,10 +183,11 @@ while ($contactrow=mysql_fetch_array($contactresult))
                 if ($supportedrow['term']=='yes') $shade='expired';
                 if ($supportedrow['expirydate']<$now) $shade='expired';
 
-                echo "<tr><td class='$shade'><img src='{$CONFIG['application_webpath']}images/icons/{$iconset}/16x16/contract.png' width='16' height='16' alt='' /> <a href=\"maintenance_details.php?id=".$supportedrow['maintenanceid']."\">Contract: ".$supportedrow['maintenanceid']."</a></td>";
+                echo "<tr><td class='$shade'><img src='{$CONFIG['application_webpath']}images/icons/{$iconset}/16x16/contract.png' width='16' height='16' alt='' /> ";
+                echo "<a href=\"contract_details.php?id=".$supportedrow['maintenanceid']."\">{$strContract}: ".$supportedrow['maintenanceid']."</a></td>";
                 echo "<td class='$shade'>".$supportedrow['productname']."</td>";
-                echo "<td class='$shade'>".date("jS M Y", $supportedrow['expirydate']);
-                if ($supportedrow['term']=='yes') echo " Terminated";
+                echo "<td class='$shade'>".date($CONFIG['dateformat_date'], $supportedrow['expirydate']);
+                if ($supportedrow['term']=='yes') echo " {$strTerminated}";
                 echo "</td>";
                 echo "</tr>\n";
                 $supportcount++;
