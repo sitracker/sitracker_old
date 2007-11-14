@@ -42,8 +42,8 @@ if ($action == "showform" OR $action=='')
     echo "<form name='addcontract' action='{$_SERVER['PHP_SELF']}?action=add' method='post' onsubmit='return confirm_submit();'>";
     echo "<table align='center' class='vertical'>";
     echo "<tr><th>{$strSite}: <sup class='red'>*</sup></th><td>".site_drop_down("site", $siteid)." </td></tr>\n";
-    echo "<tr><th>{$strContacts}:</th><td><input type='radio'>Add <input size='2' value='0'> contacts to site<br />";
-    echo "<input type='radio'>Add all site contacts to contract</td></tr>";
+    echo "<tr><th>{$strContacts}:</th><td><input type='radio'>Limit to <input size='2' value='0'> supported contacts (0 means unlimited)<br />";
+    echo "<input type='radio'>All site contacts are to be supported</td></tr>";
     echo "<tr><th>{$strProduct}: <sup class='red'>*</sup></th><td>".product_drop_down("product", 0)."</td></tr>\n";
     echo "<tr><th>{$strReseller}: <sup class='red'>*</sup></th><td>";
     reseller_drop_down("reseller", 0);

@@ -48,6 +48,7 @@ if (empty($action) OR $action == "showform" OR empty($contact))
 }
 elseif ($action == "edit" && isset($contact))
 {
+    // FIMXE i18n
     // Show edit contact form
     $sql="SELECT * FROM contacts WHERE id='$contact' ";
     $contactresult = mysql_query($sql);

@@ -233,26 +233,26 @@ function display_update_page($draftid=-1)
     $target = incident_get_next_target($id);
 
     echo "<select name='target' id='target' class='dropdown'>\n";
-    echo "<option value='none' onclick='notarget(this.form)'>No</option>\n";
+    echo "<option value='none' onclick='notarget(this.form)'>{$GLOBALS['strNo']}</option>\n";
     switch ($target->type)
     {
         case 'initialresponse':
-            echo "<option value='initialresponse' style='text-indent: 15px; height: 17px; background-image: url({$CONFIG['application_webpath']}/images/icons/{$iconset}/16x16/initialresponse.png); background-repeat: no-repeat;' onclick='initialresponse(this.form)' >Initial Response</option>\n";
-            echo "<option value='probdef' style='text-indent: 15px; height: 17px; background-image: url({$CONFIG['application_webpath']}/images/icons/{$iconset}/16x16/probdef.png); background-repeat: no-repeat;' onclick='probdef(this.form)'>Problem Definition</option>\n";
-            echo "<option value='actionplan' style='text-indent: 15px; height: 17px; background-image: url({$CONFIG['application_webpath']}/images/icons/{$iconset}/16x16/actionplan.png); background-repeat: no-repeat;' onclick='actionplan(this.form)'>Action Plan</option>\n";
-            echo "<option value='solution' style='text-indent: 15px; height: 17px; background-image: url({$CONFIG['application_webpath']}/images/icons/{$iconset}/16x16/solution.png); background-repeat: no-repeat;' onclick='reprioritise(this.form)'>Resolution/Reprioritisation</option>\n";
+            echo "<option value='initialresponse' style='text-indent: 15px; height: 17px; background-image: url({$CONFIG['application_webpath']}/images/icons/{$iconset}/16x16/initialresponse.png); background-repeat: no-repeat;' onclick='initialresponse(this.form)' >{$GLOBALS['strInitialResponse']}</option>\n";
+            echo "<option value='probdef' style='text-indent: 15px; height: 17px; background-image: url({$CONFIG['application_webpath']}/images/icons/{$iconset}/16x16/probdef.png); background-repeat: no-repeat;' onclick='probdef(this.form)'>{$GLOBALS['strProblemDefinition']}</option>\n";
+            echo "<option value='actionplan' style='text-indent: 15px; height: 17px; background-image: url({$CONFIG['application_webpath']}/images/icons/{$iconset}/16x16/actionplan.png); background-repeat: no-repeat;' onclick='actionplan(this.form)'>{$GLOBALS['strActionPlan']}</option>\n";
+            echo "<option value='solution' style='text-indent: 15px; height: 17px; background-image: url({$CONFIG['application_webpath']}/images/icons/{$iconset}/16x16/solution.png); background-repeat: no-repeat;' onclick='reprioritise(this.form)'>{$GLOBALS['strResolutionReprioritisation']}</option>\n";
         break;
         case 'probdef':
-            echo "<option value='probdef' style='text-indent: 15px; height: 17px; background-image: url({$CONFIG['application_webpath']}/images/icons/{$iconset}/16x16/probdef.png); background-repeat: no-repeat;' onclick='probdef(this.form)'>Problem Definition</option>\n";
-            echo "<option value='actionplan' style='text-indent: 15px; height: 17px; background-image: url({$CONFIG['application_webpath']}/images/icons/{$iconset}/16x16/actionplan.png); background-repeat: no-repeat;' onclick='actionplan(this.form)'>Action Plan</option>\n";
-            echo "<option value='solution' style='text-indent: 15px; height: 17px; background-image: url({$CONFIG['application_webpath']}/images/icons/{$iconset}/16x16/solution.png); background-repeat: no-repeat;' onclick='reprioritise(this.form)'>Resolution/Reprioritisation</option>\n";
+            echo "<option value='probdef' style='text-indent: 15px; height: 17px; background-image: url({$CONFIG['application_webpath']}/images/icons/{$iconset}/16x16/probdef.png); background-repeat: no-repeat;' onclick='probdef(this.form)'>{$GLOBALS['strProblemDefinition']}</option>\n";
+            echo "<option value='actionplan' style='text-indent: 15px; height: 17px; background-image: url({$CONFIG['application_webpath']}/images/icons/{$iconset}/16x16/actionplan.png); background-repeat: no-repeat;' onclick='actionplan(this.form)'>{$GLOBALS['strActionPlan']}</option>\n";
+            echo "<option value='solution' style='text-indent: 15px; height: 17px; background-image: url({$CONFIG['application_webpath']}/images/icons/{$iconset}/16x16/solution.png); background-repeat: no-repeat;' onclick='reprioritise(this.form)'>{$GLOBALS['strResolutionReprioritisation']}</option>\n";
         break;
         case 'actionplan':
-            echo "<option value='actionplan' style='text-indent: 15px; height: 17px; background-image: url({$CONFIG['application_webpath']}/images/icons/{$iconset}/16x16/actionplan.png); background-repeat: no-repeat;' onclick='actionplan(this.form)'>Action Plan</option>\n";
-            echo "<option value='solution' style='text-indent: 15px; height: 17px; background-image: url({$CONFIG['application_webpath']}/images/icons/{$iconset}/16x16/solution.png); background-repeat: no-repeat;' onclick='reprioritise(this.form)'>Resolution/Reprioritisation</option>\n";
+            echo "<option value='actionplan' style='text-indent: 15px; height: 17px; background-image: url({$CONFIG['application_webpath']}/images/icons/{$iconset}/16x16/actionplan.png); background-repeat: no-repeat;' onclick='actionplan(this.form)'>{$GLOBALS['strActionPlan']}</option>\n";
+            echo "<option value='solution' style='text-indent: 15px; height: 17px; background-image: url({$CONFIG['application_webpath']}/images/icons/{$iconset}/16x16/solution.png); background-repeat: no-repeat;' onclick='reprioritise(this.form)'>{$GLOBALS['strResolutionReprioritisation']}</option>\n";
         break;
             case 'solution':
-            echo "<option value='solution' style='text-indent: 15px; height: 17px; background-image: url({$CONFIG['application_webpath']}/images/icons/{$iconset}/16x16/solution.png); background-repeat: no-repeat;' onclick='reprioritise(this.form)'>Resolution/Reprioritisation</option>\n";
+            echo "<option value='solution' style='text-indent: 15px; height: 17px; background-image: url({$CONFIG['application_webpath']}/images/icons/{$iconset}/16x16/solution.png); background-repeat: no-repeat;' onclick='reprioritise(this.form)'>{$GLOBALS['strResolutionReprioritisation']}</option>\n";
         break;
     }
     echo "</select>\n";
@@ -266,12 +266,12 @@ function display_update_page($draftid=-1)
     if ($target->type!='solution')
         echo "<option value='actionplan'>Action Plan</option>\n";
     */
-    echo "<option value='research' selected='selected' style='text-indent: 15px; height: 17px; background-image: url({$CONFIG['application_webpath']}/images/icons/{$iconset}/16x16/research.png); background-repeat: no-repeat;'>Research Notes</option>\n";
-    echo "<option value='emailin' style='text-indent: 15px; height: 17px; background-image: url({$CONFIG['application_webpath']}/images/icons/{$iconset}/16x16/emailin.png); background-repeat: no-repeat;'>Email from Customer</option>\n";
-    echo "<option value='emailout' style='text-indent: 15px; height: 17px; background-image: url({$CONFIG['application_webpath']}/images/icons/{$iconset}/16x16/emailout.png); background-repeat: no-repeat;'>Email to Customer</option>\n";
-    echo "<option value='phonecallin' style='text-indent: 15px; height: 17px; background-image: url({$CONFIG['application_webpath']}/images/icons/{$iconset}/16x16/callin.png); background-repeat: no-repeat;'>Phone call from Customer</option>\n";
-    echo "<option value='phonecallout' style='text-indent: 15px; height: 17px; background-image: url({$CONFIG['application_webpath']}/images/icons/{$iconset}/16x16/callout.png); background-repeat: no-repeat;'>Phone call to Customer</option>\n";
-    echo "<option value='externalinfo' style='text-indent: 15px; height: 17px; background-image: url({$CONFIG['application_webpath']}/images/icons/{$iconset}/16x16/externalinfo.png); background-repeat: no-repeat;'>External Escalation Info</option>\n";
+    echo "<option value='research' selected='selected' style='text-indent: 15px; height: 17px; background-image: url({$CONFIG['application_webpath']}/images/icons/{$iconset}/16x16/research.png); background-repeat: no-repeat;'>{$GLOBALS['strResearchNotes']}</option>\n";
+    echo "<option value='emailin' style='text-indent: 15px; height: 17px; background-image: url({$CONFIG['application_webpath']}/images/icons/{$iconset}/16x16/emailin.png); background-repeat: no-repeat;'>{$GLOBALS['strEmailFromCustomer']}</option>\n";
+    echo "<option value='emailout' style='text-indent: 15px; height: 17px; background-image: url({$CONFIG['application_webpath']}/images/icons/{$iconset}/16x16/emailout.png); background-repeat: no-repeat;'>{$GLOBALS['strEmailToCustomer']}</option>\n";
+    echo "<option value='phonecallin' style='text-indent: 15px; height: 17px; background-image: url({$CONFIG['application_webpath']}/images/icons/{$iconset}/16x16/callin.png); background-repeat: no-repeat;'>{$GLOBALS['CallFromCustomer']}</option>\n";
+    echo "<option value='phonecallout' style='text-indent: 15px; height: 17px; background-image: url({$CONFIG['application_webpath']}/images/icons/{$iconset}/16x16/callout.png); background-repeat: no-repeat;'>{$GLOBALS['strCallFromCustomer']}</option>\n";
+    echo "<option value='externalinfo' style='text-indent: 15px; height: 17px; background-image: url({$CONFIG['application_webpath']}/images/icons/{$iconset}/16x16/externalinfo.png); background-repeat: no-repeat;'>{$GLOBALS['strExternalInfo']}</option>\n";
     echo "<option value='reviewmet' style='text-indent: 15px; height: 17px; background-image: url({$CONFIG['application_webpath']}/images/icons/{$iconset}/16x16/review.png); background-repeat: no-repeat;'>Incident Review</option>\n";
 
     echo "</select>";
@@ -362,7 +362,7 @@ function display_update_page($draftid=-1)
 
     echo "<th align='right' valign='top'>{$GLOBALS['strAttachFile']}";
     echo "(&lt;{$att_file_size}):</th>";
-    
+
     echo "<td class='shade1'><input type='hidden' name='MAX_FILE_SIZE' value='{$CONFIG['upload_max_filesize']}' />";
     echo "<input type='file' name='attachment' size='40' maxfilesize='{$CONFIG['upload_max_filesize']}' /></td>";
     echo "</tr>";
