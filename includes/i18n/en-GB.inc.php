@@ -164,6 +164,7 @@ $strEditProfileFor = 'Edit User Profile for %s';
 $strEditProduct = 'Edit Product';
 $strEditServiceLevel = 'Edit Service Level';
 $strEditSkill = 'Edit Skill';
+$strEditSite = 'Edit Site';
 $strEditTask = 'Edit Task';
 $strEditTemplate = 'Edit Template';
 $strEditVendor = 'Edit Vendor';

@@ -19,6 +19,8 @@ require('functions.inc.php');
 // This page requires authentication
 require('auth.inc.php');
 
+$title = $strEditContact;
+
 // External variables
 $contact = cleanvar($_REQUEST['contact']);
 $action = cleanvar($_REQUEST['action']);
@@ -56,7 +58,7 @@ elseif ($action == "edit" && isset($contact))
     while ($contactrow=mysql_fetch_array($contactresult))
     {                                                   // User does not have access
         echo "<h2><img src='{$CONFIG['application_webpath']}images/icons/{$iconset}/32x32/contact.png' width='32' height='32' alt='' /> ";
-        echo "{$strEditContact} {$contact}</h2>";
+        echo "{$strEditContact}: {$contact}</h2>";
         echo "<form name='contactform' action='{$_SERVER['PHP_SELF']}?action=update' method='post' onsubmit='return confirm_submit();'>";
         echo "<p align='center'>".sprintf($strMandatoryMarked, "<sup class='red'>*</sup>")."</p>";
         echo "<table align='center' class='vertical'>";
