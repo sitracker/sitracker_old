@@ -27,7 +27,8 @@ $incident = $_REQUEST['incident'];
 
 if($incident)
 {
-    $sql = "INSERT into tasks(owner, name, priority, startdate, created, lastupdated) VALUES('$sit[2]', 'Task for Incident {$incident}', 1, NOW(), NOW(), NOW())";
+    $sql = "INSERT into tasks(owner, name, priority, distribution, startdate, created, lastupdated) ";
+    $sql .= "VALUES('$sit[2]', 'Task for Incident {$incident}', 1, 'incident', NOW(), NOW(), NOW())";
 
     mysql_query($sql);
     if (mysql_error()) trigger_error(mysql_error(),E_USER_ERROR);
@@ -37,9 +38,8 @@ if($incident)
     $sql = "INSERT into links VALUES(4, {$taskid}, {$incident}, 'left', {$sit[2]})";
     mysql_query($sql);
     if (mysql_error()) trigger_error(mysql_error(),E_USER_ERROR);
-    confirmation_page(2, "tasks.php?incident=".$incident, "<h2>{$strTask} {$strAdded}</h2><p align='center'>{$strPleaseWaitRedirect}...</p>");
-
-}    
+    confirmation_page(2, "tasks.php?incident=".$incident, "<h2>{$strActivityAdded}</h2><p align='center'>{$strPleaseWaitRedirect}...</p>");
+}
 
 
 else

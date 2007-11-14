@@ -13,13 +13,21 @@
 require('db_connect.inc.php');
 require('functions.inc.php');
 require('auth.inc.php');
+
 $permission=0; // Allow all auth users
-$title='Tasks';
-$id = $_REQUEST['incident'];
-if($_REQUEST['incident'])
+
+$id = cleanvar($_REQUEST['incident']);
+if($id)
+{
+    $title = $strActivities;
     include('incident_html_top.inc.php');
+    
+}
 else
+{
+    $title = $strTasks;
     include('htmlheader.inc.php');
+}
 
 
 // This page requires authentication

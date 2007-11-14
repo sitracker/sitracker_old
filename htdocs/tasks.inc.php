@@ -41,9 +41,12 @@ if(!empty($incident))
     }
     $result = mysql_query($sql);
 
-    echo "<h2><img src='{$CONFIG['application_webpath']}images/icons/{$iconset}/32x32/task.png' width='32' height='32' alt='' /> ";
-    echo "Incident Tasks</h2>";
-    echo "<p align='center'>This page is to keep track of tasks relating to an incident where time spent dealing with the call needs to be known.</p>";
+    if($mode == 'incident')
+    {
+        echo "<h2><img src='{$CONFIG['application_webpath']}images/icons/{$iconset}/32x32/task.png' width='32' height='32' alt='' /> ";
+        echo "{$strActivities}</h2>";
+    }
+    echo "<p align='center'>{$strIncidentActivitiesIntro}</p>";
 }
 else
 {// Defaults
@@ -72,7 +75,7 @@ else
     echo "</select>\n";
     echo "</form><br />";
 
-    $sql = "SELECT * FROM tasks WHERE owner='$user' ";
+    $sql = "SELECT * FROM tasks WHERE owner='$user' AND distribution != 'incident' ";
     if ($show=='' OR $show=='active' ) $sql .= "AND (completion < 100 OR completion='' OR completion IS NULL) ";
     elseif ($show=='completed') $sql .= "AND (completion = 100) ";
     else $sql .= "AND 1=2 "; // force no results for other cases
@@ -222,6 +225,6 @@ else
     else echo "No public tasks";
     echo "</p>";
 }
-if($mode == 'incident') echo "<p align='center'><a href='add_task.php?incident={$id}'>{$strAddTask}</a></p>";
+if($mode == 'incident') echo "<p align='center'><a href='add_task.php?incident={$id}'>{$strAddActivity}</a></p>";
 else echo "<p align='center'><a href='add_task.php'>{$strAddTask}</a></p>";
 ?>
