@@ -34,22 +34,29 @@ $sql .= "ORDER BY sites.id, incidents.id";
 $result = mysql_query($sql);
 if (mysql_error()) trigger_error("MySQL Query Error: ".mysql_error(), E_USER_ERROR);
 
-$prvincid=0;
-while ($row = mysql_fetch_object($result))
+if (mysql_num_rows($result) > 0)
 {
-    if ($prvincid!=$row->id)
+    $prvincid=0;
+    while ($row = mysql_fetch_object($result))
     {
-        echo "<b>[{$row->siteid}] {$row->name}</b> Incident: <a href='/incident_details.php?id={$row->id}'>{$row->id}</a>  Date: ".date('d M Y', $row->opened);
-        echo "Product: ".product_name($row->product);
-        $site=$row->siteid;
-        $$site++;
-        $sites[]=$row->siteid;
-        echo "<br />\n";
+        if ($prvincid!=$row->id)
+        {
+            echo "<b>[{$row->siteid}] {$row->name}</b> Incident: <a href='../incident_details.php?id={$row->id}'>{$row->id}</a>  ";
+            echo "Date: ".date('d M Y', $row->opened);
+            echo "Product: ".product_name($row->product);
+            $site=$row->siteid;
+            $$site++;
+            $sites[]=$row->siteid;
+            echo "<br />\n";
+        }
+        $prvincid=$row->id;
+        // print_r($row);
     }
-    $prvincid=$row->id;
-    // print_r($row);
 }
-
+else
+{
+    echo "<p class='warning'>{$strNoRecords}</p>";
+}
 
 $sites=array_unique($sites);
 
