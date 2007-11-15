@@ -102,7 +102,7 @@ else
         {
             echo "<p align='center'>{$strNoRecords}<p>";
         }
-        if($numcontacts > $allowedcontacts)
+        if($numcontacts < $allowedcontacts)
         {
             echo "<p align='center'><a href='add_contact_support_contract.php?maintid={$id}&amp;siteid={$maintrow['site']}&amp;context=maintenance'>";
             echo "Add a support contact to this contract</a></p>";
