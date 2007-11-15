@@ -10,6 +10,19 @@ Further instructions and notes about specific upgrades follow, if you
 upgrading and skipping several versions listed below you should read
 everything carefully to make sure you've met all the requirements:
 
+
+Upgrading to 3.31
+-----------------
+From now on all SiT users must have unique email addresses, this
+was previously an expectation but it was not enforced so it is
+possible that your database has some duplicates.  This will not
+cause any issues unless one of those users requests to reset a
+forgotten password, in which case only one of the users owning
+the email address will be able to reset.  Additionally if either
+of the users sharing an email address edit their profile, they
+will be told that email addresses must be unique.
+
+
 Upgrading to 3.30
 -----------------
 The minimum supported MySQL version is now 4.0.18, if you have a
