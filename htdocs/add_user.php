@@ -46,7 +46,7 @@ if (empty($submit))
 
     echo "<h2><img src='{$CONFIG['application_webpath']}images/icons/{$iconset}/32x32/user.png' width='32' height='32' alt='' /> ";
     echo "{$strNewUser}</h2>";
-    echo "<h5>{$strMandatoryMarked} <sup class='red'>*</sup></h5>";
+    echo "<h5>".sprintf($strMandatoryMarked,"<sup class='red'>*</sup>")."</h5>";
     echo "<form action='{$_SERVER['PHP_SELF']}' method='post' onsubmit='return confirm_submit();'>";
     echo "<table align='center'>\n";
     echo "<tr><th>{$strRealName}: <sup class='red'>*</sup></th><td><input maxlength='50' name='realname' size='30' /></td></tr>\n";
@@ -63,8 +63,7 @@ if (empty($submit))
     echo "<tr><th>{$strTelephone}:</th><td><input maxlength='50' name='phone' size='30' /></td></tr>\n";
     echo "<tr><th>{$strMobile}:</th><td><input maxlength='50' name='mobile' size='30' /></td></tr>\n";
     echo "<tr><th>{$strFax}:</th><td><input maxlength='50' name='fax' size='30' /></td></tr>\n";
-    echo "<tr><th>{$strHolidayEntitlement} Entitlement:</th><td><input maxlength='3' name='holiday_entitlement' size='3' /> days</td></tr>\n";
-    // i18n ^^
+    echo "<tr><th>{$strHolidayEntitlement}:</th><td><input maxlength='3' name='holiday_entitlement' size='3' /> days</td></tr>\n"; // i18n days
     plugin_do('add_user_form');
     echo "</table>\n";
     echo "<p><input name='submit' type='submit' value=\"{$strAddUser}\" /></p>";
@@ -126,6 +125,16 @@ else
     {
         $errors++;
         echo "<p class='error'>Username must be unique</p>\n";
+    }
+    // Check email address is unique
+    $sql = "SELECT COUNT(id) FROM users WHERE email='$email'";
+    $result = mysql_query($sql);
+    if (mysql_error()) trigger_error(mysql_error(),E_USER_ERROR);
+    list($countexisting) = mysql_fetch_row($result);
+    if ($countexisting >= 1)
+    {
+        $errors++;
+        echo "<p class='error'>Email must be unique</p>\n";
     }
 
     // add information if no errors
