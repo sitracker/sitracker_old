@@ -556,6 +556,7 @@ $strSiteIncidents = 'Site Incidents';
 $strSiteProducts = 'Site Products';
 $strSites = 'Sites';
 $strSiteName = 'Site Name';
+$strSiteSupport = 'Site Support';
 $strSiteType = 'Site Type';
 $strSitUpgraded = '%s has been upgraded to %s';
 $strSitUpgradedLink = 'What\'s new?';
