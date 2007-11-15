@@ -1245,6 +1245,24 @@ function role_drop_down($name, $id)
 }
 
 
+function group_drop_down($name, $selected)
+{
+    global $grouparr, $numgroups;
+    $html = "<select name='$name'>";
+    $html .= "<option value='0'>{$GLOBALS['strNone']}</option>\n";
+    if ($numgroups >= 1)
+    {
+        foreach($grouparr AS $groupid => $groupname)
+        {
+            $html .= "<option value='$groupid'";
+            if ($groupid == $selected) $html .= " selected='selected'";
+            $html .= ">$groupname</option>\n";
+        }
+    }
+    $html .= "</select>\n";
+    return $html;
+}
+
 
 function interfacestyle_drop_down($name, $id)
 {
