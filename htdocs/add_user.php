@@ -126,8 +126,8 @@ else
         $errors++;
         echo "<p class='error'>Username must be unique</p>\n";
     }
-    // Check email address is unique
-    $sql = "SELECT COUNT(id) FROM users WHERE email='$email'";
+    // Check email address is unique (discount disabled accounts)
+    $sql = "SELECT COUNT(id) FROM users WHERE status > 0 AND email='$email'";
     $result = mysql_query($sql);
     if (mysql_error()) trigger_error(mysql_error(),E_USER_ERROR);
     list($countexisting) = mysql_fetch_row($result);
