@@ -79,24 +79,6 @@ switch ($action)
 
         $numgroups = count($grouparr);
 
-        function group_drop_down($name, $selected)
-        {
-            global $grouparr, $numgroups;
-            $html = "<select name='$name'>";
-            $html .= "<option value='0'>{$GLOBALS['strNone']}</option>\n";
-            if ($numgroups >= 1)
-            {
-                foreach($grouparr AS $groupid => $groupname)
-                {
-                    $html .= "<option value='$groupid'";
-                    if ($groupid == $selected) $html .= " selected='selected'";
-                    $html .= ">$groupname</option>\n";
-                }
-            }
-            $html .= "</select>\n";
-            return $html;
-        }
-
         echo "<form action='{$_SERVER['PHP_SELF']}' method='post'>";
         echo "<table summary=\"{$strUserGroups}\" align='center'>";
         echo "<tr><th>{$strGroup}</th><th>{$strOperation}</th></tr>\n";

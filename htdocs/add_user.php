@@ -44,23 +44,6 @@ if (empty($submit))
 
     $numgroups = count($grouparr);
 
-    function group_drop_down($name, $selected)
-    {
-        global $grouparr, $numgroups;
-        $html = "<select name='$name'>";
-        $html .= "<option value='0'>{$strNone}</option>\n";
-        if ($numgroups >= 1)
-        {
-            foreach($grouparr AS $groupid => $groupname)
-            {
-                $html .= "<option value='$groupid'";
-                if ($groupid == $selected) $html .= " selected='selected'";
-                $html .= ">$groupname</option>\n";
-            }
-        }
-        $html .= "</select>\n";
-        return $html;
-    }
     echo "<h2><img src='{$CONFIG['application_webpath']}images/icons/{$iconset}/32x32/user.png' width='32' height='32' alt='' /> ";
     echo "{$strNewUser}</h2>";
     echo "<h5>{$strMandatoryMarked} <sup class='red'>*</sup></h5>";
