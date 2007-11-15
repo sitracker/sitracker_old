@@ -110,6 +110,7 @@ else
 
         if($mode != 'incident')
         {
+            $totalduration;
             if ($user == $sit[2])
             {
                 echo colheader('distribution', "<img src='{$CONFIG['application_webpath']}images/icons/{$iconset}/16x16/private.png' width='16' height='16' title='Public/Private' alt='Private' style='border: 0px;' />", $sort, $order, $filter);
@@ -193,11 +194,11 @@ else
                 }
                 else
                 {
-                    $duration = $enddate - $startdate;
+                    $duration = $enddate - $startdate;                    
                     echo "<td>".format_date_friendly($enddate)."</td>";
                     echo "<td>".format_seconds($duration)."</td>";
                 }
-
+                $totalduration += $duration;
 
                 echo "<td>".format_date_friendly($lastupdated)."</td>";
             }
@@ -216,6 +217,7 @@ else
             if ($shade=='shade1') $shade='shade2';
             else $shade='shade1';
     }
+    echo "<tr class=$shade><td><strong>$strTotal</strong></td><td colspan=5>".format_seconds($totalduration)."</td</tr>";
     echo "</table>\n";
 }
 else
