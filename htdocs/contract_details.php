@@ -35,7 +35,7 @@ $maintrow=mysql_fetch_array($maintresult);
 ?>
 <table align='center' class='vertical'>
 <?php
-echo "<tr><th>{$strContract} ID:</th><td><h3><img src='{$CONFIG['application_webpath']}images/icons/{$iconset}/32x32/contract.png' width='32' height='32' alt='' /> ";
+echo "<tr><th>{$strContract} {$strID}:</th><td><h3><img src='{$CONFIG['application_webpath']}images/icons/{$iconset}/32x32/contract.png' width='32' height='32' alt='' /> ";
 echo "{$maintrow['id']}</h3></td></tr>";
 echo "<tr><th>{$strStatus}:</th><td>";
 if ($maintrow['term']=='yes') echo "<strong>{$strTerminated}</strong>";
@@ -76,7 +76,7 @@ else
 {
     $allowedcontacts = $maintrow['supportedcontacts'];
     if($allowedcontacts == 0) $allowedcontacts = 'Unlimited';
-    
+
     $sql  = "SELECT contacts.forenames, contacts.surname, supportcontacts.contactid AS contactid FROM supportcontacts, contacts ";
     $sql .= "WHERE supportcontacts.contactid=contacts.id AND supportcontacts.maintenanceid='$id' ";
     $result=mysql_query($sql);
@@ -84,7 +84,7 @@ else
     if (mysql_num_rows($result)>0)
     {
         $numberofcontacts = mysql_num_rows($result);
-        if($numcontacts > $allowedcontacts) echo "<p class='error'>Site has too many contacts</p>";
+        if($numcontacts > $allowedcontacts) echo "<p class='error'>There are more contacts linked than this contract should support</p>";
         echo "<p align='center'>".sprintf($strUsedNofN, $numberofcontacts, $allowedcontacts);
         echo "<table align='center'>";
         $supportcount=1;
@@ -102,7 +102,7 @@ else
         {
             echo "<p align='center'>{$strNoRecords}<p>";
         }
-        if($numcontacts < $allowedcontacts)
+        if($numberofcontacts < $allowedcontacts)
         {
             echo "<p align='center'><a href='add_contact_support_contract.php?maintid={$id}&amp;siteid={$maintrow['site']}&amp;context=maintenance'>";
             echo "Add a support contact to this contract</a></p>";
