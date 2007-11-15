@@ -106,7 +106,7 @@ if (user_permission($sit[2],$permission))
     echo "<dl><dd>";
     echo "Document ID: {$CONFIG['kb_id_prefix']}".leading_zero(4,$kbarticle->docid)."<br />";
     $pubdate=mysql2date($kbarticle->published);
-    if ($pubdate > 0) echo "Published on: ".date('d M Y',$pubdate) ."<br />";
+    if ($pubdate > 0) echo "Published on: ".date($CONFIG['dateformat_date'],$pubdate) ."<br />";
 
     if (is_array($author))
     {
