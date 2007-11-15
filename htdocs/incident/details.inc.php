@@ -81,10 +81,20 @@ if ($software_name!='' OR $incident->productversion != '' OR $incident->products
     echo "<br />\n";
 }
 echo priority_icon($incident->priority)." ";
-echo "<a href='contract_details.php?id={$incident->maintenanceid}' title='Contract {$incident->maintenanceid} Details' target='top.opener'>";
-if ($product_name!='') echo "{$product_name}";
-else echo "{$strContract} {$incident->maintenanceid}";
-echo "</a> / ";
+if ($product_name!='')
+{
+    echo "<a href='contract_details.php?id={$incident->maintenanceid}' title='Contract {$incident->maintenanceid} Details' target='top.opener'>";
+    echo "{$product_name}";
+    echo "</a>";
+}
+elseif ($incident->maintenanceid > 0)
+{
+    echo "<a href='contract_details.php?id={$incident->maintenanceid}' title='Contract {$incident->maintenanceid} Details' target='top.opener'>";
+    echo "{$strContract} {$incident->maintenanceid}";
+    echo "</a>";
+}
+else echo "<strong>{$strSiteSupport}</strong>";
+echo " / ";
 
 echo "{$servicelevel_tag}<br />\n";
 echo "Open for {$opened_for}, ";
