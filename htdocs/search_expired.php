@@ -9,6 +9,7 @@
 //
 
 // Author: Ivan Lucas <ivanlucas[at]users.sourceforge.net>
+// FIXME i18n whole page
 
 $permission=19; // View Contracts
 

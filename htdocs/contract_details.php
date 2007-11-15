@@ -14,6 +14,7 @@
 // This Page Is Valid XHTML 1.0 Transitional! 27Oct05
 
 $permission=19;  // view Maintenance contracts
+// FIXME i18n some compound strings
 
 require('db_connect.inc.php');
 require('functions.inc.php');
@@ -32,9 +33,7 @@ $maintresult = mysql_query($sql);
 if (mysql_error()) trigger_error("MySQL Query Error ".mysql_error(), E_USER_ERROR);
 
 $maintrow=mysql_fetch_array($maintresult);
-?>
-<table align='center' class='vertical'>
-<?php
+echo "<table align='center' class='vertical'>";
 echo "<tr><th>{$strContract} {$strID}:</th><td><h3><img src='{$CONFIG['application_webpath']}images/icons/{$iconset}/32x32/contract.png' width='32' height='32' alt='' /> ";
 echo "{$maintrow['id']}</h3></td></tr>";
 echo "<tr><th>{$strStatus}:</th><td>";
@@ -119,9 +118,7 @@ if (mysql_error()) trigger_error("MySQL Query Error ".mysql_error(), E_USER_ERRO
 
 if (mysql_num_rows($result)>0)
 {
-    ?>
-    <table align='center'>
-    <?php
+    echo "<table align='center'>";
     while ($software=mysql_fetch_array($result))
     {
         echo "<tr><td> <img src='{$CONFIG['application_webpath']}images/icons/{$iconset}/16x16/skill.png' width='16' height='16' alt='' /> ";
