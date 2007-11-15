@@ -4,7 +4,7 @@
 $languagestring='English (GB)';
 $i18ncharset='UTF-8';
 
-// list of strings (Alphabetical)
+// list of strings (Alphabetical - ABCDEFGHIJKLMNOPQRSTUVWXYZ 0123456789)
 $strAbout = 'About';
 $strAbsentSick = 'Absent Sick';
 $strAccepting = 'Accepting';
