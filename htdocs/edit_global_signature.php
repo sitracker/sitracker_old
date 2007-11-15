@@ -90,20 +90,21 @@ elseif(empty($action))
     $result = mysql_query($sql);
     if(mysql_error()) trigger_error(mysql_error(), E_USER_WARNING);
 
+    // FIXME i18n
     echo "<p align='center'>One of the signatures blow will be chosen at random and inserted at the bottom of outgoing emails. It's recommended that you begin this signature with two dashes, a space and a line feed.<br /><br />";
     echo "Remember that any changes here will be effective immediately and outgoing emails will carry the new signature.</p>";
 
-    echo "<p align='center'><a href='edit_global_signature.php?action=add'>Add New Global Signature</a></p>";
+    echo "<p align='center'><a href='edit_global_signature.php?action=add'>{$strAdd}</a></p>";
 
     echo "<table align='center' width='60%'>";
-    echo "<tr><th>Signature</th><th>Options</th></tr>";
+    echo "<tr><th>{$strGlobalSignature}</th><th>{$strOperation}</th></tr>";
     while($signature = mysql_fetch_array($result))
     {
         $id = $signature['id'];
         echo "<tr>";
         echo "<td class='shade1' width='70%'>".ereg_replace("\n", "<br />", $signature['signature'])."</td>";
-        echo "<td class='shade2' align='center'><a href='edit_global_signature.php?action=edit&amp;sig_id=$id'>edit</a> | ";
-        echo "<a href='edit_global_signature.php?action=delete&amp;sig_id=$id'>delete</a></td>";
+        echo "<td class='shade2' align='center'><a href='edit_global_signature.php?action=edit&amp;sig_id=$id'>{$strEdit}</a> | ";
+        echo "<a href='edit_global_signature.php?action=delete&amp;sig_id=$id'>{$strDelete}</a></td>";
         echo "</tr>";
     }
     echo "</table>";
@@ -116,22 +117,25 @@ elseif(!empty($action))
     switch($action)
     {
         case 'add':
-            echo "<h2>$title</h2>";
+            echo "<h2>{$strGlobalSignature}: {$strAdd}</h2>";
             ?>
             <form action="<?php echo $_SERVER['PHP_SELF']; ?>" method="post">
             <input type="hidden" name="formaction" value="add" />
             <table class='vertical' width='50%'>
             <tr>
-            <td align="right" valign="top" class="shade1"><strong>Global Signature</strong>:<br />
-            A signature to insert at the bottom of outgoing emails.  It's recommended that you begin this signature with two dashes, a space and a line feed.<br /><br />
-            Remember that any changes here will be effective immediately and outgoing emails will carry the new signature.
-            </td>
+            <?php
+            echo "<td align='right' valign='top' class='shade1'><strong>{$strGlobalSignature}</strong>:<br />\n";
+            // FIXME i18n paragraph
+            echo "A signature to insert at the bottom of outgoing emails.  It's recommended that you begin this signature with two dashes, a space and a line feed.<br /><br />";
+            echo "Remember that any changes here will be effective immediately and outgoing emails will carry the new signature.";
+            echo "</td>";
+            ?>
             <td class="shade1"><textarea name="signature" rows="15" cols="65"></textarea></td>
             </tr>
             </table>
-            <p align='center'><input name="submit" type="submit" value="Add Signature" /></p>
-            </form>
             <?php
+            echo "<p align='center'><input name='submit' type='submit' value=\"{$strAdd}\" /></p>";
+            echo "</form>\n";
         break;
 
         case 'delete':
@@ -139,23 +143,26 @@ elseif(!empty($action))
         break;
 
         case 'edit':
-            echo "<h2>Edit $title</h2>";
+            echo "<h2>{$strGlobalSignature}: {$strEdit}</h2>";
             ?>
             <form action="<?php echo $_SERVER['PHP_SELF']; ?>" method="post">
             <input type="hidden" name="formaction" value="edit" />
             <input type="hidden" name="sig_id" value="<?php echo $sig_id ?>" />
             <table class='vertical' width='50%'>
             <tr>
-            <td align="right" valign="top" class="shade1"><strong>Global Signature</strong>:<br />
-            A signature to insert at the bottom of outgoing emails.  It's recommended that you begin this signature with two dashes, a space and a line feed.<br /><br />
-            Remember that any changes here will be effective immediately and outgoing emails will carry the new signature.
+            <?php
+            echo "<td align='right' valign='top' class='shade1'><strong>{$strGlobalSignature}</strong>:<br />\n";
+            // FIXME i18n paragraph
+            echo "A signature to insert at the bottom of outgoing emails.  It's recommended that you begin this signature with two dashes, a space and a line feed.<br /><br />";
+            echo "Remember that any changes here will be effective immediately and outgoing emails will carry the new signature.";
+            ?>
             </td>
             <td class="shade1"><textarea name="signature" rows="15" cols="65"><?php echo stripslashes(get_globalsignature($sig_id)); ?></textarea></td>
             </tr>
             </table>
-            <p align='center'><input name="submit" type="submit" value="Edit Signature" /></p>
-            </form>
             <?php
+            echo "<p align='center'><input name='submit' type='submit' value=\"{$strSave}\" /></p>";
+            echo "</form>\n";
         break;
     }
     include('htmlfooter.inc.php');
