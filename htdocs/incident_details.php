@@ -31,6 +31,24 @@ if ($_REQUEST['win']=='incomingview')
     include('incident_html_top.inc.php');
     include('incident/incoming.inc.php');
 }
+elseif ($_REQUEST['win']=='jump')
+{
+    if (incident_owner($incidentid) > 0)
+    {
+        echo "<html><head>";
+        echo "<script src='{$CONFIG['application_webpath']}scripts/prototype/prototype.js' type='text/javascript'></script>\n";
+        echo "<script src='{$CONFIG['application_webpath']}webtrack.js' type='text/javascript'></script>\n";
+        echo "</head><body onload=\"incident_details_window($incidentid,'win');window.location='{$_SERVER['HTTP_REFERER']}';\">test</body></html>";
+    }
+    else
+    {
+        // return without loading popup
+        echo "<html><head>";
+        echo "<script src='{$CONFIG['application_webpath']}scripts/prototype/prototype.js' type='text/javascript'></script>\n";
+        echo "<script src='{$CONFIG['application_webpath']}webtrack.js' type='text/javascript'></script>\n";
+        echo "</head><body onload=\"window.location='{$_SERVER['HTTP_REFERER']}';\">test</body></html>";
+    }
+}
 else
 {
     $title='Details';

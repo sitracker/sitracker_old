@@ -107,7 +107,7 @@ $hmenu[30] = array (10=> array ( 'perm'=> 5, 'name'=> $strAddIncident, 'url'=>"{
                     30=> array ( 'perm'=> 0, 'name'=> $strWatchIncidents, 'url'=>"{$CONFIG['application_webpath']}incidents.php?user=all&amp;queue=1&amp;type=support"),
                     40=> array ( 'perm'=> 42, 'name'=> $strHoldingQueue, 'url'=>"{$CONFIG['application_webpath']}review_incoming_updates.php"),
                     50=> array ( 'perm'=> 0, 'name'=> $strJumpToIncident,
-                                 'url'=>"javascript:var id = prompt(%22{$strEnterTheIncidentID}%22); window.location = %22{$CONFIG['application_webpath']}incident_details.php?id=%22 + id;")
+                                 'url'=>"javascript:var id = prompt('{$strEnterTheIncidentID}'); if (!isNaN(id)) window.location = '{$CONFIG['application_webpath']}incident_details.php?id=' + id + '&win=jump';")
 );
 
 
