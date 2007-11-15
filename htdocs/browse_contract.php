@@ -61,7 +61,7 @@ echo "<input type='submit' value=\"{$strGo}\" />";
 <tr>
 <td valign="middle">
 <?php
-    echo "<a href='add_maintenance.php'>{$strAddContract}</a> |";
+    echo "<a href='add_contract.php'>{$strAddContract}</a> |";
 ?>
     <a href="<?php echo $_SERVER['PHP_SELF'] ?>?search_string=A">A</a> |
     <a href="<?php echo $_SERVER['PHP_SELF'] ?>?search_string=B">B</a> |

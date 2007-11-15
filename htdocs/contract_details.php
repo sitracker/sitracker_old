@@ -58,7 +58,7 @@ echo "<tr><th>{$strServiceLevel}:</th><td>".servicelevel_name($maintrow['service
 echo "<tr><th>{$strExpiryDate}:</th><td>".date($CONFIG['dateformat_date'], $maintrow['expirydate'])."</td></tr>";
 echo "<tr><th>{$strNotes}:</th><td>".stripslashes($maintrow['maintnotes'])."</td></tr>";
 echo "</table>";
-echo "<p align='center'><a href=\"edit_maintenance.php?action=edit&amp;maintid=$id\">{$strEditContract}</a></p>";
+echo "<p align='center'><a href=\"edit_contract.php?action=edit&amp;maintid=$id\">{$strEditContract}</a></p>";
 
 if (mysql_num_rows($maintresult)<1)
 {
