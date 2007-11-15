@@ -21,7 +21,7 @@ $title = $strAddContract;
 
 // External variables
 $action = $_REQUEST['action'];
-$siteid = mysql_escape_string($_REQUEST['siteid']);
+$siteid = cleanvar($_REQUEST['siteid']);
 
 // Show add maintenance form
 if ($action == "showform" OR $action=='')
@@ -42,13 +42,14 @@ if ($action == "showform" OR $action=='')
     echo "<form name='addcontract' action='{$_SERVER['PHP_SELF']}?action=add' method='post' onsubmit='return confirm_submit();'>";
     echo "<table align='center' class='vertical'>";
     echo "<tr><th>{$strSite}: <sup class='red'>*</sup></th><td>".site_drop_down("site", $siteid)." </td></tr>\n";
-    echo "<tr><th>{$strContacts}:</th><td><input type='radio'>Limit to <input size='2' value='0'> supported contacts (0 means unlimited)<br />";
-    echo "<input type='radio'>All site contacts are to be supported</td></tr>";
+    echo "<tr><th>{$strContacts}:</th><td><input value='amount' type='radio' name='contacts' checked>Limit to <input size='2' value='0' name='amount'> supported contacts (0 means unlimited)<br />";
+    echo "<input type='radio' value='all' name='contacts'>All site contacts are to be supported</td></tr>";
     echo "<tr><th>{$strProduct}: <sup class='red'>*</sup></th><td>".product_drop_down("product", 0)."</td></tr>\n";
     echo "<tr><th>{$strReseller}: <sup class='red'>*</sup></th><td>";
     reseller_drop_down("reseller", 0);
     echo "</td></tr>\n";
-    echo "<tr><th>{$strLicenseQuantity}: <sup class='red'>*</sup></th><td><input maxlength='7' name='licence_quantity' size='5' /></td></tr>\n";
+    echo "<tr><th>{$strLicenseQuantity}: <sup class='red'>*</sup></th><td><input value=0 maxlength='7' name='licence_quantity' size='5' />";
+    echo " (0 means unlimited)</td></tr>\n";
     echo "<tr><th>{$strLicenseType}: <sup class='red'>*</sup></th><td>";
     licence_type_drop_down("licence_type", 0);
     echo "</td></tr>\n";
@@ -69,18 +70,23 @@ if ($action == "showform" OR $action=='')
 elseif ($action == "add")
 {
     // External Variables
-    $site = mysql_escape_string($_REQUEST['site']);
-    $product = mysql_escape_string($_REQUEST['product']);
-    $reseller = mysql_escape_string($_REQUEST['reseller']);
-    $licence_quantity = mysql_escape_string($_REQUEST['licence_quantity']);
-    $licence_type = mysql_escape_string($_REQUEST['licence_type']);
-    $admincontact = mysql_escape_string($_REQUEST['admincontact']);
+    $site = cleanvar($_REQUEST['site']);
+    $product = cleanvar($_REQUEST['product']);
+    $reseller = cleanvar($_REQUEST['reseller']);
+    $licence_quantity = cleanvar($_REQUEST['licence_quantity']);
+    $licence_type = cleanvar($_REQUEST['licence_type']);
+    $admincontact = cleanvar($_REQUEST['admincontact']);
     $expirydate = strtotime($_REQUEST['expiry']);
-    $notes = mysql_escape_string($_REQUEST['notes']);
-    $servicelevelid = mysql_escape_string($_REQUEST['servicelevelid']);
-    $incidentpoolid = mysql_escape_string($_REQUEST['incidentpoolid']);
-    $productonly = mysql_escape_string($_REQUEST['productonly']);
-    $term = mysql_escape_string($_REQUEST['term']);
+    $notes = cleanvar($_REQUEST['notes']);
+    $servicelevelid = cleanvar($_REQUEST['servicelevelid']);
+    $incidentpoolid = cleanvar($_REQUEST['incidentpoolid']);
+    $productonly = cleanvar($_REQUEST['productonly']);
+    $term = cleanvar($_REQUEST['term']);
+    $contacts = cleanvar($_REQUEST['contacts']);
+    
+    $allcontacts = 'No';
+    if($contacts == 'amount') $amount = cleanvar($_REQUEST['amount']);
+    elseif($contacts == 'all') $allcontacts = 'Yes';
 
     $incident_pools = explode(',', "0,{$CONFIG['incident_pools']}");
     $incident_quantity = $incident_pools[$_POST['incident_poolid']];
@@ -149,9 +155,9 @@ elseif ($action == "add")
         if ($productonly=='yes') $term='yes';
         else $term='no';
         $sql  = "INSERT INTO maintenance (site, product, reseller, expirydate, licence_quantity, licence_type, notes, ";
-        $sql .= "admincontact, servicelevelid, incidentpoolid, incident_quantity, productonly, term) ";
+        $sql .= "admincontact, servicelevelid, incidentpoolid, incident_quantity, productonly, term, supportedcontacts, allcontactssupported) ";
         $sql .= "VALUES ('$site', '$product', '$reseller', '$expirydate', '$licence_quantity', '$licence_type', '$notes', ";
-        $sql .= "'$admincontact', '$servicelevelid', '$incidentpoolid', '$incident_quantity', '$productonly', '$term')";
+        $sql .= "'$admincontact', '$servicelevelid', '$incidentpoolid', '$incident_quantity', '$productonly', '$term', '$amount', '$allcontacts')";
 
         $result = mysql_query($sql);
         if (mysql_error()) trigger_error("MySQL Query Error ".mysql_error(), E_USER_ERROR);

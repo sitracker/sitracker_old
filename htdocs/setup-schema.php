@@ -532,6 +532,8 @@ CREATE TABLE `maintenance` (
   `term` enum('no','yes') default 'no',
   `servicelevelid` int(11) NOT NULL default '1',
   `incidentpoolid` int(11) NOT NULL default '0',
+  `supportedcontacts` INT( 255 ) NOT NULL DEFAULT '0'
+  `allcontactssupported` ENUM( 'No', 'Yes' ) NOT NULL DEFAULT 'No'
   PRIMARY KEY  (`id`),
   KEY `site` (`site`),
   KEY `productonly` (`productonly`)
@@ -1556,6 +1558,12 @@ ALTER TABLE `users` ADD `lastseen` TIMESTAMP NOT NULL ;
 ALTER TABLE `tasks` CHANGE `distribution` `distribution` ENUM( 'public', 'private', 'incident' ) NOT NULL DEFAULT 'public' ;
 
  ALTER TABLE `updates` CHANGE `type` `type` ENUM( 'default', 'editing', 'opening', 'email', 'reassigning', 'closing', 'reopening', 'auto', 'phonecallout', 'phonecallin', 'research', 'webupdate', 'emailout', 'emailin', 'externalinfo', 'probdef', 'solution', 'actionplan', 'slamet', 'reviewmet', 'tempassigning', 'auto_chase_email', 'auto_chase_phone', 'auto_chase_manager', 'auto_chased_phone', 'auto_chased_manager', 'auto_chase_managers_manager', 'customerclosurerequest', 'fromtask' ) NULL DEFAULT 'default' ;
+ 
+ 
+ -- KMH 15/11/07
+ ALTER TABLE `maintenance` ADD `supportedcontacts` INT( 255 ) NOT NULL DEFAULT '0';
+ ALTER TABLE `maintenance` ADD `allcontactssupported` ENUM( 'No', 'Yes' ) NOT NULL DEFAULT 'No';
+ 
 ";
 
 

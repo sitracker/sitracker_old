@@ -643,6 +643,7 @@ $strUnknown = 'Unknown';
 $strUnlimited = 'Unlimited';
 $strUnlink = 'Unlink';
 $strUsed = 'Used';
+$strUsedNofN = 'Used %d of %d';
 $strUser = 'User';
 $strUserGroups = 'User Groups';
 $strUsername = 'Username';

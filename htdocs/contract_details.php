@@ -1,5 +1,5 @@
 <?php
-// contract_details.php - Show contract details
+// maintenance_details.php - Show contract details
 //
 // SiT (Support Incident Tracker) - Support call tracking system
 // Copyright (C) 2000-2007 Salford Software Ltd. and Contributors
@@ -10,7 +10,7 @@
 
 // Author: Ivan Lucas <ivanlucas[at]users.sourceforge.net>
 // Created: 20th August 2001
-// Purpose: Show All Contract Details
+// Purpose: Show All Maintenance Contract Details
 // This Page Is Valid XHTML 1.0 Transitional! 27Oct05
 
 $permission=19;  // view Maintenance contracts
@@ -38,7 +38,7 @@ $maintrow=mysql_fetch_array($maintresult);
 echo "<tr><th>{$strContract} ID:</th><td><h3><img src='{$CONFIG['application_webpath']}images/icons/{$iconset}/32x32/contract.png' width='32' height='32' alt='' /> ";
 echo "{$maintrow['id']}</h3></td></tr>";
 echo "<tr><th>{$strStatus}:</th><td>";
-if ($maintrow['term']=='yes') echo '<strong>{$strTerminated}</strong>';
+if ($maintrow['term']=='yes') echo "<strong>{$strTerminated}</strong>";
 else echo $strActive;
 if ($maintrow['expirydate']<$now) echo "<span class='expired'>, {$strExpired}</span>";
 echo "</td></tr>";
@@ -57,50 +57,60 @@ echo "<tr><th>{$strLicense}:</th><td>".$maintrow['licence_quantity'].' '.licence
 echo "<tr><th>{$strServiceLevel}:</th><td>".servicelevel_name($maintrow['servicelevelid'])."</td></tr>";
 echo "<tr><th>{$strExpiryDate}:</th><td>".date($CONFIG['dateformat_date'], $maintrow['expirydate'])."</td></tr>";
 echo "<tr><th>{$strNotes}:</th><td>".stripslashes($maintrow['maintnotes'])."</td></tr>";
-?>
-</table>
-<?php
-echo "<p align='center'><a href=\"edit_contract.php?action=edit&amp;maintid=$id\">{$strEditContract}</a></p>";
+echo "</table>";
+echo "<p align='center'><a href=\"edit_maintenance.php?action=edit&amp;maintid=$id\">{$strEditContract}</a></p>";
 
 if (mysql_num_rows($maintresult)<1)
 {
     throw_error('No contract found - with ID number:',$id);
 }
-?>
-<h3>Supported Contacts:</h3>
-<?php
-$sql  = "SELECT contacts.forenames, contacts.surname, supportcontacts.contactid AS contactid FROM supportcontacts, contacts ";
-$sql .= "WHERE supportcontacts.contactid=contacts.id AND supportcontacts.maintenanceid='$id' ";
-$result=mysql_query($sql);
-if (mysql_error()) trigger_error("MySQL Query Error ".mysql_error(), E_USER_ERROR);
-if (mysql_num_rows($result)>0)
+echo "<h3>Supported Contacts:</h3>";
+
+//All site contacts are supported
+if($maintrow['allcontactssupported'] == 'Yes')
 {
-    ?>
-    <table align='center'>
-    <?php
-    $supportcount=1;
-    while ($supportedrow=mysql_fetch_array($result))
-    {
-        echo "<tr><th>{$strContact} #$supportcount:</th><td><img src='{$CONFIG['application_webpath']}images/icons/{$iconset}/16x16/contact.png' width='16' height='16' alt='' /> ";
-        echo "<a href=\"contact_details.php?id=".$supportedrow['contactid']."\">".stripslashes($supportedrow['forenames'].' '.$supportedrow['surname'])."</a>, ";
-        echo contact_site($supportedrow['contactid']). "</td>";
-        echo "<td><a href=\"delete_maintenance_support_contact.php?contactid=".$supportedrow['contactid']."&amp;maintid=$id&amp;context=maintenance\">{$strRemove}</a></td></tr>\n";
-        $supportcount++;
-    }
-    ?>
-    </table>
-    <?php
+    echo "<p class='info'>All Site contacts are supported for this contract</p>";
 }
+//else count
 else
 {
-    echo "<p align='center'>This site has no supported contacts<p>";
-}
-?>
-<p align='center'><a href="add_contact_support_contract.php?maintid=<?php echo $id; ?>&amp;siteid=<?php echo $maintrow['site'] ?>&amp;context=maintenance">Add a support contact to this contract</a></p>
-<?php
+    $allowedcontacts = $maintrow['supportedcontacts'];
+    if($allowedcontacts == 0) $allowedcontacts = 'Unlimited';
+    
+    $sql  = "SELECT contacts.forenames, contacts.surname, supportcontacts.contactid AS contactid FROM supportcontacts, contacts ";
+    $sql .= "WHERE supportcontacts.contactid=contacts.id AND supportcontacts.maintenanceid='$id' ";
+    $result=mysql_query($sql);
+    if (mysql_error()) trigger_error("MySQL Query Error ".mysql_error(), E_USER_ERROR);
+    if (mysql_num_rows($result)>0)
+    {
+        $numberofcontacts = mysql_num_rows($result);
+        if($numcontacts < $allowedcontacts) echo "<p class='error'>Site has too many contacts</p>";
+        echo "<p align='center'>".sprintf($strUsedNofN, $numberofcontacts, $allowedcontacts);
+        echo "<table align='center'>";
+        $supportcount=1;
+        while ($supportedrow=mysql_fetch_array($result))
+        {
+            echo "<tr><th>{$strContact} #$supportcount:</th><td><img src='{$CONFIG['application_webpath']}images/icons/{$iconset}/16x16/contact.png' width='16' height='16' alt='' /> ";
+            echo "<a href=\"contact_details.php?id=".$supportedrow['contactid']."\">".stripslashes($supportedrow['forenames'].' '.$supportedrow['surname'])."</a>, ";
+            echo contact_site($supportedrow['contactid']). "</td>";
+            echo "<td><a href=\"delete_maintenance_support_contact.php?contactid=".$supportedrow['contactid']."&amp;maintid=$id&amp;context=maintenance\">{$strRemove}</a></td></tr>\n";
+            $supportcount++;
+        }
+        echo "</table>";
+        }
+        else
+        {
+            echo "<p align='center'>{$strNoRecords}<p>";
+        }
+        if($numcontacts > $allowedcontacts)
+        {
+            echo "<p align='center'><a href='add_contact_support_contract.php?maintid={$id}&amp;siteid={$maintrow['site']}&amp;context=maintenance'>";
+            echo "Add a support contact to this contract</a></p>";
+        }
 
+}
 echo "<br />";
-echo "<h3>Skills supported under this contract:</h3>";
+echo "<h3>{$strSkillsSupportedUnderContract}:</h3>";
 // supported software
 $sql = "SELECT * FROM softwareproducts, software WHERE softwareproducts.softwareid=software.id AND productid='{$maintrow['product']}' ";
 $result=mysql_query($sql);
