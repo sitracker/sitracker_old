@@ -67,7 +67,7 @@ while ($site = mysql_fetch_object($result))
                 {
                     echo "{$maint->product},";
                     echo "{$maint->licence_quantity} {$maint->licence_type},";
-                    echo date('d M Y', $maint->expirydate).",";
+                    echo date($CONFIG['dateformat_date'], $maint->expirydate).",";
                     $csql  = "SELECT * FROM supportcontacts ";
                     $csql .= "WHERE maintenanceid='{$maint->maintid}' ";
                     $csql .= "ORDER BY contactid LIMIT 4";
@@ -95,7 +95,7 @@ while ($site = mysql_fetch_object($result))
                     echo "<tr>";
                     echo "<td width='20%'>{$maint->product}</td>";
                     echo "<td>{$maint->licence_quantity} {$maint->licence_type}</td>";
-                    echo "<td>".date('d M Y', $maint->expirydate)."</td>";
+                    echo "<td>".date($CONFIG['dateformat_date'], $maint->expirydate)."</td>";
 
                     $csql  = "SELECT * FROM supportcontacts ";
                     $csql .= "WHERE maintenanceid='{$maint->maintid}' ";

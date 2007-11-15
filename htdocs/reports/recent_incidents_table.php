@@ -22,7 +22,7 @@ $sites=array();
 
 $monthago = time()-(60 * 60 * 24 * 30.5);
 
-echo "<h2>Incidents opened since ".date('d M Y', $monthago)."</h2>";
+echo "<h2>Incidents opened since ".date($CONFIG['dateformat_date'], $monthago)."</h2>";
 
 $sql  = "SELECT *,sites.id AS siteid FROM sites, maintenance, supportcontacts, incidents ";
 $sql .= "WHERE sites.id = maintenance.site ";
