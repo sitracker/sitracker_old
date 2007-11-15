@@ -84,7 +84,7 @@ else
     if (mysql_num_rows($result)>0)
     {
         $numberofcontacts = mysql_num_rows($result);
-        if($numcontacts < $allowedcontacts) echo "<p class='error'>Site has too many contacts</p>";
+        if($numcontacts > $allowedcontacts) echo "<p class='error'>Site has too many contacts</p>";
         echo "<p align='center'>".sprintf($strUsedNofN, $numberofcontacts, $allowedcontacts);
         echo "<table align='center'>";
         $supportcount=1;
