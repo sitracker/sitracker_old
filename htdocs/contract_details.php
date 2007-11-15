@@ -64,18 +64,18 @@ if (mysql_num_rows($maintresult)<1)
 {
     throw_error('No contract found - with ID number:',$id);
 }
-echo "<h3>Supported Contacts:</h3>";
+echo "<h3>{$strSupportedContacts}:</h3>";
 
 //All site contacts are supported
 if($maintrow['allcontactssupported'] == 'Yes')
 {
-    echo "<p class='info'>All Site contacts are supported for this contract</p>";
+    echo "<p class='info'>{$strAllSiteContactsSupported}</p>";
 }
 //else count
 else
 {
     $allowedcontacts = $maintrow['supportedcontacts'];
-    if($allowedcontacts == 0) $allowedcontacts = 'Unlimited';
+
 
     $sql  = "SELECT contacts.forenames, contacts.surname, supportcontacts.contactid AS contactid FROM supportcontacts, contacts ";
     $sql .= "WHERE supportcontacts.contactid=contacts.id AND supportcontacts.maintenanceid='$id' ";
@@ -85,6 +85,7 @@ else
     {
         $numberofcontacts = mysql_num_rows($result);
         if($numcontacts > $allowedcontacts) echo "<p class='error'>There are more contacts linked than this contract should support</p>";
+        if($allowedcontacts == 0) $allowedcontacts = $strUnlimited;
         echo "<p align='center'>".sprintf($strUsedNofN, $numberofcontacts, $allowedcontacts);
         echo "<table align='center'>";
         $supportcount=1;
