@@ -217,7 +217,9 @@ else
             if ($shade=='shade1') $shade='shade2';
             else $shade='shade1';
     }
-    echo "<tr class=$shade><td><strong>$strTotal</strong></td><td colspan=5>".format_seconds($totalduration)."</td</tr>";
+    
+    echo "<tr class=$shade><td><strong>$strTotal:</strong></td><td colspan=5>".format_seconds($totalduration)."</td></tr>";
+    echo "<tr class=$shade><td><strong>Exact:</strong></td><td colspan=5>".seconds_to_string($totalduration)."</td></tr>";
     echo "</table>\n";
 }
 else
