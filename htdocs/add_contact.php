@@ -60,7 +60,7 @@ if (empty($submit))
     echo "<tr><th>{$strAddress}:</th><td><label>";
     html_checkbox('dataprotection_address', 'No');
     echo " {$strAddress} {$strDataProtection}</label></td></tr>\n";
-    echo "<tr><th></th><td><label><input type='checkbox' name='usesiteaddress' value='yes' onclick='togglecontactaddress();' /> {$strSpecifiyAddress}</label></td></tr>\n";
+    echo "<tr><th></th><td><label><input type='checkbox' name='usesiteaddress' value='yes' onclick='togglecontactaddress();' /> {$strSpecifyAddress}</label></td></tr>\n";
     echo "<tr><th>{$strAddress1}:</th><td><input maxlength='255' name='address1' size='35' disabled='disabled' /></td></tr>\n";
     echo "<tr><th>{$strAddress2}:</th><td><input maxlength='255' name='address2' size='35' disabled='disabled' /></td></tr>\n";
     echo "<tr><th>{$strCity}:</th><td><input maxlength='255' name='city' size='35' disabled='disabled' /></td></tr>\n";

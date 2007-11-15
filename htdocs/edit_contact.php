@@ -93,7 +93,7 @@ elseif ($action == "edit" && isset($contact))
           $extraattributes = "disabled='disabled' ";
         }
         echo "/> ";
-        echo "{$strSpecifiyAddress}</td></tr>\n";
+        echo "{$strSpecifyAddress}</td></tr>\n";
         echo "<tr><th>{$strAddress1}:</th><td><input maxlength='255' name='address1' size='40' value=\"".stripslashes($contactrow['address1'])."\" {$extraattributes} /></td></tr>\n";
         echo "<tr><th>{$strAddress2}:</th><td><input maxlength='255' name='address2' size='40' value=\"".stripslashes($contactrow['address2'])."\" {$extraattributes} /></td></tr>\n";
         echo "<tr><th>{$strCity}:</th><td><input maxlength=255' name='city' size='40' value=\"".stripslashes($contactrow['city'])."\" {$extraattributes} /></td></tr>\n";
