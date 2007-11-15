@@ -163,9 +163,9 @@ switch ($action)
             $updatehtml = "Update created from activity <a href=\"tasks.php?incident={$incident}\">{$id}</a><br />Activity started at: {$startdate}<br /><br />";
             for($i = $numnotes-1; $i >= 0; $i--)
             {
-                $updatehtml .= "<strong>".readable_date(mysql2date($notesarray[$i]->timestamp))."</strong><br />{$notesarray[$i]->bodytext}<br /><br />";
+                $updatehtml .= "[b]".readable_date(mysql2date($notesarray[$i]->timestamp))."[/b]<br />{$notesarray[$i]->bodytext}<br /><br />";
             }
-            $updatehtml .= "Activity completed at {$enddate}, duration was: ".format_seconds($duration);
+            $updatehtml .= "Activity completed at {$enddate}, duration was: [b]".format_seconds($duration)."[/b]";
 
             //create update
             $sql = "INSERT INTO updates (incidentid, userid, type, bodytext, timestamp, duration) ";
