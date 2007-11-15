@@ -5277,7 +5277,8 @@ function quick_update($incidentid, $text)
 
 }
 
-function time_dropdown($name, $selected)
+
+function time_dropdown($name)
 {
     $html = "<select name='$name'>";
     for($hours = 0; $hours < 24; $hours++)
