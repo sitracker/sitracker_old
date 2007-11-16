@@ -232,6 +232,6 @@ else
     else echo "No public tasks";
     echo "</p>";
 }
-if($mode == 'incident') echo "<p align='center'><a href='add_task.php?incident={$id}'>{$strAddActivity}</a></p>";
+if($mode == 'incident') echo "<p align='center'><a href='add_task.php?incident={$id}'>{$strStartNewActivity}</a></p>";
 else echo "<p align='center'><a href='add_task.php'>{$strAddTask}</a></p>";
 ?>

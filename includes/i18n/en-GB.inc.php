@@ -5,8 +5,10 @@ $languagestring='English (GB)';
 $i18ncharset='UTF-8';
 
 // list of strings (Alphabetical - ABCDEFGHIJKLMNOPQRSTUVWXYZ 0123456789)
+# e.g. About this site, i.e. more information
 $strAbout = 'About';
 $strAbsentSick = 'Absent Sick';
+# e.g. Accepting incidents
 $strAccepting = 'Accepting';
 $strActionNeeded = 'Action Needed';
 $strActionPlan = 'Action Plan';
@@ -18,9 +20,8 @@ $strActivity = 'Activity';
 $strActivityAdded = 'Activity Added';
 $strActivityList = 'Activity List';
 $strActivityMarkedCompleteSuccessfully = 'Activity Marked Complete Successfully';
+# i.e. Create, New
 $strAdd = 'Add';
-$strAddActivity = 'Add Activity';
-$strAddContact = 'Add Contact';
 $strAddContract = 'Add Contract';
 $strAddContractConfirm = 'Are you sure you want to add this contact?';
 $strAdded = 'Added';
@@ -36,6 +37,7 @@ $strAddress = 'Address';
 $strAddress1 = 'Address1';
 $strAddress2 = 'Address2';
 $strAddServiceLevel = 'Add Service Level';
+# i.e. Physical site
 $strAddSite = 'Add Site';
 $strAddSiteSupportIncident = 'Add Site Support Incident';
 $strAddSkill = 'Add Skill';
@@ -47,6 +49,7 @@ $strAdminContact = 'Admin Contact';
 $strAdvanced = 'Advanced';
 $strAfternoon = 'Afternoon';
 $strAge = 'Age';
+# e.g. 4 hours ago
 $strAgo = '%s ago';
 $strAll = 'All';
 $strAllClosed = 'All Closed';
@@ -54,7 +57,7 @@ $strAllDay = 'all day';
 $strAllOpen = 'All Open';
 $strAllSiteContactsSupported = 'All of this site\'s contacts are supported';
 $strAlternative = 'Alternative';
-# am = before noon
+# i.e. before noon
 $strAM = 'am';
 $strAnswer = 'Answer';
 $strApproveHolidays = 'Approve Holidays';
@@ -88,20 +91,25 @@ $strChase = 'Chase';
 $strChased = 'Chased';
 $strChooseLanguage = 'Please choose your language';
 $strCity = 'City';
+# e.g. close an incidents
 $strClose = 'Close';
+# e.g. incidents is closed
 $strClosed = 'Closed';
 $strCloseWindow = 'Close Window';
 $strClosureRequested = 'Closure Requested';
 $strClosureRequestForIncident = 'Closure request for Incident';
 $strCollapseData = 'Collapse Data';
 $strConfirmNewPassword = 'Confirm New Password';
+# noun, he is a contact
 $strContact = 'Contact';
 $strContactAddedSuccessfully = 'Contact Added Successfully';
 $strContinue = 'Continue';
 $strContactDetails = 'Contact Details';
 $strContactRecordExists = 'A contact record already exists with that Surname and Email address';
 $strContacts = 'Contacts';
+# e.g. 5 contacts
 $strContactsMulti = '%d Contacts';
+# i.e. legal agreement
 $strContract = 'Contract';
 $strContractAreYouSure = 'This incident will be logged against the customers CONTRACT. Are you sure you want to continue?';
 $strContractID = 'Contract ID';
@@ -111,9 +119,11 @@ $strControlPanel = 'Control Panel';
 $strComplete = 'Complete';
 $strCompleted = 'Completed';
 $strCompletion = 'Completion';
+# e.g. film credits
 $strCredits = 'Credits';
 $strCriteria = 'Criteria';
 $strCritical = 'Critical';
+$strCritical = 'Critical Priority';
 $strCustomer = 'Customer';
 $strCustomerFeedback = 'Customer Feedback';
 $strCustomers = 'Customers';
@@ -129,9 +139,10 @@ $strCustomerImpact = 'Customer Impact';
 $strCustomerImpactEngineerText = 'How many users are affected by this issue?  Is this an issue of downtime or a minor niggle?  Does the issue prevent people from working?';
 $strCustomerImpactCustomerText = 'How many users are affected by this issue? Is this an issue of downtime or a minor niggle? Does the issue prevent people from working?';
 $strCustomerRequestedClosure = 'Customer Requested Incident Closure';
-
+# i.e. place for widgets
 $strDashboard = 'Dashboard';
 $strDataProtection = 'Data Protection';
+# i.e. 25th December
 $strDate = 'Date';
 $strDatesNotYetApproved = 'Dates not yet approved';
 $strDay = 'Day';
@@ -151,8 +162,11 @@ $strDepartment = 'Department';
 $strDescription = 'Description';
 $strDetails = 'Details';
 $strDetailsAndLog = 'Details and Log';
+# i.e. not available
 $strDisabled = 'Disabled';
+# i.e. make it go away
 $strDismiss = 'Dismiss';
+# i.e. show
 $strDisplay = 'Display';
 $strDisplayPreferences = 'Display Preferences';
 $strDistribution = 'Distribution';
@@ -164,6 +178,7 @@ $strDraftLastSaved = 'Draft last saved';
 $strDueDate = 'Due Date';
 $strDuration = 'Duration';
 
+# verb, i.e. to change
 $strEdit = 'Edit';
 $strEditContact = 'Edit Contact';
 $strEditContract = 'Edit Contract';
@@ -202,6 +217,7 @@ $strEscalatedIncidents = 'Escalated Incidents';
 $strEscalation = 'Escalation';
 $strEscalationPaths = 'Escalation Paths';
 $strEvent = 'Event';
+$strExact = 'Exact';
 $strExternalEmail = 'External Email';
 $strExternalEngineersName = 'External Engineers Name';
 $strExternalID = 'External ID';
@@ -213,11 +229,15 @@ $strExternalEngineerCallDistribution = 'External Engineer Call Distribution';
 $strFax = 'Fax';
 $strFeedback = 'Feedback';
 $strFeedbackForms = 'Feedback Forms';
+# e.g. rss feeds
 $strFeeds = 'Feeds';
+# e.g. form fields
 $strFields = 'Fields';
+# e.g. computer files
 $strFiles = 'Files';
 $strFirstLogin = 'You are logged in as Admin which currently has a blank password, please change this now';
 $strFindContact = 'Find Contact';
+#e.g. for a person
 $strFor = 'for';
 $strForce = 'Force';
 $strForceTo = 'Force To';
@@ -227,6 +247,7 @@ $strForm = 'Form';
 # Short for 'Friday'
 $strFri = 'Fri';
 $strFriday = 'Friday';
+# e.g. from x to y
 $strFrom = 'From';
 $strFTPFilesDB = 'FTP Files DB';
 
@@ -244,6 +265,7 @@ $strHelpChar = '?';
 $strHelpContents = 'Help Contents';
 $strHelpToTranslate = 'This page is to help translators translate SiT!';
 $strHigh = 'High';
+$strHighPriority = 'High Priority';
 $strHigherPriority = 'Higher Priority';
 $strHoldingQueue = 'Holding Queue';
 $strHolidayList = 'Holiday List';
@@ -261,6 +283,7 @@ $strHolidayPlanner = 'Holiday Planner';
 $strHolidayRequests = 'Holiday Requests';
 $strHolidayType = 'Holiday Type';
 
+# i.e. short for identification; unique number
 $strID = 'ID';
 $strImportant = 'Important';
 $strInactive = 'Inactive';
@@ -329,6 +352,7 @@ $strLogIn = 'Log In';
 $strLogin = 'Login';
 $strLogout = 'Logout';
 $strLow = 'Low';
+$strLowPriority = 'Low Priority';
 
 $strMaintenance = 'Maintenance';
 $strManageDashboardComponents = 'Manage Dashboard Components';
@@ -342,6 +366,7 @@ $strMarkedComplete = 'Marked Complete';
 $strMarkedforclosureby = 'Marked for closure by %s';
 $strMarketingMailshot = 'Marketing Mailshot';
 $strMedium = 'Medium';
+$strMediumPriority = 'Medium Priority';
 $strMessage = 'Message';
 $strMessageTip = 'e.g. &quot;In france until Tue 22nd&quot;<br />Displayed on the \'view users\' page for the benefit of your colleagues.';
 $strMine = 'Mine';
@@ -477,7 +502,7 @@ $strQueue = 'Queue';
 $strRandomTip = 'Random Tip';
 $strRealName = 'Real Name';
 $strReassign = 'Reassign';
-$srtReassignedToBy = 'Reassigned to %s by %s';
+$strReassignedToBy = 'Reassigned to %s by %s';
 $strReassignText = 'Explain in detail why you are reassigning this incident and include instructions to the new owner as to what action should be taken next.  Please be as detailed as possible and include full descriptions of any work you have performed.';
 $strReceivedByEmail = 'This information was received in the email.  It is not editable.';
 $strRecent = 'Recent';
@@ -577,6 +602,7 @@ $strSortDescending = 'Sort Decending';
 $strSortResults = 'Sort Results';
 $strSpecifyAddress = 'Specify an address for this contact that is different to the site';
 $strStartDate = 'Start Date';
+$strStartNewActivity = 'Start New Activity';
 $strStatus = 'Status';
 $strStatusSummary = 'Status Summary';
 $strSubject = 'Subject';
