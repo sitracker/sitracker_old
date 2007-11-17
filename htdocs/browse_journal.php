@@ -16,7 +16,8 @@
 $permission=22; // administrate
 require('db_connect.inc.php');
 require('functions.inc.php');
-$title="Browse Journal";
+
+$title="Browse Journal"; // FIXME i18n browse journal
 // This page requires authentication
 require('auth.inc.php');
 
@@ -71,11 +72,11 @@ if ($journal_count >= 1)
 {
     echo "<table align='center'>";
     echo "<tr>";
-    echo colheader('userid','User',$sort, $order, $filter);
-    echo colheader('timestamp','Time/Date',$sort, $order, $filter);
-    echo colheader('event','Event');
-    echo colheader('action','Action');
-    echo colheader('type','Type');
+    echo colheader('userid',$strUser,$sort, $order, $filter);
+    echo colheader('timestamp',"{$strTime}/{$strDate}",$sort, $order, $filter);
+    echo colheader('event',$strEvent);
+    echo colheader('action',$strOperation);
+    echo colheader('type',$strType);
     echo "</tr>\n";
     $shade = 0;
     while ($journal = mysql_fetch_object($result))
@@ -112,7 +113,7 @@ if ($journal_count >= 1)
 }
 else
 {
-    echo "<p>No matching journal entries</p>";
+    echo "<p>{$strNoResults}</p>";
 }
 include('htmlfooter.inc.php');
 ?>

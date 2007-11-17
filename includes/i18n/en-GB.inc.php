@@ -91,9 +91,9 @@ $strChase = 'Chase';
 $strChased = 'Chased';
 $strChooseLanguage = 'Please choose your language';
 $strCity = 'City';
-# e.g. close an incidents
+# e.g. close an incident
 $strClose = 'Close';
-# e.g. incidents is closed
+# e.g. incident is closed
 $strClosed = 'Closed';
 $strCloseWindow = 'Close Window';
 $strClosureRequested = 'Closure Requested';
