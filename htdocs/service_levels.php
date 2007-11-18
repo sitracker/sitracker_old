@@ -11,8 +11,6 @@
 // Author: Ivan Lucas <ivanlucas[at]users.sourceforge.net>
 
 $permission=22; // Administrate
-$title = $strServiceLevels;
-
 require('db_connect.inc.php');
 require('functions.inc.php');
 
@@ -21,8 +19,10 @@ require('auth.inc.php');
 
 include('htmlheader.inc.php');
 
+$title = $strServiceLevels;
+
 echo "<h2><img src='{$CONFIG['application_webpath']}images/icons/{$iconset}/32x32/sla.png' width='32' height='32' alt='' /> ";
-echo "$title</h2>";
+echo "{$title}</h2>";
 
 echo "<p align='center'><a href='add_service_level.php'>{$strAddServiceLevel}</a></p>";
 
