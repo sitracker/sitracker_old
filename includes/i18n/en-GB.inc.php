@@ -5,6 +5,9 @@ $languagestring='English (GB)';
 $i18ncharset='UTF-8';
 
 // list of strings (Alphabetical - ABCDEFGHIJKLMNOPQRSTUVWXYZ 0123456789)
+
+$str0MeansUnlimited = '0 Means Unlimited';
+
 # e.g. About this site, i.e. more information
 $strAbout = 'About';
 $strAbsentSick = 'Absent Sick';
@@ -55,7 +58,7 @@ $strAll = 'All';
 $strAllClosed = 'All Closed';
 $strAllDay = 'all day';
 $strAllOpen = 'All Open';
-$strAllSiteContactsSupported = 'All of this site\'s contacts are supported';
+$strAllSiteContactsSupported = 'All of this sites\' contacts are supported';
 $strAlternative = 'Alternative';
 # i.e. before noon
 $strAM = 'am';
@@ -324,6 +327,7 @@ $strInvalidCredentials = 'Invalid username/password combination';
 $strJobTitle = 'Job Title';
 $strJumpTo = 'Jump to';
 $strJumpToIncident = 'Jump to Incident';
+$strJustNow = 'Just Now';
 
 $strKBSelectSectionsText = 'Enable any other relevant sections below by checking their box.';
 $strKeywords = 'Keywords';
@@ -488,6 +492,7 @@ $strPrivacy = 'Privacy';
 $strPrivate = 'Private';
 $strProblemDefinitionby = 'Problem definition by %s';
 $strProduct = 'Product';
+$strProductOnly = 'Product Only';
 $strProducts = 'Products';
 $strPublic = 'Public';
 $strPublicHoliday = 'Public Holiday';
