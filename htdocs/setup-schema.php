@@ -1547,8 +1547,6 @@ ALTER TABLE `users` ADD `var_i18n` VARCHAR( 20 ) NULL AFTER `var_notify_on_reass
 
 ALTER TABLE `updates` ADD `duration` INT NULL ;
 
-ALTER TABLE `updates` ADD `linktext` VARCHAR(50) NULL AFTER `bodytext`;
-
 INSERT INTO `rolepermissions` (`roleid`, `permissionid`, `granted`) VALUES (1, 70, 'true');
 INSERT INTO `userpermissions` (`userid`, `permissionid`, `granted`) VALUES (1, 68, 'true');
 INSERT INTO `userpermissions` (`userid`, `permissionid`, `granted`) VALUES (1, 69, 'true');
