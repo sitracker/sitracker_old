@@ -539,8 +539,8 @@ CREATE TABLE `maintenance` (
   KEY `productonly` (`productonly`)
 ) ENGINE=MyISAM;
 
---FIXME - decide what the last two fields should be by default
-INSERT INTO `maintenance`(id, site, product, reseller, expirydate. licence_quantity, licence_type, incident_quantity, incidents_used, notes, admincontact, productonly, term, servicelevelid, incidentpoolid) VALUES (1,1,1,2,1268179200,1,4,0,0,'This is an example contract.',1,'no','no',0,0);
+-- FIXME - decide what the last two fields should be by default
+INSERT INTO `maintenance`(id, site, product, reseller, expirydate, licence_quantity, licence_type, incident_quantity, incidents_used, notes, admincontact, productonly, term, servicelevelid, incidentpoolid) VALUES (1,1,1,2,1268179200,1,4,0,0,'This is an example contract.',1,'no','no',0,0);
 
 CREATE TABLE `notes` (
   `id` int(11) NOT NULL auto_increment,
@@ -1550,9 +1550,9 @@ ALTER TABLE `updates` ADD `duration` INT NULL ;
 ALTER TABLE `updates` ADD `linktext` VARCHAR(50) NULL AFTER `bodytext`;
 
 INSERT INTO `rolepermissions` (`roleid`, `permissionid`, `granted`) VALUES (1, 70, 'true');
-INSERT INTO `userpermissions` VALUES (1, 68, 'true');
-INSERT INTO `userpermissions` VALUES (1, 69, 'true');
-INSERT INTO `userpermissions` VALUES (1, 70, 'true');
+INSERT INTO `userpermissions` (`userid`, `permissionid`, `granted`) VALUES (1, 68, 'true');
+INSERT INTO `userpermissions` (`userid`, `permissionid`, `granted`) VALUES (1, 69, 'true');
+INSERT INTO `userpermissions` (`userid`, `permissionid`, `granted`) VALUES (1, 70, 'true');
 
 ALTER TABLE `users` ADD `lastseen` TIMESTAMP NOT NULL ;
 
