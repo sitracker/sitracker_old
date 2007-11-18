@@ -39,11 +39,12 @@ echo "{$maintrow['id']}</h3></td></tr>";
 echo "<tr><th>{$strStatus}:</th><td>";
 if ($maintrow['term']=='yes') echo "<strong>{$strTerminated}</strong>";
 else echo $strActive;
-if ($maintrow['expirydate']<$now) echo "<span class='expired'>, {$strExpired}</span>";
+if ($maintrow['expirydate']<$now AND $maintrow['expirydate'] != '-1') echo "<span class='expired'>, {$strExpired}</span>";
 echo "</td></tr>";
 echo "<tr><th>{$strSite}:</th><td><a href=\"site_details.php?id=".$maintrow['site']."\">".stripslashes($maintrow['sitename'])."</a></td></tr>";
 echo "<tr><th>{$strAdminContact}:</th><td><a href=\"contact_details.php?id=".$maintrow['admincontact']."\">".contact_realname($maintrow['admincontact'])."</a></td></tr>";
-echo "<tr><th>{$strReseller}:</th><td>".reseller_name($maintrow['reseller'])."</td></tr>";
+if($maintrow['reseller'] != '0')
+    echo "<tr><th>{$strReseller}:</th><td>".reseller_name($maintrow['reseller'])."</td></tr>";
 echo "<tr><th>{$strProduct}:</th><td>".product_name($maintrow['product'])."</td></tr>";
 echo "<tr><th>{$strIncidents}:</th>";
 echo "<td>";
@@ -52,10 +53,16 @@ if ($maintrow['incident_quantity']==0) echo "Unlimited Incidents ({$maintrow['in
 elseif ($maintrow['incident_quantity']==1) echo "{$maintrow['incident_quantity']} Incident ($incidents_remaining Remaining)";
 else echo "{$maintrow['incident_quantity']} Incidents ($incidents_remaining Remaining)";
 echo "</td></tr>";
-echo "<tr><th>{$strLicense}:</th><td>".$maintrow['licence_quantity'].' '.licence_type($maintrow['licence_type'])."</td></tr>";
+if($maintrow['licence_quantity'] != '0')
+    echo "<tr><th>{$strLicense}:</th><td>".$maintrow['licence_quantity'].' '.licence_type($maintrow['licence_type'])."</td></tr>";
 echo "<tr><th>{$strServiceLevel}:</th><td>".servicelevel_name($maintrow['servicelevelid'])."</td></tr>";
-echo "<tr><th>{$strExpiryDate}:</th><td>".date($CONFIG['dateformat_date'], $maintrow['expirydate'])."</td></tr>";
-echo "<tr><th>{$strNotes}:</th><td>".stripslashes($maintrow['maintnotes'])."</td></tr>";
+echo "<tr><th>{$strExpiryDate}:</th><td>";
+if($maintrow['expirydate'] == '-1')
+    echo "{$strUnlimited}";
+else
+    date($CONFIG['dateformat_date'], $maintrow['expirydate'])."</td></tr>";
+if($maintrow['maintnotes'] != '')
+    echo "<tr><th>{$strNotes}:</th><td>".stripslashes($maintrow['maintnotes'])."</td></tr>";
 echo "</table>";
 echo "<p align='center'><a href=\"edit_contract.php?action=edit&amp;maintid=$id\">{$strEditContract}</a></p>";
 

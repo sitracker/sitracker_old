@@ -81,8 +81,9 @@ if ($action == "edit")
         echo "<form id='maintform' name='maintform' action='{$_SERVER['PHP_SELF']}?action=update' method='post' onsubmit='return confirm_submit()'>\n";
         echo "<table align='center' class='vertical'>";
         echo "<tr><th>{$strSite}: <sup class='red'>*</sup></th><td>";
-        echo site_name($maint["site"]) ?></td></tr>
-        <?php
+        echo site_name($maint["site"]). "</td></tr>";
+	echo "<tr><th>{$strContacts}:</th><td><input value='amount' type='radio' name='contacts' checked>{$strLimitTo} <input size='2' value='0' name='amount'> {$strSupportedContacts} ({$str0MeansUnlimited})<br />";
+  	echo "<input type='radio' value='all' name='contacts'>{$strAllSiteContactsSupported}</td></tr>";
         echo "<tr><th>{$strProduct}: <sup class='red'>*</sup></th><td>";
         $productname=product_name($maint["product"]);
         if (user_permission($sit[2], 22))
@@ -93,24 +94,20 @@ if ($action == "edit")
         }
         else echo "{$productname}";
         echo "</td></tr>\n";
-        echo "<tr><th>{$strReseller}: <sup class='red'>*</sup></th><td>";
-        echo reseller_drop_down("reseller", $maint["reseller"]);
-        echo "</td></tr>\n";
-        echo "<tr><th>{$strLicenseQuantity}: <sup class='red'>*</sup></th>";
-        echo "<td><input maxlength='7' name='licence_quantity' size='5' value='{$maint['licence_quantity']}' /></td></tr>\n";
-        echo "<tr><th>{$strLicenseType}: <sup class='red'>*</sup></th><td>";
-        echo licence_type_drop_down("licence_type", $maint["licence_type"]);
-        echo "</td></tr>\n";
+
+
         echo "<tr><th>{$strExpiryDate}: <sup class='red'>*</sup></th>";
         echo "<td><input name='expirydate' size='10' value='";
         if ($maint['expirydate'] > 0) echo date('Y-m-d',$maint['expirydate']);
-        echo "' /> ".date_picker('maintform.expirydate')."</td></tr>\n";
+        echo "' /> ".date_picker('maintform.expirydate');
+        if($maint['expirydate'] == '-1')
+            echo "<input type='checkbox' checked name='noexpiry'> {$strUnlimited}";
+        else
+            echo "<input type='checkbox' name='noexpiry'> {$strUnlimited}";
+        echo "</td></tr>\n";
         echo "<tr><th>{$strServiceLevel}:</th><td>";
         echo servicelevel_drop_down('servicelevelid',$maint['servicelevelid'], TRUE);
         echo "</td></tr>\n";
-        echo "<tr><th>{$strIncidentPool}:</th>";
-        $incident_pools = explode(',', "Unlimited,{$CONFIG['incident_pools']}");
-        echo "<td>".array_drop_down($incident_pools,'incident_poolid',$maint['incident_quantity'])."</td></tr>";
         echo "<tr><th>{$strAdminContact}: <sup class='red'>*</sup></th><td>";
         echo contact_drop_down("admincontact", $maint["admincontact"], true);
         echo "</td></tr>\n";
@@ -120,10 +117,31 @@ if ($action == "edit")
         echo "<tr><th>{$strTerminated}:</th><td><input name='terminated' id='terminated' type='checkbox' value='yes'";
         if ($maint["term"] == "yes") echo " checked";
         echo " /></td></tr>\n";
+
+
+        echo "<tr><th></th><td><a href=\"javascript:toggleDiv('hidden');\">Advanced</a></td></tr>";
+
+        echo "<tbody id='hidden' style='display:none'>";
+
+        echo "<tr><th>{$strReseller}:</th><td>";
+        echo reseller_drop_down("reseller", $maint["reseller"]);
+        echo "</td></tr>\n";
+
+        echo "<tr><th>{$strLicenseQuantity}:</th>";
+        echo "<td><input maxlength='7' name='licence_quantity' size='5' value='{$maint['licence_quantity']}' /></td></tr>\n";
+        echo "<tr><th>{$strLicenseType}:</th><td>";
+        echo licence_type_drop_down("licence_type", $maint["licence_type"]);
+        echo "</td></tr>\n";
+
+        echo "<tr><th>{$strIncidentPool}:</th>";
+        $incident_pools = explode(',', "Unlimited,{$CONFIG['incident_pools']}");
+        echo "<td>".array_drop_down($incident_pools,'incident_poolid',$maint['incident_quantity'])."</td></tr>";
+
         // FIXME i18n
-        echo "<tr><th>Product Only:</th><td><input name='productonly' type='checkbox' value='yes' onclick='set_terminated();' ";
+        echo "<tr><th>{$strProductOnly}:</th><td><input name='productonly' type='checkbox' value='yes' onclick='set_terminated();' ";
         if ($maint["productonly"] == "yes") echo " checked";
         echo " /></td></tr>\n";
+        
         echo "</table>\n";
         echo "<input name='maintid' type='hidden' value='{$maintid}' />";
         echo "<p align='center'><input name='submit' type='submit' value='{$strSave}' /></p>";
@@ -149,6 +167,7 @@ else if ($action == "update")
     $incidentpoolid = cleanvar($_POST['incidentpoolid']);
     $expirydate = strtotime($_REQUEST['expirydate']);
     $product = cleanvar($_POST['product']);
+    if($_REQUEST['noexpiry'] == 'on') $expirydate = '-1';
 
     // Update maintenance
     $errors = 0;
