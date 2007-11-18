@@ -145,7 +145,7 @@ if($sit[0] != '')
             {
                 $notice->text = str_replace('$strSitUpgraded', sprintf($strSitUpgraded, $CONFIG['application_shortname'], "v{$application_version} {$application_revision}"), $notice->text);
             }
-            //critical error
+            $notice->text = bbcode($notice->text);
             if($notice->type == $CONFIG['CRITICAL_NOTICE_TYPE'])
             {
                 echo "<div class='error'><p class='error'>{$notice->text}";

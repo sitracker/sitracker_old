@@ -20,14 +20,23 @@ $action = cleanvar($_REQUEST['action']);
 if($action == 'new')
 {
     include('htmlheader.inc.php');
-    echo "<h2>{$strPostNewNotices}</h2>";
-    echo "<p align='center'>This page allows you to post a new global notice. BB code is allowed and useful variables are shown below.</p>";
-    echo "<table align='center'><tr><th>{$strVariable}</th><th>{$strValue}</th></tr>";
-    echo '<tr><td>$CONFIG[\'application_name\']</td><td>'.$CONFIG['application_name'].'</td></tr>';
-    echo '<tr><td>$CONFIG[\'application_shortname\']</td><td>'.$CONFIG['application_shortname'].'</td></tr>';
+    echo "<h2>{$strNotices}</h2>";
+    echo "<p align='center'>{$strNoticesBlurb}</p>";
+    echo "<table align='center'><tr><th>{$strCode}</th><th>{$strOutput}</th></tr>";
+    echo "<tr><th>[b][/b]</th><td>".bbcode("[b]Bold[/b]")."</td></tr>";
+    echo "<tr><th>[i][/i]</th><td>".bbcode("[i]Italic[/i]")."</td></tr>";
+    echo "<tr><th>[u][/u]</th><td>".bbcode("[u]Underline[/u]")."</td></tr>";
+    echo "<tr><th>[quote][/quote]</th><td>".bbcode("[quote]Quote[/quote]")."</td></tr>";
+    echo "<tr><th>[quote=][/quote]</th><td>".bbcode("[quote=Quote]Quote[/quote]")."</td></tr>";
+    echo "<tr><th>[url][/url]</th><td>".bbcode("[url]http://url.com[/url]")."</td></tr>";
+    echo "<tr><th>[url=][/url]</th><td>".bbcode("[url=http://url.com]URL[/url]")."</td></tr>";
+    echo "<tr><th>[img][/img]</th><td>".bbcode("[img]http://sitdemo.salfordsoftware.co.uk/images/sit_favicon.png[/img]")."</td></tr>";
+    echo "<tr><th>[color=][/color]</th><td>".bbcode("[color=red]Red[/color]")."</td></tr>";
+    echo "<tr><th>[size=][/size]</th><td>".bbcode("[size=12]Size 12[/size]")."</td></tr>";
+    echo "<tr><th>[code][/code]</th><td>".bbcode("[code]echo 'code';[/code]")."</td></tr>";
+    echo "<tr><th>[hr]</th><td>".bbcode("[hr]")."</td></tr>";
     echo "</table>";
-    echo "<div align='center'><form action='{$_SERVER[PHP_SELF]}?action=post' method='post'>";
-    echo "<h3>{$strNotice}</h3>";
+    echo "<div align='center'><form action='{$_SERVER[PHP_SELF]}?action=post' method='post'><br /><br />";
     echo "<textarea cols='60' rows='4' name='text'></textarea><br />";
     echo "<input type='submit' value='{$strSave}' />";
     echo "</form></div>";
@@ -91,10 +100,13 @@ else
     while($notice = mysql_fetch_object($result))
     {
         echo "<tr class='$shade'><td>{$notice->id}</td><td>{$notice->timestamp}</td>";
-        echo "<td>".stripslashes($notice->text)."</td>";
+        echo "<td>".stripslashes(bbcode($notice->text))."</td>";
         echo "<td>";
         // Don't allow deleting system messages
-        if ($type != 1) echo "<a href='{$_SERVER[PHP_SELF]}?action=delete&amp;id={$notice->id}'>{$strDelete}</a>";
+        if(!in_array($notice->id, $CONFIG['permanent_notices']))
+                echo "<a href='{$_SERVER[PHP_SELF]}?action=delete&amp;id={$notice->id}'>{$strDelete}</a>";
+        else
+            echo $strDelete;
         echo "</td></tr>\n";
         if ($shade=='shade1') $shade='shade2';
         else $shade='shade1';
