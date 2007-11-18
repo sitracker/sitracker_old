@@ -141,11 +141,12 @@ if($sit[0] != '')
         while($notice = mysql_fetch_object($noticeresult))
         {
             //check for the two warning types, TODO: make this better
-            //if($notice->text == '$strFirstLogin') $notice->text = $strFirstLogin;
-            $notice->text = str_replace('$strSitUpgraded', sprintf($strSitUpgraded, $CONFIG['application_shortname'], "v{$application_version} {$application_revision}"), $notice->text);
-            $notice->text = str_replace('$strSitUpgradedLink', $strSitUpgradedLink, $notice->text);
+            if($notice->id == $CONFIG['SIT_UPGRADED_NOTICE'])
+            {
+                $notice->text = str_replace('$strSitUpgraded', sprintf($strSitUpgraded, $CONFIG['application_shortname'], "v{$application_version} {$application_revision}"), $notice->text);
+            }
             //critical error
-            if($notice->type == '1')
+            if($notice->type == $CONFIG['CRITICAL_NOTICE_TYPE'])
             {
                 echo "<div class='error'><p class='error'>{$notice->text}";
                 if($notice->resolutionpage) $redirpage = $CONFIG['application_webpath'].$notice->resolutionpage;
