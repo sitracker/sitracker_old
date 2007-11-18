@@ -42,26 +42,37 @@ if ($action == "showform" OR $action=='')
     echo "<form name='addcontract' action='{$_SERVER['PHP_SELF']}?action=add' method='post' onsubmit='return confirm_submit();'>";
     echo "<table align='center' class='vertical'>";
     echo "<tr><th>{$strSite}: <sup class='red'>*</sup></th><td>".site_drop_down("site", $siteid)." </td></tr>\n";
-    echo "<tr><th>{$strContacts}:</th><td><input value='amount' type='radio' name='contacts' checked>Limit to <input size='2' value='0' name='amount'> supported contacts (0 means unlimited)<br />";
-    echo "<input type='radio' value='all' name='contacts'>All site contacts are to be supported</td></tr>";
-    echo "<tr><th>{$strProduct}: <sup class='red'>*</sup></th><td>".product_drop_down("product", 0)."</td></tr>\n";
-    echo "<tr><th>{$strReseller}: <sup class='red'>*</sup></th><td>";
+    echo "<tr><th>{$strContacts}:<sup class='red'>*</sup></th><td><input value='amount' type='radio' name='contacts' checked>{$strLimitTo} <input size='2' value='0' name='amount'> {$strSupportedContacts} ({$str0MeansUnlimited})<br />";
+     echo "<input type='radio' value='all' name='contacts'>{$strAllSiteContactsSupported}</td></tr>";
+     echo "<tr><th>{$strProduct}: <sup class='red'>*</sup></th><td>".product_drop_down("product", 0)."</td></tr>\n";
+    echo "<tr><th>{$strExpiryDate}: <sup class='red'>*</sup></th>";
+    echo "<td><input name='expiry' size='10' /> ".date_picker('addcontract.expiry')." <input type='checkbox' name='noexpiry'> {$strUnlimited}</td></tr>\n";
+    echo "<tr><th>{$strServiceLevel}:</th><td>".servicelevel_drop_down('servicelevelid', 1, TRUE)."</td></tr>\n";
+
+    echo "<tr><th>{$strAdminContact}: <sup class='red'>*</sup></th><td>".contact_drop_down("admincontact", 0, true)."</td></tr>\n";
+    echo "<tr><th>{$strNotes}:</th><td><textarea cols='40' name='notes' rows='5'></textarea></td></tr>\n";
+
+    echo "<tr><th></th><td><a href=\"javascript:toggleDiv('hidden');\">Advanced</a></td></tr>";
+
+    echo "<tbody id='hidden' style='display:none'>";
+
+    echo "<tr><th>{$strReseller}:</th><td>";
     reseller_drop_down("reseller", 0);
     echo "</td></tr>\n";
-    echo "<tr><th>{$strLicenseQuantity}: <sup class='red'>*</sup></th><td><input value=0 maxlength='7' name='licence_quantity' size='5' />";
+
+    echo "<tr><th>{$strLicenseQuantity}:</th><td><input value=0 maxlength='7' name='licence_quantity' size='5' />";
     echo " (0 means unlimited)</td></tr>\n";
-    echo "<tr><th>{$strLicenseType}: <sup class='red'>*</sup></th><td>";
+
+    echo "<tr><th>{$strLicenseType}:</th><td>";
     licence_type_drop_down("licence_type", 0);
     echo "</td></tr>\n";
-    echo "<tr><th>{$strExpiryDate}: <sup class='red'>*</sup></th>";
-    echo "<td><input name='expiry' size='10' /> ".date_picker('addcontract.expiry')."</td></tr>\n";
-    echo "<tr><th>{$strServiceLevel}:</th><td>".servicelevel_drop_down('servicelevelid', 1, TRUE)."</td></tr>\n";
+
     echo "<tr><th>{$strIncidentPool}:</th>";
     $incident_pools = explode(',', "Unlimited,{$CONFIG['incident_pools']}");
     echo "<td>".array_drop_down($incident_pools,'incident_poolid',$maint['incident_quantity'])."</td></tr>";
-    echo "<tr><th>{$strAdminContact}: <sup class='red'>*</sup></th><td>".contact_drop_down("admincontact", 0, true)."</td></tr>\n";
-    echo "<tr><th>{$strNotes}:</th><td><textarea cols='40' name='notes' rows='5'></textarea></td></tr>\n";
-    echo "<tr><th>Product Only:</th><td><input name='productonly' type='checkbox' value='yes' /></td></tr>\n"; // FIXME i18n product only
+
+    echo "<tr><th>{$strProductOnly}:</th><td><input name='productonly' type='checkbox' value='yes' /></td></tr></tbody>\n";
+    
     echo "</table>\n";
     echo "<p align='center'><input name='submit' type='submit' value=\"{$strAddContract}\" /></p>";
     echo "</form>";
@@ -83,6 +94,7 @@ elseif ($action == "add")
     $productonly = cleanvar($_REQUEST['productonly']);
     $term = cleanvar($_REQUEST['term']);
     $contacts = cleanvar($_REQUEST['contacts']);
+    if($_REQUEST['noexpiry'] == 'on') $expirydate = '-1';
     
     $allcontacts = 'No';
     if($contacts == 'amount') $amount = cleanvar($_REQUEST['amount']);
@@ -105,24 +117,6 @@ elseif ($action == "add")
         $errors = 1;
         $errors_string .= "<p class='error'>You must select a product</p>\n";
     }
-    // check for blank reseller
-    if ($reseller == 0)
-    {
-        $errors = 1;
-        $errors_string .= "<p class='error'>You must select a reseller</p>\n";
-    }
-    // check for blank licence quantity
-    if ($licence_quantity == "")
-    {
-        $errors = 1;
-        $errors_string .= "<p class='error'>You must enter a licence quantity</p>\n";
-    }
-    // check for blank licence type
-    if ($licence_type == 0)
-    {
-        $errors = 1;
-        $errors_string .= "<p class='error'>You must select a licence type</p>\n";
-    }
     // check for blank admin contact
     if ($admincontact == 0)
     {
@@ -141,7 +135,7 @@ elseif ($action == "add")
         $errors = 1;
         $errors_string .= "<p class='error'>You must enter an expiry date</p>\n";
     }
-    if ($expirydate < $now)
+    if ($expirydate < $now AND $expirydate != -1)
     {
         $errors = 1;
         $errors_string .= "<p class='error'>Expiry date cannot be in the past</p>\n";

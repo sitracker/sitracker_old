@@ -138,7 +138,7 @@ elseif ($action=='findcontact')
             $incidents_remaining = $contactrow['incident_quantity'] - $contactrow['incidents_used'];
 
             $str = "<tr class='$class'>";
-            if ($contactrow['expirydate']<$now) $str .=  "<td>{$GLOBALS['strExpired']}</td>";
+            if ($contactrow['expirydate']<$now AND $contactrow['expirydate'] != '-1') $str .=  "<td>{$GLOBALS['strExpired']}</td>";
             elseif ($contactrow['term']=='yes') $str .=  "<td>{$GLOBALS['strTerminated']}</td>";
             elseif ($contactrow['incident_quantity'] >= 1 AND $contactrow['incidents_used'] >= $contactrow['incident_quantity'])
                 $str .=  "<td class='expired'>{$GLOBALS['strZeroRemaining']} ({$contactrow['incidents_used']}/{$contactrow['incident_quantity']} {$strUsed})</td>";
@@ -153,7 +153,10 @@ elseif ($action=='findcontact')
             $str .=  '<td>'.stripslashes($contactrow['name']).'</td>';
             $str .=  '<td><strong>'.$contactrow['maintid'].'</strong>&nbsp;'.$contactrow['productname'].'</td>';
             $str .=  '<td>'.servicelevel_id2tag($contactrow['servicelevelid']).'</td>';
-            $str .=  '<td>'.date($CONFIG['dateformat_date'], $contactrow['expirydate']).'</td>';
+            if($contactrow['expirydate'] == '-1')
+                $str .= "<td>{$GLOBALS['strUnlimited']}</td>";
+            else
+                $str .=  '<td>'.date($CONFIG['dateformat_date'], $contactrow['expirydate']).'</td>';
             $str .=  "</tr>\n";
             return $str;
         }
