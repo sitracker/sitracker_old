@@ -36,7 +36,7 @@ switch ($_REQUEST['action'])
         {
             // need to insert
             $sql = "INSERT INTO feedbackforms (name,introduction,thanks,description) VALUES ";
-            $sql .= "('{$name}','[$introduction}','{$thanks}','{$description}')";
+            $sql .= "('{$name}','{$introduction}','{$thanks}','{$description}')";
             mysql_query($sql);
             if (mysql_error()) trigger_error(mysql_error(),E_USER_ERROR);
             $formid = mysql_insert_id();

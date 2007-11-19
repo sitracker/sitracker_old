@@ -117,21 +117,21 @@ switch($mode)
                         {
                             $html .= "<p align='center'>".stripslashes($row->result)."</p>";
                         }
-                        else $html .= "<p align='center'><em>No answer given</em></p>";
+                        else $html .= "<p align='center'><em>{$strNoAnswerGiven}</em></p>";
                     }
                 }
             }
 
-            $html .= "<p align='center'>Positivity: {$total_average} <strong>({$total_percent}%)</strong></p>";
+            $html .= "<p align='center'>{$strPositivity}: {$total_average} <strong>({$total_percent}%)</strong></p>";
             $surveys+=$numresults;
 
             //if ($total_average>0)
             echo $html;
             echo "\n\n\n<!-- $surveys -->\n\n\n";
         }
-        else echo "<p class='error'>No response found</p>";
+        else echo "<p class='error'>{$strNoResponseFound}</p>";
 
-        echo "<p align='center'><a href='{$_SERVER['PHP_SELF']}'>Back to list of feedback</p>";
+        echo "<p align='center'><a href='{$_SERVER['PHP_SELF']}'>{$strBackToListOfFeedback}</p>";
     break;
 
     default:
@@ -143,8 +143,8 @@ switch($mode)
         {
             // no feedback forms
             echo "<h3>{$title}</h3>";
-            echo "<p class='error' align='center'>No feedback forms defined</p>";
-            echo "<p align='center'><a href='edit_feedback_form.php?action=new'>Create new form</a></p>";
+            echo "<p class='error' align='center'>{$strNoFeedbackFormsDefined}</p>";
+            echo "<p align='center'><a href='edit_feedback_form.php?action=new'>{$strCreateNewForm}</a></p>";
         }
         else
         {
@@ -173,17 +173,17 @@ switch($mode)
 
             if (!empty($formid))
             {
-                if ($completed=='no') echo "<h3>Feedback requested but not yet received for form: $formid</h3>";
-                else echo "<h3>Responses to Feedback Form: $formid</h3>";
-                echo "<p align='center'><a href='edit_feedback_form.php?formid={$formid}'>Edit this form</a></p>";
+                if ($completed=='no') echo "<h3>{$strFeedbackRequested}: $formid</h3>";
+                else echo "<h3>{$strResponsesToFeedbackForm}: $formid</h3>";
+                echo "<p align='center'><a href='edit_feedback_form.php?formid={$formid}'>{$strEdit}</a></p>";
             }
-            else echo "<h3>Responses to all Feedback Forms</h3>";
+            else echo "<h3>{$strResponsesToAllFeedbackForms}</h3>";
 
             if ($countrows >= 1)
             {
                 echo "<table summary='feedback forms' width='95%' align='center'>";
                 echo "<tr>";
-                echo colheader('created','Feedback Requested',$sort, $order, $filter);
+                echo colheader('created',$strFeedbackRequested, $sort, $order, $filter);
                 echo colheader('contactid',$strContact,$sort, $order, $filter);
                 echo colheader('incidentid',$strIncident,$sort, $order, $filter);
                 echo "<th>{$strOperation}</th>";
@@ -224,7 +224,7 @@ switch($mode)
                     }
                     else
                     {
-                        echo "<a href='{$_SERVER['PHP_SELF']}?mode=viewresponse&amp;responseid={$resp->respid}'>View response</a>";
+                        echo "<a href='{$_SERVER['PHP_SELF']}?mode=viewresponse&amp;responseid={$resp->respid}'>{$strViewResponse}</a>";
                     }
                     echo "</td>";
                     echo "</tr>\n";
@@ -235,21 +235,22 @@ switch($mode)
             }
             else
             {
-                echo "<p class='error' align='center'>No feedback responses</p>";
+                echo "<p class='error' align='center'>{$strNoResponseFound}</p>";
             }
             if ($completed=='no')
             {
                 $sql = "SELECT COUNT(id) FROM feedbackrespondents WHERE formid='{$formid}' AND completed='yes'";
                 $result = mysql_query($sql);
                 list($completedforms) = mysql_fetch_row($result);
-                if ($completedforms > 0) echo "<p align='center'>There are <a href='{$_SERVER['PHP_SELF']}'>{$completedforms} feedback forms</a> that have been returned already.</p>";
+                if ($completedforms > 0)
+                    echo "<p align='center'>".sprintf($strFeedbackFormsReturned, "<a href='{$_SERVER['PHP_SELF']}'>{$completedforms}</a>")."</p>";
             }
             else
             {
                 $sql = "SELECT COUNT(id) FROM feedbackrespondents WHERE formid='{$formid}' AND completed='no'";
                 $result = mysql_query($sql);
                 list($waiting) = mysql_fetch_row($result);
-                if ($waiting > 0) echo "<p align='center'>There are <a href='{$_SERVER['PHP_SELF']}?completed=no'>{$waiting} feedback forms</a> that have not been returned yet.</p>";
+                if ($waiting > 0) echo "<p align='center'>".sprintf($strFeedbackFormsWaiting, "<a href='{$_SERVER['PHP_SELF']}?completed=no'>{$waiting}")."</p>";
             }
         }
 }
