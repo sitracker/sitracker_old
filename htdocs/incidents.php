@@ -63,7 +63,7 @@ if (mysql_num_rows($epresult) >= 1)
 }
 
 // Generic bit of SQL, common to both queue types
-$selectsql = "SELECT incidents.id, escalationpath, externalid, title, owner, towner, priority, status, siteid, contacts.id AS contactid, forenames, surname, phone, email, incidents.maintenanceid, ";
+$selectsql = "SELECT incidents.id, escalationpath, externalid, title, owner, towner, priority, status, closingstatus, siteid, contacts.id AS contactid, forenames, surname, phone, email, incidents.maintenanceid, ";
 $selectsql .= "servicelevel, softwareid, lastupdated, timeofnextaction, ";
 $selectsql .= "(timeofnextaction - $now) AS timetonextaction, opened, ($now - opened) AS duration, closed, (closed - opened) AS duration_closed, type, ";
 $selectsql .= "($now - lastupdated) AS timesincelastupdate ";

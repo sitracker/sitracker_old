@@ -1770,7 +1770,7 @@ function closingstatus_name($id)
 {
     if ($id!='')
         $closingstatus = db_read_column('name', 'closingstatus', $id);
-    else $closingstatus = 'Incident Not Closed';
+    else $closingstatus = $GLOBALS['strUnknown'];
 
     return($closingstatus);
 }
