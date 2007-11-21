@@ -17,16 +17,31 @@ require('functions.inc.php');
 require('auth.inc.php');
 
 
-$sql = "SELECT type, id FROM dashboard_watch_incidents WHERE userid = {$sit[2]}";
+$sql = "SELECT type, id FROM dashboard_watch_incidents WHERE userid = {$sit[2]} ORDER BY type";
 $result = mysql_query($sql);
 if (mysql_error()) trigger_error(mysql_error(),E_USER_ERROR);
 
 
 if (mysql_num_rows($result) > 0)
 {
+    $header_printed = FALSE;
+    $previous = 0;
     while($obj = mysql_fetch_object($result))
     {
-        echo "<table align='center' style='width: 100%'>";
+        if($obj->type !=3 AND $previous == 3)
+        {
+            echo "</table>";
+        }
+
+        if($obj->type == 3 AND !$header_printed)
+        {
+            echo "<table align='center' style='width: 100%'>";
+        }
+        else if($obj->type != 3)
+        {
+            echo "<table align='center' style='width: 100%'>";
+        }
+
         switch($obj->type)
         {
             case '0': //Site
@@ -68,7 +83,12 @@ if (mysql_num_rows($result) > 0)
                 echo "</th></tr>";
 
                 break;
-
+            case '3': //incident
+                $sql = "SELECT incidents.id, incidents.title, incidents.status, incidents.servicelevel, incidents.maintenanceid, incidents.priority ";
+                $sql .= "FROM incidents ";
+                $sql .= "WHERE incidents.id = {$obj->id} ";
+                //$sql .= "AND incidents.status != 2 AND incidents.status != 7";
+                break;
             default:
                 $sql = '';
         }
@@ -79,12 +99,26 @@ if (mysql_num_rows($result) > 0)
             if (mysql_error()) trigger_error(mysql_error(),E_USER_ERROR);
             if(mysql_num_rows($iresult) > 0)
             {
-                echo "<tr>";
-                echo colheader('id', $GLOBALS['strID']);
-                echo colheader('title', $GLOBALS['strTitle']);
-                //echo colheader('customer', $GLOBALS['strCustomer']);
-                echo colheader('status', $GLOBALS['strStatus']);
-                echo "</tr>\n";
+                if($obj->type == 3 AND !$header_printed)
+                {
+                    echo "<tr>";
+                    echo colheader('id', $GLOBALS['strID']);
+                    echo colheader('title', $GLOBALS['strTitle']);
+                    //echo colheader('customer', $GLOBALS['strCustomer']);
+                    echo colheader('status', $GLOBALS['strStatus']);
+                    echo "</tr>\n";
+                    $header_printed = TRUE;
+                }
+                else if($obj->type != 3)
+                {
+                    echo "<tr>";
+                    echo colheader('id', $GLOBALS['strID']);
+                    echo colheader('title', $GLOBALS['strTitle']);
+                    //echo colheader('customer', $GLOBALS['strCustomer']);
+                    echo colheader('status', $GLOBALS['strStatus']);
+                    echo "</tr>\n";
+                }
+
                 $shade='shade1';
                 while ($incident = mysql_fetch_object($iresult))
                 {
@@ -104,7 +138,12 @@ if (mysql_num_rows($result) > 0)
             }
             else echo "<tr><td colspan='3'>{$GLOBALS['strNoOpenIncidents']}</td></tr>\n";
         }
-        echo "</table>\n";
+        if($obj->type == 3 AND !$header_printed)
+        {
+            echo "</table>\n";
+        }
+
+        $previous = $obj->type;
     }
 }
 else
