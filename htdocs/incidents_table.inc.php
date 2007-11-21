@@ -227,6 +227,7 @@ while ($incidents = mysql_fetch_array($result))
     {
         echo "<td align='center' valign='top'>";
         echo incidentstatus_name($incidents["status"]);
+        if ($incidents['status']==2) echo "<br />".closingstatus_name($incidents['closingstatus']);
         echo "</td>\n";
     }
     echo "<td align='center' valign='top'>";
