@@ -25,7 +25,7 @@ switch($action)
     case 'add':
         include('htmlheader.inc.php');
         $type = $_REQUEST['type'];
-        echo "<h2>Add new set of watched incidents</h2>";
+        echo "<h2>{$strWatchAddSet}</h2>";
         echo "<form action='{$_SERVER['PHP_SELF']}?action=do_add&type={$type}' method='post'>";
         echo "<table class='vertical'>";
         echo "<tr><td>";
@@ -62,10 +62,10 @@ switch($action)
         $result = mysql_query($sql);
         if (mysql_error()) trigger_error(mysql_error(),E_USER_ERROR);
 
-        if(!$result) echo "<p class='error'>Failed to add watch incident</p>";
+        if(!$result) echo "<p class='error'>{$strWatchAddFailed}</p>";
         else
         {
-            confirmation_page("2", "edit_watch_incidents.php", "<h2>Watch Incidents added</h2><h5>{$strPleaseWaitRedirect}...</h5>");
+            confirmation_page("2", "edit_watch_incidents.php", "<h2>{$strWatchIncidentsAdded}</h2><h5>{$strPleaseWaitRedirect}...</h5>");
         }
         break;
     case 'delete':
@@ -75,15 +75,15 @@ switch($action)
         $result = mysql_query($sql);
         if (mysql_error()) trigger_error(mysql_error(),E_USER_ERROR);
 
-        if(!$result) echo "<p class='error'>Delete watch failed</p>";
+        if(!$result) echo "<p class='error'>{$strWatchDeleteFailed}</p>";
         else
         {
-            confirmation_page("2", "edit_watch_incidents.php", "<h2>Watch incidents removal succeded</h2><h5>{$strPleaseWaitRedirect}...</h5>");
+            confirmation_page("2", "edit_watch_incidents.php", "<h2>{$strWatchIncidentsRemovalSucceded}</h2><h5>{$strPleaseWaitRedirect}...</h5>");
         }
         break;
     default:
         include('htmlheader.inc.php');
-        echo "<h2>Edit watched incidents</h2>";
+        echo "<h2>{$strEditWatchedIncidents}</h2>";
 
         echo "<table align='center'>";
         for($i = 0; $i < 4; $i++)
@@ -166,7 +166,7 @@ switch($action)
             }
             else
             {
-                echo "<tr><td colspan='2'>No watches set up for this type</td></tr>";
+                echo "<tr><td colspan='2'>{$strNoIncidentsBeingWatchOfType}</td></tr>";
             }
         }
         echo "</table>";
