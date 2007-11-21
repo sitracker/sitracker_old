@@ -13,10 +13,6 @@ function dashboard_watch_incidents($row,$dashboardid)
 {
     global $sit, $CONFIG, $iconset;
 
-    $sql = "SELECT type, id FROM dashboard_watch_incidents WHERE userid = {$sit[2]}";
-    $result = mysql_query($sql);
-    if (mysql_error()) trigger_error(mysql_error(),E_USER_ERROR);
-
     echo "<div class='windowbox' style='width: 95%' id='$row-$dashboardid'>";
     echo "<div class='windowtitle'><div style='float: right'><a href='edit_watch_incidents.php'>{$GLOBALS['strEdit']}</a></div><img src='{$CONFIG['application_webpath']}images/icons/{$iconset}/16x16/support.png' width='16' height='16' alt='' />"; printf($GLOBALS['strWatchIncidents'], user_realname($user,TRUE));
     echo "</div><div class='window' id='watch_incidents_windows'>";
