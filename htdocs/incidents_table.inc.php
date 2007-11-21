@@ -211,7 +211,7 @@ while ($incidents = mysql_fetch_array($result))
     echo "</a></td>";
 
     echo "<td valign='top'>";
-    echo stripslashes($incidents['forenames'].' '.$incidents['surname'])."<br />".htmlspecialchars($site)." </td>";
+    echo "<a class='info'><span>{$incidents['phone']}<br />{$incidents['email']}</span>".stripslashes($incidents['forenames'].' '.$incidents['surname'])."</a><br />".htmlspecialchars($site)." </td>";
 
     echo "<td align='center' valign='top' >";
     // Service Level / Priority
