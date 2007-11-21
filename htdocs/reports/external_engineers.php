@@ -19,17 +19,17 @@ include('db_connect.inc.php');
 include('functions.inc.php');
 require('auth.inc.php');
 
+include('htmlheader.inc.php');
 echo "<script type='text/javascript'>";
 ?>
 function incident_details_window_l(incidentid,second)
 {
-    URL = "<?php  echo $CONFIG['application_uriprefix'].$CONFIG['application_webpath'] ?>incident_details.php?id=" + incidentid + "&javascript=enabled";
+    URL = "<?php  echo $CONFIG['application_uriprefix'].$CONFIG['application_webpath'] ?>incident_details.php?id=" + incidentid + "&amp;javascript=enabled";
     window.open(URL, "sit_popup", "toolbar=yes,status=yes,menubar=no,scrollbars=yes,resizable=yes,width=700,height=600");
 }
 <?php
 echo "</script>";
 
-include('htmlheader.inc.php');
 echo "<h2>{$strExternalEngineerCallDistribution}</h2>";
 
 $sql = "SELECT id, name FROM escalationpaths";
