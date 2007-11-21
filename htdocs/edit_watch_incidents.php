@@ -44,6 +44,10 @@ switch($action)
                 echo "{$strEngineer}: ";
                 echo user_drop_down('id','',FALSE);
                 break;
+            case '3': //Incident
+                echo "{$strIncident}:";
+                echo "<input class='textbox' name='id' size='30' />";
+                break;
         }
 
         echo "</td><tr>";
@@ -81,14 +85,14 @@ switch($action)
         include('htmlheader.inc.php');
         echo "<h2>Edit watched incidents</h2>";
 
-        for($i = 0; $i < 3; $i++)
+        echo "<table align='center'>";
+        for($i = 0; $i < 4; $i++)
         {
             $sql = "SELECT * FROM dashboard_watch_incidents WHERE userid = {$sit[2]} AND type = {$i}";
 
             $result = mysql_query($sql);
             if (mysql_error()) trigger_error(mysql_error(),E_USER_ERROR);
 
-            echo "<table align='center'>";
             echo "<tr><td align='left'><strong>";
             switch($i)
             {
@@ -97,6 +101,8 @@ switch($action)
                 case 1: echo $strContacts;
                     break;
                 case 2: echo $strEngineers;
+                    break;
+                case 3: echo $strIncidents;
                     break;
             }
             echo "</strong></td><td align='right'>";
@@ -107,7 +113,9 @@ switch($action)
                     break;
                 case 1: echo $strAddContact;
                     break;
-                case 2: echo "Add Engineer";
+                case 2: echo $strAddUser;
+                    break;
+                case 3: echo $strAddIncident;
                     break;
             }
             echo "</a></td></tr>";
@@ -141,6 +149,14 @@ switch($action)
                             $iobj = mysql_fetch_object($iresult);
                             $name = stripslashes($iobj->realname);
                             break;
+                        case 3: //Incident
+                            $sql = "SELECT title FROM incidents WHERE id = {$obj->id}";
+                            $iresult = mysql_query($sql);
+                            if (mysql_error()) trigger_error(mysql_error(),E_USER_ERROR);
+                            $iobj = mysql_fetch_object($iresult);
+                            $name = "[{$obj->id}] ".stripslashes($iobj->title);
+                            break;
+
                     }
 
                     echo "<tr class='$shade'><td>{$name}</td><td><a href='{$_SERVER['PHP_SELF']}?type={$obj->type}&amp;id={$obj->id}&amp;action=delete'>{$strRemove}</a></td></tr>";
@@ -152,9 +168,8 @@ switch($action)
             {
                 echo "<tr><td colspan='2'>No watches set up for this type</td></tr>";
             }
-
-            echo "</table>";
         }
+        echo "</table>";
         include('htmlfooter.inc.php');
         break;
 
