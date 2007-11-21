@@ -70,42 +70,45 @@ elseif ($action == "edit")
         if (mysql_error()) trigger_error("MySQL Query Error ".mysql_error(), E_USER_ERROR);
         $emailtype = mysql_fetch_array($result);
         echo "<h2>{$strEdit} ".ucfirst($emailtype['type'])." Email Template</h2>";
-        echo "<h5>{$strMandatoryMarked} <sup class='red'>*</sup></h5>";
+        echo "<h5>".sprintf($strMandatoryMarked,"<sup class='red'>*</sup>")."</h5>";
         ?>
         <p align='center'>A list of special identifiers that can be used in these fields is given at the bottom of the page.</p>
         <form name='edittemplate' action="<?php echo $_SERVER['PHP_SELF'] ?>?action=update" method="post" onsubmit="return confirm_submit()">
 
         <table align='center' class='vertical'>
         <?php
-        echo "<tr><th>Template Name: <sup class='red'>*</sup></th><td>";
+        echo "<tr><th>{$strEmailTemplate}: <sup class='red'>*</sup></th><td>";
         echo "<input maxlength='50' name='name' size='35' value='{$emailtype['name']}' ";
         // if ($emailtype['type']=='system') echo "readonly='readonly' ";
         echo "/>";
         echo "</td></tr>\n";
-        ?>
-        <tr><th>Description: <sup class='red'>*</sup></th><td><input  name="description" size='50' value="<?php echo stripslashes($emailtype["description"]) ?>" /></td></tr>
-        <tr><th>&nbsp;</th><td>&nbsp;</td></tr>
-        <tr><th>'To' Field: <sup class='red'>*</sup></th><td><input maxlength='100' name="tofield" size='30' value="<?php echo stripslashes($emailtype["tofield"]) ?>" /></td></tr>
-        <tr><th>'From' Field: <sup class='red'>*</sup></th><td><input maxlength='100' name="fromfield" size='30' value="<?php echo stripslashes($emailtype["fromfield"]) ?>" /></td></tr>
-        <tr><th>'Reply To' Field: <sup class='red'>*</sup></th><td><input maxlength='100' name="replytofield" size='30' value="<?php echo stripslashes($emailtype["replytofield"]) ?>" /></td></tr>
-        <tr><th>'CC' Field:</th><td><input maxlength='100' name="ccfield" size='30' value="<?php echo stripslashes($emailtype["ccfield"]) ?>" /></td></tr>
-        <tr><th>'BCC' Field:</th><td><input maxlength='100' name="bccfield" size='30' value="<?php echo stripslashes($emailtype["bccfield"]) ?>" /></td></tr>
-        <tr><th>'Subject' Field:</th><td><input maxlength='255' name="subjectfield" size='50' value="<?php echo stripslashes($emailtype["subjectfield"]) ?>" /></td></tr>
-        <tr><th>Store in Log:</th><td><input type="checkbox" name="storeinlog" value="Yes" <?php if ($emailtype['storeinlog']=='Yes') echo "checked='checked'"; ?> /> Store the email in the incident log</td></tr>
-        <tr><th>Visibility:</th><td><input type="checkbox" name="cust_vis" value="yes" <?php if ($emailtype['customervisibility']=='show') echo "checked='checked'"; ?> /> Make the update to the incident log visible to the customer</td></tr>
-        </table>
-        <p>
-        Body Text<br />
-        <textarea name="bodytext" rows="20" cols="60"><?php echo stripslashes($emailtype["body"]); ?></textarea>
-        </p>
+        echo "<tr><th>{$strDescription}: <sup class='red'>*</sup></th><td><input  name='description' size='50' value=\"".stripslashes($emailtype["description"])."\" /></td></tr>\n";
+        echo "<tr><th>&nbsp;</th><td>&nbsp;</td></tr>";
+        echo "<tr><th>{$strTo}: <sup class='red'>*</sup></th><td><input maxlength='100' name='tofield' size='30' value=\"".stripslashes($emailtype["tofield"])."\" /></td></tr>\n";
+        echo "<tr><th>{$strFrom}: <sup class='red'>*</sup></th><td><input maxlength='100' name='fromfield' size='30' value=\"".stripslashes($emailtype["fromfield"])."\" /></td></tr>\n";
+        echo "<tr><th>{$strReplyTo}: <sup class='red'>*</sup></th><td><input maxlength='100' name='replytofield' size='30' value=\"".stripslashes($emailtype["replytofield"])."\" /></td></tr>\n";
+        echo "<tr><th>CC:</th><td><input maxlength='100' name='ccfield' size='30' value=\"".stripslashes($emailtype["ccfield"])."\" /></td></tr>\n";
+        echo "<tr><th>BCC:</th><td><input maxlength='100' name='bccfield' size='30' value=\"".stripslashes($emailtype["bccfield"])."\" /></td></tr>\n";
+        echo "<tr><th>{$strSubject}:</th><td><input maxlength='255' name='subjectfield' size='50' value=\"".stripslashes($emailtype["subjectfield"])."\" /></td></tr>\n";
+        echo "<tr><th></th><td><label><input type='checkbox' name='storeinlog' value='Yes' ";
+        if ($emailtype['storeinlog']=='Yes') echo "checked='checked'";
+        echo " /> {$strStoreInLog}</label>";
+        echo " &nbsp; (<input type='checkbox' name='cust_vis' value='yes' ";
+        if ($emailtype['customervisibility']=='show') echo "checked='checked'";
+        echo " /> {$strVisibleToCustomer})";
+        echo "</td></tr>";
+        echo "</table>";
+        echo "<p>{$strEmail}:<br />";
+        echo "<textarea name='bodytext' rows='20' cols='60'>".stripslashes($emailtype["body"])."</textarea>\n";
+        echo "</p>";
 
-        <?php
         echo "<p>";
         echo "<input name='type' type='hidden' value='{$emailtype['type']}' />";
         echo "<input name='id' type='hidden' value='{$id}' />";
-        echo "<input name='submit' type='submit' value='Update' />";
+        echo "<input name='submit' type='submit' value=\"{$strSave}\" />";
         echo "</p>\n";
-        if ($emailtype['type']=='user') echo "<p align='center'><a href='{$_SERVER['PHP_SELF']}?action=delete&id={$id}'>Delete this template</a></p>";
+        if ($emailtype['type']=='user') echo "<p align='center'><a href='{$_SERVER['PHP_SELF']}?action=delete&id={$id}'>{$strDelete}</a></p>";
+        // FIXME i18n email templates
         ?>
         <p align='center'>The following special identifiers can be used in these fields:</p>
         <table align='center' class='vertical'>
