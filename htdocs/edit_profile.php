@@ -267,6 +267,16 @@ elseif($mode=='save')
         $sql = "DELETE FROM usernotices WHERE userid={$sit[2]} and noticeid=2";
         @mysql_query($sql);
     }
+    // Check email address is unique (discount disabled accounts)
+    $sql = "SELECT COUNT(id) FROM users WHERE status > 0 AND email='$email'";
+    $result = mysql_query($sql);
+    if (mysql_error()) trigger_error(mysql_error(),E_USER_ERROR);
+    list($countexisting) = mysql_fetch_row($result);
+    if ($countexisting >= 1)
+    {
+        $errors++;
+        echo "<p class='error'>Email must be unique</p>\n";
+    }
     // update database if no errors
     if ($errors == 0)
     {
