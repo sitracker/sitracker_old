@@ -49,7 +49,7 @@ else $adminuser=FALSE;
 list($dtype, $dlength, $dapproved, $dapprovedby)=user_holiday($user, 0, $year, $month, $day, FALSE);
 
 // allow approver (or admin) to unbook holidays already approved
-if ($length=='0' AND ($approver==TRUE AND $dapprovedby=$sit[2]) OR $adminuser==TRUE)
+if ($length=='0' AND ($approver==TRUE AND ($dapprovedby=$sit[2] OR $adminuser==TRUE)))
 {
     // Delete the holiday
     $sql = "DELETE FROM holidays ";
@@ -66,7 +66,7 @@ else
     if (empty($dapproved))
     {
         // Only allow these types to be modified
-        if ($dtype==1 || $dtype==3 || $dtype==4)
+        if ($dtype==HOL_HOLIDAY || $dtype==HOL_WORKING_AWAY || $dtype==HOL_TRAINING)
         {
             if ($length=='0')
             {
