@@ -55,7 +55,7 @@ switch ($action)
         {
             if ($direction=='lr') echo "<h2>Link {$linktype->lrname}</h2>";
             elseif ($direction=='rl') echo "<h2>Link {$linktype->rlname}</h2>";
-            echo "<p align='center'>Make a {$linktype} link for origtab {$origtab}, origref {$origref}</p>";
+            echo "<p align='center'>Make a {$linktype} link for origtab {$origtab}, origref {$origref}</p>"; // FIMXE i18n
             $recsql = "SELECT {$linktype->linkcol} AS recordref, {$linktype->selectionsql} AS recordname FROM {$linktype->linktab} ";
             $recsql .= "WHERE {$linktype->linkcol} != '{$origref}'";
             $recresult = mysql_query($recsql);
