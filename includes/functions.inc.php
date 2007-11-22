@@ -5316,10 +5316,10 @@ function time_dropdown($name)
 
 function fuzzy_time($seconds)
 {
-    if($time < 0) $time == $GLOBALS['strError'];
-    elseif($time > 0 AND $time < 60) $time == $GLOBALS['strJustNow'];
+    if($time < 0) $time = $GLOBALS['strError'];
+    elseif($time > 0 AND $time < 60) $time = $GLOBALS['strJustNow'];
     elseif($time > 60 AND $time < 5 * 60) $time = $GLOBALS['strFewMinutesAgo'];
-    elseif($time > 5 * 60 $time < 30 * 60)
+    elseif($time > 5 * 60 AND $time < 30 * 60)
     {
         $time = round($time % (5 * 60));
         $time = sprintf($GLOBALS['strAboutNMinsAgo'], $time);
