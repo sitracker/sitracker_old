@@ -623,7 +623,7 @@ else
     }
     else
     {
-        if($draftid != -1)
+        if($draftid != -1 AND !empty($draftid))
         {
             $sql = "DELETE FROM drafts WHERE id = {$draftid}";
             $result = mysql_query($sql);
