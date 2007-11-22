@@ -1,6 +1,13 @@
 Upgrading Support Incident Tracker
 ----------------------------------
 
+    Note: Unless you are familiar with PHP, it is not
+    recommended to use non-released versions of SiT!
+    (i.e. SVN versions).  These versions are not tested
+    for general use and there might  not be an easy
+    upgrade path for the next release from such
+    intermediate versions.
+
 To upgrade simply copy all the new files over the existing ones being
 careful not to overwrite your config.inc.php or any custom themes you
 might have.  Then run setup.php in your browser and follow the
@@ -21,6 +28,18 @@ forgotten password, in which case only one of the users owning
 the email address will be able to reset.  Additionally if either
 of the users sharing an email address edit their profile, they
 will be told that email addresses must be unique.
+
+New for this version is support for multiple display languages.
+After you upgrade, users will have no specific language defined
+in their profile and will therefore use the default language
+which you can now configure using the new config variable
+$CONFIG['default_i18n'].  You can set this to an rfc4646/
+rfc4647/ISO 639 code which corresponds to an existing file
+in the includes/i18n directory.
+E.g. $CONFIG['default_i18n']='cy-GB';
+Users are also given the opportunity to configure a display
+language at login and also in their profile, this language
+can be different to the default language you have set.
 
 
 Upgrading to 3.30
