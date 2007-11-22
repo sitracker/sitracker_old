@@ -63,7 +63,8 @@ $languages = array('ar' => 'Arabic',
                    'sv-SE' => 'Swedish',
                    'th-TH' => 'Thai',
                    'tr_TR' => 'Turkish',
-                   'uk-UA' => 'Ukrainian'
+                   'uk-UA' => 'Ukrainian',
+                   'zh-CN' => 'Chinese (Simplified)'
                   );
 
 if(!$_REQUEST['mode'])
