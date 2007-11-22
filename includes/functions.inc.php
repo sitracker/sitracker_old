@@ -5314,7 +5314,20 @@ function time_dropdown($name)
     return $html;
 }
 
+function fuzzy_time($seconds)
+{
+    if($time < 0) $time == $GLOBALS['strError'];
+    elseif($time > 0 AND $time < 60) $time == $GLOBALS['strJustNow'];
+    elseif($time > 60 AND $time < 5 * 60) $time = $GLOBALS['strFewMinutesAgo'];
+    elseif($time > 5 * 60 $time < 30 * 60)
+    {
+        $time = round($time % (5 * 60));
+        $time = sprintf($GLOBALS['strAboutNMinsAgo'], $time);
+    }
 
+    return $time;
+
+}
 
 // These are the modules that we are dependent on, without these something
 // or everything will fail, so let's throw an error here.
