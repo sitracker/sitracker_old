@@ -221,7 +221,7 @@ else
     if($mode == 'incident')
     {
         echo "<tr class=$shade><td><strong>{$strTotal}:</strong></td><td colspan=5>".format_seconds($totalduration)."</td></tr>";
-        echo "<tr class=$shade><td><strong>{$strExact}:</strong></td><td colspan=5>".seconds_to_string($totalduration)."</td></tr>";
+        echo "<tr class=$shade><td><strong>{$strExact}:</strong></td><td colspan=5>".exact_seconds($totalduration)."</td></tr>";
     }
     echo "</table>\n";
 }
