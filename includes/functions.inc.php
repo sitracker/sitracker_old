@@ -5316,17 +5316,26 @@ function time_dropdown($name)
 
 function fuzzy_time($seconds)
 {
-    if($time < 0) $time = $GLOBALS['strError'];
-    elseif($time > 0 AND $time < 60) $time = $GLOBALS['strJustNow'];
-    elseif($time > 60 AND $time < 5 * 60) $time = $GLOBALS['strFewMinutesAgo'];
-    elseif($time > 5 * 60 AND $time < 30 * 60)
+    //TODO
+    if($seconds < 0) $time = 'Error';
+    elseif($seconds > 0 AND $seconds < 60) $time = 'JustNow';
+    elseif($seconds > 60 AND $seconds < 5 * 60) $time = 'A Few Minutes Ago';
+    elseif($seconds > 5 * 60 AND $seconds < 30 * 60)
     {
-        $time = round($time % (5 * 60));
-        $time = sprintf($GLOBALS['strAboutNMinsAgo'], $time);
+        $seconds = 5 * round($seconds / (5 * 60));
+        $time ="About {$seconds} Mins Ago";
     }
-
+    elseif($seconds > 30 * 60 AND $seconds < 2 * 60 * 60)
+    {
+        $hours = floor($seconds / (60 * 60));
+        echo "Over {$hours} hours ago";
+    }
     return $time;
+}
 
+function exact_seconds($seconds)
+{
+    return "";
 }
 
 // These are the modules that we are dependent on, without these something
