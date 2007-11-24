@@ -405,32 +405,30 @@ elseif ($action=='incidentform')
         echo "<td>".parse_updatebody($mailed_body_text)."</td></tr>\n";
         echo "<tr><td class='shade1' colspan=2>&nbsp;</td></tr>\n";
     }
-    echo "<tr><th>{$strNextAction}:<br />If there is a time limit on the next action, please specify it here.</td>";
-    ?>
-    <td>
-    <input type="text" name="nextaction" maxlength="50" size="30" value="Initial Response" /><br /><br />
-    <input type="radio" name="timetonextaction_none" value="none" checked='checked' />None<br />
-    <input type="radio" name="timetonextaction_none" value="time" />In <em>x</em> days, hours, minutes<br />&nbsp;&nbsp;&nbsp;
-    <input maxlength="3" name="timetonextaction_days" onclick="window.document.supportdetails.timetonextaction_none[1].checked = true;" size="3"> Days&nbsp;
-    <input maxlength="2" name="timetonextaction_hours" onclick="window.document.supportdetails.timetonextaction_none[1].checked = true;" size="3"> Hours&nbsp;
-    <input maxlength="2" name="timetonextaction_minutes" onclick="window.document.supportdetails.timetonextaction_none[1].checked = true;" size="3"> Minutes<br />
-    <input type="radio" name="timetonextaction_none" value="date">On specified Date<br />&nbsp;&nbsp;&nbsp;
-    <?php
-        echo "<input name='date' size='10' value='{$date}' onclick=\"window.document.updateform.timetonextaction_none[1].checked = true;\"/> ";
-        echo date_picker('supportdetails.date');
-    ?>
-    <select name="timeoffset" onchange="window.document.updateform.timetonextaction_none[1].checked = true;" >
-    <option value="0">9:00 AM</option>
-    <option value="1">10:00 AM</option>
-    <option value="2">11:00 AM</option>
-    <option value="3">12:00 PM</option>
-    <option value="4">1:00 PM</option>
-    <option value="5">2:00 PM</option>
-    <option value="6">3:00 PM</option>
-    <option value="7">4:00 PM</option>
-    </select>
-    </td></tr>
-    <?php
+    echo "<tr><th>{$strNextAction}:<br />If there is a time limit on the next action, please specify it here.</th>"; //FIXME i18n
+    echo "<td>";
+    echo "<input type='text' name='nextaction' maxlength='50' size='30' value='Initial Response' /><br /><br />";
+    echo "<input type='radio' name='timetonextaction_none' value='none' checked='checked' />{$strNone}<br />";
+    echo "<input type='radio' name='timetonextaction_none' value='time' />In <em>x</em> days, hours, minutes<br />&nbsp;&nbsp;&nbsp;";
+    echo "<input maxlength='3' name='timetonextaction_days' onclick='window.document.supportdetails.timetonextaction_none[1].checked = true;' size='3' /> {$strDays}";
+    echo "<input maxlength='2' name='timetonextaction_hours' onclick='window.document.supportdetails.timetonextaction_none[1].checked = true;' size='3' /> {$strHours}";
+    echo "<input maxlength='2' name='timetonextaction_minutes' onclick='window.document.supportdetails.timetonextaction_none[1].checked = true;' size='3' /> {$strMinutes}<br />";
+    echo "<input type='radio' name='timetonextaction_none' value='date' />On specified Date<br />&nbsp;&nbsp;&nbsp;";
+    echo "<input name='date' size='10' value='{$date}' onclick=\'window.document.updateform.timetonextaction_none[1].checked = true;\'/> ";
+    echo date_picker('supportdetails.date');
+    
+    echo "<select name='timeoffset' onchange='window.document.updateform.timetonextaction_none[1].checked = true;' >";
+    echo "<option value='0'>9:00 AM</option>";
+    echo "<option value='1'>10:00 AM</option>";
+    echo "<option value='2'>11:00 AM</option>";
+    echo "<option value='3'>12:00 PM</option>";
+    echo "<option value='4'>1:00 PM</option>";
+    echo "<option value='5'>2:00 PM</option>";
+    echo "<option value='6'>3:00 PM</option>";
+    echo "<option value='7'>4:00 PM</option>";
+    echo "<option value='8'>5:00 PM</option>";
+    echo "</select>";
+    echo "</td></tr>";
     if (empty($updateid))
     {
         echo "<tr><th>{$strVisibleToCustomer}:</th>\n";
