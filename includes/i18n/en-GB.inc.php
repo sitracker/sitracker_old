@@ -33,6 +33,7 @@ $strAddEmailConfirm = 'Are you sure you want to add this email type?';
 $strAddFeedbackForm = 'Add Feedback Form';
 $strAddIncident = 'Add Incident';
 $strAdditionalInfo = 'Additional Information';
+$strAddKBArticle = 'Add KnowledgeBase Article';
 $strAddLink = 'Add Link';
 $strAddNew = 'Add New';
 $strAddNote = 'Add Note';
