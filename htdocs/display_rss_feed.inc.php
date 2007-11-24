@@ -30,7 +30,7 @@ else list($cssurl, $iconset) = mysql_fetch_row($cssresult);
 
 require_once('magpierss/rss_fetch.inc');
 
-$sql = "SELECT url FROM dashboard_rss WHERE owner = {$sit[2]} AND enabled = 'true'";
+$sql = "SELECT url, items FROM dashboard_rss WHERE owner = {$sit[2]} AND enabled = 'true'";
 $result = mysql_query($sql);
 if (mysql_error()) trigger_error(mysql_error(),E_USER_ERROR);
 
@@ -61,6 +61,7 @@ if(mysql_num_rows($result) > 0)
             }
             echo "</a>";
             echo "</th></tr>";
+            $counter=0;
             foreach($rss->items as $item)
             {
                 //echo "<pre>".print_r($item,true)."</pre>";
@@ -81,6 +82,8 @@ if(mysql_num_rows($result) > 0)
                 echo "<span>";
                 if (!empty($itemdate)) echo "<strong>{$itemdate}</strong><br />";
                 echo "{$d}</span></a></td></tr>";
+                $counter++;
+                if (($row[1] > 0) AND $counter > $row[1]) break;
             }
             echo "</table>";
         }
