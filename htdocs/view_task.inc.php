@@ -52,7 +52,7 @@ if (mysql_num_rows($result) >= 1)
         echo "<td>".priority_icon($task->priority).' '.priority_name($task->priority)."</td></tr>";
         echo "<tr><th>{$strStartDate}</th>";
         echo "<td>";
-        if ($startdate > 0) echo date('Y-m-d',$startdate);
+        if ($startdate > 0) echo date($CONFIG['dateformat_datetime'],$startdate);
         echo "</td></tr>";
         echo "<tr><th>{$strDueDate}</th>";
         echo "<td>";

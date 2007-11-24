@@ -5296,7 +5296,7 @@ function quick_update($incidentid, $text)
 }
 
 
-function time_dropdown($name)
+function time_dropdown($name, $selected='')
 {
     $html = "<select name='$name'>";
     for($hours = 0; $hours < 24; $hours++)
@@ -5306,8 +5306,9 @@ function time_dropdown($name)
             $hours = str_pad($hours, 2, "0", STR_PAD_LEFT);
             $mins = str_pad($mins, 2, "0", STR_PAD_RIGHT);
             if("$hours:$mins" == $selected)
-                $html .= "<option selected value='$hours:$mins'>$hours:$mins</option>";
-            $html .= "<option value='$hours:$mins'>$hours:$mins</option>";
+                $html .= "<option selected='selected' value='$hours:$mins'>$hours:$mins</option>";
+            else
+                $html .= "<option value='$hours:$mins'>$hours:$mins</option>";
         }
     }
     $html .= "</select>";
