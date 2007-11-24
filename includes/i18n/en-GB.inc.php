@@ -693,6 +693,7 @@ $strUseThisInFuture = 'Use this in future';
 $strUnknown = 'Unknown';
 $strUnlimited = 'Unlimited';
 $strUnlink = 'Unlink';
+$strUntitled = 'Untitled';
 $strUsed = 'Used';
 $strUsedNofN = 'Used %s of %s';
 $strUser = 'User';

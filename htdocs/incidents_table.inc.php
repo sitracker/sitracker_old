@@ -196,9 +196,8 @@ while ($incidents = mysql_fetch_array($result))
     echo "</td>";
     echo "<td>";
     if (!empty($incidents['softwareid'])) echo software_name($incidents['softwareid'])."<br />";
-    ?>
-    <a href="javascript:incident_details_window('<?php echo $incidents["id"] ?>','incident<?php echo $incidents["id"] ?>')" class='info'>
-    <?php if (trim($incidents['title']) !='') echo (stripslashes($incidents['title'])); else echo 'Untitled';
+    echo "<a href=\"javascript:incident_details_window('{$incidents['id']}','incident{$incidents['id']}')\" class='info'>";
+    if (trim($incidents['title']) !='') echo (stripslashes($incidents['title'])); else echo $strUntitled;
     if (!empty($update_body) AND $update_body!='...') echo "<span>{$update_body}</span>";
     else
     {

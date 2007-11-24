@@ -145,7 +145,7 @@ if (mysql_num_rows($result) >= 1)
     while ($kbarticle = mysql_fetch_object($result))
     {
         // FIXME: These styles and colours need moving to the webtrack.css file really so they can be customised
-        if (empty($kbarticle->title)) $kbarticle->title='Untitled';
+        if (empty($kbarticle->title)) $kbarticle->title = $strUntitled;
         else $kbarticle->title=stripslashes($kbarticle->title);
         echo "<tr class='{$shade}'>";
         echo "<td>{$CONFIG['kb_id_prefix']}".leading_zero(4,$kbarticle->docid)."</td>";
