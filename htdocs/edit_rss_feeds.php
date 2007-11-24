@@ -48,6 +48,45 @@ switch($action)
             confirmation_page("2", "edit_rss_feeds.php", "<h2>Feed added</h2><h5>{$strPleaseWaitRedirect}...</h5>");
         }
         break;
+    case 'edit':
+        include('htmlheader.inc.php');
+        $url = cleanvar(urldecode($_REQUEST['url']));
+        $sql = "SELECT * FROM dashboard_rss WHERE owner = {$sit[2]} AND url = '{$url}' LIMIT 1 ";
+        $result = mysql_query($sql);
+        if (mysql_error()) trigger_error(mysql_error(),E_USER_ERROR);
+        if (mysql_num_rows($result) > 0)
+        {
+            $feed = mysql_fetch_object($result);
+            if ($feed->items=='') $feed->items=0;
+            echo "<h2>Edit RSS/Atom feed</h2>";
+            echo "<form action='{$_SERVER['PHP_SELF']}?action=do_edit' method='post'>";
+            echo "<table class='vertical'>";
+            echo "<tr><td><label><img src='{$CONFIG['application_webpath']}images/icons/{$iconset}/12x12/feed-icon.png' style='border: 0px;' alt='Feed Icon' /> ";
+            echo "RSS/Atom Feed URL: <input type='text' name='url' size='45' value='{$feed->url}' /></label></td></tr>\n"; // FIXME i18n URL
+            echo "<tr><td><label>{$strDisplay}: <input type='text' name='items' size='3' value='{$feed->items}' /></label> ({$str0MeansUnlimited})</td></tr>";
+            echo "</table>";
+            echo "<input type='hidden' name='oldurl' size='45' value='{$feed->url}' />";
+            echo "<p align='center'><input name='submit' type='submit' value='{$strSave}' /></p>";
+            echo "</form>";
+        }
+        else echo "<p class='error'>$strNoRecords</p>";
+        include('htmlfooter.inc.php');
+
+        break;
+    case 'do_edit':
+        $url = cleanvar($_REQUEST['url']);
+        $oldurl = cleanvar($_REQUEST['oldurl']);
+        $items = cleanvar($_REQUEST['items']);
+        $sql = "UPDATE dashboard_rss SET url = '{$url}', items = '{$items}' WHERE url = '{$oldurl}' AND owner = {$sit[2]}";
+        $result = mysql_query($sql);
+        if (mysql_error()) trigger_error(mysql_error(),E_USER_ERROR);
+
+        if(!$result) echo "<p class='error'>Edit failed</p>";
+        else
+        {
+            confirmation_page("2", "edit_rss_feeds.php", "<h2>RSS feed change succeded</h2><h5>{$strPleaseWaitRedirect}...</h5>");
+        }
+        break;
     case 'enable':
         $url = cleanvar($_REQUEST['url']);
         $enable = cleanvar($_REQUEST['enable']);
@@ -99,7 +138,8 @@ switch($action)
                 else echo $strUnlimited;
                 echo "</td>";
                 echo "<td><a href='{$_SERVER['PHP_SELF']}?action=enable&amp;url=".urlencode($obj->url)."&amp;enable={$opposite}'>{$obj->enabled}</a></td>";
-                echo "<td><a href='{$_SERVER['PHP_SELF']}?action=delete&amp;url=".urlencode($obj->url)."'>{$strRemove}</a></td></tr>";
+                echo "<td><a href='{$_SERVER['PHP_SELF']}?action=edit&amp;url=".urlencode($obj->url)."'>{$strEdit}</a> | ";
+                echo "<a href='{$_SERVER['PHP_SELF']}?action=delete&amp;url=".urlencode($obj->url)."'>{$strRemove}</a></td></tr>";
                 if ($shade=='shade1') $shade='shade2';
                 else $shade='shade1';
             }
@@ -111,5 +151,4 @@ switch($action)
         break;
 
 }
-
 ?>
