@@ -177,16 +177,8 @@ while ($users = mysql_fetch_array($result))
     else
         echo "<img src='{$CONFIG['application_webpath']}images/icons/{$iconset}/16x16/offline.png' width='16' height='16' alt=\"{$strOffline}\" /> ";
     echo userstatus_name($users["status"]);
-    ?></td>
-    <td align='center'>
-    <?php
-        if(user_permission(2, 69))
-        {
-            if($users["accepting"]=='Yes') echo "$strYes | <a href='{$_SERVER[PHP_SELF]}?user={$users['id']}&status=no'>{$strNo} ({$strForce})</a>";
-            else echo "<a href='{$_SERVER[PHP_SELF]}?user={$users['id']}&status=yes'>{$strYes} ({$strForce})</a> | $strNo";
-        }
-         else echo $users["accepting"]=='Yes' ? $strYes : "<span class='error'>{$strNo}</span>"; ?></td>
-    <?php
+    echo "</td><td align='center'>";
+    echo $users["accepting"]=='Yes' ? $strYes : "<span class='error'>{$strNo}</span></td>";
     echo "<td>";
     echo "<a href='holidays.php?user={$users['id']}' title='{$strHolidays}'><img src='{$CONFIG['application_webpath']}images/icons/{$iconset}/16x16/holiday.png' width='16' height='16' alt='{$strHolidays}' style='border:none;' /></a> ";
     echo "<a href='tasks.php?user={$users['id']}' title='{$strTasks}'><img src='{$CONFIG['application_webpath']}images/icons/{$iconset}/16x16/task.png' width='16' height='16' alt='Todo icon' style='border:none;' /></a> ";
