@@ -482,7 +482,7 @@ elseif ($action=='assign')
         // check for blank contact
         if ($contactid == 0) { $errors = 1; $error_string .= "You must select a contact"; }
         // check for blank title
-        if ($incidenttitle == '')  { $incidenttitle='Untitled'; }
+        if ($incidenttitle == '')  { $incidenttitle = $strUntitled; }
         // check for blank priority
         if ($priority == 0){ $priority=1; }
         // check for blank type

@@ -37,7 +37,7 @@ if (user_permission($sit[2],$permission))
     $result = mysql_query($sql);
     if (mysql_error()) trigger_error("MySQL Query Error ".mysql_error(), E_USER_ERROR);
     $kbarticle = mysql_fetch_object($result);
-    if (empty($kbarticle->title)) $kbarticle->title='Untitled';
+    if (empty($kbarticle->title)) $kbarticle->title = $strUntitled;
 
     echo "<h2>".stripslashes($kbarticle->title)."</h2>";
 
