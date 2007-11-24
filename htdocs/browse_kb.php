@@ -132,7 +132,7 @@ if (mysql_error()) trigger_error("MySQL Query Error ".mysql_error(), E_USER_ERRO
 
 if (mysql_num_rows($result) >= 1)
 {
-    echo "<p align='center'><strong>{$strResults}<strong> :</p>";
+    echo "<p align='center'><strong>{$strResults}</strong> :</p>";
     echo "<table align='center' width='98%'>";
     echo "<tr>";
     echo colheader('id',$strID,FALSE);
