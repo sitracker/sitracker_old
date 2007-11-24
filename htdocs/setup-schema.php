@@ -1556,13 +1556,15 @@ ALTER TABLE `users` ADD `lastseen` TIMESTAMP NOT NULL ;
 
 ALTER TABLE `tasks` CHANGE `distribution` `distribution` ENUM( 'public', 'private', 'incident' ) NOT NULL DEFAULT 'public' ;
 
- ALTER TABLE `updates` CHANGE `type` `type` ENUM( 'default', 'editing', 'opening', 'email', 'reassigning', 'closing', 'reopening', 'auto', 'phonecallout', 'phonecallin', 'research', 'webupdate', 'emailout', 'emailin', 'externalinfo', 'probdef', 'solution', 'actionplan', 'slamet', 'reviewmet', 'tempassigning', 'auto_chase_email', 'auto_chase_phone', 'auto_chase_manager', 'auto_chased_phone', 'auto_chased_manager', 'auto_chase_managers_manager', 'customerclosurerequest', 'fromtask' ) NULL DEFAULT 'default' ;
- 
- 
- -- KMH 15/11/07
- ALTER TABLE `maintenance` ADD `supportedcontacts` INT( 255 ) NOT NULL DEFAULT '0';
- ALTER TABLE `maintenance` ADD `allcontactssupported` ENUM( 'No', 'Yes' ) NOT NULL DEFAULT 'No';
- 
+ALTER TABLE `updates` CHANGE `type` `type` ENUM( 'default', 'editing', 'opening', 'email', 'reassigning', 'closing', 'reopening', 'auto', 'phonecallout', 'phonecallin', 'research', 'webupdate', 'emailout', 'emailin', 'externalinfo', 'probdef', 'solution', 'actionplan', 'slamet', 'reviewmet', 'tempassigning', 'auto_chase_email', 'auto_chase_phone', 'auto_chase_manager', 'auto_chased_phone', 'auto_chased_manager', 'auto_chase_managers_manager', 'customerclosurerequest', 'fromtask' ) NULL DEFAULT 'default' ;
+
+
+-- KMH 15Nov07
+ALTER TABLE `maintenance` ADD `supportedcontacts` INT( 255 ) NOT NULL DEFAULT '0';
+ALTER TABLE `maintenance` ADD `allcontactssupported` ENUM( 'No', 'Yes' ) NOT NULL DEFAULT 'No';
+
+-- INL 22Nov07
+ALTER TABLE `dashboard_rss` ADD `items` INT( 5 ) NULL AFTER `url`;
 ";
 
 
