@@ -10,6 +10,7 @@
 
 // Authors: Ivan Lucas <ivanlucas[at]users.sourceforge.net>
 //          Kieran Hogg <kieran_hogg[at]users.sourceforge.net>
+//          Paul Heaney <paulheaney[at]users.sourceforge.net>
 // called by tasks.php
 
 // External variables
@@ -19,6 +20,72 @@ $sort = cleanvar($_REQUEST['sort']);
 $order = cleanvar($_REQUEST['order']);
 $incident = cleanvar($_REQUEST['incident']);
 $mode;
+
+?>
+<script type='text/javascript'>
+<!--
+function Activity()
+{
+    var id;
+    var start;
+}
+
+var dataArray = new Array();
+var count = 0;
+
+function addActivity(act)
+{
+    dataArray[count] = act;
+    count++;
+}
+
+function countUp()
+{
+    var now = new Date();
+
+    var sinceEpoch = Math.round(new Date().getTime()/1000.0);
+
+    var i = 0;
+    for(i=0; i < dataArray.length; i++)
+    {
+        var secondsOpen = sinceEpoch-dataArray[i].start;
+
+        var str = "";
+
+        if(secondsOpen >= 86400)
+        {   //days
+            var days = Math.floor(secondsOpen/86400);
+            str += days+" days ";
+            secondsOpen-=(days*86400);
+        }
+
+        if(secondsOpen >= 3600)
+        {   //hours
+            var hours = Math.floor(secondsOpen/3600);
+            str += hours+" hours ";
+            secondsOpen-=(hours*3600);
+        }
+
+        if(secondsOpen > 60)
+        {   //minutes
+            var minutes = Math.floor(secondsOpen/60);
+            str += minutes+" minutes ";
+            secondsOpen-=(minutes*60);
+        }
+
+        if(secondsOpen > 0)
+        {  // seconds
+            str += secondsOpen+" seconds";
+        }
+
+        byId("duration"+dataArray[i].id).innerHTML = "<em>"+str+"</em>";
+    }
+}
+
+setInterval("countUp()", 1000); //every 1 seconds
+//-->
+</script>
+<?php
 
 
 if(!empty($incident))
@@ -101,127 +168,137 @@ else
     if (mysql_error()) trigger_error(mysql_error(),E_USER_ERROR);
 }
 
-    //common code
-    if (mysql_num_rows($result) >=1 )
+//common code
+if (mysql_num_rows($result) >=1 )
+{
+    if($show) $filter=array('show' => $show);
+    echo "<br /><table align='center'>";
+    echo "<tr>";
+
+    if($mode != 'incident')
     {
-        if($show) $filter=array('show' => $show);
-        echo "<br /><table align='center'>";
-        echo "<tr>";
-
-        if($mode != 'incident')
+        $totalduration;
+        if ($user == $sit[2])
         {
-            $totalduration;
-            if ($user == $sit[2])
-            {
-                echo colheader('distribution', "<img src='{$CONFIG['application_webpath']}images/icons/{$iconset}/16x16/private.png' width='16' height='16' title='Public/Private' alt='Private' style='border: 0px;' />", $sort, $order, $filter);
-            }
-            else $filter['user'] = $user;
+            echo colheader('distribution', "<img src='{$CONFIG['application_webpath']}images/icons/{$iconset}/16x16/private.png' width='16' height='16' title='Public/Private' alt='Private' style='border: 0px;' />", $sort, $order, $filter);
+        }
+        else $filter['user'] = $user;
 
-            echo colheader('id', $strID, $sort, $order, $filter);
-            echo colheader('name', $strTask, $sort, $order, $filter);
-            echo colheader('priority', $strPriority, $sort, $order, $filter);
-            echo colheader('completion', $strCompletion, $sort, $order, $filter);
-            echo colheader('startdate', $strStartDate, $sort, $order, $filter);
-            echo colheader('duedate', $strDueDate, $sort, $order, $filter);
-            if ($show=='completed') echo colheader('enddate', $strEndDate, $sort, $order, $filter);
+        echo colheader('id', $strID, $sort, $order, $filter);
+        echo colheader('name', $strTask, $sort, $order, $filter);
+        echo colheader('priority', $strPriority, $sort, $order, $filter);
+        echo colheader('completion', $strCompletion, $sort, $order, $filter);
+        echo colheader('startdate', $strStartDate, $sort, $order, $filter);
+        echo colheader('duedate', $strDueDate, $sort, $order, $filter);
+        if ($show=='completed') echo colheader('enddate', $strEndDate, $sort, $order, $filter);
+    }
+    else
+    {
+        echo colheader('id', $strID, $sort, $order, $filter);
+        echo colheader('startdate', $strStartDate, $sort, $order, $filter);
+        echo colheader('completeddate', $strCompleted, $sort, $order, $filter);
+        echo colheader('duration', $strDuration, $sort, $order, $filter);
+        echo colheader('lastupdated', $strLastUpdated, $sort, $order, $filter);
+        echo colheader('owner', $strOwner, $sort, $order, $filter);
+    }
+    echo "</tr>\n";
+    $shade='shade1';
+    while ($task = mysql_fetch_object($result))
+    {
+        $duedate = mysql2date($task->duedate);
+        $startdate = mysql2date($task->startdate);
+        $enddate = mysql2date($task->enddate);
+        $lastupdated = mysql2date($task->lastupdated);
+        echo "<tr class='$shade'>";
+        if ($user == $sit[2])
+        {
+            echo "<td>";
+            if ($task->distribution=='private') echo " <img src='{$CONFIG['application_webpath']}images/icons/{$iconset}/16x16/private.png' width='16' height='16' title='Private' alt='Private' />";
+            echo "</td>";
+        }
+        if($mode == 'incident')
+        {
+            if($enddate == '0') echo "<td><a href='view_task.php?id={$task->id}&amp;mode=incident&amp;incident={$id}' class='info'>{$task->id}</a></td>";
+            else echo "<td>{$task->id}</td>";
         }
         else
         {
-            echo colheader('id', $strID, $sort, $order, $filter);
-            echo colheader('startdate', $strStartDate, $sort, $order, $filter);
-            echo colheader('completeddate', $strCompleted, $sort, $order, $filter);
-            echo colheader('duration', $strDuration, $sort, $order, $filter);
-            echo colheader('lastupdated', $strLastUpdated, $sort, $order, $filter);
-            echo colheader('owner', $strOwner, $sort, $order, $filter);
+            echo "<td>";
+            echo "{$task->id}";
+            echo "</td>";
+            echo "<td>";
+            echo "<a href='view_task.php?id={$task->id}' class='info'>".stripslashes($task->name);
+            echo "</a>";
+
+            echo "</td>";
+            echo "<td>".priority_icon($task->priority).priority_name($task->priority)."</td>";
+            echo "<td>".percent_bar($task->completion)."</td>";
+        }
+
+        if($mode != 'incident')
+        {
+            echo "<td";
+            if ($startdate > 0 AND $startdate <= $now AND $task->completion <= 0) echo " class='urgent'";
+            elseif ($startdate > 0 AND $startdate <= $now AND $task->completion >= 1 AND $task->completion < 100) echo " class='idle'";
+            echo ">";
+            if ($startdate > 0) echo date($CONFIG['dateformat_date'],$startdate);
+            echo "</td>";
+            echo "<td";
+            if ($duedate > 0 AND $duedate <= $now AND $task->completion < 100) echo " class='urgent'";
+            echo ">";
+            if ($duedate > 0) echo date($CONFIG['dateformat_date'],$duedate);
+            echo "</td>";
+        }
+        else
+        {
+            echo "<td>".format_date_friendly($startdate)."</td>";
+            if($enddate == '0')
+            {
+
+                echo "<td><script type='text/javascript'>";
+                echo "var act = new Activity();";
+                echo "act.id = {$task->id};";
+                echo "act.start = {$startdate}; ";
+                echo "addActivity(act);";
+                echo "</script>";
+
+                echo "$strNotCompleted</td>";
+                $duration = $now - $startdate;
+                //echo "<td id='duration{$task->id}'><em><div id='duration{$task->id}'>".format_seconds($duration)."</div></em></td>";
+                echo "<td id='duration{$task->id}'>".format_seconds($duration);
+                echo "<script type='text/javascript'>countUp();</script></td>";  //force a quick udate
+
+            }
+            else
+            {
+                $duration = $enddate - $startdate;
+                echo "<td>".format_date_friendly($enddate)."</td>";
+                echo "<td>".format_seconds($duration)."</td>";
+            }
+            $totalduration += $duration;
+
+            echo "<td>".format_date_friendly($lastupdated)."</td>";
+        }
+
+        if ($show=='completed')
+        {
+            echo "<td>";
+            if ($enddate > 0) echo date($CONFIG['dateformat_date'],$enddate);
+            echo "</td>";
+        }
+        if($mode == 'incident')
+        {
+            echo "<td>".user_realname($task->owner)."</td>";
         }
         echo "</tr>\n";
-        $shade='shade1';
-        while ($task = mysql_fetch_object($result))
-        {
-            $duedate = mysql2date($task->duedate);
-            $startdate = mysql2date($task->startdate);
-            $enddate = mysql2date($task->enddate);
-            $lastupdated = mysql2date($task->lastupdated);
-            echo "<tr class='$shade'>";
-            if ($user == $sit[2])
-            {
-                echo "<td>";
-                if ($task->distribution=='private') echo " <img src='{$CONFIG['application_webpath']}images/icons/{$iconset}/16x16/private.png' width='16' height='16' title='Private' alt='Private' />";
-                echo "</td>";
-            }
-            if($mode == 'incident')
-            {
-                if($enddate == '0') echo "<td><a href='view_task.php?id={$task->id}&mode=incident&incident={$id}' class='info'>{$task->id}</td>";
-                else echo "<td>{$task->id}</td>";
-            }
-            else
-            {
-                echo "<td>";
-                echo "{$task->id}";
-                echo "</td>";
-                echo "<td>";
-                echo "<a href='view_task.php?id={$task->id}' class='info'>".stripslashes($task->name);
-                echo "</a>";
-
-                echo "</td>";
-                echo "<td>".priority_icon($task->priority).priority_name($task->priority)."</td>";
-                echo "<td>".percent_bar($task->completion)."</td>";
-            }
-
-            if($mode != 'incident')
-            {
-                echo "<td";
-                if ($startdate > 0 AND $startdate <= $now AND $task->completion <= 0) echo " class='urgent'";
-                elseif ($startdate > 0 AND $startdate <= $now AND $task->completion >= 1 AND $task->completion < 100) echo " class='idle'";
-                echo ">";
-                if ($startdate > 0) echo date($CONFIG['dateformat_date'],$startdate);
-                echo "</td>";
-                echo "<td";
-                if ($duedate > 0 AND $duedate <= $now AND $task->completion < 100) echo " class='urgent'";
-                echo ">";
-                if ($duedate > 0) echo date($CONFIG['dateformat_date'],$duedate);
-                echo "</td>";
-            }
-            else
-            {
-                echo "<td>".format_date_friendly($startdate)."</td>";
-                if($enddate == '0')
-                {
-                    echo "<td>$strNotCompleted</td>";
-                    $duration = $now - $startdate;
-                    echo "<td><em>".format_seconds($duration)."</em></td>";
-
-                }
-                else
-                {
-                    $duration = $enddate - $startdate;                    
-                    echo "<td>".format_date_friendly($enddate)."</td>";
-                    echo "<td>".format_seconds($duration)."</td>";
-                }
-                $totalduration += $duration;
-
-                echo "<td>".format_date_friendly($lastupdated)."</td>";
-            }
-
-            if ($show=='completed')
-            {
-                echo "<td>";
-                if ($enddate > 0) echo date($CONFIG['dateformat_date'],$enddate);
-                echo "</td>";
-            }
-            if($mode == 'incident')
-            {
-                echo "<td>".user_realname($task->owner)."</td>";
-            }
-            echo "</tr>\n";
-            if ($shade=='shade1') $shade='shade2';
-            else $shade='shade1';
+        if ($shade=='shade1') $shade='shade2';
+        else $shade='shade1';
     }
-    
+
     if($mode == 'incident')
     {
-        echo "<tr class=$shade><td><strong>{$strTotal}:</strong></td><td colspan=5>".format_seconds($totalduration)."</td></tr>";
-        echo "<tr class=$shade><td><strong>{$strExact}:</strong></td><td colspan=5>".exact_seconds($totalduration)."</td></tr>";
+        echo "<tr class='{$shade}'><td><strong>{$strTotal}:</strong></td><td colspan='5'>".format_seconds($totalduration)."</td></tr>";
+        echo "<tr class='{$shade}'><td><strong>{$strExact}:</strong></td><td colspan='5'>".exact_seconds($totalduration)."</td></tr>";
     }
     echo "</table>\n";
 }

@@ -9,6 +9,7 @@
 //
 
 // Author: Kieran Hogg <kieran_hogg[at]users.sourceforge.net
+// This Page Is Valid XHTML 1.0 Transitional!
 
 require('db_connect.inc.php');
 require('functions.inc.php');
@@ -17,11 +18,10 @@ require('auth.inc.php');
 $permission=0; // Allow all auth users
 
 $id = cleanvar($_REQUEST['incident']);
-if($id)
+if(!empty($id))
 {
     $title = $strActivities;
     include('incident_html_top.inc.php');
-    
 }
 else
 {
@@ -34,6 +34,13 @@ else
 
 include('tasks.inc.php');
 
-include('htmlfooter.inc.php');
+if(!empty($id))
+{
+    include('incident_html_bottom.inc.php');
+}
+else
+{
+    include('htmlfooter.inc.php');
+}
 
 ?>
