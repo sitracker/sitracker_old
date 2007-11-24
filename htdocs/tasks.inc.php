@@ -139,12 +139,17 @@ else
     echo "<option ";
     if ($show == 'completed') echo "selected='selected' ";
     echo "value='{$_SERVER['PHP_SELF']}?user=$user&amp;show=completed&amp;sort=$sort&amp;order=$order'>{$strCompleted}</option>\n";
+    echo "<option ";
+    if ($show == 'incidents') echo "selected='selected' ";
+    echo "value='{$_SERVER['PHP_SELF']}?user=$user&amp;show=incidents&amp;sort=$sort&amp;order=$order'>{$strIncidents}</option>";
+    
     echo "</select>\n";
     echo "</form><br />";
 
-    $sql = "SELECT * FROM tasks WHERE owner='$user' AND distribution != 'incident' ";
-    if ($show=='' OR $show=='active' ) $sql .= "AND (completion < 100 OR completion='' OR completion IS NULL) ";
-    elseif ($show=='completed') $sql .= "AND (completion = 100) ";
+    $sql = "SELECT * FROM tasks WHERE owner='$user' ";
+    if ($show=='' OR $show=='active' ) $sql .= "AND (completion < 100 OR completion='' OR completion IS NULL)  AND distribution != 'incident' ";
+    elseif ($show=='completed') $sql .= "AND (completion = 100) AND distribution != 'incident' ";
+    elseif ($show=='incidents') $sql .= "AND distribution = 'incident' ";
     else $sql .= "AND 1=2 "; // force no results for other cases
     if ($user != $sit[2]) $sql .= "AND distribution='public' ";
 
