@@ -42,7 +42,7 @@ if (user_permission($sit[2],$permission))
         echo "<h2><img src='{$CONFIG['application_webpath']}images/icons/{$iconset}/32x32/kb.png' width='32' height='32' alt='' /> ";
         echo "{$strAddKBArticle}</h2>";
         echo "<h5>".sprintf($strMandatoryMarked, "<sup class='red'>*</sup>")."</h5>";
-        echo "<form name='articleform' action=".$_SERVER['PHP_SELF']." method='post'>";
+        echo "<form name='articleform' action='{$_SERVER['PHP_SELF']}' method='post'>";
         echo "<table align='center' class='vertical' width='600'>";
         echo "<tr><th>{$strTitle}: <sup class='red'>*</sup></th><td><input type='text' name='title' size='50' maxlength='255' /></td></tr>";
         echo "<tr><th>{$strKeywords}: <sup class='red'>*</sup></th><td><input type='text' name='keywords' size='50' maxlength='255' /></td></tr>";
