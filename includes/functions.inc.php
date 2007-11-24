@@ -5335,7 +5335,20 @@ function fuzzy_time($seconds)
 
 function exact_seconds($seconds)
 {
-    return "";
+    $days = floor($seconds / (24 * 60 * 60));
+    $seconds -= $days * (24 * 60 * 60);
+    $hours = floor($seconds / (60 * 60));
+    $seconds -=  $hours * (60 * 60);
+    $minutes = floor($seconds / 60);
+    $seconds -= $minutes * 60;
+
+    $string;
+    if($days != 0) $string .= "{$days} {$GLOBALS[strDays]}, ";
+    if($hours != 0) $string .= "{$hours} {$GLOBALS[strHours]}, ";
+    if($minutes != 0) $string .= "{$minutes} {$GLOBALS[strMinutes]}, ";
+    $string .= "{$seconds} {$GLOBALS[strSeconds]}";
+
+    return $string;
 }
 
 // These are the modules that we are dependent on, without these something
