@@ -173,7 +173,8 @@ switch ($action)
             mysql_query($sql);
             if (mysql_error()) trigger_error(mysql_error(),E_USER_ERROR);
         }
-        else {
+        else 
+        {
             // Insert note to say what happened
             $bodytext="Task marked 100% complete by {$_SESSION['realname']}:\n\n".$bodytext;
             $sql = "INSERT INTO notes ";
@@ -190,8 +191,14 @@ switch ($action)
         if (mysql_error()) trigger_error(mysql_error(),E_USER_ERROR);
 
 
-        if($incident) confirmation_page("2", "incident_details.php?id={$incident}", "<h2>{$strActivityMarkedCompleteSuccessfully}</h2><p align='center'>{$strPleaseWaitRedirect}...</p>");
-        else confirmation_page("2", "tasks.php", "<h2>{$strTaskMarkedCompleteSuccessfully}</h2><p align='center'>{$strPleaseWaitRedirect}...</p>");
+        if($incident)
+        {
+            confirmation_page("2", "tasks.php?incident={$incident}", "<h2>{$strActivityMarkedCompleteSuccessfully}</h2><p align='center'>{$strPleaseWaitRedirect}...</p>");
+        }
+        else
+        {
+            confirmation_page("2", "tasks.php", "<h2>{$strTaskMarkedCompleteSuccessfully}</h2><p align='center'>{$strPleaseWaitRedirect}...</p>");
+        }
     break;
 
     case 'delete':
