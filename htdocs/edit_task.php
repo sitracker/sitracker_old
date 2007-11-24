@@ -173,7 +173,7 @@ switch ($action)
             mysql_query($sql);
             if (mysql_error()) trigger_error(mysql_error(),E_USER_ERROR);
         }
-        else 
+        else
         {
             // Insert note to say what happened
             $bodytext="Task marked 100% complete by {$_SESSION['realname']}:\n\n".$bodytext;
@@ -248,14 +248,14 @@ switch ($action)
                 if ($startdate > 0) echo date('Y-m-d',$startdate);
                 echo "' /> ";
                 echo date_picker('edittask.startdate');
-                echo " ".time_dropdown("starttime");
+                echo " ".time_dropdown("starttime", date('H:i',$startdate));
                 echo "</td></tr>";
                 echo "<tr><th>{$strDueDate}</th>";
                 echo "<td><input type='text' name='duedate' id='duedate' size='10' value='";
                 if ($duedate > 0) echo date('Y-m-d',$duedate);
                 echo "' /> ";
                 echo date_picker('edittask.duedate');
-                echo " ".time_dropdown("duetime");
+                echo " ".time_dropdown("duetime", date('H:i',$duedate));
                 echo "</td></tr>";
                 echo "<tr><th>{$strCompletion}</th>";
                 echo "<td><input type='text' name='completion' size='3' maxlength='3' value='{$task->completion}' />&#037;</td></tr>";
@@ -264,7 +264,7 @@ switch ($action)
                 if ($enddate > 0) echo date('Y-m-d',$enddate);
                 echo "' /> ";
                 echo date_picker('edittask.enddate');
-                echo " ".time_dropdown("endtime");
+                echo " ".time_dropdown("endtime", date('H:i',$enddate));
                 echo "</td></tr>";
                 echo "<tr><th>{$strValue}</th>";
                 echo "<td><input type='text' name='value' size='6' maxlength='12' value='{$task->value}' /></td></tr>";
