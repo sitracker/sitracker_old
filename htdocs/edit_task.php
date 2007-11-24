@@ -160,12 +160,12 @@ switch ($action)
             $startdate = readable_date($startdate);
             $enddate = readable_date($enddate);
 
-            $updatehtml = "Update created from activity <a href=\"tasks.php?incident={$incident}\">{$id}</a><br />Activity started at: {$startdate}<br /><br />";
+            $updatehtml = "Update created from <a href=\"tasks.php?incident={$incident}\">Activity {$id}</a><br />Activity started: {$startdate}\n\n";
             for($i = $numnotes-1; $i >= 0; $i--)
             {
-                $updatehtml .= "[b]".readable_date(mysql2date($notesarray[$i]->timestamp))."[/b]<br />{$notesarray[$i]->bodytext}<br /><br />";
+                $updatehtml .= "[b]".readable_date(mysql2date($notesarray[$i]->timestamp))."[/b]\n{$notesarray[$i]->bodytext}\n\n";
             }
-            $updatehtml .= "Activity completed at {$enddate}, duration was: [b]".format_seconds($duration)."[/b]";
+            $updatehtml .= "Activity completed: {$enddate}, duration was: [b]".format_seconds($duration)."[/b]";
 
             //create update
             $sql = "INSERT INTO updates (incidentid, userid, type, bodytext, timestamp, duration) ";
