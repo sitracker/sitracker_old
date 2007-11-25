@@ -700,7 +700,7 @@ elseif ($action=='assign')
                 else echo $userrow['realname'];
                 echo "</td>";
                 echo "<td>".$userrow['phone']."</td>";
-                echo "<td>".userstatus_name($userrow['status'])."</td>";
+                echo "<td>".user_online($userrow['id']).userstatus_name($userrow['status'])."</td>";
                 echo "<td>".stripslashes($userrow['message'])."</td>";
                 echo "<td align='center'>";
 
