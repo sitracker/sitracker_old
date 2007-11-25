@@ -720,7 +720,7 @@ $strUsersHolidays = '%s\'s Holidays';
 $strUserIncidents = '%s\'s Incidents';
 $strUsersNoGroup = 'Users with no group';
 $strUsersTasks = '%s\'s Tasks';
-$strUsersBoldSkills = 'Users shows in bold typeface are known to have relevant software skills';
+$strUsersBoldSkills = 'Users shows in bold typeface are known to have relevant skills';
 
 $strValue = 'Value';
 $strVariable = 'Variable';
