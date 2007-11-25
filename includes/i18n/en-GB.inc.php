@@ -184,6 +184,7 @@ $strDraftDelete = 'Delete Draft';
 $strDraftEdit = 'Edit Draft';
 $strDraftLastSaved = 'Draft last saved';
 $strDueDate = 'Due Date';
+$strDurability = 'Durability';
 $strDuration = 'Duration';
 
 # verb, i.e. to change
@@ -296,7 +297,7 @@ $strHolidayEntitlement = 'Holiday Entitlement';
 $strHolidayPlanner = 'Holiday Planner';
 $strHolidayRequests = 'Holiday Requests';
 $strHolidayType = 'Holiday Type';
-$strHours = "hours";
+$strHours = 'Hours';
 
 # i.e. short for identification; unique number
 $strID = 'ID';
@@ -593,6 +594,7 @@ $strServiceHistory = 'Service History';
 $strServiceLevel = 'Service Level';
 $strServiceLevels = 'Service Levels';
 $strServicePacksApplied = 'Service Packs Applied';
+$strSession = 'Session';
 $strSessionExpired = 'Your session has expired or you have not yet logged in';
 $strSetPermissions = 'Set Permissions';
 $strSetPublicHolidays = 'Set Public Holidays';
@@ -633,6 +635,8 @@ $strStartDate = 'Start Date';
 $strStartNewActivity = 'Start New Activity';
 $strStatus = 'Status';
 $strStatusSummary = 'Status Summary';
+# i.e. permanent
+$strSticky = 'Sticky';
 $strStoreInLog = 'Store details in the Incident Log';
 $strSubject = 'Subject';
 $strSubstitute = 'Substitute';
