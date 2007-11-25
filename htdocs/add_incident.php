@@ -88,10 +88,13 @@ elseif ($action=='findcontact')
     $sql  = "SELECT *, products.name AS productname, products.id AS productid, contacts.surname AS surname, ";
     $sql .= "maintenance.id AS maintid, maintenance.incident_quantity, maintenance.incidents_used ";
     $sql .= "FROM supportcontacts, contacts, maintenance, products, sites ";
-    $sql .= "WHERE supportcontacts.contactid=contacts.id ";
-    $sql .= "AND supportcontacts.maintenanceid=maintenance.id ";
-    $sql .= "AND maintenance.product=products.id ";
+    $sql .= "WHERE maintenance.product=products.id ";
     $sql .= "AND maintenance.site=sites.id ";
+    $sql .= "AND ((supportcontacts.contactid=contacts.id ";
+    $sql .= "AND supportcontacts.maintenanceid=maintenance.id) ";
+    $sql .= "OR (maintenance.allcontactssupported = 'Yes' AND maintenance.site=siteid ";
+    $sql .= "AND contacts.siteid=sites.id)) ";
+
 
     if (empty($contactid))
     {

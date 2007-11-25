@@ -209,10 +209,10 @@ while ($incidents = mysql_fetch_array($result))
     }
     echo "</a></td>";
 
-    echo "<td valign='top'>";
+    echo "<td>";
     echo "<a href='contact_details.php?id={$incidents['contactid']}' class='info'><span>{$incidents['phone']}<br />{$incidents['email']}</span>".stripslashes($incidents['forenames'].' '.$incidents['surname'])."</a><br />".htmlspecialchars($site)." </td>";
 
-    echo "<td align='center' valign='top' >";
+    echo "<td align='center'>";
     // Service Level / Priority
     if (!empty($incidents['maintenanceid'])) echo $servicelevel->tag."<br />";
     elseif (!empty($incidents['servicelevel'])) echo $incidents['servicelevel']."<br />";
@@ -224,12 +224,12 @@ while ($incidents = mysql_fetch_array($result))
 
     if(empty($incidents_minimal))
     {
-        echo "<td align='center' valign='top'>";
+        echo "<td align='center'>";
         echo incidentstatus_name($incidents["status"]);
         if ($incidents['status']==2) echo "<br />".closingstatus_name($incidents['closingstatus']);
         echo "</td>\n";
     }
-    echo "<td align='center' valign='top'>";
+    echo "<td align='center'>";
     echo "{$updated}";
     if(empty($incidents_minimal)) echo "<br />by {$update_user}";
 
@@ -242,7 +242,7 @@ while ($incidents = mysql_fetch_array($result))
 
     if(empty($incidents_minimal))
     {
-        echo "<td align='center' valign='top' title='{$explain}'>";
+        echo "<td align='center' title='{$explain}'>";
         // Next Action
         /*
             if ($target->time > $now) echo target_type_name($target->type);
@@ -283,18 +283,18 @@ while ($incidents = mysql_fetch_array($result))
         if ($reviewremain>0 && $reviewremain<=2400)
         {
             // Only display if review is due in the next five days
-            echo "<td align='center' valign='top'>";
+            echo "<td align='center'>";
             echo sprintf($strReviewIn, format_workday_minutes($reviewremain));
         }
         elseif ($reviewremain<=0)
         {
-            echo "<td align='center' valign='top' class='review'>";
+            echo "<td align='center' class='review'>";
             if ($reviewremain > -86400) echo "<img src='{$CONFIG['application_webpath']}images/icons/{$iconset}/16x16/review.png' width='16' height='16' alt='' /> {$strReviewDueNow}";
             else echo "<img src='{$CONFIG['application_webpath']}images/icons/{$iconset}/16x16/review.png' width='16' height='16' alt='' /> ".sprintf($strReviewDueAgo ,format_workday_minutes($reviewremain*-1));
         }
         else
         {
-            echo "<td align='center' valign='top'>";
+            echo "<td align='center'>";
             if ($incidents['status'] == 2) echo "{$strAge}: ".format_seconds($incidents["duration_closed"]);
             else echo format_seconds($incidents["duration"])." old";
         }
