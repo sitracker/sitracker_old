@@ -46,7 +46,7 @@ elseif ($_REQUEST['win']=='jump')
         echo "<html><head>";
         echo "<script src='{$CONFIG['application_webpath']}scripts/prototype/prototype.js' type='text/javascript'></script>\n";
         echo "<script src='{$CONFIG['application_webpath']}webtrack.js' type='text/javascript'></script>\n";
-        echo "</head><body onload=\"window.location='{$_SERVER['HTTP_REFERER']}';\">test</body></html>";
+        echo "</head><body onload=\"window.location='{$_SERVER['HTTP_REFERER']}';\"></body></html>";
     }
 }
 else
