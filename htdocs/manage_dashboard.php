@@ -131,9 +131,9 @@ switch($_REQUEST['action'])
         if (mysql_error()) trigger_error(mysql_error(),E_USER_ERROR);
 
         echo "<h2><img src='{$CONFIG['application_webpath']}images/icons/{$iconset}/32x32/dashboard.png' width='32' height='32' alt='' /> ";
-        echo "View dashboard components</h2>";
+        echo "{$strManageDashboardComponents}</h2>";
         echo "<table class='vertical' align='center'><tr>";
-        echo colheader('id','ID');
+        echo colheader('id',$strID);
         echo colheader('name',$strName);
         echo colheader('enabled',$strEnabled);
         echo "</tr>";
