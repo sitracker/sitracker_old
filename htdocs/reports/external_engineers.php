@@ -63,16 +63,16 @@ while($escalations = mysql_fetch_object($escs))
         }
         if(!empty($esc))
         {
-            $html .= "<p><table align='center'>";
+            $html .= "<table align='center'>";
             $html .= "<tr><th>{$strExternalEngineersName}</th><th>{$strNumOfCalls}</th>";
             $html .= "<th align='center'>".priority_icon(4)."</th>";
             $html .= "<th align='center'>".priority_icon(3)."</th>";
             $html .= "<th align='center'>".priority_icon(2)."</th>";
             $html .= "<th align='center'>".priority_icon(1)."</th>";
             $html .= "<td>";
-            $html .= "<table width='100%'><tr><th width='50%'>{$strIncident}</th><th width='12%'>{$strInternalEngineer}</th><th width='25%'>{$strSoftware}</th><th>{$strStatus}</th></tr></table>";
-            $html .= "<td>";
-            $html .= "</tr>";
+            $html .= "<table width='100%'><tr><th width='50%'>{$strIncident}</th><th width='12%'>{$strInternalEngineer}</th><th width='25%'>{$strSoftware}</th><th>{$strStatus}</th></tr></table>\n";
+            $html .= "</td>";
+            $html .= "</tr>\n";
 
             foreach($esc AS $engineer)
             {
@@ -96,16 +96,16 @@ while($escalations = mysql_fetch_object($escs))
                     if(!empty($call['salfordtowner'])) $html .= "<br />T: ".user_realname($call['salfordtowner']);
                     $html .= "</td><td width='25%'>".$call['software']."</td><td>".str_replace($replace,"",incidentstatus_name($call['status']))."</td></tr>";
                 }
-                $html .= "</table>";
+                $html .= "</table>\n\n";
                 $html .= "</td>";
                 $total+=$engineer['count'];
                 $c['4']+=$engineer['4'];
                 $c['3']+=$engineer['3'];
                 $c['2']+=$engineer['2'];
                 $c['1']+=$engineer['1'];
-                $html .= "</tr>";
+                $html .= "</tr>\n";
             }
-            $html .= "<tr><td><{$strTotal}:</td><td>{$total}</td>";
+            $html .= "<tr><td>{$strTotal}:</td><td>{$total}</td>";
             if(empty($c['4'])) $c['4']=0;
             if(empty($c['3'])) $c['3']=0;
             if(empty($c['2'])) $c['2']=0;
@@ -114,8 +114,8 @@ while($escalations = mysql_fetch_object($escs))
             $html .= "<td>".$c['3']."</td>";
             $html .= "<td>".$c['2']."</td>";
             $html .= "<td>".$c['1']."</td>";
-            $html .= "</tr>";
-            $html .= "</table></p>";
+            $html .= "</tr>\n";
+            $html .= "</table>\n\n";
         }
         else
             $html .= "<p align='center'>{$strNoIncidents}</p>";
