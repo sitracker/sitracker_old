@@ -37,7 +37,9 @@ if($action == 'new')
     echo "<tr><th>[hr]</th><td>".bbcode("[hr]")."</td></tr>";
     echo "</table>";
     echo "<div align='center'><form action='{$_SERVER[PHP_SELF]}?action=post' method='post'><br /><br />";
+    echo "<h3>{$strNotice}</h3>";
     echo "<textarea cols='60' rows='4' name='text'></textarea><br />";
+    echo "<label for='session'>{$strDurability}:</label> <select name='session'><option>{$strSticky}</option><option>{$strSession}</option></select><br /><br />";
     echo "<input type='submit' value='{$strSave}' />";
     echo "</form></div>";
     echo "<p align='center'><a href='notices.php'>{$strReturnWithoutSaving}</a></p>";
