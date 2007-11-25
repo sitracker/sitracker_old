@@ -294,6 +294,7 @@ $strHolidayEntitlement = 'Holiday Entitlement';
 $strHolidayPlanner = 'Holiday Planner';
 $strHolidayRequests = 'Holiday Requests';
 $strHolidayType = 'Holiday Type';
+$strHours = "hours";
 
 # i.e. short for identification; unique number
 $strID = 'ID';
