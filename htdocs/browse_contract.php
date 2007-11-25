@@ -42,16 +42,13 @@ echo "{$title}</h2>";
 <tr>
 <td align="center">
 <form action="<?php echo $_SERVER['PHP_SELF']; ?>" method="get">
-Browse Contracts by Site (or ID): <!--<input type="text" name="search_string" />-->
+<?php echo $strBrowseContractsBySite;?>: <!--<input type="text" name="search_string" />-->
 <input dojoType='ComboBox' dataUrl='autocomplete.php?action=sites' style='width: 300px;' name='search_string' />
 <?php
 echo "<label><input type='checkbox' name='activeonly' value='yes' ";
 if ($activeonly=='yes') echo "checked='checked' ";
-echo "/> Show Active Only</label>";
-?>
-<br />
-and/or by product:
-<?php
+echo "/> {$strShowActiveOnly}</label>";
+echo "<br />{$strByProduct}: ";
 echo product_drop_down('productid', $productid);
 echo "<input type='submit' value=\"{$strGo}\" />";
 ?>
@@ -108,12 +105,13 @@ if (empty($search_string) && empty($productid))
 */
 
 // search for criteria
-$sql  = "SELECT maintenance.id AS maintid, sites.name AS site, products.name AS product, resellers.name AS reseller, licence_quantity, ";
+$sql  = "SELECT DISTINCT maintenance.id AS maintid, sites.name AS site, products.name AS product, resellers.name AS reseller, licence_quantity, ";
 $sql .= "licencetypes.name AS licence_type, expirydate, admincontact, contacts.forenames AS admincontactforenames, contacts.surname AS admincontactsurname, maintenance.notes, sites.id AS siteid, ";
 $sql .= "maintenance.term AS term, maintenance.productonly AS productonly ";
 $sql .= "FROM maintenance, sites, contacts, products, licencetypes, resellers ";
-$sql .= "WHERE (maintenance.site=sites.id AND product=products.id AND reseller=resellers.id AND licence_type=licencetypes.id AND admincontact=contacts.id) ";
-if ($activeonly=='yes') $sql .= "AND term!='yes' AND expirydate > $now ";
+$sql .= "WHERE (maintenance.site=sites.id AND product=products.id AND admincontact=contacts.id) ";
+// $sql .= "AND (reseller=resellers.id OR reseller=NULL) AND (licence_type=licencetypes.id OR licence_type=NULL) ";
+if ($activeonly=='yes') $sql .= "AND term!='yes' AND (expirydate > $now OR expirydate = '-1') ";
 if ($search_string != '*')
 {
     if (strlen($search_string)==1)
