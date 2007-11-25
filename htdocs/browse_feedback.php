@@ -131,7 +131,7 @@ switch($mode)
         }
         else echo "<p class='error'>{$strNoResponseFound}</p>";
 
-        echo "<p align='center'><a href='{$_SERVER['PHP_SELF']}'>{$strBackToListOfFeedback}</p>";
+        echo "<p align='center'><a href='{$_SERVER['PHP_SELF']}'>{$strBackToList}</p>";
     break;
 
     default:
