@@ -90,6 +90,7 @@ $strBrowseSites = 'Browse sites';
 $strBulkModify = 'Bulk Modify';
 
 $strCallFromCustomer = 'Phone call from customer';
+$strCallToCustomer = 'Phone call to customer';
 $strCause = 'Cause';
 $strChangePassword = 'Change Password';
 $strChangingContact = 'Changing the contact or skill will not reassign this incident to another contract';

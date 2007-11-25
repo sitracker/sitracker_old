@@ -32,15 +32,15 @@ function display_update_page($draftid=-1)
         $draftresult = mysql_query($draftsql);
         if (mysql_error()) trigger_error(mysql_error(),E_USER_ERROR);
         $draftobj = mysql_fetch_object($draftresult);
+
+        $metadata = explode("|",$draftobj->meta);
     }
 
     // No update body text detected show update form
-    echo "<script type=\"text/javascript\" src=\"scripts/dojo/dojo.js\"></script>";
+
     ?>
     <script type="text/javascript">
     <!--
-    dojo.require("dojo.widget.Dialog");
-    dojo.require("dojo.widget.Button");
     function deleteOption(object) {
         var Current = object.updatetype.selectedIndex;
         object.updatetype.options[Current] = null;
@@ -176,9 +176,12 @@ function display_update_page($draftid=-1)
         var toPass = byId('updatelog').value;
         //alert(toPass.value);
 
+        var meta = byId('target').value+"|"+byId('updatetype').value+"|"+byId('cust_vis').checked+"|";
+        meta += byId('priority').value+"|"+byId('newstatus').value+"|"+byId('nextaction').value+"|";
+
         if(toPass != "")
         {
-            xmlhttp.open("GET", "auto_save.php?userid="+<?php echo $_SESSION['userid']; ?>+"&type=update&incidentid="+<?php echo $id; ?>+"&draftid="+draftid+"&meta=&content="+escape(toPass), true);
+            xmlhttp.open("GET", "auto_save.php?userid="+<?php echo $_SESSION['userid']; ?>+"&type=update&incidentid="+<?php echo $id; ?>+"&draftid="+draftid+"&meta="+meta+"&content="+escape(toPass), true);
 
             xmlhttp.onreadystatechange=function() {
                 //remove this in the future after testing
@@ -202,7 +205,7 @@ function display_update_page($draftid=-1)
                         {
                             seconds = "0"+seconds;
                         }
-                        byId('updatestr').innerHTML = "<?php echo $GLOBALS['strDraftLastSaved'] ?>: "+hours+":"+minutes+":"+seconds;
+                        byId('updatestr').innerHTML = "<?php echo "<img src='{$CONFIG['application_webpath']}images/icons/{$iconset}/16x16/info.png' /> ".$GLOBALS['strDraftLastSaved'] ?>: "+hours+":"+minutes+":"+seconds;
                     }
                 }
             }
@@ -212,15 +215,6 @@ function display_update_page($draftid=-1)
 
     setInterval("save_content()", 10000); //every 10 seconds
 
-
-    var dlg0, dlg1, dlg2, dlg3;
-    function init(e) {
-        dlg0 = dojo.widget.byId("dialog0");
-        var btn = document.getElementById("hider0");
-        dlg0.setCloseControl(btn);
-    }
-    dojo.addOnLoad(init);
-
     //-->
     </script>
     <?php
@@ -229,31 +223,82 @@ function display_update_page($draftid=-1)
     echo "<table class='vertical'>";
     echo "<tr>";
     echo "<th align='right' valign='top'>{$GLOBALS['strDoesThisUpdateMeetSLA']}:";
-    echo "<img src='{$CONFIG['application_webpath']}/images/icons/{$iconset}/16x16/sla.png' width='16' height='16' alt='' /></th>";
+    echo "<img src='{$CONFIG['application_webpath']}images/icons/{$iconset}/16x16/sla.png' width='16' height='16' alt='' /></th>";
     echo "<td class='shade2'>";
     $target = incident_get_next_target($id);
 
+    $targetNone = "";
+    $targetInitialresponse = "";
+    $targetProbdef = "";
+    $targetActionplan = "";
+    $targetSolution = "";
+
+    $typeResearch = "";
+    $typeEmailin = "";
+    $typeEmailout = "";
+    $typePhonecallin = "";
+    $typePhonecallout = "";
+    $typeExternalinfo = "";
+    $typeReviewmet = "";
+
+
+    if(!empty($metadata))
+    {
+        switch($metadata[0])
+        {
+            case 'none': $targetNone = " SELECTED ";
+                break;
+            case 'initialresponse': $targetInitialresponse = " SELECTED ";
+                break;
+            case 'probdef': $targetProbdef = " SELECTED ";
+                break;
+            case 'actionplan': $targetActionplan = " SELECTED ";
+                break;
+            case 'solution': $targetSolution = " SELECTED ";
+                break;
+        }
+
+        switch($metadata[1])
+        {
+            case 'research': $typeResearch = " SELECTED ";
+                break;
+            case 'emailin': $typeEmailin = " SELECTED ";
+                break;
+            case 'emailout': $typeEmailout = " SELECTED ";
+                break;
+            case 'phonecallin': $typePhonecallin = " SELECTED ";
+                break;
+            case 'phonecallout': $typePhonecallout = " SELECTED ";
+                break;
+            case 'externalinfo': $typeExternalinfo = " SELECTED ";
+                break;
+            case 'reviewmet': $typeReviewmet = " SELECTED ";
+                break;
+        }
+    }
+
+
     echo "<select name='target' id='target' class='dropdown'>\n";
-    echo "<option value='none' onclick='notarget(this.form)'>{$GLOBALS['strNo']}</option>\n";
+    echo "<option value='none' {$targetNone} onclick='notarget(this.form)'>{$GLOBALS['strNo']}</option>\n";
     switch ($target->type)
     {
         case 'initialresponse':
-            echo "<option value='initialresponse' style='text-indent: 15px; height: 17px; background-image: url({$CONFIG['application_webpath']}/images/icons/{$iconset}/16x16/initialresponse.png); background-repeat: no-repeat;' onclick='initialresponse(this.form)' >{$GLOBALS['strInitialResponse']}</option>\n";
-            echo "<option value='probdef' style='text-indent: 15px; height: 17px; background-image: url({$CONFIG['application_webpath']}/images/icons/{$iconset}/16x16/probdef.png); background-repeat: no-repeat;' onclick='probdef(this.form)'>{$GLOBALS['strProblemDefinition']}</option>\n";
-            echo "<option value='actionplan' style='text-indent: 15px; height: 17px; background-image: url({$CONFIG['application_webpath']}/images/icons/{$iconset}/16x16/actionplan.png); background-repeat: no-repeat;' onclick='actionplan(this.form)'>{$GLOBALS['strActionPlan']}</option>\n";
-            echo "<option value='solution' style='text-indent: 15px; height: 17px; background-image: url({$CONFIG['application_webpath']}/images/icons/{$iconset}/16x16/solution.png); background-repeat: no-repeat;' onclick='reprioritise(this.form)'>{$GLOBALS['strResolutionReprioritisation']}</option>\n";
+            echo "<option value='initialresponse' {$targetInitialresponse} style='text-indent: 15px; height: 17px; background-image: url({$CONFIG['application_webpath']}images/icons/{$iconset}/16x16/initialresponse.png); background-repeat: no-repeat;' onclick='initialresponse(this.form)' >{$GLOBALS['strInitialResponse']}</option>\n";
+            echo "<option value='probdef' {$targetProbdef} style='text-indent: 15px; height: 17px; background-image: url({$CONFIG['application_webpath']}images/icons/{$iconset}/16x16/probdef.png); background-repeat: no-repeat;' onclick='probdef(this.form)'>{$GLOBALS['strProblemDefinition']}</option>\n";
+            echo "<option value='actionplan' {$targetActionplan} style='text-indent: 15px; height: 17px; background-image: url({$CONFIG['application_webpath']}images/icons/{$iconset}/16x16/actionplan.png); background-repeat: no-repeat;' onclick='actionplan(this.form)'>{$GLOBALS['strActionPlan']}</option>\n";
+            echo "<option value='solution' {$targetSolution} style='text-indent: 15px; height: 17px; background-image: url({$CONFIG['application_webpath']}images/icons/{$iconset}/16x16/solution.png); background-repeat: no-repeat;' onclick='reprioritise(this.form)'>{$GLOBALS['strResolutionReprioritisation']}</option>\n";
         break;
         case 'probdef':
-            echo "<option value='probdef' style='text-indent: 15px; height: 17px; background-image: url({$CONFIG['application_webpath']}/images/icons/{$iconset}/16x16/probdef.png); background-repeat: no-repeat;' onclick='probdef(this.form)'>{$GLOBALS['strProblemDefinition']}</option>\n";
-            echo "<option value='actionplan' style='text-indent: 15px; height: 17px; background-image: url({$CONFIG['application_webpath']}/images/icons/{$iconset}/16x16/actionplan.png); background-repeat: no-repeat;' onclick='actionplan(this.form)'>{$GLOBALS['strActionPlan']}</option>\n";
-            echo "<option value='solution' style='text-indent: 15px; height: 17px; background-image: url({$CONFIG['application_webpath']}/images/icons/{$iconset}/16x16/solution.png); background-repeat: no-repeat;' onclick='reprioritise(this.form)'>{$GLOBALS['strResolutionReprioritisation']}</option>\n";
+            echo "<option value='probdef' {$targetProbdef} style='text-indent: 15px; height: 17px; background-image: url({$CONFIG['application_webpath']}images/icons/{$iconset}/16x16/probdef.png); background-repeat: no-repeat;' onclick='probdef(this.form)'>{$GLOBALS['strProblemDefinition']}</option>\n";
+            echo "<option value='actionplan' {$targetActionplan} style='text-indent: 15px; height: 17px; background-image: url({$CONFIG['application_webpath']}images/icons/{$iconset}/16x16/actionplan.png); background-repeat: no-repeat;' onclick='actionplan(this.form)'>{$GLOBALS['strActionPlan']}</option>\n";
+            echo "<option value='solution' {$targetSolution} style='text-indent: 15px; height: 17px; background-image: url({$CONFIG['application_webpath']}images/icons/{$iconset}/16x16/solution.png); background-repeat: no-repeat;' onclick='reprioritise(this.form)'>{$GLOBALS['strResolutionReprioritisation']}</option>\n";
         break;
         case 'actionplan':
-            echo "<option value='actionplan' style='text-indent: 15px; height: 17px; background-image: url({$CONFIG['application_webpath']}/images/icons/{$iconset}/16x16/actionplan.png); background-repeat: no-repeat;' onclick='actionplan(this.form)'>{$GLOBALS['strActionPlan']}</option>\n";
-            echo "<option value='solution' style='text-indent: 15px; height: 17px; background-image: url({$CONFIG['application_webpath']}/images/icons/{$iconset}/16x16/solution.png); background-repeat: no-repeat;' onclick='reprioritise(this.form)'>{$GLOBALS['strResolutionReprioritisation']}</option>\n";
+            echo "<option value='actionplan' {$targetActionplan} style='text-indent: 15px; height: 17px; background-image: url({$CONFIG['application_webpath']}images/icons/{$iconset}/16x16/actionplan.png); background-repeat: no-repeat;' onclick='actionplan(this.form)'>{$GLOBALS['strActionPlan']}</option>\n";
+            echo "<option value='solution' {$targetSolution} style='text-indent: 15px; height: 17px; background-image: url({$CONFIG['application_webpath']}images/icons/{$iconset}/16x16/solution.png); background-repeat: no-repeat;' onclick='reprioritise(this.form)'>{$GLOBALS['strResolutionReprioritisation']}</option>\n";
         break;
             case 'solution':
-            echo "<option value='solution' style='text-indent: 15px; height: 17px; background-image: url({$CONFIG['application_webpath']}/images/icons/{$iconset}/16x16/solution.png); background-repeat: no-repeat;' onclick='reprioritise(this.form)'>{$GLOBALS['strResolutionReprioritisation']}</option>\n";
+            echo "<option value='solution' {$targetSolution} style='text-indent: 15px; height: 17px; background-image: url({$CONFIG['application_webpath']}images/icons/{$iconset}/16x16/solution.png); background-repeat: no-repeat;' onclick='reprioritise(this.form)'>{$GLOBALS['strResolutionReprioritisation']}</option>\n";
         break;
     }
     echo "</select>\n";
@@ -267,13 +312,13 @@ function display_update_page($draftid=-1)
     if ($target->type!='solution')
         echo "<option value='actionplan'>Action Plan</option>\n";
     */
-    echo "<option value='research' selected='selected' style='text-indent: 15px; height: 17px; background-image: url({$CONFIG['application_webpath']}/images/icons/{$iconset}/16x16/research.png); background-repeat: no-repeat;'>{$GLOBALS['strResearchNotes']}</option>\n";
-    echo "<option value='emailin' style='text-indent: 15px; height: 17px; background-image: url({$CONFIG['application_webpath']}/images/icons/{$iconset}/16x16/emailin.png); background-repeat: no-repeat;'>{$GLOBALS['strEmailFromCustomer']}</option>\n";
-    echo "<option value='emailout' style='text-indent: 15px; height: 17px; background-image: url({$CONFIG['application_webpath']}/images/icons/{$iconset}/16x16/emailout.png); background-repeat: no-repeat;'>{$GLOBALS['strEmailToCustomer']}</option>\n";
-    echo "<option value='phonecallin' style='text-indent: 15px; height: 17px; background-image: url({$CONFIG['application_webpath']}/images/icons/{$iconset}/16x16/callin.png); background-repeat: no-repeat;'>{$GLOBALS['CallFromCustomer']}</option>\n";
-    echo "<option value='phonecallout' style='text-indent: 15px; height: 17px; background-image: url({$CONFIG['application_webpath']}/images/icons/{$iconset}/16x16/callout.png); background-repeat: no-repeat;'>{$GLOBALS['strCallFromCustomer']}</option>\n";
-    echo "<option value='externalinfo' style='text-indent: 15px; height: 17px; background-image: url({$CONFIG['application_webpath']}/images/icons/{$iconset}/16x16/externalinfo.png); background-repeat: no-repeat;'>{$GLOBALS['strExternalInfo']}</option>\n";
-    echo "<option value='reviewmet' style='text-indent: 15px; height: 17px; background-image: url({$CONFIG['application_webpath']}/images/icons/{$iconset}/16x16/review.png); background-repeat: no-repeat;'>{$strReview}</option>\n";
+    echo "<option value='research' {$typeResearch} selected='selected' style='text-indent: 15px; height: 17px; background-image: url({$CONFIG['application_webpath']}images/icons/{$iconset}/16x16/research.png); background-repeat: no-repeat;'>{$GLOBALS['strResearchNotes']}</option>\n";
+    echo "<option value='emailin' {$typeEmailin} style='text-indent: 15px; height: 17px; background-image: url({$CONFIG['application_webpath']}images/icons/{$iconset}/16x16/emailin.png); background-repeat: no-repeat;'>{$GLOBALS['strEmailFromCustomer']}</option>\n";
+    echo "<option value='emailout' {$typeEmailout} style='text-indent: 15px; height: 17px; background-image: url({$CONFIG['application_webpath']}images/icons/{$iconset}/16x16/emailout.png); background-repeat: no-repeat;'>{$GLOBALS['strEmailToCustomer']}</option>\n";
+    echo "<option value='phonecallin' {$typePhonecallin} style='text-indent: 15px; height: 17px; background-image: url({$CONFIG['application_webpath']}images/icons/{$iconset}/16x16/callin.png); background-repeat: no-repeat;'>{$GLOBALS['strCallToCustomer']}</option>\n";
+    echo "<option value='phonecallout' {$typePhonecallout} style='text-indent: 15px; height: 17px; background-image: url({$CONFIG['application_webpath']}images/icons/{$iconset}/16x16/callout.png); background-repeat: no-repeat;'>{$GLOBALS['strCallFromCustomer']}</option>\n";
+    echo "<option value='externalinfo' {$typeExternalinfo} style='text-indent: 15px; height: 17px; background-image: url({$CONFIG['application_webpath']}images/icons/{$iconset}/16x16/externalinfo.png); background-repeat: no-repeat;'>{$GLOBALS['strExternalInfo']}</option>\n";
+    echo "<option value='reviewmet' {$typeReviewmet} style='text-indent: 15px; height: 17px; background-image: url({$CONFIG['application_webpath']}images/icons/{$iconset}/16x16/review.png); background-repeat: no-repeat;'>{$GLOBALS['strReview']}</option>\n";
 
     echo "</select>";
     echo "</td>";
@@ -282,7 +327,16 @@ function display_update_page($draftid=-1)
     echo "<th align='right' valign='top'>Update Log:<br />";
     echo "New information, relevent to the incident.  Please be as detailed as possible and include full descriptions of any work you have performed.<br />";
     echo "<br />";
-    echo "Check here <input type='checkbox' name='cust_vis' id='cust_vis' checked='checked' value='yes' /> to make this update visible to the customer.";
+    $checkbox = "";
+    if(!empty($metadata))
+    {
+        if($metadata[2] == "true") $checkbox = "checked='checked'";
+    }
+    else
+    {
+        $checkbox = "checked='checked'";
+    }
+    echo "Check here <input type='checkbox' name='cust_vis' id='cust_vis' {$checkbox} value='yes' /> to make this update visible to the customer.";
     echo "</th>";
     echo "<td class='shade1'><textarea name='bodytext' id='updatelog' rows='13' cols='50'>";
     if($draftid != -1) echo $draftobj->content;
@@ -302,16 +356,40 @@ function display_update_page($draftid=-1)
     $servicelevel=maintenance_servicelevel(incident_maintid($id));
     if ($servicelevel==2 || $servicelevel==5) $maxpriority=4;
     else $maxpriority=3;
-    echo priority_drop_down("newpriority", incident_priority($id), $maxpriority, $disable_priority); //id='priority
+
+    $setPriorityTo = incident_priority($id);
+
+    if(!empty($metadata))
+    {
+        $setPriorityTo = $metadata[3];
+    }
+
+    echo priority_drop_down("newpriority", $setPriorityTo, $maxpriority, $disable_priority); //id='priority
     echo "</td></tr>\n";
 
     echo "<tr>";
     echo "<th align='right' valign='top'>{$GLOBALS['strNewStatus']}:</th>";
-    echo "<td class='shade1'>".incidentstatus_drop_down("newstatus", incident_status($id))."</td>";
+
+    $setStatusTo = incident_status($id);
+
+    if(!empty($metadata))
+    {
+        $setStatusTo = $metadata[4];
+    }
+
+    echo "<td class='shade1'>".incidentstatus_drop_down("newstatus", $setStatusTo)."</td>";
     echo "</tr>";
     echo "<tr>";
     echo "<th align='right' valign='top'>{$GLOBALS['strNextAction']}:</th>";
-    echo "<td class='shade2'><input type='text' name='nextaction' id='nextaction' maxlength='50' size='30' value='' /></td></tr>";
+
+    $nextAction = "";
+
+    if(!empty($metadata))
+    {
+        $nextAction = $metadata[5];
+    }
+
+    echo "<td class='shade2'><input type='text' name='nextaction' id='nextaction' maxlength='50' size='30' value='{$nextAction}' /></td></tr>";
     echo "<tr>";
     echo "<th align='right'>";
     echo "<strong>{$GLOBALS['strTimeToNextAction']}</strong>:<br />The incident will be placed in the waiting queue until the time specified.</th>";
