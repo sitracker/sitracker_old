@@ -288,7 +288,7 @@ if (mysql_num_rows($result) >=1 )
                 echo "$strNotCompleted</td>";
                 $duration = $now - $startdate;
                 //echo "<td id='duration{$task->id}'><em><div id='duration{$task->id}'>".format_seconds($duration)."</div></em></td>";
-                echo "<td id='duration{$task->id}'>".format_seconds($duration);
+                echo "<td id='duration{$task->id}'>".format_seconds($duration)."</td>";
                 //echo "<script type='text/javascript'>countUp();</script></td>";  //force a quick udate
 
             }
@@ -321,15 +321,16 @@ if (mysql_num_rows($result) >=1 )
 
     if($mode == 'incident')
     {
+        echo "<tr class='{$shade}'><td><strong>{$strTotal}:</strong></td><td colspan='5'>".format_seconds($totalduration)."</td></tr>";
+        echo "<tr class='{$shade}'><td><strong>{$strExact}:</strong></td><td colspan='5' id='totalduration'>".exact_seconds($totalduration);
+
         echo "<script type='text/javascript'>";
         echo "setClosedDuration({$closedduration});";
         echo "</script>";
-
-        echo "<tr class='{$shade}'><td><strong>{$strTotal}:</strong></td><td colspan='5'>".format_seconds($totalduration)."</td></tr>";
-        echo "<tr class='{$shade}'><td><strong>{$strExact}:</strong></td><td colspan='5' id='totalduration'>".exact_seconds($totalduration)."</td></tr>";
+        echo "</td></tr>";
     }
-    echo "<script type='text/javascript'>countUp();</script></td>";  //force a quick udate
     echo "</table>\n";
+    echo "<script type='text/javascript'>countUp();</script>";  //force a quick udate
 }
 else
 {
