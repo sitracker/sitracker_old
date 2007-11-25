@@ -43,9 +43,9 @@ if (empty($mode))
     echo "<form action='{$_SERVER['PHP_SELF']}' method='post'>";
     echo "<table align='center' class='vertical'>";
     echo "<col width='250'></col><col width='*'></col>";
-    echo "<tr><th colspan='2'>".strtoupper($strAbout).' ';
-    if ($userid==$sit[2]) echo strtoupper($strYou);
-    else echo strtoupper($user->realname);
+    echo "<tr><th colspan='2'>{$strAbout}";
+    if ($userid==$sit[2]) echo $strYou;
+    else echo $user->realname;
     echo "</td></tr>\n";
     echo "<tr><th>{$strUsername}:</th><td>{$user->username}</td></tr>";
     echo "<tr><th>{$strRole}:</th>";
@@ -96,7 +96,7 @@ if (empty($mode))
     }
     echo "
     </td></tr>
-    <tr><th colspan='2'>".strtoupper($strWorkStatus)."</td></tr>";
+    <tr><th colspan='2'>{$strWorkStatus}</td></tr>";
     if ($edituserpermission AND $userid != $sit[2]) $userdisable=TRUE;
     else $userdisable=FALSE;
 
@@ -108,7 +108,7 @@ if (empty($mode))
     echo "</td></tr>\n";
     echo "<tr><th>{$strMessage}:<br />{$strMessageTip}</th>";
     echo "<td><textarea name='message' rows='4' cols='40'>".strip_tags($user->message)."</textarea></td></tr>\n";
-    echo "<tr><th colspan='2'>".strtoupper($strContactDetails)."</td></tr>";
+    echo "<tr><th colspan='2'>{$strContactDetails}</td></tr>";
     echo "<tr id='email'><th>{$strEmail}:<sup class='red'>*</sup></th><td><input maxlength='50' name='email' size='30' type='text' value='".strip_tags($user->email)."'></td></tr>";
     echo "<tr id='phone'><th>{$strTelephone}:</th><td><input maxlength='50' name='phone' size='30' type='text' value='".strip_tags($user->phone)."'></td></tr>";
     echo "<tr><th>{$strFax}:</th><td><input maxlength='50' name='fax' size='30' type='text' value='".strip_tags($user->fax)."'></td></tr>";
@@ -120,7 +120,7 @@ if (empty($mode))
     echo "<tr><th>MSN: <img src=\"images/icons/{$iconset}/16x16/msn.png\" width=\"16\" height=\"16\" alt=\"MSN\" /></th>";
     echo "<td><input maxlength=\"50\" name=\"msn\" size=\"30\" type=\"text\" value=\"".strip_tags($user->msn)."\" /></td></tr>";
 
-    echo "<tr><th colspan='2'>".strtoupper($strDisplayPreferences)."</td></tr>\n";
+    echo "<tr><th colspan='2'>{$strDisplayPreferences}</td></tr>\n";
     echo "<tr><th>{$strLanguage}</th><td>";
     echo "<select name='vari18n' id='vari18n'>";
     if (!empty($user->var_i18n)) $selectedlang = $user->var_i18n;
@@ -157,7 +157,7 @@ if (empty($mode))
     html_checkbox('collapse', $user->var_collapse);
     echo "</td></tr>\n";
 
-    echo "<tr><th colspan='2'>".strtoupper($strNotifications)."</td></tr>\n";
+    echo "<tr><th colspan='2'>{$strNotifications}</td></tr>\n";
     echo "<tr><th>{$strEmailNotificationReassign}</th><td>";
     html_checkbox('emailonreassign', $user->var_notify_on_reassign);
     echo "</td><tr>\n";
@@ -166,7 +166,7 @@ if (empty($mode))
 
     if ($CONFIG['trusted_server']==FALSE AND $userid==$sit[2])
     {
-        echo "<tr class='password'><th colspan='2'>".strtoupper($strChangePassword)."</td></tr>";
+        echo "<tr class='password'><th colspan='2'>{$strChangePassword}</td></tr>";
         echo "<tr class='password'><th>&nbsp;</th><td>{$strToChangePassword}</td></tr>";
         echo "<tr class='password'><th>{$strOldPassword}:</th><td><input maxlength='50' name='password' size='30' type='password' /></td></tr>";
         echo "<tr class='password'><th>{$strNewPassword}:</th><td><input maxlength='50' name='newpassword1' size='30' type='password' /></td></tr>";
