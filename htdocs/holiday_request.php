@@ -7,7 +7,7 @@
 // This software may be used and distributed according to the terms
 // of the GNU General Public License, incorporated herein by reference.
 //
-
+// Author: Ivan Lucas <ivanlucas[at]users.sourceforge.net>
 
 $permission=27; /* View your calendar */
 require('db_connect.inc.php');
@@ -42,7 +42,7 @@ if (!$sent)
     if ($approver==TRUE AND $mode!='approval' AND $user==$sit[2]) echo "<p align='center'><a href='holiday_request.php?user=all&amp;mode=approval'>Approve holiday requests</a></p>";
     if ($approver==TRUE AND $mode=='approval' AND $user!='all') echo "<p align='center'><a href='holiday_request.php?user=all&amp;mode=approval'>{$strShowAll}</a></p>";
 
-    $sql = "SELECT * FROM holidays, holidaytypes WHERE holidays.type=holidaytypes.id AND approved=0 ";
+    $sql = "SELECT * FROM holidays WHERE approved=0 ";
     if (!empty($type)) $sql .= "AND type='$type' ";
     if ($mode!='approval' || $user!='all') $sql.="AND userid='$user' ";
     if ($approver==TRUE && $mode=='approval') $sql .= "AND approvedby={$sit[2]} ";
@@ -53,10 +53,10 @@ if (!$sent)
     {
         echo "<table align='center'>";
         echo "<tr>";
-        if ($user=='all' && $approver==TRUE) echo "<th>Name</th>";
-        echo "<th>Date</th><th>Length</th><th>Type</th>";
-        if ($approver AND $mode=='approval') echo "<th>Approval</th><th>Group Members Away</th>";
-        else echo "<th>Status</th>";
+        if ($user=='all' && $approver==TRUE) echo "<th>{$strName}</th>";
+        echo "<th>{$strDate}</th><th>{$strLength}</th><th>{$strType}</th>";
+        if ($approver AND $mode=='approval') echo "<th>{$strOperation}</th><th>Group Members Away</th>";  // FIXME i18n group members away
+        else echo "<th>{$strStatus}</th>";
 
         echo "</tr>";
         while ($holiday=mysql_fetch_object($result))
@@ -74,7 +74,7 @@ if (!$sent)
             if ($holiday->length=='pm') echo "Afternoon";
             if ($holiday->length=='day') echo "Full Day";
             echo "</td>";
-            echo "<td>".$holiday->name."</td>";
+            echo "<td>".holiday_type($holiday->type)."</td>";
             if ($approver==TRUE)
             {
                 if ($sit[2]!=$holiday->userid AND $mode=='approval')
@@ -83,7 +83,7 @@ if (!$sent)
                     $approvetext='Approve';
                     if ($holiday->type==2) $approvetext='Acknowledge';
                     echo "<a href=\"holiday_approve.php?approve=TRUE&amp;user={$holiday->userid}&amp;view={$user}&amp;startdate={$holiday->startdate}&amp;type={$holiday->type}&amp;length={$holiday->length}\">{$approvetext}</a> | ";
-                    echo "<a href=\"holiday_approve.php?approve=FALSE&amp;user={$holiday->userid}&amp;view={$user}&amp;startdate={$holiday->startdate}&amp;type={$holiday->type}&amp;length={$holiday->length}\">Decline</a>";
+                    echo "<a href=\"holiday_approve.php?approve=FALSE&amp;user={$holiday->userid}&amp;view={$user}&amp;startdate={$holiday->startdate}&amp;type={$holiday->type}&amp;length={$holiday->length}\">Decline</a>"; // FIMXE i18n
                     if ($holiday->type==1) echo " | <a href=\"holiday_approve.php?approve=FREE&amp;user={$holiday->userid}&amp;view={$user}&amp;startdate={$holiday->startdate}&amp;type={$holiday->type}&amp;length={$holiday->length}\">Free Leave</a>";
                     echo "</td>";
                 }
@@ -161,7 +161,7 @@ else
     if (empty($approvaluser)) echo "<p class='error'>Error: You did not select a user to send the request to</p>";
     else
     {
-        $sql = "SELECT * FROM holidays, holidaytypes WHERE holidays.type=holidaytypes.id AND approved=0 ";
+        $sql = "SELECT * FROM holidays WHERE approved=0 ";
         if ($action!='resend') $sql .= "AND approvedby=0 ";
         if ($user!='all' || $approver==FALSE) $sql .= "AND userid='{$user}' ";
         $sql .= "ORDER BY startdate, length";
@@ -178,7 +178,7 @@ else
                 if ($holiday->length=='pm') $holidaylist .= "Afternoon";
                 if ($holiday->length=='day') $holidaylist .= "Full Day";
                 $holidaylist .= ", ";
-                $holidaylist .= $holiday->name."\n";
+                $holidaylist .= holiday_type($holiday->type)."\n";
             }
             $bodytext .= "$holidaylist\n";
             if (strlen($memo)>3)

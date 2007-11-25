@@ -295,20 +295,6 @@ CREATE TABLE `holidays` (
   KEY `approved` (`approved`)
 ) ENGINE=MyISAM;
 
-
-CREATE TABLE `holidaytypes` (
-  `id` int(11) NOT NULL auto_increment,
-  `name` varchar(255) NOT NULL default '',
-  PRIMARY KEY  (`id`)
-) ENGINE=MyISAM;
-
-INSERT INTO `holidaytypes` VALUES (1, 'Holiday');
-INSERT INTO `holidaytypes` VALUES (2, 'Sickness');
-INSERT INTO `holidaytypes` VALUES (3, 'Working Away');
-INSERT INTO `holidaytypes` VALUES (4, 'Training');
-INSERT INTO `holidaytypes` VALUES (5, 'Compassionate/Maternity/Paternity Leave');
-
-
 CREATE TABLE `incidentpools` (
   `id` int(11) NOT NULL auto_increment,
   `maintenanceid` int(11) NOT NULL default '0',
@@ -1565,6 +1551,8 @@ ALTER TABLE `maintenance` ADD `allcontactssupported` ENUM( 'No', 'Yes' ) NOT NUL
 
 -- INL 22Nov07
 ALTER TABLE `dashboard_rss` ADD `items` INT( 5 ) NULL AFTER `url`;
+-- INL 25Nov07
+DROP TABLE `holidaytypes`;
 ";
 
 

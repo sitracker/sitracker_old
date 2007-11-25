@@ -327,13 +327,11 @@ function draw_chart($mode, $year, $month='', $day='', $groupid='', $userid='')
     $numgroups = count($grouparr);
 
     // Get list of holiday types
-    $sql = "SELECT * FROM holidaytypes";
-    $result = mysql_query($sql);
-    if (mysql_error()) trigger_error(mysql_error(),E_USER_ERROR);
-    while ($type = mysql_fetch_object($result))
-    {
-        $holidaytype[$type->id]=$type->name;
-    }
+    $holidaytype[1] = $GLOBALS['strHoliday'];
+    $holidaytype[2] = $GLOBALS['strAbsentSick'];
+    $holidaytype[3] = $GLOBALS['strWorkingAway'];
+    $holidaytype[4] = $GLOBALS['strTraining'];
+    $holidaytype[5] = $GLOBALS['strCompassionateLeave'];
 
     $html .= "<table align='center' border='1' cellpadding='0' cellspacing='0' style='border-collapse:collapse; border-color: #AAA; width: 99%;'>";
     $usql  = "SELECT * FROM users WHERE status!=0 ";
@@ -657,24 +655,28 @@ if ($display=='chart' OR $display=='month')
 }
 elseif ($display=='list')
 {
-    echo "<h2>Holiday List</h2>";
+    echo "<h2>Holiday List</h2>"; // FIXME i18n
 
-    $sql = "SELECT * FROM holidaytypes";
-    $result = mysql_query($sql);
-    if (mysql_error()) trigger_error(mysql_error(),E_USER_ERROR);
+    // Get list of holiday types
+    $holidaytype[1] = $GLOBALS['strHoliday'];
+    $holidaytype[2] = $GLOBALS['strAbsentSick'];
+    $holidaytype[3] = $GLOBALS['strWorkingAway'];
+    $holidaytype[4] = $GLOBALS['strTraining'];
+    $holidaytype[5] = $GLOBALS['strCompassionateLeave'];
+
     echo "<form action='{$_SERVER['PHP_SELF']}' style='text-align: center;'>";
     echo "List: <select class='dropdown' name='type' onchange='window.location.href=this.options[this.selectedIndex].value'>\n";
-    while ($holidaytypes = mysql_fetch_object($result))
+    foreach ($holidaytype AS $htypeid => $htype)
     {
-        echo "<option value='{$_SERVER['PHP_SELF']}?display=list&amp;type={$holidaytypes->id}'";
-        if ($type == $holidaytypes->id) echo " selected='selected'";
-        echo ">{$holidaytypes->name}</option>\n";
+        echo "<option value='{$_SERVER['PHP_SELF']}?display=list&amp;type={$htypeid}'";
+        if ($type == $htypeid) echo " selected='selected'";
+        echo ">{$htype}</option>\n";
     }
     echo "</select></form>";
     echo "<h3>Descending date order</h3>";
     if (empty($type)) $type=1;
-    $sql = "SELECT *, holidays.id AS holidayid from holidays, holidaytypes, users WHERE holidays.type=holidaytypes.id ";
-    $sql .= "AND holidays.userid=users.id AND holidays.type=$type ";
+    $sql = "SELECT *, holidays.id AS holidayid FROM holidays, users WHERE ";
+    $sql .= "holidays.userid=users.id AND holidays.type=$type ";
     if (!empty($user) AND $user!='all') $sql .= "AND users.id='{$user}' ";
     $sql .= "ORDER BY startdate DESC";
     $result = mysql_query($sql);
@@ -682,14 +684,14 @@ elseif ($display=='list')
     if (mysql_num_rows($result))
     {
         echo "<table align='center'>";
-        echo "<tr><th>Type</th><th>User</th><th>Date</th><th>Approval Status</th><th>Action</th></tr>";
+        echo "<tr><th>{$GLOBALS['strType']}</th><th>{$GLOBALS['strUser']}</th><th>{$GLOBALS['strDate']}</th><th>{$GLOBALS['strStatus']}</th><th>{$GLOBALS['strOperation']}</th></tr>\n";
         $shade='shade1';
         while ($dates = mysql_fetch_array($result))
         {
-            echo "<tr class='$shade'><td>{$dates['name']}</td>";
+            echo "<tr class='$shade'><td>".holiday_type($dates['type'])."</td>";
             echo "<td>{$dates['realname']}</td>";
             echo "<td>".date('l jS F Y', $dates['startdate']);
-            if ($dates['length']=='am') echo " Morning only";
+            if ($dates['length']=='am') echo " Morning only"; // FIXME i18n
             if ($dates['length']=='pm') echo " Afternoon only";
             echo "</td>";
             echo "<td>";
@@ -705,9 +707,9 @@ elseif ($display=='list')
             else $shade='shade1';
         }
         echo "</table>";
-        if ($approver) echo "<p align='center'><a href='{$_SERVER['PHP_SELF']}?display=list&amp;type={$type}&amp;user=all'>Show All Users</a></p>";
+        if ($approver) echo "<p align='center'><a href='{$_SERVER['PHP_SELF']}?display=list&amp;type={$type}&amp;user=all'>{$GLOBALS['strShowAll']}</a></p>";
     }
-    else echo "<p>No results</p>";
+    else echo "<p>{$GLOBALS['strNoResults']}</p>";
     mysql_free_result($result);
 }
 elseif ($display=='week')
@@ -763,16 +765,20 @@ else
         echo "'s Calendar</h2>";
         if ($type==1) echo "<p align='center'>Used ".user_count_holidays($user, $type)." of ".user_holiday_entitlement($user)." days entitlement.<br />";
 
-        $sql = "SELECT * FROM holidaytypes";
-        $result = mysql_query($sql);
-        if (mysql_error()) trigger_error(mysql_error(),E_USER_ERROR);
+        // Get list of holiday types
+        $holidaytype[1] = $GLOBALS['strHoliday'];
+        $holidaytype[2] = $GLOBALS['strAbsentSick'];
+        $holidaytype[3] = $GLOBALS['strWorkingAway'];
+        $holidaytype[4] = $GLOBALS['strTraining'];
+        $holidaytype[5] = $GLOBALS['strCompassionateLeave'];
+
         echo "<form action='{$_SERVER['PHP_SELF']}' style='text-align: center;'>";
         echo "Calendar: <select class='dropdown' name='type' onchange='window.location.href=this.options[this.selectedIndex].value'>\n";
-        while ($holidaytypes = mysql_fetch_object($result))
+        foreach ($holidaytype AS $htypeid => $htype)
         {
-            echo "<option value='{$_SERVER['PHP_SELF']}?user=$user&amp;type={$holidaytypes->id}'";
-            if ($type == $holidaytypes->id) echo " selected='selected'";
-            echo ">{$holidaytypes->name}</option>\n";
+            echo "<option value='{$_SERVER['PHP_SELF']}?user=$user&amp;type={$htypeid}'";
+            if ($type == $htypeid) echo " selected='selected'";
+            echo ">{$htype}</option>\n";
         }
         echo "</select></form>";
 
