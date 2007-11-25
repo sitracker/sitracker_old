@@ -70,7 +70,7 @@ if ($user==$sit[2] OR $approver==TRUE)
 // Holiday List
 echo "<table align='center' width='450'>\n";
 echo "<tr><th colspan='4' class='subhead'>{$strHolidayList}</th></tr>\n";
-$sql = "SELECT * from holidays, holidaytypes WHERE holidays.type=holidaytypes.id AND userid='{$user}' AND approved=0 ORDER BY startdate ASC";
+$sql = "SELECT * from holidays WHERE userid='{$user}' AND approved=0 ORDER BY startdate ASC";
 $result = mysql_query($sql);
 if (mysql_error()) trigger_error("MySQL Query Error ".mysql_error(), E_USER_ERROR);
 $numwaiting=mysql_num_rows($result);
@@ -103,19 +103,21 @@ if ($numwaiting > 0)
 }
 mysql_free_result($result);
 
-$sql = "SELECT * from holidaytypes";
-$tresult = mysql_query($sql);
-if (mysql_error()) trigger_error("MySQL Query Error ".mysql_error(), E_USER_ERROR);
-$numtaken = mysql_num_rows($tresult);
-while ($holidaytype=mysql_fetch_array($tresult))
+// Get list of holiday types
+$holidaytype[1] = $GLOBALS['strHoliday'];
+$holidaytype[2] = $GLOBALS['strAbsentSick'];
+$holidaytype[3] = $GLOBALS['strWorkingAway'];
+$holidaytype[4] = $GLOBALS['strTraining'];
+$holidaytype[5] = $GLOBALS['strCompassionateLeave'];
+foreach ($holidaytype AS $htypeid => $htype)
 {
-    $sql = "SELECT *, from_unixtime(startdate) AS start FROM holidays WHERE userid='{$user}' AND type={$holidaytype['id']} ";
+    $sql = "SELECT *, from_unixtime(startdate) AS start FROM holidays WHERE userid='{$user}' AND type={$htypeid} ";
     $sql.= "AND (approved=1 OR (approved=11 AND startdate >= $now)) ORDER BY startdate ASC ";
     $result = mysql_query($sql);
     if (mysql_error()) trigger_error("MySQL Query Error ".mysql_error(), E_USER_ERROR);
     if ($numtaken > 0)
     {
-        echo "<tr class='shade2'><td colspan='4'><strong>{$holidaytype['name']}</strong>:</td></tr>";
+        echo "<tr class='shade2'><td colspan='4'><strong>{$htype}</strong>:</td></tr>";
         while ($dates = mysql_fetch_array($result))
         {
             echo "<tr class='shade1'>";

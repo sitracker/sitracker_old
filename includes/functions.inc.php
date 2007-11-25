@@ -2978,14 +2978,17 @@ function replace_word($text, $changepos, $replacement)
 }
 
 
-function holiday_type($id)
+function holiday_type ($id)
 {
-    if ($id==10) $holidaytype='Public Holiday';
-    else
+    switch ($id)
     {
-        $holidaytype = db_read_column('name', 'holidaytypes', $id);
-        if (empty($holidaytype))
-        $holidaytype = 'Holiday';  // default: holiday
+        case 1: $holidaytype = $GLOBALS['strHoliday']; break;
+        case 2: $holidaytype = $GLOBALS['strAbsentSick']; break;
+        case 3: $holidaytype = $GLOBALS['strWorkingAway']; break;
+        case 4: $holidaytype = $GLOBALS['strTraining']; break;
+        case 5: $holidaytype = $GLOBALS['strCompassionateLeave']; break;
+        case 10: $holidaytype = $GLOBALS['strPublicHoliday']; break;
+        default: $holidaytype = $GLOBALS['strHoliday']; break;
     }
     return($holidaytype);
 }
@@ -3017,17 +3020,19 @@ function holiday_approval_status($approvedid, $approvedby=-1)
 
 function holidaytype_drop_down($name, $id)
 {
-    $sql  = "SELECT id, name FROM holidaytypes ORDER BY name ASC";
-    $result = mysql_query($sql);
-    if (mysql_error()) trigger_error(mysql_error(),E_USER_WARNING);
+    $holidaytype[1] = $GLOBALS['strHoliday'];
+    $holidaytype[2] = $GLOBALS['strAbsentSick'];
+    $holidaytype[3] = $GLOBALS['strWorkingAway'];
+    $holidaytype[4] = $GLOBALS['strTraining'];
+    $holidaytype[5] = $GLOBALS['strCompassionateLeave'];
 
     $html = "<select name='$name'>";
     if ($id == 0) $html .= "<option selected value='0'></option>\n";
-    while ($holidays = mysql_fetch_array($result))
+    foreach ($holidaytype AS $htypeid => $htype)
     {
         $html .= "<option";
-        if ($holidays["id"] == $id) $html .= " selected='selected'";
-        $html .= " value='{$holidays["id"]}'>{$holidays["name"]}</option>\n";
+        if ($htypeid == $id) $html .= " selected='selected'";
+        $html .= " value='{$htypeid}'>{$htype}</option>\n";
     }
     $html .= "</select>\n";
     return $html;
