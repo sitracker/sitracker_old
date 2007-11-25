@@ -60,8 +60,10 @@ Icon                                      Source
 16x16/save.png                            Crystal Project
 16x16/folder.png                          Crystal Project
 16x16/locked.png                          Crystal Project
-16x16/info.png                          Crystal Project
+16x16/info.png                            Crystal Project
 16x16/unlocked.png                        Crystal Project
+16x16/online.png                          Crystal Project
+16x16/offline.png                         Crystal Project
 32x32/mimetypes/*                         Crystal Project
 32x32/blackflag.png                       SiT
 32x32/whiteflag.png                       SiT
