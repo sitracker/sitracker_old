@@ -82,8 +82,11 @@ if ($action == "edit")
         echo "<table align='center' class='vertical'>";
         echo "<tr><th>{$strSite}: <sup class='red'>*</sup></th><td>";
         echo site_name($maint["site"]). "</td></tr>";
-	echo "<tr><th>{$strContacts}:</th><td><input value='amount' type='radio' name='contacts' checked>{$strLimitTo} <input size='2' value='0' name='amount'> {$strSupportedContacts} ({$str0MeansUnlimited})<br />";
-  	echo "<input type='radio' value='all' name='contacts'>{$strAllSiteContactsSupported}</td></tr>";
+        echo "<tr><th>{$strContacts}:</th><td><input value='amount' type='radio' name='contacts' checked>{$strLimitTo} <input size='2' value='$maint[supportedcontacts]' name='amount'> {$strSupportedContacts} ({$str0MeansUnlimited})<br />";
+  	echo "<input type='radio' value='all' name='contacts'";
+        if($maint[allcontactssupported] == 'Yes')
+        echo 'checked';
+        echo ">{$strAllSiteContactsSupported}</td></tr>";
         echo "<tr><th>{$strProduct}: <sup class='red'>*</sup></th><td>";
         $productname=product_name($maint["product"]);
         if (user_permission($sit[2], 22))
@@ -167,7 +170,12 @@ else if ($action == "update")
     $incidentpoolid = cleanvar($_POST['incidentpoolid']);
     $expirydate = strtotime($_REQUEST['expirydate']);
     $product = cleanvar($_POST['product']);
+    $contacts = cleanvar($_REQUEST['contacts']);
     if($_REQUEST['noexpiry'] == 'on') $expirydate = '-1';
+    
+    $allcontacts = 'No';
+    if($contacts == 'amount') $amount = cleanvar($_REQUEST['amount']);
+    elseif($contacts == 'all') $allcontacts = 'Yes';
 
     // Update maintenance
     $errors = 0;
@@ -212,7 +220,8 @@ else if ($action == "update")
         $sql  = "UPDATE maintenance SET reseller='$reseller', expirydate='$expirydate', licence_quantity='$licence_quantity', ";
         $sql .= "licence_type='$licence_type', notes='$notes', admincontact=$admincontact, term='$terminated', servicelevelid='$servicelevelid', ";
         $sql .= "incident_quantity='$incident_quantity', ";
-        $sql .= "incidentpoolid='$incidentpoolid', productonly='$productonly'";
+        $sql .= "incidentpoolid='$incidentpoolid', productonly='$productonly', ";
+        $sql .= "supportedcontacts='$amount', allcontactssupported='$allcontacts'";
         if (!empty($product) AND user_permission($sit[2], 22)) $sql .= ", product='$product'";
         $sql .= " WHERE id='$maintid'";
         $result = mysql_query($sql);

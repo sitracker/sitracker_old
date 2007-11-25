@@ -83,11 +83,14 @@ $strBoth = 'Both';
 $strBrowse = 'Browse';
 $strBrowseContacts = 'Browse contacts';
 $strBrowseContracts = 'Browse contracts';
+$strBrowseContractsBySite = 'Browse Contracts by Site';
 $strBrowseFeedback = 'Browse feedback';
 $strBrowseFeedbackForms = 'Browse Feedback Forms';
 $strBrowseKB = 'Browse KnowledgeBase';
 $strBrowseSites = 'Browse sites';
 $strBulkModify = 'Bulk Modify';
+# e.g. Ordered By Product
+$strByProduct = 'By Product';
 
 $strCallFromCustomer = 'Phone call from customer';
 $strCallToCustomer = 'Phone call to customer';
@@ -600,6 +603,7 @@ $strSessionExpired = 'Your session has expired or you have not yet logged in';
 $strSetPermissions = 'Set Permissions';
 $strSetPublicHolidays = 'Set Public Holidays';
 $strSetYourStatus = 'Set your Status';
+$strShowActiveOnly = 'Show Active Only';
 $strShowAll = 'Show All';
 $strShowClosedIncidents = 'Show closed incidents';
 $strShowExpired = 'Show Expired';

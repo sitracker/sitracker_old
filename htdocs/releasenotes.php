@@ -13,10 +13,6 @@ echo "<div id='help'>";
 echo "<h3>v3.31</h3>";
 
 echo '<div>
-    <p><strong>Customer Portal</strong></p>
-    <div class="img-dec"><img src="images/changelog/331portal.png" /></div></li>
-    <p>Improved customer portal, customers can now read, open, update and request to close their incidents, view their contracts and view and update their details.</p><br /><br />
-
 
     <p><strong>Internationalisation</strong></p>
     <div class="img-dec"><img src="images/changelog/331translation.png" /></div>
@@ -24,6 +20,20 @@ echo '<div>
     <li>Added translate page for users to translate strings</li>
     <li>Changed the login page to allow for session-based language choice</li></ul>
     <div class="img-dec"><img src="images/changelog/331language.png" /></div><br /><br />
+        
+    <p><strong>Customer Portal</strong></p>
+    <div class="img-dec"><img src="images/changelog/331portal.png" /></div></li>
+    <p>Improved customer portal, customers can now read, open, update and request to close their incidents, view their contracts and view and update their details.</p><br /><br />
+
+    <p><strong>Improved Contract Flexibility</strong></p>
+    <div class="img-dec"><img src="images/changelog/331addcontract.png" /></div></li>
+    <p>Now when adding a contract, you can specify a number of new things.</p>
+    <ul>
+        <li>You can limit a contract to a certain amount of supported contacts (or unlimited as it is now)</li>
+        <li>You can say that every site contact is to be supported by the contact. This is particually useful for sites that have a large amount of users that all need to be supported, i.e. a University department and its students.</li>
+        <li>Contacts can now have no expiry date - Unlimited.</li>
+    </ul><br /><br />
+
 
 
     <p><strong>Jump To Incident</strong></p>
