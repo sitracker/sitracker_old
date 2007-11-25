@@ -71,7 +71,12 @@ if ($CONFIG['default_i18n']!='en-GB') @include("i18n/{$CONFIG['default_i18n']}.i
 if(!empty($_SESSION['lang']) AND $_SESSION['lang'] != $CONFIG['default_i18n']) include("i18n/{$_SESSION['lang']}.inc.php");
 ini_set('default_charset', $i18ncharset);
 
+// FIXME putting this config variable here until we fully support it - move to defaults.inc.php when ready - INL 25Nov07
+$CONFIG['db_tableprefix'] = '';
 
+// Table Names
+$dbUsers = "{$CONFIG['db_tableprefix']}users";
+// TODO add the rest of the table names here, then go through and replace hardcoded names with `{$GLOBALS['dbUsers']}` etc.
 
 // Time settings
 $now = time();
@@ -167,7 +172,7 @@ if (!function_exists('authenticate'))
         }
 
         // extract user
-        $sql  = "SELECT id FROM users ";
+        $sql  = "SELECT id FROM `users` ";
         $sql .= "WHERE username='$username' AND password='$password' AND status!=0 ";
         // a status of 0 means the user account is disabled
         $result = mysql_query($sql);
