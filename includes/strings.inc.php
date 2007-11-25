@@ -165,7 +165,7 @@ $updatetypes['emailout'] = array('icon' => 'emailout.png', 'text' => sprintf($Em
 $updatetypes['externalinfo'] = array('icon' => 'externalinfo.png', 'text' => sprintf($strExternalinfoaddedby,'updateuser'));
 $updatetypes['probdef'] = array('icon' => 'probdef.png', 'text' => sprintf($strProblemDefinitionby,'updateuser'));
 $updatetypes['research'] = array('icon' => 'research.png', 'text' => sprintf($strResearchedby,'updateuser'));
-$updatetypes['reassigning'] = array('icon' => 'reassign.png', 'text' => sprintf($srtReassignedToBy,'currentowner','updateuser'));
+$updatetypes['reassigning'] = array('icon' => 'reassign.png', 'text' => sprintf($strReassignedToBy,'currentowner','updateuser'));
 $updatetypes['reviewmet'] = array('icon' => 'review.png', 'text' => sprintf($strReviewby, 'updatereview', 'updateuser')); // conditional
 $updatetypes['tempassigning'] = array('icon' => 'tempassign.png', 'text' => sprintf($strTemporarilyAssignedto,'currentowner','updateuser'));
 $updatetypes['opening'] = array('icon' => 'open.png', 'text' => sprintf($strOpenedby,'updateuser'));
