@@ -5362,6 +5362,18 @@ function exact_seconds($seconds)
     return $string;
 }
 
+function user_online($user)
+{
+    global $iconset, $now;
+    $sql = "SELECT lastseen FROM users WHERE id={$user}";
+    $result = mysql_query($sql);
+    $users = mysql_fetch_object($result);
+    if(($now - mysql2date($users->lastseen) < (60 * 30)))
+        return "<img src='{$CONFIG['application_webpath']}images/icons/{$iconset}/16x16/online.png' width='16' height='16' alt=\"{$strOnline}\" /> ";
+    else
+        return "<img src='{$CONFIG['application_webpath']}images/icons/{$iconset}/16x16/offline.png' width='16' height='16' alt=\"{$strOffline}\" /> ";
+}
+
 // These are the modules that we are dependent on, without these something
 // or everything will fail, so let's throw an error here.
 // Check that the correct modules are loaded

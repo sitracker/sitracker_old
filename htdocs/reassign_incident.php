@@ -102,7 +102,7 @@ if (empty($bodytext))
         if (mysql_num_rows($sresult) >=1 ) echo "<strong>".stripslashes($suguser->realname)."</strong>";
         else echo stripslashes($users->realname);
         echo "</label></td>";
-        echo "<td>".userstatus_name($suguser->status)."</td>";
+        echo "<td>".user_online($suguser->id).userstatus_name($suguser->status)."</td>";
         $incpriority = user_incidents($suguser->id);
         $countincidents = ($incpriority['1']+$incpriority['2']+$incpriority['3']+$incpriority['4']);
 
@@ -137,7 +137,7 @@ if (empty($bodytext))
             if (mysql_num_rows($sresult) >=1 ) echo "<strong>".stripslashes($users->realname)."</strong>";
             else echo stripslashes($users->realname);
             echo "</label></td>";
-            echo "<td>".userstatus_name($users->status)."</td>";
+            echo "<td>".user_online($users->id).userstatus_name($users->status)."</td>";
             $incpriority = user_incidents($users->id);
             $countincidents = ($incpriority['1']+$incpriority['2']+$incpriority['3']+$incpriority['4']);
 
