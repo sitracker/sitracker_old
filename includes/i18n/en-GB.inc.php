@@ -77,7 +77,7 @@ $strAuthor = 'Author';
 $strAverageIncidentDuration = 'Average Incident Duration';
 $strAvoidDupes = 'Please help avoid duplicates by checking that the record you are adding does not already exist';
 
-$strBackToListOfFeedback = 'Back To List of Feedback';
+$strBackToList = 'Back To List';
 $strBookHoliday = 'Book Holiday';
 $strBoth = 'Both';
 $strBrowse = 'Browse';

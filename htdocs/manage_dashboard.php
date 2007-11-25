@@ -63,7 +63,7 @@ switch($_REQUEST['action'])
         if(empty($html))
         {
             echo "<p align='center'>No new dashboard components available</p>";
-            echo "<p align='center'><a href='manage_dashboard.php'>Back to list</p>";
+            echo "<p align='center'><a href='manage_dashboard.php'>{$strBackToList}</a></p>";
         }
         else
         {

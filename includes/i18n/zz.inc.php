@@ -69,7 +69,7 @@ $strAuthor = 'strAuthor';
 $strAverageIncidentDuration = 'strAverageIncidentDuration';
 $strAvoidDupes = 'strAvoidDupes';
 
-$strBackToListOfFeedback = 'strBackToListOfFeedback';
+$strBackToList = 'strBackToList';
 $strBookHoliday = 'strBookHoliday';
 $strBoth = 'strBoth';
 $strBrowse = 'strBrowse';
