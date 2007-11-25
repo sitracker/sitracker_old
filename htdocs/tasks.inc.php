@@ -32,11 +32,49 @@ function Activity()
 
 var dataArray = new Array();
 var count = 0;
+var closedDuration = 0;
 
 function addActivity(act)
 {
     dataArray[count] = act;
     count++;
+}
+
+function setClosedDuration(closed)
+{
+    closedDuration = closed;
+}
+
+function formatSeconds(secondsOpen)
+{
+    var str = "";
+    if(secondsOpen >= 86400)
+    {   //days
+        var days = Math.floor(secondsOpen/86400);
+        str += days+" days ";
+        secondsOpen-=(days*86400);
+    }
+
+    if(secondsOpen >= 3600)
+    {   //hours
+        var hours = Math.floor(secondsOpen/3600);
+        str += hours+" hours ";
+        secondsOpen-=(hours*3600);
+    }
+
+    if(secondsOpen > 60)
+    {   //minutes
+        var minutes = Math.floor(secondsOpen/60);
+        str += minutes+" minutes ";
+        secondsOpen-=(minutes*60);
+    }
+
+    if(secondsOpen > 0)
+    {  // seconds
+        str += secondsOpen+" seconds";
+    }
+
+    return str;
 }
 
 function countUp()
@@ -45,41 +83,21 @@ function countUp()
 
     var sinceEpoch = Math.round(new Date().getTime()/1000.0);
 
+    var closed = closedDuration;
+
     var i = 0;
     for(i=0; i < dataArray.length; i++)
     {
         var secondsOpen = sinceEpoch-dataArray[i].start;
 
-        var str = "";
+        closed += secondsOpen;
 
-        if(secondsOpen >= 86400)
-        {   //days
-            var days = Math.floor(secondsOpen/86400);
-            str += days+" days ";
-            secondsOpen-=(days*86400);
-        }
-
-        if(secondsOpen >= 3600)
-        {   //hours
-            var hours = Math.floor(secondsOpen/3600);
-            str += hours+" hours ";
-            secondsOpen-=(hours*3600);
-        }
-
-        if(secondsOpen > 60)
-        {   //minutes
-            var minutes = Math.floor(secondsOpen/60);
-            str += minutes+" minutes ";
-            secondsOpen-=(minutes*60);
-        }
-
-        if(secondsOpen > 0)
-        {  // seconds
-            str += secondsOpen+" seconds";
-        }
+        var str = formatSeconds(secondsOpen);
 
         byId("duration"+dataArray[i].id).innerHTML = "<em>"+str+"</em>";
     }
+
+    byId('totalduration').innerHTML = formatSeconds(closed);
 }
 
 setInterval("countUp()", 1000); //every 1 seconds
@@ -182,7 +200,8 @@ if (mysql_num_rows($result) >=1 )
 
     if($mode != 'incident')
     {
-        $totalduration;
+        $totalduration = 0;
+        $closedduration = 0;
         if ($user == $sit[2])
         {
             echo colheader('distribution', "<img src='{$CONFIG['application_webpath']}images/icons/{$iconset}/16x16/private.png' width='16' height='16' title='Public/Private' alt='Private' style='border: 0px;' />", $sort, $order, $filter);
@@ -259,7 +278,6 @@ if (mysql_num_rows($result) >=1 )
             echo "<td>".format_date_friendly($startdate)."</td>";
             if($enddate == '0')
             {
-
                 echo "<td><script type='text/javascript'>";
                 echo "var act = new Activity();";
                 echo "act.id = {$task->id};";
@@ -271,7 +289,7 @@ if (mysql_num_rows($result) >=1 )
                 $duration = $now - $startdate;
                 //echo "<td id='duration{$task->id}'><em><div id='duration{$task->id}'>".format_seconds($duration)."</div></em></td>";
                 echo "<td id='duration{$task->id}'>".format_seconds($duration);
-                echo "<script type='text/javascript'>countUp();</script></td>";  //force a quick udate
+                //echo "<script type='text/javascript'>countUp();</script></td>";  //force a quick udate
 
             }
             else
@@ -279,6 +297,7 @@ if (mysql_num_rows($result) >=1 )
                 $duration = $enddate - $startdate;
                 echo "<td>".format_date_friendly($enddate)."</td>";
                 echo "<td>".format_seconds($duration)."</td>";
+                $closedduration += $duration;
             }
             $totalduration += $duration;
 
@@ -302,9 +321,14 @@ if (mysql_num_rows($result) >=1 )
 
     if($mode == 'incident')
     {
+        echo "<script type='text/javascript'>";
+        echo "setClosedDuration({$closedduration});";
+        echo "</script>";
+
         echo "<tr class='{$shade}'><td><strong>{$strTotal}:</strong></td><td colspan='5'>".format_seconds($totalduration)."</td></tr>";
-        echo "<tr class='{$shade}'><td><strong>{$strExact}:</strong></td><td colspan='5'>".exact_seconds($totalduration)."</td></tr>";
+        echo "<tr class='{$shade}'><td><strong>{$strExact}:</strong></td><td colspan='5' id='totalduration'>".exact_seconds($totalduration)."</td></tr>";
     }
+    echo "<script type='text/javascript'>countUp();</script></td>";  //force a quick udate
     echo "</table>\n";
 }
 else

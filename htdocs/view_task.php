@@ -27,10 +27,14 @@ $taskid = cleanvar($_REQUEST['id']);
 $mode = cleanvar($_REQUEST['mode']);
 
 if($mode == 'incident')
+{
     include('incident_html_top.inc.php');
+}
 else
+{
     include('htmlheader.inc.php');
-    
+}
+
 require('view_task.inc.php');
 include('htmlfooter.inc.php');
 
