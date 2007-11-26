@@ -115,9 +115,8 @@ switch ($action)
         $result = mysql_query($sql);
         if (mysql_error()) trigger_error("MySQL Query Error ".mysql_error(), E_USER_ERROR);
 
-        // FIXME rewrite this bit and i18n
         echo "<p>{$strOwner}: <strong>";
-        if ($sit[2]==$incident->owner) echo $strYou;
+        if ($sit[2]==$incident->owner) echo "{$strYou} (".user_realname($incident->owner,TRUE).")";
         else echo user_realname($incident->owner,TRUE);
         echo "</strong>";
 
@@ -132,7 +131,7 @@ switch ($action)
 
         echo "<table align='center'>";
         echo "<tr>
-              <th colspan='2'>{$strReassignTo}</th>
+              <th colspan='2'>{$strReassignTo}:</th>
               <th colspan='5'>{$strIncidentsinQueue}</th>
               <th>{$strAccepting}</th>
               </tr>";
@@ -160,7 +159,7 @@ switch ($action)
             $sresult = mysql_query($ssql);
             if (mysql_error()) trigger_error("MySQL Query Error".mysql_error(), E_USER_ERROR);
             if (mysql_num_rows($sresult) >=1 ) echo "<strong>".stripslashes($suguser->realname)."</strong>";
-            else echo stripslashes($users->realname);
+            else echo stripslashes($suguser->realname);
             echo "</label></td>";
             echo "<td>".user_online($suguser->id).userstatus_name($suguser->status)."</td>";
             $incpriority = user_incidents($suguser->id);
