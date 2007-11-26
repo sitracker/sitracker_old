@@ -151,6 +151,9 @@ if ($actions[0]=='' OR in_array('SetUserStatus',$actions))
                         // don't change
                         $accepting='';
                     break;
+
+                    default:
+                        $accepting='';
                 }
                 $usql = "UPDATE users SET status='{$newstatus}'";
                 if ($accepting!='') $usql .= ", accepting='{$accepting}'";
