@@ -341,6 +341,7 @@ CREATE TABLE `incidents` (
   `closed` int(11) default '0',
   `closingstatus` tinyint(4) default NULL,
   `slaemail` tinyint(1) NOT NULL default '0',
+  `slanotice` tinyint(1) NOT NULL default '0',
   `locked` tinyint(4) NOT NULL default '0',
   `locktime` int(11) NOT NULL default '0',
   PRIMARY KEY  (`id`),
@@ -1230,7 +1231,7 @@ CREATE TABLE IF NOT EXISTS `notices` (
   `linktext` varchar(50) default NULL,
   `link` varchar(100) NOT NULL,
   `resolutionpage` varchar(255) NULL,
-  `timestamp` date NOT NULL,
+  `timestamp` TIMESTAMP NOT NULL,
   PRIMARY KEY  (`id`)
 ) ENGINE=MyISAM AUTO_INCREMENT=1 ;
 
@@ -1510,7 +1511,7 @@ CREATE TABLE IF NOT EXISTS `notices` (
   `linktext` varchar(50) default NULL,
   `link` varchar(100) NOT NULL,
   `resolutionpage` varchar(255) NULL,
-  `timestamp` date NOT NULL,
+  `timestamp` TIMESTAMP NOT NULL,
   PRIMARY KEY  (`id`)
 ) ENGINE=MyISAM AUTO_INCREMENT=1 ;
 
@@ -1553,6 +1554,8 @@ ALTER TABLE `maintenance` ADD `allcontactssupported` ENUM( 'No', 'Yes' ) NOT NUL
 ALTER TABLE `dashboard_rss` ADD `items` INT( 5 ) NULL AFTER `url`;
 -- INL 25Nov07
 DROP TABLE `holidaytypes`;
+ --KMH 26/11/07
+ ALTER TABLE `incidents` ADD `slanotice` TINYINT(1) NOT NULL DEFAULT '0' AFTER `slaemail` ;
 ";
 
 
