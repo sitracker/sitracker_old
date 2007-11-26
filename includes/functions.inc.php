@@ -66,6 +66,12 @@ define('TAG_SKILL', 6);
 define('TAG_KB_ARTICLE', 7);
 define('TAG_REPORT', 8);
 
+define('HOL_HOLIDAY', 1); // Holiday/Leave
+define('HOL_SICKNESS', 2);
+define('HOL_WORKING_AWAY', 3);
+define('HOL_TRAINING', 4);
+define('HOL_FREE', 5); // Compassionate/Maternity/Paterity/etc/free
+
 require('i18n/en-GB.inc.php');
 if ($CONFIG['default_i18n']!='en-GB') @include("i18n/{$CONFIG['default_i18n']}.inc.php");
 if(!empty($_SESSION['lang']) AND $_SESSION['lang'] != $CONFIG['default_i18n']) include("i18n/{$_SESSION['lang']}.inc.php");
