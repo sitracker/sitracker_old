@@ -27,6 +27,7 @@ if ($verbose) echo "Calculating SLA times{$crlf}";
 $sql="SELECT id,maintenanceid,priority,slaemail,slanotice,servicelevel,status FROM incidents WHERE status != ".STATUS_CLOSED." AND status != ".STATUS_CLOSING;
 //$sql="SELECT id,maintenanceid,priority,slaemail,servicelevel,status FROM incidents WHERE id=34833";
 $incident_result=mysql_query($sql);
+if (mysql_error()) trigger_error(mysql_error(),E_USER_ERROR);
 
 while ($incident=mysql_fetch_array($incident_result)) {
 
@@ -37,6 +38,7 @@ while ($incident=mysql_fetch_array($incident_result)) {
     if ($incident['servicelevel']=="") {
         $sql="SELECT tag FROM servicelevels, maintenance WHERE maintenance.id='{$incident['maintenanceid']}' AND servicelevels.id=maintenance.servicelevelid";
         $result=mysql_query($sql);
+        if (mysql_error()) trigger_error(mysql_error(),E_USER_ERROR);
         $t=mysql_fetch_row($sql);
         $tag=$t[0];
         mysql_free_result($result);
@@ -110,23 +112,22 @@ while ($incident=mysql_fetch_array($incident_result)) {
             //reaching SLA
             if(($newSlaTime / $times['next_sla_time']) >= ($CONFIG['urgent_threshold'] * 0.01))
             {
-                echo "here";
                 //create notice, workaround until triggers are implemented - KMH 26/11/07
                 $timetil = $times['next_sla_time']-$newSlaTime;
                 if($timetil > 0) $text = "will go out of SLA soon";
                 elseif($timetil == 0) $text = "has just gone out of SLA";
                 elseif($timetil < 0) $text = "has already gone out of SLA";
-                            
+
                 $sql = "INSERT into notices(text, linktext, link, timestamp) ";
                 $sql .= "VALUES('Incident {$incident['id']} $text', 'View Incident', 'javascript:incident_details_window(\'{$incident['id']}\',\'incident{$incident['id']}\')', NOW())";
                 mysql_query($sql);
 //                 if (mysql_error()) trigger_error(mysql_error(),E_USER_WARNING);
                 $noticeid = mysql_insert_id();
-                
+
                 $sql = "INSERT into usernotices(noticeid, userid) ";
                 $sql .= "VALUES($noticeid, {$reviewInfo['currentowner']})";
                 mysql_query($sql);
-                
+
                 $sql="UPDATE incidents SET slanotice='1' WHERE id='{$incident['id']}'";
                 mysql_query($sql);
             }
@@ -134,7 +135,7 @@ while ($incident=mysql_fetch_array($incident_result)) {
 
         // Check if we have already sent an out of SLA/Review period mail
         // This attribute is reset when an update to the incident meets sla/review time
-        if ($incident['slaemail']==0) {            
+        if ($incident['slaemail']==0) {
         // If not, check if we need to
         $emailSent=0;
             // First check SLA
@@ -154,7 +155,7 @@ while ($incident=mysql_fetch_array($incident_result)) {
             if ($emailSent) {
                 $sql="UPDATE incidents SET slaemail='1' WHERE id='{$incident['id']}'";
                 mysql_query($sql);
-            }            
+            }
 
         }
 
