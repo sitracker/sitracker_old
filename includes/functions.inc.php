@@ -4108,7 +4108,7 @@ function incident_backup_switchover($userid, $accepting)
 // Suggest the userid of a suitable person to handle the given incident
 // Users are chosen randomly in a weighted lottery depending on their
 // avilability and queue status
-function suggest_reassign_userid($incidentid)
+function suggest_reassign_userid($incidentid, $exceptuserid=0)
 {
     global $now;
     $sql = "SELECT product, softwareid, priority, contact, owner FROM incidents WHERE id={$incidentid} LIMIT 1";
@@ -4128,6 +4128,7 @@ function suggest_reassign_userid($incidentid)
         {
             $sql = "SELECT usersoftware.userid, users.status, users.lastseen FROM usersoftware, users ";
             $sql .= "WHERE users.id=usersoftware.userid AND users.accepting='Yes' ";
+            if ($exceptuserid > 0) $sql .= "AND NOT users.id = '$exceptuserid' ";
             $sql .= "AND softwareid={$incident->softwareid}";
         }
         else $sql = "SELECT id AS userid, status, lastseen FROM users WHERE status > 0 AND users.accepting='Yes'";

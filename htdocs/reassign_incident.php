@@ -39,17 +39,21 @@ switch ($action)
         $temporary  = cleanvar($_REQUEST['temporary']);
         $id = cleanvar($_REQUEST['id']);
 
-//         echo "<h1>$userid</h1>"; // FIXME don't stop here
-//         echo "<pre>".print_r($_POST,true)."</pre>";
+        // Retrieve current incident details
+        $sql = "SELECT * FROM incidents WHERE id='$id' LIMIT 1";
+        $result = mysql_query($sql);
+        if (mysql_error()) trigger_error("MySQL Query Error ".mysql_error(), E_USER_ERROR);
+        $incident = mysql_fetch_object($result);
 
-        $oldstatus=incident_status($id);
-        if ($newstatus != $oldstatus)
-        $bodytext = "Status: ".incidentstatus_name($oldstatus)." -&gt; <b>" . incidentstatus_name($newstatus) . "</b>\n\n" . $bodytext;
+        if ($newstatus != $incident->status)
+        $bodytext = "Status: ".incidentstatus_name($incident->status)." -&gt; <b>" . incidentstatus_name($newstatus) . "</b>\n\n" . $bodytext;
 
         // Update incident
         $sql = "UPDATE incidents SET ";
         if ($temporary=='yes') $sql .= "towner='{$userid}', ";
-        else $sql .= "owner='{$permnewowner}', ";
+        elseif ($temporary != 'yes' AND $sit[2]==$incident->owner) $sql .= "owner='{$userid}', towner=0, ";
+        elseif ($temporary == 'yes' AND $userid=$incident->owner) $sql .= "owner='{$userid}', towner=0, ";
+        else  $sql .= "owner='{$userid}', ";
         $sql .= "status='$newstatus', lastupdated='$now' WHERE id='$id' LIMIT 1";
         $result = mysql_query($sql);
         if (mysql_error()) trigger_error("MySQL Query Error ".mysql_error(), E_USER_ERROR);
@@ -68,7 +72,7 @@ switch ($action)
 
         $sql  = "INSERT INTO updates (incidentid, userid, bodytext, type, timestamp, currentowner, currentstatus, customervisibility) ";
         $sql .= "VALUES ($id, $sit[2], '$bodytext', '$assigntype', '$now', ";
-        if ($temporary=='yes') $sql .= "'{$sit[2]}', ";
+        if ($temporary=='yes') $sql .= "'{$userid}', ";
         else $sql .= "'{$userid}', ";
         $sql .= "'$newstatus', '$customervisibility')";
         $result = mysql_query($sql);
@@ -91,39 +95,40 @@ switch ($action)
         // No submit detected show reassign form
         $title = $strReassign;
         include('incident_html_top.inc.php');
-        $suggested = suggest_reassign_userid($id);
+
+
         $sql = "SELECT * FROM incidents WHERE id='$id' LIMIT 1";
         $result = mysql_query($sql);
         if (mysql_error()) trigger_error("MySQL Query Error ".mysql_error(), E_USER_ERROR);
         $incident = mysql_fetch_object($result);
 
+        if ($incident->towner >0 AND $incident->owner == $sit[2]) $suggested = suggest_reassign_userid($id);
+        else $suggested = suggest_reassign_userid($id, $incident->owner);
+
         echo "<form name='assignform' action='{$_SERVER['PHP_SELF']}?id={$id}' method='post'>";
 
-        $sql = "SELECT * FROM users WHERE status!=0 AND NOT id=$sit[2] ";
+        $sql = "SELECT * FROM users WHERE status!=0 ";
+        $sql .= "AND NOT id=$incident->owner ";
         if ($suggested) $sql .= "AND NOT id='$suggested' ";
         if (!$forcepermission) $sql .= "AND accepting='Yes' ";
         $sql .= "ORDER BY realname";
         $result = mysql_query($sql);
         if (mysql_error()) trigger_error("MySQL Query Error ".mysql_error(), E_USER_ERROR);
 
-        if ($incident->towner==$sit[2])
-        {
-            echo "<p>You are the temporary owner of this incident.";
-            echo "<br />\n".user_realname($incident->owner,TRUE)." is the original owner.</p>";
-        }
-            elseif ($incident->owner==$sit[2])
-            {
-                echo "<p>You are the owner of this incident.";
-                if ($incident->towner > 0) echo "<br />\n".user_realname($incident->towner,TRUE)." also has temporary ownership.";
-                echo "</p>";
-            }
-            else
-            {
-                echo "<p><strong>{$strOwner}</strong>: ".user_realname($incident->owner,TRUE).".";
-                if ($incident->towner > 0) echo "<br />\n<strong>Temp {$strOwner}</strong>: ".user_realname($incident->towner,TRUE);
-                echo "</p>";
-            }
+        // FIXME rewrite this bit and i18n
+        echo "<p>{$strOwner}: <strong>";
+        if ($sit[2]==$incident->owner) echo $strYou;
+        else echo user_realname($incident->owner,TRUE);
+        echo "</strong>";
 
+        if ($incident->towner > 0)
+        {
+            echo " (Temp: "; // FIXME i18n
+            if ($sit[2]==$incident->towner) echo $strYou;
+            else echo user_realname($incident->towner,TRUE);
+            echo ")";
+        }
+        echo "</p>";
 
         echo "<table align='center'>";
         echo "<tr>
@@ -218,95 +223,25 @@ switch ($action)
         echo "<table class='vertical'>";
 
 
-        if (empty($_REQUEST['backupid']) AND empty($_REQUEST['originalid']))
-        {
-        /*
-            //
-            // Radio Buttons, how should the incident be reassigned
-            //
-            if ($incident->owner == 0) echo "<tr><th>{$strReassign}:</th>";
-            else echo "<tr><th>Reassign:</th>";
-            echo "<td class='shade2'>";
-            $suggested = suggest_reassign_userid($id);
-            if (!empty($suggested)) echo user_realname($suggested)."<br />";
-            if ($incident->towner == $sit[2])
-            {
-                // you are the temporary owner
-                echo "<input type='radio' name='assign' value='permassign' checked='checked' />Assign back to original owner (".user_realname($incident->owner,TRUE).")<br />";
-                echo "<input type='hidden' name='permnewowner' value='{$incident->owner}' />";
-                echo "<input type='radio' name='assign' value='tempassign' />Reassign temporary ownership to ";
-                user_drop_down("tempnewowner", 0, TRUE, array($incident->owner,$incident->towner), "onclick=\"document.assignform.assign[1].checked=true;\"");
-            }
-            elseif ($incident->owner == $sit[2])
-            {
-                // you are the perm owner
-                if ($incident->towner == 0)
-                {
-                    echo "<input type='radio' name='assign' value='tempassign' />Assign temporary ownership to ";
-                    user_drop_down("tempnewowner", 0, TRUE, array($incident->owner,$incident->towner), "onclck=\"document.assignform.assign[0].checked=true;\"");
-                    echo "<br />\n";
-                }
-                else
-                {
-                    echo "<input type='radio' name='assign' value='tempassign' />Change temporary owner from ".user_realname($incident->towner,TRUE)." to ";
-                    user_drop_down("tempnewowner", 0, TRUE, array($incident->owner,$incident->towner), "onclick=\"document.assignform.assign[0].checked=true;\"");
-                    echo "<br />\n";
-                    echo "<input type='radio' name='assign' checked='checked' value='deltempassign' />Remove temporary ownership";
-                    echo "<br />\n";
-                }
-                echo "<input type='radio' name='assign' value='permassign' />Reassign to ";
-                user_drop_down("permnewowner", 0, TRUE, array($incident->owner), "onclick=\"document.assignform.assign[1].checked=true;\"");
-            }
-            else if ($incident->owner != 0 )
-            {
-                // you are not the owner or the temp owner
-                if ($incident->towner == 0)
-                {
-                    echo "<input type='radio' name='assign' value='tempassign' checked='checked' />Assign temporary ownership to ";
-                    user_drop_down("tempnewowner", $sit[2], TRUE, array($incident->owner,$incident->towner), "onclick=\"document.assignform.assign[0].checked=true;\"");
-                    echo "<br />\n";
-                }
-                else
-                {
-                    echo "<input type='radio' name='assign' value='tempassign' />Change temporary owner from ".user_realname($incident->towner,TRUE)." to ";
-                    user_drop_down("tempnewowner", 0, TRUE, array($incident->owner,$incident->towner), "onclick=\"document.assignform.assign[0].checked=true;\"");
-                    echo "<br />\n";
-                }
-                echo "<input type='radio' name='assign' value='permassign' />Reassign to ";
-                user_drop_down("permnewowner", 0, TRUE, array($incident->owner), "onclick=\"document.assignform.assign[1].checked=true;\"");
-            }
-            else
-            {
-                // The incident has no owner at all
-                echo "<input type='hidden' name='assign' value='permassign' />Assign to ";
-                user_drop_down("permnewowner", 0, TRUE, array($incident->owner), "onclick=\"document.assignform.assign[1].checked=true;\"");
-                $incident->status='1';
-            }
-            echo "</td></tr>\n";*/
-
-            /*
-            echo "<tr><td align='right' class='shade1'><strong>Reassign To</strong>:</td>";
-            echo "<td class='shade2'>";
-            user_drop_down("newowner", incident_owner($id));
-            echo "</td></tr>\n";
-            */
-        }
-        elseif (!empty($originalid))
-        {
-            echo "<tr><th>{$strReassign}:</th>";
-            echo "<td>Reassign to original engineer (".user_realname($originalid,TRUE).")";
-            echo "<input type='hidden' name='permnewowner' value='{$originalid}' />";
-            echo "<input type='hidden' name='permassign' value='{$originalid}' />";
-            echo "</td></tr>\n";
-        }
-        elseif (!empty($backupid))
-        {
-            echo "<tr><th>{$strReassign}:</strong>:</th>";
-            echo "<td>To Substitute Engineer (".user_realname($backupid,TRUE).")";
-            echo "<input type='hidden' name='tempnewowner' value='{$backupid}' />";
-            echo "<input type='hidden' name='tempassign' value='{$originalid}' />";
-            echo "</td></tr>\n";
-        }
+//         if (empty($_REQUEST['backupid']) AND empty($_REQUEST['originalid']))
+//         {
+//         }
+//         elseif (!empty($originalid))
+//         {
+//             echo "<tr><th>{$strReassign}:</th>";
+//             echo "<td>Reassign to original engineer (".user_realname($originalid,TRUE).")";
+//             echo "<input type='hidden' name='permnewowner' value='{$originalid}' />";
+//             echo "<input type='hidden' name='permassign' value='{$originalid}' />";
+//             echo "</td></tr>\n";
+//         }
+//         elseif (!empty($backupid))
+//         {
+//             echo "<tr><th>{$strReassign}:</strong>:</th>";
+//             echo "<td>To Substitute Engineer (".user_realname($backupid,TRUE).")";
+//             echo "<input type='hidden' name='tempnewowner' value='{$backupid}' />";
+//             echo "<input type='hidden' name='tempassign' value='{$originalid}' />";
+//             echo "</td></tr>\n";
+//         }
 
         echo "<tr><td colspan='2'><br />{$strReassignText}</td></tr>\n";
         echo "<tr><th>{$strUpdate}:</th>";
@@ -315,7 +250,23 @@ switch ($action)
         if (!empty($reason)) echo $reason;
         echo "</textarea>";
         echo "</td></tr>\n";
-        echo "<tr><th>Temporary:</th><td><label><input type='checkbox' name='temporary' value='yes' /> Temporary</label></td></tr>\n";
+        // FIXME i18n
+        if ($incident->towner > 0 AND ($sit[2] == $incident->owner OR $sit[2] == $incident->towner))
+        {
+            echo "<tr><th>Temporary:</th><td><label><input type='radio' name='temporary' value='no' checked='checked' ";
+            echo "/> Remove temporary ownership</label> ";
+            echo "<label><input type='radio' name='temporary' value='yes' /> Change temporary ownership</label>";
+            echo "</td></tr>\n";
+        }
+        else
+        {
+            echo "<tr><th>Temporary:</th><td><label><input type='checkbox' name='temporary' value='yes' ";
+            if ($sit[2] != $incident->owner AND $sit[2] != $incident->towner) echo "disabled='disabled' ";
+            echo "/> ";
+            if ($incident->towner > 0) echo "Change temporary ownership";
+            else echo "Assign Temporarily";
+            echo "</label></td></tr>\n";
+        }
         echo "<tr><th>{$strVisibility}:</th><td><label><input type='checkbox' name='cust_vis' value='yes' /> {$strVisibleToCustomer}</label></td></tr>\n";
 
         echo "<tr><th>{$strNewIncidentStatus}:</th>";
