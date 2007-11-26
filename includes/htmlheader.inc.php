@@ -123,11 +123,20 @@ if ($sit[0]!='')
 $action = cleanvar($_REQUEST['action']);
 $noticeid = cleanvar($_REQUEST['noticeid']);
 
-if($action=='dismiss_notice' AND is_numeric($noticeid))
+if($action=='dismiss_notice')
 {
-    $sql = "DELETE FROM usernotices WHERE noticeid={$noticeid} AND userid={$sit[2]}";
-    @mysql_query($sql);
+    if(is_numeric($noticeid))
+    {
+        $sql = "DELETE FROM usernotices WHERE noticeid={$noticeid} AND userid={$sit[2]}";
+        @mysql_query($sql);
+    }
+    elseif($noticeid == 'all')
+    {
+        $sql = "DELETE FROM usernotices WHERE userid={$sit[2]}";
+        @mysql_query($sql);
+    }
 }
+
 
 //display global notices
 if($sit[0] != '')
@@ -140,7 +149,7 @@ if($sit[0] != '')
     {
         while($notice = mysql_fetch_object($noticeresult))
         {
-            //check for the two warning types, TODO: make this better
+            //check for the notice types
             if($notice->id == $CONFIG['SIT_UPGRADED_NOTICE'])
             {
                 $notice->text = str_replace('$strSitUpgraded', sprintf($strSitUpgraded, $CONFIG['application_shortname'], "v{$application_version} {$application_revision}"), $notice->text);
@@ -173,8 +182,13 @@ if($sit[0] != '')
                     echo "</a>";
                 }
             }
-            echo "</p></div>";
+            echo "</p>";
         }
+        if(mysql_num_rows($noticeresult) > 1)
+        {
+            echo "<p align='right' style='padding-right:32px'><a href='{$_SERVER[PHP_SELF]}?action=dismiss_notice&amp;noticeid=all'>{$strDismissAll}</a></p>";
+        }
+        echo "</div>";
     }
     if($redirpage && ($_SERVER[SCRIPT_NAME] != $redirpage))
     {

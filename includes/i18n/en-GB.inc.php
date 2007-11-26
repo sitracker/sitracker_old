@@ -178,6 +178,7 @@ $strDetailsAndLog = 'Details and Log';
 $strDisabled = 'Disabled';
 # i.e. make it go away
 $strDismiss = 'Dismiss';
+$strDismissAll = 'Dismiss All';
 # i.e. show
 $strDisplay = 'Display';
 $strDisplayPreferences = 'Display Preferences';
