@@ -2,7 +2,7 @@ Changes in v3.31 - Unreleased
 -----------------------------------------------------------------------
 * Software now has a vendor (allows more accurate stats)
 * Improved customer portal, customers can now read, open, update and request
-  to close their incidents, view their contracts and view and update their 
+  to close their incidents, view their contracts and view and update their
   details
 * Enabled i18n to allow translation
 * Added translate page for users to translate strings
@@ -12,6 +12,20 @@ Changes in v3.31 - Unreleased
   of errors or information such as upgrades
 * The users page now contains an icon dispaying a user's online status
 * Changed the login page to allow for session-based language choice
+* Some support for Languages: English (US), French, Welsh, Lithuanian
+  and German
+* Customer portal now supports creating, viewing and updating incidents
+  and customer details
+* Added a link for reporting bugs to the help menu
+* The incident update page now automatically saves drafts
+* Skills can now have a vendor set
+* SLA's can now be set to 'timed' which adds an 'Activities' tab to
+  incidents and allows for recording of incident activities.
+* Added a work-around for the magic_quotes_gpc php config option
+* Made tags display in three columns
+* Fix bug in function that found an available subsitute engineer that caused the auto incident
+  switchover to be broken and for incidents to be kept in the holding queue
+* Plus many more minor changes and fixes
 
 
 Changes in v3.30 - Released 15 October 2007
