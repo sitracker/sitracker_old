@@ -56,9 +56,9 @@ if (empty($action) OR $action=='showform')
         <input type="hidden" name="updateid" value="<?php echo $updateid ?>" />
         <table class='vertical'>
         <?php
-        echo "<tr><th>{$strContact} <img src='{$CONFIG['application_webpath']}images/icons/{$iconset}/16x16/contact.png' width='16' height='16' alt='' /></th><td>";
+        echo "<tr><th><label for='search_string'>{$strContact} <img src='{$CONFIG['application_webpath']}images/icons/{$iconset}/16x16/contact.png' width='16' height='16' alt='' /></label></th><td>";
         //echo "<input type='text' name='search_string' size='30' value='{$query}' />\n";
-        echo "<input dojoType='ComboBox' value='{$query}' dataUrl='autocomplete.php?action=contact' style='width: 300px;' name='search_string' />";
+        echo "<input dojoType='ComboBox' value='{$query}' dataUrl='autocomplete.php?action=contact' style='width: 300px;' name='search_string' id='search_string' />";
         echo "<input type='hidden' name='win' value='{$win}' />";
         echo "<input name='submit' type='submit' value='{$strFindContact}' />";
         echo "</td></tr>";
@@ -419,7 +419,7 @@ elseif ($action=='incidentform')
     echo "<input type='radio' name='timetonextaction_none' value='date' />On specified Date<br />&nbsp;&nbsp;&nbsp;";
     echo "<input name='date' size='10' value='{$date}' onclick=\'window.document.updateform.timetonextaction_none[1].checked = true;\'/> ";
     echo date_picker('supportdetails.date');
-    
+
     echo "<select name='timeoffset' onchange='window.document.updateform.timetonextaction_none[1].checked = true;' >";
     echo "<option value='0'>9:00 AM</option>";
     echo "<option value='1'>10:00 AM</option>";
