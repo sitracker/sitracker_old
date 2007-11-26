@@ -392,7 +392,7 @@ switch ($_REQUEST['action'])
                     $CONFIG['db_database'] = 'sit';
                 }
                 echo "</p>";
-                $sql = "CREATE DATABASE `{$CONFIG['db_database']}`";
+                $sql = "CREATE DATABASE `{$CONFIG['db_database']}` DEFAULT CHARSET utf8";
                 if ($_REQUEST['action']=='createdatabase')
                 {
                     echo "<h2>Creating database...</h2>";
