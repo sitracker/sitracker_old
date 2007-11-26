@@ -24,7 +24,7 @@ define("STATUS_CUSTOMER",8);
 
 if ($verbose) echo "Calculating SLA times{$crlf}";
 
-$sql="SELECT id,maintenanceid,priority,slaemail,slanotice,servicelevel,status FROM incidents WHERE status != ".STATUS_CLOSED." AND status != ".STATUS_CLOSING;
+$sql="SELECT id,title,maintenanceid,priority,slaemail,slanotice,servicelevel,status FROM incidents WHERE status != ".STATUS_CLOSED." AND status != ".STATUS_CLOSING;
 //$sql="SELECT id,maintenanceid,priority,slaemail,servicelevel,status FROM incidents WHERE id=34833";
 $incident_result=mysql_query($sql);
 if (mysql_error()) trigger_error(mysql_error(),E_USER_ERROR);
@@ -114,12 +114,20 @@ while ($incident=mysql_fetch_array($incident_result)) {
             {
                 //create notice, workaround until triggers are implemented - KMH 26/11/07
                 $timetil = $times['next_sla_time']-$newSlaTime;
-                if($timetil > 0) $text = "will go out of SLA soon";
-                elseif($timetil == 0) $text = "has just gone out of SLA";
-                elseif($timetil < 0) $text = "has already gone out of SLA";
+                
+                $sql = "INSERT into notices(type, text, linktext, link, timestamp) ";
+                
+                if($timetil > 0)
+                {
+                    $text = "will go out of SLA soon";
+                    $sql .= "VALUES({$CONFIG['NEARING_SLA_TYPE']}, 'Incident {$incident['id']} - \'{$incident['title']}\' $text', 'View Incident', 'javascript:incident_details_window(\'{$incident['id']}\',\'incident{$incident['id']}\')', NOW())";
+                }
+                elseif($timetil < 0) 
+                {
+                    $text = "has already gone out of SLA";
+                    $sql .= "VALUES({$CONFIG['OUT_OF_SLA_TYPE']}, 'Incident {$incident['id']} - \'{$incident['title']}\' $text', 'View Incident', 'javascript:incident_details_window(\'{$incident['id']}\',\'incident{$incident['id']}\')', NOW())";
+                }
 
-                $sql = "INSERT into notices(text, linktext, link, timestamp) ";
-                $sql .= "VALUES('Incident {$incident['id']} $text', 'View Incident', 'javascript:incident_details_window(\'{$incident['id']}\',\'incident{$incident['id']}\')', NOW())";
                 mysql_query($sql);
 //                 if (mysql_error()) trigger_error(mysql_error(),E_USER_WARNING);
                 $noticeid = mysql_insert_id();
@@ -156,9 +164,7 @@ while ($incident=mysql_fetch_array($incident_result)) {
                 $sql="UPDATE incidents SET slaemail='1' WHERE id='{$incident['id']}'";
                 mysql_query($sql);
             }
-
         }
-
     }
 
 }
