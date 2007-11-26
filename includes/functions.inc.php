@@ -4104,7 +4104,6 @@ function incident_backup_switchover($userid, $accepting)
 }
 
 
-// FIXME not written - INL ;)
 // Suggest the userid of a suitable person to handle the given incident
 // Users are chosen randomly in a weighted lottery depending on their
 // avilability and queue status
@@ -4134,6 +4133,14 @@ function suggest_reassign_userid($incidentid, $exceptuserid=0)
         else $sql = "SELECT id AS userid, status, lastseen FROM users WHERE status > 0 AND users.accepting='Yes'";
         $result = mysql_query($sql);
         if (mysql_error()) trigger_error(mysql_error(),E_USER_ERROR);
+
+        // Fallback to all users if we have no results from above
+        if (mysql_num_rows($result) < 1)
+        {
+            $sql = "SELECT id AS userid, status, lastseen FROM users WHERE status > 0 ";
+            $result = mysql_query($sql);
+            if (mysql_error()) trigger_error(mysql_error(),E_USER_ERROR);
+        }
         while ($user = mysql_fetch_object($result))
         {
             // Get a ticket for being skilled
