@@ -27,14 +27,15 @@ $incident = $_REQUEST['incident'];
 
 if($incident)
 {
+    // FIXME i18n db text?
     $sql = "INSERT into tasks(owner, name, priority, distribution, startdate, created, lastupdated) ";
-    $sql .= "VALUES('$sit[2]', 'Task for Incident {$incident}', 1, 'incident', NOW(), NOW(), NOW())";
+    $sql .= "VALUES('$sit[2]', 'Activity for Incident {$incident}', 1, 'incident', NOW(), NOW(), NOW())";
 
     mysql_query($sql);
     if (mysql_error()) trigger_error(mysql_error(),E_USER_ERROR);
-    
+
     $taskid = mysql_insert_id();
-    
+
     $sql = "INSERT into links VALUES(4, {$taskid}, {$incident}, 'left', {$sit[2]})";
     mysql_query($sql);
     if (mysql_error()) trigger_error(mysql_error(),E_USER_ERROR);
@@ -62,7 +63,7 @@ else
             $starttime = cleanvar($_REQUEST['starttime']);
             $duetime = cleanvar($_REQUEST['duetime']);
             $endtime = cleanvar($_REQUEST['endtime']);
-    
+
             // Validate input
             $error=array();
             if ($name=='') $error[]='Task name must not be blank';
@@ -95,7 +96,7 @@ else
                 confirmation_page("2", "tasks.php", "<h2>Task added successfully</h2><p align='center'>{$strPleaseWaitRedirect}...</p>");
             }
         break;
-    
+
         case '':
         default:
             include('htmlheader.inc.php');
@@ -132,7 +133,7 @@ else
             echo "<tr><th>{$strUser}</th>";
             echo "<td>";
             echo user_drop_down('taskuser', $sit[2], FALSE);
-            echo "</td></tr>"; 
+            echo "</td></tr>";
             echo "<tr><th>{$strPrivacy}</th>";
             echo "<td><input type='radio' name='distribution' value='public' /> {$strPublic}<br />";
             echo "<input type='radio' name='distribution' checked='checked' value='private' /> {$strPrivate} </td></tr>";
