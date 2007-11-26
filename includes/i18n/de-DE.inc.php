@@ -30,7 +30,7 @@ $strGo = 'OK';
 
 $strLanguage = 'Sprache';
 $strLoggedInAs = 'Angemeldet als: %s';
-$strLogIn = 'Login';
+$strLogIn = 'Anmelden';
 $strLogout = 'Neu einloggen';
 
 $strManageUsers = 'Benutzer verwalten';
