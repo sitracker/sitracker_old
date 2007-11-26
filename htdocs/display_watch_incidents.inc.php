@@ -29,16 +29,17 @@ function statusform_submit(user)
 
 $queue = $_REQUEST['queue'];
 
-echo "<form action='{$_SERVER['PHP_SELF']}' style='text-align: center;'>";
-echo "{$strQueue}: <select class='dropdown' name='queue' onchange='window.location.href=this.options[this.selectedIndex].value'>\n";
-echo "<option ";
-if ($queue == 1) echo "selected='selected' ";
-echo "value=\"javascript:get_and_display('display_watch_incidents.inc.php?queue=1','watch_incidents_windows');\">{$strActionNeeded}</option>\n";
-echo "<option ";
-if ($queue == 3) echo "selected='selected' ";
-echo "value=\"javascript:get_and_display('display_watch_incidents.inc.php?queue=3','watch_incidents_windows');\">{$strAllOpen}</option>\n";
-echo "</select>\n";
-echo "</form>";
+// Removed by INL 26Nov07 in prep for 3.31 release
+// echo "<form action='{$_SERVER['PHP_SELF']}' style='text-align: center;'>";
+// echo "{$strQueue}: <select class='dropdown' name='queue' onchange='window.location.href=this.options[this.selectedIndex].value'>\n";
+// echo "<option ";
+// if ($queue == 1) echo "selected='selected' ";
+// echo "value=\"javascript:get_and_display('display_watch_incidents.inc.php?queue=1','watch_incidents_windows');\">{$strActionNeeded}</option>\n";
+// echo "<option ";
+// if ($queue == 3) echo "selected='selected' ";
+// echo "value=\"javascript:get_and_display('display_watch_incidents.inc.php?queue=3','watch_incidents_windows');\">{$strAllOpen}</option>\n";
+// echo "</select>\n";
+// echo "</form>";
 
 
 $sql = "SELECT type, id FROM dashboard_watch_incidents WHERE userid = {$sit[2]} ORDER BY type";
