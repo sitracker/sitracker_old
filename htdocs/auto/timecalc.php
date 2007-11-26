@@ -105,12 +105,6 @@ while ($incident=mysql_fetch_array($incident_result)) {
             echo "   Reviews need to be made every ".($times['review_days']*24*60)." minutes{$crlf}";
         }
 
-        // Check if we have already sent an out of SLA/Review period mail
-        // This attribute is reset when an update to the incident meets sla/review time
-
-            
-                echo "incident {$incident['id']}, next sla time: {$times['next_sla_time']}, currentime: $newSlaTime, ".($newSlaTime / $times['next_sla_time'])." > ".($CONFIG['urgent_threshold'] * 0.01)."\n";
-        echo "slanotice : {$incident['slanotice']} ";
         if($incident['slanotice']==0)
         {
             //reaching SLA
@@ -138,7 +132,8 @@ while ($incident=mysql_fetch_array($incident_result)) {
             }
         }
 
-
+        // Check if we have already sent an out of SLA/Review period mail
+        // This attribute is reset when an update to the incident meets sla/review time
         if ($incident['slaemail']==0) {            
         // If not, check if we need to
         $emailSent=0;
