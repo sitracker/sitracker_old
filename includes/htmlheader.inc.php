@@ -160,6 +160,24 @@ if($sit[0] != '')
                 echo "<div class='error'><p class='error'>{$notice->text}";
                 if($notice->resolutionpage) $redirpage = $CONFIG['application_webpath'].$notice->resolutionpage;
             }
+            elseif($notice->type == $CONFIG['OUT_OF_SLA_TYPE']) 
+            {
+                echo "<div class='error'><p class='error'>";
+                echo "<span>(<a href='{$_SERVER[PHP_SELF]}?action=dismiss_notice&amp;noticeid={$notice->id}'>$strDismiss</a>)</span>";
+                echo "{$notice->text}";
+                if (!empty($notice->link))
+                {
+                    echo " - <a href=\"{$notice->link}\">";
+                    if (substr($notice->linktext, 0, 4)=='$str')
+                    {
+                        $v = substr($notice->linktext, 1);
+                        echo $GLOBALS[$v];
+                    }
+                    else echo "{$notice->linktext}";
+                    echo "</a>";
+                }
+                echo "</p>";
+            }
             else
             {
                 echo "<div class='info'><p class='info'>";

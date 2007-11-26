@@ -219,7 +219,7 @@ p.info
   border: 1px solid #17446B;
   background-color: #F4F6FF;
 }
-p.info span { float: right; margin-right: 10px; }
+p.info, p.error span { float: right; margin-right: 10px; }
 p.warning, h5.warning
 {
   background-image: url('../images/icons/kdeclassic/16x16/actions/info.png');

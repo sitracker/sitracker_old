@@ -212,8 +212,11 @@ $CONFIG['YOUR_CURRENT_LANGAUGE_NOTICE'] = 1;
 $CONFIG['SIT_UPGRADED_NOTICE'] = 2;
 
 //default notice types
-$CONFIG['CRITICAL_NOTICE_TYPE'] = 1;
 $CONFIG['NORMAL_NOTICE_TYPE'] = 0;
+$CONFIG['CRITICAL_NOTICE_TYPE'] = 1;
+$CONFIG['NEARING_SLA_TYPE'] = 2;
+$CONFIG['OUT_OF_SLA_TYPE'] = 3;
+
 
 //the IDs of the notices that cannot be deleted (system notices)
 $CONFIG['permanent_notices'] = array(1,2);
