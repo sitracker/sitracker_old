@@ -109,12 +109,9 @@ while ($incident=mysql_fetch_array($incident_result)) {
 
         if($incident['slanotice']==0)
         {
-            echo "no slanotice sent\n";
-            echo "types: {$CONFIG['NEARING_SLA_TYPE']}, {$CONFIG['OUT_OF_SLA_TYPE']}\n";
             //reaching SLA
             if(($newSlaTime / $times['next_sla_time']) >= ($CONFIG['urgent_threshold'] * 0.01))
             {
-                echo "near sla\n";
                 //create notice, workaround until triggers are implemented - KMH 26/11/07
                 $timetil = $times['next_sla_time']-$newSlaTime;
                 
@@ -133,20 +130,16 @@ while ($incident=mysql_fetch_array($incident_result)) {
 
                 mysql_query($sql);
                 if (mysql_error()) trigger_error(mysql_error(),E_USER_WARNING);
-                echo "inserted notice\n";
                 $noticeid = mysql_insert_id();
 
                 $sql = "INSERT into usernotices(noticeid, userid) ";
                 $sql .= "VALUES($noticeid, {$reviewInfo['currentowner']})";
                 mysql_query($sql);
                 if (mysql_error()) trigger_error(mysql_error(),E_USER_WARNING);
-                echo "inserted usernotice\n";
 
                 $sql="UPDATE incidents SET slanotice='1' WHERE id='{$incident['id']}'";
                 mysql_query($sql);
                 if (mysql_error()) trigger_error(mysql_error(),E_USER_WARNING);
-                echo "updated incident\n";
-
             }
         }
 
