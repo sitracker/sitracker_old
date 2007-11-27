@@ -42,7 +42,7 @@ if (mysql_num_rows($result) > 0)
         if ($prvincid!=$row->id)
         {
             echo "<b>[{$row->siteid}] {$row->name}</b> Incident: <a href='{$CONFIG['application_uriprefix']}{$CONFIG['application_webpath']}incident_details.php?id={$row->id}'>{$row->id}</a>  ";
-            echo "Date: ".date('d M Y', $row->opened);
+            echo "Date: ".date('d M Y', $row->opened)." ";
             echo "Product: ".product_name($row->product);
             $site=$row->siteid;
             $$site++;
