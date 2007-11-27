@@ -13,7 +13,8 @@ require('db_connect.inc.php');
 
 session_name($CONFIG['session_name']);
 session_start();
-session_regenerate_id(TRUE);
+session_regenerate_id();
+if(!version_compare(phpversion(),"4.3.3",">=")) setcookie(session_name(), session_id(),ini_get("session.cookie_lifetime"), "/");
 
 $language = $_POST['lang'];
 

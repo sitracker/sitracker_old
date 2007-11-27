@@ -10,6 +10,7 @@
 
 // Author: Ivan Lucas <ivanlucas[at]users.sourceforge.net>
 
+// TODO we need to clean this schema up to make it confirmed compatible with mysql4
 $schema = "CREATE TABLE `billing_periods` (
 `servicelevelid` INT( 5 ) NOT NULL ,
 `engineerperiod` INT NOT NULL COMMENT 'In minutes',
