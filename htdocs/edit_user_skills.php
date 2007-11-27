@@ -32,7 +32,7 @@ if (empty($submit))
     // "Code examples on irt.org can be freely copied and used."
     ?>
     <script type="text/javascript">
-    <!--
+
     function deleteOption(object,index)
     {
         object.options[index] = null;
@@ -76,7 +76,7 @@ if (empty($submit))
         // alert(output);
         toObject.value = output;
     }
-    //--></script>
+    </script>
     <?php
 
     $sql = "SELECT * FROM usersoftware, software WHERE usersoftware.softwareid=software.id AND userid='$user' ORDER BY name";
@@ -173,27 +173,29 @@ else
             }
             $softlist[]=$value;
         }
-
-        // Make sure we're not being backup support for all the software we have no skills in.
-        if (is_array($noskills))
-        {
-            $noskills=array_unique($noskills);
-            foreach ($noskills AS $value)
-            {
-                // Remove the software listed that we don't support
-                $sql = "DELETE FROM usersoftware WHERE userid='{$_POST['userid']}' AND softwareid='$value' LIMIT 1";
-                mysql_query($sql);
-                if (mysql_error()) trigger_error("MySQL Query Error ".mysql_error(), E_USER_ERROR);
-
-                // If we are providing backup for a skill we don't have - reset that back to nobody providing backup
-                $sql = "UPDATE usersoftware SET backupid='0' WHERE backupid='{$_POST['userid']}' AND softwareid='$value' LIMIT 1";
-                mysql_query($sql);
-                if (mysql_error()) trigger_error("MySQL Query Error ".mysql_error(), E_USER_ERROR);
-            }
-        }
-
-        journal(CFG_LOGGING_MAX,'Skillset Updated',"Users Skillset was Changed",CFG_JOURNAL_USER,0);
     }
+
+    // Make sure we're not being backup support for all the software we have no skills in.
+    if (is_array($noskills))
+    {
+        $noskills=array_unique($noskills);
+        foreach ($noskills AS $value)
+        {
+            echo "removing $value";
+            // Remove the software listed that we don't support
+            $sql = "DELETE FROM usersoftware WHERE userid='{$_POST['userid']}' AND softwareid='$value' LIMIT 1";
+            mysql_query($sql);
+            if (mysql_error()) trigger_error("MySQL Query Error ".mysql_error(), E_USER_ERROR);
+
+            // If we are providing backup for a skill we don't have - reset that back to nobody providing backup
+            $sql = "UPDATE usersoftware SET backupid='0' WHERE backupid='{$_POST['userid']}' AND softwareid='$value' LIMIT 1";
+            mysql_query($sql);
+            if (mysql_error()) trigger_error("MySQL Query Error ".mysql_error(), E_USER_ERROR);
+        }
+    }
+
+    journal(CFG_LOGGING_MAX,'Skillset Updated',"Users Skillset was Changed",CFG_JOURNAL_USER,0);
+
     // Have a look to see if any of the software we support is lacking a backup/substitute engineer
     $sql = "SELECT userid FROM usersoftware WHERE userid='{$_POST['userid']}' AND backupid='0' LIMIT 1";
     $result=mysql_query($sql);
