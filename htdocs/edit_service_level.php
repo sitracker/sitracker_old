@@ -11,12 +11,13 @@
 // Author: Ivan Lucas <ivanlucas[at]users.sourceforge.net>
 
 $permission=53; // Edit Service Levels
-$title = $strEditServiceLevel;
 
 require('db_connect.inc.php');
 require('functions.inc.php');
 // This page requires authentication
 require('auth.inc.php');
+
+$title = $strEditServiceLevel;
 
 // External variables
 $tag = cleanvar($_REQUEST['tag']);
@@ -49,13 +50,31 @@ if (empty($action) OR $action == "showform")
     echo "<tr><th>{$strReview} <img src='{$CONFIG['application_webpath']}images/icons/{$iconset}/16x16/review.png' width='16' height='16' alt='' /></th>";
     echo "<td><input type='text' size='5' name='review_days' maxlength='3' value='{$sla->review_days}' /> {$strDays}</td></tr>";
     echo "<tr><th>{$strTimed} <img src='{$CONFIG['application_webpath']}images/icons/{$iconset}/16x16/sla.png' width='16' height='16' alt='' /></th><td>";    
-    if($sla->timed == 'yes') echo "<input type='checkbox' name='timed' checked>";
-    else echo "<input type='checkbox' name='timed'>";
+    if($sla->timed == 'yes')
+    {
+        echo "<input type='checkbox' name='timed' checked>";
+        $billingSQL = "SELECT * FROM billing_periods WHERE servicelevelid = {$sla->id}";
+        $billingResult = mysql_query($billingSQL);
+        if (mysql_error()) trigger_error(mysql_error(),E_USER_WARNING);
+        $billing = mysql_fetch_object($billingResult);
+
+        $customerPeriod = $billing->customerperiod;
+        $engineerPeriod = $billing->engineerperiod;
+    }
+    else
+    {
+        echo "<input type='checkbox' name='timed'>";
+        $customerPeriod = "";
+        $engineerPeriod = "";
+    }
     echo "</td></tr>";
+    echo "<tr><th>{$strBillingEngineerPeriod}<br />{$strInMinutes}</th><td><input type='text' size='5' name='engineerPeriod' maxlength='5' value='{$engineerPeriod}' /></td></tr>";
+    echo "<tr><th>{$strBillingCustomerPeriod}<br />{$strInMinutes}</th><td><input type='text' size='5' name='customerPeriod' maxlength='5' value='{$customerPeriod}' /></td></tr>";
     echo "</table>";
     echo "<input type='hidden' name='action' value='edit' />";
     echo "<input type='hidden' name='tag' value='{$tag}' />";
     echo "<input type='hidden' name='priority' value='{$priority}' />";
+    echo "<input type='hidden' name='id' value='{$sla->id}' />";
     echo "<p align='center'><input type='submit' value='{$strSave}' /></p>";
     echo "</form>";
     include('htmlfooter.inc.php');
@@ -63,11 +82,14 @@ if (empty($action) OR $action == "showform")
 elseif ($action == "edit")
 {
     // External variables
+    $id = cleanvar($_POST['id']);
     $initial_response_mins = cleanvar($_POST['initial_response_mins']);
     $prob_determ_mins = cleanvar($_POST['prob_determ_mins']);
     $action_plan_mins = cleanvar($_POST['action_plan_mins']);
     $resolution_days = cleanvar($_POST['resolution_days']);
     $review_days = cleanvar($_POST['review_days']);
+    $engineerPeriod = cleanvar($_POST['engineerPeriod']);
+    $customerPeriod = cleanvar($_POST['customerPeriod']);
     if($_POST['timed'] != 'on') $timed = 0;
     else $timed = 1;
 
@@ -80,9 +102,29 @@ elseif ($action == "edit")
     $sql .= "WHERE tag='$tag' AND priority='$priority'";
     mysql_query($sql);
     if (mysql_error()) trigger_error(mysql_error(),E_USER_ERROR);
-    if (mysql_affected_rows() == 0) trigger_error("UPDATE affected zero rows",E_USER_WARNING);
+    //if (mysql_affected_rows() == 0) trigger_error("UPDATE affected zero rows",E_USER_WARNING);
     else
     {
+        $billingSQL = "SELECT * FROM billing_periods WHERE servicelevelid = {$id}";
+        $billingResult = mysql_query($billingSQL);
+        if (mysql_error()) trigger_error(mysql_error(),E_USER_WARNING);
+        $billing = mysql_fetch_object($billingResult);
+
+        if(!empty($billing))
+        {
+            //update
+            $sql = "UPDATE billing_periods SET customerperiod = '{$customerPeriod}', engineerperiod = '{$engineerPeriod}' WHERE servicelevelid = '{$id}'";
+            $result = mysql_query($sql);
+            if (mysql_error()) trigger_error(mysql_error(),E_USER_WARNING);
+        }
+        else
+        {
+            //insert
+            $sql = "INSERT INTO billing_periods (servicelevelid, customerperiod, engineerperiod) VALUES ('{$id}', '{$customerPeriod}', '{$engineerPeriod}')";
+            $result = mysql_query($sql);
+            if (mysql_error()) trigger_error(mysql_error(),E_USER_WARNING);
+        }
+
         header("Location: service_levels.php");
         exit;
     }
