@@ -82,7 +82,7 @@ elseif ($action == "edit" && isset($contact))
         echo " Don't call</td></tr>\n"; // FIXME i18n
         echo "<tr><th>{$strDataProtection} {$strAddress}:</th><td>";
         html_checkbox('dataprotection_address', $contactrow['dataprotection_address']);
-        echo "Don't write</td></tr>\n"; // FIXME i18n
+        echo " Don't write</td></tr>\n"; // FIXME i18n
         echo "<tr><th>{$strActive}:</th><td><input type='checkbox' name='active'";
         if($contactrow['active']=='true') echo "checked='".$siterow['active']."'";
         echo " value='true' /></td></tr> <tr><th></th><td>";
