@@ -1571,7 +1571,7 @@ CREATE TABLE `billing_periods` (
 PRIMARY KEY r( `servicelevelid` )
 ) ENGINE = MYISAM ;
 
- --KMH 26/11/07
+ -- KMH 26/11/07
  ALTER TABLE `incidents` ADD `slanotice` TINYINT(1) NOT NULL DEFAULT '0' AFTER `slaemail` ;
 
 ";
