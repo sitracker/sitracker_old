@@ -10,7 +10,15 @@
 
 // Author: Ivan Lucas <ivanlucas[at]users.sourceforge.net>
 
-$schema = "CREATE TABLE `closingstatus` (
+$schema = "CREATE TABLE `billing_periods` (
+`servicelevelid` INT( 5 ) NOT NULL ,
+`engineerperiod` INT NOT NULL COMMENT 'In minutes',
+`customerpeiod` INT NOT NULL COMMENT 'In minutes',
+PRIMARY KEY r( `servicelevelid` )
+) ENGINE = MYISAM ;
+
+
+CREATE TABLE `closingstatus` (
  `id` int(11) NOT NULL auto_increment,
  `name` varchar(50) default NULL,
  PRIMARY KEY  (`id`)
@@ -1554,8 +1562,18 @@ ALTER TABLE `maintenance` ADD `allcontactssupported` ENUM( 'No', 'Yes' ) NOT NUL
 ALTER TABLE `dashboard_rss` ADD `items` INT( 5 ) NULL AFTER `url`;
 -- INL 25Nov07
 DROP TABLE `holidaytypes`;
+
+-- PH 26Nov07
+CREATE TABLE `billing_periods` (
+`servicelevelid` INT( 5 ) NOT NULL ,
+`engineerperiod` INT NOT NULL COMMENT 'In minutes',
+`customerpeiod` INT NOT NULL COMMENT 'In minutes',
+PRIMARY KEY r( `servicelevelid` )
+) ENGINE = MYISAM ;
+
  --KMH 26/11/07
  ALTER TABLE `incidents` ADD `slanotice` TINYINT(1) NOT NULL DEFAULT '0' AFTER `slaemail` ;
+
 ";
 
 

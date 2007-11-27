@@ -21,6 +21,8 @@ $strActiveContracts = 'Active Contracts';
 $strActivities = 'Activities';
 $strActivity = 'Activity';
 $strActivityAdded = 'Activity Added';
+$strActivityBilling = 'Activity Billing';
+$strActivityBillingInfo = 'Only closed tasks are shown for billing.';
 $strActivityList = 'Activity List';
 $strActivityMarkedCompleteSuccessfully = 'Activity Marked Complete Successfully';
 # i.e. Create, New
