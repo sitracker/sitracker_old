@@ -410,7 +410,7 @@ function display_update_page($draftid=-1)
     echo "<input maxlength='3' name='timetonextaction_days' id='timetonextaction_days' value='{$na_days}' onclick='window.document.updateform.timetonextaction_none[0].checked = true;' size='3' /> Days&nbsp;";
     echo "<input maxlength='2' name='timetonextaction_hours' id='timetonextaction_hours' value='{$na_hours}' onclick='window.document.updateform.timetonextaction_none[0].checked = true;' size='3' /> Hours&nbsp;";
     echo "<input maxlength='2' name='timetonextaction_minutes' id='timetonextaction_minutes' value='{$na_minutes}' onclick='window.document.updateform.timetonextaction_none[0].checked = true;' size='3' /> Minutes<br />";
-    echo "<input type='radio' name='timetonextaction_none' id='timetonextaction_none' value='date; />At specific date and time<br />";
+    echo "<input type='radio' name='timetonextaction_none' id='timetonextaction_none' value='date'; />At specific date and time<br />";
     echo "<input name='date' id='date' size='10' value='{$date}' onclick=\"window.document.updateform.timetonextaction_none[1].checked = true;\"/> ";
     echo date_picker('updateform.date');
     echo "<select name='timeoffset' id='timeoffset' onchange='window.document.updateform.timetonextaction_none[1].checked = true;'>";
@@ -656,7 +656,7 @@ else
     if ($target!='none')
     {
         // Reset the slaemail sent column, so that email reminders can be sent if the new sla target goes out
-        $sql = "UPDATE incidents SET slaemail='0' WHERE id='$id' LIMIT 1";
+        $sql = "UPDATE incidents SET slaemail='0', slanotice='0' WHERE id='$id' LIMIT 1";
         mysql_query($sql);
         if (mysql_error()) trigger_error("MySQL Query Error ".mysql_error(), E_USER_ERROR);
     }
