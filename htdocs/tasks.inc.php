@@ -66,7 +66,7 @@ function formatSeconds(secondsOpen)
         str += "00";
     }
 
-    str += "(a):";
+    str += ":";
 
     if(secondsOpen >= 3600)
     {   //hours
