@@ -86,7 +86,20 @@ function byId(id){
     return document.getElementById(id);
 }
 
+
+// www.sean.co.uk
+function pausecomp(millis)
+{
+    var date = new Date();
+    var curDate = null;
+
+    do { curDate = new Date(); }
+    while(curDate-date < millis);
+}
+
 function get_and_display(page, component){
+    pausecomp(25);
+
     var xmlhttp=false;
     /*@cc_on @*/
     /*@if (@_jscript_version >= 5)
