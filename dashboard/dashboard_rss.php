@@ -28,10 +28,11 @@ function dashboard_rss($row,$dashboardid)
 function dashboard_rss_install()
 {
     $schema = "CREATE TABLE `dashboard_rss` (
-    `owner` TINYINT NOT NULL ,
-    `url` VARCHAR( 255 ) NOT NULL ,
-    `enabled` ENUM( 'true', 'false' ) NOT NULL ,
-    INDEX ( `owner` , `url` )
+    `owner` tinyint(4) NOT NULL,
+  `url` varchar(255) NOT NULL,
+  `items` int(5) default NULL,
+  `enabled` enum('true','false') NOT NULL,
+    KEY `owner` (`owner`,`url`)
     ) ENGINE = MYISAM ;";
 
     $result = mysql_query($schema);

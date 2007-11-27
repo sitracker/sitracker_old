@@ -29,7 +29,9 @@ if (!isset($_SESSION['auth']) OR $_SESSION['auth'] == FALSE)
 else
 {
     // Attempt to prevent session fixation attacks
-    session_regenerate_id(TRUE);
+    session_regenerate_id();
+    if(!version_compare(phpversion(),"4.3.3",">=")) setcookie(session_name(), session_id(),ini_get("session.cookie_lifetime"), "/");
+
     // Conversions for when register_globals=off
     // We've migrated away from using cookies and now use sessions
     $sit[0] = $_SESSION['username'];
