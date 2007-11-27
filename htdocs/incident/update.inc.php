@@ -415,7 +415,7 @@ function display_update_page($draftid=-1)
     echo date_picker('updateform.date');
     echo "<select name='timeoffset' id='timeoffset' onchange='window.document.updateform.timetonextaction_none[1].checked = true;'>";
     // FIXME i18n choose time
-    echo "<option>Choose Time</option>";
+    echo "<option value='0'></option>";
     echo "<option value='0'>8:00 AM</option>";
     echo "<option value='1'>9:00 AM</option>";
     echo "<option value='2'>10:00 AM</option>";
