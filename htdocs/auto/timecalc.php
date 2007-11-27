@@ -119,12 +119,12 @@ while ($incident=mysql_fetch_array($incident_result)) {
                 
                 if($timetil >= 0)
                 {
-                    $text = "will go out of SLA soon";
+                    $text = "will exceed its SLA soon";
                     $sql .= "VALUES({$CONFIG['NEARING_SLA_TYPE']}, 'Incident {$incident['id']} - \'{$incident['title']}\' $text', 'View Incident', 'javascript:incident_details_window(\'{$incident['id']}\',\'incident{$incident['id']}\')', NOW())";
                 }
                 elseif($timetil < 0) 
                 {
-                    $text = "has already gone out of SLA";
+                    $text = "has exceeded its SLA";
                     $sql .= "VALUES({$CONFIG['OUT_OF_SLA_TYPE']}, 'Incident {$incident['id']} - \'{$incident['title']}\' $text', 'View Incident', 'javascript:incident_details_window(\'{$incident['id']}\',\'incident{$incident['id']}\')', NOW())";
                 }
 
