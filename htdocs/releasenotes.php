@@ -31,7 +31,7 @@ echo '<div>
     <ul>
         <li>You can limit a contract to a certain amount of supported contacts (or unlimited as it is now)</li>
         <li>You can say that every site contact is to be supported by the contact. This is particually useful for sites that have a large amount of users that all need to be supported, i.e. a University department and its students.</li>
-        <li>Contacts can now have no expiry date - Unlimited.</li>
+        <li>Contracts can now have no expiry date - Unlimited.</li>
     </ul><br /><br />
 
     <p><strong>Notices</strong></p>
