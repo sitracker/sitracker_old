@@ -4131,7 +4131,7 @@ function suggest_reassign_userid($incidentid, $exceptuserid=0)
         if (!empty($incident->softwareid))
         {
             $sql = "SELECT usersoftware.userid, users.status, users.lastseen FROM usersoftware, users ";
-            $sql .= "WHERE users.id=usersoftware.userid AND users.accepting='Yes' ";
+            $sql .= "WHERE users.id=usersoftware.userid AND users.status > 0 AND users.accepting='Yes' ";
             if ($exceptuserid > 0) $sql .= "AND NOT users.id = '$exceptuserid' ";
             $sql .= "AND softwareid={$incident->softwareid}";
         }
@@ -5266,51 +5266,6 @@ function implode_assoc($glue1, $glue2, $array)
     return implode($glue2, $array2);
 }
 
-
-// -------------------------- // -------------------------- // --------------------------
-// leave this section at the bottom of functions.inc.php ================================
-
-// Evaluate and Load plugins
-if (is_array($CONFIG['plugins']))
-{
-    foreach($CONFIG['plugins'] AS $plugin)
-    {
-        // Remove any dots
-        $plugin=str_replace('.','',$plugin);
-        // Remove any slashes
-        $plugin=str_replace('/','',$plugin);
-        if ($plugin!='') include("{$CONFIG['application_fspath']}/plugins/{$plugin}.php");
-    }
-}
-
-function plugin_register($context, $action)
-{
-    global $PLUGINACTIONS;
-    $PLUGINACTIONS[$context][] = $action;
-}
-
-
-function plugin_do($context, $optparams=FALSE)
-{
-    global $PLUGINACTIONS;
-
-    if (is_array($PLUGINACTIONS[$context]))
-    {
-        foreach($PLUGINACTIONS[$context] AS $action)
-        {
-            // Call Variable function (function with variable name)
-            if ($optparams) $rtn = $action($optparams);
-            else $rtn = $action();
-
-            // Append return value
-            if (is_array($rtn) AND is_array($rtnvalue)) array_push($rtnvalue, $rtn);
-            elseif (is_array($rtn) AND !is_array($rtnvalue)) { $rtnvalue=array(); array_push($rtnvalue, $rtn); }
-            else $rtnvalue .= $rtn;
-        }
-    }
-    return $rtnvalue;
-}
-
 function quick_update($incidentid, $text)
 {
     $incidentid = cleanvar($incidentid);
@@ -5392,6 +5347,55 @@ function user_online($user)
     else
         return "<img src='{$CONFIG['application_webpath']}images/icons/{$iconset}/16x16/offline.png' width='16' height='16' alt=\"{$strOffline}\" /> ";
 }
+
+
+
+// -------------------------- // -------------------------- // --------------------------
+// leave this section at the bottom of functions.inc.php ================================
+
+// Evaluate and Load plugins
+if (is_array($CONFIG['plugins']))
+{
+    foreach($CONFIG['plugins'] AS $plugin)
+    {
+        // Remove any dots
+        $plugin=str_replace('.','',$plugin);
+        // Remove any slashes
+        $plugin=str_replace('/','',$plugin);
+        if ($plugin!='') include("{$CONFIG['application_fspath']}/plugins/{$plugin}.php");
+    }
+}
+
+function plugin_register($context, $action)
+{
+    global $PLUGINACTIONS;
+    $PLUGINACTIONS[$context][] = $action;
+}
+
+
+function plugin_do($context, $optparams=FALSE)
+{
+    global $PLUGINACTIONS;
+
+    if (is_array($PLUGINACTIONS[$context]))
+    {
+        foreach($PLUGINACTIONS[$context] AS $action)
+        {
+            // Call Variable function (function with variable name)
+            if ($optparams) $rtn = $action($optparams);
+            else $rtn = $action();
+
+            // Append return value
+            if (is_array($rtn) AND is_array($rtnvalue)) array_push($rtnvalue, $rtn);
+            elseif (is_array($rtn) AND !is_array($rtnvalue)) { $rtnvalue=array(); array_push($rtnvalue, $rtn); }
+            else $rtnvalue .= $rtn;
+        }
+    }
+    return $rtnvalue;
+}
+
+// ** Place no more function defs below this **
+
 
 // These are the modules that we are dependent on, without these something
 // or everything will fail, so let's throw an error here.
