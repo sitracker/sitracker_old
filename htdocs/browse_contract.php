@@ -110,7 +110,7 @@ $sql .= "licencetypes.name AS licence_type, expirydate, admincontact, contacts.f
 $sql .= "maintenance.term AS term, maintenance.productonly AS productonly ";
 $sql .= "FROM maintenance, sites, contacts, products, licencetypes, resellers ";
 $sql .= "WHERE (maintenance.site=sites.id AND product=products.id AND admincontact=contacts.id) ";
-// $sql .= "AND (reseller=resellers.id OR reseller=NULL) AND (licence_type=licencetypes.id OR licence_type=NULL) ";
+$sql .= "AND (reseller=resellers.id OR reseller=NULL) AND (licence_type=licencetypes.id OR licence_type=NULL) ";
 if ($activeonly=='yes') $sql .= "AND term!='yes' AND (expirydate > $now OR expirydate = '-1') ";
 if ($search_string != '*')
 {
@@ -141,7 +141,7 @@ if (!empty($sort))
     if ($order=='a' OR $order=='ASC' OR $order='') $sql .= "ASC";
     else $sql .= "DESC";
 }
-
+echo $sql;
 $result = mysql_query($sql);
 if (mysql_error()) trigger_error("MySQL Query Error ".mysql_error(), E_USER_ERROR);
 
@@ -185,7 +185,7 @@ else
     while ($results = mysql_fetch_array($result))
     {
         // define class for table row shading
-        if ($results['expirydate']<$now || ( $results['term']=='yes' AND $results['productonly']=='no'))
+        if (($results['expirydate']<$now AND $results['expirydate'] != '-1') || ( $results['term']=='yes' AND $results['productonly']=='no'))
         {
             $class = 'expired';
         }
@@ -209,7 +209,9 @@ else
 
         <td><?php echo $results["reseller"] ?></td>
         <td><?php echo $results["licence_quantity"] ?> <?php echo $results["licence_type"] ?></td>
-        <td><?php echo date($CONFIG['dateformat_date'], $results["expirydate"]); ?></td>
+        <td><?php
+            if($results["expirydate"] == '-1') echo $strUnlimited;
+            else echo date($CONFIG['dateformat_date'], $results["expirydate"]); ?></td>
 
         <td><?php if ($results["notes"] == "") echo "&nbsp;"; else echo nl2br(stripslashes($results["notes"])); ?></td>
         </tr>
