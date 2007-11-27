@@ -109,9 +109,12 @@ while ($incident=mysql_fetch_array($incident_result)) {
 
         if($incident['slanotice']==0)
         {
+            echo "no slanotice sent\n";
+            echo "types: {$CONFIG['NEARING_SLA_TYPE']}, {$CONFIG['OUT_OF_SLA_TYPE']}\n";
             //reaching SLA
             if(($newSlaTime / $times['next_sla_time']) >= ($CONFIG['urgent_threshold'] * 0.01))
             {
+                echo "near sla\n";
                 //create notice, workaround until triggers are implemented - KMH 26/11/07
                 $timetil = $times['next_sla_time']-$newSlaTime;
                 
@@ -122,22 +125,28 @@ while ($incident=mysql_fetch_array($incident_result)) {
                     $text = "will go out of SLA soon";
                     $sql .= "VALUES({$CONFIG['NEARING_SLA_TYPE']}, 'Incident {$incident['id']} - \'{$incident['title']}\' $text', 'View Incident', 'javascript:incident_details_window(\'{$incident['id']}\',\'incident{$incident['id']}\')', NOW())";
                 }
-                elseif($timetil < 0) 
+                elseif($timetil <= 0) 
                 {
                     $text = "has already gone out of SLA";
                     $sql .= "VALUES({$CONFIG['OUT_OF_SLA_TYPE']}, 'Incident {$incident['id']} - \'{$incident['title']}\' $text', 'View Incident', 'javascript:incident_details_window(\'{$incident['id']}\',\'incident{$incident['id']}\')', NOW())";
                 }
 
                 mysql_query($sql);
-//                 if (mysql_error()) trigger_error(mysql_error(),E_USER_WARNING);
+                if (mysql_error()) trigger_error(mysql_error(),E_USER_WARNING);
+                echo "inserted notice\n";
                 $noticeid = mysql_insert_id();
 
                 $sql = "INSERT into usernotices(noticeid, userid) ";
                 $sql .= "VALUES($noticeid, {$reviewInfo['currentowner']})";
                 mysql_query($sql);
+                if (mysql_error()) trigger_error(mysql_error(),E_USER_WARNING);
+                echo "inserted usernotice\n";
 
                 $sql="UPDATE incidents SET slanotice='1' WHERE id='{$incident['id']}'";
                 mysql_query($sql);
+                if (mysql_error()) trigger_error(mysql_error(),E_USER_WARNING);
+                echo "updated incident\n";
+
             }
         }
 
