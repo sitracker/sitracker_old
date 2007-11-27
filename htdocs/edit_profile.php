@@ -272,7 +272,7 @@ elseif($mode=='save')
     $result = mysql_query($sql);
     if (mysql_error()) trigger_error(mysql_error(),E_USER_ERROR);
     list($countexisting) = mysql_fetch_row($result);
-    if ($countexisting >= 1)
+    if ($countexisting > 1)
     {
         $errors++;
         $error_string .= "<h5 class='error'>Email must be unique</h5>\n";
