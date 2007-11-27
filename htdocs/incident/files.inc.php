@@ -52,6 +52,7 @@ if ($_FILES['attachment']['name']!="")
         // make incident attachment dir if it doesn't exist
         $newfilename = $incident_attachment_fspath.'/'.$_FILES['attachment']['name'];
         $umask=umask(0000);
+        $mk=TRUE;
         if (!file_exists($incident_attachment_fspath))
         {
            $mk=mkdir($incident_attachment_fspath, 0770);
@@ -62,7 +63,7 @@ if ($_FILES['attachment']['name']!="")
         if (!$mv) trigger_error('!Error: Problem moving attachment from temp directory to: '.$newfilename, E_USER_WARNING);
 
         echo "<div class='detailinfo'>\n";
-        if (!$mk OR !$mv) echo "File <strong>{$_FILES['attachment']['name']}</strong> ({$_FILES['attachment']['type']} {$_FILES['attachment']['size']} bytes) uploaded OK";
+        if ($mk AND $mv) echo "File <strong>{$_FILES['attachment']['name']}</strong> ({$_FILES['attachment']['type']} {$_FILES['attachment']['size']} bytes) uploaded OK";
         else echo "An error occurred while uploading <strong>{$_FILES['attachment']['name']}</strong>";
 
         // Debug
