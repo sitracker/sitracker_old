@@ -54,7 +54,7 @@ if ($user==$sit[2] OR $approver==TRUE)
     $holidaystaken=user_count_holidays($user, 1);
     echo "$entitlement {$strdays}, ";
     echo "$holidaystaken {$strtaken}, ";
-    echo $entitlement-$holidaystaken." {$strRemaining}";
+    printf ($strRemaining, $entitlement-$holidaystaken);
     echo "</td></tr>\n";
     echo "<tr class='shade1'><td ><strong>{$strOtherLeave}</strong>:</td></tr>\n";
     echo "<tr class='shade2'><td>";
