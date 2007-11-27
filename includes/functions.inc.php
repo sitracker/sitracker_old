@@ -1950,10 +1950,10 @@ function emailtype_replace_specials($string, $incidentid, $userid=0)
 /* If the argument is less than 60 returns 1 minute           */
 function format_seconds($seconds)
 {
-   if ($seconds <= 0) return '0 mins';
+   if ($seconds <= 0) return '0 minutes';
    elseif ($seconds <= 60 AND $seconds >= 1)
    {
-      return ("1 min");
+      return ("1 minute");
    }
    else
    {
