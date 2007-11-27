@@ -79,7 +79,7 @@ elseif ($action == "edit" && isset($contact))
         echo " Don't send email</td></tr>\n"; // FIXME i18n
         echo "<tr><th>{$strDataProtection}: {$strTelephone}:</th><td>";
         html_checkbox('dataprotection_phone', $contactrow['dataprotection_phone']);
-        echo " Don't call</td></tr>\n" // FIXME i18n
+        echo " Don't call</td></tr>\n"; // FIXME i18n
         echo "<tr><th>{$strDataProtection} {$strAddress}:</th><td>";
         html_checkbox('dataprotection_address', $contactrow['dataprotection_address']);
         echo "Don't write</td></tr>\n"; // FIXME i18n
