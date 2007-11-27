@@ -615,23 +615,23 @@ else $day=$_REQUEST['day'];
 
 // Navigation
 echo "<p>{$strDisplay}: ";
-echo "<a href='{$_SERVER['PHP_SELF']}?display=list&amp;year={$year}&amp;month={$month}&amp;day={$day}'>";
+echo "<a href='{$_SERVER['PHP_SELF']}?display=list&amp;year={$year}&amp;month={$month}&amp;day={$day}&amp;type={$type}'>";
 if ($display=='list') echo "<em>List</em>";
 else echo "{$strList}";
 echo "</a> |";
-echo " <a href='{$_SERVER['PHP_SELF']}?display=year&amp;year={$year}&amp;month={$month}&amp;day={$day}'>";
+echo " <a href='{$_SERVER['PHP_SELF']}?display=year&amp;year={$year}&amp;month={$month}&amp;day={$day}&amp;type={$type}'>";
 if ($display=='year') echo "<em>Year</em>";
 else echo "{$strYear}";
 echo "</a> |";
-echo " <a href='{$_SERVER['PHP_SELF']}?display=month&amp;year={$year}&amp;month={$month}&amp;day={$day}'>";
+echo " <a href='{$_SERVER['PHP_SELF']}?display=month&amp;year={$year}&amp;month={$month}&amp;day={$day}&amp;type={$type}'>";
 if ($display=='month') echo "<em>Month</em>";
 else echo "{$strMonth}";
 echo "</a> |";
-echo " <a href='{$_SERVER['PHP_SELF']}?display=week&amp;year={$year}&amp;month={$month}&amp;day={$day}'>";
+echo " <a href='{$_SERVER['PHP_SELF']}?display=week&amp;year={$year}&amp;month={$month}&amp;day={$day}&amp;type={$type}'>";
 if ($display=='week') echo "<em>Week</em>";
 else echo "{$strWeek}";
 echo "</a> |";
-echo " <a href='{$_SERVER['PHP_SELF']}?display=day&amp;year={$year}&amp;month={$month}&amp;day={$day}'>";
+echo " <a href='{$_SERVER['PHP_SELF']}?display=day&amp;year={$year}&amp;month={$month}&amp;day={$day}&amp;type={$type}'>";
 if ($display=='day') echo "<em>{$strDay}</em>";
 else echo "{$strDay}";
 echo "</a>";
@@ -883,9 +883,9 @@ else
     $pdate=mktime(0,0,0,$month,$day,$year-1);
     $ndate=mktime(0,0,0,$month,$day,$year+1);
     echo "<p align='center'>";
-    echo "<a href='{$_SERVER['PHP_SELF']}?display=year&amp;year=".date('Y',$pdate)."&amp;month=".date('m',$pdate)."&amp;day=".date('d',$pdate)."'>&lt;</a> ";
+    echo "<a href='{$_SERVER['PHP_SELF']}?display=year&amp;year=".date('Y',$pdate)."&amp;month=".date('m',$pdate)."&amp;day=".date('d',$pdate)."&amp;type={$type}'>&lt;</a> ";
     echo date('Y',mktime(0,0,0,$month,$day,$year));
-    echo " <a href='{$_SERVER['PHP_SELF']}?display=year&amp;year=".date('Y',$ndate)."&amp;month=".date('m',$ndate)."&amp;day=".date('d',$ndate)."'>&gt;</a>";
+    echo " <a href='{$_SERVER['PHP_SELF']}?display=year&amp;year=".date('Y',$ndate)."&amp;month=".date('m',$ndate)."&amp;day=".date('d',$ndate)."&amp;type={$type}'>&gt;</a>";
     echo "</p>";
 
 
