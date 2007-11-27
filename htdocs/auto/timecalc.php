@@ -117,12 +117,12 @@ while ($incident=mysql_fetch_array($incident_result)) {
                 
                 $sql = "INSERT into notices(type, text, linktext, link, timestamp) ";
                 
-                if($timetil > 0)
+                if($timetil >= 0)
                 {
                     $text = "will go out of SLA soon";
                     $sql .= "VALUES({$CONFIG['NEARING_SLA_TYPE']}, 'Incident {$incident['id']} - \'{$incident['title']}\' $text', 'View Incident', 'javascript:incident_details_window(\'{$incident['id']}\',\'incident{$incident['id']}\')', NOW())";
                 }
-                elseif($timetil <= 0) 
+                elseif($timetil < 0) 
                 {
                     $text = "has already gone out of SLA";
                     $sql .= "VALUES({$CONFIG['OUT_OF_SLA_TYPE']}, 'Incident {$incident['id']} - \'{$incident['title']}\' $text', 'View Incident', 'javascript:incident_details_window(\'{$incident['id']}\',\'incident{$incident['id']}\')', NOW())";
