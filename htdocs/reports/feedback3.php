@@ -200,7 +200,8 @@ if (mysql_num_rows($mresult) >= 1)
     $adjust=13;
     $min=4;
     for ($i = 0; $i <= 10; $i++) {
-      $weighted = number_format((($counter[$i] / $countcontacts) * 100), 0);
+      if ($countcontacts > 0) $weighted = number_format((($counter[$i] / $countcontacts) * 100), 0);
+      else $weighted = 0;
       echo "<div style='background: #B";
       echo dechex(floor($i*1.5));
       echo "0; color: #FFF; float:left; width: ".($min + ($weighted * $adjust))."px;'>&nbsp;</div>&nbsp; ";
