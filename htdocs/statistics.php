@@ -107,8 +107,10 @@ function stats_period_row($desc, $start, $end)
     global $shade;
     if ($shade=='') $shade='shade1';
     $count = count_incidents($start,$end);
-    $updatesperuser = @number_format($count['updates']/$count['users'], 2);
-    $updatesperincident = @number_format($count['updates']/$count['updated'], 2);
+    if ($count['users'] > 0) $updatesperuser = @number_format($count['updates']/$count['users'], 2);
+    else $updatesperuser = 0;
+    if ($count['updated'] > 0) $updatesperincident = @number_format($count['updates']/$count['updated'], 2);
+    else $updatesperincident = 0;
     $incidentsperowner = @number_format($count['handled']/$count['owners'], 2);
 /*
     $workload = $count['handled'] + $count['emailrx'] + $count['skills'] + $count['updates'] + $count['higherpriority'];
