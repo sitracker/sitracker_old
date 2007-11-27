@@ -31,20 +31,16 @@ function confirm_submit()
 // Show add product information form
 if (empty($_REQUEST['submit']))
 {
-    ?>
-    <h2>Add Product Question</h2>
-    <?php
+    echo "<h2>{$strAddProductQuestion}</h2>";
     echo "<h5>".sprintf($strMandatoryMarked,"<sup class='red'>*</sup>")."</h5>";
-    ?>
-    <form action="<?php echo $_SERVER['PHP_SELF']; ?>" method="post" onsubmit="return confirm_submit()">
-    <table align='center'>
-    <tr><th>Product:</th><td><?php echo product_drop_down("product", 0) ?></td></tr>
-    <tr><th>Question: <sup class='red'>*</sup></th><td><input name="information" size="30" /></td></tr>
-    <tr><th>More Information: <sup class='red'>*</sup></th><td><input name="moreinformation" size="30" /></td></tr>
-    </table>
-    <p align='center'><input name="submit" type="submit" value="Add" /></p>
-    </form>
-    <?php
+    echo "<form action='{$_SERVER['PHP_SELF']}' method='post' onsubmit='return confirm_submit()'>";
+    echo "<table align='center'>";
+    echo "<tr><th>Product:</th><td>".product_drop_down("product", 0)."</td></tr>";
+    echo "<tr><th>Question: <sup class='red'>*</sup></th><td><input name='information' size='30' /></td></tr>";
+    echo "<tr><th>More Information: <sup class='red'>*</sup></th><td><input name='moreinformation' size='30' /></td></tr>";
+    echo "</table>";
+    echo "<p align='center'><input name='submit' type='submit' value='Add' /></p>";
+    echo "</form>";
 }
 else
 {
