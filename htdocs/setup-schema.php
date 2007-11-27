@@ -518,7 +518,7 @@ CREATE TABLE `maintenance` (
   `reseller` int(11) default NULL,
   `expirydate` int(11) default NULL,
   `licence_quantity` int(11) default NULL,
-  `licence_type` int(11) default NULL,
+  `licence_type` int(11) default NULL default 6,
   `incident_quantity` int(5) NOT NULL default '0',
   `incidents_used` int(5) NOT NULL default '0',
   `notes` text,
@@ -1574,6 +1574,8 @@ PRIMARY KEY r( `servicelevelid` )
  -- KMH 26/11/07
  ALTER TABLE `incidents` ADD `slanotice` TINYINT(1) NOT NULL DEFAULT '0' AFTER `slaemail` ;
 
+-- KMH 27/11/07 - Type 6 is none, workaround for browse_contact.php
+ALTER TABLE `maintenance` CHANGE `licence_type` `licence_type` INT( 11 ) NULL DEFAULT '6'
 ";
 
 
