@@ -69,11 +69,7 @@ function dashboard_tasks($row,$dashboardid)
     }
     else
     {
-<<<<<<< .mine
-        echo "<p align='center'>{$GLOBALS['strNoTasks']}</p>";
-=======
         echo "<p align='center'>{$GLOBALS['strNoRecords']}</p>";
->>>>>>> .r1524
     }
 
     echo "</div>";
