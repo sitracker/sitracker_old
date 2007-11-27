@@ -275,7 +275,7 @@ elseif($mode=='save')
     if ($countexisting >= 1)
     {
         $errors++;
-        echo "<p class='error'>Email must be unique</p>\n";
+        $error_string .= "<h5 class='error'>Email must be unique</h5>\n";
     }
     // update database if no errors
     if ($errors == 0)
