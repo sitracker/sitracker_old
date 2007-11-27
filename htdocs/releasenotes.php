@@ -24,7 +24,7 @@ echo '<div>
     <p><strong>Customer Portal</strong></p>
     <div class="img-dec"><img src="images/changelog/331portal.png" /></div></li>
     <p>Improved customer portal, customers can now read, open, update and request to close their incidents, view their contracts and view and update their details.</p><br /><br />
-
+        
     <p><strong>Improved Contract Flexibility</strong></p>
     <div class="img-dec"><img src="images/changelog/331addcontract.png" /></div></li>
     <p>Now when adding a contract, you can specify a number of new things.</p>
@@ -33,16 +33,20 @@ echo '<div>
         <li>You can say that every site contact is to be supported by the contact. This is particually useful for sites that have a large amount of users that all need to be supported, i.e. a University department and its students.</li>
         <li>Contacts can now have no expiry date - Unlimited.</li>
     </ul><br /><br />
-
-
+    
+    <p><strong>Notices</strong></p>
+    <div class="img-dec"><img src="images/changelog/331notices.png" /></div>
+    <p>New notice system, allows global notices as well as for informing usersof errors or information such as upgrades</p><br /><br />
+        
+    <p><strong>SLA Notices</strong></p>
+    <div class="img-dec"><img src="images/changelog/331slanotices.png" /></div>
+    <p>Making use of the new notice system, you will now see notices when incidents are approaching the end of their SLA.</p><br /><br />
 
     <p><strong>Jump To Incident</strong></p>
     <div class="img-dec"><img src="images/changelog/331jumpto.png" /></div>
     <p>Added a \'jump to incident\' link in the support menu</p><br /><br />
 
-    <p><strong>Notices</strong></p>
-    <div class="img-dec"><img src="images/changelog/331notices.png" /></div>
-    <p>New notice system, allows global notices as well as for informing usersof errors or information such as upgrades</p><br /><br />
+
 
     <p><strong>User Status</strong></p>
     <div class="img-dec"><img src="images/changelog/331status.png" /></div>
