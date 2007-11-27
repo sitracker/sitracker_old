@@ -141,7 +141,6 @@ if (!empty($sort))
     if ($order=='a' OR $order=='ASC' OR $order='') $sql .= "ASC";
     else $sql .= "DESC";
 }
-echo $sql;
 $result = mysql_query($sql);
 if (mysql_error()) trigger_error("MySQL Query Error ".mysql_error(), E_USER_ERROR);
 
