@@ -186,12 +186,20 @@ by the working week it is simply based on the amount of time an incident has bee
 make an update and mark the update type as 'Review'.  Review periods are a useful way of preventing incidents from
 dragging on and on.</p>
 
+
 <h3><a name='activities'>Activities</a></h3>
 <p>
-Activities are timed tasks, which are useful for when the support is chargeable based on time spend on the incident.</p>
+Activities are timed tasks, which are useful for when the support is chargeable based on time spent on the incident.</p>
 <p>The idea is to start a new activity for any related actions you do, and stop it when you have finished.
-For sites that have remote-enabled contracts there will another menu entry at the top on the incident page.</p>
-<p>Clicking this will take you to the activities page, which will be blank. Starting a new activity starts the overall timer and the timer for that task, and will take you back to the list of activities. Clicking on the ID of the activity will take you to a page where you can add notes. When the activity is complete, click 'Mark Complete' on the bottom of the notes page. This will take all your notes and time spent on the activity and create an entry in the incident log.</p>
+For incidents logged under service levels were timing is enabled there will be an <strong>Activities</strong> tab at
+the top of incident popup window.  For other incident this tab will be hidden.</p>
+
+<p>On a new incident the Activities page will be blank. Starting a new activity starts an individual timer for that
+activity as well as an overall timer which totals all the activies for that incident.  Clicking on the ID of the
+activity will take you to a page where you can add notes. When the activity is complete, click <strong>Mark Complete</strong>
+at the bottom of the notes page. This will take all your notes and time spent on the activity and create an entry in
+the incident log.</p>
+
 
 <h3><a name='closeincident'>Closing an Incident</a></h3>
 <p>When you close an incident you are given the choice to mark the incident for closure or to close it immediately.
