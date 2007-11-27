@@ -413,7 +413,7 @@ function display_update_page($draftid=-1)
     echo "<input type='radio' name='timetonextaction_none' id='timetonextaction_none' value='date'; />At specific date and time<br />";
     echo "<input name='date' id='date' size='10' value='{$date}' onclick=\"window.document.updateform.timetonextaction_none[1].checked = true;\"/> ";
     echo date_picker('updateform.date');
-    echo "<select name='timeoffset' id='timeoffset' onchange='window.document.updateform.timetonextaction_none[1].checked = true;'>";
+    echo " <select name='timeoffset' id='timeoffset' onchange='window.document.updateform.timetonextaction_none[1].checked = true;'>";
     // FIXME i18n choose time
     echo "<option value='0'></option>";
     echo "<option value='0'>8:00 AM</option>";
