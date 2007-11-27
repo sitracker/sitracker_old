@@ -7,6 +7,7 @@
         <li><a href='#incidentqueues'>Incident Queues</a></li>
         <li><a href='#watchincidents'>Watching Incidents</a></li>
         <li><a href='#servicelevels'>Service Levels</a></li>
+        <li><a href='#reassigning'>Reassigning an Incident</a></li>
         <li><a href='#closeincident'>Closing an Incident</a></li>
     </ul>
     </li>
@@ -141,6 +142,24 @@ a substitute engineer was unavailable the incident is displayed in this queue.</
 <p>As well as viewing your own queue which shows just your own incidents you can view all incidents no matter who owns them
 by selecting <strong>Support</strong> | <strong>Watch Incidents</strong> from the menu.  You can also view the various
 combined queues here by selecting, 'Action Needed', 'Waiting' or 'All Open' from the pulldown menu.</p>
+
+
+<h3><a name='reassigning'>Reassigning Incidents</a></h3>
+<p>During the time an incident is open it can be passed from user to user so that several people may work on a single
+incident.  This could be because the initial owner could not solve the incident on his/her own or because somebody
+else was better qualified to deal with it.</p>
+<p>To assign one of your incidents to somebody else, select the <strong>Reassign</strong> tab from the incident popup
+window.  You will see that SiT has already suggested and highlighted in green somebody to reassign to, this person is
+chosen automatically as the most appropriate person to deal with the incident based on availability and skills, you
+can also click the <strong><em>#</em> More...</strong> link and select a different user if you would like to choose
+who to reassign to yourself.  In the list, names that are shown in <strong>bold</strong> text have appropriate skills.
+
+<h4>Temporary Assigns</h4>
+<p>Another option when reassigning is to make the assignment temporary, this keeps you as the owner of the incident
+but also adds another 'Temporary' owner who will also see the incident in his/her queue.  This is useful when two
+colleagues are working collaboratively on the same incident, it is also used by the automatic-reassign feature
+that assigns incidents temporarily to subsitute engineers when somebody is away.</p>
+
 
 <h3><a name='servicelevels'>Service Levels</a></h3>
 <p>Each incident created is allocated a service level according to the service level set in the <a href='#contracts'>contract</a>.
