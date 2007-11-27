@@ -207,7 +207,7 @@ else
     else
     {
         if ($_POST['userid']==$_COOKIE['sit'][2])
-            confirmation_page("2", "control_panel.php", "<h2>Update Successful</h2><p align='center'>{$strPleaseWaitRedirect}...</p>");
+            confirmation_page("2", "edit_user_skills.php?user={$_POST['userid']}", "<h2>Update Successful</h2><p align='center'>{$strPleaseWaitRedirect}...</p>");
         else
             confirmation_page("2", "manage_users.php", "<h2>Update Successful</h2><p align='center'>{$strPleaseWaitRedirect}...</p>");
     }
