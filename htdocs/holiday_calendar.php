@@ -268,11 +268,13 @@ function appointment_popup($mode, $year, $month, $day, $time, $group, $user)
     $html = '';
     if ($user==$sit[2] OR $approver==TRUE)
     {
+        // Note: this first div is closed inline
         $html .= "<div class='appointment' onclick=\"appointment('app{$user}{$year}{$month}{$day}{$time}');\">";
         $html .= "<div id='app{$user}{$year}{$month}{$day}{$time}' class='appointmentdata'>";
         $html .= "<h2><a href=\"javascript:void();\">[X]</a> {$year}-{$month}-{$day} {$time}</h2>";
-        if ($mode=='book') $html .= "<a href='add_holiday.php?type=1&user={$user}&amp;year={$year}&amp;month={$month}&amp;day={$day}&amp;length={$time}'>{$GLOBALS['strBookHoliday']}</a><br />";
-        else $html .= "<a href=''>Cancel Holiday</a><br />";
+        if ($mode=='book') $html .= "<a href='add_holiday.php?type=1&amp;user={$user}&amp;year={$year}&amp;month={$month}&amp;day={$day}&amp;length={$time}'>{$GLOBALS['strBookHoliday']}</a><br />";
+//         else $html .= "<a href=''>Cancel Holiday</a><br />";
+//          TODO: Add the ability to cancel holiday from the holiday planner
         $html .= "</div>";
     }
     return $html;
@@ -450,7 +452,7 @@ function draw_chart($mode, $year, $month='', $day='', $groupid='', $userid='')
                                               'day'=> $cday,
                                               'useremail' => $user->email);
                         $html .= plugin_do('holiday_chart_day_am',$pluginparams);
-                        $html .= "</div>";
+                        if ($user->id == $sit[2]) $html .= "</div>";
                         $html .= "</td>";
                     }
                     else
@@ -468,6 +470,7 @@ function draw_chart($mode, $year, $month='', $day='', $groupid='', $userid='')
                                               'day'=> $cday,
                                               'useremail' => $user->email);
                             $html .= plugin_do('holiday_chart_day_am',$pluginparams);
+                            if ($user->id == $sit[2]) $html .= "</div>";
                             $html .= "</td>";
                         }
                     }
@@ -524,6 +527,7 @@ function draw_chart($mode, $year, $month='', $day='', $groupid='', $userid='')
                                               'day'=> $cday,
                                               'useremail' => $user->email);
                         $html .= plugin_do('holiday_chart_day_pm',$pluginparams);
+                        if ($user->id == $sit[2]) $html .= "</div>";
                         $html .= "</td>";
                     }
                     else
@@ -541,6 +545,7 @@ function draw_chart($mode, $year, $month='', $day='', $groupid='', $userid='')
                                               'day'=> $cday,
                                               'useremail' => $user->email);
                             $html .= plugin_do('holiday_chart_day_pm',$pluginparams);
+                            if ($user->id == $sit[2])  $html .= "</div>";
                             $html .= "</td>";
                         }
                     }
