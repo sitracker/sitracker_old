@@ -60,7 +60,7 @@ if(mysql_num_rows($result) > 0)
                 echo "{$rss->channel['description']}</span>";
             }
             echo "</a>";
-            echo "</th></tr>";
+            echo "</th></tr>\n";
             $counter=0;
             foreach($rss->items as $item)
             {
@@ -81,11 +81,11 @@ if(mysql_num_rows($result) > 0)
                 if ($itemdate > 10000) $itemdate = date($CONFIG['dateformat_datetime'], $itemdate);
                 echo "<span>";
                 if (!empty($itemdate)) echo "<strong>{$itemdate}</strong><br />";
-                echo "{$d}</span></a></td></tr>";
+                echo "{$d}</span></a></td></tr>\n";
                 $counter++;
                 if (($row[1] > 0) AND $counter > $row[1]) break;
             }
-            echo "</table>";
+            echo "</table>\n";
         }
         else
         {
