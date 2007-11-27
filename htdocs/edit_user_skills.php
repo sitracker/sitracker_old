@@ -181,7 +181,6 @@ else
         $noskills=array_unique($noskills);
         foreach ($noskills AS $value)
         {
-            echo "removing $value";
             // Remove the software listed that we don't support
             $sql = "DELETE FROM usersoftware WHERE userid='{$_POST['userid']}' AND softwareid='$value' LIMIT 1";
             mysql_query($sql);
