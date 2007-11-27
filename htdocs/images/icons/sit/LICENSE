@@ -46,6 +46,7 @@ Icon                                      Source
 16x16/greenflag.png                       SiT
 16x16/blueflag.png                        SiT
 16x16/redflag.png                         SiT
+16x16/cyanflag.png                        SiT
 16x16/initialresponse.png                 Crystal Project
 16x16/contact.png                         Crystal Project
 16x16/contract.png                        Crystal Project
@@ -71,6 +72,7 @@ Icon                                      Source
 32x32/greenflag.png                       SiT
 32x32/blueflag.png                        SiT
 32x32/redflag.png                         SiT
+32x32/cyanflag.png                        SiT
 32x32/sla.png                             Crystal Project
 32x32/task.png                            Crystal Project
 32x32/search.png                          Crystal Project

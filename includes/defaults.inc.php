@@ -193,7 +193,7 @@ $CONFIG['no_feedback_contracts'] = array(1 => 2);
 $CONFIG['preferred_maintenance'] = array(1 => "Dedicated");
 
 // Use an icon for specified tags, format: array('tag' => 'icon', 'tag2' => 'icon2')";
-$CONFIG['tag_icons'] = array ('redflag' => 'redflag', 'yellowflag' => 'yellowflag', 'blueflag' => 'blueflag', 'greenflag' => 'greenflag', 'whiteflag' => 'whiteflag', 'blackflag' => 'blackflag');
+$CONFIG['tag_icons'] = array ('redflag' => 'redflag', 'yellowflag' => 'yellowflag', 'blueflag' => 'blueflag', 'cyanflag' => 'cyanflag', 'greenflag' => 'greenflag', 'whiteflag' => 'whiteflag', 'blackflag' => 'blackflag');
 
 // Default Internationalisation tag (rfc4646/rfc4647/ISO 639 code), note the corresponding i18n file must exist in includes/i18n before you can use it
 $CONFIG['default_i18n'] = 'en-GB';
