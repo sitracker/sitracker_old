@@ -8,7 +8,8 @@
 // of the GNU General Public License, incorporated herein by reference.
 //
 
-// Author: Valdemaras Pipiras <info[at]ambernet.lt>
+// Authors: Valdemaras Pipiras <info[at]ambernet.lt>
+//          Ivan Lucas <ivanlucas[at]users.sourceforge.net>
 
 $permission=20;  // Manage users
 require('db_connect.inc.php');
@@ -42,6 +43,20 @@ if (!empty($userid))
     $sql = "SELECT softwareid FROM usersoftware WHERE userid=$userid LIMIT 1";
     $result = mysql_query($sql);
     if (mysql_num_rows($result)>=1) $errors++;
+
+    // Check there are no incidents linked to this user
+    $sql = "SELECT id FROM incidents WHERE owner=$userid OR towner=$userid LIMIT 1";
+    $result = mysql_query($sql);
+    if (mysql_num_rows($result)>=1) $errors++;
+
+    // Check there are no updates by this user
+    $sql = "SELECT id FROM updates WHERE userid=$userid LIMIT 1";
+    $result = mysql_query($sql);
+    if (mysql_num_rows($result)>=1) $errors++;
+
+    // FIXME need to check more tables for data possibly linked to userid
+    // We break data integrity if we delete the user and there are things
+    // related to him/her
 
     if ($errors==0)
     {
