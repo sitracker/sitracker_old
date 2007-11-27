@@ -2533,6 +2533,11 @@ function journal($loglevel, $event, $bodytext, $journaltype, $refid)
     // 3 = Full Logging
     // 4 = Max Debug Logging
 
+    //update last seen
+    $lastseensql = "UPDATE LOW_PRIORITY users SET lastseen=NOW() WHERE id={$sit[2]}";
+    mysql_query($lastseensql);
+    if (mysql_error()) trigger_error(mysql_error(), E_USER_ERROR);
+
     if ($loglevel<=$CONFIG['journal_loglevel'])
     {
         $sql  = "INSERT INTO journal ";
