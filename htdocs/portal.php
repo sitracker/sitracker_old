@@ -44,8 +44,8 @@ if (!isset($_SESSION['portalauth']) OR $_SESSION['portalauth'] == FALSE)
 else
 {
     // Attempt to prevent session fixation attacks
-    session_regenerate_id();
-
+    if (function_exists('session_regenerate_id')) session_regenerate_id();
+    if(!version_compare(phpversion(),"4.3.3",">=")) setcookie(session_name(), session_id(),ini_get("session.cookie_lifetime"), "/");
 }
 
 // External variables
@@ -387,7 +387,7 @@ switch ($page)
         $query = mysql_query($sql);
         if (mysql_error()) trigger_error("MySQL Query Error ".mysql_error(), E_USER_ERROR);
         $user = mysql_fetch_object($query);
-        
+
         echo "<form action='$_SERVER[PHP_SELF]?page=details&amp;action=update' method='post'>";
         echo "<table align='center' class='vertical'>";
         echo "<tr><th colspan='2'><h3><img src='{$CONFIG['application_webpath']}images/icons/{$iconset}/32x32/contact.png' width='32' height='32' alt='' /> ".stripslashes($user->forenames).' '.stripslashes($user->surname)."</h3></th></tr>";
