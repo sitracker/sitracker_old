@@ -30,6 +30,8 @@ center      { color: #000000; }
 .idle     { background-color: #abd6ab; } /* #90ee90; */
 .review { background-color: #7AC5CD; }
 
+
+#menu li li { background-color: #f0f0ff;}
 .navbarmenu { background-color: #009900; font-size: 8pt; font-weight: bold; color: #FFFFFF; width: 75px; height:20px; }
 
 

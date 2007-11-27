@@ -30,6 +30,7 @@ a em { font-style: normal; text-decoration: underline; }
 .titleshade { font-size: 16pt; color: #FFFFFF; font-weight: bold; text-align: center; background-color: #50C028; }
 
 /* Menu Row at Top of Pages */
+#menu li li { background-color: #7190E0;}
 .blackshade { background-color: #000000; color: #FFFFFF; text-align: center; }
 .barlink    { font-family: Tahoma, Helvetica, sans serif; font-size: small; color: #FFFFFF; font-weight: bold; text-decoration: none; }
 .barlink:hover  { font-family: Tahoma, Helvetica, sans serif; font-size: small; color: #FFFFFF; font-weight: bold; text-decoration: underline; }

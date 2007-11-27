@@ -18,9 +18,9 @@ th a:hover { text-decoration: underline; }
 }
 #menu li:hover, #menu li ul a:hover
 {
-    background-color: #B5D7E8;
+    background-color: #DDDDFF;
 }
-
+#menu li li { background-color: #B5D7E8;}
 #statusbar a { color: #203894; }
 
 tr.shade1:hover { background-color: #F2F2F2; }
