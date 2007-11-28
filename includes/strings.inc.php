@@ -12,14 +12,15 @@
 //
 // Main Menu
 //
-$hmenu[0] = array (10=> array ( 'perm'=> 0, 'name'=> $CONFIG['application_shortname'], 'url'=>"{$CONFIG['application_webpath']}main.php", 'submenu'=>"10"),
+if (!is_array($hmenu[0])) $hmenu[0] = array();
+$hmenu[0] = array_merge(array (10=> array ( 'perm'=> 0, 'name'=> $CONFIG['application_shortname'], 'url'=>"{$CONFIG['application_webpath']}main.php", 'submenu'=>"10"),
                    20=> array ( 'perm'=> 11, 'name'=> $strCustomers, 'url'=>"{$CONFIG['application_webpath']}browse_sites.php", 'submenu'=>"20"),
                    30=> array ( 'perm'=> 6, 'name'=> $strSupport, 'url'=>"{$CONFIG['application_webpath']}incidents.php?user=current&amp;queue=1&amp;type=support", 'submenu'=>"30"),
                    40=> array ( 'perm'=> 0, 'name'=> $strTasks, 'url'=>"{$CONFIG['application_webpath']}tasks.php", 'submenu'=>"40"),
                    50=> array ( 'perm'=> 54, 'name'=> $strKnowledgeBase, 'url'=>"{$CONFIG['application_webpath']}browse_kb.php", 'submenu'=>"50"),
                    60=> array ( 'perm'=> 37, 'name'=> $strReports, 'url'=>"{$CONFIG['application_webpath']}reports.php", 'submenu'=>"60"),
                    70=> array ( 'perm'=> 0, 'name'=> $strHelp, 'url'=>"{$CONFIG['application_webpath']}help.php", 'submenu'=>"70")
-);
+), $hmenu[0]);
 $hmenu[10] = array (1=> array ( 'perm'=> 0, 'name'=> $strDashboard, 'url'=>"{$CONFIG['application_webpath']}main.php"),
                     10=> array ( 'perm'=> 60, 'name'=> $strSearch, 'url'=>"{$CONFIG['application_webpath']}search.php"),
                     20=> array ( 'perm'=> 4, 'name'=> $strMyDetails, 'url'=>"{$CONFIG['application_webpath']}edit_profile.php", 'submenu'=>"1020"),
@@ -122,9 +123,9 @@ $hmenu[50] = array (10=> array ( 'perm'=> 54, 'name'=> $strNewKBArticle, 'url'=>
 );
 
 
-
+if (!is_array($hmenu[60])) $hmenu[60] = array();
 // Reports
-        $hmenu[60] = array (10=> array ( 'perm'=> 37, 'name'=>"{$strMarketingMailshot}",                                                                             'url'=>"{$CONFIG['application_webpath']}reports/marketing.php"),
+        $hmenu[60] = array_merge(array (10=> array ( 'perm'=> 37, 'name'=>"{$strMarketingMailshot}",                                                                             'url'=>"{$CONFIG['application_webpath']}reports/marketing.php"),
                     20=> array ( 'perm'=> 37, 'name'=> "{$strCustomerExport}", 'url'=>"{$CONFIG['application_webpath']}reports/cust_export.php"),
                     30=> array ( 'perm'=> 37, 'name'=> "{$strQueryByExample}", 'url'=>"{$CONFIG['application_webpath']}reports/qbe.php"),
                     50=> array ( 'perm'=> 37, 'name'=> "{$strIncidentsBySite}", 'url'=>"{$CONFIG['application_webpath']}reports/yearly_customer_export.php"),
@@ -141,7 +142,7 @@ $hmenu[50] = array (10=> array ( 'perm'=> 54, 'name'=> $strNewKBArticle, 'url'=>
                     140=> array ( 'perm'=> 37, 'name'=> "{$strIncidentsByVendor}", 'url'=>"{$CONFIG['application_webpath']}reports/incidents_by_vendor.php"),
                     150=> array ( 'perm'=> 37, 'name'=> "{$strEscalatedIncidents}",
                     'url'=>"{$CONFIG['application_webpath']}reports/external_engineers.php",
-));
+)), $hmenu[60]);
 
 $hmenu[70] = array (10=> array ( 'perm'=> 0, 'name'=> "{$strHelpContents}...", 'url'=>"{$CONFIG['application_webpath']}help.php"),
                     20=> array ( 'perm'=> 0, 'name'=> "{$strTranslate}", 'url'=>"{$CONFIG['application_webpath']}translate.php"),
