@@ -130,6 +130,7 @@ switch ($action)
         }
         echo "</p>";
 
+        echo "<div id='reassignlist'>";
         echo "<table align='center'>";
         echo "<tr>
               <th colspan='2'>{$strReassignTo}:</th>
@@ -220,6 +221,8 @@ switch ($action)
             echo "</table><br />";
             if ($suggested) echo "<p id='morelink'><a href=\"#\" onclick=\"$('moreusers').toggle();$('morelink').toggle();\">{$countusers} {$strMore}</a></p>";
         }
+        echo "</div>\n"; // reassignlist
+
         echo "<table class='vertical'>";
 
 
@@ -253,9 +256,9 @@ switch ($action)
         // FIXME i18n
         if ($incident->towner > 0 AND ($sit[2] == $incident->owner OR $sit[2] == $incident->towner))
         {
-            echo "<tr><th>Temporary:</th><td><label><input type='radio' name='temporary' value='no' checked='checked' ";
-            echo "/> Remove temporary ownership</label> ";
-            echo "<label><input type='radio' name='temporary' value='yes' /> Change temporary ownership</label>";
+            echo "<tr><th>Temporary:</th><td>";
+            echo "<label><input type='radio' name='temporary' value='yes' checked='checked' onchange=\"$('reassignlist').show();\" /> Change temporary ownership</label>";
+            echo "<label><input type='radio' name='temporary' value='no' onchange=\"$('reassignlist').hide();\" /> Remove temporary ownership</label> ";
             echo "</td></tr>\n";
         }
         else
