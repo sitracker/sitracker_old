@@ -440,18 +440,8 @@ $emailtype|$newincidentstatus|$timetonextaction_none|$timetonextaction_days|$tim
             echo "<table align='center' class='vertical' width='95%'>";
             echo "<tr><th width='30%'>{$strFrom}:</th><td><input maxlength='100' name='fromfield' id='fromfield' size='40' value=\"{$from}\" /></td></tr>\n";
             echo "<tr><th>{$strReplyTo}:</th><td><input maxlength='100' name='replytofield' id='replytofield' size='40' value=\"{$replyTo}\" /></td></tr>\n";
-            /*
-            echo "<tr><th>CC:</th><td><input maxlength='100' name='ccfield' size='40' value='";
-            if(emailtype_cc($emailtype)!=",")
-            {
-                echo emailtype_replace_specials(emailtype_cc($emailtype), $id, $sit[2]);
-            }
-            ?>" />
-            <?php
-            */
-
             if (trim($ccemail) == ",") $ccemail = "";
-            if (substr($ccemail, 0, 1) == ",") $ccemail = substr($ccemail, 1, strlen($ccemail));
+            if (substr($ccemail, 0, 1) == ",") $ccfield = substr($ccemail, 1, strlen($ccemail));
             echo "<tr><th>CC:</th><td><input maxlength='100' name='ccfield' id='ccfield' size='40' value=\"{$ccemail}\" /></td></tr>\n";
             echo "<tr><th>BCC:</th><td><input maxlength='100' name='bccfield' id='bccfield' size='40' value=\"{$bccemail}\" /></td></tr>\n";
             echo "<tr><th>{$strTo}:</th><td><input maxlength='100' name='tofield' id='tofield' size='40' value=\"{$toemail}\" /></td></tr>\n";
