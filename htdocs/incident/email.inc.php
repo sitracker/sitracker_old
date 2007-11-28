@@ -723,7 +723,7 @@ $emailtype|$newincidentstatus|$timetonextaction_none|$timetonextaction_days|$tim
                 if ($target!='none')
                 {
                     // Reset the slaemail sent column, so that email reminders can be sent if the new sla target goes out
-                    $sql = "UPDATE incidents SET slaemail='0' WHERE id='$id' LIMIT 1";
+                    $sql = "UPDATE incidents SET slaemail='0', slanotice='0' WHERE id='$id' LIMIT 1";
                     mysql_query($sql);
                     if (mysql_error()) trigger_error("MySQL Query Error ".mysql_error(), E_USER_ERROR);
                 }
