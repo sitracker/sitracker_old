@@ -392,20 +392,22 @@ function display_update_page($draftid=-1)
     echo "<td class='shade2'><input type='text' name='nextaction' id='nextaction' maxlength='50' size='30' value='{$nextAction}' /></td></tr>";
     echo "<tr>";
     echo "<th align='right'>";
+    // FIXME i18n
     echo "<strong>{$GLOBALS['strTimeToNextAction']}</strong>:<br />The incident will be placed in the waiting queue until the time specified.</th>";
     echo "<td class='shade2'>";
-    $oldtimeofnextaction=incident_timeofnextaction($id);
-    if ($oldtimeofnextaction<1) $oldtimeofnextaction=$now;
-    $wait_time=($oldtimeofnextaction-$now);
-
-    $na_days=floor($wait_time / 86400);
-    $na_remainder=$wait_time % 86400;
-    $na_hours=floor($na_remainder / 3600);
-    $na_remainder=$wait_time % 3600;
-    $na_minutes=floor($na_remainder / 60);
-    if ($na_days<0) $na_days=0;
-    if ($na_hours<0) $na_hours=0;
-    if ($na_minutes<0) $na_minutes=0;
+    // Removed for 3.31 alpha by INL (this code seems broken)
+//     $oldtimeofnextaction=incident_timeofnextaction($id);
+//     if ($oldtimeofnextaction<1) $oldtimeofnextaction=$now;
+//     $wait_time=($oldtimeofnextaction-$now);
+//
+//     $na_days=floor($wait_time / 86400);
+//     $na_remainder=$wait_time % 86400;
+//     $na_hours=floor($na_remainder / 3600);
+//     $na_remainder=$wait_time % 3600;
+//     $na_minutes=floor($na_remainder / 60);
+//     if ($na_days<0) $na_days=0;
+//     if ($na_hours<0) $na_hours=0;
+//     if ($na_minutes<0) $na_minutes=0;
     echo "<input type='radio' name='timetonextaction_none' id='timetonextaction_none' value='time' />In <em>x</em> days, hours, minutes<br />&nbsp;&nbsp;&nbsp;";
     echo "<input maxlength='3' name='timetonextaction_days' id='timetonextaction_days' value='{$na_days}' onclick='window.document.updateform.timetonextaction_none[0].checked = true;' size='3' /> Days&nbsp;";
     echo "<input maxlength='2' name='timetonextaction_hours' id='timetonextaction_hours' value='{$na_hours}' onclick='window.document.updateform.timetonextaction_none[0].checked = true;' size='3' /> Hours&nbsp;";
