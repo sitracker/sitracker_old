@@ -135,8 +135,9 @@ if (user_permission($sit[2],19)) // View contracts
     // Display contracts
     $sql  = "SELECT maintenance.id AS maintid, maintenance.term AS term, products.name AS product, resellers.name AS reseller, licence_quantity, licencetypes.name AS licence_type, expirydate, admincontact, contacts.forenames AS admincontactsforenames, contacts.surname AS admincontactssurname, maintenance.notes AS maintnotes ";
     $sql .= "FROM maintenance, contacts, products, licencetypes, resellers ";
-    $sql .= "WHERE maintenance.product=products.id AND maintenance.reseller=resellers.id AND licence_type=licencetypes.id AND admincontact=contacts.id ";
-    $sql .= "AND maintenance.site = '$id' ";
+    $sql .= "WHERE maintenance.product=products.id AND (maintenance.reseller=resellers.id OR reseller=NULL) ";
+    $sql .= "AND (licence_type=licencetypes.id OR licence_type=NULL) ";
+    $sql .= "AND admincontact=contacts.id AND maintenance.site = '$id' ";
     $sql .= "ORDER BY expirydate DESC";
 
     // connect to database and execute query
