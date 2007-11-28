@@ -304,7 +304,7 @@ while ($incidents = mysql_fetch_array($result))
 }
 echo "</table>\n\n";
 if(empty($incidents_minimal) && $user != 'all')
-    if($rowcount != 1) echo "<p align='center'>".sprintf($strNumIncidents, $rowcount)."</p>";
+    if($rowcount != 1) echo "<p align='center'>".sprintf($strIncidentsMulti, $rowcount)."</p>";
     else echo "<p align='center'>".sprintf($strSingleIncident, $rowcount)."</p>";
 if ($CONFIG['debug']) echo "<!-- End of Support Incidents Table -->\n";
 ?>
