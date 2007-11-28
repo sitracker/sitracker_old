@@ -3795,8 +3795,8 @@ function distribution_listbox($name, $distribution)
 {
     $html  = "<select name='$name'>\n";
     $html .= "<option value='public' ";  if ($distribution=='public') $html .= "selected='selected'";  $html .= ">{$GLOBALS['strPublic']}</option>\n";
-    $html .= "<option value='private' style='color: blue;'";  if ($distribution=='private') $html .= "selected='selected'";  $html .= ">{$GLOBALS['strPrivate']}</option>\n";
-    $html .= "<option value='restricted' style='color: red;'";  if ($distribution=='restricted') $html .= "selected='selected'";  $html .= ">{$GLOBALS['strRestricted']}</option>\n";
+    $html .= "<option value='private' style='color: blue;' ";  if ($distribution=='private') $html .= "selected='selected'";  $html .= ">{$GLOBALS['strPrivate']}</option>\n";
+    $html .= "<option value='restricted' style='color: red;' ";  if ($distribution=='restricted') $html .= "selected='selected'";  $html .= ">{$GLOBALS['strRestricted']}</option>\n";
     $html .= "</select>\n";
     return $html;
 }
