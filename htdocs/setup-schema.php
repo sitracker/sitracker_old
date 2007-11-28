@@ -1235,28 +1235,16 @@ INSERT INTO `vendors` VALUES (1,'Default');
 
 CREATE TABLE IF NOT EXISTS `notices` (
   `id` int(11) NOT NULL auto_increment,
+  `userid` int(11) NOT NULL,
   `type` tinyint(4) NOT NULL,
   `text` tinytext NOT NULL,
   `linktext` varchar(50) default NULL,
   `link` varchar(100) NOT NULL,
-  `resolutionpage` varchar(255) NULL,
+  `referenceid` int(11) NULL,
   `timestamp` TIMESTAMP NOT NULL,
   PRIMARY KEY  (`id`)
 ) ENGINE=MyISAM AUTO_INCREMENT=1 ;
 
-INSERT INTO `notices` (`id`, `text`, `linktext`, `timestamp`, `type`, `link`) VALUES
-(1, '\$strYourCurrentLanguage', '\$strUseThisInFuture', NOW(), 2, 'edit_profile.php?mode=savesessionlang');
-INSERT INTO `notices` (`id`, `text`, `linktext`, `timestamp`, `type`, `link`) VALUES
-(2, '\$strSitUpgraded', '\$strSitUpgradedLink', NOW(), 2, 'releasenotes.php?v=331');
-
-
-
-CREATE TABLE IF NOT EXISTS `usernotices` (
-  `noticeid` int(11) NOT NULL,
-  `userid` tinyint(4) NOT NULL,
-  `durability` enum('sticky','session') NOT NULL default 'sticky',
-  PRIMARY KEY  (`noticeid`,`userid`)
-) TYPE=MyISAM;
 ";
 
 // ********************************************************************
@@ -1515,27 +1503,15 @@ ALTER TABLE `software` ADD `vendorid` INT( 5 ) NOT NULL AFTER `name` ;
 
 CREATE TABLE IF NOT EXISTS `notices` (
   `id` int(11) NOT NULL auto_increment,
+  `userid` int(11) NOT NULL,
   `type` tinyint(4) NOT NULL,
   `text` tinytext NOT NULL,
   `linktext` varchar(50) default NULL,
   `link` varchar(100) NOT NULL,
-  `resolutionpage` varchar(255) NULL,
+  `referenceid` int(11) NULL,
   `timestamp` TIMESTAMP NOT NULL,
   PRIMARY KEY  (`id`)
 ) ENGINE=MyISAM AUTO_INCREMENT=1 ;
-
-INSERT INTO `notices` (`id`, `text`, `linktext`, `timestamp`, `type`, `link`) VALUES
-(1, '\$strYourCurrentLanguage', '\$strUseThisInFuture', NOW(), 2, 'edit_profile.php?mode=savesessionlang');
-INSERT INTO `notices` (`id`, `text`, `linktext`, `timestamp`, `type`, `resolutionpage`) VALUES
-(2, '\$strSitUpgraded', '\$strSitUpgradedLink', NOW(), 2, 'releasenotes.php?v=331');
-
-
-CREATE TABLE IF NOT EXISTS `usernotices` (
-  `noticeid` int(11) NOT NULL,
-  `userid` tinyint(4) NOT NULL,
-  `durability` enum('sticky','session') NOT NULL default 'sticky',
-  PRIMARY KEY  (`noticeid`,`userid`)
-) TYPE=MyISAM;
 
 ALTER TABLE `servicelevels` ADD `timed` enum('yes','no') NOT NULL DEFAULT 'no' ;
 
