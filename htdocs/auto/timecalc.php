@@ -24,7 +24,7 @@ define("STATUS_CUSTOMER",8);
 
 if ($verbose) echo "Calculating SLA times{$crlf}";
 
-$sql="SELECT id,title,maintenanceid,priority,slaemail,slanotice,servicelevel,status FROM incidents WHERE status != ".STATUS_CLOSED." AND status != ".STATUS_CLOSING;
+$sql="SELECT id,title,maintenanceid,priority,slaemail,slanotice,servicelevel,status,owner FROM incidents WHERE status != ".STATUS_CLOSED." AND status != ".STATUS_CLOSING;
 //$sql="SELECT id,maintenanceid,priority,slaemail,servicelevel,status FROM incidents WHERE id=34833";
 $incident_result=mysql_query($sql);
 if (mysql_error()) trigger_error(mysql_error(),E_USER_ERROR);
@@ -135,7 +135,7 @@ while ($incident=mysql_fetch_array($incident_result)) {
                 $noticeid = mysql_insert_id();
 
                 $sql = "INSERT into usernotices(noticeid, userid) ";
-                $sql .= "VALUES($noticeid, {$reviewInfo['currentowner']})";
+                $sql .= "VALUES($noticeid, {$incident['owner']})";
                 mysql_query($sql);
                 if (mysql_error()) trigger_error(mysql_error(),E_USER_WARNING);
 
