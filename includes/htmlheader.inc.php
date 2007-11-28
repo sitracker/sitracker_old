@@ -160,7 +160,7 @@ if($sit[0] != '')
                 echo "<div class='error'><p class='error'>{$notice->text}";
                 if($notice->resolutionpage) $redirpage = $CONFIG['application_webpath'].$notice->resolutionpage;
             }
-            elseif($notice->type == $CONFIG['OUT_OF_SLA_TYPE']) 
+            elseif($notice->type == $CONFIG['OUT_OF_SLA_TYPE'] OR $notice->type == $CONFIG['NEARING_SLA_TYPE'])
             {
                 echo "<div class='error'><p class='error'>";
                 echo "<span>(<a href='{$_SERVER[PHP_SELF]}?action=dismiss_notice&amp;noticeid={$notice->id}'>$strDismiss</a>)</span>";
@@ -176,7 +176,6 @@ if($sit[0] != '')
                     else echo "{$notice->linktext}";
                     echo "</a>";
                 }
-                echo "</p>";
             }
             else
             {
@@ -200,13 +199,13 @@ if($sit[0] != '')
                     echo "</a>";
                 }
             }
-            echo "</p>";
+            echo "</p></div>";
         }
         if(mysql_num_rows($noticeresult) > 1)
         {
             echo "<p align='right' style='padding-right:32px'><a href='{$_SERVER[PHP_SELF]}?action=dismiss_notice&amp;noticeid=all'>{$strDismissAll}</a></p>";
         }
-        echo "</div>";
+        //echo "</div>";
     }
     if($redirpage && ($_SERVER[SCRIPT_NAME] != $redirpage))
     {
