@@ -127,12 +127,12 @@ if($action=='dismiss_notice')
 {
     if(is_numeric($noticeid))
     {
-        $sql = "DELETE FROM usernotices WHERE noticeid={$noticeid} AND userid={$sit[2]}";
+        $sql = "DELETE FROM notices WHERE noticeid={$noticeid} AND userid={$sit[2]}";
         @mysql_query($sql);
     }
     elseif($noticeid == 'all')
     {
-        $sql = "DELETE FROM usernotices WHERE userid={$sit[2]}";
+        $sql = "DELETE FROM notices WHERE userid={$sit[2]}";
         @mysql_query($sql);
     }
 }
@@ -141,8 +141,8 @@ if($action=='dismiss_notice')
 //display global notices
 if($sit[0] != '')
 {
-    $noticesql = "SELECT * FROM notices, usernotices ";
-    $noticesql .= "WHERE userid={$sit[2]} AND notices.id=usernotices.noticeid";
+    $noticesql = "SELECT * FROM notices ";
+    $noticesql .= "WHERE userid={$sit[2]}";
     $noticeresult = mysql_query($noticesql);
     if (mysql_error()) trigger_error(mysql_error(),E_USER_WARNING);
     if(mysql_num_rows($noticeresult) > 0)
