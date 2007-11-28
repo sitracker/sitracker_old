@@ -117,27 +117,22 @@ while ($incident=mysql_fetch_array($incident_result)) {
                 //create notice, workaround until triggers are implemented - KMH 26/11/07
                 $timetil = $times['next_sla_time']-$newSlaTime;
 
-                $sql = "INSERT into notices(type, text, linktext, link, timestamp) ";
+                $sql = "INSERT into notices(userid, type, text, linktext, link, timestamp) ";
 
                 if($timetil >= 0)
                 {
                     $text = "will exceed its SLA soon";
-                    $sql .= "VALUES({$CONFIG['NEARING_SLA_TYPE']}, 'Incident {$incident['id']} - \'{$incident['title']}\' $text', 'View Incident', 'javascript:incident_details_window(\'{$incident['id']}\',\'incident{$incident['id']}\')', NOW())";
+                    $sql .= "VALUES({$incident['owner']}, {$CONFIG['NEARING_SLA_TYPE']}, 'Incident {$incident['id']} - \'{$incident['title']}\' $text', 'View Incident', 'javascript:incident_details_window(\'{$incident['id']}\',\'incident{$incident['id']}\')', NOW())";
                 }
                 elseif($timetil < 0)
                 {
                     $text = "has exceeded its SLA";
-                    $sql .= "VALUES({$CONFIG['OUT_OF_SLA_TYPE']}, 'Incident {$incident['id']} - \'{$incident['title']}\' $text', 'View Incident', 'javascript:incident_details_window(\'{$incident['id']}\',\'incident{$incident['id']}\')', NOW())";
+                    $sql .= "VALUES({$incident['owner']}, {$CONFIG['OUT_OF_SLA_TYPE']}, 'Incident {$incident['id']} - \'{$incident['title']}\' $text', 'View Incident', 'javascript:incident_details_window(\'{$incident['id']}\',\'incident{$incident['id']}\')', NOW())";
                 }
 
                 mysql_query($sql);
                 if (mysql_error()) trigger_error(mysql_error(),E_USER_WARNING);
                 $noticeid = mysql_insert_id();
-
-                $sql = "INSERT into usernotices(noticeid, userid) ";
-                $sql .= "VALUES($noticeid, {$incident['owner']})";
-                mysql_query($sql);
-                if (mysql_error()) trigger_error(mysql_error(),E_USER_WARNING);
 
                 $sql="UPDATE incidents SET slanotice='1' WHERE id='{$incident['id']}'";
                 mysql_query($sql);
@@ -148,26 +143,36 @@ while ($incident=mysql_fetch_array($incident_result)) {
         // Check if we have already sent an out of SLA/Review period mail
         // This attribute is reset when an update to the incident meets sla/review time
         if ($incident['slaemail']==0) {
-        // If not, check if we need to
+           
         $emailSent=0;
             // First check SLA
             if ($times['next_sla_time'] < ($newSlaTime*.01*$CONFIG['urgent_threshold']) ) {
-                send_template_email('OUT_OF_SLA',$incident['id'],$tag,$times['next_sla_time']-$newSlaTime);
+                //send_template_email('OUT_OF_SLA',$incident['id'],$tag,$times['next_sla_time']-$newSlaTime);
+                $sql = "INSERT into notices(text, linktext, link, timestamp) ";
+                $sql .= "VALUES('Incident {$incident['id']} is about to go out of sla', 'View Incident', '', NOW())";
+                mysql_query($sql);
+                $noticeid = mysql_insert_id();
+
+                $sql = "INSERT into usernotices(noticeid, userid) ";
+                $sql .= "VALUES($noticeid, {$reviewInfo['currentowner']})";
+                mysql_query($sql);
 
                 $emailSent=1;
             }
 
-            if (($times['review_days'] * 24 * 60) < ($newReviewTime) ) {
+            /*if (($times['review_days'] * 24 * 60) < ($newReviewTime) ) {
                 if ($verbose) echo "   Incident {$incident['id']} out of Review{$crlf}";
                 send_template_email('OUT_OF_REVIEW',$incident['id'],"",-1);
                 $emailSent=1;
-            }
+            }*/
 
             // If we just sent one then update the incident so we don't send another next time
             if ($emailSent) {
                 $sql="UPDATE incidents SET slaemail='1' WHERE id='{$incident['id']}'";
                 mysql_query($sql);
             }
+            
+
         }
     }
 
