@@ -28,57 +28,6 @@ else $user = cleanvar($_REQUEST['user']);
 if (empty($submit))
 {
     include('htmlheader.inc.php');
-    // This Javascript code placed in the public domain at http://www.irt.org/script/1265.htm
-    // "Code examples on irt.org can be freely copied and used."
-    ?>
-    <script type="text/javascript">
-
-    function deleteOption(object,index)
-    {
-        object.options[index] = null;
-    }
-
-    function addOption(object,text,value)
-    {
-        var defaultSelected = true;
-        var selected = true;
-        var optionName = new Option(text, value, defaultSelected, selected)
-        object.options[object.length] = optionName;
-    }
-
-    function copySelected(fromObject,toObject)
-    {
-        for (var i=0, l=fromObject.options.length;i<l;i++)
-        {
-            if (fromObject.options[i].selected)
-                addOption(toObject,fromObject.options[i].text,fromObject.options[i].value);
-        }
-        for (var i=fromObject.options.length-1;i>-1;i--) {
-            if (fromObject.options[i].selected)
-                deleteOption(fromObject,i);
-        }
-    }
-
-    function copyAll(fromObject,toObject) {
-        for (var i=0, l=fromObject.options.length;i<l;i++) {
-            addOption(toObject,fromObject.options[i].text,fromObject.options[i].value);
-        }
-        for (var i=fromObject.options.length-1;i>-1;i--) {
-            deleteOption(fromObject,i);
-        }
-    }
-
-    function populateHidden(fromObject,toObject) {
-        var output = '';
-        for (var i=0, l=fromObject.options.length;i<l;i++) {
-                output += escape(fromObject.name) + '=' + escape(fromObject.options[i].value) + '&';
-        }
-        // alert(output);
-        toObject.value = output;
-    }
-    </script>
-    <?php
-
     $sql = "SELECT * FROM usersoftware, software WHERE usersoftware.softwareid=software.id AND userid='$user' ORDER BY name";
     $result = mysql_query($sql);
     if (mysql_num_rows($result) >= 1)

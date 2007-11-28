@@ -46,87 +46,7 @@ if (empty($_POST['process']))
 
     ?>
     <script type="text/javascript">
-    <!--
 
-    function deleteOption(object,index) {
-        object.options[index] = null;
-    }
-
-
-    function addOption(object,text,value) {
-        var defaultSelected = true;
-        var selected = true;
-        var optionName = new Option(text, value, defaultSelected, selected)
-        object.options[object.length] = optionName;
-    }
-
-    function copySelected(fromObject,toObject) {
-        for (var i=0, l=fromObject.options.length;i < l;i++) {
-            if (fromObject.options[i].selected)
-                addOption(toObject,fromObject.options[i].text,fromObject.options[i].value);
-        }
-        for (var i=fromObject.options.length-1;i >-1;i-- ) {
-            if (fromObject.options[i].selected)
-                deleteOption(fromObject,i);
-        }
-    }
-
-    function copyAll(fromObject,toObject) {
-        for (var i=0, l=fromObject.options.length;i < l;i++) {
-            addOption(toObject,fromObject.options[i].text,fromObject.options[i].value);
-        }
-        for (var i=fromObject.options.length-1;i > -1;i--) {
-            deleteOption(fromObject,i);
-        }
-    }
-
-    function populateHidden(fromObject,toObject) {
-        var output = '';
-        for (var i=0, l=fromObject.options.length;i < l;i++) {
-                output += escape(fromObject.name) + '=' + escape(fromObject.options[i].value) + '&';
-        }
-        // alert(output);
-        toObject.value = output;
-    }
-
-
-    var MIN_ROWS = 3 ;
-    var MAX_ROWS = 10 ;
-    var MIN_COLS = 40 ;
-    var MAX_COLS = 80 ;
-
-    function changeTextAreaLength ( e ) {
-
-        var txtLength = e.value.length;
-        var numRows = 0 ;
-        var arrNewLines = e.value.split("\n");
-
-        for(var i=0; i<=arrNewLines.length-1; i++){
-            numRows++;
-            if(arrNewLines[i].length > MAX_COLS-5) {
-                numRows += Math.floor(arrNewLines[i].length/MAX_COLS)
-            }
-        }
-
-        if(txtLength == 0){
-            e.cols = MIN_COLS ;
-            e.rows = MIN_ROWS ;
-        } else {
-
-            if(numRows <= 1) {
-                e.cols = (txtLength % MAX_COLS) + 1 >= MIN_COLS ? ((txtLength % MAX_COLS) + 1) : MIN_COLS ;
-            }else{
-                e.cols = MAX_COLS ;
-                e.rows = numRows > MAX_ROWS ? MAX_ROWS : numRows ;
-            }
-        }
-    }
-
-    function resetTextAreaLength ( e ) {
-        e.cols = MIN_COLS ;
-        e.rows = MIN_ROWS ;
-    }
-    // -->
     </script>
     <?php
 
@@ -184,7 +104,7 @@ if (empty($_POST['process']))
     if (mysql_num_rows($softresult) < 1) echo "<option value=''></option>\n";
     while ($software = mysql_fetch_object($softresult))
     {
-        echo "<option value='{$software->id}' selected='selected'>$software->name</option>\n";
+        echo "<option value='{$software->id}' selected='selected'>{$software->name}</option>\n";
     }
     // echo "<option value='0'>---</option>\n";
     echo "</select>";
@@ -255,7 +175,7 @@ if (empty($_POST['process']))
             {
                 $element=$kbcontent->id;
                 echo "<tr><th class='shade1' valign='top'>";
-                echo "$kbcontent->header:</th>";
+                echo "{$kbcontent->header}:</th>";
                 echo "<td class='shade2'>";
                 echo "<textarea name='content$element' rows='10'  cols='100' title='Full Details'>";
                 echo stripslashes($kbcontent->content);
