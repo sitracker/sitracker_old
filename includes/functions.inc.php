@@ -202,7 +202,7 @@ if (!function_exists('authenticate'))
 // given an ID primary key
 function db_read_column($column, $table, $id)
 {
-    $sql = "SELECT $column FROM $table WHERE id='$id' LIMIT 1";
+    $sql = "SELECT `$column` FROM `$table` WHERE id='$id' LIMIT 1";
     $result = mysql_query($sql);
     if (mysql_error()) trigger_error(mysql_error(),E_USER_WARNING);
     list($column)=mysql_fetch_row($result);
@@ -711,7 +711,6 @@ function emailtype_to($id)
 
 function emailtype_from($id)
 {
-    echo db_read_column('fromfield', 'emailtype', $id);
     return db_read_column('fromfield', 'emailtype', $id);
 }
 
@@ -724,11 +723,7 @@ function emailtype_replyto($id)
 
 function emailtype_cc($id)
 {
-    echo db_read_column('ccfield', 'emailtype', $id);
-    if(db_read_column('ccfield', 'emailtype', $id) != ",")
-        return db_read_column('ccfield', 'emailtype', $id);
-    else
-        return "";
+   return db_read_column('ccfield', 'emailtype', $id);
 }
 
 
@@ -824,7 +819,7 @@ function incident_externalemail($id)
 
 function incident_ccemail($id)
 {
-    //return db_read_column('ccemail', 'incidents', $id);
+    return db_read_column('ccemail', 'incidents', $id);
 }
 
 function incident_timeofnextaction($id)
