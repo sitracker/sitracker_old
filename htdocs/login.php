@@ -55,10 +55,10 @@ elseif (authenticate($username, $password) == 1)
     $_SESSION['collapse'] = $user->var_collapse;
     $_SESSION['groupid'] = is_null($user->groupid) ? 0 : $user->groupid;
 
-    // Delete any old session user notices
+    /* Delete any old session user notices
     $sql = "DELETE FROM usernotices WHERE durability='session' AND userid={$_SESSION['userid']}";
     mysql_query($sql);
-    if (mysql_error()) trigger_error(mysql_error(), E_USER_ERROR);
+    if (mysql_error()) trigger_error(mysql_error(), E_USER_ERROR);*/
 
     //check if the session lang is different the their profiles
     if($_SESSION['lang'] != '' AND $_SESSION['lang'] != $user->var_i18n)
@@ -98,6 +98,17 @@ elseif (authenticate($username, $password) == 1)
         }
     }
     $_SESSION['permissions'] = array_unique($userpermissions);
+
+    if(user_status($_SESSION['userid']) != 1)
+    {
+        $status = $statusresult->name;
+        $sql = "INSERT into notices(userid, type, text, timestamp) ";
+        $sql .= "VALUES({$_SESSION['userid']}, {$CONFIG['USER_STILL_AWAY_TYPE']}, ";
+        $sql .= "'{$strUserStillAway}', NOW())";
+        mysql_query($sql);
+        if (mysql_error()) trigger_error(mysql_error(), E_USER_ERROR);
+
+    }
 
     // redirect
     if (empty($page))
