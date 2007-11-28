@@ -111,6 +111,7 @@ $strCity = 'City';
 $strClose = 'Close';
 # e.g. incident is closed
 $strClosed = 'Closed';
+$strCloseImmediately = 'Close Immediately';
 $strCloseWindow = 'Close Window';
 $strClosureRequested = 'Closure Requested';
 $strClosureRequestForIncident = 'Closure request for Incident';
