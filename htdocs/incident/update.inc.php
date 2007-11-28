@@ -529,7 +529,7 @@ else
     //remove any SLA notices - KMH
     if($updatetype == 'slamet')
     {
-        $sql = "DELETE from notices WHERE userid={$sit[2]} AND reference={$id}";
+        $sql = "DELETE from notices WHERE userid={$sit[2]} AND referenceid={$id}";
         mysql_query($sql);
         if (mysql_error()) trigger_error("MySQL Query Error ".mysql_error(), E_USER_ERROR);
     }
