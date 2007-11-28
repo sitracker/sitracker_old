@@ -117,22 +117,21 @@ while ($incident=mysql_fetch_array($incident_result)) {
                 //create notice, workaround until triggers are implemented - KMH 26/11/07
                 $timetil = $times['next_sla_time']-$newSlaTime;
 
-                $sql = "INSERT into notices(userid, type, text, linktext, link, timestamp) ";
+                $sql = "INSERT into notices(userid, type, text, linktext, link, reference, timestamp) ";
 
                 if($timetil >= 0)
                 {
                     $text = "will exceed its SLA soon";
-                    $sql .= "VALUES({$incident['owner']}, {$CONFIG['NEARING_SLA_TYPE']}, 'Incident {$incident['id']} - \'{$incident['title']}\' $text', 'View Incident', 'javascript:incident_details_window(\'{$incident['id']}\',\'incident{$incident['id']}\')', NOW())";
+                    $sql .= "VALUES({$incident['owner']}, {$CONFIG['NEARING_SLA_TYPE']}, 'Incident {$incident['id']} - \'{$incident['title']}\' $text', 'View Incident', 'javascript:incident_details_window(\'{$incident['id']}\',\'incident{$incident['id']}\')', {$incident['id']}, NOW())";
                 }
                 elseif($timetil < 0)
                 {
                     $text = "has exceeded its SLA";
-                    $sql .= "VALUES({$incident['owner']}, {$CONFIG['OUT_OF_SLA_TYPE']}, 'Incident {$incident['id']} - \'{$incident['title']}\' $text', 'View Incident', 'javascript:incident_details_window(\'{$incident['id']}\',\'incident{$incident['id']}\')', NOW())";
+                    $sql .= "VALUES({$incident['owner']}, {$CONFIG['OUT_OF_SLA_TYPE']}, 'Incident {$incident['id']} - \'{$incident['title']}\' $text', 'View Incident', 'javascript:incident_details_window(\'{$incident['id']}\',\'incident{$incident['id']}\')', {$incident['id']}, NOW())";
                 }
 
                 mysql_query($sql);
                 if (mysql_error()) trigger_error(mysql_error(),E_USER_WARNING);
-                $noticeid = mysql_insert_id();
 
                 $sql="UPDATE incidents SET slanotice='1' WHERE id='{$incident['id']}'";
                 mysql_query($sql);
