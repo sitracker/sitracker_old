@@ -727,6 +727,7 @@ $strUserGroups = 'User Groups';
 $strUsername = 'Username';
 $strUsers = 'Users';
 $strUsersHolidays = '%s\'s Holidays';
+$strUserStillAway = 'Your current status is not set to In Office, you can change it at the bottom of the front page';
 $strUserIncidents = '%s\'s Incidents';
 $strUsersNoGroup = 'Users with no group';
 $strUsersTasks = '%s\'s Tasks';
