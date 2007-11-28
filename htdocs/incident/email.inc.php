@@ -450,10 +450,10 @@ $emailtype|$newincidentstatus|$timetonextaction_none|$timetonextaction_days|$tim
             <?php
             */
 
-            if($ccemail == ",") $ccemail = "";
-            echo "<tr><th>CC:</th><td><input maxlength='100' name='ccfield' id='ccfield' size='40' value=\"{$ccemail}\" />";
-            echo "</td></tr>";
-            echo "<tr><th>BCC:</th><td><input maxlength='100' name='bccfield' id='bccfield' size='40' value=\"{$bccemail}\" /></td></tr>";
+            if (trim($ccemail) == ",") $ccemail = "";
+            if (substr($ccemail, 0, 1) == ",") $ccemail = substr($ccemail, 1, strlen($ccemail));
+            echo "<tr><th>CC:</th><td><input maxlength='100' name='ccfield' id='ccfield' size='40' value=\"{$ccemail}\" /></td></tr>\n";
+            echo "<tr><th>BCC:</th><td><input maxlength='100' name='bccfield' id='bccfield' size='40' value=\"{$bccemail}\" /></td></tr>\n";
             echo "<tr><th>{$strTo}:</th><td><input maxlength='100' name='tofield' id='tofield' size='40' value=\"{$toemail}\" /></td></tr>\n";
             echo "<tr><th>{$strSubject}:</th><td><input maxlength='255' name='subjectfield' id='subjectfield' size='40' value=\"{$subject}\" /></td></tr>\n";
             echo "<tr><th>{$strAttachment}";
@@ -483,7 +483,7 @@ $emailtype|$newincidentstatus|$timetonextaction_none|$timetonextaction_days|$tim
             echo "</textarea>";
             echo "<div id='updatestr'></div>";
             echo "</td></tr>";
-            if ($CONFIG['enable_spellchecker'] == TRUE) 
+            if ($CONFIG['enable_spellchecker'] == TRUE)
             {
                 echo "<tr><th>&nbsp;</th><td><input type='checkbox' name='spellcheck' value='yes' /> Check Spelling before sending</td></tr>\n";
             }
