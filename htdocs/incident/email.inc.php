@@ -363,6 +363,7 @@ $emailtype|$newincidentstatus|$timetonextaction_none|$timetonextaction_days|$tim
                                 seconds = "0"+seconds;
                             }
                             byId('updatestr').innerHTML = "<?php echo $GLOBALS['strDraftLastSaved'] ?>: "+hours+":"+minutes+":"+seconds;
+                            $('draftid').value = draftid;
                         }
                     }
                 }
@@ -436,7 +437,7 @@ $emailtype|$newincidentstatus|$timetonextaction_none|$timetonextaction_days|$tim
             // NOTE \" used rather than ' so email address can contain a ' (as permitted by RFC) PH 28/10/2007
 
             // encoding is multipart/form-data again as it no longer works without (why was this disabled?) - TPG 13/08/2002
-            echo "<form action='{$_SERVER['PHP_SELF']}?id={$id}&amp;draftid={$draftid}' method='post' enctype='multipart/form-data' onsubmit='return confirm_send_mail();' >";
+            echo "<form action='{$_SERVER['PHP_SELF']}?id={$id}' method='post' enctype='multipart/form-data' onsubmit='return confirm_send_mail();' >";
             echo "<table align='center' class='vertical' width='95%'>";
             echo "<tr><th width='30%'>{$strFrom}:</th><td><input maxlength='100' name='fromfield' id='fromfield' size='40' value=\"{$from}\" /></td></tr>\n";
             echo "<tr><th>{$strReplyTo}:</th><td><input maxlength='100' name='replytofield' id='replytofield' size='40' value=\"{$replyTo}\" /></td></tr>\n";
@@ -492,6 +493,7 @@ $emailtype|$newincidentstatus|$timetonextaction_none|$timetonextaction_days|$tim
             echo "<input name='target' id='target' type='hidden' value='{$target}' />";
             echo "<input type='hidden' id='step' name='step' value='3' />";
             echo "<input type='hidden' id='emailtype' name='emailtype' value='{$emailtype}' />";
+            echo "<input type='hidden' id='draftid' name='draftid' value='{$draftid}' />";
             echo "<input name='submit2' type='submit' value='{$strSendEmail}' />";
             echo "</p>\n</form>\n";
         }
@@ -753,7 +755,7 @@ $emailtype|$newincidentstatus|$timetonextaction_none|$timetonextaction_days|$tim
                 if($draftid != -1)
                 {
                     $sql = "DELETE FROM drafts WHERE id = {$draftid}";
-                    $result = mysql_query($sql);
+                    mysql_query($sql);
                     if (mysql_error()) trigger_error(mysql_error(),E_USER_ERROR);
                 }
 
