@@ -526,14 +526,6 @@ else
     $timetonextaction_minutes = cleanvar($_POST['timetonextaction_minutes']);
     $draftid = cleanvar($_POST['draftid']);
 
-    //remove any SLA notices - KMH
-    if($updatetype == 'slamet')
-    {
-        $sql = "DELETE from notices WHERE userid={$sit[2]} AND referenceid={$id}";
-        mysql_query($sql);
-        if (mysql_error()) trigger_error("MySQL Query Error ".mysql_error(), E_USER_ERROR);
-    }
-
     if (empty($newpriority)) $newpriority  = incident_priority($id);
     // update incident
     switch ($timetonextaction_none)
@@ -669,6 +661,10 @@ else
     {
         // Reset the slaemail sent column, so that email reminders can be sent if the new sla target goes out
         $sql = "UPDATE incidents SET slaemail='0', slanotice='0' WHERE id='$id' LIMIT 1";
+        mysql_query($sql);
+        if (mysql_error()) trigger_error("MySQL Query Error ".mysql_error(), E_USER_ERROR);
+        //remove any SLA notices - KMH
+        $sql = "DELETE from notices WHERE userid={$sit[2]} AND referenceid={$id}";
         mysql_query($sql);
         if (mysql_error()) trigger_error("MySQL Query Error ".mysql_error(), E_USER_ERROR);
     }
