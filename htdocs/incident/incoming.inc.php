@@ -28,13 +28,14 @@ if($_REQUEST['action'] == "updatereason")
 }
 
 $action = cleanvar($_REQUEST['action']);
-$sql = "SELECT * FROM tempincoming WHERE id='{$incomingid}'";
+$sql = "SELECT * FROM tempincoming WHERE id='{$incomingid}' LIMIT 1";
 $result = mysql_query($sql);
 if (mysql_error()) trigger_error(mysql_error(),E_USER_ERROR);
-
-while ($incoming = @mysql_fetch_object($result))
+if (mysql_num_rows($result) > 0)
 {
-    if(!$incoming->locked)
+    $incoming = @mysql_fetch_object($result);
+
+    if (!$incoming->locked)
     {
         //it's not locked, lock for this user
         $lockeduntil=date('Y-m-d H:i:s',$now+$CONFIG['record_lock_delay']);
@@ -43,12 +44,12 @@ while ($incoming = @mysql_fetch_object($result))
         if (mysql_error()) trigger_error("MySQL Query Error ".mysql_error(), E_USER_ERROR);
         $lockedbyname = "you";
     }
-    elseif($incoming->locked != $sit[2])
+    elseif ($incoming->locked != $sit[2])
     {
         $lockedby = $incoming->locked;
         $lockedbysql = "SELECT realname FROM users WHERE id={$lockedby}";
         $lockedbyresult = mysql_query($lockedbysql);
-        //if (mysql_error()) trigger_error("MySQL Query Error ".mysql_error(), E_USER_ERROR);
+        if (mysql_error()) trigger_error("MySQL Query Error ".mysql_error(), E_USER_ERROR);
         while($row = mysql_fetch_object($lockedbyresult))
             $lockedbyname = $row->realname;
     }
@@ -58,6 +59,7 @@ while ($incoming = @mysql_fetch_object($result))
     echo "<div class='detailinfo'>";
     if($lockedbyname == "you")
     {
+        // FIXME i18n Reason
         echo "<div class='detaildate'>
                 <form method='POST' action='{$_SERVER['PHP_SELF']}?id={$incomingid}&win=incomingview&action=updatereason'>
                 Reason: <input name='newreason' type='text' value=\"".stripslashes($incoming->reason)."\" size='25' maxlength='100' />
@@ -85,7 +87,8 @@ while ($incoming = @mysql_fetch_object($result))
         echo parse_updatebody($update->bodytext);
         echo "</div>";
     }
-}
+
+} else echo "<p class='error'>{$strNoRecords}</p>";
 unset($result);
 unset($uresult);
 
