@@ -129,7 +129,7 @@ while ($incident=mysql_fetch_array($incident_result)) {
                     $text = "has exceeded its SLA";
                     $sql .= "VALUES({$incident['owner']}, {$CONFIG['OUT_OF_SLA_TYPE']}, 'Incident {$incident['id']} - \'{$incident['title']}\' $text', 'View Incident', 'javascript:incident_details_window(\'{$incident['id']}\',\'incident{$incident['id']}\')', {$incident['id']}, NOW())";
                 }
-
+                echo $sql;
                 mysql_query($sql);
                 if (mysql_error()) trigger_error(mysql_error(),E_USER_WARNING);
 
