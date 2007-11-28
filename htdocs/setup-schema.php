@@ -1242,6 +1242,7 @@ CREATE TABLE IF NOT EXISTS `notices` (
   `link` varchar(100) NOT NULL,
   `referenceid` int(11) NULL,
   `timestamp` TIMESTAMP NOT NULL,
+  `durability` enum('sticky', 'session') NOT NULL default 'sticky',
   PRIMARY KEY  (`id`)
 ) ENGINE=MyISAM AUTO_INCREMENT=1 ;
 
@@ -1510,6 +1511,7 @@ CREATE TABLE IF NOT EXISTS `notices` (
   `link` varchar(100) NOT NULL,
   `referenceid` int(11) NULL,
   `timestamp` TIMESTAMP NOT NULL,
+  `durability` enum('sticky', 'session') NOT NULL default 'sticky',
   PRIMARY KEY  (`id`)
 ) ENGINE=MyISAM AUTO_INCREMENT=1 ;
 
