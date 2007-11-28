@@ -52,6 +52,7 @@ switch ($action)
         $sql = "UPDATE incidents SET ";
         if ($temporary=='yes') $sql .= "towner='{$userid}', ";
         elseif ($temporary != 'yes' AND $sit[2]==$incident->owner) $sql .= "owner='{$sit[2]}', towner=0, "; // make current user = owner
+        elseif ($temporary != 'yes' AND $sit[2]==$incident->towner) $sql .= "towner=0, "; // temp owner removing temp ownership
         elseif ($temporary == 'yes' AND $userid=$incident->owner) $sql .= "owner='{$userid}', towner=0, ";
         else  $sql .= "owner='{$userid}', ";
         $sql .= "status='$newstatus', lastupdated='$now' WHERE id='$id' LIMIT 1";
@@ -74,6 +75,7 @@ switch ($action)
         $sql .= "VALUES ($id, $sit[2], '$bodytext', '$assigntype', '$now', ";
         if ($temporary=='yes') $sql .= "'{$userid}', ";
         elseif ($temporary != 'yes' AND $sit[2]==$incident->owner) $sql .= "'{$sit[2]}', ";
+        elseif ($temporary != 'yes' AND $sit[2]==$incident->towner)  $sql .= "'{$incident->owner}', ";
         else $sql .= "'{$userid}', ";
         $sql .= "'$newstatus', '$customervisibility')";
         $result = mysql_query($sql);
@@ -124,7 +126,7 @@ switch ($action)
         if ($incident->towner > 0)
         {
             echo " (Temp: "; // FIXME i18n
-            if ($sit[2]==$incident->towner) echo $strYou;
+            if ($sit[2]==$incident->towner) echo "{$strYou} (".user_realname($incident->towner,TRUE).")";
             else echo user_realname($incident->towner,TRUE);
             echo ")";
         }
