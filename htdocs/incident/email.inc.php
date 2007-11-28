@@ -362,7 +362,7 @@ $emailtype|$newincidentstatus|$timetonextaction_none|$timetonextaction_days|$tim
                             {
                                 seconds = "0"+seconds;
                             }
-                            byId('updatestr').innerHTML = "<?php echo $GLOBALS['strDraftLastSaved'] ?>: "+hours+":"+minutes+":"+seconds;
+                            byId('updatestr').innerHTML = "<?php echo "<img src='{$CONFIG['application_webpath']}images/icons/{$iconset}/16x16/info.png' /> ".$GLOBALS['strDraftLastSaved'] ?>: "+hours+":"+minutes+":"+seconds;
                             $('draftid').value = draftid;
                         }
                     }
