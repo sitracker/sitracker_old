@@ -400,7 +400,7 @@ CREATE TABLE `interfacestyles` (
   `iconset` varchar(255) NOT NULL default 'sit',
   `headerhtml` text NOT NULL,
   PRIMARY KEY  (`id`)
-) TYPE=MyISAM AUTO_INCREMENT=16 ;
+) ENGINE=MyISAM AUTO_INCREMENT=16 ;
 
 INSERT INTO `interfacestyles` (`id`, `name`, `cssurl`, `iconset`, `headerhtml`) VALUES (1, 'Light Blue', 'webtrack1.css', 'sit', ''),
 (2, 'Grey', 'webtrack2.css', 'sit', ''),
