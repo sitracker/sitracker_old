@@ -356,7 +356,7 @@ elseif($mode='savesessionlang')
     $sql = "UPDATE users SET var_i18n = '{$_SESSION['lang']}' WHERE id = {$sit[2]}";
     mysql_query($sql);
     if (mysql_error()) trigger_error("MySQL Query Error ".mysql_error(), E_USER_ERROR);
-    $sql = "DELETE FROM usernotices WHERE noticeid=1 AND userid={$sit[2]}";
+    $sql = "DELETE FROM notices WHERE noticeid=".USER_LANG_DIFFERS_TYPE." AND userid={$sit[2]}";
     mysql_query($sql);
     if (mysql_error()) trigger_error("MySQL Query Error ".mysql_error(), E_USER_ERROR);
     include('htmlheader.inc.php');
