@@ -150,12 +150,7 @@ while ($incident=mysql_fetch_array($incident_result)) {
                 $sql = "INSERT into notices(text, linktext, link, timestamp) ";
                 $sql .= "VALUES('Incident {$incident['id']} is about to go out of sla', 'View Incident', '', NOW())";
                 mysql_query($sql);
-                $noticeid = mysql_insert_id();
-
-                $sql = "INSERT into usernotices(noticeid, userid) ";
-                $sql .= "VALUES($noticeid, {$reviewInfo['currentowner']})";
-                mysql_query($sql);
-
+               
                 $emailSent=1;
             }
 

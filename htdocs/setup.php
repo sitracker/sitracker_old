@@ -221,19 +221,14 @@ function setup_exec_sql($sqlquerylist)
 
 function user_notify_upgrade()
 {
-    $noticesql = "INSERT into notices(type, text, linktext, link, timestamp) ";
-    $noticesql .= "VALUES(2, '\$strSitUpgraded', '\$strSitUpgradedLink', 'releasenotes.php', NOW())";
-    mysql_query($noticesql);
-    if (mysql_error()) trigger_error(mysql_error(),E_USER_WARNING);
-
-    $noticeid = mysql_insert_id();
-
     $sql = "SELECT id FROM users WHERE status != 0";
     $result = mysql_query($sql);
+    $gid = md5($strSitUpgraded);
     while($user = mysql_fetch_object($result))
     {
-        $insertsql = "INSERT into usernotices(noticeid, userid) VALUES({$noticeid}, {$user->id})";
-        mysql_query($insertsql);
+        $noticesql = "INSERT into notices(userid, type, text, linktext, link, gid, timestamp) ";
+        $noticesql .= "VALUES({$user->id}, ".USER_LANG_DIFFERS_TYPE.", '\$strSitUpgraded', '\$strSitUpgradedLink', '{$CONFIG['application_webpath']}releasenotes.php', {$gid}, NOW())";
+        mysql_query($noticesql);
         if (mysql_error()) trigger_error(mysql_error(),E_USER_WARNING);
     }
 }
