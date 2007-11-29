@@ -17,8 +17,16 @@
 
 // Version number of the application, (numbers only)
 $application_version='3.31';
-// Revision string, e.g. 'beta2' or ''
-$application_revision='alpha1';
+// Revision string, e.g. 'beta2' or 'svn' or ''
+$application_revision='svn';
+
+// Append SVN data for svn versions
+if ($application_revision == 'svn')
+{
+    // Add the svn revision number
+    preg_match('/([0-9]+)/','$LastChangedRevision$',&$revision);
+    $application_revision .= $revision[0];
+}
 
 // Clean PHP_SELF server variable to avoid potential XSS security issue
 $_SERVER['PHP_SELF'] = substr($_SERVER['PHP_SELF'], 0, (strlen($_SERVER['PHP_SELF']) - @strlen($_SERVER['PATH_INFO'])));
@@ -71,8 +79,8 @@ define('HOL_SICKNESS', 2);
 define('HOL_WORKING_AWAY', 3);
 define('HOL_TRAINING', 4);
 define('HOL_FREE', 5); // Compassionate/Maternity/Paterity/etc/free
-        
-        
+
+
 //default notice types
 define('NORMAL_NOTICE_TYPE', 0);
 define('WARNING_NOTICE_TYPE', 1);
