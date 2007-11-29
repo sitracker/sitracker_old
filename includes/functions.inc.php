@@ -71,6 +71,17 @@ define('HOL_SICKNESS', 2);
 define('HOL_WORKING_AWAY', 3);
 define('HOL_TRAINING', 4);
 define('HOL_FREE', 5); // Compassionate/Maternity/Paterity/etc/free
+        
+        
+//default notice types
+define('NORMAL_NOTICE_TYPE', 0);
+define('WARNING_NOTICE_TYPE', 1);
+define('CRITICAL_NOTICE_TYPE', 2);
+define('NEARING_SLA_TYPE', 3);
+define('OUT_OF_SLA_TYPE', 4);
+define('USER_STILL_AWAY_TYPE', 5);
+define('USER_LANG_DIFFERS_TYPE', 6);
+
 
 require('i18n/en-GB.inc.php');
 if ($CONFIG['default_i18n']!='en-GB') @include("i18n/{$CONFIG['default_i18n']}.inc.php");
