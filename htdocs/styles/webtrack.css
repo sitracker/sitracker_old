@@ -232,8 +232,9 @@ p.error, h5.error
   background-image: url('../images/icons/kdeclassic/16x16/actions/stop.png');
   color: #f00;
   border: 1px solid #f00;
-  background-color: #fff;
+  background-color: #FFE1E1;
 }
+p.error span a { color: #f00; }
 
 strong.info,em.info,u.info,span.info
 {
