@@ -423,6 +423,7 @@ if (mysql_num_rows($result) >=1 )
         echo "<br />";
 
         echo "<table align='center'>";
+        // FIXME i18n table headings
         echo "<tr><th>{$strOwner}</th><th>Total minutes spent</th><th>Engineer periods</th><th>Customer periods</th></tr>";
         $shade = "shade1";
         foreach($billing AS $bill)
