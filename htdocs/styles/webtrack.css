@@ -207,14 +207,14 @@ p.tip,p.info, p.warning, p.error, h5.warning, h5.error
 }
 p.tip
 {
-  background-image: url('../images/icons/kdeclassic/16x16/actions/idea.png');
+  background-image: url('../images/icons/sit/16x16/tip.png');
   color: InfoText;
   border: 1px solid InfoText;
   background-color: InfoBackground;
 }
 p.info
 {
-  background-image: url('../images/icons/kdeclassic/16x16/actions/info.png');
+  background-image: url('../images/icons/sit/16x16/info.png');
   color: #17446B;
   border: 1px solid #17446B;
   background-color: #F4F6FF;
@@ -222,19 +222,20 @@ p.info
 p.info span, p.error span { float: right; margin-right: 10px; }
 p.warning, h5.warning
 {
-  background-image: url('../images/icons/kdeclassic/16x16/actions/info.png');
-  color: black;
-  border: 1px solid #17446B;
-  background-color: #B4D2E6;
+  background-image: url('../images/icons/sit/16x16/warning.png');
+  color: #FF8E09;
+  border: 1px solid #FF8E09;
+  background-color: #FFE8CD;
 }
 p.error, h5.error
 {
-  background-image: url('../images/icons/kdeclassic/16x16/actions/stop.png');
+  background-image: url('../images/icons/sit/16x16/error.png');
   color: #f00;
   border: 1px solid #f00;
   background-color: #FFE1E1;
 }
 p.error span a { color: #f00; }
+p.warning span a { color: #FF8E09; }
 
 strong.info,em.info,u.info,span.info
 {
