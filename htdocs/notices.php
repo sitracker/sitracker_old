@@ -40,7 +40,7 @@ if($action == 'new')
     echo "<h3>{$strNotice}</h3>";
     echo "<textarea cols='60' rows='4' name='text'></textarea><br />";
     echo "<label for='session'>{$strDurability}:</label> <select name='durability'><option value='sticky'>{$strSticky}</option><option value='session'>{$strSession}</option></select><br /><br />";
-    echo "<label for='type'>{$strType}:</label> <select name='type'><option value='{$CONFIG['NORMAL_NOTICE_TYPE']}'>{$strInfo}</option><option value='{$CONFIG['CRITICAL_NOTICE_TYPE']}'>{$strWarning}</option></select><br /><br />";
+    echo "<label for='type'>{$strType}:</label> <select name='type'><option value='".NORMAL_NOTICE_TYPE."'>{$strInfo}</option><option value='".WARNING_NOTICE_TYPE."'>{$strWarning}</option></select><br /><br />";
     echo "<input type='submit' value='{$strSave}' />";
     echo "</form></div>";
     echo "<p align='center'><a href='notices.php'>{$strReturnWithoutSaving}</a></p>";
@@ -52,15 +52,14 @@ elseif($action == 'post')
     $type = cleanvar($_REQUEST['type']);
     $durability = cleanvar($_REQUEST['durability']);
     $gid = md5($text);
+    
     //post new notice
-
     $sql = "SELECT id FROM users WHERE status != 0";
     $result = mysql_query($sql);
     while($user = mysql_fetch_object($result))
     {
         $sql = "INSERT INTO notices (userid, gid, type, text, timestamp, durability) ";
         $sql .= "VALUES({$user->id}, '{$gid}', {$type}, '{$text}', NOW(), '{$durability}')";
-        echo $sql;
         mysql_query($sql);
         if (mysql_error()) trigger_error(mysql_error(),E_USER_WARNING);
     }
@@ -88,25 +87,27 @@ else
     echo "<h2>{$strNotices}</h2>";
 
     //get all notices
-    $sql = "SELECT * FROM notices WHERE type={$CONFIG['NORMAL_NOTICE_TYPE']} OR type={$CONFIG['CRITICAL_NOTICE_TYPE']} GROUP BY gid;
-    ";
-    $result = mysql_query($sql);
-    print_r($notice);
-
+    $sql = "SELECT * FROM notices WHERE type=".NORMAL_NOTICE_TYPE." OR type=".WARNING_NOTICE_TYPE." ";
+    $sql .= "GROUP BY gid";
+    $result = @mysql_query($sql);
     echo "<table align='center'>";
     echo "<tr><th>{$strID}</th><th>{$strDate}</th><th>{$strNotice}</th><th>{$strOperation}</th></tr>\n";
     $shade='shade1';
-    while($notice = mysql_fetch_object($result))
+    if(mysql_num_rows($result) > 0)
     {
-        echo "<tr class='$shade'><td>{$notice->id}</td><td>{$notice->timestamp}</td>";
-        echo "<td>".stripslashes(bbcode($notice->text))."</td>";
-        echo "<td>";
-        echo "<a href='{$_SERVER[PHP_SELF]}?action=delete&amp;id={$notice->id}'>{$strDelete}</a>";
-        echo "</td></tr>\n";
-        if ($shade=='shade1') $shade='shade2';
-        else $shade='shade1';
+        while($notice = mysql_fetch_object($result))
+        {
+            echo "<tr class='$shade'><td>{$notice->id}</td><td>{$notice->timestamp}</td>";
+            echo "<td>".stripslashes(bbcode($notice->text))."</td>";
+            echo "<td>";
+            echo "<a href='{$_SERVER[PHP_SELF]}?action=delete&amp;id={$notice->id}'>{$strDelete}</a>";
+            echo "</td></tr>\n";
+            if ($shade=='shade1') $shade='shade2';
+            else $shade='shade1';
+        }
+        echo "</table>\n";
     }
-    echo "</table>\n";
+    else echo $strNoRecords;
 
     echo "<p align='center'><a href='{$_SERVER[PHP_SELF]}?action=new'>{$strPostNewNotice}</a></p>";
     include('htmlfooter.inc.php');
