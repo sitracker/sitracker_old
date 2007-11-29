@@ -159,7 +159,9 @@ if($sit[0] != '')
             $notice->text = bbcode($notice->text);
             if($notice->type == $CONFIG['CRITICAL_NOTICE_TYPE'])
             {
-                echo "<div class='error'><p class='error'>{$notice->text}";
+                echo "<div class='error'><p class='error'>";
+                echo "<span>(<a href='{$_SERVER[PHP_SELF]}?action=dismiss_notice&amp;noticeid={$notice->id}'>$strDismiss</a>)</span>";
+                echo $notice->text;
                 if($notice->resolutionpage) $redirpage = $CONFIG['application_webpath'].$notice->resolutionpage;
             }
             elseif($notice->type == $CONFIG['OUT_OF_SLA_TYPE'] OR $notice->type == $CONFIG['NEARING_SLA_TYPE'])
