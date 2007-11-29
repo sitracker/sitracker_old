@@ -157,16 +157,21 @@ if($sit[0] != '')
                 $notice->text = str_replace('$strSitUpgraded', sprintf($strSitUpgraded, $CONFIG['application_shortname'], "v{$application_version} {$application_revision}"), $notice->text);
             }
             $notice->text = bbcode($notice->text);
-            if($notice->type == $CONFIG['CRITICAL_NOTICE_TYPE'])
+            if($notice->type == WARNING_NOTICE_TYPE)
+            {
+                echo "<div class='warning'><p class='warning'>";
+                echo "<span>(<a href='{$_SERVER[PHP_SELF]}?action=dismiss_notice&amp;noticeid={$notice->id}'>$strDismiss</a>)</span>";
+                echo $notice->text;
+            }
+            elseif($notice->type == CRITICAL_NOTICE_TYPE)
             {
                 echo "<div class='error'><p class='error'>";
-                echo "<span>(<a href='{$_SERVER[PHP_SELF]}?action=dismiss_notice&amp;noticeid={$notice->id}'>$strDismiss</a>)</span>";
                 echo $notice->text;
                 if($notice->resolutionpage) $redirpage = $CONFIG['application_webpath'].$notice->resolutionpage;
             }
             elseif($notice->type == $CONFIG['OUT_OF_SLA_TYPE'] OR $notice->type == $CONFIG['NEARING_SLA_TYPE'])
             {
-                echo "<div class='error'><p class='error'>";
+                echo "<div class='error'><p class='warning'>";
                 echo "<span>(<a href='{$_SERVER[PHP_SELF]}?action=dismiss_notice&amp;noticeid={$notice->id}'>$strDismiss</a>)</span>";
                 echo "{$notice->text}";
                 if (!empty($notice->link))
