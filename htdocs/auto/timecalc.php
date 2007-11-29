@@ -117,7 +117,7 @@ while ($incident=mysql_fetch_array($incident_result)) {
                 //create notice, workaround until triggers are implemented - KMH 26/11/07
                 $timetil = $times['next_sla_time']-$newSlaTime;
 
-                $sql = "INSERT into notices(userid, type, text, linktext, link, reference, timestamp) ";
+                $sql = "INSERT into notices(userid, type, text, linktext, link, referenceid, timestamp) ";
 
                 if($timetil >= 0)
                 {
