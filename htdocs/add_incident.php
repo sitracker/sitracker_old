@@ -190,7 +190,8 @@ elseif ($action=='findcontact')
             echo $str_prefered;
             echo "</table>\n";
         }
-        elseif(!empty($str_alternative))
+
+        if(!empty($str_alternative))
         {
             if(!empty($str_prefered)) echo "<h3>{$strAlternative}</h3>";
             echo "<table align='center'>";
@@ -198,7 +199,11 @@ elseif ($action=='findcontact')
             echo $str_alternative;
             echo "</table>\n";
         }
-        else echo "<p class='error'>{$strNothingToDisplay}</p>";
+
+        if(empty($str_prefered) AND empty($str_alternative))
+        {
+            echo "<p class='error'>{$strNothingToDisplay}</p>";
+        }
 
         // Select the contact from the list of contacts as well
         $sql = "SELECT *, contacts.id AS contactid FROM contacts, sites WHERE contacts.siteid=sites.id ";
