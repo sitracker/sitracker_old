@@ -183,7 +183,7 @@ switch($mode)
             {
                 echo "<table summary='feedback forms' width='95%' align='center'>";
                 echo "<tr>";
-                echo colheader('created',$strFeedbackRequested, $sort, $order, $filter);
+                echo colheader('created',$strDate, $sort, $order, $filter);
                 echo colheader('contactid',$strContact,$sort, $order, $filter);
                 echo colheader('incidentid',$strIncident,$sort, $order, $filter);
                 echo "<th>{$strOperation}</th>";
