@@ -97,7 +97,7 @@ function formatSeconds(secondsOpen)
         }
         else
         {
-            str += minutes+" minutes ";
+            str += minutes;
         }
         secondsOpen-=(minutes*60);
     }
