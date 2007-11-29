@@ -58,13 +58,13 @@ elseif (authenticate($username, $password) == 1)
     // Delete any old session user notices
     $sql = "DELETE FROM notices WHERE durability='session' AND userid={$_SESSION['userid']}";
     mysql_query($sql);
-    if (mysql_error()) trigger_error(mysql_error(), E_USER_ERROR);*/
+    if (mysql_error()) trigger_error(mysql_error(), E_USER_ERROR);
 
     //check if the session lang is different the their profiles
-    /*if($_SESSION['lang'] != '' AND $_SESSION['lang'] != $user->var_i18n)
+    if($_SESSION['lang'] != '' AND $_SESSION['lang'] != $user->var_i18n)
     {
-        $sql = "INSERT INTO notices (type, userid, durability) VALUES({$CONFIG['USER_LANG_DIFFERS_TYPE']}, $user->id, 'session') ";
-        $sql .= "ON DUPLICATE KEY UPDATE noticeid=3";
+        $sql = "INSERT INTO notices (text, type, userid, durability) ";
+        $sql .= "VALUES('', {$CONFIG['USER_LANG_DIFFERS_TYPE']}, {$_SESSION['userid']}, 'session') ";
         mysql_query($sql);
         if (mysql_error()) trigger_error(mysql_error(), E_USER_ERROR);
     }
