@@ -127,13 +127,15 @@ if($action=='dismiss_notice')
 {
     if(is_numeric($noticeid))
     {
-        $sql = "DELETE FROM notices WHERE noticeid={$noticeid} AND userid={$sit[2]}";
-        @mysql_query($sql);
+        $sql = "DELETE FROM notices WHERE id={$noticeid} AND userid={$sit[2]}";
+        mysql_query($sql);
+        if (mysql_error()) trigger_error(mysql_error(),E_USER_WARNING);
     }
     elseif($noticeid == 'all')
     {
         $sql = "DELETE FROM notices WHERE userid={$sit[2]}";
-        @mysql_query($sql);
+        mysql_query($sql);
+        if (mysql_error()) trigger_error(mysql_error(),E_USER_WARNING);
     }
 }
 
