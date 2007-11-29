@@ -89,12 +89,12 @@ else
     //get all notices
     $sql = "SELECT * FROM notices WHERE type=".NORMAL_NOTICE_TYPE." OR type=".WARNING_NOTICE_TYPE." ";
     $sql .= "GROUP BY gid";
-    $result = @mysql_query($sql);
-    echo "<table align='center'>";
-    echo "<tr><th>{$strID}</th><th>{$strDate}</th><th>{$strNotice}</th><th>{$strOperation}</th></tr>\n";
+    $result = @mysql_query($sql);    
     $shade='shade1';
     if(mysql_num_rows($result) > 0)
     {
+        echo "<table align='center'>";
+        echo "<tr><th>{$strID}</th><th>{$strDate}</th><th>{$strNotice}</th><th>{$strOperation}</th></tr>\n";
         while($notice = mysql_fetch_object($result))
         {
             echo "<tr class='$shade'><td>{$notice->id}</td><td>{$notice->timestamp}</td>";
@@ -107,7 +107,7 @@ else
         }
         echo "</table>\n";
     }
-    else echo $strNoRecords;
+    else echo "<p align='center'>$strNoRecords</p>";
 
     echo "<p align='center'><a href='{$_SERVER[PHP_SELF]}?action=new'>{$strPostNewNotice}</a></p>";
     include('htmlfooter.inc.php');
