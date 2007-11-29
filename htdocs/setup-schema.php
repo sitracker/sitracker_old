@@ -10,6 +10,11 @@
 
 // Author: Ivan Lucas <ivanlucas[at]users.sourceforge.net>
 
+
+// Important: When making changes to the schema you must add SQL to make the alterations
+// to existing databases in $upgrade_schema[] at the bottom of the file
+// *AND* you must also change $schema[] for new installations (at the top of the file)
+
 // TODO we need to clean this schema up to make it confirmed compatible with mysql4
 $schema = "CREATE TABLE `billing_periods` (
 `servicelevelid` INT( 5 ) NOT NULL ,
@@ -1473,10 +1478,6 @@ INSERT INTO `rolepermissions` (`roleid`, `permissionid`, `granted`) VALUES (1, 6
 INSERT INTO `rolepermissions` (`roleid`, `permissionid`, `granted`) VALUES (2, 68, 'true');
 INSERT INTO `userpermissions` VALUES (1, 68, 'true');
 
-INSERT INTO `permissions` VALUES (69, 'Post Notices');
-INSERT INTO `rolepermissions` (`roleid`, `permissionid`, `granted`) VALUES (1, 69, 'true');
-INSERT INTO `userpermissions` VALUES (1, 69, 'true');
-
 ALTER TABLE `sites` ADD `active` ENUM( 'true', 'false' ) NOT NULL DEFAULT 'true';
 
 ALTER TABLE `contacts` ADD `active` ENUM( 'true', 'false' ) NOT NULL DEFAULT 'true';
@@ -1523,9 +1524,8 @@ ALTER TABLE `users` ADD `var_i18n` VARCHAR( 20 ) NULL AFTER `var_notify_on_reass
 
 ALTER TABLE `updates` ADD `duration` INT NULL ;
 
-INSERT INTO `userpermissions` (`userid`, `permissionid`, `granted`) VALUES (1, 68, 'true');
+INSERT INTO `permissions` VALUES (69, 'Post Notices');
 INSERT INTO `rolepermissions` (`roleid`, `permissionid`, `granted`) VALUES (1, 69, 'true');
-INSERT INTO `userpermissions` (`userid`, `permissionid`, `granted`) VALUES (1, 68, 'true');
 INSERT INTO `userpermissions` (`userid`, `permissionid`, `granted`) VALUES (1, 69, 'true');
 
 ALTER TABLE `users` ADD `lastseen` TIMESTAMP NOT NULL ;
@@ -1564,6 +1564,6 @@ INSERT INTO `permissions` VALUES (70, 'Post Global Notices');
 
 // Important: When making changes to the schema you must add SQL to make the alterations
 // to existing databases in $upgrade_schema[] *AND* you must also change $schema[] for
-// new installations.
+// new installations (above the line of stars).
 
 ?>
