@@ -195,6 +195,7 @@ $slatypes['closed'] = array('icon' => 'close.png', 'text' => $strClosed);
 // List of *Available* languages, must match files in includes/i18n
 $availablelanguages = array('en-GB' => 'English (British)',
                             'en-US' => 'English (US)',
+                            'zh-CN' => '简体中文',
                             'de-DE' => 'Deutsch',
                             'fr-FR' => 'Français',
                             'lt-LT' => 'Lietuvių',
