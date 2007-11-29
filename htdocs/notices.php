@@ -39,7 +39,8 @@ if($action == 'new')
     echo "<div align='center'><form action='{$_SERVER[PHP_SELF]}?action=post' method='post'><br /><br />";
     echo "<h3>{$strNotice}</h3>";
     echo "<textarea cols='60' rows='4' name='text'></textarea><br />";
-    echo "<label for='session'>{$strDurability}:</label> <select name='session'><option>{$strSticky}</option><option>{$strSession}</option></select><br /><br />";
+    echo "<label for='session'>{$strDurability}:</label> <select name='durability'><option value='sticky'>{$strSticky}</option><option value='session'>{$strSession}</option></select><br /><br />";
+    echo "<label for='type'>{$strType}:</label> <select name='type'><option value='{$CONFIG['NORMAL_NOTICE_TYPE']}'>{$strInfo}</option><option value='{$CONFIG['CRITICAL_NOTICE_TYPE']}'>{$strWarning}</option></select><br /><br />";
     echo "<input type='submit' value='{$strSave}' />";
     echo "</form></div>";
     echo "<p align='center'><a href='notices.php'>{$strReturnWithoutSaving}</a></p>";
@@ -48,12 +49,21 @@ if($action == 'new')
 elseif($action == 'post')
 {
     $text = cleanvar($_REQUEST['text']);
-
+    $type = cleanvar($_REQUEST['type']);
+    $durability = cleanvar($_REQUEST['durability']);
+    $gid = md5($text);
     //post new notice
-    $sql = "INSERT INTO notices (userid, type, text, timestamp, durability) VALUES({$user->id}, 2, '$text', NOW(), 'sticky')";
-    mysql_query($sql);
-    if (mysql_error()) trigger_error(mysql_error(),E_USER_WARNING);
-    $noticeid = mysql_insert_id();
+
+    $sql = "SELECT id FROM users WHERE status != 0";
+    $result = mysql_query($sql);
+    while($user = mysql_fetch_object($result))
+    {
+        $sql = "INSERT INTO notices (userid, gid, type, text, timestamp, durability) ";
+        $sql .= "VALUES({$user->id}, '{$gid}', {$type}, '{$text}', NOW(), '{$durability}')";
+        echo $sql;
+        mysql_query($sql);
+        if (mysql_error()) trigger_error(mysql_error(),E_USER_WARNING);
+    }
 
     confirmation_page(2, 'notices.php', '<h2>Notice Added</h2><p>You will be redirected, please wait...</p>');
 
@@ -61,18 +71,14 @@ elseif($action == 'post')
 elseif($action == 'delete')
 {
     $noticeid = cleanvar($_REQUEST['id']);
-    $sql = "DELETE FROM notices WHERE id={$noticeid} LIMIT 1";
+    
+    $sql = "SELECT gid FROM notices WHERE id='{$noticeid}'";
+    $result = mysql_query($sql);
+    $gid = mysql_fetch_object($result);
+    
+    $sql = "DELETE FROM notices WHERE gid='{$gid->gid}'";
     mysql_query($sql);
     if (mysql_error()) trigger_error(mysql_error(),E_USER_WARNING);
-
-    $sql = "SELECT id FROM users WHERE status != 0";
-    $result = mysql_query($sql);
-    while($user = mysql_fetch_object($result))
-    {
-        $sql = "DELETE FROM usernotices WHERE noticeid={$noticeid} AND userid={$user->id}";
-        mysql_query($sql);
-        if (mysql_error()) trigger_error(mysql_error(),E_USER_WARNING);
-    }
 
     confirmation_page(2, 'notices.php', '<h2>Notice Deleted</h2><p>You will be redirected, please wait...</p>');
 }
@@ -82,7 +88,8 @@ else
     echo "<h2>{$strNotices}</h2>";
 
     //get all notices
-    $sql = "SELECT * FROM notices";
+    $sql = "SELECT * FROM notices WHERE type={$CONFIG['NORMAL_NOTICE_TYPE']} OR type={$CONFIG['CRITICAL_NOTICE_TYPE']} GROUP BY gid;
+    ";
     $result = mysql_query($sql);
     print_r($notice);
 
@@ -94,11 +101,7 @@ else
         echo "<tr class='$shade'><td>{$notice->id}</td><td>{$notice->timestamp}</td>";
         echo "<td>".stripslashes(bbcode($notice->text))."</td>";
         echo "<td>";
-        // Don't allow deleting system messages
-        if(!in_array($notice->id, $CONFIG['permanent_notices']))
-                echo "<a href='{$_SERVER[PHP_SELF]}?action=delete&amp;id={$notice->id}'>{$strDelete}</a>";
-        else
-            echo $strDelete;
+        echo "<a href='{$_SERVER[PHP_SELF]}?action=delete&amp;id={$notice->id}'>{$strDelete}</a>";
         echo "</td></tr>\n";
         if ($shade=='shade1') $shade='shade2';
         else $shade='shade1';
