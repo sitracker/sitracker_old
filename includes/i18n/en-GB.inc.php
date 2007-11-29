@@ -747,6 +747,7 @@ $strVisibleToCustomer = 'Visible To Customer';
 $strVisibility = 'Visibility';
 
 $strWaiting = 'Waiting';
+$strWarning = 'Warning';
 $strWatchAddFailed = 'Failed to add watch incident';
 $strWatchAddSet = 'Add new set of watched incidents';
 $strWatchDeleteFailed = 'Delete watch failed';
