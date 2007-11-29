@@ -89,6 +89,7 @@ define('NEARING_SLA_TYPE', 3);
 define('OUT_OF_SLA_TYPE', 4);
 define('USER_STILL_AWAY_TYPE', 5);
 define('USER_LANG_DIFFERS_TYPE', 6);
+define('SIT_UPGRADED_NOTICE', 7);
 
 
 require('i18n/en-GB.inc.php');

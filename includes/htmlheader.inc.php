@@ -152,7 +152,7 @@ if($sit[0] != '')
         while($notice = mysql_fetch_object($noticeresult))
         {
             //check for the notice types
-            if($notice->id == $CONFIG['SIT_UPGRADED_NOTICE'])
+            if($notice->id == SIT_UPGRADED_NOTICE)
             {
                 $notice->text = str_replace('$strSitUpgraded', sprintf($strSitUpgraded, $CONFIG['application_shortname'], "v{$application_version} {$application_revision}"), $notice->text);
             }
