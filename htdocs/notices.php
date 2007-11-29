@@ -52,11 +52,8 @@ elseif($action == 'post')
     $type = cleanvar($_REQUEST['type']);
     $durability = cleanvar($_REQUEST['durability']);
     $gid = md5($text);
-<<<<<<< .mine
-=======
 
     //post new notice
->>>>>>> .r1604
     $sql = "SELECT id FROM users WHERE status != 0";
     $result = mysql_query($sql);
     while($user = mysql_fetch_object($result))
