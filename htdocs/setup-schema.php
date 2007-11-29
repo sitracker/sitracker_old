@@ -1477,6 +1477,10 @@ INSERT INTO `rolepermissions` (`roleid`, `permissionid`, `granted`) VALUES (1, 6
 INSERT INTO `rolepermissions` (`roleid`, `permissionid`, `granted`) VALUES (2, 68, 'true');
 INSERT INTO `userpermissions` VALUES (1, 68, 'true');
 
+INSERT INTO `permissions` VALUES (69, 'Post Notices');
+INSERT INTO `rolepermissions` (`roleid`, `permissionid`, `granted`) VALUES (1, 69, 'true');
+INSERT INTO `userpermissions` VALUES (1, 69, 'true');
+
 ALTER TABLE `sites` ADD `active` ENUM( 'true', 'false' ) NOT NULL DEFAULT 'true';
 
 ALTER TABLE `contacts` ADD `active` ENUM( 'true', 'false' ) NOT NULL DEFAULT 'true';
@@ -1523,10 +1527,10 @@ ALTER TABLE `users` ADD `var_i18n` VARCHAR( 20 ) NULL AFTER `var_notify_on_reass
 
 ALTER TABLE `updates` ADD `duration` INT NULL ;
 
-INSERT INTO `rolepermissions` (`roleid`, `permissionid`, `granted`) VALUES (1, 70, 'true');
+INSERT INTO `userpermissions` (`roleid`, `permissionid`, `granted`) VALUES (1, 68, 'true');
+INSERT INTO `rolepermissions` (`roleid`, `permissionid`, `granted`) VALUES (1, 69, 'true');
 INSERT INTO `userpermissions` (`userid`, `permissionid`, `granted`) VALUES (1, 68, 'true');
 INSERT INTO `userpermissions` (`userid`, `permissionid`, `granted`) VALUES (1, 69, 'true');
-INSERT INTO `userpermissions` (`userid`, `permissionid`, `granted`) VALUES (1, 70, 'true');
 
 ALTER TABLE `users` ADD `lastseen` TIMESTAMP NOT NULL ;
 
