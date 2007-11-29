@@ -50,20 +50,10 @@ elseif($action == 'post')
     $text = cleanvar($_REQUEST['text']);
 
     //post new notice
-    $sql = "INSERT INTO notices (type, text, timestamp) VALUES(2, '$text', NOW())";
+    $sql = "INSERT INTO notices (userid, type, text, timestamp, durability) VALUES({$user->id}, 2, '$text', NOW(), 'sticky')";
     mysql_query($sql);
     if (mysql_error()) trigger_error(mysql_error(),E_USER_WARNING);
-
     $noticeid = mysql_insert_id();
-
-    $sql = "SELECT id FROM users WHERE status != 0";
-    $result = mysql_query($sql);
-    while($user = mysql_fetch_object($result))
-    {
-        $sql = "INSERT INTO usernotices (noticeid, userid, durability) VALUES({$noticeid}, {$user->id}, 'sticky')";
-        mysql_query($sql);
-        if (mysql_error()) trigger_error(mysql_error(),E_USER_WARNING);
-    }
 
     confirmation_page(2, 'notices.php', '<h2>Notice Added</h2><p>You will be redirected, please wait...</p>');
 
