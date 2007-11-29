@@ -144,7 +144,7 @@ if($action=='dismiss_notice')
 if($sit[0] != '')
 {
     $noticesql = "SELECT * FROM notices ";
-    $noticesql .= "WHERE userid={$sit[2]}";
+    $noticesql .= "WHERE userid={$sit[2]} ORDER BY timestamp DESC";
     $noticeresult = mysql_query($noticesql);
     if (mysql_error()) trigger_error(mysql_error(),E_USER_WARNING);
     if(mysql_num_rows($noticeresult) > 0)
