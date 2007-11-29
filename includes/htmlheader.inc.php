@@ -151,13 +151,13 @@ if($sit[0] != '')
     {
         while($notice = mysql_fetch_object($noticeresult))
         {
+            $notice->text = bbcode($notice->text);
             //check for the notice types
-            if($notice->id == SIT_UPGRADED_NOTICE)
+            if($notice->type == SIT_UPGRADED_NOTICE)
             {
                 $notice->text = str_replace('$strSitUpgraded', sprintf($strSitUpgraded, $CONFIG['application_shortname'], "v{$application_version} {$application_revision}"), $notice->text);
             }
-            $notice->text = bbcode($notice->text);
-            if($notice->type == WARNING_NOTICE_TYPE)
+            elseif($notice->type == WARNING_NOTICE_TYPE)
             {
                 echo "<div class='warning'><p class='warning'>";
                 echo "<span>(<a href='{$_SERVER[PHP_SELF]}?action=dismiss_notice&amp;noticeid={$notice->id}'>$strDismiss</a>)</span>";
