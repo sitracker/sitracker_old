@@ -625,8 +625,7 @@ INSERT INTO `permissions` VALUES (65, 'Delete Products');
 INSERT INTO `permissions` VALUES (66, 'Install Dashboard Components');
 INSERT INTO `permissions` VALUES (67, 'Run Management Reports');
 INSERT INTO `permissions` VALUES (68, 'Manage Holidays');
-INSERT INTO `permissions` VALUES (69, 'Change User Statuses');
-INSERT INTO `permissions` VALUES (70, 'Post Global Notices');
+INSERT INTO `permissions` VALUES (69, 'Post Global Notices');
 
 
 CREATE TABLE `priority` (
@@ -766,7 +765,6 @@ INSERT INTO `rolepermissions` (`roleid`, `permissionid`, `granted`) VALUES (1, 6
 INSERT INTO `rolepermissions` (`roleid`, `permissionid`, `granted`) VALUES (1, 67, 'true');
 INSERT INTO `rolepermissions` (`roleid`, `permissionid`, `granted`) VALUES (1, 68, 'true');
 INSERT INTO `rolepermissions` (`roleid`, `permissionid`, `granted`) VALUES (1, 69, 'true');
-INSERT INTO `rolepermissions` (`roleid`, `permissionid`, `granted`) VALUES (1, 70, 'true');
 INSERT INTO `rolepermissions` (`roleid`, `permissionid`, `granted`) VALUES (2, 1, 'true');
 INSERT INTO `rolepermissions` (`roleid`, `permissionid`, `granted`) VALUES (2, 2, 'true');
 INSERT INTO `rolepermissions` (`roleid`, `permissionid`, `granted`) VALUES (2, 3, 'true');
@@ -1153,7 +1151,6 @@ INSERT INTO `userpermissions` VALUES (1, 66, 'true');
 INSERT INTO `userpermissions` VALUES (1, 67, 'true');
 INSERT INTO `userpermissions` VALUES (1, 68, 'true');
 INSERT INTO `userpermissions` VALUES (1, 69, 'true');
-INSERT INTO `userpermissions` VALUES (1, 70, 'true');
 
 CREATE TABLE `users` (
   `id` tinyint(4) NOT NULL auto_increment,
