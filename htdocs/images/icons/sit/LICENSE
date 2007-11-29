@@ -66,6 +66,9 @@ ajax-loader.gif                           ajaxload.info
 16x16/unlocked.png                        Crystal Project
 16x16/online.png                          Crystal Project
 16x16/offline.png                         Crystal Project
+16x16/error.png                           Crystal Project
+16x16/tip.png                             Crystal Project
+16x16/warning.png                         Crystal Project
 32x32/mimetypes/*                         Crystal Project
 32x32/blackflag.png                       SiT
 32x32/whiteflag.png                       SiT
@@ -89,6 +92,7 @@ ajax-loader.gif                           ajaxload.info
 32x32/feed-icon.png                       Mozilla Foundation Feed Icons
 32x32/tag.png                             Crystal Project (Modified)
 32x32/folder.png                          Crystal Project
+32x32/error.png                           Crystal Project
 
 
 KDE Classic
