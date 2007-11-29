@@ -63,8 +63,8 @@ elseif (authenticate($username, $password) == 1)
     //check if the session lang is different the their profiles
     if($_SESSION['lang'] != '' AND $_SESSION['lang'] != $user->var_i18n)
     {
-        $sql = "INSERT INTO notices (text, type, userid, durability) ";
-        $sql .= "VALUES('', {$CONFIG['USER_LANG_DIFFERS_TYPE']}, {$_SESSION['userid']}, 'session') ";
+        $sql = "INSERT INTO notices (text, linktext, link, type, userid, durability) ";
+        $sql .= "VALUES('\$strYourCurrentLanguage', '\$strUseThisInFuture', '{$CONFIG['application_webpath']}?mode=savesessionlang',  ".USER_LANG_DIFFERS_TYPE.", {$_SESSION['userid']}, 'session') ";
         mysql_query($sql);
         if (mysql_error()) trigger_error(mysql_error(), E_USER_ERROR);
     }
