@@ -144,7 +144,7 @@ if($action=='dismiss_notice')
 if($sit[0] != '')
 {
     $noticesql = "SELECT * FROM notices ";
-    $noticesql .= "WHERE userid={$sit[2]} ORDER BY timestamp DESC";
+    $noticesql .= "WHERE userid={$sit[2]} ORDER BY timestamp DESC LIMIT 20"; // Don't show more than 20 notices, saftey cap
     $noticeresult = mysql_query($noticesql);
     if (mysql_error()) trigger_error(mysql_error(),E_USER_WARNING);
     if(mysql_num_rows($noticeresult) > 0)
@@ -218,7 +218,7 @@ if($sit[0] != '')
     }
     if($redirpage && ($_SERVER[SCRIPT_NAME] != $redirpage))
     {
-        confirmation_page(2, $redirpage, '<h2>Error</h2><p align="center">You are being redirected to fix an error.</p>');
+        confirmation_page(2, $redirpage, '<h2>Error</h2><h5>You are being redirected to fix an error.</h5>');
         exit;
     }
 }
