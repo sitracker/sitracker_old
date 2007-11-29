@@ -46,7 +46,7 @@ foreach ($credits AS $credit)
 {
     $creditpart = explode('--',$credit);
     $creditpart[0] = preg_replace("/\[at\]/", "@", $creditpart[0]);
-    $creditpart[0] = trim(preg_replace("/(.*?)\s<(.*?)>/", "<a href = 'mailto:$2'>$1</a>", $creditpart[0]));
+    $creditpart[0] = trim(preg_replace("/(.*?)\s<(.*?)>/", "<a href = 'mailto:$2' style='color:#000;'>$1</a>", $creditpart[0]));
     $creditpart[1] = htmlentities(trim($creditpart[1]), ENT_COMPAT, $i18ncharset);
     echo "{$creditpart[0]} <span style='font-size: 70%; font-weight: normal;'>({$creditpart[1]})</span>";
     $count++;
