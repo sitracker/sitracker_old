@@ -169,7 +169,7 @@ if($sit[0] != '')
                 echo $notice->text;
                 if($notice->resolutionpage) $redirpage = $CONFIG['application_webpath'].$notice->resolutionpage;
             }
-            elseif($notice->type == $CONFIG['OUT_OF_SLA_TYPE'] OR $notice->type == $CONFIG['NEARING_SLA_TYPE'])
+            elseif($notice->type == OUT_OF_SLA_TYPE OR $notice->type == NEARING_SLA_TYPE)
             {
                 echo "<div class='error'><p class='warning'>";
                 echo "<span>(<a href='{$_SERVER[PHP_SELF]}?action=dismiss_notice&amp;noticeid={$notice->id}'>$strDismiss</a>)</span>";
