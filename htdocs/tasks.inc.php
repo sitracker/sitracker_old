@@ -465,7 +465,7 @@ if (mysql_num_rows($result) >=1 )
                             print_r($ind);
                             echo "</pre>";
                             */
-                            echo "IN:{$ind}:START:{$act['starttime']}:ENG:{$engineerPeriod}<br />";
+                            //  echo "IN:{$ind}:START:{$act['starttime']}:ENG:{$engineerPeriod}<br />";
 
                             if($ind <= $act['starttime'] AND $ind <= ($act['starttime']+$engineerPeriod))
                             {
