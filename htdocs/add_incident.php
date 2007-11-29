@@ -191,6 +191,8 @@ elseif ($action=='findcontact')
             echo "</table>\n";
         }
 
+        // NOTE: these BOTH need to be shown as you might wish to log against an alternative contract
+
         if(!empty($str_alternative))
         {
             if(!empty($str_prefered)) echo "<h3>{$strAlternative}</h3>";
