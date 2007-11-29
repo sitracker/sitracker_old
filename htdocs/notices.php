@@ -9,7 +9,7 @@
 //
 // Author: Kieran Hogg[at]users.sourceforge.net>
 
-$permission=70;
+$permission=69;
 
 require('db_connect.inc.php');
 require('functions.inc.php');
