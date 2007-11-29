@@ -52,8 +52,11 @@ elseif($action == 'post')
     $type = cleanvar($_REQUEST['type']);
     $durability = cleanvar($_REQUEST['durability']);
     $gid = md5($text);
-    
+<<<<<<< .mine
+=======
+
     //post new notice
+>>>>>>> .r1604
     $sql = "SELECT id FROM users WHERE status != 0";
     $result = mysql_query($sql);
     while($user = mysql_fetch_object($result))
@@ -70,11 +73,11 @@ elseif($action == 'post')
 elseif($action == 'delete')
 {
     $noticeid = cleanvar($_REQUEST['id']);
-    
+
     $sql = "SELECT gid FROM notices WHERE id='{$noticeid}'";
     $result = mysql_query($sql);
     $gid = mysql_fetch_object($result);
-    
+
     $sql = "DELETE FROM notices WHERE gid='{$gid->gid}'";
     mysql_query($sql);
     if (mysql_error()) trigger_error(mysql_error(),E_USER_WARNING);
@@ -89,7 +92,8 @@ else
     //get all notices
     $sql = "SELECT * FROM notices WHERE type=".NORMAL_NOTICE_TYPE." OR type=".WARNING_NOTICE_TYPE." ";
     $sql .= "GROUP BY gid";
-    $result = @mysql_query($sql);    
+    $result = mysql_query($sql);
+    if (mysql_error()) trigger_error(mysql_error(),E_USER_WARNING);
     $shade='shade1';
     if(mysql_num_rows($result) > 0)
     {
