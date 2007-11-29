@@ -1236,15 +1236,16 @@ INSERT INTO `vendors` VALUES (1,'Default');
 CREATE TABLE IF NOT EXISTS `notices` (
   `id` int(11) NOT NULL auto_increment,
   `userid` int(11) NOT NULL,
+  `gid` text,
   `type` tinyint(4) NOT NULL,
   `text` tinytext NOT NULL,
   `linktext` varchar(50) default NULL,
   `link` varchar(100) NOT NULL,
-  `referenceid` int(11) NULL,
-  `timestamp` TIMESTAMP NOT NULL,
-  `durability` enum('sticky', 'session') NOT NULL default 'sticky',
+  `referenceid` int(11) default NULL,
+  `timestamp` timestamp NOT NULL default CURRENT_TIMESTAMP on update CURRENT_TIMESTAMP,
+  `durability` enum('sticky','session') NOT NULL default 'sticky',
   PRIMARY KEY  (`id`)
-) ENGINE=MyISAM AUTO_INCREMENT=1 ;
+) ENGINE=MyISAM  DEFAULT CHARSET=latin1 AUTO_INCREMENT=1 ;
 
 ";
 
@@ -1505,15 +1506,16 @@ ALTER TABLE `software` ADD `vendorid` INT( 5 ) NOT NULL AFTER `name` ;
 CREATE TABLE IF NOT EXISTS `notices` (
   `id` int(11) NOT NULL auto_increment,
   `userid` int(11) NOT NULL,
+  `gid` text,
   `type` tinyint(4) NOT NULL,
   `text` tinytext NOT NULL,
   `linktext` varchar(50) default NULL,
   `link` varchar(100) NOT NULL,
-  `referenceid` int(11) NULL,
-  `timestamp` TIMESTAMP NOT NULL,
-  `durability` enum('sticky', 'session') NOT NULL default 'sticky',
+  `referenceid` int(11) default NULL,
+  `timestamp` timestamp NOT NULL default CURRENT_TIMESTAMP on update CURRENT_TIMESTAMP,
+  `durability` enum('sticky','session') NOT NULL default 'sticky',
   PRIMARY KEY  (`id`)
-) ENGINE=MyISAM AUTO_INCREMENT=1 ;
+) ENGINE=MyISAM  DEFAULT CHARSET=latin1 AUTO_INCREMENT=1 ;
 
 ALTER TABLE `servicelevels` ADD `timed` enum('yes','no') NOT NULL DEFAULT 'no' ;
 
