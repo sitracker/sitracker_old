@@ -1399,9 +1399,8 @@ UPDATE `interfacestyles` SET `name` = 'Light Blue' WHERE `id` =1 LIMIT 1 ;
 
 
 /*
- 3.25
+ 3.25 (Actual release was 3.30)
 */
-
 $upgrade_schema[325] = "
 ALTER TABLE `interfacestyles` ADD `iconset` VARCHAR( 255 ) NOT NULL DEFAULT 'sit' AFTER `cssurl` ;
 ALTER TABLE `sites` ADD `websiteurl` VARCHAR( 255 ) NULL AFTER `email` ;
@@ -1488,7 +1487,7 @@ UPDATE `interfacestyles` SET `iconset` = 'sit';
 ALTER TABLE `updates` CHANGE `type` `type` ENUM( 'default', 'editing', 'opening', 'email', 'reassigning', 'closing', 'reopening', 'auto', 'phonecallout', 'phonecallin', 'research', 'webupdate', 'emailout', 'emailin', 'externalinfo', 'probdef', 'solution', 'actionplan', 'slamet', 'reviewmet', 'tempassigning', 'auto_chase_email', 'auto_chase_phone', 'auto_chase_manager', 'auto_chased_phone','auto_chased_manager','auto_chase_managers_manager') CHARACTER SET latin1 COLLATE latin1_swedish_ci NULL DEFAULT 'default';
 ";
 
-$upgrade_schema[330] = "
+$upgrade_schema[331] = "
 ALTER TABLE `updates` CHANGE `type` `type` ENUM( 'default', 'editing', 'opening', 'email', 'reassigning', 'closing', 'reopening', 'auto', 'phonecallout', 'phonecallin', 'research', 'webupdate', 'emailout', 'emailin', 'externalinfo', 'probdef', 'solution', 'actionplan', 'slamet', 'reviewmet', 'tempassigning', 'auto_chase_email', 'auto_chase_phone', 'auto_chase_manager', 'auto_chased_phone','auto_chased_manager','auto_chase_managers_manager','customerclosurerequest') CHARACTER SET latin1 COLLATE latin1_swedish_ci NULL DEFAULT 'default';
 
 CREATE TABLE IF NOT EXISTS `drafts` (
@@ -1558,6 +1557,8 @@ PRIMARY KEY r( `servicelevelid` )
 
 -- KMH 27/11/07 - Type 6 is none, workaround for browse_contact.php
 ALTER TABLE `maintenance` CHANGE `licence_type` `licence_type` INT( 11 ) NULL DEFAULT '6'
+-- INL 29Nov07
+INSERT INTO `permissions` VALUES (70, 'Post Global Notices');
 ";
 
 
