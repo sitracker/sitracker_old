@@ -2645,6 +2645,8 @@ function print_contact_flags($id, $editlink=FALSE)
 /**
     * @author Ivan Lucas
     * @deprecated
+    * @note DEPRECATED as of 3.30 contact flags should no longer be used
+    * use tags instead
 */
 function check_contact_flag($id, $flag)
 {
@@ -2656,6 +2658,8 @@ function check_contact_flag($id, $flag)
 /**
     * @author Ivan Lucas
     * @deprecated
+    * @note DEPRECATED as of 3.30 contact flags should no longer be used
+    * use tags instead
 */
 function add_contact_flag($id, $flag)
 {
@@ -2665,7 +2669,13 @@ function add_contact_flag($id, $flag)
 }
 
 
-// Inserts an entry into the Journal table
+/**
+    * Inserts an entry into the Journal table and marks the user online
+    * @author Ivan Lucas, Kieran Hogg
+    * @retval TRUE success, entry logged
+    * @retval FALSE failure. entry not logged
+    * @note Produces an audit log
+*/
 function journal($loglevel, $event, $bodytext, $journaltype, $refid)
 {
     global $CONFIG, $sit;
@@ -2717,7 +2727,11 @@ function html_checkbox($name,$state)
         echo "<input type='checkbox' name='$name' value='$state' />" ;
 }
 
-
+/**
+    * Sends an email, replacing certain special keys with values based on the email
+    * template chosen
+    * @author Ivan Lucas
+*/
 function send_template_email($template, $incidentid, $info1='', $info2='')
 {
     global $CONFIG, $application_version_string, $sit, $now;
@@ -2785,6 +2799,11 @@ function send_template_email($template, $incidentid, $info1='', $info2='')
 }
 
 
+/**
+    * Generates and returns a random alphanumeric password
+    * @author Ivan Lucas
+    * @note Some characters (0 and 1) are not used to avoid user confusion
+*/
 function generate_password($length=8)
 {
    $possible = '0123456789'.'abcdefghijkmnpqrstuvwxyz'.'ABCDEFGHIJKLMNOPQRSTUVWXYZ'.'-';
@@ -2898,6 +2917,9 @@ function rec_copy ($from_path, $to_path)
 }
 
 
+/**
+    * @author Ivan Lucas
+*/
 function getattachmenticon($filename)
 {
     global $CONFIG, $iconset;
@@ -3644,9 +3666,12 @@ function strip_anchor_tags ($string)
 
 
 
-
-// PARAMS:  A date from a mysql database 'date' format
-// RETURNS: A php style date (unix).
+/**
+    * Converts a MySQL date to a UNIX Timestamp
+    * @author Ivan Lucas
+    * @param $mysqldate string. A date column from mysql
+    * @returns integer. a UNIX Timestamp
+*/
 function mysql2date($mysqldate)
 {
     // for the zero/blank case, return 0
@@ -3671,8 +3696,12 @@ function mysql2date($mysqldate)
 }
 
 
-// PARAMS:  A date from a mysql database 'timestamp' format
-// RETURNS: a php style date (unix).
+/**
+    * Converts a MySQL timestamp to a UNIX Timestamp
+    * @author Ivan Lucas
+    * @param $mysqldate string. A timestamp column from mysql
+    * @returns integer. a UNIX Timestamp
+*/
 function mysqlts2date($mysqldate)
 {
     // for the zero/blank case, return 0
@@ -3712,8 +3741,14 @@ function iso_8601_date($timestamp)
 }
 
 
-// Returns the number of working minutes (minutes in the working day)
-// between two unix timestamps
+/**
+    * Calculate the working time between two timestamps
+    * @author Tom Gerrard, Ivan Lucas
+    * @param $t1 integer. The start timestamp
+    * @param $t2 integer. The ending timetamp
+    * @returns integer. the number of working minutes (minutes in the working day)
+    * @todo Take holidays/public holidays into account?
+*/
 function calculate_working_time($t1,$t2) {
 // Note that this won't work if we have something
 // more complicated than a weekend
