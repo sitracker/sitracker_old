@@ -2551,8 +2551,9 @@ function journal($loglevel, $event, $bodytext, $journaltype, $refid)
     //update last seen
     $lastseensql = "UPDATE LOW_PRIORITY users SET lastseen=NOW() WHERE id='{$_SESSION['userid']}' LIMIT 1";
     mysql_query($lastseensql);
-    if (mysql_error()) trigger_error(mysql_error(), E_USER_ERROR);
+    if (mysql_error()) trigger_error(mysql_error(), E_USER_WARNING);
 
+    $bodytext = mysql_escape_string($bodytext);
     if ($loglevel<=$CONFIG['journal_loglevel'])
     {
         $sql  = "INSERT INTO journal ";
