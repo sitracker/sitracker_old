@@ -1555,10 +1555,8 @@ PRIMARY KEY r( `servicelevelid` )
  -- KMH 26/11/07
  ALTER TABLE `incidents` ADD `slanotice` TINYINT(1) NOT NULL DEFAULT '0' AFTER `slaemail` ;
 
--- KMH 27/11/07 - Type 6 is none, workaround for browse_contact.php
+-- KMH 27/11/07 Type 6 is none, workaround for browse_contact.php
 ALTER TABLE `maintenance` CHANGE `licence_type` `licence_type` INT( 11 ) NULL DEFAULT '6'
--- INL 29Nov07
-INSERT INTO `permissions` VALUES (70, 'Post Global Notices');
 ";
 
 
