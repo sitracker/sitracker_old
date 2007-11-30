@@ -64,7 +64,7 @@ elseif($action == 'post')
         if (mysql_error()) trigger_error(mysql_error(),E_USER_WARNING);
     }
 
-    confirmation_page(2, 'notices.php', '<h2>Notice Added</h2><p>You will be redirected, please wait...</p>');
+    confirmation_page(2, 'notices.php', "<h2>Notice Added</h2><h5 align='center'>You will be redirected, please wait...</h5>");
 
 }
 elseif($action == 'delete')
@@ -73,13 +73,14 @@ elseif($action == 'delete')
 
     $sql = "SELECT gid FROM notices WHERE id='{$noticeid}'";
     $result = mysql_query($sql);
+    if (mysql_error()) trigger_error(mysql_error(),E_USER_WARNING);
     $gid = mysql_fetch_object($result);
 
     $sql = "DELETE FROM notices WHERE gid='{$gid->gid}'";
     mysql_query($sql);
     if (mysql_error()) trigger_error(mysql_error(),E_USER_WARNING);
 
-    confirmation_page(2, 'notices.php', '<h2>Notice Deleted</h2><p>You will be redirected, please wait...</p>');
+    confirmation_page(2, 'notices.php', '<h2>Notice Deleted</h2><h5>You will be redirected, please wait...</h5>');
 }
 else
 {
