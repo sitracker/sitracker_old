@@ -187,10 +187,16 @@ function stripslashes_array($data) {
     }
 }
 
-// This function returns an integer depending on whether the
-// given user exists in the users table of the database.
-// 1 = User exists
-// 0 = User does not exist
+
+/**
+    * Authenticate a user with a username/password pair
+    * @author Ivan Lucas
+    * @param $username string. A username
+    * @param $password string. An MD5 password
+    * @return an integer to indicate whether the user should be allowed to continue
+    * @retval 0 the credentials were wrong or the user was not found. the user should not be allowed to continue
+    * @retval 1 to indicate user is authenticated and allowed to continue.
+*/
 function authenticate($username, $password)
 {
     if ($_SESSION['auth']==TRUE)
@@ -219,6 +225,7 @@ function authenticate($username, $password)
     }
 }
 
+
 /**
     * Returns a specified column from a specified table in the database given an ID primary key
     * @author Ivan Lucas
@@ -238,6 +245,7 @@ function db_read_column($column, $table, $id)
     $column=stripslashes($column);
     return $column;
 }
+
 
 /**
     * Returns TRUE or FALSE to indicate whether a given user has a given permission
@@ -262,6 +270,7 @@ function user_permission($userid,$permission)
     }
     return $accessgranted;
 }
+
 
 /**
     * @author Ivan Lucas
@@ -296,6 +305,8 @@ function software_name($softwareid)
     * @param $username string. A username
     * @param $password string. An MD5 hashed password
     * @return integer. the users ID or 0 if the user does not exist (username/password did not match)
+    * @retval 0 The user did not exist
+    * @retval >=1 The userid of the matching user
     * @note Returns 0 if the given user does not exist
 */
 function user_id($username, $password)
@@ -403,8 +414,15 @@ function user_status($id)
 }
 
 
-// Returns a string containging "Yes" or "No"
-// Returns "NoSuchUser" if the user does not exist
+/**
+    * Check whether the given user is accepting
+    * @author Ivan Lucas
+    * @param $id The userid of the user to check
+    * @returns string
+    * @retval 'Yes' User is accepting
+    * @retval 'No' User is not accepting
+    * @retval 'NoSuchUser' The given user does not exist
+*/
 function user_accepting($id)
 {
     $accepting = db_read_column('accepting', 'users', $id);
@@ -465,8 +483,13 @@ function user_incidents($id){
 }
 
 
-// gets users holiday information for a certain day given an optional type
-// and optional length returns both type and length and approved as an array
+/**
+    * gets users holiday information for a certain day given an optional type
+    * and optional length returns both type and length and approved as an array
+    * @author Ivan Lucas
+    * @param $userid The userid of the holiday to retrieve
+    * @return array
+*/
 function user_holiday($userid, $type=0, $year, $month, $day, $length=FALSE)
 {
     $startdate=mktime(0,0,0,$month,$day,$year);
@@ -512,7 +535,10 @@ function user_holiday($userid, $type=0, $year, $month, $day, $length=FALSE)
 }
 
 
-// Optional date field only counts holidays before that date
+/**
+    * Optional date field only counts holidays before that date
+    * @author Ivan Lucas
+*/
 function user_count_holidays($userid, $type, $date=0)
 {
     $sql = "SELECT id FROM holidays WHERE userid='$userid' AND type='$type' AND length='day' AND approved >= 0 AND approved < 2 ";
@@ -618,8 +644,12 @@ function contact_count_incidents($id)
 }
 
 
-// Returns a number representing the total number of currently
-// OPEN incidents submitted by a given contact.
+/**
+    * The number representing the total number of currently OPEN incidents submitted by a given contact.
+    * @author Ivan Lucas
+    * @param $id The Contact ID to check
+    * @returns integer. The number of currently OPEN incidents for the given contact
+*/
 function contact_count_open_incidents($id)
 {
     $sql = "SELECT id FROM incidents WHERE contact=$id AND status<>2";
@@ -634,10 +664,19 @@ function contact_count_open_incidents($id)
 }
 
 
-// Returns a string depending on whether the given contact has support for the given product.
-// Returns "yes" = Contact has support for product
-// Returns "no" = Contact doesn't have support for product
-// Returns "expired" = Contact did have support for product but it has now expired
+/**
+    * Returns a string depending on whether the given contact has support for the given product.
+    * @author Ivan Lucas
+    * @deprecated
+    * @param $contactid Contact ID to check
+    * @param $productid Product ID to check
+    * @return string
+    * @retval 'yes' Contact has support for product
+    * @retval 'no'  Contact doesn't have support for product
+    * @retval 'expired' Contact did have support for product but it has now expired
+    * @note Based on contactproducts and so DEPRECATED needs updating to be based on contracts
+    * @todo update contact_productsupport() to be based on contracts
+*/
 function contact_productsupport($contactid, $productid)
 {
     global $now;
@@ -657,10 +696,14 @@ function contact_productsupport($contactid, $productid)
     }
 }
 
-
-// Returns an integer representing the expiry day of the month for the given contact's product support.
-// Returns 0 if the contact or product does not exist or if
-// the contact does not have support for the given product.
+/**
+    * Returns an integer representing the expiry day of the month for the given contact's product support.
+    * @author Ivan Lucas
+    * @deprecated
+    * @returns integer day of month
+    * @retval 0 the contact or product does not exist or if the contact does not have support for the given product.
+    * @note Based on contactproducts and so DEPRECATED needs updating to be based on contracts
+*/
 function contact_productsupport_expiryday($contactid, $productid)
 {
     // check support
@@ -678,9 +721,14 @@ function contact_productsupport_expiryday($contactid, $productid)
 }
 
 
-
-// Returns an integer representing the expiry month of the year for the given contact's product support.
-// Returns 0 if the contact or product does not exist or if the contact does not have support for the given product.
+/**
+    * Returns an integer representing the expiry month of the year for the given contact's product support.
+    * @author Ivan Lucas
+    * @deprecated
+    * @returns integer month of year
+    * @retval 0 the contact or product does not exist or if the contact does not have support for the given product.
+    * @note Based on contactproducts and so DEPRECATED needs updating to be based on contracts
+*/
 function contact_productsupport_expirymonth($contactid, $productid)
 {
     // check support
@@ -698,8 +746,14 @@ function contact_productsupport_expirymonth($contactid, $productid)
 }
 
 
-// Returns an integer representing the expiry year for the given contact's product support.
-// Returns 0 if the contact or product does not exist or if the contact does not have support for the given product.
+/**
+    * Returns an integer representing the expiry year for the given contact's product support.
+    * @author Ivan Lucas
+    * @deprecated
+    * @returns integer year
+    * @retval 0 the contact or product does not exist or if the contact does not have support for the given product.
+    * @note Based on contactproducts and so DEPRECATED needs updating to be based on contracts
+*/
 function contact_productsupport_expiryyear($contactid, $productid)
 {
     // check support
@@ -717,6 +771,12 @@ function contact_productsupport_expiryyear($contactid, $productid)
 }
 
 
+/**
+    * Creates a vcard electronic business card for the given contact
+    * @author Ivan Lucas
+    * @param $id integer Contact ID
+    * @returns string vcard
+*/
 function contact_vcard($id)
 {
     $sql = "SELECT *, sites.name AS sitename, sites.address1 AS siteaddress1, sites.address2 AS siteaddress2, ";
@@ -872,9 +932,13 @@ function incident_timeofnextaction($id)
 }
 
 
-
-// Returns a string of HTML nicely formatted for the incident details page containing any additional
-// product info for the given incident.
+/**
+    * Returns a string of HTML nicely formatted for the incident details page containing any additional
+    * product info for the given incident.
+    * @author Ivan Lucas
+    * @param $incidentid The incident ID
+    * @returns string HTML
+*/
 function incident_productinfo_html($incidentid)
 {
     // extract appropriate product info
@@ -904,7 +968,11 @@ function incident_productinfo_html($incidentid)
 }
 
 
-// Create an array containing the service level history
+/**
+    * Create an array containing the service level history
+    * @author Ivan Lucas, Tom Gerrard
+    * @returns array
+*/
 function incident_sla_history($incidentid)
 {
     global $CONFIG;
@@ -972,12 +1040,10 @@ function incident_sla_history($incidentid)
 }
 
 
-
-/*============================================================*/
-/*                                                            */
-/*                    DROP DOWN FUNCTIONS                     */
-/*                                                            */
-/*============================================================*/
+/**
+    * Takes an array and makes an HTML selection box
+    * @author Ivan Lucas
+*/
 function array_drop_down($array, $name, $setting='', $enablefield='')
 {
     $html = "<select name='$name' id='$name' $enablefield>";
@@ -997,10 +1063,11 @@ function array_drop_down($array, $name, $setting='', $enablefield='')
 }
 
 
-
-
-// prints the HTML for a drop down list of contacts, with the given name
-// and with the given id  selected.
+/**
+    * prints the HTML for a drop down list of contacts, with the given name
+    * and with the given id  selected.
+    * @author Ivan Lucas
+*/
 function contact_drop_down($name, $id, $showsite=FALSE)
 {
     if ($showsite)
@@ -1191,11 +1258,12 @@ function sitetype_drop_down($name, $id)
 }
 
 
-
-// Prints the HTML for a drop down list of
-// supported products for the given contact and with the
-// given name and with the given product selected
-// FIXME this should use the contract and not the contact
+/**
+    * Returns the HTML for a drop down list of upported products for the given contact and with the
+    * given name and with the given product selected
+    * @author Ivan Lucas
+    * @todo FIXME this should use the contract and not the contact
+*/
 function supported_product_drop_down($name, $contactid, $productid)
 {
     global $CONFIG;
@@ -1708,7 +1776,12 @@ function priority_icon($id)
 }
 
 
-// Returns an array of fields from the most recent update record for a given incident id
+/**
+    * Returns an array of fields from the most recent update record for a given incident id
+    * @author Ivan Lucas
+    * @param $id An incident ID
+    * @returns array
+*/
 function incident_lastupdate($id)
 {
     // Find the most recent update
@@ -1769,8 +1842,12 @@ function incident_lastupdate($id)
 }
 
 
-// Returns a string containing the body of the first update (that is visible to customer)
-// in a format suitable for including in an email
+/**
+    * Returns a string containing the body of the first update (that is visible to customer)
+    * in a format suitable for including in an email
+    * @author Ivan Lucas
+    * @param $id An incident ID
+*/
 function incident_firstupdate($id)
 {
     $sql = "SELECT bodytext FROM updates WHERE incidentid='$id' AND customervisibility='show' ORDER BY timestamp ASC, id ASC LIMIT 1";
@@ -1984,9 +2061,14 @@ function emailtype_replace_specials($string, $incidentid, $userid=0)
 
 
 
-/*  formats the given number of seconds into a  */
-/* string containing the number of days, hours and minutes.   */
-/* If the argument is less than 60 returns 1 minute           */
+/**
+    * Formats a given number of seconds into a readable string showing days, hours and minutes.
+    * If $seconds is less than 60 the function returns 1 minute.
+    * @author Ivan Lucas
+    * @param $seconds integer number of seconds
+    * @returns string Readable date/time
+    * @todo TODO Needs i18n.
+*/
 function format_seconds($seconds)
 {
    if ($seconds <= 0) return '0 minutes';
@@ -2047,8 +2129,14 @@ function format_seconds($seconds)
 }
 
 
-// Return a string containing the time remaining, the time in minutes
-// provided as an argument should be in working-days. (eg. 9am - 5pm)
+/**
+    * Return a string containing the time remaining as working days/hours/minutes (eg. 9am - 5pm)
+    * @author Ivan Lucas
+    * @returns string. Length of working time, in readable days, hours and minutes
+    * @note The working day is calculated using the $CONFIG['end_working_day'] and
+    * $CONFIG['start_working_day'] config variables
+    * @todo TODO Needs i18n.
+*/
 function format_workday_minutes($minutes)
 {
     global $CONFIG;
@@ -2077,7 +2165,12 @@ function format_workday_minutes($minutes)
 }
 
 
-// Make a readable and friendly date, i.e. say Today, or Yesterday if it is
+/**
+    * Make a readable and friendly date, i.e. say Today, or Yesterday if it is
+    * @author Ivan Lucas
+    * @param $date a UNIX timestamp
+    * @returns string. Date in a readable friendly format
+*/
 function format_date_friendly($date)
 {
     global $CONFIG, $now;
@@ -2094,9 +2187,20 @@ function format_date_friendly($date)
     return ($datestring);
 }
 
-/*  generates a confirmation page containing    */
-/* the given message and which refreshes after the given      */
-/* number of seconds to the given location.                   */
+
+/**
+    * Generate HTML for a redirect/confirmation page
+    * @author Ivan Lucas
+    * @param $refreshtime integer. Number of seconds before redirection
+    * @param $location string. URL to redirect to
+    * @param $message string. HTML message to display on the page before redirection
+    * @returns string. Complete HTML page
+    * @note Uses HTML meta-tag redirection
+    * @todo TODO re-write this page so as to avoid inconsitant redirects throughout sit
+    * we should use a single refresh time throughout and one or two messages that
+    * can easily be i18n'd.
+    * @todo TODO needs i18n
+*/
 function confirmation_page($refreshtime, $location, $message)
 {
    global $sit, $CONFIG;
