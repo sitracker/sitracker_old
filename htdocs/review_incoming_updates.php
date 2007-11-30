@@ -265,7 +265,7 @@ $realemails = $countresults-$spamcount;
 if((mysql_num_rows($resultnew) > 0) OR ($realemails > 0))
 {
     $totalheld = $countresults + mysql_num_rows($resultnew) - $spamcount;
-    echo "<h2>".sprintf($strHeldEmailsNum, $totalheld)."</h2>";
+    echo "<h2>".sprintf($strHeldEmailsNum, $realemails)."</h2>"; // was $countresults
     echo "<p align='center'>{$strIncomingEmailText}</p>";
     ?>
     <form action='review_incoming_updates.php' name='held_emails'>
