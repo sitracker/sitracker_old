@@ -90,10 +90,10 @@ elseif ($action=='findcontact')
     $sql .= "FROM supportcontacts, contacts, maintenance, products, sites ";
     $sql .= "WHERE maintenance.product=products.id ";
     $sql .= "AND maintenance.site=sites.id ";
-    $sql .= "AND ((supportcontacts.contactid=contacts.id ";
-    $sql .= "AND supportcontacts.maintenanceid=maintenance.id) ";
-    $sql .= "OR (maintenance.allcontactssupported = 'Yes' AND maintenance.site=siteid ";
-    $sql .= "AND contacts.siteid=sites.id)) ";
+    $sql .= "AND supportcontacts.contactid=contacts.id ";
+    $sql .= "AND supportcontacts.maintenanceid=maintenance.id ";
+//     $sql .= "OR (maintenance.allcontactssupported = 'Yes' ";
+//     $sql .= "AND contacts.siteid=sites.id)) ";
 
 
     if (empty($contactid))
