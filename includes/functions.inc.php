@@ -335,7 +335,14 @@ function user_password($id)
 }
 
 
-function user_realname($id,$allowhtml=FALSE)
+/**
+    * Return a users real name
+    * @author Ivan Lucas
+    * @param $id integer. A user ID
+    * @param $allowhtml boolean. may return HTML if TRUE, only ever returns plain text if FALSE
+    * @note If $allowhtml is TRUE disabled user accounts are returned as HTML with span class 'deleted'
+*/
+function user_realname($id, $allowhtml=FALSE)
 {
     global $update_body;
     global $incidents;
@@ -1450,23 +1457,21 @@ function incidentstatus_drop_down($name, $id)
 }
 
 
-
+/**
+    * @author Ivan Lucas
+*/
 /*  prints the HTML for a drop down list of     */
 /* incident status names, with the given name and with the    */
 /* given id selected. Also prints an 'All' option with value  */
 /* 'all' for viewing all incidents.                           */
-
 function incidentstatus_drop_down_all($name, $id)
-   {
+{
+    // extract statuses
+    $sql  = "SELECT id, name FROM incidentstatus ORDER BY name ASC";
+    $result = mysql_query($sql);
 
-   // extract statuses
-   $sql  = "SELECT id, name FROM incidentstatus ORDER BY name ASC";
-   $result = mysql_query($sql);
-
-   // print HTML
-   ?>
-   <select name="<?php echo $name ?>">
-   <?php
+    echo "<select name='{$name}'>\n";
+    <?php
    if ($id == 0)
       echo "<option selected='selected' value=\"all\">All</option>\n";
    else
@@ -1479,8 +1484,7 @@ function incidentstatus_drop_down_all($name, $id)
    ?>
    </select>
    <?php
-
-   }
+}
 
 
 
@@ -3874,11 +3878,13 @@ function is_active_status($status, $states) {
 }
 
 
+/**
+    * Calculate the engineer working time between two timestamps for a given incident
+    i.e. ignore times when customer has action
+    * @author Ivan Lucas
+*/
 function calculate_incident_working_time($incidentid, $t1, $t2, $states=array(2,7,8))
 {
-    // Calculate the working time between two timestamps for a given incident
-    // i.e. ignore times when customer has action
-
     if ( $t1>$t2 ) {
         $t3=$t2;
         $t2=$t1;
@@ -4036,6 +4042,11 @@ function contact_manager_email($contactid)
 }
 
 
+/**
+    * Return the email address of the notify contact of the given contact
+    * @author Ivan Lucas
+    * @returns string. email address.
+*/
 function contact_notify_email($contactid)
 {
     $sql = "SELECT notify_contactid FROM contacts WHERE id='$contactid' LIMIT 1";
@@ -4051,10 +4062,14 @@ function contact_notify_email($contactid)
     return $email;
 }
 
-// Returns the contactid of the notify contact for the contactid
-// specified as a parameter.
-// If Level is specified and is >= 1 then the notify contact is
-// found recursively, ie. the notify contact of the notify contact etc.
+/**
+    * Returns the contact ID of the notify contact for the given contact ID
+    * @author Ivan Lucas
+    * @param $contactid integer. Contact ID
+    * @param $level integer. Number of levels to recurse upwards
+    * @note If Level is specified and is >= 1 then the notify contact is
+    * found recursively, ie. the notify contact of the notify contact etc.
+*/
 function contact_notify($contactid, $level=0)
 {
     $notify_contactid = 0;
@@ -4076,8 +4091,10 @@ function contact_notify($contactid, $level=0)
     }
 }
 
-
-
+/**
+    * HTML select box listing substitute engineers
+    * @author Ivan Lucas
+*/
 function software_backup_dropdown($name, $userid, $softwareid, $backupid)
 {
     $sql = "SELECT *, users.id AS userid FROM usersoftware, software, users WHERE usersoftware.softwareid=software.id ";
@@ -4110,6 +4127,10 @@ function software_backup_dropdown($name, $userid, $softwareid, $backupid)
 }
 
 
+/**
+    *
+    * @author Ivan Lucas
+*/
 function software_backup_userid($userid, $softwareid)
 {
     $backupid=0; // default
@@ -4144,11 +4165,18 @@ function software_backup_userid($userid, $softwareid)
 }
 
 
+/**
+    * Switches incidents temporary owners to the backup/substitute engineer depending on the setting of 'accepting'
+    * @author Ivan Lucas
+    * @param $userid integer. The userid of the user who's status has changed.
+    * @param $accepting string. 'yes' or 'no' to indicate whether the user is accepting
+    * @note if the $accepting parameter is 'no' then the function will attempt to temporarily assign
+    * all the open incidents that the user owns to the users defined substitute engineers
+    * If Substitute engineers cannot be found or they themselves are not accepting, the given users incidents
+    * are placed in the holding queue
+*/
 function incident_backup_switchover($userid, $accepting)
 {
-    // Switches incidents to temporarily by the backup/substitute engineer depending on the setting of 'accepting'
-    // yes: back to user
-    // no: assign to backup
     global $now;
 
     if (strtolower($accepting)=='no')
@@ -4301,9 +4329,17 @@ function incident_backup_switchover($userid, $accepting)
 }
 
 
-// Suggest the userid of a suitable person to handle the given incident
-// Users are chosen randomly in a weighted lottery depending on their
-// avilability and queue status
+/**
+    * Suggest the userid of a suitable person to handle the given incident
+    * @author Ivan Lucas
+    * @param $incidentid integer. An incident ID to suggest a new owner for
+    * @param $exceptuserid integer. This user ID will not be suggested (e.g. the existing owner)
+    * @returns A user ID of the suggested new owner
+    * @retval FALSE failure.
+    * @retval integer The user ID of the suggested new owner
+    * @note Users are chosen randomly in a weighted lottery depending on their
+    * avilability and queue status
+*/
 function suggest_reassign_userid($incidentid, $exceptuserid=0)
 {
     global $now;
@@ -4851,7 +4887,11 @@ function show_dashboard_component($row, $dashboardid)
     }
 }
 
-// Recursive function to list links as a tree
+
+/**
+    * Recursive function to list links as a tree
+    * @author Ivan Lucas
+*/
 function show_links($origtab, $colref, $level=0, $parentlinktype='', $direction='lr')
 {
     // Maximum recursion
@@ -4941,9 +4981,14 @@ function show_create_links($table, $ref)
 }
 
 
-// Function to create a PNG chart
-// Returns an image resource
-// Currently only has support for pie charts (type='pie')
+/**
+    * Create a PNG chart
+    * @author Ivan Lucas
+    * @param $type string. The type of chart to draw. (e.g. 'pie').
+    * @returns a PNG image resource
+    * @note Currently only has proper support for pie charts (type='pie')
+    * @todo TODO Support for bar and line graphs
+*/
 function draw_chart_image($type, $width, $height, $data, $legends, $title='', $unit='')
 {
     global $CONFIG;
@@ -5133,6 +5178,9 @@ function draw_chart_image($type, $width, $height, $data, $legends, $title='', $u
 }
 
 
+/**
+    * @author Ivan Lucas
+*/
 function get_tag_id($tag)
 {
     $sql = "SELECT tagid FROM tags WHERE name = LOWER('$tag')";
@@ -5153,6 +5201,10 @@ function get_tag_id($tag)
     }
 }
 
+
+/**
+    * @author Ivan Lucas
+*/
 function add_tag($id, $type, $tag)
 {
     /*
@@ -5177,6 +5229,9 @@ function add_tag($id, $type, $tag)
 }
 
 
+/**
+    * @author Ivan Lucas
+*/
 function remove_tag($id, $type, $tag)
 {
    if ($tag!='')
@@ -5201,6 +5256,10 @@ function remove_tag($id, $type, $tag)
 }
 
 
+/**
+    * Remove existing tags and replace with a new set
+    * @author Ivan Lucas
+*/
 function replace_tags($type, $id, $tagstring)
 {
     // first remove old tags
@@ -5218,8 +5277,10 @@ function replace_tags($type, $id, $tagstring)
     }
 }
 
-
-// Purge a single tag (if needed)
+/**
+    * Purge a single tag (if needed)
+    * @author Ivan Lucas
+*/
 function purge_tag($tagid)
 {
     // Check tag usage count and remove disused tag completely
@@ -5234,7 +5295,10 @@ function purge_tag($tagid)
 }
 
 
-// Purge all tags (if needed)
+/**
+    * Purge all tags (if needed)
+    * @author Ivan Lucas
+*/
 function purge_tags()
 {
     $sql = "SELECT tagid FROM tags";
@@ -5249,7 +5313,11 @@ function purge_tags()
     }
 }
 
-
+/**
+    * Produce a list of tags
+    * @author Ivan Lucas
+    * @param $html boolean. Return HTML when TRUE
+*/
 function list_tags($recordid, $type, $html=TRUE)
 {
     global $CONFIG;
@@ -5282,6 +5350,11 @@ function list_tags($recordid, $type, $html=TRUE)
 }
 
 
+/**
+    * Return HTML to display a list of tag icons
+    * @author Ivan Lucas
+    * @returns string. HTML
+*/
 function list_tag_icons($recordid, $type)
 {
     global $CONFIG;
@@ -5311,7 +5384,11 @@ function list_tag_icons($recordid, $type)
     return $str;
 }
 
-
+/**
+    * Generate a tag cloud
+    * @author Ivan Lucas, Tom Gerrard
+    * @returns string. HTML
+*/
 function show_tag_cloud($orderby="name", $showcount=FALSE)
 {
     global $CONFIG;
@@ -5366,6 +5443,11 @@ function show_tag_cloud($orderby="name", $showcount=FALSE)
     return $html;
 }
 
+
+/**
+    * @author Paul Heaney
+    * @todo TODO Return a value rather than echo directly
+*/
 function display_drafts($type, $result)
 {
     global $iconset;
@@ -5400,6 +5482,7 @@ function display_drafts($type, $result)
     }
 }
 
+
 function ansort($x,$var,$cmp='strcasecmp')
 {
     // Numeric descending sort of multi array
@@ -5408,6 +5491,7 @@ function ansort($x,$var,$cmp='strcasecmp')
     else uasort($x, create_function('$a,$b', 'return '.$cmp.'( $a['.$var.'],$b['.$var.']);'));
     return $x;
 }
+
 
 function array_remove_duplicate($array, $field)
 {
@@ -5458,6 +5542,9 @@ function implode_assoc($glue1, $glue2, $array)
     return implode($glue2, $array2);
 }
 
+/**
+    * @author Kieran Hogg
+*/
 function quick_update($incidentid, $text)
 {
     $incidentid = cleanvar($incidentid);
@@ -5471,7 +5558,9 @@ function quick_update($incidentid, $text)
 
 }
 
-
+/**
+    * @author Kieran Hogg
+*/
 function time_dropdown($name, $selected='')
 {
     $html = "<select name='$name'>";
@@ -5491,6 +5580,10 @@ function time_dropdown($name, $selected='')
     return $html;
 }
 
+/**
+    * @author Kieran Hogg
+    * @todo
+*/
 function fuzzy_time($seconds)
 {
     //TODO
@@ -5510,6 +5603,9 @@ function fuzzy_time($seconds)
     return $time;
 }
 
+/**
+    * @author Kieran Hogg
+*/
 function exact_seconds($seconds)
 {
     $days = floor($seconds / (24 * 60 * 60));
@@ -5528,6 +5624,12 @@ function exact_seconds($seconds)
     return $string;
 }
 
+/**
+    * An icon showing a users online status
+    * @author Kieran Hogg
+    * @param $user The user ID of the user to check
+    * @returns string. HTML of a 16x16 status icon.
+*/
 function user_online($user)
 {
     global $iconset, $now;
@@ -5558,6 +5660,9 @@ if (is_array($CONFIG['plugins']))
     }
 }
 
+/**
+    * @author Ivan Lucas
+*/
 function plugin_register($context, $action)
 {
     global $PLUGINACTIONS;
@@ -5565,6 +5670,9 @@ function plugin_register($context, $action)
 }
 
 
+/**
+    * @author Ivan Lucas
+*/
 function plugin_do($context, $optparams=FALSE)
 {
     global $PLUGINACTIONS;
