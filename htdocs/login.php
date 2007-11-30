@@ -99,15 +99,14 @@ elseif (authenticate($username, $password) == 1)
     }
     $_SESSION['permissions'] = array_unique($userpermissions);
 
-    if(user_status($_SESSION['userid']) != 1)
+    if (user_status($_SESSION['userid']) != 1)
     {
         $status = $statusresult->name;
-        $sql = "INSERT into notices(userid, type, text, timestamp) ";
+        $sql = "INSERT INTO notices (userid, type, text, timestamp) ";
         $sql .= "VALUES({$_SESSION['userid']}, {$CONFIG['USER_STILL_AWAY_TYPE']}, ";
-        $sql .= "'{$strUserStillAway}', NOW())";
+        $sql .= "'".mysql_escape_string($strUserStillAway)."', NOW())";
         mysql_query($sql);
         if (mysql_error()) trigger_error(mysql_error(), E_USER_ERROR);
-
     }
 
     // redirect
