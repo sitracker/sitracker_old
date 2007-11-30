@@ -271,10 +271,10 @@ else
                 $javascript .= "bindings:{ x:\"x\", y:\"y\", size:\"size\" },";
                 $javascript .= "label:\"{$skill['name']}\"";
                 $javascript .= "});\n\n\n\n";
-    
-    
+
+
     //echo $javascript."<br />";
-    
+
                 $js_coordCounter++;
             }
         }
@@ -330,7 +330,7 @@ else
 
         echo "</table></p>";
 
-        
+
         echo "<script src=\"../scripts/dojo/dojo.js\"></script>";
         echo "<script>";
             echo "dojo.require('dojo.collections.Store');";
@@ -341,11 +341,11 @@ else
             echo "var legend;";
 
             echo "dojo.addOnLoad(function(){";
-                echo $javascript; 
+                echo $javascript;
 
                 echo "var chart = new dojo.charting.Chart(null, \"{$strIncidentsBySkill}\", \"A chart\");";
                 echo "chart.addPlotArea({ x:50,y:50, plotArea:pa });";
-                
+
                 echo "legend = pa.getLegendInfo();";
 
                 echo "chart.node = dojo.byId(\"incidentsBySkill\");";
@@ -400,7 +400,9 @@ else
 
 }
 
-
+/**
+    * @author Paul Heaney
+*/
 function date_to_str($date)
 {
     $s = explode(" ",$date);

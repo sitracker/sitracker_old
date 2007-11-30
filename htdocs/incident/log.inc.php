@@ -21,6 +21,10 @@ if (realpath(__FILE__) == realpath($_SERVER['SCRIPT_FILENAME']))
 $offset = cleanvar($_REQUEST['offset']);
 if (empty($offset)) $offset=0;
 
+
+/**
+    * @author Ivan Lucas
+*/
 function count_updates($incidentid)
 {
     $count_updates = 0;
@@ -34,6 +38,10 @@ function count_updates($incidentid)
 
 $count_updates = count_updates($incidentid);
 
+
+/**
+    * @author Paul Heaney
+*/
 function log_nav_bar()
 {
     global $incidentid;

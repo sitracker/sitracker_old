@@ -33,6 +33,11 @@ else $increment = cleanvar($_REQUEST['increment']);
 if (empty($_REQUEST['states'])) $states = array('0,2,6,7,8');
 else $states = explode(',',$_REQUEST['states']);
 
+
+/**
+    * @author Ivan Lucas
+    * @todo TODO move to lib
+*/
 function count_incident_stats($incidentid)
 {
     $sql = "SELECT count(DISTINCT currentowner),count(id) FROM updates WHERE incidentid='$incidentid' AND userid!=0 GROUP BY userid";
@@ -43,12 +48,14 @@ function count_incident_stats($incidentid)
 }
 
 
-
+/**
+    * Returns number of closed incidents that were opened within the period giving
+    * the average duration in minutes and the average worked time in minutes
+    * @author Ivan Lucas
+    * @todo TODO move to lib
+*/
 function average_incident_duration($start,$end,$states)
 {
-    // Returns number of closed incidents that were opened within the period giving
-    // the average duration in minutes
-    // and the average worked time in minutes
     $sql = "SELECT opened, closed, (closed - opened) AS duration_closed, incidents.id AS incidentid ";
     $sql .= "FROM incidents ";
     $sql .= "WHERE status='2' ";
