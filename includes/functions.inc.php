@@ -141,11 +141,11 @@ $hmenu[1031] = array (10=> array ( 'perm'=> 0, 'name'=> "Option1", 'url'=>""),
 set_magic_quotes_runtime(FALSE);
 
 if (get_magic_quotes_gpc()) {
-    /*
-    All these global variables are slash-encoded by default,
-    because    magic_quotes_gpc is set by default!
-    (And magic_quotes_gpc affects more than just $_GET, $_POST, and $_COOKIE)
-    */
+
+//     All these global variables are slash-encoded by default,
+//     because    magic_quotes_gpc is set by default!
+//     (And magic_quotes_gpc affects more than just $_GET, $_POST, and $_COOKIE)
+//
     $_SERVER = stripslashes_array($_SERVER);
     $_GET = stripslashes_array($_GET);
     $_POST = stripslashes_array($_POST);
@@ -163,14 +163,19 @@ if (get_magic_quotes_gpc()) {
         $_SESSION = stripslashes_array($_SESSION, '');
         $HTTP_SESSION_VARS = stripslashes_array($HTTP_SESSION_VARS, '');
     }
-    /*
-    The $GLOBALS array is also slash-encoded, but when all the above are
-    changed, $GLOBALS is updated to reflect those changes.  (Therefore
-    $GLOBALS should never be modified directly).  $GLOBALS also contains
-    infinite recursion, so it's dangerous...
-    */
+
+//     The $GLOBALS array is also slash-encoded, but when all the above are
+//     changed, $GLOBALS is updated to reflect those changes.  (Therefore
+//     $GLOBALS should never be modified directly).  $GLOBALS also contains
+//     infinite recursion, so it's dangerous...
+
 }
 
+/**
+    * Strip slashes from an array
+    * @param $data an array
+    * @return An array with slashes stripped
+*/
 function stripslashes_array($data) {
     if (is_array($data)){
         foreach ($data as $key => $value){
@@ -182,44 +187,48 @@ function stripslashes_array($data) {
     }
 }
 
-if (!function_exists('authenticate'))
+// This function returns an integer depending on whether the
+// given user exists in the users table of the database.
+// 1 = User exists
+// 0 = User does not exist
+function authenticate($username, $password)
 {
-
-    // This function returns an integer depending on whether the
-    // given user exists in the users table of the database.
-    // 1 = User exists
-    // 0 = User does not exist
-    function authenticate($username, $password)
+    if ($_SESSION['auth']==TRUE)
     {
-        if ($_SESSION['auth']==TRUE)
-        {
-            // Already logged in
-            return 1;
-        }
+        // Already logged in
+        return 1;
+    }
 
-        // extract user
-        $sql  = "SELECT id FROM `users` ";
-        $sql .= "WHERE username='$username' AND password='$password' AND status!=0 ";
-        // a status of 0 means the user account is disabled
-        $result = mysql_query($sql);
-        if (mysql_error()) trigger_error(mysql_error(),E_USER_WARNING);
+    // extract user
+    $sql  = "SELECT id FROM `users` ";
+    $sql .= "WHERE username='$username' AND password='$password' AND status!=0 ";
+    // a status of 0 means the user account is disabled
+    $result = mysql_query($sql);
+    if (mysql_error()) trigger_error(mysql_error(),E_USER_WARNING);
 
-        // return appropriate value
-        if (mysql_num_rows($result) == 0)
-        {
-            mysql_free_result($result);
-            return 0;
-        }
-        else
-        {
-            journal(4,'User Authenticated',"$username authenticated from ".getenv('REMOTE_ADDR'),1,0);
-            return 1;
-        }
+    // return appropriate value
+    if (mysql_num_rows($result) == 0)
+    {
+        mysql_free_result($result);
+        return 0;
+    }
+    else
+    {
+        journal(4,'User Authenticated',"$username authenticated from ".getenv('REMOTE_ADDR'),1,0);
+        return 1;
     }
 }
 
-// Returns a specified column from a specified table in the database
-// given an ID primary key
+/**
+    * Returns a specified column from a specified table in the database given an ID primary key
+    * @author Ivan Lucas
+    * @param $column a string
+    * @param $table a string
+    * @param $id the primary key / id field
+    * @return A column from the database
+    * @note it's not always efficient to read a single column at a time, but when you only need
+    *  one column, this is handy
+*/
 function db_read_column($column, $table, $id)
 {
     $sql = "SELECT `$column` FROM `$table` WHERE id='$id' LIMIT 1";
@@ -230,7 +239,9 @@ function db_read_column($column, $table, $id)
     return $column;
 }
 
-
+/**
+    * @author Ivan Lucas
+*/
 function user_permission($userid,$permission)
 {
     // Default is no access
@@ -248,6 +259,9 @@ function user_permission($userid,$permission)
     return $accessgranted;
 }
 
+/**
+    * @author Ivan Lucas
+*/
 function permission_name($permissionid)
 {
     return db_read_column('name', 'permissions', $permissionid);
