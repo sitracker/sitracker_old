@@ -151,6 +151,7 @@ if($sit[0] != '')
     {
         while($notice = mysql_fetch_object($noticeresult))
         {
+            $notice->text = stripslashes($notice->text);
             $notice->text = bbcode($notice->text);
             //check for the notice types
             if($notice->type == SIT_UPGRADED_NOTICE)
