@@ -31,6 +31,7 @@ $sql = "DELETE FROM tempincoming WHERE id='$tempid'";
 mysql_query($sql);
 if (mysql_error()) trigger_error("MySQL Query Error ".mysql_error(), E_USER_ERROR);
 
+// TODO move this deldir function to lib
 function deldir($location)
 {
     if (substr($location,-1) <> "/")

@@ -18,6 +18,9 @@ if (realpath(__FILE__) == realpath($_SERVER['SCRIPT_FILENAME']))
 
 $title = $strUpdate;
 
+/**
+    * Update page
+*/
 function display_update_page($draftid=-1)
 {
     global $id;

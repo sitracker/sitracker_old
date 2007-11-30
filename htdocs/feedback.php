@@ -10,6 +10,8 @@
 
 // Author: Ivan Lucas <ivanlucas[at]users.sourceforge.net>, June 2004
 
+// FIXME i18n
+
 require('db_connect.inc.php');
 require('functions.inc.php');
 
@@ -24,6 +26,9 @@ $contactid=mysql_escape_string($hashvars['1']);
 $incidentid=urldecode(mysql_escape_string($hashvars['2']));
 unset($errorfields);
 
+/**
+    * @author Ivan Lucas
+*/
 function feedback_html_rating($name, $required, $options, $answer='')
 {
     global $CONFIG;
@@ -71,6 +76,9 @@ function feedback_html_rating($name, $required, $options, $answer='')
 }
 
 
+/**
+    * @author Ivan Lucas
+*/
 function feedback_html_options($name, $required, $options, $answer='')
 {
     $option_list=explode('{@}', $options);
@@ -101,7 +109,9 @@ function feedback_html_options($name, $required, $options, $answer='')
 }
 
 
-
+/**
+    * @author Ivan Lucas
+*/
 function html_multioptions($name, $required, $options)
 {
     $option_list=explode('{@}', $options);
@@ -128,6 +138,9 @@ function html_multioptions($name, $required, $options)
 }
 
 
+/**
+    * @author Ivan Lucas
+*/
 function feedback_html_text($name, $required, $options, $answer='')
 {
     $option_list=explode('{@}', $options);
@@ -141,6 +154,9 @@ function feedback_html_text($name, $required, $options, $answer='')
 }
 
 
+/**
+    * @author Ivan Lucas
+*/
 function feedback_html_question($type, $name, $required, $options, $answer='')
 {
     $options=nl2br(trim($options));
@@ -263,17 +279,17 @@ switch ($_REQUEST['action'])
             echo "<?";
             echo "xml version=\"1.0\" encoding=\"\"?";
             echo ">";
+    // FIXME check this code
             ?>
-
 <!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Strict//EN"
  "http://www.w3.org/TR/xhtml1/DTD/xhtml1-strict.dtd">
 
 <html xmlns='http://www.w3.org/1999/xhtml'>
 <head>
 <meta http-equiv="refresh" content="0;URL=feedback.php?ax=<?php echo "{$hashcode}&error={$errortext}&mode={$mode}"; ?>" />
-<title>GPAS ePayments</title>
+<title>Please wait</title>
 <style>
-body { font:10pt Arial, Helvetia, sans-serif; }
+body { font:10pt Arial, Helvetica, sans-serif; }
 </style>
 </head>
 <body>
@@ -282,9 +298,7 @@ body { font:10pt Arial, Helvetia, sans-serif; }
 </body>
 </head>
 <?php
-
-
-            header("Location: feedback.php?ax={$hashcode}&error={$errortext}");
+//             header("Location: feedback.php?ax={$hashcode}&error={$errortext}");
             exit;
         }
 

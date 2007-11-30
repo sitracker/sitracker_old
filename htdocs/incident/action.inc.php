@@ -17,6 +17,10 @@ if (realpath(__FILE__) == realpath($_SERVER['SCRIPT_FILENAME']))
     exit;
 }
 
+/**
+    * @author Ivan Lucas
+    * @returns string. HTML tabs, a div 'tabcontainer' containing an unnumbered list
+*/
 function draw_tabs_submit($tabsarray, $selected='')
 {
     if ($selected=='') $selected=$tabsarray[0];

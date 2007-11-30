@@ -25,7 +25,9 @@ require('auth.inc.php');
 
 include('htmlheader.inc.php');
 
-
+/**
+    * @author Ivan Lucas
+*/
 function draw_calendar($nmonth, $nyear)
 {
 

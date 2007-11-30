@@ -56,6 +56,9 @@ if($searchmode != 'related')
 // echo "<tr><td><a href='search_expired.php'>Search Expired Contracts</a></td></tr>";
 // echo "</table>\n";
 
+/**
+    * @author Ivan Lucas
+*/
 function search_highlight($x,$var)
 {
     //$x is the string, $var is the text to be highlighted
@@ -90,6 +93,10 @@ function search_highlight($x,$var)
     return $x;
 }
 
+
+/**
+    * @author Ivan Lucas
+*/
 function search_fix_quoted(&$sterms)
 {
     $numterms = count($sterms);
@@ -117,6 +124,9 @@ function search_fix_quoted(&$sterms)
 }
 
 
+/**
+    * @author Ivan Lucas
+*/
 function search_build_query($column, $sterms)
 {
     $numterms = count($sterms);
@@ -149,6 +159,10 @@ function search_build_query($column, $sterms)
     return $sql;
 }
 
+
+/**
+    * @author Ivan Lucas
+*/
 function search_build_results(&$srch_results,$entry)
 {
     global $key;

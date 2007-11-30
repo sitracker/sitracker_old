@@ -32,7 +32,9 @@ define("STATUS_CUSTOMER",8);
     Loop around all chased_phone  (NOTE: not doing chase_phone as this wouldn't be fair)
         if over 2 days set to chase_manager
 */
-
+/**
+    * @author Paul Heaney
+*/
 function not_auto_type($type)
 {
     if($type != 'auto_chase_email' AND $type != 'auto_chase_phone' AND $type != 'auto_chase_manager')

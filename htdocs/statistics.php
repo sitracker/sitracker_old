@@ -19,6 +19,10 @@ require('auth.inc.php');
 
 $mode = cleanvar($_REQUEST['mode']);
 
+
+/**
+    * @author Paul Heaney
+*/
 function get_sql_statement($startdate,$enddate,$statementnumber,$count=TRUE)
 {
     if($count) $count = "count(*)";
@@ -36,7 +40,10 @@ function get_sql_statement($startdate,$enddate,$statementnumber,$count=TRUE)
 }
 
 
-// Show Open, Closed, Updated today, this week, this month etc.
+/**
+    * Show Open, Closed, Updated today, this week, this month etc.
+    * @author Paul Heaney
+*/
 function count_incidents($startdate, $enddate)
 {
     // Counts the number of incidents opened between a start date and an end date
@@ -102,6 +109,11 @@ function count_incidents($startdate, $enddate)
     return $count;
 }
 
+
+/**
+    * @author Paul Heaney
+    * @returns string. HTML
+*/
 function stats_period_row($desc, $start, $end)
 {
     global $shade;
@@ -152,6 +164,10 @@ function stats_period_row($desc, $start, $end)
     return $html;
 }
 
+
+/**
+    * @author Paul Heaney
+*/
 function give_overview()
 {
     global $todayrecent, $mode, $CONFIG;

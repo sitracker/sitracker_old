@@ -35,7 +35,7 @@ if (empty($mode))
     if (mysql_num_rows($result) < 1) trigger_error("No such user ".strip_tags($userid),E_USER_ERROR);
     $user = mysql_fetch_object($result);
 
-    // This form should use one SQL query really, not call all these functions to lookup each field
+    // FIXME This form should use one SQL query really, not call all these functions to lookup each field
     // Need to change this sometime.
 
     echo "<h2><img src='{$CONFIG['application_webpath']}images/icons/{$iconset}/32x32/user.png' width='32' height='32' alt='' /> ";

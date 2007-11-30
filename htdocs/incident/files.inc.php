@@ -112,7 +112,10 @@ echo "</div>";
 // try to figure out what delimeter is being used (for windows or unix)...
 $delim = (strstr($incident_attachment_fspath,"/")) ? "/" : "\\";
 
-// Convert a binary string into something viewable in a web browser
+
+/**
+    * Convert a binary string into something viewable in a web browser
+*/
 function encode_binary($string)
 {
    $chars = array();
@@ -133,6 +136,10 @@ function encode_binary($string)
    return implode("",$ent);
 }
 
+
+/**
+    * @author Ivan Lucas
+*/
 function draw_file_row($file, $delim, $incidentid, $incident_attachment_fspath)
 {
     global $CONFIG;

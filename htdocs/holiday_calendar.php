@@ -39,6 +39,9 @@ elseif ($user=='all') $user='';
 if (empty($type)) $type=1;
 if (user_permission($sit[2],50)) $approver=TRUE; else $approver=FALSE;
 
+/**
+    * @author Ivan Lucas
+*/
 function draw_calendar($nmonth, $nyear)
 {
     global $type, $user, $selectedday, $selectedmonth, $selectedyear;
@@ -262,6 +265,9 @@ function draw_calendar($nmonth, $nyear)
 }
 
 
+/**
+    * @author Ivan Lucas
+*/
 function appointment_popup($mode, $year, $month, $day, $time, $group, $user)
 {
     global $sit, $approver;
@@ -281,8 +287,11 @@ function appointment_popup($mode, $year, $month, $day, $time, $group, $user)
 }
 
 
-// Holiday planner chart
-// modes: month, week, day
+/**
+    * Holiday planner chart
+    * @author Ivan Lucas
+    * @param $mode string. modes: 'month', 'week', 'day'
+*/
 function draw_chart($mode, $year, $month='', $day='', $groupid='', $userid='')
 {
     global $plugin_calendar, $sit;

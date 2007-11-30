@@ -20,6 +20,9 @@ require('functions.inc.php');
 require('auth.inc.php');
 
 
+/**
+    * @author Tom Gerrard
+*/
 function generate_row($update)
 {
     global $CONFIG, $sit;
