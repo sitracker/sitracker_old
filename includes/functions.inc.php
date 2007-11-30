@@ -222,9 +222,9 @@ function authenticate($username, $password)
 /**
     * Returns a specified column from a specified table in the database given an ID primary key
     * @author Ivan Lucas
-    * @param $column a string
-    * @param $table a string
-    * @param $id the primary key / id field
+    * @param $column a database column as a string
+    * @param $table a database table as a string
+    * @param $id the primary key / id column
     * @return A column from the database
     * @note it's not always efficient to read a single column at a time, but when you only need
     *  one column, this is handy
@@ -240,7 +240,11 @@ function db_read_column($column, $table, $id)
 }
 
 /**
+    * Returns TRUE or FALSE to indicate whether a given user has a given permission
     * @author Ivan Lucas
+    * @param $userid integer. The userid to check
+    * @param $permission integer. The permission id to check
+    * @return boolean. TRUE if the user has the permission, otherwise FALSE
 */
 function user_permission($userid,$permission)
 {
@@ -286,8 +290,14 @@ function software_name($softwareid)
 }
 
 
-// This function returns an integer representing the id of
-// given user. Returns 0 of the user does not exist
+/**
+    * Returns an integer representing the id of the user identified by his/her username and password
+    * @author Ivan Lucas
+    * @param $username string. A username
+    * @param $password string. An MD5 hashed password
+    * @return integer. the users ID or 0 if the user does not exist (username/password did not match)
+    * @note Returns 0 if the given user does not exist
+*/
 function user_id($username, $password)
 {
     // extract user
@@ -2503,8 +2513,11 @@ function countdaycurrentincidents($day, $month, $year)
 }
 
 
-// Takes a contact ID and prints HTML listing all the flags
-// LEGACY / DEPRECATED
+/**
+    * Takes a contact ID and prints HTML listing all the flags
+    * @author Ivan Lucas
+    * @deprecated
+*/
 function print_contact_flags($id, $editlink=FALSE)
 {
     $sql = "SELECT contactflags.flag, flags.name FROM contactflags, flags ";
@@ -2525,7 +2538,10 @@ function print_contact_flags($id, $editlink=FALSE)
     return TRUE;
 }
 
-// LEGACY / DEPRECATED
+/**
+    * @author Ivan Lucas
+    * @deprecated
+*/
 function check_contact_flag($id, $flag)
 {
     $sql = "SELECT flag FROM contactflags WHERE contactid='$id' AND flag='$flag'";
@@ -2533,7 +2549,10 @@ function check_contact_flag($id, $flag)
     if (mysql_error()) trigger_error(mysql_error(),E_USER_WARNING);
 }
 
-// LEGACY / DEPRECATED
+/**
+    * @author Ivan Lucas
+    * @deprecated
+*/
 function add_contact_flag($id, $flag)
 {
     // first check that contact does not already have this flag
@@ -3848,8 +3867,12 @@ function remove_slashes($string)
 }
 
 
-// Uses flag MGR to determine manager
-// DEPRECATED as of v3.30
+/**
+    * @author Ivan Lucas
+    * @deprecated
+    * @note Uses flag MGR to determine manager
+    * @note DEPRECATED as of v3.30
+*/
 function contact_manager_email($contactid)
 {
     $sql = "SELECT siteid FROM contacts WHERE id='$contactid' LIMIT 1";
