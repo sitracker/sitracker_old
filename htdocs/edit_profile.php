@@ -133,9 +133,7 @@ if (empty($mode))
     echo "</select></label>";
     echo "</td></tr>\n";
 
-    echo "<tr><th>{$strInterfaceStyle}:</th><td>";
-    interfacestyle_drop_down('style', $user->var_style);
-    echo "</td></tr>\n";
+    echo "<tr><th>{$strInterfaceStyle}:</th><td>".interfacestyle_drop_down('style', $user->var_style)."</td></tr>\n";
     echo "<tr><th>{$strIncidentRefresh}:</th>";
     echo "<td><input maxlength='10' name='incidentrefresh' size='3' type='text' value=\"{$user->var_incident_refresh}\" /> {$strSeconds}</td></tr>\n";
 

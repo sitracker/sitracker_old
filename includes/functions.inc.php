@@ -507,7 +507,7 @@ function user_incidents($id){
     * @param $month integer. Month. eg. 11 = November
     * @param $day integer. Day
     * @param $length string. 'am', 'pm', 'day' or FALSE to list all
-    * @return array
+    * @returns array
 */
 function user_holiday($userid, $type=0, $year, $month, $day, $length=FALSE)
 {
@@ -555,8 +555,12 @@ function user_holiday($userid, $type=0, $year, $month, $day, $length=FALSE)
 
 
 /**
-    * Optional date field only counts holidays before that date
+    * Count a users holidays of specified type
     * @author Ivan Lucas
+    * @param $userid integer. User ID
+    * @param $type integer. Holiday type
+    * @param $date integer. (optional) UNIX timestamp. Only counts holidays before this date
+    * @returns integer. Number of days holiday
 */
 function user_count_holidays($userid, $type, $date=0)
 {
@@ -1401,24 +1405,28 @@ function group_drop_down($name, $selected)
 }
 
 
+/**
+    * Return HTML for a box to select interface style/theme
+    * @author Ivan Lucas
+    * @param $name string. Name attribute
+    * @param $id integer. Interface style ID
+    * @returns string.  HTML
+*/
 function interfacestyle_drop_down($name, $id)
 {
-   // extract statuses
-   $sql  = "SELECT id, name FROM interfacestyles ORDER BY name ASC";
-   $result = mysql_query($sql);
-
-   // print HTML
-   ?>
-   <select name="<?php echo $name ?>">
-   <?php
-   if ($id == 0)
-      echo "<option selected='selected' value='0'></option>\n";
-   while ($styles = mysql_fetch_array($result))
-   {
-      ?><option <?php if ($styles["id"] == $id) { ?>selected='selected' <?php } ?>value='<?php echo $styles["id"] ?>'><?php echo $styles["name"] ?></option><?php
-      echo "\n";
-   }
-   echo "</select>\n";
+    // extract statuses
+    $sql  = "SELECT id, name FROM interfacestyles ORDER BY name ASC";
+    $result = mysql_query($sql);
+    $html = "<select name=\"{$name}\">";
+    if ($id == 0) $html .= "<option selected='selected' value='0'></option>\n";
+    while ($styles = mysql_fetch_array($result))
+    {
+        $html .= "<option ";
+        if ($styles["id"] == $id) $html .= "selected='selected'";
+        $html .= " value=\"{$styles["id"]}\">{$styles["name"]}</option>\n";
+    }
+    $html .= "</select>\n";
+    return $html;
 }
 
 
