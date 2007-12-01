@@ -1471,19 +1471,21 @@ function incidentstatus_drop_down_all($name, $id)
     $result = mysql_query($sql);
 
     echo "<select name='{$name}'>\n";
-    <?php
-   if ($id == 0)
-      echo "<option selected='selected' value=\"all\">All</option>\n";
-   else
-      echo "<option value=\"all\">{$GLOBALS['strAll']}</option>\n";
-   while ($statuses = mysql_fetch_array($result))
-      {
-      ?><option <?php if ($statuses["id"] == $id) { ?>selected='selected' <?php } ?>value='<?php echo $statuses["id"] ?>'><?php echo $statuses["name"] ?></option><?php
-      echo "\n";
-      }
-   ?>
-   </select>
-   <?php
+    if ($id == 0)
+        echo "<option selected='selected' value=\"all\">All</option>\n";
+    else
+        echo "<option value=\"all\">{$GLOBALS['strAll']}</option>\n";
+        
+    while ($statuses = mysql_fetch_array($result))
+    {
+        echo "<option";
+        if ($statuses["id"] == $id)
+            echo "selected='selected'";
+        echo "value='{$statuses["id"]}'>{$statuses["name"]}";
+        echo "</option>";
+        echo "\n";
+   }
+    echo "</select>";
 }
 
 
