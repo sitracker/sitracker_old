@@ -11,6 +11,8 @@
 
 //// This Page Is Valid XHTML 1.0 Transitional!  (7 Oct 2006)
 
+// FIXME i18n whole page
+
 $permission=64; // Manage escalation paths
 require('db_connect.inc.php');
 require('functions.inc.php');
@@ -43,17 +45,16 @@ if(empty($_REQUEST['mode']))
     {
         echo "<form action='".$_SERVER['PHP_SELF']."' method='post' onsubmit='return confirm_submit()'>";
         echo "<table class='vertical'>";
-
-        echo "<tr><td class='shade2' align='right'><b>Name:</b></td><td><input name='name' value='{$details->name}'/></td></tr>";
-        echo "<tr><td class='shade2' align='right'><b>Track URL:</b><br />Note: insert '%externalid%' for automatic incident number insertion</td><td><input name='trackurl' value='{$details->track_url}' /></td></tr>";
-        echo "<tr><td class='shade2' align='right'><b>Home URL:</b></td><td><input name='homeurl' value='{$details->home_url}' /></td></tr>";
-        echo "<tr><td class='shade2' align='right'><b>Title:</b></td><td><input name='title' value='{$details->url_title}' /></td></tr>";
-        echo "<tr><td class='shade2' align='right'><b>Email domain:</b></td><td><input name='emaildomain' value='{$details->email_domain}' /></td></tr>";
+        echo "<tr><th>{$strName}:</th><td><input name='name' value='{$details->name}'/></td></tr>";
+        echo "<tr><th>Track URL:</th><td><input name='trackurl' value='{$details->track_url}' /><br />Note: insert '%externalid%' for automatic incident number insertion</td></tr>";
+        echo "<tr><th>Home URL:</th><td><input name='homeurl' value='{$details->home_url}' /></td></tr>";
+        echo "<tr><th>{$strTitle}:</th><td><input name='title' value='{$details->url_title}' /></td></tr>";
+        echo "<tr><th>Email domain:</th><td><input name='emaildomain' value='{$details->email_domain}' /></td></tr>";
 
         echo "</table>";
         echo "<input type='hidden' value='{$id}' name='id' />";
         echo "<input type='hidden' value='edit' name='mode' />";
-        echo "<p align='center'><input type='submit' name='submit' value='Edit' /></p>";
+        echo "<p align='center'><input type='submit' name='submit' value=\"{$strSave}\" /></p>";
 
         echo "</form>";
     }
@@ -87,7 +88,7 @@ else
         if(!$result) echo "<p class='error'>Edit of escalation path failed</p>";
         else
         {
-            confirmation_page("2", "escalation_paths.php", "<h2>Escalation path modified</h2><h5>{$strPleaseWaitRedirect}...</h5>");
+            html_redirect("escalation_paths.php");
         }
     }
 }
