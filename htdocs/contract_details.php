@@ -112,7 +112,7 @@ else
         if($numberofcontacts < $allowedcontacts OR $allowedcontacts == 0)
         {
             echo "<p align='center'><a href='add_contact_support_contract.php?maintid={$id}&amp;siteid={$maintrow['site']}&amp;context=maintenance'>";
-            echo "Add a support contact to this contract</a></p>";
+            echo "{$strAddContact}</a></p>";
         }
 
 }

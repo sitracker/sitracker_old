@@ -75,7 +75,7 @@ if (empty($action))
     <option value='Old30'>Not updated this month</option>
     <option value='Old90'>Not updated in the past three months</option>
     <option value='Old180'>Not updated in the past six months</option>
-    </select>"; // FIXME i18n
+    </select>";
     echo "</td></tr>\n";
     echo "<tr><th>{$strOwner}:</th><td width='300'>";
     user_drop_down('search_user',0);

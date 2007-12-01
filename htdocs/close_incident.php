@@ -162,13 +162,13 @@ if (empty($_REQUEST['process']))
     echo "<span id='helptext'>Enter some details about the incident to be stored in the incident log for future use.";
     echo "You should provide a summary of the problem and information about how it was resolved.<br /><strong>Final Update</strong>:</span></td></tr>\n";
 
-    echo "<tr><th>{$strSummary}:<br />\n";
-    echo "A concise but full summary of the problem(s) that were encountered.<sup class='red'>*</sup>\n ";
+    echo "<tr><th>{$strSummary}:<sup class='red'>*</sup>\n ";
     echo "<input type='checkbox' name='incsummary' onclick=\"if (this.checked) {document.closeform.summary.disabled = false; ";
     echo "document.closeform.summary.style.display='';} else { saveValue=document.closeform.summary.value; ";
     echo "document.closeform.summary.disabled = true; document.closeform.summary.style.display='none';}\" checked='checked' disabled='disabled' /></th>";
 
-    echo "<td><textarea id='summary' name='summary' cols='40' rows='8' onfocus=\"if (this.enabled) { this.value = saveValue; ";
+    echo "<td>A concise but full summary of the problem(s) that were encountered.<br />\n"; // FIXME i18n
+    echo "<textarea id='summary' name='summary' cols='40' rows='8' onfocus=\"if (this.enabled) { this.value = saveValue; ";
     echo "setTimeout('document.articlform.summary.blur()',1); } else saveValue=this.value;\">";
     //  style="display: none;"
     $sql = "SELECT * FROM updates WHERE incidentid='$id' AND type='probdef' ORDER BY timestamp ASC";
@@ -180,7 +180,6 @@ if (empty($_REQUEST['process']))
         echo "\n\n";
     }
     echo "</textarea>\n";
-    // FIXME i18n
     ?></td></tr>
 
     <tr id='symptomsrow' style='display:none;'><th><label>Symptoms: <input type='checkbox' name='incsymptoms' onclick="if (this.checked) {document.closeform.symptoms.disabled = false; document.closeform.symptoms.style.display=''} else { saveValue=document.closeform.symptoms.value; document.closeform.symptoms.disabled = true; document.closeform.symptoms.style.display='none'}" disabled='disabled' /></label></th>
