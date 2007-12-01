@@ -101,7 +101,10 @@ function dashboard_user_incidents($row,$dashboardid)
         }
         echo "</table>";
     }
-    else echo "<p align='center'>{$GLOBALS['NoRecords']}</p>";
+    else
+    {
+        echo "<p align='center'>{$GLOBALS['strNoRecords']}</p>";
+    }
     echo "</div>";
     echo "</div>";
     //echo "</div>";

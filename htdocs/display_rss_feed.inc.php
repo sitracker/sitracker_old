@@ -93,5 +93,9 @@ if(mysql_num_rows($result) > 0)
         }
     }
 }
+else
+{
+    echo "<p align='center'>{$strNoRecords}</p>";
+}
 
 ?>
