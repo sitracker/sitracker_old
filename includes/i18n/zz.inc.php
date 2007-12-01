@@ -1,5 +1,5 @@
 <?php
-// SiT! Language File -  (zz) by Administrator
+// SiT! Language File (zz) for testing completeness of i18n
 
 $languagestring = ' (zz)';
 $i18ncharset = 'UTF-8';
@@ -230,6 +230,7 @@ $strExpired = 'strExpired';
 $strExpiryDate = 'strExpiryDate';
 $strExternalEngineerCallDistribution = 'strExternalEngineerCallDistribution';
 
+$strFailed = 'strFailed';
 $strFax = 'strFax';
 $strFeedback = 'strFeedback';
 $strFeedbackForms = 'strFeedbackForms';
@@ -627,6 +628,7 @@ $strStoreInLog = 'strStoreInLog';
 $strSubject = 'strSubject';
 $strSubstitute = 'strSubstitute';
 $strSubstitutes = 'strSubstitutes';
+$strSuccess = 'strSuccess';
 $strSuccessfully = 'strSuccessfully';
 $strSummary = 'strSummary';
 $strSun = 'strSun';
@@ -667,6 +669,7 @@ $strToChangePassword = 'strToChangePassword';
 $strTodaysStats = 'strTodaysStats';
 $strToday = 'strToday';
 $strTotal = 'strTotal';
+$strTotalMinutes = 'strTotalMinutes';
 $strTraining = 'strTraining';
 $strTranslate = 'strTranslate';
 $strTranslateTheString = 'strTranslateTheString';
@@ -685,7 +688,6 @@ $strUpdates = 'strUpdates';
 $strUpdatedFromActivity = 'strUpdatedFromActivity';
 $strUpdateSuccessful = 'strUpdateSuccessful';
 $strUpdateType = 'strUpdateType';
-$strUseThisInFuture = 'strUseThisInFuture';
 $strUnknown = 'strUnknown';
 $strUnlimited = 'strUnlimited';
 $strUnlink = 'strUnlink';
@@ -702,6 +704,7 @@ $strUserIncidents = 'strUserIncidents';
 $strUsersNoGroup = 'strUsersNoGroup';
 $strUsersTasks = 'strUsersTasks';
 $strUsersBoldSkills = 'strUsersBoldSkills';
+$strUseThisInFuture = 'strUseThisInFuture';
 
 $strValue = 'strValue';
 $strVariable = 'strVariable';
