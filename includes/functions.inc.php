@@ -281,6 +281,13 @@ function permission_name($permissionid)
 }
 
 
+/**
+    * Get the name associated with software ID / skill ID
+    * @author Ivan Lucas
+    * @param $softwareid integer
+    * @returns string. Skill/Software Name
+    * @note Software was renamed skills for v3.30
+*/
 function software_name($softwareid)
 {
     global $now;
@@ -494,7 +501,12 @@ function user_incidents($id){
     * gets users holiday information for a certain day given an optional type
     * and optional length returns both type and length and approved as an array
     * @author Ivan Lucas
-    * @param $userid The userid of the holiday to retrieve
+    * @param $userid integer. The userid of the holiday to retrieve
+    * @param $type integer. The holiday type. e.g. sickness
+    * @param $year integer. Year. eg. 2008
+    * @param $month integer. Month. eg. 11 = November
+    * @param $day integer. Day
+    * @param $length string. 'am', 'pm', 'day' or FALSE to list all
     * @return array
 */
 function user_holiday($userid, $type=0, $year, $month, $day, $length=FALSE)
@@ -1475,13 +1487,13 @@ function incidentstatus_drop_down_all($name, $id)
         echo "<option selected='selected' value=\"all\">All</option>\n";
     else
         echo "<option value=\"all\">{$GLOBALS['strAll']}</option>\n";
-        
+
     while ($statuses = mysql_fetch_array($result))
     {
         echo "<option";
         if ($statuses["id"] == $id)
             echo "selected='selected'";
-        echo "value='{$statuses["id"]}'>{$statuses["name"]}";
+        echo " value='{$statuses["id"]}'>{$statuses["name"]}";
         echo "</option>";
         echo "\n";
    }
