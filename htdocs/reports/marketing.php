@@ -9,7 +9,6 @@
 //
 
 // Author: Ivan Lucas <ivanlucas[at]users.sourceforge.net>
-// FIXME i18n
 
 $permission=37; // Run Reports
 

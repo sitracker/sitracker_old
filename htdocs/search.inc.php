@@ -209,7 +209,7 @@ $search_string = str_replace($removechars, '', stripslashes($search_string));
 
 if (!empty($search_string))
 {
-    echo "<p>Searching for '$search_string' in ".ucfirst($search_domain)."&hellip;</p>";
+    echo "<p>Searching for '$search_string' in ".ucfirst($search_domain)."&hellip;</p>"; // FIXME i18n searching for
     flush();
     $sterms = explode(' ',trim($search_string));
     search_fix_quoted($sterms);
@@ -370,7 +370,7 @@ if (!empty($search_string))
 
 //          echo "<pre>Results:\n".print_r($srch_results,TRUE)."</pre>";
 
-        echo "<p>Listing {$num_results} Results:</p>";
+        echo "<p>".sprintf($strResultsNum, $num_results).":</p>";
         echo "<table style='width: 70%; margin-left: auto; margin-right: auto;'>";
         echo "<tr>";
         $filter = array('search_string' => $search_string,
@@ -426,6 +426,7 @@ if (!empty($search_string))
 }
 if($searchmode != 'related')
 {
+    // FIXME opensearch plugin
     echo "<p>Firefox 2 and IE 7 users: You can <a href=\"javascript:window.external.AddSearchProvider('{$CONFIG['application_uriprefix']}{$CONFIG['application_webpath']}opensearch.php')\">install this search plugin</a> to make searching easier.</p>";
 }
 ?>

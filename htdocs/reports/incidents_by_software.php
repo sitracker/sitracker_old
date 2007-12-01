@@ -36,7 +36,7 @@ if (empty($_REQUEST['mode']))
     echo "<td><input type='text' name='startdate' id='startdate' size='10' /> ";
     echo date_picker('incidentsbysoftware.startdate');
     echo "</td></tr>\n";
-    // FIXME i18n
+    // FIXME i18n month breakdown
     echo "<tr><th>Month breakdown:</th><td><input type='checkbox' name='monthbreakdown' /></td></tr>\n";
     echo "<tr><th>{$strSkill}</th><td><input type='text' name='software' id='software' size='20'/></td></tr>\n";
     echo "</table>\n";
