@@ -290,7 +290,7 @@ elseif ($action == "update")
 }
 elseif ($action == "check")
 {
-    echo "<h2>Check User &amp; Role Permissions</h2>";
+    echo "<h2>Check User &amp; Role Permissions</h2>"; // FIXME i18n check user and role permissions
     if (!empty($perm))
     {
         echo "<h3>Role Permission: $perm - ".permission_name($perm)."</h3>";

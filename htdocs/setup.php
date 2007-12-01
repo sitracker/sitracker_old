@@ -133,12 +133,33 @@ function setup_configure()
     global $SETUP, $CFGVAR, $CONFIG, $config_filename;
     $html = '';
 
-    $cfg_file_exists = file_exists($config_filename);
-    $cfg_file_writable = is_writable($config_filename);
+    $configfiles = get_included_files();
+    $configfiles[] = '../includes/config.inc.php';
+    array_shift($configfiles); // Shift off this file setup.php
+    array_shift($configfiles); // Shift off defaults
+    $numconfigfiles = count($configfiles);
+
+    $cfg_file_exists = FALSE;
+    $cfg_file_writable = FALSE;
+    foreach ($configfiles AS $config_filename)
+    {
+        if (file_exists($config_filename)) $cfg_file_exists = TRUE;
+        if (is_writable($config_filename)) $cfg_file_writable = TRUE;
+    }
     if ($cfg_file_exists)
     {
-        $html .= "<h2>Found an existing <var>config.inc.php</var> file</h2>";
-        $html .= "<p>Since you already have a <var>config.inc.php</var> file we assume you are upgrading or reconfiguring, if this is not the case please delete the file <var>config.inc.php</var></p>";
+        if ($numconfigfiles < 2) $html .= "<h2>Found an existing <var>config.inc.php</var> file</h2>";
+        else
+        {
+            $html .= "<h2>Found more than one existing config file</h2>";
+            $html .= "<ul>";
+            foreach ($configfiles AS $config_filename)
+            {
+                $html .= "<li><var>{$config_filename}</var></li>";
+            }
+            $html .= "</ul>";
+        }
+        $html .= "<p>Since you already have a config file we assume you are upgrading or reconfiguring, if this is not the case please delete the file.</p>";
         if ($cfg_file_writable)
         {
             $html .= "<p class='warning'>Important: The file permissions on the file <var>config.inc.php</var> allow the file to be modified, we recommend you make this file read-only once SiT! is configured.</p>";
@@ -150,7 +171,6 @@ function setup_configure()
         }
     }
     else $html .= "<h2>Configuration</h2><p>Please complete this form to create a new <var>config.inc.php</var> configuration file for SiT!</p>";
-
     $html .= "<form action='setup.php' method='post'>\n";
 
     if ($_REQUEST['config']=='advanced')
