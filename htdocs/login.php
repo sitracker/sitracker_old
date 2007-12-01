@@ -103,7 +103,7 @@ elseif (authenticate($username, $password) == 1)
     {
         $status = $statusresult->name;
         $sql = "INSERT INTO notices (userid, type, text, timestamp) ";
-        $sql .= "VALUES({$_SESSION['userid']}, {$CONFIG['USER_STILL_AWAY_TYPE']}, ";
+        $sql .= "VALUES({$_SESSION['userid']}, ".USER_STILL_AWAY_TYPE.",";
         $sql .= "'".mysql_escape_string($strUserStillAway)."', NOW())";
         mysql_query($sql);
         if (mysql_error()) trigger_error(mysql_error(), E_USER_ERROR);
