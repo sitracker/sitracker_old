@@ -2215,15 +2215,13 @@ function format_date_friendly($date)
 /**
     * Generate HTML for a redirect/confirmation page
     * @author Ivan Lucas
+    * @deprecated
     * @param $refreshtime integer. Number of seconds before redirection
     * @param $location string. URL to redirect to
     * @param $message string. HTML message to display on the page before redirection
     * @returns string. Complete HTML page
+    * @note DEPRECATED replaced by html_redirect()
     * @note Uses HTML meta-tag redirection
-    * @todo TODO re-write this page so as to avoid inconsitant redirects throughout sit
-    * we should use a single refresh time throughout and one or two messages that
-    * can easily be i18n'd.
-    * @todo TODO needs i18n
 */
 function confirmation_page($refreshtime, $location, $message)
 {
@@ -2247,6 +2245,38 @@ function confirmation_page($refreshtime, $location, $message)
 }
 
 
+/**
+    * Generate HTML for a redirect/confirmation page
+    * @author Ivan Lucas
+    * @param $url string. URL to redirect to
+    * @param $success boolean. TRUE = Success, FALSE = Failure
+    * @param $message string. HTML message to display on the page before redirection
+    * @note Replaces confirmation_page()
+    * @note If a header HTML has already been displayed a continue link is printed
+    * @note a meta redirect will also be inserted, which is invalid HTML but appears
+    * @note to work in most browswers.
+    * @note The recommended way to use this function is to call it without headers/footers
+    * @note already displayed.
+*/
+function html_redirect($url, $success=TRUE, $message='')
+{
+    global $CONFIG, $headerdisplayed;
+    $refreshtime = 3;
+    $refresh = "{$refreshtime}; url={$url}";
+
+    $title = $GLOBALS['strPleaseWaitRedirect'];
+    if (!$headerdisplayed) include('htmlheader.inc.php');
+    else echo "<meta http-equiv=\"refresh\" content=\"$refreshtime; url=$url\" />\n";
+    echo "<h3>";
+    if ($success) echo "<span class='success'>{$GLOBALS['strSuccess']}</span>";
+    else echo "<span class='failure'>{$GLOBALS['strFailed']}</span>";
+    if (!empty($message)) echo ": {$message}";
+    echo "</h3>";
+    echo "<h4>{$GLOBALS['strPleaseWaitRedirect']}</h4>";
+    if ($headerdisplayed) echo "<p align='center'><a href=\"{$url}\">{$GLOBALS['strContinue']}</a></p>";
+    include('htmlfooter.inc.php');
+
+}
 
 
 /*  calculates the value of the unix timestamp  */

@@ -271,6 +271,9 @@ tr.expired { background-color: #DDDDDF; }
 tr.notice { background-color: #FFFFB0; }
 
 
+.success { color: #669900; }
+.failure { color: #f08080; }
+
 /*
 #menu
 #menuList

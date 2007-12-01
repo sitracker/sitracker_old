@@ -249,6 +249,7 @@ $strExpired = 'Expired';
 $strExpiryDate = 'Expiry Date';
 $strExternalEngineerCallDistribution = 'External Engineer Call Distribution';
 
+$strFailed = 'Failed';
 $strFax = 'Fax';
 $strFeedback = 'Feedback';
 $strFeedbackForms = 'Feedback Forms';
@@ -656,6 +657,7 @@ $strStoreInLog = 'Store details in the Incident Log';
 $strSubject = 'Subject';
 $strSubstitute = 'Substitute';
 $strSubstitutes = 'Substitutes';
+$strSuccess = 'Success';
 $strSuccessfully = 'Successfully';
 $strSummary = 'Summary';
 # Short for 'Sunday'
