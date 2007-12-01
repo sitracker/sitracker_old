@@ -17,21 +17,21 @@ require('functions.inc.php');
 // This page requires authentication
 require('auth.inc.php');
 
-include('htmlheader.inc.php');
 // External variables
 $siteid = mysql_escape_string($_REQUEST['siteid']);
 $submit = $_REQUEST['submit'];
-?>
-<script type='text/javascript'>
-function confirm_submit()
-{
-    return window.confirm('<?php echo $strAddContractConfirm ?>');
-}
-</script>
-<?php
-// Show add contact type form
+
 if (empty($submit))
 {
+    include('htmlheader.inc.php');
+    ?>
+    <script type='text/javascript'>
+    function confirm_submit()
+    {
+        return window.confirm('<?php echo $strAddContractConfirm ?>');
+    }
+    </script>
+    <?php
     echo "<h2><img src='{$CONFIG['application_webpath']}images/icons/{$iconset}/32x32/contact.png' width='32' height='32' alt='' /> ";
     echo "{$strNewContact}</h2>";
     echo "<h5>".sprintf($strMandatoryMarked, "<sup class='red'>*</sup>")."</h5>";
@@ -174,7 +174,8 @@ else
             if (mysql_error()) trigger_error("MySQL Query Error ".mysql_error(), E_USER_ERROR);
             $newcontact = mysql_fetch_array($result);
             journal(CFG_LOGGING_NORMAL,'Contact Added',"$forenames $surname was Added",CFG_JOURNAL_CONTACTS,$newid);
-            confirmation_page("2", "contact_details.php?id=$newid", "<h2>{$strContactAddedSuccessfully}</p><p align='center'>{$strPleaseWaitRedirect}...</p>");
+            html_redirect("contact_details.php?id=$newid");
+//             confirmation_page("2", "contact_details.php?id=$newid", "<h2>{$strContactAddedSuccessfully}</p><p align='center'>{$strPleaseWaitRedirect}...</p>");
         }
     }
 }
