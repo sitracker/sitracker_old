@@ -210,7 +210,7 @@ else if ($action == "update")
             plugin_do('save_contact_form');
 
             journal(CFG_LOGGING_NORMAL, 'Contact Edited', "Contact $contact was edited", CFG_JOURNAL_CONTACTS, $contact);
-            confirmation_page("2", "contact_details.php?id=$contact", "<h2>Contact Edited Successfully</h2><p align='center'>{$strPleaseWaitRedirect}...</p>");
+            html_redirect("contact_details.php?id={$contact}");
         }
     }
 }

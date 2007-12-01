@@ -42,10 +42,10 @@ switch($action)
         $result = mysql_query($sql);
         if (mysql_error()) trigger_error(mysql_error(),E_USER_ERROR);
 
-        if(!$result) echo "<p class='error'>Failed to add feed</p>";
+        if(!$result) html_redirect("edit_rss_feeds.php", FALSE);
         else
         {
-            confirmation_page("2", "edit_rss_feeds.php", "<h2>Feed added</h2><h5>{$strPleaseWaitRedirect}...</h5>");
+            html_redirect("edit_rss_feeds.php");
         }
         break;
     case 'edit':
@@ -81,10 +81,10 @@ switch($action)
         $result = mysql_query($sql);
         if (mysql_error()) trigger_error(mysql_error(),E_USER_ERROR);
 
-        if(!$result) echo "<p class='error'>Edit failed</p>";
+        if(!$result) html_redirect("edit_rss_feeds.php", FALSE);
         else
         {
-            confirmation_page("2", "edit_rss_feeds.php", "<h2>RSS feed change succeded</h2><h5>{$strPleaseWaitRedirect}...</h5>");
+            html_redirect("edit_rss_feeds.php");
         }
         break;
     case 'enable':
@@ -94,10 +94,10 @@ switch($action)
         $result = mysql_query($sql);
         if (mysql_error()) trigger_error(mysql_error(),E_USER_ERROR);
 
-        if(!$result) echo "<p class='error'>Changed enabled state failed</p>";
+        if(!$result) html_redirect("edit_rss_feeds.php", FALSE, "Changed enabled state failed");
         else
         {
-            confirmation_page("2", "edit_rss_feeds.php", "<h2>RSS feed change succeded</h2><h5>{$strPleaseWaitRedirect}...</h5>");
+            html_redirect("edit_rss_feeds.php");
         }
         break;
     case 'delete':
@@ -107,10 +107,10 @@ switch($action)
         $result = mysql_query($sql);
         if (mysql_error()) trigger_error(mysql_error(),E_USER_ERROR);
 
-        if(!$result) echo "<p class='error'>Delete feedfailed</p>";
+        if(!$result) html_redirect("edit_rss_feeds.php", FALSE);
         else
         {
-            confirmation_page("2", "edit_rss_feeds.php", "<h2>RSS feed removal succeded</h2><h5>{$strPleaseWaitRedirect}...</h5>");
+            html_redirect("edit_rss_feeds.php");
         }
         break;
     default:
