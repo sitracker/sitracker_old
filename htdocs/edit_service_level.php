@@ -27,6 +27,26 @@ $action = $_REQUEST['action'];
 if (empty($action) OR $action == "showform")
 {
     include('htmlheader.inc.php');
+
+    ?>
+    <script type="text/javascript">
+    <!--
+    function enableBillingPeriod()
+    {
+        if (byId('timed').checked==true)
+        {
+            $('engineerBillingPeriod').show();
+            $('customerBillingPeriod').show();
+        }
+        else
+        {
+            $('engineerBillingPeriod').hide();
+            $('customerBillingPeriod').hide();
+        }
+    }
+    --></script>
+    <?php
+
     echo "<h2><img src='{$CONFIG['application_webpath']}images/icons/{$iconset}/32x32/sla.png' width='32' height='32' alt='' /> ";
     echo "$title</h2>";
     echo "<p align='center'>{$tag} ".priority_name($priority)."</p>";
@@ -49,11 +69,11 @@ if (empty($action) OR $action == "showform")
     echo "<td><input type='text' size='5' name='resolution_days' maxlength='3' value='{$sla->resolution_days}' /> {$strDays}</td></tr>";
     echo "<tr><th>{$strReview} <img src='{$CONFIG['application_webpath']}images/icons/{$iconset}/16x16/review.png' width='16' height='16' alt='' /></th>";
     echo "<td><input type='text' size='5' name='review_days' maxlength='3' value='{$sla->review_days}' /> {$strDays}</td></tr>";
-    echo "<tr><th>{$strTimed} <img src='{$CONFIG['application_webpath']}images/icons/{$iconset}/16x16/sla.png' width='16' height='16' alt='' /></th><td>";    
+    echo "<tr><th>{$strTimed} <img src='{$CONFIG['application_webpath']}images/icons/{$iconset}/16x16/sla.png' width='16' height='16' alt='' /></th><td>";
     if($sla->timed == 'yes')
     {
-        echo "<input type='checkbox' name='timed' checked>";
-        $billingSQL = "SELECT * FROM billing_periods WHERE servicelevelid = {$sla->id}";
+        echo "<input type='checkbox' name='timed' id='timed' onchange='enableBillingPeriod();' checked>";
+        $billingSQL = "SELECT * FROM billing_periods WHERE servicelevelid = {$sla->id} AND priority = {$priority} AND tag = '{$tag}'";
         $billingResult = mysql_query($billingSQL);
         if (mysql_error()) trigger_error(mysql_error(),E_USER_WARNING);
         $billing = mysql_fetch_object($billingResult);
@@ -63,14 +83,16 @@ if (empty($action) OR $action == "showform")
     }
     else
     {
-        echo "<input type='checkbox' name='timed'>";
-        $customerPeriod = "";
-        $engineerPeriod = "";
+        echo "<input type='checkbox' name='timed' id='timed' onchange='enableBillingPeriod();' >";
+        // Set some defaults
+        $customerPeriod = "120";
+        $engineerPeriod = "60";
     }
     echo "</td></tr>";
-    echo "<tr><th>{$strBillingEngineerPeriod}<br />{$strInMinutes}</th><td><input type='text' size='5' name='engineerPeriod' maxlength='5' value='{$engineerPeriod}' /></td></tr>";
-    echo "<tr><th>{$strBillingCustomerPeriod}<br />{$strInMinutes}</th><td><input type='text' size='5' name='customerPeriod' maxlength='5' value='{$customerPeriod}' /></td></tr>";
+    echo "<tr id='engineerBillingPeriod'><th>{$strBillingEngineerPeriod}<br />{$strInMinutes}</th><td><input type='text' size='5' name='engineerPeriod' maxlength='5' value='{$engineerPeriod}' /></td></tr>";
+    echo "<tr id='customerBillingPeriod'><th>{$strBillingCustomerPeriod}<br />{$strInMinutes}</th><td><input type='text' size='5' name='customerPeriod' maxlength='5' value='{$customerPeriod}' /></td></tr>";
     echo "</table>";
+    echo "<script type='text/javascript'>enableBillingPeriod();</script>";
     echo "<input type='hidden' name='action' value='edit' />";
     echo "<input type='hidden' name='tag' value='{$tag}' />";
     echo "<input type='hidden' name='priority' value='{$priority}' />";
@@ -105,7 +127,7 @@ elseif ($action == "edit")
     //if (mysql_affected_rows() == 0) trigger_error("UPDATE affected zero rows",E_USER_WARNING);
     else
     {
-        $billingSQL = "SELECT * FROM billing_periods WHERE servicelevelid = {$id}";
+        $billingSQL = "SELECT * FROM billing_periods WHERE servicelevelid = {$id} AND priority = {$priority} AND tag = '{$tag}'";
         $billingResult = mysql_query($billingSQL);
         if (mysql_error()) trigger_error(mysql_error(),E_USER_WARNING);
         $billing = mysql_fetch_object($billingResult);
@@ -113,14 +135,14 @@ elseif ($action == "edit")
         if(!empty($billing))
         {
             //update
-            $sql = "UPDATE billing_periods SET customerperiod = '{$customerPeriod}', engineerperiod = '{$engineerPeriod}' WHERE servicelevelid = '{$id}'";
+            $sql = "UPDATE billing_periods SET customerperiod = '{$customerPeriod}', engineerperiod = '{$engineerPeriod}' WHERE servicelevelid = '{$id}' AND priority = {$priority} AND tag = '{$tag}'";
             $result = mysql_query($sql);
             if (mysql_error()) trigger_error(mysql_error(),E_USER_WARNING);
         }
         else
         {
             //insert
-            $sql = "INSERT INTO billing_periods (servicelevelid, customerperiod, engineerperiod) VALUES ('{$id}', '{$customerPeriod}', '{$engineerPeriod}')";
+            $sql = "INSERT INTO billing_periods (servicelevelid, priority, tag, customerperiod, engineerperiod) VALUES ('{$id}', '{$priority}', '{$tag}', '{$customerPeriod}', '{$engineerPeriod}')";
             $result = mysql_query($sql);
             if (mysql_error()) trigger_error(mysql_error(),E_USER_WARNING);
         }

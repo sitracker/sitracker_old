@@ -698,6 +698,7 @@ $strToChangePassword = 'To change your password, first enter your existing passw
 $strTodaysStats = 'Todays Statistics';
 $strToday = 'Today';
 $strTotal = 'Total';
+$strTotalMinutes = 'Total Minutes';
 $strTraining = 'Training';
 $strTranslate = 'Translate';
 $strTranslateTheString = 'Translate the english string on the left to your requested language on the right';
