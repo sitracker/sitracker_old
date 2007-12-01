@@ -112,14 +112,8 @@ elseif ($action == "delete")
         {
             journal(CFG_LOGGING_NORMAL, 'Supported Contact Removed', "Contact $contactid removed from maintenance contract $maintid", CFG_JOURNAL_MAINTENANCED, $maintid);
 
-            if ($context=='maintenance')
-            {
-                confirmation_page("3", "contract_details.php?id=$maintid", "<h2>Maintenance Support Contact Deletion Successful</h2><p align='center'>{$strPleaseWaitRedirect}...</p>");
-            }
-            else
-            {
-                confirmation_page("3", "contact_details.php?id=$contactid", "<h2>Maintenance Support Contact Deletion Successful</h2><p align='center'>{$strPleaseWaitRedirect}...</p>");
-            }
+            if ($context=='maintenance') html_redirect("contract_details.php?id={$maintid}");
+            else html_redirect("contact_details.php?id={$contactid}");
         }
     }
     else

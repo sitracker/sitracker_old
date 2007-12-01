@@ -7,6 +7,9 @@
 // This software may be used and distributed according to the terms
 // of the GNU General Public License, incorporated herein by reference.
 //
+// Author: Paul Heaney <paulheaney[at]users.sourceforge.net>
+
+// FIXME i18n whole page
 
 $permission=7; // Edit Incidents
 
@@ -79,12 +82,10 @@ External email:  -&gt; <b>foo@pheaney.co.uk</b>
 
 
             $sql = "UPDATE incidents SET externalengineer = '$new_extenal_engineer', externalemail = '$new_external_email' ";
-	    $sql .= " WHERE externalemail = '$old_email_address' AND closed = '0'";
-
-
+            $sql .= " WHERE externalemail = '$old_email_address' AND closed = '0'";
             $result = mysql_query($sql);
             if (mysql_error()) trigger_error(mysql_error(),E_USER_ERROR);
-            confirmation_page("2", "main.php", "<h2>Update Successful</h2><p align='center'>{$strPleaseWaitRedirect}...</p>");
+            html_redirect("main.php");
             break;
         default:
             echo '<h1>No action specified</h1>';
