@@ -222,7 +222,7 @@ if (empty($_REQUEST['process']))
     <tr id='referencesrow' style='display:none;'><th><label>References: <input type='checkbox' name='increferences' onclick="if (this.checked) {document.closeform.references.disabled = false; document.closeform.references.style.display=''} else { saveValue=document.closeform.references.value; document.closeform.references.disabled = true; document.closeform.references.style.display='none'}" disabled='disabled' /></label></th>
     <td><textarea id="references" name="references" cols='40' rows='8' style="display: none;" onfocus="if (this.enabled) { this.value = saveValue; setTimeout('document.articlform.references.blur()',1); } else saveValue=this.value;"></textarea></td></tr>
 
-    <tr><th>Closing Status: <sup class='red'>*</sup></th><td><?php closingstatus_drop_down("closingstatus", 0) ?></td></tr>
+    <tr><th>Closing Status: <sup class='red'>*</sup></th><td><?php echo closingstatus_drop_down("closingstatus", 0) ?></td></tr>
 
     <?php
     echo "<tr><th>Inform Customer:<br />";
