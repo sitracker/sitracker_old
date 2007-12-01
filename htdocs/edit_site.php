@@ -159,6 +159,7 @@ elseif ($action == "update")
             plugin_do('edit_site_save');
             journal(CFG_LOGGING_NORMAL, 'Site Edited', "Site $site was edited", CFG_JOURNAL_SITES, $site);
             html_redirect("site_details.php?id={$site}");
+            exit;
         }
     }
     else
