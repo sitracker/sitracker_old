@@ -5547,22 +5547,6 @@ function implode_assoc($glue1, $glue2, $array)
 /**
     * @author Kieran Hogg
 */
-function quick_update($incidentid, $text)
-{
-    $incidentid = cleanvar($incidentid);
-    $text = cleanvar($text);
-
-    $sql = "INSERT INTO updates('incidentid', 'userid', 'bodytext', 'currentstatus', 'timestamp') VALUES('{$incidentid}', 1, '{$sit[2]}', '{$text}', '')";
-    mysql_query($sql);
-    echo $sql;
-    if (mysql_error()){ trigger_error(mysql_error(),E_USER_ERROR); return FALSE;}
-    else return TRUE;
-
-}
-
-/**
-    * @author Kieran Hogg
-*/
 function time_dropdown($name, $selected='')
 {
     $html = "<select name='$name'>";
