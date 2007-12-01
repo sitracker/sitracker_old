@@ -227,7 +227,7 @@ elseif ($action == "update")
             if (mysql_error()) trigger_error(mysql_error(),E_USER_ERROR);
 
             if (!$result) echo "<p class='error'>Update of user permissions failed on pass 1\n";
-            else confirmation_page("2", "manage_users.php", "<h2>Permissions Successfully Set</h2><p align='center'>{$strPleaseWaitRedirect}...</p>");
+            else html_redirect("manage_users.php");
 
             // Second pass, loop through checkbox array setting access to true where boxes are checked
             if (is_array($perm))

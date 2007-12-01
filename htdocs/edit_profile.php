@@ -336,7 +336,7 @@ elseif($mode=='save')
                     @mysql_query($sql);
                 }
                 journal(CFG_LOGGING_NORMAL, 'User Profile Edited', "User Profile {$sit[2]} Edited", CFG_JOURNAL_USER, $sit[2]);
-                confirmation_page($redirecturl, TRUE, $confirm_message);
+                html_redirect($redirecturl, TRUE, $confirm_message);
             }
         }
     }
