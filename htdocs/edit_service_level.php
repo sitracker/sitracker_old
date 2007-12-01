@@ -89,8 +89,9 @@ if (empty($action) OR $action == "showform")
         $engineerPeriod = "60";
     }
     echo "</td></tr>";
-    echo "<tr id='engineerBillingPeriod'><th>{$strBillingEngineerPeriod}<br />{$strInMinutes}</th><td><input type='text' size='5' name='engineerPeriod' maxlength='5' value='{$engineerPeriod}' /></td></tr>";
-    echo "<tr id='customerBillingPeriod'><th>{$strBillingCustomerPeriod}<br />{$strInMinutes}</th><td><input type='text' size='5' name='customerPeriod' maxlength='5' value='{$customerPeriod}' /></td></tr>";
+    // Do we need $strInMinutes ?
+    echo "<tr id='engineerBillingPeriod'><th>{$strBillingEngineerPeriod}<br />{$strInMinutes}</th><td><input type='text' size='5' name='engineerPeriod' maxlength='5' value='{$engineerPeriod}' /> {$strMinutes}</td></tr>";
+    echo "<tr id='customerBillingPeriod'><th>{$strBillingCustomerPeriod}<br />{$strInMinutes}</th><td><input type='text' size='5' name='customerPeriod' maxlength='5' value='{$customerPeriod}' /> {$strMinutes}</td></tr>";
     echo "</table>";
     echo "<script type='text/javascript'>enableBillingPeriod();</script>";
     echo "<input type='hidden' name='action' value='edit' />";
