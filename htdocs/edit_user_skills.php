@@ -151,14 +151,13 @@ else
     $lacking=mysql_num_rows($result);
     if ($lacking >= 1)
     {
-        confirmation_page("3", "edit_backup_users.php?user={$_POST['userid']}", "<h2>Changes Saved</h2><h3>You should now define a substitute engineer for each piece of software.</h3><h5>{$strPleaseWaitRedirect}...</h5>");
+        // FIXME i18n
+        html_redirect("edit_backup_users.php?user={$_POST['userid']}", TRUE, "You should now define a substitute engineer for each skill");
     }
     else
     {
-        if ($_POST['userid']==$_COOKIE['sit'][2])
-            confirmation_page("2", "edit_user_skills.php?user={$_POST['userid']}", "<h2>Update Successful</h2><p align='center'>{$strPleaseWaitRedirect}...</p>");
-        else
-            confirmation_page("2", "manage_users.php", "<h2>Update Successful</h2><p align='center'>{$strPleaseWaitRedirect}...</p>");
+        if ($_POST['userid']==$_COOKIE['sit'][2]) html_redirect("edit_user_skills.php?user={$_POST['userid']}");
+        else html_header("manage_users.php");
     }
 }
 ?>

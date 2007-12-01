@@ -63,8 +63,7 @@ elseif($action == 'post')
         mysql_query($sql);
         if (mysql_error()) trigger_error(mysql_error(),E_USER_WARNING);
     }
-
-    confirmation_page(2, 'notices.php', "<h2>Notice Added</h2><h5 align='center'>You will be redirected, please wait...</h5>");
+    html_redirect('notices.php');
 
 }
 elseif($action == 'delete')
@@ -80,7 +79,7 @@ elseif($action == 'delete')
     mysql_query($sql);
     if (mysql_error()) trigger_error(mysql_error(),E_USER_WARNING);
 
-    confirmation_page(2, 'notices.php', '<h2>Notice Deleted</h2><h5>You will be redirected, please wait...</h5>');
+    html_redirect('notices.php');
 }
 else
 {

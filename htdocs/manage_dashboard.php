@@ -106,7 +106,7 @@ switch($_REQUEST['action'])
                     if(function_exists($func)) $func();
                 }
 
-                confirmation_page("2", "manage_dashboard.php", "<h2>Dashboard components installed</h2><h5>{$strPleaseWaitRedirect}...</h5>");
+                html_redirect("manage_dashboard.php");
             }
         }
         break;
@@ -120,7 +120,7 @@ switch($_REQUEST['action'])
         if(!$result) echo "<p class='error'>Changed enabled state failed</p>";
         else
         {
-            confirmation_page("2", "manage_dashboard.php", "<h2>Dashboard change succeded</h2><h5>{$strPleaseWaitRedirect}...</h5>");
+            html_redirect("manage_dashboard.php");
         }
         break;
     default:

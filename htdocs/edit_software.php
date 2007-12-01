@@ -98,7 +98,7 @@ elseif($action=='delete')
         if (mysql_error()) trigger_error(mysql_error(),E_USER_ERROR);
 
         journal(CFG_LOGGING_DEBUG, 'Skill Deleted', "Skill $id was deleted", CFG_JOURNAL_DEBUG, $id);
-        confirmation_page("2", "products.php?display=skills", "<h2>Skill Deleted Successfully</h2><p align='center'>{$strPleaseWaitRedirect}...</p>");
+        html_redirect("products.php?display=skills");
     }
 }
 else
@@ -136,7 +136,7 @@ else
         {
             $id=mysql_insert_id();
             journal(CFG_LOGGING_DEBUG, 'Skill Edited', "Skill $id was edited", CFG_JOURNAL_DEBUG, $id);
-            confirmation_page("2", "products.php?display=skills", "<h2>Skill Edit Successful</h2><p align='center'>{$strPleaseWaitRedirect}...</p>");
+            html_redirect("products.php?display=skills");
         }
     }
     else

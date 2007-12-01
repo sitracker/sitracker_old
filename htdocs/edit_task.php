@@ -116,7 +116,7 @@ switch ($action)
                 mysql_query($sql);
                 if (mysql_error()) trigger_error(mysql_error(),E_USER_ERROR);
             }
-            confirmation_page("2", "view_task.php?id={$id}", "<h2>{$strTaskEditedSuccessfully}</h2><p align='center'>{$strPleaseWaitRedirect}...</p>");
+            html_redirect("view_task.php?id={$id}", TRUE, $strTaskEditedSuccessfully); // FIXME redundant i18n string
         }
     break;
 
@@ -190,15 +190,9 @@ switch ($action)
         mysql_query($sql);
         if (mysql_error()) trigger_error(mysql_error(),E_USER_ERROR);
 
-
-        if($incident)
-        {
-            confirmation_page("2", "tasks.php?incident={$incident}", "<h2>{$strActivityMarkedCompleteSuccessfully}</h2><p align='center'>{$strPleaseWaitRedirect}...</p>");
-        }
-        else
-        {
-            confirmation_page("2", "tasks.php", "<h2>{$strTaskMarkedCompleteSuccessfully}</h2><p align='center'>{$strPleaseWaitRedirect}...</p>");
-        }
+        // FIXME redundant i18n strings
+        if($incident) html_redirect("tasks.php?incident={$incident}", TRUE, $strActivityMarkedCompleteSuccessfully);
+        else html_redirect("tasks.php", TRUE, $strTaskMarkedCompleteSuccessfully);
     break;
 
     case 'delete':
@@ -212,7 +206,8 @@ switch ($action)
         mysql_query($sql);
         if (mysql_error()) trigger_error(mysql_error(),E_USER_ERROR);
 
-        confirmation_page("2", "tasks.php?incident={$id}", "<h2>{$strTaskDeletedSuccessfully}</h2><p align='center'>{$strPleaseWaitRedirect}...</p>");
+        // FIXME redundant i18n strings
+        html_redirect("tasks.php?incident={$id}", TRUE, $strTaskDeletedSuccessfully);
     break;
 
     case '':

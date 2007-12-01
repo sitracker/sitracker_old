@@ -65,7 +65,8 @@ switch($action)
         if(!$result) echo "<p class='error'>{$strWatchAddFailed}</p>";
         else
         {
-            confirmation_page("2", "edit_watch_incidents.php", "<h2>{$strWatchIncidentsAdded}</h2><h5>{$strPleaseWaitRedirect}...</h5>");
+            // FIXME redundant i18n string
+            html_redirect("edit_watch_incidents.php", TRUE, $strWatchIncidentsAdded);
         }
         break;
     case 'delete':
@@ -78,7 +79,8 @@ switch($action)
         if(!$result) echo "<p class='error'>{$strWatchDeleteFailed}</p>";
         else
         {
-            confirmation_page("2", "edit_watch_incidents.php", "<h2>{$strWatchIncidentsRemovalSucceded}</h2><h5>{$strPleaseWaitRedirect}...</h5>");
+            // FIXME redundant i18n string
+            html_redirect("edit_watch_incidents.php", TRUE, $strWatchIncidentsRemovalSucceded);
         }
         break;
     default:
