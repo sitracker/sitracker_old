@@ -203,7 +203,7 @@ switch ($page)
             if (mysql_error()) trigger_error("MySQL Query Error ".mysql_error(), E_USER_ERROR);
 
 
-            confirmation_page("2", "portal.php?page=incidents", "<h2>Update Successful</h2><p align='center'>{$strPleaseWaitRedirect}...</p>");
+            html_redirect("portal.php?page=incidents");
         }
         break;
 
@@ -238,7 +238,7 @@ switch ($page)
             if (mysql_error()) trigger_error("MySQL Query Error ".mysql_error(), E_USER_ERROR);
 
 
-            confirmation_page("2", "portal.php?page=incidents", "<h2>Closure request Successful</h2><p align='center'>{$strPleaseWaitRedirect}...</p>");
+            html_redirect("portal.php?page=incidents");
         }
         break;
 
@@ -335,7 +335,8 @@ switch ($page)
 
             plugin_do('incident_created');
 
-            confirmation_page("2","portal.php?page=incidents", "<h2>{$strIncidentAdded}</h2><p align='center'>{$strPleaseWaitRedirect}...</p>");
+            html_redirect("portal.php?page=incidents", TRUE, $strIncidentAdded);
+            exit;
 
         }
         break;
