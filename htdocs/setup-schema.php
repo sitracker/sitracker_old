@@ -1557,6 +1557,12 @@ PRIMARY KEY r( `servicelevelid` )
 
 -- KMH 27/11/07 Type 6 is none, workaround for browse_contact.php
 ALTER TABLE `maintenance` CHANGE `licence_type` `licence_type` INT( 11 ) NULL DEFAULT '6'
+
+-- PH 1/12/07
+ALTER TABLE `billing_periods` ADD `priority` INT( 4 ) NOT NULL AFTER `servicelevelid` ;
+ALTER TABLE `billing_periods` ADD `tag` VARCHAR( 10 ) NOT NULL AFTER `priority` ;
+ALTER TABLE `billing_periods` DROP PRIMARY KEY ,
+ADD PRIMARY KEY ( `servicelevelid` , `priority` ) ;
 ";
 
 

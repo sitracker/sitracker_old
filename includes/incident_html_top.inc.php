@@ -270,6 +270,7 @@ $servicelevel_name=servicelevel_name($servicelevelid);
 if($incident->closed == 0) $closed = time();
 else $closed = $incident->closed;
 $opened_for=format_seconds($closed - $incident->opened);
+$priority = $incident->priority;
 
 // Lookup the service level times
 $slsql = "SELECT * FROM servicelevels WHERE tag='{$servicelevel_tag}' AND priority='{$incident->priority}' ";

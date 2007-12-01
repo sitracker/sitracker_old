@@ -53,7 +53,7 @@ function formatSeconds(secondsOpen)
         var days = Math.floor(secondsOpen/86400);
         if(days < 10)
         {
-            str += ")"+days;
+            str += "0"+days;
         }
         else
         {
@@ -394,15 +394,20 @@ if (mysql_num_rows($result) >=1 )
     //print_r($billing);
     //echo "</pre>";
 
+    if($mode == 'incident') echo "<p align='center'><a href='add_task.php?incident={$id}'>{$strStartNewActivity}</a></p>";
+    else echo "<p align='center'><a href='add_task.php'>{$strAddTask}</a></p>";
+
     if(!empty($billing))
     {
-        $billingSQL = "SELECT * FROM billing_periods WHERE servicelevelid = {$servicelevel_id}";
+        $billingSQL = "SELECT * FROM billing_periods WHERE servicelevelid = {$servicelevel_id} AND tag='{$servicelevel_tag}' AND priority='{$priority}'";
 
         //echo $billingSQL;
 
         $billingresult = mysql_query($billingSQL);
         if (mysql_error()) trigger_error("MySQL Query Error ".mysql_error(), E_USER_ERROR);
         $billingObj = mysql_fetch_object($billingresult);
+
+        unset($billingresult);
 
         $engineerPeriod = $billingObj->engineerperiod*60;  //to seconds
         $customerPeriod = $billingObj->customerperiod*60;
@@ -415,16 +420,16 @@ if (mysql_num_rows($result) >=1 )
 
 
         echo "<p><table align='center'>";
-        echo "<tr><td></td><th>Minutes</th></th></tr>";
-        echo "<tr><th>Engineer period</th><td>".($engineerPeriod/60)."</td></tr>";
-        echo "<tr><th>Customer period</th><td>".($customerPeriod/60)."</td></tr>";
+        echo "<tr><td></td><th>{$strMinutes}</th></th></tr>";
+        echo "<tr><th>{$strBillingEngineerPeriod}</th><td>".($engineerPeriod/60)."</td></tr>";
+        echo "<tr><th>{$strBillingCustomerPeriod}</th><td>".($customerPeriod/60)."</td></tr>";
         echo "</table></p>";
 
         echo "<br />";
 
         echo "<table align='center'>";
-        // FIXME i18n table headings
-        echo "<tr><th>{$strOwner}</th><th>Total minutes spent</th><th>Engineer periods</th><th>Customer periods</th></tr>";
+
+        echo "<tr><th>{$strOwner}</th><th>{$strTotalMinutes }</th><th>{$strBillingEngineerPeriod}</th><th>{$strBillingCustomerPeriod}</th></tr>";
         $shade = "shade1";
         foreach($billing AS $bill)
         {
@@ -584,7 +589,8 @@ else
     if ($sit[2]==$user) echo "No tasks";
     else echo "No public tasks";
     echo "</p>";
+    if($mode == 'incident') echo "<p align='center'><a href='add_task.php?incident={$id}'>{$strStartNewActivity}</a></p>";
+    else echo "<p align='center'><a href='add_task.php'>{$strAddTask}</a></p>";
 }
-if($mode == 'incident') echo "<p align='center'><a href='add_task.php?incident={$id}'>{$strStartNewActivity}</a></p>";
-else echo "<p align='center'><a href='add_task.php'>{$strAddTask}</a></p>";
+
 ?>
