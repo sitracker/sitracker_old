@@ -198,7 +198,7 @@ while ($contactrow=mysql_fetch_array($contactresult))
         }
         else
         {
-            echo "<p align='center'>This contact is not supported via any contracts</p>\n"; // FIXME i18n
+            echo "<p align='center'>This contact is not supported via any contracts</p>\n"; // FIXME i18n not supported
         }
         echo "<p align='center'><a href='add_contact_support_contract.php?contactid=$id&amp;context=contact'>Associate this contact with an existing contract</a></p>\n";
     }

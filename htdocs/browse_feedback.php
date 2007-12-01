@@ -9,7 +9,6 @@
 //
 
 // by Ivan Lucas <ivanlucas[at]users.sourceforge.net>, June 2004
-// FIXME i18n
 
 $permission=51; // View Feedback
 
@@ -45,7 +44,7 @@ switch($mode)
         echo "<tr><th>{$strCompleted}</th><td>{$response->completed}</td>\n";
         echo "</table>\n";
 
-        echo "<h3>Response</h3>";
+        echo "<h3>{$strResponsesToFeedbackForm}</h3>";
         $totalresult=0;
         $numquestions=0;
         $qsql = "SELECT * FROM feedbackquestions WHERE formid='{$response->formid}' AND type='rating' ORDER BY taborder";
