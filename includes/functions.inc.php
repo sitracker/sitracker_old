@@ -1732,64 +1732,29 @@ function accepting_drop_down($name, $userid)
 }
 
 
-/*  prints the HTML for a drop down list of     */
-/* months of the year with the gven name and with the option  */
-/* selected depending on the supplied argument                */
-function month_drop_down($name, $month)
-{
-    $months = array ('Dummy', 'January', 'February', 'March', 'April', 'May', 'June', 'July', 'August', 'September', 'October', 'November', 'December');
-    echo "<select name=\"$name\">\n";
-    if ($month == 0) echo "<option value='0'>Select A Month</option>\n";
-
-    for ($counter = 1; $counter <= 12; $counter++)
-    {
-        echo "<option ";
-        if ($counter == $month) echo "selected='selected' ";
-        echo "value=\"$counter\">$months[$counter]</option>\n";
-    }
-
-    echo "</select>\n";
-}
-
-
-
-/*  prints the HTML for a drop down list of     */
-/* years from 2000 to 2030 with the gven name and with the    */
-/* option selected depending on the supplied argument         */
-function year_drop_down($name, $year, $pre=5, $post=30)
-{
-   if ($year=='') $year=date('Y');
-   echo "<select name=\"$name\">\n";
-   if ($year == 0) echo "<option value='0'>Select A Year</option>\n";
-
-   for ($counter = $year-$pre; $counter <= $year+$post; $counter++)
-      {
-      echo "<option ";
-      if ($counter == $year) echo "selected='selected' ";
-      echo "value='$counter'>$counter</option>\n";
-      }
-
-   echo "</select>\n";
-}
-
-
+/**
+    * Return HTML for a select box for escalation path
+    * @param $name string. Name attribute
+    * @param $userid integer. The escalation path ID to pre-select
+    * @returns string. HTML
+*/
 function escalation_path_drop_down($name, $id)
 {
-   $sql  = "SELECT id, name FROM escalationpaths ";
-   $sql .= "ORDER BY name ASC";
-   $result = mysql_query($sql);
-   if (mysql_error()) trigger_error(mysql_error(),E_USER_WARNING);
-   $html = "<select name='{$name}' id='{$name}' >";
-   $html .= "<option selected='selected' value='0'>{$GLOBALS['strNone']}</option>\n";
-   while ($path = mysql_fetch_array($result))
-   {
+    $sql  = "SELECT id, name FROM escalationpaths ";
+    $sql .= "ORDER BY name ASC";
+    $result = mysql_query($sql);
+    if (mysql_error()) trigger_error(mysql_error(),E_USER_WARNING);
+    $html = "<select name='{$name}' id='{$name}' >";
+    $html .= "<option selected='selected' value='0'>{$GLOBALS['strNone']}</option>\n";
+    while ($path = mysql_fetch_array($result))
+    {
         $html .= "<option value='{$path['id']}'";
         if ($path['id']==$id) $html .= " selected='selected'";
         $html .= ">{$path['name']}</option>\n";
-   }
-   $html .= "</select>\n";
+    }
+    $html .= "</select>\n";
 
-   return $html;
+    return $html;
 }
 
 
