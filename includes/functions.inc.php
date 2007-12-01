@@ -2458,7 +2458,13 @@ function sit_error_handler($errno, $errstr, $errfile, $errline, $errcontext)
         echo "<p class='error'><strong>{$errortype[$errno]} [{$errno}]</strong><br />";
         echo "{$errstr} in {$errfile} @ line {$errline}</p>";
         // Tips, to help diagnose errors
-        if (strpos($errstr, 'Unknown column')!==FALSE) echo "<p class='tip'>You may need to upgrade your SiT Schema to fix this problem. Visit <a href='setup.php'>Setup</a></p>";
+        if (strpos($errstr, 'Unknown column')!==FALSE OR
+            preg_match("/MySQL Query Error Table '(.*)' doesn't exist/", $errstr))
+        {
+             echo "<p class='tip'>The SiT schema may need upgrading to fix this problem.";
+             if user_permission($sit[2], 22) echo "Visit <a href='setup.php'>Setup</a>"; // Only show this to admin
+             echo "</p>";
+        }
     }
 }
 
@@ -4173,7 +4179,7 @@ function software_backup_dropdown($name, $userid, $softwareid, $backupid)
     }
     else
     {
-        $html .= "<input type='hidden' name='$name' value='0' />None available";
+        $html .= "<input type='hidden' name='$name' value='0' />{$GLOBALS['strNoneAvailable']}";
     }
     return($html);
 }
