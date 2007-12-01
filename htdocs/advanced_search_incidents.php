@@ -40,9 +40,10 @@ include('htmlheader.inc.php');
 if (empty($action))
 {
     echo "<h2><img src='{$CONFIG['application_webpath']}images/icons/{$iconset}/32x32/search.png' width='32' height='32' alt='' /> ";
-    echo "Advanced Incidents Search</h2>";
+    echo "{$strSearch} ({$strAdvanced})</h2>";
     echo "<form action=\"{$_SERVER['PHP_SELF']}\" method='get'>";
     echo "<table class='vertical'>";
+    echo "<tr><th colspan='2'>{$strIncidents}</th><tr>\n";
     echo "<tr><th>{$strTitle}:</th><td><input maxlength='100' name='search_title' size='30' type='text' /></td></tr>\n";
     echo "<tr><th>{$strIncident} ID:</th><td><input maxlength='100' name='search_id' size='30' type='text' /></td></tr>\n";
     echo "<tr><th>{$strExternalID}:</th><td><input maxlength='100' name='search_externalid' size='30' type='text' /></td></tr>\n";
@@ -59,8 +60,9 @@ if (empty($action))
     echo "</select>\n";
     echo "</td></tr>\n";
     echo "<tr><th>{$strLastUpdated}:</th><td width='300'>";
+    // FIXME i18n date ranges
     echo "<select size='1' name='search_date'>
-    <option selected='selected' value='All'>All dates</option>
+    <option selected='selected' value='All'>{$strAll}</option>
     <option value='Recent180'>Updated in past six months only</option>
     <option value='Recent90'>Updated in past three months only</option>
     <option value='Recent30'>Updated in past month only</option>
@@ -159,12 +161,12 @@ else
         $countresults=  mysql_num_rows($result);
         if ($countresults == 0)
         {
-            echo "<h2>Sorry, your search yielded no results</h2>\n"; // FIXME i18n
-            echo "<p align='center'><a href=\"advanced_search_incidents.php\">Search Again</a></p>";
+            echo "<h2>{$strNoResults}</h2>\n";
+            echo "<p align='center'><a href=\"advanced_search_incidents.php\">{$strSearchAgain}</a></p>";
         }
         else
         {
-            echo "<h2>Search yielded {$countresults} result(s)</h2>"; // FIXME 18n
+            echo "<h2>".sprintf($strResultsNum, $countresults)."</h2>";
             echo "<table align='center'>
             <tr>
             <th>{$strID} (Ext ID)</th>
