@@ -2220,7 +2220,7 @@ function format_date_friendly($date)
     * @param $location string. URL to redirect to
     * @param $message string. HTML message to display on the page before redirection
     * @returns string. Complete HTML page
-    * @note DEPRECATED replaced by html_redirect()
+    * @note DEPRECATED replaced by html_redirect(). Delete after v3.40, keep until then in case plugins depend on it
     * @note Uses HTML meta-tag redirection
 */
 function confirmation_page($refreshtime, $location, $message)

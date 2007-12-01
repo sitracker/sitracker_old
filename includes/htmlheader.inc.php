@@ -219,7 +219,9 @@ if($sit[0] != '')
     }
     if($redirpage && ($_SERVER[SCRIPT_NAME] != $redirpage))
     {
-        confirmation_page(2, $redirpage, '<h2>Error</h2><h5>You are being redirected to fix an error.</h5>');
+        // Note, this uses FALSE which prints 'Failed' not sure this is the most appropriate,
+        // but html_redirect only supports success/failure currently (INL 1dec07)
+        html_redirect($redirpage, FALSE, "You are being redirected to fix an error"); // FIXME i18n
         exit;
     }
 }
