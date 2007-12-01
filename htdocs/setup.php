@@ -152,14 +152,17 @@ function setup_configure()
         else
         {
             $html .= "<h2>Found more than one existing config file</h2>";
-            $html .= "<ul>";
-            foreach ($configfiles AS $config_filename)
+            if ($cfg_file_writable)
             {
-                $html .= "<li><var>{$config_filename}</var></li>";
+                $html .= "<ul>";
+                foreach ($configfiles AS $config_filename)
+                {
+                    $html .= "<li><var>{$config_filename}</var></li>";
+                }
+                $html .= "</ul>";
             }
-            $html .= "</ul>";
         }
-        $html .= "<p>Since you already have a config file we assume you are upgrading or reconfiguring, if this is not the case please delete the file.</p>";
+        $html .= "<p>Since you already have a config file we assume you are upgrading or reconfiguring, if this is not the case please delete the existing config file.</p>";
         if ($cfg_file_writable)
         {
             $html .= "<p class='warning'>Important: The file permissions on the file <var>config.inc.php</var> allow the file to be modified, we recommend you make this file read-only once SiT! is configured.</p>";
