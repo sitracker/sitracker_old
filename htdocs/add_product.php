@@ -81,7 +81,7 @@ else
             $id=mysql_insert_id();
             journal(CFG_LOGGING_NORMAL, 'Product Added', "Product $id was added", CFG_JOURNAL_PRODUCTS, $id);
 
-            confirmation_page("2", "products.php", "<h2>Product Addition Successful</h2><p align='center'>{$strPleaseWaitRedirect}...</p>");
+            html_redirect("products.php");
         }
     }
     else

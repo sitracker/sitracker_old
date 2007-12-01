@@ -96,7 +96,9 @@ elseif ($action == "add")
         if (mysql_error()) trigger_error("MySQL Query Error ".mysql_error(), E_USER_ERROR);
         if (mysql_num_rows($result) >= 1)
         {
-            confirmation_page("1", "add_product_software.php?productid={$productid}&return=$return", "<h2>Skill Link Already Exists</h2><p align='center'>{$strPleaseWaitRedirect}...</p>");
+            html_redirect("add_product_software.php?productid={$productid}&return=$return", FALSE, $strAvoidDupes);
+            // TODO $strAvoidDupes isn't the perfect string to use here, replace with something better when
+            // we have a message about duplicates.
             exit;
         }
 
@@ -115,8 +117,8 @@ elseif ($action == "add")
         else
         {
             journal(CFG_LOGGING_NORMAL, 'Product Added', "Skill $softwareid was added to product $productid", CFG_JOURNAL_PRODUCTS, $productid);
-            if ($return=='true') confirmation_page("1", "add_product_software.php?productid={$productid}&return=true", "<h2>Skill Linked to Product Successfully</h2><p align='center'>{$strPleaseWaitRedirect}...</p>");
-            else confirmation_page("1", "products.php?productid={$productid}", "<h2>Skill Linked to Product Successfully</h2><p align='center'>{$strPleaseWaitRedirect}...</p>");
+            if ($return=='true') html_redirect("add_product_software.php?productid={$productid}&return=true");
+            else html_redirect("products.php?productid={$productid}");
         }
     }
     else

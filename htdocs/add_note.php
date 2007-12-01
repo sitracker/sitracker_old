@@ -55,12 +55,12 @@ switch ($action)
             mysql_query($sql);
             if (mysql_error()) trigger_error(mysql_error(),E_USER_ERROR);
             if (mysql_affected_rows() < 1) trigger_error("Note insert failed",E_USER_ERROR);
-            
+
             $sql = "UPDATE tasks SET lastupdated=NOW() WHERE id=$refid";
             mysql_query($sql);
             if (mysql_error()) trigger_error(mysql_error(),E_USER_ERROR);
-            
-            confirmation_page("1", "{$rpath}", "<h2>Note added successfully</h2><p align='center'>{$strPleaseWaitRedirect}...</p>");
+
+            html_redirect($rpath);
         }
     break;
 

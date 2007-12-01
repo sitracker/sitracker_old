@@ -39,7 +39,7 @@ if($incident)
     $sql = "INSERT into links VALUES(4, {$taskid}, {$incident}, 'left', {$sit[2]})";
     mysql_query($sql);
     if (mysql_error()) trigger_error(mysql_error(),E_USER_ERROR);
-    confirmation_page(2, "tasks.php?incident=".$incident, "<h2>{$strActivityAdded}</h2><p align='center'>{$strPleaseWaitRedirect}...</p>");
+    html_redirect("tasks.php?incident={$incident}", TRUE, $strActivityAdded);
 }
 
 
@@ -93,7 +93,7 @@ else
                 mysql_query($sql);
                 if (mysql_error()) trigger_error(mysql_error(),E_USER_ERROR);
                 if (mysql_affected_rows() < 1) trigger_error("Task insert failed",E_USER_ERROR);
-                confirmation_page("2", "tasks.php", "<h2>Task added successfully</h2><p align='center'>{$strPleaseWaitRedirect}...</p>");
+                html_header("tasks.php");
             }
         break;
 
