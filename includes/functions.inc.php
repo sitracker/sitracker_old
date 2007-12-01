@@ -1724,7 +1724,7 @@ function accepting_drop_down($name, $userid)
     else
     {
         $html = "<select name=\"$name\">\n";
-        $html .= "<option value=\"Yes\">Yes</option>\n";
+        $html .= "<option value=\"Yes\">{$GLOBALS['strYes']}</option>\n";
         $html .= "<option selected='selected' value=\"No\">{$GLOBALS['strNo']}</option>\n";
         $html .= "</select>\n";
    }
