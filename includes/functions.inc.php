@@ -2457,6 +2457,8 @@ function sit_error_handler($errno, $errstr, $errfile, $errline, $errcontext)
     {
         echo "<p class='error'><strong>{$errortype[$errno]} [{$errno}]</strong><br />";
         echo "{$errstr} in {$errfile} @ line {$errline}</p>";
+        // Tips, to help diagnose errors
+        if (strpos($errstr, 'Unknown column')!==FALSE) echo "<p class='tip'>You may need to upgrade your SiT Schema to fix this problem. Visit <a href='setup.php'>Setup</a></p>";
     }
 }
 
