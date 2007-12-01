@@ -120,10 +120,10 @@ if ($sit[0]!='')
     echo "</div>\n";
 }
 //dismiss any notices
-$action = cleanvar($_REQUEST['noticeaction']);
+$noticeaction = cleanvar($_REQUEST['noticeaction']);
 $noticeid = cleanvar($_REQUEST['noticeid']);
 
-if($action=='dismiss_notice')
+if($noticeaction=='dismiss_notice')
 {
     if(is_numeric($noticeid))
     {
