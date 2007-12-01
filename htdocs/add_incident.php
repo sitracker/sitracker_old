@@ -238,7 +238,6 @@ elseif ($action=='findcontact')
                 $site_incident_pool=db_read_column('freesupport', 'sites', $contactrow['siteid']);
                 if ($site_incident_pool > 0)
                 {
-                    // FIXME i18n
                     echo "<td><a href=\"{$_SERVER['PHP_SELF']}?action=incidentform&amp;type=free&amp;contactid=".$contactrow['contactid']."&amp;updateid=$updateid&amp;win={$win}\" onclick=\"return confirm_free();\">";
                     echo "{$strAddSiteSupportIncident}</a> (".sprintf($strRemaining,$site_incident_pool).")</td>";
                 }
@@ -415,7 +414,7 @@ elseif ($action=='incidentform')
         echo "<td>".parse_updatebody($mailed_body_text)."</td></tr>\n";
         echo "<tr><td class='shade1' colspan=2>&nbsp;</td></tr>\n";
     }
-    echo "<tr><th>{$strNextAction}:<br />If there is a time limit on the next action, please specify it here.</th>"; //FIXME i18n
+    echo "<tr><th>{$strNextAction}:</th>";
     echo "<td>";
     echo "<input type='text' name='nextaction' maxlength='50' size='30' value='Initial Response' /><br /><br />";
     echo "<input type='radio' name='timetonextaction_none' value='none' checked='checked' />{$strNone}<br />";

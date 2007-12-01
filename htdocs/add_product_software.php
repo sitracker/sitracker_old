@@ -12,12 +12,10 @@
 
 // This Page Is Valid XHTML 1.0 Transitional!  11Oct06
 
-// FIXME i18n
-
 $permission=24;  // Add Product
 require('db_connect.inc.php');
 require('functions.inc.php');
-$title="Associate skill with a product";
+
 // This page requires authentication
 require('auth.inc.php');
 
@@ -30,19 +28,22 @@ $return = cleanvar($_REQUEST['return']);
 
 if (empty($action) OR $action == "showform")
 {
+    $title = $strAddLink;
     include('htmlheader.inc.php');
-    ?>
-    <h2>Link skill with a product</h2>
-    <form action="<?php echo $_SERVER['PHP_SELF'] ?>?action=add" method="post">
-    <input type="hidden" name="context" value="<?php echo $context; ?>" />
-    <?php
+    echo "<h2>{$title}</h2>";
+    echo "<form action='{$_SERVER['PHP_SELF']}?action=add' method='post'>\n";
+    echo "<input type='hidden' name='context' value='{$context}' />\n";
+
     if (empty($productid))
     {
-        $name = db_read_column('name', 'software', $softwareid);
-        echo "<h3><img src='{$CONFIG['application_webpath']}images/icons/{$iconset}/16x16/skill.png' width='16' height='16' alt='' /> ";
-        echo "{$strSkill}: $name</h3>";
+        if (!empty($softwareid))
+        {
+            $name = db_read_column('name', 'software', $softwareid);
+            echo "<h3><img src='{$CONFIG['application_webpath']}images/icons/{$iconset}/16x16/skill.png' width='16' height='16' alt='' /> ";
+            echo "{$strSkill}: $name</h3>";
+        }
         echo "<input name=\"softwareid\" type=\"hidden\" value=\"$softwareid\" />\n";
-        echo "<p align='center'>Link Product: <img src='{$CONFIG['application_webpath']}images/icons/{$iconset}/16x16/product.png' width='16' height='16' alt='' /> ";
+        echo "<p align='center'>{$strProduct}: <img src='{$CONFIG['application_webpath']}images/icons/{$iconset}/16x16/product.png' width='16' height='16' alt='' /> ";
         echo product_drop_down("productid", 0);
         echo "</p>";
     }
@@ -58,7 +59,7 @@ if (empty($action) OR $action == "showform")
     }
     if (empty($softwareid))
     {
-        echo "<p align='center'>Link Skill: <img src='{$CONFIG['application_webpath']}images/icons/{$iconset}/16x16/skill.png' width='16' height='16' alt='' /> ";
+        echo "<p align='center'>{$strSkill}: <img src='{$CONFIG['application_webpath']}images/icons/{$iconset}/16x16/skill.png' width='16' height='16' alt='' /> ";
         echo software_drop_down("softwareid", 0);
         echo "</p>\n";
     }
