@@ -27,7 +27,6 @@ if($userid == $_SESSION['userid'])
 {
     if($draftid == -1)
     {
-        // FIXME check your changing your own
         $sql = "INSERT INTO drafts (userid,incidentid,type,meta,content,lastupdate) VALUES ('{$userid}','{$incidentid}','{$type}','{$meta}','{$content}','{$now}')";
     }
     else
