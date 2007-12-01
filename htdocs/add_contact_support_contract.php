@@ -105,14 +105,8 @@ else if ($action == "add")
         // update database and show success message
         else
         {
-            if ($context=='contact')
-            {
-                confirmation_page("3", "contact_details.php?id=$contactid", "<h2>Contact Successfully linked to contract</h2><p align='center'>{$strPleaseWaitRedirect}...</p>");
-            }
-            else
-            {
-                confirmation_page("3", "contract_details.php?id=$maintid", "<h2>Contact Successfully linked to contract</h2><p align='center'>{$strPleaseWaitRedirect}...</p>");
-            }
+            if ($context=='contact') html_redirect("contact_details.php?id=$contactid");
+            else html_redirect("contract_details.php?id=$maintid");
         }
     }
 
