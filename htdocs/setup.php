@@ -53,6 +53,7 @@ $CFGVAR['sales_email']['title'] = 'Your sales departments email address';
 $CFGVAR['support_manager_email']['title'] = 'The email address of the person in charge of your support service';
 $CFGVAR['bugtracker_name']['title'] = 'Bug tracker name';
 $CFGVAR['bugtracker_url']['title'] = 'Bug tracker url';
+$CFGVAR['timezone']['title'] = 'Timezone';
 $CFGVAR['dateformat_datetime']['title'] = 'Date and Time format';
 $CFGVAR['dateformat_datetime']['help'] = "See <a href='http://www.php.net/manual/en/function.date.php'>http://www.php.net/manual/en/function.date.php</a> for help with date formats";
 $CFGVAR['dateformat_filedatetime']['title'] = 'Date and Time format to use for files';

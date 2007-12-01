@@ -35,8 +35,7 @@ $oldeh = set_error_handler("sit_error_handler");
 
 if (version_compare(PHP_VERSION, "5.1.0", ">="))
 {
-    // FIXME the timezone should be in the config file
-    date_default_timezone_set('Europe/London');
+    date_default_timezone_set($CONFIG['timezone']);
 }
 
 

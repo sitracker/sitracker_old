@@ -198,6 +198,8 @@ $CONFIG['tag_icons'] = array ('redflag' => 'redflag', 'yellowflag' => 'yellowfla
 // Default Internationalisation tag (rfc4646/rfc4647/ISO 639 code), note the corresponding i18n file must exist in includes/i18n before you can use it
 $CONFIG['default_i18n'] = 'en-GB';
 
+$CONFIG['timezone'] = 'Europe/London';
+
 // Following is still BETA
 $CONFIG['auto_chase'] = FALSE;
 $CONFIG['chase_email_minutes'] = 0; // number of minutes incident has been 'awaiting customer action' before sending a chasing email, 0 is disabled
