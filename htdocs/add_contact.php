@@ -175,7 +175,6 @@ else
             $newcontact = mysql_fetch_array($result);
             journal(CFG_LOGGING_NORMAL,'Contact Added',"$forenames $surname was Added",CFG_JOURNAL_CONTACTS,$newid);
             html_redirect("contact_details.php?id=$newid");
-//             confirmation_page("2", "contact_details.php?id=$newid", "<h2>{$strContactAddedSuccessfully}</p><p align='center'>{$strPleaseWaitRedirect}...</p>");
         }
     }
 }

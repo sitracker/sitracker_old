@@ -440,7 +440,6 @@ else
                     // send awaiting closure email
                     $eml=send_template_email('INCIDENT_CLOSURE', $id);  // awaiting closure
                     if (!$eml) throw_error('!Error: Failed while sending awaiting closure email to customer, error code:', $eml);
-                    // confirmation_page("2", "incident_details.php?id=" . $id, "<p class=pagetitle>Incident $id Marked for Closure and Email Sent</p><p align='center'>{$strPleaseWaitRedirect}...</p>");
                 }
                 else
                 {
