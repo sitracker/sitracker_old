@@ -8,7 +8,6 @@
 // of the GNU General Public License, incorporated herein by reference.
 //
 // Author: Paul Heaney <paulheaney[at]users.sourceforge.net>
-// FIXME i18n
 
 $permission=0; // not required
 require('db_connect.inc.php');

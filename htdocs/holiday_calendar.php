@@ -13,7 +13,7 @@
 $permission=27; // View your calendar
 require('db_connect.inc.php');
 require('functions.inc.php');
-$title="Holiday Calendar";
+
 
 // This page requires authentication
 require('auth.inc.php');
@@ -32,6 +32,7 @@ $length = cleanvar($_REQUEST['length']);
 if (empty($length)) $length='day';
 $display = cleanvar($_REQUEST['display']);
 
+$title = $strHolidayPlanner;
 include('htmlheader.inc.php');
 
 if (empty($user) || $user=='current') $user=$sit[2];
@@ -669,7 +670,7 @@ if ($display=='chart' OR $display=='month')
 }
 elseif ($display=='list')
 {
-    echo "<h2>Holiday List</h2>"; // FIXME i18n
+    echo "<h2>{$strHolidayList}</h2>";
 
     // Get list of holiday types
     $holidaytype[1] = $GLOBALS['strHoliday'];
@@ -687,7 +688,7 @@ elseif ($display=='list')
         echo ">{$htype}</option>\n";
     }
     echo "</select></form>";
-    echo "<h3>Descending date order</h3>";
+    echo "<h3>Descending date order</h3>"; // FIXME i18n decending date
     if (empty($type)) $type=1;
     $sql = "SELECT *, holidays.id AS holidayid FROM holidays, users WHERE ";
     $sql .= "holidays.userid=users.id AND holidays.type=$type ";
@@ -705,8 +706,8 @@ elseif ($display=='list')
             echo "<tr class='$shade'><td>".holiday_type($dates['type'])."</td>";
             echo "<td>{$dates['realname']}</td>";
             echo "<td>".date('l jS F Y', $dates['startdate']);
-            if ($dates['length']=='am') echo " Morning only"; // FIXME i18n
-            if ($dates['length']=='pm') echo " Afternoon only";
+            if ($dates['length']=='am') echo " {$strMorning}";
+            if ($dates['length']=='pm') echo " {$strAfternoon}";
             echo "</td>";
             echo "<td>";
             if (empty($dates['approvedby'])) echo " <em>not requested yet</em>";
@@ -802,17 +803,18 @@ else
         if (mysql_num_rows($result))
         {
             echo "<table align='center'>";
-            echo "<tr class='shade2'><td><strong>Dates waiting for approval</strong>:</td></tr>";
+            echo "<tr class='shade2'><td><strong>Dates waiting for approval</strong>:</td></tr>"; // FIXME i18n waiting
             echo "<tr class='shade1'><td>";
             while ($dates = mysql_fetch_array($result))
             {
                 echo date('l ', $dates['startdate']);
-                if ($dates['length']=='am') echo "morning ";
-                if ($dates['length']=='pm') echo "afternoon ";
+                if ($dates['length']=='am') echo "{$strMorning} ";
+                if ($dates['length']=='pm') echo "{$strAfternoon} ";
                 echo date('jS F Y', $dates['startdate']);
                 echo "<br/>\n";
             }
             echo "</td></tr>\n";
+            // FIXME i18n send holiday request
             echo "<tr class='shade1'><td><a href='holiday_request.php?type=$type'>Send holiday request</a></td></tr>";
             echo "</table>";
         }
@@ -822,7 +824,7 @@ else
     else
     {
         // Public Holidays are a special type = 10
-        echo "<h2>Set Public Holidays</h2>";
+        echo "<h2>{$strSetPublicHolidays}</h2>";
     }
 
     echo "<p align='center'>";

@@ -86,8 +86,8 @@ elseif(empty($action))
     $result = mysql_query($sql);
     if(mysql_error()) trigger_error(mysql_error(), E_USER_WARNING);
 
-    // FIXME i18n
-    echo "<p align='center'>One of the signatures blow will be chosen at random and inserted at the bottom of outgoing emails. It's recommended that you begin this signature with two dashes, a space and a line feed.<br /><br />";
+    // FIXME i18n global signature paragraph
+    echo "<p align='center'>One of the signatures below will be chosen at random and inserted at the bottom of outgoing emails. It's recommended that you begin this signature with two dashes, a space and a line feed.<br /><br />";
     echo "Remember that any changes here will be effective immediately and outgoing emails will carry the new signature.</p>";
 
     echo "<p align='center'><a href='edit_global_signature.php?action=add'>{$strAdd}</a></p>";
@@ -121,7 +121,7 @@ elseif(!empty($action))
             <tr>
             <?php
             echo "<td align='right' valign='top' class='shade1'><strong>{$strGlobalSignature}</strong>:<br />\n";
-            // FIXME i18n paragraph
+            // FIXME i18n paragraph global sigs
             echo "A signature to insert at the bottom of outgoing emails.  It's recommended that you begin this signature with two dashes, a space and a line feed.<br /><br />";
             echo "Remember that any changes here will be effective immediately and outgoing emails will carry the new signature.";
             echo "</td>";
