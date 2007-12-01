@@ -101,10 +101,10 @@ if (empty($mode))
     else $userdisable=FALSE;
 
     echo "<tr><th>{$strStatus}:</th><td>";
-    userstatus_drop_down("status", $user->status, $userdisable);
+    echo userstatus_drop_down("status", $user->status, $userdisable);
     echo "</td></tr>\n";
     echo "<tr><th>{$strAccepting} {$strIncidents}:</th><td>";
-    accepting_drop_down("accepting", $userid);
+    echo accepting_drop_down("accepting", $userid);
     echo "</td></tr>\n";
     echo "<tr><th>{$strMessage}:<br />{$strMessageTip}</th>";
     echo "<td><textarea name='message' rows='4' cols='40'>".strip_tags($user->message)."</textarea></td></tr>\n";
