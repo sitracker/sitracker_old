@@ -255,7 +255,7 @@ echo "</div>\n<br />\n";
 echo "<div id='footerbar'>";
 echo "<form style='margin: 0px;' action='{$_SERVER['PHP_SELF']}'>";
 echo "{$strSetYourStatus}: ";
-if(isset($sit[2])) userstatus_bardrop_down("status", user_status($sit[2]));
+if(isset($sit[2])) echo userstatus_bardrop_down("status", user_status($sit[2]));
 echo "</form>\n";
 echo "</div>\n";
 include('htmlfooter.inc.php');

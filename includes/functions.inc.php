@@ -1521,6 +1521,7 @@ function incidentstatus_drop_down_all($name, $id)
     * @author Ivan Lucas
     * @param $name string. Name attribute
     * @param $id integer. ID of Closing Status to pre-select. None selected if 0 or blank.
+    * @todo Requires database i18n
     * @returns string. HTML
 */
 function closingstatus_drop_down($name, $id)
@@ -1543,10 +1544,15 @@ function closingstatus_drop_down($name, $id)
 }
 
 
-
-/*  prints the HTML for a drop down list of     */
-/* user status names, with the given name and with the given  */
-/* id selected.                                               */
+/**
+    * Return HTML for a select box of user statuses
+    * @author Ivan Lucas
+    * @param $name string. Name attribute
+    * @param $id integer. ID of User Status to pre-select. None selected if 0 or blank.
+    * @param $userdisable boolean. (optional). When TRUE an additional option is given to allow disabling of accounts
+    * @todo Requires i18n and database i18n
+    * @returns string. HTML
+*/
 function userstatus_drop_down($name, $id, $userdisable=FALSE)
 {
    // extract statuses
@@ -1569,28 +1575,35 @@ function userstatus_drop_down($name, $id, $userdisable=FALSE)
 }
 
 
-
-/*  prints the HTML for a drop down list of     */
-/* user status names, with the given name and with the given  */
-/* id selected.                                               */
+/**
+    * Return HTML for a select box of user statuses with javascript to effect changes immediately
+    * Includes two extra options for setting Accepting yes/no
+    * @author Ivan Lucas
+    * @param $name string. Name attribute
+    * @param $id integer. ID of User Status to pre-select. None selected if 0 or blank.
+    * @todo Requires i18n and database i18n
+    * @todo move inline styles to main css file
+    * @returns string. HTML
+*/
 function userstatus_bardrop_down($name, $id)
 {
-   // extract statuses
-   $sql  = "SELECT id, name FROM userstatus ORDER BY name ASC";
-   $result = mysql_query($sql);
+    // extract statuses
+    $sql  = "SELECT id, name FROM userstatus ORDER BY name ASC";
+    $result = mysql_query($sql);
 
-   // print HTML
-
-    echo "<select name='$name' title='Set your status' onchange=\"if (this.options[this.selectedIndex].value != 'null') { window.open(this.options[this.selectedIndex].value,'_top') }\">\n";
+    $html = "<select name='$name' title='Set your status' onchange=\"if (this.options[this.selectedIndex].value != 'null') { window.open(this.options[this.selectedIndex].value,'_top') }\">\n";
     while ($statuses = mysql_fetch_array($result))
     {
-      ?><option <?php if ($statuses["id"] == $id) { ?>selected='selected' <?php }; echo "value='set_user_status.php?mode=setstatus&amp;userstatus=".$statuses['id']; ?>'><?php echo $statuses["name"] ?></option><?php
-      echo "\n";
+        $html .= "<option ";
+        if ($statuses["id"] == $id) $html .= "selected='selected' ";
+        $html .= "value='set_user_status.php?mode=setstatus&amp;userstatus={$statuses['id']}'>";
+        $html .= "{$statuses["name"]}</option>\n";
     }
-   // <option value='set_user_status.php?mode=return' style="color: #404040; border-bottom: 1px solid black;"></option>
-   echo "<option value='set_user_status.php?mode=setaccepting&amp;accepting=Yes' style='color: #00AA00; border-top: 1px solid black;'>{$GLOBALS['strAccepting']}</option>";
-   echo "<option value='set_user_status.php?mode=setaccepting&amp;accepting=No' style='color: #FF0000;'>{$GLOBALS['strNotAccepting']}</option>";
-   echo "</select>\n";
+    $html .= "<option value='set_user_status.php?mode=setaccepting&amp;accepting=Yes' style='color: #00AA00; border-top: 1px solid black;'>{$GLOBALS['strAccepting']}</option>\n";
+    $html .= "<option value='set_user_status.php?mode=setaccepting&amp;accepting=No' style='color: #FF0000;'>{$GLOBALS['strNotAccepting']}</option>\n";
+    $html .= "</select>\n";
+
+    return $html;
 }
 
 
