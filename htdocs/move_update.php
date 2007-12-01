@@ -206,7 +206,7 @@ else
 
         journal(CFG_LOGGING_NORMAL, 'Incident Update Moved', "Incident update $update moved to incident $incidentid", CFG_JOURNAL_INCIDENTS, $incidentid);
 
-        confirmation_page("2", "review_incoming_updates.php", "<h2>Move Successful</h2><p align='center'>{$strPleaseWaitRedirect}...</p>");
+        html_redirect("review_incoming_updates.php");
     }
     else
     {
