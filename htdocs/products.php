@@ -69,7 +69,7 @@ if (empty($productid) AND $display!='skills')
                     if ($countcontracts > 0) echo "<a href='browse_contract.php?search_string=&amp;productid={$product->id}&amp;activeonly=yes'>{$countcontracts}</a>";
                     else echo "{$countcontracts}";
                     echo "</td>";
-                    // FIXME
+                    // FIXME link to delete product
                     // echo "<td><a href='edit_product.php?id={$product->id}'>Edit</a> | <a href='delete_product.php?id={$product->id}'>Delete</a></td>";
                     echo "</tr>\n";
                     if ($shade=='shade1') $shade='shade2';

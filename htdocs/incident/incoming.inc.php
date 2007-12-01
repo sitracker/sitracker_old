@@ -59,10 +59,9 @@ if (mysql_num_rows($result) > 0)
     echo "<div class='detailinfo'>";
     if($lockedbyname == "you")
     {
-        // FIXME i18n Reason
         echo "<div class='detaildate'>
-                <form method='POST' action='{$_SERVER['PHP_SELF']}?id={$incomingid}&win=incomingview&action=updatereason'>
-                Reason: <input name='newreason' type='text' value=\"".stripslashes($incoming->reason)."\" size='25' maxlength='100' />
+                <form method='post' action='{$_SERVER['PHP_SELF']}?id={$incomingid}&win=incomingview&action=updatereason'>
+                {$strMessage}: <input name='newreason' type='text' value=\"".stripslashes($incoming->reason)."\" size='25' maxlength='100' />
                 <input type='submit' value='{$strSave}' />
                 </form>
             </div>";
@@ -72,6 +71,7 @@ if (mysql_num_rows($result) > 0)
         echo "<div class='detaildate'>{$incoming->reason}</div>";
     }
 
+    // FIXME locked by X
     echo "<img src='{$CONFIG['application_webpath']}images/icons/{$iconset}/16x16/locked.png' alt='Locked' /> Locked by {$lockedbyname}</div>";
 
     //echo "<pre>".print_r($incoming,true)."</pre>";

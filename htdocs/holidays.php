@@ -9,7 +9,6 @@
 //
 
 // This Page Is Valid XHTML 1.0 Transitional!  13Sep06
-// FIXME i18n
 
 $permission=4; // Edit your profile
 
