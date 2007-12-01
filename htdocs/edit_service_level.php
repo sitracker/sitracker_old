@@ -56,7 +56,6 @@ if (empty($action) OR $action == "showform")
     if (mysql_error()) trigger_error(mysql_error(),E_USER_WARNING);
     $sla = mysql_fetch_object($result);
 
-    // FIXME i18n days/minutes
     echo "<form name='edit_servicelevel' action='{$_SERVER['PHP_SELF']}' method='post'>";
     echo "<table class='vertical'>";
     echo "<tr><th>{$strInitialResponse} <img src='{$CONFIG['application_webpath']}images/icons/{$iconset}/16x16/initialresponse.png' width='16' height='16' alt='' /></th>";

@@ -43,7 +43,7 @@ elseif ($action == "edit")
     //  Show edit site form
     if ($site == 0)
     {
-        echo "<p class='error'>You must select a site</p>";
+        echo "<p class='error'>You must select a site</p>"; // FIXME i18n error message
     }
     else
     {
