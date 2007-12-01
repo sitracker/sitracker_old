@@ -60,24 +60,25 @@ if (!empty($userid))
 
     if ($errors==0)
     {
-    $sql = Array();
+        $sql = Array();
         $sql[] = "DELETE FROM users WHERE id = $userid LIMIT 1";
         $sql[] = "DELETE FROM holidays WHERE userid = $userid";
         $sql[] = "DELETE FROM usergroups WHERE userid = $userid";
         $sql[] = "DELETE FROM userpermissions WHERE userid = $userid";
 
-    foreach($sql as $query)
-    {
-        $result = mysql_query($query);
+        foreach($sql as $query)
+        {
+            $result = mysql_query($query);
             if (mysql_error()) trigger_error(mysql_error(),E_USER_ERROR);
         }
 
-    journal(CFG_LOGGING_NORMAL, 'User Removed', "User $userid was removed", CFG_JOURNAL_USERS, $userid);
-        confirmation_page("2", "users.php", "<h2>User removed Successfully</p><p align='center'>{$strPleaseWaitRedirect}...</h2>");
+        journal(CFG_LOGGING_NORMAL, 'User Removed', "User $userid was removed", CFG_JOURNAL_USERS, $userid);
+        html_redirect("users.php");
     }
     else
     {
         include('htmlheader.inc.php');
+        // FIXME i18n error
         echo "<p class='error'>Sorry, this user cannot be deleted because it has been associated with one or more files, links, notes or skills/software</p>";
         echo "<p align='center'><a href='users.php#{$userid}'>Return to users list</a></p>";
         include('htmlfooter.inc.php');

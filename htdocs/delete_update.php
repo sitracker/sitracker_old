@@ -58,5 +58,5 @@ $path=$incident_attachment_fspath.'updates/'.$updateid;
 if (file_exists($path)) deldir($path);
 
 journal(CFG_LOGGING_NORMAL, 'Incident Log Entry Deleted', "Incident Log Entry $updateid was deleted from Incident $incidentid", CFG_JOURNAL_INCIDENTS, $incidentid);
-confirmation_page("1", "review_incoming_updates.php", "<h2>Delete Successful</p><p align='center'>{$strPleaseWaitRedirect}...</h2>");
+html_redirect("review_incoming_updates.php");
 ?>

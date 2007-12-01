@@ -46,11 +46,12 @@ if (!empty($productid))
         $result = mysql_query($sql);
         if (mysql_error()) trigger_error(mysql_error(),E_USER_ERROR);
         journal(CFG_LOGGING_NORMAL, 'Product Removed', "Product $productid was removed", CFG_JOURNAL_PRODUCTS, $productid);
-        confirmation_page("2", "products.php", "<h2>Product removed Successfully</p><p align='center'>{$strPleaseWaitRedirect}...</h2>");
+        html_redirect("products.php");
     }
     else
     {
         include('htmlheader.inc.php');
+        // FIXME i18n error
         echo "<p class='error'>Sorry, this product cannot be deleted because it has been associated with one or more incidents, contracts or skills</p>";
         echo "<p align='center'><a href='products.php#{$productid}'>Return to products list</a></p>";
         include('htmlfooter.inc.php');

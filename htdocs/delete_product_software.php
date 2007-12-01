@@ -31,10 +31,10 @@ if (!empty($productid) && !empty($softwareid))
     mysql_query($sql);
     if (mysql_error()) trigger_error("MySQL Query Error ".mysql_error(), E_USER_ERROR);
     journal(CFG_LOGGING_NORMAL, 'Skill Unlinked', "Skill $softwareid was unlinked from Product $productid", CFG_JOURNAL_PRODUCTS, $productid);
-    confirmation_page("2", "products.php", "<h2>Linked skill removed Successfully</p><p align='center'>{$strPleaseWaitRedirect}...</p>");
+    html_redirect("products.php");
 }
 else
 {
-    throw_error("Could not delete softwareproduct", "Parameter(s) missing");
+    html_redirect("products.php", FALSE, "Required data missing");
 }
 ?>
