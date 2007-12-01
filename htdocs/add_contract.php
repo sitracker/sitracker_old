@@ -72,7 +72,7 @@ if ($action == "showform" OR $action=='')
     echo "<td>".array_drop_down($incident_pools,'incident_poolid',$maint['incident_quantity'])."</td></tr>";
 
     echo "<tr><th>{$strProductOnly}:</th><td><input name='productonly' type='checkbox' value='yes' /></td></tr></tbody>\n";
-    
+
     echo "</table>\n";
     echo "<p align='center'><input name='submit' type='submit' value=\"{$strAddContract}\" /></p>";
     echo "</form>";
@@ -95,7 +95,7 @@ elseif ($action == "add")
     $term = cleanvar($_REQUEST['term']);
     $contacts = cleanvar($_REQUEST['contacts']);
     if($_REQUEST['noexpiry'] == 'on') $expirydate = '-1';
-    
+
     $allcontacts = 'No';
     if($contacts == 'amount') $amount = cleanvar($_REQUEST['amount']);
     elseif($contacts == 'all') $allcontacts = 'Yes';
@@ -177,7 +177,7 @@ elseif ($action == "add")
             $id=mysql_insert_id();
             journal(CFG_LOGGING_NORMAL, 'Contract Added', "Contract $id Added", CFG_JOURNAL_MAINTENANCE, $id);
 
-            confirmation_page("2", "contract_details.php?id=$maintid", "<h2>Contract Added Successfully</h2><h5>{$strPleaseWaitRedirect}...</h5>");
+            html_redirect("contract_details.php?id=$maintid");
         }
     }
     else

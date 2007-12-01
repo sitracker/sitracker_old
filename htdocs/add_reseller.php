@@ -47,7 +47,7 @@ switch($action)
             $id=mysql_insert_id();
             journal(CFG_LOGGING_NORMAL, 'Reseller Added', "Reseller $id Added", CFG_JOURNAL_MAINTENANCE, $id);
 
-            confirmation_page("2", "main.php", "<h2>Reseller Added Successfully</h2><h5>{$strPleaseWaitRedirect}...</h5>");
+            html_redirect("main.php");
         }
         break;
     default:
