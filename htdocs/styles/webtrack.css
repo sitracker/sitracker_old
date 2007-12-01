@@ -207,9 +207,9 @@ p.tip,p.info, p.warning, p.error, h5.warning, h5.error
 p.tip
 {
   background-image: url('../images/icons/sit/16x16/tip.png');
-  color: InfoText;
-  border: 1px solid InfoText;
-  background-color: InfoBackground;
+  color: black;
+  border: 1px solid black;;
+  background-color: #FFFFEB;
 }
 p.info
 {
