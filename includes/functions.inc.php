@@ -1430,6 +1430,12 @@ function interfacestyle_drop_down($name, $id)
 }
 
 
+/**
+    * Retrieve cssurl and headerhtml for given interface style
+    * @author Ivan Lucas
+    * @param $id Integer. Interface style ID
+    * @returns asoc array.
+*/
 function interface_style($id)
 {
     global $CONFIG;
@@ -1510,33 +1516,31 @@ function incidentstatus_drop_down_all($name, $id)
 
 
 
-/*  prints the HTML for a drop down list of     */
-/* closing statuses, with the given name and with the given   */
-/* id selected.                                               */
-
+/**
+    * Return HTML for a select box of closing statuses
+    * @author Ivan Lucas
+    * @param $name string. Name attribute
+    * @param $id integer. ID of Closing Status to pre-select. None selected if 0 or blank.
+    * @returns string. HTML
+*/
 function closingstatus_drop_down($name, $id)
-   {
+{
+    // extract statuses
+    $sql  = "SELECT id, name FROM closingstatus ORDER BY name ASC";
+    $result = mysql_query($sql);
+    if (mysql_error()) trigger_error(mysql_error(),E_USER_WARNING);
+    $html = "<select name=\"{$name}\">";
+    if ($id == 0) $html .= "<option selected='selected' value='0'></option>\n";
+    while ($statuses = mysql_fetch_array($result))
+    {
+        $html .= "<option ";
+        if ($statuses["id"] == $id) $html .= "selected='selected' ";
+        $html .= "value='{$statuses["id"]}'>{$statuses["name"]}</option>\n";
+    }
+    $html .= "</select>\n";
 
-   // extract statuses
-   $sql  = "SELECT id, name FROM closingstatus ORDER BY name ASC";
-   $result = mysql_query($sql);
-
-   // print HTML
-   ?>
-   <select name="<?php echo $name ?>">
-   <?php
-   if ($id == 0)
-      echo "<option selected='selected' value='0'></option>\n";
-   while ($statuses = mysql_fetch_array($result))
-      {
-      ?><option <?php if ($statuses["id"] == $id) { ?>selected='selected' <?php } ?>value='<?php echo $statuses["id"] ?>'><?php echo $statuses["name"] ?></option><?php
-      echo "\n";
-      }
-   ?>
-   </select>
-   <?php
-
-   }
+    return $html;
+}
 
 
 
