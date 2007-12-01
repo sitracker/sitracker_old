@@ -120,7 +120,7 @@ if ($sit[0]!='')
     echo "</div>\n";
 }
 //dismiss any notices
-$action = cleanvar($_REQUEST['action']);
+$action = cleanvar($_REQUEST['noticeaction']);
 $noticeid = cleanvar($_REQUEST['noticeid']);
 
 if($action=='dismiss_notice')
@@ -161,7 +161,7 @@ if($sit[0] != '')
             elseif($notice->type == WARNING_NOTICE_TYPE)
             {
                 echo "<div class='warning'><p class='warning'>";
-                echo "<span>(<a href='{$_SERVER[PHP_SELF]}?action=dismiss_notice&amp;noticeid={$notice->id}'>$strDismiss</a>)</span>";
+                echo "<span>(<a href='{$_SERVER[PHP_SELF]}?noticeaction=dismiss_notice&amp;noticeid={$notice->id}'>$strDismiss</a>)</span>";
                 echo $notice->text;
             }
             elseif($notice->type == CRITICAL_NOTICE_TYPE)
@@ -173,11 +173,11 @@ if($sit[0] != '')
             elseif($notice->type == OUT_OF_SLA_TYPE OR $notice->type == NEARING_SLA_TYPE)
             {
                 echo "<div class='error'><p class='warning'>";
-                echo "<span>(<a href='{$_SERVER[PHP_SELF]}?action=dismiss_notice&amp;noticeid={$notice->id}'>$strDismiss</a>)</span>";
+                echo "<span>(<a href='{$_SERVER[PHP_SELF]}?noticeaction=dismiss_notice&amp;noticeid={$notice->id}'>$strDismiss</a>)</span>";
                 echo "{$notice->text}";
                 if (!empty($notice->link))
                 {
-                    echo " - <a href=\"{$notice->link}\">";
+                    echo " - <a href=\"{".stripslashes($notice->link)."\">";
                     if (substr($notice->linktext, 0, 4)=='$str')
                     {
                         $v = substr($notice->linktext, 1);
@@ -190,7 +190,7 @@ if($sit[0] != '')
             else
             {
                 echo "<div class='info'><p class='info'>";
-                echo "<span>(<a href='{$_SERVER[PHP_SELF]}?action=dismiss_notice&amp;noticeid={$notice->id}'>$strDismiss</a>)</span>";
+                echo "<span>(<a href='{$_SERVER[PHP_SELF]}?noticeaction=dismiss_notice&amp;noticeid={$notice->id}'>$strDismiss</a>)</span>";
                 if (substr($notice->text, 0, 4)=='$str')
                 {
                     $v = substr($notice->text, 1);
@@ -213,7 +213,7 @@ if($sit[0] != '')
         }
         if(mysql_num_rows($noticeresult) > 1)
         {
-            echo "<p align='right' style='padding-right:32px'><a href='{$_SERVER[PHP_SELF]}?action=dismiss_notice&amp;noticeid=all'>{$strDismissAll}</a></p>";
+            echo "<p align='right' style='padding-right:32px'><a href='{$_SERVER[PHP_SELF]}?noticeaction=dismiss_notice&amp;noticeid=all'>{$strDismissAll}</a></p>";
         }
         //echo "</div>";
     }
