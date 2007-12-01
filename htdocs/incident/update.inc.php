@@ -502,7 +502,7 @@ else if($action == "deletedraft")
         $result = mysql_query($sql);
         if (mysql_error()) trigger_error(mysql_error(),E_USER_ERROR);
     }
-    confirmation_page("2", "update_incident.php?id=" . $id, "<h2>Update Successful</h2><p align='center'>{$strPleaseWaitRedirect}...</p>");
+    html_redirect("update_incident.php?id={$id})";
 }
 else if($action == "newupdate")
 {
@@ -719,7 +719,7 @@ else
             if (mysql_error()) trigger_error(mysql_error(),E_USER_ERROR);
         }
         journal(4,'Incident Updated', "Incident $id Updated", 2, $id);
-        confirmation_page("2", "incident_details.php?id=" . $id, "<h2>Update Successful</h2><p align='center'>{$strPleaseWaitRedirect}...</p>");
+        html_redirect("incident_details.php?id={$id}");
     }
 }
 

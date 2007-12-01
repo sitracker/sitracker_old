@@ -27,7 +27,7 @@ $id = cleanvar($_REQUEST['id']);
 // Don't allow resetting in DEMO MODE
 if ($CONFIG['demo'])
 {
-    confirmation_page("3", "manage_users.php", "<h2>You cannot reset passwords while in DEMO MODE</h2><p align='center'>{$strPleaseWaitRedirect}...</p>");
+    html_redirect("manage_users.php", FALSE, "You cannot reset passwords while in DEMO MODE"); // FIXME i18n demo mode
     exit;
 }
 
@@ -42,10 +42,10 @@ if ($id > 1)
     $sql = "UPDATE users SET password='$newpassword' WHERE id='$id'";
     $result = mysql_query($sql);
     if (mysql_error()) trigger_error("MySQL Query Error ".mysql_error(), E_USER_ERROR);
-    confirmation_page("7", "manage_users.php", "<h2>Password was reset to: '$newpasswordplain' (sans-quotes)</h2><p align='center'>Please wait while you are redirected...</p>");
+    html_redirect("manage_users.php", TRUE, "Password was reset to: '$newpasswordplain' (sans-quotes)"); // FIXME i18n
 }
 else
 {
-    confirmation_page("3", "manage_users.php", "<h2>You cannot reset this users password</h2><p align='center'>{$strPleaseWaitRedirect}...</p>");
+    html_redirect("manage_users.php", FALSE, "You cannot reset this users password"); // FIXME i18n error message
 }
 ?>

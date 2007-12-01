@@ -91,7 +91,7 @@ switch ($action)
 
         journal(CFG_LOGGING_FULL,'Incident Reassigned', "Incident $id reassigned to user id $newowner", CFG_JOURNAL_SUPPORT, $id);
 
-        confirmation_page("2", "incident_details.php?id=" . $id, "<h2>Reassignment Successful</h2><h5>{$strPleaseWaitRedirect}...</h5>");
+        html_redirect("incident_details.php?id={$id}");
         break;
 
     default:
