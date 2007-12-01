@@ -133,7 +133,7 @@ if($action=='dismiss_notice')
     }
     elseif($noticeid == 'all')
     {
-        $sql = "DELETE FROM notices WHERE userid={$sit[2]}";
+        $sql = "DELETE FROM notices WHERE userid={$sit[2]} LIMIT2 20"; // only delete 20 max as we only show 20 max
         mysql_query($sql);
         if (mysql_error()) trigger_error(mysql_error(),E_USER_WARNING);
     }
