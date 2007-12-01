@@ -158,7 +158,7 @@ elseif ($action == "update")
         {
             plugin_do('edit_site_save');
             journal(CFG_LOGGING_NORMAL, 'Site Edited', "Site $site was edited", CFG_JOURNAL_SITES, $site);
-            confirmation_page("2", "site_details.php?id=$site", "<h2>Site Update Successful</h2><p align='center'>{$strPleaseWaitRedirect}...</p>");
+            html_redirect("site_details.php?id={$site}");
         }
     }
     else

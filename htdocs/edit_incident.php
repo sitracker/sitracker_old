@@ -224,7 +224,7 @@ else
             if ($addition_errors == 0)
             {
                 journal(CFG_LOGGING_NORMAL, 'Incident Edited', "Incident $id was edited", CFG_JOURNAL_INCIDENTS, $id);
-                confirmation_page("2", "incident_details.php?id=" . $id, "<h2>Update Successful</h2><p align='center'>{$strPleaseWaitRedirect}...</p>");
+                html_redirect("incident_details.php?id={$id}");
             }
             else
             {

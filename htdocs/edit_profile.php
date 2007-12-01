@@ -325,7 +325,7 @@ elseif($mode=='save')
             plugin_do('save_profile_form');
 
             // password was not changed
-            if (!isset($confirm_message)) confirmation_page("2", $redirecturl, "<h2>Profile Modification Successful</h2><h5>{$strPleaseWaitRedirect}...</h5>");
+            if (!isset($confirm_message)) html_redirect($redirecturl);
             // password was changed
             else
             {
@@ -336,7 +336,7 @@ elseif($mode=='save')
                     @mysql_query($sql);
                 }
                 journal(CFG_LOGGING_NORMAL, 'User Profile Edited', "User Profile {$sit[2]} Edited", CFG_JOURNAL_USER, $sit[2]);
-                confirmation_page("2", $redirecturl, $confirm_message);
+                confirmation_page($redirecturl, TRUE, $confirm_message);
             }
         }
     }
@@ -357,9 +357,7 @@ elseif($mode='savesessionlang')
     $sql = "DELETE FROM notices WHERE type=".USER_LANG_DIFFERS_TYPE." AND userid={$sit[2]}";
     mysql_query($sql);
     if (mysql_error()) trigger_error("MySQL Query Error ".mysql_error(), E_USER_ERROR);
-    include('htmlheader.inc.php');
-    confirmation_page("2", "main.php", "<h2>Profile Modification Successful</h2><h5>{$strPleaseWaitRedirect}...</h5>");
-    include('htmlfooter.inc.php');
+    html_redirect("main.php");
 }
 
 ?>

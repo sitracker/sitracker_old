@@ -270,7 +270,7 @@ elseif ($action == "update")
         else
         {
             journal(CFG_LOGGING_NORMAL, 'Email Template Updated', "Email Template $type was modified", CFG_JOURNAL_ADMIN, $type);
-            confirmation_page("2", "edit_emailtype.php", "<h2>Email Template Edited</h2><h5>{$strPleaseWaitRedirect}...</h5>");
+            html_redirect("edit_emailtype.php");
         }
     }
 }

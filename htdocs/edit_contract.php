@@ -144,7 +144,7 @@ if ($action == "edit")
         echo "<tr><th>{$strProductOnly}:</th><td><input name='productonly' type='checkbox' value='yes' onclick='set_terminated();' ";
         if ($maint["productonly"] == "yes") echo " checked";
         echo " /></td></tr>\n";
-        
+
         echo "</table>\n";
         echo "<input name='maintid' type='hidden' value='{$maintid}' />";
         echo "<p align='center'><input name='submit' type='submit' value='{$strSave}' /></p>";
@@ -172,7 +172,7 @@ else if ($action == "update")
     $product = cleanvar($_POST['product']);
     $contacts = cleanvar($_REQUEST['contacts']);
     if($_REQUEST['noexpiry'] == 'on') $expirydate = '-1';
-    
+
     $allcontacts = 'No';
     if($contacts == 'amount') $amount = cleanvar($_REQUEST['amount']);
     elseif($contacts == 'all') $allcontacts = 'Yes';
@@ -238,7 +238,7 @@ else if ($action == "update")
         else
         {
             journal(CFG_LOGGING_NORMAL, 'Contract Edited', "contract $maintid modified", CFG_JOURNAL_MAINTENANCE, $maintid);
-            confirmation_page("2", "contract_details.php?id=$maintid", "<h2>Contract Update Successful</h2><p align='center'>{$strPleaseWaitRedirect}...</p>");
+            html_redirect("contract_details.php?id={$maintid}");
         }
     }
     // show error message if errors

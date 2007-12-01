@@ -43,7 +43,7 @@ if ($action == 'save')
     else
     {
         journal(CFG_LOGGING_NORMAL, 'Product Edited', "Product $productid was edited", CFG_JOURNAL_PRODUCTS, $productid);
-        confirmation_page("2", "products.php", "<h2>Product Edited Successfully</h2><p align='center'>{$strPleaseWaitRedirect}...</p>");
+        html_redirect("products.php");
     }
 }
 else
