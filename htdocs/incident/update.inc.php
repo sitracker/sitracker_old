@@ -396,7 +396,7 @@ function display_update_page($draftid=-1)
     echo "<td class='shade2'><input type='text' name='nextaction' id='nextaction' maxlength='50' size='30' value='{$nextAction}' /></td></tr>";
     echo "<tr>";
     echo "<th align='right'>";
-    // FIXME i18n
+    // FIXME i18n will be placed in the waiting queue
     echo "<strong>{$GLOBALS['strTimeToNextAction']}</strong>:<br />The incident will be placed in the waiting queue until the time specified.</th>";
     echo "<td class='shade2'>";
 
@@ -421,7 +421,6 @@ function display_update_page($draftid=-1)
     echo "<input name='date' id='date' size='10' value='{$date}' onclick=\"window.document.updateform.timetonextaction_none[1].checked = true;\"/> ";
     echo date_picker('updateform.date');
     echo " <select name='timeoffset' id='timeoffset' onchange='window.document.updateform.timetonextaction_none[1].checked = true;'>";
-    // FIXME i18n choose time
     echo "<option value='0'></option>";
     echo "<option value='0'>8:00 AM</option>";
     echo "<option value='1'>9:00 AM</option>";

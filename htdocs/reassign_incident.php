@@ -9,7 +9,6 @@
 //
 
 // Author: Ivan Lucas <ivanlucas[at]users.sourceforge.net>
-// FIXME i18n
 
 $permission=13; // Reassign Incident
 require('db_connect.inc.php');
@@ -125,7 +124,7 @@ switch ($action)
 
         if ($incident->towner > 0)
         {
-            echo " (Temp: "; // FIXME i18n
+            echo " (Temp: "; // FIXME i18n 'Temp'
             if ($sit[2]==$incident->towner) echo "{$strYou} (".user_realname($incident->towner,TRUE).")";
             else echo user_realname($incident->towner,TRUE);
             echo ")";
@@ -255,7 +254,7 @@ switch ($action)
         if (!empty($reason)) echo $reason;
         echo "</textarea>";
         echo "</td></tr>\n";
-        // FIXME i18n
+        // FIXME i18n 'Temporary' and 'Change/Remove Temporary Ownership'
         if ($incident->towner > 0 AND ($sit[2] == $incident->owner OR $sit[2] == $incident->towner))
         {
             echo "<tr><th>Temporary:</th><td>";
