@@ -1558,6 +1558,7 @@ function userstatus_drop_down($name, $id, $userdisable=FALSE)
    // extract statuses
    $sql  = "SELECT id, name FROM userstatus ORDER BY name ASC";
    $result = mysql_query($sql);
+   if (mysql_error()) trigger_error(mysql_error(),E_USER_WARNING);
 
    $html = "<select name='$name'>\n";
    if ($userdisable) $html .= "<option style='color: red;' selected='selected' value='0'>ACCOUNT DISABLED</option>\n";
@@ -1590,6 +1591,7 @@ function userstatus_bardrop_down($name, $id)
     // extract statuses
     $sql  = "SELECT id, name FROM userstatus ORDER BY name ASC";
     $result = mysql_query($sql);
+    if (mysql_error()) trigger_error(mysql_error(),E_USER_WARNING);
 
     $html = "<select name='$name' title='Set your status' onchange=\"if (this.options[this.selectedIndex].value != 'null') { window.open(this.options[this.selectedIndex].value,'_top') }\">\n";
     while ($statuses = mysql_fetch_array($result))
@@ -1607,38 +1609,45 @@ function userstatus_bardrop_down($name, $id)
 }
 
 
-
-
-/*  prints the HTML for a drop down list of     */
-/* email types, with the given name and with the given id     */
-/* selected.                                                  */
-
+/**
+    * Return HTML for a select box of user email templates
+    * @author Ivan Lucas
+    * @param $name string. Name attribute
+    * @param $id integer. ID of Template to pre-select. None selected if 0 or blank.
+    * @returns string. HTML
+*/
 function emailtype_drop_down($name, $id)
 {
     // INL 22Apr05 Added a filter to only show user templates
+    $sql  = "SELECT id, name, description FROM emailtype WHERE type='user' ORDER BY name ASC";
+    $result = mysql_query($sql);
+    if (mysql_error()) trigger_error(mysql_error(),E_USER_WARNING);
 
-   // extract statuses
-   $sql  = "SELECT id, name, description FROM emailtype WHERE type='user' ORDER BY name ASC";
-   $result = mysql_query($sql);
+    $html = "<select name=\"{$name}\">";
+    if ($id == 0)  $html .= "<option selected='selected' value='0'></option>\n";
+    while ($emailtypes = mysql_fetch_array($result))
+    {
+        $html .= "<option ";
+        if (!empty($emailtypes['description'])) $html .= "title='{$emailtypes['description']}' ";
+        if ($emailtypes["id"] == $id) { $html .= "selected='selected' "; }
+        $html .= "value='{$emailtypes['id']}'>{$emailtypes['name']}</option>";
+        $html .= "\n";
+    }
+    $html .= "</select>\n";
 
-   // print HTML
-  echo "<select name='{$name}'>";
-  if ($id == 0)  echo "<option selected='selected' value='0'></option>\n";
-  while ($emailtypes = mysql_fetch_array($result))
-  {
-      echo "<option ";
-      if (!empty($emailtypes['description'])) echo "title='{$emailtypes['description']}' ";
-      if ($emailtypes["id"] == $id) { echo "selected='selected' "; }
-      echo "value='{$emailtypes['id']}'>{$emailtypes['name']}</option>";
-      echo "\n";
-  }
-  echo "</select>\n";
+    return $html;
 }
 
 
-
-// prints the HTML for a drop down list of priorities, with the given name
-// and with the given id selected
+/**
+    * Return HTML for a select box of priority names (with icons)
+    * @author Ivan Lucas
+    * @param $name string. Name attribute
+    * @param $id integer. ID of priority to pre-select. None selected if 0 or blank.
+    * @param $max integer. The maximum priority ID to list.
+    * @param $disable boolean. Disable the control when TRUE.
+    * @returns string. HTML
+*/
 function priority_drop_down($name, $id, $max=4, $disable=FALSE)
 {
     global $CONFIG, $iconset;
@@ -1663,6 +1672,7 @@ function priority_drop_down($name, $id, $max=4, $disable=FALSE)
         $html .= ">{$GLOBALS['strCritical']}</option>\n";
     }
     $html .= "</select>\n";
+
     return $html;
 }
 
