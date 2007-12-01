@@ -1572,7 +1572,7 @@ function userstatus_drop_down($name, $id, $userdisable=FALSE)
    }
    $html .= "</select>\n";
 
-   echo $html;
+   return $html;
 }
 
 
@@ -1677,11 +1677,13 @@ function priority_drop_down($name, $id, $max=4, $disable=FALSE)
 }
 
 
-
-/*  prints the HTML for a multiple select list  */
-/* of products, with the given name and with all the products */
-/* the given customer has support for already selected.       */
-
+/**
+    * prints the HTML for a multiple select list of products, with the given name and with all the products
+    * the given customer has support for already selected
+    * @author Ivan Lucas
+    * @deprecated
+    * @note DEPRECATED uses contactproducts
+*/
 function contactproducts_drop_down($name, $contactid)
 {
    // extract products
@@ -1703,26 +1705,30 @@ function contactproducts_drop_down($name, $contactid)
 }
 
 
-
-/*  prints the HTML for a drop down list of     */
-/* 'yes' and 'no' with the gven name and with the option      */
-/* selected depending on the supplied userid                  */
+/**
+    * Return HTML for a select box for accepting yes/no. The given user's accepting status is displayed.
+    * @author Ivan Lucas
+    * @param $name string. Name attribute
+    * @param $userid integer. The user ID to check
+    * @returns string. HTML
+*/
 function accepting_drop_down($name, $userid)
 {
-   if (user_accepting($userid) == "Yes")
-   {
-      echo "<select name=\"$name\">\n";
-      echo "<option selected='selected' value=\"Yes\">{$GLOBALS['strYes']}</option>\n";
-      echo "<option value=\"No\">{$GLOBALS['strNo']}</option>\n";
-      echo "</select>\n";
+    if (user_accepting($userid) == "Yes")
+    {
+        $html = "<select name=\"$name\">\n";
+        $html .= "<option selected='selected' value=\"Yes\">{$GLOBALS['strYes']}</option>\n";
+        $html .= "<option value=\"No\">{$GLOBALS['strNo']}</option>\n";
+        $html .= "</select>\n";
+    }
+    else
+    {
+        $html = "<select name=\"$name\">\n";
+        $html .= "<option value=\"Yes\">Yes</option>\n";
+        $html .= "<option selected='selected' value=\"No\">{$GLOBALS['strNo']}</option>\n";
+        $html .= "</select>\n";
    }
-   else
-   {
-      echo "<select name=\"$name\">\n";
-      echo "<option value=\"Yes\">Yes</option>\n";
-      echo "<option selected='selected' value=\"No\">{$GLOBALS['strNo']}</option>\n";
-      echo "</select>\n";
-   }
+   return $html;
 }
 
 
