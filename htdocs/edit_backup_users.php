@@ -96,7 +96,7 @@ else
         mysql_query($sql);
         if (mysql_error()) trigger_error(mysql_error(),E_USER_ERROR);
     }
-    confirmation_page("2", "control_panel.php", "<h2>{$strUpdateSuccessful}</h2><h5>{$strPleaseWaitRedirect}...</h5>");
+    html_redirect("control_panel.php", TRUE, $strUpdateSuccessful);
 }
 
 ?>
