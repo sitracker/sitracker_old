@@ -54,7 +54,6 @@ if (empty($submit))
     html_checkbox('dataprotection_phone', 'No');
     echo "{$strTelephone} {$strDataProtection}</label>";
     echo "</td></tr>\n";
-    echo "</td></tr>\n";
     echo "<tr><th>{$strMobile}:</th><td><input maxlength='100' name='mobile' size='35' value='' /></td></tr>\n";
     echo "<tr><th>{$strFax}:</th><td><input maxlength='50' name='fax' size='35' /></td></tr>\n";
     echo "<tr><th>{$strAddress}:</th><td><label>";

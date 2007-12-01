@@ -36,13 +36,12 @@ if (user_permission($sit[2],42)) // Review/Delete Incident Updates
 
 if (user_permission($sit[2],44)) // FTP Publishing
 {
-    // FIXME i18n
-    echo "<thead><tr><th>FILES</th></tr></thead>";
-    echo "<tbody><tr><td><a href='ftp_list_files.php'>Manage FTP Files</a></td></tr></tbody>";
+    echo "<thead><tr><th>{$strFiles}</th></tr></thead>";
+    echo "<tbody><tr><td><a href='ftp_list_files.php'>Manage FTP Files</a></td></tr></tbody>";// FIXME i18n manage ftp files
 }
 if (user_permission($sit[2],50)) // Approve holidays
 {
-    echo "<thead><tr><th>USER MANAGEMENT</th></tr></thead>";
+    echo "<thead><tr><th>{$strManageUsers}</th></tr></thead>";
     echo "<tbody><tr><td><a href='holiday_request.php?user=all&mode=approval'>{$strApproveHolidays}</a></td></tr></tbody>";
 }
 if (user_permission($sit[2],22)) // Administrate

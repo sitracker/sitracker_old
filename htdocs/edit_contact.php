@@ -70,19 +70,18 @@ elseif ($action == "edit" && isset($contact))
         echo "<tr><th>{$strJobTitle}:</th><td><input maxlength='255' name='jobtitle' size='40' value=\"".stripslashes($contactrow['jobtitle'])."\" /></td></tr>\n";
         echo "<tr><th>{$strSite}: <sup class='red'>*</sup></th><td>".site_drop_down('siteid',$contactrow['siteid'])."</td></tr>\n";
         echo "<tr><th>{$strDepartment}:</th><td><input maxlength='100' name='department' size='40' value=\"".stripslashes($contactrow['department'])."\" /></td></tr>\n";
-        echo "<tr><th>{$strEmail}: <sup class='red'>*</sup></th><td><input maxlength='100' name='email' size='40' value=\"".stripslashes($contactrow['email'])."\" /></td></tr>\n";
-        echo "<tr><th>{$strTelephone}:</th><td><input maxlength='50' name='phone' size='40' value=\"".stripslashes($contactrow['phone'])."\" /></td></tr>\n";
+        echo "<tr><th>{$strEmail}: <sup class='red'>*</sup></th><td><input maxlength='100' name='email' size='40' value=\"".stripslashes($contactrow['email'])."\" />";
+        echo "<label>";
+        html_checkbox('dataprotection_email', $contactrow['dataprotection_email']);
+        echo "{$strEmail} {$strDataProtection}</label>";
+        echo "</td></tr>\n";
+        echo "<tr><th>{$strTelephone}:</th><td><input maxlength='50' name='phone' size='40' value=\"".stripslashes($contactrow['phone'])."\" />";
+        echo "<label>";
+        html_checkbox('dataprotection_phone', $contactrow['dataprotection_phone']);
+        echo "{$strTelephone} {$strDataProtection}</label>";
+        echo "</td></tr>\n";
         echo "<tr><th>{$strMobile}:</th><td><input maxlength='50' name='mobile' size='40' value=\"".stripslashes($contactrow['mobile'])."\" /></td></tr>\n";
         echo "<tr><th>{$strFax}:</th><td><input maxlength='50' name='fax' size='40' value=\"".stripslashes($contactrow['fax'])."\" /></td></tr>\n";
-        echo "<tr><th>{$strDataProtection}: {$strEmail}:</th><td>";
-        html_checkbox('dataprotection_email', $contactrow['dataprotection_email']);
-        echo " Don't send email</td></tr>\n"; // FIXME i18n
-        echo "<tr><th>{$strDataProtection}: {$strTelephone}:</th><td>";
-        html_checkbox('dataprotection_phone', $contactrow['dataprotection_phone']);
-        echo " Don't call</td></tr>\n"; // FIXME i18n
-        echo "<tr><th>{$strDataProtection} {$strAddress}:</th><td>";
-        html_checkbox('dataprotection_address', $contactrow['dataprotection_address']);
-        echo " Don't write</td></tr>\n"; // FIXME i18n
         echo "<tr><th>{$strActive}:</th><td><input type='checkbox' name='active'";
         if($contactrow['active']=='true') echo "checked='".$siterow['active']."'";
         echo " value='true' /></td></tr> <tr><th></th><td>";
@@ -98,6 +97,9 @@ elseif ($action == "edit" && isset($contact))
         }
         echo "/> ";
         echo "{$strSpecifyAddress}</td></tr>\n";
+        echo "<tr><th>{$strAddress}:</th><td><label>";
+        html_checkbox('dataprotection_address', $contactrow['dataprotection_address']);
+        echo " {$strAddress} {$strDataProtection}</label></td></tr>\n";
         echo "<tr><th>{$strAddress1}:</th><td><input maxlength='255' name='address1' size='40' value=\"".stripslashes($contactrow['address1'])."\" {$extraattributes} /></td></tr>\n";
         echo "<tr><th>{$strAddress2}:</th><td><input maxlength='255' name='address2' size='40' value=\"".stripslashes($contactrow['address2'])."\" {$extraattributes} /></td></tr>\n";
         echo "<tr><th>{$strCity}:</th><td><input maxlength=255' name='city' size='40' value=\"".stripslashes($contactrow['city'])."\" {$extraattributes} /></td></tr>\n";
