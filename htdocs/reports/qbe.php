@@ -113,7 +113,7 @@ elseif ($_REQUEST['mode']=='selectfields')
     echo "</td></tr>";
 
     echo "<tr><th>{$strLimitTo}:</th>";
-    echo "<td><input type='text' name='limit' value='1000' size='4' /> Records</td></tr>";
+    echo "<td><input type='text' name='limit' value='1000' size='4' /> {$strResults}</td></tr>";
 
     echo "<tr><th>{$strOutput}:</th>";
     echo "<td>";

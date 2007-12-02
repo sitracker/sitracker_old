@@ -46,7 +46,7 @@ if (empty($_REQUEST['mode']))
     echo "<label><input type='radio' name='type' value='closed' />{$strClosed}</label> ";
     echo "<label><input type='radio' name='type' value='both' checked='checked' />{$strBoth}</label>";
     echo "</td></tr>";
-    echo "<tr><th colspan='2'>Include</th></tr>";
+    echo "<tr><th colspan='2'>{$strInclude}</th></tr>";
     echo "<tr><td align='center' colspan='2'>";
     $sql = "SELECT * FROM users WHERE status > 0 ORDER BY username";
     $result = mysql_query($sql);
@@ -66,6 +66,7 @@ if (empty($_REQUEST['mode']))
     echo "<option value='csv'>{$strCSVfile}</option>";
     echo "</select>";
     echo "</td></tr>";
+    // FIXME i18n statistics only
     echo "<tr><th align='right' width='200'>Statistics only</th><td><input type='checkbox' name='statistics' /></td></tr>";
     echo "</table>";
     echo "<p align='center'>";
