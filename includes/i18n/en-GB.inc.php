@@ -8,6 +8,7 @@ $i18ncharset='UTF-8';
 
 $str0MeansUnlimited = '0 Means Unlimited';
 
+$strActual = 'Actual';
 # e.g. About this site, i.e. more information
 $strAbout = 'About';
 $strAbsentSick = 'Absent Sick';
@@ -171,6 +172,7 @@ $strDashboard = 'Dashboard';
 $strDataProtection = 'Data Protection';
 # i.e. 25th December
 $strDate = 'Date';
+$strDateAndTime = 'Date and Time';
 $strDatesNotYetApproved = 'Dates not yet approved';
 $strDay = 'Day';
 $strDays = 'Days';
@@ -697,6 +699,8 @@ $strTaskDeletedSuccessfully = 'Task deleted successfully';
 $strTaskEditedSuccessfully = 'Task edited successfully';
 $strTaskMarkedCompleteSuccessfully = 'Task marked completed successfully';
 $strTelephone = 'Telephone';
+# Abbreviated 'Temporary';
+$strTemp = 'Temp';
 $strTemporaryOwner = 'Temporary Owner';
 $strTemporarilyAssignedto = 'Temporarily assigned to %s by %s';
 $strTerminated = 'Terminated';

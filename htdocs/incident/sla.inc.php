@@ -26,7 +26,7 @@ $slahistory = incident_sla_history($incidentid);
 if (count($slahistory) >= 1)
 {
     echo "<table align='center'>";
-    echo "<tr><th>{$strEvent}</th><th>{$strUser}</th><th>{$strTarget}</th><th>Actual</th><th>Date &amp; Time</th></tr>\n";
+    echo "<tr><th>{$strEvent}</th><th>{$strUser}</th><th>{$strTarget}</th><th>{$strActual}</th><th>{$strDateAndTime}</th></tr>\n";
     foreach($slahistory AS $history)
     {
         if ($history['targetmet']==FALSE) $class='critical';

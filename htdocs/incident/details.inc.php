@@ -65,7 +65,7 @@ if ($incident->owner != $sit[2] OR ($incident->towner > 0 AND $incident->towner 
     if ($incidentowner_phone != '') echo "(Tel: {$incidentowner_phone}) ";
     if ($incident->towner > 0 AND $incident->towner != $incident->owner)
     {
-       echo "(Temp: ".user_realname($incident->towner,TRUE).")";
+       echo "({$strTemp}: ".user_realname($incident->towner,TRUE).")";
     }
     echo "<br />";
 }

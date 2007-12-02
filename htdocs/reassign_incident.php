@@ -124,7 +124,7 @@ switch ($action)
 
         if ($incident->towner > 0)
         {
-            echo " (Temp: "; // FIXME i18n 'Temp'
+            echo " ({$strTemp}: ";
             if ($sit[2]==$incident->towner) echo "{$strYou} (".user_realname($incident->towner,TRUE).")";
             else echo user_realname($incident->towner,TRUE);
             echo ")";
