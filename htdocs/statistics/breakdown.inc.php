@@ -51,7 +51,14 @@ while($row = mysql_fetch_array($result))
     echo "<td><a href=\"javascript:incident_details_window('{$row['id']}','incident{$row['id']}')\" class='info'>{$row['id']}</a></td>";
     echo "<td><a href=\"javascript:incident_details_window('{$row['id']}','incident{$row['id']}')\" class='info'>{$row['title']}</a></td>";
     echo "<td>".date($CONFIG['dateformat_datetime'],$row['opened'])."</td>";
-    echo "<td>".date($CONFIG['dateformat_datetime'],$row['closed'])."</td>";
+    if($row['status'] != 2)
+    {
+        echo "<td>{$strCurrentlyOpen}</td>";
+    }
+    else
+    {
+        echo "<td>".date($CONFIG['dateformat_datetime'],$row['closed'])."</td>";
+    }
     echo "<td>".user_realname($row['owner'])."</td>";
     $sql = "SELECT contacts.forenames,contacts.surname, sites.name FROM contacts,sites WHERE sites.id = contacts.siteid AND contacts.id = {$row['contact']}";
     $contactResult = mysql_query($sql);
