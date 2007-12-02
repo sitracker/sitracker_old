@@ -354,7 +354,6 @@ $strInOffice = 'In Office';
 $strInstall = 'Install';
 $strInterfaceStyle = 'Interface Style (Theme)';
 $strInternalEngineer = 'Internal Engineer';
-$strInstall = 'Install';
 $strInvalidCredentials = 'Invalid username/password combination';
 
 $strJobTitle = 'Job Title';
