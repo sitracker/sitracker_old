@@ -2462,7 +2462,7 @@ function sit_error_handler($errno, $errstr, $errfile, $errline, $errcontext)
             preg_match("/MySQL Query Error Table '(.*)' doesn't exist/", $errstr))
         {
              echo "<p class='tip'>The SiT schema may need upgrading to fix this problem.";
-             if user_permission($sit[2], 22) echo "Visit <a href='setup.php'>Setup</a>"; // Only show this to admin
+             if (user_permission($sit[2], 22)) echo "Visit <a href='setup.php'>Setup</a>"; // Only show this to admin
              echo "</p>";
         }
     }
