@@ -38,7 +38,7 @@ if (empty($_REQUEST['mode']))
     echo "<h2>{$strMarketingMailshot}</h2>";
     echo "<form action='{$_SERVER['PHP_SELF']}' method='post'>";
     echo "<table align='center'>";
-    echo "<tr><th>Include</th><th>Exclude</th></tr>";
+    echo "<tr><th>{$strInclude}</th><th>{$strExclude}</th></tr>";
     echo "<tr><td>";
     $sql   = "SELECT * FROM products ORDER BY name";
     $result = mysql_query($sql);
@@ -77,7 +77,7 @@ if (empty($_REQUEST['mode']))
     // echo "<tr><td align='right' width='200' class='shade1'><b>Limit to</b>:</td>";
     // echo "<td width=400 class='shade2'><input type='text' name='limit' value='9999' size='4' /> Records</td></tr>";
 
-    echo "<tr><td  colspan='2'><label><input type='checkbox' name='activeonly' value='yes' /> Only show contacts with current/active contracts.</td></tr>";
+    echo "<tr><td  colspan='2'><label><input type='checkbox' name='activeonly' value='yes' /> {$strShowActiveOnly}</label></td></tr>";
 
     echo "<tr><td colspan='2'>{$strOutput}: <select name='output'>";
     echo "<option value='screen'>{$strScreen}</option>";
