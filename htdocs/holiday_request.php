@@ -70,9 +70,9 @@ if (!$sent)
             }
             echo "<td>".date('l j F Y', $holiday->startdate)."</td>";
             echo "<td>";
-            if ($holiday->length=='am') echo "Morning";
-            if ($holiday->length=='pm') echo "Afternoon";
-            if ($holiday->length=='day') echo "Full Day";
+            if ($holiday->length=='am') echo "{$strMorning}";
+            if ($holiday->length=='pm') echo "{$strAfternoon}";
+            if ($holiday->length=='day') echo "Full Day"; // FIXME i18n Full Day
             echo "</td>";
             echo "<td>".holiday_type($holiday->type)."</td>";
             if ($approver==TRUE)
@@ -80,16 +80,17 @@ if (!$sent)
                 if ($sit[2]!=$holiday->userid AND $mode=='approval')
                 {
                     echo "<td>";
-                    $approvetext='Approve';
-                    if ($holiday->type==2) $approvetext='Acknowledge';
+                    $approvetext=$strApprove;
+                    if ($holiday->type==2) $approvetext='Acknowledge'; // FIXME i18n Acknowledge
                     echo "<a href=\"holiday_approve.php?approve=TRUE&amp;user={$holiday->userid}&amp;view={$user}&amp;startdate={$holiday->startdate}&amp;type={$holiday->type}&amp;length={$holiday->length}\">{$approvetext}</a> | ";
-                    echo "<a href=\"holiday_approve.php?approve=FALSE&amp;user={$holiday->userid}&amp;view={$user}&amp;startdate={$holiday->startdate}&amp;type={$holiday->type}&amp;length={$holiday->length}\">Decline</a>"; // FIMXE i18n
-                    if ($holiday->type==1) echo " | <a href=\"holiday_approve.php?approve=FREE&amp;user={$holiday->userid}&amp;view={$user}&amp;startdate={$holiday->startdate}&amp;type={$holiday->type}&amp;length={$holiday->length}\">Free Leave</a>";
+                    echo "<a href=\"holiday_approve.php?approve=FALSE&amp;user={$holiday->userid}&amp;view={$user}&amp;startdate={$holiday->startdate}&amp;type={$holiday->type}&amp;length={$holiday->length}\">{$strDecline}</a>";
+                    if ($holiday->type==1) echo " | <a href=\"holiday_approve.php?approve=FREE&amp;user={$holiday->userid}&amp;view={$user}&amp;startdate={$holiday->startdate}&amp;type={$holiday->type}&amp;length={$holiday->length}\">Free Leave</a>"; // FIMXE i18n free leave
                     echo "</td>";
                 }
                 else
                 {
                     echo "<td>";
+                    // FIXME i18n request sent to
                     if ($holiday->approvedby > 0) echo "Request sent to ".user_realname($holiday->approvedby,TRUE);
                     else
                     {
@@ -126,7 +127,7 @@ if (!$sent)
                 echo "<p align='center'>";
                 echo "Send the request(s) to: ";
                 echo "<select name='approvaluser'>";
-                echo "<option selected='selected' value='0'>Select A User</option>\n";
+                echo "<option selected='selected' value='0'></option>\n";
                 while ($users = mysql_fetch_array($result))
                 {
                     echo "<option";
@@ -136,7 +137,7 @@ if (!$sent)
                 }
                 echo "</select>";
                 echo "</p>";
-
+                // FIXME i18n Send to
                 // Force resend if there are no new additions to be requested
                 if ($waiting==FALSE AND $action!='resend') $action='resend';
                 echo "<input type='hidden' name='action' value='$action' />";
@@ -148,7 +149,7 @@ if (!$sent)
                 echo "</p>";
                 echo "</form>";
             }
-            else echo "<p class='error'>There are no users that can approve your request, only users with appropiate permissions can approve holiday requests and you cannot approve your own requests.</p>";
+            else echo "<p class='error'>There are no users that can approve your request, only users with appropiate permissions can approve holiday requests and you cannot approve your own requests.</p>";  // FIXME i18n para
         }
     }
     else

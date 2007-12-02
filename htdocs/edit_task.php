@@ -254,7 +254,7 @@ switch ($action)
                 echo "</td></tr>";
                 echo "<tr><th>{$strCompletion}</th>";
                 echo "<td><input type='text' name='completion' size='3' maxlength='3' value='{$task->completion}' />&#037;</td></tr>";
-                echo "<tr><th>End Date</th>";
+                echo "<tr><th>{$strEndDate}</th>";
                 echo "<td><input type='text' name='enddate' id='enddate' size='10' value='";
                 if ($enddate > 0) echo date('Y-m-d',$enddate);
                 echo "' /> ";
