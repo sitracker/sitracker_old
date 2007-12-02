@@ -113,8 +113,8 @@ if (user_permission($sit[2],$permission))
         $author=array_unique($author);
         $countauthors=count($author);
         $count=1;
-        if ($countauthors > 1) echo "Authors: ";
-        else echo "Author: ";
+        if ($countauthors > 1) echo "Authors: "; // FIXME i18n Authors
+        else echo "{$strAuthor}: ";
         foreach ($author AS $authorid)
         {
             echo user_realname($authorid,TRUE);
@@ -125,7 +125,7 @@ if (user_permission($sit[2],$permission))
     else echo "Author: {$author}";
 
     echo "<br />";
-    if (!empty($kbarticle->keywords)) echo "Keywords: ".preg_replace("/\[([0-9]+)\]/", "<a href=\"incident_details.php?id=$1\" target=\"_blank\">$0</a>", $kbarticle->keywords)."<br />";
+    if (!empty($kbarticle->keywords)) echo "{$strKeywords}: ".preg_replace("/\[([0-9]+)\]/", "<a href=\"incident_details.php?id=$1\" target=\"_blank\">$0</a>", $kbarticle->keywords)."<br />";
     //      if (!empty($kbarticle->keywords)) echo "Keywords: ".preg_replace("/\s\[(\d(1,5))\]/", "<a href=\"#\$0\">$0</a>$0</a>", $kbarticle->keywords)."<br />";
     echo "</dd></dl>";
 
@@ -133,7 +133,7 @@ if (user_permission($sit[2],$permission))
 
     echo "</div>";
 
-    echo "<p align='center'><a href='kb_edit_article.php?id={$kbarticle->docid}'>Edit this article</a></p>";
+    echo "<p align='center'><a href='kb_edit_article.php?id={$kbarticle->docid}'>{$strEdit}</a></p>";
 
     include('htmlfooter.inc.php');
 }
