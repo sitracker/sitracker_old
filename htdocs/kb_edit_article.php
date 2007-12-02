@@ -23,6 +23,7 @@ require('auth.inc.php');
 $process = cleanvar($_REQUEST['process']);
 $id = cleanvar($_REQUEST['id']);
 
+// FIXME i18n, KB article sections, summary, symptoms etc.
 $sections[]='Summary';
 $sections[]='Symptoms';
 $sections[]='Cause';
@@ -70,10 +71,10 @@ if (empty($_POST['process']))
             $expertise[]=$software->id;
         }
     }
-    echo "<p align='center'>Select the software that applies to this article</p>";
+    echo "<p align='center'>Select the skills that apply to this article</p>"; // FIXME i18n, select skills that apply
     echo "<form name='kbform' action='{$_SERVER['PHP_SELF']}' method='post' onsubmit=\"populateHidden(document.kbform.elements['expertise[]'],document.kbform.choices)\">";
     echo "<table align='center'>";
-    echo "<tr><th>Does NOT apply</th><th>&nbsp;</th><th>Applies</th></tr>";
+    echo "<tr><th>Does NOT apply</th><th>&nbsp;</th><th>Applies</th></tr>"; // FIXME i18n applies, does not apply
     echo "<tr><td align='center' width='300' class='shade1'>";
     $listsql = "SELECT * FROM software ORDER BY name";
     $listresult = mysql_query($listsql);
@@ -142,8 +143,8 @@ if (empty($_POST['process']))
 
     // ---
     // echo "<form name='kbform' action='{$_SERVER['PHP_SELF']}' method='post' >";
-    echo "<p align='center'>Title:<br /><input type='text' name='title' size='60' value=\"".stripslashes($kbarticle->title)."\" /></p>";
-    echo "<p align='center'>Keywords:<br /><input type='text' name='keywords' value='{$kbarticle->keywords}' size='60' /></p>";
+    echo "<p align='center'>{$strTitle}:<br /><input type='text' name='title' size='60' value=\"".stripslashes($kbarticle->title)."\" /></p>";
+    echo "<p align='center'>{$strKeywords}:<br /><input type='text' name='keywords' value='{$kbarticle->keywords}' size='60' /></p>";
 
     echo "\n<script type=\"text/javascript\">\n";
     echo "<!--\n";
@@ -184,7 +185,7 @@ if (empty($_POST['process']))
                 $id_array[]= $kbcontent->id;
                 echo "</td><td class='shade1'>";
                 echo distribution_listbox("distribution$element",$kbcontent->distribution);
-                echo "<br /><input type='checkbox' name='delete{$element}' value='yes' />Delete</td></tr>";
+                echo "<br /><label><input type='checkbox' name='delete{$element}' value='yes' />{$strDelete}</label></td></tr>";
             }
         }
         else
@@ -194,7 +195,7 @@ if (empty($_POST['process']))
             echo "</th><td class='shade2'>";
             echo "<textarea name='content{$section}' rows='2' cols='100' title='Full Details' onfocus=\"myInterval = window.setInterval('changeTextAreaLength(document.kbform.content{$section})', 300);\" onblur=\"window.clearInterval(myInterval); resetTextAreaLength(document.kbform.content{$section});\">";
             echo "</textarea>\n<br /><br />\n";
-            echo "</td><td class='shade1'><input type='checkbox' name='add$section' value='yes' />Add</td></tr>\n";
+            echo "</td><td class='shade1'><label><input type='checkbox' name='add$section' value='yes' />{$strAdd}</label></td></tr>\n";
         }
     }
     reset ($sections);
