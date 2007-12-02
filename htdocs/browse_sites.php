@@ -96,14 +96,14 @@ echo "{$strBrowseSites}</h2>";
     {
         echo "<a href='".$_SERVER['PHP_SELF']."?displayinactive=false";
         if(!empty($search_string)) echo "&amp;search_string={$search_string}&amp;owner={$owner}";
-        echo "'>Hide inactive</a>";
+        echo "'>{$strShowActiveOnly}</a>";
         $inactivestring="displayinactive=true";
     }
     else
     {
         echo "<a href='".$_SERVER['PHP_SELF']."?displayinactive=true";
         if(!empty($search_string)) echo "&amp;search_string={$search_string}&amp;owner={$owner}";
-        echo "'>Show inactive</a>";
+        echo "'>Show inactive</a>"; // FIXME i18n show inactive
         $inactivestring="displayinactive=false";
     }
     ?>
@@ -139,8 +139,9 @@ echo "{$strBrowseSites}</h2>";
     <a href="<?php echo $_SERVER['PHP_SELF'] ?>?search_string=Y&amp;<?php echo $inactivestring; ?>">Y</a> |
     <a href="<?php echo $_SERVER['PHP_SELF'] ?>?search_string=Z&amp;<?php echo $inactivestring; ?>">Z</a> |
     <a href="<?php echo $_SERVER['PHP_SELF'] ?>?search_string=0&amp;<?php echo $inactivestring; ?>">#</a> |
-    <a href="<?php echo $_SERVER['PHP_SELF'] ?>?search_string=*&amp;<?php echo $inactivestring; ?>">All</a>
+
 <?php
+echo "<a href='{$_SERVER['PHP_SELF']}?search_string=*&amp;{$inactivestring}'>{$strAll}</a>\n";
 $sitesql = "SELECT COUNT(id) FROM sites WHERE owner='{$sit[2]}'";
 $siteresult = mysql_query($sitesql);
 if (mysql_error()) trigger_error(mysql_error(),E_USER_WARNING);
