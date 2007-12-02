@@ -385,7 +385,7 @@ function draw_chart($mode, $year, $month='', $day='', $groupid='', $userid='')
             {
                 if ($user->groupid=='') $user->groupid=0;
                 $html .= "<tr>";
-                $html .= "<td align='left' colspan='2' class='shade2'>Group: <strong>{$grouparr[$user->groupid]}</strong></td>";
+                $html .= "<td align='left' colspan='2' class='shade2'>{$GLOBALS['strGroup']}: <strong>{$grouparr[$user->groupid]}</strong></td>";
                 for($cday=$day;$cday<=$lastday;$cday++)
                 {
                     $shade='shade1';
@@ -413,7 +413,7 @@ function draw_chart($mode, $year, $month='', $day='', $groupid='', $userid='')
 
             $html .= "<tr><th rowspan='2' style='width: 10%'>{$user->realname}</th>";
             // AM
-            $html .= "<td style='width: 2%'>am</td>";
+            $html .= "<td style='width: 2%'>{$GLOBALS['strAM']}</td>";
             for($cday=$day;$cday<=$lastday;$cday++)
             {
                 $shade='shade1';
@@ -488,7 +488,7 @@ function draw_chart($mode, $year, $month='', $day='', $groupid='', $userid='')
             }
             $html .= "</tr>\n";
             // PM
-            $html .= "<tr><td>pm</td>";
+            $html .= "<tr><td>{$GLOBALS['strPM']}</td>";
             for($cday=$day;$cday<=$lastday;$cday++)
             {
                 $shade='shade1';
@@ -578,8 +578,9 @@ function draw_chart($mode, $year, $month='', $day='', $groupid='', $userid='')
     {
         $html .= "<td>".substr($htype,0,1)." = {$htype}</td>";
     }
-    $html .= "<td>PH = Public Holiday</td>";
+    $html .= "<td>PH = {$GLOBALS['strPublicHoliday']}</td>";
     $html .= "</tr>";
+    // FIXME holiday approval status
     $html .= "<tr><td></td><td class='urgent'>declined</td><td class='review'>not approved</td><td class='idle'>approved</td><td class='notice'>approved free</td></tr>";
     $html .= "</table>\n\n";
 

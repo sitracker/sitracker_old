@@ -20,7 +20,7 @@ require('functions.inc.php');
 // This page requires authentication
 require('auth.inc.php');
 
-$title='Escalation paths';
+$title = $strEscalationPaths;
 
 include('htmlheader.inc.php');
 echo "<h2>$title</h2>";
@@ -32,12 +32,12 @@ if (mysql_num_rows($result) >= 1)
 {
     echo "<table align='center'>";
     echo "<tr>";
-    echo colheader('name','Name');
-    echo colheader('track_url','Track URL');
+    echo colheader('name',$strName);
+    echo colheader('track_url','Track URL'); // FIXME i18n, Track URL, Home URL, URL TItle
     echo colheader('home_url','Home URL');
-    echo colheader('url_title','URL Title');
+    echo colheader('url_title',"URL {$strTitle}");
     echo colheader('email_domain','Email Domain');
-    echo colheader('edit','Edit');
+    echo colheader('edit',$strOperation);
     echo "</tr>";
     while ($path = mysql_fetch_object($result))
     {
@@ -47,14 +47,14 @@ if (mysql_num_rows($result) >= 1)
         echo "<td>{$path->home_url}</td>";
         echo "<td>{$path->url_title}</td>";
         echo "<td>{$path->email_domain}</td>";
-        echo "<td><a href='edit_escalation_path.php?id={$path->id}'>Edit</a></td>";
+        echo "<td><a href='edit_escalation_path.php?id={$path->id}'>{$strEdit}</a></td>";
         echo "</tr>";
     }
     echo "</table>";
 }
-else echo "<p align='center'>No escalation paths defined</p>";
+else echo "<p align='center'>{$strNoRecords}</p>";
 
-echo "<p align='center'><a href='add_escalation_path.php'>Add escalation path</a></p>";
+echo "<p align='center'><a href='add_escalation_path.php'>{$strAdd}</a></p>";
 
 include('htmlfooter.inc.php');
 
