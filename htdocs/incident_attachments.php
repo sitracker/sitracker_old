@@ -25,7 +25,7 @@ require('auth.inc.php');
 $id = cleanvar($_REQUEST['id']);
 $incidentid=$id;
 
-$title = 'Files';
+$title = $strFiles;
 include('incident_html_top.inc.php');
 
 // append incident number to attachment path to show this users attachments
