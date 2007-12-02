@@ -9,13 +9,13 @@
 //
 // Author: Paul Heaney <paulheaney[at]users.sourceforge.net>
 
-
-$title='Todays statistics';
 require('db_connect.inc.php');
 require('functions.inc.php');
 
 // This page requires authentication
 require('auth.inc.php');
+
+$title=  $strTodaysStats;
 
 $mode = cleanvar($_REQUEST['mode']);
 
@@ -173,11 +173,14 @@ function give_overview()
     global $todayrecent, $mode, $CONFIG;
 
     echo "<table align='center'>";
+    // FIXME i18n per incident etc.
     echo "<tr><th>{$strPeriod}</th><th>{$GLOBALS['strOpened']}</th><th>{$GLOBALS['strUpdated']}</th><th>{$GLOBALS['strClosed']}</th><th>{$GLOBALS['strHandled']}</th>";
     echo "<th>{$GLOBALS['strUpdates']}</th><th>per incident</th><th>{$GLOBALS['strSkills']}</th><th>{$GLOBALS['strOwners']}</th><th>{$GLOBALS['strUsers']}</th>";
     echo "<th>upd per user</th><th>inc per owner</th><th>{$GLOBALS['strEmail']} Rx</th><th>{$GLOBALS['strEmail']} Tx</th><th>{$GLOBALS['strHigherPriority']}</th>";
     echo "<th>{$GLOBALS['strActivity']}</th></tr>\n";
-    echo stats_period_row("<a href='{$_SERVER['PHP_SELF']}?mode=daybreakdown&offset=0'>Today</a>", mktime(0,0,0,date('m'),date('d'),date('Y')),mktime(23,59,59,date('m'),date('d'),date('Y')));
+    // FIXME i18n Yesterday
+    // FIXME i18n date ranges
+    echo stats_period_row("<a href='{$_SERVER['PHP_SELF']}?mode=daybreakdown&offset=0'>{$strToday}</a>", mktime(0,0,0,date('m'),date('d'),date('Y')),mktime(23,59,59,date('m'),date('d'),date('Y')));
     echo stats_period_row("<a href='{$_SERVER['PHP_SELF']}?mode=daybreakdown&offset=1'>Yesterday</a>", mktime(0,0,0,date('m'),date('d')-1,date('Y')),mktime(23,59,59,date('m'),date('d')-1,date('Y')));
     echo stats_period_row("<a href='{$_SERVER['PHP_SELF']}?mode=daybreakdown&offset=2'>".date('l',mktime(0,0,0,date('m'),date('d')-2,date('Y')))."</a>", mktime(0,0,0,date('m'),date('d')-2,date('Y')),mktime(23,59,59,date('m'),date('d')-2,date('Y')));
     echo stats_period_row("<a href='{$_SERVER['PHP_SELF']}?mode=daybreakdown&offset=3'>".date('l',mktime(0,0,0,date('m'),date('d')-3,date('Y')))."</a>", mktime(0,0,0,date('m'),date('d')-3,date('Y')),mktime(23,59,59,date('m'),date('d')-3,date('Y')));
@@ -276,7 +279,8 @@ function give_overview()
                     echo "<tr><th>".$rowVendor['name']."</th><td class='shade2' align='left'>".$rowVendor['COUNT(incidents.id)']."</td></tr>";
                     if(strpos(strtolower($rowVendor['name']), "clos") === false) $openCallsVendor += $rowVendor['COUNT(incidents.id)'];
                 }
-                echo "<tr><th>Total Open</th><td class='shade2' align='left'><strong>$openCallsVendor</strong></td></tr></table></td>";
+                // FIXME i18n Total open
+                echo "<tr><th>{$strTotal} Open</th><td class='shade2' align='left'><strong>$openCallsVendor</strong></td></tr></table></td>";
             }
         }
         echo "</table>";
@@ -290,7 +294,7 @@ function give_overview()
     $todaysincidents=mysql_num_rows($result);
     mysql_free_result($result);
 
-    $string = "<h4>$todaysincidents Incidents logged today</h4>";
+    $string = "<h4>$todaysincidents Incidents logged today</h4>"; // FIXME i18n Incidents logged today, assigned as follows
     if($todaysincidents > 0)
     {
         $string .= "<table align='center' width='50%'><tr><td colspan='2'>Assigned as follows:</td></tr>";
@@ -324,7 +328,7 @@ function give_overview()
     if (mysql_error()) trigger_error("MySQL Query Error ".mysql_error(), E_USER_ERROR);
     list($todaysclosed)=mysql_fetch_row($result);
 
-    $string .= "<h4>$todaysclosed Incidents closed today</h4>";
+    $string .= "<h4>$todaysclosed Incidents closed today</h4>"; // FIXME i18n closed today
     if($todaysclosed > 0)
     {
         $sql = "SELECT count(incidents.id), realname, users.id AS owner FROM incidents LEFT JOIN users ON incidents.owner = users.id WHERE closed > '$todayrecent' GROUP BY owner";
@@ -400,11 +404,9 @@ function give_overview()
         $total_average=number_format($totalresult/$numquestions,2);
         $total_percent=number_format((($total_average -1) * (100 / ($CONFIG['feedback_max_score'] -1))), 0);
         if ($total_percent < 0) $total_percent=0;
-        $string .= "<p align='center'>Positivity: {$total_average} <strong>({$total_percent}%)</strong> from $numsurveys results.</p>";
+        $string .= "<p align='center'>{$strPositivity}: {$total_average} <strong>({$total_percent}%)</strong> from $numsurveys results.</p>";
         $surveys+=$numresults;
     }
-    else $string .= "<p class='error'>No feedback responses found</p>";
-
     return $string;
 }
 
