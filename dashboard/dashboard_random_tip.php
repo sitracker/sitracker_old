@@ -11,8 +11,9 @@
 
 function dashboard_random_tip($row,$dashboardid)
 {
+    global $iconset;
     echo "<div class='windowbox' style='width: 95%' id='$row-$dashboardid'>";
-    echo "<div class='windowtitle'>{$GLOBALS['strRandomTip']}</div>";
+    echo "<div class='windowtitle'><img src='{$CONFIG['application_webpath']}images/icons/{$iconset}/16x16/tip.png' width='16' height='16' alt='' /> {$GLOBALS['strRandomTip']}</div>";
     echo "<div class='window'>";
     echo random_tip();
     echo "</div>";
