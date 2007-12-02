@@ -220,22 +220,18 @@ if (empty($_REQUEST['process']))
 
     <tr id='referencesrow' style='display:none;'><th><label>References: <input type='checkbox' name='increferences' onclick="if (this.checked) {document.closeform.references.disabled = false; document.closeform.references.style.display=''} else { saveValue=document.closeform.references.value; document.closeform.references.disabled = true; document.closeform.references.style.display='none'}" disabled='disabled' /></label></th>
     <td><textarea id="references" name="references" cols='40' rows='8' style="display: none;" onfocus="if (this.enabled) { this.value = saveValue; setTimeout('document.articlform.references.blur()',1); } else saveValue=this.value;"></textarea></td></tr>
-
-    <tr><th>Closing Status: <sup class='red'>*</sup></th><td><?php echo closingstatus_drop_down("closingstatus", 0) ?></td></tr>
-
-    <?php
-    echo "<tr><th>Inform Customer:<br />";
+<?php
+    echo "<tr><th>{$strClosingStatus}: <sup class='red'>*</sup></th><td>".closingstatus_drop_down("closingstatus", 0)."</td></tr>\n";
+    echo "<tr><th>Inform {$strCustomer}:<br />"; //FIXME i18n inform customer
     echo "Send an email to the customer explaining that the incident has been (or will be) closed.</th>";
     echo "<td><label><input name='send_email' checked='checked' type='radio' value='no' />{$strNo}</label> ";
     echo "<input name='send_email' type='radio' value='yes' />{$strYes}</td></tr>\n";
     $externalemail=incident_externalemail($id);
     if ($externalemail)
     {
-        ?>
-        <tr><th>Inform External Engineer:<br />
-        Send an email to <em><?php echo $externalemail; ?></em> asking for the external incident to be closed.
-        </th>
-        <?php
+        echo "<tr><th>Inform {$strExternalEngineer}:<br />"; // FIXME i18n inform external engineer
+        echo "Send an email to <em>".stripslashes($externalemail)."</em> asking for the external incident to be closed.";
+        echo "</th>";
         echo "<td class='shade2'><label><input name='send_engineer_email' type='radio' value='no' />{$strNo}</label> ";
         echo "<label><input name='send_engineer_email' type='radio' value='yes' checked='checked' />{$strYes}</label></td></tr>\n";
     }

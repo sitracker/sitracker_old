@@ -254,21 +254,20 @@ switch ($action)
         if (!empty($reason)) echo $reason;
         echo "</textarea>";
         echo "</td></tr>\n";
-        // FIXME i18n 'Temporary' and 'Change/Remove Temporary Ownership'
         if ($incident->towner > 0 AND ($sit[2] == $incident->owner OR $sit[2] == $incident->towner))
         {
-            echo "<tr><th>Temporary:</th><td>";
-            echo "<label><input type='radio' name='temporary' value='yes' checked='checked' onchange=\"$('reassignlist').show();\" /> Change temporary ownership</label>";
-            echo "<label><input type='radio' name='temporary' value='no' onchange=\"$('reassignlist').hide();\" /> Remove temporary ownership</label> ";
+            echo "<tr><th>{$strTemporaryOwner}:</th><td>";
+            echo "<label><input type='radio' name='temporary' value='yes' checked='checked' onchange=\"$('reassignlist').show();\" /> {$strChangeTemporaryOwner}</label>";
+            echo "<label><input type='radio' name='temporary' value='no' onchange=\"$('reassignlist').hide();\" /> {$strRemoveTemporaryOwner}</label> ";
             echo "</td></tr>\n";
         }
         else
         {
-            echo "<tr><th>Temporary:</th><td><label><input type='checkbox' name='temporary' value='yes' ";
+            echo "<tr><th>{$strTemporaryOwner}:</th><td><label><input type='checkbox' name='temporary' value='yes' ";
             if ($sit[2] != $incident->owner AND $sit[2] != $incident->towner) echo "disabled='disabled' ";
             echo "/> ";
-            if ($incident->towner > 0) echo "Change temporary ownership";
-            else echo "Assign Temporarily";
+            if ($incident->towner > 0) echo "{$strChangeTemporaryOwner}";
+            else echo "{$strAssignTemporarily}";
             echo "</label></td></tr>\n";
         }
         echo "<tr><th>{$strVisibility}:</th><td><label><input type='checkbox' name='cust_vis' value='yes' /> {$strVisibleToCustomer}</label></td></tr>\n";
