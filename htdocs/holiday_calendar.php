@@ -885,12 +885,12 @@ else
     }
     else
     {
-        echo "Click on a day to select it";
+        echo "Click on a day to select it"; // FIXME i18n click on a day
     }
     echo "</p>\n";
 
 
-    echo "<h2>Year View</h2>";
+    echo "<h2>{$strYear} View</h2>"; // FIXME i18n Year View
     $pdate=mktime(0,0,0,$month,$day,$year-1);
     $ndate=mktime(0,0,0,$month,$day,$year+1);
     echo "<p align='center'>";
