@@ -92,11 +92,11 @@ if (isset($_REQUEST['fileselection']))
 
 
 $j = 0;
-$ext = array("Bytes","KBytes","MBytes","GBytes","TBytes");
+$ext = array("Bytes","KBytes","MBytes","GBytes","TBytes"); // FIXME bytes/kbytes etc.
 while ($att_max_filesize >= pow(1024,$j)) ++$j;
     $attmax = round($att_max_filesize / pow(1024,$j-1) * 100) / 100 . ' ' . $ext[$j-1];
 echo "<div class='detailhead'>\n";
-echo "File management";
+echo "{$strFileManagement}";
 echo "</div>";
 echo "<div class='detailentry'>\n";
 echo "<form action='{$_SERVER['PHP_SELF']}?id={$incidentid}' method='post' name='updateform' id='updateform' enctype='multipart/form-data'>\n";
@@ -104,8 +104,8 @@ echo "<input type='hidden' name='tab' value='{$selectedtab}' />";
 echo "<input type='hidden' name='action' value='{$selectedaction}' />";
 echo "<input type='hidden' name='MAX_FILE_SIZE' value='{$att_max_filesize}' />";
 // maxfilesize='{$att_file_size}'
-echo "Upload a file <input class='textbox' type='file' name='attachment' size='30' /> ";
-echo "<input type='submit' value='Upload' /> (&lt;{$attmax})";
+echo "<input class='textbox' type='file' name='attachment' size='30' /> ";
+echo "<input type='submit' value=\"{$strAttachFile}\" /> (&lt;{$attmax})";
 echo "</form>";
 echo "</div>";
 

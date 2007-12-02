@@ -272,6 +272,7 @@ $strFeedbackRequested = 'Feedback Requested but not yet received for form';
 $strFeeds = 'Feeds';
 # e.g. form fields
 $strFields = 'Fields';
+$strFileManagement = 'File Management';
 $strFilename = 'Filename';
 # e.g. computer files
 $strFiles = 'Files';
