@@ -65,6 +65,8 @@ $strAllClosed = 'All Closed';
 $strAllDay = 'all day';
 $strAllOpen = 'All Open';
 $strAllSiteContactsSupported = 'All of this sites\' contacts are supported';
+# i.e. Sorted by alphabet
+$strAlphabetically = 'Alphabetically';
 $strAlternative = 'Alternative';
 # i.e. before noon
 $strAM = 'am';
@@ -522,6 +524,7 @@ $strPhonecalltakenby = 'Phonecall taken by %s';
 $strPleaseCheckData = 'Please check the data you entered';
 $strPleaseWaitRedirect = 'Please wait while you are redirected';
 $strPlugins = 'Plugins';
+$strPopularity = 'Popularity';
 $strPositivity = 'Positivity';
 $strPostcode = 'Postcode';
 $strPostNewNotice = 'Post New Notice';
