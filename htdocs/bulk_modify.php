@@ -26,7 +26,7 @@ $action = cleanvar($_REQUEST['action']);
     switch($action)
     {
         case 'external_esc': //show external escalation modification page
-            echo "<h2>Bulk modify external escalation details</h2>";
+            echo "<h2>{$strBulkModify}: {$strExternalEngineersName}</h2>";
             $sql = "SELECT distinct(externalemail), externalengineer ";
             $sql .= "FROM `incidents` WHERE closed = '0' AND externalemail!=''";
 
@@ -35,19 +35,20 @@ $action = cleanvar($_REQUEST['action']);
             if (mysql_num_rows($result) >= 1)
             {
                 echo "<form action='".$_SERVER['PHP_SELF']."?action=change_external_esc' method='post'>";
+                // FIXME i18n This will change
                 echo "<p align='center'>This will change the external engineer details for all open incidents for the external engineer you select.</p>";
                 echo "<table class='vertical'>";
-                echo "<tr><th>External engineers email address (to change):</th>";
+                echo "<tr><th>{$strExternalEmail} (to change):</th>";  // FIXME to change
                 echo "<td><select name='oldexternalemail'>";
                 while($row = mysql_fetch_array($result))
                 {
                     echo "<option value='".stripslashes($row['externalengineer']).",".$row['externalemail']."'>";
-                    echo stripslashes($row['externalengineer'])." - ".$row['externalemail']."</option>\n";
+                    echo stripslashes($row['externalengineer'])." - ".stripslashes($row['externalemail'])."</option>\n";
                 }
                 echo "</select></td></tr>";
-                echo "<tr><th>External Engineers Name:</th>";
+                echo "<tr><th>{$strExternalEngineersName}:</th>";
                 echo "<td><input maxlength='80' name='externalengineer' size='30' type='text' value='' /></td></tr>";
-                echo "<tr><th>External Email:</th>";
+                echo "<tr><th>{$strExternalEmail}:</th>";
                 echo "<td><input maxlength='255' name='externalemail' size='30' type='text' value='' /></td></tr>";
                 echo "</table><p align='center'><input name='submit' type='submit' value='{$strSave}' /></p></form>";
             }
