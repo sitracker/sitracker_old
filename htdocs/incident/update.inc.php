@@ -501,7 +501,7 @@ else if($action == "deletedraft")
         $result = mysql_query($sql);
         if (mysql_error()) trigger_error(mysql_error(),E_USER_ERROR);
     }
-    html_redirect("update_incident.php?id={$id})";
+    html_redirect("update_incident.php?id={$id}");
 }
 else if($action == "newupdate")
 {
