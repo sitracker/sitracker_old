@@ -62,9 +62,7 @@ if ($sit[0]!='')
 
     if ($CONFIG['debug'])
     {
-        echo "<!--";
-        print_r($_SESSION['permissions']);
-        echo "-->";
+        $dbg .= 'permissions'.print_r($_SESSION['permissions'],true);
     }
     echo "<div id='menu'>\n";
     echo "<ul id='menuList'>\n";
