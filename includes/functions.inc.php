@@ -5472,8 +5472,8 @@ function show_tag_cloud($orderby="name", $showcount=FALSE)
     if(substr($_SERVER['SCRIPT_NAME'],-8) != "main.php")
     {
         //not in the dashbaord
-        $html .= "<p align='center'>{$GLOBALS['strSort']}: <a href='view_tags.php?orderby=name'>alphabetically</a> | ";
-        $html .= "<a href='view_tags.php?orderby=occurrences'>popularity</a></p>";
+        $html .= "<p align='center'>{$GLOBALS['strSort']}: <a href='view_tags.php?orderby=name'>{$GLOBALS['strAlphabetically']}</a> | ";
+        $html .= "<a href='view_tags.php?orderby=occurrences'>{$GLOBALS['strPopularity']}</a></p>";
     }
     if(mysql_num_rows($result) > 0)
     {
