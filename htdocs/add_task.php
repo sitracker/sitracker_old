@@ -93,7 +93,7 @@ else
                 mysql_query($sql);
                 if (mysql_error()) trigger_error(mysql_error(),E_USER_ERROR);
                 if (mysql_affected_rows() < 1) trigger_error("Task insert failed",E_USER_ERROR);
-                html_header("tasks.php");
+                html_redirect("tasks.php");
             }
         break;
 
