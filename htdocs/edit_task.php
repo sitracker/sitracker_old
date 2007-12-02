@@ -207,7 +207,7 @@ switch ($action)
         if (mysql_error()) trigger_error(mysql_error(),E_USER_ERROR);
 
         // FIXME redundant i18n strings
-        html_redirect("tasks.php?incident={$id}", TRUE, $strTaskDeletedSuccessfully);
+        html_redirect("tasks.php", TRUE, $strTaskDeletedSuccessfully);
     break;
 
     case '':
