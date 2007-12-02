@@ -38,12 +38,12 @@ switch($query)
         break;
 }
 
-if($start_str==$end_str) echo "<h2>Incidents {$type} on {$start_str}</h2>";
+if($start_str==$end_str) echo "<h2>Incidents {$type} on {$start_str}</h2>"; // FIXME i18n incidents X on X
 else echo "<h2>Incidents {$type} between {$start_str} and {$end_str}</h2>";
 
 echo "<table align='center'>";
 
-echo "<tr><th>ID</th><th>Title</th><th>Opened</th><th>Closed</th><th>Owner</th><th>Customer</th><th>Site</th></tr>";
+echo "<tr><th>{$strID}</th><th>{$strTitle}</th><th>{$strOpened}</th><th>{$strClosed}</th><th>{$strOwner}</th><th>{$strCustomer}</th><th>{$strSite}</th></tr>";
 
 while($row = mysql_fetch_array($result))
 {
