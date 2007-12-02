@@ -91,9 +91,8 @@ if ($action == "edit")
         $productname=product_name($maint["product"]);
         if (user_permission($sit[2], 22))
         {
-            // FIXME i18n
             if ($changeproduct=='yes') echo product_drop_down("product", $maint['product']);
-            else echo "{$productname} (<a href='{$_SERVER['PHP_SELF']}?action=edit&amp;maintid={$maintid}&amp;changeproduct=yes'>Change</a>)";
+            else echo "{$productname} (<a href='{$_SERVER['PHP_SELF']}?action=edit&amp;maintid={$maintid}&amp;changeproduct=yes'>{$strChange}</a>)";
         }
         else echo "{$productname}";
         echo "</td></tr>\n";
@@ -122,7 +121,7 @@ if ($action == "edit")
         echo " /></td></tr>\n";
 
 
-        echo "<tr><th></th><td><a href=\"javascript:toggleDiv('hidden');\">Advanced</a></td></tr>";
+        echo "<tr><th></th><td><a href=\"javascript:toggleDiv('hidden');\">{$strAdvanced}</a></td></tr>";
 
         echo "<tbody id='hidden' style='display:none'>";
 
@@ -150,7 +149,7 @@ if ($action == "edit")
         echo "<p align='center'><input name='submit' type='submit' value='{$strSave}' /></p>";
         echo "</form>\n";
 
-        echo "<p align='center'><a href='contract_details.php?id={$maintid}'>View contract</a></p>"; // FIXME i18n
+        echo "<p align='center'><a href='contract_details.php?id={$maintid}'>{$strReturnWithoutSaving}</a></p>";
         mysql_free_result($result);
     }
     include('htmlfooter.inc.php');

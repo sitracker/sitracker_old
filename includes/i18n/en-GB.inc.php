@@ -102,6 +102,7 @@ $strByProduct = 'By Product';
 $strCallFromCustomer = 'Phone call from customer';
 $strCallToCustomer = 'Phone call to customer';
 $strCause = 'Cause';
+$strChange = 'Change';
 $strChangePassword = 'Change Password';
 $strChangingContact = 'Changing the contact or skill will not reassign this incident to another contract';
 $strChase = 'Chase';

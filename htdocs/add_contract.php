@@ -52,7 +52,7 @@ if ($action == "showform" OR $action=='')
     echo "<tr><th>{$strAdminContact}: <sup class='red'>*</sup></th><td>".contact_drop_down("admincontact", 0, true)."</td></tr>\n";
     echo "<tr><th>{$strNotes}:</th><td><textarea cols='40' name='notes' rows='5'></textarea></td></tr>\n";
 
-    echo "<tr><th></th><td><a href=\"javascript:toggleDiv('hidden');\">Advanced</a></td></tr>";
+    echo "<tr><th></th><td><a href=\"javascript:toggleDiv('hidden');\">{$strAdvanced}</a></td></tr>";
 
     echo "<tbody id='hidden' style='display:none'>";
 
@@ -60,8 +60,8 @@ if ($action == "showform" OR $action=='')
     reseller_drop_down("reseller", 0);
     echo "</td></tr>\n";
 
-    echo "<tr><th>{$strLicenseQuantity}:</th><td><input value=0 maxlength='7' name='licence_quantity' size='5' />";
-    echo " (0 means unlimited)</td></tr>\n";
+    echo "<tr><th>{$strLicenseQuantity}:</th><td><input value='0' maxlength='7' name='licence_quantity' size='5' />";
+    echo " ({$str0MeansUnlimited})</td></tr>\n";
 
     echo "<tr><th>{$strLicenseType}:</th><td>";
     licence_type_drop_down("licence_type", 0);
