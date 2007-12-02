@@ -260,6 +260,7 @@ $strFeedbackRequested = 'Feedback Requested but not yet received for form';
 $strFeeds = 'Feeds';
 # e.g. form fields
 $strFields = 'Fields';
+$strFilename = 'Filename';
 # e.g. computer files
 $strFiles = 'Files';
 $strFirstLogin = 'You are logged in as Admin which currently has a blank password, please change this now';
@@ -632,6 +633,7 @@ $strSiteSupport = 'Site Support';
 $strSiteType = 'Site Type';
 $strSitUpgraded = '%s has been upgraded to %s';
 $strSitUpgradedLink = 'What\'s new?';
+$strSize = 'Size';
 $strSkill = 'Skill';
 $strSkills = 'Skills';
 $strSkillsFor = 'Skills For %s';

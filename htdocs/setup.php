@@ -185,8 +185,10 @@ function setup_configure()
         }
     }
 
+    $c=1;
     foreach($SETUP AS $setupvar)
     {
+        $html .= "<div class='configvar{$c}'>";
         if ($CFGVAR[$setupvar]['title']!='') $title = $CFGVAR[$setupvar]['title'];
         else $title = $setupvar;
         $html .= "<h4>{$title}</h4>";
@@ -210,7 +212,9 @@ function setup_configure()
             $html .= $value;
         }
         $html .= "' />";
+        $html .= "</div>";
         $html .= "<br />\n";
+        if ($c==1) $c==2; else $c=1;
     }
     $html .= "<input type='hidden' name='action' value='save_config' />";
     $html .= "<br /><input type='submit' name='submit' Value='Save Configuration' />";
@@ -280,6 +284,8 @@ echo "<style type=\"text/css\">\n";
 echo "body { background-color: #FFF; font-family: Tahoma, Helvetica, sans-serif; font-size: 10pt;}\n";
 echo "h1,h2,h3,h4,h5 { background-color: #203894; padding: 0.1em; border: 1px solid #203894; color: #FFF; }\n";
 echo "h4 {background-color: #F7FAFF; color: #000; border: 1px solid #3165CD; }\n";
+echo "div.configvar1 {background-color: #F7FAFF; border: 1px solid black; margin-bottom: 10px;} ";
+echo "div.configvar2 {background-color: green; border: 1px solid black; margin-bottom: 10px;} ";
 echo ".error {background: #FFFFCC; border: 1px solid red; color: red; padding: 2px;}\n";
 echo ".help {background: #F7FAFF; border: 1px solid #3165CD; color: #203894; padding: 2px;}\n";
 echo ".helptip { color: #203894;}\n";

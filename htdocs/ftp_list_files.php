@@ -12,7 +12,7 @@
 
 // This Page Is Valid XHTML 1.0 Transitional!   1Nov05
 
-$title='FTP File Database';
+
 $permission=44; // FTP Publishing
 require('db_connect.inc.php');
 require('functions.inc.php');
@@ -20,7 +20,7 @@ require('functions.inc.php');
 // This page requires authentication
 require('auth.inc.php');
 
-// Valid user
+$title= $strFTPFilesDB;
 include('htmlheader.inc.php');
 
 // External Variables
@@ -34,22 +34,20 @@ function upload_window()
         window.open(URL, "upload_window", "toolbar=yes,status=yes,menubar=no,scrollbars=yes,resizable=yes,width=700,height=600");
 }
 </script>
-<?php 
-echo "<h2>$title</h2>";  
+<?php
+echo "<h2>$title</h2>";
 if (!empty($CONFIG['ftp_hostname']) AND !empty($CONFIG['ftp_username'])) echo "<p align='center'><a href='ftp_upload_file.php'>Upload a new file</a></p>";
-?>
-
-<table summary='files' align='center'>
+echo "<table summary='files' align='center'>
 <tr>
     <th>&nbsp;</th>
-    <th><a href="<?php echo $_SERVER['PHP_SELF']; ?>?orderby=filename">Filename</a></th>
-    <th><a href="<?php echo $_SERVER['PHP_SELF']; ?>?orderby=size">Size</a></th>
-    <th><a href="<?php echo $_SERVER['PHP_SELF']; ?>?orderby=shortdescription">Title</a></th>
-    <th><a href="<?php echo $_SERVER['PHP_SELF']; ?>?orderby=version">Version</a></th>
-    <th><a href="<?php echo $_SERVER['PHP_SELF']; ?>?orderby=date">File Date</a></th>
-    <th><a href="<?php echo $_SERVER['PHP_SELF']; ?>?orderby=expiry">Expiry</a></th>
-</tr>
-<?php
+    <th><a href='{$_SERVER['PHP_SELF']}?orderby=filename'>{$strFilename}</a></th>
+    <th><a href='{$_SERVER['PHP_SELF']}?orderby=size'>{$strSize}</a></th>
+    <th><a href='{$_SERVER['PHP_SELF']}?orderby=shortdescription'>{$strTitle}</a></th>
+    <th><a href='{$_SERVER['PHP_SELF']}?orderby=version'>{$strVersion}</a></th>
+    <th><a href='{$_SERVER['PHP_SELF']}?orderby=date'>{$strDate}</a></th>
+    <th><a href='{$_SERVER['PHP_SELF']}?orderby=expiry'>{$strExpiryDate}</a></th>
+</tr>";
+
 $sql="SELECT id, filename, size, userid, shortdescription, path, downloads, filedate, fileversion, productid, ";
 $sql .="releaseid, expiry, published FROM files ";
 
