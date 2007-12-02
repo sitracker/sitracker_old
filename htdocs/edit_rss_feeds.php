@@ -52,6 +52,7 @@ switch($action)
         include('htmlheader.inc.php');
         $url = cleanvar(urldecode($_REQUEST['url']));
         $sql = "SELECT * FROM dashboard_rss WHERE owner = {$sit[2]} AND url = '{$url}' LIMIT 1 ";
+        if ($CONFIG['debug']) $dbg .= print_r($sql,true);
         $result = mysql_query($sql);
         if (mysql_error()) trigger_error(mysql_error(),E_USER_ERROR);
         if (mysql_num_rows($result) > 0)
@@ -82,23 +83,17 @@ switch($action)
         if (mysql_error()) trigger_error(mysql_error(),E_USER_ERROR);
 
         if(!$result) html_redirect("edit_rss_feeds.php", FALSE);
-        else
-        {
-            html_redirect("edit_rss_feeds.php");
-        }
+        else html_redirect("edit_rss_feeds.php");
         break;
     case 'enable':
-        $url = cleanvar($_REQUEST['url']);
+        $url = urldecode(cleanvar($_REQUEST['url']));
         $enable = cleanvar($_REQUEST['enable']);
-        $sql = "UPDATE dashboard_rss SET enabled = '{$enable}' WHERE url = '{$url}' AND owner = {$sit[2]}";
-        $result = mysql_query($sql);
+        $sql = "UPDATE `dashboard_rss` SET `enabled` = '{$enable}' WHERE `url` = '{$url}' AND `owner` = {$sit[2]}";
+        mysql_query($sql);
         if (mysql_error()) trigger_error(mysql_error(),E_USER_ERROR);
 
-        if(!$result) html_redirect("edit_rss_feeds.php", FALSE, "Changed enabled state failed");
-        else
-        {
-            html_redirect("edit_rss_feeds.php");
-        }
+        if(mysql_affected_rows() < 1) html_redirect("edit_rss_feeds.php", FALSE, "Changed enabled state failed");
+        else html_redirect("edit_rss_feeds.php");
         break;
     case 'delete':
         $url = $_REQUEST['url'];
@@ -108,14 +103,11 @@ switch($action)
         if (mysql_error()) trigger_error(mysql_error(),E_USER_ERROR);
 
         if(!$result) html_redirect("edit_rss_feeds.php", FALSE);
-        else
-        {
-            html_redirect("edit_rss_feeds.php");
-        }
+        else html_redirect("edit_rss_feeds.php");
         break;
     default:
         include('htmlheader.inc.php');
-        echo "<h2>Edit RSS/Atom feeds</h2>";  // FIXME i18n
+        echo "<h2>Edit RSS/Atom feeds</h2>";  // FIXME i18n edit feeds
 
         $sql = "SELECT * FROM dashboard_rss WHERE owner = {$sit[2]}";
         $result = mysql_query($sql);
@@ -123,8 +115,8 @@ switch($action)
 
         if(mysql_num_rows($result) > 0)
         {
-            echo "<table align='center'>";
-            echo "<tr><th>URL</th><th>{$strDisplay}</th><th>{$strEnabled}</th><th>{$strOperation}</th></tr>";
+            echo "<table align='center'>\n";
+            echo "<tr><th>URL</th><th>{$strDisplay}</th><th>{$strEnabled}</th><th>{$strOperation}</th></tr>\n";
             $shade='shade1';
             while($obj = mysql_fetch_object($result))
             {
@@ -132,20 +124,20 @@ switch($action)
                 else $opposite = "true";
                 $urlparts = parse_url($obj->url);
                 if ($obj->enabled == 'false') $shade='expired';
-                echo "<tr class='$shade'><td align='left'><a href=\"{$obj->url}\"><img src='{$CONFIG['application_webpath']}images/icons/{$iconset}/12x12/feed-icon.png' style='border: 0px;' alt='Feed Icon' /></a> <a href=\"{$obj->url}\">{$urlparts['host']}</a></td>";
+                echo "<tr class='$shade'><td align='left'><a href=\"".htmlentities($obj->url,ENT_NOQUOTES, $GLOBALS['i18ncharset'])."\"><img src='{$CONFIG['application_webpath']}images/icons/{$iconset}/12x12/feed-icon.png' style='border: 0px;' alt='Feed Icon' /></a> <a href=\"{$obj->url}\">{$urlparts['host']}</a></td>";
                 echo "<td>";
                 if ($obj->items >= 1) echo "{$obj->items}";
                 else echo $strUnlimited;
                 echo "</td>";
                 echo "<td><a href='{$_SERVER['PHP_SELF']}?action=enable&amp;url=".urlencode($obj->url)."&amp;enable={$opposite}'>{$obj->enabled}</a></td>";
                 echo "<td><a href='{$_SERVER['PHP_SELF']}?action=edit&amp;url=".urlencode($obj->url)."'>{$strEdit}</a> | ";
-                echo "<a href='{$_SERVER['PHP_SELF']}?action=delete&amp;url=".urlencode($obj->url)."'>{$strRemove}</a></td></tr>";
+                echo "<a href='{$_SERVER['PHP_SELF']}?action=delete&amp;url=".urlencode($obj->url)."'>{$strRemove}</a></td></tr>\n";
                 if ($shade=='shade1') $shade='shade2';
                 else $shade='shade1';
             }
-            echo "</table>";
+            echo "</table>\n";
         }
-        else echo "<p align='center'>No feeds currently present</p>";
+        else echo "<p align='center'>No feeds currently present</p>"; // FIXME i18n No Feeds
         echo "<p align='center'><a href='{$_SERVER['PHP_SELF']}?action=add'>{$strAdd}</a></p>";
         include('htmlfooter.inc.php');
         break;

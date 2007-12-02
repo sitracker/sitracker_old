@@ -47,16 +47,17 @@ if(mysql_num_rows($result) > 0)
         $url = $row[0];
         if($rss = fetch_rss( $url ))
         {
-            //echo "<pre>".print_r($rss,true)."</pre>";
+//              if ($CONFIG['debug']) echo "<pre>".print_r($rss,true)."</pre>";
             echo "<table align='center' style='width: 100%'>";
             echo "<tr><th><span style='float: right;'><a href='".htmlspecialchars($url)."'>";
             echo "<img src='{$CONFIG['application_webpath']}images/icons/{$iconset}/12x12/feed-icon.png' style='border: 0px;' alt='Feed Icon' />";
             echo "</a></span>";
             echo "<a href='{$rss->channel['link']}' style='color: #000;' class='info'>{$rss->channel['title']}";
-            if (!empty($rss->image['url']) OR !empty($rss->channel['description']))
+            if (!empty($rss->image['url']) OR !empty($rss->channel['description']) OR !empty($rss->channel['icon']))
             {
                 echo "<span>";
                 if (!empty($rss->image['url'])) echo "<img src='{$rss->image['url']}' alt='{$rss->image['title']}' style='float: right; margin-right: 2px; margin-left: 5px; margin-top: 2px;' />";
+                elseif (!empty($rss->channel['icon'])) echo "<img src='{$rss->channel['icon']}' style='float: right; margin-right: 2px; margin-left: 5px; margin-top: 2px;' />";
                 echo "{$rss->channel['description']}</span>";
             }
             echo "</a>";
@@ -65,7 +66,8 @@ if(mysql_num_rows($result) > 0)
             foreach($rss->items as $item)
             {
                 //echo "<pre>".print_r($item,true)."</pre>";
-                echo "<tr><td><a href='{$item['link']}' class='info'>{$item['title']}";
+                echo "<tr><td>";
+                echo "<a href='{$item['link']}' class='info'>{$item['title']}";
                 if($rss->feed_type == 'RSS')
                 {
                     if (!empty($item['pubdate'])) $itemdate = strtotime($item['pubdate']);
@@ -76,6 +78,7 @@ if(mysql_num_rows($result) > 0)
                 elseif($rss->feed_type == 'Atom')
                 {
                     if (!empty($item['issued'])) $itemdate = strtotime($item['issued']);
+                    elseif (!empty($item['published'])) $itemdate = strtotime($item['published']);
                     $d = strip_tags($item['atom_content'],$feedallowedtags);
                 }
                 if ($itemdate > 10000) $itemdate = date($CONFIG['dateformat_datetime'], $itemdate);
