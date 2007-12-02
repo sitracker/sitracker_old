@@ -26,7 +26,7 @@ $submit=$_REQUEST['submit'];
 <script type='text/javascript'>
 function confirm_submit()
 {
-    return window.confirm('<?php echo $AddEmailConfirm ?>');
+    return window.confirm('<?php echo $strAddEmailConfirm ?>');
 }
 </script>
 <?php
