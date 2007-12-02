@@ -20,8 +20,11 @@ require('auth.inc.php');
 // External variables
 $siteid = mysql_escape_string($_REQUEST['siteid']);
 $submit = $_REQUEST['submit'];
-
-if (empty($submit))
+// if($CONFIG['debug'])
+//     $debug .= print_r($_SESSION['formdata']);
+// 
+//     echo "<p class='error'>Form Error</p>";
+if (empty($submit) OR !empty($_SESSION['formerrors']))
 {
     include('htmlheader.inc.php');
     ?>
@@ -34,28 +37,84 @@ if (empty($submit))
     <?php
     echo "<h2><img src='{$CONFIG['application_webpath']}images/icons/{$iconset}/32x32/contact.png' width='32' height='32' alt='' /> ";
     echo "{$strNewContact}</h2>";
+    
+    //show errors
+    if($_SESSION['formerrors'])
+    {
+        foreach($_SESSION['formerrors'] as $error)
+        {
+            echo "<p class='error'>$error</p>";
+        }
+    }
+
+    //cleanup errors
+    $_SESSION['formerrors'] = NULL;
+
     echo "<h5>".sprintf($strMandatoryMarked, "<sup class='red'>*</sup>")."</h5>";
     echo "<form name='contactform' action='{$_SERVER['PHP_SELF']}' method='post' onsubmit='return confirm_submit();'>";
     echo "<table align='center'>";
     echo "<tr><th>{$strName}: <sup class='red'>*</sup><br />{$strTitle}, {$strForenames}, {$strSurname}</th>";
-    echo "<td><input maxlength='50' name='salutation' title='Salutation (Mr, Mrs, Miss, Dr. etc.)' size='7' />";
-    echo "<input maxlength='100' name='forenames' size='15' title='Firstnames (or initials)' />";
-    echo "<input maxlength='100' name='surname' size='20' title=\"{$strSurname}\" /></td></tr>\n";
-    echo "<tr><th>{$strJobTitle}:</th><td><input maxlength='255' name='jobtitle' size='35' title='e.g. Purchasing Manager' /></td></tr>\n";
+    echo "<td><input maxlength='50' name='salutation' title='Salutation (Mr, Mrs, Miss, Dr. etc.)' size='7'";
+    if($_SESSION['formdata']['salutation'] != '')
+        echo "value='{$_SESSION['formdata']['salutation']}'";
+    echo "/>";
+
+    echo "<input maxlength='100' name='forenames' size='15' title='Firstnames (or initials)'";
+    if($_SESSION['formdata']['forenames'] != '')
+        echo "value='{$_SESSION['formdata']['forenames']}'";
+    echo "/>";
+
+    echo "<input maxlength='100' name='surname' size='20' title=\"{$strSurname}\"";
+    if($_SESSION['formdata']['surname'] != '')
+        echo "value='{$_SESSION['formdata']['surname']}'";
+    echo "/></td></tr>\n";
+
+    echo "<tr><th>{$strJobTitle}:</th><td><input maxlength='255' name='jobtitle' size='35' title='e.g. Purchasing Manager'";
+    if($_SESSION['formdata']['jobtitle'] != '')
+        echo "value='{$_SESSION['formdata']['jobtitle']}'";
+    echo "/></td></tr>\n";
+
+    //FIXME do this one
     echo "<tr><th>{$strSite}: <sup class='red'>*</sup></th><td>".site_drop_down('siteid',$siteid)."</td></tr>\n";
-    echo "<tr><th>{$strDepartment}:</th><td><input maxlength='255' name='department' size='35' /></td></tr>\n";
-    echo "<tr><th>{$strEmail}: <sup class='red'>*</sup></th><td><input maxlength='100' name='email' size='35' /> ";
+
+    echo "<tr><th>{$strDepartment}:</th><td><input maxlength='255' name='department' size='35'";
+    if($_SESSION['formdata']['department'] != '')
+        echo "value='{$_SESSION['formdata']['department']}'";
+    echo "/></td></tr>\n";
+
+    echo "<tr><th>{$strEmail}: <sup class='red'>*</sup></th><td><input maxlength='100' name='email' size='35'";
+    if($_SESSION['formdata']['email'])
+        echo "value='{$_SESSION['formdata']['email']}'";
+    echo "/> ";
+
+    //FIXME do this one
     echo "<label>";
     html_checkbox('dataprotection_email', 'No');
     echo "{$strEmail} {$strDataProtection}</label>";
     echo "</td></tr>\n";
-    echo "<tr><th>{$strTelephone}:</th><td><input maxlength='50' name='phone' size='35' /> ";
+
+    echo "<tr><th>{$strTelephone}:</th><td><input maxlength='50' name='phone' size='35'";
+    if($_SESSION['formdata']['phone'] != '')
+        echo "value='{$_SESSION['formdata']['phone']}'";
+    echo "/> ";
+
+    //FIXME do this one
     echo "<label>";
     html_checkbox('dataprotection_phone', 'No');
     echo "{$strTelephone} {$strDataProtection}</label>";
     echo "</td></tr>\n";
-    echo "<tr><th>{$strMobile}:</th><td><input maxlength='100' name='mobile' size='35' value='' /></td></tr>\n";
-    echo "<tr><th>{$strFax}:</th><td><input maxlength='50' name='fax' size='35' /></td></tr>\n";
+
+    echo "<tr><th>{$strMobile}:</th><td><input maxlength='100' name='mobile' size='35'";
+    if($_SESSION['formdata']['mobile'] != '')
+        echo "value='{$_SESSION['formdata']['mobile']}'";
+    echo "/></td></tr>\n";
+
+    echo "<tr><th>{$strFax}:</th><td><input maxlength='50' name='fax' size='35'";
+    if($_SESSION['formdata']['fax'])
+        echo "value='{$_SESSION['formdata']['fax']}'";
+    echo "/></td></tr>\n";
+
+    //FIXME all of these
     echo "<tr><th>{$strAddress}:</th><td><label>";
     html_checkbox('dataprotection_address', 'No');
     echo " {$strAddress} {$strDataProtection}</label></td></tr>\n";
@@ -66,11 +125,16 @@ if (empty($submit))
     echo "<tr><th>{$strCounty}:</th><td><input maxlength='255' name='county' size='35' disabled='disabled' /></td></tr>\n";
     echo "<tr><th>{$strCountry}:</th><td>".country_drop_down('country', $CONFIG['home_country'], "disabled='disabled'")."</td></tr>\n";
     echo "<tr><th>{$strPostcode}:</th><td><input maxlength='255' name='postcode' size='35' disabled='disabled' /></td></tr>\n";
-    echo "<tr><th>{$strNotes}:</th><td><textarea cols='60' rows='5' name='notes'></textarea></td></tr>\n";
+    echo "<tr><th>{$strNotes}:</th><td><textarea cols='60' rows='5' name='notes'>";
+    if($_SESSION['formdata']['notes'] != '')
+        echo $_SESSION['formdata']['notes'];
+    echo "</textarea></td></tr>\n";
     echo "</table>\n\n";
     echo "<p><input name='submit' type='submit' value=\"{$strAddContact}\" /></p>";
     echo "</form>\n";
 
+    //cleanup form vars
+    $_SESSION['formdata'] = NULL;
     echo "<h5 class='warning'>{$strAvoidDupes}.</h5>";
     include('htmlfooter.inc.php');
 }
@@ -101,29 +165,31 @@ else
     $department = cleanvar($_REQUEST['department']);
     $notes = cleanvar($_REQUEST['notes']);
 
+    $_SESSION['formdata'] = $_REQUEST;
+
     $errors = 0;
     // check for blank name
     if ($surname == "")
     {
-        $errors = 1;
-        echo "<p class='error'>{$strMustEnterSurname}</p>\n";
+        $errors++;
+        $_SESSION['formerrors']['surname'] = $strMustEnterSurname;
     }
     // check for blank site
     if ($siteid == '')
     {
-        $errors = 1;
-        echo "<p class='error'>{$strMustSelectCustomerSite}</p>\n";
+        $errors++;
+        $_SESSION['formerrors']['siteid'] = $strMustSelectCustomerSite;
     }
     // check for blank email
     if ($email == "" OR $email=='none' OR $email=='n/a')
     {
-        $errors = 1;
-        echo "<p class='error'>{$strMustEnterEmail}</p>\n";
+        $errors++;
+        $_SESSION['formerrors']['email'] = $strMustEnterEmail;
     }
     if ($siteid==0 OR $siteid=='')
     {
         $errors++;
-        echo "<p class='error'>{$strMustSelectSite}</p>\n";
+        $_SESSION['formerrors']['siteid'] = $strMustSelectSite;
     }
     // Check this is not a duplicate
     $sql = "SELECT id FROM contacts WHERE email='$email' AND LCASE(surname)=LCASE('$surname') LIMIT 1";
@@ -131,7 +197,7 @@ else
     if (mysql_num_rows($result) >= 1)
     {
         $errors++;
-        echo "<p class='error'>{$strContactRecordExists}</p>";
+        $_SESSION['formerrors']['duplicate'] = $strContactRecordExists;
     }
 
 
@@ -176,5 +242,7 @@ else
             html_redirect("contact_details.php?id=$newid");
         }
     }
+    else html_redirect("add_contact.php", FALSE);
+
 }
 ?>
