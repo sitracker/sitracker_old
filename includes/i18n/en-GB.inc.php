@@ -69,6 +69,7 @@ $strAlternative = 'Alternative';
 # i.e. before noon
 $strAM = 'am';
 $strAnswer = 'Answer';
+$strApprove = 'Approve';
 $strApproveHolidays = 'Approve Holidays';
 $strArticlesPublishedRecently = 'Articles Published Recently';
 $strArticlesPublishedToday = 'Articles Published Today';
@@ -171,6 +172,7 @@ $strdayssick = 'days sick leave';
 $strdaysworkingaway = 'days working away';
 $strdaystraining = 'days training';
 $strdaysother = 'days other leave';
+$strDecline = 'Decline';
 $strDefault = 'Default';
 $strDefaultSubstitute = 'Default Substitute';
 $strDefineSubstituteEngineersFor = 'Define Substitute Engineers For %s';
