@@ -99,14 +99,24 @@ elseif (authenticate($username, $password) == 1)
     }
     $_SESSION['permissions'] = array_unique($userpermissions);
 
+    //if user is away, tell them they are
     if (user_status($_SESSION['userid']) != 1)
     {
-        $status = $statusresult->name;
-        $sql = "INSERT INTO notices (userid, type, text, timestamp) ";
-        $sql .= "VALUES({$_SESSION['userid']}, ".USER_STILL_AWAY_TYPE.",";
-        $sql .= "'".mysql_escape_string($strUserStillAway)."', NOW())";
-        mysql_query($sql);
+        //check to see if they have one already
+        $sql = "SELECT id FROM notices WHERE type=".USER_STILL_AWAY_TYPE." ";
+        $sql .= "AND userid={$_SESSION['userid']}";
+        $result = mysql_query($sql);
         if (mysql_error()) trigger_error(mysql_error(), E_USER_ERROR);
+
+        if(empty($result) OR mysql_num_rows($result) == 0)
+        {
+            $gid = md5($strUserStillAway);
+            $sql = "INSERT INTO notices (userid, type, text, timestamp, gid) ";
+            $sql .= "VALUES({$_SESSION['userid']}, ".USER_STILL_AWAY_TYPE.",";
+            $sql .= "'".mysql_escape_string($strUserStillAway)."', NOW(), '{$gid}')";
+            mysql_query($sql);
+            if (mysql_error()) trigger_error(mysql_error(), E_USER_ERROR);
+        }
     }
 
     // redirect
