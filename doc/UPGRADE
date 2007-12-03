@@ -42,7 +42,7 @@ language at login and also in their profile, this language
 can be different to the default language you have set.
 
 Contracts can now optionally limit the number of supported
-contracts or support all of the contacts for that site.
+contacts or support all of the contacts for that site.
 Some fields for contracts are now accessed via an 'Advanced'
 section of the add/edit contract page.
 
