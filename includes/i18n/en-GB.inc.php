@@ -741,6 +741,7 @@ $strUpdateType = 'Update Type';
 $strUnknown = 'Unknown';
 $strUnlimited = 'Unlimited';
 $strUnlink = 'Unlink';
+$strUnlock = 'Unlock';
 $strUntitled = 'Untitled';
 $strUsed = 'Used';
 $strUsedNofN = 'Used %s of %s';
