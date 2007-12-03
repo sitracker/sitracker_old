@@ -108,7 +108,7 @@ while ($incident=mysql_fetch_array($incident_result)) {
         }
 
         if($incident['slanotice']==0)
-        {        
+        {
             //reaching SLA
             if ($times['next_sla_time'] > 0) $reach = $newSlaTime / $times['next_sla_time'];
             else $reach = 0;
@@ -122,26 +122,26 @@ while ($incident=mysql_fetch_array($incident_result)) {
                 if($timetil >= 0)
                 {
                     $text = "will exceed its SLA soon";
-                    $sql .= "VALUES({$incident['owner']}, ".NEARING_SLA_TYPE.", 'Incident {$incident['id']} - \'".addslashes($incident['title'])."\' $text', 'View Incident', 'javascript:incident_details_window(\'{$incident['id']}\',\'incident{$incident['id']}\')', {$incident['id']}, NOW())";
+                    $sql .= "VALUES({$incident['owner']}, ".NEARING_SLA_TYPE.", 'Incident {$incident['id']} - \'".mysql_escape_string($incident['title'])."\' $text', 'View Incident', 'javascript:incident_details_window(\'{$incident['id']}\',\'incident{$incident['id']}\')', {$incident['id']}, NOW())";
                 }
                 elseif($timetil < 0)
                 {
                     $text = "has exceeded its SLA";
-                    $sql .= "VALUES({$incident['owner']}, ".OUT_OF_SLA_TYPE.", 'Incident {$incident['id']} - \'{$incident['title']}\' $text', 'View Incident', 'javascript:incident_details_window(\'{$incident['id']}\',\'incident{$incident['id']}\')', {$incident['id']}, NOW())";
+                    $sql .= "VALUES({$incident['owner']}, ".OUT_OF_SLA_TYPE.", 'Incident {$incident['id']} - \'".mysql_escape_string($incident['title'])."\' $text', 'View Incident', 'javascript:incident_details_window(\'{$incident['id']}\',\'incident{$incident['id']}\')', {$incident['id']}, NOW())";
                 }
-                echo $sql;
+                if ($CONFIG['debug']) echo $sql;
                 mysql_query($sql);
                 if (mysql_error()) trigger_error(mysql_error(),E_USER_WARNING);
 
                 $sql="UPDATE incidents SET slanotice='1' WHERE id='{$incident['id']}'";
                 mysql_query($sql);
-                if (mysql_error()) trigger_error(mysql_error(),E_USER_WARNING);               
+                if (mysql_error()) trigger_error(mysql_error(),E_USER_WARNING);
             }
         }
 
         // Check if we have already sent an out of SLA/Review period mail
         // This attribute is reset when an update to the incident meets sla/review time
-        if ($incident['slaemail']==0) {           
+        if ($incident['slaemail']==0) {
         $emailSent=0;
             // First check SLA
             if (($times['review_days'] * 24 * 60) < ($newReviewTime) ) {
@@ -155,7 +155,7 @@ while ($incident=mysql_fetch_array($incident_result)) {
                 $sql="UPDATE incidents SET slaemail='1' WHERE id='{$incident['id']}'";
                 mysql_query($sql);
             }
-            
+
 
         }
     }
