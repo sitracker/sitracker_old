@@ -123,7 +123,8 @@ function stats_period_row($desc, $start, $end)
     else $updatesperuser = 0;
     if ($count['updated'] > 0) $updatesperincident = @number_format($count['updates']/$count['updated'], 2);
     else $updatesperincident = 0;
-    $incidentsperowner = @number_format($count['handled']/$count['owners'], 2);
+    if ($count['owners'] > 0) $incidentsperowner = @number_format($count['handled']/$count['owners'], 2);
+    else $incidentsperowner = 0;
 /*
     $workload = $count['handled'] + $count['emailrx'] + $count['skills'] + $count['updates'] + $count['higherpriority'];
     $resource = $count['owners'] + $count['users'] + $count['emailtx'] + ($count['opened'] - $count['closed']);
