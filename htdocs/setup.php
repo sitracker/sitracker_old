@@ -255,7 +255,7 @@ function user_notify_upgrade()
     while($user = mysql_fetch_object($result))
     {
         $noticesql = "INSERT into notices(userid, type, text, linktext, link, gid, timestamp) ";
-        $noticesql .= "VALUES ({$user->id}, ".USER_LANG_DIFFERS_TYPE.", '\$strSitUpgraded', '\$strSitUpgradedLink', '{$CONFIG['application_webpath']}releasenotes.php', '{$gid}', NOW())";
+        $noticesql .= "VALUES({$user->id}, ".SIT_UPGRADED_NOTICE.", '\$strSitUpgraded', '\$strSitUpgradedLink', '{$CONFIG['application_webpath']}releasenotes.php', {$gid}, NOW())";
         mysql_query($noticesql);
         if (mysql_error()) trigger_error(mysql_error(),E_USER_WARNING);
     }
