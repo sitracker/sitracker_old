@@ -109,12 +109,11 @@ else
         {
             echo "<p align='center'>{$strNoRecords}<p>";
         }
-        if($numberofcontacts < $allowedcontacts OR $allowedcontacts == 0)
-        {
-            echo "<p align='center'><a href='add_contact_support_contract.php?maintid={$id}&amp;siteid={$maintrow['site']}&amp;context=maintenance'>";
-            echo "{$strAddContact}</a></p>";
-        }
-
+}
+if($numberofcontacts < $allowedcontacts OR $allowedcontacts == 0)
+{
+    echo "<p align='center'><a href='add_contact_support_contract.php?maintid={$id}&amp;siteid={$maintrow['site']}&amp;context=maintenance'>";
+    echo "{$strAddContact}</a></p>";
 }
 echo "<br />";
 echo "<h3>{$strSkillsSupportedUnderContract}:</h3>";
