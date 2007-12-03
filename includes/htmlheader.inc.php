@@ -175,7 +175,7 @@ if($sit[0] != '')
                 echo "{$notice->text}";
                 if (!empty($notice->link))
                 {
-                    echo " - <a href=\"{".stripslashes($notice->link)."\">";
+                    echo " - <a href=\"".stripslashes($notice->link)."\">";
                     if (substr($notice->linktext, 0, 4)=='$str')
                     {
                         $v = substr($notice->linktext, 1);
