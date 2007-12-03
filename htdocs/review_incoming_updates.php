@@ -81,7 +81,7 @@ function generate_row($update)
     {
         if ($update['locked'] == $sit[2])
         {
-            $html_row.="<a href='{$_SERVER['PHP_SELF']}?unlock={$update['tempid']}' title='Unlock this update so it can be modified by someone else'> Unlock</a> | ";
+            $html_row.="<a href='{$_SERVER['PHP_SELF']}?unlock={$update['tempid']}' title='Unlock this update so it can be modified by someone else'> {$GLOBALS['strUnlock']}</a> | ";
         }
         else $html_row.= "<a href=\"javascript:incident_details_window('{$update['tempid']}','incomingview');\" id='update{$update['id']}' class='info' title='View and lock this held e-mail'>{$GLOBALS['strView']}</a> | ";
         $html_row.= "<a href='delete_update.php?updateid=".$update['id']."&amp;tempid=".$update['tempid']."&amp;timestamp=".$update['timestamp']."' title='Remove this item permanently' onclick='return confirm_delete();'> {$GLOBALS['strDelete']}</a>";
