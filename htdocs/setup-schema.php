@@ -1247,7 +1247,7 @@ CREATE TABLE IF NOT EXISTS `notices` (
   `timestamp` timestamp NOT NULL default CURRENT_TIMESTAMP on update CURRENT_TIMESTAMP,
   `durability` enum('sticky','session') NOT NULL default 'sticky',
   PRIMARY KEY  (`id`)
-) ENGINE=MyISAM  DEFAULT CHARSET=latin1 AUTO_INCREMENT=1 ;
+) ENGINE=MyISAM AUTO_INCREMENT=1 ;
 
 ";
 
