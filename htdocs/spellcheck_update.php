@@ -40,7 +40,7 @@ if (!isset($spellid))
     $result=mysql_query($sql);
     if (mysql_error()) trigger_error("MySQL Query Error ".mysql_error(), E_USER_ERROR);
     list($bodytext) = mysql_fetch_row($result);
-    $isql = "INSERT INTO spellcheck (updateid, bodytext) VALUES ('$updateid', '".mysql_escape_string($bodytext)."')";
+    $isql = "INSERT INTO spellcheck (updateid, bodytext) VALUES ('$updateid', '".mysql_real_escape_string($bodytext)."')";
     $result=mysql_query($isql);
     if (mysql_error()) trigger_error("MySQL Query Error ".mysql_error(), E_USER_ERROR);
     if (!$result) throw_error("Problem inserting spellcheck temp data", '');
@@ -58,7 +58,7 @@ if (isset($changepos) && $changepos>0)
 {
     ## echo "Change position $changepos to word: $replacement<br />";
     $texttospell=replace_word($bodytext, $changepos, $replacement);
-    $sql =  "UPDATE spellcheck SET bodytext='".mysql_escape_string($texttospell)."' WHERE id='$spellid'";
+    $sql =  "UPDATE spellcheck SET bodytext='".mysql_real_escape_string($texttospell)."' WHERE id='$spellid'";
     $result=mysql_query($sql);
     if (mysql_error()) trigger_error("MySQL Query Error ".mysql_error(), E_USER_ERROR);
     if (!$result) throw_error("Problem updating spellcheck temp data", '');

@@ -72,9 +72,9 @@ if (empty($submit))
 else
 {
     // External variables
-    $username = mysql_escape_string(strtolower(trim(strip_tags($_REQUEST['username']))));
+    $username = mysql_real_escape_string(strtolower(trim(strip_tags($_REQUEST['username']))));
     $realname = cleanvar($_REQUEST['realname']);
-    $password = mysql_escape_string($_REQUEST['password']);
+    $password = mysql_real_escape_string($_REQUEST['password']);
     $groupid = cleanvar($_REQUEST['groupid']);
     $roleid = cleanvar($_REQUEST['roleid']);
     $jobtitle = cleanvar($_REQUEST['jobtitle']);

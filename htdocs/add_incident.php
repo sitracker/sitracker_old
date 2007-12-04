@@ -78,7 +78,7 @@ elseif ($action=='findcontact')
     //  Search for the contact specified in the maintenance contracts and display a list of choices
     // This Page Is Valid XHTML 1.0 Transitional! 27Oct05
 
-    $search_string=mysql_escape_string(urldecode($_REQUEST['search_string']));
+    $search_string=mysql_real_escape_string(urldecode($_REQUEST['search_string']));
     // check for blank or very short search field - otherwise this would find too many results
     if (empty($contactid) && strlen($search_string)<2)
     {

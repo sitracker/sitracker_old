@@ -28,7 +28,7 @@ echo "<p>This report shows average customer responses and a percentage figure in
 echo "incidents logged by the user(s) shown:</p>";
 
 $usql = "SELECT * FROM users WHERE status > 0 ";
-if ($_REQUEST['userid']>0) $usql .= "AND id='".mysql_escape_string($_REQUEST['userid'])."' ";
+if ($_REQUEST['userid']>0) $usql .= "AND id='".mysql_real_escape_string($_REQUEST['userid'])."' ";
 else $usql .= "ORDER BY username";
 $uresult = mysql_query($usql);
 if (mysql_error()) trigger_error(mysql_error(), E_USER_ERROR);

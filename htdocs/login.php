@@ -113,7 +113,7 @@ elseif (authenticate($username, $password) == 1)
             $gid = md5($strUserStillAway);
             $sql = "INSERT INTO notices (userid, type, text, timestamp, gid) ";
             $sql .= "VALUES({$_SESSION['userid']}, ".USER_STILL_AWAY_TYPE.",";
-            $sql .= "'".mysql_escape_string($strUserStillAway)."', NOW(), '{$gid}')";
+            $sql .= "'".mysql_real_escape_string($strUserStillAway)."', NOW(), '{$gid}')";
             mysql_query($sql);
             if (mysql_error()) trigger_error(mysql_error(), E_USER_ERROR);
         }

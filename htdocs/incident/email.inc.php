@@ -578,7 +578,7 @@ $emailtype|$newincidentstatus|$timetonextaction_none|$timetonextaction_days|$tim
             $extra_headers .= "\n"; // add an extra crlf to create a null line to separate headers from body
                                 // this appears to be required by some email clients - INL
 
-            $mime = new MIME_mail($fromfield, $tofield, stripslashes($subjectfield), stripslashes($bodytext), $extra_headers, $mailerror);
+            $mime = new MIME_mail($fromfield, $tofield, $subjectfield, $bodytext, $extra_headers, $mailerror);
 
             // check for attachment
             //        if ($_FILES['attachment']['name']!='' || strlen($filename) > 3)
@@ -682,7 +682,7 @@ $emailtype|$newincidentstatus|$timetonextaction_none|$timetonextaction_days|$tim
 
                 if (!empty($updateheader)) $updateheader .= "<hr>";
                 $updatebody = $updateheader . $bodytext;
-                $updatebody=mysql_escape_string($updatebody);
+                $updatebody=mysql_real_escape_string($updatebody);
 
                 $sql  = "INSERT INTO updates (incidentid, userid, bodytext, type, timestamp, currentstatus,customervisibility) ";
                 $sql .= "VALUES ($id, $sit[2], '$updatebody', 'email', '$now', '$newincidentstatus', '{$emailtype->customervisibility}')";

@@ -33,7 +33,7 @@ else
     $bodytext = str_replace('>','&#062;', $bodytext);
 
     $isql = "INSERT INTO spellcheck (updateid, bodytext, newincidentstatus, timetonextaction_none, timetonextaction_days, timetonextaction_hours, timetonextaction_minutes, day, month, year, fromfield, replytofield, ccfield, bccfield, tofield, subjectfield, attachmenttype, filename) ";
-    $isql .= "VALUES (0, '".mysql_escape_string($bodytext)."', '$newincidentstatus', '$timetonextaction_none', '$timetonextaction_days', '$timetonextaction_hours', '$timetonextaction_minutes', '$day', '$month', '$year', '$fromfield', '$replytofield', '$ccfield', '$bccfield', '$tofield', '$subjectfield', '$attachmenttype', '$filename')";
+    $isql .= "VALUES (0, '".mysql_real_escape_string($bodytext)."', '$newincidentstatus', '$timetonextaction_none', '$timetonextaction_days', '$timetonextaction_hours', '$timetonextaction_minutes', '$day', '$month', '$year', '$fromfield', '$replytofield', '$ccfield', '$bccfield', '$tofield', '$subjectfield', '$attachmenttype', '$filename')";
     $result=mysql_query($isql);
     if (mysql_error()) trigger_error("MySQL Query Error ".mysql_error(), E_USER_ERROR);
     if (!$result) throw_error("Problem inserting spellcheck temp data", '');
@@ -46,7 +46,7 @@ if (isset($changepos) && $changepos>0)
 {
     ## echo "Change position $changepos to word: $replacement<br />";
     $texttospell=replace_word(urldecode($bodytext), $changepos, $replacement);
-    $sql =  "UPDATE spellcheck SET bodytext='".mysql_escape_string($texttospell)."' WHERE id='$spellid'";
+    $sql =  "UPDATE spellcheck SET bodytext='".mysql_real_escape_string($texttospell)."' WHERE id='$spellid'";
     $result=mysql_query($sql);
     if (mysql_error()) trigger_error("MySQL Query Error ".mysql_error(), E_USER_ERROR);
     if (!$result) throw_error("Problem updating spellcheck temp data", '');

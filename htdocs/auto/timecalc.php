@@ -122,12 +122,12 @@ while ($incident=mysql_fetch_array($incident_result)) {
                 if($timetil >= 0)
                 {
                     $text = "will exceed its SLA soon";
-                    $sql .= "VALUES({$incident['owner']}, ".NEARING_SLA_TYPE.", 'Incident {$incident['id']} - \'".mysql_escape_string($incident['title'])."\' $text', 'View Incident', 'javascript:incident_details_window(\'{$incident['id']}\',\'incident{$incident['id']}\')', {$incident['id']}, NOW())";
+                    $sql .= "VALUES({$incident['owner']}, ".NEARING_SLA_TYPE.", 'Incident {$incident['id']} - \'".mysql_real_escape_string($incident['title'])."\' $text', 'View Incident', 'javascript:incident_details_window(\'{$incident['id']}\',\'incident{$incident['id']}\')', {$incident['id']}, NOW())";
                 }
                 elseif($timetil < 0)
                 {
                     $text = "has exceeded its SLA";
-                    $sql .= "VALUES({$incident['owner']}, ".OUT_OF_SLA_TYPE.", 'Incident {$incident['id']} - \'".mysql_escape_string($incident['title'])."\' $text', 'View Incident', 'javascript:incident_details_window(\'{$incident['id']}\',\'incident{$incident['id']}\')', {$incident['id']}, NOW())";
+                    $sql .= "VALUES({$incident['owner']}, ".OUT_OF_SLA_TYPE.", 'Incident {$incident['id']} - \'".mysql_real_escape_string($incident['title'])."\' $text', 'View Incident', 'javascript:incident_details_window(\'{$incident['id']}\',\'incident{$incident['id']}\')', {$incident['id']}, NOW())";
                 }
                 if ($CONFIG['debug']) echo $sql;
                 mysql_query($sql);

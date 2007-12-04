@@ -114,17 +114,17 @@ else
 
     // External Variables
     // These variables may contain templates so don't strip tags
-    $name = mysql_escape_string($_POST['name']);
-    $description = mysql_escape_string($_POST['description']);
-    $tofield = mysql_escape_string($_POST['tofield']);
-    $fromfield = mysql_escape_string($_POST['fromfield']);
-    $replytofield = mysql_escape_string($_POST['replytofield']);
-    $ccfield = mysql_escape_string($_POST['ccfield']);
-    $bccfield = mysql_escape_string($_POST['bccfield']);
-    $subjectfield = mysql_escape_string($_POST['subjectfield']);
-    $bodytext = mysql_escape_string($_POST['bodytext']);
-    $storeinlog = mysql_escape_string($_POST['storeinlog']);
-    $cust_vis = mysql_escape_string($_POST['cust_vis']);
+    $name = mysql_real_escape_string($_POST['name']);
+    $description = mysql_real_escape_string($_POST['description']);
+    $tofield = mysql_real_escape_string($_POST['tofield']);
+    $fromfield = mysql_real_escape_string($_POST['fromfield']);
+    $replytofield = mysql_real_escape_string($_POST['replytofield']);
+    $ccfield = mysql_real_escape_string($_POST['ccfield']);
+    $bccfield = mysql_real_escape_string($_POST['bccfield']);
+    $subjectfield = mysql_real_escape_string($_POST['subjectfield']);
+    $bodytext = mysql_real_escape_string($_POST['bodytext']);
+    $storeinlog = mysql_real_escape_string($_POST['storeinlog']);
+    $cust_vis = mysql_real_escape_string($_POST['cust_vis']);
 
     // check form input
     $errors = 0;
