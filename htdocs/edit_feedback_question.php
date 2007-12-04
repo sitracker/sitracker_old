@@ -93,20 +93,20 @@ switch ($action)
 
             echo "<th>Section Text:<br />(When this question starts a new section,<br />enter information here to appear above this question,<br />leave blank for no new section)</th>";
             echo "<td><textarea name='sectiontext' cols='80' rows='5'>";
-            echo stripslashes($question->sectiontext)."</textarea></td>";
+            echo $question->sectiontext."</textarea></td>";
             echo "</tr>\n<tr>";
 
             echo "<th>Q#:</th>";
-            echo "<td><input type='text' name='taborder' size='3' maxlength='5' value='".stripslashes($question->taborder)."' /></td>";
+            echo "<td><input type='text' name='taborder' size='3' maxlength='5' value=\"{$question->taborder}\" /></td>";
             echo "</tr>\n<tr>";
 
             echo "<th>Question:</th>";
-            echo "<td><input type='text' name='question' size='70' maxlength='255' value='".stripslashes($question->question)."' /></td>";
+            echo "<td><input type='text' name='question' size='70' maxlength='255' value=\"{$question->question}\" /></td>";
             echo "</tr>\n<tr>";
 
             echo "<th>Additional Question Text:<br />(Information and Instructions)</th>";
             echo "<td><textarea name='questiontext' cols='80' rows='5'>";
-            echo stripslashes($question->questiontext)."</textarea></td>";
+            echo $question->questiontext."</textarea></td>";
             echo "</tr>\n<tr>";
 
             echo "<th>Type:</th>";
@@ -116,7 +116,7 @@ switch ($action)
 
             echo "<th>Options:<br />(For this question-type)<br /><br />(One per line)</th>";
             echo "<td><textarea name='options' cols='80' rows='10'>";
-            echo stripslashes($question->options)."</textarea></td>";
+            echo $question->options."</textarea></td>";
             echo "</tr>\n<tr>";
 
             echo "<th>Required:</th>";

@@ -49,12 +49,11 @@ while($escalations = mysql_fetch_object($escs))
         {
             $name = $obj->externalengineer;
             if(empty($name)) $name=$strNoNameAssociated;
-            $name = stripslashes($name);
             $esc[$name]['name']=$name;
             $esc[$name]['count']++;
             $esc[$name][$obj->priority]++;
             $str = "<span><strong>".$obj->forenames." ".$obj->surname."</strong><br />".$obj->siteName."</span>";
-            $esc[$name]['calls'][$i]['text'] = "<a href=\"javascript:incident_details_window_l('".$obj->id."', 'incident".$obj->id."')\"  title=\"".stripslashes($obj->title)."\" class='info'>[".$obj->id."]{$str}</a> #".$obj->externalid." ".$obj->title;
+            $esc[$name]['calls'][$i]['text'] = "<a href=\"javascript:incident_details_window_l('".$obj->id."', 'incident".$obj->id."')\"  title=\"{$obj->title}\" class='info'>[".$obj->id."]{$str}</a> #".$obj->externalid." ".$obj->title;
             $esc[$name]['calls'][$i]['software']=$obj->name;
             $esc[$name]['calls'][$i]['status']=$obj->status;
             $esc[$name]['calls'][$i]['localowner']=$obj->owner;
@@ -82,7 +81,7 @@ while($escalations = mysql_fetch_object($escs))
                 if(empty($engineer['1']))  $engineer['1'] = 0;
 
                 $html .= "<tr>";
-                $html .= "<td class='shade1'>".stripslashes($engineer['name'])."</td><td class='shade1'>".$engineer['count']."</td>";
+                $html .= "<td class='shade1'>{$engineer['name']}</td><td class='shade1'>".$engineer['count']."</td>";
                 $html .= "<td class='shade1'>".$engineer['4']."</td>";
                 $html .= "<td class='shade1'>".$engineer['3']."</td>";
                 $html .= "<td class='shade1'>".$engineer['2']."</td>";
@@ -92,7 +91,7 @@ while($escalations = mysql_fetch_object($escs))
                 foreach($engineer['calls'] AS $call)
                 {
                     $replace = array("Response","Action");
-                    $html .= "<tr><td width='50%'>".stripslashes($call['text'])."</td><td width='12%'>".user_realname($call['localowner']);
+                    $html .= "<tr><td width='50%'>{$call['text']}</td><td width='12%'>".user_realname($call['localowner']);
                     if(!empty($call['salfordtowner'])) $html .= "<br />T: ".user_realname($call['salfordtowner']);
                     $html .= "</td><td width='25%'>".$call['software']."</td><td>".str_replace($replace,"",incidentstatus_name($call['status']))."</td></tr>";
                 }

@@ -99,7 +99,7 @@ else
         while($notice = mysql_fetch_object($result))
         {
             echo "<tr class='$shade'><td>{$notice->id}</td><td>{$notice->timestamp}</td>";
-            echo "<td>".stripslashes(bbcode($notice->text))."</td>";
+            echo "<td>".bbcode($notice->text)."</td>";
             echo "<td>";
             echo "<a href='{$_SERVER[PHP_SELF]}?action=delete&amp;id={$notice->id}'>{$strDelete}</a>";
             echo "</td></tr>\n";

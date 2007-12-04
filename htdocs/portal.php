@@ -147,7 +147,7 @@ switch ($page)
                 echo "<tr class='$shade'><td><a href='portal.php?page=showincident&amp;id={$incident->id}'>{$incident->id}</a></td>";
                 echo "<td>";
                 if (!empty($incident->softwareid)) echo software_name($incident->softwareid)."<br />";
-                echo "<strong><a href='portal.php?page=showincident&amp;id={$incident->id}'>".stripslashes($incident->title)."</a></strong></td>";
+                echo "<strong><a href='portal.php?page=showincident&amp;id={$incident->id}'>{$incident->title}</a></strong></td>";
                 echo "<td>".format_date_friendly($incident->lastupdated)."</td>";
                 echo "<td>".incidentstatus_name($incident->status)."</td>";
 
@@ -391,7 +391,7 @@ switch ($page)
 
         echo "<form action='$_SERVER[PHP_SELF]?page=details&amp;action=update' method='post'>";
         echo "<table align='center' class='vertical'>";
-        echo "<tr><th colspan='2'><h3><img src='{$CONFIG['application_webpath']}images/icons/{$iconset}/32x32/contact.png' width='32' height='32' alt='' /> ".stripslashes($user->forenames).' '.stripslashes($user->surname)."</h3></th></tr>";
+        echo "<tr><th colspan='2'><h3><img src='{$CONFIG['application_webpath']}images/icons/{$iconset}/32x32/contact.png' width='32' height='32' alt='' /> {$user->forenames} {$user->surname}</h3></th></tr>\n";
         echo "<tr><th>{$strForenames}: </th><td><input name='forenames' value='{$user->forenames}' /></td></tr>";
         echo "<tr><th>{$strSurname}: </th><td><input name='surname' value='{$user->surname}' /></td></tr>";
         echo "<tr><th>{$strDepartment}: </th><td><input name='department' value='{$user->department}' /></td></tr>";
@@ -557,8 +557,8 @@ switch ($page)
                 {
                     if ($update->customervisibility=='show') echo "<div class='detailentry'>\n";
                     else echo "<div class='detailentryhidden'>\n";
-                    if ($updatebodylen > 5) echo stripslashes(nl2br($updatebody));
-                    else echo stripslashes($updatebody);
+                    if ($updatebodylen > 5) echo nl2br($updatebody);
+                    else echo $updatebody;
                     echo "</div>\n"; // detailentry
                 }
             }

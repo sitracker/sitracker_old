@@ -68,7 +68,7 @@ $email_subject = "Re: {$CONFIG['application_shortname']}: Holiday Approval Reque
 $extra_headers  = "From: $email_from\nReply-To: $email_from\nErrors-To: {$CONFIG['support_email']}\n";
 $extra_headers .= "X-Mailer: {$CONFIG['application_shortname']} {$application_version_string}/PHP " . phpversion()."\n";
 $extra_headers .= "X-Originating-IP: {$_SERVER['REMOTE_ADDR']}\n";
-$rtnvalue = mail($email_to, stripslashes($email_subject), stripslashes($bodytext), $extra_headers);
+$rtnvalue = mail($email_to, $email_subject, $bodytext, $extra_headers);
 
 //if ($rtnvalue===TRUE) echo "<p align='center'>".user_realname($user)." has been notified of your decision</p>";
 //else echo "<p class='error'>There was a problem sending your notification</p>";

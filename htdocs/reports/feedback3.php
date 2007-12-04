@@ -142,7 +142,7 @@ if (mysql_num_rows($mresult) >= 1)
 
         while ($crow = mysql_fetch_object($cresult)){
           if ($crow->result != "")
-            $html.='<p>"'.stripslashes($crow->result).'"<br/><em><a href="javascript:incident_details_window(\''.$crow->incidentid.'\',\'incident35393\')">'.$crow->incidentid.'</a> '.$crow->title.'</em></p>';
+            $html.= "<p>{$crow->result}<br /><em><a href=\"javascript:incident_details_window(\'{$crow->incidentid}\',\'incident35393\')\">{$crow->incidentid}</a> {$crow->title}</em></p>";
         }
 
         $qsql = "SELECT * FROM feedbackquestions WHERE formid='{$formid}' AND type='rating' ORDER BY taborder";

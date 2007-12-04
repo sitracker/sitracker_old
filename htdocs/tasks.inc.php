@@ -302,7 +302,7 @@ if (mysql_num_rows($result) >=1 )
             echo "</td>";
             echo "<td>";
             if (empty($task->name)) $task->name = $strUntitled;
-            echo "<a href='view_task.php?id={$task->id}' class='info'>".stripslashes($task->name);
+            echo "<a href='view_task.php?id={$task->id}' class='info'>".$task->name;
             echo "</a>";
 
             echo "</td>";

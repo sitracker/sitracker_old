@@ -176,8 +176,8 @@ else
                 echo "<tr class='$class'>";
                 ?>
                 <td><a href="contract_details.php?id=<?php echo $results['maintid'] ?>"><?php echo $results["maintid"] ?></a></td>
-                <td><?php echo stripslashes($results["site"]); ?></td>
-                <td><?php echo stripslashes($results["product"]) ?></td>
+                <td><?php echo $results["site"]; ?></td>
+                <td><?php echo $results["product"] ?></td>
                 <td><?php echo $results["reseller"] ?></td>
                 <td><?php echo $results["licence_quantity"] ?> <?php echo $results["licence_type"] ?></td>
                 <td><?php echo date($CONFIG['dateformat_date'], $results["expirydate"]); ?>

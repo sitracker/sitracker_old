@@ -314,7 +314,7 @@ function give_overview()
             if (mysql_error()) trigger_error("MySQL Query Error ".mysql_error(), E_USER_ERROR);
             while($irow = mysql_fetch_array($iresult))
             {
-                $string .= "<small><a href=\"javascript:incident_details_window('".$irow['id']."', 'incident".$irow['id']."')\"  title=\"".stripslashes($irow['title'])."\">[".$irow['id']."]</a></small> ";
+                $string .= "<small><a href=\"javascript:incident_details_window('".$irow['id']."', 'incident".$irow['id']."')\"  title=\"".$irow['title']."\">[".$irow['id']."]</a></small> ";
             }
 
             $string .= "</td></tr>";
@@ -349,7 +349,7 @@ function give_overview()
             if (mysql_error()) trigger_error("MySQL Query Error ".mysql_error(), E_USER_ERROR);
             while($irow = mysql_fetch_array($iresult))
             {
-                $string .= "<tr><th><a href=\"javascript:incident_details_window('".$irow['id']."', 'incident".$irow['id']."')\" title='[".$irow['id']."] - ".stripslashes($irow['title'])."'>".$irow['id']."</a></th>";
+                $string .= "<tr><th><a href=\"javascript:incident_details_window('".$irow['id']."', 'incident".$irow['id']."')\" title='[".$irow['id']."] - ".$irow['title']."'>".$irow['id']."</a></th>";
                 $string .= "<td class='shade2' align='left'>".$irow['title']."</td><td class='shade2' align='left'>".$row['realname']."</td><td class='shade2'>".$irow['name']."</td></tr>\n";
             }
             // $string .= "</table>\n";

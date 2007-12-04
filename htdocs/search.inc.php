@@ -38,7 +38,7 @@ if($searchmode != 'related')
     echo " {$strFor}:";
     echo "</th>";
     echo "<td>";
-    echo "<input maxlength='100' name='search_string' size='35' type='text' value='".stripslashes(strip_tags(urldecode($search_string)))."' /> ";
+    echo "<input maxlength='100' name='search_string' size='35' type='text' value='".strip_tags(urldecode($search_string))."' /> ";
     echo "(<a href='advanced_search_incidents.php'>{$strAdvanced}</a> | <a href='view_tags.php'>{$strTagCloud}</a>)";
     echo "</td>";
     echo "</tr>\n";
@@ -205,7 +205,7 @@ function search_score_adjust($sterms, $string)
 // Remove some characters
 // '\\"'
 $removechars=array(',',';',"'");
-$search_string = str_replace($removechars, '', stripslashes($search_string));
+$search_string = str_replace($removechars, '', $search_string);
 
 if (!empty($search_string))
 {
@@ -231,9 +231,9 @@ if (!empty($search_string))
             {
                 $entry['id']=$sresult->id;
                 $entry['ref']="incident-{$sresult->id}";
-                $entry['string'] = stripslashes($sresult->title);
+                $entry['string'] = $sresult->title;
                 $entry['score'] = 10 + search_score_adjust($sterms, $entry['string']);
-                $entry['title'] = stripslashes($sresult->title);
+                $entry['title'] = $sresult->title;
                 $entry['date'] = $sresult->lastupdated;
                 $entry['extra']['opened'] = date($CONFIG['dateformat_datetime'],$sresult->opened);
                 if ($sresult->status==2) $entry['extra']['closed'] = date($CONFIG['dateformat_datetime'],$sresult->closed);
@@ -260,9 +260,9 @@ if (!empty($search_string))
                 {
                     $entry['id']=$sresult->incidentid;
                     $entry['ref']="incident-{$sresult->incidentid}";
-                    $entry['string'] = stripslashes(strip_tags($sresult->bodytext));
+                    $entry['string'] = strip_tags($sresult->bodytext);
                     $entry['score'] = 8 + search_score_adjust($sterms, $entry['string']);
-                    $entry['title'] = stripslashes($sresult->title);
+                    $entry['title'] = $sresult->title;
                     $entry['date'] = $sresult->timestamp;
                     $entry['extra']['opened'] = date($CONFIG['dateformat_datetime'],$sresult->opened);
                     if ($sresult->status==2) $entry['extra']['closed'] = date($CONFIG['dateformat_datetime'],$sresult->closed);
@@ -283,9 +283,9 @@ if (!empty($search_string))
             {
                 $entry['id']=$sresult->contactid;
                 $entry['ref']="contact-{$sresult->id}";
-                $entry['string'] = stripslashes("{$sresult->forenames} {$sresult->surname}");
+                $entry['string'] = "{$sresult->forenames} {$sresult->surname}";
                 $entry['score'] = 10 + search_score_adjust($sterms, $entry['string']);
-                $entry['title'] = stripslashes("{$sresult->forenames} {$sresult->surname}");
+                $entry['title'] = "{$sresult->forenames} {$sresult->surname}";
                 $entry['date'] = $sresult->timestamp_modified;
                 search_build_results($srch_results,$entry);
                 unset($entry);
@@ -301,9 +301,9 @@ if (!empty($search_string))
             {
                 $entry['id']=$sresult->id;
                 $entry['ref']="site-{$sresult->id}";
-                $entry['string'] = stripslashes("{$sresult->name}");
+                $entry['string'] = "{$sresult->name}";
                 $entry['score'] = 10 + search_score_adjust($sterms, $entry['string']);
-                $entry['title'] = stripslashes($sresult->name);
+                $entry['title'] = $sresult->name;
                 $entry['date'] = 0;
                 search_build_results($srch_results,$entry);
                 unset($entry);
@@ -321,9 +321,9 @@ if (!empty($search_string))
             {
                 $entry['id']=$sresult->maintid;
                 $entry['ref']="contract-{$sresult->maintid}";
-                $entry['string'] = stripslashes("{$sresult->name}");
+                $entry['string'] = "{$sresult->name}";
                 $entry['score'] = 10 + search_score_adjust($sterms, $entry['string']);
-                $entry['title'] = stripslashes($sresult->name);
+                $entry['title'] = $sresult->name;
                 $entry['extra'] = product_name($sresult->product);
                 $entry['date'] = $sresult->expirydate;
                 search_build_results($srch_results,$entry);
@@ -341,9 +341,9 @@ if (!empty($search_string))
             {
                 $entry['id']=$sresult->docid;
                 $entry['ref']="kb-{$sresult->docid}";
-                $entry['string'] = stripslashes("{$sresult->title}");
+                $entry['string'] = "{$sresult->title}";
                 $entry['score'] = 10 + search_score_adjust($sterms, $entry['string']);
-                $entry['title'] = stripslashes($sresult->title);
+                $entry['title'] = $sresult->title;
                 $entry['date'] = mysql2date($sresult->published);
                 search_build_results($srch_results,$entry);
                 unset($entry);

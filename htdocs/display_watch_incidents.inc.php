@@ -79,7 +79,7 @@ if (mysql_num_rows($result) > 0)
                 $lresult = mysql_query($lsql);
                 if (mysql_error()) trigger_error(mysql_error(),E_USER_ERROR);
                 $lobj = mysql_fetch_object($lresult);
-                echo "<tr><th colspan='3'>".stripslashes($lobj->name)." ({$strSite})</th></tr>";
+                echo "<tr><th colspan='3'>{$lobj->name} ({$strSite})</th></tr>";
                 break;
             case '1': //contact
                 $sql = "SELECT incidents.id, incidents.title, incidents.status, incidents.servicelevel, incidents.maintenanceid, incidents.priority, contacts.forenames, contacts.surname, contacts.siteid ";
@@ -91,7 +91,7 @@ if (mysql_num_rows($result) > 0)
                 $lresult = mysql_query($lsql);
                 if (mysql_error()) trigger_error(mysql_error(),E_USER_ERROR);
                 $lobj = mysql_fetch_object($lresult);
-                echo "<tr><th colspan='3'>".stripslashes($lobj->forenames)." ".stripslashes($lobj->surname)." ({$strContact})</th></tr>";
+                echo "<tr><th colspan='3'>{$lobj->forenames} {$lobj->surname} ({$strContact})</th></tr>";
                 break;
             case '2': //engineer
                 $sql = "SELECT incidents.id, incidents.title, incidents.status, incidents.servicelevel, incidents.maintenanceid, incidents.priority, contacts.forenames, contacts.surname, contacts.siteid ";

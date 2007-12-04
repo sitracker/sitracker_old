@@ -287,7 +287,7 @@ else
                     echo "<tr class='{$shade}'>";
                     echo "<td><a href=\"javascript:incident_details_window('{$incident->id}','incident{$incident->id}');\">".sprintf($strIncidentNum, $incident->id)."</a></td>";
                     echo "<td>".contact_realname($incident->contact)."</td><td>".contact_site($incident->contact)."</td>";
-                    echo "<td>".stripslashes($incident->title)."</td>";
+                    echo "<td>{$incident->title}</td>";
                     echo "</tr>\n";
                     if ($shade=='shade1') $shade='shade2';
                     else $shade='shade1';

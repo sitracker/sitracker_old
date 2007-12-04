@@ -82,14 +82,14 @@ elseif ($action == "edit")
         // if ($emailtype['type']=='system') echo "readonly='readonly' ";
         echo "/>";
         echo "</td></tr>\n";
-        echo "<tr><th>{$strDescription}: <sup class='red'>*</sup></th><td><input  name='description' size='50' value=\"".stripslashes($emailtype["description"])."\" /></td></tr>\n";
+        echo "<tr><th>{$strDescription}: <sup class='red'>*</sup></th><td><input  name='description' size='50' value=\"{$emailtype["description"]}\" /></td></tr>\n";
         echo "<tr><th>&nbsp;</th><td>&nbsp;</td></tr>";
-        echo "<tr><th>{$strTo}: <sup class='red'>*</sup></th><td><input maxlength='100' name='tofield' size='30' value=\"".stripslashes($emailtype["tofield"])."\" /></td></tr>\n";
-        echo "<tr><th>{$strFrom}: <sup class='red'>*</sup></th><td><input maxlength='100' name='fromfield' size='30' value=\"".stripslashes($emailtype["fromfield"])."\" /></td></tr>\n";
-        echo "<tr><th>{$strReplyTo}: <sup class='red'>*</sup></th><td><input maxlength='100' name='replytofield' size='30' value=\"".stripslashes($emailtype["replytofield"])."\" /></td></tr>\n";
-        echo "<tr><th>CC:</th><td><input maxlength='100' name='ccfield' size='30' value=\"".stripslashes($emailtype["ccfield"])."\" /></td></tr>\n";
-        echo "<tr><th>BCC:</th><td><input maxlength='100' name='bccfield' size='30' value=\"".stripslashes($emailtype["bccfield"])."\" /></td></tr>\n";
-        echo "<tr><th>{$strSubject}:</th><td><input maxlength='255' name='subjectfield' size='50' value=\"".stripslashes($emailtype["subjectfield"])."\" /></td></tr>\n";
+        echo "<tr><th>{$strTo}: <sup class='red'>*</sup></th><td><input maxlength='100' name='tofield' size='30' value=\"{$emailtype["tofield"]}\" /></td></tr>\n";
+        echo "<tr><th>{$strFrom}: <sup class='red'>*</sup></th><td><input maxlength='100' name='fromfield' size='30' value=\"{$emailtype["fromfield"]}\" /></td></tr>\n";
+        echo "<tr><th>{$strReplyTo}: <sup class='red'>*</sup></th><td><input maxlength='100' name='replytofield' size='30' value=\"{$emailtype["replytofield"]}\" /></td></tr>\n";
+        echo "<tr><th>CC:</th><td><input maxlength='100' name='ccfield' size='30' value=\"{$emailtype["ccfield"]}\" /></td></tr>\n";
+        echo "<tr><th>BCC:</th><td><input maxlength='100' name='bccfield' size='30' value=\"{$emailtype["bccfield"]}\" /></td></tr>\n";
+        echo "<tr><th>{$strSubject}:</th><td><input maxlength='255' name='subjectfield' size='50' value=\"{$emailtype["subjectfield"]}\" /></td></tr>\n";
         echo "<tr><th></th><td><label><input type='checkbox' name='storeinlog' value='Yes' ";
         if ($emailtype['storeinlog']=='Yes') echo "checked='checked'";
         echo " /> {$strStoreInLog}</label>";
@@ -99,7 +99,7 @@ elseif ($action == "edit")
         echo "</td></tr>";
         echo "</table>";
         echo "<p>{$strEmail}:<br />";
-        echo "<textarea name='bodytext' rows='20' cols='60'>".stripslashes($emailtype["body"])."</textarea>\n";
+        echo "<textarea name='bodytext' rows='20' cols='60'>{$emailtype["body"]}</textarea>\n";
         echo "</p>";
 
         echo "<p>";

@@ -170,8 +170,8 @@ elseif ($_REQUEST['mode']=='report')
         $html .= "<tr class='$shade'>";
         for ($i = 0; $i < $columns; $i++)
         {
-            $html .= "<td>".stripslashes($row[$i])."</td>";
-            $csv .= strip_comma(stripslashes($row[$i]));
+            $html .= "<td>{$row[$i]</td>";
+            $csv .= strip_comma($row[$i]);
             if ($i < ($columns-1)) $csv .= ",";
         }
         $html .= "</tr>\n";

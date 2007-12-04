@@ -114,7 +114,7 @@ if ($action == "edit")
         echo contact_drop_down("admincontact", $maint["admincontact"], true);
         echo "</td></tr>\n";
         echo "<tr><th>{$strNotes}:</th><td><textarea cols='40' name='notes' rows='5'>";
-        echo stripslashes($maint["notes"]);
+        echo $maint["notes"];
         echo "</textarea></td></tr>\n";
         echo "<tr><th>{$strTerminated}:</th><td><input name='terminated' id='terminated' type='checkbox' value='yes'";
         if ($maint["term"] == "yes") echo " checked";

@@ -157,7 +157,7 @@ if (empty($_REQUEST['process']))
     echo "<tr><th>{$strKnowledgeBase}";
     echo "</th><td><label><input type='checkbox' name='kbarticle' onchange='enablekb();' value='yes' /> {$strNewKBArticle}</label></td></tr>\n";
 
-    echo "<tr id='titlerow' style='display:none;'><th>{$strTitle}</th><td><input type='text' name='kbtitle' id='kbtitle' size='30' value=\"".stripslashes($incident_title)."\" disabled='disabled' /></td></tr>\n";
+    echo "<tr id='titlerow' style='display:none;'><th>{$strTitle}</th><td><input type='text' name='kbtitle' id='kbtitle' size='30' value=\"{$incident_title}\" disabled='disabled' /></td></tr>\n";
     echo "<tr><th>&nbsp;</th><td>";
     echo "<span id='helptext'>Enter some details about the incident to be stored in the incident log for future use.";
     echo "You should provide a summary of the problem and information about how it was resolved.<br /><strong>Final Update</strong>:</span></td></tr>\n";
@@ -176,7 +176,7 @@ if (empty($_REQUEST['process']))
     if (mysql_error()) trigger_error("MySQL Query Error ".mysql_error(), E_USER_ERROR);
     while ($row = mysql_fetch_object($result))
     {
-        echo stripslashes($row->bodytext);
+        echo $row->bodytext;
         echo "\n\n";
     }
     echo "</textarea>\n";
@@ -203,7 +203,7 @@ if (empty($_REQUEST['process']))
     if (mysql_error()) trigger_error("MySQL Query Error ".mysql_error(), E_USER_ERROR);
     while ($row = mysql_fetch_object($result))
     {
-        echo stripslashes(trim($row->bodytext));
+        echo trim($row->bodytext);
         echo "\n\n";
     }
     echo "</textarea>\n";
@@ -230,7 +230,7 @@ if (empty($_REQUEST['process']))
     if ($externalemail)
     {
         echo "<tr><th>Inform {$strExternalEngineer}:<br />"; // FIXME i18n inform external engineer
-        echo "Send an email to <em>".stripslashes($externalemail)."</em> asking for the external incident to be closed.";
+        echo "Send an email to <em>{$externalemail}</em> asking for the external incident to be closed.";
         echo "</th>";
         echo "<td class='shade2'><label><input name='send_engineer_email' type='radio' value='no' />{$strNo}</label> ";
         echo "<label><input name='send_engineer_email' type='radio' value='yes' checked='checked' />{$strYes}</label></td></tr>\n";

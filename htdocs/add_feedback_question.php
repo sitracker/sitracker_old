@@ -10,6 +10,8 @@
 
 // by Ivan Lucas, June 2004
 
+// FIXME i18n Whole Page
+
 $permission=48; // Add Feedback Forms
 
 require('db_connect.inc.php');
@@ -90,7 +92,7 @@ switch ($_REQUEST['action'])
 
         echo "<th>Section Text:<br />(When this question starts a new section,<br />enter information here to appear above this question,<br />leave blank for no new section)</th>";
         echo "<td><textarea name='sectiontext' cols='80' rows='5'>";
-        echo stripslashes($question->sectiontext)."</textarea></td>";
+        echo $question->sectiontext."</textarea></td>";
         echo "</tr>\n<tr>";
 
         echo "<th>Q#:</th>";
@@ -98,12 +100,12 @@ switch ($_REQUEST['action'])
         echo "</tr>\n<tr>";
 
         echo "<th>Question:</th>";
-        echo "<td><input type='text' name='question' size='35' maxlength='255' value='".stripslashes($question->question)."' /></td>";
+        echo "<td><input type='text' name='question' size='35' maxlength='255' value='".$question->question."' /></td>";
         echo "</tr>\n<tr>";
 
         echo "<th>Question Text:<br />(Information and Instructions)</th>";
         echo "<td><textarea name='questiontext' cols='80' rows='5'>";
-        echo stripslashes($question->questiontext)."</textarea></td>";
+        echo $question->questiontext."</textarea></td>";
         echo "</tr>\n<tr>";
 
         echo "<th>Type:</th>";
@@ -113,7 +115,7 @@ switch ($_REQUEST['action'])
 
         echo "<th>Options:<br />(For this question-type)<br /><br />(One per line)</th>";
         echo "<td><textarea name='options' cols='80' rows='10'>";
-        echo stripslashes($question->options)."</textarea></td>";
+        echo $question->options."</textarea></td>";
         echo "</tr>\n<tr>";
 
         echo "<th>Required:</th>";

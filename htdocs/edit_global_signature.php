@@ -19,7 +19,6 @@ function get_globalsignature($sig_id)
     $result=mysql_query($sql);
     list($signature)=mysql_fetch_row($result);
     mysql_free_result($result);
-    $signature=stripslashes($signature);
     return $signature;
 }
 
@@ -153,7 +152,7 @@ elseif(!empty($action))
             echo "Remember that any changes here will be effective immediately and outgoing emails will carry the new signature.";
             ?>
             </td>
-            <td class="shade1"><textarea name="signature" rows="15" cols="65"><?php echo stripslashes(get_globalsignature($sig_id)); ?></textarea></td>
+            <td class="shade1"><textarea name="signature" rows="15" cols="65"><?php echo get_globalsignature($sig_id); ?></textarea></td>
             </tr>
             </table>
             <?php

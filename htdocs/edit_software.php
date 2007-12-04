@@ -45,7 +45,7 @@ if (empty($action) OR $action=='edit')
         echo "<form name='editsoftware' action='{$_SERVER['PHP_SELF']}' method='post' onsubmit='return confirm_submit()'>";
         echo "<table class='vertical'>";
         echo "<tr><th>{$strVendor}:</th><td>".vendor_drop_down('vendor',$software->vendorid)."</td></tr>\n";
-        echo "<tr><th>{$strSkill}: <sup class='red'>*</sup></th><td><input maxlength='50' name='name' size='30' value='".stripslashes($software->name)."' /></td></tr>";
+        echo "<tr><th>{$strSkill}: <sup class='red'>*</sup></th><td><input maxlength='50' name='name' size='30' value=\"{$software->name}\" /></td></tr>";
         echo "<tr><th>{$strLifetime}:</th><td>";
         echo "<input type='text' name='lifetime_start' id='lifetime_start' size='10' value='";
         if ($software->lifetime_start > 1) echo date('Y-m-d',mysql2date($software->lifetime_start));
