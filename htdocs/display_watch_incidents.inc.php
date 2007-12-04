@@ -104,7 +104,7 @@ if (mysql_num_rows($result) > 0)
                 if (mysql_error()) trigger_error(mysql_error(),E_USER_ERROR);
                 $lobj = mysql_fetch_object($lresult);
                 echo "<tr><th colspan='3'>";
-                printf($GLOBALS['strIncidentsForEngineer'], stripslashes($lobj->realname));
+                printf($GLOBALS['strIncidentsForEngineer'], $lobj->realname);
                 echo "</th></tr>";
 
                 break;
@@ -149,8 +149,8 @@ if (mysql_num_rows($result) > 0)
                 {
                     echo "<tr class='$shade'>";
                     echo "<td>{$incident->id}</td>";
-                    echo "<td><a href='javascript:incident_details_window({$incident->id}) '  class='info'>".stripslashes($incident->title);
-                    echo "<span><strong>{$GLOBALS['strCustomer']}:</strong> ".stripslashes($incident->forenames.' '.$incident->surname)." of ".site_name($incident->siteid);
+                    echo "<td><a href='javascript:incident_details_window({$incident->id}) '  class='info'>".$incident->title;
+                    echo "<span><strong>{$GLOBALS['strCustomer']}:</strong> ".$incident->forenames.' '.$incident->surname." of ".site_name($incident->siteid); // FIXME i18n 'of'
                     list($update_userid, $update_type, $update_currentowner, $update_currentstatus, $update_body, $update_timestamp, $update_nextaction, $update_id)=incident_lastupdate($incident->id);
                     $update_body = parse_updatebody($update_body);
                     if (!empty($update_body) AND $update_body!='...') echo "<br />{$update_body}";

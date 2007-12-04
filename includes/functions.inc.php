@@ -1117,7 +1117,7 @@ function contact_drop_down($name, $id, $showsite=FALSE)
     while ($contacts = mysql_fetch_array($result))
     {
         if ($showsite AND $prevsite!= $contacts['siteid'] AND $prevsite!=0) $html .= "</optgroup>\n";
-        if ($showsite AND $prevsite!= $contacts['siteid']) $html .= "<optgroup label='".htmlentities($contacts['sitename'], ENT_COMPAT, 'UTF-8').", ".htmlentities(stripslashes($contacts['department']), ENT_COMPAT, $GLOBALS['i18ncharset'])."'>";
+        if ($showsite AND $prevsite!= $contacts['siteid']) $html .= "<optgroup label='".htmlentities($contacts['sitename'], ENT_COMPAT, 'UTF-8').", ".htmlentities($contacts['department'], ENT_COMPAT, $GLOBALS['i18ncharset'])."'>";
         $realname=$contacts['forenames'].' '.$contacts['surname'];
         $html .= "<option ";
         if ($contacts['contactid'] == $id) $html .= "selected='selected' ";
@@ -2566,7 +2566,7 @@ function maintenance_drop_down($name, $id)
         echo "<option selected='selected' value='0'></option>\n";
     while ($maintenance = mysql_fetch_array($result))
     {
-        ?><option <?php if ($maintenance["id"] == $id) { ?>selected='selected' <?php } ?>value='<?php echo $maintenance["id"] ?>'><?php echo stripslashes($maintenance["sitename"]) ?> | <?php echo stripslashes($maintenance["productname"]); ?></option><?php
+        ?><option <?php if ($maintenance["id"] == $id) { ?>selected='selected' <?php } ?>value='<?php echo $maintenance["id"] ?>'><?php echo $maintenance["sitename"] ?> | <?php echo $maintenance["productname"]; ?></option><?php
         echo "\n";
     }
     ?>
@@ -2856,7 +2856,7 @@ function send_template_email($template, $incidentid, $info1='', $info2='')
 
     // send email
     if ($CONFIG['demo']) $rtnvalue = TRUE;
-    else $rtnvalue = mail($email_to, stripslashes($email_subject), stripslashes($email_body), $extra_headers);
+    else $rtnvalue = mail($email_to, $email_subject, $email_body, $extra_headers);
     return $rtnvalue;
 }
 
@@ -3118,7 +3118,6 @@ function global_signature()
     $result=mysql_query($sql);
     list($signature)=mysql_fetch_row($result);
     mysql_free_result($result);
-    $signature=stripslashes($signature);
     return $signature;
 }
 
@@ -4857,7 +4856,6 @@ function parse_updatebody($updatebody)
 {
     if (!empty($updatebody))
     {
-        $updatebody=stripslashes($updatebody);
         $updatebody=str_replace("&lt;hr&gt;", "[hr]\n", $updatebody);
         $updatebody=strip_tags($updatebody);
         $updatebody=nl2br($updatebody);
@@ -4915,7 +4913,7 @@ function show_notes($linkid, $refid)
             $html .= "<img src='{$CONFIG['application_webpath']}images/icons/{$iconset}/16x16/note.png' width='16' height='16' alt='Note icon' /> ";
             $html .= "Note added by ".user_realname($note->userid,TRUE)."</div>\n";
             $html .= "<div class='detailentry note'>";
-            $html .= nl2br(bbcode(stripslashes($note->bodytext)));
+            $html .= nl2br(bbcode($note->bodytext));
             $html .= "</div>\n";
         }
     }
@@ -5391,14 +5389,14 @@ function list_tags($recordid, $type, $html=TRUE)
     {
         if($html)
         {
-            $str .= "<a href='view_tags.php?tagid={$tags->tagid}'>".stripslashes($tags->name);
+            $str .= "<a href='view_tags.php?tagid={$tags->tagid}'>".$tags->name;
             if (array_key_exists($tags->name, $CONFIG['tag_icons']))
             {
                 $str .= "&nbsp;<img src='images/icons/sit/16x16/{$CONFIG['tag_icons'][$tags->name]}.png' style='border:0px;' alt='' />";
             }
             $str .= "</a>";
         }
-        else $str .= stripslashes($tags->name);
+        else $str .= $tags->name;
         if ($count < $numtags) $str .= ", ";
         if ($html AND !($count%5)) $str .= "<br />\n";
         $count++;
@@ -5490,7 +5488,7 @@ function show_tag_cloud($orderby="name", $showcount=FALSE)
                 else $html .= "32x32";
                 $html .= "/{$CONFIG['tag_icons'][$obj->name]}.png' style='border:0px;' alt='' />";
             }
-            else $html .= stripslashes($obj->name);
+            else $html .= $obj->name;
             $html .= "</a>";
             if ($showcount) $html .= "({$obj->occurrences})";
             $html .= " &nbsp;\n";
@@ -5536,7 +5534,7 @@ function display_drafts($type, $result)
         echo "<img src='{$CONFIG['application_webpath']}images/icons/{$iconset}/16x16/delete.png' alt='{$GLOBALS['strDraftDelete']}' /></a>";
         echo "</div>";
         echo "<div class='detailentry'>";
-        echo stripslashes(nl2br($obj->content))."</div>";
+        echo nl2br($obj->content)."</div>";
     }
 }
 
