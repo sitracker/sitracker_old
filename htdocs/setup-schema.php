@@ -282,7 +282,6 @@ CREATE TABLE `flags` (
   `flag` char(3) NOT NULL default '',
   `name` varchar(100) default NULL,
   PRIMARY KEY  (`flag`),
-  KEY `flag` (`flag`)
 ) ENGINE=MyISAM;
 
 
@@ -630,7 +629,7 @@ INSERT INTO `permissions` VALUES (65, 'Delete Products');
 INSERT INTO `permissions` VALUES (66, 'Install Dashboard Components');
 INSERT INTO `permissions` VALUES (67, 'Run Management Reports');
 INSERT INTO `permissions` VALUES (68, 'Manage Holidays');
-INSERT INTO `permissions` VALUES (69, 'Post Global Notices');
+INSERT INTO `permissions` VALUES (69, 'Post Notices');
 
 
 CREATE TABLE `priority` (
@@ -1212,7 +1211,6 @@ CREATE TABLE `userstatus` (
   `id` int(11) NOT NULL auto_increment,
   `name` varchar(50) default NULL,
   PRIMARY KEY  (`id`),
-  UNIQUE KEY `id` (`id`)
 ) ENGINE=MyISAM;
 
 
@@ -1562,6 +1560,11 @@ ALTER TABLE `maintenance` CHANGE `licence_type` `licence_type` INT( 11 ) NULL DE
 ALTER TABLE `billing_periods` ADD `priority` INT( 4 ) NOT NULL AFTER `servicelevelid` ;
 ALTER TABLE `billing_periods` ADD `tag` VARCHAR( 10 ) NOT NULL AFTER `priority` ;
 ALTER TABLE `billing_periods` DROP PRIMARY KEY, ADD PRIMARY KEY ( `servicelevelid` , `priority` ) ;
+
+-- KMH 4/12/07
+ALTER TABLE `flags` DROP INDEX `flag` ;
+ALTER TABLE `userstatus` DROP INDEX `id` ;
+
 ";
 
 
