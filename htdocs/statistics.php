@@ -175,7 +175,7 @@ function give_overview()
 
     echo "<table align='center'>";
     // FIXME i18n per incident etc.
-    echo "<tr><th>{$strPeriod}</th><th>{$GLOBALS['strOpened']}</th><th>{$GLOBALS['strUpdated']}</th><th>{$GLOBALS['strClosed']}</th><th>{$GLOBALS['strHandled']}</th>";
+    echo "<tr><th>{$GLOBALS['strPeriod']}</th><th>{$GLOBALS['strOpened']}</th><th>{$GLOBALS['strUpdated']}</th><th>{$GLOBALS['strClosed']}</th><th>{$GLOBALS['strHandled']}</th>";
     echo "<th>{$GLOBALS['strUpdates']}</th><th>per incident</th><th>{$GLOBALS['strSkills']}</th><th>{$GLOBALS['strOwners']}</th><th>{$GLOBALS['strUsers']}</th>";
     echo "<th>upd per user</th><th>inc per owner</th><th>{$GLOBALS['strEmail']} Rx</th><th>{$GLOBALS['strEmail']} Tx</th><th>{$GLOBALS['strHigherPriority']}</th>";
     echo "<th>{$GLOBALS['strActivity']}</th></tr>\n";

@@ -21,16 +21,16 @@ if (realpath(__FILE__) == realpath($_SERVER['SCRIPT_FILENAME']))
 
 switch($offset)
 {
-    case 0: $dayString='Today';
+    case 0: $dayString=$strToday;
         break;
-    case 1: $dayString='Yesterday';
+    case 1: $dayString=$strYesterday;
         break;
     default:
         $dayString = date("l", mktime(0,0,0,date('m'),date('d')-$offset,date('Y')));
         break;
 }
 
-echo "<h2>Statistics from {$dayString}</h2>"; // FIXME i18n statistics from
+echo "<h2>".sprintf($strStatsFromDayStatistics, $dateString); 
 
 // FIXME i18n per incident etc.
 echo "<table align='center'>";
