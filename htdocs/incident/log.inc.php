@@ -284,7 +284,7 @@ while ($update = mysql_fetch_object($result))
         else echo "<div class='detailentryhidden'>\n";
         if ($updatebodylen > 5) echo nl2br($updatebody);
         else echo $updatebody;
-        if (!empty($update->nextaction)) echo "<div class='detailhead'>{$strNextAction}: ".stripslashes($update->nextaction)."</div>";
+        if (!empty($update->nextaction)) echo "<div class='detailhead'>{$strNextAction}: {$update->nextaction}</div>";
         echo "</div>\n"; // detailentry
     }
 

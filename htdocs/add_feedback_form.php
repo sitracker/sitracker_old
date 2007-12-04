@@ -51,22 +51,22 @@ switch ($action)
         echo "<tr>";
 
         echo "<th>Name:</th>";
-        echo "<td><input type='text' name='name' size='35' maxlength='255' value='".stripslashes($form->name)."' /></td>";
+        echo "<td><input type='text' name='name' size='35' maxlength='255' value='{$form->name}' /></td>";
         echo "</tr>\n<tr>";
 
         echo "<th>{$strDescription}:<br />(For Internal Use, not displayed)</th>";
         echo "<td><textarea name='description' cols='80' rows='6'>";
-        echo stripslashes($form->description)."</textarea></td>";
+        echo $form->description."</textarea></td>";
         echo "</tr>\n<tr>";
 
         echo "<th>Introduction:<br />(Simple HTML Allowed)</th>";
         echo "<td><textarea name='introduction' cols='80' rows='10'>";
-        echo stripslashes($form->introduction)."</textarea></td>";
+        echo $form->introduction."</textarea></td>";
         echo "</tr>\n<tr>";
 
         echo "<th>Closing Thanks:<br />(Simple HTML Allowed)</th>";
         echo "<td><textarea name='thanks' cols='80' rows='10'>";
-        echo stripslashes($form->thanks)."</textarea></td>";
+        echo $form->thanks."</textarea></td>";
         echo "</tr>\n";
 
         echo "<th>How many questions do you want?</th>";

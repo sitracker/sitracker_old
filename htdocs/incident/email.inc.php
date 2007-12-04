@@ -430,8 +430,10 @@ $emailtype|$newincidentstatus|$timetonextaction_none|$timetonextaction_days|$tim
                 $ccemail = $metadata[14];
                 $bccemail = $metadata[15];
                 $toemail = $metadata[16];
-                $subject = stripslashes($metadata[17]);
-                $body = stripslashes($metadata[18]);
+//                 $subject = stripslashes($metadata[17]);
+//                 $body = stripslashes($metadata[18]);
+                $subject = $metadata[17];
+                $body = $metadata[18];
             }
 
             // NOTE \" used rather than ' so email address can contain a ' (as permitted by RFC) PH 28/10/2007
@@ -510,7 +512,7 @@ $emailtype|$newincidentstatus|$timetonextaction_none|$timetonextaction_days|$tim
         $replytofield = cleanvar($_REQUEST['replytofield']);
         $ccfield = cleanvar($_REQUEST['ccfield']);
         $bccfield = cleanvar($_REQUEST['bccfield']);
-        $subjectfield = stripslashes(cleanvar($_REQUEST['subjectfield'],FALSE,TRUE));
+        $subjectfield = cleanvar($_REQUEST['subjectfield'],FALSE,TRUE);
         $emailtype = cleanvar($_REQUEST['emailtype']);
         $newincidentstatus = cleanvar($_REQUEST['newincidentstatus']);
         $timetonextaction_none = cleanvar($_REQUEST['timetonextaction_none']);

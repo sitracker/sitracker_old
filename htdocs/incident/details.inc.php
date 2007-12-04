@@ -15,10 +15,6 @@ if (realpath(__FILE__) == realpath($_SERVER['SCRIPT_FILENAME']))
     exit;
 }
 
-
-$incident->forenames = stripslashes($incident->forenames);
-$incident->surname = stripslashes($incident->surname);
-
 echo "<div id='detailsummary'>";
 
 // Two column table
@@ -26,30 +22,30 @@ echo "<table>";
 echo "<tr><td>";
 // First column: Contact Details
 echo "<a href='contact_details.php?id={$incident->contactid}' title=\"{$strContact}\" target='top.opener' class='info'>{$incident->forenames} {$incident->surname}";
-if (!empty($contact_notes)) echo "<span>".stripslashes($contact_notes)."</span>";
+if (!empty($contact_notes)) echo "<span>{$contact_notes}</span>";
 echo "</a> ";
 echo "of <a href='site_details.php?id={$incident->siteid}' title='{$strSite}' target='top.opener' class='info'>{$site_name}";
-if (!empty($site_notes)) echo "<span>".stripslashes($site_notes)."</span>";
+if (!empty($site_notes)) echo "<span>{$site_notes}</span>";
 echo "</a> ";
 echo list_tag_icons($incident->siteid, TAG_SITE); // site tag icons
 echo "<br />\n";
-echo "<a href='mailto:".stripslashes($incident->email)."'>".stripslashes($incident->email)."</a><br />\n";
-if ($incident->ccemail != '') echo "CC: <a href='mailto:".stripslashes($incident->ccemail)."'>".stripslashes($incident->ccemail)."</a><br />\n";
+echo "<a href=\"mailto:{$incident->email}\">{$incident->email}</a><br />\n";
+if ($incident->ccemail != '') echo "CC: <a href=\"mailto:{$incident->ccemail}\">{$incident->ccemail}</a><br />\n";
 if ($incident->phone!='' OR $incident->phone!='')
 {
-    if ($incident->phone!='') echo "Tel: ".stripslashes($incident->phone);
-    if ($incident->mobile!='') echo " Mob: ".stripslashes($incident->mobile);
+    if ($incident->phone!='') echo "Tel: {$incident->phone}";
+    if ($incident->mobile!='') echo " Mob: {$incident->mobile}";
     echo "<br />\n";
 }
 if ($incident->externalid != '' OR $incident->escalationpath > 0)
 {
     echo "{$strEscalated}: ";
-    echo format_external_id(stripslashes($incident->externalid),$incident->escalationpath)."<br />\n";
+    echo format_external_id($incident->externalid,$incident->escalationpath)."<br />\n";
 }
 if ($incident->externalengineer != '')
 {
-    echo stripslashes($incident->externalengineer);
-    if ($incident->externalemail != '') echo ", <a href='mailto:".stripslashes($incident->externalemail)."'>".stripslashes($incident->externalemail)."</a>";
+    echo $incident->externalengineer;
+    if ($incident->externalemail != '') echo ", <a href=\"mailto:{$incident->externalemail}\">{$incident->externalemail}</a>";
     echo "<br />\n";
 }
 $tags = list_tags($id, TAG_INCIDENT, TRUE);
@@ -71,11 +67,11 @@ if ($incident->owner != $sit[2] OR ($incident->towner > 0 AND $incident->towner 
 }
 if ($software_name!='' OR $incident->productversion != '' OR $incident->productservicepacks!='')
 {
-    echo stripslashes($software_name);
+    echo $software_name;
     if ($incident->productversion != '' OR $incident->productservicepacks!='')
     {
-        echo " (".stripslashes($incident->productversion);
-        if ($incident->productservicepacks!='') echo stripslashes($incident->productservicepacks);
+        echo " (".$incident->productversion;
+        if ($incident->productservicepacks!='') echo $incident->productservicepacks;
         echo ")";
     }
     echo "<br />\n";

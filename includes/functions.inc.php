@@ -241,7 +241,7 @@ function db_read_column($column, $table, $id)
     $result = mysql_query($sql);
     if (mysql_error()) trigger_error(mysql_error(),E_USER_WARNING);
     list($column)=mysql_fetch_row($result);
-    $column=stripslashes($column);
+//     $column=stripslashes($column);
     return $column;
 }
 
@@ -297,8 +297,8 @@ function software_name($softwareid)
     {
         $software = mysql_fetch_object($result);
         $lifetime_end = mysql2date($software->lifetime_end);
-        if ($lifetime_end > 0 AND $lifetime_end < $now) $name = "<span class='deleted'>".stripslashes($software->name)."</span> (<abbr title='End of Life'>EOL</abbr>)";
-        else $name = stripslashes($software->name);
+        if ($lifetime_end > 0 AND $lifetime_end < $now) $name = "<span class='deleted'>{$software->name}</span> (<abbr title='End of Life'>EOL</abbr>)";
+        else $name = $software->name;
     } else $name = $GLOBALS['StrUnknown'];
 
     return $name;
@@ -600,7 +600,7 @@ function contact_realname($id)
     else
     {
         $contact = mysql_fetch_array($result);
-        $realname=stripslashes($contact['forenames'].' '.$contact['surname']);
+        $realname=$contact['forenames'].' '.$contact['surname'];
         mysql_free_result($result);
         return($realname);
     }
@@ -623,7 +623,7 @@ function contact_site($id)
     {
         list($contactsite) = mysql_fetch_row($result);
         mysql_free_result($result);
-        $contactsite=stripslashes($contactsite);
+        $contactsite=$contactsite;
         return($contactsite);
     }
 }
@@ -1117,8 +1117,8 @@ function contact_drop_down($name, $id, $showsite=FALSE)
     while ($contacts = mysql_fetch_array($result))
     {
         if ($showsite AND $prevsite!= $contacts['siteid'] AND $prevsite!=0) $html .= "</optgroup>\n";
-        if ($showsite AND $prevsite!= $contacts['siteid']) $html .= "<optgroup label='".htmlentities(stripslashes($contacts['sitename']), ENT_COMPAT, 'UTF-8').", ".htmlentities(stripslashes($contacts['department']), ENT_COMPAT, $GLOBALS['i18ncharset'])."'>";
-        $realname=stripslashes($contacts['forenames'].' '.$contacts['surname']);
+        if ($showsite AND $prevsite!= $contacts['siteid']) $html .= "<optgroup label='".htmlentities($contacts['sitename'], ENT_COMPAT, 'UTF-8').", ".htmlentities(stripslashes($contacts['department']), ENT_COMPAT, $GLOBALS['i18ncharset'])."'>";
+        $realname=$contacts['forenames'].' '.$contacts['surname'];
         $html .= "<option ";
         if ($contacts['contactid'] == $id) $html .= "selected='selected' ";
         $html .= "value='{$contacts['contactid']}'>{$realname}";
@@ -1153,7 +1153,7 @@ function contact_site_drop_down($name, $id, $siteid='', $exclude='')
             $html .= "<option ";
             if ($contacts->contactid == $id) $html .= "selected='selected' ";
             $html .= "value='{$contacts->contactid}'>";
-            $html .= htmlspecialchars(stripslashes("{$contacts->surname}, {$contacts->forenames} of {$contacts->sitename}"));
+            $html .= htmlspecialchars("{$contacts->surname}, {$contacts->forenames} of {$contacts->sitename}"); // FIXME i18n 'of'
             $html .= "</option>\n";
         }
    }
@@ -1850,7 +1850,7 @@ function incident_lastupdate($id)
                     }
                     mysql_free_result($resultPrevious);
 
-                    return array($last['userid'], $last['type'] ,$last['currentowner'], $last['currentstatus'], stripslashes($last['body']), $last['timestamp'], $last['nextaction'], $last['id']);
+                    return array($last['userid'], $last['type'] ,$last['currentowner'], $last['currentstatus'], $last['body'], $last['timestamp'], $last['nextaction'], $last['id']);
 
                 }
             }
@@ -1859,7 +1859,7 @@ function incident_lastupdate($id)
         mysql_free_result($result);
         // Remove Tags from update Body
         $update['body']=trim($update['body']);
-        $update['body'] = stripslashes($update['body']);
+        $update['body'] = $update['body'];
         return array($update['userid'], $update['type'] ,$update['currentowner'], $update['currentstatus'], $update['body'], $update['timestamp'], $update['nextaction'], $update['id']);
     }
 }
@@ -1879,7 +1879,7 @@ function incident_firstupdate($id)
     if (mysql_num_rows($result) >= 1)
     {
         list($bodytext) = mysql_fetch_row($result);
-        $bodytext = stripslashes(strip_tags($bodytext));
+        $bodytext = strip_tags($bodytext);
     }
     else
     {
@@ -2524,8 +2524,8 @@ function site_drop_down($name, $id)
     if ($id == 0) $html .="<option selected='selected' value='0'></option>\n";
     while ($sites = mysql_fetch_object($result))
     {
-        $text=stripslashes($sites->name);
-        if (!empty($sites->department)) $text.= ", ".stripslashes($sites->department);
+        $text=$sites->name;
+        if (!empty($sites->department)) $text.= ", ".$sites->department;
         if (strlen($text) >= 55) $text=htmlspecialchars(substr(trim($text), 0, 55))."&hellip;";
         else $text=htmlspecialchars($text);
         $html .= "<option ";
@@ -2540,7 +2540,7 @@ function site_drop_down($name, $id)
 
 function site_name($id)
 {
-    $sitename = stripslashes(db_read_column('name', 'sites', $id));
+    $sitename = db_read_column('name', 'sites', $id);
     if (empty($sitename)) $sitename=$GLOBALS['strUnknown'];
 
     return($sitename);

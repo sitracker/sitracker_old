@@ -61,7 +61,7 @@ if (mysql_num_rows($result) > 0)
     {
         echo "<div class='detaildate'>
                 <form method='post' action='{$_SERVER['PHP_SELF']}?id={$incomingid}&win=incomingview&action=updatereason'>
-                {$strMessage}: <input name='newreason' type='text' value=\"".stripslashes($incoming->reason)."\" size='25' maxlength='100' />
+                {$strMessage}: <input name='newreason' type='text' value=\"{$incoming->reason}\" size='25' maxlength='100' />
                 <input type='submit' value='{$strSave}' />
                 </form>
             </div>";
@@ -82,7 +82,7 @@ if (mysql_num_rows($result) > 0)
         $updatetime = readable_date($update->timestamp);
         echo "<div class='detailhead'><div class='detaildate'>{$updatetime}</div>";
         echo "<img src='{$CONFIG['application_webpath']}images/icons/{$iconset}/16x16/emailin.png' alt='' /> ";
-        echo "From <strong>".stripslashes($incoming->emailfrom)."</strong></div>";
+        echo "{$strFrom} <strong>{$incoming->emailfrom}</strong></div>";
         echo "<div class='detailentry'>";
         echo parse_updatebody($update->bodytext);
         echo "</div>";

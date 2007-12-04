@@ -228,9 +228,9 @@ switch ($action)
                 echo "<form id='edittask' action='{$_SERVER['PHP_SELF']}' method='post'>";
                 echo "<table class='vertical'>";
                 echo "<tr><th>{$strTitle}</th>";
-                echo "<td><input type='text' name='name' size='35' maxlength='255' value=\"".stripslashes($task->name)."\" /></td></tr>";
+                echo "<td><input type='text' name='name' size='35' maxlength='255' value=\"{$task->name}\" /></td></tr>";
                 echo "<tr><th>{$strDescription}</th>";
-                echo "<td><textarea name='description' rows='4' cols='30'>".stripslashes($task->description)."</textarea></td></tr>";
+                echo "<td><textarea name='description' rows='4' cols='30'>{$task->description}</textarea></td></tr>";
                 if ($task->distribution=='public')
                 {
                     echo "<tr><th>{$strTags}:</th>";
@@ -276,9 +276,9 @@ switch ($action)
                 echo "<input type='hidden' name='action' value='edittask' />";
                 echo "<input type='hidden' name='id' value='{$id}' />";
                 // Send copy of existing data so we can see when it is changed
-                echo "<input type='hidden' name='old_name' value=\"".stripslashes($task->name)."\" />";
-                echo "<input type='hidden' name='old_description' value=\"".stripslashes($task->description)."\" />";
-                echo "<input type='hidden' name='old_priority' value='{$task->priority}' />";
+                echo "<input type='hidden' name='old_name' value=\"{$task->name}\" />";
+                echo "<input type='hidden' name='old_description' value=\"{$task->description}\" />";
+                echo "<input type='hidden' name='old_priority' value=\"{$task->priority}\" />";
                 echo "<input type='hidden' name='old_startdate' value='{$task->startdate}' />";
                 echo "<input type='hidden' name='old_duedate' value='{$task->duedate}' />";
                 echo "<input type='hidden' name='old_completion' value='{$task->completion}' />";

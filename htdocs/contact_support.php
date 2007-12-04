@@ -89,7 +89,7 @@ while ($row=mysql_fetch_object($result))
     // title
     echo "<td>";
     echo "<a href=\"javascript:incident_details_window('".$row->incidentid."','incident".$row->incidentid."')\">";
-    if (trim($row->title) !='') echo htmlspecialchars(stripslashes($row->title)); else echo $strUntitled;;
+    if (trim($row->title) !='') echo htmlspecialchars($row->title); else echo $strUntitled;;
     echo "</a>";
     echo "</td>";
     if ($mode=='site')

@@ -179,7 +179,7 @@ while ($incidents = mysql_fetch_array($result))
     if (!empty($incidents['escalationpath']) AND !empty($incidents['externalid']))
     {
         $epathurl = str_replace('%externalid%',$incidents['externalid'],$epath[$escalationpath]['track_url']);
-        $externalid = "<a href='{$epathurl}' title='{$epath[$escalationpath]['url_title']}'>".stripslashes($incidents['externalid'])."</a>";
+        $externalid = "<a href='{$epathurl}' title='{$epath[$escalationpath]['url_title']}'>{$incidents['externalid']}</a>";
     }
     elseif (empty($incidents['externalid']) AND $incidents['escalationpath']>=1)
     {
@@ -197,7 +197,7 @@ while ($incidents = mysql_fetch_array($result))
     echo "<td>";
     if (!empty($incidents['softwareid'])) echo software_name($incidents['softwareid'])."<br />";
     echo "<a href=\"javascript:incident_details_window('{$incidents['id']}','incident{$incidents['id']}')\" class='info'>";
-    if (trim($incidents['title']) !='') echo (stripslashes($incidents['title'])); else echo $strUntitled;
+    if (trim($incidents['title']) !='') echo ($incidents['title']); else echo $strUntitled;
     if (!empty($update_body) AND $update_body!='...') echo "<span>{$update_body}</span>";
     else
     {
@@ -210,7 +210,9 @@ while ($incidents = mysql_fetch_array($result))
     echo "</a></td>";
 
     echo "<td>";
-    echo "<a href='contact_details.php?id={$incidents['contactid']}' class='info'><span>{$incidents['phone']}<br />{$incidents['email']}</span>".stripslashes($incidents['forenames'].' '.$incidents['surname'])."</a><br />".htmlspecialchars($site)." </td>";
+    echo "<a href='contact_details.php?id={$incidents['contactid']}' class='info'><span>{$incidents['phone']}<br />";
+    echo "{$incidents['email']}</span>{$incidents['forenames']} {$incidents['surname']}</a><br />";
+    echo htmlspecialchars($site)." </td>";
 
     echo "<td align='center'>";
     // Service Level / Priority

@@ -212,7 +212,7 @@ else
             if($results["expirydate"] == '-1') echo $strUnlimited;
             else echo date($CONFIG['dateformat_date'], $results["expirydate"]); ?></td>
 
-        <td><?php if ($results["notes"] == "") echo "&nbsp;"; else echo nl2br(stripslashes($results["notes"])); ?></td>
+        <td><?php if ($results["notes"] == "") echo "&nbsp;"; else echo nl2br($results["notes"]); ?></td>
         </tr>
         <?php
         // invert shade

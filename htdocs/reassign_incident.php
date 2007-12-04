@@ -161,8 +161,8 @@ switch ($action)
             $ssql = "SELECT softwareid FROM usersoftware WHERE userid={$suguser->id} AND softwareid={$incident->softwareid} ";
             $sresult = mysql_query($ssql);
             if (mysql_error()) trigger_error("MySQL Query Error".mysql_error(), E_USER_ERROR);
-            if (mysql_num_rows($sresult) >=1 ) echo "<strong>".stripslashes($suguser->realname)."</strong>";
-            else echo stripslashes($suguser->realname);
+            if (mysql_num_rows($sresult) >=1 ) echo "<strong>{$suguser->realname}</strong>";
+            else echo $suguser->realname;
             echo "</label></td>";
             echo "<td>".user_online($suguser->id).userstatus_name($suguser->status)."</td>";
             $incpriority = user_incidents($suguser->id);
@@ -196,8 +196,8 @@ switch ($action)
                 $ssql = "SELECT softwareid FROM usersoftware WHERE userid={$users->id} AND softwareid={$incident->softwareid} ";
                 $sresult = mysql_query($ssql);
                 if (mysql_error()) trigger_error("MySQL Query Error ".mysql_error(), E_USER_ERROR);
-                if (mysql_num_rows($sresult) >=1 ) echo "<strong>".stripslashes($users->realname)."</strong>";
-                else echo stripslashes($users->realname);
+                if (mysql_num_rows($sresult) >=1 ) echo "<strong>{$users->realname}</strong>";
+                else echo $users->realname;
                 echo "</label></td>";
                 echo "<td>".user_online($users->id).userstatus_name($users->status)."</td>";
                 $incpriority = user_incidents($users->id);

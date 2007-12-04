@@ -34,9 +34,9 @@ if (mysql_num_rows($result) >= 1)
         $enddate=mysql2date($task->enddate);
         echo "<table class='vertical' width='100%'>";
         echo "<tr><th>{$strTitle}</th>";
-        echo "<td>".stripslashes($task->name)."</td></tr>";
+        echo "<td>{$task->name}</td></tr>";
         echo "<tr><th>{$strDescription}</th>";
-        echo "<td>".nl2br(stripslashes($task->description))."</td></tr>";
+        echo "<td>".nl2br($task->description)."</td></tr>";
         if ($task->distribution=='public')
         {
             echo "<tr><th>{$strTags}:</th><td>";

@@ -62,7 +62,7 @@ echo "<table summary=\"spellchecker\" width=\"80%\" align=\"center\" class=\"sha
 echo "<tr class='shade1'><td align='center'><em>Spellcheck Complete</em></td></tr>";
 echo "<tr><td>";
 echo "<p>";
-echo nl2br(stripslashes($spelltext));
+echo nl2br($spelltext);
 echo "</p></td></tr>";
 echo "</table>";
 

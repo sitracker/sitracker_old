@@ -72,6 +72,6 @@ $spelltext=spellcheck_text($texttospell, "&spellid=$spellid");
 // $spelltext=$texttospell;
 echo "<table summary=\"spellchecker\" width=\"80%\" align=\"center\" class=\"shade2\"><tr><td>";
 echo "<p>";
-echo nl2br(stripslashes($spelltext));
+echo nl2br($spelltext);
 echo "</p></td></tr></table>\n";
 ?>

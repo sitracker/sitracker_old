@@ -73,7 +73,7 @@ function generate_row($update)
     if (empty($update['subject'])) $update['subject'] = $strUntitled;
     $html_row.=htmlentities($update['subject'],ENT_QUOTES, $GLOBALS['i18ncharset']);
     $html_row.='<span>'.parse_updatebody($updatebodytext).'</span></a></td>';
-    $html_row.="<td align='center' width='20%'>".stripslashes($update['reason']).'</td>';
+    $html_row.="<td align='center' width='20%'>{$update['reason']}</td>';
     $html_row.="<td align='center' width='20%'>";
     if (($update['locked'] != $sit[2]) && ($update['locked']>0))
     $html_row.= "Locked by ".user_realname($update['locked'],TRUE);
@@ -396,7 +396,7 @@ if (mysql_num_rows($result) >= 1)
             echo "<tr class='shade1'>";
             echo "<td align='center'>".date($CONFIG['dateformat_datetime'], $assign->lastupdated)."</td>";
             echo "<td>".user_realname($assign->originalowner,TRUE)."</td>";
-            echo "<td>".software_name($assign->softwareid)."<br />[<a href=\"javascript:wt_winpopup('incident_details.php?id={$assign->id}&amp;popup=yes', 'mini')\">{$assign->id}</a>] ".stripslashes($assign->title)."</td>";
+            echo "<td>".software_name($assign->softwareid)."<br />[<a href=\"javascript:wt_winpopup('incident_details.php?id={$assign->id}&amp;popup=yes', 'mini')\">{$assign->id}</a>] ".$assign->title."</td>";
             $userstatus=userstatus_name($assign->userstatus);
             $usermessage=user_message($assign->originalowner);
             $username=user_realname($assign->originalowner,TRUE);

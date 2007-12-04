@@ -143,7 +143,7 @@ if (empty($_POST['process']))
 
     // ---
     // echo "<form name='kbform' action='{$_SERVER['PHP_SELF']}' method='post' >";
-    echo "<p align='center'>{$strTitle}:<br /><input type='text' name='title' size='60' value=\"".stripslashes($kbarticle->title)."\" /></p>";
+    echo "<p align='center'>{$strTitle}:<br /><input type='text' name='title' size='60' value=\"{$kbarticle->title}\" /></p>";
     echo "<p align='center'>{$strKeywords}:<br /><input type='text' name='keywords' value='{$kbarticle->keywords}' size='60' /></p>";
 
     echo "\n<script type=\"text/javascript\">\n";
@@ -179,7 +179,7 @@ if (empty($_POST['process']))
                 echo "{$kbcontent->header}:</th>";
                 echo "<td class='shade2'>";
                 echo "<textarea name='content$element' rows='10'  cols='100' title='Full Details'>";
-                echo stripslashes($kbcontent->content);
+                echo $kbcontent->content;
                 echo "</textarea>\n<br /><br />\n";
                 $author[]=$kbcontent->ownerid;
                 $id_array[]= $kbcontent->id;
@@ -254,7 +254,7 @@ else
     {
         if ($_REQUEST["add$section"]=='yes')
         {
-            $content = mysql_real_escape_string(stripslashes($_REQUEST["content$section"]));
+            $content = mysql_real_escape_string($_REQUEST["content$section"]);
             $content = strip_tags($content,$allowable_html_tags);
             $sql = "INSERT into kbcontent (content, header, headerstyle, distribution, docid) VALUES ('$content','$section','h1','private','{$articleid}') ";
             mysql_query($sql);

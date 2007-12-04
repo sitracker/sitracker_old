@@ -44,7 +44,7 @@ switch($_REQUEST['action'])
             $hash = md5($userdetails->username.'.'.$userdetails->password);
             $reseturl = "{$url['scheme']}://{$url['host']}{$url['path']}?action=confirmreset&amp;userid={$userdetails->id}&amp;hash={$hash}";
             $bodytext .= "{$reseturl}";
-            mail($email, "Information for resetting your password", stripslashes($bodytext), $extra_headers);
+            mail($email, "Information for resetting your password", $bodytext, $extra_headers);
             echo "<h3>Information sent</h3>";
             echo "<p>We have sent instructions how to reset your password to the email address you provided.</p>";
             echo "<p><a href='index.php'>Back to login page</a></p>";
@@ -67,7 +67,7 @@ switch($_REQUEST['action'])
                     $extra_headers .= "\n"; // add an extra crlf to create a null line to separate headers from body
 
                     $bodytext = "Username: {$row->username}\nPassword: {$row->password}";
-                    mail($email, "Forgotten password details", stripslashes($bodytext), $extra_headers);
+                    mail($email, "Forgotten password details", $bodytext, $extra_headers);
                     html_redirect("index.php", TRUE, "Details sent"); // FIXME i18n
                 }
             }

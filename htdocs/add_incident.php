@@ -152,8 +152,8 @@ elseif ($action=='findcontact')
                 else $str .= "(".sprintf($strRemaining, $incidents_remaining).")";
             }
             $str .=  "</td>";
-            $str .=  '<td>'.stripslashes($contactrow['forenames'].' '.$contactrow['surname']).'</td>';
-            $str .=  '<td>'.stripslashes($contactrow['name']).'</td>';
+            $str .=  '<td>'.$contactrow['forenames'].' '.$contactrow['surname'].'</td>';
+            $str .=  '<td>'.$contactrow['name'].'</td>';
             $str .=  '<td><strong>'.$contactrow['maintid'].'</strong>&nbsp;'.$contactrow['productname'].'</td>';
             $str .=  '<td>'.servicelevel_id2tag($contactrow['servicelevelid']).'</td>';
             if($contactrow['expirydate'] == '-1')
@@ -245,7 +245,7 @@ elseif ($action=='findcontact')
                 {
                     echo "<td class='expired'>{$strZeroRemaining}</td>";
                 }
-                echo '<td>'.stripslashes($contactrow['forenames'].' '.$contactrow['surname']).'</td>';
+                echo '<td>'.$contactrow['forenames'].' '.$contactrow['surname'].'</td>';
                 echo '<td>'.site_name($contactrow['siteid']).'</td>';
                 echo "</tr>\n";
             }
@@ -707,7 +707,7 @@ elseif ($action=='assign')
                 echo "</td>";
                 echo "<td>".$userrow['phone']."</td>";
                 echo "<td>".user_online($userrow['id']).userstatus_name($userrow['status'])."</td>";
-                echo "<td>".stripslashes($userrow['message'])."</td>";
+                echo "<td>".$userrow['message']."</td>";
                 echo "<td align='center'>";
 
     		$incpriority = user_incidents($userrow['id']);

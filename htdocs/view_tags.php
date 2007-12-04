@@ -68,7 +68,7 @@ else
                     {
                         $objcon = mysql_fetch_object($resultcon);
                         echo "<th><img src='{$CONFIG['application_webpath']}images/icons/{$iconset}/16x16/contact.png' width='16' height='16' alt='' /> {$strContact}</th><td><a href='contact_details.php?id={$obj->id}'>";
-                        echo stripslashes($objcon->forenames." ".$objcon->surname)."</a></td>";
+                        echo "{$objcon->forenames} {$objcon->surname}</a></td>";
                     }
                 break;
 
@@ -80,7 +80,7 @@ else
                     {
                         $objinc = mysql_fetch_object($resultinc);
                         echo "<th><img src='{$CONFIG['application_webpath']}images/icons/{$iconset}/16x16/support.png' width='16' height='16' alt='' /> {$strIncident}</th><td><a href=\"javascript:incident_details_window('{$obj->id}','incident{$obj->id}')\">";
-                        echo "{$obj->id}: ".stripslashes($objinc->title)."</a></td>";
+                        echo "{$obj->id}: {$objinc->title}</a></td>";
                     }
                 break;
 
@@ -92,7 +92,7 @@ else
                     {
                         $objsite = mysql_fetch_object($resultsite);
                         echo "<th><img src='{$CONFIG['application_webpath']}images/icons/{$iconset}/16x16/site.png' width='16' height='16' alt='' /> {$strSite}</th><td><a href='site_details.php?id={$obj->id}&amp;action=show'>";
-                        echo stripslashes($objsite->name)."</a></td>";
+                        echo "{$objsite->name}</a></td>";
                     }
                 break;
 
@@ -104,7 +104,7 @@ else
                     {
                         $objtask = mysql_fetch_object($resulttask);
                         echo "<th><img src='{$CONFIG['application_webpath']}images/icons/{$iconset}/16x16/task.png' width='16' height='16' alt='' /> {$strTask}</th><td><a href='view_task.php?id={$obj->id}'>";
-                        echo stripslashes($objtask->name)."</a></td>";
+                        echo "{$objtask->name}</a></td>";
                     }
                 break;
 
@@ -116,7 +116,7 @@ else
                     {
                         $objtask = mysql_fetch_object($resultskill);
                         echo "<th><img src='{$CONFIG['application_webpath']}images/icons/{$iconset}/16x16/skill.png' width='16' height='16' alt='' /> {$strSkill}</th><td>";
-                        echo stripslashes($objtask->name)."</td>";
+                        echo "{$objtask->name}</td>";
                     }
                 break;
 
@@ -128,7 +128,7 @@ else
                     {
                         $objtask = mysql_fetch_object($resultprod);
                         echo "<th><img src='{$CONFIG['application_webpath']}images/icons/{$iconset}/16x16/product.png' width='16' height='16' alt='' /> {$strProduct}</th>";
-                        echo "<td><a href='products.php?productid={$obj->id}'>".stripslashes($objtask->name)."</a></td>";
+                        echo "<td><a href='products.php?productid={$obj->id}'>{$objtask->name}</a></td>";
                     }
                 break;
 

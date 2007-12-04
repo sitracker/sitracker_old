@@ -248,8 +248,8 @@ if ($errors == 0)
             ?>
             <tr class='<?php echo $class ?>'>
                 <td align='center'><?php echo $results['id'] ?></td>
-                <td><a href="site_details.php?id=<?php echo $results['id']; ?>&amp;action=show"><?php echo htmlspecialchars(stripslashes($results['name'])) ?></a></td>
-                <td><?php echo nl2br(htmlspecialchars(stripslashes($results["department"]))); ?></td>
+                <td><a href="site_details.php?id=<?php echo $results['id']; ?>&amp;action=show"><?php echo htmlspecialchars($results['name']) ?></a></td>
+                <td><?php echo nl2br(htmlspecialchars($results["department"])); ?></td>
             </tr>
             <?php
             // invert shade

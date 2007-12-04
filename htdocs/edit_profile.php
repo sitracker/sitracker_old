@@ -52,12 +52,12 @@ if (empty($mode))
     if ($userid==$sit[2] OR $userid==1) echo "<td>".db_read_column('rolename', 'roles', $user->roleid)."</td>";
     else echo "<td>".role_drop_down('roleid', $user->roleid)."</td>";
     echo "</tr>";
-    echo "<tr><th>{$strRealName}:</th><td><input maxlength='50' name='realname' size='30' type='text' value=\"".stripslashes($user->realname)."\" /></td></tr>\n";
-    echo "<tr><th>{$strJobTitle}:</th><td><input maxlength='50' name='jobtitle' size='30' type='text' value=\"".stripslashes($user->title)."\" /></td></tr>\n";
+    echo "<tr><th>{$strRealName}:</th><td><input maxlength='50' name='realname' size='30' type='text' value=\"".$user->realname."\" /></td></tr>\n";
+    echo "<tr><th>{$strJobTitle}:</th><td><input maxlength='50' name='jobtitle' size='30' type='text' value=\"".$user->title."\" /></td></tr>\n";
     echo "<tr><th>{$strQualifications}:<br />{$strQualificationsTip}</th>";
-    echo "<td><textarea name='qualifications' rows='3' cols='40'>".stripslashes($user->qualifications)."</textarea></td></tr>\n";
+    echo "<td><textarea name='qualifications' rows='3' cols='40'>".$user->qualifications."</textarea></td></tr>\n";
     echo "<tr><th>{$strEmailSignature}:<br />{$strEmailSignatureTip}</th>";
-    echo "<td><textarea name='signature' rows='4' cols='40'>".strip_tags(stripslashes($user->signature))."</textarea></td></tr>\n";
+    echo "<td><textarea name='signature' rows='4' cols='40'>".strip_tags($user->signature)."</textarea></td></tr>\n";
     $entitlement=user_holiday_entitlement($userid);
     if ($edituserpermission && $userid!=$sit[2])
     {
@@ -149,7 +149,7 @@ if (empty($mode))
     echo "</td></tr>\n";
 
     echo "<tr><th>{$strIncidentUpdatesPerPage}:</th>";
-    echo "<td><input maxlength='5' name='updatesperpage' size='3' type='text' value=\"".stripslashes($user->var_num_updates_view)."\" /></td></tr>\n";
+    echo "<td><input maxlength='5' name='updatesperpage' size='3' type='text' value=\"".$user->var_num_updates_view."\" /></td></tr>\n";
 
     echo "<tr><th>{$strCollapseData}:</th><td>";
     html_checkbox('collapse', $user->var_collapse);

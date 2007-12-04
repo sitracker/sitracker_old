@@ -41,7 +41,7 @@ if ($maintrow['term']=='yes') echo "<strong>{$strTerminated}</strong>";
 else echo $strActive;
 if ($maintrow['expirydate']<$now AND $maintrow['expirydate'] != '-1') echo "<span class='expired'>, {$strExpired}</span>";
 echo "</td></tr>";
-echo "<tr><th>{$strSite}:</th><td><a href=\"site_details.php?id=".$maintrow['site']."\">".stripslashes($maintrow['sitename'])."</a></td></tr>";
+echo "<tr><th>{$strSite}:</th><td><a href=\"site_details.php?id=".$maintrow['site']."\">".$maintrow['sitename']."</a></td></tr>";
 echo "<tr><th>{$strAdminContact}:</th><td><a href=\"contact_details.php?id=".$maintrow['admincontact']."\">".contact_realname($maintrow['admincontact'])."</a></td></tr>";
 if($maintrow['reseller'] != '0')
     echo "<tr><th>{$strReseller}:</th><td>".reseller_name($maintrow['reseller'])."</td></tr>";
@@ -62,7 +62,7 @@ if($maintrow['expirydate'] == '-1')
 else
     date($CONFIG['dateformat_date'], $maintrow['expirydate'])."</td></tr>";
 if($maintrow['maintnotes'] != '')
-    echo "<tr><th>{$strNotes}:</th><td>".stripslashes($maintrow['maintnotes'])."</td></tr>";
+    echo "<tr><th>{$strNotes}:</th><td>".$maintrow['maintnotes']."</td></tr>";
 echo "</table>";
 echo "<p align='center'><a href=\"edit_contract.php?action=edit&amp;maintid=$id\">{$strEditContract}</a></p>";
 
@@ -98,7 +98,7 @@ else
         while ($supportedrow=mysql_fetch_array($result))
         {
             echo "<tr><th>{$strContact} #$supportcount:</th><td><img src='{$CONFIG['application_webpath']}images/icons/{$iconset}/16x16/contact.png' width='16' height='16' alt='' /> ";
-            echo "<a href=\"contact_details.php?id=".$supportedrow['contactid']."\">".stripslashes($supportedrow['forenames'].' '.$supportedrow['surname'])."</a>, ";
+            echo "<a href=\"contact_details.php?id=".$supportedrow['contactid']."\">".$supportedrow['forenames'].' '.$supportedrow['surname'])."</a>, ";
             echo contact_site($supportedrow['contactid']). "</td>";
             echo "<td><a href=\"delete_maintenance_support_contact.php?contactid=".$supportedrow['contactid']."&amp;maintid=$id&amp;context=maintenance\">{$strRemove}</a></td></tr>\n";
             $supportcount++;
@@ -129,7 +129,7 @@ if (mysql_num_rows($result)>0)
     {
         echo "<tr><td> <img src='{$CONFIG['application_webpath']}images/icons/{$iconset}/16x16/skill.png' width='16' height='16' alt='' /> ";
         if ($software->lifetime_end > 0 AND $software->lifetime_end < $now) echo "<span class='deleted'>";
-        echo stripslashes($software['name']);
+        echo $software['name'];
         if ($software->lifetime_end > 0 AND $software->lifetime_end < $now) echo "</span>";
         echo "</td></tr>\n";
     }

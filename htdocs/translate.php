@@ -165,7 +165,7 @@ elseif($_REQUEST['mode'] == "show")
     {
         if ($_REQUEST['lang']=='zz') $foreignvalues[$key] = $key;
         echo "<tr class='$shade'><td><label for=\"{$key}\"><code>{$key}</code></td><td><input name='english_{$key}' value=\"".htmlentities($englishvalues[$key], ENT_QUOTES, 'UTF-8')."\" size=\"45\" readonly='readonly' /></td>";
-        echo "<td><input id=\"{$key}\" name=\"{$key}\" value=\"".htmlentities(stripslashes($foreignvalues[$key]), ENT_QUOTES, 'UTF-8')."\" size=\"45\" /></td></tr>\n";
+        echo "<td><input id=\"{$key}\" name=\"{$key}\" value=\"".htmlentities($foreignvalues[$key], ENT_QUOTES, 'UTF-8')."\" size=\"45\" /></td></tr>\n";
         if ($shade=='shade1') $shade='shade2';
         else $shade='shade1';
         if (!empty($comments[$key])) echo "<tr><td colspan=3' class='{$shade}'><strong>{$strNotes}:</strong> {$comments[$key]}</td><tr>\n";
