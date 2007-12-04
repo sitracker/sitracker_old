@@ -51,25 +51,25 @@ while ($contactrow=mysql_fetch_array($contactresult))
         $siteresult = mysql_query($sitesql);
         if (mysql_error()) trigger_error("MySQL Query Error ".mysql_error(), E_USER_WARNING);
         $site = mysql_fetch_object($siteresult);
-        $address1 = stripslashes($site->address1);
-        $address2 = stripslashes($site->address2);
-        $city = stripslashes($site->city);
-        $county = stripslashes($site->county);
-        $country = stripslashes($site->country);
-        $postcode = stripslashes($site->postcode);
+        $address1 = $site->address1;
+        $address2 = $site->address2;
+        $city = $site->city;
+        $county = $site->county;
+        $country = $site->country;
+        $postcode = $site->postcode;
     }
     else
     {
-        $address1 = stripslashes($contactrow['address1']);
-        $address2 = stripslashes($contactrow['address2']);
-        $city = stripslashes($contactrow['city']);
-        $county = stripslashes($contactrow['county']);
-        $country = stripslashes($contactrow['country']);
-        $postcode = stripslashes($contactrow['postcode']);
+        $address1 = $contactrow['address1'];
+        $address2 = $contactrow['address2'];
+        $city = $contactrow['city'];
+        $county = $contactrow['county'];
+        $country = $contactrow['country'];
+        $postcode = $contactrow['postcode'];
     }
 
     echo "<table align='center' class='vertical'>";
-    echo "<tr><th colspan='2'><h3><img src='{$CONFIG['application_webpath']}images/icons/{$iconset}/32x32/contact.png' width='32' height='32' alt='' /> ".stripslashes($contactrow['forenames']).' '.stripslashes($contactrow['surname'])."</h3></th></tr>\n";
+    echo "<tr><th colspan='2'><h3><img src='{$CONFIG['application_webpath']}images/icons/{$iconset}/32x32/contact.png' width='32' height='32' alt='' /> {$contactrow['forenames']} {$contactrow['surname']}</h3></th></tr>\n";
     if ($contactrow['active']=='false')
     {
         echo "<tr><th>{$strStatus}:</th><td><span class='expired'>{$strInactive}</span></td></tr>\n";
@@ -80,9 +80,9 @@ while ($contactrow=mysql_fetch_array($contactresult))
     // echo "<tr><th>Flags:</th><td>";
     // print_contact_flags($id);
     //echo "</td></tr>";
-    echo "<tr><th>{$strJobTitle}:</th><td>".stripslashes($contactrow['jobtitle'])."</td></tr>\n";
+    echo "<tr><th>{$strJobTitle}:</th><td>{$contactrow['jobtitle']}</td></tr>\n";
     echo "<tr><th>{$strSite}:</th><td><a href=\"site_details.php?id=".$contactrow['siteid']."\">".site_name($contactrow['siteid'])."</a></td></tr>\n";
-    if (!empty($contactrow['department'])) echo "<tr><th>{$strDepartment}:</th><td>".stripslashes($contactrow['department'])."</td></tr>\n";
+    if (!empty($contactrow['department'])) echo "<tr><th>{$strDepartment}:</th><td>{$contactrow['department']}</td></tr>\n";
     if ($contactrow['dataprotection_address']!='Yes')
     {
         echo "<tr><th>{$strAddress1}:</th><td>{$address1}</td></tr>\n";
@@ -94,20 +94,20 @@ while ($contactrow=mysql_fetch_array($contactresult))
     }
     if ($contactrow['dataprotection_email']!='Yes')
     {
-        echo "<tr><th>{$strEmail}:</th><td><a href=\"mailto:".stripslashes($contactrow['email'])."\">".stripslashes($contactrow['email'])."</a></td></tr>\n";
+        echo "<tr><th>{$strEmail}:</th><td><a href=\"mailto:{$contactrow['email']}\">{$contactrow['email']}</a></td></tr>\n";
     }
     if ($contactrow['dataprotection_phone']!='Yes')
     {
-        echo "<tr><th>{$strTelephone}:</th><td>".stripslashes($contactrow['phone'])."</td></tr>\n";
-        echo "<tr><th>{$strMobile}:</th><td>".stripslashes($contactrow['mobile'])."</td></tr>\n";
-        echo "<tr><th>{$strFax}:</th><td>".stripslashes($contactrow['fax'])."</td></tr>\n";
+        echo "<tr><th>{$strTelephone}:</th><td>{$contactrow['phone']}</td></tr>\n";
+        echo "<tr><th>{$strMobile}:</th><td>{$contactrow['mobile']}</td></tr>\n";
+        echo "<tr><th>{$strFax}:</th><td>{$contactrow['fax']}</td></tr>\n";
     }
     echo "<tr><th>{$strDataProtection}:</th><td> ";
     if ($contactrow['dataprotection_email']=='Yes') { echo "<strong>No Email</strong>, "; } else { echo "Email OK, ";}
     if ($contactrow['dataprotection_phone']=='Yes') { echo "<strong>No Calls</strong>, "; } else { echo "Calls OK, ";}
     if ($contactrow['dataprotection_address']=='Yes') { echo "<strong>No Post</strong>"; } else { echo "Post OK ";}
     echo "</td></tr>\n";
-    echo "<tr><th>{$strNotes}:</th><td>".nl2br(stripslashes($contactrow['notes']))."</td></tr>\n";
+    echo "<tr><th>{$strNotes}:</th><td>".nl2br($contactrow['notes'])."</td></tr>\n";
 
     echo "<tr><td colspan='2'>&nbsp;</td></tr>\n";
     echo "<tr><th>Access Details:</th><td>{$strUsername}: <code>".$contactrow['username']."</code>";
