@@ -255,7 +255,6 @@ $sitesql = "SELECT name, notes FROM sites WHERE id = '{$incident->siteid}'";
 $siteresult = mysql_query($sitesql);
 if (mysql_error()) trigger_error(mysql_error(),E_USER_WARNING);
 $site = mysql_fetch_object($siteresult);
-$site_name=stripslashes($site->name);
 if (!empty($site->notes)) $site_notes="<img src='{$CONFIG['application_webpath']}images/icons/{$iconset}/16x16/site.png' width='16' height='16' alt='' /> <strong>Site Notes:</strong><br />".nl2br($site->notes);
 else $site_notes='';
 unset($site);
@@ -314,7 +313,7 @@ if ($slaremain <> 0 AND $incident->status!=2)
 // Print a table showing summary details of the incident
 
 if ($_REQUEST['win']=='incomingview') echo "<h1 class='review'>Incoming</h1>";
-else echo "<h1 class='$class'>{$title}: {$incidentid} - ".stripslashes($incident->title)."</h1>";
+else echo "<h1 class='$class'>{$title}: {$incidentid} - ".$incident->title."</h1>";
 
 echo "<div id='navmenu'>";
 if ($menu != 'hide')

@@ -149,7 +149,6 @@ if($sit[0] != '')
     {
         while($notice = mysql_fetch_object($noticeresult))
         {
-            $notice->text = stripslashes($notice->text);
             $notice->text = bbcode($notice->text);
             //check for the notice types
             if($notice->type == SIT_UPGRADED_NOTICE)
@@ -175,7 +174,7 @@ if($sit[0] != '')
                 echo "{$notice->text}";
                 if (!empty($notice->link))
                 {
-                    echo " - <a href=\"".stripslashes($notice->link)."\">";
+                    echo " - <a href=\"{$notice->link}\">";
                     if (substr($notice->linktext, 0, 4)=='$str')
                     {
                         $v = substr($notice->linktext, 1);
