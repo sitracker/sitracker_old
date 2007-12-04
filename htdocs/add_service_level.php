@@ -18,8 +18,8 @@ require('functions.inc.php');
 require('auth.inc.php');
 
 // External variables
-$tag = mysql_escape_string($_REQUEST['tag']);
-$priority = mysql_escape_string($_REQUEST['priority']);
+$tag = mysql_real_escape_string($_REQUEST['tag']);
+$priority = mysql_real_escape_string($_REQUEST['priority']);
 $action = $_REQUEST['action'];
 
 if (empty($action) OR $action == "showform")
@@ -78,27 +78,27 @@ if (empty($action) OR $action == "showform")
 elseif ($action == "edit")
 {
     // External variables
-    $tag = trim(mysql_escape_string(strip_tags($_POST['tag'])));
-    $low_initial_response_mins = mysql_escape_string($_POST['low_initial_response_mins']);
-    $low_prob_determ_mins = mysql_escape_string($_POST['low_prob_determ_mins']);
-    $low_action_plan_mins = mysql_escape_string($_POST['low_action_plan_mins']);
-    $low_resolution_days = mysql_escape_string($_POST['low_resolution_days']);
-    $low_review_days = mysql_escape_string($_POST['low_review_days']);
-    $med_initial_response_mins = mysql_escape_string($_POST['med_initial_response_mins']);
-    $med_prob_determ_mins = mysql_escape_string($_POST['med_prob_determ_mins']);
-    $med_action_plan_mins = mysql_escape_string($_POST['med_action_plan_mins']);
-    $med_resolution_days = mysql_escape_string($_POST['med_resolution_days']);
-    $med_review_days = mysql_escape_string($_POST['med_review_days']);
-    $hi_initial_response_mins = mysql_escape_string($_POST['hi_initial_response_mins']);
-    $hi_prob_determ_mins = mysql_escape_string($_POST['hi_prob_determ_mins']);
-    $hi_action_plan_mins = mysql_escape_string($_POST['hi_action_plan_mins']);
-    $hi_resolution_days = mysql_escape_string($_POST['hi_resolution_days']);
-    $hi_review_days = mysql_escape_string($_POST['hi_review_days']);
-    $crit_initial_response_mins = mysql_escape_string($_POST['crit_initial_response_mins']);
-    $crit_prob_determ_mins = mysql_escape_string($_POST['crit_prob_determ_mins']);
-    $crit_action_plan_mins = mysql_escape_string($_POST['crit_action_plan_mins']);
-    $crit_resolution_days = mysql_escape_string($_POST['crit_resolution_days']);
-    $crit_review_days = mysql_escape_string($_POST['crit_review_days']);
+    $tag = trim(mysql_real_escape_string(strip_tags($_POST['tag'])));
+    $low_initial_response_mins = mysql_real_escape_string($_POST['low_initial_response_mins']);
+    $low_prob_determ_mins = mysql_real_escape_string($_POST['low_prob_determ_mins']);
+    $low_action_plan_mins = mysql_real_escape_string($_POST['low_action_plan_mins']);
+    $low_resolution_days = mysql_real_escape_string($_POST['low_resolution_days']);
+    $low_review_days = mysql_real_escape_string($_POST['low_review_days']);
+    $med_initial_response_mins = mysql_real_escape_string($_POST['med_initial_response_mins']);
+    $med_prob_determ_mins = mysql_real_escape_string($_POST['med_prob_determ_mins']);
+    $med_action_plan_mins = mysql_real_escape_string($_POST['med_action_plan_mins']);
+    $med_resolution_days = mysql_real_escape_string($_POST['med_resolution_days']);
+    $med_review_days = mysql_real_escape_string($_POST['med_review_days']);
+    $hi_initial_response_mins = mysql_real_escape_string($_POST['hi_initial_response_mins']);
+    $hi_prob_determ_mins = mysql_real_escape_string($_POST['hi_prob_determ_mins']);
+    $hi_action_plan_mins = mysql_real_escape_string($_POST['hi_action_plan_mins']);
+    $hi_resolution_days = mysql_real_escape_string($_POST['hi_resolution_days']);
+    $hi_review_days = mysql_real_escape_string($_POST['hi_review_days']);
+    $crit_initial_response_mins = mysql_real_escape_string($_POST['crit_initial_response_mins']);
+    $crit_prob_determ_mins = mysql_real_escape_string($_POST['crit_prob_determ_mins']);
+    $crit_action_plan_mins = mysql_real_escape_string($_POST['crit_action_plan_mins']);
+    $crit_resolution_days = mysql_real_escape_string($_POST['crit_resolution_days']);
+    $crit_review_days = mysql_real_escape_string($_POST['crit_review_days']);
 
     // Check input
     $errors=0;

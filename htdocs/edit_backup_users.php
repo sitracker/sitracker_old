@@ -32,8 +32,8 @@ $save = $_REQUEST['save'];
 if (empty($save))
 {
     // External variables
-    if (empty($_REQUEST['user']) OR $_REQUEST['user']=='current') $user = mysql_escape_string($sit[2]);
-    else $user = mysql_escape_string($_REQUEST['user']);
+    if (empty($_REQUEST['user']) OR $_REQUEST['user']=='current') $user = mysql_real_escape_string($sit[2]);
+    else $user = mysql_real_escape_string($_REQUEST['user']);
     $default = cleanvar($_REQUEST['default']);
     $softlist = $_REQUEST['softlist'];
 

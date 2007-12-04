@@ -20,7 +20,7 @@ require('auth.inc.php');
 // External variables
 $mode = $_REQUEST['mode'];
 $edituserpermission = user_permission($sit[2],23); // edit user
-if (empty($_REQUEST['userid']) OR $_REQUEST['userid']=='current' OR $edituserpermission==FALSE) $userid = mysql_escape_string($sit[2]);
+if (empty($_REQUEST['userid']) OR $_REQUEST['userid']=='current' OR $edituserpermission==FALSE) $userid = mysql_real_escape_string($sit[2]);
 else $userid = cleanvar($_REQUEST['userid']);
 
 

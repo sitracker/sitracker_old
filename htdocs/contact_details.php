@@ -24,7 +24,7 @@ $title='Contact Details';
 require('auth.inc.php');
 
 // External variables
-$id = mysql_escape_string($_REQUEST['id']);
+$id = mysql_real_escape_string($_REQUEST['id']);
 $output = $_REQUEST['output'];
 
 if ($output == 'vcard')

@@ -206,7 +206,7 @@ else
 
                 if (!empty($header)) $header .= "<hr>";
                 $bodytext = $header . $bodytext;
-                $bodytext = mysql_escape_string($bodytext);
+                $bodytext = mysql_real_escape_string($bodytext);
                 $sql  = "INSERT INTO updates (incidentid, userid, type, bodytext, timestamp) ";
                 $sql .= "VALUES ('$id', '$sit[2]', 'editing', '$bodytext', '$now')";
                 $result = mysql_query($sql);

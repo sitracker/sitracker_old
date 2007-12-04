@@ -17,7 +17,7 @@ if (realpath(__FILE__) == realpath($_SERVER['SCRIPT_FILENAME']))
     exit;
 }
 
-if (empty($incidentid)) $incidentid = mysql_escape_string($_REQUEST['id']);
+if (empty($incidentid)) $incidentid = mysql_real_escape_string($_REQUEST['id']);
 
 // append incident number to attachment path to show this users attachments
 $incident_attachment_fspath = $CONFIG['attachment_fspath'] . $incidentid;

@@ -18,11 +18,11 @@ require('functions.inc.php');
 require('auth.inc.php');
 
 // External variables
-$siteid = mysql_escape_string($_REQUEST['siteid']);
+$siteid = mysql_real_escape_string($_REQUEST['siteid']);
 $submit = $_REQUEST['submit'];
 // if($CONFIG['debug'])
 //     $debug .= print_r($_SESSION['formdata']);
-// 
+//
 //     echo "<p class='error'>Form Error</p>";
 if (empty($submit) OR !empty($_SESSION['formerrors']))
 {
@@ -37,7 +37,7 @@ if (empty($submit) OR !empty($_SESSION['formerrors']))
     <?php
     echo "<h2><img src='{$CONFIG['application_webpath']}images/icons/{$iconset}/32x32/contact.png' width='32' height='32' alt='' /> ";
     echo "{$strNewContact}</h2>";
-    
+
     //show errors
     if($_SESSION['formerrors'])
     {
@@ -142,11 +142,11 @@ else
 {
     // Add new contact
     // External variables
-    $siteid = mysql_escape_string($_REQUEST['siteid']);
+    $siteid = mysql_real_escape_string($_REQUEST['siteid']);
     $email = strtolower(cleanvar($_REQUEST['email']));
-    $dataprotection_email = mysql_escape_string($_REQUEST['dataprotection_email']);
-    $dataprotection_phone = mysql_escape_string($_REQUEST['dataprotection_phone']);
-    $dataprotection_address = mysql_escape_string($_REQUEST['dataprotection_address']);
+    $dataprotection_email = mysql_real_escape_string($_REQUEST['dataprotection_email']);
+    $dataprotection_phone = mysql_real_escape_string($_REQUEST['dataprotection_phone']);
+    $dataprotection_address = mysql_real_escape_string($_REQUEST['dataprotection_address']);
     $username = cleanvar($_REQUEST['username']);
     $salutation = cleanvar($_REQUEST['salutation']);
     $forenames = cleanvar($_REQUEST['forenames']);

@@ -45,7 +45,7 @@ if (empty($_REQUEST['submit']))
 else
 {
     // External variables
-    $product = mysql_escape_string($_POST['product']);
+    $product = mysql_real_escape_string($_POST['product']);
     $information = cleanvar($_POST['information']);
     $moreinformation = cleanvar($_POST['moreinformation']);
 

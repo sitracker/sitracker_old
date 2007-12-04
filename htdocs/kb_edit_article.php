@@ -254,7 +254,7 @@ else
     {
         if ($_REQUEST["add$section"]=='yes')
         {
-            $content = mysql_escape_string(stripslashes($_REQUEST["content$section"]));
+            $content = mysql_real_escape_string(stripslashes($_REQUEST["content$section"]));
             $content = strip_tags($content,$allowable_html_tags);
             $sql = "INSERT into kbcontent (content, header, headerstyle, distribution, docid) VALUES ('$content','$section','h1','private','{$articleid}') ";
             mysql_query($sql);

@@ -148,10 +148,10 @@ $message = str_replace("\n\n\n\n","\n", $message);
 $message = str_replace(">\n>\n>\n>\n",">\n", $message);
 
 // Build up text to insert in the incident log
-if (!empty($decoded_email->from)) $headertext .= "From: [b]".htmlentities(mysql_escape_string($decoded_email->from), ENT_NOQUOTES)."[/b]\n";
-if (!empty($decoded_email->to)) $headertext .= "To: [b]".htmlentities(mysql_escape_string($decoded_email->to))."[/b]\n";
-if (!empty($decoded_email->cc)) $headertext .= "CC: [b]".htmlentities(mysql_escape_string($decoded_email->cc))."[/b]\n";
-if (!empty($decoded_email->subject)) $headertext .= "Subject: [b]".htmlentities(mysql_escape_string($decoded_email->subject))."[/b]\n";
+if (!empty($decoded_email->from)) $headertext .= "From: [b]".htmlentities(mysql_real_escape_string($decoded_email->from), ENT_NOQUOTES)."[/b]\n";
+if (!empty($decoded_email->to)) $headertext .= "To: [b]".htmlentities(mysql_real_escape_string($decoded_email->to))."[/b]\n";
+if (!empty($decoded_email->cc)) $headertext .= "CC: [b]".htmlentities(mysql_real_escape_string($decoded_email->cc))."[/b]\n";
+if (!empty($decoded_email->subject)) $headertext .= "Subject: [b]".htmlentities(mysql_real_escape_string($decoded_email->subject))."[/b]\n";
 if ($count_attachments >= 1)
 {
     $headertext .= "Attachments: [b]{$count_attachments}[/b] - ";
@@ -166,7 +166,7 @@ if ($count_attachments >= 1)
 }
 
 if (!empty($headertext)) $bodytext .= "{$headertext}<hr>";
-$bodytext .= mysql_escape_string($message);
+$bodytext .= mysql_real_escape_string($message);
 
 if (empty($incidentid))
 {

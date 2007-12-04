@@ -193,13 +193,13 @@ elseif ($action == "update")
     $name = cleanvar($_POST['name']);
     $description = cleanvar($_POST['description']);
     // We don't strip tags because that would also strip our special tags
-    $tofield = mysql_escape_string($_POST['tofield']);
-    $fromfield = mysql_escape_string($_POST['fromfield']);
-    $replytofield = mysql_escape_string($_POST['replytofield']);
-    $ccfield = mysql_escape_string($_POST['ccfield']);
-    $bccfield = mysql_escape_string($_POST['bccfield']);
-    $subjectfield = mysql_escape_string($_POST['subjectfield']);
-    $bodytext = mysql_escape_string($_POST['bodytext']);
+    $tofield = mysql_real_escape_string($_POST['tofield']);
+    $fromfield = mysql_real_escape_string($_POST['fromfield']);
+    $replytofield = mysql_real_escape_string($_POST['replytofield']);
+    $ccfield = mysql_real_escape_string($_POST['ccfield']);
+    $bccfield = mysql_real_escape_string($_POST['bccfield']);
+    $subjectfield = mysql_real_escape_string($_POST['subjectfield']);
+    $bodytext = mysql_real_escape_string($_POST['bodytext']);
     $cust_vis = cleanvar($_POST['cust_vis']);
     $storeinlog = cleanvar($_POST['storeinlog']);
     $id = cleanvar($_POST['id']);

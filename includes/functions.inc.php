@@ -2762,7 +2762,7 @@ function journal($loglevel, $event, $bodytext, $journaltype, $refid)
     mysql_query($lastseensql);
     if (mysql_error()) trigger_error(mysql_error(), E_USER_WARNING);
 
-    $bodytext = mysql_escape_string($bodytext);
+    $bodytext = mysql_real_escape_string($bodytext);
     if ($loglevel<=$CONFIG['journal_loglevel'])
     {
         $sql  = "INSERT INTO journal ";
@@ -2848,7 +2848,7 @@ function send_template_email($template, $incidentid, $info1='', $info2='')
         $bt   = "To: <b>$email_to</b>\nFrom: <b>$email_from</b>\nReply-To: <b>$emailreplyto</b>\n";
         $bt  .= "BCC: <b>$email_bcc</b>\nSubject: <b>$email_subject</b>\n<hr>".$email_body;
         $sql = "INSERT INTO updates (incidentid, userid, type, bodytext, timestamp, customervisibility) VALUES ";
-        $sql .= "($incidentid, 0, 'email', '".mysql_escape_string($bt)."', ";
+        $sql .= "($incidentid, 0, 'email', '".mysql_real_escape_string($bt)."', ";
         $sql .= "$now, '$email_customervisibility')";
         $result = mysql_query($sql);
         if (mysql_error()) trigger_error("MySQL Query Error ".mysql_error(), E_USER_ERROR);
@@ -4617,10 +4617,10 @@ function create_incident_feedback($formid, $incidentid)
     $email = contact_email($respondent);
 
     $sql = "INSERT INTO feedbackrespondents (formid, contactid, email, incidentid) VALUES (";
-    $sql .= "'".mysql_escape_string($formid)."', ";
-    $sql .= "'".mysql_escape_string($contactid)."', ";
-    $sql .= "'".mysql_escape_string($email)."', ";
-    $sql .= "'".mysql_escape_string($incidentid)."') ";
+    $sql .= "'".mysql_real_escape_string($formid)."', ";
+    $sql .= "'".mysql_real_escape_string($contactid)."', ";
+    $sql .= "'".mysql_real_escape_string($email)."', ";
+    $sql .= "'".mysql_real_escape_string($incidentid)."') ";
     mysql_query($sql);
     if (mysql_error()) trigger_error ("MySQL Error: ".mysql_error(), E_USER_ERROR);
     $blankformid=mysql_insert_id();
@@ -4692,9 +4692,9 @@ function cleanvar($var,$striphtml=TRUE, $transentities=TRUE)
 {
     if ($striphtml) $var = strip_tags($var);
     if ($transentities) $var = htmlentities($var, ENT_COMPAT, $GLOBALS['i18ncharset']);
-    else $var = htmlspecialchars($var);
+    else $var = htmlspecialchars($var, ENT_COMPAT, $GLOBALS['i18ncharset']);
 
-    $var = mysql_escape_string($var);
+    $var = mysql_real_escape_string($var);
     $var = trim($var);
     return $var;
 }

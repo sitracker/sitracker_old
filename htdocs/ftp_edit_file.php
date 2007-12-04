@@ -79,10 +79,10 @@ switch ($mode)
     break;
 
     case 'save':
-        $shortdescription=mysql_escape_string($_REQUEST['shortdescription']);
-        $longdescription=mysql_escape_string($_REQUEST['longdescription']);
-        $fileversion=mysql_escape_string($_REQUEST['fileversion']);
-        $webcategory=mysql_escape_string($_REQUEST['webcategory']);
+        $shortdescription=mysql_real_escape_string($_REQUEST['shortdescription']);
+        $longdescription=mysql_real_escape_string($_REQUEST['longdescription']);
+        $fileversion=mysql_real_escape_string($_REQUEST['fileversion']);
+        $webcategory=mysql_real_escape_string($_REQUEST['webcategory']);
         $sql = "UPDATE files SET ";
         $sql .= "shortdescription='$shortdescription', longdescription='$longdescription', fileversion='$fileversion', ";
         $sql .= "webcategory='$webcategory', published='yes'";

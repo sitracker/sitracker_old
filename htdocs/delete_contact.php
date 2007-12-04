@@ -22,7 +22,7 @@ require('auth.inc.php');
 // External variables
 $process = $_REQUEST['process'];
 $id = cleanvar($_REQUEST['id']);
-$newcontact = mysql_escape_string($_REQUEST['newcontact']);
+$newcontact = mysql_real_escape_string($_REQUEST['newcontact']);
 
 include('htmlheader.inc.php');
 if (empty($process))

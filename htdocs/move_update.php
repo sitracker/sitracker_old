@@ -161,7 +161,7 @@ else
         $body .="Original Message Received at: <b>$prettydate</b>\n";
         $body .= "Status: -&gt; <b>Active</b>\n";
         $bodytext = $body . $bodytext;
-        $bodytext = mysql_escape_string($bodytext);
+        $bodytext = mysql_real_escape_string($bodytext);
         // move the update.
         $sql = "UPDATE updates SET incidentid='$incidentid', userid='$sit[2]', bodytext='$bodytext', timestamp='$now' WHERE id='$updateid'";
         mysql_query($sql);

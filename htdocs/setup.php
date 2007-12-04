@@ -559,12 +559,12 @@ switch ($_REQUEST['action'])
 
                     if ($_REQUEST['action'] == 'createadminuser' AND setup_check_adminuser()==FALSE)
                     {
-                        $password = mysql_escape_string($_POST['password']);
-                        $passwordagain = mysql_escape_string($_POST['passwordagain']);
+                        $password = mysql_real_escape_string($_POST['password']);
+                        $passwordagain = mysql_real_escape_string($_POST['passwordagain']);
                         if ($password == $passwordagain)
                         {
                             $password = md5($password);
-                            $email = mysql_escape_string($_POST['email']);
+                            $email = mysql_real_escape_string($_POST['email']);
                             $sql = "INSERT INTO `users` (`id`, `username`, `password`, `realname`, `roleid`, `title`, `signature`, `email`, `status`, `var_style`, `lastseen`) ";
                             $sql .= "VALUES (1, 'admin', '$password', 'Administrator', 1, 'Administrator', 'Regards,\r\n\r\nSiT Administrator', '$email', '1', '8', NOW());";
                             mysql_query($sql);
