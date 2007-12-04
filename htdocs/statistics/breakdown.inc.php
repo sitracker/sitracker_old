@@ -38,37 +38,44 @@ switch($query)
         break;
 }
 
-if($start_str==$end_str) echo "<h2>Incidents {$type} on {$start_str}</h2>"; // FIXME i18n incidents X on X
-else echo "<h2>Incidents {$type} between {$start_str} and {$end_str}</h2>";
+if($start_str==$end_str) echo "<h2>".sprintf($strIncidentsVerbOnDate, $type, $start_str)."</h2>";
+else echo "<h2>".sprintf($strIncidentsVerbBetweenDates, $type, $start_str, $end_str)."</h2>";
 
 echo "<table align='center'>";
 
-echo "<tr><th>{$strID}</th><th>{$strTitle}</th><th>{$strOpened}</th><th>{$strClosed}</th><th>{$strOwner}</th><th>{$strCustomer}</th><th>{$strSite}</th></tr>";
-
-while($row = mysql_fetch_array($result))
+if(mysql_num_rows($result) > 0)
 {
-    echo "<tr>";
-    echo "<td><a href=\"javascript:incident_details_window('{$row['id']}','incident{$row['id']}')\" class='info'>{$row['id']}</a></td>";
-    echo "<td><a href=\"javascript:incident_details_window('{$row['id']}','incident{$row['id']}')\" class='info'>{$row['title']}</a></td>";
-    echo "<td>".date($CONFIG['dateformat_datetime'],$row['opened'])."</td>";
-    if($row['status'] != 2)
+    echo "<tr><th>{$strID}</th><th>{$strTitle}</th><th>{$strOpened}</th><th>{$strClosed}</th><th>{$strOwner}</th><th>{$strCustomer}</th><th>{$strSite}</th></tr>";
+    
+    while($row = mysql_fetch_array($result))
     {
-        echo "<td>{$strCurrentlyOpen}</td>";
+        echo "<tr>";
+        echo "<td><a href=\"javascript:incident_details_window('{$row['id']}','incident{$row['id']}')\" class='info'>{$row['id']}</a></td>";
+        echo "<td><a href=\"javascript:incident_details_window('{$row['id']}','incident{$row['id']}')\" class='info'>{$row['title']}</a></td>";
+        echo "<td>".date($CONFIG['dateformat_datetime'],$row['opened'])."</td>";
+        if($row['status'] != 2)
+        {
+            echo "<td>{$strCurrentlyOpen}</td>";
+        }
+        else
+        {
+            echo "<td>".date($CONFIG['dateformat_datetime'],$row['closed'])."</td>";
+        }
+        echo "<td>".user_realname($row['owner'])."</td>";
+        $sql = "SELECT contacts.forenames,contacts.surname, sites.name FROM contacts,sites WHERE sites.id = contacts.siteid AND contacts.id = {$row['contact']}";
+        $contactResult = mysql_query($sql);
+        if (mysql_error()) trigger_error("MySQL Query Error ".mysql_error(), E_USER_ERROR);
+        $contact = mysql_fetch_array($contactResult);
+        echo "<td>{$contact['forenames']} {$contact['surname']}</td>";
+        echo "<td>{$contact['name']}</td>";
+        echo "</tr>";
     }
-    else
-    {
-        echo "<td>".date($CONFIG['dateformat_datetime'],$row['closed'])."</td>";
-    }
-    echo "<td>".user_realname($row['owner'])."</td>";
-    $sql = "SELECT contacts.forenames,contacts.surname, sites.name FROM contacts,sites WHERE sites.id = contacts.siteid AND contacts.id = {$row['contact']}";
-    $contactResult = mysql_query($sql);
-    if (mysql_error()) trigger_error("MySQL Query Error ".mysql_error(), E_USER_ERROR);
-    $contact = mysql_fetch_array($contactResult);
-    echo "<td>{$contact['forenames']} {$contact['surname']}</td>";
-    echo "<td>{$contact['name']}</td>";
-    echo "</tr>";
+    
+    echo "</table>";
 }
-
-echo "</table>";
+else
+{
+    echo "<p class='error'>$strNoRecords</p>";
+}
 
 ?>

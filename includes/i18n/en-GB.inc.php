@@ -352,6 +352,10 @@ $strIncidentsByVendor = 'Incidents By Vendor';
 $strIncidentsForEngineer = 'Incidents for %s (Engineer)';
 $strIncidentsinQueue = 'Incidents in Queue';
 $strIncidentsLoggedOpenClosed = 'Incidents Logged (Open/Closed)';
+# e.g. Incidents opened on 2007-12-03
+$strIncidentsVerbOnDate = 'Incidents %s on %s';
+# e.g. Incidents opened between 2007-12-03 and 2007-12-04
+$strIncidentsVerbBetweenDates = 'Incidents %s between %s and %s';
 $strIncidentsUsed = 'Incidents Used';
 $strInclude = 'Include';
 $strIncomingEmailText = 'Incoming email that could not be handled automatically';
@@ -666,6 +670,7 @@ $strSortResults = 'Sort Results';
 $strSpecifyAddress = 'Specify an address for this contact that is different to the site';
 $strStartDate = 'Start Date';
 $strStartNewActivity = 'Start New Activity';
+$strStatsFromDayStatistics = 'Statistics from %s';
 $strStatus = 'Status';
 $strStatusSummary = 'Status Summary';
 # i.e. permanent
