@@ -51,6 +51,7 @@ mysql_query("SET NAMES utf8");
 mysql_select_db($CONFIG['db_database'], $db);
 if (mysql_error())
 {
+    // TODO add some detection for missing database
     // Attempt socket connection to database to check if server is alive
     if (!fsockopen($CONFIG['db_hostname'], 3306, $errno, $errstr, 5))
     {

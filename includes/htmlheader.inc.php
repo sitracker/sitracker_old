@@ -117,6 +117,17 @@ if ($sit[0]!='')
     echo "</ul>\n\n";
     echo "</div>\n";
 }
+
+if (!isset($refresh))
+{
+    //update last seen (only if this is a page that does not auto-refresh)
+    $lastseensql = "UPDATE LOW_PRIORITY users SET lastseen=NOW() WHERE id='{$_SESSION['userid']}' LIMIT 1";
+    mysql_query($lastseensql);
+    if (mysql_error()) trigger_error(mysql_error(), E_USER_WARNING);
+}
+
+
+
 //dismiss any notices
 $noticeaction = cleanvar($_REQUEST['noticeaction']);
 $noticeid = cleanvar($_REQUEST['noticeid']);

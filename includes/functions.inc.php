@@ -2759,11 +2759,6 @@ function journal($loglevel, $event, $bodytext, $journaltype, $refid)
     // 3 = Full Logging
     // 4 = Max Debug Logging
 
-    //update last seen
-    $lastseensql = "UPDATE LOW_PRIORITY users SET lastseen=NOW() WHERE id='{$_SESSION['userid']}' LIMIT 1";
-    mysql_query($lastseensql);
-    if (mysql_error()) trigger_error(mysql_error(), E_USER_WARNING);
-
     $bodytext = mysql_real_escape_string($bodytext);
     if ($loglevel<=$CONFIG['journal_loglevel'])
     {
