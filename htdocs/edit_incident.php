@@ -75,7 +75,7 @@ if (empty($submit))
         ?>
         <input name="type" type="hidden" value="Support" />
         <input name="id" type="hidden" value="<?php echo $id; ?>" />
-        <input name="oldtitle" type="hidden" value="<?php echo($incident["title"]; ?>" />
+        <input name="oldtitle" type="hidden" value="<?php echo $incident["title"]; ?>" />
         <input name="oldcontact" type="hidden" value="<?php echo $incident["contact"]; ?>" />
         <input name="oldccemail" type="hidden" value="<?php echo $incident["ccemail"]; ?>" />
         <input name="oldescalationpath" type="hidden" value="<?php echo db_read_column('name', 'escalationpaths', $incident["escalationpath"]) ?>" />
