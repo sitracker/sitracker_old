@@ -281,7 +281,7 @@ CREATE TABLE `files` (
 CREATE TABLE `flags` (
   `flag` char(3) NOT NULL default '',
   `name` varchar(100) default NULL,
-  PRIMARY KEY  (`flag`),
+  PRIMARY KEY  (`flag`)
 ) ENGINE=MyISAM;
 
 
@@ -1211,7 +1211,7 @@ CREATE TABLE `usersoftware` (
 CREATE TABLE `userstatus` (
   `id` int(11) NOT NULL auto_increment,
   `name` varchar(50) default NULL,
-  PRIMARY KEY  (`id`),
+  PRIMARY KEY  (`id`)
 ) ENGINE=MyISAM;
 
 
