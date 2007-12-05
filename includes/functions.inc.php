@@ -2261,7 +2261,8 @@ function confirmation_page($refreshtime, $location, $message)
 function html_redirect($url, $success=TRUE, $message='')
 {
     global $CONFIG, $headerdisplayed;
-    if (empty($message)) $refreshtime = 3;
+    if (empty($message)) $refreshtime = 0;
+    elseif ($sucess==FALSE) $refreshtime = 3;
     else $refreshtime = 6;
     $refresh = "{$refreshtime}; url={$url}";
 
