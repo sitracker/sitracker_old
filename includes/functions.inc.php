@@ -1187,6 +1187,7 @@ function product_drop_down($name, $id)
    return $html;
 }
 
+
 function software_drop_down($name, $id)
 {
     global $now;
