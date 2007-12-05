@@ -163,7 +163,7 @@ $updatetypes['editing'] = array('icon' => 'edit.png', 'text' => sprintf($strEdit
 $updatetypes['email'] = array('icon' => 'emailout.png', 'text' => sprintf($strEmailsentby,'updateuser'));
 $updatetypes['emailin'] = array('icon' => 'emailin.png', 'text' => sprintf($strEmailreceivedby,'updateuser'));
 $updatetypes['emailout'] = array('icon' => 'emailout.png', 'text' => sprintf($Emailsentby,'updateuser'));
-$updatetypes['externalinfo'] = array('icon' => 'externalinfo.png', 'text' => sprintf($strExternalinfoaddedby,'updateuser'));
+$updatetypes['externalinfo'] = array('icon' => 'externalinfo.png', 'text' => sprintf($strExternalInfoAddedBy,'updateuser'));
 $updatetypes['probdef'] = array('icon' => 'probdef.png', 'text' => sprintf($strProblemDefinitionby,'updateuser'));
 $updatetypes['research'] = array('icon' => 'research.png', 'text' => sprintf($strResearchedby,'updateuser'));
 $updatetypes['reassigning'] = array('icon' => 'reassign.png', 'text' => sprintf($strReassignedToBy,'currentowner','updateuser'));
