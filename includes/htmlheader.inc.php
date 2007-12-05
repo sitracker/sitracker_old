@@ -60,10 +60,10 @@ if ($sit[0]!='')
         echo "<p class='error'>Error. Menu not defined</p>";
     }
 
-    if ($CONFIG['debug'])
-    {
-        $dbg .= 'permissions'.print_r($_SESSION['permissions'],true);
-    }
+//     if ($CONFIG['debug'])
+//     {
+//         $dbg .= 'permissions'.print_r($_SESSION['permissions'],true);
+//     }
     echo "<div id='menu'>\n";
     echo "<ul id='menuList'>\n";
     foreach ($hmenu[0] as $top => $topvalue)
