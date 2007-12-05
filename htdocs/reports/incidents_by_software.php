@@ -119,7 +119,7 @@ else
         if (mysql_error()) trigger_error("MySQL Query Error ".mysql_error(), E_USER_ERROR);
         $numrows = mysql_num_rows($resultN);
 
-        foreach($slas AS &$slaReset)
+        foreach($slas AS $slaReset)
         {
             $slaReset['notEscalated'] = 0;
             $slaReset['escalated'] = 0;
