@@ -253,12 +253,13 @@ $strEscalationPaths = 'Escalation Paths';
 $strEvent = 'Event';
 $strExact = 'Exact';
 $strExclude = 'Exclude';
+$strExpired = 'Expired';
+$strExpiryDate = 'Expiry Date';
 $strExternalEmail = 'External Email';
 $strExternalEngineersName = 'External Engineers Name';
 $strExternalID = 'External ID';
 $strExternalInfo = 'External Information';
-$strExpired = 'Expired';
-$strExpiryDate = 'Expiry Date';
+$strExternalInfoAddedBy = 'External Information added by %s';
 $strExternalEngineerCallDistribution = 'External Engineer Call Distribution';
 
 $strFailed = 'Failed';
