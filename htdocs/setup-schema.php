@@ -939,11 +939,12 @@ INSERT INTO `sitetypes` VALUES (3, 'Academic');
 CREATE TABLE `software` (
   `id` int(5) NOT NULL auto_increment,
   `name` varchar(255) NOT NULL default '',
+  `vendorid` INT( 5 ) NOT NULL default '0',
   `software` int(5) NOT NULL default '0',
   `lifetime_start` date default NULL,
   `lifetime_end` date default NULL,
   PRIMARY KEY  (`id`)
-) ENGINE=MyISAM COMMENT='Individual software products as they are supported' AUTO_INCREMENT=2 ;
+) ENGINE=MyISAM COMMENT='Individual software products as they are supported' AUTO_INCREMENT=1 ;
 
 INSERT INTO `software` (`id`, `name`, `lifetime_start`, `lifetime_end`) VALUES (1, 'Example Software', NULL, NULL);
 
