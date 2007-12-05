@@ -34,6 +34,13 @@ echo "<script src='{$CONFIG['application_webpath']}calendar.js' type='text/javas
 
 // if ($userstyle == "1") echo "<link rel=\"stylesheet\" href=\"styles/webtrack1.css\">\n";
 // if ($userstyle == "2") echo "<link rel=\"stylesheet\" href=\"styles/webtrack2.css\">\n";
+
+//update last seen
+$lastseensql = "UPDATE LOW_PRIORITY users SET lastseen=NOW() WHERE id='{$_SESSION['userid']}' LIMIT 1";
+mysql_query($lastseensql);
+if (mysql_error()) trigger_error(mysql_error(), E_USER_WARNING);
+
+
 // FIXME put here some js to set action field then post form
 ?>
 <script type='text/javascript'>
