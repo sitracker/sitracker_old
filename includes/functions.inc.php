@@ -24,7 +24,7 @@ $application_revision='svn';
 if ($application_revision == 'svn')
 {
     // Add the svn revision number
-    preg_match('/([0-9]+)/','$LastChangedRevision$',&$revision);
+    preg_match('/([0-9]+)/','$LastChangedRevision$',$revision);
     $application_revision .= $revision[0];
 }
 
