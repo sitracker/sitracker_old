@@ -436,7 +436,9 @@ function display_update_page($draftid=-1)
 
     echo "<label><input type='radio' name='timetonextaction_none' id='ttna_time' value='time' onchange=\"update_ttna();\" />";
     echo "In <em>x</em> days, hours, minutes</label><br />"; // FIXME i18n in x days,. hours, minutes
-    echo "<span id='ttnacountdown' style='display: none;'>";
+    echo "<span id='ttnacountdown'";
+    if (empty($na_days) AND empty($na_hours) AND empty($na_minutes)) echo " style='display: none;'";
+    echo ">";
     echo "&nbsp;&nbsp;&nbsp;<input maxlength='3' name='timetonextaction_days' id='timetonextaction_days' value='{$na_days}' onclick='window.document.updateform.timetonextaction_none[0].checked = true;' size='3' /> {$GLOBALS['strDays']}&nbsp;";
     echo "<input maxlength='2' name='timetonextaction_hours' id='timetonextaction_hours' value='{$na_hours}' onclick='window.document.updateform.timetonextaction_none[0].checked = true;' size='3' /> {$GLOBALS['strHours']}&nbsp;";
     echo "<input maxlength='2' name='timetonextaction_minutes' id='timetonextaction_minutes' value='{$na_minutes}' onclick='window.document.updateform.timetonextaction_none[0].checked = true;' size='3' /> {$GLOBALS['strMinutes']}";
