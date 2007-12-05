@@ -181,8 +181,8 @@ function give_overview()
     echo "<th>{$GLOBALS['strActivity']}</th></tr>\n";
     // FIXME i18n Yesterday
     // FIXME i18n date ranges
-    echo stats_period_row("<a href='{$_SERVER['PHP_SELF']}?mode=daybreakdown&offset=0'>{$strToday}</a>", mktime(0,0,0,date('m'),date('d'),date('Y')),mktime(23,59,59,date('m'),date('d'),date('Y')));
-    echo stats_period_row("<a href='{$_SERVER['PHP_SELF']}?mode=daybreakdown&offset=1'>Yesterday</a>", mktime(0,0,0,date('m'),date('d')-1,date('Y')),mktime(23,59,59,date('m'),date('d')-1,date('Y')));
+    echo stats_period_row("<a href='{$_SERVER['PHP_SELF']}?mode=daybreakdown&offset=0'>{$GLOBALS['strToday']}</a>", mktime(0,0,0,date('m'),date('d'),date('Y')),mktime(23,59,59,date('m'),date('d'),date('Y')));
+    echo stats_period_row("<a href='{$_SERVER['PHP_SELF']}?mode=daybreakdown&offset=1'>{$GLOBALS['strYesterday']}</a>", mktime(0,0,0,date('m'),date('d')-1,date('Y')),mktime(23,59,59,date('m'),date('d')-1,date('Y')));
     echo stats_period_row("<a href='{$_SERVER['PHP_SELF']}?mode=daybreakdown&offset=2'>".date('l',mktime(0,0,0,date('m'),date('d')-2,date('Y')))."</a>", mktime(0,0,0,date('m'),date('d')-2,date('Y')),mktime(23,59,59,date('m'),date('d')-2,date('Y')));
     echo stats_period_row("<a href='{$_SERVER['PHP_SELF']}?mode=daybreakdown&offset=3'>".date('l',mktime(0,0,0,date('m'),date('d')-3,date('Y')))."</a>", mktime(0,0,0,date('m'),date('d')-3,date('Y')),mktime(23,59,59,date('m'),date('d')-3,date('Y')));
     echo stats_period_row("<a href='{$_SERVER['PHP_SELF']}?mode=daybreakdown&offset=4'>".date('l',mktime(0,0,0,date('m'),date('d')-4,date('Y')))."</a>", mktime(0,0,0,date('m'),date('d')-4,date('Y')),mktime(23,59,59,date('m'),date('d')-4,date('Y')));
