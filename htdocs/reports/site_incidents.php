@@ -18,10 +18,13 @@ require('auth.inc.php');
 
 $title = $strSiteIncidents;
 
-$startdate=$_REQUEST['start'];
-$enddate=$_REQUEST['end'];
+$startdate=cleanvar($_REQUEST['start']);
+$enddate=cleanvar($_REQUEST['end']);
 $mode=$_REQUEST['mode'];
 $zerologged=$_REQUEST['zerologged'];
+
+if (empty($startdate)) $startdate = date('Y-m-d');
+if (empty($enddate)) $enddate = date('Y-m-d');
 
 if(empty($mode))
 {
@@ -56,33 +59,37 @@ else
     $sql.= "WHERE sites.id=maintenance.site AND resellers.id=maintenance.reseller AND maintenance.term<>'yes' ORDER BY name";
     $result = mysql_query($sql);
     if (mysql_error()) trigger_error(mysql_error(),E_USER_ERROR);
-    $csv.="START:,{$startdate}";
-    $csv.="END:,{$enddate}";
-    while ($site = mysql_fetch_object($result))
+    if (mysql_num_rows($result) > 0)
     {
-        $sql = "SELECT count(incidents.id) AS incidentz, sites.name as site FROM contacts, sites, incidents ";
-        //$sql.= "WHERE contacts.siteid=sites.id AND sites.id={$site->id} AND incidents.opened > ($now-60*60*24*365.25) AND incidents.contact=contacts.id ";
-        $sql.= "WHERE contacts.siteid=sites.id AND sites.id={$site->id} AND incidents.opened >".strtotime($startdate)." AND incidents.closed < ".strtotime($enddate)." AND incidents.contact=contacts.id ";
-        $sql.= "GROUP BY site";
-        //echo $sql;
-        $sresult = mysql_query($sql);
-        if (mysql_error()) trigger_error(mysql_error(),E_USER_ERROR);
-        $details=mysql_fetch_object($sresult);
-        $count=1*($details->incidentz);
-        if(!empty($zerologged))
+        $csv.="START:,{$startdate}";
+        $csv.="END:,{$enddate}";
+        while ($site = mysql_fetch_object($result))
         {
-            $csv .="$count,'{$site->name},'{$site->resel}'\n";
+            $sql = "SELECT count(incidents.id) AS incidentz, sites.name as site FROM contacts, sites, incidents ";
+            //$sql.= "WHERE contacts.siteid=sites.id AND sites.id={$site->id} AND incidents.opened > ($now-60*60*24*365.25) AND incidents.contact=contacts.id ";
+            $sql.= "WHERE contacts.siteid=sites.id AND sites.id={$site->id} AND incidents.opened >".strtotime($startdate)." AND incidents.closed < ".strtotime($enddate)." AND incidents.contact=contacts.id ";
+            $sql.= "GROUP BY site";
+            //echo $sql;
+            $sresult = mysql_query($sql);
+            if (mysql_error()) trigger_error(mysql_error(),E_USER_ERROR);
+            $details=mysql_fetch_object($sresult);
+            $count=1*($details->incidentz);
+            if(!empty($zerologged))
+            {
+                $csv .="$count,'{$site->name},'{$site->resel}'\n";
+            }
+            else
+            {
+                if($count!=0) $csv .="$count,'{$site->name},'{$site->resel}'\n";
+            }
         }
-        else
-        {
-            if($count!=0) $csv .="$count,'{$site->name},'{$site->resel}'\n";
-        }
-    }
-    header("Content-type: text/csv\r\n");
-    header("Content-disposition-type: attachment\r\n");
-    header("Content-disposition: filename=yearly_incidents.csv");
-    echo "incidents, site, reseller\n";
-    echo $csv;
+        header("Content-type: text/csv\r\n");
+        header("Content-disposition-type: attachment\r\n");
+        header("Content-disposition: filename=yearly_incidents.csv");
+        echo "incidents, site, reseller\n";
+        echo $csv;
+    } else html_redirect('site_incidents.php', FALSE, $strNoResults);
+
 }
 
 ?>
