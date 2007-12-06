@@ -9,7 +9,7 @@
 //
 
 // Author: Ivan Lucas <ivanlucas[at]users.sourceforge.net>
-
+//FIXME i18n
 $permission=27; // View your calendar
 require('db_connect.inc.php');
 require('functions.inc.php');

@@ -118,13 +118,15 @@ if (empty($submit) OR !empty($_SESSION['formerrors']))
     echo "<tr><th>{$strAddress}:</th><td><label>";
     html_checkbox('dataprotection_address', 'No');
     echo " {$strAddress} {$strDataProtection}</label></td></tr>\n";
-    echo "<tr><th></th><td><label><input type='checkbox' name='usesiteaddress' value='yes' onclick='togglecontactaddress();' /> {$strSpecifyAddress}</label></td></tr>\n";
-    echo "<tr><th>{$strAddress1}:</th><td><input maxlength='255' name='address1' size='35' disabled='disabled' /></td></tr>\n";
-    echo "<tr><th>{$strAddress2}:</th><td><input maxlength='255' name='address2' size='35' disabled='disabled' /></td></tr>\n";
-    echo "<tr><th>{$strCity}:</th><td><input maxlength='255' name='city' size='35' disabled='disabled' /></td></tr>\n";
-    echo "<tr><th>{$strCounty}:</th><td><input maxlength='255' name='county' size='35' disabled='disabled' /></td></tr>\n";
-    echo "<tr><th>{$strCountry}:</th><td>".country_drop_down('country', $CONFIG['home_country'], "disabled='disabled'")."</td></tr>\n";
-    echo "<tr><th>{$strPostcode}:</th><td><input maxlength='255' name='postcode' size='35' disabled='disabled' /></td></tr>\n";
+    echo "<tr><th></th><td><label><input type='checkbox' name='usesiteaddress' value='yes' onclick=\"toggleDiv('hidden')\" /> {$strSpecifyAddress}</label></td></tr>\n";
+    echo "<tbody id='hidden' style='display:none'>";
+    echo "<tr><th>{$strAddress1}:</th><td><input maxlength='255' name='address1' size='35' /></td></tr>\n";
+    echo "<tr><th>{$strAddress2}:</th><td><input maxlength='255' name='address2' size='35' /></td></tr>\n";
+    echo "<tr><th>{$strCity}:</th><td><input maxlength='255' name='city' size='35' /></td></tr>\n";
+    echo "<tr><th>{$strCounty}:</th><td><input maxlength='255' name='county' size='35' /></td></tr>\n";
+    echo "<tr><th>{$strCountry}:</th><td>".country_drop_down('country', $CONFIG['home_country'])."</td></tr>\n";
+    echo "<tr><th>{$strPostcode}:</th><td><input maxlength='255' name='postcode' size='35' /></td></tr>\n";
+    echo "</tbody>";
     echo "<tr><th>{$strNotes}:</th><td><textarea cols='60' rows='5' name='notes'>";
     if($_SESSION['formdata']['notes'] != '')
         echo $_SESSION['formdata']['notes'];
