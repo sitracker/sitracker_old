@@ -5597,20 +5597,29 @@ function implode_assoc($glue1, $glue2, $array)
 
 /**
     * @author Kieran Hogg
+    * @param $name name of the html entity
+    * @param $time the time to set it to, format 12:34
 */
-function time_dropdown($name, $selected='')
+function time_dropdown($name, $time='')
 {
-    $html = "<select name='$name'>";
+    if($time)
+        $time = explode(':', $time);
+
+    $html = "<select name='$name'>\n";
     for($hours = 0; $hours < 24; $hours++)
     {
         for($mins = 0; $mins < 60; $mins+=15)
         {
             $hours = str_pad($hours, 2, "0", STR_PAD_LEFT);
             $mins = str_pad($mins, 2, "0", STR_PAD_RIGHT);
-            if("$hours:$mins" == $selected)
-                $html .= "<option selected='selected' value='$hours:$mins'>$hours:$mins</option>";
-            else
-                $html .= "<option value='$hours:$mins'>$hours:$mins</option>";
+
+            if($time AND $time[0] == $hours AND $time[1] == $mins)
+                //$html .= "<option selected='selected' value='$hours:$mins'>$hours:$mins</option>";
+                $i;
+            elseif($time AND $time[0] == $hours AND $time[1] < $mins AND $time[1] > ($mins - 15))
+                $html .= "<option selected='selected' value='$time[0]:$time[1]'>$time[0]:$time[1]</option>\n";
+
+            $html .= "<option value='$hours:$mins'>$hours:$mins</option>\n";
         }
     }
     $html .= "</select>";
