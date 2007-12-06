@@ -9,13 +9,14 @@
 //
 
 $permission=37; // Run Reports
-$title='Number of incidents per site';
+
 require('db_connect.inc.php');
 require('functions.inc.php');
 
 // This page requires authentication
 require('auth.inc.php');
 
+$title = $strSiteIncidents;
 
 $startdate=$_REQUEST['start'];
 $enddate=$_REQUEST['end'];
@@ -26,7 +27,7 @@ if(empty($mode))
 {
     include('htmlheader.inc.php');
 
-    echo "<h2>Incidents by site</h2>";
+    echo "<h2>{$title}</h2>";
 
     echo "<form name='date' action='".$_SERVER['PHP_SELF']."?mode=run' method='post'>";
     echo "<table class='vertical'>";
