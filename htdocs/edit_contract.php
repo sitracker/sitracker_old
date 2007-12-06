@@ -82,11 +82,15 @@ if ($action == "edit")
         echo "<table align='center' class='vertical'>";
         echo "<tr><th>{$strSite}: <sup class='red'>*</sup></th><td>";
         echo site_name($maint["site"]). "</td></tr>";
-        echo "<tr><th>{$strContacts}:</th><td><input value='amount' type='radio' name='contacts' checked>{$strLimitTo} <input size='2' value='$maint[supportedcontacts]' name='amount'> {$strSupportedContacts} ({$str0MeansUnlimited})<br />";
-  	echo "<input type='radio' value='all' name='contacts'";
-        if($maint[allcontactssupported] == 'Yes')
-        echo 'checked';
-        echo ">{$strAllSiteContactsSupported}</td></tr>";
+        // TODO all supportedcontacts disabled for 3.31 release
+        echo "<tr><th>{$strContacts}:</th><td>";
+        echo "<input type='hidden' name ='contacts' value='amount' />";
+        // echo "<input value='amount' type='radio' name='contacts' checked='checked' />";
+        echo "{$strLimitTo} <input size='2' value='$maint[supportedcontacts]' name='amount' /> {$strSupportedContacts} ({$str0MeansUnlimited})<br />";
+        //         echo "<input type='radio' value='all' name='contacts'";
+        //         if($maint[allcontactssupported] == 'Yes')
+        //         echo "checked='checked'";
+        //         echo " />{$strAllSiteContactsSupported}</td></tr>";
         echo "<tr><th>{$strProduct}: <sup class='red'>*</sup></th><td>";
         $productname=product_name($maint["product"]);
         if (user_permission($sit[2], 22))
@@ -103,9 +107,9 @@ if ($action == "edit")
         if ($maint['expirydate'] > 0) echo date('Y-m-d',$maint['expirydate']);
         echo "' /> ".date_picker('maintform.expirydate');
         if($maint['expirydate'] == '-1')
-            echo "<input type='checkbox' checked name='noexpiry'> {$strUnlimited}";
+            echo "<input type='checkbox' checked='checked' name='noexpiry' /> {$strUnlimited}";
         else
-            echo "<input type='checkbox' name='noexpiry'> {$strUnlimited}";
+            echo "<input type='checkbox' name='noexpiry' /> {$strUnlimited}";
         echo "</td></tr>\n";
         echo "<tr><th>{$strServiceLevel}:</th><td>";
         echo servicelevel_drop_down('servicelevelid',$maint['servicelevelid'], TRUE);
@@ -144,6 +148,7 @@ if ($action == "edit")
         if ($maint["productonly"] == "yes") echo " checked";
         echo " /></td></tr>\n";
 
+        echo "</tbody>";
         echo "</table>\n";
         echo "<input name='maintid' type='hidden' value='{$maintid}' />";
         echo "<p align='center'><input name='submit' type='submit' value='{$strSave}' /></p>";

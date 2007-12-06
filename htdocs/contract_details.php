@@ -98,7 +98,7 @@ else
         while ($supportedrow=mysql_fetch_array($result))
         {
             echo "<tr><th>{$strContact} #$supportcount:</th><td><img src='{$CONFIG['application_webpath']}images/icons/{$iconset}/16x16/contact.png' width='16' height='16' alt='' /> ";
-            echo "<a href=\"contact_details.php?id=".$supportedrow['contactid']."\">".$supportedrow['forenames'].' '.$supportedrow['surname'])."</a>, ";
+            echo "<a href=\"contact_details.php?id={$supportedrow['contactid']}\">{$supportedrow['forenames']} {$supportedrow['surname']}</a>, ";
             echo contact_site($supportedrow['contactid']). "</td>";
             echo "<td><a href=\"delete_maintenance_support_contact.php?contactid=".$supportedrow['contactid']."&amp;maintid=$id&amp;context=maintenance\">{$strRemove}</a></td></tr>\n";
             $supportcount++;
