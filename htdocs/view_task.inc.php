@@ -56,13 +56,13 @@ if (mysql_num_rows($result) >= 1)
         echo "</td></tr>";
         echo "<tr><th>{$strDueDate}</th>";
         echo "<td>";
-        if ($duedate > 0) echo date('Y-m-d',$duedate);
+        if ($duedate > 0) echo date($CONFIG['dateformat_datetime'],$duedate);
         echo "</td></tr>";
         echo "<tr><th>{$strCompletion}</th>";
         echo "<td>".percent_bar($task->completion)."</td></tr>";
         echo "<tr><th>{$strEndDate}</th>";
         echo "<td>";
-        if ($enddate > 0) echo date('Y-m-d',$enddate);
+        if ($enddate > 0) echo date($CONFIG['dateformat_datetime'],$enddate);
         echo "</td></tr>";
         echo "<tr><th>{$strValue}</th>";
         echo "<td>{$task->value}</td></tr>";
