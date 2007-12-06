@@ -227,7 +227,8 @@ while ($incidents = mysql_fetch_array($result))
     if(empty($incidents_minimal))
     {
         echo "<td align='center'>";
-        echo incidentstatus_name($incidents["status"]);
+        if ($incidents['status']==5 AND $incidents['towner']==$user) echo "<strong>Awaiting Your Response</strong>"; // FIXME i18n Awaiting Your Response
+        else echo incidentstatus_name($incidents["status"]);
         if ($incidents['status']==2) echo "<br />".closingstatus_name($incidents['closingstatus']);
         echo "</td>\n";
     }
