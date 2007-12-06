@@ -113,7 +113,7 @@ else
             echo "<tr><th>{$strStartDate}</th>";
             echo "<td><input type='text' name='startdate' id='startdate' size='10' /> ";
             echo date_picker('addtask.startdate');
-            echo " ".time_dropdown("starttime");
+            echo " ".time_dropdown("starttime", date("H:i"));
             echo "</td></tr>";
             echo "<tr><th>{$strDueDate}</th>";
             echo "<td><input type='text' name='duedate' id='duedate' size='10' /> ";
