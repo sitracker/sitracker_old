@@ -68,6 +68,8 @@ if (empty($submit))
     echo "</table>\n";
     echo "<p><input name='submit' type='submit' value=\"{$strAddUser}\" /></p>";
     echo "</form>\n";
+    include('htmlfooter.inc.php');
+
 }
 else
 {
@@ -169,5 +171,4 @@ else
         }
     }
 }
-include('htmlfooter.inc.php');
 ?>
