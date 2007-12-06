@@ -13,12 +13,14 @@
 // This Page Is Valid XHTML 1.0 Transitional!   15Mar06
 
 $permission=37; // Run Reports
-$title='Yearly Incident Report';
+
 require('db_connect.inc.php');
 require('functions.inc.php');
 
 // This page requires authentication
 require('auth.inc.php');
+
+$title = $strIncidentsBySite;
 
 if (empty($_REQUEST['mode']))
 {
