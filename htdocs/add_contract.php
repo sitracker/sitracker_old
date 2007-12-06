@@ -42,17 +42,23 @@ if ($action == "showform" OR $action=='')
     echo "<form name='addcontract' action='{$_SERVER['PHP_SELF']}?action=add' method='post' onsubmit='return confirm_submit();'>";
     echo "<table align='center' class='vertical'>";
     echo "<tr><th>{$strSite}: <sup class='red'>*</sup></th><td>".site_drop_down("site", $siteid)." </td></tr>\n";
-    echo "<tr><th>{$strContacts}:<sup class='red'>*</sup></th><td><input value='amount' type='radio' name='contacts' checked>{$strLimitTo} <input size='2' value='0' name='amount'> {$strSupportedContacts} ({$str0MeansUnlimited})<br />";
-     echo "<input type='radio' value='all' name='contacts'>{$strAllSiteContactsSupported}</td></tr>";
-     echo "<tr><th>{$strProduct}: <sup class='red'>*</sup></th><td>".product_drop_down("product", 0)."</td></tr>\n";
+    echo "<tr><th>{$strContacts}:<sup class='red'>*</sup></th><td>";
+    // TODO all supportedcontacts disabled for 3.31 release
+    // echo "<input value='amount' type='radio' name='contacts' checked='checked' />";
+    echo "<input type='hidden' name ='contacts' value='amount' />";
+    echo "{$strLimitTo} <input size='2' value='0' name='amount' /> {$strSupportedContacts} ({$str0MeansUnlimited})<br />";
+    // echo "<input type='radio' value='all' name='contacts' />";
+    // echo "{$strAllSiteContactsSupported}";
+    echo "</td></tr>";
+    echo "<tr><th>{$strProduct}: <sup class='red'>*</sup></th><td>".product_drop_down("product", 0)."</td></tr>\n";
     echo "<tr><th>{$strExpiryDate}: <sup class='red'>*</sup></th>";
-    echo "<td><input name='expiry' size='10' /> ".date_picker('addcontract.expiry')." <input type='checkbox' name='noexpiry'> {$strUnlimited}</td></tr>\n";
+    echo "<td><input name='expiry' size='10' /> ".date_picker('addcontract.expiry')." <input type='checkbox' name='noexpiry' /> {$strUnlimited}</td></tr>\n";
     echo "<tr><th>{$strServiceLevel}:</th><td>".servicelevel_drop_down('servicelevelid', 1, TRUE)."</td></tr>\n";
 
     echo "<tr><th>{$strAdminContact}: <sup class='red'>*</sup></th><td>".contact_drop_down("admincontact", 0, true)."</td></tr>\n";
     echo "<tr><th>{$strNotes}:</th><td><textarea cols='40' name='notes' rows='5'></textarea></td></tr>\n";
 
-    echo "<tr><th></th><td><a href=\"javascript:toggleDiv('hidden');\">{$strAdvanced}</a></td></tr>";
+    echo "<tr><th></th><td><a href=\"javascript:toggleDiv('hidden');\">{$strAdvanced}</a></td></tr>\n";
 
     echo "<tbody id='hidden' style='display:none'>";
 
