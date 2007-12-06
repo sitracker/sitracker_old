@@ -5606,6 +5606,7 @@ function time_dropdown($name, $time='')
         $time = explode(':', $time);
 
     $html = "<select name='$name'>\n";
+    $html .= "<option></option>";
     for($hours = 0; $hours < 24; $hours++)
     {
         for($mins = 0; $mins < 60; $mins+=15)
@@ -5615,10 +5616,13 @@ function time_dropdown($name, $time='')
 
             if($time AND $time[0] == $hours AND $time[1] == $mins)
                 $html .= "<option selected='selected' value='$hours:$mins'>$hours:$mins</option>";
-            elseif($time AND $time[0] == $hours AND $time[1] < $mins AND $time[1] > ($mins - 15))
-                $html .= "<option selected='selected' value='$time[0]:$time[1]'>$time[0]:$time[1]</option>\n";
-
-            $html .= "<option value='$hours:$mins'>$hours:$mins</option>\n";
+            else
+            {
+                if($time AND $time[0] == $hours AND $time[1] < $mins AND $time[1] > ($mins - 15))
+                    $html .= "<option selected='selected'           value='$time[0]:$time[1]'>$time[0]:$time[1]</option>\n";
+                else
+                    $html .= "<option value='$hours:$mins'>$hours:$mins</option>\n";
+            }
         }
     }
     $html .= "</select>";
