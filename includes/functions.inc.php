@@ -5644,17 +5644,17 @@ function fuzzy_time($seconds)
 {
     //TODO
     if($seconds < 0) $time = 'Error';
-    elseif($seconds > 0 AND $seconds < 60) $time = 'JustNow';
-    elseif($seconds > 60 AND $seconds < 5 * 60) $time = 'A Few Minutes Ago';
+    elseif($seconds > 0 AND $seconds < 60) $time = 'Just Now'; // FIXME i18n JustNow
+    elseif($seconds > 60 AND $seconds < 5 * 60) $time = 'A Few Minutes Ago'; // FIXME i18n A few minutes ago
     elseif($seconds > 5 * 60 AND $seconds < 30 * 60)
     {
         $seconds = 5 * round($seconds / (5 * 60));
-        $time ="About {$seconds} Mins Ago";
+        $time ="About {$seconds} Mins Ago"; // FIXME i18n About x mins ago
     }
     elseif($seconds > 30 * 60 AND $seconds < 2 * 60 * 60)
     {
         $hours = floor($seconds / (60 * 60));
-        echo "Over {$hours} hours ago";
+        echo "Over {$hours} hours ago"; // FIXME i18n over x hours ago
     }
     return $time;
 }
