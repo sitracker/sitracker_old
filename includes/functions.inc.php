@@ -5698,7 +5698,22 @@ function user_online($user)
         return "<img src='{$CONFIG['application_webpath']}images/icons/{$iconset}/16x16/offline.png' width='16' height='16' alt=\"{$strOffline}\" /> ";
 }
 
-
+/**
+    * Shows errors form a form, if any
+    * @author Kieran Hogg
+    * @returns string. HTML of the errors
+*/
+function show_errors()
+{
+    if($_SESSION['formerrors'])
+    {
+        foreach($_SESSION['formerrors'] as $error)
+        {
+            $html.= "<p class='error'>$error</p>";
+        }
+    }
+    return $html;
+}
 
 // -------------------------- // -------------------------- // --------------------------
 // leave this section at the bottom of functions.inc.php ================================
