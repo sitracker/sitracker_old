@@ -35,10 +35,11 @@ if (empty($submit))
     </script>
 
     <?php
+    echo show_errors();
     echo "<h2>{$strAddVendor}</h2>";
     echo "<h5>".sprintf($strMandatoryMarked,"<sup class='red'>*</sup>")."</h5>";
     echo "<form action='{$_SERVER['PHP_SELF']}' method='post' onsubmit='return confirm_submit()'>";
-    echo "<table align='center'>";
+    echo "<table align='center' class='vertical'>";
     echo "<tr><th>{$strVendor}: <sup class='red'>*</sup></th><td><input maxlength='50' name='name' size='30' /></td></tr>\n";
     echo "</table>";
     echo "<p align='center'><input name='submit' type='submit' value=\"{$strSave}\" /></p>";
@@ -51,15 +52,15 @@ else
 {
     // External variables
     $name = cleanvar($_REQUEST['name']);
-
+    $_SESSION['formdata'] = $_REQUEST;
     // Add new
     $errors = 0;
 
     // check for blank name
     if ($name == "")
     {
-        $errors = 1;
-        $errors_string .= "<p class='error'>You must enter a name</p>\n";
+        $errors++;
+        $_SESSION['formerrors']['name'] = "You must enter a name";
     }
 
     // add product if no errors
@@ -76,12 +77,13 @@ else
             journal(CFG_LOGGING_DEBUG, 'Vendor Added', "Vendor $id was added", CFG_JOURNAL_DEBUG, $id);
             html_redirect("products.php");
         }
+        $_SESSION['formdata'] = NULL;
+        $_SESSION['formerrors'] = NULL;
     }
     else
     {
         include('htmlheader.inc.php');
-        echo $errors_string;
-        include('htmlfooter.inc.php');
+        html_redirect("add_vendor.php", FALSE);
     }
 }
 ?>
