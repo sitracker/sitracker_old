@@ -38,14 +38,7 @@ if (empty($submit) OR !empty($_SESSION['formerrors']))
     echo "<h2><img src='{$CONFIG['application_webpath']}images/icons/{$iconset}/32x32/contact.png' width='32' height='32' alt='' /> ";
     echo "{$strNewContact}</h2>";
 
-    //show errors
-    if($_SESSION['formerrors'])
-    {
-        foreach($_SESSION['formerrors'] as $error)
-        {
-            echo "<p class='error'>$error</p>";
-        }
-    }
+    echo show_errors();
 
     //cleanup errors
     $_SESSION['formerrors'] = NULL;

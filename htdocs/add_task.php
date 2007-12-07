@@ -193,6 +193,7 @@ else
             echo "<input type='hidden' name='action' value='addtask' />";
             echo "</form>";
             
+            //cleanup form vars
             $_SESSION['formdata'] = NULL;
             
             include('htmlfooter.inc.php');
