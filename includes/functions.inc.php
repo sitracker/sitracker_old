@@ -5701,7 +5701,7 @@ function user_online($user)
 /**
     * Shows errors form a form, if any
     * @author Kieran Hogg
-    * @returns string. HTML of the errors
+    * @returns string. HTML of the form errors stored in the users session
 */
 function show_errors()
 {
