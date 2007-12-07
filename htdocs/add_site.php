@@ -36,7 +36,7 @@ if ($action == "showform" OR $action == '')
     echo "{$strNewSite}</h2>";
     echo "<h5>".sprintf($strMandatoryMarked, "<sup class='red'>*</sup>")."</h5>";
     echo "<form action='{$_SERVER['PHP_SELF']}?action=add' method='post' onsubmit='return confirm_submit();'>";
-    echo "<table align='center'>";
+    echo "<table align='center' class='vertical'>";
     echo "<tr><th>{$strName}: <sup class='red'>*</sup></th><td><input maxlength='255' name='name' size='30' /></td></tr>\n";
     echo "<tr><th>{$strDepartment}: <sup class='red'>*</sup></th><td><input maxlength='255' name='department' size='30' /></td></tr>\n";
     echo "<tr><th>{$strAddress1}:<sup class='red'>*</sup></th><td><input maxlength='255' name='address1' size='30' /></td></tr>\n";
