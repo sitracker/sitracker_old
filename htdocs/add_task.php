@@ -64,21 +64,21 @@ else
             $duetime = cleanvar($_REQUEST['duetime']);
             $endtime = cleanvar($_REQUEST['endtime']);
 
+            $_SESSION['formdata'] = $_REQUEST;
+
             // Validate input
-            $error=array();
-            if ($name=='') $error[]='Task name must not be blank';
+            $errors = 0;
+            if ($name=='')
+            {
+                $_SESSION['formerrors']['name'] = "Incident title must not be blank";
+                $errors++;
+            }
+
             if ($startdate > $duedate AND $duedate != '' AND $duedate > 0 ) $startdate=$duedate. " ".$duetime;
-            if (count($error) >= 1)
+            if ($errors != 0)
             {
                 include('htmlheader.inc.php');
-                echo "<p class='error'>$strPleaseCheckData</p>";
-                echo "<ul class='error'>";
-                foreach ($error AS $err)
-                {
-                    echo "<li>$err</li>";
-                }
-                echo "</ul>";
-                include('htmlfooter.inc.php');
+                html_redirect("add_task.php", FALSE);
             }
             else
             {
@@ -93,6 +93,8 @@ else
                 mysql_query($sql);
                 if (mysql_error()) trigger_error(mysql_error(),E_USER_ERROR);
                 if (mysql_affected_rows() < 1) trigger_error("Task insert failed",E_USER_ERROR);
+                $_SESSION['formdata'] = NULL;
+                $_SESSION['formerrors'] = NULL;
                 html_redirect("tasks.php");
             }
         break;
@@ -102,26 +104,59 @@ else
             include('htmlheader.inc.php');
             echo "<h2><img src='{$CONFIG['application_webpath']}images/icons/{$iconset}/32x32/task.png' width='32' height='32' alt='' /> ";
             echo "$title</h2>";
+            
+            echo show_errors();
+
+            //cleanup errors
+            $_SESSION['formerrors'] = NULL;
+            
             echo "<form id='addtask' action='{$_SERVER['PHP_SELF']}' method='post'>";
             echo "<table class='vertical'>";
-            echo "<tr><th>{$strTitle}</th>";
-            echo "<td><input type='text' name='name' size='35' maxlength='255' /></td></tr>";
+            echo "<tr><th>{$strTitle} <sup class='red'>*</sup></th>";
+            echo "<td><input type='text' name='name' size='35' maxlength='255'";
+            if($_SESSION['formdata']['name'] != '')
+                echo "value='{$_SESSION['formdata']['name']}'";
+            echo "/></td></tr>";
+            
             echo "<tr><th>{$strDescription}</th>";
-            echo "<td><textarea name='description' rows='4' cols='30'></textarea></td></tr>";
+            echo "<td><textarea name='description' rows='4' cols='30'>";
+            if($_SESSION['formdata']['description'] != '')
+                echo $_SESSION['formdata']['description'];
+            echo "</textarea></td></tr>";
+            
             echo "<tr><th>{$strPriority}</th>";
-            echo "<td>".priority_drop_down('priority',1)."</td></tr>";
+            if($_SESSION['formdata']['priority'] != '')
+                echo "<td>".priority_drop_down('priority', $_SESSION['formdata']['priority'])."</td></tr>";
+            else
+                echo "<td>".priority_drop_down('priority',1)."</td></tr>";
             echo "<tr><th>{$strStartDate}</th>";
-            echo "<td><input type='text' name='startdate' id='startdate' size='10' /> ";
+            echo "<td><input type='text' name='startdate' id='startdate' size='10'";
+            if($_SESSION['formdata']['startdate'] != '')
+                echo "value='{$_SESSION['formdata']['startdate']}'";
+            echo "/> ";
             echo date_picker('addtask.startdate');
             echo " ".time_dropdown("starttime", date("H:i"));
             echo "</td></tr>";
+            
             echo "<tr><th>{$strDueDate}</th>";
-            echo "<td><input type='text' name='duedate' id='duedate' size='10' /> ";
+            echo "<td><input type='text' name='duedate' id='duedate' size='10'";
+            if($_SESSION['formdata']['duedate'] != '')
+                echo "value='{$_SESSION['formdata']['duedate']}'";
+            echo "/> ";
             echo date_picker('addtask.duedate');
-            echo " ".time_dropdown("duetime");
+            if($_SESSION['formdata']['duetime'] != '')
+                echo " ".time_dropdown("duetime", $_SESSION['formdata']['duetime']);
+            else
+                echo " ".time_dropdown("duetime");
             echo "</td></tr>";
+            
             echo "<tr><th>{$strCompletion}</th>";
-            echo "<td><input type='text' name='completion' size='3' maxlength='3' value='0' />&#037;</td></tr>";
+            echo "<td><input type='text' name='completion' size='3' maxlength='3'";;
+            if($_SESSION['formdata']['completion'] != '')
+                echo "value='{$_SESSION['formdata']['completion']}'";
+            else
+                echo "value='0'";
+            echo "/>&#037;</td></tr>";
             //FIXME: should this be available?
             /*echo "<tr><th>{$strEndDate}</th>";
             echo "<td><input type='text' name='enddate' id='enddate' size='10' /> ";
@@ -129,18 +164,37 @@ else
             echo " ".time_dropdown("endtime");
             echo "</td></tr>";*/
             echo "<tr><th>{$strValue}</th>";
-            echo "<td><input type='text' name='value' size='6' maxlength='12' /></td></tr>";
+            echo "<td><input type='text' name='value' size='6' maxlength='12'";
+            if($_SESSION['formdata']['value'] != '')
+                echo "value='{$_SESSION['formdata']['value']}'";
+            echo "/></td></tr>";
             echo "<tr><th>{$strUser}</th>";
             echo "<td>";
-            echo user_drop_down('taskuser', $sit[2], FALSE);
+            if($_SESSION['formdata']['taskuser'] != '')
+                echo user_drop_down('taskuser', $_SESSION['formdata']['taskuser'], FALSE);
+            else
+                echo user_drop_down('taskuser', $sit[2], FALSE);
             echo "</td></tr>";
             echo "<tr><th>{$strPrivacy}</th>";
-            echo "<td><input type='radio' name='distribution' value='public' /> {$strPublic}<br />";
-            echo "<input type='radio' name='distribution' checked='checked' value='private' /> {$strPrivate} </td></tr>";
+            echo "<td>";
+            if($_SESSION['formdata']['distribution'] == 'public')
+            {
+                echo "<input type='radio' name='distribution' checked='checked'value='public' /> {$strPublic}<br />";
+                echo "<input type='radio' name='distribution' value='private' /> {$strPrivate} </td></tr>";
+            }
+            
+            else
+            {
+                echo "<input type='radio' name='distribution' value='public' /> {$strPublic}<br />";
+                echo "<input type='radio' name='distribution' checked='checked' value='private' /> {$strPrivate} </td></tr>";
+            }
             echo "</table>";
             echo "<p><input name='submit' type='submit' value='{$strAddTask}' /></p>";
             echo "<input type='hidden' name='action' value='addtask' />";
             echo "</form>";
+            
+            $_SESSION['formdata'] = NULL;
+            
             include('htmlfooter.inc.php');
     }
 }
