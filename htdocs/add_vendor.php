@@ -40,7 +40,7 @@ if (empty($submit))
     echo "<h5>".sprintf($strMandatoryMarked,"<sup class='red'>*</sup>")."</h5>";
     echo "<form action='{$_SERVER['PHP_SELF']}' method='post' onsubmit='return confirm_submit()'>";
     echo "<table align='center' class='vertical'>";
-    echo "<tr><th>{$strVendor}: <sup class='red'>*</sup></th><td><input maxlength='50' name='name' size='30' /></td></tr>\n";
+    echo "<tr><th>{$strVendor}<sup class='red'>*</sup></th><td><input maxlength='50' name='name' size='30' /></td></tr>\n";
     echo "</table>";
     echo "<p align='center'><input name='submit' type='submit' value=\"{$strSave}\" /></p>";
     echo "<p class='warning'>{$strAvoidDupes}</p>";
