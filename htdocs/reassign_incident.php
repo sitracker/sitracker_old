@@ -49,19 +49,28 @@ switch ($action)
 
         // Update incident
         $sql = "UPDATE incidents SET ";
-        if ($temporary=='yes') $sql .= "towner='{$userid}', ";
-        elseif ($temporary != 'yes' AND $incident->towner > 0 AND $sit[2]==$incident->owner) $sql .= "owner='{$sit[2]}', towner=0, "; // make current user = owner
+        if ($temporary != 'yes' AND $incident->towner > 0 AND $sit[2]==$incident->owner) $sql .= "owner='{$sit[2]}', towner=0, "; // make current user = owner
         elseif ($temporary != 'yes' AND $sit[2]==$incident->towner) $sql .= "towner=0, "; // temp owner removing temp ownership
-        elseif ($temporary == 'yes' AND $userid=$incident->owner) $sql .= "owner='{$userid}', towner=0, ";
+        elseif ($temporary == 'yes' AND $incident->towner < 1 AND $sit[2]!=$incident->owner) $sql .= "towner={$sit[2]}, "; // Temp to self
+        elseif ($temporary == 'yes' AND $userid==$incident->owner) $sql .= "owner='{$userid}', towner=0, ";
+        elseif ($temporary=='yes') $sql .= "towner='{$userid}', ";
         else  $sql .= "owner='{$userid}', ";
         $sql .= "status='$newstatus', lastupdated='$now' WHERE id='$id' LIMIT 1";
         $result = mysql_query($sql);
         if (mysql_error()) trigger_error("MySQL Query Error ".mysql_error(), E_USER_ERROR);
+//         if ($CONFIG['debug'])
+//         {
+//             echo "<pre>";
+//                 print_r($_REQUEST);
+//                 print_r($incident);
+//                 echo "<hr>$sql";
+//                 exit;
+//         }
 
         // add update
         if (strtolower(user_accepting($userid)) != "yes")
         {
-            $bodytext = "(Incident assignment was forced because the user was not accepting)<hr>\n" . $bodytext;   // FIXME i18n
+            $bodytext = "(Incident assignment was forced because the user was not accepting)<hr>\n" . $bodytext;   // FIXME i18n forced assign bodytext
         }
 
         if ($temporary=='yes') $assigntype = 'tempassigning';
@@ -72,14 +81,14 @@ switch ($action)
 
         $sql  = "INSERT INTO updates (incidentid, userid, bodytext, type, timestamp, currentowner, currentstatus, customervisibility) ";
         $sql .= "VALUES ($id, $sit[2], '$bodytext', '$assigntype', '$now', ";
-        if ($temporary=='yes') $sql .= "'{$userid}', ";
-        elseif ($temporary != 'yes' AND $incident->towner > 0 AND $sit[2]==$incident->owner) $sql .= "'{$sit[2]}', ";
+        if ($temporary != 'yes' AND $incident->towner > 0 AND $sit[2]==$incident->owner) $sql .= "'{$sit[2]}', ";
         elseif ($temporary != 'yes' AND $sit[2]==$incident->towner)  $sql .= "'{$incident->owner}', ";
+        elseif ($temporary == 'yes' AND $incident->towner < 1 AND $sit[2]!=$incident->owner) $sql .= "'{$sit[2]}', ";
+        elseif ($temporary=='yes') $sql .= "'{$userid}', ";
         else $sql .= "'{$userid}', ";
         $sql .= "'$newstatus', '$customervisibility')";
         $result = mysql_query($sql);
         if (mysql_error()) trigger_error("MySQL Query Error ".mysql_error(), E_USER_ERROR);
-//         echo "<p>$sql</p>";
 
         // Remove any tempassigns that are pending for this incident
         $sql = "DELETE FROM tempassigns WHERE incidentid='$id'";
@@ -260,6 +269,12 @@ switch ($action)
             echo "<label><input type='radio' name='temporary' value='yes' checked='checked' onchange=\"$('reassignlist').show();\" /> {$strChangeTemporaryOwner}</label>";
             echo "<label><input type='radio' name='temporary' value='no' onchange=\"$('reassignlist').hide();\" /> {$strRemoveTemporaryOwner}</label> ";
             echo "</td></tr>\n";
+        }
+        elseif ($incident->towner < 1 AND $sit[2] != $incident->owner)
+        {
+            echo "<tr><th>{$strTemporaryOwner}:</th><td>";
+            echo "<label><input type='checkbox' name='temporary' value='yes' onchange=\"$('reassignlist').toggle();\" /> ";
+            echo "{$strAssignTemporarily} to <strong>{$strYou}</strong> ({$_SESSION['realname']})</label>";
         }
         else
         {
