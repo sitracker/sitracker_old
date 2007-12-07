@@ -1319,8 +1319,15 @@ function supported_product_drop_down($name, $contactid, $productid)
 }
 
 
-//  prints the HTML for a drop down list of  users, with the given name and with the given id selected.
-// $accepting - when true displays the accepting status
+/**
+    * prints the HTML for a drop down list of  users, with the given name and with the given id selected.
+    * @author Ivan Lucas
+    * @param $name string. Name attribute
+    * @param $id integer. User ID to pre-select
+    * @param $accepting boolean. when true displays the accepting status
+    * @param $exclude integer. User ID not to list
+    * @param $attribs string. Extra attributes for the select control
+*/
 function user_drop_down($name, $id, $accepting=TRUE, $exclude=FALSE, $attribs="")
 {
     // INL 1Jul03 Now only shows users with status > 0 (ie current users)
