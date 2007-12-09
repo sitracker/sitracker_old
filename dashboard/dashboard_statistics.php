@@ -1,4 +1,15 @@
 <?php
+// dashboard_statistics.php - Display summary statistics on the dashboard
+//
+// SiT (Support Incident Tracker) - Support call tracking system
+// Copyright (C) 2000-2007 Salford Software Ltd. and Contributors
+//
+// This software may be used and distributed according to the terms
+// of the GNU General Public License, incorporated herein by reference.
+//
+// Authors: Paul Heaney <paulheaney[at]users.sourceforge.net>
+//          Ivan Lucas <ivanlucas[at]users.sourceforge.net>
+
 
 $dashboard_statistics_version = 1;
 
