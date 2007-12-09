@@ -9,14 +9,20 @@
 //
 // This Page Is Valid XHTML 1.0 Transitional! 31Oct05
 
-// Since this is the first page people will visit check if the include path is correct
-if (($fp = @fopen($filename, 'r', 1)) and fclose($fp) == FALSE)
+if (version_compare(PHP_VERSION, "5.0.0", ">="))
 {
-    header("Location: setup.php");
-    exit;
+    try
+    {
+        if (!@include('db_connect.inc.php')) throw new Exception('Failed to include essential file, include path is probably wrong');
+    }
+    catch (Exception $e)
+    {
+        header("Location: setup.php");
+        exit;
+        // print $e->getMessage();
+    }
 }
-
-require('db_connect.inc.php');
+else require('db_connect.inc.php');
 
 session_name($CONFIG['session_name']);
 session_start();
