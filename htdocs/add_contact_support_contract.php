@@ -28,12 +28,12 @@ if (empty($action) || $action == "showform")
 {
     $title="Associate person with Contract";
     include('htmlheader.inc.php');
-    ?>
-    <h2>Link a contract with a support contact</h2>
-    <form action="<?php echo $_SERVER['PHP_SELF'] ?>?action=add" method="post">
-    <input type="hidden" name="context" value="<?php echo $context ?>" />
-    <table align='center' class='vertical'>
-    <?php
+    //TODO i18n
+    echo "<h2>Link a contract with a support contact</h2>";
+    echo "<form action='{$_SERVER['PHP_SELF']}?action=add' method='post'>";
+    echo "<input type='hidden' name='context' value='{$context}' />";
+    echo "<table align='center' class='vertical'>";
+
     if (empty($maintid))
     {
         echo "<tr><th>Contract <img src='{$CONFIG['application_webpath']}images/icons/{$iconset}/16x16/contract.png' width='16' height='16' alt='' /></th>";
@@ -88,6 +88,16 @@ else if ($action == "add")
         $errors_string .= "<p class='error'>Something weird has happened, better call technical support</p>\n";
     }
 
+    $sql = "SELECT * FROM supportcontacts WHERE maintenanceid = '{$maintid}' AND contactid = '{$contactid}'";
+    $result = mysql_query($sql);
+    if (mysql_error()) trigger_error(mysql_error(),E_USER_ERROR);
+
+    if(mysql_num_rows($result) > 0)
+    {
+        $errors = 1;
+        $errors_string .= "<p class='error'>A contact can only be listed once per support contract</p>\n";
+    }
+
     // add maintenance support contact if no errors
     if ($errors == 0)
     {
@@ -109,12 +119,13 @@ else if ($action == "add")
             else html_redirect("contract_details.php?id=$maintid");
         }
     }
-
-    // show error message if errors
     else
     {
+        // show error message if errors
         include('htmlheader.inc.php');
         echo $errors_string;
+
+        echo "<p align='center'><a href='contract_details.php?id={$maintid}'>Return</a></p>";
         include('htmlfooter.inc.php');
     }
 }
