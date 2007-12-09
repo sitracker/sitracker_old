@@ -539,7 +539,6 @@ else
 {
     // Update the incident
 
-    $time = time();
     // External variables
     $target = cleanvar($_POST['target']);
     $updatetype = cleanvar($_POST['updatetype']);
@@ -638,18 +637,18 @@ else
     if ($cust_vis == "yes")
     {
         $sql  = "INSERT INTO updates (incidentid, userid, type, bodytext, timestamp, currentstatus, customervisibility, nextaction) ";
-        $sql .= "VALUES ('$id', '$sit[2]', '$updatetype', '$bodytext', '$time', '$newstatus', 'show' , '$nextaction')";
+        $sql .= "VALUES ('$id', '$sit[2]', '$updatetype', '$bodytext', '$now', '$newstatus', 'show' , '$nextaction')";
     }
     // invisible update
     else
     {
         $sql  = "INSERT INTO updates (incidentid, userid, type, bodytext, timestamp, currentstatus, nextaction) ";
-        $sql .= "VALUES ($id, $sit[2], '$updatetype', '$bodytext', $time, '$newstatus', '$nextaction')";
+        $sql .= "VALUES ($id, $sit[2], '$updatetype', '$bodytext', '$now', '$newstatus', '$nextaction')";
     }
     $result = mysql_query($sql);
     if (mysql_error()) trigger_error("MySQL Query Error ".mysql_error(), E_USER_ERROR);
 
-    $sql = "UPDATE incidents SET status='$newstatus', priority='$newpriority', lastupdated='$time', timeofnextaction='$timeofnextaction' WHERE id='$id'";
+    $sql = "UPDATE incidents SET status='$newstatus', priority='$newpriority', lastupdated='$now', timeofnextaction='$timeofnextaction' WHERE id='$id'";
     mysql_query($sql);
     if (mysql_error()) trigger_error("MySQL Query Error ".mysql_error(), E_USER_ERROR);
 
