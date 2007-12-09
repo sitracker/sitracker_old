@@ -114,19 +114,21 @@ function deldir($location)
 
 $title = 'Review Held Updates';
 $refresh = $_SESSION['incident_refresh'];
-$selected = $_REQUEST['selected'];
+$selected = $_POST['selected'];
 include('htmlheader.inc.php');
 
 if ($lock=$_REQUEST['lock'])
 {
     $lockeduntil=date('Y-m-d H:i:s',$now+$CONFIG['record_lock_delay']);
-    $sql = "UPDATE tempincoming SET locked='{$sit[2]}', lockeduntil='{$lockeduntil}' WHERE tempincoming.id='{$lock}' AND (locked = 0 OR locked IS NULL)";
+    $sql = "UPDATE tempincoming SET locked='{$sit[2]}', lockeduntil='{$lockeduntil}' ";
+    $sql .= "WHERE tempincoming.id='{$lock}' AND (locked = 0 OR locked IS NULL)";
     $result = mysql_query($sql);
     if (mysql_error()) trigger_error("MySQL Query Error ".mysql_error(), E_USER_ERROR);
 }
 elseif ($unlock=$_REQUEST['unlock'])
 {
-    $sql = "UPDATE tempincoming SET locked=NULL, lockeduntil=NULL WHERE tempincoming.id='{$unlock}' AND locked = '{$sit[2]}'";
+    $sql = "UPDATE tempincoming SET locked=NULL, lockeduntil=NULL ";
+    $sql .= "WHERE tempincoming.id='{$unlock}' AND locked = '{$sit[2]}'";
     $result = mysql_query($sql);
     if (mysql_error()) trigger_error("MySQL Query Error ".mysql_error(), E_USER_ERROR);
 }
@@ -134,7 +136,8 @@ else
 {
     // Unlock any expired locks
     $nowdatel=date('Y-m-d H:i:s');
-    $sql = "UPDATE tempincoming SET locked=NULL, lockeduntil=NULL WHERE UNIX_TIMESTAMP(lockeduntil) < '$now' ";
+    $sql = "UPDATE tempincoming SET locked=NULL, lockeduntil=NULL ";
+    $sql .= "WHERE UNIX_TIMESTAMP(lockeduntil) < '$now' ";
     mysql_query($sql);
     if (mysql_error()) trigger_error(mysql_error(),E_USER_ERROR);
 }
@@ -187,35 +190,31 @@ if(!empty($selected))
         {
             return window.confirm("This item will be permanently deleted.  Are you sure you want to continue?");
         }
-    -->
-    </script>
 
-    <script type="text/javascript">
-    <!--
-    function submitform()
-    {
-        document.held_emails.submit();
-    }
-
-    function checkAll(checkStatus)
-    {
-        var frm = document.held_emails.elements;
-        for(i = 0; i < frm.length; i++)
+        function submitform()
         {
-            if(frm[i].type == 'checkbox')
+            document.held_emails.submit();
+        }
+
+        function checkAll(checkStatus)
+        {
+            var frm = document.held_emails.elements;
+            for(i = 0; i < frm.length; i++)
             {
-                if(checkStatus)
+                if(frm[i].type == 'checkbox')
                 {
-                    frm[i].checked = true;
-                }
-                else
-                {
-                    frm[i].checked = false;
+                    if(checkStatus)
+                    {
+                        frm[i].checked = true;
+                    }
+                    else
+                    {
+                        frm[i].checked = false;
+                    }
                 }
             }
         }
-    }
-    -->
+        -->
     </script>
 
 <?php
@@ -278,7 +277,7 @@ if((mysql_num_rows($resultnew) > 0) OR ($realemails > 0))
     $totalheld = $countresults + mysql_num_rows($resultnew) - $spamcount;
     echo "<h2>".sprintf($strHeldEmailsNum, $realemails)."</h2>"; // was $countresults
     echo "<p align='center'>{$strIncomingEmailText}</p>";
-    echo "<form action='review_incoming_updates.php' name='held_emails'>";
+    echo "<form action='{$_SERVER['PHP_SELF']}' name='held_emails'  method='post'>";
     echo "<table align='center' style='width: 95%'>";
     echo "<tr>";
     echo "<th>";
@@ -299,7 +298,12 @@ if((mysql_num_rows($resultnew) > 0) OR ($realemails > 0))
     {
         echo $row;
     }
-    if($realemails > 0) echo "<tr><td><a href=\"javascript: submitform()\" onclick='return confirm_delete();'>{$strDelete}</a></td></tr>";
+    if($realemails > 0)
+    {
+        echo "<tr><td>";
+        echo "<a href=\"javascript: submitform()\" onclick='return confirm_delete();'>{$strDelete}</a>";
+        echo "</td></tr>";
+    }
     echo "</table>\n";
     echo "</form>";
 }
@@ -336,13 +340,14 @@ if($spamcount > 0)
     // FIXME i18n
     if (is_array($spam_array)) echo "<p align='center'><a href={$_SERVER['PHP_SELF']}?delete_all_spam=".implode(',',$spam_array).'>Delete all mail from spam queue</a></p>';
 
-
     echo "<br /><br />"; //gap
 }
 
 
-$sql = "SELECT incidents.id, incidents.title, contacts.forenames, contacts.surname, sites.name FROM incidents,contacts,sites ";
-$sql .= "WHERE incidents.status = 8 AND incidents.contact = contacts.id AND contacts.siteid = sites.id ORDER BY sites.id, incidents.contact"; //awaiting customer action
+$sql = "SELECT incidents.id, incidents.title, contacts.forenames, contacts.surname, sites.name ";
+$sql .= "FROM incidents,contacts,sites ";
+$sql .= "WHERE incidents.status = 8 AND incidents.contact = contacts.id AND contacts.siteid = sites.id ";
+$sql .= "ORDER BY sites.id, incidents.contact"; //awaiting customer action
 $resultchase = mysql_query($sql);
 if(mysql_num_rows($resultchase) >= 1)
 {
@@ -362,11 +367,18 @@ if(mysql_num_rows($resultchase) >= 1)
                 $html_chase .= "<br />";
                 $html_chase .= "<h2>Incidents requiring chasing by phone</h2>";
                 $html_chase .= "<table align='center' style='width: 95%'>";
-                $html_chase .= "<tr><th>Incident ID</th><th>Incident title</th><th>Contact</th><th>Site</th><th>Type</th></tr>";
+                $html_chase .= "<tr><th>Incident ID</th>";
+                $html_chase .= "<th>Incident title</th><th>Contact</th><th>Site</th><th>Type</th></tr>";
             }
 
-            if($obj_update->type == "auto_chase_phone") $type = "Chase phone";
-            else $type = "Chase manager";
+            if($obj_update->type == "auto_chase_phone")
+            {
+                $type = "Chase phone";
+            }
+            else
+            {
+                $type = "Chase manager";
+            }
 
             // show
             $html_chase .= "<tr class='{$shade}'><td><a href=\"javascript:incident_details_window('{$obj_update->incidentid}','incident{$obj_update->incidentid}')\" class='info'>{$obj_update->incidentid}</a></td><td>{$chase->title}</td><td>{$chase->forenames} {$chase->surname}</td><td>{$chase->name}</td><td>{$type}</td></tr>";
