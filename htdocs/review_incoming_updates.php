@@ -165,7 +165,6 @@ if(!empty($selected))
 {
     foreach($selected as $updateid)
     {
-        // We delete using ID and timestamp to make sure we dont' delete the wrong update by accident
         $sql = "DELETE FROM updates WHERE id='$updateid'";
         mysql_query($sql);
         if (mysql_error()) trigger_error("MySQL Query Error ".mysql_error(), E_USER_ERROR);
@@ -195,7 +194,7 @@ if(!empty($selected))
     <!--
     function submitform()
     {
-    document.held_emails.submit();
+        document.held_emails.submit();
     }
 
     function checkAll(checkStatus)
@@ -230,14 +229,23 @@ $sql .= 'ORDER BY timestamp ASC, id ASC';
 $result = mysql_query($sql);
 if (mysql_error()) trigger_error("MySQL Query Error ".mysql_error(), E_USER_ERROR);
 $countresults=mysql_num_rows($result);
+
 $spamcount=0;
 if($countresults > 0)
 {
     if ($countresults) mysql_data_seek($result, 0);
 
     while ($updates = mysql_fetch_array($result))
-        if (!stristr($updates['subject'],$CONFIG['spam_email_subject'])) $queuerows[$updates['timestamp']] = generate_row($updates);
-        else $spamcount++;
+    {
+        if (!stristr($updates['subject'],$CONFIG['spam_email_subject']))
+        {
+            $queuerows[$updates['id']] = generate_row($updates);
+        }
+        else
+        {
+            $spamcount++;
+        }
+    }
 }
 
 $sql = "SELECT * FROM incidents WHERE owner='0' AND status!='2'";
@@ -270,13 +278,15 @@ if((mysql_num_rows($resultnew) > 0) OR ($realemails > 0))
     $totalheld = $countresults + mysql_num_rows($resultnew) - $spamcount;
     echo "<h2>".sprintf($strHeldEmailsNum, $realemails)."</h2>"; // was $countresults
     echo "<p align='center'>{$strIncomingEmailText}</p>";
-    ?>
-    <form action='review_incoming_updates.php' name='held_emails'>
-    <table align='center' style='width: 95%'>
-    <tr>
-    <th>
-    <?php if($realemails > 0) echo "<input type='checkbox' name='selectAll' value='CheckAll' onclick=\"checkAll(this.checked);\" />"?>
-    <?php
+    echo "<form action='review_incoming_updates.php' name='held_emails'>";
+    echo "<table align='center' style='width: 95%'>";
+    echo "<tr>";
+    echo "<th>";
+    if($realemails > 0) 
+    {
+        echo "<input type='checkbox' name='selectAll' value='CheckAll' onclick=\"checkAll(this.checked);\" />";
+    }
+
     echo "</th>
     <th>{$strDate}</th>
     <th>{$strFrom}</th>
