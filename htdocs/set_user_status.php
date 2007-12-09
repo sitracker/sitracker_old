@@ -75,6 +75,26 @@ switch($mode)
 
         incident_backup_switchover($sit[2], $accepting);
 
+        //if user is not accepting, tell them
+        if ($accepting == 'No')
+        {
+            //check to see if they have one already
+            $sql = "SELECT id FROM notices WHERE type=".USER_STILL_AWAY_TYPE." ";
+            $sql .= "AND userid={$_SESSION['userid']}";
+            $result = mysql_query($sql);
+            if (mysql_error()) trigger_error(mysql_error(), E_USER_ERROR);
+
+            if(empty($result) OR mysql_num_rows($result) == 0)
+            {
+                $gid = md5($strUserStillAway);
+                $sql = "INSERT INTO notices (userid, type, text, timestamp, gid) ";
+                $sql .= "VALUES({$_SESSION['userid']}, ".USER_STILL_AWAY_TYPE.",";
+                $sql .= "'".mysql_real_escape_string("You are currently not accepting incidents. You can change this at the bottom of the main page.")."', NOW(), '{$gid}')"; //FIXME i18n
+                mysql_query($sql);
+                if (mysql_error()) trigger_error(mysql_error(), E_USER_ERROR);
+            }
+        }
+
         header('Location: index.php');
     break;
 
