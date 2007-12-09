@@ -291,6 +291,7 @@ echo ".help {background: #F7FAFF; border: 1px solid #3165CD; color: #203894; pad
 echo ".helptip { color: #203894;}\n";
 echo ".warning {background: #FFFFE6; border: 2px solid #FFFF31; color: red; padding: 2px;}\n";
 echo "pre {background:#FFF; border:#999; padding: 1em;}\n";
+echo "a.button { border: 1px outset #000; padding: 2px; background-color: #EFEFEF;} ";
 echo "a:link,a:visited { color: #000099; }\n";
 echo "a:hover { background: #99CCFF; }\n";
 echo "hr { background-color: #203894; margin-top: 3em; }\n";
@@ -379,7 +380,7 @@ switch ($_REQUEST['action'])
             echo "<p class='warning'>Important: The file permissions on the file <var>config.inc.php</var> allow the file to be modified, we recommend you now make this file read-only.</p>";
         }
         echo "<h2>After creating your <var>config.inc.php</var> file</h2>";
-        echo "<p>Now run <a href='setup.php'>setup</a> again</p>";
+        echo "<p>Now run <a href='setup.php' class='button'>setup</a> again</p>";
     break;
 
     case 'reconfigure':
@@ -432,10 +433,10 @@ switch ($_REQUEST['action'])
                 else
                 {
                     echo "<p class='help'>If this is the first time you have used SiT! you may need to create the database, ";
-                    echo "if you have the necessary MySQL permissions you can <a href='setup.php?action=createdatabase'>create the database automatically</a>.<br />";
+                    echo "if you have the necessary MySQL permissions you can <a href='setup.php?action=createdatabase' class='button'>create the database automatically</a>.<br />";
                     echo "Alternatively you can create it manually by executing the SQL statement <br /><code>{$sql};</code></p";
                 }
-                echo "<p>After creating the database run <a href='setup.php'>setup</a> again to create the database schema</p>";
+                echo "<p>After creating the database run <a href='setup.php' class='button'>setup</a> again to create the database schema</p>";
                 echo setup_configure();
             }
             else
@@ -466,7 +467,7 @@ switch ($_REQUEST['action'])
                     if (mysql_error()) trigger_error($sql.mysql_error(),E_USER_ERROR);
                     $installed_version = $application_version;
                     echo "<h2>Database schema created</h2>";
-                    echo "<p>If no errors were reported above you should now check the installation by running <a href='setup.php?action=checkinstallcomplete'>setup</a> again.</p>";
+                    echo "<p>If no errors were reported above you should now check the installation by running <a href='setup.php?action=checkinstallcomplete' class='button'>setup</a> again.</p>";
                 }
                 else
                 {
@@ -605,7 +606,7 @@ switch ($_REQUEST['action'])
                     else
                     {
                         echo "<p>Your database schema is v".number_format($installed_version,2);
-                        if ($installed_version < $application_version) echo ", after making a backup you should <a href='setup.php?action=upgrade'>upgrade</a> your schema to v{$application_version}";
+                        if ($installed_version < $application_version) echo ", after making a backup you should <a href='setup.php?action=upgrade' class='button'>upgrade</a> your schema to v{$application_version}";
                         echo "</p>";
                     }
 
@@ -656,8 +657,8 @@ switch ($_REQUEST['action'])
                     }
                     else
                     {
-                        echo "<p>SiT! v".number_format($installed_version,2)." is installed and ready to <a href='index.php'>run</a>.</p>";
-                        if ($_SESSION['userid']==1) echo "<p>As administrator you can <a href='{$_SERVER['PHP_SELF']}?action=reconfigure'>reconfigure</a> SiT!</p>";
+                        echo "<p>SiT! v".number_format($installed_version,2)." is installed and ready to <a href='index.php' class='button'>run</a>.</p>";
+                        if ($_SESSION['userid']==1) echo "<p>As administrator you can <a href='{$_SERVER['PHP_SELF']}?action=reconfigure' class='button'>reconfigure</a> SiT!</p>";
                     }
                 }
             }
