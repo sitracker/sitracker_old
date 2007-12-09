@@ -9,6 +9,8 @@
 //
 // Author: Paul Heaney <paulheaney[at]users.sourceforge.net>
 
+$dashboard_rss_version = 2;
+
 
 function dashboard_rss($row,$dashboardid)
 {
@@ -45,5 +47,22 @@ function dashboard_rss_install()
 
     return $res;
 }
+
+function dashboard_rss_upgrade()
+{
+    $upgrade_schema[2] = "
+        -- INL 22Nov07
+        ALTER TABLE `dashboard_rss` ADD `items` INT( 5 ) NULL AFTER `url`;
+    ";
+
+    return $upgrade_schema;
+}
+
+function dashboard_rss_get_version()
+{
+    global $dashboard_rss_version;
+    return $dashboard_rss_version;
+}
+
 
 ?>

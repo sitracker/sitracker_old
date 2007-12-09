@@ -1,5 +1,7 @@
 <?php
 
+$dashboard_statistics_version = 1;
+
 function dashboard_statistics($row,$dashboardid)
 {
     global $todayrecent;

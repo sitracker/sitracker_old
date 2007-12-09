@@ -255,7 +255,7 @@ function user_notify_upgrade()
     while($user = mysql_fetch_object($result))
     {
         $noticesql = "INSERT into notices(userid, type, text, linktext, link, gid, timestamp) ";
-        $noticesql .= "VALUES({$user->id}, ".SIT_UPGRADED_NOTICE.", '\$strSitUpgraded', '\$strSitUpgradedLink', '{$CONFIG['application_webpath']}releasenotes.php', {$gid}, NOW())";
+        $noticesql .= "VALUES({$user->id}, ".SIT_UPGRADED_NOTICE.", '\$strSitUpgraded', '\$strSitUpgradedLink', '{$CONFIG['application_webpath']}releasenotes.php', '{$gid}', NOW())";
         mysql_query($noticesql);
         if (mysql_error()) trigger_error(mysql_error(),E_USER_WARNING);
     }
@@ -536,6 +536,55 @@ switch ($_REQUEST['action'])
                             $upgradeok = TRUE;
                             echo "<p>See the <code>doc/UPGRADE</code> file for further upgrade instructions and help.<br />";
                         }
+
+                        if($installed_version >= 3.24)
+                        {
+                            //upgrade dashboard components.
+
+                            $sql = "SELECT * FROM dashboard";
+                            $result = mysql_query($sql);
+                            if (mysql_error()) trigger_error(mysql_error(),E_USER_ERROR);
+
+                            echo "<h2>Dashboard</h2>";
+                            while($dashboardnames = mysql_fetch_object($result))
+                            {
+                                $version = 1;
+                                include("{$CONFIG['application_fspath']}dashboard/dashboard_{$dashboardnames->name}.php");
+                                $func = "dashboard_{$dashboardnames->name}_get_version";
+
+                                if(function_exists($func))
+                                {
+                                    $version = $func();
+                                }
+
+                                if($version > $dashboardnames->version)
+                                {
+                                    echo "<p>Upgrading {$dashboardnames->name}</p>>";
+                                    // apply all upgrades since running version
+                                    $upgrade_func = "dashboard_{$dashboardnames->name}_upgrade";
+
+                                    if(function_exists($upgrade_func))
+                                    {
+                                        $dashboard_schema = $func();
+                                        for($i = $dashboardnames->version; $i <= $version; $i++)
+                                        {
+                                            setup_exec_sql($dashboard_schema[$i]);
+                                        }
+
+                                        $upgrade_sql = "UPDATE dashboard SET version = '{$version}' WHERE id = {$dashboardnames->id}";
+                                        mysql_query($upgrade_sql);
+                                        if (mysql_error()) trigger_error(mysql_error(),E_USER_ERROR);
+
+                                        echo "<p>{$dashboardnames->name} upgraded</p>";
+                                    }
+                                    else
+                                    {
+                                        echo "<p>No upgrade function for {$dashbaordnames->name}</p>";
+                                    }
+                                }
+                            }
+                        }
+
                         if ($upgradeok)
                         {
                             // Update the system version number
@@ -548,7 +597,10 @@ switch ($_REQUEST['action'])
                             //let's tell everyone we upgraded :)
                             user_notify_upgrade();
                         }
-                        else echo "<p class='error'>Upgrade failed.  Maybe you could try a fresh installation?</p>";
+                        else
+                        {
+                            echo "<p class='error'>Upgrade failed.  Maybe you could try a fresh installation?</p>";
+                        }
                     }
                     else
                     {

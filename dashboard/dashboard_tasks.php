@@ -8,6 +8,7 @@
 // of the GNU General Public License, incorporated herein by reference.
 //
 
+$dashboard_tasks_version = 1;
 
 function dashboard_tasks($row,$dashboardid)
 {

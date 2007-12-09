@@ -8,6 +8,7 @@
 // of the GNU General Public License, incorporated herein by reference.
 //
 
+$dashboard_random_tip_version = 1;
 
 function dashboard_random_tip($row,$dashboardid)
 {
