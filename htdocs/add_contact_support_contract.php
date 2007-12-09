@@ -64,11 +64,10 @@ if (empty($action) || $action == "showform")
         echo "<input name=\"contactid\" type=\"hidden\" value=\"$contactid\" />";
         echo "</td></tr>";
     }
-    ?>
-    </table>
-    <p align='center'><input name="submit" type="submit" value="Continue" /></p>
-    </form>
-    <?php
+    echo "</table>";
+    echo "<p align='center'><input name='submit' type='submit' value='Continue' /></p>";
+    echo "</form>";
+
     include('htmlfooter.inc.php');
 }
 else if ($action == "add")
