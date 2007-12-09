@@ -107,6 +107,7 @@ INSERT INTO `contacts` (`id`, `notify_contactid`, `username`, `password`, `foren
 CREATE TABLE `dashboard` (
   `id` int(11) NOT NULL auto_increment,
   `name` varchar(100) NOT NULL default '',
+  `version` mediumint(9) NOT NULL default '1',
   `enabled` enum('true','false') NOT NULL default 'false',
   PRIMARY KEY  (`id`)
 ) ENGINE=MyISAM ;
@@ -1538,8 +1539,6 @@ ALTER TABLE `updates` CHANGE `type` `type` ENUM( 'default', 'editing', 'opening'
 ALTER TABLE `maintenance` ADD `supportedcontacts` INT( 255 ) NOT NULL DEFAULT '0';
 ALTER TABLE `maintenance` ADD `allcontactssupported` ENUM( 'No', 'Yes' ) NOT NULL DEFAULT 'No';
 
--- INL 22Nov07
-ALTER TABLE `dashboard_rss` ADD `items` INT( 5 ) NULL AFTER `url`;
 -- INL 25Nov07
 DROP TABLE `holidaytypes`;
 
@@ -1565,6 +1564,9 @@ ALTER TABLE `billing_periods` DROP PRIMARY KEY, ADD PRIMARY KEY ( `serviceleveli
 -- KMH 4/12/07
 ALTER TABLE `flags` DROP INDEX `flag` ;
 ALTER TABLE `userstatus` DROP INDEX `id` ;
+
+-- PH 9/12/07
+ALTER TABLE `dashboard` ADD `version` MEDIUMINT NOT NULL DEFAULT '1' AFTER `name` ;
 
 ";
 

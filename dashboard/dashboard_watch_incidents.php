@@ -9,6 +9,8 @@
 //
 // Author: Paul Heaney <paulheaney[at]users.sourceforge.net>
 
+$dashboard_watch_incidents_version = 1;
+
 function dashboard_watch_incidents($row,$dashboardid)
 {
     global $sit, $CONFIG, $iconset;

@@ -8,6 +8,8 @@
 // of the GNU General Public License, incorporated herein by reference.
 //
 
+$dashboard_user_incidents_version = 1;
+
 function dashboard_user_incidents($row,$dashboardid)
 {
     global $user;

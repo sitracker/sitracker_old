@@ -23,6 +23,32 @@ function endsWith( $str, $sub ) {
    return ( substr( $str, strlen( $str ) - strlen( $sub ) ) === $sub );
 }
 
+// A duplicate of that in setup.php - Probably wants moving to functions.inc.php eventually PH 9/12/07
+function setup_exec_sql($sqlquerylist)
+{
+    global $CONFIG;
+    if (!empty($sqlquerylist))
+    {
+        $sqlqueries = explode( ';', $sqlquerylist);
+        // We don't need the last entry it's blank, as we end with a ;
+        array_pop($sqlqueries);
+        foreach($sqlqueries AS $sql)
+        {
+            mysql_query($sql);
+            if (mysql_error())
+            {
+                $html .= "<p><strong>FAILED:</strong> ".htmlspecialchars($sql)."</p>";
+                $html .= "<p class='error'>".mysql_error()."<br />A MySQL error occurred, this could be because the MySQL user '{$CONFIG['db_username']}' does not have appropriate permission to modify the database schema.<br />";
+                //echo "The SQL command was:<br /><code>$sql</code><br />";
+                $html .= "An error might also be caused by an attempt to upgrade a version that is not supported by this script.<br />";
+                $html .= "Alternatively, you may have found a bug, if you think this is the case please report it.</p>";
+            }
+            else $html .= "<p><strong>OK:</strong> ".htmlspecialchars($sql)."</p>";
+        }
+    }
+    return $html;
+}
+
 switch($_REQUEST['action'])
 {
     case 'install':
@@ -110,6 +136,59 @@ switch($_REQUEST['action'])
             }
         }
         break;
+    case 'upgradecomponent':
+        $id = $_REQUEST['id'];
+        $sql = "SELECT * FROM dashboard WHERE id = {$id}";
+        $result = mysql_query($sql);
+        if (mysql_error()) trigger_error(mysql_error(),E_USER_ERROR);
+
+        if(mysql_num_rows($result) > 0)
+        {
+            $obj = mysql_fetch_object($result);
+
+            $version = 1;
+            include("{$CONFIG['application_fspath']}dashboard/dashboard_{$obj->name}.php");
+            $func = "dashboard_{$obj->name}_get_version";
+
+            if(function_exists($func))
+            {
+                $version = $func();
+            }
+
+            if($version > $dashboardnames->version)
+            {
+                // apply all upgrades since running version
+                $func = "dashboard_{$obj->name}_upgrade";
+
+                if(function_exists($func))
+                {
+                    $schema = $func();
+                    for($i = $obj->version; $i <= $version; $i++)
+                    {
+                        setup_exec_sql($schema[$i]);
+                    }
+
+                    $sql = "UPDATE dashboard SET version = '{$version}' WHERE id = {$obj->id}";
+                    mysql_query($sql);
+                    if (mysql_error()) trigger_error(mysql_error(),E_USER_ERROR);
+                    html_redirect($_SERVER['PHP_SELF']);
+                }
+                else
+                {
+                    echo "<p class='error'>No schema available to upgrade</p>"; //TODO i18n
+                }
+            }
+            else
+            {
+                echo "<p class='error'>No upgrades for {$obj->name} dashboard component</p>"; //TODO i18n
+            }
+        }
+        else
+        {
+            echo "<p class='error'>Dashboard component {$id} doesn't exist</p>"; //TODO i18n
+        }
+
+        break;
     case 'enable':
         $id = $_REQUEST['id'];
         $enable = $_REQUEST['enable'];
@@ -117,7 +196,10 @@ switch($_REQUEST['action'])
         $result = mysql_query($sql);
         if (mysql_error()) trigger_error(mysql_error(),E_USER_ERROR);
 
-        if(!$result) echo "<p class='error'>Changed enabled state failed</p>";
+        if(!$result)
+        {
+            echo "<p class='error'>Changed enabled state failed</p>"; //TODO i18n
+        }
         else
         {
             html_redirect("manage_dashboard.php");
@@ -136,14 +218,35 @@ switch($_REQUEST['action'])
         echo colheader('id',$strID);
         echo colheader('name',$strName);
         echo colheader('enabled',$strEnabled);
+        echo colheader('upgrade',"Upgrade"); //FIXME i18n after release
         echo "</tr>";
         while($dashboardnames = mysql_fetch_object($result))
         {
             if($dashboardnames->enabled == "true") $opposite = "false";
             else $opposite = "true";
-            echo "<tr><td class='shade2'>{$dashboardnames->id}</td>";
-            echo "<td class='shade2'>{$dashboardnames->name}</td>";
-            echo "<td class='shade2'><a href='".$_SERVER['PHP_SELF']."?action=enable&amp;id={$dashboardnames->id}&amp;enable={$opposite}'>{$dashboardnames->enabled}</a></td></tr>";
+            echo "<tr class='shade2'><td>{$dashboardnames->id}</td>";
+            echo "<td>{$dashboardnames->name}</td>";
+            echo "<td><a href='".$_SERVER['PHP_SELF']."?action=enable&amp;id={$dashboardnames->id}&amp;enable={$opposite}'>{$dashboardnames->enabled}</a></td><td>";
+
+            $version = 1;
+            include("{$CONFIG['application_fspath']}dashboard/dashboard_{$dashboardnames->name}.php");
+            $func = "dashboard_{$dashboardnames->name}_get_version";
+
+            if(function_exists($func))
+            {
+                $version = $func();
+            }
+
+            if($version > $dashboardnames->version)
+            {
+                echo "<a href='{$_SERVER['PHP_SELF']}?action=upgradecomponent&amp;id={$dashboardnames->id}'>{$strYes}</a>";
+            }
+            else
+            {
+                echo $strNo;
+            }
+
+            echo "</td></tr>";
         }
         echo "</table>";
 
