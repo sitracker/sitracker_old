@@ -36,9 +36,10 @@ function contact_products_window(contactid)
 if (empty($search_string))
 {
     echo "<h2><img src='{$CONFIG['application_webpath']}images/icons/{$iconset}/32x32/search.png' width='32' height='32' alt='' /> ";
-    echo "Search Contacts</h2>
-    ?>
-    <form action="<?php echo $_SERVER['PHP_SELF']; ?>" method="post">
+    echo "Search Contacts</h2>";
+    
+    echo "<form action='{$_SERVER['PHP_SELF']}' method='post'>";
+?>
     <table align='center' class='vertical'>
     <tr><th>Search String:</th><td><input maxlength='100' name="search_string" size=30 type="text" /></td></tr>
     <tr><th>Search Fields:</th><td>
@@ -75,7 +76,6 @@ else
             $sql  = "SELECT * FROM contacts WHERE ";
             $sql .= "surname LIKE ('%$search_string%') OR ";
             $sql .= "forenames LIKE ('%$search_string%') OR ";
-            $sql .= "site LIKE ('%$search_string%') OR ";
             $sql .= "email LIKE ('%$search_string%') OR ";
             $sql .= "phone LIKE ('%$search_string%') OR ";
             $sql .= "fax LIKE ('%$search_string%')";
@@ -83,10 +83,6 @@ else
         elseif ($fields == "surname")
         {
             $sql  = "SELECT * FROM contacts WHERE surname LIKE ('%$search_string%')";
-        }
-        elseif ($fields == "site")
-        {
-            $sql  = "SELECT * FROM contacts WHERE site LIKE ('%$search_string%')";
         }
         elseif ($fields == "email")
         {
@@ -103,6 +99,8 @@ else
 
         // execute query
         $result = mysql_query($sql);
+
+        echo $sql;
 
         if (mysql_num_rows($result) == 0)
         {
