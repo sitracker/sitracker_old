@@ -153,10 +153,11 @@ else
             replace_tags(2, $id, $tags);
 
             // update support incident
-            $sql = "UPDATE incidents SET externalid='$externalid', ccemail='$ccemail', ";
+            $sql = "UPDATE incidents ";
+            $sql .= "SET externalid='$externalid', ccemail='$ccemail', ";
             $sql .= "escalationpath='$escalationpath', externalengineer='$externalengineer', externalemail='$externalemail', title='$title', ";
             $sql .= "contact='$contact', softwareid='$software', productversion='$productversion', ";
-            $sql .= "productservicepacks='$productservicepacks' WHERE id='$id'";
+            $sql .= "productservicepacks='$productservicepacks', lastupdated='$now' WHERE id='$id'";
             $result = mysql_query($sql);
             if (mysql_error()) trigger_error("MySQL Query Error ".mysql_error(), E_USER_ERROR);
             if (!$result)
