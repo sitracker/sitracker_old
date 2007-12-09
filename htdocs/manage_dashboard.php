@@ -218,6 +218,7 @@ switch($_REQUEST['action'])
         echo colheader('id',$strID);
         echo colheader('name',$strName);
         echo colheader('enabled',$strEnabled);
+        echo colheader('version',$strVersion);
         echo colheader('upgrade',"Upgrade"); //FIXME i18n after release
         echo "</tr>";
         while($dashboardnames = mysql_fetch_object($result))
@@ -226,7 +227,10 @@ switch($_REQUEST['action'])
             else $opposite = "true";
             echo "<tr class='shade2'><td>{$dashboardnames->id}</td>";
             echo "<td>{$dashboardnames->name}</td>";
-            echo "<td><a href='".$_SERVER['PHP_SELF']."?action=enable&amp;id={$dashboardnames->id}&amp;enable={$opposite}'>{$dashboardnames->enabled}</a></td><td>";
+            echo "<td><a href='".$_SERVER['PHP_SELF']."?action=enable&amp;id={$dashboardnames->id}&amp;enable={$opposite}'>{$dashboardnames->enabled}</a></td>";
+
+            echo "<td>{$dashboardnames->version}</td>";
+            echo "<td>";
 
             $version = 1;
             include("{$CONFIG['application_fspath']}dashboard/dashboard_{$dashboardnames->name}.php");
