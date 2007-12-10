@@ -39,7 +39,7 @@ $action = cleanvar($_REQUEST['action']);
                 // FIXME i18n This will change
                 echo "<p align='center'>This will change the external engineer details for all open incidents for the external engineer you select.</p>";
                 echo "<table class='vertical'>";
-                echo "<tr><th>{$strExternalEmail} (to change):</th>";  // FIXME to change
+                echo "<tr><th>{$strExternalEmail} (to change):</th>";  // FIXME 18n to change
                 echo "<td><select name='oldexternalemail'>";
                 while($row = mysql_fetch_array($result))
                 {

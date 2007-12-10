@@ -223,9 +223,9 @@ if (empty($_REQUEST['process']))
     <td><textarea id="references" name="references" cols='40' rows='8' style="display: none;" onfocus="if (this.enabled) { this.value = saveValue; setTimeout('document.articlform.references.blur()',1); } else saveValue=this.value;"></textarea></td></tr>
 <?php
     echo "<tr><th>{$strClosingStatus}: <sup class='red'>*</sup></th><td>".closingstatus_drop_down("closingstatus", 0)."</td></tr>\n";
-    echo "<tr><th>Inform {$strCustomer}:<br />"; //FIXME i18n inform customer
-    echo "Send an email to the customer explaining that the incident has been (or will be) closed.</th>";
-    echo "<td><label><input name='send_email' checked='checked' type='radio' value='no' />{$strNo}</label> ";
+    echo "<tr><th>Inform {$strCustomer}:</th>"; //FIXME i18n inform customer
+    echo "<td>Send an email to the customer explaining that the incident has been (or will be) closed.<br />";
+    echo "<label><input name='send_email' checked='checked' type='radio' value='no' />{$strNo}</label> ";
     echo "<input name='send_email' type='radio' value='yes' />{$strYes}</td></tr>\n";
     $externalemail=incident_externalemail($id);
     if ($externalemail)

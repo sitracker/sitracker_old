@@ -246,7 +246,7 @@ function display_update_page($draftid=-1)
     echo "<form action='".$_SERVER['PHP_SELF']."?id={$id}' method='post' name='updateform' id='updateform' enctype='multipart/form-data'>";
     echo "<table class='vertical'>";
     echo "<tr>";
-    echo "<th align='right' valign='top'>{$GLOBALS['strDoesThisUpdateMeetSLA']}:";
+    echo "<th align='right' valign='top' width='30%;'>{$GLOBALS['strDoesThisUpdateMeetSLA']}:";
     echo "<img src='{$CONFIG['application_webpath']}images/icons/{$iconset}/16x16/sla.png' width='16' height='16' alt='' /></th>";
     echo "<td class='shade2'>";
     $target = incident_get_next_target($id);
@@ -348,7 +348,8 @@ function display_update_page($draftid=-1)
     echo "</td>";
     echo "</tr>";
     echo "<tr>";
-    echo "<th align='right' valign='top'>Update Log:<br />";
+    echo "<th align='right' valign='top'>Update Log:</th>";
+    echo "<td class='shade1'>";
     echo "New information, relevent to the incident.  Please be as detailed as possible and include full descriptions of any work you have performed.<br />";
     echo "<br />";
     $checkbox = "";
@@ -360,9 +361,8 @@ function display_update_page($draftid=-1)
     {
         $checkbox = "checked='checked'";
     }
-    echo "Check here <input type='checkbox' name='cust_vis' id='cust_vis' {$checkbox} value='yes' /> to make this update visible to the customer.";
-    echo "</th>";
-    echo "<td class='shade1'><textarea name='bodytext' id='updatelog' rows='13' cols='50'>";
+    echo "<label>Check here <input type='checkbox' name='cust_vis' id='cust_vis' {$checkbox} value='yes' /> to make this update visible to the customer.<label><br />";
+    echo "<textarea name='bodytext' id='updatelog' rows='13' cols='50'>";
     if($draftid != -1) echo $draftobj->content;
     echo "</textarea>";
     echo "<div id='updatestr'></div>";
