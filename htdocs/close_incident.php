@@ -498,9 +498,39 @@ else
 
                 journal(CFG_LOGGING_NORMAL, 'KB Article Added', "KB Article $docid was added", CFG_JOURNAL_KB, $docid);
 
-                html_redirect("incident_details.php?id={$id}", TRUE, "Knowledge Base Article {$CONFIG['kb_id_prefix']}{$docid} created");
+                //html_redirect("incident_details.php?id={$id}", TRUE, "Knowledge Base Article {$CONFIG['kb_id_prefix']}{$docid} created");
+                ?>
+                <html>
+                <head></head>
+                <script type="text/javascript">
+                function confirm_close_window()
+                {
+                    window.opener.location='incident_details.php?id=<?php echo $id; ?>';
+                    window.close();
+                }
+                </script>
+                <body onload="confirm_close_window();">
+                </body>
+                </html>
+                <?php
             }
-            else html_redirect("incident_details.php?id={$id}");
+            else
+            {
+                ?>
+                <html>
+                <head></head>
+                <script type="text/javascript">
+                function confirm_close_window()
+                {
+                    window.opener.location='incident_details.php?id=<?php echo $id; ?>';
+                    window.close();
+                }
+                </script>
+                <body onload="confirm_close_window();">
+                </body>
+                </html>
+                <?php
+            }
         }
         else
         {
