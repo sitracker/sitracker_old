@@ -26,17 +26,16 @@ $action = $_REQUEST['action'];
 // Valid user, check permissions
 if (empty($action) || $action == "showform")
 {
-    $title="Associate person with Contract";
+    $title="Associate person with Contract"; // TODO i18n
     include('htmlheader.inc.php');
-    //TODO i18n
-    echo "<h2>Link a contract with a support contact</h2>";
+    echo "<h2>Link a contract with a support contact</h2>"; //TODO i18n
     echo "<form action='{$_SERVER['PHP_SELF']}?action=add' method='post'>";
     echo "<input type='hidden' name='context' value='{$context}' />";
     echo "<table align='center' class='vertical'>";
 
     if (empty($maintid))
     {
-        echo "<tr><th>Contract <img src='{$CONFIG['application_webpath']}images/icons/{$iconset}/16x16/contract.png' width='16' height='16' alt='' /></th>";
+        echo "<tr><th>{$strContract} <img src='{$CONFIG['application_webpath']}images/icons/{$iconset}/16x16/contract.png' width='16' height='16' alt='' /></th>";
         echo "<td width='400'>";
         maintenance_drop_down("maintid", 0);
         echo "</td></tr>";
@@ -49,23 +48,23 @@ if (empty($action) || $action == "showform")
         if (mysql_error()) trigger_error("MySQL Query Error ".mysql_error(), E_USER_ERROR);
         list($sitename, $product)=mysql_fetch_row($result);
 
-        echo "<tr><th>Contract <img src='{$CONFIG['application_webpath']}images/icons/{$iconset}/16x16/contract.png' width='16' height='16' alt='' /></th><td>$maintid - $sitename, $product</td></tr>";
+        echo "<tr><th>{$strContract} <img src='{$CONFIG['application_webpath']}images/icons/{$iconset}/16x16/contract.png' width='16' height='16' alt='' /></th><td>$maintid - $sitename, $product</td></tr>";
         echo "<input name=\"maintid\" type=\"hidden\" value=\"$maintid\" />";
     }
 
     if (empty($contactid))
     {
-        echo "<tr><th>Support Contact <img src='{$CONFIG['application_webpath']}images/icons/{$iconset}/16x16/contact.png' width='16' height='16' alt='' /></th>";
+        echo "<tr><th>{$strContact} <img src='{$CONFIG['application_webpath']}images/icons/{$iconset}/16x16/contact.png' width='16' height='16' alt='' /></th>";
         echo "<td>".contact_drop_down("contactid", 0, TRUE)."</td></tr>";
     }
     else
     {
-        echo "<tr><th>Contact <img src='{$CONFIG['application_webpath']}images/icons/{$iconset}/16x16/contact.png' width='16' height='16' alt='' /></th><td>$contactid - ".contact_realname($contactid).", ".site_name(contact_site($contactid));
+        echo "<tr><th>{$strContact} <img src='{$CONFIG['application_webpath']}images/icons/{$iconset}/16x16/contact.png' width='16' height='16' alt='' /></th><td>$contactid - ".contact_realname($contactid).", ".site_name(contact_site($contactid));
         echo "<input name=\"contactid\" type=\"hidden\" value=\"$contactid\" />";
         echo "</td></tr>";
     }
     echo "</table>";
-    echo "<p align='center'><input name='submit' type='submit' value='Continue' /></p>";
+    echo "<p align='center'><input name='submit' type='submit' value='{$strContinue}' /></p>";
     echo "</form>";
 
     include('htmlfooter.inc.php');
