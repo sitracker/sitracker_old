@@ -110,7 +110,7 @@ switch($type)
 
             case 2: // Waiting
                 echo "<span style='color: Green'>{$strWaiting}</span>";
-                $sql .= "AND (status >= 4 AND status <= 8) ";
+                $sql .= "AND ((status >= 4 AND status <= 8) OR (timeofnextaction > 0 AND timeofnextaction > $now)) ";
             break;
 
             case 3: // All Open
