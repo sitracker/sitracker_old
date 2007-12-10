@@ -11,6 +11,8 @@
 // This Page Is Valid XHTML 1.0 Transitional! 22Feb06
 
 // Authors: Ivan Lucas <ivanlucas[at]users.sourceforge.net>, Tom Gerrard
+
+@include('set_include_path.inc.php');
 $permission=54; // view KB
 
 require('db_connect.inc.php');

@@ -8,6 +8,7 @@
 // of the GNU General Public License, incorporated herein by reference.
 //
 
+@include('set_include_path.inc.php');
 $permission=20; // Add Users
 
 require('db_connect.inc.php');
@@ -46,7 +47,7 @@ if (empty($submit))
 
     echo show_errors();
     $_SESSION['formerrors'] = NULL;
-    
+
     echo "<h2><img src='{$CONFIG['application_webpath']}images/icons/{$iconset}/32x32/user.png' width='32' height='32' alt='' /> ";
     echo "{$strNewUser}</h2>";
     echo "<h5>".sprintf($strMandatoryMarked,"<sup class='red'>*</sup>")."</h5>";
@@ -56,17 +57,17 @@ if (empty($submit))
     if($_SESSION['formdata']['realname'] != "")
         echo "value='{$_SESSION['formdata']['realname']}'";
     echo "/></td></tr>\n";
-    
+
     echo "<tr><th>{$strUsername} <sup class='red'>*</sup></th><td><input maxlength='50' name='username' size='30'";
     if($_SESSION['formdata']['username'] != "")
         echo "value='{$_SESSION['formdata']['username']}'";
     echo "/></td></tr>\n";
-    
+
     echo "<tr id='password'><th>{$strPassword} <sup class='red'>*</sup></th><td><input maxlength='50' name='password' size='30'";
     if($_SESSION['formdata']['password'] != "")
         echo "value='{$_SESSION['formdata']['password']}'";
     echo "/></td></tr>\n";
-    
+
     echo "<tr><th>{$strGroup}</th>";
     if($_SESSION['formdata']['groupid'] != "")
         echo "<td>".group_drop_down('groupid', $_SESSION['formdata']['groupid'])."</td>";

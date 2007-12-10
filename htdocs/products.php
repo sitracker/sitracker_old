@@ -10,6 +10,7 @@
 
 // Author: Ivan Lucas <ivanlucas[at]users.sourceforge.net>
 
+@include('set_include_path.inc.php');
 $permission=28; // View Products and Software
 $title='Products List';
 

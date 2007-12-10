@@ -10,6 +10,7 @@
 
 // This file will soon be superceded by incident.php - 20Oct05 INL
 
+@include('set_include_path.inc.php');
 $permission=61; // View Incident Details
 require('db_connect.inc.php');
 require('functions.inc.php');

@@ -10,6 +10,7 @@
 
 // Author: Ivan Lucas <ivanlucas[at]users.sourceforge.net>
 
+@include('set_include_path.inc.php');
 $permission=53; // Edit Service Levels
 
 require('db_connect.inc.php');

@@ -12,6 +12,8 @@
 // Email:    paul.lees[at]salfordsoftware.co.uk
 // Comments: hack of Ivan's code, Addresses of ALL Supported Customers
 
+@include('set_include_path.inc.php');
+
 $permission=37; // Run Reports
 
 require('db_connect.inc.php');

@@ -11,6 +11,7 @@
 // Author: Ivan Lucas <ivanlucas[at]users.sourceforge.net>
 // Hacked: Tom Gerrard <tom.gerrard[at]salfordsoftware.co.uk>
 
+@include('set_include_path.inc.php');
 $permission=37; // Run Reports
 
 require('db_connect.inc.php');

@@ -10,6 +10,7 @@
 
 // This Page Is Valid XHTML 1.0 Transitional!  31Oct05
 
+@include('set_include_path.inc.php');
 $permission=1; // Add new contact
 
 require('db_connect.inc.php');
@@ -49,12 +50,12 @@ if (empty($submit) OR !empty($_SESSION['formerrors']))
     echo "<form name='contactform' action='{$_SERVER['PHP_SELF']}' method='post' onsubmit='return confirm_submit();'>";
     echo "<table align='center' class='vertical'>";
     echo "<tr><th>{$strName} <sup class='red'>*</sup><br /></th>\n";
-    
+
     echo "<td><table><tr><td align='center'>Salutation<br /><input maxlength='50' name='salutation' title='Salutation (Mr, Mrs, Miss, Dr. etc.)' size='7'";
     if($_SESSION['formdata']['salutation'] != '')
         echo "value='{$_SESSION['formdata']['salutation']}'";
     echo "/></td>\n";
-    
+
     echo "<td align='center'>{$strTitle}<br />";
     echo "<input maxlength='100' name='forenames' size='15' title='Firstnames (or initials)'";
     if($_SESSION['formdata']['forenames'] != '')
@@ -66,7 +67,7 @@ if (empty($submit) OR !empty($_SESSION['formerrors']))
         echo "value='{$_SESSION['formdata']['surname']}'";
     echo " /></td>";
     echo "</tr></table></tr>\n";
-    
+
     echo "<tr><th>{$strJobTitle}</th><td><input maxlength='255' name='jobtitle' size='35' title='e.g. Purchasing Manager'";
     if($_SESSION['formdata']['jobtitle'] != '')
         echo "value='{$_SESSION['formdata']['jobtitle']}'";

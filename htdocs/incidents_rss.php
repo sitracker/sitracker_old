@@ -10,6 +10,7 @@
 
 // This feature is experimental as of 22Sep06
 
+@include('set_include_path.inc.php');
 require('db_connect.inc.php');
 require('functions.inc.php');
 

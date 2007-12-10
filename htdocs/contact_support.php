@@ -13,6 +13,7 @@
 // This Page Is Valid XHTML 1.0 Transitional!   4Nov05
 // 24Apr02 INL Fixed a divide by zero bug
 
+@include('set_include_path.inc.php');
 $permission=6; // view incidents
 
 require('db_connect.inc.php');

@@ -10,6 +10,7 @@
 
 // Author: Kieran Hogg <kieran_hogg[at]users.sourceforge.net>
 
+@include('set_include_path.inc.php');
 require('db_connect.inc.php');
 require('functions.inc.php');
 

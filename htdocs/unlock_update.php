@@ -9,6 +9,7 @@
 //
 // This page is called from includes/incident_html_top.inc.php
 
+@include('set_include_path.inc.php');
 $permission=42;
 require('db_connect.inc.php');
 require('functions.inc.php');

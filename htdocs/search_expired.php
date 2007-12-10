@@ -11,6 +11,7 @@
 // Author: Ivan Lucas <ivanlucas[at]users.sourceforge.net>
 // FIXME i18n whole page
 
+@include('set_include_path.inc.php');
 $permission=19; // View Contracts
 
 require('db_connect.inc.php');

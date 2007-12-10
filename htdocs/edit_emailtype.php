@@ -8,7 +8,7 @@
 // of the GNU General Public License, incorporated herein by reference.
 //
 
-
+@include('set_include_path.inc.php');
 $permission=17; // Edit Email Template
 
 require('db_connect.inc.php');

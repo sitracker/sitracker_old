@@ -10,7 +10,7 @@
 
 // Soon to be replaced
 // See incident/edit.inc.php
-
+@include('set_include_path.inc.php');
 $permission=7; // Edit Incidents
 
 require('db_connect.inc.php');

@@ -10,6 +10,7 @@
 
 // This Page Is Valid XHTML 1.0 Transitional!  1Nov05
 
+@include('set_include_path.inc.php');
 $permission=39; // Add Maintenance Contract
 
 require('db_connect.inc.php');
@@ -52,7 +53,7 @@ if ($action == "showform" OR $action=='')
     echo "<tr><th>{$strContacts}<sup class='red'>*</sup></th><td>";
     // TODO all supportedcontacts disabled for 3.31 release
     // echo "<input value='amount' type='radio' name='contacts' checked='checked' />";
- 
+
     echo "<input type='hidden' name ='contacts' value='amount' />";
     echo "{$strLimitTo} <input size='2' name='amount' ";
     if($_SESSION['formdata']['contacts'] != "")
@@ -113,7 +114,7 @@ if ($action == "showform" OR $action=='')
     echo "<p align='center'><input name='submit' type='submit' value=\"{$strAddContract}\" /></p>";
     echo "</form>";
     include('htmlfooter.inc.php');
-    
+
     $_SESSION['formdata'] = NULL;
 }
 elseif ($action == "add")
@@ -140,7 +141,7 @@ elseif ($action == "add")
 
     $incident_pools = explode(',', "0,{$CONFIG['incident_pools']}");
     $incident_quantity = $incident_pools[$_POST['incident_poolid']];
-    
+
     $_SESSION['formdata'] = $_REQUEST;
 
     // Add maintenance to database

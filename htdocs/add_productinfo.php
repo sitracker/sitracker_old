@@ -12,6 +12,7 @@
 
 // Product information is the info related to a product that is requested when adding an incident
 
+@include('set_include_path.inc.php');
 $permission=25; // Add Product Info
 
 require('db_connect.inc.php');

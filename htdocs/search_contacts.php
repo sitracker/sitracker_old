@@ -8,6 +8,7 @@
 // of the GNU General Public License, incorporated herein by reference.
 //
 
+@include('set_include_path.inc.php');
 $permission=array(60,12); // Perform Searches, View Contacts
 require('db_connect.inc.php');
 require('functions.inc.php');
@@ -37,7 +38,7 @@ if (empty($search_string))
 {
     echo "<h2><img src='{$CONFIG['application_webpath']}images/icons/{$iconset}/32x32/search.png' width='32' height='32' alt='' /> ";
     echo "Search Contacts</h2>";
-    
+
     echo "<form action='{$_SERVER['PHP_SELF']}' method='post'>";
 ?>
     <table align='center' class='vertical'>

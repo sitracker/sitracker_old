@@ -11,6 +11,7 @@
 
 // This script is run after confirmation in close_incident.php
 
+@include('set_include_path.inc.php');
 $permision=33; // send emails
 require('db_connect.inc.php');
 require('functions.inc.php');

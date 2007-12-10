@@ -10,6 +10,7 @@
 
 // Author: Ivan Lucas <ivanlucas[at]users.sourceforge.net>
 
+@include('set_include_path.inc.php');
 $permission=56; // Add Skills
 
 require('db_connect.inc.php');
@@ -55,7 +56,7 @@ if (empty($submit))
     echo " {$strTo}: ";
     echo "<input type='text' name='lifetime_end' id='lifetime_end' size='10'";
     if($_SESSION['formdata']['lifetime_end'] != "")
-        echo "value='{$_SESSION['formdata']['lifetime_end']}'";  
+        echo "value='{$_SESSION['formdata']['lifetime_end']}'";
     echo "/> ";
     echo date_picker('addsoftware.lifetime_end');
     echo "</td></tr>\n";
@@ -65,7 +66,7 @@ if (empty($submit))
     echo "</form>\n";
     echo "<p align='center'><a href='products.php'>{$strReturnWithoutSaving}</a></p>";
     include('htmlfooter.inc.php');
-    
+
     $_SESSION['formdata'] = NULL;
 }
 else
@@ -78,7 +79,7 @@ else
     else $lifetime_end = '';
 
     $_SESSION['formdata'] = $_REQUEST;
-    
+
     // Add new
     $errors = 0;
 

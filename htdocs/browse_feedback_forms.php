@@ -1,5 +1,5 @@
 <?php
-// browse_feedback_form.php - Browse feedback forms 
+// browse_feedback_form.php - Browse feedback forms
 //
 // SiT (Support Incident Tracker) - Support call tracking system
 // Copyright (C) 2000-2007 Salford Software Ltd. and Contributors
@@ -10,6 +10,7 @@
 
 // Author: Paul Heaney <paulheaney[at]users.sourceforge.net>
 
+@include('set_include_path.inc.php');
 $permission=49; // Edit Feedback Forms
 
 require('db_connect.inc.php');

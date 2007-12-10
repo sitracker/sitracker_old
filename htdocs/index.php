@@ -9,6 +9,8 @@
 //
 // This Page Is Valid XHTML 1.0 Transitional! 31Oct05
 
+@include('set_include_path.inc.php');
+
 if (version_compare(PHP_VERSION, "5.0.0", ">="))
 {
     try
