@@ -366,10 +366,10 @@ if(mysql_num_rows($resultchase) >= 1)
             if(empty($html_chase))
             {
                 $html_chase .= "<br />";
-                $html_chase .= "<h2>Incidents requiring chasing by phone</h2>";
+                $html_chase .= "<h2>Incidents requiring chasing by phone</h2>"; // FIXME i18n Incidents requiring chasing
                 $html_chase .= "<table align='center' style='width: 95%'>";
-                $html_chase .= "<tr><th>Incident ID</th>";
-                $html_chase .= "<th>Incident title</th><th>Contact</th><th>Site</th><th>Type</th></tr>";
+                $html_chase .= "<tr><th>{$strIncident} {$strID}</th>";
+                $html_chase .= "<th>{$strIncidentTitle}</th><th>{$strContact}</th><th>{$strSite}</th><th>{$strType}</th></tr>";
             }
 
             if($obj_update->type == "auto_chase_phone")
