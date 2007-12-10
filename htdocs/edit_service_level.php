@@ -72,7 +72,7 @@ if (empty($action) OR $action == "showform")
     echo "<tr><th>{$strTimed} <img src='{$CONFIG['application_webpath']}images/icons/{$iconset}/16x16/sla.png' width='16' height='16' alt='' /></th><td>";
     if($sla->timed == 'yes')
     {
-        echo "<input type='checkbox' name='timed' id='timed' onchange='enableBillingPeriod();' checked>";
+        echo "<input type='checkbox' name='timed' id='timed' onchange='enableBillingPeriod();' checked='checked' />";
         $billingSQL = "SELECT * FROM billing_periods WHERE servicelevelid = {$sla->id} AND priority = {$priority} AND tag = '{$tag}'";
         $billingResult = mysql_query($billingSQL);
         if (mysql_error()) trigger_error(mysql_error(),E_USER_WARNING);
