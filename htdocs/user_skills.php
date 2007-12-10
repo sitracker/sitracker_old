@@ -37,7 +37,7 @@ echo "{$strListSkills} <img src='{$CONFIG['application_webpath']}images/icons/{$
 
 echo "<table align='center' style='width:95%;'>";
 echo "<tr>";
-echo "<th><a href='{$_SERVER['PHP_SELF']}?sort=realname'>{$strName}</a></th>";
+echo "<th width='15%'><a href='{$_SERVER['PHP_SELF']}?sort=realname'>{$strName}</a></th>";
 echo "<th>{$strQualifications} / {$strSkills}</th>";
 echo "</tr>";
 
@@ -49,14 +49,14 @@ while ($users = mysql_fetch_array($result))
     if ($shade) $class = "shade1";
     else $class = "shade2";
 
-    // print HTML for rows
-    ?>
-    <tr>
-        <td rowspan='2' class='<?php echo $class ?>'><a href="mailto:<?php  echo $users['email'] ?>" title="<?php $users['title']  ?>"><?php  echo $users['realname'] ?></a></td>
-        <td class='<?php echo $class ?>'><?php if ($users["qualifications"] == "") { ?>-<?php } else { echo "<strong>".$users["qualifications"]."</strong>"; } ?></td>
-    </tr>
-    <tr>
-    <?php
+    echo "<tr>";
+    echo "<td rowspan='2' class='{$class}'><a href=\"mailto:{$users['email']}\">{$users['realname']}</a><br />";
+    echo "{$users['title']}</td>";
+    echo "<td class='{$class}'>";
+    if (!empty($users['qualifications'])) echo "<strong>{$users['qualifications']}</strong>";
+    else echo "&nbsp;";
+    echo "</td></tr>\n";
+    echo "<tr>";
     echo "<td class='$class'>";
     $ssql = "SELECT * FROM usersoftware, software WHERE usersoftware.softwareid = software.id AND usersoftware.userid='{$users['id']}' ORDER BY software.name ";
     $sresult = mysql_query($ssql);
@@ -67,20 +67,22 @@ while ($users = mysql_fetch_array($result))
         $c=1;
         while ($software = mysql_fetch_object($sresult))
         {
-            if ($software->backupid==0) echo "<u class='info' title='{$strNoSubstitute}'>{$software->name}</u>";
-            else echo "<span class='info' title='{$strSubstitute}: ".user_realname($software->backupid,TRUE)."'>{$software->name}</span>";
+             //echo "<em>{$software->name}</em>";
+            //echo "<span class='info' title='{$strSubstitute}: ".user_realname($software->backupid,TRUE)."'>{$software->name}</span>";
+            echo "{$software->name}";
+            if ($software->backupid > 0) echo " <em style='color: #555;'>(".user_realname($software->backupid,TRUE).")</em>";
             if ($software->backupid==0) $nobackup++;
             if ($c < $countskills) echo ", ";
             else
             {
-                echo "<br />&bull; $countskills ".strtolower($strSkills);
+                echo "<br /><br />&bull; $countskills ".strtolower($strSkills);
                 if (($nobackup+1) >= $countskills) echo ", <strong>{$strNoSubstitutes}</strong>.";
                 elseif ($nobackup > 0) echo ", <strong>".sprintf($strNeedsSubstitueEngineers, $nobackup)."</strong>.";
             }
             $c++;
         }
     }
-    else echo "-";
+    else echo "&nbsp;";
 
     if ($users['id']==$sit[2]) echo " <a href='edit_user_skills.php'>{$strMySkills}</a>";
 
