@@ -8,6 +8,17 @@
 // of the GNU General Public License, incorporated herein by reference.
 //
 
+// Hierarchical Menus
+/* Arrays containing menu options for the top menu, each menu has an associated permission number and this is used */
+/* to decide which menu to display.  In addition each menu item has an associated permission   */
+/* This is so we can decide whether a user should see the menu option or not.                                     */
+/* perm = permission number */
+/*
+$hmenu[1031] = array (10=> array ( 'perm'=> 0, 'name'=> "Option1", 'url'=>""),
+                      20=> array ( 'perm'=> 0, 'name'=> "Option2", 'url'=>""),
+                      30=> array ( 'perm'=> 0, 'name'=> "Option3", 'url'=>"")
+);
+*/
 
 //
 // Main Menu
@@ -164,7 +175,8 @@ $hmenu[70] = array_merge(array (10=> array ( 'perm'=> 0, 'name'=> "{$strHelpCont
                     50=> array ( 'perm'=> 41, 'name'=> $strHelpAbout, 'url'=>"{$CONFIG['application_webpath']}about.php")
 ), $hmenu[70]);
 
-
+// Sort the top level menu, so that plugin menus appear in the right place
+ksort($hmenu[0]);
 
 //
 // Non specific update types
