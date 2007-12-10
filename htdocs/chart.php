@@ -8,6 +8,7 @@
 // of the GNU General Public License, incorporated herein by reference.
 //
 
+@include('set_include_path.inc.php');
 require('db_connect.inc.php');
 require('functions.inc.php');
 // This page requires authentication

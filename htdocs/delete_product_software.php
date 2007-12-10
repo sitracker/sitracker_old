@@ -13,6 +13,7 @@
 
 // Removes link between a product and software
 
+@include('set_include_path.inc.php');
 $permission=24;  // Add Product
 require('db_connect.inc.php');
 require('functions.inc.php');

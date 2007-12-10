@@ -8,7 +8,7 @@
 // of the GNU General Public License, incorporated herein by reference.
 //
 
-
+@include('set_include_path.inc.php');
 $permission=14; // View Users
 $title="Open Incident Monitor";
 require('db_connect.inc.php');

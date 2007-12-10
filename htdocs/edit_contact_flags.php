@@ -12,6 +12,7 @@
 
 // Author: Ivan Lucas <ivanlucas[at]users.sourceforge.net>
 
+@include('set_include_path.inc.php');
 $permission=36; // Set Contact Flags
 $title='Set Contact Flags';
 

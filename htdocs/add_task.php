@@ -11,6 +11,7 @@
 // Authors: Ivan Lucas <ivanlucas[at]users.sourceforge.net>
 //          Kieran Hogg <kieran_hogg[at]users.sourceforge.net>
 
+@include('set_include_path.inc.php');
 $permission=0; // Allow all auth users
 
 require('db_connect.inc.php');
@@ -104,12 +105,12 @@ else
             include('htmlheader.inc.php');
             echo "<h2><img src='{$CONFIG['application_webpath']}images/icons/{$iconset}/32x32/task.png' width='32' height='32' alt='' /> ";
             echo "$title</h2>";
-            
+
             echo show_errors();
 
             //cleanup errors
             $_SESSION['formerrors'] = NULL;
-            
+
             echo "<form id='addtask' action='{$_SERVER['PHP_SELF']}' method='post'>";
             echo "<table class='vertical'>";
             echo "<tr><th>{$strTitle} <sup class='red'>*</sup></th>";
@@ -117,13 +118,13 @@ else
             if($_SESSION['formdata']['name'] != '')
                 echo "value='{$_SESSION['formdata']['name']}'";
             echo "/></td></tr>";
-            
+
             echo "<tr><th>{$strDescription}</th>";
             echo "<td><textarea name='description' rows='4' cols='30'>";
             if($_SESSION['formdata']['description'] != '')
                 echo $_SESSION['formdata']['description'];
             echo "</textarea></td></tr>";
-            
+
             echo "<tr><th>{$strPriority}</th>";
             if($_SESSION['formdata']['priority'] != '')
                 echo "<td>".priority_drop_down('priority', $_SESSION['formdata']['priority'])."</td></tr>";
@@ -137,7 +138,7 @@ else
             echo date_picker('addtask.startdate');
             echo " ".time_dropdown("starttime", date("H:i"));
             echo "</td></tr>";
-            
+
             echo "<tr><th>{$strDueDate}</th>";
             echo "<td><input type='text' name='duedate' id='duedate' size='10'";
             if($_SESSION['formdata']['duedate'] != '')
@@ -149,7 +150,7 @@ else
             else
                 echo " ".time_dropdown("duetime");
             echo "</td></tr>";
-            
+
             echo "<tr><th>{$strCompletion}</th>";
             echo "<td><input type='text' name='completion' size='3' maxlength='3'";;
             if($_SESSION['formdata']['completion'] != '')
@@ -182,7 +183,7 @@ else
                 echo "<input type='radio' name='distribution' checked='checked'value='public' /> {$strPublic}<br />";
                 echo "<input type='radio' name='distribution' value='private' /> {$strPrivate} <img src='{$CONFIG['application_webpath']}images/icons/{$iconset}/16x16/private.png' width='16' height='16' title='{$strPublic}/{$strPrivate}' alt='{$strPrivate}' style='border: 0px;' /></td></tr>";
             }
-            
+
             else
             {
                 echo "<input type='radio' name='distribution' value='public' /> {$strPublic}<br />";
@@ -192,10 +193,10 @@ else
             echo "<p><input name='submit' type='submit' value='{$strAddTask}' /></p>";
             echo "<input type='hidden' name='action' value='addtask' />";
             echo "</form>";
-            
+
             //cleanup form vars
             $_SESSION['formdata'] = NULL;
-            
+
             include('htmlfooter.inc.php');
     }
 }

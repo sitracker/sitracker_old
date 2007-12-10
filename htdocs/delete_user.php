@@ -11,6 +11,7 @@
 // Authors: Valdemaras Pipiras <info[at]ambernet.lt>
 //          Ivan Lucas <ivanlucas[at]users.sourceforge.net>
 
+@include('set_include_path.inc.php');
 $permission=20;  // Manage users
 require('db_connect.inc.php');
 require('functions.inc.php');

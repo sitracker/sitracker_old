@@ -10,6 +10,7 @@
 
 // This Page Is Valid XHTML 1.0 Transitional! 13Sep06
 // Author: Ivan Lucas <ivanlucas[at]users.sourceforge.net>
+@include('set_include_path.inc.php');
 $permission=27; // view your calendar
 
 require('db_connect.inc.php');

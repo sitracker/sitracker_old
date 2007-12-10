@@ -10,6 +10,7 @@
 // Author: Ivan Lucas <ivanlucas[at]users.sourceforge.net>
 // This Page Is Valid XHTML 1.0 Transitional!  31Oct05
 
+@include('set_include_path.inc.php');
 $permission=14; // View Users
 $title = "User Skills";
 require('db_connect.inc.php');

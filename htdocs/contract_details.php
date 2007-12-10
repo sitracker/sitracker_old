@@ -13,6 +13,7 @@
 // Purpose: Show All Maintenance Contract Details
 // This Page Is Valid XHTML 1.0 Transitional! 27Oct05
 
+@include('set_include_path.inc.php');
 $permission=19;  // view Maintenance contracts
 // FIXME i18n some compound strings
 

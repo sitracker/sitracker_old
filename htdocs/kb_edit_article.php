@@ -10,6 +10,7 @@
 
 
 // Authors: Ivan Lucas <ivanlucas[at]users.sourceforge.net>, Tom Gerrard
+@include('set_include_path.inc.php');
 $permission=54; // view KB
 
 // uses superglobals.  see http://www.php.net/manual/en/reserved.variables.php#reserved.variables.post

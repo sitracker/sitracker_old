@@ -12,6 +12,7 @@
 
 // This Page Is Valid XHTML 1.0 Transitional! 27Oct05
 
+@include('set_include_path.inc.php');
 $permission=19; // View Maintenance Contracts
 
 require('db_connect.inc.php');

@@ -10,6 +10,7 @@
 
 // This Page Is Valid XHTML 1.0 Transitional!  10Jan06
 
+@include('set_include_path.inc.php');
 $permission=6; // View Incidents
 
 require('db_connect.inc.php');

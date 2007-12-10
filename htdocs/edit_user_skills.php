@@ -10,6 +10,7 @@
 
 // Author: Ivan Lucas <ivanlucas[at]users.sourceforge.net>
 
+@include('set_include_path.inc.php');
 if (empty($_REQUEST['user'])
     OR $_REQUEST['user']=='current'
     OR $_REQUEST['userid']==$_SESSION['userid']) $permission=58; // Edit your software skills

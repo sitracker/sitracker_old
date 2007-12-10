@@ -8,7 +8,7 @@
 // of the GNU General Public License, incorporated herein by reference.
 //
 
-
+@include('set_include_path.inc.php');
 $permission=4; // Edit your profile
 
 require('db_connect.inc.php');

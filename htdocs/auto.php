@@ -11,6 +11,7 @@
 
 // This file can be called from a cron job to run tasks periodically
 
+@include('set_include_path.inc.php');
 require('db_connect.inc.php');
 require('functions.inc.php');
 

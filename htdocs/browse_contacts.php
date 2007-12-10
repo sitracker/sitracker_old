@@ -12,6 +12,7 @@
 // Author: Ivan Lucas <ivanlucas[at]users.sourceforge.net>
 // This Page Is Valid XHTML 1.0 Transitional! 27Oct05
 
+@include('set_include_path.inc.php');
 $permission=12; // View Contacts
 
 require('db_connect.inc.php');

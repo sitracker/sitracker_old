@@ -10,7 +10,7 @@
 
 // This Page Is Valid XHTML 1.0 Transitional! 16Nov05
 
-
+@include('set_include_path.inc.php');
 $permission=22; // Administrate
 require('db_connect.inc.php');
 require('functions.inc.php');

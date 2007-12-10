@@ -12,6 +12,7 @@
 // This Page Is Valid XHTML 1.0 Transitional!   4Nov05
 
 // Authors: Ivan Lucas <ivanlucas[at]users.sourceforge.net> and Paul Heaney
+@include('set_include_path.inc.php');
 
 function get_globalsignature($sig_id)
 {

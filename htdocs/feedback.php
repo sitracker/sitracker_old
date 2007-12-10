@@ -12,6 +12,7 @@
 
 // FIXME i18n
 
+@include('set_include_path.inc.php');
 require('db_connect.inc.php');
 require('functions.inc.php');
 

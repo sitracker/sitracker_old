@@ -11,6 +11,7 @@
 
 // This Page Is Valid XHTML 1.0 Transitional!  1Nov05
 
+@include('set_include_path.inc.php');
 $permission=54; // View KB
 require('db_connect.inc.php');
 require('functions.inc.php');

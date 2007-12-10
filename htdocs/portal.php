@@ -10,6 +10,7 @@
 // Authors: Ivan Lucas <ivanlucas[at]users.sourceforge.net, Kieran Hogg <kieran_hogg[at]users.sourceforge.net>
 // XHTML 1.0 Transitional valid 12/11/07 - KMH
 
+@include('set_include_path.inc.php');
 $permission=0; // not required
 require('db_connect.inc.php');
 require('functions.inc.php');

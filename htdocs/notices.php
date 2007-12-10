@@ -9,6 +9,8 @@
 //
 // Author: Kieran Hogg[at]users.sourceforge.net>
 
+@include('set_include_path.inc.php');
+
 $permission=69;
 
 require('db_connect.inc.php');

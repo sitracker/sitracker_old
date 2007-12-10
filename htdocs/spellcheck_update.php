@@ -10,6 +10,7 @@
 
 // Author: Ivan Lucas <ivanlucas[at]users.sourceforge.net>
 
+@include('set_include_path.inc.php');
 $title='Spell Check';
 $permission=8;  // Update Incident
 require('db_connect.inc.php');

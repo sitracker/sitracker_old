@@ -11,6 +11,7 @@
 
 // FIXME i18n whole page
 
+@include('set_include_path.inc.php');
 $permission=7; // Edit Incidents
 
 require('db_connect.inc.php');

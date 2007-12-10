@@ -8,8 +8,9 @@
 // of the GNU General Public License, incorporated herein by reference.
 //
 
-// Authro: Ivan Lucas
+// Author: Ivan Lucas <ivanlucas[at]users.sourceforge.net>
 
+@include('set_include_path.inc.php');
 $permission=6; // View Incidents
 
 require('db_connect.inc.php');

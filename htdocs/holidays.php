@@ -9,7 +9,7 @@
 //
 
 // This Page Is Valid XHTML 1.0 Transitional!  13Sep06
-
+@include('set_include_path.inc.php');
 $permission=4; // Edit your profile
 
 require('db_connect.inc.php');

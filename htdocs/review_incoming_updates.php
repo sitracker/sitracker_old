@@ -12,6 +12,7 @@
 
 // This Page Is Valid XHTML 1.0 Transitional! 31Oct05
 
+@include('set_include_path.inc.php');
 $permission=42;
 require('db_connect.inc.php');
 require('functions.inc.php');
@@ -281,7 +282,7 @@ if((mysql_num_rows($resultnew) > 0) OR ($realemails > 0))
     echo "<table align='center' style='width: 95%'>";
     echo "<tr>";
     echo "<th>";
-    if($realemails > 0) 
+    if($realemails > 0)
     {
         echo "<input type='checkbox' name='selectAll' value='CheckAll' onclick=\"checkAll(this.checked);\" />";
     }

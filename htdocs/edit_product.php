@@ -10,7 +10,7 @@
 
 
 // Author: Ivan Lucas <ivanlucas[at]users.sourceforge.net>
-
+@include('set_include_path.inc.php');
 $permission=29; // Edit products
 
 require('db_connect.inc.php');
