@@ -119,21 +119,6 @@ $application_version_string=trim("v{$application_version} {$application_revision
 // Email template settings
 $template_openincident_email=12;
 
-// Hierarchical Menus
-/* Arrays containing menu options for the top menu, each menu has an associated permission number and this is used */
-/* to decide which menu to display.  In addition each menu item has an associated permission   */
-/* This is so we can decide whether a user should see the menu option or not.                                     */
-/* perm = permission number */
-/*
-$hmenu[1031] = array (10=> array ( 'perm'=> 0, 'name'=> "Option1", 'url'=>""),
-                      20=> array ( 'perm'=> 0, 'name'=> "Option2", 'url'=>""),
-                      30=> array ( 'perm'=> 0, 'name'=> "Option3", 'url'=>"")
-);
-*/
-//
-//////////////////
-
-
 //Prevent Magic Quotes from affecting scripts, regardless of server settings
 //Make sure when reading file data,
 //PHP doesn't "magically" mangle backslashes!
