@@ -464,7 +464,7 @@ function user_countincidents($id)
 
 // counts number of incidents and priorty
 function user_incidents($id){
-    $sql = "SELECT priority, count(priority) AS num FROM incidents where (owner = $id OR towner = $id) AND status != 2";
+    $sql = "SELECT priority, count(priority) AS num FROM incidents WHERE (owner = $id OR towner = $id) AND status != 2";
     $sql .= " GROUP BY priority";
 
     $result = mysql_query($sql);
