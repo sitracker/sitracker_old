@@ -33,7 +33,7 @@ if($searchmode != 'related')
     echo "<table align='center'>";
     echo "<tr><th>";
     echo "{$strSearch} ";
-    $domains=array('incidents'=>'Incidents', 'customers' => 'Customers', 'maintenance' => 'Maintenance', 'knowledgebase' => 'KnowlegeBase');
+    $domains=array('incidents'=> $strIncidents, 'customers' => $strCustomers, 'maintenance' => $strContracts, 'knowledgebase' => $strKnowledgeBase);
     echo array_drop_down($domains, 'search_domain', $search_domain);
     echo " {$strFor}:";
     echo "</th>";
@@ -130,32 +130,34 @@ function search_fix_quoted(&$sterms)
 function search_build_query($column, $sterms)
 {
     $numterms = count($sterms);
-//       echo "<pre>$column\n\n".print_r($sterms,TRUE)."</pre>";
+    //       echo "<pre>$column\n\n".print_r($sterms,TRUE)."</pre>";
     for ($i=0;$i < $numterms; $i++)
-{
-    if ($i>0)
     {
-        if ($sterms[$i]=='AND')
+        if ($i>0)
         {
-            $sql.= 'AND ';
-            $i++;
+            if ($sterms[$i]=='AND')
+            {
+                $sql.= 'AND ';
+                $i++;
+            }
+            elseif ($sterms[$i]=='OR')
+            {
+                $sql.= 'OR ';
+                $i++;
+            }
+            elseif ($sterms[$i]=='NOT')
+            {
+                $sql.= 'AND NOT ';
+                $i++;
+            }
+            else $sql .= "AND ";
         }
-        elseif ($sterms[$i]=='OR')
+        if (!empty($sterms[$i]))
         {
-            $sql.= 'OR ';
-            $i++;
+            if ($column == 'id' AND is_numeric($sterms[$i])) $sql .= "{$column} = ".str_replace('_',' ',$sterms[$i])." ";
+            else $sql .= "{$column} LIKE '%".str_replace('_',' ',$sterms[$i])."%' ";
         }
-        elseif ($sterms[$i]=='NOT')
-        {
-            $sql.= 'AND NOT ';
-            $i++;
-        }
-
-        else $sql .= "AND ";
     }
-    if (!empty($sterms[$i])) $sql .= "{$column} LIKE '%".str_replace('_',' ',$sterms[$i])."%' ";
-}
-
     return $sql;
 }
 
@@ -224,7 +226,7 @@ if (!empty($search_string))
             if (is_numeric($sterms[0])) $sql .= search_build_query('id', $sterms)."OR ";
             $sql .= search_build_query('title', $sterms);
             if(!empty($software) AND $software != '0') $sql .= "AND softwareid = {$software}";
-//             echo "<pre>$sql</pre>";
+//             if ($CONFIG['debug'])  echo "<pre>$sql</pre>";
             $result = mysql_query($sql);
             if (mysql_error()) trigger_error(mysql_error(),E_USER_WARNING);
             while ($sresult = mysql_fetch_object($result))
@@ -255,6 +257,7 @@ if (!empty($search_string))
                 $sql .= search_build_query('updates.bodytext', $sterms);
                 $sql .= ") GROUP BY incidents.id";
                 $result = mysql_query($sql);
+//                 if ($CONFIG['debug']) echo $sql;
                 if (mysql_error()) trigger_error(mysql_error(),E_USER_WARNING);
                 while ($sresult = mysql_fetch_object($result))
                 {
