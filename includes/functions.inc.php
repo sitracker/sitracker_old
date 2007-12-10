@@ -1456,7 +1456,7 @@ function interface_style($id)
 function incidentstatus_drop_down($name, $id)
 {
     // extract statuses
-    $sql  = "SELECT id, name FROM incidentstatus WHERE id >0 AND id<>2 AND id<>7 ORDER BY name ASC";
+    $sql  = "SELECT id, name FROM incidentstatus WHERE id<>2 AND id<>7 AND id<>10 ORDER BY name ASC";
     $result = mysql_query($sql);
     if (mysql_error()) trigger_error(mysql_error(),E_USER_WARNING);
     if (mysql_num_rows($result) < 1) trigger_error("Zero rows returned",E_USER_WARNING);

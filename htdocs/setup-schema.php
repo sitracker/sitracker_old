@@ -378,9 +378,8 @@ CREATE TABLE `incidentstatus` (
   `name` varchar(50) default NULL,
   `ext_name` varchar(50) default NULL,
   PRIMARY KEY  (`id`)
-) AUTO_INCREMENT=10 ENGINE=MyISAM;
+) ENGINE=MyISAM;
 
-INSERT INTO `incidentstatus` VALUES (0, 'Active (Unassigned)', 'Active');
 INSERT INTO `incidentstatus` VALUES (1, 'Active', 'Active');
 INSERT INTO `incidentstatus` VALUES (2, 'Closed', 'Closed');
 INSERT INTO `incidentstatus` VALUES (3, 'Research Needed', 'Research');
@@ -390,6 +389,7 @@ INSERT INTO `incidentstatus` VALUES (6, 'Awaiting Support Response', 'External E
 INSERT INTO `incidentstatus` VALUES (7, 'Awaiting Closure', 'Awaiting Closure');
 INSERT INTO `incidentstatus` VALUES (8, 'Awaiting Customer Action', 'Customer has Action');
 INSERT INTO `incidentstatus` VALUES (9, 'Unsupported', 'Unsupported');
+INSERT INTO `incidentstatus` VALUES (10, 'Active (Unassigned)', 'Active');
 
 
 
@@ -1544,7 +1544,7 @@ DROP TABLE `holidaytypes`;
 
 -- PH 26Nov07
 CREATE TABLE `billing_periods` (
-`servicelevelid` INT( 5 ) NOT NULL ,
+`servicelevelid` INT( 5 ) NOT NULL ,DROP TABLE `incidentstatus`
 `engineerperiod` INT NOT NULL COMMENT 'In minutes',
 `customerperiod` INT NOT NULL COMMENT 'In minutes',
 PRIMARY KEY r( `servicelevelid` )
@@ -1572,6 +1572,8 @@ ALTER TABLE `dashboard` ADD `version` MEDIUMINT NOT NULL DEFAULT '1' AFTER `name
 ALTER TABLE `contacts` ADD INDEX ( `active` );
 ALTER TABLE `sites` ADD INDEX ( `active` );
 ALTER TABLE `updates` ADD INDEX ( `customervisibility` );
+DELETE FROM incidentstatus WHERE id = 0 OR id = 10;
+INSERT INTO `incidentstatus` VALUES (10, 'Active (Unassigned)', 'Active');
 ";
 
 
