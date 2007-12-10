@@ -51,7 +51,7 @@ if (empty($submit) OR !empty($_SESSION['formerrors']))
     echo "<table align='center' class='vertical'>";
     echo "<tr><th>{$strName} <sup class='red'>*</sup><br /></th>\n";
 
-    echo "<td><table><tr><td align='center'>Salutation<br /><input maxlength='50' name='salutation' title='Salutation (Mr, Mrs, Miss, Dr. etc.)' size='7'";
+    echo "<td><table><tr><td align='center'>Salutation<br /><input maxlength='50' name='salutation' title='Salutation (Mr, Mrs, Miss, Dr. etc.)' size='7'"; //FIXME i18n
     if($_SESSION['formdata']['salutation'] != '')
         echo "value='{$_SESSION['formdata']['salutation']}'";
     echo "/></td>\n";
