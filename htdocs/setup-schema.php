@@ -1568,6 +1568,10 @@ ALTER TABLE `userstatus` DROP INDEX `id` ;
 -- PH 9/12/07
 ALTER TABLE `dashboard` ADD `version` MEDIUMINT NOT NULL DEFAULT '1' AFTER `name` ;
 
+-- INL 10/12/07
+ALTER TABLE `contacts` ADD INDEX ( `active` );
+ALTER TABLE `sites` ADD INDEX ( `active` );
+ALTER TABLE `updates` ADD INDEX ( `customervisibility` );
 ";
 
 
