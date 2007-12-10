@@ -28,11 +28,13 @@ if (empty($submit) OR !empty($_SESSION['formerrors']))
 {
     include('htmlheader.inc.php');
     ?>
+    <script type="text/javascript" src="scripts/dojo/dojo.js"></script>
     <script type='text/javascript'>
     function confirm_submit()
     {
         return window.confirm('<?php echo $strAddContractConfirm ?>');
     }
+    dojo.require("dojo.widget.ComboBox");
     </script>
     <?php
     echo "<h2><img src='{$CONFIG['application_webpath']}images/icons/{$iconset}/32x32/contact.png' width='32' height='32' alt='' /> ";
@@ -45,37 +47,41 @@ if (empty($submit) OR !empty($_SESSION['formerrors']))
 
     echo "<h5>".sprintf($strMandatoryMarked, "<sup class='red'>*</sup>")."</h5>";
     echo "<form name='contactform' action='{$_SERVER['PHP_SELF']}' method='post' onsubmit='return confirm_submit();'>";
-    echo "<table align='center'>";
-    echo "<tr><th>{$strName}: <sup class='red'>*</sup><br />{$strTitle}, {$strForenames}, {$strSurname}</th>";
-    echo "<td><input maxlength='50' name='salutation' title='Salutation (Mr, Mrs, Miss, Dr. etc.)' size='7'";
+    echo "<table align='center' class='vertical'>";
+    echo "<tr><th>{$strName} <sup class='red'>*</sup><br /></th>\n";
+    
+    echo "<td><table><tr><td align='center'>Salutation<br /><input maxlength='50' name='salutation' title='Salutation (Mr, Mrs, Miss, Dr. etc.)' size='7'";
     if($_SESSION['formdata']['salutation'] != '')
         echo "value='{$_SESSION['formdata']['salutation']}'";
-    echo "/>";
-
+    echo "/></td>\n";
+    
+    echo "<td align='center'>{$strTitle}<br />";
     echo "<input maxlength='100' name='forenames' size='15' title='Firstnames (or initials)'";
     if($_SESSION['formdata']['forenames'] != '')
         echo "value='{$_SESSION['formdata']['forenames']}'";
-    echo "/>";
+    echo "/></td>\n";
 
-    echo "<input maxlength='100' name='surname' size='20' title=\"{$strSurname}\"";
+    echo "<td align='center'>{$strSurname}<br /><input maxlength='100' name='surname' size='20' title=\"{$strSurname}\"";
     if($_SESSION['formdata']['surname'] != '')
         echo "value='{$_SESSION['formdata']['surname']}'";
-    echo "/></td></tr>\n";
-
-    echo "<tr><th>{$strJobTitle}:</th><td><input maxlength='255' name='jobtitle' size='35' title='e.g. Purchasing Manager'";
+    echo " /></td>";
+    echo "</tr></table></tr>\n";
+    
+    echo "<tr><th>{$strJobTitle}</th><td><input maxlength='255' name='jobtitle' size='35' title='e.g. Purchasing Manager'";
     if($_SESSION['formdata']['jobtitle'] != '')
         echo "value='{$_SESSION['formdata']['jobtitle']}'";
-    echo "/></td></tr>\n";
-
+    echo " />";
     //FIXME do this one
-    echo "<tr><th>{$strSite}: <sup class='red'>*</sup></th><td>".site_drop_down('siteid',$siteid)."</td></tr>\n";
+    echo "<tr><th>{$strSite} <sup class='red'>*</sup></th><td>";
+//     ".site_drop_down('siteid',$siteid)."</td></tr>\n";
+    echo "<input dojoType='ComboBox' dataUrl='autocomplete.php?action=sites' style='width: 300px;' name='search_string' />";
 
-    echo "<tr><th>{$strDepartment}:</th><td><input maxlength='255' name='department' size='35'";
+    echo "<tr><th>{$strDepartment}</th><td><input maxlength='255' name='department' size='35'";
     if($_SESSION['formdata']['department'] != '')
         echo "value='{$_SESSION['formdata']['department']}'";
     echo "/></td></tr>\n";
 
-    echo "<tr><th>{$strEmail}: <sup class='red'>*</sup></th><td><input maxlength='100' name='email' size='35'";
+    echo "<tr><th>{$strEmail} <sup class='red'>*</sup></th><td><input maxlength='100' name='email' size='35'";
     if($_SESSION['formdata']['email'])
         echo "value='{$_SESSION['formdata']['email']}'";
     echo "/> ";
@@ -86,7 +92,7 @@ if (empty($submit) OR !empty($_SESSION['formerrors']))
     echo "{$strEmail} {$strDataProtection}</label>";
     echo "</td></tr>\n";
 
-    echo "<tr><th>{$strTelephone}:</th><td><input maxlength='50' name='phone' size='35'";
+    echo "<tr><th>{$strTelephone}</th><td><input maxlength='50' name='phone' size='35'";
     if($_SESSION['formdata']['phone'] != '')
         echo "value='{$_SESSION['formdata']['phone']}'";
     echo "/> ";
@@ -97,30 +103,30 @@ if (empty($submit) OR !empty($_SESSION['formerrors']))
     echo "{$strTelephone} {$strDataProtection}</label>";
     echo "</td></tr>\n";
 
-    echo "<tr><th>{$strMobile}:</th><td><input maxlength='100' name='mobile' size='35'";
+    echo "<tr><th>{$strMobile}</th><td><input maxlength='100' name='mobile' size='35'";
     if($_SESSION['formdata']['mobile'] != '')
         echo "value='{$_SESSION['formdata']['mobile']}'";
     echo "/></td></tr>\n";
 
-    echo "<tr><th>{$strFax}:</th><td><input maxlength='50' name='fax' size='35'";
+    echo "<tr><th>{$strFax}</th><td><input maxlength='50' name='fax' size='35'";
     if($_SESSION['formdata']['fax'])
         echo "value='{$_SESSION['formdata']['fax']}'";
     echo "/></td></tr>\n";
 
     //FIXME all of these
-    echo "<tr><th>{$strAddress}:</th><td><label>";
+    echo "<tr><th>{$strAddress}</th><td><label>";
     html_checkbox('dataprotection_address', 'No');
     echo " {$strAddress} {$strDataProtection}</label></td></tr>\n";
     echo "<tr><th></th><td><label><input type='checkbox' name='usesiteaddress' value='yes' onclick=\"toggleDiv('hidden')\" /> {$strSpecifyAddress}</label></td></tr>\n";
     echo "<tbody id='hidden' style='display:none'>";
-    echo "<tr><th>{$strAddress1}:</th><td><input maxlength='255' name='address1' size='35' /></td></tr>\n";
-    echo "<tr><th>{$strAddress2}:</th><td><input maxlength='255' name='address2' size='35' /></td></tr>\n";
-    echo "<tr><th>{$strCity}:</th><td><input maxlength='255' name='city' size='35' /></td></tr>\n";
-    echo "<tr><th>{$strCounty}:</th><td><input maxlength='255' name='county' size='35' /></td></tr>\n";
-    echo "<tr><th>{$strCountry}:</th><td>".country_drop_down('country', $CONFIG['home_country'])."</td></tr>\n";
-    echo "<tr><th>{$strPostcode}:</th><td><input maxlength='255' name='postcode' size='35' /></td></tr>\n";
+    echo "<tr><th>{$strAddress1}</th><td><input maxlength='255' name='address1' size='35' /></td></tr>\n";
+    echo "<tr><th>{$strAddress2}</th><td><input maxlength='255' name='address2' size='35' /></td></tr>\n";
+    echo "<tr><th>{$strCity}</th><td><input maxlength='255' name='city' size='35' /></td></tr>\n";
+    echo "<tr><th>{$strCounty}</th><td><input maxlength='255' name='county' size='35' /></td></tr>\n";
+    echo "<tr><th>{$strCountry}</th><td>".country_drop_down('country', $CONFIG['home_country'])."</td></tr>\n";
+    echo "<tr><th>{$strPostcode}</th><td><input maxlength='255' name='postcode' size='35' /></td></tr>\n";
     echo "</tbody>";
-    echo "<tr><th>{$strNotes}:</th><td><textarea cols='60' rows='5' name='notes'>";
+    echo "<tr><th>{$strNotes}</th><td><textarea cols='60' rows='5' name='notes'>";
     if($_SESSION['formdata']['notes'] != '')
         echo $_SESSION['formdata']['notes'];
     echo "</textarea></td></tr>\n";
