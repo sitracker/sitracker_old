@@ -231,7 +231,7 @@ else
         elseif ($sort=='duedate') $sql .= "ORDER BY duedate ";
         elseif ($sort=='enddate') $sql .= "ORDER BY enddate ";
         elseif ($sort=='distribution') $sql .= "ORDER BY distribution ";
-        else $sql = "ORDER BY id ";
+        else $sql .= "ORDER BY id ";
         if ($order=='a' OR $order=='ASC' OR $order='') $sql .= "ASC";
         else $sql .= "DESC";
     }
@@ -247,7 +247,8 @@ if (mysql_num_rows($result) >=1 )
     if($show) $filter=array('show' => $show);
     echo "<br /><table align='center'>";
     echo "<tr>";
-
+    $filter['mode'] = $mode;
+    $filter['incident'] = $incident;
     if($mode != 'incident')
     {
         $totalduration = 0;
@@ -292,7 +293,10 @@ if (mysql_num_rows($result) >=1 )
         }
         if($mode == 'incident')
         {
-            if($enddate == '0') echo "<td><a href='view_task.php?id={$task->id}&amp;mode=incident&amp;incident={$id}' class='info'>{$task->id}</a></td>";
+            if ($enddate == '0')
+            {
+                echo "<td><a href='view_task.php?id={$task->id}&amp;mode=incident&amp;incident={$id}' class='info'><img src='{$CONFIG['application_webpath']}images/icons/{$iconset}/16x16/timer.png' width='16' height='16' alt='' /> {$task->id}</a></td>";
+            }
             else echo "<td>{$task->id}</td>";
         }
         else
@@ -309,7 +313,6 @@ if (mysql_num_rows($result) >=1 )
             echo "<td>".priority_icon($task->priority).priority_name($task->priority)."</td>";
             echo "<td>".percent_bar($task->completion)."</td>";
         }
-
         if($mode != 'incident')
         {
             echo "<td";

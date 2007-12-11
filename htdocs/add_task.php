@@ -50,22 +50,22 @@ else
     {
         case 'addtask':
             // External variables
-            $name = cleanvar($_REQUEST['name']);
-            $description = cleanvar($_REQUEST['description']);
-            $priority = cleanvar($_REQUEST['priority']);
-            if (!empty($_REQUEST['duedate'])) $duedate = strtotime($_REQUEST['duedate']);
+            $name = cleanvar($_POST['name']);
+            $description = cleanvar($_POST['description']);
+            $priority = cleanvar($_POST['priority']);
+            if (!empty($_POST['duedate'])) $duedate = strtotime($_POST['duedate']);
             else $duedate = '';
-            if (!empty($_REQUEST['startdate'])) $startdate = strtotime($_REQUEST['startdate']);
+            if (!empty($_POST['startdate'])) $startdate = strtotime($_POST['startdate']);
             else $startdate = '';
-            $completion = cleanvar($_REQUEST['completion']);
-            $value = cleanvar($_REQUEST['value']);
-            $distribution = cleanvar($_REQUEST['distribution']);
-            $taskuser = cleanvar($_REQUEST['taskuser']);
-            $starttime = cleanvar($_REQUEST['starttime']);
-            $duetime = cleanvar($_REQUEST['duetime']);
-            $endtime = cleanvar($_REQUEST['endtime']);
+            $completion = cleanvar($_POST['completion']);
+            $value = cleanvar($_POST['value']);
+            $distribution = cleanvar($_POST['distribution']);
+            $taskuser = cleanvar($_POST['taskuser']);
+            $starttime = cleanvar($_POST['starttime']);
+            $duetime = cleanvar($_POST['duetime']);
+            $endtime = cleanvar($_POST['endtime']);
 
-            $_SESSION['formdata'] = $_REQUEST;
+            $_SESSION['formdata'] = $_POST;
 
             // Validate input
             $errors = 0;
@@ -94,8 +94,8 @@ else
                 mysql_query($sql);
                 if (mysql_error()) trigger_error(mysql_error(),E_USER_ERROR);
                 if (mysql_affected_rows() < 1) trigger_error("Task insert failed",E_USER_ERROR);
-                $_SESSION['formdata'] = NULL;
-                $_SESSION['formerrors'] = NULL;
+                unset($_SESSION['formdata']);
+                unset($_SESSION['formerrors']);
                 html_redirect("tasks.php");
             }
         break;

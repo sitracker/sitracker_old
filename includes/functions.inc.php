@@ -2429,6 +2429,7 @@ function increment_incidents_used($maintid)
 // Functions to handle error reporting
 function sit_error_handler($errno, $errstr, $errfile, $errline, $errcontext)
 {
+    global $CONFIG;
     $errortype = array(
     E_ERROR          => 'Fatal Error',
     E_WARNING        => 'Warning',
@@ -2451,6 +2452,7 @@ function sit_error_handler($errno, $errstr, $errfile, $errline, $errcontext)
     {
         echo "<p class='error'><strong>{$errortype[$errno]} [{$errno}]</strong><br />";
         echo "{$errstr} in {$errfile} @ line {$errline}</p>";
+
         // Tips, to help diagnose errors
         if (strpos($errstr, 'Unknown column')!==FALSE OR
             preg_match("/MySQL Query Error Table '(.*)' doesn't exist/", $errstr))
@@ -2458,6 +2460,11 @@ function sit_error_handler($errno, $errstr, $errfile, $errline, $errcontext)
              echo "<p class='tip'>The SiT schema may need upgrading to fix this problem.";
              if (user_permission($sit[2], 22)) echo "Visit <a href='setup.php'>Setup</a>"; // Only show this to admin
              echo "</p>";
+        }
+
+        if (strpos($errstr, 'You have an error in your SQL syntax')!==FALSE)
+        {
+            echo "<p class='tip'>You may have found a bug in SiT, please <a href=\"{$CONFIG['bugtracker_url']}\">report it</a>.</p>";
         }
     }
 }
