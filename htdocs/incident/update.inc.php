@@ -435,7 +435,7 @@ function display_update_page($draftid=-1)
     if ($na_minutes<0) $na_minutes=0;
 
     echo "<label><input type='radio' name='timetonextaction_none' id='ttna_time' value='time' onchange=\"update_ttna();\" />";
-    echo "In <em>x</em> days, hours, minutes</label><br />"; // FIXME i18n in x days,. hours, minutes
+    echo "For <em>x</em> days, hours, minutes</label><br />"; // FIXME i18n for x days,. hours, minutes
     echo "<span id='ttnacountdown'";
     if (empty($na_days) AND empty($na_hours) AND empty($na_minutes)) echo " style='display: none;'";
     echo ">";
@@ -444,7 +444,7 @@ function display_update_page($draftid=-1)
     echo "<input maxlength='2' name='timetonextaction_minutes' id='timetonextaction_minutes' value='{$na_minutes}' onclick='window.document.updateform.timetonextaction_none[0].checked = true;' size='3' /> {$GLOBALS['strMinutes']}";
     echo "<br /></span>";
 
-    echo "<input type='radio' name='timetonextaction_none' id='ttna_date' value='date' onchange=\"update_ttna();\" />At specific date and time<br />";
+    echo "<input type='radio' name='timetonextaction_none' id='ttna_date' value='date' onchange=\"update_ttna();\" />Until specific date and time<br />"; //FIXME i18n Until specific date and time
     echo "<span id='ttnadate' style='display: none;'>";
     echo "<input name='date' id='date' size='10' value='{$date}' onclick=\"window.document.updateform.timetonextaction_none[1].checked = true;\"/> ";
     echo date_picker('updateform.date');
