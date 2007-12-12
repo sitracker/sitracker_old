@@ -93,7 +93,7 @@ switch ($_REQUEST['action'])
         echo "</td></tr>\n";
         echo "<tr>";
         echo "<td><input type='hidden' name='formid' value='{$formid}' />";
-        echo "<input type='hidden' name='isnew' value='yes' /></td>";
+        echo "<input type='hidden' name='isnew' value='yes' />";
         echo "<input type='hidden' name='action' value='save' /></td>";
         echo "<td><input type='submit' value='{$strSave}' /></td>";
         echo "</tr>";
@@ -147,25 +147,29 @@ switch ($_REQUEST['action'])
                 echo "<tr>";
                 echo "<th>Questions:</th>";
                 echo "<td>";
-                echo "<table width='100%'>";
+
                 // echo "<tr><th>Q</th><th>Question</th><th>Text</th></tr>\n<tr><th>Type</th><th>Reqd</th><th>Options</th></tr>\n";
                 $qsql  = "SELECT * FROM feedbackquestions ";
                 $qsql .= "WHERE formid='$formid' ORDER BY taborder";
                 $qresult = mysql_query($qsql);
-                while ($question = mysql_fetch_object($qresult))
+                if (mysql_num_rows($qresult) > 0)
                 {
-                    echo "<tr>";
-                    echo "<td><strong>Q{$question->taborder}</strong></td>";
-                    echo "<td><a href='edit_feedback_question.php?qid={$question->id}&amp;fid={$formid}'><strong>{$question->question}</strong></a></td>";
-                    echo "<td>{$question->questiontext}</td>";
-                    echo "</tr>\n<tr>";
-                    echo "<td>{$question->type}</td>";
-                    echo "<td colspan='2'>";
-                    if ($question->required=='true') echo "<strong>Required</strong> ";
-                    echo "<samp>{$question->options}</samp></td>";
-                    echo "</tr>";
+                    echo "<table width='100%'>";
+                    while ($question = mysql_fetch_object($qresult))
+                    {
+                        echo "<tr>";
+                        echo "<td><strong>Q{$question->taborder}</strong></td>";
+                        echo "<td><a href='edit_feedback_question.php?qid={$question->id}&amp;fid={$formid}'><strong>{$question->question}</strong></a></td>";
+                        echo "<td>{$question->questiontext}</td>";
+                        echo "</tr>\n<tr>";
+                        echo "<td>{$question->type}</td>";
+                        echo "<td colspan='2'>";
+                        if ($question->required=='true') echo "<strong>Required</strong> ";
+                        echo "<samp>{$question->options}</samp></td>";
+                        echo "</tr>";
+                    }
+                    echo "</table>";
                 }
-                echo "</table>";
                 echo "<p><a href='add_feedback_question.php?fid=$formid'>Add Question</a><br />Save the main form first</p>";
                 echo "</td></tr>\n";
                 echo "<tr>";

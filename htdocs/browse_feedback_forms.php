@@ -35,7 +35,7 @@ if(mysql_num_rows($result) > 0)
         echo "<dl>\n";
         echo "<dt>";
         echo "<a href='edit_feedback_form.php?formid={$obj->id}'>{$obj->name}</a> ";
-        echo "<dt>\n";
+        echo "</dt>\n";
         echo "<dd>{$obj->introduction}</dd>\n";
         echo "</dl>\n";
     }
