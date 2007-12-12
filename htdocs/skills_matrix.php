@@ -48,20 +48,20 @@ if ($numgroups >= 1)
     echo "{$strGroup}: <select name='choosegroup' onchange='window.location.href=this.options[this.selectedIndex].value'>";
     echo "<option value='{$_SERVER['PHP_SELF']}?gid=all";
     if(empty($legacy)) echo "'";
-    else echo "&legacy=yes'";
+    else echo "&amp;legacy=yes'";
     if ($filtergroup=='all') echo " selected='selected'";
-    echo ">All</option>\n";
+    echo ">{$strAll}</option>\n";
     foreach($grouparr AS $groupid => $groupname)
     {
         echo "<option value='{$_SERVER['PHP_SELF']}?gid={$groupid}";
         if(empty($legacy)) echo "'";
-        else echo "&legacy=yes'";
+        else echo "&amp;legacy=yes'";
         if ($groupid == $filtergroup) echo " selected='selected'";
         echo ">$groupname</option>\n";
     }
     echo "<option value='{$_SERVER['PHP_SELF']}?gid=0";
     if(empty($legacy)) echo "'";
-    else echo "&legacy=yes'";
+    else echo "&amp;legacy=yes'";
     if ($filtergroup=='0') echo " selected='selected'";
     echo ">{$strUsersWithNoGroup}</option>\n";
     echo "</select>\n";
@@ -176,8 +176,9 @@ if($countskills > 0 AND $countusers > 0)
         //echo $row->realname." ";
         $previous = $row->name;
     }
-    echo "<th align='right'>{$strTotal}</th>";
+    echo "<tr><th align='right'>{$strTotal}</th>";
     foreach($counting AS $c) echo "<td align='center'><strong>{$c}</strong></td>";
+    echo "</tr>\n";
     echo "</table>";
 } else echo "<p align='center'>{$strNothingToDisplay}</p>";
 
