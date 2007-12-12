@@ -17,6 +17,8 @@ require('functions.inc.php');
 // This page requires authentication
 require('auth.inc.php');
 
+// FIXME i18n Whole page
+
 // External variables
 $id = cleanvar($_REQUEST['id']);
 $action = $_REQUEST['action'];
@@ -26,7 +28,7 @@ if (empty($action) OR $action == "showform")
     // Show select email type form
     include('htmlheader.inc.php');
     ?>
-    <script language=javascript>
+    <script type="text/javascript">
     function confirm_submit()
     {
         return window.confirm('Are you sure you want to edit this email template?');
@@ -48,10 +50,10 @@ if (empty($action) OR $action == "showform")
         echo "<dl>\n";
         echo "<dt>";
         if ($email->type=='system') echo "<em>";
-        echo "<a href='{$_SERVER['PHP_SELF']}?id={$email->id}&action=edit'>{$email->name}</a> ";
+        echo "<a href='{$_SERVER['PHP_SELF']}?id={$email->id}&amp;action=edit'>{$email->name}</a> ";
         echo ucfirst($email->type)." template";
         if ($email->type=='system') echo "</em>";
-        echo "<dt>\n";
+        echo "</dt>\n";
         echo "<dd>{$email->description}</dd>\n";
         echo "</dl>\n";
     }
@@ -107,7 +109,7 @@ elseif ($action == "edit")
         echo "<input name='id' type='hidden' value='{$id}' />";
         echo "<input name='submit' type='submit' value=\"{$strSave}\" />";
         echo "</p>\n";
-        if ($emailtype['type']=='user') echo "<p align='center'><a href='{$_SERVER['PHP_SELF']}?action=delete&id={$id}'>{$strDelete}</a></p>";
+        if ($emailtype['type']=='user') echo "<p align='center'><a href='{$_SERVER['PHP_SELF']}?action=delete&amp;id={$id}'>{$strDelete}</a></p>";
         // FIXME i18n email templates
         ?>
         <p align='center'>The following special identifiers can be used in these fields:</p>

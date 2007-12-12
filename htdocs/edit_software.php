@@ -42,7 +42,7 @@ if (empty($action) OR $action=='edit')
     if (mysql_error()) trigger_error(mysql_error(),E_USER_ERROR);
     while ($software = mysql_fetch_object($result))
     {
-        echo "<h5>{$strMandatoryMarked} <sup class='red'>*</sup></h5>";
+        echo "<h5>".sprintf($strMandatoryMarked,"<sup class='red'>*</sup>")."</h5>";
         echo "<form name='editsoftware' action='{$_SERVER['PHP_SELF']}' method='post' onsubmit='return confirm_submit()'>";
         echo "<table class='vertical'>";
         echo "<tr><th>{$strVendor}:</th><td>".vendor_drop_down('vendor',$software->vendorid)."</td></tr>\n";
