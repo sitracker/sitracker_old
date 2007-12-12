@@ -131,3 +131,4 @@ should be written in upper case with columns and expressions in lower case.
 
 Where clarity will be improved by it use backtick (`) to quote identifiers.
 
+SELECT *, ROUND(age) AS approxage FROM `names` WHERE `names`.id > 100;
