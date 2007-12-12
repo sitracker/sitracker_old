@@ -77,8 +77,9 @@ if (empty($submit) OR !empty($_SESSION['formerrors']))
     echo " /></td></tr>\n";
     //FIXME do this one
     echo "<tr><th>{$strSite} <sup class='red'>*</sup></th><td>";
-//     ".site_drop_down('siteid',$siteid)."</td></tr>\n";
-    echo "<input dojoType='ComboBox' dataUrl='autocomplete.php?action=sites' style='width: 300px;' name='search_string' />";
+    echo site_drop_down('siteid',$siteid)."</td></tr>\n";
+    // KMH REMOVED 12/12/07, form fails as dojo doesn't have the siteID
+//     echo "<input dojoType='ComboBox' dataUrl='autocomplete.php?action=sites' style='width: 300px;' name='search_string' />"; 
 
     echo "<tr><th>{$strDepartment}</th><td><input maxlength='255' name='department' size='35'";
     if($_SESSION['formdata']['department'] != '')
