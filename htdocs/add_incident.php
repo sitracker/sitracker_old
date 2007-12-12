@@ -40,7 +40,7 @@ if (!empty($incomingid) AND empty($updateid)) $updateid = db_read_column('update
 
 if (empty($action) OR $action=='showform')
 {
-    // This Page Is Valid XHTML 1.0 Transitional! 27Oct05
+    // TODO This page fails XHTML validation because of dojo attributes - INL 12/12/07
     include('htmlheader.inc.php');
     ?>
     <script type="text/javascript" src="scripts/dojo/dojo.js"></script>
@@ -57,7 +57,9 @@ if (empty($action) OR $action=='showform')
         <input type="hidden" name="updateid" value="<?php echo $updateid ?>" />
         <table class='vertical'>
         <?php
-        echo "<tr><th><label for='search_string'>{$strContact} <img src='{$CONFIG['application_webpath']}images/icons/{$iconset}/16x16/contact.png' width='16' height='16' alt='' /></label></th><td>";
+        echo "<tr><th><label for='search_string'>{$strContact} ";
+        echo "<img src='{$CONFIG['application_webpath']}images/icons/{$iconset}/16x16/contact.png' width='16' height='16' alt='' />";
+        echo "</label></th><td>";
         //echo "<input type='text' name='search_string' size='30' value='{$query}' />\n";
         echo "<input dojoType='ComboBox' value='{$query}' dataUrl='autocomplete.php?action=contact' style='width: 300px;' name='search_string' id='search_string' />";
         echo "<input type='hidden' name='win' value='{$win}' />";
@@ -136,7 +138,7 @@ elseif ($action=='findcontact')
         {
             global $now, $updateid, $CONFIG;
             $str = "";
-            if ($contactrow['expirydate']<$now || $contactrow['term']=='yes') $class = 'expired';
+            if ($contactrow['expirydate'] < $now || $contactrow['term'] == 'yes') $class = 'expired';
             else $class = "shade2";
 
             $incidents_remaining = $contactrow['incident_quantity'] - $contactrow['incidents_used'];
@@ -145,7 +147,9 @@ elseif ($action=='findcontact')
             if ($contactrow['expirydate']<$now AND $contactrow['expirydate'] != '-1') $str .=  "<td>{$GLOBALS['strExpired']}</td>";
             elseif ($contactrow['term']=='yes') $str .=  "<td>{$GLOBALS['strTerminated']}</td>";
             elseif ($contactrow['incident_quantity'] >= 1 AND $contactrow['incidents_used'] >= $contactrow['incident_quantity'])
-                $str .=  "<td class='expired'>{$GLOBALS['strZeroRemaining']} ({$contactrow['incidents_used']}/{$contactrow['incident_quantity']} {$strUsed})</td>";
+            {
+                $str .= "<td class='expired'>{$GLOBALS['strZeroRemaining']} ({$contactrow['incidents_used']}/{$contactrow['incident_quantity']} {$strUsed})</td>";
+            }
             else
             {
                 $str .=  "<td><a href=\"{$_SERVER['PHP_SELF']}?action=incidentform&amp;type=support&amp;contactid=".$contactrow['contactid']."&amp;maintid=".$contactrow['maintenanceid']."&amp;producttext=".urlencode($contactrow['productname'])."&amp;productid=".$contactrow['productid']."&amp;updateid=$updateid&amp;siteid=".$contactrow['siteid']."&amp;win={$win}\" onclick=\"return confirm_support();\">{$GLOBALS['strAddIncident']}</a> ";
@@ -158,9 +162,13 @@ elseif ($action=='findcontact')
             $str .=  '<td><strong>'.$contactrow['maintid'].'</strong>&nbsp;'.$contactrow['productname'].'</td>';
             $str .=  '<td>'.servicelevel_id2tag($contactrow['servicelevelid']).'</td>';
             if($contactrow['expirydate'] == '-1')
+            {
                 $str .= "<td>{$GLOBALS['strUnlimited']}</td>";
+            }
             else
+            {
                 $str .=  '<td>'.date($CONFIG['dateformat_date'], $contactrow['expirydate']).'</td>';
+            }
             $str .=  "</tr>\n";
             return $str;
         }
@@ -172,8 +180,8 @@ elseif ($action=='findcontact')
 
         while($contactrow=mysql_fetch_array($result))
         {
-            if (empty($CONFIG['preferred_maintenance'])
-                OR in_array(servicelevel_id2tag($contactrow['servicelevelid']), $CONFIG['preferred_maintenance']))
+            if (empty($CONFIG['preferred_maintenance']) OR
+                in_array(servicelevel_id2tag($contactrow['servicelevelid']), $CONFIG['preferred_maintenance']))
             {
                 $str_prefered .= to_row($contactrow);
             }
