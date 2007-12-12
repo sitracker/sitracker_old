@@ -51,12 +51,15 @@ if (empty($submit) OR !empty($_SESSION['formerrors']))
     echo "<table align='center' class='vertical'>";
     echo "<tr><th>{$strName} <sup class='red'>*</sup><br /></th>\n";
 
-    echo "<td><table><tr><td align='center'>Salutation<br /><input maxlength='50' name='salutation' title='Salutation (Mr, Mrs, Miss, Dr. etc.)' size='7'"; //FIXME i18n
+    echo "<td>";
+    echo "\n<table><tr><td align='center'>{$strTitle}<br />";
+    echo "<input maxlength='50' name='salutation' title='Salutation (Mr, Mrs, Miss, Dr. etc.)' size='7'"; //FIXME i18n
+    // FIXME throughout sit the name salutation is used to mean 'courtesy title' (eg. mr, miss) - it's a mistake
     if($_SESSION['formdata']['salutation'] != '')
         echo "value='{$_SESSION['formdata']['salutation']}'";
     echo "/></td>\n";
 
-    echo "<td align='center'>{$strTitle}<br />";
+    echo "<td align='center'>{$strForenames}<br />";
     echo "<input maxlength='100' name='forenames' size='15' title='Firstnames (or initials)'";
     if($_SESSION['formdata']['forenames'] != '')
         echo "value='{$_SESSION['formdata']['forenames']}'";
@@ -65,13 +68,13 @@ if (empty($submit) OR !empty($_SESSION['formerrors']))
     echo "<td align='center'>{$strSurname}<br /><input maxlength='100' name='surname' size='20' title=\"{$strSurname}\"";
     if($_SESSION['formdata']['surname'] != '')
         echo "value='{$_SESSION['formdata']['surname']}'";
-    echo " /></td>";
-    echo "</tr></table></tr>\n";
+    echo " /></td></tr>\n";
+    echo "</table>\n</td></tr>\n";
 
     echo "<tr><th>{$strJobTitle}</th><td><input maxlength='255' name='jobtitle' size='35' title='e.g. Purchasing Manager'";
     if($_SESSION['formdata']['jobtitle'] != '')
         echo "value='{$_SESSION['formdata']['jobtitle']}'";
-    echo " />";
+    echo " /></td></tr>\n";
     //FIXME do this one
     echo "<tr><th>{$strSite} <sup class='red'>*</sup></th><td>";
 //     ".site_drop_down('siteid',$siteid)."</td></tr>\n";
