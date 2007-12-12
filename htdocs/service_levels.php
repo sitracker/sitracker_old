@@ -42,7 +42,7 @@ if (mysql_num_rows($tresult) >= 1)
 
         echo "<tr><th colspan='2'>{$strPriority}</th><th>{$strInitialResponse}</th>";
         echo "<th>{$strProblemDefinition}</th><th>{$strActionPlan}</th><th>{$strResolutionReprioritisation}</th>";
-        echo "<th>{$strReview}</th><th>{$strTimed}</th><th></th></tr>";
+        echo "<th>{$strReview}</th><th>{$strTimed}</th><th>{$strOperation}</th></tr>";
         while ($sla = mysql_fetch_object($result))
         {
             echo "<tr>";
@@ -57,7 +57,7 @@ if (mysql_num_rows($tresult) >= 1)
                 echo "<td>{$strYes}</td>";
             }
             else echo "<td>{$strNo}</td>";
-            echo "<td><a href='edit_service_level.php?tag={$sla->tag}&amp;priority={$sla->priority}'>{$strEdit}</a></th>";
+            echo "<td><a href='edit_service_level.php?tag={$sla->tag}&amp;priority={$sla->priority}'>{$strEdit}</a></td>";
             echo "</tr>\n";
         }
     }
