@@ -107,10 +107,9 @@ if (empty($submit))
         echo "value='{$_SESSION['formdata']['fax']}'";
     echo "/></td></tr>\n";
 
-    echo "<tr><th>{$strHolidayEntitlement}</th><td><input maxlength='3' name='holiday_entitlement' size='3'";
-    if($_SESSION['formdata']['holiday_entitlement'] != "")
-        echo "value='{$_SESSION['formdata']['holiday_entitlement']}'";
-    echo "days</td></tr>\n"; // i18n days
+    echo "<tr><th>{$strHolidayEntitlement}</th><td><input maxlength='3' name='holiday_entitlement' size='3' ";
+    if($_SESSION['formdata']['holiday_entitlement'] != "") echo "value='{$_SESSION['formdata']['holiday_entitlement']}'";
+    echo " /> {$strDays}</td></tr>\n";
     plugin_do('add_user_form');
     echo "</table>\n";
     echo "<p><input name='submit' type='submit' value=\"{$strAddUser}\" /></p>";
