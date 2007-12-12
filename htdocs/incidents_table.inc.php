@@ -179,19 +179,19 @@ while ($incidents = mysql_fetch_array($result))
     if (!empty($incidents['escalationpath']) AND !empty($incidents['externalid']))
     {
         $epathurl = str_replace('%externalid%',$incidents['externalid'],$epath[$escalationpath]['track_url']);
-        $externalid = "<a href='{$epathurl}' title='{$epath[$escalationpath]['url_title']}'>{$incidents['externalid']}</a>";
+        $externalid = "<a href=\"{$epathurl}\" title=\"{$epath[$escalationpath]['url_title']}\">{$incidents['externalid']}</a>";
     }
     elseif (empty($incidents['externalid']) AND $incidents['escalationpath']>=1)
     {
         $epathurl = $epath[$escalationpath]['home_url'];
-        $externalid = "<a href='{$epathurl}' title='{$epath[$escalationpath]['url_title']}'>{$epath[$escalationpath]['name']}</a>";
+        $externalid = "<a href=\"{$epathurl}\" title=\"{$epath[$escalationpath]['url_title']}\">{$epath[$escalationpath]['name']}</a>";
     }
     elseif (empty($incidents['escalationpath']) AND !empty($incidents['externalid'])) $externalid = format_external_id($incidents['externalid']);
     echo "<tr class='{$class}'>";
     echo "<td align='center'>";
     // Note: Sales incident type is obsolete
     if ($incidents['type']!='Support') echo "<strong>".ucfirst($incidents['type'])."</strong>: ";
-    echo "<a href='incident_details.php?id={$incidents['id']}' style='color: #000000;'>{$incidents['id']}</a>";
+    echo "<a href='incident_details.php?id={$incidents['id']}' style='color:#000;'>{$incidents['id']}</a>";
     if ($externalid != "") echo "<br />{$externalid}";
     echo "</td>";
     echo "<td>";
