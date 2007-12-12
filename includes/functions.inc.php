@@ -91,10 +91,12 @@ define('USER_LANG_DIFFERS_TYPE', 6);
 define('SIT_UPGRADED_NOTICE', 7);
 
 
+// Decide which language to use and setup internationalisation
 require('i18n/en-GB.inc.php');
 if ($CONFIG['default_i18n']!='en-GB') @include("i18n/{$CONFIG['default_i18n']}.inc.php");
 if(!empty($_SESSION['lang']) AND $_SESSION['lang'] != $CONFIG['default_i18n']) include("i18n/{$_SESSION['lang']}.inc.php");
 ini_set('default_charset', $i18ncharset);
+
 
 // FIXME putting this config variable here until we fully support it - move to defaults.inc.php when ready - INL 25Nov07
 $CONFIG['db_tableprefix'] = '';
