@@ -110,6 +110,10 @@ Unless it uglifies the code, use braces even for one-liner conditionals:
         return 1;
     }
 
+If you must use a one line conditional, keep it on one line - don't split it
+
+    if (foo) dothis();
+
 Always use braces if the conditional expression wraps across multiple
 physical lines.
 
