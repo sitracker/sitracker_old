@@ -36,7 +36,7 @@ function confirm_submit()
 if (empty($submit))
 {
     echo "<h2>{$strNewTemplate}</h2>";
-    echo "<h5>{$strMandatoryMarked} <sup class='red'>*</sup></h5>";
+    echo "<h5>".sprintf($strMandatoryMarked,"<sup class='red'>*</sup>")."</h5>";
     ?>
     <p align='center'>The following special identifiers can be used in these fields:</p>
     <table align='center' class='vertical'>
@@ -73,8 +73,8 @@ if (empty($submit))
     <tr><th>&lt;supportmanageremail&gt;</th><td>Technical Support mangers email address</td></tr>
     <tr><th>&lt;globalsignature&gt;</th><td>Current Global Signature</td></tr>
     <tr><th>&lt;todaysdate&gt;</th><td>Current Date</td></tr>
-    <tr><th>&lt;info1&gt;</span></th><td>Additional Info #1 (template dependent)</td></tr>
-    <tr><th>&lt;info2&gt;</span></th><td>Additional Info #2 (template dependent)</td></tr>
+    <tr><th>&lt;info1&gt;</th><td>Additional Info #1 (template dependent)</td></tr>
+    <tr><th>&lt;info2&gt;</th><td>Additional Info #2 (template dependent)</td></tr>
     <?php
     echo "<tr><th>&lt;useremail&gt;</th><td>The current users email address</td></tr>";
     echo "<tr><th>&lt;userrealname&gt;</th><td>The full name of the current user</td></tr>";
@@ -100,12 +100,13 @@ if (empty($submit))
     <tr><th>'Reply To' Field: <sup class='red'>*</sup></th><td><input maxlength='100' name="replytofield" size="30" /></td></tr>
     <tr><th>'CC' Field:</th><td><input maxlength='100' name="ccfield" size="30" /></td></tr>
     <tr><th>'BCC' Field:</th><td><input maxlength='100' name="bccfield" size="30" /></td></tr>
-    <tr><th>'Subject' Field:</th><td><input maxlength=255 name="subjectfield" size="30" /></td></tr>
-    <tr><th>Body text:</th><td><textarea name="bodytext" rows="20" cols="60" /></textarea></td></tr>
+    <tr><th>'Subject' Field:</th><td><input maxlength='255' name="subjectfield" size="30" /></td></tr>
+    <tr><th>Body text:</th><td><textarea name="bodytext" rows="20" cols="60"></textarea></td></tr>
     <tr><th>Store in Log:</th><td><input type="checkbox" name="storeinlog" value="Yes" checked='checked' /> Store the email in the incident log</td></tr>
     <tr><th>Visibility:</th><td><input type="checkbox" name="cust_vis" checked='checked' value="yes" /> Make the update to the incident log visible to the customer</td></tr>
     </table>
     <p align='center'><input name="submit" type="submit" value="Add It" /></p>
+    </form>
     <?php
     include('htmlfooter.inc.php');
 }
