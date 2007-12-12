@@ -7,10 +7,9 @@
 // This software may be used and distributed according to the terms
 // of the GNU General Public License, incorporated herein by reference.
 //
-
-
 // Author: Ivan Lucas <ivanlucas[at]users.sourceforge.net>
-// This Page Is Valid XHTML 1.0 Transitional! 27Oct05
+
+// TODO This page fails XHTML validation because of dojo attributes - INL 12/12/07
 
 @include('set_include_path.inc.php');
 $permission=11; // View Sites

@@ -10,7 +10,7 @@
 
 // Author: Ivan Lucas <ivanlucas[at]users.sourceforge.net>
 
-// This Page Is Valid XHTML 1.0 Transitional! 27Oct05
+// TODO This page fails XHTML validation because of dojo attributes - INL 12/12/07
 
 @include('set_include_path.inc.php');
 $permission=19; // View Maintenance Contracts
@@ -38,14 +38,10 @@ include('htmlheader.inc.php');
 <?php
 echo "<h2><img src='{$CONFIG['application_webpath']}images/icons/{$iconset}/32x32/contract.png' width='32' height='32' alt='' /> ";
 echo "{$title}</h2>";
-?>
-<table summary="alphamenu" align="center">
-<tr>
-<td align="center">
-<form action="<?php echo $_SERVER['PHP_SELF']; ?>" method="get">
-<?php echo $strBrowseContractsBySite;?>: <!--<input type="text" name="search_string" />-->
-<input dojoType='ComboBox' dataUrl='autocomplete.php?action=sites' style='width: 300px;' name='search_string' />
-<?php
+echo "<table summary='alphamenu' align='center'><tr><td align='center'>";
+echo "<form action='{$_SERVER['PHP_SELF']}' method='get'>";
+echo "{$strBrowseContractsBySite}:"; // <!--<input type="text" name="search_string" />-->
+echo "<input dojoType='ComboBox' dataUrl='autocomplete.php?action=sites' style='width: 300px;' name='search_string' />";
 echo "<label><input type='checkbox' name='activeonly' value='yes' ";
 if ($activeonly=='yes') echo "checked='checked' ";
 echo "/> {$strShowActiveOnly}</label>";
