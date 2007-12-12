@@ -445,6 +445,11 @@ else
                 }
             }
 
+            // Tidy up drafts i.e. delete
+            $draft_sql = "DELETE FROM drafts WHERE incidentid = {$id}";
+            mysql_query($draft_sql);
+            if (mysql_error()) trigger_error("MySQL Query Error ".mysql_error(), E_USER_ERROR);
+
             // Check for knowledge base stuff, prior to confirming:
             if ($_REQUEST['kbarticle']=='yes')
             {
@@ -500,9 +505,10 @@ else
                 journal(CFG_LOGGING_NORMAL, 'KB Article Added', "KB Article $docid was added", CFG_JOURNAL_KB, $docid);
 
                 //html_redirect("incident_details.php?id={$id}", TRUE, "Knowledge Base Article {$CONFIG['kb_id_prefix']}{$docid} created");
+
+                echo "<html>";
+                echo "<head></head>";
                 ?>
-                <html>
-                <head></head>
                 <script type="text/javascript">
                 function confirm_close_window()
                 {
@@ -511,15 +517,15 @@ else
                 }
                 </script>
                 <body onload="confirm_close_window();">
-                </body>
-                </html>
                 <?php
+                echo "</body>";
+                echo "</html>";
             }
             else
             {
+                echo "<html>";
+                echo "<head></head>";
                 ?>
-                <html>
-                <head></head>
                 <script type="text/javascript">
                 function confirm_close_window()
                 {
