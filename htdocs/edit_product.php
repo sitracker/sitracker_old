@@ -67,7 +67,7 @@ else
     echo "<td>";
     echo vendor_drop_down('vendor', $row->vendorid);
     echo "</td></tr>";
-    echo "<tr><th>Product Name: <sup class='red'>*</sup></td>";
+    echo "<tr><th>{$strName}: <sup class='red'>*</sup></th>";
     echo "<td>";
     echo "<input class='textbox' maxlength='255' name='name' size='40' value='{$row->name}' />";
     echo "</td></tr>";
@@ -81,7 +81,6 @@ else
     echo "<input type='hidden' name='productid' value='$id' />";
     echo "<input type='hidden' name='action' value='save' />";
     echo "<p align='center'><input type='submit' value='{$strSave}' /></p>";
-    echo "</td></tr>";
     echo "</form>";
 
     echo "<p align='center'><a href='products.php'>Return to products list without saving</a></p>";
