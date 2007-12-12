@@ -75,7 +75,7 @@ switch ($action)
             $shade='shade1';
             while($row = mysql_fetch_object($result))
             {
-                echo "<tr class='{$shade}'><td><a href={$_SERVER['PHP_SELF']}?action=edit&vendorid=$row->id&vendorname=".urlencode($row->name).">{$row->name}</a></td></tr>";
+                echo "<tr class='{$shade}'><td><a href=\"{$_SERVER['PHP_SELF']}?action=edit&amp;vendorid={$row->id}&amp;vendorname=".urlencode($row->name)."\">{$row->name}</a></td></tr>\n";
 
                 if($shade=='shade1') $shade='shade2';
                 else $shade='shade1';
