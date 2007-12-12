@@ -46,7 +46,7 @@ if (empty($mode))
     echo "<tr><th colspan='2'>{$strAbout}";
     if ($userid==$sit[2]) echo $strYou;
     else echo $user->realname;
-    echo "</td></tr>\n";
+    echo "</th></tr>\n";
     echo "<tr><th>{$strUsername}:</th><td>{$user->username}</td></tr>";
     echo "<tr><th>{$strRole}:</th>";
     if ($userid==$sit[2] OR $userid==1) echo "<td>".db_read_column('rolename', 'roles', $user->roleid)."</td>";
@@ -96,7 +96,7 @@ if (empty($mode))
     }
     echo "
     </td></tr>
-    <tr><th colspan='2'>{$strWorkStatus}</td></tr>";
+    <tr><th colspan='2'>{$strWorkStatus}</th></tr>";
     if ($edituserpermission AND $userid != $sit[2]) $userdisable=TRUE;
     else $userdisable=FALSE;
 
@@ -108,11 +108,11 @@ if (empty($mode))
     echo "</td></tr>\n";
     echo "<tr><th>{$strMessage}:<br />{$strMessageTip}</th>";
     echo "<td><textarea name='message' rows='4' cols='40'>".strip_tags($user->message)."</textarea></td></tr>\n";
-    echo "<tr><th colspan='2'>{$strContactDetails}</td></tr>";
-    echo "<tr id='email'><th>{$strEmail}:<sup class='red'>*</sup></th><td><input maxlength='50' name='email' size='30' type='text' value='".strip_tags($user->email)."'></td></tr>";
-    echo "<tr id='phone'><th>{$strTelephone}:</th><td><input maxlength='50' name='phone' size='30' type='text' value='".strip_tags($user->phone)."'></td></tr>";
-    echo "<tr><th>{$strFax}:</th><td><input maxlength='50' name='fax' size='30' type='text' value='".strip_tags($user->fax)."'></td></tr>";
-    echo "<tr><th>{$strMobile}:</th><td><input maxlength='50' name='mobile' size='30' type='text' value='".user_mobile($userid)."'></td></tr>";
+    echo "<tr><th colspan='2'>{$strContactDetails}</th></tr>";
+    echo "<tr id='email'><th>{$strEmail}:<sup class='red'>*</sup></th><td><input maxlength='50' name='email' size='30' type='text' value='".strip_tags($user->email)."' /></td></tr>";
+    echo "<tr id='phone'><th>{$strTelephone}:</th><td><input maxlength='50' name='phone' size='30' type='text' value='".strip_tags($user->phone)."' /></td></tr>";
+    echo "<tr><th>{$strFax}:</th><td><input maxlength='50' name='fax' size='30' type='text' value='".strip_tags($user->fax)."' /></td></tr>";
+    echo "<tr><th>{$strMobile}:</th><td><input maxlength='50' name='mobile' size='30' type='text' value='".user_mobile($userid)."' /></td></tr>";
     echo "<tr><th>AIM: <img src=\"images/icons/{$iconset}/16x16/aim.png\" width=\"16\" height=\"16\" alt=\"AIM\" /></th>";
     echo "<td><input maxlength=\"50\" name=\"aim\" size=\"30\" type=\"text\" value=\"".strip_tags($user->aim)."\" /></td></tr>";
     echo "<tr><th>ICQ: <img src=\"images/icons/{$iconset}/16x16/icq.png\" width=\"16\" height=\"16\" alt=\"ICQ\" /></th>";
@@ -120,7 +120,7 @@ if (empty($mode))
     echo "<tr><th>MSN: <img src=\"images/icons/{$iconset}/16x16/msn.png\" width=\"16\" height=\"16\" alt=\"MSN\" /></th>";
     echo "<td><input maxlength=\"50\" name=\"msn\" size=\"30\" type=\"text\" value=\"".strip_tags($user->msn)."\" /></td></tr>";
 
-    echo "<tr><th colspan='2'>{$strDisplayPreferences}</td></tr>\n";
+    echo "<tr><th colspan='2'>{$strDisplayPreferences}</th></tr>\n";
     echo "<tr><th>{$strLanguage}</th><td>";
     echo "<select name='vari18n' id='vari18n'>";
     if (!empty($user->var_i18n)) $selectedlang = $user->var_i18n;
@@ -130,7 +130,7 @@ if (empty($mode))
         if($langcode == $selectedlang) echo "<option value='$langcode' selected='selected'>$language</option>\n";
         else echo "<option value='$langcode'>$language</option>\n";
     }
-    echo "</select></label>";
+    echo "</select>";
     echo "</td></tr>\n";
 
     echo "<tr><th>{$strInterfaceStyle}:</th><td>".interfacestyle_drop_down('style', $user->var_style)."</td></tr>\n";
@@ -155,18 +155,18 @@ if (empty($mode))
     html_checkbox('collapse', $user->var_collapse);
     echo "</td></tr>\n";
 
-    echo "<tr><th colspan='2'>{$strNotifications}</td></tr>\n";
+    echo "<tr><th colspan='2'>{$strNotifications}</th></tr>\n";
     echo "<tr><th>{$strEmailNotificationReassign}</th><td>";
     html_checkbox('emailonreassign', $user->var_notify_on_reassign);
-    echo "</td><tr>\n";
+    echo "</td></tr>\n";
 
     plugin_do('edit_profile_form');
 
     if ($CONFIG['trusted_server']==FALSE AND $userid==$sit[2])
     {
-        echo "<tr class='password'><th colspan='2'>{$strChangePassword}</td></tr>";
+        echo "<tr class='password'><th colspan='2'>{$strChangePassword}</th></tr>";
         echo "<tr class='password'><th>&nbsp;</th><td>{$strToChangePassword}</td></tr>";
-        echo "<tr class='password'><th>{$strOldPassword}:</th><td><input maxlength='50' name='password' size='30' type='password' /></td></tr>";
+        echo "<tr class='password'><th>{$strOldPassword}:</th><td><input maxlength='50' name='oldpassword' size='30' type='password' /></td></tr>";
         echo "<tr class='password'><th>{$strNewPassword}:</th><td><input maxlength='50' name='newpassword1' size='30' type='password' /></td></tr>";
         echo "<tr class='password'><th>{$strConfirmNewPassword}:</th><td><input maxlength='50' name='newpassword2' size='30' type='password' /></td></tr>";
     }
@@ -207,7 +207,7 @@ elseif($mode=='save')
     $accepting = cleanvar($_POST['accepting']);
     $roleid = cleanvar($_POST['roleid']);
     $holiday_entitlement = cleanvar($_POST['holiday_entitlement']);
-    $password = cleanvar($_POST['password']);
+    $password = cleanvar($_POST['oldpassword']);
     $newpassword1 = cleanvar($_POST['newpassword1']);
     $newpassword2 = cleanvar($_POST['newpassword2']);
 
