@@ -74,8 +74,9 @@ itself further indented, e.g.:
 Line Length
 -----------
 Try to keep all code lines 80 characters or less, certainly anything above
-100 characters should be split onto several lines.  This is except for any
-generated code.
+100 characters should cause you to consider splitting onto several lines.
+This is except for long strings of HTML that would be harder to read over
+several lines and for generated code.
 
 
 Spaces
