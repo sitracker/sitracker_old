@@ -40,6 +40,7 @@ if ($approver)
     else echo $user;
     echo "&amp;mode=approval'>{$strApproveHolidays}</a>";
 }
+echo "</p>\n";
 
 // Entitlement
 if ($user==$sit[2] OR $approver==TRUE)
@@ -94,7 +95,7 @@ if ($numwaiting > 0)
             if ($dates['length']=='pm' OR $dates['length']=='day') echo "<a href='add_holiday.php?type={$dates['type']}&amp;user=$user&amp;year=".date('Y',$dates['startdate'])."&amp;month=".date('m',$dates['startdate'])."&amp;day=".date('d',$dates['startdate'])."&amp;length=am' onclick=\"return window.confirm('".date('l jS F Y', $dates['startdate']).": {$strHolidayMorningOnlyConfirm}');\" title='{$strHolidayMorningOnly}'>{$strAM}</a> | ";
             if ($dates['length']=='am' OR $dates['length']=='day') echo "<a href='add_holiday.php?type={$dates['type']}&amp;user=$user&amp;year=".date('Y',$dates['startdate'])."&amp;month=".date('m',$dates['startdate'])."&amp;day=".date('d',$dates['startdate'])."&amp;length=pm' onclick=\"return window.confirm('".date('l jS F Y', $dates['startdate']).": {$strHolidayAfternoonOnlyConfirm}');\" title='{$strHolidayAfternoonOnly}'>{$strPM}</a> | ";
             if ($dates['length']=='am' OR $dates['length']=='pm') echo "<a href='add_holiday.php?type={$dates['type']}&amp;user=$user&amp;year=".date('Y',$dates['startdate'])."&amp;month=".date('m',$dates['startdate'])."&amp;day=".date('d',$dates['startdate'])."&amp;length=day' onclick=\"return window.confirm('".date('l jS F Y', $dates['startdate']).": {$strHolidayFullDayConfirm}');\" title='{$strHolidayFullDay}'>{$strAllDay}</a> | ";
-            if ($sit[2]==$user) echo "<a href='add_holiday.php?year=".date('Y',$dates['startdate'])."&amp;month=".date('m',$dates['startdate'])."&amp;day=".date('d',$dates['startdate'])."&amp;user={$sit[2]}&amp;type={$dates['type']}&amp;length=0&return=holidays' onclick=\"return window.confirm('".date('l jS F Y', $dates['startdate']).": {$strHolidayCancelConfirm}');\" title='{$strHolidayCancel}'>cancel</a>";
+            if ($sit[2]==$user) echo "<a href='add_holiday.php?year=".date('Y',$dates['startdate'])."&amp;month=".date('m',$dates['startdate'])."&amp;day=".date('d',$dates['startdate'])."&amp;user={$sit[2]}&amp;type={$dates['type']}&amp;length=0&amp;return=holidays' onclick=\"return window.confirm('".date('l jS F Y', $dates['startdate']).": {$strHolidayCancelConfirm}');\" title='{$strHolidayCancel}'>cancel</a>";
             echo "</td></tr>\n";
         }
         echo "<tr class='shade1'><td colspan='4'><a href='holiday_request.php?action=resend'>{$strSendReminderRequest}</a></td></tr>";
