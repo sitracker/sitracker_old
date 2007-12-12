@@ -8,9 +8,9 @@
 // of the GNU General Public License, incorporated herein by reference.
 //
 
-
 // Author: Ivan Lucas <ivanlucas[at]users.sourceforge.net>
-// This Page Is Valid XHTML 1.0 Transitional! 27Oct05
+
+// TODO This page fails XHTML validation because of dojo attributes - INL 12/12/07
 
 @include('set_include_path.inc.php');
 $permission=12; // View Contacts
@@ -94,14 +94,14 @@ echo "{$strBrowseContacts}</h2>";
         if($displayinactive=="true")
         {
             echo "<a href='".$_SERVER['PHP_SELF']."?displayinactive=false";
-            if(!empty($search_string)) echo "&search_string={$search_string}";
+            if(!empty($search_string)) echo "&amp;search_string={$search_string}";
             echo "'>{$strShowActiveOnly}</a>";
             $inactivestring="displayinactive=true";
         }
         else
         {
             echo "<a href='".$_SERVER['PHP_SELF']."?displayinactive=true";
-            if(!empty($search_string)) echo "&search_string={$search_string}";
+            if(!empty($search_string)) echo "&amp;search_string={$search_string}";
             echo "'>Show inactive</a>";
             $inactivestring="displayinactive=false";
         }
