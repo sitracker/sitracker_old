@@ -141,7 +141,7 @@ switch ($_REQUEST['action'])
                 echo "<th>Closing Thanks:<br />(Simple HTML Allowed)</th>";
                 echo "<td><textarea name='thanks' cols='80' rows='10'>";
                 echo $form->thanks."</textarea></td>";
-                echo "</tr>\n";
+                echo "</tr>\n";w
 
                 // If there are no reponses to this feedback form, allow questions to be modified also
                 echo "<tr>";

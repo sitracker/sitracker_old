@@ -176,8 +176,8 @@ while ($users = mysql_fetch_array($result))
     echo user_online($users[id]);
     echo userstatus_name($users["status"]);
     echo "</td><td align='center'>";
-    echo $users["accepting"]=='Yes' ? $strYes : "<span class='error'>{$strNo}</span></td>";
-    echo "<td>";
+    echo $users["accepting"]=='Yes' ? $strYes : "<span class='error'>{$strNo}</span>";
+    echo "</td><td>";
     echo "<a href='holidays.php?user={$users['id']}' title='{$strHolidays}'><img src='{$CONFIG['application_webpath']}images/icons/{$iconset}/16x16/holiday.png' width='16' height='16' alt='{$strHolidays}' style='border:none;' /></a> ";
     echo "<a href='tasks.php?user={$users['id']}' title='{$strTasks}'><img src='{$CONFIG['application_webpath']}images/icons/{$iconset}/16x16/task.png' width='16' height='16' alt='Todo icon' style='border:none;' /></a> ";
     $sitesql = "SELECT COUNT(id) FROM sites WHERE owner='{$users['id']}'";
