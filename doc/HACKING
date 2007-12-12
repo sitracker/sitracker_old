@@ -56,7 +56,7 @@ operator is always the last item on the line, e.g.:
     {
 
 Switch statements should have the case line indented and the case block
-itsel further indented, e.g.:
+itself further indented, e.g.:
 
     switch (condition)
     {
@@ -69,6 +69,14 @@ itsel further indented, e.g.:
         default:
             ...;
     }
+
+
+Line Length
+-----------
+Try to keep all code lines 80 characters or less, certainly anything above
+100 characters should be split onto several lines.  This is except for any
+generated code.
+
 
 Spaces
 ------
@@ -125,7 +133,7 @@ Braces around case blocks in switch statements are optional.
 
 
 SQL
-===
+---
 SQL Statements (SELECT, UPDATE, INSERT...) and functions (ABS(), MATCH(), TIME())
 should be written in upper case with columns and expressions in lower case.
 
