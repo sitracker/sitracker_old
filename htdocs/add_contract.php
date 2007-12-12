@@ -8,7 +8,7 @@
 // of the GNU General Public License, incorporated herein by reference.
 //
 
-// This Page Is Valid XHTML 1.0 Transitional!  1Nov05
+// This Page fails XHTML validation because of collapsable tbody in the table - INL 12/12/07
 
 @include('set_include_path.inc.php');
 $permission=39; // Add Maintenance Contract
