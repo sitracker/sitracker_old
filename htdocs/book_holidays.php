@@ -44,7 +44,7 @@ if (empty($step))
     echo date_picker('date.start');
     echo "</td></tr>\n";
     echo "<tr><th>{$strEndDate}:</th><td align='left' class='shade1' title='date picker'>";
-    echo "<input name='end' size='10' />";
+    echo "<input name='end' size='10' /> ";
     echo date_picker('date.end');
     echo "</td></tr>\n";
     echo "</table>\n";
