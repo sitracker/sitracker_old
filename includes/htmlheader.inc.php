@@ -9,9 +9,13 @@
 //
 // This Page Is Valid XHTML 1.0 Transitional! 27Oct05
 
+// Use session language if available, else use default language
+if (!empty($_SESSION['lang'])) $lang = $_SESSION['lang'];
+else $lang = $CONFIG['default_i18n'];
+
 echo "<!DOCTYPE html PUBLIC \"-//W3C//DTD XHTML 1.0 Transitional//EN\"\n";
 echo "\"http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd\">\n";
-echo "<html xmlns=\"http://www.w3.org/1999/xhtml\" xml:lang=\"{$_SESSION['lang']}\" lang=\"{$_SESSION['lang']}\">\n";
+echo "<html xmlns=\"http://www.w3.org/1999/xhtml\" xml:lang=\"{$lang}\" lang=\"{$lang}\">\n";
 echo "<head>\n";
 echo "<!-- SiT (Support Incident Tracker) - Support call tracking system\n";
 echo "     Copyright (C) 2000-2007 Salford Software Ltd. and Contributors\n\n";
