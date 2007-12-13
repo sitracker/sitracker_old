@@ -45,8 +45,8 @@ if (empty($submit))
 
     $numgroups = count($grouparr);
 
-    echo show_errors();
-    $_SESSION['formerrors'] = NULL;
+    echo show_form_errors('add_user');
+    clear_form_errors('add_user');
 
     echo "<h2><img src='{$CONFIG['application_webpath']}images/icons/{$iconset}/32x32/user.png' width='32' height='32' alt='' /> ";
     echo "{$strNewUser}</h2>";
@@ -54,61 +54,61 @@ if (empty($submit))
     echo "<form action='{$_SERVER['PHP_SELF']}' method='post' onsubmit='return confirm_submit();'>";
     echo "<table align='center' class='vertical'>\n";
     echo "<tr><th>{$strRealName} <sup class='red'>*</sup></th><td><input maxlength='50' name='realname' size='30'";
-    if($_SESSION['formdata']['realname'] != "")
-        echo "value='{$_SESSION['formdata']['realname']}'";
+    if($_SESSION['formdata']['add_user']['realname'] != "")
+        echo "value='{$_SESSION['formdata']['add_user']['realname']}'";
     echo "/></td></tr>\n";
 
     echo "<tr><th>{$strUsername} <sup class='red'>*</sup></th><td><input maxlength='50' name='username' size='30'";
-    if($_SESSION['formdata']['username'] != "")
-        echo "value='{$_SESSION['formdata']['username']}'";
+    if($_SESSION['formdata']['add_user']['username'] != "")
+        echo "value='{$_SESSION['formdata']['add_user']['username']}'";
     echo "/></td></tr>\n";
 
     echo "<tr id='password'><th>{$strPassword} <sup class='red'>*</sup></th><td><input maxlength='50' name='password' size='30'";
-    if($_SESSION['formdata']['password'] != "")
-        echo "value='{$_SESSION['formdata']['password']}'";
+    if($_SESSION['formdata']['add_user']['password'] != "")
+        echo "value='{$_SESSION['formdata']['add_user']['password']}'";
     echo "/></td></tr>\n";
 
     echo "<tr><th>{$strGroup}</th>";
-    if($_SESSION['formdata']['groupid'] != "")
-        echo "<td>".group_drop_down('groupid', $_SESSION['formdata']['groupid'])."</td>";
+    if($_SESSION['formdata']['add_user']['groupid'] != "")
+        echo "<td>".group_drop_down('groupid', $_SESSION['formdata']['add_user']['groupid'])."</td>";
     else
         echo "<td>".group_drop_down('groupid', 0)."</td>";
     echo "</tr>";
 
     echo "<tr><th>{$strRole}</th>";
-    if($_SESSION['formdata']['roleid'] != "")
-        echo "<td>".role_drop_down('roleid', $_SESSION['formdata']['roleid'])."</td>";
+    if($_SESSION['formdata']['add_user']['roleid'] != "")
+        echo "<td>".role_drop_down('roleid', $_SESSION['formdata']['add_user']['roleid'])."</td>";
     else
         echo "<td>".role_drop_down('roleid', 1)."</td>";
     echo "</tr>";
 
     echo "<tr><th>{$strJobTitle} <sup class='red'>*</sup></th><td><input maxlength='50' name='jobtitle' size='30'";
-    if($_SESSION['formdata']['jobtitle'] != "")
-        echo "value='{$_SESSION['formdata']['jobtitle']}'";
+    if($_SESSION['formdata']['add_user']['jobtitle'] != "")
+        echo "value='{$_SESSION['formdata']['add_user']['jobtitle']}'";
     echo "/></td></tr>\n";
 
     echo "<tr id='email'><th>{$strEmail} <sup class='red'>*</sup></th><td><input maxlength='50' name='email' size='30'";
-    if($_SESSION['formdata']['email'] != "")
-        echo "value='{$_SESSION['formdata']['email']}'";
+    if($_SESSION['formdata']['add_user']['email'] != "")
+        echo "value='{$_SESSION['formdata']['add_user']['email']}'";
     echo "/></td></tr>\n";
 
     echo "<tr><th>{$strTelephone}</th><td><input maxlength='50' name='phone' size='30'";
-    if($_SESSION['formdata']['phone'] != "")
-        echo "value='{$_SESSION['formdata']['phone']}'";
+    if($_SESSION['formdata']['add_user']['phone'] != "")
+        echo "value='{$_SESSION['formdata']['add_user']['phone']}'";
     echo "/></td></tr>\n";
 
     echo "<tr><th>{$strMobile}</th><td><input maxlength='50' name='mobile' size='30'";
-    if($_SESSION['formdata']['mobile'] != "")
-        echo "value='{$_SESSION['formdata']['mobile']}'";
+    if($_SESSION['formdata']['add_user']['mobile'] != "")
+        echo "value='{$_SESSION['formdata']['add_user']['mobile']}'";
     echo "/></td></tr>\n";
 
     echo "<tr><th>{$strFax}</th><td><input maxlength='50' name='fax' size='30'";
-    if($_SESSION['formdata']['fax'] != "")
-        echo "value='{$_SESSION['formdata']['fax']}'";
+    if($_SESSION['formdata']['add_user']['fax'] != "")
+        echo "value='{$_SESSION['formdata']['add_user']['fax']}'";
     echo "/></td></tr>\n";
 
     echo "<tr><th>{$strHolidayEntitlement}</th><td><input maxlength='3' name='holiday_entitlement' size='3' ";
-    if($_SESSION['formdata']['holiday_entitlement'] != "") echo "value='{$_SESSION['formdata']['holiday_entitlement']}'";
+    if($_SESSION['formdata']['add_user']['holiday_entitlement'] != "") echo "value='{$_SESSION['formdata']['add_user']['holiday_entitlement']}'";
     echo " /> {$strDays}</td></tr>\n";
     plugin_do('add_user_form');
     echo "</table>\n";
@@ -116,8 +116,7 @@ if (empty($submit))
     echo "</form>\n";
     include('htmlfooter.inc.php');
 
-    $_SESSION['formdata'] = NULL;
-
+    clear_form_data('add_user');
 }
 else
 {
@@ -134,38 +133,38 @@ else
     $fax = cleanvar($_REQUEST['fax']);
     $holiday_entitlement = cleanvar($_REQUEST['holiday_entitlement']);
 
-    $_SESSION['formdata'] = $_REQUEST;
+    $_SESSION['formdata']['add_user'] = $_REQUEST;
     // Add user
     $errors = 0;
     // check for blank real name
     if ($realname == "")
     {
         $errors++;
-        $_SESSION['formerrors']['realname']= "You must enter a real name</p>\n";
+        $_SESSION['formerrors']['add_user']['realname']= "You must enter a real name</p>\n";
     }
     // check for blank username
     if ($username == "")
     {
         $errors++;
-        $_SESSION['formerrors']['username']= "You must enter a username</p>\n";
+        $_SESSION['formerrors']['add_user']['username']= "You must enter a username</p>\n";
     }
     // check for blank password
     if ($password == "")
     {
         $errors++;
-        $_SESSION['formerrors']['password']= "You must enter a password</p>\n";
+        $_SESSION['formerrors']['add_user']['password']= "You must enter a password</p>\n";
     }
     // check for blank job title
     if ($jobtitle == "")
     {
         $errors++;
-        $_SESSION['formerrors']['jobtitle']= "You must enter a job title</p>\n";
+        $_SESSION['formerrors']['add_user']['jobtitle']= "You must enter a job title</p>\n";
     }
     // check for blank email
     if ($email == "")
     {
         $errors++;
-        $_SESSION['formerrors']['email']= "You must enter an email address</p>\n";
+        $_SESSION['formerrors']['add_user']['email']= "You must enter an email address</p>\n";
     }
     // Check username is unique
     $sql = "SELECT COUNT(id) FROM users WHERE username='$username'";
@@ -175,7 +174,7 @@ else
     if ($countexisting >= 1)
     {
         $errors++;
-        $_SESSION['formerrors']['']= "Username must be unique</p>\n";
+        $_SESSION['formerrors']['add_user']['']= "Username must be unique</p>\n";
     }
     // Check email address is unique (discount disabled accounts)
     $sql = "SELECT COUNT(id) FROM users WHERE status > 0 AND email='$email'";
@@ -185,7 +184,7 @@ else
     if ($countexisting >= 1)
     {
         $errors++;
-        $_SESSION['formerrors']['duplicate_email'] = "Email must be unique</p>\n";
+        $_SESSION['formerrors']['add_user']['duplicate_email'] = "Email must be unique</p>\n";
     }
 
     // add information if no errors
@@ -218,6 +217,8 @@ else
             journal(CFG_LOGGING_NORMAL, 'User Added', "User $username was added", CFG_JOURNAL_ADMIN, $id);
             html_redirect("manage_users.php#userid{$newuserid}");
         }
+        clear_form_data('add_user');
+        clear_form_errors('add_user');
     }
     else
         html_redirect("add_user.php", FALSE);

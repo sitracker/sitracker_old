@@ -25,10 +25,9 @@ if ($action == "showform" OR $action == '')
 {
     // Show add site form
     include('htmlheader.inc.php');
-    echo show_errors();
+    echo show_form_errors('add_site');
+    clear_form_errors('add_site');
 
-    //cleanup errors
-    $_SESSION['formerrors'] = NULL;
     echo "<script type='text/javascript'>";
     echo 'function confirm_submit()
     {
@@ -41,84 +40,84 @@ if ($action == "showform" OR $action == '')
     echo "<form action='{$_SERVER['PHP_SELF']}?action=add' method='post' onsubmit='return confirm_submit();'>";
     echo "<table align='center' class='vertical'>";
     echo "<tr><th>{$strName} <sup class='red'>*</sup></th><td><input maxlength='255' name='name' size='30' ";
-    if($_SESSION['formdata']['name'] != "")
-        echo "value='{$_SESSION['formdata']['name']}'";
+    if($_SESSION['formdata']['add_site']['name'] != "")
+        echo "value='{$_SESSION['formdata']['add_site']['name']}'";
     echo " /></td></tr>\n";
 
     echo "<tr><th>{$strDepartment}</th><td><input maxlength='255' name='department' size='30'";
-    if($_SESSION['formdata']['department'] != "")
-        echo "value='{$_SESSION['formdata']['department']}'";
+    if($_SESSION['formdata']['add_site']['department'] != "")
+        echo "value='{$_SESSION['formdata']['add_site']['department']}'";
     echo " /></td></tr>\n";
 
     echo "<tr><th>{$strAddress1}<sup class='red'>*</sup></th><td><input maxlength='255' name='address1' size='30'";
-    if($_SESSION['formdata']['address1'] != "")
-        echo "value='{$_SESSION['formdata']['address1']}'";
+    if($_SESSION['formdata']['add_site']['address1'] != "")
+        echo "value='{$_SESSION['formdata']['add_site']['address1']}'";
     echo " /></td></tr>\n";
 
     echo "<tr><th>{$strAddress2}</th><td><input maxlength='255' name='address2' size='30'";
-    if($_SESSION['formdata'][''] != "address2")
-        echo "value='{$_SESSION['formdata']['address2']}'";
+    if($_SESSION['formdata']['add_site'][''] != "address2")
+        echo "value='{$_SESSION['formdata']['add_site']['address2']}'";
     echo " /></td></tr>\n";
 
     echo "<tr><th>{$strCity}</th><td><input maxlength='255' name='city' size='30'";
-    if($_SESSION['formdata']['city'] != "")
-        echo "value='{$_SESSION['formdata']['city']}'";
+    if($_SESSION['formdata']['add_site']['city'] != "")
+        echo "value='{$_SESSION['formdata']['add_site']['city']}'";
     echo " /></td></tr>\n";
 
     echo "<tr><th>{$strCounty}</th><td><input maxlength='255' name='county' size='30'";
-    if($_SESSION['formdata']['county'] != "")
-        echo "value='{$_SESSION['formdata']['county']}'";
+    if($_SESSION['formdata']['add_site']['county'] != "")
+        echo "value='{$_SESSION['formdata']['add_site']['county']}'";
     echo " /></td></tr>\n";
 
     echo "<tr><th>{$strCountry} <sup class='red'>*</sup></th><td>";
-    if($_SESSION['formdata']['country'] != "")
-        echo country_drop_down('country', $_SESSION['formdata']['country'])."</td></tr>\n";
+    if($_SESSION['formdata']['add_site']['country'] != "")
+        echo country_drop_down('country', $_SESSION['formdata']['add_site']['country'])."</td></tr>\n";
     else
         echo country_drop_down('country', $CONFIG['home_country'])."</td></tr>\n";
 
     echo "<tr><th>{$strPostcode}</th><td><input maxlength='255' name='postcode' size='30'";
-    if($_SESSION['formdata']['postcode'] != "")
-        echo "value='{$_SESSION['formdata']['postcode']}'";
+    if($_SESSION['formdata']['add_site']['postcode'] != "")
+        echo "value='{$_SESSION['formdata']['add_site']['postcode']}'";
     echo " /></td></tr>\n";
 
     echo "<tr><th>{$strTelephone}</th><td><input maxlength='255' name='telephone' size='30'";
-    if($_SESSION['formdata']['telephone'] != "")
-        echo "value='{$_SESSION['formdata']['telephone']}'";
+    if($_SESSION['formdata']['add_site']['telephone'] != "")
+        echo "value='{$_SESSION['formdata']['add_site']['telephone']}'";
     echo " /></td></tr>\n";
     ;
     echo "<tr><th>{$strEmail} <sup class='red'>*</sup></th><td><input maxlength='255' name='email' size='30'";
-    if($_SESSION['formdata']['email'] != "")
-        echo "value='{$_SESSION['formdata']['email']}'";
+    if($_SESSION['formdata']['add_site']['email'] != "")
+        echo "value='{$_SESSION['formdata']['add_site']['email']}'";
     echo " /></td></tr>\n";
 
     echo "<tr><th></th><td><a href=\"javascript:toggleDiv('hidden')\">{$strMore}</a></td></tr>\n";
     echo "<tbody id='hidden' class='hidden' style='display:none'>";
     echo "<tr><th>{$strFax}</th><td><input maxlength='255' name='fax' size='30'";
-    if($_SESSION['formdata']['fax'] != "")
-        echo "value='{$_SESSION['formdata']['fax']}'";
+    if($_SESSION['formdata']['add_site']['fax'] != "")
+        echo "value='{$_SESSION['formdata']['add_site']['fax']}'";
     echo " /></td></tr>\n";
 
     echo "<tr><th>{$strWebsite}</th><td><input maxlength='255' name='websiteurl' size='30'";
-    if($_SESSION['formdata']['websiteurl'] != "")
-        echo "value='{$_SESSION['formdata']['websiteurl']}'";
+    if($_SESSION['formdata']['add_site']['websiteurl'] != "")
+        echo "value='{$_SESSION['formdata']['add_site']['websiteurl']}'";
     echo " /></td></tr>\n";
 
     echo "<tr><th>{$strSiteType}</th><td>";
-    if($_SESSION['formdata']['typeid'] != "")
-        echo sitetype_drop_down('typeid', $_SESSION['formdata']['typeid'])."</td></tr>\n";
+    if($_SESSION['formdata']['add_site']['typeid'] != "")
+        echo sitetype_drop_down('typeid', $_SESSION['formdata']['add_site']['typeid'])."</td></tr>\n";
     else
         echo sitetype_drop_down('typeid', 1)."</td></tr>\n";
 
     echo "<tr><th>{$strSalesperson}</th><td>";
-    if($_SESSION['formdata']['owner'] != "")
-        user_drop_down('owner', $_SESSION['formdata']['owner'], $accepting=FALSE);
+    if($_SESSION['formdata']['add_site']['owner'] != "")
+        user_drop_down('owner', $_SESSION['formdata']['add_site']['owner'], $accepting=FALSE);
     else
         user_drop_down('owner', 0, $accepting=FALSE);
 
     echo "</td></tr>\n";
     echo "<tr><th>{$strNotes}</th><td><textarea cols='30' name='notes' rows='5'>";
-    if($_SESSION['formdata']['notes'] != "")
-        echo $_SESSION['formdata']['notes'];
+    if($_SESSION['formdata']['add_site']['notes'] != "")
+        echo $_SESSION['formdata']['add_site']['notes'];
 
     echo "</textarea></td></tr>\n";
     echo "</tbody>";
@@ -128,7 +127,7 @@ if ($action == "showform" OR $action == '')
     echo "</form>\n";
     include('htmlfooter.inc.php');
 
-    $_SESSION['formdata'] = NULL;
+    clear_form_data('add_site');
 }
 elseif ($action == "add")
 {
@@ -149,7 +148,7 @@ elseif ($action == "add")
     $typeid = cleanvar($_POST['typeid']);
     $owner = cleanvar($_POST['owner']);
 
-    $_SESSION['formdata'] = $_REQUEST;
+    $_SESSION['formdata']['add_site'] = $_REQUEST;
 
     include('htmlheader.inc.php');
 
@@ -158,17 +157,17 @@ elseif ($action == "add")
     if ($name == "")
     {
         $errors++;
-        $_SESSION['formerrors']['name'] = "Site name cannot be blank";
+        $_SESSION['formerrors']['add_site']['name'] = "Site name cannot be blank";
     }
     if ($address1 == "")
     {
         $errors++;
-        $_SESSION['formerrors']['address1'] = "Address1 cannot be blank";
+        $_SESSION['formerrors']['add_site']['address1'] = "Address1 cannot be blank";
     }
     if ($email == "")
     {
         $errors++;
-        $_SESSION['formerrors']['email'] = "Email cannot be blank";
+        $_SESSION['formerrors']['add_site']['email'] = "Email cannot be blank";
     }
 
     // add site if no errors
@@ -195,6 +194,8 @@ elseif ($action == "add")
             journal(CFG_LOGGING_NORMAL, 'Site Added', "Site $id was added", CFG_JOURNAL_SITES, $id);
             html_redirect("site_details.php?id={$id}");
         }
+        clear_form_data('add_site');
+        clear_form_errors('add_site');
     }
     else
     {

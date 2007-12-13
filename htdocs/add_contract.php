@@ -37,18 +37,22 @@ if ($action == "showform" OR $action=='')
     }
     </script>
     <?php
-    echo show_errors();
-    $_SESSION['formerrors'] = NULL;
+    echo show_form_errors('add_contract');
+    clear_form_errors('add_contract');
     echo "<h2><img src='{$CONFIG['application_webpath']}images/icons/{$iconset}/32x32/contract.png' width='32' height='32' alt='' /> ";
     echo "{$strAddContract}</h2>";
     echo "<h5>".sprintf($strMandatoryMarked,"<sup class='red'>*</sup>")."</h5>";
     echo "<form name='addcontract' action='{$_SERVER['PHP_SELF']}?action=add' method='post' onsubmit='return confirm_submit();'>";
     echo "<table align='center' class='vertical'>";
     echo "<tr><th>{$strSite} <sup class='red'>*</sup></th><td>";
-    if($_SESSION['formdata']['site'] != "")
-        echo site_drop_down("site", $_SESSION['formdata']['site'])." </td></tr>\n";
+    if($_SESSION['formdata']['add_contract']['site'] != "")
+    {
+        echo site_drop_down("site", $_SESSION['formdata']['add_contract']['site'])." </td></tr>\n";
+    }
     else
+    {
         echo site_drop_down("site", $siteid)." </td></tr>\n";
+    }
 
     echo "<tr><th>{$strContacts}<sup class='red'>*</sup></th><td>";
     // TODO all supportedcontacts disabled for 3.31 release
@@ -56,35 +60,49 @@ if ($action == "showform" OR $action=='')
 
     echo "<input type='hidden' name ='contacts' value='amount' />";
     echo "{$strLimitTo} <input size='2' name='amount' ";
-    if($_SESSION['formdata']['contacts'] != "")
-        echo "value='{$_SESSION['formdata']['amount']}'";
+    if($_SESSION['formdata']['add_contract']['contacts'] != "")
+    {
+        echo "value='{$_SESSION['formdata']['add_contract']['amount']}'";
+    }
     else
+    {
         echo "value='0'";
+    }
     echo " /> {$strSupportedContacts} ({$str0MeansUnlimited})<br />";
     // echo "<input type='radio' value='all' name='contacts' />";
     // echo "{$strAllSiteContactsSupported}";
     echo "</td></tr>";
     echo "<tr><th>{$strProduct} <sup class='red'>*</sup></th><td>";
-    if($_SESSION['formdata']['product'] != "")
-        echo product_drop_down("product", $_SESSION['formdata']['product'])."</td></tr>\n";
+    if($_SESSION['formdata']['add_contract']['product'] != "")
+    {
+        echo product_drop_down("product", $_SESSION['formdata']['add_contract']['product'])."</td></tr>\n";
+    }
     else
+    {
         echo product_drop_down("product", 0)."</td></tr>\n";
+    }
 
     echo "<tr><th>{$strExpiryDate} <sup class='red'>*</sup></th>";
     echo "<td><input name='expiry' size='10' ";
-    if($_SESSION['formdata']['expiry'] != "")
-        echo "value='{$_SESSION['formdata']['expiry']}'";
+    if($_SESSION['formdata']['add_contract']['expiry'] != "")
+        echo "value='{$_SESSION['formdata']['add_contract']['expiry']}'";
     echo "/> ".date_picker('addcontract.expiry');
     echo "<input type='checkbox' name='noexpiry' ";
-    if($_SESSION['formdata']['noexpiry'] == "on");
+    if($_SESSION['formdata']['add_contract']['noexpiry'] == "on")
+    {
         echo "checked='checked' ";
+    }
     echo "onclick=\"this.form.expiry.value=''\" /> {$strUnlimited}</td></tr>\n";
 
     echo "<tr><th>{$strServiceLevel}</th><td>";
-    if($_SESSION['formdata']['servicelevelid'] != "")
-        echo servicelevel_drop_down('servicelevelid', $_SESSION['formdata']['servicelevelid'], TRUE)."</td></tr>\n";
+    if($_SESSION['formdata']['add_contract']['servicelevelid'] != "")
+    {
+        echo servicelevel_drop_down('servicelevelid', $_SESSION['formdata']['add_contract']['servicelevelid'], TRUE)."</td></tr>\n";
+    }
     else
+    {
         echo servicelevel_drop_down('servicelevelid', 1, TRUE)."</td></tr>\n";
+    }
 
     echo "<tr><th>{$strAdminContact} <sup class='red'>*</sup></th><td>".contact_drop_down("admincontact", 0, true)."</td></tr>\n";
     echo "<tr><th>{$strNotes}</th><td><textarea cols='40' name='notes' rows='5'></textarea></td></tr>\n";
@@ -115,7 +133,8 @@ if ($action == "showform" OR $action=='')
     echo "</form>";
     include('htmlfooter.inc.php');
 
-    $_SESSION['formdata'] = NULL;
+    clear_form_data('add_contract');
+
 }
 elseif ($action == "add")
 {
@@ -142,7 +161,7 @@ elseif ($action == "add")
     $incident_pools = explode(',', "0,{$CONFIG['incident_pools']}");
     $incident_quantity = $incident_pools[$_POST['incident_poolid']];
 
-    $_SESSION['formdata'] = $_REQUEST;
+    $_SESSION['formdata']['add_contract'] = $_REQUEST;
 
     // Add maintenance to database
     $errors = 0;
@@ -150,36 +169,30 @@ elseif ($action == "add")
     if ($site == 0)
     {
         $errors++;
-        $_SESSION['formerrors'][''] = "You must select a site</p>\n";
+        $_SESSION['formerrors']['add_contract']['site'] = "You must select a site\n";
     }
     // check for blank product
     if ($product == 0)
     {
         $errors++;
-        $_SESSION['formerrors'][''] = "You must select a product</p>\n";
+        $_SESSION['formerrors']['add_contract']['product'] = "You must select a product\n";
     }
     // check for blank admin contact
     if ($admincontact == 0)
     {
         $errors++;
-        $_SESSION['formerrors'][''] = "You must select an admin contact</p>\n";
-    }
-    // check for blank service level
-    if ($admincontact == 0)
-    {
-        $errors++;
-        $_SESSION['formerrors'][''] = "You must select a service level</p>\n";
+        $_SESSION['formerrors']['add_contract']['admincontact'] = "You must select an admin contact\n";
     }
     // check for blank expiry day
     if ($expirydate == 0)
     {
         $errors++;
-        $_SESSION['formerrors'][''] = "You must enter an expiry date</p>\n";
+        $_SESSION['formerrors']['add_contract']['expirydate'] = "You must enter an expiry date\n";
     }
     elseif ($expirydate < $now AND $expirydate != -1)
     {
         $errors++;
-        $_SESSION['formerrors'][''] = "Expiry date cannot be in the past</p>\n";
+        $_SESSION['formerrors']['add_contract']['expirydate2'] = "Expiry date cannot be in the past\n";
     }
     // add maintenance if no errors
     if ($errors == 0)
@@ -220,8 +233,7 @@ elseif ($action == "add")
 
             html_redirect("contract_details.php?id=$maintid");
         }
-        $_SESSION['formdata'] = NULL;
-        $_SESSION['formerrors'] = NULL;
+        clear_form_data('add_contract');
     }
     else
     {

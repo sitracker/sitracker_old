@@ -5700,13 +5700,12 @@ function user_online($user)
         return "<img src='{$CONFIG['application_webpath']}images/icons/{$iconset}/16x16/offline.png' width='16' height='16' alt=\"{$strOffline}\" /> ";
 }
 
-
 /**
-    * Shows errors form a form, if any
+    * Shows errors from a form, if any
     * @author Kieran Hogg
     * @returns string. HTML of the form errors stored in the users session
 */
-function show_errors($formname)
+function show_form_errors($formname)
 {
     if($_SESSION['formerrors'][$formname])
     {
@@ -5718,6 +5717,25 @@ function show_errors($formname)
     return $html;
 }
 
+/**
+    * Cleans form errors
+    * @author Kieran Hogg
+    * @returns nothing
+*/
+function clear_form_errors($formname)
+{
+    unset($_SESSION['formerrors'][$formname]);
+}
+
+/**
+    * Cleans form data
+    * @author Kieran Hogg
+    * @returns nothing
+*/
+function clear_form_data($formname)
+{
+    unset($_SESSION['formdata'][$formname]);
+}
 
 /**
     * Trims a string so that it is not longer than the length given and
@@ -5729,6 +5747,7 @@ function show_errors($formname)
     *                    Set to FALSE for plain text only
     * @returns string. A shortned string (optionally with html)
 */
+
 function truncate_string($text, $maxlength=255, $html=TRUE)
 {
 
@@ -5746,7 +5765,6 @@ function truncate_string($text, $maxlength=255, $html=TRUE)
     }
     return $text;
 }
-
 
 // -------------------------- // -------------------------- // --------------------------
 // leave this section at the bottom of functions.inc.php ================================
