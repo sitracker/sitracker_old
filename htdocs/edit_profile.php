@@ -62,7 +62,7 @@ if (empty($mode))
     if ($edituserpermission && $userid!=$sit[2])
     {
         echo "<tr><th>{$strHolidayEntitlement}:</th><td>";
-        echo "<input type='text' name='holiday_entitlement' value='$entitlement' size='2' /> {$strdays}";
+        echo "<input type='text' name='holiday_entitlement' value='$entitlement' size='2' /> {$strDays}";
         echo "</td></tr>";
     }
     elseif ($entitlement > 0)
