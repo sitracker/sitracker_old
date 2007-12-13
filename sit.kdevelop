@@ -3,7 +3,7 @@
   <general>
     <author>Ivan Lucas</author>
     <email>ivanlucas@users.sourceforge.net</email>
-    <version>3.30</version>
+    <version>3.31</version>
     <projectmanagement>KDevScriptProject</projectmanagement>
     <primarylanguage>PHP</primarylanguage>
     <ignoreparts/>
@@ -12,7 +12,7 @@
     <description>Support Incident Tracker (or SiT!) is a web based application for tracking technical support calls/emails. Manage contacts, sites, technical support contracts and support incidents in one place. Send and receive emails directly from SiT!, attach files and record every communication in the incident log. SiT is aware of Service Level Agreements and incidents are flagged if they stray outside of them.</description>
     <versioncontrol>kdevsubversion</versioncontrol>
     <projectname>sit</projectname>
-    <defaultencoding/>
+    <defaultencoding>utf8</defaultencoding>
   </general>
   <kdevscriptproject>
     <general>
@@ -34,9 +34,9 @@
   </kdevdoctreeview>
   <kdevphpsupport>
     <codeHelp>
-      <codeCompletion>false</codeCompletion>
-      <codeHinting>false</codeHinting>
-      <realtimeParsing>false</realtimeParsing>
+      <codeCompletion>true</codeCompletion>
+      <codeHinting>true</codeHinting>
+      <realtimeParsing>true</realtimeParsing>
     </codeHelp>
     <general>
       <invocationMode>1</invocationMode>
@@ -48,11 +48,11 @@
     </webInvocation>
     <shell>
       <phpexe>/usr/local/bin/php</phpexe>
-      <phpini/>
+      <phpini></phpini>
     </shell>
     <options>
-      <phpincludepath/>
-      <defaultFile/>
+      <phpincludepath></phpincludepath>
+      <defaultFile></defaultFile>
       <startupFileMode>1</startupFileMode>
     </options>
   </kdevphpsupport>
@@ -116,11 +116,10 @@
   </kdevcvsservice>
   <kdevfileview>
     <groups>
+      <group pattern="*.js" name="Javascript" />
       <group pattern="*.php" name="PHP Code" />
       <group pattern="*.inc.php" name="Libraries" />
       <group pattern="*.css" name="Style Sheets" />
-      <hidenonprojectfiles>false</hidenonprojectfiles>
-      <hidenonlocation>false</hidenonlocation>
     </groups>
     <tree>
       <hidepatterns>*.o,*.lo,CVS</hidepatterns>
@@ -130,14 +129,15 @@
   </kdevfileview>
   <kdevdocumentation>
     <projectdoc>
-      <docsystem/>
-      <docurl/>
-      <usermanualurl/>
+      <docsystem></docsystem>
+      <docurl></docurl>
+      <usermanualurl></usermanualurl>
     </projectdoc>
   </kdevdocumentation>
   <ctagspart>
-    <customArguments/>
-    <customTagfilePath>tags</customTagfilePath>
+    <customArguments></customArguments>
+    <customTagfilePath>/home/ivan/dev1/sit/trunk/tags</customTagfilePath>
+    <activeTagsFiles/>
   </ctagspart>
   <kdevdebugger>
     <general>
