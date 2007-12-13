@@ -5596,10 +5596,12 @@ function implode_assoc($glue1, $glue2, $array)
     return implode($glue2, $array2);
 }
 
+
 /**
     * @author Kieran Hogg
-    * @param $name name of the html entity
-    * @param $time the time to set it to, format 12:34
+    * @param $name string. name of the html entity
+    * @param $time string. the time to set it to, format 12:34
+    * @returns string. HTML
 */
 function time_dropdown($name, $time='')
 {
@@ -5632,7 +5634,9 @@ function time_dropdown($name, $time='')
 
 /**
     * @author Kieran Hogg
-    * @todo
+    * @param $seconds Int. Number of seconds
+    * @returns string. Readable fuzzy time
+    * @todo i18n
 */
 function fuzzy_time($seconds)
 {
@@ -5653,8 +5657,11 @@ function fuzzy_time($seconds)
     return $time;
 }
 
+
 /**
     * @author Kieran Hogg
+    * @param $seconds Int. Number of seconds
+    * @returns string. Readable time in seconds
 */
 function exact_seconds($seconds)
 {
@@ -5666,13 +5673,14 @@ function exact_seconds($seconds)
     $seconds -= $minutes * 60;
 
     $string;
-    if($days != 0) $string .= "{$days} {$GLOBALS[strDays]}, ";
-    if($hours != 0) $string .= "{$hours} {$GLOBALS[strHours]}, ";
-    if($minutes != 0) $string .= "{$minutes} {$GLOBALS[strMinutes]}, ";
-    $string .= "{$seconds} {$GLOBALS[strSeconds]}";
+    if($days != 0) $string .= "{$days} {$GLOBALS['strDays']}, ";
+    if($hours != 0) $string .= "{$hours} {$GLOBALS['strHours']}, ";
+    if($minutes != 0) $string .= "{$minutes} {$GLOBALS['strMinutes']}, ";
+    $string .= "{$seconds} {$GLOBALS['strSeconds']}";
 
     return $string;
 }
+
 
 /**
     * An icon showing a users online status
@@ -5692,6 +5700,7 @@ function user_online($user)
         return "<img src='{$CONFIG['application_webpath']}images/icons/{$iconset}/16x16/offline.png' width='16' height='16' alt=\"{$strOffline}\" /> ";
 }
 
+
 /**
     * Shows errors form a form, if any
     * @author Kieran Hogg
@@ -5708,6 +5717,36 @@ function show_errors($formname)
     }
     return $html;
 }
+
+
+/**
+    * Trims a string so that it is not longer than the length given and
+    * add ellipses (...) to the end
+    * @author Ivan Lucas
+    * @param $text string. Some plain text to shorten
+    * @param $maxlength int. Length of the resulting string (in characters)
+    * @param $html bool. Set to TRUE to include HTML in the output (for ellipses)
+    *                    Set to FALSE for plain text only
+    * @returns string. A shortned string (optionally with html)
+*/
+function truncate_string($text, $maxlength=255, $html=TRUE)
+{
+
+    if (strlen($text) > $maxlength)
+    {
+        // Leave space for ellipses
+        if ($html == TRUE) $maxlength -= 1;
+        else $maxlength -= 3;
+        $text = utf8_encode(wordwrap(utf8_decode($text), $maxlength, '^\CUT/^', 1));
+        $parts = explode('^\CUT/^', $text);
+        $text = $parts[0];
+
+        if ($html == TRUE) $text .= '&hellip;';
+        else $text .= '...';
+    }
+    return $text;
+}
+
 
 // -------------------------- // -------------------------- // --------------------------
 // leave this section at the bottom of functions.inc.php ================================

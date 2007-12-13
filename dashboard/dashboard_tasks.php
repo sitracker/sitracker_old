@@ -57,7 +57,7 @@ function dashboard_tasks($row,$dashboardid)
             $startdate = mysql2date($task->startdate);
             echo "<tr class='$shade'>";
             echo "<td>{$task->id}</td>";
-            echo "<td><a href='view_task.php?id={$task->id}' class='info'>{$task->name}";
+            echo "<td><a href='view_task.php?id={$task->id}' class='info'>".truncate_string($task->name, 23);
             if (!empty($task->description)) echo "<span>".nl2br($task->description)."</span>";
             echo "</a></td>";
             echo "<td>".priority_icon($task->priority).priority_name($task->priority)."</td>";
