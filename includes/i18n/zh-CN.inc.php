@@ -251,7 +251,6 @@ $strFields = '栏目';
 $strFileManagement = '文件管理';
 $strFilename = '文件名';
 $strFiles = '文件';
-$strFirstLogin = '你已用一个空密码以管理员身份成功登陆，请现在修改密码。';
 $strFindContact = '查找合约';
 $strFor = '针对';
 $strForce = '强行';
