@@ -9,6 +9,7 @@
 //
 
 // This Page fails XHTML validation because of collapsable tbody in the table - INL 12/12/07
+// FIXME make XHTML complient - PH 13/12/07
 
 @include('set_include_path.inc.php');
 $permission=39; // Add Maintenance Contract
@@ -109,7 +110,7 @@ if ($action == "showform" OR $action=='')
 
     echo "<tr><th></th><td><a href=\"javascript:toggleDiv('hidden');\">{$strMore}</a></td></tr>\n";
 
-    echo "<tbody id='hidden' style='display:none'>";
+    echo "<tbody id='hidden' style='display:none'>"; //FIXME not XHTML
 
     echo "<tr><th>{$strReseller}</th><td>";
     reseller_drop_down("reseller", 0);
@@ -126,7 +127,7 @@ if ($action == "showform" OR $action=='')
     $incident_pools = explode(',', "Unlimited,{$CONFIG['incident_pools']}");
     echo "<td>".array_drop_down($incident_pools,'incident_poolid',$maint['incident_quantity'])."</td></tr>";
 
-    echo "<tr><th>{$strProductOnly}</th><td><input name='productonly' type='checkbox' value='yes' /></td></tr></tbody>\n";
+    echo "<tr><th>{$strProductOnly}</th><td><input name='productonly' type='checkbox' value='yes' /></td></tr></tbody>\n"; //FIXME XHTML
 
     echo "</table>\n";
     echo "<p align='center'><input name='submit' type='submit' value=\"{$strAddContract}\" /></p>";
