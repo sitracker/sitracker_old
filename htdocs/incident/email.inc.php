@@ -335,7 +335,8 @@ $emailtype|$newincidentstatus|$timetonextaction_none|$timetonextaction_days|$tim
             meta = meta+byId('year').value+"|"+byId('target').value+"|"+byId('chase_customer').value+"|";
             meta = meta+byId('chase_manager').value+"|"+byId('fromfield').value+"|"+byId('replytofield').value+"|";
             meta = meta+byId('ccfield').value+"|"+byId('bccfield').value+"|"+byId('tofield').value+"|";
-            meta = meta+urlencode(byId('subjectfield').value)+"|"+urlencode(byId('bodytext').value);
+            meta = meta+urlencode(byId('subjectfield').value)+"|"+urlencode(byId('bodytext').value)+"|"
+            meta = meta+byId('date').value+"|"+byid('timeoffset').value;
 
             if(toPass != "")
             {
@@ -390,6 +391,8 @@ $emailtype|$newincidentstatus|$timetonextaction_none|$timetonextaction_days|$tim
             $target = cleanvar($_REQUEST['target']);
             $chase_customer = cleanvar($_REQUEST['chase_customer']);
             $chase_manager = cleanvar($_REQUEST['chase_manager']);
+            $date = cleanvar($_REQUEST['date']);
+            $timeoffset = cleanvar($_REQUEST['timeoffset']);
         }
         else
         {
@@ -405,6 +408,8 @@ $emailtype|$newincidentstatus|$timetonextaction_none|$timetonextaction_days|$tim
             $target = $metadata[9];
             $chase_customer = $metadata[10];
             $chase_manager = $metadata[11];
+            $date = $metadata[12];
+            $timeoffset = $metadata[13];
         }
 
         if ($emailtype == 0 AND $draftid == -1)
@@ -489,9 +494,11 @@ $emailtype|$newincidentstatus|$timetonextaction_none|$timetonextaction_days|$tim
             echo "<input name='timetonextaction_minutes' id='timetonextaction_minutes' type='hidden' value='{$timetonextaction_minutes}' />";
             echo "<input name='chase_customer' id='chase_customer' type='hidden' value='{$chase_customer}' />";
             echo "<input name='chase_manager' id='chase_manager' type='hidden' value='{$chase_manager}' />";
-            echo "<input name='day' id='day' type='hidden' value='{$day}' />";
-            echo "<input name='month' id='month' type='hidden' value='{$month}' />";
-            echo "<input name='year' id='year' type='hidden' value='{$year}' />";
+            echo "<input name='date' id='date' type='hidden' value='{$date}' />";
+            echo "<input name='timeoffset' id='timeoffset' type='hidden' value='{$timeoffset}' />";
+//             echo "<input name='day' id='day' type='hidden' value='{$day}' />";
+//             echo "<input name='month' id='month' type='hidden' value='{$month}' />";
+//             echo "<input name='year' id='year' type='hidden' value='{$year}' />";
             echo "<input name='target' id='target' type='hidden' value='{$target}' />";
             echo "<input type='hidden' id='step' name='step' value='3' />";
             echo "<input type='hidden' id='emailtype' name='emailtype' value='{$emailtype}' />";
@@ -519,9 +526,11 @@ $emailtype|$newincidentstatus|$timetonextaction_none|$timetonextaction_days|$tim
         $timetonextaction_days = cleanvar($_REQUEST['timetonextaction_days']);
         $timetonextaction_hours = cleanvar($_REQUEST['timetonextaction_hours']);
         $timetonextaction_minutes = cleanvar($_REQUEST['timetonextaction_minutes']);
-        $day = cleanvar($_REQUEST['day']);
+        $date = cleanvar($_REQUEST['date']);
+        $timeoffset = cleanvar($_REQUEST['timeoffset']);
+        /*$day = cleanvar($_REQUEST['day']);
         $month = cleanvar($_REQUEST['month']);
-        $year = cleanvar($_REQUEST['year']);
+        */$year = cleanvar($_REQUEST['year']);
         $target = cleanvar($_REQUEST['target']);
         $chase_customer = cleanvar($_REQUEST['chase_customer']);
         $chase_manager = cleanvar($_REQUEST['chase_manager']);
@@ -652,9 +661,10 @@ $emailtype|$newincidentstatus|$timetonextaction_none|$timetonextaction_days|$tim
                     break;
 
                     case 'date':
-                        // $now + ($days * 86400) + ($hours * 3600) + ($minutes * 60);
-                        $unixdate=mktime(9,0,0,$month,$day,$year);
-                        $timeofnextaction = $unixdate;
+                        // kh: parse date from calendar picker, format: 200-12-31
+                        $date=explode("-", $date);
+                        $timeofnextaction=mktime(8 + $timeoffset,0,0,$date[1],$date[2],$date[0]);
+                        $now = time();
                         if ($timeofnextaction<0) $timeofnextaction=0;
                     break;
 
@@ -662,6 +672,9 @@ $emailtype|$newincidentstatus|$timetonextaction_none|$timetonextaction_days|$tim
                         $timeofnextaction = 0;
                     break;
                 }
+
+                $oldtimeofnextaction=incident_timeofnextaction($id);
+
                 if ($newincidentstatus != incident_status($id))
                 {
                     $sql = "UPDATE incidents SET status='$newincidentstatus', lastupdated='$now', timeofnextaction='$timeofnextaction' WHERE id='$id'";
@@ -674,6 +687,33 @@ $emailtype|$newincidentstatus|$timetonextaction_none|$timetonextaction_days|$tim
                     mysql_query("UPDATE incidents SET lastupdated='$now', timeofnextaction='$timeofnextaction' WHERE id='$id'");
                     if (mysql_error()) trigger_error("MySQL Query Error ".mysql_error(), E_USER_ERROR);
                 }
+
+                $timetext = "";
+
+                if ($timeofnextaction != 0)
+                {
+                    $timetext = "Next Action Time: ";
+                    if (($oldtimeofnextaction-$now)<1)
+                    {
+                        $timetext .= "None";
+                    }
+                    else
+                    {
+                        $timetext .= date("D jS M Y @ g:i A", $oldtimeofnextaction);
+                    }
+                    $timetext .= " -&gt; <b>";
+                    if ($timeofnextaction<1)
+                    {
+                        $timetext .= "None";
+                    }
+                    else
+                    { 
+                        $timetext.=date("D jS M Y @ g:i A", $timeofnextaction);
+                    }
+                    $timetext .= "</b>\n\n";
+                    //$bodytext = $timetext.$bodytext;
+                }
+
                 // add update
                 $bodytext=htmlentities($bodytext, ENT_COMPAT, 'UTF-8');
                 $updateheader .= "To: <b>$tofield</b>\nFrom: <b>$fromfield</b>\nReply-To: <b>$replytofield</b>\n";
@@ -683,7 +723,7 @@ $emailtype|$newincidentstatus|$timetonextaction_none|$timetonextaction_days|$tim
                 $updateheader .= "Subject: <b>$subjectfield</b>\n";
 
                 if (!empty($updateheader)) $updateheader .= "<hr>";
-                $updatebody = $updateheader . $bodytext;
+                $updatebody = $timetext . $updateheader . $bodytext;
                 $updatebody=mysql_real_escape_string($updatebody);
 
                 $sql  = "INSERT INTO updates (incidentid, userid, bodytext, type, timestamp, currentstatus,customervisibility) ";
