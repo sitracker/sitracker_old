@@ -26,3 +26,13 @@ div.windowtitle
 }
 div.windowtitle a:hover { color: white;}
 
+#menu ul, #menu li ul, #menu li li { background-color: #1063BE;  }
+#menu a.greyed, #menu a.greyed:hover { color: #000; }
+#menu li:hover {
+  color: white;
+  background-color: #1063BE;
+  font-weight: bold;
+}
+#menu li:hover>a, #menu a:hover {
+  color: white;
+}
