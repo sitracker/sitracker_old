@@ -157,8 +157,6 @@ $strDateAndTime = '日期和时间';
 $strDatesNotYetApproved = '尚未经许可的';
 $strDay = '天';
 $strDays = '天';
-
-$strdays = '天';
 $strdayssick = '天病假';
 $strdaysworkingaway = '天其它工作';
 $strdaystraining = '天培训';

@@ -150,7 +150,6 @@ $strCreateNewForm = 'Create New Form';
 $strCredits = 'Credits';
 $strCriteria = 'Criteria';
 $strCritical = 'Critical';
-$strCritical = 'Critical';
 $strCustomer = 'Customer';
 $strCustomerFeedback = 'Customer Feedback';
 $strCustomers = 'Customers';
@@ -176,7 +175,6 @@ $strDateAndTime = 'Date and Time';
 $strDatesNotYetApproved = 'Dates not yet approved';
 $strDay = 'Day';
 $strDays = 'Days';
-$strdays = 'days';
 $strdayssick = 'days sick leave';
 $strdaysworkingaway = 'days working away';
 $strdaystraining = 'days training';
@@ -277,7 +275,6 @@ $strFileManagement = 'File Management';
 $strFilename = 'Filename';
 # e.g. computer files
 $strFiles = 'Files';
-$strFirstLogin = 'You are logged in as Admin which currently has a blank password, please change this now';
 $strFindContact = 'Find Contact';
 #e.g. for a person
 $strFor = 'for';
