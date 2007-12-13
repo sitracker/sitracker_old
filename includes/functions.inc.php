@@ -5697,11 +5697,11 @@ function user_online($user)
     * @author Kieran Hogg
     * @returns string. HTML of the form errors stored in the users session
 */
-function show_errors()
+function show_errors($formname)
 {
-    if($_SESSION['formerrors'])
+    if($_SESSION['formerrors'][$formname])
     {
-        foreach($_SESSION['formerrors'] as $error)
+        foreach($_SESSION['formerrors'][$formname] as $error)
         {
             $html.= "<p class='error'>$error</p>";
         }
