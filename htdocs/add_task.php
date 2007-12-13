@@ -103,11 +103,11 @@ else
         case '':
         default:
             include('htmlheader.inc.php');
-            echo "<h2><img src='{$CONFIG['application_webpath']}images/icons/{$iconset}/32x32/task.png' width='32' height='32' alt='' /> ";
-            echo "$title</h2>";
-
             echo show_form_errors('add_task');
             clear_form_errors('add_task');
+
+            echo "<h2><img src='{$CONFIG['application_webpath']}images/icons/{$iconset}/32x32/task.png' width='32' height='32' alt='' /> ";
+            echo "$title</h2>";
 
             echo "<form id='addtask' action='{$_SERVER['PHP_SELF']}' method='post'>";
             echo "<table class='vertical'>";
