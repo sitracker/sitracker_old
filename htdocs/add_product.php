@@ -35,16 +35,37 @@ if (empty($submit))
     }
     </script>
     <?php
+    echo show_errors('add_product');
+    clear_form_errors('add_product');
     echo "<h2><img src='{$CONFIG['application_webpath']}images/icons/{$iconset}/32x32/product.png' width='32' height='32' alt='' /> ";
     echo "{$strNewProduct}</h2>";
     echo "<h5>".sprintf($strMandatoryMarked, "<sup class='red'>*</sup>")."</h5>";
     echo "<form action='{$_SERVER['PHP_SELF']}' method='post' onsubmit='return confirm_submit();'>";
     echo "<table align='center'>";
-    echo "<tr><th>{$strVendor}: <sup class='red'>*</sup></th><td>".vendor_drop_down('vendor', 0)."</td></tr>\n";
-    echo "<tr><th>{$strProduct}: <sup class='red'>*</sup></th><td><input maxlength='50' name='name' size='40' /></td></tr>\n";
-    echo "<tr><th>{$strDescription}:</th>";
+    echo "<tr><th>{$strVendor}<sup class='red'>*</sup></th><td>";
+    if($_SESSION['formdata']['add_product']['vendor'] != "")
+    {
+        echo vendor_drop_down('vendor', $_SESSION['formdata']['add_product']['vendor'])."</td></tr>\n";
+    }
+    else
+    {
+        echo vendor_drop_down('vendor', 0)."</td></tr>\n";
+    }
+    echo "<tr><th>{$strProduct}<sup class='red'>*</sup></th><td><input maxlength='50' name='name' size='40' ";
+    if($_SESSION['formdata']['add_product']['name'] != "")
+    {
+        echo "value=".$_SESSION['formdata']['add_product']['name'];
+    }
+    echo " /></td></tr>\n";
+    
+    echo "<tr><th>{$strDescription}</th>";
     echo "<td>";
-    echo "<textarea name='description' cols='40' rows='6'></textarea>";
+    echo "<textarea name='description' cols='40' rows='6'>";
+    if($_SESSION['formdata']['add_product']['description'] != "")
+    {
+        echo $_SESSION['formdata']['add_product']['description'];
+    }
+    echo "</textarea>";
     echo "</td></tr>";
     echo "</table>\n";
     echo "<p><input name='submit' type='submit' value=\"{$strAddProduct}\" /></p>";
@@ -52,6 +73,8 @@ if (empty($submit))
     echo "</form>\n";
     echo "<p align='center'><a href='products.php'>{$strReturnWithoutSaving}</a></p>";
     include('htmlfooter.inc.php');
+    clear_form_data('add_product');
+
 }
 else
 {
@@ -59,15 +82,21 @@ else
     $name = cleanvar($_REQUEST['name']);
     $vendor = cleanvar($_REQUEST['vendor']);
     $description = cleanvar($_REQUEST['description']);
-
+    
+    $_SESSION['formdata']['add_product'] = $_REQUEST;
     // Add New
     $errors = 0;
 
     // check for blank name
     if ($name == "")
     {
-        $errors = 1;
-        $errors_string .= "<p class='error'>You must enter a name</p>\n";
+        $errors++;
+        $_SESSION['formerrors']['add_product']['name'] = "Product name cannot be blank";
+    }
+    if ($vendor == "" OR $vendor == "0")
+    {
+        $errors++;
+        $_SESSION['formerrors']['add_product']['vendor'] = "Vendor cannot be blank";
     }
     // add product if no errors
     if ($errors == 0)
@@ -84,12 +113,13 @@ else
 
             html_redirect("products.php");
         }
+        clear_form_errors('add_product');
+        clear_form_data('add_product');
     }
     else
     {
         include('htmlheader.inc.php');
-        echo $errors_string;
-        include('htmlfooter.inc.php');
+        html_redirect("add_product.php", FALSE);
     }
 }
 ?>

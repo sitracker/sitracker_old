@@ -65,13 +65,13 @@ else
             $duetime = cleanvar($_POST['duetime']);
             $endtime = cleanvar($_POST['endtime']);
 
-            $_SESSION['formdata'] = $_POST;
+            $_SESSION['formdata']['add_task'] = $_POST;
 
             // Validate input
             $errors = 0;
             if ($name=='')
             {
-                $_SESSION['formerrors']['name'] = "Incident title must not be blank";
+                $_SESSION['formerrors']['add_task']['name'] = "Incident title must not be blank";
                 $errors++;
             }
 
@@ -94,8 +94,8 @@ else
                 mysql_query($sql);
                 if (mysql_error()) trigger_error(mysql_error(),E_USER_ERROR);
                 if (mysql_affected_rows() < 1) trigger_error("Task insert failed",E_USER_ERROR);
-                unset($_SESSION['formdata']);
-                unset($_SESSION['formerrors']);
+                unset($_SESSION['formdata']['add_task']);
+                unset($_SESSION['formerrors']['add_task']);
                 html_redirect("tasks.php");
             }
         break;
@@ -106,34 +106,32 @@ else
             echo "<h2><img src='{$CONFIG['application_webpath']}images/icons/{$iconset}/32x32/task.png' width='32' height='32' alt='' /> ";
             echo "$title</h2>";
 
-            echo show_errors();
-
-            //cleanup errors
-            $_SESSION['formerrors'] = NULL;
+            echo show_form_errors('add_task');
+            clear_form_errors('add_task');
 
             echo "<form id='addtask' action='{$_SERVER['PHP_SELF']}' method='post'>";
             echo "<table class='vertical'>";
             echo "<tr><th>{$strTitle} <sup class='red'>*</sup></th>";
             echo "<td><input type='text' name='name' size='35' maxlength='255'";
-            if($_SESSION['formdata']['name'] != '')
-                echo "value='{$_SESSION['formdata']['name']}'";
+            if($_SESSION['formdata']['add_task']['name'] != '')
+                echo "value='{$_SESSION['formdata']['add_task']['name']}'";
             echo "/></td></tr>";
 
             echo "<tr><th>{$strDescription}</th>";
             echo "<td><textarea name='description' rows='4' cols='30'>";
-            if($_SESSION['formdata']['description'] != '')
-                echo $_SESSION['formdata']['description'];
+            if($_SESSION['formdata']['add_task']['description'] != '')
+                echo $_SESSION['formdata']['add_task']['description'];
             echo "</textarea></td></tr>";
 
             echo "<tr><th>{$strPriority}</th>";
-            if($_SESSION['formdata']['priority'] != '')
-                echo "<td>".priority_drop_down('priority', $_SESSION['formdata']['priority'])."</td></tr>";
+            if($_SESSION['formdata']['add_task']['priority'] != '')
+                echo "<td>".priority_drop_down('priority', $_SESSION['formdata']['add_task']['priority'])."</td></tr>";
             else
                 echo "<td>".priority_drop_down('priority',1)."</td></tr>";
             echo "<tr><th>{$strStartDate}</th>";
             echo "<td><input type='text' name='startdate' id='startdate' size='10'";
-            if($_SESSION['formdata']['startdate'] != '')
-                echo "value='{$_SESSION['formdata']['startdate']}'";
+            if($_SESSION['formdata']['add_task']['startdate'] != '')
+                echo "value='{$_SESSION['formdata']['add_task']['startdate']}'";
             echo "/> ";
             echo date_picker('addtask.startdate');
             echo " ".time_dropdown("starttime", date("H:i"));
@@ -141,20 +139,20 @@ else
 
             echo "<tr><th>{$strDueDate}</th>";
             echo "<td><input type='text' name='duedate' id='duedate' size='10'";
-            if($_SESSION['formdata']['duedate'] != '')
-                echo "value='{$_SESSION['formdata']['duedate']}'";
+            if($_SESSION['formdata']['add_task']['duedate'] != '')
+                echo "value='{$_SESSION['formdata']['add_task']['duedate']}'";
             echo "/> ";
             echo date_picker('addtask.duedate');
-            if($_SESSION['formdata']['duetime'] != '')
-                echo " ".time_dropdown("duetime", $_SESSION['formdata']['duetime']);
+            if($_SESSION['formdata']['add_task']['duetime'] != '')
+                echo " ".time_dropdown("duetime", $_SESSION['formdata']['add_task']['duetime']);
             else
                 echo " ".time_dropdown("duetime");
             echo "</td></tr>";
 
             echo "<tr><th>{$strCompletion}</th>";
             echo "<td><input type='text' name='completion' size='3' maxlength='3'";;
-            if($_SESSION['formdata']['completion'] != '')
-                echo "value='{$_SESSION['formdata']['completion']}'";
+            if($_SESSION['formdata']['add_task']['completion'] != '')
+                echo "value='{$_SESSION['formdata']['add_task']['completion']}'";
             else
                 echo "value='0'";
             echo "/>&#037;</td></tr>";
@@ -166,19 +164,19 @@ else
             echo "</td></tr>";*/
             echo "<tr><th>{$strValue}</th>";
             echo "<td><input type='text' name='value' size='6' maxlength='12'";
-            if($_SESSION['formdata']['value'] != '')
-                echo "value='{$_SESSION['formdata']['value']}'";
+            if($_SESSION['formdata']['add_task']['value'] != '')
+                echo "value='{$_SESSION['formdata']['add_task']['value']}'";
             echo "/></td></tr>";
             echo "<tr><th>{$strUser}</th>";
             echo "<td>";
-            if($_SESSION['formdata']['taskuser'] != '')
-                echo user_drop_down('taskuser', $_SESSION['formdata']['taskuser'], FALSE);
+            if($_SESSION['formdata']['add_task']['taskuser'] != '')
+                echo user_drop_down('taskuser', $_SESSION['formdata']['add_task']['taskuser'], FALSE);
             else
                 echo user_drop_down('taskuser', $sit[2], FALSE);
             echo "</td></tr>";
             echo "<tr><th>{$strPrivacy}</th>";
             echo "<td>";
-            if($_SESSION['formdata']['distribution'] == 'public')
+            if($_SESSION['formdata']['add_task']['distribution'] == 'public')
             {
                 echo "<input type='radio' name='distribution' checked='checked'value='public' /> {$strPublic}<br />";
                 echo "<input type='radio' name='distribution' value='private' /> {$strPrivate} <img src='{$CONFIG['application_webpath']}images/icons/{$iconset}/16x16/private.png' width='16' height='16' title='{$strPublic}/{$strPrivate}' alt='{$strPrivate}' style='border: 0px;' /></td></tr>";
@@ -195,7 +193,9 @@ else
             echo "</form>";
 
             //cleanup form vars
-            $_SESSION['formdata'] = NULL;
+            clear_form_data('add_task');
+            clear_form_errors('add_site');
+
 
             include('htmlfooter.inc.php');
     }

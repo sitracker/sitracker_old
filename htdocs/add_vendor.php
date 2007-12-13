@@ -36,7 +36,8 @@ if (empty($submit))
     </script>
 
     <?php
-    echo show_errors();
+    echo show_form_errors('add_vendor');
+    clear_form_errors('add_vendor');
     echo "<h2>{$strAddVendor}</h2>";
     echo "<h5>".sprintf($strMandatoryMarked,"<sup class='red'>*</sup>")."</h5>";
     echo "<form action='{$_SERVER['PHP_SELF']}' method='post' onsubmit='return confirm_submit()'>";
@@ -78,8 +79,8 @@ else
             journal(CFG_LOGGING_DEBUG, 'Vendor Added', "Vendor $id was added", CFG_JOURNAL_DEBUG, $id);
             html_redirect("products.php");
         }
-        $_SESSION['formdata'] = NULL;
-        $_SESSION['formerrors'] = NULL;
+        clear_form_data('add_vendor');
+        clear_form_errors('add_vendor');
     }
     else
     {

@@ -61,7 +61,7 @@ switch($action)
                 // show success message
                 $id=mysql_insert_id();
                 journal(CFG_LOGGING_NORMAL, 'Reseller Added', "Reseller $id Added", CFG_JOURNAL_MAINTENANCE, $id);
-                $_SESSION['formerrors'] = NULL;
+                clear_form_errors('formerrors');
 
                 html_redirect("main.php");
             }
@@ -75,8 +75,8 @@ switch($action)
             return window.confirm('Are you sure you want to add this reseller?');
         }
         </script>";
-        echo show_errors();
-        $_SESSION['formerrors'] = NULL;
+        echo show_form_errors('add_reseller');
+        clear_form_errors('formerrors');
         echo "<h2>{$strAddReseller}</h2>";
         echo "<p align='center'>".sprintf($strMandatoryMarked, "<sup class='red'>*</sup>")."</p>";
         echo "<form action=\"".$_SERVER['PHP_SELF']."?action=add\" method=\"post\" onsubmit=\"return confirm_submit()\">";
