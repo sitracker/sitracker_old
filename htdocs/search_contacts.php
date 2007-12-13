@@ -8,6 +8,8 @@
 // of the GNU General Public License, incorporated herein by reference.
 //
 
+// DEPRECATED will be removed in 3.32, replaced by search.php
+
 @include('set_include_path.inc.php');
 $permission=array(60,12); // Perform Searches, View Contacts
 require('db_connect.inc.php');
