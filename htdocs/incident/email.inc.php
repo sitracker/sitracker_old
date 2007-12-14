@@ -244,7 +244,7 @@ switch ($step)
         echo "<input type='radio' name='timetonextaction_none' value='date' />At specific date and time<br />&nbsp;&nbsp;&nbsp;";
         echo "<input name='date' size='10' value='{$date}' onclick=\"window.document.updateform.timetonextaction_none[2].checked = true;\"/> ";
         echo date_picker('updateform.date');
-        echo "<select name='timeoffset' onchange='window.document.updateform.timetonextaction_none[2].checked = true;'>";
+        echo " <select name='timeoffset' onchange='window.document.updateform.timetonextaction_none[2].checked = true;'>";
         echo "<option value=''></option>";
         echo "<option value='0'>8:00 AM</option>";
         echo "<option value='1'>9:00 AM</option>";

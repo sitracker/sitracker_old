@@ -4766,7 +4766,7 @@ function date_picker($formelement)
     global $CONFIG, $iconset;
 
     $divid = "datediv".str_replace('.','',$formelement);
-    $html = "<img src='{$CONFIG['application_webpath']}images/icons/{$iconset}/16x16/pickdate.png' ";
+    $html = "<img src='{$CONFIG['application_webpath']}images/icons/{$iconset}/16x16/pickdate.png' style='vertical-align: bottom;' ";
     $html .= "onmouseup=\"toggleDatePicker('$divid','$formelement')\" width='16' height='16' alt='date picker' style='cursor: pointer;' />";
     $html .= "<div id='$divid' style='position: absolute;'></div>";
     return $html;

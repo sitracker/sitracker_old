@@ -7,8 +7,8 @@
 # Requirements:
 #    svn2cl
 
-TMPDIR=/tmp/sit/build
-PUBDIR=/tmp/sit/packages
+TMPDIR=/tmp/sit$$/build
+PUBDIR=/tmp/sit$$/packages
 
 mkdir -p $TMPDIR
 cd $TMPDIR
