@@ -463,7 +463,7 @@ function display_update_page($draftid=-1)
     echo "</select>";
     echo "<br /></span>";
 
-    echo "<input checked='checked' type='radio' name='timetonextaction_none' id='ttna_none' onchange=\"update_ttna();\" onclick=\"window.document.updateform.timetonextaction_days.value = ''; window.document.updateform.timetonextaction_hours.value = ''; window.document.updateform.timetonextaction_minutes.value = '';\" value='None' /> Unspecified";
+    echo "<label><input checked='checked' type='radio' name='timetonextaction_none' id='ttna_none' onchange=\"update_ttna();\" onclick=\"window.document.updateform.timetonextaction_days.value = ''; window.document.updateform.timetonextaction_hours.value = ''; window.document.updateform.timetonextaction_minutes.value = '';\" value='None' />Unspecified</label>";
     echo "</td></tr>";
     echo "<tr>";
     // calculate upload filesize
