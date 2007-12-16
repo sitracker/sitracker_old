@@ -15,6 +15,8 @@
 // Most are legacy and can replaced by improving the pages that call them to
 // use SQL joins.
 
+include('classes.inc.php');
+
 // Version number of the application, (numbers only)
 $application_version='3.31';
 // Revision string, e.g. 'beta2' or 'svn' or ''
@@ -3799,16 +3801,38 @@ function iso_8601_date($timestamp)
    return $date_mod;
 }
 
+/**
+    * Decide whether the time is during a public holiday 
+    * @author Paul Heaney
+    * @param $time integer. Timestamp to identify
+    * @param $publicholidays array of Holiday. Public holiday to compare against
+    * @returns boolean. If this date occurs during a public holiday
+*/
+function is_public_holiday($time, $publicholidays)
+{
+    foreach($publicholidays AS $holiday)
+    {
+        if($time >= $holiday->starttime AND $time <= $holiday->endtime)
+	    {
+	        return TRUE;	
+	    }
+    }
+
+    return FALSE;
+}
 
 /**
     * Calculate the working time between two timestamps
-    * @author Tom Gerrard, Ivan Lucas
+    * @author Tom Gerrard, Ivan Lucas, Paul Heaney
     * @param $t1 integer. The start timestamp
     * @param $t2 integer. The ending timetamp
     * @returns integer. the number of working minutes (minutes in the working day)
-    * @todo Take holidays/public holidays into account?
 */
 function calculate_working_time($t1,$t2) {
+
+/*
+// PH 16/12/07 Old function commented out, rewritten to support public holidays. Old code to be removed once we're happy this is stable
+
 // Note that this won't work if we have something
 // more complicated than a weekend
 
@@ -3924,6 +3948,60 @@ function calculate_working_time($t1,$t2) {
 
   $minutes= $min + ($weeks * count($CONFIG['working_days']) + $days ) * ($ewd-$swd) * 60;
   return $minutes;
+*/
+
+    global $CONFIG;
+    $swd=$CONFIG['start_working_day']/3600;
+    $ewd=$CONFIG['end_working_day']/3600;
+
+  // Just in case they are the wrong way around ...
+
+    if ( $t1>$t2 ) {
+        $t3=$t2;
+        $t2=$t1;
+        $t1=$t3;
+    }
+
+    $startofday = mktime(0,0,0, date("m",$t1), date("d",$t1), date("Y",$t1));
+    $endofday = mktime(23,59,59, date("m",$t2), date("d",$t2), date("Y",$t2));
+
+    $sql = "SELECT * FROM holidays ";
+    $sql .= "WHERE type = 10 AND (startdate >= '{$startofday}' AND startdate <= '{$endofday}')";
+
+    $result = mysql_query($sql);
+    if (mysql_error()) trigger_error(mysql_error(),E_USER_ERROR);
+
+    $publicholidays;
+
+    if(mysql_num_rows($result) > 0)
+    {
+        // Assume public holidays are ALL day
+        while($obj = mysql_fetch_object($result))
+        {
+            $holiday = new Holiday();
+            $holiday->starttime = $obj->startdate;
+            $holiday->endtime = ($obj->startdate+(60*60*24));
+
+            $publicholidays[] = $holiday;
+        }
+    }
+
+    $currenttime = $t1;
+
+    $timeworked = 0;
+
+    while($currenttime <= $t2)
+    {
+        $time = getdate($currenttime);
+
+        if(in_array($time['wday'], $CONFIG['working_days']) AND $time['hours'] >= $swd AND $time['hours'] <= $ewd AND !is_public_holiday($currenttime, $publicholidays))
+        {
+            $timeworked++;
+        }
+        $currenttime+=60;
+    }
+
+    return $timeworked;
 }
 
 
@@ -3949,6 +4027,7 @@ function calculate_incident_working_time($incidentid, $t1, $t2, $states=array(2,
     $sql="SELECT id, currentstatus, timestamp FROM updates WHERE incidentid='$incidentid' ORDER BY id ASC";
     $result=mysql_query($sql);
     if (mysql_error()) trigger_error(mysql_error(),E_USER_WARNING);
+
     $time=0;
     $timeptr=0;
     $laststatus=2; // closed
