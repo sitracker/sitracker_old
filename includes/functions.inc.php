@@ -3810,12 +3810,15 @@ function iso_8601_date($timestamp)
 */
 function is_public_holiday($time, $publicholidays)
 {
-    foreach($publicholidays AS $holiday)
+    if(!empty($publicholidays))
     {
-        if($time >= $holiday->starttime AND $time <= $holiday->endtime)
-	    {
-	        return TRUE;	
-	    }
+        foreach($publicholidays AS $holiday)
+        {
+            if($time >= $holiday->starttime AND $time <= $holiday->endtime)
+	        {
+	            return TRUE;	
+	        }
+        }
     }
 
     return FALSE;
