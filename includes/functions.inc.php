@@ -3824,7 +3824,7 @@ function is_public_holiday($time, $publicholidays)
     * @param $t2 integer. The ending timetamp
     * @returns integer. the number of working minutes (minutes in the working day)
 */
-function calculate_working_time($t1,$t2) {
+function calculate_working_time($t1,$t2,$publicholidays) {
 
 /*
 // PH 16/12/07 Old function commented out, rewritten to support public holidays. Old code to be removed once we're happy this is stable
@@ -3958,30 +3958,6 @@ function calculate_working_time($t1,$t2) {
         $t1=$t3;
     }
 
-    $startofday = mktime(0,0,0, date("m",$t1), date("d",$t1), date("Y",$t1));
-    $endofday = mktime(23,59,59, date("m",$t2), date("d",$t2), date("Y",$t2));
-
-    $sql = "SELECT * FROM holidays ";
-    $sql .= "WHERE type = 10 AND (startdate >= '{$startofday}' AND startdate <= '{$endofday}')";
-
-    $result = mysql_query($sql);
-    if (mysql_error()) trigger_error(mysql_error(),E_USER_ERROR);
-
-    $publicholidays;
-
-    if(mysql_num_rows($result) > 0)
-    {
-        // Assume public holidays are ALL day
-        while($obj = mysql_fetch_object($result))
-        {
-            $holiday = new Holiday();
-            $holiday->starttime = $obj->startdate;
-            $holiday->endtime = ($obj->startdate+(60*60*24));
-
-            $publicholidays[] = $holiday;
-        }
-    }
-
     $currenttime = $t1;
 
     $timeworked = 0;
@@ -4020,6 +3996,30 @@ function calculate_incident_working_time($incidentid, $t1, $t2, $states=array(2,
         $t1=$t3;
     }
 
+    $startofday = mktime(0,0,0, date("m",$t1), date("d",$t1), date("Y",$t1));
+    $endofday = mktime(23,59,59, date("m",$t2), date("d",$t2), date("Y",$t2));
+
+    $sql = "SELECT * FROM holidays ";
+    $sql .= "WHERE type = 10 AND (startdate >= '{$startofday}' AND startdate <= '{$endofday}')";
+
+    $result = mysql_query($sql);
+    if (mysql_error()) trigger_error(mysql_error(),E_USER_ERROR);
+
+    $publicholidays;
+
+    if(mysql_num_rows($result) > 0)
+    {
+        // Assume public holidays are ALL day
+        while($obj = mysql_fetch_object($result))
+        {
+            $holiday = new Holiday();
+            $holiday->starttime = $obj->startdate;
+            $holiday->endtime = ($obj->startdate+(60*60*24));
+
+            $publicholidays[] = $holiday;
+        }
+    }
+
     $sql="SELECT id, currentstatus, timestamp FROM updates WHERE incidentid='$incidentid' ORDER BY id ASC";
     $result=mysql_query($sql);
     if (mysql_error()) trigger_error(mysql_error(),E_USER_WARNING);
@@ -4043,7 +4043,7 @@ function calculate_incident_working_time($incidentid, $t1, $t2, $states=array(2,
             if ($t2<$update['timestamp'])
             {
                 // If we have reached the very end of the range, increment time to end of range, break
-                if (is_active_status($laststatus, $states)) $time+=calculate_working_time($timeptr,$t2);
+                if (is_active_status($laststatus, $states)) $time+=calculate_working_time($timeptr,$t2,$publicholidays);
                 break;
             }
 
@@ -4051,7 +4051,7 @@ function calculate_incident_working_time($incidentid, $t1, $t2, $states=array(2,
             if (is_active_status($laststatus, $states)!=is_active_status($update['currentstatus'], $states))
             {
                 // If it's active and we've not reached the end of the range, increment time
-                if (is_active_status($laststatus, $states) && ($t2 >= $update['timestamp'])) $time+=calculate_working_time($timeptr,$update['timestamp']);
+                if (is_active_status($laststatus, $states) && ($t2 >= $update['timestamp'])) $time+=calculate_working_time($timeptr,$update['timestamp'],$publicholidays);
                 else
                 {
                     $timeptr=$update['timestamp'];
@@ -4066,7 +4066,7 @@ function calculate_incident_working_time($incidentid, $t1, $t2, $states=array(2,
     // Calculate remainder
     if ( is_active_status($laststatus, $states) && ($t2 >= $update['timestamp']))
     {
-        $time+=calculate_working_time($timeptr,$t2);
+        $time+=calculate_working_time($timeptr,$t2,$publicholidays);
     }
 
     return $time;
