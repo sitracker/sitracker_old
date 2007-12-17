@@ -3799,7 +3799,7 @@ function iso_8601_date($timestamp)
     * @author Paul Heaney
     * @param $time integer. Timestamp to identify
     * @param $publicholidays array of Holiday. Public holiday to compare against
-    * @returns boolean. If this date occurs during a public holiday
+    * @returns integer. If > 0 number of seconds left in the public holiday
 */
 function is_public_holiday($time, $publicholidays)
 {
@@ -3809,12 +3809,12 @@ function is_public_holiday($time, $publicholidays)
         {
             if($time >= $holiday->starttime AND $time <= $holiday->endtime)
 	        {
-	            return TRUE;
+	            return $holiday->endtime-$time;
 	        }
         }
     }
 
-    return FALSE;
+    return 0;
 }
 
 /**
@@ -3947,30 +3947,65 @@ function calculate_working_time($t1,$t2,$publicholidays) {
 */
 
     global $CONFIG;
-    $swd=$CONFIG['start_working_day']/3600;
-    $ewd=$CONFIG['end_working_day']/3600;
+    $swd = $CONFIG['start_working_day']/3600;
+    $ewd = $CONFIG['end_working_day']/3600;
 
   // Just in case they are the wrong way around ...
 
-    if ( $t1>$t2 ) {
-        $t3=$t2;
-        $t2=$t1;
-        $t1=$t3;
+    if ( $t1 > $t2 ) {
+        $t3 = $t2;
+        $t2 = $t1;
+        $t1 = $t3;
     }
 
     $currenttime = $t1;
 
     $timeworked = 0;
 
-    while($currenttime <= $t2)
+    while ($currenttime <= $t2)
     {
         $time = getdate($currenttime);
 
-        if(in_array($time['wday'], $CONFIG['working_days']) AND $time['hours'] >= $swd AND $time['hours'] <= $ewd AND !is_public_holiday($currenttime, $publicholidays))
+        $ph = 0;
+
+        if (in_array($time['wday'], $CONFIG['working_days']) AND $time['hours'] >= $swd AND $time['hours'] <= $ewd AND (($ph = is_public_holiday($currenttime, $publicholidays)) == 0))
         {
             $timeworked++;
+            $currenttime += 60;  // move to the next minute
         }
-        $currenttime+=60;
+        else
+        {
+            // Jump closer to the next work minute
+            if (!in_array($time['wday'], $CONFIG['working_days']))
+            {
+                // Move to next day
+                $c = ($time['hours']*60)+$time['minutes'];
+                $midnight = 24*60;
+                $diff = $midnight-$c;
+                $currenttime += ($diff*60); // to seconds 
+            }
+            else if ($time['hours'] < $swd)
+            {
+                // jump to beginning of working day
+                $c = ($time['hours']*60)+$time['minutes'];
+                $diff = ($swd*60)-$c;
+                $currenttime += ($diff*60); // to seconds
+            }
+            else if ($time['hours'] > $ewd)
+            {
+                $c = ((24*60)-(($time['hours']*60)+$time['minutes']))+($swd*60);
+                $currenttime += ($c*60);
+            }
+            else if ($ph != 0)
+            {
+                // jump over the public holiday
+                $currenttime += $ph+60;
+            }
+            else
+            {
+                $currenttime += 60;  // move to the next minute
+            }
+        }
     }
 
     return $timeworked;
@@ -3990,10 +4025,10 @@ function is_active_status($status, $states) {
 */
 function calculate_incident_working_time($incidentid, $t1, $t2, $states=array(2,7,8))
 {
-    if ( $t1>$t2 ) {
-        $t3=$t2;
-        $t2=$t1;
-        $t1=$t3;
+    if ( $t1 > $t2 ) {
+        $t3 = $t2;
+        $t2 = $t1;
+        $t1 = $t3;
     }
 
     $startofday = mktime(0,0,0, date("m",$t1), date("d",$t1), date("Y",$t1));
@@ -4007,10 +4042,10 @@ function calculate_incident_working_time($incidentid, $t1, $t2, $states=array(2,
 
     $publicholidays;
 
-    if(mysql_num_rows($result) > 0)
+    if (mysql_num_rows($result) > 0)
     {
         // Assume public holidays are ALL day
-        while($obj = mysql_fetch_object($result))
+        while ($obj = mysql_fetch_object($result))
         {
             $holiday = new Holiday();
             $holiday->starttime = $obj->startdate;
@@ -4020,19 +4055,19 @@ function calculate_incident_working_time($incidentid, $t1, $t2, $states=array(2,
         }
     }
 
-    $sql="SELECT id, currentstatus, timestamp FROM updates WHERE incidentid='$incidentid' ORDER BY id ASC";
-    $result=mysql_query($sql);
+    $sql = "SELECT id, currentstatus, timestamp FROM updates WHERE incidentid='$incidentid' ORDER BY id ASC";
+    $result = mysql_query($sql);
     if (mysql_error()) trigger_error(mysql_error(),E_USER_WARNING);
 
-    $time=0;
-    $timeptr=0;
-    $laststatus=2; // closed
+    $time = 0;
+    $timeptr = 0;
+    $laststatus = 2; // closed
     while ($update=mysql_fetch_array($result))
     {
         //  if ($t1<=$update['timestamp'])
         if ($t1<=$update['timestamp'])
         {
-            if ($timeptr==0)
+            if ($timeptr == 0)
             {
                 // This is the first update
                 // If it's active, set the ptr = t1
@@ -4043,7 +4078,10 @@ function calculate_incident_working_time($incidentid, $t1, $t2, $states=array(2,
             if ($t2<$update['timestamp'])
             {
                 // If we have reached the very end of the range, increment time to end of range, break
-                if (is_active_status($laststatus, $states)) $time+=calculate_working_time($timeptr,$t2,$publicholidays);
+                if (is_active_status($laststatus, $states))
+                {
+                    $time += calculate_working_time($timeptr,$t2,$publicholidays);
+                }
                 break;
             }
 
@@ -4051,7 +4089,10 @@ function calculate_incident_working_time($incidentid, $t1, $t2, $states=array(2,
             if (is_active_status($laststatus, $states)!=is_active_status($update['currentstatus'], $states))
             {
                 // If it's active and we've not reached the end of the range, increment time
-                if (is_active_status($laststatus, $states) && ($t2 >= $update['timestamp'])) $time+=calculate_working_time($timeptr,$update['timestamp'],$publicholidays);
+                if (is_active_status($laststatus, $states) && ($t2 >= $update['timestamp']))
+                {
+                    $time += calculate_working_time($timeptr,$update['timestamp'], $publicholidays);
+                }
                 else
                 {
                     $timeptr=$update['timestamp'];
@@ -4064,9 +4105,9 @@ function calculate_incident_working_time($incidentid, $t1, $t2, $states=array(2,
     mysql_free_result($result);
 
     // Calculate remainder
-    if ( is_active_status($laststatus, $states) && ($t2 >= $update['timestamp']))
+    if (is_active_status($laststatus, $states) && ($t2 >= $update['timestamp']))
     {
-        $time+=calculate_working_time($timeptr,$t2,$publicholidays);
+        $time += calculate_working_time($timeptr,$t2,$publicholidays);
     }
 
     return $time;
@@ -4076,18 +4117,21 @@ function calculate_incident_working_time($incidentid, $t1, $t2, $states=array(2,
 function strip_comma($string)
 {
     // also strips Tabs, CR's and LF's
-    $string=str_replace(",", " ", $string);
-    $string=str_replace("\r", " ", $string);
-    $string=str_replace("\n", " ", $string);
-    $string=str_replace("\t", " ", $string);
+    $string = str_replace(",", " ", $string);
+    $string = str_replace("\r", " ", $string);
+    $string = str_replace("\n", " ", $string);
+    $string = str_replace("\t", " ", $string);
     return $string;
 }
 
 
 function leading_zero($length,$number)
 {
-    $length=$length-strlen($number);
-    for ($i = 0; $i < $length; $i++) { $number = "0" . $number;  }
+    $length = $length-strlen($number);
+    for ($i = 0; $i < $length; $i++)
+    {
+        $number = "0" . $number;  
+    }
     return($number);
 }
 
@@ -4097,11 +4141,17 @@ function readable_date($date)
     // Takes a UNIX Timestamp and resturns a string with a pretty readable date
     // e.g. Yesterday @ 5:28pm
     if (date('dmy', $date) == date('dmy', time()))
+    {
         $datestring = "{$GLOBALS['strToday']} @ ".date('g:ia', $date);
+    }
     elseif (date('dmy', $date) == date('dmy', (time()-86400)))
+    {
         $datestring = "{$GLOBALS['strYesterday']} @ ".date('g:ia', $date);
+    }
     else
+    {
         $datestring = date("l jS M y @ g:ia", $date);
+    }
     return $datestring;
 }
 
