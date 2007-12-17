@@ -1252,6 +1252,14 @@ CREATE TABLE IF NOT EXISTS `notices` (
   PRIMARY KEY  (`id`)
 ) ENGINE=MyISAM AUTO_INCREMENT=1 ;
 
+CREATE TABLE `triggers` (
+`triggerid` TINYINT NOT NULL ,
+`userid` TINYINT NOT NULL ,
+`action1` VARCHAR( 255 ) NOT NULL ,
+`action2` VARCHAR( 255 ) NULL ,
+`action3` VARCHAR( 255 ) NULL ,
+PRIMARY KEY ( `triggerid` , `userid` )
+) ENGINE = MYISAM ;
 ";
 
 // ********************************************************************
@@ -1579,6 +1587,17 @@ DELETE FROM incidentstatus WHERE id = 0 OR id = 10;
 INSERT INTO `incidentstatus` VALUES (10, 'Active (Unassigned)', 'Active');
 ";
 
+$upgrade_schema[340] = "
+-- KMH 17/12/07
+CREATE TABLE `triggers` (
+`triggerid` TINYINT NOT NULL ,
+`userid` TINYINT NOT NULL ,
+`action1` VARCHAR( 255 ) NOT NULL ,
+`action2` VARCHAR( 255 ) NULL ,
+`action3` VARCHAR( 255 ) NULL ,
+PRIMARY KEY ( `triggerid` , `userid` )
+) ENGINE = MYISAM ;
+";
 
 // Important: When making changes to the schema you must add SQL to make the alterations
 // to existing databases in $upgrade_schema[] *AND* you must also change $schema[] for

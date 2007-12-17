@@ -149,7 +149,7 @@ $CONFIG['critical_threshold'] = 95;
 $CONFIG['demo'] = FALSE;
 
 // Output extra debug information, some as HTML comments and some in the page footer
-$CONFIG['debug'] = FALSE;
+$CONFIG['debug'] = TRUE;
 
 // Enable user portal
 $CONFIG['portal'] = FALSE;

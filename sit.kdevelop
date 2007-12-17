@@ -134,11 +134,6 @@
       <usermanualurl></usermanualurl>
     </projectdoc>
   </kdevdocumentation>
-  <ctagspart>
-    <customArguments></customArguments>
-    <customTagfilePath>/home/ivan/dev1/sit/trunk/tags</customTagfilePath>
-    <activeTagsFiles/>
-  </ctagspart>
   <kdevdebugger>
     <general>
       <programargs/>
