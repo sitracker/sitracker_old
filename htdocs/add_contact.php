@@ -236,7 +236,7 @@ else
         $username = strtolower(substr($surname, 0, strcspn($surname, " ")));
         $password = generate_password();
 
-        $sql  = "INSERT INTO contacts (username, password, salutation, forenames, surname, jobtitle, ";
+        $sql  = "INSERT INTO `{$dbContacts}` (username, password, salutation, forenames, surname, jobtitle, ";
         $sql .= "siteid, address1, address2, city, county, country, postcode, email, phone, mobile, fax, ";
         $sql .= "department, notes, dataprotection_email, dataprotection_phone, dataprotection_address, ";
         $sql .= "timestamp_added, timestamp_modified) ";
@@ -250,14 +250,14 @@ else
         // concatenate username with insert id to make unique
         $newid = mysql_insert_id();
         $username = $username . $newid;
-        $sql = "UPDATE contacts SET username='$username' WHERE id='$newid'";
+        $sql = "UPDATE `{$dbContacts}` SET username='$username' WHERE id='$newid'";
         $result = mysql_query($sql);
         if (mysql_error()) trigger_error("MySQL Query Error ".mysql_error(), E_USER_ERROR);
 
         if (!$result) echo "<p class='error'>Addition of Contact Failed\n";
         else
         {
-            $sql = "SELECT username, password FROM contacts WHERE id=$newid";
+            $sql = "SELECT username, password FROM `{$dbContacts}` WHERE id=$newid";
             $result = mysql_query($sql);
             if (mysql_error()) trigger_error("MySQL Query Error ".mysql_error(), E_USER_ERROR);
             $newcontact = mysql_fetch_array($result);

@@ -43,8 +43,8 @@ if (empty($action) || $action == "showform")
     }
     else
     {
-        $sql = "SELECT sites.name, products.name FROM maintenance, sites, products WHERE maintenance.site=sites.id ";
-        $sql .= "AND maintenance.product=products.id AND maintenance.id='$maintid'";
+        $sql = "SELECT s.name, p.name FROM `{$dbMaintenance}` m, `{$dbSites}` s, `{$dbProducts}` p WHERE m.site=s.id ";
+        $sql .= "AND m.product=p.id AND m.id='$maintid'";
         $result=mysql_query($sql);
         if (mysql_error()) trigger_error("MySQL Query Error ".mysql_error(), E_USER_ERROR);
         list($sitename, $product)=mysql_fetch_row($result);
@@ -87,7 +87,7 @@ else if ($action == "add")
         $errors_string .= "<p class='error'>Something weird has happened, better call technical support</p>\n";
     }
 
-    $sql = "SELECT * FROM supportcontacts WHERE maintenanceid = '{$maintid}' AND contactid = '{$contactid}'";
+    $sql = "SELECT * FROM `{$dbSupportContacts}` WHERE maintenanceid = '{$maintid}' AND contactid = '{$contactid}'";
     $result = mysql_query($sql);
     if (mysql_error()) trigger_error(mysql_error(),E_USER_ERROR);
 
@@ -100,7 +100,7 @@ else if ($action == "add")
     // add maintenance support contact if no errors
     if ($errors == 0)
     {
-        $sql  = "INSERT INTO supportcontacts (maintenanceid, contactid) VALUES ($maintid, $contactid)";
+        $sql  = "INSERT INTO `{$dbSupportContacts}` (maintenanceid, contactid) VALUES ($maintid, $contactid)";
         $result = mysql_query($sql);
         if (mysql_error()) trigger_error("MySQL Query Error ".mysql_error(), E_USER_ERROR);
 
