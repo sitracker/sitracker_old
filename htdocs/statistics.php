@@ -219,7 +219,7 @@ function give_overview()
     $result = mysql_query($sql);
     if (mysql_error()) trigger_error("MySQL Query Error ".mysql_error(), E_USER_ERROR);
 
-    echo "<h2>{$strCurrentlyOpen}</h2>";
+    echo "<h2>{$GLOBALS['strCurrentlyOpen']}</h2>";
     echo "<table class='vertical' align='center'>";
     if(mysql_num_rows($result) > 0)
     {
@@ -360,7 +360,7 @@ function give_overview()
 
     mysql_free_result($result);
 
-    $string .= "<h2>{$strCustomerFeedback}</h2>";
+    $string .= "<h2>{$GLOBALS['strCustomerFeedback']}</h2>";
     $totalresult=0;
     $numquestions=0;
     $qsql = "SELECT * FROM feedbackquestions WHERE formid='1' AND type='rating' ORDER BY taborder";
@@ -406,7 +406,7 @@ function give_overview()
         $total_average=number_format($totalresult/$numquestions,2);
         $total_percent=number_format((($total_average -1) * (100 / ($CONFIG['feedback_max_score'] -1))), 0);
         if ($total_percent < 0) $total_percent=0;
-        $string .= "<p align='center'>{$strPositivity}: {$total_average} <strong>({$total_percent}%)</strong> from $numsurveys results.</p>";
+        $string .= "<p align='center'>{$GLOBALS['strPositivity']}: {$total_average} <strong>({$total_percent}%)</strong> from $numsurveys results.</p>";
         $surveys+=$numresults;
     }
     return $string;

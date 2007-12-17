@@ -125,6 +125,12 @@ switch ($action)
         //this task is for an incident, enter an update from all the notes
         if($incident)
         {
+            //get current incident status
+            $sql = "SELECT status FROM incidents WHERE id={$incident}";
+            $result = mysql_query($sql);
+            $status = mysql_fetch_object($result);
+            $status = $status->status;
+            
             $sql = "SELECT * FROM tasks WHERE id='$id'";
             $result = mysql_query($sql);
             if (mysql_error()) trigger_error(mysql_error(),E_USER_ERROR);
@@ -169,8 +175,8 @@ switch ($action)
             $updatehtml .= "Activity completed: {$enddate}, duration was: [b]".format_seconds($duration)."[/b]";
 
             //create update
-            $sql = "INSERT INTO updates (incidentid, userid, type, bodytext, timestamp, duration) ";
-            $sql .= "VALUES('{$incident}', '{$sit[2]}', 'fromtask', '{$updatehtml}', '$now', '$duration')";
+            $sql = "INSERT INTO updates (incidentid, userid, type, currentstatus, bodytext, timestamp, duration) ";
+            $sql .= "VALUES('{$incident}', '{$sit[2]}', 'fromtask', {$status}, '{$updatehtml}', '$now', '$duration')";
             mysql_query($sql);
             if (mysql_error()) trigger_error(mysql_error(),E_USER_ERROR);
         }

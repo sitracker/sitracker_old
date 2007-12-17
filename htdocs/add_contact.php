@@ -37,7 +37,7 @@ if (empty($submit) OR !empty($_SESSION['formerrors']['add_contact']))
     }
     dojo.require("dojo.widget.ComboBox");
     </script>
-    <?php    
+    <?php
     echo show_form_errors('add_contact');
     clear_form_errors('add_contact');
     echo "<h2><img src='{$CONFIG['application_webpath']}images/icons/{$iconset}/32x32/contact.png' width='32' height='32' alt='' /> ";
@@ -53,39 +53,51 @@ if (empty($submit) OR !empty($_SESSION['formerrors']['add_contact']))
     echo "<input maxlength='50' name='salutation' title='Salutation (Mr, Mrs, Miss, Dr. etc.)' size='7'"; //FIXME i18n
     // FIXME throughout sit the name salutation is used to mean 'courtesy title' (eg. mr, miss) - it's a mistake
     if($_SESSION['formdata']['add_contact']['salutation'] != '')
+    {
         echo "value='{$_SESSION['formdata']['add_contact']['salutation']}'";
+    }
     echo "/></td>\n";
 
     echo "<td align='center'>{$strForenames}<br />";
     echo "<input maxlength='100' name='forenames' size='15' title='Firstnames (or initials)'";
     if($_SESSION['formdata']['add_contact']['forenames'] != '')
+    {
         echo "value='{$_SESSION['formdata']['add_contact']['forenames']}'";
+    }
     echo "/></td>\n";
 
     echo "<td align='center'>{$strSurname}<br /><input maxlength='100' name='surname' size='20' title=\"{$strSurname}\"";
     if($_SESSION['formdata']['add_contact']['surname'] != '')
+    {
         echo "value='{$_SESSION['formdata']['add_contact']['surname']}'";
+    }
     echo " /></td></tr>\n";
     echo "</table>\n</td></tr>\n";
 
     echo "<tr><th>{$strJobTitle}</th><td><input maxlength='255' name='jobtitle' size='35' title='e.g. Purchasing Manager'";
     if($_SESSION['formdata']['add_contact']['jobtitle'] != '')
+    {
         echo "value='{$_SESSION['formdata']['add_contact']['jobtitle']}'";
+    }
     echo " /></td></tr>\n";
     //FIXME do this one
     echo "<tr><th>{$strSite} <sup class='red'>*</sup></th><td>";
     echo site_drop_down('siteid',$siteid)."</td></tr>\n";
     // KMH REMOVED 12/12/07, form fails as dojo doesn't have the siteID
-//     echo "<input dojoType='ComboBox' dataUrl='autocomplete.php?action=sites' style='width: 300px;' name='search_string' />"; 
+//     echo "<input dojoType='ComboBox' dataUrl='autocomplete.php?action=sites' style='width: 300px;' name='search_string' />";
 
     echo "<tr><th>{$strDepartment}</th><td><input maxlength='255' name='department' size='35'";
     if($_SESSION['formdata']['add_contact']['department'] != '')
+    {
         echo "value='{$_SESSION['formdata']['add_contact']['department']}'";
+    }
     echo "/></td></tr>\n";
 
     echo "<tr><th>{$strEmail} <sup class='red'>*</sup></th><td><input maxlength='100' name='email' size='35'";
     if($_SESSION['formdata']['add_contact']['email'])
+    {
         echo "value='{$_SESSION['formdata']['add_contact']['email']}'";
+    }
     echo "/> ";
 
     //FIXME do this one
@@ -96,7 +108,9 @@ if (empty($submit) OR !empty($_SESSION['formerrors']['add_contact']))
 
     echo "<tr><th>{$strTelephone}</th><td><input maxlength='50' name='phone' size='35'";
     if($_SESSION['formdata']['add_contact']['phone'] != '')
+    {
         echo "value='{$_SESSION['formdata']['add_contact']['phone']}'";
+    }
     echo "/> ";
 
     //FIXME do this one
@@ -107,12 +121,16 @@ if (empty($submit) OR !empty($_SESSION['formerrors']['add_contact']))
 
     echo "<tr><th>{$strMobile}</th><td><input maxlength='100' name='mobile' size='35'";
     if($_SESSION['formdata']['add_contact']['mobile'] != '')
+    {
         echo "value='{$_SESSION['formdata']['add_contact']['mobile']}'";
+    }
     echo "/></td></tr>\n";
 
     echo "<tr><th>{$strFax}</th><td><input maxlength='50' name='fax' size='35'";
     if($_SESSION['formdata']['add_contact']['fax'])
+    {
         echo "value='{$_SESSION['formdata']['add_contact']['fax']}'";
+    }
     echo "/></td></tr>\n";
 
     //FIXME all of these
@@ -130,7 +148,9 @@ if (empty($submit) OR !empty($_SESSION['formerrors']['add_contact']))
     echo "</tbody>";
     echo "<tr><th>{$strNotes}</th><td><textarea cols='60' rows='5' name='notes'>";
     if($_SESSION['formdata']['add_contact']['notes'] != '')
+    {
         echo $_SESSION['formdata']['add_contact']['notes'];
+    }
     echo "</textarea></td></tr>\n";
     echo "</table>\n\n";
     echo "<p><input name='submit' type='submit' value=\"{$strAddContact}\" /></p>";

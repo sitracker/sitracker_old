@@ -206,10 +206,16 @@ else
                 if ($oldproductservicepacks != $productservicepacks) $header .= "Service Packs Applied: ".$oldproductservicepacks." -&gt; <b>".$productservicepacks."</b>\n";
 
                 if (!empty($header)) $header .= "<hr>";
+             //get current incident status
+                $sql = "SELECT status FROM incidents WHERE id={$id}";
+                $result = mysql_query($sql);
+                $status = mysql_fetch_object($result);
+                $status = $status->status;
+
                 $bodytext = $header . $bodytext;
                 $bodytext = mysql_real_escape_string($bodytext);
-                $sql  = "INSERT INTO updates (incidentid, userid, type, bodytext, timestamp) ";
-                $sql .= "VALUES ('$id', '$sit[2]', 'editing', '$bodytext', '$now')";
+                $sql  = "INSERT INTO updates (incidentid, userid, type, currentstatus, bodytext, timestamp) ";
+                $sql .= "VALUES ('$id', '$sit[2]', 'editing', '$status', '$bodytext', '$now')";
                 $result = mysql_query($sql);
                 if (mysql_error()) trigger_error("MySQL Query Error ".mysql_error(), E_USER_ERROR);
 
