@@ -211,7 +211,7 @@ else
                 $result = mysql_query($sql);
                 $status = mysql_fetch_object($result);
                 $status = $status->status;
-                
+
                 $bodytext = $header . $bodytext;
                 $bodytext = mysql_real_escape_string($bodytext);
                 $sql  = "INSERT INTO updates (incidentid, userid, type, currentstatus, bodytext, timestamp) ";
