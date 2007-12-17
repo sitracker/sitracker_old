@@ -219,7 +219,7 @@ function give_overview()
     $result = mysql_query($sql);
     if (mysql_error()) trigger_error("MySQL Query Error ".mysql_error(), E_USER_ERROR);
 
-    echo "<h2>{$strCurrentlyOpen}</h2>";
+    echo "<h2>{$GLOBALS['strCurrentlyOpen']}</h2>";
     echo "<table class='vertical' align='center'>";
     if(mysql_num_rows($result) > 0)
     {
@@ -360,7 +360,7 @@ function give_overview()
 
     mysql_free_result($result);
 
-    $string .= "<h2>{$strCustomerFeedback}</h2>";
+    $string .= "<h2>{$GLOBALS['strCustomerFeedback']}</h2>";
     $totalresult=0;
     $numquestions=0;
     $qsql = "SELECT * FROM feedbackquestions WHERE formid='1' AND type='rating' ORDER BY taborder";
