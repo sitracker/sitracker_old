@@ -37,7 +37,7 @@ define("STATUS_CUSTOMER",8);
 */
 function not_auto_type($type)
 {
-    if($type != 'auto_chase_email' AND $type != 'auto_chase_phone' AND $type != 'auto_chase_manager')
+    if ($type != 'auto_chase_email' AND $type != 'auto_chase_phone' AND $type != 'auto_chase_manager')
     {
         return TRUE;
     }
@@ -45,7 +45,7 @@ function not_auto_type($type)
     return FALSE;
 }
 
-if($CONFIG['auto_chase'] == TRUE)
+if ($CONFIG['auto_chase'] == TRUE)
 {
 
     // if 'awaiting customer action' for more than $CONFIG['chase_email_minutes'] and NOT in an auto state, send auto email
@@ -58,7 +58,7 @@ if($CONFIG['auto_chase'] == TRUE)
 
     while($obj = mysql_fetch_object($result))
     {
-        if(!in_array($obj->maintenanceid, $CONFIG['dont_chase_maintids']))
+        if (!in_array($obj->maintenanceid, $CONFIG['dont_chase_maintids']))
         {
             // only annoy these people
             $sql_update = "SELECT * FROM updates WHERE incidentid = {$obj->id} ORDER BY timestamp DESC LIMIT 1";
@@ -67,10 +67,10 @@ if($CONFIG['auto_chase'] == TRUE)
 
             $obj_update = mysql_fetch_object($result_update);
 
-            if($CONFIG['chase_email_minutes'] != 0)
+            if ($CONFIG['chase_email_minutes'] != 0)
             {
-                //if(not_auto_type($obj_update->type) AND $obj_update->timestamp <= ($now-$CONFIG['chase_email_minutes']*60))
-                if(not_auto_type($obj_update->type) AND (($obj->timeofnextaction == 0 AND calculate_working_time($obj_update->timestamp, $now) >= $CONFIG['chase_email_minutes']) OR ($obj->timeofnextaction != 0 AND calculate_working_time($obj->timeofnextupdate, $now) >= $CONFIG['chase_email_minutes'])))
+                //if (not_auto_type($obj_update->type) AND $obj_update->timestamp <= ($now-$CONFIG['chase_email_minutes']*60))
+                if (not_auto_type($obj_update->type) AND (($obj->timeofnextaction == 0 AND calculate_working_time($obj_update->timestamp, $now) >= $CONFIG['chase_email_minutes']) OR ($obj->timeofnextaction != 0 AND calculate_working_time($obj->timeofnextupdate, $now) >= $CONFIG['chase_email_minutes'])))
                 {
                     send_template_email($CONFIG['chase_email_template'],$obj->id);
                     $sql_insert = "INSERT INTO updates (incidentid, userid, type, bodytext, timestamp, customervisibility) VALUES ('{$obj_update->incidentid}','{$sit['2']}','auto_chase_email','Sent auto chase email to customer','{$now}','show')";
@@ -83,11 +83,10 @@ if($CONFIG['auto_chase'] == TRUE)
                 }
             }
 
-            if($CONFIG['chase_phone_minutes'] != 0)
+            if ($CONFIG['chase_phone_minutes'] != 0)
             {
-                //if($obj_update->type == 'auto_chase_email' AND $obj_update->timestamp <= ($now-$CONFIG['chase_phone_minutes']*60))
-                if($obj_update->type == 'auto_chase_email' AND  (($obj->timeofnextaction == 0 AND calculate_working_time($obj_update->timestamp, $now) >= $CONFIG['chase_phone_minutes']) OR ($obj->timeofnextaction != 0 AND calculate_working_time($obj->timeofnextupdate, $now) >= $CONFIG['chase_phone_minutes'])))
-
+                //if ($obj_update->type == 'auto_chase_email' AND $obj_update->timestamp <= ($now-$CONFIG['chase_phone_minutes']*60))
+                if ($obj_update->type == 'auto_chase_email' AND  (($obj->timeofnextaction == 0 AND calculate_working_time($obj_update->timestamp, $now) >= $CONFIG['chase_phone_minutes']) OR ($obj->timeofnextaction != 0 AND calculate_working_time($obj->timeofnextupdate, $now) >= $CONFIG['chase_phone_minutes'])))
                 {
                     $sql_insert = "INSERT INTO updates (incidentid, userid, type, bodytext, timestamp, customervisibility) VALUES ('{$obj_update->incidentid}','{$sit['2']}','auto_chase_phone','Status: Awaiting Customer Action -&gt; <b>Active</b><hr>Please phone the customer to get an update on this call as {$CONFIG['chase_phone_minutes']} have passed since the auto chase email was sent. Once you have done this please use the update type \"Chased customer - phone\"','{$now}','hide')";
                     mysql_query($sql_insert);
@@ -99,10 +98,10 @@ if($CONFIG['auto_chase'] == TRUE)
                 }
             }
 
-            if($CONFIG['chase_manager_minutes'] != 0)
+            if ($CONFIG['chase_manager_minutes'] != 0)
             {
-                //if($obj_update->type == 'auto_chased_phone' AND $obj_update->timestamp <= ($now-$CONFIG['chase_manager_minutes']*60))
-                if($obj_update->type == 'auto_chased_phone' AND (($obj->timeofnextaction == 0 AND calculate_working_time($obj_update->timestamp, $now) >= $CONFIG['chase_manager_minutes']) OR ($obj->timeofnextaction != 0 AND calculate_working_time($obj->timeofnextupdate, $now) >= $CONFIG['chase_manager_minutes'])))
+                //if ($obj_update->type == 'auto_chased_phone' AND $obj_update->timestamp <= ($now-$CONFIG['chase_manager_minutes']*60))
+                if ($obj_update->type == 'auto_chased_phone' AND (($obj->timeofnextaction == 0 AND calculate_working_time($obj_update->timestamp, $now) >= $CONFIG['chase_manager_minutes']) OR ($obj->timeofnextaction != 0 AND calculate_working_time($obj->timeofnextupdate, $now) >= $CONFIG['chase_manager_minutes'])))
                 {
                     $update = "Status: Awaiting Customer Action -&gt; <b>Active</b><hr>";
                     $update .= "Please phone the customers MANAGER to get an update on this call as ".$CONFIG['chase_manager_minutes']." have passed since the auto chase email was sent.<br />";
@@ -119,10 +118,10 @@ if($CONFIG['auto_chase'] == TRUE)
                 }
             }
 
-            if($CONFIG['chase_managers_manager_minutes'] != 0)
+            if ($CONFIG['chase_managers_manager_minutes'] != 0)
             {
-                //if($obj_update->type == 'auto_chased_manager' AND $obj_update->timestamp <= ($now-$CONFIG['chase_managers_manager_minutes']*60))
-                if($obj_update->type == 'auto_chased_manager' AND (($obj->timeofnextaction == 0 AND calculate_working_time($obj_update->timestamp, $now) >= $CONFIG['chase_amanager_manager_minutes']) OR ($obj->timeofnextaction != 0 AND calculate_working_time($obj->timeofnextupdate, $now) >= $CONFIG['chase_amanager_manager_minutes'])))
+                //if ($obj_update->type == 'auto_chased_manager' AND $obj_update->timestamp <= ($now-$CONFIG['chase_managers_manager_minutes']*60))
+                if ($obj_update->type == 'auto_chased_manager' AND (($obj->timeofnextaction == 0 AND calculate_working_time($obj_update->timestamp, $now) >= $CONFIG['chase_amanager_manager_minutes']) OR ($obj->timeofnextaction != 0 AND calculate_working_time($obj->timeofnextupdate, $now) >= $CONFIG['chase_amanager_manager_minutes'])))
                 {
                     $sql_insert = "INSERT INTO updates (incidentid, userid, type, bodytext, timestamp, customervisibility) VALUES ('{$obj_update->incidentid}','{$sit['2']}','auto_chase_managers_manager','Status: Awaiting Customer Action -&gt; <b>Active</b><hr>Please phone the customers managers manager to get an update on this call as {$CONFIG['chase_manager_minutes']} have passed since the auto chase email was sent. Once you have done this please email the actions to the customer and manager and select the \"Was this a manager chase?\"','{$now}','hide')";
                     mysql_query($sql_insert);

@@ -49,14 +49,14 @@ if (user_permission($sit[2],$permission))
         echo "<form name='articleform' action='{$_SERVER['PHP_SELF']}' method='post'>";
         echo "<table align='center' class='vertical' width='600'>";
         echo "<tr><th>{$strTitle}: <sup class='red'>*</sup></th><td><input type='text' name='title' size='50' maxlength='255'";
-        if($_SESSION['formdata']['kb_add_article']['title'] != "")
+        if ($_SESSION['formdata']['kb_add_article']['title'] != "")
         {
             echo "value=".$_SESSION['formdata']['kb_add_article']['title'];
         }
         echo " /></td></tr>";
 
         echo "<tr><th>{$strKeywords}: <sup class='red'>*</sup></th><td><input type='text' name='keywords' size='50' maxlength='255'";
-        if($_SESSION['formdata']['kb_add_article']['keywords'] != "")
+        if ($_SESSION['formdata']['kb_add_article']['keywords'] != "")
         {
             echo "value=".$_SESSION['formdata']['kb_add_article']['keywords'];
         }
@@ -133,18 +133,18 @@ PRINT;
         $_SESSION['formdata']['kb_add_article'] = $_POST;
 
         $errors = 0;
-        if($title == "")
+        if ($title == "")
         {
             $_SESSION['formerrors']['kb_add_article']['title'] = "Title cannot be empty";
             $errors++;
         }
-        if($keywords == "")
+        if ($keywords == "")
         {
             $_SESSION['formerrors']['kb_add_article']['keywords'] = "Keywords cannot be empty";
             $errors++;
         }
 
-        if($errors == '0')
+        if ($errors == '0')
         {
             $sql = "INSERT INTO `{$dbKBArticles}` (doctype, title, distribution, author, published, keywords) VALUES ";
             $sql .= "('1', ";

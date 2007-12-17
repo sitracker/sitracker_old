@@ -71,7 +71,7 @@ LIMIT 0 , 30
     // FIXME i18n for the period N to N
     echo "<p align='center'>For the period {$_REQUEST['startdate']} to {$_REQUEST['enddate']}</p>";
 
-    if(mysql_num_rows($result) > 0)
+    if (mysql_num_rows($result) > 0)
     {
         echo "<p>";
         echo "<table class='vertical' align='center'>";

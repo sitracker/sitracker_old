@@ -52,7 +52,7 @@ if (mysql_num_rows($tresult) >= 1)
             echo "<td>".format_workday_minutes($sla->action_plan_mins)."</td>";
             echo "<td>".round($sla->resolution_days)." working days</td>"; // why is this a float?
             echo "<td>{$sla->review_days} days</td>";
-            if($sla->timed == 'yes')
+            if ($sla->timed == 'yes')
             {
                 echo "<td>{$strYes}</td>";
             }

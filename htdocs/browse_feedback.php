@@ -139,7 +139,7 @@ switch($mode)
         $result = mysql_query($sql);
         if (mysql_error()) trigger_error(mysql_error(),E_USER_WARNING);
 
-        if(mysql_num_rows($result) == 0)
+        if (mysql_num_rows($result) == 0)
         {
             // no feedback forms
             echo "<h3>{$title}</h3>";

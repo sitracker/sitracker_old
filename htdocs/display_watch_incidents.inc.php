@@ -52,23 +52,23 @@ if (mysql_num_rows($result) > 0)
 {
     $header_printed = FALSE;
     $previous = 0;
-    while($obj = mysql_fetch_object($result))
+    while ($obj = mysql_fetch_object($result))
     {
-        if($obj->type !=3 AND $previous == 3)
+        if ($obj->type !=3 AND $previous == 3)
         {
             echo "</table>";
         }
 
-        if($obj->type == 3 AND !$header_printed)
+        if ($obj->type == 3 AND !$header_printed)
         {
             echo "<table align='center' style='width: 100%'>";
         }
-        else if($obj->type != 3)
+        else if ($obj->type != 3)
         {
             echo "<table align='center' style='width: 100%'>";
         }
 
-        switch($obj->type)
+        switch ($obj->type)
         {
             case '0': //Site
                 $sql = "SELECT incidents.id, incidents.title, incidents.status, incidents.servicelevel, incidents.maintenanceid, incidents.priority, contacts.forenames, contacts.surname, contacts.siteid ";
@@ -123,9 +123,9 @@ if (mysql_num_rows($result) > 0)
         {
             $iresult = mysql_query($sql);
             if (mysql_error()) trigger_error(mysql_error(),E_USER_ERROR);
-            if(mysql_num_rows($iresult) > 0)
+            if (mysql_num_rows($iresult) > 0)
             {
-                if($obj->type == 3 AND !$header_printed)
+                if ($obj->type == 3 AND !$header_printed)
                 {
                     echo "<tr>";
                     echo colheader('id', $GLOBALS['strID']);
@@ -135,7 +135,7 @@ if (mysql_num_rows($result) > 0)
                     echo "</tr>\n";
                     $header_printed = TRUE;
                 }
-                else if($obj->type != 3)
+                else if ($obj->type != 3)
                 {
                     echo "<tr>";
                     echo colheader('id', $GLOBALS['strID']);
@@ -164,7 +164,7 @@ if (mysql_num_rows($result) > 0)
             }
             else echo "<tr><td colspan='3'>{$GLOBALS['strNoOpenIncidents']}</td></tr>\n";
         }
-        if($obj->type == 3 AND !$header_printed)
+        if ($obj->type == 3 AND !$header_printed)
         {
             echo "</table>\n";
         }

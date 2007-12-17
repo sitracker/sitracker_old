@@ -20,7 +20,7 @@ session_start();
 if (!empty($_SESSION['lang']) AND $_SESSION['lang'] != $CONFIG['default_i18n']) include("i18n/{$_SESSION['lang']}.inc.php");
 require('strings.inc.php');
 
-if($CONFIG['portal'] == FALSE)
+if ($CONFIG['portal'] == FALSE)
 {
     // portal disabled
     $_SESSION['portalauth'] = FALSE;
@@ -46,7 +46,7 @@ else
 {
     // Attempt to prevent session fixation attacks
     if (function_exists('session_regenerate_id')) session_regenerate_id();
-    if(!version_compare(phpversion(),"4.3.3",">=")) setcookie(session_name(), session_id(),ini_get("session.cookie_lifetime"), "/");
+    if (!version_compare(phpversion(),"4.3.3",">=")) setcookie(session_name(), session_id(),ini_get("session.cookie_lifetime"), "/");
 }
 
 // External variables
@@ -115,9 +115,9 @@ switch ($page)
     //show their open incidents
     case 'incidents':
         $showclosed = $_REQUEST['showclosed'];
-        if(empty($showclosed)) $showclosed = "false";
+        if (empty($showclosed)) $showclosed = "false";
 
-        if($showclosed == "true")
+        if ($showclosed == "true")
         {
             echo "<h2>{$strYourClosedIncidents}</h2>";
             echo "<p align='center'><a href='$_SERVER[PHP_SELF]?page=incidents&amp;showclosed=false'>{$strShowOpenIncidents}</a></p>";
@@ -141,7 +141,7 @@ switch ($page)
             echo colheader('title',$strTitle);
             echo colheader('lastupdated',$strLastUpdated);
             echo colheader('status',$strStatus);
-            if($showclosed == "false") echo colheader('actions', $strOperation);
+            if ($showclosed == "false") echo colheader('actions', $strOperation);
             echo "</tr>\n";
             while ($incident = mysql_fetch_object($result))
             {
@@ -152,14 +152,14 @@ switch ($page)
                 echo "<td>".format_date_friendly($incident->lastupdated)."</td>";
                 echo "<td>".incidentstatus_name($incident->status)."</td>";
 
-                if($showclosed == "false")
+                if ($showclosed == "false")
                 {
                     echo "<td><a href='{$_SERVER[PHP_SELF]}?page=update&amp;id={$incident->id}'>{$strUpdate}</a> | ";
 
                     //check if the customer has requested a closure
                     $lastupdate = list($update_userid, $update_type, $update_currentowner, $update_currentstatus, $update_body, $update_timestamp, $update_nextaction, $update_id)=incident_lastupdate($incident->id);
 
-                    if($lastupdate[1] == "customerclosurerequest") echo "{$strClosureRequested}</td>";
+                    if ($lastupdate[1] == "customerclosurerequest") echo "{$strClosureRequested}</td>";
                     else echo "<a href='{$_SERVER[PHP_SELF]}?page=close&amp;id={$incident->id}'>{$strRequestClosure}</a></td>";
                 }
                 echo "</tr>";
@@ -175,7 +175,7 @@ switch ($page)
 
     //update an open incident
     case 'update':
-        if(empty($_REQUEST['update']))
+        if (empty($_REQUEST['update']))
         {
             $id = $_REQUEST['id'];
             echo "<h2>{$strUpdateIncident} {$_REQUEST['id']}</h2>";
@@ -210,7 +210,7 @@ switch ($page)
 
     //close an open incident
     case 'close':
-        if(empty($_REQUEST['reason']))
+        if (empty($_REQUEST['reason']))
         {
             $id = $_REQUEST['id'];
             echo "<h2>{$strClosureRequestForIncident} {$_REQUEST['id']}</h2>";
@@ -245,7 +245,7 @@ switch ($page)
 
     //add a new incident
     case 'add':
-        if(!$_REQUEST['action'])
+        if (!$_REQUEST['action'])
         {
             echo "<h2>{$strAddIncident}</h2>";
             echo "<table align='center' width='50%' class='vertical'>";
@@ -279,10 +279,10 @@ switch ($page)
             $servicelevel = servicelevel_id2tag(maintenance_servicelevel($contractid));
 
             $updatetext = "Opened via the portal by <b>".contact_realname($contactid)."</b>\n\n";
-            if(!empty($probdesc)) $updatetext .= "<b>Problem Description</b>\n{$probdesc}\n\n";
-            if(!empty($workarounds))  $updatetext .= "<b>Workarounds Attempted</b>\n{$workarounds}\n\n";
-            if(!empty($reproduction)) $updatetext .= "<b>Problem Reproduction</b>\n{$reproduction}\n\n";
-            if(!empty($impact)) $updatetext .= "<b>Customer Impact</b>\n{$impact}\n\n";
+            if (!empty($probdesc)) $updatetext .= "<b>Problem Description</b>\n{$probdesc}\n\n";
+            if (!empty($workarounds))  $updatetext .= "<b>Workarounds Attempted</b>\n{$workarounds}\n\n";
+            if (!empty($reproduction)) $updatetext .= "<b>Problem Reproduction</b>\n{$reproduction}\n\n";
+            if (!empty($impact)) $updatetext .= "<b>Customer Impact</b>\n{$impact}\n\n";
 
             //create new incident
             $sql  = "INSERT INTO incidents (title, owner, contact, priority, servicelevel, status, type, maintenanceid, ";
@@ -345,7 +345,7 @@ switch ($page)
     //show user's details
     case 'details':
         //if new details posted
-        if(cleanvar($_REQUEST['action']) == 'update')
+        if (cleanvar($_REQUEST['action']) == 'update')
         {
             $forenames = cleanvar($_REQUEST['forenames']);
             $surname = cleanvar($_REQUEST['surname']);
@@ -372,7 +372,7 @@ switch ($page)
                 $errors = 1;
                 echo "<p class='error'>You must enter an email address</p>\n";
             }
-            if($errors == 0)
+            if ($errors == 0)
             {
                 $updatesql = "UPDATE contacts SET forenames='$forenames', surname='$surname', department='$department', address1='$address1', address2='$address2', county='$county', country='$country', postcode='$postcode', phone='$phone', fax='$fax', email='$email' ";
                 $updatesql .= "WHERE id='{$_SESSION['contactid']}'";
@@ -417,14 +417,14 @@ switch ($page)
 
         echo "<h2>Details: {$incidentid} - {$user->title}</h2>";
 
-        if($user->status != 2)
+        if ($user->status != 2)
         {
             echo "<p align='center'><a href='{$_SERVER[PHP_SELF]}?page=update&amp;id={$incidentid}'>{$strUpdate}</a> | ";
 
             //check if the customer has requested a closure
             $lastupdate = list($update_userid, $update_type, $update_currentowner, $update_currentstatus, $update_body, $update_timestamp, $update_nextaction, $update_id)=incident_lastupdate($incidentid);
 
-            if($lastupdate[1] == "customerclosurerequest") echo "{$strClosureRequested}</td>";
+            if ($lastupdate[1] == "customerclosurerequest") echo "{$strClosureRequested}</td>";
             else echo "<a href='{$_SERVER[PHP_SELF]}?page=close&amp;id={$incidentid}'>{$strRequestClosure}</a></p>";
         }
 
@@ -476,12 +476,12 @@ switch ($page)
 
         while ($update = mysql_fetch_object($result))
         {
-            if(empty($firstid)) $firstid = $update->id;
+            if (empty($firstid)) $firstid = $update->id;
             $updateid = $update->id;
             $updatebody=trim($update->bodytext);
 
             //remove empty updates
-            if(!empty($updatebody) AND $updatebody != "<hr>")
+            if (!empty($updatebody) AND $updatebody != "<hr>")
             {
                 $updatebodylen=strlen($updatebody);
 
@@ -550,7 +550,7 @@ switch ($page)
                 {
                     echo "<img src='{$CONFIG['application_webpath']}images/icons/{$iconset}/16x16/{$updatetypes['research']['icon']}' width='16' height='16' alt='Research' />";
                     echo "<span>Click to {$newmode}</span></a> ";
-                    if($update->sla != '') echo "<img src='{$CONFIG['application_webpath']}images/icons/{$iconset}/16x16/{$slatypes[$update->sla]['icon']}' width='16' height='16' alt='{$update->type}' />";
+                    if ($update->sla != '') echo "<img src='{$CONFIG['application_webpath']}images/icons/{$iconset}/16x16/{$slatypes[$update->sla]['icon']}' width='16' height='16' alt='{$update->type}' />";
                 }
                 echo " {$updatetime}</div>";
                 echo "</div>\n";

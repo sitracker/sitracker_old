@@ -120,13 +120,13 @@ function draw_calendar($nmonth, $nyear)
        print("</tr>\n");
 
        print("<tr>\n");
-       while($dayRow < $firstday)
+       while ($dayRow < $firstday)
        {
          print("<td><!-- This day in last month --></td>");
          $dayRow += 1;
        }
        $day = 0;
-       if($frametarget)
+       if ($frametarget)
        {
          $targetString = 'target = '.$frametarget;
        }
@@ -134,9 +134,9 @@ function draw_calendar($nmonth, $nyear)
        {
          $targetString = '';
        }
-       while($day < $lastday)
+       while ($day < $lastday)
        {
-         if(($dayRow % 7) == 0)
+         if (($dayRow % 7) == 0)
          {
            print("</tr>\n<tr>\n");
          }

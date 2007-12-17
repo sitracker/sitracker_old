@@ -19,7 +19,7 @@ require('auth.inc.php');
 
 
 $action = cleanvar($_REQUEST['action']);
-if($action == 'new')
+if ($action == 'new')
 {
     include('htmlheader.inc.php');
     echo "<h2>{$strNotices}</h2>";
@@ -48,7 +48,7 @@ if($action == 'new')
     echo "<p align='center'><a href='notices.php'>{$strReturnWithoutSaving}</a></p>";
     include('htmlfooter.inc.php');
 }
-elseif($action == 'post')
+elseif ($action == 'post')
 {
     $text = cleanvar($_REQUEST['text']);
     $type = cleanvar($_REQUEST['type']);
@@ -68,7 +68,7 @@ elseif($action == 'post')
     html_redirect('notices.php');
 
 }
-elseif($action == 'delete')
+elseif ($action == 'delete')
 {
     $noticeid = cleanvar($_REQUEST['id']);
 
@@ -94,11 +94,11 @@ else
     $result = mysql_query($sql);
     if (mysql_error()) trigger_error(mysql_error(),E_USER_WARNING);
     $shade='shade1';
-    if(mysql_num_rows($result) > 0)
+    if (mysql_num_rows($result) > 0)
     {
         echo "<table align='center'>";
         echo "<tr><th>{$strID}</th><th>{$strDate}</th><th>{$strNotice}</th><th>{$strOperation}</th></tr>\n";
-        while($notice = mysql_fetch_object($result))
+        while ($notice = mysql_fetch_object($result))
         {
             echo "<tr class='$shade'><td>{$notice->id}</td><td>{$notice->timestamp}</td>";
             echo "<td>".bbcode($notice->text)."</td>";

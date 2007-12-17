@@ -34,7 +34,7 @@ switch ($action)
             $errors_string .= "<p class='error'>You must enter a name</p>\n";
         }
 
-        if($errors == 0)
+        if ($errors == 0)
         {
             $sql = "UPDATE vendors SET name = '{$vendorname}' WHERE id = '{$vendorid}'";
             $result = mysql_query($sql);
@@ -69,15 +69,15 @@ switch ($action)
         $sql = "SELECT * FROM vendors";
         $result = mysql_query($sql);
         if (mysql_error()) trigger_error(mysql_error(),E_USER_ERROR);
-        if(mysql_num_rows($result) > 0)
+        if (mysql_num_rows($result) > 0)
         {
             echo "<table class='vertical' align='center'>";
             $shade='shade1';
-            while($row = mysql_fetch_object($result))
+            while ($row = mysql_fetch_object($result))
             {
                 echo "<tr class='{$shade}'><td><a href=\"{$_SERVER['PHP_SELF']}?action=edit&amp;vendorid={$row->id}&amp;vendorname=".urlencode($row->name)."\">{$row->name}</a></td></tr>\n";
 
-                if($shade=='shade1') $shade='shade2';
+                if ($shade=='shade1') $shade='shade2';
                 else $shade='shade1';
             }
             echo "</table>";

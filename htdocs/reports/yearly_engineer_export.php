@@ -110,15 +110,15 @@ elseif ($_REQUEST['statistics'] == 'on')
     $sql .= "WHERE users.id=incidents.owner AND incidents.opened >= {$startdate} AND incidents.opened <= {$enddate} ";
     //$sql .= "WHERE users.id=incidents.owner AND incidents.opened > ($now-60*60*24*365.25) ";
     /*$sql .= "WHERE users.id=incidents.owner "; // AND incidents.opened > ($now-60*60*24*365.25) ";
-    if($type == "opened")
+    if ($type == "opened")
     {
         $sql .= " AND incidents.opened >= {$startdate} AND incidents.opened <= {$enddate} ";
     }
-    else if($type == "closed")
+    else if ($type == "closed")
     {
         $sql .= " AND incidents.closed >= {$startdate} AND incidents.closed <= {$enddate} ";
     }
-    else if($type == "both")
+    else if ($type == "both")
     {
         $sql .= " AND ((incidents.opened >= {$startdate} AND incidents.opened <= {$enddate}) ";
         $sql .= " OR (incidents.closed >= {$startdate} AND incidents.closed <= {$enddate})) ";
@@ -138,9 +138,9 @@ elseif ($_REQUEST['statistics'] == 'on')
     $numrows = mysql_num_rows($result);
 
     $totalOpened = 0;
-    if($numrows > 0)
+    if ($numrows > 0)
     {
-        while($obj = mysql_fetch_object($result))
+        while ($obj = mysql_fetch_object($result))
         {
             $data[$obj->id]['realname'] = $obj->realname;
             $data[$obj->id]['opened'] = $obj->numberOpened;
@@ -171,7 +171,7 @@ elseif ($_REQUEST['statistics'] == 'on')
     $numrows = mysql_num_rows($result);
 
     $totalClosed = 0;
-    if($numrows > 0)
+    if ($numrows > 0)
     {
         while($obj = mysql_fetch_object($result))
         {
@@ -185,15 +185,15 @@ elseif ($_REQUEST['statistics'] == 'on')
     // Escalated
     //
     $sql = "SELECT COUNT(DISTINCT(incidentid)) AS numberEscalated, users.id, users.realname FROM updates, incidents,users WHERE  users.id=incidents.owner AND updates.incidentid = incidents.id  AND updates.bodytext LIKE \"External ID%\"";
-    if($type == "opened")
+    if ($type == "opened")
     {
         $sql .= " AND incidents.opened >= {$startdate} AND incidents.opened <= {$enddate} ";
     }
-    else if($type == "closed")
+    else if ($type == "closed")
     {
         $sql .= " AND incidents.closed >= {$startdate} AND incidents.closed <= {$enddate} ";
     }
-    else if($type == "both")
+    else if ($type == "both")
     {
         $sql .= " AND ((incidents.opened >= {$startdate} AND incidents.opened <= {$enddate}) ";
         $sql .= " OR (incidents.closed >= {$startdate} AND incidents.closed <= {$enddate})) ";
@@ -212,9 +212,9 @@ elseif ($_REQUEST['statistics'] == 'on')
     $numrows = mysql_num_rows($result);
 
     $totalEscalated = 0;
-    if($numrows > 0)
+    if ($numrows > 0)
     {
-        while($obj = mysql_fetch_object($result))
+        while ($obj = mysql_fetch_object($result))
         {
             $data[$obj->id]['realname'] = $obj->realname;
             $data[$obj->id]['escalated'] = $obj->numberEscalated;
@@ -227,7 +227,7 @@ elseif ($_REQUEST['statistics'] == 'on')
     print_r($data);
     echo "</pre>";*/
 
-    if(sizeof($data) > 0)
+    if (sizeof($data) > 0)
     {
         $html .= "<table align='center'>";
         $html .= "<tr>";
@@ -249,13 +249,13 @@ elseif ($_REQUEST['statistics'] == 'on')
         {
             $html .= "<tr>";
             $html .= "<td {$class}>".$engineer['realname']."</td>";
-            if(empty($engineer['opened'])) $open = 0;
+            if (empty($engineer['opened'])) $open = 0;
             else $open = $engineer['opened'];
             $html .= "<td {$class}>{$open}</td>";
-            if(empty($engineer['escalated'])) $escalated = 0;
+            if (empty($engineer['escalated'])) $escalated = 0;
             else $escalated = $engineer['escalated'];
             $html .= "<td {$class}>{$escalated}</td>";
-            if(empty($engineer['closed'])) $closed = 0;
+            if (empty($engineer['closed'])) $closed = 0;
             else $closed = $engineer['closed'];
             $html .= "<td {$class}>{$closed}</td>";
             $html .= "<td {$class}>".round($engineer['opened']/12,2)."</td>"; //The average over a 12mnth period
@@ -274,7 +274,7 @@ elseif ($_REQUEST['statistics'] == 'on')
             $csv .= round(($engineer['escalated']/$engineer['opened'])*100,2)."%\n";
 
 
-            if($class=="class='shade1'") $class="class='shade2'";
+            if ($class=="class='shade1'") $class="class='shade2'";
             else $class="class='shade1'";
         }
         $html .= "<tr>";
@@ -358,15 +358,15 @@ elseif ($_REQUEST['mode']=='report')
     $sql = "SELECT incidents.id AS incid, incidents.title AS title,users.realname AS realname, users.id AS userid, ";
     $sql .= "incidents.opened AS opened, incidents.closed AS closed FROM users, incidents ";
     $sql .= "WHERE users.id=incidents.owner "; // AND incidents.opened > ($now-60*60*24*365.25) ";
-    if($type == "opened")
+    if ($type == "opened")
     {
         $sql .= " AND incidents.opened >= {$startdate} AND incidents.opened <= {$enddate} ";
     }
-    else if($type == "closed")
+    else if ($type == "closed")
     {
         $sql .= " AND incidents.closed >= {$startdate} AND incidents.closed <= {$enddate} ";
     }
-    else if($type == "both")
+    else if ($type == "both")
     {
         $sql .= " AND ((incidents.opened >= {$startdate} AND incidents.opened <= {$enddate}) ";
         $sql .= " OR (incidents.closed >= {$startdate} AND incidents.closed <= {$enddate})) ";
@@ -387,15 +387,15 @@ elseif ($_REQUEST['mode']=='report')
 
     //$sql_esc = "SELECT distinct(incidentid) AS incid FROM updates, incidents WHERE updates.incidentid = incidents.id AND incidents.opened > ($now-60*60*24*365.25)  AND updates.bodytext LIKE \"External ID%\"";
     $sql_esc = "SELECT distinct(incidentid) AS incid FROM updates, incidents WHERE updates.incidentid = incidents.id AND updates.bodytext LIKE \"External ID%\" ";
-    if($type == "opened")
+    if ($type == "opened")
     {
         $sql_esc .= " AND incidents.opened >= {$startdate} AND incidents.opened <= {$enddate} ";
     }
-    else if($type == "closed")
+    else if ($type == "closed")
     {
         $sql_esc .= " AND incidents.closed >= {$startdate} AND incidents.closed <= {$enddate} ";
     }
-    else if($type == "both")
+    else if ($type == "both")
     {
         $sql_esc .= " AND ((incidents.opened >= {$startdate} AND incidents.opened <= {$enddate}) ";
         $sql_esc .= " OR (incidents.closed >= {$startdate} AND incidents.closed <= {$enddate})) ";

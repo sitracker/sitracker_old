@@ -36,10 +36,10 @@ if (mysql_error()) trigger_error("MySQL Query Error ".mysql_error(), E_USER_ERRO
 $count=mysql_num_rows($result);
 echo "<b>Report showing all $count contact records</b> - ".date(r)."<br><br>";
 
-if($result)
+if ($result)
 {
     echo "<table summary=\"\" width=\"100%\">";
-    while($row=mysql_fetch_array($result))
+    while ($row=mysql_fetch_array($result))
     {
         echo "<tr>";
         echo "<td>";

@@ -23,7 +23,7 @@ include('htmlheader.inc.php');
 $startdate=strtotime($_REQUEST['startdate']);
 $enddate=strtotime($_REQUEST['enddate']);
 
-if(empty($startdate))
+if (empty($startdate))
 {
     echo "<h2>$title</h2>";
     echo "<form action='{$_SERVER['PHP_SELF']}' id='incidentsbysoftware' method='post'>";
@@ -43,7 +43,7 @@ if(empty($startdate))
 else
 {
 
-    if($startdate < $enddate)
+    if ($startdate < $enddate)
     {
         // opened
         $sql = "SELECT id,owner,opened,title FROM incidents ";
@@ -97,20 +97,19 @@ else
             $closed=0;
             $owners=array();
             $right='';
-            foreach($day AS $d)
+            foreach ($day AS $d)
             {
-
-                if(is_array($d))
+                if (is_array($d))
                 {
                     /*
                     echo "<pre>";
                     print_r($d);
                     echo "</pre>";
                     */
-                    foreach($d AS $a)
+                    foreach ($d AS $a)
                     {
                         $right .= "<tr><td>".$a['type']."</td><td><a href='../incident_details.php?id=".$a['id']."' style='color: #000000;'>".$a['id']."</td><td>".$a['title']."</a></td><td>".user_realname($a['owner'])."</td></tr>";
-                        if($a['type']=='opened')
+                        if ($a['type']=='opened')
                         {
                             $opened++;
                             $owners[$a['owner']]['owner']=$a['owner'];
@@ -130,15 +129,15 @@ else
             echo "<tr><td>{$strOpened}</td><td>{$opened}</td></tr>";
             echo "<tr><td>{$strClosed}</td><td>{$closed}</td></tr>";
             echo "<table><tr><th>User</th><th>Opened</th><th>Closed</th></tr>";
-            foreach($owners AS $o)
+            foreach ($owners AS $o)
             {
                 echo "<tr>";
                 echo "<td>".user_realname($o['owner'])."</td><td>";
-                if($o['closed']!=0) echo $o['closed'];
+                if ($o['closed']!=0) echo $o['closed'];
                 else echo "0";
 
                 echo "</td><td>";
-                if($o['opened']!=0) echo $o['opened'];
+                if ($o['opened']!=0) echo $o['opened'];
                 else echo "0";
                 echo "</td>";
                 echo "</tr>";

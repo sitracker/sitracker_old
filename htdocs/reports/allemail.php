@@ -38,9 +38,9 @@ $result=mysql_query($sql);
 if (mysql_error()) trigger_error("MySQL Query Error ".mysql_error(), E_USER_ERROR);
 $count=mysql_num_rows($result);
 echo "<strong>Found $count records</strong><br /><br />";
-if($result)
+if ($result)
 {
-    while(list($email)=mysql_fetch_row($result))
+    while (list($email)=mysql_fetch_row($result))
     {
         echo "$email";
         echo "<br />";

@@ -20,7 +20,7 @@ require('functions.inc.php');
 // This page requires authentication
 require('auth.inc.php');
 
-if(empty($_REQUEST['mode']))
+if (empty($_REQUEST['mode']))
 {
     $title = "Edit escalation path";
     //show page
@@ -71,13 +71,13 @@ else
     $emaildomain = cleanvar($_REQUEST['emaildomain']);
 
     $errors = 0;
-    if(empty($name))
+    if (empty($name))
     {
         $errors++;
         echo "<p class='error'>You must enter a name for the escalation path</p>\n";
     }
 
-    if($errors == 0)
+    if ($errors == 0)
     {
         $sql = "UPDATE escalationpaths SET name = '{$name}', track_url = '{$trackurl}', ";
         $sql .= " home_url = '{$homeurl}', url_title = '{$title}', email_domain = '{$emaildomain}' ";
@@ -85,7 +85,7 @@ else
         $result = mysql_query($sql);
         if (mysql_error()) trigger_error(mysql_error(),E_USER_ERROR);
 
-        if(!$result) echo "<p class='error'>Edit of escalation path failed</p>";
+        if (!$result) echo "<p class='error'>Edit of escalation path failed</p>";
         else
         {
             html_redirect("escalation_paths.php");

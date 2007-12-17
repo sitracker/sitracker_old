@@ -49,10 +49,10 @@ $sig_id = cleanvar($_REQUEST['sig_id']);
 $signature = cleanvar($_REQUEST['signature']);
 $formaction = cleanvar($_REQUEST['formaction']);
 
-if(!empty($signature))
+if (!empty($signature))
 {
     //we've been passed a signature - ie we must either be deleting or editing on actual signature
-    switch($formaction)
+    switch ($formaction)
     {
         case 'add':
             //then we're adding a new signature
@@ -75,7 +75,7 @@ if(!empty($signature))
   }
 
 }
-elseif(empty($action))
+elseif (empty($action))
 {
     //The just view the global signatures
     include('htmlheader.inc.php');
@@ -84,7 +84,7 @@ elseif(empty($action))
 
     $sql = "SELECT id, signature FROM emailsig ORDER BY id ASC";
     $result = mysql_query($sql);
-    if(mysql_error()) trigger_error(mysql_error(), E_USER_WARNING);
+    if (mysql_error()) trigger_error(mysql_error(), E_USER_WARNING);
 
     // FIXME i18n global signature paragraph
     echo "<p align='center'>One of the signatures below will be chosen at random and inserted at the bottom of outgoing emails. It's recommended that you begin this signature with two dashes, a space and a line feed.<br /><br />";
@@ -107,10 +107,10 @@ elseif(empty($action))
 
     include('htmlfooter.inc.php');
 }
-elseif(!empty($action))
+elseif (!empty($action))
 {
     include('htmlheader.inc.php');
-    switch($action)
+    switch ($action)
     {
         case 'add':
             echo "<h2>{$strGlobalSignature}: {$strAdd}</h2>";

@@ -85,7 +85,7 @@ switch($mode)
             $result = mysql_query($sql);
             if (mysql_error()) trigger_error(mysql_error(), E_USER_ERROR);
 
-            if(empty($result) OR mysql_num_rows($result) == 0)
+            if (empty($result) OR mysql_num_rows($result) == 0)
             {
                 $gid = md5($strUserStillAway);
                 $sql = "INSERT INTO notices (userid, type, text, timestamp, gid) ";

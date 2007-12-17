@@ -65,7 +65,7 @@ else
     $sql .= "WHERE software.id = incidents.softwareid AND incidents.opened >= '{$startdate}' ";
     $sql .= "AND incidents.opened <= '{$enddate}' ";
     $software = $_REQUEST['software'];
-    if(!empty($software)) $sql .= "AND software.name LIKE '%{$software}%' ";
+    if (!empty($software)) $sql .= "AND software.name LIKE '%{$software}%' ";
     $sql .= "GROUP BY software.id ORDER BY softwarecount DESC";
     $result = mysql_query($sql);
     if (mysql_error()) trigger_error("MySQL Query Error ".mysql_error(), E_USER_ERROR);
@@ -75,7 +75,7 @@ else
     $softwareID[0] = 0;
     $c = 0;
     $count = 0;
-    while($row = mysql_fetch_array($result))
+    while ($row = mysql_fetch_array($result))
     {
         $countArray[$c] = $row['softwarecount'];
         $count += $countArray[$c];
@@ -136,10 +136,10 @@ else
         }
 
 
-        if($numrows > 0)
+        if ($numrows > 0)
         {
             unset($monthbreakdown);
-            while($obj = mysql_fetch_object($resultN))
+            while ($obj = mysql_fetch_object($resultN))
             {
                 $datestr = date("M y",$obj->opened);
 
@@ -148,7 +148,7 @@ else
                 if (mysql_error()) trigger_error("MySQL Query Error ".mysql_error(), E_USER_ERROR);
                 list($numrowsL) = mysql_fetch_row($resultL);
 
-                if($numrowsL > 0) $slas[$obj->servicelevel]['escalated']++;
+                if ($numrowsL > 0) $slas[$obj->servicelevel]['escalated']++;
                 else $slas[$obj->servicelevel]['notEscalated']++;
 
                 $monthbreakdown[$datestr][$obj->servicelevel]++;
@@ -159,26 +159,26 @@ else
         echo "<td>{$percentage}%</td>";
         echo "<td>{$softwareNames[$i]}</td>";
 
-        foreach($slas AS $sla)
+        foreach ($slas AS $sla)
         {
             echo "<td>";
             echo ($sla['notEscalated']+$sla['escalated'])." / ".$sla['escalated'];
             echo "</td>";
         }
 
-        if($monthbreakdownstatus === "on")
+        if ($monthbreakdownstatus === "on")
         {
             echo "<tr class='$shade'><td></td><td colspan='".(count($slas)+2)."'>";
             echo "<table style='width: 100%'><tr>";
-            foreach($monthbreakdown AS $month) echo "<th>{$month['month']}</th>";
+            foreach ($monthbreakdown AS $month) echo "<th>{$month['month']}</th>";
             echo "</tr>\n<tr>";
-            foreach($monthbreakdown AS $month)
+            foreach ($monthbreakdown AS $month)
             {//echo "<pre>".print_r($month)."</pre>";
 	            echo "<td><table>";
                 $total=0;
-                foreach($slas AS $slaNames)
+                foreach ($slas AS $slaNames)
                 {
-                    if(empty($month[$slaNames['name']])) $month[$slaNames['name']] = 0;
+                    if (empty($month[$slaNames['name']])) $month[$slaNames['name']] = 0;
                     echo "<tr>";
                     echo "<td>".$slaNames['name']."</td><td>".$month[$slaNames['name']]."</td>";
                     echo "</tr>\n";
@@ -204,13 +204,13 @@ else
     }
     echo "</table>";
 
-    if($monthbreakdownstatus === "on")
+    if ($monthbreakdownstatus === "on")
     {
         echo "<p><table align='center'>";
         echo "<tr><th>Month</th><th>Number of calls</th></tr>";
         $shade='shade1';
 
-        foreach($monthtotals AS $m)
+        foreach ($monthtotals AS $m)
         {
             echo "<tr class='$shade'>";
             echo "<td>".$m['month']."</td><td align='center'>".$m['value']."</td><tr>";
@@ -253,13 +253,13 @@ else
             foreach($months AS $m)
             {
                 $val = $skill[$m]['numberofincidents'];
-                if(empty($val)) $val = 0;
+                if (empty($val)) $val = 0;
                 echo "<td>{$val}</td>";
                 $csv .= "{$val},";
                 $sum += $val;
 
-                if($val < $min) $min = $val;
-                if($val > $max) $max = $val;
+                if ($val < $min) $min = $val;
+                if ($val > $max) $max = $val;
 
                 $coords .= "{ x: {$counter}, y: {$val} }, ";
                 $counter++;
@@ -269,13 +269,13 @@ else
 
             $percentage = ($sum / $total) * 100;
 
-            if($shade == "shade1") $shade = "shade2";
+            if ($shade == "shade1") $shade = "shade2";
             else $shade = "shade1";
 
             $clgth = strlen($coords)-2;
             $coords = substr($coords, 0, $clgth);
 
-            if($percentage >= 5)
+            if ($percentage >= 5)
             {
                 //only show on graph items with 5% or more of the share
                 $javascript .= "var d{$js_coordCounter} = [ {$coords} ]\n\n";
@@ -286,10 +286,10 @@ else
                 $javascript .= "bindings:{ x:\"x\", y:\"y\", size:\"size\" },";
                 $javascript .= "label:\"{$skill['name']}\"";
                 $javascript .= "});\n\n\n\n";
-    
-    
+
+
     //echo $javascript."<br />";
-    
+
                 $js_coordCounter++;
             }
         }
@@ -362,11 +362,11 @@ echo "</pre>";
             echo "var legend;";
 
             echo "dojo.addOnLoad(function(){";
-                echo $javascript; 
+                echo $javascript;
 
                 echo "var chart = new dojo.charting.Chart(null, \"{$strIncidentsBySkill}\", \"A chart\");";
                 echo "chart.addPlotArea({ x:50,y:50, plotArea:pa });";
-                
+
                 echo "legend = pa.getLegendInfo();";
 
                 echo "chart.node = dojo.byId(\"incidentsBySkill\");";

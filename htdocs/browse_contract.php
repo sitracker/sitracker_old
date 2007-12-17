@@ -206,7 +206,7 @@ else
         <td><?php echo $results["reseller"] ?></td>
         <td><?php echo $results["licence_quantity"] ?> <?php echo $results["licence_type"] ?></td>
         <td><?php
-            if($results["expirydate"] == '-1') echo $strUnlimited;
+            if ($results["expirydate"] == '-1') echo $strUnlimited;
             else echo date($CONFIG['dateformat_date'], $results["expirydate"]); ?></td>
 
         <td><?php if ($results["notes"] == "") echo "&nbsp;"; else echo nl2br($results["notes"]); ?></td>

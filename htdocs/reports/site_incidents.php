@@ -27,7 +27,7 @@ $zerologged=$_REQUEST['zerologged'];
 if (empty($startdate)) $startdate = date('Y-m-d');
 if (empty($enddate)) $enddate = date('Y-m-d');
 
-if(empty($mode))
+if (empty($mode))
 {
     include('htmlheader.inc.php');
 
@@ -75,13 +75,13 @@ else
             if (mysql_error()) trigger_error(mysql_error(),E_USER_ERROR);
             $details=mysql_fetch_object($sresult);
             $count=1*($details->incidentz);
-            if(!empty($zerologged))
+            if (!empty($zerologged))
             {
                 $csv .="$count,'{$site->name},'{$site->resel}'\n";
             }
             else
             {
-                if($count!=0) $csv .="$count,'{$site->name},'{$site->resel}'\n";
+                if ($count!=0) $csv .="$count,'{$site->name},'{$site->resel}'\n";
             }
         }
         header("Content-type: text/csv\r\n");
@@ -89,7 +89,8 @@ else
         header("Content-disposition: filename=yearly_incidents.csv");
         echo "incidents, site, reseller\n";
         echo $csv;
-    } else html_redirect('site_incidents.php', FALSE, $strNoResults);
+    }
+    else html_redirect('site_incidents.php', FALSE, $strNoResults);
 
 }
 

@@ -48,7 +48,7 @@ if (empty($action) OR $action == "showform")
     $result= mysql_query($sql);
     if (mysql_error()) trigger_error(mysql_error(),E_USER_ERROR);
 
-    if(mysql_num_rows($result) >= 1)
+    if (mysql_num_rows($result) >= 1)
     {
         echo "<h2>{$strRolePermissions}</h2>";
         echo "<form action='{$_SERVER['PHP_SELF']}' method='post' onsubmit='return confirm_submit()'>";

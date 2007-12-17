@@ -38,7 +38,7 @@ if (mysql_error()) trigger_error("MySQL Query Error ".mysql_error(), E_USER_ERRO
 $count=mysql_num_rows($result);
 echo "<b>Found $count records</b><br /><br />";
 
-if($result)
+if ($result)
 {
     while($address=mysql_fetch_array($result))
     {
