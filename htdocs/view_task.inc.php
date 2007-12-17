@@ -77,26 +77,22 @@ if (mysql_num_rows($result) >= 1)
         if ($task->completion < 100) echo " | <a href='edit_task.php?id={$taskid}&amp;action=markcomplete'>{$strMarkComplete}</a>";
         echo "</p>";
 
-/*
-        // Temporarily disabled for 3.30 beta1 release
-
         echo "<div style='border: 1px solid #CCCCFF; padding: 5px;'>";
-        echo "<p><strong>Links</strong>:</p>";
+        echo "<p><strong>{$strLinks}</strong>:</p>";
         // Draw links tree
         // Have a look what can be linked from tasks
         echo show_links('tasks', $task->id);
 
-        echo "<p><strong>Reverse Links</strong>:</p>";
+        echo "<p><strong>{$strReverseLinks}</strong>:</p>";
         echo show_links('tasks', $task->id, 0, '', 'rl');
 
         echo "</div>";
 
         echo show_create_links('tasks', $task->id);
-        */
 
         echo "</div>";
-        // Notes
 
+        // Notes
         echo "<div style='width: 48%; float: right; border: 1px solid #CCCCFF;'>";
         echo add_note_form(10, $taskid);
         echo show_notes(10, $taskid);

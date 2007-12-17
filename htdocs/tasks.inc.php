@@ -21,6 +21,9 @@ $order = cleanvar($_REQUEST['order']);
 $incident = cleanvar($_REQUEST['incident']);
 $mode;
 
+
+if(!empty($incident))
+{
 ?>
 <script type='text/javascript'>
 <!--
@@ -155,9 +158,6 @@ setInterval("countUp()", 1000); //every 1 seconds
 </script>
 <?php
 
-
-if(!empty($incident))
-{
     $mode = 'incident';
 
     //get info for incident-->task linktype
@@ -391,7 +391,7 @@ if (mysql_num_rows($result) >=1 )
         echo "</td></tr>";
     }
     echo "</table>\n";
-    echo "<script type='text/javascript'>countUp();</script>";  //force a quick udate
+    if($mode == 'incident') echo "<script type='text/javascript'>countUp();</script>";  //force a quick udate
 
     //echo "<pre>";
     //print_r($billing);
