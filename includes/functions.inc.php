@@ -18,7 +18,7 @@
 include('classes.inc.php');
 
 // Version number of the application, (numbers only)
-$application_version='3.31';
+$application_version='3.40';
 // Revision string, e.g. 'beta2' or 'svn' or ''
 $application_revision='svn';
 
@@ -3802,7 +3802,7 @@ function iso_8601_date($timestamp)
 }
 
 /**
-    * Decide whether the time is during a public holiday 
+    * Decide whether the time is during a public holiday
     * @author Paul Heaney
     * @param $time integer. Timestamp to identify
     * @param $publicholidays array of Holiday. Public holiday to compare against
@@ -3816,7 +3816,7 @@ function is_public_holiday($time, $publicholidays)
         {
             if($time >= $holiday->starttime AND $time <= $holiday->endtime)
 	        {
-	            return TRUE;	
+	            return TRUE;
 	        }
         }
     }
