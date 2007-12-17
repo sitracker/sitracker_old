@@ -5094,7 +5094,7 @@ function show_links($origtab, $colref, $level=0, $parentlinktype='', $direction=
 
 function show_create_links($table, $ref)
 {
-    $html .= "<p align='center'>Add Link: ";
+    $html .= "<p align='center'>{$GLOBALS['strAddLink']}: ";
     $sql = "SELECT * FROM linktypes WHERE origtab='$table' OR linktab='$table' ";
     $result = mysql_query($sql);
     if (mysql_error()) trigger_error(mysql_error(),E_USER_WARNING);
