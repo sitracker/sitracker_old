@@ -25,7 +25,7 @@ require('auth.inc.php');
 
 
 
-$sql = "SELECT * FROM dashboard WHERE enabled='true' ORDER BY id";
+$sql = "SELECT * FROM `{$dbDashboard}` WHERE enabled='true' ORDER BY id";
 $result = mysql_query($sql);
 if (mysql_error()) trigger_error(mysql_error(),E_USER_WARNING);
 while ($dashboard = mysql_fetch_object($result))
@@ -39,7 +39,7 @@ include('htmlheader.inc.php');
 
 echo "<script type=\"text/javascript\" src=\"scripts/dojo/dojo.js\"></script>";
 
-$sql = "SELECT dashboard FROM users WHERE id = '".$_SESSION['userid']."'";
+$sql = "SELECT dashboard FROM `{$dbUsers}` WHERE id = '".$_SESSION['userid']."'";
 $result = mysql_query($sql);
 if (mysql_error()) trigger_error(mysql_error(),E_USER_WARNING);
 

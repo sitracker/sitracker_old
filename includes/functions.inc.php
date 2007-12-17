@@ -100,13 +100,6 @@ if(!empty($_SESSION['lang']) AND $_SESSION['lang'] != $CONFIG['default_i18n']) i
 ini_set('default_charset', $i18ncharset);
 
 
-// FIXME putting this config variable here until we fully support it - move to defaults.inc.php when ready - INL 25Nov07
-$CONFIG['db_tableprefix'] = '';
-
-// Table Names
-$dbUsers = "{$CONFIG['db_tableprefix']}users";
-// TODO add the rest of the table names here, then go through and replace hardcoded names with `{$GLOBALS['dbUsers']}` etc.
-
 // Time settings
 $now = time();
 $today=$now+(16*3600);  // next 16 hours, based on reminders being run at midnight this is today

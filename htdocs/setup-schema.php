@@ -16,6 +16,9 @@
 // *AND* you must also change $schema[] for new installations (at the top of the file)
 
 // TODO we need to clean this schema up to make it confirmed compatible with mysql4
+
+// TODO 3.40 Make this use a configured table prefix
+
 $schema = "CREATE TABLE `billing_periods` (
 `servicelevelid` INT( 5 ) NOT NULL ,
 `engineerperiod` INT NOT NULL COMMENT 'In minutes',

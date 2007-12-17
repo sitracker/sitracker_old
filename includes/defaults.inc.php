@@ -25,6 +25,9 @@ $CONFIG['db_password'] = '';
 // the name of the database to use
 $CONFIG['db_database'] = 'sit';
 
+// Prefix database tables with the a string (e.g. 'sit_', use this if the database you are using is shared with other applications
+$CONFIG['db_tableprefix'] = '';
+
 $CONFIG['home_country'] = 'UNITED KINGDOM';
 
 $CONFIG['support_email'] = 'support@localhost';
