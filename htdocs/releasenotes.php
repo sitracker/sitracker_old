@@ -11,23 +11,23 @@ include_once('htmlheader.inc.php');
 echo "<h2>Release Notes</h2>";
 
 echo "<div id='help'>";
+echo "<p>For the latest notes on this release please <a href='http://sitracker.sourceforge.net/ReleaseNotes'>see the SiT website</a>, a summary is shown below:</p>";
 echo "<h3>v3.31</h3>";
-
 echo '<div>
 
     <p><strong>Internationalisation</strong></p>
-    <div class="img-dec"><img src="images/changelog/331translation.png" /></div>
+    <div class="img-dec"><img src="images/changelog/331translation.png" alt="Translation" /></div>
     <ul><li>Enabled i18n to allow translation</li>
     <li>Added translate page for users to translate strings</li>
     <li>Changed the login page to allow for session-based language choice</li></ul>
-    <div class="img-dec"><img src="images/changelog/331language.png" /></div><br /><br />
+    <div class="img-dec"><img src="images/changelog/331language.png" alt="Language" /></div><br /><br />
 
     <p><strong>Customer Portal</strong></p>
-    <div class="img-dec"><img src="images/changelog/331portal.png" /></div></li>
+    <div class="img-dec"><img src="images/changelog/331portal.png" alt="Portal" /></div>
     <p>Improved built-in customer portal, customers can now read, open, update and request to close their incidents, view their contracts and view and update their details.</p><br /><br />
 
     <p><strong>Improved Contract Flexibility</strong></p>
-    <div class="img-dec"><img src="images/changelog/331addcontract.png" /></div></li>
+    <div class="img-dec"><img src="images/changelog/331addcontract.png" alt="Add Contract" /></div>
     <p>Now when adding a contract, you can specify a number of new things.</p>
     <ul>
         <li>You can limit a contract to a certain amount of supported contacts (or unlimited as it is now)</li>
@@ -36,37 +36,37 @@ echo '<div>
     </ul><br /><br />
 
     <p><strong>Notices</strong></p>
-    <div class="img-dec"><img src="images/changelog/331notices.png" /></div>
+    <div class="img-dec"><img src="images/changelog/331notices.png" alt="Notices" /></div>
     <p>New notice system, allows global notices as well as for informing usersof errors or information such as upgrades</p><br /><br />
 
     <p><strong>SLA Notices</strong></p>
-    <div class="img-dec"><img src="images/changelog/331slanotices.png" /></div>
+    <div class="img-dec"><img src="images/changelog/331slanotices.png" alt="SLA Notices" /></div>
     <p>Making use of the new notice system, you will now see notices when incidents are approaching the end of their SLA.</p><br /><br />
 
     <p><strong>Jump To Incident</strong></p>
-    <div class="img-dec"><img src="images/changelog/331jumpto.png" /></div>
+    <div class="img-dec"><img src="images/changelog/331jumpto.png" alt="Jump to Incident" /></div>
     <p>Added a \'jump to incident\' link in the support menu</p><br /><br />
 
 
 
     <p><strong>User Status</strong></p>
-    <div class="img-dec"><img src="images/changelog/331status.png" /></div>
+    <div class="img-dec"><img src="images/changelog/331status.png" alt="User Status" /></div>
     <p>The users page now contains an icon dispaying a user\'s online status</p><br /><br />
 
 
     <p><strong>Activites</strong></p>
-    <div class="img-dec"><img src="images/changelog/331activitiesmenu.png" /></div>
+    <div class="img-dec"><img src="images/changelog/331activitiesmenu.png" alt="Activities Menu" /></div>
     <p>Incidents logged under SLAs that are set to \'Timed\' (in <a href="service_levels.php">service_levels.php</a>) have an \'Activities\' entry.</p>
-    <div class="img-dec"><img src="images/changelog/331activitieslist.png" /></div>
+    <div class="img-dec"><img src="images/changelog/331activitieslist.png" alt="Activities List" /></div>
     <p>List of all the activities related to an incident.</p>
-    <div class="img-dec"><img src="images/changelog/331activitieslog.png" /></div>
+    <div class="img-dec"><img src="images/changelog/331activitieslog.png" alt="Activities Log" /></div>
     <p>When an activity is marked as complete, an entry is entered into the update log.</p><br /><br />
 
 
     <p><strong>Other Updates</strong></p>
     <ul><li>Added <a href="'.$CONFIG['application_webpath'].'reports/external_engineers.php">external engineer report</a> which shows incidents that have been escalated</li>
     <li>Software now has a vendor (allows more accurate stats)</li></ul>
-</ul></div>';
+    </div>';
 echo "</div>";
 
 include_once('htmlfooter.inc.php');
