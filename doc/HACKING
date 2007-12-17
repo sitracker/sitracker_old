@@ -30,7 +30,7 @@ Comments can also provide notes for future work, including:
     //      but if you don't fix it, at least document it to save the next
     //      person some time in tracking down the problem.
 
-    // DEPRECATED: this is marking a feature as deprecated,and should
+    // DEPRECATED: this is marking a feature as deprecated, and should
     //             state a version or date when the feature is targetted
     //             to be removed completely
 
