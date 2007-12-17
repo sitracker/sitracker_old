@@ -406,7 +406,7 @@ function give_overview()
         $total_average=number_format($totalresult/$numquestions,2);
         $total_percent=number_format((($total_average -1) * (100 / ($CONFIG['feedback_max_score'] -1))), 0);
         if ($total_percent < 0) $total_percent=0;
-        $string .= "<p align='center'>{$strPositivity}: {$total_average} <strong>({$total_percent}%)</strong> from $numsurveys results.</p>";
+        $string .= "<p align='center'>{$GLOBALS['strPositivity']}: {$total_average} <strong>({$total_percent}%)</strong> from $numsurveys results.</p>";
         $surveys+=$numresults;
     }
     return $string;
