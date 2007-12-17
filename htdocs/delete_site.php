@@ -42,7 +42,7 @@ else
     {
         include('htmlheader.inc.php');
         echo "<h2>Delete Site</h2>";
-        $sql="SELECT * FROM sites WHERE id='$id' LIMIT 1";
+        $sql="SELECT * FROM `{$dbSites}` WHERE id='$id' LIMIT 1";
         $siteresult = mysql_query($sql);
         $site=mysql_fetch_object($siteresult);
         if (mysql_error()) trigger_error(mysql_error(),E_USER_ERROR);
@@ -84,7 +84,7 @@ else
         }
         else
         {
-            $sql = "DELETE FROM sites WHERE id='$id' LIMIT 1";
+            $sql = "DELETE FROM `{$dbSites}` WHERE id='$id' LIMIT 1";
             $result = mysql_query($sql);
             if (mysql_error()) trigger_error(mysql_error(),E_USER_ERROR);
             else
@@ -108,7 +108,7 @@ else
         mysql_query($sql);
         if (mysql_error()) trigger_error(mysql_error(),E_USER_ERROR);
 
-        $sql = "DELETE FROM sites WHERE id='$id' LIMIT 1";
+        $sql = "DELETE FROM `{$dbSites}` WHERE id='$id' LIMIT 1";
         $result = mysql_query($sql);
         if (mysql_error()) trigger_error(mysql_error(),E_USER_ERROR);
 

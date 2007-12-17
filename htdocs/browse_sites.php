@@ -28,7 +28,7 @@ if(empty($displayinactive)) $displayinactive = "false";
 if($submit_value == "go")
 {
 // build SQL
-    $sql  = "SELECT id, name, department FROM sites ";
+    $sql  = "SELECT id, name, department FROM `{$dbSites}` ";
     if (!empty($owner))
     {
         $sql .= "WHERE owner = '{$owner}' ";
@@ -142,7 +142,7 @@ echo "{$strBrowseSites}</h2>";
 
 <?php
 echo "<a href='{$_SERVER['PHP_SELF']}?search_string=*&amp;{$inactivestring}'>{$strAll}</a>\n";
-$sitesql = "SELECT COUNT(id) FROM sites WHERE owner='{$sit[2]}'";
+$sitesql = "SELECT COUNT(id) FROM `{$dbSites}` WHERE owner='{$sit[2]}'";
 $siteresult = mysql_query($sitesql);
 if (mysql_error()) trigger_error(mysql_error(),E_USER_WARNING);
 list($ownedsites) = mysql_fetch_row($siteresult);
@@ -174,7 +174,7 @@ if ($errors == 0)
     {
         // Don't  need to do this again, already done above, us the results of that
         // build SQL
-        $sql  = "SELECT id, name, department, active FROM sites ";
+        $sql  = "SELECT id, name, department, active FROM `{$dbSites}` ";
 
         if (!empty($owner))
         {

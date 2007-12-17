@@ -63,7 +63,7 @@ $options = cleanvar($_POST['options']);
 switch ($_REQUEST['action'])
 {
     case 'save':
-        $sql = "INSERT INTO feedbackquestions ";
+        $sql = "INSERT INTO `{$dbFeedbackQuestions}` ";
         $sql .= "(formid, question, questiontext, sectiontext, taborder, type, required, options) VALUES (";
         $sql .= "'{$formid}',";
         $sql .= "'{$question}',";

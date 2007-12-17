@@ -30,7 +30,7 @@ $numquestions = cleanvar($_POST['numquestions']);
 switch ($action)
 {
     case 'save':
-        $sql = "INSERT INTO feedbackforms (name, description, introduction, thanks) VALUES (";
+        $sql = "INSERT INTO `{$dbFeedbackForms}` (name, description, introduction, thanks) VALUES (";
         $sql .= "'{$name}', ";
         $sql .= "'{$description}', ";
         $sql .= "'{$introduction}', ";

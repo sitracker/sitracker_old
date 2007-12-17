@@ -40,7 +40,7 @@ if (empty($_REQUEST['submit']))
     echo "<tr><th>Question: <sup class='red'>*</sup></th><td><input name='information' size='30' /></td></tr>";
     echo "<tr><th>More Information: <sup class='red'>*</sup></th><td><input name='moreinformation' size='30' /></td></tr>";
     echo "</table>";
-    echo "<p align='center'><input name='submit' type='submit' value='Add' /></p>";
+    echo "<p align='center'><input name='submit' type='submit' value=\"{$strAdd}\" /></p>";
     echo "</form>";
 }
 else
@@ -68,7 +68,7 @@ else
     // add product information if no errors
     if ($errors == 0)
     {
-        $sql = "INSERT INTO productinfo (productid, information, moreinformation) ";
+        $sql = "INSERT INTO `{$dbProductInfo}` (productid, information, moreinformation) ";
         $sql .= "VALUES ('$product', '$information', '$moreinformation')";
         $result = mysql_query($sql);
         if (mysql_error()) trigger_error(mysql_error(),E_USER_ERROR);

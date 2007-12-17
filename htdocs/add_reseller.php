@@ -38,7 +38,7 @@ switch($action)
         }
         else
         {
-            $sql = "INSERT INTO resellers (name) VALUES ('$name')";
+            $sql = "INSERT INTO `{$dbResellers}` (name) VALUES ('$name')";
             $result = mysql_query($sql);
             if (mysql_error()) trigger_error("MySQL Query Error ".mysql_error(), E_USER_ERROR);
 

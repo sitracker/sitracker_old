@@ -51,7 +51,7 @@ switch ($action)
         }
         else
         {
-            $sql = "INSERT INTO notes (userid, bodytext, link, refid) ";
+            $sql = "INSERT INTO `{$dbNotes}` (userid, bodytext, link, refid) ";
             $sql .= "VALUES ('{$sit[2]}', '{$bodytext}', '{$link}', '{$refid}')";
             mysql_query($sql);
             if (mysql_error()) trigger_error(mysql_error(),E_USER_ERROR);

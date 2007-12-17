@@ -57,7 +57,7 @@ if (empty($submit))
         echo "value=".$_SESSION['formdata']['add_product']['name'];
     }
     echo " /></td></tr>\n";
-    
+
     echo "<tr><th>{$strDescription}</th>";
     echo "<td>";
     echo "<textarea name='description' cols='40' rows='6'>";
@@ -82,7 +82,7 @@ else
     $name = cleanvar($_REQUEST['name']);
     $vendor = cleanvar($_REQUEST['vendor']);
     $description = cleanvar($_REQUEST['description']);
-    
+
     $_SESSION['formdata']['add_product'] = $_REQUEST;
     // Add New
     $errors = 0;
@@ -101,7 +101,7 @@ else
     // add product if no errors
     if ($errors == 0)
     {
-        $sql = "INSERT INTO products (name, vendorid, description) VALUES ('$name', '$vendor', '$description')";
+        $sql = "INSERT INTO `{$dbProducts}` (name, vendorid, description) VALUES ('$name', '$vendor', '$description')";
         $result = mysql_query($sql);
         if (mysql_error()) trigger_error("MySQL Query Error ".mysql_error(), E_USER_ERROR);
 

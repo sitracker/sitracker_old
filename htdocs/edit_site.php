@@ -48,7 +48,7 @@ elseif ($action == "edit")
     }
     else
     {
-        $sql="SELECT * FROM sites WHERE id='$site' ";
+        $sql="SELECT * FROM `{$dbSites}` WHERE id='$site' ";
         $siteresult = mysql_query($sql);
         if (mysql_error()) trigger_error("MySQL Query Error ".mysql_error(), E_USER_ERROR);
         while ($siterow=mysql_fetch_array($siteresult))
@@ -147,7 +147,7 @@ elseif ($action == "update")
         if($active=='true') $activeStr = 'true';
         else $activeStr = 'false';
 
-        $sql = "UPDATE sites SET name='$name', department='$department', address1='$address1', address2='$address2', city='$city', ";
+        $sql = "UPDATE `{$dbSites}` SET name='$name', department='$department', address1='$address1', address2='$address2', city='$city', ";
         $sql .= "county='$county', postcode='$postcode', country='$country', telephone='$telephone', fax='$fax', email='$email', ";
         $sql .= "websiteurl='$websiteurl', notes='$notes', typeid='$typeid', owner='$owner', freesupport='$incident_quantity', active='$activeStr' WHERE id='$site' LIMIT 1";
 
