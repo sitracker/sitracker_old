@@ -153,7 +153,7 @@ else
             replace_tags(2, $id, $tags);
 
             // update support incident
-            $sql = "UPDATE incidents ";
+            $sql = "UPDATE `{$dbIncidents}` ";
             $sql .= "SET externalid='$externalid', ccemail='$ccemail', ";
             $sql .= "escalationpath='$escalationpath', externalengineer='$externalengineer', externalemail='$externalemail', title='$title', ";
             $sql .= "contact='$contact', softwareid='$software', productversion='$productversion', ";
@@ -214,7 +214,7 @@ else
 
                 $bodytext = $header . $bodytext;
                 $bodytext = mysql_real_escape_string($bodytext);
-                $sql  = "INSERT INTO updates (incidentid, userid, type, currentstatus, bodytext, timestamp) ";
+                $sql  = "INSERT INTO `{$dbUpdates}` (incidentid, userid, type, currentstatus, bodytext, timestamp) ";
                 $sql .= "VALUES ('$id', '$sit[2]', 'editing', '$status', '$bodytext', '$now')";
                 $result = mysql_query($sql);
                 if (mysql_error()) trigger_error("MySQL Query Error ".mysql_error(), E_USER_ERROR);

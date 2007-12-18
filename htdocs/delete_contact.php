@@ -146,7 +146,7 @@ else
         mysql_query($sql);
         if (mysql_error()) trigger_error("MySQL Query Error ".mysql_error(), E_USER_ERROR);
 
-        $sql = "UPDATE incidents SET contact='$newcontact' WHERE contact='$id' ";
+        $sql = "UPDATE `{$dbIncidents}` SET contact='$newcontact' WHERE contact='$id' ";
         mysql_query($sql);
         if (mysql_error()) trigger_error("MySQL Query Error ".mysql_error(), E_USER_ERROR);
 

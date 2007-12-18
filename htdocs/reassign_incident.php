@@ -49,7 +49,7 @@ switch ($action)
         $bodytext = "Status: ".incidentstatus_name($incident->status)." -&gt; <b>" . incidentstatus_name($newstatus) . "</b>\n\n" . $bodytext;
 
         // Update incident
-        $sql = "UPDATE incidents SET ";
+        $sql = "UPDATE `{$dbIncidents}` SET ";
         if ($temporary != 'yes' AND $incident->towner > 0 AND $sit[2]==$incident->owner) $sql .= "owner='{$sit[2]}', towner=0, "; // make current user = owner
         elseif ($temporary != 'yes' AND $sit[2]==$incident->towner) $sql .= "towner=0, "; // temp owner removing temp ownership
         elseif ($temporary == 'yes' AND $incident->towner < 1 AND $sit[2]!=$incident->owner) $sql .= "towner={$sit[2]}, "; // Temp to self
@@ -80,7 +80,7 @@ switch ($action)
         if ($_REQUEST['cust_vis']=='yes') $customervisibility='show';
         else $customervisibility='hide';
 
-        $sql  = "INSERT INTO updates (incidentid, userid, bodytext, type, timestamp, currentowner, currentstatus, customervisibility) ";
+        $sql  = "INSERT INTO `{$dbUpdates}` (incidentid, userid, bodytext, type, timestamp, currentowner, currentstatus, customervisibility) ";
         $sql .= "VALUES ($id, $sit[2], '$bodytext', '$assigntype', '$now', ";
         if ($temporary != 'yes' AND $incident->towner > 0 AND $sit[2]==$incident->owner) $sql .= "'{$sit[2]}', ";
         elseif ($temporary != 'yes' AND $sit[2]==$incident->towner)  $sql .= "'{$incident->owner}', ";

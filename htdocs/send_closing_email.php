@@ -70,7 +70,7 @@ else
         // add update
         $time = time();
         $updatebody .= "To: <b>" . $tofield . "</b>\nFrom: <b>" . $fromfield . "</b>\nReply-To: <b>" . $replytofield . "</b>\nCC: <b>" . $ccfield . "</b>\nBCC: <b>" . $bccfield . "</b>\nSubject: <b>" . $subjectfield . "</b>\n\n" . $bodytext;
-        $sql  = "INSERT INTO updates (incidentid, userid, bodytext, type, timestamp) ";
+        $sql  = "INSERT INTO `{$dbUpdates}` (incidentid, userid, bodytext, type, timestamp) ";
         $sql .= "VALUES ($id, $sit[2], '$updatebody', 'email', $time)";
         mysql_query($sql);
 

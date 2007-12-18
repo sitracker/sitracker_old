@@ -40,13 +40,13 @@ switch ($action)
                     if (mysql_error()) trigger_error(mysql_error(),E_USER_ERROR);
 
                     // Insert an entry into the update log for this incident
-                    $sql  = "INSERT INTO updates (incidentid, userid, type, timestamp, currentowner, customervisibility, sla, bodytext) ";
+                    $sql  = "INSERT INTO `{$dbUpdates}` (incidentid, userid, type, timestamp, currentowner, customervisibility, sla, bodytext) ";
                     $sql .= "VALUES ('$id', '".$sit[2]."', 'editing', '$now', '".$sit[2]."', 'hide', '','Added relationship with Incident $relatedid')";
                     mysql_query($sql);
                     if (mysql_error()) trigger_error("MySQL Query Error ".mysql_error(), E_USER_ERROR);
 
                     // Insert an entry into the update log for the related incident
-                    $sql  = "INSERT INTO updates (incidentid, userid, type, timestamp, currentowner, customervisibility, sla, bodytext) ";
+                    $sql  = "INSERT INTO `{$dbUpdates}` (incidentid, userid, type, timestamp, currentowner, customervisibility, sla, bodytext) ";
                     $sql .= "VALUES ('$relatedid', '".$sit[2]."', 'editing', '$now', '".$sit[2]."', 'hide', '','Added relationship with Incident $id')";
                     mysql_query($sql);
                     if (mysql_error()) trigger_error("MySQL Query Error ".mysql_error(), E_USER_ERROR);
@@ -69,13 +69,13 @@ switch ($action)
         if (mysql_error()) trigger_error("MySQL Query Error ".mysql_error(), E_USER_ERROR);
 
         // Insert an entry into the update log for this incident
-        $sql  = "INSERT INTO updates (incidentid, userid, type, timestamp, currentowner, customervisibility, sla, bodytext) ";
+        $sql  = "INSERT INTO `{$dbUpdates}` (incidentid, userid, type, timestamp, currentowner, customervisibility, sla, bodytext) ";
         $sql .= "VALUES ('{$relation->incidentid}', '".$sit[2]."', 'editing', '$now', '".$sit[2]."', 'hide', '','Removed relationship with Incident {$relation->relatedid}')";
         mysql_query($sql);
         if (mysql_error()) trigger_error("MySQL Query Error ".mysql_error(), E_USER_ERROR);
 
         // Insert an entry into the update log for the related incident
-        $sql  = "INSERT INTO updates (incidentid, userid, type, timestamp, currentowner, customervisibility, sla, bodytext) ";
+        $sql  = "INSERT INTO `{$dbUpdates}` (incidentid, userid, type, timestamp, currentowner, customervisibility, sla, bodytext) ";
         $sql .= "VALUES ('{$relation->relatedid}', '".$sit[2]."', 'editing', '$now', '".$sit[2]."', 'hide', '','Removed relationship with Incident {$relation->incidentid}')";
         mysql_query($sql);
         if (mysql_error()) trigger_error("MySQL Query Error ".mysql_error(), E_USER_ERROR);

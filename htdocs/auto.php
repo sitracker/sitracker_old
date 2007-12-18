@@ -56,12 +56,12 @@ if ($actions[0]=='' OR in_array('CloseIncidents',$actions))
     if ($verbose) echo "Found ".mysql_num_rows($result)." Incidents to close{$crlf}";
     while ($irow=mysql_fetch_array($result))
     {
-        $sqlb="UPDATE incidents SET lastupdated='$now', closed='$now', status='2', closingstatus='4', timeofnextaction='0' WHERE id='".$irow['id']."'";
+        $sqlb="UPDATE `{$dbIncidents}` SET lastupdated='$now', closed='$now', status='2', closingstatus='4', timeofnextaction='0' WHERE id='".$irow['id']."'";
         $resultb=mysql_query($sqlb);
         if (mysql_error()) trigger_error("MySQL Query Error ".mysql_error(), E_USER_ERROR);
         if ($verbose) echo "  Incident ".$row['id']." closed{$crlf}";
 
-        $sqlc="INSERT INTO updates (incidentid, userid, type, currentowner, currentstatus, bodytext, timestamp, nextaction, customervisibility) ";
+        $sqlc="INSERT INTO `{$dbUpdates}` (incidentid, userid, type, currentowner, currentstatus, bodytext, timestamp, nextaction, customervisibility) ";
         $sqlc.="VALUES ('".$irow['id']."', '0', 'closing', '".$irow['owner']."', '".$irow['status']."', 'Incident Closed by {$CONFIG['application_shortname']}', '$now', '', 'show' ) ";
         $resultc=mysql_query($sqlc);
         if (mysql_error()) trigger_error(mysql_error(),E_USER_ERROR);

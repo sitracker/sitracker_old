@@ -687,14 +687,14 @@ $emailtype|$newincidentstatus|$timetonextaction_none|$timetonextaction_days|$tim
 
                 if ($newincidentstatus != incident_status($id))
                 {
-                    $sql = "UPDATE incidents SET status='$newincidentstatus', lastupdated='$now', timeofnextaction='$timeofnextaction' WHERE id='$id'";
+                    $sql = "UPDATE `{$dbIncidents}` SET status='$newincidentstatus', lastupdated='$now', timeofnextaction='$timeofnextaction' WHERE id='$id'";
                     mysql_query($sql);
                     if (mysql_error()) trigger_error("MySQL Query Error ".mysql_error(), E_USER_ERROR);
                     $updateheader = "New Status: <b>" . incidentstatus_name($newincidentstatus) . "</b>\n\n";
                 }
                 else
                 {
-                    mysql_query("UPDATE incidents SET lastupdated='$now', timeofnextaction='$timeofnextaction' WHERE id='$id'");
+                    mysql_query("UPDATE `{$dbIncidents}` SET lastupdated='$now', timeofnextaction='$timeofnextaction' WHERE id='$id'");
                     if (mysql_error()) trigger_error("MySQL Query Error ".mysql_error(), E_USER_ERROR);
                 }
 
@@ -717,7 +717,7 @@ $emailtype|$newincidentstatus|$timetonextaction_none|$timetonextaction_days|$tim
                         $timetext .= "None";
                     }
                     else
-                    { 
+                    {
                         $timetext.=date("D jS M Y @ g:i A", $timeofnextaction);
                     }
                     $timetext .= "</b>\n\n";
@@ -736,7 +736,7 @@ $emailtype|$newincidentstatus|$timetonextaction_none|$timetonextaction_days|$tim
                 $updatebody = $timetext . $updateheader . $bodytext;
                 $updatebody=mysql_real_escape_string($updatebody);
 
-                $sql  = "INSERT INTO updates (incidentid, userid, bodytext, type, timestamp, currentstatus,customervisibility) ";
+                $sql  = "INSERT INTO `{$dbUpdates}` (incidentid, userid, bodytext, type, timestamp, currentstatus,customervisibility) ";
                 $sql .= "VALUES ($id, $sit[2], '$updatebody', 'email', '$now', '$newincidentstatus', '{$emailtype->customervisibility}')";
                 mysql_query($sql);
                 if (mysql_error()) trigger_error("MySQL Query Error ".mysql_error(), E_USER_ERROR);
@@ -750,22 +750,22 @@ $emailtype|$newincidentstatus|$timetonextaction_none|$timetonextaction_days|$tim
                     break;
 
                     case 'initialresponse':
-                        $sql  = "INSERT INTO updates (incidentid, userid, type, timestamp, currentowner, currentstatus, customervisibility, sla, bodytext) ";
+                        $sql  = "INSERT INTO `{$dbUpdates}` (incidentid, userid, type, timestamp, currentowner, currentstatus, customervisibility, sla, bodytext) ";
                         $sql .= "VALUES ('$id', '".$sit[2]."', 'slamet', '$now', '".$sit[2]."', '$newincidentstatus', 'show', 'initialresponse','The Initial Response has been made.')";
                     break;
 
                     case 'probdef':
-                        $sql  = "INSERT INTO updates (incidentid, userid, type, timestamp, currentowner, currentstatus, customervisibility, sla, bodytext) ";
+                        $sql  = "INSERT INTO `{$dbUpdates}` (incidentid, userid, type, timestamp, currentowner, currentstatus, customervisibility, sla, bodytext) ";
                         $sql .= "VALUES ('$id', '".$sit[2]."', 'slamet', '$now', '".$sit[2]."', '$newincidentstatus', 'show', 'probdef','The problem has been defined.')";
                     break;
 
                     case 'actionplan':
-                        $sql  = "INSERT INTO updates (incidentid, userid, type, timestamp, currentowner, currentstatus, customervisibility, sla, bodytext) ";
+                        $sql  = "INSERT INTO `{$dbUpdates}` (incidentid, userid, type, timestamp, currentowner, currentstatus, customervisibility, sla, bodytext) ";
                         $sql .= "VALUES ('$id', '".$sit[2]."', 'slamet', '$now', '".$sit[2]."', '$newincidentstatus', 'show', 'actionplan','An action plan has been made.')";
                     break;
 
                     case 'solution':
-                        $sql  = "INSERT INTO updates (incidentid, userid, type, timestamp, currentowner, currentstatus, customervisibility, sla, bodytext) ";
+                        $sql  = "INSERT INTO `{$dbUpdates}` (incidentid, userid, type, timestamp, currentowner, currentstatus, customervisibility, sla, bodytext) ";
                         $sql .= "VALUES ('$id', '".$sit[2]."', 'slamet', '$now', '".$sit[2]."', '$newincidentstatus', 'show', 'solution','The incident has been resolved or reprioritised.\nThe issue should now be brought to a close or a new problem definition created within the service level.')";
                     break;
                 }
@@ -777,29 +777,29 @@ $emailtype|$newincidentstatus|$timetonextaction_none|$timetonextaction_days|$tim
                 if ($target!='none')
                 {
                     // Reset the slaemail sent column, so that email reminders can be sent if the new sla target goes out
-                    $sql = "UPDATE incidents SET slaemail='0', slanotice='0' WHERE id='$id' LIMIT 1";
+                    $sql = "UPDATE `{$dbIncidents}` SET slaemail='0', slanotice='0' WHERE id='$id' LIMIT 1";
                     mysql_query($sql);
                     if (mysql_error()) trigger_error("MySQL Query Error ".mysql_error(), E_USER_ERROR);
                 }
 
                 if (!empty($chase_customer))
                 {
-                    $sql_insert = "INSERT INTO updates (incidentid, userid, type, bodytext, timestamp, customervisibility) VALUES ('{$id}','{$sit['2']}','auto_chased_phone','Customer has been called to chase','{$now}','hide')";
+                    $sql_insert = "INSERT INTO `{$dbUpdates}` (incidentid, userid, type, bodytext, timestamp, customervisibility) VALUES ('{$id}','{$sit['2']}','auto_chased_phone','Customer has been called to chase','{$now}','hide')";
                     mysql_query($sql_insert);
                     if (mysql_error()) trigger_error("MySQL Query Error ".mysql_error(), E_USER_ERROR);
 
-                    $sql_update = "UPDATE incidents SET lastupdated = '{$now}' WHERE id = {$id}";
+                    $sql_update = "UPDATE `{$dbIncidents}` SET lastupdated = '{$now}' WHERE id = {$id}";
                     mysql_query($sql_update);
                     if (mysql_error()) trigger_error("MySQL Query Error ".mysql_error(), E_USER_ERROR);
                 }
 
                 if (!empty($chase_manager))
                 {
-                    $sql_insert = "INSERT INTO updates (incidentid, userid, type, bodytext, timestamp, customervisibility) VALUES ('{$id}','{$sit['2']}','auto_chased_manager','Manager has been called to chase','{$now}','hide')";
+                    $sql_insert = "INSERT INTO `{$dbUpdates}` (incidentid, userid, type, bodytext, timestamp, customervisibility) VALUES ('{$id}','{$sit['2']}','auto_chased_manager','Manager has been called to chase','{$now}','hide')";
                     mysql_query($sql_insert);
                     if (mysql_error()) trigger_error("MySQL Query Error ".mysql_error(), E_USER_ERROR);
 
-                    $sql_update = "UPDATE incidents SET lastupdated = '{$now}' WHERE id = {$id}";
+                    $sql_update = "UPDATE `{$dbIncidents}` SET lastupdated = '{$now}' WHERE id = {$id}";
                     mysql_query($sql_update);
                     if (mysql_error()) trigger_error("MySQL Query Error ".mysql_error(), E_USER_ERROR);
                 }

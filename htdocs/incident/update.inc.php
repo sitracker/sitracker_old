@@ -636,19 +636,19 @@ else
     // visible update
     if ($cust_vis == "yes")
     {
-        $sql  = "INSERT INTO updates (incidentid, userid, type, bodytext, timestamp, currentstatus, customervisibility, nextaction) ";
+        $sql  = "INSERT INTO `{$dbUpdates}` (incidentid, userid, type, bodytext, timestamp, currentstatus, customervisibility, nextaction) ";
         $sql .= "VALUES ('$id', '$sit[2]', '$updatetype', '$bodytext', '$now', '$newstatus', 'show' , '$nextaction')";
     }
     // invisible update
     else
     {
-        $sql  = "INSERT INTO updates (incidentid, userid, type, bodytext, timestamp, currentstatus, nextaction) ";
+        $sql  = "INSERT INTO `{$dbUpdates}` (incidentid, userid, type, bodytext, timestamp, currentstatus, nextaction) ";
         $sql .= "VALUES ($id, $sit[2], '$updatetype', '$bodytext', '$now', '$newstatus', '$nextaction')";
     }
     $result = mysql_query($sql);
     if (mysql_error()) trigger_error("MySQL Query Error ".mysql_error(), E_USER_ERROR);
 
-    $sql = "UPDATE incidents SET status='$newstatus', priority='$newpriority', lastupdated='$now', timeofnextaction='$timeofnextaction' WHERE id='$id'";
+    $sql = "UPDATE `{$dbIncidents}` SET status='$newstatus', priority='$newpriority', lastupdated='$now', timeofnextaction='$timeofnextaction' WHERE id='$id'";
     mysql_query($sql);
     if (mysql_error()) trigger_error("MySQL Query Error ".mysql_error(), E_USER_ERROR);
 
@@ -661,22 +661,22 @@ else
         break;
 
         case 'initialresponse':
-            $sql  = "INSERT INTO updates (incidentid, userid, type, timestamp, currentowner, currentstatus, customervisibility, sla, bodytext) ";
+            $sql  = "INSERT INTO `{$dbUpdates}` (incidentid, userid, type, timestamp, currentowner, currentstatus, customervisibility, sla, bodytext) ";
             $sql .= "VALUES ('$id', '".$sit[2]."', 'slamet', '$now', '".$sit[2]."', '$newstatus', 'show', 'initialresponse','The Initial Response has been made.')";
         break;
 
         case 'probdef':
-            $sql  = "INSERT INTO updates (incidentid, userid, type, timestamp, currentowner, currentstatus, customervisibility, sla, bodytext) ";
+            $sql  = "INSERT INTO `{$dbUpdates}` (incidentid, userid, type, timestamp, currentowner, currentstatus, customervisibility, sla, bodytext) ";
             $sql .= "VALUES ('$id', '".$sit[2]."', 'slamet', '$now', '".$sit[2]."', '$newstatus', 'show', 'probdef','The problem has been defined.')";
         break;
 
         case 'actionplan':
-            $sql  = "INSERT INTO updates (incidentid, userid, type, timestamp, currentowner, currentstatus, customervisibility, sla, bodytext) ";
+            $sql  = "INSERT INTO `{$dbUpdates}` (incidentid, userid, type, timestamp, currentowner, currentstatus, customervisibility, sla, bodytext) ";
             $sql .= "VALUES ('$id', '".$sit[2]."', 'slamet', '$now', '".$sit[2]."', '$newstatus', 'show', 'actionplan','An action plan has been made.')";
         break;
 
         case 'solution':
-            $sql  = "INSERT INTO updates (incidentid, userid, type, timestamp, currentowner, currentstatus, customervisibility, sla, bodytext) ";
+            $sql  = "INSERT INTO `{$dbUpdates}` (incidentid, userid, type, timestamp, currentowner, currentstatus, customervisibility, sla, bodytext) ";
             $sql .= "VALUES ('$id', '".$sit[2]."', 'slamet', '$now', '".$sit[2]."', '$newstatus', 'show', 'solution','The incident has been resolved or reprioritised.\nThe issue should now be brought to a close or a new problem definition created within the service level.')";
         break;
     }
@@ -688,7 +688,7 @@ else
     if ($target!='none')
     {
         // Reset the slaemail sent column, so that email reminders can be sent if the new sla target goes out
-        $sql = "UPDATE incidents SET slaemail='0', slanotice='0' WHERE id='$id' LIMIT 1";
+        $sql = "UPDATE `{$dbIncidents}` SET slaemail='0', slanotice='0' WHERE id='$id' LIMIT 1";
         mysql_query($sql);
         if (mysql_error()) trigger_error("MySQL Query Error ".mysql_error(), E_USER_ERROR);
         //remove any SLA notices - KMH

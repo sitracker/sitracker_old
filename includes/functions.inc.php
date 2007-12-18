@@ -2609,6 +2609,7 @@ function html_checkbox($name,$state)
 function send_template_email($template, $incidentid, $info1='', $info2='')
 {
     global $CONFIG, $application_version_string, $sit, $now;
+    global $dbUpdates;
     if (empty($template)) throw_error('Blank template ID:', 'send_template_email()');
     if (empty($incidentid)) throw_error('Blank incident ID:', 'send_template_email()');
 
@@ -2659,7 +2660,7 @@ function send_template_email($template, $incidentid, $info1='', $info2='')
     {
         $bt   = "To: <b>$email_to</b>\nFrom: <b>$email_from</b>\nReply-To: <b>$emailreplyto</b>\n";
         $bt  .= "BCC: <b>$email_bcc</b>\nSubject: <b>$email_subject</b>\n<hr>".$email_body;
-        $sql = "INSERT INTO updates (incidentid, userid, type, bodytext, timestamp, customervisibility) VALUES ";
+        $sql = "INSERT INTO `{$dbUpdates}` (incidentid, userid, type, bodytext, timestamp, customervisibility) VALUES ";
         $sql .= "($incidentid, 0, 'email', '".mysql_real_escape_string($bt)."', ";
         $sql .= "$now, '$email_customervisibility')";
         $result = mysql_query($sql);
@@ -4148,12 +4149,12 @@ function software_backup_userid($userid, $softwareid)
 */
 function incident_backup_switchover($userid, $accepting)
 {
-    global $now;
+    global $now, $dbIncidents, $dbUpdates;
 
     if (strtolower($accepting)=='no')
     {
         // Look through the incidents that this user OWNS (and are not closed)
-        $sql = "SELECT * FROM incidents WHERE (owner='$userid' OR towner='$userid') AND status!=2";
+        $sql = "SELECT * FROM `{$dbIncidents}` WHERE (owner='$userid' OR towner='$userid') AND status!=2";
         $result = mysql_query($sql);
         if (mysql_error()) trigger_error(mysql_error(),E_USER_WARNING);
         while ($incident = mysql_fetch_object($result))
@@ -4181,7 +4182,7 @@ function incident_backup_switchover($userid, $accepting)
             {
                 // do an automatic temporary reassign
                 // update incident
-                $rusql = "UPDATE incidents SET ";
+                $rusql = "UPDATE `{$dbIncidents}` SET ";
                 $rusql .= "towner='{$backupid}', lastupdated='$now' WHERE id='{$incident->id}' LIMIT 1";
                 mysql_query($rusql);
                 if (mysql_error()) trigger_error(mysql_error(),E_USER_ERROR);
@@ -4192,7 +4193,7 @@ function incident_backup_switchover($userid, $accepting)
                 $usermessage=user_message($userid);
                 $bodytext="Previous Incident Owner ({$username}) {$userstatus}  {$usermessage}";
                 $assigntype='tempassigning';
-                $risql  = "INSERT INTO updates (incidentid, userid, bodytext, type, timestamp, currentowner, currentstatus) ";
+                $risql  = "INSERT INTO `{$dbUpdates}` (incidentid, userid, bodytext, type, timestamp, currentowner, currentstatus) ";
                 $risql .= "VALUES ('{$incident->id}', '0', '$bodytext', '$assigntype', '$now', ";
                 $risql .= "'{$backupid}', ";
                 $risql .= "'{$incident->status}')";
@@ -4255,7 +4256,7 @@ function incident_backup_switchover($userid, $accepting)
                     {
                         // Incident appears not to have been updated by the temporary owner so automatically reassign back to orignal owner
                         // update incident
-                        $rusql = "UPDATE incidents SET ";
+                        $rusql = "UPDATE `{$dbIncidents}` SET ";
                         $rusql .= "towner='', lastupdated='$now' WHERE id='{$incident->id}' LIMIT 1";
                         mysql_query($rusql);
                         if (mysql_error()) trigger_error(mysql_error(),E_USER_ERROR);
@@ -4266,7 +4267,7 @@ function incident_backup_switchover($userid, $accepting)
                         $usermessage=user_message($userid);
                         $bodytext="Reassigning to original owner {$username} ({$userstatus})";
                         $assigntype='reassigning';
-                        $risql  = "INSERT INTO updates (incidentid, userid, bodytext, type, timestamp, currentowner, currentstatus) ";
+                        $risql  = "INSERT INTO `{$dbUpdates}` (incidentid, userid, bodytext, type, timestamp, currentowner, currentstatus) ";
                         $risql .= "VALUES ('{$incident->id}', '0', '$bodytext', '$assigntype', '$now', ";
                         $risql .= "'{$backupid}', ";
                         $risql .= "'{$incident->status}')";

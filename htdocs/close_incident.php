@@ -289,14 +289,14 @@ else
         {
             // mark incident as awaiting closure
             $timeofnextaction=$now + $CONFIG['closure_delay'];
-            $sql = "UPDATE incidents SET status='7', lastupdated='$now', timeofnextaction='$timeofnextaction' WHERE id='$id'";
+            $sql = "UPDATE `{$dbIncidents}` SET status='7', lastupdated='$now', timeofnextaction='$timeofnextaction' WHERE id='$id'";
             $result = mysql_query($sql);
             if (mysql_error()) trigger_error("MySQL Query Error ".mysql_error(), E_USER_ERROR);
         }
         else
         {
             // mark incident as closed
-            $sql = "UPDATE incidents SET status='2', closingstatus='$closingstatus', lastupdated='$now', closed='$now' WHERE id='$id'";
+            $sql = "UPDATE `{$dbIncidents}` SET status='2', closingstatus='$closingstatus', lastupdated='$now', closed='$now' WHERE id='$id'";
             $result = mysql_query($sql);
             if (mysql_error()) trigger_error("MySQL Query Error ".mysql_error(), E_USER_ERROR);
         }
@@ -316,7 +316,7 @@ else
                 if (strlen($_REQUEST['summary'])>3)
                 {
                     // Problem Definition
-                    $sql  = "INSERT INTO updates (incidentid, userid, type, bodytext, timestamp, customervisibility) ";
+                    $sql  = "INSERT INTO `{$dbUpdates}` (incidentid, userid, type, bodytext, timestamp, customervisibility) ";
                     $sql .= "VALUES ('$id', '$sit[2]', 'probdef', '$summary', '$now', 'hide')";
                     $result = mysql_query($sql);
                     if (mysql_error()) trigger_error("MySQL Query Error ".mysql_error(), E_USER_ERROR);
@@ -324,7 +324,7 @@ else
                 if (strlen($_REQUEST['solution'])>3)
                 {
                     // Final Solution
-                    $sql  = "INSERT INTO updates (incidentid, userid, type, bodytext, timestamp, customervisibility) ";
+                    $sql  = "INSERT INTO `{$dbUpdates}` (incidentid, userid, type, bodytext, timestamp, customervisibility) ";
                     $sql .= "VALUES ('$id', '$sit[2]', 'solution', '$solution', '$now', 'hide')";
                     $result = mysql_query($sql);
                     if (mysql_error()) trigger_error("MySQL Query Error ".mysql_error(), E_USER_ERROR);
@@ -332,7 +332,7 @@ else
             }
 
             // Meet service level 'solution'
-            $sql  = "INSERT INTO updates (incidentid, userid, type, timestamp, currentowner, customervisibility, sla, bodytext) ";
+            $sql  = "INSERT INTO `{$dbUpdates}` (incidentid, userid, type, timestamp, currentowner, customervisibility, sla, bodytext) ";
             $sql .= "VALUES ('$id', '".$sit[2]."', 'slamet', '$now', '{$sit[2]}', 'show', 'solution','')";
             $result = mysql_query($sql);
             if (mysql_error()) trigger_error("MySQL Query Error ".mysql_error(), E_USER_ERROR);
@@ -341,7 +341,7 @@ else
             if ($wait=='yes')
             {
                 // Update - mark for closure
-                $sql  = "INSERT INTO updates (incidentid, userid, type, bodytext, timestamp) ";
+                $sql  = "INSERT INTO `{$dbUpdates}` (incidentid, userid, type, bodytext, timestamp) ";
                 $sql .= "VALUES ('$id', '{$sit[2]}', 'closing', 'Marked for Closure', '$now')";
                 $result = mysql_query($sql);
                 if (mysql_error()) trigger_error("MySQL Query Error ".mysql_error(), E_USER_ERROR);
@@ -349,7 +349,7 @@ else
             else
             {
                 // Update - close immediately
-                $sql  = "INSERT INTO updates (incidentid, userid, type, bodytext, timestamp) ";
+                $sql  = "INSERT INTO `{$dbUpdates}` (incidentid, userid, type, bodytext, timestamp) ";
                 $sql .= "VALUES ('$id', '{$sit[2]}', 'closing', 'Incident Closed', '$now')";
                 $result = mysql_query($sql);
                 if (mysql_error()) trigger_error("MySQL Query Error ".mysql_error(), E_USER_ERROR);
@@ -395,12 +395,12 @@ else
                     //dont care if I'm related to myself
                     if ($relatedid != $id)
                     {
-                        $sql  = "INSERT INTO updates (incidentid, userid, type, bodytext, timestamp) ";
+                        $sql  = "INSERT INTO `{$dbUpdates}` (incidentid, userid, type, bodytext, timestamp) ";
                         $sql .= "VALUES ('$relatedid', '{$sit[2]}', 'research', 'New Status: [b]Active[/b]<hr>\nRelated incident [$id] has been closed', '$now')";
                         $result = mysql_query($sql);
                         if (mysql_error()) trigger_error("MySQL Query Error ".mysql_error(), E_USER_ERROR);
 
-                        $sql = "UPDATE incidents SET status = 1 WHERE id = '$relatedid'";
+                        $sql = "UPDATE `{$dbIncidents}` SET status = 1 WHERE id = '$relatedid'";
                         $result = mysql_query($sql);
                         if (mysql_error()) trigger_error("MySQL Query Error ".mysql_error(), E_USER_ERROR);
                     }
@@ -466,7 +466,7 @@ else
 
                 // Update the incident to say that a KB article was created, with the KB Article number
                 $update = "<b>Knowledge base article</b> created from this incident, see: {$CONFIG['kb_id_prefix']}".leading_zero(4,$docid);
-                $sql  = "INSERT INTO updates (incidentid, userid, type, bodytext, timestamp) ";
+                $sql  = "INSERT INTO `{$dbUpdates}` (incidentid, userid, type, bodytext, timestamp) ";
                 $sql .= "VALUES ('$id', '$sit[2]', 'default', '$update', '$now')";
                 $result = mysql_query($sql);
                 if (mysql_error()) trigger_error("MySQL Query Error ".mysql_error(), E_USER_ERROR);

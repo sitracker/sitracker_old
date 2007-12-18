@@ -545,7 +545,7 @@ elseif ($action=='assign')
                 $priority = $highestpriority;
             }
 
-            $sql  = "INSERT INTO incidents (title, owner, contact, priority, servicelevel, status, type, maintenanceid, ";
+            $sql  = "INSERT INTO `{$dbIncidents}` (title, owner, contact, priority, servicelevel, status, type, maintenanceid, ";
             $sql .= "product, softwareid, productversion, productservicepacks, opened, lastupdated, timeofnextaction) ";
             $sql .= "VALUES ('$incidenttitle', '".$sit[2]."', '$contactid', '$priority', '$servicelevel', '1', 'Support', '$maintid', ";
             $sql .= "'$productid', '$software', '$productversion', '$productservicepacks', '$now', '$now', '$timeofnextaction')";
@@ -590,7 +590,7 @@ elseif ($action=='assign')
             else
             {
                 // Create a new update from details entered
-                $sql  = "INSERT INTO updates (incidentid, userid, type, bodytext, timestamp, currentowner, ";
+                $sql  = "INSERT INTO `{$dbUpdates}` (incidentid, userid, type, bodytext, timestamp, currentowner, ";
                 $sql .= "currentstatus, customervisibility, nextaction) ";
                 $sql .= "VALUES ('$incidentid', '{$sit[2]}', 'opening', '$updatetext', '$now', '{$sit[2]}', ";
                 $sql .= "'1', '$customervisibility', '$nextaction')";
@@ -617,14 +617,14 @@ elseif ($action=='assign')
 
             // Insert the first SLA update, this indicates the start of an incident
             // This insert could possibly be merged with another of the 'updates' records, but for now we keep it seperate for clarity
-            $sql  = "INSERT INTO updates (incidentid, userid, type, timestamp, currentowner, currentstatus, customervisibility, sla, bodytext) ";
+            $sql  = "INSERT INTO `{$dbUpdates}` (incidentid, userid, type, timestamp, currentowner, currentstatus, customervisibility, sla, bodytext) ";
             $sql .= "VALUES ('$incidentid', '".$sit[2]."', 'slamet', '$now', '".$sit[2]."', '1', 'show', 'opened','The incident is open and awaiting action.')";
             mysql_query($sql);
             if (mysql_error()) trigger_error("MySQL Query Error ".mysql_error(), E_USER_ERROR);
 
             // Insert the first Review update, this indicates the review period of an incident has started
             // This insert could possibly be merged with another of the 'updates' records, but for now we keep it seperate for clarity
-            $sql  = "INSERT INTO updates (incidentid, userid, type, timestamp, currentowner, currentstatus, customervisibility, sla, bodytext) ";
+            $sql  = "INSERT INTO `{$dbUpdates}` (incidentid, userid, type, timestamp, currentowner, currentstatus, customervisibility, sla, bodytext) ";
             $sql .= "VALUES ('$incidentid', '{$sit[2]}', 'reviewmet', '$now', '".$sit[2]."', '1', 'hide', 'opened','')";
             mysql_query($sql);
             if (mysql_error()) trigger_error("MySQL Query Error ".mysql_error(), E_USER_ERROR);
@@ -764,7 +764,7 @@ elseif ($action=='reassign')
     echo user_realname($uid)."'s <strong style='color: red'>{$strActionNeeded}</strong> queue</p>";
     $userphone = user_phone($userid);
     if ($userphone!='') echo "<p align='center'>{$strTelephone}: {$userphone}</p>";
-    $sql = "UPDATE incidents SET owner='$uid', lastupdated='$now' WHERE id='$incidentid'";
+    $sql = "UPDATE `{$dbIncidents}` SET owner='$uid', lastupdated='$now' WHERE id='$incidentid'";
     mysql_query($sql);
     if (mysql_error()) trigger_error("MySQL Query Error ".mysql_error(), E_USER_ERROR);
 
@@ -774,7 +774,7 @@ elseif ($action=='reassign')
     }
 
     // add update
-    $sql  = "INSERT INTO updates (incidentid, userid, type, timestamp, currentowner, currentstatus, nextaction) ";
+    $sql  = "INSERT INTO `{$dbUpdates}` (incidentid, userid, type, timestamp, currentowner, currentstatus, nextaction) ";
     $sql .= "VALUES ('$incidentid', '$sit[2]', 'reassigning', '$now', '$uid', '1', '$nextaction')";
     $result = mysql_query($sql);
     if (mysql_error()) trigger_error("MySQL Query Error ".mysql_error(), E_USER_ERROR);

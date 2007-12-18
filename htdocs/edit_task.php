@@ -175,7 +175,7 @@ switch ($action)
             $updatehtml .= "Activity completed: {$enddate}, duration was: [b]".format_seconds($duration)."[/b]";
 
             //create update
-            $sql = "INSERT INTO updates (incidentid, userid, type, currentstatus, bodytext, timestamp, duration) ";
+            $sql = "INSERT INTO `{$dbUpdates}` (incidentid, userid, type, currentstatus, bodytext, timestamp, duration) ";
             $sql .= "VALUES('{$incident}', '{$sit[2]}', 'fromtask', {$status}, '{$updatehtml}', '$now', '$duration')";
             mysql_query($sql);
             if (mysql_error()) trigger_error(mysql_error(),E_USER_ERROR);

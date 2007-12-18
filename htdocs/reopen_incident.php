@@ -46,26 +46,26 @@ else
     // Reopen the incident
     // update incident
     $time = time();
-    $sql = "UPDATE incidents SET status='$newstatus', lastupdated='$time', closed='0' WHERE id='$id' LIMIT 1";
+    $sql = "UPDATE `{$dbIncidents}` SET status='$newstatus', lastupdated='$time', closed='0' WHERE id='$id' LIMIT 1";
     mysql_query($sql);
     if (mysql_error()) trigger_error(mysql_error(),E_USER_ERROR);
 
     // add update
-    $sql  = "INSERT INTO updates (incidentid, userid, type, bodytext, timestamp) ";
+    $sql  = "INSERT INTO `{$dbUpdates}` (incidentid, userid, type, bodytext, timestamp) ";
     $sql .= "VALUES ($id, $sit[2], 'reopening', '$bodytext', $time)";
     $result = mysql_query($sql);
     if (mysql_error()) trigger_error(mysql_error(),E_USER_ERROR);
 
     // Insert the first SLA update for the reopened incident, this indicates the start of an sla period
     // This insert could possibly be merged with another of the 'updates' records, but for now we keep it seperate for clarity
-    $sql  = "INSERT INTO updates (incidentid, userid, type, timestamp, currentowner, currentstatus, customervisibility, sla, bodytext) ";
+    $sql  = "INSERT INTO `{$dbUpdates}` (incidentid, userid, type, timestamp, currentowner, currentstatus, customervisibility, sla, bodytext) ";
     $sql .= "VALUES ('$id', '".$sit[2]."', 'slamet', '$now', '".$sit[2]."', '1', 'show', 'opened','The incident is open and awaiting action.')";
     mysql_query($sql);
     if (mysql_error()) trigger_error("MySQL Query Error ".mysql_error(), E_USER_ERROR);
 
     // Insert the first Review update, this indicates the review period of an incident has restarted
     // This insert could possibly be merged with another of the 'updates' records, but for now we keep it seperate for clarity
-    $sql  = "INSERT INTO updates (incidentid, userid, type, timestamp, currentowner, currentstatus, customervisibility, sla, bodytext) ";
+    $sql  = "INSERT INTO `{$dbUpdates}` (incidentid, userid, type, timestamp, currentowner, currentstatus, customervisibility, sla, bodytext) ";
     $sql .= "VALUES ('$id', '0', 'reviewmet', '$now', '".$sit[2]."', '1', 'hide', 'opened','')";
     mysql_query($sql);
     if (mysql_error()) trigger_error("MySQL Query Error ".mysql_error(), E_USER_ERROR);

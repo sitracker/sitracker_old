@@ -145,7 +145,7 @@ while ($incident=mysql_fetch_array($incident_result)) {
                 mysql_query($sql);
                 if (mysql_error()) trigger_error(mysql_error(),E_USER_WARNING);
 
-                $sql = "UPDATE incidents SET slanotice='1' WHERE id='{$incident['id']}'";
+                $sql = "UPDATE `{$dbIncidents}` SET slanotice='1' WHERE id='{$incident['id']}'";
                 mysql_query($sql);
                 if (mysql_error()) trigger_error(mysql_error(),E_USER_WARNING);
             }
@@ -167,7 +167,7 @@ while ($incident=mysql_fetch_array($incident_result)) {
             // If we just sent one then update the incident so we don't send another next time
             if ($emailSent)
             {
-                $sql="UPDATE incidents SET slaemail='1' WHERE id='{$incident['id']}'";
+                $sql="UPDATE `{$dbIncidents}` SET slaemail='1' WHERE id='{$incident['id']}'";
                 mysql_query($sql);
             }
         }

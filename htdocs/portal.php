@@ -193,13 +193,13 @@ switch ($page)
             //add the update
             $update = "Updated via the portal by <b>{$user->forenames} {$user->surname}</b>\n\n";
             $update .= $_REQUEST['update'];
-            $sql = "INSERT INTO updates (incidentid, userid, type, currentstatus, bodytext, timestamp, customervisibility) ";
+            $sql = "INSERT INTO `{$dbUpdates}` (incidentid, userid, type, currentstatus, bodytext, timestamp, customervisibility) ";
             $sql .= "VALUES('{$_REQUEST['id']}', '0', 'webupdate', '1', '{$update}', '{$now}', 'show')";
             mysql_query($sql);
             if (mysql_error()) trigger_error("MySQL Query Error ".mysql_error(), E_USER_ERROR);
 
             //set incident back to active
-            $sql = "UPDATE incidents SET status=1, lastupdated=$now WHERE id={$_REQUEST['id']}";
+            $sql = "UPDATE `{$dbIncidents}` SET status=1, lastupdated=$now WHERE id={$_REQUEST['id']}";
             mysql_query($sql);
             if (mysql_error()) trigger_error("MySQL Query Error ".mysql_error(), E_USER_ERROR);
 
@@ -234,7 +234,7 @@ switch ($page)
             if (mysql_error()) trigger_error("MySQL Query Error ".mysql_error(), E_USER_ERROR);
 
             //set incident back to active
-            $sql = "UPDATE incidents SET status=1, lastupdated=$now WHERE id={$_REQUEST['id']}";
+            $sql = "UPDATE `{$dbIncidents}` SET status=1, lastupdated=$now WHERE id={$_REQUEST['id']}";
             mysql_query($sql);
             if (mysql_error()) trigger_error("MySQL Query Error ".mysql_error(), E_USER_ERROR);
 
@@ -285,7 +285,7 @@ switch ($page)
             if (!empty($impact)) $updatetext .= "<b>Customer Impact</b>\n{$impact}\n\n";
 
             //create new incident
-            $sql  = "INSERT INTO incidents (title, owner, contact, priority, servicelevel, status, type, maintenanceid, ";
+            $sql  = "INSERT INTO `{$dbIncidents}` (title, owner, contact, priority, servicelevel, status, type, maintenanceid, ";
             $sql .= "product, softwareid, productversion, productservicepacks, opened, lastupdated) ";
             $sql .= "VALUES ('$incidenttitle', '0', '$contactid', '1', '$servicelevel', '1', 'Support', '', ";
             $sql .= "'$contractid', '$software', '$softwareversion', '$softwareservicepacks', '$now', '$now')";
@@ -296,7 +296,7 @@ switch ($page)
             $_SESSION['incidentid'] = $incidentid;
 
             // Create a new update
-            $sql  = "INSERT INTO updates (incidentid, userid, type, bodytext, timestamp, currentowner, ";
+            $sql  = "INSERT INTO `{$dbUpdates}` (incidentid, userid, type, bodytext, timestamp, currentowner, ";
             $sql .= "currentstatus, customervisibility) ";
             $sql .= "VALUES ('$incidentid', '0', 'opening', '$updatetext', '$now', '', ";
             $sql .= "'1', 'show')";
@@ -322,14 +322,14 @@ switch ($page)
 
             // Insert the first SLA update, this indicates the start of an incident
             // This insert could possibly be merged with another of the 'updates' records, but for now we keep it seperate for clarity
-            $sql  = "INSERT INTO updates (incidentid, userid, type, timestamp, currentowner, currentstatus, customervisibility, sla, bodytext) ";
+            $sql  = "INSERT INTO `{$dbUpdates}` (incidentid, userid, type, timestamp, currentowner, currentstatus, customervisibility, sla, bodytext) ";
             $sql .= "VALUES ('$incidentid', '0', 'slamet', '$now', '0', '1', 'hide', 'opened','The incident is open and awaiting action.')";
             mysql_query($sql);
             if (mysql_error()) trigger_error("MySQL Query Error ".mysql_error(), E_USER_ERROR);
 
             // Insert the first Review update, this indicates the review period of an incident has started
             // This insert could possibly be merged with another of the 'updates' records, but for now we keep it seperate for clarity
-            $sql  = "INSERT INTO updates (incidentid, userid, type, timestamp, currentowner, currentstatus, customervisibility, sla, bodytext) ";
+            $sql  = "INSERT INTO `{$dbUpdates}` (incidentid, userid, type, timestamp, currentowner, currentstatus, customervisibility, sla, bodytext) ";
             $sql .= "VALUES ('$incidentid', '0', 'reviewmet', '$now', '0', '1', 'hide', 'opened','')";
             mysql_query($sql);
             if (mysql_error()) trigger_error("MySQL Query Error ".mysql_error(), E_USER_ERROR);

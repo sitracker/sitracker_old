@@ -518,7 +518,7 @@ switch ($_REQUEST['action'])
                             $result = mysql_query($sql);
                             while ($row = mysql_fetch_object($result))
                             {
-                                $sql = "UPDATE incidents SET servicelevel='{$row->tag}' WHERE id='{$row->incidentid}' AND servicelevel IS NULL LIMIT 1";
+                                $sql = "UPDATE `{$dbIncidents}` SET servicelevel='{$row->tag}' WHERE id='{$row->incidentid}' AND servicelevel IS NULL LIMIT 1";
                                 mysql_query($sql);
                                 if (mysql_error())
                                 {
