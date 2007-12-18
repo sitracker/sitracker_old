@@ -30,7 +30,7 @@ echo "<h2>Report: Email Address of Supported Customers</h2>";
 echo "<h4><em>(Doesn't check for expiry)</em></h4>";
 
 $sql  = "SELECT DISTINCT contacts.email ";
-$sql .= "FROM contacts LEFT JOIN contactproducts ON contacts.id=contactproducts.contactid ";
+$sql .= "FROM contacts LEFT JOIN `{$dbSupportContacts}` ON contacts.id = `{$dbSupportContacts}`.contactid ";
 $sql .= "WHERE dataprotection_email != 'Yes' ";
 $sql .="ORDER BY email ASC ";
 //$sql.="LIMIT 100";

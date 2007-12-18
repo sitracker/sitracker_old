@@ -29,7 +29,7 @@ echo "<h3>(Doesn't check for expiry)</h3>";
 
 
 $sql  = "SELECT DISTINCT contacts.address1, contacts.address2, contacts.city, contacts.county, contacts.country, contacts.postcode ";
-$sql.="FROM contacts LEFT JOIN contactproducts ON contacts.id=contactproducts.contactid ";
+$sql.="FROM contacts LEFT JOIN `{$dbContactProducts}` ON contacts.id = `{$dbContactProducts}`.contactid ";
 //$sql.="WHERE productid='1' OR productid='77' OR productid='55' ";
 //$sql.="ORDER BY email ASC ";
 //$sql.="LIMIT 100";

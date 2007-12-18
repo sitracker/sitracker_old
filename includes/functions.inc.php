@@ -669,113 +669,6 @@ function contact_count_open_incidents($id)
 
 
 /**
-    * Returns a string depending on whether the given contact has support for the given product.
-    * @author Ivan Lucas
-    * @deprecated
-    * @param $contactid Contact ID to check
-    * @param $productid Product ID to check
-    * @return string
-    * @retval 'yes' Contact has support for product
-    * @retval 'no'  Contact doesn't have support for product
-    * @retval 'expired' Contact did have support for product but it has now expired
-    * @note Based on contactproducts and so DEPRECATED needs updating to be based on contracts
-    * @todo update contact_productsupport() to be based on contracts
-*/
-function contact_productsupport($contactid, $productid)
-{
-    global $now;
-    // check support
-    $sql = "SELECT id, expirydate FROM contactproducts WHERE contactid=$contactid AND productid=$productid";
-    $result = mysql_query($sql);
-
-    if (mysql_num_rows($result) == 0)
-        return("no");
-    else
-    {
-        $product = mysql_fetch_array($result);
-        if ($product["expirydate"] <= $now)
-            return("expired");
-        else if ($product["expirydate"] > $now)
-            return("yes");
-    }
-}
-
-/**
-    * Returns an integer representing the expiry day of the month for the given contact's product support.
-    * @author Ivan Lucas
-    * @deprecated
-    * @returns integer day of month
-    * @retval 0 the contact or product does not exist or if the contact does not have support for the given product.
-    * @note Based on contactproducts and so DEPRECATED needs updating to be based on contracts
-*/
-function contact_productsupport_expiryday($contactid, $productid)
-{
-    // check support
-    $sql = "SELECT id, expirydate FROM contactproducts WHERE contactid=$contactid AND productid=$productid";
-    $result = mysql_query($sql);
-
-    if (mysql_num_rows($result) == 0)
-        return(0);
-    else
-    {
-        $productsupport = mysql_fetch_array($result);
-        $date_array = getdate($productsupport["expirydate"]);
-        return($date_array["mday"]);
-    }
-}
-
-
-/**
-    * Returns an integer representing the expiry month of the year for the given contact's product support.
-    * @author Ivan Lucas
-    * @deprecated
-    * @returns integer month of year
-    * @retval 0 the contact or product does not exist or if the contact does not have support for the given product.
-    * @note Based on contactproducts and so DEPRECATED needs updating to be based on contracts
-*/
-function contact_productsupport_expirymonth($contactid, $productid)
-{
-    // check support
-    $sql = "SELECT id, expirydate FROM contactproducts WHERE contactid=$contactid AND productid=$productid";
-    $result = mysql_query($sql);
-
-    if (mysql_num_rows($result) == 0)
-        return(0);
-    else
-    {
-        $productsupport = mysql_fetch_array($result);
-        $date_array = getdate($productsupport["expirydate"]);
-        return($date_array["mon"]);
-    }
-}
-
-
-/**
-    * Returns an integer representing the expiry year for the given contact's product support.
-    * @author Ivan Lucas
-    * @deprecated
-    * @returns integer year
-    * @retval 0 the contact or product does not exist or if the contact does not have support for the given product.
-    * @note Based on contactproducts and so DEPRECATED needs updating to be based on contracts
-*/
-function contact_productsupport_expiryyear($contactid, $productid)
-{
-    // check support
-    $sql = "SELECT id, expirydate FROM contactproducts WHERE contactid=$contactid AND productid=$productid";
-    $result = mysql_query($sql);
-
-    if (mysql_num_rows($result) == 0)
-        return(0);
-    else
-    {
-        $productsupport = mysql_fetch_array($result);
-        $date_array = getdate($productsupport["expirydate"]);
-        return($date_array["year"]);
-    }
-}
-
-
-/**
     * Creates a vcard electronic business card for the given contact
     * @author Ivan Lucas
     * @param $id integer Contact ID
@@ -1668,34 +1561,6 @@ function priority_drop_down($name, $id, $max=4, $disable=FALSE)
 
 
 /**
-    * prints the HTML for a multiple select list of products, with the given name and with all the products
-    * the given customer has support for already selected
-    * @author Ivan Lucas
-    * @deprecated
-    * @note DEPRECATED uses contactproducts
-*/
-function contactproducts_drop_down($name, $contactid)
-{
-   // extract products
-   $sql  = "SELECT * FROM products ORDER BY name ASC";
-   $result = mysql_query($sql);
-
-   // print HTML
-   ?>
-   <select multiple="mutliple" name="<?php echo $name ?>" size="10">
-   <?php
-   while ($products = mysql_fetch_array($result))
-   {
-      ?><option <?php if (contact_productsupport($contactid, $products["id"]) == 1) { ?>selected='selected' <?php } ?>value='<?php echo $products["id"] ?>'><?php echo $products["name"] ?></option><?php
-      echo "\n";
-   }
-   ?>
-   </select>
-   <?php
-}
-
-
-/**
     * Return HTML for a select box for accepting yes/no. The given user's accepting status is displayed.
     * @author Ivan Lucas
     * @param $name string. Name attribute
@@ -2392,16 +2257,6 @@ function incidents_remaining($id)
     if (empty($remaining)) $remaining = '&infin;';
 
     return($remaining);
-}
-
-
-// OBSOLETE
-/* Returns an incidentpoolid given             */
-/* a contactproduct id        */
-/* Returns 0 if none is found, meaning unlimited */
-function incidentpoolid($id)
-{
-    return db_read_column('incidentpoolid', 'contactproducts', $id);
 }
 
 

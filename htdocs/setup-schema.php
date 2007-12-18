@@ -44,23 +44,6 @@ INSERT INTO `closingstatus` VALUES (8, 'Support Expired');
 INSERT INTO `closingstatus` VALUES (9, 'Unsolved');
 INSERT INTO `closingstatus` VALUES (10, 'Escalated');
 
-CREATE TABLE `contactproducts` (
- `id` int(11) NOT NULL auto_increment,
- `contactid` int(11) default NULL,
- `productid` int(11) default NULL,
- `maintenancecontractid` int(11) default NULL,
- `maintenancecontactid` int(11) default NULL,
- `expirydate` int(11) default NULL,
- `incidentpoolid` int(11) NOT NULL default '0',
- `servicelevelid` int(11) NOT NULL default '1',
- PRIMARY KEY  (`id`),
- KEY `maintenancecontractid` (`maintenancecontractid`),
- KEY `maintenancecontactid` (`maintenancecontactid`),
- KEY `incidentpoolid` (`incidentpoolid`),
- KEY `servicelevelid` (`servicelevelid`)
-) ENGINE=MyISAM;
-
-
 CREATE TABLE `contacts` (
   `id` int(11) NOT NULL auto_increment,
   `notify_contactid` int(11) NOT NULL default '0',
@@ -1591,7 +1574,8 @@ CREATE TABLE `triggers` (
 PRIMARY KEY ( `triggerid` , `userid` )
 ) ENGINE = MYISAM ;
 
-DROP TABLE `contactflags`;
+DROP TABLE IF EXISTS `contactflags`;
+DROP TABLE IF EXISTS `contactproducts`;
 
 ";
 
