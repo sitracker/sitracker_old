@@ -33,7 +33,7 @@ if ($id=='')
 
 // Display site
 echo "<table align='center' class='vertical'>";
-$sql="SELECT * FROM sites WHERE id='$id' ";
+$sql="SELECT * FROM `{$dbSites}` WHERE id='$id' ";
 $siteresult = mysql_query($sql);
 if (mysql_error()) trigger_error(mysql_error(),E_USER_WARNING);
 while ($siterow=mysql_fetch_array($siteresult))

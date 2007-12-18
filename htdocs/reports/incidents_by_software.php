@@ -82,7 +82,7 @@ else
 
     if (mysql_num_rows($result) > 0)
     {
-        $sqlSLA = "SELECT DISTINCT(tag) FROM servicelevels";
+        $sqlSLA = "SELECT DISTINCT(tag) FROM `{$dbServiceLevels}`";
         $resultSLA = mysql_query($sqlSLA);
         if (mysql_error()) trigger_error("MySQL Query Error ".mysql_error(), E_USER_ERROR);
 

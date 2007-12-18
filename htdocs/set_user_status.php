@@ -28,7 +28,7 @@ $originalowner = cleanvar($_REQUEST['originalowner']);
 switch ($mode)
 {
     case 'setstatus':
-        $sql  = "UPDATE users SET status='$userstatus'";
+        $sql  = "UPDATE `{$dbUsers}` SET status='$userstatus'";
         switch ($userstatus)
         {
             case 1: // in office
@@ -100,7 +100,7 @@ switch ($mode)
     break;
 
     case 'setaccepting':
-        $sql  = "UPDATE users SET accepting='$accepting' ";
+        $sql  = "UPDATE `{$dbUsers}` SET accepting='$accepting' ";
         $sql .= "WHERE id='$sit[2]' LIMIT 1";
         $result = mysql_query($sql);
         if (mysql_error()) trigger_error(mysql_error(),E_USER_ERROR);

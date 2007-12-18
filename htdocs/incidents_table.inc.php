@@ -93,7 +93,7 @@ while ($incidents = mysql_fetch_array($result))
     $tag = $incidents['servicelevel'];
     if ($tag=='') $tag = servicelevel_id2tag(maintenance_servicelevel($incidents['maintenanceid']));
 
-    $slsql = "SELECT * FROM servicelevels WHERE tag='{$tag}' AND priority='{$incidents['priority']}' ";
+    $slsql = "SELECT * FROM `{$dbServiceLevels}` WHERE tag='{$tag}' AND priority='{$incidents['priority']}' ";
     $slresult = mysql_query($slsql);
     if (mysql_error()) trigger_error("mysql query error ".mysql_error(), E_USER_ERROR);
     $servicelevel = mysql_fetch_object($slresult);

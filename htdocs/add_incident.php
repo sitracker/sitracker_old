@@ -535,7 +535,7 @@ elseif ($action=='assign')
             if ($servicelevel=='') $servicelevel = $CONFIG['default_service_level'];
 
             // Check the service level priorities, look for the highest possible and reduce the chosen priority if needed
-            $sql = "SELECT priority FROM servicelevels WHERE tag='$servicelevel' ORDER BY priority DESC LIMIT 1";
+            $sql = "SELECT priority FROM `{$dbServiceLevels}` WHERE tag='$servicelevel' ORDER BY priority DESC LIMIT 1";
             $result = mysql_query($sql);
             if (mysql_error()) trigger_error(mysql_error(). "--$sql--",E_USER_ERROR);
             list($highestpriority) = mysql_fetch_row($result);
@@ -604,9 +604,9 @@ elseif ($action=='assign')
             {
                 // FIXME: for now we use id but in future use tag, once maintenance uses tag
                 $servicelevel=maintenance_servicelevel($maintid);
-                $sql = "SELECT * FROM servicelevels WHERE id='$servicelevel' AND priority='$priority' ";
+                $sql = "SELECT * FROM `{$dbServiceLevels}` WHERE id='$servicelevel' AND priority='$priority' ";
             }
-            else $sql = "SELECT * FROM servicelevels WHERE tag='$servicelevel' AND priority='$priority' ";
+            else $sql = "SELECT * FROM `{$dbServiceLevels}` WHERE tag='$servicelevel' AND priority='$priority' ";
 
             $result = mysql_query($sql);
             if (mysql_error()) trigger_error("MySQL Query Error ".mysql_error(), E_USER_ERROR);

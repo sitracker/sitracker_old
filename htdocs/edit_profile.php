@@ -234,7 +234,7 @@ elseif ($mode=='save')
             $password=strtoupper(md5($password));
             $newpassword1=strtoupper(md5($newpassword1));
             $newpassword2=strtoupper(md5($newpassword2));
-            $sql = "UPDATE users SET password='$newpassword1' WHERE id='$userid'";
+            $sql = "UPDATE `{$dbUsers}` SET password='$newpassword1' WHERE id='$userid'";
             $result = mysql_query($sql);
             if (mysql_error()) trigger_error("MySQL Query Error ".mysql_error(), E_USER_ERROR);
 
@@ -283,7 +283,7 @@ elseif ($mode=='save')
 
         $oldstatus = user_status($userid);
 
-        $sql  = "UPDATE users SET realname='$realname', title='$jobtitle', email='$email', qualifications='$qualifications', ";
+        $sql  = "UPDATE `{$dbUsers}` SET realname='$realname', title='$jobtitle', email='$email', qualifications='$qualifications', ";
         $sql .= "phone='$phone', mobile='$mobile', aim='$aim', icq='$icq', msn='$msn', fax='$fax', var_incident_refresh='$incidentrefresh', ";
         if ($userid != 1 AND !empty($_REQUEST['roleid']) AND $edituserpermission==TRUE) $sql .= "roleid='{$roleid}', ";
         if (!empty($holiday_entitlement) AND $edituserpermission==TRUE) $sql .= "holiday_entitlement='{$holiday_entitlement}', ";
@@ -351,10 +351,10 @@ elseif ($mode=='save')
 elseif ($mode='savesessionlang')
 {
 
-    $sql = "UPDATE users SET var_i18n = '{$_SESSION['lang']}' WHERE id = {$sit[2]}";
+    $sql = "UPDATE `{$dbUsers}` SET var_i18n = '{$_SESSION['lang']}' WHERE id = {$sit[2]}";
     mysql_query($sql);
     if (mysql_error()) trigger_error("MySQL Query Error ".mysql_error(), E_USER_ERROR);
-    $sql = "DELETE FROM notices WHERE type=".USER_LANG_DIFFERS_TYPE." AND userid={$sit[2]}";
+    $sql = "DELETE FROM `{$dbNotices}` WHERE type=".USER_LANG_DIFFERS_TYPE." AND userid={$sit[2]}";
     mysql_query($sql);
     if (mysql_error()) trigger_error("MySQL Query Error ".mysql_error(), E_USER_ERROR);
     html_redirect("main.php");

@@ -31,7 +31,7 @@ $newstatus = cleanvar($_REQUEST['status']);
 //TODO: maybe put this in another file?
 if ($changeuser AND $newstatus)
 {
-    $sql = "UPDATE users SET accepting='{$newstatus}' WHERE id={$changeuser}";
+    $sql = "UPDATE `{$dbUsers}` SET accepting='{$newstatus}' WHERE id={$changeuser}";
     @mysql_query($sql);
 }
 
@@ -180,7 +180,7 @@ while ($users = mysql_fetch_array($result))
     echo "</td><td>";
     echo "<a href='holidays.php?user={$users['id']}' title='{$strHolidays}'><img src='{$CONFIG['application_webpath']}images/icons/{$iconset}/16x16/holiday.png' width='16' height='16' alt='{$strHolidays}' style='border:none;' /></a> ";
     echo "<a href='tasks.php?user={$users['id']}' title='{$strTasks}'><img src='{$CONFIG['application_webpath']}images/icons/{$iconset}/16x16/task.png' width='16' height='16' alt='Todo icon' style='border:none;' /></a> ";
-    $sitesql = "SELECT COUNT(id) FROM sites WHERE owner='{$users['id']}'";
+    $sitesql = "SELECT COUNT(id) FROM `{$dbSites}` WHERE owner='{$users['id']}'";
     $siteresult = mysql_query($sitesql);
     if (mysql_error()) trigger_error(mysql_error(),E_USER_WARNING);
     list($ownedsites) = mysql_fetch_row($siteresult);

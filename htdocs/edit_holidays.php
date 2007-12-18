@@ -45,7 +45,7 @@ switch ($_REQUEST['action'])
                 if (mysql_error()) trigger_error(mysql_error(),E_USER_ERROR);
 
                 // Update Holiday Entitlement
-                $usql = "UPDATE users SET holiday_entitlement = $new_entitlement WHERE id={$users->id} LIMIT 1";
+                $usql = "UPDATE `{$dbUsers}` SET holiday_entitlement = $new_entitlement WHERE id={$users->id} LIMIT 1";
                 mysql_query($usql);
                 if (mysql_error()) trigger_error(mysql_error(),E_USER_ERROR);
             }

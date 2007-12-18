@@ -26,7 +26,6 @@ if ($verbose) echo "Calculating SLA times{$crlf}";
 
 $sql = "SELECT id, title, maintenanceid, priority, slaemail, slanotice, servicelevel, status, owner ";
 $sql .= "FROM `{$dbIncidents}` WHERE status != ".STATUS_CLOSED." AND status != ".STATUS_CLOSING;
-//$sql="SELECT id,maintenanceid,priority,slaemail,servicelevel,status FROM incidents WHERE id=34833";
 $incident_result=mysql_query($sql);
 if (mysql_error()) trigger_error(mysql_error(),E_USER_ERROR);
 
@@ -70,7 +69,7 @@ while ($incident=mysql_fetch_array($incident_result)) {
     }
     mysql_free_result($update_result);
 
-    $sql = "SELECT id, type, sla, timestamp, currentstatus, currentowner FROM updates WHERE incidentid='{$incident['id']}' ";
+    $sql = "SELECT id, type, sla, timestamp, currentstatus, currentowner FROM `{$dbUpdates}` WHERE incidentid='{$incident['id']}' ";
     $sql .= "AND type='reviewmet' ORDER BY id DESC LIMIT 1";
     $update_result = mysql_query($sql);
     if (mysql_error()) trigger_error(mysql_error(),E_USER_ERROR);
@@ -108,7 +107,8 @@ while ($incident=mysql_fetch_array($incident_result)) {
 
         // Query the database for the next SLA and review times...
 
-        $sql="SELECT ($slaRequest*$coefficient) as 'next_sla_time', review_days from servicelevels WHERE tag='$tag' AND priority='{$incident['priority']}'";
+        $sql = "SELECT ($slaRequest*$coefficient) as 'next_sla_time', review_days ";
+        $sql .= "FROM `{$dbServiceLevels}` WHERE tag = '$tag' AND priority = '{$incident['priority']}'";
         $result=mysql_query($sql);
         $times=mysql_fetch_assoc($result);
         mysql_free_result($result);

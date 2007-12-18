@@ -82,7 +82,7 @@ else
             break;
     }
 
-    $sql = "UPDATE users SET dashboard = '$dashboardstr' WHERE id = '".$_SESSION['userid']."'";
+    $sql = "UPDATE `{$dbUsers}` SET dashboard = '$dashboardstr' WHERE id = '".$_SESSION['userid']."'";
     $contactresult = mysql_query($sql);
     if (mysql_error()) trigger_error("MySQL Query Error ".mysql_error(), E_USER_ERROR);
     html_redirect("main.php");

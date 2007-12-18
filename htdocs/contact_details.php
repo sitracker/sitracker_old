@@ -48,7 +48,7 @@ while ($contactrow=mysql_fetch_array($contactresult))
     // Lookup the site address if this contact hasn't got a specific address set
     if ($contactrow['address1']=='')
     {
-        $sitesql = "SELECT * FROM sites WHERE id='{$contactrow['siteid']}' LIMIT 1";
+        $sitesql = "SELECT * FROM `{$dbSites}` WHERE id='{$contactrow['siteid']}' LIMIT 1";
         $siteresult = mysql_query($sitesql);
         if (mysql_error()) trigger_error("MySQL Query Error ".mysql_error(), E_USER_WARNING);
         $site = mysql_fetch_object($siteresult);

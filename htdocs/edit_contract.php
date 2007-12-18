@@ -221,7 +221,7 @@ else if ($action == "update")
         if (empty($productonly)) $productonly='no';
         if ($productonly=='yes') $terminated='yes';
 
-        $sql  = "UPDATE maintenance SET reseller='$reseller', expirydate='$expirydate', licence_quantity='$licence_quantity', ";
+        $sql  = "UPDATE `{$dbMaintenance}` SET reseller='$reseller', expirydate='$expirydate', licence_quantity='$licence_quantity', ";
         $sql .= "licence_type='$licence_type', notes='$notes', admincontact=$admincontact, term='$terminated', servicelevelid='$servicelevelid', ";
         $sql .= "incident_quantity='$incident_quantity', ";
         $sql .= "incidentpoolid='$incidentpoolid', productonly='$productonly', ";

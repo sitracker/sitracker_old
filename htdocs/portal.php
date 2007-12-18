@@ -309,9 +309,9 @@ switch ($page)
             {
                 // FIXME: for now we use id but in future use tag, once maintenance uses tag
                 $servicelevel=maintenance_servicelevel($contractid);
-                $sql = "SELECT * FROM servicelevels WHERE id='$servicelevel' AND priority='$priority' ";
+                $sql = "SELECT * FROM `{$dbServiceLevels}` WHERE id='$servicelevel' AND priority='$priority' ";
             }
-            else $sql = "SELECT * FROM servicelevels WHERE tag='$servicelevel' AND priority='$priority' ";
+            else $sql = "SELECT * FROM `{$dbServiceLevels}` WHERE tag='$servicelevel' AND priority='$priority' ";
 
             $result = mysql_query($sql);
             if (mysql_error()) trigger_error("MySQL Query Error ".mysql_error(), E_USER_ERROR);

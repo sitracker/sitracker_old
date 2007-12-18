@@ -33,7 +33,7 @@ switch ($mode)
 {
     case 'viewresponse':
         echo "<h2>{$strFeedback}</h2>";
-        $sql = "SELECT * FROM feedbackrespondents WHERE id='{$responseid}'";
+        $sql = "SELECT * FROM `{$dbFeedbackRespondents}` WHERE id='{$responseid}'";
         $result = mysql_query($sql);
         if (mysql_error()) trigger_error(mysql_error(),E_USER_WARNING);
         $response = mysql_fetch_object($result);
@@ -48,7 +48,7 @@ switch ($mode)
         echo "<h3>{$strResponsesToFeedbackForm}</h3>";
         $totalresult=0;
         $numquestions=0;
-        $qsql = "SELECT * FROM feedbackquestions WHERE formid='{$response->formid}' AND type='rating' ORDER BY taborder";
+        $qsql = "SELECT * FROM `{$dbFeedbackQuestions}` WHERE formid='{$response->formid}' AND type='rating' ORDER BY taborder";
         $qresult = mysql_query($qsql);
         if (mysql_error()) trigger_error(mysql_error(), E_USER_ERROR);
 
@@ -59,14 +59,14 @@ switch ($mode)
             {
                 $numquestions++;
                 $html .= "<tr><th>Q{$qrow->taborder}: {$qrow->question}</th>";
-                $sql = "SELECT * FROM feedbackrespondents, incidents, users, feedbackresults ";
-                $sql .= "WHERE feedbackrespondents.incidentid=incidents.id ";
-                $sql .= "AND incidents.owner=users.id ";
-                $sql .= "AND feedbackrespondents.id=feedbackresults.respondentid ";
-                $sql .= "AND feedbackresults.questionid='{$qrow->id}' ";
-                $sql .= "AND feedbackrespondents.id='$responseid' ";
-                $sql .= "AND feedbackrespondents.completed = 'yes' \n";
-                $sql .= "ORDER BY incidents.owner, incidents.id";
+                $sql = "SELECT * FROM `{$dbFeedbackRespondents}` AS f, `{$dbIncidents}` AS i, `{$dbUsers}` AS u, `{$dbFeedbackresults}` AS r ";
+                $sql .= "WHERE f.incidentid=i.id ";
+                $sql .= "AND i.owner=u.id ";
+                $sql .= "AND f.id=r.respondentid ";
+                $sql .= "AND r.questionid='{$qrow->id}' ";
+                $sql .= "AND f.id='$responseid' ";
+                $sql .= "AND f.completed = 'yes' \n";
+                $sql .= "ORDER BY i.owner, i.id";
                 $result = mysql_query($sql);
                 if (mysql_error()) trigger_error(mysql_error(), E_USER_ERROR);
                 $numresults=0;
@@ -91,7 +91,7 @@ switch ($mode)
             $total_average=number_format($totalresult/$numquestions,2);
             $total_percent=number_format((($total_average-1) * (100 / ($CONFIG['feedback_max_score'] -1))), 0);
 
-            $qsql = "SELECT * FROM feedbackquestions WHERE formid='{$response->formid}' AND type='text' ORDER BY taborder";
+            $qsql = "SELECT * FROM `{$dbFeedbackQuestions}` WHERE formid='{$response->formid}' AND type='text' ORDER BY taborder";
             $qresult = mysql_query($qsql);
             if (mysql_error()) trigger_error(mysql_error(), E_USER_ERROR);
 
@@ -100,14 +100,14 @@ switch ($mode)
                 while ($qrow = mysql_fetch_object($qresult))
                 {
 
-                    $sql = "SELECT * FROM feedbackrespondents, incidents, users, feedbackresults ";
-                    $sql .= "WHERE feedbackrespondents.incidentid=incidents.id ";
-                    $sql .= "AND incidents.owner=users.id ";
-                    $sql .= "AND feedbackrespondents.id=feedbackresults.respondentid ";
-                    $sql .= "AND feedbackresults.questionid='{$qrow->id}' ";
-                    $sql .= "AND feedbackrespondents.id='$responseid' ";
-                    $sql .= "AND feedbackrespondents.completed = 'yes' \n";
-                    $sql .= "ORDER BY incidents.owner, incidents.id";
+                    $sql = "SELECT * FROM `{$dbFeedbackRespondents}` AS f, `{$dbIncidents}` AS i, `{$dbUsers}` AS u, `{$dbFeedbackResults}` AS r ";
+                    $sql .= "WHERE f.incidentid = i.id ";
+                    $sql .= "AND i.owner = u.id ";
+                    $sql .= "AND f.id = r.respondentid ";
+                    $sql .= "AND r.questionid = '{$qrow->id}' ";
+                    $sql .= "AND f.id = '$responseid' ";
+                    $sql .= "AND f.completed = 'yes' \n";
+                    $sql .= "ORDER BY i.owner, i.id";
                     $result = mysql_query($sql);
                     if (mysql_error()) trigger_error(mysql_error(), E_USER_ERROR);
                     while ($row = mysql_fetch_object($result))
@@ -135,7 +135,7 @@ switch ($mode)
     break;
 
     default:
-        $sql = "SELECT * FROM feedbackforms";
+        $sql = "SELECT * FROM `{$dbFeedbackForms}`";
         $result = mysql_query($sql);
         if (mysql_error()) trigger_error(mysql_error(),E_USER_WARNING);
 
@@ -151,8 +151,8 @@ switch ($mode)
             if (empty($formid) AND !empty($CONFIG['feedback_form'])) $formid=$CONFIG['feedback_form'];
             else $formid=1;
 
-            $sql  = "SELECT *, feedbackrespondents.id AS respid FROM feedbackrespondents, feedbackforms ";
-            $sql .= "WHERE feedbackrespondents.formid=feedbackforms.id ";
+            $sql  = "SELECT *, feedbackrespondents.id AS respid FROM `{$dbFeedbackRespondents}` AS fr, `{$dbFeedbackForms}` AS ff ";
+            $sql .= "WHERE fr.formid = ff.id ";
             if ($completed=='no') $sql .= "AND completed='no' ";
             else $sql .= "AND completed='yes' ";
             if (!empty($formid)) $sql .= "AND formid='$formid'";
@@ -239,7 +239,7 @@ switch ($mode)
             }
             if ($completed=='no')
             {
-                $sql = "SELECT COUNT(id) FROM feedbackrespondents WHERE formid='{$formid}' AND completed='yes'";
+                $sql = "SELECT COUNT(id) FROM `{$dbFeedbackRespondents}` WHERE formid='{$formid}' AND completed='yes'";
                 $result = mysql_query($sql);
                 list($completedforms) = mysql_fetch_row($result);
                 if ($completedforms > 0)
@@ -247,7 +247,7 @@ switch ($mode)
             }
             else
             {
-                $sql = "SELECT COUNT(id) FROM feedbackrespondents WHERE formid='{$formid}' AND completed='no'";
+                $sql = "SELECT COUNT(id) FROM `{$dbFeedbackRespondents}` WHERE formid='{$formid}' AND completed='no'";
                 $result = mysql_query($sql);
                 list($waiting) = mysql_fetch_row($result);
                 if ($waiting > 0) echo "<p align='center'>".sprintf($strFeedbackFormsWaiting, "<a href='{$_SERVER['PHP_SELF']}?completed=no'>{$waiting}")."</p>";

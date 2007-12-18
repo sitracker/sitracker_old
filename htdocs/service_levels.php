@@ -27,7 +27,7 @@ echo "{$title}</h2>";
 
 echo "<p align='center'><a href='add_service_level.php'>{$strAddServiceLevel}</a></p>";
 
-$tsql = "SELECT DISTINCT * FROM servicelevels GROUP BY tag";
+$tsql = "SELECT DISTINCT * FROM `{$dbServiceLevels}` GROUP BY tag";
 $tresult = mysql_query($tsql);
 if (mysql_error()) trigger_error(mysql_error(),E_USER_WARNING);
 if (mysql_num_rows($tresult) >= 1)
@@ -36,7 +36,7 @@ if (mysql_num_rows($tresult) >= 1)
     while ($tag = mysql_fetch_object($tresult))
     {
         echo "<thead><tr><th colspan='9'>{$tag->tag}</th></tr></thead>";
-        $sql = "SELECT * FROM servicelevels WHERE tag='{$tag->tag}' ORDER BY priority";
+        $sql = "SELECT * FROM `{$dbServiceLevels}` WHERE tag='{$tag->tag}' ORDER BY priority";
         $result = mysql_query($sql);
         if (mysql_error()) trigger_error(mysql_error(),E_USER_WARNING);
 

@@ -150,7 +150,7 @@ else
         mysql_query($sql);
         if (mysql_error()) trigger_error("MySQL Query Error ".mysql_error(), E_USER_ERROR);
 
-        $sql = "UPDATE maintenance SET admincontact='$newcontact' WHERE admincontact='$id' ";
+        $sql = "UPDATE `{$dbMaintenance}` SET admincontact='$newcontact' WHERE admincontact='$id' ";
         mysql_query($sql);
         if (mysql_error()) trigger_error("MySQL Query Error ".mysql_error(), E_USER_ERROR);
     }

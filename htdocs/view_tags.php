@@ -86,7 +86,7 @@ else
                 break;
 
                 case TAG_SITE: //site
-                    $sql = "SELECT name FROM sites WHERE id = '{$obj->id}'";
+                    $sql = "SELECT name FROM `{$dbSites}` WHERE id = '{$obj->id}'";
                     $resultsite = mysql_query($sql);
                     if (mysql_error()) trigger_error(mysql_error(),E_USER_ERROR);
                     if (mysql_num_rows($resultsite) > 0)

@@ -76,7 +76,7 @@ if (mysql_num_rows($result) > 0)
                 $sql .= "WHERE i.contact = contacts.id AND contacts.siteid = {$obj->id} ";
                 $sql .= "AND i.status != 2 AND i.status != 7";
 
-                $lsql = "SELECT name FROM sites WHERE id = {$obj->id}";
+                $lsql = "SELECT name FROM `{$dbSites}` WHERE id = {$obj->id}";
                 $lresult = mysql_query($lsql);
                 if (mysql_error()) trigger_error(mysql_error(),E_USER_ERROR);
                 $lobj = mysql_fetch_object($lresult);

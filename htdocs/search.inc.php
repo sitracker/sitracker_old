@@ -295,7 +295,7 @@ if (!empty($search_string))
             }
 
             // Sites
-                    $sql = "SELECT * FROM sites WHERE ";
+                    $sql = "SELECT * FROM `{$dbSites}` WHERE ";
             $sql .= search_build_query('name', $sterms);
 //             echo "<pre>$sql</pre>";
             $result = mysql_query($sql);

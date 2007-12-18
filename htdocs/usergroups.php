@@ -54,7 +54,7 @@ switch ($action)
     case 'deletegroup':
         $groupid = cleanvar($_REQUEST['groupid']);
         // Remove group membership for all users currently assigned to this group
-        $sql = "UPDATE users SET groupid = '' WHERE groupid = '{$groupid}'";
+        $sql = "UPDATE `{$dbUsers}` SET groupid = '' WHERE groupid = '{$groupid}'";
         mysql_query($sql);
         if (mysql_error()) trigger_error(mysql_error(),E_USER_ERROR);
 

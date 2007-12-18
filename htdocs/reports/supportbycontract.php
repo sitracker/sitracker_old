@@ -36,9 +36,9 @@ else
     include ('htmlheader.inc.php');
 }
 
-$sql = "SELECT *, sites.name AS sitename FROM sites ";
+$sql = "SELECT *, s.name AS sitename FROM `{$dbSites}` AS s ";
 if (!empty($_REQUEST['siteid'])) $sql .= "WHERE id='{$siteid}'";
-else $sql .= "ORDER BY sites.name";
+else $sql .= "ORDER BY s.name";
 $result = mysql_query($sql);
 if (mysql_error()) trigger_error(mysql_error(), E_USER_ERROR);
 while ($site = mysql_fetch_object($result))

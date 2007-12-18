@@ -44,7 +44,7 @@ $perm = $_REQUEST['perm'];
 
 if (empty($action) OR $action == "showform")
 {
-    $sql = "SELECT * FROM roles ORDER BY id ASC";
+    $sql = "SELECT * FROM `{$dbRoles}` ORDER BY id ASC";
     $result= mysql_query($sql);
     if (mysql_error()) trigger_error(mysql_error(),E_USER_ERROR);
 
@@ -60,7 +60,7 @@ if (empty($action) OR $action == "showform")
             echo "<th>{$rolerow->rolename}</th>";
         }
         echo "</tr>\n";
-        $psql = "SELECT * FROM permissions";
+        $psql = "SELECT * FROM `{$dbPermissions}`";
         $presult = mysql_query($psql);
         $class='shade1';
         while ($perm = mysql_fetch_object($presult))
@@ -71,7 +71,7 @@ if (empty($action) OR $action == "showform")
             mysql_data_seek($result, 0);
             while ($rolerow = mysql_fetch_object($result))
             {
-                $rpsql = "SELECT * FROM rolepermissions WHERE roleid='{$rolerow->id}' AND permissionid='{$perm->id}'";
+                $rpsql = "SELECT * FROM `{$dbRolePermissions}` WHERE roleid='{$rolerow->id}' AND permissionid='{$perm->id}'";
                 $rpresult = mysql_query($rpsql);
                 $rp = mysql_fetch_object($rpresult);
                 echo "<td><input name='{$rolerow->id}perm[]' type='checkbox' value='{$perm->id}' ";
@@ -99,7 +99,7 @@ elseif ($action == "edit" && (!empty($user) OR !empty($role)))
     if (!empty($user)) echo "<p align='center'>Permissions that are inherited from the users role can not be changed.</p>";
 
     // Next lookup the permissions
-    $sql = "SELECT * FROM `{$dbUsers}` AS u, rolepermissions WHERE u.roleid = rolepermissions.roleid AND u.id = '$user' AND granted='true'";
+    $sql = "SELECT * FROM `{$dbUsers}` AS u, `{$dbRolePermissions}` AS rp WHERE u.roleid = rp.roleid AND u.id = '$user' AND granted='true'";
     $result = mysql_query($sql);
     if (mysql_error()) trigger_error(mysql_error(),E_USER_ERROR);
     $userrolepermission=array();

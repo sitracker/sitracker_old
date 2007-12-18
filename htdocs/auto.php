@@ -156,7 +156,7 @@ if ($actions[0]=='' OR in_array('SetUserStatus',$actions))
                     default:
                         $accepting='';
                 }
-                $usql = "UPDATE users SET status='{$newstatus}'";
+                $usql = "UPDATE `{$dbUsers}` SET status='{$newstatus}'";
                 if ($accepting!='') $usql .= ", accepting='{$accepting}'";
                 $usql .= " WHERE id='{$huser->userid}' LIMIT 1";
                 if ($accepting=='No') incident_backup_switchover($huser->userid, 'no');

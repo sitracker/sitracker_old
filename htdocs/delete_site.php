@@ -104,7 +104,7 @@ else
         if (mysql_error()) trigger_error(mysql_error(),E_USER_ERROR);
 
         // Move contracts
-        $sql = "UPDATE maintenance SET site='$destinationid' WHERE site='$id'";
+        $sql = "UPDATE `{$dbMaintenance}` SET site='$destinationid' WHERE site='$id'";
         mysql_query($sql);
         if (mysql_error()) trigger_error(mysql_error(),E_USER_ERROR);
 

@@ -25,12 +25,12 @@ $monthago = time()-(60 * 60 * 24 * 30.5);
 
 echo "<h2>Incidents opened since ".date($CONFIG['dateformat_date'], $monthago)."</h2>";
 
-$sql  = "SELECT *,sites.id AS siteid FROM sites, maintenance, `{$dbSupportContacts}` AS sc, incidents ";
-$sql .= "WHERE sites.id = maintenance.site ";
-$sql .= "AND maintenance.id = sc.maintenanceid ";
-$sql .= "AND sc.contactid = incidents.contact ";
-$sql .= "AND incidents.opened > '$monthago' ";
-$sql .= "ORDER BY sites.id, incidents.id";
+$sql  = "SELECT *,s.id AS siteid FROM `{$dbSites}` AS s, `{$dbMaintenance}` AS m, `{$dbSupportContacts}` AS sc, `{$dbIncidents}` AS i ";
+$sql .= "WHERE s.id = m.site ";
+$sql .= "AND m.id = sc.maintenanceid ";
+$sql .= "AND sc.contactid = i.contact ";
+$sql .= "AND i.opened > '$monthago' ";
+$sql .= "ORDER BY s.id, i.id";
 
 $result = mysql_query($sql);
 if (mysql_error()) trigger_error("MySQL Query Error: ".mysql_error(), E_USER_ERROR);

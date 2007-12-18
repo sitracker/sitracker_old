@@ -64,24 +64,24 @@ else
         // build SQL
         if ($fields == "all")
         {
-            $sql  = "SELECT id, name, address1 FROM sites WHERE ";
+            $sql  = "SELECT id, name, address1 FROM `{$dbSites}` WHERE ";
             $sql .= "id LIKE ('%$search_string%') OR ";
             $sql .= "name LIKE ('%$search_string%') OR ";
             $sql .= "address1 LIKE ('%$search_string%')";
         }
         else if ($fields == "id")
         {
-            $sql  = "SELECT id, name, address1 FROM sites WHERE ";
+            $sql  = "SELECT id, name, address1 FROM `{$dbSites}` WHERE ";
             $sql .= "id LIKE ('%$search_string%')";
         }
         else if ($fields == "name")
         {
-            $sql  = "SELECT id, name, address1 FROM sites WHERE ";
+            $sql  = "SELECT id, name, address1 FROM `{$dbSites}` WHERE ";
             $sql .= "name LIKE ('%$search_string%')";
         }
         else if ($fields == "address1")
         {
-            $sql  = "SELECT id, name, address1 FROM sites WHERE ";
+            $sql  = "SELECT id, name, address1 FROM `{$dbSites}` WHERE ";
             $sql .= "address1 LIKE ('%$search_string%')";
         }
 

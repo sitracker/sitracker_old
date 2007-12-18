@@ -52,7 +52,7 @@ if (empty($action) OR $action == "showform")
     echo "$title</h2>";
     echo "<p align='center'>{$tag} ".priority_name($priority)."</p>";
 
-    $sql = "SELECT * FROM servicelevels WHERE tag='$tag' AND priority='$priority'";
+    $sql = "SELECT * FROM `{$dbServiceLevels}` WHERE tag='$tag' AND priority='$priority'";
     $result = mysql_query($sql);
     if (mysql_error()) trigger_error(mysql_error(),E_USER_WARNING);
     $sla = mysql_fetch_object($result);
@@ -115,7 +115,7 @@ elseif ($action == "edit")
     if ($_POST['timed'] != 'on') $timed = 0;
     else $timed = 1;
 
-    $sql = "UPDATE servicelevels SET initial_response_mins='$initial_response_mins', ";
+    $sql = "UPDATE `{$dbServiceLevels}` SET initial_response_mins='$initial_response_mins', ";
     $sql .= "prob_determ_mins='$prob_determ_mins', ";
     $sql .= "action_plan_mins='$action_plan_mins', ";
     $sql .= "resolution_days='$resolution_days', ";

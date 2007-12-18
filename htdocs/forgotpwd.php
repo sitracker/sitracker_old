@@ -182,7 +182,7 @@ switch ($_REQUEST['action'])
             {
                 if ($newpassword1==$newpassword2)
                 {
-                    $usql = "UPDATE users SET password=MD5({$newpassword1}) WHERE id={$userid} LIMIT 1";
+                    $usql = "UPDATE `{$dbUsers}` SET password=MD5({$newpassword1}) WHERE id={$userid} LIMIT 1";
                     mysql_query($usql);
                     echo "<h3>Password reset</h3>";
                     echo "<p>Your password has been reset, you can now login using the new details.</p>";

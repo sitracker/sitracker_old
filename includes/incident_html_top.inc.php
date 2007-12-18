@@ -258,7 +258,7 @@ $sql .= " OR i.contact=NULL ";
 $incidentresult = mysql_query($sql);
 if (mysql_error()) trigger_error("MySQL Query Error ".mysql_error(), E_USER_ERROR);
 $incident = mysql_fetch_object($incidentresult);
-$sitesql = "SELECT name, notes FROM sites WHERE id = '{$incident->siteid}'";
+$sitesql = "SELECT name, notes FROM `{$dbSites}` WHERE id = '{$incident->siteid}'";
 $siteresult = mysql_query($sitesql);
 if (mysql_error()) trigger_error(mysql_error(),E_USER_WARNING);
 $site = mysql_fetch_object($siteresult);
@@ -280,7 +280,7 @@ $opened_for=format_seconds($closed - $incident->opened);
 $priority = $incident->priority;
 
 // Lookup the service level times
-$slsql = "SELECT * FROM servicelevels WHERE tag='{$servicelevel_tag}' AND priority='{$incident->priority}' ";
+$slsql = "SELECT * FROM `{$dbServiceLevels}` WHERE tag='{$servicelevel_tag}' AND priority='{$incident->priority}' ";
 $slresult = mysql_query($slsql);
 if (mysql_error()) trigger_error("MySQL Query Error ".mysql_error(), E_USER_ERROR);
 $servicelevel = mysql_fetch_object($slresult);

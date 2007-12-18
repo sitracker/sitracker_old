@@ -12,7 +12,7 @@ $dashboard_tasks_version = 1;
 
 function dashboard_tasks($row,$dashboardid)
 {
-    global $sit, $CONFIG, $iconset;
+    global $sit, $CONFIG, $iconset, $dbTasks;
     $user = $sit[2];
     echo "<div class='windowbox' style='width: 95%;' id='$row-$dashboardid'>";
     echo "<div class='windowtitle'><a href='tasks.php'><img src='{$CONFIG['application_webpath']}images/icons/{$iconset}/16x16/task.png' width='16' height='16' alt='' /> ";
@@ -20,7 +20,7 @@ function dashboard_tasks($row,$dashboardid)
     echo "</a></div>";
     echo "<div class='window'>";
 
-    $sql = "SELECT * FROM tasks WHERE owner='$user' AND (completion < 100 OR completion='' OR completion IS NULL) AND distribution != 'incident' ";
+    $sql = "SELECT * FROM `{$dbTasks}` WHERE owner='$user' AND (completion < 100 OR completion='' OR completion IS NULL) AND distribution != 'incident' ";
     if (!empty($sort))
     {
         if ($sort=='id') $sql .= "ORDER BY id ";

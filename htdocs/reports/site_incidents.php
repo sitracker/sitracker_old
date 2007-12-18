@@ -56,8 +56,9 @@ if (empty($mode))
 else
 {
     // FIXME handle crash were dates are blank
-    $sql = "SELECT DISTINCT sites.id, sites.name as name, resellers.name as resel FROM sites, maintenance, resellers ";
-    $sql.= "WHERE sites.id=maintenance.site AND resellers.id=maintenance.reseller AND maintenance.term<>'yes' ORDER BY name";
+    $sql = "SELECT DISTINCT s.id, s.name AS name, r.name AS resel ";
+    $sql .= "FROM `{$dbSites}` AS s, `{$dbMaintenance}` AS m, `{$dbResellers}` AS r ";
+    $sql.= "WHERE s.id = m.site AND r.id = m.reseller AND m.term <> 'yes' ORDER BY s.name";
     $result = mysql_query($sql);
     if (mysql_error()) trigger_error(mysql_error(),E_USER_ERROR);
     if (mysql_num_rows($result) > 0)
@@ -66,9 +67,9 @@ else
         $csv.="END:,{$enddate}";
         while ($site = mysql_fetch_object($result))
         {
-            $sql = "SELECT count(incidents.id) AS incidentz, sites.name as site FROM `{$dbContacts}` AS c, sites, incidents ";
+            $sql = "SELECT count(i.id) AS incidentz, s.name AS site FROM `{$dbContacts}` AS c, `{$dbSites}` AS s, `{$dbIncidents}` AS i ";
             //$sql.= "WHERE contacts.siteid=sites.id AND sites.id={$site->id} AND incidents.opened > ($now-60*60*24*365.25) AND incidents.contact=contacts.id ";
-            $sql.= "WHERE c.siteid = sites.id AND sites.id={$site->id} AND incidents.opened >".strtotime($startdate)." AND incidents.closed < ".strtotime($enddate)." AND incidents.contact=c.id ";
+            $sql.= "WHERE c.siteid = s.id AND s.id={$site->id} AND i.opened >".strtotime($startdate)." AND i.closed < ".strtotime($enddate)." AND i.contact = c.id ";
             $sql.= "GROUP BY site";
             //echo $sql;
             $sresult = mysql_query($sql);

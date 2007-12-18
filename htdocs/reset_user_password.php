@@ -39,7 +39,7 @@ if ($id > 1)
     $newpasswordplain = generate_password();
     $newpassword=md5($newpasswordplain);
 
-    $sql = "UPDATE users SET password='$newpassword' WHERE id='$id'";
+    $sql = "UPDATE `{$dbUsers}` SET password='$newpassword' WHERE id='$id'";
     $result = mysql_query($sql);
     if (mysql_error()) trigger_error("MySQL Query Error ".mysql_error(), E_USER_ERROR);
     html_redirect("manage_users.php", TRUE, "Password was reset to: '$newpasswordplain' (sans-quotes)"); // FIXME i18n

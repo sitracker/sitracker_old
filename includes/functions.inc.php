@@ -882,7 +882,7 @@ function incident_productinfo_html($incidentid)
 */
 function incident_sla_history($incidentid)
 {
-    global $CONFIG, $dbIncidents;
+    global $CONFIG, $dbIncidents, $dbServiceLevels;
     $working_day_mins = ($CONFIG['end_working_day'] - $CONFIG['start_working_day']) / 60;
 
     // Not the most efficient but..
@@ -892,7 +892,7 @@ function incident_sla_history($incidentid)
     $incident = mysql_fetch_object($result);
 
     // Get service levels
-    $sql = "SELECT * FROM servicelevels WHERE tag='{$incident->servicelevel}' AND priority='{$incident->priority}' ";
+    $sql = "SELECT * FROM `{$dbServiceLevels}` WHERE tag='{$incident->servicelevel}' AND priority='{$incident->priority}' ";
     $result = mysql_query($sql);
     if (mysql_error()) trigger_error("MySQL Query Error ".mysql_error(), E_USER_ERROR);
     $level = mysql_fetch_object($result);
@@ -2167,48 +2167,50 @@ function calculate_time_of_next_action($days, $hours, $minutes)
 // with the given name and with the given id selected.
 function servicelevel_drop_down($name, $id, $collapse=FALSE)
 {
-   if ($collapse) $sql = "SELECT DISTINCT id, tag FROM servicelevels";
-   else $sql  = "SELECT id, priority FROM servicelevels";
-   $result = mysql_query($sql);
+    global $dbServiceLevels;
+    if ($collapse) $sql = "SELECT DISTINCT id, tag FROM `{$dbServiceLevels}`";
+    else $sql  = "SELECT id, priority FROM `{$dbServiceLevels}`";
+    $result = mysql_query($sql);
 
-   $html = "<select name='$name'>\n";
-   // INL 30Mar06 Removed this ability to select a null service level
-   // if ($id == 0) $html .= "<option selected='selected' value='0'></option>\n";
-   while ($servicelevels = mysql_fetch_object($result))
-   {
-      $html .= "<option ";
-      $html .= "value='{$servicelevels->id}' ";
-      if ($servicelevels->id == $id) $html .= "selected='selected'";
-      $html .= ">";
-      if ($collapse) $html .= $servicelevels->tag;
-      else $html .= "{$servicelevels->tag} ".priority_name($servicelevels->priority);
-      $html .= "</option>\n";
-   }
-   $html .= "</select>";
-   return $html;
+    $html = "<select name='$name'>\n";
+    // INL 30Mar06 Removed this ability to select a null service level
+    // if ($id == 0) $html .= "<option selected='selected' value='0'></option>\n";
+    while ($servicelevels = mysql_fetch_object($result))
+    {
+        $html .= "<option ";
+        $html .= "value='{$servicelevels->id}' ";
+        if ($servicelevels->id == $id) $html .= "selected='selected'";
+        $html .= ">";
+        if ($collapse) $html .= $servicelevels->tag;
+        else $html .= "{$servicelevels->tag} ".priority_name($servicelevels->priority);
+        $html .= "</option>\n";
+    }
+    $html .= "</select>";
+    return $html;
 }
 
 
 function serviceleveltag_drop_down($name, $tag, $collapse=FALSE)
 {
-   if ($collapse) $sql = "SELECT DISTINCT tag FROM servicelevels";
-   else $sql  = "SELECT tag, priority FROM servicelevels";
-   $result = mysql_query($sql);
+    global $dbServiceLevels;
+    if ($collapse) $sql = "SELECT DISTINCT tag FROM `{$dbServiceLevels}`";
+    else $sql  = "SELECT tag, priority FROM servicelevels";
+    $result = mysql_query($sql);
 
-   $html = "<select name='$name'>\n";
-   if ($tag == '') $html .= "<option selected='selected' value=''></option>\n";
-   while ($servicelevels = mysql_fetch_object($result))
-   {
-      $html .= "<option ";
-      $html .= "value='{$servicelevels->tag}' ";
-      if ($servicelevels->tag == $tag) $html .= "selected='selected'";
-      $html .= ">";
-      if ($collapse) $html .= $servicelevels->tag;
-      else $html .= "{$servicelevels->tag} ".priority_name($servicelevels->priority);
-      $html .= "</option>\n";
-   }
-   $html .= "</select>";
-   return $html;
+    $html = "<select name='$name'>\n";
+    if ($tag == '') $html .= "<option selected='selected' value=''></option>\n";
+    while ($servicelevels = mysql_fetch_object($result))
+    {
+        $html .= "<option ";
+        $html .= "value='{$servicelevels->tag}' ";
+        if ($servicelevels->tag == $tag) $html .= "selected='selected'";
+        $html .= ">";
+        if ($collapse) $html .= $servicelevels->tag;
+        else $html .= "{$servicelevels->tag} ".priority_name($servicelevels->priority);
+        $html .= "</option>\n";
+    }
+    $html .= "</select>";
+    return $html;
 }
 
 
@@ -2260,7 +2262,8 @@ function maintenance_siteid($id)
 // and just use tags instead
 function servicelevel_id2tag($id)
 {
-    return db_read_column('tag', 'servicelevels', $id);
+    global $dbServiceLevels;
+    return db_read_column('tag', $dbServiceLevels, $id);
 }
 
 
@@ -2277,7 +2280,8 @@ function incidents_remaining($id)
 
 function decrement_free_incidents($siteid)
 {
-    $sql = "UPDATE sites SET freesupport = (freesupport - 1) WHERE id='$siteid'";
+    global $dbSites;
+    $sql = "UPDATE `{$dbSites}` SET freesupport = (freesupport - 1) WHERE id='$siteid'";
     mysql_query($sql);
     if (mysql_affected_rows() < 1) trigger_error("No rows affected while updating freesupport",E_USER_ERROR);
     if (mysql_error()) trigger_error(mysql_error(),E_USER_ERROR);
@@ -2287,7 +2291,8 @@ function decrement_free_incidents($siteid)
 
 function increment_incidents_used($maintid)
 {
-    $sql = "UPDATE maintenance SET incidents_used = (incidents_used + 1) WHERE id='$maintid'";
+    global $dbMaintenance;
+    $sql = "UPDATE `{$dbMaintenance}` SET incidents_used = (incidents_used + 1) WHERE id='$maintid'";
     mysql_query($sql);
     if (mysql_affected_rows() < 1) trigger_error("No rows affected while updating freesupport",E_USER_ERROR);
     if (mysql_error()) trigger_error(mysql_error(),E_USER_ERROR);
@@ -2387,7 +2392,7 @@ function throw_user_error($message, $details='')
 /* sites, with the given name and with the given id selected. */
 function site_drop_down($name, $id)
 {
-    $sql  = "SELECT id, name, department FROM sites ORDER BY name ASC";
+    $sql  = "SELECT id, name, department FROM `{$dbSites}` ORDER BY name ASC";
     $result = mysql_query($sql);
 
     $html = "<select name='{$name}'>\n";

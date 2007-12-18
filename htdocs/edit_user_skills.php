@@ -112,11 +112,11 @@ else
         $expertise=array_unique($expertise);
         foreach ($expertise AS $value)
         {
-            $checksql = "SELECT userid FROM usersoftware WHERE userid='{$_POST['userid']}' AND softwareid='$value' LIMIT 1";
+            $checksql = "SELECT userid FROM `{$dbUserSoftware}` WHERE userid='{$_POST['userid']}' AND softwareid='$value' LIMIT 1";
             $checkresult=mysql_query($checksql);
             if (mysql_num_rows($checkresult)< 1)
             {
-                $sql = "INSERT DELAYED INTO usersoftware (userid, softwareid) VALUES ('{$_POST['userid']}', '$value')";
+                $sql = "INSERT DELAYED INTO `{$dbUserSoftware}` (userid, softwareid) VALUES ('{$_POST['userid']}', '$value')";
                 // echo "$sql <br />";
                 mysql_query($sql);
                 if (mysql_error()) trigger_error("MySQL Query Error ".mysql_error(), E_USER_ERROR);
@@ -132,12 +132,12 @@ else
         foreach ($noskills AS $value)
         {
             // Remove the software listed that we don't support
-            $sql = "DELETE FROM usersoftware WHERE userid='{$_POST['userid']}' AND softwareid='$value' LIMIT 1";
+            $sql = "DELETE FROM `{$dbUserSoftware}` WHERE userid='{$_POST['userid']}' AND softwareid='$value' LIMIT 1";
             mysql_query($sql);
             if (mysql_error()) trigger_error("MySQL Query Error ".mysql_error(), E_USER_ERROR);
 
             // If we are providing backup for a skill we don't have - reset that back to nobody providing backup
-            $sql = "UPDATE usersoftware SET backupid='0' WHERE backupid='{$_POST['userid']}' AND softwareid='$value' LIMIT 1";
+            $sql = "UPDATE `{$dbUserSoftware}` SET backupid='0' WHERE backupid='{$_POST['userid']}' AND softwareid='$value' LIMIT 1";
             mysql_query($sql);
             if (mysql_error()) trigger_error("MySQL Query Error ".mysql_error(), E_USER_ERROR);
         }
@@ -146,7 +146,7 @@ else
     journal(CFG_LOGGING_MAX,'Skillset Updated',"Users Skillset was Changed",CFG_JOURNAL_USER,0);
 
     // Have a look to see if any of the software we support is lacking a backup/substitute engineer
-    $sql = "SELECT userid FROM usersoftware WHERE userid='{$_POST['userid']}' AND backupid='0' LIMIT 1";
+    $sql = "SELECT userid FROM `{$dbUserSoftware}` WHERE userid='{$_POST['userid']}' AND backupid='0' LIMIT 1";
     $result=mysql_query($sql);
     if (mysql_error()) trigger_error("MySQL Query Error ".mysql_error(), E_USER_ERROR);
     $lacking=mysql_num_rows($result);

@@ -32,13 +32,13 @@ if (empty($_REQUEST['mode']))
     echo "<table summary='Site Selection Table' align='center'>";
     echo "<tr><th colspan='2' align='center'>Include</th></tr>";
     echo "<tr><td align='center' colspan='2'>";
-    $sql = "SELECT * FROM sites ORDER BY name";
+    $sql = "SELECT * FROM `{$dbSites}` ORDER BY name";
     $result = mysql_query($sql);
     if (mysql_error()) trigger_error("MySQL Query Error ".mysql_error(), E_USER_ERROR);
     echo "<select name='inc[]' multiple='multiple' size='20'>";
     while ($site = mysql_fetch_object($result))
     {
-        echo "<option value='{$site->id}'>$site->name</option>\n";
+        echo "<option value='{$site->id}'>{$site->name}</option>\n";
     }
     echo "</select>";
     echo "</td>";
