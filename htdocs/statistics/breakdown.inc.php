@@ -46,7 +46,7 @@ echo "<table align='center'>";
 if (mysql_num_rows($result) > 0)
 {
     echo "<tr><th>{$strID}</th><th>{$strTitle}</th><th>{$strOpened}</th><th>{$strClosed}</th><th>{$strOwner}</th><th>{$strCustomer}</th><th>{$strSite}</th></tr>";
-    
+
     while ($row = mysql_fetch_array($result))
     {
         echo "<tr>";
@@ -62,7 +62,8 @@ if (mysql_num_rows($result) > 0)
             echo "<td>".date($CONFIG['dateformat_datetime'],$row['closed'])."</td>";
         }
         echo "<td>".user_realname($row['owner'])."</td>";
-        $sql = "SELECT contacts.forenames,contacts.surname, sites.name FROM contacts,sites WHERE sites.id = contacts.siteid AND contacts.id = {$row['contact']}";
+        $sql = "SELECT c.forenames, c.surname, sites.name FROM `{$dbContacts}` AS c, sites ";
+        $sql .= "WHERE sites.id = c.siteid AND c.id = {$row['contact']}";
         $contactResult = mysql_query($sql);
         if (mysql_error()) trigger_error("MySQL Query Error ".mysql_error(), E_USER_ERROR);
         $contact = mysql_fetch_array($contactResult);
@@ -70,7 +71,7 @@ if (mysql_num_rows($result) > 0)
         echo "<td>{$contact['name']}</td>";
         echo "</tr>";
     }
-    
+
     echo "</table>";
 }
 else

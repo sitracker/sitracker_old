@@ -52,7 +52,7 @@ elseif ($action == "edit" && isset($contact))
 {
     // FIMXE i18n
     // Show edit contact form
-    $sql="SELECT * FROM contacts WHERE id='$contact' ";
+    $sql="SELECT * FROM `{$dbContacts}` WHERE id='$contact' ";
     $contactresult = mysql_query($sql);
     if (mysql_error()) trigger_error("MySQL Query Error ".mysql_error(), E_USER_ERROR);
     while ($contactrow=mysql_fetch_array($contactresult))

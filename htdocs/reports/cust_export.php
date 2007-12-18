@@ -134,15 +134,15 @@ elseif ($_REQUEST['mode']=='report')
     $excsql .= ")";
     }
     */
-    $sql = "SELECT *, contacts.id AS contactid, sites.name AS site, contacts.email AS cemail FROM contacts ";
-    $sql .= "LEFT JOIN sites ON contacts.siteid=sites.id ";
+    $sql = "SELECT *, c.id AS contactid, sites.name AS site, c.email AS cemail FROM `{$dbContacts}` ";
+    $sql .= "LEFT JOIN sites ON c.siteid=sites.id ";
 
     if (empty($incsql)==FALSE OR empty($excsql)==FALSE) $sql .= "WHERE ";
     if (!empty($incsql)) $sql .= "$incsql";
     if (empty($incsql)==FALSE AND empty($excsql)==FALSE) $sql .= " AND ";
     if (!empty($excsql)) $sql .= "$excsql";
 
-    $sql .= " ORDER BY contacts.email ASC ";
+    $sql .= " ORDER BY c.email ASC ";
 
     $result = mysql_query($sql);
     if (mysql_error()) trigger_error("MySQL Query Error ".mysql_error(), E_USER_ERROR);

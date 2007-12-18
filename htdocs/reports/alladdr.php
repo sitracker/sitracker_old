@@ -28,15 +28,15 @@ echo "<h2>Report: Address of ALL Supported Customers</h2>";
 echo "<h3>(Doesn't check for expiry)</h3>";
 
 
-$sql  = "SELECT DISTINCT contacts.address1, contacts.address2, contacts.city, contacts.county, contacts.country, contacts.postcode ";
-$sql.="FROM contacts LEFT JOIN `{$dbContactProducts}` ON contacts.id = `{$dbContactProducts}`.contactid ";
+$sql  = "SELECT DISTINCT c.address1, c.address2, c.city, c.county, c.country, c.postcode ";
+$sql .= "FROM `{$dbContacts}` AS c LEFT JOIN `{$dbContactProducts}` ON c.id = `{$dbContactProducts}`.contactid ";
 //$sql.="WHERE productid='1' OR productid='77' OR productid='55' ";
 //$sql.="ORDER BY email ASC ";
 //$sql.="LIMIT 100";
 $result=mysql_query($sql);
 if (mysql_error()) trigger_error("MySQL Query Error ".mysql_error(), E_USER_ERROR);
 $count=mysql_num_rows($result);
-echo "<b>Found $count records</b><br /><br />";
+echo "<strong>Found $count records</strong><br /><br />";
 
 if ($result)
 {

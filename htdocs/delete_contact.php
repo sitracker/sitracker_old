@@ -51,7 +51,7 @@ if (empty($process))
         </script>
         <?php
         echo "<h2>Delete Contact</h2>\n";
-        $sql="SELECT * FROM contacts WHERE id='$id' ";
+        $sql="SELECT * FROM `{$dbContacts}` WHERE id='$id' ";
         $contactresult = mysql_query($sql);
         if (mysql_error()) trigger_error("MySQL Query Error ".mysql_error(), E_USER_ERROR);
         while ($contactrow=mysql_fetch_array($contactresult))
@@ -89,7 +89,7 @@ if (empty($process))
         {
             echo "<form action=\"{$_SERVER['PHP_SELF']}\" method=\"post\">\n";
             echo "<p align='center'>Before you can delete you must select another contact to receive any incidents and/or maintenance contracts.</p>";
-            $sql  = "SELECT id, forenames, surname, siteid FROM contacts ORDER BY surname ASC";
+            $sql  = "SELECT id, forenames, surname, siteid FROM `{$dbContacts}` ORDER BY surname ASC";
             $result = mysql_query($sql);
             ?>
             <p align='center'>
@@ -156,7 +156,7 @@ else
     }
 
     // do the delete
-    $sql = "DELETE FROM contacts WHERE id='$id' LIMIT 1";
+    $sql = "DELETE FROM `{$dbContacts}` WHERE id='$id' LIMIT 1";
     mysql_query($sql);
     if (mysql_error()) trigger_error("MySQL Query Error ".mysql_error(), E_USER_ERROR);
 

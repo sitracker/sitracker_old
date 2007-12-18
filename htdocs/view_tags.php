@@ -62,7 +62,7 @@ else
             switch ($obj->type)
             {
                 case TAG_CONTACT: //contact
-                    $sql = "SELECT forenames, surname FROM contacts WHERE id = '{$obj->id}'";
+                    $sql = "SELECT forenames, surname FROM `{$dbContacts}` WHERE id = '{$obj->id}'";
                     $resultcon = mysql_query($sql);
                     if (mysql_error()) trigger_error(mysql_error(),E_USER_ERROR);
                     if (mysql_num_rows($resultcon) > 0)

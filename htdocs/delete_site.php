@@ -53,7 +53,7 @@ else
         echo "</table>";
 
         // Look for associated contacts
-        $sql = "SELECT COUNT(id) FROM contacts WHERE siteid='$id'";
+        $sql = "SELECT COUNT(id) FROM `{$dbContacts}` WHERE siteid='$id'";
         $result = mysql_query($sql);
         if (mysql_error()) trigger_error(mysql_error(),E_USER_ERROR);
         list($numcontacts) = mysql_fetch_row($result);

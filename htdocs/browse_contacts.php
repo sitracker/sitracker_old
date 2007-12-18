@@ -31,7 +31,7 @@ if (empty($displayinactive)) $displayinactive = "false";
 if ($submit_value == 'go')
 {
         // build SQL
-        $sql  = "SELECT * FROM contacts ";
+        $sql  = "SELECT * FROM `{$dbContacts}` ";
         $search_string_len=strlen($search_string);
         if ($search_string != '*')
         {
@@ -163,27 +163,27 @@ else
         {
             // Don't  need to do this again, already done above, us the results of that
             // build SQL
-            $sql  = "SELECT contacts.* FROM contacts,sites ";
-            $sql .= "WHERE contacts.siteid = sites.id ";
+            $sql  = "SELECT c.* FROM `{$dbContacts}` AS c, sites ";
+            $sql .= "WHERE c.siteid = sites.id ";
             $search_string_len=strlen($search_string);
             if ($search_string != '*')
             {
                 $sql .= " AND (";
-                if ($search_string_len<=6) $sql .= "contacts.id=('$search_string') OR ";
+                if ($search_string_len<=6) $sql .= "c.id=('$search_string') OR ";
                 if ($search_string_len<=2)
                 {
-                    $sql .= "SUBSTRING(contacts.surname,1,$search_string_len)=('$search_string') ";
+                    $sql .= "SUBSTRING(c.surname,1,$search_string_len)=('$search_string') ";
                 }
                 else
                 {
-                    $sql .= "contacts.surname LIKE '%$search_string%' OR contacts.forenames LIKE '%$search_string%' OR ";
-                    $sql .= "CONCAT(contacts.forenames,' ',contacts.surname) LIKE '%$search_string%'";
+                    $sql .= "c.surname LIKE '%$search_string%' OR c.forenames LIKE '%$search_string%' OR ";
+                    $sql .= "CONCAT(c.forenames,' ',c.surname) LIKE '%$search_string%'";
                 }
                 $sql .= " ) ";
             }
             if ($displayinactive=="false")
             {
-                $sql .= " AND contacts.active = 'true' AND sites.active = 'true'";
+                $sql .= " AND c.active = 'true' AND sites.active = 'true'";
             }
             $sql .= " ORDER BY surname ASC";
 

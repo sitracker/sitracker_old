@@ -34,7 +34,7 @@ switch ($action)
         }
         break;
     case 'contact' :
-        $sql = "SELECT DISTINCT forenames,surname FROM contacts WHERE active='true'";
+        $sql = "SELECT DISTINCT forenames, surname FROM `{$dbContacts}` WHERE active='true'";
         $result = mysql_query($sql);
         if (mysql_error()) trigger_error(mysql_error(),E_USER_ERROR);
         if (mysql_num_rows($result) > 0)

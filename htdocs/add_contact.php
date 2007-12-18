@@ -215,7 +215,7 @@ else
         $_SESSION['formerrors']['add_contact']['siteid'] = $strMustSelectSite;
     }
     // Check this is not a duplicate
-    $sql = "SELECT id FROM contacts WHERE email='$email' AND LCASE(surname)=LCASE('$surname') LIMIT 1";
+    $sql = "SELECT id FROM `{$dbContacts}` WHERE email='$email' AND LCASE(surname)=LCASE('$surname') LIMIT 1";
     $result = mysql_query($sql);
     if (mysql_num_rows($result) >= 1)
     {

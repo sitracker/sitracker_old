@@ -185,7 +185,7 @@ switch ($page)
         }
         else
         {
-            $usersql = "SELECT forenames, surname FROM contacts WHERE id={$_SESSION['contactid']}";
+            $usersql = "SELECT forenames, surname FROM `{$dbContacts}` WHERE id={$_SESSION['contactid']}";
             $result = mysql_query($usersql);
             $user = mysql_fetch_object($result);
             if (mysql_error()) trigger_error("MySQL Query Error ".mysql_error(), E_USER_ERROR);
@@ -220,7 +220,7 @@ switch ($page)
         }
         else
         {
-            $usersql = "SELECT forenames, surname FROM contacts WHERE id={$_SESSION['contactid']}";
+            $usersql = "SELECT forenames, surname FROM `{$dbContacts}` WHERE id={$_SESSION['contactid']}";
             $result = mysql_query($usersql);
             $user = mysql_fetch_object($result);
             if (mysql_error()) trigger_error("MySQL Query Error ".mysql_error(), E_USER_ERROR);
@@ -382,10 +382,10 @@ switch ($page)
         }
 
         echo "<h2>{$strYourDetails}</h2>";
-        $sql = "SELECT contacts.forenames, contacts.surname, contacts.department, contacts.address1, contacts.address2, contacts.county, contacts.country, contacts.postcode, contacts.phone, contacts.fax, contacts.email ";
-        $sql .= "FROM contacts, sites ";
-        $sql .= "WHERE contacts.siteid=sites.id ";
-        $sql .= "AND contacts.id={$_SESSION['contactid']}";
+        $sql = "SELECT c.forenames, c.surname, c.department, c.address1, c.address2, c.county, c.country, c.postcode, c.phone, c.fax, c.email ";
+        $sql .= "FROM `{$dbContacts}` AS c, sites ";
+        $sql .= "WHERE c.siteid = sites.id ";
+        $sql .= "AND c.id={$_SESSION['contactid']}";
         $query = mysql_query($sql);
         if (mysql_error()) trigger_error("MySQL Query Error ".mysql_error(), E_USER_ERROR);
         $user = mysql_fetch_object($query);

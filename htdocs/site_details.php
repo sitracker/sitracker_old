@@ -81,7 +81,7 @@ echo "</p>";
 echo "<h3>{$strContacts}</h3>";
 
 // List Contacts
-$sql="SELECT * FROM contacts WHERE siteid='$id' ORDER BY surname, forenames";
+$sql="SELECT * FROM `{$dbContacts}` WHERE siteid='$id' ORDER BY surname, forenames";
 $contactresult = mysql_query($sql);
 if (mysql_error()) trigger_error("MySQL Query Error ".mysql_error(), E_USER_ERROR);
 $countcontacts = mysql_num_rows($contactresult);

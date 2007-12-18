@@ -217,15 +217,15 @@ elseif ($action=='findcontact')
         }
 
         // Select the contact from the list of contacts as well
-        $sql = "SELECT *, contacts.id AS contactid FROM contacts, sites WHERE contacts.siteid=sites.id ";
+        $sql = "SELECT *, c.id AS contactid FROM `{$dbContacts}` AS c, sites WHERE c.siteid = sites.id ";
         if (empty($contactid))
         {
             $sql .= "AND (surname LIKE '%$search_string%' OR forenames LIKE '%$search_string%' OR sites.name LIKE '%$search_string%' ";
             $sql .= "OR CONCAT_WS(' ', forenames, surname) LIKE '$search_string') ";
         }
-        else $sql .= "AND contacts.id = '$contactid' ";
+        else $sql .= "AND c.id = '$contactid' ";
 
-        $sql .= "ORDER by contacts.surname, contacts.forenames ";
+        $sql .= "ORDER by c.surname, c.forenames ";
         $result=mysql_query($sql);
         if (mysql_error()) trigger_error("MySQL Query Error ".mysql_error(), E_USER_ERROR);
 
@@ -279,14 +279,14 @@ elseif ($action=='findcontact')
         echo "</h2>\n";
         echo "<p align='center'><a href=\"add_incident.php?updateid=$updateid&amp;win={$win}\">{$strSearchAgain}</a></p>";
         // Select the contact from the list of contacts as well
-        $sql = "SELECT *, contacts.id AS contactid FROM contacts, sites WHERE contacts.siteid=sites.id ";
+        $sql = "SELECT *, c.id AS contactid FROM `{$dbContacts}` AS c, sites WHERE c.siteid = sites.id ";
         if (empty($contactid))
         {
             $sql .= "AND (surname LIKE '%$search_string%' OR forenames LIKE '%$search_string%' OR sites.name LIKE '%$search_string%' ";
             $sql .= "OR CONCAT_WS(' ', forenames, surname) = '$search_string' )";
         }
-        else $sql .= "AND contacts.id = '$contactid' ";
-        $sql .= "ORDER by contacts.surname, contacts.forenames ";
+        else $sql .= "AND c.id = '$contactid' ";
+        $sql .= "ORDER by c.surname, c.forenames ";
         $result=mysql_query($sql);
         if (mysql_error()) trigger_error("MySQL Query Error ".mysql_error(), E_USER_ERROR);
 

@@ -570,7 +570,8 @@ function user_holiday_entitlement($userid)
 
 function contact_realname($id)
 {
-    $sql = "SELECT forenames, surname FROM contacts WHERE id='$id'";
+    global $dbContacts;
+    $sql = "SELECT forenames, surname FROM `{$dbContacts}` WHERE id='$id'";
     $result = mysql_query($sql);
     if (mysql_error()) trigger_error(mysql_error(),E_USER_WARNING);
 
@@ -591,8 +592,9 @@ function contact_realname($id)
 
 function contact_site($id)
 {
+    global $dbContacts;
     // note: this returns the site _NAME_ not the siteid - INL 17Apr02
-    $sql = "SELECT sites.name FROM contacts, sites WHERE contacts.siteid=sites.id AND contacts.id='$id'";
+    $sql = "SELECT sites.name FROM `{$dbContacts}` AS c, sites WHERE c.siteid = sites.id AND c.id = '$id'";
     $result = mysql_query($sql);
     if (mysql_error()) trigger_error(mysql_error(),E_USER_WARNING);
 
@@ -676,10 +678,11 @@ function contact_count_open_incidents($id)
 */
 function contact_vcard($id)
 {
+    global $dbContacts;
     $sql = "SELECT *, sites.name AS sitename, sites.address1 AS siteaddress1, sites.address2 AS siteaddress2, ";
     $sql .= "sites.city AS sitecity, sites.county AS sitecounty, sites.country AS sitecountry, sites.postcode AS sitepostcode ";
-    $sql .= "FROM contacts, sites ";
-    $sql .= "WHERE contacts.siteid=sites.id AND contacts.id='$id' LIMIT 1";
+    $sql .= "FROM `{$dbContacts}` AS c, sites ";
+    $sql .= "WHERE c.siteid = sites.id AND c.id = '$id' LIMIT 1";
     $result = mysql_query($sql);
     if (mysql_error()) trigger_error(mysql_error(),E_USER_WARNING);
     $contact = mysql_fetch_object($result);
@@ -967,18 +970,19 @@ function array_drop_down($array, $name, $setting='', $enablefield='')
 */
 function contact_drop_down($name, $id, $showsite=FALSE)
 {
+    global $dbContacts;
     if ($showsite)
     {
-        $sql  = "SELECT contacts.id AS contactid, sites.id AS siteid, surname, forenames, ";
+        $sql  = "SELECT c.id AS contactid, sites.id AS siteid, surname, forenames, ";
         $sql .= "sites.name AS sitename, sites.department AS department ";
-        $sql .= "FROM contacts, sites WHERE contacts.siteid=sites.id AND contacts.active = 'true' ";
+        $sql .= "FROM `{$dbContacts}` AS c, sites WHERE c.siteid = sites.id AND c.active = 'true' ";
         $sql .= "AND sites.active = 'true' ";
         $sql .= "ORDER BY sites.name, surname ASC, forenames ASC";
     }
     else
     {
-        $sql  = "SELECT contacts.id AS contactid, surname, forenames FROM contacts,sites ";
-        $sql .= "WHERE contacts.siteid = sites.id AND sites.active = 'true' AND contacts.active = 'true' ";
+        $sql  = "SELECT c.id AS contactid, surname, forenames FROM `{$dbContacts}` AS c, sites ";
+        $sql .= "WHERE c.siteid = sites.id AND sites.active = 'true' AND c.active = 'true' ";
         $sql .= "ORDER BY forenames ASC, surname ASC";
     }
 
@@ -1012,17 +1016,19 @@ function contact_drop_down($name, $id, $showsite=FALSE)
 /* with the given id selected.                                */
 function contact_site_drop_down($name, $id, $siteid='', $exclude='')
 {
-   $sql  = "SELECT contacts.id AS contactid, forenames, surname, siteid, sites.name AS sitename FROM contacts, sites ";
-   $sql .= "WHERE contacts.siteid=sites.id AND contacts.active = 'true' AND sites.active = 'true' ";
-   if (!empty($siteid)) $sql .= "AND sites.id='$siteid' ";
-   $sql .= "ORDER BY surname ASC";
-   $result = mysql_query($sql);
-   if (mysql_error()) trigger_error(mysql_error(),E_USER_WARNING);
+    global $dbContacts;
+    $sql  = "SELECT c.id AS contactid, forenames, surname, siteid, sites.name AS sitename ";
+    $sql .= "FROM `{$dbContacts}` AS c, sites ";
+    $sql .= "WHERE c.siteid = sites.id AND c.active = 'true' AND sites.active = 'true' ";
+    if (!empty($siteid)) $sql .= "AND sites.id='$siteid' ";
+    $sql .= "ORDER BY surname ASC";
+    $result = mysql_query($sql);
+    if (mysql_error()) trigger_error(mysql_error(),E_USER_WARNING);
 
-   $html = "<select name='$name'>\n";
-   if ($id == 0) $html .= "<option selected='selected' value='0'></option>\n";
-   while ($contacts = mysql_fetch_object($result))
-   {
+    $html = "<select name='$name'>\n";
+    if ($id == 0) $html .= "<option selected='selected' value='0'></option>\n";
+    while ($contacts = mysql_fetch_object($result))
+    {
         if ($contacts->contactid != $exclude)
         {
             $html .= "<option ";
@@ -1031,10 +1037,10 @@ function contact_site_drop_down($name, $id, $siteid='', $exclude='')
             $html .= htmlspecialchars("{$contacts->surname}, {$contacts->forenames} of {$contacts->sitename}"); // FIXME i18n 'of'
             $html .= "</option>\n";
         }
-   }
-   $html .= "</select>\n";
+    }
+    $html .= "</select>\n";
 
-   return $html;
+    return $html;
 }
 
 
@@ -4004,12 +4010,13 @@ function remove_slashes($string)
 */
 function contact_notify_email($contactid)
 {
-    $sql = "SELECT notify_contactid FROM contacts WHERE id='$contactid' LIMIT 1";
+    global $dbContacts;
+    $sql = "SELECT notify_contactid FROM `{$dbContacts}` WHERE id='$contactid' LIMIT 1";
     $result = mysql_query($sql);
     if (mysql_error()) trigger_error(mysql_error(),E_USER_WARNING);
     list($notify_contactid) = mysql_fetch_row($result);
 
-    $sql = "SELECT email FROM contacts WHERE id='$notify_contactid' LIMIT 1";
+    $sql = "SELECT email FROM `{$dbContacts}` WHERE id='$notify_contactid' LIMIT 1";
     $result = mysql_query($sql);
     if (mysql_error()) trigger_error(mysql_error(),E_USER_WARNING);
     list($email) = mysql_fetch_row($result);
@@ -4027,11 +4034,12 @@ function contact_notify_email($contactid)
 */
 function contact_notify($contactid, $level=0)
 {
+    global $dbContacts;
     $notify_contactid = 0;
     if ($level == 0) return $contactid;
     else
     {
-        $sql = "SELECT notify_contactid FROM contacts WHERE id='$contactid' LIMIT 1";
+        $sql = "SELECT notify_contactid FROM `{$dbContacts}` WHERE id='$contactid' LIMIT 1";
         $result = mysql_query($sql);
         if (mysql_error()) trigger_error(mysql_error(),E_USER_WARNING);
         list($notify_contactid) = mysql_fetch_row($result);

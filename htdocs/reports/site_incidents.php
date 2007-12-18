@@ -66,9 +66,9 @@ else
         $csv.="END:,{$enddate}";
         while ($site = mysql_fetch_object($result))
         {
-            $sql = "SELECT count(incidents.id) AS incidentz, sites.name as site FROM contacts, sites, incidents ";
+            $sql = "SELECT count(incidents.id) AS incidentz, sites.name as site FROM `{$dbContacts}` AS c, sites, incidents ";
             //$sql.= "WHERE contacts.siteid=sites.id AND sites.id={$site->id} AND incidents.opened > ($now-60*60*24*365.25) AND incidents.contact=contacts.id ";
-            $sql.= "WHERE contacts.siteid=sites.id AND sites.id={$site->id} AND incidents.opened >".strtotime($startdate)." AND incidents.closed < ".strtotime($enddate)." AND incidents.contact=contacts.id ";
+            $sql.= "WHERE c.siteid = sites.id AND sites.id={$site->id} AND incidents.opened >".strtotime($startdate)." AND incidents.closed < ".strtotime($enddate)." AND incidents.contact=c.id ";
             $sql.= "GROUP BY site";
             //echo $sql;
             $sresult = mysql_query($sql);

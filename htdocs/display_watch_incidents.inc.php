@@ -88,7 +88,7 @@ if (mysql_num_rows($result) > 0)
                 $sql .= "WHERE incidents.contact = contacts.id AND incidents.contact = {$obj->id} ";
                 $sql .= "AND incidents.status != 2 AND incidents.status != 7";
 
-                $lsql = "SELECT forenames, surname FROM contacts WHERE id = {$obj->id}";
+                $lsql = "SELECT forenames, surname FROM `{$dbContacts}` WHERE id = {$obj->id}";
                 $lresult = mysql_query($lsql);
                 if (mysql_error()) trigger_error(mysql_error(),E_USER_ERROR);
                 $lobj = mysql_fetch_object($lresult);

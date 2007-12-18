@@ -40,7 +40,7 @@ if ($output == 'vcard')
 include ('htmlheader.inc.php');
 
 // Display contacts
-$sql="SELECT * FROM contacts WHERE id='$id' ";
+$sql="SELECT * FROM `{$dbContacts}` WHERE id='$id' ";
 $contactresult = mysql_query($sql);
 if (mysql_error()) trigger_error("MySQL Query Error ".mysql_error(), E_USER_WARNING);
 while ($contactrow=mysql_fetch_array($contactresult))

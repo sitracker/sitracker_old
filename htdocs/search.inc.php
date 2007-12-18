@@ -276,7 +276,7 @@ if (!empty($search_string))
         break;
 
         case 'customers':
-            $sql = "SELECT *, contacts.id AS contactid FROM contacts WHERE ";
+            $sql = "SELECT *, c.id AS contactid FROM `{$dbContacts}` AS c WHERE ";
             $sql .= search_build_query("CONCAT(forenames,' ',surname)", $sterms);
 //             echo "<pre>$sql</pre>";
             $result = mysql_query($sql);
