@@ -75,7 +75,7 @@ if (mysql_num_rows($result) > 0)
     echo "<img src='{$CONFIG['application_webpath']}images/icons/{$iconset}/16x16/locked.png' alt='Locked' /> Locked by {$lockedbyname}</div>";
 
     //echo "<pre>".print_r($incoming,true)."</pre>";
-    $usql = "SELECT * FROM updates WHERE id='{$incoming->updateid}'";
+    $usql = "SELECT * FROM `{$dbUpdates}` WHERE id='{$incoming->updateid}'";
     $uresult = mysql_query($usql);
     while ($update = mysql_fetch_object($uresult))
     {

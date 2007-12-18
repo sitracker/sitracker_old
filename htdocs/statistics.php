@@ -33,10 +33,10 @@ function get_sql_statement($startdate,$enddate,$statementnumber,$count=TRUE)
     $sql[1] = "SELECT {$count} FROM `{$dbIncidents}` WHERE closed BETWEEN '{$startdate}' AND '{$enddate}'";
     $sql[2] = "SELECT {$count} FROM `{$dbIncidents}` WHERE lastupdated BETWEEN '{$startdate}' AND '{$enddate}'";
     $sql[3] = "SELECT {$count} FROM `{$dbIncidents}` WHERE opened <= '{$enddate}' AND (closed >= '$startdate' OR closed = 0)";
-    $sql[4] = "SELECT count(*), count(DISTINCT userid) FROM updates WHERE timestamp >= '$startdate' AND timestamp <= '$enddate'";
-    $sql[5] = "SELECT count(DISTINCT softwareid), count(DISTINCT owner) FROM incidents WHERE opened <= '{$enddate}' AND (closed >= '$startdate' OR closed = 0)";
-    $sql[6] = "SELECT {$count} FROM updates WHERE timestamp >= '$startdate' AND timestamp <= '$enddate' AND type='email'";
-    $sql[7] = "SELECT {$count} FROM updates WHERE timestamp >= '$startdate' AND timestamp <= '$enddate' AND type='emailin'";
+    $sql[4] = "SELECT count(*), count(DISTINCT userid) FROM `{$dbUpdates}` WHERE timestamp >= '$startdate' AND timestamp <= '$enddate'";
+    $sql[5] = "SELECT count(DISTINCT softwareid), count(DISTINCT owner) FROM `{$dbIncidents}` WHERE opened <= '{$enddate}' AND (closed >= '$startdate' OR closed = 0)";
+    $sql[6] = "SELECT {$count} FROM `{$dbUpdates}` WHERE timestamp >= '$startdate' AND timestamp <= '$enddate' AND type='email'";
+    $sql[7] = "SELECT {$count} FROM `{$dbUpdates}` WHERE timestamp >= '$startdate' AND timestamp <= '$enddate' AND type='emailin'";
     $sql[8] = "SELECT {$count} FROM `{$dbIncidents}` WHERE opened <= '{$enddate}' AND (closed >= '$startdate' OR closed = 0) AND priority >= 3";
     return $sql[$statementnumber];
 }

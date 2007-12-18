@@ -37,7 +37,7 @@ if (!empty($addword))
 if (!isset($spellid))
 {
     if (!isset($updateid)) throw_error('!Error no updateid or spellid', '');
-    $sql = "SELECT bodytext FROM updates WHERE id='$updateid'";
+    $sql = "SELECT bodytext FROM `{$dbUpdates}` WHERE id='$updateid'";
     $result=mysql_query($sql);
     if (mysql_error()) trigger_error("MySQL Query Error ".mysql_error(), E_USER_ERROR);
     list($bodytext) = mysql_fetch_row($result);

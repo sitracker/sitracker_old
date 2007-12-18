@@ -199,7 +199,7 @@ else
     }
 
     $fifteenminsago = $now - 900;
-    $sql = "SELECT bodytext FROM updates WHERE incidentid = '{$incidentid}' AND timestamp > '{$fifteenminsago}' ORDER BY id DESC LIMIT 1";
+    $sql = "SELECT bodytext FROM `{$dbUpdates}` WHERE incidentid = '{$incidentid}' AND timestamp > '{$fifteenminsago}' ORDER BY id DESC LIMIT 1";
     $result = mysql_query($sql);
     if (mysql_error()) trigger_error(mysql_error(),E_USER_WARNING);
 

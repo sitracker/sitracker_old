@@ -155,7 +155,7 @@ if ($spam_string=$_REQUEST['delete_all_spam'])
         if (mysql_error()) trigger_error("MySQL Query Error ".mysql_error(), E_USER_ERROR);
         if (mysql_affected_rows()==1)
         {
-            $sql = "DELETE FROM updates WHERE id='".$ids[0]."'";
+            $sql = "DELETE FROM `{$dbUpdates}` WHERE id='".$ids[0]."'";
             mysql_query($sql);
             if (mysql_error()) trigger_error("MySQL Query Error ".mysql_error(), E_USER_ERROR);
             $path=$CONFIG['attachment_fspath'].'updates/'.$ids[0];
@@ -169,7 +169,7 @@ if (!empty($selected))
 {
     foreach ($selected as $updateid)
     {
-        $sql = "DELETE FROM updates WHERE id='$updateid'";
+        $sql = "DELETE FROM `{$dbUpdates}` WHERE id='$updateid'";
         mysql_query($sql);
         if (mysql_error()) trigger_error("MySQL Query Error ".mysql_error(), E_USER_ERROR);
 
@@ -221,11 +221,11 @@ if (!empty($selected))
 <?php
 
 // extract updates
-$sql  = 'SELECT updates.id as id, updates.bodytext as bodytext, tempincoming.emailfrom as emailfrom, tempincoming.subject as subject, ';
-$sql .= 'updates.timestamp as timestamp, tempincoming.incidentid as incidentid, tempincoming.id as tempid, tempincoming.locked as locked, ';
-$sql .= 'tempincoming.reason as reason, tempincoming.contactid as contactid, tempincoming.`from` as fromaddr ';
-$sql .= 'FROM updates, tempincoming WHERE updates.incidentid=0 AND tempincoming.updateid=updates.id ';
-$sql .= 'ORDER BY timestamp ASC, id ASC';
+$sql  = "SELECT u.id AS id, u.bodytext AS bodytext, tempincoming.emailfrom AS emailfrom, tempincoming.subject AS subject, ";
+$sql .= "updates.timestamp AS timestamp, tempincoming.incidentid AS incidentid, tempincoming.id AS tempid, tempincoming.locked AS locked, ";
+$sql .= "tempincoming.reason AS reason, tempincoming.contactid AS contactid, tempincoming.`from` AS fromaddr ";
+$sql .= "FROM `{$dbUpdates}` AS u, tempincoming WHERE u.incidentid=0 AND tempincoming.updateid=u.id ";
+$sql .= "ORDER BY timestamp ASC, id ASC";
 $result = mysql_query($sql);
 if (mysql_error()) trigger_error("MySQL Query Error ".mysql_error(), E_USER_ERROR);
 $countresults=mysql_num_rows($result);
@@ -355,7 +355,7 @@ if (mysql_num_rows($resultchase) >= 1)
     $shade='shade1';
     while ($chase = mysql_fetch_object($resultchase))
     {
-        $sql_update = "SELECT * FROM updates WHERE incidentid = {$chase	->id} ORDER BY timestamp DESC LIMIT 1";
+        $sql_update = "SELECT * FROM `{$dbUpdates}` WHERE incidentid = {$chase	->id} ORDER BY timestamp DESC LIMIT 1";
         $result_update = mysql_query($sql_update);
         if (mysql_error()) trigger_error("MySQL Query Error ".mysql_error(), E_USER_ERROR);
 

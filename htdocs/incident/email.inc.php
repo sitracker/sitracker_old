@@ -208,7 +208,7 @@ switch ($step)
 
         if ($CONFIG['auto_chase'] == TRUE)
         {
-            $sql = "SELECT * FROM updates WHERE incidentid = {$id} ORDER BY timestamp DESC LIMIT 1";
+            $sql = "SELECT * FROM `{$dbUpdates}` WHERE incidentid = {$id} ORDER BY timestamp DESC LIMIT 1";
             $result = mysql_query($sql);
             if (mysql_error()) trigger_error("MySQL Query Error ".mysql_error(), E_USER_ERROR);
 

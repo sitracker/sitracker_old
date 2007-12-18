@@ -404,7 +404,7 @@ elseif ($action=='incidentform')
     }
     else
     {
-        $sql="SELECT bodytext FROM updates WHERE id=$updateid";
+        $sql = "SELECT bodytext FROM `{$dbUpdates}` WHERE id=$updateid";
         $result=mysql_query($sql);
         if (mysql_error()) trigger_error("MySQL Query Error ".mysql_error(), E_USER_ERROR);
         $updaterow=mysql_fetch_array($result);

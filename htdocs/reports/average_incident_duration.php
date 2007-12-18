@@ -41,7 +41,8 @@ else $states = explode(',',$_REQUEST['states']);
 */
 function count_incident_stats($incidentid)
 {
-    $sql = "SELECT count(DISTINCT currentowner),count(id) FROM updates WHERE incidentid='$incidentid' AND userid!=0 GROUP BY userid";
+    global $dbUpdates;
+    $sql = "SELECT count(DISTINCT currentowner),count(id) FROM `{$dbUpdates}` WHERE incidentid='$incidentid' AND userid!=0 GROUP BY userid";
     $result = mysql_query($sql);
     if (mysql_error()) trigger_error(mysql_error(),E_USER_ERROR);
     list($unique_users,$num_updates) = mysql_fetch_row($result);
@@ -57,6 +58,7 @@ function count_incident_stats($incidentid)
 */
 function average_incident_duration($start,$end,$states)
 {
+    global $dbIncidents;
     $sql = "SELECT opened, closed, (closed - opened) AS duration_closed, i.id AS incidentid ";
     $sql .= "FROM `{$dbIncidents}` AS i ";
     $sql .= "WHERE status='2' ";

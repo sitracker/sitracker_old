@@ -28,7 +28,7 @@ if (empty($offset)) $offset=0;
 function count_updates($incidentid)
 {
     $count_updates = 0;
-    $sql = "SELECT COUNT(id) FROM updates WHERE incidentid='{$incidentid}'";
+    $sql = "SELECT COUNT(id) FROM `{$dbUpdates}` WHERE incidentid='{$incidentid}'";
     $result = mysql_query($sql);
     if (mysql_error()) trigger_error("MySQL Query Error ".mysql_error(), E_USER_ERROR);
     list ($count_updates) = mysql_fetch_row($result);
@@ -85,7 +85,7 @@ $records = strtolower(cleanvar($_REQUEST['records']));
 
 if ($incidentid=='' OR $incidentid < 1) trigger_error("Incident ID cannot be zero or blank", E_USER_ERROR);
 
-$sql  = "SELECT * FROM updates WHERE incidentid='{$incidentid}' ";
+$sql  = "SELECT * FROM `{$dbUpdates}` WHERE incidentid='{$incidentid}' ";
 // Don't show hidden updates if we're on the customer view tab
 if (strtolower($selectedtab)=='customer_view') $sql .= "AND customervisibility='show' ";
 $sql .= "ORDER BY timestamp {$_SESSION['update_order']}, id {$_SESSION['update_order']} ";

@@ -53,10 +53,10 @@ if (count($slahistory) >= 1)
 else echo "<p align='center'>There is no history to display.<p>";
 
 //start status summary
-$sql = "SELECT updates.id as updatesid, incidentid, userid, type, timestamp, currentstatus, incidentstatus.id, incidentstatus.name as name ";
-$sql .= "FROM updates, incidentstatus ";
-$sql .= " WHERE incidentid='{$incidentid}' ";
-$sql .= " AND updates.currentstatus=incidentstatus.id ";
+$sql = "SELECT u.id AS updatesid, incidentid, userid, type, timestamp, currentstatus, incidentstatus.id, incidentstatus.name AS name ";
+$sql .= "FROM `{$dbUpdates}` AS u, incidentstatus ";
+$sql .= " WHERE incidentid = '{$incidentid}' ";
+$sql .= " AND u.currentstatus=incidentstatus.id ";
 $sql .= " ORDER BY timestamp ASC";
 
 $result = mysql_query($sql);

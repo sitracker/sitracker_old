@@ -884,7 +884,7 @@ function incident_productinfo_html($incidentid)
 */
 function incident_sla_history($incidentid)
 {
-    global $CONFIG, $dbIncidents, $dbServiceLevels;
+    global $CONFIG, $dbIncidents, $dbServiceLevels, $dbUpdates;
     $working_day_mins = ($CONFIG['end_working_day'] - $CONFIG['start_working_day']) / 60;
 
     // Not the most efficient but..
@@ -900,7 +900,7 @@ function incident_sla_history($incidentid)
     $level = mysql_fetch_object($result);
 
     // Loop through the updates in ascending order looking for service level events
-    $sql = "SELECT * FROM updates WHERE type='slamet' AND incidentid='{$incidentid}' ORDER BY id ASC, timestamp ASC";
+    $sql = "SELECT * FROM `{$dbUpdates}` WHERE type='slamet' AND incidentid='{$incidentid}' ORDER BY id ASC, timestamp ASC";
     $result = mysql_query($sql);
     if (mysql_error()) trigger_error("MySQL Query Error ".mysql_error(), E_USER_ERROR);
     $prevtime=0;
@@ -1680,9 +1680,10 @@ function priority_icon($id)
 */
 function incident_lastupdate($id)
 {
+    global $dbUpdates;
     // Find the most recent update
     $sql = "SELECT userid, type, sla, currentowner, currentstatus, LEFT(bodytext,500) AS body, timestamp, nextaction, id ";
-    $sql .= "FROM updates WHERE incidentid='$id' ORDER BY timestamp DESC, id DESC LIMIT 1";
+    $sql .= "FROM `{$dbUpdates}` WHERE incidentid='$id' ORDER BY timestamp DESC, id DESC LIMIT 1";
     $result = mysql_query($sql);
     if (mysql_error()) trigger_error(mysql_error(),E_USER_WARNING);
 
@@ -1696,7 +1697,7 @@ function incident_lastupdate($id)
         {
             //check if the previous update was by userid == 0 if so then we can assume this is a new call
             $sqlPrevious = "SELECT userid, type, currentowner, currentstatus, LEFT(bodytext,500) AS body, timestamp, nextaction, id, sla, type ";
-            $sqlPrevious .= "FROM updates WHERE id < ".$update['id']." AND incidentid = '$id' ORDER BY id DESC";
+            $sqlPrevious .= "FROM `{$dbUpdates}` WHERE id < ".$update['id']." AND incidentid = '$id' ORDER BY id DESC";
             $resultPrevious = mysql_query($sqlPrevious);
             if (mysql_error()) trigger_error(mysql_error(),E_USER_WARNING);
 
@@ -1746,7 +1747,8 @@ function incident_lastupdate($id)
 */
 function incident_firstupdate($id)
 {
-    $sql = "SELECT bodytext FROM updates WHERE incidentid='$id' AND customervisibility='show' ORDER BY timestamp ASC, id ASC LIMIT 1";
+    global $dbUpdates;
+    $sql = "SELECT bodytext FROM `{$dbUpdates}` WHERE incidentid='$id' AND customervisibility='show' ORDER BY timestamp ASC, id ASC LIMIT 1";
     $result = mysql_query($sql);
     if (mysql_error()) trigger_error(mysql_error(),E_USER_WARNING);
     if (mysql_num_rows($result) >= 1)
@@ -2925,7 +2927,8 @@ function getattachmenticon($filename)
 
 function count_incoming_updates()
 {
-    $sql = "SELECT id FROM updates WHERE incidentid=0";
+    global $dbUpdates;
+    $sql = "SELECT id FROM `{$dbUpdates}` WHERE incidentid=0";
     $result=mysql_query($sql);
     $count=mysql_num_rows($result);
     mysql_free_result($result);
@@ -3419,9 +3422,9 @@ function check_email($email, $check_dns = FALSE)
 
 function incident_get_next_target($incidentid)
 {
-    global $now;
+    global $now, $dbUpdates;
     // Find the most recent SLA target that was met
-    $sql = "SELECT sla,timestamp FROM updates WHERE incidentid='$incidentid' AND type='slamet' ORDER BY id DESC LIMIT 1";
+    $sql = "SELECT sla,timestamp FROM `{$dbUpdates}` WHERE incidentid='$incidentid' AND type='slamet' ORDER BY id DESC LIMIT 1";
     $result = mysql_query($sql);
     if (mysql_error()) trigger_error(mysql_error(),E_USER_WARNING);
 
@@ -3517,8 +3520,8 @@ function target_radio_buttons($incidentid)
 
 function incident_get_next_review($incidentid)
 {
-    global $now;
-    $sql = "SELECT timestamp FROM updates WHERE incidentid='$incidentid' AND type='reviewmet' ORDER BY id DESC LIMIT 1";
+    global $now, $dbUpdates;
+    $sql = "SELECT timestamp FROM `{$dbUpdates}` WHERE incidentid='$incidentid' AND type='reviewmet' ORDER BY id DESC LIMIT 1";
     $result = mysql_query($sql);
     if (mysql_error()) trigger_error(mysql_error(),E_USER_WARNING);
 
@@ -3855,8 +3858,10 @@ function is_active_status($status, $states) {
 */
 function calculate_incident_working_time($incidentid, $t1, $t2, $states=array(2,7,8))
 {
-    global $dbHolidays;
-    if ( $t1 > $t2 ) {
+    global $dbHolidays, $dbUpdates;
+
+    if ( $t1 > $t2 )
+    {
         $t3 = $t2;
         $t2 = $t1;
         $t1 = $t3;
@@ -3886,7 +3891,7 @@ function calculate_incident_working_time($incidentid, $t1, $t2, $states=array(2,
         }
     }
 
-    $sql = "SELECT id, currentstatus, timestamp FROM updates WHERE incidentid='$incidentid' ORDER BY id ASC";
+    $sql = "SELECT id, currentstatus, timestamp FROM `{$dbUpdates}` WHERE incidentid='$incidentid' ORDER BY id ASC";
     $result = mysql_query($sql);
     if (mysql_error()) trigger_error(mysql_error(),E_USER_WARNING);
 
@@ -4248,20 +4253,20 @@ function incident_backup_switchover($userid, $accepting)
             if ($assign->assigned=='yes')
             {
                 // Incident has actually been reassigned, so have a look if we can grab it back.
-                $lsql = "SELECT id,status FROM incidents WHERE id='{$assign->incidentid}' AND owner='{$assign->originalowner}' AND towner!=''";
+                $lsql = "SELECT id,status FROM `{$dbIncidents}` WHERE id='{$assign->incidentid}' AND owner='{$assign->originalowner}' AND towner!=''";
                 $lresult = mysql_query($lsql);
                 if (mysql_error()) trigger_error(mysql_error(),E_USER_WARNING);
                 while ($incident = mysql_fetch_object($lresult))
                 {
                     // Find our tempassign
-                    $usql = "SELECT id,currentowner FROM updates WHERE incidentid='{$incident->id}' AND userid='0' AND type='tempassigning' ORDER BY id DESC LIMIT 1";
+                    $usql = "SELECT id,currentowner FROM `{$dbUpdates}` WHERE incidentid='{$incident->id}' AND userid='0' AND type='tempassigning' ORDER BY id DESC LIMIT 1";
                     $uresult = mysql_query($usql);
                     if (mysql_error()) trigger_error(mysql_error(),E_USER_WARNING);
                     list($prevassignid,$tempowner) = mysql_fetch_row($uresult);
 
                     // Look to see if the temporary owner has updated the incident since we temp assigned it
                     // If he has, we leave it in his queue
-                    $usql = "SELECT id FROM updates WHERE incidentid='{$incident->id}' AND id > '{$prevassignid}' AND userid='$tempowner' LIMIT 1 ";
+                    $usql = "SELECT id FROM `{$dbUpdates}` WHERE incidentid='{$incident->id}' AND id > '{$prevassignid}' AND userid='$tempowner' LIMIT 1 ";
                     $uresult = mysql_query($usql);
                     if (mysql_error()) trigger_error(mysql_error(),E_USER_WARNING);
                     if (mysql_num_rows($uresult) < 1)
@@ -4296,7 +4301,7 @@ function incident_backup_switchover($userid, $accepting)
             else
             {
                 // now have a look to see if the reassign was completed
-                $ssql = "SELECT id FROM incidents WHERE id='{$assign->incidentid}' LIMIT 1";
+                $ssql = "SELECT id FROM `{$dbIncidents}` WHERE id='{$assign->incidentid}' LIMIT 1";
                 $sresult = mysql_query($ssql);
                 if (mysql_error()) trigger_error(mysql_error(),E_USER_WARNING);
                 if (mysql_num_rows($sresult) >= 1)

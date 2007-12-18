@@ -51,7 +51,7 @@ if (!empty($userid))
     if (mysql_num_rows($result)>=1) $errors++;
 
     // Check there are no updates by this user
-    $sql = "SELECT id FROM updates WHERE userid=$userid LIMIT 1";
+    $sql = "SELECT id FROM `{$dbUpdates}` WHERE userid=$userid LIMIT 1";
     $result = mysql_query($sql);
     if (mysql_num_rows($result)>=1) $errors++;
 

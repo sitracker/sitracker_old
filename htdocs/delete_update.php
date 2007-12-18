@@ -24,7 +24,7 @@ $tempid = cleanvar($_REQUEST['tempid']);
 if (empty($updateid)) throw_error('!Error: Update ID was not set, not deleting!', $updateid);
 
 // We delete using ID and timestamp to make sure we dont' delete the wrong update by accident
-$sql = "DELETE FROM updates WHERE id='$updateid' AND timestamp='$timestamp'";  // We might in theory have more than one ...
+$sql = "DELETE FROM `{$dbUpdates}` WHERE id='$updateid' AND timestamp='$timestamp'";  // We might in theory have more than one ...
 mysql_query($sql);
 if (mysql_error()) trigger_error("MySQL Query Error ".mysql_error(), E_USER_ERROR);
 

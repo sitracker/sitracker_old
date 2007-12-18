@@ -43,7 +43,7 @@ if ($incidentid=='')
     </div>
     <?php
 
-    $sql  = "SELECT * FROM updates WHERE id='$updateid' ";
+    $sql  = "SELECT * FROM `{$dbUpdates}` WHERE id='$updateid' ";
     $result = mysql_query($sql);
     if (mysql_error()) trigger_error("MySQL Query Error ".mysql_error(), E_USER_ERROR);
 
@@ -150,7 +150,7 @@ else
     if (incident_open($incidentid) == "Yes")
     {
         // retrieve the update body so that we can insert time headers
-        $sql = "SELECT incidentid, bodytext, timestamp FROM updates WHERE id='$updateid'";
+        $sql = "SELECT incidentid, bodytext, timestamp FROM `{$dbUpdates}` WHERE id='$updateid'";
         $uresult=mysql_query($sql);
         if (mysql_error()) trigger_error("MySQL Query Error ".mysql_error(), E_USER_ERROR);
         list($oldincidentid, $bodytext, $timestamp)=mysql_fetch_row($uresult);

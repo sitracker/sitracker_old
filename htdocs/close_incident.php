@@ -172,7 +172,7 @@ if (empty($_REQUEST['process']))
     echo "<textarea id='summary' name='summary' cols='40' rows='8' onfocus=\"if (this.enabled) { this.value = saveValue; ";
     echo "setTimeout('document.articlform.summary.blur()',1); } else saveValue=this.value;\">";
     //  style="display: none;"
-    $sql = "SELECT * FROM updates WHERE incidentid='$id' AND type='probdef' ORDER BY timestamp ASC";
+    $sql = "SELECT * FROM `{$dbUpdates}` WHERE incidentid='$id' AND type='probdef' ORDER BY timestamp ASC";
     $result = mysql_query($sql);
     if (mysql_error()) trigger_error("MySQL Query Error ".mysql_error(), E_USER_ERROR);
     while ($row = mysql_fetch_object($result))
@@ -199,7 +199,7 @@ if (empty($_REQUEST['process']))
 
     <?php
     echo "<td><textarea id='solution' name='solution' cols='40' rows='8' onfocus=\"if (this.enabled) { this.value = saveValue; setTimeout('document.articleform.solution.blur()',1); } else saveValue=this.value;\">";
-    $sql = "SELECT * FROM updates WHERE incidentid='$id' AND type='solution' ORDER BY timestamp ASC";
+    $sql = "SELECT * FROM `{$dbUpdates}` WHERE incidentid='$id' AND type='solution' ORDER BY timestamp ASC";
     $result = mysql_query($sql);
     if (mysql_error()) trigger_error("MySQL Query Error ".mysql_error(), E_USER_ERROR);
     while ($row = mysql_fetch_object($result))

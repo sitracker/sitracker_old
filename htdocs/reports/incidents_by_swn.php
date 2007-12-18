@@ -143,7 +143,8 @@ else
             {
                 $datestr = date("M y",$obj->opened);
 
-                $sqlL = "SELECT count(id) FROM updates WHERE updates.bodytext LIKE \"External ID%\" AND incidentid = '".$obj->id."'";
+                // FIXME this sql uses the body to find out which incidents have been escalated
+                $sqlL = "SELECT count(id) FROM `{$dbUpdates}` AS u WHERE u.bodytext LIKE \"External ID%\" AND incidentid = '".$obj->id."'";
                 $resultL = mysql_query($sqlL);
                 if (mysql_error()) trigger_error("MySQL Query Error ".mysql_error(), E_USER_ERROR);
                 list($numrowsL) = mysql_fetch_row($resultL);
