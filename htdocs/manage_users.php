@@ -19,8 +19,8 @@ require ('auth.inc.php');
 
 include ('htmlheader.inc.php');
 
-$sql  = "SELECT *,users.id AS userid FROM users, roles ";
-$sql .= "WHERE users.roleid=roles.id ";
+$sql  = "SELECT *,u.id AS userid FROM `{$dbUsers}` AS u, `{$dbRoles}` AS r ";
+$sql .= "WHERE u.roleid = r.id ";
 
 // sort users by realname by default
 if (!isset($sort) || $sort == "realname") $sql .= " ORDER BY IF(status> 0,1,0) DESC, realname ASC";

@@ -299,8 +299,9 @@ function software_name($softwareid)
 */
 function user_id($username, $password)
 {
+    global $dbUsers;
     // extract user
-    $sql  = "SELECT id FROM users ";
+    $sql  = "SELECT id FROM `{$dbUsers}` ";
     $sql .= "WHERE username='$username' AND password='$password'";
     $result = mysql_query($sql);
     if (mysql_error()) trigger_error(mysql_error(),E_USER_WARNING);
@@ -335,13 +336,14 @@ function user_realname($id, $allowhtml=FALSE)
     global $update_body;
     global $incidents;
     global $CONFIG;
+    global $dbUsers;
     if ($id >= 1)
     {
         if ($id == $_SESSION['userid']) return $_SESSION['realname'];
         else
         {
             // return db_read_column('realname', 'users', $id);
-            $sql = "SELECT realname, status FROM users WHERE id='$id' LIMIT 1";
+            $sql = "SELECT realname, status FROM `{$dbUsers}` WHERE id='$id' LIMIT 1";
             $result = mysql_query($sql);
             if (mysql_error()) trigger_error(mysql_error(),E_USER_WARNING);
             list($realname, $status)=mysql_fetch_row($result);
@@ -3108,20 +3110,21 @@ function holidaytype_drop_down($name, $id)
 // on the date specified
 function check_group_holiday($userid, $date, $length='day')
 {
+    global $dbUsers, $dbHolidays;
     // get groupid
-    $sql = "SELECT groupid FROM users WHERE id='$userid' ";
+    $sql = "SELECT groupid FROM `{$dbUsers}` WHERE id='$userid' ";
     $result = mysql_query($sql);
     if (mysql_error()) trigger_error(mysql_error(),E_USER_WARNING);
     while ($group = mysql_fetch_object($result))
     {
         // list group members
-        $msql = "SELECT id AS userid FROM users WHERE groupid='{$group->groupid}' AND id!='$userid' ";
+        $msql = "SELECT id AS userid FROM `{$dbUsers}` WHERE groupid='{$group->groupid}' AND id!='$userid' ";
         $mresult = mysql_query($msql);
         if (mysql_error()) trigger_error(mysql_error(),E_USER_WARNING);
         while ($member = mysql_fetch_object($mresult))
         {
             // check to see if this group member has holiday
-            $hsql = "SELECT * FROM holidays WHERE userid='{$member->userid}' AND startdate='{$date}' ";
+            $hsql = "SELECT * FROM `{$dbHolidays}` WHERE userid='{$member->userid}' AND startdate='{$date}' ";
             if ($length=='am' || $length=='pm') $hsql .= "AND length = '$length' || length = 'day' ";
             $hresult = mysql_query($hsql);
             if (mysql_error()) trigger_error(mysql_error(),E_USER_WARNING);
@@ -4069,10 +4072,11 @@ function contact_notify($contactid, $level=0)
 */
 function software_backup_dropdown($name, $userid, $softwareid, $backupid)
 {
-    $sql = "SELECT *, users.id AS userid FROM usersoftware, software, users WHERE usersoftware.softwareid=software.id ";
+    global $dbUsers;
+    $sql = "SELECT *, u.id AS userid FROM usersoftware, software, `{$dbUsers}` AS u WHERE usersoftware.softwareid=software.id ";
     $sql .= "AND software.id='$softwareid' ";
-    $sql .= "AND userid!='{$userid}' AND users.status > 0 ";
-    $sql .= "AND usersoftware.userid=users.id ";
+    $sql .= "AND userid!='{$userid}' AND u.status > 0 ";
+    $sql .= "AND usersoftware.userid = u.id ";
     $sql .= " ORDER BY realname";
     $result = mysql_query($sql);
     if (mysql_error()) trigger_error(mysql_error(),E_USER_ERROR);
@@ -4314,7 +4318,7 @@ function incident_backup_switchover($userid, $accepting)
 */
 function suggest_reassign_userid($incidentid, $exceptuserid=0)
 {
-    global $now;
+    global $now, $dbUsers, $dbIncidents;
     $sql = "SELECT product, softwareid, priority, contact, owner FROM incidents WHERE id={$incidentid} LIMIT 1";
     $result = mysql_query($sql);
     if (mysql_error()) trigger_error(mysql_error(),E_USER_ERROR);
@@ -4330,19 +4334,19 @@ function suggest_reassign_userid($incidentid, $exceptuserid=0)
         // Find the users with this skill (or all users)
         if (!empty($incident->softwareid))
         {
-            $sql = "SELECT usersoftware.userid, users.status, users.lastseen FROM usersoftware, users ";
-            $sql .= "WHERE users.id=usersoftware.userid AND users.status > 0 AND users.accepting='Yes' ";
+            $sql = "SELECT usersoftware.userid, u.status, u.lastseen FROM usersoftware, `{$dbUsers}` AS u ";
+            $sql .= "WHERE u.id = usersoftware.userid AND u.status > 0 AND u.accepting='Yes' ";
             if ($exceptuserid > 0) $sql .= "AND NOT users.id = '$exceptuserid' ";
             $sql .= "AND softwareid={$incident->softwareid}";
         }
-        else $sql = "SELECT id AS userid, status, lastseen FROM users WHERE status > 0 AND users.accepting='Yes'";
+        else $sql = "SELECT id AS userid, status, lastseen FROM `{$dbUsers}` WHERE status > 0 AND users.accepting='Yes'";
         $result = mysql_query($sql);
         if (mysql_error()) trigger_error(mysql_error(),E_USER_ERROR);
 
         // Fallback to all users if we have no results from above
         if (mysql_num_rows($result) < 1)
         {
-            $sql = "SELECT id AS userid, status, lastseen FROM users WHERE status > 0 ";
+            $sql = "SELECT id AS userid, status, lastseen FROM `{$dbUsers}` WHERE status > 0 ";
             $result = mysql_query($sql);
             if (mysql_error()) trigger_error(mysql_error(),E_USER_ERROR);
         }
@@ -4370,7 +4374,7 @@ function suggest_reassign_userid($incidentid, $exceptuserid=0)
             }
 
             // Have a look at the users incident queue (owned)
-            $qsql = "SELECT id, priority, lastupdated, status, softwareid FROM incidents WHERE owner={$user->userid}";
+            $qsql = "SELECT id, priority, lastupdated, status, softwareid FROM `{$dbIncidents}` WHERE owner={$user->userid}";
             $qresult = mysql_query($qsql);
             if (mysql_error()) trigger_error(mysql_error(),E_USER_ERROR);
             $queue_size = mysql_num_rows($qresult);

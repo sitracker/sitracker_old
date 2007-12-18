@@ -119,7 +119,7 @@ switch ($action)
 
         echo "<form name='assignform' action='{$_SERVER['PHP_SELF']}?id={$id}' method='post'>";
 
-        $sql = "SELECT * FROM users WHERE status!=0 ";
+        $sql = "SELECT * FROM `{$dbUsers}` WHERE status!=0 ";
         $sql .= "AND NOT id=$incident->owner ";
         if ($suggested) $sql .= "AND NOT id='$suggested' ";
         if (!$forcepermission) $sql .= "AND accepting='Yes' ";
@@ -161,7 +161,7 @@ switch ($action)
         if ($suggested)
         {
             // Suggested user is shown as the first row
-            $sugsql = "SELECT * FROM users WHERE id='$suggested' LIMIT 1";
+            $sugsql = "SELECT * FROM `{$dbUsers}` WHERE id='$suggested' LIMIT 1";
             $sugresult = mysql_query($sugsql);
             if (mysql_error()) trigger_error("MySQL Query Error ".mysql_error(), E_USER_ERROR);
             $suguser = mysql_fetch_object($sugresult);

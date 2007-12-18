@@ -27,7 +27,7 @@ function dashboard_user_incidents($row,$dashboardid)
     // If the user is passed as a username lookup the userid
     if (!is_number($user) AND $user!='current' AND $user!='all')
     {
-        $usql = "SELECT id FROM users WHERE username='$user' LIMIT 1";
+        $usql = "SELECT id FROM `{$dbUsers}` WHERE username='$user' LIMIT 1";
         $uresult = mysql_query($usql);
         if (mysql_error()) trigger_error(mysql_error(),E_USER_WARNING);
         if (mysql_num_rows($uresult) >= 1) list($user) = mysql_fetch_row($uresult);

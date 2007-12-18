@@ -296,7 +296,7 @@ function appointment_popup($mode, $year, $month, $day, $time, $group, $user)
 */
 function draw_chart($mode, $year, $month='', $day='', $groupid='', $userid='')
 {
-    global $plugin_calendar, $sit;
+    global $plugin_calendar, $sit, $dbUsers;
     if (empty($day)) $day = date('d');
 
     if ($mode=='month')
@@ -347,7 +347,7 @@ function draw_chart($mode, $year, $month='', $day='', $groupid='', $userid='')
     $holidaytype[5] = $GLOBALS['strCompassionateLeave'];
 
     $html .= "<table align='center' border='1' cellpadding='0' cellspacing='0' style='border-collapse:collapse; border-color: #AAA; width: 99%;'>";
-    $usql  = "SELECT * FROM users WHERE status!=0 ";
+    $usql  = "SELECT * FROM `{$dbUsers}` WHERE status!=0 ";
     if ($numgroups > 1) $usql .= "AND groupid > 0 ";  // there is always 1 group (ie. 'none')
     if (!empty($user)) $usql .= "AND id={$user} ";
     $usql .= "ORDER BY groupid, realname";  // status=0 means left company

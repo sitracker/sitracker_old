@@ -28,7 +28,7 @@ if (empty($mode))
 {
     include ('htmlheader.inc.php');
 
-    $sql = "SELECT * FROM users WHERE id='$userid' LIMIT 1";
+    $sql = "SELECT * FROM `{$dbUsers}` WHERE id='$userid' LIMIT 1";
     $result = mysql_query($sql);
     if (mysql_error()) trigger_error("MySQL Query Error ".mysql_error(), E_USER_ERROR);
 
@@ -266,7 +266,7 @@ elseif ($mode=='save')
         @mysql_query($sql);
     }
     // Check email address is unique (discount disabled accounts)
-    $sql = "SELECT COUNT(id) FROM users WHERE status > 0 AND email='$email'";
+    $sql = "SELECT COUNT(id) FROM `{$dbUsers}` WHERE status > 0 AND email='$email'";
     $result = mysql_query($sql);
     if (mysql_error()) trigger_error(mysql_error(),E_USER_ERROR);
     list($countexisting) = mysql_fetch_row($result);

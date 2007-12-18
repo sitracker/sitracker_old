@@ -99,7 +99,7 @@ elseif ($action == "edit" && (!empty($user) OR !empty($role)))
     if (!empty($user)) echo "<p align='center'>Permissions that are inherited from the users role can not be changed.</p>";
 
     // Next lookup the permissions
-    $sql = "SELECT * FROM users, rolepermissions WHERE users.roleid=rolepermissions.roleid AND users.id = '$user' AND granted='true'";
+    $sql = "SELECT * FROM `{$dbUsers}` AS u, rolepermissions WHERE u.roleid = rolepermissions.roleid AND u.id = '$user' AND granted='true'";
     $result = mysql_query($sql);
     if (mysql_error()) trigger_error(mysql_error(),E_USER_ERROR);
     $userrolepermission=array();

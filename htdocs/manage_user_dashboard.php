@@ -19,7 +19,7 @@ require ('auth.inc.php');
 
 $dashboardid = $_REQUEST['id'];
 
-$sql = "SELECT dashboard FROM users WHERE id = '".$_SESSION['userid']."'";
+$sql = "SELECT dashboard FROM `{$dbUsers}` WHERE id = '".$_SESSION['userid']."'";
 $result = mysql_query($sql);
 if (mysql_error()) trigger_error(mysql_error(),E_USER_WARNING);
 

@@ -145,7 +145,7 @@ switch ($action)
                             $name = $iobj->forenames.' '.$iobj->surname;
                             break;
                         case 2: //Engineer
-                            $sql = "SELECT realname FROM users WHERE id = {$obj->id}";
+                            $sql = "SELECT realname FROM `{$dbUsers}` WHERE id = {$obj->id}";
                             $iresult = mysql_query($sql);
                             if (mysql_error()) trigger_error(mysql_error(),E_USER_ERROR);
                             $iobj = mysql_fetch_object($iresult);

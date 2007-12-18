@@ -62,10 +62,10 @@ if (!empty($userid))
     if ($errors==0)
     {
         $sql = Array();
-        $sql[] = "DELETE FROM users WHERE id = $userid LIMIT 1";
-        $sql[] = "DELETE FROM holidays WHERE userid = $userid";
-        $sql[] = "DELETE FROM usergroups WHERE userid = $userid";
-        $sql[] = "DELETE FROM userpermissions WHERE userid = $userid";
+        $sql[] = "DELETE FROM `{$dbUsers}` WHERE id = $userid LIMIT 1";
+        $sql[] = "DELETE FROM `{$dbHolidays}` WHERE userid = $userid";
+        $sql[] = "DELETE FROM `{$dbUserGroups}` WHERE userid = $userid";
+        $sql[] = "DELETE FROM `{$dbUserPermissions}` WHERE userid = $userid";
 
         foreach ($sql as $query)
         {

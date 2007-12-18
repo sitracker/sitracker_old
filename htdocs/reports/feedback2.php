@@ -28,7 +28,7 @@ echo "<h2>Average <a href='{$CONFIG['application_webpath']}reports/feedback.php'
 echo "<p>This report shows average customer responses and a percentage figure indicating the overall positivity of customers toward ";
 echo "incidents logged by the user(s) shown:</p>";
 
-$usql = "SELECT * FROM users WHERE status > 0 ";
+$usql = "SELECT * FROM `{$dbUsers}` WHERE status > 0 ";
 if ($_REQUEST['userid']>0) $usql .= "AND id='".mysql_real_escape_string($_REQUEST['userid'])."' ";
 else $usql .= "ORDER BY username";
 $uresult = mysql_query($usql);

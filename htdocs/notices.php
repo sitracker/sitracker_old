@@ -56,7 +56,7 @@ elseif ($action == 'post')
     $gid = md5($text);
 
     //post new notice
-    $sql = "SELECT id FROM users WHERE status != 0";
+    $sql = "SELECT id FROM `{$dbUsers}` WHERE status != 0";
     $result = mysql_query($sql);
     while ($user = mysql_fetch_object($result))
     {

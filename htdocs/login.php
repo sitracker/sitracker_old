@@ -39,7 +39,7 @@ elseif (authenticate($username, $password) == 1)
     $_SESSION['auth'] = TRUE;
 
     // Retrieve users profile
-    $sql = "SELECT * FROM users WHERE username='$username' AND password='$password' LIMIT 1";
+    $sql = "SELECT * FROM `{$dbUsers}` WHERE username='$username' AND password='$password' LIMIT 1";
     $result = mysql_query($sql);
     if (mysql_error()) trigger_error(mysql_error(), E_USER_ERROR);
     if (mysql_num_rows($result) < 1) trigger_error("No such user", E_USER_ERROR);
@@ -75,8 +75,8 @@ elseif (authenticate($username, $password) == 1)
     // The zero permission is added to all users, zero means everybody can access
     $userpermissions[]=0;
     // First lookup the role permissions
-    $sql = "SELECT * FROM users, rolepermissions WHERE users.roleid=rolepermissions.roleid ";
-    $sql .= "AND users.id = '{$_SESSION['userid']}' AND granted='true'";
+    $sql = "SELECT * FROM `{$dbUsers}` AS u, rolepermissions WHERE u.roleid = rolepermissions.roleid ";
+    $sql .= "AND u.id = '{$_SESSION['userid']}' AND granted='true'";
     $result = mysql_query($sql);
     if (mysql_error()) trigger_error(mysql_error(),E_USER_ERROR);
     if (mysql_num_rows($result) >= 1)

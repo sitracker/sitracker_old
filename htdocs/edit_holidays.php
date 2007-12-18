@@ -24,7 +24,7 @@ switch ($_REQUEST['action'])
         $archivedate = strtotime($_REQUEST['archivedate']);
         if ($archivedate < 1000) $archivedate = $now;
         $default_entitlement = cleanvar($_REQUEST['default_entitlement']);
-        $sql = "SELECT * FROM users WHERE status >= 1";
+        $sql = "SELECT * FROM `{$dbUsers}` WHERE status >= 1";
         $result = mysql_query($sql);
         if (mysql_error()) trigger_error(mysql_error(),E_USER_WARNING);
         while ($users = mysql_fetch_object($result))
@@ -60,7 +60,7 @@ switch ($_REQUEST['action'])
         include ('htmlheader.inc.php');
         echo "<h2>$title</h2>";
 
-        $sql = "SELECT * FROM users WHERE status >= 1 ORDER BY realname ASC";
+        $sql = "SELECT * FROM `{$dbUsers}` WHERE status >= 1 ORDER BY realname ASC";
         $result = mysql_query($sql);
         if (mysql_error()) trigger_error(mysql_error(),E_USER_WARNING);
 

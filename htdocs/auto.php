@@ -166,7 +166,7 @@ if ($actions[0]=='' OR in_array('SetUserStatus',$actions))
         }
     }
     // Find users who are set away but have no entry in the holiday calendar
-    $sql = "SELECT * FROM users WHERE status=5 OR status=7 OR status=8 OR status=9 ";
+    $sql = "SELECT * FROM `{$dbUsers}` WHERE status=5 OR status=7 OR status=8 OR status=9 ";
     $result = mysql_query($sql);
     if (mysql_error()) trigger_error(mysql_error(),E_USER_ERROR);
 }

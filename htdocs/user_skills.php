@@ -24,7 +24,7 @@ $sort = cleanvar($_REQUEST['sort']);
 
 include ('htmlheader.inc.php');
 
-$sql  = "SELECT * FROM users WHERE status!=0";  // status=0 means account disabled
+$sql  = "SELECT * FROM `{$dbUsers}` WHERE status!=0";  // status=0 means account disabled
 
 // sort users by realname by default
 if (empty($sort) || $sort == "realname")  $sql .= " ORDER BY realname ASC";

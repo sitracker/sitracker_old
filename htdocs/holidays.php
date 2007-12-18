@@ -143,7 +143,7 @@ echo "</table>\n";
 if ($user==$sit[2])
 {
     // Only show when viewing your own holiday page
-    $sql  = "SELECT * FROM users WHERE status!=0 AND status!=1 ";  // status=0 means left company
+    $sql  = "SELECT * FROM `{$dbUsers}` WHERE status!=0 AND status!=1 ";  // status=0 means left company
     $result = mysql_query($sql);
     if (mysql_error()) trigger_error("MySQL Query Error ".mysql_error(), E_USER_ERROR);
     echo "<table align='center' width='450'>";

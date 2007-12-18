@@ -100,7 +100,7 @@ if (mysql_num_rows($result) > 0)
                 $sql .= "WHERE i.contact = contacts.id AND (i.owner = {$obj->id} OR i.towner = {$obj->id}) ";
                 $sql .= "AND i.status != 2 AND i.status != 7";
 
-                $lsql = "SELECT realname FROM users WHERE id = {$obj->id}";
+                $lsql = "SELECT realname FROM `{$dbUsers}` WHERE id = {$obj->id}";
                 $lresult = mysql_query($lsql);
                 if (mysql_error()) trigger_error(mysql_error(),E_USER_ERROR);
                 $lobj = mysql_fetch_object($lresult);

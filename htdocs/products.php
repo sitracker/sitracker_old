@@ -95,7 +95,7 @@ if (empty($productid) AND $display!='skills')
         echo "<tr><th>{$strSkill}</th><th>{$strLifetime}</th><th>Engineers</th><th>{$strIncidents}</th><th>{$strOperation}</th></tr>";
         while ($software = mysql_fetch_array($result))
         {
-            $ssql = "SELECT COUNT(userid) FROM usersoftware, users WHERE usersoftware.userid = users.id AND users.status!=0 AND usersoftware.softwareid='{$software['id']}'";
+            $ssql = "SELECT COUNT(userid) FROM usersoftware, `{$dbUsers}` AS u WHERE usersoftware.userid = users.id AND u.status!=0 AND usersoftware.softwareid='{$software['id']}'";
             $sresult = mysql_query($ssql);
             if (mysql_error()) trigger_error(mysql_error(),E_USER_ERROR);
             list($countengineers) = mysql_fetch_row($sresult);
@@ -141,7 +141,7 @@ elseif (empty($productid) AND ($display=='skills' OR $display=='software'))
         while ($software = mysql_fetch_object($result))
         {
 
-            $ssql = "SELECT COUNT(userid) FROM usersoftware, users WHERE usersoftware.userid = users.id AND users.status!=0 AND usersoftware.softwareid='{$software->id}'";
+            $ssql = "SELECT COUNT(userid) FROM usersoftware, `{$dbUsers}` AS u WHERE usersoftware.userid = u.id AND u.status!=0 AND usersoftware.softwareid='{$software->id}'";
             $sresult = mysql_query($ssql);
             if (mysql_error()) trigger_error(mysql_error(),E_USER_ERROR);
             list($countengineers) = mysql_fetch_row($sresult);
@@ -214,7 +214,7 @@ else
                 $shade='shade2';
                 while ($software=mysql_fetch_array($swresult))
                 {
-                    $ssql = "SELECT COUNT(userid) FROM usersoftware, users WHERE usersoftware.userid = users.id AND users.status!=0 AND usersoftware.softwareid='{$software['id']}'";
+                    $ssql = "SELECT COUNT(userid) FROM usersoftware, `{$dbUsers}` AS u WHERE usersoftware.userid = u.id AND u.status!=0 AND usersoftware.softwareid='{$software['id']}'";
                     $sresult = mysql_query($ssql);
                     if (mysql_error()) trigger_error(mysql_error(),E_USER_ERROR);
                     list($countengineers) = mysql_fetch_row($sresult);

@@ -68,27 +68,13 @@ if ($numgroups >= 1)
     echo "</form>\n<br />";
 }
 
-
-/*$sql = "SELECT users.id, users.realname FROM users, usersoftware LEFT JOIN software ON  ";
-if (empty($legacy)) $sql .= " ((software.lifetime_end > NOW() OR software.lifetime_end = '0000-00-00' OR software.lifetime_end is NULL) AND (";
-else $sql .= "(";
-$sql .= "software.id = usersoftware.softwareid )";
-if (empty($legacy)) $sql .= ")";
-
-$sql .= "WHERE users.id = usersoftware.userid AND users.status <> 0 ";
-
-if ($numgroups >= 1 AND $filtergroup=='0') $sql .= "AND (users.groupid='0' OR users.groupid='' OR users.groupid IS NULL) ";
-elseif ($numgroups < 1 OR $filtergroup=='all') { $sql .= "AND 1=1 "; }
-else $sql .= "AND users.groupid='{$filtergroup}'";
-
-$sql .= "GROUP BY users.id ORDER BY users.realname";*/
-$sql = "SELECT users.id, users.realname,software.name FROM usersoftware RIGHT JOIN software ON (usersoftware.softwareid = software.id) LEFT JOIN users ON usersoftware.userid = users.id ";
-$sql .= " WHERE (users.status <> 0 OR users.status IS NULL) ";
+$sql = "SELECT u.id, u.realname, software.name FROM usersoftware RIGHT JOIN software ON (usersoftware.softwareid = software.id) LEFT JOIN `{$dbUsers}` AS u ON usersoftware.userid = u.id ";
+$sql .= " WHERE (u.status <> 0 OR u.status IS NULL) ";
 if (empty($legacy)) $sql .= "AND (software.lifetime_end > NOW() OR software.lifetime_end = '0000-00-00' OR software.lifetime_end is NULL) ";
-if ($numgroups >= 1 AND $filtergroup=='0') $sql .= "AND (users.groupid='0' OR users.groupid='' OR users.groupid IS NULL) ";
+if ($numgroups >= 1 AND $filtergroup=='0') $sql .= "AND (u.groupid='0' OR u.groupid='' OR u.groupid IS NULL) ";
 elseif ($numgroups < 1 OR $filtergroup=='all') { $sql .= "AND 1=1 "; }
-else $sql .= "AND (users.groupid='{$filtergroup}' OR users.groupid IS NULL)";
-$sql .= " GROUP BY users.id ORDER BY users.realname";
+else $sql .= "AND (u.groupid='{$filtergroup}' OR u.groupid IS NULL)";
+$sql .= " GROUP BY u.id ORDER BY u.realname";
 
 $usersresult = mysql_query($sql);
 if (mysql_error()) trigger_error(mysql_error(),E_USER_WARNING);
@@ -112,13 +98,15 @@ if ($countusers > 0)
 }
 mysql_data_seek($usersresult, 0);
 
-$sql = "SELECT users.id, users.realname,software.name FROM usersoftware RIGHT JOIN software ON (usersoftware.softwareid = software.id) LEFT JOIN users ON usersoftware.userid = users.id ";
-$sql .= " WHERE (users.status <> 0 OR users.status IS NULL) ";
+$sql = "SELECT u.id, u.realname, software.name ";
+$sql .= "FROM usersoftware RIGHT JOIN software ON (usersoftware.softwareid = software.id) ";
+$sql .= "LEFT JOIN users AS u ON usersoftware.userid = u.id ";
+$sql .= " WHERE (u.status <> 0 OR u.status IS NULL) ";
 if (empty($legacy)) $sql .= "AND (software.lifetime_end > NOW() OR software.lifetime_end = '0000-00-00' OR software.lifetime_end is NULL) ";
-if ($numgroups >= 1 AND $filtergroup=='0') $sql .= "AND (users.groupid='0' OR users.groupid='' OR users.groupid IS NULL) ";
+if ($numgroups >= 1 AND $filtergroup=='0') $sql .= "AND (u.groupid='0' OR u.groupid='' OR u.groupid IS NULL) ";
 elseif ($numgroups < 1 OR $filtergroup=='all') { $sql .= "AND 1=1 "; }
-else $sql .= "AND (users.groupid='{$filtergroup}' OR users.groupid IS NULL)";
-$sql .= " ORDER BY software.name, users.id";
+else $sql .= "AND (u.groupid='{$filtergroup}' OR u.groupid IS NULL)";
+$sql .= " ORDER BY software.name, u.id";
 
 $result = mysql_query($sql);
 if (mysql_error()) trigger_error(mysql_error(),E_USER_WARNING);

@@ -49,7 +49,7 @@ if (empty($_REQUEST['mode']))
     echo "</td></tr>";
     echo "<tr><th colspan='2'>{$strInclude}</th></tr>";
     echo "<tr><td align='center' colspan='2'>";
-    $sql = "SELECT * FROM users WHERE status > 0 ORDER BY username";
+    $sql = "SELECT * FROM `{$dbUsers}` WHERE status > 0 ORDER BY username";
     $result = mysql_query($sql);
     if (mysql_error()) trigger_error("MySQL Query Error ".mysql_error(), E_USER_ERROR);
     echo "<select name='inc[]' multiple='multiple' size='20'>";
@@ -106,8 +106,8 @@ elseif ($_REQUEST['statistics'] == 'on')
     }
 
     $sql = "SELECT COUNT(DISTINCT incidents.id) AS numberOpened, users.id, users.realname ";
-    $sql .= "FROM users, incidents ";
-    $sql .= "WHERE users.id=incidents.owner AND incidents.opened >= {$startdate} AND incidents.opened <= {$enddate} ";
+    $sql .= "FROM `{$dbUsers}` AS u, incidents ";
+    $sql .= "WHERE u.id=incidents.owner AND incidents.opened >= {$startdate} AND incidents.opened <= {$enddate} ";
     //$sql .= "WHERE users.id=incidents.owner AND incidents.opened > ($now-60*60*24*365.25) ";
     /*$sql .= "WHERE users.id=incidents.owner "; // AND incidents.opened > ($now-60*60*24*365.25) ";
     if ($type == "opened")
@@ -129,7 +129,7 @@ elseif ($_REQUEST['statistics'] == 'on')
     if (empty($incsql)==FALSE AND empty($excsql)==FALSE) $sql .= " AND ";
     if (!empty($excsql)) $sql .= "$excsql";
 
-    $sql .= " GROUP BY users.id ";
+    $sql .= " GROUP BY u.id ";
 
     //echo $sql;
 
@@ -355,9 +355,9 @@ elseif ($_REQUEST['mode']=='report')
         $incsql_esc .= ")";
     }
 //
-    $sql = "SELECT incidents.id AS incid, incidents.title AS title,users.realname AS realname, users.id AS userid, ";
-    $sql .= "incidents.opened AS opened, incidents.closed AS closed FROM users, incidents ";
-    $sql .= "WHERE users.id=incidents.owner "; // AND incidents.opened > ($now-60*60*24*365.25) ";
+    $sql = "SELECT incidents.id AS incid, incidents.title AS title, u.realname AS realname, u.id AS userid, ";
+    $sql .= "incidents.opened AS opened, incidents.closed AS closed FROM `{$dbUsers}` AS u, incidents ";
+    $sql .= "WHERE u.id=incidents.owner "; // AND incidents.opened > ($now-60*60*24*365.25) ";
     if ($type == "opened")
     {
         $sql .= " AND incidents.opened >= {$startdate} AND incidents.opened <= {$enddate} ";

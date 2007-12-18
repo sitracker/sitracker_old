@@ -29,7 +29,7 @@ switch ($_REQUEST['action'])
     case 'forgotpwd':
         include ('htmlheader.inc.php');
         // First look to see if this is a SiT user
-        $sql = "SELECT id, username, password FROM users WHERE email = '{$email}' LIMIT 1";
+        $sql = "SELECT id, username, password FROM `{$dbUsers}` WHERE email = '{$email}' LIMIT 1";
         $userresult = mysql_query($sql);
         if (mysql_error()) trigger_error(mysql_error(),E_USER_WARNING);
         $usercount = mysql_num_rows($userresult);
@@ -84,7 +84,7 @@ switch ($_REQUEST['action'])
 
     case 'confirmreset':
         include ('htmlheader.inc.php');
-        $sql = "SELECT id, username, password FROM users WHERE id = '{$userid}' LIMIT 1";
+        $sql = "SELECT id, username, password FROM `{$dbUsers}` WHERE id = '{$userid}' LIMIT 1";
         $userresult = mysql_query($sql);
         if (mysql_error()) trigger_error(mysql_error(),E_USER_WARNING);
         $usercount = mysql_num_rows($userresult);
@@ -126,7 +126,7 @@ switch ($_REQUEST['action'])
 
     case 'resetpasswordform':
         include ('htmlheader.inc.php');
-        $sql = "SELECT id, username, password FROM users WHERE id = '{$userid}' LIMIT 1";
+        $sql = "SELECT id, username, password FROM `{$dbUsers}` WHERE id = '{$userid}' LIMIT 1";
         $userresult = mysql_query($sql);
         if (mysql_error()) trigger_error(mysql_error(),E_USER_WARNING);
         $usercount = mysql_num_rows($userresult);
@@ -170,7 +170,7 @@ switch ($_REQUEST['action'])
         $newpassword1 = cleanvar($_REQUEST['newpassword1']);
         $newpassword2 = cleanvar($_REQUEST['newpassword2']);
         include ('htmlheader.inc.php');
-        $sql = "SELECT id, username, password FROM users WHERE id = '{$userid}' LIMIT 1";
+        $sql = "SELECT id, username, password FROM `{$dbUsers}` WHERE id = '{$userid}' LIMIT 1";
         $userresult = mysql_query($sql);
         if (mysql_error()) trigger_error(mysql_error(),E_USER_WARNING);
         $usercount = mysql_num_rows($userresult);

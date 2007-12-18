@@ -73,7 +73,7 @@ if ($numgroups >= 1)
     echo "</form>\n<br />";
 }
 
-$sql  = "SELECT * FROM users WHERE status!=0 ";  // status=0 means account disabled
+$sql  = "SELECT * FROM `{$dbUsers}` WHERE status!=0 ";  // status=0 means account disabled
 if ($numgroups >= 1 AND $filtergroup=='0') $sql .= "AND (groupid='0' OR groupid='' OR groupid IS NULL) ";
 elseif ($numgroups < 1 OR $filtergroup=='all') { $sql .= "AND 1=1 "; }
 else $sql .= "AND groupid='{$filtergroup}'";

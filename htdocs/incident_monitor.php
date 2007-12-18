@@ -71,7 +71,7 @@ if (mysql_error()) trigger_error("MySQL Query Error ".mysql_error(), E_USER_ERRO
 $supportopen=mysql_num_rows($result);
 mysql_free_result($result);
 
-$sql  = "SELECT * FROM users WHERE var_monitor='true' ";
+$sql  = "SELECT * FROM `{$dbUsers}` WHERE var_monitor='true' ";
 $result = mysql_query($sql);
 if (mysql_error()) trigger_error("MySQL Query Error ".mysql_error(), E_USER_ERROR);
 $row=1;
