@@ -24,7 +24,14 @@ echo "     of the GNU General Public License, incorporated herein by reference. 
 echo "<meta http-equiv=\"Content-Type\" content=\"text/html;charset={$i18ncharset}\" />\n";
 echo "<meta name=\"GENERATOR\" content=\"{$CONFIG['application_name']} {$application_version_string}\" />\n";
 echo "<title>";
-if (isset($title)) { echo "$title - {$CONFIG['application_shortname']}"; } else { echo "{$CONFIG['application_name']}{$extratitlestring}"; }
+if (isset($title))
+{
+    echo "$title - {$CONFIG['application_shortname']}"; 
+}
+else
+{
+    echo "{$CONFIG['application_name']}{$extratitlestring}";
+}
 echo "</title>\n";
 echo "<link rel='SHORTCUT ICON' href='{$CONFIG['application_webpath']}images/sit_favicon.png' />\n";
 echo "<style type='text/css'>@import url('{$CONFIG['application_webpath']}styles/webtrack.css');</style>\n";
@@ -55,7 +62,7 @@ echo "</head>\n";
 echo "<body>\n";
 echo "<h1 id='apptitle'>{$CONFIG['application_name']}</h1>\n";
 // Show menu if logged in
-if ($sit[0]!='')
+if ($sit[0] != '')
 {
     // Build a heirarchical top menu
     $hmenu;
@@ -119,6 +126,27 @@ if ($sit[0]!='')
         echo "</li>\n";
     }
     echo "</ul>\n\n";
+
+    echo "<script type='text/javascript'>";
+    ?>
+        function jumpto()
+        {
+            incident_details_window(document.jumptoincident.incident.value, 'incident'+document.jumptoincident.incident.value);
+        }
+
+        function clear()
+        {
+            document.jumptoincident.incident.value = "";
+        }
+    <?php
+    echo "</script>";
+
+    echo "<div align='right'>";
+    echo "<form name='jumptoincident' action='' method='post'>";
+    echo "<input type='text' name='incident' id='incident' size='10' value='{$strIncidentNumAbb}' onclick='clear()'/> ";
+    echo "<input type='submit' value='{$strGo}' onclick='jumpto()' />";
+    echo "</form>";
+    echo "</div>";
     echo "</div>\n";
 }
 

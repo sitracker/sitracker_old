@@ -337,6 +337,7 @@ $strIncidentLogOrder = 'Incident Log Order';
 $strIncidentLoggedEngineer = 'An incident has now been added as incident number %s and logged to your account, you should now assign an engineer who is to deal with the incident';
 $strIncidentNoContract = 'This incident is not logged under contract';
 $strIncidentNum = 'Incident %d';
+$strIncidentNumAbb = 'Incident#';
 $strIncidentPool = 'Incident Pool';
 $strIncidentRefresh = 'Incident Refresh';
 $strIncidentUpdatesPerPage = 'Incident Updates per page';
