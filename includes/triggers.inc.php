@@ -8,22 +8,39 @@
 // of the GNU General Public License, incorporated herein by reference.
 
 //set up all the trigger types
-define('INCIDENT_CREATED_TRIGGER', 1);
-define('INCIDENT_ASSIGNED_TRIGGER', 2);
-define('INCIDENT_ASSIGNED_WHILE_AWAY_TRIGGER', 3);
-define('INCIDENT_ASSIGNED_WHILE_OFFLINE_TRIGGER', 4);
-define('INCIDENT_NEARING_SLA_TRIGGER', 5);
-define('USERS_INCIDENT_NEARING_SLA_TRIGGER', 6);
-define('INCIDENT_EXCEEDED_SLA_TRIGGER', 7);
-define('INCIDENT_REVIEW_DUE', 8);
-define('CRITICAL_INCIDENT_LOGGED', 9);
-define('KB_CREATED_TRIGGER', 10);
-define('NEW_HELD_EMAIL_TRIGGER', 11);
-define('WAITING_HELP_EMAIL', 12);
-define('USER_SET_TO_AWAY_TRIGGER', 13);
-define('SIT_UPGRADED_TRIGGER', 14);
-define('USER_RETURNS_TRIGGER', 15);
-define('INCIDENT_OWNED_CLOSED_BY_USER_TRIGGER', 16);
+define('TRIGGER_INCIDENT_CREATED', 1);
+define('TRIGGER_INCIDENT_ASSIGNED', 2);
+define('TRIGGER_INCIDENT_ASSIGNED_WHILE_AWAY', 3);
+define('TRIGGER_INCIDENT_ASSIGNED_WHILE_OFFLINE', 4);
+define('TRIGGER_INCIDENT_NEARING_SLA', 5);
+define('TRIGGER_USERS_INCIDENT_NEARING_SLA', 6);
+define('TRIGGER_INCIDENT_EXCEEDED_SLA', 7);
+define('TRIGGER_INCIDENT_REVIEW_DUE', 8);
+define('TRIGGER_CRITICAL_INCIDENT_LOGGED', 9);
+define('TRIGGER_KB_CREATED', 10);
+define('TRIGGER_NEW_HELD_EMAIL', 11);
+define('TRIGGER_WAITING_HELP_EMAIL', 12);
+define('TRIGGER_USER_SET_TO_AWAY', 13);
+define('TRIGGER_SIT_UPGRADED', 14);
+define('TRIGGER_USER_RETURNS', 15);
+define('TRIGGER_INCIDENT_OWNED_CLOSED_BY_USER', 16);
+
+$triggerarray = array(TRIGGER_INCIDENT_CREATED,
+                        TRIGGER_INCIDENT_ASSIGNED,
+                        TRIGGER_INCIDENT_ASSIGNED_WHILE_AWAY,
+                        TRIGGER_INCIDENT_ASSIGNED_WHILE_OFFLINE,
+                        TRIGGER_INCIDENT_NEARING_SLA,
+                        TRIGGER_USERS_INCIDENT_NEARING_SLA,
+                        TRIGGER_INCIDENT_EXCEEDED_SLA,
+                        TRIGGER_INCIDENT_REVIEW_DUE,
+                        TRIGGER_CRITICAL_INCIDENT_LOGGED,
+                        TRIGGER_KB_CREATED,
+                        TRIGGER_NEW_HELD_EMAIL,
+                        TRIGGER_WAITING_HELP_EMAIL,
+                        TRIGGER_USER_SET_TO_AWAY,
+                        TRIGGER_SIT_UPGRADED,
+                        TRIGGER_USER_RETURNS,
+                        TRIGGER_INCIDENT_OWNED_CLOSED_BY_USER);
 
 function trigger($triggertype, $paramarray='')
 {
@@ -34,9 +51,9 @@ function trigger($triggertype, $paramarray='')
 
     switch($triggertype)
     {
-        case INCIDENT_CREATED_TRIGGER:
+        case TRIGGER_INCIDENT_CREATED:
         {
-            if($CONFIG['debug']) $dbg .= "INCIDENT_CREATED_TRIGGER<br />";
+            if($CONFIG['debug']) $dbg .= "TRIGGER_INCIDENT_CREATED<br />";
             if($paramarray != '')
             {
                 if($CONFIG['debug']) $dbg .= "Params passed:<br />";
@@ -60,50 +77,50 @@ function trigger($triggertype, $paramarray='')
         }
             break;
 
-        case INCIDENT_ASSIGNED_TRIGGER:
-            echo "INCIDENT_ASSIGNED_TRIGGER";
+        case TRIGGER_INCIDENT_ASSIGNED:
+            echo "TRIGGER_INCIDENT_ASSIGNED";
             break;
-        case INCIDENT_ASSIGNED_WHILE_AWAY_TRIGGER:
-            echo "INCIDENT_ASSIGNED_WHILE_AWAY_TRIGGER";
+        case TRIGGER_INCIDENT_ASSIGNED_WHILE_AWAY:
+            echo "TRIGGER_INCIDENT_ASSIGNED_WHILE_AWAY";
             break;
-        case INCIDENT_ASSIGNED_WHILE_OFFLINE_TRIGGER:
-            echo "INCIDENT_ASSIGNED_WHILE_OFFLINE_TRIGGER";
+        case TRIGGER_INCIDENT_ASSIGNED_WHILE_OFFLINE:
+            echo "TRIGGER_INCIDENT_ASSIGNED_WHILE_OFFLINE";
             break;
-        case INCIDENT_NEARING_SLA_TRIGGER:
-            echo "INCIDENT_NEARING_SLA_TRIGGER";
+        case TRIGGER_INCIDENT_NEARING_SLA:
+            echo "TRIGGER_INCIDENT_NEARING_SLA";
             break;
-        case USERS_INCIDENT_NEARING_SLA_TRIGGER:
-            echo "USERS_INCIDENT_NEARING_SLA_TRIGGER";
+        case TRIGGER_USERS_INCIDENT_NEARING_SLA:
+            echo "TRIGGER_USERS_INCIDENT_NEARING_SLA";
             break;
-        case INCIDENT_EXCEEDED_SLA_TRIGGER:
-            echo "INCIDENT_EXCEEDED_SLA_TRIGGER";
+        case TRIGGER_INCIDENT_EXCEEDED_SLA:
+            echo "TRIGGER_INCIDENT_EXCEEDED_SLA";
             break;
-        case INCIDENT_REVIEW_DUE:
-            echo "INCIDENT_REVIEW_DUE";
+        case TRIGGER_INCIDENT_REVIEW_DUE:
+            echo "TRIGGER_INCIDENT_REVIEW_DUE";
             break;
-        case CRITICAL_INCIDENT_LOGGED:
-            echo "CRITICAL_INCIDENT_LOGGED";
+        case TRIGGER_CRITICAL_INCIDENT_LOGGED:
+            echo "TRIGGER_CRITICAL_INCIDENT_LOGGED";
             break;
-        case KB_CREATED_TRIGGER:
-            echo "KB_CREATED_TRIGGER";
+        case TRIGGER_KB_CREATED:
+            echo "TRIGGER_KB_CREATED";
             break;
-        case NEW_HELD_EMAIL_TRIGGER:
-            echo "NEW_HELD_EMAIL_TRIGGER";
+        case TRIGGER_NEW_HELD_EMAIL:
+            echo "TRIGGER_NEW_HELD_EMAIL";
             break;
-        case WAITING_HELP_EMAIL:
-            echo "WAITING_HELP_EMAIL";
+        case TRIGGER_WAITING_HELP_EMAIL:
+            echo "TRIGGER_WAITING_HELP_EMAIL";
             break;
-        case USER_SET_TO_AWAY_TRIGGER:
-            echo "USER_SET_TO_AWAY_TRIGGER";
+        case TRIGGER_USER_SET_TO_AWAY:
+            echo "TRIGGER_USER_SET_TO_AWAY";
             break;
-        case SIT_UPGRADED_TRIGGER:
-            echo "SIT_UPGRADED_TRIGGER";
+        case TRIGGER_SIT_UPGRADED:
+            echo "TRIGGER_SIT_UPGRADED";
             break;
-        case USER_RETURNS_TRIGGER:
-            echo "USER_RETURNS_TRIGGER";
+        case TRIGGER_USER_RETURNS:
+            echo "TRIGGER_USER_RETURNS";
             break;
-        case INCIDENT_OWNED_CLOSED_BY_USER_TRIGGER:
-            echo "INCIDENT_OWNED_CLOSED_BY_USER_TRIGGER";
+        case TRIGGER_INCIDENT_OWNED_CLOSED_BY_USER:
+            echo "TRIGGER_INCIDENT_OWNED_CLOSED_BY_USER";
             break;
         default:
             echo "hit default!";
