@@ -30,7 +30,7 @@ $result = mysql_query($sql);
 
 while ($product = mysql_fetch_object($result))
 {
-    $csql = "SELECT COUNT(id) AS count FROM maintenance WHERE product = {$product->id} AND NOT term = 'yes' AND expirydate > $now";
+    $csql = "SELECT COUNT(id) AS count FROM `{$dbMaintenance}` WHERE product = {$product->id} AND NOT term = 'yes' AND expirydate > $now";
     $cresult = mysql_query($csql);
     list($contract_count) = mysql_fetch_row($cresult);
     if ($contract_count > 0) $productlist[$product->id] = $contract_count;

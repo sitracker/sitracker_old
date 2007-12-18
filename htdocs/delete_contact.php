@@ -73,10 +73,10 @@ if (empty($process))
         {
             echo "<p align='center' class='error'>There are $totalincidents incidents assigned to this contact</p>";
         }
-        $sql  = "SELECT supportcontacts.maintenanceid AS maintenanceid, maintenance.product, products.name AS productname, ";
+        $sql  = "SELECT sc.maintenanceid AS maintenanceid, maintenance.product, products.name AS productname, ";
         $sql .= "maintenance.expirydate, maintenance.term ";
-        $sql .= "FROM supportcontacts, maintenance, products ";
-        $sql .= "WHERE supportcontacts.maintenanceid=maintenance.id AND maintenance.product=products.id AND supportcontacts.contactid='$id' ";
+        $sql .= "FROM `{$dbSupportContacts}` AS sc, maintenance, products ";
+        $sql .= "WHERE sc.maintenanceid=maintenance.id AND maintenance.product=products.id AND sc.contactid='$id' ";
         $result=mysql_query($sql);
         if (mysql_error()) trigger_error("MySQL Query Error ".mysql_error(), E_USER_ERROR);
         $totalcontracts=mysql_num_rows($result);
@@ -142,7 +142,7 @@ else
     // save to db
     if (!empty($newcontact))
     {
-        $sql = "UPDATE supportcontacts SET contactid='$newcontact' WHERE contactid='$id' ";
+        $sql = "UPDATE `{$dbSupportContacts}` SET contactid='$newcontact' WHERE contactid='$id' ";
         mysql_query($sql);
         if (mysql_error()) trigger_error("MySQL Query Error ".mysql_error(), E_USER_ERROR);
 

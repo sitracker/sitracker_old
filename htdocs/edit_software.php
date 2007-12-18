@@ -90,7 +90,7 @@ elseif ($action=='delete')
         mysql_query($sql);
         if (mysql_error()) trigger_error(mysql_error(),E_USER_ERROR);
 
-        $sql = "DELETE FROM softwareproducts WHERE softwareid='$id'";
+        $sql = "DELETE FROM `{$dbSoftwareProducts}` WHERE softwareid='$id'";
         mysql_query($sql);
         if (mysql_error()) trigger_error(mysql_error(),E_USER_ERROR);
 

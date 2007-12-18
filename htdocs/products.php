@@ -50,13 +50,13 @@ if (empty($productid) AND $display!='skills')
                 while ($product = mysql_fetch_object($presult))
                 {
                     // Count linked skills
-                    $ssql = "SELECT COUNT(softwareid) FROM softwareproducts WHERE productid={$product->id}";
+                    $ssql = "SELECT COUNT(softwareid) FROM `{$dbSoftwareProducts}` WHERE productid={$product->id}";
                     $sresult = mysql_query($ssql);
                     if (mysql_error()) trigger_error("MySQL Query Error ".mysql_error(), E_USER_ERROR);
                     list($countlinked)=mysql_fetch_row($sresult);
 
                     // Count contracts
-                    $ssql = "SELECT COUNT(id) FROM maintenance WHERE product='{$product->id}' AND term!='yes' AND expirydate > '{$now}'";
+                    $ssql = "SELECT COUNT(id) FROM `{$dbMaintenance}` WHERE product='{$product->id}' AND term!='yes' AND expirydate > '{$now}'";
                     $sresult = mysql_query($ssql);
                     if (mysql_error()) trigger_error("MySQL Query Error ".mysql_error(), E_USER_ERROR);
                     list($countcontracts)=mysql_fetch_row($sresult);
@@ -84,7 +84,7 @@ if (empty($productid) AND $display!='skills')
     else echo "<p class='error'>No vendors defined</p>";
 
 
-    $sql = "SELECT software.* FROM software LEFT JOIN softwareproducts ON software.id=softwareproducts.softwareid WHERE softwareproducts.softwareid IS NULL";
+    $sql = "SELECT software.* FROM software LEFT JOIN `{$dbSoftwareProducts}` AS sp ON software.id=sp.softwareid WHERE sp.softwareid IS NULL";
     $result = mysql_query($sql);
     if (mysql_error()) trigger_error(mysql_error(),E_USER_ERROR);
     if (mysql_num_rows($result) >= 1)
@@ -147,7 +147,7 @@ elseif (empty($productid) AND ($display=='skills' OR $display=='software'))
             list($countengineers) = mysql_fetch_row($sresult);
 
             // Count linked products
-            $ssql = "SELECT COUNT(productid) FROM softwareproducts WHERE softwareid={$software->id}";
+            $ssql = "SELECT COUNT(productid) FROM `{$dbSoftwareProducts}` WHERE softwareid={$software->id}";
             $sresult = mysql_query($ssql);
             if (mysql_error()) trigger_error("MySQL Query Error ".mysql_error(), E_USER_ERROR);
             list($countlinked)=mysql_fetch_row($sresult);
@@ -204,7 +204,7 @@ else
             echo "<table summary='List of skills linked to product' align='center'>";
             if (!empty($product->description)) echo "<tr class='shade1'><td colspan='0'>".nl2br($product->description)."</td></tr>";
 
-            $swsql = "SELECT * FROM softwareproducts, software WHERE softwareproducts.softwareid=software.id AND productid='{$product->id}' ORDER BY name";
+            $swsql = "SELECT * FROM `{$dbSoftwareProducts}` AS sp, software WHERE sp.softwareid=software.id AND productid='{$product->id}' ORDER BY name";
             $swresult=mysql_query($swsql);
             if (mysql_error()) trigger_error("MySQL Query Error ".mysql_error(), E_USER_ERROR);
 
@@ -250,7 +250,7 @@ else
             echo "</table>\n";
             echo "<p align='center'><a href='add_product_software.php?productid={$product->id}'>Link skill to {$product->name}</a></p>\n";
 
-            $sql = "SELECT * FROM maintenance WHERE product='{$product->id}' ORDER BY id DESC";
+            $sql = "SELECT * FROM `{$dbMaintenance}` WHERE product='{$product->id}' ORDER BY id DESC";
             $result = mysql_query($sql);
             if (mysql_error()) trigger_error(mysql_error(),E_USER_ERROR);
             if (mysql_num_rows($result) >= 1)

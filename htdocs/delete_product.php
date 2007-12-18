@@ -27,7 +27,7 @@ if (!empty($productid))
 {
     $errors=0;
     // Check there are no contracts with this product
-    $sql = "SELECT id FROM maintenance WHERE product=$productid LIMIT 1";
+    $sql = "SELECT id FROM `{$dbMaintenance}` WHERE product=$productid LIMIT 1";
     $result = mysql_query($sql);
     if (mysql_num_rows($result)>=1) $errors++;
 
@@ -37,7 +37,7 @@ if (!empty($productid))
     if (mysql_num_rows($result)>=1) $errors++;
 
     // Check there is no software linked to this product
-    $sql = "SELECT productid FROM softwareproducts WHERE productid=$productid LIMIT 1";
+    $sql = "SELECT productid FROM `{$dbSoftwareProducts}` WHERE productid=$productid LIMIT 1";
     $result = mysql_query($sql);
     if (mysql_num_rows($result)>=1) $errors++;
 

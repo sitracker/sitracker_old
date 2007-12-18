@@ -85,11 +85,11 @@ switch ($type)
             if (mysql_num_rows($uresult) >= 1) list($user) = mysql_fetch_row($uresult);
             else $user=$sit[2]; // force to current user if username not found
         }
-        $sql = $selectsql . "WHERE contact=contacts.id AND incidents.priority=priority.id ";
+        $sql = $selectsql . "WHERE contact=contacts.id AND i.priority=priority.id ";
         if ($user!='all') $sql .= "AND (owner='$user' OR towner='$user') ";
         if (!empty($softwareid)) $sql .= "AND softwareid='$softwareid' ";
 
-        if (!empty($maintexclude)) $sql .= "AND incidents.maintenanceid != '{$maintexclude}' ";
+        if (!empty($maintexclude)) $sql .= "AND i.maintenanceid != '{$maintexclude}' ";
 
         echo "<h2>";
         if ($user!='all') echo sprintf($strUserIncidents, user_realname($user,TRUE)).": ";
@@ -223,7 +223,7 @@ switch ($type)
             $incsql .= ")";
 
             // Create SQL for chosen queue
-            $sql = $selectsql . "WHERE contact=contacts.id AND incidents.priority=priority.id ";
+            $sql = $selectsql . "WHERE contact=contacts.id AND i.priority=priority.id ";
             $sql .= "AND owner!='$user' AND towner!='$user' ";
             $sql .= "AND $incsql ";
 

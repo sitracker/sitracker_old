@@ -148,7 +148,7 @@ if (!isset($_SESSION[$incidentid.'cs']))
       $cs |= 16;
 
     $sql  = "SELECT p.vendorid ";
-    $sql .= "FROM maintenance m, products p ";
+    $sql .= "FROM `{$dbMaintenance}` m, products p ";
     $sql .= "WHERE (m.id='{$incident->maintenanceid}' AND m.product=p.id) ";
 
     $result = mysql_query($sql);

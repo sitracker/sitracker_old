@@ -151,10 +151,10 @@ while ($contactrow=mysql_fetch_array($contactresult))
     if (user_permission($sit[2],30)) // view supported products
     {
         echo "<h4>{$strContracts}:</h4>";
-        $sql  = "SELECT supportcontacts.maintenanceid AS maintenanceid, maintenance.product, products.name AS productname, ";
+        $sql  = "SELECT sc.maintenanceid AS maintenanceid, maintenance.product, products.name AS productname, ";
         $sql .= "maintenance.expirydate, maintenance.term ";
-        $sql .= "FROM supportcontacts, maintenance, products ";
-        $sql .= "WHERE supportcontacts.maintenanceid=maintenance.id AND maintenance.product=products.id AND supportcontacts.contactid='$id' ";
+        $sql .= "FROM `{$dbSupportContacts}` AS sc, maintenance, products ";
+        $sql .= "WHERE sc.maintenanceid=maintenance.id AND maintenance.product=products.id AND sc.contactid='$id' ";
         $result=mysql_query($sql);
         if (mysql_error()) trigger_error("MySQL Query Error ".mysql_error(), E_USER_ERROR);
         if (mysql_num_rows($result)>0)

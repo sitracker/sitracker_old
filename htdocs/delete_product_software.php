@@ -28,7 +28,7 @@ $softwareid = cleanvar($_REQUEST['softwareid']);
 
 if (!empty($productid) && !empty($softwareid))
 {
-    $sql = "DELETE FROM softwareproducts WHERE productid='$productid' AND softwareid='$softwareid' LIMIT 1";
+    $sql = "DELETE FROM `{$dbSoftwareProducts}` WHERE productid='$productid' AND softwareid='$softwareid' LIMIT 1";
     mysql_query($sql);
     if (mysql_error()) trigger_error("MySQL Query Error ".mysql_error(), E_USER_ERROR);
     journal(CFG_LOGGING_NORMAL, 'Skill Unlinked', "Skill $softwareid was unlinked from Product $productid", CFG_JOURNAL_PRODUCTS, $productid);

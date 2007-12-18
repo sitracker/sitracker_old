@@ -90,11 +90,11 @@ elseif ($action=='findcontact')
     }
     $sql  = "SELECT *, products.name AS productname, products.id AS productid, contacts.surname AS surname, ";
     $sql .= "maintenance.id AS maintid, maintenance.incident_quantity, maintenance.incidents_used ";
-    $sql .= "FROM supportcontacts, contacts, maintenance, products, sites ";
+    $sql .= "FROM `{$dbSupportContacts}` AS sc, contacts, maintenance, products, sites ";
     $sql .= "WHERE maintenance.product=products.id ";
     $sql .= "AND maintenance.site=sites.id ";
-    $sql .= "AND supportcontacts.contactid=contacts.id ";
-    $sql .= "AND supportcontacts.maintenanceid=maintenance.id ";
+    $sql .= "AND sc.contactid=contacts.id ";
+    $sql .= "AND sc.maintenanceid=maintenance.id ";
 //     $sql .= "OR (maintenance.allcontactssupported = 'Yes' ";
 //     $sql .= "AND contacts.siteid=sites.id)) ";
 
@@ -107,7 +107,7 @@ elseif ($action=='findcontact')
     }
     else
     {
-        $sql .= "AND supportcontacts.contactid = '$contactid' ";
+        $sql .= "AND sc.contactid = '$contactid' ";
     }
 
     $sql .= "ORDER by contacts.forenames, contacts.surname, productname, expirydate ";

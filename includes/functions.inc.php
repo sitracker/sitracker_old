@@ -1105,8 +1105,9 @@ function software_drop_down($name, $id)
 
 function softwareproduct_drop_down($name, $id, $productid)
 {
+    global $dbSoftwareProducts;
     // extract software
-    $sql  = "SELECT id, name FROM software, softwareproducts WHERE software.id=softwareproducts.softwareid ";
+    $sql  = "SELECT id, name FROM software, `{$dbSoftwareProducts}` AS sp WHERE software.id = sp.softwareid ";
     $sql .= "AND productid='$productid' ";
     $sql .= "ORDER BY name ASC";
     $result = mysql_query($sql);
@@ -1177,9 +1178,9 @@ function supported_product_drop_down($name, $contactid, $productid)
 {
     global $CONFIG;
 
-    $sql = "SELECT *,products.id AS productid, products.name AS productname FROM supportcontacts,maintenance,products ";
-    $sql .= "WHERE supportcontacts.maintenanceid=maintenance.id AND maintenance.product=products.id ";
-    $sql .= "AND supportcontacts.contactid='$contactid'";
+    $sql = "SELECT *,products.id AS productid, products.name AS productname FROM `{$dbSupportContacts}` AS sc,maintenance,products ";
+    $sql .= "WHERE sc.maintenanceid=maintenance.id AND maintenance.product=products.id ";
+    $sql .= "AND sc.contactid='$contactid'";
 
     $result = mysql_query($sql);
     if (mysql_error()) trigger_error(mysql_error(),E_USER_WARNING);
@@ -2227,23 +2228,23 @@ function servicelevel_name($id)
 // FIXME: default service level needs changeing/checking
 function maintenance_servicelevel($maintid)
 {
-  $sql = "SELECT servicelevelid FROM maintenance WHERE id='$maintid' ";
-  $result = mysql_query($sql);
-  if (mysql_error()) trigger_error(mysql_error(),E_USER_WARNING);
-  if (mysql_num_rows($result) < 1)
-  {
-    // in case there is no maintenance contract associated with the incident, use default service level
-    // if there is a maintenance contract then we should throw an error because there should be
-    // service level
-    if ($maintid==0) $servicelevelid=1;
-    ## else throw_error('!Error: Could not find a service level for maintenance ID:', $maintid);
-  }
-  else
-  {
-    list($servicelevelid) = mysql_fetch_row($result);
-  }
-
-  return $servicelevelid;
+    global $dbMaintenance;
+    $sql = "SELECT servicelevelid FROM `{$dbMaintenance}` WHERE id='$maintid' ";
+    $result = mysql_query($sql);
+    if (mysql_error()) trigger_error(mysql_error(),E_USER_WARNING);
+    if (mysql_num_rows($result) < 1)
+    {
+        // in case there is no maintenance contract associated with the incident, use default service level
+        // if there is a maintenance contract then we should throw an error because there should be
+        // service level
+        if ($maintid==0) $servicelevelid=1;
+        ## else throw_error('!Error: Could not find a service level for maintenance ID:', $maintid);
+    }
+    else
+    {
+        list($servicelevelid) = mysql_fetch_row($result);
+    }
+    return $servicelevelid;
 }
 
 
@@ -2419,9 +2420,10 @@ function site_name($id)
 // given id selected.
 function maintenance_drop_down($name, $id)
 {
+    global $dbMaintenance;
     // FIXME make maintenance_drop_down a hierarchical selection box sites/contracts
     // extract all maintenance contracts
-    $sql  = "SELECT sites.name AS sitename, products.name AS productname, maintenance.id AS id FROM maintenance, sites, products ";
+    $sql  = "SELECT sites.name AS sitename, products.name AS productname, m.id AS id FROM `{$dbMaintenance}` AS m, sites, products ";
     $sql .= "WHERE site=sites.id AND product=products.id ORDER BY sites.name ASC";
     $result = mysql_query($sql);
 

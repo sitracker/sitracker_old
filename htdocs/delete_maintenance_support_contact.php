@@ -97,7 +97,7 @@ elseif ($action == "delete")
     // delete maintenance support contact if no errors
     if ($errors == 0)
     {
-        $sql  = "DELETE FROM supportcontacts WHERE maintenanceid='$maintid' AND contactid='$contactid'";
+        $sql  = "DELETE FROM `{$dbSupportContacts}` WHERE maintenanceid='$maintid' AND contactid='$contactid'";
         $result = mysql_query($sql);
         if (mysql_error()) trigger_error("MySQL Query Error ".mysql_error(), E_USER_ERROR);
 

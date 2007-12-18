@@ -93,7 +93,7 @@ elseif ($action == "add")
     if ($errors == 0)
     {
         // First have a look if we already have this link
-        $sql = "SELECT productid FROM softwareproducts WHERE productid='$productid' AND softwareid='$softwareid'";
+        $sql = "SELECT productid FROM `{$dbSoftwareProducts}` WHERE productid='$productid' AND softwareid='$softwareid'";
         $result = mysql_query($sql);
         if (mysql_error()) trigger_error("MySQL Query Error ".mysql_error(), E_USER_ERROR);
         if (mysql_num_rows($result) >= 1)
@@ -104,7 +104,7 @@ elseif ($action == "add")
             exit;
         }
 
-        $sql  = "INSERT INTO softwareproducts (productid, softwareid) VALUES ($productid, $softwareid)";
+        $sql  = "INSERT INTO `{$dbSoftwareProducts}` (productid, softwareid) VALUES ($productid, $softwareid)";
         $result = mysql_query($sql);
         if (mysql_error()) trigger_error("MySQL Query Error ".mysql_error(), E_USER_ERROR);
 

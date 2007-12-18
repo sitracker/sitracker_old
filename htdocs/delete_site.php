@@ -63,7 +63,7 @@ else
         }
 
         // Look for associated maintenance contracts
-        $sql = "SELECT COUNT(id) FROM maintenance WHERE site='$id'";
+        $sql = "SELECT COUNT(id) FROM `{$dbMaintenance}` WHERE site='$id'";
         $result = mysql_query($sql);
         if (mysql_error()) trigger_error(mysql_error(),E_USER_ERROR);
         list($numcontracts) = mysql_fetch_row($result);

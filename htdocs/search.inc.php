@@ -314,7 +314,7 @@ if (!empty($search_string))
             break;
 
         case 'maintenance':
-            $sql = "SELECT *,maintenance.id AS maintid FROM maintenance,sites WHERE maintenance.site=sites.id AND (";
+            $sql = "SELECT *, m.id AS maintid FROM `{$dbMaintenance}` AS m,sites WHERE m.site=sites.id AND (";
             $sql .= search_build_query('sites.name', $sterms);
             $sql .= ")";
 //             echo "<pre>$sql</pre>";

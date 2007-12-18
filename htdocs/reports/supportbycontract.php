@@ -43,16 +43,16 @@ $result = mysql_query($sql);
 if (mysql_error()) trigger_error(mysql_error(), E_USER_ERROR);
 while ($site = mysql_fetch_object($result))
 {
-    $msql  = "SELECT maintenance.id AS maintid, maintenance.term AS term, products.name AS product, resellers.name AS reseller, ";
+    $msql  = "SELECT m.id AS maintid, m.term AS term, products.name AS product, resellers.name AS reseller, ";
     $msql .= "licence_quantity, licencetypes.name AS licence_type, expirydate, admincontact, contacts.forenames AS admincontactsforenames, ";
-    $msql .= "contacts.surname AS admincontactssurname, maintenance.notes AS maintnotes ";
-    $msql .= "FROM maintenance, contacts, products, licencetypes, resellers ";
-    $msql .= "WHERE maintenance.product=products.id ";
-    $msql .= "AND maintenance.reseller=resellers.id AND licence_type=licencetypes.id AND admincontact=contacts.id ";
-    $msql .= "AND maintenance.site = '{$site->id}' ";
+    $msql .= "contacts.surname AS admincontactssurname, m.notes AS maintnotes ";
+    $msql .= "FROM `{$dbMaintenance}` AS m, contacts, products, licencetypes, resellers ";
+    $msql .= "WHERE m.product=products.id ";
+    $msql .= "AND m.reseller=resellers.id AND licence_type=licencetypes.id AND admincontact=contacts.id ";
+    $msql .= "AND m.site = '{$site->id}' ";
     $msql .= "AND products.vendorid=2 ";    // novell products only
-    $msql .= "AND maintenance.term!='yes' ";
-    $msql .= "AND maintenance.expirydate > '$now' ";     $msql .= "ORDER BY expirydate DESC";
+    $msql .= "AND m.term!='yes' ";
+    $msql .= "AND m.expirydate > '$now' ";     $msql .= "ORDER BY expirydate DESC";
 
     echo "\n<!-- $msql -->\n";
     $mresult = mysql_query($msql);
@@ -69,7 +69,7 @@ while ($site = mysql_fetch_object($result))
                     echo "{$maint->product},";
                     echo "{$maint->licence_quantity} {$maint->licence_type},";
                     echo date($CONFIG['dateformat_date'], $maint->expirydate).",";
-                    $csql  = "SELECT * FROM supportcontacts ";
+                    $csql  = "SELECT * FROM `{$dbSupportContacts}` ";
                     $csql .= "WHERE maintenanceid='{$maint->maintid}' ";
                     $csql .= "ORDER BY contactid LIMIT 4";
                     ## echo "<!-- ($csql) -->";
@@ -98,7 +98,7 @@ while ($site = mysql_fetch_object($result))
                     echo "<td>{$maint->licence_quantity} {$maint->licence_type}</td>";
                     echo "<td>".date($CONFIG['dateformat_date'], $maint->expirydate)."</td>";
 
-                    $csql  = "SELECT * FROM supportcontacts ";
+                    $csql  = "SELECT * FROM `{$dbSupportContacts}` ";
                     $csql .= "WHERE maintenanceid='{$maint->maintid}' ";
                     $csql .= "ORDER BY contactid LIMIT 4";
                     ## echo "<!-- ($csql) -->";

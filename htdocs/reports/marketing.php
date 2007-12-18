@@ -143,15 +143,15 @@ elseif ($_REQUEST['mode']=='report')
         $excsql .= ")";
     }
 
-    $sql  = "SELECT *, contacts.id AS contactid, contacts.email AS contactemail, sites.name AS sitename FROM maintenance ";
-    $sql .= "LEFT JOIN supportcontacts ON maintenance.id=supportcontacts.maintenanceid ";
-    $sql .= "LEFT JOIN contacts ON supportcontacts.contactid=contacts.id ";
+    $sql  = "SELECT *, contacts.id AS contactid, contacts.email AS contactemail, sites.name AS sitename FROM `{$dbMaintenance}` AS m ";
+    $sql .= "LEFT JOIN `{$dbSupportContacts}` AS sc ON m.id=sc.maintenanceid ";
+    $sql .= "LEFT JOIN contacts ON sc.contactid=contacts.id ";
     $sql .= "LEFT JOIN sites ON contacts.siteid = sites.id ";
 
     if (empty($incsql)==FALSE OR empty($excsql)==FALSE OR $_REQUEST['activeonly']=='yes') $sql .= "WHERE ";
     if ($_REQUEST['activeonly']=='yes')
     {
-        $sql .= "maintenance.term!='yes' AND maintenance.expirydate > '$now' ";
+        $sql .= "m.term!='yes' AND m.expirydate > '$now' ";
         if (empty($incsql)==FALSE OR empty($excsql)==FALSE) $sql .= "AND ";
     }
     if (!empty($incsql)) $sql .= "$incsql";

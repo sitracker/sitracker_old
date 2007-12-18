@@ -172,10 +172,10 @@ elseif ($_REQUEST['mode']=='report')
 
             $html .= "<td>{$row->site}</td>";
 
-            $psql = "SELECT * FROM supportcontacts, maintenance, products WHERE ";
-            $psql .= "supportcontacts.maintenanceid=maintenance.id AND ";
+            $psql = "SELECT * FROM `{$dbSupportContacts}` AS sc, maintenance, products WHERE ";
+            $psql .= "sc.maintenanceid=maintenance.id AND ";
             $psql .= "maintenance.product=products.id ";
-            $psql .= "AND supportcontacts.contactid='$row->contactid' ";
+            $psql .= "AND sc.contactid='$row->contactid' ";
             $html .= "<td>";
         // FIXME dataprotection_address csv
 

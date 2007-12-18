@@ -79,12 +79,12 @@ elseif ($_REQUEST['mode']=='report')
         $nicedate=date('d/m/Y',$row->opened);
         $html .= "<tr class='shade2'><td>{$row->name}</td><td>{$row->address1}</td><td>{$row->address2}</td><td>{$row->city}</td><td>{$row->county}</td><td>{$row->country}</td><td>{$row->postcode}</td>";
         $html .= "<td>";
-        $psql  = "SELECT maintenance.id AS maintid, maintenance.term AS term, products.name AS product, ";
-        $psql .= "maintenance.admincontact AS admincontact, ";
-        $psql .= "resellers.name AS reseller, licence_quantity, licencetypes.name AS licence_type, expirydate, admincontact, contacts.forenames AS admincontactsforenames, contacts.surname AS admincontactssurname, maintenance.notes AS maintnotes ";
-        $psql .= "FROM maintenance, contacts, products, licencetypes, resellers ";
-        $psql .= "WHERE maintenance.product=products.id AND maintenance.reseller=resellers.id AND licence_type=licencetypes.id AND admincontact=contacts.id ";
-        $psql .= "AND maintenance.site = '{$row->id}' ";
+        $psql  = "SELECT m.id AS maintid, m.term AS term, products.name AS product, ";
+        $psql .= "m.admincontact AS admincontact, ";
+        $psql .= "resellers.name AS reseller, licence_quantity, licencetypes.name AS licence_type, expirydate, admincontact, contacts.forenames AS admincontactsforenames, contacts.surname AS admincontactssurname, m.notes AS maintnotes ";
+        $psql .= "FROM `{$dbMaintenance}` AS m, contacts, products, licencetypes, resellers ";
+        $psql .= "WHERE m.product=products.id AND m.reseller=resellers.id AND licence_type=licencetypes.id AND admincontact=contacts.id ";
+        $psql .= "AND m.site = '{$row->id}' ";
         $psql .= "ORDER BY products.name ASC";
         $presult = mysql_query($psql);
         if (mysql_error()) trigger_error("MySQL Query Error ".mysql_error(), E_USER_ERROR);

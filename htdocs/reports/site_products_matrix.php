@@ -46,15 +46,15 @@ switch ($_POST['action'])
 
         $vendor = cleanvar($_POST['vendor']);
 
-        $sql  = "SELECT maintenance.id AS maintid, sites.name AS site, sites.id AS siteid, contacts.address1 AS address1, products.name AS product, resellers.name AS reseller, licence_quantity, licencetypes.name AS licence_type, expirydate, admincontact, contacts.forenames AS forenames, .contacts.surname AS admincontactname, maintenance.notes, ";
+        $sql  = "SELECT m.id AS maintid, sites.name AS site, sites.id AS siteid, contacts.address1 AS address1, products.name AS product, resellers.name AS reseller, licence_quantity, licencetypes.name AS licence_type, expirydate, admincontact, contacts.forenames AS forenames, .contacts.surname AS admincontactname, m.notes, ";
         $sql .= "contacts.department AS department, contacts.address2 AS address2, contacts.city AS city, contacts.county, contacts.country, contacts.postcode, sitetypes.typename AS typename ";
-        $sql .= "FROM maintenance, sites, sitetypes, contacts, products, licencetypes, resellers WHERE ";
-        $sql .= "(maintenance.site=sites.id ";
+        $sql .= "FROM `{$dbMaintenance}` AS m, sites, sitetypes, contacts, products, licencetypes, resellers WHERE ";
+        $sql .= "(m.site=sites.id ";
         $sql .= "AND sites.typeid=sitetypes.typeid ";
         $sql .= "AND product=products.id ";
         if (!empty($vendor)) $sql .= "AND products.vendorid='{$vendor}' ";
         $sql .= "AND reseller=resellers.id AND licence_type=licencetypes.id AND admincontact=contacts.id) AND ";
-        $sql .= "expirydate <= $max_expiry AND expirydate >= $min_expiry AND maintenance.term != 'yes' GROUP BY sites.id ORDER BY expirydate ASC";
+        $sql .= "expirydate <= $max_expiry AND expirydate >= $min_expiry AND m.term != 'yes' GROUP BY sites.id ORDER BY expirydate ASC";
 
 // echo $sql;
 

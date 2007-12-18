@@ -72,10 +72,10 @@ switch ($page)
         echo "<h2>{$strYourSupportEntitlement}</h2>";
         $sql = "SELECT maintenance.*, products.*, ";
         $sql .= "(maintenance.incident_quantity - maintenance.incidents_used) AS availableincidents ";
-        $sql .= "FROM supportcontacts, maintenance, products ";
-        $sql .= "WHERE supportcontacts.maintenanceid=maintenance.id ";
+        $sql .= "FROM `{$dbSupportContacts}` AS sc, maintenance, products ";
+        $sql .= "WHERE sc.maintenanceid=maintenance.id ";
         $sql .= "AND maintenance.product=products.id ";
-        $sql .= "AND supportcontacts.contactid='{$_SESSION['contactid']}'";
+        $sql .= "AND sc.contactid='{$_SESSION['contactid']}'";
         $result = mysql_query($sql);
         if (mysql_error()) trigger_error(mysql_error(),E_USER_ERROR);
         $numcontracts = mysql_num_rows($result);

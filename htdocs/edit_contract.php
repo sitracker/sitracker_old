@@ -47,7 +47,7 @@ if ($action == "edit")
     if ($maintid == 0) echo "<p class='error'>You must select a contract</p>\n";
     else
     {
-        $sql = "SELECT * FROM maintenance WHERE id='$maintid'";
+        $sql = "SELECT * FROM `{$dbMaintenance}` WHERE id='$maintid'";
         $result = mysql_query($sql);
         if (mysql_error()) trigger_error("MySQL Error", E_USER_ERROR);
         $maint = mysql_fetch_array($result);

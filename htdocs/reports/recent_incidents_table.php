@@ -25,10 +25,10 @@ $monthago = time()-(60 * 60 * 24 * 30.5);
 
 echo "<h2>Incidents opened since ".date($CONFIG['dateformat_date'], $monthago)."</h2>";
 
-$sql  = "SELECT *,sites.id AS siteid FROM sites, maintenance, supportcontacts, incidents ";
+$sql  = "SELECT *,sites.id AS siteid FROM sites, maintenance, `{$dbSupportContacts}` AS sc, incidents ";
 $sql .= "WHERE sites.id = maintenance.site ";
-$sql .= "AND maintenance.id = supportcontacts.maintenanceid ";
-$sql .= "AND supportcontacts.contactid = incidents.contact ";
+$sql .= "AND maintenance.id = sc.maintenanceid ";
+$sql .= "AND sc.contactid = incidents.contact ";
 $sql .= "AND incidents.opened > '$monthago' ";
 $sql .= "ORDER BY sites.id, incidents.id";
 
