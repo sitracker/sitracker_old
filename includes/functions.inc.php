@@ -1827,6 +1827,7 @@ function product_name($id)
 function emailtype_replace_specials($string, $incidentid, $userid=0)
 {
     global $CONFIG, $application_version, $application_version_string;
+    global $dbIncidents;
     if ($incidentid=='') throw_error('incident ID was blank in emailtype_replace_specials()',$string);
 
     $contactid=incident_contact($incidentid);
@@ -1838,7 +1839,7 @@ function emailtype_replace_specials($string, $incidentid, $userid=0)
     // INL 13Jun03 Do one query to grab the incident details instead of doing a query
     // per replace-keyword - this should save a few queries
 
-    $sql = "SELECT * FROM incidents WHERE id='$incidentid'";
+    $sql = "SELECT * FROM `{$dbIncidents}` WHERE id='$incidentid'";
     $result = mysql_query($sql);
     if (mysql_error()) trigger_error(mysql_error(),E_USER_WARNING);
     $incident=mysql_fetch_object($result);
@@ -2520,9 +2521,10 @@ function licence_type($id)
 function countdayincidents($day, $month, $year)
 {
     // Counts the number of incidents opened on a specified day
+    global $dbIncidents;
     $unixstartdate=mktime(0,0,0,$month,$day,$year);
     $unixenddate=mktime(23,59,59,$month,$day,$year);
-    $sql = "SELECT count(*) FROM incidents ";
+    $sql = "SELECT count(*) FROM `{$dbIncidents}` ";
     $sql .= "WHERE opened BETWEEN '$unixstartdate' AND '$unixenddate' ";
     $result= mysql_query($sql);
     list($count)=mysql_fetch_row($result);
@@ -2534,9 +2536,10 @@ function countdayincidents($day, $month, $year)
 function countdayclosedincidents($day, $month, $year)
 {
     // Counts the number of incidents closed on a specified day
+    global $dbIncidents;
     $unixstartdate=mktime(0,0,0,$month,$day,$year);
     $unixenddate=mktime(23,59,59,$month,$day,$year);
-    $sql = "SELECT count(*) FROM incidents ";
+    $sql = "SELECT count(*) FROM `{$dbIncidents}` ";
     $sql .= "WHERE closed BETWEEN '$unixstartdate' AND '$unixenddate' ";
     $result= mysql_query($sql);
     list($count)=mysql_fetch_row($result);
@@ -2547,10 +2550,11 @@ function countdayclosedincidents($day, $month, $year)
 
 function countdaycurrentincidents($day, $month, $year)
 {
+    global $dbIncidents;
     // Counts the number of incidents opened on a specified day
     $unixstartdate=mktime(0,0,0,$month,$day,$year);
     $unixenddate=mktime(23,59,59,$month,$day,$year);
-    $sql = "SELECT count(*) FROM incidents ";
+    $sql = "SELECT count(*) FROM `{$dbIncidents}` ";
     $sql .= "WHERE opened <= '$unixenddate' AND closed >= '$unixstartdate' ";
     $result= mysql_query($sql);
     list($count)=mysql_fetch_row($result);
@@ -4332,7 +4336,7 @@ function incident_backup_switchover($userid, $accepting)
 function suggest_reassign_userid($incidentid, $exceptuserid=0)
 {
     global $now, $dbUsers, $dbIncidents;
-    $sql = "SELECT product, softwareid, priority, contact, owner FROM incidents WHERE id={$incidentid} LIMIT 1";
+    $sql = "SELECT product, softwareid, priority, contact, owner FROM `{$dbIncidents}` WHERE id={$incidentid} LIMIT 1";
     $result = mysql_query($sql);
     if (mysql_error()) trigger_error(mysql_error(),E_USER_ERROR);
 
@@ -4720,7 +4724,8 @@ function percent_bar($percent)
 
 function incident_open($incidentid)
 {
-    $sql = "SELECT id FROM incidents WHERE id='$incidentid' AND status!=2";
+    global $dbIncidents;
+    $sql = "SELECT id FROM `{$dbIncidents}` WHERE id='$incidentid' AND status!=2";
     $result=mysql_query($sql);
     if (mysql_error()) trigger_error("MySQL Query Error ".mysql_error(), E_USER_ERROR);
     if (mysql_num_rows($result) > 0)
@@ -4729,7 +4734,7 @@ function incident_open($incidentid)
     }
     else
     {
-        $sql = "SELECT id FROM incidents WHERE id = '$incidentid'";
+        $sql = "SELECT id FROM `{$dbIncidents}` WHERE id = '$incidentid'";
         $result=mysql_query($sql);
         if (mysql_error()) trigger_error("MySQL Query Error ".mysql_error(), E_USER_ERROR);
         if (mysql_num_rows($result) > 0)

@@ -239,12 +239,6 @@ function give_overview()
     mysql_free_result($result);
 
     //count incidents by Vendor
-
-/*
-    $sql = "SELECT DISTINCT products.vendorid, vendors.name FROM incidents, products, vendors ";
-    $sql .= "WHERE (status != 2 AND status != 7) AND incidents.product = products.id AND vendors.id = products.vendorid ORDER BY vendorid";
-*/
-
     $sql = "SELECT DISTINCT software.vendorid, vendors.name FROM `{$dbIncidents}` AS i, software, vendors ";
     $sql .= "WHERE (status != 2 AND status != 7) AND i.softwareid = software.id AND vendors.id = software.vendorid ORDER BY vendorid";
 
@@ -257,13 +251,6 @@ function give_overview()
         while ($vendors = mysql_fetch_array($result))
         {
             // This should use the software and relate to the product and then to the vendor
-            /*
-            $sqlVendor = "SELECT COUNT(incidents.id), incidentstatus.name FROM incidents, incidentstatus, products ";
-            $sqlVendor .= "WHERE incidents.status = incidentstatus.id AND closed = 0 AND incidents.product = products.id ";
-            $sqlVendor .= "AND products.vendorid = ".$vendors['vendorid']." ";
-            $sqlVendor .= "GROUP BY incidents.status";
-            */
-
             $sqlVendor = "SELECT COUNT(i.id), incidentstatus.name FROM `{$dbIncidents}` AS i, incidentstatus, software ";
             $sqlVendor .= "WHERE i.status = incidentstatus.id AND closed = 0 AND i.softwareid = software.id ";
             $sqlVendor .= "AND software.vendorid = ".$vendors['vendorid']." ";

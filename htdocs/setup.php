@@ -513,8 +513,8 @@ switch ($_REQUEST['action'])
                             echo "<p>Upgrading incidents data from version prior to 3.21...</p>";
                             // Fill the new servicelevel field in the incidents table using information from the maintenance contract
                             echo "<p>Upgrading incidents table to store service level...</p>";
-                            $sql = "SELECT *,incidents.id AS incidentid FROM incidents, maintenance, servicelevels WHERE incidents.maintenanceid=maintenance.id AND ";
-                            $sql .= "maintenance.servicelevelid = servicelevels.id ";
+                            $sql = "SELECT *, i.id AS incidentid FROM `{$dbIncidents}` AS i, `{$dbMaintenance}` AS m, `{$dbServiceLevels}` AS s WHERE i.maintenanceid = m.id AND ";
+                            $sql .= "m.servicelevelid = s.id ";
                             $result = mysql_query($sql);
                             while ($row = mysql_fetch_object($result))
                             {

@@ -47,14 +47,6 @@ if (empty($_REQUEST['mode']))
 }
 else
 {
-/*
-SELECT COUNT( incidents.id ) , products.vendorid, vendors.name
-FROM incidents, products, vendors
-WHERE incidents.product = products.id
-AND products.vendorid = vendors.id
-GROUP BY products.vendorid
-LIMIT 0 , 30
-*/
     $startdate = strtotime($_REQUEST['startdate']);
     $enddate = strtotime($_REQUEST['enddate']);
 
