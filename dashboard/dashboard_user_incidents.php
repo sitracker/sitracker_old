@@ -33,7 +33,7 @@ function dashboard_user_incidents($row,$dashboardid)
         if (mysql_num_rows($uresult) >= 1) list($user) = mysql_fetch_row($uresult);
         else $user=$sit[2]; // force to current user if username not found
     }
-    $sql = $selectsql . "WHERE contact=c.id AND i.priority=p.id ";
+    $sql =  "WHERE i.contact=c.id AND i.priority=p.id ";
     if ($user!='all') $sql .= "AND (owner='$user' OR towner='$user') ";
 
 
@@ -46,8 +46,8 @@ function dashboard_user_incidents($row,$dashboardid)
     $sql .= "OR IF (status='1' OR status='3' OR status='4', 1=1 , 1=2) ";  // active, research, left message - show all
     $sql .= ") AND timeofnextaction < $now ) ";
     echo "<div class='windowbox' style='width: 95%' id='$row-$dashboardid'>";
-    echo "<div class='windowtitle'><a href='incidents.php?user=current&amp;queue=1&amp;type=support'>
-        <img src='{$CONFIG['application_webpath']}images/icons/{$iconset}/16x16/support.png' width='16' height='16' alt='' /> ";
+    echo "<div class='windowtitle'><a href='incidents.php?user=current&amp;queue=1&amp;type=support'>";
+    echo "<img src='{$CONFIG['application_webpath']}images/icons/{$iconset}/16x16/support.png' width='16' height='16' alt='' /> ";
     if ($CONFIG['debug']) printf($GLOBALS['strUserIncidents'], user_realname($user,TRUE));
     echo "</a> ({$GLOBALS['strActionNeeded']})</div>";
     echo "<div class='window'>";
