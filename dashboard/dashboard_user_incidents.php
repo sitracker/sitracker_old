@@ -33,7 +33,7 @@ function dashboard_user_incidents($row,$dashboardid)
         if (mysql_num_rows($uresult) >= 1) list($user) = mysql_fetch_row($uresult);
         else $user=$sit[2]; // force to current user if username not found
     }
-    $sql =  "WHERE i.contact=c.id AND i.priority=p.id ";
+    $sql =  "WHERE i.contact = c.id AND i.priority = p.id ";
     if ($user!='all') $sql .= "AND (owner='$user' OR towner='$user') ";
 
 
