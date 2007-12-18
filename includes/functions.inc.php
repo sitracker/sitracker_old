@@ -1515,8 +1515,9 @@ function incidentstatus_drop_down_all($name, $id)
 */
 function closingstatus_drop_down($name, $id)
 {
+    global $dbClosingStatus;
     // extract statuses
-    $sql  = "SELECT id, name FROM closingstatus ORDER BY name ASC";
+    $sql  = "SELECT id, name FROM `{$dbClosingStatus}` ORDER BY name ASC";
     $result = mysql_query($sql);
     if (mysql_error()) trigger_error(mysql_error(),E_USER_WARNING);
     $html = "<select name=\"{$name}\">";
@@ -1908,11 +1909,11 @@ function incidentstatus_name($id)
 
 function closingstatus_name($id)
 {
-    if ($id!='')
-        $closingstatus = db_read_column('name', 'closingstatus', $id);
+    global $dbClosingStatus;
+    if ($id!='') $closingstatus = db_read_column('name', $dbClosingStatus, $id);
     else $closingstatus = $GLOBALS['strUnknown'];
 
-    return($closingstatus);
+    return ($closingstatus);
 }
 
 
@@ -3982,7 +3983,7 @@ function calculate_working_time($t1,$t2,$publicholidays) {
                 $c = ($time['hours']*60)+$time['minutes'];
                 $midnight = 24*60;
                 $diff = $midnight-$c;
-                $currenttime += ($diff*60); // to seconds 
+                $currenttime += ($diff*60); // to seconds
             }
             else if ($time['hours'] < $swd)
             {
@@ -4130,7 +4131,7 @@ function leading_zero($length,$number)
     $length = $length-strlen($number);
     for ($i = 0; $i < $length; $i++)
     {
-        $number = "0" . $number;  
+        $number = "0" . $number;
     }
     return($number);
 }

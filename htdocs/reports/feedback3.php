@@ -49,12 +49,12 @@ while ($qrow = mysql_fetch_object($qresult))
 }
 
 
-$msql = "SELECT *, closingstatus.name AS closingstatusname, sites.name AS sitename, sites.id as siteid, (incidents.closed - incidents.opened) AS duration, \n";
+$msql = "SELECT *, cs.name AS closingstatusname, sites.name AS sitename, sites.id as siteid, (incidents.closed - incidents.opened) AS duration, \n";
 $msql .= "feedbackrespondents.id AS reportid, contacts.id AS contactid ";
-$msql .= "FROM feedbackrespondents, incidents, contacts, sites, closingstatus WHERE feedbackrespondents.incidentid=incidents.id \n";
+$msql .= "FROM feedbackrespondents, incidents, contacts, sites, `{$dbClosingStatus}` AS cs WHERE feedbackrespondents.incidentid=incidents.id \n";
 $msql .= "AND incidents.contact=contacts.id ";
 $msql .= "AND contacts.siteid=sites.id ";
-$msql .= "AND incidents.closingstatus=closingstatus.id ";
+$msql .= "AND incidents.closingstatus=cs.id ";
 $msql .= "AND feedbackrespondents.incidentid > 0 \n";
 $msql .= "AND feedbackrespondents.completed = 'yes' \n";
 if (!empty($id)) $msql .= "AND incidents.contact='$id' \n";

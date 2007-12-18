@@ -342,9 +342,9 @@ function give_overview()
         {
             $string .= "<tr><th colspan='4' align='left'>".$row['count(incidents.id)']." Closed by ".$row['realname']."</th></tr>\n";
 
-            $sql = "SELECT incidents.id, incidents.title, closingstatus.name ";
-            $sql .= "FROM incidents, closingstatus ";
-            $sql .= "WHERE incidents.closingstatus = closingstatus.id AND closed > '$todayrecent' AND incidents.owner = '".$row['owner']."' ORDER BY closed";
+            $sql = "SELECT incidents.id, incidents.title, cs.name ";
+            $sql .= "FROM incidents, `{$dbClosingStatus}` AS cs ";
+            $sql .= "WHERE incidents.closingstatus = cs.id AND closed > '$todayrecent' AND incidents.owner = '".$row['owner']."' ORDER BY closed";
 
             $iresult = mysql_query($sql);
             if (mysql_error()) trigger_error("MySQL Query Error ".mysql_error(), E_USER_ERROR);
