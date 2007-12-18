@@ -118,20 +118,20 @@ elseif ($action == "edit" && (!empty($user) OR !empty($role)))
     </tr>\n";
     if (empty($role) AND !empty($user))
     {
-        $sql = "SELECT id, name, userpermissions.granted AS granted FROM permissions, userpermissions ";
-        $sql.= "WHERE permissions.id=userpermissions.permissionid ";
+        $sql = "SELECT id, name, userpermissions.granted AS granted FROM `{$dbPermissions}` AS p, userpermissions ";
+        $sql.= "WHERE p.id = userpermissions.permissionid ";
         $sql.= "AND userpermissions.userid='$user' ";
     }
     else
     {
-        $sql = "SELECT id, name, rolepermissions.granted AS granted FROM permissions, rolepermissions ";
-        $sql.= "WHERE permissions.id=rolepermissions.permissionid ";
+        $sql = "SELECT id, name, rolepermissions.granted AS granted FROM `{$dbPermissions}` AS p, rolepermissions ";
+        $sql.= "WHERE p.id = rolepermissions.permissionid ";
         $sql.= "AND rolepermissions.roleid='$role' ";
     }
     $permission_result = mysql_query($sql);
     if (mysql_error()) trigger_error(mysql_error(),E_USER_ERROR);
 
-    $sql = "SELECT * FROM permissions";
+    $sql = "SELECT * FROM `{$dbPermissions}`";
     $result= mysql_query($sql);
     $class='shade1';
     while ($permissions = mysql_fetch_array($result))
@@ -170,7 +170,7 @@ elseif ($action == "update")
     // check for blank name
     if (empty($role) AND empty($user))
     {
-        $sql = "SELECT * FROM roles ORDER BY id ASC";
+        $sql = "SELECT * FROM `{$dbRoles}` ORDER BY id ASC";
         $result= mysql_query($sql);
         if (mysql_error()) trigger_error(mysql_error(),E_USER_ERROR);
         while ($rolerow = mysql_fetch_object($result))
