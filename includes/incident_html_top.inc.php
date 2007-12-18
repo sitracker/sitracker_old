@@ -250,11 +250,11 @@ function Hide(button,element)
 $incidentid=$id;
 // Retrieve incident
 // extract incident details
-$sql  = "SELECT *, incidents.id AS incidentid, ";
+$sql  = "SELECT *, i.id AS incidentid, ";
 $sql .= "contacts.id AS contactid, contacts.notes AS contactnotes, servicelevel ";
-$sql .= "FROM incidents, contacts ";
-$sql .= "WHERE (incidents.id='{$incidentid}' AND incidents.contact=contacts.id) ";
-$sql .= " OR incidents.contact=NULL ";
+$sql .= "FROM `{$dbIncidents}` AS i, contacts ";
+$sql .= "WHERE (i.id='{$incidentid}' AND i.contact=contacts.id) ";
+$sql .= " OR i.contact=NULL ";
 $incidentresult = mysql_query($sql);
 if (mysql_error()) trigger_error("MySQL Query Error ".mysql_error(), E_USER_ERROR);
 $incident = mysql_fetch_object($incidentresult);

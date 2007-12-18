@@ -21,7 +21,7 @@ $userid=cleanvar($_REQUEST['user']);
 
 if (!is_numeric($userid)) trigger_error('Invalid userid', E_USER_ERROR);
 
-$sql = "SELECT * FROM incidents WHERE (owner='$userid' OR towner='$userid') ";
+$sql = "SELECT * FROM `{$dbIncidents}` WHERE (owner='$userid' OR towner='$userid') ";
 $sql .= "AND (status!='2') LIMIT 5";  // not closed
 
 $result = mysql_query($sql);

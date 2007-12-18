@@ -57,8 +57,8 @@ function count_incident_stats($incidentid)
 */
 function average_incident_duration($start,$end,$states)
 {
-    $sql = "SELECT opened, closed, (closed - opened) AS duration_closed, incidents.id AS incidentid ";
-    $sql .= "FROM incidents ";
+    $sql = "SELECT opened, closed, (closed - opened) AS duration_closed, i.id AS incidentid ";
+    $sql .= "FROM `{$dbIncidents}` AS i ";
     $sql .= "WHERE status='2' ";
     if ($start > 0) $sql .= "AND opened >= $start ";
     if ($end > 0) $sql .= "AND opened <= $end ";
@@ -93,7 +93,7 @@ function average_incident_duration($start,$end,$states)
 
 
 // get the first date
-$sql = "SELECT opened FROM incidents ORDER BY id ASC LIMIT 1";
+$sql = "SELECT opened FROM `{$dbIncidents}` ORDER BY id ASC LIMIT 1";
 $result = mysql_query($sql);
 if (mysql_error()) trigger_error(mysql_error(),E_USER_ERROR);
 list($firstdate)=mysql_fetch_row($result);

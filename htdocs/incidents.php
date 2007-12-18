@@ -49,7 +49,7 @@ function statusform_submit(user)
 <?php
 
 // Extract escalation paths
-$epsql = "SELECT id, name, track_url, home_url, url_title FROM escalationpaths";
+$epsql = "SELECT id, name, track_url, home_url, url_title FROM `{$dbEscalationPaths}`";
 $epresult = mysql_query($epsql);
 if (mysql_error()) trigger_error(mysql_error(),E_USER_ERROR);
 if (mysql_num_rows($epresult) >= 1)
@@ -64,11 +64,11 @@ if (mysql_num_rows($epresult) >= 1)
 }
 
 // Generic bit of SQL, common to both queue types
-$selectsql = "SELECT incidents.id, escalationpath, externalid, title, owner, towner, priority, status, closingstatus, siteid, contacts.id AS contactid, forenames, surname, phone, email, incidents.maintenanceid, ";
+$selectsql = "SELECT i.id, escalationpath, externalid, title, owner, towner, priority, status, closingstatus, siteid, contacts.id AS contactid, forenames, surname, phone, email, i.maintenanceid, ";
 $selectsql .= "servicelevel, softwareid, lastupdated, timeofnextaction, ";
 $selectsql .= "(timeofnextaction - $now) AS timetonextaction, opened, ($now - opened) AS duration, closed, (closed - opened) AS duration_closed, type, ";
 $selectsql .= "($now - lastupdated) AS timesincelastupdate ";
-$selectsql .= "FROM incidents, contacts, priority ";
+$selectsql .= "FROM `{$dbIncidents}` AS i, contacts, priority ";
 
 switch ($type)
 {

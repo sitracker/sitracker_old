@@ -114,19 +114,24 @@ else
         $recent_today = time() - (1 * 86400);
         $recent_hour = time() - (3600);
 
-        if ($search_details =='') $sql = "SELECT DISTINCT incidents.id, externalid, title, priority, siteid, owner, type, forenames, surname, lastupdated, status, opened, servicelevel FROM incidents, contacts WHERE incidents.contact=contacts.id  ";
+        if ($search_details =='')
+        {
+            $sql = "SELECT DISTINCT i.id, externalid, title, priority, siteid, owner, type, forenames, surname, lastupdated, status, opened, servicelevel ";
+            $sql .= "FROM `{$dbIncidents}` AS i, contacts WHERE i.contact=contacts.id  ";
+        }
         if ($search_details !='')
         {
             //           $sql = "SELECT incidents.id, externalid, title, priority, site, owner, incidents.type, realname, lastupdated, status FROM incidents, contacts ";
             //           $sql.= "LEFT JOIN updates on updates.incidentid=incidents.id WHERE contact=contacts.id ";
-            $sql = "SELECT DISTINCT incidents.id, updates.incidentid, incidents.externalid, incidents.title, incidents.priority, incidents.owner, incidents.type, incidents.lastupdated, incidents.status, contacts.forenames, contacts.surname, contacts.siteid, incidents.opened FROM updates, incidents, contacts WHERE updates.incidentid=incidents.id AND incidents.contact=contacts.id AND bodytext LIKE ('%$search_details%') ";
+            $sql = "SELECT DISTINCT i.id, updates.incidentid, i.externalid, i.title, i.priority, i.owner, i.type, i.lastupdated, i.status, contacts.forenames, contacts.surname, contacts.siteid, i.opened ";
+            $sql .= "FROM updates, `{$dbIncidents}` AS i, contacts WHERE updates.incidentid = i.id AND i.contact = contacts.id AND bodytext LIKE ('%$search_details%') ";
         }
 
         if ($search_title != '') $sql.= "AND title LIKE ('%$search_title%') ";
-        if ($search_id != '') $sql.= "AND incidents.id LIKE ('%$search_id%') ";
+        if ($search_id != '') $sql.= "AND i.id LIKE ('%$search_id%') ";
         if ($search_externalid !='') $sql.= "AND externalid LIKE ('%$search_externalid%') ";
         if ($search_contact != '') $sql.= "AND (contacts.surname LIKE '%$search_contact%' OR forenames LIKE '%$search_contact%') ";
-        if ($search_servicelevel != '') $sql.= "AND (incidents.servicelevel = '{$search_servicelevel}') ";
+        if ($search_servicelevel != '') $sql.= "AND (i.servicelevel = '{$search_servicelevel}') ";
         if ($search_range == 'Closed') $sql.= "AND closed != '0' ";
         if ($search_range == 'Open') $sql.= "AND closed = '0' ";
         if ($search_date == 'Recent180') $sql.= "AND lastupdated >= '$recent_sixmonth' ";
@@ -148,8 +153,8 @@ else
         // Sorting
         if ($sort_results == 'DateASC') $sql.="ORDER BY lastupdated ASC ";
         if ($sort_results == 'DateDESC') $sql.="ORDER BY lastupdated DESC ";
-        if ($sort_results == 'IDASC') $sql.="ORDER BY incidents.id ASC ";
-        if ($sort_results == 'TitleASC') $sql.="ORDER BY incidents.title ASC ";
+        if ($sort_results == 'IDASC') $sql.="ORDER BY i.id ASC ";
+        if ($sort_results == 'TitleASC') $sql.="ORDER BY i.title ASC ";
         if ($sort_results == 'ContactASC') $sql.="ORDER BY contacts.surname ASC ";
         if ($sort_results == 'SiteASC') $sql.="ORDER BY contacts.siteid ASC ";
 

@@ -33,13 +33,14 @@ echo "</script>";
 
 echo "<h2>{$strExternalEngineerCallDistribution}</h2>";
 
-$sql = "SELECT id, name FROM escalationpaths";
+$sql = "SELECT id, name FROM `{$dbEscalationPaths}`";
 $escs = mysql_query($sql);
 while ($escalations = mysql_fetch_object($escs))
 {
         $html .= "<h3>{$escalations->name}</h3>";
-        $sql = "SELECT incidents.*, software.name, contacts.forenames, contacts.surname, sites.name AS siteName FROM incidents, software, contacts, sites WHERE escalationpath = '{$escalations->id}' AND closed = '0' AND software.id = incidents.softwareid ";
-        $sql .= " AND incidents.contact = contacts.id AND contacts.siteid = sites.id ";
+        $sql = "SELECT i.*, software.name, contacts.forenames, contacts.surname, sites.name AS siteName ";
+        $sql .= "FROM `{$dbIncidents}` AS i, software, contacts, sites WHERE escalationpath = '{$escalations->id}' AND closed = '0' AND software.id = i.softwareid ";
+        $sql .= " AND i.contact = contacts.id AND contacts.siteid = sites.id ";
         $sql .= "ORDER BY externalengineer";
 
         $result = mysql_query($sql);

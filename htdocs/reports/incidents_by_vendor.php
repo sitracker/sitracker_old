@@ -58,7 +58,8 @@ LIMIT 0 , 30
     $startdate = strtotime($_REQUEST['startdate']);
     $enddate = strtotime($_REQUEST['enddate']);
 
-    $sql = "SELECT COUNT(incidents.id) AS volume, products.vendorid, vendors.name  FROM incidents, products, vendors WHERE incidents.product = products.id AND incidents.opened >= '{$startdate}' AND incidents.opened <= '{$enddate}' ";
+    $sql = "SELECT COUNT(i.id) AS volume, products.vendorid, vendors.name ";
+    $sql .= "FROM `{$dbIncidents}` AS i, products, vendors WHERE i.product = products.id AND i.opened >= '{$startdate}' AND i.opened <= '{$enddate}' ";
     $sql .= "AND products.vendorid = vendors.id GROUP BY products.vendorid";
 
     $result = mysql_query($sql);

@@ -100,7 +100,7 @@ if (empty($productid) AND $display!='skills')
             if (mysql_error()) trigger_error(mysql_error(),E_USER_ERROR);
             list($countengineers) = mysql_fetch_row($sresult);
 
-            $ssql = "SELECT COUNT(id) FROM incidents WHERE softwareid='{$software['id']}'";
+            $ssql = "SELECT COUNT(id) FROM `{$dbIncidents}` WHERE softwareid='{$software['id']}'";
             $sresult = mysql_query($ssql);
             if (mysql_error()) trigger_error(mysql_error(),E_USER_ERROR);
             list($countincidents) = mysql_fetch_row($sresult);
@@ -152,7 +152,7 @@ elseif (empty($productid) AND ($display=='skills' OR $display=='software'))
             if (mysql_error()) trigger_error("MySQL Query Error ".mysql_error(), E_USER_ERROR);
             list($countlinked)=mysql_fetch_row($sresult);
 
-            $ssql = "SELECT COUNT(id) FROM incidents WHERE softwareid='{$software->id}'";
+            $ssql = "SELECT COUNT(id) FROM `{$dbIncidents}` WHERE softwareid='{$software->id}'";
             $sresult = mysql_query($ssql);
             if (mysql_error()) trigger_error(mysql_error(),E_USER_ERROR);
             list($countincidents) = mysql_fetch_row($sresult);
@@ -219,7 +219,7 @@ else
                     if (mysql_error()) trigger_error(mysql_error(),E_USER_ERROR);
                     list($countengineers) = mysql_fetch_row($sresult);
 
-                    $ssql = "SELECT COUNT(id) FROM incidents WHERE softwareid='{$software['id']}'";
+                    $ssql = "SELECT COUNT(id) FROM `{$dbIncidents}` WHERE softwareid='{$software['id']}'";
                     $sresult = mysql_query($ssql);
                     if (mysql_error()) trigger_error(mysql_error(),E_USER_ERROR);
                     list($countincidents) = mysql_fetch_row($sresult);
@@ -273,7 +273,7 @@ else
                 echo "</table>\n";
             }
 
-            $sql = "SELECT * FROM incidents WHERE product={$product->id} ORDER BY id DESC";
+            $sql = "SELECT * FROM `{$dbIncidents}` WHERE product={$product->id} ORDER BY id DESC";
             $result = mysql_query($sql);
             if (mysql_error()) trigger_error(mysql_error(),E_USER_ERROR);
             if (mysql_num_rows($result) >= 1)

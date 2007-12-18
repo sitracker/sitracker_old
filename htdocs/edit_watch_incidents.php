@@ -152,7 +152,7 @@ switch ($action)
                             $name = $iobj->realname;
                             break;
                         case 3: //Incident
-                            $sql = "SELECT title FROM incidents WHERE id = {$obj->id}";
+                            $sql = "SELECT title FROM `{$dbIncidents}` WHERE id = {$obj->id}";
                             $iresult = mysql_query($sql);
                             if (mysql_error()) trigger_error(mysql_error(),E_USER_ERROR);
                             $iobj = mysql_fetch_object($iresult);

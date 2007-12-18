@@ -51,7 +51,7 @@ if ($CONFIG['auto_chase'] == TRUE)
     // if 'awaiting customer action' for more than $CONFIG['chase_email_minutes'] and NOT in an auto state, send auto email
 
     //$sql = "SELECT incidents.id, contacts.forenames,contacts.surname,contacts.id AS managerid FROM incidents,contacts WHERE status = ".STATUS_CUSTOMER." AND contacts.notify_contactid = contacts.id";
-    $sql = "SELECT incidents.id, incidents.timeofnextaction FROM incidents WHERE status = ".STATUS_CUSTOMER;
+    $sql = "SELECT i.id, i.timeofnextaction FROM `{$dbIncidents}` AS i WHERE status = ".STATUS_CUSTOMER;
 
     $result = mysql_query($sql);
     if (mysql_error()) trigger_error("MySQL Query Error ".mysql_error(), E_USER_ERROR);
@@ -61,7 +61,7 @@ if ($CONFIG['auto_chase'] == TRUE)
         if (!in_array($obj->maintenanceid, $CONFIG['dont_chase_maintids']))
         {
             // only annoy these people
-            $sql_update = "SELECT * FROM updates WHERE incidentid = {$obj->id} ORDER BY timestamp DESC LIMIT 1";
+            $sql_update = "SELECT * FROM `{$dbUpdates}` WHERE incidentid = {$obj->id} ORDER BY timestamp DESC LIMIT 1";
             $result_update = mysql_query($sql_update);
             if (mysql_error()) trigger_error("MySQL Query Error ".mysql_error(), E_USER_ERROR);
 

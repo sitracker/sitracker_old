@@ -46,7 +46,7 @@ if (!empty($userid))
     if (mysql_num_rows($result)>=1) $errors++;
 
     // Check there are no incidents linked to this user
-    $sql = "SELECT id FROM incidents WHERE owner=$userid OR towner=$userid LIMIT 1";
+    $sql = "SELECT id FROM `{$dbIncidents}` WHERE owner=$userid OR towner=$userid LIMIT 1";
     $result = mysql_query($sql);
     if (mysql_num_rows($result)>=1) $errors++;
 

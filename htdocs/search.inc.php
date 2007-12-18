@@ -221,7 +221,7 @@ if (!empty($search_string))
         case 'all':
             // All search not supported now, so just do incidents instead
         case 'incidents':
-            $sql = "SELECT * FROM incidents WHERE ";
+            $sql = "SELECT * FROM `{$dbIncidents}` WHERE ";
             if (is_numeric($sterms[0])) $sql .= search_build_query('id', $sterms)."OR ";
             $sql .= search_build_query('title', $sterms);
             if (!empty($software) AND $software != '0') $sql .= "AND softwareid = {$software}";
@@ -251,10 +251,11 @@ if (!empty($search_string))
             if ($searchmode != 'related')
             {
             // Incident updates
-                $sql = "SELECT DISTINCT incidents.id AS incidentid, incidents.title, updates.bodytext, updates.timestamp, incidents.opened, incidents.closed FROM incidents,updates WHERE ";
-                $sql .= "updates.incidentid = incidents.id AND (";
+                $sql = "SELECT DISTINCT i.id AS incidentid, i.title, updates.bodytext, updates.timestamp, i.opened, i.closed ";
+                $sql .= "FROM `{$dbIncidents}` AS i,updates WHERE ";
+                $sql .= "updates.incidentid = i.id AND (";
                 $sql .= search_build_query('updates.bodytext', $sterms);
-                $sql .= ") GROUP BY incidents.id";
+                $sql .= ") GROUP BY i.id";
                 $result = mysql_query($sql);
 //                 if ($CONFIG['debug']) echo $sql;
                 if (mysql_error()) trigger_error(mysql_error(),E_USER_WARNING);

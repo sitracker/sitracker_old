@@ -50,7 +50,7 @@ if ($actions[0]=='' OR in_array('CloseIncidents',$actions))
     //
     // Select incidents awaiting closure for more than a week where the next action time is not set or has passed
     //
-    $sql = "SELECT * FROM incidents WHERE status='7' AND (($now - lastupdated) > '{$CONFIG['closure_delay']}') AND (timeofnextaction='0' OR timeofnextaction<='$now') ";
+    $sql = "SELECT * FROM `{$dbIncidents}` WHERE status='7' AND (($now - lastupdated) > '{$CONFIG['closure_delay']}') AND (timeofnextaction='0' OR timeofnextaction<='$now') ";
     $result=mysql_query($sql);
     if (mysql_error()) trigger_error(mysql_error(),E_USER_ERROR);
     if ($verbose) echo "Found ".mysql_num_rows($result)." Incidents to close{$crlf}";

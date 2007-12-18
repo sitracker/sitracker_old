@@ -71,10 +71,10 @@ if (mysql_num_rows($result) > 0)
         switch ($obj->type)
         {
             case '0': //Site
-                $sql = "SELECT incidents.id, incidents.title, incidents.status, incidents.servicelevel, incidents.maintenanceid, incidents.priority, contacts.forenames, contacts.surname, contacts.siteid ";
-                $sql .= "FROM incidents, contacts ";
-                $sql .= "WHERE incidents.contact = contacts.id AND contacts.siteid = {$obj->id} ";
-                $sql .= "AND incidents.status != 2 AND incidents.status != 7";
+                $sql = "SELECT i.id, i.title, i.status, i.servicelevel, i.maintenanceid, i.priority, contacts.forenames, contacts.surname, contacts.siteid ";
+                $sql .= "FROM `{$dbIncidents}` AS i, contacts ";
+                $sql .= "WHERE i.contact = contacts.id AND contacts.siteid = {$obj->id} ";
+                $sql .= "AND i.status != 2 AND i.status != 7";
 
                 $lsql = "SELECT name FROM sites WHERE id = {$obj->id}";
                 $lresult = mysql_query($lsql);
@@ -83,10 +83,10 @@ if (mysql_num_rows($result) > 0)
                 echo "<tr><th colspan='3'>{$lobj->name} ({$strSite})</th></tr>";
                 break;
             case '1': //contact
-                $sql = "SELECT incidents.id, incidents.title, incidents.status, incidents.servicelevel, incidents.maintenanceid, incidents.priority, contacts.forenames, contacts.surname, contacts.siteid ";
-                $sql .= "FROM incidents, contacts ";
-                $sql .= "WHERE incidents.contact = contacts.id AND incidents.contact = {$obj->id} ";
-                $sql .= "AND incidents.status != 2 AND incidents.status != 7";
+                $sql = "SELECT i.id, i.title, i.status, i.servicelevel, i.maintenanceid, i.priority, contacts.forenames, contacts.surname, contacts.siteid ";
+                $sql .= "FROM `{$dbIncidents}` AS i, contacts ";
+                $sql .= "WHERE i.contact = contacts.id AND i.contact = {$obj->id} ";
+                $sql .= "AND i.status != 2 AND i.status != 7";
 
                 $lsql = "SELECT forenames, surname FROM `{$dbContacts}` WHERE id = {$obj->id}";
                 $lresult = mysql_query($lsql);
@@ -95,10 +95,10 @@ if (mysql_num_rows($result) > 0)
                 echo "<tr><th colspan='3'>{$lobj->forenames} {$lobj->surname} ({$strContact})</th></tr>";
                 break;
             case '2': //engineer
-                $sql = "SELECT incidents.id, incidents.title, incidents.status, incidents.servicelevel, incidents.maintenanceid, incidents.priority, contacts.forenames, contacts.surname, contacts.siteid ";
-                $sql .= "FROM incidents, contacts ";
-                $sql .= "WHERE incidents.contact = contacts.id AND (incidents.owner = {$obj->id} OR incidents.towner = {$obj->id}) ";
-                $sql .= "AND incidents.status != 2 AND incidents.status != 7";
+                $sql = "SELECT i.id, i.title, i.status, i.servicelevel, i.maintenanceid, i.priority, contacts.forenames, contacts.surname, contacts.siteid ";
+                $sql .= "FROM `{$dbIncidents}` AS i, contacts ";
+                $sql .= "WHERE i.contact = contacts.id AND (i.owner = {$obj->id} OR i.towner = {$obj->id}) ";
+                $sql .= "AND i.status != 2 AND i.status != 7";
 
                 $lsql = "SELECT realname FROM users WHERE id = {$obj->id}";
                 $lresult = mysql_query($lsql);
@@ -110,9 +110,9 @@ if (mysql_num_rows($result) > 0)
 
                 break;
             case '3': //incident
-                $sql = "SELECT incidents.id, incidents.title, incidents.status, incidents.servicelevel, incidents.maintenanceid, incidents.priority ";
-                $sql .= "FROM incidents ";
-                $sql .= "WHERE incidents.id = {$obj->id} ";
+                $sql = "SELECT i.id, i.title, i.status, i.servicelevel, i.maintenanceid, i.priority ";
+                $sql .= "FROM `{$dbIncidents}` AS i ";
+                $sql .= "WHERE i.id = {$obj->id} ";
                 //$sql .= "AND incidents.status != 2 AND incidents.status != 7";
                 break;
             default:

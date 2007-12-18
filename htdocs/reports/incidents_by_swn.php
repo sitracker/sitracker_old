@@ -122,7 +122,7 @@ else
             $others += $countArray[$i];
         }
 
-        $sqlN = "SELECT id, servicelevel, opened FROM incidents WHERE softwareid = '".$softwareID[$i]."'";
+        $sqlN = "SELECT id, servicelevel, opened FROM `{$dbIncidents}` WHERE softwareid = '".$softwareID[$i]."'";
         $sqlN .= " AND opened >= '{$startdate}' AND opened <= '{$enddate}' ORDER BY opened";
 
         $resultN = mysql_query($sqlN);

@@ -66,10 +66,11 @@ else
         // build SQL
         if ($fields == "all" || $fields=='')
         {
-            $sql  = "SELECT incidents.id, externalid, title, priority, siteid, owner, type, surname, forenames, lastupdated, status FROM incidents, contacts, priority WHERE contact=contacts.id ";
-            $sql .= "AND incidents.priority=priority.id AND ";
+            $sql  = "SELECT i.id, externalid, title, priority, siteid, owner, type, surname, forenames, lastupdated, status ";
+            $sql .= "FROM `{$dbIncidents}` AS i, contacts, priority WHERE contact=contacts.id ";
+            $sql .= "AND i.priority=priority.id AND ";
             $sql .= "(title LIKE ('%$search_string%') OR ";
-            $sql .= "incidents.id LIKE ('%$search_string%') OR ";
+            $sql .= "i.id LIKE ('%$search_string%') OR ";
             $sql .= "externalid LIKE ('%$search_string%') OR ";
             $sql .= "surname LIKE ('%$search_string%') OR ";
             $sql .= "forenames LIKE ('%$search_string%') OR ";
@@ -77,23 +78,28 @@ else
         }
         elseif ($fields == "title")
         {
-            $sql  = "SELECT incidents.id, externalid, title, priority, siteid, owner, type, surname, forenames, lastupdated, status, contacts.siteid AS siteid FROM incidents, contacts WHERE contact=contacts.id AND title LIKE ('%$search_string%')";
+            $sql  = "SELECT i.id, externalid, title, priority, siteid, owner, type, surname, forenames, lastupdated, status, contacts.siteid AS siteid ";
+            $sql .= "FROM `{$dbIncidents}` AS i, contacts WHERE contact=contacts.id AND title LIKE ('%$search_string%')";
         }
         elseif ($fields == "id")
         {
-            $sql  = "SELECT incidents.id, externalid, title, priority, siteid, owner, type, surname, forenames, lastupdated, status, contacts.siteid AS siteid FROM incidents, contacts WHERE contact=contacts.id AND incidents.id LIKE ('%$search_string%')";
+            $sql  = "SELECT i.id, externalid, title, priority, siteid, owner, type, surname, forenames, lastupdated, status, contacts.siteid AS siteid ";
+            $sql .= "FROM `{$dbIncidents}` AS i, contacts WHERE contact=contacts.id AND i.id LIKE ('%$search_string%')";
         }
         elseif ($fields == "externalid")
         {
-            $sql  = "SELECT incidents.id, externalid, title, priority, siteid, owner, type, surname, forenames, lastupdated, status, contacts.siteid AS siteid FROM incidents, contacts WHERE contact=contacts.id AND externalid LIKE ('%$search_string%')";
+            $sql  = "SELECT i.id, externalid, title, priority, siteid, owner, type, surname, forenames, lastupdated, status, contacts.siteid AS siteid ";
+            $sql .= "FROM `{$dbIncidents}` AS i, contacts WHERE contact=contacts.id AND externalid LIKE ('%$search_string%')";
         }
         elseif ($fields == "contact")
         {
-            $sql  = "SELECT incidents.id, externalid, title, priority, siteid, owner, type, surname, forenames, lastupdated, status, contacts.siteid AS siteid FROM incidents, contacts WHERE contact=contacts.id AND surname LIKE ('%$search_string%')";
+            $sql  = "SELECT i.id, externalid, title, priority, siteid, owner, type, surname, forenames, lastupdated, status, contacts.siteid AS siteid ";
+            $sql .= "FROM `{$dbIncidents}` AS i, contacts WHERE contact=contacts.id AND surname LIKE ('%$search_string%')";
         }
         elseif ($fields == "site")
         {
-            $sql  = "SELECT incidents.id, externalid, title, priority, siteid, owner, type, surname, forenames, lastupdated, status, contacts.siteid AS siteid FROM incidents, contacts, sites WHERE contact=contacts.id AND contacts.siteid=sites.id AND sites.name LIKE ('%$search_string%') ORDER BY incidents.id";
+            $sql  = "SELECT i.id, externalid, title, priority, siteid, owner, type, surname, forenames, lastupdated, status, contacts.siteid AS siteid ";
+            $sql .= "FROM `{$dbIncidents}` AS i, contacts, sites WHERE contact=contacts.id AND contacts.siteid=sites.id AND sites.name LIKE ('%$search_string%') ORDER BY i.id";
         }
 
         $result = mysql_query($sql);

@@ -26,17 +26,18 @@ $mode = cleanvar($_REQUEST['mode']);
 */
 function get_sql_statement($startdate,$enddate,$statementnumber,$count=TRUE)
 {
+    global $dbIncidents;
     if ($count) $count = "count(*)";
     else $count = "*";
-    $sql[0] = "SELECT {$count} FROM incidents WHERE opened BETWEEN '{$startdate}' AND '{$enddate}'";
-    $sql[1] = "SELECT {$count} FROM incidents WHERE closed BETWEEN '{$startdate}' AND '{$enddate}'";
-    $sql[2] = "SELECT {$count} FROM incidents WHERE lastupdated BETWEEN '{$startdate}' AND '{$enddate}'";
-    $sql[3] = "SELECT {$count} FROM incidents WHERE opened <= '{$enddate}' AND (closed >= '$startdate' OR closed = 0)";
+    $sql[0] = "SELECT {$count} FROM `{$dbIncidents}` WHERE opened BETWEEN '{$startdate}' AND '{$enddate}'";
+    $sql[1] = "SELECT {$count} FROM `{$dbIncidents}` WHERE closed BETWEEN '{$startdate}' AND '{$enddate}'";
+    $sql[2] = "SELECT {$count} FROM `{$dbIncidents}` WHERE lastupdated BETWEEN '{$startdate}' AND '{$enddate}'";
+    $sql[3] = "SELECT {$count} FROM `{$dbIncidents}` WHERE opened <= '{$enddate}' AND (closed >= '$startdate' OR closed = 0)";
     $sql[4] = "SELECT count(*), count(DISTINCT userid) FROM updates WHERE timestamp >= '$startdate' AND timestamp <= '$enddate'";
     $sql[5] = "SELECT count(DISTINCT softwareid), count(DISTINCT owner) FROM incidents WHERE opened <= '{$enddate}' AND (closed >= '$startdate' OR closed = 0)";
     $sql[6] = "SELECT {$count} FROM updates WHERE timestamp >= '$startdate' AND timestamp <= '$enddate' AND type='email'";
     $sql[7] = "SELECT {$count} FROM updates WHERE timestamp >= '$startdate' AND timestamp <= '$enddate' AND type='emailin'";
-    $sql[8] = "SELECT {$count} FROM incidents WHERE opened <= '{$enddate}' AND (closed >= '$startdate' OR closed = 0) AND priority >= 3";
+    $sql[8] = "SELECT {$count} FROM `{$dbIncidents}` WHERE opened <= '{$enddate}' AND (closed >= '$startdate' OR closed = 0) AND priority >= 3";
     return $sql[$statementnumber];
 }
 
@@ -214,8 +215,8 @@ function give_overview()
 
     echo "<br />\n";
 
-    $sql = "SELECT COUNT(incidents.id), incidentstatus.name FROM incidents, incidentstatus ";
-    $sql .= "WHERE incidents.status = incidentstatus.id AND status != 2 AND status != 7 GROUP BY incidents.status";
+    $sql = "SELECT COUNT(i.id), incidentstatus.name FROM `{$dbIncidents}` AS i, incidentstatus ";
+    $sql .= "WHERE i.status = incidentstatus.id AND status != 2 AND status != 7 GROUP BY i.status";
     $result = mysql_query($sql);
     if (mysql_error()) trigger_error("MySQL Query Error ".mysql_error(), E_USER_ERROR);
 
@@ -244,8 +245,8 @@ function give_overview()
     $sql .= "WHERE (status != 2 AND status != 7) AND incidents.product = products.id AND vendors.id = products.vendorid ORDER BY vendorid";
 */
 
-    $sql = "SELECT DISTINCT software.vendorid, vendors.name FROM incidents, software, vendors ";
-    $sql .= "WHERE (status != 2 AND status != 7) AND incidents.softwareid = software.id AND vendors.id = software.vendorid ORDER BY vendorid";
+    $sql = "SELECT DISTINCT software.vendorid, vendors.name FROM `{$dbIncidents}` AS i, software, vendors ";
+    $sql .= "WHERE (status != 2 AND status != 7) AND i.softwareid = software.id AND vendors.id = software.vendorid ORDER BY vendorid";
 
     $result = mysql_query($sql);
     if (mysql_error()) trigger_error("MySQL Query Error ".mysql_error(), E_USER_ERROR);
@@ -263,10 +264,10 @@ function give_overview()
             $sqlVendor .= "GROUP BY incidents.status";
             */
 
-            $sqlVendor = "SELECT COUNT(incidents.id), incidentstatus.name FROM incidents, incidentstatus, software ";
-            $sqlVendor .= "WHERE incidents.status = incidentstatus.id AND closed = 0 AND incidents.softwareid = software.id ";
+            $sqlVendor = "SELECT COUNT(i.id), incidentstatus.name FROM `{$dbIncidents}` AS i, incidentstatus, software ";
+            $sqlVendor .= "WHERE i.status = incidentstatus.id AND closed = 0 AND i.softwareid = software.id ";
             $sqlVendor .= "AND software.vendorid = ".$vendors['vendorid']." ";
-            $sqlVendor .= "GROUP BY incidents.status";
+            $sqlVendor .= "GROUP BY i.status";
 
             $resultVendor = mysql_query($sqlVendor);
             if (mysql_error()) trigger_error("MySQL Query Error ".mysql_error(), E_USER_ERROR);
@@ -290,7 +291,7 @@ function give_overview()
 
 
     // Count incidents logged today
-    $sql = "SELECT id FROM incidents WHERE opened > '$todayrecent'";
+    $sql = "SELECT id FROM `{$dbIncidents}` WHERE opened > '$todayrecent'";
     $result = mysql_query($sql);
     if (mysql_error()) trigger_error("MySQL Query Error ".mysql_error(), E_USER_ERROR);
     $todaysincidents=mysql_num_rows($result);
@@ -300,13 +301,16 @@ function give_overview()
     if ($todaysincidents > 0)
     {
         $string .= "<table align='center' width='50%'><tr><td colspan='2'>Assigned as follows:</td></tr>";
-        $sql = "SELECT count(incidents.id), realname, users.id AS owner FROM incidents, users WHERE opened > '$todayrecent' AND incidents.owner = users.id GROUP BY owner DESC";
+        $sql = "SELECT count(i.id), realname, users.id AS owner ";
+        $sql .= "FROM `{$dbIncidents}` AS i, users ";
+        $sql .= "WHERE opened > '$todayrecent' AND i.owner = users.id "
+        $sql .= "GROUP BY owner DESC";
 
         $result = mysql_query($sql);
         if (mysql_error()) trigger_error("MySQL Query Error ".mysql_error(), E_USER_ERROR);
         while ($row = mysql_fetch_array($result))
         {
-            $sql = "SELECT id, title FROM incidents WHERE opened > '$todayrecent' AND owner = '".$row['owner']."'";
+            $sql = "SELECT id, title FROM `{$dbIncidents}` WHERE opened > '$todayrecent' AND owner = '".$row['owner']."'";
 
             $string .= "<tr><th>".$row['count(incidents.id)']."</th>";
             $string .= "<td class='shade2' align='left'><a href='incidents.php?user=".$row['owner']."&amp;queue=1&amp;type=support'>".$row['realname']."</a> ";
@@ -325,7 +329,7 @@ function give_overview()
 
 
     // Count incidents closed today
-    $sql = "SELECT COUNT(id) FROM incidents WHERE closed > '$todayrecent'";
+    $sql = "SELECT COUNT(id) FROM `{$dbIncidents}` WHERE closed > '$todayrecent'";
     $result = mysql_query($sql);
     if (mysql_error()) trigger_error("MySQL Query Error ".mysql_error(), E_USER_ERROR);
     list($todaysclosed)=mysql_fetch_row($result);
@@ -333,7 +337,7 @@ function give_overview()
     $string .= "<h4>$todaysclosed Incidents closed today</h4>"; // FIXME i18n closed today
     if ($todaysclosed > 0)
     {
-        $sql = "SELECT count(incidents.id), realname, users.id AS owner FROM incidents LEFT JOIN users ON incidents.owner = users.id WHERE closed > '$todayrecent' GROUP BY owner";
+        $sql = "SELECT count(i.id), realname, users.id AS owner FROM `{$dbIncidents}` AS i LEFT JOIN users ON i.owner = users.id WHERE closed > '$todayrecent' GROUP BY owner";
         $string .= "<table align='center' width='50%'>";
         $string .= "<tr><th>ID</th><th>Title</th><th>Owner</th><th>Closing status</th></tr>\n";
         $result = mysql_query($sql);
@@ -342,9 +346,9 @@ function give_overview()
         {
             $string .= "<tr><th colspan='4' align='left'>".$row['count(incidents.id)']." Closed by ".$row['realname']."</th></tr>\n";
 
-            $sql = "SELECT incidents.id, incidents.title, cs.name ";
-            $sql .= "FROM incidents, `{$dbClosingStatus}` AS cs ";
-            $sql .= "WHERE incidents.closingstatus = cs.id AND closed > '$todayrecent' AND incidents.owner = '".$row['owner']."' ORDER BY closed";
+            $sql = "SELECT i.id, i.title, cs.name ";
+            $sql .= "FROM `{$dbIncidents}` AS i, `{$dbClosingStatus}` AS cs ";
+            $sql .= "WHERE i.closingstatus = cs.id AND closed > '$todayrecent' AND i.owner = '".$row['owner']."' ORDER BY closed";
 
             $iresult = mysql_query($sql);
             if (mysql_error()) trigger_error("MySQL Query Error ".mysql_error(), E_USER_ERROR);

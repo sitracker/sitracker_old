@@ -473,7 +473,7 @@ else
 
 
                 // Get softwareid from Incident record
-                $sql = "SELECT softwareid FROM incidents WHERE id='$id'";
+                $sql = "SELECT softwareid FROM `{$dbIncidents}` WHERE id='$id'";
                 $result=mysql_query($sql);
                 if (mysql_error()) trigger_error("MySQL Query Error ".mysql_error(), E_USER_ERROR);
                 list($softwareid)=mysql_fetch_row($result);

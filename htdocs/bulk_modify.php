@@ -68,7 +68,7 @@ External email:  -&gt; <b>foo@pheaney.co.uk</b>
 
             //list incidents with this old email address so we can update them
 
-            $sql = "SELECT id FROM incidents WHERE closed = '0' AND externalemail = '".$old_email_address."'";
+            $sql = "SELECT id FROM `{$dbIncidents}` WHERE closed = '0' AND externalemail = '".$old_email_address."'";
             $result = mysql_query($sql);
             if (mysql_error()) trigger_error(mysql_error(),E_USER_ERROR);
 

@@ -73,7 +73,7 @@ elseif ($action=='delete')
 {
     // Delete
     // First check there are no incidents using this software
-    $sql = "SELECT count(id) FROM incidents WHERE softwareid='$id'";
+    $sql = "SELECT count(id) FROM `{$dbIncidents}` WHERE softwareid='$id'";
     $result = mysql_query($sql);
     if (mysql_error()) trigger_error(mysql_error(),E_USER_ERROR);
     list($countincidents) = mysql_fetch_row($result);

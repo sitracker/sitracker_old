@@ -31,7 +31,7 @@ if (empty($submit))
     include ('incident_html_top.inc.php');
 
     // extract incident details
-    $sql  = "SELECT * FROM incidents WHERE id='$id'";
+    $sql  = "SELECT * FROM `{$dbIncidents}` WHERE id='$id'";
     $result = mysql_query($sql);
     if (mysql_error()) trigger_error("MySQL Query Error ".mysql_error(), E_USER_ERROR);
     $incident = mysql_fetch_array($result);
@@ -196,7 +196,7 @@ else
                         $header .= "None";
                     $header .= "</b>\n";
                 }
-                $escalationpath=db_read_column('name', 'escalationpaths', $escalationpath);
+                $escalationpath=db_read_column('name', $dbEscalationPaths, $escalationpath);
                 if ($oldccemail != $ccemail) $header .= "CC Email: " . $oldccemail . " -&gt; <b>" . $ccemail . "</b>\n";
                 if ($oldescalationpath != $escalationpath) $header .= "Escalation: " . $oldescalationpath . " -&gt; <b>" . $escalationpath . "</b>\n";
                 if ($oldexternalengineer != $externalengineer) $header .= "External Engineer: " . $oldexternalengineer . " -&gt; <b>" . $externalengineer . "</b>\n";
@@ -207,7 +207,7 @@ else
 
                 if (!empty($header)) $header .= "<hr>";
              //get current incident status
-                $sql = "SELECT status FROM incidents WHERE id={$id}";
+                $sql = "SELECT status FROM `{$dbIncidents}` WHERE id={$id}";
                 $result = mysql_query($sql);
                 $status = mysql_fetch_object($result);
                 $status = $status->status;

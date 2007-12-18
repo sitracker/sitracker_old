@@ -248,7 +248,7 @@ if ($countresults > 0)
     }
 }
 
-$sql = "SELECT * FROM incidents WHERE owner='0' AND status!='2'";
+$sql = "SELECT * FROM `{$dbIncidents}` WHERE owner='0' AND status!='2'";
 $resultnew = mysql_query($sql);
 if (mysql_num_rows($resultnew) >= 1)
 {
@@ -345,10 +345,10 @@ if ($spamcount > 0)
 }
 
 
-$sql = "SELECT incidents.id, incidents.title, contacts.forenames, contacts.surname, sites.name ";
-$sql .= "FROM incidents,contacts,sites ";
-$sql .= "WHERE incidents.status = 8 AND incidents.contact = contacts.id AND contacts.siteid = sites.id ";
-$sql .= "ORDER BY sites.id, incidents.contact"; //awaiting customer action
+$sql = "SELECT i.id, i.title, contacts.forenames, contacts.surname, sites.name ";
+$sql .= "FROM `{$dbIncidents}` AS i,contacts,sites ";
+$sql .= "WHERE i.status = 8 AND i.contact = contacts.id AND contacts.siteid = sites.id ";
+$sql .= "ORDER BY sites.id, i.contact"; //awaiting customer action
 $resultchase = mysql_query($sql);
 if (mysql_num_rows($resultchase) >= 1)
 {

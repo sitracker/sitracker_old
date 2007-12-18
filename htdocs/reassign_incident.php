@@ -40,7 +40,7 @@ switch ($action)
         $id = cleanvar($_REQUEST['id']);
 
         // Retrieve current incident details
-        $sql = "SELECT * FROM incidents WHERE id='$id' LIMIT 1";
+        $sql = "SELECT * FROM `{$dbIncidents}` WHERE id='$id' LIMIT 1";
         $result = mysql_query($sql);
         if (mysql_error()) trigger_error("MySQL Query Error ".mysql_error(), E_USER_ERROR);
         $incident = mysql_fetch_object($result);
@@ -109,7 +109,7 @@ switch ($action)
         include ('incident_html_top.inc.php');
 
 
-        $sql = "SELECT * FROM incidents WHERE id='$id' LIMIT 1";
+        $sql = "SELECT * FROM `{$dbIncidents}` WHERE id='$id' LIMIT 1";
         $result = mysql_query($sql);
         if (mysql_error()) trigger_error("MySQL Query Error ".mysql_error(), E_USER_ERROR);
         $incident = mysql_fetch_object($result);

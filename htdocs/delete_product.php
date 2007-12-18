@@ -32,7 +32,7 @@ if (!empty($productid))
     if (mysql_num_rows($result)>=1) $errors++;
 
     // check there are no incidents with this product
-    $sql = "SELECT id FROM incidents WHERE product=$productid LIMIT 1";
+    $sql = "SELECT id FROM `{$dbIncidents}` WHERE product=$productid LIMIT 1";
     $result = mysql_query($sql);
     if (mysql_num_rows($result)>=1) $errors++;
 

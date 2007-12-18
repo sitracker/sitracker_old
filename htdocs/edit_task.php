@@ -126,11 +126,11 @@ switch ($action)
         if ($incident)
         {
             //get current incident status
-            $sql = "SELECT status FROM incidents WHERE id={$incident}";
+            $sql = "SELECT status FROM `{$dbIncidents}` WHERE id={$incident}";
             $result = mysql_query($sql);
             $status = mysql_fetch_object($result);
             $status = $status->status;
-            
+
             $sql = "SELECT * FROM tasks WHERE id='$id'";
             $result = mysql_query($sql);
             if (mysql_error()) trigger_error(mysql_error(),E_USER_ERROR);

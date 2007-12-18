@@ -121,13 +121,13 @@ switch ($page)
         {
             echo "<h2>{$strYourClosedIncidents}</h2>";
             echo "<p align='center'><a href='$_SERVER[PHP_SELF]?page=incidents&amp;showclosed=false'>{$strShowOpenIncidents}</a></p>";
-            $sql = "SELECT * FROM incidents WHERE status = 2 AND contact = '{$_SESSION['contactid']}'";
+            $sql = "SELECT * FROM `{$dbIncidents}` WHERE status = 2 AND contact = '{$_SESSION['contactid']}'";
         }
         else
         {
             echo "<h2>{$strYourCurrentOpenIncidents}</h2>";
             echo "<p align='center'><a href='$_SERVER[PHP_SELF]?page=incidents&amp;showclosed=true'>{$strShowClosedIncidents}</a></p>";
-            $sql = "SELECT * FROM incidents WHERE status != 2 AND contact = '{$_SESSION['contactid']}'";
+            $sql = "SELECT * FROM `{$dbIncidents}` WHERE status != 2 AND contact = '{$_SESSION['contactid']}'";
         }
         $result = mysql_query($sql);
         if (mysql_error()) trigger_error(mysql_error(),E_USER_ERROR);
@@ -411,7 +411,7 @@ switch ($page)
     //show specified incident
     case 'showincident':
         $incidentid = $_REQUEST['id'];
-        $sql = "SELECT title, contact, status FROM incidents WHERE id={$incidentid}";
+        $sql = "SELECT title, contact, status FROM `{$dbIncidents}` WHERE id={$incidentid}";
         $result = mysql_query($sql);
         $user = mysql_fetch_object($result);
 

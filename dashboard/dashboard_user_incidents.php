@@ -51,17 +51,17 @@ function dashboard_user_incidents($row,$dashboardid)
     echo "</a> ({$GLOBALS['strActionNeeded']})</div>";
     echo "<div class='window'>";
 
-    $selectsql = "SELECT incidents.id, externalid, title, owner, towner, priority, status, siteid, forenames, surname, email, incidents.maintenanceid, ";
+    $selectsql = "SELECT i.id, externalid, title, owner, towner, priority, status, siteid, forenames, surname, email, i.maintenanceid, ";
     $selectsql .= "servicelevel, softwareid, lastupdated, timeofnextaction, ";
     $selectsql .= "(timeofnextaction - $now) AS timetonextaction, opened, ($now - opened) AS duration, closed, (closed - opened) AS duration_closed, type, ";
     $selectsql .= "($now - lastupdated) AS timesincelastupdate ";
-    $selectsql .= "FROM incidents, contacts, priority ";
+    $selectsql .= "FROM `{$dbIncidents}` AS i, `{$dbContacts}` AS c, `{$dbPriority}` AS p ";
     // Create SQL for Sorting
     switch ($sort)
     {
         case 'id': $sql .= " ORDER BY id $sortorder"; break;
         case 'title': $sql .= " ORDER BY title $sortorder"; break;
-        case 'contact': $sql .= " ORDER BY contacts.surname $sortorder, contacts.forenames $sortorder"; break;
+        case 'contact': $sql .= " ORDER BY c.surname $sortorder, c.forenames $sortorder"; break;
         case 'priority': $sql .=  " ORDER BY priority $sortorder, lastupdated ASC"; break;
         case 'status': $sql .= " ORDER BY status $sortorder"; break;
         case 'lastupdated': $sql .= " ORDER BY lastupdated $sortorder"; break;

@@ -25,7 +25,7 @@ if (empty($_REQUEST['mode']))
     $title = "Edit escalation path";
     //show page
     $id = $_REQUEST['id'];
-    $sql = "SELECT * FROM escalationpaths WHERE id = {$id}";
+    $sql = "SELECT * FROM `{$dbEscalationPaths}` WHERE id = {$id}";
     $result = mysql_query($sql);
     if (mysql_error()) trigger_error(mysql_error(),E_USER_ERROR);
 
@@ -79,7 +79,7 @@ else
 
     if ($errors == 0)
     {
-        $sql = "UPDATE escalationpaths SET name = '{$name}', track_url = '{$trackurl}', ";
+        $sql = "UPDATE `{$dbEscalationPaths}` SET name = '{$name}', track_url = '{$trackurl}', ";
         $sql .= " home_url = '{$homeurl}', url_title = '{$title}', email_domain = '{$emaildomain}' ";
         $sql .= " WHERE id = '{$id}'";
         $result = mysql_query($sql);

@@ -429,10 +429,10 @@ function user_accepting($id)
 
 function user_activeincidents($userid)
 {
-    global $CONFIG, $now;
+    global $CONFIG, $now, $dbIncidents;
     // This SQL must match the SQL in incidents.php
-    $sql = "SELECT incidents.id  ";
-    $sql .= "FROM incidents, contacts, priority WHERE contact=contacts.id AND incidents.priority=priority.id ";
+    $sql = "SELECT i.id  ";
+    $sql .= "FROM `{$dbIncidents}` AS i, contacts, priority WHERE contact=contacts.id AND i.priority=priority.id ";
     $sql .= "AND (owner='$userid' OR towner='$userid') ";
     $sql .= "AND (status!='2') ";  // not closed
     // the "1=2" obviously false else expression is to prevent records from showing unless the IF condition is true
@@ -451,8 +451,9 @@ function user_activeincidents($userid)
 // counts a users open incidents
 function user_countincidents($id)
 {
+    global $dbIncidents;
     // this number will never match the number shown in the active queue and is not meant to
-    $sql = "SELECT id FROM incidents WHERE (owner='$id' OR towner='$id') AND (status!=2)";
+    $sql = "SELECT id FROM `{$dbIncidents}` WHERE (owner='$id' OR towner='$id') AND (status!=2)";
     $result = mysql_query($sql);
     if (mysql_error()) trigger_error(mysql_error(),E_USER_WARNING);
 
@@ -460,8 +461,10 @@ function user_countincidents($id)
 }
 
 // counts number of incidents and priorty
-function user_incidents($id){
-    $sql = "SELECT priority, count(priority) AS num FROM incidents WHERE (owner = $id OR towner = $id) AND status != 2";
+function user_incidents($id)
+{
+    global $dbIncidents;
+    $sql = "SELECT priority, count(priority) AS num FROM `{$dbIncidents}` WHERE (owner = $id OR towner = $id) AND status != 2";
     $sql .= " GROUP BY priority";
 
     $result = mysql_query($sql);
@@ -639,7 +642,8 @@ function contact_fax($id)
 
 function contact_count_incidents($id)
 {
-    $sql = "SELECT id FROM incidents WHERE contact='$id'";
+    global $dbIncidents;
+    $sql = "SELECT id FROM `{$dbIncidents}` WHERE contact='$id'";
     $result = mysql_query($sql);
     if (mysql_error()) trigger_error(mysql_error(),E_USER_WARNING);
 
@@ -658,7 +662,8 @@ function contact_count_incidents($id)
 */
 function contact_count_open_incidents($id)
 {
-    $sql = "SELECT id FROM incidents WHERE contact=$id AND status<>2";
+    global $dbIncidents;
+    $sql = "SELECT id FROM `{$dbIncidents}` WHERE contact=$id AND status<>2";
     $result = mysql_query($sql);
     if (mysql_error()) trigger_error(mysql_error(),E_USER_WARNING);
 
@@ -875,11 +880,11 @@ function incident_productinfo_html($incidentid)
 */
 function incident_sla_history($incidentid)
 {
-    global $CONFIG;
+    global $CONFIG, $dbIncidents;
     $working_day_mins = ($CONFIG['end_working_day'] - $CONFIG['start_working_day']) / 60;
 
     // Not the most efficient but..
-    $sql = "SELECT * FROM incidents WHERE id='{$incidentid}'";
+    $sql = "SELECT * FROM `{$dbIncidents}` WHERE id='{$incidentid}'";
     $result = mysql_query($sql);
     if (mysql_error()) trigger_error("MySQL Query Error ".mysql_error(), E_USER_ERROR);
     $incident = mysql_fetch_object($result);
@@ -1601,7 +1606,8 @@ function accepting_drop_down($name, $userid)
 */
 function escalation_path_drop_down($name, $id)
 {
-    $sql  = "SELECT id, name FROM escalationpaths ";
+    global $dbEscalationPaths;
+    $sql  = "SELECT id, name FROM `{$dbEscalationPaths}` ";
     $sql .= "ORDER BY name ASC";
     $result = mysql_query($sql);
     if (mysql_error()) trigger_error(mysql_error(),E_USER_WARNING);
@@ -4416,11 +4422,11 @@ function suggest_reassign_userid($incidentid, $exceptuserid=0)
 
 function format_external_id($externalid, $escalationpath='')
 {
-    global $CONFIG;
+    global $CONFIG, $dbEscalationPaths;
     if (!empty($escalationpath))
     {
         // Extract escalation path
-        $epsql = "SELECT id, name, track_url, home_url, url_title FROM escalationpaths ";
+        $epsql = "SELECT id, name, track_url, home_url, url_title FROM `{$dbEscalationPaths}` ";
         if (!empty($escalationpath)) $epsql .= "WHERE id='$escalationpath' ";
         $epresult = mysql_query($epsql);
         if (mysql_error()) trigger_error(mysql_error(),E_USER_ERROR);

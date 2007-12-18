@@ -37,21 +37,21 @@ else echo "<h2>".contact_realname($id)."</h2>";
 
 if ($mode=='site')
 {
-    $sql = "SELECT *, (closed - opened) AS duration_closed, incidents.id AS incidentid FROM incidents, contacts ";
-    $sql .= "WHERE incidents.contact=contacts.id ";
+    $sql = "SELECT *, (closed - opened) AS duration_closed, i.id AS incidentid FROM `{$dbIncidents}` AS i, contacts ";
+    $sql .= "WHERE i.contact = contacts.id ";
     if (!empty($id) AND $id != 'all') $sql .= "AND contacts.siteid='$id' ";
-    if ($status=='open') $sql .= "AND incidents.status!=2 ";
-    elseif ($status=='closed') $sql .= "AND incidents.status=2 ";
+    if ($status=='open') $sql .= "AND i.status!=2 ";
+    elseif ($status=='closed') $sql .= "AND i.status=2 ";
     if ($start > 0) $sql .= "AND opened >= $start ";
     if ($end > 0) $sql .= "AND opened <= $end ";
     $sql .= "ORDER BY opened DESC";
 }
 else
 {
-    $sql = "SELECT *, (closed - opened) AS duration_closed, incidents.id AS incidentid FROM incidents WHERE ";
+    $sql = "SELECT *, (closed - opened) AS duration_closed, i.id AS incidentid FROM `{$dbIncidents}` WHERE ";
     $sql .= "contact='$id' ";
-    if ($status=='open') $sql .= "AND incidents.status!=2 ";
-    elseif ($status=='closed') $sql .= "AND incidents.status=2 ";
+    if ($status=='open') $sql .= "AND i.status!=2 ";
+    elseif ($status=='closed') $sql .= "AND i.status=2 ";
     $sql .= "ORDER BY opened DESC";
 }
 $result = mysql_query($sql);
