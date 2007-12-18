@@ -5684,6 +5684,82 @@ function truncate_string($text, $maxlength=255, $html=TRUE)
     return $text;
 }
 
+/**
+    * Creates a new notice, used as standalone and in triggers
+    * @author Kieran Hogg
+    * @param $userid int. ID of the user to create the trigger for
+    * @param $noticetext string. The actual text of the notice if needed, should be less and less
+    *                            needed as we use templates instead of standalone ones.
+    * @param $triggertype int. Type of trigger, used to find the right template. Default blank.
+    * @param $parameters string. List of parameters passed from the trigger, e.g. incident id etc.
+    * @returns boolean. Success or fail.
+    * NOTES: work in progress, skeleton code atm 18/12/07
+*/
+function create_notice($userid, $noticetext='', $triggertype='', $parameters='')
+{
+    if($triggertype != '')
+    {
+        //this is a trigger notice, get text
+        switch($triggertype)
+        {
+            case INCIDENT_CREATED_TRIGGER:
+                $text = "Incident $parameters[incidentid] - $parameters[incidenttitle] has been logged";
+                break;
+            case INCIDENT_ASSIGNED_TRIGGER:
+            //TODO always to you?
+                $text = "Incident $parameters[incidentid] - $parameters[incidenttitle] has been assigned to you";
+                break;
+            case INCIDENT_ASSIGNED_WHILE_AWAY_TRIGGER:
+                $text = "Incident $parameters[incidentid] - $parameters[incidenttitle] has been assigned to you and your status is set to away";
+                break;
+            case INCIDENT_ASSIGNED_WHILE_OFFLINE_TRIGGER:
+            //TODO will this ever be used?
+                $text = "Incident $parameters[incidentid] - $parameters[incidenttitle] has been assigned to when you were offline";
+                break;
+            case INCIDENT_NEARING_SLA_TRIGGER:
+                $text = "Incident $parameters[incidentid] - $parameters[incidenttitle] is nearing its SLA";
+                echo "INCIDENT_NEARING_SLA_TRIGGER";
+                break;
+            case USERS_INCIDENT_NEARING_SLA_TRIGGER:
+                $text = "$parameters[incidentowner]'s incident $parameters[incidentid] - $parameters[incidenttitle] is nearing its SLA";
+                break;
+            case INCIDENT_EXCEEDED_SLA_TRIGGER:
+                $text = "Incident $parameters[incidentid] - $parameters[incidenttitle] has exceeded its SLA";
+                break;
+            case INCIDENT_REVIEW_DUE:
+                $text = "Incident $parameters[incidentid] - $parameters[incidenttitle] is due for review";
+                break;
+            case CRITICAL_INCIDENT_LOGGED:
+                $text = "The critical incident $parameters[incidentid] - $parameters[incidenttitle] has been logged for $parameters[customersite]";
+                break;
+            case KB_CREATED_TRIGGER:
+                $text = "KB Article $parameters[KBname] has been created";
+                break;
+            case NEW_HELD_EMAIL_TRIGGER:
+                $text = "There is a new email in the holding queue";
+                break;
+            case WAITING_HELP_EMAIL:
+                echo "WAITING_HELP_EMAIL";
+                break;
+            case USER_SET_TO_AWAY_TRIGGER:
+                echo "USER_SET_TO_AWAY_TRIGGER";
+                break;
+            case SIT_UPGRADED_TRIGGER:
+                $text = "SiT! has been upgraded to %s";
+                break;
+            case USER_RETURNS_TRIGGER:
+                $text = "Engineer $parameters[engineername] - $parameters[incidenttitle] has been closed by $parameters[incidentclosedby]";
+                break;
+            case INCIDENT_OWNED_CLOSED_BY_USER_TRIGGER:
+                $text = "Your incident $parameters[incidentid] - $parameters[incidenttitle] has been closed by $parameters[engineername]";
+                break;
+            default:
+                echo "hit default!";
+                break;
+        }
+    }
+}
+
 // -------------------------- // -------------------------- // --------------------------
 // leave this section at the bottom of functions.inc.php ================================
 
