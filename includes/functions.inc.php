@@ -4838,7 +4838,8 @@ function dashboard_do($context, $row=0, $dashboardid=0)
 
 function show_dashboard_component($row, $dashboardid)
 {
-    $sql = "SELECT name FROM dashboard WHERE enabled = 'true' AND id = '$dashboardid'";
+    global $dbDashboard;
+    $sql = "SELECT name FROM `{$dbDashboard}` WHERE enabled = 'true' AND id = '$dashboardid'";
     $result = mysql_query($sql);
     if (mysql_error()) trigger_error(mysql_error(),E_USER_ERROR);
 

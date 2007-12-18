@@ -55,7 +55,7 @@ switch ($_REQUEST['action'])
     case 'install':
         include ('htmlheader.inc.php');
 
-        $sql = "SELECT name FROM dashboard";
+        $sql = "SELECT name FROM `{$dbDashboard}`";
         $result = mysql_query($sql);
         if (mysql_error()) trigger_error(mysql_error(),E_USER_ERROR);
 
@@ -139,7 +139,7 @@ switch ($_REQUEST['action'])
         break;
     case 'upgradecomponent':
         $id = $_REQUEST['id'];
-        $sql = "SELECT * FROM dashboard WHERE id = {$id}";
+        $sql = "SELECT * FROM `{$dbDashboard}` WHERE id = {$id}";
         $result = mysql_query($sql);
         if (mysql_error()) trigger_error(mysql_error(),E_USER_ERROR);
 
@@ -209,7 +209,7 @@ switch ($_REQUEST['action'])
     default:
         include ('htmlheader.inc.php');
 
-        $sql = "SELECT * FROM dashboard";
+        $sql = "SELECT * FROM `{$dbDashboard}`";
         $result = mysql_query($sql);
         if (mysql_error()) trigger_error(mysql_error(),E_USER_ERROR);
 

@@ -41,7 +41,7 @@ if (empty($dashboardid))
 
     include ('htmlheader.inc.php');
 
-    $sql = "SELECT * FROM dashboard WHERE enabled = 'true'";
+    $sql = "SELECT * FROM `{$dbDashboard}` WHERE enabled = 'true'";
     $result = mysql_query($sql);
     if (mysql_error()) trigger_error(mysql_error(),E_USER_ERROR);
 
