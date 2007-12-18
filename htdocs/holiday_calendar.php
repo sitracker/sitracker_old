@@ -362,7 +362,7 @@ function draw_chart($mode, $year, $month='', $day='', $groupid='', $userid='')
         {
             unset($hdays);
 
-            $hsql = "SELECT * FROM holidays WHERE userid={$user->id} AND startdate >= $startdate AND startdate <= $enddate ";
+            $hsql = "SELECT * FROM `{$dbHolidays}` WHERE userid={$user->id} AND startdate >= $startdate AND startdate <= $enddate ";
             $hsql .= "AND type != 10";
             $hresult = mysql_query($hsql);
             if (mysql_error()) trigger_error(mysql_error(),E_USER_ERROR);
@@ -374,7 +374,7 @@ function draw_chart($mode, $year, $month='', $day='', $groupid='', $userid='')
                 $happroved[$cday] = $holiday->approved;
             }
             // Public holidays
-            $phsql = "SELECT * FROM holidays WHERE type=10 AND startdate >= $startdate AND startdate <= $enddate ";
+            $phsql = "SELECT * FROM `{$dbHolidays}` WHERE type=10 AND startdate >= $startdate AND startdate <= $enddate ";
             $phresult = mysql_query($phsql);
             if (mysql_error()) trigger_error(mysql_error(),E_USER_ERROR);
             while ($pubhol = mysql_fetch_object($phresult))
@@ -692,9 +692,9 @@ elseif ($display=='list')
     echo "</select></form>";
     echo "<h3>Descending date order</h3>"; // FIXME i18n decending date
     if (empty($type)) $type=1;
-    $sql = "SELECT *, holidays.id AS holidayid FROM holidays, users WHERE ";
-    $sql .= "holidays.userid=users.id AND holidays.type=$type ";
-    if (!empty($user) AND $user!='all') $sql .= "AND users.id='{$user}' ";
+    $sql = "SELECT *, h.id AS holidayid FROM `{$dbHolidays}` AS h, `{$dbUsers}` AS u WHERE ";
+    $sql .= "h.userid = u.id AND h.type=$type ";
+    if (!empty($user) AND $user!='all') $sql .= "AND u.id='{$user}' ";
     $sql .= "ORDER BY startdate DESC";
     $result = mysql_query($sql);
     if (mysql_error()) trigger_error("MySQL Query Error ".mysql_error(), E_USER_ERROR);
@@ -799,7 +799,7 @@ else
         }
         echo "</select></form>";
 
-        $sql = "SELECT * from holidays WHERE userid='{$user}' AND approved=0 AND type='$type'";
+        $sql = "SELECT * from `{$dbHolidays}` WHERE userid='{$user}' AND approved=0 AND type='$type'";
         $result = mysql_query($sql);
         if (mysql_error()) trigger_error("MySQL Query Error ".mysql_error(), E_USER_ERROR);
         if (mysql_num_rows($result))

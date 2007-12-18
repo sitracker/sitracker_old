@@ -43,7 +43,7 @@ if (!$sent)
     if ($approver==TRUE AND $mode!='approval' AND $user==$sit[2]) echo "<p align='center'><a href='holiday_request.php?user=all&amp;mode=approval'>Approve holiday requests</a></p>";
     if ($approver==TRUE AND $mode=='approval' AND $user!='all') echo "<p align='center'><a href='holiday_request.php?user=all&amp;mode=approval'>{$strShowAll}</a></p>";
 
-    $sql = "SELECT * FROM holidays WHERE approved=0 ";
+    $sql = "SELECT * FROM `{$dbHolidays}` WHERE approved=0 ";
     if (!empty($type)) $sql .= "AND type='$type' ";
     if ($mode!='approval' || $user!='all') $sql.="AND userid='$user' ";
     if ($approver==TRUE && $mode=='approval') $sql .= "AND approvedby={$sit[2]} ";
@@ -163,7 +163,7 @@ else
     if (empty($approvaluser)) echo "<p class='error'>Error: You did not select a user to send the request to</p>";
     else
     {
-        $sql = "SELECT * FROM holidays WHERE approved=0 ";
+        $sql = "SELECT * FROM `{$dbHolidays}` WHERE approved=0 ";
         if ($action!='resend') $sql .= "AND approvedby=0 ";
         if ($user!='all' || $approver==FALSE) $sql .= "AND userid='{$user}' ";
         $sql .= "ORDER BY startdate, length";
@@ -194,7 +194,7 @@ else
             $bodytext .= "to approve or decline these requests.";
         }
         // Mark the userid of the person who will approve the request so that they can see them
-        $sql = "UPDATE holidays SET approvedby='{$approvaluser}' WHERE userid='{$user}' AND approved=0";
+        $sql = "UPDATE `{$dbHolidays}` SET approvedby='{$approvaluser}' WHERE userid='{$user}' AND approved=0";
         mysql_query($sql);
         if (mysql_error()) trigger_error(mysql_error(),E_USER_ERROR);
 

@@ -113,7 +113,7 @@ elseif ($step=='1')
     {
         if (date('D',$day)!='Sat' && date('D',$day)!='Sun')
         {
-            $sql = "SELECT * FROM holidays WHERE startdate = '$day' AND userid='{$user}'";
+            $sql = "SELECT * FROM `{$dbHolidays}` WHERE startdate = '$day' AND userid='{$user}'";
             $result = mysql_query($sql);
             if (mysql_error()) trigger_error("MySQL Query Error ".mysql_error(), E_USER_ERROR);
 
@@ -169,7 +169,7 @@ elseif ($step=='1')
             }
             else
             {
-                $sql = "SELECT * FROM holidays WHERE startdate = '$day' AND type='10' ";
+                $sql = "SELECT * FROM `{$dbHolidays}` WHERE startdate = '$day' AND type='10' ";
                 $result = mysql_query($sql);
                 if (mysql_error()) trigger_error("MySQL Query Error ".mysql_error(), E_USER_ERROR);
                 if (mysql_num_rows($result) > 0)
@@ -239,7 +239,7 @@ else
         {
             // check to see if there is other holiday booked on this day
             // and modify that where required.
-            $sql = "INSERT INTO holidays (userid, type, startdate, length, approved, approvedby) ";
+            $sql = "INSERT INTO `{$dbHolidays}` (userid, type, startdate, length, approved, approvedby) ";
             $sql .= "VALUES ('{$user}', '$type', '{$$d}', '{$$len}', '0', '$approvaluser') ";
             mysql_query($sql);
             if (mysql_error()) trigger_error("MySQL Query Error ".mysql_error(), E_USER_ERROR);

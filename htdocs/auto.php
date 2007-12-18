@@ -88,7 +88,7 @@ if ($actions[0]=='' OR in_array('SetUserStatus',$actions))
     // Find users with holidays today who don't have correct status
     $startdate=mktime(0,0,0,date('m'),date('d'),date('Y'));
     $enddate=mktime(23,59,59,date('m'),date('d'),date('Y'));
-    $sql = "SELECT * FROM holidays ";
+    $sql = "SELECT * FROM `{$dbHolidays}` ";
     $sql .= "WHERE startdate >= '$startdate' AND startdate < '$enddate' AND (type >='1' AND type <= 5) ";
     $sql .= "AND (approved=1 OR approved=2 OR approved=11 OR approved=12)";
     $result = mysql_query($sql);

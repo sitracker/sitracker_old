@@ -31,13 +31,13 @@ $view = cleanvar($_REQUEST['view']);
 switch (strtolower($approve))
 {
     case 'true':
-        $sql = "UPDATE holidays SET approved='1' ";
+        $sql = "UPDATE `{$dbHolidays}` SET approved='1' ";
     break;
     case 'false':
-        $sql = "UPDATE holidays SET approved='2' ";
+        $sql = "UPDATE `{$dbHolidays}` SET approved='2' ";
     break;
     case 'free':
-        $sql = "UPDATE holidays SET approved='1', type='5' ";
+        $sql = "UPDATE `{$dbHolidays}` SET approved='1', type='5' ";
     break;
 }
 

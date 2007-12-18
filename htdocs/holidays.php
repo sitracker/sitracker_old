@@ -70,7 +70,7 @@ if ($user==$sit[2] OR $approver==TRUE)
 // Holiday List
 echo "<table align='center' width='450'>\n";
 echo "<tr><th colspan='4' class='subhead'>{$strHolidayList}</th></tr>\n";
-$sql = "SELECT * FROM holidays WHERE userid='{$user}' AND approved=0 ORDER BY startdate ASC";
+$sql = "SELECT * FROM `{$dbHolidays}` WHERE userid='{$user}' AND approved=0 ORDER BY startdate ASC";
 $result = mysql_query($sql);
 if (mysql_error()) trigger_error("MySQL Query Error ".mysql_error(), E_USER_ERROR);
 $numwaiting=mysql_num_rows($result);
@@ -111,7 +111,7 @@ $holidaytype[4] = $GLOBALS['strTraining'];
 $holidaytype[5] = $GLOBALS['strCompassionateLeave'];
 foreach ($holidaytype AS $htypeid => $htype)
 {
-    $sql = "SELECT *, from_unixtime(startdate) AS start FROM holidays WHERE userid='{$user}' AND type={$htypeid} ";
+    $sql = "SELECT *, from_unixtime(startdate) AS start FROM `{$dbHolidays}` WHERE userid='{$user}' AND type={$htypeid} ";
     $sql.= "AND (approved=1 OR (approved=11 AND startdate >= $now)) ORDER BY startdate ASC ";
     $result = mysql_query($sql);
     if (mysql_error()) trigger_error("MySQL Query Error ".mysql_error(), E_USER_ERROR);

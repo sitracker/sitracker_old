@@ -497,9 +497,10 @@ function user_incidents($id)
 */
 function user_holiday($userid, $type=0, $year, $month, $day, $length=FALSE)
 {
+    global $dbHolidays;
     $startdate=mktime(0,0,0,$month,$day,$year);
     $enddate=mktime(23,59,59,$month,$day,$year);
-    $sql = "SELECT * FROM holidays WHERE startdate >= '$startdate' AND startdate < '$enddate' ";
+    $sql = "SELECT * FROM `{$dbHolidays}` WHERE startdate >= '$startdate' AND startdate < '$enddate' ";
     if ($type!=0)
     {
         $sql .= "AND (type='$type' OR type='10' OR type='5') ";
@@ -550,13 +551,14 @@ function user_holiday($userid, $type=0, $year, $month, $day, $length=FALSE)
 */
 function user_count_holidays($userid, $type, $date=0)
 {
-    $sql = "SELECT id FROM holidays WHERE userid='$userid' AND type='$type' AND length='day' AND approved >= 0 AND approved < 2 ";
+    global $dbHolidays;
+    $sql = "SELECT id FROM `{$dbHolidays}` WHERE userid='$userid' AND type='$type' AND length='day' AND approved >= 0 AND approved < 2 ";
     if ($date > 0) $sql .= "AND startdate < $date";
     $result = mysql_query($sql);
     if (mysql_error()) trigger_error(mysql_error(),E_USER_WARNING);
     $full_days=mysql_num_rows($result);
 
-    $sql = "SELECT id FROM holidays WHERE userid='$userid' AND type='$type' AND (length='pm' OR length='am') AND approved >= 0 AND approved < 2 ";
+    $sql = "SELECT id FROM `{$dbHolidays}` WHERE userid='$userid' AND type='$type' AND (length='pm' OR length='am') AND approved >= 0 AND approved < 2 ";
     if ($date > 0) $sql .= "AND startdate < $date";
     $result = mysql_query($sql);
     if (mysql_error()) trigger_error(mysql_error(),E_USER_WARNING);
@@ -3853,6 +3855,7 @@ function is_active_status($status, $states) {
 */
 function calculate_incident_working_time($incidentid, $t1, $t2, $states=array(2,7,8))
 {
+    global $dbHolidays;
     if ( $t1 > $t2 ) {
         $t3 = $t2;
         $t2 = $t1;
@@ -3862,7 +3865,7 @@ function calculate_incident_working_time($incidentid, $t1, $t2, $states=array(2,
     $startofday = mktime(0,0,0, date("m",$t1), date("d",$t1), date("Y",$t1));
     $endofday = mktime(23,59,59, date("m",$t2), date("d",$t2), date("Y",$t2));
 
-    $sql = "SELECT * FROM holidays ";
+    $sql = "SELECT * FROM `{$dbHolidays}` ";
     $sql .= "WHERE type = 10 AND (startdate >= '{$startofday}' AND startdate <= '{$endofday}')";
 
     $result = mysql_query($sql);
