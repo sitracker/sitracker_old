@@ -1231,9 +1231,8 @@ CREATE TABLE IF NOT EXISTS `notices` (
 CREATE TABLE `triggers` (
 `triggerid` TINYINT NOT NULL ,
 `userid` TINYINT NOT NULL ,
-`action1` VARCHAR( 255 ) NOT NULL ,
-`action2` VARCHAR( 255 ) NULL ,
-`action3` VARCHAR( 255 ) NULL ,
+`action` TINYINT NOT NULL DEFAULT '1' ,
+`parameters` VARCHAR( 255 ) NULL ,
 PRIMARY KEY ( `triggerid` , `userid` )
 ) ENGINE = MYISAM ;
 ";
@@ -1568,9 +1567,8 @@ $upgrade_schema[340] = "
 CREATE TABLE `triggers` (
 `triggerid` TINYINT NOT NULL ,
 `userid` TINYINT NOT NULL ,
-`action1` VARCHAR( 255 ) NOT NULL ,
-`action2` VARCHAR( 255 ) NULL ,
-`action3` VARCHAR( 255 ) NULL ,
+`action` TINYINT NOT NULL DEFAULT '1' ,
+`parameters` VARCHAR( 255 ) NULL ,
 PRIMARY KEY ( `triggerid` , `userid` )
 ) ENGINE = MYISAM ;
 
