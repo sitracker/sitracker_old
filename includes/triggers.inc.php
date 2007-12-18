@@ -37,7 +37,7 @@ $j = 1;
 foreach($triggerarray as $trigger)
 {
     define($triggerarray[$i], $j);
-    $i; $j;
+    $i++; $j++;
 }
                         
 //define all the actions
@@ -46,7 +46,7 @@ $j = 1;
 foreach($actionarray as $action)
 {
     define($actionarray[$i], $j);
-    $i; $j;
+    $i++; $j++;
 }
 
 function trigger($triggertype, $paramarray='')
@@ -71,18 +71,18 @@ function trigger($triggertype, $paramarray='')
     //find relevant triggers
     //FIXME use db var
     $sql = "SELECT * FROM triggers WHERE triggerid={$triggertype} ";
+    if($CONFIG['debug']) $dbg .= $sql."\n";
     if($user) $sql .= "AND user={$user}";
     $query = mysql_query($sql);
     while($result = mysql_fetch_object($query))
     {
-        trigger_action($result->userid, $result->action, $result->parameters);
+        trigger_action($result->userid, $triggertype, $result->action, $result->parameters);
     }
 }
 
 
-function trigger_action($userid, $action, $parameters)
+function trigger_action($userid, $triggertype, $action, $parameters)
 {
-
     switch($action)
     {
         case ACTION_EMAIL:
@@ -90,7 +90,7 @@ function trigger_action($userid, $action, $parameters)
             break;
             
         case ACTION_NOTICE:
-            echo "sendnotice()";
+            create_notice($userid, '', $triggertype, $parameters);
             break;
                 
         case ACTION_NONE:

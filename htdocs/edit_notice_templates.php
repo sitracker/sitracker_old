@@ -74,12 +74,12 @@ elseif ($action == "edit")
 
         <table align='center' class='vertical'>
         <?php
-        echo "<tr><th>{$strNoticeTemplate}: <sup class='red'>*</sup></th><td>";
+        echo "<tr><th>{$strName} <sup class='red'>*</sup></th><td>";
         echo "<input maxlength='50' name='name' size='35' value='{$noticetype['name']}' ";
         // if ($noticetype['type']=='system') echo "readonly='readonly' ";
         echo "/>";
         echo "</td></tr>\n";
-        echo "<tr><th>{$strDescription}: <sup class='red'>*</sup></th><td><input name='description' size='50' value=\"{$noticetype["description"]}\" /></td></tr>\n";
+        echo "<tr><th>{$strDescription} <sup class='red'>*</sup></th><td><input name='description' size='50' value=\"{$noticetype["description"]}\" /></td></tr>\n";
         echo "<tr><th>{$strType} <sup class='red'>*</sup></th><td><input name='type' size='50' value=\"{$noticetype["type"]}\" /></td></tr>\n";
         echo "<tr><th>{$strText} <sup class='red'>*</sup></th><td>";
         echo "<textarea>{$noticetype["text"]}</textarea></td></tr>\n";

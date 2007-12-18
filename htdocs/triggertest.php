@@ -6,6 +6,6 @@ include ('triggers.inc.php');
 
 
 include ('htmlheader.inc.php');
-trigger(TRIGGER_INCIDENT_CREATED, array('user' => 69));
+trigger(TRIGGER_INCIDENT_CREATED, array('test' => 69));
 include ('htmlfooter.inc.php');
 ?>

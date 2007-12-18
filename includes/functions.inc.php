@@ -5719,67 +5719,24 @@ function truncate_string($text, $maxlength=255, $html=TRUE)
 */
 function create_notice($userid, $noticetext='', $triggertype='', $parameters='')
 {
+    global $CONFIG, $dbg;
     if($triggertype != '')
     {
         //this is a trigger notice, get text
-        switch($triggertype)
+        $sql = "SELECT * from noticetemplates WHERE id={$triggertype}";
+        $query = mysql_query($sql);
+        if($query)
         {
-            case INCIDENT_CREATED_TRIGGER:
-                $text = "Incident $parameters[incidentid] - $parameters[incidenttitle] has been logged";
-                break;
-            case INCIDENT_ASSIGNED_TRIGGER:
-            //TODO always to you?
-                $text = "Incident $parameters[incidentid] - $parameters[incidenttitle] has been assigned to you";
-                break;
-            case INCIDENT_ASSIGNED_WHILE_AWAY_TRIGGER:
-                $text = "Incident $parameters[incidentid] - $parameters[incidenttitle] has been assigned to you and your status is set to away";
-                break;
-            case INCIDENT_ASSIGNED_WHILE_OFFLINE_TRIGGER:
-            //TODO will this ever be used?
-                $text = "Incident $parameters[incidentid] - $parameters[incidenttitle] has been assigned to when you were offline";
-                break;
-            case INCIDENT_NEARING_SLA_TRIGGER:
-                $text = "Incident $parameters[incidentid] - $parameters[incidenttitle] is nearing its SLA";
-                echo "INCIDENT_NEARING_SLA_TRIGGER";
-                break;
-            case USERS_INCIDENT_NEARING_SLA_TRIGGER:
-                $text = "$parameters[incidentowner]'s incident $parameters[incidentid] - $parameters[incidenttitle] is nearing its SLA";
-                break;
-            case INCIDENT_EXCEEDED_SLA_TRIGGER:
-                $text = "Incident $parameters[incidentid] - $parameters[incidenttitle] has exceeded its SLA";
-                break;
-            case INCIDENT_REVIEW_DUE:
-                $text = "Incident $parameters[incidentid] - $parameters[incidenttitle] is due for review";
-                break;
-            case CRITICAL_INCIDENT_LOGGED:
-                $text = "The critical incident $parameters[incidentid] - $parameters[incidenttitle] has been logged for $parameters[customersite]";
-                break;
-            case KB_CREATED_TRIGGER:
-                $text = "KB Article $parameters[KBname] has been created";
-                break;
-            case NEW_HELD_EMAIL_TRIGGER:
-                $text = "There is a new email in the holding queue";
-                break;
-            case WAITING_HELP_EMAIL:
-                echo "WAITING_HELP_EMAIL";
-                break;
-            case USER_SET_TO_AWAY_TRIGGER:
-                echo "USER_SET_TO_AWAY_TRIGGER";
-                break;
-            case SIT_UPGRADED_TRIGGER:
-                $text = "SiT! has been upgraded to %s";
-                break;
-            case USER_RETURNS_TRIGGER:
-                $text = "Engineer $parameters[engineername] - $parameters[incidenttitle] has been closed by $parameters[incidentclosedby]";
-                break;
-            case INCIDENT_OWNED_CLOSED_BY_USER_TRIGGER:
-                $text = "Your incident $parameters[incidentid] - $parameters[incidenttitle] has been closed by $parameters[engineername]";
-                break;
-            default:
-                echo "hit default!";
-                break;
+            $notice = mysql_fetch_object($query);
         }
+        else
+        {
+            return FALSE;
+        }
+        
+        if($CONFIG['debug']) $dbg .= "$notice->title notice created";
     }
+    
 }
 
 // -------------------------- // -------------------------- // --------------------------
