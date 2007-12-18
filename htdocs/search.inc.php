@@ -49,7 +49,6 @@ if ($searchmode != 'related')
 // echo "<table align='center'>";
 // echo "<tr><th>OTHER SEARCHES</th></tr>";
 // echo "<tr><td><a href='advanced_search_incidents.php'>Search for an Incident</a> (Advanced)</td></tr>";
-// // echo "<tr><td class='shade2' width=350><a href='search_contacts.php'>Search for a Contact</a></td></tr>";
 // echo "<tr><td><a href='search_renewals.php'>Search Contract Renewals</a></td></tr>";
 // // #echo "<tr><td class='shade2' width=350><a href='search_sites.php'>Search for a Site</a></td></tr>";
 // // echo "<tr><td class='shade2' width=350><a href='search_maintenance.php'>Search for a Maintenance Contract</a></td></tr>";
