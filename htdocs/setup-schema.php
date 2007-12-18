@@ -1598,8 +1598,8 @@ CREATE TABLE `noticetemplates` (
 `durability` ENUM( 'sticky', 'session' ) NOT NULL DEFAULT 'sticky'
 ) ENGINE = MYISAM ;
 
-//TODO this needs completing and adding to the main SQL
-INSERT INTO `noticetemplates` (`id`, `name`, `type`, `description`, `text`, `linktext`, `link`, `durability`) VALUES 
+-- TODO this needs completing and adding to the main SQL
+INSERT INTO `noticetemplates` (`id`, `name`, `type`, `description`, `text`, `linktext`, `link`, `durability`) VALUES
 (1, 'INCIDENT_CREATED_TRIGGER', 0, '', 'Incident <incidentid> - <incidenttitle> has been logged', 'View Incident', 'javascript:incident_details_window(<incidentid>)', 'sticky'),
 (2, 'INCIDENT_ASSIGNED_TRIGGER', 0, '', 'Incident <incidentid> - <incidenttitle> has been assigned to you', 'View Incident', 'javascript:incident_details_window(<incidentid>)', 'sticky'),
 (3, 'INCIDENT_NEARING_SLA_TRIGGER', 0, '', 'Incident <incidentid> - <incidenttitle> is nearing its SLA', 'View Incident', 'javascript:incident_details_window(<incidentid>)', 'sticky'),
