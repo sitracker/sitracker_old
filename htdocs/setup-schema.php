@@ -44,13 +44,6 @@ INSERT INTO `closingstatus` VALUES (8, 'Support Expired');
 INSERT INTO `closingstatus` VALUES (9, 'Unsolved');
 INSERT INTO `closingstatus` VALUES (10, 'Escalated');
 
-CREATE TABLE `contactflags` (
- `contactid` int(11) default NULL,
- `flag` char(3) NOT NULL default '',
-  KEY `contactid` (`contactid`),
-  KEY `flag` (`flag`)
-) ENGINE=MyISAM;
-
 CREATE TABLE `contactproducts` (
  `id` int(11) NOT NULL auto_increment,
  `contactid` int(11) default NULL,
@@ -1555,7 +1548,7 @@ DROP TABLE `holidaytypes`;
 
 -- PH 26Nov07
 CREATE TABLE `billing_periods` (
-`servicelevelid` INT( 5 ) NOT NULL ,DROP TABLE `incidentstatus`
+`servicelevelid` INT( 5 ) NOT NULL ,
 `engineerperiod` INT NOT NULL COMMENT 'In minutes',
 `customerperiod` INT NOT NULL COMMENT 'In minutes',
 PRIMARY KEY r( `servicelevelid` )
@@ -1597,6 +1590,9 @@ CREATE TABLE `triggers` (
 `action3` VARCHAR( 255 ) NULL ,
 PRIMARY KEY ( `triggerid` , `userid` )
 ) ENGINE = MYISAM ;
+
+DROP TABLE `contactflags`;
+
 ";
 
 // Important: When making changes to the schema you must add SQL to make the alterations

@@ -77,10 +77,6 @@ while ($contactrow=mysql_fetch_array($contactresult))
     }
     $tags = list_tags($id, 1, TRUE);
     if (!empty($tags)) echo "<tr><th>{$strTags}:</th><td>{$tags}</td></tr>\n";
-    // Flags are deprecated as of v3.30 in favour of tags - INL
-    // echo "<tr><th>Flags:</th><td>";
-    // print_contact_flags($id);
-    //echo "</td></tr>";
     echo "<tr><th>{$strJobTitle}:</th><td>{$contactrow['jobtitle']}</td></tr>\n";
     echo "<tr><th>{$strSite}:</th><td><a href=\"site_details.php?id=".$contactrow['siteid']."\">".site_name($contactrow['siteid'])."</a></td></tr>\n";
     if (!empty($contactrow['department'])) echo "<tr><th>{$strDepartment}:</th><td>{$contactrow['department']}</td></tr>\n";
@@ -134,15 +130,6 @@ while ($contactrow=mysql_fetch_array($contactresult))
         if ($notify_contact3 > 0) echo " -&gt; ".contact_realname($notify_contact3);
         echo "</td></tr>\n";
     }
-
-//      DEPRECATED as of v3.30 in favour of Notify contacts (see above)
-//     $contact_manager=contact_manager_email($id);
-//     if ($contact_manager != '')
-//     {
-//         echo "<tr><th>Managers Email:</th><td>";
-//         echo contact_manager_email($id);
-//         echo "</td></tr>";
-//     }
 
     plugin_do('contact_details');
 
