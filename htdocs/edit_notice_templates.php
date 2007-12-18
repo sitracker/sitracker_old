@@ -1,5 +1,5 @@
 <?php
-// edit_emailtype.php - Form for editing email templates
+// edit_notice_templates.php - Form for editing notice templates
 //
 // SiT (Support Incident Tracker) - Support call tracking system
 // Copyright (C) 2000-2007 Salford Software Ltd. and Contributors
@@ -9,7 +9,8 @@
 //
 
 @include ('set_include_path.inc.php');
-$permission=17; // Edit Email Template
+//FIXME
+$permission=0;
 
 require ('db_connect.inc.php');
 require ('functions.inc.php');
@@ -25,36 +26,30 @@ $action = $_REQUEST['action'];
 
 if (empty($action) OR $action == "showform")
 {
-    // Show select email type form
+    // Show select notice type form
     include ('htmlheader.inc.php');
     ?>
     <script type="text/javascript">
     function confirm_submit()
     {
-        return window.confirm('Are you sure you want to edit this email template?');
+        return window.confirm('Are you sure you want to edit this notice template?');
     }
     </script>
-    <h2>Select Email Template</h2>
-    <p align='center'>Please be very careful when editing existing templates, <?php echo $CONFIG['application_shortname']; ?> relies on some of these templates to
-    send emails out automatically, if in doubt - seek advice.</p>
-    <p align='center'>Templates should not begin with any text that looks like an email header.  (e.g. <code>'Name: '</code>)</p>
-    <p align='center'><a href="add_emailtype.php?action=showform">Add Email Template</a> | <a href="edit_global_signature.php">Edit Global Signature</a></p>
+    <h2>Select Notice Template</h2>
+    <p align='center'><a href="add_notice_templates.php?action=showform">Add Notice Template</a></p>
     <?php
 
     echo "<div style='margin-left: auto; margin-right: auto; width: 70%;'>";
-    $sql = "SELECT * FROM emailtype ORDER BY name,id";
+    $sql = "SELECT * FROM noticetemplates ORDER BY name,id";
     $result = mysql_query($sql);
     if (mysql_error()) trigger_error("MySQL Query Error ".mysql_error(), E_USER_ERROR);
-    while ($email = mysql_fetch_object($result))
+    while ($notice = mysql_fetch_object($result))
     {
         echo "<dl>\n";
         echo "<dt>";
-        if ($email->type=='system') echo "<em>";
-        echo "<a href='{$_SERVER['PHP_SELF']}?id={$email->id}&amp;action=edit'>{$email->name}</a> ";
-        echo ucfirst($email->type)." template";
-        if ($email->type=='system') echo "</em>";
-        echo "</dt>\n";
-        echo "<dd>{$email->description}</dd>\n";
+        if ($notice->type=='system') echo "<em>";
+        echo "<a href='{$_SERVER['PHP_SELF']}?id={$notice->id}&amp;action=edit'>{$notice->name}</a> ";
+        echo "<dd>{$notice->description}</dd>\n";
         echo "</dl>\n";
     }
     echo "</div>";
@@ -63,15 +58,15 @@ if (empty($action) OR $action == "showform")
 elseif ($action == "edit")
 {
     include ('htmlheader.inc.php');
-    // Show edit email type form
+    // Show edit notice type form
     if ($id > 0)
     {
-        // extract email type details
-        $sql = "SELECT * FROM emailtype WHERE id='$id'";
+        // extract notice type details
+        $sql = "SELECT * FROM noticetemplates WHERE id='$id'";
         $result = mysql_query($sql);
         if (mysql_error()) trigger_error("MySQL Query Error ".mysql_error(), E_USER_ERROR);
-        $emailtype = mysql_fetch_array($result);
-        echo "<h2>{$strEdit} ".ucfirst($emailtype['type'])." Email Template</h2>";
+        $noticetype = mysql_fetch_array($result);
+        echo "<h2>{$strEdit} Notice Template</h2>";
         echo "<h5>".sprintf($strMandatoryMarked,"<sup class='red'>*</sup>")."</h5>";
         ?>
         <p align='center'>A list of special identifiers that can be used in these fields is given at the bottom of the page.</p>
@@ -79,37 +74,26 @@ elseif ($action == "edit")
 
         <table align='center' class='vertical'>
         <?php
-        echo "<tr><th>{$strEmailTemplate}: <sup class='red'>*</sup></th><td>";
-        echo "<input maxlength='50' name='name' size='35' value='{$emailtype['name']}' ";
-        // if ($emailtype['type']=='system') echo "readonly='readonly' ";
+        echo "<tr><th>{$strNoticeTemplate}: <sup class='red'>*</sup></th><td>";
+        echo "<input maxlength='50' name='name' size='35' value='{$noticetype['name']}' ";
+        // if ($noticetype['type']=='system') echo "readonly='readonly' ";
         echo "/>";
         echo "</td></tr>\n";
-        echo "<tr><th>{$strDescription}: <sup class='red'>*</sup></th><td><input  name='description' size='50' value=\"{$emailtype["description"]}\" /></td></tr>\n";
-        echo "<tr><th>&nbsp;</th><td>&nbsp;</td></tr>";
-        echo "<tr><th>{$strTo}: <sup class='red'>*</sup></th><td><input maxlength='100' name='tofield' size='30' value=\"{$emailtype["tofield"]}\" /></td></tr>\n";
-        echo "<tr><th>{$strFrom}: <sup class='red'>*</sup></th><td><input maxlength='100' name='fromfield' size='30' value=\"{$emailtype["fromfield"]}\" /></td></tr>\n";
-        echo "<tr><th>{$strReplyTo}: <sup class='red'>*</sup></th><td><input maxlength='100' name='replytofield' size='30' value=\"{$emailtype["replytofield"]}\" /></td></tr>\n";
-        echo "<tr><th>CC:</th><td><input maxlength='100' name='ccfield' size='30' value=\"{$emailtype["ccfield"]}\" /></td></tr>\n";
-        echo "<tr><th>BCC:</th><td><input maxlength='100' name='bccfield' size='30' value=\"{$emailtype["bccfield"]}\" /></td></tr>\n";
-        echo "<tr><th>{$strSubject}:</th><td><input maxlength='255' name='subjectfield' size='50' value=\"{$emailtype["subjectfield"]}\" /></td></tr>\n";
-        echo "<tr><th></th><td><label><input type='checkbox' name='storeinlog' value='Yes' ";
-        if ($emailtype['storeinlog']=='Yes') echo "checked='checked'";
-        echo " /> {$strStoreInLog}</label>";
-        echo " &nbsp; (<input type='checkbox' name='cust_vis' value='yes' ";
-        if ($emailtype['customervisibility']=='show') echo "checked='checked'";
-        echo " /> {$strVisibleToCustomer})";
+        echo "<tr><th>{$strDescription}: <sup class='red'>*</sup></th><td><input name='description' size='50' value=\"{$noticetype["description"]}\" /></td></tr>\n";
+        echo "<tr><th>{$strType} <sup class='red'>*</sup></th><td><input name='type' size='50' value=\"{$noticetype["type"]}\" /></td></tr>\n";
+        echo "<tr><th>{$strText} <sup class='red'>*</sup></th><td>";
+        echo "<textarea>{$noticetype["text"]}</textarea></td></tr>\n";
+        echo "<tr><th>{$strLinkText}</th><td><input maxlength='100' name='linktext' size='30' value=\"{$noticetype["linktext"]}\" /></td></tr>\n";
+        echo "<tr><th>{$strLink}</th><td><input maxlength='100' name='link' size='30' value=\"{$noticetype["link"]}\" /></td></tr>\n";
         echo "</td></tr>";
         echo "</table>";
-        echo "<p>{$strEmail}:<br />";
-        echo "<textarea name='bodytext' rows='20' cols='60'>{$emailtype["body"]}</textarea>\n";
-        echo "</p>";
 
         echo "<p>";
-        echo "<input name='type' type='hidden' value='{$emailtype['type']}' />";
+        echo "<input name='type' type='hidden' value='{$noticetype['type']}' />";
         echo "<input name='id' type='hidden' value='{$id}' />";
         echo "<input name='submit' type='submit' value=\"{$strSave}\" />";
         echo "</p>\n";
-        if ($emailtype['type']=='user') echo "<p align='center'><a href='{$_SERVER['PHP_SELF']}?action=delete&amp;id={$id}'>{$strDelete}</a></p>";
+        if ($noticetype['type']=='user') echo "<p align='center'><a href='{$_SERVER['PHP_SELF']}?action=delete&amp;id={$id}'>{$strDelete}</a></p>";
         // FIXME i18n email templates
         ?>
         <p align='center'>The following special identifiers can be used in these fields:</p>

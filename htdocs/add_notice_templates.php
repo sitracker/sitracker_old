@@ -1,5 +1,5 @@
 <?php
-// add_emailtype.php - Form for adding email templates
+// add_notice_templates.php - Form for adding notice templates
 //
 // SiT (Support Incident Tracker) - Support call tracking system
 // Copyright (C) 2000-2007 Salford Software Ltd. and Contributors
@@ -8,10 +8,8 @@
 // of the GNU General Public License, incorporated herein by reference.
 //
 
-// Author: Ivan Lucas <ivanlucas[at]users.sourceforge.net>
-
 @include ('set_include_path.inc.php');
-$permission=16; // Add Email Template
+$permission=0;
 
 require ('db_connect.inc.php');
 require ('functions.inc.php');
@@ -27,12 +25,12 @@ $submit=$_REQUEST['submit'];
 <script type='text/javascript'>
 function confirm_submit()
 {
-    return window.confirm('<?php echo $strAddEmailConfirm ?>');
+    return window.confirm('<?php echo $strAddNoticeConfirm ?>');
 }
 </script>
 <?php
 
-// Show add email type form
+// Show add notice type form
 if (empty($submit))
 {
     echo "<h2>{$strNewTemplate}</h2>";
@@ -61,17 +59,11 @@ if (empty($submit))
     <tr><th>&lt;incidentfirstupdate&gt;</th><td>The first customer visible update in the incident log</td></tr>
     <tr><th>&lt;useremail&gt;</th><td>Email address of current user</td></tr>
     <tr><th>&lt;userrealname&gt;</th><td>Real name of current user</td></tr>
-    <tr><th>&lt;signature&gt;</th><td>Signature of current user</td></tr>
-    <tr><th>&lt;novellid&gt;</th><td>Novell ID of current user</td></tr>
-    <tr><th>&lt;microsoftid&gt;</th><td>Microsoft ID of current user</td></tr>
-    <tr><th>&lt;dseid&gt;</th><td>DSE ID of current user</td></tr>
-    <tr><th>&lt;cheyenneid&gt;</th><td>Cheyenne ID of current user</td></tr>
     <tr><th>&lt;applicationname&gt;</th><td>Name of this application</td></tr>
     <tr><th>&lt;applicationshortname&gt;</th><td>Short name of this application</td></tr>
     <tr><th>&lt;applicationversion&gt;</th><td>Version number of this application</td></tr>
     <tr><th>&lt;supportemail&gt;</th><td>Technical Support email address</td></tr>
     <tr><th>&lt;supportmanageremail&gt;</th><td>Technical Support mangers email address</td></tr>
-    <tr><th>&lt;globalsignature&gt;</th><td>Current Global Signature</td></tr>
     <tr><th>&lt;todaysdate&gt;</th><td>Current Date</td></tr>
     <tr><th>&lt;info1&gt;</th><td>Additional Info #1 (template dependent)</td></tr>
     <tr><th>&lt;info2&gt;</th><td>Additional Info #2 (template dependent)</td></tr>
@@ -87,24 +79,26 @@ if (empty($submit))
     echo "<tr><th>&lt;globalsignature&gt;</th><td>The global signature</td></tr>";
     echo "<tr><th>&lt;todaysdate&gt;</th><td>Todays date</td></tr>";
 
-    plugin_do('emailtemplate_list');
+    plugin_do('noticetemplate_list');
     ?>
     </table>
 
     <form action="<?php echo $_SERVER['PHP_SELF']; ?>" method="post" onsubmit="return confirm_submit()">
-    <table class='vertical'>
-    <tr><th>Name Of Email Template: <sup class='red'>*</sup></th><td><input maxlength="50" name="name" size="30" /></td></tr>
-    <tr><th>Description: <sup class='red'>*</sup></th><td><input maxlength="50" name="description" size="30" /></td></tr>
-    <tr><th>'To' Field: <sup class='red'>*</sup></th><td><input maxlength='100' name="tofield" size="30" /></td></tr>
-    <tr><th>'From' Field: <sup class='red'>*</sup></th><td><input maxlength='100' name="fromfield" size="30" /></td></tr>
-    <tr><th>'Reply To' Field: <sup class='red'>*</sup></th><td><input maxlength='100' name="replytofield" size="30" /></td></tr>
-    <tr><th>'CC' Field:</th><td><input maxlength='100' name="ccfield" size="30" /></td></tr>
-    <tr><th>'BCC' Field:</th><td><input maxlength='100' name="bccfield" size="30" /></td></tr>
-    <tr><th>'Subject' Field:</th><td><input maxlength='255' name="subjectfield" size="30" /></td></tr>
-    <tr><th>Body text:</th><td><textarea name="bodytext" rows="20" cols="60"></textarea></td></tr>
-    <tr><th>Store in Log:</th><td><input type="checkbox" name="storeinlog" value="Yes" checked='checked' /> Store the email in the incident log</td></tr>
-    <tr><th>Visibility:</th><td><input type="checkbox" name="cust_vis" checked='checked' value="yes" /> Make the update to the incident log visible to the customer</td></tr>
-    </table>
+    <table align='center' class='vertical'>
+    <?php
+    echo "<tr><th>{$strNoticeTemplate}: <sup class='red'>*</sup></th><td>";
+    echo "<input maxlength='50' name='name' size='35' value='{$noticetype['name']}' ";
+    // if ($noticetype['type']=='system') echo "readonly='readonly' ";
+    echo "/>";
+    echo "</td></tr>\n";
+    echo "<tr><th>{$strDescription}: <sup class='red'>*</sup></th><td><input name='description' size='50' value=\"{$noticetype["description"]}\" /></td></tr>\n";
+    echo "<tr><th>{$strType} <sup class='red'>*</sup></th><td><input name='type' size='50' value=\"{$noticetype["type"]}\" /></td></tr>\n";
+    echo "<tr><th>{$strText} <sup class='red'>*</sup></th><td>";
+    echo "<textarea>{$noticetype["text"]}</textarea></td></tr>\n";
+    echo "<tr><th>{$strLinkText}</th><td><input maxlength='100' name='linktext' size='30' value=\"{$noticetype["linktext"]}\" /></td></tr>\n";
+    echo "<tr><th>{$strLink}</th><td><input maxlength='100' name='link' size='30' value=\"{$noticetype["link"]}\" /></td></tr>\n";
+    echo "</td></tr>";
+    echo "</table>";?>
     <p align='center'><input name="submit" type="submit" value="Add It" /></p>
     </form>
     <?php
@@ -118,55 +112,26 @@ else
     // These variables may contain templates so don't strip tags
     $name = mysql_real_escape_string($_POST['name']);
     $description = mysql_real_escape_string($_POST['description']);
-    $tofield = mysql_real_escape_string($_POST['tofield']);
-    $fromfield = mysql_real_escape_string($_POST['fromfield']);
-    $replytofield = mysql_real_escape_string($_POST['replytofield']);
-    $ccfield = mysql_real_escape_string($_POST['ccfield']);
-    $bccfield = mysql_real_escape_string($_POST['bccfield']);
-    $subjectfield = mysql_real_escape_string($_POST['subjectfield']);
-    $bodytext = mysql_real_escape_string($_POST['bodytext']);
-    $storeinlog = mysql_real_escape_string($_POST['storeinlog']);
-    $cust_vis = mysql_real_escape_string($_POST['cust_vis']);
-
+    $type = cleanvar($_POST['type']);
+    $text = cleanvar($_POST['text']);
+    $linktext = cleanvar($_POST['linktext']);
+    $link = cleanvar($_POST['link']);
     // check form input
     $errors = 0;
-    // check for blank name
-    if ($name == "")
-    {
-        $errors++;
-        echo "<p class='error'>You must enter a name for the email type</p>\n";
-    }
-    // check for blank tofield
-    if ($tofield == "")
-    {
-        $errors++;
-        echo "<p class='error'>You must enter a 'To' field</p>\n";
-    }
-    // check for blank name
-    if ($fromfield == "")
-    {
-        $errors++;
-        echo "<p class='error'>You must enter a 'From' field</p>\n";
-    }
+    //TODO form checking
     if ($errors == 0)
     {
-        if ($_REQUEST['cust_vis']=='yes') $cust_vis='show';
-        else $cust_vis='hide';
-        if ($_REQUEST['storeinlog']=='yes') $storeinlog='Yes';
-        else $storeinlog='No';
-
-        $sql  = "INSERT INTO emailtype (name, description, tofield, fromfield, replytofield, ccfield, bccfield, subjectfield, body, customervisibility, storeinlog) ";
-        $sql .= "VALUES ('$name', '$description', '$tofield', '$fromfield', '$replytofield', '$ccfield', ";
-        $sql .= "'$bccfield', '$subjectfield', '$bodytext', '$cust_vis', '$storeinlog')";
+        $sql  = "INSERT INTO noticetemplates (name, description, type, text, linktext, link) ";
+        $sql .= "VALUES ('$name', '$description', '$type', '$text', '$linktext', '$link')";
         $result = mysql_query($sql);
         if (mysql_error()) trigger_error("MySQL Query Error ".mysql_error(), E_USER_ERROR);
 
-        if (!$result) echo "<p class='error'>Addition of Email Type Failed\n";
+        if (!$result) echo "<p class='error'>Addition of Notice Template Failed\n";
         else
         {
             $id=mysql_insert_id();
-            journal(CFG_LOGGING_FULL, 'Administration', 'Email template $id was added', CFG_JOURNAL_ADMIN, $id);
-            html_redirect("edit_emailtype.php?action=showform");
+            journal(CFG_LOGGING_FULL, 'Administration', 'Notice template $id was added', CFG_JOURNAL_ADMIN, $id);
+            html_redirect("edit_notice_templates.php?action=showform");
         }
     }
 }

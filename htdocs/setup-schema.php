@@ -1235,6 +1235,17 @@ CREATE TABLE `triggers` (
 `parameters` VARCHAR( 255 ) NULL ,
 PRIMARY KEY ( `triggerid` , `userid` )
 ) ENGINE = MYISAM ;
+
+CREATE TABLE `noticetemplates` (
+`id` INT( 11 ) NOT NULL AUTO_INCREMENT PRIMARY KEY ,
+`name` VARCHAR( 255 ) NOT NULL ,
+`type` TINYINT( 4 ) NOT NULL ,
+`description` VARCHAR( 255 ) NOT NULL ,
+`text` TINYTEXT NOT NULL ,
+`linktext` VARCHAR( 50 ) NULL ,
+`link` VARCHAR( 100 ) NULL ,
+`durability` ENUM( 'sticky', 'session' ) NOT NULL DEFAULT 'sticky'
+) ENGINE = MYISAM ;
 ";
 
 // ********************************************************************
@@ -1575,6 +1586,32 @@ PRIMARY KEY ( `triggerid` , `userid` )
 DROP TABLE IF EXISTS `contactflags`;
 DROP TABLE IF EXISTS `contactproducts`;
 
+-- KMH 18/12/07
+CREATE TABLE `noticetemplates` (
+`id` INT( 11 ) NOT NULL AUTO_INCREMENT PRIMARY KEY ,
+`name` VARCHAR( 255 ) NOT NULL ,
+`type` TINYINT( 4 ) NOT NULL ,
+`description` VARCHAR( 255 ) NOT NULL ,
+`text` TINYTEXT NOT NULL ,
+`linktext` VARCHAR( 50 ) NULL ,
+`link` VARCHAR( 100 ) NULL ,
+`durability` ENUM( 'sticky', 'session' ) NOT NULL DEFAULT 'sticky'
+) ENGINE = MYISAM ;
+
+//TODO this needs completing and adding to the main SQL
+INSERT INTO `noticetemplates` (`id`, `name`, `type`, `description`, `text`, `linktext`, `link`, `durability`) VALUES 
+(1, 'INCIDENT_CREATED_TRIGGER', 0, '', 'Incident <incidentid> - <incidenttitle> has been logged', 'View Incident', 'javascript:incident_details_window(<incidentid>)', 'sticky'),
+(2, 'INCIDENT_ASSIGNED_TRIGGER', 0, '', 'Incident <incidentid> - <incidenttitle> has been assigned to you', 'View Incident', 'javascript:incident_details_window(<incidentid>)', 'sticky'),
+(3, 'INCIDENT_NEARING_SLA_TRIGGER', 0, '', 'Incident <incidentid> - <incidenttitle> is nearing its SLA', 'View Incident', 'javascript:incident_details_window(<incidentid>)', 'sticky'),
+(4, 'USERS_INCIDENT_NEARING_SLA_TRIGGER', 0, '', '<incidentowner>''s incident <incidentid> - <incidenttitle> is nearing its SLA', 'View Incident', 'javascript:incident_details_window(<incidentid>)', 'sticky'),
+(5, 'INCIDENT_EXCEEDED_SLA_TRIGGER', 0, '', 'Incident <incidentid> - <incidenttitle> has exceeded its SLA', 'View Incident', 'javascript:incident_details_window(<incidentid>)', 'sticky'),
+(6, 'INCIDENT_REVIEW_DUE', 0, '', 'Incident <incidentid> - <incidenttitle> is due for review', 'View Incident', 'javascript:incident_details_window(<incidentid>)', 'sticky'),
+(7, 'CRITICAL_INCIDENT_LOGGED', 0, '', 'The critical incident <incidentid> - <incidenttitle> has been logged for <customersite>', 'View Incident', 'javascript:incident_details_window(<incidentid>)', 'sticky'),
+(8, 'KB_CREATED_TRIGGER', 0, '', 'KB Article <KBname> has been created', NULL, NULL, 'sticky'),
+(9, 'NEW_HELD_EMAIL', 0, '', 'There is a new email in the holding queue', 'View Holding Queue', '<sitpath>/review_incoming_updates.php', 'sticky'),
+(10, 'MINS_HELD_EMAIL', 0, '', 'There has been an email in the holding queue for <holdingmins> minutes', 'View Holding Queue', '<sitpath>/review_incoming_updates.php', 'sticky'),
+(11, 'SIT_UPGRADED', 0, '', 'SiT! has been upgraded to <sitversion>', 'What''s New?', '<sitpath>/releasenotes.php', 'sticky'),
+(12, 'INCIDENT_OWNED_CLOSED_BY_USER', 0, '', 'Your incident <incidentid> - <incidenttitle> has been closed by <engineername>', NULL, NULL, 'sticky');
 ";
 
 // Important: When making changes to the schema you must add SQL to make the alterations
