@@ -35,7 +35,7 @@ switch ($_REQUEST['action'])
         if ($isnew == "yes")
         {
             // need to insert
-            $sql = "INSERT INTO feedbackforms (name,introduction,thanks,description) VALUES ";
+            $sql = "INSERT INTO `{$dbFeedbackForms}` (name,introduction,thanks,description) VALUES ";
             $sql .= "('{$name}','{$introduction}','{$thanks}','{$description}')";
             mysql_query($sql);
             if (mysql_error()) trigger_error(mysql_error(),E_USER_ERROR);
@@ -43,7 +43,7 @@ switch ($_REQUEST['action'])
         }
         else
         {
-            $sql = "UPDATE feedbackforms ";
+            $sql = "UPDATE `{$dbFeedbackForms}` ";
             $sql .= "SET name='$name', description='$description', introduction='$introduction', thanks='$thanks' ";
             $sql .= "WHERE id='$formid' LIMIT 1";
             mysql_query($sql);

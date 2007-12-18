@@ -264,7 +264,7 @@ switch ($_REQUEST['action'])
             $debugtext .= "_POST[$fieldname]={$_POST[$fieldname]}\n";
 
             // Put the SQL to be executed into an array to execute later
-            $rsql[] = "INSERT INTO feedbackresults (respondentid, questionid, result, resulttext) VALUES ('$respondentid', '$qid','$qresult', '$qresulttext')";
+            $rsql[] = "INSERT INTO `{$dbFeedbackResults}` (respondentid, questionid, result, resulttext) VALUES ('$respondentid', '$qid','$qresult', '$qresulttext')";
             // Store the field in an array
             $fieldarray[$question->id]=$_POST[$fieldname];
         }

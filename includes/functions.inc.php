@@ -2572,7 +2572,7 @@ function countdaycurrentincidents($day, $month, $year)
 */
 function journal($loglevel, $event, $bodytext, $journaltype, $refid)
 {
-    global $CONFIG, $sit;
+    global $CONFIG, $sit, $dbJournal;
     // Journal Types
     // 1 = Logon/Logoff
     // 2 = Support Incidents
@@ -2592,7 +2592,7 @@ function journal($loglevel, $event, $bodytext, $journaltype, $refid)
     $bodytext = mysql_real_escape_string($bodytext);
     if ($loglevel<=$CONFIG['journal_loglevel'])
     {
-        $sql  = "INSERT INTO journal ";
+        $sql  = "INSERT INTO `{$dbJournal}` ";
         $sql .= "(userid, event, bodytext, journaltype, refid) ";
         $sql .= "VALUES ('".$sit[2]."', '$event', '$bodytext', '$journaltype', '$refid') ";
         $result= mysql_query($sql);
@@ -4194,7 +4194,7 @@ function incident_backup_switchover($userid, $accepting)
                 {
                     // it's not in the queue, and the user isn't accepting so add it
                     $userstatus=user_status($userid);
-                    $usql = "INSERT INTO tempassigns (incidentid,originalowner,userstatus) VALUES ('{$incident->id}', '{$userid}', '$userstatus')";
+                    $usql = "INSERT INTO `{$dbTempAssigns}` (incidentid,originalowner,userstatus) VALUES ('{$incident->id}', '{$userid}', '$userstatus')";
                     mysql_query($usql);
                     if (mysql_error()) trigger_error(mysql_error(),E_USER_ERROR);
                 }
@@ -4222,20 +4222,20 @@ function incident_backup_switchover($userid, $accepting)
                 if (mysql_error()) trigger_error(mysql_error(),E_USER_ERROR);
 
                 // Look to see if this assignment is in the queue already
-                $fsql = "SELECT * FROM tempassigns WHERE incidentid='{$incident->id}' AND originalowner='{$userid}'";
+                $fsql = "SELECT * FROM `{$dbTempAssigns}` WHERE incidentid='{$incident->id}' AND originalowner='{$userid}'";
                 $fresult = mysql_query($fsql);
                 if (mysql_error()) trigger_error(mysql_error(),E_USER_WARNING);
                 if (mysql_num_rows($fresult) < 1)
                 {
                     $userstatus=user_status($userid);
-                    $usql = "INSERT INTO tempassigns (incidentid,originalowner,userstatus,assigned) VALUES ('{$incident->id}', '{$userid}', '$userstatus','yes')";
+                    $usql = "INSERT INTO `{$dbTempAssigns}` (incidentid,originalowner,userstatus,assigned) VALUES ('{$incident->id}', '{$userid}', '$userstatus','yes')";
                     mysql_query($usql);
                     if (mysql_error()) trigger_error(mysql_error(),E_USER_ERROR);
                 }
                 else
                 {
                     // mark the temp assigns table so it's not showing in the holding queue
-                    $tasql = "UPDATE tempassigns SET assigned='yes' WHERE originalowner='$userid' AND incidentid='{$incident->id}' LIMIT 1";
+                    $tasql = "UPDATE `{$dbTempAssigns}` SET assigned='yes' WHERE originalowner='$userid' AND incidentid='{$incident->id}' LIMIT 1";
                     mysql_query($tasql);
                     if (mysql_error()) trigger_error(mysql_error(),E_USER_ERROR);
                 }
@@ -4548,10 +4548,11 @@ function send_feedback($contractid)
 // Creates a blank feedback form response
 function create_incident_feedback($formid, $incidentid)
 {
+    global $dbFeedbackRespondents;
     $contactid = incident_contact($incidentid);
     $email = contact_email($respondent);
 
-    $sql = "INSERT INTO feedbackrespondents (formid, contactid, email, incidentid) VALUES (";
+    $sql = "INSERT INTO `{$dbFeedbackRespondents}` (formid, contactid, email, incidentid) VALUES (";
     $sql .= "'".mysql_real_escape_string($formid)."', ";
     $sql .= "'".mysql_real_escape_string($contactid)."', ";
     $sql .= "'".mysql_real_escape_string($email)."', ";
@@ -5177,6 +5178,7 @@ function draw_chart_image($type, $width, $height, $data, $legends, $title='', $u
 */
 function get_tag_id($tag)
 {
+    global $dbTags;
     $sql = "SELECT tagid FROM tags WHERE name = LOWER('$tag')";
     $result = mysql_query($sql);
     if (mysql_error()) trigger_error(mysql_error(),E_USER_WARNING);
@@ -5188,7 +5190,7 @@ function get_tag_id($tag)
     else
     {
         //need to add
-        $sql = "INSERT INTO tags (name) VALUES (LOWER('$tag'))";
+        $sql = "INSERT INTO `{$dbTags}` (name) VALUES (LOWER('$tag'))";
         $result = mysql_query($sql);
         if (mysql_error()) trigger_error(mysql_error(),E_USER_ERROR);
         return mysql_insert_id();
@@ -5201,6 +5203,7 @@ function get_tag_id($tag)
 */
 function add_tag($id, $type, $tag)
 {
+    global $dbSetTags;
     /*
     TAG TYPES
     1 - contact
@@ -5216,7 +5219,7 @@ function add_tag($id, $type, $tag)
     {
         $tagid = get_tag_id($tag);
         // Ignore errors, die silently
-        $sql = "INSERT INTO set_tags VALUES ('$id', '$type', '$tagid')";
+        $sql = "INSERT INTO `{$dbSetTags}` VALUES ('$id', '$type', '$tagid')";
         $result = @mysql_query($sql);
     }
     return true;
@@ -5228,20 +5231,21 @@ function add_tag($id, $type, $tag)
 */
 function remove_tag($id, $type, $tag)
 {
-   if ($tag!='')
+    global $dbSetTags, $dbTags;
+    if ($tag != '')
     {
         $tagid = get_tag_id($tag);
         // Ignore errors, die silently
-        $sql = "DELETE FROM set_tags WHERE id = '$id' AND type = '$type' AND tagid = '$tagid')";
+        $sql = "DELETE FROM `{$dbSetTags}` WHERE id = '$id' AND type = '$type' AND tagid = '$tagid')";
         $result = @mysql_query($sql);
 
         // Check tag usage count and remove disused tags completely
-        $sql = "SELECT COUNT(id) FROM set_tags WHERE tagid = '$tagid'";
+        $sql = "SELECT COUNT(id) FROM `{$dbSetTags}` WHERE tagid = '$tagid'";
         $result = mysql_query($sql);
         list($count) = mysql_fetch_row($result);
         if ($count == 0)
         {
-            $sql = "DELETE FROM tags WHERE tagid = '$tagid' LIMIT 1";
+            $sql = "DELETE FROM `{$dbTags}` WHERE tagid = '$tagid' LIMIT 1";
             @mysql_query($sql);
         }
         purge_tag($tagid);
@@ -5256,8 +5260,9 @@ function remove_tag($id, $type, $tag)
 */
 function replace_tags($type, $id, $tagstring)
 {
+    global $dbSetTags;
     // first remove old tags
-    $sql = "DELETE FROM set_tags WHERE id = '$id' AND type = '$type'";
+    $sql = "DELETE FROM `{$dbSetTags}` WHERE id = '$id' AND type = '$type'";
     $result = mysql_query($sql);
     if (mysql_error()) trigger_error("MySQL Query Error ".mysql_error(), E_USER_ERROR);
 
@@ -5278,12 +5283,13 @@ function replace_tags($type, $id, $tagstring)
 function purge_tag($tagid)
 {
     // Check tag usage count and remove disused tag completely
-    $sql = "SELECT COUNT(id) FROM set_tags WHERE tagid = '$tagid'";
+    global $dbSetTags, $dbTags;
+    $sql = "SELECT COUNT(id) FROM `{$dbSetTags}` WHERE tagid = '$tagid'";
     $result = mysql_query($sql);
     list($count) = mysql_fetch_row($result);
     if ($count == 0)
     {
-        $sql = "DELETE FROM tags WHERE tagid = '$tagid' LIMIT 1";
+        $sql = "DELETE FROM `{$dbTags}` WHERE tagid = '$tagid' LIMIT 1";
         @mysql_query($sql);
     }
 }
@@ -5295,7 +5301,8 @@ function purge_tag($tagid)
 */
 function purge_tags()
 {
-    $sql = "SELECT tagid FROM tags";
+    global $dbTags;
+    $sql = "SELECT tagid FROM `{$dbTags}`";
     $result = mysql_query($sql);
     if (mysql_error()) trigger_error(mysql_error(),E_USER_ERROR);
     if (mysql_num_rows($result) > 0)
@@ -5314,10 +5321,10 @@ function purge_tags()
 */
 function list_tags($recordid, $type, $html=TRUE)
 {
-    global $CONFIG;
+    global $CONFIG, $dbSetTags, $dbTags;
 
-    $sql = "SELECT tags.name, tags.tagid FROM set_tags, tags WHERE set_tags.tagid = tags.tagid AND ";
-    $sql .= "set_tags.type = '$type' AND set_tags.id = '$recordid'";
+    $sql = "SELECT tags.name, tags.tagid FROM `{$dbSetTags}` AS s, `{$dbTags}` AS t WHERE s.tagid = t.tagid AND ";
+    $sql .= "s.type = '$type' AND s.id = '$recordid'";
     $result = mysql_query($sql);
     if (mysql_error()) trigger_error(mysql_error(),E_USER_ERROR);
     $numtags = mysql_num_rows($result);
@@ -5733,10 +5740,10 @@ function create_notice($userid, $noticetext='', $triggertype='', $parameters='')
         {
             return FALSE;
         }
-        
+
         if($CONFIG['debug']) $dbg .= "$notice->title notice created";
     }
-    
+
 }
 
 // -------------------------- // -------------------------- // --------------------------
