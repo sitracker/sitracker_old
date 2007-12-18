@@ -388,6 +388,7 @@ $strLifetime = 'Lifetime';
 $strLink = 'Link';
 $strLinkedSkills = 'Linked Skills';
 $strLinkProducts = 'Link Products';
+$strLinkText = 'Link Text';
 $strLinks = 'Links';
 $strLimitTo = 'Limit to';
 $strList = 'List';
@@ -711,6 +712,7 @@ $strTemp = 'Temp';
 $strTemporaryOwner = 'Temporary Owner';
 $strTemporarilyAssignedto = 'Temporarily assigned to %s by %s';
 $strTerminated = 'Terminated';
+$strText = 'Text';
 # Short for 'Thursday'
 $strThu = 'Thu';
 $strThursday = 'Thursday';
