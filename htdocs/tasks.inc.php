@@ -402,7 +402,7 @@ if (mysql_num_rows($result) >=1 )
 
     if (!empty($billing))
     {
-        $billingSQL = "SELECT * FROM `{$ddBillingPeriods}` WHERE servicelevelid = {$servicelevel_id} AND tag='{$servicelevel_tag}' AND priority='{$priority}'";
+        $billingSQL = "SELECT * FROM `{$dbBillingPeriods}` WHERE servicelevelid = {$servicelevel_id} AND tag='{$servicelevel_tag}' AND priority='{$priority}'";
 
         //echo $billingSQL;
 

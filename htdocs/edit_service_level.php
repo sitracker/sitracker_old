@@ -73,7 +73,7 @@ if (empty($action) OR $action == "showform")
     if ($sla->timed == 'yes')
     {
         echo "<input type='checkbox' name='timed' id='timed' onchange='enableBillingPeriod();' checked='checked' />";
-        $billingSQL = "SELECT * FROM `{$ddBillingPeriods}` WHERE servicelevelid = {$sla->id} AND priority = {$priority} AND tag = '{$tag}'";
+        $billingSQL = "SELECT * FROM `{$dbBillingPeriods}` WHERE servicelevelid = {$sla->id} AND priority = {$priority} AND tag = '{$tag}'";
         $billingResult = mysql_query($billingSQL);
         if (mysql_error()) trigger_error(mysql_error(),E_USER_WARNING);
         $billing = mysql_fetch_object($billingResult);
@@ -127,7 +127,7 @@ elseif ($action == "edit")
     //if (mysql_affected_rows() == 0) trigger_error("UPDATE affected zero rows",E_USER_WARNING);
     else
     {
-        $billingSQL = "SELECT * FROM `{$ddBillingPeriods}` WHERE servicelevelid = {$id} AND priority = {$priority} AND tag = '{$tag}'";
+        $billingSQL = "SELECT * FROM `{$dbBillingPeriods}` WHERE servicelevelid = {$id} AND priority = {$priority} AND tag = '{$tag}'";
         $billingResult = mysql_query($billingSQL);
         if (mysql_error()) trigger_error(mysql_error(),E_USER_WARNING);
         $billing = mysql_fetch_object($billingResult);
@@ -135,14 +135,14 @@ elseif ($action == "edit")
         if (!empty($billing))
         {
             //update
-            $sql = "UPDATE `{$ddBillingPeriods}` SET customerperiod = '{$customerPeriod}', engineerperiod = '{$engineerPeriod}' WHERE servicelevelid = '{$id}' AND priority = {$priority} AND tag = '{$tag}'";
+            $sql = "UPDATE `{$dbBillingPeriods}` SET customerperiod = '{$customerPeriod}', engineerperiod = '{$engineerPeriod}' WHERE servicelevelid = '{$id}' AND priority = {$priority} AND tag = '{$tag}'";
             $result = mysql_query($sql);
             if (mysql_error()) trigger_error(mysql_error(),E_USER_WARNING);
         }
         else
         {
             //insert
-            $sql = "INSERT INTO `{$ddBillingPeriods}` (servicelevelid, priority, tag, customerperiod, engineerperiod) VALUES ('{$id}', '{$priority}', '{$tag}', '{$customerPeriod}', '{$engineerPeriod}')";
+            $sql = "INSERT INTO `{$dbBillingPeriods}` (servicelevelid, priority, tag, customerperiod, engineerperiod) VALUES ('{$id}', '{$priority}', '{$tag}', '{$customerPeriod}', '{$engineerPeriod}')";
             $result = mysql_query($sql);
             if (mysql_error()) trigger_error(mysql_error(),E_USER_WARNING);
         }
