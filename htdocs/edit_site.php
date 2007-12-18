@@ -12,20 +12,20 @@
 
 // FIXME i18n
 
-@include('set_include_path.inc.php');
+@include ('set_include_path.inc.php');
 $permission=3; // Edit existing site details
-require('db_connect.inc.php');
-require('functions.inc.php');
+require ('db_connect.inc.php');
+require ('functions.inc.php');
 
 // This page requires authentication
-require('auth.inc.php');
+require ('auth.inc.php');
 
 // External variables
 $action = $_REQUEST['action'];
 $site = cleanvar($_REQUEST['site']);
 
 $title = $strEditSite;
-include('htmlheader.inc.php');
+include ('htmlheader.inc.php');
 
 
 // Show select site form
@@ -168,5 +168,5 @@ elseif ($action == "update")
         echo $errors_string;
     }
 }
-include('htmlfooter.inc.php');
+include ('htmlfooter.inc.php');
 ?>

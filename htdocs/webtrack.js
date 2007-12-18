@@ -77,7 +77,7 @@ function pausecomp(millis)
     var curDate = null;
 
     do { curDate = new Date(); }
-    while(curDate-date < millis);
+    while (curDate-date < millis);
 }
 
 function get_and_display(page, component)

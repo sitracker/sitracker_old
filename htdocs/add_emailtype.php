@@ -10,15 +10,15 @@
 
 // Author: Ivan Lucas <ivanlucas[at]users.sourceforge.net>
 
-@include('set_include_path.inc.php');
+@include ('set_include_path.inc.php');
 $permission=16; // Add Email Template
 
-require('db_connect.inc.php');
-require('functions.inc.php');
+require ('db_connect.inc.php');
+require ('functions.inc.php');
 // This page requires authentication
-require('auth.inc.php');
+require ('auth.inc.php');
 
-include('htmlheader.inc.php');
+include ('htmlheader.inc.php');
 
 // External variables
 $submit=$_REQUEST['submit'];
@@ -108,7 +108,7 @@ if (empty($submit))
     <p align='center'><input name="submit" type="submit" value="Add It" /></p>
     </form>
     <?php
-    include('htmlfooter.inc.php');
+    include ('htmlfooter.inc.php');
 }
 else
 {

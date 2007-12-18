@@ -10,14 +10,14 @@
 
 // Author: Ivan Lucas <ivanlucas[at]users.sourceforge.net>
 //FIXME i18n
-@include('set_include_path.inc.php');
+@include ('set_include_path.inc.php');
 $permission=27; // View your calendar
-require('db_connect.inc.php');
-require('functions.inc.php');
+require ('db_connect.inc.php');
+require ('functions.inc.php');
 
 
 // This page requires authentication
-require('auth.inc.php');
+require ('auth.inc.php');
 
 // External variables
 $user = cleanvar($_REQUEST['user']);
@@ -34,7 +34,7 @@ if (empty($length)) $length='day';
 $display = cleanvar($_REQUEST['display']);
 
 $title = $strHolidayPlanner;
-include('htmlheader.inc.php');
+include ('htmlheader.inc.php');
 
 if (empty($user) || $user=='current') $user=$sit[2];
 elseif ($user=='all') $user='';
@@ -127,13 +127,13 @@ function draw_calendar($nmonth, $nyear)
     echo "</tr>\n";
 
     echo "<tr>\n";
-    while($dayRow < $firstday)
+    while ($dayRow < $firstday)
     {
         echo "<td><!-- This day in last month --></td>";
         $dayRow += 1;
     }
     $day = 0;
-    while($day < $lastday)
+    while ($day < $lastday)
     {
         if (($dayRow % 7) == 0 AND $dayRow >0) echo "</tr>\n<tr>\n";
         $adjusted_day = $day+1;
@@ -920,5 +920,5 @@ else
     }
     echo "</table>";
 }
-include('htmlfooter.inc.php');
+include ('htmlfooter.inc.php');
 ?>

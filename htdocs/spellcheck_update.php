@@ -10,14 +10,14 @@
 
 // Author: Ivan Lucas <ivanlucas[at]users.sourceforge.net>
 
-@include('set_include_path.inc.php');
+@include ('set_include_path.inc.php');
 $title='Spell Check';
 $permission=8;  // Update Incident
-require('db_connect.inc.php');
-require('functions.inc.php');
+require ('db_connect.inc.php');
+require ('functions.inc.php');
 
 // This page requires authentication
-require('auth.inc.php');
+require ('auth.inc.php');
 
 // External Variables
 $addword = cleanvar($_REQUEST['addword']);
@@ -27,7 +27,7 @@ $changepos = cleanvar($_REQUEST['changepos']);
 $replacement = cleanvar($_REQUEST['replacement']);
 
 
-include('incident_html_top.inc.php');
+include ('incident_html_top.inc.php');
 echo "<h2>$title</h2>";
 if (!empty($addword))
 {

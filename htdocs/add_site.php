@@ -11,12 +11,12 @@
 // Author: Ivan Lucas <ivanlucas[at]users.sourceforge.net>
 // This Page Is Valid XHTML 1.0 Transitional! 27Oct05
 
-@include('set_include_path.inc.php');
+@include ('set_include_path.inc.php');
 $permission=2; // Add new site
-require('db_connect.inc.php');
-require('functions.inc.php');
+require ('db_connect.inc.php');
+require ('functions.inc.php');
 // This page requires authentication
-require('auth.inc.php');
+require ('auth.inc.php');
 
 // External variables
 $action = $_REQUEST['action'];
@@ -24,7 +24,7 @@ $action = $_REQUEST['action'];
 if ($action == "showform" OR $action == '')
 {
     // Show add site form
-    include('htmlheader.inc.php');
+    include ('htmlheader.inc.php');
     echo show_form_errors('add_site');
     clear_form_errors('add_site');
 
@@ -125,7 +125,7 @@ if ($action == "showform" OR $action == '')
     echo "<p><input name='submit' type='submit' value=\"{$strAddSite}\" /></p>";
     echo "<p class='warning'>{$strAvoidDupes}</p>\n";
     echo "</form>\n";
-    include('htmlfooter.inc.php');
+    include ('htmlfooter.inc.php');
 
     clear_form_data('add_site');
 }
@@ -150,7 +150,7 @@ elseif ($action == "add")
 
     $_SESSION['formdata']['add_site'] = $_REQUEST;
 
-    include('htmlheader.inc.php');
+    include ('htmlheader.inc.php');
 
     $errors = 0;
     // check for blank name

@@ -8,13 +8,13 @@
 // of the GNU General Public License, incorporated herein by reference.
 //
 
-@include('set_include_path.inc.php');
+@include ('set_include_path.inc.php');
 $permission=8; // Update Incidents
-require('db_connect.inc.php');
-require('functions.inc.php');
+require ('db_connect.inc.php');
+require ('functions.inc.php');
 
 // This page requires authentication
-require('auth.inc.php');
+require ('auth.inc.php');
 
 // External variables
 $incidentid = cleanvar($_REQUEST['incidentid']);
@@ -25,7 +25,7 @@ $send_email = cleanvar($_REQUEST['send_email']);
 if ($incidentid=='')
 {
     $title = "Move Update $updateid";
-    include('htmlheader.inc.php');
+    include ('htmlheader.inc.php');
     echo "<h2>$title</h2>";
     if ($error=='1')
     {
@@ -137,7 +137,7 @@ if ($incidentid=='')
         </td></tr>
         </table>
         <?php
-        include('htmlfooter.inc.php');
+        include ('htmlfooter.inc.php');
     }
 }
 else

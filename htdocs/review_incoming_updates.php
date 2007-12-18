@@ -12,13 +12,13 @@
 
 // This Page Is Valid XHTML 1.0 Transitional! 31Oct05
 
-@include('set_include_path.inc.php');
+@include ('set_include_path.inc.php');
 $permission=42;
-require('db_connect.inc.php');
-require('functions.inc.php');
+require ('db_connect.inc.php');
+require ('functions.inc.php');
 
 // This page requires authentication
-require('auth.inc.php');
+require ('auth.inc.php');
 
 
 /**
@@ -116,7 +116,7 @@ function deldir($location)
 $title = 'Review Held Updates';
 $refresh = $_SESSION['incident_refresh'];
 $selected = $_POST['selected'];
-include('htmlheader.inc.php');
+include ('htmlheader.inc.php');
 
 if ($lock=$_REQUEST['lock'])
 {
@@ -167,7 +167,7 @@ if ($spam_string=$_REQUEST['delete_all_spam'])
 
 if (!empty($selected))
 {
-    foreach($selected as $updateid)
+    foreach ($selected as $updateid)
     {
         $sql = "DELETE FROM updates WHERE id='$updateid'";
         mysql_query($sql);
@@ -295,7 +295,7 @@ if ((mysql_num_rows($resultnew) > 0) OR ($realemails > 0))
     <th>{$strOperation}</th>
     </tr>";
     sort($queuerows);
-    foreach($queuerows AS $row)
+    foreach ($queuerows AS $row)
     {
         echo $row;
     }
@@ -353,7 +353,7 @@ $resultchase = mysql_query($sql);
 if (mysql_num_rows($resultchase) >= 1)
 {
     $shade='shade1';
-    while($chase = mysql_fetch_object($resultchase))
+    while ($chase = mysql_fetch_object($resultchase))
     {
         $sql_update = "SELECT * FROM updates WHERE incidentid = {$chase	->id} ORDER BY timestamp DESC LIMIT 1";
         $result_update = mysql_query($sql_update);
@@ -461,5 +461,5 @@ if (mysql_num_rows($result) >= 1)
 
 // TODO v3.2x Merge the sections into a single queue using an array
 
-include('htmlfooter.inc.php');
+include ('htmlfooter.inc.php');
 ?>

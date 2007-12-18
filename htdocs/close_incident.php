@@ -8,13 +8,13 @@
 // of the GNU General Public License, incorporated herein by reference.
 //
 
-@include('set_include_path.inc.php');
+@include ('set_include_path.inc.php');
 $permission=18; //  Close Incidents
 
-require('db_connect.inc.php');
-require('functions.inc.php');
+require ('db_connect.inc.php');
+require ('functions.inc.php');
 // This page requires authentication
-require('auth.inc.php');
+require ('auth.inc.php');
 
 // External Variables
 $id = cleanvar($_REQUEST['id']);
@@ -24,7 +24,7 @@ $incidentid=$id;
 if (empty($_REQUEST['process']))
 {
     $title = $strClose;
-    include('incident_html_top.inc.php');
+    include ('incident_html_top.inc.php');
     ?>
     <script type="text/javascript">
     <!--
@@ -243,7 +243,7 @@ if (empty($_REQUEST['process']))
     echo "<input type='hidden' name='process' value='closeincident' />";
     echo "<input name='submit' type='submit' value=\"{$strClose}\" /></p>";
     echo "</form>";
-    include('incident_html_bottom.inc.php');
+    include ('incident_html_bottom.inc.php');
 }
 else
 {
@@ -372,7 +372,7 @@ else
 
             $relatedincidents;
 
-            while($a = mysql_fetch_array($result))
+            while ($a = mysql_fetch_array($result))
             {
                 $relatedincidents[] = $a[0];
             }
@@ -382,7 +382,7 @@ else
             $result = mysql_query($sql);
             if (mysql_error()) trigger_error("MySQL Query Error ".mysql_error(), E_USER_ERROR);
 
-            while($a = mysql_fetch_array($result))
+            while ($a = mysql_fetch_array($result))
             {
                 $relatedincidents[] = $a[0];
             }
@@ -390,7 +390,7 @@ else
             {
                 $uniquearray = array_unique($relatedincidents);
 
-                foreach($uniquearray AS $relatedid)
+                foreach ($uniquearray AS $relatedid)
                 {
                     //dont care if I'm related to myself
                     if ($relatedid != $id)
@@ -541,16 +541,16 @@ else
         }
         else
         {
-            include('incident_html_top.inc.php');
+            include ('incident_html_top.inc.php');
             echo $addition_errors_string;
-            include('incident_html_bottom.inc.php');
+            include ('incident_html_bottom.inc.php');
         }
     }
     else
     {
-        include('incident_html_top.inc.php');
+        include ('incident_html_top.inc.php');
         echo $error_string;
-        include('incident_html_bottom.inc.php');
+        include ('incident_html_bottom.inc.php');
     }
 }
 ?>

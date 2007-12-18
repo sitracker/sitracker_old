@@ -133,7 +133,7 @@ while ($incidents = mysql_fetch_array($result))
 
     // ======= Row Colors / Shading =======
     // Define Row Shading lowest to highest priority so that unimportant colors are overwritten by important ones
-    switch($queue)
+    switch ($queue)
     {
         case 1: // Action Needed
             $class='shade2';

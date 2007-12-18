@@ -8,14 +8,14 @@
 // of the GNU General Public License, incorporated herein by reference.
 //
 
-@include('set_include_path.inc.php');
+@include ('set_include_path.inc.php');
 $permission=34; // Reopen Incidents
 
-require('db_connect.inc.php');
-require('functions.inc.php');
+require ('db_connect.inc.php');
+require ('functions.inc.php');
 
 // This page requires authentication
-require('auth.inc.php');
+require ('auth.inc.php');
 
 // External variables
 $submit = cleanvar($_REQUEST['submit']);
@@ -28,7 +28,7 @@ if (empty($submit))
     // No submit detected show update form
     $incident_title=incident_title($id);
     $title = 'Reopen: '.$id . " - " . $incident_title;
-    include('incident_html_top.inc.php');
+    include ('incident_html_top.inc.php');
     ?>
     <h2>Reopen Incident</h2>
     <form action="<?php echo $_SERVER['PHP_SELF'] ?>?id=<?php echo $id ?>" method="post">
@@ -39,7 +39,7 @@ if (empty($submit))
     <p><input name="submit" type="submit" value="Reopen Incident" /></p>
     </form>
     <?php
-    include('incident_html_bottom.inc.php');
+    include ('incident_html_bottom.inc.php');
 }
 else
 {
@@ -72,9 +72,9 @@ else
 
     if (!$result)
     {
-        include('includes/incident_html_top.inc');
+        include ('includes/incident_html_top.inc');
         echo "<p class='error'>Update Failed</p>\n";
-        include('incident_htmlfooter.inc.php');
+        include ('incident_htmlfooter.inc.php');
     }
     else
     {

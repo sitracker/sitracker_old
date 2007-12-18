@@ -9,13 +9,13 @@
 //
 // Author: Paul Heaney <paulheaney[at]users.sourceforge.net>
 
-@include('set_include_path.inc.php');
+@include ('set_include_path.inc.php');
 $permission=0; // not required
-require('db_connect.inc.php');
-require('functions.inc.php');
+require ('db_connect.inc.php');
+require ('functions.inc.php');
 
 // This page requires authentication
-require('auth.inc.php');
+require ('auth.inc.php');
 
 if ($_SESSION['auth'] == TRUE) $styleid = $_SESSION['style'];
 else $styleid= $CONFIG['default_interface_style'];
@@ -43,7 +43,7 @@ $feedallowedtags = '<img><strong><em><br><p>';
 
 if (mysql_num_rows($result) > 0)
 {
-    while($row = mysql_fetch_row($result))
+    while ($row = mysql_fetch_row($result))
     {
         $url = $row[0];
         if ($rss = fetch_rss( $url ))
@@ -64,7 +64,7 @@ if (mysql_num_rows($result) > 0)
             echo "</a>";
             echo "</th></tr>\n";
             $counter=0;
-            foreach($rss->items as $item)
+            foreach ($rss->items as $item)
             {
                 //echo "<pre>".print_r($item,true)."</pre>";
                 echo "<tr><td>";

@@ -8,16 +8,16 @@
 // of the GNU General Public License, incorporated herein by reference.
 //
 
-@include('set_include_path.inc.php');
+@include ('set_include_path.inc.php');
 $permission=22; // Administrate
-require('db_connect.inc.php');
-require('functions.inc.php');
+require ('db_connect.inc.php');
+require ('functions.inc.php');
 // This page requires authentication
-require('auth.inc.php');
+require ('auth.inc.php');
 
 $title = $strEditHolidays;
 
-switch($_REQUEST['action'])
+switch ($_REQUEST['action'])
 {
     case 'save':
         $max_carryover = cleanvar($_REQUEST['max_carryover']);
@@ -57,7 +57,7 @@ switch($_REQUEST['action'])
 
     case 'form':
     default:
-        include('htmlheader.inc.php');
+        include ('htmlheader.inc.php');
         echo "<h2>$title</h2>";
 
         $sql = "SELECT * FROM users WHERE status >= 1 ORDER BY realname ASC";
@@ -103,7 +103,7 @@ switch($_REQUEST['action'])
         echo "<input type='hidden' name='action' value='save' />";
         echo "<input type='submit' name='submit' value='{$strSave}' /></p>";
         echo "</form>";
-        include('htmlfooter.inc.php');
+        include ('htmlfooter.inc.php');
     break;
 }
 ?>

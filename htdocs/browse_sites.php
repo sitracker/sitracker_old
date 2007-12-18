@@ -11,12 +11,12 @@
 
 // TODO This page fails XHTML validation because of dojo attributes - INL 12/12/07
 
-@include('set_include_path.inc.php');
+@include ('set_include_path.inc.php');
 $permission=11; // View Sites
-require('db_connect.inc.php');
-require('functions.inc.php');
+require ('db_connect.inc.php');
+require ('functions.inc.php');
 // This page requires authentication
-require('auth.inc.php');
+require ('auth.inc.php');
 
 // External variables
 $search_string = cleanvar($_REQUEST['search_string']);
@@ -71,12 +71,12 @@ if ($submit_value == "go")
     }
 }
 
-include('htmlheader.inc.php');
+include ('htmlheader.inc.php');
 if ($search_string=='') $search_string='a';
 ?>
 <script type="text/javascript" src="scripts/dojo/dojo.js"></script>
 <script type="text/javascript">
-    dojo.require("dojo.widget.ComboBox");
+    dojo.require ("dojo.widget.ComboBox");
 </script>
 <?php
 echo "<h2><img src='{$CONFIG['application_webpath']}images/icons/{$iconset}/32x32/site.png' width='32' height='32' alt='' /> ";
@@ -260,5 +260,5 @@ if ($errors == 0)
     }
 }
 
-include('htmlfooter.inc.php');
+include ('htmlfooter.inc.php');
 ?>

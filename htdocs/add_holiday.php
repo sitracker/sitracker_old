@@ -10,13 +10,13 @@
 
 // Author: Ivan Lucas <ivanlucas[at]users.sourceforge.net>
 
-@include('set_include_path.inc.php');
+@include ('set_include_path.inc.php');
 $permission=27; // View your calendar
-require('db_connect.inc.php');
-require('functions.inc.php');
+require ('db_connect.inc.php');
+require ('functions.inc.php');
 $title="Holiday Calendar";
 // This page requires authentication
-require('auth.inc.php');
+require ('auth.inc.php');
 
 // Valid user
 

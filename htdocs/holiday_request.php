@@ -9,14 +9,14 @@
 //
 // Author: Ivan Lucas <ivanlucas[at]users.sourceforge.net>
 
-@include('set_include_path.inc.php');
+@include ('set_include_path.inc.php');
 $permission=27; /* View your calendar */
-require('db_connect.inc.php');
-require('functions.inc.php');
+require ('db_connect.inc.php');
+require ('functions.inc.php');
 $title="Holiday Request";
 
 // This page requires authentication
-require('auth.inc.php');
+require ('auth.inc.php');
 
 // External variables
 $user = cleanvar($_REQUEST['user']);
@@ -27,7 +27,7 @@ $type = cleanvar($_REQUEST['type']);
 $memo = cleanvar($_REQUEST['memo']);
 $approvaluser = cleanvar($_REQUEST['approvaluser']);
 
-include('htmlheader.inc.php');
+include ('htmlheader.inc.php');
 if (empty($user)) $user=$sit[2];
 if (!$sent)
 {
@@ -215,5 +215,5 @@ else
     }
     echo "<p align='center'><a href='holidays.php?user={$user}'>Back to holidays page</p></p>";
 }
-include('htmlfooter.inc.php');
+include ('htmlfooter.inc.php');
 ?>

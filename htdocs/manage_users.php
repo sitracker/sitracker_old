@@ -10,14 +10,14 @@
 
 // This Page Is Valid XHTML 1.0 Transitional! 16Nov05
 
-@include('set_include_path.inc.php');
+@include ('set_include_path.inc.php');
 $permission=22; // Administrate
-require('db_connect.inc.php');
-require('functions.inc.php');
+require ('db_connect.inc.php');
+require ('functions.inc.php');
 // This page requires authentication
-require('auth.inc.php');
+require ('auth.inc.php');
 
-include('htmlheader.inc.php');
+include ('htmlheader.inc.php');
 
 $sql  = "SELECT *,users.id AS userid FROM users, roles ";
 $sql .= "WHERE users.roleid=roles.id ";
@@ -136,5 +136,5 @@ echo "</table>\n";
 // free result and disconnect
 mysql_free_result($result);
 
-include('htmlfooter.inc.php');
+include ('htmlfooter.inc.php');
 ?>

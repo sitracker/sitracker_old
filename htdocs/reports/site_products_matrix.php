@@ -9,14 +9,14 @@
 //
 //  Author:   Ivan Lucas
 
-@include('set_include_path.inc.php');
+@include ('set_include_path.inc.php');
 $permission=37;  // Run Reports
 
-include('db_connect.inc.php');
-include('functions.inc.php');
+include ('db_connect.inc.php');
+include ('functions.inc.php');
 
 // This page requires authentication
-require('auth.inc.php');
+require ('auth.inc.php');
 
 // show search renewal form
 switch ($_POST['action'])
@@ -130,11 +130,11 @@ switch ($_POST['action'])
             }
             else
             {
-                include('htmlheader.inc.php');
+                include ('htmlheader.inc.php');
                 echo $html;
 //                 echo "<hr />";
 //                 echo "<pre>{$csv}</pre>";
-                include('htmlfooter.inc.php');
+                include ('htmlfooter.inc.php');
             }
         }
         else
@@ -144,7 +144,7 @@ switch ($_POST['action'])
         break;
 
     default:
-        include('htmlheader.inc.php');
+        include ('htmlheader.inc.php');
         echo "<h2>Site Product Matrix</h2>";
         echo "<form name='report' action='{$_SERVER['PHP_SELF']}' method='post'>";
         echo "<table class='vertical'>";
@@ -169,7 +169,7 @@ switch ($_POST['action'])
         echo "<p><input name='submit' type='submit' value=\"{$strRunReport}\" /></p>";
         echo "<input type='hidden' name='action' value='runreport' />";
         echo "</form>\n";
-        include('htmlfooter.inc.php');
+        include ('htmlfooter.inc.php');
         break;
 }
 ?>

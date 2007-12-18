@@ -12,15 +12,15 @@
 
 // Product information is the info related to a product that is requested when adding an incident
 
-@include('set_include_path.inc.php');
+@include ('set_include_path.inc.php');
 $permission=25; // Add Product Info
 
-require('db_connect.inc.php');
-require('functions.inc.php');
+require ('db_connect.inc.php');
+require ('functions.inc.php');
 // This page requires authentication
-require('auth.inc.php');
+require ('auth.inc.php');
 
-include('htmlheader.inc.php');
+include ('htmlheader.inc.php');
 ?>
 <script type="text/javascript">
 function confirm_submit()
@@ -81,5 +81,5 @@ else
         }
     }
 }
-include('htmlfooter.inc.php');
+include ('htmlfooter.inc.php');
 ?>

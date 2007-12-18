@@ -11,20 +11,20 @@
 
 // FIXME i18n whole page
 
-@include('set_include_path.inc.php');
+@include ('set_include_path.inc.php');
 $permission=7; // Edit Incidents
 
-require('db_connect.inc.php');
-require('functions.inc.php');
+require ('db_connect.inc.php');
+require ('functions.inc.php');
 
 // This page requires authentication
-require('auth.inc.php');
+require ('auth.inc.php');
 
-include('htmlheader.inc.php');
+include ('htmlheader.inc.php');
 
 $action = cleanvar($_REQUEST['action']);
 
-    switch($action)
+    switch ($action)
     {
         case 'external_esc': //show external escalation modification page
             echo "<h2>{$strBulkModify}: {$strExternalEngineersName}</h2>";
@@ -41,7 +41,7 @@ $action = cleanvar($_REQUEST['action']);
                 echo "<table class='vertical'>";
                 echo "<tr><th>{$strExternalEmail} (to change):</th>";  // FIXME 18n to change
                 echo "<td><select name='oldexternalemail'>";
-                while($row = mysql_fetch_array($result))
+                while ($row = mysql_fetch_array($result))
                 {
                     echo "<option value=\"".$row['externalengineer'].",".$row['externalemail']."\">";
                     echo $row['externalengineer']." - ".$row['externalemail']."</option>\n";
@@ -72,7 +72,7 @@ External email:  -&gt; <b>foo@pheaney.co.uk</b>
             $result = mysql_query($sql);
             if (mysql_error()) trigger_error(mysql_error(),E_USER_ERROR);
 
-            while($row = mysql_fetch_array($result))
+            while ($row = mysql_fetch_array($result))
             {
                 $bodytext = "External Engineer: ".$old_external_engineer." -&gt; [b]". $new_extenal_engineer."[/b]\n";
                 $bodytext .= "External email: ".$old_email_address." -&gt; [b]".$new_external_email."[/b]\n<hr>";
@@ -95,6 +95,6 @@ External email:  -&gt; <b>foo@pheaney.co.uk</b>
     }
 
 
-include('htmlfooter.inc.php');
+include ('htmlfooter.inc.php');
 
 ?>

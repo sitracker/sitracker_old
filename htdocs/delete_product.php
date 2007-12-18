@@ -12,13 +12,13 @@
 
 // Removes a product
 
-@include('set_include_path.inc.php');
+@include ('set_include_path.inc.php');
 $permission=65;  // Delete products
-require('db_connect.inc.php');
-require('functions.inc.php');
+require ('db_connect.inc.php');
+require ('functions.inc.php');
 
 // This page requires authentication
-require('auth.inc.php');
+require ('auth.inc.php');
 
 // External variables
 $productid = cleanvar($_REQUEST['id']);
@@ -51,11 +51,11 @@ if (!empty($productid))
     }
     else
     {
-        include('htmlheader.inc.php');
+        include ('htmlheader.inc.php');
         // FIXME i18n error
         echo "<p class='error'>Sorry, this product cannot be deleted because it has been associated with one or more incidents, contracts or skills</p>";
         echo "<p align='center'><a href='products.php#{$productid}'>Return to products list</a></p>";
-        include('htmlfooter.inc.php');
+        include ('htmlfooter.inc.php');
     }
 }
 else

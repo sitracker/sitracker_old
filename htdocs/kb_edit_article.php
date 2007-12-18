@@ -10,15 +10,15 @@
 
 
 // Authors: Ivan Lucas <ivanlucas[at]users.sourceforge.net>, Tom Gerrard
-@include('set_include_path.inc.php');
+@include ('set_include_path.inc.php');
 $permission=54; // view KB
 
 // uses superglobals.  see http://www.php.net/manual/en/reserved.variables.php#reserved.variables.post
 
-require('db_connect.inc.php');
-require('functions.inc.php');
+require ('db_connect.inc.php');
+require ('functions.inc.php');
 // This page requires authentication
-require('auth.inc.php');
+require ('auth.inc.php');
 
 // External variables
 $process = cleanvar($_REQUEST['process']);
@@ -44,7 +44,7 @@ if (empty($_POST['process']))
         exit;
     }
     $docid = $id;
-    include('htmlheader.inc.php');
+    include ('htmlheader.inc.php');
 
     ?>
     <script type="text/javascript">
@@ -211,7 +211,7 @@ if (empty($_POST['process']))
     echo "</form>";
 
     echo "</td></tr></table>";
-    include('htmlfooter.inc.php');
+    include ('htmlfooter.inc.php');
 }
 else
 {

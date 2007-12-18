@@ -10,16 +10,16 @@
 
 // Author: Ivan Lucas <ivanlucas[at]users.sourceforge.net>
 
-@include('set_include_path.inc.php');
+@include ('set_include_path.inc.php');
 if (empty($_REQUEST['user'])
     OR $_REQUEST['user']=='current'
     OR $_REQUEST['userid']==$_SESSION['userid']) $permission=58; // Edit your software skills
 else $permission=59; // Manage users software skills
 
-require('db_connect.inc.php');
-require('functions.inc.php');
+require ('db_connect.inc.php');
+require ('functions.inc.php');
 // This page requires authentication
-require('auth.inc.php');
+require ('auth.inc.php');
 
 // External Variables
 $submit=$_REQUEST['submit'];
@@ -28,7 +28,7 @@ else $user = cleanvar($_REQUEST['user']);
 
 if (empty($submit))
 {
-    include('htmlheader.inc.php');
+    include ('htmlheader.inc.php');
     $sql = "SELECT * FROM usersoftware, software WHERE usersoftware.softwareid=software.id AND userid='$user' ORDER BY name";
     $result = mysql_query($sql);
     if (mysql_num_rows($result) >= 1)
@@ -84,7 +84,7 @@ if (empty($submit))
     echo "<p align='center'><input name='submit' type='submit' value='{$strSave}' /></p>";
     echo "</form>\n";
 
-    include('htmlfooter.inc.php');
+    include ('htmlfooter.inc.php');
 }
 else
 {

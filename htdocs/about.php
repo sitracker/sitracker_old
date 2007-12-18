@@ -11,15 +11,15 @@
 
 // This Page Is Valid XHTML 1.0 Transitional! 28Oct05
 
-@include('set_include_path.inc.php');
+@include ('set_include_path.inc.php');
 $permission=41; // View Status
 
-require('db_connect.inc.php');
-require('functions.inc.php');
+require ('db_connect.inc.php');
+require ('functions.inc.php');
 // This page requires authentication
-require('auth.inc.php');
+require ('auth.inc.php');
 
-include('htmlheader.inc.php');
+include ('htmlheader.inc.php');
 
 echo "<table summary='by Ivan Lucas' align='center' width='50%'>\n";
 echo "<tr><td class='shade1' colspan='2'>{$strAbout} {$CONFIG['application_shortname']}&hellip;</td></tr>\n";
@@ -99,7 +99,7 @@ echo "<tr><td class='shade1' colspan='2'>{$strPlugins}:</td></tr>";
 echo "<tr><td class='shade2' colspan='2'>";
 if (count($CONFIG['plugins']) >= 1)
 {
-    foreach($CONFIG['plugins'] AS $plugin)
+    foreach ($CONFIG['plugins'] AS $plugin)
     {
         echo "<p><strong>$plugin</strong>";
         if ($PLUGININFO[$plugin]['version'] != '') echo " version ".number_format($PLUGININFO[$plugin]['version'], 2)."<br />";
@@ -119,5 +119,5 @@ echo "</table>\n";
 
 plugin_do('about');
 
-include('htmlfooter.inc.php');
+include ('htmlfooter.inc.php');
 ?>

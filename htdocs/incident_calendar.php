@@ -12,19 +12,19 @@
 
 // FIXME this isn't on the menu, is it still required?
 
-@include('set_include_path.inc.php');
+@include ('set_include_path.inc.php');
 $permission=27; // View your calendar
-require('db_connect.inc.php');
-require('functions.inc.php');
+require ('db_connect.inc.php');
+require ('functions.inc.php');
 $title="Incident Calendar";
 
 // This page requires authentication
-require('auth.inc.php');
+require ('auth.inc.php');
 
 // External variables
 
 
-include('htmlheader.inc.php');
+include ('htmlheader.inc.php');
 
 /**
     * @author Ivan Lucas
@@ -226,5 +226,5 @@ function draw_calendar($nmonth, $nyear)
       }
       echo "</table>\n";
 
-      include('htmlfooter.inc.php');
+      include ('htmlfooter.inc.php');
 ?>

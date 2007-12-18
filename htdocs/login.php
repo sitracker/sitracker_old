@@ -9,8 +9,8 @@
 //
 // Author: Ivan Lucas <ivanlucas[at]users.sourceforge.net>
 
-@include('set_include_path.inc.php');
-require('db_connect.inc.php');
+@include ('set_include_path.inc.php');
+require ('db_connect.inc.php');
 
 session_name($CONFIG['session_name']);
 session_start();
@@ -19,7 +19,7 @@ if (!version_compare(phpversion(),"4.3.3",">=")) setcookie(session_name(), sessi
 
 $language = $_POST['lang'];
 
-require('functions.inc.php');
+require ('functions.inc.php');
 
 // External vars
 $password = md5($_REQUEST['password']);

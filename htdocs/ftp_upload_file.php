@@ -10,13 +10,13 @@
 
 
 // Author: Ivan Lucas <ivanlucas[at]users.sourceforge.net>
-@include('set_include_path.inc.php');
+@include ('set_include_path.inc.php');
 $permission=44; // ftp publishing
-require('db_connect.inc.php');
-require('functions.inc.php');
+require ('db_connect.inc.php');
+require ('functions.inc.php');
 
 // This page requires authentication
-require('auth.inc.php');
+require ('auth.inc.php');
 
 // External variables
 $file = cleanvar($_REQUEST['file']);
@@ -24,7 +24,7 @@ $action = cleanvar($_REQUEST['action']);
 
 if (empty($action))
 {
-    include('htmlheader.inc.php');
+    include ('htmlheader.inc.php');
     ?>
     <h2>Upload Public File</h2>
     <p align='center'>IMPORTANT: Files published here are <strong>public</strong> and available to all ftp users.</p>
@@ -83,7 +83,7 @@ if (empty($action))
     <p align='center'><a href='ftp_list_files.php'>Back to list</a></p>
     </form>
     <?php
-    include('htmlfooter.inc.php');
+    include ('htmlfooter.inc.php');
 }
 else
 {

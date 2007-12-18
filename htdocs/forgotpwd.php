@@ -10,11 +10,11 @@
 // Authors: Paul Heaney <paulheaney[at]users.sourceforge.net>
 //          Ivan Lucas <ivanlucas[at]users.sourceforge.net>
 
-@include('set_include_path.inc.php');
+@include ('set_include_path.inc.php');
 $permission=0; // not required
-require('db_connect.inc.php');
-require('functions.inc.php');
-include('mime.inc.php');
+require ('db_connect.inc.php');
+require ('functions.inc.php');
+include ('mime.inc.php');
 
 $title='Forgotten Password';
 
@@ -24,10 +24,10 @@ $username = cleanvar($_REQUEST['username']);
 $userid = cleanvar($_REQUEST['userid']);
 $userhash = cleanvar($_REQUEST['hash']);
 
-switch($_REQUEST['action'])
+switch ($_REQUEST['action'])
 {
     case 'forgotpwd':
-        include('htmlheader.inc.php');
+        include ('htmlheader.inc.php');
         // First look to see if this is a SiT user
         $sql = "SELECT id, username, password FROM users WHERE email = '{$email}' LIMIT 1";
         $userresult = mysql_query($sql);
@@ -60,7 +60,7 @@ switch($_REQUEST['action'])
             $contactcount = mysql_num_rows($contactresult);
             if ($contactcount == 1)
             {
-                while($row = mysql_fetch_object($contactresult))
+                while ($row = mysql_fetch_object($contactresult))
                 {
                     $extra_headers = "Reply-To: {$CONFIG['support_email']}\n";
                     $extra_headers .= "X-Mailer: {$CONFIG['application_shortname']} {$application_version_string}/PHP " . phpversion() . "\n";
@@ -79,11 +79,11 @@ switch($_REQUEST['action'])
                 echo "<p><a href='index.php'>Back to login page</a></p>";
             }
         }
-        include('htmlfooter.inc.php');
+        include ('htmlfooter.inc.php');
     break;
 
     case 'confirmreset':
-        include('htmlheader.inc.php');
+        include ('htmlheader.inc.php');
         $sql = "SELECT id, username, password FROM users WHERE id = '{$userid}' LIMIT 1";
         $userresult = mysql_query($sql);
         if (mysql_error()) trigger_error(mysql_error(),E_USER_WARNING);
@@ -121,11 +121,11 @@ switch($_REQUEST['action'])
             echo "<p>Did you paste the full URL you received in the email?</p>";
             echo "<p><a href='index.php'>Back to login page</a></p>";
         }
-        include('htmlfooter.inc.php');
+        include ('htmlfooter.inc.php');
     break;
 
     case 'resetpasswordform':
-        include('htmlheader.inc.php');
+        include ('htmlheader.inc.php');
         $sql = "SELECT id, username, password FROM users WHERE id = '{$userid}' LIMIT 1";
         $userresult = mysql_query($sql);
         if (mysql_error()) trigger_error(mysql_error(),E_USER_WARNING);
@@ -163,13 +163,13 @@ switch($_REQUEST['action'])
             echo "<p>Invalid user ID</p>";
             echo "<p><a href='index.php'>Back to login page</a></p>";
         }
-        include('htmlfooter.inc.php');
+        include ('htmlfooter.inc.php');
     break;
 
     case 'savepassword':
         $newpassword1 = cleanvar($_REQUEST['newpassword1']);
         $newpassword2 = cleanvar($_REQUEST['newpassword2']);
-        include('htmlheader.inc.php');
+        include ('htmlheader.inc.php');
         $sql = "SELECT id, username, password FROM users WHERE id = '{$userid}' LIMIT 1";
         $userresult = mysql_query($sql);
         if (mysql_error()) trigger_error(mysql_error(),E_USER_WARNING);
@@ -208,12 +208,12 @@ switch($_REQUEST['action'])
             echo "<p>Invalid user ID</p>";
             echo "<p><a href='index.php'>Back to login page</a></p>";
         }
-        include('htmlfooter.inc.php');
+        include ('htmlfooter.inc.php');
     break;
 
     case 'form':
     default:
-        include('htmlheader.inc.php');
+        include ('htmlheader.inc.php');
         echo "<h2>$title</h2>";
         echo "<form action='{$_SERVER['PHP_SELF']}' method='post'>";
         ?>
@@ -224,7 +224,7 @@ switch($_REQUEST['action'])
         <input type='hidden' name='action' value='forgotpwd' />
         </form>
         <?php
-        include('htmlfooter.inc.php');
+        include ('htmlfooter.inc.php');
     break;
 }
 

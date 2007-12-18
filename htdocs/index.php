@@ -9,13 +9,13 @@
 //
 // This Page Is Valid XHTML 1.0 Transitional! 31Oct05
 
-@include('set_include_path.inc.php');
+@include ('set_include_path.inc.php');
 
 if (version_compare(PHP_VERSION, "5.0.0", ">="))
 {
     try
     {
-        if (!@include('db_connect.inc.php')) throw new Exception('Failed to include essential file, include path is probably wrong');
+        if (!@include ('db_connect.inc.php')) throw new Exception('Failed to include essential file, include path is probably wrong');
     }
     catch (Exception $e)
     {
@@ -24,12 +24,12 @@ if (version_compare(PHP_VERSION, "5.0.0", ">="))
         // print $e->getMessage();
     }
 }
-else require('db_connect.inc.php');
+else require ('db_connect.inc.php');
 
 session_name($CONFIG['session_name']);
 session_start();
-include('strings.inc.php');
-require('functions.inc.php');
+include ('strings.inc.php');
+require ('functions.inc.php');
 
 if ($_SESSION['auth'] != TRUE)
 {
@@ -38,7 +38,7 @@ if ($_SESSION['auth'] != TRUE)
     $page = htmlentities(strip_tags(str_replace('..','',str_replace('//','',str_replace(':','',urldecode($_REQUEST['page']))))),ENT_COMPAT, $GLOBALS['i18ncharset']);
 
     // Invalid user, show log in form
-    include('htmlheader.inc.php');
+    include ('htmlheader.inc.php');
     if ($id==1) echo "<p class='error'>".sprintf($strEnterCredentials, $CONFIG['application_shortname'])."</p><br />";
     if ($id==2) echo "<p class='error'>{$strSessionExpired}</p><br />";
     if ($id==3) throw_user_error("{$strInvalidCredentials}");
@@ -50,7 +50,7 @@ if ($_SESSION['auth'] != TRUE)
     if (empty($_SESSION['lang'])) echo " selected='selected'";
     echo ">{$strDefault}</option>\n";
     if ($_GET['lang']=='zz') $availablelanguages['zz'] = 'Test Language (zz)';
-    foreach($availablelanguages AS $langcode => $language)
+    foreach ($availablelanguages AS $langcode => $language)
     {
         if ($langcode == $_SESSION['lang']) echo "<option value='$langcode' selected='selected'>$language</option>\n";
         else echo "<option value='$langcode'>$language</option>\n";
@@ -69,7 +69,7 @@ if ($_SESSION['auth'] != TRUE)
     echo "<br /><a href='forgotpwd.php'>{$strForgottenDetails}</a>";
     echo "</form>\n";
     echo "</div>\n</div>\n";
-    include('htmlfooter.inc.php');
+    include ('htmlfooter.inc.php');
 }
 else
 {

@@ -9,13 +9,13 @@
 //
 
 // Author: Ivan Lucas <ivanlucas[at]users.sourceforge.net>
-@include('set_include_path.inc.php');
+@include ('set_include_path.inc.php');
 
 $permission=13; // Reassign Incident
-require('db_connect.inc.php');
-require('functions.inc.php');
+require ('db_connect.inc.php');
+require ('functions.inc.php');
 // This page requires authentication
-require('auth.inc.php');
+require ('auth.inc.php');
 
 $forcepermission = user_permission($sit[2],40);
 
@@ -106,7 +106,7 @@ switch ($action)
     default:
         // No submit detected show reassign form
         $title = $strReassign;
-        include('incident_html_top.inc.php');
+        include ('incident_html_top.inc.php');
 
 
         $sql = "SELECT * FROM incidents WHERE id='$id' LIMIT 1";
@@ -294,7 +294,7 @@ switch ($action)
         echo "<input type='hidden' name='action' value='save' />";
         echo "<p align='center'><input name='submit' type='submit' value=\"{$strReassign}\" /></p>";
         echo "</form>\n";
-        include('incident_html_bottom.inc.php');
+        include ('incident_html_bottom.inc.php');
 }
 
 ?>

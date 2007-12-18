@@ -10,16 +10,16 @@
 
 // by Ivan Lucas <ivanlucas[at]users.sourceforge.net>, June 2004
 
-@include('set_include_path.inc.php');
+@include ('set_include_path.inc.php');
 $permission=51; // View Feedback
 
-require('db_connect.inc.php');
-require('functions.inc.php');
+require ('db_connect.inc.php');
+require ('functions.inc.php');
 // This page requires authentication
-require('auth.inc.php');
+require ('auth.inc.php');
 
 $title = $strBrowseFeedback;
-include('htmlheader.inc.php');
+include ('htmlheader.inc.php');
 
 // External variables
 $formid = cleanvar($_REQUEST['id']);
@@ -29,7 +29,7 @@ $order = cleanvar($_REQUEST['order']);
 $mode = cleanvar($_REQUEST['mode']);
 $completed = cleanvar($_REQUEST['completed']);
 
-switch($mode)
+switch ($mode)
 {
     case 'viewresponse':
         echo "<h2>{$strFeedback}</h2>";
@@ -159,7 +159,7 @@ switch($mode)
 
             if ($order=='a' OR $order=='ASC' OR $order='') $sortorder = "ASC";
             else $sortorder = "DESC";
-            switch($sort)
+            switch ($sort)
             {
                 case 'created': $sql .= " ORDER BY created $sortorder"; break;
                 case 'contactid': $sql .= " ORDER BY contactid $sortorder"; break;
@@ -254,5 +254,5 @@ switch($mode)
             }
         }
 }
-include('htmlfooter.inc.php');
+include ('htmlfooter.inc.php');
 ?>

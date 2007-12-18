@@ -12,13 +12,13 @@
 
 // FIXME i18n Whole Page
 
-@include('set_include_path.inc.php');
+@include ('set_include_path.inc.php');
 $permission=48; // Add Feedback Forms
 
-require('db_connect.inc.php');
-require('functions.inc.php');
+require ('db_connect.inc.php');
+require ('functions.inc.php');
 // This page requires authentication
-require('auth.inc.php');
+require ('auth.inc.php');
 
 function qtype_listbox($type)
 {
@@ -82,7 +82,7 @@ switch ($_REQUEST['action'])
 
     default:
         $title = "Add Feedback Question";
-        include('htmlheader.inc.php');
+        include ('htmlheader.inc.php');
         $qid = strip_tags($_REQUEST['qid']);
 
         echo "<h2 align='center'>$title</h2>\n";
@@ -132,6 +132,6 @@ switch ($_REQUEST['action'])
         echo "</tr>";
         echo "</table>";
         echo "</form>";
-        include('htmlfooter.inc.php');
+        include ('htmlfooter.inc.php');
 }
 ?>

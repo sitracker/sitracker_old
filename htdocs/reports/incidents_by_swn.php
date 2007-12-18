@@ -20,17 +20,17 @@
 
 $permission=37; // Run Reports
 
-require('db_connect.inc.php');
-require('functions.inc.php');
+require ('db_connect.inc.php');
+require ('functions.inc.php');
 
 // This page requires authentication
-require('auth.inc.php');
+require ('auth.inc.php');
 
 $title = $strIncidentsBySkill;
 
 if (empty($_REQUEST['mode']))
 {
-    include('htmlheader.inc.php');
+    include ('htmlheader.inc.php');
 
     echo "<h2>$title</h2>";
     echo "<form action='{$_SERVER['PHP_SELF']}' id='incidentsbysoftware' method='post'>";
@@ -53,7 +53,7 @@ if (empty($_REQUEST['mode']))
     echo "</p>";
     echo "</form>\n";
 
-    include('htmlfooter.inc.php');
+    include ('htmlfooter.inc.php');
 }
 else
 {
@@ -84,7 +84,7 @@ else
         $c++;
     }
 
-    include('htmlheader.inc.php');
+    include ('htmlheader.inc.php');
     // FIXME i18n
 
     $sqlSLA = "SELECT DISTINCT(tag) FROM servicelevels";
@@ -98,7 +98,7 @@ else
     echo "<p>";
     echo "<table class='vertical' align='center'>";
     echo "<tr><th>Number of calls</th><th>%</th><th>{$strSkill}</th>";
-    while($sla = mysql_fetch_object($resultSLA))
+    while ($sla = mysql_fetch_object($resultSLA))
     {
         echo "<th>".$sla->tag."</th>";
         $slas[$sla->tag]['name'] = $sla->tag;
@@ -129,7 +129,7 @@ else
         if (mysql_error()) trigger_error("MySQL Query Error ".mysql_error(), E_USER_ERROR);
         $numrows = mysql_num_rows($resultN);
 
-        foreach($slas AS &$slaReset)
+        foreach ($slas AS &$slaReset)
         {
             $slaReset['notEscalated'] = 0;
             $slaReset['escalated'] = 0;
@@ -232,7 +232,7 @@ else
         $shade = "shade1";
         $csv = ",";
         echo "<p><table align='center'><tr><td></td>";
-        foreach($months AS $m)
+        foreach ($months AS $m)
         {
             echo "<th>{$m}</th>";
             $csv .= "{$m},";
@@ -242,7 +242,7 @@ else
         $js_coordCounter = 0;
         $min = 0;
         $max = 0;
-        foreach($skilltotals AS $skill)
+        foreach ($skilltotals AS $skill)
         {
 
             echo "<tr class='{$shade}'><td>{$skill['name']}</td>";
@@ -250,7 +250,7 @@ else
             $sum = 0;
             $counter = 0;
             $coords = "";
-            foreach($months AS $m)
+            foreach ($months AS $m)
             {
                 $val = $skill[$m]['numberofincidents'];
                 if (empty($val)) $val = 0;
@@ -301,7 +301,7 @@ else
         $javascript .= "xA.label = \"Months\";\n";
         /*$javascript .= "xA.labels = [ "Mon", "Tue", 2, 3, 4, 5 ];";*/
         $javascript .= "xA.labels = [";
-        foreach($months AS $m)
+        foreach ($months AS $m)
         {
             $javascript .= "\"{$m}\", ";
         }
@@ -337,7 +337,7 @@ else
 
         echo "<tr><th>Totals</th>";
         $csv .= "\nTotals,";
-        foreach($months AS $m)
+        foreach ($months AS $m)
         {
             echo "<td>";
             echo $monthtotals[$m]['value'];
@@ -354,10 +354,10 @@ echo "</pre>";
 /*
         echo "<script src=\"../scripts/dojo/dojo.js\"></script>";
         echo "<script>";
-            echo "dojo.require('dojo.collections.Store');";
-            echo "dojo.require('dojo.charting.Chart');";
-            echo "dojo.require('dojo.widget.ContentPane');";
-            echo "dojo.require('dojo.json');";
+            echo "dojo.require ('dojo.collections.Store');";
+            echo "dojo.require ('dojo.charting.Chart');";
+            echo "dojo.require ('dojo.widget.ContentPane');";
+            echo "dojo.require ('dojo.json');";
 
             echo "var legend;";
 
@@ -418,7 +418,7 @@ echo "</pre>";
         echo "\n</div></p>";
     }
 
-    include('htmlfooter.inc.php');
+    include ('htmlfooter.inc.php');
 
 }
 
@@ -426,7 +426,7 @@ echo "</pre>";
 function date_to_str($date)
 {
     $s = explode(" ",$date);
-    switch($s[0])
+    switch ($s[0])
     {
         case 'Jan': return $s[1]."01";
             break;

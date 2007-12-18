@@ -10,14 +10,14 @@
 
 // Author: Ivan Lucas <ivanlucas[at]users.sourceforge.net>
 
-@include('set_include_path.inc.php');
+@include ('set_include_path.inc.php');
 $permission=0; // Allow all auth users
 
-require('db_connect.inc.php');
-require('functions.inc.php');
+require ('db_connect.inc.php');
+require ('functions.inc.php');
 
 // This page requires authentication
-require('auth.inc.php');
+require ('auth.inc.php');
 
 $title = $strEditTask;
 
@@ -64,7 +64,7 @@ switch ($action)
         if ($startdate > $duedate AND $duedate != '' AND $duedate > 0 ) $startdate=$duedate;
         if (count($error) >= 1)
         {
-            include('htmlheader.inc.php');
+            include ('htmlheader.inc.php');
             echo "<p class='error'>Please check the data you entered</p>";
             echo "<ul class='error'>";
             foreach ($error AS $err)
@@ -72,7 +72,7 @@ switch ($action)
                 echo "<li>$err</li>";
             }
             echo "</ul>";
-            include('htmlfooter.inc.php');
+            include ('htmlfooter.inc.php');
         }
         else
         {
@@ -150,7 +150,7 @@ switch ($action)
             if (mysql_error()) trigger_error(mysql_error(),E_USER_ERROR);
             if (mysql_num_rows($result) >= 1)
             {
-                while($notes = mysql_fetch_object($result))
+                while ($notes = mysql_fetch_object($result))
                 {
                     $notesarray[$numnotes] = $notes;
                     $numnotes++;
@@ -219,7 +219,7 @@ switch ($action)
 
     case '':
     default:
-        include('htmlheader.inc.php');
+        include ('htmlheader.inc.php');
         echo "<h2><img src='{$CONFIG['application_webpath']}images/icons/{$iconset}/32x32/task.png' width='32' height='32' alt='' /> ";
         echo "$title</h2>";
         $sql = "SELECT * FROM tasks WHERE id='$id'";
@@ -299,7 +299,7 @@ switch ($action)
 
 
         echo "<p align='center'><a href='tasks.php'>{$strTaskList}</a></p>";
-        include('htmlfooter.inc.php');
+        include ('htmlfooter.inc.php');
 }
 
 ?>

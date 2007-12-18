@@ -10,13 +10,13 @@
 
 // Author: Ivan Lucas <ivanlucas[at]users.sourceforge.net>
 
-@include('set_include_path.inc.php');
+@include ('set_include_path.inc.php');
 $permission=6; // View Incidents
 
-require('db_connect.inc.php');
-require('functions.inc.php');
+require ('db_connect.inc.php');
+require ('functions.inc.php');
 
-require('auth.inc.php');
+require ('auth.inc.php');
 // soon to be replaced by incident/sla.inc.php
 
 $incidentid = cleanvar($_REQUEST['id']);
@@ -44,10 +44,10 @@ $servicelevel_name=servicelevel_name($servicelevelid);
 $opened_for=format_seconds(time() - $incident->opened);
 
 
-include('incident_html_top.inc.php');
-include('incident/sla.inc.php');
+include ('incident_html_top.inc.php');
+include ('incident/sla.inc.php');
 
-include('incident_html_bottom.inc.php');
+include ('incident_html_bottom.inc.php');
 exit;
 
 ?>

@@ -9,13 +9,13 @@
 //
 // Author: Paul Heaney <paulheaney[at]users.sourceforge.net>
 
-@include('set_include_path.inc.php');
+@include ('set_include_path.inc.php');
 $permission=66; // Install dashboard components
-require('db_connect.inc.php');
-require('functions.inc.php');
+require ('db_connect.inc.php');
+require ('functions.inc.php');
 
 // This page requires authentication
-require('auth.inc.php');
+require ('auth.inc.php');
 
 function beginsWith( $str, $sub ) {
    return ( substr( $str, 0, strlen( $sub ) ) === $sub );
@@ -33,7 +33,7 @@ function setup_exec_sql($sqlquerylist)
         $sqlqueries = explode( ';', $sqlquerylist);
         // We don't need the last entry it's blank, as we end with a ;
         array_pop($sqlqueries);
-        foreach($sqlqueries AS $sql)
+        foreach ($sqlqueries AS $sql)
         {
             mysql_query($sql);
             if (mysql_error())
@@ -50,10 +50,10 @@ function setup_exec_sql($sqlquerylist)
     return $html;
 }
 
-switch($_REQUEST['action'])
+switch ($_REQUEST['action'])
 {
     case 'install':
-        include('htmlheader.inc.php');
+        include ('htmlheader.inc.php');
 
         $sql = "SELECT name FROM dashboard";
         $result = mysql_query($sql);
@@ -62,7 +62,7 @@ switch($_REQUEST['action'])
         echo "<h2><img src='{$CONFIG['application_webpath']}images/icons/{$iconset}/32x32/dashboard.png' width='32' height='32' alt='' /> ";
         echo "Install new dashboard component</h2>";
         echo "<p align='center'>Please note the component must has been placed in the dashboard directory and named <var>dashboard_NAME</var></p>";
-        while($dashboardnames = mysql_fetch_object($result))
+        while ($dashboardnames = mysql_fetch_object($result))
         {
             $dashboard[$dashboardnames->name] = $dashboardnames->name;
         }
@@ -71,7 +71,7 @@ switch($_REQUEST['action'])
 
         $dir_handle = @opendir($path) or die("Unable to open dashboard directory $path");
 
-        while($file = readdir($dir_handle))
+        while ($file = readdir($dir_handle))
         {
             if (beginsWith($file, "dashboard_") && endsWith($file, ".php"))
             {
@@ -105,7 +105,7 @@ switch($_REQUEST['action'])
             echo "</form>\n";
         }
 
-        include('htmlfooter.inc.php');
+        include ('htmlfooter.inc.php');
 
         break;
     case 'installdashboard':
@@ -126,9 +126,9 @@ switch($_REQUEST['action'])
             else
             {
                 // run the post install compoents
-                foreach($dashboardcomponents AS $comp)
+                foreach ($dashboardcomponents AS $comp)
                 {
-                    include("{$CONFIG['application_fspath']}dashboard/dashboard_{$comp}.php");
+                    include ("{$CONFIG['application_fspath']}dashboard/dashboard_{$comp}.php");
                     $func = "dashboard_".$comp."_install";
                     if (function_exists($func)) $func();
                 }
@@ -148,7 +148,7 @@ switch($_REQUEST['action'])
             $obj = mysql_fetch_object($result);
 
             $version = 1;
-            include("{$CONFIG['application_fspath']}dashboard/dashboard_{$obj->name}.php");
+            include ("{$CONFIG['application_fspath']}dashboard/dashboard_{$obj->name}.php");
             $func = "dashboard_{$obj->name}_get_version";
 
             if (function_exists($func))
@@ -207,7 +207,7 @@ switch($_REQUEST['action'])
         }
         break;
     default:
-        include('htmlheader.inc.php');
+        include ('htmlheader.inc.php');
 
         $sql = "SELECT * FROM dashboard";
         $result = mysql_query($sql);
@@ -222,7 +222,7 @@ switch($_REQUEST['action'])
         echo colheader('version',$strVersion);
         echo colheader('upgrade',"Upgrade"); //FIXME i18n after release
         echo "</tr>";
-        while($dashboardnames = mysql_fetch_object($result))
+        while ($dashboardnames = mysql_fetch_object($result))
         {
             if ($dashboardnames->enabled == "true") $opposite = "false";
             else $opposite = "true";
@@ -234,7 +234,7 @@ switch($_REQUEST['action'])
             echo "<td>";
 
             $version = 1;
-            include("{$CONFIG['application_fspath']}dashboard/dashboard_{$dashboardnames->name}.php");
+            include ("{$CONFIG['application_fspath']}dashboard/dashboard_{$dashboardnames->name}.php");
             $func = "dashboard_{$dashboardnames->name}_get_version";
 
             if (function_exists($func))
@@ -257,7 +257,7 @@ switch($_REQUEST['action'])
 
         echo "<p align='center'><a href='".$_SERVER['PHP_SELF']."?action=install'>{$strInstall}</a></p>";
 
-        include('htmlfooter.inc.php');
+        include ('htmlfooter.inc.php');
         break;
 }
 

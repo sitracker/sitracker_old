@@ -10,15 +10,15 @@
 // Authors: Ivan Lucas <ivanlucas[at]users.sourceforge.net, Kieran Hogg <kieran_hogg[at]users.sourceforge.net>
 // XHTML 1.0 Transitional valid 12/11/07 - KMH
 
-@include('set_include_path.inc.php');
+@include ('set_include_path.inc.php');
 $permission=0; // not required
-require('db_connect.inc.php');
-require('functions.inc.php');
+require ('db_connect.inc.php');
+require ('functions.inc.php');
 session_name($CONFIG['session_name']);
 session_start();
 // Load session language if it is set and different to the default language
-if (!empty($_SESSION['lang']) AND $_SESSION['lang'] != $CONFIG['default_i18n']) include("i18n/{$_SESSION['lang']}.inc.php");
-require('strings.inc.php');
+if (!empty($_SESSION['lang']) AND $_SESSION['lang'] != $CONFIG['default_i18n']) include ("i18n/{$_SESSION['lang']}.inc.php");
+require ('strings.inc.php');
 
 if ($CONFIG['portal'] == FALSE)
 {
@@ -54,7 +54,7 @@ $page = cleanvar($_REQUEST['page']);
 
 $filter=array('page' => $page);
 
-include('htmlheader.inc.php');
+include ('htmlheader.inc.php');
 
 echo "<div id='menu'>\n";
 echo "<ul id='menuList'>\n";
@@ -433,7 +433,7 @@ switch ($page)
         if ($user->contact != $_SESSION['contactid'])
         {
             echo "<p align='center'>$strNoPermission.</p>";
-            include('htmlfooter.inc.php');
+            include ('htmlfooter.inc.php');
             exit;
         }*/
 
@@ -452,7 +452,7 @@ switch ($page)
         if (mysql_error()) trigger_error("MySQL Query Error $sql".mysql_error(), E_USER_ERROR);
 
         $keeptags=array('b','i','u','hr','&lt;', '&gt;');
-        foreach($keeptags AS $keeptag)
+        foreach ($keeptags AS $keeptag)
         {
             if (substr($keeptag,0,1)=='&')
             {
@@ -572,6 +572,6 @@ switch ($page)
         echo "<p align='center'>{$strWelcome} ".contact_realname($_SESSION['contactid'])."</p>";
 }
 
-include('htmlfooter.inc.php');
+include ('htmlfooter.inc.php');
 
 ?>

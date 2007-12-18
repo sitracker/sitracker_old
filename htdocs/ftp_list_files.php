@@ -12,16 +12,16 @@
 
 // This Page Is Valid XHTML 1.0 Transitional!   1Nov05
 
-@include('set_include_path.inc.php');
+@include ('set_include_path.inc.php');
 $permission=44; // FTP Publishing
-require('db_connect.inc.php');
-require('functions.inc.php');
+require ('db_connect.inc.php');
+require ('functions.inc.php');
 
 // This page requires authentication
-require('auth.inc.php');
+require ('auth.inc.php');
 
 $title= $strFTPFilesDB;
-include('htmlheader.inc.php');
+include ('htmlheader.inc.php');
 
 // External Variables
 $orderby=cleanvar($_REQUEST['orderby']);
@@ -51,7 +51,7 @@ echo "<table summary='files' align='center'>
 $sql="SELECT id, filename, size, userid, shortdescription, path, downloads, filedate, fileversion, productid, ";
 $sql .="releaseid, expiry, published FROM files ";
 
-switch($orderby)
+switch ($orderby)
 {
     case 'filename':
         $sql.="ORDER by filename ";
@@ -117,5 +117,5 @@ while (list($id, $filename, $size, $userid, $shortdescription, $path, $downloads
     echo "</tr>\n";
 }
 echo "</table>\n";
-include('htmlfooter.inc.php');
+include ('htmlfooter.inc.php');
 ?>

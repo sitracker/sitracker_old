@@ -10,12 +10,12 @@
 
 
 // This Page Is Valid XHTML 1.0 Transitional!  1Nov05
-@include('set_include_path.inc.php');
+@include ('set_include_path.inc.php');
 $permission=4; // Edit your profile
-require('db_connect.inc.php');
-require('functions.inc.php');
+require ('db_connect.inc.php');
+require ('functions.inc.php');
 // This page requires authentication
-require('auth.inc.php');
+require ('auth.inc.php');
 
 // External variables
 $mode = $_REQUEST['mode'];
@@ -26,7 +26,7 @@ else $userid = cleanvar($_REQUEST['userid']);
 
 if (empty($mode))
 {
-    include('htmlheader.inc.php');
+    include ('htmlheader.inc.php');
 
     $sql = "SELECT * FROM users WHERE id='$userid' LIMIT 1";
     $result = mysql_query($sql);
@@ -125,7 +125,7 @@ if (empty($mode))
     echo "<select name='vari18n' id='vari18n'>";
     if (!empty($user->var_i18n)) $selectedlang = $user->var_i18n;
     else $selectedlang = $_SESSION['lang'];
-    foreach($availablelanguages AS $langcode => $language)
+    foreach ($availablelanguages AS $langcode => $language)
     {
         if ($langcode == $selectedlang) echo "<option value='$langcode' selected='selected'>$language</option>\n";
         else echo "<option value='$langcode'>$language</option>\n";
@@ -176,7 +176,7 @@ if (empty($mode))
     echo "<p><input name='reset' type='reset' value='{$strReset}' /> <input name='submit' type='submit' value='{$strSave}' /></p>";
     echo "</form>\n";
 
-    include('htmlfooter.inc.php');
+    include ('htmlfooter.inc.php');
 }
 elseif ($mode=='save')
 {
@@ -314,9 +314,9 @@ elseif ($mode=='save')
 
         if (!$result)
         {
-            include('htmlheader.inc.php');
+            include ('htmlheader.inc.php');
             throw_error('!Error while updating users table', '');
-            include('htmlfooter.inc.php');
+            include ('htmlfooter.inc.php');
         }
         else
         {
@@ -343,9 +343,9 @@ elseif ($mode=='save')
     else
     {
         // print error string
-        include('htmlheader.inc.php');
+        include ('htmlheader.inc.php');
         echo $error_string;
-        include('htmlfooter.inc.php');
+        include ('htmlfooter.inc.php');
     }
 }
 elseif ($mode='savesessionlang')

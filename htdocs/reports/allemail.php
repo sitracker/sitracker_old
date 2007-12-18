@@ -14,17 +14,17 @@
 
 // FIXME Not on menu
 
-@include('set_include_path.inc.php');
+@include ('set_include_path.inc.php');
 
 $permission=37; // Run Reports
 
-require('db_connect.inc.php');
-require('functions.inc.php');
+require ('db_connect.inc.php');
+require ('functions.inc.php');
 
 // This page requires authentication
-require('auth.inc.php');
+require ('auth.inc.php');
 
-include('htmlheader.inc.php');
+include ('htmlheader.inc.php');
 
 echo "<h2>Report: Email Address of Supported Customers</h2>";
 echo "<h4><em>(Doesn't check for expiry)</em></h4>";
@@ -53,6 +53,6 @@ else
 mysql_free_result($result);
 mysql_close($db);
 
-include('htmlfooter.inc.php');
+include ('htmlfooter.inc.php');
 
 ?>

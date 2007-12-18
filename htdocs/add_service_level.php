@@ -10,13 +10,13 @@
 
 // Author: Ivan Lucas <ivanlucas[at]users.sourceforge.net>
 
-@include('set_include_path.inc.php');
+@include ('set_include_path.inc.php');
 $permission=22; // Administrate
 
-require('db_connect.inc.php');
-require('functions.inc.php');
+require ('db_connect.inc.php');
+require ('functions.inc.php');
 // This page requires authentication
-require('auth.inc.php');
+require ('auth.inc.php');
 
 // External variables
 $tag = mysql_real_escape_string($_REQUEST['tag']);
@@ -26,7 +26,7 @@ $action = $_REQUEST['action'];
 if (empty($action) OR $action == "showform")
 {
     $title = $strAddServiceLevel;
-    include('htmlheader.inc.php');
+    include ('htmlheader.inc.php');
     echo "<h2><img src='{$CONFIG['application_webpath']}images/icons/{$iconset}/32x32/sla.png' width='32' height='32' alt='' /> ";
     echo "$title</h2>";
     echo "<form name='add_servicelevel' action='{$_SERVER['PHP_SELF']}' method='post'>";
@@ -74,7 +74,7 @@ if (empty($action) OR $action == "showform")
     echo "<input type='hidden' name='action' value='edit' />";
     echo "<p align='center'><input type='submit' value='{$strSave}' /></p>";
     echo "</form>";
-    include('htmlfooter.inc.php');
+    include ('htmlfooter.inc.php');
 }
 elseif ($action == "edit")
 {

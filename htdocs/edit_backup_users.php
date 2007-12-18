@@ -12,9 +12,9 @@
 // Author: Ivan Lucas <ivanlucas[at]users.sourceforge.net>
 
 // This Page Is Valid XHTML 1.0 Transitional!   3Nov05
-@include('set_include_path.inc.php');
-require('db_connect.inc.php');
-require('functions.inc.php');
+@include ('set_include_path.inc.php');
+require ('db_connect.inc.php');
+require ('functions.inc.php');
 
 if (empty($_REQUEST['user'])
     OR $_REQUEST['user']=='current'
@@ -23,7 +23,7 @@ if (empty($_REQUEST['user'])
 else $permission = 59; // Manage users software skills
 
 // This page requires authentication
-require('auth.inc.php');
+require ('auth.inc.php');
 
 // Valid user with Permission
 // External variables
@@ -37,7 +37,7 @@ if (empty($save))
     $default = cleanvar($_REQUEST['default']);
     $softlist = $_REQUEST['softlist'];
 
-    include('htmlheader.inc.php');
+    include ('htmlheader.inc.php');
     echo "<h2>".sprintf($strDefineSubstituteEngineersFor, user_realname($user,TRUE))."</h2>\n";
     echo "<form name='def' action='{$_SERVER['PHP_SELF']}' method='post'>";
     echo "<input type='hidden' name='user' value='{$user}' />";
@@ -79,7 +79,7 @@ if (empty($save))
     {
         echo "<h5 class='error'>{$strNoResults}</h5>";
     }
-    include('htmlfooter.inc.php');
+    include ('htmlfooter.inc.php');
 }
 else
 {

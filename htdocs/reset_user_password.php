@@ -13,13 +13,13 @@
 // FIXME with the new forgotten password feature introduced for 3.30
 // we may not need this now?
 
-@include('set_include_path.inc.php');
+@include ('set_include_path.inc.php');
 $permission=9; // change user permissions
-require('db_connect.inc.php');
-require('functions.inc.php');
+require ('db_connect.inc.php');
+require ('functions.inc.php');
 
 // This page requires authentication
-require('auth.inc.php');
+require ('auth.inc.php');
 
 // External variables
 $id = cleanvar($_REQUEST['id']);

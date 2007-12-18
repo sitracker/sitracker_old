@@ -12,14 +12,14 @@
 // Author: Ivan Lucas <ivanlucas[at]users.sourceforge.net>, Tom Gerrard
 // 7Oct02 INL  Added support for maintenanceid to be put into incidents table
 
-@include('set_include_path.inc.php');
+@include ('set_include_path.inc.php');
 $permission=5;
-require('db_connect.inc.php');
-require('functions.inc.php');
+require ('db_connect.inc.php');
+require ('functions.inc.php');
 $title=$strAddIncident;
 
 // This page requires authentication
-require('auth.inc.php');
+require ('auth.inc.php');
 
 // External variables
 $action = $_REQUEST['action'];
@@ -41,11 +41,11 @@ if (!empty($incomingid) AND empty($updateid)) $updateid = db_read_column('update
 if (empty($action) OR $action=='showform')
 {
     // TODO This page fails XHTML validation because of dojo attributes - INL 12/12/07
-    include('htmlheader.inc.php');
+    include ('htmlheader.inc.php');
     ?>
     <script type="text/javascript" src="scripts/dojo/dojo.js"></script>
     <script type="text/javascript">
-        dojo.require("dojo.widget.ComboBox");
+        dojo.require ("dojo.widget.ComboBox");
     </script>
     <?php
     echo "<h2>{$strAddIncident} - {$strFindContact}</h2>";
@@ -74,7 +74,7 @@ if (empty($action) OR $action=='showform')
     {
         echo "<p align='center'>{$strContact} $contactid</p>";
     }
-    include('htmlfooter.inc.php');
+    include ('htmlfooter.inc.php');
 }
 elseif ($action=='findcontact')
 {
@@ -116,7 +116,7 @@ elseif ($action=='findcontact')
     if (mysql_error()) trigger_error("MySQL Query Error ".mysql_error(), E_USER_ERROR);
     if (mysql_num_rows($result)>0)
     {
-        include('htmlheader.inc.php');
+        include ('htmlheader.inc.php');
         ?>
         <script type="text/javascript">
         function confirm_support()
@@ -178,7 +178,7 @@ elseif ($action=='findcontact')
 
         $headers = "<tr><th>&nbsp;</th><th>{$strName}</th><th>{$strSite}</th><th>{$strContract}</th><th>{$strServiceLevel}</th><th>{$strExpiryDate}</th></tr>";
 
-        while($contactrow=mysql_fetch_array($result))
+        while ($contactrow=mysql_fetch_array($result))
         {
             if (empty($CONFIG['preferred_maintenance']) OR
                 in_array(servicelevel_id2tag($contactrow['servicelevelid']), $CONFIG['preferred_maintenance']))
@@ -241,7 +241,7 @@ elseif ($action=='findcontact')
             echo "<th>{$strSite}</th>";
             echo "</tr>\n";
 
-            while($contactrow=mysql_fetch_array($result))
+            while ($contactrow=mysql_fetch_array($result))
             {
                 echo "<tr class='shade2'>";
                 $site_incident_pool=db_read_column('freesupport', 'sites', $contactrow['siteid']);
@@ -267,12 +267,12 @@ elseif ($action=='findcontact')
             echo "<p align='center'><a href=\"add_contact.php\">{$strAddContact}</a></p>";
         }
         echo "<p align='center'><a href=\"{$_SERVER['PHP_SELF']}?updateid={$updateid}&amp;win={$win}\">{$strSearchAgain}</a></p>";
-        include('htmlfooter.inc.php');
+        include ('htmlfooter.inc.php');
     }
     else
     {
         // This Page Is Valid XHTML 1.0 Transitional! 27Oct05
-        include('htmlheader.inc.php');
+        include ('htmlheader.inc.php');
         echo "<h2>No contract found matching ";
         if (!empty($search_string)) echo "'$search_string' ";
         if (!empty($contactid)) echo "contact id $contactid ";
@@ -301,7 +301,7 @@ elseif ($action=='findcontact')
             echo "<th>{$strSite}</th>";
             echo "</tr>\n";
 
-            while($contactrow=mysql_fetch_array($result))
+            while ($contactrow=mysql_fetch_array($result))
             {
                 echo "<tr class='shade2'>";
                 $site_incident_pool=db_read_column('freesupport', 'sites', $contactrow['siteid']);
@@ -324,13 +324,13 @@ elseif ($action=='findcontact')
             echo "<h3>No matching contacts found</h3>";
             echo "<p align='center'><a href=\"add_contact.php\">{$strAddContact}</a></p>\n";
         }
-        include('htmlfooter.inc.php');
+        include ('htmlfooter.inc.php');
     }
 }
 elseif ($action=='incidentform')
 {
     // Display form to get details of the actual incident
-    include('htmlheader.inc.php');
+    include ('htmlheader.inc.php');
 
     echo "<h2>{$strAddIncident} - Get Details</h2>";
     ?>
@@ -463,11 +463,11 @@ elseif ($action=='incidentform')
     ?>
     </form>
     <?php
-    include('htmlfooter.inc.php');
+    include ('htmlfooter.inc.php');
 }
 elseif ($action=='assign')
 {
-    include('htmlheader.inc.php');
+    include ('htmlheader.inc.php');
     if ($type == "support" || $type == "free")
     {
         echo "<h2>{$strAddIncident} - Assign</h2>";
@@ -748,7 +748,7 @@ elseif ($action=='assign')
             throw_error('User input error:', $error_string);
         }
     }
-    include('htmlfooter.inc.php');
+    include ('htmlfooter.inc.php');
 }
 elseif ($action=='reassign')
 {
@@ -757,7 +757,7 @@ elseif ($action=='reassign')
     $uid = cleanvar($_REQUEST['userid']);
     $nextaction = cleanvar($_REQUST['nextaction']);
 
-    include('htmlheader.inc.php');
+    include ('htmlheader.inc.php');
     echo "<h2>{$strIncidentAdded} - {$strSummary}</h2>";
     echo "<p align='center'>{$strIncident} <a href=\"javascript:incident_details_window('$incidentid','incident{$incidentid}');\">";
     echo "{$incidentid}</a> has been moved to ";
@@ -778,6 +778,6 @@ elseif ($action=='reassign')
     $sql .= "VALUES ('$incidentid', '$sit[2]', 'reassigning', '$now', '$uid', '1', '$nextaction')";
     $result = mysql_query($sql);
     if (mysql_error()) trigger_error("MySQL Query Error ".mysql_error(), E_USER_ERROR);
-    include('htmlfooter.inc.php');
+    include ('htmlfooter.inc.php');
 }
 ?>

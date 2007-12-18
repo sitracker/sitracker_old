@@ -9,19 +9,19 @@
 //
 // Author: Kieran Hogg[at]users.sourceforge.net>
 
-@include('set_include_path.inc.php');
+@include ('set_include_path.inc.php');
 
 $permission=69;
 
-require('db_connect.inc.php');
-require('functions.inc.php');
-require('auth.inc.php');
+require ('db_connect.inc.php');
+require ('functions.inc.php');
+require ('auth.inc.php');
 
 
 $action = cleanvar($_REQUEST['action']);
 if ($action == 'new')
 {
-    include('htmlheader.inc.php');
+    include ('htmlheader.inc.php');
     echo "<h2>{$strNotices}</h2>";
     echo "<p align='center'>{$strNoticesBlurb}</p>";
     echo "<table align='center'><tr><th>{$strCode}</th><th>{$strOutput}</th></tr>";
@@ -46,7 +46,7 @@ if ($action == 'new')
     echo "<input type='submit' value='{$strSave}' />";
     echo "</form></div>";
     echo "<p align='center'><a href='notices.php'>{$strReturnWithoutSaving}</a></p>";
-    include('htmlfooter.inc.php');
+    include ('htmlfooter.inc.php');
 }
 elseif ($action == 'post')
 {
@@ -58,7 +58,7 @@ elseif ($action == 'post')
     //post new notice
     $sql = "SELECT id FROM users WHERE status != 0";
     $result = mysql_query($sql);
-    while($user = mysql_fetch_object($result))
+    while ($user = mysql_fetch_object($result))
     {
         $sql = "INSERT INTO notices (userid, gid, type, text, timestamp, durability) ";
         $sql .= "VALUES({$user->id}, '{$gid}', {$type}, '{$text}', NOW(), '{$durability}')";
@@ -85,7 +85,7 @@ elseif ($action == 'delete')
 }
 else
 {
-    include('htmlheader.inc.php');
+    include ('htmlheader.inc.php');
     echo "<h2>{$strNotices}</h2>";
 
     //get all notices
@@ -113,7 +113,7 @@ else
     else echo "<p align='center'>$strNoRecords</p>";
 
     echo "<p align='center'><a href='{$_SERVER[PHP_SELF]}?action=new'>{$strPostNewNotice}</a></p>";
-    include('htmlfooter.inc.php');
+    include ('htmlfooter.inc.php');
 }
 
 ?>

@@ -10,13 +10,13 @@
 
 // Author: Ivan Lucas <ivanlucas[at]users.sourceforge.net>
 
-@include('set_include_path.inc.php');
+@include ('set_include_path.inc.php');
 $permission=32;  // Edit Supported Products
-require('db_connect.inc.php');
-require('functions.inc.php');
+require ('db_connect.inc.php');
+require ('functions.inc.php');
 
 // This page requires authentication
-require('auth.inc.php');
+require ('auth.inc.php');
 
 // External Variables
 $maintid = cleanvar($_REQUEST['maintid']);
@@ -28,7 +28,7 @@ $action = $_REQUEST['action'];
 if (empty($action) || $action == "showform")
 {
     $title="Associate person with Contract"; // TODO i18n
-    include('htmlheader.inc.php');
+    include ('htmlheader.inc.php');
     echo "<h2>Link a contract with a support contact</h2>"; //TODO i18n
     echo "<form action='{$_SERVER['PHP_SELF']}?action=add' method='post'>";
     echo "<input type='hidden' name='context' value='{$context}' />";
@@ -68,7 +68,7 @@ if (empty($action) || $action == "showform")
     echo "<p align='center'><input name='submit' type='submit' value='{$strContinue}' /></p>";
     echo "</form>";
 
-    include('htmlfooter.inc.php');
+    include ('htmlfooter.inc.php');
 }
 else if ($action == "add")
 {
@@ -107,9 +107,9 @@ else if ($action == "add")
         // show error message if addition failed
         if (!$result)
         {
-            include('htmlheader.inc.php');
+            include ('htmlheader.inc.php');
             echo "<p class='error'>Addition of support contact failed\n";
-            include('htmlfooter.inc.php');
+            include ('htmlfooter.inc.php');
         }
         // update database and show success message
         else
@@ -121,11 +121,11 @@ else if ($action == "add")
     else
     {
         // show error message if errors
-        include('htmlheader.inc.php');
+        include ('htmlheader.inc.php');
         echo $errors_string;
 
         echo "<p align='center'><a href='contract_details.php?id={$maintid}'>Return</a></p>";
-        include('htmlfooter.inc.php');
+        include ('htmlfooter.inc.php');
     }
 }
 ?>

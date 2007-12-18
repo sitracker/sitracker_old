@@ -8,21 +8,21 @@
 // of the GNU General Public License, incorporated herein by reference.
 //
 
-@include('set_include_path.inc.php');
+@include ('set_include_path.inc.php');
 $permission=20; // Add Users
 
-require('db_connect.inc.php');
-require('functions.inc.php');
+require ('db_connect.inc.php');
+require ('functions.inc.php');
 
 // This page requires authentication
-require('auth.inc.php');
+require ('auth.inc.php');
 
 $title = $strAddUser;
 
 // External variables
 $submit = $_REQUEST['submit'];
 
-include('htmlheader.inc.php');
+include ('htmlheader.inc.php');
 ?>
 <script type="text/javascript">
 function confirm_submit()
@@ -114,7 +114,7 @@ if (empty($submit))
     echo "</table>\n";
     echo "<p><input name='submit' type='submit' value=\"{$strAddUser}\" /></p>";
     echo "</form>\n";
-    include('htmlfooter.inc.php');
+    include ('htmlfooter.inc.php');
 
     clear_form_data('add_user');
 }

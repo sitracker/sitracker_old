@@ -49,7 +49,7 @@ function trigger($triggertype, $paramarray='')
     //quick sanity check
     if (!is_numeric($triggertype) OR $triggertype < 1 OR $triggertype > 16) return;
 
-    switch($triggertype)
+    switch ($triggertype)
     {
         case TRIGGER_INCIDENT_CREATED:
         {
@@ -57,7 +57,7 @@ function trigger($triggertype, $paramarray='')
             if ($paramarray != '')
             {
                 if ($CONFIG['debug']) $dbg .= "Params passed:<br />";
-                foreach(array_keys($paramarray) as $key)
+                foreach (array_keys($paramarray) as $key)
                 {
                     //parse parameter array
                     //TODO define the keys to look for other than 'user'

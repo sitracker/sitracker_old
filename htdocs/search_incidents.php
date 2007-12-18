@@ -10,18 +10,18 @@
 
 // This Page Is Valid XHTML 1.0 Transitional!  10Jan06
 
-@include('set_include_path.inc.php');
+@include ('set_include_path.inc.php');
 $permission=6; // View Incidents
 
-require('db_connect.inc.php');
-require('functions.inc.php');
+require ('db_connect.inc.php');
+require ('functions.inc.php');
 // This page requires authentication
-require('auth.inc.php');
+require ('auth.inc.php');
 
 // External variables
 $search_string = cleanvar($_REQUEST['search_string']);
 
-include('htmlheader.inc.php');
+include ('htmlheader.inc.php');
 
 // show search incidents form
 if (empty($search_string))
@@ -157,5 +157,5 @@ else
         echo "<p align='center'><a href=\"search_incidents.php\">Search Again</a></p>";
     }
 }
-include('htmlfooter.inc.php');
+include ('htmlfooter.inc.php');
 ?>

@@ -10,16 +10,16 @@
 
 // Author: Ivan Lucas <ivanlucas[at]users.sourceforge.net>
 
-@include('set_include_path.inc.php');
+@include ('set_include_path.inc.php');
 $permission=23; // Edit user
 
-require('db_connect.inc.php');
-require('functions.inc.php');
+require ('db_connect.inc.php');
+require ('functions.inc.php');
 
 $title = $strUserGroups;
 
 // This page requires authentication
-require('auth.inc.php');
+require ('auth.inc.php');
 
 $action = cleanvar($_REQUEST['action']);
 
@@ -66,7 +66,7 @@ switch ($action)
     break;
 
     default:
-        include('htmlheader.inc.php');
+        include ('htmlheader.inc.php');
 
         echo "<h2>$title</h2>";
 
@@ -85,7 +85,7 @@ switch ($action)
         echo "<tr><th>{$strGroup}</th><th>{$strOperation}</th></tr>\n";
         if ($numgroups >= 1)
         {
-            foreach($grouparr AS $groupid => $groupname)
+            foreach ($grouparr AS $groupid => $groupname)
             {
                 echo "<tr><td>$groupname</td><td><a href='usergroups.php?groupid={$groupid}&amp;action=deletegroup'>{$strDelete}</a></td></tr>\n";
             }
@@ -115,6 +115,6 @@ switch ($action)
         echo "<p><input type='hidden' name='action' value='savemembers' /><input type='submit' value='{$strSave}' /></p>";
         echo "</form>";
 
-        include('htmlfooter.inc.php');
+        include ('htmlfooter.inc.php');
 }
 ?>

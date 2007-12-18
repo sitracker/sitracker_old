@@ -11,13 +11,13 @@
 // Author: Ivan Lucas <ivanlucas[at]users.sourceforge.net>
 // Comments: Shows a list of incidents that each site has logged
 
-@include('set_include_path.inc.php');
-require('db_connect.inc.php');
-require('functions.inc.php');
+@include ('set_include_path.inc.php');
+require ('db_connect.inc.php');
+require ('functions.inc.php');
 
 // This page requires authentication
-require('auth.inc.php');
-include('htmlheader.inc.php');
+require ('auth.inc.php');
+include ('htmlheader.inc.php');
 
 $sites=array();
 
@@ -62,14 +62,14 @@ else
 $sites=array_unique($sites);
 
 /*
-foreach($sites AS $site => $val)
+foreach ($sites AS $site => $val)
 {
   $tot[$val] = $$val;
 }
 
 rsort($tot);
 
-foreach($tot AS $total => $val)
+foreach ($tot AS $total => $val)
 {
   echo "total: $total   value: $val <br />";
 }
@@ -77,7 +77,7 @@ foreach($tot AS $total => $val)
 
 $totals=array();
 
-foreach($sites AS $site => $val)
+foreach ($sites AS $site => $val)
 {
     if ($prev > $$val) array_push($totals, $val);
     else array_unshift($totals, $val);
@@ -87,12 +87,12 @@ foreach($sites AS $site => $val)
 
 // was sites
 /*
-foreach($totals AS $site => $val)
+foreach ($totals AS $site => $val)
 {
   echo "[{$val}] ".site_name($val);
   echo "= {$$val} <br />";
 }
 */
 
-include('htmlfooter.inc.php');
+include ('htmlfooter.inc.php');
 ?>

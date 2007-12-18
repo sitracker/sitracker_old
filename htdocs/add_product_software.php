@@ -12,13 +12,13 @@
 
 // This Page Is Valid XHTML 1.0 Transitional!  11Oct06
 
-@include('set_include_path.inc.php');
+@include ('set_include_path.inc.php');
 $permission=24;  // Add Product
-require('db_connect.inc.php');
-require('functions.inc.php');
+require ('db_connect.inc.php');
+require ('functions.inc.php');
 
 // This page requires authentication
-require('auth.inc.php');
+require ('auth.inc.php');
 
 // External variables
 $action = mysql_real_escape_string($_REQUEST['action']);
@@ -30,7 +30,7 @@ $return = cleanvar($_REQUEST['return']);
 if (empty($action) OR $action == "showform")
 {
     $title = $strAddLink;
-    include('htmlheader.inc.php');
+    include ('htmlheader.inc.php');
     echo "<h2>{$title}</h2>";
     echo "<form action='{$_SERVER['PHP_SELF']}?action=add' method='post'>\n";
     echo "<input type='hidden' name='context' value='{$context}' />\n";
@@ -71,7 +71,7 @@ if (empty($action) OR $action == "showform")
     echo "</form>";
 
     echo "<p align='center'><a href='products.php?productid={$productid}'>{$strReturnWithoutSaving}</a></p>";
-    include('htmlfooter.inc.php');
+    include ('htmlfooter.inc.php');
 }
 elseif ($action == "add")
 {
@@ -111,9 +111,9 @@ elseif ($action == "add")
         // show error message if addition failed
         if (!$result)
         {
-            include('htmlheader.inc.php');
+            include ('htmlheader.inc.php');
             throw_error("Addition of skill/product failed",$sql);
-            include('htmlfooter.inc.php');
+            include ('htmlfooter.inc.php');
         }
         // update db and show success message
         else
@@ -126,9 +126,9 @@ elseif ($action == "add")
     else
     {
         // show error message if errors
-        include('htmlheader.inc.php');
+        include ('htmlheader.inc.php');
         echo $errors_string;
-        include('htmlfooter.inc.php');
+        include ('htmlfooter.inc.php');
     }
 }
 ?>

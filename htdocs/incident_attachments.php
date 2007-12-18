@@ -13,26 +13,26 @@
 // INL 2Nov05
 // This file will be superceded by htdocs/incidents/files.inc.php
 
-@include('set_include_path.inc.php');
+@include ('set_include_path.inc.php');
 $permission=62; // View incident attachments
 
-require('db_connect.inc.php');
-require('functions.inc.php');
+require ('db_connect.inc.php');
+require ('functions.inc.php');
 
 // This page requires authentication
-require('auth.inc.php');
+require ('auth.inc.php');
 
 // External variables
 $id = cleanvar($_REQUEST['id']);
 $incidentid=$id;
 
 $title = $strFiles;
-include('incident_html_top.inc.php');
+include ('incident_html_top.inc.php');
 
 // append incident number to attachment path to show this users attachments
 $incident_attachment_fspath = $CONFIG['attachment_fspath'] . $id;
 
-include('incident/files.inc.php');
+include ('incident/files.inc.php');
 
 /*
 if (file_exists($incident_attachment_fspath))
@@ -40,7 +40,7 @@ if (file_exists($incident_attachment_fspath))
 
     // set array full of recursed files and directories
     $temparray=list_dir($incident_attachment_fspath, 1);
-    foreach($temparray as $value)
+    foreach ($temparray as $value)
     {
         if (substr($value,-8)!='mail.eml')
         $filesarray[] = $value;
@@ -127,6 +127,6 @@ else
     echo "<p class='error'>Incident $id has no files attached, attachment directory doesn't exist: $incident_attachment_fspath</p>";
 }
 */
-include('incident_html_bottom.inc.php');
+include ('incident_html_bottom.inc.php');
 
 ?>

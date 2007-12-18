@@ -10,13 +10,13 @@
 
 // This Page Is Valid XHTML 1.0 Transitional!  31Oct05
 
-@include('set_include_path.inc.php');
+@include ('set_include_path.inc.php');
 $permission=1; // Add new contact
 
-require('db_connect.inc.php');
-require('functions.inc.php');
+require ('db_connect.inc.php');
+require ('functions.inc.php');
 // This page requires authentication
-require('auth.inc.php');
+require ('auth.inc.php');
 
 // External variables
 $siteid = mysql_real_escape_string($_REQUEST['siteid']);
@@ -27,7 +27,7 @@ $submit = $_REQUEST['submit'];
 //     echo "<p class='error'>Form Error</p>";
 if (empty($submit) OR !empty($_SESSION['formerrors']['add_contact']))
 {
-    include('htmlheader.inc.php');
+    include ('htmlheader.inc.php');
     ?>
     <script type="text/javascript" src="scripts/dojo/dojo.js"></script>
     <script type='text/javascript'>
@@ -35,7 +35,7 @@ if (empty($submit) OR !empty($_SESSION['formerrors']['add_contact']))
     {
         return window.confirm('<?php echo $strAddContractConfirm ?>');
     }
-    dojo.require("dojo.widget.ComboBox");
+    dojo.require ("dojo.widget.ComboBox");
     </script>
     <?php
     echo show_form_errors('add_contact');
@@ -159,7 +159,7 @@ if (empty($submit) OR !empty($_SESSION['formerrors']['add_contact']))
     //cleanup form vars
     clear_form_data('add_contact');
     echo "<h5 class='warning'>{$strAvoidDupes}.</h5>";
-    include('htmlfooter.inc.php');
+    include ('htmlfooter.inc.php');
 }
 else
 {

@@ -13,14 +13,14 @@
 
 // Removes link between a product and software
 
-@include('set_include_path.inc.php');
+@include ('set_include_path.inc.php');
 $permission=24;  // Add Product
-require('db_connect.inc.php');
-require('functions.inc.php');
+require ('db_connect.inc.php');
+require ('functions.inc.php');
 $title="Disassociate skill with a product";
 
 // This page requires authentication
-require('auth.inc.php');
+require ('auth.inc.php');
 
 // External variables
 $productid = cleanvar($_REQUEST['productid']);

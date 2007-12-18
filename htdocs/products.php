@@ -10,21 +10,21 @@
 
 // Author: Ivan Lucas <ivanlucas[at]users.sourceforge.net>
 
-@include('set_include_path.inc.php');
+@include ('set_include_path.inc.php');
 $permission=28; // View Products and Software
 $title='Products List';
 
-require('db_connect.inc.php');
-require('functions.inc.php');
+require ('db_connect.inc.php');
+require ('functions.inc.php');
 
 // This page requires authentication
-require('auth.inc.php');
+require ('auth.inc.php');
 
 // External Variables
 $productid = cleanvar($_REQUEST['productid']);
 $display = cleanvar($_REQUEST['display']);
 
-include('htmlheader.inc.php');
+include ('htmlheader.inc.php');
 
 if (empty($productid) AND $display!='skills')
 {
@@ -308,5 +308,5 @@ if ($display=='skills' OR $display=='software') echo " | <a href='products.php'>
 else echo " | <a href='products.php?display=skills'>{$strListSkills}</a>";
 echo "</p>";
 
-include('htmlfooter.inc.php');
+include ('htmlfooter.inc.php');
 ?>

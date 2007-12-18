@@ -8,17 +8,17 @@
 // of the GNU General Public License, incorporated herein by reference.
 //
 
-@include('set_include_path.inc.php');
+@include ('set_include_path.inc.php');
 $permission=8; // Update Incident
-require('db_connect.inc.php');
-require('functions.inc.php');
+require ('db_connect.inc.php');
+require ('functions.inc.php');
 
 $disable_priority=TRUE;
 
 // 19 Nov 04 - Fixed bug where currentstatus wasn't updated or inserted - ilucas
 
 // This page requires authentication
-require('auth.inc.php');
+require ('auth.inc.php');
 
 // External Variables
 // $bodytext = cleanvar($_REQUEST['bodytext'],FALSE,FALSE);
@@ -27,9 +27,9 @@ $id = cleanvar($_REQUEST['id']);
 $incidentid=$id;
 $action = cleanvar($_REQUEST['action']);
 
-include('incident/update.inc.php');
+include ('incident/update.inc.php');
 
-include('incident_html_bottom.inc.php');
+include ('incident_html_bottom.inc.php');
 exit;
 
 ?>

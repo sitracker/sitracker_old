@@ -11,10 +11,10 @@
 // Authors: Ivan Lucas <ivanlucas[at]users.sourceforge.net>
 //          Paul Heaney <paulheaney[at]users.sourceforge.net>
 
-@include('set_include_path.inc.php');
-require('db_connect.inc.php');
-require('functions.inc.php');
-require('mime_email.class.php');
+@include ('set_include_path.inc.php');
+require ('db_connect.inc.php');
+require ('functions.inc.php');
+require ('mime_email.class.php');
 
 // read the email from stdin (it should be piped to us by the MTA)
 $fp = fopen("php://stdin", "r");
@@ -42,7 +42,7 @@ if ($decoded_email->contenttype=='multipart/mixed'
     OR $decoded_email->contenttype=='multipart/alternative')
 {
     // This is a MIME message
-    foreach($decoded_email->mime_block AS $block)
+    foreach ($decoded_email->mime_block AS $block)
     {
         print_r($block);
         // Do the decoding
@@ -157,7 +157,7 @@ if ($count_attachments >= 1)
 {
     $headertext .= "Attachments: [b]{$count_attachments}[/b] - ";
     $c=1;
-    foreach($attachment AS $att)
+    foreach ($attachment AS $att)
     {
         $headertext .= "[[att]]{$att}[[/att]]";
         if ($c < $count_attachments) $headertext .= ", ";

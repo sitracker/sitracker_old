@@ -13,14 +13,14 @@
 
 // This Page Is Valid XHTML 1.0 Transitional!   4Nov05
 
-@include('set_include_path.inc.php');
+@include ('set_include_path.inc.php');
 $permission=22; // administrate
-require('db_connect.inc.php');
-require('functions.inc.php');
+require ('db_connect.inc.php');
+require ('functions.inc.php');
 
 $title="Browse Journal"; // FIXME i18n browse journal
 // This page requires authentication
-require('auth.inc.php');
+require ('auth.inc.php');
 
 // External variables
 $offset = cleanvar($_REQUEST['offset']);
@@ -32,7 +32,7 @@ $order = cleanvar($_REQUEST['order']);
 
 if (empty($search_string)) $search_string='a';
 
-include('htmlheader.inc.php');
+include ('htmlheader.inc.php');
 echo "<h2>{$title}</h2>";
 
 if (empty($perpage)) $perpage = 50;
@@ -45,7 +45,7 @@ if (!empty($sort))
 {
     if ($order=='a' OR $order=='ASC' OR $order='') $sortorder = "ASC";
     else $sortorder = "DESC";
-    switch($sort)
+    switch ($sort)
     {
         case 'userid': $sql .= " ORDER BY userid $sortorder"; break;
         case 'timestamp': $sql .= " ORDER BY timestamp $sortorder"; break;
@@ -116,5 +116,5 @@ else
 {
     echo "<p>{$strNoResults}</p>";
 }
-include('htmlfooter.inc.php');
+include ('htmlfooter.inc.php');
 ?>

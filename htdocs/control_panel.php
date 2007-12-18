@@ -8,15 +8,15 @@
 // of the GNU General Public License, incorporated herein by reference.
 //
 
-@include('set_include_path.inc.php');
+@include ('set_include_path.inc.php');
 $permission=4; // Edit your profile
 
-require('db_connect.inc.php');
-require('functions.inc.php');
+require ('db_connect.inc.php');
+require ('functions.inc.php');
 // This page requires authentication
-require('auth.inc.php');
+require ('auth.inc.php');
 
-include('htmlheader.inc.php');
+include ('htmlheader.inc.php');
 echo "<h2>{$CONFIG['application_shortname']} {$strControlPanel}</h2>";
 echo "<table align='center'>";
 echo "<thead>";
@@ -61,5 +61,5 @@ if (user_permission($sit[2],22)) // Administrate
 
 plugin_do('cp_menu');
 echo "</table>\n";
-include('htmlfooter.inc.php');
+include ('htmlfooter.inc.php');
 ?>

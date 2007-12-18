@@ -11,14 +11,14 @@
 // Author: Paul Heaney <paulheaney[at]users.sourceforge.net>
 // This Page Is *NOT* Valid XHTML 1.0 Transitional!
 
-@include('set_include_path.inc.php');
+@include ('set_include_path.inc.php');
 
 $permission=0; // not required
-require('db_connect.inc.php');
-require('functions.inc.php');
+require ('db_connect.inc.php');
+require ('functions.inc.php');
 
 // This page requires authentication
-require('auth.inc.php');
+require ('auth.inc.php');
 
 // --------------------------------------------------------------------------------------------
 // Dashboard widgets
@@ -30,12 +30,12 @@ $result = mysql_query($sql);
 if (mysql_error()) trigger_error(mysql_error(),E_USER_WARNING);
 while ($dashboard = mysql_fetch_object($result))
 {
-   include("{$CONFIG['application_fspath']}dashboard/dashboard_{$dashboard->name}.php");
+   include ("{$CONFIG['application_fspath']}dashboard/dashboard_{$dashboard->name}.php");
    $DASHBOARDCOMP["dashboard_{$dashboard->name}"]="dashboard_{$dashboard->name}";
 }
 
 // Valid user
-include('htmlheader.inc.php');
+include ('htmlheader.inc.php');
 
 echo "<script type=\"text/javascript\" src=\"scripts/dojo/dojo.js\"></script>";
 
@@ -57,10 +57,10 @@ $cols0 = "";
 $cols1 = "";
 $cols2 = "";
 
-foreach($dashboardcomponents AS $db)
+foreach ($dashboardcomponents AS $db)
 {
     $c = explode("-",$db);
-    switch($c[0])
+    switch ($c[0])
     {
         case 0: $col0++;
             $cols0 .= $c[1].",";
@@ -85,8 +85,8 @@ echo "<a href=\"javascript:save_layout();\" id='savelayout' title='Save Dashboar
 ?>
 <script type="text/javascript">
 /* <![CDATA[ */
-    dojo.require("dojo.dnd.*");
-    dojo.require("dojo.event.*");
+    dojo.require ("dojo.dnd.*");
+    dojo.require ("dojo.event.*");
 
     function byId(id){
         return document.getElementById(id);
@@ -208,7 +208,7 @@ echo "<table border=\"0\" width=\"99%\" id='cols'><tr>";
 echo "<td width=\"33%\" valign='top' id='col0'>";
 
 $arr = explode(",",$cols0);
-foreach($arr AS $a)
+foreach ($arr AS $a)
 {
     show_dashboard_component(0,$a);
 }
@@ -216,7 +216,7 @@ foreach($arr AS $a)
 echo "</td><td width=\"33%\" valign='top' id='col1'>";
 
 $arr = explode(",",$cols1);
-foreach($arr AS $a)
+foreach ($arr AS $a)
 {
     show_dashboard_component(1,$a);
 }
@@ -224,7 +224,7 @@ foreach($arr AS $a)
 echo "</td><td width=\"33%\" valign=\"top\" id='col2'>";
 
 $arr = explode(",",$cols2);
-foreach($arr AS $a)
+foreach ($arr AS $a)
 {
     show_dashboard_component(2,$a);
 }
@@ -260,5 +260,5 @@ echo "{$strSetYourStatus}: ";
 if (isset($sit[2])) echo userstatus_bardrop_down("status", user_status($sit[2]));
 echo "</form>\n";
 echo "</div>\n";
-include('htmlfooter.inc.php');
+include ('htmlfooter.inc.php');
 ?>

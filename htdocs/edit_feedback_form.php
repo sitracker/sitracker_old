@@ -9,13 +9,13 @@
 //
 
 // by Ivan Lucas, June 2004
-@include('set_include_path.inc.php');
+@include ('set_include_path.inc.php');
 $permission=49; // Edit Feedback Forms
 
-require('db_connect.inc.php');
-require('functions.inc.php');
+require ('db_connect.inc.php');
+require ('functions.inc.php');
 // This page requires authentication
-require('auth.inc.php');
+require ('auth.inc.php');
 
 // External Variables
 $formid = cleanvar($_REQUEST['formid']);
@@ -55,7 +55,7 @@ switch ($_REQUEST['action'])
     break;
 
     case 'new':
-        include('htmlheader.inc.php');
+        include ('htmlheader.inc.php');
         echo "<h3>Create feedback form</h3>";
         echo "<form action='{$_SERVER['PHP_SELF']}' method='post'>";
         echo "<table summary='Form' align='center'>";
@@ -99,14 +99,14 @@ switch ($_REQUEST['action'])
         echo "</tr>";
         echo "</table>";
         echo "</form>";
-        include('htmlfooter.inc.php');
+        include ('htmlfooter.inc.php');
         break;
     default:
         $sql = "SELECT * FROM feedbackforms WHERE id='{$formid}'";
         $result = mysql_query($sql);
         if (mysql_error()) trigger_error(mysql_error(),E_USER_WARNING);
 
-        include('htmlheader.inc.php');
+        include ('htmlheader.inc.php');
         echo "<h3>{$title}</h3>";
 
         $sql = "SELECT * FROM feedbackforms WHERE id = '$formid'";
@@ -182,7 +182,7 @@ switch ($_REQUEST['action'])
             }
         }
         else echo "<p class='error'>No feedback form found</p>";
-        include('htmlfooter.inc.php');
+        include ('htmlfooter.inc.php');
     break;
 }
 ?>

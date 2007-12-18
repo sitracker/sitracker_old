@@ -9,12 +9,12 @@
 //
 // Author: Paul Heaney <paulheaney[at]users.sourceforge.net>
 
-@include('set_include_path.inc.php');
-require('db_connect.inc.php');
-require('functions.inc.php');
+@include ('set_include_path.inc.php');
+require ('db_connect.inc.php');
+require ('functions.inc.php');
 
 // This page requires authentication
-require('auth.inc.php');
+require ('auth.inc.php');
 
 $title=  $strTodaysStats;
 
@@ -226,7 +226,7 @@ function give_overview()
        // echo "<table align='center' class='vertical' width='20%'>";
         $openCalls = 0;
         echo "<td><table class='vertical' align='center'>";
-        while($row = mysql_fetch_array($result))
+        while ($row = mysql_fetch_array($result))
         {
             echo "<tr><th>".$row['name']."</th><td class='shade2' align='left'>".$row['COUNT(incidents.id)']."</td></tr>";
             if (strpos(strtolower($row['name']), "clos") === false) $openCalls += $row['COUNT(incidents.id)'];
@@ -253,7 +253,7 @@ function give_overview()
     if (mysql_num_rows($result) > 1)
     {
         echo "<h2>By vendor</h2><table class='vertical' align='center'>";
-        while($vendors = mysql_fetch_array($result))
+        while ($vendors = mysql_fetch_array($result))
         {
             // This should use the software and relate to the product and then to the vendor
             /*
@@ -276,7 +276,7 @@ function give_overview()
                 $openCallsVendor = 0;
                 echo "<td style='vertical-align:top' align='center'><strong>".$vendors['name']."</strong>";
                 echo "<table class='vertical' align='center'>";
-                while($rowVendor = mysql_fetch_array($resultVendor))
+                while ($rowVendor = mysql_fetch_array($resultVendor))
                 {
                     echo "<tr><th>".$rowVendor['name']."</th><td class='shade2' align='left'>".$rowVendor['COUNT(incidents.id)']."</td></tr>";
                     if (strpos(strtolower($rowVendor['name']), "clos") === false) $openCallsVendor += $rowVendor['COUNT(incidents.id)'];
@@ -304,7 +304,7 @@ function give_overview()
 
         $result = mysql_query($sql);
         if (mysql_error()) trigger_error("MySQL Query Error ".mysql_error(), E_USER_ERROR);
-        while($row = mysql_fetch_array($result))
+        while ($row = mysql_fetch_array($result))
         {
             $sql = "SELECT id, title FROM incidents WHERE opened > '$todayrecent' AND owner = '".$row['owner']."'";
 
@@ -313,7 +313,7 @@ function give_overview()
 
             $iresult = mysql_query($sql);
             if (mysql_error()) trigger_error("MySQL Query Error ".mysql_error(), E_USER_ERROR);
-            while($irow = mysql_fetch_array($iresult))
+            while ($irow = mysql_fetch_array($iresult))
             {
                 $string .= "<small><a href=\"javascript:incident_details_window('".$irow['id']."', 'incident".$irow['id']."')\"  title=\"".$irow['title']."\">[".$irow['id']."]</a></small> ";
             }
@@ -338,7 +338,7 @@ function give_overview()
         $string .= "<tr><th>ID</th><th>Title</th><th>Owner</th><th>Closing status</th></tr>\n";
         $result = mysql_query($sql);
         if (mysql_error()) trigger_error("MySQL Query Error ".mysql_error(), E_USER_ERROR);
-        while($row = mysql_fetch_array($result))
+        while ($row = mysql_fetch_array($result))
         {
             $string .= "<tr><th colspan='4' align='left'>".$row['count(incidents.id)']." Closed by ".$row['realname']."</th></tr>\n";
 
@@ -348,7 +348,7 @@ function give_overview()
 
             $iresult = mysql_query($sql);
             if (mysql_error()) trigger_error("MySQL Query Error ".mysql_error(), E_USER_ERROR);
-            while($irow = mysql_fetch_array($iresult))
+            while ($irow = mysql_fetch_array($iresult))
             {
                 $string .= "<tr><th><a href=\"javascript:incident_details_window('".$irow['id']."', 'incident".$irow['id']."')\" title='[".$irow['id']."] - ".$irow['title']."'>".$irow['id']."</a></th>";
                 $string .= "<td class='shade2' align='left'>".$irow['title']."</td><td class='shade2' align='left'>".$row['realname']."</td><td class='shade2'>".$irow['name']."</td></tr>\n";
@@ -412,19 +412,19 @@ function give_overview()
     return $string;
 }
 
-include('htmlheader.inc.php');
+include ('htmlheader.inc.php');
 
-switch($mode)
+switch ($mode)
 {
     case 'breakdown':
         $query = $_REQUEST['query'];
         $startdate = $_REQUEST['start'];
         $enddate = $_REQUEST['end'];
-        include('statistics/breakdown.inc.php');
+        include ('statistics/breakdown.inc.php');
         break;
     case 'daybreakdown':
         $offset = $_REQUEST['offset'];
-        include('statistics/daybreakdown.inc.php');
+        include ('statistics/daybreakdown.inc.php');
         break;
     case 'overview': //this is the default so just fall though
     default:
@@ -436,5 +436,5 @@ switch($mode)
 
 
 
-include('htmlfooter.inc.php');
+include ('htmlfooter.inc.php');
 ?>

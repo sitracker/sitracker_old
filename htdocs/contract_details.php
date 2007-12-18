@@ -13,19 +13,19 @@
 // Purpose: Show All Maintenance Contract Details
 // This Page Is Valid XHTML 1.0 Transitional! 27Oct05
 
-@include('set_include_path.inc.php');
+@include ('set_include_path.inc.php');
 $permission=19;  // view Maintenance contracts
 // FIXME i18n some compound strings
 
-require('db_connect.inc.php');
-require('functions.inc.php');
+require ('db_connect.inc.php');
+require ('functions.inc.php');
 
 // This page requires authentication
-require('auth.inc.php');
+require ('auth.inc.php');
 
 $id = cleanvar($_REQUEST['id']);
 
-include('htmlheader.inc.php');
+include ('htmlheader.inc.php');
 
 // Display Maintenance
 $sql  = "SELECT maintenance.*, maintenance.notes AS maintnotes, sites.name AS sitename FROM maintenance, sites ";
@@ -147,5 +147,5 @@ else
 {
     echo "<p align='center'>{$strNone} / {$strUnknown}<p>";
 }
-include('htmlfooter.inc.php');
+include ('htmlfooter.inc.php');
 ?>

@@ -10,13 +10,13 @@
 
 // Author: Ivan Lucas <ivanlucas[at]users.sourceforge.net>
 
-@include('set_include_path.inc.php');
+@include ('set_include_path.inc.php');
 $permission=56; // Add Software
 
-require('db_connect.inc.php');
-require('functions.inc.php');
+require ('db_connect.inc.php');
+require ('functions.inc.php');
 // This page requires authentication
-require('auth.inc.php');
+require ('auth.inc.php');
 
 // External variables
 $id = cleanvar($_REQUEST['id']);
@@ -26,7 +26,7 @@ if (empty($action) OR $action=='edit')
 {
     $title = $strEditSkill;
     // Show add product form
-    include('htmlheader.inc.php');
+    include ('htmlheader.inc.php');
     ?>
     <script type="text/javascript">
     function confirm_submit()
@@ -67,7 +67,7 @@ if (empty($action) OR $action=='edit')
     echo "<p align='center'><input name='submit' type='submit' value='{$strSave}' /></p>";
     echo "</form>\n";
     echo "<p align='center'><a href='products.php'>Return to products list without saving</a></p>";
-    include('htmlfooter.inc.php');
+    include ('htmlfooter.inc.php');
 }
 elseif ($action=='delete')
 {
@@ -79,10 +79,10 @@ elseif ($action=='delete')
     list($countincidents) = mysql_fetch_row($result);
     if ($countincidents >=1 )
     {
-        include('htmlheader.inc.php');
+        include ('htmlheader.inc.php');
         echo "<p class='error'>Sorry, this skill cannot be deleted because it has been associated with one or more incidents</p>";
         echo "<p align='center'><a href='products.php?display=skills'>Return to products list</a></p>";
-        include('htmlfooter.inc.php');
+        include ('htmlfooter.inc.php');
     }
     else
     {
@@ -142,9 +142,9 @@ else
     }
     else
     {
-        include('htmlheader.inc.php');
+        include ('htmlheader.inc.php');
         echo $errors_string;
-        include('htmlfooter.inc.php');
+        include ('htmlfooter.inc.php');
     }
 }
 ?>

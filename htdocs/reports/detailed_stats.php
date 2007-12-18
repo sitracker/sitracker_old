@@ -9,17 +9,17 @@
 //
 // Author: Paul Heaney <paulheaney[at]users.sourceforge.net>
 
-@include('set_include_path.inc.php');
+@include ('set_include_path.inc.php');
 $permission=67; // Run Reports
 $title='Incidents open/closed by period';
-require('db_connect.inc.php');
-require('functions.inc.php');
+require ('db_connect.inc.php');
+require ('functions.inc.php');
 
 
 // This page requires authentication
-require('auth.inc.php');
+require ('auth.inc.php');
 
-include('htmlheader.inc.php');
+include ('htmlheader.inc.php');
 $startdate=strtotime($_REQUEST['startdate']);
 $enddate=strtotime($_REQUEST['enddate']);
 
@@ -50,7 +50,7 @@ else
         $sql .= "WHERE opened BETWEEN '{$startdate}' AND '{$enddate}'  ORDER BY opened";
         $result= mysql_query($sql);
 
-        while($incident = mysql_fetch_object($result))
+        while ($incident = mysql_fetch_object($result))
         {
             $stats[date('Y-m-d', $incident->opened)]['date']=date('l d/m/Y', $incident->opened);
             $stats[date('Y-m-d', $incident->opened)][$incident->id]['opened']['id'] = $incident->id;
@@ -67,7 +67,7 @@ else
 
         //$stats=array();
 
-        while($incident = mysql_fetch_object($result))
+        while ($incident = mysql_fetch_object($result))
         {
             $stats[date('Y-m-d', $incident->closed)]['date']=date('l d/m/Y', $incident->closed);
             $stats[date('Y-m-d', $incident->closed)][$incident->id]['closed']['id'] = $incident->id;
@@ -84,7 +84,7 @@ else
         echo "</pre>";
 */
 
-        foreach($stats AS $day)
+        foreach ($stats AS $day)
         {
             /*
             echo "<pre>";
@@ -154,5 +154,5 @@ else
     }
 }
 
-include('htmlfooter.inc.php');
+include ('htmlfooter.inc.php');
 ?>

@@ -13,13 +13,13 @@
 // Warning: Unknown: Your script possibly relies on a session side-effect which existed until PHP 4.2.3. Please be advised that the session extension does not consider global variables as a source of data, unless register_globals is enabled. You can disable this functionality and this warning by setting session.bug_compat_42 or session.bug_compat_warn to off, respectively. in Unknown on line 0
 // Not sure why - Ivan 6Sep06
 
-@include('set_include_path.inc.php');
+@include ('set_include_path.inc.php');
 $permission=14; // View Users
-require('db_connect.inc.php');
-require('functions.inc.php');
+require ('db_connect.inc.php');
+require ('functions.inc.php');
 
 // This page requires authentication
-require('auth.inc.php');
+require ('auth.inc.php');
 
 // External variables
 $sort = cleanvar($_REQUEST['sort']);
@@ -41,7 +41,7 @@ if ($groupid=='all') $filtergroup = 'all';
 elseif ($groupid=='') $filtergroup = $_SESSION['groupid'];
 else $filtergroup = $groupid;
 
-include('htmlheader.inc.php');
+include ('htmlheader.inc.php');
 
 $gsql = "SELECT * FROM groups ORDER BY name";
 $gresult = mysql_query($gsql);
@@ -60,7 +60,7 @@ if ($numgroups >= 1)
     echo "<option value='{$_SERVER['PHP_SELF']}?gid=all'";
     if ($filtergroup=='all') echo " selected='selected'";
     echo ">All</option>\n";
-    foreach($grouparr AS $groupid => $groupname)
+    foreach ($grouparr AS $groupid => $groupname)
 {
         echo "<option value='{$_SERVER['PHP_SELF']}?gid={$groupid}'";
         if ($groupid == $filtergroup) echo " selected='selected'";
@@ -196,5 +196,5 @@ echo "</table>\n";
 
 mysql_free_result($result);
 
-include('htmlfooter.inc.php');
+include ('htmlfooter.inc.php');
 ?>

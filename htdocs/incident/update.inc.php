@@ -268,7 +268,7 @@ function display_update_page($draftid=-1)
 
     if (!empty($metadata))
     {
-        switch($metadata[0])
+        switch ($metadata[0])
         {
             case 'none': $targetNone = " SELECTED ";
                 break;
@@ -282,7 +282,7 @@ function display_update_page($draftid=-1)
                 break;
         }
 
-        switch($metadata[1])
+        switch ($metadata[1])
         {
             case 'research': $typeResearch = " SELECTED ";
                 break;
@@ -497,7 +497,7 @@ if (empty($action))
     $result = mysql_query($sql);
     if (mysql_error()) trigger_error(mysql_error(),E_USER_ERROR);
 
-    include('incident_html_top.inc.php');
+    include ('incident_html_top.inc.php');
 
     if (mysql_num_rows($result) > 0)
     {
@@ -515,7 +515,7 @@ if (empty($action))
 }
 else if ($action == "editdraft")
 {
-    include('incident_html_top.inc.php');
+    include ('incident_html_top.inc.php');
     $draftid = cleanvar($_REQUEST['draftid']);
     display_update_page($draftid);
 }
@@ -532,7 +532,7 @@ else if ($action == "deletedraft")
 }
 else if ($action == "newupdate")
 {
-    include('incident_html_top.inc.php');
+    include ('incident_html_top.inc.php');
     display_update_page();
 }
 else
@@ -621,7 +621,7 @@ else
     // Check the updatetype field, if it's blank look at the target
     if (empty($updatetype))
     {
-        switch($target)
+        switch ($target)
         {
             case 'actionplan': $updatetype='actionplan';  break;
             case 'probdef': $updatetype='probdef';  break;
@@ -731,9 +731,9 @@ else
     }
     if (!$result)
     {
-        include('includes/incident_html_top.inc');
+        include ('includes/incident_html_top.inc');
         echo "<p class='error'>Update Failed</p>\n";
-        include('includes/incident_html_bottom.inc');
+        include ('includes/incident_html_bottom.inc');
     }
     else
     {

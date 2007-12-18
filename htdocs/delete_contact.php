@@ -12,20 +12,20 @@
 
 // This Page Is Valid XHTML 1.0 Transitional!   31Oct05
 
-@include('set_include_path.inc.php');
+@include ('set_include_path.inc.php');
 $permission=55; // Delete Sites/Contacts
 
-require('db_connect.inc.php');
-require('functions.inc.php');
+require ('db_connect.inc.php');
+require ('functions.inc.php');
 // This page requires authentication
-require('auth.inc.php');
+require ('auth.inc.php');
 
 // External variables
 $process = $_REQUEST['process'];
 $id = cleanvar($_REQUEST['id']);
 $newcontact = mysql_real_escape_string($_REQUEST['newcontact']);
 
-include('htmlheader.inc.php');
+include ('htmlheader.inc.php');
 if (empty($process))
 {
     if (empty($id))
@@ -135,7 +135,7 @@ if (empty($process))
             echo "</form>\n";
         }
     }
-    include('htmlfooter.inc.php');
+    include ('htmlfooter.inc.php');
 }
 else
 {

@@ -11,13 +11,13 @@
 // This Page fails XHTML validation because of collapsable tbody in the table - INL 12/12/07
 // FIXME make XHTML complient - PH 13/12/07
 
-@include('set_include_path.inc.php');
+@include ('set_include_path.inc.php');
 $permission=39; // Add Maintenance Contract
 
-require('db_connect.inc.php');
-require('functions.inc.php');
+require ('db_connect.inc.php');
+require ('functions.inc.php');
 // This page requires authentication
-require('auth.inc.php');
+require ('auth.inc.php');
 
 $title = $strAddContract;
 
@@ -28,7 +28,7 @@ $siteid = cleanvar($_REQUEST['siteid']);
 // Show add maintenance form
 if ($action == "showform" OR $action=='')
 {
-    include('htmlheader.inc.php');
+    include ('htmlheader.inc.php');
 
     ?>
     <script type="text/javascript">
@@ -132,7 +132,7 @@ if ($action == "showform" OR $action=='')
     echo "</table>\n";
     echo "<p align='center'><input name='submit' type='submit' value=\"{$strAddContract}\" /></p>";
     echo "</form>";
-    include('htmlfooter.inc.php');
+    include ('htmlfooter.inc.php');
 
     clear_form_data('add_contract');
 
@@ -222,9 +222,9 @@ elseif ($action == "add")
         if ($addition_errors == 1)
         {
             // show addition error message
-            include('htmlheader.inc.php');
+            include ('htmlheader.inc.php');
             echo $addition_errors_string;
-            include('htmlfooter.inc.php');
+            include ('htmlfooter.inc.php');
         }
         else
         {
@@ -239,7 +239,7 @@ elseif ($action == "add")
     else
     {
         // show error message if errors
-        include('htmlheader.inc.php');
+        include ('htmlheader.inc.php');
         html_redirect("add_contract.php", FALSE);
     }
 }

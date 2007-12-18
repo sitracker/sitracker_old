@@ -12,21 +12,21 @@
 
 // Author: Ivan Lucas <ivanlucas[at]users.sourceforge.net>
 
-@include('set_include_path.inc.php');
+@include ('set_include_path.inc.php');
 $permission=36; // Set Contact Flags
 $title='Set Contact Flags';
 
-require('db_connect.inc.php');
-require('functions.inc.php');
+require ('db_connect.inc.php');
+require ('functions.inc.php');
 // This page requires authentication
-require('auth.inc.php');
+require ('auth.inc.php');
 
 // External variables
 $mode = $_REQUEST['mode'];
 $contactid=mysql_real_escape_string($_REQUEST['id']);
 $flag=cleanvar($_REQUEST['flag']);
 
-switch($mode)
+switch ($mode)
 {
     case 'addflag':
         $sql = "INSERT INTO contactflags (contactid, flag) VALUES ('$contactid', '$flag')";
@@ -45,7 +45,7 @@ switch($mode)
     break;
 }
 
-include('htmlheader.inc.php');
+include ('htmlheader.inc.php');
 ?>
 <script type="text/javascript">
 function confirm_submit()
@@ -98,11 +98,11 @@ while ($flagrow=mysql_fetch_array($flagresult))
         $col++;
     }
 }
-while($col<=5)
+while ($col<=5)
 {
     echo "<td class=\"shade2\">&nbsp;</td>";
     $col++;
 }
 echo "</tr></table>";
-include('htmlfooter.inc.php');
+include ('htmlfooter.inc.php');
 ?>

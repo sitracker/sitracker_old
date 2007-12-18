@@ -25,7 +25,7 @@ if (mysql_error()) trigger_error("MySQL Query Error ".mysql_error(), E_USER_ERRO
 $start_str=date("Y-m-d",$startdate);
 $end_str=date("Y-m-d",$enddate);
 
-switch($query)
+switch ($query)
 {
     case 0:
         $type='opened';
@@ -47,7 +47,7 @@ if (mysql_num_rows($result) > 0)
 {
     echo "<tr><th>{$strID}</th><th>{$strTitle}</th><th>{$strOpened}</th><th>{$strClosed}</th><th>{$strOwner}</th><th>{$strCustomer}</th><th>{$strSite}</th></tr>";
     
-    while($row = mysql_fetch_array($result))
+    while ($row = mysql_fetch_array($result))
     {
         echo "<tr>";
         echo "<td><a href=\"javascript:incident_details_window('{$row['id']}','incident{$row['id']}')\" class='info'>{$row['id']}</a></td>";

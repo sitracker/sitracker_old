@@ -10,13 +10,13 @@
 
 // Author: Ivan Lucas <ivanlucas[at]users.sourceforge.net>
 
-@include('set_include_path.inc.php');
+@include ('set_include_path.inc.php');
 $permission=24; // Add Product
 
-require('db_connect.inc.php');
-require('functions.inc.php');
+require ('db_connect.inc.php');
+require ('functions.inc.php');
 // This page requires authentication
-require('auth.inc.php');
+require ('auth.inc.php');
 
 $title = $strAddProduct;
 
@@ -26,7 +26,7 @@ $submit = $_REQUEST['submit'];
 if (empty($submit))
 {
     // Show add product form
-    include('htmlheader.inc.php');
+    include ('htmlheader.inc.php');
     ?>
     <script type="text/javascript">
     function confirm_submit()
@@ -72,7 +72,7 @@ if (empty($submit))
     echo "<p class='warning'>{$strAvoidDupes}</p>";
     echo "</form>\n";
     echo "<p align='center'><a href='products.php'>{$strReturnWithoutSaving}</a></p>";
-    include('htmlfooter.inc.php');
+    include ('htmlfooter.inc.php');
     clear_form_data('add_product');
 
 }
@@ -118,7 +118,7 @@ else
     }
     else
     {
-        include('htmlheader.inc.php');
+        include ('htmlheader.inc.php');
         html_redirect("add_product.php", FALSE);
     }
 }

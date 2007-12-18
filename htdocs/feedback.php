@@ -12,9 +12,9 @@
 
 // FIXME i18n
 
-@include('set_include_path.inc.php');
-require('db_connect.inc.php');
-require('functions.inc.php');
+@include ('set_include_path.inc.php');
+require ('db_connect.inc.php');
+require ('functions.inc.php');
 
 // External variables
 $hashcode=$_REQUEST['ax'];
@@ -87,7 +87,7 @@ function feedback_html_options($name, $required, $options, $answer='')
     if ($option_count > 3)
     {
         $html .= "<select name='$name'>\n";
-        foreach($option_list AS $key=>$option)
+        foreach ($option_list AS $key=>$option)
         {
             $value=strtolower(trim(str_replace(' ', '_', $option)));
             $html .= "<option value='$value'";
@@ -98,7 +98,7 @@ function feedback_html_options($name, $required, $options, $answer='')
     }
     else
     {
-        foreach($option_list AS $key=>$option)
+        foreach ($option_list AS $key=>$option)
         {
             $value=strtolower(trim(str_replace(' ', '_', $option)));
             $html .= "<input type='radio' name='$name' value='$value'";
@@ -120,7 +120,7 @@ function html_multioptions($name, $required, $options)
     if ($option_count > 3)
     {
         $html .= "<select name='{$name}[]' multiple='multiple'>\n";
-        foreach($option_list AS $key=>$option)
+        foreach ($option_list AS $key=>$option)
         {
             $value=strtolower(trim(str_replace(' ', '_', $option)));
             $html .= "<option value='$value'>".trim($option)."</option>\n";
@@ -129,7 +129,7 @@ function html_multioptions($name, $required, $options)
     }
     else
     {
-        foreach($option_list AS $key=>$option)
+        foreach ($option_list AS $key=>$option)
         {
             $value=strtolower(trim(str_replace(' ', '_', $option)));
             $html .= "<input type='checkbox' name='$name' value='$value' />".trim($option)." &nbsp; \n";
@@ -164,7 +164,7 @@ function feedback_html_question($type, $name, $required, $options, $answer='')
     $options=str_replace('<br>', '{@}', $options);
     $options=str_replace('<br />', '{@}', $options);
     $options=str_replace('<br/>', '{@}', $options);
-    switch($type)
+    switch ($type)
     {
         case 'rating':
             $html = feedback_html_rating($name, $required, $options, $answer);
@@ -336,7 +336,7 @@ body { font:10pt Arial, Helvetica, sans-serif; }
     break;
 
     default:
-        if ($_REQUEST['mode']!='bare') include('htmlheader.inc.php');
+        if ($_REQUEST['mode']!='bare') include ('htmlheader.inc.php');
         else echo "<html>\n<head>\n<title>Feedback Form</title>\n</head>\n<body>\n<div id='pagecontent'>\n\n";
         $errorfields = explode(",",urldecode($_REQUEST['error']));
         $fielddata=unserialize(base64_decode($errorfields[0])); // unserialize(
@@ -408,7 +408,7 @@ body { font:10pt Arial, Helvetica, sans-serif; }
                 if ($reqd>=1) echo "<p><sup style='color: red; font-size: 120%;'>*</sup> Questions marked with this symbol are required and must be answered before continuing.</p>";
             }
         }
-        if ($_REQUEST['mode']!='bare') include('htmlfooter.inc.php');
+        if ($_REQUEST['mode']!='bare') include ('htmlfooter.inc.php');
         else echo "\n</div>\n</body>\n</html>\n";
     break;
 }

@@ -15,7 +15,7 @@
 // Most are legacy and can replaced by improving the pages that call them to
 // use SQL joins.
 
-include('classes.inc.php');
+include ('classes.inc.php');
 
 // Version number of the application, (numbers only)
 $application_version='3.40';
@@ -94,9 +94,9 @@ define('SIT_UPGRADED_NOTICE', 7);
 
 
 // Decide which language to use and setup internationalisation
-require('i18n/en-GB.inc.php');
-if ($CONFIG['default_i18n']!='en-GB') @include("i18n/{$CONFIG['default_i18n']}.inc.php");
-if (!empty($_SESSION['lang']) AND $_SESSION['lang'] != $CONFIG['default_i18n']) include("i18n/{$_SESSION['lang']}.inc.php");
+require ('i18n/en-GB.inc.php');
+if ($CONFIG['default_i18n']!='en-GB') @include ("i18n/{$CONFIG['default_i18n']}.inc.php");
+if (!empty($_SESSION['lang']) AND $_SESSION['lang'] != $CONFIG['default_i18n']) include ("i18n/{$_SESSION['lang']}.inc.php");
 ini_set('default_charset', $i18ncharset);
 
 
@@ -242,7 +242,7 @@ function user_permission($userid,$permission)
 
     if (!is_array($permission)) { $permission = array($permission); }
 
-    foreach($permission AS $perm)
+    foreach ($permission AS $perm)
     {
         if (@in_array($perm, $_SESSION['permissions']) == TRUE) $accessgranted = TRUE;
         else $accessgranted = FALSE;
@@ -358,7 +358,7 @@ function user_realname($id, $allowhtml=FALSE)
             $frommail = strtolower(substr(strstr($from[0], '@'), 1));
             $customerdomain = strtolower(substr(strstr($incidents['email'], '@'), 1));
             if ($frommail == $customerdomain) return $GLOBALS['strCustomer'];
-            foreach($CONFIG['ext_esc_partners'] AS $partner)
+            foreach ($CONFIG['ext_esc_partners'] AS $partner)
             {
                 if (strstr(strtolower($frommail), strtolower($partner['email_domain'])))
                 {
@@ -1053,7 +1053,7 @@ function array_drop_down($array, $name, $setting='', $enablefield='')
     $html = "<select name='$name' id='$name' $enablefield>";
     if (array_key_exists($setting, $array) AND in_array($setting, $array)==FALSE) $usekey=TRUE;
     else $usekey=FALSE;
-    foreach($array AS $key => $value)
+    foreach ($array AS $key => $value)
     {
         $value=htmlentities($value, ENT_COMPAT, $GLOBALS['i18ncharset']);
         if ($usekey) $html .= "<option value='$key'";
@@ -1382,7 +1382,7 @@ function group_drop_down($name, $selected)
     $html .= "<option value='0'>{$GLOBALS['strNone']}</option>\n";
     if ($numgroups >= 1)
     {
-        foreach($grouparr AS $groupid => $groupname)
+        foreach ($grouparr AS $groupid => $groupname)
         {
             $html .= "<option value='$groupid'";
             if ($groupid == $selected) $html .= " selected='selected'";
@@ -1826,7 +1826,7 @@ function incident_lastupdate($id)
                 {
                     $last;
                     //This was an initial assignment so we now want the first update - looping round data retrieved rather than second query
-                    while($row = mysql_fetch_array($resultPrevious))
+                    while ($row = mysql_fetch_array($resultPrevious))
                     {
                         $last = $row;
                         if ($row['userid'] != 0)
@@ -2256,7 +2256,7 @@ function html_redirect($url, $success=TRUE, $message='')
     $refresh = "{$refreshtime}; url={$url}";
 
     $title = $GLOBALS['strPleaseWaitRedirect'];
-    if (!$headerdisplayed) include('htmlheader.inc.php');
+    if (!$headerdisplayed) include ('htmlheader.inc.php');
     else echo "<meta http-equiv=\"refresh\" content=\"$refreshtime; url=$url\" />\n";
     echo "<h3>";
     if ($success) echo "<span class='success'>{$GLOBALS['strSuccess']}</span>";
@@ -2265,7 +2265,7 @@ function html_redirect($url, $success=TRUE, $message='')
     echo "</h3>";
     echo "<h4>{$GLOBALS['strPleaseWaitRedirect']}</h4>";
     if ($headerdisplayed) echo "<p align='center'><a href=\"{$url}\">{$GLOBALS['strContinue']}</a></p>";
-    include('htmlfooter.inc.php');
+    include ('htmlfooter.inc.php');
 
 }
 
@@ -2688,7 +2688,7 @@ function print_contact_flags($id, $editlink=FALSE)
     $sql .= "WHERE contactflags.flag=flags.flag AND contactflags.contactid='$id' ";
     $result= mysql_query($sql);
     if (mysql_error()) trigger_error(mysql_error(),E_USER_WARNING);
-    while( $contactflagrows = mysql_fetch_array($result) )
+    while ( $contactflagrows = mysql_fetch_array($result) )
     {
         if ($editlink==TRUE) echo "<a href='edit_contact_flags.php?mode=removeflag&amp;id=$id&amp;flag={$contactflagrows['flag']}' title='{$contactflagrows['name']} (Click to Remove)'>";
         else echo "<span title=\"".$contactflagrows['name']."\">";
@@ -3078,7 +3078,7 @@ function getattachmenticon($filename)
     {
         $a=0;
         $stop=FALSE;
-        while($a < $cnt && $stop==FALSE)
+        while ($a < $cnt && $stop==FALSE)
         {
             if ($ext==$filetype[$a])
             {
@@ -3805,7 +3805,7 @@ function is_public_holiday($time, $publicholidays)
 {
     if (!empty($publicholidays))
     {
-        foreach($publicholidays AS $holiday)
+        foreach ($publicholidays AS $holiday)
         {
             if ($time >= $holiday->starttime AND $time <= $holiday->endtime)
 	        {
@@ -4665,7 +4665,7 @@ function format_external_id($externalid, $escalationpath='')
     else
     {
         $html = $externalid;
-        foreach($CONFIG['ext_esc_partners'] AS $partner)
+        foreach ($CONFIG['ext_esc_partners'] AS $partner)
         {
             if (!empty($partner['ext_callid_regexp']))
             {
@@ -4688,7 +4688,7 @@ function return_bytes($val)
 {
     $val = trim($val);
     $last = strtolower($val{strlen($val)-1});
-    switch($last)
+    switch ($last)
     {
         // The 'G' modifier is available since PHP 5.1.0
         case 'g': $val *= 1024;
@@ -4721,7 +4721,7 @@ function draw_tabs($tabsarray, $selected='')
 function send_feedback($contractid)
 {
     global $CONFIG;
-    foreach($CONFIG['no_feedback_contracts'] AS $contract)
+    foreach ($CONFIG['no_feedback_contracts'] AS $contract)
     {
         if ($contract == $contractid)
         {
@@ -4825,7 +4825,7 @@ function cleanvar($var,$striphtml=TRUE, $transentities=TRUE)
 function external_escalation($escalated, $incid)
 {
 
-   foreach($escalated as $i => $id){
+   foreach ($escalated as $i => $id){
 	if ($id == $incid){
 	   return "yes";
 	}
@@ -5450,7 +5450,7 @@ function replace_tags($type, $id, $tagstring)
     $seperators=array(', ',';',',');
     $tags=str_replace($seperators, ' ', trim($tagstring));
     $tag_array = explode(" ", $tags);
-    foreach($tag_array AS $tag)
+    foreach ($tag_array AS $tag)
     {
         add_tag($id, $type, trim($tag));
     }
@@ -5485,7 +5485,7 @@ function purge_tags()
     if (mysql_error()) trigger_error(mysql_error(),E_USER_ERROR);
     if (mysql_num_rows($result) > 0)
     {
-        while($tag = mysql_fetch_object($result))
+        while ($tag = mysql_fetch_object($result))
         {
             purge_tag($tag->tagid);
         }
@@ -5508,7 +5508,7 @@ function list_tags($recordid, $type, $html=TRUE)
     $numtags = mysql_num_rows($result);
     if ($html AND $numtags > 0) $str .= "<div class='taglist'>";
     $count=1;
-    while($tags = mysql_fetch_object($result))
+    while ($tags = mysql_fetch_object($result))
     {
         if ($html)
         {
@@ -5553,7 +5553,7 @@ function list_tag_icons($recordid, $type)
     $numtags = mysql_num_rows($result);
     if ($numtags > 0)
     {
-        while($tags = mysql_fetch_object($result))
+        while ($tags = mysql_fetch_object($result))
         {
             $str .= "<a href='view_tags.php?tagid={$tags->tagid}' title='{$tags->name}'>";
             $str .= "<img src='images/icons/sit/16x16/{$CONFIG['tag_icons'][$tags->name]}.png' style='border:0px;' alt='{$tags->name}' />";
@@ -5599,7 +5599,7 @@ function show_tag_cloud($orderby="name", $showcount=FALSE)
     if (mysql_num_rows($result) > 0)
     {
         $html .= "<table align='center'><tr><td>";
-        while($obj = mysql_fetch_object($result))
+        while ($obj = mysql_fetch_object($result))
         {
             $size = log($obj->occurrences * 100) * 40;
             if ($size==0) $size=100;
@@ -5646,7 +5646,7 @@ function display_drafts($type, $result)
 
     echo "<p align='center'>{$GLOBALS['strDraftChoose']}</p>";
 
-    while($obj = mysql_fetch_object($result))
+    while ($obj = mysql_fetch_object($result))
     {
         echo "<div class='detailhead'>";
         echo "<div class='detaildate'>".date($CONFIG['dateformat_datetime'], $obj->lastupdate);
@@ -5692,7 +5692,7 @@ if (!function_exists("stripos"))
 
 function array_multi_search($needle, $haystack, $searchkey)
 {
-    foreach($haystack AS $thekey => $thevalue)
+    foreach ($haystack AS $thekey => $thevalue)
     {
         if ($thevalue[$searchkey] == $needle) return $thekey;
     }
@@ -5705,7 +5705,7 @@ function string_find_all($haystack, $needle, $limit=0)
     $positions = array();
     $currentoffset = 0;
     $count=0;
-    while(($pos = stripos($haystack, $needle, $offset)) !==false && ($count < $limit || $limit == 0))
+    while (($pos = stripos($haystack, $needle, $offset)) !==false && ($count < $limit || $limit == 0))
     {
         $positions[] = $pos;
         $offset = $pos + strlen($needle);
@@ -5717,7 +5717,7 @@ function string_find_all($haystack, $needle, $limit=0)
 // Implode assocative array
 function implode_assoc($glue1, $glue2, $array)
 {
-    foreach($array as $key => $val) $array2[] = $key.$glue1.$val;
+    foreach ($array as $key => $val) $array2[] = $key.$glue1.$val;
     return implode($glue2, $array2);
 }
 
@@ -5834,7 +5834,7 @@ function show_form_errors($formname)
 {
     if ($_SESSION['formerrors'][$formname])
     {
-        foreach($_SESSION['formerrors'][$formname] as $error)
+        foreach ($_SESSION['formerrors'][$formname] as $error)
         {
             $html.= "<p class='error'>$error</p>";
         }
@@ -5897,13 +5897,13 @@ function truncate_string($text, $maxlength=255, $html=TRUE)
 // Evaluate and Load plugins
 if (is_array($CONFIG['plugins']))
 {
-    foreach($CONFIG['plugins'] AS $plugin)
+    foreach ($CONFIG['plugins'] AS $plugin)
     {
         // Remove any dots
         $plugin=str_replace('.','',$plugin);
         // Remove any slashes
         $plugin=str_replace('/','',$plugin);
-        if ($plugin!='') include("{$CONFIG['application_fspath']}/plugins/{$plugin}.php");
+        if ($plugin!='') include ("{$CONFIG['application_fspath']}/plugins/{$plugin}.php");
     }
 }
 
@@ -5926,7 +5926,7 @@ function plugin_do($context, $optparams=FALSE)
 
     if (is_array($PLUGINACTIONS[$context]))
     {
-        foreach($PLUGINACTIONS[$context] AS $action)
+        foreach ($PLUGINACTIONS[$context] AS $action)
         {
             // Call Variable function (function with variable name)
             if ($optparams) $rtn = $action($optparams);

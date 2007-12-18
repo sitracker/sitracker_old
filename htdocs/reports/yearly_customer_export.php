@@ -12,20 +12,20 @@
 
 // This Page Is Valid XHTML 1.0 Transitional!   15Mar06
 
-@include('set_include_path.inc.php');
+@include ('set_include_path.inc.php');
 $permission=37; // Run Reports
 
-require('db_connect.inc.php');
-require('functions.inc.php');
+require ('db_connect.inc.php');
+require ('functions.inc.php');
 
 // This page requires authentication
-require('auth.inc.php');
+require ('auth.inc.php');
 
 $title = $strIncidentsBySite;
 
 if (empty($_REQUEST['mode']))
 {
-    include('htmlheader.inc.php');
+    include ('htmlheader.inc.php');
     echo "<h2>$title</h2>";
     echo "<p align='center'>This report lists the incidents that each site has logged over the past twelve months.</p>";
     echo "<form action='{$_SERVER['PHP_SELF']}' method='post'>";
@@ -59,7 +59,7 @@ if (empty($_REQUEST['mode']))
     echo "<input type='submit' value=\"{$strRunReport}\" />";
     echo "</p>";
     echo "</form>";
-    include('htmlfooter.inc.php');
+    include ('htmlfooter.inc.php');
 }
 elseif ($_REQUEST['mode']=='report')
 {
@@ -149,9 +149,9 @@ elseif ($_REQUEST['mode']=='report')
 
     if ($_POST['output']=='screen')
     {
-        include('htmlheader.inc.php');
+        include ('htmlheader.inc.php');
         echo $html;
-        include('htmlfooter.inc.php');
+        include ('htmlfooter.inc.php');
     }
     elseif ($_POST['output']=='csv')
     {

@@ -19,18 +19,18 @@
 
 // Requested by Rob Shepley, 3 Oct 05
 
-@include('set_include_path.inc.php');
+@include ('set_include_path.inc.php');
 $permission=37; // Run Reports
 $title='Yearly Engineer/Incident Report';
-require('db_connect.inc.php');
-require('functions.inc.php');
+require ('db_connect.inc.php');
+require ('functions.inc.php');
 
 // This page requires authentication
-require('auth.inc.php');
+require ('auth.inc.php');
 
 if (empty($_REQUEST['mode']))
 {
-    include('htmlheader.inc.php');
+    include ('htmlheader.inc.php');
     echo "<h2>$title</h2>";
     echo "<form action='{$_SERVER['PHP_SELF']}' method='post' id='incidentsbyengineer'>";
     echo "<table align='center' class='vertical'>";
@@ -76,7 +76,7 @@ if (empty($_REQUEST['mode']))
     echo "<input type='submit' value=\"{$strRunReport}\" />";
     echo "</p>";
     echo "</form>";
-    include('htmlfooter.inc.php');
+    include ('htmlfooter.inc.php');
 }
 elseif ($_REQUEST['statistics'] == 'on')
 {
@@ -173,7 +173,7 @@ elseif ($_REQUEST['statistics'] == 'on')
     $totalClosed = 0;
     if ($numrows > 0)
     {
-        while($obj = mysql_fetch_object($result))
+        while ($obj = mysql_fetch_object($result))
         {
             $data[$obj->id]['realname'] = $obj->realname;
             $data[$obj->id]['closed'] = $obj->numberClosed;
@@ -245,7 +245,7 @@ elseif ($_REQUEST['statistics'] == 'on')
         $csv .= "Avg Closed (Month),Percentage escalated\n";
 
         $class="class='shade1'";
-        foreach($data AS $engineer)
+        foreach ($data AS $engineer)
         {
             $html .= "<tr>";
             $html .= "<td {$class}>".$engineer['realname']."</td>";
@@ -307,10 +307,10 @@ elseif ($_REQUEST['statistics'] == 'on')
 
     if ($_POST['output']=='screen')
     {
-        include('htmlheader.inc.php');
+        include ('htmlheader.inc.php');
         echo "<h2>Engineer statistics for past year</h2>";
         echo $html;
-        include('htmlfooter.inc.php');
+        include ('htmlfooter.inc.php');
     }
     elseif ($_POST['output']=='csv')
     {
@@ -415,7 +415,7 @@ elseif ($_REQUEST['mode']=='report')
 
     $escalated_array = array($numrows_esc);
     $count = 0;
-    while($row = mysql_fetch_object($result_esc)){
+    while ($row = mysql_fetch_object($result_esc)){
         $escalated_array[$count] = $row->incid;
         $count++;
     }
@@ -440,9 +440,9 @@ elseif ($_REQUEST['mode']=='report')
 
     if ($_POST['output']=='screen')
     {
-        include('htmlheader.inc.php');
+        include ('htmlheader.inc.php');
         echo $html;
-        include('htmlfooter.inc.php');
+        include ('htmlfooter.inc.php');
     }
     elseif ($_POST['output']=='csv')
     {

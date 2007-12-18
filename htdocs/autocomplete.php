@@ -9,17 +9,17 @@
 //
 // Author: Paul Heaney <paulheaney[at]users.sourceforge.net>
 
-@include('set_include_path.inc.php');
+@include ('set_include_path.inc.php');
 $permission=0; // not required
-require('db_connect.inc.php');
-require('functions.inc.php');
+require ('db_connect.inc.php');
+require ('functions.inc.php');
 
 // This page requires authentication
-require('auth.inc.php');
+require ('auth.inc.php');
 
 $action = $_REQUEST['action'];
 
-switch($action)
+switch ($action)
 {
     case 'tags':
         $sql = "SELECT DISTINCT tags.name FROM set_tags, tags WHERE set_tags.tagid = tags.tagid GROUP BY tags.name";
@@ -27,7 +27,7 @@ switch($action)
         if (mysql_error()) trigger_error(mysql_error(),E_USER_ERROR);
         if (mysql_num_rows($result) > 0)
         {
-            while($obj = mysql_fetch_object($result))
+            while ($obj = mysql_fetch_object($result))
             {
                 $str .= "[".$obj->name."],";
             }
@@ -39,7 +39,7 @@ switch($action)
         if (mysql_error()) trigger_error(mysql_error(),E_USER_ERROR);
         if (mysql_num_rows($result) > 0)
         {
-            while($obj = mysql_fetch_object($result))
+            while ($obj = mysql_fetch_object($result))
             {
                 $str .= "[\"".$obj->surname."\"],";
                 $str .= "[\"".$obj->forenames." ".$obj->surname."\"],";
@@ -52,7 +52,7 @@ switch($action)
         if (mysql_error()) trigger_error(mysql_error(),E_USER_ERROR);
         if (mysql_num_rows($result) > 0)
         {
-            while($obj = mysql_fetch_object($result))
+            while ($obj = mysql_fetch_object($result))
             {
                 $str .= "[\"".$obj->name."\"],";
             }

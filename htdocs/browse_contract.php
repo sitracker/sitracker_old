@@ -12,13 +12,13 @@
 
 // TODO This page fails XHTML validation because of dojo attributes - INL 12/12/07
 
-@include('set_include_path.inc.php');
+@include ('set_include_path.inc.php');
 $permission=19; // View Maintenance Contracts
 
-require('db_connect.inc.php');
-require('functions.inc.php');
+require ('db_connect.inc.php');
+require ('functions.inc.php');
 // This page requires authentication
-require('auth.inc.php');
+require ('auth.inc.php');
 
 $title = $strBrowseContracts;
 
@@ -29,11 +29,11 @@ $sort = cleanvar($_REQUEST['sort']);
 $order = cleanvar($_REQUEST['order']);
 $activeonly = cleanvar($_REQUEST['activeonly']);
 
-include('htmlheader.inc.php');
+include ('htmlheader.inc.php');
 ?>
 <script type="text/javascript" src="scripts/dojo/dojo.js"></script>
 <script type="text/javascript">
-    dojo.require("dojo.widget.ComboBox");
+    dojo.require ("dojo.widget.ComboBox");
 </script>
 <?php
 echo "<h2><img src='{$CONFIG['application_webpath']}images/icons/{$iconset}/32x32/contract.png' width='32' height='32' alt='' /> ";
@@ -221,6 +221,6 @@ else
     <?php
     // free result and disconnect
     mysql_free_result($result);
-    include('htmlfooter.inc.php');
+    include ('htmlfooter.inc.php');
 }
 ?>

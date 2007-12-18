@@ -10,13 +10,13 @@
 
 // Author: Kieran Hogg <kieran_hogg[at]users.sourceforge.net>
 
-@include('set_include_path.inc.php');
+@include ('set_include_path.inc.php');
 $permission=0; // not required
-require('db_connect.inc.php');
-require('functions.inc.php');
+require ('db_connect.inc.php');
+require ('functions.inc.php');
 
-require('auth.inc.php');
-include('htmlheader.inc.php');
+require ('auth.inc.php');
+include ('htmlheader.inc.php');
 
 $i18npath = '../includes/i18n/';
 
@@ -96,7 +96,7 @@ elseif ($_REQUEST['mode'] == "show")
     $lines = explode("\n", $theData);
     $langstrings['en-GB'];
     $englishvalues = array();
-    foreach($lines as $values)
+    foreach ($lines as $values)
     {
         $badchars = array("$", "\"", "\\", "<?php", "?>");
         $values = trim(str_replace($badchars, '', $values));
@@ -142,7 +142,7 @@ elseif ($_REQUEST['mode'] == "show")
         fclose($fh);
         $lines = explode("\n", $theData);
         //print_r($lines);
-        foreach($lines as $values)
+        foreach ($lines as $values)
         {
             $badchars = array("$", "\"", "\\", "<?php", "?>");
             $values = trim(str_replace($badchars, '', $values));
@@ -162,7 +162,7 @@ elseif ($_REQUEST['mode'] == "show")
     echo "<table align='center'><tr><th>{$strVariable}</th><th>en-GB ({$strEnglish})</th><th>{$_REQUEST['lang']}</th></tr>";
 
     $shade = 'shade1';
-    foreach(array_keys($englishvalues) as $key)
+    foreach (array_keys($englishvalues) as $key)
     {
         if ($_REQUEST['lang']=='zz') $foreignvalues[$key] = $key;
         echo "<tr class='$shade'><td><label for=\"{$key}\"><code>{$key}</code></td><td><input name='english_{$key}' value=\"".htmlentities($englishvalues[$key], ENT_QUOTES, 'UTF-8')."\" size=\"45\" readonly='readonly' /></td>";
@@ -193,7 +193,7 @@ elseif ($_REQUEST['mode'] == "save")
 
     $lastchar='';
     $translatedcount=0;
-    foreach(array_keys($_POST) as $key)
+    foreach (array_keys($_POST) as $key)
     {
         if (!empty($_POST[$key]) AND substr($key, 0, 3) == "str")
         {
@@ -214,5 +214,5 @@ else
 {
     die('Invalid mode');
 }
-include('htmlfooter.inc.php');
+include ('htmlfooter.inc.php');
 ?>

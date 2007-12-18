@@ -10,14 +10,14 @@
 
 // Author: Ivan Lucas <ivanlucas[at]users.sourceforge.net>
 
-@include('set_include_path.inc.php');
+@include ('set_include_path.inc.php');
 $permission=37; // Run Reports
 
-require('db_connect.inc.php');
-require('functions.inc.php');
+require ('db_connect.inc.php');
+require ('functions.inc.php');
 
 // This page requires authentication
-require('auth.inc.php');
+require ('auth.inc.php');
 
 // Temporary: put in place so that this 3.07 feature can be used under 3.06
 if (!function_exists('strip_comma'))
@@ -35,7 +35,7 @@ if (!function_exists('strip_comma'))
 
 if (empty($_REQUEST['mode']))
 {
-    include('htmlheader.inc.php');
+    include ('htmlheader.inc.php');
     echo "<h2>{$strMarketingMailshot}</h2>";
     echo "<form action='{$_SERVER['PHP_SELF']}' method='post'>";
     echo "<table align='center'>";
@@ -109,7 +109,7 @@ if (empty($_REQUEST['mode']))
     echo "<strong>Field 11:</strong> {$strTelephone}<br />";
     echo "<strong>Field 12:</strong> {$strProducts} <em>(Lists all the customers products regardless of selections made above)</em><br />";
     echo "</td></tr></table>";
-    include('htmlfooter.inc.php');
+    include ('htmlfooter.inc.php');
 }
 elseif ($_REQUEST['mode']=='report')
 {
@@ -239,9 +239,9 @@ elseif ($_REQUEST['mode']=='report')
 
     if ($_POST['output']=='screen')
     {
-        include('htmlheader.inc.php');
+        include ('htmlheader.inc.php');
         echo $html;
-        include('htmlfooter.inc.php');
+        include ('htmlfooter.inc.php');
     }
     elseif ($_POST['output']=='csv')
     {

@@ -12,17 +12,17 @@
 // Email:    paul.lees[at]salfordsoftware.co.uk
 // Comments: hack of Ivan's code, Addresses of ALL Supported Customers
 
-@include('set_include_path.inc.php');
+@include ('set_include_path.inc.php');
 
 $permission=37; // Run Reports
 
-require('db_connect.inc.php');
-require('functions.inc.php');
+require ('db_connect.inc.php');
+require ('functions.inc.php');
 
 // This page requires authentication
-require('auth.inc.php');
+require ('auth.inc.php');
 
-include('htmlheader.inc.php');
+include ('htmlheader.inc.php');
 
 echo "<h2>Report: Address of ALL Supported Customers</h2>";
 echo "<h3>(Doesn't check for expiry)</h3>";
@@ -40,7 +40,7 @@ echo "<b>Found $count records</b><br /><br />";
 
 if ($result)
 {
-    while($address=mysql_fetch_array($result))
+    while ($address=mysql_fetch_array($result))
     {
         echo $address['address1'];
         echo "<br />";
@@ -63,5 +63,5 @@ else
 mysql_free_result($result);
 
 
-include('htmlfooter.inc.php');
+include ('htmlfooter.inc.php');
 ?>

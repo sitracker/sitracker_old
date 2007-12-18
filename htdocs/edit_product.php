@@ -10,13 +10,13 @@
 
 
 // Author: Ivan Lucas <ivanlucas[at]users.sourceforge.net>
-@include('set_include_path.inc.php');
+@include ('set_include_path.inc.php');
 $permission=29; // Edit products
 
-require('db_connect.inc.php');
-require('functions.inc.php');
+require ('db_connect.inc.php');
+require ('functions.inc.php');
 // This page requires authentication
-require('auth.inc.php');
+require ('auth.inc.php');
 
 // External variables
 $id = cleanvar($_REQUEST['id']);
@@ -49,7 +49,7 @@ if ($action == 'save')
 else
 {
     $title = $strEditProduct;
-    include('htmlheader.inc.php');
+    include ('htmlheader.inc.php');
 
     echo "<h2><img src='{$CONFIG['application_webpath']}images/icons/{$iconset}/32x32/product.png' width='32' height='32' alt='' /> ";
     echo "$title</h2>\n";
@@ -86,6 +86,6 @@ else
     echo "<p align='center'><a href='products.php'>Return to products list without saving</a></p>";
     mysql_free_result($result);
 
-    include('htmlfooter.inc.php');
+    include ('htmlfooter.inc.php');
 }
 ?>

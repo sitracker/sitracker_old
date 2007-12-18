@@ -10,13 +10,13 @@
 
 // This Page Is Valid XHTML 1.0 Transitional! 13Sep06
 // Author: Ivan Lucas <ivanlucas[at]users.sourceforge.net>
-@include('set_include_path.inc.php');
+@include ('set_include_path.inc.php');
 $permission=27; // view your calendar
 
-require('db_connect.inc.php');
-require('functions.inc.php');
+require ('db_connect.inc.php');
+require ('functions.inc.php');
 // This page requires authentication
-require('auth.inc.php');
+require ('auth.inc.php');
 
 // External variables
 $step = $_REQUEST['step'];
@@ -26,7 +26,7 @@ else $user = $sit[2];
 
 if (empty($step))
 {
-    include('htmlheader.inc.php');
+    include ('htmlheader.inc.php');
     // The JavaScript date picker used on this page came from an article at
     // http://www.dagblastit.com/~tmcclure/dhtml/calendar.html
     // The website states
@@ -53,7 +53,7 @@ if (empty($step))
     echo "<input type='hidden' name='step' value='1' />";
     echo "<input type='submit' value=\"{$strBookHoliday}\" /></p>";
     echo "</form>";
-    include('htmlfooter.inc.php');
+    include ('htmlfooter.inc.php');
 }
 elseif ($step=='1')
 {
@@ -62,7 +62,7 @@ elseif ($step=='1')
     $end = cleanvar($_REQUEST['end']);
     $type = cleanvar($_REQUEST['type']);
 
-    include('htmlheader.inc.php');
+    include ('htmlheader.inc.php');
     $start=strtotime($start);
     $end=strtotime($end);
     if ($start==0 && $end==0) { $start=$now; $end=$now; }
@@ -213,7 +213,7 @@ elseif ($step=='1')
     echo "<br />";
 
     echo "<p align='center'><a href='book_holidays.php?user={$user}'>Abandon this booking and try again</a></p>";
-    include('htmlfooter.inc.php');
+    include ('htmlfooter.inc.php');
 }
 else
 {

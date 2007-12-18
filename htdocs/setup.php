@@ -11,24 +11,24 @@
 // Author: Ivan Lucas <ivanlucas[at]users.sourceforge.net>
 
 // Load config defaults
-@include("defaults.inc.php");
+@include ("defaults.inc.php");
 // Keep the defaults as a seperate array
 $DEFAULTS = $CONFIG;
 
 // Load config file with customisations
-// @include("config.inc-dist.php");
-@include("config.inc.php");
+// @include ("config.inc-dist.php");
+@include ("config.inc.php");
 // Server Configuration
-@include('/etc/webtrack.conf'); // for legacy systems
-@include('/etc/sit.conf');
+@include ('/etc/webtrack.conf'); // for legacy systems
+@include ('/etc/sit.conf');
 
 // Some actions require authentication
 if ($_REQUEST['action']=='reconfigure')
 {
     $permission=22;
     $_REQUEST['config']='advanced'; // set advanced mode
-    require('functions.inc.php');
-    require('auth.inc.php');
+    require ('functions.inc.php');
+    require ('auth.inc.php');
 }
 
 // These are the required variables we want to configure during installation
@@ -181,14 +181,14 @@ function setup_configure()
     if ($_REQUEST['config']=='advanced')
     {
         $html .= "<input type='hidden' name='config' value='advanced' />\n";
-        foreach($CFGVAR AS $setupvar => $setupval)
+        foreach ($CFGVAR AS $setupvar => $setupval)
         {
             $SETUP[] = $setupvar;
         }
     }
 
     $c=1;
-    foreach($SETUP AS $setupvar)
+    foreach ($SETUP AS $setupvar)
     {
         $html .= "<div class='configvar{$c}'>";
         if ($CFGVAR[$setupvar]['title']!='') $title = $CFGVAR[$setupvar]['title'];
@@ -232,7 +232,7 @@ function setup_exec_sql($sqlquerylist)
         $sqlqueries = explode( ';', $sqlquerylist);
         // We don't need the last entry it's blank, as we end with a ;
         array_pop($sqlqueries);
-        foreach($sqlqueries AS $sql)
+        foreach ($sqlqueries AS $sql)
         {
             mysql_query($sql);
             if (mysql_error())
@@ -254,7 +254,7 @@ function user_notify_upgrade()
     $sql = "SELECT id FROM users WHERE status != 0";
     $result = mysql_query($sql);
     $gid = md5($strSitUpgraded);
-    while($user = mysql_fetch_object($result))
+    while ($user = mysql_fetch_object($result))
     {
         $noticesql = "INSERT into notices(userid, type, text, linktext, link, gid, timestamp) ";
         $noticesql .= "VALUES({$user->id}, ".SIT_UPGRADED_NOTICE.", '\$strSitUpgraded', '\$strSitUpgradedLink', '{$CONFIG['application_webpath']}releasenotes.php', '{$gid}', NOW())";
@@ -332,14 +332,14 @@ switch ($_REQUEST['action'])
 
         if ($_REQUEST['config']=='advanced')
         {
-            foreach($CFGVAR AS $setupvar => $setupval)
+            foreach ($CFGVAR AS $setupvar => $setupval)
             {
                 $SETUP[] = $setupvar;
             }
         }
 
         // Keep the posted setup
-        foreach($SETUP AS $setupvar)
+        foreach ($SETUP AS $setupvar)
         {
             if ($_POST[$setupvar]=='TRUE') $_POST[$setupvar] = TRUE;
             if ($_POST[$setupvar]=='FALSE') $_POST[$setupvar] = FALSE;
@@ -348,7 +348,7 @@ switch ($_REQUEST['action'])
         // Extract the differences between the defaults and the newly configured items
         $CFGDIFF = array_diff_assoc($CONFIG, $DEFAULTS);
 
-        foreach($CFGDIFF AS $setupvar => $setupval)
+        foreach ($CFGDIFF AS $setupvar => $setupval)
         {
             if ($CFGVAR[$setupvar]['title']!='') $newcfgfile .= "# {$CFGVAR[$setupvar]['title']}\n";
             if ($CFGVAR[$setupvar]['help']!='') $newcfgfile .= "# {$CFGVAR[$setupvar]['help']}\n";
@@ -443,10 +443,10 @@ switch ($_REQUEST['action'])
             }
             else
             {
-                require('functions.inc.php');
+                require ('functions.inc.php');
 
                 // Load the empty schema
-                require('setup-schema.php');
+                require ('setup-schema.php');
 
                 // Connected to database and db selected
                 echo "<p>Connected to database - ok</p>";
@@ -549,10 +549,10 @@ switch ($_REQUEST['action'])
                             if (mysql_error()) trigger_error(mysql_error(),E_USER_ERROR);
 
                             echo "<h2>Dashboard</h2>";
-                            while($dashboardnames = mysql_fetch_object($result))
+                            while ($dashboardnames = mysql_fetch_object($result))
                             {
                                 $version = 1;
-                                include("{$CONFIG['application_fspath']}dashboard/dashboard_{$dashboardnames->name}.php");
+                                include ("{$CONFIG['application_fspath']}dashboard/dashboard_{$dashboardnames->name}.php");
                                 $func = "dashboard_{$dashboardnames->name}_get_version";
 
                                 if (function_exists($func))

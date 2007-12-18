@@ -334,7 +334,7 @@ if ($menu != 'hide')
                 AND tempincoming.updateid=updates.id";
         $query = mysql_query($insql);
         if (mysql_error()) trigger_error(mysql_error(),E_USER_WARNING);
-        while($inupdate = mysql_fetch_object($query))
+        while ($inupdate = mysql_fetch_object($query))
         {
             echo "<a class='barlink' href='unlock_update.php?id={$id}'>{$strUnlock}</a> | ";
             echo "<a class='barlink' href=\"javascript:window.opener.location='move_update.php?updateid={$inupdate->updateid}&amp;incidentidnumber={$update['incidentid']}'; window.close();\" >{$strAssign}</a> | ";

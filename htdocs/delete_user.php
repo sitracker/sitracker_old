@@ -11,13 +11,13 @@
 // Authors: Valdemaras Pipiras <info[at]ambernet.lt>
 //          Ivan Lucas <ivanlucas[at]users.sourceforge.net>
 
-@include('set_include_path.inc.php');
+@include ('set_include_path.inc.php');
 $permission=20;  // Manage users
-require('db_connect.inc.php');
-require('functions.inc.php');
+require ('db_connect.inc.php');
+require ('functions.inc.php');
 
 // This page requires authentication
-require('auth.inc.php');
+require ('auth.inc.php');
 
 // External variables
 $userid = cleanvar($_REQUEST['userid']);
@@ -67,7 +67,7 @@ if (!empty($userid))
         $sql[] = "DELETE FROM usergroups WHERE userid = $userid";
         $sql[] = "DELETE FROM userpermissions WHERE userid = $userid";
 
-        foreach($sql as $query)
+        foreach ($sql as $query)
         {
             $result = mysql_query($query);
             if (mysql_error()) trigger_error(mysql_error(),E_USER_ERROR);
@@ -78,11 +78,11 @@ if (!empty($userid))
     }
     else
     {
-        include('htmlheader.inc.php');
+        include ('htmlheader.inc.php');
         // FIXME i18n error
         echo "<p class='error'>Sorry, this user cannot be deleted because it has been associated with one or more files, links, notes or skills/software</p>";
         echo "<p align='center'><a href='users.php#{$userid}'>Return to users list</a></p>";
-        include('htmlfooter.inc.php');
+        include ('htmlfooter.inc.php');
     }
 }
 else

@@ -12,13 +12,13 @@
 //// This Page Is Valid XHTML 1.0 Transitional!  (7 Oct 2006)
 
 // FIXME i18n whole page
-@include('set_include_path.inc.php');
+@include ('set_include_path.inc.php');
 $permission=64; // Manage escalation paths
-require('db_connect.inc.php');
-require('functions.inc.php');
+require ('db_connect.inc.php');
+require ('functions.inc.php');
 
 // This page requires authentication
-require('auth.inc.php');
+require ('auth.inc.php');
 
 if (empty($_REQUEST['mode']))
 {
@@ -29,7 +29,7 @@ if (empty($_REQUEST['mode']))
     $result = mysql_query($sql);
     if (mysql_error()) trigger_error(mysql_error(),E_USER_ERROR);
 
-    include('htmlheader.inc.php');
+    include ('htmlheader.inc.php');
     ?>
     <script type='text/javascript'>
     function confirm_submit()
@@ -41,7 +41,7 @@ if (empty($_REQUEST['mode']))
 
     echo "<h2>{$title}</h2>";
 
-    while($details = mysql_fetch_object($result))
+    while ($details = mysql_fetch_object($result))
     {
         echo "<form action='".$_SERVER['PHP_SELF']."' method='post' onsubmit='return confirm_submit()'>";
         echo "<table class='vertical'>";
@@ -58,7 +58,7 @@ if (empty($_REQUEST['mode']))
 
         echo "</form>";
     }
-    include('htmlfooter.inc.php');
+    include ('htmlfooter.inc.php');
 }
 else
 {

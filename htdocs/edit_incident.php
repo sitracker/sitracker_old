@@ -10,14 +10,14 @@
 
 // Soon to be replaced
 // See incident/edit.inc.php
-@include('set_include_path.inc.php');
+@include ('set_include_path.inc.php');
 $permission=7; // Edit Incidents
 
-require('db_connect.inc.php');
-require('functions.inc.php');
+require ('db_connect.inc.php');
+require ('functions.inc.php');
 
 // This page requires authentication
-require('auth.inc.php');
+require ('auth.inc.php');
 
 // External variables
 $submit = $_REQUEST['submit'];
@@ -28,7 +28,7 @@ $incidentid=$id;
 if (empty($submit))
 {
     $title = $strEdit;
-    include('incident_html_top.inc.php');
+    include ('incident_html_top.inc.php');
 
     // extract incident details
     $sql  = "SELECT * FROM incidents WHERE id='$id'";
@@ -91,7 +91,7 @@ if (empty($submit))
         echo "<input name='submit' type='submit' value='{$strSave}' /></p>";
         echo "</form>\n";
     }
-    include('incident_html_bottom.inc.php');
+    include ('incident_html_bottom.inc.php');
 }
 else
 {
@@ -235,16 +235,16 @@ else
             }
             else
             {
-                include('incident_html_top.inc.php');
+                include ('incident_html_top.inc.php');
                 echo $addition_errors_string;
-                include('incident_html_bottom.inc.php');
+                include ('incident_html_bottom.inc.php');
             }
         }
         else
         {
-            include('incident_html_top.inc.php');
+            include ('incident_html_top.inc.php');
             echo $error_string;
-            include('incident_html_bottom.inc.php');
+            include ('incident_html_bottom.inc.php');
         }
     }
 }

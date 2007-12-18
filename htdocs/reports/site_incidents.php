@@ -8,14 +8,14 @@
 // of the GNU General Public License, incorporated herein by reference.
 //
 
-@include('set_include_path.inc.php');
+@include ('set_include_path.inc.php');
 $permission=37; // Run Reports
 
-require('db_connect.inc.php');
-require('functions.inc.php');
+require ('db_connect.inc.php');
+require ('functions.inc.php');
 
 // This page requires authentication
-require('auth.inc.php');
+require ('auth.inc.php');
 
 $title = $strSiteIncidents;
 
@@ -29,7 +29,7 @@ if (empty($enddate)) $enddate = date('Y-m-d');
 
 if (empty($mode))
 {
-    include('htmlheader.inc.php');
+    include ('htmlheader.inc.php');
 
     echo "<h2>{$title}</h2>";
 
@@ -51,7 +51,7 @@ if (empty($mode))
     echo "<input type='submit' value=\"{$strRunReport}\" /></p>";
     echo "</form>";
 
-    include('htmlfooter.inc.php');
+    include ('htmlfooter.inc.php');
 }
 else
 {

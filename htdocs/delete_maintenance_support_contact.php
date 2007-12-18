@@ -15,14 +15,14 @@
 
 // This Page Is Valid XHTML 1.0 Transitional!   31Oct05
 
-@include('set_include_path.inc.php');
+@include ('set_include_path.inc.php');
 $permission=32;  // Edit Supported Products
-require('db_connect.inc.php');
-require('functions.inc.php');
+require ('db_connect.inc.php');
+require ('functions.inc.php');
 $title="Remove a Supported Contact";
 
 // This page requires authentication
-require('auth.inc.php');
+require ('auth.inc.php');
 
 // External variables
 $action = $_REQUEST['action'];
@@ -33,7 +33,7 @@ $contactid = cleanvar($_REQUEST['contactid']);
 
 if (empty($action) OR $action == "showform")
 {
-    include('htmlheader.inc.php');
+    include ('htmlheader.inc.php');
     ?>
     <script type='text/javascript'>
     function confirm_submit()
@@ -76,7 +76,7 @@ if (empty($action) OR $action == "showform")
     <p align='center'><input name="submit" type="submit" value="Continue" /></p>
     </form>
     <?php
-    include('htmlfooter.inc.php');
+    include ('htmlfooter.inc.php');
 }
 elseif ($action == "delete")
 {
@@ -104,9 +104,9 @@ elseif ($action == "delete")
         // show error message if deletion failed
         if (!$result)
         {
-            include('htmlheader.inc.php');
+            include ('htmlheader.inc.php');
             throw_error('Deletion of maintenance support conact failed:','$sql');
-            include('htmlfooter.inc.php');
+            include ('htmlfooter.inc.php');
         }
         // update db and show success message
         else
@@ -120,9 +120,9 @@ elseif ($action == "delete")
     else
     {
         // show error message if errors
-        include('htmlheader.inc.php');
+        include ('htmlheader.inc.php');
         echo $errors_string;
-        include('htmlfooter.inc.php');
+        include ('htmlfooter.inc.php');
     }
 }
 ?>

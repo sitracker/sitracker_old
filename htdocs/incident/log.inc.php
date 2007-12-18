@@ -98,7 +98,7 @@ $result = mysql_query($sql);
 if (mysql_error()) trigger_error("MySQL Query Error $sql".mysql_error(), E_USER_ERROR);
 
 $keeptags=array('b','i','u','hr','&lt;', '&gt;');
-foreach($keeptags AS $keeptag)
+foreach ($keeptags AS $keeptag)
 {
     if (substr($keeptag,0,1)=='&')
     {

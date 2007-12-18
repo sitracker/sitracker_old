@@ -10,13 +10,13 @@
 
 // by Ivan Lucas, June 2004
 
-@include('set_include_path.inc.php');
+@include ('set_include_path.inc.php');
 $permission=48; // Add Feedback Forms
 
-require('db_connect.inc.php');
-require('functions.inc.php');
+require ('db_connect.inc.php');
+require ('functions.inc.php');
 // This page requires authentication
-require('auth.inc.php');
+require ('auth.inc.php');
 
 // External Variables
 $formid = cleanvar($_REQUEST['id']);
@@ -44,7 +44,7 @@ switch ($action)
 
     default:
         $title='Add feedback form';
-        include('htmlheader.inc.php');
+        include ('htmlheader.inc.php');
         echo "<h2 align='center'>$title</h2>\n";
 
         echo "<form action='{$_SERVER['PHP_SELF']}' method='post'>";
@@ -81,7 +81,7 @@ switch ($action)
         echo "</tr>";
 
         echo "</table>";
-        include('htmlfooter.inc.php');
+        include ('htmlfooter.inc.php');
 }
 
 ?>

@@ -10,18 +10,18 @@
 
 // Author: Ivan Lucas <ivanlucas[at]users.sourceforge.net>
 
-@include('set_include_path.inc.php');
+@include ('set_include_path.inc.php');
 $permission=37; // Run Reports
 
-require('db_connect.inc.php');
-require('functions.inc.php');
+require ('db_connect.inc.php');
+require ('functions.inc.php');
 
 // This page requires authentication
-require('auth.inc.php');
+require ('auth.inc.php');
 
 $title = $strCountContractsByProduct;
 
-include('htmlheader.inc.php');
+include ('htmlheader.inc.php');
 
 echo "<h2>{$title}</h2>";
 
@@ -49,6 +49,6 @@ foreach ($productlist AS $prod => $contcount)
     else $shade='shade1';
 }
 echo "</table>\n";
-include('htmlfooter.inc.php');
+include ('htmlfooter.inc.php');
 
 ?>

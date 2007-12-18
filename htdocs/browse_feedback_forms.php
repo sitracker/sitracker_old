@@ -10,16 +10,16 @@
 
 // Author: Paul Heaney <paulheaney[at]users.sourceforge.net>
 
-@include('set_include_path.inc.php');
+@include ('set_include_path.inc.php');
 $permission=49; // Edit Feedback Forms
 
-require('db_connect.inc.php');
-require('functions.inc.php');
+require ('db_connect.inc.php');
+require ('functions.inc.php');
 // This page requires authentication
-require('auth.inc.php');
+require ('auth.inc.php');
 
 $title = "Browse Feedback Forms";
-include('htmlheader.inc.php');
+include ('htmlheader.inc.php');
 
 echo "<h2>".$title."</h2>";
 
@@ -47,6 +47,6 @@ else
     echo "<p align='center'><a href='edit_feedback_form.php?action=new'>Create new form</a></p>";
 }
 
-include('htmlfooter.inc.php');
+include ('htmlfooter.inc.php');
 
 ?>

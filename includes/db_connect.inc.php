@@ -10,15 +10,15 @@
 
 
 // Load config defaults
-include("defaults.inc.php");
+include ("defaults.inc.php");
 // Load config file with customisations
-@include("config.inc.php");
+@include ("config.inc.php");
 // Server Configuration
-@include('/etc/webtrack.conf');  // Legacy, for compatibility
-@include('/etc/sit.conf');
+@include ('/etc/webtrack.conf');  // Legacy, for compatibility
+@include ('/etc/sit.conf');
 // TODO determine which language to use, for now we're hardcoded to English (British)
 // i18n
-@include('i18n/en-gb.inc.php');
+@include ('i18n/en-gb.inc.php');
 
 if ($CONFIG['debug'] > 0)
 {

@@ -12,13 +12,13 @@
 
 // Authors: Ivan Lucas <ivanlucas[at]users.sourceforge.net>, Tom Gerrard
 
-@include('set_include_path.inc.php');
+@include ('set_include_path.inc.php');
 $permission=54; // view KB
 
-require('db_connect.inc.php');
-require('functions.inc.php');
+require ('db_connect.inc.php');
+require ('functions.inc.php');
 // This page requires authentication
-require('auth.inc.php');
+require ('auth.inc.php');
 
 // Valid user, check permission
 if (user_permission($sit[2],$permission))
@@ -29,7 +29,7 @@ if (user_permission($sit[2],$permission))
 
     if (empty($process))
     {
-        include('htmlheader.inc.php');
+        include ('htmlheader.inc.php');
         ?>
         <script type="text/javascript">
         <!--
@@ -110,7 +110,7 @@ if (user_permission($sit[2],$permission))
         </p>
         </form>
 PRINT;
-        include('htmlfooter.inc.php');
+        include ('htmlfooter.inc.php');
 
         unset($_SESSION['formdata']['kb_add_article']);
     }

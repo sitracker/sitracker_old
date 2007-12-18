@@ -11,9 +11,9 @@
 
 // This file can be called from a cron job to run tasks periodically
 
-@include('set_include_path.inc.php');
-require('db_connect.inc.php');
-require('functions.inc.php');
+@include ('set_include_path.inc.php');
+require ('db_connect.inc.php');
+require ('functions.inc.php');
 
 $crlf = "\n";
 
@@ -79,7 +79,7 @@ if ($actions[0]=='' OR in_array('PurgeJournal',$actions))
 
 if ($actions[0]=='' OR in_array('TimeCalc',$actions))
 {
-    require('auto/timecalc.php');
+    require ('auto/timecalc.php');
 }
 
 
@@ -173,7 +173,7 @@ if ($actions[0]=='' OR in_array('SetUserStatus',$actions))
 
 if ($actions[0]=='' OR in_array('ChaseCustomers',$actions))
 {
-    require('auto/chase_customer.php');
+    require ('auto/chase_customer.php');
 }
 
 plugin_do('automata');

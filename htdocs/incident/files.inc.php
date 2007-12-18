@@ -81,7 +81,7 @@ if (isset($_REQUEST['fileselection']))
     echo "Tested these files";
     echo "</div>";
     echo "<div class='detailentry'>\n";
-    foreach($fileselection AS $filesel)
+    foreach ($fileselection AS $filesel)
     {
         echo "$filesel &hellip; ";
         echo "listed";
@@ -209,7 +209,7 @@ if (file_exists($incident_attachment_fspath))
     if (count($temparray) == 0) echo "<p class='info'>No files<p>";
     else
     {
-        foreach($temparray as $value) {
+        foreach ($temparray as $value) {
             if (is_dir($value)) $dirarray[] = $value;
             elseif (is_file($value) AND substr($value,-1)!='.' AND substr($value,-8)!='mail.eml') $rfilearray[] = $value;
         }
@@ -224,7 +224,7 @@ if (file_exists($incident_attachment_fspath))
 
             echo "<p><em>Root of Incident {$incidentid}</em></p>\n";
             echo "<table>\n";
-            foreach($rfilearray AS $rfile)
+            foreach ($rfilearray AS $rfile)
             {
                 echo draw_file_row($rfile, $delim, $incidentid, $incident_attachment_fspath);
             }
@@ -232,7 +232,7 @@ if (file_exists($incident_attachment_fspath))
             echo "</div>";
         }
 
-        foreach($dirarray AS $dir)
+        foreach ($dirarray AS $dir)
         {
             $directory=substr($dir,0,strrpos($dir,$delim));
             $dirname=substr($dir,strrpos($dir,$delim)+1,strlen($dir));
@@ -256,12 +256,12 @@ if (file_exists($incident_attachment_fspath))
                     $updateid=substr($updatelink,strrpos($updatelink,$delim)+1,strlen($updatelink));
                     echo "<p>These files arrived by <a href='{$CONFIG['attachment_webpath']}{$incidentid}/{$dirname}/mail.eml'>email</a>, jump to the appropriate <a href='incident_details.php?id={$incidentid}#$updateid'>entry in the log</a></p>";
                 }
-                foreach($tempfarray as $fvalue)
+                foreach ($tempfarray as $fvalue)
                 {
                     if (is_file($fvalue) AND substr($fvalue,-8)!='mail.eml') $filearray[] = $fvalue;
                 }
                 echo "<table>\n";
-                foreach($filearray AS $file)
+                foreach ($filearray AS $file)
                 {
                     echo draw_file_row($file, $delim, $incidentid, $incident_attachment_fspath);
 

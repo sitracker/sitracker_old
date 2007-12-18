@@ -13,14 +13,14 @@
 //          Kieran Hogg <kieran_hogg[at]users.sourceforge.net>
 // heavily based on the Salford Report by Paul Heaney
 
-@include('set_include_path.inc.php');
+@include ('set_include_path.inc.php');
 $permission=37; // Run Reports
 
-include('db_connect.inc.php');
-include('functions.inc.php');
-require('auth.inc.php');
+include ('db_connect.inc.php');
+include ('functions.inc.php');
+require ('auth.inc.php');
 
-include('htmlheader.inc.php');
+include ('htmlheader.inc.php');
 echo "<script type='text/javascript'>";
 ?>
 function incident_details_window_l(incidentid,second)
@@ -35,7 +35,7 @@ echo "<h2>{$strExternalEngineerCallDistribution}</h2>";
 
 $sql = "SELECT id, name FROM escalationpaths";
 $escs = mysql_query($sql);
-while($escalations = mysql_fetch_object($escs))
+while ($escalations = mysql_fetch_object($escs))
 {
         $html .= "<h3>{$escalations->name}</h3>";
         $sql = "SELECT incidents.*, software.name, contacts.forenames, contacts.surname, sites.name AS siteName FROM incidents, software, contacts, sites WHERE escalationpath = '{$escalations->id}' AND closed = '0' AND software.id = incidents.softwareid ";
@@ -46,7 +46,7 @@ while($escalations = mysql_fetch_object($escs))
         if (mysql_error()) trigger_error(mysql_error(),E_USER_ERROR);
 
         $i = 0;
-        while($obj = mysql_fetch_object($result))
+        while ($obj = mysql_fetch_object($result))
         {
             $name = $obj->externalengineer;
             if (empty($name)) $name = $strNoNameAssociated;
@@ -74,7 +74,7 @@ while($escalations = mysql_fetch_object($escs))
             $html .= "</td>";
             $html .= "</tr>\n";
 
-            foreach($esc AS $engineer)
+            foreach ($esc AS $engineer)
             {
                 if (empty($engineer['4']))  $engineer['4'] = 0;
                 if (empty($engineer['3']))  $engineer['3'] = 0;
@@ -123,5 +123,5 @@ while($escalations = mysql_fetch_object($escs))
     unset($esc);
 }
 echo $html;
-include('htmlfooter.inc.php');
+include ('htmlfooter.inc.php');
 ?>

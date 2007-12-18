@@ -170,7 +170,7 @@ setInterval("countUp()", 1000); //every 1 seconds
 
     //get list of tasks
     $sql = "SELECT * FROM tasks WHERE 1=0 ";
-    while($tasks = mysql_fetch_object($result))
+    while ($tasks = mysql_fetch_object($result))
     {
         $sql .= "OR id={$tasks->origcolref} ";
     }
@@ -434,7 +434,7 @@ if (mysql_num_rows($result) >=1 )
 
         echo "<tr><th>{$strOwner}</th><th>{$strTotalMinutes }</th><th>{$strBillingEngineerPeriod}</th><th>{$strBillingCustomerPeriod}</th></tr>";
         $shade = "shade1";
-        foreach($billing AS $bill)
+        foreach ($billing AS $bill)
         {
             /*
                 [eng][starttime]
@@ -449,7 +449,7 @@ if (mysql_num_rows($result) >=1 )
             $count['engineer'];
             $count['customer'];
 
-            foreach($bill AS $act)
+            foreach ($bill AS $act)
             {
                 $owner = user_realname($act['owner']);
                 $duration += $act['duration'];
@@ -464,10 +464,10 @@ if (mysql_num_rows($result) >=1 )
 
                 if (!empty($count['engineer']))
                 {
-                    while($customerDur > 0)
+                    while ($customerDur > 0)
                     {
                         $saved = "false";
-                        foreach($count['engineer'] AS $ind)
+                        foreach ($count['engineer'] AS $ind)
                         {
                             /*
                             echo "<pre>";
@@ -508,7 +508,7 @@ if (mysql_num_rows($result) >=1 )
                     $localDur = $act['duration']-$engineerPeriod;
                     $startTime = $act['starttime'];
 
-                    while($localDur > 0)
+                    while ($localDur > 0)
                     {
                         $startTime+=$engineerPeriod;
                         $count['engineer'][$startTime] = $startTime;
@@ -518,10 +518,10 @@ if (mysql_num_rows($result) >=1 )
 
                 if (!empty($count['customer']))
                 {
-                    while($act['duration'] > 0)
+                    while ($act['duration'] > 0)
                     {
                         $saved = "false";
-                        foreach($count['customer'] AS $ind)
+                        foreach ($count['customer'] AS $ind)
                         {
                             /*
                             echo "<pre>";
@@ -560,7 +560,7 @@ if (mysql_num_rows($result) >=1 )
                     $localDur = $act['duration']-$customerPeriod;
                     $startTime = $act['starttime'];
 
-                    while($localDur > 0)
+                    while ($localDur > 0)
                     {
                         $startTime+=$customerPeriod;
                         $count['customer'][$startTime] = $startTime;

@@ -12,13 +12,13 @@
 
 // TODO This page fails XHTML validation because of dojo attributes - INL 12/12/07
 
-@include('set_include_path.inc.php');
+@include ('set_include_path.inc.php');
 $permission=12; // View Contacts
 
-require('db_connect.inc.php');
-require('functions.inc.php');
+require ('db_connect.inc.php');
+require ('functions.inc.php');
 // This page requires authentication
-require('auth.inc.php');
+require ('auth.inc.php');
 
 $title = $strBrowseContacts;
 
@@ -62,7 +62,7 @@ if ($submit_value == 'go')
         }
 }
 
-include('htmlheader.inc.php');
+include ('htmlheader.inc.php');
 
 if ($search_string=='') $search_string='a';
 ?>
@@ -75,7 +75,7 @@ window.open(URL, "contact_products_window", "toolbar=no,status=yes,menubar=no,sc
 </script>
 <script type="text/javascript" src="scripts/dojo/dojo.js"></script>
 <script type="text/javascript">
-    dojo.require("dojo.widget.ComboBox");
+    dojo.require ("dojo.widget.ComboBox");
 </script>
 <?php
 echo "<h2><img src='{$CONFIG['application_webpath']}images/icons/{$iconset}/32x32/contact.png' width='32' height='32' alt='' /> ";
@@ -237,5 +237,5 @@ else
         mysql_free_result($result);
     }
 }
-include('htmlfooter.inc.php');
+include ('htmlfooter.inc.php');
 ?>

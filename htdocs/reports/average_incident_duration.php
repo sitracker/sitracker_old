@@ -12,17 +12,17 @@
 //
 // Comments: How long do we take to close incidents?
 
-@include('set_include_path.inc.php');
+@include ('set_include_path.inc.php');
 set_time_limit(60);
 
 $title='Average Incident Duration';
 $permission=37; // Run Reports
 
-require('db_connect.inc.php');
-require('functions.inc.php');
+require ('db_connect.inc.php');
+require ('functions.inc.php');
 
 // This page requires authentication
-require('auth.inc.php');
+require ('auth.inc.php');
 
 $id = cleanvar($_REQUEST['id']);
 $mode = cleanvar($_REQUEST['mode']);
@@ -158,9 +158,9 @@ if ($_REQUEST['output']=='csv')
 }
 else
 {
-    include('htmlheader.inc.php');
+    include ('htmlheader.inc.php');
     echo $html;
-    include('htmlfooter.inc.php');
+    include ('htmlfooter.inc.php');
 }
 
 

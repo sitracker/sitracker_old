@@ -9,28 +9,28 @@
 //
 // Author: Paul Heaney <paulheaney[at]users.sourceforge.net>
 
-@include('set_include_path.inc.php');
+@include ('set_include_path.inc.php');
 $permission=0; // not required
-require('db_connect.inc.php');
-require('functions.inc.php');
+require ('db_connect.inc.php');
+require ('functions.inc.php');
 
 // This page requires authentication
-require('auth.inc.php');
+require ('auth.inc.php');
 
 
 $action = $_REQUEST['action'];
 
-switch($action)
+switch ($action)
 {
     case 'add':
-        include('htmlheader.inc.php');
+        include ('htmlheader.inc.php');
         $type = $_REQUEST['type'];
         echo "<h2>{$strWatchAddSet}</h2>";
         echo "<form action='{$_SERVER['PHP_SELF']}?action=do_add&type={$type}' method='post'>";
         echo "<table class='vertical'>";
         echo "<tr><td>";
 
-        switch($type)
+        switch ($type)
         {
             case '0': //site
                 echo "{$strSite}: ";
@@ -53,7 +53,7 @@ switch($action)
         echo "</td><tr>";
         echo "</table>";
         echo "<p align='center'><input name='submit' type='submit' value='{$strAdd}' /></p>";
-        include('htmlfooter.inc.php');
+        include ('htmlfooter.inc.php');
         break;
     case 'do_add':
         $id = $_REQUEST['id'];
@@ -84,7 +84,7 @@ switch($action)
         }
         break;
     default:
-        include('htmlheader.inc.php');
+        include ('htmlheader.inc.php');
         echo "<h2>{$strEditWatchedIncidents}</h2>";
 
         echo "<table align='center'>";
@@ -96,7 +96,7 @@ switch($action)
             if (mysql_error()) trigger_error(mysql_error(),E_USER_ERROR);
 
             echo "<tr><td align='left'><strong>";
-            switch($i)
+            switch ($i)
             {
                 case 0: echo $strSites;
                     break;
@@ -109,7 +109,7 @@ switch($action)
             }
             echo "</strong></td><td align='right'>";
             echo "<a href='{$_SERVER['PHP_SELF']}?type={$i}&amp;action=add'>";
-            switch($i)
+            switch ($i)
             {
                 case 0: echo $strAddSite;
                     break;
@@ -125,10 +125,10 @@ switch($action)
             if (mysql_num_rows($result) > 0)
             {
                 $shade='shade1';
-                while($obj = mysql_fetch_object($result))
+                while ($obj = mysql_fetch_object($result))
                 {
                     $name = '';
-                    switch($obj->type)
+                    switch ($obj->type)
                     {
                         case 0: //site
                             $sql = "SELECT name FROM sites WHERE id = {$obj->id}";
@@ -172,7 +172,7 @@ switch($action)
             }
         }
         echo "</table>";
-        include('htmlfooter.inc.php');
+        include ('htmlfooter.inc.php');
         break;
 
 }

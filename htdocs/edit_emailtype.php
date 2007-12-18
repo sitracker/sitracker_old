@@ -8,14 +8,14 @@
 // of the GNU General Public License, incorporated herein by reference.
 //
 
-@include('set_include_path.inc.php');
+@include ('set_include_path.inc.php');
 $permission=17; // Edit Email Template
 
-require('db_connect.inc.php');
-require('functions.inc.php');
+require ('db_connect.inc.php');
+require ('functions.inc.php');
 
 // This page requires authentication
-require('auth.inc.php');
+require ('auth.inc.php');
 
 // FIXME i18n Whole page
 
@@ -26,7 +26,7 @@ $action = $_REQUEST['action'];
 if (empty($action) OR $action == "showform")
 {
     // Show select email type form
-    include('htmlheader.inc.php');
+    include ('htmlheader.inc.php');
     ?>
     <script type="text/javascript">
     function confirm_submit()
@@ -58,11 +58,11 @@ if (empty($action) OR $action == "showform")
         echo "</dl>\n";
     }
     echo "</div>";
-    include('htmlfooter.inc.php');
+    include ('htmlfooter.inc.php');
 }
 elseif ($action == "edit")
 {
-    include('htmlheader.inc.php');
+    include ('htmlheader.inc.php');
     // Show edit email type form
     if ($id > 0)
     {
@@ -165,7 +165,7 @@ elseif ($action == "edit")
         echo "</table>\n";
         echo "</form>";
 
-        include('htmlfooter.inc.php');
+        include ('htmlfooter.inc.php');
     }
     else
     {

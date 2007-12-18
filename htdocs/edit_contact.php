@@ -9,15 +9,15 @@
 //
 
 // This Page Is Valid XHTML 1.0 Transitional!  31Oct05
-@include('set_include_path.inc.php');
+@include ('set_include_path.inc.php');
 $permission=10; // Edit Contacts
 $title='Edit Contact';
 
-require('db_connect.inc.php');
-require('functions.inc.php');
+require ('db_connect.inc.php');
+require ('functions.inc.php');
 
 // This page requires authentication
-require('auth.inc.php');
+require ('auth.inc.php');
 
 $title = $strEditContact;
 
@@ -25,7 +25,7 @@ $title = $strEditContact;
 $contact = cleanvar($_REQUEST['contact']);
 $action = cleanvar($_REQUEST['action']);
 
-include('htmlheader.inc.php');
+include ('htmlheader.inc.php');
 ?>
 <script type='text/javascript'>
 function confirm_submit()
@@ -217,5 +217,5 @@ else if ($action == "update")
         }
     }
 }
-include('htmlfooter.inc.php');
+include ('htmlfooter.inc.php');
 ?>

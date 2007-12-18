@@ -9,14 +9,14 @@
 //
 
 // This Page Is Valid XHTML 1.0 Transitional!  13Sep06
-@include('set_include_path.inc.php');
+@include ('set_include_path.inc.php');
 $permission=4; // Edit your profile
 
-require('db_connect.inc.php');
-require('functions.inc.php');
+require ('db_connect.inc.php');
+require ('functions.inc.php');
 
 // This page requires authentication
-require('auth.inc.php');
+require ('auth.inc.php');
 
 $approver = user_permission($sit[2],50); // Approve holidays
 
@@ -26,7 +26,7 @@ else $user = $sit[2];
 if ($user==$sit[2]) $title= sprintf($strUsersHolidays, $_SESSION['realname']);
 else $title = user_realname($user)."'s Holidays";
 
-include('htmlheader.inc.php');
+include ('htmlheader.inc.php');
 echo "<h2><img src='{$CONFIG['application_webpath']}images/icons/{$iconset}/32x32/holiday.png' width='32' height='32' alt='' /> ";
 echo "$title</h2>";
 
@@ -167,5 +167,5 @@ if ($user==$sit[2])
     else echo "<tr class='shade2'><td><em>{$strNobody}</em></td></tr>\n";
     echo "</table>";
 }
-include('htmlfooter.inc.php');
+include ('htmlfooter.inc.php');
 ?>

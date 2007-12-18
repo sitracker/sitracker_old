@@ -11,16 +11,16 @@
 // Author: Ivan Lucas <ivanlucas[at]users.sourceforge.net>
 // Hacked: Tom Gerrard <tom.gerrard[at]salfordsoftware.co.uk>
 
-@include('set_include_path.inc.php');
+@include ('set_include_path.inc.php');
 $permission=37; // Run Reports
 
-require('db_connect.inc.php');
-require('functions.inc.php');
+require ('db_connect.inc.php');
+require ('functions.inc.php');
 
 // This page requires authentication
-require('auth.inc.php');
+require ('auth.inc.php');
 
-include('htmlheader.inc.php');
+include ('htmlheader.inc.php');
 
 $maxscore = $CONFIG['feedback_max_score'];
 $formid=$CONFIG['feedback_form'];
@@ -222,5 +222,5 @@ else
 }
 
 echo "</div>\n";
-include('htmlfooter.inc.php');
+include ('htmlfooter.inc.php');
 ?>

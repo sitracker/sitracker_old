@@ -12,7 +12,7 @@
 // This Page Is Valid XHTML 1.0 Transitional!   4Nov05
 
 // Authors: Ivan Lucas <ivanlucas[at]users.sourceforge.net> and Paul Heaney
-@include('set_include_path.inc.php');
+@include ('set_include_path.inc.php');
 
 function get_globalsignature($sig_id)
 {
@@ -36,10 +36,10 @@ function delete_signature($sig_id)
 $permission=43; // Edit global signature
 
 
-require('db_connect.inc.php');
-require('functions.inc.php');
+require ('db_connect.inc.php');
+require ('functions.inc.php');
 // This page requires authentication
-require('auth.inc.php');
+require ('auth.inc.php');
 
 $title = $strGlobalSignature;
 
@@ -78,7 +78,7 @@ if (!empty($signature))
 elseif (empty($action))
 {
     //The just view the global signatures
-    include('htmlheader.inc.php');
+    include ('htmlheader.inc.php');
 
     echo "<h2>$title</h2>";
 
@@ -94,7 +94,7 @@ elseif (empty($action))
 
     echo "<table align='center' width='60%'>";
     echo "<tr><th>{$strGlobalSignature}</th><th>{$strOperation}</th></tr>";
-    while($signature = mysql_fetch_array($result))
+    while ($signature = mysql_fetch_array($result))
     {
         $id = $signature['id'];
         echo "<tr>";
@@ -105,11 +105,11 @@ elseif (empty($action))
     }
     echo "</table>";
 
-    include('htmlfooter.inc.php');
+    include ('htmlfooter.inc.php');
 }
 elseif (!empty($action))
 {
-    include('htmlheader.inc.php');
+    include ('htmlheader.inc.php');
     switch ($action)
     {
         case 'add':
@@ -161,6 +161,6 @@ elseif (!empty($action))
             echo "</form>\n";
         break;
     }
-    include('htmlfooter.inc.php');
+    include ('htmlfooter.inc.php');
 }
 ?>

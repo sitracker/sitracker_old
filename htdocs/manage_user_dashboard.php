@@ -9,13 +9,13 @@
 //
 // Author: Paul Heaney <paulheaney[at]users.sourceforge.net>
 
-@include('set_include_path.inc.php');
+@include ('set_include_path.inc.php');
 $permission=0; // not required
-require('db_connect.inc.php');
-require('functions.inc.php');
+require ('db_connect.inc.php');
+require ('functions.inc.php');
 
 // This page requires authentication
-require('auth.inc.php');
+require ('auth.inc.php');
 
 $dashboardid = $_REQUEST['id'];
 
@@ -33,13 +33,13 @@ if (mysql_num_rows($result) > 0)
 if (empty($dashboardid))
 {
 
-    foreach($dashboardcomponents AS $db)
+    foreach ($dashboardcomponents AS $db)
     {
         $c = explode("-",$db);
         $ondashboard[$c[1]] = $c[1];
     }
 
-    include('htmlheader.inc.php');
+    include ('htmlheader.inc.php');
 
     $sql = "SELECT * FROM dashboard WHERE enabled = 'true'";
     $result = mysql_query($sql);
@@ -51,7 +51,7 @@ if (empty($dashboardid))
     if (mysql_num_rows($result) > 0)
     {
         echo "<table align='center'>\n";
-        while($obj = mysql_fetch_object($result))
+        while ($obj = mysql_fetch_object($result))
         {
             if (empty($ondashboard[$obj->id]))
             {
@@ -66,12 +66,12 @@ if (empty($dashboardid))
         echo "</table>\n";
     }
 
-    include('htmlfooter.inc.php');
+    include ('htmlfooter.inc.php');
 }
 else
 {
     $action = $_REQUEST['action'];
-    switch($action)
+    switch ($action)
     {
         case 'add':
             $dashboardstr = $dashboardstr.",0-".$dashboardid;

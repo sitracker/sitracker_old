@@ -27,7 +27,7 @@ if (count($slahistory) >= 1)
 {
     echo "<table align='center'>";
     echo "<tr><th>{$strEvent}</th><th>{$strUser}</th><th>{$strTarget}</th><th>{$strActual}</th><th>{$strDateAndTime}</th></tr>\n";
-    foreach($slahistory AS $history)
+    foreach ($slahistory AS $history)
     {
         if ($history['targetmet']==FALSE) $class='critical';
         else $class='shade2';
@@ -65,7 +65,7 @@ if (mysql_error()) trigger_error(mysql_error(), E_USER_ERROR);
 $updatearray = array();
 $last = -1;
 $laststatus;
-while($row = mysql_fetch_object($result))
+while ($row = mysql_fetch_object($result))
 {
     $updatearray[$row->currentstatus]['name'] = $row->name;
     if ($last == -1)
@@ -84,7 +84,7 @@ if (extension_loaded('gd'))
 {
     $data = array();
     $legends;
-    foreach($updatearray as $row)
+    foreach ($updatearray as $row)
     {
         array_push($data, $row['time']);
         $legends .= $row['name']."|";
@@ -99,7 +99,7 @@ else
 {
     echo "<table align='center'>";
     echo "<tr><th>{$strStatus}</th><th>{$strTime}</th></tr>\n";
-    foreach($updatearray as $row)
+    foreach ($updatearray as $row)
     {
         echo "<tr><td>".$row['name']. "</td><td>".format_seconds($row['time'])."</td></tr>";
     }

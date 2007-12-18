@@ -12,18 +12,18 @@
 
 //// This Page Is Valid XHTML 1.0 Transitional!  (7 Oct 2006)
 
-@include('set_include_path.inc.php');
+@include ('set_include_path.inc.php');
 $permission=64; // Manage escalation paths
 
-require('db_connect.inc.php');
-require('functions.inc.php');
+require ('db_connect.inc.php');
+require ('functions.inc.php');
 
 // This page requires authentication
-require('auth.inc.php');
+require ('auth.inc.php');
 
 $title = $strEscalationPaths;
 
-include('htmlheader.inc.php');
+include ('htmlheader.inc.php');
 echo "<h2>$title</h2>";
 
 $sql = "SELECT * FROM escalationpaths ORDER BY name";
@@ -57,6 +57,6 @@ else echo "<p align='center'>{$strNoRecords}</p>";
 
 echo "<p align='center'><a href='add_escalation_path.php'>{$strAdd}</a></p>";
 
-include('htmlfooter.inc.php');
+include ('htmlfooter.inc.php');
 
 ?>

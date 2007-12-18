@@ -112,7 +112,7 @@ if ($_REQUEST['action'] != 'doit')
     // Do whatever
 
     // Cleanup
-    foreach($_SESSION as $key => $value )
+    foreach ($_SESSION as $key => $value )
         if (strncmp($key,$incidentid,5) === 0) unset($_SESSION['key']);
 }
 

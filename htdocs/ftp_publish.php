@@ -10,14 +10,14 @@
 
 // Author: Ivan Lucas <ivanlucas[at]users.sourceforge.net>
 
-@include('set_include_path.inc.php');
+@include ('set_include_path.inc.php');
 $permission=44; // Publish Files to FTP site
 
-require('db_connect.inc.php');
-require('functions.inc.php');
+require ('db_connect.inc.php');
+require ('functions.inc.php');
 
 // This page requires authentication
-require('auth.inc.php');
+require ('auth.inc.php');
 
 // seed with microseconds since last "whole" second
 mt_srand((double)microtime()*1000000);
@@ -44,7 +44,7 @@ $pretty_file_size = round($pretty_file_size / pow(1024,$j-1) * 100) / 100 . ' ' 
 if (!isset($temp_directory))
 {
     // show form
-    include('htmlheader.inc.php');
+    include ('htmlheader.inc.php');
     ?>
     <h2>FTP Publish</h2>
     <form name="publishform" action="<?php echo $_SERVER['PHP_SELF']; ?>" method="post">
@@ -105,12 +105,12 @@ if (!isset($temp_directory))
     </form>
     <?php
 
-    include('htmlfooter.inc.php');
+    include ('htmlfooter.inc.php');
 }
 else
 {
     // publish file
-    include('htmlheader.inc.php');
+    include ('htmlheader.inc.php');
     echo "<h2>FTP Publish</h2>";
     // set up basic connection
     $conn_id = ftp_connect($CONFIG['ftp_hostname']);
@@ -186,6 +186,6 @@ else
     }
     // close the FTP stream
     ftp_quit($conn_id);
-    include('htmlfooter.inc.php');
+    include ('htmlfooter.inc.php');
 }
 ?>

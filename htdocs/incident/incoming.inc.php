@@ -50,7 +50,7 @@ if (mysql_num_rows($result) > 0)
         $lockedbysql = "SELECT realname FROM users WHERE id={$lockedby}";
         $lockedbyresult = mysql_query($lockedbysql);
         if (mysql_error()) trigger_error("MySQL Query Error ".mysql_error(), E_USER_ERROR);
-        while($row = mysql_fetch_object($lockedbyresult))
+        while ($row = mysql_fetch_object($lockedbyresult))
             $lockedbyname = $row->realname;
     }
     else

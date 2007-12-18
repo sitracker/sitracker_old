@@ -10,9 +10,9 @@
 
 // This feature is experimental as of 22Sep06
 
-@include('set_include_path.inc.php');
-require('db_connect.inc.php');
-require('functions.inc.php');
+@include ('set_include_path.inc.php');
+require ('db_connect.inc.php');
+require ('functions.inc.php');
 
 // This script requires no authentication
 // The information it reveals should not be sensitive

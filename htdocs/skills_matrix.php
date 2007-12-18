@@ -9,13 +9,13 @@
 //
 // Author: Paul Heaney <paulheaney[at]users.sourceforge.net>
 
-@include('set_include_path.inc.php');
+@include ('set_include_path.inc.php');
 $permission=0; // not required
-require('db_connect.inc.php');
-require('functions.inc.php');
+require ('db_connect.inc.php');
+require ('functions.inc.php');
 
 // This page requires authentication
-require('auth.inc.php');
+require ('auth.inc.php');
 
 $legacy = cleanvar($_REQUEST['legacy']);
 $groupid = cleanvar($_REQUEST['gid']);
@@ -27,7 +27,7 @@ else $filtergroup = $groupid;
 
 $title = $strSkillsMatrix;
 
-include('htmlheader.inc.php');
+include ('htmlheader.inc.php');
 
 echo "<h2><img src='{$CONFIG['application_webpath']}images/icons/{$iconset}/32x32/skill.png' width='32' height='32' alt='' /> ";
 echo "$title</h2>";
@@ -51,7 +51,7 @@ if ($numgroups >= 1)
     else echo "&amp;legacy=yes'";
     if ($filtergroup=='all') echo " selected='selected'";
     echo ">{$strAll}</option>\n";
-    foreach($grouparr AS $groupid => $groupname)
+    foreach ($grouparr AS $groupid => $groupname)
     {
         echo "<option value='{$_SERVER['PHP_SELF']}?gid={$groupid}";
         if (empty($legacy)) echo "'";
@@ -97,7 +97,7 @@ $countusers = mysql_num_rows($usersresult);
 
 if ($countusers > 0)
 {
-    while($row = mysql_fetch_object($usersresult))
+    while ($row = mysql_fetch_object($usersresult))
     {
         if (($row->realname != NULL) AND ($row->realname != ''))
         {
@@ -128,7 +128,7 @@ $countskills = mysql_num_rows($result);
 if ($countskills > 0 AND $countusers > 0)
 {
     $previous = "";
-    while($row = mysql_fetch_object($result))
+    while ($row = mysql_fetch_object($result))
     {
         if (($row->realname != NULL) AND ($row->realname != '')) $skills[$row->name][$row->realname] = $row->realname;
     }
@@ -136,17 +136,17 @@ if ($countskills > 0 AND $countusers > 0)
     echo "<table align='center' class='vertical'>";
     $shade='shade1';
     echo "<thead><tr><td>{$strSkill}</td>";
-    foreach($users AS $u) echo "<th>$u</th>";
+    foreach ($users AS $u) echo "<th>$u</th>";
     echo "<th>{$strTotal}</th>";
     echo "</tr></thead>\n";
     $previous = "";
-    while($row = mysql_fetch_object($result))
+    while ($row = mysql_fetch_object($result))
     {
         if ($previous != $row->name)
         {
             $count = 0;
             echo "<tr><th width='20%;'>{$row->name}</th>";
-            while($user = mysql_fetch_object($usersresult))
+            while ($user = mysql_fetch_object($usersresult))
             {
                 if (($user->realname != NULL) AND ($user->realname != ''))
                 {
@@ -177,11 +177,11 @@ if ($countskills > 0 AND $countusers > 0)
         $previous = $row->name;
     }
     echo "<tr><th align='right'>{$strTotal}</th>";
-    foreach($counting AS $c) echo "<td align='center'><strong>{$c}</strong></td>";
+    foreach ($counting AS $c) echo "<td align='center'><strong>{$c}</strong></td>";
     echo "</tr>\n";
     echo "</table>";
 } else echo "<p align='center'>{$strNothingToDisplay}</p>";
 
-include('htmlfooter.inc.php');
+include ('htmlfooter.inc.php');
 
 ?>

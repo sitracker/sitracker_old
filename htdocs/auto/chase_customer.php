@@ -56,7 +56,7 @@ if ($CONFIG['auto_chase'] == TRUE)
     $result = mysql_query($sql);
     if (mysql_error()) trigger_error("MySQL Query Error ".mysql_error(), E_USER_ERROR);
 
-    while($obj = mysql_fetch_object($result))
+    while ($obj = mysql_fetch_object($result))
     {
         if (!in_array($obj->maintenanceid, $CONFIG['dont_chase_maintids']))
         {

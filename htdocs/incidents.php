@@ -11,14 +11,14 @@
 
 // This Page Is Valid XHTML 1.0 Transitional!   31Oct05
 
-@include('set_include_path.inc.php');
+@include ('set_include_path.inc.php');
 $permission=6; // View Incidents
 $title='Incidents List';
 
-require('db_connect.inc.php');
-require('functions.inc.php');
+require ('db_connect.inc.php');
+require ('functions.inc.php');
 // This page requires authentication
-require('auth.inc.php');
+require ('auth.inc.php');
 
 // External variables
 $type = cleanvar($_REQUEST['type']);
@@ -36,7 +36,7 @@ if (empty($sort)) $sort='priority';
 if (empty($queue)) $queue=1;
 
 $refresh = $_SESSION['incident_refresh'];
-include('htmlheader.inc.php');
+include ('htmlheader.inc.php');
 ?>
 <script type="text/javascript">
 function statusform_submit(user)
@@ -70,7 +70,7 @@ $selectsql .= "(timeofnextaction - $now) AS timetonextaction, opened, ($now - op
 $selectsql .= "($now - lastupdated) AS timesincelastupdate ";
 $selectsql .= "FROM incidents, contacts, priority ";
 
-switch($type)
+switch ($type)
 {
     case 'support':
         // Create SQL for chosen queue
@@ -95,7 +95,7 @@ switch($type)
         if ($user!='all') echo sprintf($strUserIncidents, user_realname($user,TRUE)).": ";
         else echo "{$strWatchingAll} ";
 
-        switch($queue)
+        switch ($queue)
         {
             case 1: // Action Needed
                 echo "<span style='color: Red'>{$strActionNeeded}</span>";
@@ -135,7 +135,7 @@ switch($type)
         {
             if ($order=='a' OR $order=='ASC' OR $order='') $sortorder = "ASC";
             else $sortorder = "DESC";
-            switch($sort)
+            switch ($sort)
             {
                 case 'id': $sql .= " ORDER BY id $sortorder"; break;
                 case 'title': $sql .= " ORDER BY title $sortorder"; break;
@@ -189,7 +189,7 @@ switch($type)
         if (mysql_num_rows($result) >= 1)
         {
             // Incidents Table
-            include('incidents_table.inc.php');
+            include ('incidents_table.inc.php');
         }
         else echo "<h5>{$strNoIncidents}</h5>";
 
@@ -231,7 +231,7 @@ switch($type)
 
             //   $sql .= "AND
 
-            switch($queue)
+            switch ($queue)
             {
                 case 1: // Action Needed
                     echo "<h2>{$strOtherIncidents}: <span style='color: Red'>{$strActionNeeded}</span></h2>\n";
@@ -265,7 +265,7 @@ switch($type)
             }
 
             // Create SQL for Sorting
-            switch($sort)
+            switch ($sort)
             {
                 case 'id': $sql .= " ORDER BY id $sortorder"; break;
                 case 'title': $sql .= " ORDER BY title $sortorder"; break;
@@ -286,7 +286,7 @@ switch($type)
             if ($rowcount >= 1)
             {
                 // Incidents Table
-                include('incidents_table.inc.php');
+                include ('incidents_table.inc.php');
             }
             else echo "<h5>{$strNoIncidents}</h5>";
 
@@ -294,5 +294,5 @@ switch($type)
             // ***
         }
 }
-include('htmlfooter.inc.php');
+include ('htmlfooter.inc.php');
 ?>

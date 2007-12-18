@@ -15,20 +15,20 @@
 // Notes:
 //  Counts activate calls within the specified period (i.e. those with a lastupdate time > timespecified)
 
-@include('set_include_path.inc.php');
+@include ('set_include_path.inc.php');
 $permission=37; // Run Reports
 
-require('db_connect.inc.php');
-require('functions.inc.php');
+require ('db_connect.inc.php');
+require ('functions.inc.php');
 
 // This page requires authentication
-require('auth.inc.php');
+require ('auth.inc.php');
 
 $title = $strIncidentsBySkill;
 
 if (empty($_REQUEST['mode']))
 {
-    include('htmlheader.inc.php');
+    include ('htmlheader.inc.php');
 
     echo "<h2>$title</h2>";
     echo "<form action='{$_SERVER['PHP_SELF']}' id='incidentsbysoftware' method='post'>";
@@ -47,7 +47,7 @@ if (empty($_REQUEST['mode']))
     echo "</p>";
     echo "</form>\n";
 
-    include('htmlfooter.inc.php');
+    include ('htmlfooter.inc.php');
 }
 else
 {
@@ -76,7 +76,7 @@ else
         $c++;
     }
 
-    include('htmlheader.inc.php');
+    include ('htmlheader.inc.php');
 
     echo "<h2>{$strIncidentsBySkill}</h2>";
 
@@ -89,7 +89,7 @@ else
         if ($startdate > 1) echo "<p align='center'>since ".date($CONFIG['dateformat_date'], $startdate)."</p>"; // FIXME i18n since
         echo "<table class='vertical' align='center'>";
         echo "<tr><th>Number of calls</th><th>%</th><th>{$strSkill}</th>";     // FIXME i18n number of calls
-        while($sla = mysql_fetch_object($resultSLA))
+        while ($sla = mysql_fetch_object($resultSLA))
         {
             echo "<th>".$sla->tag."</th>";
             $slas[$sla->tag]['name'] = $sla->tag;
@@ -120,7 +120,7 @@ else
             if (mysql_error()) trigger_error("MySQL Query Error ".mysql_error(), E_USER_ERROR);
             $numrows = mysql_num_rows($resultN);
 
-            foreach($slas AS $slaReset)
+            foreach ($slas AS $slaReset)
             {
                 $slaReset['notEscalated'] = 0;
                 $slaReset['escalated'] = 0;
@@ -150,7 +150,7 @@ else
             echo "<td>{$percentage}%</td>";
             echo "<td>{$softwareNames[$i]}</td>";
 
-            foreach($slas AS $sla)
+            foreach ($slas AS $sla)
             {
                 echo "<td>";
                 echo ($sla['notEscalated']+$sla['escalated'])." / ".$sla['escalated'];
@@ -161,13 +161,13 @@ else
             {
                 echo "<tr class='$shade'><td></td><td colspan='".(count($slas)+2)."'>";
                 echo "<table style='width: 100%'><tr>";
-                foreach($monthbreakdown AS $month) echo "<th>{$month['month']}</th>";
+                foreach ($monthbreakdown AS $month) echo "<th>{$month['month']}</th>";
                 echo "</tr>\n<tr>";
-                foreach($monthbreakdown AS $month)
+                foreach ($monthbreakdown AS $month)
                 {//echo "<pre>".print_r($month)."</pre>";
                     echo "<td><table>";
                     $total=0;
-                    foreach($slas AS $slaNames)
+                    foreach ($slas AS $slaNames)
                     {
                         if (empty($month[$slaNames['name']])) $month[$slaNames['name']] = 0;
                         echo "<tr>";
@@ -223,7 +223,7 @@ else
             $shade = "shade1";
 
             echo "<p><table align='center'><tr><td></td>";
-            foreach($months AS $m)
+            foreach ($months AS $m)
             {
                 echo "<th>{$m}</th>";
             }
@@ -231,14 +231,14 @@ else
             $js_coordCounter = 0;
             $min = 0;
             $max = 0;
-            foreach($skilltotals AS $skill)
+            foreach ($skilltotals AS $skill)
             {
 
                 echo "<tr class='{$shade}'><td>{$skill['name']}</td>";
                 $sum = 0;
                 $counter = 0;
                 $coords = "";
-                foreach($months AS $m)
+                foreach ($months AS $m)
                 {
                     $val = $skill[$m]['numberofincidents'];
                     if (empty($val)) $val = 0;
@@ -287,7 +287,7 @@ else
             $javascript .= "xA.label = \"Months\";\n";
             /*$javascript .= "xA.labels = [ "Mon", "Tue", 2, 3, 4, 5 ];";*/
             $javascript .= "xA.labels = [";
-            foreach($months AS $m)
+            foreach ($months AS $m)
             {
                 $javascript .= "\"{$m}\", ";
             }
@@ -322,7 +322,7 @@ else
             $javascript .= "var pA = new dojo.charting.Plot(xA, yA);";
 
             echo "<th>Totals</th>";
-            foreach($months AS $m)
+            foreach ($months AS $m)
             {
                 echo "<td>";
                 echo $monthtotals[$m]['value'];
@@ -334,10 +334,10 @@ else
 
             echo "<script src=\"../scripts/dojo/dojo.js\"></script>";
             echo "<script>";
-                echo "dojo.require('dojo.collections.Store');";
-                echo "dojo.require('dojo.charting.Chart');";
-                echo "dojo.require('dojo.widget.ContentPane');";
-                echo "dojo.require('dojo.json');";
+                echo "dojo.require ('dojo.collections.Store');";
+                echo "dojo.require ('dojo.charting.Chart');";
+                echo "dojo.require ('dojo.widget.ContentPane');";
+                echo "dojo.require ('dojo.json');";
 
                 echo "var legend;";
 
@@ -401,7 +401,7 @@ else
     {
         echo "<p class='error'>{$strNoRecords}</p>";
     }
-    include('htmlfooter.inc.php');
+    include ('htmlfooter.inc.php');
 
 }
 
@@ -411,7 +411,7 @@ else
 function date_to_str($date)
 {
     $s = explode(" ",$date);
-    switch($s[0])
+    switch ($s[0])
     {
         case 'Jan': return $s[1]."01";
             break;

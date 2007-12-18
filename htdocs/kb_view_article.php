@@ -9,13 +9,13 @@
 //
 
 // Authors: Ivan Lucas <ivanlucas[at]users.sourceforge.net>, Tom Gerrard
-@include('set_include_path.inc.php');
+@include ('set_include_path.inc.php');
 $permission=54; // View KB
 
-require('db_connect.inc.php');
-require('functions.inc.php');
+require ('db_connect.inc.php');
+require ('functions.inc.php');
 // This page requires authentication
-require('auth.inc.php');
+require ('auth.inc.php');
 
 // Valid user, check permissions
 if (user_permission($sit[2],$permission))
@@ -28,7 +28,7 @@ if (user_permission($sit[2],$permission))
         exit;
     }
 
-    include('htmlheader.inc.php');
+    include ('htmlheader.inc.php');
 
     echo "<div id='kbarticle'>";
     echo "<table summary='Knowledge Base Article'><tr><td>";
@@ -135,6 +135,6 @@ if (user_permission($sit[2],$permission))
 
     echo "<p align='center'><a href='kb_edit_article.php?id={$kbarticle->docid}'>{$strEdit}</a></p>";
 
-    include('htmlfooter.inc.php');
+    include ('htmlfooter.inc.php');
 }
 ?>

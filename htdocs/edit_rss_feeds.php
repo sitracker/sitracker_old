@@ -10,20 +10,20 @@
 // Author: Paul Heaney <paulheaney[at]users.sourceforge.net>
 // FIXME i18n
 
-@include('set_include_path.inc.php');
+@include ('set_include_path.inc.php');
 $permission=0; // not required
-require('db_connect.inc.php');
-require('functions.inc.php');
+require ('db_connect.inc.php');
+require ('functions.inc.php');
 
 // This page requires authentication
-require('auth.inc.php');
+require ('auth.inc.php');
 
 $action = $_REQUEST['action'];
 
-switch($action)
+switch ($action)
 {
     case 'add':
-        include('htmlheader.inc.php');
+        include ('htmlheader.inc.php');
         echo "<h2>Add RSS/Atom feed</h2>";
         echo "<form action='{$_SERVER['PHP_SELF']}?action=do_add' method='post'>";
         echo "<table class='vertical'>";
@@ -33,7 +33,7 @@ switch($action)
         echo "</table>";
         echo "<p align='center'><input name='submit' type='submit' value='{$strAdd}' /></p>";
         echo "</form>";
-        include('htmlfooter.inc.php');
+        include ('htmlfooter.inc.php');
         break;
     case 'do_add':
         $url = cleanvar($_REQUEST['url']);
@@ -50,7 +50,7 @@ switch($action)
         }
         break;
     case 'edit':
-        include('htmlheader.inc.php');
+        include ('htmlheader.inc.php');
         $url = cleanvar(urldecode($_REQUEST['url']));
         $sql = "SELECT * FROM dashboard_rss WHERE owner = {$sit[2]} AND url = '{$url}' LIMIT 1 ";
         if ($CONFIG['debug']) $dbg .= print_r($sql,true);
@@ -72,7 +72,7 @@ switch($action)
             echo "</form>";
         }
         else echo "<p class='error'>$strNoRecords</p>";
-        include('htmlfooter.inc.php');
+        include ('htmlfooter.inc.php');
 
         break;
     case 'do_edit':
@@ -107,7 +107,7 @@ switch($action)
         else html_redirect("edit_rss_feeds.php");
         break;
     default:
-        include('htmlheader.inc.php');
+        include ('htmlheader.inc.php');
         echo "<h2>Edit RSS/Atom feeds</h2>";  // FIXME i18n edit feeds
 
         $sql = "SELECT * FROM dashboard_rss WHERE owner = {$sit[2]}";
@@ -119,7 +119,7 @@ switch($action)
             echo "<table align='center'>\n";
             echo "<tr><th>URL</th><th>{$strDisplay}</th><th>{$strEnabled}</th><th>{$strOperation}</th></tr>\n";
             $shade='shade1';
-            while($obj = mysql_fetch_object($result))
+            while ($obj = mysql_fetch_object($result))
             {
                 if ($obj->enabled == "true") $opposite = "false";
                 else $opposite = "true";
@@ -140,7 +140,7 @@ switch($action)
         }
         else echo "<p align='center'>No feeds currently present</p>"; // FIXME i18n No Feeds
         echo "<p align='center'><a href='{$_SERVER['PHP_SELF']}?action=add'>{$strAdd}</a></p>";
-        include('htmlfooter.inc.php');
+        include ('htmlfooter.inc.php');
         break;
 
 }

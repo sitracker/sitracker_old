@@ -57,7 +57,7 @@ function dashboard_user_incidents($row,$dashboardid)
     $selectsql .= "($now - lastupdated) AS timesincelastupdate ";
     $selectsql .= "FROM incidents, contacts, priority ";
     // Create SQL for Sorting
-    switch($sort)
+    switch ($sort)
     {
         case 'id': $sql .= " ORDER BY id $sortorder"; break;
         case 'title': $sql .= " ORDER BY title $sortorder"; break;
@@ -87,10 +87,10 @@ function dashboard_user_incidents($row,$dashboardid)
     {
         // Incidents Table
         $incidents_minimal = true;
-        //include('incidents_table.inc.php');
+        //include ('incidents_table.inc.php');
         $shade='shade1';
         echo "<table style='width: 100%;'>";
-        while($row = mysql_fetch_array($result))
+        while ($row = mysql_fetch_array($result))
         {
             list($update_userid, $update_type, $update_currentowner, $update_currentstatus, $update_body, $update_timestamp, $update_nextaction, $update_id)=incident_lastupdate($row['id']);
             $update_body = parse_updatebody($update_body);

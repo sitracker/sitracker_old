@@ -12,15 +12,15 @@
 
 // This Page Is Valid XHTML 1.0 Transitional!   4Nov05
 
-@include('set_include_path.inc.php');
+@include ('set_include_path.inc.php');
 $permission=44; // Publish Files to FTP site
 
 $title='Edit FTP File Details and Publish';
-require('db_connect.inc.php');
-require('functions.inc.php');
+require ('db_connect.inc.php');
+require ('functions.inc.php');
 
 // This page requires authentication
-require('auth.inc.php');
+require ('auth.inc.php');
 
 // External Vars
 $id = cleanvar($_REQUEST['id']);
@@ -31,7 +31,7 @@ switch ($mode)
 {
     case 'form':
         // display file details
-        include('htmlheader.inc.php');
+        include ('htmlheader.inc.php');
         $sql = "SELECT * FROM files WHERE id='$id'";
         $result = mysql_query($sql);
         if (mysql_error()) trigger_error("MySQL Query Error ".mysql_error(), E_USER_ERROR);
@@ -76,7 +76,7 @@ switch ($mode)
         echo "<input type='hidden' name='mode' value='save' />";
         echo "<p align='center'><input type='submit' value='Save &amp; Publish' /></p>";
         echo "</form>";
-        include('htmlfooter.inc.php');
+        include ('htmlfooter.inc.php');
     break;
 
     case 'save':

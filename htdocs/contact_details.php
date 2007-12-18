@@ -14,15 +14,15 @@
 // Purpose: Show All Contact Details
 // This Page Is Valid XHTML 1.0 Transitional! 27Oct05
 
-@include('set_include_path.inc.php');
+@include ('set_include_path.inc.php');
 $permission=12;  // view contacts
 
-require('db_connect.inc.php');
-require('functions.inc.php');
+require ('db_connect.inc.php');
+require ('functions.inc.php');
 $title='Contact Details';
 
 // This page requires authentication
-require('auth.inc.php');
+require ('auth.inc.php');
 
 // External variables
 $id = mysql_real_escape_string($_REQUEST['id']);
@@ -37,7 +37,7 @@ if ($output == 'vcard')
     exit;
 }
 
-include('htmlheader.inc.php');
+include ('htmlheader.inc.php');
 
 // Display contacts
 $sql="SELECT * FROM contacts WHERE id='$id' ";
@@ -210,5 +210,5 @@ while ($contactrow=mysql_fetch_array($contactresult))
 }
 mysql_free_result($contactresult);
 
-include('htmlfooter.inc.php');
+include ('htmlfooter.inc.php');
 ?>

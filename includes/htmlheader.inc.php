@@ -162,7 +162,7 @@ if ($sit[0] != '')
     if (mysql_error()) trigger_error(mysql_error(),E_USER_WARNING);
     if (mysql_num_rows($noticeresult) > 0)
     {
-        while($notice = mysql_fetch_object($noticeresult))
+        while ($notice = mysql_fetch_object($noticeresult))
         {
             $notice->text = bbcode($notice->text);
             //check for the notice types

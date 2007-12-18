@@ -10,21 +10,21 @@
 
 // DEPRECATED will be removed in 3.32, replaced by search.php
 
-@include('set_include_path.inc.php');
+@include ('set_include_path.inc.php');
 $permission=array(60,12); // Perform Searches, View Contacts
-require('db_connect.inc.php');
-require('functions.inc.php');
+require ('db_connect.inc.php');
+require ('functions.inc.php');
 $title="Search Contacts";
 
 // This page requires authentication
-require('auth.inc.php');
+require ('auth.inc.php');
 
 
 // External variables
 $search_string = cleanvar($_REQUEST['search_string']);
 $fields = cleanvar($_REQUEST['fields']);
 
-include('htmlheader.inc.php');
+include ('htmlheader.inc.php');
 ?>
 <script type="text/javascript">
 function contact_products_window(contactid)
@@ -149,5 +149,5 @@ else
         }
     }
 }
-include('htmlfooter.inc.php');
+include ('htmlfooter.inc.php');
 ?>

@@ -9,14 +9,14 @@
 //
 // Author: Ivan Lucas <ivanlucas[at]users.sourceforge.net>
 
-@include('set_include_path.inc.php');
+@include ('set_include_path.inc.php');
 $permission=35;  // Set your status
 
-require('db_connect.inc.php');
-require('functions.inc.php');
+require ('db_connect.inc.php');
+require ('functions.inc.php');
 
 // This page requires authentication
-require('auth.inc.php');
+require ('auth.inc.php');
 
 // External variables
 $mode = cleanvar($_REQUEST['mode']);
@@ -25,7 +25,7 @@ $accepting = cleanvar($_REQUEST['accepting']);
 $incidentid = cleanvar($_REQUEST['incidentid']);
 $originalowner = cleanvar($_REQUEST['originalowner']);
 
-switch($mode)
+switch ($mode)
 {
     case 'setstatus':
         $sql  = "UPDATE users SET status='$userstatus'";

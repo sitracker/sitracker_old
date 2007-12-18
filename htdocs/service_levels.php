@@ -10,15 +10,15 @@
 
 // Author: Ivan Lucas <ivanlucas[at]users.sourceforge.net>
 
-@include('set_include_path.inc.php');
+@include ('set_include_path.inc.php');
 $permission=22; // Administrate
-require('db_connect.inc.php');
-require('functions.inc.php');
+require ('db_connect.inc.php');
+require ('functions.inc.php');
 
 // This page requires authentication
-require('auth.inc.php');
+require ('auth.inc.php');
 
-include('htmlheader.inc.php');
+include ('htmlheader.inc.php');
 
 $title = $strServiceLevels;
 
@@ -64,5 +64,5 @@ if (mysql_num_rows($tresult) >= 1)
     echo "</table>";
     }
     else echo "<p class='error'>{$strNoRecords}</p>";
-    include('htmlfooter.inc.php');
+    include ('htmlfooter.inc.php');
 ?>

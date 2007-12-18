@@ -9,18 +9,18 @@
 //
 // Author: Paul Heaney <paulheaney[at]users.sourceforge.net>
 
-@include('set_include_path.inc.php');
+@include ('set_include_path.inc.php');
 $permission=63; //FIXME define a permission
 
-require('db_connect.inc.php');
-require('functions.inc.php');
+require ('db_connect.inc.php');
+require ('functions.inc.php');
 // This page requires authentication
-require('auth.inc.php');
+require ('auth.inc.php');
 
 // External variables
 $action = $_REQUEST['action'];
 
-switch($action)
+switch ($action)
 {
     case 'add':
         $name = $_REQUEST['reseller_name'];
@@ -52,9 +52,9 @@ switch($action)
             if ($addition_errors == 1)
             {
                 // show addition error message
-                include('htmlheader.inc.php');
+                include ('htmlheader.inc.php');
                 echo $addition_errors_string;
-                include('htmlfooter.inc.php');
+                include ('htmlfooter.inc.php');
             }
             else
             {
@@ -68,7 +68,7 @@ switch($action)
         }
         break;
     default:
-        include('htmlheader.inc.php');
+        include ('htmlheader.inc.php');
         echo "<script type=\"text/javascript\">";
         echo "function confirm_submit()
         {
@@ -85,7 +85,7 @@ switch($action)
         echo "</table>";
         echo "<p align='center'><input name=\"submit\" type=\"submit\" value=\"{$strAddReseller}\" /></p>";
         echo "</form>";
-        include('htmlfooter.inc.php');
+        include ('htmlfooter.inc.php');
         break;
 }
 

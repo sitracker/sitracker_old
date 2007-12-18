@@ -75,7 +75,7 @@ function search_highlight($x,$var)
     {
         $xtemp = "";
         $i=0;
-        while($i<strlen($x))
+        while ($i<strlen($x))
         {
             if ((($i + strlen($var)) <= strlen($x)) && (strcasecmp($var, substr($x, $i, strlen($var))) == 0))
             {
@@ -195,7 +195,7 @@ function search_score_adjust($sterms, $string)
     $score_modifier=0;
     if ($string != 'AND' && $string!='OR' && $string != 'NOT')
     {
-        foreach($sterms AS $sterm)
+        foreach ($sterms AS $sterm)
         {
             $positions=string_find_all($string, $sterm);
             if (count($positions) >0 ) $score_modifier+=$numpositions;
@@ -239,7 +239,7 @@ if (!empty($search_string))
                 $entry['date'] = $sresult->lastupdated;
                 $entry['extra']['opened'] = date($CONFIG['dateformat_datetime'],$sresult->opened);
                 if ($sresult->status==2) $entry['extra']['closed'] = date($CONFIG['dateformat_datetime'],$sresult->closed);
-                foreach($sterms AS $sterm)
+                foreach ($sterms AS $sterm)
                 {
                     $positions=string_find_all($entry['string'], $sterm);
                     $numpositions=count($positions);
@@ -384,7 +384,7 @@ if (!empty($search_string))
         echo colheader('date', $strDate, $sort, $order, $filter);
         echo "</tr>";
         $shade='shade1';
-        foreach($srch_results AS $sresult)
+        foreach ($srch_results AS $sresult)
         {
             $type = explode('-',$sresult['ref']);
             $type = $type[0];
@@ -403,7 +403,7 @@ if (!empty($search_string))
             if (is_array($sresult['extra']))
             {
                 echo "<span>";
-                foreach($sresult['extra'] AS $extrakey => $extravalue)
+                foreach ($sresult['extra'] AS $extrakey => $extravalue)
                 {
                     echo "<strong>".ucfirst($extrakey)."</strong>: $extravalue<br />\n";
                 }

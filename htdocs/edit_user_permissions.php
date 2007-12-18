@@ -10,13 +10,13 @@
 
 // Author: Ivan Lucas <ivanlucas[at]users.sourceforge.net>
 
-@include('set_include_path.inc.php');
+@include ('set_include_path.inc.php');
 $permission=9; // Edit User Permissions
 
-require('db_connect.inc.php');
-require('functions.inc.php');
+require ('db_connect.inc.php');
+require ('functions.inc.php');
 // This page requires authentication
-require('auth.inc.php');
+require ('auth.inc.php');
 
 $title = $strSetPermissions;
 
@@ -27,7 +27,7 @@ if ($CONFIG['demo'] AND $_SESSION['userid']!=1)
 }
 
 
-include('htmlheader.inc.php');
+include ('htmlheader.inc.php');
 ?>
 <script type="text/javascript">
 function confirm_submit()
@@ -186,7 +186,7 @@ elseif ($action == "update")
             if (is_array($_POST["{$rolerow->id}perm"]))
             {
                 reset ($_POST["{$rolerow->id}perm"]);
-                while($x = each($_POST["{$rolerow->id}perm"]))
+                while ($x = each($_POST["{$rolerow->id}perm"]))
                 {
                     $sql = "UPDATE rolepermissions SET granted='true' WHERE roleid='{$rolerow->id}' AND permissionid='".$x[1]."' ";
                     // echo "Updating permission ".$x[1]."<br />";
@@ -233,7 +233,7 @@ elseif ($action == "update")
             if (is_array($perm))
             {
                 reset ($perm);
-                while($x = each($perm))
+                while ($x = each($perm))
                 {
                     $sql = "UPDATE userpermissions SET granted='true' WHERE userid='$user' AND permissionid='".$x[1]."' ";
                     # echo "Updating permission ".$x[1]."<br />";
@@ -267,7 +267,7 @@ elseif ($action == "update")
             if (is_array($perm))
             {
                 reset ($perm);
-                while($x = each($perm))
+                while ($x = each($perm))
                 {
                     $sql = "UPDATE rolepermissions SET granted='true' WHERE roleid='$role' AND permissionid='".$x[1]."' ";
                     # echo "Updating permission ".$x[1]."<br />";
@@ -308,7 +308,7 @@ elseif ($action == "check")
             echo "<table align='center'>";
             echo "<tr><th>{$strUser}</th><th>{$strRole}</th></tr>";
             $shade='shade1';
-            while($user = mysql_fetch_object($result))
+            while ($user = mysql_fetch_object($result))
             {
                 echo "<tr class='$shade'><td>&#10004; ";
                 echo "<a href='edit_profile.php?userid={$user->userid}'>";
@@ -334,7 +334,7 @@ elseif ($action == "check")
             echo "<table align='center'>";
             echo "<tr><th>{$strUser}</th></tr>";
             $shade='shade1';
-            while($user = mysql_fetch_object($result))
+            while ($user = mysql_fetch_object($result))
             {
                 echo "<tr class='$shade'><td>&#10004; <a href='{$_SERVER['PHP_SELF']}?action=edit&amp;userid={$user->userid}#perm{$perm}'>{$user->realname}</a> ({$user->username})</td></tr>\n";
                 if ($shade=='shade1') $shade='shade2';
@@ -349,5 +349,5 @@ else
 {
     echo "<p class='error'>No changes to make</p>";
 }
-include('htmlfooter.inc.php');
+include ('htmlfooter.inc.php');
 ?>

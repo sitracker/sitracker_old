@@ -13,13 +13,13 @@
 // This Page Is Valid XHTML 1.0 Transitional!   4Nov05
 // 24Apr02 INL Fixed a divide by zero bug
 
-@include('set_include_path.inc.php');
+@include ('set_include_path.inc.php');
 $permission=6; // view incidents
 
-require('db_connect.inc.php');
-require('functions.inc.php');
+require ('db_connect.inc.php');
+require ('functions.inc.php');
 // This page requires authentication
-require('auth.inc.php');
+require ('auth.inc.php');
 
 // External variables
 $id = cleanvar($_REQUEST['id']);
@@ -30,7 +30,7 @@ if (!empty($_REQUEST['end'])) $end = strtotime($_REQUEST['end']);
 else $end=0;
 $status = $_REQUEST['status'];
 
-include('htmlheader.inc.php');
+include ('htmlheader.inc.php');
 
 if ($mode=='site') echo "<h2>".site_name($id)."</h2>";
 else echo "<h2>".contact_realname($id)."</h2>";
@@ -118,7 +118,7 @@ while ($row=mysql_fetch_object($result))
     $slahistory = incident_sla_history($row->incidentid);
     if (is_array($slahistory))
     {
-        foreach($slahistory AS $history)
+        foreach ($slahistory AS $history)
         {
             if ($history['targetmet'] == FALSE) $targetmet = FALSE;
         }
@@ -239,5 +239,5 @@ if ($countproducts >= 1 OR $contactcontacts >= 1)
     }
 }
 
-include('htmlfooter.inc.php');
+include ('htmlfooter.inc.php');
 ?>
