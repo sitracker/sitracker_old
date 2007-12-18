@@ -22,7 +22,7 @@ $step = cleanvar($_REQUEST['step']);
 $id = cleanvar($_REQUEST['id']);
 $incidentid=$id;
 $draftid = cleanvar($_REQUEST['draftid']);
-if(empty($draftid)) $draftid = -1;
+if (empty($draftid)) $draftid = -1;
 
 $title = $strEmail;
 

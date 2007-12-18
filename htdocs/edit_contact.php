@@ -83,7 +83,7 @@ elseif ($action == "edit" && isset($contact))
         echo "<tr><th>{$strMobile}:</th><td><input maxlength='50' name='mobile' size='40' value=\"{$contactrow['mobile']}\" /></td></tr>\n";
         echo "<tr><th>{$strFax}:</th><td><input maxlength='50' name='fax' size='40' value=\"{$contactrow['fax']}\" /></td></tr>\n";
         echo "<tr><th>{$strActive}:</th><td><input type='checkbox' name='active'";
-        if($contactrow['active']=='true') echo "checked='".$siterow['active']."'";
+        if ($contactrow['active']=='true') echo "checked='".$siterow['active']."'";
         echo " value='true' /></td></tr> <tr><th></th><td>";
         echo "<input type='checkbox' name='usesiteaddress' value='yes' onclick='togglecontactaddress();' ";
         if ($contactrow['address1'] !='')
@@ -188,7 +188,7 @@ else if ($action == "update")
         if ($dataprotection_phone  != '') $dataprotection_phone='Yes'; else $dataprotection_phone='No';
         if ($dataprotection_address  != '') $dataprotection_address='Yes'; else $dataprotection_address='No';
 
-        if($active=='true') $activeStr = 'true';
+        if ($active=='true') $activeStr = 'true';
         else $activeStr = 'false';
 
         /*

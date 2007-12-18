@@ -19,7 +19,7 @@ require('auth.inc.php');
 $permission=0; // Allow all auth users
 
 $id = cleanvar($_REQUEST['incident']);
-if(!empty($id))
+if (!empty($id))
 {
     $title = $strActivities;
     include('incident_html_top.inc.php');
@@ -35,7 +35,7 @@ else
 
 include('tasks.inc.php');
 
-if(!empty($id))
+if (!empty($id))
 {
     include('incident_html_bottom.inc.php');
 }

@@ -16,7 +16,7 @@ $permission=60; // Perform Searches
 $limit_results=2000;
 
 //FIXME make search_string safe
-if($searchmode != 'related')
+if ($searchmode != 'related')
 {
     $search_string = $_REQUEST['search_string'];
     $search_domain = cleanvar($_REQUEST['search_domain']);
@@ -77,7 +77,7 @@ function search_highlight($x,$var)
         $i=0;
         while($i<strlen($x))
         {
-            if((($i + strlen($var)) <= strlen($x)) && (strcasecmp($var, substr($x, $i, strlen($var))) == 0))
+            if ((($i + strlen($var)) <= strlen($x)) && (strcasecmp($var, substr($x, $i, strlen($var))) == 0))
             {
                 $xtemp .= "<span style='background: #FFFACD; font-weight: bolder;'>" . substr($x, $i , strlen($var)) . "</span>";
                 $i += strlen($var);
@@ -225,7 +225,7 @@ if (!empty($search_string))
             $sql = "SELECT * FROM incidents WHERE ";
             if (is_numeric($sterms[0])) $sql .= search_build_query('id', $sterms)."OR ";
             $sql .= search_build_query('title', $sterms);
-            if(!empty($software) AND $software != '0') $sql .= "AND softwareid = {$software}";
+            if (!empty($software) AND $software != '0') $sql .= "AND softwareid = {$software}";
 //             if ($CONFIG['debug'])  echo "<pre>$sql</pre>";
             $result = mysql_query($sql);
             if (mysql_error()) trigger_error(mysql_error(),E_USER_WARNING);
@@ -249,7 +249,7 @@ if (!empty($search_string))
                 search_build_results($srch_results,$entry);
                 unset($entry);
             }
-            if($searchmode != 'related')
+            if ($searchmode != 'related')
             {
             // Incident updates
                 $sql = "SELECT DISTINCT incidents.id AS incidentid, incidents.title, updates.bodytext, updates.timestamp, incidents.opened, incidents.closed FROM incidents,updates WHERE ";
@@ -427,7 +427,7 @@ if (!empty($search_string))
     }
     else echo "<p>No results</p>";
 }
-if($searchmode != 'related')
+if ($searchmode != 'related')
 {
     // FIXME opensearch plugin
     echo "<p>Firefox 2 and IE 7 users: You can <a href=\"javascript:window.external.AddSearchProvider('{$CONFIG['application_uriprefix']}{$CONFIG['application_webpath']}opensearch.php')\">install this search plugin</a> to make searching easier.</p>";

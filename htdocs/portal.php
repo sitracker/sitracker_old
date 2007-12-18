@@ -430,7 +430,7 @@ switch ($page)
 
         /*
         //check if this user owns the incident
-        if($user->contact != $_SESSION['contactid'])
+        if ($user->contact != $_SESSION['contactid'])
         {
             echo "<p align='center'>$strNoPermission.</p>";
             include('htmlfooter.inc.php');

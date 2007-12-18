@@ -45,7 +45,7 @@ if ($maintrow['expirydate']<$now AND $maintrow['expirydate'] != '-1') echo "<spa
 echo "</td></tr>\n";
 echo "<tr><th>{$strSite}:</th><td><a href=\"site_details.php?id=".$maintrow['site']."\">".$maintrow['sitename']."</a></td></tr>";
 echo "<tr><th>{$strAdminContact}:</th><td><a href=\"contact_details.php?id=".$maintrow['admincontact']."\">".contact_realname($maintrow['admincontact'])."</a></td></tr>";
-if($maintrow['reseller'] != '0') echo "<tr><th>{$strReseller}:</th><td>".reseller_name($maintrow['reseller'])."</td></tr>";
+if ($maintrow['reseller'] != '0') echo "<tr><th>{$strReseller}:</th><td>".reseller_name($maintrow['reseller'])."</td></tr>";
 echo "<tr><th>{$strProduct}:</th><td>".product_name($maintrow['product'])."</td></tr>";
 echo "<tr><th>{$strIncidents}:</th>";
 echo "<td>";
@@ -54,13 +54,13 @@ if ($maintrow['incident_quantity']==0) echo "Unlimited Incidents ({$maintrow['in
 elseif ($maintrow['incident_quantity']==1) echo "{$maintrow['incident_quantity']} Incident ($incidents_remaining Remaining)";
 else echo "{$maintrow['incident_quantity']} Incidents ($incidents_remaining Remaining)";
 echo "</td></tr>";
-if($maintrow['licence_quantity'] != '0')
+if ($maintrow['licence_quantity'] != '0')
 {
     echo "<tr><th>{$strLicense}:</th><td>".$maintrow['licence_quantity'].' '.licence_type($maintrow['licence_type'])."</td></tr>\n";
 }
 echo "<tr><th>{$strServiceLevel}:</th><td>".servicelevel_name($maintrow['servicelevelid'])."</td></tr>";
 echo "<tr><th>{$strExpiryDate}:</th><td>";
-if($maintrow['expirydate'] == '-1')
+if ($maintrow['expirydate'] == '-1')
 {
     echo "{$strUnlimited}";
 }
@@ -69,7 +69,7 @@ else
     date($CONFIG['dateformat_date'], $maintrow['expirydate']);
 }
 echo "</td></tr>";
-if($maintrow['maintnotes'] != '')
+if ($maintrow['maintnotes'] != '')
     echo "<tr><th>{$strNotes}:</th><td>".$maintrow['maintnotes']."</td></tr>";
 echo "</table>";
 echo "<p align='center'><a href=\"edit_contract.php?action=edit&amp;maintid=$id\">{$strEditContract}</a></p>";
@@ -81,7 +81,7 @@ if (mysql_num_rows($maintresult)<1)
 echo "<h3>{$strSupportedContacts}:</h3>";
 
 //All site contacts are supported
-if($maintrow['allcontactssupported'] == 'Yes')
+if ($maintrow['allcontactssupported'] == 'Yes')
 {
     echo "<p class='info'>{$strAllSiteContactsSupported}</p>";
 }
@@ -98,8 +98,8 @@ else
     if (mysql_num_rows($result)>0)
     {
         $numberofcontacts = mysql_num_rows($result);
-        if($numcontacts > $allowedcontacts) echo "<p class='error'>There are more contacts linked than this contract should support</p>";
-        if($allowedcontacts == 0) $allowedcontacts = $strUnlimited;
+        if ($numcontacts > $allowedcontacts) echo "<p class='error'>There are more contacts linked than this contract should support</p>";
+        if ($allowedcontacts == 0) $allowedcontacts = $strUnlimited;
         echo "<p align='center'>".sprintf($strUsedNofN, $numberofcontacts, $allowedcontacts)."</p>\n";
         echo "<table align='center'>";
         $supportcount=1;
@@ -118,7 +118,7 @@ else
             echo "<p align='center'>{$strNoRecords}<p>";
         }
 }
-if($numberofcontacts < $allowedcontacts OR $allowedcontacts == 0)
+if ($numberofcontacts < $allowedcontacts OR $allowedcontacts == 0)
 {
     echo "<p align='center'><a href='add_contact_support_contract.php?maintid={$id}&amp;siteid={$maintrow['site']}&amp;context=maintenance'>";
     echo "{$strAddContact}</a></p>";

@@ -32,7 +32,7 @@ switch ($_REQUEST['action'])
         $thanks = cleanvar($_REQUEST['thanks']);
         $isnew = cleanvar($_REQUEST['isnew']);
 
-        if($isnew == "yes")
+        if ($isnew == "yes")
         {
             // need to insert
             $sql = "INSERT INTO feedbackforms (name,introduction,thanks,description) VALUES ";

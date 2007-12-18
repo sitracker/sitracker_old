@@ -29,7 +29,7 @@ $changeuser = cleanvar($_REQUEST['user']);
 $newstatus = cleanvar($_REQUEST['status']);
 
 //TODO: maybe put this in another file?
-if($changeuser AND $newstatus)
+if ($changeuser AND $newstatus)
 {
     $sql = "UPDATE users SET accepting='{$newstatus}' WHERE id={$changeuser}";
     @mysql_query($sql);

@@ -31,7 +31,7 @@ include('htmlheader.inc.php');
 
 echo "<h2><img src='{$CONFIG['application_webpath']}images/icons/{$iconset}/32x32/skill.png' width='32' height='32' alt='' /> ";
 echo "$title</h2>";
-if(empty($legacy)) echo "<p align='center'><a href='{$_SERVER['PHP_SELF']}?legacy=yes&amp;gid={$groupid}'>Show legacy skills</a></p>";
+if (empty($legacy)) echo "<p align='center'><a href='{$_SERVER['PHP_SELF']}?legacy=yes&amp;gid={$groupid}'>Show legacy skills</a></p>";
 else echo "<p align='center'><a href='{$_SERVER['PHP_SELF']}?gid={$groupid}'>Hide legacy skills</a></p>";
 
 $gsql = "SELECT * FROM groups ORDER BY name";
@@ -47,20 +47,20 @@ if ($numgroups >= 1)
     echo "<form action='{$_SERVER['PHP_SELF']}' style='text-align: center;' method='get'>";
     echo "{$strGroup}: <select name='choosegroup' onchange='window.location.href=this.options[this.selectedIndex].value'>";
     echo "<option value='{$_SERVER['PHP_SELF']}?gid=all";
-    if(empty($legacy)) echo "'";
+    if (empty($legacy)) echo "'";
     else echo "&amp;legacy=yes'";
     if ($filtergroup=='all') echo " selected='selected'";
     echo ">{$strAll}</option>\n";
     foreach($grouparr AS $groupid => $groupname)
     {
         echo "<option value='{$_SERVER['PHP_SELF']}?gid={$groupid}";
-        if(empty($legacy)) echo "'";
+        if (empty($legacy)) echo "'";
         else echo "&amp;legacy=yes'";
         if ($groupid == $filtergroup) echo " selected='selected'";
         echo ">$groupname</option>\n";
     }
     echo "<option value='{$_SERVER['PHP_SELF']}?gid=0";
-    if(empty($legacy)) echo "'";
+    if (empty($legacy)) echo "'";
     else echo "&amp;legacy=yes'";
     if ($filtergroup=='0') echo " selected='selected'";
     echo ">{$strUsersWithNoGroup}</option>\n";
@@ -70,10 +70,10 @@ if ($numgroups >= 1)
 
 
 /*$sql = "SELECT users.id, users.realname FROM users, usersoftware LEFT JOIN software ON  ";
-if(empty($legacy)) $sql .= " ((software.lifetime_end > NOW() OR software.lifetime_end = '0000-00-00' OR software.lifetime_end is NULL) AND (";
+if (empty($legacy)) $sql .= " ((software.lifetime_end > NOW() OR software.lifetime_end = '0000-00-00' OR software.lifetime_end is NULL) AND (";
 else $sql .= "(";
 $sql .= "software.id = usersoftware.softwareid )";
-if(empty($legacy)) $sql .= ")";
+if (empty($legacy)) $sql .= ")";
 
 $sql .= "WHERE users.id = usersoftware.userid AND users.status <> 0 ";
 
@@ -84,7 +84,7 @@ else $sql .= "AND users.groupid='{$filtergroup}'";
 $sql .= "GROUP BY users.id ORDER BY users.realname";*/
 $sql = "SELECT users.id, users.realname,software.name FROM usersoftware RIGHT JOIN software ON (usersoftware.softwareid = software.id) LEFT JOIN users ON usersoftware.userid = users.id ";
 $sql .= " WHERE (users.status <> 0 OR users.status IS NULL) ";
-if(empty($legacy)) $sql .= "AND (software.lifetime_end > NOW() OR software.lifetime_end = '0000-00-00' OR software.lifetime_end is NULL) ";
+if (empty($legacy)) $sql .= "AND (software.lifetime_end > NOW() OR software.lifetime_end = '0000-00-00' OR software.lifetime_end is NULL) ";
 if ($numgroups >= 1 AND $filtergroup=='0') $sql .= "AND (users.groupid='0' OR users.groupid='' OR users.groupid IS NULL) ";
 elseif ($numgroups < 1 OR $filtergroup=='all') { $sql .= "AND 1=1 "; }
 else $sql .= "AND (users.groupid='{$filtergroup}' OR users.groupid IS NULL)";
@@ -95,11 +95,11 @@ if (mysql_error()) trigger_error(mysql_error(),E_USER_WARNING);
 
 $countusers = mysql_num_rows($usersresult);
 
-if($countusers > 0)
+if ($countusers > 0)
 {
     while($row = mysql_fetch_object($usersresult))
     {
-        if(($row->realname != NULL) AND ($row->realname != ''))
+        if (($row->realname != NULL) AND ($row->realname != ''))
         {
             $users[$row->id] = $row->realname;
             $counting[$row->realname]=0;
@@ -114,7 +114,7 @@ mysql_data_seek($usersresult, 0);
 
 $sql = "SELECT users.id, users.realname,software.name FROM usersoftware RIGHT JOIN software ON (usersoftware.softwareid = software.id) LEFT JOIN users ON usersoftware.userid = users.id ";
 $sql .= " WHERE (users.status <> 0 OR users.status IS NULL) ";
-if(empty($legacy)) $sql .= "AND (software.lifetime_end > NOW() OR software.lifetime_end = '0000-00-00' OR software.lifetime_end is NULL) ";
+if (empty($legacy)) $sql .= "AND (software.lifetime_end > NOW() OR software.lifetime_end = '0000-00-00' OR software.lifetime_end is NULL) ";
 if ($numgroups >= 1 AND $filtergroup=='0') $sql .= "AND (users.groupid='0' OR users.groupid='' OR users.groupid IS NULL) ";
 elseif ($numgroups < 1 OR $filtergroup=='all') { $sql .= "AND 1=1 "; }
 else $sql .= "AND (users.groupid='{$filtergroup}' OR users.groupid IS NULL)";
@@ -125,12 +125,12 @@ if (mysql_error()) trigger_error(mysql_error(),E_USER_WARNING);
 
 $countskills = mysql_num_rows($result);
 
-if($countskills > 0 AND $countusers > 0)
+if ($countskills > 0 AND $countusers > 0)
 {
     $previous = "";
     while($row = mysql_fetch_object($result))
     {
-        if(($row->realname != NULL) AND ($row->realname != '')) $skills[$row->name][$row->realname] = $row->realname;
+        if (($row->realname != NULL) AND ($row->realname != '')) $skills[$row->name][$row->realname] = $row->realname;
     }
     mysql_data_seek($result, 0);
     echo "<table align='center' class='vertical'>";
@@ -142,16 +142,16 @@ if($countskills > 0 AND $countusers > 0)
     $previous = "";
     while($row = mysql_fetch_object($result))
     {
-        if($previous != $row->name)
+        if ($previous != $row->name)
         {
             $count = 0;
             echo "<tr><th width='20%;'>{$row->name}</th>";
             while($user = mysql_fetch_object($usersresult))
             {
-                if(($user->realname != NULL) AND ($user->realname != ''))
+                if (($user->realname != NULL) AND ($user->realname != ''))
                 {
                     //todo get the proper symbol for a cross
-                    if(empty($skills[$row->name][$user->realname]))
+                    if (empty($skills[$row->name][$user->realname]))
                     {
                         // No skill in this software
                         echo "<td align='center' class='$shade'></td>"; // &#215;

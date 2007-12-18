@@ -69,7 +69,7 @@ if (empty($action) OR $action=='edit')
     echo "<p align='center'><a href='products.php'>Return to products list without saving</a></p>";
     include('htmlfooter.inc.php');
 }
-elseif($action=='delete')
+elseif ($action=='delete')
 {
     // Delete
     // First check there are no incidents using this software

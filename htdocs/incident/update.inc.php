@@ -30,7 +30,7 @@ function display_update_page($draftid=-1)
     global $iconset;
     global $now;
 
-    if($draftid != -1)
+    if ($draftid != -1)
     {
         $draftsql = "SELECT * FROM drafts WHERE id = {$draftid}";
         $draftresult = mysql_query($draftsql);
@@ -203,16 +203,16 @@ function display_update_page($draftid=-1)
         var meta = byId('target').value+"|"+byId('updatetype').value+"|"+byId('cust_vis').checked+"|";
         meta += byId('priority').value+"|"+byId('newstatus').value+"|"+byId('nextaction').value+"|";
 
-        if(toPass != "")
+        if (toPass != "")
         {
             xmlhttp.open("GET", "auto_save.php?userid="+<?php echo $_SESSION['userid']; ?>+"&type=update&incidentid="+<?php echo $id; ?>+"&draftid="+draftid+"&meta="+meta+"&content="+escape(toPass), true);
 
             xmlhttp.onreadystatechange=function() {
                 //remove this in the future after testing
                 if (xmlhttp.readyState==4) {
-                    if(xmlhttp.responseText != ""){
+                    if (xmlhttp.responseText != ""){
                         //alert(xmlhttp.responseText);
-                        if(draftid == -1)
+                        if (draftid == -1)
                         {
                             draftid = xmlhttp.responseText;
                             byId('draftid').value = draftid;
@@ -220,12 +220,12 @@ function display_update_page($draftid=-1)
                         var currentTime = new Date();
                         var hours = currentTime.getHours();
                         var minutes = currentTime.getMinutes();
-                        if(minutes < 10)
+                        if (minutes < 10)
                         {
                             minutes = "0"+minutes;
                         }
                         var seconds = currentTime.getSeconds();
-                        if(seconds < 10)
+                        if (seconds < 10)
                         {
                             seconds = "0"+seconds;
                         }
@@ -266,7 +266,7 @@ function display_update_page($draftid=-1)
     $typeReviewmet = "";
 
 
-    if(!empty($metadata))
+    if (!empty($metadata))
     {
         switch($metadata[0])
         {
@@ -353,9 +353,9 @@ function display_update_page($draftid=-1)
     echo "New information, relevent to the incident.  Please be as detailed as possible and include full descriptions of any work you have performed.<br />";
     echo "<br />";
     $checkbox = "";
-    if(!empty($metadata))
+    if (!empty($metadata))
     {
-        if($metadata[2] == "true") $checkbox = "checked='checked'";
+        if ($metadata[2] == "true") $checkbox = "checked='checked'";
     }
     else
     {
@@ -363,7 +363,7 @@ function display_update_page($draftid=-1)
     }
     echo "<label<input type='checkbox' name='cust_vis' id='cust_vis' {$checkbox} value='yes' /> Make this update visible to the incident reporter<label><br />"; //FIXME i18n Make this update visible to the incident reporter
     echo "<textarea name='bodytext' id='updatelog' rows='13' cols='50'>";
-    if($draftid != -1) echo $draftobj->content;
+    if ($draftid != -1) echo $draftobj->content;
     echo "</textarea>";
     echo "<div id='updatestr'></div>";
     echo "</td></tr>";
@@ -383,7 +383,7 @@ function display_update_page($draftid=-1)
 
     $setPriorityTo = incident_priority($id);
 
-    if(!empty($metadata))
+    if (!empty($metadata))
     {
         $setPriorityTo = $metadata[3];
     }
@@ -396,7 +396,7 @@ function display_update_page($draftid=-1)
 
     $setStatusTo = incident_status($id);
 
-    if(!empty($metadata))
+    if (!empty($metadata))
     {
         $setStatusTo = $metadata[4];
     }
@@ -408,7 +408,7 @@ function display_update_page($draftid=-1)
 
     $nextAction = "";
 
-    if(!empty($metadata))
+    if (!empty($metadata))
     {
         $nextAction = $metadata[5];
     }
@@ -482,7 +482,7 @@ function display_update_page($draftid=-1)
     echo "</table>";
     echo "<p class='center'>";
     echo "<input type='hidden' name='action' value='update' />";
-    if($draftid == -1) $localdraft = "";
+    if ($draftid == -1) $localdraft = "";
     else $localdraft = $draftid;
     echo "<input type='hidden' name='draftid' id='draftid' value='{$localdraft}' />";
     echo "<input type='hidden' name='storepriority' value='".incident_priority($id)."' />";
@@ -499,7 +499,7 @@ if (empty($action))
 
     include('incident_html_top.inc.php');
 
-    if(mysql_num_rows($result) > 0)
+    if (mysql_num_rows($result) > 0)
     {
         echo "<h2>{$title}</h2>";
 
@@ -513,16 +513,16 @@ if (empty($action))
         display_update_page();
     }
 }
-else if($action == "editdraft")
+else if ($action == "editdraft")
 {
     include('incident_html_top.inc.php');
     $draftid = cleanvar($_REQUEST['draftid']);
     display_update_page($draftid);
 }
-else if($action == "deletedraft")
+else if ($action == "deletedraft")
 {
     $draftid = cleanvar($_REQUEST['draftid']);
-    if($draftid != -1)
+    if ($draftid != -1)
     {
         $sql = "DELETE FROM drafts WHERE id = {$draftid}";
         $result = mysql_query($sql);
@@ -530,7 +530,7 @@ else if($action == "deletedraft")
     }
     html_redirect("update_incident.php?id={$id}");
 }
-else if($action == "newupdate")
+else if ($action == "newupdate")
 {
     include('incident_html_top.inc.php');
     display_update_page();
@@ -737,7 +737,7 @@ else
     }
     else
     {
-        if($draftid != -1 AND !empty($draftid))
+        if ($draftid != -1 AND !empty($draftid))
         {
             $sql = "DELETE FROM drafts WHERE id = {$draftid}";
             $result = mysql_query($sql);

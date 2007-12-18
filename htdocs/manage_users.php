@@ -124,7 +124,7 @@ while ($users = mysql_fetch_array($result))
     echo "</td><td>";
     echo userstatus_name($users["status"]);
     echo "</td><td>";
-    if($users["accepting"]=='Yes') echo $strYes;
+    if ($users["accepting"]=='Yes') echo $strYes;
     else echo "<span class='error'>{$strNo}</span>";
     echo "</td></tr>";
     // invert shade

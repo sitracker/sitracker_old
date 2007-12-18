@@ -34,7 +34,7 @@ switch($_REQUEST['action'])
         if (mysql_error()) trigger_error(mysql_error(),E_USER_WARNING);
         $usercount = mysql_num_rows($userresult);
         $userdetails = mysql_fetch_object($userresult);
-        if($usercount == 1)
+        if ($usercount == 1)
         {
             $extra_headers = "Reply-To: {$CONFIG['support_email']}\n";
             $extra_headers .= "X-Mailer: {$CONFIG['application_shortname']} {$application_version_string}/PHP " . phpversion() . "\n";
@@ -58,7 +58,7 @@ switch($_REQUEST['action'])
             if (mysql_error()) trigger_error(mysql_error(),E_USER_WARNING);
 
             $contactcount = mysql_num_rows($contactresult);
-            if($contactcount == 1)
+            if ($contactcount == 1)
             {
                 while($row = mysql_fetch_object($contactresult))
                 {

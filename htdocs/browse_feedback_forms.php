@@ -27,7 +27,7 @@ $sql = "SELECT * FROM feedbackforms";
 $result = mysql_query($sql);
 if (mysql_error()) trigger_error(mysql_error(),E_USER_ERROR);
 
-if(mysql_num_rows($result) > 0)
+if (mysql_num_rows($result) > 0)
 {
     echo "<div style='margin-left: auto; margin-right: auto; width: 70%;'>";
     while ($obj = mysql_fetch_object($result))

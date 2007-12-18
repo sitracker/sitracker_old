@@ -41,12 +41,12 @@ define('MAGPIE_OUTPUT_ENCODING', $i18ncharset);
 
 $feedallowedtags = '<img><strong><em><br><p>';
 
-if(mysql_num_rows($result) > 0)
+if (mysql_num_rows($result) > 0)
 {
     while($row = mysql_fetch_row($result))
     {
         $url = $row[0];
-        if($rss = fetch_rss( $url ))
+        if ($rss = fetch_rss( $url ))
         {
 //              if ($CONFIG['debug']) echo "<pre>".print_r($rss,true)."</pre>";
             echo "<table align='center' style='width: 100%'>";
@@ -69,14 +69,14 @@ if(mysql_num_rows($result) > 0)
                 //echo "<pre>".print_r($item,true)."</pre>";
                 echo "<tr><td>";
                 echo "<a href='{$item['link']}' class='info'>{$item['title']}";
-                if($rss->feed_type == 'RSS')
+                if ($rss->feed_type == 'RSS')
                 {
                     if (!empty($item['pubdate'])) $itemdate = strtotime($item['pubdate']);
                     elseif (!empty($item['dc']['date'])) $itemdate = strtotime($item['dc']['date']);
                     else $itemdate = '';
                     $d = strip_tags($item['description'],$feedallowedtags);
                 }
-                elseif($rss->feed_type == 'Atom')
+                elseif ($rss->feed_type == 'Atom')
                 {
                     if (!empty($item['issued'])) $itemdate = strtotime($item['issued']);
                     elseif (!empty($item['published'])) $itemdate = strtotime($item['published']);

@@ -180,15 +180,15 @@ function help_window(helpid)
 }
 
 
-if(document.layers)
+if (document.layers)
 {
    thisbrowser="NN4";
 }
-if(document.all)
+if (document.all)
 {
    thisbrowser="ie"
 }
-if(!document.all && document.getElementById)
+if (!document.all && document.getElementById)
 {
    thisbrowser="NN6";
 }
@@ -274,7 +274,7 @@ $servicelevel_id=maintenance_servicelevel($incident->maintenanceid);
 $servicelevel_tag = $incident->servicelevel;
 if ($servicelevel_tag=='') $servicelevel_tag = servicelevel_id2tag(maintenance_servicelevel($incident->maintenanceid));
 $servicelevel_name=servicelevel_name($servicelevelid);
-if($incident->closed == 0) $closed = time();
+if ($incident->closed == 0) $closed = time();
 else $closed = $incident->closed;
 $opened_for=format_seconds($closed - $incident->opened);
 $priority = $incident->priority;
@@ -352,7 +352,7 @@ if ($menu != 'hide')
         echo "<a class='barlink' href='incident_relationships.php?id={$id}&amp;tab=relationships' accesskey='L'>{$strRelations}</a> | ";
         echo "<a class='barlink' href='javascript:email_window({$id})' accesskey='E'>{$strEmail}</a> | ";
         echo "<a class='barlink' href='incident_attachments.php?id={$id}&amp;popup={$popup}' accesskey='F'>{$strFiles}</a> | ";
-        if($servicelevel->timed =='yes') echo "<a class='barlink' href='tasks.php?incident={$id}'>{$strActivities}</a> | ";
+        if ($servicelevel->timed =='yes') echo "<a class='barlink' href='tasks.php?incident={$id}'>{$strActivities}</a> | ";
         echo "<a class='barlink' href='incident_details.php?id={$id}&amp;popup={$popup}' accesskey='D'>{$strDetailsAndLog}</a> | ";
 
         echo "<a class='barlink' href='javascript:help_window({$permission});'>{$strHelpChar}</a>";

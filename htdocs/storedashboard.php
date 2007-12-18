@@ -20,7 +20,7 @@ require('auth.inc.php');
 $id = $_REQUEST['id'];
 $val = $_REQUEST['val'];
 
-if($id == $_SESSION['userid'])
+if ($id == $_SESSION['userid'])
 {
     //check you're changing your own
     $sql = "UPDATE users SET dashboard = '$val' WHERE id = '$id'";

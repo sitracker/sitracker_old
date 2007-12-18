@@ -135,7 +135,7 @@ function draw_calendar($nmonth, $nyear)
     $day = 0;
     while($day < $lastday)
     {
-        if(($dayRow % 7) == 0 AND $dayRow >0) echo "</tr>\n<tr>\n";
+        if (($dayRow % 7) == 0 AND $dayRow >0) echo "</tr>\n<tr>\n";
         $adjusted_day = $day+1;
         $bold="";
         $notbold="";

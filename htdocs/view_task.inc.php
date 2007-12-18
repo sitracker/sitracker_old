@@ -14,7 +14,7 @@
 
 echo "<h2><img src='{$CONFIG['application_webpath']}images/icons/{$iconset}/32x32/task.png' width='32' height='32' alt='' /> $title</h2>";
 
-if($mode != 'incident') echo "<div style='width: 90%; margin-left: auto; margin-right: auto;'>";
+if ($mode != 'incident') echo "<div style='width: 90%; margin-left: auto; margin-right: auto;'>";
 
 $sql = "SELECT * FROM tasks WHERE id='{$taskid}'";
 $result = mysql_query($sql);
@@ -26,7 +26,7 @@ if (mysql_num_rows($result) >= 1)
     {
         echo "<p class='error'>{$strTaskPrivateError}</p>";
     }
-    elseif($mode != 'incident')
+    elseif ($mode != 'incident')
     {
         echo "<div style='width: 48%; float: left;'>";
         $startdate=mysql2date($task->startdate);
@@ -99,7 +99,7 @@ if (mysql_num_rows($result) >= 1)
 
         echo "</div>";
     }
-    elseif($mode == 'incident')
+    elseif ($mode == 'incident')
     {
         echo "<div style='width: 48%; margin-left: auto; margin-right: auto;border: 1px solid #CCCCFF;'>";
         echo add_note_form(10, $taskid);
@@ -110,10 +110,10 @@ if (mysql_num_rows($result) >= 1)
 }
 else echo "<p class='error'>{$strNoMatchingTask}</p>";
 
-if($mode != 'incident') echo "</div>";
+if ($mode != 'incident') echo "</div>";
 echo "<div style='clear:both; padding-top: 20px;'>";
 
-if($mode != 'incident') echo "<p align='center'><a href='tasks.php'>{$strTaskList}</a></p>";
+if ($mode != 'incident') echo "<p align='center'><a href='tasks.php'>{$strTaskList}</a></p>";
 else echo "<p align='center'><a href=edit_task.php?id={$taskid}&amp;action=markcomplete&amp;incident={$incidentid}>{$strMarkComplete}</a> | <a href='tasks.php?incident={$id}'>{$strActivityList}</a></p>";
 echo "</div>";
 

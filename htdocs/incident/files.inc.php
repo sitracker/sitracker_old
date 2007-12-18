@@ -27,7 +27,7 @@ $att_max_filesize = return_bytes($CONFIG['upload_max_filesize']);
 if ($_FILES['attachment']['name']!="")
 {
     // Check if we had an error whilst uploading
-    if($_FILES['attachment']['error']!='')
+    if ($_FILES['attachment']['error']!='')
     {
         echo "<div class='detailinfo'>\n";
 
@@ -125,7 +125,7 @@ function encode_binary($string)
    {
      if ( preg_match("/^(\w| )$/",$chars[$i]))
          $ent[$i] = $chars[$i];
-     elseif( ord($chars[$i]) < 32) $ent[$i]=".";
+     elseif ( ord($chars[$i]) < 32) $ent[$i]=".";
      else
          $ent[$i] = "&#" . ord($chars[$i]) . ";";
    }

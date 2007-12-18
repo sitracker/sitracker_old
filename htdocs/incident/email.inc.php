@@ -18,13 +18,13 @@ if (realpath(__FILE__) == realpath($_SERVER['SCRIPT_FILENAME']))
 
 //if (empty($step)) $step=1;
 
-if(empty($step))
+if (empty($step))
 {
     $action = $_REQUEST['action'];
 
-    if($action == "deletedraft")
+    if ($action == "deletedraft")
     {
-        if($draftid != -1)
+        if ($draftid != -1)
         {
             $sql = "DELETE FROM drafts WHERE id = {$draftid}";
             $result = mysql_query($sql);
@@ -38,7 +38,7 @@ if(empty($step))
     $result = mysql_query($sql);
     if (mysql_error()) trigger_error(mysql_error(),E_USER_ERROR);
 
-    if(mysql_num_rows($result) > 0)
+    if (mysql_num_rows($result) > 0)
     {
         include('incident_html_top.inc.php');
 
@@ -206,7 +206,7 @@ switch ($step)
         }
         echo "</select>\n</td></tr>";
 
-        if($CONFIG['auto_chase'] == TRUE)
+        if ($CONFIG['auto_chase'] == TRUE)
         {
             $sql = "SELECT * FROM updates WHERE incidentid = {$id} ORDER BY timestamp DESC LIMIT 1";
             $result = mysql_query($sql);
@@ -214,7 +214,7 @@ switch ($step)
 
             $obj = mysql_fetch_object($result);
 
-            if($obj->type == 'auto_chase_phone')
+            if ($obj->type == 'auto_chase_phone')
             {
                 echo "<tr><th>{$strCustomerChaseUpdate}</th><td>";
                 echo "<input type='radio' name='chase_customer' value='no' checked='yes' />{$strNo} ";
@@ -222,7 +222,7 @@ switch ($step)
                 echo "</td></tr>";
             }
 
-            if($obj->type == 'auto_chase_manager')
+            if ($obj->type == 'auto_chase_manager')
             {
                 echo "<tr><th>{$strManagerChaseUpdate}</th>";
                 echo "<input type='radio' name='chase_manager' value='no' checked='yes' />{$strNo} ";
@@ -270,7 +270,7 @@ switch ($step)
 
     case 2:
         // show form 2
-        if($draftid != -1)
+        if ($draftid != -1)
         {
             $draftsql = "SELECT * FROM drafts WHERE id = {$draftid}";
             $draftresult = mysql_query($draftsql);
@@ -338,28 +338,28 @@ $emailtype|$newincidentstatus|$timetonextaction_none|$timetonextaction_days|$tim
             meta = meta+urlencode(byId('subjectfield').value)+"|"+urlencode(byId('bodytext').value)+"|"
             meta = meta+byId('date').value+"|"+byid('timeoffset').value;
 
-            if(toPass != "")
+            if (toPass != "")
             {
                 xmlhttp.open("GET", "auto_save.php?userid="+<?php echo $_SESSION['userid']; ?>+"&type=email&incidentid="+<?php echo $id; ?>+"&draftid="+draftid+"&meta="+meta+"&content="+escape(toPass), true);
 
                 xmlhttp.onreadystatechange=function() {
                     //remove this in the future after testing
                     if (xmlhttp.readyState==4) {
-                        if(xmlhttp.responseText != ""){
+                        if (xmlhttp.responseText != ""){
                             //alert(xmlhttp.responseText);
-                            if(draftid == -1)
+                            if (draftid == -1)
                             {
                                 draftid = xmlhttp.responseText;
                             }
                             var currentTime = new Date();
                             var hours = currentTime.getHours();
                             var minutes = currentTime.getMinutes();
-                            if(minutes < 10)
+                            if (minutes < 10)
                             {
                                 minutes = "0"+minutes;
                             }
                             var seconds = currentTime.getSeconds();
-                            if(seconds < 10)
+                            if (seconds < 10)
                             {
                                 seconds = "0"+seconds;
                             }
@@ -377,7 +377,7 @@ $emailtype|$newincidentstatus|$timetonextaction_none|$timetonextaction_days|$tim
         </script>
         <?php
         // External vars
-        if($draftid == -1)
+        if ($draftid == -1)
         {
             $emailtype = cleanvar($_REQUEST['emailtype']);
             $newincidentstatus = cleanvar($_REQUEST['newincidentstatus']);
@@ -418,7 +418,7 @@ $emailtype|$newincidentstatus|$timetonextaction_none|$timetonextaction_days|$tim
         }
         else
         {
-            if($draftid == -1)
+            if ($draftid == -1)
             {
                 $from = emailtype_replace_specials(emailtype_from($emailtype), $id, $sit[2]);
                 $replyTo = emailtype_replace_specials(emailtype_replyto($emailtype), $id, $sit[2]);
@@ -782,7 +782,7 @@ $emailtype|$newincidentstatus|$timetonextaction_none|$timetonextaction_days|$tim
                     if (mysql_error()) trigger_error("MySQL Query Error ".mysql_error(), E_USER_ERROR);
                 }
 
-                if(!empty($chase_customer))
+                if (!empty($chase_customer))
                 {
                     $sql_insert = "INSERT INTO updates (incidentid, userid, type, bodytext, timestamp, customervisibility) VALUES ('{$id}','{$sit['2']}','auto_chased_phone','Customer has been called to chase','{$now}','hide')";
                     mysql_query($sql_insert);
@@ -793,7 +793,7 @@ $emailtype|$newincidentstatus|$timetonextaction_none|$timetonextaction_days|$tim
                     if (mysql_error()) trigger_error("MySQL Query Error ".mysql_error(), E_USER_ERROR);
                 }
 
-                if(!empty($chase_manager))
+                if (!empty($chase_manager))
                 {
                     $sql_insert = "INSERT INTO updates (incidentid, userid, type, bodytext, timestamp, customervisibility) VALUES ('{$id}','{$sit['2']}','auto_chased_manager','Manager has been called to chase','{$now}','hide')";
                     mysql_query($sql_insert);
@@ -804,7 +804,7 @@ $emailtype|$newincidentstatus|$timetonextaction_none|$timetonextaction_days|$tim
                     if (mysql_error()) trigger_error("MySQL Query Error ".mysql_error(), E_USER_ERROR);
                 }
 
-                if($draftid != -1)
+                if ($draftid != -1)
                 {
                     $sql = "DELETE FROM drafts WHERE id = {$draftid}";
                     mysql_query($sql);

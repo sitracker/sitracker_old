@@ -123,7 +123,7 @@ switch ($action)
 
     case 'markcomplete':
         //this task is for an incident, enter an update from all the notes
-        if($incident)
+        if ($incident)
         {
             //get current incident status
             $sql = "SELECT status FROM incidents WHERE id={$incident}";
@@ -198,7 +198,7 @@ switch ($action)
         if (mysql_error()) trigger_error(mysql_error(),E_USER_ERROR);
 
         // FIXME redundant i18n strings
-        if($incident) html_redirect("tasks.php?incident={$incident}", TRUE, $strActivityMarkedCompleteSuccessfully);
+        if ($incident) html_redirect("tasks.php?incident={$incident}", TRUE, $strActivityMarkedCompleteSuccessfully);
         else html_redirect("tasks.php", TRUE, $strTaskMarkedCompleteSuccessfully);
     break;
 

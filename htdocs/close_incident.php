@@ -393,7 +393,7 @@ else
                 foreach($uniquearray AS $relatedid)
                 {
                     //dont care if I'm related to myself
-                    if($relatedid != $id)
+                    if ($relatedid != $id)
                     {
                         $sql  = "INSERT INTO updates (incidentid, userid, type, bodytext, timestamp) ";
                         $sql .= "VALUES ('$relatedid', '{$sit[2]}', 'research', 'New Status: [b]Active[/b]<hr>\nRelated incident [$id] has been closed', '$now')";

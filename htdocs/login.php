@@ -15,7 +15,7 @@ require('db_connect.inc.php');
 session_name($CONFIG['session_name']);
 session_start();
 if (function_exists('session_regenerate_id')) session_regenerate_id();
-if(!version_compare(phpversion(),"4.3.3",">=")) setcookie(session_name(), session_id(),ini_get("session.cookie_lifetime"), "/");
+if (!version_compare(phpversion(),"4.3.3",">=")) setcookie(session_name(), session_id(),ini_get("session.cookie_lifetime"), "/");
 
 $language = $_POST['lang'];
 
@@ -27,7 +27,7 @@ $username = cleanvar($_REQUEST['username']);
 $public_browser = cleanvar($_REQUEST['public_browser']);
 $page = strip_tags(str_replace('..','',str_replace('//','',str_replace(':','',urldecode($_REQUEST['page'])))));
 
-if(empty($_REQUEST['username']) AND empty($_REQUEST['password']) AND $language != $_SESSION['lang'])
+if (empty($_REQUEST['username']) AND empty($_REQUEST['password']) AND $language != $_SESSION['lang'])
 {
     if ($language!='default') $_SESSION['lang'] = $language;
     else $_SESSION['lang'] = '';
@@ -62,7 +62,7 @@ elseif (authenticate($username, $password) == 1)
     if (mysql_error()) trigger_error(mysql_error(), E_USER_ERROR);
 
     //check if the session lang is different the their profiles
-    if($_SESSION['lang'] != '' AND $_SESSION['lang'] != $user->var_i18n)
+    if ($_SESSION['lang'] != '' AND $_SESSION['lang'] != $user->var_i18n)
     {
         $sql = "INSERT INTO notices (text, linktext, link, type, userid, durability) ";
         $sql .= "VALUES('\$strYourCurrentLanguage', '\$strUseThisInFuture', '{$CONFIG['application_webpath']}edit_profile.php?mode=savesessionlang',  ".USER_LANG_DIFFERS_TYPE.", {$_SESSION['userid']}, 'session') ";
@@ -112,7 +112,7 @@ elseif (authenticate($username, $password) == 1)
         exit;
     }
 }
-elseif($CONFIG['portal'] == TRUE)
+elseif ($CONFIG['portal'] == TRUE)
 {
     // Invalid user and portal enabled
     // Have a look if this is a contact trying to login

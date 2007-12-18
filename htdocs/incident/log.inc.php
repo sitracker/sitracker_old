@@ -124,7 +124,7 @@ foreach($keeptags AS $keeptag)
 $count=0;
 while ($update = mysql_fetch_object($result))
 {
-    if(empty($firstid)) $firstid = $update->id;
+    if (empty($firstid)) $firstid = $update->id;
     $updateid = $update->id;
     $updatebody=trim($update->bodytext);
     $updatebodylen=strlen($updatebody);
@@ -228,7 +228,7 @@ while ($update = mysql_fetch_object($result))
     $next = $offset + $_SESSION['num_update_view'];
 
     echo "<div class='detaildate'>";
-    if($count==0)
+    if ($count==0)
     {
         if ($offset > 0)
         {
@@ -273,7 +273,7 @@ while ($update = mysql_fetch_object($result))
     {
         echo "<img src='{$CONFIG['application_webpath']}images/icons/{$iconset}/16x16/{$updatetypes['research']['icon']}' width='16' height='16' alt='Research' />";
         echo "<span>Click to {$newmode}</span></a> ";
-        if($update->sla != '') echo "<img src='{$CONFIG['application_webpath']}images/icons/{$iconset}/16x16/{$slatypes[$update->sla]['icon']}' width='16' height='16' alt='{$update->type}' />";
+        if ($update->sla != '') echo "<img src='{$CONFIG['application_webpath']}images/icons/{$iconset}/16x16/{$slatypes[$update->sla]['icon']}' width='16' height='16' alt='{$update->type}' />";
         echo "Updated ({$update->type}) by {$updateuser}";
     }
 

@@ -26,13 +26,13 @@ switch($action)
         $name = $_REQUEST['reseller_name'];
 
         $errors = 0;
-        if(empty($name))
+        if (empty($name))
         {
             $_SESSION['formerrors']['name'] = 'Name cannot be empty';
             $errors++;
         }
 
-        if($errors != 0)
+        if ($errors != 0)
         {
             html_redirect("add_reseller.php", FALSE);
         }

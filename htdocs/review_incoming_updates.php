@@ -165,7 +165,7 @@ if ($spam_string=$_REQUEST['delete_all_spam'])
     unset($spam_array);
 }
 
-if(!empty($selected))
+if (!empty($selected))
 {
     foreach($selected as $updateid)
     {
@@ -202,9 +202,9 @@ if(!empty($selected))
             var frm = document.held_emails.elements;
             for(i = 0; i < frm.length; i++)
             {
-                if(frm[i].type == 'checkbox')
+                if (frm[i].type == 'checkbox')
                 {
-                    if(checkStatus)
+                    if (checkStatus)
                     {
                         frm[i].checked = true;
                     }
@@ -231,7 +231,7 @@ if (mysql_error()) trigger_error("MySQL Query Error ".mysql_error(), E_USER_ERRO
 $countresults=mysql_num_rows($result);
 
 $spamcount=0;
-if($countresults > 0)
+if ($countresults > 0)
 {
     if ($countresults) mysql_data_seek($result, 0);
 
@@ -273,7 +273,7 @@ if (mysql_num_rows($resultnew) >= 1)
 
 $realemails = $countresults-$spamcount;
 
-if((mysql_num_rows($resultnew) > 0) OR ($realemails > 0))
+if ((mysql_num_rows($resultnew) > 0) OR ($realemails > 0))
 {
     $totalheld = $countresults + mysql_num_rows($resultnew) - $spamcount;
     echo "<h2>".sprintf($strHeldEmailsNum, $realemails)."</h2>"; // was $countresults
@@ -282,7 +282,7 @@ if((mysql_num_rows($resultnew) > 0) OR ($realemails > 0))
     echo "<table align='center' style='width: 95%'>";
     echo "<tr>";
     echo "<th>";
-    if($realemails > 0)
+    if ($realemails > 0)
     {
         echo "<input type='checkbox' name='selectAll' value='CheckAll' onclick=\"checkAll(this.checked);\" />";
     }
@@ -299,7 +299,7 @@ if((mysql_num_rows($resultnew) > 0) OR ($realemails > 0))
     {
         echo $row;
     }
-    if($realemails > 0)
+    if ($realemails > 0)
     {
         echo "<tr><td>";
         echo "<a href=\"javascript: submitform()\" onclick='return confirm_delete();'>{$strDelete}</a>";
@@ -308,16 +308,16 @@ if((mysql_num_rows($resultnew) > 0) OR ($realemails > 0))
     echo "</table>\n";
     echo "</form>";
 }
-else if($spamcount == 0)
+else if ($spamcount == 0)
 {
     echo "<h2>{$strNoRecords}</h2>";
 }
 
-if($spamcount > 0)
+if ($spamcount > 0)
 {
     // FIXME i18n
     echo "<h2>Spam Email";
-    if($spamcount > 1) echo "s";
+    if ($spamcount > 1) echo "s";
     echo " ({$spamcount} total)</h2>\n";
     echo "<p align='center'>Incoming email that is suspected to be spam</p>";
 
@@ -350,7 +350,7 @@ $sql .= "FROM incidents,contacts,sites ";
 $sql .= "WHERE incidents.status = 8 AND incidents.contact = contacts.id AND contacts.siteid = sites.id ";
 $sql .= "ORDER BY sites.id, incidents.contact"; //awaiting customer action
 $resultchase = mysql_query($sql);
-if(mysql_num_rows($resultchase) >= 1)
+if (mysql_num_rows($resultchase) >= 1)
 {
     $shade='shade1';
     while($chase = mysql_fetch_object($resultchase))
@@ -361,9 +361,9 @@ if(mysql_num_rows($resultchase) >= 1)
 
         $obj_update = mysql_fetch_object($result_update);
 
-        if($obj_update ->type == 'auto_chase_phone' OR $obj_update ->type == 'auto_chase_manager')
+        if ($obj_update ->type == 'auto_chase_phone' OR $obj_update ->type == 'auto_chase_manager')
         {
-            if(empty($html_chase))
+            if (empty($html_chase))
             {
                 $html_chase .= "<br />";
                 $html_chase .= "<h2>Incidents requiring chasing by phone</h2>"; // FIXME i18n Incidents requiring chasing
@@ -372,7 +372,7 @@ if(mysql_num_rows($resultchase) >= 1)
                 $html_chase .= "<th>{$strIncidentTitle}</th><th>{$strContact}</th><th>{$strSite}</th><th>{$strType}</th></tr>";
             }
 
-            if($obj_update->type == "auto_chase_phone")
+            if ($obj_update->type == "auto_chase_phone")
             {
                 $type = "Chase phone";
             }
@@ -384,13 +384,13 @@ if(mysql_num_rows($resultchase) >= 1)
             // show
             $html_chase .= "<tr class='{$shade}'><td><a href=\"javascript:incident_details_window('{$obj_update->incidentid}','incident{$obj_update->incidentid}')\" class='info'>{$obj_update->incidentid}</a></td><td>{$chase->title}</td><td>{$chase->forenames} {$chase->surname}</td><td>{$chase->name}</td><td>{$type}</td></tr>";
 
-            if($shade=='shade1') $shade='shade2';
+            if ($shade=='shade1') $shade='shade2';
             else $shade='shade1';
         }
     }
 }
 
-if(!empty($html_chase))
+if (!empty($html_chase))
 {
     echo $html_chase;
     echo "</table>";

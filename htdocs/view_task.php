@@ -27,7 +27,7 @@ $id = cleanvar($_REQUEST['incident']);
 $taskid = cleanvar($_REQUEST['id']);
 $mode = cleanvar($_REQUEST['mode']);
 
-if($mode == 'incident')
+if ($mode == 'incident')
 {
     include('incident_html_top.inc.php');
 }

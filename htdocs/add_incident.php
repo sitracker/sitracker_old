@@ -161,7 +161,7 @@ elseif ($action=='findcontact')
             $str .=  '<td>'.$contactrow['name'].'</td>';
             $str .=  '<td><strong>'.$contactrow['maintid'].'</strong>&nbsp;'.$contactrow['productname'].'</td>';
             $str .=  '<td>'.servicelevel_id2tag($contactrow['servicelevelid']).'</td>';
-            if($contactrow['expirydate'] == '-1')
+            if ($contactrow['expirydate'] == '-1')
             {
                 $str .= "<td>{$GLOBALS['strUnlimited']}</td>";
             }
@@ -191,7 +191,7 @@ elseif ($action=='findcontact')
             }
         }
 
-        if(!empty($str_prefered))
+        if (!empty($str_prefered))
         {
             echo "<h3>{$strPreferred}</h3>";
             echo "<table align='center'>";
@@ -202,16 +202,16 @@ elseif ($action=='findcontact')
 
         // NOTE: these BOTH need to be shown as you might wish to log against an alternative contract
 
-        if(!empty($str_alternative))
+        if (!empty($str_alternative))
         {
-            if(!empty($str_prefered)) echo "<h3>{$strAlternative}</h3>";
+            if (!empty($str_prefered)) echo "<h3>{$strAlternative}</h3>";
             echo "<table align='center'>";
             echo $headers;
             echo $str_alternative;
             echo "</table>\n";
         }
 
-        if(empty($str_prefered) AND empty($str_alternative))
+        if (empty($str_prefered) AND empty($str_alternative))
         {
             echo "<p class='error'>{$strNothingToDisplay}</p>";
         }
@@ -768,7 +768,7 @@ elseif ($action=='reassign')
     mysql_query($sql);
     if (mysql_error()) trigger_error("MySQL Query Error ".mysql_error(), E_USER_ERROR);
 
-    if(user_notification_on_reassign($uid)=='true')
+    if (user_notification_on_reassign($uid)=='true')
     {
         send_template_email('INCIDENT_REASSIGNED_USER_NOTIFY', $incidentid);
     }

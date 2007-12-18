@@ -88,7 +88,7 @@ if ($action == "edit")
         // echo "<input value='amount' type='radio' name='contacts' checked='checked' />";
         echo "{$strLimitTo} <input size='2' value='$maint[supportedcontacts]' name='amount' /> {$strSupportedContacts} ({$str0MeansUnlimited})<br />";
         //         echo "<input type='radio' value='all' name='contacts'";
-        //         if($maint[allcontactssupported] == 'Yes')
+        //         if ($maint[allcontactssupported] == 'Yes')
         //         echo "checked='checked'";
         //         echo " />{$strAllSiteContactsSupported}</td></tr>";
         echo "<tr><th>{$strProduct}: <sup class='red'>*</sup></th><td>";
@@ -106,7 +106,7 @@ if ($action == "edit")
         echo "<td><input name='expirydate' size='10' value='";
         if ($maint['expirydate'] > 0) echo date('Y-m-d',$maint['expirydate']);
         echo "' /> ".date_picker('maintform.expirydate');
-        if($maint['expirydate'] == '-1')
+        if ($maint['expirydate'] == '-1')
             echo "<input type='checkbox' checked='checked' name='noexpiry' /> {$strUnlimited}";
         else
             echo "<input type='checkbox' name='noexpiry' /> {$strUnlimited}";
@@ -175,11 +175,11 @@ else if ($action == "update")
     $expirydate = strtotime($_REQUEST['expirydate']);
     $product = cleanvar($_POST['product']);
     $contacts = cleanvar($_REQUEST['contacts']);
-    if($_REQUEST['noexpiry'] == 'on') $expirydate = '-1';
+    if ($_REQUEST['noexpiry'] == 'on') $expirydate = '-1';
 
     $allcontacts = 'No';
-    if($contacts == 'amount') $amount = cleanvar($_REQUEST['amount']);
-    elseif($contacts == 'all') $allcontacts = 'Yes';
+    if ($contacts == 'amount') $amount = cleanvar($_REQUEST['amount']);
+    elseif ($contacts == 'all') $allcontacts = 'Yes';
 
     // Update maintenance
     $errors = 0;

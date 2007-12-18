@@ -38,12 +38,12 @@ switch($query)
         break;
 }
 
-if($start_str==$end_str) echo "<h2>".sprintf($strIncidentsVerbOnDate, $type, $start_str)."</h2>";
+if ($start_str==$end_str) echo "<h2>".sprintf($strIncidentsVerbOnDate, $type, $start_str)."</h2>";
 else echo "<h2>".sprintf($strIncidentsVerbBetweenDates, $type, $start_str, $end_str)."</h2>";
 
 echo "<table align='center'>";
 
-if(mysql_num_rows($result) > 0)
+if (mysql_num_rows($result) > 0)
 {
     echo "<tr><th>{$strID}</th><th>{$strTitle}</th><th>{$strOpened}</th><th>{$strClosed}</th><th>{$strOwner}</th><th>{$strCustomer}</th><th>{$strSite}</th></tr>";
     
@@ -53,7 +53,7 @@ if(mysql_num_rows($result) > 0)
         echo "<td><a href=\"javascript:incident_details_window('{$row['id']}','incident{$row['id']}')\" class='info'>{$row['id']}</a></td>";
         echo "<td><a href=\"javascript:incident_details_window('{$row['id']}','incident{$row['id']}')\" class='info'>{$row['title']}</a></td>";
         echo "<td>".date($CONFIG['dateformat_datetime'],$row['opened'])."</td>";
-        if($row['status'] != 2)
+        if ($row['status'] != 2)
         {
             echo "<td>{$strCurrentlyOpen}</td>";
         }

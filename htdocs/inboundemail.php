@@ -191,7 +191,7 @@ else
 {
     $incident_open = incident_open($incidentid);
 
-    if($incident_open != "Yes")
+    if ($incident_open != "Yes")
     {
         //Dont want to associate with a closed call
         $oldincidentid = $incidentid;
@@ -203,18 +203,18 @@ else
     $result = mysql_query($sql);
     if (mysql_error()) trigger_error(mysql_error(),E_USER_WARNING);
 
-    if(mysql_num_rows($result) > 0)
+    if (mysql_num_rows($result) > 0)
     {
         list($lastupdate) = mysql_fetch_row($result);
 
         $newtext = "{$headertext}<hr>{$message}";
-        if(strcmp(trim($lastupdate),trim($newtext)) == 0)
+        if (strcmp(trim($lastupdate),trim($newtext)) == 0)
         {
             $error = 1;
         }
     }
 
-    if($error != 1)
+    if ($error != 1)
     {
         // Existing incident, new update:
         // Add entry to the incident update log
@@ -224,7 +224,7 @@ else
         if (mysql_error()) trigger_error(mysql_error(),E_USER_WARNING);
         $updateid = mysql_insert_id();
 
-        if($incident_open == "Yes")
+        if ($incident_open == "Yes")
         {
             // Mark the incident as active
             $sql = "UPDATE incidents SET status='1', lastupdated='".time()."', timeofnextaction='0' WHERE id='{$incidentid}'";
@@ -234,7 +234,7 @@ else
         else
         {
             //create record in tempincoming
-            if($incident_open == "No")
+            if ($incident_open == "No")
             {
                 //incident closed
                 $sql = "INSERT INTO tempincoming (updateid, incidentid, emailfrom, subject, reason, contactid) ";
@@ -254,7 +254,7 @@ else
     }
     else
     {
-        if($incidentid != 0)
+        if ($incidentid != 0)
         {
             $bodytext = "[i]Received duplicate email within 15 minutes. Message not stored. Possible mail loop.[/i]";
             $sql  = "INSERT INTO updates (incidentid, userid, type, bodytext, timestamp, customervisibility, currentstatus) ";

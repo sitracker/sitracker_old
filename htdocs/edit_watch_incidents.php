@@ -62,7 +62,7 @@ switch($action)
         $result = mysql_query($sql);
         if (mysql_error()) trigger_error(mysql_error(),E_USER_ERROR);
 
-        if(!$result) echo "<p class='error'>{$strWatchAddFailed}</p>";
+        if (!$result) echo "<p class='error'>{$strWatchAddFailed}</p>";
         else
         {
             // FIXME redundant i18n string
@@ -76,7 +76,7 @@ switch($action)
         $result = mysql_query($sql);
         if (mysql_error()) trigger_error(mysql_error(),E_USER_ERROR);
 
-        if(!$result) echo "<p class='error'>{$strWatchDeleteFailed}</p>";
+        if (!$result) echo "<p class='error'>{$strWatchDeleteFailed}</p>";
         else
         {
             // FIXME redundant i18n string
@@ -122,7 +122,7 @@ switch($action)
             }
             echo "</a></td></tr>";
 
-            if(mysql_num_rows($result) > 0)
+            if (mysql_num_rows($result) > 0)
             {
                 $shade='shade1';
                 while($obj = mysql_fetch_object($result))

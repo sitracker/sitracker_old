@@ -91,7 +91,7 @@ else if ($action == "add")
     $result = mysql_query($sql);
     if (mysql_error()) trigger_error(mysql_error(),E_USER_ERROR);
 
-    if(mysql_num_rows($result) > 0)
+    if (mysql_num_rows($result) > 0)
     {
         $errors = 1;
         $errors_string .= "<p class='error'>A contact can only be listed once per support contract</p>\n";

@@ -43,7 +43,7 @@ switch($action)
         $result = mysql_query($sql);
         if (mysql_error()) trigger_error(mysql_error(),E_USER_ERROR);
 
-        if(!$result) html_redirect("edit_rss_feeds.php", FALSE);
+        if (!$result) html_redirect("edit_rss_feeds.php", FALSE);
         else
         {
             html_redirect("edit_rss_feeds.php");
@@ -83,7 +83,7 @@ switch($action)
         $result = mysql_query($sql);
         if (mysql_error()) trigger_error(mysql_error(),E_USER_ERROR);
 
-        if(!$result) html_redirect("edit_rss_feeds.php", FALSE);
+        if (!$result) html_redirect("edit_rss_feeds.php", FALSE);
         else html_redirect("edit_rss_feeds.php");
         break;
     case 'enable':
@@ -93,7 +93,7 @@ switch($action)
         mysql_query($sql);
         if (mysql_error()) trigger_error(mysql_error(),E_USER_ERROR);
 
-        if(mysql_affected_rows() < 1) html_redirect("edit_rss_feeds.php", FALSE, "Changed enabled state failed");
+        if (mysql_affected_rows() < 1) html_redirect("edit_rss_feeds.php", FALSE, "Changed enabled state failed");
         else html_redirect("edit_rss_feeds.php");
         break;
     case 'delete':
@@ -103,7 +103,7 @@ switch($action)
         $result = mysql_query($sql);
         if (mysql_error()) trigger_error(mysql_error(),E_USER_ERROR);
 
-        if(!$result) html_redirect("edit_rss_feeds.php", FALSE);
+        if (!$result) html_redirect("edit_rss_feeds.php", FALSE);
         else html_redirect("edit_rss_feeds.php");
         break;
     default:
@@ -114,14 +114,14 @@ switch($action)
         $result = mysql_query($sql);
         if (mysql_error()) trigger_error(mysql_error(),E_USER_ERROR);
 
-        if(mysql_num_rows($result) > 0)
+        if (mysql_num_rows($result) > 0)
         {
             echo "<table align='center'>\n";
             echo "<tr><th>URL</th><th>{$strDisplay}</th><th>{$strEnabled}</th><th>{$strOperation}</th></tr>\n";
             $shade='shade1';
             while($obj = mysql_fetch_object($result))
             {
-                if($obj->enabled == "true") $opposite = "false";
+                if ($obj->enabled == "true") $opposite = "false";
                 else $opposite = "true";
                 $urlparts = parse_url($obj->url);
                 if ($obj->enabled == 'false') $shade='expired';

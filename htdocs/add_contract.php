@@ -46,7 +46,7 @@ if ($action == "showform" OR $action=='')
     echo "<form name='addcontract' action='{$_SERVER['PHP_SELF']}?action=add' method='post' onsubmit='return confirm_submit();'>";
     echo "<table align='center' class='vertical'>";
     echo "<tr><th>{$strSite} <sup class='red'>*</sup></th><td>";
-    if($_SESSION['formdata']['add_contract']['site'] != "")
+    if ($_SESSION['formdata']['add_contract']['site'] != "")
     {
         echo site_drop_down("site", $_SESSION['formdata']['add_contract']['site'])." </td></tr>\n";
     }
@@ -61,7 +61,7 @@ if ($action == "showform" OR $action=='')
 
     echo "<input type='hidden' name ='contacts' value='amount' />";
     echo "{$strLimitTo} <input size='2' name='amount' ";
-    if($_SESSION['formdata']['add_contract']['contacts'] != "")
+    if ($_SESSION['formdata']['add_contract']['contacts'] != "")
     {
         echo "value='{$_SESSION['formdata']['add_contract']['amount']}'";
     }
@@ -74,7 +74,7 @@ if ($action == "showform" OR $action=='')
     // echo "{$strAllSiteContactsSupported}";
     echo "</td></tr>";
     echo "<tr><th>{$strProduct} <sup class='red'>*</sup></th><td>";
-    if($_SESSION['formdata']['add_contract']['product'] != "")
+    if ($_SESSION['formdata']['add_contract']['product'] != "")
     {
         echo product_drop_down("product", $_SESSION['formdata']['add_contract']['product'])."</td></tr>\n";
     }
@@ -85,18 +85,18 @@ if ($action == "showform" OR $action=='')
 
     echo "<tr><th>{$strExpiryDate} <sup class='red'>*</sup></th>";
     echo "<td><input name='expiry' size='10' ";
-    if($_SESSION['formdata']['add_contract']['expiry'] != "")
+    if ($_SESSION['formdata']['add_contract']['expiry'] != "")
         echo "value='{$_SESSION['formdata']['add_contract']['expiry']}'";
     echo "/> ".date_picker('addcontract.expiry');
     echo "<input type='checkbox' name='noexpiry' ";
-    if($_SESSION['formdata']['add_contract']['noexpiry'] == "on")
+    if ($_SESSION['formdata']['add_contract']['noexpiry'] == "on")
     {
         echo "checked='checked' ";
     }
     echo "onclick=\"this.form.expiry.value=''\" /> {$strUnlimited}</td></tr>\n";
 
     echo "<tr><th>{$strServiceLevel}</th><td>";
-    if($_SESSION['formdata']['add_contract']['servicelevelid'] != "")
+    if ($_SESSION['formdata']['add_contract']['servicelevelid'] != "")
     {
         echo servicelevel_drop_down('servicelevelid', $_SESSION['formdata']['add_contract']['servicelevelid'], TRUE)."</td></tr>\n";
     }
@@ -153,11 +153,11 @@ elseif ($action == "add")
     $productonly = cleanvar($_REQUEST['productonly']);
     $term = cleanvar($_REQUEST['term']);
     $contacts = cleanvar($_REQUEST['contacts']);
-    if($_REQUEST['noexpiry'] == 'on') $expirydate = '-1';
+    if ($_REQUEST['noexpiry'] == 'on') $expirydate = '-1';
 
     $allcontacts = 'No';
-    if($contacts == 'amount') $amount = cleanvar($_REQUEST['amount']);
-    elseif($contacts == 'all') $allcontacts = 'Yes';
+    if ($contacts == 'amount') $amount = cleanvar($_REQUEST['amount']);
+    elseif ($contacts == 'all') $allcontacts = 'Yes';
 
     $incident_pools = explode(',', "0,{$CONFIG['incident_pools']}");
     $incident_quantity = $incident_pools[$_POST['incident_poolid']];

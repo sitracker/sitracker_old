@@ -89,7 +89,7 @@ switch($type)
         if ($user!='all') $sql .= "AND (owner='$user' OR towner='$user') ";
         if (!empty($softwareid)) $sql .= "AND softwareid='$softwareid' ";
 
-        if(!empty($maintexclude)) $sql .= "AND incidents.maintenanceid != '{$maintexclude}' ";
+        if (!empty($maintexclude)) $sql .= "AND incidents.maintenanceid != '{$maintexclude}' ";
 
         echo "<h2>";
         if ($user!='all') echo sprintf($strUserIncidents, user_realname($user,TRUE)).": ";

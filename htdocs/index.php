@@ -52,7 +52,7 @@ if ($_SESSION['auth'] != TRUE)
     if ($_GET['lang']=='zz') $availablelanguages['zz'] = 'Test Language (zz)';
     foreach($availablelanguages AS $langcode => $language)
     {
-        if($langcode == $_SESSION['lang']) echo "<option value='$langcode' selected='selected'>$language</option>\n";
+        if ($langcode == $_SESSION['lang']) echo "<option value='$langcode' selected='selected'>$language</option>\n";
         else echo "<option value='$langcode'>$language</option>\n";
     }
     echo "</select></label>";

@@ -202,12 +202,11 @@ else
             echo "</td></tr>";
             echo "<tr><th>{$strPrivacy}</th>";
             echo "<td>";
-            if($_SESSION['formdata']['add_task']['distribution'] == 'public')
+            if ($_SESSION['formdata']['add_task']['distribution'] == 'public')
             {
                 echo "<input type='radio' name='distribution' checked='checked'value='public' /> {$strPublic}<br />";
                 echo "<input type='radio' name='distribution' value='private' /> {$strPrivate} <img src='{$CONFIG['application_webpath']}images/icons/{$iconset}/16x16/private.png' width='16' height='16' title='{$strPublic}/{$strPrivate}' alt='{$strPrivate}' style='border: 0px;' /></td></tr>";
             }
-
             else
             {
                 echo "<input type='radio' name='distribution' value='public' /> {$strPublic}<br />";

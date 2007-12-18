@@ -7,7 +7,7 @@ function incident_details_window(incidentid,win)
 {
     // URL = "incident.php?popup=yes&id=" + incidentid;
     URL = "incident_details.php?id=" + incidentid + "&win=" + win;
-    if(popwin) { popwin.close(); }
+    if (popwin) { popwin.close(); }
     popwin = window.open(URL, "sit_popup", "toolbar=yes,status=yes,menubar=no,scrollbars=yes,resizable=yes,width=700,height=600");
 }
 
@@ -132,7 +132,7 @@ function get_and_display(page, component)
         //remove this in the future after testing
         if (xmlhttp.readyState==4)
         {
-            if(xmlhttp.responseText != "")
+            if (xmlhttp.responseText != "")
             {
                 //alert(xmlhttp.responseText);
                 rsswindow.innerHTML = xmlhttp.responseText;
@@ -230,19 +230,19 @@ function changeTextAreaLength ( e )
     for(var i=0; i<=arrNewLines.length-1; i++)
     {
         numRows++;
-        if(arrNewLines[i].length > MAX_COLS-5)
+        if (arrNewLines[i].length > MAX_COLS-5)
         {
             numRows += Math.floor(arrNewLines[i].length/MAX_COLS)
         }
     }
 
-    if(txtLength == 0)
+    if (txtLength == 0)
     {
         e.cols = MIN_COLS ;
         e.rows = MIN_ROWS ;
     } else
     {
-        if(numRows <= 1)
+        if (numRows <= 1)
         {
             e.cols = (txtLength % MAX_COLS) + 1 >= MIN_COLS ? ((txtLength % MAX_COLS) + 1) : MIN_COLS ;
         }

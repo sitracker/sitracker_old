@@ -42,20 +42,20 @@ if (empty($submit))
     echo "<form name='addsoftware' action='{$_SERVER['PHP_SELF']}' method='post' onsubmit='return confirm_submit();'>";
     echo "<table class='vertical'>";
     echo "<tr><th>{$strVendor}:</th><td>";
-    if($_SESSION['formdata']['add_software']['vendor'] != "")
+    if ($_SESSION['formdata']['add_software']['vendor'] != "")
         echo vendor_drop_down('vendor',$_SESSION['formdata']['add_software']['vendor'])."</td></tr>\n";
     else
         echo vendor_drop_down('vendor',$software->vendorid)."</td></tr>\n";
     echo "<tr><th>{$strSkill}: <sup class='red'>*</sup></th><td><input maxlength='50' name='name' size='30' /></td></tr>\n";
     echo "<tr><th>{$strLifetime}:</th><td>";
     echo "<input type='text' name='lifetime_start' id='lifetime_start' size='10' ";
-    if($_SESSION['formdata']['add_software']['lifetime_start'] != "")
+    if ($_SESSION['formdata']['add_software']['lifetime_start'] != "")
         echo "value='{$_SESSION['formdata']['add_software']['lifetime_start']}'";
     echo " /> ";
     echo date_picker('addsoftware.lifetime_start');
     echo " {$strTo}: ";
     echo "<input type='text' name='lifetime_end' id='lifetime_end' size='10'";
-    if($_SESSION['formdata']['add_software']['lifetime_end'] != "")
+    if ($_SESSION['formdata']['add_software']['lifetime_end'] != "")
         echo "value='{$_SESSION['formdata']['add_software']['lifetime_end']}'";
     echo "/> ";
     echo date_picker('addsoftware.lifetime_end');

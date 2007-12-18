@@ -96,7 +96,7 @@ define('SIT_UPGRADED_NOTICE', 7);
 // Decide which language to use and setup internationalisation
 require('i18n/en-GB.inc.php');
 if ($CONFIG['default_i18n']!='en-GB') @include("i18n/{$CONFIG['default_i18n']}.inc.php");
-if(!empty($_SESSION['lang']) AND $_SESSION['lang'] != $CONFIG['default_i18n']) include("i18n/{$_SESSION['lang']}.inc.php");
+if (!empty($_SESSION['lang']) AND $_SESSION['lang'] != $CONFIG['default_i18n']) include("i18n/{$_SESSION['lang']}.inc.php");
 ini_set('default_charset', $i18ncharset);
 
 
@@ -349,18 +349,18 @@ function user_realname($id, $allowhtml=FALSE)
             else return ("<span class='deleted'>$realname</span>");
         }
     }
-    elseif(!empty($incidents['email']))
+    elseif (!empty($incidents['email']))
     {
         //an an incident
         preg_match('/From:[ A-Za-z@\.]*/', $update_body, $from);
-        if(!empty($from))
+        if (!empty($from))
         {
             $frommail = strtolower(substr(strstr($from[0], '@'), 1));
             $customerdomain = strtolower(substr(strstr($incidents['email'], '@'), 1));
-            if($frommail == $customerdomain) return $GLOBALS['strCustomer'];
+            if ($frommail == $customerdomain) return $GLOBALS['strCustomer'];
             foreach($CONFIG['ext_esc_partners'] AS $partner)
             {
-                if(strstr(strtolower($frommail), strtolower($partner['email_domain'])))
+                if (strstr(strtolower($frommail), strtolower($partner['email_domain'])))
                 {
                     return $partner['name'];
                 }
@@ -465,11 +465,11 @@ function user_incidents($id){
     $sql .= " GROUP BY priority";
 
     $result = mysql_query($sql);
-    if(mysql_error()) trigger_error(mysql_error(),E_USER_WARNING);
+    if (mysql_error()) trigger_error(mysql_error(),E_USER_WARNING);
 
     $arr = array('1' => '0', '2' => '0', '3' => '0', '4' => '0');
 
-    if(mysql_num_rows($result) > 0){
+    if (mysql_num_rows($result) > 0){
 	while ($count = mysql_fetch_array($result)){
 		$arr[$count['priority']] = $count['num'];
 	}
@@ -1809,7 +1809,7 @@ function incident_lastupdate($id)
         $update = mysql_fetch_array($result);
 
         // In certain circumstances go back even further, find an earlier update
-        if(($update['type'] == "reassigning" AND !isset($update['body'])) OR ($update['type'] == 'slamet' AND $row['sla'] == 'opened'))
+        if (($update['type'] == "reassigning" AND !isset($update['body'])) OR ($update['type'] == 'slamet' AND $row['sla'] == 'opened'))
         {
             //check if the previous update was by userid == 0 if so then we can assume this is a new call
             $sqlPrevious = "SELECT userid, type, currentowner, currentstatus, LEFT(bodytext,500) AS body, timestamp, nextaction, id, sla, type ";
@@ -1822,16 +1822,16 @@ function incident_lastupdate($id)
             else
             {
                 $row = mysql_fetch_array($resultPrevious);
-                if($row['userid'] == 0)
+                if ($row['userid'] == 0)
                 {
                     $last;
                     //This was an initial assignment so we now want the first update - looping round data retrieved rather than second query
                     while($row = mysql_fetch_array($resultPrevious))
                     {
                         $last = $row;
-                        if($row['userid'] != 0)
+                        if ($row['userid'] != 0)
                         {
-                            if($row['type'] ==  'slamet')
+                            if ($row['type'] ==  'slamet')
                             {
                                 $last = mysql_fetch_array($resultPrevious);
                             }
@@ -2032,7 +2032,7 @@ function emailtype_replace_specials($string, $incidentid, $userid=0)
                     33 => $baseurl.'feedback.php?ax='.urlencode(trim(base64_encode(gzcompress(str_rot13(urlencode($CONFIG['feedback_form']).'&&'.urlencode($contactid).'&&'.urlencode($incidentid))))))
                 );
 
-    if($incident->towner != 0)
+    if ($incident->towner != 0)
     {
         //$return_string = str_replace("<incidentreassignemailaddress>", user_email($incident->towner), $return_string);
         $email_regex[] = '/<incidentreassignemailaddress>/s';
@@ -2439,7 +2439,7 @@ function sit_error_handler($errno, $errstr, $errfile, $errline, $errcontext)
     E_USER_ERROR      => 'Application Error',
     E_USER_WARNING    => 'Application Warning',
     E_USER_NOTICE    => 'Application Notice');
-    if(defined('E_STRICT')) $errortype[E_STRICT] = 'Strict Runtime notice';
+    if (defined('E_STRICT')) $errortype[E_STRICT] = 'Strict Runtime notice';
 
     $trace_errors = array(E_ERROR, E_USER_ERROR);
 
@@ -2836,7 +2836,7 @@ function send_template_email($template, $incidentid, $info1='', $info2='')
 
     $extra_headers .= "\r\n";
 
-    if($email_storeinlog == 'Yes')
+    if ($email_storeinlog == 'Yes')
     {
         $bt   = "To: <b>$email_to</b>\nFrom: <b>$email_from</b>\nReply-To: <b>$emailreplyto</b>\n";
         $bt  .= "BCC: <b>$email_bcc</b>\nSubject: <b>$email_subject</b>\n<hr>".$email_body;
@@ -2882,7 +2882,7 @@ if (!function_exists('list_dir'))
         // try to figure out what delimeter is being used (for windows or unix)...
         $delim = (strstr($dirname,"/")) ? "/" : "\\";
 
-        if($dirname[strlen($dirname)-1]!=$delim)
+        if ($dirname[strlen($dirname)-1]!=$delim)
         $dirname.=$delim;
 
         $handle = opendir($dirname);
@@ -2890,9 +2890,9 @@ if (!function_exists('list_dir'))
 
         while ($file = readdir($handle))
         {
-            if($file=='.'||$file=='..')
+            if ($file=='.'||$file=='..')
                 continue;
-            if(is_dir($dirname.$file) && $recursive)
+            if (is_dir($dirname.$file) && $recursive)
             {
                 $x = list_dir($dirname.$file.$delim);
                 $result_array = array_merge($result_array, $x);
@@ -2908,7 +2908,7 @@ if (!function_exists('list_dir'))
         {
             natsort($result_array);
 
-            if($_SESSION['update_order'] == "desc")
+            if ($_SESSION['update_order'] == "desc")
             {
                 $result_array = array_reverse($result_array);
             }
@@ -3565,18 +3565,18 @@ function country_drop_down($name, $country, $extraattributes='')
 
 function check_email($email, $check_dns = FALSE)
 {
-    if((preg_match('/(@.*@)|(\.\.)|(@\.)|(\.@)|(^\.)/', $email)) ||
+    if ((preg_match('/(@.*@)|(\.\.)|(@\.)|(\.@)|(^\.)/', $email)) ||
        (preg_match('/^.+\@(\[?)[a-zA-Z0-9\-\.]+\.([a-zA-Z]{2,3}|[0-9]{1,3})(\]?)$/',$email)))
     {
-        if($check_dns)
+        if ($check_dns)
         {
             $host = explode('@', $email);
             // Check for MX record
-            if( checkdnsrr($host[1], 'MX') ) return TRUE;
+            if ( checkdnsrr($host[1], 'MX') ) return TRUE;
             // Check for A record
-            if( checkdnsrr($host[1], 'A') ) return TRUE;
+            if ( checkdnsrr($host[1], 'A') ) return TRUE;
             // Check for CNAME record
-            if( checkdnsrr($host[1], 'CNAME') ) return TRUE;
+            if ( checkdnsrr($host[1], 'CNAME') ) return TRUE;
         }
         else
         {
@@ -3803,11 +3803,11 @@ function iso_8601_date($timestamp)
 */
 function is_public_holiday($time, $publicholidays)
 {
-    if(!empty($publicholidays))
+    if (!empty($publicholidays))
     {
         foreach($publicholidays AS $holiday)
         {
-            if($time >= $holiday->starttime AND $time <= $holiday->endtime)
+            if ($time >= $holiday->starttime AND $time <= $holiday->endtime)
 	        {
 	            return $holiday->endtime-$time;
 	        }
@@ -4429,7 +4429,7 @@ function incident_backup_switchover($userid, $accepting)
             }
         }
     }
-    elseif($accepting=='')
+    elseif ($accepting=='')
     {
         // Do nothing when accepting status doesn't exist
     }
@@ -4667,11 +4667,11 @@ function format_external_id($externalid, $escalationpath='')
         $html = $externalid;
         foreach($CONFIG['ext_esc_partners'] AS $partner)
         {
-            if(!empty($partner['ext_callid_regexp']))
+            if (!empty($partner['ext_callid_regexp']))
             {
-                if(preg_match($partner['ext_callid_regexp'], $externalid))
+                if (preg_match($partner['ext_callid_regexp'], $externalid))
                 {
-                    if(!empty($partner['ext_url']))
+                    if (!empty($partner['ext_url']))
                     {
                         $html = "<a href='".str_replace("%externalid", $externalid, $partner['ext_url'])."' title = '".$partner['ext_url_title']."'>{$externalid}</a>";
                     }
@@ -4723,7 +4723,7 @@ function send_feedback($contractid)
     global $CONFIG;
     foreach($CONFIG['no_feedback_contracts'] AS $contract)
     {
-        if($contract == $contractid)
+        if ($contract == $contractid)
         {
             return FALSE;
         }
@@ -4754,7 +4754,7 @@ function random_tip()
 {
     global $CONFIG;
     $delim="\n";
-    if(!file_exists($CONFIG['tipsfile']))
+    if (!file_exists($CONFIG['tipsfile']))
     {
         trigger_error("Tips file '{$CONFIG['tipsfile']}' was not found!  check your paths!",E_USER_WARNING);
     }
@@ -4826,7 +4826,7 @@ function external_escalation($escalated, $incid)
 {
 
    foreach($escalated as $i => $id){
-	if($id == $incid){
+	if ($id == $incid){
 	   return "yes";
 	}
    }
@@ -5047,7 +5047,7 @@ function dashboard_do($context, $row=0, $dashboardid=0)
 {
     global $DASHBOARDCOMP;
     $action = $DASHBOARDCOMP[$context];
-    if($action != NULL || $action != "")
+    if ($action != NULL || $action != "")
     {
         if (function_exists($action)) $action($row,$dashboardid);
     }
@@ -5059,7 +5059,7 @@ function show_dashboard_component($row, $dashboardid)
     $result = mysql_query($sql);
     if (mysql_error()) trigger_error(mysql_error(),E_USER_ERROR);
 
-    if(mysql_num_rows($result) == 1)
+    if (mysql_num_rows($result) == 1)
     {
         $obj = mysql_fetch_object($result);
         dashboard_do("dashboard_".$obj->name,'db_'.$row,$dashboardid);
@@ -5365,7 +5365,7 @@ function get_tag_id($tag)
     $sql = "SELECT tagid FROM tags WHERE name = LOWER('$tag')";
     $result = mysql_query($sql);
     if (mysql_error()) trigger_error(mysql_error(),E_USER_WARNING);
-    if(mysql_num_rows($result) == 1)
+    if (mysql_num_rows($result) == 1)
     {
         $id = mysql_fetch_row($result);
         return $id[0];
@@ -5510,7 +5510,7 @@ function list_tags($recordid, $type, $html=TRUE)
     $count=1;
     while($tags = mysql_fetch_object($result))
     {
-        if($html)
+        if ($html)
         {
             $str .= "<a href='view_tags.php?tagid={$tags->tagid}'>".$tags->name;
             if (array_key_exists($tags->name, $CONFIG['tag_icons']))
@@ -5575,7 +5575,7 @@ function show_tag_cloud($orderby="name", $showcount=FALSE)
     // First purge any disused tags
     purge_tags();
     $sql = "SELECT COUNT(name) AS occurrences, name, tags.tagid FROM tags, set_tags WHERE tags.tagid = set_tags.tagid GROUP BY name ORDER BY $orderby";
-    if($orderby == "occurrences") $sql .= " DESC";
+    if ($orderby == "occurrences") $sql .= " DESC";
     $result = mysql_query($sql);
     if (mysql_error()) trigger_error(mysql_error(),E_USER_ERROR);
 
@@ -5590,13 +5590,13 @@ function show_tag_cloud($orderby="name", $showcount=FALSE)
     list($min) = mysql_fetch_row($countresult);
     unset($countsql, $countresult);
 
-    if(substr($_SERVER['SCRIPT_NAME'],-8) != "main.php")
+    if (substr($_SERVER['SCRIPT_NAME'],-8) != "main.php")
     {
         //not in the dashbaord
         $html .= "<p align='center'>{$GLOBALS['strSort']}: <a href='view_tags.php?orderby=name'>{$GLOBALS['strAlphabetically']}</a> | ";
         $html .= "<a href='view_tags.php?orderby=occurrences'>{$GLOBALS['strPopularity']}</a></p>";
     }
-    if(mysql_num_rows($result) > 0)
+    if (mysql_num_rows($result) > 0)
     {
         $html .= "<table align='center'><tr><td>";
         while($obj = mysql_fetch_object($result))
@@ -5633,12 +5633,12 @@ function display_drafts($type, $result)
     global $id;
     global $CONFIG;
 
-    if($type == 'update')
+    if ($type == 'update')
     {
         $page = "update_incident.php";
         $editurlspecific = "";
     }
-    else if($type == 'email')
+    else if ($type == 'email')
     {
         $page = "email_incident.php";
         $editurlspecific = "&amp;step=2";
@@ -5694,7 +5694,7 @@ function array_multi_search($needle, $haystack, $searchkey)
 {
     foreach($haystack AS $thekey => $thevalue)
     {
-        if($thevalue[$searchkey] == $needle) return $thekey;
+        if ($thevalue[$searchkey] == $needle) return $thekey;
     }
     return FALSE;
 }
@@ -5730,7 +5730,7 @@ function implode_assoc($glue1, $glue2, $array)
 */
 function time_dropdown($name, $time='')
 {
-    if($time)
+    if ($time)
         $time = explode(':', $time);
 
     $html = "<select name='$name'>\n";
@@ -5742,11 +5742,11 @@ function time_dropdown($name, $time='')
             $hours = str_pad($hours, 2, "0", STR_PAD_LEFT);
             $mins = str_pad($mins, 2, "0", STR_PAD_RIGHT);
 
-            if($time AND $time[0] == $hours AND $time[1] == $mins)
+            if ($time AND $time[0] == $hours AND $time[1] == $mins)
                 $html .= "<option selected='selected' value='$hours:$mins'>$hours:$mins</option>";
             else
             {
-                if($time AND $time[0] == $hours AND $time[1] < $mins AND $time[1] > ($mins - 15))
+                if ($time AND $time[0] == $hours AND $time[1] < $mins AND $time[1] > ($mins - 15))
                     $html .= "<option selected='selected'           value='$time[0]:$time[1]'>$time[0]:$time[1]</option>\n";
                 else
                     $html .= "<option value='$hours:$mins'>$hours:$mins</option>\n";
@@ -5766,15 +5766,15 @@ function time_dropdown($name, $time='')
 function fuzzy_time($seconds)
 {
     //TODO
-    if($seconds < 0) $time = 'Error';
-    elseif($seconds > 0 AND $seconds < 60) $time = 'Just Now'; // FIXME i18n JustNow
-    elseif($seconds > 60 AND $seconds < 5 * 60) $time = 'A Few Minutes Ago'; // FIXME i18n A few minutes ago
-    elseif($seconds > 5 * 60 AND $seconds < 30 * 60)
+    if ($seconds < 0) $time = 'Error';
+    elseif ($seconds > 0 AND $seconds < 60) $time = 'Just Now'; // FIXME i18n JustNow
+    elseif ($seconds > 60 AND $seconds < 5 * 60) $time = 'A Few Minutes Ago'; // FIXME i18n A few minutes ago
+    elseif ($seconds > 5 * 60 AND $seconds < 30 * 60)
     {
         $seconds = 5 * round($seconds / (5 * 60));
         $time ="About {$seconds} Mins Ago"; // FIXME i18n About x mins ago
     }
-    elseif($seconds > 30 * 60 AND $seconds < 2 * 60 * 60)
+    elseif ($seconds > 30 * 60 AND $seconds < 2 * 60 * 60)
     {
         $hours = floor($seconds / (60 * 60));
         echo "Over {$hours} hours ago"; // FIXME i18n over x hours ago
@@ -5798,9 +5798,9 @@ function exact_seconds($seconds)
     $seconds -= $minutes * 60;
 
     $string;
-    if($days != 0) $string .= "{$days} {$GLOBALS['strDays']}, ";
-    if($hours != 0) $string .= "{$hours} {$GLOBALS['strHours']}, ";
-    if($minutes != 0) $string .= "{$minutes} {$GLOBALS['strMinutes']}, ";
+    if ($days != 0) $string .= "{$days} {$GLOBALS['strDays']}, ";
+    if ($hours != 0) $string .= "{$hours} {$GLOBALS['strHours']}, ";
+    if ($minutes != 0) $string .= "{$minutes} {$GLOBALS['strMinutes']}, ";
     $string .= "{$seconds} {$GLOBALS['strSeconds']}";
 
     return $string;
@@ -5819,7 +5819,7 @@ function user_online($user)
     $sql = "SELECT lastseen FROM users WHERE id={$user}";
     $result = mysql_query($sql);
     $users = mysql_fetch_object($result);
-    if(($now - mysql2date($users->lastseen) < (60 * 30)))
+    if (($now - mysql2date($users->lastseen) < (60 * 30)))
         return "<img src='{$CONFIG['application_webpath']}images/icons/{$iconset}/16x16/online.png' width='16' height='16' alt=\"{$strOnline}\" /> ";
     else
         return "<img src='{$CONFIG['application_webpath']}images/icons/{$iconset}/16x16/offline.png' width='16' height='16' alt=\"{$strOffline}\" /> ";
@@ -5832,7 +5832,7 @@ function user_online($user)
 */
 function show_form_errors($formname)
 {
-    if($_SESSION['formerrors'][$formname])
+    if ($_SESSION['formerrors'][$formname])
     {
         foreach($_SESSION['formerrors'][$formname] as $error)
         {

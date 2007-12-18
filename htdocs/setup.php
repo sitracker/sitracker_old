@@ -540,7 +540,7 @@ switch ($_REQUEST['action'])
                             echo "<p>See the <code>doc/UPGRADE</code> file for further upgrade instructions and help.<br />";
                         }
 
-                        if($installed_version >= 3.24)
+                        if ($installed_version >= 3.24)
                         {
                             //upgrade dashboard components.
 
@@ -555,18 +555,18 @@ switch ($_REQUEST['action'])
                                 include("{$CONFIG['application_fspath']}dashboard/dashboard_{$dashboardnames->name}.php");
                                 $func = "dashboard_{$dashboardnames->name}_get_version";
 
-                                if(function_exists($func))
+                                if (function_exists($func))
                                 {
                                     $version = $func();
                                 }
 
-                                if($version > $dashboardnames->version)
+                                if ($version > $dashboardnames->version)
                                 {
                                     echo "<p>Upgrading {$dashboardnames->name}</p>>";
                                     // apply all upgrades since running version
                                     $upgrade_func = "dashboard_{$dashboardnames->name}_upgrade";
 
-                                    if(function_exists($upgrade_func))
+                                    if (function_exists($upgrade_func))
                                     {
                                         $dashboard_schema = $func();
                                         for($i = $dashboardnames->version; $i <= $version; $i++)
@@ -643,8 +643,8 @@ switch ($_REQUEST['action'])
                         echo "<code>chmod -R 777 {$CONFIG['attachment_fspath']}</code>";
                         echo "</p>";
                     }
-                    elseif(!isset($_REQUEST)) echo "<p class='error'>SiT! requires PHP 4.2.0 or later</p>";
-                    elseif(@ini_get('register_globals')==1) echo "<p class='error'>SiT! strongly recommends that you change your php.ini setting <code>register_globals</code> to OFF.</p>";
+                    elseif (!isset($_REQUEST)) echo "<p class='error'>SiT! requires PHP 4.2.0 or later</p>";
+                    elseif (@ini_get('register_globals')==1) echo "<p class='error'>SiT! strongly recommends that you change your php.ini setting <code>register_globals</code> to OFF.</p>";
                     elseif (setup_check_adminuser()==FALSE)
                     {
                         echo "<p><span style='color: red; font-weight: bolder;'>Important:</span> you <strong>must</strong> create an admin account before you can use SiT</p>";

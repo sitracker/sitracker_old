@@ -144,7 +144,7 @@ elseif ($action == "update")
         if (isset($licenserx)) $licenserx='1'; else $licenserx='0';
         // update site
 
-        if($active=='true') $activeStr = 'true';
+        if ($active=='true') $activeStr = 'true';
         else $activeStr = 'false';
 
         $sql = "UPDATE `{$dbSites}` SET name='$name', department='$department', address1='$address1', address2='$address2', city='$city', ";

@@ -23,14 +23,14 @@ $sql = "SELECT dashboard FROM users WHERE id = '".$_SESSION['userid']."'";
 $result = mysql_query($sql);
 if (mysql_error()) trigger_error(mysql_error(),E_USER_WARNING);
 
-if(mysql_num_rows($result) > 0)
+if (mysql_num_rows($result) > 0)
 {
     $obj = mysql_fetch_object($result);
     $dashboardstr = $obj->dashboard;
     $dashboardcomponents = explode(",",$obj->dashboard);
 }
 
-if(empty($dashboardid))
+if (empty($dashboardid))
 {
 
     foreach($dashboardcomponents AS $db)
@@ -48,12 +48,12 @@ if(empty($dashboardid))
     echo "<h2><img src='{$CONFIG['application_webpath']}images/icons/{$iconset}/32x32/dashboard.png' width='32' height='32' alt='' /> ";
     echo "{$strDashboard}: ".user_realname($sit[2])."</h2>\n";
 
-    if(mysql_num_rows($result) > 0)
+    if (mysql_num_rows($result) > 0)
     {
         echo "<table align='center'>\n";
         while($obj = mysql_fetch_object($result))
         {
-            if(empty($ondashboard[$obj->id]))
+            if (empty($ondashboard[$obj->id]))
             {
                 //not already on dashbaord
                 echo "<tr><th>{$strName}:</th><td>{$obj->name}</td><td><a href='{$_SERVER['PHP_SELF']}?action=add&amp;id=$obj->id'>{$strAdd}</a></td></tr>\n";

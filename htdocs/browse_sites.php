@@ -23,9 +23,9 @@ $search_string = cleanvar($_REQUEST['search_string']);
 $owner = cleanvar($_REQUEST['owner']);
 $submit_value = cleanvar($_REQUEST['submit']);
 $displayinactive = cleanvar($_REQUEST['displayinactive']);
-if(empty($displayinactive)) $displayinactive = "false";
+if (empty($displayinactive)) $displayinactive = "false";
 
-if($submit_value == "go")
+if ($submit_value == "go")
 {
 // build SQL
     $sql  = "SELECT id, name, department FROM `{$dbSites}` ";
@@ -55,14 +55,14 @@ if($submit_value == "go")
             $sql .= "name LIKE '%$search_string%' ";
         }
     }
-    if(!$displayinactive) $sql .= "AND active = 'true'";
+    if (!$displayinactive) $sql .= "AND active = 'true'";
     $sql .= " ORDER BY name ASC";
 
     // execute query
     $result = mysql_query($sql);
     if (mysql_error()) trigger_error("MySQL Query Error ".mysql_error(), E_USER_ERROR);
 
-    if(mysql_num_rows($result) == 1)
+    if (mysql_num_rows($result) == 1)
     {
             //go straight to the site
             $row = mysql_fetch_array($result);
@@ -92,17 +92,17 @@ echo "{$strBrowseSites}</h2>";
     echo "<input dojoType='ComboBox' dataUrl='autocomplete.php?action=sites' style='width: 300px;' name='search_string' />";
     echo "<input name='submit' type='submit' value='{$strGo}' /></p>";
     echo "</form>\n";
-    if($displayinactive=="true")
+    if ($displayinactive=="true")
     {
         echo "<a href='".$_SERVER['PHP_SELF']."?displayinactive=false";
-        if(!empty($search_string)) echo "&amp;search_string={$search_string}&amp;owner={$owner}";
+        if (!empty($search_string)) echo "&amp;search_string={$search_string}&amp;owner={$owner}";
         echo "'>{$strShowActiveOnly}</a>";
         $inactivestring="displayinactive=true";
     }
     else
     {
         echo "<a href='".$_SERVER['PHP_SELF']."?displayinactive=true";
-        if(!empty($search_string)) echo "&amp;search_string={$search_string}&amp;owner={$owner}";
+        if (!empty($search_string)) echo "&amp;search_string={$search_string}&amp;owner={$owner}";
         echo "'>Show inactive</a>"; // FIXME i18n show inactive
         $inactivestring="displayinactive=false";
     }
@@ -170,7 +170,7 @@ if ($search_string == "")
 // search for criteria
 if ($errors == 0)
 {
-    if($submit_value != 'go')
+    if ($submit_value != 'go')
     {
         // Don't  need to do this again, already done above, us the results of that
         // build SQL

@@ -70,7 +70,7 @@ if (empty($action) OR $action == "showform")
     echo "<tr><th>{$strReview} <img src='{$CONFIG['application_webpath']}images/icons/{$iconset}/16x16/review.png' width='16' height='16' alt='' /></th>";
     echo "<td><input type='text' size='5' name='review_days' maxlength='3' value='{$sla->review_days}' /> {$strDays}</td></tr>";
     echo "<tr><th>{$strTimed} <img src='{$CONFIG['application_webpath']}images/icons/{$iconset}/16x16/timer.png' width='16' height='16' alt='' /></th><td>";
-    if($sla->timed == 'yes')
+    if ($sla->timed == 'yes')
     {
         echo "<input type='checkbox' name='timed' id='timed' onchange='enableBillingPeriod();' checked='checked' />";
         $billingSQL = "SELECT * FROM billing_periods WHERE servicelevelid = {$sla->id} AND priority = {$priority} AND tag = '{$tag}'";
@@ -112,7 +112,7 @@ elseif ($action == "edit")
     $review_days = cleanvar($_POST['review_days']);
     $engineerPeriod = cleanvar($_POST['engineerPeriod']);
     $customerPeriod = cleanvar($_POST['customerPeriod']);
-    if($_POST['timed'] != 'on') $timed = 0;
+    if ($_POST['timed'] != 'on') $timed = 0;
     else $timed = 1;
 
     $sql = "UPDATE servicelevels SET initial_response_mins='$initial_response_mins', ";
@@ -132,7 +132,7 @@ elseif ($action == "edit")
         if (mysql_error()) trigger_error(mysql_error(),E_USER_WARNING);
         $billing = mysql_fetch_object($billingResult);
 
-        if(!empty($billing))
+        if (!empty($billing))
         {
             //update
             $sql = "UPDATE billing_periods SET customerperiod = '{$customerPeriod}', engineerperiod = '{$engineerPeriod}' WHERE servicelevelid = '{$id}' AND priority = {$priority} AND tag = '{$tag}'";

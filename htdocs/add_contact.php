@@ -21,7 +21,7 @@ require('auth.inc.php');
 // External variables
 $siteid = mysql_real_escape_string($_REQUEST['siteid']);
 $submit = $_REQUEST['submit'];
-// if($CONFIG['debug'])
+// if ($CONFIG['debug'])
 //     $debug .= print_r($_SESSION['formdata']['add_contact']);
 //
 //     echo "<p class='error'>Form Error</p>";
@@ -52,7 +52,7 @@ if (empty($submit) OR !empty($_SESSION['formerrors']['add_contact']))
     echo "\n<table><tr><td align='center'>{$strTitle}<br />";
     echo "<input maxlength='50' name='salutation' title='Salutation (Mr, Mrs, Miss, Dr. etc.)' size='7'"; //FIXME i18n
     // FIXME throughout sit the name salutation is used to mean 'courtesy title' (eg. mr, miss) - it's a mistake
-    if($_SESSION['formdata']['add_contact']['salutation'] != '')
+    if ($_SESSION['formdata']['add_contact']['salutation'] != '')
     {
         echo "value='{$_SESSION['formdata']['add_contact']['salutation']}'";
     }
@@ -60,14 +60,14 @@ if (empty($submit) OR !empty($_SESSION['formerrors']['add_contact']))
 
     echo "<td align='center'>{$strForenames}<br />";
     echo "<input maxlength='100' name='forenames' size='15' title='Firstnames (or initials)'";
-    if($_SESSION['formdata']['add_contact']['forenames'] != '')
+    if ($_SESSION['formdata']['add_contact']['forenames'] != '')
     {
         echo "value='{$_SESSION['formdata']['add_contact']['forenames']}'";
     }
     echo "/></td>\n";
 
     echo "<td align='center'>{$strSurname}<br /><input maxlength='100' name='surname' size='20' title=\"{$strSurname}\"";
-    if($_SESSION['formdata']['add_contact']['surname'] != '')
+    if ($_SESSION['formdata']['add_contact']['surname'] != '')
     {
         echo "value='{$_SESSION['formdata']['add_contact']['surname']}'";
     }
@@ -75,7 +75,7 @@ if (empty($submit) OR !empty($_SESSION['formerrors']['add_contact']))
     echo "</table>\n</td></tr>\n";
 
     echo "<tr><th>{$strJobTitle}</th><td><input maxlength='255' name='jobtitle' size='35' title='e.g. Purchasing Manager'";
-    if($_SESSION['formdata']['add_contact']['jobtitle'] != '')
+    if ($_SESSION['formdata']['add_contact']['jobtitle'] != '')
     {
         echo "value='{$_SESSION['formdata']['add_contact']['jobtitle']}'";
     }
@@ -87,14 +87,14 @@ if (empty($submit) OR !empty($_SESSION['formerrors']['add_contact']))
 //     echo "<input dojoType='ComboBox' dataUrl='autocomplete.php?action=sites' style='width: 300px;' name='search_string' />";
 
     echo "<tr><th>{$strDepartment}</th><td><input maxlength='255' name='department' size='35'";
-    if($_SESSION['formdata']['add_contact']['department'] != '')
+    if ($_SESSION['formdata']['add_contact']['department'] != '')
     {
         echo "value='{$_SESSION['formdata']['add_contact']['department']}'";
     }
     echo "/></td></tr>\n";
 
     echo "<tr><th>{$strEmail} <sup class='red'>*</sup></th><td><input maxlength='100' name='email' size='35'";
-    if($_SESSION['formdata']['add_contact']['email'])
+    if ($_SESSION['formdata']['add_contact']['email'])
     {
         echo "value='{$_SESSION['formdata']['add_contact']['email']}'";
     }
@@ -107,7 +107,7 @@ if (empty($submit) OR !empty($_SESSION['formerrors']['add_contact']))
     echo "</td></tr>\n";
 
     echo "<tr><th>{$strTelephone}</th><td><input maxlength='50' name='phone' size='35'";
-    if($_SESSION['formdata']['add_contact']['phone'] != '')
+    if ($_SESSION['formdata']['add_contact']['phone'] != '')
     {
         echo "value='{$_SESSION['formdata']['add_contact']['phone']}'";
     }
@@ -120,14 +120,14 @@ if (empty($submit) OR !empty($_SESSION['formerrors']['add_contact']))
     echo "</td></tr>\n";
 
     echo "<tr><th>{$strMobile}</th><td><input maxlength='100' name='mobile' size='35'";
-    if($_SESSION['formdata']['add_contact']['mobile'] != '')
+    if ($_SESSION['formdata']['add_contact']['mobile'] != '')
     {
         echo "value='{$_SESSION['formdata']['add_contact']['mobile']}'";
     }
     echo "/></td></tr>\n";
 
     echo "<tr><th>{$strFax}</th><td><input maxlength='50' name='fax' size='35'";
-    if($_SESSION['formdata']['add_contact']['fax'])
+    if ($_SESSION['formdata']['add_contact']['fax'])
     {
         echo "value='{$_SESSION['formdata']['add_contact']['fax']}'";
     }
@@ -147,7 +147,7 @@ if (empty($submit) OR !empty($_SESSION['formerrors']['add_contact']))
     echo "<tr><th>{$strPostcode}</th><td><input maxlength='255' name='postcode' size='35' /></td></tr>\n";
     echo "</tbody>";
     echo "<tr><th>{$strNotes}</th><td><textarea cols='60' rows='5' name='notes'>";
-    if($_SESSION['formdata']['add_contact']['notes'] != '')
+    if ($_SESSION['formdata']['add_contact']['notes'] != '')
     {
         echo $_SESSION['formdata']['add_contact']['notes'];
     }

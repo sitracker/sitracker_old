@@ -26,7 +26,7 @@ $mode = cleanvar($_REQUEST['mode']);
 */
 function get_sql_statement($startdate,$enddate,$statementnumber,$count=TRUE)
 {
-    if($count) $count = "count(*)";
+    if ($count) $count = "count(*)";
     else $count = "*";
     $sql[0] = "SELECT {$count} FROM incidents WHERE opened BETWEEN '{$startdate}' AND '{$enddate}'";
     $sql[1] = "SELECT {$count} FROM incidents WHERE closed BETWEEN '{$startdate}' AND '{$enddate}'";
@@ -221,7 +221,7 @@ function give_overview()
 
     echo "<h2>{$GLOBALS['strCurrentlyOpen']}</h2>";
     echo "<table class='vertical' align='center'>";
-    if(mysql_num_rows($result) > 0)
+    if (mysql_num_rows($result) > 0)
     {
        // echo "<table align='center' class='vertical' width='20%'>";
         $openCalls = 0;
@@ -229,7 +229,7 @@ function give_overview()
         while($row = mysql_fetch_array($result))
         {
             echo "<tr><th>".$row['name']."</th><td class='shade2' align='left'>".$row['COUNT(incidents.id)']."</td></tr>";
-            if(strpos(strtolower($row['name']), "clos") === false) $openCalls += $row['COUNT(incidents.id)'];
+            if (strpos(strtolower($row['name']), "clos") === false) $openCalls += $row['COUNT(incidents.id)'];
         }
         echo "<tr><th>{$strTotal}</th><td class='shade2' align='left'><strong>$openCalls</strong></td></tr></table></td>";
     }
@@ -250,7 +250,7 @@ function give_overview()
     $result = mysql_query($sql);
     if (mysql_error()) trigger_error("MySQL Query Error ".mysql_error(), E_USER_ERROR);
 
-    if(mysql_num_rows($result) > 1)
+    if (mysql_num_rows($result) > 1)
     {
         echo "<h2>By vendor</h2><table class='vertical' align='center'>";
         while($vendors = mysql_fetch_array($result))
@@ -271,7 +271,7 @@ function give_overview()
             $resultVendor = mysql_query($sqlVendor);
             if (mysql_error()) trigger_error("MySQL Query Error ".mysql_error(), E_USER_ERROR);
 
-            if(mysql_num_rows($resultVendor) > 0)
+            if (mysql_num_rows($resultVendor) > 0)
             {
                 $openCallsVendor = 0;
                 echo "<td style='vertical-align:top' align='center'><strong>".$vendors['name']."</strong>";
@@ -279,7 +279,7 @@ function give_overview()
                 while($rowVendor = mysql_fetch_array($resultVendor))
                 {
                     echo "<tr><th>".$rowVendor['name']."</th><td class='shade2' align='left'>".$rowVendor['COUNT(incidents.id)']."</td></tr>";
-                    if(strpos(strtolower($rowVendor['name']), "clos") === false) $openCallsVendor += $rowVendor['COUNT(incidents.id)'];
+                    if (strpos(strtolower($rowVendor['name']), "clos") === false) $openCallsVendor += $rowVendor['COUNT(incidents.id)'];
                 }
                 // FIXME i18n Total open
                 echo "<tr><th>{$strTotal} Open</th><td class='shade2' align='left'><strong>$openCallsVendor</strong></td></tr></table></td>";
@@ -297,7 +297,7 @@ function give_overview()
     mysql_free_result($result);
 
     $string = "<h4>$todaysincidents Incidents logged today</h4>"; // FIXME i18n Incidents logged today, assigned as follows
-    if($todaysincidents > 0)
+    if ($todaysincidents > 0)
     {
         $string .= "<table align='center' width='50%'><tr><td colspan='2'>Assigned as follows:</td></tr>";
         $sql = "SELECT count(incidents.id), realname, users.id AS owner FROM incidents, users WHERE opened > '$todayrecent' AND incidents.owner = users.id GROUP BY owner DESC";
@@ -331,7 +331,7 @@ function give_overview()
     list($todaysclosed)=mysql_fetch_row($result);
 
     $string .= "<h4>$todaysclosed Incidents closed today</h4>"; // FIXME i18n closed today
-    if($todaysclosed > 0)
+    if ($todaysclosed > 0)
     {
         $sql = "SELECT count(incidents.id), realname, users.id AS owner FROM incidents LEFT JOIN users ON incidents.owner = users.id WHERE closed > '$todayrecent' GROUP BY owner";
         $string .= "<table align='center' width='50%'>";

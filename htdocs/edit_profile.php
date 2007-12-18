@@ -127,7 +127,7 @@ if (empty($mode))
     else $selectedlang = $_SESSION['lang'];
     foreach($availablelanguages AS $langcode => $language)
     {
-        if($langcode == $selectedlang) echo "<option value='$langcode' selected='selected'>$language</option>\n";
+        if ($langcode == $selectedlang) echo "<option value='$langcode' selected='selected'>$language</option>\n";
         else echo "<option value='$langcode'>$language</option>\n";
     }
     echo "</select>";
@@ -178,7 +178,7 @@ if (empty($mode))
 
     include('htmlfooter.inc.php');
 }
-elseif($mode=='save')
+elseif ($mode=='save')
 {
     // External variables
     $message = cleanvar($_POST['message']);
@@ -278,8 +278,8 @@ elseif($mode=='save')
     // update database if no errors
     if ($errors == 0)
     {
-        if(!empty($collapse)) $collapse = 'true'; else $collapse = 'false';
-        if(!empty($emailonreassign)) $emailonreassign = 'true'; else $emailonreassign = 'false';
+        if (!empty($collapse)) $collapse = 'true'; else $collapse = 'false';
+        if (!empty($emailonreassign)) $emailonreassign = 'true'; else $emailonreassign = 'false';
 
         $oldstatus = user_status($userid);
 
@@ -306,7 +306,7 @@ elseif($mode=='save')
 
         //only want to reassign to backup if you've changed you status
         //(i.e. In Office -> On Holiday rather than when youve updated your message) or changes from accepting to not accepting
-        if($oldstatus != $status)
+        if ($oldstatus != $status)
         {
             // reassign the users incidents if appropriate
             incident_backup_switchover($userid, $accepting);
@@ -330,7 +330,7 @@ elseif($mode=='save')
             else
             {
                 //if this was the admin changing his password for the first time
-                if($sit[2] == '1')
+                if ($sit[2] == '1')
                 {
                     $sql = "UPDATE usernotices SET dimissed=1 WHERE userid={$sit[2]} and updateid=1";
                     @mysql_query($sql);
@@ -348,7 +348,7 @@ elseif($mode=='save')
         include('htmlfooter.inc.php');
     }
 }
-elseif($mode='savesessionlang')
+elseif ($mode='savesessionlang')
 {
 
     $sql = "UPDATE users SET var_i18n = '{$_SESSION['lang']}' WHERE id = {$sit[2]}";

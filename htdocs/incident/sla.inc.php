@@ -68,7 +68,7 @@ $laststatus;
 while($row = mysql_fetch_object($result))
 {
     $updatearray[$row->currentstatus]['name'] = $row->name;
-    if($last == -1)
+    if ($last == -1)
         $updatearray[$row->currentstatus]['time'] = 0;
     else
         $updatearray[$laststatus]['time'] += 60 * calculate_incident_working_time($row->incidentid, $last, $row->timestamp);

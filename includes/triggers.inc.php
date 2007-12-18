@@ -47,24 +47,24 @@ function trigger($triggertype, $paramarray='')
     global $sit, $CONFIG, $dbg;
     
     //quick sanity check
-    if(!is_numeric($triggertype) OR $triggertype < 1 OR $triggertype > 16) return;
+    if (!is_numeric($triggertype) OR $triggertype < 1 OR $triggertype > 16) return;
 
     switch($triggertype)
     {
         case TRIGGER_INCIDENT_CREATED:
         {
-            if($CONFIG['debug']) $dbg .= "TRIGGER_INCIDENT_CREATED<br />";
-            if($paramarray != '')
+            if ($CONFIG['debug']) $dbg .= "TRIGGER_INCIDENT_CREATED<br />";
+            if ($paramarray != '')
             {
-                if($CONFIG['debug']) $dbg .= "Params passed:<br />";
+                if ($CONFIG['debug']) $dbg .= "Params passed:<br />";
                 foreach(array_keys($paramarray) as $key)
                 {
                     //parse parameter array
                     //TODO define the keys to look for other than 'user'
-                    if($CONFIG['debug']) $dbg .= "\$paramarray[$key] = " .$paramarray[$key]."<br />";
+                    if ($CONFIG['debug']) $dbg .= "\$paramarray[$key] = " .$paramarray[$key]."<br />";
                     
                     //get user to apply trigger to
-                    if($key == 'user')
+                    if ($key == 'user')
                     {
                         $user = $key;
                     }

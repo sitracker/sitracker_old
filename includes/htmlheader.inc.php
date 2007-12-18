@@ -46,7 +46,7 @@ echo "<script src='{$CONFIG['application_webpath']}webtrack.js' type='text/javas
 // javascript popup date library
 echo "<script src='{$CONFIG['application_webpath']}calendar.js' type='text/javascript'></script>\n";
 
-if($sit[0] != '')
+if ($sit[0] != '')
 {
     echo "<link rel=\"search\" type=\"application/opensearchdescription+xml\" title=\"{$CONFIG['application_shortname']} Search\" href=\"{$CONFIG['application_webpath']}opensearch.php\" />";
 }
@@ -136,15 +136,15 @@ if (!isset($refresh))
 $noticeaction = cleanvar($_REQUEST['noticeaction']);
 $noticeid = cleanvar($_REQUEST['noticeid']);
 
-if($noticeaction=='dismiss_notice')
+if ($noticeaction=='dismiss_notice')
 {
-    if(is_numeric($noticeid))
+    if (is_numeric($noticeid))
     {
         $sql = "DELETE FROM notices WHERE id={$noticeid} AND userid={$sit[2]}";
         mysql_query($sql);
         if (mysql_error()) trigger_error(mysql_error(),E_USER_WARNING);
     }
-    elseif($noticeid == 'all')
+    elseif ($noticeid == 'all')
     {
         $sql = "DELETE FROM notices WHERE userid={$sit[2]} LIMIT 20"; // only delete 20 max as we only show 20 max
         mysql_query($sql);
@@ -154,35 +154,35 @@ if($noticeaction=='dismiss_notice')
 
 
 //display global notices
-if($sit[0] != '')
+if ($sit[0] != '')
 {
     $noticesql = "SELECT * FROM notices ";
     $noticesql .= "WHERE userid={$sit[2]} ORDER BY timestamp DESC LIMIT 20"; // Don't show more than 20 notices, saftey cap
     $noticeresult = mysql_query($noticesql);
     if (mysql_error()) trigger_error(mysql_error(),E_USER_WARNING);
-    if(mysql_num_rows($noticeresult) > 0)
+    if (mysql_num_rows($noticeresult) > 0)
     {
         while($notice = mysql_fetch_object($noticeresult))
         {
             $notice->text = bbcode($notice->text);
             //check for the notice types
-            if($notice->type == SIT_UPGRADED_NOTICE)
+            if ($notice->type == SIT_UPGRADED_NOTICE)
             {
                 $notice->text = str_replace('$strSitUpgraded', sprintf($strSitUpgraded, $CONFIG['application_shortname'], "v{$application_version} {$application_revision}"), $notice->text);
             }
-            elseif($notice->type == WARNING_NOTICE_TYPE)
+            elseif ($notice->type == WARNING_NOTICE_TYPE)
             {
                 echo "<div class='warning'><p class='warning'>";
                 echo "<span>(<a href='{$_SERVER[PHP_SELF]}?noticeaction=dismiss_notice&amp;noticeid={$notice->id}'>$strDismiss</a>)</span>";
                 echo $notice->text;
             }
-            elseif($notice->type == CRITICAL_NOTICE_TYPE)
+            elseif ($notice->type == CRITICAL_NOTICE_TYPE)
             {
                 echo "<div class='error'><p class='error'>";
                 echo $notice->text;
-                if($notice->resolutionpage) $redirpage = $CONFIG['application_webpath'].$notice->resolutionpage;
+                if ($notice->resolutionpage) $redirpage = $CONFIG['application_webpath'].$notice->resolutionpage;
             }
-            elseif($notice->type == OUT_OF_SLA_TYPE OR $notice->type == NEARING_SLA_TYPE)
+            elseif ($notice->type == OUT_OF_SLA_TYPE OR $notice->type == NEARING_SLA_TYPE)
             {
                 echo "<div class='error'><p class='warning'>";
                 echo "<span>(<a href='{$_SERVER[PHP_SELF]}?noticeaction=dismiss_notice&amp;noticeid={$notice->id}'>$strDismiss</a>)</span>";
@@ -223,13 +223,13 @@ if($sit[0] != '')
             }
             echo "</p></div>";
         }
-        if(mysql_num_rows($noticeresult) > 1)
+        if (mysql_num_rows($noticeresult) > 1)
         {
             echo "<p align='right' style='padding-right:32px'><a href='{$_SERVER[PHP_SELF]}?noticeaction=dismiss_notice&amp;noticeid=all'>{$strDismissAll}</a></p>";
         }
         //echo "</div>";
     }
-    if($redirpage && ($_SERVER[SCRIPT_NAME] != $redirpage))
+    if ($redirpage && ($_SERVER[SCRIPT_NAME] != $redirpage))
     {
         // Note, this uses FALSE which prints 'Failed' not sure this is the most appropriate,
         // but html_redirect only supports success/failure currently (INL 1dec07)

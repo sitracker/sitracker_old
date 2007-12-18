@@ -73,10 +73,10 @@ switch($_REQUEST['action'])
 
         while($file = readdir($dir_handle))
         {
-            if(beginsWith($file, "dashboard_") && endsWith($file, ".php"))
+            if (beginsWith($file, "dashboard_") && endsWith($file, ".php"))
             {
                 //echo "file name ".$file."<br />";
-                if(empty($dashboard[substr($file, 10, strlen($file)-14)]))  //this is 14 due to .php =4 and dashboard_ = 10
+                if (empty($dashboard[substr($file, 10, strlen($file)-14)]))  //this is 14 due to .php =4 and dashboard_ = 10
                 {
                     //echo "file name ".$file." - ".substr($file, 10, strlen($file)-14)."<br />";
                     //$html .= "echo "<option value='{$row->id}'>$row->realname</option>\n";";
@@ -87,7 +87,7 @@ switch($_REQUEST['action'])
 
         closedir($dir_handle);
 
-        if(empty($html))
+        if (empty($html))
         {
             echo "<p align='center'>No new dashboard components available</p>";
             echo "<p align='center'><a href='manage_dashboard.php'>{$strBackToList}</a></p>";
@@ -110,7 +110,7 @@ switch($_REQUEST['action'])
         break;
     case 'installdashboard':
         $dashboardcomponents = $_REQUEST['comp'];
-        if(is_array($dashboardcomponents))
+        if (is_array($dashboardcomponents))
         {
             $count = count($dashboardcomponents);
 
@@ -122,7 +122,7 @@ switch($_REQUEST['action'])
             $result = mysql_query(substr($sql, 0, strlen($sql)-2));
             if (mysql_error()) trigger_error(mysql_error(),E_USER_ERROR);
 
-            if(!$result) echo "<p class='error'>Instalation of plugin(s) failed</p>";
+            if (!$result) echo "<p class='error'>Instalation of plugin(s) failed</p>";
             else
             {
                 // run the post install compoents
@@ -130,7 +130,7 @@ switch($_REQUEST['action'])
                 {
                     include("{$CONFIG['application_fspath']}dashboard/dashboard_{$comp}.php");
                     $func = "dashboard_".$comp."_install";
-                    if(function_exists($func)) $func();
+                    if (function_exists($func)) $func();
                 }
 
                 html_redirect("manage_dashboard.php");
@@ -143,7 +143,7 @@ switch($_REQUEST['action'])
         $result = mysql_query($sql);
         if (mysql_error()) trigger_error(mysql_error(),E_USER_ERROR);
 
-        if(mysql_num_rows($result) > 0)
+        if (mysql_num_rows($result) > 0)
         {
             $obj = mysql_fetch_object($result);
 
@@ -151,17 +151,17 @@ switch($_REQUEST['action'])
             include("{$CONFIG['application_fspath']}dashboard/dashboard_{$obj->name}.php");
             $func = "dashboard_{$obj->name}_get_version";
 
-            if(function_exists($func))
+            if (function_exists($func))
             {
                 $version = $func();
             }
 
-            if($version > $dashboardnames->version)
+            if ($version > $dashboardnames->version)
             {
                 // apply all upgrades since running version
                 $func = "dashboard_{$obj->name}_upgrade";
 
-                if(function_exists($func))
+                if (function_exists($func))
                 {
                     $schema = $func();
                     for($i = $obj->version; $i <= $version; $i++)
@@ -197,7 +197,7 @@ switch($_REQUEST['action'])
         $result = mysql_query($sql);
         if (mysql_error()) trigger_error(mysql_error(),E_USER_ERROR);
 
-        if(!$result)
+        if (!$result)
         {
             echo "<p class='error'>Changed enabled state failed</p>"; //TODO i18n
         }
@@ -224,7 +224,7 @@ switch($_REQUEST['action'])
         echo "</tr>";
         while($dashboardnames = mysql_fetch_object($result))
         {
-            if($dashboardnames->enabled == "true") $opposite = "false";
+            if ($dashboardnames->enabled == "true") $opposite = "false";
             else $opposite = "true";
             echo "<tr class='shade2'><td>{$dashboardnames->id}</td>";
             echo "<td>{$dashboardnames->name}</td>";
@@ -237,12 +237,12 @@ switch($_REQUEST['action'])
             include("{$CONFIG['application_fspath']}dashboard/dashboard_{$dashboardnames->name}.php");
             $func = "dashboard_{$dashboardnames->name}_get_version";
 
-            if(function_exists($func))
+            if (function_exists($func))
             {
                 $version = $func();
             }
 
-            if($version > $dashboardnames->version)
+            if ($version > $dashboardnames->version)
             {
                 echo "<a href='{$_SERVER['PHP_SELF']}?action=upgradecomponent&amp;id={$dashboardnames->id}'>{$strYes}</a>";
             }

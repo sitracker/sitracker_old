@@ -18,7 +18,7 @@ if (realpath(__FILE__) == realpath($_SERVER['SCRIPT_FILENAME']))
 }
 $incomingid = cleanvar($_REQUEST['id']);
 
-if($_REQUEST['action'] == "updatereason")
+if ($_REQUEST['action'] == "updatereason")
 {
     $newreason = cleanvar($_REQUEST['newreason']);
     $update = "UPDATE tempincoming SET reason='{$newreason}' WHERE id={$incomingid}";
@@ -57,7 +57,7 @@ if (mysql_num_rows($result) > 0)
         $lockedbyname = "you";
 
     echo "<div class='detailinfo'>";
-    if($lockedbyname == "you")
+    if ($lockedbyname == "you")
     {
         echo "<div class='detaildate'>
                 <form method='post' action='{$_SERVER['PHP_SELF']}?id={$incomingid}&win=incomingview&action=updatereason'>

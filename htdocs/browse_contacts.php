@@ -26,9 +26,9 @@ $title = $strBrowseContacts;
 $search_string = cleanvar($_REQUEST['search_string']);
 $submit_value = cleanvar($_REQUEST['submit']);
 $displayinactive = cleanvar($_REQUEST['displayinactive']);
-if(empty($displayinactive)) $displayinactive = "false";
+if (empty($displayinactive)) $displayinactive = "false";
 
-if($submit_value == 'go')
+if ($submit_value == 'go')
 {
         // build SQL
         $sql  = "SELECT * FROM contacts ";
@@ -53,7 +53,7 @@ if($submit_value == 'go')
         $result = mysql_query($sql);
         if (mysql_error()) trigger_error("MySQL Query Error ".mysql_error(), E_USER_ERROR);
 
-        if(mysql_num_rows($result) == 1)
+        if (mysql_num_rows($result) == 1)
         {
             //go straight to the contact
             $row = mysql_fetch_array($result);
@@ -91,17 +91,17 @@ echo "{$strBrowseContacts}</h2>";
     <input dojoType='ComboBox' dataUrl='autocomplete.php?action=contact' style='width: 300px;' name='search_string' />
     <?php echo "<input name='submit' type='submit' value=\"{$strGo}\" /></p>";
     echo "</form>\n";
-        if($displayinactive=="true")
+        if ($displayinactive=="true")
         {
             echo "<a href='".$_SERVER['PHP_SELF']."?displayinactive=false";
-            if(!empty($search_string)) echo "&amp;search_string={$search_string}";
+            if (!empty($search_string)) echo "&amp;search_string={$search_string}";
             echo "'>{$strShowActiveOnly}</a>";
             $inactivestring="displayinactive=true";
         }
         else
         {
             echo "<a href='".$_SERVER['PHP_SELF']."?displayinactive=true";
-            if(!empty($search_string)) echo "&amp;search_string={$search_string}";
+            if (!empty($search_string)) echo "&amp;search_string={$search_string}";
             echo "'>Show inactive</a>";
             $inactivestring="displayinactive=false";
         }
@@ -159,7 +159,7 @@ else
     // search for criteria
     if ($errors == 0)
     {
-        if($submit_value != 'go')
+        if ($submit_value != 'go')
         {
             // Don't  need to do this again, already done above, us the results of that
             // build SQL
@@ -181,7 +181,7 @@ else
                 }
                 $sql .= " ) ";
             }
-            if($displayinactive=="false")
+            if ($displayinactive=="false")
             {
                 $sql .= " AND contacts.active = 'true' AND sites.active = 'true'";
             }
