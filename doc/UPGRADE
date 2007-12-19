@@ -10,8 +10,13 @@ Upgrading Support Incident Tracker
 
 To upgrade simply copy all the new files over the existing ones being
 careful not to overwrite your config.inc.php or any custom themes you
-might have.  Then run setup.php in your browser and follow the
-instructions on-screen.
+might have.
+
+If you cannot edit php.ini and have set the include path using the
+alternative method of editing set_include_path.inc.php you will need
+to edit this file again and set the path anew.
+
+Then run setup.php in your browser and follow the instructions on-screen.
 
 Further instructions and notes about specific upgrades follow, if you
 upgrading and skipping several versions listed below you should read
