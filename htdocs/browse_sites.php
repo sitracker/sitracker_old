@@ -228,9 +228,19 @@ if ($errors == 0)
         $countsites = mysql_num_rows($result);
         echo "<p align='center'>Displaying $countsites site";
         if ($countsites > 1) echo "s";
-        if ($owner > 0) echo " owned by <strong>".user_realname($owner)."</strong>";
-        elseif ($search_string=='0') echo " matching <strong><em>Number</em></strong>";
-        else echo " matching <strong>'{$search_string}'</strong>";
+
+        if ($owner > 0)
+        {
+            echo " owned by <strong>".user_realname($owner)."</strong>";
+        }
+        elseif
+        {
+            ($search_string=='0') echo " matching <strong><em>Number</em></strong>";
+        }
+        else
+        {
+            echo " matching <strong>'{$search_string}'</strong>";
+        }
         echo "</p>";
         echo "<table align='center'>
         <tr>
@@ -245,13 +255,11 @@ if ($errors == 0)
             if ($shade) $class = "shade1";
             else $class = "shade2";
             if ($results['active']=='false') $class='expired';
-            ?>
-            <tr class='<?php echo $class ?>'>
-                <td align='center'><?php echo $results['id'] ?></td>
-                <td><a href="site_details.php?id=<?php echo $results['id']; ?>&amp;action=show"><?php echo htmlspecialchars($results['name']) ?></a></td>
-                <td><?php echo nl2br(htmlspecialchars($results["department"])); ?></td>
-            </tr>
-            <?php
+            echo "<tr class='{$class}'>";
+            echo "<td align='center'>{$results['id']}</td>";
+            echo "<td><a href='site_details.php?id={$results['id']}&amp;action=show'>{$results['name']}</a></td>";
+            echo "<td>".nl2br($results["department"])."</td>";
+            echo "</tr>";
             // invert shade
             if ($shade == 1) $shade = 0;
             else $shade = 1;
