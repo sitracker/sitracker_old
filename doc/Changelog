@@ -35,6 +35,8 @@ Changes in v3.31 - Released 19 December 2007
 * RSS feeds in the RSS dashboard component can now be limited to display X number
   of items
 * Tidied updates and close incident pages
+* Allow setting of include_path even without ability to modify php.ini
+  see the htdocs/set_include_path.inc.php file for more details
 * Plus many more minor changes and fixes
 
 
