@@ -18,7 +18,7 @@
 // Version number of the application, (numbers only)
 $application_version='3.31';
 // Revision string, e.g. 'beta2' or 'svn' or ''
-$application_revision='svn';
+$application_revision='';
 
 // Append SVN data for svn versions
 if ($application_revision == 'svn')
