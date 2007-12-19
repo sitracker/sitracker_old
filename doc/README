@@ -66,18 +66,24 @@ Installing
         - Make the htdocs/ directory your web root
 
         - Configure your php.ini include_path setting to point to the
-          includes/ subdirectory and to enable register_globals
+          includes/ subdirectory
+            If you cannot edit php.ini, the alternative method of
+            setting the include path is by editing
+            set_include_path.inc.php which is in the htdocs
+            directory.  If you do this you will need to edit the
+            file each time you upgrade, or back it up and restore
+            afterwards.
 
         - In your browser visit setup.php which will prompt you
           for a few important settings and take you through the
           process of creating the database schema
 
-        - setup.php will display a password for the admin account,
-          make a note of this as it is only displayed once
+        - setup.php will prompt you to add an admin account,
+          make a note of the password you choose for this account
 
         - Now visit index.php in your browser and login using
-          'admin' as the username and the password that was
-          displayed by setup.php
+          'admin' as the username and the password that you
+          chose during setup
 
         - Within sit go to SiT! -> Control Panel -> Manage Users
           -> Add User to create more users
@@ -237,6 +243,10 @@ please feel welcome to join our mailing list by sending an email to
 sit-subscribe@lists.salfordsoftware.co.uk or posting a message on our
 forum at http://sourceforge.net/forum/?group_id=160319
 
+We also now have an IRC channel.  #sit on the freenode network, we'd
+love for you to join us, see here http://sitracker.sourceforge.net/IRC
+for more info.
+
 
 Reporting Bugs
 --------------
@@ -245,7 +255,7 @@ to report it via our bug tracker
 at http://sourceforge.net/tracker/?group_id=160319&atid=815372
 
 If you're not sure whether the problem you've found is actually a bug,
-please discuss it on our mailing list first.
+please discuss it with us first.
 
 
 Contributing to the SiT! project
@@ -269,5 +279,8 @@ As you see, there are many ways in which you can contribute. All of
 them are very important and everyone is welcome to participate.
 
 The Support Incident Tracker developers can be reached via the mailing
-list, to subscribe send an email to
-sit-subscribe@lists.salfordsoftware.co.uk
+list, see here for more info http://sourceforge.net/mail/?group_id=160319
+
+We also now have an IRC channel.  #sit on the freenode network, we'd
+love for you to join us, see here http://sitracker.sourceforge.net/IRC
+for more info.

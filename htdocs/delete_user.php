@@ -26,22 +26,22 @@ if (!empty($userid))
 {
     $errors=0;
     // Check there are no files linked to this user
-    $sql = "SELECT userid FROM files WHERE userid=$userid LIMIT 1";
+    $sql = "SELECT userid FROM `{$dbFiles}` WHERE userid=$userid LIMIT 1";
     $result = mysql_query($sql);
     if (mysql_num_rows($result)>=1) $errors++;
 
     // check there are no links linked to this product
-    $sql = "SELECT userid FROM links WHERE userid=$userid LIMIT 1";
+    $sql = "SELECT userid FROM `{$dbLinks}` WHERE userid=$userid LIMIT 1";
     $result = mysql_query($sql);
     if (mysql_num_rows($result)>=1) $errors++;
 
     // check there are no notes linked to this product
-    $sql = "SELECT userid FROM notes WHERE userid=$userid LIMIT 1";
+    $sql = "SELECT userid FROM `{$dbNotes}` WHERE userid=$userid LIMIT 1";
     $result = mysql_query($sql);
     if (mysql_num_rows($result)>=1) $errors++;
 
     // Check there is no software linked to this user
-    $sql = "SELECT softwareid FROM usersoftware WHERE userid=$userid LIMIT 1";
+    $sql = "SELECT softwareid FROM `{$dbUserSoftware}` WHERE userid=$userid LIMIT 1";
     $result = mysql_query($sql);
     if (mysql_num_rows($result)>=1) $errors++;
 

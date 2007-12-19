@@ -41,7 +41,7 @@ if (empty($_REQUEST['mode']))
     echo "<table align='center'>";
     echo "<tr><th>{$strInclude}</th><th>{$strExclude}</th></tr>";
     echo "<tr><td>";
-    $sql   = "SELECT * FROM products ORDER BY name";
+    $sql   = "SELECT * FROM `{$dbProducts}` ORDER BY name";
     $result = mysql_query($sql);
     if (mysql_error()) trigger_error("MySQL Query Error ".mysql_error(), E_USER_ERROR);
     echo "<select name='inc[]' multiple='multiple' size='20'>";
@@ -52,7 +52,7 @@ if (empty($_REQUEST['mode']))
     echo "</select>";
     echo "</td>";
     echo "<td>";
-    $sql = "SELECT * FROM products ORDER BY name";
+    $sql = "SELECT * FROM `{$dbProducts}` ORDER BY name";
     $result = mysql_query($sql);
     if (mysql_error()) trigger_error(mysql_error(),E_USER_ERROR);
     echo "<select name='exc[]' multiple='multiple' size='20'>";
@@ -145,8 +145,8 @@ elseif ($_REQUEST['mode']=='report')
 
     $sql  = "SELECT *, contacts.id AS contactid, contacts.email AS contactemail, sites.name AS sitename FROM `{$dbMaintenance}` AS m ";
     $sql .= "LEFT JOIN `{$dbSupportContacts}` AS sc ON m.id=sc.maintenanceid ";
-    $sql .= "LEFT JOIN contacts ON sc.contactid=contacts.id ";
-    $sql .= "LEFT JOIN sites ON contacts.siteid = sites.id ";
+    $sql .= "LEFT JOIN `{$dbContacts}` AS c ON sc.contactid=contacts.id ";
+    $sql .= "LEFT JOIN `{$dbSites}` AS s ON contacts.siteid = sites.id ";
 
     if (empty($incsql)==FALSE OR empty($excsql)==FALSE OR $_REQUEST['activeonly']=='yes') $sql .= "WHERE ";
     if ($_REQUEST['activeonly']=='yes')
@@ -158,7 +158,7 @@ elseif ($_REQUEST['mode']=='report')
     if (empty($incsql)==FALSE AND empty($excsql)==FALSE) $sql .= " AND ";
     if (!empty($excsql)) $sql .= "$excsql";
 
-    $sql .= " ORDER BY contacts.email ASC ";
+    $sql .= " ORDER BY c.email ASC ";
 
     $result = mysql_query($sql);
     if (mysql_error()) trigger_error(mysql_error(),E_USER_ERROR);

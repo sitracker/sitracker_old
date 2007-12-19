@@ -52,7 +52,7 @@ if (empty($_POST['process']))
     </script>
     <?php
 
-    $sql = "SELECT * FROM kbarticles WHERE docid='{$docid}' LIMIT 1";
+    $sql = "SELECT * FROM `{$dbKBArticles}` WHERE docid='{$docid}' LIMIT 1";
     $result = mysql_query($sql);
     if (mysql_error()) trigger_error("MySQL Query Error ".mysql_error(), E_USER_ERROR);
     $kbarticle = mysql_fetch_object($result);
@@ -62,7 +62,7 @@ if (empty($_POST['process']))
     if (empty($_REQUEST['user']) OR $_REQUEST['user']=='current') $user=$sit[2];
     else $user=$_REQUEST['user'];
 
-    $softsql = "SELECT * FROM kbsoftware, software WHERE kbsoftware.softwareid=software.id AND kbsoftware.docid='{$docid}' ORDER BY name";
+    $softsql = "SELECT * FROM `{$dbKBSoftware}` AS k, `{$dbSoftware}` AS s WHERE k.softwareid = s.id AND k.docid = '{$docid}' ORDER BY name";
     $softresult = mysql_query($softsql);
     if (mysql_error()) trigger_error("MySQL Error: ".mysql_error(),E_USER_ERROR);
     if (mysql_num_rows($result) >= 1)
@@ -77,7 +77,7 @@ if (empty($_POST['process']))
     echo "<table align='center'>";
     echo "<tr><th>Does NOT apply</th><th>&nbsp;</th><th>Applies</th></tr>"; // FIXME i18n applies, does not apply
     echo "<tr><td align='center' width='300' class='shade1'>";
-    $listsql = "SELECT * FROM software ORDER BY name";
+    $listsql = "SELECT * FROM `{$dbSoftware}` ORDER BY name";
     $listresult = mysql_query($listsql);
     if (mysql_error()) trigger_error("MySQL Error: ".mysql_error(),E_USER_ERROR);
     if (mysql_num_rows($listresult) >= 1 )
@@ -99,7 +99,7 @@ if (empty($_POST['process']))
     echo "<input type='button' value='&lt;&lt;' onclick=\"copyAll(this.form.elements['expertise[]'],this.form.software)\" /><br />";
     echo "</td>";
     echo "<td width='300' class='shade2'>";
-    $softsql = "SELECT * FROM kbsoftware, software WHERE kbsoftware.softwareid=software.id AND docid='{$docid}' ORDER BY name";
+    $softsql = "SELECT * FROM `{$dbKBSoftware}` AS k, `{$dbSoftware}` AS s WHERE k.softwareid = s.id AND docid = '{$docid}' ORDER BY name";
     $softresult = mysql_query($softsql);
     if (mysql_error()) trigger_error("MySQL Error: ".mysql_error(),E_USER_ERROR);
     echo "<select name='expertise[]' multiple='multiple' size='7'>";
@@ -167,7 +167,7 @@ if (empty($_POST['process']))
     foreach ($sections AS $section)
     {
         // summary
-        $csql = "SELECT * FROM kbcontent WHERE docid='{$docid}' AND header='$section' ";
+        $csql = "SELECT * FROM `{$dbKBContent}` WHERE docid = '{$docid}' AND header = '$section' ";
         $cresult = mysql_query($csql);
         if (mysql_error()) trigger_error("MySQL Query Error ".mysql_error(), E_USER_ERROR);
         $num_rows = mysql_num_rows($cresult);
@@ -242,10 +242,10 @@ else
         if (empty($headerstyle)) $headerstyle='h3';
         if ($_REQUEST[$dfieldname]!='yes') {
 
-            $sql = "UPDATE kbcontent SET content='$content', headerstyle='h1', distribution='$distribution' WHERE id='$id' AND docid='{$articleid}' ";
+            $sql = "UPDATE `{$dbKBContent}` SET content='$content', headerstyle='h1', distribution='$distribution' WHERE id='$id' AND docid='{$articleid}' ";
         }
         else
-            $sql = "DELETE FROM kbcontent WHERE id='$id' AND docid='{$_REQUEST['articleid']}' ";
+            $sql = "DELETE FROM `{$dbKBContent}` WHERE id='$id' AND docid='{$_REQUEST['articleid']}' ";
         mysql_query($sql);
         if (mysql_error()) trigger_error("MySQL Query Error ".mysql_error(), E_USER_ERROR);
     }
@@ -257,14 +257,14 @@ else
         {
             $content = mysql_real_escape_string($_REQUEST["content$section"]);
             $content = strip_tags($content,$allowable_html_tags);
-            $sql = "INSERT into kbcontent (content, header, headerstyle, distribution, docid) VALUES ('$content','$section','h1','private','{$articleid}') ";
+            $sql = "INSERT INTO `{$dbKBContent}` (content, header, headerstyle, distribution, docid) VALUES ('$content','$section','h1','private','{$articleid}') ";
             mysql_query($sql);
             if (mysql_error()) trigger_error("MySQL Query Error ".mysql_error(), E_USER_ERROR);
         }
     }
 
     // Remove associated software ready for re-assocation
-    $sql = "DELETE FROM kbsoftware WHERE docid='{$articleid}'";
+    $sql = "DELETE FROM `{$dbKBSoftware}` WHERE docid='{$articleid}'";
     mysql_query($sql);
 
     if (is_array($_POST['expertise']))
@@ -272,7 +272,7 @@ else
         $expertise=array_unique(($_POST['expertise']));
         foreach ($expertise AS $value)
         {
-            $sql = "INSERT INTO kbsoftware (docid, softwareid) VALUES ('{$articleid}', '$value')";
+            $sql = "INSERT INTO `{$dbKBSoftware}` (docid, softwareid) VALUES ('{$articleid}', '$value')";
             mysql_query($sql);
             if (mysql_error()) trigger_error("MySQL Query Error ".mysql_error(), E_USER_ERROR);
         }

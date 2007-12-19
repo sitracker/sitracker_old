@@ -43,14 +43,14 @@ $result = mysql_query($sql);
 if (mysql_error()) trigger_error(mysql_error(), E_USER_ERROR);
 while ($site = mysql_fetch_object($result))
 {
-    $msql  = "SELECT m.id AS maintid, m.term AS term, products.name AS product, resellers.name AS reseller, ";
-    $msql .= "licence_quantity, licencetypes.name AS licence_type, expirydate, admincontact, contacts.forenames AS admincontactsforenames, ";
-    $msql .= "contacts.surname AS admincontactssurname, m.notes AS maintnotes ";
-    $msql .= "FROM `{$dbMaintenance}` AS m, contacts, products, licencetypes, resellers ";
-    $msql .= "WHERE m.product=products.id ";
-    $msql .= "AND m.reseller=resellers.id AND licence_type=licencetypes.id AND admincontact=contacts.id ";
+    $msql  = "SELECT m.id AS maintid, m.term AS term, p.name AS product, r.name AS reseller, ";
+    $msql .= "licence_quantity, l.name AS licence_type, expirydate, admincontact, c.forenames AS admincontactsforenames, ";
+    $msql .= "c.surname AS admincontactssurname, m.notes AS maintnotes ";
+    $msql .= "FROM `{$dbMaintenance}` AS m, `{$dbContacts}` AS c, `{$dbProducts}` AS p, `{$dbLicenceTypes}` AS l, `{$dbResellers}` AS r ";
+    $msql .= "WHERE m.product=p.id ";
+    $msql .= "AND m.reseller=r.id AND licence_type=l.id AND admincontact=c.id ";
     $msql .= "AND m.site = '{$site->id}' ";
-    $msql .= "AND products.vendorid=2 ";    // novell products only
+    $msql .= "AND p.vendorid=2 ";    // novell products only
     $msql .= "AND m.term!='yes' ";
     $msql .= "AND m.expirydate > '$now' ";     $msql .= "ORDER BY expirydate DESC";
 

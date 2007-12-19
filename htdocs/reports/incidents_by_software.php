@@ -53,12 +53,12 @@ else
 {
     $monthbreakdownstatus = $_REQUEST['monthbreakdown'];
     $startdate = strtotime($_REQUEST['startdate']);
-    $sql = "SELECT count(software.id) AS softwarecount, software.name, software.id ";
-    $sql .= "FROM software, incidents ";
-    $sql .= "WHERE software.id = incidents.softwareid AND incidents.opened > '{$startdate}' ";
+    $sql = "SELECT count(software.id) AS softwarecount, s.name, s.id ";
+    $sql .= "FROM `{$dbSoftware}` AS s, `{$dbIncidents}` AS i ";
+    $sql .= "WHERE s.id = i.softwareid AND i.opened > '{$startdate}' ";
     $software = $_REQUEST['software'];
-    if (!empty($software)) $sql .= "AND software.id ='{$software}' ";
-    $sql .= "GROUP BY software.id ORDER BY softwarecount DESC";
+    if (!empty($software)) $sql .= "AND s.id ='{$software}' ";
+    $sql .= "GROUP BY s.id ORDER BY softwarecount DESC";
     $result = mysql_query($sql);
     if (mysql_error()) trigger_error("MySQL Query Error ".mysql_error(), E_USER_ERROR);
 

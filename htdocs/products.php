@@ -28,7 +28,7 @@ include ('htmlheader.inc.php');
 
 if (empty($productid) AND $display!='skills')
 {
-    $sql = "SELECT * FROM vendors ORDER BY name";
+    $sql = "SELECT * FROM `{$dbVendors}` ORDER BY name";
     $result = mysql_query($sql);
     if (mysql_error()) trigger_error("MySQL Query Error ".mysql_error(), E_USER_ERROR);
 
@@ -38,7 +38,7 @@ if (empty($productid) AND $display!='skills')
         {
             echo "<h2><img src='{$CONFIG['application_webpath']}images/icons/{$iconset}/32x32/product.png' width='32' height='32' alt='' /> ";
             echo "{$vendor->name}</h2>";
-            $psql = "SELECT * FROM products WHERE vendorid='{$vendor->id}' ORDER BY name";
+            $psql = "SELECT * FROM `{$dbProducts}` WHERE vendorid='{$vendor->id}' ORDER BY name";
             $presult = mysql_query($psql);
             if (mysql_error()) trigger_error("MySQL Query Error ".mysql_error(), E_USER_ERROR);
             if (mysql_num_rows($presult) >= 1)
@@ -84,7 +84,7 @@ if (empty($productid) AND $display!='skills')
     else echo "<p class='error'>No vendors defined</p>";
 
 
-    $sql = "SELECT software.* FROM software LEFT JOIN `{$dbSoftwareProducts}` AS sp ON software.id=sp.softwareid WHERE sp.softwareid IS NULL";
+    $sql = "SELECT s.* FROM `{$dbSoftware}` AS s LEFT JOIN `{$dbSoftwareProducts}` AS sp ON s.id = sp.softwareid WHERE sp.softwareid IS NULL";
     $result = mysql_query($sql);
     if (mysql_error()) trigger_error(mysql_error(),E_USER_ERROR);
     if (mysql_num_rows($result) >= 1)
@@ -95,7 +95,7 @@ if (empty($productid) AND $display!='skills')
         echo "<tr><th>{$strSkill}</th><th>{$strLifetime}</th><th>Engineers</th><th>{$strIncidents}</th><th>{$strOperation}</th></tr>";
         while ($software = mysql_fetch_array($result))
         {
-            $ssql = "SELECT COUNT(userid) FROM usersoftware, `{$dbUsers}` AS u WHERE usersoftware.userid = users.id AND u.status!=0 AND usersoftware.softwareid='{$software['id']}'";
+            $ssql = "SELECT COUNT(userid) FROM `{$dbUserSoftware}` AS us, `{$dbUsers}` AS u WHERE us.userid = u.id AND u.status!=0 AND us.softwareid = '{$software['id']}'";
             $sresult = mysql_query($ssql);
             if (mysql_error()) trigger_error(mysql_error(),E_USER_ERROR);
             list($countengineers) = mysql_fetch_row($sresult);
@@ -129,8 +129,7 @@ if (empty($productid) AND $display!='skills')
 elseif (empty($productid) AND ($display=='skills' OR $display=='software'))
 {
     echo "<h2><img src='{$CONFIG['application_webpath']}images/icons/{$iconset}/32x32/skill.png' width='32' height='32' alt='' /> {$strSkills}</h2>";
-    //$sql = "SELECT * FROM software ORDER BY name";
-    $sql = "SELECT software.*, vendors.name AS vendorname FROM software left join vendors ON software.vendorid = vendors.id ORDER BY name";
+    $sql = "SELECT s.*, v.name AS vendorname FROM `{$dbSoftware}` AS s LEFT JOIN `{$dbVendors}` AS v ON s.vendorid = v.id ORDER BY name";
     $result = mysql_query($sql);
     if (mysql_error()) trigger_error(mysql_error(),E_USER_ERROR);
     if (mysql_num_rows($result) >= 1)
@@ -140,8 +139,7 @@ elseif (empty($productid) AND ($display=='skills' OR $display=='software'))
         $shade='shade1';
         while ($software = mysql_fetch_object($result))
         {
-
-            $ssql = "SELECT COUNT(userid) FROM usersoftware, `{$dbUsers}` AS u WHERE usersoftware.userid = u.id AND u.status!=0 AND usersoftware.softwareid='{$software->id}'";
+            $ssql = "SELECT COUNT(userid) FROM `{$dbUserSoftware}` AS us, `{$dbUsers}` AS u WHERE us.userid = u.id AND u.status!=0 AND us.softwareid='{$software->id}'";
             $sresult = mysql_query($ssql);
             if (mysql_error()) trigger_error(mysql_error(),E_USER_ERROR);
             list($countengineers) = mysql_fetch_row($sresult);
@@ -190,7 +188,7 @@ elseif (empty($productid) AND ($display=='skills' OR $display=='software'))
 }
 else
 {
-    $psql = "SELECT * FROM products WHERE id='{$productid}' LIMIT 1";
+    $psql = "SELECT * FROM `{$dbProducts}` WHERE id='{$productid}' LIMIT 1";
     $presult = mysql_query($psql);
     if (mysql_error()) trigger_error("MySQL Query Error ".mysql_error(), E_USER_ERROR);
     if (mysql_num_rows($presult) >= 1)
@@ -214,7 +212,7 @@ else
                 $shade='shade2';
                 while ($software=mysql_fetch_array($swresult))
                 {
-                    $ssql = "SELECT COUNT(userid) FROM usersoftware, `{$dbUsers}` AS u WHERE usersoftware.userid = u.id AND u.status!=0 AND usersoftware.softwareid='{$software['id']}'";
+                    $ssql = "SELECT COUNT(userid) FROM `{$dbUserSoftware}` AS us, `{$dbUsers}` AS u WHERE us.userid = u.id AND u.status!=0 AND us.softwareid='{$software['id']}'";
                     $sresult = mysql_query($ssql);
                     if (mysql_error()) trigger_error(mysql_error(),E_USER_ERROR);
                     list($countengineers) = mysql_fetch_row($sresult);

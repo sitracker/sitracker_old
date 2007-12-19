@@ -1,4 +1,4 @@
-Changes in v3.31 - Unreleased
+Changes in v3.31 - Released 19 December 2007
 -----------------------------------------------------------------------
 * Software now has a vendor (allows more accurate stats)
 * Improved customer portal, customers can now read, open, update and request
@@ -12,12 +12,12 @@ Changes in v3.31 - Unreleased
   of errors or information such as upgrades
 * The users page now contains an icon dispaying a user's online status
 * Changed the login page to allow for session-based language choice
-* Some support for Languages: English (US), French, Welsh, Lithuanian
-  and German
+* Some support for Languages: English (US), Chinese (Simple), French, Welsh,
+  Lithuanian and German
 * Customer portal now supports creating, viewing and updating incidents
   and customer details
 * Added a link for reporting bugs to the help menu
-* The incident update page now automatically saves drafts
+* The incident update and the send email pages now automatically save drafts
 * Skills can now have a vendor set
 * SLA's can now be set to 'timed' which adds an 'Activities' tab to
   incidents and allows for recording of incident activities.
@@ -25,6 +25,18 @@ Changes in v3.31 - Unreleased
 * Made tags display in three columns
 * Fix bug in function that found an available subsitute engineer that caused the auto incident
   switchover to be broken and for incidents to be kept in the holding queue
+* show forgotten password link regardless of whether the portal is active
+  or not.
+* Re-written reassign page automatically suggests the best person to assign to
+  based on skills and availability.
+* Get rid of the default (random) admin password on setup
+* Prompt the user at the end of setup to create an admin account if one does
+  not exist
+* RSS feeds in the RSS dashboard component can now be limited to display X number
+  of items
+* Tidied updates and close incident pages
+* Allow setting of include_path even without ability to modify php.ini
+  see the htdocs/set_include_path.inc.php file for more details
 * Plus many more minor changes and fixes
 
 

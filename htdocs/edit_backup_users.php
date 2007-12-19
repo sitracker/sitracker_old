@@ -46,7 +46,8 @@ if (empty($save))
     echo "</p>";
     echo "</form>";
 
-    $sql = "SELECT * FROM usersoftware, software WHERE usersoftware.softwareid=software.id AND userid='{$user}' ORDER BY name";
+    $sql = "SELECT * FROM `{$dbUserSoftware}` AS us, `{$dbSoftware}` AS s ";
+    $sql .= "WHERE us.softwareid = s.id AND userid='{$user}' ORDER BY name";
     $result = mysql_query($sql);
     $countsw=mysql_num_rows($result);
     if ($countsw >= 1)
