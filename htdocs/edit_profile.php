@@ -84,7 +84,7 @@ if (empty($mode))
     echo "<tr><th>{$strGroupMembership}:</th><td valign='top'>";
     if ($user->groupid >= 1)
     {
-        $sql="SELECT name FROM groups WHERE id='{$user->groupid}' ";
+        $sql = "SELECT name FROM `{$dbGroups}` WHERE id='{$user->groupid}' ";
         $result = mysql_query($sql);
         if (mysql_error()) trigger_error(mysql_error(),E_USER_ERROR);
         $group = mysql_fetch_object($result);
@@ -262,7 +262,7 @@ elseif ($mode=='save')
     else
     {
         //we updated our email, dimiss notice
-        $sql = "DELETE FROM usernotices WHERE userid={$sit[2]} and noticeid=2";
+        $sql = "DELETE FROM `{$dbUserNotices}` WHERE userid={$sit[2]} and noticeid=2";
         @mysql_query($sql);
     }
     // Check email address is unique (discount disabled accounts)

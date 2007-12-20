@@ -57,7 +57,7 @@ elseif (authenticate($username, $password) == 1)
     $_SESSION['groupid'] = is_null($user->groupid) ? 0 : $user->groupid;
 
     // Delete any old session user notices
-    $sql = "DELETE FROM notices WHERE durability='session' AND userid={$_SESSION['userid']}";
+    $sql = "DELETE FROM `{$dbNotices}` WHERE durability='session' AND userid={$_SESSION['userid']}";
     mysql_query($sql);
     if (mysql_error()) trigger_error(mysql_error(), E_USER_ERROR);
 
@@ -88,7 +88,7 @@ elseif (authenticate($username, $password) == 1)
     }
 
     // Next lookup the individual users permissions
-    $sql = "SELECT * FROM userpermissions WHERE userid = '{$_SESSION['userid']}' AND granted='true' ";
+    $sql = "SELECT * FROM `{$dbUserPermissions}` WHERE userid = '{$_SESSION['userid']}' AND granted='true' ";
     $result = mysql_query($sql);
     if (mysql_error()) trigger_error(mysql_error(),E_USER_ERROR);
     if (mysql_num_rows($result) >= 1)

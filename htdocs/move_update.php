@@ -196,7 +196,7 @@ else
         }
 
         //remove from tempincoming to prevent build up
-        $sql = "DELETE FROM tempincoming WHERE updateid='$updateid'";
+        $sql = "DELETE FROM `{$dbTempIncoming}` WHERE updateid='$updateid'";
         mysql_query($sql);
         if (mysql_error()) trigger_error("MySQL Query Error ".mysql_error(), E_USER_ERROR);
 

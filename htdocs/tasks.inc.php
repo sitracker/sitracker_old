@@ -162,14 +162,14 @@ setInterval("countUp()", 1000); //every 1 seconds
 
     //get info for incident-->task linktype
     $sql = "SELECT DISTINCT origcolref, linkcolref ";
-    $sql .= "FROM links, linktypes ";
-    $sql .= "WHERE links.linktype=4 ";
-    $sql .= "AND linkcolref={$incident} ";
-    $sql .= "AND direction='left'";
+    $sql .= "FROM `{$dblinks}` AS l, `{$dbLinkTypes}` AS lt ";
+    $sql .= "WHERE l.linktype = 4 ";
+    $sql .= "AND linkcolref = {$incident} ";
+    $sql .= "AND direction = 'left'";
     $result = mysql_query($sql);
 
     //get list of tasks
-    $sql = "SELECT * FROM tasks WHERE 1=0 ";
+    $sql = "SELECT * FROM `{$dbTasks}` WHERE 1=0 ";
     while ($tasks = mysql_fetch_object($result))
     {
         $sql .= "OR id={$tasks->origcolref} ";
@@ -214,7 +214,7 @@ else
     echo "</select>\n";
     echo "</form><br />";
 
-    $sql = "SELECT * FROM tasks WHERE owner='$user' ";
+    $sql = "SELECT * FROM `{$dbTasks}` WHERE owner='$user' ";
     if ($show=='' OR $show=='active' ) $sql .= "AND (completion < 100 OR completion='' OR completion IS NULL)  AND distribution != 'incident' ";
     elseif ($show=='completed') $sql .= "AND (completion = 100) AND distribution != 'incident' ";
     elseif ($show=='incidents') $sql .= "AND distribution = 'incident' ";

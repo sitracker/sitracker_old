@@ -84,7 +84,7 @@ elseif (strtolower($mode)=='today') echo "<h4>{$strArticlesPublishedToday}</h4>"
 if (strlen($search_string) > 4)
 {
     // Find Software
-    $sql = "SELECT * FROM software WHERE name LIKE '%{$search_string}%' LIMIT 20";
+    $sql = "SELECT * FROM `{$dbSoftware}` WHERE name LIKE '%{$search_string}%' LIMIT 20";
     $result = mysql_query($sql);
     if (mysql_error()) trigger_error("MySQL Query Error ".mysql_error(), E_USER_ERROR);
     echo "<p align='center'><strong>Matching Skills</strong>: ";
@@ -101,7 +101,7 @@ if (strlen($search_string) > 4)
     echo "</p>\n";
 }
 // Find Articles
-$sql = "SELECT * FROM kbarticles ";
+$sql = "SELECT * FROM `{$dbKBArticles}` ";
 if (strtolower($mode)=='myarticles') $sql .= "WHERE author='{$sit[2]}' ";
 if (!empty($search_string))
 {
@@ -152,8 +152,8 @@ if (mysql_num_rows($result) >= 1)
         echo "<td>{$CONFIG['kb_id_prefix']}".leading_zero(4,$kbarticle->docid)."</td>";
         echo "<td>";
         // Lookup what software this applies to
-        $ssql = "SELECT * FROM kbsoftware, software WHERE kbsoftware.softwareid=software.id ";
-        $ssql .= "AND kbsoftware.docid='{$kbarticle->docid}' ORDER BY software.name";
+        $ssql = "SELECT * FROM `{$dbKBSoftware}` AS kbs, `{$dbSoftware}` AS s WHERE kbs.softwareid = s.id ";
+        $ssql .= "AND kbs.docid = '{$kbarticle->docid}' ORDER BY s.name";
         $sresult = mysql_query($ssql);
         if (mysql_error()) trigger_error("MySQL Query Error ".mysql_error(), E_USER_ERROR);
         $rowcount = mysql_num_rows($sresult);
@@ -172,7 +172,7 @@ if (mysql_num_rows($result) >= 1)
             echo "Various";
         }
         echo "<br /><a href='kb_view_article.php?id={$kbarticle->docid}' class='info'>{$kbarticle->title}";
-        $asql = "SELECT LEFT(content,400) FROM kbcontent WHERE docid='{$kbarticle->docid}' ORDER BY id ASC LIMIT 1";
+        $asql = "SELECT LEFT(content,400) FROM `{$dbKBContent}` WHERE docid='{$kbarticle->docid}' ORDER BY id ASC LIMIT 1";
         $aresult = mysql_query($asql);
         if (mysql_error()) trigger_error("MySQL Query Error ".mysql_error(), E_USER_ERROR);
         list($content)=mysql_fetch_row($aresult);
