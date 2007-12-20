@@ -92,7 +92,7 @@ switch ($action)
         if (mysql_error()) trigger_error("MySQL Query Error ".mysql_error(), E_USER_ERROR);
 
         // Remove any tempassigns that are pending for this incident
-        $sql = "DELETE FROM tempassigns WHERE incidentid='$id'";
+        $sql = "DELETE FROM `{$dbTempAssigns}` WHERE incidentid='$id'";
         mysql_query($sql);
         if (mysql_error()) trigger_error("MySQL Query Error ".mysql_error(), E_USER_ERROR);
 
@@ -168,7 +168,7 @@ switch ($action)
             echo "<tr class='idle'>";
             echo "<td><label><input type='radio' name='userid' checked='checked' value='{$suguser->id}' /> ";
             // Have a look if this user has skills with this software
-            $ssql = "SELECT softwareid FROM usersoftware WHERE userid={$suguser->id} AND softwareid={$incident->softwareid} ";
+            $ssql = "SELECT softwareid FROM `{$dbUserSoftware}` WHERE userid={$suguser->id} AND softwareid={$incident->softwareid} ";
             $sresult = mysql_query($ssql);
             if (mysql_error()) trigger_error("MySQL Query Error".mysql_error(), E_USER_ERROR);
             if (mysql_num_rows($sresult) >=1 ) echo "<strong>{$suguser->realname}</strong>";
@@ -203,7 +203,7 @@ switch ($action)
                 echo "<tr class='$shade'>";
                 echo "<td><label><input type='radio' name='userid' value='{$users->id}' /> ";
                 // Have a look if this user has skills with this software
-                $ssql = "SELECT softwareid FROM usersoftware WHERE userid={$users->id} AND softwareid={$incident->softwareid} ";
+                $ssql = "SELECT softwareid FROM `{$dbUserSoftware}` WHERE userid={$users->id} AND softwareid={$incident->softwareid} ";
                 $sresult = mysql_query($ssql);
                 if (mysql_error()) trigger_error("MySQL Query Error ".mysql_error(), E_USER_ERROR);
                 if (mysql_num_rows($sresult) >=1 ) echo "<strong>{$users->realname}</strong>";

@@ -23,7 +23,7 @@ include ('htmlheader.inc.php');
 
 echo "<h2>".$title."</h2>";
 
-$sql = "SELECT * FROM feedbackforms";
+$sql = "SELECT * FROM `{$dbFeedbackForms}`";
 $result = mysql_query($sql);
 if (mysql_error()) trigger_error(mysql_error(),E_USER_ERROR);
 

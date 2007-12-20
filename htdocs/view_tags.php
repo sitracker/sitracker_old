@@ -33,7 +33,7 @@ if (empty($tagid))
 }
 else
 {
-    $sql = "SELECT name FROM tags WHERE tagid = '$tagid' LIMIT 1";
+    $sql = "SELECT name FROM `{$dbTags}` WHERE tagid = '$tagid' LIMIT 1";
     $result = mysql_query($sql);
     if (mysql_error()) trigger_error(mysql_error(),E_USER_WARNING);
     list($tagname)=mysql_fetch_row($result);
@@ -45,7 +45,7 @@ else
 
 
     //show only this tag
-    $sql = "SELECT * FROM set_tags WHERE tagid = '$tagid'";
+    $sql = "SELECT * FROM `{$dbSetTags}` WHERE tagid = '$tagid'";
     $result = mysql_query($sql);
     if (mysql_error()) trigger_error(mysql_error(),E_USER_WARNING);
 
@@ -98,7 +98,7 @@ else
                 break;
 
                 case TAG_TASK: // task
-                    $sql = "SELECT name FROM tasks WHERE id = '{$obj->id}'";
+                    $sql = "SELECT name FROM `{$dbTasks}` WHERE id = '{$obj->id}'";
                     $resulttask = mysql_query($sql);
                     if (mysql_error()) trigger_error(mysql_error(),E_USER_ERROR);
                     if (mysql_num_rows($resulttask) > 0)
@@ -110,7 +110,7 @@ else
                 break;
 
                 case TAG_SKILL:
-                    $sql = "SELECT name FROM software WHERE id = '{$obj->id}'";
+                    $sql = "SELECT name FROM `{$dbSoftware}` WHERE id = '{$obj->id}'";
                     $resultskill = mysql_query($sql);
                     if (mysql_error()) trigger_error(mysql_error(),E_USER_ERROR);
                     if (mysql_num_rows($resultskill) > 0)
@@ -122,7 +122,7 @@ else
                 break;
 
                 case TAG_PRODUCT:
-                    $sql = "SELECT name FROM products WHERE id = '{$obj->id}'";
+                    $sql = "SELECT name FROM `{$dbProducts}` WHERE id = '{$obj->id}'";
                     $resultprod = mysql_query($sql);
                     if (mysql_error()) trigger_error(mysql_error(),E_USER_ERROR);
                     if (mysql_num_rows($resultprod) > 0)

@@ -71,7 +71,7 @@ if ($actions[0]=='' OR in_array('CloseIncidents',$actions))
 if ($actions[0]=='' OR in_array('PurgeJournal',$actions))
 {
     $purgedate = date('YmdHis',($now - $CONFIG['journal_purge_after']));
-    $sql = "DELETE FROM journal WHERE timestamp < $purgedate";
+    $sql = "DELETE FROM `{$dbJournal}` WHERE timestamp < $purgedate";
     $result = mysql_query($sql);
     if (mysql_error()) trigger_error(mysql_error(),E_USER_ERROR);
     if ($verbose) echo "Purged ".mysql_affected_rows()." journal entries{$crlf}";

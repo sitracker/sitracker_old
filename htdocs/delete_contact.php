@@ -73,10 +73,10 @@ if (empty($process))
         {
             echo "<p align='center' class='error'>There are $totalincidents incidents assigned to this contact</p>";
         }
-        $sql  = "SELECT sc.maintenanceid AS maintenanceid, maintenance.product, products.name AS productname, ";
-        $sql .= "maintenance.expirydate, maintenance.term ";
-        $sql .= "FROM `{$dbSupportContacts}` AS sc, maintenance, products ";
-        $sql .= "WHERE sc.maintenanceid=maintenance.id AND maintenance.product=products.id AND sc.contactid='$id' ";
+        $sql  = "SELECT sc.maintenanceid AS maintenanceid, m.product, p.name AS productname, ";
+        $sql .= "m.expirydate, m.term ";
+        $sql .= "FROM `{$dbSupportContacts}` AS sc, `{$dbMaintenance}` AS m, `{$dbProducts}` AS p ";
+        $sql .= "WHERE sc.maintenanceid = m.id AND m.product = p.id AND sc.contactid = '$id' ";
         $result=mysql_query($sql);
         if (mysql_error()) trigger_error("MySQL Query Error ".mysql_error(), E_USER_ERROR);
         $totalcontracts=mysql_num_rows($result);

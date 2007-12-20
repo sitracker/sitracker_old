@@ -70,12 +70,12 @@ switch ($page)
     //show the user's contracts
     case 'entitlement':
         echo "<h2>{$strYourSupportEntitlement}</h2>";
-        $sql = "SELECT maintenance.*, products.*, ";
-        $sql .= "(maintenance.incident_quantity - maintenance.incidents_used) AS availableincidents ";
-        $sql .= "FROM `{$dbSupportContacts}` AS sc, maintenance, products ";
-        $sql .= "WHERE sc.maintenanceid=maintenance.id ";
-        $sql .= "AND maintenance.product=products.id ";
-        $sql .= "AND sc.contactid='{$_SESSION['contactid']}'";
+        $sql = "SELECT m.*, p.*, ";
+        $sql .= "(m.incident_quantity - m.incidents_used) AS availableincidents ";
+        $sql .= "FROM `{$dbSupportContacts}` AS sc, `{$dbMaintenance}` AS m, `{$dbProducts}` AS p ";
+        $sql .= "WHERE sc.maintenanceid = m.id ";
+        $sql .= "AND m.product = p.id ";
+        $sql .= "AND sc.contactid = '{$_SESSION['contactid']}'";
         $result = mysql_query($sql);
         if (mysql_error()) trigger_error(mysql_error(),E_USER_ERROR);
         $numcontracts = mysql_num_rows($result);
@@ -383,8 +383,8 @@ switch ($page)
 
         echo "<h2>{$strYourDetails}</h2>";
         $sql = "SELECT c.forenames, c.surname, c.department, c.address1, c.address2, c.county, c.country, c.postcode, c.phone, c.fax, c.email ";
-        $sql .= "FROM `{$dbContacts}` AS c, sites ";
-        $sql .= "WHERE c.siteid = sites.id ";
+        $sql .= "FROM `{$dbContacts}` AS c, `{$dbSites}` AS s ";
+        $sql .= "WHERE c.siteid = s.id ";
         $sql .= "AND c.id={$_SESSION['contactid']}";
         $query = mysql_query($sql);
         if (mysql_error()) trigger_error("MySQL Query Error ".mysql_error(), E_USER_ERROR);

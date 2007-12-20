@@ -29,7 +29,7 @@ echo "<h2><a href='{$CONFIG['application_webpath']}reports/feedback.php'>Feedbac
 echo "<p>This report shows customer responses and a percentage figure indicating the overall positivity of customers toward ";
 echo "incidents logged by the user(s) shown:</p>";
 
-$qsql = "SELECT * FROM feedbackquestions WHERE formid='{$formid}' AND type='rating' ORDER BY taborder";
+$qsql = "SELECT * FROM `{$dbFeedbackQuestions}` WHERE formid='{$formid}' AND type='rating' ORDER BY taborder";
 $qresult = mysql_query($qsql);
 if (mysql_error()) trigger_error(mysql_error(), E_USER_ERROR);
 while ($qrow = mysql_fetch_object($qresult))
@@ -37,15 +37,15 @@ while ($qrow = mysql_fetch_object($qresult))
     $q[$qrow->taborder]=$qrow;
 }
 
-$msql = "SELECT *, cs.name AS closingstatusname, sites.name AS sitename, (incidents.closed - incidents.opened) AS duration, \n";
-$msql .= "feedbackrespondents.id AS reportid, contacts.id AS contactid, sites.id AS siteid \n";
-$msql .= "FROM feedbackrespondents, incidents, contacts, sites, `{$dbClosingStatus}` AS cs WHERE feedbackrespondents.incidentid=incidents.id \n";
-$msql .= "AND incidents.contact=contacts.id ";
-$msql .= "AND contacts.siteid=sites.id ";
-$msql .= "AND incidents.closingstatus=cs.id ";
-$msql .= "AND feedbackrespondents.incidentid > 0 \n";
-$msql .= "AND feedbackrespondents.completed = 'yes' \n"; ///////////////////////
-$msql .= "ORDER BY sites.name, sites.department, incidents.id ASC \n";
+$msql = "SELECT *, cs.name AS closingstatusname, s.name AS sitename, (i.closed - i.opened) AS duration, \n";
+$msql .= "fr.id AS reportid, c.id AS contactid, s.id AS siteid \n";
+$msql .= "FROM `{$dbFeedbackRespondents}` AS fr, `{$dbIncidents}` AS i, `{$dbContacts}` AS c, `{$dbSites}` AS s, `{$dbClosingStatus}` AS cs WHERE feedbackrespondents.incidentid=incidents.id \n";
+$msql .= "AND i.contact = c.id ";
+$msql .= "AND c.siteid = s.id ";
+$msql .= "AND i.closingstatus = cs.id ";
+$msql .= "AND fr.incidentid > 0 \n";
+$msql .= "AND fr.completed = 'yes' \n"; ///////////////////////
+$msql .= "ORDER BY s.name, s.department, i.id ASC \n";
 
 $mresult = mysql_query($msql);
 if (mysql_error()) trigger_error(mysql_error(), E_USER_ERROR);
@@ -140,7 +140,7 @@ if (mysql_num_rows($mresult) >=1)
     //$html .= "<p><strong>{$mrow->title}</strong>, opened ".date("l jS F Y @ g:i a", $mrow->opened)." for ".format_seconds($mrow->duration)." and {$mrow->closingstatusname} on ".date("l jS F Y @ g:i a", $mrow->closed)."</p>";
     // $html = "<h2><a href='/contact_details.php?id={$mrow->contactid}' title='Jump to Contact'>{$mrow->forenames} {$mrow->surname}</a>, {$mrow->department} &nbsp; <a href='#' title='Jump to site'>{$mrow->sitename}</a></h2>";
     $html = "<h2>{$mrow->department}&nbsp; <a href='site_details.php?id={$mrow->siteid}' title='Jump to site'>{$mrow->sitename}</a></h2>";
-    $qsql = "SELECT * FROM feedbackquestions WHERE formid='{$formid}' AND type='rating' ORDER BY taborder";
+    $qsql = "SELECT * FROM `{$dbFeedbackQuestions}` WHERE formid='{$formid}' AND type='rating' ORDER BY taborder";
     $qresult = mysql_query($qsql);
     ## echo "$qsql";
 
@@ -149,13 +149,13 @@ if (mysql_num_rows($mresult) >=1)
     {
         $numquestions++;
         // $html .= "Q{$qrow->taborder}: {$qrow->question} &nbsp;";
-        $sql = "SELECT * FROM feedbackrespondents, incidents, users, feedbackresults ";
-        $sql .= "WHERE feedbackrespondents.incidentid=incidents.id ";
-        $sql .= "AND incidents.owner=users.id ";
-        $sql .= "AND feedbackrespondents.id=feedbackresults.respondentid ";
-        $sql .= "AND feedbackresults.questionid='$qrow->id' ";
-        $sql .= "AND feedbackrespondents.id='$mrow->reportid' ";
-        $sql .= "ORDER BY incidents.contact, incidents.id";
+        $sql = "SELECT * FROM `{$dbFeedbackRespondents}` AS fr, `{$dbIncidents}` AS i, `{$dbUsers}` AS u, `{$dbFeedbackResults}` AS r ";
+        $sql .= "WHERE fr.incidentid = i.id ";
+        $sql .= "AND i.owner = u.id ";
+        $sql .= "AND fr.id = fr.respondentid ";
+        $sql .= "AND fr.questionid = '$qrow->id' ";
+        $sql .= "AND fr.id = '$mrow->reportid' ";
+        $sql .= "ORDER BY i.contact, i.id";
         // echo "==== $sql ====";
         $result = mysql_query($sql);
 

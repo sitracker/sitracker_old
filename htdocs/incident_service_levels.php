@@ -27,9 +27,9 @@ $title = 'Service Levels';
 // Retrieve incident
 // extract incident details
 $sql  = "SELECT *, i.id AS incidentid, ";
-$sql .= "contacts.id AS contactid ";
-$sql .= "FROM `{$dbIncidents}` AS i, contacts ";
-$sql .= "WHERE (i.id='{$incidentid}' AND i.contact=contacts.id) ";
+$sql .= "c.id AS contactid ";
+$sql .= "FROM `{$dbIncidents}` AS i, `{$dbContacts}` AS c ";
+$sql .= "WHERE (i.id='{$incidentid}' AND i.contact = c.id) ";
 $sql .= " OR i.contact=NULL ";
 $result = mysql_query($sql);
 if (mysql_error()) trigger_error(mysql_error(), E_USER_ERROR);

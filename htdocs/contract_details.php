@@ -28,8 +28,8 @@ $id = cleanvar($_REQUEST['id']);
 include ('htmlheader.inc.php');
 
 // Display Maintenance
-$sql  = "SELECT m.*, m.notes AS maintnotes, sites.name AS sitename FROM `{$dbMaintenance}` AS m, sites ";
-$sql .= "WHERE sites.id = m.site AND m.id='$id' ";
+$sql  = "SELECT m.*, m.notes AS maintnotes, sites.name AS sitename FROM `{$dbMaintenance}` AS m, `{$dbSites}` AS s ";
+$sql .= "WHERE s.id = m.site AND m.id='$id' ";
 $maintresult = mysql_query($sql);
 if (mysql_error()) trigger_error("MySQL Query Error ".mysql_error(), E_USER_ERROR);
 
@@ -91,7 +91,8 @@ else
     $allowedcontacts = $maintrow['supportedcontacts'];
 
 
-    $sql  = "SELECT contacts.forenames, contacts.surname, sc.contactid AS contactid FROM `{$dbSupportContacts}` AS sc, contacts ";
+    $sql  = "SELECT c.forenames, c.surname, sc.contactid AS contactid ";
+    $sql .= "FROM `{$dbSupportContacts}` AS sc, `{$dbContacts}` AS c ";
     $sql .= "WHERE sc.contactid=contacts.id AND sc.maintenanceid='$id' ";
     $result=mysql_query($sql);
     if (mysql_error()) trigger_error("MySQL Query Error ".mysql_error(), E_USER_ERROR);
@@ -126,7 +127,8 @@ if ($numberofcontacts < $allowedcontacts OR $allowedcontacts == 0)
 echo "<br />";
 echo "<h3>{$strSkillsSupportedUnderContract}:</h3>";
 // supported software
-$sql = "SELECT * FROM `{$dbSoftwareProducts}` AS sp, software WHERE sp.softwareid=software.id AND productid='{$maintrow['product']}' ";
+$sql = "SELECT * FROM `{$dbSoftwareProducts}` AS sp, `{$dbSoftware}` AS s ";
+$sql .= "WHERE sp.softwareid = s.id AND productid = '{$maintrow['product']}' ";
 $result=mysql_query($sql);
 if (mysql_error()) trigger_error("MySQL Query Error ".mysql_error(), E_USER_ERROR);
 

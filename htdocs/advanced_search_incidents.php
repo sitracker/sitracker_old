@@ -117,7 +117,7 @@ else
         if ($search_details =='')
         {
             $sql = "SELECT DISTINCT i.id, externalid, title, priority, siteid, owner, type, forenames, surname, lastupdated, status, opened, servicelevel ";
-            $sql .= "FROM `{$dbIncidents}` AS i, contacts WHERE i.contact=contacts.id  ";
+            $sql .= "FROM `{$dbIncidents}` AS i, `{$dbContacts}` AS c WHERE i.contact = c.id  ";
         }
         if ($search_details !='')
         {

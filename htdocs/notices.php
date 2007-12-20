@@ -60,7 +60,7 @@ elseif ($action == 'post')
     $result = mysql_query($sql);
     while ($user = mysql_fetch_object($result))
     {
-        $sql = "INSERT INTO notices (userid, gid, type, text, timestamp, durability) ";
+        $sql = "INSERT INTO `{$dbNotices}` (userid, gid, type, text, timestamp, durability) ";
         $sql .= "VALUES({$user->id}, '{$gid}', {$type}, '{$text}', NOW(), '{$durability}')";
         mysql_query($sql);
         if (mysql_error()) trigger_error(mysql_error(),E_USER_WARNING);
@@ -72,12 +72,12 @@ elseif ($action == 'delete')
 {
     $noticeid = cleanvar($_REQUEST['id']);
 
-    $sql = "SELECT gid FROM notices WHERE id='{$noticeid}'";
+    $sql = "SELECT gid FROM `{$dbNotices}` WHERE id='{$noticeid}'";
     $result = mysql_query($sql);
     if (mysql_error()) trigger_error(mysql_error(),E_USER_WARNING);
     $gid = mysql_fetch_object($result);
 
-    $sql = "DELETE FROM notices WHERE gid='{$gid->gid}'";
+    $sql = "DELETE FROM `{$dbNotices}` WHERE gid='{$gid->gid}'";
     mysql_query($sql);
     if (mysql_error()) trigger_error(mysql_error(),E_USER_WARNING);
 
@@ -89,7 +89,7 @@ else
     echo "<h2>{$strNotices}</h2>";
 
     //get all notices
-    $sql = "SELECT * FROM notices WHERE type=".NORMAL_NOTICE_TYPE." OR type=".WARNING_NOTICE_TYPE." ";
+    $sql = "SELECT * FROM `{$dbNotices}` WHERE type=".NORMAL_NOTICE_TYPE." OR type=".WARNING_NOTICE_TYPE." ";
     $sql .= "GROUP BY gid";
     $result = mysql_query($sql);
     if (mysql_error()) trigger_error(mysql_error(),E_USER_WARNING);

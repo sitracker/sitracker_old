@@ -72,7 +72,7 @@ switch ($action)
     case 'delete':
         $id = $_REQUEST['id'];
         $type = $_REQUEST['type'];
-        $sql = "DELETE FROM dashboard_watch_incidents WHERE id = '{$id}' AND userid = {$sit[2]} AND type = '{$type}'";
+        $sql = "DELETE FROM `{$dbDashboardWatchIncidents}` WHERE id = '{$id}' AND userid = {$sit[2]} AND type = '{$type}'";
         $result = mysql_query($sql);
         if (mysql_error()) trigger_error(mysql_error(),E_USER_ERROR);
 
@@ -90,7 +90,7 @@ switch ($action)
         echo "<table align='center'>";
         for($i = 0; $i < 4; $i++)
         {
-            $sql = "SELECT * FROM dashboard_watch_incidents WHERE userid = {$sit[2]} AND type = {$i}";
+            $sql = "SELECT * FROM `{$dbDashboardWatchIncidents}` WHERE userid = {$sit[2]} AND type = {$i}";
 
             $result = mysql_query($sql);
             if (mysql_error()) trigger_error(mysql_error(),E_USER_ERROR);

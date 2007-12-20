@@ -90,7 +90,7 @@ else
         $_SESSION['formerrors']['add_software']['name'] = "You must enter a skill name";
     }
     // Check this is not a duplicate
-    $sql = "SELECT id FROM software WHERE LCASE(name)=LCASE('$name') LIMIT 1";
+    $sql = "SELECT id FROM `{$dbSoftware}` WHERE LCASE(name)=LCASE('$name') LIMIT 1";
     $result = mysql_query($sql);
     if (mysql_num_rows($result) >= 1)
     {

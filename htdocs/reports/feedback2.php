@@ -40,7 +40,7 @@ if (mysql_num_rows($uresult) >= 1)
         $totalresult=0;
         $numquestions=0;
         $html = "<h2>".ucfirst($user->realname)."</h2>";
-        $qsql = "SELECT * FROM feedbackquestions WHERE formid='{$formid}' AND type='rating' ORDER BY taborder";
+        $qsql = "SELECT * FROM `{$dbFeedbackQuestions}` WHERE formid='{$formid}' AND type='rating' ORDER BY taborder";
         $qresult = mysql_query($qsql);
         if (mysql_error()) trigger_error(mysql_error(), E_USER_ERROR);
 
@@ -50,14 +50,14 @@ if (mysql_num_rows($uresult) >= 1)
             {
                 $numquestions++;
                 $html .= "Q{$qrow->taborder}: {$qrow->question} &nbsp;";
-                $sql = "SELECT * FROM feedbackrespondents, incidents, users, feedbackresults ";
-                $sql .= "WHERE feedbackrespondents.incidentid=incidents.id ";
-                $sql .= "AND incidents.owner=users.id ";
-                $sql .= "AND feedbackrespondents.id=feedbackresults.respondentid ";
-                $sql .= "AND feedbackresults.questionid='$qrow->id' ";
-                $sql .= "AND users.id='$user->id' ";
-                $sql .= "AND feedbackrespondents.completed = 'yes' \n"; ///////////////////////
-                $sql .= "ORDER BY incidents.owner, incidents.id";
+                $sql = "SELECT * FROM `{$dbFeedbackRespondents}` AS fr, `{$dbIncidents}` AS i, `{$dbUsers}` AS u, `{$dbFeedbackResults}` AS r ";
+                $sql .= "WHERE fr.incidentid = i.id ";
+                $sql .= "AND i.owner = users.id ";
+                $sql .= "AND fr.id = r.respondentid ";
+                $sql .= "AND r.questionid = '$qrow->id' ";
+                $sql .= "AND u.id = '$user->id' ";
+                $sql .= "AND fr.completed = 'yes' \n"; ///////////////////////
+                $sql .= "ORDER BY i.owner, i.id";
                 $result = mysql_query($sql);
                 if (mysql_error()) trigger_error(mysql_error(), E_USER_ERROR);
                 $numresults=0;

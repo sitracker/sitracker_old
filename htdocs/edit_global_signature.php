@@ -16,7 +16,7 @@
 
 function get_globalsignature($sig_id)
 {
-    $sql = "SELECT signature FROM emailsig WHERE id = $sig_id";
+    $sql = "SELECT signature FROM `{$dbEmailsig}` WHERE id = $sig_id";
     $result=mysql_query($sql);
     list($signature)=mysql_fetch_row($result);
     mysql_free_result($result);
@@ -25,7 +25,7 @@ function get_globalsignature($sig_id)
 
 function delete_signature($sig_id)
 {
-    $sql = "DELETE FROM emailsig WHERE id = $sig_id";
+    $sql = "DELETE FROM `{$dbEmailsig}` WHERE id = $sig_id";
     mysql_query($sql);
     if (mysql_error()) trigger_error("MySQL Query Error ".mysql_error(), E_USER_ERROR);
 
@@ -82,7 +82,7 @@ elseif (empty($action))
 
     echo "<h2>$title</h2>";
 
-    $sql = "SELECT id, signature FROM emailsig ORDER BY id ASC";
+    $sql = "SELECT id, signature FROM `{$dbEmailsig}` ORDER BY id ASC";
     $result = mysql_query($sql);
     if (mysql_error()) trigger_error(mysql_error(), E_USER_WARNING);
 

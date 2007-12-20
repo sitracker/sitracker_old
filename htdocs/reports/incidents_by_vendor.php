@@ -50,9 +50,9 @@ else
     $startdate = strtotime($_REQUEST['startdate']);
     $enddate = strtotime($_REQUEST['enddate']);
 
-    $sql = "SELECT COUNT(i.id) AS volume, products.vendorid, vendors.name ";
-    $sql .= "FROM `{$dbIncidents}` AS i, products, vendors WHERE i.product = products.id AND i.opened >= '{$startdate}' AND i.opened <= '{$enddate}' ";
-    $sql .= "AND products.vendorid = vendors.id GROUP BY products.vendorid";
+    $sql = "SELECT COUNT(i.id) AS volume, p.vendorid, p.name ";
+    $sql .= "FROM `{$dbIncidents}` AS i, `{$dbProducts}` AS p, `{$dbVendors}` AS v WHERE i.product = p.id AND i.opened >= '{$startdate}' AND i.opened <= '{$enddate}' ";
+    $sql .= "AND p.vendorid = v.id GROUP BY p.vendorid";
 
     $result = mysql_query($sql);
     if (mysql_error()) trigger_error("MySQL Query Error ".mysql_error(), E_USER_ERROR);

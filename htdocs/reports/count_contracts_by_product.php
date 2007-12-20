@@ -25,7 +25,7 @@ include ('htmlheader.inc.php');
 
 echo "<h2>{$title}</h2>";
 
-$sql = "SELECT * FROM products ";
+$sql = "SELECT * FROM `{$dbProducts}` ";
 $result = mysql_query($sql);
 
 while ($product = mysql_fetch_object($result))

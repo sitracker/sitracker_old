@@ -35,7 +35,7 @@ function confirm_submit()
 if (empty($submit))
 {
     // Show add user form
-    $gsql = "SELECT * FROM groups ORDER BY name";
+    $gsql = "SELECT * FROM `{$dbGroups}` ORDER BY name";
     $gresult = mysql_query($gsql);
     if (mysql_error()) trigger_error(mysql_error(),E_USER_ERROR);
     while ($group = mysql_fetch_object($gresult))
@@ -198,12 +198,12 @@ else
         $newuserid = mysql_insert_id();
 
         // Create permissions (set to none)
-        $sql = "SELECT * FROM permissions";
+        $sql = "SELECT * FROM `{$dbPermissions}`";
         $result = mysql_query($sql);
         if (mysql_error()) trigger_error("MySQL Query Error ".mysql_error(), E_USER_ERROR);
         while ($perm = mysql_fetch_object($result))
         {
-            $psql = "INSERT INTO userpermissions (userid, permissionid, granted) ";
+            $psql = "INSERT INTO `{$dbUserPermissions}` (userid, permissionid, granted) ";
             $psql .= "VALUES ('$newuserid', '{$perm->id}', 'false')";
             mysql_query($psql);
             if (mysql_error()) trigger_error("MySQL Query Error ".mysql_error(), E_USER_ERROR);

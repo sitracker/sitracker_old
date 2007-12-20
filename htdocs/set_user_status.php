@@ -80,7 +80,7 @@ switch ($mode)
         if ($accepting == 'No')
         {
             //check to see if they have one already
-            $sql = "SELECT id FROM notices WHERE type=".USER_STILL_AWAY_TYPE." ";
+            $sql = "SELECT id FROM `{$dbNotices}` WHERE type=".USER_STILL_AWAY_TYPE." ";
             $sql .= "AND userid={$_SESSION['userid']}";
             $result = mysql_query($sql);
             if (mysql_error()) trigger_error(mysql_error(), E_USER_ERROR);

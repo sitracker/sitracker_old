@@ -57,16 +57,17 @@ if (empty($_REQUEST['mode']))
 }
 else
 {
+    // FIXME sanitize input $_REQUEST vars
     $monthbreakdownstatus = $_REQUEST['monthbreakdown'];
     $startdate = strtotime($_REQUEST['startdate']);
     $enddate = strtotime($_REQUEST['enddate']);
-    $sql = "SELECT count(software.id) AS softwarecount, software.name, software.id ";
-    $sql .= "FROM software, incidents ";
-    $sql .= "WHERE software.id = incidents.softwareid AND incidents.opened >= '{$startdate}' ";
-    $sql .= "AND incidents.opened <= '{$enddate}' ";
+    $sql = "SELECT count(s.id) AS softwarecount, s.name, s.id ";
+    $sql .= "FROM `{$dbSoftware}` AS s, `{$dbIncidents}` AS i ";
+    $sql .= "WHERE s.id = i.softwareid AND i.opened >= '{$startdate}' ";
+    $sql .= "AND i.opened <= '{$enddate}' ";
     $software = $_REQUEST['software'];
-    if (!empty($software)) $sql .= "AND software.name LIKE '%{$software}%' ";
-    $sql .= "GROUP BY software.id ORDER BY softwarecount DESC";
+    if (!empty($software)) $sql .= "AND s.name LIKE '%{$software}%' ";
+    $sql .= "GROUP BY s.id ORDER BY softwarecount DESC";
     $result = mysql_query($sql);
     if (mysql_error()) trigger_error("MySQL Query Error ".mysql_error(), E_USER_ERROR);
 

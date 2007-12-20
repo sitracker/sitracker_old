@@ -57,11 +57,11 @@ else
         $now = time();
         $max_expiry = $now + ($expire * 86400);
         // build SQL
-        $sql  = "SELECT m.id AS maintid, sites.name AS site, products.name AS product, resellers.name AS reseller, ";
-        $sql .= "licence_quantity, licencetypes.name AS licence_type, expirydate, admincontact, ";
-        $sql .= "contacts.forenames AS admincontactforenames, contacts.surname AS admincontactsurname, m.notes ";
-        $sql .= "FROM `{$dbMaintenance}` AS m, sites, contacts, products, licencetypes, resellers WHERE ";
-        $sql .= "(maintenance.site=sites.id AND product=products.id AND reseller=resellers.id AND licence_type=licencetypes.id AND admincontact=contacts.id) AND ";
+        $sql  = "SELECT m.id AS maintid, s.name AS site, p.name AS product, r.name AS reseller, ";
+        $sql .= "licence_quantity, l.name AS licence_type, expirydate, admincontact, ";
+        $sql .= "c.forenames AS admincontactforenames, c.surname AS admincontactsurname, m.notes ";
+        $sql .= "FROM `{$dbMaintenance}` AS m, `{$dbSites}` AS s, `{$dbContacts}` AS c, `{$dbProducts}` AS p, `{$dbLicenceTypes}` AS l, `{$dbResellers}` AS r ";
+        $sql .= "WHERE (m.site = s.id AND product = p.id AND reseller = r.id AND licence_type = l.id AND admincontact = c.id) AND ";
         $sql .= "expirydate <= $max_expiry AND expirydate >= $now ORDER BY expirydate ASC";
 
         $result = mysql_query($sql);

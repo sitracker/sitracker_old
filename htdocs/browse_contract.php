@@ -102,23 +102,23 @@ if (empty($search_string) && empty($productid))
 */
 
 // search for criteria
-$sql  = "SELECT DISTINCT m.id AS maintid, sites.name AS site, products.name AS product, resellers.name AS reseller, licence_quantity, ";
-$sql .= "licencetypes.name AS licence_type, expirydate, admincontact, ";
-$sql .= "contacts.forenames AS admincontactforenames, contacts.surname AS admincontactsurname, m.notes, sites.id AS siteid, ";
+$sql  = "SELECT DISTINCT m.id AS maintid, s.name AS site, p.name AS product, r.name AS reseller, licence_quantity, ";
+$sql .= "l.name AS licence_type, expirydate, admincontact, ";
+$sql .= "c.forenames AS admincontactforenames, c.surname AS admincontactsurname, m.notes, s.id AS siteid, ";
 $sql .= "m.term AS term, m.productonly AS productonly ";
-$sql .= "FROM `{$dbMaintenance}` AS m, sites, contacts, products, licencetypes, resellers ";
-$sql .= "WHERE (m.site=sites.id AND product=products.id AND admincontact=contacts.id) ";
-$sql .= "AND (reseller=resellers.id OR reseller=NULL) AND (licence_type=licencetypes.id OR licence_type=NULL) ";
+$sql .= "FROM `{$dbMaintenance}` AS m, `{$dbSites}` AS s, `{$dbContacts}` AS c, `{$dbProducts}` AS p, `{$dbLicenceTypes}` AS l, `{$dbResellers}` AS r ";
+$sql .= "WHERE (m.site=sites.id AND product = p.id AND admincontact = c.id) ";
+$sql .= "AND (reseller = r.id OR reseller = NULL) AND (licence_type = l.id OR licence_type = NULL) ";
 if ($activeonly=='yes') $sql .= "AND term!='yes' AND (expirydate > $now OR expirydate = '-1') ";
 if ($search_string != '*')
 {
     if (strlen($search_string)==1)
     {
-        $sql .= "AND SUBSTRING(sites.name,1,1)=('$search_string') ";
+        $sql .= "AND SUBSTRING(s.name,1,1)=('$search_string') ";
     }
     else
     {
-        $sql .= "AND (sites.name LIKE '%$search_string%' ";
+        $sql .= "AND (s.name LIKE '%$search_string%' ";
         $sql .= "OR m.id = '$search_string') ";
     }
 
@@ -131,10 +131,10 @@ if (!empty($sort))
 {
     if ($sort=='expiry') $sql .= "ORDER BY expirydate ";
     elseif ($sort=='id') $sql .= "ORDER BY m.id ";
-    elseif ($sort=='product') $sql .= " ORDER BY products.name ";
-    elseif ($sort=='site') $sql .= " ORDER BY sites.name ";
-    elseif ($sort=='reseller') $sql .= " ORDER BY resellers.name ";
-    else $sql .= " ORDER BY sites.name ";
+    elseif ($sort=='product') $sql .= " ORDER BY p.name ";
+    elseif ($sort=='site') $sql .= " ORDER BY s.name ";
+    elseif ($sort=='reseller') $sql .= " ORDER BY r.name ";
+    else $sql .= " ORDER BY s.name ";
 
     if ($order=='a' OR $order=='ASC' OR $order='') $sql .= "ASC";
     else $sql .= "DESC";
