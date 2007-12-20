@@ -32,7 +32,7 @@ switch ($mode)
     case 'form':
         // display file details
         include ('htmlheader.inc.php');
-        $sql = "SELECT * FROM files WHERE id='$id'";
+        $sql = "SELECT * FROM `{$dbFiles}` WHERE id='$id'";
         $result = mysql_query($sql);
         if (mysql_error()) trigger_error("MySQL Query Error ".mysql_error(), E_USER_ERROR);
         $frow=mysql_fetch_array($result);
@@ -40,7 +40,7 @@ switch ($mode)
         // calculate filesize
         $j = 0;
         $ext =
-        array("Bytes","KBytes","MBytes","GBytes","TBytes");
+        array("Bytes","KBytes","MBytes","GBytes","TBytes");  // FIXME i18n Bytes, Kbytes etc.
         $pretty_file_size = $frow['size'];
         while ($pretty_file_size >= pow(1024,$j)) ++$j;
         $pretty_file_size = round($pretty_file_size / pow(1024,$j-1) * 100) / 100 . ' ' . $ext[$j-1];

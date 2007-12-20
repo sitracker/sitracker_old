@@ -163,8 +163,8 @@ else
         {
             // Don't  need to do this again, already done above, us the results of that
             // build SQL
-            $sql  = "SELECT c.* FROM `{$dbContacts}` AS c, sites ";
-            $sql .= "WHERE c.siteid = sites.id ";
+            $sql  = "SELECT c.* FROM `{$dbContacts}` AS c, `{$dbSites}` AS s ";
+            $sql .= "WHERE c.siteid = s.id ";
             $search_string_len=strlen($search_string);
             if ($search_string != '*')
             {
@@ -183,7 +183,7 @@ else
             }
             if ($displayinactive=="false")
             {
-                $sql .= " AND c.active = 'true' AND sites.active = 'true'";
+                $sql .= " AND c.active = 'true' AND s.active = 'true'";
             }
             $sql .= " ORDER BY surname ASC";
 

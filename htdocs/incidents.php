@@ -64,11 +64,11 @@ if (mysql_num_rows($epresult) >= 1)
 }
 
 // Generic bit of SQL, common to both queue types
-$selectsql = "SELECT i.id, escalationpath, externalid, title, owner, towner, priority, status, closingstatus, siteid, contacts.id AS contactid, forenames, surname, phone, email, i.maintenanceid, ";
+$selectsql = "SELECT i.id, escalationpath, externalid, title, owner, towner, priority, status, closingstatus, siteid, c.id AS contactid, forenames, surname, phone, email, i.maintenanceid, ";
 $selectsql .= "servicelevel, softwareid, lastupdated, timeofnextaction, ";
 $selectsql .= "(timeofnextaction - $now) AS timetonextaction, opened, ($now - opened) AS duration, closed, (closed - opened) AS duration_closed, type, ";
 $selectsql .= "($now - lastupdated) AS timesincelastupdate ";
-$selectsql .= "FROM `{$dbIncidents}` AS i, contacts, priority ";
+$selectsql .= "FROM `{$dbIncidents}` AS i, `{$dbContacts}` AS c, `{$dbPriority}` AS pr ";
 
 switch ($type)
 {
@@ -85,7 +85,7 @@ switch ($type)
             if (mysql_num_rows($uresult) >= 1) list($user) = mysql_fetch_row($uresult);
             else $user=$sit[2]; // force to current user if username not found
         }
-        $sql = $selectsql . "WHERE contact=contacts.id AND i.priority=priority.id ";
+        $sql = $selectsql . "WHERE contact = c.id AND i.priority = pr.id ";
         if ($user!='all') $sql .= "AND (owner='$user' OR towner='$user') ";
         if (!empty($softwareid)) $sql .= "AND softwareid='$softwareid' ";
 
@@ -139,7 +139,7 @@ switch ($type)
             {
                 case 'id': $sql .= " ORDER BY id $sortorder"; break;
                 case 'title': $sql .= " ORDER BY title $sortorder"; break;
-                case 'contact': $sql .= " ORDER BY contacts.surname $sortorder, contacts.forenames $sortorder"; break;
+                case 'contact': $sql .= " ORDER BY c.surname $sortorder, c.forenames $sortorder"; break;
                 case 'priority': $sql .=  " ORDER BY priority $sortorder, lastupdated ASC"; break;
                 case 'status': $sql .= " ORDER BY status $sortorder"; break;
                 case 'lastupdated': $sql .= " ORDER BY lastupdated $sortorder"; break;

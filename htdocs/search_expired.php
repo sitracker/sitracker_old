@@ -66,12 +66,13 @@ else
         $min_expiry = $now - ($expired * 86400);
 
         // build SQL
-        $sql  = "SELECT m.id AS maintid, sites.name AS site, products.name AS product, resellers.name AS reseller, ";
-        $sql .= "licence_quantity, licencetypes.name AS licence_type, expirydate, admincontact, ";
-        $sql .= "contacts.forenames AS admincontactforenames, contacts.surname AS admincontactsurname, ";
-        $sql .= "contacts.email AS admincontactemail, contacts.phone AS admincontactphone, m.notes ";
-        $sql .= "FROM `{$dbMaintenance}` AS m, sites, contacts, products, licencetypes, resellers WHERE ";
-        $sql .= "(siteid=sites.id AND product=products.id AND reseller=resellers.id AND licence_type=licencetypes.id AND admincontact=contacts.id) AND ";
+        $sql  = "SELECT m.id AS maintid, s.name AS site, p.name AS product, r.name AS reseller, ";
+        $sql .= "licence_quantity, l.name AS licence_type, expirydate, admincontact, ";
+        $sql .= "c.forenames AS admincontactforenames, c.surname AS admincontactsurname, ";
+        $sql .= "c.email AS admincontactemail, c.phone AS admincontactphone, m.notes ";
+        $sql .= "FROM `{$dbMaintenance}` AS m, `{$dbSites}` AS s, `{$dbContacts}` AS c, ";
+        $sql .= "`{$dbProducts}` AS p, `{$dbLicenceTypes}` AS l, `{$dbResellers}` AS r WHERE ";
+        $sql .= "(siteid = s.id AND product = p.id AND reseller = r.id AND licence_type = l.id AND admincontact = c.id) AND ";
         $sql .= "expirydate >= $min_expiry AND expirydate <= $now ";
         if ($show == "terminated") $sql .= "AND term='yes'";
         else if ($show == "nonterminated") $sql .= "AND term='no'";

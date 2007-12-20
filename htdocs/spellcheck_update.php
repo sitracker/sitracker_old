@@ -49,7 +49,7 @@ if (!isset($spellid))
 }
 else
 {
-    $sql = "SELECT updateid, bodytext FROM spellcheck WHERE id='$spellid'";
+    $sql = "SELECT updateid, bodytext FROM `{$dbSpellCheck}` WHERE id='$spellid'";
     $result=mysql_query($sql);
     list($updateid, $bodytext) = mysql_fetch_row($result);
     if (mysql_error()) trigger_error("MySQL Query Error ".mysql_error(), E_USER_ERROR);

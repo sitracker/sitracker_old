@@ -49,7 +49,7 @@ echo "<table summary='files' align='center'>
 </tr>";
 
 $sql="SELECT id, filename, size, userid, shortdescription, path, downloads, filedate, fileversion, productid, ";
-$sql .="releaseid, expiry, published FROM files ";
+$sql .="releaseid, expiry, published FROM `{$dbFiles}` ";
 
 switch ($orderby)
 {

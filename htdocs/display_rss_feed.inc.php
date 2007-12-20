@@ -19,7 +19,7 @@ require ('auth.inc.php');
 
 if ($_SESSION['auth'] == TRUE) $styleid = $_SESSION['style'];
 else $styleid= $CONFIG['default_interface_style'];
-$csssql = "SELECT cssurl, iconset FROM interfacestyles WHERE id='{$styleid}'";
+$csssql = "SELECT cssurl, iconset FROM `{$dbInterfaceStyles}` WHERE id='{$styleid}'";
 $cssresult = mysql_query($csssql);
 if (mysql_error()) trigger_error(mysql_error(),E_USER_WARNING);
 else list($cssurl, $iconset) = mysql_fetch_row($cssresult);
@@ -31,7 +31,7 @@ else list($cssurl, $iconset) = mysql_fetch_row($cssresult);
 
 require_once('magpierss/rss_fetch.inc');
 
-$sql = "SELECT url, items FROM dashboard_rss WHERE owner = {$sit[2]} AND enabled = 'true'";
+$sql = "SELECT url, items FROM `{$dbDashboardRSS}` WHERE owner = {$sit[2]} AND enabled = 'true'";
 $result = mysql_query($sql);
 if (mysql_error()) trigger_error(mysql_error(),E_USER_ERROR);
 

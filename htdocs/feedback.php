@@ -198,7 +198,7 @@ switch ($_REQUEST['action'])
         // Have a look to see if this respondant has already responded to this form
         // Get respondentid
         //print_r($_REQUEST);
-        $sql = "SELECT id AS respondentid FROM feedbackrespondents WHERE contactid='$contactid' AND formid='$formid' AND incidentid='$incidentid'";
+        $sql = "SELECT id AS respondentid FROM `{$dbFeedbackRespondents}` WHERE contactid='$contactid' AND formid='$formid' AND incidentid='$incidentid'";
         $result = mysql_query($sql);
         if (mysql_error()) trigger_error(mysql_error(),E_USER_ERROR);
         if (mysql_num_rows($result) < 1)
@@ -213,7 +213,7 @@ switch ($_REQUEST['action'])
         // Store this respondent and references
 
         // Loop through the questions in this form and store the results
-        $sql = "SELECT * FROM feedbackquestions WHERE formid='{$formid}'";
+        $sql = "SELECT * FROM `{$dbFeedbackQuestions}` WHERE formid='{$formid}'";
         $result = mysql_query($sql);
         if (mysql_error()) trigger_error(mysql_error(),E_USER_ERROR);
         while ($question = mysql_fetch_object($result))
@@ -342,7 +342,7 @@ body { font:10pt Arial, Helvetica, sans-serif; }
         $fielddata=unserialize(base64_decode($errorfields[0])); // unserialize(
 
         // Have a look to see if this person has a form waiting to be filled
-        $rsql = "SELECT id FROM feedbackrespondents WHERE contactid='$contactid' AND incidentid='$incidentid' AND formid='$formid' ";
+        $rsql = "SELECT id FROM `{$dbFeedbackRespondents}` WHERE contactid='$contactid' AND incidentid='$incidentid' AND formid='$formid' ";
         if ($_REQUEST['rr']) $rsql .= "AND completed='yes' ";
 
         $rresult = mysql_query($rsql);
@@ -360,7 +360,7 @@ body { font:10pt Arial, Helvetica, sans-serif; }
         }
         else
         {
-            $sql = "SELECT * FROM feedbackforms WHERE id='{$formid}'";
+            $sql = "SELECT * FROM `{$dbFeedbackForms}` WHERE id='{$formid}'";
             $result = mysql_query($sql);
             if (mysql_error()) trigger_error(mysql_error(), E_USER_ERROR);
 
@@ -375,8 +375,8 @@ body { font:10pt Arial, Helvetica, sans-serif; }
                 if (!empty($_REQUEST['error'])) echo "<p style='color: red'>Error, you did not complete all required questions, please check your answers and try again.</p>";
                 echo nl2br($form->introduction);
 
-                $qsql  = "SELECT * FROM feedbackquestions ";
-                $qsql .= "WHERE feedbackquestions.formid='{$form->id}' ";
+                $qsql  = "SELECT * FROM `{$dbFeedbackQuestions}` AS fq ";
+                $qsql .= "WHERE fq.formid='{$form->id}' ";
                 $qsql .= "ORDER BY taborder ASC";
                 $qresult=mysql_query($qsql);
                 if (mysql_error()) trigger_error(mysql_error(), E_USER_ERROR);

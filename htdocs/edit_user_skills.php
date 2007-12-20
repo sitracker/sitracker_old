@@ -29,7 +29,7 @@ else $user = cleanvar($_REQUEST['user']);
 if (empty($submit))
 {
     include ('htmlheader.inc.php');
-    $sql = "SELECT * FROM usersoftware, software WHERE usersoftware.softwareid=software.id AND userid='$user' ORDER BY name";
+    $sql = "SELECT * FROM `{$dbUserSoftware}` AS us, `{$dbSoftware}` AS s WHERE us.softwareid = s.id AND userid = '$user' ORDER BY name";
     $result = mysql_query($sql);
     if (mysql_num_rows($result) >= 1)
     {
@@ -45,7 +45,7 @@ if (empty($submit))
     echo "<table align='center'>";
     echo "<tr><th>{$strNOSkills}</th><th>&nbsp;</th><th>{$strHAVESkills}</th></tr>";
     echo "<tr><td align='center' width='300' class='shade1'>";
-    $sql = "SELECT * FROM software ORDER BY name";
+    $sql = "SELECT * FROM `{$dbSoftware}` ORDER BY name";
     $result = mysql_query($sql);
     if (mysql_num_rows($result) >= 1)
     {
@@ -66,7 +66,7 @@ if (empty($submit))
     echo "<input type='button' value='&lt;&lt;' title='Remove All' onclick=\"copyAll(this.form.elements['expertise[]'],this.form.elements['noskills[]'])\" /><br />";
     echo "</td>";
     echo "<td class='shade1'>";
-    $sql = "SELECT * FROM usersoftware, software WHERE usersoftware.softwareid=software.id AND userid='{$user}' ORDER BY name";
+    $sql = "SELECT * FROM `{$dbUserSoftware}` AS us, `{$dbSoftware}` AS s WHERE us.softwareid = s.id AND userid = '{$user}' ORDER BY name";
     $result = mysql_query($sql);
     echo "<select name='expertise[]' multiple='multiple' size='20' style='width: 100%;  min-width: 200px;'>";
     while ($software = mysql_fetch_object($result))

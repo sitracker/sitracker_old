@@ -22,7 +22,7 @@ $action = $_REQUEST['action'];
 switch ($action)
 {
     case 'tags':
-        $sql = "SELECT DISTINCT tags.name FROM set_tags, tags WHERE set_tags.tagid = tags.tagid GROUP BY tags.name";
+        $sql = "SELECT DISTINCT t.name FROM `{$dbSetTags}` AS st, `{$dbTags}` AS t WHERE st.tagid = t.tagid GROUP BY t.name";
         $result = mysql_query($sql);
         if (mysql_error()) trigger_error(mysql_error(),E_USER_ERROR);
         if (mysql_num_rows($result) > 0)

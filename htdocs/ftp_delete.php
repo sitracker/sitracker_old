@@ -22,7 +22,7 @@ require ('auth.inc.php');
 // External variables
 $id = cleanvar($_REQUEST['id']);
 
-$sql = "SELECT * FROM files WHERE id='$id'";
+$sql = "SELECT * FROM `{$dbFiles}` WHERE id='$id'";
 $result = mysql_query($sql);
 if (mysql_error()) trigger_error("MySQL Query Error ".mysql_error(), E_USER_ERROR);
 $frow=mysql_fetch_array($result);
@@ -70,7 +70,7 @@ else
 ftp_quit($conn_id);
 
 // remove file from database
-$sql = "DELETE FROM files WHERE id='$id'";
+$sql = "DELETE FROM `{$dbFiles}` WHERE id='$id'";
 mysql_query($sql);
 if (mysql_error()) trigger_error("MySQL Query Error ".mysql_error(), E_USER_ERROR);
 journal(CFG_JOURNAL_OTHER, 'FTP File Deleted', "File {$frow['filename']} was deleted from FTP", CFG_JOURNAL_PRODUCTS, 0);

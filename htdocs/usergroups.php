@@ -59,7 +59,7 @@ switch ($action)
         if (mysql_error()) trigger_error(mysql_error(),E_USER_ERROR);
 
         // Remove the group
-        $sql = "DELETE FROM groups WHERE id='{$groupid}' LIMIT 1";
+        $sql = "DELETE FROM `{$dbGroups}` WHERE id='{$groupid}' LIMIT 1";
         mysql_query($sql);
         if (mysql_error()) trigger_error(mysql_error(),E_USER_ERROR);
         html_redirect("usergroups.php");
@@ -70,7 +70,7 @@ switch ($action)
 
         echo "<h2>$title</h2>";
 
-        $gsql = "SELECT * FROM groups ORDER BY name";
+        $gsql = "SELECT * FROM `{$dbGroups}` ORDER BY name";
         $gresult = mysql_query($gsql);
         if (mysql_error()) trigger_error(mysql_error(),E_USER_ERROR);
         while ($group = mysql_fetch_object($gresult))

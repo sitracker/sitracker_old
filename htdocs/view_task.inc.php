@@ -16,7 +16,7 @@ echo "<h2><img src='{$CONFIG['application_webpath']}images/icons/{$iconset}/32x3
 
 if ($mode != 'incident') echo "<div style='width: 90%; margin-left: auto; margin-right: auto;'>";
 
-$sql = "SELECT * FROM tasks WHERE id='{$taskid}'";
+$sql = "SELECT * FROM `{$dbTasks}` WHERE id='{$taskid}'";
 $result = mysql_query($sql);
 if (mysql_error()) trigger_error(mysql_error(),E_USER_ERROR);
 if (mysql_num_rows($result) >= 1)

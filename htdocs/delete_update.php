@@ -28,7 +28,7 @@ $sql = "DELETE FROM `{$dbUpdates}` WHERE id='$updateid' AND timestamp='$timestam
 mysql_query($sql);
 if (mysql_error()) trigger_error("MySQL Query Error ".mysql_error(), E_USER_ERROR);
 
-$sql = "DELETE FROM tempincoming WHERE id='$tempid'";
+$sql = "DELETE FROM `{$dbTempIncoming}` WHERE id='$tempid'";
 mysql_query($sql);
 if (mysql_error()) trigger_error("MySQL Query Error ".mysql_error(), E_USER_ERROR);
 

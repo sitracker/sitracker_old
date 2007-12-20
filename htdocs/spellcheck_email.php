@@ -22,7 +22,11 @@ if (isset($addword))
 }
 if (isset($spellid))
 {
-    $sql = "SELECT updateid, bodytext, newincidentstatus, timetonextaction_none, timetonextaction_days, timetonextaction_hours, timetonextaction_minutes, day, month, year, fromfield, replytofield, ccfield, bccfield, tofield, subjectfield, attachmenttype, filename FROM spellcheck WHERE id='$spellid'";
+    $sql = "SELECT updateid, bodytext, newincidentstatus, timetonextaction_none, ";
+    $sql .= "timetonextaction_days, timetonextaction_hours, timetonextaction_minutes, ";
+    $sql .= "day, month, year, fromfield, replytofield, ccfield, bccfield, tofield, ";
+    $sql .= "subjectfield, attachmenttype, filename ";
+    $sql .= "FROM `{$dbSpellCheck}` WHERE id='$spellid'";
     $result=mysql_query($sql);
     list($updateid, $bodytext, $newincidentstatus, $timetonextaction_none, $timetonextaction_days, $timetonextaction_hours, $timetonextaction_minutes, $day, $month, $year, $fromfield, $replytofield, $ccfield, $bccfield, $tofield, $subjectfield, $attachmenttype, $filename) = mysql_fetch_row($result);
     if (mysql_error()) trigger_error("MySQL Query Error ".mysql_error(), E_USER_ERROR);

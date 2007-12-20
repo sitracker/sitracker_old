@@ -49,7 +49,7 @@ if (!empty($sort))
     {
         case 'userid': $sql .= " ORDER BY userid $sortorder"; break;
         case 'timestamp': $sql .= " ORDER BY timestamp $sortorder"; break;
-        case 'refid': $sql .= " ORDER BY contacts.surname $sortorder, contacts.forenames $sortorder"; break;
+        case 'refid': $sql .= " ORDER BY c.surname $sortorder, c.forenames $sortorder"; break;
         default:   $sql .= " ORDER BY timestamp DESC"; break;
     }
 }

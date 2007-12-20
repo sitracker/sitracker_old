@@ -251,18 +251,18 @@ if (!empty($search_string))
             if ($searchmode != 'related')
             {
             // Incident updates
-                $sql = "SELECT DISTINCT i.id AS incidentid, i.title, updates.bodytext, updates.timestamp, i.opened, i.closed ";
-                $sql .= "FROM `{$dbIncidents}` AS i,updates WHERE ";
-                $sql .= "updates.incidentid = i.id AND (";
-                $sql .= search_build_query('updates.bodytext', $sterms);
+                $sql = "SELECT DISTINCT i.id AS incidentid, i.title, u.bodytext, u.timestamp, i.opened, i.closed ";
+                $sql .= "FROM `{$dbIncidents}` AS i, `{$dbUpdates}` AS u WHERE ";
+                $sql .= "u.incidentid = i.id AND (";
+                $sql .= search_build_query('u.bodytext', $sterms);
                 $sql .= ") GROUP BY i.id";
                 $result = mysql_query($sql);
 //                 if ($CONFIG['debug']) echo $sql;
                 if (mysql_error()) trigger_error(mysql_error(),E_USER_WARNING);
                 while ($sresult = mysql_fetch_object($result))
                 {
-                    $entry['id']=$sresult->incidentid;
-                    $entry['ref']="incident-{$sresult->incidentid}";
+                    $entry['id'] = $sresult->incidentid;
+                    $entry['ref'] = "incident-{$sresult->incidentid}";
                     $entry['string'] = strip_tags($sresult->bodytext);
                     $entry['score'] = 8 + search_score_adjust($sterms, $entry['string']);
                     $entry['title'] = $sresult->title;
@@ -314,8 +314,8 @@ if (!empty($search_string))
             break;
 
         case 'maintenance':
-            $sql = "SELECT *, m.id AS maintid FROM `{$dbMaintenance}` AS m,sites WHERE m.site=sites.id AND (";
-            $sql .= search_build_query('sites.name', $sterms);
+            $sql = "SELECT *, m.id AS maintid FROM `{$dbMaintenance}` AS m, `{$dbSites}` AS s WHERE m.site = s.id AND (";
+            $sql .= search_build_query('s.name', $sterms);
             $sql .= ")";
 //             echo "<pre>$sql</pre>";
             $result = mysql_query($sql);
@@ -335,7 +335,7 @@ if (!empty($search_string))
             break;
 
         case 'knowledgebase':
-            $sql = "SELECT * FROM kbarticles WHERE ";
+            $sql = "SELECT * FROM `{$dbKBArticles}` WHERE ";
             $sql .= search_build_query('title', $sterms);
 //             echo "<pre>$sql</pre>";
             $result = mysql_query($sql);
