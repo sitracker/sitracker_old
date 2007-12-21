@@ -257,7 +257,7 @@ else
             {
                 //incident closed
                 $sql = "INSERT INTO `{$dbTempIncoming}` (updateid, incidentid, emailfrom, subject, reason, contactid) ";
-                $sql.= "VALUES ('{$updateid}', '0', '{$decoded_email->from_name}', '".mysql_real_escape_string($decoded_email->subject)."', 'Incident {$oldincidentid} is closed', '$contactid' )";
+                $sql.= "VALUES ('{$updateid}', '0', '{$decoded_email->from_name}', '".mysql_real_escape_string($decoded_email->subject)."', '".mysql_real_escape_string("Incident <a href=\"javascript:incident_details_window('{$oldincidentid}','incident{$oldincidentid}')\" class='info'>{$oldincidentid}</a> is closed")."', '$contactid' )";
                 mysql_query($sql);
                 if (mysql_error()) trigger_error(mysql_error(),E_USER_WARNING);
             }
