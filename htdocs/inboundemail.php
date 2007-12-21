@@ -149,10 +149,26 @@ $message = str_replace("\n\n\n\n","\n", $message);
 $message = str_replace(">\n>\n>\n>\n",">\n", $message);
 
 // Build up text to insert in the incident log
-if (!empty($decoded_email->from)) $headertext .= "From: [b]".htmlentities(mysql_real_escape_string($decoded_email->from), ENT_NOQUOTES)."[/b]\n";
-if (!empty($decoded_email->to)) $headertext .= "To: [b]".htmlentities(mysql_real_escape_string($decoded_email->to))."[/b]\n";
-if (!empty($decoded_email->cc)) $headertext .= "CC: [b]".htmlentities(mysql_real_escape_string($decoded_email->cc))."[/b]\n";
-if (!empty($decoded_email->subject)) $headertext .= "Subject: [b]".htmlentities(mysql_real_escape_string($decoded_email->subject))."[/b]\n";
+if (!empty($decoded_email->from))
+{
+    $headertext .= "From: [b]".htmlentities(mysql_real_escape_string($decoded_email->from), ENT_NOQUOTES)."[/b]\n";
+}
+
+if (!empty($decoded_email->to))
+{
+    $headertext .= "To: [b]".htmlentities(mysql_real_escape_string($decoded_email->to))."[/b]\n";
+}
+
+if (!empty($decoded_email->cc))
+{
+    $headertext .= "CC: [b]".htmlentities(mysql_real_escape_string($decoded_email->cc))."[/b]\n";
+}
+
+if (!empty($decoded_email->subject))
+{
+    $headertext .= "Subject: [b]".htmlentities(mysql_real_escape_string($decoded_email->subject))."[/b]\n";
+}
+
 if ($count_attachments >= 1)
 {
     $headertext .= "Attachments: [b]{$count_attachments}[/b] - ";
@@ -179,8 +195,8 @@ if (empty($incidentid))
     $updateid = mysql_insert_id();
 
     //new call
-    $sql = "INSERT INTO tempincoming (updateid, incidentid, emailfrom, subject, reason, contactid) ";
-    $sql.= "VALUES ('".$updateid."', '0', '".$decoded_email->from_name."', '".$decoded_email->subject."', 'Possible new call', '$contactid' )";
+    $sql = "INSERT INTO `{$dbTempIncoming}` (updateid, incidentid, emailfrom, subject, reason, contactid) ";
+    $sql.= "VALUES ('{$updateid}', '0', '{$decoded_email->from_name}', '".mysql_real_escape_string($decoded_email->subject)."', 'Possible new call', '{$contactid}' )";
     mysql_query($sql);
     if (mysql_error()) trigger_error(mysql_error(),E_USER_WARNING);
 
@@ -199,7 +215,9 @@ else
     }
 
     $fifteenminsago = $now - 900;
-    $sql = "SELECT bodytext FROM `{$dbUpdates}` WHERE incidentid = '{$incidentid}' AND timestamp > '{$fifteenminsago}' ORDER BY id DESC LIMIT 1";
+    $sql = "SELECT bodytext FROM `{$dbUpdates}` ";
+    $sql .= "WHERE incidentid = '{$incidentid}' AND timestamp > '{$fifteenminsago}' ";
+    $sql .= "ORDER BY id DESC LIMIT 1";
     $result = mysql_query($sql);
     if (mysql_error()) trigger_error(mysql_error(),E_USER_WARNING);
 
@@ -227,7 +245,8 @@ else
         if ($incident_open == "Yes")
         {
             // Mark the incident as active
-            $sql = "UPDATE `{$dbIncidents}` SET status='1', lastupdated='".time()."', timeofnextaction='0' WHERE id='{$incidentid}'";
+            $sql = "UPDATE `{$dbIncidents}` SET status='1', lastupdated='".time()."', timeofnextaction='0' ";
+            $sql .= "WHERE id='{$incidentid}'";
             mysql_query($sql);
             if (mysql_error()) trigger_error(mysql_error(),E_USER_WARNING);
         }
@@ -237,16 +256,16 @@ else
             if ($incident_open == "No")
             {
                 //incident closed
-                $sql = "INSERT INTO tempincoming (updateid, incidentid, emailfrom, subject, reason, contactid) ";
-                $sql.= "VALUES ('".$updateid."', '0', '".$decoded_email->from_name."', '".$decoded_email->subject."', 'Incident ".$oldincidentid." is closed', '$contactid' )";
+                $sql = "INSERT INTO `{$dbTempIncoming}` (updateid, incidentid, emailfrom, subject, reason, contactid) ";
+                $sql.= "VALUES ('{$updateid}', '0', '{$decoded_email->from_name}', '".mysql_real_escape_string($decoded_email->subject)."', 'Incident {$oldincidentid} is closed', '$contactid' )";
                 mysql_query($sql);
                 if (mysql_error()) trigger_error(mysql_error(),E_USER_WARNING);
             }
             else
             {
                 //new call
-                $sql = "INSERT INTO tempincoming (updateid, incidentid, emailfrom, subject, reason, contactid) ";
-                $sql.= "VALUES ('".$updateid."', '0', '".$decoded_email->from_name."', '".$decoded_email->subject."', 'Possible new call', '$contactid' )";
+                $sql = "INSERT INTO `{$dbTempIncoming}` (updateid, incidentid, emailfrom, subject, reason, contactid) ";
+                $sql.= "VALUES ('{$updateid}', '0', '{$decoded_email->from_name}', '".mysql_real_escape_string($decoded_email->subject)."', 'Possible new call', '{$contactid}' )";
                 mysql_query($sql);
                 if (mysql_error()) trigger_error(mysql_error(),E_USER_WARNING);
             }
@@ -258,7 +277,7 @@ else
         {
             $bodytext = "[i]Received duplicate email within 15 minutes. Message not stored. Possible mail loop.[/i]";
             $sql  = "INSERT INTO `{$dbUpdates}` (incidentid, userid, type, bodytext, timestamp, customervisibility, currentstatus) ";
-            $sql .= "VALUES ('{$incidentid}', 0, 'emailin', '{$bodytext}', '{$now}', '$customer_visible', 1 )";
+            $sql .= "VALUES ('{$incidentid}', 0, 'emailin', '{$bodytext}', '{$now}', '{$customer_visible}', 1 )";
             mysql_query($sql);
             if (mysql_error()) trigger_error(mysql_error(),E_USER_WARNING);
         }
