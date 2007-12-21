@@ -233,9 +233,9 @@ if ($errors == 0)
         {
             echo " owned by <strong>".user_realname($owner)."</strong>";
         }
-        elseif
+        elseif ($search_string=='0')
         {
-            ($search_string=='0') echo " matching <strong><em>Number</em></strong>";
+            echo " matching <strong><em>Number</em></strong>";
         }
         else
         {
