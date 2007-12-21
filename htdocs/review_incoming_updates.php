@@ -222,7 +222,7 @@ if (!empty($selected))
 
 // extract updates
 $sql  = "SELECT u.id AS id, u.bodytext AS bodytext, tempincoming.emailfrom AS emailfrom, tempincoming.subject AS subject, ";
-$sql .= "updates.timestamp AS timestamp, tempincoming.incidentid AS incidentid, tempincoming.id AS tempid, tempincoming.locked AS locked, ";
+$sql .= "u.timestamp AS timestamp, tempincoming.incidentid AS incidentid, tempincoming.id AS tempid, tempincoming.locked AS locked, ";
 $sql .= "tempincoming.reason AS reason, tempincoming.contactid AS contactid, tempincoming.`from` AS fromaddr ";
 $sql .= "FROM `{$dbUpdates}` AS u, tempincoming WHERE u.incidentid=0 AND tempincoming.updateid=u.id ";
 $sql .= "ORDER BY timestamp ASC, id ASC";
