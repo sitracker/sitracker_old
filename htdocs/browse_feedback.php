@@ -151,7 +151,7 @@ switch ($mode)
             if (empty($formid) AND !empty($CONFIG['feedback_form'])) $formid=$CONFIG['feedback_form'];
             else $formid=1;
 
-            $sql  = "SELECT *, feedbackrespondents.id AS respid FROM `{$dbFeedbackRespondents}` AS fr, `{$dbFeedbackForms}` AS ff ";
+            $sql  = "SELECT *, fr.id AS respid FROM `{$dbFeedbackRespondents}` AS fr, `{$dbFeedbackForms}` AS ff ";
             $sql .= "WHERE fr.formid = ff.id ";
             if ($completed=='no') $sql .= "AND completed='no' ";
             else $sql .= "AND completed='yes' ";
