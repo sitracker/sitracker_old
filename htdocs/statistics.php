@@ -272,8 +272,7 @@ function give_overview()
                         $openCallsVendor += $rowVendor['COUNT(i.id)'];
                     }
                 }
-                // FIXME i18n Total open
-                echo "<tr><th>{$strTotal} Open</th>";
+                echo "<tr><th>{$strTotalOpen}</th>";
                 echo "<td class='shade2' align='left'><strong>{$openCallsVendor}</strong></td></tr></table></td>";
             }
         }
@@ -288,7 +287,7 @@ function give_overview()
     $todaysincidents=mysql_num_rows($result);
     mysql_free_result($result);
 
-    $string = "<h4>$todaysincidents Incidents logged today</h4>"; // FIXME i18n Incidents logged today, assigned as follows
+    $string = "<h4>".sprintf($GLOBALS['strIncidentsLoggedToday'], $todaysincidents)."</h4>";
     if ($todaysincidents > 0)
     {
         $string .= "<table align='center' width='50%'><tr><td colspan='2'>Assigned as follows:</td></tr>";
@@ -325,7 +324,7 @@ function give_overview()
     if (mysql_error()) trigger_error("MySQL Query Error ".mysql_error(), E_USER_ERROR);
     list($todaysclosed)=mysql_fetch_row($result);
 
-    $string .= "<h4>$todaysclosed Incidents closed today</h4>"; // FIXME i18n closed today
+    $string .= "<h4>".sprintf($GLOBALS['strIncidentsClosedToday'], $todaysclosed)."</h4>";
     if ($todaysclosed > 0)
     {
         $sql = "SELECT count(i.id), realname, users.id AS owner FROM `{$GLOBALS['dbIncidents']}` AS i LEFT JOIN users ON i.owner = users.id WHERE closed > '$todayrecent' GROUP BY owner";
@@ -335,7 +334,7 @@ function give_overview()
         if (mysql_error()) trigger_error("MySQL Query Error ".mysql_error(), E_USER_ERROR);
         while ($row = mysql_fetch_array($result))
         {
-            $string .= "<tr><th colspan='4' align='left'>".$row['count(incidents.id)']." Closed by ".$row['realname']."</th></tr>\n";
+            $string .= "<tr><th colspan='4' align='left'>".$row['count(incidents.id)']." {$GLOBALS['strClosedBy']} ".$row['realname']."</th></tr>\n";
 
             $sql = "SELECT i.id, i.title, cs.name ";
             $sql .= "FROM `{$GLOBALS['dbIncidents']}` AS i, `{$GLOBALS['dbClosingStatus']}` AS cs ";
@@ -348,7 +347,6 @@ function give_overview()
                 $string .= "<tr><th><a href=\"javascript:incident_details_window('".$irow['id']."', 'incident".$irow['id']."')\" title='[".$irow['id']."] - ".$irow['title']."'>".$irow['id']."</a></th>";
                 $string .= "<td class='shade2' align='left'>".$irow['title']."</td><td class='shade2' align='left'>".$row['realname']."</td><td class='shade2'>".$irow['name']."</td></tr>\n";
             }
-            // $string .= "</table>\n";
         }
         $string .= "</table>\n\n";
     }
