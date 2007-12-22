@@ -3799,6 +3799,8 @@ function calculate_working_time($t1,$t2,$publicholidays) {
 
     $timeworked = 0;
 
+    $t2date = getdate($ts);
+
     while ($currenttime <= $t2)
     {
         $time = getdate($currenttime);
@@ -3807,8 +3809,18 @@ function calculate_working_time($t1,$t2,$publicholidays) {
 
         if (in_array($time['wday'], $CONFIG['working_days']) AND $time['hours'] >= $swd AND $time['hours'] <= $ewd AND (($ph = is_public_holiday($currenttime, $publicholidays)) == 0))
         {
-            $timeworked++;
-            $currenttime += 60;  // move to the next minute
+            if ($t2date['yday'] == $time['yday'] AND $t2day['year'] == $time['year'])
+            {
+                // if end same day as time
+                $c = $t2 - $currenttime;
+                $timeworked += $c/60;
+                $currenttime += $c;
+            }
+            else
+            {
+                $timeworked++;
+                $currenttime += 60;  // move to the next minute
+            }
         }
         else
         {
@@ -5323,7 +5335,7 @@ function list_tags($recordid, $type, $html=TRUE)
 {
     global $CONFIG, $dbSetTags, $dbTags;
 
-    $sql = "SELECT tags.name, tags.tagid FROM `{$dbSetTags}` AS s, `{$dbTags}` AS t WHERE s.tagid = t.tagid AND ";
+    $sql = "SELECT t.name, t.tagid FROM `{$dbSetTags}` AS s, `{$dbTags}` AS t WHERE s.tagid = t.tagid AND ";
     $sql .= "s.type = '$type' AND s.id = '$recordid'";
     $result = mysql_query($sql);
     if (mysql_error()) trigger_error(mysql_error(),E_USER_ERROR);
