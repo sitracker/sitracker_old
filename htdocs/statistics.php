@@ -290,7 +290,7 @@ function give_overview()
         $string .= "<table align='center' width='50%'><tr><td colspan='2'>Assigned as follows:</td></tr>";
         $sql = "SELECT count(i.id), realname, users.id AS owner ";
         $sql .= "FROM `{$dbIncidents}` AS i, users ";
-        $sql .= "WHERE opened > '$todayrecent' AND i.owner = users.id "
+        $sql .= "WHERE opened > '{$todayrecent}' AND i.owner = users.id ";
         $sql .= "GROUP BY owner DESC";
 
         $result = mysql_query($sql);
