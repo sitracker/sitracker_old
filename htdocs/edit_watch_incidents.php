@@ -156,7 +156,7 @@ switch ($action)
                             $iresult = mysql_query($sql);
                             if (mysql_error()) trigger_error(mysql_error(),E_USER_ERROR);
                             $iobj = mysql_fetch_object($iresult);
-                            $name = "[{$obj->id}] ".$iobj->title;
+                            $name = "<a href=\"javascript:incident_details_window('{$obj->id}','incident{$obj->id}')\" class='info'>[{$obj->id}] {$iobj->title}</a>";
                             break;
 
                     }
