@@ -118,6 +118,7 @@ $strCity = 'City';
 $strClose = 'Close';
 # e.g. incident is closed
 $strClosed = 'Closed';
+$strClosedBy = 'Closed by';
 $strCloseImmediately = 'Close Immediately';
 $strCloseWindow = 'Close Window';
 # i.e. the status at the time of closure
@@ -337,6 +338,7 @@ $strIncidentLogOrder = 'Incident Log Order';
 $strIncidentLoggedEngineer = 'An incident has now been added as incident number %s and logged to your account, you should now assign an engineer who is to deal with the incident';
 $strIncidentNoContract = 'This incident is not logged under contract';
 $strIncidentNum = 'Incident %d';
+$strIncidentNumAbb = 'Incident#';
 $strIncidentPool = 'Incident Pool';
 $strIncidentRefresh = 'Incident Refresh';
 $strIncidentUpdatesPerPage = 'Incident Updates per page';
@@ -347,9 +349,11 @@ $strIncidentsByEngineer = 'Incidents By Engineer';
 $strIncidentsBySite = 'Incidents By Site';
 $strIncidentsBySkill = 'Incidents By Skill';
 $strIncidentsByVendor = 'Incidents By Vendor';
+$strIncidentsClosedToday = '%s Incidents Closed Today';
 $strIncidentsForEngineer = 'Incidents for %s (Engineer)';
 $strIncidentsinQueue = 'Incidents in Queue';
 $strIncidentsLoggedOpenClosed = 'Incidents Logged (Open/Closed)';
+$strIncidentsLoggedToday = '%s Incidents Logged Today';
 # e.g. Incidents opened on 2007-12-03
 $strIncidentsVerbOnDate = 'Incidents %s on %s';
 # e.g. Incidents opened between 2007-12-03 and 2007-12-04
@@ -721,6 +725,7 @@ $strToChangePassword = 'To change your password, first enter your existing passw
 $strTodaysStats = 'Todays Statistics';
 $strToday = 'Today';
 $strTotal = 'Total';
+$strTotalOpen = 'Total Open';
 $strTotalMinutes = 'Total Minutes';
 $strTraining = 'Training';
 $strTranslate = 'Translate';

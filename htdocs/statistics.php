@@ -281,8 +281,8 @@ function give_overview()
                     echo "<tr><th>".$rowVendor['name']."</th><td class='shade2' align='left'>".$rowVendor['COUNT(incidents.id)']."</td></tr>";
                     if(strpos(strtolower($rowVendor['name']), "clos") === false) $openCallsVendor += $rowVendor['COUNT(incidents.id)'];
                 }
-                // FIXME i18n Total open
-                echo "<tr><th>{$strTotal} Open</th><td class='shade2' align='left'><strong>$openCallsVendor</strong></td></tr></table></td>";
+                echo "<tr><th>{$strTotalOpen}</th>";
+                echo "<td class='shade2' align='left'><strong>{$openCallsVendor}</strong></td></tr></table></td>";
             }
         }
         echo "</table>";
@@ -296,8 +296,8 @@ function give_overview()
     $todaysincidents=mysql_num_rows($result);
     mysql_free_result($result);
 
-    $string = "<h4>$todaysincidents Incidents logged today</h4>"; // FIXME i18n Incidents logged today, assigned as follows
-    if($todaysincidents > 0)
+    $string = "<h4>".sprintf($GLOBALS['strIncidentsLoggedToday'], $todaysincidents)."</h4>";
+    if ($todaysincidents > 0)
     {
         $string .= "<table align='center' width='50%'><tr><td colspan='2'>Assigned as follows:</td></tr>";
         $sql = "SELECT count(incidents.id), realname, users.id AS owner FROM incidents, users WHERE opened > '$todayrecent' AND incidents.owner = users.id GROUP BY owner DESC";
@@ -330,8 +330,8 @@ function give_overview()
     if (mysql_error()) trigger_error("MySQL Query Error ".mysql_error(), E_USER_ERROR);
     list($todaysclosed)=mysql_fetch_row($result);
 
-    $string .= "<h4>$todaysclosed Incidents closed today</h4>"; // FIXME i18n closed today
-    if($todaysclosed > 0)
+    $string .= "<h4>".sprintf($GLOBALS['strIncidentsClosedToday'], $todaysclosed)."</h4>";
+    if ($todaysclosed > 0)
     {
         $sql = "SELECT count(incidents.id), realname, users.id AS owner FROM incidents LEFT JOIN users ON incidents.owner = users.id WHERE closed > '$todayrecent' GROUP BY owner";
         $string .= "<table align='center' width='50%'>";
@@ -340,7 +340,7 @@ function give_overview()
         if (mysql_error()) trigger_error("MySQL Query Error ".mysql_error(), E_USER_ERROR);
         while($row = mysql_fetch_array($result))
         {
-            $string .= "<tr><th colspan='4' align='left'>".$row['count(incidents.id)']." Closed by ".$row['realname']."</th></tr>\n";
+            $string .= "<tr><th colspan='4' align='left'>".$row['count(incidents.id)']." {$GLOBALS['strClosedBy']} ".$row['realname']."</th></tr>\n";
 
             $sql = "SELECT incidents.id, incidents.title, closingstatus.name ";
             $sql .= "FROM incidents, closingstatus ";
@@ -353,7 +353,6 @@ function give_overview()
                 $string .= "<tr><th><a href=\"javascript:incident_details_window('".$irow['id']."', 'incident".$irow['id']."')\" title='[".$irow['id']."] - ".$irow['title']."'>".$irow['id']."</a></th>";
                 $string .= "<td class='shade2' align='left'>".$irow['title']."</td><td class='shade2' align='left'>".$row['realname']."</td><td class='shade2'>".$irow['name']."</td></tr>\n";
             }
-            // $string .= "</table>\n";
         }
         $string .= "</table>\n\n";
     }
