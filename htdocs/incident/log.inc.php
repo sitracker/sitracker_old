@@ -27,6 +27,7 @@ if (empty($offset)) $offset=0;
 */
 function count_updates($incidentid)
 {
+    global $dbUpdates;
     $count_updates = 0;
     $sql = "SELECT COUNT(id) FROM `{$dbUpdates}` WHERE incidentid='{$incidentid}'";
     $result = mysql_query($sql);
