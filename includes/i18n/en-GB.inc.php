@@ -125,6 +125,7 @@ $strCloseWindow = 'Close Window';
 $strClosingStatus = 'Closing Status';
 $strClosureRequested = 'Closure Requested';
 $strClosureRequestForIncident = 'Closure request for Incident';
+$strCode = 'Code';
 $strCollapseData = 'Collapse Data';
 $strConfirmNewPassword = 'Confirm New Password';
 # noun, he is a contact
@@ -227,6 +228,8 @@ $strEditTemplate = 'Edit Template';
 $strEditVendor = 'Edit Vendor';
 $strEditWatchedIncidents = 'Edit Watched Incidents';
 $strEmail = 'Email';
+# eg novell.com
+$strEmailDomain = 'Email Domain';
 $strEmailFromCustomer = 'Email from customer';
 $strEmailNotificationReassign = 'Email notification on reassign';
 $strEmailsentby = 'Email sent by %s';
@@ -323,6 +326,7 @@ $strHolidayEntitlement = 'Holiday Entitlement';
 $strHolidayPlanner = 'Holiday Planner';
 $strHolidayRequests = 'Holiday Requests';
 $strHolidayType = 'Holiday Type';
+$strHomeURL = 'Home URL';
 $strHours = 'Hours';
 
 # i.e. short for identification; unique number
@@ -467,7 +471,6 @@ $strNo = 'No';
 $strNoAnswerGiven = 'No Answer Given';
 $strNobody = 'Nobody';
 $strNoCalls = 'No Calls';
-$strCode = 'Code';
 $strNoContactsForSite = 'There are no contacts associated with this site';
 $strNoContractsForSite = 'There are no contracts associated with this site';
 $strNoEmail = 'No Email';
@@ -500,6 +503,7 @@ $strNoticesBlurb = 'This page allows you to post a new global notice. BB code is
 $strNotInOffice = 'Not In Office';
 $strNotSet = 'Not Set';
 $strNotes = 'Notes';
+$strNoteInsertEscalationID = 'Note: insert \'%externalid%\' for automatic incident number insertion';
 $strNow = 'Now';
 $strNumOfIncidents = 'There are %s incidents in this list';
 $strNumOfCalls = '# of calls';
@@ -727,6 +731,7 @@ $strToday = 'Today';
 $strTotal = 'Total';
 $strTotalOpen = 'Total Open';
 $strTotalMinutes = 'Total Minutes';
+$strTrackURL = 'Track URL';
 $strTraining = 'Training';
 $strTranslate = 'Translate';
 $strTranslateTheString = 'Translate the english string on the left to your requested language on the right';
@@ -736,6 +741,7 @@ $strTue = 'Tue';
 $strTuesday = 'Tuesday';
 $strType = 'Type';
 
+$strURLTile = 'URL Title';
 $strUpdate = 'Update';
 $strUpdated = 'updated';
 $strUpdatedAutomaticallyBy = 'Updated automatically by %s';

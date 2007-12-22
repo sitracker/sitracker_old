@@ -44,30 +44,39 @@ if(empty($submit))
     echo "<form action='".$_SERVER['PHP_SELF']."' method='post' onsubmit='return confirm_submit()'>";
     echo "<table class='vertical'>";
 
-    //FIXME i18n
     echo "<tr><th>{$strName}<sup class='red'>*</sup></th><td><input name='name'";
     if($_SESSION['formdata']['add_escalation_path']['name'] != "")
+    {
         echo "value='{$_SESSION['formdata']['add_escalation_path']['name']}'";
+    }
     echo "/></td></tr>";
 
-    echo "<tr><th>Track URL<br /></th><td><input name='trackurl'";
+    echo "<tr><th>{$strTrackURL}<br /></th><td><input name='trackurl'";
     if($_SESSION['formdata']['add_escalation_path']['trackurl'] != "")
+    {
         echo "value='{$_SESSION['formdata']['add_escalation_path']['trackurl']}'";
-    echo "/><br />Note: insert '%externalid%' for automatic incident number insertion</td></tr>";
+    }
+    echo "/><br />{$strNoteInsertEscalationID}</td></tr>";
 
-    echo "<tr><th>Home URL</th><td><input name='homeurl'";
+    echo "<tr><th>{$strHomeURL}</th><td><input name='homeurl'";
     if($_SESSION['formdata']['add_escalation_path']['homeurl'] != "")
+    {
         echo "value='{$_SESSION['formdata']['add_escalation_path']['homeurl']}'";
+    }
     echo "/></td></tr>";
 
     echo "<tr><th>{$strTitle}</th><td><input name='title'";
     if($_SESSION['formdata']['add_escalation_path']['title'] != "")
+    {
         echo "value='{$_SESSION['formdata']['add_escalation_path']['title']}'";
+    }
     echo "/></td></tr>";
 
-    echo "<tr><th>Email domain</th><td><input name='emaildomain'";
+    echo "<tr><th>{$strEmailDomain}</th><td><input name='emaildomain'";
     if($_SESSION['formdata']['add_escalation_path']['emaildomain'] != "")
+    {
         echo "value='{$_SESSION['formdata']['add_escalation_path']['emaildomain']}'";
+    }
     echo "/></td></tr>";
 
     echo "</table>";
@@ -94,7 +103,7 @@ else
     if(empty($name))
     {
         $errors++;
-        $_SESSION['formerrors']['add_escalation_path']['name'] = "You must enter a name for the escalation path\n";
+        $_SESSION['formerrors']['add_escalation_path']['name'] = "You must enter a name for the escalation path\n";  // FIXME i18n
     }
 
     if($errors == 0)
@@ -104,7 +113,10 @@ else
         $result = mysql_query($sql);
         if (mysql_error()) trigger_error(mysql_error(),E_USER_ERROR);
 
-        if(!$result) $_SESSION['formerrors']['add_escalation_path']['error'] = "Addition of escalation path failed";
+        if(!$result)
+        {
+            $_SESSION['formerrors']['add_escalation_path']['error'] = "Addition of escalation path failed";   // FIXME i18n
+        }
         else
         {
             html_redirect("escalation_paths.php");
