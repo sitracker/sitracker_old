@@ -61,8 +61,14 @@ while ($incidents = mysql_fetch_array($result))
     if ($incidents["timeofnextaction"] == 0) $timetonextaction_string = "&nbsp;";  // was 'no time set'
     else
     {
-        if (($incidents["timeofnextaction"] - $now) > 0) $timetonextaction_string = format_seconds($incidents["timeofnextaction"] - $now);
-        else $timetonextaction_string = "<strong>{$strNow}</strong>";
+        if (($incidents["timeofnextaction"] - $now) > 0)
+        {
+            $timetonextaction_string = format_seconds($incidents["timeofnextaction"] - $now);
+        }
+        else
+        {
+            $timetonextaction_string = "<strong>{$strNow}</strong>";
+        }
     }
     // Make a readable site name
     $site = site_name($incidents['siteid']);
