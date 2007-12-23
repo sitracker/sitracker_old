@@ -1,5 +1,5 @@
 Package: sit
-Version: 3.31
+Version: !SITVERSION!
 Section: web 
 Priority: optional
 Architecture: all
