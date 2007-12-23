@@ -327,7 +327,8 @@ function give_overview()
     $string .= "<h4>".sprintf($GLOBALS['strIncidentsClosedToday'], $todaysclosed)."</h4>";
     if ($todaysclosed > 0)
     {
-        $sql = "SELECT count(i.id), realname, users.id AS owner FROM `{$GLOBALS['dbIncidents']}` AS i LEFT JOIN users ON i.owner = users.id WHERE closed > '$todayrecent' GROUP BY owner";
+        $sql = "SELECT count(i.id), realname, u.id AS owner FROM `{$GLOBALS['dbIncidents']}` AS i ";
+        $sql .= "LEFT JOIN `{$dbUsers}` AS u ON i.owner = u.id WHERE closed > '$todayrecent' GROUP BY owner";
         $string .= "<table align='center' width='50%'>";
         $string .= "<tr><th>ID</th><th>Title</th><th>Owner</th><th>Closing status</th></tr>\n";
         $result = mysql_query($sql);
