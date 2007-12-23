@@ -1,0 +1,12 @@
+#!/bin/bash
+# Postint script for SiT
+
+if [ -d /etc/apache2/conf.d ] && [ ! -e /etc/apache2/conf.d/phpmyadmin.conf ]; then
+    ln -s /etc/sit/apache.conf /etc/apache2/conf.d/sit.conf
+fi
+
+if [ -x /usr/sbin/invoke-rc.d ]; then
+    /usr/sbin/invoke-rc.d apache2 reload
+else
+    /etc/init.d/apache2 reload
+fi
