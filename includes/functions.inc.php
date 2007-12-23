@@ -1188,10 +1188,10 @@ function sitetype_drop_down($name, $id)
 */
 function supported_product_drop_down($name, $contactid, $productid)
 {
-    global $CONFIG;
+    global $CONFIG, $dbSupportContacts, $dbMaintenance, $dbProducts;
 
-    $sql = "SELECT *,products.id AS productid, products.name AS productname FROM `{$dbSupportContacts}` AS sc,maintenance,products ";
-    $sql .= "WHERE sc.maintenanceid=maintenance.id AND maintenance.product=products.id ";
+    $sql = "SELECT *, p.id AS productid, p.name AS productname FROM `{$dbSupportContacts}` AS sc, `{$dbMaintenance}` AS m, `{$dbProducts}` AS p ";
+    $sql .= "WHERE sc.maintenanceid = m.id AND m.product = p.id ";
     $sql .= "AND sc.contactid='$contactid'";
 
     $result = mysql_query($sql);
@@ -1234,7 +1234,8 @@ function user_drop_down($name, $id, $accepting=TRUE, $exclude=FALSE, $attribs=""
     // INL 19Jan05 Option exclude field to exclude a user, or an array of
     // users
 
-    $sql  = "SELECT id, realname, accepting FROM users WHERE status > 0 ORDER BY realname ASC";
+    global $dbUsers;
+    $sql  = "SELECT id, realname, accepting FROM `{$dbUsers}` WHERE status > 0 ORDER BY realname ASC";
     $result = mysql_query($sql);
     if (mysql_error()) trigger_error(mysql_error(),E_USER_WARNING);
 
@@ -1275,20 +1276,21 @@ function user_drop_down($name, $id, $accepting=TRUE, $exclude=FALSE, $attribs=""
 
 function role_drop_down($name, $id)
 {
-   $sql  = "SELECT id, rolename FROM roles ORDER BY rolename ASC";
-   $result = mysql_query($sql);
-   if (mysql_error()) trigger_error(mysql_error(),E_USER_WARNING);
+    global $dbRoles;
+    $sql  = "SELECT id, rolename FROM `{$dbRoles}` ORDER BY rolename ASC";
+    $result = mysql_query($sql);
+    if (mysql_error()) trigger_error(mysql_error(),E_USER_WARNING);
 
-   $html = "<select name='{$name}'>";
-   if ($id == 0) $html .= "<option selected='selected' value='0'></option>\n";
-   while ($role = mysql_fetch_object($result))
-   {
+    $html = "<select name='{$name}'>";
+    if ($id == 0) $html .= "<option selected='selected' value='0'></option>\n";
+    while ($role = mysql_fetch_object($result))
+    {
         $html .= "<option value='{$role->id}'";
         if ($role->id==$id) $html .= " selected='selected'";
         $html .= ">{$role->rolename}</option>\n";
-   }
-   $html .= "</select>\n";
-   return $html;
+    }
+    $html .= "</select>\n";
+    return $html;
 }
 
 
@@ -1320,8 +1322,9 @@ function group_drop_down($name, $selected)
 */
 function interfacestyle_drop_down($name, $id)
 {
+    global $dbInterfaceStyles;
     // extract statuses
-    $sql  = "SELECT id, name FROM interfacestyles ORDER BY name ASC";
+    $sql  = "SELECT id, name FROM `{$dbInterfaceStyles}` ORDER BY name ASC";
     $result = mysql_query($sql);
     $html = "<select name=\"{$name}\">";
     if ($id == 0) $html .= "<option selected='selected' value='0'></option>\n";
@@ -1344,9 +1347,9 @@ function interfacestyle_drop_down($name, $id)
 */
 function interface_style($id)
 {
-    global $CONFIG;
+    global $CONFIG, $dbInterfaceStyles;
 
-    $sql  = "SELECT cssurl, headerhtml FROM interfacestyles WHERE id='$id'";
+    $sql  = "SELECT cssurl, headerhtml FROM `{$dbInterfaceStyles}` WHERE id='$id'";
     $result = mysql_query($sql);
     if (mysql_error()) trigger_error(mysql_error(),E_USER_WARNING);
     if (mysql_num_rows($result) == 0)
@@ -1369,8 +1372,9 @@ function interface_style($id)
 // name and with the given id selected.
 function incidentstatus_drop_down($name, $id)
 {
+    global $dbIncidentStatus;
     // extract statuses
-    $sql  = "SELECT id, name FROM incidentstatus WHERE id<>2 AND id<>7 AND id<>10 ORDER BY name ASC";
+    $sql  = "SELECT id, name FROM `{$dbIncidentStatus}` WHERE id<>2 AND id<>7 AND id<>10 ORDER BY name ASC";
     $result = mysql_query($sql);
     if (mysql_error()) trigger_error(mysql_error(),E_USER_WARNING);
     if (mysql_num_rows($result) < 1) trigger_error("Zero rows returned",E_USER_WARNING);
@@ -1398,8 +1402,9 @@ function incidentstatus_drop_down($name, $id)
 /* 'all' for viewing all incidents.                           */
 function incidentstatus_drop_down_all($name, $id)
 {
+    global $dbIncidentStatus;
     // extract statuses
-    $sql  = "SELECT id, name FROM incidentstatus ORDER BY name ASC";
+    $sql  = "SELECT id, name FROM `{$dbIncidentStatus}` ORDER BY name ASC";
     $result = mysql_query($sql);
 
     echo "<select name='{$name}'>\n";
@@ -1462,24 +1467,24 @@ function closingstatus_drop_down($name, $id)
 */
 function userstatus_drop_down($name, $id, $userdisable=FALSE)
 {
-   // extract statuses
-   $sql  = "SELECT id, name FROM userstatus ORDER BY name ASC";
-   $result = mysql_query($sql);
-   if (mysql_error()) trigger_error(mysql_error(),E_USER_WARNING);
+    global $dbUserStatus;
+    // extract statuses
+    $sql  = "SELECT id, name FROM `{$dbUserStatus}` ORDER BY name ASC";
+    $result = mysql_query($sql);
+    if (mysql_error()) trigger_error(mysql_error(),E_USER_WARNING);
 
-   $html = "<select name='$name'>\n";
-   if ($userdisable) $html .= "<option style='color: red;' selected='selected' value='0'>ACCOUNT DISABLED</option>\n";
-   while ($statuses = mysql_fetch_array($result))
-   {
-
+    $html = "<select name='$name'>\n";
+    if ($userdisable) $html .= "<option style='color: red;' selected='selected' value='0'>ACCOUNT DISABLED</option>\n";
+    while ($statuses = mysql_fetch_array($result))
+    {
         $html .= "<option ";
         if ($statuses["id"] == $id) $html .= "selected='selected' ";
         $html .= "value='{$statuses["id"]}'>";
         $html .= "{$statuses["name"]}</option>\n";
-   }
-   $html .= "</select>\n";
+    }
+    $html .= "</select>\n";
 
-   return $html;
+    return $html;
 }
 
 
@@ -1495,8 +1500,9 @@ function userstatus_drop_down($name, $id, $userdisable=FALSE)
 */
 function userstatus_bardrop_down($name, $id)
 {
+    global $dbUserStatus;
     // extract statuses
-    $sql  = "SELECT id, name FROM userstatus ORDER BY name ASC";
+    $sql  = "SELECT id, name FROM `{$dbUserStatus}` ORDER BY name ASC";
     $result = mysql_query($sql);
     if (mysql_error()) trigger_error(mysql_error(),E_USER_WARNING);
 
@@ -1525,8 +1531,9 @@ function userstatus_bardrop_down($name, $id)
 */
 function emailtype_drop_down($name, $id)
 {
+    global $dbEmailType;
     // INL 22Apr05 Added a filter to only show user templates
-    $sql  = "SELECT id, name, description FROM emailtype WHERE type='user' ORDER BY name ASC";
+    $sql  = "SELECT id, name, description FROM `{$dbEmailType}` WHERE type='user' ORDER BY name ASC";
     $result = mysql_query($sql);
     if (mysql_error()) trigger_error(mysql_error(),E_USER_WARNING);
 
@@ -1778,24 +1785,20 @@ function incident_firstupdate($id)
 /* status does not exist.                                     */
 function incidentstatus_name($id)
 {
-   // extract priority
-   $sql = "SELECT name FROM incidentstatus WHERE id='$id'";
-   $result = mysql_query($sql);
-   if (mysql_error()) trigger_error(mysql_error(),E_USER_WARNING);
+    global $dbIncidentStatus;
+    $sql = "SELECT name FROM `{$dbIncidentStatus}` WHERE id='$id'";
+    $result = mysql_query($sql);
+    if (mysql_error()) trigger_error(mysql_error(),E_USER_WARNING);
 
-
-   if (mysql_num_rows($result) == 0)
-   {
-      return("");
-   }
-   else
-   {
-      $incidentstatus = mysql_fetch_array($result);
-      return($incidentstatus["name"]);
-   }
-
-   // free result and disconnect
-   mysql_free_result($result);
+    if (mysql_num_rows($result) == 0)
+    {
+        return("");
+    }
+    else
+    {
+        $incidentstatus = mysql_fetch_array($result);
+        return($incidentstatus["name"]);
+    }
 }
 
 
@@ -2207,7 +2210,7 @@ function serviceleveltag_drop_down($name, $tag, $collapse=FALSE)
 {
     global $dbServiceLevels;
     if ($collapse) $sql = "SELECT DISTINCT tag FROM `{$dbServiceLevels}`";
-    else $sql  = "SELECT tag, priority FROM servicelevels";
+    else $sql  = "SELECT tag, priority FROM `{$dbServiceLevels}";
     $result = mysql_query($sql);
 
     $html = "<select name='$name'>\n";
@@ -2440,11 +2443,11 @@ function site_name($id)
 // given id selected.
 function maintenance_drop_down($name, $id)
 {
-    global $dbMaintenance;
+    global $dbMaintenance, $dbSites, $dbProducts;
     // FIXME make maintenance_drop_down a hierarchical selection box sites/contracts
     // extract all maintenance contracts
-    $sql  = "SELECT sites.name AS sitename, products.name AS productname, m.id AS id FROM `{$dbMaintenance}` AS m, sites, products ";
-    $sql .= "WHERE site=sites.id AND product=products.id ORDER BY sites.name ASC";
+    $sql  = "SELECT sites.name AS sitename, products.name AS productname, m.id AS id FROM `{$dbMaintenance}` AS m, `{$dbSites}` AS s, `{$dbProducts}` AS p ";
+    $sql .= "WHERE site = s.id AND product = p.id ORDER BY s.name ASC";
     $result = mysql_query($sql);
 
     // print HTML
@@ -2468,7 +2471,8 @@ function maintenance_drop_down($name, $id)
 // selected.                                                  */
 function reseller_drop_down($name, $id)
 {
-    $sql  = "SELECT id, name FROM resellers ORDER BY name ASC";
+    global $dbResellers;
+    $sql  = "SELECT id, name FROM `{$dbResellers}` ORDER BY name ASC";
     $result = mysql_query($sql);
     if (mysql_error()) trigger_error(mysql_error(),E_USER_WARNING);
 
@@ -2500,7 +2504,8 @@ function reseller_name($id)
 // selected.
 function licence_type_drop_down($name, $id)
 {
-    $sql  = "SELECT id, name FROM licencetypes ORDER BY name ASC";
+    global $dbLicenceTypes;
+    $sql  = "SELECT id, name FROM `{$dbLicenceTypes}` ORDER BY name ASC";
     $result = mysql_query($sql);
 
     // print HTML
@@ -2632,7 +2637,7 @@ function html_checkbox($name,$state)
 function send_template_email($template, $incidentid, $info1='', $info2='')
 {
     global $CONFIG, $application_version_string, $sit, $now;
-    global $dbUpdates;
+    global $dbUpdates, $dbEmailType;
     if (empty($template)) throw_error('Blank template ID:', 'send_template_email()');
     if (empty($incidentid)) throw_error('Blank incident ID:', 'send_template_email()');
 
@@ -2640,7 +2645,7 @@ function send_template_email($template, $incidentid, $info1='', $info2='')
     else
     {
         // Lookup the template id using the name
-        $sql = "SELECT id FROM emailtype WHERE name='$template' LIMIT 1";
+        $sql = "SELECT id FROM `{$dbEmailtype}` WHERE name='$template' LIMIT 1";
         $result = mysql_query($sql);
         if (mysql_error()) trigger_error(mysql_error(),E_USER_WARNING);
         list($templateid) = mysql_fetch_row($result);
@@ -2950,8 +2955,8 @@ function count_incoming_updates()
 
 function global_signature()
 {
-    //$sql = "SELECT signature FROM emailsig LIMIT 1";
-    $sql = "SELECT signature FROM emailsig ORDER BY RAND() LIMIT 1";
+    global $dbEmailSig;
+    $sql = "SELECT signature FROM `{$dbEmailSig}` ORDER BY RAND() LIMIT 1";
     $result=mysql_query($sql);
     list($signature)=mysql_fetch_row($result);
     mysql_free_result($result);
@@ -4109,11 +4114,12 @@ function contact_notify($contactid, $level=0)
 */
 function software_backup_dropdown($name, $userid, $softwareid, $backupid)
 {
-    global $dbUsers;
-    $sql = "SELECT *, u.id AS userid FROM usersoftware, software, `{$dbUsers}` AS u WHERE usersoftware.softwareid=software.id ";
-    $sql .= "AND software.id='$softwareid' ";
-    $sql .= "AND userid!='{$userid}' AND u.status > 0 ";
-    $sql .= "AND usersoftware.userid = u.id ";
+    global $dbUsers, $dbUserSoftware, $dbSoftware;
+    $sql = "SELECT *, u.id AS userid FROM `{$dbUserSoftware}` AS us, `{$dbSoftware}` AS s, `{$dbUsers}` AS u ";
+    $sql .= "WHERE us.softwareid = s.id ";
+    $sql .= "AND s.id = '$softwareid' ";
+    $sql .= "AND userid != '{$userid}' AND u.status > 0 ";
+    $sql .= "AND us.userid = u.id ";
     $sql .= " ORDER BY realname";
     $result = mysql_query($sql);
     if (mysql_error()) trigger_error(mysql_error(),E_USER_ERROR);
@@ -4146,9 +4152,10 @@ function software_backup_dropdown($name, $userid, $softwareid, $backupid)
 */
 function software_backup_userid($userid, $softwareid)
 {
+    global $dbUserSoftware;
     $backupid=0; // default
     // Find out who is the substitute for this user/skill
-    $sql = "SELECT backupid FROM usersoftware WHERE userid='$userid' AND softwareid='$softwareid'";
+    $sql = "SELECT backupid FROM `{$dbUserSoftware}` WHERE userid = '$userid' AND softwareid = '$softwareid'";
     $result = mysql_query($sql);
     if (mysql_error()) trigger_error(mysql_error(),E_USER_WARNING);
     list($backupid)=mysql_fetch_row($result);
@@ -4157,7 +4164,7 @@ function software_backup_userid($userid, $softwareid)
     // If that substitute is not accepting then try and find another
     if (empty($backupid) OR user_accepting($backupid)!='Yes')
     {
-        $sql = "SELECT backupid FROM usersoftware WHERE userid='$backupid' AND userid!='$userid' ";
+        $sql = "SELECT backupid FROM `{$dbUserSoftware}` WHERE userid='$backupid' AND userid!='$userid' ";
         $sql .= "AND softwareid='$softwareid' AND backupid!='$backup1'";
         $result = mysql_query($sql);
         if (mysql_error()) trigger_error(mysql_error(),E_USER_WARNING);
@@ -4168,7 +4175,7 @@ function software_backup_userid($userid, $softwareid)
     // One more iteration, is the backup of the backup accepting?  If not try another
     if (empty($backupid) OR user_accepting($backupid)!='Yes')
     {
-        $sql = "SELECT backupid FROM usersoftware WHERE userid='$backupid' AND userid!='$userid' ";
+        $sql = "SELECT backupid FROM `{$dbUserSoftware}` WHERE userid='$backupid' AND userid!='$userid' ";
         $sql .= "AND softwareid='$softwareid' AND backupid!='$backup1' AND backupid!='$backup2'";
         $result = mysql_query($sql);
         if (mysql_error()) trigger_error(mysql_error(),E_USER_WARNING);
@@ -4190,7 +4197,7 @@ function software_backup_userid($userid, $softwareid)
 */
 function incident_backup_switchover($userid, $accepting)
 {
-    global $now, $dbIncidents, $dbUpdates;
+    global $now, $dbIncidents, $dbUpdates, $dbTempAssigns;
 
     if (strtolower($accepting)=='no')
     {
@@ -4207,7 +4214,7 @@ function incident_backup_switchover($userid, $accepting)
             {
                 // no backup engineer found so add to the holding queue
                 // Look to see if this assignment is in the queue already
-                $fsql = "SELECT * FROM tempassigns WHERE incidentid='{$incident->id}' AND originalowner='{$userid}'";
+                $fsql = "SELECT * FROM `{$dbTempAssigns}` WHERE incidentid='{$incident->id}' AND originalowner='{$userid}'";
                 $fresult = mysql_query($fsql);
                 if (mysql_error()) trigger_error(mysql_error(),E_USER_WARNING);
                 if (mysql_num_rows($fresult) < 1)
@@ -4269,7 +4276,7 @@ function incident_backup_switchover($userid, $accepting)
     else
     {
         // The user is now ACCEPTING, so first have a look to see if there are any reassignments in the queue
-        $sql = "SELECT * FROM tempassigns WHERE originalowner='{$userid}' ";
+        $sql = "SELECT * FROM `{$dbTempAssigns}` WHERE originalowner='{$userid}' ";
         $result = mysql_query($sql);
         if (mysql_error()) trigger_error(mysql_error(),E_USER_WARNING);
         while ($assign = mysql_fetch_object($result))
@@ -4316,7 +4323,7 @@ function incident_backup_switchover($userid, $accepting)
                         if (mysql_error()) trigger_error(mysql_error(),E_USER_ERROR);
 
                         // remove from assign queue now, all done
-                        $rsql = "DELETE FROM tempassigns WHERE incidentid='{$assign->incidentid}' AND originalowner='{$assign->originalowner}'";
+                        $rsql = "DELETE FROM `{$dbTempAssigns}` WHERE incidentid='{$assign->incidentid}' AND originalowner='{$assign->originalowner}'";
                         mysql_query($rsql);
                         if (mysql_error()) trigger_error(mysql_error(),E_USER_ERROR);
                     }
@@ -4331,7 +4338,7 @@ function incident_backup_switchover($userid, $accepting)
                 if (mysql_num_rows($sresult) >= 1)
                 {
                     // reassign wasn't completed, or it was already assigned back, simply remove from assign queue
-                    $rsql = "DELETE FROM tempassigns WHERE incidentid='{$assign->incidentid}' AND originalowner='{$assign->originalowner}'";
+                    $rsql = "DELETE FROM `{$dbTempAssigns}` WHERE incidentid='{$assign->incidentid}' AND originalowner='{$assign->originalowner}'";
                     mysql_query($rsql);
                     if (mysql_error()) trigger_error(mysql_error(),E_USER_ERROR);
                 }
@@ -4355,7 +4362,7 @@ function incident_backup_switchover($userid, $accepting)
 */
 function suggest_reassign_userid($incidentid, $exceptuserid=0)
 {
-    global $now, $dbUsers, $dbIncidents;
+    global $now, $dbUsers, $dbIncidents, $dbUserSoftware;
     $sql = "SELECT product, softwareid, priority, contact, owner FROM `{$dbIncidents}` WHERE id={$incidentid} LIMIT 1";
     $result = mysql_query($sql);
     if (mysql_error()) trigger_error(mysql_error(),E_USER_ERROR);
@@ -4371,10 +4378,10 @@ function suggest_reassign_userid($incidentid, $exceptuserid=0)
         // Find the users with this skill (or all users)
         if (!empty($incident->softwareid))
         {
-            $sql = "SELECT usersoftware.userid, u.status, u.lastseen FROM usersoftware, `{$dbUsers}` AS u ";
-            $sql .= "WHERE u.id = usersoftware.userid AND u.status > 0 AND u.accepting='Yes' ";
+            $sql = "SELECT us.userid, u.status, u.lastseen FROM `{$dbUserSoftware}` AS us, `{$dbUsers}` AS u ";
+            $sql .= "WHERE u.id = us.userid AND u.status > 0 AND u.accepting='Yes' ";
             if ($exceptuserid > 0) $sql .= "AND NOT users.id = '$exceptuserid' ";
-            $sql .= "AND softwareid={$incident->softwareid}";
+            $sql .= "AND softwareid = {$incident->softwareid}";
         }
         else $sql = "SELECT id AS userid, status, lastseen FROM `{$dbUsers}` WHERE status > 0 AND users.accepting='Yes'";
         $result = mysql_query($sql);
@@ -4856,8 +4863,8 @@ function add_note_form($linkid, $refid)
 
 function show_notes($linkid, $refid)
 {
-    global $sit, $iconset;
-    $sql = "SELECT * FROM notes WHERE link='{$linkid}' AND refid='{$refid}' ORDER BY timestamp DESC, id DESC";
+    global $sit, $iconset, $dbNotes;
+    $sql = "SELECT * FROM `{$dbNotes}` WHERE link='{$linkid}' AND refid='{$refid}' ORDER BY timestamp DESC, id DESC";
     $result = mysql_query($sql);
     if (mysql_error()) trigger_error(mysql_error(),E_USER_ERROR);
     $countnotes = mysql_num_rows($result);
@@ -4909,19 +4916,20 @@ function show_dashboard_component($row, $dashboardid)
 */
 function show_links($origtab, $colref, $level=0, $parentlinktype='', $direction='lr')
 {
+    global $dbLinkTypes, $dbLinks;
     // Maximum recursion
     $maxrecursions=15;
 
     if ($level <= $maxrecursions)
     {
-        $sql = "SELECT * FROM linktypes WHERE origtab='$origtab' ";
+        $sql = "SELECT * FROM `{$dbLinkTypes}` WHERE origtab='$origtab' ";
         if (!empty($parentlinktype)) $sql .= "AND id='{$parentlinktype}'";
         $result = mysql_query($sql);
         if (mysql_error()) trigger_error(mysql_error(),E_USER_WARNING);
         while ($linktype = mysql_fetch_object($result))
         {
             // Look up links of this type
-            $lsql = "SELECT * FROM links WHERE linktype='{$linktype->id}' ";
+            $lsql = "SELECT * FROM `{$dbLinks}` WHERE linktype='{$linktype->id}' ";
             if ($direction=='lr') $lsql .= "AND origcolref='{$colref}'";
             elseif ($direction=='rl') $lsql .= "AND linkcolref='{$colref}'";
             $lresult = mysql_query($lsql);
@@ -4973,8 +4981,9 @@ function show_links($origtab, $colref, $level=0, $parentlinktype='', $direction=
 
 function show_create_links($table, $ref)
 {
+    global $dbLinkTypes;
     $html .= "<p align='center'>{$GLOBALS['strAddLink']}: ";
-    $sql = "SELECT * FROM linktypes WHERE origtab='$table' OR linktab='$table' ";
+    $sql = "SELECT * FROM `{$dbLinkTypes}` WHERE origtab='$table' OR linktab='$table' ";
     $result = mysql_query($sql);
     if (mysql_error()) trigger_error(mysql_error(),E_USER_WARNING);
     $numlinktypes=mysql_num_rows($result);
@@ -5199,7 +5208,7 @@ function draw_chart_image($type, $width, $height, $data, $legends, $title='', $u
 function get_tag_id($tag)
 {
     global $dbTags;
-    $sql = "SELECT tagid FROM tags WHERE name = LOWER('$tag')";
+    $sql = "SELECT tagid FROM `{$dbTags}` WHERE name = LOWER('$tag')";
     $result = mysql_query($sql);
     if (mysql_error()) trigger_error(mysql_error(),E_USER_WARNING);
     if (mysql_num_rows($result) == 1)
@@ -5378,14 +5387,14 @@ function list_tags($recordid, $type, $html=TRUE)
 */
 function list_tag_icons($recordid, $type)
 {
-    global $CONFIG;
-    $sql = "SELECT tags.name, tags.tagid FROM set_tags, tags WHERE set_tags.tagid = tags.tagid AND ";
-    $sql .= "set_tags.type = '$type' AND set_tags.id = '$recordid' AND (";
+    global $CONFIG, $dbSetTags, $dbTags;
+    $sql = "SELECT tags.name, tags.tagid FROM `{$dbSetTags}` AS st, `{$dbTags}` WHERE st.tagid = t.tagid AND ";
+    $sql .= "st.type = '$type' AND st.id = '$recordid' AND (";
     $counticons = count($CONFIG['tag_icons']);
     $count=1;
     foreach ($CONFIG['tag_icons'] AS $icon)
     {
-        $sql .= "tags.name = '{$icon}'";
+        $sql .= "t.name = '{$icon}'";
         if ($count < $counticons) $sql .= " OR ";
         $count++;
     }
@@ -5412,21 +5421,21 @@ function list_tag_icons($recordid, $type)
 */
 function show_tag_cloud($orderby="name", $showcount=FALSE)
 {
-    global $CONFIG;
+    global $CONFIG, $dbTags, $dbSetTags;
 
     // First purge any disused tags
     purge_tags();
-    $sql = "SELECT COUNT(name) AS occurrences, name, tags.tagid FROM tags, set_tags WHERE tags.tagid = set_tags.tagid GROUP BY name ORDER BY $orderby";
+    $sql = "SELECT COUNT(name) AS occurrences, name, t.tagid FROM `{$dbTags}` AS t, `{$dbSetTags}` AS st WHERE t.tagid = st.tagid GROUP BY name ORDER BY $orderby";
     if ($orderby == "occurrences") $sql .= " DESC";
     $result = mysql_query($sql);
     if (mysql_error()) trigger_error(mysql_error(),E_USER_ERROR);
 
-    $countsql = "SELECT COUNT(*) AS counted FROM set_tags GROUP BY tagid ORDER BY counted DESC LIMIT 1";
+    $countsql = "SELECT COUNT(*) AS counted FROM `{$dbSetTags}` GROUP BY tagid ORDER BY counted DESC LIMIT 1";
     $countresult = mysql_query($countsql);
     if (mysql_error()) trigger_error(mysql_error(),E_USER_ERROR);
     list($max) = mysql_fetch_row($countresult);
 
-    $countsql = "SELECT COUNT(*) AS counted FROM set_tags GROUP BY tagid ORDER BY counted ASC LIMIT 1";
+    $countsql = "SELECT COUNT(*) AS counted FROM `{$dbSetTags}` GROUP BY tagid ORDER BY counted ASC LIMIT 1";
     $countresult = mysql_query($countsql);
     if (mysql_error()) trigger_error(mysql_error(),E_USER_ERROR);
     list($min) = mysql_fetch_row($countresult);
@@ -5657,8 +5666,8 @@ function exact_seconds($seconds)
 */
 function user_online($user)
 {
-    global $iconset, $now;
-    $sql = "SELECT lastseen FROM users WHERE id={$user}";
+    global $iconset, $now, $dbUsers;
+    $sql = "SELECT lastseen FROM `{$dbUsers}` WHERE id={$user}";
     $result = mysql_query($sql);
     $users = mysql_fetch_object($result);
     if (($now - mysql2date($users->lastseen) < (60 * 30)))
