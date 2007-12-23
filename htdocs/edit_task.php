@@ -111,7 +111,7 @@ switch ($action)
             {
                 $bodytext="Task Edited by {$_SESSION['realname']}:\n\n".$bodytext;
                 // Link 10 = Tasks
-                $sql = "INSERT INTO notes ";
+                $sql = "INSERT INTO `{$dbNotes}` ";
                 $sql .= "(userid, bodytext, link, refid) ";
                 $sql .= "VALUES ('0', '{$bodytext}', '10',' $id')";
                 mysql_query($sql);
@@ -184,7 +184,7 @@ switch ($action)
         {
             // Insert note to say what happened
             $bodytext="Task marked 100% complete by {$_SESSION['realname']}:\n\n".$bodytext;
-            $sql = "INSERT INTO notes ";
+            $sql = "INSERT INTO `{$dbNotes}` ";
             $sql .= "(userid, bodytext, link, refid) ";
             $sql .= "VALUES ('0', '{$bodytext}', '10',' $id')";
             mysql_query($sql);

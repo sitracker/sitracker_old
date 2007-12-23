@@ -37,7 +37,7 @@ else
     $bodytext = str_replace('<','&#060;', $bodytext);
     $bodytext = str_replace('>','&#062;', $bodytext);
 
-    $isql = "INSERT INTO spellcheck (updateid, bodytext, newincidentstatus, timetonextaction_none, timetonextaction_days, timetonextaction_hours, timetonextaction_minutes, day, month, year, fromfield, replytofield, ccfield, bccfield, tofield, subjectfield, attachmenttype, filename) ";
+    $isql = "INSERT INTO `{$dbSpellCheck}` (updateid, bodytext, newincidentstatus, timetonextaction_none, timetonextaction_days, timetonextaction_hours, timetonextaction_minutes, day, month, year, fromfield, replytofield, ccfield, bccfield, tofield, subjectfield, attachmenttype, filename) ";
     $isql .= "VALUES (0, '".mysql_real_escape_string($bodytext)."', '$newincidentstatus', '$timetonextaction_none', '$timetonextaction_days', '$timetonextaction_hours', '$timetonextaction_minutes', '$day', '$month', '$year', '$fromfield', '$replytofield', '$ccfield', '$bccfield', '$tofield', '$subjectfield', '$attachmenttype', '$filename')";
     $result=mysql_query($isql);
     if (mysql_error()) trigger_error("MySQL Query Error ".mysql_error(), E_USER_ERROR);

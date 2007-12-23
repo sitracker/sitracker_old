@@ -34,7 +34,7 @@ switch ($action)
             switch ($relation)
             {
                 case 'sibling':
-                    $sql = "INSERT INTO relatedincidents (incidentid, relation, relatedid, owner) ";
+                    $sql = "INSERT INTO `{$dbRelatedIncidents}` (incidentid, relation, relatedid, owner) ";
                     $sql .= "VALUES ('$id', 'sibling', '$relatedid', '{$_SESSION['userid']}')";
                     mysql_query($sql);
                     if (mysql_error()) trigger_error(mysql_error(),E_USER_ERROR);

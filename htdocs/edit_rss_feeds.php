@@ -39,7 +39,7 @@ switch ($action)
         $url = cleanvar($_REQUEST['url']);
         $enable = cleanvar($_REQUEST['enable']);
         $items = cleanvar($_REQUEST['items']);
-        $sql = "INSERT INTO dashboard_rss (owner, url, items, enabled) VALUES ({$sit[2]},'{$url}','{$items}','true')"; //SET enabled = '{$enable}' WHERE url = '{$url}' AND owner = {$sit[2]}";
+        $sql = "INSERT INTO `{$dbDashboardRSS}` (owner, url, items, enabled) VALUES ({$sit[2]},'{$url}','{$items}','true')"; //SET enabled = '{$enable}' WHERE url = '{$url}' AND owner = {$sit[2]}";
         $result = mysql_query($sql);
         if (mysql_error()) trigger_error(mysql_error(),E_USER_ERROR);
 

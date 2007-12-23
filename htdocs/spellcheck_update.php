@@ -41,7 +41,7 @@ if (!isset($spellid))
     $result=mysql_query($sql);
     if (mysql_error()) trigger_error("MySQL Query Error ".mysql_error(), E_USER_ERROR);
     list($bodytext) = mysql_fetch_row($result);
-    $isql = "INSERT INTO spellcheck (updateid, bodytext) VALUES ('$updateid', '".mysql_real_escape_string($bodytext)."')";
+    $isql = "INSERT INTO `{$dbSpellCheck}` (updateid, bodytext) VALUES ('$updateid', '".mysql_real_escape_string($bodytext)."')";
     $result=mysql_query($isql);
     if (mysql_error()) trigger_error("MySQL Query Error ".mysql_error(), E_USER_ERROR);
     if (!$result) throw_error("Problem inserting spellcheck temp data", '');

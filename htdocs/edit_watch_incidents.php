@@ -58,7 +58,7 @@ switch ($action)
     case 'do_add':
         $id = $_REQUEST['id'];
         $type = $_REQUEST['type'];
-        $sql = "INSERT INTO dashboard_watch_incidents VALUES ({$sit[2]},'{$type}','{$id}')";
+        $sql = "INSERT INTO `{$dbDashboardWatchIncidents}` VALUES ({$sit[2]},'{$type}','{$id}')";
         $result = mysql_query($sql);
         if (mysql_error()) trigger_error(mysql_error(),E_USER_ERROR);
 

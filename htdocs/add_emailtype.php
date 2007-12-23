@@ -155,7 +155,7 @@ else
         if ($_REQUEST['storeinlog']=='yes') $storeinlog='Yes';
         else $storeinlog='No';
 
-        $sql  = "INSERT INTO emailtype (name, description, tofield, fromfield, replytofield, ccfield, bccfield, subjectfield, body, customervisibility, storeinlog) ";
+        $sql  = "INSERT INTO `{$dbEmailType}` (name, description, tofield, fromfield, replytofield, ccfield, bccfield, subjectfield, body, customervisibility, storeinlog) ";
         $sql .= "VALUES ('$name', '$description', '$tofield', '$fromfield', '$replytofield', '$ccfield', ";
         $sql .= "'$bccfield', '$subjectfield', '$bodytext', '$cust_vis', '$storeinlog')";
         $result = mysql_query($sql);

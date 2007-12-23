@@ -45,7 +45,7 @@ switch ($action)
             html_redirect("usergroups.php", FALSE, "Group name must not be empty");  // FIXME i18n
             exit;
         }
-        $sql = "INSERT INTO groups (name) VALUES ('{$group}')";
+        $sql = "INSERT INTO `{$dbGroups}` (name) VALUES ('{$group}')";
         mysql_query($sql);
         if (mysql_error()) trigger_error(mysql_error(),E_USER_ERROR);
         html_redirect("usergroups.php");

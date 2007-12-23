@@ -68,7 +68,7 @@ else
     // add product if no errors
     if ($errors == 0)
     {
-        $sql = "INSERT INTO vendors (name) VALUES ('$name')";
+        $sql = "INSERT INTO `{$dbVendors}` (name) VALUES ('$name')";
         $result = mysql_query($sql);
         if (mysql_error()) trigger_error("MySQL Query Error ".mysql_error(), E_USER_ERROR);
 

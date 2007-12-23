@@ -114,7 +114,7 @@ switch ($_REQUEST['action'])
         {
             $count = count($dashboardcomponents);
 
-            $sql = "INSERT INTO dashboard (name) VALUES ";
+            $sql = "INSERT INTO `{$dbDashboard}` (name) VALUES ";
             for($i = 0; $i < $count; $i++)
             {
                 $sql .= "('{$dashboardcomponents[$i]}'), ";
