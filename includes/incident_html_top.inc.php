@@ -22,7 +22,7 @@ else
     echo "<link rel=\"stylesheet\" href=\"styles/webtrack1.css\" />\n";
 }
 
-$csssql = "SELECT cssurl, iconset FROM interfacestyles WHERE id='{$styleid}'";
+$csssql = "SELECT cssurl, iconset FROM `{$dbInterfaceStyles}` WHERE id='{$styleid}'";
 $cssresult = mysql_query($csssql);
 if (mysql_error()) trigger_error(mysql_error(),E_USER_WARNING);
 else list($cssurl, $iconset) = mysql_fetch_row($cssresult);
@@ -251,9 +251,9 @@ $incidentid=$id;
 // Retrieve incident
 // extract incident details
 $sql  = "SELECT *, i.id AS incidentid, ";
-$sql .= "contacts.id AS contactid, contacts.notes AS contactnotes, servicelevel ";
-$sql .= "FROM `{$dbIncidents}` AS i, contacts ";
-$sql .= "WHERE (i.id='{$incidentid}' AND i.contact=contacts.id) ";
+$sql .= "c.id AS contactid, c.notes AS contactnotes, servicelevel ";
+$sql .= "FROM `{$dbIncidents}` AS i, `{$dbContacts}` AS c ";
+$sql .= "WHERE (i.id='{$incidentid}' AND i.contact = c.id) ";
 $sql .= " OR i.contact=NULL ";
 $incidentresult = mysql_query($sql);
 if (mysql_error()) trigger_error("MySQL Query Error ".mysql_error(), E_USER_ERROR);
@@ -329,9 +329,9 @@ if ($menu != 'hide')
     if ($_REQUEST['win']=='incomingview')
     {
         $insql = "SELECT emailfrom, contactid, updateid, tempincoming.id, timestamp
-                FROM tempincoming, updates
-                WHERE tempincoming.id={$id}
-                AND tempincoming.updateid=updates.id";
+                FROM `{$dbTempIncoming}` AS ti, `{$dbUpdates}` AS u
+                WHERE ti.id = {$id}
+                AND ti.updateid = u.id";
         $query = mysql_query($insql);
         if (mysql_error()) trigger_error(mysql_error(),E_USER_WARNING);
         while ($inupdate = mysql_fetch_object($query))

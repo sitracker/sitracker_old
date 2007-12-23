@@ -24,13 +24,13 @@ $triggerarray = array(TRIGGER_INCIDENT_CREATED,
                         TRIGGER_SIT_UPGRADED,
                         TRIGGER_USER_RETURNS,
                         TRIGGER_INCIDENT_OWNED_CLOSED_BY_USER);
-                        
+
 //set up all the action types
 $actionarray = array(ACTION_NONE,
                         ACTION_NOTICE,
                         ACTION_EMAIL);
-                        
-//TODO fix to use one var (minor issue)                        
+
+//TODO fix to use one var (minor issue)
 //define all the triggers
 $i = 0;
 $j = 1;
@@ -39,7 +39,7 @@ foreach($triggerarray as $trigger)
     define($triggerarray[$i], $j);
     $i++; $j++;
 }
-                        
+
 //define all the actions
 $i = 0;
 $j = 1;
@@ -60,17 +60,17 @@ function trigger($triggertype, $paramarray='')
         //parse parameter array
         //TODO define the keys to look for other than 'user'
         if ($CONFIG['debug']) $dbg .= "\$paramarray[$key] = " .$paramarray[$key]."<br />";
-        
+
         //get user to apply trigger to
         if ($key == 'user')
         {
             $user = $paramarray['user'];
         }
     }
-    
+
     //find relevant triggers
     //FIXME use db var
-    $sql = "SELECT * FROM triggers WHERE triggerid={$triggertype} ";
+    $sql = "SELECT * FROM `{$dbTriggers}` WHERE triggerid={$triggertype} ";
     if($CONFIG['debug']) $dbg .= $sql."\n";
     if($user) $sql .= "AND user={$user}";
     $query = mysql_query($sql);
@@ -88,11 +88,11 @@ function trigger_action($userid, $triggertype, $action, $parameters)
         case ACTION_EMAIL:
             echo "sendemail()";
             break;
-            
+
         case ACTION_NOTICE:
             create_notice($userid, '', $triggertype, $parameters);
             break;
-                
+
         case ACTION_NONE:
         //fallthrough
         default:

@@ -26,7 +26,7 @@ echo "<meta name=\"GENERATOR\" content=\"{$CONFIG['application_name']} {$applica
 echo "<title>";
 if (isset($title))
 {
-    echo "$title - {$CONFIG['application_shortname']}"; 
+    echo "$title - {$CONFIG['application_shortname']}";
 }
 else
 {
@@ -37,7 +37,7 @@ echo "<link rel='SHORTCUT ICON' href='{$CONFIG['application_webpath']}images/sit
 echo "<style type='text/css'>@import url('{$CONFIG['application_webpath']}styles/webtrack.css');</style>\n";
 if ($_SESSION['auth'] == TRUE) $styleid = $_SESSION['style'];
 else $styleid= $CONFIG['default_interface_style'];
-$csssql = "SELECT cssurl, iconset FROM interfacestyles WHERE id='{$styleid}'";
+$csssql = "SELECT cssurl, iconset FROM `{$dbInterfaceStyles}` WHERE id='{$styleid}'";
 $cssresult = mysql_query($csssql);
 if (mysql_error()) trigger_error(mysql_error(),E_USER_WARNING);
 else list($cssurl, $iconset) = mysql_fetch_row($cssresult);
@@ -168,13 +168,13 @@ if ($noticeaction=='dismiss_notice')
 {
     if (is_numeric($noticeid))
     {
-        $sql = "DELETE FROM notices WHERE id={$noticeid} AND userid={$sit[2]}";
+        $sql = "DELETE FROM `{$dbNotices}` WHERE id={$noticeid} AND userid={$sit[2]}";
         mysql_query($sql);
         if (mysql_error()) trigger_error(mysql_error(),E_USER_WARNING);
     }
     elseif ($noticeid == 'all')
     {
-        $sql = "DELETE FROM notices WHERE userid={$sit[2]} LIMIT 20"; // only delete 20 max as we only show 20 max
+        $sql = "DELETE FROM `{$dbNotices}` WHERE userid={$sit[2]} LIMIT 20"; // only delete 20 max as we only show 20 max
         mysql_query($sql);
         if (mysql_error()) trigger_error(mysql_error(),E_USER_WARNING);
     }
@@ -184,7 +184,7 @@ if ($noticeaction=='dismiss_notice')
 //display global notices
 if ($sit[0] != '')
 {
-    $noticesql = "SELECT * FROM notices ";
+    $noticesql = "SELECT * FROM `{$dbNotices}` ";
     $noticesql .= "WHERE userid={$sit[2]} ORDER BY timestamp DESC LIMIT 20"; // Don't show more than 20 notices, saftey cap
     $noticeresult = mysql_query($noticesql);
     if (mysql_error()) trigger_error(mysql_error(),E_USER_WARNING);

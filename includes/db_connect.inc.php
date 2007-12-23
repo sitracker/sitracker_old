@@ -122,6 +122,7 @@ $dbTags = "{$CONFIG['db_tableprefix']}tags";
 $dbTasks = "{$CONFIG['db_tableprefix']}tasks";
 $dbTempAssigns = "{$CONFIG['db_tableprefix']}tempassigns";
 $dbTempIncoming = "{$CONFIG['db_tableprefix']}tempincoming";
+$dbTriggers = "{$CONFIG['db_tableprefix']}triggers";
 $dbUpdates = "{$CONFIG['db_tableprefix']}updates";
 $dbUserGroups = "{$CONFIG['db_tableprefix']}usergroups";
 $dbUserPermissions = "{$CONFIG['db_tableprefix']}userpermissions";
