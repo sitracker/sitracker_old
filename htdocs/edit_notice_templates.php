@@ -40,7 +40,7 @@ if (empty($action) OR $action == "showform")
     <?php
 
     echo "<div style='margin-left: auto; margin-right: auto; width: 70%;'>";
-    $sql = "SELECT * FROM noticetemplates ORDER BY name,id";
+    $sql = "SELECT * FROM `{$dbNoticeTemplates}` ORDER BY name,id";
     $result = mysql_query($sql);
     if (mysql_error()) trigger_error("MySQL Query Error ".mysql_error(), E_USER_ERROR);
     while ($notice = mysql_fetch_object($result))
@@ -62,7 +62,7 @@ elseif ($action == "edit")
     if ($id > 0)
     {
         // extract notice type details
-        $sql = "SELECT * FROM noticetemplates WHERE id='$id'";
+        $sql = "SELECT * FROM `{$dbNoticeTemplates}` WHERE id='$id'";
         $result = mysql_query($sql);
         if (mysql_error()) trigger_error("MySQL Query Error ".mysql_error(), E_USER_ERROR);
         $noticetype = mysql_fetch_array($result);
@@ -161,7 +161,7 @@ elseif ($action == "delete")
         exit;
     }
     // We only allow user templates to be deleted
-    $sql = "DELETE FROM emailtype WHERE id='$id' AND type='user' LIMIT 1";
+    $sql = "DELETE FROM `{$dbNoticeTemplates}` WHERE id='$id' AND type='user' LIMIT 1";
     mysql_query($sql);
     if (mysql_error()) trigger_error(mysql_error(),E_USER_ERROR);
     header("Location: {$_SERVER['PHP_SELF']}?action=showform");

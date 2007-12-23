@@ -102,14 +102,14 @@ switch ($_REQUEST['action'])
         include ('htmlfooter.inc.php');
         break;
     default:
-        $sql = "SELECT * FROM feedbackforms WHERE id='{$formid}'";
+        $sql = "SELECT * FROM `{$dbFeedbackForms}` WHERE id='{$formid}'";
         $result = mysql_query($sql);
         if (mysql_error()) trigger_error(mysql_error(),E_USER_WARNING);
 
         include ('htmlheader.inc.php');
         echo "<h3>{$title}</h3>";
 
-        $sql = "SELECT * FROM feedbackforms WHERE id = '$formid'";
+        $sql = "SELECT * FROM `{$dbFeedbackForms}` WHERE id = '$formid'";
         $result = mysql_query($sql);
         if (mysql_error()) trigger_error ("MySQL Error: ".mysql_error(), E_USER_ERROR);
         if (mysql_num_rows($result) >= 1)
@@ -149,7 +149,7 @@ switch ($_REQUEST['action'])
                 echo "<td>";
 
                 // echo "<tr><th>Q</th><th>Question</th><th>Text</th></tr>\n<tr><th>Type</th><th>Reqd</th><th>Options</th></tr>\n";
-                $qsql  = "SELECT * FROM feedbackquestions ";
+                $qsql  = "SELECT * FROM `{$dbFeedbackQuestions}` ";
                 $qsql .= "WHERE formid='$formid' ORDER BY taborder";
                 $qresult = mysql_query($qsql);
                 if (mysql_num_rows($qresult) > 0)

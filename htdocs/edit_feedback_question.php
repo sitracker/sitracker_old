@@ -81,7 +81,7 @@ switch ($action)
 
         echo "<h2 align='center'>$title</h2>\n";
 
-        $sql = "SELECT * FROM feedbackquestions WHERE id = '$qid'";
+        $sql = "SELECT * FROM `{$dbFeedbackQuestions}` WHERE id = '$qid'";
         $result = mysql_query($sql);
         if (mysql_error()) trigger_error ("MySQL Error: ".mysql_error(), E_USER_ERROR);
 

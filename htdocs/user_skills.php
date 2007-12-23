@@ -58,7 +58,7 @@ while ($users = mysql_fetch_array($result))
     echo "</td></tr>\n";
     echo "<tr>";
     echo "<td class='$class'>";
-    $ssql = "SELECT * FROM usersoftware, software WHERE usersoftware.softwareid = software.id AND usersoftware.userid='{$users['id']}' ORDER BY software.name ";
+    $ssql = "SELECT * FROM `{$dbUserSoftware}` AS us, `{$dbSoftware}` AS s WHERE us.softwareid = s.id AND us.userid='{$users['id']}' ORDER BY s.name ";
     $sresult = mysql_query($ssql);
     $countskills=mysql_num_rows($sresult);
     $nobackup=0;

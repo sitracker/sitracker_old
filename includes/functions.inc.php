@@ -180,6 +180,7 @@ function stripslashes_array($data) {
 */
 function authenticate($username, $password)
 {
+    global $dbUsers;
     if ($_SESSION['auth']==TRUE)
     {
         // Already logged in
@@ -187,7 +188,7 @@ function authenticate($username, $password)
     }
 
     // extract user
-    $sql  = "SELECT id FROM `users` ";
+    $sql  = "SELECT id FROM `{$dbUsers}` ";
     $sql .= "WHERE username='$username' AND password='$password' AND status!=0 ";
     // a status of 0 means the user account is disabled
     $result = mysql_query($sql);
@@ -268,12 +269,13 @@ function permission_name($permissionid)
     * @param $softwareid integer
     * @returns string. Skill/Software Name
     * @note Software was renamed skills for v3.30
+    * @todo FIXME i18n
 */
 function software_name($softwareid)
 {
-    global $now;
+    global $now, $dbSoftware;
 // <span class='deleted'>
-    $sql = "SELECT * FROM software WHERE id = '{$softwareid}'";
+    $sql = "SELECT * FROM `{$dbSoftware}` WHERE id = '{$softwareid}'";
     $result = mysql_query($sql);
     if (mysql_num_rows($result) >= 1)
     {
@@ -431,10 +433,10 @@ function user_accepting($id)
 
 function user_activeincidents($userid)
 {
-    global $CONFIG, $now, $dbIncidents;
+    global $CONFIG, $now, $dbIncidents, $dbContacts, $dbPriority;
     // This SQL must match the SQL in incidents.php
     $sql = "SELECT i.id  ";
-    $sql .= "FROM `{$dbIncidents}` AS i, contacts, priority WHERE contact=contacts.id AND i.priority=priority.id ";
+    $sql .= "FROM `{$dbIncidents}` AS i, `{$dbContacts}` AS c, `{$dbPriority}` AS pr WHERE contact = c.id AND i.priority = pr.id ";
     $sql .= "AND (owner='$userid' OR towner='$userid') ";
     $sql .= "AND (status!='2') ";  // not closed
     // the "1=2" obviously false else expression is to prevent records from showing unless the IF condition is true
@@ -599,9 +601,9 @@ function contact_realname($id)
 
 function contact_site($id)
 {
-    global $dbContacts;
+    global $dbContacts, $dbSites;
     // note: this returns the site _NAME_ not the siteid - INL 17Apr02
-    $sql = "SELECT sites.name FROM `{$dbContacts}` AS c, sites WHERE c.siteid = sites.id AND c.id = '$id'";
+    $sql = "SELECT sites.name FROM `{$dbContacts}` AS c, `{$dbSites}` AS s WHERE c.siteid = s.id AND c.id = '$id'";
     $result = mysql_query($sql);
     if (mysql_error()) trigger_error(mysql_error(),E_USER_WARNING);
 
@@ -690,8 +692,8 @@ function contact_vcard($id)
     global $dbContacts;
     $sql = "SELECT *, sites.name AS sitename, sites.address1 AS siteaddress1, sites.address2 AS siteaddress2, ";
     $sql .= "sites.city AS sitecity, sites.county AS sitecounty, sites.country AS sitecountry, sites.postcode AS sitepostcode ";
-    $sql .= "FROM `{$dbContacts}` AS c, sites ";
-    $sql .= "WHERE c.siteid = sites.id AND c.id = '$id' LIMIT 1";
+    $sql .= "FROM `{$dbContacts}` AS c, `{$dbSites}` AS s ";
+    $sql .= "WHERE c.siteid = s.id AND c.id = '$id' LIMIT 1";
     $result = mysql_query($sql);
     if (mysql_error()) trigger_error(mysql_error(),E_USER_WARNING);
     $contact = mysql_fetch_object($result);
@@ -847,12 +849,14 @@ function incident_timeofnextaction($id)
     * @author Ivan Lucas
     * @param $incidentid The incident ID
     * @returns string HTML
+    * @todo FIXME i18n No product info
 */
 function incident_productinfo_html($incidentid)
 {
+    global $dbProductInfo, $dbIncidentProductInfo;
     // extract appropriate product info
-    $sql  = "SELECT *, TRIM(incidentproductinfo.information) AS info FROM productinfo, incidentproductinfo ";
-    $sql .= "WHERE incidentid=$incidentid AND productinfoid=productinfo.id AND TRIM(productinfo.information) !='' ";
+    $sql  = "SELECT *, TRIM(incidentproductinfo.information) AS info FROM `{$dbProductInfo}` AS p, {$dbIncidentProductInfo}` ipi ";
+    $sql .= "WHERE incidentid = $incidentid AND productinfoid = p.id AND TRIM(p.information) !='' ";
     $result = mysql_query($sql);
     if (mysql_error()) trigger_error(mysql_error(),E_USER_WARNING);
 
@@ -979,19 +983,19 @@ function array_drop_down($array, $name, $setting='', $enablefield='')
 */
 function contact_drop_down($name, $id, $showsite=FALSE)
 {
-    global $dbContacts;
+    global $dbContacts, $dbSites;
     if ($showsite)
     {
-        $sql  = "SELECT c.id AS contactid, sites.id AS siteid, surname, forenames, ";
-        $sql .= "sites.name AS sitename, sites.department AS department ";
-        $sql .= "FROM `{$dbContacts}` AS c, sites WHERE c.siteid = sites.id AND c.active = 'true' ";
-        $sql .= "AND sites.active = 'true' ";
-        $sql .= "ORDER BY sites.name, surname ASC, forenames ASC";
+        $sql  = "SELECT c.id AS contactid, s.id AS siteid, surname, forenames, ";
+        $sql .= "s.name AS sitename, s.department AS department ";
+        $sql .= "FROM `{$dbContacts}` AS c, `{$dbSites}` AS s WHERE c.siteid = s.id AND c.active = 'true' ";
+        $sql .= "AND s.active = 'true' ";
+        $sql .= "ORDER BY s.name, surname ASC, forenames ASC";
     }
     else
     {
         $sql  = "SELECT c.id AS contactid, surname, forenames FROM `{$dbContacts}` AS c, sites ";
-        $sql .= "WHERE c.siteid = sites.id AND sites.active = 'true' AND c.active = 'true' ";
+        $sql .= "WHERE c.siteid = s.id AND s.active = 'true' AND c.active = 'true' ";
         $sql .= "ORDER BY forenames ASC, surname ASC";
     }
 
@@ -1025,10 +1029,10 @@ function contact_drop_down($name, $id, $showsite=FALSE)
 /* with the given id selected.                                */
 function contact_site_drop_down($name, $id, $siteid='', $exclude='')
 {
-    global $dbContacts;
-    $sql  = "SELECT c.id AS contactid, forenames, surname, siteid, sites.name AS sitename ";
-    $sql .= "FROM `{$dbContacts}` AS c, sites ";
-    $sql .= "WHERE c.siteid = sites.id AND c.active = 'true' AND sites.active = 'true' ";
+    global $dbContacts, $dbSites;
+    $sql  = "SELECT c.id AS contactid, forenames, surname, siteid, s.name AS sitename ";
+    $sql .= "FROM `{$dbContacts}` AS c, `{$dbSites}` AS s ";
+    $sql .= "WHERE c.siteid = s.id AND c.active = 'true' AND s.active = 'true' ";
     if (!empty($siteid)) $sql .= "AND sites.id='$siteid' ";
     $sql .= "ORDER BY surname ASC";
     $result = mysql_query($sql);
@@ -1058,41 +1062,43 @@ function contact_site_drop_down($name, $id, $siteid='', $exclude='')
 /* selected.                                                  */
 function product_drop_down($name, $id)
 {
-   // extract products
-   $sql  = "SELECT id, name FROM products ORDER BY name ASC";
-   $result = mysql_query($sql);
-   if (mysql_error()) trigger_error(mysql_error(),E_USER_WARNING);
+    global $dbProducts;
+    // extract products
+    $sql  = "SELECT id, name FROM `{$dbProducts}` ORDER BY name ASC";
+    $result = mysql_query($sql);
+    if (mysql_error()) trigger_error(mysql_error(),E_USER_WARNING);
 
-   $html = "<select name='{$name}' id='{$name}'>";
+    $html = "<select name='{$name}' id='{$name}'>";
 
-   if ($id == 0)
-      $html .= "<option selected='selected' value='0'></option>\n";
-   while ($products = mysql_fetch_array($result))
-   {
+    if ($id == 0) $html .= "<option selected='selected' value='0'></option>\n";
+
+    while ($products = mysql_fetch_array($result))
+    {
         $html .= "<option value='{$products['id']}'";
         if ($products['id']==$id) $html .= " selected='selected'";
         $html .= ">{$products['name']}</option>\n";
-   }
-   $html .= "</select>\n";
-   return $html;
+    }
+    $html .= "</select>\n";
+
+    return $html;
 }
 
 
 function software_drop_down($name, $id)
 {
-    global $now;
-   // extract software
-   $sql  = "SELECT id, name, lifetime_end FROM software ";
-   $sql .= "ORDER BY name ASC";
-   $result = mysql_query($sql);
-   if (mysql_error()) trigger_error(mysql_error(),E_USER_WARNING);
+    global $now, $dbSoftware;
 
-   $html = "<select name='{$name}' id='{$name}' >";
+    $sql  = "SELECT id, name, lifetime_end FROM `{$dbSoftware}` ";
+    $sql .= "ORDER BY name ASC";
+    $result = mysql_query($sql);
+    if (mysql_error()) trigger_error(mysql_error(),E_USER_WARNING);
 
-   if ($id == 0)
-      $html .= "<option selected='selected' value='0'></option>\n";
-   while ($software = mysql_fetch_array($result))
-   {
+    $html = "<select name='{$name}' id='{$name}' >";
+
+    if ($id == 0) $html .= "<option selected='selected' value='0'></option>\n";
+
+    while ($software = mysql_fetch_array($result))
+    {
         $html .= "<option value='{$software['id']}'";
         if ($software['id']==$id) $html .= " selected='selected'";
         $html .= ">{$software['name']}";
@@ -1109,10 +1115,10 @@ function software_drop_down($name, $id)
 
 function softwareproduct_drop_down($name, $id, $productid)
 {
-    global $dbSoftwareProducts;
+    global $dbSoftware, $dbSoftwareProducts;
     // extract software
-    $sql  = "SELECT id, name FROM software, `{$dbSoftwareProducts}` AS sp WHERE software.id = sp.softwareid ";
-    $sql .= "AND productid='$productid' ";
+    $sql  = "SELECT id, name FROM `{$dbSoftware}` AS s, `{$dbSoftwareProducts}` AS sp WHERE s.id = sp.softwareid ";
+    $sql .= "AND productid = '$productid' ";
     $sql .= "ORDER BY name ASC";
     $result = mysql_query($sql);
     if (mysql_error()) trigger_error(mysql_error(),E_USER_WARNING);
@@ -1136,7 +1142,8 @@ function softwareproduct_drop_down($name, $id, $productid)
 
 function vendor_drop_down($name, $id)
 {
-    $sql = "SELECT id, name FROM vendors ORDER BY name ASC";
+    global $dbVendors;
+    $sql = "SELECT id, name FROM `{$dbVendors}` ORDER BY name ASC";
     $result = mysql_query($sql);
     if (mysql_error()) trigger_error(mysql_error(),E_USER_WARNING);
     $html = "<select name='$name'>";
@@ -1156,7 +1163,8 @@ function vendor_drop_down($name, $id)
 
 function sitetype_drop_down($name, $id)
 {
-    $sql = "SELECT typeid, typename FROM sitetypes ORDER BY typename ASC";
+    global $dbSiteTypes;
+    $sql = "SELECT typeid, typename FROM `{$dbSiteTypes}` ORDER BY typename ASC";
     $result = mysql_query($sql);
     if (mysql_error()) trigger_error(mysql_error(),E_USER_WARNING);
     $html .= "<select name='$name'>\n";

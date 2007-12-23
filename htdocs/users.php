@@ -43,7 +43,7 @@ else $filtergroup = $groupid;
 
 include ('htmlheader.inc.php');
 
-$gsql = "SELECT * FROM groups ORDER BY name";
+$gsql = "SELECT * FROM `{$dbGroups}` ORDER BY name";
 $gresult = mysql_query($gsql);
 if (mysql_error()) trigger_error(mysql_error(),E_USER_ERROR);
 while ($group = mysql_fetch_object($gresult))

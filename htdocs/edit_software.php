@@ -37,7 +37,7 @@ if (empty($action) OR $action=='edit')
     <?php
     echo "<h2><img src='{$CONFIG['application_webpath']}images/icons/{$iconset}/32x32/skill.png' width='32' height='32' alt='' /> ";
     echo "$title</h2>";
-    $sql = "SELECT * FROM software WHERE id='$id' LIMIT 1";
+    $sql = "SELECT * FROM `{$dbSoftware}` WHERE id='$id' LIMIT 1";
     $result = mysql_query($sql);
     if (mysql_error()) trigger_error(mysql_error(),E_USER_ERROR);
     while ($software = mysql_fetch_object($result))
@@ -86,7 +86,7 @@ elseif ($action=='delete')
     }
     else
     {
-        $sql = "DELETE FROM software WHERE id='$id'";
+        $sql = "DELETE FROM `{$dbSoftware}` WHERE id='$id'";
         mysql_query($sql);
         if (mysql_error()) trigger_error(mysql_error(),E_USER_ERROR);
 
@@ -94,7 +94,7 @@ elseif ($action=='delete')
         mysql_query($sql);
         if (mysql_error()) trigger_error(mysql_error(),E_USER_ERROR);
 
-        $sql = "DELETE FROM usersoftware WHERE softwareid='$id'";
+        $sql = "DELETE FROM `{$dbUserSoftware}` WHERE softwareid='$id'";
         mysql_query($sql);
         if (mysql_error()) trigger_error(mysql_error(),E_USER_ERROR);
 

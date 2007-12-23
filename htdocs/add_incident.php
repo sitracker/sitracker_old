@@ -88,29 +88,29 @@ elseif ($action=='findcontact')
         header("Location: {$_SERVER['PHP_SELF']}");
         exit;
     }
-    $sql  = "SELECT *, products.name AS productname, products.id AS productid, contacts.surname AS surname, ";
-    $sql .= "maintenance.id AS maintid, maintenance.incident_quantity, maintenance.incidents_used ";
-    $sql .= "FROM `{$dbSupportContacts}` AS sc, contacts, maintenance, products, sites ";
-    $sql .= "WHERE maintenance.product=products.id ";
-    $sql .= "AND maintenance.site=sites.id ";
-    $sql .= "AND sc.contactid=contacts.id ";
-    $sql .= "AND sc.maintenanceid=maintenance.id ";
+    $sql  = "SELECT *, p.name AS productname, p.id AS productid, c.surname AS surname, ";
+    $sql .= "m.id AS maintid, m.incident_quantity, m.incidents_used ";
+    $sql .= "FROM `{$dbSupportContacts}` AS sc, `{$dbContacts}` AS c, `{$dbMaintenance}` AS m, `{$dbProducts}` AS p, `{$dbSites}` AS s ";
+    $sql .= "WHERE m.product = p.id ";
+    $sql .= "AND m.site = s.id ";
+    $sql .= "AND sc.contactid = c.id ";
+    $sql .= "AND sc.maintenanceid = m.id ";
 //     $sql .= "OR (maintenance.allcontactssupported = 'Yes' ";
 //     $sql .= "AND contacts.siteid=sites.id)) ";
 
 
     if (empty($contactid))
     {
-        $sql .= "AND (contacts.surname LIKE '%$search_string%' OR contacts.forenames LIKE '%$search_string%' ";
-        $sql .= "OR SOUNDEX('$search_string') = SOUNDEX((CONCAT_WS(' ', contacts.forenames, contacts.surname))) ";
-        $sql .= "OR sites.name LIKE '%$search_string%') ";
+        $sql .= "AND (c.surname LIKE '%$search_string%' OR c.forenames LIKE '%$search_string%' ";
+        $sql .= "OR SOUNDEX('$search_string') = SOUNDEX((CONCAT_WS(' ', c.forenames, c.surname))) ";
+        $sql .= "OR s.name LIKE '%$search_string%') ";
     }
     else
     {
         $sql .= "AND sc.contactid = '$contactid' ";
     }
 
-    $sql .= "ORDER by contacts.forenames, contacts.surname, productname, expirydate ";
+    $sql .= "ORDER by c.forenames, c.surname, productname, expirydate ";
 
     $result=mysql_query($sql);
     if (mysql_error()) trigger_error("MySQL Query Error ".mysql_error(), E_USER_ERROR);
@@ -217,10 +217,10 @@ elseif ($action=='findcontact')
         }
 
         // Select the contact from the list of contacts as well
-        $sql = "SELECT *, c.id AS contactid FROM `{$dbContacts}` AS c, sites WHERE c.siteid = sites.id ";
+        $sql = "SELECT *, c.id AS contactid FROM `{$dbContacts}` AS c, `{$dbSites}` AS s WHERE c.siteid = s.id ";
         if (empty($contactid))
         {
-            $sql .= "AND (surname LIKE '%$search_string%' OR forenames LIKE '%$search_string%' OR sites.name LIKE '%$search_string%' ";
+            $sql .= "AND (surname LIKE '%$search_string%' OR forenames LIKE '%$search_string%' OR s.name LIKE '%$search_string%' ";
             $sql .= "OR CONCAT_WS(' ', forenames, surname) LIKE '$search_string') ";
         }
         else $sql .= "AND c.id = '$contactid' ";
@@ -279,10 +279,10 @@ elseif ($action=='findcontact')
         echo "</h2>\n";
         echo "<p align='center'><a href=\"add_incident.php?updateid=$updateid&amp;win={$win}\">{$strSearchAgain}</a></p>";
         // Select the contact from the list of contacts as well
-        $sql = "SELECT *, c.id AS contactid FROM `{$dbContacts}` AS c, sites WHERE c.siteid = sites.id ";
+        $sql = "SELECT *, c.id AS contactid FROM `{$dbContacts}` AS c, `{$dbSites}` AS s WHERE c.siteid = s.id ";
         if (empty($contactid))
         {
-            $sql .= "AND (surname LIKE '%$search_string%' OR forenames LIKE '%$search_string%' OR sites.name LIKE '%$search_string%' ";
+            $sql .= "AND (surname LIKE '%$search_string%' OR forenames LIKE '%$search_string%' OR s.name LIKE '%$search_string%' ";
             $sql .= "OR CONCAT_WS(' ', forenames, surname) = '$search_string' )";
         }
         else $sql .= "AND c.id = '$contactid' ";
@@ -383,7 +383,7 @@ elseif ($action=='incidentform')
         echo "<td><textarea name='probdesc' rows='10' cols='60'></textarea></td></tr>\n";
         // Insert pre-defined per-product questions from the database, these should be required fields
         // These 'productinfo' questions don't have a GUI as of 27Oct05
-        $sql = "SELECT * FROM productinfo WHERE productid='$productid'";
+        $sql = "SELECT * FROM `{$dbProductInfo}` WHERE productid='$productid'";
         $result=mysql_query($sql);
         if (mysql_error()) trigger_error("MySQL Query Error ".mysql_error(), E_USER_ERROR);
         while ($productinforow=mysql_fetch_array($result))
@@ -410,7 +410,7 @@ elseif ($action=='incidentform')
         $updaterow=mysql_fetch_array($result);
         $mailed_body_text = $updaterow['bodytext'];
 
-        $sql="SELECT subject FROM tempincoming WHERE updateid=$updateid";
+        $sql="SELECT subject FROM `{$dbTempIncoming}` WHERE updateid=$updateid";
         $result=mysql_query($sql);
         if (mysql_error()) trigger_error("MySQL Query Error ".mysql_error(), E_USER_ERROR);
         $updaterow=mysql_fetch_array($result);
@@ -709,7 +709,7 @@ elseif ($action=='assign')
                 echo "<td>";
 
                 // Have a look if this user has skills with this software
-                $ssql = "SELECT softwareid FROM usersoftware WHERE userid='{$userrow['id']}' AND softwareid='{$software}' ";
+                $ssql = "SELECT softwareid FROM `{$dbUserSoftware}` WHERE userid='{$userrow['id']}' AND softwareid='{$software}' ";
                 $sresult = mysql_query($ssql);
                 if (mysql_num_rows($sresult) >=1 ) echo "<strong>{$userrow['realname']}</strong>";
                 else echo $userrow['realname'];

@@ -365,8 +365,8 @@ else
             }
 
             //notify related inicdents this has been closed
-            $sql = "SELECT distinct (relatedid) FROM relatedincidents,incidents WHERE incidentid = '$id' ";
-            $sql .= "AND incidents.id = relatedincidents.relatedid AND incidents.status != 2";
+            $sql = "SELECT distinct (relatedid) FROM `{$dbRelatedIncidents}` AS r, `{$dbIncidents}` AS i WHERE incidentid = '$id' ";
+            $sql .= "AND i.id = r.relatedid AND i.status != 2";
             $result = mysql_query($sql);
             if (mysql_error()) trigger_error("MySQL Query Error ".mysql_error(), E_USER_ERROR);
 
@@ -377,8 +377,8 @@ else
                 $relatedincidents[] = $a[0];
             }
 
-            $sql = "SELECT distinct (incidentid) FROM relatedincidents, incidents WHERE relatedid = '$id' ";
-            $sql .= "AND incidents.id = relatedincidents.incidentid AND incidents.status != 2";
+            $sql = "SELECT distinct (incidentid) FROM `{$dbRelatedIncidents}` AS r, `{$dbIncidents}` AS i WHERE relatedid = '$id' ";
+            $sql .= "AND i.id = r.incidentid AND i.status != 2";
             $result = mysql_query($sql);
             if (mysql_error()) trigger_error("MySQL Query Error ".mysql_error(), E_USER_ERROR);
 
@@ -407,7 +407,7 @@ else
                 }
             }
             //tidy up temp reassigns
-            $sql = "DELETE FROM tempassigns WHERE incidentid = '$id'";
+            $sql = "DELETE FROM `{$dbTempAssigns}` WHERE incidentid = '$id'";
             $result = mysql_query($sql);
             if (mysql_error()) trigger_error("MySQL Query Error ".mysql_error(), E_USER_ERROR);
         }
@@ -446,7 +446,7 @@ else
             }
 
             // Tidy up drafts i.e. delete
-            $draft_sql = "DELETE FROM drafts WHERE incidentid = {$id}";
+            $draft_sql = "DELETE FROM `{$dbDrafts}` WHERE incidentid = {$id}";
             mysql_query($draft_sql);
             if (mysql_error()) trigger_error("MySQL Query Error ".mysql_error(), E_USER_ERROR);
 

@@ -52,7 +52,7 @@ switch ($action)
     case 'edit':
         include ('htmlheader.inc.php');
         $url = cleanvar(urldecode($_REQUEST['url']));
-        $sql = "SELECT * FROM dashboard_rss WHERE owner = {$sit[2]} AND url = '{$url}' LIMIT 1 ";
+        $sql = "SELECT * FROM `{$dbDashboardRSS}` WHERE owner = {$sit[2]} AND url = '{$url}' LIMIT 1 ";
         if ($CONFIG['debug']) $dbg .= print_r($sql,true);
         $result = mysql_query($sql);
         if (mysql_error()) trigger_error(mysql_error(),E_USER_ERROR);
@@ -99,7 +99,7 @@ switch ($action)
     case 'delete':
         $url = $_REQUEST['url'];
         $enable = $_REQUEST['enable'];
-        $sql = "DELETE FROM dashboard_rss WHERE url = '{$url}' AND owner = {$sit[2]}";
+        $sql = "DELETE FROM `{$dbDashboardRSS}` WHERE url = '{$url}' AND owner = {$sit[2]}";
         $result = mysql_query($sql);
         if (mysql_error()) trigger_error(mysql_error(),E_USER_ERROR);
 
@@ -110,7 +110,7 @@ switch ($action)
         include ('htmlheader.inc.php');
         echo "<h2>Edit RSS/Atom feeds</h2>";  // FIXME i18n edit feeds
 
-        $sql = "SELECT * FROM dashboard_rss WHERE owner = {$sit[2]}";
+        $sql = "SELECT * FROM `{$dbDashboardRSS}` WHERE owner = {$sit[2]}";
         $result = mysql_query($sql);
         if (mysql_error()) trigger_error(mysql_error(),E_USER_ERROR);
 
