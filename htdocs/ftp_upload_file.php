@@ -146,7 +146,7 @@ else
         {
             // store file details in database
             // important: path must be blank for public files (all go in same dir)
-            $sql = "INSERT INTO files (filename, size, userid, shortdescription, longdescription, path, date, expiry, fileversion) ";
+            $sql = "INSERT INTO `{$dbFiles}` (filename, size, userid, shortdescription, longdescription, path, date, expiry, fileversion) ";
             $sql .= "VALUES ('$file_name', '$filesize', '".$sit[2]."', '$shortdescription', '$longdescription', '', '$now', '$expirydate' ,'$fileversion')";
             mysql_query($sql);
             if (mysql_error()) trigger_error("MySQL Query Error ".mysql_error(), E_USER_ERROR);

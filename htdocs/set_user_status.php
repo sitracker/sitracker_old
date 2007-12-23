@@ -88,7 +88,7 @@ switch ($mode)
             if (empty($result) OR mysql_num_rows($result) == 0)
             {
                 $gid = md5($strUserStillAway);
-                $sql = "INSERT INTO notices (userid, type, text, timestamp, gid) ";
+                $sql = "INSERT INTO `{$dbNotices}` (userid, type, text, timestamp, gid) ";
                 $sql .= "VALUES({$_SESSION['userid']}, ".USER_STILL_AWAY_TYPE.",";
                 $sql .= "'".mysql_real_escape_string("You are currently not accepting incidents. You can change this at the bottom of the main page.")."', NOW(), '{$gid}')"; //FIXME i18n
                 mysql_query($sql);

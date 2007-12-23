@@ -121,7 +121,7 @@ else
     //TODO form checking
     if ($errors == 0)
     {
-        $sql  = "INSERT INTO noticetemplates (name, description, type, text, linktext, link) ";
+        $sql  = "INSERT INTO `{$dbNoticeTemplates}` (name, description, type, text, linktext, link) ";
         $sql .= "VALUES ('$name', '$description', '$type', '$text', '$linktext', '$link')";
         $result = mysql_query($sql);
         if (mysql_error()) trigger_error("MySQL Query Error ".mysql_error(), E_USER_ERROR);

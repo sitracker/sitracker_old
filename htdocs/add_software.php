@@ -101,7 +101,7 @@ else
     // add product if no errors
     if ($errors == 0)
     {
-        $sql = "INSERT INTO software (name, lifetime_start, lifetime_end) VALUES ('$name','$lifetime_start','$lifetime_end')";
+        $sql = "INSERT INTO `{$dbSoftware}` (name, lifetime_start, lifetime_end) VALUES ('$name','$lifetime_start','$lifetime_end')";
         $result = mysql_query($sql);
         if (mysql_error()) trigger_error("MySQL Query Error ".mysql_error(), E_USER_ERROR);
 

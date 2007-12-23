@@ -197,7 +197,7 @@ elseif ($action == "update")
                     {
                         // Update failed, this could be because of a missing userpemissions record so try and create one
                         // echo "Update of permission ".$x[1]."failed, no problem, will try insert instead.<br />";
-                        $isql = "INSERT INTO rolepermissions (roleid, permissionid, granted) ";
+                        $isql = "INSERT INTO `{$dbRolePermissions}` (roleid, permissionid, granted) ";
                         $isql .= "VALUES ('{$rolerow->id}', '".$x[1]."', 'true')";
                         $iresult = mysql_query($isql);
                         if (mysql_error()) trigger_error(mysql_error(),E_USER_ERROR);
@@ -244,7 +244,7 @@ elseif ($action == "update")
                     {
                         // Update failed, this could be because of a missing userpemissions record so try and create one
                         // echo "Update of permission ".$x[1]."failed, no problem, will try insert instead.<br />";
-                        $isql = "INSERT INTO userpermissions (userid, permissionid, granted) ";
+                        $isql = "INSERT INTO `{$dbUserPermissions}` (userid, permissionid, granted) ";
                         $isql .= "VALUES ('$user', '".$x[1]."', 'true')";
                         $iresult = mysql_query($isql);
                         if (mysql_error()) trigger_error(mysql_error(),E_USER_ERROR);
@@ -278,7 +278,7 @@ elseif ($action == "update")
                     {
                         // Update failed, this could be because of a missing userpemissions record so try and create one
                         // echo "Update of permission ".$x[1]."failed, no problem, will try insert instead.<br />";
-                        $isql = "INSERT INTO rolepermissions (roleid, permissionid, granted) ";
+                        $isql = "INSERT INTO `{$dbRolePermissions}` (roleid, permissionid, granted) ";
                         $isql .= "VALUES ('$role', '".$x[1]."', 'true')";
                         $iresult = mysql_query($isql);
                         if (mysql_error()) trigger_error(mysql_error(),E_USER_ERROR);

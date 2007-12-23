@@ -99,6 +99,7 @@ $dbLinkTypes = "{$CONFIG['db_tableprefix']}linktypes";
 $dbMaintenance = "{$CONFIG['db_tableprefix']}maintenance";
 $dbNotes = "{$CONFIG['db_tableprefix']}notes";
 $dbNotices = "{$CONFIG['db_tableprefix']}notices";
+$dbNoticeTemplates = "{$CONFIG['db_tableprefix']}noticetemplates";
 $dbPermissions = "{$CONFIG['db_tableprefix']}permissions";
 $dbPriority = "{$CONFIG['db_tableprefix']}priority";
 $dbProductInfo = "{$CONFIG['db_tableprefix']}productinfo";

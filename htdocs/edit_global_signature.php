@@ -56,7 +56,7 @@ if (!empty($signature))
     {
         case 'add':
             //then we're adding a new signature
-            $sql = "INSERT INTO emailsig (signature) VALUES ('$signature') ";
+            $sql = "INSERT INTO `{$dbEmailSig}` (signature) VALUES ('$signature') ";
             mysql_query($sql);
             if (mysql_error()) trigger_error("MySQL Query Error ".mysql_error(), E_USER_ERROR);
 
@@ -65,7 +65,7 @@ if (!empty($signature))
         break;
 
         case 'edit':
-            $sql = "UPDATE emailsig SET signature = '$signature' WHERE id = ".$sig_id;
+            $sql = "UPDATE `{$dbEmailSig}` SET signature = '$signature' WHERE id = ".$sig_id;
             mysql_query($sql);
             if (mysql_error()) trigger_error("MySQL Query Error ".mysql_error(), E_USER_ERROR);
 

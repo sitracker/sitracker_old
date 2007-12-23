@@ -179,7 +179,7 @@ else
         }
 
         // store file details in database
-        $sql = "INSERT INTO files (filename, size, userid, shortdescription, longdescription, path, date, expiry, fileversion) ";
+        $sql = "INSERT INTO `{$dbFiles}` (filename, size, userid, shortdescription, longdescription, path, date, expiry, fileversion) ";
         $sql .= "VALUES ('$destination_file', '$filesize', '".$sit[2]."', '$shortdescription', '$longdescription', '".$temp_directory.'/'."', '$now', '$expirydate' ,'$fileversion')";
         mysql_query($sql);
         if (mysql_error()) trigger_error("MySQL Query Error ".mysql_error(), E_USER_ERROR);
