@@ -4,7 +4,7 @@ Section: web
 Priority: optional
 Architecture: all
 Essential: no
-Depends: debconf (>= 0.5) | debconf-2.0, libapache2-mod-php5 | libapache-mod-php5 | php5-cgi | php5 | libapache2-mod-php4 | libapache-mod-php4 | php4 | php4-cgi, perl, php5-mcrypt | php4-mcrypt, php5-mysql | php5-mysqli | php4-mysql
+Depends: debconf (>= 0.5) | debconf-2.0, libapache2-mod-php5 | libapache-mod-php5 | php5-cgi | php5 | libapache2-mod-php4 | libapache-mod-php4 | php4 | php4-cgi, php5-mcrypt | php4-mcrypt, php5-mysql | php5-mysqli | php4-mysql
 Recommends: apache2 | httpd, php5-gd | php4-gd
 Suggests: mysql-server
 Installed-Size: 24576
