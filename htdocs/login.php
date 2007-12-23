@@ -75,7 +75,7 @@ elseif (authenticate($username, $password) == 1)
     // The zero permission is added to all users, zero means everybody can access
     $userpermissions[]=0;
     // First lookup the role permissions
-    $sql = "SELECT * FROM `{$dbUsers}` AS u, rolepermissions WHERE u.roleid = rolepermissions.roleid ";
+    $sql = "SELECT * FROM `{$dbUsers}` AS u, `{$dbRolePermissions}` AS rp WHERE u.roleid = rp.roleid ";
     $sql .= "AND u.id = '{$_SESSION['userid']}' AND granted='true'";
     $result = mysql_query($sql);
     if (mysql_error()) trigger_error(mysql_error(),E_USER_ERROR);

@@ -103,7 +103,7 @@ else
     // FIXME: whatabout cases where the user is a backup for one of the products
     // he removes? or if the backup user leaves the company?
 
-    //$sql = "DELETE FROM usersoftware WHERE userid='{$_POST['userid']}'";
+    //$sql = "DELETE FROM `{$dbUserSoftware}` WHERE userid='{$_POST['userid']}'";
     //mysql_query($sql);
     //if (mysql_error()) trigger_error("MySQL Query Error ".mysql_error(), E_USER_ERROR);
 

@@ -87,12 +87,12 @@ elseif ($_REQUEST['mode']=='report')
         }
         $incsql .= ")";
     }
-    $sql = "SELECT incidents.id AS incid, incidents.title AS title, c.id AS contactid, sites.name AS site, c.email AS cemail, ";
-    $sql .= "CONCAT(c.forenames,' ',c.surname) AS cname, incidents.opened as opened, sitetypes.typename, incidents.externalid AS externalid, ";
-    $sql .= "sites.id AS siteid ";
-    $sql .= "FROM `{$dbContacts}` AS c, sites, sitetypes, incidents ";
-    $sql .= "WHERE c.siteid=sites.id AND sites.typeid=sitetypes.typeid AND incidents.opened > ($now-60*60*24*365.25) ";
-    $sql .= "AND incidents.contact=c.id";
+    $sql = "SELECT i.id AS incid, i.title AS title, c.id AS contactid, s.name AS site, c.email AS cemail, ";
+    $sql .= "CONCAT(c.forenames,' ',c.surname) AS cname, i.opened as opened, st.typename, i.externalid AS externalid, ";
+    $sql .= "s.id AS siteid ";
+    $sql .= "FROM `{$dbContacts}` AS c, `{$dbSites}` AS s, `{$dbSiteTypes}` AS st, `{$dbIncidents}` AS i ";
+    $sql .= "WHERE c.siteid = s.id AND s.typeid = st.typeid AND i.opened > ($now-60*60*24*365.25) ";
+    $sql .= "AND i.contact=c.id";
 
     if (empty($incsql)==FALSE OR empty($excsql)==FALSE) $sql .= " AND ";
     if (!empty($incsql)) $sql .= "$incsql";

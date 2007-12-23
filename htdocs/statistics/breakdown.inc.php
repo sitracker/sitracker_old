@@ -62,8 +62,9 @@ if (mysql_num_rows($result) > 0)
             echo "<td>".date($CONFIG['dateformat_datetime'],$row['closed'])."</td>";
         }
         echo "<td>".user_realname($row['owner'])."</td>";
-        $sql = "SELECT c.forenames, c.surname, sites.name FROM `{$dbContacts}` AS c, sites ";
-        $sql .= "WHERE sites.id = c.siteid AND c.id = {$row['contact']}";
+        $sql = "SELECT c.forenames, c.surname, s.name ";
+        $sql .= "FROM `{$dbContacts}` AS c, `{$dbSites}` AS s ";
+        $sql .= "WHERE s.id = c.siteid AND c.id = {$row['contact']}";
         $contactResult = mysql_query($sql);
         if (mysql_error()) trigger_error("MySQL Query Error ".mysql_error(), E_USER_ERROR);
         $contact = mysql_fetch_array($contactResult);

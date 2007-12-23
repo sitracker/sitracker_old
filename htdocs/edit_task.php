@@ -131,7 +131,7 @@ switch ($action)
             $status = mysql_fetch_object($result);
             $status = $status->status;
 
-            $sql = "SELECT * FROM tasks WHERE id='$id'";
+            $sql = "SELECT * FROM `{$dbTasks}` WHERE id='$id'";
             $result = mysql_query($sql);
             if (mysql_error()) trigger_error(mysql_error(),E_USER_ERROR);
             if (mysql_num_rows($result) >= 1)
@@ -145,7 +145,7 @@ switch ($action)
             //get all the notes
             $notearray = array();
             $numnotes = 0;
-            $sql = "SELECT * FROM notes WHERE link='10' AND refid='{$id}'";
+            $sql = "SELECT * FROM `{$dbNotes}` WHERE link='10' AND refid='{$id}'";
             $result = mysql_query($sql);
             if (mysql_error()) trigger_error(mysql_error(),E_USER_ERROR);
             if (mysql_num_rows($result) >= 1)
@@ -157,7 +157,7 @@ switch ($action)
                 }
             }
             //delete all the notes
-            $sql = "DELETE FROM notes WHERE refid='{$id}'";
+            $sql = "DELETE FROM `{$dbNotes}` WHERE refid='{$id}'";
             $result = mysql_query($sql);
             if (mysql_error()) trigger_error(mysql_error(),E_USER_ERROR);
 
@@ -203,12 +203,12 @@ switch ($action)
     break;
 
     case 'delete':
-        $sql = "DELETE FROM tasks ";
+        $sql = "DELETE FROM `{$dbTasks}` ";
         $sql .= "WHERE id='$id' LIMIT 1";
         mysql_query($sql);
         if (mysql_error()) trigger_error(mysql_error(),E_USER_ERROR);
 
-        $sql = "DELETE FROM notes ";
+        $sql = "DELETE FROM `{$dbNotes}` ";
         $sql .= "WHERE link=10 AND refid='$id' ";
         mysql_query($sql);
         if (mysql_error()) trigger_error(mysql_error(),E_USER_ERROR);
@@ -222,7 +222,7 @@ switch ($action)
         include ('htmlheader.inc.php');
         echo "<h2><img src='{$CONFIG['application_webpath']}images/icons/{$iconset}/32x32/task.png' width='32' height='32' alt='' /> ";
         echo "$title</h2>";
-        $sql = "SELECT * FROM tasks WHERE id='$id'";
+        $sql = "SELECT * FROM `{$dbTasks}` WHERE id='$id'";
         $result = mysql_query($sql);
         if (mysql_error()) trigger_error(mysql_error(),E_USER_ERROR);
         if (mysql_num_rows($result) >= 1)

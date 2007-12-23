@@ -329,7 +329,7 @@ function draw_chart($mode, $year, $month='', $day='', $groupid='', $userid='')
     $enddate  = mktime(23,59,59,$month,$lastday,$year);
 
     // Get list of user groups
-    $gsql = "SELECT * FROM groups ORDER BY name";
+    $gsql = "SELECT * FROM `{$dbGroups}` ORDER BY name";
     $gresult = mysql_query($gsql);
     if (mysql_error()) trigger_error(mysql_error(),E_USER_ERROR);
     $grouparr[0]='None';

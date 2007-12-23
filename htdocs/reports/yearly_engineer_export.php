@@ -351,21 +351,22 @@ elseif ($_REQUEST['mode']=='report')
         $incsql_esc .= ")";
     }
 //
-    $sql = "SELECT incidents.id AS incid, incidents.title AS title, u.realname AS realname, u.id AS userid, ";
-    $sql .= "incidents.opened AS opened, incidents.closed AS closed FROM `{$dbUsers}` AS u, incidents ";
-    $sql .= "WHERE u.id=incidents.owner "; // AND incidents.opened > ($now-60*60*24*365.25) ";
+    $sql = "SELECT i.id AS incid, i.title AS title, u.realname AS realname, u.id AS userid, ";
+    $sql .= "i.opened AS opened, i.closed AS closed ";
+    $sql .= "FROM `{$dbUsers}` AS u, `{$dbIncidents}` AS i ";
+    $sql .= "WHERE u.id = i.owner "; // AND incidents.opened > ($now-60*60*24*365.25) ";
     if ($type == "opened")
     {
-        $sql .= " AND incidents.opened >= {$startdate} AND incidents.opened <= {$enddate} ";
+        $sql .= " AND i.opened >= {$startdate} AND i.opened <= {$enddate} ";
     }
     else if ($type == "closed")
     {
-        $sql .= " AND incidents.closed >= {$startdate} AND incidents.closed <= {$enddate} ";
+        $sql .= " AND i.closed >= {$startdate} AND i.closed <= {$enddate} ";
     }
     else if ($type == "both")
     {
-        $sql .= " AND ((incidents.opened >= {$startdate} AND incidents.opened <= {$enddate}) ";
-        $sql .= " OR (incidents.closed >= {$startdate} AND incidents.closed <= {$enddate})) ";
+        $sql .= " AND ((i.opened >= {$startdate} AND i.opened <= {$enddate}) ";
+        $sql .= " OR (i.closed >= {$startdate} AND i.closed <= {$enddate})) ";
     }
 
 
@@ -375,14 +376,15 @@ elseif ($_REQUEST['mode']=='report')
     if (empty($incsql) == FALSE AND empty($excsql) == FALSE) $sql .= " AND ";
     if (!empty($excsql)) $sql .= "$excsql";
 
-    $sql .= " ORDER BY realname, incidents.id ASC ";
+    $sql .= " ORDER BY realname, i.id ASC ";
 
     $result = mysql_query($sql);
     if (mysql_error()) trigger_error("MySQL Query Error: $sql ".mysql_error(), E_USER_ERROR);
     $numrows = mysql_num_rows($result);
 
     // FIXME this SQL use the incident body to determine whether it's been escalated
-    $sql_esc = "SELECT distinct(incidentid) AS incid FROM `{$dbUpdates}` AS u, `{$dbIncidents}` AS i ";
+    $sql_esc = "SELECT distinct(incidentid) AS incid ";
+    $sql_esc .= "FROM `{$dbUpdates}` AS u, `{$dbIncidents}` AS i ";
     $sql_esc .= "WHERE u.incidentid = i.id AND u.bodytext LIKE \"External ID%\" ";
     if ($type == "opened")
     {

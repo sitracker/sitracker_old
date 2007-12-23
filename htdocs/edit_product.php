@@ -57,7 +57,7 @@ else
     echo "<form action='{$_SERVER['PHP_SELF']}' method='post' >";
     echo "<table align='center' class='vertical'>";
 
-    $sql = "SELECT * FROM products WHERE id='$id' ";
+    $sql = "SELECT * FROM `{$dbProducts}` WHERE id='$id' ";
     $result = mysql_query($sql);
     if (mysql_error()) trigger_error("MySQL Query Error ".mysql_error(), E_USER_ERROR);
 

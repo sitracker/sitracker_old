@@ -34,7 +34,7 @@ echo "$title</h2>";
 if (empty($legacy)) echo "<p align='center'><a href='{$_SERVER['PHP_SELF']}?legacy=yes&amp;gid={$groupid}'>Show legacy skills</a></p>";
 else echo "<p align='center'><a href='{$_SERVER['PHP_SELF']}?gid={$groupid}'>Hide legacy skills</a></p>";
 
-$gsql = "SELECT * FROM groups ORDER BY name";
+$gsql = "SELECT * FROM `{$dbGroups}` ORDER BY name";
 $gresult = mysql_query($gsql);
 if (mysql_error()) trigger_error(mysql_error(),E_USER_ERROR);
 while ($group = mysql_fetch_object($gresult))
@@ -68,9 +68,11 @@ if ($numgroups >= 1)
     echo "</form>\n<br />";
 }
 
-$sql = "SELECT u.id, u.realname, software.name FROM usersoftware RIGHT JOIN software ON (usersoftware.softwareid = software.id) LEFT JOIN `{$dbUsers}` AS u ON usersoftware.userid = u.id ";
+$sql = "SELECT u.id, u.realname, software.name ";
+$sql .= "FROM `{$dbUserSoftware}` AS us RIGHT JOIN `{$dbSoftware}` AS s ON (us.softwareid = s.id) ";
+$sql .= "LEFT JOIN `{$dbUsers}` AS u ON us.userid = u.id ";
 $sql .= " WHERE (u.status <> 0 OR u.status IS NULL) ";
-if (empty($legacy)) $sql .= "AND (software.lifetime_end > NOW() OR software.lifetime_end = '0000-00-00' OR software.lifetime_end is NULL) ";
+if (empty($legacy)) $sql .= "AND (s.lifetime_end > NOW() OR s.lifetime_end = '0000-00-00' OR s.lifetime_end is NULL) ";
 if ($numgroups >= 1 AND $filtergroup=='0') $sql .= "AND (u.groupid='0' OR u.groupid='' OR u.groupid IS NULL) ";
 elseif ($numgroups < 1 OR $filtergroup=='all') { $sql .= "AND 1=1 "; }
 else $sql .= "AND (u.groupid='{$filtergroup}' OR u.groupid IS NULL)";

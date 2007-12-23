@@ -26,7 +26,7 @@ if (empty($step))
     {
         if ($draftid != -1)
         {
-            $sql = "DELETE FROM drafts WHERE id = {$draftid}";
+            $sql = "DELETE FROM `{$dbDrafts}` WHERE id = {$draftid}";
             $result = mysql_query($sql);
             if (mysql_error()) trigger_error(mysql_error(),E_USER_ERROR);
         }
@@ -34,7 +34,7 @@ if (empty($step))
         exit;
     }
 
-    $sql = "SELECT * FROM drafts WHERE type = 'email' AND userid = '{$sit[2]}' AND incidentid = '{$id}'";
+    $sql = "SELECT * FROM `{$dbDrafts}` WHERE type = 'email' AND userid = '{$sit[2]}' AND incidentid = '{$id}'";
     $result = mysql_query($sql);
     if (mysql_error()) trigger_error(mysql_error(),E_USER_ERROR);
 
@@ -272,7 +272,7 @@ switch ($step)
         // show form 2
         if ($draftid != -1)
         {
-            $draftsql = "SELECT * FROM drafts WHERE id = {$draftid}";
+            $draftsql = "SELECT * FROM `{$dbDrafts}` WHERE id = {$draftid}";
             $draftresult = mysql_query($draftsql);
             if (mysql_error()) trigger_error(mysql_error(),E_USER_ERROR);
             $draftobj = mysql_fetch_object($draftresult);
@@ -624,7 +624,7 @@ $emailtype|$newincidentstatus|$timetonextaction_none|$timetonextaction_days|$tim
             }
 
             // Lookup the email template (we need this to find out if the update should be visible or not)
-            $sql = "SELECT * FROM emailtype WHERE id='$emailtype' ";
+            $sql = "SELECT * FROM `{$dbEmailType}` WHERE id='$emailtype' ";
             $result = mysql_query($sql);
             if (mysql_error()) trigger_error("MySQL Query Error ".mysql_error(), E_USER_ERROR);
             if (mysql_num_rows($result) < 1) trigger_error("Email template '{$meailtype}' not found",E_USER_ERROR);
@@ -806,7 +806,7 @@ $emailtype|$newincidentstatus|$timetonextaction_none|$timetonextaction_days|$tim
 
                 if ($draftid != -1)
                 {
-                    $sql = "DELETE FROM drafts WHERE id = {$draftid}";
+                    $sql = "DELETE FROM `{$dbDrafts}` WHERE id = {$draftid}";
                     mysql_query($sql);
                     if (mysql_error()) trigger_error(mysql_error(),E_USER_ERROR);
                 }

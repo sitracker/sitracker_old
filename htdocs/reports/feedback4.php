@@ -39,7 +39,8 @@ while ($qrow = mysql_fetch_object($qresult))
 
 $msql = "SELECT *, cs.name AS closingstatusname, s.name AS sitename, (i.closed - i.opened) AS duration, \n";
 $msql .= "fr.id AS reportid, c.id AS contactid, s.id AS siteid \n";
-$msql .= "FROM `{$dbFeedbackRespondents}` AS fr, `{$dbIncidents}` AS i, `{$dbContacts}` AS c, `{$dbSites}` AS s, `{$dbClosingStatus}` AS cs WHERE feedbackrespondents.incidentid=incidents.id \n";
+$msql .= "FROM `{$dbFeedbackRespondents}` AS fr, `{$dbIncidents}` AS i, `{$dbContacts}` AS c, `{$dbSites}` AS s, `{$dbClosingStatus}` AS cs ";
+$msql .= "WHERE fr.incidentid = i.id \n";
 $msql .= "AND i.contact = c.id ";
 $msql .= "AND c.siteid = s.id ";
 $msql .= "AND i.closingstatus = cs.id ";

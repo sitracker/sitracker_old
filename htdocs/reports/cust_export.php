@@ -121,8 +121,8 @@ elseif ($_REQUEST['mode']=='report')
     $excsql .= ")";
     }
     */
-    $sql = "SELECT *, c.id AS contactid, sites.name AS site, c.email AS cemail FROM `{$dbContacts}` ";
-    $sql .= "LEFT JOIN sites ON c.siteid=sites.id ";
+    $sql = "SELECT *, c.id AS contactid, s.name AS site, c.email AS cemail FROM `{$dbContacts}` ";
+    $sql .= "LEFT JOIN `{$dbSites}` AS s ON c.siteid = s.id ";
 
     if (empty($incsql)==FALSE OR empty($excsql)==FALSE) $sql .= "WHERE ";
     if (!empty($incsql)) $sql .= "$incsql";

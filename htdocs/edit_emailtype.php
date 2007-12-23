@@ -42,7 +42,7 @@ if (empty($action) OR $action == "showform")
     <?php
 
     echo "<div style='margin-left: auto; margin-right: auto; width: 70%;'>";
-    $sql = "SELECT * FROM emailtype ORDER BY name,id";
+    $sql = "SELECT * FROM `{$dbEmailType}` ORDER BY name,id";
     $result = mysql_query($sql);
     if (mysql_error()) trigger_error("MySQL Query Error ".mysql_error(), E_USER_ERROR);
     while ($email = mysql_fetch_object($result))
@@ -67,7 +67,7 @@ elseif ($action == "edit")
     if ($id > 0)
     {
         // extract email type details
-        $sql = "SELECT * FROM emailtype WHERE id='$id'";
+        $sql = "SELECT * FROM `{$dbEmailType}` WHERE id='$id'";
         $result = mysql_query($sql);
         if (mysql_error()) trigger_error("MySQL Query Error ".mysql_error(), E_USER_ERROR);
         $emailtype = mysql_fetch_array($result);
@@ -177,7 +177,7 @@ elseif ($action == "delete")
         exit;
     }
     // We only allow user templates to be deleted
-    $sql = "DELETE FROM emailtype WHERE id='$id' AND type='user' LIMIT 1";
+    $sql = "DELETE FROM `{$dbEmailType}` WHERE id='$id' AND type='user' LIMIT 1";
     mysql_query($sql);
     if (mysql_error()) trigger_error(mysql_error(),E_USER_ERROR);
     header("Location: {$_SERVER['PHP_SELF']}?action=showform");

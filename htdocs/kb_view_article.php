@@ -33,7 +33,7 @@ if (user_permission($sit[2],$permission))
     echo "<div id='kbarticle'>";
     echo "<table summary='Knowledge Base Article'><tr><td>";
 
-    $sql = "SELECT * FROM kbarticles WHERE docid='{$id}' LIMIT 1";
+    $sql = "SELECT * FROM `{$dbKBArticles}` WHERE docid='{$id}' LIMIT 1";
     $result = mysql_query($sql);
     if (mysql_error()) trigger_error("MySQL Query Error ".mysql_error(), E_USER_ERROR);
     $kbarticle = mysql_fetch_object($result);
@@ -42,8 +42,9 @@ if (user_permission($sit[2],$permission))
     echo "<h2>{$kbarticle->title}</h2>";
 
     // Lookup what software this applies to
-    $ssql = "SELECT * FROM kbsoftware, software WHERE kbsoftware.softwareid=software.id AND kbsoftware.docid='{$id}' ";
-    $ssql .= "ORDER BY software.name";
+    $ssql = "SELECT * FROM `{$dbKBSoftware}` AS kbs, `{$dbSoftware}` AS s ";
+    $ssql .= "WHERE kbs.softwareid = s.id AND kbs.docid = '{$id}' ";
+    $ssql .= "ORDER BY s.name";
     $sresult = mysql_query($ssql);
     if (mysql_error()) trigger_error("MySQL Query Error ".mysql_error(), E_USER_ERROR);
     if (mysql_num_rows($sresult) >= 1)

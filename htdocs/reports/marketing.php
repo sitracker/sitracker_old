@@ -190,10 +190,10 @@ elseif ($_REQUEST['mode']=='report')
             if ($row->dataprotection_phone!='Yes') $html .= "<td>{$row->phone}</td>";
             else $html .= "<td><em style='color: red';>{$strWithheld}</em></td>";
 
-            $psql = "SELECT * FROM supportcontacts, maintenance, products WHERE ";
-            $psql .= "supportcontacts.maintenanceid=maintenance.id AND ";
-            $psql .= "maintenance.product=products.id ";
-            $psql .= "AND supportcontacts.contactid='$row->contactid' ";
+            $psql = "SELECT * FROM `{$dbSupportContacts}` AS sc, `{$dbMaintenance}` AS m, `{$dbProducts}` AS p WHERE ";
+            $psql .= "sc.maintenanceid = m.id AND ";
+            $psql .= "m.product = p.id ";
+            $psql .= "AND sc.contactid = '$row->contactid' ";
             $html .= "<td>";
 
             // FIXME dataprotection_address for csv

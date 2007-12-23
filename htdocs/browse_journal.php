@@ -38,7 +38,7 @@ echo "<h2>{$title}</h2>";
 if (empty($perpage)) $perpage = 50;
 if ($offset=='') $offset=0;
 
-$sql = "SELECT * FROM journal ";
+$sql = "SELECT * FROM `{$dbJournal}` ";
 if (!empty($type)) $sql .= "WHERE journaltype='{$type}' ";
 // Create SQL for Sorting
 if (!empty($sort))

@@ -28,7 +28,7 @@ include ('htmlheader.inc.php');
 // External Vars
 $id = cleanvar($_REQUEST['id']);
 
-$sql = "SELECT * FROM files WHERE id='$id'";
+$sql = "SELECT * FROM `{$dbFiles}` WHERE id='$id'";
 $result = mysql_query($sql);
 if (mysql_error()) trigger_error("MySQL Query Error ".mysql_error(), E_USER_ERROR);
 $frow=mysql_fetch_array($result);

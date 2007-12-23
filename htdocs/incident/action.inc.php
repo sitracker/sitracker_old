@@ -148,8 +148,8 @@ if (!isset($_SESSION[$incidentid.'cs']))
       $cs |= 16;
 
     $sql  = "SELECT p.vendorid ";
-    $sql .= "FROM `{$dbMaintenance}` m, products p ";
-    $sql .= "WHERE (m.id='{$incident->maintenanceid}' AND m.product=p.id) ";
+    $sql .= "FROM `{$dbMaintenance}` AS m, `{$dbProducts}` AS p ";
+    $sql .= "WHERE (m.id='{$incident->maintenanceid}' AND m.product = p.id) ";
 
     $result = mysql_query($sql);
     if (mysql_error()) trigger_error("MySQL Query Error ".mysql_error(), E_USER_ERROR);

@@ -26,7 +26,7 @@ switch ($action)
 {
     case 'add':
         // First check there isn't already a relationship to that incident
-        $sql = "SELECT id FROM relatedincidents WHERE (incidentid='$relatedid' AND relatedid='$id') OR (relatedid='$relatedid' AND incidentid='$id')";
+        $sql = "SELECT id FROM `{$dbRelatedIncidents}` WHERE (incidentid='$relatedid' AND relatedid='$id') OR (relatedid='$relatedid' AND incidentid='$id')";
         $result = mysql_query($sql);
         if (mysql_num_rows($result) < 1 AND $relatedid!=$id)
         {
@@ -59,12 +59,12 @@ switch ($action)
 
     case 'delete':
         // Retreive details of the relationship
-        $sql = "SELECT * FROM relatedincidents WHERE id='$rid'";
+        $sql = "SELECT * FROM `{$dbRelatedIncidents}` WHERE id='$rid'";
         $result = mysql_query($sql);
         if (mysql_error()) trigger_error("MySQL Query Error ".mysql_error(), E_USER_ERROR);
         $relation = mysql_fetch_object($result);
 
-        $sql = "DELETE FROM relatedincidents WHERE id='$rid'";
+        $sql = "DELETE FROM `{$dbRelatedIncidents}` WHERE id='$rid'";
         mysql_query($sql);
         if (mysql_error()) trigger_error("MySQL Query Error ".mysql_error(), E_USER_ERROR);
 
@@ -89,7 +89,7 @@ switch ($action)
 
 
 // Incident relationships
-$rsql = "SELECT * FROM relatedincidents WHERE incidentid='$id' OR relatedid='$id'";
+$rsql = "SELECT * FROM `{$dbRelatedIncidents}` WHERE incidentid='$id' OR relatedid='$id'";
 $rresult = mysql_query($rsql);
 if (mysql_error()) trigger_error(mysql_error(),E_USER_WARNING);
 if (mysql_num_rows($rresult) >= 1)

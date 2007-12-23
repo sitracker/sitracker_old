@@ -70,17 +70,18 @@ else
         // build SQL
         if ($fields=='' OR $fields == "all")
         {
-            $sql  = "SELECT m.id AS maintid, sites.name AS site, products.name AS product, resellers.name AS reseller, ";
-            $sql .= "licence_quantity, licencetypes.name AS licence_type, expirydate, admincontact, contacts.forenames AS admincontactforenames, ";
-            $sql .= "contacts.surname AS admincontactsurnname, m.notes, m.term ";
-            $sql .= "FROM `{$dbMaintenance}` AS m, sites, contacts, products, licencetypes, resellers WHERE ";
-            $sql .= "(m.site=sites.id AND product=products.id AND reseller=resellers.id AND licence_type=licencetypes.id AND admincontact=contacts.id) AND ";
+            $sql  = "SELECT m.id AS maintid, s.name AS site, p.name AS product, r.name AS reseller, ";
+            $sql .= "licence_quantity, lt.name AS licence_type, expirydate, admincontact, c.forenames AS admincontactforenames, ";
+            $sql .= "c.surname AS admincontactsurnname, m.notes, m.term ";
+            $sql .= "FROM `{$dbMaintenance}` AS m, `{$dbSites}` AS s, `{$dbContacts}` AS c, `{$dbProducts}` AS p, `{$dbLicenceTypes}` AS lt, `{$dbResellers}` AS r ";
+            $sql . ="WHERE ";
+            $sql .= "(m.site = sites.id AND product = p.id AND reseller = r.id AND licence_type = lt.id AND admincontact = c.id) AND ";
             $sql .= "(m.id LIKE ('%$search_string%') OR ";
-            $sql .= "sites.name LIKE ('%$search_string%') OR ";
-            $sql .= "products.name LIKE ('%$search_string%') OR ";
-            $sql .= "resellers.name LIKE ('%$search_string%') OR ";
+            $sql .= "s.name LIKE ('%$search_string%') OR ";
+            $sql .= "p.name LIKE ('%$search_string%') OR ";
+            $sql .= "r.name LIKE ('%$search_string%') OR ";
             $sql .= "licencetypes.name LIKE ('%$search_string%') OR ";
-            $sql .= "contacts.surname LIKE ('%$search_string%'))";
+            $sql .= "c.surname LIKE ('%$search_string%'))";
             if ($hideterminated=='yes') $sql .= " AND NOT m.term = 'yes'";
             if ($hideexpired=='yes') $sql .= " AND m.expirydate > {$now}";
         }

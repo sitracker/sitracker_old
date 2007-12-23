@@ -150,7 +150,7 @@ if ($spam_string=$_REQUEST['delete_all_spam'])
     {
         $ids=explode('_',$spam);
 
-        $sql = "DELETE FROM tempincoming WHERE id='".$ids[1]."' AND SUBJECT LIKE '%SPAMASSASSIN%' AND updateid='".$ids[0]."' LIMIT 1";
+        $sql = "DELETE FROM `{$dbTempIncoming}` WHERE id='".$ids[1]."' AND SUBJECT LIKE '%SPAMASSASSIN%' AND updateid='".$ids[0]."' LIMIT 1";
         mysql_query($sql);
         if (mysql_error()) trigger_error("MySQL Query Error ".mysql_error(), E_USER_ERROR);
         if (mysql_affected_rows()==1)
@@ -173,7 +173,7 @@ if (!empty($selected))
         mysql_query($sql);
         if (mysql_error()) trigger_error("MySQL Query Error ".mysql_error(), E_USER_ERROR);
 
-        $sql = "DELETE FROM tempincoming WHERE updateid='$updateid'";
+        $sql = "DELETE FROM `{$dbTempIncoming}` WHERE updateid='$updateid'";
         mysql_query($sql);
         if (mysql_error()) trigger_error("MySQL Query Error ".mysql_error(), E_USER_ERROR);
         $path=$incident_attachment_fspath.'updates/'.$updateid;
@@ -221,10 +221,11 @@ if (!empty($selected))
 <?php
 
 // extract updates
-$sql  = "SELECT u.id AS id, u.bodytext AS bodytext, tempincoming.emailfrom AS emailfrom, tempincoming.subject AS subject, ";
-$sql .= "u.timestamp AS timestamp, tempincoming.incidentid AS incidentid, tempincoming.id AS tempid, tempincoming.locked AS locked, ";
-$sql .= "tempincoming.reason AS reason, tempincoming.contactid AS contactid, tempincoming.`from` AS fromaddr ";
-$sql .= "FROM `{$dbUpdates}` AS u, tempincoming WHERE u.incidentid=0 AND tempincoming.updateid=u.id ";
+$sql  = "SELECT u.id AS id, u.bodytext AS bodytext, ti.emailfrom AS emailfrom, ti.subject AS subject, ";
+$sql .= "u.timestamp AS timestamp, ti.incidentid AS incidentid, ti.id AS tempid, ti.locked AS locked, ";
+$sql .= "ti.reason AS reason, ti.contactid AS contactid, ti.`from` AS fromaddr ";
+$sql .= "FROM `{$dbUpdates}` AS u, `{$dbTempIncoming}` AS ti ";
+$sql .= "WHERE u.incidentid = 0 AND ti.updateid = u.id ";
 $sql .= "ORDER BY timestamp ASC, id ASC";
 $result = mysql_query($sql);
 if (mysql_error()) trigger_error("MySQL Query Error ".mysql_error(), E_USER_ERROR);
@@ -345,10 +346,10 @@ if ($spamcount > 0)
 }
 
 
-$sql = "SELECT i.id, i.title, contacts.forenames, contacts.surname, sites.name ";
-$sql .= "FROM `{$dbIncidents}` AS i,contacts,sites ";
-$sql .= "WHERE i.status = 8 AND i.contact = contacts.id AND contacts.siteid = sites.id ";
-$sql .= "ORDER BY sites.id, i.contact"; //awaiting customer action
+$sql = "SELECT i.id, i.title, c.forenames, c.surname, s.name ";
+$sql .= "FROM `{$dbIncidents}` AS i,`{$dbContacts}` AS c, `{$dbSites}` AS s ";
+$sql .= "WHERE i.status = 8 AND i.contact = c.id AND c.siteid = s.id ";
+$sql .= "ORDER BY s.id, i.contact"; //awaiting customer action
 $resultchase = mysql_query($sql);
 if (mysql_num_rows($resultchase) >= 1)
 {
@@ -396,7 +397,8 @@ if (!empty($html_chase))
     echo "</table>";
 }
 
-$sql = "SELECT * FROM tempassigns,incidents WHERE tempassigns.incidentid=incidents.id AND assigned='no' ";
+$sql = "SELECT * FROM `{$dbTempAssigns}` AS t, `{$dbIncidents}` AS i ";
+$sql .= "WHERE t.incidentid = i.id AND assigned='no' ";
 $result = mysql_query($sql);
 
 if (mysql_num_rows($result) >= 1)

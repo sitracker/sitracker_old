@@ -21,14 +21,14 @@ $incomingid = cleanvar($_REQUEST['id']);
 if ($_REQUEST['action'] == "updatereason")
 {
     $newreason = cleanvar($_REQUEST['newreason']);
-    $update = "UPDATE tempincoming SET reason='{$newreason}' WHERE id={$incomingid}";
+    $update = "UPDATE `{$dbTempIncoming}` SET reason='{$newreason}' WHERE id={$incomingid}";
     $result = mysql_query($update);
     if (mysql_error()) trigger_error(mysql_error(),E_USER_ERROR);
     unset($result);
 }
 
 $action = cleanvar($_REQUEST['action']);
-$sql = "SELECT * FROM tempincoming WHERE id='{$incomingid}' LIMIT 1";
+$sql = "SELECT * FROM `{$dbTempIncoming}` WHERE id='{$incomingid}' LIMIT 1";
 $result = mysql_query($sql);
 if (mysql_error()) trigger_error(mysql_error(),E_USER_ERROR);
 if (mysql_num_rows($result) > 0)

@@ -71,9 +71,9 @@ if (mysql_num_rows($result) > 0)
         switch ($obj->type)
         {
             case '0': //Site
-                $sql = "SELECT i.id, i.title, i.status, i.servicelevel, i.maintenanceid, i.priority, contacts.forenames, contacts.surname, contacts.siteid ";
-                $sql .= "FROM `{$dbIncidents}` AS i, contacts ";
-                $sql .= "WHERE i.contact = contacts.id AND contacts.siteid = {$obj->id} ";
+                $sql = "SELECT i.id, i.title, i.status, i.servicelevel, i.maintenanceid, i.priority, c.forenames, c.surname, c.siteid ";
+                $sql .= "FROM `{$dbIncidents}` AS i, `{$dbContacts}` AS c ";
+                $sql .= "WHERE i.contact = c.id AND c.siteid = {$obj->id} ";
                 $sql .= "AND i.status != 2 AND i.status != 7";
 
                 $lsql = "SELECT name FROM `{$dbSites}` WHERE id = {$obj->id}";
