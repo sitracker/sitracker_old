@@ -98,7 +98,7 @@ if ($offset > 0)
 $result = mysql_query($sql);
 if (mysql_error()) trigger_error("MySQL Query Error $sql".mysql_error(), E_USER_ERROR);
 
-$keeptags=array('b','i','u','hr','&lt;', '&gt;');
+$keeptags = array('b','i','u','hr','&lt;', '&gt;');
 foreach ($keeptags AS $keeptag)
 {
     if (substr($keeptag,0,1)=='&')
@@ -122,7 +122,7 @@ foreach ($keeptags AS $keeptag)
 }
 
 //echo log_nav_bar();
-$count=0;
+$count = 0;
 while ($update = mysql_fetch_object($result))
 {
     if (empty($firstid)) $firstid = $update->id;

@@ -19,7 +19,7 @@ require ('functions.inc.php');
 require ('auth.inc.php');
 include ('htmlheader.inc.php');
 
-$sites=array();
+$sites = array();
 
 $monthago = time()-(60 * 60 * 24 * 30.5);
 
@@ -59,7 +59,7 @@ else
     echo "<p class='warning'>{$strNoRecords}</p>";
 }
 
-$sites=array_unique($sites);
+$sites = array_unique($sites);
 
 /*
 foreach ($sites AS $site => $val)
@@ -75,7 +75,7 @@ foreach ($tot AS $total => $val)
 }
 */
 
-$totals=array();
+$totals = array();
 
 foreach ($sites AS $site => $val)
 {

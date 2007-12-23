@@ -13,7 +13,7 @@
 // This Page Is Valid XHTML 1.0 Transitional! 31Oct05
 
 @include ('set_include_path.inc.php');
-$permission=42;
+$permission = 42;
 require ('db_connect.inc.php');
 require ('functions.inc.php');
 
@@ -229,9 +229,9 @@ $sql .= "WHERE u.incidentid = 0 AND ti.updateid = u.id ";
 $sql .= "ORDER BY timestamp ASC, id ASC";
 $result = mysql_query($sql);
 if (mysql_error()) trigger_error("MySQL Query Error ".mysql_error(), E_USER_ERROR);
-$countresults=mysql_num_rows($result);
+$countresults = mysql_num_rows($result);
 
-$spamcount=0;
+$spamcount = 0;
 if ($countresults > 0)
 {
     if ($countresults) mysql_data_seek($result, 0);

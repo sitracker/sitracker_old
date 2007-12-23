@@ -111,10 +111,10 @@ $CONFIG['upload_max_filesize'] = return_bytes($CONFIG['upload_max_filesize']);
 
 
 // Set a string to be the full version number and revision of the application
-$application_version_string=trim("v{$application_version} {$application_revision}");
+$application_version_string = trim("v{$application_version} {$application_revision}");
 
 // Email template settings
-$template_openincident_email=12;
+$template_openincident_email = 12;
 
 //Prevent Magic Quotes from affecting scripts, regardless of server settings
 //Make sure when reading file data,

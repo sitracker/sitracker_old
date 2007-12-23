@@ -33,7 +33,7 @@ function delete_signature($sig_id)
     html_redirect("edit_global_signature.php");
 }
 
-$permission=43; // Edit global signature
+$permission = 43; // Edit global signature
 
 
 require ('db_connect.inc.php');

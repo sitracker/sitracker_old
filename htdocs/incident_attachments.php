@@ -14,7 +14,7 @@
 // This file will be superceded by htdocs/incidents/files.inc.php
 
 @include ('set_include_path.inc.php');
-$permission=62; // View incident attachments
+$permission = 62; // View incident attachments
 
 require ('db_connect.inc.php');
 require ('functions.inc.php');

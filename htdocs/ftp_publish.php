@@ -11,7 +11,7 @@
 // Author: Ivan Lucas <ivanlucas[at]users.sourceforge.net>
 
 @include ('set_include_path.inc.php');
-$permission=44; // Publish Files to FTP site
+$permission = 44; // Publish Files to FTP site
 
 require ('db_connect.inc.php');
 require ('functions.inc.php');
@@ -21,17 +21,17 @@ require ('auth.inc.php');
 
 // seed with microseconds since last "whole" second
 mt_srand((double)microtime()*1000000);
-$maxVal=1000000;
-$minVal=1;
+$maxVal = 1000000;
+$minVal = 1;
 $randvala = (mt_rand() % ($maxVal-$minVal)) + $minVal;
 // seed with current time
 mt_srand($now);
 $maxVal=1000000;
 $minVal=1;
 $randvalb = (mt_rand() % ($maxVal-$minVal)) + $minVal;
-$randomdir=dechex(crc32($randvala.$randvalb));
+$randomdir = dechex(crc32($randvala.$randvalb));
 
-$filesize=filesize($source_file);
+$filesize = filesize($source_file);
 // calculate filesize
 $j = 0;
 $ext =

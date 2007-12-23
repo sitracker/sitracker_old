@@ -10,7 +10,7 @@
 
 // by Ivan Lucas, June 2004
 @include ('set_include_path.inc.php');
-$permission=49; // Edit Feedback Forms
+$permission = 49; // Edit Feedback Forms
 
 require ('db_connect.inc.php');
 require ('functions.inc.php');

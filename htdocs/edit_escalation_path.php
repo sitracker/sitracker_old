@@ -13,7 +13,7 @@
 
 // FIXME i18n whole page
 @include ('set_include_path.inc.php');
-$permission=64; // Manage escalation paths
+$permission = 64; // Manage escalation paths
 require ('db_connect.inc.php');
 require ('functions.inc.php');
 

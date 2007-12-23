@@ -11,8 +11,8 @@
 // Author: Ivan Lucas <ivanlucas[at]users.sourceforge.net>
 
 @include ('set_include_path.inc.php');
-$permission=28; // View Products and Software
-$title='Products List';
+$permission = 28; // View Products and Software
+$title = 'Products List';
 
 require ('db_connect.inc.php');
 require ('functions.inc.php');

@@ -11,7 +11,7 @@
 // Author: Ivan Lucas <ivanlucas[at]users.sourceforge.net>
 
 @include ('set_include_path.inc.php');
-$permission=44; // Publish Files to FTP site
+$permission = 44; // Publish Files to FTP site
 
 require ('db_connect.inc.php');
 require ('functions.inc.php');
@@ -25,7 +25,7 @@ $id = cleanvar($_REQUEST['id']);
 $sql = "SELECT * FROM `{$dbFiles}` WHERE id='$id'";
 $result = mysql_query($sql);
 if (mysql_error()) trigger_error("MySQL Query Error ".mysql_error(), E_USER_ERROR);
-$frow=mysql_fetch_array($result);
+$frow = mysql_fetch_array($result);
 
 // set up basic connection
 $conn_id = ftp_connect($CONFIG['ftp_hostname']);

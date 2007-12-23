@@ -13,18 +13,18 @@
 // This Page Is Valid XHTML 1.0 Transitional!   1Nov05
 
 @include ('set_include_path.inc.php');
-$permission=44; // FTP Publishing
+$permission = 44; // FTP Publishing
 require ('db_connect.inc.php');
 require ('functions.inc.php');
 
 // This page requires authentication
 require ('auth.inc.php');
 
-$title= $strFTPFilesDB;
+$title = $strFTPFilesDB;
 include ('htmlheader.inc.php');
 
 // External Variables
-$orderby=cleanvar($_REQUEST['orderby']);
+$orderby = cleanvar($_REQUEST['orderby']);
 
 ?>
 <script type="text/javascript">
@@ -82,7 +82,7 @@ switch ($orderby)
     break;
 }
 
-$result=mysql_query($sql);
+$result = mysql_query($sql);
 if (mysql_error()) trigger_error("MySQL Query Error ".mysql_error(), E_USER_ERROR);
 
 while (list($id, $filename, $size, $userid, $shortdescription, $path, $downloads, $filedate, $fileversion,

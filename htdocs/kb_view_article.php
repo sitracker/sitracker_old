@@ -10,7 +10,7 @@
 
 // Authors: Ivan Lucas <ivanlucas[at]users.sourceforge.net>, Tom Gerrard
 @include ('set_include_path.inc.php');
-$permission=54; // View KB
+$permission = 54; // View KB
 
 require ('db_connect.inc.php');
 require ('functions.inc.php');

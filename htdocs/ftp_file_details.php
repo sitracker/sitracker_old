@@ -13,9 +13,9 @@
 // This Page Is Valid XHTML 1.0 Transitional!   4Nov05
 
 @include ('set_include_path.inc.php');
-$permission=44; // Publish Files to FTP site
+$permission = 44; // Publish Files to FTP site
 
-$title='FTP File Details';
+$title = 'FTP File Details';
 require ('db_connect.inc.php');
 require ('functions.inc.php');
 
@@ -31,7 +31,7 @@ $id = cleanvar($_REQUEST['id']);
 $sql = "SELECT * FROM `{$dbFiles}` WHERE id='$id'";
 $result = mysql_query($sql);
 if (mysql_error()) trigger_error("MySQL Query Error ".mysql_error(), E_USER_ERROR);
-$frow=mysql_fetch_array($result);
+$frow = mysql_fetch_array($result);
 
 // calculate filesize
 $j = 0;

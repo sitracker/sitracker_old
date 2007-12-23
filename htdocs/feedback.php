@@ -19,12 +19,12 @@ require ('functions.inc.php');
 // External variables
 $hashcode=$_REQUEST['ax'];
 $mode=$_REQUEST['mode'];
-$decodehash=str_rot13(gzuncompress(base64_decode(urldecode($hashcode))));
+$decodehash = str_rot13(gzuncompress(base64_decode(urldecode($hashcode))));
 
-$hashvars=explode('&&',$decodehash);
-$formid=mysql_real_escape_string($hashvars['0']);
-$contactid=mysql_real_escape_string($hashvars['1']);
-$incidentid=urldecode(mysql_real_escape_string($hashvars['2']));
+$hashvars = explode('&&',$decodehash);
+$formid = mysql_real_escape_string($hashvars['0']);
+$contactid = mysql_real_escape_string($hashvars['1']);
+$incidentid = urldecode(mysql_real_escape_string($hashvars['2']));
 unset($errorfields);
 
 /**

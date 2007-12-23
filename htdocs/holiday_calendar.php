@@ -11,7 +11,7 @@
 // Author: Ivan Lucas <ivanlucas[at]users.sourceforge.net>
 //FIXME i18n
 @include ('set_include_path.inc.php');
-$permission=27; // View your calendar
+$permission= 2 7; // View your calendar
 require ('db_connect.inc.php');
 require ('functions.inc.php');
 
@@ -30,7 +30,7 @@ $selectedyear = cleanvar($_REQUEST['selectedyear']);
 $selectedtype = cleanvar($_REQUEST['selectedtype']);
 $approved = cleanvar($_REQUEST['approved']);
 $length = cleanvar($_REQUEST['length']);
-if (empty($length)) $length='day';
+if (empty($length)) $length = 'day';
 $display = cleanvar($_REQUEST['display']);
 
 $title = $strHolidayPlanner;

@@ -11,7 +11,7 @@
 // Soon to be replaced
 // See incident/edit.inc.php
 @include ('set_include_path.inc.php');
-$permission=7; // Edit Incidents
+$permission = 7; // Edit Incidents
 
 require ('db_connect.inc.php');
 require ('functions.inc.php');
@@ -22,7 +22,7 @@ require ('auth.inc.php');
 // External variables
 $submit = $_REQUEST['submit'];
 $id = cleanvar($_REQUEST['id']);
-$incidentid=$id;
+$incidentid = $id;
 
 // No submit detected show edit form
 if (empty($submit))

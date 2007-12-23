@@ -16,7 +16,7 @@
 // This Page Is Valid XHTML 1.0 Transitional!   31Oct05
 
 @include ('set_include_path.inc.php');
-$permission=32;  // Edit Supported Products
+$permission = 32;  // Edit Supported Products
 require ('db_connect.inc.php');
 require ('functions.inc.php');
 $title="Remove a Supported Contact";

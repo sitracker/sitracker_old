@@ -13,7 +13,7 @@
 // FIXME i18n whole page
 
 @include ('set_include_path.inc.php');
-$permission=19; // View Contracts
+$permission = 19; // View Contracts
 require ('db_connect.inc.php');
 require ('functions.inc.php');
 

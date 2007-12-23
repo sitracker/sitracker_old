@@ -11,7 +11,7 @@
 // This file will soon be superceded by incident.php - 20Oct05 INL
 
 @include ('set_include_path.inc.php');
-$permission=61; // View Incident Details
+$permission = 61; // View Incident Details
 require ('db_connect.inc.php');
 require ('functions.inc.php');
 
@@ -27,8 +27,8 @@ $id = $incidentid;
 <?php
 if ($_REQUEST['win']=='incomingview')
 {
-    $title='Incoming';
-    $incidentid='';
+    $title = 'Incoming';
+    $incidentid = '';
     include ('incident_html_top.inc.php');
     include ('incident/incoming.inc.php');
 }

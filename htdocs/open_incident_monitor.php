@@ -9,7 +9,7 @@
 //
 
 @include ('set_include_path.inc.php');
-$permission=14; // View Users
+$permission = 14; // View Users
 $title="Open Incident Monitor";
 require ('db_connect.inc.php');
 require ('functions.inc.php');

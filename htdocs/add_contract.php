@@ -12,7 +12,7 @@
 // FIXME make XHTML complient - PH 13/12/07
 
 @include ('set_include_path.inc.php');
-$permission=39; // Add Maintenance Contract
+$permission = 39; // Add Maintenance Contract
 
 require ('db_connect.inc.php');
 require ('functions.inc.php');

@@ -10,7 +10,7 @@
 // Author: Paul Heaney <paulheaney[at]users.sourceforge.net>
 
 @include ('set_include_path.inc.php');
-$permission=66; // Install dashboard components
+$permission = 66; // Install dashboard components
 require ('db_connect.inc.php');
 require ('functions.inc.php');
 

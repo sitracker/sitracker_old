@@ -11,7 +11,7 @@
 // Author: Ivan Lucas <ivanlucas[at]users.sourceforge.net>
 @include ('set_include_path.inc.php');
 
-$permission=13; // Reassign Incident
+$permission = 13; // Reassign Incident
 require ('db_connect.inc.php');
 require ('functions.inc.php');
 // This page requires authentication

@@ -11,10 +11,10 @@
 // Author: Ivan Lucas <ivanlucas[at]users.sourceforge.net>
 
 @include ('set_include_path.inc.php');
-$permission=27; // View your calendar
+$permission = 27; // View your calendar
 require ('db_connect.inc.php');
 require ('functions.inc.php');
-$title="Holiday Calendar";
+$title = "Holiday Calendar";
 // This page requires authentication
 require ('auth.inc.php');
 
@@ -30,14 +30,14 @@ $length = cleanvar($_REQUEST['length']);
 $return = cleanvar($_REQUEST['return']);
 
 // startdate in unix format
-$startdate=mktime(0,0,0,$month,$day,$year);
-$enddate=mktime(23,59,59,$month,$day,$year);
-if ($length=='') $length='day';
+$startdate = mktime(0,0,0,$month,$day,$year);
+$enddate = mktime(23,59,59,$month,$day,$year);
+if ($length=='') $length = 'day';
 
-if (user_permission($sit[2],50)) $approver=TRUE;
-else $approver=FALSE;
-if (user_permission($sit[2],22)) $adminuser=TRUE;
-else $adminuser=FALSE;
+if (user_permission($sit[2],50)) $approver = TRUE;
+else $approver = FALSE;
+if (user_permission($sit[2],22)) $adminuser = TRUE;
+else $adminuser = FALSE;
 
 // Holiday types (for reference)
 // 1 = Holiday

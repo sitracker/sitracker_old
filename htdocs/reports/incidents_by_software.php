@@ -16,7 +16,7 @@
 //  Counts activate calls within the specified period (i.e. those with a lastupdate time > timespecified)
 
 @include ('set_include_path.inc.php');
-$permission=37; // Run Reports
+$permission = 37; // Run Reports
 
 require ('db_connect.inc.php');
 require ('functions.inc.php');

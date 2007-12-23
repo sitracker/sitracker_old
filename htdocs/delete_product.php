@@ -13,7 +13,7 @@
 // Removes a product
 
 @include ('set_include_path.inc.php');
-$permission=65;  // Delete products
+$permission = 65;  // Delete products
 require ('db_connect.inc.php');
 require ('functions.inc.php');
 

@@ -13,9 +13,9 @@
 // This Page Is Valid XHTML 1.0 Transitional!   4Nov05
 
 @include ('set_include_path.inc.php');
-$permission=44; // Publish Files to FTP site
+$permission = 44; // Publish Files to FTP site
 
-$title='Edit FTP File Details and Publish';
+$title = 'Edit FTP File Details and Publish';
 require ('db_connect.inc.php');
 require ('functions.inc.php');
 
@@ -25,7 +25,7 @@ require ('auth.inc.php');
 // External Vars
 $id = cleanvar($_REQUEST['id']);
 $mode = cleanvar($_REQUEST['mode']);
-if (empty($mode)) $mode='form';
+if (empty($mode)) $mode = 'form';
 
 switch ($mode)
 {

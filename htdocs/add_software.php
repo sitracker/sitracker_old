@@ -11,7 +11,7 @@
 // Author: Ivan Lucas <ivanlucas[at]users.sourceforge.net>
 
 @include ('set_include_path.inc.php');
-$permission=56; // Add Skills
+$permission = 56; // Add Skills
 
 require ('db_connect.inc.php');
 require ('functions.inc.php');

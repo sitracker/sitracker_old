@@ -12,7 +12,7 @@
 //          Kieran Hogg <kieran_hogg[at]users.sourceforge.net>
 
 @include ('set_include_path.inc.php');
-$permission=0; // Allow all auth users
+$permission = 0; // Allow all auth users
 
 require ('db_connect.inc.php');
 require ('functions.inc.php');

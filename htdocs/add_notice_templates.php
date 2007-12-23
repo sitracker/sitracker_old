@@ -9,7 +9,7 @@
 //
 
 @include ('set_include_path.inc.php');
-$permission=0;
+$permission = 0;
 
 require ('db_connect.inc.php');
 require ('functions.inc.php');

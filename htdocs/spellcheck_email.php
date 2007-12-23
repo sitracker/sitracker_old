@@ -61,7 +61,7 @@ else
 {
     $texttospell=$bodytext;
 }
-$spelltext=spellcheck_text($texttospell, "&id=$id&spellid=$spellid&step=3&spellcheck=yes");
+$spelltext = spellcheck_text($texttospell, "&id=$id&spellid=$spellid&step=3&spellcheck=yes");
 // $spelltext=$texttospell;
 echo "<table summary=\"spellchecker\" width=\"80%\" align=\"center\" class=\"shade2\">";
 echo "<tr class='shade1'><td align='center'><em>Spellcheck Complete</em></td></tr>";

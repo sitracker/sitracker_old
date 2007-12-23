@@ -9,11 +9,11 @@
 //
 
 @include ('set_include_path.inc.php');
-$permission=8; // Update Incident
+$permission = 8; // Update Incident
 require ('db_connect.inc.php');
 require ('functions.inc.php');
 
-$disable_priority=TRUE;
+$disable_priority = TRUE;
 
 // 19 Nov 04 - Fixed bug where currentstatus wasn't updated or inserted - ilucas
 

@@ -265,6 +265,6 @@ if ($sit[0] != '')
         exit;
     }
 }
-$headerdisplayed=TRUE; // Set a variable so we can check to see if the header was included
+$headerdisplayed = TRUE; // Set a variable so we can check to see if the header was included
 echo "<div id='mainframe'>";
 ?>

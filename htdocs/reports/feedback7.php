@@ -11,7 +11,7 @@
 // Author: Ivan Lucas <ivanlucas[at]users.sourceforge.net>
 
 @include ('set_include_path.inc.php');
-$permission=37; // Run Reports
+$permission = 37; // Run Reports
 
 require ('db_connect.inc.php');
 require ('functions.inc.php');
@@ -23,14 +23,13 @@ include ('htmlheader.inc.php');
 
 $formid=$CONFIG['feedback_form'];
 $now = time();
-
 echo "<div style='margin: 20px'>";
 echo "<h2><a href='/reports/feedback.php'>Feedback</a> Scores: By Incident</h2>";
 echo "<p>This report shows average customer responses and a percentage figure indicating the overall positivity of sites regarding ";
 echo "incidents logged:</p>";
 
-$rcount=1;
-$survcount=0;
+$rcount = 1;
+$survcount = 0;
 
 $msql = "SELECT *,  \n";
 $msql .= "rep.id AS reportid, i.id AS incidentid \n";

@@ -11,7 +11,7 @@
 // XHTML 1.0 Transitional valid 12/11/07 - KMH
 
 @include ('set_include_path.inc.php');
-$permission=0; // not required
+$permission = 0; // not required
 require ('db_connect.inc.php');
 require ('functions.inc.php');
 session_name($CONFIG['session_name']);
@@ -52,7 +52,7 @@ else
 // External variables
 $page = cleanvar($_REQUEST['page']);
 
-$filter=array('page' => $page);
+$filter = array('page' => $page);
 
 include ('htmlheader.inc.php');
 

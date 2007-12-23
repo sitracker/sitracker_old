@@ -20,7 +20,7 @@
 // Requested by Rob Shepley, 3 Oct 05
 
 @include ('set_include_path.inc.php');
-$permission=37; // Run Reports
+$permission = 37; // Run Reports
 $title='Yearly Engineer/Incident Report';
 require ('db_connect.inc.php');
 require ('functions.inc.php');

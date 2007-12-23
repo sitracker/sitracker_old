@@ -16,7 +16,7 @@
 
 @include ('set_include_path.inc.php');
 
-$permission=37; // Run Reports
+$permission = 37; // Run Reports
 
 require ('db_connect.inc.php');
 require ('functions.inc.php');
@@ -34,9 +34,9 @@ $sql .= "FROM `{$dbContacts}` AS c LEFT JOIN `{$dbSupportContacts}` ON c.id = `{
 $sql .= "WHERE dataprotection_email != 'Yes' ";
 $sql .="ORDER BY email ASC ";
 //$sql.="LIMIT 100";
-$result=mysql_query($sql);
+$result = mysql_query($sql);
 if (mysql_error()) trigger_error("MySQL Query Error ".mysql_error(), E_USER_ERROR);
-$count=mysql_num_rows($result);
+$count = mysql_num_rows($result);
 echo "<strong>Found $count records</strong><br /><br />";
 if ($result)
 {

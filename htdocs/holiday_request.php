@@ -10,10 +10,10 @@
 // Author: Ivan Lucas <ivanlucas[at]users.sourceforge.net>
 
 @include ('set_include_path.inc.php');
-$permission=27; /* View your calendar */
+$permission = 27; /* View your calendar */
 require ('db_connect.inc.php');
 require ('functions.inc.php');
-$title="Holiday Request";
+$title = "Holiday Request";
 
 // This page requires authentication
 require ('auth.inc.php');

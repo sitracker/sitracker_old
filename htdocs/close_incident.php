@@ -9,7 +9,7 @@
 //
 
 @include ('set_include_path.inc.php');
-$permission=18; //  Close Incidents
+$permission = 18; //  Close Incidents
 
 require ('db_connect.inc.php');
 require ('functions.inc.php');
@@ -18,7 +18,7 @@ require ('auth.inc.php');
 
 // External Variables
 $id = cleanvar($_REQUEST['id']);
-$incidentid=$id;
+$incidentid = $id;
 
 // No submit detected show closure form
 if (empty($_REQUEST['process']))

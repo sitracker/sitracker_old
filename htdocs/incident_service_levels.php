@@ -11,7 +11,7 @@
 // Author: Ivan Lucas <ivanlucas[at]users.sourceforge.net>
 
 @include ('set_include_path.inc.php');
-$permission=6; // View Incidents
+$permission = 6; // View Incidents
 
 require ('db_connect.inc.php');
 require ('functions.inc.php');
@@ -34,14 +34,14 @@ $sql .= " OR i.contact=NULL ";
 $result = mysql_query($sql);
 if (mysql_error()) trigger_error(mysql_error(), E_USER_ERROR);
 $incident = mysql_fetch_object($result);
-$site_name=site_name($incident->siteid);
-$product_name=product_name($incident->product);
+$site_name = site_name($incident->siteid);
+$product_name = product_name($incident->product);
 if ($incident->softwareid > 0) $software_name=software_name($incident->softwareid);
-$servicelevel_id=maintenance_servicelevel($incident->maintenanceid);
+$servicelevel_id = maintenance_servicelevel($incident->maintenanceid);
 $servicelevel_tag = $incident->servicelevel;
 if ($servicelevel_tag=='') $servicelevel_tag = servicelevel_id2tag(maintenance_servicelevel($incident->maintenanceid));
-$servicelevel_name=servicelevel_name($servicelevelid);
-$opened_for=format_seconds(time() - $incident->opened);
+$servicelevel_name = servicelevel_name($servicelevelid);
+$opened_for = format_seconds(time() - $incident->opened);
 
 
 include ('incident_html_top.inc.php');

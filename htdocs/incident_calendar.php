@@ -13,7 +13,7 @@
 // FIXME this isn't on the menu, is it still required?
 
 @include ('set_include_path.inc.php');
-$permission=27; // View your calendar
+$permission = 27; // View your calendar
 require ('db_connect.inc.php');
 require ('functions.inc.php');
 $title="Incident Calendar";

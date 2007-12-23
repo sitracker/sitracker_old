@@ -9,7 +9,7 @@
 //
 
 @include ('set_include_path.inc.php');
-$permission=17; // Edit Email Template
+$permission = 17; // Edit Email Template
 
 require ('db_connect.inc.php');
 require ('functions.inc.php');

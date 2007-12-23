@@ -13,7 +13,7 @@
 // This Page Is Valid XHTML 1.0 Transitional! 27Oct05
 
 @include ('set_include_path.inc.php');
-$permission=11; // View Sites
+$permission = 11; // View Sites
 require ('db_connect.inc.php');
 require ('functions.inc.php');
 
@@ -21,7 +21,7 @@ require ('functions.inc.php');
 require ('auth.inc.php');
 
 // External variables
-$id=cleanvar($_REQUEST['id']);
+$id = cleanvar($_REQUEST['id']);
 
 include ('htmlheader.inc.php');
 

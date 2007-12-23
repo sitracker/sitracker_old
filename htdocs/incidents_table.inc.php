@@ -41,9 +41,9 @@ if (empty($incidents_minimal)) echo "<col width='8%'></col>";
 
 echo "<tr>";
 
-$filter=array('queue' => $queue,
-              'user' => $user,
-              'type' => $type);
+$filter = array('queue' => $queue,
+                'user' => $user,
+                'type' => $type);
 echo colheader('id',$strID,$sort, $order, $filter);
 echo colheader('title',$strTitle,$sort, $order, $filter);
 echo colheader('contact',$strContact,$sort, $order, $filter);

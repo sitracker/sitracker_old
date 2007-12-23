@@ -14,7 +14,7 @@
 // 24Apr02 INL Fixed a divide by zero bug
 
 @include ('set_include_path.inc.php');
-$permission=6; // view incidents
+$permission = 6; // view incidents
 
 require ('db_connect.inc.php');
 require ('functions.inc.php');
@@ -73,12 +73,12 @@ echo "<th>Closed</th>";
 echo "<th>Duration</th>";
 echo "<th>SLA</th>";
 echo "</tr>";
-$shade='shade1';
-$totalduration=0;
-$countclosed=0;
-$countincidents=0;
-$countextincidents=0;
-$countslaexceeded=0;
+$shade = 'shade1';
+$totalduration = 0;
+$countclosed = 0;
+$countincidents = 0;
+$countextincidents = 0;
+$countslaexceeded = 0;
 $productlist = array();
 $softwarelist = array();
 if ($mode=='site') $contactlist = array();
@@ -86,7 +86,7 @@ while ($row=mysql_fetch_object($result))
 {
     $targetmet = TRUE;
     if ($row->status==2) $shade='expired';
-    else $shade='shade1';
+    else $shade = 'shade1';
     echo "<tr class='$shade'>";
     echo "<td>".$row->incidentid."</td>";
     // title

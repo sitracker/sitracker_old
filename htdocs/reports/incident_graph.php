@@ -11,7 +11,7 @@
 // Author: Ivan Lucas <ivanlucas[at]users.sourceforge.net>
 
 @include ('set_include_path.inc.php');
-$permission=37; // Run Reports
+$permission = 37; // Run Reports
 require ('db_connect.inc.php');
 require ('functions.inc.php');
 
@@ -22,25 +22,35 @@ require ('auth.inc.php');
 $startyear = cleanvar($_REQUEST['startyear']);
 
 
-$title="Incident Graph";
+$title = "Incident Graph";
 
-$openedcolour='#FF962A';
-$closedcolour='#72B8B8';
-$currentcolour='#1CA772';
+$openedcolour = '#FF962A';
+$closedcolour = '#72B8B8';
+$currentcolour = '#1CA772';
 
-$currentyear=date('Y');
+$currentyear = date('Y');
 include ('htmlheader.inc.php');
-$currentyear=date('Y');
-$currentmonth=date('n');
-$daysinyear=date('z',mktime(0,0,0,12,31,$year));
+$currentyear = date('Y');
+$currentmonth = date('n');
+$daysinyear = date('z',mktime(0,0,0,12,31,$year));
 flush();
 echo "<table summary=\"Graph\" align=\"center\" style='border: 1px solid #000;' width='250'>";
-if (empty($startyear)) { $startyear=$currentyear; $lastyear=$currentyear+1; }
-if (empty($startmonth)) { $startmonth=1; $lastyear=$startyear+1;}
-else {$lastyear=$startyear+2;}
-
-if ($startyear==$currentyear) $lastmonth=$currentmonth;
-else $lastmonth=12;
+if (empty($startyear))
+{
+    $startyear = $currentyear;
+    $lastyear = $currentyear+1;
+}
+if (empty($startmonth))
+{
+    $startmonth = 1;
+    $lastyear = $startyear + 1;
+}
+else
+{
+    $lastyear = $startyear + 2;
+}
+if ($startyear==$currentyear) $lastmonth = $currentmonth;
+else $lastmonth = 12;
 
 echo "<h2>Incidents <span style='color: $openedcolour;'>Opened</span> and <span style='color: $closedcolour;'>Closed</span> each month</h2>";
 echo "<p align='center'>This report shows how many incidents where opened each day.  Hover your mouse over each bar to see the daily figures.<br />";

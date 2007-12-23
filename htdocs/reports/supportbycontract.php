@@ -13,9 +13,9 @@
 // Comments: List supported contacts by contract
 
 @include ('set_include_path.inc.php');
-$permission=19; /* View Maintenance Contracts */
-$title='Supported contacts by Contract';
-$now=time();
+$permission = 19; /* View Maintenance Contracts */
+$title = 'Supported contacts by Contract';
+
 require ('db_connect.inc.php');
 require ('functions.inc.php');
 

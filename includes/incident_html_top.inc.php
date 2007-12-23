@@ -268,15 +268,15 @@ else $site_notes='';
 unset($site);
 if (!empty($incident->contactnotes)) $contact_notes="<img src='{$CONFIG['application_webpath']}images/icons/{$iconset}/16x16/contact.png' width='16' height='16' alt='' /> <strong>Contact Notes:</strong><br />".nl2br($incident->contactnotes);
 else $contact_notes='';
-$product_name=product_name($incident->product);
-if ($incident->softwareid > 0) $software_name=software_name($incident->softwareid);
-$servicelevel_id=maintenance_servicelevel($incident->maintenanceid);
+$product_name = product_name($incident->product);
+if ($incident->softwareid > 0) $software_name = software_name($incident->softwareid);
+$servicelevel_id = maintenance_servicelevel($incident->maintenanceid);
 $servicelevel_tag = $incident->servicelevel;
 if ($servicelevel_tag=='') $servicelevel_tag = servicelevel_id2tag(maintenance_servicelevel($incident->maintenanceid));
-$servicelevel_name=servicelevel_name($servicelevelid);
+$servicelevel_name = servicelevel_name($servicelevelid);
 if ($incident->closed == 0) $closed = time();
 else $closed = $incident->closed;
-$opened_for=format_seconds($closed - $incident->opened);
+$opened_for = format_seconds($closed - $incident->opened);
 $priority = $incident->priority;
 
 // Lookup the service level times

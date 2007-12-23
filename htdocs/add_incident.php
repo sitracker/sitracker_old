@@ -13,10 +13,10 @@
 // 7Oct02 INL  Added support for maintenanceid to be put into incidents table
 
 @include ('set_include_path.inc.php');
-$permission=5;
+$permission = 5;
 require ('db_connect.inc.php');
 require ('functions.inc.php');
-$title=$strAddIncident;
+$title = $strAddIncident;
 
 // This page requires authentication
 require ('auth.inc.php');
@@ -34,7 +34,7 @@ $type = cleanvar($_REQUEST['type']);
 $maintid = cleanvar($_REQUEST['maintid']);
 $productid = cleanvar($_REQUEST['productid']);
 $producttext = cleanvar($_REQUEST['producttext']);
-$win=cleanvar($_REQUEST['win']);
+$win = cleanvar($_REQUEST['win']);
 
 if (!empty($incomingid) AND empty($updateid)) $updateid = db_read_column('updateid', 'tempincoming', $incomingid);
 

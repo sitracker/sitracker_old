@@ -9,7 +9,7 @@
 //
 
 @include ('set_include_path.inc.php');
-$permission=21; // Edit Contracts
+$permission = 21; // Edit Contracts
 
 require ('db_connect.inc.php');
 require ('functions.inc.php');

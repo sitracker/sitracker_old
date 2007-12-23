@@ -9,7 +9,7 @@
 //
 
 @include ('set_include_path.inc.php');
-$permission=37; // Run Reports
+$permission = 37; // Run Reports
 
 require ('db_connect.inc.php');
 require ('functions.inc.php');
@@ -19,10 +19,10 @@ require ('auth.inc.php');
 
 $title = $strSiteIncidents;
 
-$startdate=cleanvar($_REQUEST['start']);
-$enddate=cleanvar($_REQUEST['end']);
-$mode=$_REQUEST['mode'];
-$zerologged=$_REQUEST['zerologged'];
+$startdate = cleanvar($_REQUEST['start']);
+$enddate = cleanvar($_REQUEST['end']);
+$mode = $_REQUEST['mode'];
+$zerologged = $_REQUEST['zerologged'];
 
 if (empty($startdate)) $startdate = date('Y-m-d');
 if (empty($enddate)) $enddate = date('Y-m-d');

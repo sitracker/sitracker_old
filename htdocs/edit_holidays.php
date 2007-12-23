@@ -9,7 +9,7 @@
 //
 
 @include ('set_include_path.inc.php');
-$permission=22; // Administrate
+$permission = 22; // Administrate
 require ('db_connect.inc.php');
 require ('functions.inc.php');
 // This page requires authentication

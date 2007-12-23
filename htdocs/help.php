@@ -9,10 +9,10 @@
 //
 
 @include ('set_include_path.inc.php');
-$permission=26; // Help
+$permission = 26; // Help
 require ('db_connect.inc.php');
 require ('functions.inc.php');
-$title="Help";
+$title = "Help";
 
 // This page requires authentication
 require ('auth.inc.php');

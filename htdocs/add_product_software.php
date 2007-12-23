@@ -13,7 +13,7 @@
 // This Page Is Valid XHTML 1.0 Transitional!  11Oct06
 
 @include ('set_include_path.inc.php');
-$permission=24;  // Add Product
+$permission = 24;  // Add Product
 require ('db_connect.inc.php');
 require ('functions.inc.php');
 

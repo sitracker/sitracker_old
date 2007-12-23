@@ -16,7 +16,7 @@
 set_time_limit(60);
 
 $title='Average Incident Duration';
-$permission=37; // Run Reports
+$permission = 37; // Run Reports
 
 require ('db_connect.inc.php');
 require ('functions.inc.php');

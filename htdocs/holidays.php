@@ -10,7 +10,7 @@
 
 // This Page Is Valid XHTML 1.0 Transitional!  13Sep06
 @include ('set_include_path.inc.php');
-$permission=4; // Edit your profile
+$permission = 4; // Edit your profile
 
 require ('db_connect.inc.php');
 require ('functions.inc.php');
@@ -73,7 +73,7 @@ echo "<tr><th colspan='4' class='subhead'>{$strHolidayList}</th></tr>\n";
 $sql = "SELECT * FROM `{$dbHolidays}` WHERE userid='{$user}' AND approved=0 ORDER BY startdate ASC";
 $result = mysql_query($sql);
 if (mysql_error()) trigger_error("MySQL Query Error ".mysql_error(), E_USER_ERROR);
-$numwaiting=mysql_num_rows($result);
+$numwaiting = mysql_num_rows($result);
 if ($numwaiting > 0)
 {
     if ($user==$sit[2])

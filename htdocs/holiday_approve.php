@@ -11,10 +11,10 @@
 // Author: Ivan Lucas <ivanlucas[at]users.sourceforge.net>
 
 @include ('set_include_path.inc.php');
-$permission=50; // Approve Holiday
+$permission = 50; // Approve Holiday
 require ('db_connect.inc.php');
 require ('functions.inc.php');
-$title="Holiday Approval";
+$title = "Holiday Approval";
 
 // This page requires authentication
 require ('auth.inc.php');

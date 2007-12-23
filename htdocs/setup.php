@@ -32,7 +32,7 @@ if ($_REQUEST['action']=='reconfigure')
 }
 
 // These are the required variables we want to configure during installation
-$SETUP=array('db_hostname','db_database','db_username','db_password','application_fspath','application_webpath');
+$SETUP = array('db_hostname','db_database','db_username','db_password','application_fspath','application_webpath');
 
 // Descriptions of all the config variables
 $CFGVAR['db_hostname']['title']='MySQL Database Hostname';

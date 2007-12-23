@@ -11,7 +11,7 @@
 // by Ivan Lucas, June 2004
 
 @include ('set_include_path.inc.php');
-$permission=48; // Add Feedback Forms
+$permission = 48; // Add Feedback Forms
 
 require ('db_connect.inc.php');
 require ('functions.inc.php');

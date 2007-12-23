@@ -9,7 +9,7 @@
 //
 
 @include ('set_include_path.inc.php');
-$permission=20; // Add Users
+$permission = 20; // Add Users
 
 require ('db_connect.inc.php');
 require ('functions.inc.php');

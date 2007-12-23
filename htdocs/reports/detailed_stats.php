@@ -10,7 +10,7 @@
 // Author: Paul Heaney <paulheaney[at]users.sourceforge.net>
 
 @include ('set_include_path.inc.php');
-$permission=67; // Run Reports
+$permission = 67; // Run Reports
 $title='Incidents open/closed by period';
 require ('db_connect.inc.php');
 require ('functions.inc.php');
@@ -20,8 +20,8 @@ require ('functions.inc.php');
 require ('auth.inc.php');
 
 include ('htmlheader.inc.php');
-$startdate=strtotime($_REQUEST['startdate']);
-$enddate=strtotime($_REQUEST['enddate']);
+$startdate = strtotime($_REQUEST['startdate']);
+$enddate = strtotime($_REQUEST['enddate']);
 
 if (empty($startdate))
 {

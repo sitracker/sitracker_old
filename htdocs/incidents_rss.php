@@ -17,7 +17,7 @@ require ('functions.inc.php');
 // This script requires no authentication
 // The information it reveals should not be sensitive
 
-$userid=cleanvar($_REQUEST['user']);
+$userid = cleanvar($_REQUEST['user']);
 
 if (!is_numeric($userid)) trigger_error('Invalid userid', E_USER_ERROR);
 

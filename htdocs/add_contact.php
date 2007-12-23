@@ -11,7 +11,7 @@
 // This Page Is Valid XHTML 1.0 Transitional!  31Oct05
 
 @include ('set_include_path.inc.php');
-$permission=1; // Add new contact
+$permission = 1; // Add new contact
 
 require ('db_connect.inc.php');
 require ('functions.inc.php');

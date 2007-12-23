@@ -9,7 +9,7 @@
 //
 
 @include ('set_include_path.inc.php');
-$permission=42; // Delete Incident Updates
+$permission = 42; // Delete Incident Updates
 require ('db_connect.inc.php');
 require ('functions.inc.php');
 

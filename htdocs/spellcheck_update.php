@@ -12,7 +12,7 @@
 
 @include ('set_include_path.inc.php');
 $title='Spell Check';
-$permission=8;  // Update Incident
+$permission = 8;  // Update Incident
 require ('db_connect.inc.php');
 require ('functions.inc.php');
 
@@ -69,7 +69,7 @@ else
 {
     $texttospell=$bodytext;
 }
-$spelltext=spellcheck_text($texttospell, "&spellid=$spellid");
+$spelltext = spellcheck_text($texttospell, "&spellid=$spellid");
 // $spelltext=$texttospell;
 echo "<table summary=\"spellchecker\" width=\"80%\" align=\"center\" class=\"shade2\"><tr><td>";
 echo "<p>";

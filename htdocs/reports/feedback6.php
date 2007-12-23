@@ -11,7 +11,7 @@
 // Author: Ivan Lucas <ivanlucas[at]users.sourceforge.net>
 
 @include ('set_include_path.inc.php');
-$permission=37; // Run Reports
+$permission = 37; // Run Reports
 
 require ('db_connect.inc.php');
 require ('functions.inc.php');
@@ -28,7 +28,7 @@ echo "<h2><a href='/reports/feedback.php'>Feedback</a> Scores: By Skill</h2>";
 echo "<p>This report shows average customer responses and a percentage figure indicating the overall positivity of sites regarding ";
 echo "incidents logged:</p>";
 
-$rcount=1;
+$rcount = 1;
 
 $msql = "SELECT *,  \n";
 $msql .= "fr.id AS reportid, \n";

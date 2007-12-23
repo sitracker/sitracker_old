@@ -14,7 +14,7 @@
 // we may not need this now?
 
 @include ('set_include_path.inc.php');
-$permission=9; // change user permissions
+$permission = 9; // change user permissions
 require ('db_connect.inc.php');
 require ('functions.inc.php');
 

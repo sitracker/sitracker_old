@@ -39,7 +39,7 @@ switch ($mode)
     throw_error("Error showing/hiding update $updateid.", 'invalid mode');
 }
 
-$temp_result=mysql_query($vsql);
+$temp_result = mysql_query($vsql);
 if (mysql_error()) trigger_error("MySQL Query Error ".mysql_error(), E_USER_ERROR);
 
 header("Location: incident_details.php?id=$incidentid&expand={$expand}&view={$view}#$updateid");

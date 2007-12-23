@@ -29,7 +29,7 @@ fclose($fp);
 $email = new mime_email;
 $email->set_emaildata($rawemail);
 unset($rawemail);
-$attachment=array();
+$attachment = array();
 
 $decoded_email = $email->go_decode();
 
@@ -37,14 +37,14 @@ $decoded_email = $email->go_decode();
 if (preg_match('/\[(\d{1,5})\]/',$decoded_email->subject,$m)) $incidentid = $m[1];
 $customer_visible = 'No';
 
-$part=1;
-if ($decoded_email->contenttype=='multipart/mixed'
-    OR $decoded_email->contenttype=='multipart/alternative')
+$part = 1;
+if ($decoded_email->contenttype=='multipart/mixed' OR
+    $decoded_email->contenttype=='multipart/alternative')
 {
     // This is a MIME message
     foreach ($decoded_email->mime_block AS $block)
     {
-        print_r($block);
+        if ($CONFIG['debug']) print_r($block);
         // Do the decoding
         switch ($block->mime_transferenc)
         {

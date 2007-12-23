@@ -11,7 +11,7 @@
 // by Ivan Lucas <ivanlucas[at]users.sourceforge.net>, June 2004
 
 @include ('set_include_path.inc.php');
-$permission=51; // View Feedback
+$permission = 51; // View Feedback
 
 require ('db_connect.inc.php');
 require ('functions.inc.php');

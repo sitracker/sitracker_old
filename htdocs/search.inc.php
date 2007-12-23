@@ -12,8 +12,8 @@
 
 // This Page Is Valid XHTML 1.0 Transitional! 29Nov05
 
-$permission=60; // Perform Searches
-$limit_results=2000;
+$permission = 60; // Perform Searches
+$limit_results = 2000;
 
 //FIXME make search_string safe
 if ($searchmode != 'related')
@@ -205,7 +205,7 @@ function search_score_adjust($sterms, $string)
 
 // Remove some characters
 // '\\"'
-$removechars=array(',',';',"'");
+$removechars = array(',',';',"'");
 $search_string = str_replace($removechars, '', $search_string);
 
 if (!empty($search_string))

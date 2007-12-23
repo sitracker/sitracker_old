@@ -11,12 +11,12 @@
 //          Ivan Lucas <ivanlucas[at]users.sourceforge.net>
 
 @include ('set_include_path.inc.php');
-$permission=0; // not required
+$permission = 0; // not required
 require ('db_connect.inc.php');
 require ('functions.inc.php');
 include ('mime.inc.php');
 
-$title='Forgotten Password';
+$title = 'Forgotten Password';
 
 // External variables
 $email = cleanvar($_REQUEST['emailaddress']);

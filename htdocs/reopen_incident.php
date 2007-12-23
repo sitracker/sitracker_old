@@ -9,7 +9,7 @@
 //
 
 @include ('set_include_path.inc.php');
-$permission=34; // Reopen Incidents
+$permission = 34; // Reopen Incidents
 
 require ('db_connect.inc.php');
 require ('functions.inc.php');

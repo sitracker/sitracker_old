@@ -14,7 +14,7 @@
 // This Page Is Valid XHTML 1.0 Transitional! 27Oct05
 
 @include ('set_include_path.inc.php');
-$permission=19;  // view Maintenance contracts
+$permission = 19;  // view Maintenance contracts
 // FIXME i18n some compound strings
 
 require ('db_connect.inc.php');
@@ -129,7 +129,7 @@ echo "<h3>{$strSkillsSupportedUnderContract}:</h3>";
 // supported software
 $sql = "SELECT * FROM `{$dbSoftwareProducts}` AS sp, `{$dbSoftware}` AS s ";
 $sql .= "WHERE sp.softwareid = s.id AND productid = '{$maintrow['product']}' ";
-$result=mysql_query($sql);
+$result = mysql_query($sql);
 if (mysql_error()) trigger_error("MySQL Query Error ".mysql_error(), E_USER_ERROR);
 
 if (mysql_num_rows($result)>0)

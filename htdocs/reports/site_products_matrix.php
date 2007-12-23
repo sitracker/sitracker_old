@@ -10,7 +10,7 @@
 //  Author:   Ivan Lucas
 
 @include ('set_include_path.inc.php');
-$permission=37;  // Run Reports
+$permission = 37;  // Run Reports
 
 include ('db_connect.inc.php');
 include ('functions.inc.php');

@@ -9,7 +9,7 @@
 //
 
 @include ('set_include_path.inc.php');
-$permission=4; // Edit your profile
+$permission = 4; // Edit your profile
 
 require ('db_connect.inc.php');
 require ('functions.inc.php');

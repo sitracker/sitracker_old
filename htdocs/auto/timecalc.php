@@ -26,7 +26,7 @@ if ($verbose) echo "Calculating SLA times{$crlf}";
 
 $sql = "SELECT id, title, maintenanceid, priority, slaemail, slanotice, servicelevel, status, owner ";
 $sql .= "FROM `{$dbIncidents}` WHERE status != ".STATUS_CLOSED." AND status != ".STATUS_CLOSING;
-$incident_result=mysql_query($sql);
+$incident_result = mysql_query($sql);
 if (mysql_error()) trigger_error(mysql_error(),E_USER_ERROR);
 
 while ($incident=mysql_fetch_array($incident_result)) {

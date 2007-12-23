@@ -11,7 +11,7 @@
 // Author: Ivan Lucas <ivanlucas[at]users.sourceforge.net>
 
 @include ('set_include_path.inc.php');
-$permission=37; // Run Reports
+$permission = 37; // Run Reports
 
 require ('db_connect.inc.php');
 require ('functions.inc.php');
@@ -39,8 +39,8 @@ arsort($productlist, SORT_NUMERIC);
 
 echo "<table align='center'>";
 echo "<tr><th>#</th><th>{$strProduct}</th><th>{$strContracts}</th></tr>\n";
-$count=1;
-$shade='shade1';
+$count = 1;
+$shade = 'shade1';
 foreach ($productlist AS $prod => $contcount)
 {
     echo "<tr class='$shade'><td>{$count}</td><td>".product_name($prod)."</td><td><a href='../browse_contract.php?activeonly=yes&amp;productid={$prod}'>{$contcount}</a></td></tr>\n";

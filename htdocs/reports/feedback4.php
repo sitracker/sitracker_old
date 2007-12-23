@@ -11,7 +11,7 @@
 // Author: Ivan Lucas <ivanlucas[at]users.sourceforge.net>
 
 @include ('set_include_path.inc.php');
-$permission=37; //Run Reports
+$permission = 37; //Run Reports
 
 require ('db_connect.inc.php');
 require ('functions.inc.php');
@@ -21,8 +21,7 @@ require ('auth.inc.php');
 
 include ('htmlheader.inc.php');
 
-$formid=$CONFIG['feedback_form'];
-$now = time();
+$formid = $CONFIG['feedback_form'];
 
 echo "<div style='margin: 20px'>";
 echo "<h2><a href='{$CONFIG['application_webpath']}reports/feedback.php'>Feedback</a> Scores: By Site</h2>";

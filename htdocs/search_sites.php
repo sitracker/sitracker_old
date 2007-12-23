@@ -9,7 +9,7 @@
 //
 
 @include ('set_include_path.inc.php');
-$permission=11; // View Sites
+$permission = 11; // View Sites
 
 require ('db_connect.inc.php');
 require ('functions.inc.php');

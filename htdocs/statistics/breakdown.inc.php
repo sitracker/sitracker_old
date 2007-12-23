@@ -22,8 +22,8 @@ $sql = get_sql_statement($startdate,$enddate,$query,false);
 $result= mysql_query($sql);
 if (mysql_error()) trigger_error("MySQL Query Error ".mysql_error(), E_USER_ERROR);
 
-$start_str=date("Y-m-d",$startdate);
-$end_str=date("Y-m-d",$enddate);
+$start_str = date("Y-m-d",$startdate);
+$end_str = date("Y-m-d",$enddate);
 
 switch ($query)
 {

@@ -16,7 +16,7 @@ require ('db_connect.inc.php');
 require ('functions.inc.php');
 require ('auth.inc.php');
 
-$permission=0; // Allow all auth users
+$permission = 0; // Allow all auth users
 
 $id = cleanvar($_REQUEST['incident']);
 if (!empty($id))

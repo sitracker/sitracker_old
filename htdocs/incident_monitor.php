@@ -13,8 +13,8 @@
 // FIXME target 3.24 this page needs serious tidying up
 
 @include ('set_include_path.inc.php');
-$permission=14; // View Users
-$title="Incident Monitor";
+$permission = 14; // View Users
+// $title = "Incident Monitor";
 require ('db_connect.inc.php');
 require ('functions.inc.php');
 
@@ -47,47 +47,47 @@ require ('auth.inc.php');
 $sql = "SELECT id FROM `{$dbIncidents}` WHERE opened > '$todayrecent'";
 $result = mysql_query($sql);
 if (mysql_error()) trigger_error("MySQL Query Error ".mysql_error(), E_USER_ERROR);
-$todaysincidents=mysql_num_rows($result);
+$todaysincidents = mysql_num_rows($result);
 mysql_free_result($result);
 
 // Count incidents updated today
 $sql = "SELECT id FROM `{$dbIncidents}` WHERE lastupdated > '$todayrecent'";
 $result = mysql_query($sql);
 if (mysql_error()) trigger_error("MySQL Query Error ".mysql_error(), E_USER_ERROR);
-$todaysupdated=mysql_num_rows($result);
+$todaysupdated = mysql_num_rows($result);
 mysql_free_result($result);
 
 // Count incidents closed today
 $sql = "SELECT id FROM `{$dbIncidents}` WHERE closed > '$todayrecent'";
 $result = mysql_query($sql);
 if (mysql_error()) trigger_error("MySQL Query Error ".mysql_error(), E_USER_ERROR);
-$todaysclosed=mysql_num_rows($result);
+$todaysclosed = mysql_num_rows($result);
 mysql_free_result($result);
 
 // count total number of SUPPORT incidents that are open at this time (not closed)
 $sql = "SELECT id FROM `{$dbIncidents}` WHERE status!=2 AND status!=9 AND status!=7 AND type='support'";
 $result = mysql_query($sql);
 if (mysql_error()) trigger_error("MySQL Query Error ".mysql_error(), E_USER_ERROR);
-$supportopen=mysql_num_rows($result);
+$supportopen = mysql_num_rows($result);
 mysql_free_result($result);
 
 $sql  = "SELECT * FROM `{$dbUsers}` WHERE var_monitor='true' ";
 $result = mysql_query($sql);
 if (mysql_error()) trigger_error("MySQL Query Error ".mysql_error(), E_USER_ERROR);
-$row=1;
-$col=1;
-$count=1;
+$row = 1;
+$col = 1;
+$count = 1;
 echo "<table summary=\"users\" width=\"100%\" height=\"100%\" align='center'><tr>";
 while ($users = mysql_fetch_array($result))
 {
-    $outstanding=user_countincidents($users['id']);
-    $userstatus=userstatus_name(user_status($users['id']));
-    $useraccepting=strtolower(user_accepting($users['id']));
-    $waiting=count_incoming_updates();
-    $incidents_color='Blue';
-    if ($outstanding >= 10) $incidents_color='Red';
-    if ($outstanding < 5) $incidents_color='#00BB00';
-    $name_color='Blue';
+    $outstanding = user_countincidents($users['id']);
+    $userstatus = userstatus_name(user_status($users['id']));
+    $useraccepting = strtolower(user_accepting($users['id']));
+    $waiting = count_incoming_updates();
+    $incidents_color = 'Blue';
+    if ($outstanding >= 10) $incidents_color = 'Red';
+    if ($outstanding < 5) $incidents_color = '#00BB00';
+    $name_color = 'Blue';
     ?>
     <td><table summary="<?php echo $users['realname'] ?>">
     <tr>
@@ -95,8 +95,8 @@ while ($users = mysql_fetch_array($result))
     echo "<td class='incidents' style='color: $incidents_color'>".$outstanding."</td>";
     echo "<td class='name'>".$users['realname']."</td>";
     // calcuate percentage
-    $percentage=($outstanding*10);
-    if ($percentage>100) $percentage=100;
+    $percentage = ($outstanding*10);
+    if ($percentage > 100) $percentage = 100;
     ?>
     </tr>
     <tr>

@@ -14,7 +14,7 @@
 // Not sure why - Ivan 6Sep06
 
 @include ('set_include_path.inc.php');
-$permission=14; // View Users
+$permission = 14; // View Users
 require ('db_connect.inc.php');
 require ('functions.inc.php');
 
@@ -100,7 +100,7 @@ if (mysql_error()) trigger_error("MySQL Query Error ".mysql_error(), E_USER_ERRO
 
 echo "<table align='center' style='width: 95%;'>";
 echo "<tr>";
-$filter=array('gid' => $filtergroup);
+$filter = array('gid' => $filtergroup);
 echo colheader('realname', $strName, $sort, $order, $filter);
 echo "<th colspan='5'>{$strIncidentsinQueue}</th>";
 echo colheader('phone',$strTelephone,$sort, $order, $filter);
