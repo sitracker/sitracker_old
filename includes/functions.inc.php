@@ -603,7 +603,7 @@ function contact_site($id)
 {
     global $dbContacts, $dbSites;
     // note: this returns the site _NAME_ not the siteid - INL 17Apr02
-    $sql = "SELECT sites.name FROM `{$dbContacts}` AS c, `{$dbSites}` AS s WHERE c.siteid = s.id AND c.id = '$id'";
+    $sql = "SELECT s.name FROM `{$dbContacts}` AS c, `{$dbSites}` AS s WHERE c.siteid = s.id AND c.id = '$id'";
     $result = mysql_query($sql);
     if (mysql_error()) trigger_error(mysql_error(),E_USER_WARNING);
 
@@ -690,8 +690,8 @@ function contact_count_open_incidents($id)
 function contact_vcard($id)
 {
     global $dbContacts;
-    $sql = "SELECT *, sites.name AS sitename, sites.address1 AS siteaddress1, sites.address2 AS siteaddress2, ";
-    $sql .= "sites.city AS sitecity, sites.county AS sitecounty, sites.country AS sitecountry, sites.postcode AS sitepostcode ";
+    $sql = "SELECT *, s.name AS sitename, s.address1 AS siteaddress1, s.address2 AS siteaddress2, ";
+    $sql .= "s.city AS sitecity, s.county AS sitecounty, s.country AS sitecountry, s.postcode AS sitepostcode ";
     $sql .= "FROM `{$dbContacts}` AS c, `{$dbSites}` AS s ";
     $sql .= "WHERE c.siteid = s.id AND c.id = '$id' LIMIT 1";
     $result = mysql_query($sql);
@@ -1033,7 +1033,7 @@ function contact_site_drop_down($name, $id, $siteid='', $exclude='')
     $sql  = "SELECT c.id AS contactid, forenames, surname, siteid, s.name AS sitename ";
     $sql .= "FROM `{$dbContacts}` AS c, `{$dbSites}` AS s ";
     $sql .= "WHERE c.siteid = s.id AND c.active = 'true' AND s.active = 'true' ";
-    if (!empty($siteid)) $sql .= "AND sites.id='$siteid' ";
+    if (!empty($siteid)) $sql .= "AND s.id='$siteid' ";
     $sql .= "ORDER BY surname ASC";
     $result = mysql_query($sql);
     if (mysql_error()) trigger_error(mysql_error(),E_USER_WARNING);
@@ -2446,7 +2446,7 @@ function maintenance_drop_down($name, $id)
     global $dbMaintenance, $dbSites, $dbProducts;
     // FIXME make maintenance_drop_down a hierarchical selection box sites/contracts
     // extract all maintenance contracts
-    $sql  = "SELECT sites.name AS sitename, products.name AS productname, m.id AS id FROM `{$dbMaintenance}` AS m, `{$dbSites}` AS s, `{$dbProducts}` AS p ";
+    $sql  = "SELECT s.name AS sitename, p.name AS productname, m.id AS id FROM `{$dbMaintenance}` AS m, `{$dbSites}` AS s, `{$dbProducts}` AS p ";
     $sql .= "WHERE site = s.id AND product = p.id ORDER BY s.name ASC";
     $result = mysql_query($sql);
 

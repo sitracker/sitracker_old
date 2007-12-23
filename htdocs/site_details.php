@@ -135,13 +135,13 @@ if (user_permission($sit[2],19)) // View contracts
     echo "<h3>{$strContracts}<a id='contracts'></a></h3>";
 
     // Display contracts
-    $sql  = "SELECT m.id AS maintid, m.term AS term, products.name AS product, resellers.name AS reseller, ";
-    $sql .= "licence_quantity, licencetypes.name AS licence_type, expirydate, admincontact, ";
-    $sql .= "contacts.forenames AS admincontactsforenames, contacts.surname AS admincontactssurname, m.notes AS maintnotes ";
+    $sql  = "SELECT m.id AS maintid, m.term AS term, p.name AS product, r.name AS reseller, ";
+    $sql .= "licence_quantity, lt.name AS licence_type, expirydate, admincontact, ";
+    $sql .= "c.forenames AS admincontactsforenames, c.surname AS admincontactssurname, m.notes AS maintnotes ";
     $sql .= "FROM `{$dbMaintenance}` AS m, `{$dbContacts}` AS c, `{$dbProducts}` AS p, `{$dbLicenceTypes}` AS lt, resellers ";
-    $sql .= "WHERE m.product=products.id AND (m.reseller=resellers.id OR reseller=NULL) ";
-    $sql .= "AND (licence_type=licencetypes.id OR licence_type=NULL) ";
-    $sql .= "AND admincontact=contacts.id AND m.site = '$id' ";
+    $sql .= "WHERE m.product = p.id AND (m.reseller = r.id OR reseller=NULL) ";
+    $sql .= "AND (licence_type = lt.id OR licence_type=NULL) ";
+    $sql .= "AND admincontact = c.id AND m.site = '$id' ";
     $sql .= "ORDER BY expirydate DESC";
 
     // connect to database and execute query

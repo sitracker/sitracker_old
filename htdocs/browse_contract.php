@@ -107,7 +107,7 @@ $sql .= "l.name AS licence_type, expirydate, admincontact, ";
 $sql .= "c.forenames AS admincontactforenames, c.surname AS admincontactsurname, m.notes, s.id AS siteid, ";
 $sql .= "m.term AS term, m.productonly AS productonly ";
 $sql .= "FROM `{$dbMaintenance}` AS m, `{$dbSites}` AS s, `{$dbContacts}` AS c, `{$dbProducts}` AS p, `{$dbLicenceTypes}` AS l, `{$dbResellers}` AS r ";
-$sql .= "WHERE (m.site=sites.id AND product = p.id AND admincontact = c.id) ";
+$sql .= "WHERE (m.site = s.id AND product = p.id AND admincontact = c.id) ";
 $sql .= "AND (reseller = r.id OR reseller = NULL) AND (licence_type = l.id OR licence_type = NULL) ";
 if ($activeonly=='yes') $sql .= "AND term!='yes' AND (expirydate > $now OR expirydate = '-1') ";
 if ($search_string != '*')

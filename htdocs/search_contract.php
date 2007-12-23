@@ -75,7 +75,7 @@ else
             $sql .= "c.surname AS admincontactsurnname, m.notes, m.term ";
             $sql .= "FROM `{$dbMaintenance}` AS m, `{$dbSites}` AS s, `{$dbContacts}` AS c, `{$dbProducts}` AS p, `{$dbLicenceTypes}` AS lt, `{$dbResellers}` AS r ";
             $sql . ="WHERE ";
-            $sql .= "(m.site = sites.id AND product = p.id AND reseller = r.id AND licence_type = lt.id AND admincontact = c.id) AND ";
+            $sql .= "(m.site = s.id AND product = p.id AND reseller = r.id AND licence_type = lt.id AND admincontact = c.id) AND ";
             $sql .= "(m.id LIKE ('%$search_string%') OR ";
             $sql .= "s.name LIKE ('%$search_string%') OR ";
             $sql .= "p.name LIKE ('%$search_string%') OR ";
@@ -123,7 +123,7 @@ else
         }
         elseif ($fields == "admincontact")
         {
-            $sql  = "SELECT m.id AS maintid, sites.name AS site, p.name AS product, r.name AS reseller, licence_quantity, lt.name AS licence_type, expirydate, admincontact, c.forenames AS admincontactforenames, c.surname AS admincontactsurnname, m.notes, m.term ";
+            $sql  = "SELECT m.id AS maintid, s.name AS site, p.name AS product, r.name AS reseller, licence_quantity, lt.name AS licence_type, expirydate, admincontact, c.forenames AS admincontactforenames, c.surname AS admincontactsurnname, m.notes, m.term ";
             $sql .= "FROM `{$dbMaintenance}` AS m, `{$dbSites}` AS s, `{$dbContacts}` AS c, `{$dbProducts}` AS p, `{$dbLicenceTypes}` AS lt, `{$dbResellers}` AS r ";
             $sql .= "WHERE ";
             $sql .= "(m.site = s.id AND product = p.id AND reseller = r.id AND licence_type = lt.id AND admincontact = c.id) AND ";
@@ -142,9 +142,9 @@ else
         }
         elseif ($fields == "licence_type")
         {
-            $sql  = "SELECT m.id AS maintid, sites.name AS site, products.name AS product, resellers.name AS reseller, licence_quantity, licencetypes.name AS licence_type, expirydate, admincontact, c.forenames AS admincontactforenames, c.surname AS admincontactsurnname, m.notes, m.term ";
+            $sql  = "SELECT m.id AS maintid, s.name AS site, products.name AS product, resellers.name AS reseller, licence_quantity, licencetypes.name AS licence_type, expirydate, admincontact, c.forenames AS admincontactforenames, c.surname AS admincontactsurnname, m.notes, m.term ";
             $sql .= "FROM `{$dbMaintenance}` AS m, `{$dbSites}` AS s, `{$dbContacts}` AS c, `{$dbProducts}` AS p, `{$dbLicenceTypes}` AS lt, `{$dbResellers}` AS r WHERE ";
-            $sql .= "(m.site = sites.id AND product = p.id AND reseller = r.id AND licence_type = lt.id AND admincontact = c.id) AND ";
+            $sql .= "(m.site = s.id AND product = p.id AND reseller = r.id AND licence_type = lt.id AND admincontact = c.id) AND ";
             $sql .= "(lt.name LIKE ('%$search_string%'))";
             if ($hideterminated=='yes') $sql .= " AND m.term!='yes'";
             if ($hideexpired=='yes') $sql .= " AND m.expirydate > {$now}";
