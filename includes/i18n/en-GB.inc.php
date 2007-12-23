@@ -216,6 +216,7 @@ $strEditContact = 'Edit Contact';
 $strEditContract = 'Edit Contract';
 $strEdited = 'Edited';
 $strEditedBy = 'Edited by %s';
+$strEditEscalationPath = 'Edit Escalation Path';
 $strEditHolidays = 'Edit Holidays';
 $strEditHolidayEntitlement = 'Edit Holiday Entitlement';
 $strEditProfileFor = 'Edit User Profile for %s';
