@@ -93,7 +93,7 @@ else
 
     $sql  = "SELECT c.forenames, c.surname, sc.contactid AS contactid ";
     $sql .= "FROM `{$dbSupportContacts}` AS sc, `{$dbContacts}` AS c ";
-    $sql .= "WHERE sc.contactid=contacts.id AND sc.maintenanceid='$id' ";
+    $sql .= "WHERE sc.contactid = c.id AND sc.maintenanceid='$id' ";
     $result=mysql_query($sql);
     if (mysql_error()) trigger_error("MySQL Query Error ".mysql_error(), E_USER_ERROR);
     if (mysql_num_rows($result)>0)

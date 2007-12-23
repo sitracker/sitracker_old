@@ -29,7 +29,7 @@ include ('htmlheader.inc.php');
 echo "<h2>Report: Email Address of Supported Customers</h2>";
 echo "<h4><em>(Doesn't check for expiry)</em></h4>";
 
-$sql  = "SELECT DISTINCT contacts.email ";
+$sql  = "SELECT DISTINCT c.email ";
 $sql .= "FROM `{$dbContacts}` AS c LEFT JOIN `{$dbSupportContacts}` ON c.id = `{$dbSupportContacts}`.contactid ";
 $sql .= "WHERE dataprotection_email != 'Yes' ";
 $sql .="ORDER BY email ASC ";

@@ -138,7 +138,7 @@ if (user_permission($sit[2],19)) // View contracts
     $sql  = "SELECT m.id AS maintid, m.term AS term, products.name AS product, resellers.name AS reseller, ";
     $sql .= "licence_quantity, licencetypes.name AS licence_type, expirydate, admincontact, ";
     $sql .= "contacts.forenames AS admincontactsforenames, contacts.surname AS admincontactssurname, m.notes AS maintnotes ";
-    $sql .= "FROM `{$dbMaintenance}` AS m, contacts, products, licencetypes, resellers ";
+    $sql .= "FROM `{$dbMaintenance}` AS m, `{$dbContacts}` AS c, `{$dbProducts}` AS p, `{$dbLicenceTypes}` AS lt, resellers ";
     $sql .= "WHERE m.product=products.id AND (m.reseller=resellers.id OR reseller=NULL) ";
     $sql .= "AND (licence_type=licencetypes.id OR licence_type=NULL) ";
     $sql .= "AND admincontact=contacts.id AND m.site = '$id' ";

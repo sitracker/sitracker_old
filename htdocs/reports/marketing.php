@@ -143,10 +143,10 @@ elseif ($_REQUEST['mode']=='report')
         $excsql .= ")";
     }
 
-    $sql  = "SELECT *, contacts.id AS contactid, contacts.email AS contactemail, sites.name AS sitename FROM `{$dbMaintenance}` AS m ";
-    $sql .= "LEFT JOIN `{$dbSupportContacts}` AS sc ON m.id=sc.maintenanceid ";
-    $sql .= "LEFT JOIN `{$dbContacts}` AS c ON sc.contactid=contacts.id ";
-    $sql .= "LEFT JOIN `{$dbSites}` AS s ON contacts.siteid = sites.id ";
+    $sql  = "SELECT *, c.id AS contactid, c.email AS contactemail, s.name AS sitename FROM `{$dbMaintenance}` AS m ";
+    $sql .= "LEFT JOIN `{$dbSupportContacts}` AS sc ON m.id = sc.maintenanceid ";
+    $sql .= "LEFT JOIN `{$dbContacts}` AS c ON sc.contactid = cs.id ";
+    $sql .= "LEFT JOIN `{$dbSites}` AS s ON c.siteid = s.id ";
 
     if (empty($incsql)==FALSE OR empty($excsql)==FALSE OR $_REQUEST['activeonly']=='yes') $sql .= "WHERE ";
     if ($_REQUEST['activeonly']=='yes')
