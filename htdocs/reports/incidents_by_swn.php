@@ -18,6 +18,7 @@
 // Notes:
 //  Counts activate calls within the specified period (i.e. those with a lastupdate time > timespecified)
 
+@include('../set_include_path.inc.php');
 $permission=37; // Run Reports
 
 require('db_connect.inc.php');
@@ -286,10 +287,10 @@ else
                 $javascript .= "bindings:{ x:\"x\", y:\"y\", size:\"size\" },";
                 $javascript .= "label:\"{$skill['name']}\"";
                 $javascript .= "});\n\n\n\n";
-    
-    
+
+
     //echo $javascript."<br />";
-    
+
                 $js_coordCounter++;
             }
         }
@@ -362,11 +363,11 @@ echo "</pre>";
             echo "var legend;";
 
             echo "dojo.addOnLoad(function(){";
-                echo $javascript; 
+                echo $javascript;
 
                 echo "var chart = new dojo.charting.Chart(null, \"{$strIncidentsBySkill}\", \"A chart\");";
                 echo "chart.addPlotArea({ x:50,y:50, plotArea:pa });";
-                
+
                 echo "legend = pa.getLegendInfo();";
 
                 echo "chart.node = dojo.byId(\"incidentsBySkill\");";

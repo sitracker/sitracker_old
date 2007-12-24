@@ -14,7 +14,7 @@
 
 // FIXME Not on menu
 
-@include('set_include_path.inc.php');
+@include('../set_include_path.inc.php');
 
 $permission=37; // Run Reports
 

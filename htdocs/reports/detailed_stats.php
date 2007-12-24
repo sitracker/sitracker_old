@@ -9,7 +9,7 @@
 //
 // Author: Paul Heaney <paulheaney[at]users.sourceforge.net>
 
-@include('set_include_path.inc.php');
+@include('../set_include_path.inc.php');
 $permission=67; // Run Reports
 $title='Incidents open/closed by period';
 require('db_connect.inc.php');
