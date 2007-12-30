@@ -200,7 +200,7 @@ switch ($type)
         // EXPERTISE QUEUE
         // ***
         if ($user=='current') $user=$sit[2];
-        $softsql = "SELECT * FROM usersoftware WHERE userid='$user' ";
+        $softsql = "SELECT * FROM `{$dbUserSoftware}` WHERE userid='$user' ";
         $softresult = mysql_query($softsql);
         if (mysql_error()) trigger_error("MySQL Query Error ".mysql_error(), E_USER_ERROR);
 
@@ -223,7 +223,7 @@ switch ($type)
             $incsql .= ")";
 
             // Create SQL for chosen queue
-            $sql = $selectsql . "WHERE contact=contacts.id AND i.priority=priority.id ";
+            $sql = $selectsql . "WHERE contact=c.id AND i.priority=pr.id ";
             $sql .= "AND owner!='$user' AND towner!='$user' ";
             $sql .= "AND $incsql ";
 
@@ -269,7 +269,7 @@ switch ($type)
             {
                 case 'id': $sql .= " ORDER BY id $sortorder"; break;
                 case 'title': $sql .= " ORDER BY title $sortorder"; break;
-                case 'contact': $sql .= " ORDER BY contacts.surname $sortorder, contacts.forenames $sortorder"; break;
+                case 'contact': $sql .= " ORDER BY c.surname $sortorder, c.forenames $sortorder"; break;
                 case 'priority': $sql .=  " ORDER BY priority $sortorder, lastupdated ASC"; break;
                 case 'status': $sql .= " ORDER BY status $sortorder"; break;
                 case 'lastupdated': $sql .= " ORDER BY lastupdated $sortorder"; break;
