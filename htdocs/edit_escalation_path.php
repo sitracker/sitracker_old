@@ -22,7 +22,7 @@ require ('auth.inc.php');
 
 if (empty($_REQUEST['mode']))
 {
-    $title = "Edit escalation path";
+    $title = $strEditEscalationPath;
     //show page
     $id = $_REQUEST['id'];
     $sql = "SELECT * FROM `{$dbEscalationPaths}` WHERE id = {$id}";

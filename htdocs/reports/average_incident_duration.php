@@ -12,10 +12,10 @@
 //
 // Comments: How long do we take to close incidents?
 
-@include ('set_include_path.inc.php');
+@include ('../set_include_path.inc.php');
 set_time_limit(60);
 
-$title='Average Incident Duration';
+$title = 'Average Incident Duration';
 $permission = 37; // Run Reports
 
 require ('db_connect.inc.php');

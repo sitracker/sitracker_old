@@ -7,8 +7,8 @@
 # Requirements:
 #    svn2cl
 
-TMPDIR=/tmp/sit$$/build
-PUBDIR=/tmp/sit$$/packages
+TMPDIR=/tmp/sit.$$/build
+PUBDIR=/tmp/sit.$$/packages
 
 mkdir -p $TMPDIR
 cd $TMPDIR
@@ -40,8 +40,14 @@ fi
 
 
 # Now we check there are no parse errors before building package
-## for i in $( find . -name "*.php"  ); do php -l $i; done | grep -v "No syntax err"
-## TODO make this quit if it finds an error
+
+ERR=`find $1 -type f -name \*.php -exec sh -c 'php -l {} | grep -v "No syntax errors"' \;|tee /tmp/sit.$$/phpcheck|wc|awk '{print $1}'`
+if [ $ERR -ne 0 ]; then
+    echo "Syntax error detected, failing";
+    echo "Please check /tmp/sit.$$/phpcheck";
+    #exit 1;
+fi
+
 
 echo "Creating release: $RELNAME"
 
@@ -57,10 +63,32 @@ mkdir -p "$PUBDIR"
 # Create a source tar file
 tar -czf "$RELNAME.orig.tar.gz" $SITDIR
 
-echo "sit ($SITVER) unstable; urgency=low" > "$SITDIR/debian/changelog"
+echo "sit ($SITVER) unstable; urgency=low" > "$SITDIR/DEBIAN/changelog"
 
 # TODO determine the svn rev of the previous release so we can...
 # TODO append the svn changelog *since the last release only* into the debian/changelog file
 #svn2cl -o debian/changelog
 
 # TODO build a .deb package
+
+sed -i 's/!SITVERSION!/'$SITVER'/g' $TMPDIR/$SITDIR/DEBIAN/control
+
+mkdir -p /tmp/sit.$$/deb/etc/
+mkdir -p /tmp/sit.$$/deb/usr/share/sit/
+
+cp -r $TMPDIR/$SITDIR/attachments /tmp/sit.$$/deb/usr/share/sit/
+cp -r $TMPDIR/$SITDIR/dashboard /tmp/sit.$$/deb/usr/share/sit/
+cp -r $TMPDIR/$SITDIR/doc /tmp/sit.$$/deb/usr/share/sit/
+cp -r $TMPDIR/$SITDIR/htdocs /tmp/sit.$$/deb/usr/share/sit/
+cp -r $TMPDIR/$SITDIR/includes /tmp/sit.$$/deb/usr/share/sit/
+cp -r $TMPDIR/$SITDIR/index.php /tmp/sit.$$/deb/usr/share/sit/
+cp -r $TMPDIR/$SITDIR/plugins /tmp/sit.$$/deb/usr/share/sit/
+cp -r $TMPDIR/$SITDIR/README /tmp/sit.$$/deb/usr/share/sit/
+cp -r $TMPDIR/$SITDIR/DEBIAN /tmp/sit.$$/deb/
+cp -r $TMPDIR/$SITDIR/conf/etc /tmp/sit.$$/deb/
+
+sudo chown -R root:root /tmp/sit.$$/deb/usr
+sudo chown -R root:root /tmp/sit.$$/deb/etc
+chmod 755 /tmp/sit.$$/deb/DEBIAN/post*
+
+dpkg -b /tmp/sit.$$/deb/ /tmp/sit.$$/packages/$SITDIR.deb

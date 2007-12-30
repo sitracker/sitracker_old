@@ -10,8 +10,8 @@
 
 // Author: Ivan Lucas <ivanlucas[at]users.sourceforge.net>
 
-@include ('set_include_path.inc.php');
-$permission=37; // Run Reports
+@include ('../set_include_path.inc.php');
+$permission = 37; // Run Reports
 
 require ('db_connect.inc.php');
 require ('functions.inc.php');

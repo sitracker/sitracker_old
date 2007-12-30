@@ -34,10 +34,10 @@ if (mysql_num_rows($result) >= 1)
     echo "<table align='center'>";
     echo "<tr>";
     echo colheader('name',$strName);
-    echo colheader('track_url','Track URL'); // FIXME i18n, Track URL, Home URL, URL TItle
-    echo colheader('home_url','Home URL');
-    echo colheader('url_title',"URL {$strTitle}");
-    echo colheader('email_domain','Email Domain');
+    echo colheader('track_url',$strTrackURL);
+    echo colheader('home_url',$strHomeURL);
+    echo colheader('url_title',$strURLTile);
+    echo colheader('email_domain',$strEmailDomain);
     echo colheader('edit',$strOperation);
     echo "</tr>";
     while ($path = mysql_fetch_object($result))

@@ -242,12 +242,12 @@ if ($errors == 0)
             echo " matching <strong>'{$search_string}'</strong>";
         }
         echo "</p>";
-        echo "<table align='center'>
-        <tr>
-            <th>{$strID}</th>
-            <th>{$strSiteName}</th>
-            <th>{$strDepartment}</th>
-        </tr>";
+        echo "<table align='center'>";
+        echo "<tr>";
+        echo "<th>{$strID}</th>";
+        echo "<th>{$strSiteName}</th>";
+        echo "<th>{$strDepartment}</th>";
+        echo "</tr>";
         $shade = 0;
         while ($results = mysql_fetch_array($result))
         {

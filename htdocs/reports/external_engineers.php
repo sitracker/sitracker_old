@@ -13,7 +13,7 @@
 //          Kieran Hogg <kieran_hogg[at]users.sourceforge.net>
 // heavily based on the Salford Report by Paul Heaney
 
-@include ('set_include_path.inc.php');
+@include ('../set_include_path.inc.php');
 $permission = 37; // Run Reports
 
 include ('db_connect.inc.php');

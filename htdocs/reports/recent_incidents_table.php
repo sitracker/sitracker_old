@@ -11,7 +11,7 @@
 // Author: Ivan Lucas <ivanlucas[at]users.sourceforge.net>
 // Comments: Shows a list of incidents that each site has logged
 
-@include ('set_include_path.inc.php');
+@include ('../set_include_path.inc.php');
 require ('db_connect.inc.php');
 require ('functions.inc.php');
 
