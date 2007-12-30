@@ -12,18 +12,18 @@
 // Created: 9th March 2001
 // This Page Is Valid XHTML 1.0 Transitional! 27Oct05
 
-@include ('set_include_path.inc.php');
-$permission = 11; // View Sites
-require ('db_connect.inc.php');
-require ('functions.inc.php');
+@include('set_include_path.inc.php');
+$permission=11; // View Sites
+require('db_connect.inc.php');
+require('functions.inc.php');
 
 // This page requires authentication
-require ('auth.inc.php');
+require('auth.inc.php');
 
 // External variables
-$id = cleanvar($_REQUEST['id']);
+$id=cleanvar($_REQUEST['id']);
 
-include ('htmlheader.inc.php');
+include('htmlheader.inc.php');
 
 if ($id=='')
 {
@@ -33,7 +33,7 @@ if ($id=='')
 
 // Display site
 echo "<table align='center' class='vertical'>";
-$sql="SELECT * FROM `{$dbSites}` WHERE id='$id' ";
+$sql="SELECT * FROM sites WHERE id='$id' ";
 $siteresult = mysql_query($sql);
 if (mysql_error()) trigger_error(mysql_error(),E_USER_WARNING);
 while ($siterow=mysql_fetch_array($siteresult))
@@ -81,7 +81,7 @@ echo "</p>";
 echo "<h3>{$strContacts}</h3>";
 
 // List Contacts
-$sql="SELECT * FROM `{$dbContacts}` WHERE siteid='$id' ORDER BY surname, forenames";
+$sql="SELECT * FROM contacts WHERE siteid='$id' ORDER BY surname, forenames";
 $contactresult = mysql_query($sql);
 if (mysql_error()) trigger_error("MySQL Query Error ".mysql_error(), E_USER_ERROR);
 $countcontacts = mysql_num_rows($contactresult);
@@ -135,13 +135,11 @@ if (user_permission($sit[2],19)) // View contracts
     echo "<h3>{$strContracts}<a id='contracts'></a></h3>";
 
     // Display contracts
-    $sql  = "SELECT m.id AS maintid, m.term AS term, p.name AS product, r.name AS reseller, ";
-    $sql .= "licence_quantity, lt.name AS licence_type, expirydate, admincontact, ";
-    $sql .= "c.forenames AS admincontactsforenames, c.surname AS admincontactssurname, m.notes AS maintnotes ";
-    $sql .= "FROM `{$dbMaintenance}` AS m, `{$dbContacts}` AS c, `{$dbProducts}` AS p, `{$dbLicenceTypes}` AS lt, `{$dbResellers}` AS r ";
-    $sql .= "WHERE m.product = p.id AND (m.reseller = r.id OR reseller = NULL) ";
-    $sql .= "AND (licence_type = lt.id OR licence_type = NULL) ";
-    $sql .= "AND admincontact = c.id AND m.site = '$id' ";
+    $sql  = "SELECT maintenance.id AS maintid, maintenance.term AS term, products.name AS product, resellers.name AS reseller, licence_quantity, licencetypes.name AS licence_type, expirydate, admincontact, contacts.forenames AS admincontactsforenames, contacts.surname AS admincontactssurname, maintenance.notes AS maintnotes ";
+    $sql .= "FROM maintenance, contacts, products, licencetypes, resellers ";
+    $sql .= "WHERE maintenance.product=products.id AND (maintenance.reseller=resellers.id OR reseller=NULL) ";
+    $sql .= "AND (licence_type=licencetypes.id OR licence_type=NULL) ";
+    $sql .= "AND admincontact=contacts.id AND maintenance.site = '$id' ";
     $sql .= "ORDER BY expirydate DESC";
 
     // connect to database and execute query
@@ -184,17 +182,24 @@ if (user_permission($sit[2],19)) // View contracts
             else $class = "shade2";
             if ($results['term']=='yes' || $results['expirydate']<$now) $class = "expired";
             echo "<tr>";
-                echo "<td class='<?php echo $class ?>'><img src='{$CONFIG['application_webpath']}images/icons/{$iconset}/16x16/contract.png' width='16' height='16' alt='' /> ";
-                echo "<a href='contract_details.php?id={$results['maintid']}'>{$strContract} {$results['maintid']}</a></td>";
-                ?>
-                <td class='<?php echo $class ?>'><?php echo $results["product"]; ?></td>
-                <td class='<?php echo $class ?>'><?php echo $results["reseller"]; ?></td>
-                <td class='<?php echo $class ?>'><?php echo $results["licence_quantity"] ?> <?php echo $results["licence_type"]; ?></td>
-                <td class='<?php echo $class ?>'><?php echo date($CONFIG['dateformat_date'], $results["expirydate"]); ?></td>
-                <td class='<?php echo $class ?>'><?php echo $results['admincontactsforenames'].' '.$results['admincontactssurname']; ?></td>
-                <td class='<?php echo $class ?>'><?php if ($results['maintnotes'] == '') echo '&nbsp;'; else echo nl2br($results['maintnotes']); ?></td>
-            </tr>
-            <?php
+            echo "<td class='{$class}'><img src='{$CONFIG['application_webpath']}images/icons/{$iconset}/16x16/contract.png' width='16' height='16' alt='' /> ";
+            echo "<a href='contract_details.php?id={$results['maintid']}'>{$strContract} {$results['maintid']}</a></td>";
+            echo "<td class='{$class}'>{$results['product']}</td>";
+            echo "<td class='{$class}'>{$results['reseller']}</td>";
+            echo "<td class='{$class}'>{$results['licence_quantity']} {$results['licence_type']}</td>";
+            echo "<td class='{$class}'>".date($CONFIG['dateformat_date'], $results['expirydate'])."</td>";
+            echo "<td class='{$class}'>{$results['admincontactsforenames']} {$results['admincontactssurname']}></td>";
+            echo "<td class='{$class}'>";
+            if ($results['maintnotes'] == '')
+            {
+                echo '&nbsp;';
+            }
+            else
+            {
+                echo nl2br($results['maintnotes']);
+            }
+            echo "</td>";
+            echo "</tr>";
             // invert shade
             if ($shade == 1) $shade = 0;
             else $shade = 1;
@@ -205,6 +210,6 @@ if (user_permission($sit[2],19)) // View contracts
     echo "<p align='center'><a href='add_contract.php?action=showform&amp;siteid=$id'>{$strAddContract}</a></p>";
 }
 
-include ('htmlfooter.inc.php');
+include('htmlfooter.inc.php');
 
 ?>
