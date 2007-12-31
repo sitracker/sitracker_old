@@ -2408,6 +2408,7 @@ function throw_user_error($message, $details='')
 /* sites, with the given name and with the given id selected. */
 function site_drop_down($name, $id)
 {
+    global $dbSites;
     $sql  = "SELECT id, name, department FROM `{$dbSites}` ORDER BY name ASC";
     $result = mysql_query($sql);
 
