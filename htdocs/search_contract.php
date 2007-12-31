@@ -74,7 +74,7 @@ else
             $sql .= "licence_quantity, lt.name AS licence_type, expirydate, admincontact, c.forenames AS admincontactforenames, ";
             $sql .= "c.surname AS admincontactsurnname, m.notes, m.term ";
             $sql .= "FROM `{$dbMaintenance}` AS m, `{$dbSites}` AS s, `{$dbContacts}` AS c, `{$dbProducts}` AS p, `{$dbLicenceTypes}` AS lt, `{$dbResellers}` AS r ";
-            $sql . ="WHERE ";
+            $sql .= "WHERE ";
             $sql .= "(m.site = s.id AND product = p.id AND reseller = r.id AND licence_type = lt.id AND admincontact = c.id) AND ";
             $sql .= "(m.id LIKE ('%$search_string%') OR ";
             $sql .= "s.name LIKE ('%$search_string%') OR ";
