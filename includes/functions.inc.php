@@ -5389,7 +5389,7 @@ function list_tags($recordid, $type, $html=TRUE)
 function list_tag_icons($recordid, $type)
 {
     global $CONFIG, $dbSetTags, $dbTags;
-    $sql = "SELECT tags.name, tags.tagid FROM `{$dbSetTags}` AS st, `{$dbTags}` WHERE st.tagid = t.tagid AND ";
+    $sql = "SELECT t.name, t.tagid FROM `{$dbSetTags}` AS st, `{$dbTags}` AS t WHERE st.tagid = t.tagid AND ";
     $sql .= "st.type = '$type' AND st.id = '$recordid' AND (";
     $counticons = count($CONFIG['tag_icons']);
     $count=1;
