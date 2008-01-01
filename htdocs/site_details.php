@@ -184,17 +184,24 @@ if (user_permission($sit[2],19)) // View contracts
             else $class = "shade2";
             if ($results['term']=='yes' || $results['expirydate']<$now) $class = "expired";
             echo "<tr>";
-                echo "<td class='<?php echo $class ?>'><img src='{$CONFIG['application_webpath']}images/icons/{$iconset}/16x16/contract.png' width='16' height='16' alt='' /> ";
-                echo "<a href='contract_details.php?id={$results['maintid']}'>{$strContract} {$results['maintid']}</a></td>";
-                ?>
-                <td class='<?php echo $class ?>'><?php echo $results["product"]; ?></td>
-                <td class='<?php echo $class ?>'><?php echo $results["reseller"]; ?></td>
-                <td class='<?php echo $class ?>'><?php echo $results["licence_quantity"] ?> <?php echo $results["licence_type"]; ?></td>
-                <td class='<?php echo $class ?>'><?php echo date($CONFIG['dateformat_date'], $results["expirydate"]); ?></td>
-                <td class='<?php echo $class ?>'><?php echo $results['admincontactsforenames'].' '.$results['admincontactssurname']; ?></td>
-                <td class='<?php echo $class ?>'><?php if ($results['maintnotes'] == '') echo '&nbsp;'; else echo nl2br($results['maintnotes']); ?></td>
-            </tr>
-            <?php
+            echo "<td class='{$class}'><img src='{$CONFIG['application_webpath']}images/icons/{$iconset}/16x16/contract.png' width='16' height='16' alt='' /> ";
+            echo "<a href='contract_details.php?id={$results['maintid']}'>{$strContract} {$results['maintid']}</a></td>";
+            echo "<td class='{$class}'>{$results['product']}</td>";
+            echo "<td class='{$class}'>{$results['reseller']}</td>";
+            echo "<td class='{$class}'>{$results['licence_quantity']} {$results['licence_type']}</td>";
+            echo "<td class='{$class}'>".date($CONFIG['dateformat_date'], $results["expirydate"])."</td>";
+            echo "<td class='{$class}'>{$results['admincontactsforenames']}  {$results['admincontactssurname']}</td>";
+            echo "<td class='{$class}'>";
+            if ($results['maintnotes'] == '')
+            {
+                echo '&nbsp;';
+            }
+            else
+            {
+                echo nl2br($results['maintnotes']);
+            }
+            echo "</td>";
+            echo "</tr>";
             // invert shade
             if ($shade == 1) $shade = 0;
             else $shade = 1;
