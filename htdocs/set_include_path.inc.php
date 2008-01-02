@@ -2,7 +2,7 @@
 // set_include_path.inc.php - Allow setting of include path without altering php.ini
 //
 // SiT (Support Incident Tracker) - Support call tracking system
-// Copyright (C) 2000-2007 Salford Software Ltd. and Contributors
+// Copyright (C) 2000-2008 Salford Software Ltd. and Contributors
 //
 // This software may be used and distributed according to the terms
 // of the GNU General Public License, incorporated herein by reference.

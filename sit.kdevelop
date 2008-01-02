@@ -48,11 +48,11 @@
     </webInvocation>
     <shell>
       <phpexe>/usr/local/bin/php</phpexe>
-      <phpini></phpini>
+      <phpini/>
     </shell>
     <options>
-      <phpincludepath></phpincludepath>
-      <defaultFile></defaultFile>
+      <phpincludepath/>
+      <defaultFile/>
       <startupFileMode>1</startupFileMode>
     </options>
   </kdevphpsupport>
@@ -120,6 +120,8 @@
       <group pattern="*.php" name="PHP Code" />
       <group pattern="*.inc.php" name="Libraries" />
       <group pattern="*.css" name="Style Sheets" />
+      <hidenonprojectfiles>false</hidenonprojectfiles>
+      <hidenonlocation>false</hidenonlocation>
     </groups>
     <tree>
       <hidepatterns>*.o,*.lo,CVS</hidepatterns>
@@ -129,13 +131,13 @@
   </kdevfileview>
   <kdevdocumentation>
     <projectdoc>
-      <docsystem></docsystem>
-      <docurl></docurl>
-      <usermanualurl></usermanualurl>
+      <docsystem/>
+      <docurl/>
+      <usermanualurl/>
     </projectdoc>
   </kdevdocumentation>
   <ctagspart>
-    <customArguments></customArguments>
+    <customArguments/>
     <customTagfilePath>/home/ivan/dev1/sit/trunk/tags</customTagfilePath>
     <activeTagsFiles/>
   </ctagspart>
