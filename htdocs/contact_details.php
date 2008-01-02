@@ -82,9 +82,14 @@ while ($contactrow=mysql_fetch_array($contactresult))
     // print_contact_flags($id);
     //echo "</td></tr>";
     echo "<tr><th>{$strJobTitle}:</th><td>{$contactrow['jobtitle']}</td></tr>\n";
-    echo "<tr><th>{$strSite}:</th><td><a href=\"site_details.php?id=".$contactrow['siteid']."\">".site_name($contactrow['siteid'])."</a></td></tr>\n";
-    if (!empty($contactrow['department'])) echo "<tr><th>{$strDepartment}:</th><td>{$contactrow['department']}</td></tr>\n";
-    if ($contactrow['dataprotection_address']!='Yes')
+    echo "<tr><th>{$strSite}:</th><td>";
+    echo "<a href='site_details.php?id={$contactrow['siteid']}'>".site_name($contactrow['siteid'])."</a></td></tr>\n";
+    if (!empty($contactrow['department']))
+    {
+        echo "<tr><th>{$strDepartment}:</th><td>{$contactrow['department']}</td></tr>\n";
+    }
+
+    if ($contactrow['dataprotection_address'] != 'Yes')
     {
         echo "<tr><th>{$strAddress1}:</th><td>{$address1}</td></tr>\n";
         echo "<tr><th>{$strAddress2}:</th><td>{$address2}</td></tr>\n";
@@ -93,45 +98,91 @@ while ($contactrow=mysql_fetch_array($contactresult))
         echo "<tr><th>{$strPostcode}:</th><td>{$postcode}</td></tr>\n";
         echo "<tr><th>{$strCountry}:</th><td>{$country}</td></tr>\n";
     }
-    if ($contactrow['dataprotection_email']!='Yes')
+
+    if ($contactrow['dataprotection_email'] != 'Yes')
     {
-        echo "<tr><th>{$strEmail}:</th><td><a href=\"mailto:{$contactrow['email']}\">{$contactrow['email']}</a></td></tr>\n";
+        echo "<tr><th>{$strEmail}:</th>";
+        echo "<td><a href=\"mailto:{$contactrow['email']}\">{$contactrow['email']}</a></td></tr>\n";
     }
-    if ($contactrow['dataprotection_phone']!='Yes')
+
+    if ($contactrow['dataprotection_phone'] != 'Yes')
     {
         echo "<tr><th>{$strTelephone}:</th><td>{$contactrow['phone']}</td></tr>\n";
         echo "<tr><th>{$strMobile}:</th><td>{$contactrow['mobile']}</td></tr>\n";
         echo "<tr><th>{$strFax}:</th><td>{$contactrow['fax']}</td></tr>\n";
     }
     echo "<tr><th>{$strDataProtection}:</th><td> ";
-    if ($contactrow['dataprotection_email']=='Yes') { echo "<strong>No Email</strong>, "; } else { echo "Email OK, ";}
-    if ($contactrow['dataprotection_phone']=='Yes') { echo "<strong>No Calls</strong>, "; } else { echo "Calls OK, ";}
-    if ($contactrow['dataprotection_address']=='Yes') { echo "<strong>No Post</strong>"; } else { echo "Post OK ";}
+
+    if ($contactrow['dataprotection_email'] == 'Yes')
+    {
+        echo "<strong>{$strNoEmail}</strong>, ";
+    }
+    else
+    {
+        echo "{$strEmailOK}, ";
+    }
+
+    if ($contactrow['dataprotection_phone'] == 'Yes')
+    {
+        echo "<strong>{$strNoCalls}</strong>, ";
+    }
+    else
+    {
+        echo "{$strCallsOK}, ";
+    }
+
+    if ($contactrow['dataprotection_address'] == 'Yes')
+    {
+        echo "<strong>{$strNoPost}</strong>";
+    }
+    else
+    {
+        echo "{$strPostOK} ";
+    }
+
     echo "</td></tr>\n";
     echo "<tr><th>{$strNotes}:</th><td>".nl2br($contactrow['notes'])."</td></tr>\n";
 
     echo "<tr><td colspan='2'>&nbsp;</td></tr>\n";
-    echo "<tr><th>Access Details:</th><td>{$strUsername}: <code>".$contactrow['username']."</code>";
+    echo "<tr><th>{$strAccessDetails}:</th><td>{$strUsername}: <code>{$contactrow['username']}</code>";
     // echo ", password: <code>".$contactrow['password']."</code>";  ## Passwords no longer controlled from SiT INL 23Nov04
     echo "</td></tr>\n";
     echo "<tr><th>{$strIncidents}:</th><td>";
-    $openincidents=contact_count_open_incidents($id);
-    $totalincidents=contact_count_incidents($id);
-    if ($totalincidents==0) echo "None";
-    if ($openincidents>=1) echo "$openincidents open, ";
-    if ($totalincidents>=1) echo "$totalincidents logged, see <a href='contact_support.php?id=$id'>here</a>";
+    $openincidents = contact_count_open_incidents($id);
+    $totalincidents = contact_count_incidents($id);
+    if ($totalincidents == 0) echo $strNone;
+    //if ($openincidents >= 1) echo "$openincidents open, ";
+    if ($openincidents >= 1) echo sprintf($strNumOpenIncidents, $openincidents).", ";
+
+
+    if ($totalincidents>=1)
+    {
+        echo "$totalincidents logged, see <a href='contact_support.php?id={$id}'>here</a>";
+    }
+
     echo "</td></tr>\n";
 
     if ($contactrow['notify_contactid'] > 0)
     {
-        echo "<tr><th>Notify Contact:</th><td>";
+        echo "<tr><th>{$strNotifyContact}:</th><td>";
         echo contact_realname($contactrow['notify_contactid']);
         $notify_contact1 = contact_notify($contactrow['notify_contactid'], 1);
-        if ($notify_contact1 > 0) echo " -&gt; ".contact_realname($notify_contact1);
+        if ($notify_contact1 > 0)
+        {
+            echo " -&gt; ".contact_realname($notify_contact1);
+        }
+
         $notify_contact2 = contact_notify($contactrow['notify_contactid'], 2);
-        if ($notify_contact2 > 0) echo " -&gt; ".contact_realname($notify_contact2);
+        if ($notify_contact2 > 0)
+        {
+            echo " -&gt; ".contact_realname($notify_contact2);
+        }
+
         $notify_contact3 = contact_notify($contactrow['notify_contactid'], 3);
-        if ($notify_contact3 > 0) echo " -&gt; ".contact_realname($notify_contact3);
+        if ($notify_contact3 > 0)
+        {
+            echo " -&gt; ".contact_realname($notify_contact3);
+        }
         echo "</td></tr>\n";
     }
 
@@ -146,17 +197,18 @@ while ($contactrow=mysql_fetch_array($contactresult))
 
     plugin_do('contact_details');
 
-    if ($contactrow['timestamp_modified']>0)
+    if ($contactrow['timestamp_modified'] > 0)
     {
-        echo "<tr><td>{$strLastUpdated}:</td><td>".date($CONFIG['dateformat_datetime'],$contactrow['timestamp_modified'])."</td></tr>\n";
+        echo "<tr><th>{$strLastUpdated}:</th>";
+        echo "<td>".date($CONFIG['dateformat_datetime'],$contactrow['timestamp_modified'])."</td></tr>\n";
     }
     echo "</table>\n";
 
     echo "<p align='center'>";
-    echo "<a href=\"add_incident.php?action=findcontact&amp;contactid=$id\">{$strAddIncident}</a> | ";
-    echo "<a href=\"contact_details.php?id=$id&amp;output=vcard\">vCard</a> | ";
-    echo "<a href=\"edit_contact.php?action=edit&amp;contact=$id\">{$strEdit}</a> | ";
-    echo "<a href=\"delete_contact.php?id=$id\">{$strDelete}</a>";
+    echo "<a href='add_incident.php?action=findcontact&amp;contactid={$id}'>{$strAddIncident}</a> | ";
+    echo "<a href='contact_details.php?id={$id}&amp;output=vcard'>vCard</a> | ";
+    echo "<a href='edit_contact.php?action=edit&amp;contact={$id}'>{$strEdit}</a> | ";
+    echo "<a href='delete_contact.php?id={$id}'>{$strDelete}</a>";
     echo "</p>\n";
 
 
@@ -167,7 +219,8 @@ while ($contactrow=mysql_fetch_array($contactresult))
         $sql  = "SELECT supportcontacts.maintenanceid AS maintenanceid, maintenance.product, products.name AS productname, ";
         $sql .= "maintenance.expirydate, maintenance.term ";
         $sql .= "FROM supportcontacts, maintenance, products ";
-        $sql .= "WHERE supportcontacts.maintenanceid=maintenance.id AND maintenance.product=products.id AND supportcontacts.contactid='$id' ";
+        $sql .= "WHERE supportcontacts.maintenanceid=maintenance.id ";
+        $sql .= "AND maintenance.product=products.id AND supportcontacts.contactid='{$id}' ";
         $result=mysql_query($sql);
         if (mysql_error()) trigger_error("MySQL Query Error ".mysql_error(), E_USER_ERROR);
         if (mysql_num_rows($result)>0)
@@ -181,14 +234,15 @@ while ($contactrow=mysql_fetch_array($contactresult))
             $shade='shade2';
             while ($supportedrow=mysql_fetch_array($result))
             {
-                if ($supportedrow['term']=='yes') $shade='expired';
-                if ($supportedrow['expirydate']<$now) $shade='expired';
+                if ($supportedrow['term'] == 'yes') $shade='expired';
+                if ($supportedrow['expirydate'] < $now) $shade='expired';
 
-                echo "<tr><td class='$shade'><img src='{$CONFIG['application_webpath']}images/icons/{$iconset}/16x16/contract.png' width='16' height='16' alt='' /> ";
-                echo "<a href=\"contract_details.php?id=".$supportedrow['maintenanceid']."\">{$strContract}: ".$supportedrow['maintenanceid']."</a></td>";
+                echo "<tr><td class='$shade'>";
+                echo "<img src='{$CONFIG['application_webpath']}images/icons/{$iconset}/16x16/contract.png' width='16' height='16' alt='' /> ";
+                echo "<a href='contract_details.php?id={$supportedrow['maintenanceid']}'>{$strContract}: {$supportedrow['maintenanceid']}</a></td>";
                 echo "<td class='$shade'>".$supportedrow['productname']."</td>";
                 echo "<td class='$shade'>".date($CONFIG['dateformat_date'], $supportedrow['expirydate']);
-                if ($supportedrow['term']=='yes') echo " {$strTerminated}";
+                if ($supportedrow['term'] == 'yes') echo " {$strTerminated}";
                 echo "</td>";
                 echo "</tr>\n";
                 $supportcount++;
@@ -201,11 +255,12 @@ while ($contactrow=mysql_fetch_array($contactresult))
         {
             echo "<p align='center'>This contact is not supported via any contracts</p>\n"; // FIXME i18n not supported
         }
-        echo "<p align='center'><a href='add_contact_support_contract.php?contactid=$id&amp;context=contact'>Associate this contact with an existing contract</a></p>\n";
+        echo "<p align='center'><a href='add_contact_support_contract.php?contactid={$id}&amp;context=contact'>";
+        echo "Associate this contact with an existing contract</a></p>\n"; //FIXME i18n
     }
     else
     {
-        echo "<p align='center'>Related contracts not shown (no permision)</p>\n";
+        echo "<p align='center'>Related contracts not shown (no permision)</p>\n"; //FIXME i18n
     }
 }
 mysql_free_result($contactresult);
