@@ -233,7 +233,8 @@ if (!empty($search_string))
             {
                 $entry['id']=$sresult->id;
                 $entry['ref']="incident-{$sresult->id}";
-                $entry['string'] = $sresult->title;
+                if (!empty($sresult->title)) $entry['string'] = $sresult->title;
+                else $entry['string'] = $strUntitled;
                 $entry['score'] = 10 + search_score_adjust($sterms, $entry['string']);
                 $entry['title'] = $sresult->title;
                 $entry['date'] = $sresult->lastupdated;
