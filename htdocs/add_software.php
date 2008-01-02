@@ -62,7 +62,7 @@ if (empty($submit))
     echo date_picker('addsoftware.lifetime_end');
     echo "</td></tr>\n";
     echo "</table>";
-    echo "<p align='center'><input name='submit' type='submit' value=\"{$strAddSkill}\" /></p>";
+    echo "<p align='center'><input name='submit' type='submit' value='{$strAddSkill}' /></p>";
     echo "<p class='warning'>{$strAvoidDupes}</p>";
     echo "</form>\n";
     echo "<p align='center'><a href='products.php'>{$strReturnWithoutSaving}</a></p>";
@@ -88,7 +88,7 @@ else
     if ($name == "")
     {
         $errors++;
-        $_SESSION['formerrors']['add_software']['name'] = "You must enter a skill name";
+        $_SESSION['formerrors']['add_software']['name'] = $strMustEnterSkillName;
     }
     // Check this is not a duplicate
     $sql = "SELECT id FROM software WHERE LCASE(name)=LCASE('$name') LIMIT 1";
@@ -110,7 +110,7 @@ else
         else
         {
             $id=mysql_insert_id();
-            journal(CFG_LOGGING_DEBUG, 'Skill Added', "Skill $id was added", CFG_JOURNAL_DEBUG, $id);
+            journal(CFG_LOGGING_DEBUG, 'Skill Added', "Skill {$id} was added", CFG_JOURNAL_DEBUG, $id);
             html_redirect("products.php");
             //clear form data
             $_SESSION['formdata']['add_software'] = NULL;

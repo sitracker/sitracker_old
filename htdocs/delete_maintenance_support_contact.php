@@ -64,12 +64,12 @@ if (empty($action) OR $action == "showform")
     }
     else
     {
-        echo "<tr><th>{$strContact} <img src='{$CONFIG['application_webpath']}images/icons/{$iconset}/16x16/contact.png' width='16' height='16' alt='' /></th><td>$contactid";
-        echo "<input name=\"contactid\" type=\"hidden\" value=\"$contactid\" /></td></tr>";
+        echo "<tr><th>{$strContact} <img src='{$CONFIG['application_webpath']}images/icons/{$iconset}/16x16/contact.png' width='16' height='16' alt='' /></th><td>{$contactid}";
+        echo "<input name='contactid' type='hidden' value='$contactid' /></td></tr>";
     }
 
     echo "</table>";
-    echo "<p align='center'><input name='submit' type='submit' value='Continue' /></p>";
+    echo "<p align='center'><input name='submit' type='submit' value='{$strContinue}' /></p>";
     echo "</form>";
     include('htmlfooter.inc.php');
 }

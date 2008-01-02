@@ -94,7 +94,7 @@ else
     if(empty($name))
     {
         $errors++;
-        $_SESSION['formerrors']['add_escalation_path']['name'] = "You must enter a name for the escalation path\n";  // FIXME i18n
+        $_SESSION['formerrors']['add_escalation_path']['name'] = $strMustEnterNameEscalationPath;
     }
 
     if($errors == 0)

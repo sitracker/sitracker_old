@@ -64,11 +64,14 @@ else
         $result = mysql_query($sql);
         if (mysql_error()) trigger_error("MySQL Query Error ".mysql_error(), E_USER_ERROR);
 
-        if (!$result) echo "<p class='error'>Addition of Vendor Failed\n";
+        if (!$result)
+        {
+            echo "<p class='error'>Addition of Vendor Failed\n";
+        }
         else
         {
             $id=mysql_insert_id();
-            journal(CFG_LOGGING_DEBUG, 'Vendor Added', "Vendor $id was added", CFG_JOURNAL_DEBUG, $id);
+            journal(CFG_LOGGING_DEBUG, 'Vendor Added', "Vendor {$id} was added", CFG_JOURNAL_DEBUG, $id);
             html_redirect("products.php");
         }
         clear_form_data('add_vendor');

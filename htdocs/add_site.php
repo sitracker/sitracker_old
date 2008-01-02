@@ -152,7 +152,7 @@ if ($action == "showform" OR $action == '')
     echo "</textarea></td></tr>\n";
     echo "</tbody>";
     echo "</table>\n";
-    echo "<p><input name='submit' type='submit' value=\"{$strAddSite}\" /></p>";
+    echo "<p><input name='submit' type='submit' value='{$strAddSite}' /></p>";
     echo "<p class='warning'>{$strAvoidDupes}</p>\n";
     echo "</form>\n";
     include('htmlfooter.inc.php');
@@ -221,7 +221,7 @@ elseif ($action == "add")
             $id=mysql_insert_id();
 
             plugin_do('site_created');
-            journal(CFG_LOGGING_NORMAL, 'Site Added', "Site $id was added", CFG_JOURNAL_SITES, $id);
+            journal(CFG_LOGGING_NORMAL, 'Site Added', "Site {$id} was added", CFG_JOURNAL_SITES, $id);
             html_redirect("site_details.php?id={$id}");
         }
         clear_form_data('add_site');

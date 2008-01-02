@@ -161,7 +161,7 @@ elseif ($action == "edit")
     }
     else
     {
-        echo "<p class='error'>You must select an email template</p>\n";
+        echo "<p class='error'>{$strMustSelectEmailTemplate}</p>\n";
     }
 }
 elseif ($action == "delete")
@@ -173,7 +173,7 @@ elseif ($action == "delete")
         exit;
     }
     // We only allow user templates to be deleted
-    $sql = "DELETE FROM emailtype WHERE id='$id' AND type='user' LIMIT 1";
+    $sql = "DELETE FROM emailtype WHERE id='{$id}' AND type='user' LIMIT 1";
     mysql_query($sql);
     if (mysql_error()) trigger_error(mysql_error(),E_USER_ERROR);
     header("Location: {$_SERVER['PHP_SELF']}?action=showform");
@@ -263,7 +263,7 @@ elseif ($action == "update")
         if (!$result) echo "<p class='error'>Update of Email Type Failed\n";
         else
         {
-            journal(CFG_LOGGING_NORMAL, 'Email Template Updated', "Email Template $type was modified", CFG_JOURNAL_ADMIN, $type);
+            journal(CFG_LOGGING_NORMAL, 'Email Template Updated', "Email Template {$type} was modified", CFG_JOURNAL_ADMIN, $type);
             html_redirect("edit_emailtype.php");
         }
     }

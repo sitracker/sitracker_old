@@ -131,7 +131,7 @@ if (empty($submit))
     echo " /> {$strDays}</td></tr>\n";
     plugin_do('add_user_form');
     echo "</table>\n";
-    echo "<p><input name='submit' type='submit' value=\"{$strAddUser}\" /></p>";
+    echo "<p><input name='submit' type='submit' value='{$strAddUser}' /></p>";
     echo "</form>\n";
     include('htmlfooter.inc.php');
 

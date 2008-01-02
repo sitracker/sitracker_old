@@ -33,7 +33,7 @@ if (empty($_REQUEST['submit']))
     echo "<tr><th>Question: <sup class='red'>*</sup></th><td><input name='information' size='30' /></td></tr>";
     echo "<tr><th>More Information: <sup class='red'>*</sup></th><td><input name='moreinformation' size='30' /></td></tr>";
     echo "</table>";
-    echo "<p align='center'><input name='submit' type='submit' value='Add' /></p>";
+    echo "<p align='center'><input name='submit' type='submit' value='{$strAdd}' /></p>";
     echo "</form>";
 }
 else
@@ -49,13 +49,13 @@ else
     if ($product == 0)
     {
         $errors = 1;
-        echo "<p class='error'>You must select a product</p>\n";
+        echo "<p class='error'>{$strMustEnterProduct}</p>\n";
     }
     // check for blank information
     if ($information == "")
     {
         $errors = 1;
-        echo "<p class='error'>You must enter some product information</p>\n";
+        echo "<p class='error'>{$strMustEnterProductInformation}</p>\n";
     }
 
     // add product information if no errors
