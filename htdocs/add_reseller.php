@@ -69,21 +69,15 @@ switch($action)
         break;
     default:
         include('htmlheader.inc.php');
-        echo "<script type=\"text/javascript\">";
-        echo "function confirm_submit()
-        {
-            return window.confirm('Are you sure you want to add this reseller?');
-        }
-        </script>";
         echo show_form_errors('add_reseller');
         clear_form_errors('formerrors');
         echo "<h2>{$strAddReseller}</h2>";
         echo "<p align='center'>".sprintf($strMandatoryMarked, "<sup class='red'>*</sup>")."</p>";
-        echo "<form action=\"".$_SERVER['PHP_SELF']."?action=add\" method=\"post\" onsubmit=\"return confirm_submit()\">";
+        echo "<form action='{$_SERVER['PHP_SELF']}?action=add' method='post' onsubmit='return confirm_submit(\"{$strAreYouSureAddReseller}\")>";
         echo "<table align='center' class='vertical'>";
         echo "<tr><th>{$strName}: <sup class='red'>*</sup></th><td><input type='text' name='reseller_name' /></td></tr>";
         echo "</table>";
-        echo "<p align='center'><input name=\"submit\" type=\"submit\" value=\"{$strAddReseller}\" /></p>";
+        echo "<p align='center'><input name='submit' type='submit' value='{$strAddReseller}' /></p>";
         echo "</form>";
         include('htmlfooter.inc.php');
         break;

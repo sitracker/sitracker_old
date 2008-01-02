@@ -26,14 +26,6 @@ $contact = cleanvar($_REQUEST['contact']);
 $action = cleanvar($_REQUEST['action']);
 
 include('htmlheader.inc.php');
-?>
-<script type='text/javascript'>
-function confirm_submit()
-{
-    return window.confirm('Are you sure you want to make these changes?');
-}
-</script>
-<?php
 
 // User has access
 if (empty($action) OR $action == "showform" OR empty($contact))
@@ -45,7 +37,7 @@ if (empty($action) OR $action == "showform" OR empty($contact))
     echo "<table align='center'>";
     echo "<tr><th>{$strContact}:</th><td>".contact_site_drop_down("contact", 0)."</td></tr>";
     echo "</table>";
-    echo "<p align='center'><input name='submit' type='submit' value=\"$strContinue\" /></p>";
+    echo "<p align='center'><input name='submit' type='submit' value='{$strContinue}' /></p>";
     echo "</form>\n";
 }
 elseif ($action == "edit" && isset($contact))
@@ -56,10 +48,11 @@ elseif ($action == "edit" && isset($contact))
     $contactresult = mysql_query($sql);
     if (mysql_error()) trigger_error("MySQL Query Error ".mysql_error(), E_USER_ERROR);
     while ($contactrow=mysql_fetch_array($contactresult))
-    {                                                   // User does not have access
+    {
+        // User does not have access
         echo "<h2><img src='{$CONFIG['application_webpath']}images/icons/{$iconset}/32x32/contact.png' width='32' height='32' alt='' /> ";
         echo "{$strEditContact}: {$contact}</h2>";
-        echo "<form name='contactform' action='{$_SERVER['PHP_SELF']}?action=update' method='post' onsubmit='return confirm_submit();'>";
+        echo "<form name='contactform' action='{$_SERVER['PHP_SELF']}?action=update' method='post' onsubmit='return confirm_submit(\"{$strAreYouSureMakeTheseChanges}\");'>";
         echo "<p align='center'>".sprintf($strMandatoryMarked, "<sup class='red'>*</sup>")."</p>";
         echo "<table align='center' class='vertical'>";
         echo "<tr><th>{$strName}: <sup class='red'>*</sup><br />{$strTitle}, {$strForenames}, {$strSurname}</th>";

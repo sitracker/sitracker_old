@@ -46,14 +46,7 @@ switch($mode)
 }
 
 include('htmlheader.inc.php');
-?>
-<script type="text/javascript">
-function confirm_submit()
-{
-    return window.confirm('Are you sure you want to make these changes?');
-}
-</script>
-<?php
+
 //
 // Display current Contact Flags
 //
@@ -63,7 +56,7 @@ if (mysql_error()) trigger_error("MySQL Query Error ".mysql_error(), E_USER_ERRO
 while ($contactrow=mysql_fetch_array($contactresult))
 {
     echo "<table align='center'>";
-    echo "<tr><th>Name:</th><td><h3><a href='edit_contact.php?action=edit&amp;contact={$contactid}'>".$contactrow['forenames'].' '.$contactrow['surname']."</a></h3></td></tr>";
+    echo "<tr><th>Name:</th><td><h3><a href='edit_contact.php?action=edit&amp;contact={$contactid}'>{$contactrow['forenames']} {$contactrow['surname']}</a></h3></td></tr>";
     echo "<tr><th>Current Flags:</th><td>";
     print_contact_flags($contactid, TRUE);
     echo "</td></tr>\n";
@@ -93,14 +86,18 @@ while ($flagrow=mysql_fetch_array($flagresult))
 {
     if (!in_array($flagrow['flag'], $cflags))
     {
-        echo "<td class=\"shade2\" align=\"center\"><a href=\"{$_SERVER['PHP_SELF']}?mode=addflag&amp;id=$contactid&amp;flag=".strtoupper($flagrow['flag'])."\" title=\"".$flagrow['name']."\">".strtoupper($flagrow['flag'])."</a><br />{$flagrow['name']}</td>\n";
-        if ($col>4) { echo "</tr>\n<tr>"; $col=0;}
+        echo "<td class='shade2' align='center'><a href='{$_SERVER['PHP_SELF']}?mode=addflag&amp;id={$contactid}&amp;flag=".strtoupper($flagrow['flag'])."' title='{$flagrow['name']}'>".strtoupper($flagrow['flag'])."</a><br />{$flagrow['name']}</td>\n";
+        if ($col>4)
+        {
+            echo "</tr>\n<tr>"; 
+            $col=0;
+        }
         $col++;
     }
 }
 while($col<=5)
 {
-    echo "<td class=\"shade2\">&nbsp;</td>";
+    echo "<td class='shade2'>&nbsp;</td>";
     $col++;
 }
 echo "</tr></table>";

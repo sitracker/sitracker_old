@@ -13,6 +13,8 @@
 
 // Author: Ivan Lucas <ivanlucas[at]users.sourceforge.net>
 
+// FIXME i18n
+
 // This Page Is Valid XHTML 1.0 Transitional!   31Oct05
 
 @include('set_include_path.inc.php');
@@ -34,19 +36,13 @@ $contactid = cleanvar($_REQUEST['contactid']);
 if (empty($action) OR $action == "showform")
 {
     include('htmlheader.inc.php');
-    ?>
-    <script type='text/javascript'>
-    function confirm_submit()
-    {
-        return window.confirm('This will remove the ability to log incidents for this contact regarding the product which this contract is for. Are you sure you want to delete this maintenance support contact?');
-    }
-    </script>
-    <h2>Remove the link between a contract and a support contact</h2>
-    <p align='center'>This will mean that the contact will not be able to log any further support incidents for the related product</p>
-    <form action="<?php echo $_SERVER['PHP_SELF']; ?>?action=delete" method="post" onsubmit="return confirm_submit()">
-    <input type="hidden" name="context" value="<?php echo $context ?>" />
-    <table align='center' class='vertical'>
-    <?php
+
+    echo "<h2>Remove the link between a contract and a support contact</h2>";
+    echo "<p align='center'>This will mean that the contact will not be able to log any further support incidents for the related product</p>";
+    echo "<form action='{$_SERVER['PHP_SELF']}?action=delete' method='post' onsubmit='return confirm_submit(\"{$strAreYouSureDeleteMaintenceContract}\")'>";
+    echo "<input type='hidden' name='context' value='{$context}' />";
+    echo "<table align='center' class='vertical'>";
+
     if (empty($maintid))
     {
         echo "<tr><th>{$strContract} <img src='{$CONFIG['application_webpath']}images/icons/{$iconset}/16x16/contract.png' width='16' height='16' alt='' /></th>";
@@ -71,11 +67,10 @@ if (empty($action) OR $action == "showform")
         echo "<tr><th>{$strContact} <img src='{$CONFIG['application_webpath']}images/icons/{$iconset}/16x16/contact.png' width='16' height='16' alt='' /></th><td>$contactid";
         echo "<input name=\"contactid\" type=\"hidden\" value=\"$contactid\" /></td></tr>";
     }
-    ?>
-    </table>
-    <p align='center'><input name="submit" type="submit" value="Continue" /></p>
-    </form>
-    <?php
+
+    echo "</table>";
+    echo "<p align='center'><input name='submit' type='submit' value='Continue' /></p>";
+    echo "</form>";
     include('htmlfooter.inc.php');
 }
 elseif ($action == "delete")

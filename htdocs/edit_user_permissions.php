@@ -28,14 +28,7 @@ if ($CONFIG['demo'] AND $_SESSION['userid']!=1)
 
 
 include('htmlheader.inc.php');
-?>
-<script type="text/javascript">
-function confirm_submit()
-{
-    return window.confirm('Are you sure you want to make these changes?');
-}
-</script>
-<?php
+
 // External variables
 $user = cleanvar($_REQUEST['user']);
 $role = cleanvar($_REQUEST['role']);
@@ -51,7 +44,7 @@ if (empty($action) OR $action == "showform")
     if(mysql_num_rows($result) >= 1)
     {
         echo "<h2>{$strRolePermissions}</h2>";
-        echo "<form action='{$_SERVER['PHP_SELF']}' method='post' onsubmit='return confirm_submit()'>";
+        echo "<form action='{$_SERVER['PHP_SELF']}' method='post' onsubmit='return confirm_submit(\"{$strAreYouSureMakeTheseChanges}\")'>";
         echo "<table align='center'>";
         echo "<tr>";
         echo "<th>{$strPermission}</th>";
@@ -110,7 +103,7 @@ elseif ($action == "edit" && (!empty($user) OR !empty($role)))
            $userrolepermission[]=$roleperm->permissionid;
         }
     }
-    echo "<form action='{$_SERVER['PHP_SELF']}?action=update' method='post' onsubmit='return confirm_submit()'>";
+    echo "<form action='{$_SERVER['PHP_SELF']}?action=update' method='post' onsubmit='return confirm_submit(\"{$strAreYouSureMakeTheseChanges}\")'>";
     echo "<table align='center'>
     <tr>
     <th>ID</th>

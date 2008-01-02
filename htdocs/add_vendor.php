@@ -27,24 +27,16 @@ if (empty($submit))
 {
     // Show form
     include('htmlheader.inc.php');
-    ?>
-    <script type="text/javascript">
-    function confirm_submit()
-    {
-        return window.confirm('Are you sure you want to add this vendor?');
-    }
-    </script>
 
-    <?php
     echo show_form_errors('add_vendor');
     clear_form_errors('add_vendor');
     echo "<h2>{$strAddVendor}</h2>";
     echo "<h5>".sprintf($strMandatoryMarked,"<sup class='red'>*</sup>")."</h5>";
-    echo "<form action='{$_SERVER['PHP_SELF']}' method='post' onsubmit='return confirm_submit()'>";
+    echo "<form action='{$_SERVER['PHP_SELF']}' method='post' onsubmit='return confirm_submit(\"{$strAreYouSureAddVendor}\")'>";
     echo "<table align='center' class='vertical'>";
     echo "<tr><th>{$strVendor}<sup class='red'>*</sup></th><td><input maxlength='50' name='name' size='30' /></td></tr>\n";
     echo "</table>";
-    echo "<p align='center'><input name='submit' type='submit' value=\"{$strSave}\" /></p>";
+    echo "<p align='center'><input name='submit' type='submit' value='{$strSave}' /></p>";
     echo "<p class='warning'>{$strAvoidDupes}</p>";
     echo "</form>\n";
     echo "<p align='center'><a href='products.php'>{$strReturnWithoutSaving}</a></p>";
@@ -62,7 +54,7 @@ else
     if ($name == "")
     {
         $errors++;
-        $_SESSION['formerrors']['name'] = "You must enter a name";
+        $_SESSION['formerrors']['name'] = $strMustEnterName;
     }
 
     // add product if no errors

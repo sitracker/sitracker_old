@@ -54,10 +54,6 @@ if ($action == "edit")
         ?>
         <script type='text/javascript'>
         <!--
-        function confirm_submit()
-        {
-            return window.confirm('Are you sure you want to make these changes?');
-        }
 
         function set_terminated()
         {
@@ -78,7 +74,7 @@ if ($action == "edit")
         echo "<h2><img src='{$CONFIG['application_webpath']}images/icons/{$iconset}/32x32/contract.png' width='32' height='32' alt='' /> ";
         echo "{$strEditContract}: {$maintid}</h2>";
         echo "<h5>".sprintf($strMandatoryMarked,"<sup class='red'>*</sup>")."</h5>";
-        echo "<form id='maintform' name='maintform' action='{$_SERVER['PHP_SELF']}?action=update' method='post' onsubmit='return confirm_submit()'>\n";
+        echo "<form id='maintform' name='maintform' action='{$_SERVER['PHP_SELF']}?action=update' method='post' onsubmit='return confirm_submit(\"{$strAreYouSureMakeTheseChanges}\")'>\n";
         echo "<table align='center' class='vertical'>";
         echo "<tr><th>{$strSite}: <sup class='red'>*</sup></th><td>";
         echo site_name($maint["site"]). "</td></tr>";
@@ -86,7 +82,7 @@ if ($action == "edit")
         echo "<tr><th>{$strContacts}:</th><td>";
         echo "<input type='hidden' name ='contacts' value='amount' />";
         // echo "<input value='amount' type='radio' name='contacts' checked='checked' />";
-        echo "{$strLimitTo} <input size='2' value='$maint[supportedcontacts]' name='amount' /> {$strSupportedContacts} ({$str0MeansUnlimited})<br />";
+        echo "{$strLimitTo} <input size='2' value='{$maint[supportedcontacts]}' name='amount' /> {$strSupportedContacts} ({$str0MeansUnlimited})<br />";
         //         echo "<input type='radio' value='all' name='contacts'";
         //         if($maint[allcontactssupported] == 'Yes')
         //         echo "checked='checked'";
@@ -107,9 +103,13 @@ if ($action == "edit")
         if ($maint['expirydate'] > 0) echo date('Y-m-d',$maint['expirydate']);
         echo "' /> ".date_picker('maintform.expirydate');
         if($maint['expirydate'] == '-1')
+        {
             echo "<input type='checkbox' checked='checked' name='noexpiry' /> {$strUnlimited}";
+        }
         else
+        {
             echo "<input type='checkbox' name='noexpiry' /> {$strUnlimited}";
+        }
         echo "</td></tr>\n";
         echo "<tr><th>{$strServiceLevel}:</th><td>";
         echo servicelevel_drop_down('servicelevelid',$maint['servicelevelid'], TRUE);

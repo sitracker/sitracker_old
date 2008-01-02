@@ -30,21 +30,14 @@ if ($action == "showform" OR $action=='')
 {
     include('htmlheader.inc.php');
 
-    ?>
-    <script type="text/javascript">
-    function confirm_submit()
-    {
-        return window.confirm('Are you sure you want to add this contract?');
-    }
-    </script>
-    <?php
     echo show_form_errors('add_contract');
     clear_form_errors('add_contract');
     echo "<h2><img src='{$CONFIG['application_webpath']}images/icons/{$iconset}/32x32/contract.png' width='32' height='32' alt='' /> ";
     echo "{$strAddContract}</h2>";
     echo "<h5>".sprintf($strMandatoryMarked,"<sup class='red'>*</sup>")."</h5>";
-    echo "<form name='addcontract' action='{$_SERVER['PHP_SELF']}?action=add' method='post' onsubmit='return confirm_submit();'>";
+    echo "<form name='addcontract' action='{$_SERVER['PHP_SELF']}?action=add' method='post' onsubmit='return confirm_submit(\"{$strAreYouSureAddContract}\");'>";
     echo "<table align='center' class='vertical'>";
+
     echo "<tr><th>{$strSite} <sup class='red'>*</sup></th><td>";
     if($_SESSION['formdata']['add_contract']['site'] != "")
     {

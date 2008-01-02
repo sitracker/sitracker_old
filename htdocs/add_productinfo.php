@@ -21,20 +21,13 @@ require('functions.inc.php');
 require('auth.inc.php');
 
 include('htmlheader.inc.php');
-?>
-<script type="text/javascript">
-function confirm_submit()
-{
-    return window.confirm('Are you sure you want to add this product information?');
-}
-</script>
-<?php
+
 // Show add product information form
 if (empty($_REQUEST['submit']))
 {
     echo "<h2>{$strAddProductQuestion}</h2>";
     echo "<h5>".sprintf($strMandatoryMarked,"<sup class='red'>*</sup>")."</h5>";
-    echo "<form action='{$_SERVER['PHP_SELF']}' method='post' onsubmit='return confirm_submit()'>";
+    echo "<form action='{$_SERVER['PHP_SELF']}' method='post' onsubmit='return confirm_submit(\"{$strAreYouSureAddProductInfo}\")'>";
     echo "<table align='center'>";
     echo "<tr><th>Product:</th><td>".product_drop_down("product", 0)."</td></tr>";
     echo "<tr><th>Question: <sup class='red'>*</sup></th><td><input name='information' size='30' /></td></tr>";
