@@ -99,7 +99,7 @@ switch ($type)
         {
             case 1: // Action Needed
                 echo "<span style='color: Red'>{$strActionNeeded}</span>";
-
+                echo "</h2><hr /><br />";
                 $sql .= "AND (status!='2') ";  // not closed
                 // the "1=2" obviously false else expression is to prevent records from showing unless the IF condition is true
                 $sql .= "AND ((timeofnextaction > 0 AND timeofnextaction < $now) OR ";
@@ -111,26 +111,26 @@ switch ($type)
 
             case 2: // Waiting
                 echo "<span style='color: Green'>{$strWaiting}</span>";
+                echo "</h2><hr /><br />";
                 $sql .= "AND ((status >= 4 AND status <= 8) OR (timeofnextaction > 0 AND timeofnextaction > $now)) ";
             break;
 
             case 3: // All Open
                 echo "<span style='color: Blue'>{$strAllOpen}</span>";
+                echo "</h2><hr /><br />";
                 $sql .= "AND status!='2' ";
             break;
 
             case 4: // All Closed
                 echo "<span style='color: Gray'>{$strAllClosed}</span>";
+                echo "</h2><hr /><br />";
                 $sql .= "AND status='2' ";
             break;
 
             default:
                 trigger_error("Invalid queue ($queue) on query string",E_USER_NOTICE);
             break;
-        }
-        echo "</h2>\n";
-
-        // Create SQL for Sorting
+        }        // Create SQL for Sorting
         if (!empty($sort))
         {
             if ($order=='a' OR $order=='ASC' OR $order='') $sortorder = "ASC";
@@ -234,7 +234,8 @@ switch ($type)
             switch ($queue)
             {
                 case 1: // Action Needed
-                    echo "<h2>{$strOtherIncidents}: <span style='color: Red'>{$strActionNeeded}</span></h2>\n";
+                    echo "<h2>{$strOtherIncidents}: <span style='color: Red'>{$strActionNeeded}</span>\n";
+                    echo "</h2><hr /><br />";
                     $sql .= "AND (status!='2') ";  // not closed
                     // the "1=2" obviously false else expression is to prevent records from showing unless the IF condition is true
                     $sql .= "AND ((timeofnextaction > 0 AND timeofnextaction < $now) OR ";
@@ -245,17 +246,20 @@ switch ($type)
                 break;
 
                 case 2: // Waiting
-                    echo "<h2>{$strOtherIncidents}: <span style='color: Green'>{$strWaiting}</span></h2>\n";
+                    echo "<h2>{$strOtherIncidents}: <span style='color: Green'>{$strWaiting}</span>\n";
+                    echo "</h2><hr /><br />";
                     $sql .= "AND (status >= 4 AND status <= 8) ";
                 break;
 
                 case 3: // All Open
-                    echo "<h2>{$strOtherIncidents}: <span style='color: Blue'>{$strAllOpen}</span></h2>\n";
+                    echo "<h2>{$strOtherIncidents}: <span style='color: Blue'>{$strAllOpen}</span>\n";
+                    echo "</h2><hr /><br />";
                     $sql .= "AND status!='2' ";
                 break;
 
                 case 4: // All Closed
-                    echo "<h2>{$strOtherIncidents}: <span style='color: Gray'>{$strAllClosed}</span></h2>\n";
+                    echo "<h2>{$strOtherIncidents}: <span style='color: Gray'>{$strAllClosed}</span>\n";
+                    echo "</h2><hr /><br />";
                     $sql .= "AND status='2' ";
                 break;
 
