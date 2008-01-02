@@ -204,10 +204,10 @@ while ($contactrow=mysql_fetch_array($contactresult))
     if (user_permission($sit[2],30)) // view supported products
     {
         echo "<h4>{$strContracts}:</h4>";
-        $sql  = "SELECT sc.maintenanceid AS maintenanceid, maintenance.product, products.name AS productname, ";
-        $sql .= "maintenance.expirydate, maintenance.term ";
-        $sql .= "FROM `{$dbSupportContacts}` AS sc, maintenance, products ";
-        $sql .= "WHERE sc.maintenanceid=maintenance.id AND maintenance.product=products.id AND sc.contactid='$id' ";
+        $sql  = "SELECT sc.maintenanceid AS maintenanceid, m.product, p.name AS productname, ";
+        $sql .= "m.expirydate, m.term ";
+        $sql .= "FROM `{$dbSupportContacts}` AS sc, `{$dbMaintenance}` AS m, `{$dbProducts}` AS p ";
+        $sql .= "WHERE sc.maintenanceid=m.id AND m.product=p.id AND sc.contactid='$id' ";
         $result=mysql_query($sql);
         if (mysql_error()) trigger_error("MySQL Query Error ".mysql_error(), E_USER_ERROR);
         if (mysql_num_rows($result)>0)
@@ -227,7 +227,7 @@ while ($contactrow=mysql_fetch_array($contactresult))
                 echo "<tr><td class='$shade'>";
                 echo "<img src='{$CONFIG['application_webpath']}images/icons/{$iconset}/16x16/contract.png' width='16' height='16' alt='' /> ";
                 echo "<a href='contract_details.php?id={$supportedrow['maintenanceid']}'>{$strContract}: {$supportedrow['maintenanceid']}</a></td>";
-                echo "<td class='$shade'>".$supportedrow['productname']."</td>";
+                echo "<td class='$shade'>{$supportedrow['productname']}</td>";
                 echo "<td class='$shade'>".date($CONFIG['dateformat_date'], $supportedrow['expirydate']);
                 if ($supportedrow['term'] == 'yes') echo " {$strTerminated}";
                 echo "</td>";
