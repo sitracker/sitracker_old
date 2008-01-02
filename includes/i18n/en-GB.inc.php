@@ -14,6 +14,7 @@ $strAbout = 'About';
 $strAbsentSick = 'Absent Sick';
 # e.g. Accepting incidents
 $strAccepting = 'Accepting';
+$strAccessDetails = 'Access Details';
 $strActionNeeded = 'Action Needed';
 $strActionPlan = 'Action Plan';
 $strActionPlanBy = 'Action plan by %s';
@@ -441,6 +442,7 @@ $strMorning = 'Morning';
 $strMultiIncidents = '%d Incidents';
 $strMustEnterEmail = 'You must enter an email address';
 $strMustEnterSurname = 'You must enter a contact Surname';
+$strMustEnterSiteName = 'You must enter a site name';
 $strMustSelectCustomerSite = 'You must select a site for this customer';
 $strMustSelectSite = 'You must select a site';
 $strMyDashboard = 'My Dashboard';

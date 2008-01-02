@@ -63,25 +63,36 @@ elseif ($action == "edit" && isset($contact))
         echo "<p align='center'>".sprintf($strMandatoryMarked, "<sup class='red'>*</sup>")."</p>";
         echo "<table align='center' class='vertical'>";
         echo "<tr><th>{$strName}: <sup class='red'>*</sup><br />{$strTitle}, {$strForenames}, {$strSurname}</th>";
-        echo "<td><input maxlength='50' name='salutation' title='Salutation (Mr, Mrs, Miss, Dr. etc.)' size='7' value=\"{$contactrow['salutation']}\" />\n";
-        echo "<input maxlength='100' name='forenames' size='15' title='Firstnames (or initials)' value=\"{$contactrow['forenames']}\" />\n";
-        echo "<input maxlength='100' name='surname' size='20' title='Surname/Last Name' value=\"{$contactrow['surname']}\" /></td></tr>\n";
-        echo "<tr><th>{$strTags}:</th><td><textarea rows='2' cols='60' name='tags'>".list_tags($contact, TAG_CONTACT, false)."</textarea></td></tr>\n";
-        echo "<tr><th>{$strJobTitle}:</th><td><input maxlength='255' name='jobtitle' size='40' value=\"{$contactrow['jobtitle']}\" /></td></tr>\n";
-        echo "<tr><th>{$strSite}: <sup class='red'>*</sup></th><td>".site_drop_down('siteid',$contactrow['siteid'])."</td></tr>\n";
-        echo "<tr><th>{$strDepartment}:</th><td><input maxlength='100' name='department' size='40' value=\"{$contactrow['department']}\" /></td></tr>\n";
-        echo "<tr><th>{$strEmail}: <sup class='red'>*</sup></th><td><input maxlength='100' name='email' size='40' value=\"{$contactrow['email']}\" />";
+        echo "<td><input maxlength='50' name='salutation' title='Salutation (Mr, Mrs, Miss, Dr. etc.)' size='7' value='{$contactrow['salutation']}' />\n";
+        echo "<input maxlength='100' name='forenames' size='15' title='Firstnames (or initials)' value='{$contactrow['forenames']}' />\n";
+        echo "<input maxlength='100' name='surname' size='20' title='{$strSurname}' value='{$contactrow['surname']}' />";
+        echo "</td></tr>\n";
+        echo "<tr><th>{$strTags}:</th><td><textarea rows='2' cols='60' name='tags'>";
+        echo list_tags($contact, TAG_CONTACT, false)."</textarea></td></tr>\n";
+        echo "<tr><th>{$strJobTitle}:</th><td>";
+        echo "<input maxlength='255' name='jobtitle' size='40' value=\"{$contactrow['jobtitle']}\" />";
+        echo "</td></tr>\n";
+        echo "<tr><th>{$strSite}: <sup class='red'>*</sup></th><td>";
+        echo site_drop_down('siteid', $contactrow['siteid'])."</td></tr>\n";
+        echo "<tr><th>{$strDepartment}:</th><td>";
+        echo "<input maxlength='100' name='department' size='40' value='{$contactrow['department']}' />";
+        echo "</td></tr>\n";
+        echo "<tr><th>{$strEmail}: <sup class='red'>*</sup></th><td>";
+        echo "<input maxlength='100' name='email' size='40' value='{$contactrow['email']}' />";
         echo "<label>";
         html_checkbox('dataprotection_email', $contactrow['dataprotection_email']);
         echo "{$strEmail} {$strDataProtection}</label>";
         echo "</td></tr>\n";
-        echo "<tr><th>{$strTelephone}:</th><td><input maxlength='50' name='phone' size='40' value=\"{$contactrow['phone']}\" />";
+        echo "<tr><th>{$strTelephone}:</th><td>";
+        echo "<input maxlength='50' name='phone' size='40' value='{$contactrow['phone']}' />";
         echo "<label>";
         html_checkbox('dataprotection_phone', $contactrow['dataprotection_phone']);
         echo "{$strTelephone} {$strDataProtection}</label>";
         echo "</td></tr>\n";
-        echo "<tr><th>{$strMobile}:</th><td><input maxlength='50' name='mobile' size='40' value=\"{$contactrow['mobile']}\" /></td></tr>\n";
-        echo "<tr><th>{$strFax}:</th><td><input maxlength='50' name='fax' size='40' value=\"{$contactrow['fax']}\" /></td></tr>\n";
+        echo "<tr><th>{$strMobile}:</th><td>";
+        echo "<input maxlength='50' name='mobile' size='40' value='{$contactrow['mobile']}' /></td></tr>\n";
+        echo "<tr><th>{$strFax}:</th><td>";
+        echo "<input maxlength='50' name='fax' size='40' value='{$contactrow['fax']}' /></td></tr>\n";
         echo "<tr><th>{$strActive}:</th><td><input type='checkbox' name='active'";
         if($contactrow['active']=='true') echo "checked='".$siterow['active']."'";
         echo " value='true' /></td></tr> <tr><th></th><td>";
@@ -100,24 +111,35 @@ elseif ($action == "edit" && isset($contact))
         echo "<tr><th>{$strAddress}:</th><td><label>";
         html_checkbox('dataprotection_address', $contactrow['dataprotection_address']);
         echo " {$strAddress} {$strDataProtection}</label></td></tr>\n";
-        echo "<tr><th>{$strAddress1}:</th><td><input maxlength='255' name='address1' size='40' value=\"{$contactrow['address1']}\" {$extraattributes} /></td></tr>\n";
-        echo "<tr><th>{$strAddress2}:</th><td><input maxlength='255' name='address2' size='40' value=\"{$contactrow['address2']}\" {$extraattributes} /></td></tr>\n";
-        echo "<tr><th>{$strCity}:</th><td><input maxlength=255' name='city' size='40' value=\"{$contactrow['city']}\" {$extraattributes} /></td></tr>\n";
-        echo "<tr><th>{$strCounty}:</th><td><input maxlength='255' name='county' size='40' value=\"{$contactrow['county']}\" {$extraattributes} /></td></tr>\n";
-        echo "<tr><th>{$strPostcode}:</th><td><input maxlength='255' name='postcode' size='40' value=\"{$contactrow['postcode']}\" {$extraattributes} /></td></tr>\n";
+        echo "<tr><th>{$strAddress1}:</th><td>";
+        echo "<input maxlength='255' name='address1' size='40' value='{$contactrow['address1']}' {$extraattributes} />";
+        echo "</td></tr>\n";
+        echo "<tr><th>{$strAddress2}:</th><td>";
+        echo "<input maxlength='255' name='address2' size='40' value='{$contactrow['address2']}' {$extraattributes} />";
+        echo "</td></tr>\n";
+        echo "<tr><th>{$strCity}:</th><td>";
+        echo "<input maxlength=255' name='city' size='40' value='{$contactrow['city']}' {$extraattributes} />";
+        echo "</td></tr>\n";
+        echo "<tr><th>{$strCounty}:</th><td>";
+        echo "<input maxlength='255' name='county' size='40' value='{$contactrow['county']}' {$extraattributes} />";
+        echo "</td></tr>\n";
+        echo "<tr><th>{$strPostcode}:</th><td>";
+        echo "<input maxlength='255' name='postcode' size='40' value='{$contactrow['postcode']}' {$extraattributes} />";
+        echo "</td></tr>\n";
         echo "<tr><th>{$strCountry}:</th><td>";
         echo country_drop_down('country', $contactrow['country'], $extraattributes);
         echo "</td></tr>\n";
-        // FIXME i18n Notify Contact
-        echo "<tr><th>Notify contact:</th><td>".contact_site_drop_down('notify_contactid', $contactrow['notify_contactid'], $contactrow['siteid'], $contact)."</td></tr>\n";
-        echo "<tr><th>{$strNotes}:</th><td><textarea rows='5' cols='60' name='notes'>{$contactrow['notes']}</textarea></td></tr>\n";
+        echo "<tr><th>{$strNotifyContact}:</th><td>";
+        echo contact_site_drop_down('notify_contactid', $contactrow['notify_contactid'], $contactrow['siteid'], $contact);
+        echo "</td></tr>\n";
+        echo "<tr><th>{$strNotes}:</th><td>";
+        echo "<textarea rows='5' cols='60' name='notes'>{$contactrow['notes']}</textarea></td></tr>\n";
 
         plugin_do('edit_contact_form');
         echo "</table>";
-        ?>
-        <input name="contact" type="hidden" value="<?php echo $contact ?>" />
 
-        <?php
+        echo "<input name='contact' type='hidden' value='{$contact}' />";
+
         echo "<p align='center'><input name='submit' type='submit' value='{$strSave}' /></p>";
         echo "</form>\n";
     }
@@ -159,19 +181,19 @@ else if ($action == "update")
     if ($surname == '')
     {
         $errors = 1;
-        echo "<p class='error'>You must enter a surname</p>\n";
+        echo "<p class='error'>{$strMustEnterSurname}</p>\n";
     }
     // check for blank site
     if ($siteid == "")
     {
         $errors = 1;
-        echo "<p class='error'>You must enter a site name</p>\n";
+        echo "<p class='error'>{$strMustEnterSiteName}</p>\n";
     }
     // check for blank name
     if ($email == "" OR $email=='none' OR $email=='n/a')
     {
         $errors = 1;
-        echo "<p class='error'>You must enter an email address</p>\n";
+        echo "<p class='error'>{$strMustEnterEmail}</p>\n";
     }
     // check for blank contact id
     if ($contact == "")
@@ -211,7 +233,7 @@ else if ($action == "update")
         {
             plugin_do('save_contact_form');
 
-            journal(CFG_LOGGING_NORMAL, 'Contact Edited', "Contact $contact was edited", CFG_JOURNAL_CONTACTS, $contact);
+            journal(CFG_LOGGING_NORMAL, 'Contact Edited', "Contact {$contact} was edited", CFG_JOURNAL_CONTACTS, $contact);
             html_redirect("contact_details.php?id={$contact}");
             exit;
         }
