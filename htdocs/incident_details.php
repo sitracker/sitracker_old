@@ -50,6 +50,17 @@ elseif ($_REQUEST['win']=='jump')
         echo "</head><body onload=\"window.location='{$_SERVER['HTTP_REFERER']}';\"></body></html>";
     }
 }
+elseif ($_REQUEST['win'] == 'holdingview')
+{
+    $_REQUEST['win'] = 'incomingview';
+    $title='Incoming';
+    $incidentid='';
+    include('incident_html_top.inc.php');
+    include('incident/details.inc.php');
+
+    include('incident/log.inc.php');
+}
+
 else
 {
     $title='Details';

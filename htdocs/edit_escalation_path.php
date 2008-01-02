@@ -30,20 +30,12 @@ if (empty($_REQUEST['mode']))
     if (mysql_error()) trigger_error(mysql_error(),E_USER_ERROR);
 
     include ('htmlheader.inc.php');
-    ?>
-    <script type='text/javascript'>
-    function confirm_submit()
-    {
-        return window.confirm('Are you sure you want to edit this escalation path?');
-    }
-    </script>
-    <?php
 
     echo "<h2>{$title}</h2>";
 
     while ($details = mysql_fetch_object($result))
     {
-        echo "<form action='".$_SERVER['PHP_SELF']."' method='post' onsubmit='return confirm_submit()'>";
+        echo "<form action='".$_SERVER['PHP_SELF']."' method='post' onsubmit='return confirm_submit(\"{$strAreYouSureEditEscalationPath}\")'>";
         echo "<table class='vertical'>";
         echo "<tr><th>{$strName}:</th><td><input name='name' value='{$details->name}'/></td></tr>";
         echo "<tr><th>Track URL:</th><td><input name='trackurl' value='{$details->track_url}' /><br />Note: insert '%externalid%' for automatic incident number insertion</td></tr>";

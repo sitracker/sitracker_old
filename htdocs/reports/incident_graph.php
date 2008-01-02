@@ -34,7 +34,8 @@ $currentyear = date('Y');
 $currentmonth = date('n');
 $daysinyear = date('z',mktime(0,0,0,12,31,$year));
 flush();
-echo "<table summary=\"Graph\" align=\"center\" style='border: 1px solid #000;' width='250'>";
+
+echo "<table summary='Graph' align='center' style='border: 1px solid #000;' width='250'>";
 if (empty($startyear))
 {
     $startyear = $currentyear;
@@ -43,16 +44,17 @@ if (empty($startyear))
 if (empty($startmonth))
 {
     $startmonth = 1;
-    $lastyear = $startyear + 1;
+    $lastyear = $startyear+1;
 }
 else
 {
-    $lastyear = $startyear + 2;
+    $lastyear=$startyear+2;
 }
-if ($startyear==$currentyear) $lastmonth = $currentmonth;
-else $lastmonth = 12;
 
-echo "<h2>Incidents <span style='color: $openedcolour;'>Opened</span> and <span style='color: $closedcolour;'>Closed</span> each month</h2>";
+if ($startyear==$currentyear) $lastmonth=$currentmonth;
+else $lastmonth=12;
+
+echo "<h2>Incidents <span style='color: {$openedcolour};'>Opened</span> and <span style='color: {$closedcolour};'>Closed</span> each month</h2>";
 echo "<p align='center'>This report shows how many incidents where opened each day.  Hover your mouse over each bar to see the daily figures.<br />";
 echo "Compare: <a href='{$_SERVER['PHP_SELF']}?startyear=".($currentyear-2)."'>".($currentyear-2)."</a> | ";
 echo "<a href='{$_SERVER['PHP_SELF']}?startyear=".($currentyear-1)."'>".($currentyear-1)."</a> | ";
@@ -81,11 +83,11 @@ for($year=$startyear;$year<$lastyear;$year++)
             $countdayincidents=countdayincidents($day, $month, $year);
             // not needed $countdaycurrentincidents=countdaycurrentincidents($day, $month, $year);
             $countdayclosedincidents=countdayclosedincidents($day, $month, $year);
-            echo "<td valign=\"bottom\" >";
+            echo "<td valign='bottom' >";
             if ($countdayincidents>0)
             {
                 $height=$countdayincidents*4;
-                echo "<div style='cursor: help; height: {$height}px; width: 5px; background-color: $openedcolour;' title='$countdayincidents Incidents Opened on $day $monthname $year'>&nbsp;</div>";
+                echo "<div style='cursor: help; height: {$height}px; width: 5px; background-color: {$openedcolour};' title={'$countdayincidents} Incidents Opened on {$day} {$monthname} {$year}'>&nbsp;</div>";
                 // echo "<img src=\"/images/vertgraph.gif\" width=\"12\" height=\"$height\" alt=\"$countdayincidents Incidents\" title=\"$countdayincidents Incidents\">";
                 $monthtotal+=$countdayincidents;
             }
@@ -103,7 +105,10 @@ for($year=$startyear;$year<$lastyear;$year++)
             $closedheight=$countdayclosedincidents*4;
             $monthtotalclosed+=$countdayclosedincidents;
             echo "<td valign=\"bottom\" >";
-            if ($countdayclosedincidents>0)  echo "<div style='cursor: help; height: {$closedheight}px;  width: 5px; background-color: $closedcolour;' title='$countdayclosedincidents Incidents Closed on $day $monthname $year'>&nbsp;</div>";
+            if ($countdayclosedincidents>0)
+            {
+                echo "<div style='cursor: help; height: {$closedheight}px;  width: 5px; background-color: $closedcolour;' title='$countdayclosedincidents Incidents Closed on $day $monthname $year'>&nbsp;</div>";
+            }
             echo "</td>";
         }
         echo "</tr>\n";

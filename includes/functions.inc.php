@@ -2418,8 +2418,10 @@ function site_drop_down($name, $id)
     {
         $text=$sites->name;
         if (!empty($sites->department)) $text.= ", ".$sites->department;
-        if (strlen($text) >= 55) $text=htmlspecialchars(substr(trim($text), 0, 55))."&hellip;";
-        else $text=htmlspecialchars($text);
+//         if (strlen($text) >= 55) $text=htmlspecialchars(substr(trim($text), 0, 55))."&hellip;";
+//         else $text=htmlspecialchars($text);
+        if (strlen($text) >= 55) $text = substr(trim($text), 0, 55)."&hellip;";
+        else $text = $text;
         $html .= "<option ";
         if ($sites->id == $id) $html .= "selected='selected' ";
         $html .= "value='{$sites->id}'>{$text}</option>\n";

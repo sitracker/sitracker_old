@@ -27,14 +27,7 @@ if (empty($action) OR $action=='edit')
     $title = $strEditSkill;
     // Show add product form
     include ('htmlheader.inc.php');
-    ?>
-    <script type="text/javascript">
-    function confirm_submit()
-    {
-        return window.confirm('Are you sure you want to edit this Skill?');
-    }
-    </script>
-    <?php
+
     echo "<h2><img src='{$CONFIG['application_webpath']}images/icons/{$iconset}/32x32/skill.png' width='32' height='32' alt='' /> ";
     echo "$title</h2>";
     $sql = "SELECT * FROM `{$dbSoftware}` WHERE id='$id' LIMIT 1";
@@ -43,10 +36,10 @@ if (empty($action) OR $action=='edit')
     while ($software = mysql_fetch_object($result))
     {
         echo "<h5>".sprintf($strMandatoryMarked,"<sup class='red'>*</sup>")."</h5>";
-        echo "<form name='editsoftware' action='{$_SERVER['PHP_SELF']}' method='post' onsubmit='return confirm_submit()'>";
+        echo "<form name='editsoftware' action='{$_SERVER['PHP_SELF']}' method='post' onsubmit='return confirm_submit(\"{$strAreYouSureMakeTheseChanges}\")'>";
         echo "<table class='vertical'>";
         echo "<tr><th>{$strVendor}:</th><td>".vendor_drop_down('vendor',$software->vendorid)."</td></tr>\n";
-        echo "<tr><th>{$strSkill}: <sup class='red'>*</sup></th><td><input maxlength='50' name='name' size='30' value=\"{$software->name}\" /></td></tr>";
+        echo "<tr><th>{$strSkill}: <sup class='red'>*</sup></th><td><input maxlength='50' name='name' size='30' value='{$software->name}' /></td></tr>";
         echo "<tr><th>{$strLifetime}:</th><td>";
         echo "<input type='text' name='lifetime_start' id='lifetime_start' size='10' value='";
         if ($software->lifetime_start > 1) echo date('Y-m-d',mysql2date($software->lifetime_start));
@@ -66,7 +59,7 @@ if (empty($action) OR $action=='edit')
     echo "<input type='hidden' name='action' value='save' />";
     echo "<p align='center'><input name='submit' type='submit' value='{$strSave}' /></p>";
     echo "</form>\n";
-    echo "<p align='center'><a href='products.php'>Return to products list without saving</a></p>";
+    echo "<p align='center'><a href='products.php'>Return to products list without saving</a></p>";// FIXME i18n
     include ('htmlfooter.inc.php');
 }
 elseif ($action=='delete')
@@ -80,8 +73,8 @@ elseif ($action=='delete')
     if ($countincidents >=1 )
     {
         include ('htmlheader.inc.php');
-        echo "<p class='error'>Sorry, this skill cannot be deleted because it has been associated with one or more incidents</p>";
-        echo "<p align='center'><a href='products.php?display=skills'>Return to products list</a></p>";
+        echo "<p class='error'>Sorry, this skill cannot be deleted because it has been associated with one or more incidents</p>"; // FIXME i18n
+        echo "<p align='center'><a href='products.php?display=skills'>Return to products list</a></p>"; // FIXME i18n
         include ('htmlfooter.inc.php');
     }
     else

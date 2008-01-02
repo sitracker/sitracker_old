@@ -27,20 +27,12 @@ if (empty($submit))
 {
     // Show add product form
     include ('htmlheader.inc.php');
-    ?>
-    <script type="text/javascript">
-    function confirm_submit()
-    {
-        return window.confirm('Are you sure you want to add this product?');
-    }
-    </script>
-    <?php
     echo show_errors('add_product');
     clear_form_errors('add_product');
     echo "<h2><img src='{$CONFIG['application_webpath']}images/icons/{$iconset}/32x32/product.png' width='32' height='32' alt='' /> ";
     echo "{$strNewProduct}</h2>";
     echo "<h5>".sprintf($strMandatoryMarked, "<sup class='red'>*</sup>")."</h5>";
-    echo "<form action='{$_SERVER['PHP_SELF']}' method='post' onsubmit='return confirm_submit();'>";
+    echo "<form action='{$_SERVER['PHP_SELF']}' method='post' onsubmit='return confirm_submit(\"{$strAreYouSureAddProduct}\");'>";
     echo "<table align='center'>";
     echo "<tr><th>{$strVendor}<sup class='red'>*</sup></th><td>";
     if ($_SESSION['formdata']['add_product']['vendor'] != "")
@@ -68,7 +60,7 @@ if (empty($submit))
     echo "</textarea>";
     echo "</td></tr>";
     echo "</table>\n";
-    echo "<p><input name='submit' type='submit' value=\"{$strAddProduct}\" /></p>";
+    echo "<p><input name='submit' type='submit' value='{$strAddProduct}' /></p>";
     echo "<p class='warning'>{$strAvoidDupes}</p>";
     echo "</form>\n";
     echo "<p align='center'><a href='products.php'>{$strReturnWithoutSaving}</a></p>";

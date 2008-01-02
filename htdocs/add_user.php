@@ -23,15 +23,7 @@ $title = $strAddUser;
 $submit = $_REQUEST['submit'];
 
 include ('htmlheader.inc.php');
-?>
-<script type="text/javascript">
-function confirm_submit()
-{
-    return window.confirm('Are you sure you want to add this user?');
-}
-</script>
 
-<?php
 if (empty($submit))
 {
     // Show add user form
@@ -51,68 +43,95 @@ if (empty($submit))
     echo "<h2><img src='{$CONFIG['application_webpath']}images/icons/{$iconset}/32x32/user.png' width='32' height='32' alt='' /> ";
     echo "{$strNewUser}</h2>";
     echo "<h5>".sprintf($strMandatoryMarked,"<sup class='red'>*</sup>")."</h5>";
-    echo "<form action='{$_SERVER['PHP_SELF']}' method='post' onsubmit='return confirm_submit();'>";
+    echo "<form action='{$_SERVER['PHP_SELF']}' method='post' onsubmit='return confirm_submit(\"{$strAreYouSureAddUser}\");'>";
     echo "<table align='center' class='vertical'>\n";
     echo "<tr><th>{$strRealName} <sup class='red'>*</sup></th><td><input maxlength='50' name='realname' size='30'";
     if ($_SESSION['formdata']['add_user']['realname'] != "")
+    {
         echo "value='{$_SESSION['formdata']['add_user']['realname']}'";
+    }
     echo "/></td></tr>\n";
 
     echo "<tr><th>{$strUsername} <sup class='red'>*</sup></th><td><input maxlength='50' name='username' size='30'";
     if ($_SESSION['formdata']['add_user']['username'] != "")
+    {
         echo "value='{$_SESSION['formdata']['add_user']['username']}'";
+    }
     echo "/></td></tr>\n";
 
     echo "<tr id='password'><th>{$strPassword} <sup class='red'>*</sup></th><td><input maxlength='50' name='password' size='30'";
     if ($_SESSION['formdata']['add_user']['password'] != "")
+    {
         echo "value='{$_SESSION['formdata']['add_user']['password']}'";
+    }
     echo "/></td></tr>\n";
 
     echo "<tr><th>{$strGroup}</th>";
     if ($_SESSION['formdata']['add_user']['groupid'] != "")
+    {
         echo "<td>".group_drop_down('groupid', $_SESSION['formdata']['add_user']['groupid'])."</td>";
+    }
     else
+    {
         echo "<td>".group_drop_down('groupid', 0)."</td>";
+    }
     echo "</tr>";
 
     echo "<tr><th>{$strRole}</th>";
     if ($_SESSION['formdata']['add_user']['roleid'] != "")
+    {
         echo "<td>".role_drop_down('roleid', $_SESSION['formdata']['add_user']['roleid'])."</td>";
+    }
     else
+    {
         echo "<td>".role_drop_down('roleid', 1)."</td>";
+    }
     echo "</tr>";
 
     echo "<tr><th>{$strJobTitle} <sup class='red'>*</sup></th><td><input maxlength='50' name='jobtitle' size='30'";
     if ($_SESSION['formdata']['add_user']['jobtitle'] != "")
+    {
         echo "value='{$_SESSION['formdata']['add_user']['jobtitle']}'";
+    }
     echo "/></td></tr>\n";
 
     echo "<tr id='email'><th>{$strEmail} <sup class='red'>*</sup></th><td><input maxlength='50' name='email' size='30'";
     if ($_SESSION['formdata']['add_user']['email'] != "")
+    {
         echo "value='{$_SESSION['formdata']['add_user']['email']}'";
+    }
     echo "/></td></tr>\n";
 
     echo "<tr><th>{$strTelephone}</th><td><input maxlength='50' name='phone' size='30'";
     if ($_SESSION['formdata']['add_user']['phone'] != "")
+    {
         echo "value='{$_SESSION['formdata']['add_user']['phone']}'";
+    }
     echo "/></td></tr>\n";
 
     echo "<tr><th>{$strMobile}</th><td><input maxlength='50' name='mobile' size='30'";
     if ($_SESSION['formdata']['add_user']['mobile'] != "")
+    {
         echo "value='{$_SESSION['formdata']['add_user']['mobile']}'";
+    }
     echo "/></td></tr>\n";
 
     echo "<tr><th>{$strFax}</th><td><input maxlength='50' name='fax' size='30'";
     if ($_SESSION['formdata']['add_user']['fax'] != "")
+    {
         echo "value='{$_SESSION['formdata']['add_user']['fax']}'";
+    }
     echo "/></td></tr>\n";
 
     echo "<tr><th>{$strHolidayEntitlement}</th><td><input maxlength='3' name='holiday_entitlement' size='3' ";
-    if ($_SESSION['formdata']['add_user']['holiday_entitlement'] != "") echo "value='{$_SESSION['formdata']['add_user']['holiday_entitlement']}'";
+    if($_SESSION['formdata']['add_user']['holiday_entitlement'] != "") 
+    {
+        echo "value='{$_SESSION['formdata']['add_user']['holiday_entitlement']}'";
+    }
     echo " /> {$strDays}</td></tr>\n";
     plugin_do('add_user_form');
     echo "</table>\n";
-    echo "<p><input name='submit' type='submit' value=\"{$strAddUser}\" /></p>";
+    echo "<p><input name='submit' type='submit' value='{$strAddUser}' /></p>";
     echo "</form>\n";
     include ('htmlfooter.inc.php');
 

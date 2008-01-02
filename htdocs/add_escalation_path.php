@@ -23,25 +23,16 @@ $submit = $_REQUEST['submit'];
 
 $title = $strNewEscalationPath;
 
-
-
 if (empty($submit))
 {
     include ('htmlheader.inc.php');
-    ?>
-    <script type='text/javascript'>
-    function confirm_submit()
-    {
-        return window.confirm('Are you sure you want to add this escalation path?');
-    }
-    </script>
-    <?php
+
     echo show_form_errors('add_escalation_path');
     clear_form_errors('add_escalation_path');
 
     echo "<h2>{$title}</h2>";
 
-    echo "<form action='".$_SERVER['PHP_SELF']."' method='post' onsubmit='return confirm_submit()'>";
+    echo "<form action='".$_SERVER['PHP_SELF']."' method='post' onsubmit='return confirm_submit(\"{$strAreYouSureAddEscalationPath}\")'>";
     echo "<table class='vertical'>";
 
     echo "<tr><th>{$strName}<sup class='red'>*</sup></th><td><input name='name'";
@@ -103,7 +94,7 @@ else
     if (empty($name))
     {
         $errors++;
-        $_SESSION['formerrors']['add_escalation_path']['name'] = "You must enter a name for the escalation path\n";  // FIXME i18n
+        $_SESSION['formerrors']['add_escalation_path']['name'] = $strMustEnterNameEscalationPath;
     }
 
     if ($errors == 0)

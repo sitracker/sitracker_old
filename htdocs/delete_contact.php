@@ -87,14 +87,12 @@ if (empty($process))
 
         if ($totalincidents > 0 || $totalcontracts > 0)
         {
-            echo "<form action=\"{$_SERVER['PHP_SELF']}\" method=\"post\">\n";
+            echo "<form action='{$_SERVER['PHP_SELF']}' method='post'>\n";
             echo "<p align='center'>Before you can delete you must select another contact to receive any incidents and/or maintenance contracts.</p>";
             $sql  = "SELECT id, forenames, surname, siteid FROM `{$dbContacts}` ORDER BY surname ASC";
             $result = mysql_query($sql);
-            ?>
-            <p align='center'>
-            <select name="newcontact">
-            <?php
+            echo "<p align='center'>";
+            echo "<select name='newcontact'>";
             if ($id == 0)
             echo "<option selected='selected' value='0'>Select A Contact\n";
             while ($contacts = mysql_fetch_array($result))
@@ -111,10 +109,8 @@ if (empty($process))
                     echo "</option>\n";
                 }
             }
-            ?>
-            </select><br />
-            <br />
-            <?php
+            echo "</select><br />";
+            echo "<br />";
             echo "<input type='hidden' name='id' value='$id' />";
             echo "<input type='hidden' name='process' value='true' />";
             echo "<input type='submit' value='{$strDelete}' />";
@@ -125,7 +121,7 @@ if (empty($process))
         {
             // plain delete
             echo "<br />";
-            echo "<form action=\"{$_SERVER['PHP_SELF']}\" method=\"post\">\n";
+            echo "<form action='{$_SERVER['PHP_SELF']}' method='post'>\n";
             echo "<input type='hidden' name='newcontact' value='' />";  // empty
             echo "<input type='hidden' name='id' value='$id' />";
             echo "<input type='hidden' name='process' value='true' />";
