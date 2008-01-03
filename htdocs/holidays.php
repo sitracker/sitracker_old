@@ -109,6 +109,9 @@ $holidaytype[2] = $GLOBALS['strAbsentSick'];
 $holidaytype[3] = $GLOBALS['strWorkingAway'];
 $holidaytype[4] = $GLOBALS['strTraining'];
 $holidaytype[5] = $GLOBALS['strCompassionateLeave'];
+
+$totaltaken = 0;
+
 foreach ($holidaytype AS $htypeid => $htype)
 {
     $sql = "SELECT *, from_unixtime(startdate) AS start FROM holidays WHERE userid='{$user}' AND type={$htypeid} ";
@@ -116,6 +119,7 @@ foreach ($holidaytype AS $htypeid => $htype)
     $result = mysql_query($sql);
     if (mysql_error()) trigger_error("MySQL Query Error ".mysql_error(), E_USER_ERROR);
     $numtaken = mysql_num_rows($result);
+    $totaltaken += $numtaken;
     if ($numtaken > 0)
     {
         echo "<tr class='shade2'><td colspan='4'><strong>{$htype}</strong>:</td></tr>";
@@ -135,7 +139,10 @@ foreach ($holidaytype AS $htypeid => $htype)
     mysql_free_result($result);
 }
 
-if ($numtaken < 1 AND $numwaiting < 1) echo "<tr class='shade2'><td colspan='4'><em>{$strNone}</em</td></tr>\n";
+if ($totaltaken < 1 AND $numwaiting < 1)
+{
+    echo "<tr class='shade2'><td colspan='4'><em>{$strNone}</em</td></tr>\n";
+}
 echo "</table>\n";
 
 
