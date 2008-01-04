@@ -5764,7 +5764,7 @@ function create_notice($userid, $noticetext='', $triggertype='', $paramarray='')
 
     if($triggertype != '')
     {
-        //this is a trigger notice, get text
+        //this is a trigger notice, get notice template
         $sql = "SELECT * from noticetemplates WHERE id={$triggertype}";
         $query = mysql_query($sql);
         if($query)
@@ -5774,16 +5774,15 @@ function create_notice($userid, $noticetext='', $triggertype='', $paramarray='')
             $noticelinktext = trigger_replace_specials($notice->linktext, $paramarray);
             $noticelink = trigger_replace_specials($notice->link, $paramarray);
             if($CONFIG['debug']) $dbg .= $noticetext."\n";
-            
+
             $sql = "INSERT into notices(userid, type, text, linktext, link, referenceid, timestamp) ";
-            $sql .= "VALUES ({$userid}, 'TRIGGER{$triggertype}', '{$noticetext}', '{$noticelinktext}', '{$noticelink}', '', NOW())";
+            $sql .= "VALUES ({$userid}, '{$notice->type}', '{$noticetext}', '{$noticelinktext}', '{$noticelink}', '', NOW())";
             mysql_query($sql);
             if (mysql_error()) trigger_error(mysql_error(),E_USER_WARNING);
-            
         }
         else
         {
-            return FALSE;
+            throw_error("No such trigger type");
         }
     }
 
