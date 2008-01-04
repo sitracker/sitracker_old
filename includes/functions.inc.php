@@ -80,6 +80,7 @@ define('HOL_SICKNESS', 2);
 define('HOL_WORKING_AWAY', 3);
 define('HOL_TRAINING', 4);
 define('HOL_FREE', 5); // Compassionate/Maternity/Paterity/etc/free
+define('HOL_PUBLIC', 10);  // Public Holiday (eg. Bank Holiday)
 
 
 //default notice types

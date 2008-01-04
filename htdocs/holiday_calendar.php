@@ -36,9 +36,9 @@ $display = cleanvar($_REQUEST['display']);
 $title = $strHolidayPlanner;
 include ('htmlheader.inc.php');
 
-if (empty($user) || $user=='current') $user=$sit[2];
-elseif ($user=='all') $user='';
-if (empty($type)) $type=1;
+if (empty($user) || $user == 'current') $user = $sit[2];
+elseif ($user == 'all') $user = '';
+if (empty($type)) $type = 1;
 if (user_permission($sit[2],50)) $approver=TRUE; else $approver=FALSE;
 
 /**
@@ -210,37 +210,37 @@ function draw_calendar($nmonth, $nyear)
                 // mainshade = white
                 switch ($dtype)
                 {
-                    case 1:
+                    case HOL_HOLIDAY:
                         $shade= "mainshade";
                         if ($approved==1) { $shade='idle';  }
                         if ($approved==2) $shade='urgent';
                     break;
 
-                    case 2:
+                    case HOL_SICKNESS:
                         $shade= "mainshade";
                         if ($approved==1) { $shade='idle';  }
                         if ($approved==2) $shade='urgent';
                     break;
 
-                    case 3:
+                    case HOL_WORKING_AWAY:
                         $shade= "mainshade";
                         if ($approved==1) { $shade='idle';  }
                         if ($approved==2) $shade='urgent';
                     break;
 
-                    case 4:
+                    case HOL_TRAINING:
                         $shade= "mainshade";
                         if ($approved==1) { $shade='idle';  }
                         if ($approved==2) $shade='urgent';
                     break;
 
-                    case 5:
+                    case HOL_FREE:
                         $shade= "mainshade";
                         if ($approved==1) { $shade='idle'; $style="border: 1px dotted magenta; "; }
                         if ($approved==2) $shade='urgent';
                     break;
 
-                    case 10: // public holidays
+                    case HOL_PUBLIC: // public holidays
                         $style="background: #D6D6D6;";
                         $shade='shade1';
                     break;
@@ -249,7 +249,12 @@ function draw_calendar($nmonth, $nyear)
                         $shade="shade2";
                     break;
                 }
-                if ($dtype==1 || $dtype=='' || $dtype==5 || $dtype==3 || $dtype==2 || $dtype==4)
+                if ($dtype == HOL_HOLIDAY ||
+                    $dtype == '' ||
+                    $dtype == HOL_FREE ||
+                    $dtype == HOL_WORKING_AWAY ||
+                    $dtype == HOL_SICKNESS ||
+                    $dtype == HOL_TRAINING)
                 {
                     echo "<td class=\"$shade\" style=\"width: 15px; $style\">";
                     echo "<a href=\"add_holiday.php?type=$type&amp;user=$user&amp;year=$nyear&amp;month=$nmonth&amp;day=$calday\"  title=\"$celltitle\">$bold$adjusted_day$notbold</a></td>";
@@ -774,7 +779,7 @@ elseif ($display=='day')
 else
 {
     // Display year calendar
-    if ($type < 10)
+    if ($type != HOL_PUBLIC)
     {
         echo "<h2>";
         if ($user=='all' && $approver==TRUE) echo "Everybody";
@@ -821,12 +826,12 @@ else
             echo "</table>";
         }
         mysql_free_result($result);
-
     }
     else
     {
         // Public Holidays are a special type = 10
         echo "<h2>{$strSetPublicHolidays}</h2>";
+        $user = 0;
     }
 
     echo "<p align='center'>";
@@ -893,8 +898,8 @@ else
 
 
     echo "<h2>{$strYear} View</h2>"; // FIXME i18n Year View
-    $pdate=mktime(0,0,0,$month,$day,$year-1);
-    $ndate=mktime(0,0,0,$month,$day,$year+1);
+    $pdate = mktime(0,0,0,$month,$day,$year-1);
+    $ndate = mktime(0,0,0,$month,$day,$year+1);
     echo "<p align='center'>";
     echo "<a href='{$_SERVER['PHP_SELF']}?display=year&amp;year=".date('Y',$pdate)."&amp;month=".date('m',$pdate)."&amp;day=".date('d',$pdate)."&amp;type={$type}'>&lt;</a> ";
     echo date('Y',mktime(0,0,0,$month,$day,$year));
@@ -903,9 +908,9 @@ else
 
 
     echo "<table align='center' border='1' cellpadding='0' cellspacing='0' style='border-collapse:collapse; border-color: #AAA; width: 80%;'>";
-    $displaymonth=1;
-    $displayyear=$year;
-    for ($r==1;$r<3;$r++)
+    $displaymonth = 1;
+    $displayyear = $year;
+    for ($r == 1;$r < 3;$r++)
     {
         echo "<tr>";
         for ($c=1;$c<=4;$c++)
@@ -913,7 +918,11 @@ else
             echo "<td valign='top' align='center' class='shade1'>";
             draw_calendar($displaymonth,$displayyear);
             echo "</td>";
-            if ($displaymonth==12) { $displayyear++; $displaymonth=0; }
+            if ($displaymonth==12)
+            {
+                $displayyear++;
+                $displaymonth=0;
+            }
             $displaymonth++;
         }
         echo "</tr>";
