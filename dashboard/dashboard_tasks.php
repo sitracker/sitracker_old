@@ -55,6 +55,7 @@ function dashboard_tasks($row,$dashboardid)
         {
             $duedate = mysql2date($task->duedate);
             $startdate = mysql2date($task->startdate);
+            if (empty($task->name)) $task->name = $GLOBALS['strUntitled'];
             echo "<tr class='$shade'>";
             echo "<td>{$task->id}</td>";
             echo "<td><a href='view_task.php?id={$task->id}' class='info'>".truncate_string($task->name, 23);
