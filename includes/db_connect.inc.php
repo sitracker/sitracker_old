@@ -8,7 +8,6 @@
 // of the GNU General Public License, incorporated herein by reference.
 //
 
-
 // Load config defaults
 include ("defaults.inc.php");
 // Load config file with customisations
