@@ -90,8 +90,7 @@ while (list($id, $filename, $size, $userid, $shortdescription, $path, $downloads
 {
     // calculate filesize
     $j = 0;
-    $ext =
-    array("Bytes","KBytes","MBytes","GBytes","TBytes");
+    $ext = array($strBytes, $strKBytes, $strMBytes, $strGBytes, $strTBytes);
     $pretty_file_size = $size;
     while ($pretty_file_size >= pow(1024,$j)) ++$j;
     $pretty_file_size = round($pretty_file_size / pow(1024,$j-1) * 100) / 100 . ' ' . $ext[$j-1];

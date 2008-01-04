@@ -457,8 +457,7 @@ $emailtype|$newincidentstatus|$timetonextaction_none|$timetonextaction_days|$tim
             echo "<tr><th>{$strAttachment}";
             // calculate filesize
             $j = 0;
-            $ext =
-            array("Bytes","KBytes","MBytes","GBytes","TBytes");
+            $ext = array($strBytes, $strKBytes, $strMBytes, $strGBytes, $strTBytes);
             $file_size = $CONFIG['upload_max_filesize'];
             while ($file_size >= pow(1024,$j)) ++$j;
             $file_size = round($file_size / pow(1024,$j-1) * 100) / 100 . ' ' . $ext[$j-1];

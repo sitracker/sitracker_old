@@ -12,35 +12,34 @@
 
 // This Page Is Valid XHTML 1.0 Transitional!   4Nov05
 
-@include ('set_include_path.inc.php');
-$permission = 44; // Publish Files to FTP site
+@include('set_include_path.inc.php');
+$permission=44; // Publish Files to FTP site
 
-$title = 'Edit FTP File Details and Publish';
-require ('db_connect.inc.php');
-require ('functions.inc.php');
+$title='Edit FTP File Details and Publish';
+require('db_connect.inc.php');
+require('functions.inc.php');
 
 // This page requires authentication
-require ('auth.inc.php');
+require('auth.inc.php');
 
 // External Vars
 $id = cleanvar($_REQUEST['id']);
 $mode = cleanvar($_REQUEST['mode']);
-if (empty($mode)) $mode = 'form';
+if (empty($mode)) $mode='form';
 
 switch ($mode)
 {
     case 'form':
         // display file details
-        include ('htmlheader.inc.php');
-        $sql = "SELECT * FROM `{$dbFiles}` WHERE id='$id'";
+        include('htmlheader.inc.php');
+        $sql = "SELECT * FROM files WHERE id='$id'";
         $result = mysql_query($sql);
         if (mysql_error()) trigger_error("MySQL Query Error ".mysql_error(), E_USER_ERROR);
         $frow=mysql_fetch_array($result);
 
         // calculate filesize
         $j = 0;
-        $ext =
-        array("Bytes","KBytes","MBytes","GBytes","TBytes");  // FIXME i18n Bytes, Kbytes etc.
+        $ext = array($strBytes, $strKBytes, $strMBytes, $strGBytes, $strTBytes);
         $pretty_file_size = $frow['size'];
         while ($pretty_file_size >= pow(1024,$j)) ++$j;
         $pretty_file_size = round($pretty_file_size / pow(1024,$j-1) * 100) / 100 . ' ' . $ext[$j-1];
@@ -76,7 +75,7 @@ switch ($mode)
         echo "<input type='hidden' name='mode' value='save' />";
         echo "<p align='center'><input type='submit' value='Save &amp; Publish' /></p>";
         echo "</form>";
-        include ('htmlfooter.inc.php');
+        include('htmlfooter.inc.php');
     break;
 
     case 'save':

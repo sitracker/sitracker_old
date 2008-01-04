@@ -116,6 +116,7 @@ $strBrowseSites = 'Browse sites';
 $strBulkModify = 'Bulk Modify';
 # e.g. Ordered By Product
 $strByProduct = 'By Product';
+$strBytes = 'Bytes';
 
 $strCallFromCustomer = 'Phone call from customer';
 $strCallToCustomer = 'Phone call to customer';
@@ -311,6 +312,7 @@ $strFriday = 'Friday';
 $strFrom = 'From';
 $strFTPFilesDB = 'FTP Files DB';
 
+$strGBytes = 'GBytes';
 $strGlobalSignature = 'Global Signature';
 $strGo = 'Go';
 $strGroup = 'Group';
@@ -398,6 +400,7 @@ $strJumpToIncident = 'Jump to Incident';
 $strJustNow = 'Just Now';
 
 $strKBSelectSectionsText = 'Enable any other relevant sections below by checking their box.';
+$strKBytes = 'KBytes';
 $strKeywords = 'Keywords';
 $strKnowledgeBase = 'KnowledgeBase';
 
@@ -440,6 +443,7 @@ $strMarkForClosure = 'Mark for Closure';
 $strMarkedComplete = 'Marked Complete';
 $strMarkedforclosureby = 'Marked for closure by %s';
 $strMarketingMailshot = 'Marketing Mailshot';
+$strMBytes = 'MBytes';
 $strMedium = 'Medium';
 $strMediumPriority = 'Medium Priority';
 $strMessage = 'Message';
@@ -740,6 +744,7 @@ $strTaskPrivateError = 'Sorry, you cannot view this task as it has been marked p
 $strTaskDeletedSuccessfully = 'Task deleted successfully';
 $strTaskEditedSuccessfully = 'Task edited successfully';
 $strTaskMarkedCompleteSuccessfully = 'Task marked completed successfully';
+$strTBytes = 'TBytes';
 $strTelephone = 'Telephone';
 # Abbreviated 'Temporary';
 $strTemp = 'Temp';

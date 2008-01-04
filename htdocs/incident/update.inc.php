@@ -469,7 +469,7 @@ function display_update_page($draftid=-1)
     echo "<tr>";
     // calculate upload filesize
     $j = 0;
-    $ext = array("Bytes","KBytes","MBytes","GBytes","TBytes");
+    $ext = array($strBytes, $strKBytes, $strMBytes, $strGBytes, $strTBytes);
     $att_file_size = $CONFIG['upload_max_filesize'];
     while ($att_file_size >= pow(1024,$j)) ++$j;
     $att_file_size = round($att_file_size / pow(1024,$j-1) * 100) / 100 . ' ' . $ext[$j-1];

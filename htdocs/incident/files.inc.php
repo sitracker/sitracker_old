@@ -51,8 +51,8 @@ if ($_FILES['attachment']['name'] != "")
         // OK to proceed
         // make incident attachment dir if it doesn't exist
         $newfilename = $incident_attachment_fspath.'/'.$_FILES['attachment']['name'];
-        $umask=umask(0000);
-        $mk=TRUE;
+        $umask = umask(0000);
+        $mk = TRUE;
         if (!file_exists($incident_attachment_fspath))
         {
            $mk = mkdir($incident_attachment_fspath, 0770);
@@ -92,9 +92,13 @@ if (isset($_REQUEST['fileselection']))
 
 
 $j = 0;
-$ext = array("Bytes","KBytes","MBytes","GBytes","TBytes"); // FIXME bytes/kbytes etc.
-while ($att_max_filesize >= pow(1024,$j)) ++$j;
-    $attmax = round($att_max_filesize / pow(1024,$j-1) * 100) / 100 . ' ' . $ext[$j-1];
+
+$ext = array($strBytes, $strKBytes, $strMBytes, $strGBytes, $strTBytes);
+while ($att_max_filesize >= pow(1024,$j))
+{
+    ++$j;
+}
+$attmax = round($att_max_filesize / pow(1024,$j-1) * 100) / 100 . ' ' . $ext[$j-1];
 echo "<div class='detailhead'>\n";
 echo "{$strFileManagement}";
 echo "</div>";
@@ -143,11 +147,11 @@ function encode_binary($string)
 function draw_file_row($file, $delim, $incidentid, $incident_attachment_fspath)
 {
     global $CONFIG;
-    $filepathparts=explode($delim, $file);
+    $filepathparts = explode($delim, $file);
     $parts = count($filepathparts);
-    $filename=$filepathparts[$parts-1];
-    $filedir=$filepathparts[$parts-2];
-    $preview=''; // reset the preview
+    $filename = $filepathparts[$parts-1];
+    $filedir = $filepathparts[$parts-2];
+    $preview = ''; // reset the preview
 
     if ($filedir != $incidentid)
     {
@@ -163,7 +167,7 @@ function draw_file_row($file, $delim, $incidentid, $incident_attachment_fspath)
     }
     // calculate filesize
     $j = 0;
-    $ext = array("Bytes","KiloBytes","MegaBytes","GigaBytes","TerraBytes");
+    $ext = array($GLOBALS['strBytes'], $GLOBALS['strKBytes'], $GLOBALS['strMBytes'], $GLOBALS['strGBytes'], $GLOBALS['strTBytes']);
     $filesize = filesize($file);
     while ($filesize >= pow(1024,$j)) ++$j;
     $file_size = round($filesize / pow(1024,$j-1) * 100) / 100 . ' ' . $ext[$j-1];
@@ -181,7 +185,7 @@ function draw_file_row($file, $delim, $incidentid, $incident_attachment_fspath)
         $preview = fread($handle, 512); // only read this much, we can't preview the whole thing, not enough space
         fclose($handle);
         // Make the preview safe to display
-        $preview=nl2br(encode_binary(strip_tags($preview)));
+        $preview = nl2br(encode_binary(strip_tags($preview)));
         $html .= " class='info'><span>{$preview}</span>$filename</a>";
     }
     else $html .= ">$filename</a>";
@@ -205,7 +209,7 @@ if (file_exists($incident_attachment_fspath))
     echo "<input type='hidden' name='action' value='{$selectedaction}' />";
 
     // List the directories first
-    $temparray=list_dir($incident_attachment_fspath, 0);
+    $temparray = list_dir($incident_attachment_fspath, 0);
     if (count($temparray) == 0) echo "<p class='info'>No files<p>";
     else
     {
@@ -234,15 +238,23 @@ if (file_exists($incident_attachment_fspath))
 
         foreach ($dirarray AS $dir)
         {
-            $directory=substr($dir,0,strrpos($dir,$delim));
-            $dirname=substr($dir,strrpos($dir,$delim)+1,strlen($dir));
-            if ( is_number($dirname) && $dirname!=$id && strlen($dirname)==10) $dirprettyname=date('l jS M Y @ g:ia',$dirname);
-            else $dirprettyname=$dirname;
+            $directory = substr($dir,0,strrpos($dir,$delim));
+            $dirname = substr($dir,strrpos($dir,$delim)+1,strlen($dir));
+            if (is_number($dirname) &&
+                $dirname!=$id &&
+                strlen($dirname)==10)
+            {
+                $dirprettyname = date('l jS M Y @ g:ia',$dirname);
+            }
+            else
+            {
+                $dirprettyname = $dirname;
+            }
             $headhtml = "<div class='detailhead'>\n";
             $headhtml .= "<img src='{$CONFIG['application_webpath']}images/icons/{$iconset}/16x16/folder.png' alt='{$id}' title='{$dir}' border='0' height='16' width='16' valign='top' /> {$dirprettyname}";
             $headhtml .= "</div>\n";
-            $tempfarray=list_dir($dir, 1);
-            if (count($tempfarray)==1 AND (substr($tempfarray[0],-8)=='mail.eml'))
+            $tempfarray = list_dir($dir, 1);
+            if (count($tempfarray) == 1 AND (substr($tempfarray[0],-8) == 'mail.eml'))
             {
                 // do nothing if theres only an email in the dir, don't even list the directory
             }
