@@ -37,7 +37,8 @@ $j = 1;
 foreach($triggerarray as $trigger)
 {
     define($triggerarray[$i], $j);
-    $i++; $j++;
+    $i++; 
+    $j++;
 }
 
 //define all the actions
@@ -46,26 +47,20 @@ $j = 1;
 foreach($actionarray as $action)
 {
     define($actionarray[$i], $j);
-    $i++; $j++;
+    $i++; 
+    $j++;
 }
 
 function trigger($triggertype, $paramarray='')
 {
-    global $sit, $CONFIG, $dbg;
-
+    global $sit, $CONFIG, $dbg, $dbTriggers;
     //quick sanity check
     if (!is_numeric($triggertype) OR $triggertype < 1 OR $triggertype > 16) return;
+    
     foreach (array_keys($paramarray) as $key)
     {
         //parse parameter array
-        //TODO define the keys to look for other than 'user'
-        if ($CONFIG['debug']) $dbg .= "\$paramarray[$key] = " .$paramarray[$key]."<br />";
-
-        //get user to apply trigger to
-        if ($key == 'user')
-        {
-            $user = $paramarray['user'];
-        }
+        if ($CONFIG['debug']) $dbg .= "\$paramarray[$key] = " .$paramarray[$key]."\n";
     }
 
     //find relevant triggers
@@ -76,13 +71,35 @@ function trigger($triggertype, $paramarray='')
     $query = mysql_query($sql);
     while($result = mysql_fetch_object($query))
     {
-        trigger_action($result->userid, $triggertype, $result->action, $result->parameters);
+        //if we have any params from the actual trigger, append to user params
+        if(!empty($result->parameters))
+        {
+            $resultparams = explode(",", $result->parameters);
+            foreach($resultparams as $assigns)
+            {
+                $values = explode("=", $assigns);
+                $paramarray[$values[0]] = $values[1];
+                if($CONFIG['debug']) $dbg .= "\$paramarray[{$values[0]}] = {$values[1]}";
+            }
+        }
+        
+        if($CONFIG['debug'])
+        {
+            $dbg .= "TRIGGER: trigger_action({$result->userid}, {$triggertype}, {$result->action}, {$paramarray}) called \n";
+        }
+        trigger_action($result->userid, $triggertype, $result->action, $paramarray);
     }
 }
 
 
-function trigger_action($userid, $triggertype, $action, $parameters)
+function trigger_action($userid, $triggertype, $action, $paramarray)
 {
+    global $CONFIG, $dbg;
+    if($CONFIG['debug']) 
+    {
+        $dbg .= "TRIGGER: trigger_action($userid, $triggertype, $action, $paramarray) received\n";
+    }
+
     switch($action)
     {
         case ACTION_EMAIL:
@@ -90,7 +107,11 @@ function trigger_action($userid, $triggertype, $action, $parameters)
             break;
 
         case ACTION_NOTICE:
-            create_notice($userid, '', $triggertype, $parameters);
+            if($CONFIG['debug']) 
+            {
+                $dbg .= "TRIGGER: create_notice($userid, '', $triggertype, $paramarray) called";
+            }
+            create_notice($userid, '', $triggertype, $paramarray);
             break;
 
         case ACTION_NONE:
@@ -100,7 +121,39 @@ function trigger_action($userid, $triggertype, $action, $parameters)
     }
 }
 
+function trigger_replace_specials($string, $paramarray)
+{
+    global $CONFIG, $application_version, $application_version_string, $dbg;
+    global $dbIncidents;
+    if($CONFIG['debug'])
+    {
+        $dbg .= "TRIGGER: notice string before - $string\n";
+        $dbg .= "TRIGGER: param array: ".print_r($paramarray);
+    }
+    
+    $url = parse_url($_SERVER['HTTP_REFERER']);
+    $baseurl = "{$url['scheme']}://{$url['host']}{$CONFIG['application_webpath']}";
 
+    $trigger_regex = array(0 => '/<incidentid>/s',
+                            1 => '/<incidenttitle>/s',
+                            2 => '/<incidentowner>/s',
+                            3 => '/<KBname>/s',
+                            4 => '/<sitpath>/s',
+                            5 => '/<sitversion>/s',
+                            6 => '/<engineerclosedname>/s',
+                            );
+
+    $trigger_replace = array(0 => $paramarray['incidentid'],
+                                1 => $paramarray['incidenttitle'],
+                                2 => $paramarray['incidentowner'],
+                                3 => $paramarray['KBname'],
+                                4 => $baseurl,
+                                5 => $application_version,
+                                6 => $paramarray['engineerclosedname']
+                            );
+
+    return preg_replace($trigger_regex,$trigger_replace,$string);
+}
 
 
 ?>

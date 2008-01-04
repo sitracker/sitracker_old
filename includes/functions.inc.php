@@ -5756,9 +5756,11 @@ function truncate_string($text, $maxlength=255, $html=TRUE)
     * @returns boolean. Success or fail.
     * NOTES: work in progress, skeleton code atm 18/12/07
 */
-function create_notice($userid, $noticetext='', $triggertype='', $parameters='')
+function create_notice($userid, $noticetext='', $triggertype='', $paramarray='')
 {
     global $CONFIG, $dbg;
+    if($CONFIG['debug']) $dbg .= print_r($paramarray)."\n";
+
     if($triggertype != '')
     {
         //this is a trigger notice, get text
@@ -5767,13 +5769,21 @@ function create_notice($userid, $noticetext='', $triggertype='', $parameters='')
         if($query)
         {
             $notice = mysql_fetch_object($query);
+            $noticetext = trigger_replace_specials($notice->text, $paramarray);
+            $noticelinktext = trigger_replace_specials($notice->linktext, $paramarray);
+            $noticelink = trigger_replace_specials($notice->link, $paramarray);
+            if($CONFIG['debug']) $dbg .= $noticetext."\n";
+            
+            $sql = "INSERT into notices(userid, type, text, linktext, link, referenceid, timestamp) ";
+            $sql .= "VALUES ({$userid}, 'TRIGGER{$triggertype}', '{$noticetext}', '{$noticelinktext}', '{$noticelink}', '', NOW())";
+            mysql_query($sql);
+            if (mysql_error()) trigger_error(mysql_error(),E_USER_WARNING);
+            
         }
         else
         {
             return FALSE;
         }
-
-        if($CONFIG['debug']) $dbg .= "$notice->title notice created";
     }
 
 }

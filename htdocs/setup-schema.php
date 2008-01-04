@@ -1610,8 +1610,8 @@ INSERT INTO `noticetemplates` (`id`, `name`, `type`, `description`, `text`, `lin
 (8, 'KB_CREATED_TRIGGER', 0, '', 'KB Article <KBname> has been created', NULL, NULL, 'sticky'),
 (9, 'NEW_HELD_EMAIL', 0, '', 'There is a new email in the holding queue', 'View Holding Queue', '<sitpath>/review_incoming_updates.php', 'sticky'),
 (10, 'MINS_HELD_EMAIL', 0, '', 'There has been an email in the holding queue for <holdingmins> minutes', 'View Holding Queue', '<sitpath>/review_incoming_updates.php', 'sticky'),
-(11, 'SIT_UPGRADED', 0, '', 'SiT! has been upgraded to <sitversion>', 'What''s New?', '<sitpath>/releasenotes.php', 'sticky'),
-(12, 'INCIDENT_OWNED_CLOSED_BY_USER', 0, '', 'Your incident <incidentid> - <incidenttitle> has been closed by <engineername>', NULL, NULL, 'sticky');
+(11, 'SIT_UPGRADED', 0, '', 'SiT! has been upgraded to <sitversion>', 'What\'s New?', '<sitpath>/releasenotes.php', 'sticky'),
+(12, 'INCIDENT_OWNED_CLOSED_BY_USER', 0, '', 'Your incident <incidentid> - <incidenttitle> has been closed by <engineerclosedname>', NULL, NULL, 'sticky');
 ";
 
 // Important: When making changes to the schema you must add SQL to make the alterations
