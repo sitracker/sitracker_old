@@ -147,11 +147,11 @@ function encode_binary($string)
 function draw_file_row($file, $delim, $incidentid, $incident_attachment_fspath)
 {
     global $CONFIG;
-    $filepathparts=explode($delim, $file);
+    $filepathparts = explode($delim, $file);
     $parts = count($filepathparts);
-    $filename=$filepathparts[$parts-1];
-    $filedir=$filepathparts[$parts-2];
-    $preview=''; // reset the preview
+    $filename = $filepathparts[$parts-1];
+    $filedir = $filepathparts[$parts-2];
+    $preview = ''; // reset the preview
 
     if ($filedir != $incidentid)
     {
@@ -167,7 +167,7 @@ function draw_file_row($file, $delim, $incidentid, $incident_attachment_fspath)
     }
     // calculate filesize
     $j = 0;
-    $ext = array($strBytes, $strKBytes, $strMBytes, $strGBytes, $strTBytes);
+    $ext = array($GLOBALS['strBytes'], $GLOBALS['strKBytes'], $GLOBALS['strMBytes'], $GLOBALS['strGBytes'], $GLOBALS['strTBytes']);
     $filesize = filesize($file);
     while ($filesize >= pow(1024,$j)) ++$j;
     $file_size = round($filesize / pow(1024,$j-1) * 100) / 100 . ' ' . $ext[$j-1];
@@ -185,7 +185,7 @@ function draw_file_row($file, $delim, $incidentid, $incident_attachment_fspath)
         $preview = fread($handle, 512); // only read this much, we can't preview the whole thing, not enough space
         fclose($handle);
         // Make the preview safe to display
-        $preview=nl2br(encode_binary(strip_tags($preview)));
+        $preview = nl2br(encode_binary(strip_tags($preview)));
         $html .= " class='info'><span>{$preview}</span>$filename</a>";
     }
     else $html .= ">$filename</a>";
@@ -209,7 +209,7 @@ if (file_exists($incident_attachment_fspath))
     echo "<input type='hidden' name='action' value='{$selectedaction}' />";
 
     // List the directories first
-    $temparray=list_dir($incident_attachment_fspath, 0);
+    $temparray = list_dir($incident_attachment_fspath, 0);
     if (count($temparray) == 0) echo "<p class='info'>No files<p>";
     else
     {
@@ -228,7 +228,7 @@ if (file_exists($incident_attachment_fspath))
 
             echo "<p><em>Root of Incident {$incidentid}</em></p>\n";
             echo "<table>\n";
-            foreach($rfilearray AS $rfile)
+            foreach ($rfilearray AS $rfile)
             {
                 echo draw_file_row($rfile, $delim, $incidentid, $incident_attachment_fspath);
             }
@@ -236,17 +236,25 @@ if (file_exists($incident_attachment_fspath))
             echo "</div>";
         }
 
-        foreach($dirarray AS $dir)
+        foreach ($dirarray AS $dir)
         {
-            $directory=substr($dir,0,strrpos($dir,$delim));
-            $dirname=substr($dir,strrpos($dir,$delim)+1,strlen($dir));
-            if ( is_number($dirname) && $dirname!=$id && strlen($dirname)==10) $dirprettyname=date('l jS M Y @ g:ia',$dirname);
-            else $dirprettyname=$dirname;
+            $directory = substr($dir,0,strrpos($dir,$delim));
+            $dirname = substr($dir,strrpos($dir,$delim)+1,strlen($dir));
+            if (is_number($dirname) &&
+                $dirname!=$id &&
+                strlen($dirname)==10)
+            {
+                $dirprettyname = date('l jS M Y @ g:ia',$dirname);
+            }
+            else
+            {
+                $dirprettyname = $dirname;
+            }
             $headhtml = "<div class='detailhead'>\n";
             $headhtml .= "<img src='{$CONFIG['application_webpath']}images/icons/{$iconset}/16x16/folder.png' alt='{$id}' title='{$dir}' border='0' height='16' width='16' valign='top' /> {$dirprettyname}";
             $headhtml .= "</div>\n";
-            $tempfarray=list_dir($dir, 1);
-            if (count($tempfarray)==1 AND (substr($tempfarray[0],-8)=='mail.eml'))
+            $tempfarray = list_dir($dir, 1);
+            if (count($tempfarray) == 1 AND (substr($tempfarray[0],-8) == 'mail.eml'))
             {
                 // do nothing if theres only an email in the dir, don't even list the directory
             }
@@ -260,12 +268,12 @@ if (file_exists($incident_attachment_fspath))
                     $updateid=substr($updatelink,strrpos($updatelink,$delim)+1,strlen($updatelink));
                     echo "<p>These files arrived by <a href='{$CONFIG['attachment_webpath']}{$incidentid}/{$dirname}/mail.eml'>email</a>, jump to the appropriate <a href='incident_details.php?id={$incidentid}#$updateid'>entry in the log</a></p>";
                 }
-                foreach($tempfarray as $fvalue)
+                foreach ($tempfarray as $fvalue)
                 {
                     if (is_file($fvalue) AND substr($fvalue,-8)!='mail.eml') $filearray[] = $fvalue;
                 }
                 echo "<table>\n";
-                foreach($filearray AS $file)
+                foreach ($filearray AS $file)
                 {
                     echo draw_file_row($file, $delim, $incidentid, $incident_attachment_fspath);
 
