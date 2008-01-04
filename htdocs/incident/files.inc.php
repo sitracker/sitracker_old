@@ -51,8 +51,8 @@ if ($_FILES['attachment']['name'] != "")
         // OK to proceed
         // make incident attachment dir if it doesn't exist
         $newfilename = $incident_attachment_fspath.'/'.$_FILES['attachment']['name'];
-        $umask=umask(0000);
-        $mk=TRUE;
+        $umask = umask(0000);
+        $mk = TRUE;
         if (!file_exists($incident_attachment_fspath))
         {
            $mk = mkdir($incident_attachment_fspath, 0770);
@@ -92,9 +92,13 @@ if (isset($_REQUEST['fileselection']))
 
 
 $j = 0;
-$ext = array("Bytes","KBytes","MBytes","GBytes","TBytes"); // FIXME bytes/kbytes etc.
-while ($att_max_filesize >= pow(1024,$j)) ++$j;
-    $attmax = round($att_max_filesize / pow(1024,$j-1) * 100) / 100 . ' ' . $ext[$j-1];
+
+$ext = array($strBytes, $strKBytes, $strMBytes, $strGBytes, $strTBytes);
+while ($att_max_filesize >= pow(1024,$j))
+{
+    ++$j;
+}
+$attmax = round($att_max_filesize / pow(1024,$j-1) * 100) / 100 . ' ' . $ext[$j-1];
 echo "<div class='detailhead'>\n";
 echo "{$strFileManagement}";
 echo "</div>";
@@ -163,7 +167,7 @@ function draw_file_row($file, $delim, $incidentid, $incident_attachment_fspath)
     }
     // calculate filesize
     $j = 0;
-    $ext = array("Bytes","KiloBytes","MegaBytes","GigaBytes","TerraBytes");
+    $ext = array($strBytes, $strKBytes, $strMBytes, $strGBytes, $strTBytes);
     $filesize = filesize($file);
     while ($filesize >= pow(1024,$j)) ++$j;
     $file_size = round($filesize / pow(1024,$j-1) * 100) / 100 . ' ' . $ext[$j-1];
