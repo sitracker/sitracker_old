@@ -351,7 +351,7 @@ function give_overview()
     {
         $string .= "<table align='center' width='50%'><tr><td colspan='2'>{$GLOBALS['strAssignedAsFollows']}</td></tr>";
         $sql = "SELECT count(i.id), realname, users.id AS owner ";
-        $sql .= "FROM `{$dbIncidents}` AS i, users ";
+        $sql .= "FROM `{$GLOBALS['dbIncidents']}` AS i, users ";
         $sql .= "WHERE opened > '{$todayrecent}' AND i.owner = users.id ";
         $sql .= "GROUP BY owner DESC";
 
@@ -359,7 +359,7 @@ function give_overview()
         if (mysql_error()) trigger_error("MySQL Query Error ".mysql_error(), E_USER_ERROR);
         while ($row = mysql_fetch_array($result))
         {
-            $sql = "SELECT id, title FROM `{$dbIncidents}` WHERE opened > '$todayrecent' AND owner = '{$row['owner']}'";
+            $sql = "SELECT id, title FROM `{$GLOBALS['dbIncidents']}` WHERE opened > '{$todayrecent}' AND owner = '{$row['owner']}'";
 
             $string .= "<tr><th>{$row['count(incidents.id)']}</th>";
             $string .= "<td class='shade2' align='left'>";
