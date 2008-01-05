@@ -12,11 +12,11 @@
 
 // This Page Is Valid XHTML 1.0 Transitional! 29Nov05
 
-$permission=60; // Perform Searches
-$limit_results=2000;
+$permission = 60; // Perform Searches
+$limit_results = 2000;
 
 //FIXME make search_string safe
-if($searchmode != 'related')
+if ($searchmode != 'related')
 {
     $search_string = $_REQUEST['search_string'];
     $search_domain = cleanvar($_REQUEST['search_domain']);
@@ -62,10 +62,10 @@ if($searchmode != 'related')
 function search_highlight($x,$var)
 {
     //$x is the string, $var is the text to be highlighted
-            $x = strip_tags($x);
+    $x = strip_tags($x);
     $x = str_replace("\n", '', $x);
     // Trim the string to a reasonable length
-            $pos1=stripos($x,$var);
+    $pos1=stripos($x,$var);
     if ($pos1===FALSE) $pos1=0;
     if ($pos1>30) $pos1-=25;
     $pos2=strlen($var)+70;
@@ -75,9 +75,9 @@ function search_highlight($x,$var)
     {
         $xtemp = "";
         $i=0;
-        while($i<strlen($x))
+        while ($i < strlen($x))
         {
-            if((($i + strlen($var)) <= strlen($x)) && (strcasecmp($var, substr($x, $i, strlen($var))) == 0))
+            if ((($i + strlen($var)) <= strlen($x)) && (strcasecmp($var, substr($x, $i, strlen($var))) == 0))
             {
                 $xtemp .= "<span style='background: #FFFACD; font-weight: bolder;'>" . substr($x, $i , strlen($var)) . "</span>";
                 $i += strlen($var);
@@ -100,10 +100,10 @@ function search_highlight($x,$var)
 function search_fix_quoted(&$sterms)
 {
     $numterms = count($sterms);
-    for ($i=0;$i < $numterms; $i++)
+    for ($i=0; $i < $numterms; $i++)
     {
         // start quote
-                if (substr($sterms[$i],0,1)=='"')
+        if (substr($sterms[$i],0,1)=='"')
         {
             for ($n=$i;$n < $numterms; $n++)
             {
@@ -154,8 +154,14 @@ function search_build_query($column, $sterms)
         }
         if (!empty($sterms[$i]))
         {
-            if ($column == 'id' AND is_numeric($sterms[$i])) $sql .= "{$column} = ".str_replace('_',' ',$sterms[$i])." ";
-            else $sql .= "{$column} LIKE '%".str_replace('_',' ',$sterms[$i])."%' ";
+            if ($column == 'id' AND is_numeric($sterms[$i]))
+            {
+                $sql .= "{$column} = ".str_replace('_',' ',$sterms[$i])." ";
+            }
+            else
+            {
+                $sql .= "{$column} LIKE '%".str_replace('_',' ',$sterms[$i])."%' ";
+            }
         }
     }
     return $sql;
@@ -211,12 +217,12 @@ $search_string = str_replace($removechars, '', $search_string);
 
 if (!empty($search_string))
 {
-    echo "<p>Searching for '$search_string' in ".ucfirst($search_domain)."&hellip;</p>"; // FIXME i18n searching for
+    echo "<p>".sprintf($strSearchInDomain, $search_string, ucfirst($search_domain))."</p>";
     flush();
     $sterms = explode(' ',trim($search_string));
     search_fix_quoted($sterms);
-    $key=0;
-    $srch_results=array();
+    $key = 0;
+    $srch_results = array();
     switch ($search_domain)
     {
         case 'all':
@@ -225,32 +231,46 @@ if (!empty($search_string))
             $sql = "SELECT * FROM incidents WHERE ";
             if (is_numeric($sterms[0])) $sql .= search_build_query('id', $sterms)."OR ";
             $sql .= search_build_query('title', $sterms);
-            if(!empty($software) AND $software != '0') $sql .= "AND softwareid = {$software}";
+            if (!empty($software) AND $software != '0')
+            {
+                $sql .= "AND softwareid = {$software}";
+            }
 //             if ($CONFIG['debug'])  echo "<pre>$sql</pre>";
             $result = mysql_query($sql);
             if (mysql_error()) trigger_error(mysql_error(),E_USER_WARNING);
             while ($sresult = mysql_fetch_object($result))
             {
-                $entry['id']=$sresult->id;
-                $entry['ref']="incident-{$sresult->id}";
-                if (!empty($sresult->title)) $entry['string'] = $sresult->title;
-                else $entry['string'] = $strUntitled;
+                $entry['id'] = $sresult->id;
+                $entry['ref'] = "incident-{$sresult->id}";
+                if (!empty($sresult->title))
+                {
+                    $entry['string'] = $sresult->title;
+                }
+                else
+                {
+                    $entry['string'] = $strUntitled;
+                }
+
                 $entry['score'] = 10 + search_score_adjust($sterms, $entry['string']);
                 $entry['title'] = $sresult->title;
                 $entry['date'] = $sresult->lastupdated;
                 $entry['extra']['opened'] = date($CONFIG['dateformat_datetime'],$sresult->opened);
-                if ($sresult->status==2) $entry['extra']['closed'] = date($CONFIG['dateformat_datetime'],$sresult->closed);
-                foreach($sterms AS $sterm)
+                if ($sresult->status == 2)
                 {
-                    $positions=string_find_all($entry['string'], $sterm);
-                    $numpositions=count($positions);
-                    if ($numpositions >0 ) $entry['score']+=$numpositions;
+                    $entry['extra']['closed'] = date($CONFIG['dateformat_datetime'],$sresult->closed);
+                }
+
+                foreach ($sterms AS $sterm)
+                {
+                    $positions = string_find_all($entry['string'], $sterm);
+                    $numpositions = count($positions);
+                    if ($numpositions >0 ) $entry['score'] += $numpositions;
 //                     echo "numpos: $numpositions<br />";
                 }
                 search_build_results($srch_results,$entry);
                 unset($entry);
             }
-            if($searchmode != 'related')
+            if ($searchmode != 'related')
             {
             // Incident updates
                 $sql = "SELECT DISTINCT incidents.id AS incidentid, incidents.title, updates.bodytext, updates.timestamp, incidents.opened, incidents.closed FROM incidents,updates WHERE ";
@@ -262,14 +282,17 @@ if (!empty($search_string))
                 if (mysql_error()) trigger_error(mysql_error(),E_USER_WARNING);
                 while ($sresult = mysql_fetch_object($result))
                 {
-                    $entry['id']=$sresult->incidentid;
-                    $entry['ref']="incident-{$sresult->incidentid}";
+                    $entry['id'] = $sresult->incidentid;
+                    $entry['ref'] = "incident-{$sresult->incidentid}";
                     $entry['string'] = strip_tags($sresult->bodytext);
                     $entry['score'] = 8 + search_score_adjust($sterms, $entry['string']);
                     $entry['title'] = $sresult->title;
                     $entry['date'] = $sresult->timestamp;
                     $entry['extra']['opened'] = date($CONFIG['dateformat_datetime'],$sresult->opened);
-                    if ($sresult->status==2) $entry['extra']['closed'] = date($CONFIG['dateformat_datetime'],$sresult->closed);
+                    if ($sresult->status == 2)
+                    {
+                        $entry['extra']['closed'] = date($CONFIG['dateformat_datetime'],$sresult->closed);
+                    }
                     search_build_results($srch_results,$entry);
                     unset($entry);
                 }
@@ -285,8 +308,8 @@ if (!empty($search_string))
             if (mysql_error()) trigger_error(mysql_error(),E_USER_WARNING);
             while ($sresult = mysql_fetch_object($result))
             {
-                $entry['id']=$sresult->contactid;
-                $entry['ref']="contact-{$sresult->id}";
+                $entry['id'] = $sresult->contactid;
+                $entry['ref'] = "contact-{$sresult->id}";
                 $entry['string'] = "{$sresult->forenames} {$sresult->surname}";
                 $entry['score'] = 10 + search_score_adjust($sterms, $entry['string']);
                 $entry['title'] = "{$sresult->forenames} {$sresult->surname}";
@@ -296,15 +319,15 @@ if (!empty($search_string))
             }
 
             // Sites
-                    $sql = "SELECT * FROM sites WHERE ";
+            $sql = "SELECT * FROM sites WHERE ";
             $sql .= search_build_query('name', $sterms);
 //             echo "<pre>$sql</pre>";
             $result = mysql_query($sql);
             if (mysql_error()) trigger_error(mysql_error(),E_USER_WARNING);
             while ($sresult = mysql_fetch_object($result))
             {
-                $entry['id']=$sresult->id;
-                $entry['ref']="site-{$sresult->id}";
+                $entry['id'] = $sresult->id;
+                $entry['ref'] = "site-{$sresult->id}";
                 $entry['string'] = "{$sresult->name}";
                 $entry['score'] = 10 + search_score_adjust($sterms, $entry['string']);
                 $entry['title'] = $sresult->name;
@@ -323,8 +346,8 @@ if (!empty($search_string))
             if (mysql_error()) trigger_error(mysql_error(),E_USER_WARNING);
             while ($sresult = mysql_fetch_object($result))
             {
-                $entry['id']=$sresult->maintid;
-                $entry['ref']="contract-{$sresult->maintid}";
+                $entry['id'] = $sresult->maintid;
+                $entry['ref'] = "contract-{$sresult->maintid}";
                 $entry['string'] = "{$sresult->name}";
                 $entry['score'] = 10 + search_score_adjust($sterms, $entry['string']);
                 $entry['title'] = $sresult->name;
@@ -343,8 +366,8 @@ if (!empty($search_string))
             if (mysql_error()) trigger_error(mysql_error(),E_USER_WARNING);
             while ($sresult = mysql_fetch_object($result))
             {
-                $entry['id']=$sresult->docid;
-                $entry['ref']="kb-{$sresult->docid}";
+                $entry['id'] = $sresult->docid;
+                $entry['ref'] = "kb-{$sresult->docid}";
                 $entry['string'] = "{$sresult->title}";
                 $entry['score'] = 10 + search_score_adjust($sterms, $entry['string']);
                 $entry['title'] = $sresult->title;
@@ -355,7 +378,7 @@ if (!empty($search_string))
             break;
 
         default:
-            echo "<p>Searching in this domain not available yet</p>";
+            echo "<p>{$strSearchInDomainNotAvailableYet}</p>";
     }
 
 
@@ -364,13 +387,13 @@ if (!empty($search_string))
         $num_results = count($srch_results);
         if ($sort=='date' AND $order=='d') $srch_results=ansort($srch_results,'date','numeric');
         elseif ($sort=='date' AND $order=='a') $srch_results = array_reverse(ansort($srch_results,'date','numeric'), TRUE);
-        elseif ($sort=='score' AND $order=='d') $srch_results=ansort($srch_results,'score','numeric');
-        elseif ($sort=='score' AND $order=='a') $srch_results=array_reverse(ansort($srch_results,'score','numeric'), TRUE);
-        elseif ($sort=='id' AND $order=='d') $srch_results=ansort($srch_results,'id','numeric');
-        elseif ($sort=='id' AND $order=='a') $srch_results=array_reverse(ansort($srch_results,'id','numeric'), TRUE);
-        elseif ($sort=='result' AND $order=='a') $srch_results=ansort($srch_results,'title','strnatcasecmp');
-        elseif ($sort=='result' AND $order=='d') $srch_results=array_reverse(ansort($srch_results,'title','strnatcasecmp'));
-        else $srch_results=ansort($srch_results,'date');
+        elseif ($sort=='score' AND $order=='d') $srch_results = ansort($srch_results,'score','numeric');
+        elseif ($sort=='score' AND $order=='a') $srch_results = array_reverse(ansort($srch_results,'score','numeric'), TRUE);
+        elseif ($sort=='id' AND $order=='d') $srch_results = ansort($srch_results,'id','numeric');
+        elseif ($sort=='id' AND $order=='a') $srch_results = array_reverse(ansort($srch_results,'id','numeric'), TRUE);
+        elseif ($sort=='result' AND $order=='a') $srch_results = ansort($srch_results,'title','strnatcasecmp');
+        elseif ($sort=='result' AND $order=='d') $srch_results = array_reverse(ansort($srch_results,'title','strnatcasecmp'));
+        else $srch_results = ansort($srch_results,'date');
 
 //          echo "<pre>Results:\n".print_r($srch_results,TRUE)."</pre>";
 
@@ -389,16 +412,27 @@ if (!empty($search_string))
         {
             $type = explode('-',$sresult['ref']);
             $type = $type[0];
-            echo "<tr class='$shade'>";
+            echo "<tr class='{$shade}'>";
             echo "<td>".ucfirst($type).": {$sresult['id']}</td>";
             switch ($type)
             {
-                case 'incident': $url = "javascript:incident_details_window('{$sresult['id']}', 'incident{$sresult['id']}')"; break;
-                case 'contact': $url = "contact_details.php?id={$sresult['id']}"; break;
-                case 'site': $url = "site_details.php?id={$sresult['id']}"; break;
-                case 'contract': $url = "contract_details.php?id={$sresult['id']}"; break;
-                case 'kb': $url = "kb_view_article.php?id={$sresult['id']}"; break;
-                default: $url = "javascript:alert('nothing to link to');";
+                case 'incident': 
+                    $url = "javascript:incident_details_window('{$sresult['id']}', 'incident{$sresult['id']}')"; 
+                    break;
+                case 'contact': 
+                    $url = "contact_details.php?id={$sresult['id']}"; 
+                    break;
+                case 'site': 
+                    $url = "site_details.php?id={$sresult['id']}"; 
+                    break;
+                case 'contract': 
+                    $url = "contract_details.php?id={$sresult['id']}"; 
+                    break;
+                case 'kb': 
+                    $url = "kb_view_article.php?id={$sresult['id']}"; 
+                    break;
+                default: 
+                    $url = "javascript:alert('nothing to link to');";
             }
             echo "<td style='width:400px;'><a href=\"$url\" class='info'>{$sresult['title']}";
             if (is_array($sresult['extra']))
@@ -418,7 +452,10 @@ if (!empty($search_string))
             echo "<br />&hellip;".search_highlight($sresult['string'],$search_string)."&hellip;</td>";
             echo "<td>{$sresult['score']}</td>";
             echo "<td>";
-            if ($sresult['date']>0) echo date($CONFIG['dateformat_datetime'],$sresult['date']);
+            if ($sresult['date'] > 0)
+            {
+                echo date($CONFIG['dateformat_datetime'],$sresult['date']);
+            }
             echo "</td>";
             echo "</tr>\n";
             if ($shade=='shade1') $shade='shade2';
@@ -426,11 +463,13 @@ if (!empty($search_string))
         }
         echo "</table>";
     }
-    else echo "<p>No results</p>";
+    else echo "<p>{$strNoResults}</p>";
 }
-if($searchmode != 'related')
+if ($searchmode != 'related')
 {
     // FIXME opensearch plugin
-    echo "<p>Firefox 2 and IE 7 users: You can <a href=\"javascript:window.external.AddSearchProvider('{$CONFIG['application_uriprefix']}{$CONFIG['application_webpath']}opensearch.php')\">install this search plugin</a> to make searching easier.</p>";
+    //echo "<p>Firefox 2 and IE 7 users: You can <a href=\"javascript:window.external.AddSearchProvider('{$CONFIG['application_uriprefix']}{$CONFIG['application_webpath']}opensearch.php')\">install this search plugin</a> to make searching easier.</p>";
+    $link = "<a href=\"javascript:window.external.AddSearchProvider('{$CONFIG['application_uriprefix']}{$CONFIG['application_webpath']}opensearch.php')\">";
+    echo "<p>".sprintf($strInstallOpensearch, $link)."</p>";
 }
 ?>

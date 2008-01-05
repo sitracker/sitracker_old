@@ -33,18 +33,19 @@ function setup_exec_sql($sqlquerylist)
         $sqlqueries = explode( ';', $sqlquerylist);
         // We don't need the last entry it's blank, as we end with a ;
         array_pop($sqlqueries);
-        foreach($sqlqueries AS $sql)
+        foreach ($sqlqueries AS $sql)
         {
             mysql_query($sql);
             if (mysql_error())
             {
-                $html .= "<p><strong>FAILED:</strong> ".htmlspecialchars($sql)."</p>";
+                $html .= "<p><strong>{$strFAILED}:</strong> ".htmlspecialchars($sql)."</p>";
+                // FIXME i18n
                 $html .= "<p class='error'>".mysql_error()."<br />A MySQL error occurred, this could be because the MySQL user '{$CONFIG['db_username']}' does not have appropriate permission to modify the database schema.<br />";
                 //echo "The SQL command was:<br /><code>$sql</code><br />";
                 $html .= "An error might also be caused by an attempt to upgrade a version that is not supported by this script.<br />";
                 $html .= "Alternatively, you may have found a bug, if you think this is the case please report it.</p>";
             }
-            else $html .= "<p><strong>OK:</strong> ".htmlspecialchars($sql)."</p>";
+            else $html .= "<p><strong>{$strOK}:</strong> ".htmlspecialchars($sql)."</p>";
         }
     }
     return $html;
@@ -60,9 +61,9 @@ switch($_REQUEST['action'])
         if (mysql_error()) trigger_error(mysql_error(),E_USER_ERROR);
 
         echo "<h2><img src='{$CONFIG['application_webpath']}images/icons/{$iconset}/32x32/dashboard.png' width='32' height='32' alt='' /> ";
-        echo "Install new dashboard component</h2>";
+        echo $strInstallDashboardComponents."</h2>";
         echo "<p align='center'>Please note the component must has been placed in the dashboard directory and named <var>dashboard_NAME</var></p>";
-        while($dashboardnames = mysql_fetch_object($result))
+        while ($dashboardnames = mysql_fetch_object($result))
         {
             $dashboard[$dashboardnames->name] = $dashboardnames->name;
         }
@@ -71,12 +72,12 @@ switch($_REQUEST['action'])
 
         $dir_handle = @opendir($path) or die("Unable to open dashboard directory $path");
 
-        while($file = readdir($dir_handle))
+        while ($file = readdir($dir_handle))
         {
-            if(beginsWith($file, "dashboard_") && endsWith($file, ".php"))
+            if (beginsWith($file, "dashboard_") && endsWith($file, ".php"))
             {
                 //echo "file name ".$file."<br />";
-                if(empty($dashboard[substr($file, 10, strlen($file)-14)]))  //this is 14 due to .php =4 and dashboard_ = 10
+                if (empty($dashboard[substr($file, 10, strlen($file)-14)]))  //this is 14 due to .php =4 and dashboard_ = 10
                 {
                     //echo "file name ".$file." - ".substr($file, 10, strlen($file)-14)."<br />";
                     //$html .= "echo "<option value='{$row->id}'>$row->realname</option>\n";";
@@ -87,9 +88,9 @@ switch($_REQUEST['action'])
 
         closedir($dir_handle);
 
-        if(empty($html))
+        if (empty($html))
         {
-            echo "<p align='center'>No new dashboard components available</p>";
+            echo "<p align='center'>{$strNoNewDashboardComponentsToInstall}</p>";
             echo "<p align='center'><a href='manage_dashboard.php'>{$strBackToList}</a></p>";
         }
         else
@@ -110,7 +111,7 @@ switch($_REQUEST['action'])
         break;
     case 'installdashboard':
         $dashboardcomponents = $_REQUEST['comp'];
-        if(is_array($dashboardcomponents))
+        if (is_array($dashboardcomponents))
         {
             $count = count($dashboardcomponents);
 
@@ -122,7 +123,10 @@ switch($_REQUEST['action'])
             $result = mysql_query(substr($sql, 0, strlen($sql)-2));
             if (mysql_error()) trigger_error(mysql_error(),E_USER_ERROR);
 
-            if(!$result) echo "<p class='error'>Instalation of plugin(s) failed</p>";
+            if(!$result)
+            {
+                echo "<p class='error'>{$strInstallDashboardComponentFailed}</p>";
+            }
             else
             {
                 // run the post install compoents
@@ -176,17 +180,17 @@ switch($_REQUEST['action'])
                 }
                 else
                 {
-                    echo "<p class='error'>No schema available to upgrade</p>"; //TODO i18n
+                    echo "<p class='error'>{$strNoSchemaAvailableToUpgrade}</p>";
                 }
             }
             else
             {
-                echo "<p class='error'>No upgrades for {$obj->name} dashboard component</p>"; //TODO i18n
+                echo "<p class='error'>".sprintf($strNoUpgradesForDashboardComponent, $obj->name)."</p>";
             }
         }
         else
         {
-            echo "<p class='error'>Dashboard component {$id} doesn't exist</p>"; //TODO i18n
+            echo "<p class='error'>".sprintf($strDashboardComponentDoesntExist, $id)."</p>";
         }
 
         break;
@@ -199,7 +203,7 @@ switch($_REQUEST['action'])
 
         if(!$result)
         {
-            echo "<p class='error'>Changed enabled state failed</p>"; //TODO i18n
+            echo "<p class='error'>{$strChangeStateFailed}</p>";
         }
         else
         {
@@ -220,12 +224,18 @@ switch($_REQUEST['action'])
         echo colheader('name',$strName);
         echo colheader('enabled',$strEnabled);
         echo colheader('version',$strVersion);
-        echo colheader('upgrade',"Upgrade"); //FIXME i18n after release
+        echo colheader('upgrade',$strUpgrade);
         echo "</tr>";
-        while($dashboardnames = mysql_fetch_object($result))
+        while ($dashboardnames = mysql_fetch_object($result))
         {
-            if($dashboardnames->enabled == "true") $opposite = "false";
-            else $opposite = "true";
+            if ($dashboardnames->enabled == "true")
+            {
+                $opposite = "false";
+            }
+            else
+            {
+                $opposite = "true";
+            }
             echo "<tr class='shade2'><td>{$dashboardnames->id}</td>";
             echo "<td>{$dashboardnames->name}</td>";
             echo "<td><a href='".$_SERVER['PHP_SELF']."?action=enable&amp;id={$dashboardnames->id}&amp;enable={$opposite}'>{$dashboardnames->enabled}</a></td>";
