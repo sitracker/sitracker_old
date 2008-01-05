@@ -102,6 +102,24 @@ Spaces appear between operators, e.g.:
     someObject->setValue(someObject->currentValue() + 1)
 
 
+Blank Lines
+-----------
+Blank lines should appear between if statements:
+
+    if (foo)
+    {
+        ...
+    }
+    else
+    {
+        ....
+    }
+
+    if (bar)
+    {
+        ....
+    }
+
 Braces
 ------
 Braces always appear on a line by themself, indented to align with the

@@ -51,60 +51,60 @@ function count_incidents($startdate, $enddate)
     // Returns an associative array
     // 0
     $sql = get_sql_statement($startdate,$enddate,0);
-    $result= mysql_query($sql);
-    list($count['opened'])=mysql_fetch_row($result);
+    $result = mysql_query($sql);
+    list($count['opened']) = mysql_fetch_row($result);
     mysql_free_result($result);
 
     // 1
     $sql = get_sql_statement($startdate,$enddate,1);
-    $result= mysql_query($sql);
-    list($count['closed'])=mysql_fetch_row($result);
+    $result = mysql_query($sql);
+    list($count['closed']) = mysql_fetch_row($result);
     mysql_free_result($result);
 
     // 2
     $sql = get_sql_statement($startdate,$enddate,2);
-    $result= mysql_query($sql);
-    list($count['updated'])=mysql_fetch_row($result);
+    $result = mysql_query($sql);
+    list($count['updated']) = mysql_fetch_row($result);
     mysql_free_result($result);
 
     // 3
     $sql = get_sql_statement($startdate,$enddate,3);
-    $result= mysql_query($sql);
-    list($count['handled'])=mysql_fetch_row($result);
+    $result = mysql_query($sql);
+    list($count['handled']) = mysql_fetch_row($result);
     mysql_free_result($result);
 
     // 4
     $sql = get_sql_statement($startdate,$enddate,4);
-    $result= mysql_query($sql);
+    $result = mysql_query($sql);
     if (mysql_error()) trigger_error(mysql_error(),E_USER_ERROR);
-    list($count['updates'],$count['users'])=mysql_fetch_row($result);
+    list($count['updates'],$count['users']) = mysql_fetch_row($result);
     mysql_free_result($result);
 
     // 5
     $sql = get_sql_statement($startdate,$enddate,5);
-    $result= mysql_query($sql);
+    $result = mysql_query($sql);
     if (mysql_error()) trigger_error(mysql_error(),E_USER_ERROR);
-    list($count['skills'], $count['owners'])=mysql_fetch_row($result);
+    list($count['skills'], $count['owners']) = mysql_fetch_row($result);
     mysql_free_result($result);
 
     // 6
     $sql = get_sql_statement($startdate,$enddate,6);
-    $result= mysql_query($sql);
+    $result = mysql_query($sql);
     if (mysql_error()) trigger_error(mysql_error(),E_USER_ERROR);
-    list($count['emailtx'])=mysql_fetch_row($result);
+    list($count['emailtx']) = mysql_fetch_row($result);
     mysql_free_result($result);
 
     // 7
     $sql = get_sql_statement($startdate,$enddate,7);
-    $result= mysql_query($sql);
+    $result = mysql_query($sql);
     if (mysql_error()) trigger_error(mysql_error(),E_USER_ERROR);
-    list($count['emailrx'])=mysql_fetch_row($result);
+    list($count['emailrx']) = mysql_fetch_row($result);
     mysql_free_result($result);
 
     // 8
     $sql = get_sql_statement($startdate,$enddate,8);
-    $result= mysql_query($sql);
-    list($count['higherpriority'])=mysql_fetch_row($result);
+    $result = mysql_query($sql);
+    list($count['higherpriority']) = mysql_fetch_row($result);
     mysql_free_result($result);
 
     return $count;
@@ -120,32 +120,81 @@ function stats_period_row($desc, $start, $end)
     global $shade;
     if ($shade=='') $shade='shade1';
     $count = count_incidents($start,$end);
-    if ($count['users'] > 0) $updatesperuser = @number_format($count['updates']/$count['users'], 2);
-    else $updatesperuser = 0;
-    if ($count['updated'] > 0) $updatesperincident = @number_format($count['updates']/$count['updated'], 2);
-    else $updatesperincident = 0;
-    if ($count['owners'] > 0) $incidentsperowner = @number_format($count['handled']/$count['owners'], 2);
-    else $incidentsperowner = 0;
+
+    if ($count['users'] > 0)
+    {
+        $updatesperuser = @number_format($count['updates']/$count['users'], 2);
+    }
+    else
+    {
+        $updatesperuser = 0;
+    }
+
+    if ($count['updated'] > 0)
+    {
+        $updatesperincident = @number_format($count['updates']/$count['updated'], 2);
+    }
+    else
+    {
+        $updatesperincident = 0;
+    }
+
+    if ($count['owners'] > 0)
+    {
+        $incidentsperowner = @number_format($count['handled']/$count['owners'], 2);
+    }
+    else
+    {
+        $incidentsperowner = 0;
+    }
 /*
     $workload = $count['handled'] + $count['emailrx'] + $count['skills'] + $count['updates'] + $count['higherpriority'];
     $resource = $count['owners'] + $count['users'] + $count['emailtx'] + ($count['opened'] - $count['closed']);
     $busyrating = ($resource / $workload * 100);
     $busyrating = @number_format($busyrating * 4.5,1);
 */
-    if ($count['updated'] > 10) $freshness = ($count['updated'] / $count['handled'] * 100);
-    else $freshness=$count['updated'];
-    if ($count['owners'] > 0) $load = (($count['handled'] / $count['owners']) / $count['handled'] * 100);
-    else $load = 0;
-    if ($count['updates'] > 10) $busyness = (($count['updates'] / $count['users']) / $count['updates'] * 100);
-    else $busyness=$count['updates'];
-    if ($count['users'] > 0 && $count['emailtx'] > 0) $busyness2 = (($count['emailtx'] / $count['users']) / $count['handled'] * 100);
-    else $busyness2 = 0;
-    $activity = ($freshness+$load+$busyness+$busyness2 / 400 * 100);
+    if ($count['updated'] > 10)
+    {
+        $freshness = ($count['updated'] / $count['handled'] * 100);
+    }
+    else
+    {
+        $freshness = $count['updated'];
+    }
+
+    if ($count['owners'] > 0)
+    {
+        $load = (($count['handled'] / $count['owners']) / $count['handled'] * 100);
+    }
+    else
+    {
+        $load = 0;
+    }
+
+    if ($count['updates'] > 10)
+    {
+        $busyness = (($count['updates'] / $count['users']) / $count['updates'] * 100);
+    }
+    else
+    {
+        $busyness=$count['updates'];
+    }
+
+    if ($count['users'] > 0 && $count['emailtx'] > 0)
+    {
+        $busyness2 = (($count['emailtx'] / $count['users']) / $count['handled'] * 100);
+    }
+    else
+    {
+        $busyness2 = 0;
+    }
+
+    $activity = ($freshness + $load + $busyness + $busyness2 / 400 * 100);
     $activity = @number_format($activity,1);
     if ($activity > 100) $activity=100;
     if ($activity < 0) $activity = 0;
 
-    $html = "<tr class='$shade'><td>$desc</td>";
+    $html = "<tr class='{$shade}'><td>{$desc}</td>";
     $html .= "<td><a href='{$_SERVER['PHP_SELF']}?mode=breakdown&query=0&start={$start}&end={$end}'>{$count['opened']}</a></td>";
     $html .= "<td><a href='{$_SERVER['PHP_SELF']}?mode=breakdown&query=2&start={$start}&end={$end}'>{$count['updated']}</a></td>";
     $html .= "<td><a href='{$_SERVER['PHP_SELF']}?mode=breakdown&query=1&start={$start}&end={$end}'>{$count['closed']}</a></td>";
@@ -175,13 +224,15 @@ function give_overview()
     global $todayrecent, $mode, $CONFIG;
 
     echo "<table align='center'>";
-    // FIXME i18n per incident etc.
-    echo "<tr><th>{$GLOBALS['strPeriod']}</th><th>{$GLOBALS['strOpened']}</th><th>{$GLOBALS['strUpdated']}</th><th>{$GLOBALS['strClosed']}</th><th>{$GLOBALS['strHandled']}</th>";
-    echo "<th>{$GLOBALS['strUpdates']}</th><th>per incident</th><th>{$GLOBALS['strSkills']}</th><th>{$GLOBALS['strOwners']}</th><th>{$GLOBALS['strUsers']}</th>";
-    echo "<th>upd per user</th><th>inc per owner</th><th>{$GLOBALS['strEmail']} Rx</th><th>{$GLOBALS['strEmail']} Tx</th><th>{$GLOBALS['strHigherPriority']}</th>";
+    echo "<tr><th>{$GLOBALS['strPeriod']}</th>";
+    echo "<th>{$GLOBALS['strOpened']}</th><th>{$GLOBALS['strUpdated']}</th>";
+    echo "<th>{$GLOBALS['strClosed']}</th><th>{$GLOBALS['strHandled']}</th>";
+    echo "<th>{$GLOBALS['strUpdates']}</th><th>{$GLOBALS['strPerIncident']}</th><th>{$GLOBALS['strSkills']}</th>";
+    echo "<th>{$GLOBALS['strOwners']}</th><th>{$GLOBALS['strUsers']}</th>";
+    echo "<th>upd per user</th><th>inc per owner</th><th>{$GLOBALS['strEmailReceivedAbbrev']}</th>"; // FIXME i18n
+    echo "<th>{$GLOBALS['strEmailTransmisttedAbbrev']}</th><th>{$GLOBALS['strHigherPriority']}</th>";
     echo "<th>{$GLOBALS['strActivity']}</th></tr>\n";
-    // FIXME i18n Yesterday
-    // FIXME i18n date ranges
+
     echo stats_period_row("<a href='{$_SERVER['PHP_SELF']}?mode=daybreakdown&offset=0'>{$GLOBALS['strToday']}</a>", mktime(0,0,0,date('m'),date('d'),date('Y')),mktime(23,59,59,date('m'),date('d'),date('Y')));
     echo stats_period_row("<a href='{$_SERVER['PHP_SELF']}?mode=daybreakdown&offset=1'>{$GLOBALS['strYesterday']}</a>", mktime(0,0,0,date('m'),date('d')-1,date('Y')),mktime(23,59,59,date('m'),date('d')-1,date('Y')));
     echo stats_period_row("<a href='{$_SERVER['PHP_SELF']}?mode=daybreakdown&offset=2'>".date('l',mktime(0,0,0,date('m'),date('d')-2,date('Y')))."</a>", mktime(0,0,0,date('m'),date('d')-2,date('Y')),mktime(23,59,59,date('m'),date('d')-2,date('Y')));
@@ -190,21 +241,22 @@ function give_overview()
     echo stats_period_row("<a href='{$_SERVER['PHP_SELF']}?mode=daybreakdown&offset=5'>".date('l',mktime(0,0,0,date('m'),date('d')-5,date('Y')))."</a>", mktime(0,0,0,date('m'),date('d')-5,date('Y')),mktime(23,59,59,date('m'),date('d')-5,date('Y')));
     echo stats_period_row("<a href='{$_SERVER['PHP_SELF']}?mode=daybreakdown&offset=6'>".date('l',mktime(0,0,0,date('m'),date('d')-6,date('Y')))."</a>", mktime(0,0,0,date('m'),date('d')-6,date('Y')),mktime(23,59,59,date('m'),date('d')-6,date('Y')));
     echo "<tr><td colspan='*'></td></tr>";
-    echo stats_period_row('Past 7 days', mktime(0,0,0,date('m'),date('d')-6,date('Y')),mktime(23,59,59,date('m'),date('d'),date('Y')));
-    echo stats_period_row('Previous 7 days', mktime(0,0,0,date('m'),date('d')-13,date('Y')),mktime(23,59,59,date('m'),date('d')-7,date('Y')));
+    echo stats_period_row(sprintf($GLOBALS['strPastXDays'],7), mktime(0,0,0,date('m'),date('d')-6,date('Y')),mktime(23,59,59,date('m'),date('d'),date('Y')));
+    echo stats_period_row(sprintf($GLOBALS['strPreviousXDays'],7), mktime(0,0,0,date('m'),date('d')-13,date('Y')),mktime(23,59,59,date('m'),date('d')-7,date('Y')));
     echo "<tr><td colspan='*'></td></tr>";
+
     if ($mode=='detail')
     {
-        echo stats_period_row('This month', mktime(0,0,0,date('m'),1,date('Y')),mktime(23,59,59,date('m'),date('d'),date('Y')));
-        echo stats_period_row('Last month', mktime(0,0,0,date('m')-1,date('d'),date('Y')),mktime(23,59,59,date('m'),0,date('Y')));
+        echo stats_period_row($GLOBALS['strThisMonth'], mktime(0,0,0,date('m'),1,date('Y')),mktime(23,59,59,date('m'),date('d'),date('Y')));
+        echo stats_period_row($GLOBALS['strLastMonth'], mktime(0,0,0,date('m')-1,date('d'),date('Y')),mktime(23,59,59,date('m'),0,date('Y')));
         echo stats_period_row(date('F y',mktime(0,0,0,date('m')-2,1,date('Y'))), mktime(0,0,0,date('m')-2,date('d'),date('Y')),mktime(23,59,59,date('m')-1,0,date('Y')));
         echo stats_period_row(date('F y',mktime(0,0,0,date('m')-3,1,date('Y'))), mktime(0,0,0,date('m')-3,date('d'),date('Y')),mktime(23,59,59,date('m')-2,0,date('Y')));
         echo stats_period_row(date('F y',mktime(0,0,0,date('m')-4,1,date('Y'))), mktime(0,0,0,date('m')-4,date('d'),date('Y')),mktime(23,59,59,date('m')-3,0,date('Y')));
         echo stats_period_row(date('F y',mktime(0,0,0,date('m')-5,1,date('Y'))), mktime(0,0,0,date('m')-5,date('d'),date('Y')),mktime(23,59,59,date('m')-4,0,date('Y')));
         echo stats_period_row(date('F y',mktime(0,0,0,date('m')-6,1,date('Y'))), mktime(0,0,0,date('m')-6,date('d'),date('Y')),mktime(23,59,59,date('m')-5,0,date('Y')));
         echo "<tr><td colspan='*'></td></tr>";
-        echo stats_period_row('This year', mktime(0,0,0,1,1,date('Y')),mktime(23,59,59,date('m'),date('d'),date('Y')));
-        echo stats_period_row('Last year', mktime(0,0,0,1,1,date('Y')-1),mktime(23,59,59,12,31,date('Y')-1));
+        echo stats_period_row($GLOBALS['strThisYear'], mktime(0,0,0,1,1,date('Y')),mktime(23,59,59,date('m'),date('d'),date('Y')));
+        echo stats_period_row($GLOBALS['strLastYear'], mktime(0,0,0,1,1,date('Y')-1),mktime(23,59,59,12,31,date('Y')-1));
         echo stats_period_row(date('Y',mktime(0,0,0,1,1,date('Y')-2)), mktime(0,0,0,1,1,date('Y')-2),mktime(23,59,59,12,31,date('Y')-2));
         echo stats_period_row(date('Y',mktime(0,0,0,1,1,date('Y')-3)), mktime(0,0,0,1,1,date('Y')-3),mktime(23,59,59,12,31,date('Y')-3));
         echo stats_period_row(date('Y',mktime(0,0,0,1,1,date('Y')-4)), mktime(0,0,0,1,1,date('Y')-4),mktime(23,59,59,12,31,date('Y')-4));
@@ -221,17 +273,21 @@ function give_overview()
 
     echo "<h2>{$GLOBALS['strCurrentlyOpen']}</h2>";
     echo "<table class='vertical' align='center'>";
-    if(mysql_num_rows($result) > 0)
+    if (mysql_num_rows($result) > 0)
     {
        // echo "<table align='center' class='vertical' width='20%'>";
         $openCalls = 0;
         echo "<td><table class='vertical' align='center'>";
-        while($row = mysql_fetch_array($result))
+        while ($row = mysql_fetch_array($result))
         {
-            echo "<tr><th>".$row['name']."</th><td class='shade2' align='left'>".$row['COUNT(incidents.id)']."</td></tr>";
-            if(strpos(strtolower($row['name']), "clos") === false) $openCalls += $row['COUNT(incidents.id)'];
+            echo "<tr><th>{$row['name']}</th><td class='shade2' align='left'>{$row['COUNT(incidents.id)']}</td></tr>";
+            if (strpos(strtolower($row['name']), "clos") === false)
+            {
+                $openCalls += $row['COUNT(incidents.id)'];
+            }
         }
-        echo "<tr><th>{$strTotal}</th><td class='shade2' align='left'><strong>$openCalls</strong></td></tr></table></td>";
+        echo "<tr><th>{$GLOBALS['strTotal']}</th><td class='shade2' align='left'>";
+        echo "<strong>{$openCalls}</strong></td></tr></table></td>";
     }
     plugin_do('statistics_table_overview');
     echo "</table>";
@@ -250,10 +306,10 @@ function give_overview()
     $result = mysql_query($sql);
     if (mysql_error()) trigger_error("MySQL Query Error ".mysql_error(), E_USER_ERROR);
 
-    if(mysql_num_rows($result) > 1)
+    if (mysql_num_rows($result) > 1)
     {
-        echo "<h2>By vendor</h2><table class='vertical' align='center'>";
-        while($vendors = mysql_fetch_array($result))
+        echo "<h2>{$GLOBALS['$strByVendor']}</h2><table class='vertical' align='center'>";
+        while ($vendors = mysql_fetch_array($result))
         {
             // This should use the software and relate to the product and then to the vendor
             /*
@@ -265,24 +321,29 @@ function give_overview()
 
             $sqlVendor = "SELECT COUNT(incidents.id), incidentstatus.name FROM incidents, incidentstatus, software ";
             $sqlVendor .= "WHERE incidents.status = incidentstatus.id AND closed = 0 AND incidents.softwareid = software.id ";
-            $sqlVendor .= "AND software.vendorid = ".$vendors['vendorid']." ";
+            $sqlVendor .= "AND software.vendorid = {$vendors['vendorid']} ";
             $sqlVendor .= "GROUP BY incidents.status";
 
             $resultVendor = mysql_query($sqlVendor);
             if (mysql_error()) trigger_error("MySQL Query Error ".mysql_error(), E_USER_ERROR);
 
-            if(mysql_num_rows($resultVendor) > 0)
+            if (mysql_num_rows($resultVendor) > 0)
             {
                 $openCallsVendor = 0;
-                echo "<td style='vertical-align:top' align='center'><strong>".$vendors['name']."</strong>";
+                echo "<td style='vertical-align:top' align='center'><strong>{$vendors['name']}</strong>";
                 echo "<table class='vertical' align='center'>";
-                while($rowVendor = mysql_fetch_array($resultVendor))
+                while ($rowVendor = mysql_fetch_array($resultVendor))
                 {
-                    echo "<tr><th>".$rowVendor['name']."</th><td class='shade2' align='left'>".$rowVendor['COUNT(incidents.id)']."</td></tr>";
-                    if(strpos(strtolower($rowVendor['name']), "clos") === false) $openCallsVendor += $rowVendor['COUNT(incidents.id)'];
+                    echo "<tr><th>{$rowVendor['name']}</th><td class='shade2' align='left'>";
+                    echo "{$rowVendor['COUNT(incidents.id)']}</td></tr>";
+
+                    if (strpos(strtolower($rowVendor['name']), "clos") === false)
+                    {
+                        $openCallsVendor += $rowVendor['COUNT(incidents.id)'];
+                    }
                 }
-                echo "<tr><th>{$strTotalOpen}</th>";
-                echo "<td class='shade2' align='left'><strong>{$openCallsVendor}</strong></td></tr></table></td>";
+                echo "<tr><th>{$GLOBALS['strTotalOpen']}</th>";
+                echo "<td class='shade2' align='left'><strong>{$GLOBALS['openCallsVendor']}</strong></td></tr></table></td>";
             }
         }
         echo "</table>";
@@ -290,32 +351,34 @@ function give_overview()
 
 
     // Count incidents logged today
-    $sql = "SELECT id FROM incidents WHERE opened > '$todayrecent'";
+    $sql = "SELECT id FROM incidents WHERE opened > '{$todayrecent}'";
     $result = mysql_query($sql);
     if (mysql_error()) trigger_error("MySQL Query Error ".mysql_error(), E_USER_ERROR);
-    $todaysincidents=mysql_num_rows($result);
+    $todaysincidents = mysql_num_rows($result);
     mysql_free_result($result);
 
     $string = "<h4>".sprintf($GLOBALS['strIncidentsLoggedToday'], $todaysincidents)."</h4>";
     if ($todaysincidents > 0)
     {
-        $string .= "<table align='center' width='50%'><tr><td colspan='2'>Assigned as follows:</td></tr>";
-        $sql = "SELECT count(incidents.id), realname, users.id AS owner FROM incidents, users WHERE opened > '$todayrecent' AND incidents.owner = users.id GROUP BY owner DESC";
+        $string .= "<table align='center' width='50%'><tr><td colspan='2'>{$GLOBALS['strAssignedAsFollows']}</td></tr>";
+        $sql = "SELECT count(incidents.id), realname, users.id AS owner FROM incidents, users WHERE opened > '{$todayrecent}' AND incidents.owner = users.id GROUP BY owner DESC";
 
         $result = mysql_query($sql);
         if (mysql_error()) trigger_error("MySQL Query Error ".mysql_error(), E_USER_ERROR);
-        while($row = mysql_fetch_array($result))
+        while ($row = mysql_fetch_array($result))
         {
-            $sql = "SELECT id, title FROM incidents WHERE opened > '$todayrecent' AND owner = '".$row['owner']."'";
+            $sql = "SELECT id, title FROM incidents WHERE opened > '{$todayrecent}' AND owner = '{$row['owner']}'";
 
-            $string .= "<tr><th>".$row['count(incidents.id)']."</th>";
-            $string .= "<td class='shade2' align='left'><a href='incidents.php?user=".$row['owner']."&amp;queue=1&amp;type=support'>".$row['realname']."</a> ";
+            $string .= "<tr><th>{$row['count(incidents.id)']}</th>";
+            $string .= "<td class='shade2' align='left'>";
+            $string .= "<a href='incidents.php?user={$row['owner']}&amp;queue=1&amp;type=support'>{$row['realname']}</a> ";
 
             $iresult = mysql_query($sql);
             if (mysql_error()) trigger_error("MySQL Query Error ".mysql_error(), E_USER_ERROR);
-            while($irow = mysql_fetch_array($iresult))
+
+            while ($irow = mysql_fetch_array($iresult))
             {
-                $string .= "<small><a href=\"javascript:incident_details_window('".$irow['id']."', 'incident".$irow['id']."')\"  title=\"".$irow['title']."\">[".$irow['id']."]</a></small> ";
+                $string .= "<small><a href=\"javascript:incident_details_window('{$irow['id']}', 'incident{$irow['id']}')\"  title='{$irow['title']}'>[{$irow['id']}]</a></small> ";
             }
 
             $string .= "</td></tr>";
@@ -325,33 +388,42 @@ function give_overview()
 
 
     // Count incidents closed today
-    $sql = "SELECT COUNT(id) FROM incidents WHERE closed > '$todayrecent'";
+    $sql = "SELECT COUNT(id) FROM incidents WHERE closed > '{$todayrecent}'";
     $result = mysql_query($sql);
     if (mysql_error()) trigger_error("MySQL Query Error ".mysql_error(), E_USER_ERROR);
-    list($todaysclosed)=mysql_fetch_row($result);
+    list($todaysclosed) = mysql_fetch_row($result);
 
     $string .= "<h4>".sprintf($GLOBALS['strIncidentsClosedToday'], $todaysclosed)."</h4>";
     if ($todaysclosed > 0)
     {
-        $sql = "SELECT count(incidents.id), realname, users.id AS owner FROM incidents LEFT JOIN users ON incidents.owner = users.id WHERE closed > '$todayrecent' GROUP BY owner";
-        $string .= "<table align='center' width='50%'>";
-        $string .= "<tr><th>ID</th><th>Title</th><th>Owner</th><th>Closing status</th></tr>\n";
+        $sql = "SELECT count(incidents.id), realname, users.id AS owner FROM incidents ";
+        $sql .= "LEFT JOIN users ON incidents.owner = users.id WHERE closed > '{$todayrecent}' ";
+        $sql .= "GROUP BY owner";
         $result = mysql_query($sql);
         if (mysql_error()) trigger_error("MySQL Query Error ".mysql_error(), E_USER_ERROR);
-        while($row = mysql_fetch_array($result))
+
+        $string .= "<table align='center' width='50%'>";
+        $string .= "<tr><th>{$GLOBALS['strID']}</th><th>{$GLOBALS['strTitle']}</th>";
+        $string .= "<th>{$GLOBALS['strOwner']}</th><th>{$GLOBALS['strClosingStatus']}</th></tr>\n";
+
+        while ($row = mysql_fetch_array($result))
         {
-            $string .= "<tr><th colspan='4' align='left'>".$row['count(incidents.id)']." {$GLOBALS['strClosedBy']} ".$row['realname']."</th></tr>\n";
+            $string .= "<tr><th colspan='4' align='left'>".$row['count(incidents.id)']." {$GLOBALS['strClosedBy']} {$row['realname']}</th></tr>\n";
 
             $sql = "SELECT incidents.id, incidents.title, closingstatus.name ";
             $sql .= "FROM incidents, closingstatus ";
-            $sql .= "WHERE incidents.closingstatus = closingstatus.id AND closed > '$todayrecent' AND incidents.owner = '".$row['owner']."' ORDER BY closed";
+            $sql .= "WHERE incidents.closingstatus = closingstatus.id AND closed > '{$todayrecent}' ";
+            $sql .= "AND incidents.owner = '{$row['owner']}' ";
+            $sql .= "ORDER BY closed";
 
             $iresult = mysql_query($sql);
             if (mysql_error()) trigger_error("MySQL Query Error ".mysql_error(), E_USER_ERROR);
-            while($irow = mysql_fetch_array($iresult))
+            while ($irow = mysql_fetch_array($iresult))
             {
-                $string .= "<tr><th><a href=\"javascript:incident_details_window('".$irow['id']."', 'incident".$irow['id']."')\" title='[".$irow['id']."] - ".$irow['title']."'>".$irow['id']."</a></th>";
-                $string .= "<td class='shade2' align='left'>".$irow['title']."</td><td class='shade2' align='left'>".$row['realname']."</td><td class='shade2'>".$irow['name']."</td></tr>\n";
+                $string .= "<tr><th><a href=\"javascript:incident_details_window('{$irow['id']}', 'incident{$irow['id']}')\" title='[{$irow['id']}] - {$irow['title']}'>{$irow['id']}</a></th>";
+                $string .= "<td class='shade2' align='left'>{$irow['title']}</td>";
+                $string .= "<td class='shade2' align='left'>{$row['realname']}</td>";
+                $string .= "<td class='shade2'>{$irow['name']}</td></tr>\n";
             }
         }
         $string .= "</table>\n\n";
@@ -377,36 +449,38 @@ function give_overview()
             $sql .= "WHERE feedbackrespondents.incidentid=incidents.id ";
             $sql .= "AND incidents.owner=users.id ";
             $sql .= "AND feedbackrespondents.id=feedbackresults.respondentid ";
-            $sql .= "AND feedbackresults.questionid='$qrow->id' ";
+            $sql .= "AND feedbackresults.questionid='{$qrow->id}' ";
             $sql .= "AND feedbackrespondents.completed = 'yes' \n";
             $sql .= "ORDER BY incidents.owner, incidents.id";
             $result = mysql_query($sql);
             if (mysql_error()) trigger_error(mysql_error(), E_USER_ERROR);
-            $numsurveys=mysql_num_rows($result);
-            $numresults=0;
-            $cumul=0;
-            $percent=0;
-            $average=0;
+            $numsurveys = mysql_num_rows($result);
+            $numresults = 0;
+            $cumul = 0;
+            $percent = 0;
+            $average = 0;
+
             while ($row = mysql_fetch_object($result))
             {
                 if (!empty($row->result))
                 {
-                    $cumul+=$row->result;
+                    $cumul += $row->result;
                     $numresults++;
                 }
             }
             if ($numresults>0) $average=number_format(($cumul/$numresults), 2);
-            $percent =number_format((($average -1) * (100 / ($CONFIG['feedback_max_score'] -1))), 0);
-            $totalresult+=$average;
+            $percent = number_format((($average -1) * (100 / ($CONFIG['feedback_max_score'] -1))), 0);
+            $totalresult += $average;
             $string .= "<td>{$average}</td></tr>";
             // <strong>({$percent}%)</strong><br />";
         }
         $string .= "</table>\n";
-        $total_average=number_format($totalresult/$numquestions,2);
-        $total_percent=number_format((($total_average -1) * (100 / ($CONFIG['feedback_max_score'] -1))), 0);
-        if ($total_percent < 0) $total_percent=0;
-        $string .= "<p align='center'>{$GLOBALS['strPositivity']}: {$total_average} <strong>({$total_percent}%)</strong> from $numsurveys results.</p>";
-        $surveys+=$numresults;
+        $total_average = number_format($totalresult/$numquestions,2);
+        $total_percent = number_format((($total_average -1) * (100 / ($CONFIG['feedback_max_score'] -1))), 0);
+        if ($total_percent < 0) $total_percent = 0;
+        $string .= "<p align='center'>{$GLOBALS['strPositivity']}: {$total_average} <strong>({$total_percent}%)</strong> ";
+        $string .= sprintf($GLOBALS['strFromXResults'], $numsurveys).". </p>";
+        $surveys += $numresults;
     }
     return $string;
 }
@@ -427,13 +501,10 @@ switch($mode)
         break;
     case 'overview': //this is the default so just fall though
     default:
-        echo "<h2>$title - Overview</h2>";
+        echo "<h2>{$title} - {$strOverview}</h2>";
         echo give_overview();
         break;
 }
-
-
-
 
 include('htmlfooter.inc.php');
 ?>
