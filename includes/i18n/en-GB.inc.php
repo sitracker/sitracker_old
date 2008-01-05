@@ -297,6 +297,7 @@ $strFileManagement = 'File Management';
 $strFilename = 'Filename';
 # e.g. computer files
 $strFiles = 'Files';
+$strFinalUpdate = 'Final Update';
 $strFindContact = 'Find Contact';
 #e.g. for a person
 $strFor = 'for';
@@ -719,6 +720,8 @@ $strSubstitutes = 'Substitutes';
 $strSuccess = 'Success';
 $strSuccessfully = 'Successfully';
 $strSummary = 'Summary';
+$strSummaryOfProblem = 'A concise but full summary of the problem(s) that were encountered.';
+$strSummaryOfProblemAndResolution = 'You should provide a summary of the problem and information about how it was resolved.';
 # Short for 'Sunday'
 $strSun = 'Sun';
 $strSunday = 'Sunday';
@@ -779,6 +782,7 @@ $strUpdated = 'updated';
 $strUpdatedAutomaticallyBy = 'Updated automatically by %s';
 $strUpdatedFromTask = 'Updated From Task';
 $strUpdateIncident = 'Update Incident';
+$strUpdateIncidentFailed = 'Incident Update failed';
 $strUpdateNewUpdate = 'New update (none of the above)';
 $strUpdates = 'Updates';
 $strUpdatedFromActivity = 'Updated from Activity by %s';
