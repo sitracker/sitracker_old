@@ -20,11 +20,24 @@ require ('auth.inc.php');
 $id = cleanvar($_REQUEST['id']);
 $incidentid = $id;
 
+$title = $strClose;
+
 // No submit detected show closure form
 if (empty($_REQUEST['process']))
 {
-    $title = $strClose;
+    $sql = "SELECT owner FROM incidents WHERE id = '{$incidentid}'";
+    $result = mysql_query($sql);
+    if (mysql_error()) trigger_error(mysql_error(),E_USER_ERROR);
+    list($owner) = mysql_fetch_row($result);
+
+    if ($owner == 0)
+    {
+        html_redirect("incident_details.php?id={$incidentid}", FALSE, "Call must be assigned before closure");
+        exit;
+    }
+
     include ('incident_html_top.inc.php');
+
     ?>
     <script type="text/javascript">
     <!--
@@ -153,24 +166,29 @@ if (empty($_REQUEST['process']))
     echo "<form name='closeform' action='{$_SERVER['PHP_SELF']}' method='post'>";
     echo "<table class='vertical' width='100%'>";
     echo "<tr><th width='30%'>{$strClose}:</th>";
-    echo "<td><label><input type='radio' name='wait' value='yes' checked='checked' />{$strMarkForClosure}</label><br />";
+    echo "<td><label><input type='radio' name='wait' value='yes' checked='checked' />";
+    echo "{$strMarkForClosure}</label><br />";
     echo "<label><input type='radio' name='wait' value='no' />{$strCloseImmediately}</label></td></tr>\n";
     echo "<tr><th>{$strKnowledgeBase}";
-    echo "</th><td><label><input type='checkbox' name='kbarticle' onchange='enablekb();' value='yes' /> {$strNewKBArticle}</label></td></tr>\n";
+    echo "</th><td><label><input type='checkbox' name='kbarticle' onchange='enablekb();' value='yes' />";
+    echo "{$strNewKBArticle}</label></td></tr>\n";
 
-    echo "<tr id='titlerow' style='display:none;'><th>{$strTitle}</th><td><input type='text' name='kbtitle' id='kbtitle' size='30' value=\"{$incident_title}\" disabled='disabled' /></td></tr>\n";
+    echo "<tr id='titlerow' style='display:none;'><th>{$strTitle}</th>";
+    echo "<td><input type='text' name='kbtitle' id='kbtitle' size='30' value='{$incident_title}' disabled='disabled' />";
+    echo "</td></tr>\n";
     echo "<tr><th>&nbsp;</th><td>";
     echo "<span id='helptext'>Enter some details about the incident to be stored in the incident log for future use.";
-    echo "You should provide a summary of the problem and information about how it was resolved.<br /><strong>Final Update</strong>:</span></td></tr>\n";
+    echo "{$strSummaryOfProblemAndResolution}<br /><strong>{$strFinalUpdate}</strong>:</span></td></tr>\n";
 
     echo "<tr><th>{$strSummary}:<sup class='red'>*</sup>\n ";
     echo "<input type='checkbox' name='incsummary' onclick=\"if (this.checked) {document.closeform.summary.disabled = false; ";
     echo "document.closeform.summary.style.display='';} else { saveValue=document.closeform.summary.value; ";
     echo "document.closeform.summary.disabled = true; document.closeform.summary.style.display='none';}\" checked='checked' disabled='disabled' /></th>";
 
-    echo "<td>A concise but full summary of the problem(s) that were encountered.<br />\n"; // FIXME i18n
+    echo "<td>{$strSummaryOfProblem}<br />\n";
     echo "<textarea id='summary' name='summary' cols='40' rows='8' onfocus=\"if (this.enabled) { this.value = saveValue; ";
     echo "setTimeout('document.articlform.summary.blur()',1); } else saveValue=this.value;\">";
+
     //  style="display: none;"
     $sql = "SELECT * FROM `{$dbUpdates}` WHERE incidentid='$id' AND type='probdef' ORDER BY timestamp ASC";
     $result = mysql_query($sql);
@@ -181,7 +199,8 @@ if (empty($_REQUEST['process']))
         echo "\n\n";
     }
     echo "</textarea>\n";
-    ?></td></tr>
+    echo "</td></tr>";
+    ?>
 
     <tr id='symptomsrow' style='display:none;'><th><label>Symptoms: <input type='checkbox' name='incsymptoms' onclick="if (this.checked) {document.closeform.symptoms.disabled = false; document.closeform.symptoms.style.display=''} else { saveValue=document.closeform.symptoms.value; document.closeform.symptoms.disabled = true; document.closeform.symptoms.style.display='none'}" disabled='disabled' /></label></th>
     <td><textarea id="symptoms" name="symptoms" cols='40' style="display: none;" rows='8' onfocus="if (this.enabled) { this.value = saveValue; setTimeout('document.articlform.symptoms.blur()',1); } else saveValue=this.value;"></textarea></td></tr>
@@ -310,10 +329,10 @@ else
         if ($addition_errors == 0)
         {
             ## if ($cust_vis == "yes") $show='show'; else $show='hide';
-            if ($_REQUEST['kbarticle']!='yes')
+            if ($_REQUEST['kbarticle'] != 'yes')
             {
                 // No KB Article, so just add updates to log for Summary and Solution
-                if (strlen($_REQUEST['summary'])>3)
+                if (strlen($_REQUEST['summary']) > 3)
                 {
                     // Problem Definition
                     $sql  = "INSERT INTO `{$dbUpdates}` (incidentid, userid, type, bodytext, timestamp, customervisibility) ";
@@ -321,7 +340,7 @@ else
                     $result = mysql_query($sql);
                     if (mysql_error()) trigger_error("MySQL Query Error ".mysql_error(), E_USER_ERROR);
                 }
-                if (strlen($_REQUEST['solution'])>3)
+                if (strlen($_REQUEST['solution']) > 3)
                 {
                     // Final Solution
                     $sql  = "INSERT INTO `{$dbUpdates}` (incidentid, userid, type, bodytext, timestamp, customervisibility) ";
@@ -361,7 +380,7 @@ else
             if (!$result)
             {
                 $addition_errors = 1;
-                $addition_errors_string .= "<p class='error'>Addition of incident update failed</p>\n";
+                $addition_errors_string .= "<p class='error'>{$strUpdateIncidentFailed}</p>\n";
             }
 
             //notify related inicdents this has been closed
@@ -498,11 +517,13 @@ else
                 }
 
                 // Add Software Record
-                if ($softwareid>0)  $sql="INSERT INTO `{$KBSoftware}` (docid,softwareid) VALUES ('$docid', '$softwareid')";
-                mysql_query($sql);
-                if (mysql_error()) trigger_error("MySQL Query Error ".mysql_error(), E_USER_ERROR);
-
-                journal(CFG_LOGGING_NORMAL, 'KB Article Added', "KB Article $docid was added", CFG_JOURNAL_KB, $docid);
+                if ($softwareid>0)
+                {
+                    $sql="INSERT INTO `{$KBSoftware}` (docid,softwareid) VALUES ('{$docid}', '{$softwareid}')";
+                    mysql_query($sql);
+                    if (mysql_error()) trigger_error("MySQL Query Error ".mysql_error(), E_USER_ERROR);
+                    journal(CFG_LOGGING_NORMAL, 'KB Article Added', "KB Article {$docid} was added", CFG_JOURNAL_KB, $docid);
+                }
 
                 //html_redirect("incident_details.php?id={$id}", TRUE, "Knowledge Base Article {$CONFIG['kb_id_prefix']}{$docid} created");
 
@@ -516,8 +537,8 @@ else
                     window.close();
                 }
                 </script>
-                <body onload="confirm_close_window();">
                 <?php
+                echo "<body onload=\"confirm_close_window();\">";
                 echo "</body>";
                 echo "</html>";
             }
@@ -533,10 +554,10 @@ else
                     window.close();
                 }
                 </script>
-                <body onload="confirm_close_window();">
-                </body>
-                </html>
                 <?php
+                echo "<body onload=\"confirm_close_window();\">";
+                echo "</body>";
+                echo "</html>";
             }
         }
         else

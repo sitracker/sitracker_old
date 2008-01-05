@@ -26,28 +26,38 @@ echo "<meta name=\"GENERATOR\" content=\"{$CONFIG['application_name']} {$applica
 echo "<title>";
 if (isset($title))
 {
-    echo "$title - {$CONFIG['application_shortname']}";
+    echo "$title - {$CONFIG['application_shortname']}"; 
 }
 else
 {
     echo "{$CONFIG['application_name']}{$extratitlestring}";
 }
+
 echo "</title>\n";
 echo "<link rel='SHORTCUT ICON' href='{$CONFIG['application_webpath']}images/sit_favicon.png' />\n";
 echo "<style type='text/css'>@import url('{$CONFIG['application_webpath']}styles/webtrack.css');</style>\n";
-if ($_SESSION['auth'] == TRUE) $styleid = $_SESSION['style'];
-else $styleid= $CONFIG['default_interface_style'];
+if ($_SESSION['auth'] == TRUE)
+{
+    $styleid = $_SESSION['style'];
+}
+else
+{
+    $styleid = $CONFIG['default_interface_style'];
+}
+
 $csssql = "SELECT cssurl, iconset FROM `{$dbInterfaceStyles}` WHERE id='{$styleid}'";
 $cssresult = mysql_query($csssql);
-if (mysql_error()) trigger_error(mysql_error(),E_USER_WARNING);
-else list($cssurl, $iconset) = mysql_fetch_row($cssresult);
+if (mysql_error())trigger_error(mysql_error(),E_USER_WARNING);
+
+list($cssurl, $iconset) = mysql_fetch_row($cssresult);
 unset($styleid);
 echo "<link rel='stylesheet' href='{$CONFIG['application_webpath']}styles/{$cssurl}' />\n";
 
 if (isset($refresh) && $refresh != 0)
 {
-   echo "<meta http-equiv=\"refresh\" content=\"$refresh\" />\n";
+   echo "<meta http-equiv='refresh' content='{$refresh}' />\n";
 }
+
 echo "<script src='{$CONFIG['application_webpath']}scripts/prototype/prototype.js' type='text/javascript'></script>\n";
 echo "<script src='{$CONFIG['application_webpath']}webtrack.js' type='text/javascript'></script>\n";
 // javascript popup date library
@@ -55,7 +65,7 @@ echo "<script src='{$CONFIG['application_webpath']}calendar.js' type='text/javas
 
 if ($sit[0] != '')
 {
-    echo "<link rel=\"search\" type=\"application/opensearchdescription+xml\" title=\"{$CONFIG['application_shortname']} Search\" href=\"{$CONFIG['application_webpath']}opensearch.php\" />";
+    echo "<link rel='search' type='application/opensearchdescription+xml' title='{$CONFIG['application_shortname']} Search' href='{$CONFIG['application_webpath']}opensearch.php' />";
 }
 
 echo "</head>\n";
@@ -68,7 +78,7 @@ if ($sit[0] != '')
     $hmenu;
     if (!is_array($hmenu))
     {
-        echo "<p class='error'>Error. Menu not defined</p>";
+        echo "<p class='error'>{$strErrorMenuNotDefined}</p>";
     }
 
 //     if ($CONFIG['debug'])
@@ -81,36 +91,84 @@ if ($sit[0] != '')
     {
         echo "<li class='menuitem'>";
         // Permission Required: ".permission_name($topvalue['perm'])."
-        if ($topvalue['perm'] >=1 AND !in_array($topvalue['perm'], $_SESSION['permissions'])) echo "<a href='javascript:void();' class='greyed'>{$topvalue['name']}</a>";
-        else echo "<a href=\"{$topvalue['url']}\">{$topvalue['name']}</a>";
+        if ($topvalue['perm'] >=1 AND !in_array($topvalue['perm'], $_SESSION['permissions']))
+        {
+            echo "<a href='javascript:void();' class='greyed'>{$topvalue['name']}</a>";
+        }
+        else
+        {
+            echo "<a href='{$topvalue['url']}'>{$topvalue['name']}</a>";
+        }
+
         // Do we need a submenu?
         if ($topvalue['submenu'] > 0 AND in_array($topvalue['perm'], $_SESSION['permissions']))
         {
             echo "\n<ul>"; //  id='menuSub'
             foreach ($hmenu[$topvalue['submenu']] as $sub => $subvalue)
             {
-                if ($subvalue['submenu'] > 0) echo "<li class='submenu'>";
-                else echo "<li>";
-                if ($subvalue['perm'] >=1 AND !in_array($subvalue['perm'], $_SESSION['permissions'])) echo "<a href='javascript:void();' class='greyed'>{$subvalue['name']}</a>";
-                else echo "<a href=\"{$subvalue['url']}\">{$subvalue['name']}</a>";
+                if ($subvalue['submenu'] > 0)
+                {
+                    echo "<li class='submenu'>";
+                }
+                else
+                {
+                    echo "<li>";
+                }
+
+                if ($subvalue['perm'] >=1 AND !in_array($subvalue['perm'], $_SESSION['permissions']))
+                {
+                    echo "<a href='javascript:void();' class='greyed'>{$subvalue['name']}</a>";
+                }
+                else
+                {
+                    echo "<a href='{$subvalue['url']}'>{$subvalue['name']}</a>";
+                }
+
                 if ($subvalue['submenu'] > 0 AND in_array($subvalue['perm'], $_SESSION['permissions']))
                 {
                     echo "<ul>"; // id ='menuSubSub'
                     foreach ($hmenu[$subvalue['submenu']] as $subsub => $subsubvalue)
                     {
-                        if ($subsubvalue['submenu'] > 0) echo "<li class='submenu'>";
-                        else echo "<li>";
-                        if ($subsubvalue['perm'] >=1 AND !in_array($subsubvalue['perm'], $_SESSION['permissions'])) echo "<a href=\"javascript:void();\" class='greyed'>{$subsubvalue['name']}</a>";
-                        else echo "<a href=\"{$subsubvalue['url']}\">{$subsubvalue['name']}</a>";
+                        if ($subsubvalue['submenu'] > 0)
+                        {
+                            echo "<li class='submenu'>";
+                        }
+                        else
+                        {
+                            echo "<li>";
+                        }
+
+                        if ($subsubvalue['perm'] >=1 AND !in_array($subsubvalue['perm'], $_SESSION['permissions']))
+                        {
+                            echo "<a href=\"javascript:void();\" class='greyed'>{$subsubvalue['name']}</a>";
+                        }
+                        else
+                        {
+                            echo "<a href='{$subsubvalue['url']}'>{$subsubvalue['name']}</a>";
+                        }
+
                         if ($subsubvalue['submenu'] > 0 AND in_array($subsubvalue['perm'], $_SESSION['permissions']))
                         {
                             echo "<ul>"; // id ='menuSubSubSub'
                             foreach ($hmenu[$subsubvalue['submenu']] as $subsubsub => $subsubsubvalue)
                             {
-                                if ($subsubsubvalue['submenu'] > 0) echo "<li class='submenu'>";
-                                else echo "<li>";
-                                if ($subsubsubvalue['perm'] >=1 AND !in_array($subsubsubvalue['perm'], $_SESSION['permissions'])) echo "<a href='javascript:void();' class='greyed'>{$subsubsubvalue['name']}</a>";
-                                else echo "<a href=\"{$subsubsubvalue['url']}\">{$subsubsubvalue['name']}</a>";
+                                if ($subsubsubvalue['submenu'] > 0)
+                                {
+                                    echo "<li class='submenu'>";
+                                }
+                                else
+                                {
+                                    echo "<li>";
+                                }
+
+                                if ($subsubsubvalue['perm'] >=1 AND !in_array($subsubsubvalue['perm'], $_SESSION['permissions']))
+                                {
+                                    echo "<a href='javascript:void();' class='greyed'>{$subsubsubvalue['name']}</a>";
+                                }
+                                else
+                                {
+                                    echo "<a href='{$subsubsubvalue['url']}'>{$subsubsubvalue['name']}</a>";
+                                }
                                 echo "</li>\n";
                             }
                             echo "</ul>\n";
@@ -164,7 +222,7 @@ if (!isset($refresh))
 $noticeaction = cleanvar($_REQUEST['noticeaction']);
 $noticeid = cleanvar($_REQUEST['noticeid']);
 
-if ($noticeaction=='dismiss_notice')
+if ($noticeaction == 'dismiss_notice')
 {
     if (is_numeric($noticeid))
     {
@@ -208,7 +266,11 @@ if ($sit[0] != '')
             {
                 echo "<div class='error'><p class='error'>";
                 echo $notice->text;
-                if ($notice->resolutionpage) $redirpage = $CONFIG['application_webpath'].$notice->resolutionpage;
+
+                if($notice->resolutionpage)
+                {
+                    $redirpage = $CONFIG['application_webpath'].$notice->resolutionpage;
+                }
             }
             elseif ($notice->type == OUT_OF_SLA_TYPE OR $notice->type == NEARING_SLA_TYPE)
             {
@@ -223,7 +285,10 @@ if ($sit[0] != '')
                         $v = substr($notice->linktext, 1);
                         echo $GLOBALS[$v];
                     }
-                    else echo "{$notice->linktext}";
+                    else
+                    {
+                        echo $notice->linktext;
+                    }
                     echo "</a>";
                 }
             }
@@ -231,21 +296,28 @@ if ($sit[0] != '')
             {
                 echo "<div class='info'><p class='info'>";
                 echo "<span>(<a href='{$_SERVER[PHP_SELF]}?noticeaction=dismiss_notice&amp;noticeid={$notice->id}'>$strDismiss</a>)</span>";
-                if (substr($notice->text, 0, 4)=='$str')
+                if (substr($notice->text, 0, 4) == '$str')
                 {
                     $v = substr($notice->text, 1);
                     echo $GLOBALS[$v];
                 }
-                else echo "{$notice->text}";
+                else
+                {
+                    echo $notice->text;
+                }
+
                 if (!empty($notice->link))
                 {
-                    echo " - <a href=\"{$notice->link}\">";
+                    echo " - <a href='{$notice->link}'>";
                     if (substr($notice->linktext, 0, 4)=='$str')
                     {
                         $v = substr($notice->linktext, 1);
                         echo $GLOBALS[$v];
                     }
-                    else echo "{$notice->linktext}";
+                    else
+                    {
+                        echo $notice->linktext;
+                    }
                     echo "</a>";
                 }
             }

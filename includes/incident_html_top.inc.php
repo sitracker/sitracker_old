@@ -4,8 +4,15 @@ session_start();
 echo "<!DOCTYPE html PUBLIC \"-//W3C//DTD XHTML 1.0 Transitional//EN\" \"http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd\">\n";
 echo "<html xmlns=\"http://www.w3.org/1999/xhtml\"  xml:lang=\"{$_SESSION['lang']}\" lang=\"{$_SESSION['lang']}\">\n<head><title>";
 if (!empty($incidentid)) echo "{$incidentid} - ";
-if (isset($title)) echo $title;
-else echo $CONFIG['application_shortname'];
+if (isset($title))
+{
+    echo $title;
+}
+else
+{
+    echo $CONFIG['application_shortname'];
+}
+
 echo "</title>";
 echo "<meta http-equiv=\"Content-Type\" content=\"text/html; charset={$i18ncharset}\" />\n";
 echo "<meta name=\"GENERATOR\" content=\"{$CONFIG['application_name']} {$application_version_string}\" />\n";
@@ -19,7 +26,7 @@ if ($_SESSION['auth'] == TRUE)
 else
 {
     $styleid= $CONFIG['default_interface_style'];
-    echo "<link rel=\"stylesheet\" href=\"styles/webtrack1.css\" />\n";
+    echo "<link rel='stylesheet' href='styles/webtrack1.css' />\n";
 }
 
 $csssql = "SELECT cssurl, iconset FROM `{$dbInterfaceStyles}` WHERE id='{$styleid}'";
@@ -159,20 +166,54 @@ $siteresult = mysql_query($sitesql);
 if (mysql_error()) trigger_error(mysql_error(),E_USER_WARNING);
 $site = mysql_fetch_object($siteresult);
 $site_name = $site->name;
-if (!empty($site->notes)) $site_notes="<img src='{$CONFIG['application_webpath']}images/icons/{$iconset}/16x16/site.png' width='16' height='16' alt='' /> <strong>Site Notes:</strong><br />".nl2br($site->notes);
-else $site_notes='';
+
+if (!empty($site->notes))
+{
+    $site_notes = "<img src='{$CONFIG['application_webpath']}images/icons/{$iconset}/16x16/site.png' width='16' height='16' alt='' /> <strong>{$strSiteNotes}</strong><br />".nl2br($site->notes);
+}
+else
+{
+    $site_notes='';
+}
+
 unset($site);
-if (!empty($incident->contactnotes)) $contact_notes="<img src='{$CONFIG['application_webpath']}images/icons/{$iconset}/16x16/contact.png' width='16' height='16' alt='' /> <strong>Contact Notes:</strong><br />".nl2br($incident->contactnotes);
-else $contact_notes='';
+if (!empty($incident->contactnotes))
+{
+    $contact_notes = "<img src='{$CONFIG['application_webpath']}images/icons/{$iconset}/16x16/contact.png' width='16' height='16' alt='' /> <strong>{$strContactNotes}</strong><br />".nl2br($incident->contactnotes);
+}
+else
+{
+    $contact_notes='';
+}
+
 $product_name = product_name($incident->product);
-if ($incident->softwareid > 0) $software_name = software_name($incident->softwareid);
+if ($incident->softwareid > 0)
+{
+    $software_name=software_name($incident->softwareid);
+}
+
 $servicelevel_id = maintenance_servicelevel($incident->maintenanceid);
+
 $servicelevel_tag = $incident->servicelevel;
-if ($servicelevel_tag=='') $servicelevel_tag = servicelevel_id2tag(maintenance_servicelevel($incident->maintenanceid));
+if ($servicelevel_tag=='')
+{
+    $servicelevel_tag = servicelevel_id2tag(maintenance_servicelevel($incident->maintenanceid));
+}
+
+
 $servicelevel_name = servicelevel_name($servicelevelid);
-if ($incident->closed == 0) $closed = time();
-else $closed = $incident->closed;
+
+if($incident->closed == 0)
+{
+    $closed = time();
+}
+else
+{
+    $closed = $incident->closed;
+}
+
 $opened_for = format_seconds($closed - $incident->opened);
+
 $priority = $incident->priority;
 
 // Lookup the service level times
@@ -194,15 +235,28 @@ switch ($target->type)
     default: $slaremain=0; $slatarget=0;
 }
 
-if ($slatarget >0) $slaremain=($slatarget - $target->since);
-else $slaremain=0;
+if ($slatarget >0)
+{
+    $slaremain = ($slatarget - $target->since);
+}
+else
+{
+    $slaremain=0;
+}
+
 $targettype = target_type_name($target->type);
 
 // Get next review time
 $reviewsince = incident_get_next_review($incidentid);  // time since last review in minutes
 $reviewtarget = ($servicelevel->review_days * $working_day_mins);          // how often reviews should happen in minutes
-if ($reviewtarget > 0) $reviewremain=($reviewtarget - $reviewsince);
-else $reviewremain = 0;
+if ($reviewtarget > 0)
+{
+    $reviewremain=($reviewtarget - $reviewsince);
+}
+else
+{
+    $reviewremain = 0;
+}
 
 // Color the title bar according to the SLA and priority
 $class='';
@@ -216,8 +270,14 @@ if ($slaremain <> 0 AND $incident->status!=2)
 
 // Print a table showing summary details of the incident
 
-if ($_REQUEST['win']=='incomingview') echo "<h1 class='review'>Incoming</h1>";
-else echo "<h1 class='$class'>{$title}: {$incidentid} - ".$incident->title."</h1>";
+if ($_REQUEST['win'] == 'incomingview')
+{
+    echo "<h1 class='review'>{$strIncoming}</h1>";
+}
+else
+{
+    echo "<h1 class='$class'>{$title}: {$incidentid} - ".$incident->title."</h1>";
+}
 
 echo "<div id='navmenu'>";
 if ($menu != 'hide')
