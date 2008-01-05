@@ -3841,30 +3841,35 @@ function calculate_working_time($t1,$t2,$publicholidays) {
         }
         else
         {
+            $midnight = 1440; // 24 * 60  minutes
+
             // Jump closer to the next work minute
             if (!in_array($time['wday'], $CONFIG['working_days']))
             {
                 // Move to next day
-                $c = ($time['hours']*60)+$time['minutes'];
-                $midnight = 24*60;
-                $diff = $midnight-$c;
+                $c = ($time['hours']*60) + $time['minutes'];
+                $diff = $midnight - $c;
                 $currenttime += ($diff*60); // to seconds
+
+                // Jump to start of working day
+                $currenttime += ($swd*60);
             }
             else if ($time['hours'] < $swd)
             {
                 // jump to beginning of working day
-                $c = ($time['hours']*60)+$time['minutes'];
-                $diff = ($swd*60)-$c;
+                $c = ($time['hours']*60) + $time['minutes'];
+                $diff = ($swd*60) - $c;
                 $currenttime += ($diff*60); // to seconds
             }
             else if ($time['hours'] > $ewd)
             {
-                $c = ((24*60)-(($time['hours']*60)+$time['minutes']))+($swd*60);
+                // Jump to the start of the next working day
+                $c = ($midnight - (($time['hours']*60) + $time['minutes'])) + ($swd*60);
                 $currenttime += ($c*60);
             }
             else if ($ph != 0)
             {
-                // jump over the public holiday
+                // jump to the minute after the public holiday
                 $currenttime += $ph+60;
             }
             else
@@ -3944,6 +3949,7 @@ function calculate_incident_working_time($incidentid, $t1, $t2, $states=array(2,
                 if (is_active_status($laststatus, $states)) $timeptr=$t1;
                 else $timeptr=$update['timestamp'];
             }
+
             if ($t2<$update['timestamp'])
             {
                 // If we have reached the very end of the range, increment time to end of range, break
@@ -3964,12 +3970,12 @@ function calculate_incident_working_time($incidentid, $t1, $t2, $states=array(2,
                 }
                 else
                 {
-                    $timeptr=$update['timestamp'];
+                    $timeptr = $update['timestamp'];
                 }
                 // if it's not active set the ptr
             }
         }
-        $laststatus=$update['currentstatus'];
+        $laststatus = $update['currentstatus'];
     }
     mysql_free_result($result);
 
