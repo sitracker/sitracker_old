@@ -25,7 +25,7 @@ $title = $strClose;
 // No submit detected show closure form
 if (empty($_REQUEST['process']))
 {
-    $sql = "SELECT owner FROM incidents WHERE id = '{$incidentid}'";
+    $sql = "SELECT owner FROM `{$dbIncidents}` WHERE id = '{$incidentid}'";
     $result = mysql_query($sql);
     if (mysql_error()) trigger_error(mysql_error(),E_USER_ERROR);
     list($owner) = mysql_fetch_row($result);
@@ -293,6 +293,7 @@ else
         $errors = 1;
         $error_string = "<p class='error'>You must select a closing status</p>\n";
     }
+
     if ($_REQUEST['summary']=='' && $_REQUEST['solution']=='')
     {
         $errors = 1;
@@ -319,6 +320,7 @@ else
             $result = mysql_query($sql);
             if (mysql_error()) trigger_error("MySQL Query Error ".mysql_error(), E_USER_ERROR);
         }
+
         if (!$result)
         {
             $addition_errors = 1;
@@ -340,6 +342,7 @@ else
                     $result = mysql_query($sql);
                     if (mysql_error()) trigger_error("MySQL Query Error ".mysql_error(), E_USER_ERROR);
                 }
+
                 if (strlen($_REQUEST['solution']) > 3)
                 {
                     // Final Solution
