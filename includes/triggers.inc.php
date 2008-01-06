@@ -51,23 +51,29 @@ foreach($actionarray as $action)
     $j++;
 }
 
+/**
+    * Master trigger function, creates a new trigger
+    * @author Kieran Hogg
+    * @param $triggertype interger. The id of the trigger type
+    * @param $paramarray array. Extra parameters to pass the trigger; foo=bar,bar=foo
+    * @return boolean. TRUE if the trigger created successfully, FALSE if not
+*/
 function trigger($triggertype, $paramarray='')
 {
     global $sit, $CONFIG, $dbg, $dbTriggers;
-    //quick sanity check
-    if (!is_numeric($triggertype) OR $triggertype < 1 OR $triggertype > 16) return;
-    
-    foreach (array_keys($paramarray) as $key)
+    if ($CONFIG['debug'])
     {
-        //parse parameter array
-        if ($CONFIG['debug']) $dbg .= "\$paramarray[$key] = " .$paramarray[$key]."\n";
+        foreach (array_keys($paramarray) as $key)
+        {
+            //parse parameter array
+            $dbg .= "\$paramarray[$key] = " .$paramarray[$key]."\n";
+            
+            //TODO do we need to check for any 'special' keys here?
+        }
     }
 
     //find relevant triggers
-    //FIXME use db var
-    $sql = "SELECT * FROM `{$dbTriggers}` WHERE triggerid={$triggertype} ";
-    if($CONFIG['debug']) $dbg .= $sql."\n";
-    if($user) $sql .= "AND user={$user}";
+    $sql = "SELECT * FROM `{$dbTriggers}` WHERE triggerid={$triggertype} ";    
     $query = mysql_query($sql);
     while($result = mysql_fetch_object($query))
     {
@@ -79,7 +85,7 @@ function trigger($triggertype, $paramarray='')
             {
                 $values = explode("=", $assigns);
                 $paramarray[$values[0]] = $values[1];
-                if($CONFIG['debug']) $dbg .= "\$paramarray[{$values[0]}] = {$values[1]}";
+                if($CONFIG['debug']) $dbg .= "\$paramarray[{$values[0]}] = {$values[1]}\n";
             }
         }
         
@@ -91,7 +97,13 @@ function trigger($triggertype, $paramarray='')
     }
 }
 
-
+/**
+    * Do the specific action for the specific user for a trigger
+    * @author Kieran Hogg
+    * @param $userid
+    * @param $triggertypeif ($CONFIG['debug']) 
+    * @return boolean. TRUE if the user has the permission, otherwise FALSE
+*/
 function trigger_action($userid, $triggertype, $action, $paramarray)
 {
     global $CONFIG, $dbg;
@@ -103,7 +115,7 @@ function trigger_action($userid, $triggertype, $action, $paramarray)
     switch($action)
     {
         case ACTION_EMAIL:
-            echo "sendemail()";
+            send_trigger_email($userid, $triggertype, $paramarray);
             break;
 
         case ACTION_NOTICE:
@@ -121,6 +133,13 @@ function trigger_action($userid, $triggertype, $action, $paramarray)
     }
 }
 
+/**
+    * Returns TRUE or FALSE to indicate whether a given user has a given permission
+    * @author Ivan Lucas
+    * @param $userid integer. The userid to check
+    * @param $permission integer. The permission id to check
+    * @return boolean. TRUE if the user has the permission, otherwise FALSE
+*/
 function trigger_replace_specials($string, $paramarray)
 {
     global $CONFIG, $application_version, $application_version_string, $dbg;
@@ -153,6 +172,26 @@ function trigger_replace_specials($string, $paramarray)
                             );
 
     return preg_replace($trigger_regex,$trigger_replace,$string);
+}
+function send_trigger_email($userid, $triggertype, $paramarray)
+{
+    if($CONFIG['debug']) $dbg .= "send_trigger_email({$userid}, {$triggertype}, {$paramarray})";
+    //if we have an incidentid, get it to pass to emailtype_replace_specials()
+    if (!empty($paramarray['incidentid']))
+    {
+        $incidentid = $paramarray['incidentid'];
+    }
+    
+    $sql = "SELECT * FROM emailtypes WHERE triggerid={$triggertype}";
+    $query = mysql_query($sql);
+    if ($query)
+    {
+        $result = mysql_fetch_object($query);
+    }
+    $string = $result->body;
+    $email = emailtype_replace_specials($string, $incidentid, $userid);
+    if($CONFIG['debug']) $dbg .= $email;
+
 }
 
 

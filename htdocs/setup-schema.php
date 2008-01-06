@@ -129,6 +129,7 @@ CREATE TABLE `emailtype` (
   `body` text,
   `customervisibility` enum('show','hide') NOT NULL default 'show',
   `storeinlog` enum('No','Yes') NOT NULL default 'Yes',
+  `triggerid` INT( 11 ) NULL,
   PRIMARY KEY  (`id`)
 ) ENGINE=MyISAM;
 
@@ -1233,7 +1234,7 @@ CREATE TABLE `triggers` (
 `userid` TINYINT NOT NULL ,
 `action` TINYINT NOT NULL DEFAULT '1' ,
 `parameters` VARCHAR( 255 ) NULL ,
-PRIMARY KEY ( `triggerid` , `userid` )
+PRIMARY KEY ( `triggerid` , `userid` , `action` )  
 ) ENGINE = MYISAM ;
 
 CREATE TABLE `noticetemplates` (
@@ -1580,7 +1581,7 @@ CREATE TABLE `triggers` (
 `userid` TINYINT NOT NULL ,
 `action` TINYINT NOT NULL DEFAULT '1' ,
 `parameters` VARCHAR( 255 ) NULL ,
-PRIMARY KEY ( `triggerid` , `userid` )
+PRIMARY KEY ( `triggerid` , `userid` , `action` )  
 ) ENGINE = MYISAM ;
 
 DROP TABLE IF EXISTS `contactflags`;
@@ -1600,18 +1601,24 @@ CREATE TABLE `noticetemplates` (
 
 -- TODO 3.40 this needs completing and adding to the main SQL
 INSERT INTO `noticetemplates` (`id`, `name`, `type`, `description`, `text`, `linktext`, `link`, `durability`) VALUES
-(1, 'INCIDENT_CREATED_TRIGGER', 0, '', 'Incident <incidentid> - <incidenttitle> has been logged', 'View Incident', 'javascript:incident_details_window(<incidentid>)', 'sticky'),
-(2, 'INCIDENT_ASSIGNED_TRIGGER', 0, '', 'Incident <incidentid> - <incidenttitle> has been assigned to you', 'View Incident', 'javascript:incident_details_window(<incidentid>)', 'sticky'),
-(3, 'INCIDENT_NEARING_SLA_TRIGGER', 0, '', 'Incident <incidentid> - <incidenttitle> is nearing its SLA', 'View Incident', 'javascript:incident_details_window(<incidentid>)', 'sticky'),
-(4, 'USERS_INCIDENT_NEARING_SLA_TRIGGER', 0, '', '<incidentowner>''s incident <incidentid> - <incidenttitle> is nearing its SLA', 'View Incident', 'javascript:incident_details_window(<incidentid>)', 'sticky'),
-(5, 'INCIDENT_EXCEEDED_SLA_TRIGGER', 0, '', 'Incident <incidentid> - <incidenttitle> has exceeded its SLA', 'View Incident', 'javascript:incident_details_window(<incidentid>)', 'sticky'),
-(6, 'INCIDENT_REVIEW_DUE', 0, '', 'Incident <incidentid> - <incidenttitle> is due for review', 'View Incident', 'javascript:incident_details_window(<incidentid>)', 'sticky'),
-(7, 'CRITICAL_INCIDENT_LOGGED', 0, '', 'The critical incident <incidentid> - <incidenttitle> has been logged for <customersite>', 'View Incident', 'javascript:incident_details_window(<incidentid>)', 'sticky'),
-(8, 'KB_CREATED_TRIGGER', 0, '', 'KB Article <KBname> has been created', NULL, NULL, 'sticky'),
-(9, 'NEW_HELD_EMAIL', 0, '', 'There is a new email in the holding queue', 'View Holding Queue', '<sitpath>/review_incoming_updates.php', 'sticky'),
-(10, 'MINS_HELD_EMAIL', 0, '', 'There has been an email in the holding queue for <holdingmins> minutes', 'View Holding Queue', '<sitpath>/review_incoming_updates.php', 'sticky'),
-(11, 'SIT_UPGRADED', 0, '', 'SiT! has been upgraded to <sitversion>', 'What\'s New?', '<sitpath>/releasenotes.php', 'sticky'),
-(12, 'INCIDENT_OWNED_CLOSED_BY_USER', 0, '', 'Your incident <incidentid> - <incidenttitle> has been closed by <engineerclosedname>', NULL, NULL, 'sticky');
+(1, 'TRIGGER_INCIDENT_CREATED', 0, '', 'Incident <incidentid> - <incidenttitle> has been logged', 'View Incident', 'javascript:incident_details_window(<incidentid>)', 'sticky'),
+(2, 'TRIGGER_INCIDENT_ASSIGNED', 0, '', 'Incident <incidentid> - <incidenttitle> has been assigned to you', 'View Incident', 'javascript:incident_details_window(<incidentid>)', 'sticky'),
+(3, 'TRIGGER_INCIDENT_NEARING_SLA', 0, '', 'Incident <incidentid> - <incidenttitle> is nearing its SLA', 'View Incident', 'javascript:incident_details_window(<incidentid>)', 'sticky'),
+(4, 'TRIGGER_USERS_INCIDENT_NEARING_SLA', 0, '', '<incidentowner>''s incident <incidentid> - <incidenttitle> is nearing its SLA', 'View Incident', 'javascript:incident_details_window(<incidentid>)', 'sticky'),
+(5, 'TRIGGER_INCIDENT_EXCEEDED_SLA', 0, '', 'Incident <incidentid> - <incidenttitle> has exceeded its SLA', 'View Incident', 'javascript:incident_details_window(<incidentid>)', 'sticky'),
+(6, 'TRIGGER_INCIDENT_REVIEW_DUE', 0, '', 'Incident <incidentid> - <incidenttitle> is due for review', 'View Incident', 'javascript:incident_details_window(<incidentid>)', 'sticky'),
+(7, 'TRIGGER_CRITICAL_INCIDENT_LOGGED', 0, '', 'The critical incident <incidentid> - <incidenttitle> has been logged for <customersite>', 'View Incident', 'javascript:incident_details_window(<incidentid>)', 'sticky'),
+(8, 'TRIGGER_KB_CREATED', 0, '', 'KB Article <KBname> has been created', NULL, NULL, 'sticky'),
+(9, 'TRIGGER_NEW_HELD_EMAIL', 0, '', 'There is a new email in the holding queue', 'View Holding Queue', '<sitpath>/review_incoming_updates.php', 'sticky'),
+(10, 'TRIGGER_MINS_HELD_EMAIL', 0, '', 'There has been an email in the holding queue for <holdingmins> minutes', 'View Holding Queue', '<sitpath>/review_incoming_updates.php', 'sticky'),
+(11, 'TRIGGER_SIT_UPGRADED', 0, '', 'SiT! has been upgraded to <sitversion>', 'What\'s New?', '<sitpath>/releasenotes.php', 'sticky'),
+(12, 'TRIGGER_INCIDENT_OWNED_CLOSED_BY_USER', 0, '', 'Your incident <incidentid> - <incidenttitle> has been closed by <engineerclosedname>', NULL, NULL, 'sticky');
+
+-- KMH 06/01/08
+ALTER TABLE `emailtype` ADD `triggerid` INT( 11 ) NULL ;
+INSERT INTO `sit`.`emailtype` (`id` ,`name` ,`type` ,`description` ,`tofield` ,`fromfield` ,`replytofield` ,`ccfield` ,`bccfield` ,`subjectfield` ,`body` ,`customervisibility` ,
+`storeinlog` ,`triggerid`)VALUES (NULL , 'TRIGGER_INCIDENT_LOGGED', 'system', 'Trigger email sent when a new incident is logged.', '<useremail>', '<supportemail>', NULL , NULL , NULL , '[<incidentid>] - <incidenttitle>', 'Hello <contactfirstname>,\r\n\r\nIncident <incidentid> - <incidenttitle> has been logged.\r\n\r\n<signature> <globalsignature>\r\n-------------\r\nThis email is sent as a result of a system trigger. If you do not want to receive these emails, you can disable them from the ''Triggers'' page.', 'hide', 'No', '1');
+
 ";
 
 // Important: When making changes to the schema you must add SQL to make the alterations

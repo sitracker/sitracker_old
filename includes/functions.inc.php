@@ -2284,7 +2284,7 @@ function product_name($id)
 // with their appropriate values.
 function emailtype_replace_specials($string, $incidentid=0, $userid=0)
 {
-    global $CONFIG, $application_version, $application_version_string;
+    global $CONFIG, $application_version, $application_version_string, $dbIncidents;
 
     $contactid = incident_contact($incidentid);
 

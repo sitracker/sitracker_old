@@ -1,8 +1,13 @@
 <?php
 
-include ('db_connect.inc.php');
-include ('functions.inc.php');
-include ('triggers.inc.php');
+@include ('set_include_path.inc.php');
+$permission = 0;
+require ('db_connect.inc.php');
+require ('functions.inc.php');
+require ('triggers.inc.php');
+// This page requires authentication
+require ('auth.inc.php');
+
 
 include ('htmlheader.inc.php');
 trigger(TRIGGER_INCIDENT_CREATED, array('incidentid' => 1, 'incidenttitle' => "test incident"));
