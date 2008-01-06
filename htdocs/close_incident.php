@@ -522,7 +522,7 @@ else
                 // Add Software Record
                 if ($softwareid>0)
                 {
-                    $sql="INSERT INTO `{$KBSoftware}` (docid,softwareid) VALUES ('{$docid}', '{$softwareid}')";
+                    $sql="INSERT INTO `{$dbKBSoftware}` (docid,softwareid) VALUES ('{$docid}', '{$softwareid}')";
                     mysql_query($sql);
                     if (mysql_error()) trigger_error("MySQL Query Error ".mysql_error(), E_USER_ERROR);
                     journal(CFG_LOGGING_NORMAL, 'KB Article Added', "KB Article {$docid} was added", CFG_JOURNAL_KB, $docid);

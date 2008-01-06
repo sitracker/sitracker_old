@@ -251,12 +251,12 @@ function setup_exec_sql($sqlquerylist)
 
 function user_notify_upgrade()
 {
-    $sql = "SELECT id FROM users WHERE status != 0";
+    $sql = "SELECT id FROM `{$GLOBALS['dbUsers']}` WHERE status != 0";
     $result = mysql_query($sql);
     $gid = md5($strSitUpgraded);
     while ($user = mysql_fetch_object($result))
     {
-        $noticesql = "INSERT into notices(userid, type, text, linktext, link, gid, timestamp) ";
+        $noticesql = "INSERT INTO `{$GLOBALS['dbNotices']}` (userid, type, text, linktext, link, gid, timestamp) ";
         $noticesql .= "VALUES({$user->id}, ".SIT_UPGRADED_NOTICE.", '\$strSitUpgraded', '\$strSitUpgradedLink', '{$CONFIG['application_webpath']}releasenotes.php', '{$gid}', NOW())";
         mysql_query($noticesql);
         if (mysql_error()) trigger_error(mysql_error(),E_USER_WARNING);
@@ -267,7 +267,7 @@ function user_notify_upgrade()
 // Returns TRUE if an admin account exists, or false if not
 function setup_check_adminuser()
 {
-    $sql = "SELECT id FROM users WHERE id=1 OR username='admin' OR roleid='1'";
+    $sql = "SELECT id FROM `{$GLOBALS['dbUsers']}` WHERE id=1 OR username='admin' OR roleid='1'";
     $result = @mysql_query($sql);
     if (mysql_num_rows($result) >= 1) return TRUE;
     else FALSE;
@@ -464,7 +464,7 @@ switch ($_REQUEST['action'])
                     // No users table or empty users table, proceed to install
                     echo setup_exec_sql($schema);
                     // Set the system version number
-                    $sql = "INSERT INTO system ( id, version) VALUES (0, $application_version)";
+                    $sql = "INSERT INTO `{$dbSystem}` ( id, version) VALUES (0, $application_version)";
                     mysql_query($sql);
                     if (mysql_error()) trigger_error($sql.mysql_error(),E_USER_ERROR);
                     $installed_version = $application_version;
@@ -478,7 +478,7 @@ switch ($_REQUEST['action'])
 
                     // Have a look what version is installed
                     // First look to see if the system table exists
-                    $exists = mysql_query("SELECT 1 FROM system LIMIT 0");
+                    $exists = mysql_query("SELECT 1 FROM `{$dbSystem}` LIMIT 0");
                     if (!$exists)
                     {
                         echo "<p class='error'>Could not find a 'system' table which probably means you have a version prior to v3.21</p>";
@@ -486,7 +486,7 @@ switch ($_REQUEST['action'])
                     }
                     else
                     {
-                        $sql = "SELECT version FROM system WHERE id = 0";
+                        $sql = "SELECT version FROM `{$dbSystem}` WHERE id = 0";
                         $result = mysql_query($sql);
                         if (mysql_error()) trigger_error(mysql_error(),E_USER_WARNING);
                         list($installed_version) = mysql_fetch_row($result);
@@ -544,7 +544,7 @@ switch ($_REQUEST['action'])
                         {
                             //upgrade dashboard components.
 
-                            $sql = "SELECT * FROM dashboard";
+                            $sql = "SELECT * FROM {$dbDashboard}";
                             $result = mysql_query($sql);
                             if (mysql_error()) trigger_error(mysql_error(),E_USER_ERROR);
 
@@ -574,7 +574,7 @@ switch ($_REQUEST['action'])
                                             setup_exec_sql($dashboard_schema[$i]);
                                         }
 
-                                        $upgrade_sql = "UPDATE dashboard SET version = '{$version}' WHERE id = {$dashboardnames->id}";
+                                        $upgrade_sql = "UPDATE {$$dbDashboard} SET version = '{$version}' WHERE id = {$dashboardnames->id}";
                                         mysql_query($upgrade_sql);
                                         if (mysql_error()) trigger_error(mysql_error(),E_USER_ERROR);
 
@@ -591,7 +591,7 @@ switch ($_REQUEST['action'])
                         if ($upgradeok)
                         {
                             // Update the system version number
-                            $sql = "REPLACE INTO system ( id, version) VALUES (0, $application_version)";
+                            $sql = "REPLACE INTO `{$dbSystem}` ( id, version) VALUES (0, $application_version)";
                             mysql_query($sql);
                             if (mysql_error()) trigger_error(mysql_error(),E_USER_ERROR);
                             $installed_version = $application_version;
@@ -608,7 +608,10 @@ switch ($_REQUEST['action'])
                     else
                     {
                         echo "<p>Your database schema is v".number_format($installed_version,2);
-                        if ($installed_version < $application_version) echo ", after making a backup you should <a href='setup.php?action=upgrade' class='button'>upgrade</a> your schema to v{$application_version}";
+                        if ($installed_version < $application_version)
+                        {
+                            echo ", after making a backup you should <a href='setup.php?action=upgrade' class='button'>upgrade</a> your schema to v{$application_version}";
+                        }
                         echo "</p>";
                     }
 
@@ -620,8 +623,8 @@ switch ($_REQUEST['action'])
                         {
                             $password = md5($password);
                             $email = mysql_real_escape_string($_POST['email']);
-                            $sql = "INSERT INTO `users` (`id`, `username`, `password`, `realname`, `roleid`, `title`, `signature`, `email`, `status`, `var_style`, `lastseen`) ";
-                            $sql .= "VALUES (1, 'admin', '$password', 'Administrator', 1, 'Administrator', 'Regards,\r\n\r\nSiT Administrator', '$email', '1', '8', NOW());";
+                            $sql = "INSERT INTO `{$dbUsers}` (`id`, `username`, `password`, `realname`, `roleid`, `title`, `signature`, `email`, `status`, `var_style`, `lastseen`) ";
+                            $sql .= "VALUES (1, 'admin', '{$password}', 'Administrator', 1, 'Administrator', 'Regards,\r\n\r\nSiT Administrator', '{$email}', '1', '8', NOW());";
                             mysql_query($sql);
                             if (mysql_error())
                             {
@@ -632,8 +635,14 @@ switch ($_REQUEST['action'])
                     }
                     // Check installation
                     echo "<h2>Checking installation...</h2>";
-                    if ($CONFIG['attachment_fspath']=='') echo "<p class='error'>Attachment path must not be empty, please set the \$CONFIG['attachment_fspath'] configuration variable</p>";
-                    elseif (file_exists($CONFIG['attachment_fspath'])==FALSE) echo "<p class='error'>The attachment path that you have configured ({$CONFIG['attachment_fspath']}) does not exist, please create this directory or alter the \$CONFIG['attachment_fspath'] configuration variable to point to a directory that does exist.</p>";
+                    if ($CONFIG['attachment_fspath'] == '')
+                    {
+                        echo "<p class='error'>Attachment path must not be empty, please set the \$CONFIG['attachment_fspath'] configuration variable</p>";
+                    }
+                    elseif (file_exists($CONFIG['attachment_fspath']) == FALSE)
+                    {
+                        echo "<p class='error'>The attachment path that you have configured ({$CONFIG['attachment_fspath']}) does not exist, please create this directory or alter the \$CONFIG['attachment_fspath'] configuration variable to point to a directory that does exist.</p>";
+                    }
                     elseif (is_writable($CONFIG['attachment_fspath'])==FALSE)
                     {
                         echo "<p class='error'>Attachment path '{$CONFIG['attachment_fspath']}' not writable<br />";
@@ -643,8 +652,14 @@ switch ($_REQUEST['action'])
                         echo "<code>chmod -R 777 {$CONFIG['attachment_fspath']}</code>";
                         echo "</p>";
                     }
-                    elseif (!isset($_REQUEST)) echo "<p class='error'>SiT! requires PHP 4.2.0 or later</p>";
-                    elseif (@ini_get('register_globals')==1) echo "<p class='error'>SiT! strongly recommends that you change your php.ini setting <code>register_globals</code> to OFF.</p>";
+                    elseif (!isset($_REQUEST))
+                    {
+                        echo "<p class='error'>SiT! requires PHP 4.2.0 or later</p>";
+                    }
+                    elseif (@ini_get('register_globals')==1)
+                    {
+                        echo "<p class='error'>SiT! strongly recommends that you change your php.ini setting <code>register_globals</code> to OFF.</p>";
+                    }
                     elseif (setup_check_adminuser()==FALSE)
                     {
                         echo "<p><span style='color: red; font-weight: bolder;'>Important:</span> you <strong>must</strong> create an admin account before you can use SiT</p>";
@@ -660,7 +675,10 @@ switch ($_REQUEST['action'])
                     else
                     {
                         echo "<p>SiT! v".number_format($installed_version,2)." is installed and ready to <a href='index.php' class='button'>run</a>.</p>";
-                        if ($_SESSION['userid']==1) echo "<p>As administrator you can <a href='{$_SERVER['PHP_SELF']}?action=reconfigure' class='button'>reconfigure</a> SiT!</p>";
+                        if ($_SESSION['userid']==1)
+                        {
+                            echo "<p>As administrator you can <a href='{$_SERVER['PHP_SELF']}?action=reconfigure' class='button'>reconfigure</a> SiT!</p>";
+                        }
                     }
                 }
             }

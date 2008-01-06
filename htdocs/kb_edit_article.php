@@ -85,12 +85,18 @@ if (empty($_POST['process']))
         echo "<select name='software' multiple='multiple' size='7'>";
         while ($software = mysql_fetch_object($listresult))
         {
-            if (is_array($expertise)) { if (!in_array($software->id,$expertise)) echo "<option value='{$software->id}'>$software->name</option>\n";  }
-            else  echo "<option value='{$software->id}'>{$software->name}</option>\n";
+            if (is_array($expertise)) { if (!in_array($software->id,$expertise))
+            {
+                echo "<option value='{$software->id}'>$software->name</option>\n";  }
+            }
+            else
+            { 
+                echo "<option value='{$software->id}'>{$software->name}</option>\n";
+            }
         }
         echo "</select>";
     }
-    else echo "<p class='error'>No software found</p>";
+    else echo "<p class='error'>No software found</p>"; // FIXME i18n
     echo "</td>";
     echo "<td class='shade1'>";
     echo "<input type='button' value='&gt;' onclick=\"copySelected(this.form.software,this.form.elements['expertise[]'])\" /><br />";
@@ -229,7 +235,7 @@ else
     {
         $cfieldname = "content$id";
         $dfieldname = "delete$id";
-        $sql = "UPDATE kbarticles SET title='$title', keywords='$keywords' WHERE docid='{$articleid}'";
+        $sql = "UPDATE `{$dbKBArticles}` SET title='{$title}', keywords='{$keywords}' WHERE docid='{$articleid}'";
         mysql_query($sql);
         if (mysql_error()) trigger_error("MySQL Query Error ".mysql_error(), E_USER_ERROR);
 
@@ -242,7 +248,7 @@ else
         if (empty($headerstyle)) $headerstyle='h3';
         if ($_REQUEST[$dfieldname]!='yes') {
 
-            $sql = "UPDATE `{$dbKBContent}` SET content='$content', headerstyle='h1', distribution='$distribution' WHERE id='$id' AND docid='{$articleid}' ";
+            $sql = "UPDATE `{$dbKBContent}` SET content='{$content}', headerstyle='h1', distribution='{$distribution}' WHERE id='$id' AND docid='{$articleid}' ";
         }
         else
             $sql = "DELETE FROM `{$dbKBContent}` WHERE id='$id' AND docid='{$_REQUEST['articleid']}' ";

@@ -58,7 +58,7 @@ if (user_permission($sit[2],$permission))
         echo "</ul>\n";
     }
 
-    $csql = "SELECT * FROM kbcontent WHERE docid='{$id}' ";
+    $csql = "SELECT * FROM `{$dbKBContent}` WHERE docid='{$id}' ";
     $cresult = mysql_query($csql);
     if (mysql_error()) trigger_error("MySQL Query Error ".mysql_error(), E_USER_ERROR);
     while ($kbcontent = mysql_fetch_object($cresult))
@@ -123,7 +123,10 @@ if (user_permission($sit[2],$permission))
             $count++;
         }
     }
-    else echo "Author: {$author}";
+    else
+    {
+        echo "Author: {$author}";
+    }
 
     echo "<br />";
     if (!empty($kbarticle->keywords)) echo "{$strKeywords}: ".preg_replace("/\[([0-9]+)\]/", "<a href=\"incident_details.php?id=$1\" target=\"_blank\">$0</a>", $kbarticle->keywords)."<br />";

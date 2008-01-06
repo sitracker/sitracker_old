@@ -23,7 +23,7 @@ $schema = "CREATE TABLE `billing_periods` (
 `servicelevelid` INT( 5 ) NOT NULL ,
 `engineerperiod` INT NOT NULL COMMENT 'In minutes',
 `customerperiod` INT NOT NULL COMMENT 'In minutes',
-PRIMARY KEY r( `servicelevelid` )
+PRIMARY KEY ( `servicelevelid` )
 ) ENGINE = MYISAM ;
 
 
