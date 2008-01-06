@@ -2282,20 +2282,11 @@ function product_name($id)
 
 // Returns a string with all occurrences of emailtype special identifiers (in angle brackets) replaced
 // with their appropriate values.
-function emailtype_replace_specials($string, $incidentid, $userid=0)
+function emailtype_replace_specials($string, $incidentid=0, $userid=0)
 {
     global $CONFIG, $application_version, $application_version_string;
 
-    if ($incidentid == '')
-    {
-        throw_error('incident ID was blank in emailtype_replace_specials()',$string);
-    }
-
     $contactid = incident_contact($incidentid);
-    if ($contactid == 0)
-    {
-        throw_error('cannot obtain contact ID in email_replace_specials()',$contactid);
-    }
 
     $url = parse_url($_SERVER['HTTP_REFERER']);
     $baseurl = "{$url['scheme']}://{$url['host']}{$CONFIG['application_webpath']}";
@@ -6659,7 +6650,6 @@ function create_notice($userid, $noticetext='', $triggertype='', $paramarray='')
             throw_error("No such trigger type");
         }
     }
-
 }
 
 // -------------------------- // -------------------------- // --------------------------
