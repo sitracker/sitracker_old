@@ -122,7 +122,8 @@ $template_openincident_email = 12;
 //PHP doesn't "magically" mangle backslashes!
 set_magic_quotes_runtime(FALSE);
 
-if (get_magic_quotes_gpc()) {
+if (get_magic_quotes_gpc())
+{
 
 //     All these global variables are slash-encoded by default,
 //     because    magic_quotes_gpc is set by default!
@@ -141,7 +142,9 @@ if (get_magic_quotes_gpc()) {
     $HTTP_COOKIE_VARS = stripslashes_array($HTTP_COOKIE_VARS);
     $HTTP_POST_FILES = stripslashes_array($HTTP_POST_FILES);
     $HTTP_ENV_VARS = stripslashes_array($HTTP_ENV_VARS);
-    if (isset($_SESSION)) {    #These are unconfirmed (?)
+    if (isset($_SESSION)) 
+    {
+        #These are unconfirmed (?)
         $_SESSION = stripslashes_array($_SESSION, '');
         $HTTP_SESSION_VARS = stripslashes_array($HTTP_SESSION_VARS, '');
     }
@@ -158,13 +161,18 @@ if (get_magic_quotes_gpc()) {
     * @param $data an array
     * @return An array with slashes stripped
 */
-function stripslashes_array($data) {
-    if (is_array($data)){
-        foreach ($data as $key => $value){
+function stripslashes_array($data)
+{
+    if (is_array($data))
+    {
+        foreach ($data as $key => $value)
+        {
             $data[$key] = stripslashes_array($value);
         }
         return $data;
-    }else{
+    }
+    else
+    {
         return stripslashes($data);
     }
 }
@@ -282,9 +290,19 @@ function software_name($softwareid)
     {
         $software = mysql_fetch_object($result);
         $lifetime_end = mysql2date($software->lifetime_end);
-        if ($lifetime_end > 0 AND $lifetime_end < $now) $name = "<span class='deleted'>{$software->name}</span> (<abbr title='End of Life'>EOL</abbr>)";
-        else $name = $software->name;
-    } else $name = $GLOBALS['StrUnknown'];
+        if ($lifetime_end > 0 AND $lifetime_end < $now)
+        {
+            $name = "<span class='deleted'>{$software->name}</span> (<abbr title='End of Life'>EOL</abbr>)";
+        }
+        else
+        {
+            $name = $software->name;
+        }
+    }
+    else
+    {
+        $name = $GLOBALS['StrUnknown'];
+    }
 
     return $name;
 }
@@ -342,16 +360,25 @@ function user_realname($id, $allowhtml=FALSE)
     global $dbUsers;
     if ($id >= 1)
     {
-        if ($id == $_SESSION['userid']) return $_SESSION['realname'];
+        if ($id == $_SESSION['userid'])
+        {
+            return $_SESSION['realname'];
+        }
         else
         {
             // return db_read_column('realname', 'users', $id);
             $sql = "SELECT realname, status FROM `{$dbUsers}` WHERE id='$id' LIMIT 1";
             $result = mysql_query($sql);
             if (mysql_error()) trigger_error(mysql_error(),E_USER_WARNING);
-            list($realname, $status)=mysql_fetch_row($result);
-            if ($allowhtml==FALSE OR $status > 0) return $realname;
-            else return ("<span class='deleted'>$realname</span>");
+            list($realname, $status) = mysql_fetch_row($result);
+            if ($allowhtml==FALSE OR $status > 0)
+            {
+                return $realname;
+            }
+            else
+            {
+                return "<span class='deleted'>{$realname}</span>";
+            }
         }
     }
     elseif (!empty($incidents['email']))
@@ -362,7 +389,9 @@ function user_realname($id, $allowhtml=FALSE)
         {
             $frommail = strtolower(substr(strstr($from[0], '@'), 1));
             $customerdomain = strtolower(substr(strstr($incidents['email'], '@'), 1));
+
             if ($frommail == $customerdomain) return $GLOBALS['strCustomer'];
+
             foreach ($CONFIG['ext_esc_partners'] AS $partner)
             {
                 if (strstr(strtolower($frommail), strtolower($partner['email_domain'])))
@@ -374,14 +403,20 @@ function user_realname($id, $allowhtml=FALSE)
     }
 
     //Got this far not returned anything so
-    return($CONFIG['application_shortname']); // No from email address
+    return $CONFIG['application_shortname']; // No from email address
 }
 
 
 function user_email($id)
 {
-    if ($id == $_SESSION['userid']) return $_SESSION['email'];
-    else return db_read_column('email', 'users', $id);
+    if ($id == $_SESSION['userid'])
+    {
+        return $_SESSION['email'];
+    }
+    else
+    {
+        return db_read_column('email', 'users', $id);
+    }
 }
 
 
@@ -438,7 +473,7 @@ function user_activeincidents($userid)
     // This SQL must match the SQL in incidents.php
     $sql = "SELECT i.id  ";
     $sql .= "FROM `{$dbIncidents}` AS i, `{$dbContacts}` AS c, `{$dbPriority}` AS pr WHERE contact = c.id AND i.priority = pr.id ";
-    $sql .= "AND (owner='$userid' OR towner='$userid') ";
+    $sql .= "AND (owner='{$userid}' OR towner='{$userid}') ";
     $sql .= "AND (status!='2') ";  // not closed
     // the "1=2" obviously false else expression is to prevent records from showing unless the IF condition is true
     $sql .= "AND ((timeofnextaction > 0 AND timeofnextaction < $now) OR ";
@@ -458,7 +493,8 @@ function user_countincidents($id)
 {
     global $dbIncidents;
     // this number will never match the number shown in the active queue and is not meant to
-    $sql = "SELECT id FROM `{$dbIncidents}` WHERE (owner='$id' OR towner='$id') AND (status!=2)";
+
+    $sql = "SELECT id FROM `{$dbIncidents}` WHERE (owner='{$id}' OR towner='{$id}') AND (status!=2)";
     $result = mysql_query($sql);
     if (mysql_error()) trigger_error(mysql_error(),E_USER_WARNING);
 
@@ -477,10 +513,13 @@ function user_incidents($id)
 
     $arr = array('1' => '0', '2' => '0', '3' => '0', '4' => '0');
 
-    if (mysql_num_rows($result) > 0){
-	while ($count = mysql_fetch_array($result)){
-		$arr[$count['priority']] = $count['num'];
-	}
+
+    if (mysql_num_rows($result) > 0)
+    {
+        while ($count = mysql_fetch_array($result))
+        {
+            $arr[$count['priority']] = $count['num'];
+        }
     }
     return $arr;
 }
@@ -513,12 +552,15 @@ function user_holiday($userid, $type=0, $year, $month, $day, $length=FALSE)
     {
         $sql .=" AND userid='$userid' ";
     }
+
     if ($length!=FALSE)
     {
         $sql .= "AND length='$length' ";
     }
+
     $result = mysql_query($sql);
     if (mysql_error()) trigger_error(mysql_error(),E_USER_WARNING);
+
     if (mysql_num_rows($result) == 0)
     {
         return FALSE;
@@ -556,18 +598,25 @@ function user_count_holidays($userid, $type, $date=0)
 {
     global $dbHolidays;
     $sql = "SELECT id FROM `{$dbHolidays}` WHERE userid='$userid' AND type='$type' AND length='day' AND approved >= 0 AND approved < 2 ";
-    if ($date > 0) $sql .= "AND startdate < $date";
+    if ($date > 0) $sql .= "AND startdate < {$date}";
     $result = mysql_query($sql);
     if (mysql_error()) trigger_error(mysql_error(),E_USER_WARNING);
     $full_days=mysql_num_rows($result);
 
-    $sql = "SELECT id FROM `{$dbHolidays}` WHERE userid='$userid' AND type='$type' AND (length='pm' OR length='am') AND approved >= 0 AND approved < 2 ";
-    if ($date > 0) $sql .= "AND startdate < $date";
+
+    $sql = "SELECT id FROM `{$dbHolidays}` ";
+    $sql .= "WHERE userid='{$userid}' AND type='{$type}' AND (length='pm' OR length='am') AND approved >= 0 AND approved < 2 ";
+
+    if ($date > 0)
+    {
+        $sql .= "AND startdate < $date";
+    }
+
     $result = mysql_query($sql);
     if (mysql_error()) trigger_error(mysql_error(),E_USER_WARNING);
-    $half_days=mysql_num_rows($result);
+    $half_days = mysql_num_rows($result);
 
-    $days_holiday=$full_days+($half_days/2);
+    $days_holiday = $full_days + ($half_days / 2);
     return $days_holiday;
 }
 
@@ -593,9 +642,9 @@ function contact_realname($id)
     else
     {
         $contact = mysql_fetch_array($result);
-        $realname=$contact['forenames'].' '.$contact['surname'];
+        $realname = $contact['forenames'].' '.$contact['surname'];
         mysql_free_result($result);
-        return($realname);
+        return $realname;
     }
 }
 
@@ -611,14 +660,14 @@ function contact_site($id)
     if (mysql_num_rows($result) == 0)
     {
         mysql_free_result($result);
-        return($GLOBALS['strUnknown']);
+        return $GLOBALS['strUnknown'];
     }
     else
     {
         list($contactsite) = mysql_fetch_row($result);
         mysql_free_result($result);
-        $contactsite=$contactsite;
-        return($contactsite);
+        $contactsite = $contactsite;
+        return $contactsite;
     }
 }
 
@@ -654,10 +703,10 @@ function contact_count_incidents($id)
     $result = mysql_query($sql);
     if (mysql_error()) trigger_error(mysql_error(),E_USER_WARNING);
 
-    $count=mysql_num_rows($result);
+    $count = mysql_num_rows($result);
 
     mysql_free_result($result);
-    return($count);
+    return $count;
 }
 
 
@@ -674,11 +723,130 @@ function contact_count_open_incidents($id)
     $result = mysql_query($sql);
     if (mysql_error()) trigger_error(mysql_error(),E_USER_WARNING);
 
-    $count=mysql_num_rows($result);
+    $count = mysql_num_rows($result);
 
     mysql_free_result($result);
 
-    return($count);
+    return $count;
+}
+
+
+/**
+    * Returns a string depending on whether the given contact has support for the given product.
+    * @author Ivan Lucas
+    * @deprecated
+    * @param $contactid Contact ID to check
+    * @param $productid Product ID to check
+    * @return string
+    * @retval 'yes' Contact has support for product
+    * @retval 'no'  Contact doesn't have support for product
+    * @retval 'expired' Contact did have support for product but it has now expired
+    * @note Based on contactproducts and so DEPRECATED needs updating to be based on contracts
+    * @todo update contact_productsupport() to be based on contracts
+*/
+function contact_productsupport($contactid, $productid)
+{
+    global $now;
+    // check support
+    $sql = "SELECT id, expirydate FROM contactproducts WHERE contactid=$contactid AND productid=$productid";
+    $result = mysql_query($sql);
+
+    if (mysql_num_rows($result) == 0)
+    {
+        return("no");
+    }
+    else
+    {
+        $product = mysql_fetch_array($result);
+        if ($product["expirydate"] <= $now)
+        {
+            return("expired");
+        }
+        else if ($product["expirydate"] > $now)
+        {
+            return("yes");
+        }
+    }
+}
+
+/**
+    * Returns an integer representing the expiry day of the month for the given contact's product support.
+    * @author Ivan Lucas
+    * @deprecated
+    * @returns integer day of month
+    * @retval 0 the contact or product does not exist or if the contact does not have support for the given product.
+    * @note Based on contactproducts and so DEPRECATED needs updating to be based on contracts
+*/
+function contact_productsupport_expiryday($contactid, $productid)
+{
+    // check support
+    $sql = "SELECT id, expirydate FROM contactproducts WHERE contactid=$contactid AND productid=$productid";
+    $result = mysql_query($sql);
+
+    if (mysql_num_rows($result) == 0)
+    {
+        return 0;
+    }
+    else
+    {
+        $productsupport = mysql_fetch_array($result);
+        $date_array = getdate($productsupport["expirydate"]);
+        return $date_array["mday"];
+    }
+}
+
+
+/**
+    * Returns an integer representing the expiry month of the year for the given contact's product support.
+    * @author Ivan Lucas
+    * @deprecated
+    * @returns integer month of year
+    * @retval 0 the contact or product does not exist or if the contact does not have support for the given product.
+    * @note Based on contactproducts and so DEPRECATED needs updating to be based on contracts
+*/
+function contact_productsupport_expirymonth($contactid, $productid)
+{
+    // check support
+    $sql = "SELECT id, expirydate FROM contactproducts WHERE contactid=$contactid AND productid=$productid";
+    $result = mysql_query($sql);
+
+    if (mysql_num_rows($result) == 0)
+    {
+        return(0);
+    }
+    else
+    {
+        $productsupport = mysql_fetch_array($result);
+        $date_array = getdate($productsupport["expirydate"]);
+        return($date_array["mon"]);
+    }
+}
+
+
+/**
+    * Returns an integer representing the expiry year for the given contact's product support.
+    * @author Ivan Lucas
+    * @deprecated
+    * @returns integer year
+    * @retval 0 the contact or product does not exist or if the contact does not have support for the given product.
+    * @note Based on contactproducts and so DEPRECATED needs updating to be based on contracts
+*/
+function contact_productsupport_expiryyear($contactid, $productid)
+{
+    // check support
+    $sql = "SELECT id, expirydate FROM contactproducts WHERE contactid=$contactid AND productid=$productid";
+    $result = mysql_query($sql);
+
+    if (mysql_num_rows($result) == 0)
+    {
+        return(0);
+    }
+    else
+    {
+        $productsupport = mysql_fetch_array($result);
+        $date_array = getdate($productsupport["expirydate"]);
+        return($date_array["year"]);
+    }
 }
 
 
@@ -786,9 +954,13 @@ function incident_maintid($id)
 {
     $maintid = db_read_column('maintenanceid', 'incidents', $id);
     if ($maintid == '')
+    {
         throw_error("!Error: No matching record while reading in incident_maintid() Incident ID:", $id);
-
-    else return($maintid);
+    }
+    else
+    {
+        return($maintid);
+    }
 }
 
 
@@ -922,12 +1094,26 @@ function incident_sla_history($incidentid)
             default:
                 $slahistory[$idx]['targettime'] = 0;
         }
-        if ($prevtime > 0) $slahistory[$idx]['actualtime'] = calculate_incident_working_time($incidentid, $prevtime, $history->timestamp);
-        else $slahistory[$idx]['actualtime'] = 0;
+        if ($prevtime > 0)
+        {
+            $slahistory[$idx]['actualtime'] = calculate_incident_working_time($incidentid, $prevtime, $history->timestamp);
+        }
+        else
+        {
+            $slahistory[$idx]['actualtime'] = 0;
+        }
+
         $slahistory[$idx]['timestamp'] = $history->timestamp;
         $slahistory[$idx]['userid'] = $history->userid;
-        if ($slahistory[$idx]['actualtime'] <= $slahistory[$idx]['targettime']) $slahistory[$idx]['targetmet'] = TRUE;
-        else $slahistory[$idx]['targetmet'] = FALSE;
+        if ($slahistory[$idx]['actualtime'] <= $slahistory[$idx]['targettime'])
+        {
+            $slahistory[$idx]['targetmet'] = TRUE;
+        }
+        else
+        {
+            $slahistory[$idx]['targetmet'] = FALSE;
+        }
+
         $prevtime=$history->timestamp;
         $idx++;
     }
@@ -946,8 +1132,15 @@ function incident_sla_history($incidentid)
                 $slahistory[$idx]['targettime'] = 0;
         }
         $slahistory[$idx]['actualtime'] = $target->since;
-        if ($slahistory[$idx]['actualtime'] <= $slahistory[$idx]['targettime']) $slahistory[$idx]['targetmet'] = TRUE;
-        else $slahistory[$idx]['targetmet'] = FALSE;
+        if ($slahistory[$idx]['actualtime'] <= $slahistory[$idx]['targettime'])
+        {
+            $slahistory[$idx]['targetmet'] = TRUE;
+        }
+        else
+        {
+            $slahistory[$idx]['targetmet'] = FALSE;
+        }
+
         $slahistory[$idx]['timestamp'] = 0;
     }
     return $slahistory;
@@ -961,16 +1154,44 @@ function incident_sla_history($incidentid)
 function array_drop_down($array, $name, $setting='', $enablefield='')
 {
     $html = "<select name='$name' id='$name' $enablefield>";
-    if (array_key_exists($setting, $array) AND in_array($setting, $array)==FALSE) $usekey=TRUE;
-    else $usekey=FALSE;
+
+    if (array_key_exists($setting, $array) AND in_array($setting, $array)==FALSE)
+    {
+        $usekey=TRUE;
+    }
+    else
+    {
+        $usekey=FALSE;
+    }
+
     foreach ($array AS $key => $value)
     {
-        $value=htmlentities($value, ENT_COMPAT, $GLOBALS['i18ncharset']);
-        if ($usekey) $html .= "<option value='$key'";
-        else $html .= "<option value='$value'";
-        if ($usekey) { if ($key==$setting) $html .= " selected='selected'"; }
-        else { if ($value==$setting) $html .= " selected='selected'"; }
-        $html .= ">$value</option>\n";
+        $value = htmlentities($value, ENT_COMPAT, $GLOBALS['i18ncharset']);
+        if ($usekey)
+        {
+            $html .= "<option value='$key'";
+        }
+        else
+        {
+            $html .= "<option value='$value'";
+        }
+
+        if ($usekey)
+        {
+            if ($key==$setting)
+            {
+                $html .= " selected='selected'"; 
+            }
+        }
+        else
+        {
+            if ($value==$setting)
+            {
+                $html .= " selected='selected'"; 
+            }
+        }
+
+        $html .= ">{$value}</option>\n";
     }
     $html .= "</select>\n";
     return $html;
@@ -1005,21 +1226,39 @@ function contact_drop_down($name, $id, $showsite=FALSE)
 
     $html = "<select name='$name' id='$name' >\n";
     if ($id == 0)
+    {
         $html .= "<option selected='selected' value='0'></option>\n";
+    }
+
     $prevsite=0;
     while ($contacts = mysql_fetch_array($result))
     {
-        if ($showsite AND $prevsite!= $contacts['siteid'] AND $prevsite!=0) $html .= "</optgroup>\n";
-        if ($showsite AND $prevsite!= $contacts['siteid']) $html .= "<optgroup label='".htmlentities($contacts['sitename'], ENT_COMPAT, 'UTF-8').", ".htmlentities($contacts['department'], ENT_COMPAT, $GLOBALS['i18ncharset'])."'>";
+        if ($showsite AND $prevsite!= $contacts['siteid'] AND $prevsite!=0)
+        {
+            $html .= "</optgroup>\n";
+        }
+
+        if ($showsite AND $prevsite!= $contacts['siteid'])
+        {
+            $html .= "<optgroup label='".htmlentities($contacts['sitename'], ENT_COMPAT, 'UTF-8').", ".htmlentities($contacts['department'], ENT_COMPAT, $GLOBALS['i18ncharset'])."'>";
+        }
+
         $realname=$contacts['forenames'].' '.$contacts['surname'];
         $html .= "<option ";
-        if ($contacts['contactid'] == $id) $html .= "selected='selected' ";
+        if ($contacts['contactid'] == $id)
+        {
+            $html .= "selected='selected' ";
+        }
         $html .= "value='{$contacts['contactid']}'>{$realname}";
         $html .= "</option>\n";
 
         $prevsite = $contacts['siteid'];
     }
-    if ($showsite) $html.= "</optgroup>";
+    if ($showsite)
+    {
+        $html.= "</optgroup>";
+    }
+
     $html .= "</select>\n";
     return $html;
 }
@@ -1030,6 +1269,7 @@ function contact_drop_down($name, $id, $showsite=FALSE)
 /* with the given id selected.                                */
 function contact_site_drop_down($name, $id, $siteid='', $exclude='')
 {
+
     global $dbContacts, $dbSites;
     $sql  = "SELECT c.id AS contactid, forenames, surname, siteid, s.name AS sitename ";
     $sql .= "FROM `{$dbContacts}` AS c, `{$dbSites}` AS s ";
@@ -1039,18 +1279,21 @@ function contact_site_drop_down($name, $id, $siteid='', $exclude='')
     $result = mysql_query($sql);
     if (mysql_error()) trigger_error(mysql_error(),E_USER_WARNING);
 
-    $html = "<select name='$name'>\n";
-    if ($id == 0) $html .= "<option selected='selected' value='0'></option>\n";
+
     while ($contacts = mysql_fetch_object($result))
     {
-        if ($contacts->contactid != $exclude)
-        {
-            $html .= "<option ";
-            if ($contacts->contactid == $id) $html .= "selected='selected' ";
-            $html .= "value='{$contacts->contactid}'>";
-            $html .= htmlspecialchars("{$contacts->surname}, {$contacts->forenames} of {$contacts->sitename}"); // FIXME i18n 'of'
-            $html .= "</option>\n";
-        }
+            if ($contacts->contactid != $exclude)
+            {
+                $html .= "<option ";
+                if ($contacts->contactid == $id)
+                {
+                    $html .= "selected='selected' ";
+                }
+
+                $html .= "value='{$contacts->contactid}'>";
+                $html .= htmlspecialchars("{$contacts->surname}, {$contacts->forenames} of {$contacts->sitename}"); // FIXME i18n 'of'
+                $html .= "</option>\n";
+            }
     }
     $html .= "</select>\n";
 
@@ -1071,24 +1314,32 @@ function product_drop_down($name, $id)
 
     $html = "<select name='{$name}' id='{$name}'>";
 
-    if ($id == 0) $html .= "<option selected='selected' value='0'></option>\n";
+
+    if ($id == 0)
+    {
+        $html .= "<option selected='selected' value='0'></option>\n";
+    }
 
     while ($products = mysql_fetch_array($result))
     {
         $html .= "<option value='{$products['id']}'";
-        if ($products['id']==$id) $html .= " selected='selected'";
+        if ($products['id'] == $id)
+        {
+            $html .= " selected='selected'";
+        }
         $html .= ">{$products['name']}</option>\n";
     }
     $html .= "</select>\n";
-
     return $html;
+
 }
 
 
 function software_drop_down($name, $id)
 {
-    global $now, $dbSoftware;
 
+    global $now, $dbSoftware;
+    // extract software
     $sql  = "SELECT id, name, lifetime_end FROM `{$dbSoftware}` ";
     $sql .= "ORDER BY name ASC";
     $result = mysql_query($sql);
@@ -1096,21 +1347,31 @@ function software_drop_down($name, $id)
 
     $html = "<select name='{$name}' id='{$name}' >";
 
-    if ($id == 0) $html .= "<option selected='selected' value='0'></option>\n";
+    if ($id == 0)
+    {
+        $html .= "<option selected='selected' value='0'></option>\n";
+    }
 
     while ($software = mysql_fetch_array($result))
     {
         $html .= "<option value='{$software['id']}'";
-        if ($software['id']==$id) $html .= " selected='selected'";
-        $html .= ">{$software['name']}";
-        $lifetime_start=mysql2date($software->lifetime_start);
-        $lifetime_end=mysql2date($software->lifetime_end);
-        if ($lifetime_end > 0 AND $lifetime_end < $now) $html .= " (EOL)";
-        $html .= "</option>\n";
-   }
-   $html .= "</select>\n";
+        if ($software['id'] == $id)
+        {
+            $html .= " selected='selected'";
+        }
 
-   return $html;
+        $html .= ">{$software['name']}";
+        $lifetime_start = mysql2date($software->lifetime_start);
+        $lifetime_end = mysql2date($software->lifetime_end);
+        if ($lifetime_end > 0 AND $lifetime_end < $now)
+        {
+            $html .= " (EOL)";
+        }
+        $html .= "</option>\n";
+    }
+    $html .= "</select>\n";
+
+    return $html;
 }
 
 
@@ -1123,19 +1384,30 @@ function softwareproduct_drop_down($name, $id, $productid)
     $sql .= "ORDER BY name ASC";
     $result = mysql_query($sql);
     if (mysql_error()) trigger_error(mysql_error(),E_USER_WARNING);
+
     if (mysql_num_rows($result) >=1)
     {
-        $html ="<select name='$name'>";
-        if ($id == 0) $html .= "<option selected='selected' value='0'></option>\n";
+        $html = "<select name='$name'>";
+        if ($id == 0)
+        {
+            $html .= "<option selected='selected' value='0'></option>\n";
+        }
+
         while ($software = mysql_fetch_array($result))
         {
             $html .= "<option";
-            if ($software['id'] == $id) $html .= " selected='selected'";
+            if ($software['id'] == $id)
+            {
+                $html .= " selected='selected'";
+            }
             $html .= " value='{$software['id']}'>{$software['name']}</option>\n";
         }
         $html .= "</select>\n";
     }
-    else $html = "-";
+    else
+    {
+        $html = "-";
+    }
 
     return $html;
 }
@@ -1149,11 +1421,17 @@ function vendor_drop_down($name, $id)
     if (mysql_error()) trigger_error(mysql_error(),E_USER_WARNING);
     $html = "<select name='$name'>";
     if ($id == 0)
+    {
         $html .= "<option selected='selected' value='0'></option>\n";
+    }
+
     while ($row = mysql_fetch_array($result))
     {
         $html .= "<option";
-        if ($row['id'] == $id) $html .= " selected='selected'";
+        if ($row['id'] == $id)
+        {
+            $html .= " selected='selected'";
+        }
         $html .= " value='{$row['id']}'>{$row['name']}</option>\n";
     }
    $html .= "</select>";
@@ -1169,11 +1447,19 @@ function sitetype_drop_down($name, $id)
     $result = mysql_query($sql);
     if (mysql_error()) trigger_error(mysql_error(),E_USER_WARNING);
     $html .= "<select name='$name'>\n";
-    if ($id == 0) $html .= "<option selected='selected' value='0'></option>\n";
+    if ($id == 0)
+    {
+        $html .= "<option selected='selected' value='0'></option>\n";
+    }
+
     while ($row = mysql_fetch_array($result))
     {
         $html .= "<option ";
-        if ($row['typeid'] == $id) { $html .="selected='selected' "; }
+        if ($row['typeid'] == $id)
+        {
+            $html .="selected='selected' "; 
+        }
+
         $html .= "value='{$row['typeid']}'>{$row['typename']}</option>\n";
     }
     $html .= "</select>";
@@ -1201,15 +1487,23 @@ function supported_product_drop_down($name, $contactid, $productid)
     if ($CONFIG['debug']) $html .= "<!-- Original product {$productid}-->";
     $html .= "<select name=\"$name\">\n";
     if ($productid == 0)
-        $html .= "<option selected='selected' value='0'>No Contract - Not Product Related</option>\n";
+    {
+        $html .= "<option selected='selected' value='0'>No Contract - Not Product Related</option>\n"; //FIXME i18n
+    }
+
     if ($productid == -1)
+    {
         $html .= "<option selected='selected' value='0'></option>\n";
+    }
 
     while ($products = mysql_fetch_array($result))
     {
         $remainingstring=incidents_remaining($products["incidentpoolid"])." Incidents Left";  // string containing text stating number of incidents remaining
         $html .= "<option ";
-        if ($productid == $products['productid']) $html .= "selected='selected' ";
+        if ($productid == $products['productid'])
+        {
+            $html .= "selected='selected' ";
+        }
         $html .= "value='{$products['productid']}'>";
         $html .= servicelevel_name($products['servicelevelid'])." ".$products['productname'].", Exp:".date($CONFIG['dateformat_shortdate'], $products["expirydate"]).", $remainingstring";
         $html .= "</option>\n";
@@ -1241,10 +1535,17 @@ function user_drop_down($name, $id, $accepting=TRUE, $exclude=FALSE, $attribs=""
     if (mysql_error()) trigger_error(mysql_error(),E_USER_WARNING);
 
     echo "<select name='{$name}' id='{$name}' ";
-    if (!empty($attribs)) echo " $attribs";
+    if (!empty($attribs))
+    {
+        echo " $attribs";
+    }
+
     echo ">\n";
     if ($id == 0)
+    {
         echo "<option selected='selected' value='0'></option>\n";
+    }
+
     while ($users = mysql_fetch_array($result))
     {
         $show=TRUE;
@@ -1264,10 +1565,17 @@ function user_drop_down($name, $id, $accepting=TRUE, $exclude=FALSE, $attribs=""
         {
             echo "<option ";
             if ($users["id"] == $id) echo "selected='selected' ";
-            if ($users['accepting']=='No' AND $accepting==TRUE) echo " class='expired' ";
+            if ($users['accepting']=='No' AND $accepting==TRUE)
+            {
+                echo " class='expired' ";
+            }
+
             echo "value='{$users['id']}'>";
             echo "{$users['realname']}";
-            if ($users['accepting']=='No' AND $accepting==TRUE) echo ", {$GLOBALS['strNotAccepting']}";
+            if ($users['accepting']=='No' AND $accepting==TRUE)
+            {
+                echo ", {$GLOBALS['strNotAccepting']}";
+            }
             echo "</option>\n";
         }
     }
@@ -1277,17 +1585,26 @@ function user_drop_down($name, $id, $accepting=TRUE, $exclude=FALSE, $attribs=""
 
 function role_drop_down($name, $id)
 {
+
     global $dbRoles;
     $sql  = "SELECT id, rolename FROM `{$dbRoles}` ORDER BY rolename ASC";
     $result = mysql_query($sql);
     if (mysql_error()) trigger_error(mysql_error(),E_USER_WARNING);
 
     $html = "<select name='{$name}'>";
-    if ($id == 0) $html .= "<option selected='selected' value='0'></option>\n";
+    if ($id == 0)
+    {
+        $html .= "<option selected='selected' value='0'></option>\n";
+    }
+
     while ($role = mysql_fetch_object($result))
     {
         $html .= "<option value='{$role->id}'";
-        if ($role->id==$id) $html .= " selected='selected'";
+        if ($role->id==$id)
+        {
+            $html .= " selected='selected'";
+        }
+
         $html .= ">{$role->rolename}</option>\n";
     }
     $html .= "</select>\n";
@@ -1305,7 +1622,10 @@ function group_drop_down($name, $selected)
         foreach ($grouparr AS $groupid => $groupname)
         {
             $html .= "<option value='$groupid'";
-            if ($groupid == $selected) $html .= " selected='selected'";
+            if ($groupid == $selected)
+            {
+                $html .= " selected='selected'";
+            }
             $html .= ">$groupname</option>\n";
         }
     }
@@ -1328,11 +1648,19 @@ function interfacestyle_drop_down($name, $id)
     $sql  = "SELECT id, name FROM `{$dbInterfaceStyles}` ORDER BY name ASC";
     $result = mysql_query($sql);
     $html = "<select name=\"{$name}\">";
-    if ($id == 0) $html .= "<option selected='selected' value='0'></option>\n";
+    if ($id == 0)
+    {
+        $html .= "<option selected='selected' value='0'></option>\n";
+    }
+
     while ($styles = mysql_fetch_array($result))
     {
         $html .= "<option ";
-        if ($styles["id"] == $id) $html .= "selected='selected'";
+        if ($styles["id"] == $id)
+        {
+            $html .= "selected='selected'";
+        }
+
         $html .= " value=\"{$styles["id"]}\">{$styles["name"]}</option>\n";
     }
     $html .= "</select>\n";
@@ -1353,6 +1681,7 @@ function interface_style($id)
     $sql  = "SELECT cssurl, headerhtml FROM `{$dbInterfaceStyles}` WHERE id='$id'";
     $result = mysql_query($sql);
     if (mysql_error()) trigger_error(mysql_error(),E_USER_WARNING);
+
     if (mysql_num_rows($result) == 0)
     {
         mysql_free_result($result);
@@ -1363,7 +1692,12 @@ function interface_style($id)
         $style = mysql_fetch_assoc($result);
         mysql_free_result($result);
     }
-    if (empty($style)) $style = (array($CONFIG['default_css_url'],''));  // default style
+
+    if (empty($style))
+    {
+        $style = (array($CONFIG['default_css_url'],''));  // default style
+    }
+
     return($style);
 }
 
@@ -1378,14 +1712,21 @@ function incidentstatus_drop_down($name, $id)
     $sql  = "SELECT id, name FROM `{$dbIncidentStatus}` WHERE id<>2 AND id<>7 AND id<>10 ORDER BY name ASC";
     $result = mysql_query($sql);
     if (mysql_error()) trigger_error(mysql_error(),E_USER_WARNING);
-    if (mysql_num_rows($result) < 1) trigger_error("Zero rows returned",E_USER_WARNING);
+    if (mysql_num_rows($result) < 1)
+    {
+        trigger_error("Zero rows returned",E_USER_WARNING);
+    }
 
     $html = "<select id='{$name}' name='{$name}'>";
     // if ($id == 0) $html .= "<option selected='selected' value='0'></option>\n";
     while ($statuses = mysql_fetch_array($result))
     {
         $html .= "<option ";
-        if ($statuses['id'] == $id) $html .= "selected='selected' ";
+        if ($statuses['id'] == $id)
+        {
+            $html .= "selected='selected' ";
+        }
+
         $html .= "value='{$statuses['id']}'";
         $html .= ">{$statuses['name']}</option>\n";
     }
@@ -1410,15 +1751,21 @@ function incidentstatus_drop_down_all($name, $id)
 
     echo "<select name='{$name}'>\n";
     if ($id == 0)
-        echo "<option selected='selected' value=\"all\">All</option>\n";
+    {
+        echo "<option selected='selected' value=\"all\">{$GLOBALS['strAll']}</option>\n";
+    }
     else
+    {
         echo "<option value=\"all\">{$GLOBALS['strAll']}</option>\n";
+    }
 
     while ($statuses = mysql_fetch_array($result))
     {
         echo "<option";
         if ($statuses["id"] == $id)
+        {
             echo "selected='selected'";
+        }
         echo " value='{$statuses["id"]}'>{$statuses["name"]}";
         echo "</option>";
         echo "\n";
@@ -1443,12 +1790,19 @@ function closingstatus_drop_down($name, $id)
     $sql  = "SELECT id, name FROM `{$dbClosingStatus}` ORDER BY name ASC";
     $result = mysql_query($sql);
     if (mysql_error()) trigger_error(mysql_error(),E_USER_WARNING);
-    $html = "<select name=\"{$name}\">";
-    if ($id == 0) $html .= "<option selected='selected' value='0'></option>\n";
+    $html = "<select name='{$name}'>";
+    if ($id == 0)
+    {
+        $html .= "<option selected='selected' value='0'></option>\n";
+    }
+
     while ($statuses = mysql_fetch_array($result))
     {
         $html .= "<option ";
-        if ($statuses["id"] == $id) $html .= "selected='selected' ";
+        if ($statuses["id"] == $id)
+        {
+            $html .= "selected='selected' ";
+        }
         $html .= "value='{$statuses["id"]}'>{$statuses["name"]}</option>\n";
     }
     $html .= "</select>\n";
@@ -1475,11 +1829,18 @@ function userstatus_drop_down($name, $id, $userdisable=FALSE)
     if (mysql_error()) trigger_error(mysql_error(),E_USER_WARNING);
 
     $html = "<select name='$name'>\n";
-    if ($userdisable) $html .= "<option style='color: red;' selected='selected' value='0'>ACCOUNT DISABLED</option>\n";
+    if ($userdisable)
+    {
+        $html .= "<option style='color: red;' selected='selected' value='0'>ACCOUNT DISABLED</option>\n";
+    }
+
     while ($statuses = mysql_fetch_array($result))
     {
         $html .= "<option ";
-        if ($statuses["id"] == $id) $html .= "selected='selected' ";
+        if ($statuses["id"] == $id)
+        {
+            $html .= "selected='selected' ";
+        }
         $html .= "value='{$statuses["id"]}'>";
         $html .= "{$statuses["name"]}</option>\n";
     }
@@ -1539,12 +1900,23 @@ function emailtype_drop_down($name, $id)
     if (mysql_error()) trigger_error(mysql_error(),E_USER_WARNING);
 
     $html = "<select name=\"{$name}\">";
-    if ($id == 0)  $html .= "<option selected='selected' value='0'></option>\n";
+    if ($id == 0)
+    {
+        $html .= "<option selected='selected' value='0'></option>\n";
+    }
+
     while ($emailtypes = mysql_fetch_array($result))
     {
         $html .= "<option ";
-        if (!empty($emailtypes['description'])) $html .= "title='{$emailtypes['description']}' ";
-        if ($emailtypes["id"] == $id) { $html .= "selected='selected' "; }
+        if (!empty($emailtypes['description']))
+        {
+            $html .= "title='{$emailtypes['description']}' ";
+        }
+
+        if ($emailtypes["id"] == $id)
+        {
+            $html .= "selected='selected' ";
+        }
         $html .= "value='{$emailtypes['id']}'>{$emailtypes['name']}</option>";
         $html .= "\n";
     }
@@ -1568,27 +1940,82 @@ function priority_drop_down($name, $id, $max=4, $disable=FALSE)
     global $CONFIG, $iconset;
     // INL 8Oct02 - Removed DB Query
     $html = "<select id='priority' name='$name' ";
-    if ($disable) $html .= "disabled='disabled'";
+    if ($disable)
+    {
+        $html .= "disabled='disabled'";
+    }
+
     $html .= ">";
-    if ($id == 0) $html .= "<option selected='selected' value='0'></option>\n";
+    if ($id == 0)
+    {
+        $html .= "<option selected='selected' value='0'></option>\n";
+    }
+
     $html .= "<option style='text-indent: 14px; background-image: url({$CONFIG['application_webpath']}images/low_priority.gif); background-repeat:no-repeat;' value='1'";
-    if ($id==1) $html .= " selected='selected'";
+    if ($id == 1)
+    {
+        $html .= " selected='selected'";
+    }
+
     $html .= ">{$GLOBALS['strLow']}</option>\n";
     $html .= "<option style='text-indent: 14px; background-image: url({$CONFIG['application_webpath']}images/med_priority.gif); background-repeat:no-repeat;' value='2'";
-    if ($id==2) $html .= " selected='selected'";
+    if ($id == 2)
+    {
+        $html .= " selected='selected'";
+    }
+
     $html .= ">{$GLOBALS['strMedium']}</option>\n";
     $html .= "<option style='text-indent: 14px; background-image: url({$CONFIG['application_webpath']}images/high_priority.gif); background-repeat:no-repeat;' value='3'";
-    if ($id==3) $html .= " selected='selected'";
+    if ($id==3)
+    {
+        $html .= " selected='selected'";
+    }
+
     $html .= ">{$GLOBALS['strHigh']}</option>\n";
-    if ($max >=4)
+    if ($max >= 4)
     {
         $html .= "<option style='text-indent: 14px; background-image: url({$CONFIG['application_webpath']}images/crit_priority.gif); background-repeat:no-repeat;' value='4'";
-        if ($id==4) $html .= " selected='selected'";
+        if ($id==4)
+        {
+            $html .= " selected='selected'";
+        }
         $html .= ">{$GLOBALS['strCritical']}</option>\n";
     }
     $html .= "</select>\n";
 
     return $html;
+}
+
+
+/**
+    * prints the HTML for a multiple select list of products, with the given name and with all the products
+    * the given customer has support for already selected
+    * @author Ivan Lucas
+    * @deprecated
+    * @note DEPRECATED uses contactproducts
+*/
+function contactproducts_drop_down($name, $contactid)
+{
+    // extract products
+    $sql  = "SELECT * FROM products ORDER BY name ASC";
+    $result = mysql_query($sql);
+
+    // print HTML
+
+    echo "<select multiple='mutliple' name='{$name}' size='10'>";
+    while ($products = mysql_fetch_array($result))
+    {
+        echo "<option ";
+        if (contact_productsupport($contactid, $products["id"]) == 1) 
+        { 
+            echo "selected='selected' ";
+        }
+
+        echo "value='{$products['id']}'>{$products['name']}</option>";
+        echo "\n";
+    }
+
+    echo "</select>";
 }
 
 
@@ -1637,7 +2064,10 @@ function escalation_path_drop_down($name, $id)
     while ($path = mysql_fetch_array($result))
     {
         $html .= "<option value='{$path['id']}'";
-        if ($path['id']==$id) $html .= " selected='selected'";
+        if ($path['id']==$id)
+        {
+            $html .= " selected='selected'";
+        }
         $html .= ">{$path['name']}</option>\n";
     }
     $html .= "</select>\n";
@@ -1703,7 +2133,10 @@ function incident_lastupdate($id)
     $result = mysql_query($sql);
     if (mysql_error()) trigger_error(mysql_error(),E_USER_WARNING);
 
-    if (mysql_num_rows($result) == 0) trigger_error("Zero records while retrieving incident last update",E_USER_WARNING);
+    if (mysql_num_rows($result) == 0)
+    {
+        trigger_error("Zero records while retrieving incident last update",E_USER_WARNING);
+    }
     else
     {
         $update = mysql_fetch_array($result);
@@ -1717,8 +2150,10 @@ function incident_lastupdate($id)
             $resultPrevious = mysql_query($sqlPrevious);
             if (mysql_error()) trigger_error(mysql_error(),E_USER_WARNING);
 
-
-            if (mysql_num_rows($result) == 0) trigger_error("Zero records while retrieving incident last update",E_USER_WARNING);
+            if (mysql_num_rows($result) == 0)
+            {
+                trigger_error("Zero records while retrieving incident last update",E_USER_WARNING);
+            }
             else
             {
                 $row = mysql_fetch_array($resultPrevious);
@@ -1731,7 +2166,7 @@ function incident_lastupdate($id)
                         $last = $row;
                         if ($row['userid'] != 0)
                         {
-                            if ($row['type'] ==  'slamet')
+                            if ($row['type'] == 'slamet')
                             {
                                 $last = mysql_fetch_array($resultPrevious);
                             }
@@ -1748,7 +2183,7 @@ function incident_lastupdate($id)
         }
         mysql_free_result($result);
         // Remove Tags from update Body
-        $update['body']=trim($update['body']);
+        $update['body'] = trim($update['body']);
         $update['body'] = $update['body'];
         return array($update['userid'], $update['type'] ,$update['currentowner'], $update['currentstatus'], $update['body'], $update['timestamp'], $update['nextaction'], $update['id']);
     }
@@ -1767,6 +2202,7 @@ function incident_firstupdate($id)
     $sql = "SELECT bodytext FROM `{$dbUpdates}` WHERE incidentid='$id' AND customervisibility='show' ORDER BY timestamp ASC, id ASC LIMIT 1";
     $result = mysql_query($sql);
     if (mysql_error()) trigger_error(mysql_error(),E_USER_WARNING);
+
     if (mysql_num_rows($result) >= 1)
     {
         list($bodytext) = mysql_fetch_row($result);
@@ -1791,6 +2227,7 @@ function incidentstatus_name($id)
     $result = mysql_query($sql);
     if (mysql_error()) trigger_error(mysql_error(),E_USER_WARNING);
 
+
     if (mysql_num_rows($result) == 0)
     {
         return("");
@@ -1800,14 +2237,23 @@ function incidentstatus_name($id)
         $incidentstatus = mysql_fetch_array($result);
         return($incidentstatus["name"]);
     }
+
+   // free result and disconnect
+    mysql_free_result($result);
 }
 
 
 function closingstatus_name($id)
 {
     global $dbClosingStatus;
-    if ($id!='') $closingstatus = db_read_column('name', $dbClosingStatus, $id);
-    else $closingstatus = $GLOBALS['strUnknown'];
+    if ($id != '')
+    {
+        $closingstatus = db_read_column('name', 'closingstatus', $id);
+    }
+    else
+    {
+        $closingstatus = $GLOBALS['strUnknown'];
+    }
 
     return ($closingstatus);
 }
@@ -1839,11 +2285,17 @@ function product_name($id)
 function emailtype_replace_specials($string, $incidentid, $userid=0)
 {
     global $CONFIG, $application_version, $application_version_string;
-    global $dbIncidents;
-    if ($incidentid=='') throw_error('incident ID was blank in emailtype_replace_specials()',$string);
 
-    $contactid=incident_contact($incidentid);
-    if ($contactid==0) throw_error('cannot obtain contact ID in email_replace_specials()',$contactid);
+    if ($incidentid == '')
+    {
+        throw_error('incident ID was blank in emailtype_replace_specials()',$string);
+    }
+
+    $contactid = incident_contact($incidentid);
+    if ($contactid == 0)
+    {
+        throw_error('cannot obtain contact ID in email_replace_specials()',$contactid);
+    }
 
     $url = parse_url($_SERVER['HTTP_REFERER']);
     $baseurl = "{$url['scheme']}://{$url['host']}{$CONFIG['application_webpath']}";
@@ -1854,7 +2306,7 @@ function emailtype_replace_specials($string, $incidentid, $userid=0)
     $sql = "SELECT * FROM `{$dbIncidents}` WHERE id='$incidentid'";
     $result = mysql_query($sql);
     if (mysql_error()) trigger_error(mysql_error(),E_USER_WARNING);
-    $incident=mysql_fetch_object($result);
+    $incident = mysql_fetch_object($result);
 
     $email_regex = array(0 => '/<contactemail>/s',
                     1 => '/<contactname>/s',
@@ -1981,63 +2433,106 @@ function emailtype_replace_specials($string, $incidentid, $userid=0)
     * @returns string Readable date/time
     * @todo TODO Needs i18n.
 */
+// FIXME i18n
 function format_seconds($seconds)
 {
-   if ($seconds <= 0) return '0 minutes';
-   elseif ($seconds <= 60 AND $seconds >= 1)
-   {
-      return ("1 minute");
-   }
-   else
-   {
-      $years = floor($seconds / ( 2629800 * 12));
-      $remainder = ($seconds % ( 2629800 * 12));
-      $months = floor($remainder / 2629800);
-      $remainder = ($seconds % 2629800);
-      $days = floor($remainder / 86400);
-      $remainder = ($remainder % 86400);
-      $hours = floor($remainder / 3600);
-      $remainder = ($remainder % 3600);
-      $minutes = floor($remainder / 60);
-      if ($years>0)
-      {
-        $return_string .= "$years Years ";
-      }
-      if ($months>0 AND $years<2)
-      {
-        if ($months==1) $return_string .= "1 Month ";
-        else $return_string .= "$months Months ";
-      }
-      if ($days>0 AND $months<6)
-      {
-        if ($days==1) $return_string .= "1 Day ";
-        else $return_string .= "$days Days ";
-      }
-      if ($months<1 AND $days<7 AND $hours>0)
-      {
-        if ($hours==1) $return_string .= "1 hour ";
-        else $return_string .= "$hours hours ";
-      }
-      elseif ($months<1 AND $days<1 AND $hours>0)
-      {
-        if ($minutes==1) $return_string .= "1 minute";
-        elseif ($minutes>1) $return_string .= "$minutes minutes";
-      }
+    if ($seconds <= 0)
+    {
+        return '0 minutes';
+    }
+    elseif ($seconds <= 60 AND $seconds >= 1)
+    {
+        return ("1 minute");
+    }
+    else
+    {
+        $years = floor($seconds / ( 2629800 * 12));
+        $remainder = ($seconds % ( 2629800 * 12));
+        $months = floor($remainder / 2629800);
+        $remainder = ($seconds % 2629800);
+        $days = floor($remainder / 86400);
+        $remainder = ($remainder % 86400);
+        $hours = floor($remainder / 3600);
+        $remainder = ($remainder % 3600);
+        $minutes = floor($remainder / 60);
 
-      if ($months<1 AND $days<1 AND $hours<1 )
-      {
-            if ($minutes<=1) $return_string .= "$minutes minute";
-            if ($minutes>1) $return_string .= "$minutes minutes";
-      }
-      /*
-          if ($months<1 AND $days<1 AND $hours<1 AND $minutes>0)
-      {
-         $return_string .= "$minutes minutes";
-      }
-      */
-      $return_string=trim($return_string);
-      return($return_string);
-   }
+        if ($years > 0)
+        {
+            $return_string .= "$years Years ";
+        }
+
+        if ($months>0 AND $years<2)
+        {
+            if ($months == 1)
+            {
+                $return_string .= "1 Month "; 
+            }
+            else
+            {
+                $return_string .= "$months Months ";
+            }
+        }
+
+        if ($days > 0 AND $months < 6)
+        {
+            if ($days == 1)
+            {
+                $return_string .= "1 Day ";
+            }
+            else
+            {
+                $return_string .= "$days Days ";
+            }
+        }
+
+        if ($months < 1 AND $days < 7 AND $hours > 0)
+        {
+            if ($hours == 1)
+            {
+                $return_string .= "1 hour ";
+            }
+            else
+            {
+                $return_string .= "$hours hours ";
+            }
+        }
+        elseif ($months < 1 AND $days < 1 AND $hours > 0)
+        {
+            if ($minutes == 1)
+            {
+                $return_string .= "1 minute";
+            }
+            elseif ($minutes > 1)
+            {
+                $return_string .= "$minutes minutes";
+            }
+        }
+
+        if ($months < 1 AND $days < 1 AND $hours < 1)
+        {
+            if ($minutes <= 1)
+            {
+                $return_string .= "$minutes minute";
+            }
+            else
+            {
+                $return_string .= "$minutes minutes";
+            }
+
+//             if ($minutes > 1)
+//             {
+//                 $return_string .= "$minutes minutes";
+//             }
+        }
+        /*
+            if ($months<1 AND $days<1 AND $hours<1 AND $minutes>0)
+        {
+            $return_string .= "$minutes minutes";
+        }
+        */
+        $return_string = trim($return_string);
+        return $return_string;
+    }
 }
 
 
@@ -2049,6 +2544,7 @@ function format_seconds($seconds)
     * $CONFIG['start_working_day'] config variables
     * @todo TODO Needs i18n.
 */
+// FIXME i18n
 function format_workday_minutes($minutes)
 {
     global $CONFIG;
@@ -2058,22 +2554,49 @@ function format_workday_minutes($minutes)
     $hours = floor($remainder / 60);
     $minutes = floor($remainder % 60);
 
-    if ($days == 1) $time = "{$days} working day";
-    elseif ($days > 1) $time = "{$days} working days";
+    if ($days == 1)
+    {
+        $time = "{$days} working day";
+    }
+    elseif ($days > 1)
+    {
+        $time = "{$days} working days";
+    }
 
-    if ($days <= 3 AND $hours == 1) $time .= " {$hours} hour";
-    elseif ($days <= 3 AND $hours > 1) $time .= " {$hours} hours";
-    elseif ($days > 3 AND $hours >= 1) $time = "&gt; ".$time;
+    if ($days <= 3 AND $hours == 1)
+    {
+        $time .= " {$hours} hour";
+    }
+    elseif ($days <= 3 AND $hours > 1)
+    {
+        $time .= " {$hours} hours";
+    }
+    elseif ($days > 3 AND $hours >= 1)
+    {
+        $time = "&gt; ".$time;
+    }
 
-    if ($days < 1 AND $hours < 8 AND $minutes == 1) $time .= " {$minutes} minute";
-    elseif ($days < 1 AND $hours < 8 AND $minutes > 1) $time .= " {$minutes} minutes";
+    if ($days < 1 AND $hours < 8 AND $minutes == 1)
+    {
+        $time .= " {$minutes} minute";
+    }
+    elseif ($days < 1 AND $hours < 8 AND $minutes > 1)
+    {
+        $time .= " {$minutes} minutes";
+    }
 
-    if ($days == 1 AND $hours < 8 AND $minutes == 1) $time .= " {$minutes} min";
-    elseif ($days == 1 AND $hours < 8 AND $minutes > 1) $time .= " {$minutes} mins";
+    if ($days == 1 AND $hours < 8 AND $minutes == 1)
+    {
+        $time .= " {$minutes} min";
+    }
+    elseif ($days == 1 AND $hours < 8 AND $minutes > 1)
+    {
+        $time .= " {$minutes} mins";
+    }
 
     $time = trim($time);
 
-    return ($time);
+    return $time;
 }
 
 
@@ -2087,14 +2610,22 @@ function format_date_friendly($date)
 {
     global $CONFIG, $now;
     if (date('dmy', $date) == date('dmy', time()))
+    {
         $datestring = "{$GLOBALS['strToday']} @ ".date($CONFIG['dateformat_time'], $date);
-    elseif (date('dmy', $date) == date('dmy', (time()-86400)))
+    }
+    elseif (date('dmy', $date) == date('dmy', (time() - 86400)))
+    {
         $datestring = "{$GLOBALS['strYesterday']} @ ".date($CONFIG['dateformat_time'], $date);
+    }
     elseif ($date < $now-86400 AND
             $date > $now-(86400*6))
+    {
         $datestring = date('l', $date)." @ ".date($CONFIG['dateformat_time'], $date);
+    }
     else
+    {
         $datestring = date($CONFIG['dateformat_datetime'], $date);
+    }
 
     return ($datestring);
 }
@@ -2155,15 +2686,37 @@ function html_redirect($url, $success=TRUE, $message='')
     $refresh = "{$refreshtime}; url={$url}";
 
     $title = $GLOBALS['strPleaseWaitRedirect'];
-    if (!$headerdisplayed) include ('htmlheader.inc.php');
-    else echo "<meta http-equiv=\"refresh\" content=\"$refreshtime; url=$url\" />\n";
+    if (!$headerdisplayed)
+    {
+        include('htmlheader.inc.php');
+    }
+    else
+    {
+        echo "<meta http-equiv=\"refresh\" content=\"$refreshtime; url=$url\" />\n";
+    }
+
     echo "<h3>";
-    if ($success) echo "<span class='success'>{$GLOBALS['strSuccess']}</span>";
-    else echo "<span class='failure'>{$GLOBALS['strFailed']}</span>";
-    if (!empty($message)) echo ": {$message}";
+    if ($success)
+    {
+        echo "<span class='success'>{$GLOBALS['strSuccess']}</span>";
+    }
+    else
+    {
+        echo "<span class='failure'>{$GLOBALS['strFailed']}</span>";
+    }
+
+    if (!empty($message))
+    {
+        echo ": {$message}";
+    }
+
     echo "</h3>";
     echo "<h4>{$GLOBALS['strPleaseWaitRedirect']}</h4>";
-    if ($headerdisplayed) echo "<p align='center'><a href=\"{$url}\">{$GLOBALS['strContinue']}</a></p>";
+    if ($headerdisplayed)
+    {
+        echo "<p align='center'><a href=\"{$url}\">{$GLOBALS['strContinue']}</a></p>";
+    }
+
     include ('htmlfooter.inc.php');
 
 }
@@ -2185,8 +2738,15 @@ function calculate_time_of_next_action($days, $hours, $minutes)
 function servicelevel_drop_down($name, $id, $collapse=FALSE)
 {
     global $dbServiceLevels;
-    if ($collapse) $sql = "SELECT DISTINCT id, tag FROM `{$dbServiceLevels}`";
-    else $sql  = "SELECT id, priority FROM `{$dbServiceLevels}`";
+
+    if ($collapse)
+    {
+        $sql = "SELECT DISTINCT id, tag FROM `{$dbServiceLevels}`";
+    }
+    else
+    {
+        $sql  = "SELECT id, priority FROM `{$dbServiceLevels}`";
+    }
     $result = mysql_query($sql);
 
     $html = "<select name='$name'>\n";
@@ -2196,10 +2756,21 @@ function servicelevel_drop_down($name, $id, $collapse=FALSE)
     {
         $html .= "<option ";
         $html .= "value='{$servicelevels->id}' ";
-        if ($servicelevels->id == $id) $html .= "selected='selected'";
+        if ($servicelevels->id == $id)
+        {
+            $html .= "selected='selected'";
+        }
+
         $html .= ">";
-        if ($collapse) $html .= $servicelevels->tag;
-        else $html .= "{$servicelevels->tag} ".priority_name($servicelevels->priority);
+        if ($collapse)
+        {
+            $html .= $servicelevels->tag;
+        }
+        else
+        {
+            $html .= "{$servicelevels->tag} ".priority_name($servicelevels->priority);
+        }
+
         $html .= "</option>\n";
     }
     $html .= "</select>";
@@ -2210,20 +2781,43 @@ function servicelevel_drop_down($name, $id, $collapse=FALSE)
 function serviceleveltag_drop_down($name, $tag, $collapse=FALSE)
 {
     global $dbServiceLevels;
-    if ($collapse) $sql = "SELECT DISTINCT tag FROM `{$dbServiceLevels}`";
-    else $sql  = "SELECT tag, priority FROM `{$dbServiceLevels}";
+
+    if ($collapse)
+    {
+        $sql = "SELECT DISTINCT tag FROM `{$dbServiceLevels}`";
+    }
+    else
+    {
+        $sql  = "SELECT tag, priority FROM `{$dbServiceLevels}`";
+    }
     $result = mysql_query($sql);
 
+
     $html = "<select name='$name'>\n";
-    if ($tag == '') $html .= "<option selected='selected' value=''></option>\n";
+    if ($tag == '')
+    {
+        $html .= "<option selected='selected' value=''></option>\n";
+    }
+
     while ($servicelevels = mysql_fetch_object($result))
     {
         $html .= "<option ";
         $html .= "value='{$servicelevels->tag}' ";
-        if ($servicelevels->tag == $tag) $html .= "selected='selected'";
+        if ($servicelevels->tag == $tag)
+        {
+            $html .= "selected='selected'";
+        }
+
         $html .= ">";
-        if ($collapse) $html .= $servicelevels->tag;
-        else $html .= "{$servicelevels->tag} ".priority_name($servicelevels->priority);
+        if ($collapse)
+        {
+            $html .= $servicelevels->tag;
+        }
+        else
+        {
+            $html .= "{$servicelevels->tag} ".priority_name($servicelevels->priority);
+        }
+
         $html .= "</option>\n";
     }
     $html .= "</select>";
@@ -2241,8 +2835,10 @@ function servicelevel_name($id)
     $servicelevel = db_read_column('tag', 'servicelevels', $id);
 
     if ($servicelevel == '')
-        $servicelevel=$CONFIG['default_service_level'];
-    return($servicelevel);
+    {
+        $servicelevel = $CONFIG['default_service_level'];
+    }
+    return $servicelevel;
 }
 
 
@@ -2250,15 +2846,19 @@ function servicelevel_name($id)
 function maintenance_servicelevel($maintid)
 {
     global $dbMaintenance;
-    $sql = "SELECT servicelevelid FROM `{$dbMaintenance}` WHERE id='$maintid' ";
+    $sql = "SELECT servicelevelid FROM `{$dbMaintenance}` WHERE id='{$maintid}' ";
     $result = mysql_query($sql);
     if (mysql_error()) trigger_error(mysql_error(),E_USER_WARNING);
+
     if (mysql_num_rows($result) < 1)
     {
         // in case there is no maintenance contract associated with the incident, use default service level
         // if there is a maintenance contract then we should throw an error because there should be
         // service level
-        if ($maintid==0) $servicelevelid=1;
+        if ($maintid == 0)
+        {
+            $servicelevelid=1;
+        }
         ## else throw_error('!Error: Could not find a service level for maintenance ID:', $maintid);
     }
     else
@@ -2266,12 +2866,14 @@ function maintenance_servicelevel($maintid)
         list($servicelevelid) = mysql_fetch_row($result);
     }
     return $servicelevelid;
+
 }
 
 
 function maintenance_siteid($id)
 {
-   return db_read_column('site', 'maintenance', $id);
+    return db_read_column('site', 'maintenance', $id);
+
 }
 
 
@@ -2289,9 +2891,12 @@ function servicelevel_id2tag($id)
 function incidents_remaining($id)
 {
     $remainging = db_read_column('incidentsremaining', 'incidentpools', $id);
-    if (empty($remaining)) $remaining = '&infin;';
+    if (empty($remaining))
+    {
+        $remaining = '&infin;';
+    }
 
-    return($remaining);
+    return $remaining;
 }
 
 
@@ -2300,7 +2905,11 @@ function decrement_free_incidents($siteid)
     global $dbSites;
     $sql = "UPDATE `{$dbSites}` SET freesupport = (freesupport - 1) WHERE id='$siteid'";
     mysql_query($sql);
-    if (mysql_affected_rows() < 1) trigger_error("No rows affected while updating freesupport",E_USER_ERROR);
+    if (mysql_affected_rows() < 1)
+    {
+        trigger_error("No rows affected while updating freesupport",E_USER_ERROR);
+    }
+
     if (mysql_error()) trigger_error(mysql_error(),E_USER_ERROR);
     else return TRUE;
 }
@@ -2318,6 +2927,7 @@ function increment_incidents_used($maintid)
 
 
 // Functions to handle error reporting
+// FIXME i18n
 function sit_error_handler($errno, $errstr, $errfile, $errline, $errcontext)
 {
     global $CONFIG;
@@ -2414,17 +3024,35 @@ function site_drop_down($name, $id)
     $result = mysql_query($sql);
 
     $html = "<select name='{$name}'>\n";
-    if ($id == 0) $html .="<option selected='selected' value='0'></option>\n";
+    if ($id == 0)
+    {
+        $html .="<option selected='selected' value='0'></option>\n";
+    }
+
     while ($sites = mysql_fetch_object($result))
     {
-        $text=$sites->name;
-        if (!empty($sites->department)) $text.= ", ".$sites->department;
+        $text = $sites->name;
+        if (!empty($sites->department))
+        {
+            $text.= ", ".$sites->department;
+        }
 //         if (strlen($text) >= 55) $text=htmlspecialchars(substr(trim($text), 0, 55))."&hellip;";
 //         else $text=htmlspecialchars($text);
-        if (strlen($text) >= 55) $text = substr(trim($text), 0, 55)."&hellip;";
-        else $text = $text;
+        if (strlen($text) >= 55)
+        {
+            $text = substr(trim($text), 0, 55)."&hellip;";
+        }
+        else
+        {
+            $text = $text;
+        }
+
         $html .= "<option ";
-        if ($sites->id == $id) $html .= "selected='selected' ";
+        if ($sites->id == $id)
+        {
+            $html .= "selected='selected' ";
+        }
+
         $html .= "value='{$sites->id}'>{$text}</option>\n";
     }
     $html .= "</select>\n";
@@ -2436,7 +3064,10 @@ function site_drop_down($name, $id)
 function site_name($id)
 {
     $sitename = db_read_column('name', 'sites', $id);
-    if (empty($sitename)) $sitename=$GLOBALS['strUnknown'];
+    if (empty($sitename))
+    {
+        $sitename = $GLOBALS['strUnknown'];
+    }
 
     return($sitename);
 }
@@ -2455,19 +3086,24 @@ function maintenance_drop_down($name, $id)
     $result = mysql_query($sql);
 
     // print HTML
-    ?>
-    <select name="<?php echo $name ?>">
-    <?php
+    echo "<select name='{$name}'>";
     if ($id == 0)
+    {
         echo "<option selected='selected' value='0'></option>\n";
+    }
+
     while ($maintenance = mysql_fetch_array($result))
     {
-        ?><option <?php if ($maintenance["id"] == $id) { ?>selected='selected' <?php } ?>value='<?php echo $maintenance["id"] ?>'><?php echo $maintenance["sitename"] ?> | <?php echo $maintenance["productname"]; ?></option><?php
+        echo "<option ";
+        if ($maintenance["id"] == $id)
+        {
+            echo "selected='selected' ";
+        }
+        echo "value='{$maintenance['id']}'>{$maintenance['sitename']} | {$maintenance['productname']}</option>";
         echo "\n";
     }
-    ?>
-    </select>
-    <?php
+
+    echo "</select>";
 }
 
 
@@ -2481,19 +3117,26 @@ function reseller_drop_down($name, $id)
     if (mysql_error()) trigger_error(mysql_error(),E_USER_WARNING);
 
     // print HTML
-    ?>
-    <select name="<?php echo $name ?>">
-    <?php
+
+    echo "<select name='{$name}'>";
+
     if ($id == 0)
+    {
         echo "<option selected='selected' value='0'></option>\n";
+    }
     while ($resellers = mysql_fetch_array($result))
     {
-        ?><option <?php if ($resellers["id"] == $id) { ?>selected='selected' <?php } ?>value='<?php echo $resellers["id"] ?>'><?php echo $resellers["name"] ?></option><?php
+        echo "<option ";
+        if ($resellers["id"] == $id)
+        {
+            echo "selected='selected' ";
+        }
+
+        echo "value='{$resellers['id']}'>{$resellers['name']}</option>";
         echo "\n";
     }
-    ?>
-    </select>
-    <?php
+
+    echo "</select>";
 }
 
 
@@ -2513,19 +3156,25 @@ function licence_type_drop_down($name, $id)
     $result = mysql_query($sql);
 
     // print HTML
-    ?>
-    <select name="<?php echo $name ?>">
-    <?php
+    echo "<select name='{$name}'>";
+
     if ($id == 0)
+    {
         echo "<option selected='selected' value='0'></option>\n";
+    }
     while ($licencetypes = mysql_fetch_array($result))
     {
-        ?><option <?php if ($licencetypes["id"] == $id) { ?>selected='selected' <?php } ?>value='<?php echo $licencetypes["id"] ?>'><?php echo $licencetypes["name"] ?></option><?php
+        echo "<option ";
+        if ($licencetypes["id"] == $id)
+        {
+            echo "selected='selected' ";
+        }
+
+        echo "value='{$licencetypes['id']}'>{$licencetypes['name']}</option>";
         echo "\n";
     }
-    ?>
-    </select>
-    <?php
+
+    echo "</select>";
 }
 
 
@@ -2543,8 +3192,8 @@ function countdayincidents($day, $month, $year)
     $unixenddate=mktime(23,59,59,$month,$day,$year);
     $sql = "SELECT count(*) FROM `{$dbIncidents}` ";
     $sql .= "WHERE opened BETWEEN '$unixstartdate' AND '$unixenddate' ";
-    $result= mysql_query($sql);
-    list($count)=mysql_fetch_row($result);
+    $result = mysql_query($sql);
+    list($count) = mysql_fetch_row($result);
     mysql_free_result($result);
     return $count;
 }
@@ -2558,8 +3207,8 @@ function countdayclosedincidents($day, $month, $year)
     $unixenddate=mktime(23,59,59,$month,$day,$year);
     $sql = "SELECT count(*) FROM `{$dbIncidents}` ";
     $sql .= "WHERE closed BETWEEN '$unixstartdate' AND '$unixenddate' ";
-    $result= mysql_query($sql);
-    list($count)=mysql_fetch_row($result);
+    $result = mysql_query($sql);
+    list($count) = mysql_fetch_row($result);
     mysql_free_result($result);
     return $count;
 }
@@ -2573,10 +3222,65 @@ function countdaycurrentincidents($day, $month, $year)
     $unixenddate=mktime(23,59,59,$month,$day,$year);
     $sql = "SELECT count(*) FROM `{$dbIncidents}` ";
     $sql .= "WHERE opened <= '$unixenddate' AND closed >= '$unixstartdate' ";
-    $result= mysql_query($sql);
-    list($count)=mysql_fetch_row($result);
+    $result = mysql_query($sql);
+    list($count) = mysql_fetch_row($result);
     mysql_free_result($result);
     return $count;
+}
+
+
+/**
+    * Takes a contact ID and prints HTML listing all the flags
+    * @author Ivan Lucas
+    * @deprecated
+*/
+function print_contact_flags($id, $editlink=FALSE)
+{
+    $sql = "SELECT contactflags.flag, flags.name FROM contactflags, flags ";
+    $sql .= "WHERE contactflags.flag=flags.flag AND contactflags.contactid='$id' ";
+    $result= mysql_query($sql);
+    if (mysql_error()) trigger_error(mysql_error(),E_USER_WARNING);
+    while( $contactflagrows = mysql_fetch_array($result) )
+    {
+        if ($editlink==TRUE)
+        {
+            echo "<a href='edit_contact_flags.php?mode=removeflag&amp;id=$id&amp;flag={$contactflagrows['flag']}' title='{$contactflagrows['name']} (Click to Remove)'>";
+        }
+        else echo "<span title=\"".$contactflagrows['name']."\">";
+        echo strtoupper($contactflagrows['flag']);
+        if ($editlink==TRUE) echo "</a>";
+        else echo "</span>";
+        echo ' ';
+    }
+    if (mysql_num_rows($result)==0) echo "<em>{$GLOBALS['strNone']}</em>";
+    mysql_free_result($result);
+    return TRUE;
+}
+
+/**
+    * @author Ivan Lucas
+    * @deprecated
+    * @note DEPRECATED as of 3.30 contact flags should no longer be used
+    * use tags instead
+*/
+function check_contact_flag($id, $flag)
+{
+    $sql = "SELECT flag FROM contactflags WHERE contactid='$id' AND flag='$flag'";
+    $result = mysql_query($sql);
+    if (mysql_error()) trigger_error(mysql_error(),E_USER_WARNING);
+}
+
+/**
+    * @author Ivan Lucas
+    * @deprecated
+    * @note DEPRECATED as of 3.30 contact flags should no longer be used
+    * use tags instead
+*/
+function add_contact_flag($id, $flag)
+{
+    // first check that contact does not already have this flag
+    $sql = "";
+    trigger_error("add_contact_flag feature is not available yet", E_USER_WARNING);
 }
 
 
@@ -2612,7 +3316,7 @@ function journal($loglevel, $event, $bodytext, $journaltype, $refid)
         $sql  = "INSERT INTO `{$dbJournal}` ";
         $sql .= "(userid, event, bodytext, journaltype, refid) ";
         $sql .= "VALUES ('".$sit[2]."', '$event', '$bodytext', '$journaltype', '$refid') ";
-        $result= mysql_query($sql);
+        $result = mysql_query($sql);
         if (mysql_error()) trigger_error(mysql_error(),E_USER_WARNING);
         return TRUE;
     }
@@ -2628,9 +3332,13 @@ function journal($loglevel, $event, $bodytext, $journaltype, $refid)
 function html_checkbox($name,$state)
 {
     if ($state==1 || $state=='Yes' || $state=='yes' || $state=='true' || $state=='TRUE')
+    {
         echo "<input type='checkbox' checked='checked' name='$name' value='$state' />" ;
+    }
     else
+    {
         echo "<input type='checkbox' name='$name' value='$state' />" ;
+    }
 }
 
 /**
@@ -2645,7 +3353,10 @@ function send_template_email($template, $incidentid, $info1='', $info2='')
     if (empty($template)) throw_error('Blank template ID:', 'send_template_email()');
     if (empty($incidentid)) throw_error('Blank incident ID:', 'send_template_email()');
 
-    if (is_numeric($template)) $templateid = $template;
+    if (is_numeric($template))
+    {
+        $templateid = $template;
+    }
     else
     {
         // Lookup the template id using the name
@@ -2682,9 +3393,13 @@ function send_template_email($template, $incidentid, $info1='', $info2='')
     $extra_headers .= "X-Mailer: {$CONFIG['application_shortname']} {$application_version_string}/PHP " . phpversion()."\r\n";
     $extra_headers .= "X-Originating-IP: {$_SERVER['REMOTE_ADDR']}\r\n";
     if ($email_cc != '')
+    {
         $extra_headers .= "CC: $email_cc\r\n";
+    }
     if ($email_bcc != "")
+    {
         $extra_headers .= "BCC: $email_bcc\r\n";
+    }
 
     $extra_headers .= "\r\n";
 
@@ -2700,8 +3415,15 @@ function send_template_email($template, $incidentid, $info1='', $info2='')
     }
 
     // send email
-    if ($CONFIG['demo']) $rtnvalue = TRUE;
-    else $rtnvalue = mail($email_to, $email_subject, $email_body, $extra_headers);
+    if ($CONFIG['demo'])
+    {
+        $rtnvalue = TRUE;
+    }
+    else
+    {
+        $rtnvalue = mail($email_to, $email_subject, $email_body, $extra_headers);
+    }
+
     return $rtnvalue;
 }
 
@@ -2722,7 +3444,7 @@ function generate_password($length=8)
    {
         $str .= substr($possible, (rand() % strlen($possible)),1);
    }
-   return($str);
+   return $str;
 }
 
 
@@ -2734,16 +3456,19 @@ if (!function_exists('list_dir'))
         // try to figure out what delimeter is being used (for windows or unix)...
         $delim = (strstr($dirname,"/")) ? "/" : "\\";
 
-        if ($dirname[strlen($dirname)-1]!=$delim)
-        $dirname.=$delim;
+        if ($dirname[strlen($dirname)-1] != $delim)
+        $dirname .= $delim;
 
         $handle = opendir($dirname);
         if ($handle==FALSE) throw_error('Error in list_dir() Problem attempting to open directory',$dirname);
 
         while ($file = readdir($handle))
         {
-            if ($file=='.'||$file=='..')
+            if ($file == '.' || $file == '..')
+            {
                 continue;
+            }
+
             if (is_dir($dirname.$file) && $recursive)
             {
                 $x = list_dir($dirname.$file.$delim);
@@ -2751,7 +3476,7 @@ if (!function_exists('list_dir'))
             }
             else
             {
-                $result_array[]=$dirname.$file;
+                $result_array[] = $dirname.$file;
             }
         }
         closedir($handle);
@@ -2774,8 +3499,8 @@ if (!function_exists('is_number'))
 {
     function is_number($string)
     {
-        $number=TRUE;
-        for ($i=0;$i<strlen($string);$i++)
+        $number = TRUE;
+        for ($i=0; $i < strlen($string); $i++)
         {
             if (!(ord(substr($string,$i,1)) <= 57 && ord(substr($string,$i,1)) >= 48))
             {
@@ -2800,7 +3525,7 @@ function rec_copy ($from_path, $to_path)
     {
         chdir($from_path);
         $handle=opendir('.');
-        while (($file = readdir($handle))!==false)
+        while (($file = readdir($handle)) !== false)
         {
             if (($file != ".") && ($file != ".."))
             {
@@ -2831,8 +3556,8 @@ function getattachmenticon($filename)
 {
     global $CONFIG, $iconset;
     // Maybe sometime make this use mime typesad of file extensions
-    $ext=strtolower(substr($filename, (strlen($filename)-3) , 3));
-    $imageurl="{$CONFIG['application_webpath']}images/icons/{$iconset}/32x32/mimetypes/mime_empty.png";
+    $ext = strtolower(substr($filename, (strlen($filename)-3) , 3));
+    $imageurl = "{$CONFIG['application_webpath']}images/icons/{$iconset}/32x32/mimetypes/mime_empty.png";
 
     $type_image = "{$CONFIG['application_webpath']}images/icons/{$iconset}/32x32/file_image.png";
 
@@ -2928,14 +3653,14 @@ function getattachmenticon($filename)
     $cnt = count($filetype);
     if ( $cnt > 0 )
     {
-        $a=0;
-        $stop=FALSE;
+        $a = 0;
+        $stop = FALSE;
         while ($a < $cnt && $stop==FALSE)
         {
             if ($ext==$filetype[$a])
             {
-                $imageurl=$imgurl[$a];
-                $stop=TRUE;
+                $imageurl = $imgurl[$a];
+                $stop = TRUE;
             }
             $a++;
         }
@@ -2950,8 +3675,8 @@ function count_incoming_updates()
 {
     global $dbUpdates;
     $sql = "SELECT id FROM `{$dbUpdates}` WHERE incidentid=0";
-    $result=mysql_query($sql);
-    $count=mysql_num_rows($result);
+    $result = mysql_query($sql);
+    $count = mysql_num_rows($result);
     mysql_free_result($result);
     return $count;
 }
@@ -2961,8 +3686,8 @@ function global_signature()
 {
     global $dbEmailSig;
     $sql = "SELECT signature FROM `{$dbEmailSig}` ORDER BY RAND() LIMIT 1";
-    $result=mysql_query($sql);
-    list($signature)=mysql_fetch_row($result);
+    $result = mysql_query($sql);
+    list($signature) = mysql_fetch_row($result);
     mysql_free_result($result);
     return $signature;
 }
@@ -2990,6 +3715,7 @@ function spellcheck_addword($word)
 
 
 // urltext should take the form '&var=value'
+// FIXME i18n
 function spellcheck_text($text, $urltext)
 {
     global $CONFIG;
@@ -3004,30 +3730,48 @@ function spellcheck_text($text, $urltext)
     $text = str_replace('<','&#060;', $text);
     $text = str_replace('>','&#062;', $text);
 
-    for($c=0;$c<=strlen($text);$c++)
+    for ($c=0; $c <= strlen($text); $c++)
     {
-        $char=strtolower(substr($text,$c,1));
+        $char = strtolower(substr($text,$c,1));
         if (!(ord($char) >= 97 && ord($char) <= 122))
         {
-            if ($endwordpos==-1 && $startwordpos==-1) $newtext .= $char;
-            if ($startwordpos==-1) $startwordpos=$c+1;
-            else $endwordpos=$c;
+            if ($endwordpos==-1 && $startwordpos==-1)
+            {
+                $newtext .= $char;
+            }
+
+            if ($startwordpos==-1)
+            {
+                $startwordpos=$c+1;
+            }
+            else
+            {
+                $endwordpos=$c;
+            }
         }
-        if ($c==0 && (ord($char) >= 97 && ord($char) <= 122)) $startwordpos=0;
+        if ($c == 0 && (ord($char) >= 97 && ord($char) <= 122))
+        {
+            $startwordpos=0;
+        }
+
         if ($endwordpos!=-1 && $startwordpos!=-1)
         {
-            $word=substr($text, $startwordpos, ($endwordpos-$startwordpos));
+            $word = substr($text, $startwordpos, ($endwordpos-$startwordpos));
             if (!spellcheck_word($pspell_link, $word))
             {
-                $suggestions=pspell_suggest($pspell_link, $word);
-                if (count($suggestions)>1)
+                $suggestions = pspell_suggest($pspell_link, $word);
+                if (count($suggestions) > 1)
                 {
-                    $tooltiptext="Possible spellings:<br /><br />";
+                    $tooltiptext = "Possible spellings:<br /><br />";
                     $tooltiptext .= "<table summary='suggestions'>";
-                    $col=0;
+                    $col = 0;
                     foreach ($suggestions as $suggestion)
                     {
-                        if ($col>3) { $tooltiptext .= "</tr>\n<tr>"; $col=0; }
+                        if ($col > 3)
+                        {
+                            $tooltiptext .= "</tr>\n<tr>"; $col=0;
+                        }
+
                         $tooltiptext .= "<td valign='top' align='left'><a href='{$_SERVER['PHP_SELF']}?changepos=$c&amp;replacement=$suggestion$urltext&amp;step=3'>$suggestion</a></td>";
                         $col++;
                     }
@@ -3043,7 +3787,10 @@ function spellcheck_text($text, $urltext)
                 $newtext .= "<a class=\"spellLink\" href=\"?\" onclick=\"showHelpTip(event, linkHelp$c); return false\">$word</a>";
             }
             else
+            {
                 $newtext .= "$word";
+            }
+
             $c--;
             $startwordpos=-1;
             $endwordpos=-1;
@@ -3059,12 +3806,12 @@ function replace_word($text, $changepos, $replacement)
     // changepos is the position of the end of the word needing to be changed
 
     // read backwards until the end of the word and store the word end position
-    $limit=$changepos-30;
-    $c=$changepos-1;
+    $limit = $changepos-30;
+    $c = $changepos-1;
     do
     {
-        $char=strtolower(substr($text,$c,1));
-        $startwordpos=$c;
+        $char = strtolower(substr($text,$c,1));
+        $startwordpos = $c;
         $c--;
     } while ((ord($char) >= 97 && ord($char) <= 122) && $c > 1 );
 
@@ -3091,7 +3838,7 @@ function holiday_type ($id)
     return($holidaytype);
 }
 
-
+// FIXME i18n
 function holiday_approval_status($approvedid, $approvedby=-1)
 {
     // We add 10 to normal status when we archive holiday
@@ -3125,11 +3872,18 @@ function holidaytype_drop_down($name, $id)
     $holidaytype[5] = $GLOBALS['strCompassionateLeave'];
 
     $html = "<select name='$name'>";
-    if ($id == 0) $html .= "<option selected value='0'></option>\n";
+    if ($id == 0)
+    {
+        $html .= "<option selected value='0'></option>\n";
+    }
+
     foreach ($holidaytype AS $htypeid => $htype)
     {
         $html .= "<option";
-        if ($htypeid == $id) $html .= " selected='selected'";
+        if ($htypeid == $id)
+        {
+            $html .= " selected='selected'";
+        }
         $html .= " value='{$htypeid}'>{$htype}</option>\n";
     }
     $html .= "</select>\n";
@@ -3156,7 +3910,11 @@ function check_group_holiday($userid, $date, $length='day')
         {
             // check to see if this group member has holiday
             $hsql = "SELECT * FROM `{$dbHolidays}` WHERE userid='{$member->userid}' AND startdate='{$date}' ";
-            if ($length=='am' || $length=='pm') $hsql .= "AND length = '$length' || length = 'day' ";
+            if ($length=='am' || $length=='pm')
+            {
+                $hsql .= "AND length = '$length' || length = 'day' ";
+            }
+
             $hresult = mysql_query($hsql);
             if (mysql_error()) trigger_error(mysql_error(),E_USER_WARNING);
             if (mysql_num_rows($hresult) >= 1)
@@ -3170,7 +3928,7 @@ function check_group_holiday($userid, $date, $length='day')
     return $namelist;
 }
 
-
+// FIXME i18n
 function country_drop_down($name, $country, $extraattributes='')
 {
     global $CONFIG;
@@ -3401,9 +4159,12 @@ function country_drop_down($name, $country, $extraattributes='')
         $html = "<select name=\"$name\" $extraattributes>";
         foreach ($countrylist as $key => $value)
         {
-            $value=htmlspecialchars($value);
+            $value = htmlspecialchars($value);
             $html .= "<option value='$value'";
-            if ($value==strtoupper($country)) $html .= " selected='selected'";
+            if ($value==strtoupper($country))
+            {
+                $html .= " selected='selected'";
+            }
             $html .= ">$value</option>\n";
         }
         $html .= "</select>";
@@ -3411,7 +4172,7 @@ function country_drop_down($name, $country, $extraattributes='')
     else
     {
         // make editable input box
-        $html = "<input maxlength='100' name=\"$name\" size='40' value=\"$country\" $extraattributes />";
+        $html = "<input maxlength='100' name='{$name}' size='40' value='{$country}' {$extraattributes} />";
     }
     return $html;
 }
@@ -3451,7 +4212,7 @@ function incident_get_next_target($incidentid)
 
     if (mysql_num_rows($result) > 0)
     {
-        $upd=mysql_fetch_object($result);
+        $upd = mysql_fetch_object($result);
 
         switch ($upd->sla)
         {
@@ -3464,12 +4225,12 @@ function incident_get_next_target($incidentid)
             case 'closed': $target->type='opened'; break;
         }
 
-        $target->since=calculate_incident_working_time($incidentid,$upd->timestamp,$now);
+        $target->since = calculate_incident_working_time($incidentid,$upd->timestamp,$now);
     }
     else
     {
-        $target->type='regularcontact';
-        $target->since=0;
+        $target->type = 'regularcontact';
+        $target->since = 0;
     }
     return $target;
 }
@@ -3548,8 +4309,8 @@ function incident_get_next_review($incidentid)
 
     if (mysql_num_rows($result) > 0)
     {
-        $upd=mysql_fetch_object($result);
-        $timesincereview=floor(($now-($upd->timestamp))/60);
+        $upd = mysql_fetch_object($result);
+        $timesincereview = floor(($now - ($upd->timestamp)) / 60);
     }
     return $timesincereview;
 }
@@ -3583,8 +4344,15 @@ function strip_anchor_tags ($string)
 function mysql2date($mysqldate)
 {
     // for the zero/blank case, return 0
-    if (empty($mysqldate)) return 0;
-    if ($mysqldate=='0000-00-00 00:00:00' OR $mysqldate=='0000-00-00') return 0;
+    if (empty($mysqldate))
+    {
+        return 0;
+    }
+
+    if ($mysqldate=='0000-00-00 00:00:00' OR $mysqldate=='0000-00-00')
+    {
+        return 0;
+    }
 
     // Takes a MYSQL date and converts it to a proper PHP date
     $day = substr($mysqldate,8,2);
@@ -3598,7 +4366,10 @@ function mysql2date($mysqldate)
         $second = substr($mysqldate,17,2);
         $phpdate= mktime($hour,$minute,$second,$month,$day,$year);
     }
-    else $phpdate= mktime(0,0,0,$month,$day,$year);
+    else
+    {
+        $phpdate= mktime(0, 0, 0, $month, $day, $year);
+    }
 
     return $phpdate;
 }
@@ -3634,7 +4405,7 @@ function mysqlts2date($mysqldate)
         $minute = substr($mysqldate,14,2);
         $second = substr($mysqldate,17,2);
     }
-    $phpdate= mktime($hour,$minute,$second,$month,$day,$year);
+    $phpdate = mktime($hour,$minute,$second,$month,$day,$year);
     return $phpdate;
 }
 
@@ -4959,13 +5730,31 @@ function show_links($origtab, $colref, $level=0, $parentlinktype='', $direction=
                         if (mysql_error()) trigger_error(mysql_error(),E_USER_WARNING);
                         while ($record = mysql_fetch_object($recresult))
                         {
-                            if ($link->direction=='bi') $html .= "<strong>{$linktype->name}</strong> ";
-                            elseif ($direction=='lr') $html .= "<strong>{$linktype->lrname}</strong> ";
-                            elseif ($direction=='rl') $html .= "<strong>{$linktype->rlname}</strong> ";
-                            else $html = "Whoops";
+                            if ($link->direction == 'bi')
+                            {
+                                $html .= "<strong>{$linktype->name}</strong> ";
+                            }
+                            elseif ($direction == 'lr')
+                            {
+                                $html .= "<strong>{$linktype->lrname}</strong> ";
+                            }
+                            elseif ($direction == 'rl')
+                            {
+                                $html .= "<strong>{$linktype->rlname}</strong> ";
+                            }
+                            else
+                            {
+                                $html = "Whoops"; // FIXME i18n
+                            }
 
-                            if ($direction=='lr') $currentlinkref=$link->linkcolref;
-                            elseif ($direction=='rl') $currentlinkref=$link->origcolref;
+                            if ($direction == 'lr')
+                            {
+                                $currentlinkref = $link->linkcolref;
+                            }
+                            elseif ($direction == 'rl')
+                            {
+                                $currentlinkref = $link->origcolref;
+                            }
 
                             $viewurl = str_replace('%id%',$currentlinkref,$linktype->viewurl);
 
@@ -4996,17 +5785,24 @@ function show_create_links($table, $ref)
     $sql = "SELECT * FROM `{$dbLinkTypes}` WHERE origtab='$table' OR linktab='$table' ";
     $result = mysql_query($sql);
     if (mysql_error()) trigger_error(mysql_error(),E_USER_WARNING);
-    $numlinktypes=mysql_num_rows($result);
-    $rowcount=1;
+    $numlinktypes = mysql_num_rows($result);
+    $rowcount = 1;
     while ($linktype = mysql_fetch_object($result))
     {
-        if ($linktype->origtab == $table AND $linktype->linktab != $table) $html .= "<a href='add_link.php?origtab=tasks&amp;origref={$ref}&amp;linktype={$linktype->id}'>{$linktype->lrname}</a>";
-        elseif ($linktype->origtab != $table AND $linktype->linktab == $table) $html .= "<a href='add_link.php?origtab=tasks&amp;origref={$ref}&amp;linktype={$linktype->id}'>{$linktype->rlname}</a>";
+        if ($linktype->origtab == $table AND $linktype->linktab != $table)
+        {
+            $html .= "<a href='add_link.php?origtab=tasks&amp;origref={$ref}&amp;linktype={$linktype->id}'>{$linktype->lrname}</a>";
+        }
+        elseif ($linktype->origtab != $table AND $linktype->linktab == $table)
+        {
+            $html .= "<a href='add_link.php?origtab=tasks&amp;origref={$ref}&amp;linktype={$linktype->id}'>{$linktype->rlname}</a>";
+        }
         else
         {
             $html .= "<a href='add_link.php?origtab=tasks&amp;origref={$ref}&amp;linktype={$linktype->id}'>{$linktype->lrname}</a> | ";
             $html .= "<a href='add_link.php?origtab=tasks&amp;origref={$ref}&amp;linktype={$linktype->id}&amp;dir=rl'>{$linktype->rlname}</a>";
         }
+
         if ($rowcount < $numlinktypes) $html .= " | ";
         $rowcount++;
     }
@@ -5127,7 +5923,7 @@ function draw_chart_image($type, $width, $height, $data, $legends, $title='', $u
             //3D effect.
             $legendY = 80 - ($countdata * 10);
             if ($legendY < 10) $legendY = 10;
-            for($z=1;$z<=$sz;$z++)
+            for ($z=1; $z <= $sz; $z++)
             {
                 for($i=0;$i<$countdata;$i++)
                 {
@@ -5137,14 +5933,24 @@ function draw_chart_image($type, $width, $height, $data, $legends, $title='', $u
             }
             imagerectangle($img, 250, $legendY-5, 470, $legendY+($countdata*15), $black);
             //Top pie.
-            for($i=0;$i<$countdata;$i++)
+            for ($i = 0; $i < $countdata; $i++)
             {
                 imagefilledarc($img,$cx,$cy,$sx,$sy,$angle_sum[$i-1] ,$angle_sum[$i], $colors[$i], IMG_ARC_PIE);
                 imagefilledrectangle($img, 255, ($legendY+1), 264, ($legendY+9), $colors[$i]);
                 // Legend
-                if ($unit=='seconds') $data[$i]=format_seconds($data[$i]);
-                if ($use_ttf) imagettftext($img, 8, 0, 270, ($legendY+9), $black, $fontfile, substr(urldecode($legends[$i]),0,27)." ({$data[$i]})");
-                else imagestring($img,2, 270, ($legendY-1), substr(urldecode($legends[$i]),0,27)." ({$data[$i]})", $black);
+                if ($unit == 'seconds')
+                {
+                    $data[$i]=format_seconds($data[$i]);
+                }
+
+                if ($use_ttf)
+                {
+                    imagettftext($img, 8, 0, 270, ($legendY+9), $black, $fontfile, substr(urldecode($legends[$i]),0,27)." ({$data[$i]})");
+                }
+                else
+                {
+                    imagestring($img,2, 270, ($legendY-1), substr(urldecode($legends[$i]),0,27)." ({$data[$i]})", $black);
+                }
                 // imagearc($img,$cx,$cy,$sx,$sy,$angle_sum[$i1] ,$angle_sum[$i], $blue);
                 $legendY+=15;
             }
@@ -5165,6 +5971,7 @@ function draw_chart_image($type, $width, $height, $data, $legends, $title='', $u
                 imageline($img, $i*$colwidth, 0, $i*$colwidth, $width, $grey);
                 imageline($img, 2, $i*$rowheight, $width-2, $i*$rowheight, $grey);
             }
+
             for ($i=0; $i<$countdata; $i++)
             {
                 $dataheight=($height-($data[$i] / $maxdata) * $height);
@@ -5184,12 +5991,14 @@ function draw_chart_image($type, $width, $height, $data, $legends, $title='', $u
             {
                 if ($dataval > $maxdata) $maxdata = $dataval;
             }
+
             imagerectangle($img, $width-1, $height-1, 0, 0, $black);
             for ($i=1; $i<$countdata; $i++)
             {
                 imageline($img, $i*$colwidth, 0, $i*$colwidth, $width, $grey);
                 imageline($img, 2, $i*$rowheight, $width-2, $i*$rowheight, $grey);
             }
+
             for ($i=0; $i<$countdata; $i++)
             {
                 $dataheight=($height-($data[$i] / $maxdata) * $height);
@@ -5306,8 +6115,8 @@ function replace_tags($type, $id, $tagstring)
     if (mysql_error()) trigger_error("MySQL Query Error ".mysql_error(), E_USER_ERROR);
 
     // Change seperators to spaces
-    $seperators=array(', ',';',',');
-    $tags=str_replace($seperators, ' ', trim($tagstring));
+    $seperators = array(', ',';',',');
+    $tags = str_replace($seperators, ' ', trim($tagstring));
     $tag_array = explode(" ", $tags);
     foreach ($tag_array AS $tag)
     {
@@ -5367,8 +6176,13 @@ function list_tags($recordid, $type, $html=TRUE)
     $result = mysql_query($sql);
     if (mysql_error()) trigger_error(mysql_error(),E_USER_ERROR);
     $numtags = mysql_num_rows($result);
-    if ($html AND $numtags > 0) $str .= "<div class='taglist'>";
-    $count=1;
+
+    if ($html AND $numtags > 0)
+    {
+        $str .= "<div class='taglist'>";
+    }
+
+    $count = 1;
     while ($tags = mysql_fetch_object($result))
     {
         if ($html)
@@ -5380,7 +6194,11 @@ function list_tags($recordid, $type, $html=TRUE)
             }
             $str .= "</a>";
         }
-        else $str .= $tags->name;
+        else
+        {
+            $str .= $tags->name;
+        }
+
         if ($count < $numtags) $str .= ", ";
         if ($html AND !($count%5)) $str .= "<br />\n";
         $count++;
@@ -5401,7 +6219,7 @@ function list_tag_icons($recordid, $type)
     $sql = "SELECT t.name, t.tagid FROM `{$dbSetTags}` AS st, `{$dbTags}` AS t WHERE st.tagid = t.tagid AND ";
     $sql .= "st.type = '$type' AND st.id = '$recordid' AND (";
     $counticons = count($CONFIG['tag_icons']);
-    $count=1;
+    $count = 1;
     foreach ($CONFIG['tag_icons'] AS $icon)
     {
         $sql .= "t.name = '{$icon}'";
@@ -5468,8 +6286,14 @@ function show_tag_cloud($orderby="name", $showcount=FALSE)
             if (array_key_exists($obj->name, $CONFIG['tag_icons']))
             {
                 $html .= "{$obj->name}&nbsp;<img src='images/icons/sit/";
-                if ($size <= 200) $html .= "16x16";
-                else $html .= "32x32";
+                if ($size <= 200)
+                {
+                    $html .= "16x16";
+                }
+                else
+                {
+                    $html .= "32x32";
+                }
                 $html .= "/{$CONFIG['tag_icons'][$obj->name]}.png' style='border:0px;' alt='' />";
             }
             else $html .= $obj->name;
@@ -5527,17 +6351,31 @@ function ansort($x,$var,$cmp='strcasecmp')
 {
     // Numeric descending sort of multi array
     if ( is_string($var) ) $var = "'$var'";
-    if ($cmp=='numeric') uasort($x, create_function('$a,$b', 'return '.'( $a['.$var.'] < $b['.$var.']);'));
-    else uasort($x, create_function('$a,$b', 'return '.$cmp.'( $a['.$var.'],$b['.$var.']);'));
+
+    if ($cmp=='numeric')
+    {
+        uasort($x, create_function('$a,$b', 'return '.'( $a['.$var.'] < $b['.$var.']);'));
+    }
+    else
+    {
+        uasort($x, create_function('$a,$b', 'return '.$cmp.'( $a['.$var.'],$b['.$var.']);'));
+    }
     return $x;
 }
 
 
 function array_remove_duplicate($array, $field)
 {
-    foreach ($array as $sub) $cmp[] = $sub[$field];
+    foreach ($array as $sub)
+    {
+        $cmp[] = $sub[$field];
+    }
+
     $unique = array_unique($cmp);
-    foreach ($unique as $k => $rien) $new[] = $array[$k];
+    foreach ($unique as $k => $rien)
+    {
+        $new[] = $array[$k];
+    }
     return $new;
 }
 
@@ -5565,7 +6403,8 @@ function string_find_all($haystack, $needle, $limit=0)
 {
     $positions = array();
     $currentoffset = 0;
-    $count=0;
+
+    $count = 0;
     while (($pos = stripos($haystack, $needle, $offset)) !==false && ($count < $limit || $limit == 0))
     {
         $positions[] = $pos;
@@ -5578,7 +6417,11 @@ function string_find_all($haystack, $needle, $limit=0)
 // Implode assocative array
 function implode_assoc($glue1, $glue2, $array)
 {
-    foreach ($array as $key => $val) $array2[] = $key.$glue1.$val;
+    foreach ($array as $key => $val)
+    {
+        $array2[] = $key.$glue1.$val;
+    }
+
     return implode($glue2, $array2);
 }
 
@@ -5592,7 +6435,9 @@ function implode_assoc($glue1, $glue2, $array)
 function time_dropdown($name, $time='')
 {
     if ($time)
+    {
         $time = explode(':', $time);
+    }
 
     $html = "<select name='$name'>\n";
     $html .= "<option></option>";
@@ -5604,13 +6449,19 @@ function time_dropdown($name, $time='')
             $mins = str_pad($mins, 2, "0", STR_PAD_RIGHT);
 
             if ($time AND $time[0] == $hours AND $time[1] == $mins)
+            {
                 $html .= "<option selected='selected' value='$hours:$mins'>$hours:$mins</option>";
+            }
             else
             {
                 if ($time AND $time[0] == $hours AND $time[1] < $mins AND $time[1] > ($mins - 15))
+                {
                     $html .= "<option selected='selected'           value='$time[0]:$time[1]'>$time[0]:$time[1]</option>\n";
+                }
                 else
+                {
                     $html .= "<option value='$hours:$mins'>$hours:$mins</option>\n";
+                }
             }
         }
     }
@@ -5681,9 +6532,13 @@ function user_online($user)
     $result = mysql_query($sql);
     $users = mysql_fetch_object($result);
     if (($now - mysql2date($users->lastseen) < (60 * 30)))
+    {
         return "<img src='{$CONFIG['application_webpath']}images/icons/{$iconset}/16x16/online.png' width='16' height='16' alt=\"{$strOnline}\" /> ";
+    }
     else
+    {
         return "<img src='{$CONFIG['application_webpath']}images/icons/{$iconset}/16x16/offline.png' width='16' height='16' alt=\"{$strOffline}\" /> ";
+    }
 }
 
 /**
@@ -5697,7 +6552,7 @@ function show_form_errors($formname)
     {
         foreach ($_SESSION['formerrors'][$formname] as $error)
         {
-            $html.= "<p class='error'>$error</p>";
+            $html .= "<p class='error'>$error</p>";
         }
     }
     return $html;
@@ -5740,14 +6595,27 @@ function truncate_string($text, $maxlength=255, $html=TRUE)
     if (strlen($text) > $maxlength)
     {
         // Leave space for ellipses
-        if ($html == TRUE) $maxlength -= 1;
-        else $maxlength -= 3;
+        if ($html == TRUE)
+        {
+            $maxlength -= 1;
+        }
+        else
+        {
+            $maxlength -= 3;
+        }
+
         $text = utf8_encode(wordwrap(utf8_decode($text), $maxlength, '^\CUT/^', 1));
         $parts = explode('^\CUT/^', $text);
         $text = $parts[0];
 
-        if ($html == TRUE) $text .= '&hellip;';
-        else $text .= '...';
+        if ($html == TRUE)
+        {
+            $text .= '&hellip;';
+        }
+        else
+        {
+            $text .= '...';
+        }
     }
     return $text;
 }
@@ -5803,10 +6671,14 @@ if (is_array($CONFIG['plugins']))
     foreach ($CONFIG['plugins'] AS $plugin)
     {
         // Remove any dots
-        $plugin=str_replace('.','',$plugin);
+        $plugin = str_replace('.','',$plugin);
         // Remove any slashes
-        $plugin=str_replace('/','',$plugin);
-        if ($plugin!='') include ("{$CONFIG['application_fspath']}/plugins/{$plugin}.php");
+
+        $plugin = str_replace('/','',$plugin);
+        if ($plugin!='')
+        {
+            include("{$CONFIG['application_fspath']}/plugins/{$plugin}.php");
+        }
     }
 }
 
@@ -5832,13 +6704,28 @@ function plugin_do($context, $optparams=FALSE)
         foreach ($PLUGINACTIONS[$context] AS $action)
         {
             // Call Variable function (function with variable name)
-            if ($optparams) $rtn = $action($optparams);
-            else $rtn = $action();
+            if ($optparams)
+            {
+                $rtn = $action($optparams);
+            }
+            else
+            {
+                $rtn = $action();
+            }
 
             // Append return value
-            if (is_array($rtn) AND is_array($rtnvalue)) array_push($rtnvalue, $rtn);
-            elseif (is_array($rtn) AND !is_array($rtnvalue)) { $rtnvalue=array(); array_push($rtnvalue, $rtn); }
-            else $rtnvalue .= $rtn;
+            if (is_array($rtn) AND is_array($rtnvalue))
+            {
+                array_push($rtnvalue, $rtn);
+            }
+            elseif (is_array($rtn) AND !is_array($rtnvalue))
+            {
+                $rtnvalue=array(); array_push($rtnvalue, $rtn);
+            }
+            else
+            {
+                $rtnvalue .= $rtn;
+            }
         }
     }
     return $rtnvalue;
