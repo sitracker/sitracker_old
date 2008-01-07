@@ -84,9 +84,12 @@ if (empty($_POST['process']))
         echo "<select name='software' multiple='multiple' size='7'>";
         while ($software = mysql_fetch_object($listresult))
         {
-            if (is_array($expertise)) { if (!in_array($software->id,$expertise))
+            if (is_array($expertise))
             {
-                echo "<option value='{$software->id}'>$software->name</option>\n";  }
+                if (!in_array($software->id,$expertise))
+                {
+                    echo "<option value='{$software->id}'>$software->name</option>\n";
+                }
             }
             else
             {

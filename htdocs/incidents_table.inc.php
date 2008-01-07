@@ -213,9 +213,9 @@ while ($incidents = mysql_fetch_array($result))
         $epathurl = $epath[$escalationpath]['home_url'];
         $externalid = "<a href=\"{$epathurl}\" title=\"{$epath[$escalationpath]['url_title']}\">{$epath[$escalationpath]['name']}</a>";
     }
-    elseif
+    elseif (empty($incidents['escalationpath']) AND !empty($incidents['externalid']))
     {
-        (empty($incidents['escalationpath']) AND !empty($incidents['externalid'])) $externalid = format_external_id($incidents['externalid']);
+        $externalid = format_external_id($incidents['externalid']);
     }
 
     echo "<tr class='{$class}'>";
