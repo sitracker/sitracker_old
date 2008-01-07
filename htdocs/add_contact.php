@@ -63,7 +63,7 @@ if (empty($submit) OR !empty($_SESSION['formerrors']['add_contact']))
     echo "/></td>\n";
 
     echo "<td align='center'>{$strSurname}<br /><input maxlength='100' name='surname' size='20' title=\"{$strSurname}\"";
-    if($_SESSION['formdata']['add_contact']['surname'] != '')
+    if ($_SESSION['formdata']['add_contact']['surname'] != '')
     {
         echo "value='{$_SESSION['formdata']['add_contact']['surname']}'";
     }
@@ -71,12 +71,11 @@ if (empty($submit) OR !empty($_SESSION['formerrors']['add_contact']))
     echo "</table>\n</td></tr>\n";
 
     echo "<tr><th>{$strJobTitle}</th><td><input maxlength='255' name='jobtitle' size='35' title='e.g. Purchasing Manager'";
-    if($_SESSION['formdata']['add_contact']['jobtitle'] != '')
+    if ($_SESSION['formdata']['add_contact']['jobtitle'] != '')
     {
         echo "value='{$_SESSION['formdata']['add_contact']['jobtitle']}'";
     }
     echo " /></td></tr>\n";
-    //FIXME do this one
     echo "<tr><th>{$strSite} <sup class='red'>*</sup></th><td>";
     echo site_drop_down('siteid',$siteid)."</td></tr>\n";
     // KMH REMOVED 12/12/07, form fails as dojo doesn't have the siteID
@@ -96,7 +95,6 @@ if (empty($submit) OR !empty($_SESSION['formerrors']['add_contact']))
     }
     echo "/> ";
 
-    //FIXME do this one
     echo "<label>";
     html_checkbox('dataprotection_email', 'No');
     echo "{$strEmail} {$strDataProtection}</label>";
@@ -109,27 +107,25 @@ if (empty($submit) OR !empty($_SESSION['formerrors']['add_contact']))
     }
     echo "/> ";
 
-    //FIXME do this one
     echo "<label>";
     html_checkbox('dataprotection_phone', 'No');
     echo "{$strTelephone} {$strDataProtection}</label>";
     echo "</td></tr>\n";
 
     echo "<tr><th>{$strMobile}</th><td><input maxlength='100' name='mobile' size='35'";
-    if($_SESSION['formdata']['add_contact']['mobile'] != '')
+    if ($_SESSION['formdata']['add_contact']['mobile'] != '')
     {
         echo "value='{$_SESSION['formdata']['add_contact']['mobile']}'";
     }
     echo "/></td></tr>\n";
 
     echo "<tr><th>{$strFax}</th><td><input maxlength='50' name='fax' size='35'";
-    if($_SESSION['formdata']['add_contact']['fax'])
+    if ($_SESSION['formdata']['add_contact']['fax'])
     {
         echo "value='{$_SESSION['formdata']['add_contact']['fax']}'";
     }
     echo "/></td></tr>\n";
 
-    //FIXME all of these
     echo "<tr><th>{$strAddress}</th><td><label>";
     html_checkbox('dataprotection_address', 'No');
     echo " {$strAddress} {$strDataProtection}</label></td></tr>\n";
