@@ -14,9 +14,6 @@ $strClose = 'Schließen';
 $strClosed = 'Geschlossen';
 
 $strDays = 'Tage';
-
-$strdays = 'tage';
-
 $strDefault = 'Standard';
 $strDelete = 'Löschen';
 $strDescription = 'Beschreibung';
@@ -24,6 +21,7 @@ $strDescription = 'Beschreibung';
 $strEdit = 'Bearbeiten';
 
 $strForgottenDetails = 'Passwort vergessen?';
+$strFriday = 'Freitag';
 $strFrom = 'Von';
 
 $strGo = 'OK';
@@ -35,6 +33,7 @@ $strLogout = 'Neu einloggen';
 
 $strManageUsers = 'Benutzer verwalten';
 $strMessage = 'Meldung';
+$strMonday = 'Montag';
 
 $strNo = 'Nein';
 $strNone = 'Keine';
@@ -52,20 +51,26 @@ $strRealName = 'Vollständiger Name';
 $strRemove = 'Entfernen';
 $strReset = 'Zurücksetzen';
 
+$strSaturday = 'Samstag';
 $strSave = 'Speichern';
 $strSearch = 'Suche';
 $strShowAll = 'Alles anzeigen';
 $strStatus = 'Status';
 $strSummary = 'Zusammenfassung';
+$strSunday = 'Sonntag';
 
+$strThursday = 'Donnerstag';
 $strTo = 'An';
 $strTotal = 'Insgesamt';
+$strTuesday = 'Dienstag';
 $strType = 'Typ';
 
 $strUnknown = 'Unbekannt';
 $strUsername = 'Benutzername';
 
 $strView = 'Ansicht';
+
+$strWednesday = 'Mittwoch';
 
 $strYes = 'Ja';
 ?>
