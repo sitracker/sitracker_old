@@ -36,9 +36,10 @@ echo "<table align='center' class='vertical'>";
 $sql="SELECT * FROM `{$dbSites}` WHERE id='$id' ";
 $siteresult = mysql_query($sql);
 if (mysql_error()) trigger_error(mysql_error(),E_USER_WARNING);
-while ($siterow=mysql_fetch_array($siteresult))
+while ($siterow = mysql_fetch_array($siteresult))
 {
-    echo "<tr><th>{$strSite}:</th><td><h3><img src='{$CONFIG['application_webpath']}images/icons/{$iconset}/32x32/site.png' width='32' height='32' alt='' /> ".$siterow['name']."</h3>";
+    echo "<tr><th>{$strSite}:</th><td>";
+    echo "<h3><img src='{$CONFIG['application_webpath']}images/icons/{$iconset}/32x32/site.png' width='32' height='32' alt='' /> ".$siterow['name']."</h3>";
     echo "</td></tr>";
     if ($siterow['active']=='false')
     {

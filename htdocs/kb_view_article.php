@@ -31,7 +31,7 @@ if (user_permission($sit[2],$permission))
     include ('htmlheader.inc.php');
 
     echo "<div id='kbarticle'>";
-    echo "<table summary='Knowledge Base Article'><tr><td>";
+    echo "<table summary='{$strKnowledgeBaseArticle}'><tr><td>";
 
     $sql = "SELECT * FROM `{$dbKBArticles}` WHERE docid='{$id}' LIMIT 1";
     $result = mysql_query($sql);
@@ -66,9 +66,9 @@ if (user_permission($sit[2],$permission))
         switch ($kbcontent->distribution)
         {
             case 'private':
-                echo "<div style='color: blue; background: #FFD8DE; background-image:url({$CONFIG['application_webpath']}images/icons/{$iconset}/16x16/private.png); background-repeat: no-repeat; background-position: top right;' title='This paragraph is marked PRIVATE'>";
+                echo "<div style='color: blue; background: #FFD8DE; background-image:url({$CONFIG['application_webpath']}images/icons/{$iconset}/16x16/private.png); background-repeat: no-repeat; background-position: top right;' title='{$strParagraphMarkedPrivate}'>";
                 break;
-            case 'restricted': echo "<div style='color: red; background: #FFD8DE; background: #FFD8DE; background-image:url({$CONFIG['application_webpath']}images/icons/{$iconset}/16x16/private.png); background-repeat: no-repeat; background-position: top right;' title='This paragraph is marked RESTRICTED'>";  break;
+            case 'restricted': echo "<div style='color: red; background: #FFD8DE; background: #FFD8DE; background-image:url({$CONFIG['application_webpath']}images/icons/{$iconset}/16x16/private.png); background-repeat: no-repeat; background-position: top right;' title='{$strParagraphMarkedRestricted}'>";  break;
             default: echo "<div>";
         }
         echo "<{$kbcontent->headerstyle}>{$kbcontent->header}</{$kbcontent->headerstyle}>\n";
@@ -105,16 +105,19 @@ if (user_permission($sit[2],$permission))
     echo "<hr />";
     echo $CONFIG['kb_disclaimer_html'];
     echo "<dl><dd>";
-    echo "Document ID: {$CONFIG['kb_id_prefix']}".leading_zero(4,$kbarticle->docid)."<br />";
+    echo sprintf($strDocumentIDX, $CONFIG['kb_id_prefix'], leading_zero(4,$kbarticle->docid))."<br />";
     $pubdate=mysql2date($kbarticle->published);
-    if ($pubdate > 0) echo "Published on: ".date($CONFIG['dateformat_date'],$pubdate) ."<br />";
+    if ($pubdate > 0)
+    {
+        echo sprintf($strPublishedOnX, date($CONFIG['dateformat_date'],$pubdate))."<br />";
+    }
 
     if (is_array($author))
     {
         $author=array_unique($author);
         $countauthors=count($author);
         $count=1;
-        if ($countauthors > 1) echo "Authors: "; // FIXME i18n Authors
+        if ($countauthors > 1) echo "{$strAuthors}: ";
         else echo "{$strAuthor}: ";
         foreach ($author AS $authorid)
         {
@@ -125,7 +128,7 @@ if (user_permission($sit[2],$permission))
     }
     else
     {
-        echo "Author: {$author}";
+        echo "{$strAuthor}: {$author}";
     }
 
     echo "<br />";

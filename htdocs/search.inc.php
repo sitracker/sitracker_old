@@ -470,8 +470,6 @@ if (!empty($search_string))
 }
 if ($searchmode != 'related')
 {
-    // FIXME opensearch plugin
-    //echo "<p>Firefox 2 and IE 7 users: You can <a href=\"javascript:window.external.AddSearchProvider('{$CONFIG['application_uriprefix']}{$CONFIG['application_webpath']}opensearch.php')\">install this search plugin</a> to make searching easier.</p>";
     $link = "<a href=\"javascript:window.external.AddSearchProvider('{$CONFIG['application_uriprefix']}{$CONFIG['application_webpath']}opensearch.php')\">";
     echo "<p>".sprintf($strInstallOpensearch, $link)."</p>";
 }

@@ -9,8 +9,6 @@
 //
 // Author: Paul Heaney <paulheaney[at]users.sourceforge.net>
 
-// FIXME i18n whole page
-
 @include ('set_include_path.inc.php');
 $permission = 7; // Edit Incidents
 
@@ -36,10 +34,10 @@ $action = cleanvar($_REQUEST['action']);
             if (mysql_num_rows($result) >= 1)
             {
                 echo "<form action='".$_SERVER['PHP_SELF']."?action=change_external_esc' method='post'>";
-                // FIXME i18n This will change
-                echo "<p align='center'>This will change the external engineer details for all open incidents for the external engineer you select.</p>";
+
+                echo "<p align='center'>{$strChangeExternalDetailsOnAllOpenForSelected}</p>";
                 echo "<table class='vertical'>";
-                echo "<tr><th>{$strExternalEmail} (to change):</th>";  // FIXME 18n to change
+                echo "<tr><th>{$strExternalEmail} {$strToChangeBrackets}:</th>";
                 echo "<td><select name='oldexternalemail'>";
                 while ($row = mysql_fetch_array($result))
                 {
@@ -48,12 +46,18 @@ $action = cleanvar($_REQUEST['action']);
                 }
                 echo "</select></td></tr>";
                 echo "<tr><th>{$strExternalEngineersName}:</th>";
-                echo "<td><input maxlength='80' name='externalengineer' size='30' type='text' value='' /></td></tr>";
+                echo "<td><input maxlength='80' name='externalengineer' size='30' type='text' value='' />";
+                echo "</td></tr>";
                 echo "<tr><th>{$strExternalEmail}:</th>";
-                echo "<td><input maxlength='255' name='externalemail' size='30' type='text' value='' /></td></tr>";
-                echo "</table><p align='center'><input name='submit' type='submit' value='{$strSave}' /></p></form>";
+                echo "<td><input maxlength='255' name='externalemail' size='30' type='text' value='' />";
+                echo "</td></tr>";
+                echo "</table><p align='center'><input name='submit' type='submit' value='{$strSave}' />";
+                echo "</p></form>";
             }
-            else echo "<p align='center'>There are currently no escalated incidents to modify</p>";
+            else
+            {
+                echo "<p align='center'>{$strCurrentlyNoOpenEscalatedIncidentsToModify}</p>";
+            }
         break;
         case 'change_external_esc': //omdify the extenal escalation info
 /*
@@ -74,8 +78,8 @@ External email:  -&gt; <b>foo@pheaney.co.uk</b>
 
             while ($row = mysql_fetch_array($result))
             {
-                $bodytext = "External Engineer: ".$old_external_engineer." -&gt; [b]". $new_extenal_engineer."[/b]\n";
-                $bodytext .= "External email: ".$old_email_address." -&gt; [b]".$new_external_email."[/b]\n<hr>";
+                $bodytext = "{$strExternalEngineer}: ".$old_external_engineer." -&gt; [b]". $new_extenal_engineer."[/b]\n";
+                $bodytext .= "{$strExternalEmail}: ".$old_email_address." -&gt; [b]".$new_external_email."[/b]\n<hr>";
                 $sql  = "INSERT INTO `{$dbUpdates}` (incidentid, userid, type, bodytext, timestamp) ";
                 $sql .= "VALUES ('".$row['id']."', '".$sit[2]."', 'editing', '$bodytext', '".time()."')";
                 $result = mysql_query($sql);
@@ -90,7 +94,7 @@ External email:  -&gt; <b>foo@pheaney.co.uk</b>
             html_redirect("main.php");
             break;
         default:
-            echo '<h1>No action specified</h1>';
+            echo '<h1>{$strNoActionSpecified}</h1>';
             break;
     }
 

@@ -36,12 +36,25 @@ if (!$sent)
 
     $waiting=FALSE;
     echo "<h2><img src='{$CONFIG['application_webpath']}images/icons/{$iconset}/32x32/holiday.png' width='32' height='32' alt='' /> ";
-    if ($user=='all') echo "All";
-    else echo user_realname($user,TRUE);
+    if ($user == 'all')
+    {
+        echo $strAll;
+    }
+    else
+    {
+        echo user_realname($user,TRUE);
+    }
     echo " - {$strHolidayRequests}</h2>";
 
-    if ($approver==TRUE AND $mode!='approval' AND $user==$sit[2]) echo "<p align='center'><a href='holiday_request.php?user=all&amp;mode=approval'>Approve holiday requests</a></p>";
-    if ($approver==TRUE AND $mode=='approval' AND $user!='all') echo "<p align='center'><a href='holiday_request.php?user=all&amp;mode=approval'>{$strShowAll}</a></p>";
+    if ($approver==TRUE AND $mode!='approval' AND $user==$sit[2])
+    {
+        echo "<p align='center'><a href='holiday_request.php?user=all&amp;mode=approval'>{$strApproveHolidays}</a></p>";
+    }
+
+    if ($approver==TRUE AND $mode=='approval' AND $user!='all')
+    {
+        echo "<p align='center'><a href='holiday_request.php?user=all&amp;mode=approval'>{$strShowAll}</a></p>";
+    }
 
     $sql = "SELECT * FROM `{$dbHolidays}` WHERE approved=0 ";
     if (!empty($type)) $sql .= "AND type='$type' ";
@@ -54,10 +67,19 @@ if (!$sent)
     {
         echo "<table align='center'>";
         echo "<tr>";
-        if ($user=='all' && $approver==TRUE) echo "<th>{$strName}</th>";
+        if ($user == 'all' && $approver == TRUE)
+        {
+            echo "<th>{$strName}</th>";
+        }
         echo "<th>{$strDate}</th><th>{$strLength}</th><th>{$strType}</th>";
-        if ($approver AND $mode=='approval') echo "<th>{$strOperation}</th><th>Group Members Away</th>";  // FIXME i18n group members away
-        else echo "<th>{$strStatus}</th>";
+        if ($approver AND $mode == 'approval')
+        {
+            echo "<th>{$strOperation}</th><th>{$strGroupMembersAway}</th>";
+        }
+        else
+        {
+            echo "<th>{$strStatus}</th>";
+        }
 
         echo "</tr>";
         while ($holiday=mysql_fetch_object($result))
@@ -71,18 +93,18 @@ if (!$sent)
             }
             echo "<td>".date('l j F Y', $holiday->startdate)."</td>";
             echo "<td>";
-            if ($holiday->length=='am') echo "{$strMorning}";
-            if ($holiday->length=='pm') echo "{$strAfternoon}";
-            if ($holiday->length=='day') echo "Full Day"; // FIXME i18n Full Day
+            if ($holiday->length=='am') echo $strMorning;
+            if ($holiday->length=='pm') echo $strAfternoon;
+            if ($holiday->length=='day') echo $strFullDay;
             echo "</td>";
             echo "<td>".holiday_type($holiday->type)."</td>";
             if ($approver==TRUE)
             {
-                if ($sit[2]!=$holiday->userid AND $mode=='approval')
+                if ($sit[2] != $holiday->userid AND $mode == 'approval')
                 {
                     echo "<td>";
-                    $approvetext=$strApprove;
-                    if ($holiday->type==2) $approvetext='Acknowledge'; // FIXME i18n Acknowledge
+                    $approvetext = $strApprove;
+                    if ($holiday->type == 2) $approvetext = $strAcknowledge;
                     echo "<a href=\"holiday_approve.php?approve=TRUE&amp;user={$holiday->userid}&amp;view={$user}&amp;startdate={$holiday->startdate}&amp;type={$holiday->type}&amp;length={$holiday->length}\">{$approvetext}</a> | ";
                     echo "<a href=\"holiday_approve.php?approve=FALSE&amp;user={$holiday->userid}&amp;view={$user}&amp;startdate={$holiday->startdate}&amp;type={$holiday->type}&amp;length={$holiday->length}\">{$strDecline}</a>";
                     if ($holiday->type==1) echo " | <a href=\"holiday_approve.php?approve=FREE&amp;user={$holiday->userid}&amp;view={$user}&amp;startdate={$holiday->startdate}&amp;type={$holiday->type}&amp;length={$holiday->length}\">Free Leave</a>"; // FIMXE i18n free leave
@@ -91,11 +113,14 @@ if (!$sent)
                 else
                 {
                     echo "<td>";
-                    // FIXME i18n request sent to
-                    if ($holiday->approvedby > 0) echo "Request sent to ".user_realname($holiday->approvedby,TRUE);
+
+                    if ($holiday->approvedby > 0)
+                    {
+                        echo sprintf($strRequestSentToX, user_realname($holiday->approvedby,TRUE));
+                    }
                     else
                     {
-                        echo "Request not sent";
+                        echo $strRequestNotSent;
                         $waiting=TRUE;
                     }
                     echo "</td>";
@@ -138,29 +163,35 @@ if (!$sent)
                 }
                 echo "</select>";
                 echo "</p>";
-                // FIXME i18n Send to
+
                 // Force resend if there are no new additions to be requested
                 if ($waiting==FALSE AND $action!='resend') $action='resend';
                 echo "<input type='hidden' name='action' value='$action' />";
-                echo "<p align='center'>Send comments with your request: (or leave blank)<br />";
+                echo "<p align='center'>{$strRequestSentComments}<br />";
                 echo "<textarea name='memo' rows='3' cols='40'></textarea>";
                 echo "<input type='hidden' name='user' value='$user' />";
                 echo "<input type='hidden' name='sent' value='true' /><br /><br />";
-                echo "<input type='submit' name='submit' value='Send Request' />";
+                echo "<input type='submit' name='submit' value='{$strSendRequest}' />";
                 echo "</p>";
                 echo "</form>";
             }
-            else echo "<p class='error'>There are no users that can approve your request, only users with appropiate permissions can approve holiday requests and you cannot approve your own requests.</p>";  // FIXME i18n para
+            else
+            {
+                echo "<p class='error'>{$strRequestNoUsersToApprovePermissions}</p>";
+            }
         }
     }
     else
     {
-        echo "<p class='info'>There are currently no holidays waiting for your approval</p>";
+        echo "<p class='info'>{$strRequestNoHolidaysAwaitingYourApproval}</p>";
     }
 }
 else
 {
-    if (empty($approvaluser)) echo "<p class='error'>Error: You did not select a user to send the request to</p>";
+    if (empty($approvaluser))
+    {
+        echo "<p class='error'>Error: You did not select a user to send the request to</p>";
+    }
     else
     {
         $sql = "SELECT * FROM `{$dbHolidays}` WHERE approved=0 ";
@@ -172,13 +203,13 @@ else
         if (mysql_num_rows($result)>0)
         {
             // FIXME this email should probably use the email template system
-            $bodytext = "Message from {$CONFIG['application_shortname']}: ".user_realname($user)." has requested that you approve the following holidays:\n\n";
+            $bodytext = "Message from {$CONFIG['application_shortname']}: ".user_realname($user)." has requested that you approve the following holidays:\n\n";  //FIXME i18n
             while ($holiday=mysql_fetch_object($result))
             {
                 $holidaylist .= date('l j F Y', $holiday->startdate).", ";
-                if ($holiday->length=='am') $holidaylist .= "Morning";
-                if ($holiday->length=='pm') $holidaylist .= "Afternoon";
-                if ($holiday->length=='day') $holidaylist .= "Full Day";
+                if ($holiday->length=='am') $holidaylist .= $strMorning;
+                if ($holiday->length=='pm') $holidaylist .= $strAfternoon;
+                if ($holiday->length=='day') $holidaylist .= $strFullDaye;
                 $holidaylist .= ", ";
                 $holidaylist .= holiday_type($holiday->type)."\n";
             }
@@ -191,7 +222,7 @@ else
             $url = parse_url($_SERVER['HTTP_REFERER']);
             $approveurl = "{$url['scheme']}://{$url['host']}{$url['path']}";
             $bodytext .= "Please point your browser to\n<{$approveurl}?user={$user}&mode=approval>\n ";
-            $bodytext .= "to approve or decline these requests.";
+            $bodytext .= "to approve or decline these requests."; //FIXME i18n
         }
         // Mark the userid of the person who will approve the request so that they can see them
         $sql = "UPDATE `{$dbHolidays}` SET approvedby='{$approvaluser}' WHERE userid='{$user}' AND approved=0";
@@ -208,12 +239,12 @@ else
 
         if ($rtnvalue===TRUE)
         {
-            echo "<p align='center'>Your request has been sent</p>";
+            echo "<p align='center'>{$strRequestSent}</p>";
             echo "<p align='center'>".nl2br($holidaylist)."</p>";
         }
         else echo "<p class='error'>There was a problem sending your request</p>";
     }
-    echo "<p align='center'><a href='holidays.php?user={$user}'>Back to holidays page</p></p>";
+    echo "<p align='center'><a href='holidays.php?user={$user}'>{$strMyHolidays}</p></p>";
 }
 include ('htmlfooter.inc.php');
 ?>

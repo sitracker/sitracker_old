@@ -58,7 +58,10 @@ $shade = 0;
 while ($incidents = mysql_fetch_array($result))
 {
     // calculate time to next action string
-    if ($incidents["timeofnextaction"] == 0) $timetonextaction_string = "&nbsp;";  // was 'no time set'
+    if ($incidents["timeofnextaction"] == 0)
+    {
+        $timetonextaction_string = "&nbsp;";  // was 'no time set'
+    }
     else
     {
         if (($incidents["timeofnextaction"] - $now) > 0)
@@ -82,18 +85,30 @@ while ($incidents = mysql_fetch_array($result))
         $updated = "<em style='color: #640000; font-weight: bolder;'>{$when}</em>";
     }
     elseif ($incidents['lastupdated'] > $now - 1800)
+    {
         $updated = "<em style='color: #640000;'>".sprintf($strAgo, format_seconds($now - $incidents['lastupdated']))."</em>";
+    }
     elseif ($incidents['lastupdated'] > $now - 3600)
+    {
         $updated = "<em>".sprintf($strAgo, format_seconds($now - $incidents['lastupdated']))."</em>";
+    }
     elseif (date('dmy', $incidents['lastupdated']) == date('dmy', $now))
+    {
         $updated = "{$strToday} @ ".date($CONFIG['dateformat_time'], $incidents['lastupdated']);
+    }
     elseif (date('dmy', $incidents['lastupdated']) == date('dmy', ($now-86400)))
+    {
         $updated = "{$strYesterday} @ ".date($CONFIG['dateformat_time'], $incidents['lastupdated']);
+    }
     elseif ($incidents['lastupdated'] < $now-86400 AND
             $incidents['lastupdated'] > $now-(86400*6))
+    {
         $updated = date('l', $incidents['lastupdated'])." @ ".date($CONFIG['dateformat_time'], $incidents['lastupdated']);
+    }
     else
+    {
         $updated = date($CONFIG['dateformat_datetime'], $incidents["lastupdated"]);
+    }
 
     // Fudge for old ones
     $tag = $incidents['servicelevel'];
@@ -125,9 +140,15 @@ while ($incidents = mysql_fetch_array($result))
 
     // Get next review time
     $reviewsince = incident_get_next_review($incidents['id']);  // time since last review in minutes
-    $reviewtarget=($servicelevel->review_days * 1440);          // how often reviews should happen in minutes
-    if ($reviewtarget >0) $reviewremain=($reviewtarget - $reviewsince);
-    else $reviewremain=0;
+    $reviewtarget = ($servicelevel->review_days * 1440);          // how often reviews should happen in minutes
+    if ($reviewtarget > 0)
+    {
+        $reviewremain = ($reviewtarget - $reviewsince);
+    }
+    else
+    {
+        $reviewremain=0;
+    }
 
     ##echo "<!-- target-info: ";
     ##print_r($target);
@@ -192,19 +213,38 @@ while ($incidents = mysql_fetch_array($result))
         $epathurl = $epath[$escalationpath]['home_url'];
         $externalid = "<a href=\"{$epathurl}\" title=\"{$epath[$escalationpath]['url_title']}\">{$epath[$escalationpath]['name']}</a>";
     }
-    elseif (empty($incidents['escalationpath']) AND !empty($incidents['externalid'])) $externalid = format_external_id($incidents['externalid']);
+    elseif (empty($incidents['escalationpath']) AND !empty($incidents['externalid']))
+    {
+        $externalid = format_external_id($incidents['externalid']);
+    }
+
     echo "<tr class='{$class}'>";
     echo "<td align='center'>";
     // Note: Sales incident type is obsolete
-    if ($incidents['type']!='Support') echo "<strong>".ucfirst($incidents['type'])."</strong>: ";
+    if ($incidents['type'] != 'Support')
+    {
+        echo "<strong>".ucfirst($incidents['type'])."</strong>: ";
+    }
+
     echo "<a href='incident_details.php?id={$incidents['id']}' style='color:#000;'>{$incidents['id']}</a>";
     if ($externalid != "") echo "<br />{$externalid}";
     echo "</td>";
     echo "<td>";
     if (!empty($incidents['softwareid'])) echo software_name($incidents['softwareid'])."<br />";
     echo "<a href=\"javascript:incident_details_window('{$incidents['id']}','incident{$incidents['id']}')\" class='info'>";
-    if (trim($incidents['title']) !='') echo ($incidents['title']); else echo $strUntitled;
-    if (!empty($update_body) AND $update_body!='...') echo "<span>{$update_body}</span>";
+    if (trim($incidents['title']) !='')
+    {
+        echo ($incidents['title']); 
+    }
+    else
+    {
+        echo $strUntitled;
+    }
+
+    if (!empty($update_body) AND $update_body!='...')
+    {
+        echo "<span>{$update_body}</span>";
+    }
     else
     {
         $update_currentownername = user_realname($update_currentowner,TRUE);
@@ -222,19 +262,42 @@ while ($incidents = mysql_fetch_array($result))
 
     echo "<td align='center'>";
     // Service Level / Priority
-    if (!empty($incidents['maintenanceid'])) echo $servicelevel->tag."<br />";
-    elseif (!empty($incidents['servicelevel'])) echo $incidents['servicelevel']."<br />";
-    else echo "Unknown service level<br />";
-    $blinktime=(time()-($servicelevel->initial_response_mins * 60));
-    if ($incidents['priority']==4 AND $incidents['lastupdated']<= $blinktime) echo "<strong style='text-decoration: blink;'>".priority_name($incidents["priority"])."</strong>";
-        else echo priority_name($incidents['priority']);
+    if (!empty($incidents['maintenanceid']))
+    {
+        echo $servicelevel->tag."<br />";
+    }
+    elseif (!empty($incidents['servicelevel']))
+    {
+        echo $incidents['servicelevel']."<br />";
+    }
+    else
+    {
+        echo "{$strUnknownServiceLevel}<br />";
+    }
+
+    $blinktime = (time() - ($servicelevel->initial_response_mins * 60));
+    if ($incidents['priority']==4 AND $incidents['lastupdated']<= $blinktime)
+    {
+        echo "<strong style='text-decoration: blink;'>".priority_name($incidents["priority"])."</strong>";
+    }
+    else
+    {
+        echo priority_name($incidents['priority']);
+    }
     echo "</td>\n";
 
     if (empty($incidents_minimal))
     {
         echo "<td align='center'>";
-        if ($incidents['status']==5 AND $incidents['towner']==$user) echo "<strong>Awaiting Your Response</strong>"; // FIXME i18n Awaiting Your Response
-        else echo incidentstatus_name($incidents["status"]);
+        if ($incidents['status'] == 5 AND $incidents['towner'] == $user)
+        {
+            echo "<strong>{$strAwaitingYourResponse}</strong>";
+        }
+        else
+        {
+            echo incidentstatus_name($incidents["status"]);
+        }
+
         if ($incidents['status']==2) echo "<br />".closingstatus_name($incidents['closingstatus']);
         echo "</td>\n";
     }
@@ -244,8 +307,14 @@ while ($incidents = mysql_fetch_array($result))
 
     if (empty($incidents_minimal))
     {
-        if ($incidents['towner'] > 0 AND $incidents['towner']!=$user) echo "<br />Temp: <strong>".user_realname($incidents['towner'],TRUE)."</strong>";
-        elseif ($incidents['owner']!=$user) echo "<br />{$strOwner}: <strong>".user_realname($incidents['owner'],TRUE)."</strong>";
+        if ($incidents['towner'] > 0 AND $incidents['towner'] != $user)
+        {
+            echo "<br />{$strTemp}: <strong>".user_realname($incidents['towner'],TRUE)."</strong>";
+        }
+        elseif ($incidents['owner'] != $user)
+        {
+            echo "<br />{$strOwner}: <strong>".user_realname($incidents['owner'],TRUE)."</strong>";
+        }
     }
     echo "</td>\n";
 
@@ -298,8 +367,14 @@ while ($incidents = mysql_fetch_array($result))
         elseif ($reviewremain<=0)
         {
             echo "<td align='center' class='review'>";
-            if ($reviewremain > -86400) echo "<img src='{$CONFIG['application_webpath']}images/icons/{$iconset}/16x16/review.png' width='16' height='16' alt='' /> {$strReviewDueNow}";
-            else echo "<img src='{$CONFIG['application_webpath']}images/icons/{$iconset}/16x16/review.png' width='16' height='16' alt='' /> ".sprintf($strReviewDueAgo ,format_workday_minutes($reviewremain*-1));
+            if ($reviewremain > -86400)
+            {
+                echo "<img src='{$CONFIG['application_webpath']}images/icons/{$iconset}/16x16/review.png' width='16' height='16' alt='' /> {$strReviewDueNow}";
+            }
+            else
+            {
+                echo "<img src='{$CONFIG['application_webpath']}images/icons/{$iconset}/16x16/review.png' width='16' height='16' alt='' /> ".sprintf($strReviewDueAgo ,format_workday_minutes($reviewremain*-1));
+            }
         }
         else
         {
@@ -312,8 +387,17 @@ while ($incidents = mysql_fetch_array($result))
     echo "</tr>\n";
 }
 echo "</table>\n\n";
-if (empty($incidents_minimal) && $user != 'all')
-    if ($rowcount != 1) echo "<p align='center'>".sprintf($strIncidentsMulti, $rowcount)."</p>";
-    else echo "<p align='center'>".sprintf($strSingleIncident, $rowcount)."</p>";
+
+if(empty($incidents_minimal) && $user != 'all')
+
+if($rowcount != 1)
+{
+    echo "<p align='center'>".sprintf($strIncidentsMulti, $rowcount)."</p>";
+}
+else
+{
+    echo "<p align='center'>".sprintf($strSingleIncident, $rowcount)."</p>";
+}
+
 if ($CONFIG['debug']) echo "<!-- End of Support Incidents Table -->\n";
 ?>

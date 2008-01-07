@@ -24,17 +24,16 @@ require ('auth.inc.php');
 $process = cleanvar($_REQUEST['process']);
 $id = cleanvar($_REQUEST['id']);
 
-// FIXME i18n, KB article sections, summary, symptoms etc.
-$sections[]='Summary';
-$sections[]='Symptoms';
-$sections[]='Cause';
-$sections[]='Question';
-$sections[]='Answer';
-$sections[]='Solution';
-$sections[]='Workaround';
-$sections[]='Status';
-$sections[]='Additional';
-$sections[]='References';
+$sections[] = $strSummary;
+$sections[] = $strSymptoms;
+$sections[] = $strCause;
+$sections[] = $strQuestion;
+$sections[] = $strAnswer;
+$sections[] = $strSolution;
+$sections[] = $strWorkaround;
+$sections[] = $strStatus;
+$sections[] = $strAdditional;
+$sections[] = $strReferences;
 
 if (empty($_POST['process']))
 {
@@ -57,7 +56,7 @@ if (empty($_POST['process']))
     if (mysql_error()) trigger_error("MySQL Query Error ".mysql_error(), E_USER_ERROR);
     $kbarticle = mysql_fetch_object($result);
 
-    echo "<table summary='Knowledge Base Article' width='98%' align='center' border='0'><tr><td>";
+    echo "<table summary='{$strKnowledgeBaseArticle}' width='98%' align='center' border='0'><tr><td>";
 
     if (empty($_REQUEST['user']) OR $_REQUEST['user']=='current') $user=$sit[2];
     else $user=$_REQUEST['user'];
@@ -72,10 +71,10 @@ if (empty($_POST['process']))
             $expertise[]=$software->id;
         }
     }
-    echo "<p align='center'>Select the skills that apply to this article</p>"; // FIXME i18n, select skills that apply
+    echo "<p align='center'>{$strSelectSkillsApplyToArticle}</p>";
     echo "<form name='kbform' action='{$_SERVER['PHP_SELF']}' method='post' onsubmit=\"populateHidden(document.kbform.elements['expertise[]'],document.kbform.choices)\">";
     echo "<table align='center'>";
-    echo "<tr><th>Does NOT apply</th><th>&nbsp;</th><th>Applies</th></tr>"; // FIXME i18n applies, does not apply
+    echo "<tr><th>$strDoesNOTApply</th><th>&nbsp;</th><th>Applies</th></tr>";
     echo "<tr><td align='center' width='300' class='shade1'>";
     $listsql = "SELECT * FROM `{$dbSoftware}` ORDER BY name";
     $listresult = mysql_query($listsql);
@@ -90,7 +89,7 @@ if (empty($_POST['process']))
                 echo "<option value='{$software->id}'>$software->name</option>\n";  }
             }
             else
-            { 
+            {
                 echo "<option value='{$software->id}'>{$software->name}</option>\n";
             }
         }
@@ -200,7 +199,7 @@ if (empty($_POST['process']))
             echo "<tr><th valign='top'>";
             echo "$section:";
             echo "</th><td class='shade2'>";
-            echo "<textarea name='content{$section}' rows='2' cols='100' title='Full Details' onfocus=\"myInterval = window.setInterval('changeTextAreaLength(document.kbform.content{$section})', 300);\" onblur=\"window.clearInterval(myInterval); resetTextAreaLength(document.kbform.content{$section});\">";
+            echo "<textarea name='content{$section}' rows='2' cols='100' title='{$strFullDetails}' onfocus=\"myInterval = window.setInterval('changeTextAreaLength(document.kbform.content{$section})', 300);\" onblur=\"window.clearInterval(myInterval); resetTextAreaLength(document.kbform.content{$section});\">";
             echo "</textarea>\n<br /><br />\n";
             echo "</td><td class='shade1'><label><input type='checkbox' name='add$section' value='yes' />{$strAdd}</label></td></tr>\n";
         }
