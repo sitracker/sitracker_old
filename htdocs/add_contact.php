@@ -76,7 +76,6 @@ if (empty($submit) OR !empty($_SESSION['formerrors']['add_contact']))
         echo "value='{$_SESSION['formdata']['add_contact']['jobtitle']}'";
     }
     echo " /></td></tr>\n";
-    //FIXME do this one
     echo "<tr><th>{$strSite} <sup class='red'>*</sup></th><td>";
     echo site_drop_down('siteid',$siteid)."</td></tr>\n";
     // KMH REMOVED 12/12/07, form fails as dojo doesn't have the siteID
@@ -96,7 +95,6 @@ if (empty($submit) OR !empty($_SESSION['formerrors']['add_contact']))
     }
     echo "/> ";
 
-    //FIXME do this one
     echo "<label>";
     html_checkbox('dataprotection_email', 'No');
     echo "{$strEmail} {$strDataProtection}</label>";
@@ -109,7 +107,6 @@ if (empty($submit) OR !empty($_SESSION['formerrors']['add_contact']))
     }
     echo "/> ";
 
-    //FIXME do this one
     echo "<label>";
     html_checkbox('dataprotection_phone', 'No');
     echo "{$strTelephone} {$strDataProtection}</label>";
@@ -129,7 +126,6 @@ if (empty($submit) OR !empty($_SESSION['formerrors']['add_contact']))
     }
     echo "/></td></tr>\n";
 
-    //FIXME all of these
     echo "<tr><th>{$strAddress}</th><td><label>";
     html_checkbox('dataprotection_address', 'No');
     echo " {$strAddress} {$strDataProtection}</label></td></tr>\n";

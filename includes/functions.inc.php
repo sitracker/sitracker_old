@@ -142,7 +142,7 @@ if (get_magic_quotes_gpc())
     $HTTP_COOKIE_VARS = stripslashes_array($HTTP_COOKIE_VARS);
     $HTTP_POST_FILES = stripslashes_array($HTTP_POST_FILES);
     $HTTP_ENV_VARS = stripslashes_array($HTTP_ENV_VARS);
-    if (isset($_SESSION)) 
+    if (isset($_SESSION))
     {
         #These are unconfirmed (?)
         $_SESSION = stripslashes_array($_SESSION, '');
@@ -742,7 +742,7 @@ function contact_count_open_incidents($id)
     * @retval 'no'  Contact doesn't have support for product
     * @retval 'expired' Contact did have support for product but it has now expired
     * @note Based on contactproducts and so DEPRECATED needs updating to be based on contracts
-    * @todo update contact_productsupport() to be based on contracts
+    * @todo TODO update contact_productsupport() to be based on contracts
 */
 function contact_productsupport($contactid, $productid)
 {
@@ -1180,14 +1180,14 @@ function array_drop_down($array, $name, $setting='', $enablefield='')
         {
             if ($key==$setting)
             {
-                $html .= " selected='selected'"; 
+                $html .= " selected='selected'";
             }
         }
         else
         {
             if ($value==$setting)
             {
-                $html .= " selected='selected'"; 
+                $html .= " selected='selected'";
             }
         }
 
@@ -1457,7 +1457,7 @@ function sitetype_drop_down($name, $id)
         $html .= "<option ";
         if ($row['typeid'] == $id)
         {
-            $html .="selected='selected' "; 
+            $html .="selected='selected' ";
         }
 
         $html .= "value='{$row['typeid']}'>{$row['typename']}</option>\n";
@@ -2006,8 +2006,8 @@ function contactproducts_drop_down($name, $contactid)
     while ($products = mysql_fetch_array($result))
     {
         echo "<option ";
-        if (contact_productsupport($contactid, $products["id"]) == 1) 
-        { 
+        if (contact_productsupport($contactid, $products["id"]) == 1)
+        {
             echo "selected='selected' ";
         }
 
@@ -2456,7 +2456,7 @@ function format_seconds($seconds)
         {
             if ($months == 1)
             {
-                $return_string .= "1 Month "; 
+                $return_string .= "1 Month ";
             }
             else
             {
@@ -6579,7 +6579,6 @@ function clear_form_data($formname)
     *                    Set to FALSE for plain text only
     * @returns string. A shortned string (optionally with html)
 */
-
 function truncate_string($text, $maxlength=255, $html=TRUE)
 {
 
@@ -6651,6 +6650,22 @@ function create_notice($userid, $noticetext='', $triggertype='', $paramarray='')
         }
     }
 }
+
+/**
+    * Returns a localised and translated date
+    * @author Ivan Lucas
+    * @param $format string. date() format
+    * @param $date int. UNIX timestamp
+    * @returns string. An internationised date/time string
+    * @todo TODO actually do some internationisation
+*/
+function ldate($format, $date)
+{
+    $datestring = date($format, $date);
+
+    return $datestring;
+}
+
 
 // -------------------------- // -------------------------- // --------------------------
 // leave this section at the bottom of functions.inc.php ================================
