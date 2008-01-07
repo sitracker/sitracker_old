@@ -33,16 +33,37 @@ switch ($action)
         $name = cleanvar($_REQUEST['name']);
         $description = cleanvar($_REQUEST['description']);
         $priority = cleanvar($_REQUEST['priority']);
-        if (!empty($_REQUEST['duedate'])) $duedate = strtotime($_REQUEST['duedate']);
-        else $duedate = '';
-        if (!empty($_REQUEST['startdate'])) $startdate = strtotime($_REQUEST['startdate']);
-        else $startdate = '';
+        if (!empty($_REQUEST['duedate']))
+        {
+            $duedate = strtotime($_REQUEST['duedate']);
+        }
+        else
+        {
+            $duedate = '';
+        }
+
+        if (!empty($_REQUEST['startdate']))
+        {
+            $startdate = strtotime($_REQUEST['startdate']);
+        }
+        else
+        {
+            $startdate = '';
+        }
+
         $completion = cleanvar(str_replace('%','',$_REQUEST['completion']));
         if ($completion!='' AND !is_numeric($completion)) $completion=0;
         if ($completion > 100) $completion=100;
         if ($completion < 0) $completion=0;
-        if (!empty($_REQUEST['enddate'])) $enddate = strtotime($_REQUEST['enddate']);
-        else $enddate = '';
+        if (!empty($_REQUEST['enddate']))
+        {
+            $enddate = strtotime($_REQUEST['enddate']);
+        }
+        else
+        {
+            $enddate = '';
+        }
+
         if ($completion==100 AND $enddate == '') $enddate = $now;
         $value = cleanvar($_REQUEST['value']);
         $distribution = cleanvar($_REQUEST['distribution']);
@@ -130,7 +151,7 @@ switch ($action)
             $result = mysql_query($sql);
             $status = mysql_fetch_object($result);
             $status = $status->status;
-            
+
             $sql = "SELECT * FROM tasks WHERE id='$id'";
             $result = mysql_query($sql);
             if (mysql_error()) trigger_error(mysql_error(),E_USER_ERROR);

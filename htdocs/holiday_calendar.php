@@ -587,7 +587,7 @@ function draw_chart($mode, $year, $month='', $day='', $groupid='', $userid='')
     $html .= "<td>PH = {$GLOBALS['strPublicHoliday']}</td>";
     $html .= "</tr>";
     // FIXME holiday approval status
-    $html .= "<tr><td></td><td class='urgent'>declined</td><td class='review'>not approved</td><td class='idle'>approved</td><td class='notice'>approved free</td></tr>";
+    $html .= "<tr><td></td><td class='urgent'>{$strDeclined}</td><td class='review'>{$strNotApproved}</td><td class='idle'>{$strApproved}</td><td class='notice'>{$strApprovedFree}</td></tr>";
     $html .= "</table>\n\n";
 
     return $html;
@@ -602,7 +602,7 @@ function month_select($month, $year)
     $pmonth=$cmonth-5;
     $pyear=$cyear-1;
     $nyear=$cyear+1;
-    $html .= "<a href='{$SERVER['PHP_SELF']}?display=month&amp;month={$month}&amp;year={$pyear}' title='Back one year'>&lt;&lt;</a> ";
+    $html .= "<a href='{$SERVER['PHP_SELF']}?display=month&amp;month={$month}&amp;year={$pyear}' title='{$strBackOnYear}'>&lt;&lt;</a> ";
     for ($c=1;$c <= 12;$c++)
     {
         if (mktime(0,0,0,$cmonth,1,$cyear)==mktime(0,0,0,date('m'),1,date('Y'))) $html .= "<span style='background: #FF0;'>";
@@ -614,7 +614,7 @@ function month_select($month, $year)
         $cmonth++;
         if ($cmonth > 12) { $cmonth -= 12; $cyear++; }
     }
-    $html .= " <a href='{$SERVER['PHP_SELF']}?month=display=month&amp;{$month}&amp;year={$nyear}' title='Forward one year'>&gt;&gt;</a>";
+    $html .= " <a href='{$SERVER['PHP_SELF']}?month=display=month&amp;{$month}&amp;year={$nyear}' title='{$strForwardOneYear}'>&gt;&gt;</a>";
     $html .= "</p>";
     return $html;
 }
@@ -695,7 +695,7 @@ elseif ($display=='list')
         echo ">{$htype}</option>\n";
     }
     echo "</select></form>";
-    echo "<h3>Descending date order</h3>"; // FIXME i18n decending date
+    echo "<h3>{$strDescendingDateOrder}</h3>";
     if (empty($type)) $type=1;
     $sql = "SELECT *, holidays.id AS holidayid FROM holidays, users WHERE ";
     $sql .= "holidays.userid=users.id AND holidays.type=$type ";
@@ -810,7 +810,7 @@ else
         if (mysql_num_rows($result))
         {
             echo "<table align='center'>";
-            echo "<tr class='shade2'><td><strong>Dates waiting for approval</strong>:</td></tr>"; // FIXME i18n waiting
+            echo "<tr class='shade2'><td><strong>{$strDatesAwaitingApproval}</strong>:</td></tr>";
             echo "<tr class='shade1'><td>";
             while ($dates = mysql_fetch_array($result))
             {
@@ -897,7 +897,7 @@ else
     echo "</p>\n";
 
 
-    echo "<h2>{$strYear} View</h2>"; // FIXME i18n Year View
+    echo "<h2>{$strYearView}</h2>";
     $pdate = mktime(0,0,0,$month,$day,$year-1);
     $ndate = mktime(0,0,0,$month,$day,$year+1);
     echo "<p align='center'>";

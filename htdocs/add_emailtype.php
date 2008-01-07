@@ -96,7 +96,7 @@ if (empty($submit))
     echo "<tr><th>Store in Log:</th><td><input type='checkbox' name='storeinlog' value='Yes' checked='checked' /> Store the email in the incident log</td></tr>";
     echo "<tr><th>Visibility:</th><td><input type='checkbox' name='cust_vis' checked='checked' value='yes' /> Make the update to the incident log visible to the customer</td></tr>";
     echo "</table>";
-    echo "<p align='center'><input name='submit' type='submit' value='Add It' /></p>"; //FIXME i18n
+    echo "<p align='center'><input name='submit' type='submit' value='{$strAdd}' /></p>";
     echo "</form>";
     include('htmlfooter.inc.php');
 }

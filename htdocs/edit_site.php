@@ -10,8 +10,6 @@
 
 // This Page Is Valid XHTML 1.0 Transitional!  6Feb06
 
-// FIXME i18n
-
 @include('set_include_path.inc.php');
 $permission=3; // Edit existing site details
 require('db_connect.inc.php');
@@ -58,19 +56,27 @@ elseif ($action == "edit")
             echo "<form name='edit_site' action='{$_SERVER['PHP_SELF']}?action=update' method='post' onsubmit='return confirm_submit(\"{$strAreYouSureMakeTheseChanges}\")'>";
             echo "<h5>".sprintf($strMandatoryMarked,"<sup class='red'>*</sup>")."</h5>";
             echo "<table align='center' class='vertical'>";
-            echo "<tr><th>{$strName}: <sup class='red'>*</sup></th><td><input maxlength='50' name='name' size='40' value='{$siterow['name']}' /></td></tr>\n";
-            echo "<tr><th>{$strTags}:</th><td><textarea rows='2' cols='60' name='tags'>".list_tags($site, TAG_SITE, false)."</textarea>\n";
-            echo "<tr><th>{$strDepartment}: <sup class='red'>*</sup></th><td><input maxlength='50' name='department' size='40' value='{$siterow['department']}' /></td></tr>\n";
-            echo "<tr><th>{$strAddress1}: <sup class='red'>*</sup></th><td><input maxlength='50' name='address1' size='40' value='{$siterow['address1']}' /></td></tr>\n";
+            echo "<tr><th>{$strName}: <sup class='red'>*</sup></th>";
+            echo "<td><input maxlength='50' name='name' size='40' value='{$siterow['name']}' /></td></tr>\n";
+            echo "<tr><th>{$strTags}:</th><td><textarea rows='2' cols='60' name='tags'>";
+            echo list_tags($site, TAG_SITE, false)."</textarea>\n";
+            echo "<tr><th>{$strDepartment}: <sup class='red'>*</sup></th>";
+            echo "<td><input maxlength='50' name='department' size='40' value='{$siterow['department']}' /></td></tr>\n";
+            echo "<tr><th>{$strAddress1}: <sup class='red'>*</sup></th>";
+            echo "<td><input maxlength='50' name='address1' size='40' value='{$siterow['address1']}' /></td></tr>\n";
             echo "<tr><th>{$strAddress2}: </th><td><input maxlength='50' name='address2' size='40' value='{$siterow['address2']}' /></td></tr>\n";
             echo "<tr><th>{$strCity}:</th><td><input maxlength='255' name='city' size='40' value='{$siterow['city']}' /></td></tr>\n";
             echo "<tr><th>{$strCounty}:</th><td><input maxlength='255' name='county' size='40' value='{$siterow['county']}' /></td></tr>\n";
             echo "<tr><th>{$strPostcode}:</th><td><input maxlength='255' name='postcode' size='40' value='{$siterow['postcode']}' /></td></tr>\n";
             echo "<tr><th>{$strCountry}:</th><td>".country_drop_down('country', $siterow['country'])."</td></tr>\n";
-            echo "<tr><th>{$strTelephone}:</th><td><input maxlength='255' name='telephone' size='40' value='{$siterow['telephone']}' /></td></tr>\n";
-            echo "<tr><th>{$strFax}:</th><td><input maxlength='255' name='fax' size='40' value='{$siterow['fax']}' /></td></tr>\n";
-            echo "<tr><th>{$strEmail}:</th><td><input maxlength='255' name='email' size='40' value='{$siterow['email']}' /></td></tr>\n";
-            echo "<tr><th>{$strWebsite}:</th><td><input maxlength='255' name='websiteurl' size='40' value='{$siterow['websiteurl']}' /></td></tr>\n";
+            echo "<tr><th>{$strTelephone}:</th><td>";
+            echo "<input maxlength='255' name='telephone' size='40' value='{$siterow['telephone']}' /></td></tr>\n";
+            echo "<tr><th>{$strFax}:</th><td>";
+            echo "<input maxlength='255' name='fax' size='40' value='{$siterow['fax']}' /></td></tr>\n";
+            echo "<tr><th>{$strEmail}:</th><td>";
+            echo "<input maxlength='255' name='email' size='40' value='{$siterow['email']}' /></td></tr>\n";
+            echo "<tr><th>{$strWebsite}:</th><td>";
+            echo "<input maxlength='255' name='websiteurl' size='40' value='{$siterow['websiteurl']}' /></td></tr>\n";
             echo "<tr><th>{$strSiteType}:</th><td>\n";
             echo sitetype_drop_down('typeid', $siterow['typeid']);
             echo "</td></tr>\n";
@@ -80,12 +86,20 @@ elseif ($action == "edit")
             echo "</td></tr>\n";
             echo "<tr><th>{$strIncidentPool}:</th>";
             $incident_pools = explode(',', "{$strNone},{$CONFIG['incident_pools']}");
-            if (array_key_exists($siterow['freesupport'], $incident_pools)==FALSE) array_unshift($incident_pools,$siterow['freesupport']);
+            if (array_key_exists($siterow['freesupport'], $incident_pools)==FALSE)
+            {
+                array_unshift($incident_pools,$siterow['freesupport']);
+            }
             echo "<td>".array_drop_down($incident_pools,'incident_poolid',$siterow['freesupport'])."</td></tr>";
             echo "<tr><th>{$strActive}:</th><td><input type='checkbox' name='active' ";
-            if ($siterow['active']=='true') echo "checked='".$siterow['active']."'";
+            if ($siterow['active'] == 'true')
+            {
+                echo "checked='".$siterow['active']."'";
+            }
             echo " value='true' /></td></tr>\n";
-            echo "<tr><th>{$strNotes}:</th><td><textarea rows='5' cols='30' name='notes'>{$siterow['notes']}</textarea></td></tr>\n";
+            echo "<tr><th>{$strNotes}:</th><td>";
+            echo "<textarea rows='5' cols='30' name='notes'>{$siterow['notes']}</textarea>";
+            echo "</td></tr>\n";
             plugin_do('edit_site_form');
             echo "</table>\n";
             echo "<input name='site' type='hidden' value='$site' />";
@@ -124,7 +138,7 @@ elseif ($action == "update")
     if ($name == "")
     {
         $errors = 1;
-        $errors_string .= "<p class='error'>You must enter a name</p>\n";
+        $errors_string .= "<p class='error'>{$strMustEnterName}</p>\n";
     }
 
     // edit site if no errors
@@ -149,7 +163,7 @@ elseif ($action == "update")
         else
         {
             plugin_do('edit_site_save');
-            journal(CFG_LOGGING_NORMAL, 'Site Edited', "Site $site was edited", CFG_JOURNAL_SITES, $site);
+            journal(CFG_LOGGING_NORMAL, $strSiteEdited, sprintf($strSiteXEdited,$site) , CFG_JOURNAL_SITES, $site);
             html_redirect("site_details.php?id={$site}");
             exit;
         }

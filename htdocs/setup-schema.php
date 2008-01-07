@@ -20,7 +20,7 @@ $schema = "CREATE TABLE `billing_periods` (
 `servicelevelid` INT( 5 ) NOT NULL ,
 `engineerperiod` INT NOT NULL COMMENT 'In minutes',
 `customerperiod` INT NOT NULL COMMENT 'In minutes',
-PRIMARY KEY r( `servicelevelid` )
+PRIMARY KEY ( `servicelevelid` )
 ) ENGINE = MYISAM ;
 
 
@@ -495,7 +495,7 @@ CREATE TABLE `links` (
      `userid` tinyint(4) NOT NULL default '0',
      PRIMARY KEY  (`linktype`,`origcolref`,`linkcolref`),
      KEY `userid` (`userid`)
-   ) ENGINE=MyISAM ;
+) ENGINE=MyISAM ;
 
 CREATE TABLE `linktypes` (
      `id` int(11) NOT NULL auto_increment,
@@ -512,7 +512,7 @@ CREATE TABLE `linktypes` (
      PRIMARY KEY  (`id`),
      KEY `origtab` (`origtab`),
      KEY `linktab` (`linktab`)
-   ) ENGINE=MyISAM;
+) ENGINE=MyISAM;
 
 
 INSERT INTO `linktypes` VALUES (1,'Task','Subtask','Parent Task','tasks','id','tasks','id','name','','view_task.php?id=%id%'),(2,'Contact','Contact','Contact Task','tasks','id','contacts','id','forenames','','contact_details.php?id=%id%'),(3,'Site','Site','Site Task','tasks','id','sites','id','name','','site_details.php?id=%id%'),(4,'Incident','Incident','Task','tasks','id','incidents','id','title','','incident_details.php?id=%id%');
@@ -874,7 +874,8 @@ CREATE TABLE `servicelevels` (
   `timed` enum('yes','no') NOT NULL default 'no',
   PRIMARY KEY  (`tag`,`priority`),
   KEY `id` (`id`),
-  KEY `review_days` (`review_days`)) ENGINE=MyISAM;
+  KEY `review_days` (`review_days`)
+) ENGINE=MyISAM;
 
 
 INSERT INTO `servicelevels` VALUES (0, 'standard', 1, 320, 380, 960, 14.00, 28, 90, 0);
