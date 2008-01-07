@@ -15,6 +15,7 @@ $strAbsentSick = 'Absent Sick';
 # e.g. Accepting incidents
 $strAccepting = 'Accepting';
 $strAccessDetails = 'Access Details';
+$strAction = 'Action';
 $strActionNeeded = 'Action Needed';
 $strActionPlan = 'Action Plan';
 $strActionPlanBy = 'Action plan by %s';
@@ -589,6 +590,7 @@ $strOwner = 'Owner';
 $strOwners = 'Owners';
 $strOverview = 'Overview';
 
+$strParameters = 'Parameters';
 $strPassword = 'Password';
 $strPastXDays = 'Past %s days';
 $strPastXMonths = 'Past %s months';
@@ -818,6 +820,8 @@ $strTraining = 'Training';
 $strTranslate = 'Translate';
 $strTranslateTheString = 'Translate the english string on the left to your requested language on the right';
 $strTranslation = 'Translation';
+$strTrigger = 'Trigger';
+$strTriggers = 'Triggers';
 # Short for 'Tuesday'
 $strTue = 'Tue';
 $strTuesday = 'Tuesday';

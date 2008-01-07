@@ -6,24 +6,25 @@
 //
 // This software may be used and distributed according to the terms
 // of the GNU General Public License, incorporated herein by reference.
+include ('mime.inc.php');
 
 //set up all the trigger types
-$triggerarray = array(TRIGGER_INCIDENT_CREATED,
-                        TRIGGER_INCIDENT_ASSIGNED,
-                        TRIGGER_INCIDENT_ASSIGNED_WHILE_AWAY,
-                        TRIGGER_INCIDENT_ASSIGNED_WHILE_OFFLINE,
-                        TRIGGER_INCIDENT_NEARING_SLA,
-                        TRIGGER_USERS_INCIDENT_NEARING_SLA,
-                        TRIGGER_INCIDENT_EXCEEDED_SLA,
-                        TRIGGER_INCIDENT_REVIEW_DUE,
-                        TRIGGER_CRITICAL_INCIDENT_LOGGED,
-                        TRIGGER_KB_CREATED,
-                        TRIGGER_NEW_HELD_EMAIL,
-                        TRIGGER_WAITING_HELP_EMAIL,
-                        TRIGGER_USER_SET_TO_AWAY,
-                        TRIGGER_SIT_UPGRADED,
-                        TRIGGER_USER_RETURNS,
-                        TRIGGER_INCIDENT_OWNED_CLOSED_BY_USER);
+$triggerarray[] = array('id' => TRIGGER_INCIDENT_CREATED, 'description' => 'test');
+$triggerarray[] = array('id' => TRIGGER_INCIDENT_ASSIGNED);
+$triggerarray[] = array('id' => TRIGGER_INCIDENT_ASSIGNED_WHILE_AWAY);
+$triggerarray[] = array('id' => TRIGGER_INCIDENT_ASSIGNED_WHILE_OFFLINE);
+$triggerarray[] = array('id' => TRIGGER_INCIDENT_NEARING_SLA);
+$triggerarray[] = array('id' => TRIGGER_USERS_INCIDENT_NEARING_SLA);
+$triggerarray[] = array('id' => TRIGGER_INCIDENT_EXCEEDED_SLA);
+$triggerarray[] = array('id' => TRIGGER_INCIDENT_REVIEW_DUE);
+$triggerarray[] = array('id' => TRIGGER_CRITICAL_INCIDENT_LOGGED);
+$triggerarray[] = array('id' => TRIGGER_KB_CREATED);
+$triggerarray[] = array('id' => TRIGGER_NEW_HELD_EMAIL);
+$triggerarray[] = array('id' => TRIGGER_WAITING_HELP_EMAIL);
+$triggerarray[] = array('id' => TRIGGER_USER_SET_TO_AWAY);
+$triggerarray[] = array('id' => TRIGGER_SIT_UPGRADED);
+$triggerarray[] = array('id' => TRIGGER_USER_RETURNS);
+$triggerarray[] = array('id' => TRIGGER_INCIDENT_OWNED_CLOSED_BY_USER);
 
 //set up all the action types
 $actionarray = array(ACTION_NONE,
@@ -36,11 +37,10 @@ $i = 0;
 $j = 1;
 foreach($triggerarray as $trigger)
 {
-    define($triggerarray[$i], $j);
+    define($triggerarray[$i]['id'], $j);
     $i++; 
     $j++;
 }
-
 //define all the actions
 $i = 0;
 $j = 1;
@@ -60,20 +60,28 @@ foreach($actionarray as $action)
 */
 function trigger($triggertype, $paramarray='')
 {
+    echo $triggertype;
     global $sit, $CONFIG, $dbg, $dbTriggers;
-    if ($CONFIG['debug'])
+    if ($CONFIG['debug'] && $paramarray != '')
     {
         foreach (array_keys($paramarray) as $key)
         {
             //parse parameter array
             $dbg .= "\$paramarray[$key] = " .$paramarray[$key]."\n";
-            
+            if($key == "user")
+            {
+                $userid = $paramarray[$key];
+            }
             //TODO do we need to check for any 'special' keys here?
         }
     }
 
     //find relevant triggers
-    $sql = "SELECT * FROM `{$dbTriggers}` WHERE triggerid={$triggertype} ";    
+    $sql = "SELECT * FROM `{$dbTriggers}` WHERE triggerid={$triggertype} ";
+    if ($userid)
+    {
+        $sql .= "AND userid={$userid}";
+    }
     $query = mysql_query($sql);
     while($result = mysql_fetch_object($query))
     {
@@ -115,6 +123,10 @@ function trigger_action($userid, $triggertype, $action, $paramarray)
     switch($action)
     {
         case ACTION_EMAIL:
+            if($CONFIG['debug']) 
+            {
+                $dbg .= "TRIGGER: send_trigger_email($userid, $triggertype, $paramarray)\n";
+            }
             send_trigger_email($userid, $triggertype, $paramarray);
             break;
 
@@ -173,25 +185,132 @@ function trigger_replace_specials($string, $paramarray)
 
     return preg_replace($trigger_regex,$trigger_replace,$string);
 }
+
+function trigger_replace_email_specials($string, $paramarray)
+{
+    global $CONFIG, $application_version, $application_version_string, $dbg;
+    global $dbIncidents;
+    if($CONFIG['debug'])
+    {
+        $dbg .= "TRIGGER: notice string before - $string\n";
+        $dbg .= "TRIGGER: param array: ".print_r($paramarray);
+    }
+    
+    $url = parse_url($_SERVER['HTTP_REFERER']);
+    $baseurl = "{$url['scheme']}://{$url['host']}{$CONFIG['application_webpath']}";
+
+    $email_regex = array(0 => '/<contactemail>/s',
+                         1 => '/<contactname>/s',
+                         2 => '/<contactfirstname>/s',
+                         3 => '/<contactsite>/s',
+                         4 => '/<contactphone>/s',
+                         5 => '/<contactmanager>/s',
+                         6 => '/<contactnotify>/s',
+                         7 => '/<incidentid>/s',
+                         8 => '/<incidentexternalid>/s',
+                         9 => '/<incidentccemail>/s',
+                         10 => '/<incidentexternalengineer>/s',
+                         11 => '/<incidentexternalengineerfirstname>/s',
+                         12 => '/<incidentexternalemail>/s',
+                         13 => '/<incidenttitle>/s',
+                         14 => '/<incidentpriority>/s',
+                         15 => '/<incidentsoftware>/s',
+                         16 => '/<incidentowner>/s',
+                         17 => '/<useremail>/s',
+                         18 => '/<userrealname>/s',
+                         19 => "/<applicationname>/s",
+                         20 => '/<applicationshortname>/s',
+                         21 => '/<applicationversion>/s',
+                         22 => '/<supportemail>/s',
+                         23 => '/<salesemail>/s',
+                         24 => '/<supportmanageremail>/s',
+                         25 => '/<signature>/s',
+                         26 => '/<globalsignature>/s',
+                         27 => '/<todaysdate>/s',
+                         28 => '/<salespersonemail>/s',
+                         29 => '/<incidentfirstupdate>/s',
+                         30 => '/<contactnotify2>/s',
+                         31 => '/<contactnotify3>/s',
+                         32 => '/<contactnotify4>/s',
+                         33 => '/<feedbackurl>/s'
+                        );
+
+    $email_replace = array(0 => contact_email($contactid),
+        1 => contact_realname($contactid),
+        2 => strtok(contact_realname($contactid),' '),
+        3 => contact_site($contactid),
+        4 => contact_phone($contactid),
+        5 => contact_notify_email($contactid),
+        6 => contact_notify_email($contactid),
+        7 => $incidentid,
+        8 => $incident->externalid,
+        9 => incident_ccemail($incidentid),
+        10 => incident_externalengineer($incidentid),
+        11 => strtok(incident_externalengineer($incidentid),' '),
+        12 => incident_externalemail($incidentid),
+        13 => incident_title($incidentid),
+        14 => priority_name(incident_priority($incidentid)),
+        15 => software_name($incident->softwareid),
+        16 => user_realname($incident->owner),
+        17 => user_email($userid),
+        18 => user_realname($userid),
+        19 => $CONFIG['application_name'],
+        20 => $CONFIG['application_shortname'],
+        21 => $application_version_string,
+        22 => $CONFIG['support_email'],
+        23 => $CONFIG['sales_email'],
+        24 => $CONFIG['support_manager_email'],
+        25 => user_signature($userid),
+        26 => global_signature(),
+        27 => date("jS F Y"),
+        28 => user_email(db_read_column('owner', 'sites', db_read_column('siteid','contacts',$contactid))),
+        29 => incident_firstupdate($incidentid),
+        30 => contact_email(contact_notify($contactid, 2)),
+        31 => contact_email(contact_notify($contactid, 3)),
+        32 => contact_email(contact_notify($contactid, 4)),
+        33 => $baseurl.'feedback.php?ax='.urlencode(trim(base64_encode(gzcompress(str_rot13(urlencode($CONFIG['feedback_form']).'&&'.urlencode($contactid).'&&'.urlencode($incidentid))))))
+                          );
+
+    return preg_replace($email_regex,$email_replace,$string);
+}
+
 function send_trigger_email($userid, $triggertype, $paramarray)
 {
-    if($CONFIG['debug']) $dbg .= "send_trigger_email({$userid}, {$triggertype}, {$paramarray})";
+    global $CONFIG, $dbg;
+    if($CONFIG['debug']) $dbg .= "TRIGGER: send_trigger_email({$userid}, {$triggertype}, {$paramarray})";
     //if we have an incidentid, get it to pass to emailtype_replace_specials()
     if (!empty($paramarray['incidentid']))
     {
         $incidentid = $paramarray['incidentid'];
     }
     
-    $sql = "SELECT * FROM emailtypes WHERE triggerid={$triggertype}";
+    $sql = "SELECT * FROM emailtype WHERE triggerid={$triggertype}";
     $query = mysql_query($sql);
     if ($query)
     {
         $result = mysql_fetch_object($query);
     }
-    $string = $result->body;
-    $email = emailtype_replace_specials($string, $incidentid, $userid);
-    if($CONFIG['debug']) $dbg .= $email;
+    $emailtype = $result->id;
+    $from = emailtype_replace_specials(emailtype_from($emailtype), $incidentid, $userid);
+    $replyTo = emailtype_replace_specials(emailtype_replyto($emailtype), $incidentid, $userid);
+    $toemail = emailtype_replace_specials(emailtype_to($emailtype), $incidentid, $userid);
+    $subject = emailtype_replace_specials(emailtype_subject($emailtype), $incidentid, $userid);
+    $body = emailtype_replace_specials(emailtype_body($emailtype), $incidentid, $userid);
 
+    $mime = new MIME_mail($from, $toemail, $subject, $body, '', $mailerror);
+    $mailok=$mime->send_mail();
+    if ($mailok==FALSE) trigger_error('Internal error sending email: '.$mailerror.'','send_mail() failed');
+
+
+    if($CONFIG['debug']) 
+    {
+        $dbg .= "TRIGGER: emailtype_replace_specials($string, $incidentid, $userid)";
+    }
+    $email = emailtype_replace_specials($string, $incidentid, $userid);
+    if($CONFIG['debug']) 
+    {
+        $dbg .= $email;
+    }
 }
 
 

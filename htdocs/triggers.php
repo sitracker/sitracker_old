@@ -37,7 +37,7 @@ if ($mode != "save")
         $result = mysql_fetch_object($query);
         $resultaction = $result->action;
         echo "<tr><td>{$trigger['id']}<br /><em>{$trigger['description']}</em></td><td>\n";
-        echo "<select id='select-{$trigger['id']}'>\n";
+        echo "<select id='action-{$trigger['id']}' name='action-{$trigger['id']}'>\n";
         foreach ($actionarray as $action)
         {
             echo "<option value='".constant($action)."'";
@@ -47,8 +47,8 @@ if ($mode != "save")
             }
             echo ">$action</option>\n";
         }
-        echo "</td><td>";
-        echo "<input id='input-{$trigger['id']}' /></td></tr>\n";
+        echo "</select></td><td>";
+        echo "<input id='params-{$trigger['id']}' name='params-{$trigger['id']}' /></td></tr>\n";
     }
     echo "<tr><td><a href=\"javascript:toggleDiv('hidden')\">{$strAdd}</a></td></tr>\n";
     echo "<tbody id='hidden' class='hidden' style='display:none'><tr><td><select>";
@@ -57,7 +57,7 @@ if ($mode != "save")
         echo "<option>{$trigger['id']}</option>";
     }
     echo "</select></td>";
-    echo "<td><select>";
+    echo "<td><select id='action-{$trigger['id']}' name='action-{$trigger['id']}'>";
     foreach ($actionarray as $action)
     {
         echo "<option value='".constant($action)."' ";
@@ -67,7 +67,7 @@ if ($mode != "save")
         }
         echo ">$action</option>\n";
     }
-    echo "</td><td><input /></td></tr>\n";
+    echo "</select></td><td><input id='params-{$trigger['id']}' name='params-{$trigger['id']}' /></td></tr>\n";
     echo "</td></tr>";
     echo "</table>";
     echo "<p align='center'><input type='submit' value='$strSave' /></p>";
@@ -76,6 +76,26 @@ if ($mode != "save")
 }
 else
 {
-
+    foreach(array_keys($_POST) as $keys)
+    {
+        echo "\$_POST[{$keys}] = {$_POST[$keys]}<br />";
+        $splitkeys = explode("-", $keys);
+        if ($splitkeys[0] == "action")
+        {
+            $newtriggerarray[$splitkeys[1]]['action'] = $_POST[$keys];
+        }
+        elseif($splitkeys[0] == "params")
+        {
+            $newtriggerarray[$splitkeys[1]]['params'] = $_POST[$keys];
+        }
+    }
+//     print_r($newtriggerarray);
+    
+    foreach($newtriggerarray as $trigger)
+    {
+        print_r($trigger);
+        $sql = "UPDATE triggers SET action='$trigger[action]', params='$trigger[params]' WHERE triggerid='".constant($trigger)."'";
+        echo $sql."<br />";
+    }
 }
 ?>
