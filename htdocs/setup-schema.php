@@ -1622,7 +1622,7 @@ INSERT INTO `sit`.`emailtype` (`id` ,`name` ,`type` ,`description` ,`tofield` ,`
 
 -- KMH 08/01/08
 ALTER TABLE `emailtype` DROP `id` ;
-ALTER TABLE `emailtype` CHANGE `name` `id` VARCHAR( 50 ) CHARACTER SET latin1 COLLATE latin1_swedish_ci NOT NULL ;
+ALTER TABLE `emailtype` CHANGE `name` `id` VARCHAR( 50 ) NOT NULL ;
 ALTER TABLE `emailtype` ADD PRIMARY KEY ( `id` )
         
 -- KMH 09/01/08
