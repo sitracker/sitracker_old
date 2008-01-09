@@ -1620,6 +1620,19 @@ ALTER TABLE `emailtype` ADD `triggerid` INT( 11 ) NULL ;
 INSERT INTO `sit`.`emailtype` (`id` ,`name` ,`type` ,`description` ,`tofield` ,`fromfield` ,`replytofield` ,`ccfield` ,`bccfield` ,`subjectfield` ,`body` ,`customervisibility` ,
 `storeinlog` ,`triggerid`)VALUES (NULL , 'TRIGGER_INCIDENT_LOGGED', 'system', 'Trigger email sent when a new incident is logged.', '<useremail>', '<supportemail>', NULL , NULL , NULL , '[<incidentid>] - <incidenttitle>', 'Hello <contactfirstname>,\r\n\r\nIncident <incidentid> - <incidenttitle> has been logged.\r\n\r\n<signature> <globalsignature>\r\n-------------\r\nThis email is sent as a result of a system trigger. If you do not want to receive these emails, you can disable them from the ''Triggers'' page.', 'hide', 'No', '1');
 
+-- KMH 08/01/08
+ALTER TABLE `emailtype` DROP `id` ;
+ALTER TABLE `emailtype` CHANGE `name` `id` VARCHAR( 50 ) CHARACTER SET latin1 COLLATE latin1_swedish_ci NOT NULL ;
+ALTER TABLE `emailtype` ADD PRIMARY KEY ( `id` )
+        
+-- KMH 09/01/08
+INSERT INTO `emailtype` (`id`, `type`, `description`, `tofield`, `fromfield`, `replytofield`, `ccfield`, `bccfield`, `subjectfield`, `body`, `customervisibility`, `storeinlog`) VALUES 
+('TRIGGER_INCIDENT_CREATED', 'system', 'Trigger email sent when a new incident is logged.', '<useremail>', '<supportemail>', NULL, NULL, NULL, '[<incidentid>] - <incidenttitle>', 'Hello <contactfirstname>,\r\n\r\nIncident <incidentid> - <incidenttitle> has been logged.\r\n\r\n<signature> <globalsignature>\r\n-------------\r\nThis email is sent as a result of a system trigger. If you do not want to receive these emails, you can disable them from the ''Triggers'' page.', 'hide', 'No'),
+('TRIGGER_INCIDENT_NEARING_SLA', 'system', 'Trigger email sent when an incident is nearing its SLA.', '<useremail>', '<supportemail>', NULL, NULL, NULL, '[<incidentid>] - <incidenttitle>: SLA approaching', 'Hello <contactfirstname>,\r\n\r\nIncident <incidentid> - <incidenttitle> is approaching its SLA.\r\n\r\n<signature> <globalsignature>\r\n-------------\r\nThis email is sent as a result of a system trigger. If you do not want to receive these emails, you can disable them from the ''Triggers'' page.', 'hide', 'No'),
+('TRIGGER_INCIDENT_ASSIGNED', 'user', 'Notify user when call assigned to them', '<useremail>', '<supportemail>', NULL, NULL, NULL, '[<incidentid>] - <incidenttitle>: has been assigned to you', 'Hello <contactfirstname>,\r\n\r\nIncident <incidentid> - <incidenttitle> has been assigned to you.\r\n\r\n<signature> <globalsignature>\r\n-------------\r\nThis email is sent as a result of a system trigger. If you do not want to receive these emails, you can disable them from the ''Triggers'' page.', 'show', 'Yes');
+
+INSERT INTO `noticetemplates` (`id`, `type`, `description`, `text`, `linktext`, `link`, `durability`) VALUES
+('INCIDENT_OWNED_CLOSED_BY_USER', 0, '', 'Your incident <incidentid> - <incidenttitle> has been closed by <engineerclosedname>', NULL, NULL, 'sticky');
 ";
 
 // Important: When making changes to the schema you must add SQL to make the alterations
