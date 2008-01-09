@@ -3335,10 +3335,12 @@ function html_checkbox($name,$state)
 /**
     * Sends an email, replacing certain special keys with values based on the email
     * template chosen
+    * @deprecated
     * @author Ivan Lucas
 */
 function send_template_email($template, $incidentid, $info1='', $info2='')
 {
+    throw_error("send_template_email() is deprecated in 3.40+");
     global $CONFIG, $application_version_string, $sit, $now;
     global $dbUpdates, $dbEmailType;
     if (empty($template)) throw_error('Blank template ID:', 'send_template_email()');
@@ -6621,35 +6623,6 @@ function truncate_string($text, $maxlength=255, $html=TRUE)
     * @returns boolean. Success or fail.
     * NOTES: work in progress, skeleton code atm 18/12/07
 */
-function create_notice($userid, $noticetext='', $triggertype='', $paramarray='')
-{
-    global $CONFIG, $dbg;
-    if($CONFIG['debug']) $dbg .= print_r($paramarray)."\n";
-
-    if($triggertype != '')
-    {
-        //this is a trigger notice, get notice template
-        $sql = "SELECT * from noticetemplates WHERE id={$triggertype}";
-        $query = mysql_query($sql);
-        if($query)
-        {
-            $notice = mysql_fetch_object($query);
-            $noticetext = trigger_replace_specials($notice->text, $paramarray);
-            $noticelinktext = trigger_replace_specials($notice->linktext, $paramarray);
-            $noticelink = trigger_replace_specials($notice->link, $paramarray);
-            if($CONFIG['debug']) $dbg .= $noticetext."\n";
-
-            $sql = "INSERT into notices(userid, type, text, linktext, link, referenceid, timestamp) ";
-            $sql .= "VALUES ({$userid}, '{$notice->type}', '{$noticetext}', '{$noticelinktext}', '{$noticelink}', '', NOW())";
-            mysql_query($sql);
-            if (mysql_error()) trigger_error(mysql_error(),E_USER_WARNING);
-        }
-        else
-        {
-            throw_error("No such trigger type");
-        }
-    }
-}
 
 /**
     * Returns a localised and translated date

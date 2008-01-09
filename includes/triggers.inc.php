@@ -27,30 +27,14 @@ $triggerarray[] = array('id' => TRIGGER_USER_RETURNS);
 $triggerarray[] = array('id' => TRIGGER_INCIDENT_OWNED_CLOSED_BY_USER);
 
 //set up all the action types
+define(ACTION_NONE, 1);
+define(ACTION_NOTICE, 2);
+define(ACTION_EMAIL, 3);
+define(ACTION_JOURNAL, 4);
 $actionarray = array(ACTION_NONE,
-                        ACTION_NOTICE,
-                        ACTION_EMAIL);
-
-//TODO fix to use one var (minor issue)
-//define all the triggers
-$i = 0;
-$j = 1;
-foreach($triggerarray as $trigger)
-{
-    define($triggerarray[$i]['id'], $j);
-    $i++; 
-    $j++;
-}
-//define all the actions
-$i = 0;
-$j = 1;
-foreach($actionarray as $action)
-{
-    define($actionarray[$i], $j);
-    $i++; 
-    $j++;
-}
-
+                ACTION_NOTICE,
+                ACTION_EMAIL,
+                ACTION_JOURNAL);
 /**
     * Master trigger function, creates a new trigger
     * @author Kieran Hogg
@@ -60,7 +44,6 @@ foreach($actionarray as $action)
 */
 function trigger($triggertype, $paramarray='')
 {
-    echo $triggertype;
     global $sit, $CONFIG, $dbg, $dbTriggers;
     if ($CONFIG['debug'] && $paramarray != '')
     {
@@ -77,7 +60,7 @@ function trigger($triggertype, $paramarray='')
     }
 
     //find relevant triggers
-    $sql = "SELECT * FROM `{$dbTriggers}` WHERE triggerid={$triggertype} ";
+    $sql = "SELECT * FROM `{$dbTriggers}` WHERE triggerid='{$triggertype}'";
     if ($userid)
     {
         $sql .= "AND userid={$userid}";
@@ -119,26 +102,33 @@ function trigger_action($userid, $triggertype, $action, $paramarray)
     {
         $dbg .= "TRIGGER: trigger_action($userid, $triggertype, $action, $paramarray) received\n";
     }
+    
+    //get the template type
+    $sql = "SELECT template FROM triggers WHERE userid='{$userid}' AND triggerid='{$triggertype}'";
+    $query = mysql_query($sql);
+    $template = mysql_fetch_object($query);
+    $template = $template->template;
 
     switch($action)
     {
-        case ACTION_EMAIL:
+        case "ACTION_EMAIL":
             if($CONFIG['debug']) 
             {
-                $dbg .= "TRIGGER: send_trigger_email($userid, $triggertype, $paramarray)\n";
+                $dbg .= "TRIGGER: send_trigger_email($userid, $triggertype, $template, $paramarray)\n";
             }
-            send_trigger_email($userid, $triggertype, $paramarray);
+            send_trigger_email($userid, $triggertype, $template, $paramarray);
             break;
 
-        case ACTION_NOTICE:
+        case "ACTION_NOTICE":
             if($CONFIG['debug']) 
             {
-                $dbg .= "TRIGGER: create_notice($userid, '', $triggertype, $paramarray) called";
+                $dbg .= "TRIGGER: create_trigger_notice($userid, '', $triggertype, $template, $paramarray) called";
             }
-            create_notice($userid, '', $triggertype, $paramarray);
+            create_trigger_notice($userid, '', $triggertype, $template, $paramarray);
             break;
-
-        case ACTION_NONE:
+        case "ACTION_JOURNAL":
+            //TODO
+        case "ACTION_NONE":
         //fallthrough
         default:
             break;
@@ -274,17 +264,18 @@ function trigger_replace_email_specials($string, $paramarray)
     return preg_replace($email_regex,$email_replace,$string);
 }
 
-function send_trigger_email($userid, $triggertype, $paramarray)
+function send_trigger_email($userid, $triggertype, $template, $paramarray)
 {
     global $CONFIG, $dbg;
     if($CONFIG['debug']) $dbg .= "TRIGGER: send_trigger_email({$userid}, {$triggertype}, {$paramarray})";
+    
     //if we have an incidentid, get it to pass to emailtype_replace_specials()
     if (!empty($paramarray['incidentid']))
     {
         $incidentid = $paramarray['incidentid'];
     }
     
-    $sql = "SELECT * FROM emailtype WHERE triggerid={$triggertype}";
+    $sql = "SELECT * FROM emailtype WHERE id='{$triggertype}'";
     $query = mysql_query($sql);
     if ($query)
     {
@@ -292,15 +283,14 @@ function send_trigger_email($userid, $triggertype, $paramarray)
     }
     $emailtype = $result->id;
     $from = emailtype_replace_specials(emailtype_from($emailtype), $incidentid, $userid);
-    $replyTo = emailtype_replace_specials(emailtype_replyto($emailtype), $incidentid, $userid);
     $toemail = emailtype_replace_specials(emailtype_to($emailtype), $incidentid, $userid);
     $subject = emailtype_replace_specials(emailtype_subject($emailtype), $incidentid, $userid);
     $body = emailtype_replace_specials(emailtype_body($emailtype), $incidentid, $userid);
 
     $mime = new MIME_mail($from, $toemail, $subject, $body, '', $mailerror);
+
     $mailok=$mime->send_mail();
     if ($mailok==FALSE) trigger_error('Internal error sending email: '.$mailerror.'','send_mail() failed');
-
 
     if($CONFIG['debug']) 
     {
@@ -313,5 +303,76 @@ function send_trigger_email($userid, $triggertype, $paramarray)
     }
 }
 
+function create_trigger_notice($userid, $noticetext='', $triggertype='', $template, $paramarray='')
+{
+    global $CONFIG, $dbg;
+    if($CONFIG['debug']) $dbg .= print_r($paramarray)."\n";
 
+    //this is a trigger notice, get notice template
+    $sql = "SELECT * from noticetemplates WHERE id='{$template}'";
+    $query = mysql_query($sql);
+    if($query)
+    {
+        $notice = mysql_fetch_object($query);
+        $noticetext = trigger_replace_specials($notice->text, $paramarray);
+        $noticelinktext = trigger_replace_specials($notice->linktext, $paramarray);
+        $noticelink = trigger_replace_specials($notice->link, $paramarray);
+        if($CONFIG['debug']) $dbg .= $noticetext."\n";
+
+        $sql = "INSERT into notices(userid, type, text, linktext, link, referenceid, timestamp) ";
+        $sql .= "VALUES ({$userid}, '{$notice->type}', '{$noticetext}', '{$noticelinktext}', '{$noticelink}', '', NOW())";
+        mysql_query($sql);
+        if (mysql_error()) trigger_error(mysql_error(),E_USER_WARNING);
+    }
+    else
+    {
+        throw_error("No such trigger type");
+    }
+}
+
+function triggers_drop_down($name, $selected = '')
+{
+    global $triggerarray;
+    $html .= "<select id='{$name}' name='{$name}'>";
+    foreach ($triggerarray as $trigger)
+    {
+        if($trigger['id'] == $selected)
+        {
+            $html .= "<option selected='selected'>{$trigger['id']}</option>\n";
+        }
+        else
+        {
+            $html .= "<option>{$trigger['id']}</option>\n";
+
+        }
+    }
+    $html .=  "</select>";
+    return $html;
+}
+
+function email_templates($name)
+{
+    $html .= "<select id='{$name}' name='{$name}'>";
+    $sql = "SELECT * FROM emailtype";
+    $query = mysql_query($sql);
+    while($template = mysql_fetch_object($query))
+    {
+        $html .= "<option value='{$template->id}'>{$template->id}</option>\n";
+    }
+    $html .= "</select>\n";
+    return $html;
+}
+
+function notice_templates($name)
+{
+    $html .= "<select id='{$name}' name='{$name}'>";
+    $sql = "SELECT * FROM noticetemplates";
+    $query = mysql_query($sql);
+    while($template = mysql_fetch_object($query))
+    {
+        $html .= "<option value='{$template->id}'>{$template->id}</option>\n";
+    }
+    $html .= "</select>\n";
+    return $html;
+}
 ?>
