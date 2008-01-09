@@ -861,11 +861,8 @@ $strTechnicalSupportAdmin = 'Technical Support Admin';
 $strTelephone = 'Telephone';
 # Abbreviated 'Temporary';
 $strTemp = 'Temp';
-<<<<<<< .mine
 $strTemplate = 'Template';
-=======
 $strTemplatesShouldNotBeginWith = 'Templates should not begin with any text that looks like an email header.  (e.g. <code>\'Name: \'</code>)';
->>>>>>> .r2052
 $strTemporaryOwner = 'Temporary Owner';
 $strTemporarilyAssignedto = 'Temporarily assigned to %s by %s';
 $strTerminated = 'Terminated';
