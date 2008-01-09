@@ -3340,7 +3340,7 @@ function html_checkbox($name,$state)
 */
 function send_template_email($template, $incidentid, $info1='', $info2='')
 {
-    throw_error("send_template_email() is deprecated in 3.40+");
+    throw_error("send_template_email() is deprecated in 3.40+", "Use trigger() instead");
     global $CONFIG, $application_version_string, $sit, $now;
     global $dbUpdates, $dbEmailType;
     if (empty($template)) throw_error('Blank template ID:', 'send_template_email()');
