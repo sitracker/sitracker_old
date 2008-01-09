@@ -16,7 +16,6 @@
 $permission = 5;
 require ('db_connect.inc.php');
 require ('functions.inc.php');
-require ('triggers.inc.php');
 $title = $strAddIncident;
 
 // This page requires authentication
@@ -770,12 +769,6 @@ elseif ($action=='reassign')
     mysql_query($sql);
     if (mysql_error()) trigger_error("MySQL Query Error ".mysql_error(), E_USER_ERROR);
 
-    //deprecate for 3.40
-    /*if (user_notification_on_reassign($uid)=='true')
-    {
-        send_template_email('INCIDENT_REASSIGNED_USER_NOTIFY', $incidentid);
-    }*/
-    
     trigger(TRIGGER_INCIDENT_ASSIGNED, array('userid' => $uid, 'incidentid' => $incidentid));
     // add update
     $sql  = "INSERT INTO `{$dbUpdates}` (incidentid, userid, type, timestamp, currentowner, currentstatus, nextaction) ";
