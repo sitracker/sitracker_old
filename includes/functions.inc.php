@@ -16,7 +16,7 @@
 // use SQL joins.
 
 include ('classes.inc.php');
-
+require ('triggers.inc.php');
 // Version number of the application, (numbers only)
 $application_version='3.40';
 // Revision string, e.g. 'beta2' or 'svn' or ''
@@ -1879,7 +1879,7 @@ function userstatus_bardrop_down($name, $id)
     $html .= "<option value='set_user_status.php?mode=setaccepting&amp;accepting=Yes' style='color: #00AA00; border-top: 1px solid black;'>{$GLOBALS['strAccepting']}</option>\n";
     $html .= "<option value='set_user_status.php?mode=setaccepting&amp;accepting=No' style='color: #FF0000;'>{$GLOBALS['strNotAccepting']}</option>\n";
     $html .= "</select>\n";
-
+    trigger("USER_SET_TO_AWAY", array('userid' => $id));
     return $html;
 }
 
