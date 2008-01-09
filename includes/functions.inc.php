@@ -285,7 +285,7 @@ function permission_name($permissionid)
 */
 function software_name($softwareid)
 {
-    global $now;
+    global $now, $strEOL, $strEndOfLife;
 // <span class='deleted'>
     $sql = "SELECT * FROM software WHERE id = '{$softwareid}'";
     $result = mysql_query($sql);
@@ -295,7 +295,7 @@ function software_name($softwareid)
         $lifetime_end = mysql2date($software->lifetime_end);
         if ($lifetime_end > 0 AND $lifetime_end < $now)
         {
-            $name = "<span class='deleted'>{$software->name}</span> (<abbr title='End of Life'>EOL</abbr>)";
+            $name = "<span class='deleted'>{$software->name}</span> (<abbr title='{$strEndOfLife}'>{$strEOL}</abbr>)";
         }
         else
         {
@@ -858,15 +858,37 @@ function contact_vcard($id)
     if (!empty($contact->jobtitle)) $vcard .= "TITLE:{$contact->jobtitle}\r\n";
     if (!empty($contact->sitename)) $vcard .= "ORG:{$contact->sitename}\r\n";
     if ($contact->dataprotection_phone!='Yes') $vcard .= "TEL;TYPE=WORK:{$contact->phone}\r\n";
-    if ($contact->dataprotection_phone!='Yes' && !empty($contact->fax)) $vcard .= "TEL;TYPE=WORK;TYPE=FAX:{$contact->fax}\r\n";
-    if ($contact->dataprotection_phone!='Yes' && !empty($contact->mobile)) $vcard .= "TEL;TYPE=WORK;TYPE=CELL:{$contact->mobile}\r\n";
-    if ($contact->dataprotection_email!='Yes' && !empty($contact->email)) $vcard .= "EMAIL;TYPE=INTERNET:{$contact->email}\r\n";
+    if ($contact->dataprotection_phone!='Yes' && !empty($contact->fax))
+    {
+        $vcard .= "TEL;TYPE=WORK;TYPE=FAX:{$contact->fax}\r\n";
+    }
+    
+    if ($contact->dataprotection_phone!='Yes' && !empty($contact->mobile))
+    {
+        $vcard .= "TEL;TYPE=WORK;TYPE=CELL:{$contact->mobile}\r\n";
+    }
+    
+    if ($contact->dataprotection_email!='Yes' && !empty($contact->email))
+    {
+        $vcard .= "EMAIL;TYPE=INTERNET:{$contact->email}\r\n";
+    }
+    
     if ($contact->dataprotection_address!='Yes')
     {
-        if ($contact->address1 != '') $vcard .= "ADR;WORK:{$contact->address1};{$contact->address2};{$contact->city};{$contact->county};{$contact->postcode};{$contact->country}\r\n";
-        else $vcard .= "ADR;WORK:{$contact->siteaddress1};{$contact->siteaddress2};{$contact->sitecity};{$contact->sitecounty};{$contact->sitepostcode};{$contact->sitecountry}\r\n";
+        if ($contact->address1 != '')
+        {
+            $vcard .= "ADR;WORK:{$contact->address1};{$contact->address2};{$contact->city};{$contact->county};{$contact->postcode};{$contact->country}\r\n";
+        }
+        else
+        {
+            $vcard .= "ADR;WORK:{$contact->siteaddress1};{$contact->siteaddress2};{$contact->sitecity};{$contact->sitecounty};{$contact->sitepostcode};{$contact->sitecountry}\r\n";
+        }
     }
-    if (!empty($contact->notes)) $vcard .= "NOTE:{$contact->notes}\r\n";
+    if (!empty($contact->notes))
+    {
+        $vcard .= "NOTE:{$contact->notes}\r\n";
+    }
+    
     $vcard .= "REV:".iso_8601_date($contact->timestamp_modified)."\r\n";
     $vcard .= "END:VCARD\r\n";
     return $vcard;
@@ -1011,6 +1033,7 @@ function incident_timeofnextaction($id)
 */
 function incident_productinfo_html($incidentid)
 {
+    global $strNoProductInfo;
     // extract appropriate product info
     $sql  = "SELECT *, TRIM(incidentproductinfo.information) AS info FROM productinfo, incidentproductinfo ";
     $sql .= "WHERE incidentid=$incidentid AND productinfoid=productinfo.id AND TRIM(productinfo.information) !='' ";
@@ -1019,7 +1042,7 @@ function incident_productinfo_html($incidentid)
 
     if (mysql_num_rows($result) == 0)
     {
-        return('<tr><td>No product info</td><td>No product info</td></tr>');
+        return('<tr><td>{$strNoProductInfo}</td><td>{$strNoProductInfo}</td></tr>');
     }
     else
     {
@@ -1071,10 +1094,18 @@ function incident_sla_history($incidentid)
         $slahistory[$idx]['targetsla'] = $history->sla;
         switch ($history->sla)
         {
-            case 'initialresponse': $slahistory[$idx]['targettime'] = $level->initial_response_mins; break;
-            case 'probdef': $slahistory[$idx]['targettime'] = $level->prob_determ_mins; break;
-            case 'actionplan': $slahistory[$idx]['targettime'] = $level->action_plan_mins; break;
-            case 'solution': $slahistory[$idx]['targettime'] = ($level->resolution_days * $working_day_mins); break;
+            case 'initialresponse':
+                $slahistory[$idx]['targettime'] = $level->initial_response_mins;
+                break;
+            case 'probdef':
+                $slahistory[$idx]['targettime'] = $level->prob_determ_mins;
+                break;
+            case 'actionplan':
+                $slahistory[$idx]['targettime'] = $level->action_plan_mins;
+                break;
+            case 'solution':
+                $slahistory[$idx]['targettime'] = ($level->resolution_days * $working_day_mins);
+                break;
             default:
                 $slahistory[$idx]['targettime'] = 0;
         }
@@ -1108,10 +1139,18 @@ function incident_sla_history($incidentid)
         $slahistory[$idx]['targetsla'] = $target->type;
         switch ($target->type)
         {
-            case 'initialresponse': $slahistory[$idx]['targettime'] = $level->initial_response_mins; break;
-            case 'probdef': $slahistory[$idx]['targettime'] = $level->prob_determ_mins; break;
-            case 'actionplan': $slahistory[$idx]['targettime'] = $level->action_plan_mins; break;
-            case 'solution': $slahistory[$idx]['targettime'] = ($level->resolution_days * $working_day_mins); break;
+            case 'initialresponse':
+                $slahistory[$idx]['targettime'] = $level->initial_response_mins;
+                break;
+            case 'probdef':
+                $slahistory[$idx]['targettime'] = $level->prob_determ_mins;
+                break;
+            case 'actionplan':
+                $slahistory[$idx]['targettime'] = $level->action_plan_mins;
+                break;
+            case 'solution':
+                $slahistory[$idx]['targettime'] = ($level->resolution_days * $working_day_mins);
+                break;
             default:
                 $slahistory[$idx]['targettime'] = 0;
         }
@@ -1304,12 +1343,12 @@ function product_drop_down($name, $id)
 
     while ($products = mysql_fetch_array($result))
     {
-            $html .= "<option value='{$products['id']}'";
-            if ($products['id'] == $id)
-            {
-                $html .= " selected='selected'";
-            }
-            $html .= ">{$products['name']}</option>\n";
+        $html .= "<option value='{$products['id']}'";
+        if ($products['id'] == $id)
+        {
+            $html .= " selected='selected'";
+        }
+        $html .= ">{$products['name']}</option>\n";
     }
     $html .= "</select>\n";
     return $html;
@@ -1318,7 +1357,7 @@ function product_drop_down($name, $id)
 
 function software_drop_down($name, $id)
 {
-    global $now;
+    global $now, $strEOL;
     // extract software
     $sql  = "SELECT id, name, lifetime_end FROM software ";
     $sql .= "ORDER BY name ASC";
@@ -1345,7 +1384,7 @@ function software_drop_down($name, $id)
         $lifetime_end = mysql2date($software->lifetime_end);
         if ($lifetime_end > 0 AND $lifetime_end < $now)
         {
-            $html .= " (EOL)";
+            $html .= " ({$strEOL})";
         }
         $html .= "</option>\n";
     }
@@ -1452,7 +1491,7 @@ function sitetype_drop_down($name, $id)
 */
 function supported_product_drop_down($name, $contactid, $productid)
 {
-    global $CONFIG;
+    global $CONFIG, $strXIncidentsLeft;
 
     $sql = "SELECT *,products.id AS productid, products.name AS productname FROM supportcontacts,maintenance,products ";
     $sql .= "WHERE supportcontacts.maintenanceid=maintenance.id AND maintenance.product=products.id ";
@@ -1475,7 +1514,7 @@ function supported_product_drop_down($name, $contactid, $productid)
 
     while ($products = mysql_fetch_array($result))
     {
-        $remainingstring=incidents_remaining($products["incidentpoolid"])." Incidents Left";  // string containing text stating number of incidents remaining
+        $remainingstring = sprintf($strXIncidentsLeft, incidents_remaining($products["incidentpoolid"]));
         $html .= "<option ";
         if ($productid == $products['productid'])
         {
@@ -1840,7 +1879,11 @@ function userstatus_bardrop_down($name, $id)
     while ($statuses = mysql_fetch_array($result))
     {
         $html .= "<option ";
-        if ($statuses["id"] == $id) $html .= "selected='selected' ";
+        if ($statuses["id"] == $id)
+        {
+            $html .= "selected='selected' ";
+        }
+        
         $html .= "value='set_user_status.php?mode=setstatus&amp;userstatus={$statuses['id']}'>";
         $html .= "{$statuses["name"]}</option>\n";
     }
@@ -2391,18 +2434,19 @@ function emailtype_replace_specials($string, $incidentid, $userid=0)
     * @author Ivan Lucas
     * @param $seconds integer number of seconds
     * @returns string Readable date/time
-    * @todo TODO Needs i18n.
 */
-// FIXME i18n
 function format_seconds($seconds)
 {
+    global $str1Day, $str1Minute, $str1Month, $str1Hour, $strXMinute;
+    global $strXMinutes, $strXHours, $strXDays, $strXMonths, $strXYears;
+    
     if ($seconds <= 0)
     {
-        return '0 minutes';
+        return sprintf($strXMinutes, 0);
     }
     elseif ($seconds <= 60 AND $seconds >= 1)
     {
-        return ("1 minute");
+        return $str1Minutes;
     }
     else
     {
@@ -2418,18 +2462,18 @@ function format_seconds($seconds)
 
         if ($years > 0)
         {
-            $return_string .= "$years Years ";
+            $return_string .= sprintf($strXYears, $year);
         }
 
-        if ($months>0 AND $years<2)
+        if ($months > 0 AND $years < 2)
         {
             if ($months == 1)
             {
-                $return_string .= "1 Month ";
+                $return_string .= $str1Month;
             }
             else
             {
-                $return_string .= "$months Months ";
+                $return_string .= sprintf($strXMonths, $months);
             }
         }
 
@@ -2437,11 +2481,11 @@ function format_seconds($seconds)
         {
             if ($days == 1)
             {
-                $return_string .= "1 Day ";
+                $return_string .= $str1Day;
             }
             else
             {
-                $return_string .= "$days Days ";
+                $return_string .= sprintf($strXDays, $days);
             }
         }
 
@@ -2449,22 +2493,22 @@ function format_seconds($seconds)
         {
             if ($hours == 1)
             {
-                $return_string .= "1 hour ";
+                $return_string .= $str1Hour;
             }
             else
             {
-                $return_string .= "$hours hours ";
+                $return_string .= sprintf($strXHours, $hours);
             }
         }
         elseif ($months < 1 AND $days < 1 AND $hours > 0)
         {
             if ($minutes == 1)
             {
-                $return_string .= "1 minute";
+                $return_string .= $str1Minute;
             }
             elseif ($minutes > 1)
             {
-                $return_string .= "$minutes minutes";
+                $return_string .= sprintf($strXMinutes, $minutes);
             }
         }
 
@@ -2472,11 +2516,11 @@ function format_seconds($seconds)
         {
             if ($minutes <= 1)
             {
-                $return_string .= "$minutes minute";
+                $return_string .= sprintf($strXMinute, $minutes);
             }
             else
             {
-                $return_string .= "$minutes minutes";
+                $return_string .= sprintf($strXMinutes, $minutes);
             }
 
 //             if ($minutes > 1)
@@ -2502,12 +2546,11 @@ function format_seconds($seconds)
     * @returns string. Length of working time, in readable days, hours and minutes
     * @note The working day is calculated using the $CONFIG['end_working_day'] and
     * $CONFIG['start_working_day'] config variables
-    * @todo TODO Needs i18n.
 */
-// FIXME i18n
 function format_workday_minutes($minutes)
 {
-    global $CONFIG;
+    global $CONFIG, $strXMinutes, $strXMinute, $strXHours, $strXHour;
+    global $strXWorkingDay, $strXWorkingDays;
     $working_day_mins = ($CONFIG['end_working_day'] - $CONFIG['start_working_day']) / 60;
     $days = floor($minutes / $working_day_mins);
     $remainder = ($minutes % $working_day_mins);
@@ -2516,20 +2559,20 @@ function format_workday_minutes($minutes)
 
     if ($days == 1)
     {
-        $time = "{$days} working day";
+        $time = sprintf($strXWorkingDay, $days);
     }
     elseif ($days > 1)
     {
-        $time = "{$days} working days";
+        $time = sprintf($strXWorkingDays, $days);
     }
 
     if ($days <= 3 AND $hours == 1)
     {
-        $time .= " {$hours} hour";
+        $time .= " ".sprintf($strXHour, $hours);
     }
     elseif ($days <= 3 AND $hours > 1)
     {
-        $time .= " {$hours} hours";
+        $time .= " ".sprintf($strXHours, $hours);
     }
     elseif ($days > 3 AND $hours >= 1)
     {
@@ -2538,20 +2581,20 @@ function format_workday_minutes($minutes)
 
     if ($days < 1 AND $hours < 8 AND $minutes == 1)
     {
-        $time .= " {$minutes} minute";
+        $time .= " ".sprintf($strXMinute, $minutes);
     }
     elseif ($days < 1 AND $hours < 8 AND $minutes > 1)
     {
-        $time .= " {$minutes} minutes";
+        $time .= " ".sprintf($strXMinutes, $minutes);
     }
 
     if ($days == 1 AND $hours < 8 AND $minutes == 1)
     {
-        $time .= " {$minutes} min";
+        $time .= " ".sprintf($strXMinute, $minutes);
     }
     elseif ($days == 1 AND $hours < 8 AND $minutes > 1)
     {
-        $time .= " {$minutes} mins";
+        $time .= " ".sprintf($strXMinutes, $minutes);
     }
 
     $time = trim($time);
@@ -2640,9 +2683,19 @@ function confirmation_page($refreshtime, $location, $message)
 function html_redirect($url, $success=TRUE, $message='')
 {
     global $CONFIG, $headerdisplayed;
-    if (empty($message)) $refreshtime = 1;
-    elseif ($sucess==FALSE) $refreshtime = 3;
-    else $refreshtime = 6;
+    if (empty($message))
+    {
+        $refreshtime = 1;
+    }
+    elseif ($sucess==FALSE)
+    {
+        $refreshtime = 3;
+    }
+    else
+    {
+        $refreshtime = 6;
+    }
+    
     $refresh = "{$refreshtime}; url={$url}";
 
     $title = $GLOBALS['strPleaseWaitRedirect'];
@@ -2946,7 +2999,7 @@ function throw_user_error($message, $details='')
     global $CONFIG, $application_version_string, $sit;
 
     $html = "<div class='error'>";
-    if (is_array($message)) echo "<p class='error'>Oops</p>";
+    if (is_array($message)) echo "<p class='error'>Oops</p>";  // FIXME i18n ;-)
 
 
 
@@ -2956,13 +3009,13 @@ function throw_user_error($message, $details='')
         // Loop through the array
         foreach ($message AS $msg)
         {
-            $html .= "<li>$msg</li>";
+            $html .= "<li>{$msg}</li>";
         }
         $html .- "</ul>";
     }
     else
     {
-        $html .= "<p class='error'>$message</p>";
+        $html .= "<p class='error'>{$message}</p>";
     }
 
     $html .= "</div>\n";
@@ -3193,13 +3246,17 @@ function print_contact_flags($id, $editlink=FALSE)
     $sql .= "WHERE contactflags.flag=flags.flag AND contactflags.contactid='$id' ";
     $result= mysql_query($sql);
     if (mysql_error()) trigger_error(mysql_error(),E_USER_WARNING);
-    while( $contactflagrows = mysql_fetch_array($result) )
+    while ($contactflagrows = mysql_fetch_array($result) )
     {
         if ($editlink==TRUE)
         {
             echo "<a href='edit_contact_flags.php?mode=removeflag&amp;id=$id&amp;flag={$contactflagrows['flag']}' title='{$contactflagrows['name']} (Click to Remove)'>";
         }
-        else echo "<span title=\"".$contactflagrows['name']."\">";
+        else
+        {
+            echo "<span title=\"".$contactflagrows['name']."\">";
+        }
+        
         echo strtoupper($contactflagrows['flag']);
         if ($editlink==TRUE) echo "</a>";
         else echo "</span>";
@@ -3286,11 +3343,11 @@ function html_checkbox($name,$state)
 {
     if ($state==1 || $state=='Yes' || $state=='yes' || $state=='true' || $state=='TRUE')
     {
-        echo "<input type='checkbox' checked='checked' name='$name' value='$state' />" ;
+        echo "<input type='checkbox' checked='checked' name='{$name}' value='{$state}' />" ;
     }
     else
     {
-        echo "<input type='checkbox' name='$name' value='$state' />" ;
+        echo "<input type='checkbox' name='{$name}' value='{$state}' />" ;
     }
 }
 
@@ -3789,26 +3846,29 @@ function holiday_type ($id)
     return($holidaytype);
 }
 
-// FIXME i18n
 function holiday_approval_status($approvedid, $approvedby=-1)
 {
+    global $strApproved, $strApprovedFree, $strRequested, $strNotRequested;
+    global $strArchivedDenied, $strArchivedNotRequested, $strArchivedRequested;
+    global $strArchivedApproved, $strArchivedApprovedFree, $strApprovalStatusUnknown;
+    
     // We add 10 to normal status when we archive holiday
     switch ($approvedid)
     {
-        case -2: $status = "Not requested"; break;
-        case -1: $status = "Denied"; break;
+        case -2: $status = $strNotRequested; break;
+        case -1: $status = $strDenied; break;
         case 0:
-            if ($approvedby == 0) $status = "Not requested";
-            else $status = "Requested";
+            if ($approvedby == 0) $status = $strNotRequested;
+            else $status = $strRequested;
         break;
-        case 1: $status = "Approved"; break;
-        case 2: $status = "Approved 'Free'"; break;
-        case 8: $status = "Archived. Not Requested"; break;
-        case 9: $status = "Archived. Denied"; break;
-        case 10: $status = "Archived. Requested"; break;
-        case 11: $status = "Archived. Approved"; break;
-        case 12: $status = "Archived. Approved 'Free'"; break;
-        default: $status = "Approval Status Unknown"; break;
+        case 1: $status = $strApproved; break;
+        case 2: $status = $strApprovedFree; break;
+        case 8: $status = $strArchivedNotRequested; break;
+        case 9: $status = $strArchivedDenied; break;
+        case 10: $status = $strArchivedRequested; break;
+        case 11: $status = $strArchivedApproved; break;
+        case 12: $status = $strArchivedApprovedFree; break;
+        default: $status = $strApprovalStatusUnknown; break;
     }
     return $status;
 }
@@ -4201,10 +4261,13 @@ function target_type_name($targettype)
     }
     return $name;
 }
-
-
+/**
+ * No long used anywhere, suggest removal
+ * @deprecated
+*/
 function target_radio_buttons($incidentid)
 {
+    global $strNo, $strInitialResponse;
     $target = incident_get_next_target($incidentid);
     if (empty($target->time))
     {
@@ -4215,8 +4278,8 @@ function target_radio_buttons($incidentid)
         switch ($target->type)
         {
             case 'initialresponse':
-                echo "<input type='radio' name='target' checked='checked' value='none' />No ";
-                echo "<input type='radio' name='target' value='initialresponse' />Initial Response ";
+                echo "<input type='radio' name='target' checked='checked' value='none' />{$strNo} ";
+                echo "<input type='radio' name='target' value='initialresponse' />{$strInitialResponse} ";
                 echo "<input type='radio' name='target' value='probdef' />Prob. Def. ";
                 echo "<input type='radio' name='target' value='actionplan' />Act. Plan ";
                 echo "<input type='radio' name='target' disabled='disabled' value='solution' />Reprioritise ";
@@ -4224,7 +4287,7 @@ function target_radio_buttons($incidentid)
 
             case 'probdef':
                 echo "<input type='radio' name='target' checked='checked' value='none' />No ";
-                echo "<input type='radio' name='target' disabled='disabled' value='initialresponse' />Init. Response ";
+                echo "<input type='radio' name='target' disabled='disabled' value='initialresponse' />{$strInitialResponse} ";
                 echo "<input type='radio' name='target' value='probdef' />Prob. Def. ";
                 echo "<input type='radio' name='target' value='actionplan' />Act. Plan ";
                 echo "<input type='radio' name='target' value='solution' />Reprioritise ";
@@ -4232,7 +4295,7 @@ function target_radio_buttons($incidentid)
 
             case 'actionplan':
                 echo "<input type='radio' name='target' checked='checked' value='none' />No ";
-                echo "<input type='radio' name='target' disabled='disabled' value='initialresponse' />Init. Response ";
+                echo "<input type='radio' name='target' disabled='disabled' value='initialresponse' />{$strInitialResponse} ";
                 echo "<input type='radio' name='target' disabled='disabled' value='probdef' />Prob. Def. ";
                 echo "<input type='radio' name='target' value='actionplan' />Act. Plan ";
                 echo "<input type='radio' name='target' value='solution' />Reprioritise ";
@@ -4240,7 +4303,7 @@ function target_radio_buttons($incidentid)
 
             case 'solution':
                 echo "<input type='radio' name='target' checked='checked' value='none' />No ";
-                echo "<input type='radio' name='target' disabled='disabled' value='initialresponse' />Init. Response ";
+                echo "<input type='radio' name='target' disabled='disabled' value='initialresponse' />{$strInitialResponse} ";
                 echo "<input type='radio' name='target' disabled='disabled' value='probdef' />Prob. Def. ";
                 echo "<input type='radio' name='target' disabled='disabled' value='actionplan' />Act. Plan ";
                 echo "<input type='radio' name='target' value='solution' />Reprioritise ";
@@ -4655,6 +4718,7 @@ function contact_manager_email($contactid)
     $sql .= "AND contacts.siteid='{$siteid}' AND contactflags.flag='MGR'";
     $result = mysql_query($sql);
     if (mysql_error()) trigger_error(mysql_error(),E_USER_WARNING);
+    
     if (mysql_num_rows($result) >= 1)
     {
         while ($contact = mysql_fetch_object($result))
@@ -4663,8 +4727,12 @@ function contact_manager_email($contactid)
         }
         $managers=implode(", ", $manager);
     }
-    else $managers='';
-    return ($managers);
+    else
+    {
+        $managers='';
+    }
+    
+    return $managers;
 }
 
 
@@ -4699,7 +4767,10 @@ function contact_notify_email($contactid)
 function contact_notify($contactid, $level=0)
 {
     $notify_contactid = 0;
-    if ($level == 0) return $contactid;
+    if ($level == 0)
+    {
+        return $contactid;
+    }
     else
     {
         $sql = "SELECT notify_contactid FROM contacts WHERE id='$contactid' LIMIT 1";
@@ -4973,7 +5044,10 @@ function suggest_reassign_userid($incidentid, $exceptuserid=0)
     $result = mysql_query($sql);
     if (mysql_error()) trigger_error(mysql_error(),E_USER_ERROR);
 
-    if (!$result) $userid = FALSE;
+    if (!$result)
+    {
+        $userid = FALSE;
+    }
     else
     {
         $incident = mysql_fetch_object($result);
@@ -5000,6 +5074,7 @@ function suggest_reassign_userid($incidentid, $exceptuserid=0)
             $result = mysql_query($sql);
             if (mysql_error()) trigger_error(mysql_error(),E_USER_ERROR);
         }
+        
         while ($user = mysql_fetch_object($result))
         {
             // Get a ticket for being skilled
@@ -5397,7 +5472,11 @@ function colheader($colname, $coltitle, $sort=FALSE, $order='', $filter='', $def
             if ($var != '') $qsappend .= "&amp;{$key}=".urlencode($var);
         }
     }
-    else $qsappend='';
+    else
+    {
+        $qsappend='';
+    }
+    
     if ($sort==$colname)
     {
         //if ($order=='') $order=$defaultorder;
@@ -5453,10 +5532,24 @@ function add_note_form($linkid, $refid)
     $html .= "New Note by ".user_realname($sit[2])."</div>\n";
     $html .= "<div class='detailentry note'>";
     $html .= "<textarea rows='3' cols='40' name='bodytext' style='width: 94%; margin-top: 5px; margin-bottom: 5px; margin-left: 3%; margin-right: 3%; background-color: transparent; border: 1px dashed #A2A86A;'></textarea>";
-    if (!empty($linkid)) $html .= "<input type='hidden' name='link' value='$linkid' />";
-    else $html .= "&nbsp;Link <input type='text' name='link' size='3' />";
-    if (!empty($refid)) $html .= "<input type='hidden' name='refid' value='{$refid}' />";
-    else $html .= "&nbsp;Ref ID <input type='text' name='refid' size='4' />";
+    if (!empty($linkid))
+    {
+        $html .= "<input type='hidden' name='link' value='$linkid' />";
+    }
+    else
+    {
+        $html .= "&nbsp;Link <input type='text' name='link' size='3' />";
+    }
+    
+    if (!empty($refid))
+    {
+        $html .= "<input type='hidden' name='refid' value='{$refid}' />";
+    }
+    else
+    {
+        $html .= "&nbsp;Ref ID <input type='text' name='refid' size='4' />";
+    }
+    
     $html .= "<input type='hidden' name='action' value='addnote' />";
     $html .= "<input type='hidden' name='rpath' value='{$_SERVER['PHP_SELF']}?{$_SERVER['QUERY_STRING']}' />";
     $html .= "<div style='text-align: right'><input type='submit' value='{$GLOBALS['strAddNote']}' /></div>\n";
