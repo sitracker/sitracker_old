@@ -131,27 +131,6 @@ while ($incident=mysql_fetch_array($incident_result)) {
                 trigger("INCIDENT_NEARING_SLA", array('incidentid' => $incident['id'], 'nextslatime' => $times['next_sla_time']));
             }
         }
-
-        // Check if we have already sent an out of SLA/Review period mail
-        // This attribute is reset when an update to the incident meets sla/review time
-        if ($incident['slaemail']==0)
-        {
-            $emailSent=0;
-            // First check SLA
-            if (($times['review_days'] * 24 * 60) < ($newReviewTime) )
-            {
-                if ($verbose) echo "   Incident {$incident['id']} out of Review{$crlf}";
-                send_template_email('OUT_OF_REVIEW',$incident['id'],"",-1);
-                $emailSent=1;
-            }
-
-            // If we just sent one then update the incident so we don't send another next time
-            if ($emailSent)
-            {
-                $sql="UPDATE `{$dbIncidents}` SET slaemail='1' WHERE id='{$incident['id']}'";
-                mysql_query($sql);
-            }
-        }
     }
 }
 
