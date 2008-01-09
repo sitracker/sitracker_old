@@ -126,28 +126,9 @@ while ($incident=mysql_fetch_array($incident_result)) {
             else $reach = 0;
             if ($reach >= ($CONFIG['urgent_threshold'] * 0.01))
             {
-                //create notice, workaround until triggers are implemented - KMH 26/11/07
                 $timetil = $times['next_sla_time']-$newSlaTime;
-
-                $sql = "INSERT into notices(userid, type, text, linktext, link, referenceid, timestamp) ";
-
-                if ($timetil >= 0)
-                {
-                    $text = "will exceed its SLA soon";
-                    $sql .= "VALUES({$incident['owner']}, ".NEARING_SLA_TYPE.", 'Incident {$incident['id']} - \'".mysql_real_escape_string($incident['title'])."\' $text', 'View Incident', 'javascript:incident_details_window(\'{$incident['id']}\',\'incident{$incident['id']}\')', {$incident['id']}, NOW())";
-                }
-                elseif ($timetil < 0)
-                {
-                    $text = "has exceeded its SLA";
-                    $sql .= "VALUES({$incident['owner']}, ".OUT_OF_SLA_TYPE.", 'Incident {$incident['id']} - \'".mysql_real_escape_string($incident['title'])."\' $text', 'View Incident', 'javascript:incident_details_window(\'{$incident['id']}\',\'incident{$incident['id']}\')', {$incident['id']}, NOW())";
-                }
-                if ($CONFIG['debug']) echo $sql;
-                mysql_query($sql);
-                if (mysql_error()) trigger_error(mysql_error(),E_USER_WARNING);
-
-                $sql = "UPDATE `{$dbIncidents}` SET slanotice='1' WHERE id='{$incident['id']}'";
-                mysql_query($sql);
-                if (mysql_error()) trigger_error(mysql_error(),E_USER_WARNING);
+ 
+                trigger("INCIDENT_NEARING_SLA", array('incidentid' => $incident['id'], 'nextslatime' => $times['next_sla_time']));
             }
         }
 
