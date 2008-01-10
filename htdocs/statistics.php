@@ -20,7 +20,6 @@ $title=  $strTodaysStats;
 
 $mode = cleanvar($_REQUEST['mode']);
 
-
 /**
     * @author Paul Heaney
 */
@@ -229,7 +228,7 @@ function give_overview()
     echo "<th>{$GLOBALS['strClosed']}</th><th>{$GLOBALS['strHandled']}</th>";
     echo "<th>{$GLOBALS['strUpdates']}</th><th>{$GLOBALS['strPerIncident']}</th><th>{$GLOBALS['strSkills']}</th>";
     echo "<th>{$GLOBALS['strOwners']}</th><th>{$GLOBALS['strUsers']}</th>";
-    echo "<th>upd per user</th><th>inc per owner</th><th>{$GLOBALS['strEmailReceivedAbbrev']}</th>"; // FIXME i18n
+    echo "<th>{$strUpdatePerUserAbbrev}</th><th>{$strIncidentPerOwnerAbbrev}</th><th>{$GLOBALS['strEmailReceivedAbbrev']}</th>";
     echo "<th>{$GLOBALS['strEmailTransmisttedAbbrev']}</th><th>{$GLOBALS['strHigherPriority']}</th>";
     echo "<th>{$GLOBALS['strActivity']}</th></tr>\n";
 

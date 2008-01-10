@@ -442,7 +442,7 @@ if (mysql_num_rows($result) >= 1)
             $userstatus = userstatus_name($assign->userstatus);
             $usermessage = user_message($assign->originalowner);
             $username = user_realname($assign->originalowner,TRUE);
-            echo "<td>Owner {$userstatus} &amp; not accepting<br />{$usermessage}</td>";
+            echo "<td>Owner {$userstatus} &amp; not accepting<br />{$usermessage}</td>"; // FIXME i18n
             $backupid = software_backup_userid($assign->originalowner, $assign->softwareid);
             $backupname = user_realname($backupid,TRUE);
             $reason = urlencode(trim("Previous Incident Owner ($username) {$userstatus}  {$usermessage}"));
@@ -467,7 +467,7 @@ if (mysql_num_rows($result) >= 1)
             $origstatus = userstatus_name($assign->userstatus);
             $usermessage = user_message($assign->originalowner);
             $username = user_realname($assign->owner,TRUE);
-            echo "<td>Owner {$userstatusname} &amp; accepting again<br />{$usermessage}</td>";
+            echo "<td>Owner {$userstatusname} &amp; accepting again<br />{$usermessage}</td>"; // FIXME i18n
             $originalname = user_realname($assign->originalowner,TRUE);
             $reason = urlencode(trim("{$originalname} is now accepting incidents again. Previous status {$origstatus} and not accepting."));
             echo "<td>";

@@ -90,7 +90,7 @@ switch($mode)
                 $gid = md5($strUserStillAway);
                 $sql = "INSERT INTO notices (userid, type, text, timestamp, gid) ";
                 $sql .= "VALUES({$_SESSION['userid']}, ".USER_STILL_AWAY_TYPE.",";
-                $sql .= "'".mysql_real_escape_string("You are currently not accepting incidents. You can change this at the bottom of the main page.")."', NOW(), '{$gid}')"; //FIXME i18n
+                $sql .= "'".mysql_real_escape_string($strYouACurrentlyNotAccepting)."', NOW(), '{$gid}')";
                 mysql_query($sql);
                 if (mysql_error()) trigger_error(mysql_error(), E_USER_ERROR);
             }
