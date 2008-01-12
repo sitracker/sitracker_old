@@ -48,6 +48,14 @@ if ($incident->externalengineer != '')
     if ($incident->externalemail != '') echo ", <a href=\"mailto:{$incident->externalemail}\">{$incident->externalemail}</a>";
     echo "<br />\n";
 }
+
+if (open_activities_for_incident($incidentid))
+{
+    echo "<a href='tasks.php?incident={$incidentid}' class='info'>";
+    echo "<img src='{$CONFIG['application_webpath']}images/icons/{$iconset}/16x16/timer.png' width='16' height='16' alt='{$strOpenActivities}' />";
+    echo " {$strOpenActivities}</a><br />";
+}
+
 $tags = list_tags($id, TAG_INCIDENT, TRUE);
 if (!empty($tags)) echo "{$tags}\n";
 echo "</td>";

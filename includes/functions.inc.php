@@ -6553,6 +6553,34 @@ function ldate($format, $date)
     return $datestring;
 }
 
+function open_activities_for_incident($incientid)
+{
+    // Running Activities
+
+    $sql = "SELECT DISTINCT origcolref, linkcolref ";
+    $sql .= "FROM links, linktypes ";
+    $sql .= "WHERE links.linktype=4 ";
+    $sql .= "AND linkcolref={$incientid} ";
+    $sql .= "AND direction='left'";
+    $result = mysql_query($sql);
+    
+    //get list of tasks
+    $sql = "SELECT * FROM tasks WHERE enddate IS NULL ";
+    while($tasks = mysql_fetch_object($result))
+    {
+        if (empty($orSQL)) $orSQL = "(";
+        else $orSQL .= " OR ";
+        $orSQL .= "id={$tasks->origcolref} ";
+    }
+    
+    if (!empty($orSQL))
+    {
+        $sql .= "AND {$orSQL})";
+    }
+    $result = mysql_query($sql);
+    
+    return mysql_num_rows($result);    
+}
 
 // -------------------------- // -------------------------- // --------------------------
 // leave this section at the bottom of functions.inc.php ================================

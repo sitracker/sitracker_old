@@ -682,6 +682,7 @@ $strOtherLeave = 'Other Leave';
 $strOrphanedSites = 'Orphanded Sites';
 $strOpen = 'Open';
 $strOpened = 'Opened';
+$strOpenActivities = 'Open Activities';
 $strOpenedby = 'Opened by %s';
 $strOperation = 'Operation';
 $strOutput = 'Output';
