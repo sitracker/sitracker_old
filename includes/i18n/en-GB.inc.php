@@ -142,6 +142,7 @@ $strBrowseFeedbackForms = 'Browse Feedback Forms';
 $strBrowseKB = 'Browse KnowledgeBase';
 $strBrowseSites = 'Browse sites';
 $strBulkModify = 'Bulk Modify';
+$strByReseller = 'By Reseller';
 # e.g. Ordered By Product
 $strByProduct = 'By Product';
 $strBytes = 'Bytes';

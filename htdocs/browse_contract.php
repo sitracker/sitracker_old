@@ -24,6 +24,7 @@ $title = $strBrowseContracts;
 
 // External variables
 $productid = cleanvar($_REQUEST['productid']);
+$resellerid = cleanvar($_REQUEST['resellerid']);
 $search_string = cleanvar($_REQUEST['search_string']);
 $sort = cleanvar($_REQUEST['sort']);
 $order = cleanvar($_REQUEST['order']);
@@ -47,14 +48,17 @@ if ($activeonly=='yes') echo "checked='checked' ";
 echo "/> {$strShowActiveOnly}</label>";
 echo "<br />{$strByProduct}: ";
 echo product_drop_down('productid', $productid);
+
+echo "{$strByReseller}: ";
+echo reseller_drop_down('resellerid', $resellerid);
 echo "<input type='submit' value=\"{$strGo}\" />";
-?>
-</form>
-</td>
-</tr>
-<tr>
-<td valign="middle">
-<?php
+
+echo "</form>";
+echo "</td>";
+echo "</tr>";
+echo "<tr>";
+echo "<td valign='middle'>";
+
     echo "<a href='add_contract.php'>{$strAddContract}</a> |";
 ?>
     <a href="<?php echo $_SERVER['PHP_SELF'] ?>?search_string=A">A</a> |
@@ -85,12 +89,10 @@ echo "<input type='submit' value=\"{$strGo}\" />";
     <a href="<?php echo $_SERVER['PHP_SELF'] ?>?search_string=Z">Z</a> |
     <?php
     echo "<a href='{$_SERVER['PHP_SELF']}?search_string=*'>{$strAll}</a>";
-    ?>
-</td>
-</tr>
-</table>
 
-<?php
+echo "</td>";
+echo "</tr>";
+echo "</table>";
 
 // check input
 /*
@@ -128,6 +130,11 @@ if ($search_string != '*')
     if ($productid)
     {
         $sql .= "AND maintenance.product='$productid' ";
+    }
+    
+    if (!empty($resellerid))
+    {
+        $sql .= "AND maintenance.reseller='{$resellerid}' ";
     }
 }
 if (!empty($sort))
@@ -173,7 +180,8 @@ else
     <tr>
         <?php
         $filter=array('search_string' => $search_string,
-                      'productid' => $productid);
+                      'productid' => $productid,
+                      'resellerid' => $resellerid);
         echo colheader('id', $strID, $sort, $order, $filter);
         echo colheader('product', $strProduct, $sort, $order, $filter);
         echo colheader('site', $strSite, $sort, $order, $filter);
