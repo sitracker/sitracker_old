@@ -223,6 +223,7 @@ $availablelanguages = array('en-GB' => 'English (British)',
                             'en-US' => 'English (US)',
                             'zh-CN' => '简体中文',
                             'de-DE' => 'Deutsch',
+                            'es-CO' => 'Español (Colombia)',
                             'fr-FR' => 'Français',
                             'lt-LT' => 'Lietuvių',
                             'cy-GB' => 'Cymraeg'
