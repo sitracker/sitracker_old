@@ -73,7 +73,7 @@ CREATE TABLE `contacts` (
   `forenames` varchar(100) NOT NULL default '',
   `surname` varchar(100) NOT NULL default '',
   `jobtitle` varchar(255) NOT NULL default '',
-  `salutation` varchar(50) NOT NULL default '',
+  `courtesytitle` varchar(50) NOT NULL default '',
   `siteid` int(11) NOT NULL default '0',
   `email` varchar(100) default NULL,
   `phone` varchar(50) default NULL,
@@ -101,7 +101,7 @@ CREATE TABLE `contacts` (
   KEY `notify_contactid` (`notify_contactid`)
 ) ENGINE=MyISAM;
 
-INSERT INTO `contacts` (`id`, `notify_contactid`, `username`, `password`, `forenames`, `surname`, `jobtitle`, `salutation`, `siteid`, `email`, `phone`, `mobile`, `fax`, `department`, `address1`, `address2`, `city`, `county`, `country`, `postcode`, `dataprotection_email`, `dataprotection_phone`, `dataprotection_address`, `timestamp_added`, `timestamp_modified`, `notes`) VALUES
+INSERT INTO `contacts` (`id`, `notify_contactid`, `username`, `password`, `forenames`, `surname`, `jobtitle`, `courtesytitlen`, `siteid`, `email`, `phone`, `mobile`, `fax`, `department`, `address1`, `address2`, `city`, `county`, `country`, `postcode`, `dataprotection_email`, `dataprotection_phone`, `dataprotection_address`, `timestamp_added`, `timestamp_modified`, `notes`) VALUES
 (1, 4, 'Acme1', '2830', 'John', 'Acme', 'Chairman', 'Mr', 1, 'acme@example.com', '0666 222111', '', '', '', '', '', '', '', '', '', 'Yes', 'Yes', 'Yes', 1132930556, 1187360933, '');
 
 CREATE TABLE `dashboard` (
@@ -1575,6 +1575,11 @@ ALTER TABLE `sites` ADD INDEX ( `active` );
 ALTER TABLE `updates` ADD INDEX ( `customervisibility` );
 DELETE FROM incidentstatus WHERE id = 0 OR id = 10;
 INSERT INTO `incidentstatus` VALUES (10, 'Active (Unassigned)', 'Active');
+";
+
+$upgrade_schema[332] = "
+-- INL 12Jan08
+ALTER TABLE `contacts` CHANGE `salutation` `courtesytitle` VARCHAR( 50 ) CHARACTER SET latin1 COLLATE latin1_swedish_ci NOT NULL COMMENT 'Was ''salutation'' before 3.32';
 ";
 
 

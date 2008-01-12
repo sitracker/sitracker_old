@@ -46,11 +46,10 @@ if (empty($submit) OR !empty($_SESSION['formerrors']['add_contact']))
 
     echo "<td>";
     echo "\n<table><tr><td align='center'>{$strTitle}<br />";
-    echo "<input maxlength='50' name='salutation' title='Salutation (Mr, Mrs, Miss, Dr. etc.)' size='7'"; //FIXME i18n
-    // FIXME throughout sit the name salutation is used to mean 'courtesy title' (eg. mr, miss) - it's a mistake
-    if($_SESSION['formdata']['add_contact']['salutation'] != '')
+    echo "<input maxlength='50' name='courtesytitle' title='Courtesy Title (Mr, Mrs, Miss, Dr. etc.)' size='7'"; //FIXME i18n
+    if($_SESSION['formdata']['add_contact']['courtesytitle'] != '')
     {
-        echo "value='{$_SESSION['formdata']['add_contact']['salutation']}'";
+        echo "value='{$_SESSION['formdata']['add_contact']['courtesytitle']}'";
     }
     echo "/></td>\n";
 
@@ -163,7 +162,7 @@ else
     $dataprotection_phone = mysql_real_escape_string($_REQUEST['dataprotection_phone']);
     $dataprotection_address = mysql_real_escape_string($_REQUEST['dataprotection_address']);
     $username = cleanvar($_REQUEST['username']);
-    $salutation = cleanvar($_REQUEST['salutation']);
+    $courtesytitle = cleanvar($_REQUEST['courtesytitle']);
     $forenames = cleanvar($_REQUEST['forenames']);
     $surname = cleanvar($_REQUEST['surname']);
     $jobtitle = cleanvar($_REQUEST['jobtitle']);
@@ -228,11 +227,11 @@ else
         $username = strtolower(substr($surname, 0, strcspn($surname, " ")));
         $password = generate_password();
 
-        $sql  = "INSERT INTO contacts (username, password, salutation, forenames, surname, jobtitle, ";
+        $sql  = "INSERT INTO contacts (username, password, courtesytitle, forenames, surname, jobtitle, ";
         $sql .= "siteid, address1, address2, city, county, country, postcode, email, phone, mobile, fax, ";
         $sql .= "department, notes, dataprotection_email, dataprotection_phone, dataprotection_address, ";
         $sql .= "timestamp_added, timestamp_modified) ";
-        $sql .= "VALUES ('$username', '$password', '$salutation', '$forenames', '$surname', '$jobtitle', ";
+        $sql .= "VALUES ('$username', '$password', '$courtesytitle', '$forenames', '$surname', '$jobtitle', ";
         $sql .= "'$siteid', '$address1', '$address2', '$city', '$county', '$country', '$postcode', '$email', ";
         $sql .= "'$phone', '$mobile', '$fax', '$department', '$notes', '$dataprotection_email', ";
         $sql .= "'$dataprotection_phone', '$dataprotection_address', '$now', '$now')";

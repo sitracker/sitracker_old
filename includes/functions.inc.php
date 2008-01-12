@@ -855,7 +855,7 @@ function contact_vcard($id)
     if (mysql_error()) trigger_error(mysql_error(),E_USER_WARNING);
     $contact = mysql_fetch_object($result);
     $vcard = "BEGIN:VCARD\r\n";
-    $vcard .= "N:{$contact->surname};{$contact->forenames};{$contact->salutation}\r\n";
+    $vcard .= "N:{$contact->surname};{$contact->forenames};{$contact->courtesytitle}\r\n";
     $vcard .= "FN:{$contact->forenames} {$contact->surname}\r\n";
     if (!empty($contact->jobtitle)) $vcard .= "TITLE:{$contact->jobtitle}\r\n";
     if (!empty($contact->sitename)) $vcard .= "ORG:{$contact->sitename}\r\n";
