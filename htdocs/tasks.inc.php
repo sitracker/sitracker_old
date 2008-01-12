@@ -536,13 +536,14 @@ if (mysql_num_rows($result) >=1 )
                             */
                             //  echo "IN:{$ind}:START:{$act['starttime']}:ENG:{$engineerPeriod}<br />";
 
-                            if ($ind <= $act['starttime'] AND $ind <= ($act['starttime']+$engineerPeriod))
+                            if ($ind <= $act['starttime'] AND $ind <= ($act['starttime'] + $engineerPeriod))
                             {
                                 //echo "IND:{$ind}:START:{$act['starttime']}<br />";
                                 // already have something which starts in this period just need to check it fits in the period
-                                if ($ind+$engineerPeriod > $act['starttime']+$customerDur)
+
+                                if ($ind + $engineerPeriod > $act['starttime'] + $customerDur)
                                 {
-                                    $remainderInPeriod = ($ind+$engineerPeriod)-$act['starttime'];
+                                    $remainderInPeriod = ($ind + $engineerPeriod) - $act['starttime'];
                                     $customerDur -= $remainderInPeriod;
 
                                     $saved = "true";
@@ -570,7 +571,7 @@ if (mysql_num_rows($result) >=1 )
                     {
                         $startTime+=$engineerPeriod;
                         $count['engineer'][$startTime] = $startTime;
-                        $localDur-$engineerPeriod;
+                        $localDur -= $engineerPeriod; // was just -
                     }
                 }
 
@@ -592,9 +593,10 @@ if (mysql_num_rows($result) >=1 )
                             {
                                 //echo "IND:{$ind}:START:{$act['starttime']}<br />";
                                 // already have something which starts in this period just need to check it fits in the period
-                                if ($ind+$customerPeriod > $act['starttime']+$act['duration'])
+
+                                if ($ind + $customerPeriod > $act['starttime'] + $act['duration'])
                                 {
-                                    $remainderInPeriod = ($ind+$customerPeriod)-$act['starttime'];
+                                    $remainderInPeriod = ($ind+$customerPeriod) - $act['starttime'];
                                     $act['duration'] -= $remainderInPeriod;
 
                                     $saved = "true";
@@ -608,7 +610,7 @@ if (mysql_num_rows($result) >=1 )
                             // need to add a new block
                             $count['customer'][$act['starttime']] = $act['starttime'];
 
-                            $act['duration'] -= $customerPeriod;
+                            $act['duration'] -= $customerPeriod; // was just -
                         }
                     }
                 }
@@ -620,9 +622,9 @@ if (mysql_num_rows($result) >=1 )
 
                     while ($localDur > 0)
                     {
-                        $startTime+=$customerPeriod;
+                        $startTime += $customerPeriod;
                         $count['customer'][$startTime] = $startTime;
-                        $localDur-$customerPeriod;
+                        $localDur -= $customerPeriod;
                     }
                 }
             }
