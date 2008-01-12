@@ -2494,18 +2494,18 @@ function format_seconds($seconds)
 
         if ($years > 0)
         {
-            $return_string .= sprintf($strXYears, $year);
+            $return_string .= sprintf($strXYears, $year)." ";
         }
 
         if ($months > 0 AND $years < 2)
         {
             if ($months == 1)
             {
-                $return_string .= $str1Month;
+                $return_string .= $str1Month." ";
             }
             else
             {
-                $return_string .= sprintf($strXMonths, $months);
+                $return_string .= sprintf($strXMonths, $months)." ";
             }
         }
 
@@ -2513,11 +2513,11 @@ function format_seconds($seconds)
         {
             if ($days == 1)
             {
-                $return_string .= $str1Day;
+                $return_string .= $str1Day." ";
             }
             else
             {
-                $return_string .= sprintf($strXDays, $days);
+                $return_string .= sprintf($strXDays, $days)." ";
             }
         }
 
@@ -2525,22 +2525,22 @@ function format_seconds($seconds)
         {
             if ($hours == 1)
             {
-                $return_string .= $str1Hour;
+                $return_string .= $str1Hour." ";
             }
             else
             {
-                $return_string .= sprintf($strXHours, $hours);
+                $return_string .= sprintf($strXHours, $hours)." ";
             }
         }
         elseif ($months < 1 AND $days < 1 AND $hours > 0)
         {
             if ($minutes == 1)
             {
-                $return_string .= $str1Minute;
+                $return_string .= $str1Minute." ";
             }
             elseif ($minutes > 1)
             {
-                $return_string .= sprintf($strXMinutes, $minutes);
+                $return_string .= sprintf($strXMinutes, $minutes)." ";
             }
         }
 
@@ -2548,11 +2548,11 @@ function format_seconds($seconds)
         {
             if ($minutes <= 1)
             {
-                $return_string .= sprintf($strXMinute, $minutes);
+                $return_string .= sprintf($strXMinute, $minutes)." ";
             }
             else
             {
-                $return_string .= sprintf($strXMinutes, $minutes);
+                $return_string .= sprintf($strXMinutes, $minutes)." ";
             }
 
 //             if ($minutes > 1)
@@ -2566,6 +2566,7 @@ function format_seconds($seconds)
             $return_string .= "$minutes minutes";
         }
         */
+
         $return_string = trim($return_string);
         return $return_string;
     }
