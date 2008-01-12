@@ -570,6 +570,7 @@ $strMonthView = 'Month View';
 $strMore = 'More...';
 $strMorning = 'Morning';
 $strMultiIncidents = '%d Incidents';
+$strMustCloseActivitiesBeforeClosure = 'You must close all activities for the incident before closure.';
 $strMustEnterEmail = 'You must enter an email address';
 $strMustEnterName = 'You must enter a name';
 $strMustEnterNameEscalationPath = 'You must enter a name for the escalation path';

@@ -155,8 +155,8 @@ if (mysql_error()) trigger_error("MySQL Query Error ".mysql_error(), E_USER_ERRO
 
 if (mysql_num_rows($result) == 0)
 {
-    echo "<p align='center'>Sorry, unable to find any maintenance contracts";
-    if (!empty($search_string)) echo " matching '<em>{$search_string}</em>";
+    echo "<p align='center'>Sorry, unable to find any maintenance contracts"; // FIXME i18n
+    if (!empty($search_string)) echo " matching '<em>{$search_string}</em>"; // FIXME i18n
     echo "</p>\n";
 }
 else
@@ -172,23 +172,23 @@ else
     </script>
     <?php
     echo "<p align='center'>Displaying ".mysql_num_rows($result)." contract(s)";
-    if (!empty($search_string)) echo " matching '<em>{$search_string}</em>";
-    if ($productid) echo " where product matches <em>'".product_name($productid)."'</em>";
+    if (!empty($search_string)) echo " matching '<em>{$search_string}</em>"; // FIXME i18n
+    if ($productid) echo " where product matches <em>'".product_name($productid)."'</em>"; // FIXME i18n
     echo "</p>\n";
-    ?>
-    <table align='center' style='width: 95%;'>
-    <tr>
-        <?php
-        $filter=array('search_string' => $search_string,
-                      'productid' => $productid,
-                      'resellerid' => $resellerid);
-        echo colheader('id', $strID, $sort, $order, $filter);
-        echo colheader('product', $strProduct, $sort, $order, $filter);
-        echo colheader('site', $strSite, $sort, $order, $filter);
-        echo colheader('reseller', $strReseller, $sort, $order. $filter);
-        echo "<th>{$strLicense}</th>";
-        echo colheader('expiry', $strExpiryDate, $sort, $order, $filter);
-        echo "<th width='200'>{$strNotes}</th>";
+
+    echo "<table align='center' style='width: 95%;'>";
+    echo "<tr>";
+
+    $filter=array('search_string' => $search_string,
+                  'productid' => $productid,
+                  'resellerid' => $resellerid);
+    echo colheader('id', $strID, $sort, $order, $filter);
+    echo colheader('product', $strProduct, $sort, $order, $filter);
+    echo colheader('site', $strSite, $sort, $order, $filter);
+    echo colheader('reseller', $strReseller, $sort, $order. $filter);
+    echo "<th>{$strLicense}</th>";
+    echo colheader('expiry', $strExpiryDate, $sort, $order, $filter);
+    echo "<th width='200'>{$strNotes}</th>";
     echo "</tr>\n";
     $shade = 0;
     while ($results = mysql_fetch_array($result))

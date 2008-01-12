@@ -35,6 +35,35 @@ if (empty($_REQUEST['process']))
         html_redirect("incident_details.php?id={$incidentid}", FALSE, $strCallMustBeAssignedBeforeClosure);
         exit;
     }
+    
+        //get info for incident-->task linktype
+    $sql = "SELECT DISTINCT origcolref, linkcolref ";
+    $sql .= "FROM links, linktypes ";
+    $sql .= "WHERE links.linktype=4 ";
+    $sql .= "AND linkcolref={$id} ";
+    $sql .= "AND direction='left'";
+    $result = mysql_query($sql);
+
+    //get list of tasks
+    $sql = "SELECT * FROM tasks WHERE enddate IS NULL ";
+    while($tasks = mysql_fetch_object($result))
+    {
+        if (empty($orSQL)) $orSQL = "(";
+        else $orSQL .= " OR ";
+        $orSQL .= "id={$tasks->origcolref} ";
+    }
+    
+    if (!empty($orSQL))
+    {
+        $sql .= "AND {$orSQL})";
+    }
+    $result = mysql_query($sql);
+    
+    if (mysql_num_rows($result) > 0)
+    {
+        html_redirect("incident_details.php?id={$incidentid}", FALSE, $strMustCloseActivitiesBeforeClosure);
+        exit;
+    }
 
     include('incident_html_top.inc.php');
 
