@@ -27,7 +27,7 @@ if (empty($submit))
 {
     // Show add product form
     include('htmlheader.inc.php');
-    echo show_errors('add_product');
+    echo show_form_errors('add_product');
     clear_form_errors('add_product');
     echo "<h2><img src='{$CONFIG['application_webpath']}images/icons/{$iconset}/32x32/product.png' width='32' height='32' alt='' /> ";
     echo "{$strNewProduct}</h2>";
@@ -74,7 +74,7 @@ else
     $name = cleanvar($_REQUEST['name']);
     $vendor = cleanvar($_REQUEST['vendor']);
     $description = cleanvar($_REQUEST['description']);
-    
+
     $_SESSION['formdata']['add_product'] = $_REQUEST;
     // Add New
     $errors = 0;

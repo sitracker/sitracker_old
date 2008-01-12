@@ -41,7 +41,7 @@ if (user_permission($sit[2],$permission))
         -->
         </script>
         <?php
-        //echo show_errors('kb_add_article');
+        echo show_form_errors('kb_add_article');
         unset($_SESSION['formerrors']['kb_add_article']);
         echo "<h2><img src='{$CONFIG['application_webpath']}images/icons/{$iconset}/32x32/kb.png' width='32' height='32' alt='' /> ";
         echo "{$strAddKBArticle}</h2>";
