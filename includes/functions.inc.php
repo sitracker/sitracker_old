@@ -18,7 +18,7 @@
 // Version number of the application, (numbers only)
 $application_version='3.32';
 // Revision string, e.g. 'beta2' or 'svn' or ''
-$application_revision='svn';
+$application_revision = 'svn';
 
 // Append SVN data for svn versions
 if ($application_revision == 'svn')
@@ -94,7 +94,7 @@ define('SIT_UPGRADED_NOTICE', 7);
 
 // Decide which language to use and setup internationalisation
 require('i18n/en-GB.inc.php');
-if ($CONFIG['default_i18n']!='en-GB') @include("i18n/{$CONFIG['default_i18n']}.inc.php");
+if ($CONFIG['default_i18n'] != 'en-GB') @include("i18n/{$CONFIG['default_i18n']}.inc.php");
 if(!empty($_SESSION['lang']) AND $_SESSION['lang'] != $CONFIG['default_i18n']) include("i18n/{$_SESSION['lang']}.inc.php");
 ini_set('default_charset', $i18ncharset);
 
@@ -108,19 +108,19 @@ $dbUsers = "{$CONFIG['db_tableprefix']}users";
 
 // Time settings
 $now = time();
-$today=$now+(16*3600);  // next 16 hours, based on reminders being run at midnight this is today
-$lastweek=$now - (7 * 86400); // the previous seven days
-$todayrecent=$now-(16*3600);  // past 16 hours
+$today = $now+(16*3600);  // next 16 hours, based on reminders being run at midnight this is today
+$lastweek = $now - (7 * 86400); // the previous seven days
+$todayrecent = $now-(16*3600);  // past 16 hours
 
 $CONFIG['upload_max_filesize'] = return_bytes($CONFIG['upload_max_filesize']);
 
 
 
 // Set a string to be the full version number and revision of the application
-$application_version_string=trim("v{$application_version} {$application_revision}");
+$application_version_string = trim("v{$application_version} {$application_revision}");
 
 // Email template settings
-$template_openincident_email=12;
+$template_openincident_email = 12;
 
 //Prevent Magic Quotes from affecting scripts, regardless of server settings
 //Make sure when reading file data,
@@ -194,7 +194,7 @@ function stripslashes_array($data)
 */
 function authenticate($username, $password)
 {
-    if ($_SESSION['auth']==TRUE)
+    if ($_SESSION['auth'] == TRUE)
     {
         // Already logged in
         return 1;
@@ -286,7 +286,7 @@ function permission_name($permissionid)
 function software_name($softwareid)
 {
     global $now, $strEOL, $strEndOfLife;
-// <span class='deleted'>
+
     $sql = "SELECT * FROM software WHERE id = '{$softwareid}'";
     $result = mysql_query($sql);
     if (mysql_num_rows($result) >= 1)
@@ -323,7 +323,6 @@ function software_name($softwareid)
 */
 function user_id($username, $password)
 {
-    // extract user
     $sql  = "SELECT id FROM users ";
     $sql .= "WHERE username='$username' AND password='$password'";
     $result = mysql_query($sql);
@@ -372,7 +371,7 @@ function user_realname($id, $allowhtml=FALSE)
             $result = mysql_query($sql);
             if (mysql_error()) trigger_error(mysql_error(),E_USER_WARNING);
             list($realname, $status) = mysql_fetch_row($result);
-            if ($allowhtml==FALSE OR $status > 0)
+            if ($allowhtml == FALSE OR $status > 0)
             {
                 return $realname;
             }
@@ -500,7 +499,8 @@ function user_countincidents($id)
 }
 
 // counts number of incidents and priorty
-function user_incidents($id){
+function user_incidents($id)
+{
     $sql = "SELECT priority, count(priority) AS num FROM incidents WHERE (owner = $id OR towner = $id) AND status != 2";
     $sql .= " GROUP BY priority";
 
@@ -511,10 +511,10 @@ function user_incidents($id){
 
     if (mysql_num_rows($result) > 0)
     {
-	    while ($count = mysql_fetch_array($result))
+        while ($count = mysql_fetch_array($result))
         {
-		    $arr[$count['priority']] = $count['num'];
-	    }
+            $arr[$count['priority']] = $count['num'];
+        }
     }
     return $arr;
 }
@@ -544,7 +544,7 @@ function user_holiday($userid, $type=0, $year, $month, $day, $length=FALSE)
     }
     else
     {
-        $sql .=" AND userid='$userid' ";
+        $sql .= " AND userid='$userid' ";
     }
 
     if ($length!=FALSE)
@@ -562,12 +562,12 @@ function user_holiday($userid, $type=0, $year, $month, $day, $length=FALSE)
     else
     {
         $totallength=0;
-        while ($holiday=mysql_fetch_object($result))
+        while ($holiday = mysql_fetch_object($result))
         {
-            $type=$holiday->type;
-            $length=$holiday->length;
-            $approved=$holiday->approved;
-            $approvedby=$holiday->approvedby;
+            $type = $holiday->type;
+            $length = $holiday->length;
+            $approved = $holiday->approved;
+            $approvedby = $holiday->approvedby;
             // hmm... not sure these next lines are required.
             if ($length=='am' && $totallength==0) $totallength='am';
             if ($length=='pm' && $totallength==0) $totallength='pm';
@@ -594,7 +594,7 @@ function user_count_holidays($userid, $type, $date=0)
     if ($date > 0) $sql .= "AND startdate < $date";
     $result = mysql_query($sql);
     if (mysql_error()) trigger_error(mysql_error(),E_USER_WARNING);
-    $full_days=mysql_num_rows($result);
+    $full_days = mysql_num_rows($result);
 
     $sql = "SELECT id FROM holidays ";
     $sql .= "WHERE userid='$userid' AND type='$type' AND (length='pm' OR length='am') AND approved >= 0 AND approved < 2 ";
@@ -730,6 +730,7 @@ function contact_count_open_incidents($id)
     * @retval 'expired' Contact did have support for product but it has now expired
     * @note Based on contactproducts and so DEPRECATED needs updating to be based on contracts
     * @todo TODO update contact_productsupport() to be based on contracts
+    *
 */
 function contact_productsupport($contactid, $productid)
 {
@@ -755,6 +756,7 @@ function contact_productsupport($contactid, $productid)
         }
     }
 }
+
 
 /**
     * Returns an integer representing the expiry day of the month for the given contact's product support.
@@ -816,7 +818,7 @@ function contact_productsupport_expirymonth($contactid, $productid)
     * @deprecated
     * @returns integer year
     * @retval 0 the contact or product does not exist or if the contact does not have support for the given product.
-    * @note Based on contactproducts and so DEPRECATED needs updating to be based on contracts
+    * @deprecated Based on contactproducts and so DEPRECATED needs updating to be based on contracts
 */
 function contact_productsupport_expiryyear($contactid, $productid)
 {
@@ -862,17 +864,17 @@ function contact_vcard($id)
     {
         $vcard .= "TEL;TYPE=WORK;TYPE=FAX:{$contact->fax}\r\n";
     }
-    
+
     if ($contact->dataprotection_phone!='Yes' && !empty($contact->mobile))
     {
         $vcard .= "TEL;TYPE=WORK;TYPE=CELL:{$contact->mobile}\r\n";
     }
-    
+
     if ($contact->dataprotection_email!='Yes' && !empty($contact->email))
     {
         $vcard .= "EMAIL;TYPE=INTERNET:{$contact->email}\r\n";
     }
-    
+
     if ($contact->dataprotection_address!='Yes')
     {
         if ($contact->address1 != '')
@@ -888,7 +890,7 @@ function contact_vcard($id)
     {
         $vcard .= "NOTE:{$contact->notes}\r\n";
     }
-    
+
     $vcard .= "REV:".iso_8601_date($contact->timestamp_modified)."\r\n";
     $vcard .= "END:VCARD\r\n";
     return $vcard;
@@ -1883,7 +1885,7 @@ function userstatus_bardrop_down($name, $id)
         {
             $html .= "selected='selected' ";
         }
-        
+
         $html .= "value='set_user_status.php?mode=setstatus&amp;userstatus={$statuses['id']}'>";
         $html .= "{$statuses["name"]}</option>\n";
     }
@@ -2439,7 +2441,7 @@ function format_seconds($seconds)
 {
     global $str1Day, $str1Minute, $str1Month, $str1Hour, $strXMinute;
     global $strXMinutes, $strXHours, $strXDays, $strXMonths, $strXYears;
-    
+
     if ($seconds <= 0)
     {
         return sprintf($strXMinutes, 0);
@@ -2696,7 +2698,7 @@ function html_redirect($url, $success=TRUE, $message='')
     {
         $refreshtime = 6;
     }
-    
+
     $refresh = "{$refreshtime}; url={$url}";
 
     $title = $GLOBALS['strPleaseWaitRedirect'];
@@ -3257,7 +3259,7 @@ function print_contact_flags($id, $editlink=FALSE)
         {
             echo "<span title=\"".$contactflagrows['name']."\">";
         }
-        
+
         echo strtoupper($contactflagrows['flag']);
         if ($editlink==TRUE) echo "</a>";
         else echo "</span>";
@@ -3852,7 +3854,7 @@ function holiday_approval_status($approvedid, $approvedby=-1)
     global $strApproved, $strApprovedFree, $strRequested, $strNotRequested;
     global $strArchivedDenied, $strArchivedNotRequested, $strArchivedRequested;
     global $strArchivedApproved, $strArchivedApprovedFree, $strApprovalStatusUnknown;
-    
+
     // We add 10 to normal status when we archive holiday
     switch ($approvedid)
     {
@@ -4719,7 +4721,7 @@ function contact_manager_email($contactid)
     $sql .= "AND contacts.siteid='{$siteid}' AND contactflags.flag='MGR'";
     $result = mysql_query($sql);
     if (mysql_error()) trigger_error(mysql_error(),E_USER_WARNING);
-    
+
     if (mysql_num_rows($result) >= 1)
     {
         while ($contact = mysql_fetch_object($result))
@@ -4732,7 +4734,7 @@ function contact_manager_email($contactid)
     {
         $managers='';
     }
-    
+
     return $managers;
 }
 
@@ -5075,7 +5077,7 @@ function suggest_reassign_userid($incidentid, $exceptuserid=0)
             $result = mysql_query($sql);
             if (mysql_error()) trigger_error(mysql_error(),E_USER_ERROR);
         }
-        
+
         while ($user = mysql_fetch_object($result))
         {
             // Get a ticket for being skilled
@@ -5477,7 +5479,7 @@ function colheader($colname, $coltitle, $sort=FALSE, $order='', $filter='', $def
     {
         $qsappend='';
     }
-    
+
     if ($sort==$colname)
     {
         //if ($order=='') $order=$defaultorder;
@@ -5541,7 +5543,7 @@ function add_note_form($linkid, $refid)
     {
         $html .= "&nbsp;Link <input type='text' name='link' size='3' />";
     }
-    
+
     if (!empty($refid))
     {
         $html .= "<input type='hidden' name='refid' value='{$refid}' />";
@@ -5550,7 +5552,7 @@ function add_note_form($linkid, $refid)
     {
         $html .= "&nbsp;Ref ID <input type='text' name='refid' size='4' />";
     }
-    
+
     $html .= "<input type='hidden' name='action' value='addnote' />";
     $html .= "<input type='hidden' name='rpath' value='{$_SERVER['PHP_SELF']}?{$_SERVER['QUERY_STRING']}' />";
     $html .= "<div style='text-align: right'><input type='submit' value='{$GLOBALS['strAddNote']}' /></div>\n";
