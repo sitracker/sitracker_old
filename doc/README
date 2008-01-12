@@ -239,9 +239,10 @@ subdirectory (named for your plugin) inside htdocs/ext
 Getting Help
 ------------
 If you need help installing or using Support Incident Tracker
-please feel welcome to join our mailing list by sending an email to
-sit-subscribe@lists.salfordsoftware.co.uk or posting a message on our
-forum at http://sourceforge.net/forum/?group_id=160319
+please feel welcome to join our mailing list
+sitracker-devel@lists.sourceforge.net. You can subscribe herein
+https://lists.sourceforge.net/lists/listinfo/sitracker-devel
+or post a message on our forum at http://sourceforge.net/forum/?group_id=160319
 
 We also now have an IRC channel.  #sit on the freenode network, we'd
 love for you to join us, see here http://sitracker.sourceforge.net/IRC
