@@ -8,7 +8,6 @@
 // of the GNU General Public License, incorporated herein by reference.
 //
 // Author: Paul Heaney <paulheaney[at]users.sourceforge.net>
-// FIXME i18n
 
 @include ('set_include_path.inc.php');
 $permission = 0; // not required
@@ -24,11 +23,11 @@ switch ($action)
 {
     case 'add':
         include ('htmlheader.inc.php');
-        echo "<h2>Add RSS/Atom feed</h2>";
+        echo "<h2>{$strAddRSSAtomFeed}</h2>";
         echo "<form action='{$_SERVER['PHP_SELF']}?action=do_add' method='post'>";
         echo "<table class='vertical'>";
-        echo "<tr><td><label><img src='{$CONFIG['application_webpath']}images/icons/{$iconset}/12x12/feed-icon.png' style='border: 0px;' alt='Feed Icon' /> ";
-        echo "RSS/Atom Feed URL: <input type='text' name='url' size='45' /></label></td></tr>\n"; // FIXME i18n URL
+        echo "<tr><td><label><img src='{$CONFIG['application_webpath']}images/icons/{$iconset}/12x12/feed-icon.png' style='border: 0px;' alt='{$strFeedIcon}' /> ";
+        echo "{$strRSSAtomURL}: <input type='text' name='url' size='45' /></label></td></tr>\n";
         echo "<tr><td><label>{$strDisplay}: <input type='text' name='items' size='3' value='0' /></label> ({$str0MeansUnlimited})</td></tr>";
         echo "</table>";
         echo "<p align='center'><input name='submit' type='submit' value='{$strAdd}' /></p>";
@@ -60,18 +59,18 @@ switch ($action)
         {
             $feed = mysql_fetch_object($result);
             if ($feed->items=='') $feed->items=0;
-            echo "<h2>Edit RSS/Atom feed</h2>";
+            echo "<h2>{$strEditRSSAtomFeed}</h2>";
             echo "<form action='{$_SERVER['PHP_SELF']}?action=do_edit' method='post'>";
             echo "<table class='vertical'>";
             echo "<tr><td><label><img src='{$CONFIG['application_webpath']}images/icons/{$iconset}/12x12/feed-icon.png' style='border: 0px;' alt='Feed Icon' /> ";
-            echo "RSS/Atom Feed URL: <input type='text' name='url' size='45' value='{$feed->url}' /></label></td></tr>\n"; // FIXME i18n URL
+            echo "{$strRSSAtomURL}: <input type='text' name='url' size='45' value='{$feed->url}' /></label></td></tr>\n";
             echo "<tr><td><label>{$strDisplay}: <input type='text' name='items' size='3' value='{$feed->items}' /></label> ({$str0MeansUnlimited})</td></tr>";
             echo "</table>";
             echo "<input type='hidden' name='oldurl' size='45' value='{$feed->url}' />";
             echo "<p align='center'><input name='submit' type='submit' value='{$strSave}' /></p>";
             echo "</form>";
         }
-        else echo "<p class='error'>$strNoRecords</p>";
+        else echo "<p class='error'>{$strNoRecords}</p>";
         include ('htmlfooter.inc.php');
 
         break;
@@ -108,7 +107,7 @@ switch ($action)
         break;
     default:
         include ('htmlheader.inc.php');
-        echo "<h2>Edit RSS/Atom feeds</h2>";  // FIXME i18n edit feeds
+        echo "<h2>{$strEditRSSAtomFeed}</h2>";
 
         $sql = "SELECT * FROM `{$dbDashboardRSS}` WHERE owner = {$sit[2]}";
         $result = mysql_query($sql);
@@ -125,7 +124,7 @@ switch ($action)
                 else $opposite = "true";
                 $urlparts = parse_url($obj->url);
                 if ($obj->enabled == 'false') $shade='expired';
-                echo "<tr class='$shade'><td align='left'><a href=\"".htmlentities($obj->url,ENT_NOQUOTES, $GLOBALS['i18ncharset'])."\"><img src='{$CONFIG['application_webpath']}images/icons/{$iconset}/12x12/feed-icon.png' style='border: 0px;' alt='Feed Icon' /></a> <a href=\"{$obj->url}\">{$urlparts['host']}</a></td>";
+                echo "<tr class='$shade'><td align='left'><a href=\"".htmlentities($obj->url,ENT_NOQUOTES, $GLOBALS['i18ncharset'])."\"><img src='{$CONFIG['application_webpath']}images/icons/{$iconset}/12x12/feed-icon.png' style='border: 0px;' alt='{strFeedIcon}' /></a> <a href=\"{$obj->url}\">{$urlparts['host']}</a></td>";
                 echo "<td>";
                 if ($obj->items >= 1) echo "{$obj->items}";
                 else echo $strUnlimited;
@@ -138,7 +137,7 @@ switch ($action)
             }
             echo "</table>\n";
         }
-        else echo "<p align='center'>No feeds currently present</p>"; // FIXME i18n No Feeds
+        else echo "<p align='center'>{$strNoFeedsCurrentlyPresent}</p>";
         echo "<p align='center'><a href='{$_SERVER['PHP_SELF']}?action=add'>{$strAdd}</a></p>";
         include ('htmlfooter.inc.php');
         break;

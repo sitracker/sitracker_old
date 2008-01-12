@@ -52,12 +52,22 @@ if (empty($submit))
         echo "<select name='noskills[]' multiple='multiple' size='20' style='width: 100%; min-width: 200px;'>";
         while ($software = mysql_fetch_object($result))
         {
-            if (is_array($expertise)) { if (!in_array($software->id,$expertise)) echo "<option value='{$software->id}'>$software->name</option>\n";  }
-            else  echo "<option value='{$software->id}'>$software->name</option>\n";
+            if (is_array($expertise)) { if (!in_array($software->id,$expertise))
+            {
+                echo "<option value='{$software->id}'>$software->name</option>\n";  }
+            }
+            else
+            {
+                echo "<option value='{$software->id}'>$software->name</option>\n";
+            }
         }
         echo "</select>";
     }
-    else echo "<p class='error'>No software defined</p>";
+    else
+    {
+        echo "<p class='error'>{$strNoSkillsDefined}</p>";
+    }
+        
     echo "</td>";
     echo "<td class='shade2'>";
     echo "<input type='button' value='&gt;' title='Add Selected' onclick=\"copySelected(this.form.elements['noskills[]'],this.form.elements['expertise[]'])\" /><br />";
@@ -77,10 +87,10 @@ if (empty($submit))
     echo "</select>";
     echo "<input type='hidden' name='userid' value='{$user}' />";
     echo "</td></tr>\n";
-    ?>
-    </table>
-    <input type="hidden" name="choices" />
-    <?php
+
+    echo "</table>";
+    echo "<input type='hidden' name='choices' />";
+
     echo "<p align='center'><input name='submit' type='submit' value='{$strSave}' /></p>";
     echo "</form>\n";
 
@@ -128,7 +138,7 @@ else
     // Make sure we're not being backup support for all the software we have no skills in.
     if (is_array($noskills))
     {
-        $noskills=array_unique($noskills);
+        $noskills = array_unique($noskills);
         foreach ($noskills AS $value)
         {
             // Remove the software listed that we don't support
@@ -152,8 +162,7 @@ else
     $lacking=mysql_num_rows($result);
     if ($lacking >= 1)
     {
-        // FIXME i18n
-        html_redirect("edit_backup_users.php?user={$_POST['userid']}", TRUE, "You should now define a substitute engineer for each skill");
+        html_redirect("edit_backup_users.php?user={$_POST['userid']}", TRUE, $strYouShouldNowDefineSubstituteEngineers);
     }
     else
     {

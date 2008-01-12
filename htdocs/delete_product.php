@@ -54,7 +54,7 @@ if (!empty($productid))
         include ('htmlheader.inc.php');
         // FIXME i18n error
         echo "<p class='error'>Sorry, this product cannot be deleted because it has been associated with one or more incidents, contracts or skills</p>";
-        echo "<p align='center'><a href='products.php#{$productid}'>Return to products list</a></p>";
+        echo "<p align='center'><a href='products.php#{$productid}'>{$strReturnToProductList}</a></p>";
         include ('htmlfooter.inc.php');
     }
 }

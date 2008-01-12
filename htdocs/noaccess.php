@@ -9,8 +9,6 @@
 //
 // Author: Ivan Lucas <ivanlucas[at]users.sourceforge.net>
 
-// FIXME i18n Permission denied
-
 @include ('set_include_path.inc.php');
 require ('db_connect.inc.php');
 require ('functions.inc.php');
@@ -25,7 +23,7 @@ include ('htmlheader.inc.php');
 if ($username!='')
 {
     $errdate=date('M j H:i');
-    $errmsg="$errdate ".permission_name($id)."($id) Permission denied for '$username'";
+    $errmsg="$errdate ".permission_name($id)."({$id}) ".sprintf($strPermissionDeniedForX, $username);
     $errmsg.="\n";
     if (!empty($CONFIG['access_logfile']))
     {

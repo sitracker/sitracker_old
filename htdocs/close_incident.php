@@ -32,7 +32,7 @@ if (empty($_REQUEST['process']))
 
     if ($owner == 0)
     {
-        html_redirect("incident_details.php?id={$incidentid}", FALSE, "Call must be assigned before closure");
+        html_redirect("incident_details.php?id={$incidentid}", FALSE, $strCallMustBeAssignedBeforeClosure);
         exit;
     }
 
@@ -162,7 +162,7 @@ if (empty($_REQUEST['process']))
     -->
     </script>
     <?php
-    // FIXME i18n
+
     echo "<form name='closeform' action='{$_SERVER['PHP_SELF']}' method='post'>";
     echo "<table class='vertical' width='100%'>";
     echo "<tr><th width='30%'>{$strClose}:</th>";
@@ -177,7 +177,7 @@ if (empty($_REQUEST['process']))
     echo "<td><input type='text' name='kbtitle' id='kbtitle' size='30' value='{$incident_title}' disabled='disabled' />";
     echo "</td></tr>\n";
     echo "<tr><th>&nbsp;</th><td>";
-    echo "<span id='helptext'>Enter some details about the incident to be stored in the incident log for future use.";
+    echo "<span id='helptext'>{$strEnterDetailsAboutIncidentToBeStoredInLog}";
     echo "{$strSummaryOfProblemAndResolution}<br /><strong>{$strFinalUpdate}</strong>:</span></td></tr>\n";
 
     echo "<tr><th>{$strSummary}:<sup class='red'>*</sup>\n ";
@@ -200,23 +200,21 @@ if (empty($_REQUEST['process']))
     }
     echo "</textarea>\n";
     echo "</td></tr>";
-    ?>
 
-    <tr id='symptomsrow' style='display:none;'><th><label>Symptoms: <input type='checkbox' name='incsymptoms' onclick="if (this.checked) {document.closeform.symptoms.disabled = false; document.closeform.symptoms.style.display=''} else { saveValue=document.closeform.symptoms.value; document.closeform.symptoms.disabled = true; document.closeform.symptoms.style.display='none'}" disabled='disabled' /></label></th>
-    <td><textarea id="symptoms" name="symptoms" cols='40' style="display: none;" rows='8' onfocus="if (this.enabled) { this.value = saveValue; setTimeout('document.articlform.symptoms.blur()',1); } else saveValue=this.value;"></textarea></td></tr>
+    echo "<tr id='symptomsrow' style='display:none;'><th><label>{$strSymptoms}: <input type='checkbox' name='incsymptoms' onclick=\"if (this.checked) {document.closeform.symptoms.disabled = false; document.closeform.symptoms.style.display=''} else { saveValue=document.closeform.symptoms.value; document.closeform.symptoms.disabled = true; document.closeform.symptoms.style.display='none'}\" disabled='disabled' /></label></th>";
+    echo "<td><textarea id='symptoms' name='symptoms' cols='40' style='display: none;' rows='8' onfocus=\"if (this.enabled) { this.value = saveValue; setTimeout('document.articlform.symptoms.blur()',1); } else saveValue=this.value;\"></textarea></td></tr>";
 
-    <tr id='causerow' style='display:none;'><th><label>Cause: <input type='checkbox' name='inccause' onclick="if (this.checked) {document.closeform.cause.disabled = false; document.closeform.cause.style.display=''} else { saveValue=document.closeform.cause.value; document.closeform.cause.disabled = true; document.closeform.cause.style.display='none'}" disabled='disabled' /></label></th>
-    <td><textarea id="cause" name="cause" cols='40' rows='8' style="display: none;" onfocus="if (this.enabled) { this.value = saveValue; setTimeout('document.articlform.cause.blur()',1); } else saveValue=this.value;"></textarea></td></tr>
+    echo "<tr id='causerow' style='display:none;'><th><label>{$strCause}: <input type='checkbox' name='inccause' onclick=\"if (this.checked) {document.closeform.cause.disabled = false; document.closeform.cause.style.display=''} else { saveValue=document.closeform.cause.value; document.closeform.cause.disabled = true; document.closeform.cause.style.display='none'}\" disabled='disabled' /></label></th>";
+    echo "<td><textarea id='cause' name='cause' cols='40' rows='8' style='display: none;' onfocus=\"if (this.enabled) { this.value = saveValue; setTimeout('document.articlform.cause.blur()',1); } else saveValue=this.value;\"></textarea></td></tr>";
 
-    <tr id='questionrow' style='display:none;'><th><label>Question: <input type='checkbox' name='incquestion' onclick="if (this.checked) {document.closeform.question.disabled = false; document.closeform.question.style.display=''} else { saveValue=document.closeform.question.value; document.closeform.question.disabled = true; document.closeform.question.style.display='none'}" disabled='disabled' /></label></th>
-    <td><textarea id="question" name="question" cols='40' rows='8' style="display: none;" onfocus="if (this.enabled) { this.value = saveValue; setTimeout('document.articlform.question.blur()',1); } else saveValue=this.value;"></textarea></td></tr>
+    echo "<tr id='questionrow' style='display:none;'><th><label>{$strQuestion}: <input type='checkbox' name='incquestion' onclick=\"if (this.checked) {document.closeform.question.disabled = false; document.closeform.question.style.display=''} else { saveValue=document.closeform.question.value; document.closeform.question.disabled = true; document.closeform.question.style.display='none'}\" disabled='disabled' /></label></th>";
+    echo "<td><textarea id='question' name='question' cols='40' rows='8' style='display: none;' onfocus=\"if (this.enabled) { this.value = saveValue; setTimeout('document.articlform.question.blur()',1); } else saveValue=this.value;\"></textarea></td></tr>";
 
-    <tr id='answerrow' style='display:none;'><th><label>Answer: <input type='checkbox' name='incanswer' onclick="if (this.checked) {document.closeform.answer.disabled = false; document.closeform.answer.style.display=''} else { saveValue=document.closeform.answer.value; document.closeform.answer.disabled = true; document.closeform.answer.style.display='none'}" disabled='disabled' /></label></th>
-    <td><textarea id="answer" name="answer" cols='40' rows='8' style="display: none;" onfocus="if (this.enabled) { this.value = saveValue; setTimeout('document.articlform.answer.blur()',1); } else saveValue=this.value;"></textarea></td></tr>
+    echo "<tr id='answerrow' style='display:none;'><th><label>{$strAnswer}: <input type='checkbox' name='incanswer' onclick=\"if (this.checked) {document.closeform.answer.disabled = false; document.closeform.answer.style.display=''} else { saveValue=document.closeform.answer.value; document.closeform.answer.disabled = true; document.closeform.answer.style.display='none'}\" disabled='disabled' /></label></th>";
+    echo "<td><textarea id='answer' name='answer' cols='40' rows='8' style='display: none;' onfocus=\"if (this.enabled) { this.value = saveValue; setTimeout('document.articlform.answer.blur()',1); } else saveValue=this.value;\"></textarea></td></tr>";
 
-    <tr><th><label>Solution: <sup class='red'>*</sup><input type='checkbox' name='incsolution' onclick="if (this.checked) {document.closeform.solution.disabled = false; document.closeform.solution.style.display=''} else { saveValue=document.closeform.solution.value; document.closeform.solution.disabled = true; document.closeform.solution.style.display='none'}" checked='checked' disabled='disabled' /></label></th>
+    echo "<tr><th><label>{$strSolution}: <sup class='red'>*</sup><input type='checkbox' name='incsolution' onclick=\"if (this.checked) {document.closeform.solution.disabled = false; document.closeform.solution.style.display=''} else { saveValue=document.closeform.solution.value; document.closeform.solution.disabled = true; document.closeform.solution.style.display='none'}\" checked='checked' disabled='disabled' /></label></th>";
 
-    <?php
     echo "<td><textarea id='solution' name='solution' cols='40' rows='8' onfocus=\"if (this.enabled) { this.value = saveValue; setTimeout('document.articleform.solution.blur()',1); } else saveValue=this.value;\">";
     $sql = "SELECT * FROM `{$dbUpdates}` WHERE incidentid='$id' AND type='solution' ORDER BY timestamp ASC";
     $result = mysql_query($sql);
@@ -228,29 +226,29 @@ if (empty($_REQUEST['process']))
     }
     echo "</textarea>\n";
     echo "</td></tr>";
-    ?>
-    <tr id='workaroundrow' style='display:none;'><th><label>Workaround: <input type='checkbox' name='incworkaround' onclick="if (this.checked) {document.closeform.workaround.disabled = false; document.closeform.workaround.style.display=''} else { saveValue=document.closeform.workaround.value; document.closeform.workaround.disabled = true; document.closeform.workaround.style.display='none'}" disabled='disabled' /></label></th>
-    <td><textarea id="workaround" name="workaround" cols='40' rows='8' style="display: none;" onfocus="if (this.enabled) { this.value = saveValue; setTimeout('document.articlform.workaround.blur()',1); } else saveValue=this.value;"></textarea></td></tr>
 
-    <tr id='statusrow' style='display:none;'><th><label>Status: <input type='checkbox' name='incstatus' onclick="if (this.checked) {document.closeform.status.disabled = false; document.closeform.status.style.display=''} else { saveValue=document.closeform.status.value; document.closeform.status.disabled = true; document.closeform.status.style.display='none'}" disabled='disabled' /></label></th>
-    <td><textarea id="status" name="status" cols='40' rows='8' style="display: none;" onfocus="if (this.enabled) { this.value = saveValue; setTimeout('document.articlform.status.blur()',1); } else saveValue=this.value;"></textarea></td></tr>
+    echo "<tr id='workaroundrow' style='display:none;'><th><label>{$strWorkaround}: <input type='checkbox' name='incworkaround' onclick=\"if (this.checked) {document.closeform.workaround.disabled = false; document.closeform.workaround.style.display=''} else { saveValue=document.closeform.workaround.value; document.closeform.workaround.disabled = true; document.closeform.workaround.style.display='none'}\" disabled='disabled' /></label></th>";
+    echo "<td><textarea id='workaround' name='workaround' cols='40' rows='8' style='display: none;' onfocus=\"if (this.enabled) { this.value = saveValue; setTimeout('document.articlform.workaround.blur()',1); } else saveValue=this.value;\"></textarea></td></tr>";
 
-    <tr id='inforow' style='display:none;'><th><label>Additional Info: <input type='checkbox' name='incadditional' onclick="if (this.checked) {document.closeform.additional.disabled = false; document.closeform.additional.style.display=''} else { saveValue=document.closeform.additional.value; document.closeform.additional.disabled = true; document.closeform.additional.style.display='none'}" disabled='disabled' /></label></th>
-    <td><textarea id="additional" name="additional" cols='40' rows='8' style="display: none;" onfocus="if (this.enabled) { this.value = saveValue; setTimeout('document.articlform.additional.blur()',1); } else saveValue=this.value;"></textarea></td></tr>
+    echo "<tr id='statusrow' style='display:none;'><th><label>{$strStatus}: <input type='checkbox' name='incstatus' onclick=\"if (this.checked) {document.closeform.status.disabled = false; document.closeform.status.style.display=''} else { saveValue=document.closeform.status.value; document.closeform.status.disabled = true; document.closeform.status.style.display='none'}\" disabled='disabled' /></label></th>";
+    echo "<td><textarea id='status' name='status' cols='40' rows='8' style='display: none;' onfocus=\"if (this.enabled) { this.value = saveValue; setTimeout('document.articlform.status.blur()',1); } else saveValue=this.value;\"></textarea></td></tr>";
 
-    <tr id='referencesrow' style='display:none;'><th><label>References: <input type='checkbox' name='increferences' onclick="if (this.checked) {document.closeform.references.disabled = false; document.closeform.references.style.display=''} else { saveValue=document.closeform.references.value; document.closeform.references.disabled = true; document.closeform.references.style.display='none'}" disabled='disabled' /></label></th>
-    <td><textarea id="references" name="references" cols='40' rows='8' style="display: none;" onfocus="if (this.enabled) { this.value = saveValue; setTimeout('document.articlform.references.blur()',1); } else saveValue=this.value;"></textarea></td></tr>
-<?php
+    echo "<tr id='inforow' style='display:none;'><th><label>{$strAdditionalInfo}: <input type='checkbox' name='incadditional' onclick=\"if (this.checked) {document.closeform.additional.disabled = false; document.closeform.additional.style.display=''} else { saveValue=document.closeform.additional.value; document.closeform.additional.disabled = true; document.closeform.additional.style.display='none'}\" disabled='disabled' /></label></th>";
+    echo "<td><textarea id='additional' name='additional' cols='40' rows='8' style='display: none;' onfocus=\"if (this.enabled) { this.value = saveValue; setTimeout('document.articlform.additional.blur()',1); } else saveValue=this.value;\"></textarea></td></tr>";
+
+    echo "<tr id='referencesrow' style='display:none;'><th><label>{$strReferences}: <input type='checkbox' name='increferences' onclick=\"if (this.checked) {document.closeform.references.disabled = false; document.closeform.references.style.display=''} else { saveValue=document.closeform.references.value; document.closeform.references.disabled = true; document.closeform.references.style.display='none'}\" disabled='disabled' /></label></th>";
+    echo "<td><textarea id='references' name='references' cols='40' rows='8' style='display: none;' onfocus=\"if (this.enabled) { this.value = saveValue; setTimeout('document.articlform.references.blur()',1); } else saveValue=this.value;\"></textarea></td></tr>";
+
     echo "<tr><th>{$strClosingStatus}: <sup class='red'>*</sup></th><td>".closingstatus_drop_down("closingstatus", 0)."</td></tr>\n";
-    echo "<tr><th>Inform {$strCustomer}:</th>"; //FIXME i18n inform customer
-    echo "<td>Send an email to the customer explaining that the incident has been (or will be) closed.<br />";
+    echo "<tr><th>".sprintf($strInformX, $strCustomer).":</th>";
+    echo "<td>{$strSendEmailExplainingIncidentClosure}<br />";
     echo "<label><input name='send_email' checked='checked' type='radio' value='no' />{$strNo}</label> ";
     echo "<input name='send_email' type='radio' value='yes' />{$strYes}</td></tr>\n";
     $externalemail=incident_externalemail($id);
     if ($externalemail)
     {
-        echo "<tr><th>Inform {$strExternalEngineer}:<br />"; // FIXME i18n inform external engineer
-        echo "Send an email to <em>{$externalemail}</em> asking for the external incident to be closed.";
+        echo "<tr><th>".sprintf($strInformX, $strExternalEngineer).":<br />";
+        echo "Send an email to <em>{$externalemail}</em> asking for the external incident to be closed."; // FIXME i18n
         echo "</th>";
         echo "<td class='shade2'><label><input name='send_engineer_email' type='radio' value='no' />{$strNo}</label> ";
         echo "<label><input name='send_engineer_email' type='radio' value='yes' checked='checked' />{$strYes}</label></td></tr>\n";
@@ -291,13 +289,13 @@ else
     if ($closingstatus == 0)
     {
         $errors = 1;
-        $error_string = "<p class='error'>You must select a closing status</p>\n";
+        $error_string = "<p class='error'>{$strMustSelectClosingStatus}</p>\n";
     }
 
     if ($_REQUEST['summary']=='' && $_REQUEST['solution']=='')
     {
         $errors = 1;
-        $error_string = "<p class='error'>You must enter some text for both summary and solution</P>\n";
+        $error_string = "<p class='error'>{$strMustEnterTextInBothSummaryAndSolution}</P>\n";
     }
 
     if ($errors == 0)
@@ -308,7 +306,7 @@ else
         if ($wait=='yes')
         {
             // mark incident as awaiting closure
-            $timeofnextaction=$now + $CONFIG['closure_delay'];
+            $timeofnextaction = $now + $CONFIG['closure_delay'];
             $sql = "UPDATE `{$dbIncidents}` SET status='7', lastupdated='$now', timeofnextaction='$timeofnextaction' WHERE id='$id'";
             $result = mysql_query($sql);
             if (mysql_error()) trigger_error("MySQL Query Error ".mysql_error(), E_USER_ERROR);
@@ -378,7 +376,7 @@ else
             }
 
             // Make Journal Entry
-            journal(CFG_LOGGING_NORMAL,'Incident Closed',"Incident $id was closed",CFG_JOURNAL_SUPPORT,$id);
+            journal(CFG_LOGGING_NORMAL,'Incident Closed',"Incident $id was closed",CFG_JOURNAL_SUPPORT,$id); //FIXME i18n
 
             if (!$result)
             {

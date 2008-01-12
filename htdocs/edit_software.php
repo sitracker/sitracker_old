@@ -29,7 +29,7 @@ if (empty($action) OR $action=='edit')
     include ('htmlheader.inc.php');
 
     echo "<h2><img src='{$CONFIG['application_webpath']}images/icons/{$iconset}/32x32/skill.png' width='32' height='32' alt='' /> ";
-    echo "$title</h2>";
+    echo "{$title}</h2>";
     $sql = "SELECT * FROM `{$dbSoftware}` WHERE id='$id' LIMIT 1";
     $result = mysql_query($sql);
     if (mysql_error()) trigger_error(mysql_error(),E_USER_ERROR);
@@ -42,12 +42,18 @@ if (empty($action) OR $action=='edit')
         echo "<tr><th>{$strSkill}: <sup class='red'>*</sup></th><td><input maxlength='50' name='name' size='30' value='{$software->name}' /></td></tr>";
         echo "<tr><th>{$strLifetime}:</th><td>";
         echo "<input type='text' name='lifetime_start' id='lifetime_start' size='10' value='";
-        if ($software->lifetime_start > 1) echo date('Y-m-d',mysql2date($software->lifetime_start));
+        if ($software->lifetime_start > 1)
+        {
+            echo date('Y-m-d',mysql2date($software->lifetime_start));
+        }
         echo "' /> ";
         echo date_picker('editsoftware.lifetime_start');
         echo " To: ";
         echo "<input type='text' name='lifetime_end' id='lifetime_end' size='10' value='";
-        if ($software->lifetime_end > 1) echo date('Y-m-d',mysql2date($software->lifetime_end));
+        if ($software->lifetime_end > 1)
+        {
+            echo date('Y-m-d',mysql2date($software->lifetime_end));
+        }
         echo "' /> ";
         echo date_picker('editsoftware.lifetime_end');
         echo "</td></tr>";
@@ -59,7 +65,7 @@ if (empty($action) OR $action=='edit')
     echo "<input type='hidden' name='action' value='save' />";
     echo "<p align='center'><input name='submit' type='submit' value='{$strSave}' /></p>";
     echo "</form>\n";
-    echo "<p align='center'><a href='products.php'>Return to products list without saving</a></p>";// FIXME i18n
+    echo "<p align='center'><a href='products.php'>{$strReturnWithoutSaving}</a></p>";
     include ('htmlfooter.inc.php');
 }
 elseif ($action=='delete')
@@ -70,11 +76,11 @@ elseif ($action=='delete')
     $result = mysql_query($sql);
     if (mysql_error()) trigger_error(mysql_error(),E_USER_ERROR);
     list($countincidents) = mysql_fetch_row($result);
-    if ($countincidents >=1 )
+    if ($countincidents >=1)
     {
         include ('htmlheader.inc.php');
         echo "<p class='error'>Sorry, this skill cannot be deleted because it has been associated with one or more incidents</p>"; // FIXME i18n
-        echo "<p align='center'><a href='products.php?display=skills'>Return to products list</a></p>"; // FIXME i18n
+        echo "<p align='center'><a href='products.php?display=skills'>{$strReturnToProductList}</a></p>";
         include ('htmlfooter.inc.php');
     }
     else
@@ -114,7 +120,7 @@ else
     if ($name == "")
     {
         $errors = 1;
-        $errors_string .= "<p class='error'>You must enter a name</p>\n";
+        $errors_string .= "<p class='error'>{$strMustEnterName}</p>\n";
     }
     // add product if no errors
     if ($errors == 0)

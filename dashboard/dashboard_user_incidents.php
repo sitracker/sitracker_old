@@ -87,7 +87,11 @@ function dashboard_user_incidents($row,$dashboardid)
     // build querystring for hyperlinks
     $querystring = "?user=$user&amp;queue=$queue&amp;type=$type&amp;";
 
-    if ($user=='all') echo "<p align='center'>There are <strong>{$rowcount}</strong> incidents in this list.</p>";
+    if ($user=='all')
+    {
+        //echo "<p align='center'>There are <strong>{$rowcount}</strong> incidents in this list.</p>";        
+        echo "<p align='center'>".sprintf($strThereAreXIncidentsInThisList, $rowcount)."</p>";
+    }
     $mode = "min";
     // Print message if no incidents were listed
     if (mysql_num_rows($result) >= 1)
@@ -102,8 +106,12 @@ function dashboard_user_incidents($row,$dashboardid)
             list($update_userid, $update_type, $update_currentowner, $update_currentstatus, $update_body, $update_timestamp, $update_nextaction, $update_id)=incident_lastupdate($row['id']);
             $update_body = parse_updatebody($update_body);
             echo "<tr><td class='$shade'>";
-            echo "<a href='javascript:incident_details_window({$row['id']})' class='info'>"."{$row['id']} - {$row['title']} for {$row['forenames']}   {$row['surname']}"; // FIXME i18n 'for'
-            if (!empty($update_body) AND $update_body!='...') echo "<span>{$update_body}</span>";
+            echo "<a href='javascript:incident_details_window({$row['id']})' class='info'>";
+            echo "{$row['id']} - {$row['title']} for {$row['forenames']}   {$row['surname']}"; // FIXME i18n 'for'
+            if (!empty($update_body) AND $update_body!='...')
+            {
+                echo "<span>{$update_body}</span>";
+            }
             echo "</a></td></tr>\n";
             if ($shade=='shade1') $shade='shade2';
             else $shade='shade1';

@@ -68,7 +68,7 @@ switch ($action)
     default:
         include ('htmlheader.inc.php');
 
-        echo "<h2>$title</h2>";
+        echo "<h2>{$title}</h2>";
 
         $gsql = "SELECT * FROM `{$dbGroups}` ORDER BY name";
         $gresult = mysql_query($gsql);
@@ -103,7 +103,7 @@ switch ($action)
         if (mysql_error()) trigger_error(mysql_error(),E_USER_ERROR);
 
         echo "<form action='{$_SERVER['PHP_SELF']}' method='post'>";
-        echo "<table summary=\"$strGroupMembership\" align='center'>";
+        echo "<table summary='{$strGroupMembership}' align='center'>";
         echo "<tr><th>{$strUser}</th><th>{$strGroup}</th></tr>";
         while ($user = mysql_fetch_object($result))
         {

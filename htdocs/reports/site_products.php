@@ -20,7 +20,7 @@ require ('auth.inc.php');
 if (empty($_REQUEST['mode']))
 {
     include ('htmlheader.inc.php');
-    echo "<h2>$title</h2>";
+    echo "<h2>{$title}</h2>";
     echo "<form action='{$_SERVER['PHP_SELF']}' method='post'>";
     echo "<table align='center'>";
 
@@ -45,15 +45,15 @@ if (empty($_REQUEST['mode']))
     echo "</form>";
 
     echo "<table align='center'><tr><td>";
-    echo "<h4>When outputting to a CSV file the format is as follows:</h4>";
-    echo "<strong>Field 1:</strong> {$strSite}<br />";
-    echo "<strong>Field 2:</strong> {$strAddress1}<br />";
-    echo "<strong>Field 3:</strong> {$strAddress2}<br />";
-    echo "<strong>Field 4:</strong> {$strCity}<br />";
-    echo "<strong>Field 5:</strong> {$strCounty}<br />";
-    echo "<strong>Field 6:</strong> {$strCountry}<br />";
-    echo "<strong>Field 7:</strong> {$strPostcode}<br />";
-    echo "<strong>Field 8:</strong> {$strProducts}<br />";
+    echo "<h4>When outputting to a CSV file the format is as follows:</h4>"; // FIXME i18n
+    echo "<strong>Field 1:</strong> {$strSite}<br />"; // FIXME i18n
+    echo "<strong>Field 2:</strong> {$strAddress1}<br />"; // FIXME i18n
+    echo "<strong>Field 3:</strong> {$strAddress2}<br />"; // FIXME i18n
+    echo "<strong>Field 4:</strong> {$strCity}<br />"; // FIXME i18n
+    echo "<strong>Field 5:</strong> {$strCounty}<br />"; // FIXME i18n
+    echo "<strong>Field 6:</strong> {$strCountry}<br />"; // FIXME i18n
+    echo "<strong>Field 7:</strong> {$strPostcode}<br />"; // FIXME i18n
+    echo "<strong>Field 8:</strong> {$strProducts}<br />"; // FIXME i18n
     echo "</td></tr></table>";
     include ('htmlfooter.inc.php');
 }
@@ -69,7 +69,10 @@ elseif ($_REQUEST['mode']=='report')
     // FIXME i18n
     $html .= "<p align='center'>This report is a list of sites that you selected and the products they have (or have had) maintenance for.</p>";
     $html .= "<table width='99%' align='center'>";
-    $html .= "<tr><th>{$strSite}</th><th>{$strAddress1}</th><th>{$strAddress2}</th><th>{$strCity}</th><th>{$strCounty}</th><th>{$strCountry}</th><th>{$strPostcode}</th><th>{$strProducts}</th></tr>";
+    $html .= "<tr><th>{$strSite}</th><th>{$strAddress1}</th>";
+    $html .= "<th>{$strAddress2}</th><th>{$strCity}</th>";
+    $html .= "<th>{$strCounty}</th><th>{$strCountry}</th>";
+    $html .= "<th>{$strPostcode}</th><th>{$strProducts}</th></tr>";
     $csvfieldheaders .= "site,address1,address2,city,county,country,postcode,products\r\n";
     $rowcount=0;
     while ($row = mysql_fetch_object($result))
@@ -77,7 +80,10 @@ elseif ($_REQUEST['mode']=='report')
         // FIXME strip slashes
         $product="";
         $nicedate=date('d/m/Y',$row->opened);
-        $html .= "<tr class='shade2'><td>{$row->name}</td><td>{$row->address1}</td><td>{$row->address2}</td><td>{$row->city}</td><td>{$row->county}</td><td>{$row->country}</td><td>{$row->postcode}</td>";
+        $html .= "<tr class='shade2'><td>{$row->name}</td>";
+        $html .= "<td>{$row->address1}</td><td>{$row->address2}</td>";
+        $html .= "<td>{$row->city}</td><td>{$row->county}</td>";
+        $html .= "<td>{$row->country}</td><td>{$row->postcode}</td>";
         $html .= "<td>";
         $psql  = "SELECT m.id AS maintid, m.term AS term, p.name AS product, ";
         $psql .= "m.admincontact AS admincontact, ";

@@ -32,9 +32,9 @@ if (empty($user)) $user=$sit[2];
 if (!$sent)
 {
     // check to see if this user has approve permission
-    $approver=user_permission($sit[2], 50);
+    $approver = user_permission($sit[2], 50);
 
-    $waiting=FALSE;
+    $waiting = FALSE;
     echo "<h2><img src='{$CONFIG['application_webpath']}images/icons/{$iconset}/32x32/holiday.png' width='32' height='32' alt='' /> ";
     if ($user == 'all')
     {
@@ -98,7 +98,7 @@ if (!$sent)
             if ($holiday->length=='day') echo $strFullDay;
             echo "</td>";
             echo "<td>".holiday_type($holiday->type)."</td>";
-            if ($approver==TRUE)
+            if ($approver == TRUE)
             {
                 if ($sit[2] != $holiday->userid AND $mode == 'approval')
                 {
@@ -135,7 +135,10 @@ if (!$sent)
             echo "</tr>";
         }
         echo "</table>";
-        if ($mode=='approval') echo "<p align='center'><a href='holiday_approve.php?approve=TRUE&amp;user=$user&amp;view=$user&amp;startdate=all&amp;type=all'>Approve all</a></p>";
+        if ($mode == 'approval')
+        {
+            echo "<p align='center'><a href='holiday_approve.php?approve=TRUE&amp;user=$user&amp;view=$user&amp;startdate=all&amp;type=all'>{$strApproveAll}</a></p>";
+        }
         else
         {
             // extract users (only show users with permission to approve that are not disabled accounts)
@@ -151,7 +154,7 @@ if (!$sent)
             {
                 echo "<form action='{$_SERVER['PHP_SELF']}' method='post'>";
                 echo "<p align='center'>";
-                echo "Send the request(s) to: ";
+                echo "{$strSendRequestsTo}: ";
                 echo "<select name='approvaluser'>";
                 echo "<option selected='selected' value='0'></option>\n";
                 while ($users = mysql_fetch_array($result))
@@ -166,7 +169,7 @@ if (!$sent)
 
                 // Force resend if there are no new additions to be requested
                 if ($waiting==FALSE AND $action!='resend') $action='resend';
-                echo "<input type='hidden' name='action' value='$action' />";
+                echo "<input type='hidden' name='action' value='{$action}' />";
                 echo "<p align='center'>{$strRequestSentComments}<br />";
                 echo "<textarea name='memo' rows='3' cols='40'></textarea>";
                 echo "<input type='hidden' name='user' value='$user' />";
@@ -190,7 +193,7 @@ else
 {
     if (empty($approvaluser))
     {
-        echo "<p class='error'>Error: You did not select a user to send the request to</p>";
+        echo "<p class='error'>{$strErrorNotUserSelectedToSendApproval}</p>";
     }
     else
     {
@@ -216,7 +219,7 @@ else
             $bodytext .= "$holidaylist\n";
             if (strlen($memo)>3)
             {
-                $bodytext .= "The following comments were sent with the request:\n\n";
+                $bodytext .= "{$strCommentsSentWithRequest}:\n\n";
                 $bodytext .= "---\n$memo\n---\n\n";
             }
             $url = parse_url($_SERVER['HTTP_REFERER']);
@@ -242,7 +245,10 @@ else
             echo "<p align='center'>{$strRequestSent}</p>";
             echo "<p align='center'>".nl2br($holidaylist)."</p>";
         }
-        else echo "<p class='error'>There was a problem sending your request</p>";
+        else
+        {
+            echo "<p class='error'>There was a problem sending your request</p>";
+        }
     }
     echo "<p align='center'><a href='holidays.php?user={$user}'>{$strMyHolidays}</p></p>";
 }

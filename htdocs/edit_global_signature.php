@@ -8,10 +8,12 @@
 // of the GNU General Public License, incorporated herein by reference.
 //
 
-
 // This Page Is Valid XHTML 1.0 Transitional!   4Nov05
 
-// Authors: Ivan Lucas <ivanlucas[at]users.sourceforge.net> and Paul Heaney
+// Authors: Ivan Lucas <ivanlucas[at]users.sourceforge.net>
+//          Paul Heaney <paulheaney[at]users.sourceforge.net>
+
+
 @include ('set_include_path.inc.php');
 
 function get_globalsignature($sig_id)
@@ -80,15 +82,14 @@ elseif (empty($action))
     //The just view the global signatures
     include ('htmlheader.inc.php');
 
-    echo "<h2>$title</h2>";
+    echo "<h2>{$title}</h2>";
 
     $sql = "SELECT id, signature FROM `{$dbEmailsig}` ORDER BY id ASC";
     $result = mysql_query($sql);
     if (mysql_error()) trigger_error(mysql_error(), E_USER_WARNING);
 
-    // FIXME i18n global signature paragraph
-    echo "<p align='center'>One of the signatures below will be chosen at random and inserted at the bottom of outgoing emails. It's recommended that you begin this signature with two dashes, a space and a line feed.<br /><br />";
-    echo "Remember that any changes here will be effective immediately and outgoing emails will carry the new signature.</p>";
+    echo "<p align='center'>{$strOneOfTheSignaturesWillBeInserted}<br /><br />";
+    echo "{$strGlobalSignatureRemember}</p>";
 
     echo "<p align='center'><a href='edit_global_signature.php?action=add'>{$strAdd}</a></p>";
 
@@ -114,22 +115,19 @@ elseif (!empty($action))
     {
         case 'add':
             echo "<h2>{$strGlobalSignature}: {$strAdd}</h2>";
-            ?>
-            <form action="<?php echo $_SERVER['PHP_SELF']; ?>" method="post">
-            <input type="hidden" name="formaction" value="add" />
-            <table class='vertical' width='50%'>
-            <tr>
-            <?php
+            echo "<form action='{$_SERVER['PHP_SELF']}' method='post'>";
+            echo "<input type='hidden' name='formaction' value='add' />";
+            echo "<table class='vertical' width='50%'>";
+            echo "<tr>";
+
             echo "<td align='right' valign='top' class='shade1'><strong>{$strGlobalSignature}</strong>:<br />\n";
-            // FIXME i18n paragraph global sigs
-            echo "A signature to insert at the bottom of outgoing emails.  It's recommended that you begin this signature with two dashes, a space and a line feed.<br /><br />";
-            echo "Remember that any changes here will be effective immediately and outgoing emails will carry the new signature.";
+            echo "{$strGlobalSignatureDescription}<br /><br />";
+            echo "$strGlobalSignatureRemember";
             echo "</td>";
-            ?>
-            <td class="shade1"><textarea name="signature" rows="15" cols="65"></textarea></td>
-            </tr>
-            </table>
-            <?php
+
+            echo "<td class='shade1'><textarea name='signature' rows='15' cols='65'></textarea></td>";
+            echo "</tr>";
+            echo "</table>";
             echo "<p align='center'><input name='submit' type='submit' value=\"{$strAdd}\" /></p>";
             echo "</form>\n";
         break;
@@ -148,9 +146,8 @@ elseif (!empty($action))
             <tr>
             <?php
             echo "<td align='right' valign='top' class='shade1'><strong>{$strGlobalSignature}</strong>:<br />\n";
-            // FIXME i18n paragraph
-            echo "A signature to insert at the bottom of outgoing emails.  It's recommended that you begin this signature with two dashes, a space and a line feed.<br /><br />";
-            echo "Remember that any changes here will be effective immediately and outgoing emails will carry the new signature.";
+            echo "{$strGlobalSignatureDescription}<br /><br />";
+            echo "$strGlobalSignatureRemember";
             ?>
             </td>
             <td class="shade1"><textarea name="signature" rows="15" cols="65"><?php echo get_globalsignature($sig_id); ?></textarea></td>
