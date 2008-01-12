@@ -46,7 +46,6 @@ if (user_permission($sit[2],50)) // Approve holidays
 }
 if (user_permission($sit[2],22)) // Administrate
 {
-    // FIXME i18n
     echo "<thead><tr><th>{$strAdministratorsOnly}</th></tr></thead>";
     echo "<tbody>";
     echo "<tr><td><a href='manage_users.php'>{$strManageUsers}</a></td></tr>";
@@ -55,7 +54,7 @@ if (user_permission($sit[2],22)) // Administrate
     echo "<tr><td><a href='service_levels.php'>{$strServiceLevels}</a></td></tr>";
     echo "<tr><td><a href='add_productinfo.php?action=showform'>{$strAddProductInformation}</a></td></tr>";
     echo "<tr><td><a href='holiday_calendar.php?type=10'>{$strSetPublicHolidays}</a></td></tr>";
-    echo "<tr><td><a href='show_orphaned_contacts.php'>{$strShowOrphandedContacts}</a></td></tr>"; // FIXME actually implement
+    echo "<tr><td><a href='show_orphaned_contacts.php'>{$strShowOrphandedContacts}</a></td></tr>";
     echo "</tbody>";
 }
 

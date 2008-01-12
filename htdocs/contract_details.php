@@ -45,7 +45,18 @@ if ($maintrow['expirydate']<$now AND $maintrow['expirydate'] != '-1') echo "<spa
 echo "</td></tr>\n";
 echo "<tr><th>{$strSite}:</th><td><a href=\"site_details.php?id=".$maintrow['site']."\">".$maintrow['sitename']."</a></td></tr>";
 echo "<tr><th>{$strAdminContact}:</th><td><a href=\"contact_details.php?id=".$maintrow['admincontact']."\">".contact_realname($maintrow['admincontact'])."</a></td></tr>";
-if($maintrow['reseller'] != '0') echo "<tr><th>{$strReseller}:</th><td>".reseller_name($maintrow['reseller'])."</td></tr>";
+
+echo "<tr><th>{$strReseller}:</th><td>";
+
+if (empty($results['reseller']))
+{
+    echo $strNoReseller;
+}
+else
+{
+    echo reseller_name($maintrow['reseller']);
+}
+echo "</td></tr>";
 echo "<tr><th>{$strProduct}:</th><td>".product_name($maintrow['product'])."</td></tr>";
 echo "<tr><th>{$strIncidents}:</th>";
 echo "<td>";

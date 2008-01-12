@@ -100,15 +100,19 @@ if (empty($search_string) && empty($productid))
     echo "<p class='error'>You must enter a search string</p>\n";
 }
 */
-
 // search for criteria
 $sql  = "SELECT DISTINCT maintenance.id AS maintid, sites.name AS site, products.name AS product, resellers.name AS reseller, licence_quantity, ";
 $sql .= "licencetypes.name AS licence_type, expirydate, admincontact, contacts.forenames AS admincontactforenames, contacts.surname AS admincontactsurname, maintenance.notes, sites.id AS siteid, ";
 $sql .= "maintenance.term AS term, maintenance.productonly AS productonly ";
-$sql .= "FROM maintenance, sites, contacts, products, licencetypes, resellers ";
+$sql .= "FROM sites, contacts, products, maintenance ";
+$sql .= "LEFT JOIN licencetypes ON maintenance.licence_type=licencetypes.id ";
+$sql .= "LEFT JOIN resellers ON resellers.id = maintenance.reseller ";
 $sql .= "WHERE (maintenance.site=sites.id AND product=products.id AND admincontact=contacts.id) ";
-$sql .= "AND (reseller=resellers.id OR reseller=NULL) AND (licence_type=licencetypes.id OR licence_type=NULL) ";
-if ($activeonly=='yes') $sql .= "AND term!='yes' AND (expirydate > $now OR expirydate = '-1') ";
+if ($activeonly == 'yes')
+{
+    $sql .= "AND term!='yes' AND (expirydate > $now OR expirydate = '-1') ";
+}
+
 if ($search_string != '*')
 {
     if (strlen($search_string)==1)
@@ -138,6 +142,7 @@ if (!empty($sort))
     if ($order=='a' OR $order=='ASC' OR $order='') $sql .= "ASC";
     else $sql .= "DESC";
 }
+
 $result = mysql_query($sql);
 if (mysql_error()) trigger_error("MySQL Query Error ".mysql_error(), E_USER_ERROR);
 
@@ -194,31 +199,73 @@ else
             if ($shade) $class = "shade1";
             else $class = "shade2";
         }
-        ?>
-        <tr class='<?php echo $class ?>'>
-        <td><a href="contract_details.php?&amp;id=<?php echo $results['maintid'] ?>">Contract <?php echo $results["maintid"] ?></a></td>
-        <td><?php echo $results["product"] ?></td>
-        <?php
+
+        echo "<tr class='{$class}'>";
+        echo "<td><a href='contract_details.php?&amp;id={$results['maintid']}'>{$strContract} {$results['maintid']}</a></td>";
+        echo "<td>{$results["product"]}</td>";
         echo "<td><a href='site_details.php?id={$results['siteid']}#contracts'>".htmlspecialchars($results['site'])."</a><br />";
-        echo "Admin: <a href='contact_details.php?mode=popup&amp;id={$results['admincontact']}' target='_blank'>{$results['admincontactforenames']} {$results['admincontactsurname']}</a></td>";
-        ?>
+        echo "{$strAdminContact}: <a href='contact_details.php?mode=popup&amp;id={$results['admincontact']}' target='_blank'>{$results['admincontactforenames']} {$results['admincontactsurname']}</a></td>";
 
-        <td><?php echo $results["reseller"] ?></td>
-        <td><?php echo $results["licence_quantity"] ?> <?php echo $results["licence_type"] ?></td>
-        <td><?php
-            if($results["expirydate"] == '-1') echo $strUnlimited;
-            else echo date($CONFIG['dateformat_date'], $results["expirydate"]); ?></td>
+        echo "<td>";
 
-        <td><?php if ($results["notes"] == "") echo "&nbsp;"; else echo nl2br($results["notes"]); ?></td>
-        </tr>
-        <?php
+        if (empty($results['reseller']))
+        {
+            echo $strNoReseller;
+        }
+        else
+        {
+            echo $results['reseller'];
+        }
+        
+        echo "</td><td>";
+        
+        if (empty($results['licence_type']))
+        {
+            echo $strNoLicense;    
+        }
+        else
+        {
+            if ($results['licence_quantity'] == 0)
+            {
+                echo "{$strUnlimited} ";
+            }
+            else
+            {
+                echo "{$results['licence_quantity']} ";
+            }
+            
+            echo $results['licence_type'];
+        }
+            
+        echo "</td><td>";
+        if($results["expirydate"] == '-1')
+        {
+            echo $strUnlimited;
+        }
+        else
+        {
+            echo date($CONFIG['dateformat_date'], $results["expirydate"]);
+        }
+        echo "</td>";
+
+        echo "<td>";
+        if ($results["notes"] == "")
+        {
+            echo "&nbsp;";
+        }
+        else
+        {
+            echo nl2br($results["notes"]);
+        }
+        
+        echo "</td></tr>";
+
         // invert shade
         if ($shade == 1) $shade = 0;
         else $shade = 1;
     }
-    ?>
-    </table>
-    <?php
+
+    echo "</table>";
     // free result and disconnect
     mysql_free_result($result);
     include('htmlfooter.inc.php');

@@ -136,11 +136,19 @@ if (user_permission($sit[2],19)) // View contracts
     echo "<h3>{$strContracts}<a id='contracts'></a></h3>";
 
     // Display contracts
-    $sql  = "SELECT maintenance.id AS maintid, maintenance.term AS term, products.name AS product, resellers.name AS reseller, licence_quantity, licencetypes.name AS licence_type, expirydate, admincontact, contacts.forenames AS admincontactsforenames, contacts.surname AS admincontactssurname, maintenance.notes AS maintnotes ";
+    /*$sql  = "SELECT maintenance.id AS maintid, maintenance.term AS term, products.name AS product, resellers.name AS reseller, licence_quantity, licencetypes.name AS licence_type, expirydate, admincontact, contacts.forenames AS admincontactsforenames, contacts.surname AS admincontactssurname, maintenance.notes AS maintnotes ";
     $sql .= "FROM maintenance, contacts, products, licencetypes, resellers ";
-    $sql .= "WHERE maintenance.product=products.id AND (maintenance.reseller=resellers.id OR reseller=NULL) ";
-    $sql .= "AND (licence_type=licencetypes.id OR licence_type=NULL) ";
+    $sql .= "WHERE maintenance.product=products.id AND (maintenance.reseller=resellers.id OR reseller IS NULL) ";
+    $sql .= "AND (licence_type=licencetypes.id OR licence_type IS NULL) ";
     $sql .= "AND admincontact=contacts.id AND maintenance.site = '$id' ";
+    $sql .= "ORDER BY expirydate DESC";*/
+       
+    $sql  = "SELECT maintenance.id AS maintid, maintenance.term AS term, products.name AS product, resellers.name AS reseller, licence_quantity, licencetypes.name AS licence_type, expirydate, admincontact, contacts.forenames AS admincontactsforenames, contacts.surname AS admincontactssurname, maintenance.notes AS maintnotes ";
+    $sql .= "FROM contacts, products, maintenance ";
+    $sql .= "LEFT JOIN licencetypes ON maintenance.licence_type=licencetypes.id ";
+    $sql .= "LEFT JOIN resellers ON resellers.id = maintenance.reseller ";
+    $sql .= "WHERE maintenance.product=products.id ";
+    $sql .= "AND admincontact=contacts.id AND maintenance.site = '{$id}' ";
     $sql .= "ORDER BY expirydate DESC";
 
     // connect to database and execute query
@@ -186,8 +194,37 @@ if (user_permission($sit[2],19)) // View contracts
             echo "<td class='{$class}'><img src='{$CONFIG['application_webpath']}images/icons/{$iconset}/16x16/contract.png' width='16' height='16' alt='' /> ";
             echo "<a href='contract_details.php?id={$results['maintid']}'>{$strContract} {$results['maintid']}</a></td>";
             echo "<td class='{$class}'>{$results['product']}</td>";
-            echo "<td class='{$class}'>{$results['reseller']}</td>";
-            echo "<td class='{$class}'>{$results['licence_quantity']} {$results['licence_type']}</td>";
+            echo "<td class='{$class}'>";
+            if (empty($results['reseller']))
+            {
+                echo $strNoReseller;
+            }
+            else
+            {
+                echo $results['reseller'];
+            }
+            
+            echo "</td>";
+            echo "<td class='{$class}'>";
+            
+            if (empty($results['licence_type']))
+            {
+                echo $strNoLicense;    
+            }
+            else
+            {
+                if ($results['licence_quantity'] == 0)
+                {
+                    echo "{$strUnlimited} ";
+                }
+                else
+                {
+                    echo "{$results['licence_quantity']} ";
+                }
+                echo $results['licence_type'];
+            }
+            
+            echo "</td>";
             echo "<td class='{$class}'>".date($CONFIG['dateformat_date'], $results['expirydate'])."</td>";
             echo "<td class='{$class}'>{$results['admincontactsforenames']} {$results['admincontactssurname']}></td>";
             echo "<td class='{$class}'>";

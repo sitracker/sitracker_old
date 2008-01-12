@@ -87,11 +87,11 @@ function feedback_html_options($name, $required, $options, $answer='')
     if ($option_count > 3)
     {
         $html .= "<select name='$name'>\n";
-        foreach($option_list AS $key=>$option)
+        foreach ($option_list AS $key=>$option)
         {
-            $value=strtolower(trim(str_replace(' ', '_', $option)));
+            $value = strtolower(trim(str_replace(' ', '_', $option)));
             $html .= "<option value='$value'";
-            if ($answer==$value) $html .= " selected='selected'";
+            if ($answer == $value) $html .= " selected='selected'";
             $html .= ">".trim($option)."</option>\n";
         }
         $html .= "</select>\n";
@@ -148,8 +148,14 @@ function feedback_html_text($name, $required, $options, $answer='')
     $cols=$option_list[0] ? $option_list[0] : 60;
     $rows=$option_list[1] ? $option_list[1] : 5;
 
-    if ($rows==1) $html .= "<input type='text' name='$name' size='$cols' value='$answer' />\n";
-    else  $html .= "<textarea name ='$name' rows='$rows' cols='$cols' />{$answer}</textarea>\n";
+    if ($rows==1)
+    {
+        $html .= "<input type='text' name='$name' size='$cols' value='$answer' />\n";
+    }
+    else
+    {
+        $html .= "<textarea name ='$name' rows='$rows' cols='$cols' />{$answer}</textarea>\n";
+    }
 
     return $html;
 }
@@ -160,10 +166,10 @@ function feedback_html_text($name, $required, $options, $answer='')
 */
 function feedback_html_question($type, $name, $required, $options, $answer='')
 {
-    $options=nl2br(trim($options));
-    $options=str_replace('<br>', '{@}', $options);
-    $options=str_replace('<br />', '{@}', $options);
-    $options=str_replace('<br/>', '{@}', $options);
+    $options = nl2br(trim($options));
+    $options = str_replace('<br>', '{@}', $options);
+    $options = str_replace('<br />', '{@}', $options);
+    $options = str_replace('<br/>', '{@}', $options);
     switch($type)
     {
         case 'rating':
@@ -183,7 +189,7 @@ function feedback_html_question($type, $name, $required, $options, $answer='')
         break;
 
         default:
-            $html = "Error: Unable to accept a response for this question, no handler for question of type '$type'.";
+            $html = "Error: Unable to accept a response for this question, no handler for question of type '{$type}'."; // FIXME i18n
         break;
   }
   return $html;
