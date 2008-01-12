@@ -932,7 +932,6 @@ $strUsersTasks = '%s\'s Tasks';
 $strUsersBoldSkills = 'Users shows in bold typeface are known to have relevant skills';
 $strUseThisInFuture = 'Use this in future';
 
-
 $strValue = 'Value';
 $strVariable = 'Variable';
 $strVendor = 'Vendor';

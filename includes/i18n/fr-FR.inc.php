@@ -1,6 +1,5 @@
 <?php
-
-// SiT! Language File - Français (fr-FR)
+// SiT! Language File - French (fr-FR)
 
 $languagestring = 'French (fr-FR)';
 $i18ncharset = 'UTF-8';
@@ -13,25 +12,25 @@ $strActionPlanBy = 'Plan d\'Action par %s';
 $strActive = 'Actif';
 $strActivity = 'Activité';
 $strAdd = 'Ajouter';
+$strAddContact = 'Ajouter Contact';
+$strAddContract = 'Ajouter Accord';
 $strAdded = 'Ajouté';
 $strAddFeedbackForm = 'Ajouter Document de Commentaire';
 $strAddIncident = 'Ajouter Évènement';
 $strAddLink = 'Ajouter Lien';
 $strAddNote = 'Ajouter Note';
-$strAddTask = 'Ajouter Tâche';
-$strAddTemplate = 'Ajouter Formulaire';
-$strAddUser = 'Ajouter Utilisateur';
-$strAddContact = 'Ajouter Contact';
-$strAddContract = 'Ajouter Accord';
 $strAddProduct = 'Ajouter Produit';
 $strAddReseller = 'Ajouter Revendeur';
-$strAddServiceLevel = 'Ajouter Niveau de Service';
-$strAddSite = 'Ajouter Site';
-$strAddSkill = 'Ajouter Habileté';
-$strAddVendor = 'Ajouter Vendeur';
 $strAddress = 'Adresse';
 $strAddress1 = 'Adresse1';
 $strAddress2 = 'Adresse2';
+$strAddServiceLevel = 'Ajouter Niveau de Service';
+$strAddSite = 'Ajouter Site';
+$strAddSkill = 'Ajouter Habileté';
+$strAddTask = 'Ajouter Tâche';
+$strAddTemplate = 'Ajouter Formulaire';
+$strAddUser = 'Ajouter Utilisateur';
+$strAddVendor = 'Ajouter Vendeur';
 $strAdminContact = 'Contact d\'Administration';
 $strAdvanced = 'Avancé';
 $strAge = 'Âge';
@@ -54,6 +53,7 @@ $strBrowseContacts = 'Parcourir contacts';
 $strBrowseFeedback = 'Parcourir commentaires';
 $strBrowseFeedbackForms = 'Parcourir Documents de Commentaire';
 $strBrowseKB = 'Parcourir Base de Connaissance';
+
 $strChooseLanguage = 'Veuillez choisir votre langue';
 $strCity = 'Ville';
 $strContact = 'Contact';
@@ -63,10 +63,10 @@ $strContactsMulti = '%d Contacts';
 $strContract = 'Accord';
 $strContracts = 'Accords';
 $strControlPanel = 'Panneau de Contrôle';
-$strCustomer = 'Client';
-$strCustomers = 'Clients';
 $strCountry = 'Pays';
 $strCurrentlyOpen = 'actuellement ouvert';
+$strCustomer = 'Client';
+$strCustomers = 'Clients';
 
 $strDashboard = 'Tableau de bord';
 $strDate = 'Date';
@@ -80,6 +80,7 @@ $strEnglish = 'Anglais';
 $strExpiryDate = 'Date d\'Expiration';
 
 $strForgottenDetails = 'Mot de passe oublié?';
+$strFriday = 'Vendredi';
 
 $strGo = 'Aller';
 
@@ -95,6 +96,7 @@ $strLogIn = 'Connexion';
 $strLogin = 'Connexion';
 $strLogout = 'Déconnexion';
 
+$strMonday = 'Lundi';
 $strMyDashboard = 'Mon Panneau de Contrôle';
 $strMyDetails = 'Mes Détails Personnels';
 $strMyHolidays = 'Mes Vacances';
@@ -116,12 +118,15 @@ $strPublished = 'Public';
 $strRandomTip = 'Petit Conseil';
 $strReports = 'Rapports';
 
+$strSaturday = 'Samedi';
 $strSearch = 'Rechercher';
 $strSearchAgain = 'Rechercher de Nouveau';
+$strSunday = 'Dimanche';
 $strSupport = 'Assistance';
 
 $strTask = 'Tâche';
 $strTasks = 'Tâches';
+$strThursday = 'Jeudi';
 $strTime = 'L\'heure';
 $strTitle = 'Titre';
 $strTo = 'À';
@@ -129,14 +134,16 @@ $strTodaysStats = 'Statistiques Quotidiennes';
 $strToday = 'Aujourd\'hui';
 $strTranslate = 'Traduire';
 $strTranslation = 'Traduction';
+$strTuesday = 'Mardi';
 
 $strUpdated = 'Mise à Jour';
 $strUnknown = 'Inconnu';
 $strUsed = 'Utilisé';
-$strUsers = 'Utilisateurs';
 $strUsername = 'Nom d\'utilisateur';
+$strUsers = 'Utilisateurs';
 $strUsersTasks = 'Tâches de %s';
 
+$strWednesday = 'Mercredi';
 $strWelcome = 'Bienvenue';
 
 $strYes = 'Oui';

@@ -4789,7 +4789,7 @@ function readable_date($date)
     }
     else
     {
-        $datestring = date("l jS M y @ g:ia", $date);
+        $datestring = ldate("l jS M y @ g:ia", $date);
     }
     return $datestring;
 }
@@ -6630,11 +6630,21 @@ function truncate_string($text, $maxlength=255, $html=TRUE)
     * @param $format string. date() format
     * @param $date int. UNIX timestamp
     * @returns string. An internationised date/time string
-    * @todo TODO actually do some internationisation
+    * @todo Currently only translates day names in full, needs to do
+    *       short day names, month names in full, short month names, am/pm?
 */
 function ldate($format, $date)
 {
     $datestring = date($format, $date);
+
+    // Internationalise full day names
+    if (strpos($format, 'l') !== FALSE)
+    {
+        $days = array('Monday','Tuesday','Wednesday','Thursday','Friday','Saturday','Sunday');
+        $i18ndays = array($GLOBALS['strMonday'], $GLOBALS['strTuesday'], $GLOBALS['strWednesday'],
+                          $GLOBALS['strThursday'], $GLOBALS['strFriday'], $GLOBALS['strSaturday'], $GLOBALS['strSunday']);
+        $datestring = str_replace($days, $i18ndays, $datestring);
+    }
 
     return $datestring;
 }

@@ -234,7 +234,7 @@ while ($incidents = mysql_fetch_array($result))
     echo "<a href=\"javascript:incident_details_window('{$incidents['id']}','incident{$incidents['id']}')\" class='info'>";
     if (trim($incidents['title']) !='')
     {
-        echo ($incidents['title']); 
+        echo ($incidents['title']);
     }
     else
     {
