@@ -2478,7 +2478,7 @@ function format_seconds($seconds)
     }
     elseif ($seconds <= 60 AND $seconds >= 1)
     {
-        return $str1Minutes;
+        return $str1Minute;
     }
     else
     {
