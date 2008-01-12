@@ -76,7 +76,7 @@ function formatSeconds(secondsOpen)
         var hours = Math.floor(secondsOpen/3600);
         if(hours < 10)
         {
-            str = "0"+hours;
+            str += "0"+hours;
         }
         else
         {
@@ -197,6 +197,7 @@ else
         $usql = "SELECT id FROM users WHERE username='{$user}' LIMIT 1";
         $uresult = mysql_query($usql);
         if (mysql_error()) trigger_error(mysql_error(),E_USER_WARNING);
+        
         if (mysql_num_rows($uresult) >= 1)
         {
             list($user) = mysql_fetch_row($uresult);
@@ -333,7 +334,11 @@ if (mysql_num_rows($result) >=1 )
             echo "{$task->id}";
             echo "</td>";
             echo "<td>";
-            if (empty($task->name)) $task->name = $strUntitled;
+            if (empty($task->name))
+            {
+                $task->name = $strUntitled;
+            }
+            
             echo "<a href='view_task.php?id={$task->id}' class='info'>".$task->name;
             echo "</a>";
 
@@ -468,8 +473,8 @@ if (mysql_num_rows($result) >=1 )
 
         unset($billingresult);
 
-        $engineerPeriod = $billingObj->engineerperiod*60;  //to seconds
-        $customerPeriod = $billingObj->customerperiod*60;
+        $engineerPeriod = $billingObj->engineerperiod * 60;  //to seconds
+        $customerPeriod = $billingObj->customerperiod * 60;
 
         if(empty($engineerPeriod) OR $engineerPeriod == 0) $engineerPeriod = 3600;
         if(empty($customerPeriod) OR $customerPeriod == 0) $customerPeriod = 3600;
@@ -494,12 +499,18 @@ if (mysql_num_rows($result) >=1 )
         echo "<th>{$strBillingEngineerPeriod}</th>";
         echo "<th>{$strBillingCustomerPeriod}</th></tr>";
         $shade = "shade1";
-        foreach($billing AS $bill)
+        
+        /*
+        echo "<pre>";
+        print_r($billing);
+        echo "</pre>";
+        */
+        
+        foreach($billing AS $engineer)
         {
             /*
                 [eng][starttime]
             */
-
 
             $owner = "";
             $duration = 0;
@@ -509,10 +520,10 @@ if (mysql_num_rows($result) >=1 )
             $count['engineer'];
             $count['customer'];
 
-            foreach($bill AS $act)
+            foreach($engineer AS $activity)
             {
-                $owner = user_realname($act['owner']);
-                $duration += $act['duration'];
+                $owner = user_realname($activity['owner']);
+                $duration += $activity['duration'];
 
                 /*
                 echo "<pre>";
@@ -520,7 +531,9 @@ if (mysql_num_rows($result) >=1 )
                 echo "</pre>";
                 */
 
-                $customerDur = $act['duration'];
+                $customerDur = $activity['duration'];
+                $engineerDur = $activity['duration'];
+                $startTime = $activity['starttime'];
 
                 if (!empty($count['engineer']))
                 {
@@ -536,25 +549,27 @@ if (mysql_num_rows($result) >=1 )
                             */
                             //  echo "IN:{$ind}:START:{$act['starttime']}:ENG:{$engineerPeriod}<br />";
 
-                            if($ind <= $act['starttime'] AND $ind <= ($act['starttime'] + $engineerPeriod))
+                            if($ind <= $activity['starttime'] AND $ind <= ($activity['starttime'] + $engineerPeriod))
                             {
                                 //echo "IND:{$ind}:START:{$act['starttime']}<br />";
                                 // already have something which starts in this period just need to check it fits in the period
-                                if($ind + $engineerPeriod > $act['starttime'] + $customerDur)
+                                if($ind + $engineerPeriod > $activity['starttime'] + $customerDur)
                                 {
-                                    $remainderInPeriod = ($ind + $engineerPeriod) - $act['starttime'];
+                                    $remainderInPeriod = ($ind + $engineerPeriod) - $activity['starttime'];
                                     $customerDur -= $remainderInPeriod;
 
                                     $saved = "true";
                                 }
                             }
                         }
-
-                        if ($saved == "false" AND $act['duration'] > 0)
+                        //echo "Saved: {$saved}<br />";
+                        if ($saved == "false" AND $activity['duration'] > 0)
                         {
-                            //echo "BB:".$act['starttime'].":SAVED:{$saved}:DUR:{$act['duration']}<br />";
+                            //echo "BB:".$activity['starttime'].":SAVED:{$saved}:DUR:{$activity['duration']}<br />";
                             // need to add a new block
-                            $count['engineer'][$act['starttime']] = $act['starttime'];
+                            $count['engineer'][$startTime] = $startTime;
+
+                            $startTime += $engineerPeriod;
 
                             $customerDur -= $engineerPeriod;
                         }
@@ -562,21 +577,22 @@ if (mysql_num_rows($result) >=1 )
                 }
                 else
                 {
-                    $count['engineer'][$act['starttime']] = $act['starttime'];
-                    $localDur = $act['duration']-$engineerPeriod;
-                    $startTime = $act['starttime'];
+                    $count['engineer'][$activity['starttime']] = $activity['starttime'];
+                    $localDur = $activity['duration'] - $engineerPeriod;
 
                     while ($localDur > 0)
                     {
-                        $startTime+=$engineerPeriod;
+                        $startTime += $engineerPeriod;
                         $count['engineer'][$startTime] = $startTime;
                         $localDur -= $engineerPeriod; // was just -
                     }
                 }
-
+                
+                $startTime = $activity['starttime'];
+                
                 if (!empty($count['customer']))
                 {
-                    while ($act['duration'] > 0)
+                    while ($engineerDur > 0)
                     {
                         $saved = "false";
                         foreach ($count['customer'] AS $ind)
@@ -588,40 +604,40 @@ if (mysql_num_rows($result) >=1 )
                             */
                             //echo "IN:{$ind}:START:{$act['starttime']}:ENG:{$engineerPeriod}<br />";
 
-                            if ($ind <= $act['starttime'] AND $ind <= ($act['starttime']+$customerPeriod))
+                            if ($ind <= $activity['starttime'] AND $ind <= ($activity['starttime'] + $customerPeriod))
                             {
-                                //echo "IND:{$ind}:START:{$act['starttime']}<br />";
+                                //echo "IND:{$ind}:START:{$activity['starttime']}<br />";
                                 // already have something which starts in this period just need to check it fits in the period
-                                if ($ind + $customerPeriod > $act['starttime'] + $act['duration'])
+                                if ($ind + $customerPeriod > $activity['starttime'] + $activity['duration'])
                                 {
-                                    $remainderInPeriod = ($ind+$customerPeriod) - $act['starttime'];
-                                    $act['duration'] -= $remainderInPeriod;
+                                    $remainderInPeriod = ($ind+$customerPeriod) - $activity['starttime'];
+                                    $engineerDur -= $remainderInPeriod;
 
                                     $saved = "true";
                                 }
                             }
                         }
 
-                        if($saved == "false" AND $act['duration'] > 0)
+                        if($saved == "false" AND $activity['duration'] > 0)
                         {
-                            //echo "BB:".$act['starttime'].":SAVED:{$saved}:DUR:{$act['duration']}<br />";
+                            //echo "BB:".$activity['starttime'].":SAVED:{$saved}:DUR:{$activity['duration']}<br />";
                             // need to add a new block
-                            $count['customer'][$act['starttime']] = $act['starttime'];
+                            $startTime += $customerPeriod;
+                            $count['customer'][$startTime] = $startTime;
 
-                            $act['duration'] -= $customerPeriod; // was just -
+                            $engineerDur -= $customerPeriod; // was just -
                         }
                     }
                 }
                 else
                 {
-                    $count['customer'][$act['starttime']] = $act['starttime'];
-                    $localDur = $act['duration']-$customerPeriod;
-                    $startTime = $act['starttime'];
+                    $count['customer'][$activity['starttime']] = $activity['starttime'];
+                    $localDur = $activity['duration'] - $customerPeriod;
 
                     while($localDur > 0)
                     {
-                        $startTime += $customerPeriod;
-                        $count['customer'][$startTime] = $startTime;
+                        $starttime += $customerPeriod;
+                        $count['customer'][$starttime] = $starttime;
                         $localDur -= $customerPeriod;
                     }
                 }
