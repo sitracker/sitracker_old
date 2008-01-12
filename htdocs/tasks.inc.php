@@ -184,31 +184,54 @@ setInterval("countUp()", 1000); //every 1 seconds
     echo "<p align='center'>{$strIncidentActivitiesIntro}</p>";
 }
 else
-{// Defaults
-    if (empty($user) OR $user=='current') $user=$sit[2];
+{
+    // Defaults
+    if (empty($user) OR $user=='current')
+    {
+        $user=$sit[2];
+    }
+    
     // If the user is passed as a username lookup the userid
-    if (!is_number($user) AND $user!='current' AND $user!='all')
+    if (!is_number($user) AND $user != 'current' AND $user != 'all')
     {
         $usql = "SELECT id FROM `{$dbUsers}` WHERE username='{$user}' LIMIT 1";
         $uresult = mysql_query($usql);
         if (mysql_error()) trigger_error(mysql_error(),E_USER_WARNING);
-        if (mysql_num_rows($uresult) >= 1) list($user) = mysql_fetch_row($uresult);
-        else $user=$sit[2]; // force to current user if username not found
+        if (mysql_num_rows($uresult) >= 1)
+        {
+            list($user) = mysql_fetch_row($uresult);
+        }        
+        else
+        {
+            $user=$sit[2]; // force to current user if username not found
+        }
     }
     echo "<h2><img src='{$CONFIG['application_webpath']}images/icons/{$iconset}/32x32/task.png' width='32' height='32' alt='' /> ";
-    echo user_realname($user,TRUE) . "'s {$strTasks}:</h2>";
+    echo user_realname($user,TRUE) . "'s {$strTasks}:</h2>"; // FIXME i18n
 
     // show drop down select for task view options
     echo "<form action='{$_SERVER['PHP_SELF']}' style='text-align: center;'>";
     echo "{$strView}: <select class='dropdown' name='queue' onchange='window.location.href=this.options[this.selectedIndex].value'>\n";
-    echo "<option ";
-    if ($show == '' OR $show == 'active') echo "selected='selected' ";
+    echo "<option ";    
+    if ($show == '' OR $show == 'active')
+    {
+        echo "selected='selected' ";
+    }
+    
     echo "value='{$_SERVER['PHP_SELF']}?user=$user&amp;show=active&amp;sort=$sort&amp;order=$order'>{$strActive}</option>\n";
     echo "<option ";
-    if ($show == 'completed') echo "selected='selected' ";
+    if ($show == 'completed')
+    {
+        echo "selected='selected' ";
+    }
+        
     echo "value='{$_SERVER['PHP_SELF']}?user=$user&amp;show=completed&amp;sort=$sort&amp;order=$order'>{$strCompleted}</option>\n";
     echo "<option ";
-    if ($show == 'incidents') echo "selected='selected' ";
+    if ($show == 'incidents')
+    {
+        echo "selected='selected' ";
+    }
+    
     echo "value='{$_SERVER['PHP_SELF']}?user=$user&amp;show=incidents&amp;sort=$sort&amp;order=$order'>{$strActivities}</option>";
 
     echo "</select>\n";
@@ -288,14 +311,19 @@ if (mysql_num_rows($result) >=1 )
         if ($user == $sit[2])
         {
             echo "<td>";
-            if ($task->distribution=='private') echo " <img src='{$CONFIG['application_webpath']}images/icons/{$iconset}/16x16/private.png' width='16' height='16' title='Private' alt='Private' />";
+            if ($task->distribution=='private')
+            {
+                echo " <img src='{$CONFIG['application_webpath']}images/icons/{$iconset}/16x16/private.png' width='16' height='16' title='Private' alt='Private' />";
+            }
             echo "</td>";
         }
+
         if ($mode == 'incident')
         {
             if ($enddate == '0')
             {
-                echo "<td><a href='view_task.php?id={$task->id}&amp;mode=incident&amp;incident={$id}' class='info'><img src='{$CONFIG['application_webpath']}images/icons/{$iconset}/16x16/timer.png' width='16' height='16' alt='' /> {$task->id}</a></td>";
+                echo "<td><a href='view_task.php?id={$task->id}&amp;mode=incident&amp;incident={$id}' class='info'>";
+                echo "<img src='{$CONFIG['application_webpath']}images/icons/{$iconset}/16x16/timer.png' width='16' height='16' alt='' /> {$task->id}</a></td>";
             }
             else echo "<td>{$task->id}</td>";
         }
@@ -313,18 +341,38 @@ if (mysql_num_rows($result) >=1 )
             echo "<td>".priority_icon($task->priority).priority_name($task->priority)."</td>";
             echo "<td>".percent_bar($task->completion)."</td>";
         }
+
         if ($mode != 'incident')
         {
             echo "<td";
-            if ($startdate > 0 AND $startdate <= $now AND $task->completion <= 0) echo " class='urgent'";
-            elseif ($startdate > 0 AND $startdate <= $now AND $task->completion >= 1 AND $task->completion < 100) echo " class='idle'";
+            if ($startdate > 0 AND $startdate <= $now AND $task->completion <= 0)
+            {
+                echo " class='urgent'";
+            }
+            elseif ($startdate > 0 AND $startdate <= $now AND
+                    $task->completion >= 1 AND $task->completion < 100)
+            {
+                echo " class='idle'";
+            }
+            
             echo ">";
-            if ($startdate > 0) echo date($CONFIG['dateformat_date'],$startdate);
+            if ($startdate > 0)
+            {
+                echo date($CONFIG['dateformat_date'],$startdate);
+            }
+            
             echo "</td>";
             echo "<td";
-            if ($duedate > 0 AND $duedate <= $now AND $task->completion < 100) echo " class='urgent'";
+            if ($duedate > 0 AND $duedate <= $now AND $task->completion < 100)
+            {
+                echo " class='urgent'";
+            }
+            
             echo ">";
-            if ($duedate > 0) echo date($CONFIG['dateformat_date'],$duedate);
+            if ($duedate > 0)
+            {
+                echo date($CONFIG['dateformat_date'],$duedate);
+            }
             echo "</td>";
         }
         else
@@ -343,8 +391,6 @@ if (mysql_num_rows($result) >=1 )
                 $duration = $now - $startdate;
                 //echo "<td id='duration{$task->id}'><em><div id='duration{$task->id}'>".format_seconds($duration)."</div></em></td>";
                 echo "<td id='duration{$task->id}'>".format_seconds($duration)."</td>";
-                //echo "<script type='text/javascript'>countUp();</script></td>";  //force a quick udate
-
             }
             else
             {
@@ -354,9 +400,9 @@ if (mysql_num_rows($result) >=1 )
                 $closedduration += $duration;
 
 
-                $temparray['owner']=$task->owner;
-                $temparray['starttime']=$startdate;
-                $temparray['duration']=$duration;
+                $temparray['owner'] = $task->owner;
+                $temparray['starttime'] = $startdate;
+                $temparray['duration'] = $duration;
                 $billing[$task->owner][] = $temparray;
             }
             $totalduration += $duration;
@@ -364,10 +410,14 @@ if (mysql_num_rows($result) >=1 )
             echo "<td>".format_date_friendly($lastupdated)."</td>";
         }
 
-        if ($show=='completed')
+        if ($show == 'completed')
         {
             echo "<td>";
-            if ($enddate > 0) echo date($CONFIG['dateformat_date'],$enddate);
+            if ($enddate > 0)
+            {
+                echo date($CONFIG['dateformat_date'],$enddate);
+            }
+            
             echo "</td>";
         }
         if ($mode == 'incident')
@@ -375,14 +425,16 @@ if (mysql_num_rows($result) >=1 )
             echo "<td>".user_realname($task->owner)."</td>";
         }
         echo "</tr>\n";
-        if ($shade=='shade1') $shade='shade2';
-        else $shade='shade1';
+        if ($shade == 'shade1') $shade = 'shade2';
+        else $shade = 'shade1';
     }
 
     if ($mode == 'incident')
     {
-        echo "<tr class='{$shade}'><td><strong>{$strTotal}:</strong></td><td colspan='5'>".format_seconds($totalduration)."</td></tr>";
-        echo "<tr class='{$shade}'><td><strong>{$strExact}:</strong></td><td colspan='5' id='totalduration'>".exact_seconds($totalduration);
+        echo "<tr class='{$shade}'><td><strong>{$strTotal}:</strong></td>";
+        echo "<td colspan='5'>".format_seconds($totalduration)."</td></tr>";
+        echo "<tr class='{$shade}'><td><strong>{$strExact}:</strong></td>";
+        echo "<td colspan='5' id='totalduration'>".exact_seconds($totalduration);
 
         echo "<script type='text/javascript'>";
         if (empty($closedduration)) $closedduration = 0;
@@ -391,7 +443,11 @@ if (mysql_num_rows($result) >=1 )
         echo "</td></tr>";
     }
     echo "</table>\n";
-    if ($mode == 'incident') echo "<script type='text/javascript'>countUp();</script>";  //force a quick udate
+    
+    if($mode == 'incident')
+    {
+        echo "<script type='text/javascript'>countUp();</script>";  //force a quick udate
+    }
 
     //echo "<pre>";
     //print_r($billing);
@@ -424,15 +480,19 @@ if (mysql_num_rows($result) >=1 )
 
         echo "<p><table align='center'>";
         echo "<tr><td></td><th>{$strMinutes}</th></th></tr>";
-        echo "<tr><th>{$strBillingEngineerPeriod}</th><td>".($engineerPeriod/60)."</td></tr>";
-        echo "<tr><th>{$strBillingCustomerPeriod}</th><td>".($customerPeriod/60)."</td></tr>";
+        echo "<tr><th>{$strBillingEngineerPeriod}</th>";
+        echo "<td>".($engineerPeriod/60)."</td></tr>";
+        echo "<tr><th>{$strBillingCustomerPeriod}</th>";
+        echo "<td>".($customerPeriod/60)."</td></tr>";
         echo "</table></p>";
 
         echo "<br />";
 
         echo "<table align='center'>";
 
-        echo "<tr><th>{$strOwner}</th><th>{$strTotalMinutes }</th><th>{$strBillingEngineerPeriod}</th><th>{$strBillingCustomerPeriod}</th></tr>";
+        echo "<tr><th>{$strOwner}</th><th>{$strTotalMinutes }</th>";
+        echo "<th>{$strBillingEngineerPeriod}</th>";
+        echo "<th>{$strBillingCustomerPeriod}</th></tr>";
         $shade = "shade1";
         foreach ($billing AS $bill)
         {
@@ -487,8 +547,6 @@ if (mysql_num_rows($result) >=1 )
 
                                     $saved = "true";
                                 }
-
-
                             }
                         }
 
@@ -569,7 +627,10 @@ if (mysql_num_rows($result) >=1 )
                 }
             }
 
-            echo "<tr class='{$shade}'><td>{$owner}</td><td>".round($duration/60)."</td><td>".sizeof($count['engineer'])."</td><td>".sizeof($count['customer'])."</td></tr>";
+            echo "<tr class='{$shade}'><td>{$owner}</td>";
+            echo "<td>".round($duration/60)."</td>";
+            echo "<td>".sizeof($count['engineer'])."</td>";
+            echo "<td>".sizeof($count['customer'])."</td></tr>";
             $tduration += $duration;
             $totalengineerperiods += sizeof($count['engineer']);
             $totalcustomerperiods += sizeof($count['customer']);
@@ -581,7 +642,8 @@ if (mysql_num_rows($result) >=1 )
             if ($shade == "shade1") $shade = "shade2";
             else $shade = "shade2";
         }
-        echo "<tr><td>TOTALS</td><td>".round($tduration/60)."</td><td>{$totalengineerperiods}</td><td>{$totalcustomerperiods}</td></tr>";
+        echo "<tr><td>{$strTOTALS}</td><td>".round($tduration/60)."</td>";
+        echo "<td>{$totalengineerperiods}</td><td>{$totalcustomerperiods}</td></tr>";
         echo "</table></p>";
     }
 
@@ -589,11 +651,26 @@ if (mysql_num_rows($result) >=1 )
 else
 {
     echo "<p align='center'>";
-    if ($sit[2]==$user) echo "No tasks";
-    else echo "No public tasks";
+    if ($sit[2] == $user)
+    {
+        echo $strNoTasks;
+    }
+    else
+    {
+        echo $strNoPublicTasks;
+    }
+    
     echo "</p>";
-    if ($mode == 'incident') echo "<p align='center'><a href='add_task.php?incident={$id}'>{$strStartNewActivity}</a></p>";
-    else echo "<p align='center'><a href='add_task.php'>{$strAddTask}</a></p>";
+    if($mode == 'incident')
+    {
+        echo "<p align='center'>";
+        echo "<a href='add_task.php?incident={$id}'>{$strStartNewActivity}";
+        echo "</a></p>";
+    }
+    else
+    {
+        echo "<p align='center'><a href='add_task.php'>{$strAddTask}</a></p>";
+    }
 }
 
 ?>

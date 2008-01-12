@@ -621,6 +621,7 @@ $strNotRequested = 'Not Requested';
 $strNotifications = 'Notifications';
 $strNoRecords = 'No Records';
 $strNoTasks = 'No Tasks';
+$strNoPublicTasks = 'No Public Tasks';
 $strNothingToDisplay = 'Nothing to Display';
 $strNotice = 'Notice';
 $strNotices = 'Notices';
@@ -901,6 +902,8 @@ $strTodaysDate = 'Todays Date';
 $strTodaysStats = 'Todays Statistics';
 $strToday = 'Today';
 $strTotal = 'Total';
+# Totals capitalised
+$strTOTALS = 'TOTALS';
 $strTotalOpen = 'Total Open';
 $strTotalMinutes = 'Total Minutes';
 $strTrackURL = 'Track URL';
