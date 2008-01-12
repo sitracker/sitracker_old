@@ -226,6 +226,18 @@ if ($sit[0] != '')
     if (mysql_error()) trigger_error(mysql_error(),E_USER_WARNING);
     if (mysql_num_rows($noticeresult) > 0)
     {
+        $keys = array_keys($_REQUEST);
+
+        foreach ($keys AS $key)
+        {
+            if ($key != 'sit' AND $key != 'SiTsessionID')
+            {
+                //$url[]= "{$key}=".$_REQUEST[$key];
+                //$alink .= "&amp;{$key}=".$_REQUEST[$key];
+                $url .= "&amp;{$key}=".$_REQUEST[$key];
+            }
+        }
+            
         while ($notice = mysql_fetch_object($noticeresult))
         {
             $notice->text = bbcode($notice->text);
@@ -237,7 +249,7 @@ if ($sit[0] != '')
             elseif ($notice->type == WARNING_NOTICE_TYPE)
             {
                 echo "<div class='warning'><p class='warning'>";
-                echo "<span>(<a href='{$_SERVER[PHP_SELF]}?noticeaction=dismiss_notice&amp;noticeid={$notice->id}'>$strDismiss</a>)</span>";
+                echo "<span>(<a href='{$_SERVER[PHP_SELF]}?noticeaction=dismiss_notice&amp;noticeid={$notice->id}{$url}'>{$strDismiss}</a>)</span>";
                 echo $notice->text;
             }
             elseif ($notice->type == CRITICAL_NOTICE_TYPE)
@@ -252,7 +264,7 @@ if ($sit[0] != '')
             elseif ($notice->type == OUT_OF_SLA_TYPE OR $notice->type == NEARING_SLA_TYPE)
             {
                 echo "<div class='error'><p class='warning'>";
-                echo "<span>(<a href='{$_SERVER[PHP_SELF]}?noticeaction=dismiss_notice&amp;noticeid={$notice->id}'>$strDismiss</a>)</span>";
+                echo "<span>(<a href='{$_SERVER[PHP_SELF]}?noticeaction=dismiss_notice&amp;noticeid={$notice->id}{$url}'>{$strDismiss}</a>)</span>";
                 echo "{$notice->text}";
                 if (!empty($notice->link))
                 {
@@ -272,7 +284,7 @@ if ($sit[0] != '')
             else
             {
                 echo "<div class='info'><p class='info'>";
-                echo "<span>(<a href='{$_SERVER[PHP_SELF]}?noticeaction=dismiss_notice&amp;noticeid={$notice->id}'>$strDismiss</a>)</span>";
+                echo "<span>(<a href='{$_SERVER[PHP_SELF]}?noticeaction=dismiss_notice&amp;noticeid={$notice->id}{$url}'>{$strDismiss}</a>)</span>";
                 if (substr($notice->text, 0, 4) == '$str')
                 {
                     $v = substr($notice->text, 1);
@@ -300,9 +312,23 @@ if ($sit[0] != '')
             }
             echo "</p></div>";
         }
+        
         if (mysql_num_rows($noticeresult) > 1)
         {
-            echo "<p align='right' style='padding-right:32px'><a href='{$_SERVER[PHP_SELF]}?noticeaction=dismiss_notice&amp;noticeid=all'>{$strDismissAll}</a></p>";
+            $keys = array_keys($_REQUEST);
+
+            $alink = "{$_SERVER[PHP_SELF]}?noticeaction=dismiss_notice&amp;noticeid=all";
+            
+            foreach ($keys AS $key)
+            {
+                if ($key != 'sit' AND $key != 'SiTsessionID')
+                {
+                    //$url[]= "{$key}=".$_REQUEST[$key];
+                    $alink .= "&amp;{$key}=".$_REQUEST[$key];
+                }
+            }
+            
+            echo "<p align='right' style='padding-right:32px'><a href='{$alink}'>{$strDismissAll}</a></p>";
         }
         //echo "</div>";
     }
