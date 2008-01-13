@@ -52,7 +52,7 @@ CREATE TABLE `contacts` (
   `forenames` varchar(100) NOT NULL default '',
   `surname` varchar(100) NOT NULL default '',
   `jobtitle` varchar(255) NOT NULL default '',
-  `salutation` varchar(50) NOT NULL default '',
+  `courtesytitle` varchar(50) NOT NULL default '',
   `siteid` int(11) NOT NULL default '0',
   `email` varchar(100) default NULL,
   `phone` varchar(50) default NULL,
@@ -80,7 +80,7 @@ CREATE TABLE `contacts` (
   KEY `notify_contactid` (`notify_contactid`)
 ) ENGINE=MyISAM;
 
-INSERT INTO `contacts` (`id`, `notify_contactid`, `username`, `password`, `forenames`, `surname`, `jobtitle`, `salutation`, `siteid`, `email`, `phone`, `mobile`, `fax`, `department`, `address1`, `address2`, `city`, `county`, `country`, `postcode`, `dataprotection_email`, `dataprotection_phone`, `dataprotection_address`, `timestamp_added`, `timestamp_modified`, `notes`) VALUES
+INSERT INTO `contacts` (`id`, `notify_contactid`, `username`, `password`, `forenames`, `surname`, `jobtitle`, `courtesytitlen`, `siteid`, `email`, `phone`, `mobile`, `fax`, `department`, `address1`, `address2`, `city`, `county`, `country`, `postcode`, `dataprotection_email`, `dataprotection_phone`, `dataprotection_address`, `timestamp_added`, `timestamp_modified`, `notes`) VALUES
 (1, 4, 'Acme1', '2830', 'John', 'Acme', 'Chairman', 'Mr', 1, 'acme@example.com', '0666 222111', '', '', '', '', '', '', '', '', '', 'Yes', 'Yes', 'Yes', 1132930556, 1187360933, '');
 
 CREATE TABLE `dashboard` (
@@ -1235,7 +1235,7 @@ CREATE TABLE `triggers` (
 `userid` TINYINT NOT NULL ,
 `action` TINYINT NOT NULL DEFAULT '1' ,
 `parameters` VARCHAR( 255 ) NULL ,
-PRIMARY KEY ( `triggerid` , `userid` , `action` )  
+PRIMARY KEY ( `triggerid` , `userid` , `action` )
 ) ENGINE = MYISAM ;
 
 CREATE TABLE `noticetemplates` (
@@ -1575,6 +1575,11 @@ DELETE FROM incidentstatus WHERE id = 0 OR id = 10;
 INSERT INTO `incidentstatus` VALUES (10, 'Active (Unassigned)', 'Active');
 ";
 
+$upgrade_schema[332] = "
+-- INL 12Jan08
+ALTER TABLE `contacts` CHANGE `salutation` `courtesytitle` VARCHAR( 50 ) CHARACTER SET latin1 COLLATE latin1_swedish_ci NOT NULL COMMENT 'Was ''salutation'' before 3.32';
+";
+
 $upgrade_schema[340] = "
 -- KMH 17/12/07
 CREATE TABLE `triggers` (
@@ -1582,7 +1587,7 @@ CREATE TABLE `triggers` (
 `userid` TINYINT NOT NULL ,
 `action` TINYINT NOT NULL DEFAULT '1' ,
 `parameters` VARCHAR( 255 ) NULL ,
-PRIMARY KEY ( `triggerid` , `userid` , `action` )  
+PRIMARY KEY ( `triggerid` , `userid` , `action` )
 ) ENGINE = MYISAM ;
 
 DROP TABLE IF EXISTS `contactflags`;
@@ -1624,9 +1629,9 @@ INSERT INTO `sit`.`emailtype` (`id` ,`name` ,`type` ,`description` ,`tofield` ,`
 ALTER TABLE `emailtype` DROP `id` ;
 ALTER TABLE `emailtype` CHANGE `name` `id` VARCHAR( 50 ) NOT NULL ;
 ALTER TABLE `emailtype` ADD PRIMARY KEY ( `id` )
-        
+
 -- KMH 09/01/08
-INSERT INTO `emailtype` (`id`, `type`, `description`, `tofield`, `fromfield`, `replytofield`, `ccfield`, `bccfield`, `subjectfield`, `body`, `customervisibility`, `storeinlog`) VALUES 
+INSERT INTO `emailtype` (`id`, `type`, `description`, `tofield`, `fromfield`, `replytofield`, `ccfield`, `bccfield`, `subjectfield`, `body`, `customervisibility`, `storeinlog`) VALUES
 ('TRIGGER_INCIDENT_CREATED', 'system', 'Trigger email sent when a new incident is logged.', '<useremail>', '<supportemail>', NULL, NULL, NULL, '[<incidentid>] - <incidenttitle>', 'Hello <contactfirstname>,\r\n\r\nIncident <incidentid> - <incidenttitle> has been logged.\r\n\r\n<signature> <globalsignature>\r\n-------------\r\nThis email is sent as a result of a system trigger. If you do not want to receive these emails, you can disable them from the ''Triggers'' page.', 'hide', 'No'),
 ('TRIGGER_INCIDENT_NEARING_SLA', 'system', 'Trigger email sent when an incident is nearing its SLA.', '<useremail>', '<supportemail>', NULL, NULL, NULL, '[<incidentid>] - <incidenttitle>: SLA approaching', 'Hello <contactfirstname>,\r\n\r\nIncident <incidentid> - <incidenttitle> is approaching its SLA.\r\n\r\n<signature> <globalsignature>\r\n-------------\r\nThis email is sent as a result of a system trigger. If you do not want to receive these emails, you can disable them from the ''Triggers'' page.', 'hide', 'No'),
 ('TRIGGER_INCIDENT_ASSIGNED', 'user', 'Notify user when call assigned to them', '<useremail>', '<supportemail>', NULL, NULL, NULL, '[<incidentid>] - <incidenttitle>: has been assigned to you', 'Hello <contactfirstname>,\r\n\r\nIncident <incidentid> - <incidenttitle> has been assigned to you.\r\n\r\n<signature> <globalsignature>\r\n-------------\r\nThis email is sent as a result of a system trigger. If you do not want to receive these emails, you can disable them from the ''Triggers'' page.', 'show', 'Yes');

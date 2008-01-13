@@ -369,18 +369,18 @@ function display_update_page($draftid=-1)
     echo "<div id='updatestr'></div>";
     echo "</td></tr>";
 
-    if ($target->type=='initialresponse')
+    if ($target->type == 'initialresponse')
     {
-        $disable_priority=TRUE;
+        $disable_priority = TRUE;
     }
-    else $disable_priority=FALSE;
+    else $disable_priority = FALSE;
     echo "<tr><th align='right' valign='top'>{$GLOBALS['strNewPriority']}:</th>";
     echo "<td class='shade1'>";
 
     // FIXME fix maximum priority
     $servicelevel=maintenance_servicelevel(incident_maintid($id));
-    if ($servicelevel==2 || $servicelevel==5) $maxpriority=4;
-    else $maxpriority=3;
+    if ($servicelevel == 2 || $servicelevel == 5) $maxpriority = 4;
+    else $maxpriority = 3;
 
     $setPriorityTo = incident_priority($id);
 
@@ -422,18 +422,18 @@ function display_update_page($draftid=-1)
     echo "<td class='shade2'>";
     echo "Place the incident in the waiting queue?<br />";
 
-    $oldtimeofnextaction=incident_timeofnextaction($id);
-    if ($oldtimeofnextaction<1) $oldtimeofnextaction=$now;
-    $wait_time=($oldtimeofnextaction-$now);
+    $oldtimeofnextaction = incident_timeofnextaction($id);
+    if ($oldtimeofnextaction < 1) $oldtimeofnextaction=$now;
+    $wait_time = ($oldtimeofnextaction-$now);
 
-    $na_days=floor($wait_time / 86400);
-    $na_remainder=$wait_time % 86400;
-    $na_hours=floor($na_remainder / 3600);
-    $na_remainder=$wait_time % 3600;
-    $na_minutes=floor($na_remainder / 60);
-    if ($na_days<0) $na_days=0;
-    if ($na_hours<0) $na_hours=0;
-    if ($na_minutes<0) $na_minutes=0;
+    $na_days = floor($wait_time / 86400);
+    $na_remainder = $wait_time % 86400;
+    $na_hours = floor($na_remainder / 3600);
+    $na_remainder = $wait_time % 3600;
+    $na_minutes = floor($na_remainder / 60);
+    if ($na_days < 0) $na_days = 0;
+    if ($na_hours < 0) $na_hours = 0;
+    if ($na_minutes < 0) $na_minutes = 0;
 
     echo "<label><input type='radio' name='timetonextaction_none' id='ttna_time' value='time' onchange=\"update_ttna();\" />";
     echo "For <em>x</em> days, hours, minutes</label><br />"; // FIXME i18n for x days,. hours, minutes
@@ -564,7 +564,7 @@ else
         break;
 
         case 'time':
-            if ($timetonextaction_days<1 && $timetonextaction_hours<1 && $timetonextaction_minutes<1)
+            if ($timetonextaction_days < 1 && $timetonextaction_hours < 1 && $timetonextaction_minutes < 1)
             {
                 $timeofnextaction = 0;
             }
@@ -576,10 +576,10 @@ else
 
         case 'date':
             // kh: parse date from calendar picker, format: 200-12-31
-            $date=explode("-", $date);
-            $timeofnextaction=mktime(8 + $timeoffset,0,0,$date[1],$date[2],$date[0]);
+            $date = explode("-", $date);
+            $timeofnextaction = mktime(8 + $timeoffset,0,0,$date[1],$date[2],$date[0]);
             $now = time();
-            if ($timeofnextaction<0) $timeofnextaction=0;
+            if ($timeofnextaction < 0) $timeofnextaction = 0;
         break;
 
         default:
@@ -590,8 +590,8 @@ else
     // Put text into body of update for field changes (reverse order)
     // delim first
     $bodytext = "<hr>" . $bodytext;
-    $oldstatus=incident_status($id);
-    $oldtimeofnextaction=incident_timeofnextaction($id);
+    $oldstatus = incident_status($id);
+    $oldtimeofnextaction = incident_timeofnextaction($id);
     if ($newstatus != $oldstatus)
     {
         $bodytext = "Status: ".incidentstatus_name($oldstatus)." -&gt; <b>" . incidentstatus_name($newstatus) . "</b>\n\n" . $bodytext;
@@ -612,7 +612,7 @@ else
         $bodytext=$timetext.$bodytext;
     }
     // was '$attachment'
-    if ($_FILES['attachment']['name']!='' && isset($_FILES['attachment']['name'])==TRUE)
+    if ($_FILES['attachment']['name'] != '' && isset($_FILES['attachment']['name']) == TRUE)
     {
         $bodytext = "Attachment: [[att]]{$_FILES['attachment']['name']}[[/att]]\n".$bodytext;
     }
@@ -703,20 +703,23 @@ else
     $incident_attachment_fspath = $CONFIG['attachment_fspath'] . $id;
     if ($_FILES['attachment']['name'] != "")
     {
+        // try to figure out what delimeter is being used (for windows or unix)...
+        $delim = (strstr($filesarray[$c],"/")) ? "/" : "\\";
+
         // make incident attachment dir if it doesn't exist
-        $umask=umask(0000);
+        $umask = umask(0000);
         if (!file_exists($CONFIG['attachment_fspath'] . "$id"))
         {
-            $mk=@mkdir($CONFIG['attachment_fspath'] ."$id", 0770);
+            $mk = @mkdir($CONFIG['attachment_fspath'] ."$id", 0770);
             if (!$mk) throw_error('Failed creating incident attachment directory: ',$incident_attachment_fspath .$id);
         }
-        $mk=@mkdir($CONFIG['attachment_fspath'] .$id . "/$now", 0770);
+        $mk = @mkdir($CONFIG['attachment_fspath'] .$id . "{$delim}{$now}", 0770);
         if (!$mk) throw_error('Failed creating incident attachment (timestamp) directory: ',$incident_attachment_fspath .$id . "/$now");
         umask($umask);
-        $newfilename = $incident_attachment_fspath.'/'.$now.'/'.$_FILES['attachment']['name'];
+        $newfilename = $incident_attachment_fspath.$delim.$now.$delim.$_FILES['attachment']['name'];
 
         // Move the uploaded file from the temp directory into the incidents attachment dir
-        $mv=move_uploaded_file($_FILES['attachment']['tmp_name'], $newfilename);
+        $mv = move_uploaded_file($_FILES['attachment']['tmp_name'], $newfilename);
         if (!$mv) trigger_error('!Error: Problem moving attachment from temp directory to: '.$newfilename, E_USER_WARNING);
 
         //$mv=move_uploaded_file($attachment, "$filename");

@@ -24,6 +24,7 @@ $title = $strBrowseContracts;
 
 // External variables
 $productid = cleanvar($_REQUEST['productid']);
+$resellerid = cleanvar($_REQUEST['resellerid']);
 $search_string = cleanvar($_REQUEST['search_string']);
 $sort = cleanvar($_REQUEST['sort']);
 $order = cleanvar($_REQUEST['order']);
@@ -47,14 +48,17 @@ if ($activeonly=='yes') echo "checked='checked' ";
 echo "/> {$strShowActiveOnly}</label>";
 echo "<br />{$strByProduct}: ";
 echo product_drop_down('productid', $productid);
+
+echo "{$strByReseller}: ";
+echo reseller_drop_down('resellerid', $resellerid);
 echo "<input type='submit' value=\"{$strGo}\" />";
-?>
-</form>
-</td>
-</tr>
-<tr>
-<td valign="middle">
-<?php
+
+echo "</form>";
+echo "</td>";
+echo "</tr>";
+echo "<tr>";
+echo "<td valign='middle'>";
+
     echo "<a href='add_contract.php'>{$strAddContract}</a> |";
 ?>
     <a href="<?php echo $_SERVER['PHP_SELF'] ?>?search_string=A">A</a> |
@@ -85,12 +89,10 @@ echo "<input type='submit' value=\"{$strGo}\" />";
     <a href="<?php echo $_SERVER['PHP_SELF'] ?>?search_string=Z">Z</a> |
     <?php
     echo "<a href='{$_SERVER['PHP_SELF']}?search_string=*'>{$strAll}</a>";
-    ?>
-</td>
-</tr>
-</table>
 
-<?php
+echo "</td>";
+echo "</tr>";
+echo "</table>";
 
 // check input
 /*
@@ -100,7 +102,6 @@ if (empty($search_string) && empty($productid))
     echo "<p class='error'>You must enter a search string</p>\n";
 }
 */
-
 // search for criteria
 $sql  = "SELECT DISTINCT m.id AS maintid, s.name AS site, p.name AS product, r.name AS reseller, licence_quantity, ";
 $sql .= "l.name AS licence_type, expirydate, admincontact, ";
@@ -109,7 +110,11 @@ $sql .= "m.term AS term, m.productonly AS productonly ";
 $sql .= "FROM `{$dbMaintenance}` AS m, `{$dbSites}` AS s, `{$dbContacts}` AS c, `{$dbProducts}` AS p, `{$dbLicenceTypes}` AS l, `{$dbResellers}` AS r ";
 $sql .= "WHERE (m.site = s.id AND product = p.id AND admincontact = c.id) ";
 $sql .= "AND (reseller = r.id OR reseller = NULL) AND (licence_type = l.id OR licence_type = NULL) ";
-if ($activeonly=='yes') $sql .= "AND term!='yes' AND (expirydate > $now OR expirydate = '-1') ";
+if ($activeonly=='yes')
+{
+    $sql .= "AND term!='yes' AND (expirydate > $now OR expirydate = '-1') ";
+}
+
 if ($search_string != '*')
 {
     if (strlen($search_string)==1)
@@ -126,6 +131,11 @@ if ($search_string != '*')
     {
         $sql .= "AND m.product='$productid' ";
     }
+
+    if (!empty($resellerid))
+    {
+        $sql .= "AND maintenance.reseller='{$resellerid}' ";
+    }
 }
 if (!empty($sort))
 {
@@ -139,13 +149,14 @@ if (!empty($sort))
     if ($order=='a' OR $order=='ASC' OR $order='') $sql .= "ASC";
     else $sql .= "DESC";
 }
+
 $result = mysql_query($sql);
 if (mysql_error()) trigger_error("MySQL Query Error ".mysql_error(), E_USER_ERROR);
 
 if (mysql_num_rows($result) == 0)
 {
-    echo "<p align='center'>Sorry, unable to find any maintenance contracts";
-    if (!empty($search_string)) echo " matching '<em>{$search_string}</em>";
+    echo "<p align='center'>Sorry, unable to find any maintenance contracts"; // FIXME i18n
+    if (!empty($search_string)) echo " matching '<em>{$search_string}</em>"; // FIXME i18n
     echo "</p>\n";
 }
 else
@@ -161,22 +172,23 @@ else
     </script>
     <?php
     echo "<p align='center'>Displaying ".mysql_num_rows($result)." contract(s)";
-    if (!empty($search_string)) echo " matching '<em>{$search_string}</em>";
-    if ($productid) echo " where product matches <em>'".product_name($productid)."'</em>";
+    if (!empty($search_string)) echo " matching '<em>{$search_string}</em>"; // FIXME i18n
+    if ($productid) echo " where product matches <em>'".product_name($productid)."'</em>"; // FIXME i18n
     echo "</p>\n";
-    ?>
-    <table align='center' style='width: 95%;'>
-    <tr>
-        <?php
-        $filter=array('search_string' => $search_string,
-                      'productid' => $productid);
-        echo colheader('id', $strID, $sort, $order, $filter);
-        echo colheader('product', $strProduct, $sort, $order, $filter);
-        echo colheader('site', $strSite, $sort, $order, $filter);
-        echo colheader('reseller', $strReseller, $sort, $order. $filter);
-        echo "<th>{$strLicense}</th>";
-        echo colheader('expiry', $strExpiryDate, $sort, $order, $filter);
-        echo "<th width='200'>{$strNotes}</th>";
+
+    echo "<table align='center' style='width: 95%;'>";
+    echo "<tr>";
+
+    $filter=array('search_string' => $search_string,
+                  'productid' => $productid,
+                  'resellerid' => $resellerid);
+    echo colheader('id', $strID, $sort, $order, $filter);
+    echo colheader('product', $strProduct, $sort, $order, $filter);
+    echo colheader('site', $strSite, $sort, $order, $filter);
+    echo colheader('reseller', $strReseller, $sort, $order. $filter);
+    echo "<th>{$strLicense}</th>";
+    echo colheader('expiry', $strExpiryDate, $sort, $order, $filter);
+    echo "<th width='200'>{$strNotes}</th>";
     echo "</tr>\n";
     $shade = 0;
     while ($results = mysql_fetch_array($result))
@@ -195,31 +207,73 @@ else
             if ($shade) $class = "shade1";
             else $class = "shade2";
         }
-        ?>
-        <tr class='<?php echo $class ?>'>
-        <td><a href="contract_details.php?&amp;id=<?php echo $results['maintid'] ?>">Contract <?php echo $results["maintid"] ?></a></td>
-        <td><?php echo $results["product"] ?></td>
-        <?php
+
+        echo "<tr class='{$class}'>";
+        echo "<td><a href='contract_details.php?&amp;id={$results['maintid']}'>{$strContract} {$results['maintid']}</a></td>";
+        echo "<td>{$results["product"]}</td>";
         echo "<td><a href='site_details.php?id={$results['siteid']}#contracts'>".htmlspecialchars($results['site'])."</a><br />";
-        echo "Admin: <a href='contact_details.php?mode=popup&amp;id={$results['admincontact']}' target='_blank'>{$results['admincontactforenames']} {$results['admincontactsurname']}</a></td>";
-        ?>
+        echo "{$strAdminContact}: <a href='contact_details.php?mode=popup&amp;id={$results['admincontact']}' target='_blank'>{$results['admincontactforenames']} {$results['admincontactsurname']}</a></td>";
 
-        <td><?php echo $results["reseller"] ?></td>
-        <td><?php echo $results["licence_quantity"] ?> <?php echo $results["licence_type"] ?></td>
-        <td><?php
-            if ($results["expirydate"] == '-1') echo $strUnlimited;
-            else echo date($CONFIG['dateformat_date'], $results["expirydate"]); ?></td>
+        echo "<td>";
 
-        <td><?php if ($results["notes"] == "") echo "&nbsp;"; else echo nl2br($results["notes"]); ?></td>
-        </tr>
-        <?php
+        if (empty($results['reseller']))
+        {
+            echo $strNoReseller;
+        }
+        else
+        {
+            echo $results['reseller'];
+        }
+
+        echo "</td><td>";
+
+        if (empty($results['licence_type']))
+        {
+            echo $strNoLicense;
+        }
+        else
+        {
+            if ($results['licence_quantity'] == 0)
+            {
+                echo "{$strUnlimited} ";
+            }
+            else
+            {
+                echo "{$results['licence_quantity']} ";
+            }
+
+            echo $results['licence_type'];
+        }
+
+        echo "</td><td>";
+        if($results["expirydate"] == '-1')
+        {
+            echo $strUnlimited;
+        }
+        else
+        {
+            echo date($CONFIG['dateformat_date'], $results["expirydate"]);
+        }
+        echo "</td>";
+
+        echo "<td>";
+        if ($results["notes"] == "")
+        {
+            echo "&nbsp;";
+        }
+        else
+        {
+            echo nl2br($results["notes"]);
+        }
+
+        echo "</td></tr>";
+
         // invert shade
         if ($shade == 1) $shade = 0;
         else $shade = 1;
     }
-    ?>
-    </table>
-    <?php
+
+    echo "</table>";
     // free result and disconnect
     mysql_free_result($result);
     include ('htmlfooter.inc.php');

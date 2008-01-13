@@ -103,7 +103,7 @@ echo "{$strBrowseSites}</h2>";
     {
         echo "<a href='".$_SERVER['PHP_SELF']."?displayinactive=true";
         if (!empty($search_string)) echo "&amp;search_string={$search_string}&amp;owner={$owner}";
-        echo "'>Show inactive</a>"; // FIXME i18n show inactive
+        echo "'>{$strShowAll}</a>";
         $inactivestring="displayinactive=false";
     }
     ?>

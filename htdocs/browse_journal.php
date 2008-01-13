@@ -18,7 +18,8 @@ $permission = 22; // administrate
 require ('db_connect.inc.php');
 require ('functions.inc.php');
 
-$title = "Browse Journal"; // FIXME i18n browse journal
+$title = $strBrowseJournal;
+
 // This page requires authentication
 require ('auth.inc.php');
 

@@ -52,31 +52,29 @@ if ($maintrow['expirydate']<$now AND $maintrow['expirydate'] != '-1')
     echo "<span class='expired'>, {$strExpired}</span>";
 }
 echo "</td></tr>\n";
-echo "<tr><th>{$strSite}:</th>";
-echo "<td><a href=\"site_details.php?id=".$maintrow['site']."\">".$maintrow['sitename']."</a></td></tr>";
-echo "<tr><th>{$strAdminContact}:</th>";
-echo "<td><a href='{$_SERVER['PHP_SELF']}?id=".$maintrow['admincontact']."'>".contact_realname($maintrow['admincontact'])."</a>";
-echo "</td></tr>";
-if ($maintrow['reseller'] != '0')
+echo "<tr><th>{$strSite}:</th><td><a href=\"site_details.php?id=".$maintrow['site']."\">".$maintrow['sitename']."</a></td></tr>";
+echo "<tr><th>{$strAdminContact}:</th><td><a href=\"contact_details.php?id=".$maintrow['admincontact']."\">".contact_realname($maintrow['admincontact'])."</a></td></tr>";
+
+echo "<tr><th>{$strReseller}:</th><td>";
+
+if (empty($results['reseller']))
 {
-    echo "<tr><th>{$strReseller}:</th><td>".reseller_name($maintrow['reseller'])."</td></tr>";
+    echo $strNoReseller;
 }
+else
+{
+    echo reseller_name($maintrow['reseller']);
+}
+echo "</td></tr>";
 echo "<tr><th>{$strProduct}:</th><td>".product_name($maintrow['product'])."</td></tr>";
 echo "<tr><th>{$strIncidents}:</th>";
 echo "<td>";
 $incidents_remaining = $maintrow['incident_quantity'] - $maintrow['incidents_used'];
-if ($maintrow['incident_quantity']==0)
-{
-    echo "Unlimited Incidents ({$maintrow['incidents_used']} Used)"; // FIXME i18n unlimited used
-}
-elseif ($maintrow['incident_quantity']==1)
-{
-    echo "{$maintrow['incident_quantity']} Incident ($incidents_remaining Remaining)"; //FIXME i18n
-}
-else
-{
-    echo "{$maintrow['incident_quantity']} Incidents ($incidents_remaining Remaining)"; //FIXME i18n
-}
+
+if ($maintrow['incident_quantity'] == 0) $quantity = $strUnlimited;
+else $quantity = $maintrow['incident_quantity'];
+printf($strUsedNofN, $maintrow['incidents_used'], $quantity);
+if ($maintrow['incidents_used'] >= $maintrow['incident_quantity']) echo " ($strZeroRemaining)";
 echo "</td></tr>";
 if ($maintrow['licence_quantity'] != '0')
 {

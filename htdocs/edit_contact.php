@@ -56,7 +56,7 @@ elseif ($action == "edit" && isset($contact))
         echo "<p align='center'>".sprintf($strMandatoryMarked, "<sup class='red'>*</sup>")."</p>";
         echo "<table align='center' class='vertical'>";
         echo "<tr><th>{$strName}: <sup class='red'>*</sup><br />{$strTitle}, {$strForenames}, {$strSurname}</th>";
-        echo "<td><input maxlength='50' name='salutation' title='Salutation (Mr, Mrs, Miss, Dr. etc.)' size='7' value='{$contactrow['salutation']}' />\n";
+        echo "<td><input maxlength='50' name='courtesytitle' title='Courtesy Title (Mr, Mrs, Miss, Dr. etc.)' size='7' value='{$contactrow['salutation']}' />\n"; // i18n courtesy title
         echo "<input maxlength='100' name='forenames' size='15' title='Firstnames (or initials)' value='{$contactrow['forenames']}' />\n";
         echo "<input maxlength='100' name='surname' size='20' title='{$strSurname}' value='{$contactrow['surname']}' />";
         echo "</td></tr>\n";
@@ -141,7 +141,7 @@ else if ($action == "update")
 {
     // External variables
     $contact = cleanvar($_POST['contact']);
-    $salutation = cleanvar($_POST['salutation']);
+    $courtesytitle = cleanvar($_POST['courtesytitle']);
     $surname = cleanvar($_POST['surname']);
     $forenames = cleanvar($_POST['forenames']);
     $siteid = cleanvar($_POST['siteid']);
@@ -211,7 +211,7 @@ else if ($action == "update")
         */
         replace_tags(1, $contact, $tags);
 
-        $sql = "UPDATE contacts SET salutation='$salutation', surname='$surname', forenames='$forenames', siteid='$siteid', email='$email', phone='$phone', mobile='$mobile', fax='$fax', ";
+        $sql = "UPDATE contacts SET courtesytitle='$courtesytitle', surname='$surname', forenames='$forenames', siteid='$siteid', email='$email', phone='$phone', mobile='$mobile', fax='$fax', ";
         $sql .= "address1='$address1', address2='$address2', city='$city', county='$county', postcode='$postcode', ";
         $sql .= "country='$country', dataprotection_email='$dataprotection_email', dataprotection_phone='$dataprotection_phone', ";
         $sql .= "notes='$notes', dataprotection_address='$dataprotection_address' , department='$department' , jobtitle='$jobtitle', ";

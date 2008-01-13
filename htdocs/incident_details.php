@@ -22,9 +22,6 @@ require ('auth.inc.php');
 $incidentid = cleanvar($_REQUEST['id']);
 $id = $incidentid;
 
-?>
-
-<?php
 if ($_REQUEST['win']=='incomingview')
 {
     $title = 'Incoming';
@@ -53,7 +50,7 @@ elseif ($_REQUEST['win']=='jump')
 elseif ($_REQUEST['win'] == 'holdingview')
 {
     $_REQUEST['win'] = 'incomingview';
-    $title='Incoming';
+    $title = $strIncoming;
     $incidentid='';
     include('incident_html_top.inc.php');
     include('incident/details.inc.php');
@@ -63,7 +60,8 @@ elseif ($_REQUEST['win'] == 'holdingview')
 
 else
 {
-    $title='Details';
+    $title = $strDetails;
+    
     include ('incident_html_top.inc.php');
 
     include ('incident/details.inc.php');

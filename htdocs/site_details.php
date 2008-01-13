@@ -139,10 +139,11 @@ if (user_permission($sit[2],19)) // View contracts
     $sql  = "SELECT m.id AS maintid, m.term AS term, p.name AS product, r.name AS reseller, ";
     $sql .= "licence_quantity, lt.name AS licence_type, expirydate, admincontact, ";
     $sql .= "c.forenames AS admincontactsforenames, c.surname AS admincontactssurname, m.notes AS maintnotes ";
-    $sql .= "FROM `{$dbMaintenance}` AS m, `{$dbContacts}` AS c, `{$dbProducts}` AS p, `{$dbLicenceTypes}` AS lt, `{$dbResellers}` AS r ";
-    $sql .= "WHERE m.product = p.id AND (m.reseller = r.id OR reseller = NULL) ";
-    $sql .= "AND (licence_type = lt.id OR licence_type = NULL) ";
-    $sql .= "AND admincontact = c.id AND m.site = '$id' ";
+    $sql .= "FROM `{$dbContacts}` AS c, `{$dbProducts}` AS p, `{$dbMaintenance}` AS m ";
+    $sql .= "LEFT JOIN `{$dbLicenceTypes}` AS lt ON m.licence_type = lt.id ";
+    $sql .= "LEFT JOIN `{$dbResellers}` AS r ON r.id = m.reseller ";
+    $sql .= "WHERE m.product = p.id ";
+    $sql .= "AND admincontact = c.id AND m.site = '{$id}' ";
     $sql .= "ORDER BY expirydate DESC";
 
     // connect to database and execute query
@@ -188,8 +189,37 @@ if (user_permission($sit[2],19)) // View contracts
             echo "<td class='{$class}'><img src='{$CONFIG['application_webpath']}images/icons/{$iconset}/16x16/contract.png' width='16' height='16' alt='' /> ";
             echo "<a href='contract_details.php?id={$results['maintid']}'>{$strContract} {$results['maintid']}</a></td>";
             echo "<td class='{$class}'>{$results['product']}</td>";
-            echo "<td class='{$class}'>{$results['reseller']}</td>";
-            echo "<td class='{$class}'>{$results['licence_quantity']} {$results['licence_type']}</td>";
+            echo "<td class='{$class}'>";
+            if (empty($results['reseller']))
+            {
+                echo $strNoReseller;
+            }
+            else
+            {
+                echo $results['reseller'];
+            }
+
+            echo "</td>";
+            echo "<td class='{$class}'>";
+
+            if (empty($results['licence_type']))
+            {
+                echo $strNoLicense;
+            }
+            else
+            {
+                if ($results['licence_quantity'] == 0)
+                {
+                    echo "{$strUnlimited} ";
+                }
+                else
+                {
+                    echo "{$results['licence_quantity']} ";
+                }
+                echo $results['licence_type'];
+            }
+
+            echo "</td>";
             echo "<td class='{$class}'>".date($CONFIG['dateformat_date'], $results["expirydate"])."</td>";
             echo "<td class='{$class}'>{$results['admincontactsforenames']}  {$results['admincontactssurname']}</td>";
             echo "<td class='{$class}'>";

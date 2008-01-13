@@ -193,12 +193,42 @@ elseif ($action == "add")
     {
         $addition_errors = 0;
 
-        if (empty($productonly)) $productonly='no';
-        if ($productonly=='yes') $term='yes';
-        else $term='no';
+        if (empty($productonly))
+        {
+            $productonly = 'no';
+        }
+        
+        if ($productonly=='yes')
+        {
+            $term = 'yes';
+        }
+        else
+        {
+            $term = 'no';
+        }
+        
+        if(empty($reseller) OR $reseller == 0)
+        {
+            $reseller = "NULL";
+        }
+        else
+        {
+            $reseller = "'{$reseller}'";
+        }
+        
+        if(empty($licence_type) OR $licence_type == 0)
+        {
+            $licence_type = "NULL";
+        }
+        else
+        {
+            $licence_type = "'{$licence_type}'";
+        }
+            
+        // NOTE above is so we can insert null so browse_contacts etc can see the contract rather than inserting 0
         $sql  = "INSERT INTO `{$dbMaintenance}` (site, product, reseller, expirydate, licence_quantity, licence_type, notes, ";
         $sql .= "admincontact, servicelevelid, incidentpoolid, incident_quantity, productonly, term, supportedcontacts, allcontactssupported) ";
-        $sql .= "VALUES ('$site', '$product', '$reseller', '$expirydate', '$licence_quantity', '$licence_type', '$notes', ";
+        $sql .= "VALUES ('$site', '$product', $reseller, '$expirydate', '$licence_quantity', $licence_type, '$notes', ";
         $sql .= "'$admincontact', '$servicelevelid', '$incidentpoolid', '$incident_quantity', '$productonly', '$term', '$amount', '$allcontacts')";
 
         $result = mysql_query($sql);

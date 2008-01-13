@@ -91,8 +91,14 @@ if ($action == "edit")
         $productname=product_name($maint["product"]);
         if (user_permission($sit[2], 22))
         {
-            if ($changeproduct=='yes') echo product_drop_down("product", $maint['product']);
-            else echo "{$productname} (<a href='{$_SERVER['PHP_SELF']}?action=edit&amp;maintid={$maintid}&amp;changeproduct=yes'>{$strChange}</a>)";
+            if ($changeproduct=='yes')
+            {
+                echo product_drop_down("product", $maint['product']);
+            }
+            else
+            {
+                echo "{$productname} (<a href='{$_SERVER['PHP_SELF']}?action=edit&amp;maintid={$maintid}&amp;changeproduct=yes'>{$strChange}</a>)";
+            }
         }
         else echo "{$productname}";
         echo "</td></tr>\n";
@@ -143,8 +149,8 @@ if ($action == "edit")
         $incident_pools = explode(',', "Unlimited,{$CONFIG['incident_pools']}");
         echo "<td>".array_drop_down($incident_pools,'incident_poolid',$maint['incident_quantity'])."</td></tr>";
 
-        // FIXME i18n
-        echo "<tr><th>{$strProductOnly}:</th><td><input name='productonly' type='checkbox' value='yes' onclick='set_terminated();' ";
+        echo "<tr><th>{$strProductOnly}:</th>";
+        echo "<td><input name='productonly' type='checkbox' value='yes' onclick='set_terminated();' ";
         if ($maint["productonly"] == "yes") echo " checked";
         echo " /></td></tr>\n";
 

@@ -89,7 +89,7 @@ function dashboard_user_incidents($row,$dashboardid)
 
     if ($user=='all')
     {
-        //echo "<p align='center'>There are <strong>{$rowcount}</strong> incidents in this list.</p>";        
+        //echo "<p align='center'>There are <strong>{$rowcount}</strong> incidents in this list.</p>";
         echo "<p align='center'>".sprintf($strThereAreXIncidentsInThisList, $rowcount)."</p>";
     }
     $mode = "min";
@@ -107,7 +107,7 @@ function dashboard_user_incidents($row,$dashboardid)
             $update_body = parse_updatebody($update_body);
             echo "<tr><td class='$shade'>";
             echo "<a href='javascript:incident_details_window({$row['id']})' class='info'>";
-            echo "{$row['id']} - {$row['title']} for {$row['forenames']}   {$row['surname']}"; // FIXME i18n 'for'
+            echo "{$row['id']} - {$row['title']} {$GLOBALS['strFor']} {$row['forenames']}   {$row['surname']}";
             if (!empty($update_body) AND $update_body!='...')
             {
                 echo "<span>{$update_body}</span>";
