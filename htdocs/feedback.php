@@ -10,8 +10,6 @@
 
 // Author: Ivan Lucas <ivanlucas[at]users.sourceforge.net>, June 2004
 
-// FIXME i18n
-
 @include('set_include_path.inc.php');
 require('db_connect.inc.php');
 require('functions.inc.php');
@@ -34,13 +32,13 @@ function feedback_html_rating($name, $required, $options, $answer='')
 {
     global $CONFIG;
     // Rate things out of 'score_max' number
-    $score_max=$CONFIG['feedback_max_score'];
+    $score_max = $CONFIG['feedback_max_score'];
 
-    $option_list=explode('{@}', $options);
-    $promptleft=$option_list[0];
-    $promptright=$option_list[1];
+    $option_list = explode('{@}', $options);
+    $promptleft = $option_list[0];
+    $promptright = $option_list[1];
 
-    $colwidth=round(100/$score_max);
+    $colwidth = round(100/$score_max);
 
     $html .= "<table class='feedback'>\n";
     if (empty($promptleft)==FALSE OR empty($promptright)==FALSE)
@@ -53,22 +51,32 @@ function feedback_html_rating($name, $required, $options, $answer='')
         else $html.="<th width='$colwidth%'>&nbsp;</th>";
         }
         */
-        $html.="<th colspan='$score_max' style='text-align: left;'><div style='float: right;'>$promptright</div><div>$promptleft</div></th>";
-        if ($required!='true') $html .= "<th>&nbsp;</th>";
+        $html .= "<th colspan='{$score_max}' style='text-align: left;'>";
+        $html .= "<div style='float: right;'>{$promptright}</div><div>{$promptleft}</div></th>";
+        if ($required != 'true')
+        {
+            $html .= "<th>&nbsp;</th>";
+        }
         $html .= "</tr>\n";
     }
     echo "<tr>";
-    for($c=1;$c<=$score_max;$c++)
+    for ($c = 1; $c <= $score_max; $c++)
     {
-        $html.="<td width='$colwidth%' style='text-align: center;'><input type='radio' name='$name' value='$c' ";
-        if ($answer==$c) $html .= "checked='checked'";
+        $html .= "<td width='{$colwidth}%' style='text-align: center;'><input type='radio' name='{$name}' value='{$c}' ";
+        if ($answer == $c)
+        {
+            $html .= "checked='checked'";
+        }
         $html .= " />$c</td>\n";
     }
-    if ($required!='true')
+    if ($required != 'true')
     {
-        $html .= "<td><input type='radio' name='$name' value='0' ";
-        if ($answer==0) $html .= "checked='checked'";
-        $html .= "/>N/A</td>";
+        $html .= "<td><input type='radio' name='{$name}' value='0' ";
+        if ($answer == 0)
+        {
+            $html .= "checked='checked'";
+        }
+        $html .= "/>{$strNotApplicableAbbrev}</td>";
     }
     $html .= "</tr>\n";
     $html .= "</table>\n";
@@ -82,27 +90,33 @@ function feedback_html_rating($name, $required, $options, $answer='')
 */
 function feedback_html_options($name, $required, $options, $answer='')
 {
-    $option_list=explode('{@}', $options);
-    $option_count=count($option_list);
+    $option_list = explode('{@}', $options);
+    $option_count = count($option_list);
     if ($option_count > 3)
     {
-        $html .= "<select name='$name'>\n";
+        $html .= "<select name='{$name}'>\n";
         foreach ($option_list AS $key=>$option)
         {
             $value = strtolower(trim(str_replace(' ', '_', $option)));
-            $html .= "<option value='$value'";
-            if ($answer == $value) $html .= " selected='selected'";
+            $html .= "<option value='{$value}'";
+            if ($answer == $value)
+            {
+                $html .= " selected='selected'";
+            }
             $html .= ">".trim($option)."</option>\n";
         }
         $html .= "</select>\n";
     }
     else
     {
-        foreach($option_list AS $key=>$option)
+        foreach ($option_list AS $key=>$option)
         {
-            $value=strtolower(trim(str_replace(' ', '_', $option)));
-            $html .= "<input type='radio' name='$name' value='$value'";
-            if ($answer==$value) $html .= " selected='selected'";
+            $value = strtolower(trim(str_replace(' ', '_', $option)));
+            $html .= "<input type='radio' name='{$name}' value='{$value}'";
+            if ($answer == $value)
+            {
+                $html .= " selected='selected'";
+            }
             $html .= " />".trim($option)." &nbsp; \n";
         }
     }
@@ -115,24 +129,24 @@ function feedback_html_options($name, $required, $options, $answer='')
 */
 function html_multioptions($name, $required, $options)
 {
-    $option_list=explode('{@}', $options);
-    $option_count=count($option_list);
+    $option_list = explode('{@}', $options);
+    $option_count = count($option_list);
     if ($option_count > 3)
     {
         $html .= "<select name='{$name}[]' multiple='multiple'>\n";
-        foreach($option_list AS $key=>$option)
+        foreach ($option_list AS $key=>$option)
         {
-            $value=strtolower(trim(str_replace(' ', '_', $option)));
-            $html .= "<option value='$value'>".trim($option)."</option>\n";
+            $value = strtolower(trim(str_replace(' ', '_', $option)));
+            $html .= "<option value='{$value}'>".trim($option)."</option>\n";
         }
         $html .= "</select>\n";
     }
     else
     {
-        foreach($option_list AS $key=>$option)
+        foreach ($option_list AS $key=>$option)
         {
-            $value=strtolower(trim(str_replace(' ', '_', $option)));
-            $html .= "<input type='checkbox' name='$name' value='$value' />".trim($option)." &nbsp; \n";
+            $value = strtolower(trim(str_replace(' ', '_', $option)));
+            $html .= "<input type='checkbox' name='{$name}' value='{$value}' />".trim($option)." &nbsp; \n";
         }
     }
     return $html;
@@ -144,17 +158,17 @@ function html_multioptions($name, $required, $options)
 */
 function feedback_html_text($name, $required, $options, $answer='')
 {
-    $option_list=explode('{@}', $options);
-    $cols=$option_list[0] ? $option_list[0] : 60;
-    $rows=$option_list[1] ? $option_list[1] : 5;
+    $option_list = explode('{@}', $options);
+    $cols = $option_list[0] ? $option_list[0] : 60;
+    $rows = $option_list[1] ? $option_list[1] : 5;
 
     if ($rows==1)
     {
-        $html .= "<input type='text' name='$name' size='$cols' value='$answer' />\n";
+        $html .= "<input type='text' name='{$name}' size='{$cols}' value='{$answer}' />\n";
     }
     else
     {
-        $html .= "<textarea name ='$name' rows='$rows' cols='$cols' />{$answer}</textarea>\n";
+        $html .= "<textarea name ='{$name}' rows='{$rows}' cols='{$cols}' />{$answer}</textarea>\n";
     }
 
     return $html;
@@ -189,7 +203,7 @@ function feedback_html_question($type, $name, $required, $options, $answer='')
         break;
 
         default:
-            $html = "Error: Unable to accept a response for this question, no handler for question of type '{$type}'."; // FIXME i18n
+            $html = sprintf($strErrorNoHandlerDefinedForQuestionTypeX, $type);
         break;
   }
   return $html;
@@ -226,16 +240,17 @@ switch ($_REQUEST['action'])
         {
             $qid = $question->id;
 
-            $options=nl2br(trim($question->options));
-            $options=str_replace('<br>', '{@}', $options);
-            $options=str_replace('<br />', '{@}', $options);
-            $options=str_replace('<br/>', '{@}', $options);
-            $option_list=explode('{@}', $options);
+            $options = nl2br(trim($question->options));
+            $options = str_replace('<br>', '{@}', $options);
+            $options = str_replace('<br />', '{@}', $options);
+            $options = str_replace('<br/>', '{@}', $options);
+            $option_list = explode('{@}', $options);
 
             $fieldname="Q{$question->id}";
 
             // Check required fields are filled
-            if ($question->required=='true' AND (strlen($_POST[$fieldname])<1 OR isset($_POST[$fieldname])==false)) $errorfields[]="{$question->id}";
+            if ($question->required=='true' AND (strlen($_POST[$fieldname])<1 OR
+                    isset($_POST[$fieldname])==false)) $errorfields[]="{$question->id}";
 
             // Store text responses in the appropriate field
             if ($question->type=='text')
@@ -345,11 +360,14 @@ body { font:10pt Arial, Helvetica, sans-serif; }
         if ($_REQUEST['mode']!='bare') include('htmlheader.inc.php');
         else echo "<html>\n<head>\n<title>Feedback Form</title>\n</head>\n<body>\n<div id='pagecontent'>\n\n";
         $errorfields = explode(",",urldecode($_REQUEST['error']));
-        $fielddata=unserialize(base64_decode($errorfields[0])); // unserialize(
+        $fielddata = unserialize(base64_decode($errorfields[0])); // unserialize(
 
         // Have a look to see if this person has a form waiting to be filled
         $rsql = "SELECT id FROM feedbackrespondents WHERE contactid='$contactid' AND incidentid='$incidentid' AND formid='$formid' ";
-        if ($_REQUEST['rr']) $rsql .= "AND completed='yes' ";
+        if ($_REQUEST['rr'])
+        {
+            $rsql .= "AND completed='yes' ";
+        }
 
         $rresult = mysql_query($rsql);
         if (mysql_error()) trigger_error(mysql_error(), E_USER_ERROR);
@@ -360,8 +378,7 @@ body { font:10pt Arial, Helvetica, sans-serif; }
         if ($waitingforms<1)
         {
             echo "<h2>Error</h2>";
-            echo "<p>There is no feedback form waiting to be completed at this address, this could be because you have ";
-            echo "already provided feedback.  Please check that the URL you entered is correct.</p>";
+            echo "<p>{$strNoFeedBackFormToCompleteHere}</p>";
             echo "\n\n<!-- f: $formid r:$respondent rr:$responseref dh:$decodehash  hc:$hashcode -->\n\n";
         }
         else
@@ -375,10 +392,14 @@ body { font:10pt Arial, Helvetica, sans-serif; }
             {
                 echo "<form action='feedback.php' method='post'>\n";
                 echo "<h1>{$form->name}</h1>\n";
-                echo "<p>Relating to incident <strong>#{$incidentid}</strong> &mdash; <strong>".incident_title($incidentid)."</strong><br />";
-                echo "Opened by <strong>".contact_realname(incident_contact($incidentid))."</strong> on ".date($CONFIG['dateformat_date'],db_read_column('opened', 'incidents', $incidentid))." and closed on ".date($CONFIG['dateformat_date'],db_read_column('closed', 'incidents', $incidentid)).".</p>";
+                echo "<p>{$strRelatingToIncident} <strong>#{$incidentid}</strong> &mdash; <strong>".incident_title($incidentid)."</strong><br />";
+                echo sprintf($strOpenedbyXonY, contact_realname(incident_contact($incidentid)), date($CONFIG['dateformat_date'],db_read_column('opened', 'incidents', $incidentid)));
+                echo sprintf($strClosedOnX, date($CONFIG['dateformat_date'],db_read_column('closed', 'incidents', $incidentid))).".</p>";
 
-                if (!empty($_REQUEST['error'])) echo "<p style='color: red'>Error, you did not complete all required questions, please check your answers and try again.</p>";
+                if (!empty($_REQUEST['error']))
+                {
+                    echo "<p style='color: red'>{$strErrorRequiredQuestionsNotCompleted}</p>";
+                }
                 echo nl2br($form->introduction);
 
                 $qsql  = "SELECT * FROM feedbackquestions ";
@@ -388,7 +409,11 @@ body { font:10pt Arial, Helvetica, sans-serif; }
                 if (mysql_error()) trigger_error(mysql_error(), E_USER_ERROR);
                 while ($question = mysql_fetch_object($qresult))
                 {
-                    if (strlen(trim($question->sectiontext))>3) echo "<hr />{$question->sectiontext}\n";
+                    if (strlen(trim($question->sectiontext)) > 3)
+                    {
+                        echo "<hr />{$question->sectiontext}\n";
+                    }
+                    
                     echo "<h4>Q{$question->taborder}: {$question->question}";
                     if ($question->required=='true')
                     {
@@ -397,11 +422,24 @@ body { font:10pt Arial, Helvetica, sans-serif; }
                     }
                     echo "</h4>";
 
-                    if (!empty($question->questiontext)) echo "<p>{$question->questiontext}</p>";
-                    if (!empty($fielddata[$question->id])) $answer=$fielddata[$question->id];
-                    else $answer='';
+                    if (!empty($question->questiontext))
+                    {
+                        echo "<p>{$question->questiontext}</p>";
+                    }
+                    if (!empty($fielddata[$question->id]))
+                    {
+                        $answer = $fielddata[$question->id];
+                    }
+                    else
+                    {
+                        $answer='';
+                    }
+                    
                     echo feedback_html_question($question->type, "Q{$question->id}", $question->required, $question->options, $answer);
-                    if (in_array($question->id,$errorfields)) echo "<p style='color: red'>Question {$question->taborder} requires an answer before continuing.</p>";
+                    if (in_array($question->id, $errorfields))
+                    {
+                        echo "<p style='color: red'>".sprintf($strQuestionXNeedsAnsweringBeforeContinuing, $question->taborder)."</p>";
+                    }
                     echo "<br />";
                 }
 
@@ -411,10 +449,16 @@ body { font:10pt Arial, Helvetica, sans-serif; }
                 echo "<input type='hidden' name='ax' value='".strip_tags($_REQUEST['ax'])."' />\n";
                 echo "<input type='submit' value='Submit' />\n";
                 echo "</form>\n";
-                if ($reqd>=1) echo "<p><sup style='color: red; font-size: 120%;'>*</sup> Questions marked with this symbol are required and must be answered before continuing.</p>";
+                if ($reqd>=1)
+                {
+                    echo "<p><sup style='color: red; font-size: 120%;'>*</sup> {$strQuestionRequired}</p>";
+                }
             }
         }
-        if ($_REQUEST['mode']!='bare') include('htmlfooter.inc.php');
+        if ($_REQUEST['mode']!='bare')
+        {
+            include('htmlfooter.inc.php');
+        }
         else echo "\n</div>\n</body>\n</html>\n";
     break;
 }
