@@ -691,7 +691,6 @@ $strNotInOffice = 'Not In Office';
 $strNotSet = 'Not Set';
 $strNoteInsertExternalID = 'Note: insert \'%externalid%\' for automatic incident number insertion';
 $strNotes = 'Notes';
-$strNoteInsertEscalationID = 'Note: insert \'%externalid%\' for automatic incident number insertion';
 # Short for November
 $strNovAbbr = 'Nov';
 $strNovember = 'November';

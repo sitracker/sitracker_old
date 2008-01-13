@@ -652,7 +652,6 @@ $strNotInOffice = 'strNotInOffice';
 $strNotSet = 'strNotSet';
 $strNoteInsertExternalID = 'strNoteInsertExternalID';
 $strNotes = 'strNotes';
-$strNoteInsertEscalationID = 'strNoteInsertEscalationID';
 $strNovAbbr = 'strNovAbbr';
 $strNovember = 'strNovember';
 $strNow = 'strNow';
