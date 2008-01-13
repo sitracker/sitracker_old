@@ -94,20 +94,20 @@ while ($incidents = mysql_fetch_array($result))
     }
     elseif (date('dmy', $incidents['lastupdated']) == date('dmy', $now))
     {
-        $updated = "{$strToday} @ ".date($CONFIG['dateformat_time'], $incidents['lastupdated']);
+        $updated = "{$strToday} @ ".ldate($CONFIG['dateformat_time'], $incidents['lastupdated']);
     }
     elseif (date('dmy', $incidents['lastupdated']) == date('dmy', ($now-86400)))
     {
-        $updated = "{$strYesterday} @ ".date($CONFIG['dateformat_time'], $incidents['lastupdated']);
+        $updated = "{$strYesterday} @ ".ldate($CONFIG['dateformat_time'], $incidents['lastupdated']);
     }
     elseif ($incidents['lastupdated'] < $now-86400 AND
             $incidents['lastupdated'] > $now-(86400*6))
     {
-        $updated = date('l', $incidents['lastupdated'])." @ ".date($CONFIG['dateformat_time'], $incidents['lastupdated']);
+        $updated = ldate('l', $incidents['lastupdated'])." @ ".ldate($CONFIG['dateformat_time'], $incidents['lastupdated']);
     }
     else
     {
-        $updated = date($CONFIG['dateformat_datetime'], $incidents["lastupdated"]);
+        $updated = ldate($CONFIG['dateformat_datetime'], $incidents["lastupdated"]);
     }
 
     // Fudge for old ones

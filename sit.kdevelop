@@ -34,9 +34,9 @@
   </kdevdoctreeview>
   <kdevphpsupport>
     <codeHelp>
-      <codeCompletion>true</codeCompletion>
-      <codeHinting>true</codeHinting>
-      <realtimeParsing>true</realtimeParsing>
+      <codeCompletion>false</codeCompletion>
+      <codeHinting>false</codeHinting>
+      <realtimeParsing>false</realtimeParsing>
     </codeHelp>
     <general>
       <invocationMode>1</invocationMode>
@@ -120,6 +120,8 @@
       <group pattern="*.php" name="PHP Code" />
       <group pattern="*.inc.php" name="Libraries" />
       <group pattern="*.css" name="Style Sheets" />
+      <hidenonprojectfiles>false</hidenonprojectfiles>
+      <hidenonlocation>false</hidenonlocation>
     </groups>
     <tree>
       <hidepatterns>*.o,*.lo,CVS</hidepatterns>
@@ -134,6 +136,11 @@
       <usermanualurl></usermanualurl>
     </projectdoc>
   </kdevdocumentation>
+  <ctagspart>
+    <customArguments></customArguments>
+    <customTagfilePath>.</customTagfilePath>
+    <activeTagsFiles/>
+  </ctagspart>
   <kdevdebugger>
     <general>
       <programargs/>

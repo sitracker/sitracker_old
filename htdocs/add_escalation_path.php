@@ -47,7 +47,7 @@ if (empty($submit))
     {
         echo "value='{$_SESSION['formdata']['add_escalation_path']['trackurl']}'";
     }
-    echo "/><br />{$strNoteInsertEscalationID}</td></tr>";
+    echo "/><br />{$strNoteInsertExternalID}</td></tr>";
 
     echo "<tr><th>{$strHomeURL}</th><td><input name='homeurl'";
     if ($_SESSION['formdata']['add_escalation_path']['homeurl'] != "")
