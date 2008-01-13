@@ -121,7 +121,7 @@ if ($sit[0] != '')
                 }
                 else
                 {
-                    echo "<a href='{$subvalue['url']}'>{$subvalue['name']}</a>";
+                    echo "<a href=\"{$subvalue['url']}\">{$subvalue['name']}</a>";
                 }
 
                 if ($subvalue['submenu'] > 0 AND in_array($subvalue['perm'], $_SESSION['permissions']))
