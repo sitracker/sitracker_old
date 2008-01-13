@@ -19,10 +19,53 @@ $show = cleanvar($_REQUEST['show']);
 $sort = cleanvar($_REQUEST['sort']);
 $order = cleanvar($_REQUEST['order']);
 $incident = cleanvar($_REQUEST['incident']);
+
 $mode;
 
+?>
+<script type='text/javascript'>
+<!--
+function submitform()
+{
+    document.tasks.submit();
+}
 
-if (!empty($incident))
+function checkAll(checkStatus)
+{
+    var frm = document.held_emails.elements;
+    for(i = 0; i < frm.length; i++)
+    {
+        if(frm[i].type == 'checkbox')
+        {
+            if(checkStatus)
+            {
+                frm[i].checked = true;
+            }
+            else
+            {
+                frm[i].checked = false;
+            }
+        }
+    }
+}
+
+-->
+</script>
+<?php
+
+
+$selected = $_POST['selected'];
+
+if (!empty($selected))
+{
+    foreach ($selected as $taskid)
+    {
+        mark_task_completed($taskid, FALSE);
+    }
+}
+
+
+if(!empty($incident))
 {
 ?>
 <script type='text/javascript'>
@@ -154,6 +197,7 @@ function countUp()
 }
 
 setInterval("countUp()", 1000); //every 1 seconds
+
 //-->
 </script>
 <?php
@@ -190,18 +234,18 @@ else
     {
         $user=$sit[2];
     }
-    
+
     // If the user is passed as a username lookup the userid
     if (!is_number($user) AND $user != 'current' AND $user != 'all')
     {
         $usql = "SELECT id FROM `{$dbUsers}` WHERE username='{$user}' LIMIT 1";
         $uresult = mysql_query($usql);
         if (mysql_error()) trigger_error(mysql_error(),E_USER_WARNING);
-        
+
         if (mysql_num_rows($uresult) >= 1)
         {
             list($user) = mysql_fetch_row($uresult);
-        }        
+        }
         else
         {
             $user=$sit[2]; // force to current user if username not found
@@ -213,26 +257,26 @@ else
     // show drop down select for task view options
     echo "<form action='{$_SERVER['PHP_SELF']}' style='text-align: center;'>";
     echo "{$strView}: <select class='dropdown' name='queue' onchange='window.location.href=this.options[this.selectedIndex].value'>\n";
-    echo "<option ";    
+    echo "<option ";
     if ($show == '' OR $show == 'active')
     {
         echo "selected='selected' ";
     }
-    
+
     echo "value='{$_SERVER['PHP_SELF']}?user=$user&amp;show=active&amp;sort=$sort&amp;order=$order'>{$strActive}</option>\n";
     echo "<option ";
     if ($show == 'completed')
     {
         echo "selected='selected' ";
     }
-        
+
     echo "value='{$_SERVER['PHP_SELF']}?user=$user&amp;show=completed&amp;sort=$sort&amp;order=$order'>{$strCompleted}</option>\n";
     echo "<option ";
     if ($show == 'incidents')
     {
         echo "selected='selected' ";
     }
-    
+
     echo "value='{$_SERVER['PHP_SELF']}?user=$user&amp;show=incidents&amp;sort=$sort&amp;order=$order'>{$strActivities}</option>";
 
     echo "</select>\n";
@@ -269,6 +313,7 @@ else
 if (mysql_num_rows($result) >=1 )
 {
     if ($show) $filter=array('show' => $show);
+    echo "<form action='{$_SERVER['PHP_SELF']}' name='tasks'  method='post'>";
     echo "<br /><table align='center'>";
     echo "<tr>";
     $filter['mode'] = $mode;
@@ -284,6 +329,7 @@ if (mysql_num_rows($result) >=1 )
         else $filter['user'] = $user;
 
         echo colheader('id', $strID, $sort, $order, $filter);
+        echo colheader('markcomplete', $strMarkComplete, $sort, $order, $filter);
         echo colheader('name', $strTask, $sort, $order, $filter);
         echo colheader('priority', $strPriority, $sort, $order, $filter);
         echo colheader('completion', $strCompletion, $sort, $order, $filter);
@@ -333,12 +379,13 @@ if (mysql_num_rows($result) >=1 )
             echo "<td>";
             echo "{$task->id}";
             echo "</td>";
+            echo "<td align='center'><input type='checkbox' name='selected[]' value='{$task->id}' /></td>";
             echo "<td>";
             if (empty($task->name))
             {
                 $task->name = $strUntitled;
             }
-            
+
             echo "<a href='view_task.php?id={$task->id}' class='info'>".$task->name;
             echo "</a>";
 
@@ -359,20 +406,20 @@ if (mysql_num_rows($result) >=1 )
             {
                 echo " class='idle'";
             }
-            
+
             echo ">";
             if ($startdate > 0)
             {
                 echo date($CONFIG['dateformat_date'],$startdate);
             }
-            
+
             echo "</td>";
             echo "<td";
             if ($duedate > 0 AND $duedate <= $now AND $task->completion < 100)
             {
                 echo " class='urgent'";
             }
-            
+
             echo ">";
             if ($duedate > 0)
             {
@@ -422,7 +469,7 @@ if (mysql_num_rows($result) >=1 )
             {
                 echo date($CONFIG['dateformat_date'],$enddate);
             }
-            
+
             echo "</td>";
         }
         if ($mode == 'incident')
@@ -447,8 +494,15 @@ if (mysql_num_rows($result) >=1 )
         echo "</script>";
         echo "</td></tr>";
     }
+    else
+    {
+        echo "<tr><td /><td />";
+        echo "<td><a href=\"javascript: submitform()\">{$strMarkComplete}</a></td>";
+        echo "<td /><td /><td /><td /><td /></tr>";
+    }
     echo "</table>\n";
-    
+    echo "</form>";
+
     if($mode == 'incident')
     {
         echo "<script type='text/javascript'>countUp();</script>";  //force a quick udate
@@ -458,8 +512,14 @@ if (mysql_num_rows($result) >=1 )
     //print_r($billing);
     //echo "</pre>";
 
-    if ($mode == 'incident') echo "<p align='center'><a href='add_task.php?incident={$id}'>{$strStartNewActivity}</a></p>";
-    else echo "<p align='center'><a href='add_task.php'>{$strAddTask}</a></p>";
+    if($mode == 'incident')
+    {
+        echo "<p align='center'><a href='add_task.php?incident={$id}'>{$strStartNewActivity}</a></p>";
+    }
+    else
+    {
+        echo "<p align='center'><a href='add_task.php'>{$strAddTask}</a></p>";
+    }
 
     if (!empty($billing))
     {
@@ -505,7 +565,7 @@ if (mysql_num_rows($result) >=1 )
         print_r($billing);
         echo "</pre>";
         */
-        
+
         foreach($billing AS $engineer)
         {
             /*
@@ -588,9 +648,9 @@ if (mysql_num_rows($result) >=1 )
                         $localDur -= $engineerPeriod; // was just -
                     }
                 }
-                
+
                 $startTime = $activity['starttime'];
-                
+
                 if (!empty($count['customer']))
                 {
                     while ($engineerDur > 0)
@@ -676,7 +736,7 @@ else
     {
         echo $strNoPublicTasks;
     }
-    
+
     echo "</p>";
     if($mode == 'incident')
     {

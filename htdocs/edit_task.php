@@ -159,9 +159,9 @@ switch ($action)
             if (mysql_num_rows($result) >= 1)
             {
                 $task = mysql_fetch_object($result);
-                $startdate=mysql2date($task->startdate);
-                $duedate=mysql2date($task->duedate);
-                $enddate=mysql2date($task->enddate);
+                $startdate = mysql2date($task->startdate);
+                $duedate = mysql2date($task->duedate);
+                $enddate = mysql2date($task->enddate);
             }
 
             //get all the notes
@@ -201,23 +201,13 @@ switch ($action)
             $sql .= "VALUES('{$incident}', '{$sit[2]}', 'fromtask', {$status}, '{$updatehtml}', '$now', '$duration')";
             mysql_query($sql);
             if (mysql_error()) trigger_error(mysql_error(),E_USER_ERROR);
+
+            mark_task_completed($id, TRUE);
         }
         else
         {
-            // Insert note to say what happened
-            $bodytext="Task marked 100% complete by {$_SESSION['realname']}:\n\n".$bodytext;
-            $sql = "INSERT INTO `{$dbNotes}` ";
-            $sql .= "(userid, bodytext, link, refid) ";
-            $sql .= "VALUES ('0', '{$bodytext}', '10',' $id')";
-            mysql_query($sql);
-            if (mysql_error()) trigger_error(mysql_error(),E_USER_ERROR);
+            mark_task_completed($id, FALSE);
         }
-        $enddate = date('Y-m-d H:i:s');
-        $sql = "UPDATE tasks ";
-        $sql .= "SET completion='100', enddate='$enddate' ";
-        $sql .= "WHERE id='$id' LIMIT 1";
-        mysql_query($sql);
-        if (mysql_error()) trigger_error(mysql_error(),E_USER_ERROR);
 
         // FIXME redundant i18n strings
         if ($incident) html_redirect("tasks.php?incident={$incident}", TRUE, $strActivityMarkedCompleteSuccessfully);

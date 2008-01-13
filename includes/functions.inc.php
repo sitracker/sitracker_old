@@ -6804,6 +6804,27 @@ function open_activities_for_incident($incientid)
     return mysql_num_rows($result);
 }
 
+function mark_task_completed($taskid, $incident)
+{
+    if(!$incident)
+    {
+        // Insert note to say what happened
+        $bodytext="Task marked 100% complete by {$_SESSION['realname']}:\n\n".$bodytext;
+        $sql = "INSERT INTO notes ";
+        $sql .= "(userid, bodytext, link, refid) ";
+        $sql .= "VALUES ('0', '{$bodytext}', '10', '{$taskid}')";
+        mysql_query($sql);
+        if (mysql_error()) trigger_error(mysql_error(),E_USER_ERROR);
+    }
+    
+    $enddate = date('Y-m-d H:i:s');
+    $sql = "UPDATE tasks ";
+    $sql .= "SET completion='100', enddate='$enddate' ";
+    $sql .= "WHERE id='$taskid' LIMIT 1";
+    mysql_query($sql);
+    if (mysql_error()) trigger_error(mysql_error(),E_USER_ERROR);
+}
+
 // -------------------------- // -------------------------- // --------------------------
 // leave this section at the bottom of functions.inc.php ================================
 
