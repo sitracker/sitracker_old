@@ -3970,12 +3970,6 @@ function check_group_holiday($userid, $date, $length='day')
 {
     global $dbUsers, $dbHolidays;
 
-    $sql = "SELECT groupid FROM `{$dbUsers}` WHERE id='$userid' ";
-    $result = mysql_query($sql);
-    if (mysql_error()) trigger_error(mysql_error(),E_USER_WARNING);
-    while ($group = mysql_fetch_object($result))
-    {
-    */
     $groupid = user_group_id($userid);
     if(!empty($groupid))
     {
