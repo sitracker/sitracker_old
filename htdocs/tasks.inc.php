@@ -19,7 +19,50 @@ $show = cleanvar($_REQUEST['show']);
 $sort = cleanvar($_REQUEST['sort']);
 $order = cleanvar($_REQUEST['order']);
 $incident = cleanvar($_REQUEST['incident']);
+
 $mode;
+
+?>
+<script type='text/javascript'>
+<!--
+function submitform()
+{
+    document.tasks.submit();
+}
+
+function checkAll(checkStatus)
+{
+    var frm = document.held_emails.elements;
+    for(i = 0; i < frm.length; i++)
+    {
+        if(frm[i].type == 'checkbox')
+        {
+            if(checkStatus)
+            {
+                frm[i].checked = true;
+            }
+            else
+            {
+                frm[i].checked = false;
+            }
+        }
+    }
+}
+
+-->
+</script>
+<?php
+
+
+$selected = $_POST['selected'];
+
+if (!empty($selected))
+{
+    foreach ($selected as $taskid)
+    {
+        mark_task_completed($taskid, FALSE);
+    }
+}
 
 
 if(!empty($incident))
@@ -154,6 +197,7 @@ function countUp()
 }
 
 setInterval("countUp()", 1000); //every 1 seconds
+
 //-->
 </script>
 <?php
@@ -269,6 +313,7 @@ else
 if (mysql_num_rows($result) >=1 )
 {
     if($show) $filter=array('show' => $show);
+    echo "<form action='{$_SERVER['PHP_SELF']}' name='tasks'  method='post'>";
     echo "<br /><table align='center'>";
     echo "<tr>";
     $filter['mode'] = $mode;
@@ -284,6 +329,7 @@ if (mysql_num_rows($result) >=1 )
         else $filter['user'] = $user;
 
         echo colheader('id', $strID, $sort, $order, $filter);
+        echo colheader('markcomplete', $strMarkComplete, $sort, $order, $filter);
         echo colheader('name', $strTask, $sort, $order, $filter);
         echo colheader('priority', $strPriority, $sort, $order, $filter);
         echo colheader('completion', $strCompletion, $sort, $order, $filter);
@@ -333,6 +379,7 @@ if (mysql_num_rows($result) >=1 )
             echo "<td>";
             echo "{$task->id}";
             echo "</td>";
+            echo "<td align='center'><input type='checkbox' name='selected[]' value='{$task->id}' /></td>";
             echo "<td>";
             if (empty($task->name))
             {
@@ -341,7 +388,7 @@ if (mysql_num_rows($result) >=1 )
             
             echo "<a href='view_task.php?id={$task->id}' class='info'>".$task->name;
             echo "</a>";
-
+            
             echo "</td>";
             echo "<td>".priority_icon($task->priority).priority_name($task->priority)."</td>";
             echo "<td>".percent_bar($task->completion)."</td>";
@@ -446,8 +493,15 @@ if (mysql_num_rows($result) >=1 )
         echo "setClosedDuration({$closedduration});";
         echo "</script>";
         echo "</td></tr>";
-    }   
+    }
+    else
+    {
+        echo "<tr><td /><td />";
+        echo "<td><a href=\"javascript: submitform()\">{$strMarkComplete}</a></td>";
+        echo "<td /><td /><td /><td /><td /></tr>";
+    }
     echo "</table>\n";
+    echo "</form>";
     
     if($mode == 'incident')
     {
@@ -458,8 +512,14 @@ if (mysql_num_rows($result) >=1 )
     //print_r($billing);
     //echo "</pre>";
 
-    if($mode == 'incident') echo "<p align='center'><a href='add_task.php?incident={$id}'>{$strStartNewActivity}</a></p>";
-    else echo "<p align='center'><a href='add_task.php'>{$strAddTask}</a></p>";
+    if($mode == 'incident')
+    {
+        echo "<p align='center'><a href='add_task.php?incident={$id}'>{$strStartNewActivity}</a></p>";
+    }
+    else
+    {
+        echo "<p align='center'><a href='add_task.php'>{$strAddTask}</a></p>";
+    }
 
     if(!empty($billing))
     {
