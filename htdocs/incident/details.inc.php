@@ -49,7 +49,7 @@ if ($incident->externalengineer != '')
     echo "<br />\n";
 }
 
-if (open_activities_for_incident($incidentid))
+if (open_activities_for_incident($incidentid) > 0)
 {
     echo "<a href='tasks.php?incident={$incidentid}' class='info'>";
     echo "<img src='{$CONFIG['application_webpath']}images/icons/{$iconset}/16x16/timer.png' width='16' height='16' alt='{$strOpenActivities}' />";
