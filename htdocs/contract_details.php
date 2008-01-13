@@ -61,9 +61,11 @@ echo "<tr><th>{$strProduct}:</th><td>".product_name($maintrow['product'])."</td>
 echo "<tr><th>{$strIncidents}:</th>";
 echo "<td>";
 $incidents_remaining = $maintrow['incident_quantity'] - $maintrow['incidents_used'];
-if ($maintrow['incident_quantity']==0) echo "Unlimited Incidents ({$maintrow['incidents_used']} Used)"; // FIXME i18n unlimited used
-elseif ($maintrow['incident_quantity']==1) echo "{$maintrow['incident_quantity']} Incident ($incidents_remaining Remaining)";
-else echo "{$maintrow['incident_quantity']} Incidents ($incidents_remaining Remaining)";
+
+if ($maintrow['incident_quantity'] == 0) $quantity = $strUnlimited;
+else $quantity = $maintrow['incident_quantity'];
+printf($strUsedNofN, $maintrow['incidents_used'], $quantity);
+if ($maintrow['incidents_used'] >= $maintrow['incident_quantity']) echo " ($strZeroRemaining)";
 echo "</td></tr>";
 if($maintrow['licence_quantity'] != '0')
 {

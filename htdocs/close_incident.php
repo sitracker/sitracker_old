@@ -35,14 +35,14 @@ if (empty($_REQUEST['process']))
         html_redirect("incident_details.php?id={$incidentid}", FALSE, $strCallMustBeAssignedBeforeClosure);
         exit;
     }
-    
+
     if (open_activities_for_incident($incidentid) > 0)
     {
         html_redirect("incident_details.php?id={$incidentid}", FALSE, $strMustCloseActivitiesBeforeClosure);
         exit;
     }
 
-    include('incident_html_top.inc.php');    
+    include('incident_html_top.inc.php');
 
     ?>
     <script type="text/javascript">
@@ -254,7 +254,7 @@ if (empty($_REQUEST['process']))
     if ($externalemail)
     {
         echo "<tr><th>".sprintf($strInformX, $strExternalEngineer).":<br />";
-        echo "Send an email to <em>{$externalemail}</em> asking for the external incident to be closed."; // FIXME i18n
+        printf($strSendEmailExternalIncidentClosure, "<em>{$externalemail}</em>");
         echo "</th>";
         echo "<td class='shade2'><label><input name='send_engineer_email' type='radio' value='no' />{$strNo}</label> ";
         echo "<label><input name='send_engineer_email' type='radio' value='yes' checked='checked' />{$strYes}</label></td></tr>\n";
@@ -379,7 +379,7 @@ else
             }
 
             // Make Journal Entry
-            journal(CFG_LOGGING_NORMAL,'Incident Closed',"Incident $id was closed",CFG_JOURNAL_SUPPORT,$id); //FIXME i18n
+            journal(CFG_LOGGING_NORMAL,'Incident Closed',"Incident $id was closed",CFG_JOURNAL_SUPPORT,$id);
 
             if (!$result)
             {
