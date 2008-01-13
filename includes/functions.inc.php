@@ -2649,20 +2649,20 @@ function format_date_friendly($date)
     global $CONFIG, $now;
     if (date('dmy', $date) == date('dmy', time()))
     {
-        $datestring = "{$GLOBALS['strToday']} @ ".date($CONFIG['dateformat_time'], $date);
+        $datestring = "{$GLOBALS['strToday']} @ ".ldate($CONFIG['dateformat_time'], $date);
     }
     elseif (date('dmy', $date) == date('dmy', (time() - 86400)))
     {
-        $datestring = "{$GLOBALS['strYesterday']} @ ".date($CONFIG['dateformat_time'], $date);
+        $datestring = "{$GLOBALS['strYesterday']} @ ".ldate($CONFIG['dateformat_time'], $date);
     }
     elseif ($date < $now-86400 AND
             $date > $now-(86400*6))
     {
-        $datestring = date('l', $date)." @ ".date($CONFIG['dateformat_time'], $date);
+        $datestring = date('l', $date)." @ ".ldate($CONFIG['dateformat_time'], $date);
     }
     else
     {
-        $datestring = date($CONFIG['dateformat_datetime'], $date);
+        $datestring = ldate($CONFIG['dateformat_datetime'], $date);
     }
 
     return ($datestring);
@@ -3947,17 +3947,35 @@ function holidaytype_drop_down($name, $id)
     return $html;
 }
 
+/**
+ * @author Paul Heaney
+ * @param $userid - userid to find group for
+ * @return A int of the groupid
+ */
+function user_group_id($userid)
+{
+    // get groupid
+    $sql = "SELECT groupid FROM users WHERE id='{$userid}' ";
+    $result = mysql_query($sql);
+    if (mysql_error()) trigger_error(mysql_error(),E_USER_WARNING);
+    list($groupid) = mysql_fetch_row($result);
+    return $groupid;
+}
 
 // check to see if any fellow group members have holiday
 // on the date specified
 function check_group_holiday($userid, $date, $length='day')
 {
     global $dbUsers, $dbHolidays;
-    // get groupid
+
     $sql = "SELECT groupid FROM `{$dbUsers}` WHERE id='$userid' ";
     $result = mysql_query($sql);
     if (mysql_error()) trigger_error(mysql_error(),E_USER_WARNING);
     while ($group = mysql_fetch_object($result))
+    {
+    */
+    $groupid = user_group_id($userid);
+    if(!empty($groupid))
     {
         // list group members
         $msql = "SELECT id AS userid FROM `{$dbUsers}` WHERE groupid='{$group->groupid}' AND id!='$userid' ";
@@ -6756,8 +6774,8 @@ function truncate_string($text, $maxlength=255, $html=TRUE)
     * @param $format string. date() format
     * @param $date int. UNIX timestamp
     * @returns string. An internationised date/time string
-    * @todo Currently only translates day names in full, needs to do
-    *       short day names, month names in full, short month names, am/pm?
+    * @todo Currently only translates day names in full and short day names, needs to do
+    *       month names in full, short month names, am/pm?
 */
 function ldate($format, $date)
 {
@@ -6769,6 +6787,14 @@ function ldate($format, $date)
         $days = array('Monday','Tuesday','Wednesday','Thursday','Friday','Saturday','Sunday');
         $i18ndays = array($GLOBALS['strMonday'], $GLOBALS['strTuesday'], $GLOBALS['strWednesday'],
                           $GLOBALS['strThursday'], $GLOBALS['strFriday'], $GLOBALS['strSaturday'], $GLOBALS['strSunday']);
+        $datestring = str_replace($days, $i18ndays, $datestring);
+    }
+    // Internationalise abbreviated day names
+    if (strpos($format, 'D') !== FALSE)
+    {
+        $days = array('Mon','Tue','Wed','Thu','Fri','Sat','Sun');
+        $i18ndays = array($GLOBALS['strMon'], $GLOBALS['strTue'], $GLOBALS['strWed'],
+                          $GLOBALS['strThu'], $GLOBALS['strFri'], $GLOBALS['strSat'], $GLOBALS['strSun']);
         $datestring = str_replace($days, $i18ndays, $datestring);
     }
 
@@ -6816,7 +6842,7 @@ function mark_task_completed($taskid, $incident)
         mysql_query($sql);
         if (mysql_error()) trigger_error(mysql_error(),E_USER_ERROR);
     }
-    
+
     $enddate = date('Y-m-d H:i:s');
     $sql = "UPDATE tasks ";
     $sql .= "SET completion='100', enddate='$enddate' ";

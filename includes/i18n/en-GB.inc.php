@@ -215,6 +215,7 @@ $strCompassionateLeave = 'Maternity/Paternity/Compassionate Leave';
 $strCountContractsByProduct = 'Count contracts by product';
 $strCounty = 'County';
 $strCountry = 'Country';
+$strCourtesyTitle = 'Courtesy Title';
 $strCreate = 'Create';
 $strCSVfile = 'CSV (Comma Seperated) file';
 $strCurrentDate = 'Current Date';
@@ -1030,7 +1031,7 @@ $strWatchingAll = 'Watching All';
 $strWebupdate = 'Web update';
 $strWeek = 'Week';
 # Short for 'Wednesday'
-$strWeds = 'Weds';
+$strWed = 'Wed';
 $strWednesday = 'Wednesday';
 $strWelcome = 'Welcome';
 $strWhosAwayToday = 'Who\'s Away Today?';
@@ -1049,6 +1050,8 @@ $strXDays = '%s Days';
 $strXHours = '%s Hours';
 $strXMinute = '%s Minute';
 $strXMinutes = '%s Minutes';
+# e.g. 'Fred of ACME Inc'. i.e. Name of Site
+$strXofX = '%s of %s';
 $strXSeconds = '%s Seconds';
 $strXWorkingDay = '%s working day';
 $strXWorkingDays = '%s working days';

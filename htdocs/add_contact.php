@@ -46,15 +46,15 @@ if (empty($submit) OR !empty($_SESSION['formerrors']['add_contact']))
 
     echo "<td>";
     echo "\n<table><tr><td align='center'>{$strTitle}<br />";
-    echo "<input maxlength='50' name='courtesytitle' title='Courtesy Title (Mr, Mrs, Miss, Dr. etc.)' size='7'"; //FIXME i18n
-    if($_SESSION['formdata']['add_contact']['courtesytitle'] != '')
+    echo "<input maxlength='50' name='courtesytitle' title=\"{$strCourtesyTitle}\" size='7'";
+    if ($_SESSION['formdata']['add_contact']['courtesytitle'] != '')
     {
         echo "value='{$_SESSION['formdata']['add_contact']['courtesytitle']}'";
     }
     echo "/></td>\n";
 
     echo "<td align='center'>{$strForenames}<br />";
-    echo "<input maxlength='100' name='forenames' size='15' title='Firstnames (or initials)'";
+    echo "<input maxlength='100' name='forenames' size='15' title=\"{$strForenames}\"";
     if ($_SESSION['formdata']['add_contact']['forenames'] != '')
     {
         echo "value='{$_SESSION['formdata']['add_contact']['forenames']}'";
@@ -69,7 +69,7 @@ if (empty($submit) OR !empty($_SESSION['formerrors']['add_contact']))
     echo " /></td></tr>\n";
     echo "</table>\n</td></tr>\n";
 
-    echo "<tr><th>{$strJobTitle}</th><td><input maxlength='255' name='jobtitle' size='35' title='e.g. Purchasing Manager'";
+    echo "<tr><th>{$strJobTitle}</th><td><input maxlength='255' name='jobtitle' size='35' title=\"{$strJobTitle}\"";
     if ($_SESSION['formdata']['add_contact']['jobtitle'] != '')
     {
         echo "value='{$_SESSION['formdata']['add_contact']['jobtitle']}'";
