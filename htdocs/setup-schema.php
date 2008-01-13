@@ -1579,7 +1579,17 @@ INSERT INTO `incidentstatus` VALUES (10, 'Active (Unassigned)', 'Active');
 
 $upgrade_schema[332] = "
 -- INL 12Jan08
-ALTER TABLE `contacts` CHANGE `salutation` `courtesytitle` VARCHAR( 50 ) CHARACTER SET latin1 COLLATE latin1_swedish_ci NOT NULL COMMENT 'Was ''salutation'' before 3.32';
+ALTER TABLE `contacts` CHANGE `salutation` `courtesytitle` VARCHAR( 50 ) NOT NULL COMMENT 'Was ''salutation'' before 3.32';
+-- INL 13Jan08
+UPDATE `incidentstatus` SET `name` = 'strActive' WHERE `incidentstatus`.`id` =1 LIMIT 1 ;
+UPDATE `incidentstatus` SET `name` = 'strClosed' WHERE `incidentstatus`.`id` =2 LIMIT 1 ;
+UPDATE `incidentstatus` SET `name` = 'strResearchNeeded' WHERE `incidentstatus`.`id` =3 LIMIT 1 ;
+UPDATE `incidentstatus` SET `name` = 'strCalledAndLeftMessage' WHERE `incidentstatus`.`id` =4 LIMIT 1 ;
+UPDATE `incidentstatus` SET `name` = 'strAwaitingColleagueResponse' WHERE `incidentstatus`.`id` =5 LIMIT 1 ;
+UPDATE `incidentstatus` SET `name` = 'strAwaitingSupportResponse' WHERE `incidentstatus`.`id` =6 LIMIT 1 ;
+UPDATE `incidentstatus` SET `name` = 'strAwaitingClosure' WHERE `incidentstatus`.`id` =7 LIMIT 1 ;
+UPDATE `incidentstatus` SET `name` = 'strAwaitingCustomerAction' WHERE `incidentstatus`.`id` =8 LIMIT 1 ;
+UPDATE `incidentstatus` SET `name` = 'strUnsupported' WHERE `incidentstatus`.`id` =9 LIMIT 1 ;
 ";
 
 

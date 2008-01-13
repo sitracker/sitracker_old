@@ -2226,28 +2226,30 @@ function incident_firstupdate($id)
 }
 
 
-/* Returns a string representing the name of   */
-/* the given incident status. Returns an empty string if the  */
-/* status does not exist.                                     */
+/**
+    * Converts an incident status ID to an internationalised status string
+    * @author Ivan Lucas
+    * @param $id integer incident status ID
+    * @returns string Internationalised incident status.
+    *                 Or empty string if the ID is not recognised.
+    * @note The incident status database table must contain i18n keys.
+*/
 function incidentstatus_name($id)
 {
-   // extract priority
-   $sql = "SELECT name FROM incidentstatus WHERE id='$id'";
-   $result = mysql_query($sql);
-   if (mysql_error()) trigger_error(mysql_error(),E_USER_WARNING);
+    $sql = "SELECT name FROM incidentstatus WHERE id='$id'";
+    $result = mysql_query($sql);
+    if (mysql_error()) trigger_error(mysql_error(),E_USER_WARNING);
 
-   if (mysql_num_rows($result) == 0)
-   {
-      return("");
-   }
-   else
-   {
-      $incidentstatus = mysql_fetch_array($result);
-      return $incidentstatus["name"];
-   }
-
-   // free result and disconnect
-   mysql_free_result($result);
+    if (mysql_num_rows($result) == 0)
+    {
+        $name = '';
+    }
+    else
+    {
+        $incidentstatus = mysql_fetch_array($result);
+        $name = $GLOBALS[$incidentstatus['name']];
+    }
+    return $name;
 }
 
 
@@ -6623,7 +6625,7 @@ function open_activities_for_incident($incientid)
     $result = mysql_query($sql);
 
     if (mysql_num_rows($result) > 0)
-    {    
+    {
         //get list of tasks
         $sql = "SELECT * FROM tasks WHERE enddate IS NULL ";
         while($tasks = mysql_fetch_object($result))
@@ -6632,20 +6634,20 @@ function open_activities_for_incident($incientid)
             else $orSQL .= " OR ";
             $orSQL .= "id={$tasks->origcolref} ";
         }
-    
+
         if (!empty($orSQL))
         {
             $sql .= "AND {$orSQL})";
         }
         $result = mysql_query($sql);
-    
-        $num = mysql_num_rows($result);        
+
+        $num = mysql_num_rows($result);
     }
     else
     {
         $num = 0;
     }
-    
+
     return $num;
 }
 
