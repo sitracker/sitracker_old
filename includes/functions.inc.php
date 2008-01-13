@@ -2617,20 +2617,20 @@ function format_date_friendly($date)
     global $CONFIG, $now;
     if (date('dmy', $date) == date('dmy', time()))
     {
-        $datestring = "{$GLOBALS['strToday']} @ ".date($CONFIG['dateformat_time'], $date);
+        $datestring = "{$GLOBALS['strToday']} @ ".ldate($CONFIG['dateformat_time'], $date);
     }
     elseif (date('dmy', $date) == date('dmy', (time() - 86400)))
     {
-        $datestring = "{$GLOBALS['strYesterday']} @ ".date($CONFIG['dateformat_time'], $date);
+        $datestring = "{$GLOBALS['strYesterday']} @ ".ldate($CONFIG['dateformat_time'], $date);
     }
     elseif ($date < $now-86400 AND
             $date > $now-(86400*6))
     {
-        $datestring = date('l', $date)." @ ".date($CONFIG['dateformat_time'], $date);
+        $datestring = date('l', $date)." @ ".ldate($CONFIG['dateformat_time'], $date);
     }
     else
     {
-        $datestring = date($CONFIG['dateformat_datetime'], $date);
+        $datestring = ldate($CONFIG['dateformat_datetime'], $date);
     }
 
     return ($datestring);
@@ -6534,8 +6534,8 @@ function truncate_string($text, $maxlength=255, $html=TRUE)
     * @param $format string. date() format
     * @param $date int. UNIX timestamp
     * @returns string. An internationised date/time string
-    * @todo Currently only translates day names in full, needs to do
-    *       short day names, month names in full, short month names, am/pm?
+    * @todo Currently only translates day names in full and short day names, needs to do
+    *       month names in full, short month names, am/pm?
 */
 function ldate($format, $date)
 {
@@ -6547,6 +6547,14 @@ function ldate($format, $date)
         $days = array('Monday','Tuesday','Wednesday','Thursday','Friday','Saturday','Sunday');
         $i18ndays = array($GLOBALS['strMonday'], $GLOBALS['strTuesday'], $GLOBALS['strWednesday'],
                           $GLOBALS['strThursday'], $GLOBALS['strFriday'], $GLOBALS['strSaturday'], $GLOBALS['strSunday']);
+        $datestring = str_replace($days, $i18ndays, $datestring);
+    }
+    // Internationalise abbreviated day names
+    if (strpos($format, 'D') !== FALSE)
+    {
+        $days = array('Mon','Tue','Wed','Thu','Fri','Sat','Sun');
+        $i18ndays = array($GLOBALS['strMon'], $GLOBALS['strTue'], $GLOBALS['strWed'],
+                          $GLOBALS['strThu'], $GLOBALS['strFri'], $GLOBALS['strSat'], $GLOBALS['strSun']);
         $datestring = str_replace($days, $i18ndays, $datestring);
     }
 
@@ -6563,7 +6571,7 @@ function open_activities_for_incident($incientid)
     $sql .= "AND linkcolref={$incientid} ";
     $sql .= "AND direction='left'";
     $result = mysql_query($sql);
-    
+
     //get list of tasks
     $sql = "SELECT * FROM tasks WHERE enddate IS NULL ";
     while($tasks = mysql_fetch_object($result))
@@ -6572,14 +6580,14 @@ function open_activities_for_incident($incientid)
         else $orSQL .= " OR ";
         $orSQL .= "id={$tasks->origcolref} ";
     }
-    
+
     if (!empty($orSQL))
     {
         $sql .= "AND {$orSQL})";
     }
     $result = mysql_query($sql);
-    
-    return mysql_num_rows($result);    
+
+    return mysql_num_rows($result);
 }
 
 function mark_task_completed($taskid, $incident)
@@ -6594,7 +6602,7 @@ function mark_task_completed($taskid, $incident)
         mysql_query($sql);
         if (mysql_error()) trigger_error(mysql_error(),E_USER_ERROR);
     }
-    
+
     $enddate = date('Y-m-d H:i:s');
     $sql = "UPDATE tasks ";
     $sql .= "SET completion='100', enddate='$enddate' ";

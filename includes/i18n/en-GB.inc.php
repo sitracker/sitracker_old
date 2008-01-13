@@ -1022,7 +1022,7 @@ $strWatchingAll = 'Watching All';
 $strWebupdate = 'Web update';
 $strWeek = 'Week';
 # Short for 'Wednesday'
-$strWeds = 'Weds';
+$strWed = 'Wed';
 $strWednesday = 'Wednesday';
 $strWelcome = 'Welcome';
 $strWhosAwayToday = 'Who\'s Away Today?';

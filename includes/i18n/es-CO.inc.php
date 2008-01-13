@@ -950,7 +950,7 @@ $strWatchingAll = 'Watching All';
 $strWebupdate = 'Actualizacion Web';
 $strWeek = 'Semana';
 # Short for 'Wednesday'
-$strWeds = 'Mié';
+$strWed = 'Mié';
 $strWednesday = 'Miércoles';
 $strWelcome = 'Bienvenido';
 $strWhosAwayToday = 'Quién no está disponible hoy?';
