@@ -329,7 +329,7 @@ if (mysql_num_rows($result) >=1 )
         else $filter['user'] = $user;
 
         echo colheader('id', $strID, $sort, $order, $filter);
-        echo colheader('markcomplete', $strMarkComplete, $sort, $order, $filter);
+        echo colheader('markcomplete', '', $sort, $order, $filter);
         echo colheader('name', $strTask, $sort, $order, $filter);
         echo colheader('priority', $strPriority, $sort, $order, $filter);
         echo colheader('completion', $strCompletion, $sort, $order, $filter);
@@ -497,8 +497,8 @@ if (mysql_num_rows($result) >=1 )
     else
     {
         echo "<tr><td /><td />";
-        echo "<td><a href=\"javascript: submitform()\">{$strMarkComplete}</a></td>";
-        echo "<td /><td /><td /><td /><td /></tr>";
+        echo "<td colspan='5'><a href=\"javascript: submitform()\">{$strMarkComplete}</a></td>";
+        echo "</tr>";
     }
     echo "</table>\n";
     echo "</form>";
