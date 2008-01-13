@@ -226,7 +226,7 @@ if ($sit[0] != '')
     if (mysql_error()) trigger_error(mysql_error(),E_USER_WARNING);
     if (mysql_num_rows($noticeresult) > 0)
     {
-        $keys = array_keys($_REQUEST);
+        $keys = array_keys($_GET);
 
         foreach ($keys AS $key)
         {
@@ -234,7 +234,7 @@ if ($sit[0] != '')
             {
                 //$url[]= "{$key}=".$_REQUEST[$key];
                 //$alink .= "&amp;{$key}=".$_REQUEST[$key];
-                $url .= "&amp;{$key}=".$_REQUEST[$key];
+                $url .= "&amp;{$key}=".$_GET[$key];
             }
         }
             
