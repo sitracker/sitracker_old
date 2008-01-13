@@ -6553,8 +6553,7 @@ function truncate_string($text, $maxlength=255, $html=TRUE)
     * @param $format string. date() format
     * @param $date int. UNIX timestamp
     * @returns string. An internationised date/time string
-    * @todo Currently only translates day names in full and short day names, needs to do
-    *       month names in full, short month names, am/pm?
+    * @todo  th/st and am/pm maybe?
 */
 function ldate($format, $date)
 {
@@ -6568,6 +6567,7 @@ function ldate($format, $date)
                           $GLOBALS['strThursday'], $GLOBALS['strFriday'], $GLOBALS['strSaturday'], $GLOBALS['strSunday']);
         $datestring = str_replace($days, $i18ndays, $datestring);
     }
+
     // Internationalise abbreviated day names
     if (strpos($format, 'D') !== FALSE)
     {
@@ -6577,8 +6577,39 @@ function ldate($format, $date)
         $datestring = str_replace($days, $i18ndays, $datestring);
     }
 
+    // Internationalise full month names
+    if (strpos($format, 'F') !== FALSE)
+    {
+        $months = array('January','February','March','April','May','June','July','August','September','October','November','December');
+        $i18nmonths = array($GLOBALS['strJanuary'], $GLOBALS['strFebruary'], $GLOBALS['strMarch'],
+                          $GLOBALS['strApril'], $GLOBALS['strMay'], $GLOBALS['strJune'], $GLOBALS['strJuly'],
+                          $GLOBALS['strAugust'], $GLOBALS['strSeptember'], $GLOBALS['strOctober'],
+                          $GLOBALS['strNovember'], $GLOBALS['strDecember']);
+        $datestring = str_replace($months, $i18nmonths, $datestring);
+    }
+
+    // Internationalise short month names
+    if (strpos($format, 'M') !== FALSE)
+    {
+        $months = array('Jan','Feb','Mar','Apr','May','Jun','Jul','Aug','Sep','Oct','Nov','Dec');
+        $i18nmonths = array($GLOBALS['strJanAbbr'], $GLOBALS['strFebAbbr'], $GLOBALS['strMarAbbr'],
+                          $GLOBALS['strAprAbbr'], $GLOBALS['strMayAbbr'], $GLOBALS['strJunAbbr'], $GLOBALS['strJulAbbr'],
+                          $GLOBALS['strAugAbbr'], $GLOBALS['strSepAbbr'], $GLOBALS['strOctAbbr'],
+                          $GLOBALS['strNovAbbr'], $GLOBALS['strDecAbbr']);
+        $datestring = str_replace($months, $i18nmonths, $datestring);
+    }
+
+    // Internationalise am/pm
+    if (strpos($format, 'a') !== FALSE)
+    {
+        $months = array('am','pm');
+        $i18nmonths = array($GLOBALS['strAM'], $GLOBALS['strPM']);
+        $datestring = str_replace($months, $i18nmonths, $datestring);
+    }
+
     return $datestring;
 }
+
 
 function open_activities_for_incident($incientid)
 {

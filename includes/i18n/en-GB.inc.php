@@ -88,6 +88,9 @@ $strApproveAll = 'Approve All';
 $strApproved = 'Approved';
 $strApprovedFree = 'Approved Free';
 $strApproveHolidays = 'Approve Holidays';
+# Short for April
+$strAprAbbr = 'Apr';
+$strApril = 'April';
 $strArchivedApproved = 'Archived. Approved';
 $strArchivedApprovedFree = 'Archived. Approved \'Free\'';
 $strArchivedDenied = 'Archived. Denied';
@@ -120,6 +123,9 @@ $strAssociateContactWithContract = 'Associate this contact with an existing cont
 $strAtLunch = 'At Lunch';
 $strAttachFile = 'Attach File';
 $strAttachment = 'Attachment';
+# Short for August
+$strAugAbbr = 'Aug';
+$strAugust = 'August';
 $strAuthor = 'Author';
 $strAuthors = 'Authors';
 $strAwaitingYourResponse = 'Awaiting Your Response';
@@ -247,6 +253,9 @@ $strdayssick = 'days sick leave';
 $strdaysworkingaway = 'days working away';
 $strdaystraining = 'days training';
 $strdaysother = 'days other leave';
+# Short for December
+$strDecAbbr = 'Dec';
+$strDecember = 'December';
 $strDecline = 'Decline';
 $strDeclined = 'Declined';
 $strDefault = 'Default';
@@ -359,6 +368,9 @@ $strExternalEngineerCallDistribution = 'External Engineer Call Distribution';
 $strFailed = 'Failed';
 $strFAILED = 'FAILED';
 $strFax = 'Fax';
+# Short for February
+$strFebAbbr = 'Feb';
+$strFebruary = 'February';
 $strFeedback = 'Feedback';
 $strFeedbackForms = 'Feedback Forms';
 $strFeedbackFormsRequested = 'There are %s feedback forms that have been returned already';
@@ -503,10 +515,18 @@ $strInvalidEmailAddress = 'Invalid email address';
 $strInvalidUserID = 'Invalid user id';
 $strIgnore = 'Ignore';
 
+# short for January
+$strJanAbbr = 'Jan';
+$strJanuary = 'January';
 $strJobTitle = 'Job Title';
 $strJournal = 'Journal';
+$strJulAbbr = 'Jul';
+$strJuly = 'July';
 $strJumpTo = 'Jump to';
 $strJumpToIncident = 'Jump to Incident';
+# Short for June
+$strJunAbbr = 'Jun';
+$strJune = 'June';
 $strJustNow = 'Just Now';
 
 $strKBSelectSectionsText = 'Enable any other relevant sections below by checking their box.';
@@ -552,11 +572,17 @@ $strManageUsers = 'Manage Users';
 $strManageYourDashboard = 'Manage your Dashboard';
 $strManagerChaseUpdate = 'Was this a manager chase?';
 $strMandatoryMarked = 'Mandatory fields are marked %s';
+# Short for March
+$strMarAbbr = 'Mar';
+$strMarch = 'March';
 $strMarkComplete = 'Mark Complete';
 $strMarkForClosure = 'Mark for Closure';
 $strMarkedComplete = 'Marked Complete';
 $strMarkedforclosureby = 'Marked for closure by %s';
 $strMarketingMailshot = 'Marketing Mailshot';
+# Short for May (these happen to be the same in english)
+$strMayAbbr = 'May';
+$strMay = 'May';
 $strMBytes = 'MBytes';
 $strMedium = 'Medium';
 $strMediumPriority = 'Medium Priority';
@@ -666,11 +692,17 @@ $strNotSet = 'Not Set';
 $strNoteInsertExternalID = 'Note: insert \'%externalid%\' for automatic incident number insertion';
 $strNotes = 'Notes';
 $strNoteInsertEscalationID = 'Note: insert \'%externalid%\' for automatic incident number insertion';
+# Short for November
+$strNovAbbr = 'Nov';
+$strNovember = 'November';
 $strNow = 'Now';
 $strNumOfIncidents = 'There are %s incidents in this list';
 $strNumOpenIncidents = '%s open';
 $strNumOfCalls = '# of calls';
 
+# Short for October
+$strOctAbbr = 'Oct';
+$strOctober = 'October';
 $strOK = 'OK';
 $strOlderVersions = 'Older Versions';
 $strOldPassword = 'Old Password';
@@ -830,6 +862,9 @@ $strSendTranslation = 'Save the text below as %s and place in the %s directory t
 $strSendRequest = 'Send Request';
 $strSendReminderRequest = 'Send Reminder Request';
 $strSendRequestsTo = 'Send the request(s) to';
+# Short for September
+$strSep = 'Sep';
+$strSeptember = 'September';
 $strService = 'Service';
 $strServiceHistory = 'Service History';
 $strServiceLevel = 'Service Level';
