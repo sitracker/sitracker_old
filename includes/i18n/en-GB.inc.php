@@ -1041,6 +1041,8 @@ $strXDays = '%s Days';
 $strXHours = '%s Hours';
 $strXMinute = '%s Minute';
 $strXMinutes = '%s Minutes';
+# e.g. 'Fred of ACME Inc'. i.e. Name of Site
+$strXofX = '%s of %s';
 $strXSeconds = '%s Seconds';
 $strXWorkingDay = '%s working day';
 $strXWorkingDays = '%s working days';
