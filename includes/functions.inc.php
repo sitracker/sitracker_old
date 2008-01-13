@@ -6591,22 +6591,31 @@ function open_activities_for_incident($incientid)
     $sql .= "AND direction='left'";
     $result = mysql_query($sql);
 
-    //get list of tasks
-    $sql = "SELECT * FROM tasks WHERE enddate IS NULL ";
-    while($tasks = mysql_fetch_object($result))
-    {
-        if (empty($orSQL)) $orSQL = "(";
-        else $orSQL .= " OR ";
-        $orSQL .= "id={$tasks->origcolref} ";
+    if (mysql_num_rows($result) > 0)
+    {    
+        //get list of tasks
+        $sql = "SELECT * FROM tasks WHERE enddate IS NULL ";
+        while($tasks = mysql_fetch_object($result))
+        {
+            if (empty($orSQL)) $orSQL = "(";
+            else $orSQL .= " OR ";
+            $orSQL .= "id={$tasks->origcolref} ";
+        }
+    
+        if (!empty($orSQL))
+        {
+            $sql .= "AND {$orSQL})";
+        }
+        $result = mysql_query($sql);
+    
+        $num = mysql_num_rows($result);        
     }
-
-    if (!empty($orSQL))
+    else
     {
-        $sql .= "AND {$orSQL})";
+        $num = 0;
     }
-    $result = mysql_query($sql);
-
-    return mysql_num_rows($result);
+    
+    return $num;
 }
 
 function mark_task_completed($taskid, $incident)
