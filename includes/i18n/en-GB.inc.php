@@ -214,6 +214,7 @@ $strCompassionateLeave = 'Maternity/Paternity/Compassionate Leave';
 $strCountContractsByProduct = 'Count contracts by product';
 $strCounty = 'County';
 $strCountry = 'Country';
+$strCourtesyTitle = 'Courtesy Title';
 $strCreate = 'Create';
 $strCSVfile = 'CSV (Comma Seperated) file';
 $strCurrentDate = 'Current Date';
