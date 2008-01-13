@@ -141,8 +141,9 @@ if (!$sent)
         }
         else
         {
+            $groupid = user_group_id($sit[2]);
             // extract users (only show users with permission to approve that are not disabled accounts)
-            $sql  = "SELECT DISTINCT id, realname, accepting FROM users, userpermissions, rolepermissions ";
+            $sql  = "SELECT DISTINCT id, realname, accepting, groupid FROM users, userpermissions, rolepermissions ";
             $sql .= "WHERE users.id=userpermissions.userid AND users.roleid=rolepermissions.roleid ";
             $sql .= "AND (userpermissions.permissionid=50 AND userpermissions.granted='true' OR ";
             $sql .= "rolepermissions.permissionid=50 AND rolepermissions.granted='true') ";
@@ -160,7 +161,7 @@ if (!$sent)
                 while ($users = mysql_fetch_array($result))
                 {
                     echo "<option";
-                    if ($users['id'] == $id) echo " selected='selected'";
+                    if ($users['groupid'] == $groupid) echo " selected='selected'";
                     echo " value='{$users['id']}'";
                     echo ">{$users['realname']}</option>\n";
                 }

@@ -3904,19 +3904,38 @@ function holidaytype_drop_down($name, $id)
     return $html;
 }
 
+/**
+ * @author Paul Heaney
+ * @param $userid - userid to find group for
+ * @return A int of the groupid
+ */
+function user_group_id($userid)
+{
+    // get groupid
+    $sql = "SELECT groupid FROM users WHERE id='{$userid}' ";
+    $result = mysql_query($sql);
+    if (mysql_error()) trigger_error(mysql_error(),E_USER_WARNING);
+    list($groupid) = mysql_fetch_row($result);
+    return $groupid;
+}
 
 // check to see if any fellow group members have holiday
 // on the date specified
 function check_group_holiday($userid, $date, $length='day')
 {
+    /*
     // get groupid
     $sql = "SELECT groupid FROM users WHERE id='$userid' ";
     $result = mysql_query($sql);
     if (mysql_error()) trigger_error(mysql_error(),E_USER_WARNING);
     while ($group = mysql_fetch_object($result))
     {
+    */
+    $groupid = user_group_id($userid);
+    if(!empty($groupid))
+    {
         // list group members
-        $msql = "SELECT id AS userid FROM users WHERE groupid='{$group->groupid}' AND id!='$userid' ";
+        $msql = "SELECT id AS userid FROM users WHERE groupid='{$groupid}' AND id!='{$userid}' ";
         $mresult = mysql_query($msql);
         if (mysql_error()) trigger_error(mysql_error(),E_USER_WARNING);
         while ($member = mysql_fetch_object($mresult))
