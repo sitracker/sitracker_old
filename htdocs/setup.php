@@ -25,14 +25,14 @@ $DEFAULTS = $CONFIG;
 // Some actions require authentication
 if ($_REQUEST['action']=='reconfigure')
 {
-    $permission=22;
-    $_REQUEST['config']='advanced'; // set advanced mode
+    $permission = 22;
+    $_REQUEST['config'] = 'advanced'; // set advanced mode
     require('functions.inc.php');
     require('auth.inc.php');
 }
 
 // These are the required variables we want to configure during installation
-$SETUP=array('db_hostname','db_database','db_username','db_password','application_fspath','application_webpath');
+$SETUP = array('db_hostname','db_database','db_username','db_password','application_fspath','application_webpath');
 
 // Descriptions of all the config variables
 $CFGVAR['db_hostname']['title']='MySQL Database Hostname';
@@ -348,13 +348,34 @@ switch ($_REQUEST['action'])
 
         foreach($CFGDIFF AS $setupvar => $setupval)
         {
-            if ($CFGVAR[$setupvar]['title']!='') $newcfgfile .= "# {$CFGVAR[$setupvar]['title']}\n";
-            if ($CFGVAR[$setupvar]['help']!='') $newcfgfile .= "# {$CFGVAR[$setupvar]['help']}\n";
+            if ($CFGVAR[$setupvar]['title'] != '')
+            {
+                $newcfgfile .= "# {$CFGVAR[$setupvar]['title']}\n";
+            }
+            
+            if ($CFGVAR[$setupvar]['help']!='')
+            {
+                $newcfgfile .= "# {$CFGVAR[$setupvar]['help']}\n";
+            }
+            
             $newcfgfile .= "\$CONFIG['$setupvar'] = ";
-            if (is_numeric($setupval)) $newcfgfile .= "{$setupval}";
-            elseif (is_bool($setupval)) $newcfgfile .= $setupval == TRUE ? "TRUE" : "FALSE";
-            elseif (substr($setupval, 0, 6)=='array(') $newcfgfile .= stripslashes("{$setupval}");
-            else $newcfgfile .= "'{$setupval}'";
+            
+            if (is_numeric($setupval))
+            {
+                $newcfgfile .= "{$setupval}";
+            }
+            elseif (is_bool($setupval))
+            {
+                $newcfgfile .= $setupval == TRUE ? "TRUE" : "FALSE";
+            }
+            elseif (substr($setupval, 0, 6)=='array(')
+            {
+                $newcfgfile .= stripslashes("{$setupval}");
+            }
+            else
+            {
+                $newcfgfile .= "'{$setupval}'";
+            }
             $newcfgfile .= ";\n\n";
         }
         $newcfgfile .= "?";
@@ -411,7 +432,10 @@ switch ($_REQUEST['action'])
             if (mysql_error())
             {
                 echo "<p class='error'>".mysql_error()."<br />Could not select database";
-                if ($CONFIG['db_database']!='') echo " '{$CONFIG['db_database']}', check the database name,";
+                if ($CONFIG['db_database']!='')
+                {
+                    echo " '{$CONFIG['db_database']}', check the database name,";
+                }
                 else
                 {
                     echo ", the database name was not configured, please set the <code>\$CONFIG['db_database'] config variable";
@@ -423,7 +447,10 @@ switch ($_REQUEST['action'])
                 {
                     echo "<h2>Creating database...</h2>";
                     $result = mysql_query($sql);
-                    if ($result) echo "<p><strong>OK</strong> Database '{$CONFIG['db_database']}' created.</p>";
+                    if ($result)
+                    {
+                        echo "<p><strong>OK</strong> Database '{$CONFIG['db_database']}' created.</p>";
+                    }
                     else
                     {
                         echo "<p class='error'>".mysql_error()."<br />The database could not be created automatically, ";
@@ -489,13 +516,18 @@ switch ($_REQUEST['action'])
                         if (mysql_error()) trigger_error(mysql_error(),E_USER_WARNING);
                         list($installed_version) = mysql_fetch_row($result);
                     }
-                    if (empty($installed_version)) die ("<p class='error'>Fatal setup error - Could not determine version of installed software.  Try wiping your installation and installing from clean. (sorry)</p>");
+                    
+                    if (empty($installed_version))
+                    {
+                        die ("<p class='error'>Fatal setup error - Could not determine version of installed software.  Try wiping your installation and installing from clean. (sorry)</p>");
+                    }
+                    
                     echo "<h2>Installed OK</h2>";
 
                     if ($_REQUEST['action']=='upgrade')
                     {
                         // Upgrade schema
-                        for($v=(($installed_version*100)+1);$v<=($application_version*100);$v++)
+                        for ($v=(($installed_version*100)+1); $v<=($application_version*100); $v++)
                         {
                             if (!empty($upgrade_schema[$v]))
                             {
@@ -538,7 +570,7 @@ switch ($_REQUEST['action'])
                             echo "<p>See the <code>doc/UPGRADE</code> file for further upgrade instructions and help.<br />";
                         }
 
-                        if($installed_version >= 3.24)
+                        if ($installed_version >= 3.24)
                         {
                             //upgrade dashboard components.
 
@@ -547,27 +579,27 @@ switch ($_REQUEST['action'])
                             if (mysql_error()) trigger_error(mysql_error(),E_USER_ERROR);
 
                             echo "<h2>Dashboard</h2>";
-                            while($dashboardnames = mysql_fetch_object($result))
+                            while ($dashboardnames = mysql_fetch_object($result))
                             {
                                 $version = 1;
                                 include("{$CONFIG['application_fspath']}dashboard/dashboard_{$dashboardnames->name}.php");
                                 $func = "dashboard_{$dashboardnames->name}_get_version";
 
-                                if(function_exists($func))
+                                if (function_exists($func))
                                 {
                                     $version = $func();
                                 }
 
-                                if($version > $dashboardnames->version)
+                                if ($version > $dashboardnames->version)
                                 {
                                     echo "<p>Upgrading {$dashboardnames->name}</p>>";
                                     // apply all upgrades since running version
                                     $upgrade_func = "dashboard_{$dashboardnames->name}_upgrade";
 
-                                    if(function_exists($upgrade_func))
+                                    if (function_exists($upgrade_func))
                                     {
                                         $dashboard_schema = $func();
-                                        for($i = $dashboardnames->version; $i <= $version; $i++)
+                                        for ($i = $dashboardnames->version; $i <= $version; $i++)
                                         {
                                             setup_exec_sql($dashboard_schema[$i]);
                                         }
@@ -626,13 +658,23 @@ switch ($_REQUEST['action'])
                                trigger_error(mysql_error(),E_USER_WARNING);
                                echo "<p><strong>FAILED:</strong> $sql</p>";
                             }
-                        } else echo "<p class='error'>Admin account not created, the passwords you entered did not match.</p>";
+                        }
+                        else
+                        {
+                            echo "<p class='error'>Admin account not created, the passwords you entered did not match.</p>";
+                        }
                     }
                     // Check installation
                     echo "<h2>Checking installation...</h2>";
-                    if ($CONFIG['attachment_fspath']=='') echo "<p class='error'>Attachment path must not be empty, please set the \$CONFIG['attachment_fspath'] configuration variable</p>";
-                    elseif (file_exists($CONFIG['attachment_fspath'])==FALSE) echo "<p class='error'>The attachment path that you have configured ({$CONFIG['attachment_fspath']}) does not exist, please create this directory or alter the \$CONFIG['attachment_fspath'] configuration variable to point to a directory that does exist.</p>";
-                    elseif (is_writable($CONFIG['attachment_fspath'])==FALSE)
+                    if ($CONFIG['attachment_fspath'] == '')
+                    {
+                        echo "<p class='error'>Attachment path must not be empty, please set the \$CONFIG['attachment_fspath'] configuration variable</p>";
+                    }
+                    elseif (file_exists($CONFIG['attachment_fspath']) == FALSE)
+                    {
+                        echo "<p class='error'>The attachment path that you have configured ({$CONFIG['attachment_fspath']}) does not exist, please create this directory or alter the \$CONFIG['attachment_fspath'] configuration variable to point to a directory that does exist.</p>";
+                    }
+                    elseif (is_writable($CONFIG['attachment_fspath']) == FALSE)
                     {
                         echo "<p class='error'>Attachment path '{$CONFIG['attachment_fspath']}' not writable<br />";
                         echo "Permissions:  <code>{$CONFIG['attachment_fspath']} ".file_permissions_info(fileperms($CONFIG['attachment_fspath']));
@@ -641,8 +683,14 @@ switch ($_REQUEST['action'])
                         echo "<code>chmod -R 777 {$CONFIG['attachment_fspath']}</code>";
                         echo "</p>";
                     }
-                    elseif(!isset($_REQUEST)) echo "<p class='error'>SiT! requires PHP 4.2.0 or later</p>";
-                    elseif(@ini_get('register_globals')==1) echo "<p class='error'>SiT! strongly recommends that you change your php.ini setting <code>register_globals</code> to OFF.</p>";
+                    elseif(!isset($_REQUEST))
+                    {
+                        echo "<p class='error'>SiT! requires PHP 4.2.0 or later</p>";
+                    }
+                    elseif (@ini_get('register_globals')==1)
+                    {
+                        echo "<p class='error'>SiT! strongly recommends that you change your php.ini setting <code>register_globals</code> to OFF.</p>";
+                    }
                     elseif (setup_check_adminuser()==FALSE)
                     {
                         echo "<p><span style='color: red; font-weight: bolder;'>Important:</span> you <strong>must</strong> create an admin account before you can use SiT</p>";
@@ -658,7 +706,10 @@ switch ($_REQUEST['action'])
                     else
                     {
                         echo "<p>SiT! v".number_format($installed_version,2)." is installed and ready to <a href='index.php' class='button'>run</a>.</p>";
-                        if ($_SESSION['userid']==1) echo "<p>As administrator you can <a href='{$_SERVER['PHP_SELF']}?action=reconfigure' class='button'>reconfigure</a> SiT!</p>";
+                        if ($_SESSION['userid']==1)
+                        {
+                            echo "<p>As administrator you can <a href='{$_SERVER['PHP_SELF']}?action=reconfigure' class='button'>reconfigure</a> SiT!</p>";
+                        }
                     }
                 }
             }
