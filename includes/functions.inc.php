@@ -73,6 +73,8 @@ define('TAG_SKILL', 6);
 define('TAG_KB_ARTICLE', 7);
 define('TAG_REPORT', 8);
 
+define('NOTE_TASK', 10);
+
 define('HOL_HOLIDAY', 1); // Holiday/Leave
 define('HOL_SICKNESS', 2);
 define('HOL_WORKING_AWAY', 3);
@@ -462,7 +464,7 @@ function user_accepting($id)
     $accepting = db_read_column('accepting', 'users', $id);
     if ($accepting == '')  $accepting = "NoSuchUser";
 
-    return($accepting);
+    return $accepting;
 }
 
 
