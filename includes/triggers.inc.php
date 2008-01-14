@@ -2,11 +2,17 @@
 // triggers.inc.php - Handle triggers
 //
 // SiT (Support Incident Tracker) - Support call tracking system
-// Copyright (C) 2000-2007 Salford Software Ltd. and Contributors
+// Copyright (C) 2000-2008 Salford Software Ltd. and Contributors
 //
 // This software may be used and distributed according to the terms
 // of the GNU General Public License, incorporated herein by reference.
+
+// Author: Kieran Hogg <kieran_hogg[at]users.sourceforge.net>
+
 include ('mime.inc.php');
+
+// FIXME The trigger functions need documenting, the current doc comments
+// appear to be wrong :( INL 10Jan08
 
 //set up all the trigger types
 $triggerarray[] = array('id' => TRIGGER_INCIDENT_CREATED, 'description' => 'test');
@@ -79,7 +85,7 @@ function trigger($triggertype, $paramarray='')
                 if($CONFIG['debug']) $dbg .= "\$paramarray[{$values[0]}] = {$values[1]}\n";
             }
         }
-        
+
         if($CONFIG['debug'])
         {
             $dbg .= "TRIGGER: trigger_action({$result->userid}, {$triggertype}, {$result->action}, {$paramarray}) called \n";
@@ -92,17 +98,17 @@ function trigger($triggertype, $paramarray='')
     * Do the specific action for the specific user for a trigger
     * @author Kieran Hogg
     * @param $userid
-    * @param $triggertypeif ($CONFIG['debug']) 
+    * @param $triggertypeif ($CONFIG['debug'])
     * @return boolean. TRUE if the user has the permission, otherwise FALSE
 */
 function trigger_action($userid, $triggertype, $action, $paramarray)
 {
     global $CONFIG, $dbg;
-    if($CONFIG['debug']) 
+    if($CONFIG['debug'])
     {
         $dbg .= "TRIGGER: trigger_action($userid, $triggertype, $action, $paramarray) received\n";
     }
-    
+
     //get the template type
     $sql = "SELECT template FROM triggers WHERE userid='{$userid}' AND triggerid='{$triggertype}'";
     $query = mysql_query($sql);
@@ -112,7 +118,7 @@ function trigger_action($userid, $triggertype, $action, $paramarray)
     switch($action)
     {
         case "ACTION_EMAIL":
-            if($CONFIG['debug']) 
+            if($CONFIG['debug'])
             {
                 $dbg .= "TRIGGER: send_trigger_email($userid, $triggertype, $template, $paramarray)\n";
             }
@@ -120,7 +126,7 @@ function trigger_action($userid, $triggertype, $action, $paramarray)
             break;
 
         case "ACTION_NOTICE":
-            if($CONFIG['debug']) 
+            if($CONFIG['debug'])
             {
                 $dbg .= "TRIGGER: create_trigger_notice($userid, '', $triggertype, $template, $paramarray) called";
             }
@@ -151,7 +157,7 @@ function trigger_replace_specials($string, $paramarray)
         $dbg .= "TRIGGER: notice string before - $string\n";
         $dbg .= "TRIGGER: param array: ".print_r($paramarray);
     }
-    
+
     $url = parse_url($_SERVER['HTTP_REFERER']);
     $baseurl = "{$url['scheme']}://{$url['host']}{$CONFIG['application_webpath']}";
 
@@ -185,7 +191,7 @@ function trigger_replace_email_specials($string, $paramarray)
         $dbg .= "TRIGGER: notice string before - $string\n";
         $dbg .= "TRIGGER: param array: ".print_r($paramarray);
     }
-    
+
     $url = parse_url($_SERVER['HTTP_REFERER']);
     $baseurl = "{$url['scheme']}://{$url['host']}{$CONFIG['application_webpath']}";
 
@@ -268,13 +274,13 @@ function send_trigger_email($userid, $triggertype, $template, $paramarray)
 {
     global $CONFIG, $dbg;
     if($CONFIG['debug']) $dbg .= "TRIGGER: send_trigger_email({$userid}, {$triggertype}, {$paramarray})";
-    
+
     //if we have an incidentid, get it to pass to emailtype_replace_specials()
     if (!empty($paramarray['incidentid']))
     {
         $incidentid = $paramarray['incidentid'];
     }
-    
+
     $sql = "SELECT * FROM emailtype WHERE id='{$triggertype}'";
     $query = mysql_query($sql);
     if ($query)
@@ -292,12 +298,12 @@ function send_trigger_email($userid, $triggertype, $template, $paramarray)
     $mailok=$mime->send_mail();
     if ($mailok==FALSE) trigger_error('Internal error sending email: '.$mailerror.'','send_mail() failed');
 
-    if($CONFIG['debug']) 
+    if($CONFIG['debug'])
     {
         $dbg .= "TRIGGER: emailtype_replace_specials($string, $incidentid, $userid)";
     }
     $email = emailtype_replace_specials($string, $incidentid, $userid);
-    if($CONFIG['debug']) 
+    if($CONFIG['debug'])
     {
         $dbg .= $email;
     }
