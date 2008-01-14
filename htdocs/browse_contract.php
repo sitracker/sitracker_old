@@ -134,7 +134,7 @@ if ($search_string != '*')
 
     if (!empty($resellerid))
     {
-        $sql .= "AND maintenance.reseller='{$resellerid}' ";
+        $sql .= "AND m.reseller='{$resellerid}' ";
     }
 }
 if (!empty($sort))
