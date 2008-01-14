@@ -3137,10 +3137,15 @@ function reseller_drop_down($name, $id)
 
     echo "<select name='{$name}'>";
 
-    if ($id == 0)
+    if ($id == 0 OR empty($id))
     {
         echo "<option selected='selected' value='0'></option>\n";
     }
+    else
+    {
+        echo "<option value='0'></option>\n";
+    }
+    
     while ($resellers = mysql_fetch_array($result))
     {
         echo "<option ";
