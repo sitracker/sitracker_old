@@ -112,7 +112,7 @@ echo "<a href=\"javascript:save_layout();\" id='savelayout' title='Save Dashboar
         var dt1=new dojo.dnd.HtmlDropTarget(dl, ["li1"]);
 
         dojo.event.connect(dt1, "onDragOver", function(e) {
-        $(e.target.id).style.border = '2px dashed #cccccc;';
+        if ($(e.target.id)) $(e.target.id).style.border = '2px dashed #cccccc;';
         });
 
         dojo.event.connect(dt1, "onDrop", function(e) {
@@ -129,7 +129,7 @@ echo "<a href=\"javascript:save_layout();\" id='savelayout' title='Save Dashboar
         var dl = byId("col1");
         var dt2 = new dojo.dnd.HtmlDropTarget(dl, ["li1"]);
         dojo.event.connect(dt2, "onDragOver", function(e) {
-        $(e.target.id).style.border = '2px dashed #cccccc;';
+        if ($(e.target.id)) $(e.target.id).style.border = '2px dashed #cccccc;';
         });
 
         dojo.event.connect(dt2, "onDrop", function(e) {
@@ -145,7 +145,7 @@ echo "<a href=\"javascript:save_layout();\" id='savelayout' title='Save Dashboar
         var dl = byId("col2");
         var dt3 = new dojo.dnd.HtmlDropTarget(dl, ["li1"]);
         dojo.event.connect(dt3, "onDragOver", function(e) {
-        $(e.target.id).style.border = '2px dashed #cccccc;';
+        if ($(e.target.id)) $(e.target.id).style.border = '2px dashed #cccccc;';
         });
 
         dojo.event.connect(dt3, "onDrop", function(e) {
