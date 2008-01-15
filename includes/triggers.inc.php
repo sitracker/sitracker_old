@@ -11,11 +11,9 @@
 
 include ('mime.inc.php');
 
-// FIXME The trigger functions need documenting, the current doc comments
-// appear to be wrong :( INL 10Jan08
-
 //set up all the trigger types
-$triggerarray[] = array('id' => TRIGGER_INCIDENT_CREATED, 'description' => 'test');
+$triggerarray[] = array('id' => TRIGGER_INCIDENT_CREATED,
+                        'description' => 'test');
 $triggerarray[] = array('id' => TRIGGER_INCIDENT_ASSIGNED);
 $triggerarray[] = array('id' => TRIGGER_INCIDENT_ASSIGNED_WHILE_AWAY);
 $triggerarray[] = array('id' => TRIGGER_INCIDENT_ASSIGNED_WHILE_OFFLINE);
@@ -45,7 +43,7 @@ $actionarray = array(ACTION_NONE,
     * Master trigger function, creates a new trigger
     * @author Kieran Hogg
     * @param $triggertype interger. The id of the trigger type
-    * @param $paramarray array. Extra parameters to pass the trigger; foo=bar,bar=foo
+    * @param $paramarray array. Extra parameters to pass the trigger
     * @return boolean. TRUE if the trigger created successfully, FALSE if not
 */
 function trigger($triggertype, $paramarray='')
@@ -82,23 +80,31 @@ function trigger($triggertype, $paramarray='')
             {
                 $values = explode("=", $assigns);
                 $paramarray[$values[0]] = $values[1];
-                if($CONFIG['debug']) $dbg .= "\$paramarray[{$values[0]}] = {$values[1]}\n";
+                if($CONFIG['debug'])
+                {
+                    $dbg .= "\$paramarray[{$values[0]}] = {$values[1]}\n";
+                }
             }
         }
 
         if($CONFIG['debug'])
         {
-            $dbg .= "TRIGGER: trigger_action({$result->userid}, {$triggertype}, {$result->action}, {$paramarray}) called \n";
+            $dbg .= "TRIGGER: trigger_action({$result->userid}, {$triggertype},
+                    {$result->action}, {$paramarray}) called \n";
         }
-        trigger_action($result->userid, $triggertype, $result->action, $paramarray);
+        trigger_action($result->userid, $triggertype, $result->action,
+                       $paramarray);
     }
 }
 
 /**
     * Do the specific action for the specific user for a trigger
     * @author Kieran Hogg
-    * @param $userid
-    * @param $triggertypeif ($CONFIG['debug'])
+    * @param $userid integer. The user to apply the trigger action to
+    * @param $triggertype string. The type of trigger to apply
+    * @param $action string. The type of action to perform
+    * @param $paramarray array. The array of extra parameters to apply to the
+    * trigger 
     * @return boolean. TRUE if the user has the permission, otherwise FALSE
 */
 function trigger_action($userid, $triggertype, $action, $paramarray)
@@ -106,11 +112,13 @@ function trigger_action($userid, $triggertype, $action, $paramarray)
     global $CONFIG, $dbg;
     if($CONFIG['debug'])
     {
-        $dbg .= "TRIGGER: trigger_action($userid, $triggertype, $action, $paramarray) received\n";
+        $dbg .= "TRIGGER: trigger_action($userid, $triggertype, $action,
+                $paramarray) received\n";
     }
 
     //get the template type
-    $sql = "SELECT template FROM triggers WHERE userid='{$userid}' AND triggerid='{$triggertype}'";
+    $sql = "SELECT template FROM triggers WHERE userid='{$userid}' AND
+            triggerid='{$triggertype}'";
     $query = mysql_query($sql);
     $template = mysql_fetch_object($query);
     $template = $template->template;
@@ -120,7 +128,8 @@ function trigger_action($userid, $triggertype, $action, $paramarray)
         case "ACTION_EMAIL":
             if($CONFIG['debug'])
             {
-                $dbg .= "TRIGGER: send_trigger_email($userid, $triggertype, $template, $paramarray)\n";
+                $dbg .= "TRIGGER: send_trigger_email($userid, $triggertype,
+                        $template, $paramarray)\n";
             }
             send_trigger_email($userid, $triggertype, $template, $paramarray);
             break;
@@ -128,9 +137,11 @@ function trigger_action($userid, $triggertype, $action, $paramarray)
         case "ACTION_NOTICE":
             if($CONFIG['debug'])
             {
-                $dbg .= "TRIGGER: create_trigger_notice($userid, '', $triggertype, $template, $paramarray) called";
+                $dbg .= "TRIGGER: create_trigger_notice($userid, '',
+                        $triggertype, $template, $paramarray) called";
             }
-            create_trigger_notice($userid, '', $triggertype, $template, $paramarray);
+            create_trigger_notice($userid, '', $triggertype, $template,
+                                  $paramarray);
             break;
         case "ACTION_JOURNAL":
             //TODO
@@ -142,11 +153,12 @@ function trigger_action($userid, $triggertype, $action, $paramarray)
 }
 
 /**
-    * Returns TRUE or FALSE to indicate whether a given user has a given permission
-    * @author Ivan Lucas
-    * @param $userid integer. The userid to check
-    * @param $permission integer. The permission id to check
-    * @return boolean. TRUE if the user has the permission, otherwise FALSE
+    * Replaces template variables with their values
+    * @author Kieran Hogg
+    * @param $string string. The string containing the variables
+    * @param $paramarray array. An array containing values to be substitute 
+    * into the string
+    * @return string. The string with variables replaced
 */
 function trigger_replace_specials($string, $paramarray)
 {
@@ -159,7 +171,8 @@ function trigger_replace_specials($string, $paramarray)
     }
 
     $url = parse_url($_SERVER['HTTP_REFERER']);
-    $baseurl = "{$url['scheme']}://{$url['host']}{$CONFIG['application_webpath']}";
+    $baseurl = "{$url['scheme']}://{$url['host']}";
+    $baseurl .= "{$CONFIG['application_webpath']}";
 
     $trigger_regex = array(0 => '/<incidentid>/s',
                             1 => '/<incidenttitle>/s',
@@ -182,6 +195,16 @@ function trigger_replace_specials($string, $paramarray)
     return preg_replace($trigger_regex,$trigger_replace,$string);
 }
 
+/**
+    * Replaces email template variables with their values
+    * @author Kieran Hogg
+    * @param $string string. The string containing the variables
+    * @param $paramarray array. An array containing values to be substitute 
+    * into the string
+    * @return string. The string with variables replaced
+    * @notes Temporary function, should be intergrated into
+    * trigger_email_specials()
+*/
 function trigger_replace_email_specials($string, $paramarray)
 {
     global $CONFIG, $application_version, $application_version_string, $dbg;
@@ -193,7 +216,8 @@ function trigger_replace_email_specials($string, $paramarray)
     }
 
     $url = parse_url($_SERVER['HTTP_REFERER']);
-    $baseurl = "{$url['scheme']}://{$url['host']}{$CONFIG['application_webpath']}";
+    $baseurl = "{$url['scheme']}://{$url['host']}";
+    $baseurl.= "{$CONFIG['application_webpath']}";
 
     $email_regex = array(0 => '/<contactemail>/s',
                          1 => '/<contactname>/s',
@@ -259,21 +283,37 @@ function trigger_replace_email_specials($string, $paramarray)
         25 => user_signature($userid),
         26 => global_signature(),
         27 => date("jS F Y"),
-        28 => user_email(db_read_column('owner', 'sites', db_read_column('siteid','contacts',$contactid))),
+        28 => user_email(db_read_column('owner', 'sites',
+                                        db_read_column('siteid','contacts',
+                                                       $contactid))),
         29 => incident_firstupdate($incidentid),
         30 => contact_email(contact_notify($contactid, 2)),
         31 => contact_email(contact_notify($contactid, 3)),
         32 => contact_email(contact_notify($contactid, 4)),
-        33 => $baseurl.'feedback.php?ax='.urlencode(trim(base64_encode(gzcompress(str_rot13(urlencode($CONFIG['feedback_form']).'&&'.urlencode($contactid).'&&'.urlencode($incidentid))))))
-                          );
+        33 => $baseurl.'feedback.php?ax='.urlencode(trim(base64_encode(
+                gzcompress(str_rot13(urlencode($CONFIG['feedback_form']).'&&'.
+                urlencode($contactid).'&&'.urlencode($incidentid))))))
+        );
 
     return preg_replace($email_regex,$email_replace,$string);
 }
-
+/**
+    * Sends an email for a trigger
+    * @author Kieran Hogg
+    * @param $userid integer. The user to send the email to
+    * @param $triggertype string. The type of trigger to apply
+    * @param $template string. The name of the email template to use
+    * @param $paramarray array. The array of extra parameters to apply to the
+    * trigger
+*/
 function send_trigger_email($userid, $triggertype, $template, $paramarray)
 {
     global $CONFIG, $dbg;
-    if($CONFIG['debug']) $dbg .= "TRIGGER: send_trigger_email({$userid}, {$triggertype}, {$paramarray})";
+    if($CONFIG['debug'])
+    {
+        $dbg .= "TRIGGER: send_trigger_email({$userid},{$triggertype},
+                {$paramarray})";
+    }
 
     //if we have an incidentid, get it to pass to emailtype_replace_specials()
     if (!empty($paramarray['incidentid']))
@@ -288,19 +328,25 @@ function send_trigger_email($userid, $triggertype, $template, $paramarray)
         $result = mysql_fetch_object($query);
     }
     $emailtype = $result->id;
-    $from = emailtype_replace_specials(emailtype_from($emailtype), $incidentid, $userid);
-    $toemail = emailtype_replace_specials(emailtype_to($emailtype), $incidentid, $userid);
-    $subject = emailtype_replace_specials(emailtype_subject($emailtype), $incidentid, $userid);
-    $body = emailtype_replace_specials(emailtype_body($emailtype), $incidentid, $userid);
+    $from = emailtype_replace_specials(emailtype_from($emailtype), $incidentid,
+                                       $userid);
+    $toemail = emailtype_replace_specials(emailtype_to($emailtype), $incidentid,
+                                          $userid);
+    $subject = emailtype_replace_specials(emailtype_subject($emailtype),
+                                          $incidentid, $userid);
+    $body = emailtype_replace_specials(emailtype_body($emailtype), $incidentid,
+                                       $userid);
 
     $mime = new MIME_mail($from, $toemail, $subject, $body, '', $mailerror);
 
     $mailok=$mime->send_mail();
-    if ($mailok==FALSE) trigger_error('Internal error sending email: '.$mailerror.'','send_mail() failed');
+    if ($mailok==FALSE) trigger_error('Internal error sending email: '.
+                                      $mailerror.'','send_mail() failed');
 
     if($CONFIG['debug'])
     {
-        $dbg .= "TRIGGER: emailtype_replace_specials($string, $incidentid, $userid)";
+        $dbg .= "TRIGGER: emailtype_replace_specials($string, $incidentid,
+                $userid)";
     }
     $email = emailtype_replace_specials($string, $incidentid, $userid);
     if($CONFIG['debug'])
@@ -308,11 +354,25 @@ function send_trigger_email($userid, $triggertype, $template, $paramarray)
         $dbg .= $email;
     }
 }
-
-function create_trigger_notice($userid, $noticetext='', $triggertype='', $template, $paramarray='')
+/**
+    * Creates a trigger notice
+    * @author Kieran Hogg
+    * @param $userid integer. The user to apply the trigger action to
+    * @param $noticetext string. The text of the notice; only used for manual
+    * notices
+    * @param $triggertype string. The type of trigger to apply
+    * @param $template string. The name of the email template to use
+    * @param $paramarray array. The array of extra parametes to apply to the
+    * trigger
+*/
+function create_trigger_notice($userid, $noticetext='', $triggertype='',
+                               $template, $paramarray='')
 {
     global $CONFIG, $dbg;
-    if($CONFIG['debug']) $dbg .= print_r($paramarray)."\n";
+    if($CONFIG['debug'])
+    {
+        $dbg .= print_r($paramarray)."\n";
+    }
 
     //this is a trigger notice, get notice template
     $sql = "SELECT * from noticetemplates WHERE id='{$template}'";
@@ -325,8 +385,10 @@ function create_trigger_notice($userid, $noticetext='', $triggertype='', $templa
         $noticelink = trigger_replace_specials($notice->link, $paramarray);
         if($CONFIG['debug']) $dbg .= $noticetext."\n";
 
-        $sql = "INSERT into notices(userid, type, text, linktext, link, referenceid, timestamp) ";
-        $sql .= "VALUES ({$userid}, '{$notice->type}', '{$noticetext}', '{$noticelinktext}', '{$noticelink}', '', NOW())";
+        $sql = "INSERT into notices(userid, type, text, linktext, link,
+                                    referenceid, timestamp) ";
+        $sql .= "VALUES ({$userid}, '{$notice->type}', '{$noticetext}',
+                        '{$noticelinktext}', '{$noticelink}', '', NOW())";
         mysql_query($sql);
         if (mysql_error()) trigger_error(mysql_error(),E_USER_WARNING);
     }
@@ -336,6 +398,12 @@ function create_trigger_notice($userid, $noticetext='', $triggertype='', $templa
     }
 }
 
+/**
+    * Displays a <select> with the list of triggers
+    * @author Kieran Hogg
+    * @param $name string. The name for the select
+    * @param $selected string. The name of the selected item
+*/
 function triggers_drop_down($name, $selected = '')
 {
     global $triggerarray;
@@ -356,7 +424,13 @@ function triggers_drop_down($name, $selected = '')
     return $html;
 }
 
-function email_templates($name)
+/**
+    * Displays a <select> with the list of email templates
+    * @author Kieran Hogg
+    * @param $name string. The name for the select
+    * @param $selected string. The name of the selected item
+*/
+function email_templates($name, $selected = '')
 {
     $html .= "<select id='{$name}' name='{$name}'>";
     $sql = "SELECT * FROM emailtype";
@@ -369,7 +443,13 @@ function email_templates($name)
     return $html;
 }
 
-function notice_templates($name)
+/**
+    * Displays a <select> with the list of notice templates
+    * @author Kieran Hogg
+    * @param $name string. The name for the select
+    * @param $selected string. The name of the selected item
+*/
+function notice_templates($name, $selected = '')
 {
     $html .= "<select id='{$name}' name='{$name}'>";
     $sql = "SELECT * FROM noticetemplates";
