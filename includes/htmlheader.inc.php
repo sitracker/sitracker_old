@@ -26,7 +26,7 @@ echo "<meta name=\"GENERATOR\" content=\"{$CONFIG['application_name']} {$applica
 echo "<title>";
 if (isset($title))
 {
-    echo "$title - {$CONFIG['application_shortname']}"; 
+    echo "$title - {$CONFIG['application_shortname']}";
 }
 else
 {
@@ -45,7 +45,7 @@ else
     $styleid = $CONFIG['default_interface_style'];
 }
 
-$csssql = "SELECT cssurl, iconset FROM `{$dbInterfaceStyles}` WHERE id='{$styleid}'";
+$csssql = "SELECT cssurl, iconset FROM `{$GLOBALS['dbInterfaceStyles']}` WHERE id='{$styleid}'";
 $cssresult = mysql_query($csssql);
 if (mysql_error())trigger_error(mysql_error(),E_USER_WARNING);
 
@@ -211,7 +211,7 @@ if ($sit[0] != '')
 if (!isset($refresh))
 {
     //update last seen (only if this is a page that does not auto-refresh)
-    $lastseensql = "UPDATE LOW_PRIORITY users SET lastseen=NOW() WHERE id='{$_SESSION['userid']}' LIMIT 1";
+    $lastseensql = "UPDATE LOW_PRIORITY `{$GLOBALS['dbUsers']}` SET lastseen=NOW() WHERE id='{$_SESSION['userid']}' LIMIT 1";
     mysql_query($lastseensql);
     if (mysql_error()) trigger_error(mysql_error(), E_USER_WARNING);
 }
@@ -226,13 +226,13 @@ if ($noticeaction == 'dismiss_notice')
 {
     if (is_numeric($noticeid))
     {
-        $sql = "DELETE FROM `{$dbNotices}` WHERE id={$noticeid} AND userid={$sit[2]}";
+        $sql = "DELETE FROM `{$GLOBALS['dbNotices']}` WHERE id={$noticeid} AND userid={$sit[2]}";
         mysql_query($sql);
         if (mysql_error()) trigger_error(mysql_error(),E_USER_WARNING);
     }
     elseif ($noticeid == 'all')
     {
-        $sql = "DELETE FROM `{$dbNotices}` WHERE userid={$sit[2]} LIMIT 20"; // only delete 20 max as we only show 20 max
+        $sql = "DELETE FROM `{$GLOBALS['dbNotices']}` WHERE userid={$sit[2]} LIMIT 20"; // only delete 20 max as we only show 20 max
         mysql_query($sql);
         if (mysql_error()) trigger_error(mysql_error(),E_USER_WARNING);
     }
@@ -242,7 +242,7 @@ if ($noticeaction == 'dismiss_notice')
 //display global notices
 if ($sit[0] != '')
 {
-    $noticesql = "SELECT * FROM `{$dbNotices}` ";
+    $noticesql = "SELECT * FROM `${GLOBALS['dbNotices']}` ";
     $noticesql .= "WHERE userid={$sit[2]} ORDER BY timestamp DESC LIMIT 20"; // Don't show more than 20 notices, saftey cap
     $noticeresult = mysql_query($noticesql);
     if (mysql_error()) trigger_error(mysql_error(),E_USER_WARNING);
@@ -259,7 +259,7 @@ if ($sit[0] != '')
                 $url .= "&amp;{$key}=".$_GET[$key];
             }
         }
-            
+
         while ($notice = mysql_fetch_object($noticeresult))
         {
             $notice->text = bbcode($notice->text);
@@ -335,13 +335,13 @@ if ($sit[0] != '')
             }
             echo "</p></div>";
         }
-        
+
         if (mysql_num_rows($noticeresult) > 1)
         {
             $keys = array_keys($_REQUEST);
 
             $alink = "{$_SERVER[PHP_SELF]}?noticeaction=dismiss_notice&amp;noticeid=all";
-            
+
             foreach ($keys AS $key)
             {
                 if ($key != 'sit' AND $key != 'SiTsessionID')
@@ -350,7 +350,7 @@ if ($sit[0] != '')
                     $alink .= "&amp;{$key}=".$_REQUEST[$key];
                 }
             }
-            
+
             echo "<p align='right' style='padding-right:32px'><a href='{$alink}'>{$strDismissAll}</a></p>";
         }
         //echo "</div>";

@@ -2732,7 +2732,7 @@ function html_redirect($url, $success=TRUE, $message='')
     $title = $GLOBALS['strPleaseWaitRedirect'];
     if (!$headerdisplayed)
     {
-        include('htmlheader.inc.php');
+        include ('htmlheader.inc.php');
     }
     else
     {
