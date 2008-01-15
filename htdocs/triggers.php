@@ -14,7 +14,6 @@
 $permission = 0;
 require ('db_connect.inc.php');
 require ('functions.inc.php');
-require ('triggers.inc.php');
 // This page requires authentication
 require ('auth.inc.php');
 
@@ -31,7 +30,6 @@ if ($mode != "save")
     echo "<table align='center'><tr><th>{$strTrigger}</th><th>{$strAction}</th><th>{$strTemplate}</th><th>{$strParameters}</th></tr>";
 
     //get all triggers for this user
-    //TODO 3.40 sort the js to make these editable
     $sql = "SELECT * FROM triggers WHERE userid='{$sit[2]}'";
     $query = mysql_query($sql);
     if ($query)
