@@ -1632,13 +1632,13 @@ INSERT INTO `noticetemplates` (`id`, `name`, `type`, `description`, `text`, `lin
 
 -- KMH 06/01/08
 ALTER TABLE `emailtype` ADD `triggerid` INT( 11 ) NULL ;
-INSERT INTO `sit`.`emailtype` (`id` ,`name` ,`type` ,`description` ,`tofield` ,`fromfield` ,`replytofield` ,`ccfield` ,`bccfield` ,`subjectfield` ,`body` ,`customervisibility` ,
+INSERT INTO `emailtype` (`id` ,`name` ,`type` ,`description` ,`tofield` ,`fromfield` ,`replytofield` ,`ccfield` ,`bccfield` ,`subjectfield` ,`body` ,`customervisibility` ,
 `storeinlog` ,`triggerid`)VALUES (NULL , 'TRIGGER_INCIDENT_LOGGED', 'system', 'Trigger email sent when a new incident is logged.', '<useremail>', '<supportemail>', NULL , NULL , NULL , '[<incidentid>] - <incidenttitle>', 'Hello <contactfirstname>,\r\n\r\nIncident <incidentid> - <incidenttitle> has been logged.\r\n\r\n<signature> <globalsignature>\r\n-------------\r\nThis email is sent as a result of a system trigger. If you do not want to receive these emails, you can disable them from the ''Triggers'' page.', 'hide', 'No', '1');
 
 -- KMH 08/01/08
 ALTER TABLE `emailtype` DROP `id` ;
 ALTER TABLE `emailtype` CHANGE `name` `id` VARCHAR( 50 ) NOT NULL ;
-ALTER TABLE `emailtype` ADD PRIMARY KEY ( `id` )
+ALTER TABLE `emailtype` ADD PRIMARY KEY ( `id` );
 
 -- KMH 09/01/08
 INSERT INTO `emailtype` (`id`, `type`, `description`, `tofield`, `fromfield`, `replytofield`, `ccfield`, `bccfield`, `subjectfield`, `body`, `customervisibility`, `storeinlog`) VALUES

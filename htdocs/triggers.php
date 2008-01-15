@@ -11,7 +11,7 @@
 // Author: Kieran Hogg <kieran_hogg[at]users.sourceforge.net>
 
 @include ('set_include_path.inc.php');
-$permission = 0;
+$permission = 22; // TODO 3.40 set a permission for triggers
 require ('db_connect.inc.php');
 require ('functions.inc.php');
 // This page requires authentication
@@ -32,6 +32,7 @@ if ($mode != "save")
     //get all triggers for this user
     $sql = "SELECT * FROM triggers WHERE userid='{$sit[2]}'";
     $query = mysql_query($sql);
+    if (mysql_error()) trigger_error(mysql_error(),E_USER_WARNING);
     if ($query)
     {
         while ($trigger = mysql_fetch_object($query))
@@ -44,7 +45,7 @@ if ($mode != "save")
 
         }
     }
-    
+
     //new trigger part
     echo "<tr><td><a href=\"javascript:toggleDiv('hidden')\">{$strAdd}</a></td></tr>\n";
     echo "<tbody id='hidden' class='hidden' style='display:none'><tr><td></td>\n";
