@@ -28,36 +28,51 @@ if (empty($action) OR $action == "showform")
     // Show select email type form
     include ('htmlheader.inc.php');
 
-    echo "<h2>Select Email Template</h2>";
+    echo "<h2>Templates</h2>";
     echo "<p align='center'>Please be very careful when editing existing templates, {$CONFIG['application_shortname']} relies on some of these templates to
     send emails out automatically, if in doubt - seek advice.</p>";
     echo "<p align='center'>{$strTemplatesShouldNotBeginWith}</p>";
-    echo "<p align='center'><a href='add_emailtype.php?action=showform'>{$strAddEmailTemplate}</a> | <a href='edit_global_signature.php'>{$strEditGlobalSignature}</a></p>";
+    echo "<p align='center'><a href='add_emailtype.php?action=showform'>{$strAddEmailTemplate}</a> | ";
+    echo "<a href='edit_global_signature.php'>{$strEditGlobalSignature}</a></p>";
 
-    echo "<div style='margin-left: auto; margin-right: auto; width: 70%;'>";
-    $sql = "SELECT * FROM `{$dbEmailType}` ORDER BY name,id";
+    $sql = "SELECT * FROM `{$dbEmailType}` ORDER BY id";
     $result = mysql_query($sql);
     if (mysql_error()) trigger_error("MySQL Query Error ".mysql_error(), E_USER_ERROR);
     while ($email = mysql_fetch_object($result))
     {
-        echo "<dl>\n";
-        echo "<dt>";
-        if ($email->type=='system') echo "<em>";
-        echo "<a href='{$_SERVER['PHP_SELF']}?id={$email->id}&amp;action=edit'>{$email->name}</a> ";
-        echo ucfirst($email->type)." template";
-        if ($email->type=='system') echo "</em>";
-        echo "</dt>\n";
-        echo "<dd>{$email->description}</dd>\n";
-        echo "</dl>\n";
+        $templates[$email->id] = array('id' => $email->id, 'template' => 'email', 'type' => $email->type, 'desc' => $email->description);
     }
-    echo "</div>";
+    $sql = "SELECT * FROM `{$dbNoticeTemplates}` ORDER BY id";
+    $result = mysql_query($sql);
+    if (mysql_error()) trigger_error("MySQL Query Error ".mysql_error(), E_USER_ERROR);
+    while ($notice = mysql_fetch_object($result))
+    {
+        $templates[$notice->name] = array('id' => $notice->name, 'template' => 'notice', 'type' => $notice->type, 'desc' => $notice->description);
+    }
+    ksort($templates);
+    $shade='shade1';
+    echo "<table align='center'>";
+    echo "<tr><th>{$strType}</th><th>{$strID}</th><th>{$strDescription}</th><th>{$strOperation}</th></tr>";
+    foreach ($templates AS $template)
+    {
+        echo "<tr class='{$shade}'>";
+        echo "<td>{$template['type']} {$template['template']}</td>";
+        echo "<td>{$template['id']}</td>";
+        echo "<td>{$template['desc']}</td>";
+        echo "<td><a href='{$_SERVER['PHP_SELF']}?id={$template['id']}&amp;action=edit&amp;template={$template['template']}'>{$strEdit}</a></td>";
+        echo "</tr>\n";
+        if ($shade=='shade1') $shade='shade2';
+        else $shade='shade1';
+    }
+    echo "</table>";
+//     echo "<pre>".print_r($template,true)."</pre>";
     include ('htmlfooter.inc.php');
 }
 elseif ($action == "edit")
 {
     include ('htmlheader.inc.php');
     // Show edit email type form
-    if ($id > 0)
+    if (!empty($id))
     {
         // extract email type details
         $sql = "SELECT * FROM `{$dbEmailType}` WHERE id='$id'";
