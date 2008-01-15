@@ -87,12 +87,6 @@ define('HOL_PUBLIC', 10);  // Public Holiday (eg. Bank Holiday)
 define('NORMAL_NOTICE_TYPE', 0);
 define('WARNING_NOTICE_TYPE', 1);
 define('CRITICAL_NOTICE_TYPE', 2);
-define('NEARING_SLA_TYPE', 3);
-define('OUT_OF_SLA_TYPE', 4);
-define('USER_STILL_AWAY_TYPE', 5);
-define('USER_LANG_DIFFERS_TYPE', 6);
-define('SIT_UPGRADED_NOTICE', 7);
-
 
 // Decide which language to use and setup internationalisation
 require('i18n/en-GB.inc.php');
