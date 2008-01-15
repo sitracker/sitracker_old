@@ -322,14 +322,19 @@ if (mysql_num_rows($result) >=1 )
     {
         $totalduration = 0;
         $closedduration = 0;
+
+        echo colheader('markcomplete', '', $sort, $order, $filter);
+
         if ($user == $sit[2])
         {
             echo colheader('distribution', "<img src='{$CONFIG['application_webpath']}images/icons/{$iconset}/16x16/private.png' width='16' height='16' title='Public/Private' alt='Private' style='border: 0px;' />", $sort, $order, $filter);
         }
-        else $filter['user'] = $user;
+        else
+        {
+            $filter['user'] = $user;
+        }
 
         echo colheader('id', $strID, $sort, $order, $filter);
-        echo colheader('markcomplete', '', $sort, $order, $filter);
         echo colheader('name', $strTask, $sort, $order, $filter);
         echo colheader('priority', $strPriority, $sort, $order, $filter);
         echo colheader('completion', $strCompletion, $sort, $order, $filter);
@@ -355,6 +360,11 @@ if (mysql_num_rows($result) >=1 )
         $enddate = mysql2date($task->enddate);
         $lastupdated = mysql2date($task->lastupdated);
         echo "<tr class='$shade'>";
+        if (mode != 'incident')
+        {
+            echo "<td align='center'><input type='checkbox' name='selected[]' value='{$task->id}' /></td>";
+        }
+        
         if ($user == $sit[2])
         {
             echo "<td>";
@@ -372,14 +382,16 @@ if (mysql_num_rows($result) >=1 )
                 echo "<td><a href='view_task.php?id={$task->id}&amp;mode=incident&amp;incident={$id}' class='info'>";
                 echo "<img src='{$CONFIG['application_webpath']}images/icons/{$iconset}/16x16/timer.png' width='16' height='16' alt='' /> {$task->id}</a></td>";
             }
-            else echo "<td>{$task->id}</td>";
+            else
+            {
+                echo "<td>{$task->id}</td>";
+            }
         }
         else
         {
             echo "<td>";
             echo "{$task->id}";
             echo "</td>";
-            echo "<td align='center'><input type='checkbox' name='selected[]' value='{$task->id}' /></td>";
             echo "<td>";
             if (empty($task->name))
             {
@@ -496,8 +508,8 @@ if (mysql_num_rows($result) >=1 )
     }
     else
     {
-        echo "<tr><td /><td />";
-        echo "<td colspan='5'><a href=\"javascript: submitform()\">{$strMarkComplete}</a></td>";
+        echo "<tr>";
+        echo "<td colspan='7'><a href=\"javascript: submitform()\">{$strMarkComplete}</a></td>";
         echo "</tr>";
     }
     echo "</table>\n";
