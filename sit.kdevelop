@@ -48,11 +48,11 @@
     </webInvocation>
     <shell>
       <phpexe>/usr/local/bin/php</phpexe>
-      <phpini></phpini>
+      <phpini/>
     </shell>
     <options>
-      <phpincludepath></phpincludepath>
-      <defaultFile></defaultFile>
+      <phpincludepath/>
+      <defaultFile/>
       <startupFileMode>1</startupFileMode>
     </options>
   </kdevphpsupport>
@@ -131,13 +131,13 @@
   </kdevfileview>
   <kdevdocumentation>
     <projectdoc>
-      <docsystem></docsystem>
-      <docurl></docurl>
-      <usermanualurl></usermanualurl>
+      <docsystem/>
+      <docurl/>
+      <usermanualurl/>
     </projectdoc>
   </kdevdocumentation>
   <ctagspart>
-    <customArguments></customArguments>
+    <customArguments/>
     <customTagfilePath>.</customTagfilePath>
     <activeTagsFiles/>
   </ctagspart>

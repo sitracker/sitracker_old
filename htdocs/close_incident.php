@@ -38,7 +38,7 @@ if (empty($_REQUEST['process']))
 
     if (open_activities_for_incident($incidentid) > 0)
     {
-        html_redirect("incident_details.php?id={$incidentid}", FALSE, $strMustCloseActivitiesBeforeClosure);
+        html_redirect("incident_details.php?id={$incidentid}", FALSE, $strMustCompleteActivitiesBeforeClosure);
         exit;
     }
 

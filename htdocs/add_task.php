@@ -26,10 +26,9 @@ $title = $strAddTask;
 $action = $_REQUEST['action'];
 $incident = $_REQUEST['incident'];
 
-if($incident)
+if ($incident)
 {
-    // FIXME i18n db text?
-    $sql = "INSERT into tasks(owner, name, priority, distribution, startdate, created, lastupdated) ";
+    $sql = "INSERT INTO tasks(owner, name, priority, distribution, startdate, created, lastupdated) ";
     $sql .= "VALUES('$sit[2]', 'Activity for Incident {$incident}', 1, 'incident', NOW(), NOW(), NOW())";
 
     mysql_query($sql);
@@ -37,7 +36,7 @@ if($incident)
 
     $taskid = mysql_insert_id();
 
-    $sql = "INSERT into links VALUES(4, {$taskid}, {$incident}, 'left', {$sit[2]})";
+    $sql = "INSERT INTO links VALUES(4, {$taskid}, {$incident}, 'left', {$sit[2]})";
     mysql_query($sql);
     if (mysql_error()) trigger_error(mysql_error(),E_USER_ERROR);
     html_redirect("tasks.php?incident={$incident}", TRUE, $strActivityAdded);
@@ -113,24 +112,24 @@ else
             echo "<table class='vertical'>";
             echo "<tr><th>{$strTitle} <sup class='red'>*</sup></th>";
             echo "<td><input type='text' name='name' size='35' maxlength='255'";
-            if($_SESSION['formdata']['add_task']['name'] != '')
+            if ($_SESSION['formdata']['add_task']['name'] != '')
                 echo "value='{$_SESSION['formdata']['add_task']['name']}'";
             echo "/></td></tr>";
 
             echo "<tr><th>{$strDescription}</th>";
             echo "<td><textarea name='description' rows='4' cols='30'>";
-            if($_SESSION['formdata']['add_task']['description'] != '')
+            if ($_SESSION['formdata']['add_task']['description'] != '')
                 echo $_SESSION['formdata']['add_task']['description'];
             echo "</textarea></td></tr>";
 
             echo "<tr><th>{$strPriority}</th>";
-            if($_SESSION['formdata']['add_task']['priority'] != '')
+            if ($_SESSION['formdata']['add_task']['priority'] != '')
                 echo "<td>".priority_drop_down('priority', $_SESSION['formdata']['add_task']['priority'])."</td></tr>";
             else
                 echo "<td>".priority_drop_down('priority',1)."</td></tr>";
             echo "<tr><th>{$strStartDate}</th>";
             echo "<td><input type='text' name='startdate' id='startdate' size='10'";
-            if($_SESSION['formdata']['add_task']['startdate'] != '')
+            if ($_SESSION['formdata']['add_task']['startdate'] != '')
                 echo "value='{$_SESSION['formdata']['add_task']['startdate']}'";
             echo "/> ";
             echo date_picker('addtask.startdate');
@@ -139,11 +138,11 @@ else
 
             echo "<tr><th>{$strDueDate}</th>";
             echo "<td><input type='text' name='duedate' id='duedate' size='10'";
-            if($_SESSION['formdata']['add_task']['duedate'] != '')
+            if ($_SESSION['formdata']['add_task']['duedate'] != '')
                 echo "value='{$_SESSION['formdata']['add_task']['duedate']}'";
             echo "/> ";
             echo date_picker('addtask.duedate');
-            if($_SESSION['formdata']['add_task']['duetime'] != '')
+            if ($_SESSION['formdata']['add_task']['duetime'] != '')
                 echo " ".time_dropdown("duetime", $_SESSION['formdata']['add_task']['duetime']);
             else
                 echo " ".time_dropdown("duetime");
@@ -151,7 +150,7 @@ else
 
             echo "<tr><th>{$strCompletion}</th>";
             echo "<td><input type='text' name='completion' size='3' maxlength='3'";;
-            if($_SESSION['formdata']['add_task']['completion'] != '')
+            if ($_SESSION['formdata']['add_task']['completion'] != '')
                 echo "value='{$_SESSION['formdata']['add_task']['completion']}'";
             else
                 echo "value='0'";
@@ -164,19 +163,19 @@ else
             echo "</td></tr>";*/
             echo "<tr><th>{$strValue}</th>";
             echo "<td><input type='text' name='value' size='6' maxlength='12'";
-            if($_SESSION['formdata']['add_task']['value'] != '')
+            if ($_SESSION['formdata']['add_task']['value'] != '')
                 echo "value='{$_SESSION['formdata']['add_task']['value']}'";
             echo "/></td></tr>";
             echo "<tr><th>{$strUser}</th>";
             echo "<td>";
-            if($_SESSION['formdata']['add_task']['taskuser'] != '')
+            if ($_SESSION['formdata']['add_task']['taskuser'] != '')
                 echo user_drop_down('taskuser', $_SESSION['formdata']['add_task']['taskuser'], FALSE);
             else
                 echo user_drop_down('taskuser', $sit[2], FALSE);
             echo "</td></tr>";
             echo "<tr><th>{$strPrivacy}</th>";
             echo "<td>";
-            if($_SESSION['formdata']['add_task']['distribution'] == 'public')
+            if ($_SESSION['formdata']['add_task']['distribution'] == 'public')
             {
                 echo "<input type='radio' name='distribution' checked='checked'value='public' /> {$strPublic}<br />";
                 echo "<input type='radio' name='distribution' value='private' /> {$strPrivate} <img src='{$CONFIG['application_webpath']}images/icons/{$iconset}/16x16/private.png' width='16' height='16' title='{$strPublic}/{$strPrivate}' alt='{$strPrivate}' style='border: 0px;' /></td></tr>";

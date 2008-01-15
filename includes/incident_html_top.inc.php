@@ -409,7 +409,7 @@ if ($menu != 'hide')
         echo "<a class='barlink' href='incident_relationships.php?id={$id}&amp;tab=relationships' accesskey='L'>{$strRelations}</a> | ";
         echo "<a class='barlink' href='javascript:email_window({$id})' accesskey='E'>{$strEmail}</a> | ";
         echo "<a class='barlink' href='incident_attachments.php?id={$id}&amp;popup={$popup}' accesskey='F'>{$strFiles}</a> | ";
-        if($servicelevel->timed =='yes') echo "<a class='barlink' href='tasks.php?incident={$id}'>{$strActivities}</a> | ";
+        if ($servicelevel->timed =='yes') echo "<a class='barlink' href='tasks.php?incident={$id}'>{$strActivities}</a> | ";
         echo "<a class='barlink' href='incident_details.php?id={$id}&amp;popup={$popup}' accesskey='D'>{$strDetailsAndLog}</a> | ";
 
         echo "<a class='barlink' href='javascript:help_window({$permission});'>{$strHelpChar}</a>";
@@ -421,6 +421,7 @@ if ($menu != 'hide')
         echo "<a class='barlink' href='incident_service_levels.php?id={$id}&amp;popup={$poup}' accesskey='S'>{$strService}</a> | ";
         echo "<a class='barlink' href='incident_relationships.php?id={$id}&amp;tab=relationships'>{$strRelations}</a> | ";
         echo "<a class='barlink' href='incident_attachments.php?id={$id}&amp;popup={$popup}' accesskey='F'>{$strFiles}</a> | ";
+        if ($servicelevel->timed =='yes') echo "<a class='barlink' href='tasks.php?incident={$id}'>{$strActivities}</a> | ";
         echo "<a class='barlink' href='incident_details.php?id={$id}&amp;popup={$popup}' accesskey='D'>{$strDetailsAndLog}</a> | ";
         echo "<a class='barlink' href='javascript:help_window({$permission});'>{$strHelpChar}</a>";
         if (!empty($_REQUEST['popup'])) echo " | <a class='barlink' href='javascript:window.close();'>{$strCloseWindow}</a>";

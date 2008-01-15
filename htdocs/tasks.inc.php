@@ -234,18 +234,18 @@ else
     {
         $user=$sit[2];
     }
-    
+
     // If the user is passed as a username lookup the userid
     if (!is_number($user) AND $user != 'current' AND $user != 'all')
     {
         $usql = "SELECT id FROM users WHERE username='{$user}' LIMIT 1";
         $uresult = mysql_query($usql);
         if (mysql_error()) trigger_error(mysql_error(),E_USER_WARNING);
-        
+
         if (mysql_num_rows($uresult) >= 1)
         {
             list($user) = mysql_fetch_row($uresult);
-        }        
+        }
         else
         {
             $user=$sit[2]; // force to current user if username not found
@@ -257,26 +257,26 @@ else
     // show drop down select for task view options
     echo "<form action='{$_SERVER['PHP_SELF']}' style='text-align: center;'>";
     echo "{$strView}: <select class='dropdown' name='queue' onchange='window.location.href=this.options[this.selectedIndex].value'>\n";
-    echo "<option ";    
+    echo "<option ";
     if ($show == '' OR $show == 'active')
     {
         echo "selected='selected' ";
     }
-    
+
     echo "value='{$_SERVER['PHP_SELF']}?user=$user&amp;show=active&amp;sort=$sort&amp;order=$order'>{$strActive}</option>\n";
     echo "<option ";
     if ($show == 'completed')
     {
         echo "selected='selected' ";
     }
-        
+
     echo "value='{$_SERVER['PHP_SELF']}?user=$user&amp;show=completed&amp;sort=$sort&amp;order=$order'>{$strCompleted}</option>\n";
     echo "<option ";
     if ($show == 'incidents')
     {
         echo "selected='selected' ";
     }
-    
+
     echo "value='{$_SERVER['PHP_SELF']}?user=$user&amp;show=incidents&amp;sort=$sort&amp;order=$order'>{$strActivities}</option>";
 
     echo "</select>\n";
@@ -364,7 +364,7 @@ if (mysql_num_rows($result) >=1 )
             }
             echo "</td>";
         }
-        
+
         if($mode == 'incident')
         {
             if ($enddate == '0')
@@ -385,15 +385,15 @@ if (mysql_num_rows($result) >=1 )
             {
                 $task->name = $strUntitled;
             }
-            
+
             echo "<a href='view_task.php?id={$task->id}' class='info'>".$task->name;
             echo "</a>";
-            
+
             echo "</td>";
             echo "<td>".priority_icon($task->priority).priority_name($task->priority)."</td>";
             echo "<td>".percent_bar($task->completion)."</td>";
         }
-        
+
         if($mode != 'incident')
         {
             echo "<td";
@@ -406,20 +406,20 @@ if (mysql_num_rows($result) >=1 )
             {
                 echo " class='idle'";
             }
-            
+
             echo ">";
             if ($startdate > 0)
             {
                 echo date($CONFIG['dateformat_date'],$startdate);
             }
-            
+
             echo "</td>";
             echo "<td";
             if ($duedate > 0 AND $duedate <= $now AND $task->completion < 100)
             {
                 echo " class='urgent'";
             }
-            
+
             echo ">";
             if ($duedate > 0)
             {
@@ -469,7 +469,7 @@ if (mysql_num_rows($result) >=1 )
             {
                 echo date($CONFIG['dateformat_date'],$enddate);
             }
-            
+
             echo "</td>";
         }
         if($mode == 'incident')
@@ -502,8 +502,8 @@ if (mysql_num_rows($result) >=1 )
     }
     echo "</table>\n";
     echo "</form>";
-    
-    if($mode == 'incident')
+
+    if ($mode == 'incident')
     {
         echo "<script type='text/javascript'>countUp();</script>";  //force a quick udate
     }
@@ -512,16 +512,20 @@ if (mysql_num_rows($result) >=1 )
     //print_r($billing);
     //echo "</pre>";
 
-    if($mode == 'incident')
+    if ($mode == 'incident')
     {
-        echo "<p align='center'><a href='add_task.php?incident={$id}'>{$strStartNewActivity}</a></p>";
+        // Show add activity link if the incident is open
+        if (incident_status($id) != 2)
+        {
+            echo "<p align='center'><a href='add_task.php?incident={$id}'>{$strStartNewActivity}</a></p>";
+        }
     }
     else
     {
         echo "<p align='center'><a href='add_task.php'>{$strAddTask}</a></p>";
     }
 
-    if(!empty($billing))
+    if (!empty($billing))
     {
         $billingSQL = "SELECT * FROM billing_periods WHERE servicelevelid = {$servicelevel_id} AND tag='{$servicelevel_tag}' AND priority='{$priority}'";
 
@@ -559,13 +563,13 @@ if (mysql_num_rows($result) >=1 )
         echo "<th>{$strBillingEngineerPeriod}</th>";
         echo "<th>{$strBillingCustomerPeriod}</th></tr>";
         $shade = "shade1";
-        
+
         /*
         echo "<pre>";
         print_r($billing);
         echo "</pre>";
         */
-        
+
         foreach($billing AS $engineer)
         {
             /*
@@ -647,9 +651,9 @@ if (mysql_num_rows($result) >=1 )
                         $localDur -= $engineerPeriod; // was just -
                     }
                 }
-                
+
                 $startTime = $activity['starttime'];
-                
+
                 if (!empty($count['customer']))
                 {
                     while ($engineerDur > 0)
@@ -735,7 +739,7 @@ else
     {
         echo $strNoPublicTasks;
     }
-    
+
     echo "</p>";
     if($mode == 'incident')
     {

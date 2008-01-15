@@ -17,14 +17,14 @@
 
 // This Page Is Valid XHTML 1.0 Transitional!   31Oct05
 
-@include('set_include_path.inc.php');
+@include ('set_include_path.inc.php');
 $permission=32;  // Edit Supported Products
-require('db_connect.inc.php');
-require('functions.inc.php');
-$title="Remove a Supported Contact";
+require ('db_connect.inc.php');
+require ('functions.inc.php');
+$title = "Remove a Supported Contact";
 
 // This page requires authentication
-require('auth.inc.php');
+require ('auth.inc.php');
 
 // External variables
 $action = $_REQUEST['action'];
@@ -35,7 +35,7 @@ $contactid = cleanvar($_REQUEST['contactid']);
 
 if (empty($action) OR $action == "showform")
 {
-    include('htmlheader.inc.php');
+    include ('htmlheader.inc.php');
 
     echo "<h2>Remove the link between a contract and a support contact</h2>";
     echo "<p align='center'>This will mean that the contact will not be able to log any further support incidents for the related product</p>";
@@ -59,7 +59,7 @@ if (empty($action) OR $action == "showform")
 
     if (empty($contactid))
     {
-        echo "<tr><th>Support {$strContact} <img src='{$CONFIG['application_webpath']}images/icons/{$iconset}/16x16/contact.png' width='16' height='16' alt='' /></th><td width='400'>";
+        echo "<tr><th>{$strSupport} {$strContact} <img src='{$CONFIG['application_webpath']}images/icons/{$iconset}/16x16/contact.png' width='16' height='16' alt='' /></th><td width='400'>";
         echo contact_drop_down("contactid", 0)."</td></tr>";
     }
     else

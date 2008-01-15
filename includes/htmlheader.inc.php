@@ -26,7 +26,7 @@ echo "<meta name=\"GENERATOR\" content=\"{$CONFIG['application_name']} {$applica
 echo "<title>";
 if (isset($title))
 {
-    echo "$title - {$CONFIG['application_shortname']}"; 
+    echo "$title - {$CONFIG['application_shortname']}";
 }
 else
 {
@@ -237,7 +237,7 @@ if ($sit[0] != '')
                 $url .= "&amp;{$key}=".$_GET[$key];
             }
         }
-            
+
         while ($notice = mysql_fetch_object($noticeresult))
         {
             $notice->text = bbcode($notice->text);
@@ -312,13 +312,13 @@ if ($sit[0] != '')
             }
             echo "</p></div>";
         }
-        
+
         if (mysql_num_rows($noticeresult) > 1)
         {
             $keys = array_keys($_REQUEST);
 
             $alink = "{$_SERVER[PHP_SELF]}?noticeaction=dismiss_notice&amp;noticeid=all";
-            
+
             foreach ($keys AS $key)
             {
                 if ($key != 'sit' AND $key != 'SiTsessionID')
@@ -327,7 +327,7 @@ if ($sit[0] != '')
                     $alink .= "&amp;{$key}=".$_REQUEST[$key];
                 }
             }
-            
+
             echo "<p align='right' style='padding-right:32px'><a href='{$alink}'>{$strDismissAll}</a></p>";
         }
         //echo "</div>";

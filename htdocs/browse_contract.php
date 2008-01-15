@@ -131,7 +131,7 @@ if ($search_string != '*')
     {
         $sql .= "AND maintenance.product='$productid' ";
     }
-    
+
     if (!empty($resellerid))
     {
         $sql .= "AND maintenance.reseller='{$resellerid}' ";
@@ -155,8 +155,8 @@ if (mysql_error()) trigger_error("MySQL Query Error ".mysql_error(), E_USER_ERRO
 
 if (mysql_num_rows($result) == 0)
 {
-    echo "<p align='center'>Sorry, unable to find any maintenance contracts"; // FIXME i18n
-    if (!empty($search_string)) echo " matching '<em>{$search_string}</em>"; // FIXME i18n
+    echo "<p align='center'>{$strNoResults}";
+    if (!empty($search_string)) echo " matching '<em>{$search_string}</em>";
     echo "</p>\n";
 }
 else
@@ -172,7 +172,7 @@ else
     </script>
     <?php
     echo "<p align='center'>Displaying ".mysql_num_rows($result)." contract(s)";
-    if (!empty($search_string)) echo " matching '<em>{$search_string}</em>"; // FIXME i18n
+    if (!empty($search_string)) echo " matching '<em>{$search_string}</em>"; // FIXME i18n 'displaying matching'
     if ($productid) echo " where product matches <em>'".product_name($productid)."'</em>"; // FIXME i18n
     echo "</p>\n";
 
@@ -224,12 +224,12 @@ else
         {
             echo $results['reseller'];
         }
-        
+
         echo "</td><td>";
-        
+
         if (empty($results['licence_type']))
         {
-            echo $strNoLicense;    
+            echo $strNoLicense;
         }
         else
         {
@@ -241,10 +241,10 @@ else
             {
                 echo "{$results['licence_quantity']} ";
             }
-            
+
             echo $results['licence_type'];
         }
-            
+
         echo "</td><td>";
         if($results["expirydate"] == '-1')
         {
@@ -265,7 +265,7 @@ else
         {
             echo nl2br($results["notes"]);
         }
-        
+
         echo "</td></tr>";
 
         // invert shade
