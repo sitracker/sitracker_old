@@ -19,7 +19,7 @@ require('auth.inc.php');
 
 
 $action = cleanvar($_REQUEST['action']);
-if($action == 'new')
+if ($action == 'new')
 {
     include('htmlheader.inc.php');
     echo "<h2>{$strNotices}</h2>";
@@ -48,7 +48,7 @@ if($action == 'new')
     echo "<p align='center'><a href='notices.php'>{$strReturnWithoutSaving}</a></p>";
     include('htmlfooter.inc.php');
 }
-elseif($action == 'post')
+elseif ($action == 'post')
 {
     $text = cleanvar($_REQUEST['text']);
     $type = cleanvar($_REQUEST['type']);
@@ -58,7 +58,7 @@ elseif($action == 'post')
     //post new notice
     $sql = "SELECT id FROM users WHERE status != 0";
     $result = mysql_query($sql);
-    while($user = mysql_fetch_object($result))
+    while ($user = mysql_fetch_object($result))
     {
         $sql = "INSERT INTO notices (userid, gid, type, text, timestamp, durability) ";
         $sql .= "VALUES({$user->id}, '{$gid}', {$type}, '{$text}', NOW(), '{$durability}')";
@@ -68,7 +68,7 @@ elseif($action == 'post')
     html_redirect('notices.php');
 
 }
-elseif($action == 'delete')
+elseif ($action == 'delete')
 {
     $noticeid = cleanvar($_REQUEST['id']);
 
@@ -93,24 +93,27 @@ else
     $sql .= "GROUP BY gid";
     $result = mysql_query($sql);
     if (mysql_error()) trigger_error(mysql_error(),E_USER_WARNING);
-    $shade='shade1';
-    if(mysql_num_rows($result) > 0)
+    $shade = 'shade1';
+    if (mysql_num_rows($result) > 0)
     {
         echo "<table align='center'>";
         echo "<tr><th>{$strID}</th><th>{$strDate}</th><th>{$strNotice}</th><th>{$strOperation}</th></tr>\n";
-        while($notice = mysql_fetch_object($result))
+        while ($notice = mysql_fetch_object($result))
         {
             echo "<tr class='$shade'><td>{$notice->id}</td><td>{$notice->timestamp}</td>";
             echo "<td>".bbcode($notice->text)."</td>";
             echo "<td>";
             echo "<a href='{$_SERVER[PHP_SELF]}?action=delete&amp;id={$notice->id}'>{$strDelete}</a>";
             echo "</td></tr>\n";
-            if ($shade=='shade1') $shade='shade2';
-            else $shade='shade1';
+            if ($shade == 'shade1') $shade = 'shade2';
+            else $shade = 'shade1';
         }
         echo "</table>\n";
     }
-    else echo "<p align='center'>$strNoRecords</p>";
+    else
+    {
+        echo "<p align='center'>{$strNoRecords}</p>";
+    }
 
     echo "<p align='center'><a href='{$_SERVER[PHP_SELF]}?action=new'>{$strPostNewNotice}</a></p>";
     include('htmlfooter.inc.php');

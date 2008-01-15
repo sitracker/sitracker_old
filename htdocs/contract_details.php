@@ -28,7 +28,7 @@ include('htmlheader.inc.php');
 
 // Display Maintenance
 $sql  = "SELECT maintenance.*, maintenance.notes AS maintnotes, sites.name AS sitename FROM maintenance, sites ";
-$sql .= "WHERE sites.id = maintenance.site AND maintenance.id='$id' ";
+$sql .= "WHERE sites.id = maintenance.site AND maintenance.id='{$id}' ";
 $maintresult = mysql_query($sql);
 if (mysql_error()) trigger_error("MySQL Query Error ".mysql_error(), E_USER_ERROR);
 

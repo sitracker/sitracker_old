@@ -58,7 +58,11 @@ switch($action)
         if (mysql_num_rows($result) > 0)
         {
             $feed = mysql_fetch_object($result);
-            if ($feed->items=='') $feed->items=0;
+            if ($feed->items=='')
+            {
+                $feed->items=0;
+            }
+            
             echo "<h2>{$strEditRSSAtomFeed}</h2>";
             echo "<form action='{$_SERVER['PHP_SELF']}?action=do_edit' method='post'>";
             echo "<table class='vertical'>";
@@ -70,7 +74,11 @@ switch($action)
             echo "<p align='center'><input name='submit' type='submit' value='{$strSave}' /></p>";
             echo "</form>";
         }
-        else echo "<p class='error'>{$strNoRecords}</p>";
+        else
+        {
+            echo "<p class='error'>{$strNoRecords}</p>";
+        }
+        
         include('htmlfooter.inc.php');
 
         break;
@@ -92,8 +100,14 @@ switch($action)
         mysql_query($sql);
         if (mysql_error()) trigger_error(mysql_error(),E_USER_ERROR);
 
-        if(mysql_affected_rows() < 1) html_redirect("edit_rss_feeds.php", FALSE, "Changed enabled state failed");
-        else html_redirect("edit_rss_feeds.php");
+        if(mysql_affected_rows() < 1)
+        {
+            html_redirect("edit_rss_feeds.php", FALSE, "Changed enabled state failed");
+        }
+        else
+        {
+            html_redirect("edit_rss_feeds.php");
+        }
         break;
     case 'delete':
         $url = $_REQUEST['url'];
@@ -117,30 +131,51 @@ switch($action)
         {
             echo "<table align='center'>\n";
             echo "<tr><th>URL</th><th>{$strDisplay}</th><th>{$strEnabled}</th><th>{$strOperation}</th></tr>\n";
-            $shade='shade1';
+            $shade = 'shade1';
             while($obj = mysql_fetch_object($result))
             {
-                if($obj->enabled == "true") $opposite = "false";
-                else $opposite = "true";
+                if($obj->enabled == "true")
+                {
+                    $opposite = "false";
+                }
+                else
+                {
+                    $opposite = "true";
+                }
+                
                 $urlparts = parse_url($obj->url);
-                if ($obj->enabled == 'false') $shade='expired';
+                if ($obj->enabled == 'false')
+                {
+                    $shade='expired';
+                }
+                
                 echo "<tr class='$shade'><td align='left'><a href=\"".htmlentities($obj->url,ENT_NOQUOTES, $GLOBALS['i18ncharset'])."\"><img src='{$CONFIG['application_webpath']}images/icons/{$iconset}/12x12/feed-icon.png' style='border: 0px;' alt='{strFeedIcon}' /></a> <a href=\"{$obj->url}\">{$urlparts['host']}</a></td>";
                 echo "<td>";
-                if ($obj->items >= 1) echo "{$obj->items}";
-                else echo $strUnlimited;
+                if ($obj->items >= 1)
+                {
+                    echo "{$obj->items}";
+                }
+                else
+                {
+                    echo $strUnlimited;
+                }
+                
                 echo "</td>";
                 echo "<td><a href='{$_SERVER['PHP_SELF']}?action=enable&amp;url=".urlencode($obj->url)."&amp;enable={$opposite}'>{$obj->enabled}</a></td>";
                 echo "<td><a href='{$_SERVER['PHP_SELF']}?action=edit&amp;url=".urlencode($obj->url)."'>{$strEdit}</a> | ";
                 echo "<a href='{$_SERVER['PHP_SELF']}?action=delete&amp;url=".urlencode($obj->url)."'>{$strRemove}</a></td></tr>\n";
-                if ($shade=='shade1') $shade='shade2';
-                else $shade='shade1';
+                if ($shade == 'shade1') $shade = 'shade2';
+                else $shade = 'shade1';
             }
             echo "</table>\n";
         }
-        else echo "<p align='center'>{$strNoFeedsCurrentlyPresent}</p>";
+        else
+        {
+            echo "<p align='center'>{$strNoFeedsCurrentlyPresent}</p>";
+        }
+        
         echo "<p align='center'><a href='{$_SERVER['PHP_SELF']}?action=add'>{$strAdd}</a></p>";
         include('htmlfooter.inc.php');
         break;
-
 }
 ?>

@@ -39,21 +39,46 @@ if ($_SESSION['auth'] != TRUE)
 
     // Invalid user, show log in form
     include('htmlheader.inc.php');
-    if ($id==1) echo "<p class='error'>".sprintf($strEnterCredentials, $CONFIG['application_shortname'])."</p><br />";
-    if ($id==2) echo "<p class='error'>{$strSessionExpired}</p><br />";
-    if ($id==3) throw_user_error("{$strInvalidCredentials}");
+    if ($id == 1)
+    {
+        echo "<p class='error'>".sprintf($strEnterCredentials, $CONFIG['application_shortname'])."</p><br />";
+    }
+    
+    if ($id == 2)
+    {
+        echo "<p class='error'>{$strSessionExpired}</p><br />";
+    }
+    
+    if ($id == 3)
+    {
+        throw_user_error("{$strInvalidCredentials}");
+    }
 
     echo "<div style='margin-left: auto; margin-right: auto; width: 380px; text-align: center; margin-top: 3em;'>";
     echo "<form id='langselectform' action='login.php' method='post'>";
     echo "<label for='lang'>{$strLanguage}:  <select name='lang' id='lang' onchange='this.form.submit();'>";
     echo "<option value='default'";
-    if (empty($_SESSION['lang'])) echo " selected='selected'";
-    echo ">{$strDefault}</option>\n";
-    if ($_GET['lang']=='zz') $availablelanguages['zz'] = 'Test Language (zz)';
-    foreach($availablelanguages AS $langcode => $language)
+    if (empty($_SESSION['lang']))
     {
-        if($langcode == $_SESSION['lang']) echo "<option value='$langcode' selected='selected'>$language</option>\n";
-        else echo "<option value='$langcode'>$language</option>\n";
+        echo " selected='selected'";
+    }
+    
+    echo ">{$strDefault}</option>\n";
+    if ($_GET['lang'] == 'zz')
+    {
+        $availablelanguages['zz'] = 'Test Language (zz)';
+    }
+    
+    foreach ($availablelanguages AS $langcode => $language)
+    {
+        if ($langcode == $_SESSION['lang'])
+        {
+            echo "<option value='{$langcode}' selected='selected'>{$language}</option>\n";
+        }
+        else
+        {
+            echo "<option value='{$langcode}'>{$language}</option>\n";
+        }
     }
     echo "</select></label>";
     echo "</form>";

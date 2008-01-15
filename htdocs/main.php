@@ -57,10 +57,10 @@ $cols0 = "";
 $cols1 = "";
 $cols2 = "";
 
-foreach($dashboardcomponents AS $db)
+foreach ($dashboardcomponents AS $db)
 {
     $c = explode("-",$db);
-    switch($c[0])
+    switch ($c[0])
     {
         case 0: $col0++;
             $cols0 .= $c[1].",";
@@ -230,7 +230,7 @@ echo "<table border=\"0\" width=\"99%\" id='cols'><tr>";
 echo "<td width=\"33%\" valign='top' id='col0'>";
 
 $arr = explode(",",$cols0);
-foreach($arr AS $a)
+foreach ($arr AS $a)
 {
     show_dashboard_component(0,$a);
 }
@@ -238,7 +238,7 @@ foreach($arr AS $a)
 echo "</td><td width=\"33%\" valign='top' id='col1'>";
 
 $arr = explode(",",$cols1);
-foreach($arr AS $a)
+foreach ($arr AS $a)
 {
     show_dashboard_component(1,$a);
 }
@@ -246,7 +246,7 @@ foreach($arr AS $a)
 echo "</td><td width=\"33%\" valign=\"top\" id='col2'>";
 
 $arr = explode(",",$cols2);
-foreach($arr AS $a)
+foreach ($arr AS $a)
 {
     show_dashboard_component(2,$a);
 }
@@ -255,7 +255,9 @@ echo "</td></tr></table>\n";
 
 // Check users email address
 if (empty($_SESSION['email']) OR !preg_match('/^[A-z0-9][\w.-]*@[A-z0-9][\w\-\.]+\.[A-z0-9]{2,6}$/',$_SESSION['email']))
-    echo "<p class='error'>Please <a href='edit_profile.php'>edit your profile</a> and set a valid email address</p>";
+{
+    echo "<p class='error'>Please <a href='edit_profile.php'>edit your profile</a> and set a valid email address</p>"; // FIXME i18n
+}
 
 //  Users Login Details
 echo "<div id='userbar'>".sprintf($strLoggedInAs, "<strong>{$sit[0]}</strong>");
@@ -269,17 +271,22 @@ else
 {
     echo "<strong>{$strAccepting}</strong>";
 }
-echo " calls";
-if ($sit[3]=='public')
+
+echo " calls";// FIXME i18n
+
+if ($sit[3] == 'public')
 {
-    echo "- Public/Shared Computer (Increased Security)";
+    echo "- Public/Shared Computer (Increased Security)"; // FIXME i18n
 }
 
 echo "</div>\n<br />\n";
 echo "<div id='footerbar'>";
 echo "<form style='margin: 0px;' action='{$_SERVER['PHP_SELF']}'>";
 echo "{$strSetYourStatus}: ";
-if(isset($sit[2])) echo userstatus_bardrop_down("status", user_status($sit[2]));
+if (isset($sit[2]))
+{
+   echo userstatus_bardrop_down("status", user_status($sit[2]));
+}
 echo "</form>\n";
 echo "</div>\n";
 include('htmlfooter.inc.php');

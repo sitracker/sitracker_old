@@ -49,7 +49,7 @@ elseif ($action == "edit")
         $sql="SELECT * FROM sites WHERE id='$site' ";
         $siteresult = mysql_query($sql);
         if (mysql_error()) trigger_error("MySQL Query Error ".mysql_error(), E_USER_ERROR);
-        while ($siterow=mysql_fetch_array($siteresult))
+        while ($siterow = mysql_fetch_array($siteresult))
         {
             echo "<h2><img src='{$CONFIG['application_webpath']}images/icons/{$iconset}/32x32/site.png' width='32' height='32' alt='' /> ";
             echo "{$strEditSite}: {$site} - ".site_name($site)."</h2>";
@@ -146,11 +146,24 @@ elseif ($action == "update")
     {
 
         replace_tags(3, $site, $tags);
-        if (isset($licenserx)) $licenserx='1'; else $licenserx='0';
+        if (isset($licenserx))
+        {
+            $licenserx = '1';
+        }
+        else
+        {
+            $licenserx = '0';
+        }
         // update site
 
-        if($active=='true') $activeStr = 'true';
-        else $activeStr = 'false';
+        if ($active == 'true')
+        {
+            $activeStr = 'true';
+        }
+        else
+        {
+            $activeStr = 'false';
+        }
 
         $sql = "UPDATE sites SET name='$name', department='$department', address1='$address1', address2='$address2', city='$city', ";
         $sql .= "county='$county', postcode='$postcode', country='$country', telephone='$telephone', fax='$fax', email='$email', ";

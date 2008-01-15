@@ -62,7 +62,10 @@ switch($action)
         $result = mysql_query($sql);
         if (mysql_error()) trigger_error(mysql_error(),E_USER_ERROR);
 
-        if(!$result) echo "<p class='error'>{$strWatchAddFailed}</p>";
+        if (!$result)
+        {
+            echo "<p class='error'>{$strWatchAddFailed}</p>";
+        }
         else
         {
             // FIXME redundant i18n string
@@ -76,7 +79,10 @@ switch($action)
         $result = mysql_query($sql);
         if (mysql_error()) trigger_error(mysql_error(),E_USER_ERROR);
 
-        if(!$result) echo "<p class='error'>{$strWatchDeleteFailed}</p>";
+        if (!$result)
+        {
+            echo "<p class='error'>{$strWatchDeleteFailed}</p>";
+        }
         else
         {
             // FIXME redundant i18n string
@@ -96,7 +102,7 @@ switch($action)
             if (mysql_error()) trigger_error(mysql_error(),E_USER_ERROR);
 
             echo "<tr><td align='left'><strong>";
-            switch($i)
+            switch ($i)
             {
                 case 0: echo $strSites;
                     break;
@@ -109,7 +115,7 @@ switch($action)
             }
             echo "</strong></td><td align='right'>";
             echo "<a href='{$_SERVER['PHP_SELF']}?type={$i}&amp;action=add'>";
-            switch($i)
+            switch ($i)
             {
                 case 0: echo $strAddSite;
                     break;
@@ -122,13 +128,13 @@ switch($action)
             }
             echo "</a></td></tr>";
 
-            if(mysql_num_rows($result) > 0)
+            if (mysql_num_rows($result) > 0)
             {
-                $shade='shade1';
-                while($obj = mysql_fetch_object($result))
+                $shade = 'shade1';
+                while ($obj = mysql_fetch_object($result))
                 {
                     $name = '';
-                    switch($obj->type)
+                    switch ($obj->type)
                     {
                         case 0: //site
                             $sql = "SELECT name FROM sites WHERE id = {$obj->id}";
@@ -162,8 +168,8 @@ switch($action)
                     }
 
                     echo "<tr class='$shade'><td>{$name}</td><td><a href='{$_SERVER['PHP_SELF']}?type={$obj->type}&amp;id={$obj->id}&amp;action=delete'>{$strRemove}</a></td></tr>";
-                    if ($shade=='shade1') $shade='shade2';
-                    else $shade='shade1';
+                    if ($shade == 'shade1') $shade = 'shade2';
+                    else $shade = 'shade1';
                 }
             }
             else
@@ -174,7 +180,6 @@ switch($action)
         echo "</table>";
         include('htmlfooter.inc.php');
         break;
-
 }
 
 ?>

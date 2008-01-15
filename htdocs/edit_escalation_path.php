@@ -32,7 +32,7 @@ if(empty($_REQUEST['mode']))
 
     echo "<h2>{$title}</h2>";
 
-    while($details = mysql_fetch_object($result))
+    while ($details = mysql_fetch_object($result))
     {
         echo "<form action='".$_SERVER['PHP_SELF']."' method='post' onsubmit='return confirm_submit(\"{$strAreYouSureEditEscalationPath}\")'>";
         echo "<table class='vertical'>";
