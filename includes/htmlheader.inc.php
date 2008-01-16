@@ -243,7 +243,8 @@ if ($noticeaction == 'dismiss_notice')
 if ($sit[0] != '')
 {
     $noticesql = "SELECT * FROM `${GLOBALS['dbNotices']}` ";
-    $noticesql .= "WHERE userid={$sit[2]} ORDER BY timestamp DESC LIMIT 20"; // Don't show more than 20 notices, saftey cap
+    // Don't show more than 20 notices, saftey cap
+    $noticesql .= "WHERE userid={$sit[2]} ORDER BY timestamp DESC LIMIT 20"; 
     $noticeresult = mysql_query($noticesql);
     if (mysql_error()) trigger_error(mysql_error(),E_USER_WARNING);
     if (mysql_num_rows($noticeresult) > 0)
@@ -252,27 +253,19 @@ if ($sit[0] != '')
 
         foreach ($keys AS $key)
         {
-            if ($key != 'sit' AND $key != 'SiTsessionID')
+            if ($key != 'noticeid')
             {
-                //$url[]= "{$key}=".$_REQUEST[$key];
-                //$alink .= "&amp;{$key}=".$_REQUEST[$key];
                 $url .= "&amp;{$key}=".$_GET[$key];
             }
         }
 
         while ($notice = mysql_fetch_object($noticeresult))
         {
-            $notice->text = bbcode($notice->text);
+            //$notice->text = bbcode($notice->text);
             //check for the notice types
-            if ($notice->type == SIT_UPGRADED_NOTICE)
+            if ($notice->type == WARNING_NOTICE_TYPE)
             {
-                $notice->text = str_replace('$strSitUpgraded', sprintf($strSitUpgraded, $CONFIG['application_shortname'], "v{$application_version} {$application_revision}"), $notice->text);
-            }
-            elseif ($notice->type == WARNING_NOTICE_TYPE)
-            {
-                echo "<div class='warning'><p class='warning'>";
-                echo "<span>(<a href='{$_SERVER[PHP_SELF]}?noticeaction=dismiss_notice&amp;noticeid={$notice->id}{$url}'>{$strDismiss}</a>)</span>";
-                echo $notice->text;
+                $class = 'warning';
             }
             elseif ($notice->type == CRITICAL_NOTICE_TYPE)
             {
@@ -284,58 +277,43 @@ if ($sit[0] != '')
                     $redirpage = $CONFIG['application_webpath'].$notice->resolutionpage;
                 }
             }
-            elseif ($notice->type == OUT_OF_SLA_TYPE OR $notice->type == NEARING_SLA_TYPE)
+            else
             {
-                echo "<div class='error'><p class='warning'>";
-                echo "<span>(<a href='{$_SERVER[PHP_SELF]}?noticeaction=dismiss_notice&amp;noticeid={$notice->id}{$url}'>{$strDismiss}</a>)</span>";
-                echo "{$notice->text}";
-                if (!empty($notice->link))
-                {
-                    echo " - <a href=\"{$notice->link}\">";
-                    if (substr($notice->linktext, 0, 4)=='$str')
-                    {
-                        $v = substr($notice->linktext, 1);
-                        echo $GLOBALS[$v];
-                    }
-                    else
-                    {
-                        echo $notice->linktext;
-                    }
-                    echo "</a>";
-                }
+                $class = 'info';
+            }
+            
+            echo "<div class='{$class}'><p class='info'>";
+            echo "<span>(<a href='{$_SERVER[PHP_SELF]}?noticeaction=dismiss_notice&amp;noticeid={$notice->id}{$url}'>{$strDismiss}</a>)</span>";
+            if (substr($notice->text, 0, 4) == '$str')
+            {
+                $v = substr($notice->text, 1);
+                echo $GLOBALS[$v];
             }
             else
             {
-                echo "<div class='info'><p class='info'>";
-                echo "<span>(<a href='{$_SERVER[PHP_SELF]}?noticeaction=dismiss_notice&amp;noticeid={$notice->id}{$url}'>{$strDismiss}</a>)</span>";
-                if (substr($notice->text, 0, 4) == '$str')
+                echo $notice->text;
+            }
+
+            if (!empty($notice->link))
+            {
+                echo " - <a href='{$notice->link}'>";
+                if (substr($notice->linktext, 0, 4)=='$str')
                 {
-                    $v = substr($notice->text, 1);
+                    $v = substr($notice->linktext, 1);
                     echo $GLOBALS[$v];
                 }
                 else
                 {
-                    echo $notice->text;
+                    echo $notice->linktext;
                 }
-
-                if (!empty($notice->link))
-                {
-                    echo " - <a href='{$notice->link}'>";
-                    if (substr($notice->linktext, 0, 4)=='$str')
-                    {
-                        $v = substr($notice->linktext, 1);
-                        echo $GLOBALS[$v];
-                    }
-                    else
-                    {
-                        echo $notice->linktext;
-                    }
-                    echo "</a>";
-                }
+                echo "</a>";
             }
-            echo "</p></div>";
+        
+        echo "<sub>";
+        echo "<em> ".format_date_friendly(strtotime($notice->timestamp))."</em>";
+        echo "</sub></p></div>";
         }
-
+        
         if (mysql_num_rows($noticeresult) > 1)
         {
             $keys = array_keys($_REQUEST);
