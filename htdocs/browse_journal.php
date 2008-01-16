@@ -53,7 +53,7 @@ if (!empty($sort))
         case 'refid': $sql .= " ORDER BY c.surname $sortorder, c.forenames $sortorder"; break;
         default:   $sql .= " ORDER BY timestamp DESC"; break;
     }
-}
+} else $sql .= " ORDER BY timestamp DESC";
 $sql .= " LIMIT $offset, $perpage ";
 $result = mysql_query($sql);
 if (mysql_error()) trigger_error("MySQL Query Error ".mysql_error(), E_USER_ERROR);
@@ -95,7 +95,10 @@ if ($journal_count >= 1)
         {
             case 2: echo "<a href='incident_details.php?id={$journal->refid}' target='_blank'>{$journal->bodytext}</a>"; break;
             case 5: echo "<a href='contact_details.php?id={$journal->refid}' target='_blank'>{$journal->bodytext}</a>"; break;
-            default: echo "{$journal->bodytext} (Ref: {$journal->refid})"; break;
+            default:
+                echo "{$journal->bodytext}";
+                if (!empty($journal->refid)) echo "(Ref: {$journal->refid})";
+                break;
         }
         echo "</td>";
         echo "<td><a href='{$_SERVER['PHP_SELF']}?type={$journal->journaltype}'>{$journaltype[$journal->journaltype]}</a></td>";

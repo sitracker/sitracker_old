@@ -145,7 +145,8 @@ function trigger_action($userid, $triggerid, $action, $paramarray)
                                   $paramarray);
             break;
         case "ACTION_JOURNAL":
-            journal(CFG_LOGGING_NORMAL, 'Site Added', "Site {$id} was added", CFG_JOURNAL_SITES, $id);
+            $journalbody = implode($paramarray);
+            journal(CFG_LOGGING_NORMAL, $triggerid, "Trigger Fired ({$journalbody})", 0, $userid);
         case "ACTION_NONE":
         //fallthrough
         default:
