@@ -1592,13 +1592,16 @@ UPDATE `incidentstatus` SET `name` = 'strUnsupported' WHERE `incidentstatus`.`id
 
 $upgrade_schema[340] = "
 -- KMH 17/12/07
-CREATE TABLE `triggers` (
-`triggerid` TINYINT NOT NULL ,
-`userid` TINYINT NOT NULL ,
-`action` TINYINT NOT NULL DEFAULT '1' ,
-`parameters` VARCHAR( 255 ) NULL ,
-PRIMARY KEY ( `triggerid` , `userid` , `action` )
-) ENGINE = MYISAM ;
+CREATE TABLE IF NOT EXISTS `triggers` (
+  `id` int(11) NOT NULL auto_increment,
+  `triggerid` varchar(50) NOT NULL,
+  `userid` tinyint(4) NOT NULL,
+  `action` enum('ACTION_NONE','ACTION_EMAIL','ACTION_NOTICE','ACTION_JOURNAL') NOT NULL default 'ACTION_NONE',
+  `template` varchar(50) NOT NULL,
+  `parameters` varchar(255) default NULL,
+  PRIMARY KEY  (`id`),
+  KEY `triggerid` (`triggerid`),
+) ENGINE=MyISAM ;
 
 DROP TABLE IF EXISTS `contactflags`;
 DROP TABLE IF EXISTS `contactproducts`;
@@ -1648,12 +1651,6 @@ INSERT INTO `emailtype` (`id`, `type`, `description`, `tofield`, `fromfield`, `r
 
 INSERT INTO `noticetemplates` (`id`, `type`, `description`, `text`, `linktext`, `link`, `durability`) VALUES
 ('INCIDENT_OWNED_CLOSED_BY_USER', 0, '', 'Your incident <incidentid> - <incidenttitle> has been closed by <engineerclosedname>', NULL, NULL, 'sticky');
-
-
---INL 15/01/08 TODO Kieran - please check before 3.40 release added this it was missing
-ALTER TABLE `triggers` ADD `template` VARCHAR( 50 ) NOT NULL AFTER `action` ;
-ALTER TABLE `triggers` ADD INDEX ( `template` ) ;
- ALTER TABLE `triggers` CHANGE `triggerid` `triggerid` TINYINT( 4 ) NOT NULL AUTO_INCREMENT ;
 ";
 
 // Important: When making changes to the schema you must add SQL to make the alterations
