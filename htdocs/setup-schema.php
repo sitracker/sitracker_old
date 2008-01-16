@@ -1600,7 +1600,7 @@ CREATE TABLE IF NOT EXISTS `triggers` (
   `template` varchar(50) NOT NULL,
   `parameters` varchar(255) default NULL,
   PRIMARY KEY  (`id`),
-  KEY `triggerid` (`triggerid`),
+  KEY `triggerid` (`triggerid`)
 ) ENGINE=MyISAM ;
 
 DROP TABLE IF EXISTS `contactflags`;

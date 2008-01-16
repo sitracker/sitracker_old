@@ -39,14 +39,15 @@ $actionarray = array(ACTION_NONE,
                 ACTION_NOTICE,
                 ACTION_EMAIL,
                 ACTION_JOURNAL);
+
 /**
     * Master trigger function, creates a new trigger
     * @author Kieran Hogg
-    * @param $triggertype interger. The id of the trigger type
+    * @param $triggerid integer. The id of the trigger to fire
     * @param $paramarray array. Extra parameters to pass the trigger
     * @return boolean. TRUE if the trigger created successfully, FALSE if not
 */
-function trigger($triggertype, $paramarray='')
+function trigger($triggerid, $paramarray='')
 {
     global $sit, $CONFIG, $dbg, $dbTriggers;
     if ($CONFIG['debug'] && $paramarray != '')
@@ -64,7 +65,7 @@ function trigger($triggertype, $paramarray='')
     }
 
     //find relevant triggers
-    $sql = "SELECT * FROM `{$dbTriggers}` WHERE triggerid='{$triggertype}'";
+    $sql = "SELECT * FROM `{$dbTriggers}` WHERE triggerid='{$triggerid}'";
     if ($userid)
     {
         $sql .= "AND userid={$userid}";
@@ -89,10 +90,10 @@ function trigger($triggertype, $paramarray='')
 
         if($CONFIG['debug'])
         {
-            $dbg .= "TRIGGER: trigger_action({$result->userid}, {$triggertype},
+            $dbg .= "TRIGGER: trigger_action({$result->userid}, {$triggerid},
                     {$result->action}, {$paramarray}) called \n";
         }
-        trigger_action($result->userid, $triggertype, $result->action,
+        trigger_action($result->userid, $triggerid, $result->action,
                        $paramarray);
     }
 }
@@ -101,24 +102,24 @@ function trigger($triggertype, $paramarray='')
     * Do the specific action for the specific user for a trigger
     * @author Kieran Hogg
     * @param $userid integer. The user to apply the trigger action to
-    * @param $triggertype string. The type of trigger to apply
+    * @param $triggerid string. The id of the trigger to apply
     * @param $action string. The type of action to perform
     * @param $paramarray array. The array of extra parameters to apply to the
-    * trigger 
+    * trigger
     * @return boolean. TRUE if the user has the permission, otherwise FALSE
 */
-function trigger_action($userid, $triggertype, $action, $paramarray)
+function trigger_action($userid, $triggerid, $action, $paramarray)
 {
     global $CONFIG, $dbg;
     if($CONFIG['debug'])
     {
-        $dbg .= "TRIGGER: trigger_action($userid, $triggertype, $action,
+        $dbg .= "TRIGGER: trigger_action($userid, $triggerid, $action,
                 $paramarray) received\n";
     }
 
     //get the template type
     $sql = "SELECT template FROM triggers WHERE userid='{$userid}' AND
-            triggerid='{$triggertype}'";
+            triggerid='{$triggerid}'";
     $query = mysql_query($sql);
     $template = mysql_fetch_object($query);
     $template = $template->template;
@@ -128,23 +129,23 @@ function trigger_action($userid, $triggertype, $action, $paramarray)
         case "ACTION_EMAIL":
             if($CONFIG['debug'])
             {
-                $dbg .= "TRIGGER: send_trigger_email($userid, $triggertype,
+                $dbg .= "TRIGGER: send_trigger_email($userid, $triggerid,
                         $template, $paramarray)\n";
             }
-            send_trigger_email($userid, $triggertype, $template, $paramarray);
+            send_trigger_email($userid, $triggerid, $template, $paramarray);
             break;
 
         case "ACTION_NOTICE":
             if($CONFIG['debug'])
             {
                 $dbg .= "TRIGGER: create_trigger_notice($userid, '',
-                        $triggertype, $template, $paramarray) called";
+                        $triggerid, $template, $paramarray) called";
             }
-            create_trigger_notice($userid, '', $triggertype, $template,
+            create_trigger_notice($userid, '', $triggerid, $template,
                                   $paramarray);
             break;
         case "ACTION_JOURNAL":
-            //TODO
+            journal(CFG_LOGGING_NORMAL, 'Site Added', "Site {$id} was added", CFG_JOURNAL_SITES, $id);
         case "ACTION_NONE":
         //fallthrough
         default:
@@ -156,7 +157,7 @@ function trigger_action($userid, $triggertype, $action, $paramarray)
     * Replaces template variables with their values
     * @author Kieran Hogg
     * @param $string string. The string containing the variables
-    * @param $paramarray array. An array containing values to be substitute 
+    * @param $paramarray array. An array containing values to be substitute
     * into the string
     * @return string. The string with variables replaced
 */
@@ -199,7 +200,7 @@ function trigger_replace_specials($string, $paramarray)
     * Replaces email template variables with their values
     * @author Kieran Hogg
     * @param $string string. The string containing the variables
-    * @param $paramarray array. An array containing values to be substitute 
+    * @param $paramarray array. An array containing values to be substitute
     * into the string
     * @return string. The string with variables replaced
     * @notes Temporary function, should be intergrated into
