@@ -1318,7 +1318,7 @@ function contact_site_drop_down($name, $id, $siteid='', $exclude='')
                 }
 
                 $html .= "value='{$contacts->contactid}'>";
-                $html .= htmlspecialchars("{$contacts->surname}, {$contacts->forenames} of {$contacts->sitename}"); // FIXME i18n 'of'
+                $html .= htmlspecialchars("{$contacts->surname}, {$contacts->forenames} - {$contacts->sitename}");
                 $html .= "</option>\n";
             }
     }
@@ -1508,7 +1508,7 @@ function supported_product_drop_down($name, $contactid, $productid)
     $html .= "<select name=\"$name\">\n";
     if ($productid == 0)
     {
-        $html .= "<option selected='selected' value='0'>No Contract - Not Product Related</option>\n"; //FIXME i18n
+        $html .= "<option selected='selected' value='0'>No Contract - Not Product Related</option>\n";
     }
 
     if ($productid == -1)
@@ -2857,9 +2857,16 @@ function servicelevel_name($id)
 }
 
 
-// FIXME: default service level needs changeing/checking
+/**
+    * Retrieves the service level ID of a given maintenance contract
+    * @author Ivan Lucas
+    * @param $maintid Integer. Contract ID
+    * @returns. Integer. Service Level ID
+    * @note Service level ID's are DEPRECATED service level tags should be used in favour of service level ID's
+*/
 function maintenance_servicelevel($maintid)
 {
+    global $CONFIG;
     $sql = "SELECT servicelevelid FROM maintenance WHERE id='$maintid' ";
     $result = mysql_query($sql);
     if (mysql_error()) trigger_error(mysql_error(),E_USER_WARNING);
@@ -2871,6 +2878,7 @@ function maintenance_servicelevel($maintid)
         // service level
         if ($maintid == 0)
         {
+            // Convert the default service level tag to an ide and use that
             $servicelevelid = servicelevel_tag2id($CONFIG['default_service_level']);
         }
     }
