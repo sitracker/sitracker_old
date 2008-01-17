@@ -713,7 +713,7 @@ else
             if (!$mk) throw_error('Failed creating incident attachment directory: ',$incident_attachment_fspath .$id);
         }
         $mk = @mkdir($CONFIG['attachment_fspath'] .$id . "{$delim}{$now}", 0770);
-        if (!$mk) throw_error('Failed creating incident attachment (timestamp) directory: ',$incident_attachment_fspath .$id . "/$now");
+        if (!$mk) throw_error('Failed creating incident attachment (timestamp) directory: ',$incident_attachment_fspath .$id . "{$delim}{$now}");
         umask($umask);
         $newfilename = $incident_attachment_fspath.$delim.$now.$delim.$_FILES['attachment']['name'];
 
