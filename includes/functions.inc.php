@@ -6803,7 +6803,7 @@ function plugin_do($context, $optparams=FALSE)
 // Check that the correct modules are loaded
 if (!extension_loaded('pspell')) $CONFIG['enable_spellchecker']=FALSE; // FORCE Turn off spelling if module not found
 if (!extension_loaded('mysql')) trigger_error('SiT requires the php/mysql module', E_USER_ERROR);
-if (version_compare(PHP_VERSION, "5.3.0", "<")) trigger_error('INFO: You are running an older PHP version, some features may not work properly.', E_USER_NOTICE);
+if (version_compare(PHP_VERSION, "4.3.0", "<")) trigger_error('INFO: You are running an older PHP version, some features may not work properly.', E_USER_NOTICE);
 if (@ini_get('register_globals')==1 OR strtolower(@ini_get('register_globals'))=='on')
 {
     trigger_error('Error: php.ini MUST have register_globals set to off, there are potential security risks involved with leaving it as it is!', E_USER_ERROR);
