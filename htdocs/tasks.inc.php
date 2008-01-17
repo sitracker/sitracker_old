@@ -206,7 +206,7 @@ setInterval("countUp()", 1000); //every 1 seconds
 
     //get info for incident-->task linktype
     $sql = "SELECT DISTINCT origcolref, linkcolref ";
-    $sql .= "FROM `{$dblinks}` AS l, `{$dbLinkTypes}` AS lt ";
+    $sql .= "FROM `{$dbLinks}` AS l, `{$dbLinkTypes}` AS lt ";
     $sql .= "WHERE l.linktype = 4 ";
     $sql .= "AND linkcolref = {$incident} ";
     $sql .= "AND direction = 'left'";
@@ -214,12 +214,12 @@ setInterval("countUp()", 1000); //every 1 seconds
 
     //get list of tasks
     $sql = "SELECT * FROM `{$dbTasks}` WHERE 1=0 ";
-    $result = mysql_query($sql);
+    
     while ($tasks = mysql_fetch_object($result))
     {
         $sql .= "OR id={$tasks->origcolref} ";
     }
-    
+    $result = mysql_query($sql);
 
     if ($mode == 'incident')
     {
