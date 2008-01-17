@@ -1219,7 +1219,7 @@ INSERT INTO `vendors` VALUES (1,'Default');
 CREATE TABLE IF NOT EXISTS `notices` (
   `id` int(11) NOT NULL auto_increment,
   `userid` int(11) NOT NULL,
-  `gid` text,
+  `templates` varchar(255) NULL,
   `type` tinyint(4) NOT NULL,
   `text` tinytext NOT NULL,
   `linktext` varchar(50) default NULL,
@@ -1651,6 +1651,9 @@ INSERT INTO `emailtype` (`id`, `type`, `description`, `tofield`, `fromfield`, `r
 
 INSERT INTO `noticetemplates` (`id`, `type`, `description`, `text`, `linktext`, `link`, `durability`) VALUES
 ('INCIDENT_OWNED_CLOSED_BY_USER', 0, '', 'Your incident <incidentid> - <incidenttitle> has been closed by <engineerclosedname>', NULL, NULL, 'sticky');
+
+-- KMH 17/01/08
+ALTER TABLE `notices` CHANGE `gid` `template` VARCHAR( 255 ) NULL DEFAULT NULL
 ";
 
 // Important: When making changes to the schema you must add SQL to make the alterations
