@@ -22,11 +22,11 @@ $mode = $_REQUEST['mode'];
 $edituserpermission = user_permission($sit[2],23); // edit user
 if (empty($_REQUEST['userid']) OR $_REQUEST['userid']=='current' OR $edituserpermission==FALSE)
 {
-    $userid = mysql_real_escape_string($sit[2]);
+    $edituserid = mysql_real_escape_string($sit[2]);
 }
 else
 {
-    $userid = cleanvar($_REQUEST['userid']);
+    $edituserid = cleanvar($_REQUEST['userid']);
 }
 
 
@@ -34,11 +34,11 @@ if (empty($mode))
 {
     include ('htmlheader.inc.php');
 
-    $sql = "SELECT * FROM `{$dbUsers}` WHERE id='$userid' LIMIT 1";
+    $sql = "SELECT * FROM `{$dbUsers}` WHERE id='{$edituserid}' LIMIT 1";
     $result = mysql_query($sql);
     if (mysql_error()) trigger_error("MySQL Query Error ".mysql_error(), E_USER_ERROR);
 
-    if (mysql_num_rows($result) < 1) trigger_error("No such user ".strip_tags($userid),E_USER_ERROR);
+    if (mysql_num_rows($result) < 1) trigger_error("No such user ".strip_tags($edituserid),E_USER_ERROR);
     $user = mysql_fetch_object($result);
 
     // FIXME This form should use one SQL query really, not call all these functions to lookup each field
@@ -50,7 +50,7 @@ if (empty($mode))
     echo "<table align='center' class='vertical'>";
     echo "<col width='250'></col><col width='*'></col>";
     echo "<tr><th colspan='2'>{$strAbout}";
-    if ($userid == $sit[2])
+    if ($edituserid == $sit[2])
     {
         echo $strYou;
     }
@@ -58,11 +58,11 @@ if (empty($mode))
     {
         echo $user->realname;
     }
-    
+
     echo "</th></tr>\n";
     echo "<tr><th>{$strUsername}:</th><td>{$user->username}</td></tr>";
     echo "<tr><th>{$strRole}:</th>";
-    if ($userid == $sit[2] OR $userid == 1)
+    if ($edituserid == $sit[2] OR $edituserid == 1)
     {
         echo "<td>".db_read_column('rolename', 'roles', $user->roleid)."</td>";
     }
@@ -70,7 +70,7 @@ if (empty($mode))
     {
         echo "<td>".role_drop_down('roleid', $user->roleid)."</td>";
     }
-    
+
     echo "</tr>";
     echo "<tr><th>{$strRealName}:</th><td><input maxlength='50' name='realname' size='30' type='text' value=\"".$user->realname."\" /></td></tr>\n";
     echo "<tr><th>{$strJobTitle}:</th><td><input maxlength='50' name='jobtitle' size='30' type='text' value=\"".$user->title."\" /></td></tr>\n";
@@ -78,8 +78,8 @@ if (empty($mode))
     echo "<td><textarea name='qualifications' rows='3' cols='40'>".$user->qualifications."</textarea></td></tr>\n";
     echo "<tr><th>{$strEmailSignature}:<br />{$strEmailSignatureTip}</th>";
     echo "<td><textarea name='signature' rows='4' cols='40'>".strip_tags($user->signature)."</textarea></td></tr>\n";
-    $entitlement = user_holiday_entitlement($userid);
-    if ($edituserpermission && $userid!=$sit[2])
+    $entitlement = user_holiday_entitlement($edituserid);
+    if ($edituserpermission && $edituserid!=$sit[2])
     {
         echo "<tr><th>{$strHolidayEntitlement}:</th><td>";
         echo "<input type='text' name='holiday_entitlement' value='$entitlement' size='2' /> {$strDays}";
@@ -87,23 +87,23 @@ if (empty($mode))
     }
     elseif ($entitlement > 0)
     {
-        $holidaystaken=user_count_holidays($userid, 1);
+        $holidaystaken=user_count_holidays($edituserid, 1);
         echo "<tr><th>{$strHolidayEntitlement}:</th><td>";
         echo "{$entitlement} {$strdays}, ";
         echo "{$holidaystaken} {$strtaken}, ";
         echo sprintf($strRemaining, $entitlement-$holidaystaken);
         echo "</td></tr>\n";
         echo "<tr><th>{$strOtherLeave}:</th><td>";
-        echo user_count_holidays($userid, 2)." {$strdayssick}, ";
-        echo user_count_holidays($userid, 3)." {$strdaysworkingaway}, ";
-        echo user_count_holidays($userid, 4)." {$strdaystraining}";
+        echo user_count_holidays($edituserid, 2)." {$strdayssick}, ";
+        echo user_count_holidays($edituserid, 3)." {$strdaysworkingaway}, ";
+        echo user_count_holidays($edituserid, 4)." {$strdaystraining}";
         echo "<br />";
-        echo user_count_holidays($userid, 5)." {$strdaysother}";
+        echo user_count_holidays($edituserid, 5)." {$strdaysother}";
         echo "</td></tr>";
     }
-    
+
     echo "<tr><th>{$strGroupMembership}:</th><td valign='top'>";
-    
+
     if ($user->groupid >= 1)
     {
         $sql = "SELECT name FROM `{$dbGroups}` WHERE id='{$user->groupid}' ";
@@ -118,8 +118,8 @@ if (empty($mode))
     }
     echo "</td></tr>";
     echo "<tr><th colspan='2'>{$strWorkStatus}</th></tr>";
-    
-    if ($edituserpermission AND $userid != $sit[2])
+
+    if ($edituserpermission AND $edituserid != $sit[2])
     {
         $userdisable = TRUE;
     }
@@ -132,7 +132,7 @@ if (empty($mode))
     echo userstatus_drop_down("status", $user->status, $userdisable);
     echo "</td></tr>\n";
     echo "<tr><th>{$strAccepting} {$strIncidents}:</th><td>";
-    echo accepting_drop_down("accepting", $userid);
+    echo accepting_drop_down("accepting", $edituserid);
     echo "</td></tr>\n";
     echo "<tr><th>{$strMessage}:<br />{$strMessageTip}</th>";
     echo "<td><textarea name='message' rows='4' cols='40'>".strip_tags($user->message)."</textarea></td></tr>\n";
@@ -140,7 +140,7 @@ if (empty($mode))
     echo "<tr id='email'><th>{$strEmail}:<sup class='red'>*</sup></th><td><input maxlength='50' name='email' size='30' type='text' value='".strip_tags($user->email)."' /></td></tr>";
     echo "<tr id='phone'><th>{$strTelephone}:</th><td><input maxlength='50' name='phone' size='30' type='text' value='".strip_tags($user->phone)."' /></td></tr>";
     echo "<tr><th>{$strFax}:</th><td><input maxlength='50' name='fax' size='30' type='text' value='".strip_tags($user->fax)."' /></td></tr>";
-    echo "<tr><th>{$strMobile}:</th><td><input maxlength='50' name='mobile' size='30' type='text' value='".user_mobile($userid)."' /></td></tr>";
+    echo "<tr><th>{$strMobile}:</th><td><input maxlength='50' name='mobile' size='30' type='text' value='".user_mobile($edituserid)."' /></td></tr>";
     echo "<tr><th>AIM: <img src=\"images/icons/{$iconset}/16x16/aim.png\" width=\"16\" height=\"16\" alt=\"AIM\" /></th>";
     echo "<td><input maxlength=\"50\" name=\"aim\" size=\"30\" type=\"text\" value=\"".strip_tags($user->aim)."\" /></td></tr>";
     echo "<tr><th>ICQ: <img src=\"images/icons/{$iconset}/16x16/icq.png\" width=\"16\" height=\"16\" alt=\"ICQ\" /></th>";
@@ -159,7 +159,7 @@ if (empty($mode))
     {
         $selectedlang = $_SESSION['lang'];
     }
-    
+
     foreach ($availablelanguages AS $langcode => $language)
     {
         if ($langcode == $selectedlang)
@@ -185,14 +185,14 @@ if (empty($mode))
     {
         echo "selected='selected'";
     }
-    
+
     echo " value='desc'>{$strNewestAtTop}</option>\n";
     echo "<option ";
     if ($user->var_update_order == "asc")
     {
         echo "selected='selected'";
     }
-    
+
     echo " value='asc'>{$strNewestAtBottom}</option>\n";
     echo "</select>";
     echo "</td></tr>\n";
@@ -211,7 +211,7 @@ if (empty($mode))
 
     plugin_do('edit_profile_form');
 
-    if ($CONFIG['trusted_server']==FALSE AND $userid==$sit[2])
+    if ($CONFIG['trusted_server']==FALSE AND $edituserid==$sit[2])
     {
         echo "<tr class='password'><th colspan='2'>{$strChangePassword}</th></tr>";
         echo "<tr class='password'><th>&nbsp;</th><td>{$strToChangePassword}</td></tr>";
@@ -220,7 +220,7 @@ if (empty($mode))
         echo "<tr class='password'><th>{$strConfirmNewPassword}:</th><td><input maxlength='50' name='newpassword2' size='30' type='password' /></td></tr>";
     }
     echo "</table>\n";
-    echo "<input type='hidden' name='userid' value='{$userid}' />";
+    echo "<input type='hidden' name='userid' value='{$edituserid}' />";
     echo "<input type='hidden' name='mode' value='save' />";
     echo "<p><input name='reset' type='reset' value='{$strReset}' /> <input name='submit' type='submit' value='{$strSave}' /></p>";
     echo "</form>\n";
@@ -233,7 +233,7 @@ elseif ($mode=='save')
     $message = cleanvar($_POST['message']);
     $realname = cleanvar($_POST['realname']);
     $qualifications = cleanvar($qualifications);
-    $userid = cleanvar($_POST['userid']);
+    $edituserid = cleanvar($_POST['userid']);
     $email = cleanvar($_POST['email']);
     $jobtitle = cleanvar($_POST['jobtitle']);
     $qualifications = cleanvar($_POST['qualifications']);
@@ -262,7 +262,7 @@ elseif ($mode=='save')
 
     // Some extra checking here so that users can't edit other peoples profiles
     $edituserpermission = user_permission($sit[2],23); // edit user
-    if ($userid != $sit[2] AND $edituserpermission==FALSE)
+    if ($edituserid != $sit[2] AND $edituserpermission==FALSE)
     {
         trigger_error('Error: No permission to edit this users profile', E_USER_ERROR);
         exit;
@@ -278,12 +278,12 @@ elseif ($mode=='save')
     if ($password != "" && $newpassword1 != "" && $newpassword2 != "")
     {
         // verify password fields
-        if ($newpassword1 == $newpassword2 && strtoupper(md5($password)) == strtoupper(user_password($userid)))
+        if ($newpassword1 == $newpassword2 && strtoupper(md5($password)) == strtoupper(user_password($edituserid)))
         {
             $password = strtoupper(md5($password));
             $newpassword1 = strtoupper(md5($newpassword1));
             $newpassword2 = strtoupper(md5($newpassword2));
-            $sql = "UPDATE `{$dbUsers}` SET password='$newpassword1' WHERE id='$userid'";
+            $sql = "UPDATE `{$dbUsers}` SET password='$newpassword1' WHERE id='{$edituserid}'";
             $result = mysql_query($sql);
             if (mysql_error()) trigger_error("MySQL Query Error ".mysql_error(), E_USER_ERROR);
 
@@ -335,7 +335,7 @@ elseif ($mode=='save')
         {
             $collapse = 'false';
         }
-        
+
         if(!empty($emailonreassign))
         {
             $emailonreassign = 'true';
@@ -345,26 +345,26 @@ elseif ($mode=='save')
             $emailonreassign = 'false';
         }
 
-        $oldstatus = user_status($userid);
+        $oldstatus = user_status($edituserid);
 
         $sql  = "UPDATE `{$dbUsers}` SET realname='$realname', title='$jobtitle', email='$email', qualifications='$qualifications', ";
         $sql .= "phone='$phone', mobile='$mobile', aim='$aim', icq='$icq', msn='$msn', fax='$fax', var_incident_refresh='$incidentrefresh', ";
-        if ($userid != 1 AND !empty($_REQUEST['roleid']) AND $edituserpermission==TRUE)
+        if ($edituserid != 1 AND !empty($_REQUEST['roleid']) AND $edituserpermission==TRUE)
         {
             $sql .= "roleid='{$roleid}', ";
         }
-        
+
         if (!empty($holiday_entitlement) AND $edituserpermission==TRUE)
         {
             $sql .= "holiday_entitlement='{$holiday_entitlement}', ";
         }
         $sql .= "var_update_order='$updateorder', var_num_updates_view='$updatesperpage', var_style='$style', signature='$signature', message='$message', status='$status', accepting='$accepting', ";
-        $sql .= "var_collapse='$collapse', var_notify_on_reassign='$emailonreassign', var_i18n='{$vari18n}' WHERE id='$userid' LIMIT 1";
+        $sql .= "var_collapse='$collapse', var_notify_on_reassign='$emailonreassign', var_i18n='{$vari18n}' WHERE id='$edituserid' LIMIT 1";
         $result = mysql_query($sql);
         if (mysql_error()) trigger_error("MySQL Query Error ".mysql_error(), E_USER_ERROR);
 
         // If this is the current user, update the profile in the users session
-        if ($userid == $_SESSION['userid'])
+        if ($edituserid == $_SESSION['userid'])
         {
             $_SESSION['style'] = $style;
             $_SESSION['realname'] = $realname;
@@ -380,7 +380,7 @@ elseif ($mode=='save')
         if ($oldstatus != $status)
         {
             // reassign the users incidents if appropriate
-            incident_backup_switchover($userid, $accepting);
+            incident_backup_switchover($edituserid, $accepting);
         }
 
         if (!$result)
@@ -391,7 +391,7 @@ elseif ($mode=='save')
         }
         else
         {
-            if ($userid==$sit[2]) $redirecturl='index.php';
+            if ($edituserid==$sit[2]) $redirecturl='index.php';
             else $redirecturl='manage_users.php';
             plugin_do('save_profile_form');
 

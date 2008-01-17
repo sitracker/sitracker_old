@@ -352,14 +352,14 @@ switch ($_REQUEST['action'])
             {
                 $newcfgfile .= "# {$CFGVAR[$setupvar]['title']}\n";
             }
-            
+
             if ($CFGVAR[$setupvar]['help']!='')
             {
                 $newcfgfile .= "# {$CFGVAR[$setupvar]['help']}\n";
             }
-            
+
             $newcfgfile .= "\$CONFIG['$setupvar'] = ";
-            
+
             if (is_numeric($setupval))
             {
                 $newcfgfile .= "{$setupval}";
@@ -516,12 +516,12 @@ switch ($_REQUEST['action'])
                         if (mysql_error()) trigger_error(mysql_error(),E_USER_WARNING);
                         list($installed_version) = mysql_fetch_row($result);
                     }
-                    
+
                     if (empty($installed_version))
                     {
                         die ("<p class='error'>Fatal setup error - Could not determine version of installed software.  Try wiping your installation and installing from clean. (sorry)</p>");
                     }
-                    
+
                     echo "<h2>Installed OK</h2>";
 
                     if ($_REQUEST['action']=='upgrade')
@@ -687,7 +687,7 @@ switch ($_REQUEST['action'])
                     {
                         echo "<p class='error'>SiT! requires PHP 4.2.0 or later</p>";
                     }
-                    elseif (@ini_get('register_globals')==1)
+                    elseif (@ini_get('register_globals')==1 OR strtolower(@ini_get('register_globals'))=='on')
                     {
                         echo "<p class='error'>SiT! strongly recommends that you change your php.ini setting <code>register_globals</code> to OFF.</p>";
                     }

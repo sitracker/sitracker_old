@@ -17,6 +17,7 @@
 
 include ('classes.inc.php');
 require ('triggers.inc.php');
+
 // Version number of the application, (numbers only)
 $application_version='3.40';
 // Revision string, e.g. 'beta2' or 'svn' or ''
@@ -3023,15 +3024,22 @@ function sit_error_handler($errno, $errstr, $errfile, $errline, $errcontext)
     E_USER_ERROR      => 'Application Error',
     E_USER_WARNING    => 'Application Warning',
     E_USER_NOTICE     => 'Application Notice');
+
     if (defined('E_STRICT')) $errortype[E_STRICT] = 'Strict Runtime notice';
+
 
     $trace_errors = array(E_ERROR, E_USER_ERROR);
 
     $user_errors = E_USER_ERROR | E_USER_WARNING | E_USER_NOTICE;
     $system_errors = E_ERROR | E_WARNING | E_CORE_ERROR | E_CORE_WARNING | E_COMPILE_ERROR | E_COMPILE_WARNING;
+    $warnings = E_WARNING | E_USER_WARNING | E_CORE_WARNING | E_COMPILE_WARNING;
+    $notices = E_NOTICE | E_USER_NOTICE;
     if (($errno & $user_errors) OR ($errno & $system_errors))
     {
-        echo "<p class='error'><strong>{$errortype[$errno]} [{$errno}]</strong><br />";
+        if ($errno & $notices) $class = 'info';
+        elseif ($errno & $warnings) $class = 'warning';
+        else $class='error';
+        echo "<p class='{$class}'><strong>{$errortype[$errno]} [{$errno}]</strong><br />";
         echo "{$errstr} in {$errfile} @ line {$errline}</p>";
 
         // Tips, to help diagnose errors
@@ -7012,12 +7020,11 @@ function plugin_do($context, $optparams=FALSE)
 // These are the modules that we are dependent on, without these something
 // or everything will fail, so let's throw an error here.
 // Check that the correct modules are loaded
-// if (!extension_loaded('gd')) throw_error("FATAL ERROR: {$CONFIG['application_name']} requires the gd module", '');
 if (!extension_loaded('pspell')) $CONFIG['enable_spellchecker']=FALSE; // FORCE Turn off spelling if module not found
-if (!extension_loaded('mysql')) throw_error("FATAL ERROR: {$CONFIG['application_name']} requires the mysql module", '');
-if (strtolower(ini_get("register_globals"))=="off") throw_error("FATAL ERROR: {$CONFIG['application_name']} requires the register globals to be ON, see php.ini", '');
-## if (!extension_loaded('ftp')) throw_error("FATAL ERROR: {$CONFIG['application_name']} requires the ftp module", '');
-## if (!extension_loaded('sockets')) throw_error("FATAL ERROR: {$CONFIG['application_name']} requires the sockets module", '');
-//
-
+if (!extension_loaded('mysql')) trigger_error('SiT requires the php/mysql module', E_USER_ERROR);
+if (version_compare(PHP_VERSION, "4.3.0", "<")) trigger_error('INFO: You are running an older PHP version, some features may not work properly.', E_USER_NOTICE);
+if (@ini_get('register_globals')==1 OR strtolower(@ini_get('register_globals'))=='on')
+{
+    trigger_error('Error: php.ini MUST have register_globals set to off, there are potential security risks involved with leaving it as it is!', E_USER_ERROR);
+}
 ?>
