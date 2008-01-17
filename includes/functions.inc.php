@@ -3174,7 +3174,7 @@ function reseller_drop_down($name, $id)
     {
         echo "<option value='0'></option>\n";
     }
-    
+
     while ($resellers = mysql_fetch_array($result))
     {
         echo "<option ";
@@ -4000,7 +4000,7 @@ function check_group_holiday($userid, $date, $length='day')
     return $namelist;
 }
 
-// FIXME i18n
+// TODO i18n country list (How do we do this?)
 function country_drop_down($name, $country, $extraattributes='')
 {
     global $CONFIG;
@@ -5833,7 +5833,7 @@ function show_links($origtab, $colref, $level=0, $parentlinktype='', $direction=
 {
     global $dbLinkTypes, $dbLinks;
     // Maximum recursion
-    $maxrecursions=15;
+    $maxrecursions = 15;
 
     if ($level <= $maxrecursions)
     {
@@ -5878,7 +5878,7 @@ function show_links($origtab, $colref, $level=0, $parentlinktype='', $direction=
                             }
                             else
                             {
-                                $html = "Whoops"; // FIXME i18n
+                                $html = $GLOBALS['strError'];
                             }
 
                             if ($direction == 'lr')
@@ -5907,7 +5907,7 @@ function show_links($origtab, $colref, $level=0, $parentlinktype='', $direction=
             }
         }
     }
-    else $html .= "<p class='error'>Maximum number of {$maxrecursions} recursions reached</p>";
+    else $html .= "<p class='error'>{$GLOBALS['strError']}: Maximum number of {$maxrecursions} recursions reached</p>";
     return $html;
 }
 
@@ -6607,23 +6607,21 @@ function time_dropdown($name, $time='')
     * @author Kieran Hogg
     * @param $seconds Int. Number of seconds
     * @returns string. Readable fuzzy time
-    * @todo i18n
 */
 function fuzzy_time($seconds)
 {
-    //TODO
-    if ($seconds < 0) $time = 'Error';
-    elseif ($seconds > 0 AND $seconds < 60) $time = 'Just Now'; // FIXME i18n JustNow
-    elseif ($seconds > 60 AND $seconds < 5 * 60) $time = 'A Few Minutes Ago'; // FIXME i18n A few minutes ago
+    if ($seconds < 0) $time = $GLOBALS['strError']
+    elseif ($seconds > 0 AND $seconds < 60) $time = $GLOBALS['strJustNow'];
+    elseif ($seconds > 60 AND $seconds < 5 * 60) $time = $GLOBALS['strFewMinutesAgo'];
     elseif ($seconds > 5 * 60 AND $seconds < 30 * 60)
     {
-        $seconds = 5 * round($seconds / (5 * 60));
-        $time ="About {$seconds} Mins Ago"; // FIXME i18n About x mins ago
+        $minutes = 5 * round($seconds / (5 * 60));
+        $time = sprintf($strAboutXMinutesAgo, $minutes);
     }
     elseif ($seconds > 30 * 60 AND $seconds < 2 * 60 * 60)
     {
         $hours = floor($seconds / (60 * 60));
-        echo "Over {$hours} hours ago"; // FIXME i18n over x hours ago
+        $time = sprintf($strOverXHoursAgo, $hours);
     }
     return $time;
 }

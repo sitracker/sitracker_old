@@ -12,12 +12,12 @@ $str1Minute = '1 Minute';
 $str1Month = '1 Month';
 $str1Hour = '1 Hour';
 
-$strAddRSSAtomFeed = 'Add RSS/Atom feed';
-$strActual = 'Actual';
-$strAcknowledge = 'Acknowledge';
 # e.g. About this site, i.e. more information
 $strAbout = 'About';
+$strAboutXMinutesAgo = 'About %d Mins Ago';
 $strAbsentSick = 'Absent Sick';
+$strActual = 'Actual';
+$strAcknowledge = 'Acknowledge';
 # e.g. Accepting incidents
 $strAccepting = 'Accepting';
 $strAccessDetails = 'Access Details';
@@ -57,6 +57,7 @@ $strAddReseller = 'Add Reseller';
 $strAddress = 'Address';
 $strAddress1 = 'Address1';
 $strAddress2 = 'Address2';
+$strAddRSSAtomFeed = 'Add RSS/Atom feed';
 $strAddServiceLevel = 'Add Service Level';
 # i.e. Physical site
 $strAddSite = 'Add Site';
@@ -389,6 +390,7 @@ $strFeedbackRequested = 'Feedback Requested but not yet received for form';
 # e.g. rss feeds
 $strFeeds = 'Feeds';
 $strFeedIcon = 'Feed Icon';
+$strFewMinutesAgo = 'A few minutes ago';
 # e.g. form fields
 $strFields = 'Fields';
 $strFileManagement = 'File Management';
@@ -744,6 +746,7 @@ $strOwners = 'Owners';
 $strOwnerXAcctingAgain = 'Owner %s accepting again';
 $strOwnerXAndNotAccepting = 'Owner %s &amp; not accepting';
 $strOverview = 'Overview';
+$strOverXHoursAgo = 'Over %x hours ago';
 
 $strParameters = 'Parameters';
 $strParagraphMarkedPrivate = 'This paragraph is marked private.';
