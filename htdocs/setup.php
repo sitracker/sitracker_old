@@ -11,24 +11,24 @@
 // Author: Ivan Lucas <ivanlucas[at]users.sourceforge.net>
 
 // Load config defaults
-@include ("defaults.inc.php");
+@include("defaults.inc.php");
 // Keep the defaults as a seperate array
 $DEFAULTS = $CONFIG;
 
 // Load config file with customisations
-// @include ("config.inc-dist.php");
-@include ("config.inc.php");
+// @include("config.inc-dist.php");
+@include("config.inc.php");
 // Server Configuration
-@include ('/etc/webtrack.conf'); // for legacy systems
-@include ('/etc/sit.conf');
+@include('/etc/webtrack.conf'); // for legacy systems
+@include('/etc/sit.conf');
 
 // Some actions require authentication
 if ($_REQUEST['action']=='reconfigure')
 {
-    $permission=22;
-    $_REQUEST['config']='advanced'; // set advanced mode
-    require ('functions.inc.php');
-    require ('auth.inc.php');
+    $permission = 22;
+    $_REQUEST['config'] = 'advanced'; // set advanced mode
+    require('functions.inc.php');
+    require('auth.inc.php');
 }
 
 // These are the required variables we want to configure during installation
@@ -40,8 +40,6 @@ $CFGVAR['db_hostname']['help']="The Hostname or IP address of the MySQL Database
 $CFGVAR['db_username']['title']='MySQL Database Username';
 $CFGVAR['db_password']['title']='MySQL Database Password';
 $CFGVAR['db_database']['title']='MySQL Database Name';
-$CFGVAR['db_tableprefix']['title']='MySQL Database Table Prefix';
-$CFGVAR['db_tableprefix']['help']="Prefix database tables with the a string (e.g. 'sit_', use this if the database you are using is shared with other applications";
 $CFGVAR['application_fspath']['title']='Filesystem Path';
 $CFGVAR['application_fspath']['help']="The full absolute filesystem path to the SiT! directory with trailing slash. e.g. '/var/www/sit/'";
 $CFGVAR['application_webpath']['title'] = 'The path to SiT! from the browsers perspective with a training slash. e.g. /sit/';
@@ -181,14 +179,14 @@ function setup_configure()
     if ($_REQUEST['config']=='advanced')
     {
         $html .= "<input type='hidden' name='config' value='advanced' />\n";
-        foreach ($CFGVAR AS $setupvar => $setupval)
+        foreach($CFGVAR AS $setupvar => $setupval)
         {
             $SETUP[] = $setupvar;
         }
     }
 
     $c=1;
-    foreach ($SETUP AS $setupvar)
+    foreach($SETUP AS $setupvar)
     {
         $html .= "<div class='configvar{$c}'>";
         if ($CFGVAR[$setupvar]['title']!='') $title = $CFGVAR[$setupvar]['title'];
@@ -232,7 +230,7 @@ function setup_exec_sql($sqlquerylist)
         $sqlqueries = explode( ';', $sqlquerylist);
         // We don't need the last entry it's blank, as we end with a ;
         array_pop($sqlqueries);
-        foreach ($sqlqueries AS $sql)
+        foreach($sqlqueries AS $sql)
         {
             mysql_query($sql);
             if (mysql_error())
@@ -251,12 +249,12 @@ function setup_exec_sql($sqlquerylist)
 
 function user_notify_upgrade()
 {
-    $sql = "SELECT id FROM `{$GLOBALS['dbUsers']}` WHERE status != 0";
+    $sql = "SELECT id FROM users WHERE status != 0";
     $result = mysql_query($sql);
     $gid = md5($strSitUpgraded);
-    while ($user = mysql_fetch_object($result))
+    while($user = mysql_fetch_object($result))
     {
-        $noticesql = "INSERT INTO `{$GLOBALS['dbNotices']}` (userid, type, text, linktext, link, gid, timestamp) ";
+        $noticesql = "INSERT into notices(userid, type, text, linktext, link, gid, timestamp) ";
         $noticesql .= "VALUES({$user->id}, ".SIT_UPGRADED_NOTICE.", '\$strSitUpgraded', '\$strSitUpgradedLink', '{$CONFIG['application_webpath']}releasenotes.php', '{$gid}', NOW())";
         mysql_query($noticesql);
         if (mysql_error()) trigger_error(mysql_error(),E_USER_WARNING);
@@ -267,7 +265,7 @@ function user_notify_upgrade()
 // Returns TRUE if an admin account exists, or false if not
 function setup_check_adminuser()
 {
-    $sql = "SELECT id FROM `{$GLOBALS['dbUsers']}` WHERE id=1 OR username='admin' OR roleid='1'";
+    $sql = "SELECT id FROM users WHERE id=1 OR username='admin' OR roleid='1'";
     $result = @mysql_query($sql);
     if (mysql_num_rows($result) >= 1) return TRUE;
     else FALSE;
@@ -332,14 +330,14 @@ switch ($_REQUEST['action'])
 
         if ($_REQUEST['config']=='advanced')
         {
-            foreach ($CFGVAR AS $setupvar => $setupval)
+            foreach($CFGVAR AS $setupvar => $setupval)
             {
                 $SETUP[] = $setupvar;
             }
         }
 
         // Keep the posted setup
-        foreach ($SETUP AS $setupvar)
+        foreach($SETUP AS $setupvar)
         {
             if ($_POST[$setupvar]=='TRUE') $_POST[$setupvar] = TRUE;
             if ($_POST[$setupvar]=='FALSE') $_POST[$setupvar] = FALSE;
@@ -348,15 +346,36 @@ switch ($_REQUEST['action'])
         // Extract the differences between the defaults and the newly configured items
         $CFGDIFF = array_diff_assoc($CONFIG, $DEFAULTS);
 
-        foreach ($CFGDIFF AS $setupvar => $setupval)
+        foreach($CFGDIFF AS $setupvar => $setupval)
         {
-            if ($CFGVAR[$setupvar]['title']!='') $newcfgfile .= "# {$CFGVAR[$setupvar]['title']}\n";
-            if ($CFGVAR[$setupvar]['help']!='') $newcfgfile .= "# {$CFGVAR[$setupvar]['help']}\n";
+            if ($CFGVAR[$setupvar]['title'] != '')
+            {
+                $newcfgfile .= "# {$CFGVAR[$setupvar]['title']}\n";
+            }
+            
+            if ($CFGVAR[$setupvar]['help']!='')
+            {
+                $newcfgfile .= "# {$CFGVAR[$setupvar]['help']}\n";
+            }
+            
             $newcfgfile .= "\$CONFIG['$setupvar'] = ";
-            if (is_numeric($setupval)) $newcfgfile .= "{$setupval}";
-            elseif (is_bool($setupval)) $newcfgfile .= $setupval == TRUE ? "TRUE" : "FALSE";
-            elseif (substr($setupval, 0, 6)=='array(') $newcfgfile .= stripslashes("{$setupval}");
-            else $newcfgfile .= "'{$setupval}'";
+            
+            if (is_numeric($setupval))
+            {
+                $newcfgfile .= "{$setupval}";
+            }
+            elseif (is_bool($setupval))
+            {
+                $newcfgfile .= $setupval == TRUE ? "TRUE" : "FALSE";
+            }
+            elseif (substr($setupval, 0, 6)=='array(')
+            {
+                $newcfgfile .= stripslashes("{$setupval}");
+            }
+            else
+            {
+                $newcfgfile .= "'{$setupval}'";
+            }
             $newcfgfile .= ";\n\n";
         }
         $newcfgfile .= "?";
@@ -413,7 +432,10 @@ switch ($_REQUEST['action'])
             if (mysql_error())
             {
                 echo "<p class='error'>".mysql_error()."<br />Could not select database";
-                if ($CONFIG['db_database']!='') echo " '{$CONFIG['db_database']}', check the database name,";
+                if ($CONFIG['db_database']!='')
+                {
+                    echo " '{$CONFIG['db_database']}', check the database name,";
+                }
                 else
                 {
                     echo ", the database name was not configured, please set the <code>\$CONFIG['db_database'] config variable";
@@ -425,7 +447,10 @@ switch ($_REQUEST['action'])
                 {
                     echo "<h2>Creating database...</h2>";
                     $result = mysql_query($sql);
-                    if ($result) echo "<p><strong>OK</strong> Database '{$CONFIG['db_database']}' created.</p>";
+                    if ($result)
+                    {
+                        echo "<p><strong>OK</strong> Database '{$CONFIG['db_database']}' created.</p>";
+                    }
                     else
                     {
                         echo "<p class='error'>".mysql_error()."<br />The database could not be created automatically, ";
@@ -443,10 +468,10 @@ switch ($_REQUEST['action'])
             }
             else
             {
-                require ('functions.inc.php');
+                require('functions.inc.php');
 
                 // Load the empty schema
-                require ('setup-schema.php');
+                require('setup-schema.php');
 
                 // Connected to database and db selected
                 echo "<p>Connected to database - ok</p>";
@@ -464,7 +489,7 @@ switch ($_REQUEST['action'])
                     // No users table or empty users table, proceed to install
                     echo setup_exec_sql($schema);
                     // Set the system version number
-                    $sql = "INSERT INTO `{$dbSystem}` ( id, version) VALUES (0, $application_version)";
+                    $sql = "INSERT INTO system ( id, version) VALUES (0, $application_version)";
                     mysql_query($sql);
                     if (mysql_error()) trigger_error($sql.mysql_error(),E_USER_ERROR);
                     $installed_version = $application_version;
@@ -478,7 +503,7 @@ switch ($_REQUEST['action'])
 
                     // Have a look what version is installed
                     // First look to see if the system table exists
-                    $exists = mysql_query("SELECT 1 FROM `{$dbSystem}` LIMIT 0");
+                    $exists = mysql_query("SELECT 1 FROM system LIMIT 0");
                     if (!$exists)
                     {
                         echo "<p class='error'>Could not find a 'system' table which probably means you have a version prior to v3.21</p>";
@@ -486,18 +511,23 @@ switch ($_REQUEST['action'])
                     }
                     else
                     {
-                        $sql = "SELECT version FROM `{$dbSystem}` WHERE id = 0";
+                        $sql = "SELECT version FROM system WHERE id = 0";
                         $result = mysql_query($sql);
                         if (mysql_error()) trigger_error(mysql_error(),E_USER_WARNING);
                         list($installed_version) = mysql_fetch_row($result);
                     }
-                    if (empty($installed_version)) die ("<p class='error'>Fatal setup error - Could not determine version of installed software.  Try wiping your installation and installing from clean. (sorry)</p>");
+                    
+                    if (empty($installed_version))
+                    {
+                        die ("<p class='error'>Fatal setup error - Could not determine version of installed software.  Try wiping your installation and installing from clean. (sorry)</p>");
+                    }
+                    
                     echo "<h2>Installed OK</h2>";
 
                     if ($_REQUEST['action']=='upgrade')
                     {
                         // Upgrade schema
-                        for($v=(($installed_version*100)+1);$v<=($application_version*100);$v++)
+                        for ($v=(($installed_version*100)+1); $v<=($application_version*100); $v++)
                         {
                             if (!empty($upgrade_schema[$v]))
                             {
@@ -513,12 +543,12 @@ switch ($_REQUEST['action'])
                             echo "<p>Upgrading incidents data from version prior to 3.21...</p>";
                             // Fill the new servicelevel field in the incidents table using information from the maintenance contract
                             echo "<p>Upgrading incidents table to store service level...</p>";
-                            $sql = "SELECT *, i.id AS incidentid FROM `{$dbIncidents}` AS i, `{$dbMaintenance}` AS m, `{$dbServiceLevels}` AS s WHERE i.maintenanceid = m.id AND ";
-                            $sql .= "m.servicelevelid = s.id ";
+                            $sql = "SELECT *,incidents.id AS incidentid FROM incidents, maintenance, servicelevels WHERE incidents.maintenanceid=maintenance.id AND ";
+                            $sql .= "maintenance.servicelevelid = servicelevels.id ";
                             $result = mysql_query($sql);
                             while ($row = mysql_fetch_object($result))
                             {
-                                $sql = "UPDATE `{$dbIncidents}` SET servicelevel='{$row->tag}' WHERE id='{$row->incidentid}' AND servicelevel IS NULL LIMIT 1";
+                                $sql = "UPDATE incidents SET servicelevel='{$row->tag}' WHERE id='{$row->incidentid}' AND servicelevel IS NULL LIMIT 1";
                                 mysql_query($sql);
                                 if (mysql_error())
                                 {
@@ -544,7 +574,7 @@ switch ($_REQUEST['action'])
                         {
                             //upgrade dashboard components.
 
-                            $sql = "SELECT * FROM {$dbDashboard}";
+                            $sql = "SELECT * FROM dashboard";
                             $result = mysql_query($sql);
                             if (mysql_error()) trigger_error(mysql_error(),E_USER_ERROR);
 
@@ -552,7 +582,7 @@ switch ($_REQUEST['action'])
                             while ($dashboardnames = mysql_fetch_object($result))
                             {
                                 $version = 1;
-                                include ("{$CONFIG['application_fspath']}dashboard/dashboard_{$dashboardnames->name}.php");
+                                include("{$CONFIG['application_fspath']}dashboard/dashboard_{$dashboardnames->name}.php");
                                 $func = "dashboard_{$dashboardnames->name}_get_version";
 
                                 if (function_exists($func))
@@ -569,12 +599,12 @@ switch ($_REQUEST['action'])
                                     if (function_exists($upgrade_func))
                                     {
                                         $dashboard_schema = $func();
-                                        for($i = $dashboardnames->version; $i <= $version; $i++)
+                                        for ($i = $dashboardnames->version; $i <= $version; $i++)
                                         {
                                             setup_exec_sql($dashboard_schema[$i]);
                                         }
 
-                                        $upgrade_sql = "UPDATE {$$dbDashboard} SET version = '{$version}' WHERE id = {$dashboardnames->id}";
+                                        $upgrade_sql = "UPDATE dashboard SET version = '{$version}' WHERE id = {$dashboardnames->id}";
                                         mysql_query($upgrade_sql);
                                         if (mysql_error()) trigger_error(mysql_error(),E_USER_ERROR);
 
@@ -591,7 +621,7 @@ switch ($_REQUEST['action'])
                         if ($upgradeok)
                         {
                             // Update the system version number
-                            $sql = "REPLACE INTO `{$dbSystem}` ( id, version) VALUES (0, $application_version)";
+                            $sql = "REPLACE INTO system ( id, version) VALUES (0, $application_version)";
                             mysql_query($sql);
                             if (mysql_error()) trigger_error(mysql_error(),E_USER_ERROR);
                             $installed_version = $application_version;
@@ -608,10 +638,7 @@ switch ($_REQUEST['action'])
                     else
                     {
                         echo "<p>Your database schema is v".number_format($installed_version,2);
-                        if ($installed_version < $application_version)
-                        {
-                            echo ", after making a backup you should <a href='setup.php?action=upgrade' class='button'>upgrade</a> your schema to v{$application_version}";
-                        }
+                        if ($installed_version < $application_version) echo ", after making a backup you should <a href='setup.php?action=upgrade' class='button'>upgrade</a> your schema to v{$application_version}";
                         echo "</p>";
                     }
 
@@ -623,15 +650,19 @@ switch ($_REQUEST['action'])
                         {
                             $password = md5($password);
                             $email = mysql_real_escape_string($_POST['email']);
-                            $sql = "INSERT INTO `{$dbUsers}` (`id`, `username`, `password`, `realname`, `roleid`, `title`, `signature`, `email`, `status`, `var_style`, `lastseen`) ";
-                            $sql .= "VALUES (1, 'admin', '{$password}', 'Administrator', 1, 'Administrator', 'Regards,\r\n\r\nSiT Administrator', '{$email}', '1', '8', NOW());";
+                            $sql = "INSERT INTO `users` (`id`, `username`, `password`, `realname`, `roleid`, `title`, `signature`, `email`, `status`, `var_style`, `lastseen`) ";
+                            $sql .= "VALUES (1, 'admin', '$password', 'Administrator', 1, 'Administrator', 'Regards,\r\n\r\nSiT Administrator', '$email', '1', '8', NOW());";
                             mysql_query($sql);
                             if (mysql_error())
                             {
                                trigger_error(mysql_error(),E_USER_WARNING);
                                echo "<p><strong>FAILED:</strong> $sql</p>";
                             }
-                        } else echo "<p class='error'>Admin account not created, the passwords you entered did not match.</p>";
+                        }
+                        else
+                        {
+                            echo "<p class='error'>Admin account not created, the passwords you entered did not match.</p>";
+                        }
                     }
                     // Check installation
                     echo "<h2>Checking installation...</h2>";
@@ -643,7 +674,7 @@ switch ($_REQUEST['action'])
                     {
                         echo "<p class='error'>The attachment path that you have configured ({$CONFIG['attachment_fspath']}) does not exist, please create this directory or alter the \$CONFIG['attachment_fspath'] configuration variable to point to a directory that does exist.</p>";
                     }
-                    elseif (is_writable($CONFIG['attachment_fspath'])==FALSE)
+                    elseif (is_writable($CONFIG['attachment_fspath']) == FALSE)
                     {
                         echo "<p class='error'>Attachment path '{$CONFIG['attachment_fspath']}' not writable<br />";
                         echo "Permissions:  <code>{$CONFIG['attachment_fspath']} ".file_permissions_info(fileperms($CONFIG['attachment_fspath']));
@@ -652,7 +683,7 @@ switch ($_REQUEST['action'])
                         echo "<code>chmod -R 777 {$CONFIG['attachment_fspath']}</code>";
                         echo "</p>";
                     }
-                    elseif (!isset($_REQUEST))
+                    elseif(!isset($_REQUEST))
                     {
                         echo "<p class='error'>SiT! requires PHP 4.2.0 or later</p>";
                     }

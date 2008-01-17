@@ -740,6 +740,8 @@ $strOperation = 'Operation';
 $strOutput = 'Output';
 $strOwner = 'Owner';
 $strOwners = 'Owners';
+$strOwnerXAcctingAgain = 'Owner %s accepting again';
+$strOwnerXAndNotAccepting = 'Owner %s &amp; not accepting';
 $strOverview = 'Overview';
 
 $strParameters = 'Parameters';
@@ -757,6 +759,7 @@ $strPermissionDeniedForX = 'Permission denied for %s';
 $strPermissions = 'Permissions';
 $strPerIncident = 'Per Incident';
 $strPreferred = 'Preferred';
+$strPreviousIncidentOwner = 'Previous Incident Owner';
 $strPreviousXDays = 'Previous %s days';
 $strPreviousXMonths = 'Previous %s months';
 $strPhonecallmadeby = 'Phonecall made by %s';

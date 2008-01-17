@@ -444,10 +444,10 @@ if (mysql_num_rows($result) >= 1)
             $userstatus = userstatus_name($assign->userstatus);
             $usermessage = user_message($assign->originalowner);
             $username = user_realname($assign->originalowner,TRUE);
-            echo "<td>Owner {$userstatus} &amp; not accepting<br />{$usermessage}</td>"; // FIXME i18n
+            echo "<td>".sprintf($strOwnerXAndNotAccepting, $userstatus)."<br />{$usermessage}</td>";
             $backupid = software_backup_userid($assign->originalowner, $assign->softwareid);
             $backupname = user_realname($backupid,TRUE);
-            $reason = urlencode(trim("Previous Incident Owner ($username) {$userstatus}  {$usermessage}"));
+            $reason = urlencode(trim("{$strPreviousIncidentOwner} ($username) {$userstatus}  {$usermessage}"));
             echo "<td>";
             if ($backupid >= 1)
             {
@@ -469,9 +469,9 @@ if (mysql_num_rows($result) >= 1)
             $origstatus = userstatus_name($assign->userstatus);
             $usermessage = user_message($assign->originalowner);
             $username = user_realname($assign->owner,TRUE);
-            echo "<td>Owner {$userstatusname} &amp; accepting again<br />{$usermessage}</td>"; // FIXME i18n
+            echo "<td>".sprintf($strOwnerXAcctingAgain, $userstatusname)."<br />{$usermessage}</td>";
             $originalname = user_realname($assign->originalowner,TRUE);
-            $reason = urlencode(trim("{$originalname} is now accepting incidents again. Previous status {$origstatus} and not accepting."));
+            $reason = urlencode(trim("{$originalname} is now accepting incidents again. Previous status {$origstatus} and not accepting."));  // FIXME i18n
             echo "<td>";
             echo "<a href=\"javascript:wt_winpopup('reassign_incident.php?id={$assign->id}&amp;reason={$reason}&amp;originalid={$assign->originalowner}&amp;popup=yes','mini');\" title='Re-assign this incident to {$originalname}'>Return to original owner</a> | ";
 
