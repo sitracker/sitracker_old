@@ -214,11 +214,12 @@ setInterval("countUp()", 1000); //every 1 seconds
 
     //get list of tasks
     $sql = "SELECT * FROM `{$dbTasks}` WHERE 1=0 ";
+    $result = mysql_query($sql);
     while ($tasks = mysql_fetch_object($result))
     {
         $sql .= "OR id={$tasks->origcolref} ";
     }
-    $result = mysql_query($sql);
+    
 
     if ($mode == 'incident')
     {
