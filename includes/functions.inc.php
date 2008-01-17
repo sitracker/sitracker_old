@@ -3969,7 +3969,7 @@ function check_group_holiday($userid, $date, $length='day')
     return $namelist;
 }
 
-// FIXME i18n
+// TODO i18n country list (How do we do this?)
 function country_drop_down($name, $country, $extraattributes='')
 {
     global $CONFIG;
@@ -5644,7 +5644,7 @@ function show_dashboard_component($row, $dashboardid)
 function show_links($origtab, $colref, $level=0, $parentlinktype='', $direction='lr')
 {
     // Maximum recursion
-    $maxrecursions=15;
+    $maxrecursions = 15;
 
     if ($level <= $maxrecursions)
     {
@@ -5689,7 +5689,7 @@ function show_links($origtab, $colref, $level=0, $parentlinktype='', $direction=
                             }
                             else
                             {
-                                $html = "Whoops"; // FIXME i18n
+                                $html = $GLOBALS['strError'];
                             }
 
                             if ($direction == 'lr')
@@ -5718,7 +5718,7 @@ function show_links($origtab, $colref, $level=0, $parentlinktype='', $direction=
             }
         }
     }
-    else $html .= "<p class='error'>Maximum number of {$maxrecursions} recursions reached</p>";
+    else $html .= "<p class='error'>{$GLOBALS['strError']}: Maximum number of {$maxrecursions} recursions reached</p>";
     return $html;
 }
 
