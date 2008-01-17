@@ -212,8 +212,7 @@ else
         echo "<br />";
         echo "<p align='center'><a href=\"advanced_search_incidents.php\">{$strSearchAgain}</a></p>";
         // FIXME v3.4x Replace maxresults limit with paging
-        // FIXME i18n
-        if ($countresults >= $maxresults) echo "<p class='info'>A maximum of {$maxresults} results are displayed, your search might have returned more.</p>";
+        if ($countresults >= $maxresults) printf($strMaxResults, $maxresults);
     }
 }
 include ('htmlfooter.inc.php');

@@ -49,13 +49,6 @@ if ($incident->externalengineer != '')
     echo "<br />\n";
 }
 
-if (open_activities_for_incident($incidentid) > 0)
-{
-    echo "<a href='tasks.php?incident={$incidentid}' class='info'>";
-    echo "<img src='{$CONFIG['application_webpath']}images/icons/{$iconset}/16x16/timer.png' width='16' height='16' alt='{$strOpenActivities}' />";
-    echo " {$strOpenActivities}</a><br />";
-}
-
 $tags = list_tags($id, TAG_INCIDENT, TRUE);
 if (!empty($tags)) echo "{$tags}\n";
 echo "</td>";
@@ -101,7 +94,13 @@ else echo "<strong>{$strSiteSupport}</strong>";
 echo " / ";
 
 echo "{$servicelevel_tag}<br />\n";
-echo "Open for {$opened_for}, ";
+if (open_activities_for_incident($incidentid) > 0)
+{
+    echo "<a href='tasks.php?incident={$incidentid}' class='info'>";
+    echo "<img src='{$CONFIG['application_webpath']}images/icons/{$iconset}/16x16/timer.png' width='16' height='16' alt='{$strOpenActivities}' />";
+    echo "</a> ";
+}
+echo "Open for {$opened_for} ";
 echo incidentstatus_name($incident->status);
 if ($incident->status == 2) echo " (" . closingstatus_name($incident->closingstatus) . ")";
 echo "<br />\n";

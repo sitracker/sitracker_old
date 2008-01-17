@@ -11,14 +11,14 @@
 // Authors: Ivan Lucas <ivanlucas[at]users.sourceforge.net>
 //          Kieran Hogg <kieran_hogg[at]users.sourceforge.net>
 
-@include ('set_include_path.inc.php');
-$permission = 0; // Allow all auth users
+@include('set_include_path.inc.php');
+$permission=0; // Allow all auth users
 
-require ('db_connect.inc.php');
-require ('functions.inc.php');
+require('db_connect.inc.php');
+require('functions.inc.php');
 
 // This page requires authentication
-require ('auth.inc.php');
+require('auth.inc.php');
 
 $title = $strAddTask;
 
@@ -28,8 +28,7 @@ $incident = $_REQUEST['incident'];
 
 if ($incident)
 {
-    // FIXME i18n db text?
-    $sql = "INSERT into tasks(owner, name, priority, distribution, startdate, created, lastupdated) ";
+    $sql = "INSERT INTO `{$dbTasks}` (owner, name, priority, distribution, startdate, created, lastupdated) ";
     $sql .= "VALUES('$sit[2]', 'Activity for Incident {$incident}', 1, 'incident', NOW(), NOW(), NOW())";
 
     mysql_query($sql);
@@ -37,7 +36,7 @@ if ($incident)
 
     $taskid = mysql_insert_id();
 
-    $sql = "INSERT into links VALUES(4, {$taskid}, {$incident}, 'left', {$sit[2]})";
+    $sql = "INSERT INTO links VALUES(4, {$taskid}, {$incident}, 'left', {$sit[2]})";
     mysql_query($sql);
     if (mysql_error()) trigger_error(mysql_error(),E_USER_ERROR);
     html_redirect("tasks.php?incident={$incident}", TRUE, $strActivityAdded);
@@ -78,7 +77,7 @@ else
             if ($startdate > $duedate AND $duedate != '' AND $duedate > 0 ) $startdate=$duedate. " ".$duetime;
             if ($errors != 0)
             {
-                include ('htmlheader.inc.php');
+                include('htmlheader.inc.php');
                 html_redirect("add_task.php", FALSE);
             }
             else
@@ -88,7 +87,7 @@ else
                 if ($duedate > 0) $duedate = date('Y-m-d',$duedate)." ".$duetime;
                 else $duedate='';
                 if ($startdate < 1 AND $completion > 0) $startdate = date('Y-m-d H:i:s')." ".$starttime;
-                $sql = "INSERT INTO `{$dbTasks}` ";
+                $sql = "INSERT INTO tasks ";
                 $sql .= "(name,description,priority,owner,duedate,startdate,completion,value,distribution,created) ";
                 $sql .= "VALUES ('$name','$description','$priority','$taskuser','$duedate','$startdate','$completion','$value','$distribution','".date('Y-m-d H:i:s')."')";
                 mysql_query($sql);
@@ -102,7 +101,7 @@ else
 
         case '':
         default:
-            include ('htmlheader.inc.php');
+            include('htmlheader.inc.php');
             echo show_form_errors('add_task');
             clear_form_errors('add_task');
 
@@ -114,34 +113,24 @@ else
             echo "<tr><th>{$strTitle} <sup class='red'>*</sup></th>";
             echo "<td><input type='text' name='name' size='35' maxlength='255'";
             if ($_SESSION['formdata']['add_task']['name'] != '')
-            {
                 echo "value='{$_SESSION['formdata']['add_task']['name']}'";
-            }
             echo "/></td></tr>";
 
             echo "<tr><th>{$strDescription}</th>";
             echo "<td><textarea name='description' rows='4' cols='30'>";
             if ($_SESSION['formdata']['add_task']['description'] != '')
-            {
                 echo $_SESSION['formdata']['add_task']['description'];
-            }
             echo "</textarea></td></tr>";
 
             echo "<tr><th>{$strPriority}</th>";
             if ($_SESSION['formdata']['add_task']['priority'] != '')
-            {
                 echo "<td>".priority_drop_down('priority', $_SESSION['formdata']['add_task']['priority'])."</td></tr>";
-            }
             else
-            {
                 echo "<td>".priority_drop_down('priority',1)."</td></tr>";
-            }
             echo "<tr><th>{$strStartDate}</th>";
             echo "<td><input type='text' name='startdate' id='startdate' size='10'";
             if ($_SESSION['formdata']['add_task']['startdate'] != '')
-            {
                 echo "value='{$_SESSION['formdata']['add_task']['startdate']}'";
-            }
             echo "/> ";
             echo date_picker('addtask.startdate');
             echo " ".time_dropdown("starttime", date("H:i"));
@@ -150,31 +139,21 @@ else
             echo "<tr><th>{$strDueDate}</th>";
             echo "<td><input type='text' name='duedate' id='duedate' size='10'";
             if ($_SESSION['formdata']['add_task']['duedate'] != '')
-            {
                 echo "value='{$_SESSION['formdata']['add_task']['duedate']}'";
-            }
             echo "/> ";
             echo date_picker('addtask.duedate');
             if ($_SESSION['formdata']['add_task']['duetime'] != '')
-            {
                 echo " ".time_dropdown("duetime", $_SESSION['formdata']['add_task']['duetime']);
-            }
             else
-            {
                 echo " ".time_dropdown("duetime");
-            }
             echo "</td></tr>";
 
             echo "<tr><th>{$strCompletion}</th>";
             echo "<td><input type='text' name='completion' size='3' maxlength='3'";;
             if ($_SESSION['formdata']['add_task']['completion'] != '')
-            {
                 echo "value='{$_SESSION['formdata']['add_task']['completion']}'";
-            }
             else
-            {
                 echo "value='0'";
-            }
             echo "/>&#037;</td></tr>";
             //FIXME: should this be available?
             /*echo "<tr><th>{$strEndDate}</th>";
@@ -185,20 +164,14 @@ else
             echo "<tr><th>{$strValue}</th>";
             echo "<td><input type='text' name='value' size='6' maxlength='12'";
             if ($_SESSION['formdata']['add_task']['value'] != '')
-            {
                 echo "value='{$_SESSION['formdata']['add_task']['value']}'";
-            }
             echo "/></td></tr>";
             echo "<tr><th>{$strUser}</th>";
             echo "<td>";
             if ($_SESSION['formdata']['add_task']['taskuser'] != '')
-            {
                 echo user_drop_down('taskuser', $_SESSION['formdata']['add_task']['taskuser'], FALSE);
-            }
             else
-            {
                 echo user_drop_down('taskuser', $sit[2], FALSE);
-            }
             echo "</td></tr>";
             echo "<tr><th>{$strPrivacy}</th>";
             echo "<td>";
@@ -207,6 +180,7 @@ else
                 echo "<input type='radio' name='distribution' checked='checked'value='public' /> {$strPublic}<br />";
                 echo "<input type='radio' name='distribution' value='private' /> {$strPrivate} <img src='{$CONFIG['application_webpath']}images/icons/{$iconset}/16x16/private.png' width='16' height='16' title='{$strPublic}/{$strPrivate}' alt='{$strPrivate}' style='border: 0px;' /></td></tr>";
             }
+
             else
             {
                 echo "<input type='radio' name='distribution' value='public' /> {$strPublic}<br />";
@@ -222,7 +196,7 @@ else
             clear_form_errors('add_site');
 
 
-            include ('htmlfooter.inc.php');
+            include('htmlfooter.inc.php');
     }
 }
 

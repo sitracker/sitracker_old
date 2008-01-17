@@ -94,10 +94,10 @@ function setClosedDuration(closed)
 function formatSeconds(secondsOpen)
 {
     var str = "";
-    if (secondsOpen >= 86400)
+    if(secondsOpen >= 86400)
     {   //days
         var days = Math.floor(secondsOpen/86400);
-        if (days < 10)
+        if(days < 10)
         {
             str += "0"+days;
         }
@@ -114,10 +114,10 @@ function formatSeconds(secondsOpen)
 
     str += ":";
 
-    if (secondsOpen >= 3600)
+    if(secondsOpen >= 3600)
     {   //hours
         var hours = Math.floor(secondsOpen/3600);
-        if (hours < 10)
+        if(hours < 10)
         {
             str += "0"+hours;
         }
@@ -134,10 +134,10 @@ function formatSeconds(secondsOpen)
 
     str += ":";
 
-    if (secondsOpen > 60)
+    if(secondsOpen > 60)
     {   //minutes
         var minutes = Math.floor(secondsOpen/60);
-        if (minutes < 10)
+        if(minutes < 10)
         {
             str += "0"+minutes;
         }
@@ -154,9 +154,9 @@ function formatSeconds(secondsOpen)
 
     str += ":";
 
-    if (secondsOpen > 0)
+    if(secondsOpen > 0)
     {  // seconds
-        if (secondsOpen < 10)
+        if(secondsOpen < 10)
         {
             str += "0"+secondsOpen;
         }
@@ -206,22 +206,21 @@ setInterval("countUp()", 1000); //every 1 seconds
 
     //get info for incident-->task linktype
     $sql = "SELECT DISTINCT origcolref, linkcolref ";
-    $sql .= "FROM `{$dbLinks}` AS l, `{$dbLinkTypes}` AS lt ";
-    $sql .= "WHERE l.linktype = 4 ";
-    $sql .= "AND linkcolref = {$incident} ";
-    $sql .= "AND direction = 'left'";
+    $sql .= "FROM links, linktypes ";
+    $sql .= "WHERE links.linktype=4 ";
+    $sql .= "AND linkcolref={$incident} ";
+    $sql .= "AND direction='left'";
     $result = mysql_query($sql);
 
     //get list of tasks
-    $sql = "SELECT * FROM `{$dbTasks}` WHERE 1=0 ";
-    
-    while ($tasks = mysql_fetch_object($result))
+    $sql = "SELECT * FROM tasks WHERE 1=0 ";
+    while($tasks = mysql_fetch_object($result))
     {
         $sql .= "OR id={$tasks->origcolref} ";
     }
     $result = mysql_query($sql);
 
-    if ($mode == 'incident')
+    if($mode == 'incident')
     {
         echo "<h2><img src='{$CONFIG['application_webpath']}images/icons/{$iconset}/32x32/task.png' width='32' height='32' alt='' /> ";
         echo "{$strActivities}</h2>";
@@ -239,7 +238,7 @@ else
     // If the user is passed as a username lookup the userid
     if (!is_number($user) AND $user != 'current' AND $user != 'all')
     {
-        $usql = "SELECT id FROM `{$dbUsers}` WHERE username='{$user}' LIMIT 1";
+        $usql = "SELECT id FROM users WHERE username='{$user}' LIMIT 1";
         $uresult = mysql_query($usql);
         if (mysql_error()) trigger_error(mysql_error(),E_USER_WARNING);
 
@@ -283,7 +282,7 @@ else
     echo "</select>\n";
     echo "</form><br />";
 
-    $sql = "SELECT * FROM `{$dbTasks}` WHERE owner='$user' ";
+    $sql = "SELECT * FROM tasks WHERE owner='$user' ";
     if ($show=='' OR $show=='active' ) $sql .= "AND (completion < 100 OR completion='' OR completion IS NULL)  AND distribution != 'incident' ";
     elseif ($show=='completed') $sql .= "AND (completion = 100) AND distribution != 'incident' ";
     elseif ($show=='incidents') $sql .= "AND distribution = 'incident' ";
@@ -313,13 +312,13 @@ else
 //common code
 if (mysql_num_rows($result) >=1 )
 {
-    if ($show) $filter=array('show' => $show);
+    if($show) $filter=array('show' => $show);
     echo "<form action='{$_SERVER['PHP_SELF']}' name='tasks'  method='post'>";
     echo "<br /><table align='center'>";
     echo "<tr>";
     $filter['mode'] = $mode;
     $filter['incident'] = $incident;
-    if ($mode != 'incident')
+    if($mode != 'incident')
     {
         $totalduration = 0;
         $closedduration = 0;
@@ -366,7 +365,7 @@ if (mysql_num_rows($result) >=1 )
             echo "</td>";
         }
 
-        if ($mode == 'incident')
+        if($mode == 'incident')
         {
             if ($enddate == '0')
             {
@@ -395,7 +394,7 @@ if (mysql_num_rows($result) >=1 )
             echo "<td>".percent_bar($task->completion)."</td>";
         }
 
-        if ($mode != 'incident')
+        if($mode != 'incident')
         {
             echo "<td";
             if ($startdate > 0 AND $startdate <= $now AND $task->completion <= 0)
@@ -431,7 +430,7 @@ if (mysql_num_rows($result) >=1 )
         else
         {
             echo "<td>".format_date_friendly($startdate)."</td>";
-            if ($enddate == '0')
+            if($enddate == '0')
             {
                 echo "<td><script type='text/javascript'>";
                 echo "var act = new Activity();";
@@ -473,7 +472,7 @@ if (mysql_num_rows($result) >=1 )
 
             echo "</td>";
         }
-        if ($mode == 'incident')
+        if($mode == 'incident')
         {
             echo "<td>".user_realname($task->owner)."</td>";
         }
@@ -482,7 +481,7 @@ if (mysql_num_rows($result) >=1 )
         else $shade = 'shade1';
     }
 
-    if ($mode == 'incident')
+    if($mode == 'incident')
     {
         echo "<tr class='{$shade}'><td><strong>{$strTotal}:</strong></td>";
         echo "<td colspan='5'>".format_seconds($totalduration)."</td></tr>";
@@ -490,7 +489,7 @@ if (mysql_num_rows($result) >=1 )
         echo "<td colspan='5' id='totalduration'>".exact_seconds($totalduration);
 
         echo "<script type='text/javascript'>";
-        if (empty($closedduration)) $closedduration = 0;
+        if(empty($closedduration)) $closedduration = 0;
         echo "setClosedDuration({$closedduration});";
         echo "</script>";
         echo "</td></tr>";
@@ -504,7 +503,7 @@ if (mysql_num_rows($result) >=1 )
     echo "</table>\n";
     echo "</form>";
 
-    if($mode == 'incident')
+    if ($mode == 'incident')
     {
         echo "<script type='text/javascript'>countUp();</script>";  //force a quick udate
     }
@@ -513,9 +512,13 @@ if (mysql_num_rows($result) >=1 )
     //print_r($billing);
     //echo "</pre>";
 
-    if($mode == 'incident')
+    if ($mode == 'incident')
     {
-        echo "<p align='center'><a href='add_task.php?incident={$id}'>{$strStartNewActivity}</a></p>";
+        // Show add activity link if the incident is open
+        if (incident_status($id) != 2)
+        {
+            echo "<p align='center'><a href='add_task.php?incident={$id}'>{$strStartNewActivity}</a></p>";
+        }
     }
     else
     {
@@ -524,7 +527,7 @@ if (mysql_num_rows($result) >=1 )
 
     if (!empty($billing))
     {
-        $billingSQL = "SELECT * FROM `{$dbBillingPeriods}` WHERE servicelevelid = {$servicelevel_id} AND tag='{$servicelevel_tag}' AND priority='{$priority}'";
+        $billingSQL = "SELECT * FROM billing_periods WHERE servicelevelid = {$servicelevel_id} AND tag='{$servicelevel_tag}' AND priority='{$priority}'";
 
         //echo $billingSQL;
 
@@ -537,8 +540,8 @@ if (mysql_num_rows($result) >=1 )
         $engineerPeriod = $billingObj->engineerperiod * 60;  //to seconds
         $customerPeriod = $billingObj->customerperiod * 60;
 
-        if (empty($engineerPeriod) OR $engineerPeriod == 0) $engineerPeriod = 3600;
-        if (empty($customerPeriod) OR $customerPeriod == 0) $customerPeriod = 3600;
+        if(empty($engineerPeriod) OR $engineerPeriod == 0) $engineerPeriod = 3600;
+        if(empty($customerPeriod) OR $customerPeriod == 0) $customerPeriod = 3600;
 
         echo "<h3>{$strActivityBilling}</h3>";
         echo "<p align='center'>{$strActivityBillingInfo}</p>";
@@ -609,7 +612,6 @@ if (mysql_num_rows($result) >=1 )
                             echo "</pre>";
                             */
                             //  echo "IN:{$ind}:START:{$act['starttime']}:ENG:{$engineerPeriod}<br />";
-
 
                             if($ind <= $activity['starttime'] AND $ind <= ($activity['starttime'] + $engineerPeriod))
                             {
@@ -696,7 +698,7 @@ if (mysql_num_rows($result) >=1 )
                     $count['customer'][$activity['starttime']] = $activity['starttime'];
                     $localDur = $activity['duration'] - $customerPeriod;
 
-                    while ($localDur > 0)
+                    while($localDur > 0)
                     {
                         $starttime += $customerPeriod;
                         $count['customer'][$starttime] = $starttime;
@@ -717,7 +719,7 @@ if (mysql_num_rows($result) >=1 )
             print_r($count);
             echo "</pre>";
             */
-            if ($shade == "shade1") $shade = "shade2";
+            if($shade == "shade1") $shade = "shade2";
             else $shade = "shade2";
         }
         echo "<tr><td>{$strTOTALS}</td><td>".round($tduration/60)."</td>";

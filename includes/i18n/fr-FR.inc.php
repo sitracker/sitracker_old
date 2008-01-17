@@ -40,11 +40,15 @@ $strAllClosed = 'Tous Terminés';
 $strAllOpen = 'Tous Ouverts';
 $strAlternative = 'Alternative';
 $strApproveHolidays = 'Autoriser Congé';
+$strAprAbbr = 'Avr';
+$strApril = 'Avril';
 $strAssign = 'Assigner';
 $strAssignTo = 'Assigner À';
 $strAtLunch = 'Au Déjeuner';
 $strAttachFile = 'Attacher Fichier';
 $strAttachment = 'Fichier';
+$strAugAbbr = 'Août';
+$strAugust = 'Août';
 $strAuthor = 'Auteur';
 $strAverageIncidentDuration = 'Moyenne Durée d\'Évènement';
 
@@ -72,6 +76,8 @@ $strDashboard = 'Tableau de bord';
 $strDate = 'Date';
 $strDay = 'Jour';
 $strDays = 'Jours';
+$strDecAbbr = 'Déc';
+$strDecember = 'Décembre';
 $strDelete = 'Supprimer';
 $strDeleted = 'Supprimé';
 $strDeleteTask = 'Supprimer Tâche';
@@ -79,6 +85,8 @@ $strDeleteTask = 'Supprimer Tâche';
 $strEnglish = 'Anglais';
 $strExpiryDate = 'Date d\'Expiration';
 
+$strFebAbbr = 'Fév';
+$strFebruary = 'Février';
 $strForgottenDetails = 'Mot de passe oublié?';
 $strFriday = 'Vendredi';
 
@@ -88,6 +96,13 @@ $strHelp = 'Aide';
 $strHelpChar = '?';
 $strHelpToTranslate = 'Cette page se vise à aider les traducteurs pour traduire SiT !';
 
+$strJanAbbr = 'Jan';
+$strJanuary = 'Janvier';
+$strJulAbbr = 'juil';
+$strJuly = 'Juillet';
+$strJunAbbr = 'juin';
+$strJune = 'Juin';
+
 $strKnowledgeBase = 'Base de Connaissance';
 
 $strLanguage = 'Langue';
@@ -96,6 +111,10 @@ $strLogIn = 'Connexion';
 $strLogin = 'Connexion';
 $strLogout = 'Déconnexion';
 
+$strMarAbbr = 'Mar';
+$strMarch = 'Mars';
+$strMayAbbr = 'Mai';
+$strMay = 'Mai';
 $strMonday = 'Lundi';
 $strMyDashboard = 'Mon Panneau de Contrôle';
 $strMyDetails = 'Mes Détails Personnels';
@@ -107,8 +126,12 @@ $strMySubstitutes = 'Mes Remplaçants';
 $strNo = 'Non';
 $strNoIncidents = 'Pas d\'Incident';
 $strNoKBArticles = 'Pas d\'articles de la Base de Connaissance';
+$strNovAbbr = 'Nov';
+$strNovember = 'Novembre';
 $strNow = 'Actuellement';
 
+$strOctAbbr = 'Oct';
+$strOctober = 'Octobre';
 $strOnHoliday = 'En Congé';
 
 $strPassword = 'Mot de passe';
@@ -121,6 +144,8 @@ $strReports = 'Rapports';
 $strSaturday = 'Samedi';
 $strSearch = 'Rechercher';
 $strSearchAgain = 'Rechercher de Nouveau';
+$strSep = 'Sep';
+$strSeptember = 'Septembre';
 $strSunday = 'Dimanche';
 $strSupport = 'Assistance';
 

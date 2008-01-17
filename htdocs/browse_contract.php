@@ -155,8 +155,8 @@ if (mysql_error()) trigger_error("MySQL Query Error ".mysql_error(), E_USER_ERRO
 
 if (mysql_num_rows($result) == 0)
 {
-    echo "<p align='center'>Sorry, unable to find any maintenance contracts"; // FIXME i18n
-    if (!empty($search_string)) echo " matching '<em>{$search_string}</em>"; // FIXME i18n
+    echo "<p align='center'>{$strNoResults}";
+    if (!empty($search_string)) echo " matching '<em>{$search_string}</em>";
     echo "</p>\n";
 }
 else
@@ -172,7 +172,7 @@ else
     </script>
     <?php
     echo "<p align='center'>Displaying ".mysql_num_rows($result)." contract(s)";
-    if (!empty($search_string)) echo " matching '<em>{$search_string}</em>"; // FIXME i18n
+    if (!empty($search_string)) echo " matching '<em>{$search_string}</em>"; // FIXME i18n 'displaying matching'
     if ($productid) echo " where product matches <em>'".product_name($productid)."'</em>"; // FIXME i18n
     echo "</p>\n";
 

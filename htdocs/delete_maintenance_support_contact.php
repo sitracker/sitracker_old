@@ -18,10 +18,10 @@
 // This Page Is Valid XHTML 1.0 Transitional!   31Oct05
 
 @include ('set_include_path.inc.php');
-$permission = 32;  // Edit Supported Products
+$permission=32;  // Edit Supported Products
 require ('db_connect.inc.php');
 require ('functions.inc.php');
-$title="Remove a Supported Contact";
+$title = "Remove a Supported Contact";
 
 // This page requires authentication
 require ('auth.inc.php');
@@ -59,7 +59,7 @@ if (empty($action) OR $action == "showform")
 
     if (empty($contactid))
     {
-        echo "<tr><th>Support {$strContact} <img src='{$CONFIG['application_webpath']}images/icons/{$iconset}/16x16/contact.png' width='16' height='16' alt='' /></th><td width='400'>";
+        echo "<tr><th>{$strSupport} {$strContact} <img src='{$CONFIG['application_webpath']}images/icons/{$iconset}/16x16/contact.png' width='16' height='16' alt='' /></th><td width='400'>";
         echo contact_drop_down("contactid", 0)."</td></tr>";
     }
     else
@@ -71,7 +71,7 @@ if (empty($action) OR $action == "showform")
     echo "</table>";
     echo "<p align='center'><input name='submit' type='submit' value='{$strContinue}' /></p>";
     echo "</form>";
-    include ('htmlfooter.inc.php');
+    include('htmlfooter.inc.php');
 }
 elseif ($action == "delete")
 {
@@ -92,16 +92,16 @@ elseif ($action == "delete")
     // delete maintenance support contact if no errors
     if ($errors == 0)
     {
-        $sql  = "DELETE FROM `{$dbSupportContacts}` WHERE maintenanceid='$maintid' AND contactid='$contactid'";
+        $sql  = "DELETE FROM supportcontacts WHERE maintenanceid='$maintid' AND contactid='$contactid'";
         $result = mysql_query($sql);
         if (mysql_error()) trigger_error("MySQL Query Error ".mysql_error(), E_USER_ERROR);
 
         // show error message if deletion failed
         if (!$result)
         {
-            include ('htmlheader.inc.php');
+            include('htmlheader.inc.php');
             throw_error('Deletion of maintenance support conact failed:','$sql');
-            include ('htmlfooter.inc.php');
+            include('htmlfooter.inc.php');
         }
         // update db and show success message
         else
@@ -115,9 +115,9 @@ elseif ($action == "delete")
     else
     {
         // show error message if errors
-        include ('htmlheader.inc.php');
+        include('htmlheader.inc.php');
         echo $errors_string;
-        include ('htmlfooter.inc.php');
+        include('htmlfooter.inc.php');
     }
 }
 ?>

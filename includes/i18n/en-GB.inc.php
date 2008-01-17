@@ -595,6 +595,7 @@ $strMarketingMailshot = 'Marketing Mailshot';
 # Short for May (these happen to be the same in english)
 $strMayAbbr = 'May';
 $strMay = 'May';
+$strMaxResults = 'A maximum of %d results are displayed, your search might have returned more.';
 $strMBytes = 'MBytes';
 $strMedium = 'Medium';
 $strMediumPriority = 'Medium Priority';
@@ -612,7 +613,7 @@ $strMore = 'More...';
 $strMoreContactsThanContractSupports = 'There are more contacts linked than this contract should support';
 $strMorning = 'Morning';
 $strMultiIncidents = '%d Incidents';
-$strMustCloseActivitiesBeforeClosure = 'You must close all activities for the incident before closure.';
+$strMustCompleteActivitiesBeforeClosure = 'You must complete all activities for the incident before closure.';
 $strMustEnterEmail = 'You must enter an email address';
 $strMustEnterName = 'You must enter a name';
 $strMustEnterNameEscalationPath = 'You must enter a name for the escalation path';

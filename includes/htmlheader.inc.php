@@ -313,7 +313,7 @@ if ($sit[0] != '')
         echo "<em> ".format_date_friendly(strtotime($notice->timestamp))."</em>";
         echo "</sub></p></div>";
         }
-        
+
         if (mysql_num_rows($noticeresult) > 1)
         {
             $keys = array_keys($_REQUEST);
