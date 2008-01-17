@@ -92,6 +92,13 @@ echo "<a href=\"javascript:save_layout();\" id='savelayout' title='Save Dashboar
         return document.getElementById(id);
     }
 
+    function resetborder()
+    {
+        $('col0').style.border = '0px';
+        $('col1').style.border = '0px';
+        $('col2').style.border = '0px';
+    }
+
     function init(){
 
         //var cols = [1,3,1];
@@ -104,10 +111,15 @@ echo "<a href=\"javascript:save_layout();\" id='savelayout' title='Save Dashboar
         var dl = byId("col0");
         var dt1=new dojo.dnd.HtmlDropTarget(dl, ["li1"]);
 
+        dojo.event.connect(dt1, "onDragOver", function(e) {
+        if ($(e.target.id)) $(e.target.id).style.border = '2px dashed #cccccc;';
+        });
+
         dojo.event.connect(dt1, "onDrop", function(e) {
         $('savelayout').style.display='inline';
-        //      window.alert(e.dragObject.domNode.id + ' was dropped on ' + e.target.id);
-        save_layout();
+            resetborder();
+            //      window.alert(e.dragObject.domNode.id + ' was dropped on ' + e.target.id);
+            save_layout();
         });
         for(var x=0; x<cols0.length; x++){
             new dojo.dnd.HtmlDragSource(byId('db_0-'+cols0[x]),"li1");
@@ -116,9 +128,14 @@ echo "<a href=\"javascript:save_layout();\" id='savelayout' title='Save Dashboar
         // list two
         var dl = byId("col1");
         var dt2 = new dojo.dnd.HtmlDropTarget(dl, ["li1"]);
+        dojo.event.connect(dt2, "onDragOver", function(e) {
+        if ($(e.target.id)) $(e.target.id).style.border = '2px dashed #cccccc;';
+        });
+
         dojo.event.connect(dt2, "onDrop", function(e) {
-        $('savelayout').style.display='inline';
-        save_layout();
+            $('savelayout').style.display='inline';
+            resetborder();
+            save_layout();
         });
         for(var x=0; x<cols1.length; x++){
             new dojo.dnd.HtmlDragSource(byId('db_1-'+cols1[x]),"li1");
@@ -127,9 +144,14 @@ echo "<a href=\"javascript:save_layout();\" id='savelayout' title='Save Dashboar
         // list three
         var dl = byId("col2");
         var dt3 = new dojo.dnd.HtmlDropTarget(dl, ["li1"]);
+        dojo.event.connect(dt3, "onDragOver", function(e) {
+        if ($(e.target.id)) $(e.target.id).style.border = '2px dashed #cccccc;';
+        });
+
         dojo.event.connect(dt3, "onDrop", function(e) {
-        $('savelayout').style.display='inline';
-        save_layout();
+            $('savelayout').style.display='inline';
+            resetborder();
+            save_layout();
         });
         for(var x=0; x<cols2.length; x++){
             new dojo.dnd.HtmlDragSource(byId('db_2-'+cols2[x]),"li1");
