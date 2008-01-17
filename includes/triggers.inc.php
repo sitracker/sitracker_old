@@ -13,7 +13,7 @@ include ('mime.inc.php');
 
 //set up all the trigger types
 $triggerarray[] = array('id' => TRIGGER_INCIDENT_CREATED,
-                        'description' => 'Occurs ehen a new incident has been created');
+                        'description' => 'Occurs when a new incident has been created');
 $triggerarray[] = array('id' => TRIGGER_INCIDENT_ASSIGNED,
                         'description' => 'Occurs when a new incident is assigned to you');
 $triggerarray[] = array('id' => TRIGGER_INCIDENT_ASSIGNED_WHILE_AWAY,
