@@ -1219,7 +1219,7 @@ INSERT INTO `vendors` VALUES (1,'Default');
 CREATE TABLE IF NOT EXISTS `notices` (
   `id` int(11) NOT NULL auto_increment,
   `userid` int(11) NOT NULL,
-  `templates` varchar(255) NULL,
+  `template` varchar(255) NULL,
   `type` tinyint(4) NOT NULL,
   `text` tinytext NOT NULL,
   `linktext` varchar(50) default NULL,
