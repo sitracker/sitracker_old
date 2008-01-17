@@ -238,8 +238,8 @@ function db_read_column($column, $table, $id)
     $sql = "SELECT `$column` FROM `$table` WHERE id='$id' LIMIT 1";
     $result = mysql_query($sql);
     if (mysql_error()) trigger_error(mysql_error(),E_USER_WARNING);
-    list($column)=mysql_fetch_row($result);
-//     $column=stripslashes($column);
+    list($column) = mysql_fetch_row($result);
+
     return $column;
 }
 
@@ -2869,11 +2869,10 @@ function maintenance_servicelevel($maintid)
         // in case there is no maintenance contract associated with the incident, use default service level
         // if there is a maintenance contract then we should throw an error because there should be
         // service level
-        if ($maintid==0)
+        if ($maintid == 0)
         {
-            $servicelevelid = 1;
+            $servicelevelid = servicelevel_tag2id($CONFIG['default_service_level']);
         }
-        ## else throw_error('!Error: Could not find a service level for maintenance ID:', $maintid);
     }
     else
     {
@@ -2890,35 +2889,45 @@ function maintenance_siteid($id)
 }
 
 
-// Temporary solution, eventually we will move away from using servicelevel id's
-// and just use tags instead
+/**
+    * @author Ivan Lucas
+    * @deprecated
+    * @note DEPRECATED service level tags should be used in favour of service level ID's
+    * @note Temporary solution, eventually we will move away from using servicelevel id's  and just use tags instead
+*/
 function servicelevel_id2tag($id)
 {
     return db_read_column('tag', 'servicelevels', $id);
 }
 
 
+/**
+    * @author Ivan Lucas
+    * @deprecated
+    * @note DEPRECATED service level tags should be used in favour of service level ID's
+    * @note Temporary solution, eventually we will move away from using servicelevel id's  and just use tags instead
+*/
+function servicelevel_tag2id($sltag)
+{
+    $sql = "SELECT id FROM servicelevels WHERE tag = '{$sltag}' AND priority=1";
+    $result = mysql_query($sql);
+    if (mysql_error()) trigger_error(mysql_error(),E_USER_WARNING);
+    list($id) = mysql_fetch_row($result);
+
+    return $id;
+}
+
 // Returns the number of remaining incidents given an incident pool id
 // Returns 'Unlimited' if theres no match on ID
 function incidents_remaining($id)
 {
-    $remainging = db_read_column('incidentsremaining', 'incidentpools', $id);
+    $remaining = db_read_column('incidentsremaining', 'incidentpools', $id);
     if (empty($remaining))
     {
         $remaining = '&infin;';
     }
 
     return $remaining;
-}
-
-
-// OBSOLETE
-/* Returns an incidentpoolid given             */
-/* a contactproduct id        */
-/* Returns 0 if none is found, meaning unlimited */
-function incidentpoolid($id)
-{
-    return db_read_column('incidentpoolid', 'contactproducts', $id);
 }
 
 
@@ -2946,23 +2955,31 @@ function increment_incidents_used($maintid)
 }
 
 
-// Functions to handle error reporting
-// FIXME i18n
+/**
+    * Handle a PHP triggered error
+    * @author Ivan Lucas
+    * @note Not called directly but triggered by PHP's own error handling
+    *       and the trigger_error function.
+    * @note Parameters as per http://www.php.net/set_error_handler
+    * @note This function is not internationalised in order that bugs can
+    *       be reported to developers and still be sure that they will be
+    *       understood
+**/
 function sit_error_handler($errno, $errstr, $errfile, $errline, $errcontext)
 {
     global $CONFIG;
     $errortype = array(
-    E_ERROR          => 'Fatal Error',
-    E_WARNING        => 'Warning',
-    E_PARSE          => 'Parse Error',
+    E_ERROR           => 'Fatal Error',
+    E_WARNING         => 'Warning',
+    E_PARSE           => 'Parse Error',
     E_NOTICE          => 'Notice',
     E_CORE_ERROR      => 'Core Error',
     E_CORE_WARNING    => 'Core Warning',
-    E_COMPILE_ERROR  => 'Compile Error',
+    E_COMPILE_ERROR   => 'Compile Error',
     E_COMPILE_WARNING => 'Compile Warning',
     E_USER_ERROR      => 'Application Error',
     E_USER_WARNING    => 'Application Warning',
-    E_USER_NOTICE    => 'Application Notice');
+    E_USER_NOTICE     => 'Application Notice');
     if(defined('E_STRICT')) $errortype[E_STRICT] = 'Strict Runtime notice';
 
     $trace_errors = array(E_ERROR, E_USER_ERROR);
@@ -2990,25 +3007,38 @@ function sit_error_handler($errno, $errstr, $errfile, $errline, $errcontext)
     }
 }
 
+
+/**
+    * @author Ivan Lucas
+    * @deprecated Remove after 3.40 release
+    * @note DEPRECATED and replaced by sit_error_handler() / trigger_error()
+**/
 function throw_fatal_error($message,$details)
 {
     trigger_error("{$message}: {$details}", E_USER_ERROR);
 }
 
+
+/**
+    * @author Ivan Lucas
+    * @deprecated Remove after 3.40 release
+    * @note DEPRECATED and replaced by sit_error_handler() / trigger_error()
+**/
 function throw_error($message, $details)
 {
     trigger_error("{$message}: {$details}", E_USER_WARNING);
 }
 
 
+/**
+    * Displays user errors
+    * @param $message array. An array of error strings
+    * @returns Nothing. Outputs HTML list of user errors directly
+*/
 function throw_user_error($message, $details='')
 {
-    global $CONFIG, $application_version_string, $sit;
-
     $html = "<div class='error'>";
-    if (is_array($message)) echo "<p class='error'>Oops</p>";  // FIXME i18n ;-)
-
-
+    if (is_array($message)) echo "<p class='error'>{$GLOBALS['strError']}</p>";
 
     if (is_array($message))
     {
@@ -3097,7 +3127,7 @@ function site_name($id)
 // given id selected.
 function maintenance_drop_down($name, $id)
 {
-    // FIXME make maintenance_drop_down a hierarchical selection box sites/contracts
+    // TODO make maintenance_drop_down a hierarchical selection box sites/contracts
     // extract all maintenance contracts
     $sql  = "SELECT sites.name AS sitename, products.name AS productname, maintenance.id AS id FROM maintenance, sites, products ";
     $sql .= "WHERE site=sites.id AND product=products.id ORDER BY sites.name ASC";
@@ -4292,9 +4322,12 @@ function target_type_name($targettype)
     }
     return $name;
 }
+
+
 /**
  * No long used anywhere, suggest removal
  * @deprecated
+ * @note DEPRECATED remove after 3.40
 */
 function target_radio_buttons($incidentid)
 {
@@ -4357,18 +4390,6 @@ function incident_get_next_review($incidentid)
         $timesincereview = floor(($now - ($upd->timestamp)) / 60);
     }
     return $timesincereview;
-}
-
-
-function unhtmlentities ($string)
-{
-    // We may not need this function after PHP 4.3
-    // http://uk.php.net/manual/en/function.get-html-translation-table.php
-    $trans_tbl = get_html_translation_table (HTML_ENTITIES);
-    $trans_tbl[' '] = '&#160;';
-    $trans_tbl = array_flip ($trans_tbl);
-    $ret = strtr ($string, $trans_tbl);
-    return preg_replace('/&#(\d+);/me', "chr('\\1')",$ret);
 }
 
 
@@ -4736,7 +4757,7 @@ function remove_slashes($string)
     * @author Ivan Lucas
     * @deprecated
     * @note Uses flag MGR to determine manager
-    * @note DEPRECATED as of v3.30
+    * @note DEPRECATED as of v3.30, remove after 3.40 release
 */
 function contact_manager_email($contactid)
 {
@@ -4787,6 +4808,7 @@ function contact_notify_email($contactid)
     return $email;
 }
 
+
 /**
     * Returns the contact ID of the notify contact for the given contact ID
     * @author Ivan Lucas
@@ -4818,6 +4840,7 @@ function contact_notify($contactid, $level=0)
         return $notify_contactid;
     }
 }
+
 
 /**
     * HTML select box listing substitute engineers
@@ -5391,20 +5414,27 @@ function user_notification_on_reassign($user)
     return db_read_column('var_notify_on_reassign', 'users', $user);
 }
 
+
+/**
+    * Converts BBcode to HTML
+    * @author Paul Heaney
+    * @param $text string. Text with BBCode
+    * @returns string HTML
+*/
 function bbcode($text)
 {
     $bbcode_regex = array(0 => '/\[b\](.*?)\[\/b\]/s',
-                        1 => '/\[i\](.*?)\[\/i\]/s',
-                        2 => '/\[u\](.*?)\[\/u\]/s',
-                        3 => '/\[quote\](.*?)\[\/quote\]/s',
-                        4 => '/\[quote\=(.*?)](.*?)\[\/quote\]/s',
-                        5 => '/\[url\](.*?)\[\/url\]/s',
-                        6 => '/\[url\=(.*?)\](.*?)\[\/url\]/s',
-                        7 => '/\[img\](.*?)\[\/img\]/s',
-                        8 => '/\[color\=(.*?)\](.*?)\[\/color\]/s',
-                        9 => '/\[size\=(.*?)\](.*?)\[\/size\]/s',
-                        10 => '/\[code\](.*?)\[\/code\]/s',
-                        11 => '/\[hr\]/s');
+                          1 => '/\[i\](.*?)\[\/i\]/s',
+                          2 => '/\[u\](.*?)\[\/u\]/s',
+                          3 => '/\[quote\](.*?)\[\/quote\]/s',
+                          4 => '/\[quote\=(.*?)](.*?)\[\/quote\]/s',
+                          5 => '/\[url\](.*?)\[\/url\]/s',
+                          6 => '/\[url\=(.*?)\](.*?)\[\/url\]/s',
+                          7 => '/\[img\](.*?)\[\/img\]/s',
+                          8 => '/\[color\=(.*?)\](.*?)\[\/color\]/s',
+                          9 => '/\[size\=(.*?)\](.*?)\[\/size\]/s',
+                          10 => '/\[code\](.*?)\[\/code\]/s',
+                          11 => '/\[hr\]/s');
 
     $bbcode_replace = array(0 => '<strong>$1</strong>',
                             1 => '<em>$1</em>',
@@ -5413,14 +5443,17 @@ function bbcode($text)
                             4 => '<blockquote cite="$1"><p>$1 said:<br />$2</p></blockquote>',
                             5 => '<a href="$1" title="$1">$1</a>',
                             6 => '<a href="$1" title="$1">$2</a>',
-                            7 => '<img src="$1" alt="User submitted image" title="User submitted image"/>',
+                            7 => '<img src="$1" alt="User submitted image" />',
                             8 => '<span style="color:$1">$2</span>',
                             9 => '<span style="font-size:$1">$2</span>',
                             10 => '<code>$1</code>',
                             11 => '<hr />');
 
-    return preg_replace($bbcode_regex, $bbcode_replace, $text);
+    $html = preg_replace($bbcode_regex, $bbcode_replace, $text);
+
+    return $html;
 }
+
 
 function strip_bbcode_tooltip($text)
 {
@@ -5531,6 +5564,7 @@ function colheader($colname, $coltitle, $sort=FALSE, $order='', $filter='', $def
     return $html;
 }
 
+
 function parse_updatebody($updatebody)
 {
     if (!empty($updatebody))
@@ -5588,6 +5622,7 @@ function add_note_form($linkid, $refid)
     $html .= "</form>";
     return $html;
 }
+
 
 function show_notes($linkid, $refid)
 {
