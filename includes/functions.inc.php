@@ -6455,7 +6455,7 @@ function time_dropdown($name, $time='')
 */
 function fuzzy_time($seconds)
 {
-    if ($seconds < 0) $time = $GLOBALS['strError']
+    if ($seconds < 0) $time = $GLOBALS['strError'];
     elseif ($seconds > 0 AND $seconds < 60) $time = $GLOBALS['strJustNow'];
     elseif ($seconds > 60 AND $seconds < 5 * 60) $time = $GLOBALS['strFewMinutesAgo'];
     elseif ($seconds > 5 * 60 AND $seconds < 30 * 60)
