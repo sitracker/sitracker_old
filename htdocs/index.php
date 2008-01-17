@@ -43,12 +43,12 @@ if ($_SESSION['auth'] != TRUE)
     {
         echo "<p class='error'>".sprintf($strEnterCredentials, $CONFIG['application_shortname'])."</p><br />";
     }
-    
+
     if ($id == 2)
     {
         echo "<p class='error'>{$strSessionExpired}</p><br />";
     }
-    
+
     if ($id == 3)
     {
         throw_user_error("{$strInvalidCredentials}");
@@ -62,13 +62,13 @@ if ($_SESSION['auth'] != TRUE)
     {
         echo " selected='selected'";
     }
-    
+
     echo ">{$strDefault}</option>\n";
     if ($_GET['lang'] == 'zz')
     {
         $availablelanguages['zz'] = 'Test Language (zz)';
     }
-    
+
     foreach ($availablelanguages AS $langcode => $language)
     {
         if ($langcode == $_SESSION['lang'])
