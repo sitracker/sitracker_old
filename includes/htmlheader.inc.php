@@ -330,7 +330,6 @@ if ($sit[0] != '')
 
             echo "<p align='right' style='padding-right:32px'><a href='{$alink}'>{$strDismissAll}</a></p>";
         }
-        //echo "</div>";
     }
 }
 $headerdisplayed = TRUE; // Set a variable so we can check to see if the header was included

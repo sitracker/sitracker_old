@@ -171,10 +171,7 @@ else
     }
     </script>
     <?php
-    echo "<p align='center'>Displaying ".mysql_num_rows($result)." contract(s)";
-    if (!empty($search_string)) echo " matching '<em>{$search_string}</em>"; // FIXME i18n 'displaying matching'
-    if ($productid) echo " where product matches <em>'".product_name($productid)."'</em>"; // FIXME i18n
-    echo "</p>\n";
+    echo "<p align='center'>".sprintf($strResultsNum, mysql_num_rows($result))."</p>\n";
 
     echo "<table align='center' style='width: 95%;'>";
     echo "<tr>";
