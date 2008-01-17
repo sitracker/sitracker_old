@@ -160,6 +160,7 @@ $strByReseller = 'By Reseller';
 # e.g. Ordered By Product
 $strByProduct = 'By Product';
 $strBytes = 'Bytes';
+$strByDate = 'By Date';
 $strByVendor = 'By Vendor';
 
 # incident status: e.g. Made a phone call and left a message
@@ -1042,7 +1043,7 @@ $strUpdateIncidentFailed = 'Incident Update failed';
 $strUpdateNewUpdate = 'New update (none of the above)';
 $strUpdatePerUserAbbrev = 'upd per user';
 $strUpdates = 'Updates';
-$strUpdatedFromActivity = 'Updated from Activity by %s';
+$strUpdatedFromActiity = 'Updated from Activity by %s';
 $strUpdateSuccessful = 'Update Successful';
 $strUpdateType = 'Update Type';
 $strUnknown = 'Unknown';

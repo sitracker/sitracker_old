@@ -61,35 +61,34 @@ if (empty($action))
     echo "</select>\n";
     echo "</td></tr>\n";
     echo "<tr><th>{$strLastUpdated}:</th><td width='300'>";
-    // FIXME i18n date ranges
-    echo "<select size='1' name='search_date'>
-    <option selected='selected' value='All'>{$strAll}</option>
-    <option value='Recent180'>Updated in past six months only</option>
-    <option value='Recent90'>Updated in past three months only</option>
-    <option value='Recent30'>Updated in past month only</option>
-    <option value='Recent14'>Updated in past fortnight only</option>
-    <option value='Recent7'>Updated in past week only</option>
-    <option value='Recent1'>Updated today</option>
-    <option value='RecentHour'>Updated this hour</option>
-    <option value='OldHour'>Not updated in the past hour</option>
-    <option value='Old7'>Not updated this week</option>
-    <option value='Old30'>Not updated this month</option>
-    <option value='Old90'>Not updated in the past three months</option>
-    <option value='Old180'>Not updated in the past six months</option>
-    </select>";
+    echo "<select size='1' name='search_date'>";
+    echo "<option selected='selected' value='All'>{$strAll}</option>";
+    echo "<option value='Recent180'>".sprintf($strPreviousXMonths, 6)."</option>";
+    echo "<option value='Recent90'>".sprintf($strPreviousXMonths, 3)."</option>";
+    echo "<option value='Recent30'>".sprintf($strPreviousXMonths, 30)."</option>";
+    echo "<option value='Recent14'>".sprintf($strPreviousXMonths, 14)."</option>";
+    echo "<option value='Recent7'>".sprintf($strPreviousXDays, 7)."</option>";
+    echo "<option value='Recent1'>{$strToday}</option>";
+    echo "<option value='RecentHour'>&lt; ".sprintf($strXMinutes, 60)."</option>";
+    echo "<option value='OldHour'>&gt; ".sprintf($strXMinutes, 60)."</option>";
+    echo "<option value='Old7'>&gt; ".sprintf($strXDays, 7)."</option>";
+    echo "<option value='Old30'>&gt; ".sprintf($strXDays, 30)."</option>";
+    echo "<option value='Old90'>&gt; ".sprintf($strXMonths, 3)."</option>";
+    echo "<option value='Old180'>&gt; ".sprintf($strXMonths, 6)."</option>";
+    echo "</select>";
     echo "</td></tr>\n";
     echo "<tr><th>{$strOwner}:</th><td width='300'>";
     user_drop_down('search_user',0);
     echo "</td></tr>";
     echo "<tr><th>{$strSortResults}:</th><td width='300'>";
     echo "<select size='1' name='sort_results'>
-    <option selected='selected' value='DateDESC'>By date, newest first</option>
-    <option value='DateASC'>By Date, oldest first</option>
-    <option value='IDASC'>By Incident ID</option>
-    <option value='TitleASC'>By Title</option>
-    <option value='ContactASC'>By Contact Name</option>
-    <option value='SiteASC'>By Site Name</option>
-    </select>"; // i18n
+    <option selected='selected' value='DateDESC'>{$strByDate} ({$strNewestAtTop})</option>
+    <option value='DateASC'>{$strByDate} ({$strNewestAtBottom})</option>
+    <option value='IDASC'>{$strID}</option>
+    <option value='TitleASC'>{$strTitle}</option>
+    <option value='ContactASC'>{$strContact}</option>
+    <option value='SiteASC'>{$strSite}</option>
+    </select>";
     echo "</td></tr>\n";
     echo "<tr><td></td><td><input type='hidden' name='action' value='search' />";
     echo "<input name='reset' type='reset' value=\"{$strReset}\" />&nbsp;";
@@ -191,7 +190,7 @@ else
                 else $class = "shade2";
                 ?>
                 <tr class='<?php echo $class; ?>'>
-                <td align='center'  width='100'><?php echo $results["id"] ?> (<?php if ($results["externalid"] == "") echo "None"; else echo $results["externalid"] ?>)</td>
+                <td align='center'  width='100'><?php echo $results["id"] ?> (<?php if ($results["externalid"] == "") echo $strNone; else echo $results["externalid"] ?>)</td>
                 <td width='150'><a href="javascript:incident_details_window('<?php echo $results["id"] ?>')"><?php echo $results["title"] ?></a></td>
                 <td align='center' width='100'><?php echo $results['forenames'].' '.$results['surname']; ?></td>
                 <td align='center' width='100'><?php echo site_name($results['siteid']) ?></td>

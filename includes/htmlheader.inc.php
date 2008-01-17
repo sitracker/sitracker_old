@@ -331,14 +331,6 @@ if ($sit[0] != '')
 
             echo "<p align='right' style='padding-right:32px'><a href='{$alink}'>{$strDismissAll}</a></p>";
         }
-        //echo "</div>";
-    }
-    if ($redirpage && ($_SERVER[SCRIPT_NAME] != $redirpage))
-    {
-        // Note, this uses FALSE which prints 'Failed' not sure this is the most appropriate,
-        // but html_redirect only supports success/failure currently (INL 1dec07)
-        html_redirect($redirpage, FALSE, "You are being redirected to fix an error"); // FIXME i18n
-        exit;
     }
 }
 $headerdisplayed = TRUE; // Set a variable so we can check to see if the header was included

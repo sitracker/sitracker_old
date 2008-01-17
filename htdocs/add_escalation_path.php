@@ -106,7 +106,7 @@ else
 
         if(!$result)
         {
-            $_SESSION['formerrors']['add_escalation_path']['error'] = "Addition of escalation path failed";   // FIXME i18n error
+            $_SESSION['formerrors']['add_escalation_path']['error'] = "{$strError}: Addition of escalation path failed";   // FIXME i18n error
         }
         else
         {
