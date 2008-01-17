@@ -13,22 +13,37 @@ include ('mime.inc.php');
 
 //set up all the trigger types
 $triggerarray[] = array('id' => TRIGGER_INCIDENT_CREATED,
-                        'description' => 'test');
-$triggerarray[] = array('id' => TRIGGER_INCIDENT_ASSIGNED);
-$triggerarray[] = array('id' => TRIGGER_INCIDENT_ASSIGNED_WHILE_AWAY);
-$triggerarray[] = array('id' => TRIGGER_INCIDENT_ASSIGNED_WHILE_OFFLINE);
-$triggerarray[] = array('id' => TRIGGER_INCIDENT_NEARING_SLA);
-$triggerarray[] = array('id' => TRIGGER_USERS_INCIDENT_NEARING_SLA);
-$triggerarray[] = array('id' => TRIGGER_INCIDENT_EXCEEDED_SLA);
-$triggerarray[] = array('id' => TRIGGER_INCIDENT_REVIEW_DUE);
-$triggerarray[] = array('id' => TRIGGER_CRITICAL_INCIDENT_LOGGED);
-$triggerarray[] = array('id' => TRIGGER_KB_CREATED);
-$triggerarray[] = array('id' => TRIGGER_NEW_HELD_EMAIL);
-$triggerarray[] = array('id' => TRIGGER_WAITING_HELP_EMAIL);
-$triggerarray[] = array('id' => TRIGGER_USER_SET_TO_AWAY);
-$triggerarray[] = array('id' => TRIGGER_SIT_UPGRADED);
-$triggerarray[] = array('id' => TRIGGER_USER_RETURNS);
-$triggerarray[] = array('id' => TRIGGER_INCIDENT_OWNED_CLOSED_BY_USER);
+                        'description' => 'Occurs ehen a new incident has been created');
+$triggerarray[] = array('id' => TRIGGER_INCIDENT_ASSIGNED,
+                        'description' => 'Occurs when a new incident is assigned to you');
+$triggerarray[] = array('id' => TRIGGER_INCIDENT_ASSIGNED_WHILE_AWAY,
+                        'description' => 'Occurs when a new incident is assigned to you and you are set to not accepting');
+$triggerarray[] = array('id' => TRIGGER_INCIDENT_ASSIGNED_WHILE_OFFLINE,
+                        'description' => 'Occurs when a new incident is assigned to you and your status is offline');
+$triggerarray[] = array('id' => TRIGGER_INCIDENT_NEARING_SLA,
+                        'description' => 'Occurs when one of your incidents nears an SLA');
+$triggerarray[] = array('id' => TRIGGER_USERS_INCIDENT_NEARING_SLA,
+                        'description' => 'Occurs when a user\'s incident you are watching is assigned to you');
+$triggerarray[] = array('id' => TRIGGER_INCIDENT_EXCEEDED_SLA,
+                        'description' => 'Occurs when one of your incidents exceeds an SLA');
+$triggerarray[] = array('id' => TRIGGER_INCIDENT_REVIEW_DUE,
+                        'description' => 'Occurs when an incident is due a review');
+$triggerarray[] = array('id' => TRIGGER_CRITICAL_INCIDENT_LOGGED,
+                        'description' => 'Occurs when a priority A incident is logged');
+$triggerarray[] = array('id' => TRIGGER_KB_CREATED,
+                        'description' => 'Occurs when a new Knowledgebase article is created');
+$triggerarray[] = array('id' => TRIGGER_NEW_HELD_EMAIL,
+                        'description' => 'Occurs when there is a new email in the holding queue');
+$triggerarray[] = array('id' => TRIGGER_WAITING_HELD_EMAIL,
+                        'description' => 'Occurs when there is a new email in the holding queue for x minutes');
+$triggerarray[] = array('id' => TRIGGER_USER_SET_TO_AWAY,
+                        'description' => 'Occurs when one of your watched engineer goes away');
+$triggerarray[] = array('id' => TRIGGER_SIT_UPGRADED,
+                        'description' => 'Occurs when the system is upgraded');
+$triggerarray[] = array('id' => TRIGGER_USER_RETURNS,
+                        'description' => 'Occurs when one of your watched engineers returns');
+$triggerarray[] = array('id' => TRIGGER_INCIDENT_OWNED_CLOSED_BY_USER,
+                        'description' => 'Occurs when one of your incidents is closed by another engineer');
 
 //set up all the action types
 define(ACTION_NONE, 1);
@@ -376,27 +391,30 @@ function create_trigger_notice($userid, $noticetext='', $triggertype='',
         $dbg .= print_r($paramarray)."\n";
     }
 
-    //this is a trigger notice, get notice template
-    $sql = "SELECT * from noticetemplates WHERE id='{$template}'";
-    $query = mysql_query($sql);
-    if($query)
+    if(!empty($template))
     {
-        $notice = mysql_fetch_object($query);
-        $noticetext = trigger_replace_specials($notice->text, $paramarray);
-        $noticelinktext = trigger_replace_specials($notice->linktext, $paramarray);
-        $noticelink = trigger_replace_specials($notice->link, $paramarray);
-        if($CONFIG['debug']) $dbg .= $noticetext."\n";
-
-        $sql = "INSERT into notices(userid, type, text, linktext, link,
-                                    referenceid, timestamp) ";
-        $sql .= "VALUES ({$userid}, '{$notice->type}', '{$noticetext}',
-                        '{$noticelinktext}', '{$noticelink}', '', NOW())";
-        mysql_query($sql);
-        if (mysql_error()) trigger_error(mysql_error(),E_USER_WARNING);
-    }
-    else
-    {
-        throw_error("No such trigger type");
+        //this is a trigger notice, get notice template
+        $sql = "SELECT * from noticetemplates WHERE id='{$template}'";
+        $query = mysql_query($sql);
+        if($query)
+        {
+            $notice = mysql_fetch_object($query);
+            $noticetext = trigger_replace_specials($notice->text, $paramarray);
+            $noticelinktext = trigger_replace_specials($notice->linktext, $paramarray);
+            $noticelink = trigger_replace_specials($notice->link, $paramarray);
+            if($CONFIG['debug']) $dbg .= $noticetext."\n";
+    
+            $sql = "INSERT into notices(userid, type, text, linktext, link,
+                                        referenceid, timestamp) ";
+            $sql .= "VALUES ({$userid}, '{$notice->type}', '{$noticetext}',
+                            '{$noticelinktext}', '{$noticelink}', '', NOW())";
+            mysql_query($sql);
+            if (mysql_error()) trigger_error(mysql_error(),E_USER_WARNING);
+        }
+        else
+        {
+            throw_error("No such trigger type");
+        }
     }
 }
 
