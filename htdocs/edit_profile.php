@@ -20,8 +20,14 @@ require ('auth.inc.php');
 // External variables
 $mode = $_REQUEST['mode'];
 $edituserpermission = user_permission($sit[2],23); // edit user
-if (empty($_REQUEST['userid']) OR $_REQUEST['userid']=='current' OR $edituserpermission==FALSE) $userid = mysql_real_escape_string($sit[2]);
-else $userid = cleanvar($_REQUEST['userid']);
+if (empty($_REQUEST['userid']) OR $_REQUEST['userid']=='current' OR $edituserpermission==FALSE)
+{
+    $userid = mysql_real_escape_string($sit[2]);
+}
+else
+{
+    $userid = cleanvar($_REQUEST['userid']);
+}
 
 
 if (empty($mode))
@@ -44,13 +50,27 @@ if (empty($mode))
     echo "<table align='center' class='vertical'>";
     echo "<col width='250'></col><col width='*'></col>";
     echo "<tr><th colspan='2'>{$strAbout}";
-    if ($userid==$sit[2]) echo $strYou;
-    else echo $user->realname;
+    if ($userid == $sit[2])
+    {
+        echo $strYou;
+    }
+    else
+    {
+        echo $user->realname;
+    }
+    
     echo "</th></tr>\n";
     echo "<tr><th>{$strUsername}:</th><td>{$user->username}</td></tr>";
     echo "<tr><th>{$strRole}:</th>";
-    if ($userid==$sit[2] OR $userid==1) echo "<td>".db_read_column('rolename', 'roles', $user->roleid)."</td>";
-    else echo "<td>".role_drop_down('roleid', $user->roleid)."</td>";
+    if ($userid == $sit[2] OR $userid == 1)
+    {
+        echo "<td>".db_read_column('rolename', 'roles', $user->roleid)."</td>";
+    }
+    else
+    {
+        echo "<td>".role_drop_down('roleid', $user->roleid)."</td>";
+    }
+    
     echo "</tr>";
     echo "<tr><th>{$strRealName}:</th><td><input maxlength='50' name='realname' size='30' type='text' value=\"".$user->realname."\" /></td></tr>\n";
     echo "<tr><th>{$strJobTitle}:</th><td><input maxlength='50' name='jobtitle' size='30' type='text' value=\"".$user->title."\" /></td></tr>\n";
@@ -58,7 +78,7 @@ if (empty($mode))
     echo "<td><textarea name='qualifications' rows='3' cols='40'>".$user->qualifications."</textarea></td></tr>\n";
     echo "<tr><th>{$strEmailSignature}:<br />{$strEmailSignatureTip}</th>";
     echo "<td><textarea name='signature' rows='4' cols='40'>".strip_tags($user->signature)."</textarea></td></tr>\n";
-    $entitlement=user_holiday_entitlement($userid);
+    $entitlement = user_holiday_entitlement($userid);
     if ($edituserpermission && $userid!=$sit[2])
     {
         echo "<tr><th>{$strHolidayEntitlement}:</th><td>";
@@ -81,7 +101,9 @@ if (empty($mode))
         echo user_count_holidays($userid, 5)." {$strdaysother}";
         echo "</td></tr>";
     }
+    
     echo "<tr><th>{$strGroupMembership}:</th><td valign='top'>";
+    
     if ($user->groupid >= 1)
     {
         $sql = "SELECT name FROM `{$dbGroups}` WHERE id='{$user->groupid}' ";
@@ -94,11 +116,17 @@ if (empty($mode))
     {
         echo "None set";
     }
-    echo "
-    </td></tr>
-    <tr><th colspan='2'>{$strWorkStatus}</th></tr>";
-    if ($edituserpermission AND $userid != $sit[2]) $userdisable=TRUE;
-    else $userdisable=FALSE;
+    echo "</td></tr>";
+    echo "<tr><th colspan='2'>{$strWorkStatus}</th></tr>";
+    
+    if ($edituserpermission AND $userid != $sit[2])
+    {
+        $userdisable = TRUE;
+    }
+    else
+    {
+        $userdisable = FALSE;
+    }
 
     echo "<tr><th>{$strStatus}:</th><td>";
     echo userstatus_drop_down("status", $user->status, $userdisable);
@@ -123,12 +151,25 @@ if (empty($mode))
     echo "<tr><th colspan='2'>{$strDisplayPreferences}</th></tr>\n";
     echo "<tr><th>{$strLanguage}</th><td>";
     echo "<select name='vari18n' id='vari18n'>";
-    if (!empty($user->var_i18n)) $selectedlang = $user->var_i18n;
-    else $selectedlang = $_SESSION['lang'];
+    if (!empty($user->var_i18n))
+    {
+        $selectedlang = $user->var_i18n;
+    }
+    else
+    {
+        $selectedlang = $_SESSION['lang'];
+    }
+    
     foreach ($availablelanguages AS $langcode => $language)
     {
-        if ($langcode == $selectedlang) echo "<option value='$langcode' selected='selected'>$language</option>\n";
-        else echo "<option value='$langcode'>$language</option>\n";
+        if ($langcode == $selectedlang)
+        {
+            echo "<option value='$langcode' selected='selected'>$language</option>\n";
+        }
+        else
+        {
+            echo "<option value='$langcode'>$language</option>\n";
+        }
     }
     echo "</select>";
     echo "</td></tr>\n";
@@ -140,10 +181,18 @@ if (empty($mode))
     echo "<tr><th>{$strIncidentLogOrder}:</th><td>";
     echo "<select name='updateorder'>";
     echo "<option ";
-    if ($user->var_update_order == "desc") echo "selected='selected'";
+    if ($user->var_update_order == "desc")
+    {
+        echo "selected='selected'";
+    }
+    
     echo " value='desc'>{$strNewestAtTop}</option>\n";
     echo "<option ";
-    if ($user->var_update_order == "asc") echo "selected='selected'";
+    if ($user->var_update_order == "asc")
+    {
+        echo "selected='selected'";
+    }
+    
     echo " value='asc'>{$strNewestAtBottom}</option>\n";
     echo "</select>";
     echo "</td></tr>\n";
@@ -231,15 +280,15 @@ elseif ($mode=='save')
         // verify password fields
         if ($newpassword1 == $newpassword2 && strtoupper(md5($password)) == strtoupper(user_password($userid)))
         {
-            $password=strtoupper(md5($password));
-            $newpassword1=strtoupper(md5($newpassword1));
-            $newpassword2=strtoupper(md5($newpassword2));
+            $password = strtoupper(md5($password));
+            $newpassword1 = strtoupper(md5($newpassword1));
+            $newpassword2 = strtoupper(md5($newpassword2));
             $sql = "UPDATE `{$dbUsers}` SET password='$newpassword1' WHERE id='$userid'";
             $result = mysql_query($sql);
             if (mysql_error()) trigger_error("MySQL Query Error ".mysql_error(), E_USER_ERROR);
 
             if (mysql_affected_rows() < 1) { throw_error("!Error password change failed - new password", "$newpassword1"); }
-            $confirm_message = "<h2>Password Changed</h2>\n<p align='center'>You should log out and log back in again</p>\n<p align='center'>Please wait while you are redirected.</p>";
+            $confirm_message = "<h2>Password Changed</h2>\n<p align='center'>You should log out and log back in again</p>\n<p align='center'>Please wait while you are redirected.</p>"; // FIXME i18n
         }
         else
         {
@@ -251,13 +300,13 @@ elseif ($mode=='save')
     if ($realname == "")
     {
         $errors = 1;
-        $error_string .= "<h5 class='error'>You must enter a real name</h5>\n";
+        $error_string .= "<h5 class='error'>You must enter a real name</h5>\n";// FIXME i18n
     }
     // check for blank email address
     if ($email == "")
     {
         $errors = 1;
-        $error_string .= "<h5 class='error'>You must enter an email address</h5>\n";
+        $error_string .= "<h5 class='error'>You must enter an email address</h5>\n";// FIXME i18n
     }
     else
     {
@@ -278,15 +327,37 @@ elseif ($mode=='save')
     // update database if no errors
     if ($errors == 0)
     {
-        if (!empty($collapse)) $collapse = 'true'; else $collapse = 'false';
-        if (!empty($emailonreassign)) $emailonreassign = 'true'; else $emailonreassign = 'false';
+        if (!empty($collapse))
+        {
+            $collapse = 'true';
+        }
+        else
+        {
+            $collapse = 'false';
+        }
+        
+        if(!empty($emailonreassign))
+        {
+            $emailonreassign = 'true';
+        }
+        else
+        {
+            $emailonreassign = 'false';
+        }
 
         $oldstatus = user_status($userid);
 
         $sql  = "UPDATE `{$dbUsers}` SET realname='$realname', title='$jobtitle', email='$email', qualifications='$qualifications', ";
         $sql .= "phone='$phone', mobile='$mobile', aim='$aim', icq='$icq', msn='$msn', fax='$fax', var_incident_refresh='$incidentrefresh', ";
-        if ($userid != 1 AND !empty($_REQUEST['roleid']) AND $edituserpermission==TRUE) $sql .= "roleid='{$roleid}', ";
-        if (!empty($holiday_entitlement) AND $edituserpermission==TRUE) $sql .= "holiday_entitlement='{$holiday_entitlement}', ";
+        if ($userid != 1 AND !empty($_REQUEST['roleid']) AND $edituserpermission==TRUE)
+        {
+            $sql .= "roleid='{$roleid}', ";
+        }
+        
+        if (!empty($holiday_entitlement) AND $edituserpermission==TRUE)
+        {
+            $sql .= "holiday_entitlement='{$holiday_entitlement}', ";
+        }
         $sql .= "var_update_order='$updateorder', var_num_updates_view='$updatesperpage', var_style='$style', signature='$signature', message='$message', status='$status', accepting='$accepting', ";
         $sql .= "var_collapse='$collapse', var_notify_on_reassign='$emailonreassign', var_i18n='{$vari18n}' WHERE id='$userid' LIMIT 1";
         $result = mysql_query($sql);
@@ -348,7 +419,7 @@ elseif ($mode=='save')
         include ('htmlfooter.inc.php');
     }
 }
-elseif ($mode='savesessionlang')
+elseif ($mode == 'savesessionlang')
 {
 
     $sql = "UPDATE `{$dbUsers}` SET var_i18n = '{$_SESSION['lang']}' WHERE id = {$sit[2]}";

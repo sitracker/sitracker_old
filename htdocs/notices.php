@@ -93,7 +93,7 @@ else
     $sql .= "GROUP BY gid";
     $result = mysql_query($sql);
     if (mysql_error()) trigger_error(mysql_error(),E_USER_WARNING);
-    $shade='shade1';
+    $shade = 'shade1';
     if (mysql_num_rows($result) > 0)
     {
         echo "<table align='center'>";
@@ -105,12 +105,15 @@ else
             echo "<td>";
             echo "<a href='{$_SERVER[PHP_SELF]}?action=delete&amp;id={$notice->id}'>{$strDelete}</a>";
             echo "</td></tr>\n";
-            if ($shade=='shade1') $shade='shade2';
-            else $shade='shade1';
+            if ($shade == 'shade1') $shade = 'shade2';
+            else $shade = 'shade1';
         }
         echo "</table>\n";
     }
-    else echo "<p align='center'>$strNoRecords</p>";
+    else
+    {
+        echo "<p align='center'>{$strNoRecords}</p>";
+    }
 
     echo "<p align='center'><a href='{$_SERVER[PHP_SELF]}?action=new'>{$strPostNewNotice}</a></p>";
     include ('htmlfooter.inc.php');

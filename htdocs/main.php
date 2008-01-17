@@ -11,39 +11,39 @@
 // Author: Paul Heaney <paulheaney[at]users.sourceforge.net>
 // This Page Is *NOT* Valid XHTML 1.0 Transitional!
 
-@include ('set_include_path.inc.php');
+@include('set_include_path.inc.php');
 
-$permission = 0; // not required
-require ('db_connect.inc.php');
-require ('functions.inc.php');
+$permission=0; // not required
+require('db_connect.inc.php');
+require('functions.inc.php');
 
 // This page requires authentication
-require ('auth.inc.php');
+require('auth.inc.php');
 
 // --------------------------------------------------------------------------------------------
 // Dashboard widgets
 
 
 
-$sql = "SELECT * FROM `{$dbDashboard}` WHERE enabled='true' ORDER BY id";
+$sql = "SELECT * FROM dashboard WHERE enabled='true' ORDER BY id";
 $result = mysql_query($sql);
 if (mysql_error()) trigger_error(mysql_error(),E_USER_WARNING);
 while ($dashboard = mysql_fetch_object($result))
 {
-   include ("{$CONFIG['application_fspath']}dashboard/dashboard_{$dashboard->name}.php");
+   include("{$CONFIG['application_fspath']}dashboard/dashboard_{$dashboard->name}.php");
    $DASHBOARDCOMP["dashboard_{$dashboard->name}"]="dashboard_{$dashboard->name}";
 }
 
 // Valid user
-include ('htmlheader.inc.php');
+include('htmlheader.inc.php');
 
 echo "<script type=\"text/javascript\" src=\"scripts/dojo/dojo.js\"></script>";
 
-$sql = "SELECT dashboard FROM `{$dbUsers}` WHERE id = '".$_SESSION['userid']."'";
+$sql = "SELECT dashboard FROM users WHERE id = '".$_SESSION['userid']."'";
 $result = mysql_query($sql);
 if (mysql_error()) trigger_error(mysql_error(),E_USER_WARNING);
 
-if (mysql_num_rows($result) > 0)
+if(mysql_num_rows($result) > 0)
 {
     $obj = mysql_fetch_object($result);
     $dashboardcomponents = explode(",",$obj->dashboard);
@@ -85,8 +85,8 @@ echo "<a href=\"javascript:save_layout();\" id='savelayout' title='Save Dashboar
 ?>
 <script type="text/javascript">
 /* <![CDATA[ */
-    dojo.require ("dojo.dnd.*");
-    dojo.require ("dojo.event.*");
+    dojo.require("dojo.dnd.*");
+    dojo.require("dojo.event.*");
 
     function byId(id){
         return document.getElementById(id);
@@ -212,7 +212,7 @@ echo "<a href=\"javascript:save_layout();\" id='savelayout' title='Save Dashboar
         xmlhttp.onreadystatechange=function() {
             //remove this in the future after testing
             if (xmlhttp.readyState==4) {
-                if (xmlhttp.responseText != ""){
+                if(xmlhttp.responseText != ""){
                     //alert(xmlhttp.responseText);
                 }
             }
@@ -255,7 +255,9 @@ echo "</td></tr></table>\n";
 
 // Check users email address
 if (empty($_SESSION['email']) OR !preg_match('/^[A-z0-9][\w.-]*@[A-z0-9][\w\-\.]+\.[A-z0-9]{2,6}$/',$_SESSION['email']))
-    echo "<p class='error'>Please <a href='edit_profile.php'>edit your profile</a> and set a valid email address</p>";
+{
+    echo "<p class='error'>Please <a href='edit_profile.php'>edit your profile</a> and set a valid email address</p>"; // FIXME i18n
+}
 
 //  Users Login Details
 echo "<div id='userbar'>".sprintf($strLoggedInAs, "<strong>{$sit[0]}</strong>");
@@ -269,18 +271,23 @@ else
 {
     echo "<strong>{$strAccepting}</strong>";
 }
-echo " calls";
-if ($sit[3]=='public')
+
+echo " calls";// FIXME i18n
+
+if ($sit[3] == 'public')
 {
-    echo "- Public/Shared Computer (Increased Security)";
+    echo "- Public/Shared Computer (Increased Security)"; // FIXME i18n
 }
 
 echo "</div>\n<br />\n";
 echo "<div id='footerbar'>";
 echo "<form style='margin: 0px;' action='{$_SERVER['PHP_SELF']}'>";
 echo "{$strSetYourStatus}: ";
-if (isset($sit[2])) echo userstatus_bardrop_down("status", user_status($sit[2]));
+if (isset($sit[2]))
+{
+   echo userstatus_bardrop_down("status", user_status($sit[2]));
+}
 echo "</form>\n";
 echo "</div>\n";
-include ('htmlfooter.inc.php');
+include('htmlfooter.inc.php');
 ?>

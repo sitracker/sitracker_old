@@ -29,8 +29,14 @@ $page = strip_tags(str_replace('..','',str_replace('//','',str_replace(':','',ur
 
 if (empty($_REQUEST['username']) AND empty($_REQUEST['password']) AND $language != $_SESSION['lang'])
 {
-    if ($language!='default') $_SESSION['lang'] = $language;
-    else $_SESSION['lang'] = '';
+    if ($language!='default')
+    {
+        $_SESSION['lang'] = $language;
+    }
+    else
+    {
+        $_SESSION['lang'] = '';
+    }
     header ("Location: index.php");
 }
 elseif (authenticate($username, $password) == 1)
@@ -69,11 +75,14 @@ elseif (authenticate($username, $password) == 1)
         mysql_query($sql);
         if (mysql_error()) trigger_error(mysql_error(), E_USER_ERROR);
     }
-    if ($user->var_i18n != $CONFIG['default_i18n'] AND $_SESSION['lang']=='') $_SESSION['lang'] = $user->var_i18n;
+    if ($user->var_i18n != $CONFIG['default_i18n'] AND $_SESSION['lang']=='')
+    {
+        $_SESSION['lang'] = $user->var_i18n;
+    }
 
     // Make an array full of users permissions
     // The zero permission is added to all users, zero means everybody can access
-    $userpermissions[]=0;
+    $userpermissions[] = 0;
     // First lookup the role permissions
     $sql = "SELECT * FROM `{$dbUsers}` AS u, `{$dbRolePermissions}` AS rp WHERE u.roleid = rp.roleid ";
     $sql .= "AND u.id = '{$_SESSION['userid']}' AND granted='true'";
@@ -116,8 +125,8 @@ elseif ($CONFIG['portal'] == TRUE)
 {
     // Invalid user and portal enabled
     // Have a look if this is a contact trying to login
-    $portalpassword=cleanvar($_REQUEST['password']);
-    $sql = "SELECT * FROM `{$dbContacts}` WHERE username='$username' AND password='$portalpassword' LIMIT 1";
+    $portalpassword = cleanvar($_REQUEST['password']);
+    $sql = "SELECT * FROM `{$dbContacts}` WHERE username='{$username}' AND password='{$portalpassword}' LIMIT 1";
     $result = mysql_query($sql);
     if (mysql_error()) trigger_error(mysql_error(),E_USER_ERROR);
     if (mysql_num_rows($result) >= 1)
@@ -137,12 +146,12 @@ elseif ($CONFIG['portal'] == TRUE)
     $_SESSION['auth'] = FALSE;
     $_SESSION['portalauth'] = FALSE;
     // log the failure
-    if ($username!='')
+    if ($username != '')
     {
-        $errdate=date('M j H:i');
-        $errmsg="$errdate Failed login for user '$username' from IP: {$_SERVER['REMOTE_ADDR']}";
-        $errmsg.="\n";
-        $errlog=@error_log($errmsg, 3, $CONFIG['access_logfile']);
+        $errdate = date('M j H:i');
+        $errmsg = "$errdate Failed login for user '{$username}' from IP: {$_SERVER['REMOTE_ADDR']}";
+        $errmsg .= "\n";
+        $errlog = @error_log($errmsg, 3, $CONFIG['access_logfile']);
         ## if (!$errlog) echo "Fatal error logging this problem<br />";
         unset($errdate);
         unset($errmsg);

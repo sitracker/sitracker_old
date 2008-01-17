@@ -20,11 +20,11 @@ $id = cleanvar($_REQUEST['id']);
 include ('htmlheader.inc.php');
 
 // log the failure
-if ($username!='')
+if ($username != '')
 {
-    $errdate=date('M j H:i');
-    $errmsg="$errdate ".permission_name($id)."({$id}) ".sprintf($strPermissionDeniedForX, $username);
-    $errmsg.="\n";
+    $errdate = date('M j H:i');
+    $errmsg = "$errdate ".permission_name($id)."({$id}) ".sprintf($strPermissionDeniedForX, $username);
+    $errmsg .= "\n";
     if (!empty($CONFIG['access_logfile']))
     {
         $errlog=error_log($errmsg, 3, "{$CONFIG['access_logfile']}");
@@ -39,9 +39,12 @@ if (strpos($id,',')!==FALSE)
 {
     $refused = explode(',', $id);
 }
-else $refused = array($id);
+else
+{
+    $refused = array($id);
+}
 
-echo "<p align='center' class='error'>Sorry, you do not have permission to the following areas:</p>";
+echo "<p align='center' class='error'>Sorry, you do not have permission to the following areas:</p>"; // FIXME i18n
 echo "<ul>";
 foreach ($refused AS $id)
 {
@@ -49,7 +52,7 @@ foreach ($refused AS $id)
     journal(CFG_LOGGING_MIN, 'Access Failure', "Access to ".permission_name($id)." ($id) was denied", CFG_JOURNAL_OTHER, $id);
 }
 echo "</ul>";
-   echo "<p align='center'>If you feel that you should have access to this particular feature, please ask an administrator to grant you access</p>";
+echo "<p align='center'>If you feel that you should have access to this particular feature, please ask an administrator to grant you access</p>";// FIXME i18n
 echo "<p align='center'><a href=\"javascript:history.back();\">Back</a></p>";
 
 

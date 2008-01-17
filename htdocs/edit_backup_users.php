@@ -19,8 +19,14 @@ require ('functions.inc.php');
 if (empty($_REQUEST['user'])
     OR $_REQUEST['user']=='current'
     OR $_REQUEST['user']==$_SESSION['userid']
-    OR $_REQUEST['userid']==$_SESSION['userid']) $permission = 58; // Edit your software skills
-else $permission = 59; // Manage users software skills
+    OR $_REQUEST['userid']==$_SESSION['userid'])
+{
+    $permission = 58; // Edit your software skills
+}
+else
+{
+    $permission = 59; // Manage users software skills
+}
 
 // This page requires authentication
 require ('auth.inc.php');
@@ -32,8 +38,15 @@ $save = $_REQUEST['save'];
 if (empty($save))
 {
     // External variables
-    if (empty($_REQUEST['user']) OR $_REQUEST['user']=='current') $user = mysql_real_escape_string($sit[2]);
-    else $user = mysql_real_escape_string($_REQUEST['user']);
+    if (empty($_REQUEST['user']) OR $_REQUEST['user']=='current')
+    {
+        $user = mysql_real_escape_string($sit[2]);
+    }
+    else
+    {
+        $user = mysql_real_escape_string($_REQUEST['user']);
+    }
+    
     $default = cleanvar($_REQUEST['default']);
     $softlist = $_REQUEST['softlist'];
 
@@ -49,26 +62,31 @@ if (empty($save))
     $sql = "SELECT * FROM `{$dbUserSoftware}` AS us, `{$dbSoftware}` AS s ";
     $sql .= "WHERE us.softwareid = s.id AND userid='{$user}' ORDER BY name";
     $result = mysql_query($sql);
-    $countsw=mysql_num_rows($result);
+    $countsw = mysql_num_rows($result);
+    
     if ($countsw >= 1)
     {
         echo "<form action='{$_SERVER['PHP_SELF']}' method='post'>\n";
         echo "<table align='center'>\n";
         echo "<tr><th>{$strSkill}</th><th>{$strSubstitute}</th></tr>";
-        $class='shade1';
+        $class = 'shade1';
         while ($software = mysql_fetch_object($result))
         {
             echo "<tr class='$class'>";
             echo "<td><strong>{$software->id}</strong>: {$software->name}</td>";
-            if ($software->backupid==0) $software->backupid=$default;
+            if ($software->backupid == 0)
+            {
+                $software->backupid=$default;
+            }
+            
             echo "<td>".software_backup_dropdown('backup[]', $user, $software->id, $software->backupid)."</td>";
             echo "</tr>\n";
-            if ($class=='shade2') $class = "shade1";
+            if ($class == 'shade2') $class = "shade1";
             else $class = "shade2";
             flush();
             $softarr[]=$software->id;
         }
-        $softlist=implode(',',$softarr);
+        $softlist = implode(',',$softarr);
         echo "</table>\n";
         echo "<input type='hidden' name='user' value='$user' />";
         echo "<input type='hidden' name='softlist' value='$softlist' />";

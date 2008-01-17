@@ -46,20 +46,20 @@ if (empty($productid) AND $display!='skills')
                 echo "<table summary='List of products' align='center' width='95%'>";
                 echo "<tr><th width='20%'>{$strProduct}</th><th width='60%'>{$strDescription}</th><th width='10%'>{$strLinkedSkills}</th>";
                 echo "<th width='10%'>{$strActiveContracts}</th></tr>\n";
-                $shade='shade1';
+                $shade = 'shade1';
                 while ($product = mysql_fetch_object($presult))
                 {
                     // Count linked skills
                     $ssql = "SELECT COUNT(softwareid) FROM `{$dbSoftwareProducts}` WHERE productid={$product->id}";
                     $sresult = mysql_query($ssql);
                     if (mysql_error()) trigger_error("MySQL Query Error ".mysql_error(), E_USER_ERROR);
-                    list($countlinked)=mysql_fetch_row($sresult);
+                    list($countlinked) = mysql_fetch_row($sresult);
 
                     // Count contracts
                     $ssql = "SELECT COUNT(id) FROM `{$dbMaintenance}` WHERE product='{$product->id}' AND term!='yes' AND expirydate > '{$now}'";
                     $sresult = mysql_query($ssql);
                     if (mysql_error()) trigger_error("MySQL Query Error ".mysql_error(), E_USER_ERROR);
-                    list($countcontracts)=mysql_fetch_row($sresult);
+                    list($countcontracts) = mysql_fetch_row($sresult);
 
                     if ($countlinked < 1) $shade='urgent';
                     if ($countcontracts < 1) $shade='expired';
@@ -67,21 +67,30 @@ if (empty($productid) AND $display!='skills')
                     echo "<td>{$product->description}</td>";
                     echo "<td align='right'>{$countlinked}</td>";
                     echo "<td align='right'>";
-                    if ($countcontracts > 0) echo "<a href='browse_contract.php?search_string=&amp;productid={$product->id}&amp;activeonly=yes'>{$countcontracts}</a>";
-                    else echo "{$countcontracts}";
+                    if ($countcontracts > 0)
+                    {
+                        echo "<a href='browse_contract.php?search_string=&amp;productid={$product->id}&amp;activeonly=yes'>{$countcontracts}</a>";
+                    }
+                    else
+                    {
+                        echo "{$countcontracts}";
+                    }
                     echo "</td>";
                     // FIXME link to delete product
                     // echo "<td><a href='edit_product.php?id={$product->id}'>Edit</a> | <a href='delete_product.php?id={$product->id}'>Delete</a></td>";
                     echo "</tr>\n";
-                    if ($shade=='shade1') $shade='shade2';
-                    else $shade='shade1';
+                    if ($shade == 'shade1') $shade = 'shade2';
+                    else $shade = 'shade1';
                 }
                 echo "</table>\n";
             }
             else echo "<p class='warning'>No products for this vendor</p>\n";
         }
     }
-    else echo "<p class='error'>No vendors defined</p>";
+    else
+    {
+        echo "<p class='error'>No vendors defined</p>";
+    }
 
 
     $sql = "SELECT s.* FROM `{$dbSoftware}` AS s LEFT JOIN `{$dbSoftwareProducts}` AS sp ON s.id = sp.softwareid WHERE sp.softwareid IS NULL";
@@ -108,10 +117,24 @@ if (empty($productid) AND $display!='skills')
             echo "<tr class='$shade'><td><img src='{$CONFIG['application_webpath']}images/icons/{$iconset}/16x16/skill.png' width='16' height='16' alt='' /> ";
             echo "{$software['name']}</td>";
             echo "<td>";
-            if ($software['lifetime_start'] > 1) echo date($CONFIG['dateformat_shortdate'],mysql2date($software['lifetime_start'])).' to ';
-            else echo "&#8734;";
-            if ($software['lifetime_end'] > 1) echo date($CONFIG['dateformat_shortdate'],mysql2date($software['lifetime_end']));
-            elseif ($software['lifetime_start'] >1) echo "&#8734;";
+            if ($software['lifetime_start'] > 1)
+            {
+                echo date($CONFIG['dateformat_shortdate'],mysql2date($software['lifetime_start'])).' to ';// FIXME i18n
+            }
+            else
+            {
+                echo "&#8734;";
+            }
+            
+            if ($software['lifetime_end'] > 1)
+            {
+                echo date($CONFIG['dateformat_shortdate'],mysql2date($software['lifetime_end']));
+            }
+            elseif ($software['lifetime_start'] > 1)
+            {
+                echo "&#8734;";
+            }
+            
             echo "</td>";
             echo "<td>{$countengineers}</td>";
             echo "<td>{$countincidents}</td>";
@@ -120,8 +143,8 @@ if (empty($productid) AND $display!='skills')
             echo "| <a href='edit_software.php?id={$software['id']}&amp;action=delete'>{$strDelete}</a>";
             echo "</td>";
             echo "</tr>\n";
-            if ($shade=='shade1') $shade='shade2';
-            else $shade='shade1';
+            if ($shade == 'shade1') $shade = 'shade2';
+            else $shade = 'shade1';
         }
         echo "</table>";
     }
@@ -135,8 +158,8 @@ elseif (empty($productid) AND ($display=='skills' OR $display=='software'))
     if (mysql_num_rows($result) >= 1)
     {
         echo "<table align='center'>";
-        echo "<tr><th>{$strSkill}</th><th>{$strVendor}</th><th>{$strLifetime}</th><th>Linked to # Products</th><th>Engineers</th><th>{$strIncidents}</th><th>{$strOperation}</th></tr>";
-        $shade='shade1';
+        echo "<tr><th>{$strSkill}</th><th>{$strVendor}</th><th>{$strLifetime}</th><th>Linked to # Products</th><th>Engineers</th><th>{$strIncidents}</th><th>{$strOperation}</th></tr>"; // FIXME i18n
+        $shade = 'shade1';
         while ($software = mysql_fetch_object($result))
         {
             $ssql = "SELECT COUNT(userid) FROM `{$dbUserSoftware}` AS us, `{$dbUsers}` AS u WHERE us.userid = u.id AND u.status!=0 AND us.softwareid='{$software->id}'";
@@ -155,20 +178,38 @@ elseif (empty($productid) AND ($display=='skills' OR $display=='software'))
             if (mysql_error()) trigger_error(mysql_error(),E_USER_ERROR);
             list($countincidents) = mysql_fetch_row($sresult);
 
-            $lifetime_start=mysql2date($software->lifetime_start);
-            $lifetime_end=mysql2date($software->lifetime_end);
+            $lifetime_start = mysql2date($software->lifetime_start);
+            $lifetime_end = mysql2date($software->lifetime_end);
 
             if ($countengineers < 1) $shade = "notice";
             if ($countlinked < 1) $shade = "urgent";
-            if ($lifetime_start > $now OR ($lifetime_end > 1 AND $lifetime_end < $now)) $shade='expired';
-            echo "<tr class='$shade'>";
+            if ($lifetime_start > $now OR ($lifetime_end > 1 AND $lifetime_end < $now))
+            {
+                $shade='expired';
+            }
+            
+            echo "<tr class='{$shade}'>";
             echo "<td>{$software->name}</td>";
             echo "<td>{$software->vendorname}</td>";
             echo "<td>";
-            if ($software->lifetime_start > 1) echo date($CONFIG['dateformat_shortdate'],$lifetime_start).' to ';
-            else echo "&#8734;";
-            if ($software->lifetime_end > 1) echo date($CONFIG['dateformat_shortdate'],$lifetime_end);
-            elseif ($software->lifetime_start >1) echo "&#8734;";
+            if ($software->lifetime_start > 1)
+            {
+                echo date($CONFIG['dateformat_shortdate'],$lifetime_start).' to ';
+            }
+            else
+            {
+                echo "&#8734;";
+            }
+            
+            if ($software->lifetime_end > 1)
+            {
+                echo date($CONFIG['dateformat_shortdate'],$lifetime_end);
+            }
+            elseif ($software->lifetime_start >1)
+            {
+                echo "&#8734;";
+            }
+            
             echo "</td>";
             echo "<td>{$countlinked}</td>";
             echo "<td>{$countengineers}</td>";
@@ -178,8 +219,8 @@ elseif (empty($productid) AND ($display=='skills' OR $display=='software'))
             echo "| <a href='edit_software.php?id={$software->id}&amp;action=delete'>{$strDelete}</a>";
             echo "</td>";
             echo "</tr>\n";
-            if ($shade=='shade1') $shade='shade2';
-            else $shade='shade1';
+            if ($shade == 'shade1') $shade = 'shade2';
+            else $shade = 'shade1';
         }
         echo "</table>";
     }
@@ -225,10 +266,23 @@ else
                     echo "<tr class='$shade'><td><img src='{$CONFIG['application_webpath']}images/icons/{$iconset}/16x16/skill.png' width='16' height='16' alt='' /> ";
                     echo "{$software['name']}</td>";
                     echo "<td>";
-                    if ($software['lifetime_start'] > 1) echo date($CONFIG['dateformat_shortdate'],mysql2date($software['lifetime_start'])).' to ';
-                    else echo "&#8734;";
-                    if ($software['lifetime_end'] > 1) echo date($CONFIG['dateformat_shortdate'],mysql2date($software['lifetime_end']));
-                    elseif ($software['lifetime_start'] >1) echo "&#8734;";
+                    if ($software['lifetime_start'] > 1)
+                    {
+                        echo date($CONFIG['dateformat_shortdate'],mysql2date($software['lifetime_start'])).' to ';
+                    }
+                    else
+                    {
+                        echo "&#8734;";
+                    }
+                    
+                    if ($software['lifetime_end'] > 1)
+                    {
+                        echo date($CONFIG['dateformat_shortdate'],mysql2date($software['lifetime_end']));
+                    }
+                    elseif ($software['lifetime_start'] > 1)
+                    {
+                        echo "&#8734;";
+                    }
                     echo "</td>";
                     echo "<td>{$countengineers}</td>";
                     echo "<td>{$countincidents}</td>";
@@ -237,36 +291,40 @@ else
                     echo "| <a href='edit_software.php?id={$software['softwareid']}&amp;action=delete'>{$strDelete}</a>";
                     echo "</td>";
                     echo "</tr>\n";
-                    if ($shade=='shade1') $shade='shade2';
-                    else $shade='shade1';
+                    if ($shade == 'shade1') $shade = 'shade2';
+                    else $shade = 'shade1';
                 }
             }
             else
             {
-                echo "<tr><td>&nbsp;</td><td><em>No skills linked to this product</em></td><td>&nbsp;</td></tr>\n";
+                echo "<tr><td>&nbsp;</td><td><em>No skills linked to this product</em></td><td>&nbsp;</td></tr>\n";// FIXME i18n
             }
             echo "</table>\n";
-            echo "<p align='center'><a href='add_product_software.php?productid={$product->id}'>Link skill to {$product->name}</a></p>\n";
+            echo "<p align='center'><a href='add_product_software.php?productid={$product->id}'>Link skill to {$product->name}</a></p>\n";// FIXME i18n
 
             $sql = "SELECT * FROM `{$dbMaintenance}` WHERE product='{$product->id}' ORDER BY id DESC";
             $result = mysql_query($sql);
             if (mysql_error()) trigger_error(mysql_error(),E_USER_ERROR);
             if (mysql_num_rows($result) >= 1)
             {
-                echo "<h3>Related Contracts</h3>";
+                echo "<h3>Related Contracts</h3>";// FIXME i18n
                 echo "<table align='center'>";
                 echo "<tr><th>{$strContract}</th><th>{$strSite}</th></tr>";
                 $shade = 'shade1';
                 while ($contract = mysql_fetch_object($result))
                 {
-                    if ($contract->term=='yes' OR $contract->expirydate < $now) $shade = "expired";
+                    if ($contract->term=='yes' OR $contract->expirydate < $now)
+                    {
+                        $shade = "expired";
+                    }
+                    
                     echo "<tr class='{$shade}'>";
                     echo "<td><img src='{$CONFIG['application_webpath']}images/icons/{$iconset}/16x16/contract.png' width='16' height='16' alt='' /> ";
                     echo "<a href='contract_details.php?id={$contract->id}'>".sprintf($strContractNum, $contract->id)."</a></td>";
                     echo "<td>".site_name($contract->site)."</td>";
                     echo "</tr>\n";
-                    if ($shade=='shade1') $shade='shade2';
-                    else $shade='shade1';
+                    if ($shade == 'shade1') $shade = 'shade2';
+                    else $shade = 'shade1';
                 }
                 echo "</table>\n";
             }
@@ -287,8 +345,8 @@ else
                     echo "<td>".contact_realname($incident->contact)."</td><td>".contact_site($incident->contact)."</td>";
                     echo "<td>{$incident->title}</td>";
                     echo "</tr>\n";
-                    if ($shade=='shade1') $shade='shade2';
-                    else $shade='shade1';
+                    if ($shade == 'shade1') $shade = 'shade2';
+                    else $shade = 'shade1';
                 }
                 echo "</table>\n";
 
@@ -296,14 +354,22 @@ else
         }
 
     }
-    else echo "<p class='error'>No matching product</p>";
+    else echo "<p class='error'>No matching product</p>";// FIXME i18n
 
     echo "<p align='center'><a href='{$_SERVER['PHP_SELF']}#{$productid}'>Back to list of products</a></p>";
 }
 
 echo "<p align='center'><a href='add_vendor.php'>{$strAddVendor}</a> | <a href='add_product.php'>{$strAddProduct}</a> | <a href='add_software.php'>{$strAddSkill}</a>";
-if ($display=='skills' OR $display=='software') echo " | <a href='products.php'>{$strListProducts}</a>";
-else echo " | <a href='products.php?display=skills'>{$strListSkills}</a>";
+
+if ($display=='skills' OR $display=='software')
+{
+    echo " | <a href='products.php'>{$strListProducts}</a>";
+}
+else
+{
+    echo " | <a href='products.php?display=skills'>{$strListSkills}</a>";
+}
+
 echo "</p>";
 
 include ('htmlfooter.inc.php');

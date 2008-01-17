@@ -45,14 +45,18 @@ if (empty($submit))
         echo "<tr><th>{$strTags}:</th><td><textarea rows='2' cols='40' name='tags'>".list_tags($id, 2, false)."</textarea></td></tr>\n";
         echo "<tr><th>{$strImportant}:</th>";
         echo "<td>{$strChangingContact}. ";
-        if ($incident['maintenanceid'] >= 1) echo sprintf($strLoggedUnder, $incident['maintenanceid']).". ";
+        if ($incident['maintenanceid'] >= 1)
+        {
+            echo sprintf($strLoggedUnder, $incident['maintenanceid']).". ";
+        }
+        
         else echo "{$strIncidentNoContract}. ";
         echo "{$strToChangeContract}.";
         echo "</td></tr>\n";
         echo "<tr><th>{$strContact}:</th><td>";
         echo contact_drop_down("contact", $incident["contact"], TRUE)."</td></tr>\n";
         flush();
-        $maintid=maintenance_siteid($incident['maintenanceid']);
+        $maintid = maintenance_siteid($incident['maintenanceid']);
         echo "<tr><th>{$strSite}:</th><td>".site_name($maintid)."</td></tr>";
         echo "<tr><th>{$strSkill}:</th><td>".software_drop_down("software", $incident["softwareid"])."</td></tr>\n";
         echo "<tr><th>{$strVersion}:</th>";
@@ -72,22 +76,22 @@ if (empty($submit))
         plugin_do('edit_incident_form');
         echo "</table>\n";
         echo "<p align='center'>";
-        ?>
-        <input name="type" type="hidden" value="Support" />
-        <input name="id" type="hidden" value="<?php echo $id; ?>" />
-        <input name="oldtitle" type="hidden" value="<?php echo $incident["title"]; ?>" />
-        <input name="oldcontact" type="hidden" value="<?php echo $incident["contact"]; ?>" />
-        <input name="oldccemail" type="hidden" value="<?php echo $incident["ccemail"]; ?>" />
-        <input name="oldescalationpath" type="hidden" value="<?php echo db_read_column('name', 'escalationpaths', $incident["escalationpath"]) ?>" />
-        <input name="oldexternalid" type="hidden" value="<?php echo $incident["externalid"]; ?>" />
-        <input name="oldexternalengineer" type="hidden" value="<?php echo $incident["externalengineer"]; ?>" />
-        <input name="oldexternalemail" type="hidden" value="<?php echo $incident["externalemail"]; ?>" />
-        <input name="oldpriority" type="hidden" value="<?php echo $incident["priority"]; ?>" />
-        <input name="oldstatus" type="hidden" value="<?php echo $incident["status"]; ?>" />
-        <input name="oldproductversion" type="hidden" value="<?php echo $incident["productversion"]; ?>" />
-        <input name="oldproductservicepacks" type="hidden" value="<?php echo $incident["productservicepacks"]; ?>" />
-        <input name="oldsoftware" type="hidden" value="<?php echo $incident["softwareid"] ?>" />
-        <?php
+        echo "<input name='type' type='hidden' value='Submit' />";
+
+        echo "<input name='id' type='hidden' value=\"{$id}\" />";
+        echo "<input name='oldtitle' type='hidden' value=\"{$incident['title']}\" />";
+        echo "<input name='oldcontact' type='hidden' value=\"{$incident['contact']}\" />";
+        echo "<input name='oldccemail' type='hidden' value=\"{$incident['ccemail']}\" />";
+        echo "<input name='oldescalationpath' type='hidden' value=\"".db_read_column('name', 'escalationpaths', $incident["escalationpath"])."\" />";
+        echo "<input name='oldexternalid' type='hidden' value=\"{$incident['externalid']}\" />";
+        echo "<input name='oldexternalengineer' type='hidden' value=\"{$incident['externalengineer']}\" />";
+        echo "<input name='oldexternalemail' type='hidden' value=\"{$incident['externalemail']}\" />";
+        echo "<input name='oldpriority' type='hidden' value=\"{$incident['priority']}\" />";
+        echo "<input name='oldstatus' type='hidden' value=\"{$incident['status']}\" />";
+        echo "<input name='oldproductversion' type='hidden' value=\"{$incident['productversion']}\" />";
+        echo "<input name='oldproductservicepacks' type='hidden' value=\"{$incident['productservicepacks']}\" />";
+        echo "<input name='oldsoftware' type='hidden' value=\"{$incident['softwareid']}\" />";
+
         echo "<input name='submit' type='submit' value='{$strSave}' /></p>";
         echo "</form>\n";
     }
@@ -186,24 +190,60 @@ else
                 {
                     $header .= "External ID: ";
                     if ($oldexternalid != "")
+                    {
                         $header .= $oldexternalid;
+                    }
                     else
+                    {
                         $header .= "None";
+                    }
+                    
                     $header .= " -&gt; <b>";
                     if ($externalid != "")
+                    {
                         $header .= $externalid;
+                    }
                     else
+                    {
                         $header .= "None";
+                    }
+                        
                     $header .= "</b>\n";
                 }
-                $escalationpath=db_read_column('name', $dbEscalationPaths, $escalationpath);
-                if ($oldccemail != $ccemail) $header .= "CC Email: " . $oldccemail . " -&gt; <b>" . $ccemail . "</b>\n";
-                if ($oldescalationpath != $escalationpath) $header .= "Escalation: " . $oldescalationpath . " -&gt; <b>" . $escalationpath . "</b>\n";
-                if ($oldexternalengineer != $externalengineer) $header .= "External Engineer: " . $oldexternalengineer . " -&gt; <b>" . $externalengineer . "</b>\n";
-                if ($oldexternalemail != $externalemail) $header .= "External email: " . $oldexternalemail . " -&gt; <b>" . $externalemail . "</b>\n";
-                if ($oldsoftware != $software) $header .= "Skill: ".software_name($oldsoftware)." -&gt; <b>".software_name($software)."</b>\n";
-                if ($oldproductversion != $productversion) $header .= "Version: ".$oldproductversion." -&gt; <b>".$productversion."</b>\n";
-                if ($oldproductservicepacks != $productservicepacks) $header .= "Service Packs Applied: ".$oldproductservicepacks." -&gt; <b>".$productservicepacks."</b>\n";
+                $escalationpath = db_read_column('name', $dbEscalationPaths, $escalationpath);
+                if ($oldccemail != $ccemail)
+                {
+                    $header .= "CC Email: " . $oldccemail . " -&gt; <b>" . $ccemail . "</b>\n";
+                }
+                
+                if ($oldescalationpath != $escalationpath)
+                {
+                    $header .= "Escalation: " . $oldescalationpath . " -&gt; <b>" . $escalationpath . "</b>\n";
+                }
+                if ($oldexternalengineer != $externalengineer)
+                {
+                    $header .= "External Engineer: " . $oldexternalengineer . " -&gt; <b>" . $externalengineer . "</b>\n";
+                }
+                
+                if ($oldexternalemail != $externalemail)
+                {
+                    $header .= "External email: " . $oldexternalemail . " -&gt; <b>" . $externalemail . "</b>\n";
+                }
+                
+                if ($oldsoftware != $software)
+                {
+                    $header .= "Skill: ".software_name($oldsoftware)." -&gt; <b>".software_name($software)."</b>\n";
+                }
+                
+                if ($oldproductversion != $productversion)
+                {
+                    $header .= "Version: ".$oldproductversion." -&gt; <b>".$productversion."</b>\n";
+                }
+                
+                if ($oldproductservicepacks != $productservicepacks)
+                {
+                    $header .= "Service Packs Applied: ".$oldproductservicepacks." -&gt; <b>".$productservicepacks."</b>\n";
+                }
 
                 if (!empty($header)) $header .= "<hr>";
              //get current incident status

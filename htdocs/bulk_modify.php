@@ -31,9 +31,10 @@ $action = cleanvar($_REQUEST['action']);
 
             $result = mysql_query($sql);
             if (mysql_error()) trigger_error(mysql_error(),E_USER_ERROR);
+            
             if (mysql_num_rows($result) >= 1)
             {
-                echo "<form action='".$_SERVER['PHP_SELF']."?action=change_external_esc' method='post'>";
+                echo "<form action='{$_SERVER['PHP_SELF']}?action=change_external_esc' method='post'>";
 
                 echo "<p align='center'>{$strChangeExternalDetailsOnAllOpenForSelected}</p>";
                 echo "<table class='vertical'>";
@@ -41,7 +42,7 @@ $action = cleanvar($_REQUEST['action']);
                 echo "<td><select name='oldexternalemail'>";
                 while ($row = mysql_fetch_array($result))
                 {
-                    echo "<option value=\"".$row['externalengineer'].",".$row['externalemail']."\">";
+                    echo "<option value=\"{$row['externalengineer']},{$row['externalemail']}\">";
                     echo $row['externalengineer']." - ".$row['externalemail']."</option>\n";
                 }
                 echo "</select></td></tr>";
@@ -58,7 +59,7 @@ $action = cleanvar($_REQUEST['action']);
             {
                 echo "<p align='center'>{$strCurrentlyNoOpenEscalatedIncidentsToModify}</p>";
             }
-        break;
+            break;
         case 'change_external_esc': //omdify the extenal escalation info
 /*
 External Engineer:  -&gt; <b>Foo</b>
@@ -87,8 +88,8 @@ External email:  -&gt; <b>foo@pheaney.co.uk</b>
             }
 
 
-            $sql = "UPDATE `{$dbIncidents}` SET externalengineer = '$new_extenal_engineer', externalemail = '$new_external_email' ";
-            $sql .= " WHERE externalemail = '$old_email_address' AND closed = '0'";
+            $sql = "UPDATE `{$dbIncidents}` SET externalengineer = '{$new_extenal_engineer}', externalemail = '{$new_external_email}' ";
+            $sql .= " WHERE externalemail = '{$old_email_address}' AND closed = '0'";
             $result = mysql_query($sql);
             if (mysql_error()) trigger_error(mysql_error(),E_USER_ERROR);
             html_redirect("main.php");

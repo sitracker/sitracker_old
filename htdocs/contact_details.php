@@ -41,13 +41,13 @@ if ($output == 'vcard')
 include ('htmlheader.inc.php');
 
 // Display contacts
-$sql="SELECT * FROM `{$dbContacts}` WHERE id='$id' ";
+$sql = "SELECT * FROM `{$dbContacts}` WHERE id='{$id}' ";
 $contactresult = mysql_query($sql);
 if (mysql_error()) trigger_error("MySQL Query Error ".mysql_error(), E_USER_WARNING);
-while ($contactrow=mysql_fetch_array($contactresult))
+while ($contactrow = mysql_fetch_array($contactresult))
 {
     // Lookup the site address if this contact hasn't got a specific address set
-    if ($contactrow['address1']=='')
+    if ($contactrow['address1'] == '')
     {
         $sitesql = "SELECT * FROM `{$dbSites}` WHERE id='{$contactrow['siteid']}' LIMIT 1";
         $siteresult = mysql_query($sitesql);
@@ -77,13 +77,19 @@ while ($contactrow=mysql_fetch_array($contactresult))
         echo "<tr><th>{$strStatus}:</th><td><span class='expired'>{$strInactive}</span></td></tr>\n";
     }
     $tags = list_tags($id, 1, TRUE);
-    if (!empty($tags)) echo "<tr><th>{$strTags}:</th><td>{$tags}</td></tr>\n";
+    if (!empty($tags))
+    {
+        echo "<tr><th>{$strTags}:</th><td>{$tags}</td></tr>\n";
+    }
+    
     echo "<tr><th>{$strJobTitle}:</th><td>{$contactrow['jobtitle']}</td></tr>\n";
     echo "<tr><th>{$strSite}:</th><td>";
-    echo "<a href='site_details.php?id={$contactrow['siteid']}'>".site_name($contactrow['siteid'])."</a></td></tr>\n";
+    echo "<a href='site_details.php?id={$contactrow['siteid']}'>";
+    echo site_name($contactrow['siteid'])."</a></td></tr>\n";
     if (!empty($contactrow['department']))
     {
-        echo "<tr><th>{$strDepartment}:</th><td>{$contactrow['department']}</td></tr>\n";
+        echo "<tr><th>{$strDepartment}:</th>";
+        echo "<td>{$contactrow['department']}</td></tr>\n";
     }
 
     if ($contactrow['dataprotection_address'] != 'Yes')
@@ -138,7 +144,8 @@ while ($contactrow=mysql_fetch_array($contactresult))
     }
 
     echo "</td></tr>\n";
-    echo "<tr><th>{$strNotes}:</th><td>".nl2br($contactrow['notes'])."</td></tr>\n";
+    echo "<tr><th>{$strNotes}:</th><td>";
+    echo nl2br($contactrow['notes'])."</td></tr>\n";
 
     echo "<tr><td colspan='2'>&nbsp;</td></tr>\n";
     echo "<tr><th>{$strAccessDetails}:</th><td>{$strUsername}: <code>{$contactrow['username']}</code>";
@@ -147,14 +154,21 @@ while ($contactrow=mysql_fetch_array($contactresult))
     echo "<tr><th>{$strIncidents}:</th><td>";
     $openincidents = contact_count_open_incidents($id);
     $totalincidents = contact_count_incidents($id);
-    if ($totalincidents == 0) echo $strNone;
-    //if ($openincidents >= 1) echo "$openincidents open, ";
-    if ($openincidents >= 1) echo sprintf($strNumOpenIncidents, $openincidents).", ";
-
-
-    if ($totalincidents>=1)
+    if ($totalincidents == 0)
     {
-        echo "$totalincidents logged, see <a href='contact_support.php?id={$id}'>here</a>";
+        echo $strNone;
+    }
+    
+    //if ($openincidents >= 1) echo "$openincidents open, ";
+    if ($openincidents >= 1)
+    {
+        echo sprintf($strNumOpenIncidents, $openincidents).", ";
+    }
+
+
+    if ($totalincidents >= 1)
+    {
+        echo "$totalincidents logged, see <a href='contact_support.php?id={$id}'>here</a>"; // FIXME i18n
     }
 
     echo "</td></tr>\n";
@@ -208,7 +222,7 @@ while ($contactrow=mysql_fetch_array($contactresult))
         $sql .= "m.expirydate, m.term ";
         $sql .= "FROM `{$dbSupportContacts}` AS sc, `{$dbMaintenance}` AS m, `{$dbProducts}` AS p ";
         $sql .= "WHERE sc.maintenanceid=m.id AND m.product=p.id AND sc.contactid='$id' ";
-        $result=mysql_query($sql);
+        $result = mysql_query($sql);
         if (mysql_error()) trigger_error("MySQL Query Error ".mysql_error(), E_USER_ERROR);
         if (mysql_num_rows($result)>0)
         {
@@ -219,30 +233,41 @@ while ($contactrow=mysql_fetch_array($contactresult))
 
             $supportcount=1;
             $shade='shade2';
-            while ($supportedrow=mysql_fetch_array($result))
+            while ($supportedrow = mysql_fetch_array($result))
             {
-                if ($supportedrow['term'] == 'yes') $shade='expired';
-                if ($supportedrow['expirydate'] < $now) $shade='expired';
+                if ($supportedrow['term'] == 'yes')
+                {
+                    $shade='expired';
+                }
+                
+                if ($supportedrow['expirydate'] < $now)
+                {
+                    $shade='expired';
+                }
 
                 echo "<tr><td class='$shade'>";
                 echo "<img src='{$CONFIG['application_webpath']}images/icons/{$iconset}/16x16/contract.png' width='16' height='16' alt='' /> ";
                 echo "<a href='contract_details.php?id={$supportedrow['maintenanceid']}'>{$strContract}: {$supportedrow['maintenanceid']}</a></td>";
                 echo "<td class='$shade'>{$supportedrow['productname']}</td>";
                 echo "<td class='$shade'>".date($CONFIG['dateformat_date'], $supportedrow['expirydate']);
-                if ($supportedrow['term'] == 'yes') echo " {$strTerminated}";
+                if ($supportedrow['term'] == 'yes')
+                {
+                    echo " {$strTerminated}";
+                }
+                
                 echo "</td>";
                 echo "</tr>\n";
                 $supportcount++;
-                $shade='shade2';
+                $shade = 'shade2';
             }
             echo "</table>\n";
-
         }
         else
         {
             echo "<p align='center'>{$strNone}</p>\n";
         }
-        echo "<p align='center'><a href='add_contact_support_contract.php?contactid={$id}&amp;context=contact'>";
+        echo "<p align='center'>";
+        echo "<a href='add_contact_support_contract.php?contactid={$id}&amp;context=contact'>";
         echo "{$strAssociateContactWithContract}</a></p>\n";
     }
     else
