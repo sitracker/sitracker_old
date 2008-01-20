@@ -268,11 +268,16 @@ elseif ($mode=='save')
         exit;
     }
 
+    $sql = "SELECT * FROM `{$dbUsers}` AS u WHERE id = {$userid}";
+
     // If users status is set to 0 (disabled) force 'accepting' to no
     if ($status==0) $accepting='No';
 
     // Update user profile
     $errors = 0;
+    $result = mysql_query($sql);
+    if (mysql_error()) trigger_error("MySQL Query Error ".mysql_error(), E_USER_ERROR);
+    $userdetails = mysql_fetch_row($result);
 
     // check for change of password
     if ($password != "" && $newpassword1 != "" && $newpassword2 != "")
@@ -336,7 +341,10 @@ elseif ($mode=='save')
             $collapse = 'false';
         }
 
-        if(!empty($emailonreassign))
+        //$oldstatus = user_status($userid);
+        $oldstatus = $userdetails['status'];
+
+        if (!empty($emailonreassign))
         {
             $emailonreassign = 'true';
         }
@@ -344,8 +352,6 @@ elseif ($mode=='save')
         {
             $emailonreassign = 'false';
         }
-
-        $oldstatus = user_status($edituserid);
 
         $sql  = "UPDATE `{$dbUsers}` SET realname='$realname', title='$jobtitle', email='$email', qualifications='$qualifications', ";
         $sql .= "phone='$phone', mobile='$mobile', aim='$aim', icq='$icq', msn='$msn', fax='$fax', var_incident_refresh='$incidentrefresh', ";

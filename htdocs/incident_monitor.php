@@ -81,8 +81,8 @@ echo "<table summary=\"users\" width=\"100%\" height=\"100%\" align='center'><tr
 while ($users = mysql_fetch_array($result))
 {
     $outstanding = user_countincidents($users['id']);
-    $userstatus = userstatus_name(user_status($users['id']));
-    $useraccepting = strtolower(user_accepting($users['id']));
+    $userstatus = userstatus_name($users['status']);
+    $useraccepting = strtolower($users['accepting']);
     $waiting = count_incoming_updates();
     $incidents_color = 'Blue';
     if ($outstanding >= 10) $incidents_color = 'Red';

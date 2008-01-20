@@ -287,7 +287,7 @@ elseif ($action == "check")
     echo "<h2>Check User &amp; Role Permissions</h2>"; // FIXME i18n check user and role permissions
     if (!empty($perm))
     {
-        echo "<h3>Role Permission: $perm - ".permission_name($perm)."</h3>";
+        echo "<h3>Role Permission: {$perm} - ".permission_name($perm)."</h3>";
         $sql = "SELECT rp.roleid AS roleid, username, u.id AS userid, realname, rolename ";
         $sql .= "FROM `{$dbRolePermissions}` AS rp, `{$dbRoles}` AS r, `{$dbUsers}` AS u ";
         $sql .= "WHERE rp.roleid = r.id ";

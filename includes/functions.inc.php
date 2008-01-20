@@ -3244,7 +3244,10 @@ function reseller_drop_down($name, $id)
     echo "</select>";
 }
 
-
+/*
+ *
+ * @deprecated  - PH 
+ */
 function reseller_name($id)
 {
     return db_read_column('name', 'resellers', $id);
@@ -3282,7 +3285,10 @@ function licence_type_drop_down($name, $id)
     echo "</select>";
 }
 
-
+/*
+ *
+ * @deprecated  - PH 
+ */
 function licence_type($id)
 {
     return db_read_column('name', 'licencetypes', $id);
@@ -5137,9 +5143,16 @@ function software_backup_userid($userid, $softwareid)
 */
 function incident_backup_switchover($userid, $accepting)
 {
-    global $now, $dbIncidents, $dbUpdates, $dbTempAssigns;
+    global $now, $dbIncidents, $dbUpdates, $dbTempAssigns, $dbUsers, $dbUserStatus;
 
-    if (strtolower($accepting)=='no')
+    $usersql = "SELECT u.*, us AS statusname ";
+    $usersql .= "FROM `{$dbUsers}` AS u, `{$dbUserStatus}` AS us ";
+    $usersql .= "WHERE u.id = '{$userid}' AND u.status = us.id";
+    $userresult = mysql_query($usersql);
+    if (mysql_error()) trigger_error(mysql_error(),E_USER_WARNING);
+    $user = mysql_fetch_row($userresult);
+
+    if (strtolower($accepting) == 'no')
     {
         // Look through the incidents that this user OWNS (and are not closed)
         $sql = "SELECT * FROM `{$dbIncidents}` WHERE (owner='$userid' OR towner='$userid') AND status!=2";
@@ -5148,7 +5161,7 @@ function incident_backup_switchover($userid, $accepting)
         while ($incident = mysql_fetch_object($result))
         {
             // Try and find a backup/substitute engineer
-            $backupid=software_backup_userid($userid, $incident->softwareid);
+            $backupid = software_backup_userid($userid, $incident->softwareid);
 
             if (empty($backupid))
             {
@@ -5160,14 +5173,15 @@ function incident_backup_switchover($userid, $accepting)
                 if (mysql_num_rows($fresult) < 1)
                 {
                     // it's not in the queue, and the user isn't accepting so add it
-                    $userstatus=user_status($userid);
+                    //$userstatus=user_status($userid);
+                    $userstatus = $user['status'];
                     $usql = "INSERT INTO `{$dbTempAssigns}` (incidentid,originalowner,userstatus) VALUES ('{$incident->id}', '{$userid}', '$userstatus')";
                     mysql_query($usql);
                     if (mysql_error()) trigger_error(mysql_error(),E_USER_ERROR);
                 }
             }
             else
-            {
+            {               
                 // do an automatic temporary reassign
                 // update incident
                 $rusql = "UPDATE `{$dbIncidents}` SET ";
@@ -5177,8 +5191,10 @@ function incident_backup_switchover($userid, $accepting)
 
                 // add update
                 $username=user_realname($userid);
-                $userstatus=userstatus_name(user_status($userid));
-                $usermessage=user_message($userid);
+                //$userstatus = userstatus_name(user_status($userid));
+                $userstatus = $user['statusname'];
+                //$usermessage=user_message($userid);
+                $usermessage = $user['message'];
                 $bodytext="Previous Incident Owner ({$username}) {$userstatus}  {$usermessage}";
                 $assigntype='tempassigning';
                 $risql  = "INSERT INTO `{$dbUpdates}` (incidentid, userid, bodytext, type, timestamp, currentowner, currentstatus) ";
@@ -5194,7 +5210,8 @@ function incident_backup_switchover($userid, $accepting)
                 if (mysql_error()) trigger_error(mysql_error(),E_USER_WARNING);
                 if (mysql_num_rows($fresult) < 1)
                 {
-                    $userstatus=user_status($userid);
+                    //$userstatus=user_status($userid);
+                    $userstatus = $user['status'];
                     $usql = "INSERT INTO `{$dbTempAssigns}` (incidentid,originalowner,userstatus,assigned) VALUES ('{$incident->id}', '{$userid}', '$userstatus','yes')";
                     mysql_query($usql);
                     if (mysql_error()) trigger_error(mysql_error(),E_USER_ERROR);
@@ -5251,8 +5268,10 @@ function incident_backup_switchover($userid, $accepting)
 
                         // add update
                         $username=user_realname($userid);
-                        $userstatus=userstatus_name(user_status($userid));
-                        $usermessage=user_message($userid);
+                        //$userstatus = userstatus_name(user_status($userid));
+                        $userstatus = $user['statusname'];
+                        //$usermessage=user_message($userid);
+                        $usermessage = $user['message'];
                         $bodytext="Reassigning to original owner {$username} ({$userstatus})";
                         $assigntype='reassigning';
                         $risql  = "INSERT INTO `{$dbUpdates}` (incidentid, userid, bodytext, type, timestamp, currentowner, currentstatus) ";
