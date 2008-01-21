@@ -13,6 +13,8 @@
 //          Paul Heaney <paulheaney[at]users.sourceforge.net>
 // called by tasks.php
 
+// NOTE/FIXME billing code needs sensible variable names etc PH 21/01/2008
+
 // External variables
 $user = cleanvar($_REQUEST['user']);
 $show = cleanvar($_REQUEST['show']);
@@ -559,7 +561,7 @@ if (mysql_num_rows($result) >=1 )
 
     if (!empty($billing))
     {
-        $billingSQL = "SELECT * FROM billing_periods WHERE servicelevelid = {$servicelevel_id} AND tag='{$servicelevel_tag}' AND priority='{$priority}'";
+        $billingSQL = "SELECT * FROM billing_periods WHERE tag='{$servicelevel_tag}' AND priority='{$priority}'";
 
         //echo $billingSQL;
 
@@ -706,7 +708,7 @@ if (mysql_num_rows($result) >=1 )
                                 // already have something which starts in this period just need to check it fits in the period
                                 if ($ind + $customerPeriod > $activity['starttime'] + $activity['duration'])
                                 {
-                                    $remainderInPeriod = ($ind+$customerPeriod) - $activity['starttime'];
+                                    $remainderInPeriod = ($ind+$customerPeriod) - $engineerDur;
                                     $engineerDur -= $remainderInPeriod;
 
                                     $saved = "true";
@@ -714,12 +716,13 @@ if (mysql_num_rows($result) >=1 )
                             }
                         }
 
-                        if($saved == "false" AND $activity['duration'] > 0)
+                        if ($saved == "false" AND $activity['duration'] > 0)
                         {
                             //echo "BB:".$activity['starttime'].":SAVED:{$saved}:DUR:{$activity['duration']}<br />";
                             // need to add a new block
-                            $startTime += $customerPeriod;
                             $count['customer'][$startTime] = $startTime;
+
+                            $startTime += $customerPeriod;
 
                             $engineerDur -= $customerPeriod; // was just -
                         }
