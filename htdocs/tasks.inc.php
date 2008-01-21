@@ -13,6 +13,8 @@
 //          Paul Heaney <paulheaney[at]users.sourceforge.net>
 // called by tasks.php
 
+// NOTE/FIXME billing code needs sensible variable names etc PH 21/01/2008
+
 // External variables
 $user = cleanvar($_REQUEST['user']);
 $show = cleanvar($_REQUEST['show']);
@@ -214,13 +216,13 @@ setInterval("countUp()", 1000); //every 1 seconds
 
     //get list of tasks
     $sql = "SELECT * FROM tasks WHERE 1=0 ";
-    while($tasks = mysql_fetch_object($result))
+    while ($tasks = mysql_fetch_object($result))
     {
         $sql .= "OR id={$tasks->origcolref} ";
     }
     $result = mysql_query($sql);
 
-    if($mode == 'incident')
+    if ($mode == 'incident')
     {
         echo "<h2><img src='{$CONFIG['application_webpath']}images/icons/{$iconset}/32x32/task.png' width='32' height='32' alt='' /> ";
         echo "{$strActivities}</h2>";
@@ -283,11 +285,27 @@ else
     echo "</form><br />";
 
     $sql = "SELECT * FROM tasks WHERE owner='$user' ";
-    if ($show=='' OR $show=='active' ) $sql .= "AND (completion < 100 OR completion='' OR completion IS NULL)  AND distribution != 'incident' ";
-    elseif ($show=='completed') $sql .= "AND (completion = 100) AND distribution != 'incident' ";
-    elseif ($show=='incidents') $sql .= "AND distribution = 'incident' ";
-    else $sql .= "AND 1=2 "; // force no results for other cases
-    if ($user != $sit[2]) $sql .= "AND distribution='public' ";
+    if ($show=='' OR $show=='active' )
+    {
+        $sql .= "AND (completion < 100 OR completion='' OR completion IS NULL)  AND distribution != 'incident' ";
+    }
+    elseif ($show == 'completed')
+    {
+        $sql .= "AND (completion = 100) AND distribution != 'incident' ";
+    }
+    elseif ($show == 'incidents')
+    {
+        $sql .= "AND distribution = 'incident' ";
+    }
+    else
+    {
+        $sql .= "AND 1=2 "; // force no results for other cases
+    }
+
+    if ($user != $sit[2])
+    {
+        $sql .= "AND distribution='public' ";
+    }
 
     if (!empty($sort))
     {
@@ -300,10 +318,14 @@ else
         elseif ($sort=='enddate') $sql .= "ORDER BY enddate ";
         elseif ($sort=='distribution') $sql .= "ORDER BY distribution ";
         else $sql .= "ORDER BY id ";
+
         if ($order=='a' OR $order=='ASC' OR $order='') $sql .= "ASC";
         else $sql .= "DESC";
     }
-    else $sql .= "ORDER BY IF(duedate,duedate,99999999) ASC, duedate ASC, startdate DESC, priority DESC, completion ASC";
+    else
+    {
+        $sql .= "ORDER BY IF(duedate,duedate,99999999) ASC, duedate ASC, startdate DESC, priority DESC, completion ASC";
+    }
 
     $result = mysql_query($sql);
     if (mysql_error()) trigger_error(mysql_error(),E_USER_ERROR);
@@ -318,7 +340,7 @@ if (mysql_num_rows($result) >=1 )
     echo "<tr>";
     $filter['mode'] = $mode;
     $filter['incident'] = $incident;
-    if($mode != 'incident')
+    if ($mode != 'incident')
     {
         $totalduration = 0;
         $closedduration = 0;
@@ -340,7 +362,7 @@ if (mysql_num_rows($result) >=1 )
         echo colheader('completion', $strCompletion, $sort, $order, $filter);
         echo colheader('startdate', $strStartDate, $sort, $order, $filter);
         echo colheader('duedate', $strDueDate, $sort, $order, $filter);
-        if ($show=='completed') echo colheader('enddate', $strEndDate, $sort, $order, $filter);
+        if ($show == 'completed') echo colheader('enddate', $strEndDate, $sort, $order, $filter);
     }
     else
     {
@@ -360,11 +382,11 @@ if (mysql_num_rows($result) >=1 )
         $enddate = mysql2date($task->enddate);
         $lastupdated = mysql2date($task->lastupdated);
         echo "<tr class='$shade'>";
-        if (mode != 'incident')
+        if ($mode != 'incident')
         {
             echo "<td align='center'><input type='checkbox' name='selected[]' value='{$task->id}' /></td>";
         }
-        
+
         if ($user == $sit[2])
         {
             echo "<td>";
@@ -375,7 +397,7 @@ if (mysql_num_rows($result) >=1 )
             echo "</td>";
         }
 
-        if($mode == 'incident')
+        if ($mode == 'incident')
         {
             if ($enddate == '0')
             {
@@ -442,7 +464,7 @@ if (mysql_num_rows($result) >=1 )
         else
         {
             echo "<td>".format_date_friendly($startdate)."</td>";
-            if($enddate == '0')
+            if ($enddate == '0')
             {
                 echo "<td><script type='text/javascript'>";
                 echo "var act = new Activity();";
@@ -493,7 +515,7 @@ if (mysql_num_rows($result) >=1 )
         else $shade = 'shade1';
     }
 
-    if($mode == 'incident')
+    if ($mode == 'incident')
     {
         echo "<tr class='{$shade}'><td><strong>{$strTotal}:</strong></td>";
         echo "<td colspan='5'>".format_seconds($totalduration)."</td></tr>";
@@ -501,7 +523,7 @@ if (mysql_num_rows($result) >=1 )
         echo "<td colspan='5' id='totalduration'>".exact_seconds($totalduration);
 
         echo "<script type='text/javascript'>";
-        if(empty($closedduration)) $closedduration = 0;
+        if (empty($closedduration)) $closedduration = 0;
         echo "setClosedDuration({$closedduration});";
         echo "</script>";
         echo "</td></tr>";
@@ -539,7 +561,7 @@ if (mysql_num_rows($result) >=1 )
 
     if (!empty($billing))
     {
-        $billingSQL = "SELECT * FROM billing_periods WHERE servicelevelid = {$servicelevel_id} AND tag='{$servicelevel_tag}' AND priority='{$priority}'";
+        $billingSQL = "SELECT * FROM billing_periods WHERE tag='{$servicelevel_tag}' AND priority='{$priority}'";
 
         //echo $billingSQL;
 
@@ -686,7 +708,7 @@ if (mysql_num_rows($result) >=1 )
                                 // already have something which starts in this period just need to check it fits in the period
                                 if ($ind + $customerPeriod > $activity['starttime'] + $activity['duration'])
                                 {
-                                    $remainderInPeriod = ($ind+$customerPeriod) - $activity['starttime'];
+                                    $remainderInPeriod = ($ind+$customerPeriod) - $engineerDur;
                                     $engineerDur -= $remainderInPeriod;
 
                                     $saved = "true";
@@ -694,12 +716,13 @@ if (mysql_num_rows($result) >=1 )
                             }
                         }
 
-                        if($saved == "false" AND $activity['duration'] > 0)
+                        if ($saved == "false" AND $activity['duration'] > 0)
                         {
                             //echo "BB:".$activity['starttime'].":SAVED:{$saved}:DUR:{$activity['duration']}<br />";
                             // need to add a new block
-                            $startTime += $customerPeriod;
                             $count['customer'][$startTime] = $startTime;
+
+                            $startTime += $customerPeriod;
 
                             $engineerDur -= $customerPeriod; // was just -
                         }
