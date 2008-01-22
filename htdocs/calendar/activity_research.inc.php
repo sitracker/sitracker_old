@@ -1,5 +1,4 @@
 <?php
-
 // activity_research.inc.php - Research activity information
 //
 // SiT (Support Incident Tracker) - Support call tracking system
@@ -21,12 +20,12 @@ if (realpath(__FILE__) == realpath($_SERVER['SCRIPT_FILENAME']))
 $activity_types['Research'] = "";
 
 echo "<script type='text/javascript'>
-    
+
     function activityResearch(level)
     {
-        $('newactivityalias').value = 'Research';               
+        $('newactivityalias').value = 'Research';
     }
-    
+
     activityTypes['Research'] = activityResearch;
 
 </script>

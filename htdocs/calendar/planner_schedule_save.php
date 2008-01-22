@@ -1,5 +1,4 @@
 <?php
-
 // planner_schedule_save.php - create or update tasks based on calendar
 //
 // SiT (Support Incident Tracker) - Support call tracking system
@@ -10,28 +9,28 @@
 //
 // Author: Tom Gerrard <tom.gerrard[at]salfordsoftware.co.uk>
 
-$permission=27; // View your calendar
-require('db_connect.inc.php');
-require('functions.inc.php');
-require('auth.inc.php');
-include('calendar.inc.php');
+$permission = 27; // View your calendar
+require ('db_connect.inc.php');
+require ('functions.inc.php');
+require ('auth.inc.php');
+include ('calendar.inc.php');
 
 header('Content-Type: text/plain');
 
-foreach(array(
-			  'saveAnItem',
-			  'description',
-			  'newItem',
-			  'eventStartDate',
-			  'eventEndDate',
-              'droptarget',
-              'week',
-			  'id',
-              'name',
-              'user'
-			  ) as $var)
+foreach (array(
+            'saveAnItem',
+            'description',
+            'newItem',
+            'eventStartDate',
+            'eventEndDate',
+            'droptarget',
+            'week',
+            'id',
+            'name',
+            'user'
+            ) as $var)
 {
-	eval("\$$var=cleanvar(\$_REQUEST['$var']);");
+    eval("\$$var=cleanvar(\$_REQUEST['$var']);");
 }
 
 $startDate = strtotime($eventStartDate);
@@ -39,9 +38,8 @@ $endDate = strtotime($eventEndDate);
 
 if (isset($_GET['saveAnItem']))
 {
-    switch($newItem)
+    switch ($newItem)
     {
-
         case 2:
             $day = substr($droptarget,-1) - 1;
             $startDate = $week / 1000 + 86400 * $day + $CONFIG['start_working_day'] - 3600;
@@ -52,16 +50,19 @@ if (isset($_GET['saveAnItem']))
         break;
 
         case 0:
-            $sql = "update tasks set description='" . mysql_escape_string($description) .
+            $sql = "UPDATE `{$dbTasks}` SET description='" . mysql_escape_string($description) .
                     "',name='". mysql_escape_string($name) .
                     "',startdate='".date("Y-m-d H:i:s",strtotime($eventStartDate)) .
                     "',enddate='".date("Y-m-d H:i:s",strtotime($eventEndDate)) .
-                    "' where id='" . $id . "' and completion < '1'";
-            mysql_query($sql);
-            echo $sql;
+                    "' WHERE id='" . $id . "' AND completion < '1'";
+            mysql_query($SQL);
+            if (mysql_error())
+            {
+                trigger_error(mysql_error(),E_USER_ERROR);
+                $dbg = $sql;
+            }
         break;
-	}
-    echo mysql_error();
+    }
 }
 
 ?>

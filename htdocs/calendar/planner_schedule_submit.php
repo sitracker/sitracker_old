@@ -1,5 +1,4 @@
 <?php
-
 // planner_schedule_save.php - create or update tasks based on calendar
 //
 // SiT (Support Incident Tracker) - Support call tracking system
@@ -10,26 +9,27 @@
 //
 // Author: Tom Gerrard <tom.gerrard[at]salfordsoftware.co.uk>
 
-$permission=27; // View your calendar
-require('db_connect.inc.php');
-require('functions.inc.php');
-require('auth.inc.php');
+$permission = 27; // View your calendar
+require ('db_connect.inc.php');
+require ('functions.inc.php');
+require ('auth.inc.php');
 
 header('Content-Type: text/plain');
 
-foreach(array('data', 'user') as $var) eval("\$$var=cleanvar(\$_REQUEST['$var']);");
+foreach (array('data', 'user') as $var) eval("\$$var=cleanvar(\$_REQUEST['$var']);");
 
 $parts = explode('^', $data);
 array_pop($parts);
 
 foreach ($parts as $part)
 {
+    // TODO remove debugging
     print_r(explode('~', $part));
     list($id, $schedule, $weekstart, $comments) = explode('~', $part);
     echo "id is $id, schedule is $schedule, weekstart = $weekstart, comments is $comments";
-    $name = trim(implode(' ',explode('|',  $id)));    
+    $name = trim(implode(' ',explode('|',  $id)));
     $bodytext = "$name is ";
-    
+
     switch ($schedule)
     {
         case -1:
@@ -42,9 +42,9 @@ foreach ($parts as $part)
             $bodytext .= 'ahead of schedule';
         break;
     }
-    
+
     $bodytext .= ".  $comments";
-    
+
     if (($schedule == -1) || ($comments != ""))
     {
         //trigger(TRIGGER_TIMESHEET_CREATED_STATUS,
@@ -58,23 +58,25 @@ foreach ($parts as $part)
 
     if (($schedule != 0) || ($comments != ""))
     {
-        
-        $sql = "INSERT INTO notes (userid, bodytext, link, refid) VALUES ('";
-        $sql.= $user. "', '" . $bodytext . "', '1001', $id)";       
+
+        $sql = "INSERT INTO `{$dbNotes}` (userid, bodytext, link, refid) VALUES ('";
+        $sql.= $user. "', '" . $bodytext . "', '1001', $id)";
     }
 }
 
 $ws = floor($weekstart / 1000);
 
-$sql = "UPDATE tasks SET completion = 1 WHERE startdate >= FROM_UNIXTIME($ws) AND ";
+$sql = "UPDATE `{$dbTasks}` SET completion = 1 WHERE startdate >= FROM_UNIXTIME($ws) AND ";
 $sql.= "startdate < (FROM_UNIXTIME($ws + 86400 * 7)) AND ";
 $sql.= "distribution = 'event' AND ";
 $sql.= "completion = 0 AND ";
 $sql.= "owner = ". $user;
 
 mysql_query($sql);
-echo $sql;
-
-
+if (mysql_error())
+{
+    trigger_error(mysql_error(),E_USER_ERROR);
+    $dbg = $sql;
+}
 
 ?>

@@ -1,5 +1,4 @@
 <?php
-
 // activity_travelling.inc.php - Travelling activity information
 //
 // SiT (Support Incident Tracker) - Support call tracking system
@@ -21,18 +20,15 @@ if (realpath(__FILE__) == realpath($_SERVER['SCRIPT_FILENAME']))
 $activity_types['Travelling'] = "";
 
 echo "<script type='text/javascript'>
-    
+
     function activityTravelling(level)
     {
-        $('newactivityalias').value = 'Travelling';               
+        $('newactivityalias').value = 'Travelling';
     }
-    
+
     activityTypes['Travelling'] = activityTravelling;
 
 </script>
 ";
 
 ?>
-
-
-

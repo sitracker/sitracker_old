@@ -32,7 +32,7 @@ echo "<script src='{$CONFIG['application_webpath']}calendar/week_planner.js.php?
 echo "<script type='text/javascript' src='{$CONFIG['application_webpath']}scripts/dojo/dojo.js' djConfig='parseOnLoad: true'></script>\n";
 
 echo "<script type='text/javascript'>
-	var activitycount = 0;
+    var activitycount = 0;
     dojo.require('dojo.dnd.*');
     dojo.require('dojo.event.*');
     dojo.require('dojo.lang');
@@ -97,11 +97,11 @@ global $approver;
 
 if ($approver)
 {
-	echo "<form method='post' action='" . $_SERVER['PHP_SELF'] . "?display=timesheet'>";
-	echo user_drop_down('user', $user);
-	echo "<input type='submit' value='Switch User' />";
-	echo "</form>";
-	echo "<br/>";
+    echo "<form method='post' action='" . $_SERVER['PHP_SELF'] . "?display=timesheet'>";
+    echo user_drop_down('user', $user);
+    echo "<input type='submit' value='Switch User' />";
+    echo "</form>";
+    echo "<br/>";
 }
 
 echo "<div id='addremove' style='position: absolute; display:none; top: 0px; ";

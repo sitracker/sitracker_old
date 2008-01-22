@@ -1,5 +1,4 @@
 <?php
-
 // planner_schedule_getitems.php - read event tasks and output XML
 //
 // SiT (Support Incident Tracker) - Support call tracking system
@@ -10,15 +9,15 @@
 //
 // Author: Tom Gerrard <tom.gerrard[at]salfordsoftware.co.uk>
 
-$permission=27; // View your calendar FIXME
-require('db_connect.inc.php');
-require('functions.inc.php');
-require('auth.inc.php');
+$permission = 27; // View your calendar FIXME
+require ('db_connect.inc.php');
+require ('functions.inc.php');
+require ('auth.inc.php');
 
-include('calendar.inc.php');
+include ('calendar.inc.php');
 
-foreach(array('year', 'month', 'day', 'user') as $var)
-	eval("\$$var=cleanvar(\$_REQUEST['$var']);");
+foreach (array('year', 'month', 'day', 'user') as $var)
+    eval("\$$var=cleanvar(\$_REQUEST['$var']);");
 
 header('Content-Type: text/xml');
 echo '<?xml version="1.0" ?>' . "\n";
@@ -31,12 +30,12 @@ $items = get_users_appointments($user, $startOfWeek, $endOfWeek);
 
 foreach ($items as $item)
 {
-	echo "<item>\n";
-	foreach ($item as $key => $value)
-	{
-		echo "  <$key>$value</$key>\n";	
-	}
-	echo "</item>\n";
+    echo "<item>\n";
+    foreach ($item as $key => $value)
+    {
+        echo "  <$key>$value</$key>\n";
+    }
+    echo "</item>\n";
 }
 
 ?>

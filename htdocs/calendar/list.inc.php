@@ -21,9 +21,9 @@ if (empty($type)) $type = 1;
 echo appointment_type_dropdown($type, 'list');
 echo "<h3>Descending date order</h3>"; // FIXME i18n decending date
 
-$sql = "SELECT *, holidays.id AS holidayid FROM holidays, users WHERE ";
-$sql .= "holidays.userid=users.id AND holidays.type=$type ";
-if (!empty($user) AND $user!='all') $sql .= "AND users.id='{$user}' ";
+$sql = "SELECT *, h.id AS holidayid FROM `{$dbHolidays}` AS h, `{$dbUsers}` AS u ";
+$sql .= "WHERE h.userid = u.id AND h.type=$type ";
+if (!empty($user) AND $user!='all') $sql .= "AND u.id='{$user}' ";
 $sql .= "ORDER BY startdate DESC";
 $result = mysql_query($sql);
 if (mysql_error()) trigger_error("MySQL Query Error ".mysql_error(), E_USER_ERROR);
@@ -41,7 +41,7 @@ if (mysql_num_rows($result))
         if ($dates['length']=='pm') echo " {$strAfternoon}";
         echo "</td>";
         echo "<td>";
-        if (empty($dates['approvedby'])) echo " <em>not requested yet</em>";
+        if (empty($dates['approvedby'])) echo " <em>not requested yet</em>"; // FIXME i18n not requested yet
         else echo "<strong>".holiday_approval_status($dates['approved'])."</strong>";
         if ($dates['approvedby'] > 0 AND $dates['approved'] >= 1) echo " by ".user_realname($dates['approvedby']);
         elseif ($dates['approvedby'] > 0 AND empty($dates['approved'])) echo " of ".user_realname($dates['approvedby']);

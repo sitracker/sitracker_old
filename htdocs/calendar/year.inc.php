@@ -20,6 +20,7 @@ if (realpath(__FILE__) == realpath($_SERVER['SCRIPT_FILENAME']))
 if ($type < 10)
 {
     echo "<h2>";
+    // FIXME i18n apostrophe in name and Everybodys calendar
     if ($user=='all' && $approver==TRUE) echo "Everybody";
     else echo user_realname($user,TRUE);
     echo "'s Calendar</h2>";

@@ -1,6 +1,5 @@
 <?php
-
-// planner_schedule_getprevious.php - read previous activities 
+// planner_schedule_getprevious.php - read previous activities
 //
 // SiT (Support Incident Tracker) - Support call tracking system
 // Copyright (C) 2000-2008 Salford Software Ltd. and Contributors
@@ -17,7 +16,7 @@ require('auth.inc.php');
 include('calendar.inc.php');
 
 foreach(array('user') as $var)
-	eval("\$$var=cleanvar(\$_REQUEST['$var']);");
+    eval("\$$var=cleanvar(\$_REQUEST['$var']);");
 
 header('Content-Type: text/xml');
 echo '<?xml version="1.0" ?>' . "\n";
@@ -27,28 +26,26 @@ $items = array();
 $endperiod = date("Y-m-d H:i:s", time() + (86400 * 7));
 $startperiod = date("Y-m-d H:i:s", strtotime($endperiod . "-1 MONTH"));
 
-$sql = "select distinct name, description from tasks where startdate >= '$startperiod' and enddate < '$endperiod' and distribution = 'event' and owner = '$user'";
+$sql = "SELECT DISTINCT name, description FROM `{$dbTasks}` WHERE startdate >= '$startperiod' AND ";
+$sql .= "enddate < '$endperiod' AND distribution = 'event' AND owner = '$user'";
 $res = mysql_query($sql);
-echo mysql_error();
+if (mysql_error()) trigger_error(mysql_error(),E_USER_ERROR);
 while($inf = mysql_fetch_array($res))
 {
-	$items[] = array ('id' => $inf['name'],
-	                 'name' => $inf['description'],
-					 'editvalue' => '',
-					 'optionvalue' => 0);
+    $items[] = array ('id' => $inf['name'],
+                    'name' => $inf['description'],
+                    'editvalue' => '',
+                    'optionvalue' => 0);
 }
 
 foreach ($items as $item)
 {
-	echo "<item>\n";
-	foreach ($item as $key => $value)
-	{
-		echo "  <$key>$value</$key>\n";	
-	}
-	echo "</item>\n";
+    echo "<item>\n";
+    foreach ($item as $key => $value)
+    {
+        echo "  <$key>$value</$key>\n";
+    }
+    echo "</item>\n";
 }
 
 ?>
-
-
-

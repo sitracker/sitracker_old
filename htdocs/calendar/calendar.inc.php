@@ -23,8 +23,6 @@ $holidaytype[5] = $GLOBALS['strCompassionateLeave'];
 /**
     * @author Ivan Lucas
 */
-
-
 function draw_calendar($nmonth, $nyear)
 {
     global $type, $user, $selectedday, $selectedmonth, $selectedyear;
@@ -311,7 +309,7 @@ function draw_chart($mode, $year, $month='', $day='', $groupid='', $userid='')
     $enddate  = mktime(23,59,59,$month,$lastday,$year);
 
     // Get list of user groups
-    $gsql = "SELECT * FROM groups ORDER BY name";
+    $gsql = "SELECT * FROM `{$GLOBALS['dbGroups']}` ORDER BY name";
     $gresult = mysql_query($gsql);
     if (mysql_error()) trigger_error(mysql_error(),E_USER_ERROR);
     $grouparr[0]='None';
@@ -322,7 +320,7 @@ function draw_chart($mode, $year, $month='', $day='', $groupid='', $userid='')
     $numgroups = count($grouparr);
 
     $html .= "<table align='center' border='1' cellpadding='0' cellspacing='0' style='border-collapse:collapse; border-color: #AAA; width: 99%;'>";
-    $usql  = "SELECT * FROM users WHERE status!=0 ";
+    $usql  = "SELECT * FROM `{$GLOBALS['dbUsers']}` WHERE status!=0 ";
     if ($numgroups > 1) $usql .= "AND groupid > 0 ";  // there is always 1 group (ie. 'none')
     if (!empty($user)) $usql .= "AND id={$user} ";
     $usql .= "ORDER BY groupid, realname";  // status=0 means left company
@@ -337,7 +335,7 @@ function draw_chart($mode, $year, $month='', $day='', $groupid='', $userid='')
         {
             unset($hdays);
 
-            $hsql = "SELECT * FROM holidays WHERE userid={$user->id} AND startdate >= $startdate AND startdate <= $enddate ";
+            $hsql = "SELECT * FROM `{$GLOBALS['dbHolidays']}` WHERE userid={$user->id} AND startdate >= $startdate AND startdate <= $enddate ";
             $hsql .= "AND type != 10";
             $hresult = mysql_query($hsql);
             if (mysql_error()) trigger_error(mysql_error(),E_USER_ERROR);
@@ -349,7 +347,7 @@ function draw_chart($mode, $year, $month='', $day='', $groupid='', $userid='')
                 $happroved[$cday] = $holiday->approved;
             }
             // Public holidays
-            $phsql = "SELECT * FROM holidays WHERE type=10 AND startdate >= $startdate AND startdate <= $enddate ";
+            $phsql = "SELECT * FROM `{$GLOBALS['dbHolidays']}` WHERE type=10 AND startdate >= $startdate AND startdate <= $enddate ";
             $phresult = mysql_query($phsql);
             if (mysql_error()) trigger_error(mysql_error(),E_USER_ERROR);
             while ($pubhol = mysql_fetch_object($phresult))
@@ -586,7 +584,7 @@ function month_select($month, $year, $params = '')
     }
     $html .= " <a href='{$SERVER['PHP_SELF']}?month=display=month&amp;{$month}&amp;year={$nyear}$params' title='Forward one year'>&gt;&gt;</a>";
     $html .= "</p>";
-    return $html; 
+    return $html;
 }
 
 function appointment_type_dropdown($type, $display)
@@ -597,7 +595,7 @@ function appointment_type_dropdown($type, $display)
     $holidaytype[3] = $GLOBALS['strWorkingAway'];
     $holidaytype[4] = $GLOBALS['strTraining'];
     $holidaytype[5] = $GLOBALS['strCompassionateLeave'];
-    
+
     $html  = "<form action='{$_SERVER['PHP_SELF']}' style='text-align: center;'>";
     $html .= $GLOBALS['strType'];
     $html .= ": <select class='dropdown' name='type' onchange='window.location.href=this.options[this.selectedIndex].value'>\n";
@@ -615,11 +613,11 @@ function get_users_appointments($user, $start, $end)
 {
     global $holidaytype;
     $items = array();
-    $sql = "select * from tasks where startdate >= '";
+    $sql = "SELECT * FROM `{$GLOBALS['dbTasks']}` WHERE startdate >= '";
     $sql.= date("Y-m-d H:i:s", $start);
-    $sql.= "' and enddate < '";
+    $sql.= "' AND enddate < '";
     $sql.= date("Y-m-d H:i:s", $end);
-    $sql.= "'and (distribution = 'event' or distribution = 'incident') and owner = '$user'";
+    $sql.= "'AND (distribution = 'event' OR distribution = 'incident') AND owner = '$user'";
     $res = mysql_query($sql);
     echo mysql_error();
     while($inf = mysql_fetch_array($res))
@@ -631,22 +629,22 @@ function get_users_appointments($user, $start, $end)
                 case '2':
                     $bgcolor = '#FFDDFF';
                 break;
-                
+
                 case '1':
                     $bgcolor = '#FFFFDD';
                 break;
-                
+
                 default:
                     $bgcolor = '#FFFFFF';
                 break;
-            }		
+            }
         }
         else
         {
             $inf['completion'] = 2;
             $bgcolor = '#FFDDFF';
         }
-        
+
         $items[] = array ('id' => $inf['id'],
                          'description' => $inf['description'],
                          'owner' => $inf['owner'],
@@ -655,31 +653,31 @@ function get_users_appointments($user, $start, $end)
                          'eventEndDate' => gmdate('D, d M Y H:i:s', strtotime($inf["enddate"])) . ' GMT',
                          'bgColorCode' => $bgcolor);
     }
-    
-    $sql = "select * from holidays where startdate >= '$start' and startdate < '$end' and userid = '$user'";
+
+    $sql = "SELECT * FROM `{$GLOBALS['dbHolidays']}` WHERE startdate >= '$start' AND startdate < '$end' AND userid = '$user'";
     $res = mysql_query($sql);
     echo mysql_error();
     global $CONFIG;
     while($inf = mysql_fetch_array($res))
     {
-        switch ($inf['length']) 
+        switch ($inf['length'])
         {
             case 'am':
                 $startdate = $inf['startdate'] + $CONFIG['start_working_day'];
                 $enddate = $inf['startdate'] + ($CONFIG['start_working_day'] + $CONFIG['end_working_day']) / 2;
             break;
-            
+
             case 'pm':
                 $startdate = $inf['startdate'] + ($CONFIG['start_working_day'] + $CONFIG['end_working_day']) / 2;
                 $enddate = $inf['startdate'] + $CONFIG['end_working_day'];
             break;
-            
+
             default:
                 $startdate = $inf['startdate'] + $CONFIG['start_working_day'];
                 $enddate = $inf['startdate'] + $CONFIG['end_working_day'];
             break;
         }
-        
+
         switch ($inf['type'])
         {
             case 1:
@@ -690,18 +688,18 @@ function get_users_appointments($user, $start, $end)
                 $description = $holidaytype[$inf['type']];
                 $bgcolor = '#DDFFDD';
             break;
-            
+
             case 10:
                 $description = $strPublicHoliday;
                 $bgcolor = '#ADADAD';
             break;
-            
+
             default:
                 $description = $strUnknown;
                 $bgcolor = '#ADADAD';
             break;
         }
-        
+
         $items[] = array (
             'id' => $inf['id'],
             'description' => $description,
@@ -710,14 +708,15 @@ function get_users_appointments($user, $start, $end)
             'eventStartDate' => gmdate('D, d M Y H:i:s', $startdate) . ' GMT',
             'eventEndDate' => gmdate('D, d M Y H:i:s', $enddate) . ' GMT',
             'bgColorCode' => $bgcolor
-        );                   
+        );
     }
     return $items;
 }
 
-function book_appointment($name, $description, $user, $start, $end) 
+function book_appointment($name, $description, $user, $start, $end)
 {
-    $sql = "insert into tasks (name,description,owner,startdate,enddate,distribution,completion)
+    global $dbTasks;
+    $sql = "INSERT INTO `{$dbTasks}` (name,description,owner,startdate,enddate,distribution,completion)
             values('" . mysql_escape_string($name) . "','" .
             mysql_escape_string($description) . "','" .
             $user . "','" .
@@ -726,7 +725,7 @@ function book_appointment($name, $description, $user, $start, $end)
             'event',
             '0')";
     mysql_query($sql, $GLOBALS['db']);
-    return mysql_insert_id($GLOBALS['db']);	
+    return mysql_insert_id($GLOBALS['db']);
 }
 
 function book_days_when_free($name, $description, $user, $startdate, $days, $doit)
@@ -741,7 +740,7 @@ function book_days_when_free($name, $description, $user, $startdate, $days, $doi
         }
         if ($doit) book_appointment($name, $description, $user, $startdate + $CONFIG['start_working_day'], $startdate + $CONFIG['end_working_day']);
         $daysarray[] = array('name'=>$name, 'description'=>$description, 'user'=>$user, 'startdate'=>$startdate);
-        $startdate += 86400; 
+        $startdate += 86400;
     }
     return $daysarray;
 }

@@ -16,7 +16,7 @@ if (realpath(__FILE__) == realpath($_SERVER['SCRIPT_FILENAME']))
     exit;
 }
 
-echo "<h2>Week View</h2>";
+echo "<h2>Week View</h2>"; // FIXME i18n Week View
 // Force the week view to the start first day of the week (ie. the monday)
 switch (date('D',mktime(0,0,0,$month,$day,$year)))
 {
