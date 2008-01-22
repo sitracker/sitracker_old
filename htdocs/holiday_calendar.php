@@ -9,6 +9,21 @@
 //
 
 // Author: Ivan Lucas <ivanlucas[at]users.sourceforge.net>
+
+
+
+
+
+
+// **********************************************
+// DEPRECATED as of 3.40 do not use this file
+// use calendar.php et. al. instead.
+// *********************************************
+
+
+trigger_error('DEPRECATED file', E_USER_WARNING);
+
+
 //FIXME i18n
 @include ('set_include_path.inc.php');
 $permission = 27; // View your calendar
