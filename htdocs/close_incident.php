@@ -1,4 +1,4 @@
-<?php
+ <?php
 // close_incident.php - Display a form for closing an incident
 //
 // SiT (Support Incident Tracker) - Support call tracking system
@@ -382,7 +382,13 @@ else
             }
 
             // Make Journal Entry
-            journal(CFG_LOGGING_NORMAL,'Incident Closed',"Incident $id was closed",CFG_JOURNAL_SUPPORT,$id);
+            //FIXME add trigger for this
+            journal(CFG_LOGGING_NORMAL, 'Incident Closed',"Incident $id was closed",CFG_JOURNAL_SUPPORT,$id);
+            if (incident_owner($id) != $sit[2])
+            {
+                trigger("TRIGGER_INCIDENT_OWNED_CLOSED_BY_USER", array('incidentid' => id, 'closedby' => $sit[2]));
+            }
+
 
             if (!$result)
             {
