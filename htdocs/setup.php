@@ -1,4 +1,4 @@
-<?php
+ <?php
 // setup.php - Install/Upgrade and set up plugins
 //
 // SiT (Support Incident Tracker) - Support call tracking system
@@ -246,21 +246,6 @@ function setup_exec_sql($sqlquerylist)
     }
     return $html;
 }
-
-function user_notify_upgrade()
-{
-    $sql = "SELECT id FROM users WHERE status != 0";
-    $result = mysql_query($sql);
-    $gid = md5($strSitUpgraded);
-    while($user = mysql_fetch_object($result))
-    {
-        $noticesql = "INSERT into notices(userid, type, text, linktext, link, gid, timestamp) ";
-        $noticesql .= "VALUES({$user->id}, ".SIT_UPGRADED_NOTICE.", '\$strSitUpgraded', '\$strSitUpgradedLink', '{$CONFIG['application_webpath']}releasenotes.php', '{$gid}', NOW())";
-        mysql_query($noticesql);
-        if (mysql_error()) trigger_error(mysql_error(),E_USER_WARNING);
-    }
-}
-
 
 // Returns TRUE if an admin account exists, or false if not
 function setup_check_adminuser()
@@ -627,8 +612,8 @@ switch ($_REQUEST['action'])
                             $installed_version = $application_version;
                             echo "<h2>Upgrade complete</h2>";
                             echo "<p>Upgraded to v{$application_version}</p>";
-                            //let's tell everyone we upgraded :)
-                            user_notify_upgrade();
+                            
+                            trigger("TRIGGER_SIT_UPGRADED", array('version' => $application_version));
                         }
                         else
                         {

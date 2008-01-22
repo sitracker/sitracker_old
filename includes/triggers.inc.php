@@ -11,11 +11,22 @@
 
 include ('mime.inc.php');
 
-//set up all the trigger types
+
+/**
+ * id - trigger name
+ * description - when the trigger is fired
+ * required - parameters the triggers needs to fire
+ * optional - parameters the trigger can check on, mimics 'subscription'-type events
+ */
 $triggerarray[] = array('id' => TRIGGER_INCIDENT_CREATED,
-                        'description' => 'Occurs when a new incident has been created');
+                        'description' => 'Occurs when a new incident has been created',
+                        'requires' => array('incidentid'),
+                        'optional' => array('contactid', 'siteid'));
 $triggerarray[] = array('id' => TRIGGER_INCIDENT_ASSIGNED,
-                        'description' => 'Occurs when a new incident is assigned to you');
+                        'description' => 'Occurs when a new incident is assigned to you',
+                        'requires' => array('incidentid', 'userid'),
+                        'optional' => array(),
+                        );
 $triggerarray[] = array('id' => TRIGGER_INCIDENT_ASSIGNED_WHILE_AWAY,
                         'description' => 'Occurs when a new incident is assigned to you and you are set to not accepting');
 $triggerarray[] = array('id' => TRIGGER_INCIDENT_ASSIGNED_WHILE_OFFLINE,
@@ -23,12 +34,14 @@ $triggerarray[] = array('id' => TRIGGER_INCIDENT_ASSIGNED_WHILE_OFFLINE,
 $triggerarray[] = array('id' => TRIGGER_INCIDENT_NEARING_SLA,
                         'description' => 'Occurs when one of your incidents nears an SLA');
 $triggerarray[] = array('id' => TRIGGER_USERS_INCIDENT_NEARING_SLA,
-                        'description' => 'Occurs when a user\'s incident you are watching is assigned to you');
+                        'description' => 'Occurs when a user\'s incident you are watching is assigned to you',
+                        'requires' => array('incidentid'),
+                        'optional' => array('userid'));
 $triggerarray[] = array('id' => TRIGGER_INCIDENT_EXCEEDED_SLA,
                         'description' => 'Occurs when one of your incidents exceeds an SLA');
 $triggerarray[] = array('id' => TRIGGER_INCIDENT_REVIEW_DUE,
                         'description' => 'Occurs when an incident is due a review');
-$triggerarray[] = array('id' => TRIGGER_CRITICAL_INCIDENT_LOGGED,
+$triggerarray[] = array('id' => TRIGGER_CRITICAL_INCIDENT_CREATED,
                         'description' => 'Occurs when a priority A incident is logged');
 $triggerarray[] = array('id' => TRIGGER_KB_CREATED,
                         'description' => 'Occurs when a new Knowledgebase article is created');

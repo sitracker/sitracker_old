@@ -180,7 +180,9 @@ PRINT;
             }
 
             $id = mysql_insert_id();
-            journal(CFG_LOGGING_NORMAL, 'KB Article Added', "KB Article $id was added", CFG_JOURNAL_KB, $id);
+            //DEPRECATED 3.40
+            //journal(CFG_LOGGING_NORMAL, 'KB Article Added', "KB Article $id was added", CFG_JOURNAL_KB, $id);
+            trigger("TRIGGER_KB_CREATED", array('title' => $title));
 
             unset($_SESSION['formerrors']['kb_add_article']);
             unset($_SESSION['formdata']['kb_add_article']);

@@ -175,7 +175,9 @@ if ($actions[0]=='' OR in_array('ChaseCustomers',$actions))
 {
     require ('auto/chase_customer.php');
 }
-
+//TODO 3.40 finish the code for this - adding for trigger completeness
+trigger("TRIGGER_NEW_HELD_EMAIL", array());
+trigger("TRIGGER_WAITING_HELD_EMAIL", array('minsheld' => $minsheld));
 plugin_do('automata');
 
 ?>

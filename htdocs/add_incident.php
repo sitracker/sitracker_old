@@ -743,6 +743,12 @@ elseif ($action=='assign')
             echo "</table>";
             echo "<p align='center'>{$strUsersBoldSkills}.</p>";
             trigger(TRIGGER_INCIDENT_CREATED, array('incidentid' => $incidentid));
+            
+            //FIXME 3.40 is critical always 4?
+            if ($priority == 4)
+            {
+                trigger(TRIGGER_CRITICAL_INCIDENT_CREATED, array('incidentid' => $incidentid));
+            }
         }
         else
         {
