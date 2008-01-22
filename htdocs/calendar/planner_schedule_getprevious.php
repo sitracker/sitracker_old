@@ -1,0 +1,54 @@
+<?php
+
+// planner_schedule_getprevious.php - read previous activities 
+//
+// SiT (Support Incident Tracker) - Support call tracking system
+// Copyright (C) 2000-2008 Salford Software Ltd. and Contributors
+//
+// This software may be used and distributed according to the terms
+// of the GNU General Public License, incorporated herein by reference.
+//
+// Author: Tom Gerrard <tom.gerrard[at]salfordsoftware.co.uk>
+
+$permission=27; // View your calendar FIXME
+require('db_connect.inc.php');
+require('functions.inc.php');
+require('auth.inc.php');
+include('calendar.inc.php');
+
+foreach(array('user') as $var)
+	eval("\$$var=cleanvar(\$_REQUEST['$var']);");
+
+header('Content-Type: text/xml');
+echo '<?xml version="1.0" ?>' . "\n";
+
+$items = array();
+
+$endperiod = date("Y-m-d H:i:s", time() + (86400 * 7));
+$startperiod = date("Y-m-d H:i:s", strtotime($endperiod . "-1 MONTH"));
+
+$sql = "select distinct name, description from tasks where startdate >= '$startperiod' and enddate < '$endperiod' and distribution = 'event' and owner = '$user'";
+$res = mysql_query($sql);
+echo mysql_error();
+while($inf = mysql_fetch_array($res))
+{
+	$items[] = array ('id' => $inf['name'],
+	                 'name' => $inf['description'],
+					 'editvalue' => '',
+					 'optionvalue' => 0);
+}
+
+foreach ($items as $item)
+{
+	echo "<item>\n";
+	foreach ($item as $key => $value)
+	{
+		echo "  <$key>$value</$key>\n";	
+	}
+	echo "</item>\n";
+}
+
+?>
+
+
+
