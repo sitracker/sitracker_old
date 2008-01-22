@@ -41,12 +41,12 @@ echo "<script type='text/javascript'>
         {
             this.domNode.style.backgroundColor = '#ddf';
             var saveString = '?saveAnItem=true'
-            + '&description=' + escape(e.dragObject.domNode.innerHTML)
-            + '&name=' + escape(e.dragObject.domNode.id)
-            + '&droptarget=' + this.domNode.id
-            + '&week=' + dateStartOfWeek.getTime()
-            + '&user=' + $user
-            + '&newItem=2';
+            + '&amp;description=' + escape(e.dragObject.domNode.innerHTML)
+            + '&amp;name=' + escape(e.dragObject.domNode.id)
+            + '&amp;droptarget=' + this.domNode.id
+            + '&amp;week=' + dateStartOfWeek.getTime()
+            + '&amp;user=' + $user
+            + '&amp;newItem=2';
 
 
             var newid;
@@ -98,8 +98,8 @@ global $approver;
 if ($approver)
 {
     echo "<form method='post' action='" . $_SERVER['PHP_SELF'] . "?display=timesheet'>";
-    echo user_drop_down('user', $user);
-    echo "<input type='submit' value='Switch User' />";
+    echo user_drop_down('user', $user, FALSE);
+    echo "<input type='submit' value='Switch User' />"; // FIXME i18n Switch User.
     echo "</form>";
     echo "<br/>";
 }

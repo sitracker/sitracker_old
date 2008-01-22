@@ -1557,7 +1557,7 @@ function supported_product_drop_down($name, $contactid, $productid)
     * @author Ivan Lucas
     * @param $name string. Name attribute
     * @param $id integer. User ID to pre-select
-    * @param $accepting boolean. when true displays the accepting status
+    * @param $accepting boolean. when true displays the accepting status. hides it when false
     * @param $exclude integer. User ID not to list
     * @param $attribs string. Extra attributes for the select control
 */
@@ -3246,7 +3246,7 @@ function reseller_drop_down($name, $id)
 
 /*
  *
- * @deprecated  - PH 
+ * @deprecated  - PH
  */
 function reseller_name($id)
 {
@@ -3287,7 +3287,7 @@ function licence_type_drop_down($name, $id)
 
 /*
  *
- * @deprecated  - PH 
+ * @deprecated  - PH
  */
 function licence_type($id)
 {
@@ -5181,7 +5181,7 @@ function incident_backup_switchover($userid, $accepting)
                 }
             }
             else
-            {               
+            {
                 // do an automatic temporary reassign
                 // update incident
                 $rusql = "UPDATE `{$dbIncidents}` SET ";
