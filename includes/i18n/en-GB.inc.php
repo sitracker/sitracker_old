@@ -163,6 +163,7 @@ $strBytes = 'Bytes';
 $strByDate = 'By Date';
 $strByVendor = 'By Vendor';
 
+$strCalendar = 'Calendar';
 # incident status: e.g. Made a phone call and left a message
 $strCalledAndLeftMessage = 'Called And Left Message';
 $strCallsOK = 'Calls Ok';

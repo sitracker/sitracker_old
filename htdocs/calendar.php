@@ -12,7 +12,7 @@
 //         Tom Gerrard <tom.gerrard[at]salfordsoftware.co.uk>
 
 @include('set_include_path.inc.php');
-$permission=27; // View your calendar
+$permission = 27; // View your calendar
 require('db_connect.inc.php');
 require('functions.inc.php');
 
@@ -22,13 +22,13 @@ include('calendar/calendar.inc.php');
 
 // External variables
 foreach (array(
-              'user', 'nmonth', 'nyear', 'type', 'selectedday', 'selectedmonth',
-              'selectedyear', 'selectedtype', 'approved', 'length', 'display',
-              'weeknumber'
-			  ) as $var)
-	eval("\$$var=cleanvar(\$_REQUEST['$var']);");
+            'user', 'nmonth', 'nyear', 'type', 'selectedday', 'selectedmonth',
+            'selectedyear', 'selectedtype', 'approved', 'length', 'display',
+            'weeknumber'
+            ) as $var)
+    eval("\$$var=cleanvar(\$_REQUEST['$var']);");
 if (empty($length)) $length='day';
-$title = $strCalendar;  //TODO add this
+$title = $strCalendar;
 include('htmlheader.inc.php');
 // FIXME not sure if stylesheet should go here, check validation.  inl 22 jan 08
 echo "<link rel='stylesheet' href='{$CONFIG['application_webpath']}calendar/planner.css.php' />\n";
