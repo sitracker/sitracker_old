@@ -30,6 +30,8 @@ foreach (array(
 if (empty($length)) $length='day';
 $title = $strCalendar;  //TODO add this
 include('htmlheader.inc.php');
+// FIXME not sure if stylesheet should go here, check validation.  inl 22 jan 08
+echo "<link rel='stylesheet' href='{$CONFIG['application_webpath']}calendar/planner.css.php' />\n";
 
 if (empty($user) || $user=='current') $user=$sit[2];
 elseif ($user=='all') $user='';

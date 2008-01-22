@@ -10,10 +10,6 @@
 //
 // Author: Tom Gerrard <tom.gerrard[at]salfordsoftware.co.uk>
 
-/* TODO - add this to the schema:
-  ALTER TABLE `tasks` CHANGE `distribution` `distribution` ENUM( 'public', 'private', 'incident', 'event' )
-*/
-
 $permission=27; // View your calendar
 require('db_connect.inc.php');
 require('functions.inc.php');
@@ -45,19 +41,19 @@ if (isset($_GET['saveAnItem']))
 {
     switch($newItem)
     {
-        
+
         case 2:
             $day = substr($droptarget,-1) - 1;
             $startDate = $week / 1000 + 86400 * $day + $CONFIG['start_working_day'] - 3600;
             $endDate = $week / 1000 + 86400 * $day + $CONFIG['end_working_day'] - 3600;
-        
+
         case 1:
             echo book_appointment($name, $description, $user, $startDate, $endDate);
         break;
-        
+
         case 0:
             $sql = "update tasks set description='" . mysql_escape_string($description) .
-                    "',name='". mysql_escape_string($name) .            
+                    "',name='". mysql_escape_string($name) .
                     "',startdate='".date("Y-m-d H:i:s",strtotime($eventStartDate)) .
                     "',enddate='".date("Y-m-d H:i:s",strtotime($eventEndDate)) .
                     "' where id='" . $id . "' and completion < '1'";

@@ -1001,7 +1001,7 @@ CREATE TABLE `tasks` (
   `enddate` datetime default NULL,
   `completion` tinyint(4) default NULL,
   `value` float(6,2) default NULL,
-  `distribution` enum('public','private', 'incident') NOT NULL default 'public',
+  `distribution` enum('public','private', 'incident', 'event') NOT NULL default 'public',
   `created` datetime NOT NULL default '0000-00-00 00:00:00',
   `lastupdated` timestamp(14) NOT NULL,
   PRIMARY KEY  (`id`),
@@ -1655,7 +1655,9 @@ INSERT INTO `noticetemplates` (`id`, `type`, `description`, `text`, `linktext`, 
 ('INCIDENT_OWNED_CLOSED_BY_USER', 0, '', 'Your incident <incidentid> - <incidenttitle> has been closed by <engineerclosedname>', NULL, NULL, 'sticky');
 
 -- KMH 17/01/08
-ALTER TABLE `notices` CHANGE `gid` `template` VARCHAR( 255 ) NULL DEFAULT NULL
+ALTER TABLE `notices` CHANGE `gid` `template` VARCHAR( 255 ) NULL DEFAULT NULL;
+-- INL 22/01/08
+ALTER TABLE `tasks` CHANGE `distribution` `distribution` ENUM( 'public', 'private', 'incident', 'event' );
 ";
 
 // Important: When making changes to the schema you must add SQL to make the alterations

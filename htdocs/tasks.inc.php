@@ -287,11 +287,11 @@ else
     $sql = "SELECT * FROM tasks WHERE owner='$user' ";
     if ($show=='' OR $show=='active' )
     {
-        $sql .= "AND (completion < 100 OR completion='' OR completion IS NULL)  AND distribution != 'incident' ";
+        $sql .= "AND (completion < 100 OR completion='' OR completion IS NULL) AND (distribution = 'public' OR distribution = 'private') ";
     }
     elseif ($show == 'completed')
     {
-        $sql .= "AND (completion = 100) AND distribution != 'incident' ";
+        $sql .= "AND (completion = 100) AND (distribution = 'public' OR distribution = 'private') ";
     }
     elseif ($show == 'incidents')
     {
