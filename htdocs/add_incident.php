@@ -771,15 +771,16 @@ elseif ($action=='reassign')
 
     //do assigned triggers
     trigger(TRIGGER_INCIDENT_ASSIGNED, array('userid' => $uid, 'incidentid' => $incidentid));
-    if(!user_online($uid))
+    if (!user_online($uid))
     {
         trigger(TRIGGER_INCIDENT_ASSIGNED_WHILE_OFFLINE, array('userid' => $uid, 'incidentid' => $incidentid));
     }
     
-    if(user_accepting($uid) == "No")
+    if (user_accepting($uid) == "No")
     {
         trigger(TRIGGER_INCIDENT_ASSIGNED_WHILE_AWAY, array('userid' => $uid, 'incidentid' => $incidentid));
     }
+    
     // add update
     $sql  = "INSERT INTO `{$dbUpdates}` (incidentid, userid, type, timestamp, currentowner, currentstatus, nextaction) ";
     $sql .= "VALUES ('$incidentid', '$sit[2]', 'reassigning', '$now', '$uid', '1', '$nextaction')";
