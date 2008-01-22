@@ -86,24 +86,24 @@ function trigger($triggerid, $paramarray='')
         $sql .= "AND userid={$userid}";
     }
     $query = mysql_query($sql);
-    while($result = mysql_fetch_object($query))
+    while ($result = mysql_fetch_object($query))
     {
         //if we have any params from the actual trigger, append to user params
-        if(!empty($result->parameters))
+        if (!empty($result->parameters))
         {
             $resultparams = explode(",", $result->parameters);
-            foreach($resultparams as $assigns)
+            foreach ($resultparams as $assigns)
             {
                 $values = explode("=", $assigns);
                 $paramarray[$values[0]] = $values[1];
-                if($CONFIG['debug'])
+                if ($CONFIG['debug'])
                 {
                     $dbg .= "\$paramarray[{$values[0]}] = {$values[1]}\n";
                 }
             }
         }
 
-        if($CONFIG['debug'])
+        if ($CONFIG['debug'])
         {
             $dbg .= "TRIGGER: trigger_action({$result->userid}, {$triggerid},
                     {$result->action}, {$paramarray}) called \n";
@@ -126,7 +126,7 @@ function trigger($triggerid, $paramarray='')
 function trigger_action($userid, $triggerid, $action, $paramarray)
 {
     global $CONFIG, $dbg;
-    if($CONFIG['debug'])
+    if ($CONFIG['debug'])
     {
         $dbg .= "TRIGGER: trigger_action($userid, $triggerid, $action,
                 $paramarray) received\n";
@@ -139,10 +139,10 @@ function trigger_action($userid, $triggerid, $action, $paramarray)
     $template = mysql_fetch_object($query);
     $template = $template->template;
 
-    switch($action)
+    switch ($action)
     {
         case "ACTION_EMAIL":
-            if($CONFIG['debug'])
+            if ($CONFIG['debug'])
             {
                 $dbg .= "TRIGGER: send_trigger_email($userid, $triggerid,
                         $template, $paramarray)\n";
@@ -151,7 +151,7 @@ function trigger_action($userid, $triggerid, $action, $paramarray)
             break;
 
         case "ACTION_NOTICE":
-            if($CONFIG['debug'])
+            if ($CONFIG['debug'])
             {
                 $dbg .= "TRIGGER: create_trigger_notice($userid, '',
                         $triggerid, $template, $paramarray) called";
@@ -181,7 +181,7 @@ function trigger_replace_specials($string, $paramarray)
 {
     global $CONFIG, $application_version, $application_version_string, $dbg;
     global $dbIncidents;
-    if($CONFIG['debug'])
+    if ($CONFIG['debug'])
     {
         $dbg .= "TRIGGER: notice string before - $string\n";
         $dbg .= "TRIGGER: param array: ".print_r($paramarray);
@@ -226,7 +226,7 @@ function trigger_replace_email_specials($string, $paramarray)
 {
     global $CONFIG, $application_version, $application_version_string, $dbg;
     global $dbIncidents;
-    if($CONFIG['debug'])
+    if ($CONFIG['debug'])
     {
         $dbg .= "TRIGGER: notice string before - $string\n";
         $dbg .= "TRIGGER: param array: ".print_r($paramarray);
@@ -326,7 +326,7 @@ function trigger_replace_email_specials($string, $paramarray)
 function send_trigger_email($userid, $triggertype, $template, $paramarray)
 {
     global $CONFIG, $dbg;
-    if($CONFIG['debug'])
+    if ($CONFIG['debug'])
     {
         $dbg .= "TRIGGER: send_trigger_email({$userid},{$triggertype},
                 {$paramarray})";
@@ -360,13 +360,13 @@ function send_trigger_email($userid, $triggertype, $template, $paramarray)
     if ($mailok==FALSE) trigger_error('Internal error sending email: '.
                                       $mailerror.'','send_mail() failed');
 
-    if($CONFIG['debug'])
+    if ($CONFIG['debug'])
     {
         $dbg .= "TRIGGER: emailtype_replace_specials($string, $incidentid,
                 $userid)";
     }
     $email = emailtype_replace_specials($string, $incidentid, $userid);
-    if($CONFIG['debug'])
+    if ($CONFIG['debug'])
     {
         $dbg .= $email;
     }
@@ -386,23 +386,23 @@ function create_trigger_notice($userid, $noticetext='', $triggertype='',
                                $template, $paramarray='')
 {
     global $CONFIG, $dbg;
-    if($CONFIG['debug'])
+    if ($CONFIG['debug'])
     {
         $dbg .= print_r($paramarray)."\n";
     }
 
-    if(!empty($template))
+    if (!empty($template))
     {
         //this is a trigger notice, get notice template
         $sql = "SELECT * from noticetemplates WHERE id='{$template}'";
         $query = mysql_query($sql);
-        if($query)
+        if ($query)
         {
             $notice = mysql_fetch_object($query);
             $noticetext = trigger_replace_specials($notice->text, $paramarray);
             $noticelinktext = trigger_replace_specials($notice->linktext, $paramarray);
             $noticelink = trigger_replace_specials($notice->link, $paramarray);
-            if($CONFIG['debug']) $dbg .= $noticetext."\n";
+            if ($CONFIG['debug']) $dbg .= $noticetext."\n";
     
             $sql = "INSERT into notices(userid, type, text, linktext, link,
                                         referenceid, timestamp) ";
@@ -430,7 +430,7 @@ function triggers_drop_down($name, $selected = '')
     $html .= "<select id='{$name}' name='{$name}'>";
     foreach ($triggerarray as $trigger)
     {
-        if($trigger['id'] == $selected)
+        if ($trigger['id'] == $selected)
         {
             $html .= "<option selected='selected'>{$trigger['id']}</option>\n";
         }
@@ -455,7 +455,7 @@ function email_templates($name, $selected = '')
     $html .= "<select id='{$name}' name='{$name}'>";
     $sql = "SELECT * FROM emailtype";
     $query = mysql_query($sql);
-    while($template = mysql_fetch_object($query))
+    while ($template = mysql_fetch_object($query))
     {
         $html .= "<option value='{$template->id}'>{$template->id}</option>\n";
     }
@@ -474,7 +474,7 @@ function notice_templates($name, $selected = '')
     $html .= "<select id='{$name}' name='{$name}'>";
     $sql = "SELECT * FROM noticetemplates";
     $query = mysql_query($sql);
-    while($template = mysql_fetch_object($query))
+    while ($template = mysql_fetch_object($query))
     {
         $html .= "<option value='{$template->id}'>{$template->id}</option>\n";
     }
