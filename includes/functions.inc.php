@@ -6735,7 +6735,7 @@ function exact_seconds($seconds)
     * @param $user The user ID of the user to check
     * @returns string. HTML of a 16x16 status icon.
 */
-function user_online($user)
+function user_online_icon($user)
 {
     global $iconset, $now, $dbUsers;
     $sql = "SELECT lastseen FROM `{$dbUsers}` WHERE id={$user}";
@@ -6748,6 +6748,28 @@ function user_online($user)
     else
     {
         return "<img src='{$CONFIG['application_webpath']}images/icons/{$iconset}/16x16/offline.png' width='16' height='16' alt=\"{$strOffline}\" /> ";
+    }
+}
+
+/**
+    * Returns users online status
+    * @author Kieran Hogg
+    * @param $user The user ID of the user to check
+    * @returns boolean. TRUE if online, FALSE if not
+*/
+function user_online($user)
+{
+    global $iconset, $now, $dbUsers;
+    $sql = "SELECT lastseen FROM `{$dbUsers}` WHERE id={$user}";
+    $result = mysql_query($sql);
+    $users = mysql_fetch_object($result);
+    if (($now - mysql2date($users->lastseen) < (60 * 30)))
+    {
+        return TRUE;
+    }
+    else
+    {
+        return FALSE;
     }
 }
 

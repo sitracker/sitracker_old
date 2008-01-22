@@ -173,7 +173,7 @@ while ($users = mysql_fetch_array($result))
     <td align='left'>
     <?php
     //see if the users has been active in the last 30mins
-    echo user_online($users[id]);
+    echo user_online_icon($users[id]);
     echo userstatus_name($users["status"]);
     echo "</td><td align='center'>";
     echo $users["accepting"]=='Yes' ? $strYes : "<span class='error'>{$strNo}</span>";

@@ -715,7 +715,7 @@ elseif ($action=='assign')
                 else echo $userrow['realname'];
                 echo "</td>";
                 echo "<td>".$userrow['phone']."</td>";
-                echo "<td>".user_online($userrow['id']).userstatus_name($userrow['status'])."</td>";
+                echo "<td>".user_online_icon($userrow['id']).userstatus_name($userrow['status'])."</td>";
                 echo "<td>".$userrow['message']."</td>";
                 echo "<td align='center'>";
 
@@ -769,7 +769,17 @@ elseif ($action=='reassign')
     mysql_query($sql);
     if (mysql_error()) trigger_error("MySQL Query Error ".mysql_error(), E_USER_ERROR);
 
+    //do assigned triggers
     trigger(TRIGGER_INCIDENT_ASSIGNED, array('userid' => $uid, 'incidentid' => $incidentid));
+    if(!user_online($uid))
+    {
+        trigger(TRIGGER_INCIDENT_ASSIGNED_WHILE_OFFLINE, array('userid' => $uid, 'incidentid' => $incidentid));
+    }
+    
+    if(user_accepting($uid) == "No")
+    {
+        trigger(TRIGGER_INCIDENT_ASSIGNED_WHILE_AWAY, array('userid' => $uid, 'incidentid' => $incidentid));
+    }
     // add update
     $sql  = "INSERT INTO `{$dbUpdates}` (incidentid, userid, type, timestamp, currentowner, currentstatus, nextaction) ";
     $sql .= "VALUES ('$incidentid', '$sit[2]', 'reassigning', '$now', '$uid', '1', '$nextaction')";

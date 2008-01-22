@@ -174,7 +174,7 @@ switch ($action)
             if (mysql_num_rows($sresult) >=1 ) echo "<strong>{$suguser->realname}</strong>";
             else echo $suguser->realname;
             echo "</label></td>";
-            echo "<td>".user_online($suguser->id).userstatus_name($suguser->status)."</td>";
+            echo "<td>".user_online_icon($suguser->id).userstatus_name($suguser->status)."</td>";
             $incpriority = user_incidents($suguser->id);
             $countincidents = ($incpriority['1']+$incpriority['2']+$incpriority['3']+$incpriority['4']);
 
@@ -209,7 +209,7 @@ switch ($action)
                 if (mysql_num_rows($sresult) >=1 ) echo "<strong>{$users->realname}</strong>";
                 else echo $users->realname;
                 echo "</label></td>";
-                echo "<td>".user_online($users->id).userstatus_name($users->status)."</td>";
+                echo "<td>".user_online_icon($users->id).userstatus_name($users->status)."</td>";
                 $incpriority = user_incidents($users->id);
                 $countincidents = ($incpriority['1']+$incpriority['2']+$incpriority['3']+$incpriority['4']);
 
