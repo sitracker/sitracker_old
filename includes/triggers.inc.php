@@ -102,7 +102,6 @@ function trigger($triggerid, $paramarray='')
     while ($result = mysql_fetch_object($query))
     {
         //see if we have any checks first
-        //TODO check the logic of this, VERY important
         if(!empty($result->checks))
         {
             if (!trigger_checks($result->checks, $paramarray))
