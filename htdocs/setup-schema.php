@@ -1240,6 +1240,23 @@ CREATE TABLE `triggers` (
 PRIMARY KEY ( `triggerid` , `userid` , `action` )
 ) ENGINE = MYISAM ;
 
+INSERT INTO triggers (triggerid, userid, action) VALUES ('TRIGGER_INCIDENT_CREATED', '0', 'ACTION_JOURNAL');
+INSERT INTO triggers (triggerid, userid, action) VALUES ('TRIGGER_INCIDENT_ASSIGNED', '0', 'ACTION_JOURNAL');
+INSERT INTO triggers (triggerid, userid, action) VALUES ('TRIGGER_INCIDENT_ASSIGNED_WHILE_AWAY', '0', 'ACTION_JOURNAL');
+INSERT INTO triggers (triggerid, userid, action) VALUES ('TRIGGER_INCIDENT_ASSIGNED_WHILE_OFFLINE', '0', 'ACTION_JOURNAL');
+INSERT INTO triggers (triggerid, userid, action) VALUES ('TRIGGER_INCIDENT_NEARING_SLA', '0', 'ACTION_JOURNAL');
+INSERT INTO triggers (triggerid, userid, action) VALUES ('TRIGGER_USERS_INCIDENT_NEARING_SLA', '0', 'ACTION_JOURNAL');
+INSERT INTO triggers (triggerid, userid, action) VALUES ('TRIGGER_INCIDENT_EXCEEDED_SLA', '0', 'ACTION_JOURNAL');
+INSERT INTO triggers (triggerid, userid, action) VALUES ('TRIGGER_INCIDENT_REVIEW_DUE', '0', 'ACTION_JOURNAL');
+INSERT INTO triggers (triggerid, userid, action) VALUES ('TRIGGER_CRITICAL_INCIDENT_CREATED', '0', 'ACTION_JOURNAL');
+INSERT INTO triggers (triggerid, userid, action) VALUES ('TRIGGER_KB_CREATED', '0', 'ACTION_JOURNAL');
+INSERT INTO triggers (triggerid, userid, action) VALUES ('TRIGGER_NEW_HELD_EMAIL', '0', 'ACTION_JOURNAL');
+INSERT INTO triggers (triggerid, userid, action) VALUES ('TRIGGER_WAITING_HELD_EMAIL', '0', 'ACTION_JOURNAL');
+INSERT INTO triggers (triggerid, userid, action) VALUES ('TRIGGER_USER_SET_TO_AWAY', '0', 'ACTION_JOURNAL');
+INSERT INTO triggers (triggerid, userid, action) VALUES ('TRIGGER_SIT_UPGRADED', '0', 'ACTION_JOURNAL');
+INSERT INTO triggers (triggerid, userid, action) VALUES ('TRIGGER_USER_RETURNS', '0', 'ACTION_JOURNAL');
+INSERT INTO triggers (triggerid, userid, action) VALUES ('TRIGGER_INCIDENT_OWNED_CLOSED_BY_USER', '0', 'ACTION_JOURNAL');
+
 CREATE TABLE `noticetemplates` (
 `id` INT( 11 ) NOT NULL AUTO_INCREMENT PRIMARY KEY ,
 `name` VARCHAR( 255 ) NOT NULL ,
@@ -1601,6 +1618,7 @@ CREATE TABLE IF NOT EXISTS `triggers` (
   `action` enum('ACTION_NONE','ACTION_EMAIL','ACTION_NOTICE','ACTION_JOURNAL') NOT NULL default 'ACTION_NONE',
   `template` varchar(50) NOT NULL,
   `parameters` varchar(255) default NULL,
+  `checks` varchar(255) default NULL,
   PRIMARY KEY  (`id`),
   KEY `triggerid` (`triggerid`)
 ) ENGINE=MyISAM ;
@@ -1658,6 +1676,24 @@ INSERT INTO `noticetemplates` (`id`, `type`, `description`, `text`, `linktext`, 
 ALTER TABLE `notices` CHANGE `gid` `template` VARCHAR( 255 ) NULL DEFAULT NULL;
 -- INL 22/01/08
 ALTER TABLE `tasks` CHANGE `distribution` `distribution` ENUM( 'public', 'private', 'incident', 'event' );
+-- KMH 23/01/08
+ALTER TABLE `triggers` ADD `checks` VARCHAR( 255 ) NULL ;
+INSERT INTO triggers (triggerid, userid, action) VALUES ('TRIGGER_INCIDENT_CREATED', '0', 'ACTION_JOURNAL');
+INSERT INTO triggers (triggerid, userid, action) VALUES ('TRIGGER_INCIDENT_ASSIGNED', '0', 'ACTION_JOURNAL');
+INSERT INTO triggers (triggerid, userid, action) VALUES ('TRIGGER_INCIDENT_ASSIGNED_WHILE_AWAY', '0', 'ACTION_JOURNAL');
+INSERT INTO triggers (triggerid, userid, action) VALUES ('TRIGGER_INCIDENT_ASSIGNED_WHILE_OFFLINE', '0', 'ACTION_JOURNAL');
+INSERT INTO triggers (triggerid, userid, action) VALUES ('TRIGGER_INCIDENT_NEARING_SLA', '0', 'ACTION_JOURNAL');
+INSERT INTO triggers (triggerid, userid, action) VALUES ('TRIGGER_USERS_INCIDENT_NEARING_SLA', '0', 'ACTION_JOURNAL');
+INSERT INTO triggers (triggerid, userid, action) VALUES ('TRIGGER_INCIDENT_EXCEEDED_SLA', '0', 'ACTION_JOURNAL');
+INSERT INTO triggers (triggerid, userid, action) VALUES ('TRIGGER_INCIDENT_REVIEW_DUE', '0', 'ACTION_JOURNAL');
+INSERT INTO triggers (triggerid, userid, action) VALUES ('TRIGGER_CRITICAL_INCIDENT_CREATED', '0', 'ACTION_JOURNAL');
+INSERT INTO triggers (triggerid, userid, action) VALUES ('TRIGGER_KB_CREATED', '0', 'ACTION_JOURNAL');
+INSERT INTO triggers (triggerid, userid, action) VALUES ('TRIGGER_NEW_HELD_EMAIL', '0', 'ACTION_JOURNAL');
+INSERT INTO triggers (triggerid, userid, action) VALUES ('TRIGGER_WAITING_HELD_EMAIL', '0', 'ACTION_JOURNAL');
+INSERT INTO triggers (triggerid, userid, action) VALUES ('TRIGGER_USER_SET_TO_AWAY', '0', 'ACTION_JOURNAL');
+INSERT INTO triggers (triggerid, userid, action) VALUES ('TRIGGER_SIT_UPGRADED', '0', 'ACTION_JOURNAL');
+INSERT INTO triggers (triggerid, userid, action) VALUES ('TRIGGER_USER_RETURNS', '0', 'ACTION_JOURNAL');
+INSERT INTO triggers (triggerid, userid, action) VALUES ('TRIGGER_INCIDENT_OWNED_CLOSED_BY_USER', '0', 'ACTION_JOURNAL');
 ";
 
 // Important: When making changes to the schema you must add SQL to make the alterations
