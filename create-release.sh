@@ -1,9 +1,13 @@
 #!/bin/bash
-
-# Generates Debian packages for SiT
-# Authors: Ivan Lucas <ivanlucas[at]users.sourceforge.net>
-#          Paul Heaney <paulheaney[at]users.sourceforge.net>
-
+## Generates Debian packages for SiT
+## SiT (Support Incident Tracker) - Support call tracking system
+## Copyright (C) 2000-2008 Salford Software Ltd. and Contributors
+##
+## This software may be used and distributed according to the terms
+## of the GNU General Public License, incorporated herein by reference.
+##
+## Authors: Ivan Lucas <ivanlucas[at]users.sourceforge.net>
+##          Paul Heaney <paulheaney[at]users.sourceforge.net>
 # Requirements:
 #    svn2cl
 
@@ -25,7 +29,7 @@ find -name "\.svn" | xargs rm -rf
 # Now grab the app version number
 SITVER=$(grep ^\$application_version= includes/functions.inc.php|awk -F "'|'" '{print $2}')
 
-# Now find out if this is a proper release 
+# Now find out if this is a proper release
 SITREV=$(grep ^\$application_revision= includes/functions.inc.php|awk -F "'|'" '{print $2}')
 
 # Now we've got version and rev Create the release name
@@ -33,7 +37,7 @@ if [ -n $SITREV ]; then
   	RELNAME="sit_$SITVER"
 elif [ $SITREV = "svn" ]; then
 	RELNAME="sit_$SITVER+$SITREV$SVNREV"
-else 
+else
 	RELNAME="sit_$SITVER+$SITREV"
 fi
 

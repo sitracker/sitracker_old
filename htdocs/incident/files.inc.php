@@ -171,8 +171,17 @@ function draw_file_row($file, $delim, $incidentid, $incident_attachment_fspath)
     $filesize = filesize($file);
     while ($filesize >= pow(1024,$j)) ++$j;
     $file_size = round($filesize / pow(1024,$j-1) * 100) / 100 . ' ' . $ext[$j-1];
-    $mime_type = mime_content_type($file);  // FIXME this requires php > 4.3 and is deprecated
-
+    if (function_exists('mime_content_type')
+    {
+        // FIXME mime_content_type requires php > 4.3 and is deprecated
+        $mime_type = mime_content_type($file);
+    }
+    else
+    {
+        // TODO find a reliable cross/platform low dependency way of determining mime type if possibe
+        // At the moment we leave mime_type blank if we can't find mime_content_type
+        $mime_type = '';
+    }
     $html = "<tr>";
     $html .= "<td align='right' width='5%'>";
     $html .= "<a href=\"$url\"><img src='".getattachmenticon($filename)."' alt='Icon' title='{$filename} ({$file_size})' /></a>";
