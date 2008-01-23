@@ -543,7 +543,7 @@ function trigger_checks($checkstrings, $paramarray)
                 {
                     return FALSE;
                 }
-                break;
+            break;
             
             case 'contactid':
                 $sql = "SELECT contacts.id AS contactid ";
@@ -568,7 +568,7 @@ function trigger_checks($checkstrings, $paramarray)
                 {
                     return FALSE;
                 }
-                break;
+            break;
             
             case 'userid':
                 $sql = "SELECT incidents.owner AS userid ";
@@ -592,7 +592,35 @@ function trigger_checks($checkstrings, $paramarray)
                 {
                     return FALSE;
                 }
-                break;
+            break;
+        
+            case 'sla':
+                $sql = "SELECT incidents.servicelevel AS sla ";
+                $sql .= "FROM incidents ";
+                $sql .= "WHERE incidents.id={$paramarray[incidentid]} ";
+                $query = mysql_query($sql);
+                if($query)
+                {
+                    $result = mysql_fetch_object($query);
+                    $sla = $result->sla;
+                    if ($sla == $values[1])
+                    {
+                        return TRUE;
+                    }
+                    else
+                    {
+                        return FALSE;
+                    }
+                }
+                else
+                {
+                    return FALSE;
+                }
+            break;
+        
+            default:
+            return FALSE;
+            break;
         }
     }
 }
