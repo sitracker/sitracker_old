@@ -208,19 +208,21 @@ setInterval("countUp()", 1000); //every 1 seconds
 
     //get info for incident-->task linktype
     $sql = "SELECT DISTINCT origcolref, linkcolref ";
-    $sql .= "FROM links, linktypes ";
-    $sql .= "WHERE links.linktype=4 ";
-    $sql .= "AND linkcolref={$incident} ";
-    $sql .= "AND direction='left'";
+    $sql .= "FROM `{$dbLinks}` AS l, `{$dbLinkTypes}` AS lt ";
+    $sql .= "WHERE l.linktype = 4 ";
+    $sql .= "AND linkcolref = {$incident} ";
+    $sql .= "AND direction = 'left'";
     $result = mysql_query($sql);
+    if (mysql_error()) trigger_error(mysql_error(),E_USER_WARNING);
 
     //get list of tasks
-    $sql = "SELECT * FROM tasks WHERE 1=0 ";
+    $sql = "SELECT * FROM `{$dbTasks}` WHERE 1=0 ";
     while ($tasks = mysql_fetch_object($result))
     {
         $sql .= "OR id={$tasks->origcolref} ";
     }
     $result = mysql_query($sql);
+    if (mysql_error()) trigger_error(mysql_error(),E_USER_WARNING);
 
     if ($mode == 'incident')
     {
@@ -240,7 +242,7 @@ else
     // If the user is passed as a username lookup the userid
     if (!is_number($user) AND $user != 'current' AND $user != 'all')
     {
-        $usql = "SELECT id FROM users WHERE username='{$user}' LIMIT 1";
+        $usql = "SELECT id FROM `{$dbUsers}` WHERE username='{$user}' LIMIT 1";
         $uresult = mysql_query($usql);
         if (mysql_error()) trigger_error(mysql_error(),E_USER_WARNING);
 
@@ -284,7 +286,7 @@ else
     echo "</select>\n";
     echo "</form><br />";
 
-    $sql = "SELECT * FROM tasks WHERE owner='$user' ";
+    $sql = "SELECT * FROM `{$dbTasks}` WHERE owner='$user' ";
     if ($show=='' OR $show=='active' )
     {
         $sql .= "AND (completion < 100 OR completion='' OR completion IS NULL) AND (distribution = 'public' OR distribution = 'private') ";
