@@ -513,6 +513,8 @@ function notice_templates($name, $selected = '')
 */
 function trigger_checks($checkstrings, $paramarray)
 {
+    $passed = FALSE;
+    
     $checks = explode(",", $checkstrings);
     foreach ($checks as $check)
     {
@@ -532,16 +534,8 @@ function trigger_checks($checkstrings, $paramarray)
                     $siteid = $result->siteid;
                     if ($siteid == $values[1])
                     {
-                        return TRUE;
+                        $passed = TRUE;
                     }
-                    else
-                    {
-                        return FALSE;
-                    }
-                }
-                else
-                {
-                    return FALSE;
                 }
             break;
             
@@ -557,16 +551,8 @@ function trigger_checks($checkstrings, $paramarray)
                     $contactid = $result->contactid;
                     if ($contactid == $values[1])
                     {
-                        return TRUE;
+                        $passed = TRUE;
                     }
-                    else
-                    {
-                        return FALSE;
-                    }
-                }
-                else
-                {
-                    return FALSE;
                 }
             break;
             
@@ -581,16 +567,8 @@ function trigger_checks($checkstrings, $paramarray)
                     $userid = $result->userid;
                     if ($userid == $values[1])
                     {
-                        return TRUE;
+                        $passed = TRUE;
                     }
-                    else
-                    {
-                        return FALSE;
-                    }
-                }
-                else
-                {
-                    return FALSE;
                 }
             break;
         
@@ -605,23 +583,16 @@ function trigger_checks($checkstrings, $paramarray)
                     $sla = $result->sla;
                     if ($sla == $values[1])
                     {
-                        return TRUE;
+                        $passed = TRUE;
                     }
-                    else
-                    {
-                        return FALSE;
-                    }
-                }
-                else
-                {
-                    return FALSE;
                 }
             break;
         
             default:
-            return FALSE;
+                //blank
             break;
         }
     }
+    return $passed;
 }
 ?>
