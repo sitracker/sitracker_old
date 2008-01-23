@@ -17,6 +17,9 @@ if (realpath(__FILE__) == realpath($_SERVER['SCRIPT_FILENAME']))
     exit;
 }
 
+// try to figure out what delimeter is being used (for windows or unix)...
+$delim = (strstr($incident_attachment_fspath,"/")) ? "/" : "\\";
+
 if (empty($incidentid)) $incidentid = mysql_real_escape_string($_REQUEST['id']);
 
 // append incident number to attachment path to show this users attachments
@@ -50,7 +53,7 @@ if ($_FILES['attachment']['name'] != "")
     {
         // OK to proceed
         // make incident attachment dir if it doesn't exist
-        $newfilename = $incident_attachment_fspath.'/'.$_FILES['attachment']['name'];
+        $newfilename = $incident_attachment_fspath.$delim.$_FILES['attachment']['name'];
         $umask = umask(0000);
         $mk = TRUE;
         if (!file_exists($incident_attachment_fspath))
@@ -112,9 +115,6 @@ echo "<input class='textbox' type='file' name='attachment' size='30' /> ";
 echo "<input type='submit' value=\"{$strAttachFile}\" /> (&lt;{$attmax})";
 echo "</form>";
 echo "</div>";
-
-// try to figure out what delimeter is being used (for windows or unix)...
-$delim = (strstr($incident_attachment_fspath,"/")) ? "/" : "\\";
 
 
 /**
