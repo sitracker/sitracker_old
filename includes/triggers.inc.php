@@ -101,6 +101,16 @@ function trigger($triggerid, $paramarray='')
     $query = mysql_query($sql);
     while ($result = mysql_fetch_object($query))
     {
+        //see if we have any checks first
+        //TODO check the logic of this, VERY important
+        if(!empty($result->checks))
+        {
+            if (!trigger_checks($result->checks, $paramarray))
+            {
+                return;
+            }
+        }
+        
         //if we have any params from the actual trigger, append to user params
         if (!empty($result->parameters))
         {
@@ -493,5 +503,98 @@ function notice_templates($name, $selected = '')
     }
     $html .= "</select>\n";
     return $html;
+}
+
+/**
+    * Checks array of parameters against list of parametrs
+    * @author Kieran Hogg
+    * @param $checkstrings string. The list of required parameters
+    * @param $paramarray array. The array to compare the strings to
+    * @returns TRUE if the string parameter is in the array, FALSE if not
+*/
+function trigger_checks($checkstrings, $paramarray)
+{
+    $checks = explode(",", $checkstrings);
+    foreach ($checks as $check)
+    {
+        $values = explode("=", $check);
+        switch($values[0])
+        {
+            case 'siteid':
+                $sql = "SELECT sites.id AS siteid ";
+                $sql .= "FROM sites, incidents, contacts ";
+                $sql .= "WHERE incidents.id={$paramarray[incidentid]} ";
+                $sql .= "AND incidents.contact=contacts.id ";
+                $sql .= "AND sites.id=contacts.siteid";
+                $query = mysql_query($sql);
+                if($query)
+                {
+                    $result = mysql_fetch_object($query);
+                    $siteid = $result->siteid;
+                    if ($siteid == $values[1])
+                    {
+                        return TRUE;
+                    }
+                    else
+                    {
+                        return FALSE;
+                    }
+                }
+                else
+                {
+                    return FALSE;
+                }
+                break;
+            
+            case 'contactid':
+                $sql = "SELECT contacts.id AS contactid ";
+                $sql .= "FROM incidents, contacts ";
+                $sql .= "WHERE incidents.id={$paramarray[incidentid]} ";
+                $sql .= "AND incidents.contact=contacts.id ";
+                $query = mysql_query($sql);
+                if($query)
+                {
+                    $result = mysql_fetch_object($query);
+                    $contactid = $result->contactid;
+                    if ($contactid == $values[1])
+                    {
+                        return TRUE;
+                    }
+                    else
+                    {
+                        return FALSE;
+                    }
+                }
+                else
+                {
+                    return FALSE;
+                }
+                break;
+            
+            case 'userid':
+                $sql = "SELECT incidents.owner AS userid ";
+                $sql .= "FROM incidents ";
+                $sql .= "WHERE incidents.id={$paramarray[incidentid]} ";
+                $query = mysql_query($sql);
+                if($query)
+                {
+                    $result = mysql_fetch_object($query);
+                    $userid = $result->userid;
+                    if ($userid == $values[1])
+                    {
+                        return TRUE;
+                    }
+                    else
+                    {
+                        return FALSE;
+                    }
+                }
+                else
+                {
+                    return FALSE;
+                }
+                break;
+        }
+    }
 }
 ?>
