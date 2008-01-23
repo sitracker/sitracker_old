@@ -10,6 +10,7 @@
 
 // Author: Ivan Lucas <ivanlucas[at]users.sourceforge.net>
 
+@include('set_include_path.inc.php');
 // Load config defaults
 @include("defaults.inc.php");
 // Keep the defaults as a seperate array
