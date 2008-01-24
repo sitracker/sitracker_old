@@ -52,11 +52,11 @@ if ($frow['path']=='') $ftp_path=$CONFIG['ftp_path']; else $ftp_path=$CONFIG['ft
 <tr><th>Web Category:</th><td><?php echo $frow['webcategory']; ?></td></tr>
 <tr><th>Description:</th><td><?php echo $frow['longdescription']; ?></td></tr>
 <tr><th>File Version:</th><td><?php echo $frow['fileversion']; ?></td></tr>
-<tr><th>File Date:</th><td><?php echo date($CONFIG['dateformat_filedatetime'],$frow['filedate']).' <strong>by</strong> '.user_realname($frow['userid'],TRUE); ?></td></tr>
+<tr><th>File Date:</th><td><?php echo ldate($CONFIG['dateformat_filedatetime'],$frow['filedate']).' <strong>by</strong> '.user_realname($frow['userid'],TRUE); ?></td></tr>
 <?php
 if ($frow['expiry']>0)
 {
-    ?><tr><th>Expiry:</th><td><?php echo date($CONFIG['dateformat_filedatetime'],$frow['expiry']); ?></td></tr><?php
+    ?><tr><th>Expiry:</th><td><?php echo ldate($CONFIG['dateformat_filedatetime'],$frow['expiry']); ?></td></tr><?php
 }
 echo "</table>\n";
 echo "<p align='center'>";

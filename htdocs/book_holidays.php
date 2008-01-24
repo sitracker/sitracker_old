@@ -127,8 +127,8 @@ elseif ($step == '1')
     echo "<p align='center'><strong>Select Days</strong></p>";// FIXME i18n
 
     echo "<table align='center' width='550' class='vertical'>";
-    echo "<tr><th>{$strStartDate}</th><td>".date($CONFIG['dateformat_date'],$start)."</td></tr>";
-    echo "<tr><th>{$strEndDate}</th><td>".date($CONFIG['dateformat_date'],$end)."</td></tr>";
+    echo "<tr><th>{$strStartDate}</th><td>".ldate($CONFIG['dateformat_date'],$start)."</td></tr>";
+    echo "<tr><th>{$strEndDate}</th><td>".ldate($CONFIG['dateformat_date'],$end)."</td></tr>";
     echo "</table><br />";
 
     echo "<form name='date' action='{$_SERVER['PHP_SELF']}' method='post'>";
@@ -136,7 +136,7 @@ elseif ($step == '1')
     echo "<input type='hidden' name='type' value='{$type}' />";
 
     echo "<table align='center' width='550'>";
-    echo "<tr><th>{$strDate}</th><th>{$strNone}</th><th>{$strDay}</th><th>AM</th><th>PM</th></tr>\n";
+    echo "<tr><th>{$strDate}</th><th>{$strNone}</th><th>{$strDay}</th><th>{$strAM}</th><th>{$strPM}</th></tr>\n";
 
     $daynumber = 1;
     $options = 0;
@@ -158,7 +158,7 @@ elseif ($step == '1')
                     $holiday_type=holiday_type($existing_holiday['type']);
                     $holiday_legend=strtoupper(substr($holiday_type,0,1));
                     echo "<tr>";
-                    echo "<td class='shade2' align='right'> ".date('l jS M y',$day)." </td>";
+                    echo "<td class='shade2' align='right'> ".ldate('l jS M y',$day)." </td>";
                     echo "<td class='shade1' align='center'>";
                     if ($existing_holiday['length'] == 'day')
                     {
@@ -231,11 +231,11 @@ elseif ($step == '1')
                 if (mysql_error()) trigger_error("MySQL Query Error ".mysql_error(), E_USER_ERROR);
                 if (mysql_num_rows($result) > 0)
                 {
-                    echo "<tr><td class='shade1' align='right'>".date('l jS M y',$day)."</td><td colspan='4'>{$strPublicHoliday}</td></tr>";
+                    echo "<tr><td class='shade1' align='right'>".ldate('l jS M y',$day)."</td><td colspan='4'>{$strPublicHoliday}</td></tr>";
                 }
                 else
                 {
-                    echo "<tr><td class='shade2' align='right'>".date('l jS M y',$day)." </td>";
+                    echo "<tr><td class='shade2' align='right'>".ldate('l jS M y',$day)." </td>";
                     // Don't allow booking sickness in the future, still not sure whether we should allow this or not, it could be useful in the case of long term illness
                     if (($type == '2' && $day <= $now) || ($type != 2))
                     {
@@ -297,7 +297,7 @@ else
         {
             $$len='day';
         }
-        
+
         if ($$len != 'none')
         {
             // check to see if there is other holiday booked on this day

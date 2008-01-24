@@ -111,7 +111,7 @@ else
                 <td align='center' class='<?php echo $class ?>' width='100'><?php echo $results["product"] ?></td>
                 <td align='center' class='<?php echo $class ?>' width='100'><?php echo $results["reseller"] ?></td>
                 <td align='center' class='<?php echo $class ?>' width='75'><?php echo $results["licence_quantity"] ?> <?php echo $results["licence_type"] ?></td>
-                <td align='center' class='<?php echo $class ?>' width='100'><?php echo date($CONFIG['dateformat_date'], $results["expirydate"]); ?></td>
+                <td align='center' class='<?php echo $class ?>' width='100'><?php echo ldate($CONFIG['dateformat_date'], $results["expirydate"]); ?></td>
                 <td align='center' class='<?php echo $class ?>' width='100'><a href="javascript: contact_details_window(<?php echo $results["admincontact"]?>)"><?php echo $results['admincontactforenames'].' '.$results['admincontactsurname'] ?></a></td>
                 <td align='center' class='<?php echo $class ?>' width='150'><?php if ($results["notes"] == "") echo "&nbsp;"; else echo nl2br($results["notes"]); ?></td>
                 </tr>

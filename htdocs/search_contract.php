@@ -181,7 +181,7 @@ else
                 <td><?php echo $results["product"] ?></td>
                 <td><?php echo $results["reseller"] ?></td>
                 <td><?php echo $results["licence_quantity"] ?> <?php echo $results["licence_type"] ?></td>
-                <td><?php echo date($CONFIG['dateformat_date'], $results["expirydate"]); ?>
+                <td><?php echo ldate($CONFIG['dateformat_date'], $results["expirydate"]); ?>
                 <?php
                 if ($results["term"]=='yes') echo "<br />Terminated";
                 ?>

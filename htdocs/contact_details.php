@@ -80,7 +80,7 @@ while ($contactrow = mysql_fetch_array($contactresult))
     {
         echo "<tr><th>{$strTags}:</th><td>{$tags}</td></tr>\n";
     }
-    
+
     // Flags are deprecated as of v3.30 in favour of tags - INL
     // echo "<tr><th>Flags:</th><td>";
     // print_contact_flags($id);
@@ -161,7 +161,7 @@ while ($contactrow = mysql_fetch_array($contactresult))
     {
         echo $strNone;
     }
-    
+
     //if ($openincidents >= 1) echo "$openincidents open, ";
     if ($openincidents >= 1)
     {
@@ -214,7 +214,7 @@ while ($contactrow = mysql_fetch_array($contactresult))
     if ($contactrow['timestamp_modified'] > 0)
     {
         echo "<tr><th>{$strLastUpdated}:</th>";
-        echo "<td>".date($CONFIG['dateformat_datetime'],$contactrow['timestamp_modified'])."</td></tr>\n";
+        echo "<td>".ldate($CONFIG['dateformat_datetime'],$contactrow['timestamp_modified'])."</td></tr>\n";
     }
     echo "</table>\n";
 
@@ -252,7 +252,7 @@ while ($contactrow = mysql_fetch_array($contactresult))
                 {
                     $shade='expired';
                 }
-                
+
                 if ($supportedrow['expirydate'] < $now)
                 {
                     $shade='expired';
@@ -262,12 +262,12 @@ while ($contactrow = mysql_fetch_array($contactresult))
                 echo "<img src='{$CONFIG['application_webpath']}images/icons/{$iconset}/16x16/contract.png' width='16' height='16' alt='' /> ";
                 echo "<a href='contract_details.php?id={$supportedrow['maintenanceid']}'>{$strContract}: {$supportedrow['maintenanceid']}</a></td>";
                 echo "<td class='$shade'>".$supportedrow['productname']."</td>";
-                echo "<td class='$shade'>".date($CONFIG['dateformat_date'], $supportedrow['expirydate']);
+                echo "<td class='$shade'>".ldate($CONFIG['dateformat_date'], $supportedrow['expirydate']);
                 if ($supportedrow['term'] == 'yes')
                 {
                     echo " {$strTerminated}";
                 }
-                
+
                 echo "</td>";
                 echo "</tr>\n";
                 $supportcount++;

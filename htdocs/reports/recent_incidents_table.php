@@ -23,7 +23,7 @@ $sites=array();
 
 $monthago = time()-(60 * 60 * 24 * 30.5);
 
-echo "<h2>Incidents opened since ".date($CONFIG['dateformat_date'], $monthago)."</h2>";
+echo "<h2>Incidents opened since ".ldate($CONFIG['dateformat_date'], $monthago)."</h2>";
 
 $sql  = "SELECT *,sites.id AS siteid FROM sites, maintenance, supportcontacts, incidents ";
 $sql .= "WHERE sites.id = maintenance.site ";
@@ -43,7 +43,7 @@ if (mysql_num_rows($result) > 0)
         if ($prvincid!=$row->id)
         {
             echo "<b>[{$row->siteid}] {$row->name}</b> Incident: <a href='{$CONFIG['application_uriprefix']}{$CONFIG['application_webpath']}incident_details.php?id={$row->id}'>{$row->id}</a>  ";
-            echo "Date: ".date('d M Y', $row->opened)." ";
+            echo "Date: ".ldate('d M Y', $row->opened)." ";
             echo "Product: ".product_name($row->product);
             $site=$row->siteid;
             $$site++;

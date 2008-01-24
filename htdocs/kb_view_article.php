@@ -108,7 +108,7 @@ if (user_permission($sit[2],$permission))
     $pubdate=mysql2date($kbarticle->published);
     if ($pubdate > 0)
     {
-        echo sprintf($strPublishedOnX, date($CONFIG['dateformat_date'],$pubdate))."<br />";
+        echo sprintf($strPublishedOnX, ldate($CONFIG['dateformat_date'],$pubdate))."<br />";
     }
 
     if (is_array($author))

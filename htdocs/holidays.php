@@ -83,10 +83,10 @@ if ($numwaiting > 0)
         while ($dates = mysql_fetch_array($result))
         {
             echo "<tr class='shade1'><td>{$dates['name']}</td>";
-            echo "<td>".date('l', $dates['startdate'])." ";
+            echo "<td>".ldate('l', $dates['startdate'])." ";
             if ($dates['length']=='am') echo "<u>{$strMorning}</u> ";
             if ($dates['length']=='pm') echo "<u>{$strAfternoon}</u> ";
-            echo date('jS F Y', $dates['startdate']);
+            echo ldate('jS F Y', $dates['startdate']);
             echo "</td>";
             echo "<td>";
             echo holiday_approval_status($dates['approved'], $dates['approvedby']);
@@ -126,10 +126,10 @@ foreach ($holidaytype AS $htypeid => $htype)
         while ($dates = mysql_fetch_array($result))
         {
             echo "<tr class='shade1'>";
-            echo "<td colspan='2'>".date('l', $dates['startdate'])." ";
+            echo "<td colspan='2'>".ldate('l', $dates['startdate'])." ";
             if ($dates['length']=='am') echo "<u>{$strMorning}</u> ";
             if ($dates['length']=='pm') echo "<u>{$strAfternoon}</u> ";
-            echo date('jS F Y', $dates['startdate']);
+            echo ldate('jS F Y', $dates['startdate']);
             echo "</td>";
             echo "<td colspan='2'>";
             echo holiday_approval_status($dates['approved'], $dates['approvedby']);

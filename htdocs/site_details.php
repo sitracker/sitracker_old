@@ -142,7 +142,7 @@ if (user_permission($sit[2],19)) // View contracts
     $sql .= "AND (licence_type=licencetypes.id OR licence_type IS NULL) ";
     $sql .= "AND admincontact=contacts.id AND maintenance.site = '$id' ";
     $sql .= "ORDER BY expirydate DESC";*/
-       
+
     $sql  = "SELECT maintenance.id AS maintid, maintenance.term AS term, products.name AS product, resellers.name AS reseller, licence_quantity, licencetypes.name AS licence_type, expirydate, admincontact, contacts.forenames AS admincontactsforenames, contacts.surname AS admincontactssurname, maintenance.notes AS maintnotes ";
     $sql .= "FROM contacts, products, maintenance ";
     $sql .= "LEFT JOIN licencetypes ON maintenance.licence_type=licencetypes.id ";
@@ -203,13 +203,13 @@ if (user_permission($sit[2],19)) // View contracts
             {
                 echo $results['reseller'];
             }
-            
+
             echo "</td>";
             echo "<td class='{$class}'>";
-            
+
             if (empty($results['licence_type']))
             {
-                echo $strNoLicense;    
+                echo $strNoLicense;
             }
             else
             {
@@ -223,9 +223,9 @@ if (user_permission($sit[2],19)) // View contracts
                 }
                 echo $results['licence_type'];
             }
-            
+
             echo "</td>";
-            echo "<td class='{$class}'>".date($CONFIG['dateformat_date'], $results['expirydate'])."</td>";
+            echo "<td class='{$class}'>".ldate($CONFIG['dateformat_date'], $results['expirydate'])."</td>";
             echo "<td class='{$class}'>{$results['admincontactsforenames']} {$results['admincontactssurname']}></td>";
             echo "<td class='{$class}'>";
             if ($results['maintnotes'] == '')

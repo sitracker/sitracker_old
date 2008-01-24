@@ -249,7 +249,7 @@ else
         }
         else
         {
-            echo date($CONFIG['dateformat_date'], $results["expirydate"]);
+            echo ldate($CONFIG['dateformat_date'], $results["expirydate"]);
         }
         echo "</td>";
 

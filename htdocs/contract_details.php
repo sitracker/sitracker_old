@@ -104,7 +104,7 @@ if ($maintrow['expirydate'] == '-1')
 }
 else
 {
-    date($CONFIG['dateformat_date'], $maintrow['expirydate']);
+    ldate($CONFIG['dateformat_date'], $maintrow['expirydate']);
 }
 
 echo "</td></tr>";
@@ -144,7 +144,7 @@ else
         {
             echo "<p class='error'>{$strMoreContactsThanContractSupports}</p>";
         }
-        
+
         if ($allowedcontacts == 0)
         {
             $allowedcontacts = $strUnlimited;

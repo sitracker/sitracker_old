@@ -115,7 +115,7 @@ elseif ($_REQUEST['mode']=='report')
     $externalincidents=0;
     while ($row = mysql_fetch_object($result))
     {
-        $nicedate=date('d/m/Y',$row->opened);
+        $nicedate = ldate('d/m/Y',$row->opened);
         $html .= "<tr class='shade2'><td>$nicedate</td><td>{$row->incid}</td><td>{$row->externalid}</td><td>{$row->title}</td><td>{$row->cname}</td><td>{$row->site}</td><td>{$row->typename}</td></tr>\n";
         $csv .="'".$nicedate."', '{$row->incid}','{$row->externalid}', '{$row->title}','{$row->cname}','{$row->site}','{$row->typename}'\n";
         if (!empty($row->externalid))

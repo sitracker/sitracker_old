@@ -167,7 +167,7 @@ elseif ($action=='findcontact')
             }
             else
             {
-                $str .=  '<td>'.date($CONFIG['dateformat_date'], $contactrow['expirydate']).'</td>';
+                $str .=  '<td>'.ldate($CONFIG['dateformat_date'], $contactrow['expirydate']).'</td>';
             }
             $str .=  "</tr>\n";
             return $str;

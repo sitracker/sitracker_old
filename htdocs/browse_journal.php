@@ -87,7 +87,7 @@ if ($journal_count >= 1)
         else $class = "shade2";
         echo "<tr class='$class'>";
         echo "<td>".user_realname($journal->userid,TRUE)."</td>";
-        echo "<td>".date($CONFIG['dateformat_datetime'], mysqlts2date($journal->timestamp))."</td>";
+        echo "<td>".ldate($CONFIG['dateformat_datetime'], mysqlts2date($journal->timestamp))."</td>";
         echo "<td>{$journal->event}</td>";
         echo "<td>";
         switch ($journal->journaltype)

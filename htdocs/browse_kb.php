@@ -180,7 +180,7 @@ if (mysql_num_rows($result) >= 1)
         echo "<span>{$content}</span>";
         echo "</a>";
         echo "</td>";
-        echo "<td>".date($CONFIG['dateformat_date'], mysql2date($kbarticle->published))."</td>";
+        echo "<td>".ldate($CONFIG['dateformat_date'], mysql2date($kbarticle->published))."</td>";
         echo "<td>".user_realname($kbarticle->author)."</td>";
         echo "<td>{$kbarticle->keywords}</td>";
         echo "</tr>\n";

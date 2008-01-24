@@ -91,7 +91,7 @@ if (!$sent)
                 echo user_realname($holiday->userid,TRUE);
                 echo "</a></td>";
             }
-            echo "<td>".date('l j F Y', $holiday->startdate)."</td>";
+            echo "<td>".ldate('l j F Y', $holiday->startdate)."</td>";
             echo "<td>";
             if ($holiday->length=='am') echo $strMorning;
             if ($holiday->length=='pm') echo $strAfternoon;
@@ -210,7 +210,7 @@ else
             $bodytext = "Message from {$CONFIG['application_shortname']}: ".user_realname($user)." has requested that you approve the following holidays:\n\n";  //FIXME i18n
             while ($holiday=mysql_fetch_object($result))
             {
-                $holidaylist .= date('l j F Y', $holiday->startdate).", ";
+                $holidaylist .= ldate('l j F Y', $holiday->startdate).", ";
                 if ($holiday->length=='am') $holidaylist .= $strMorning;
                 if ($holiday->length=='pm') $holidaylist .= $strAfternoon;
                 if ($holiday->length=='day') $holidaylist .= $strFullDaye;

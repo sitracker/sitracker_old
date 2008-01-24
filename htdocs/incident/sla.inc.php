@@ -45,7 +45,7 @@ if (count($slahistory) >= 1)
         if ($history['timestamp'] == 0) echo "</em>";
         echo "</td>";
         echo "<td>";
-        if ($history['timestamp'] > 0) echo date($CONFIG['dateformat_datetime'],$history['timestamp']);
+        if ($history['timestamp'] > 0) echo ldate($CONFIG['dateformat_datetime'],$history['timestamp']);
         echo "</td>";
     }
     echo "</table>\n";
