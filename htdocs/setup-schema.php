@@ -1594,7 +1594,7 @@ UPDATE `incidentstatus` SET `name` = 'strAwaitingCustomerAction' WHERE `incident
 UPDATE `incidentstatus` SET `name` = 'strUnsupported' WHERE `incidentstatus`.`id` =9 LIMIT 1 ;
 -- INL 24Jan08
 ALTER TABLE `users` ADD `var_utc_offset` INT NOT NULL DEFAULT '0' COMMENT 'Offset from UTC (timezone) in minutes' AFTER `var_i18n` ;
-
+INSERT INTO `userstatus` (`id` ,`name`) VALUES ('0', 'Account Disabled');
 ";
 
 

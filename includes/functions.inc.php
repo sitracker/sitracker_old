@@ -1850,13 +1850,16 @@ function userstatus_drop_down($name, $id, $userdisable=FALSE)
 
     while ($statuses = mysql_fetch_array($result))
     {
-        $html .= "<option ";
-        if ($statuses["id"] == $id)
+        if ($statuses["id"] > 0)
         {
-            $html .= "selected='selected' ";
+            $html .= "<option ";
+            if ($statuses["id"] == $id)
+            {
+                $html .= "selected='selected' ";
+            }
+            $html .= "value='{$statuses["id"]}'>";
+            $html .= "{$statuses["name"]}</option>\n";
         }
-        $html .= "value='{$statuses["id"]}'>";
-        $html .= "{$statuses["name"]}</option>\n";
     }
     $html .= "</select>\n";
 
@@ -1884,14 +1887,17 @@ function userstatus_bardrop_down($name, $id)
     $html = "<select name='$name' title='Set your status' onchange=\"if (this.options[this.selectedIndex].value != 'null') { window.open(this.options[this.selectedIndex].value,'_top') }\">\n";
     while ($statuses = mysql_fetch_array($result))
     {
-        $html .= "<option ";
-        if ($statuses["id"] == $id)
+        if ($statuses["id"] > 0)
         {
-            $html .= "selected='selected' ";
-        }
+            $html .= "<option ";
+            if ($statuses["id"] == $id)
+            {
+                $html .= "selected='selected' ";
+            }
 
-        $html .= "value='set_user_status.php?mode=setstatus&amp;userstatus={$statuses['id']}'>";
-        $html .= "{$statuses["name"]}</option>\n";
+            $html .= "value='set_user_status.php?mode=setstatus&amp;userstatus={$statuses['id']}'>";
+            $html .= "{$statuses["name"]}</option>\n";
+        }
     }
     $html .= "<option value='set_user_status.php?mode=setaccepting&amp;accepting=Yes' style='color: #00AA00; border-top: 1px solid black;'>{$GLOBALS['strAccepting']}</option>\n";
     $html .= "<option value='set_user_status.php?mode=setaccepting&amp;accepting=No' style='color: #FF0000;'>{$GLOBALS['strNotAccepting']}</option>\n";
