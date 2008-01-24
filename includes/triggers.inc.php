@@ -13,50 +13,41 @@ include ('mime.inc.php');
 
 
 /**
+ * Define a list of available triggers, trigger() will need to be called in the appropriate
+ * place in the code for each of these
+ *
  * id - trigger name
- * description - when the trigger is fired
- * required - parameters the triggers needs to fire
- * optional - parameters the trigger can check on, mimics 'subscription'-type events
+ *   description - when the trigger is fired
+ *   required - parameters the triggers needs to fire
+ *   optional - parameters the trigger can check on, mimics 'subscription'-type events
  */
-$triggerarray[] = array('id' => TRIGGER_INCIDENT_CREATED,
-                        'description' => 'Occurs when a new incident has been created',
-                        'requires' => array('incidentid'),
-                        'optional' => array('contactid', 'siteid'));
-$triggerarray[] = array('id' => TRIGGER_INCIDENT_ASSIGNED,
-                        'description' => 'Occurs when a new incident is assigned to you',
-                        'requires' => array('incidentid', 'userid'),
-                        'optional' => array(),
-                        );
-$triggerarray[] = array('id' => TRIGGER_INCIDENT_ASSIGNED_WHILE_AWAY,
-                        'description' => 'Occurs when a new incident is assigned to you and you are set to not accepting');
-$triggerarray[] = array('id' => TRIGGER_INCIDENT_ASSIGNED_WHILE_OFFLINE,
-                        'description' => 'Occurs when a new incident is assigned to you and your status is offline');
-$triggerarray[] = array('id' => TRIGGER_INCIDENT_NEARING_SLA,
-                        'description' => 'Occurs when one of your incidents nears an SLA');
-$triggerarray[] = array('id' => TRIGGER_USERS_INCIDENT_NEARING_SLA,
-                        'description' => 'Occurs when a user\'s incident you are watching is assigned to you',
-                        'requires' => array('incidentid'),
-                        'optional' => array('userid'));
-$triggerarray[] = array('id' => TRIGGER_INCIDENT_EXCEEDED_SLA,
-                        'description' => 'Occurs when one of your incidents exceeds an SLA');
-$triggerarray[] = array('id' => TRIGGER_INCIDENT_REVIEW_DUE,
-                        'description' => 'Occurs when an incident is due a review');
-$triggerarray[] = array('id' => TRIGGER_CRITICAL_INCIDENT_CREATED,
-                        'description' => 'Occurs when a priority A incident is logged');
-$triggerarray[] = array('id' => TRIGGER_KB_CREATED,
-                        'description' => 'Occurs when a new Knowledgebase article is created');
-$triggerarray[] = array('id' => TRIGGER_NEW_HELD_EMAIL,
-                        'description' => 'Occurs when there is a new email in the holding queue');
-$triggerarray[] = array('id' => TRIGGER_WAITING_HELD_EMAIL,
-                        'description' => 'Occurs when there is a new email in the holding queue for x minutes');
-$triggerarray[] = array('id' => TRIGGER_USER_SET_TO_AWAY,
-                        'description' => 'Occurs when one of your watched engineer goes away');
-$triggerarray[] = array('id' => TRIGGER_SIT_UPGRADED,
-                        'description' => 'Occurs when the system is upgraded');
-$triggerarray[] = array('id' => TRIGGER_USER_RETURNS,
-                        'description' => 'Occurs when one of your watched engineers returns');
-$triggerarray[] = array('id' => TRIGGER_INCIDENT_OWNED_CLOSED_BY_USER,
-                        'description' => 'Occurs when one of your incidents is closed by another engineer');
+$triggerarray['TRIGGER_INCIDENT_CREATED'] = array('description' => 'Occurs when a new incident has been created',
+                                                  'required' => array('incidentid'),
+                                                  'optional' => array('contactid', 'siteid', 'priority'));
+
+$triggerarray['TRIGGER_INCIDENT_ASSIGNED'] = array('description' => 'Occurs when a new incident is assigned to you',
+                                                   'required' => array('incidentid', 'userid'),
+                                                   'optional' => array());
+
+$triggerarray['TRIGGER_INCIDENT_ASSIGNED_WHILE_AWAY'] =
+                                            array('description' => 'Occurs when a new incident is assigned to you and you are set to not accepting');
+
+$triggerarray['TRIGGER_INCIDENT_ASSIGNED_WHILE_OFFLINE'] = array('description' => 'Occurs when a new incident is assigned to you and your status is offline');
+$triggerarray['TRIGGER_INCIDENT_NEARING_SLA'] = array('description' => 'Occurs when one of your incidents nears an SLA');
+$triggerarray['TRIGGER_USERS_INCIDENT_NEARING_SLA'] = array('description' => 'Occurs when a user\'s incident you are watching is assigned to you',
+                                                            'required' => array('incidentid'),
+                                                            'optional' => array('userid'));
+
+$triggerarray['TRIGGER_INCIDENT_EXCEEDED_SLA'] = array('description' => 'Occurs when one of your incidents exceeds an SLA');
+$triggerarray['TRIGGER_INCIDENT_REVIEW_DUE'] = array('description' => 'Occurs when an incident is due a review');
+// Note: removed the critical incident created trigger, need to recreate this using checks
+$triggerarray['TRIGGER_KB_CREATED'] = array('description' => 'Occurs when a new Knowledgebase article is created');
+$triggerarray['TRIGGER_NEW_HELD_EMAIL'] = array('description' => 'Occurs when there is a new email in the holding queue');
+$triggerarray['TRIGGER_WAITING_HELD_EMAIL'] = array('description' => 'Occurs when there is a new email in the holding queue for x minutes');
+$triggerarray['TRIGGER_USER_SET_TO_AWAY'] = array('description' => 'Occurs when one of your watched engineer goes away');
+$triggerarray['TRIGGER_SIT_UPGRADED'] = array('description' => 'Occurs when the system is upgraded');
+$triggerarray['TRIGGER_USER_RETURNS'] = array('description' => 'Occurs when one of your watched engineers returns');
+$triggerarray['TRIGGER_INCIDENT_OWNED_CLOSED_BY_USER'] = array('description' => 'Occurs when one of your incidents is closed by another engineer');
 
 //set up all the action types
 define(ACTION_NONE, 1);
@@ -68,6 +59,7 @@ $actionarray = array(ACTION_NONE,
                 ACTION_EMAIL,
                 ACTION_JOURNAL);
 
+
 /**
     * Master trigger function, creates a new trigger
     * @author Kieran Hogg
@@ -77,7 +69,15 @@ $actionarray = array(ACTION_NONE,
 */
 function trigger($triggerid, $paramarray='')
 {
-    global $sit, $CONFIG, $dbg, $dbTriggers;
+    global $sit, $CONFIG, $dbg, $dbTriggers, $triggerarray;
+
+    // Check that this is a defined trigger
+    if (!array_key_exists($triggerid, $triggerarray))
+    {
+        trigger_error("Trigger '{$triggerid}' not defined", E_USER_WARNING);
+        return;
+    }
+
     if ($CONFIG['debug'] && $paramarray != '')
     {
         foreach (array_keys($paramarray) as $key)
@@ -106,10 +106,11 @@ function trigger($triggerid, $paramarray='')
         {
             if (!trigger_checks($result->checks, $paramarray))
             {
+                trigger_error("Trigger '{$triggerid}' failed checks", E_USER_WARNING);
                 return;
             }
         }
-        
+
         //if we have any params from the actual trigger, append to user params
         if (!empty($result->parameters))
         {
@@ -133,7 +134,9 @@ function trigger($triggerid, $paramarray='')
         trigger_action($result->userid, $triggerid, $result->action,
                        $paramarray);
     }
+    return;
 }
+
 
 /**
     * Do the specific action for the specific user for a trigger
@@ -224,7 +227,7 @@ function trigger_replace_specials($string, $paramarray)
                             );
 
     $trigger_replace = array(0 => $paramarray['incidentid'],
-                                1 => $paramarray['incidenttitle'],
+                                1 => incident_title($paramarray['incidentid']),
                                 2 => $paramarray['incidentowner'],
                                 3 => $paramarray['KBname'],
                                 4 => $baseurl,
@@ -235,6 +238,7 @@ function trigger_replace_specials($string, $paramarray)
 
     return preg_replace($trigger_regex,$trigger_replace,$string);
 }
+
 
 /**
     * Replaces email template variables with their values
@@ -414,7 +418,7 @@ function create_trigger_notice($userid, $noticetext='', $triggertype='',
     {
         $dbg .= print_r($paramarray)."\n";
     }*/
-    
+
     if (!empty($template))
     {
         //this is a trigger notice, get notice template
@@ -427,7 +431,7 @@ function create_trigger_notice($userid, $noticetext='', $triggertype='',
             $noticelinktext = trigger_replace_specials($notice->linktext, $paramarray);
             $noticelink = trigger_replace_specials($notice->link, $paramarray);
             if ($CONFIG['debug']) $dbg .= $noticetext."\n";
-    
+
             $sql = "INSERT into notices(userid, type, text, linktext, link,
                                         referenceid, timestamp) ";
             $sql .= "VALUES ({$userid}, '{$notice->type}', '{$noticetext}',
@@ -482,7 +486,7 @@ function email_templates($name, $selected = '')
     $query = mysql_query($sql);
     while ($template = mysql_fetch_object($query))
     {
-        $html .= "<option value='{$template->id}'>{$template->id}</option>\n";
+        $html .= "<option value='{$template->id}'>{$template->name}</option>\n";
     }
     $html .= "</select>\n";
     return $html;
@@ -501,14 +505,14 @@ function notice_templates($name, $selected = '')
     $query = mysql_query($sql);
     while ($template = mysql_fetch_object($query))
     {
-        $html .= "<option value='{$template->id}'>{$template->id}</option>\n";
+        $html .= "<option value='{$template->id}'>{$template->name}</option>\n";
     }
     $html .= "</select>\n";
     return $html;
 }
 
 /**
-    * Checks array of parameters against list of parametrs
+    * Checks array of parameters against list of parameters
     * @author Kieran Hogg
     * @param $checkstrings string. The list of required parameters
     * @param $paramarray array. The array to compare the strings to
@@ -517,7 +521,7 @@ function notice_templates($name, $selected = '')
 function trigger_checks($checkstrings, $paramarray)
 {
     $passed = FALSE;
-    
+
     $checks = explode(",", $checkstrings);
     foreach ($checks as $check)
     {
@@ -541,7 +545,7 @@ function trigger_checks($checkstrings, $paramarray)
                     }
                 }
             break;
-            
+
             case 'contactid':
                 $sql = "SELECT contacts.id AS contactid ";
                 $sql .= "FROM incidents, contacts ";
@@ -558,7 +562,7 @@ function trigger_checks($checkstrings, $paramarray)
                     }
                 }
             break;
-            
+
             case 'userid':
                 $sql = "SELECT incidents.owner AS userid ";
                 $sql .= "FROM incidents ";
@@ -574,7 +578,7 @@ function trigger_checks($checkstrings, $paramarray)
                     }
                 }
             break;
-        
+
             case 'sla':
                 $sql = "SELECT incidents.servicelevel AS sla ";
                 $sql .= "FROM incidents ";
@@ -590,7 +594,7 @@ function trigger_checks($checkstrings, $paramarray)
                     }
                 }
             break;
-        
+
             default:
                 //blank
             break;

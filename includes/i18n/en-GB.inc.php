@@ -22,6 +22,7 @@ $strAcknowledge = 'Acknowledge';
 $strAccepting = 'Accepting';
 $strAccessDetails = 'Access Details';
 $strAction = 'Action';
+$strActions = 'Actions';
 $strActionNeeded = 'Action Needed';
 $strActionPlan = 'Action Plan';
 $strActionPlanBy = 'Action plan by %s';

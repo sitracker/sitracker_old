@@ -38,8 +38,9 @@ $escs = mysql_query($sql);
 while ($escalations = mysql_fetch_object($escs))
 {
         $html .= "<h3>{$escalations->name}</h3>";
-        $sql = "SELECT i.*, s.name, c.forenames, c.surname, s.name AS siteName ";
-        $sql .= "FROM `{$dbIncidents}` AS i, `{$dbSoftware}` AS s, `{$dbContacts}` AS c, `{$dbSites}` AS s WHERE escalationpath = '{$escalations->id}' AND closed = '0' AND software.id = i.softwareid ";
+        $sql = "SELECT i.*, sw.name, c.forenames, c.surname, s.name AS siteName ";
+        $sql .= "FROM `{$dbIncidents}` AS i, `{$dbSoftware}` AS sw, `{$dbContacts}` AS c, `{$dbSites}` AS s ";
+        $sql .= "WHERE escalationpath = '{$escalations->id}' AND closed = '0' AND sw.id = i.softwareid ";
         $sql .= " AND i.contact = c.id AND c.siteid = s.id ";
         $sql .= "ORDER BY externalengineer";
 
