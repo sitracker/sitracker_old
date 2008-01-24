@@ -5144,7 +5144,7 @@ function incident_backup_switchover($userid, $accepting)
 {
     global $now, $dbIncidents, $dbUpdates, $dbTempAssigns, $dbUsers, $dbUserStatus;
 
-    $usersql = "SELECT u.*, us AS statusname ";
+    $usersql = "SELECT u.*, us.name AS statusname ";
     $usersql .= "FROM `{$dbUsers}` AS u, `{$dbUserStatus}` AS us ";
     $usersql .= "WHERE u.id = '{$userid}' AND u.status = us.id";
     $userresult = mysql_query($usersql);
