@@ -261,7 +261,7 @@ if ($sit[0] != '')
 
         while ($notice = mysql_fetch_object($noticeresult))
         {
-            //$notice->text = bbcode($notice->text);
+            $notice->text = bbcode($notice->text);
             //check for the notice types
             if ($notice->type == WARNING_NOTICE_TYPE)
             {
@@ -316,19 +316,21 @@ if ($sit[0] != '')
 
         if (mysql_num_rows($noticeresult) > 1)
         {
-            $keys = array_keys($_REQUEST);
+            //fix the GET keys to stop breaking urls
+            $keys = array_keys($_GET);
 
-            $alink = "{$_SERVER[PHP_SELF]}?noticeaction=dismiss_notice&amp;noticeid=all";
+            $file = $_SERVER[PHP_SELF];
+            $end = "noticeaction=dismiss_notice&amp;noticeid=all";
 
             foreach ($keys AS $key)
             {
                 if ($key != 'sit' AND $key != 'SiTsessionID')
                 {
                     //$url[]= "{$key}=".$_REQUEST[$key];
-                    $alink .= "&amp;{$key}=".$_REQUEST[$key];
+                    $link .= $key."=".$_REQUEST[$key]."&amp;";
                 }
             }
-
+            $alink = $file."?".$link.$end;
             echo "<p align='right' style='padding-right:32px'><a href='{$alink}'>{$strDismissAll}</a></p>";
         }
     }
