@@ -21,7 +21,8 @@ include ('mime.inc.php');
  *   required - parameters the triggers needs to fire
  *   optional - parameters the trigger can check on, mimics 'subscription'-type events
  */
-$triggerarray['TRIGGER_INCIDENT_CREATED'] = array('description' => 'Occurs when a new incident has been created',
+$triggerarray['TRIGGER_INCIDENT_CREATED'] = array('name' => 'Incident Created',
+                                                  'description' => 'A new incident has been created',
                                                   'required' => array('incidentid'),
                                                   'optional' => array('contactid', 'siteid', 'priority'));
 
@@ -482,11 +483,11 @@ function triggers_drop_down($name, $selected = '')
 function email_templates($name, $selected = '')
 {
     $html .= "<select id='{$name}' name='{$name}'>";
-    $sql = "SELECT * FROM emailtype";
+    $sql = "SELECT * FROM emailtype WHERE type='system' ORDER BY id";
     $query = mysql_query($sql);
     while ($template = mysql_fetch_object($query))
     {
-        $html .= "<option value='{$template->id}'>{$template->name}</option>\n";
+        $html .= "<option value='{$template->id}'>{$template->id}</option>\n";
     }
     $html .= "</select>\n";
     return $html;

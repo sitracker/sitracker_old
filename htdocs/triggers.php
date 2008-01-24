@@ -56,9 +56,79 @@ switch ($_REQUEST['mode'])
         break;
 
     case 'add':
+        $id = cleanvar($_GET['id']);
+        // Check that this is a defined trigger
+        if (!array_key_exists($id, $triggerarray))
+        {
+            html_redirect($_SERVER['PHP_SELF'], FALSE);
+            exit;
+        }
+
         include ('htmlheader.inc.php');
-        echo "<h2>$title</h2>";
-        echo "<h3>Add Action</h3>"; // FIXME i18n add action/new action
+        ?>
+        <script type="text/javascript">
+        <!--
+        function switch_template()
+        {
+            if ($('new_action').value == 'ACTION_NOTICE')
+            {
+                $('noticetemplatesbox').show();
+                $('parametersbox').show();
+                $('emailtemplatesbox').hide();
+                $('journalbox').hide();
+            }
+            else if ($('new_action').value == 'ACTION_EMAIL')
+            {
+                $('emailtemplatesbox').show();
+                $('parametersbox').show();
+                $('noticetemplatesbox').hide();
+                $('journalbox').hide();
+            }
+            else if ($('new_action').value == 'ACTION_JOURNAL')
+            {
+                $('parametersbox').show();
+                $('journalbox').show();
+                $('emailtemplatesbox').hide();
+                $('noticetemplatesbox').hide();
+            }
+            else
+            {
+                $('noticetemplatesbox').hide();
+                $('emailtemplatesbox').hide();
+                $('parametersbox').hide();
+                $('journalbox').hide();
+            }
+        }
+        -->
+        </script>
+        <?php
+        echo "<h2><img src='{$CONFIG['application_webpath']}images/icons/{$iconset}/32x32/triggeraction.png' width='32' height='32' alt='' /> ";
+        echo "$title</h2>";
+        if (!empty($triggerarray[$id]['name'])) $name = $triggerarray[$id]['name'];
+        else $name = $id;
+        echo "<h3>Add Action to '{$name}' trigger</h3>"; // FIXME i18n add action/new action
+
+        echo "<table align='center'><tr><th>{$strAction}</th><th>{$strTemplate}</th><th>{$strParameters}</th></tr>\n";
+        echo "<tr>";
+        echo "<td><select name='new_action' id='new_action' onchange='switch_template();'>";
+        echo "<option value='ACTION_NONE'>{$strNone}</option>\n";
+        echo "<option value='ACTION_EMAIL'>{$strEmail}</option>\n";
+        echo "<option value='ACTION_NOTICE'>{$strNotice}</option>\n";
+        echo "<option value='ACTION_JOURNAL'>{$strJournal}</option>\n";
+        echo "</select></td>";
+        echo "<td>";
+        echo "<div id='noticetemplatesbox' style='display:none;'>";
+        echo notice_templates('noticetemplate');
+        echo "</div>\n";
+        echo "<div id='emailtemplatesbox' style='display:none;'>";
+        echo email_templates('emailtemplate');
+        echo "</div>\n";
+        echo "<div id='journalbox' style='display:none;'>{$strNone}</div>";
+        echo "</td>";
+        echo "<td><div id='parametersbox' style='display:none;'><input type='text' name='parameters' size='30' /></div></td>";
+        echo "</table>\n";
+
+        echo "<p align='center'><a href='{$_SERVER['PHP_SELF']}'>{$strBackToList}</a></p>\n";
         include ('htmlfooter.inc.php');
         break;
 
@@ -67,7 +137,8 @@ switch ($_REQUEST['mode'])
         //display the list
         $adminuser = user_permission($sit[2],22); // Admin user
         include ('htmlheader.inc.php');
-        echo "<h2>$title</h2>";
+        echo "<h2><img src='{$CONFIG['application_webpath']}images/icons/{$iconset}/32x32/trigger.png' width='32' height='32' alt='' /> ";
+        echo "$title</h2>";
         echo "<p align='center'>A list of available triggers and the actions that are set when triggers occur</p>"; // TODO triggers blurb
         echo "<table align='center'><tr><th>{$strTrigger}</th><th>{$strActions}</th><th>{$strOperation}</th></tr>\n";
 
@@ -75,7 +146,8 @@ switch ($_REQUEST['mode'])
         foreach($triggerarray AS $trigger => $triggervar)
         {
             echo "<tr class='$shade'>";
-            echo "<td><strong>";
+            echo "<td><img src='{$CONFIG['application_webpath']}images/icons/{$iconset}/16x16/trigger.png' width='16' height='16' alt='' /> ";
+            echo "<strong>";
             if (!empty($triggervar['name'])) echo "{$triggervar['name']}";
             else echo "{$trigger}";
             echo "</strong><br />\n";
@@ -87,11 +159,18 @@ switch ($_REQUEST['mode'])
             if (!$adminuser) $sql .= "AND userid='{$sit[2]}'";
             $result = mysql_query($sql);
             if (mysql_error()) trigger_error(mysql_error(),E_USER_WARNING);
-            while ($trigaction = mysql_fetch_object($result))
+            if (mysql_num_rows($result) >= 1)
             {
-                echo "&bull; {$trigaction->action}";
-                if (!empty($trigaction->checks)) echo " ({$trigaction->checks})";
-                echo "<br />\n";
+                while ($trigaction = mysql_fetch_object($result))
+                {
+                    echo "<img src='{$CONFIG['application_webpath']}images/icons/{$iconset}/16x16/triggeraction.png' width='16' height='16' alt='' /> {$trigaction->action}";
+                    if (!empty($trigaction->checks)) echo " ({$trigaction->checks})";
+                    echo "<br />\n";
+                }
+            }
+            else
+            {
+                echo "{$strNone}";
             }
             echo "</td>";
             echo "<td><a href='{$_SERVER['PHP_SELF']}?mode=add&amp;id={$trigger}'>Add Action</a></td>"; // TODO link to add page

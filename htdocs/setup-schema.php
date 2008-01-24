@@ -1697,7 +1697,7 @@ INSERT INTO triggers (triggerid, userid, action) VALUES ('TRIGGER_USER_SET_TO_AW
 INSERT INTO triggers (triggerid, userid, action) VALUES ('TRIGGER_SIT_UPGRADED', '0', 'ACTION_JOURNAL');
 INSERT INTO triggers (triggerid, userid, action) VALUES ('TRIGGER_USER_RETURNS', '0', 'ACTION_JOURNAL');
 INSERT INTO triggers (triggerid, userid, action) VALUES ('TRIGGER_INCIDENT_OWNED_CLOSED_BY_USER', '0', 'ACTION_JOURNAL');
--- INL 24Jan08
+-- INL 24Jan08 TODO add to above ^^
 ALTER TABLE `triggers` ADD INDEX ( `userid` );
 ";
 
