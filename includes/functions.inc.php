@@ -16,7 +16,7 @@
 // use SQL joins.
 
 // Version number of the application, (numbers only)
-$application_version='3.32';
+$application_version = '3.32';
 // Revision string, e.g. 'beta2' or 'svn' or ''
 $application_revision = 'svn';
 
@@ -4723,10 +4723,10 @@ function readable_date($date)
 {
     // Takes a UNIX Timestamp and resturns a string with a pretty readable date
     // e.g. Yesterday @ 5:28pm
-    if (date('dmy', $date) == date('dmy', time()))
-        $datestring = "{$GLOBALS['strToday']} @ ".date('g:ia', $date);
-    elseif (date('dmy', $date) == date('dmy', (time()-86400)))
-        $datestring = "{$GLOBALS['strYesterday']} @ ".date('g:ia', $date);
+    if (date('dmy', $date) == ldate('dmy', time()))
+        $datestring = "{$GLOBALS['strToday']} @ ".ldate('g:ia', $date);
+    elseif (date('dmy', $date) == ldate('dmy', (time()-86400)))
+        $datestring = "{$GLOBALS['strYesterday']} @ ".ldate('g:ia', $date);
     else
         $datestring = ldate("l jS M y @ g:ia", $date);
 
