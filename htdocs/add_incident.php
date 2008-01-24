@@ -742,12 +742,12 @@ elseif ($action=='assign')
             }
             echo "</table>";
             echo "<p align='center'>{$strUsersBoldSkills}.</p>";
-            trigger(TRIGGER_INCIDENT_CREATED, array('incidentid' => $incidentid));
+            trigger("TRIGGER_INCIDENT_CREATED", array('incidentid' => $incidentid));
             
             //FIXME 3.40 is critical always 4?
             if ($priority == 4)
             {
-                trigger(TRIGGER_CRITICAL_INCIDENT_CREATED, array('incidentid' => $incidentid));
+                trigger("TRIGGER_CRITICAL_INCIDENT_CREATED", array('incidentid' => $incidentid));
             }
         }
         else
@@ -776,15 +776,15 @@ elseif ($action=='reassign')
     if (mysql_error()) trigger_error("MySQL Query Error ".mysql_error(), E_USER_ERROR);
 
     //do assigned triggers
-    trigger(TRIGGER_INCIDENT_ASSIGNED, array('userid' => $uid, 'incidentid' => $incidentid));
+    trigger("TRIGGER_INCIDENT_ASSIGNED", array('userid' => $uid, 'incidentid' => $incidentid));
     if (!user_online($uid))
     {
-        trigger(TRIGGER_INCIDENT_ASSIGNED_WHILE_OFFLINE, array('userid' => $uid, 'incidentid' => $incidentid));
+        trigger("TRIGGER_INCIDENT_ASSIGNED_WHILE_OFFLINE", array('userid' => $uid, 'incidentid' => $incidentid));
     }
     
     if (user_accepting($uid) == "No")
     {
-        trigger(TRIGGER_INCIDENT_ASSIGNED_WHILE_AWAY, array('userid' => $uid, 'incidentid' => $incidentid));
+        trigger("TRIGGER_INCIDENT_ASSIGNED_WHILE_AWAY", array('userid' => $uid, 'incidentid' => $incidentid));
     }
     
     // add update

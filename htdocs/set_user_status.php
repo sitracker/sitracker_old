@@ -76,24 +76,14 @@ switch ($mode)
 
         incident_backup_switchover($sit[2], $accepting);
 
-        //if user is not accepting, tell them
+        //if user is not accepting
         if ($accepting == 'No')
         {
-            //check to see if they have one already
-            $sql = "SELECT id FROM `{$dbNotices}` WHERE type=".USER_STILL_AWAY_TYPE." ";
-            $sql .= "AND userid={$_SESSION['userid']}";
-            $result = mysql_query($sql);
-            if (mysql_error()) trigger_error(mysql_error(), E_USER_ERROR);
-
-            if (empty($result) OR mysql_num_rows($result) == 0)
-            {
-                $gid = md5($strUserStillAway);
-                $sql = "INSERT INTO `{$dbNotices}` (userid, type, text, timestamp, gid) ";
-                $sql .= "VALUES({$_SESSION['userid']}, ".USER_STILL_AWAY_TYPE.",";
-                $sql .= "'".mysql_real_escape_string($strYouACurrentlyNotAccepting)."', NOW(), '{$gid}')";
-                mysql_query($sql);
-                if (mysql_error()) trigger_error(mysql_error(), E_USER_ERROR);
-            }
+            trigger("TRIGGER_USER_SET_TO_AWAY", array('userid' => $sit[2]));
+        }
+        if ($accepting == 'Yes')
+        {
+            trigger("TRIGGER_USER_RETURNS", array('userid' => $sit[2]));
         }
 
         header('Location: index.php');

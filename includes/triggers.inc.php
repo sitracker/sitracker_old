@@ -205,8 +205,8 @@ function trigger_replace_specials($string, $paramarray)
     global $dbIncidents;
     if ($CONFIG['debug'])
     {
-        $dbg .= "TRIGGER: notice string before - $string\n";
-        $dbg .= "TRIGGER: param array: ".print_r($paramarray);
+        /*$dbg .= "TRIGGER: notice string before - $string\n";
+        $dbg .= "TRIGGER: param array: ".print_r($paramarray);*/
     }
 
     $url = parse_url($_SERVER['HTTP_REFERER']);
@@ -220,6 +220,7 @@ function trigger_replace_specials($string, $paramarray)
                             4 => '/<sitpath>/s',
                             5 => '/<sitversion>/s',
                             6 => '/<engineerclosedname>/s',
+                            7 => '/<realname>/s'
                             );
 
     $trigger_replace = array(0 => $paramarray['incidentid'],
@@ -228,7 +229,8 @@ function trigger_replace_specials($string, $paramarray)
                                 3 => $paramarray['KBname'],
                                 4 => $baseurl,
                                 5 => $application_version,
-                                6 => $paramarray['engineerclosedname']
+                                6 => $paramarray['engineerclosedname'],
+                                7 => user_realname($paramarray['userid']),
                             );
 
     return preg_replace($trigger_regex,$trigger_replace,$string);
@@ -408,11 +410,11 @@ function create_trigger_notice($userid, $noticetext='', $triggertype='',
                                $template, $paramarray='')
 {
     global $CONFIG, $dbg;
-    if ($CONFIG['debug'])
+    /*if ($CONFIG['debug'])
     {
         $dbg .= print_r($paramarray)."\n";
-    }
-
+    }*/
+    
     if (!empty($template))
     {
         //this is a trigger notice, get notice template
@@ -430,6 +432,7 @@ function create_trigger_notice($userid, $noticetext='', $triggertype='',
                                         referenceid, timestamp) ";
             $sql .= "VALUES ({$userid}, '{$notice->type}', '{$noticetext}',
                             '{$noticelinktext}', '{$noticelink}', '', NOW())";
+                            //echo $sql;
             mysql_query($sql);
             if (mysql_error()) trigger_error(mysql_error(),E_USER_WARNING);
         }

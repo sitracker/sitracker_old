@@ -128,7 +128,7 @@ while ($incident=mysql_fetch_array($incident_result)) {
             {
                 $timetil = $times['next_sla_time']-$newSlaTime;
  
-                trigger("INCIDENT_NEARING_SLA", array('incidentid' => $incident['id'], 'nextslatime' => $times['next_sla_time']));
+                trigger("TRIGGER_INCIDENT_NEARING_SLA", array('incidentid' => $incident['id'], 'nextslatime' => $times['next_sla_time']));
                 trigger("TRIGGER_USERS_INCIDENT_NEARING_SLA", array('incidentid' => $incident['id'], 'nextslatime' => $times['next_sla_time'], 'user' => $reviewInfo['currentowner']));
             }
         }
