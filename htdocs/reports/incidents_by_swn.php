@@ -94,8 +94,8 @@ else
     if (mysql_error()) trigger_error("MySQL Query Error ".mysql_error(), E_USER_ERROR);
 
     echo "<h2>Number of incidents by software";
-    if ($startdate > 1) echo " between ".date($CONFIG['dateformat_date'], $startdate);
-    if ($enddate > 1) echo " and ".date($CONFIG['dateformat_date'], $enddate);
+    if ($startdate > 1) echo " between ".ldate($CONFIG['dateformat_date'], $startdate);
+    if ($enddate > 1) echo " and ".ldate($CONFIG['dateformat_date'], $enddate);
     echo "</h2>";
     echo "<p>";
     echo "<table class='vertical' align='center'>";

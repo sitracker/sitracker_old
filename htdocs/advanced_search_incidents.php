@@ -196,8 +196,8 @@ else
                 <td align='center' width='100'><?php echo site_name($results['siteid']) ?></td>
                 <td align='center' width='50'><?php echo $results['servicelevel']."<br />".priority_name($results["priority"]); ?></td>
                 <td align='center' width='100'><?php echo user_realname($results['owner'],TRUE) ?></td>
-                <td align='center' width='150'><?php echo date($CONFIG['dateformat_datetime'], $results["opened"]); ?></td>
-                <td align='center' width='150'><?php echo date($CONFIG['dateformat_datetime'], $results["lastupdated"]); ?></td>
+                <td align='center' width='150'><?php echo ldate($CONFIG['dateformat_datetime'], $results["opened"]); ?></td>
+                <td align='center' width='150'><?php echo ldate($CONFIG['dateformat_datetime'], $results["lastupdated"]); ?></td>
                 <td align='center' width='50'><?php echo $results["type"] ?></td>
                 <td align='center' width='50'><?php echo incidentstatus_name($results["status"]); ?></td>
                 </tr>

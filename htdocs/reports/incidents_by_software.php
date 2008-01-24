@@ -86,7 +86,7 @@ else
         $resultSLA = mysql_query($sqlSLA);
         if (mysql_error()) trigger_error("MySQL Query Error ".mysql_error(), E_USER_ERROR);
 
-        if ($startdate > 1) echo "<p align='center'>since ".date($CONFIG['dateformat_date'], $startdate)."</p>"; // FIXME i18n since
+        if ($startdate > 1) echo "<p align='center'>since ".ldate($CONFIG['dateformat_date'], $startdate)."</p>"; // FIXME i18n since
         echo "<table class='vertical' align='center'>";
         echo "<tr><th>Number of calls</th><th>%</th><th>{$strSkill}</th>";     // FIXME i18n number of calls
         while ($sla = mysql_fetch_object($resultSLA))

@@ -393,8 +393,8 @@ body { font:10pt Arial, Helvetica, sans-serif; }
                 echo "<form action='feedback.php' method='post'>\n";
                 echo "<h1>{$form->name}</h1>\n";
                 echo "<p>{$strRelatingToIncident} <strong>#{$incidentid}</strong> &mdash; <strong>".incident_title($incidentid)."</strong><br />";
-                echo sprintf($strOpenedbyXonY, contact_realname(incident_contact($incidentid)), date($CONFIG['dateformat_date'],db_read_column('opened', 'incidents', $incidentid)));
-                echo sprintf($strClosedOnX, date($CONFIG['dateformat_date'],db_read_column('closed', 'incidents', $incidentid))).".</p>";
+                echo sprintf($strOpenedbyXonY, contact_realname(incident_contact($incidentid)), ldate($CONFIG['dateformat_date'],db_read_column('opened', 'incidents', $incidentid)));
+                echo sprintf($strClosedOnX, ldate($CONFIG['dateformat_date'],db_read_column('closed', 'incidents', $incidentid))).".</p>";
 
                 if (!empty($_REQUEST['error']))
                 {
@@ -413,7 +413,7 @@ body { font:10pt Arial, Helvetica, sans-serif; }
                     {
                         echo "<hr />{$question->sectiontext}\n";
                     }
-                    
+
                     echo "<h4>Q{$question->taborder}: {$question->question}";
                     if ($question->required=='true')
                     {
@@ -434,7 +434,7 @@ body { font:10pt Arial, Helvetica, sans-serif; }
                     {
                         $answer='';
                     }
-                    
+
                     echo feedback_html_question($question->type, "Q{$question->id}", $question->required, $question->options, $answer);
                     if (in_array($question->id, $errorfields))
                     {

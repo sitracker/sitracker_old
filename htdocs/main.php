@@ -23,14 +23,12 @@ require('auth.inc.php');
 // --------------------------------------------------------------------------------------------
 // Dashboard widgets
 
-
-
 $sql = "SELECT * FROM `{$dbDashboard}` WHERE enabled='true' ORDER BY id";
 $result = mysql_query($sql);
 if (mysql_error()) trigger_error(mysql_error(),E_USER_WARNING);
 while ($dashboard = mysql_fetch_object($result))
 {
-   include("{$CONFIG['application_fspath']}dashboard/dashboard_{$dashboard->name}.php");
+   include ("{$CONFIG['application_fspath']}dashboard{$fsdelim}dashboard_{$dashboard->name}.php");
    $DASHBOARDCOMP["dashboard_{$dashboard->name}"]="dashboard_{$dashboard->name}";
 }
 

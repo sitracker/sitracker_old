@@ -171,8 +171,17 @@ function draw_file_row($file, $delim, $incidentid, $incident_attachment_fspath)
     $filesize = filesize($file);
     while ($filesize >= pow(1024,$j)) ++$j;
     $file_size = round($filesize / pow(1024,$j-1) * 100) / 100 . ' ' . $ext[$j-1];
-    $mime_type = mime_content_type($file);  // FIXME this requires php > 4.3 and is deprecated
-
+    if (function_exists('mime_content_type')
+    {
+        // FIXME mime_content_type requires php > 4.3 and is deprecated
+        $mime_type = mime_content_type($file);
+    }
+    else
+    {
+        // TODO find a reliable cross/platform low dependency way of determining mime type if possibe
+        // At the moment we leave mime_type blank if we can't find mime_content_type
+        $mime_type = '';
+    }
     $html = "<tr>";
     $html .= "<td align='right' width='5%'>";
     $html .= "<a href=\"$url\"><img src='".getattachmenticon($filename)."' alt='Icon' title='{$filename} ({$file_size})' /></a>";
@@ -192,7 +201,7 @@ function draw_file_row($file, $delim, $incidentid, $incident_attachment_fspath)
     $html .= "</td>";
     $html .= "<td width='20%'>$file_size</td>";
     $html .= "<td width='20%'>$mime_type</td>";
-    $html .= "<td width='20%'>".date($CONFIG['dateformat_filedatetime'],filemtime($file))."</td>";
+    $html .= "<td width='20%'>".ldate($CONFIG['dateformat_filedatetime'],filemtime($file))."</td>";
     // $html .= "<td width='5%'><input type='checkbox' name='fileselection[]' value='{$filename}' onclick=\"togglerow(this, 'tt');\"/></td>";
     $html .= "</tr>\n";
     return $html;
@@ -244,7 +253,7 @@ if (file_exists($incident_attachment_fspath))
                 $dirname!=$id &&
                 strlen($dirname)==10)
             {
-                $dirprettyname = date('l jS M Y @ g:ia',$dirname);
+                $dirprettyname = ldate('l jS M Y @ g:ia',$dirname);
             }
             else
             {

@@ -82,7 +82,7 @@ if (mysql_num_rows($result) > 0)
                     elseif (!empty($item['published'])) $itemdate = strtotime($item['published']);
                     $d = strip_tags($item['atom_content'],$feedallowedtags);
                 }
-                if ($itemdate > 10000) $itemdate = date($CONFIG['dateformat_datetime'], $itemdate);
+                if ($itemdate > 10000) $itemdate = ldate($CONFIG['dateformat_datetime'], $itemdate);
                 echo "<span>";
                 if (!empty($itemdate)) echo "<strong>{$itemdate}</strong><br />";
                 echo "{$d}</span></a></td></tr>\n";

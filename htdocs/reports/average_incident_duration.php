@@ -131,8 +131,8 @@ while ($current_time<time()) {
 
 
   $html .= "<tr class='$shade'>";
-  $html .= "<td>".date('F Y',mktime(0,0,0,$current_month,1,$current_year));
-  if ($next_month > $current_month+1 AND $next_year==$current_year)  $html .= " - ".date('F Y',mktime(0,0,0,$next_month,1,$next_year))."</td>";
+  $html .= "<td>".ldate('F Y',mktime(0,0,0,$current_month,1,$current_year));
+  if ($next_month > $current_month+1 AND $next_year==$current_year)  $html .= " - ".ldate('F Y',mktime(0,0,0,$next_month,1,$next_year))."</td>";
   $html .= "<td>{$stats[0]}</td>";
   $html .= "<td>".format_seconds($stats[1]*60)."</td>";
   $html .= "<td>".round($stats[2]/60)." hours</td>";
@@ -140,7 +140,7 @@ while ($current_time<time()) {
   $html .= "<td>{$stats[4]}</td>";
   $html .= "<td>{$stats[5]}</td>";
   $html .= "</tr>\n";
-  $csv .= date('F Y',mktime(0,0,0,$current_month,1,$current_year))." - ".date('F Y',mktime(0,0,0,$next_month,1,$next_year));
+  $csv .= ldate('F Y',mktime(0,0,0,$current_month,1,$current_year))." - ".ldate('F Y',mktime(0,0,0,$next_month,1,$next_year));
   $csv .= ",{$stats[0]},".($stats[1]/60).",".round($stats[2]/60)."\n";
   if ($shade=='shade1') $shade='shade2';
   else $shade='shade1';

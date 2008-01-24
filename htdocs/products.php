@@ -119,22 +119,22 @@ if (empty($productid) AND $display!='skills')
             echo "<td>";
             if ($software['lifetime_start'] > 1)
             {
-                echo date($CONFIG['dateformat_shortdate'],mysql2date($software['lifetime_start'])).' to ';// FIXME i18n
+                echo ldate($CONFIG['dateformat_shortdate'],mysql2date($software['lifetime_start'])).' to '; // FIXME i18n 'to'
             }
             else
             {
                 echo "&#8734;";
             }
-            
+
             if ($software['lifetime_end'] > 1)
             {
-                echo date($CONFIG['dateformat_shortdate'],mysql2date($software['lifetime_end']));
+                echo ldate($CONFIG['dateformat_shortdate'],mysql2date($software['lifetime_end']));
             }
             elseif ($software['lifetime_start'] > 1)
             {
                 echo "&#8734;";
             }
-            
+
             echo "</td>";
             echo "<td>{$countengineers}</td>";
             echo "<td>{$countincidents}</td>";
@@ -187,29 +187,29 @@ elseif (empty($productid) AND ($display=='skills' OR $display=='software'))
             {
                 $shade='expired';
             }
-            
+
             echo "<tr class='{$shade}'>";
             echo "<td>{$software->name}</td>";
             echo "<td>{$software->vendorname}</td>";
             echo "<td>";
             if ($software->lifetime_start > 1)
             {
-                echo date($CONFIG['dateformat_shortdate'],$lifetime_start).' to ';
+                echo ldate($CONFIG['dateformat_shortdate'],$lifetime_start).' to '; // FIXME i18n 'to'
             }
             else
             {
                 echo "&#8734;";
             }
-            
+
             if ($software->lifetime_end > 1)
             {
-                echo date($CONFIG['dateformat_shortdate'],$lifetime_end);
+                echo ldate($CONFIG['dateformat_shortdate'],$lifetime_end);
             }
             elseif ($software->lifetime_start >1)
             {
                 echo "&#8734;";
             }
-            
+
             echo "</td>";
             echo "<td>{$countlinked}</td>";
             echo "<td>{$countengineers}</td>";
@@ -268,16 +268,16 @@ else
                     echo "<td>";
                     if ($software['lifetime_start'] > 1)
                     {
-                        echo date($CONFIG['dateformat_shortdate'],mysql2date($software['lifetime_start'])).' to ';
+                        echo ldate($CONFIG['dateformat_shortdate'],mysql2date($software['lifetime_start'])).' to '; // FIXME i18n 'to'
                     }
                     else
                     {
                         echo "&#8734;";
                     }
-                    
+
                     if ($software['lifetime_end'] > 1)
                     {
-                        echo date($CONFIG['dateformat_shortdate'],mysql2date($software['lifetime_end']));
+                        echo ldate($CONFIG['dateformat_shortdate'],mysql2date($software['lifetime_end']));
                     }
                     elseif ($software['lifetime_start'] > 1)
                     {
@@ -317,7 +317,7 @@ else
                     {
                         $shade = "expired";
                     }
-                    
+
                     echo "<tr class='{$shade}'>";
                     echo "<td><img src='{$CONFIG['application_webpath']}images/icons/{$iconset}/16x16/contract.png' width='16' height='16' alt='' /> ";
                     echo "<a href='contract_details.php?id={$contract->id}'>".sprintf($strContractNum, $contract->id)."</a></td>";

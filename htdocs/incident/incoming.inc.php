@@ -38,7 +38,7 @@ if (mysql_num_rows($result) > 0)
     if (!$incoming->locked)
     {
         //it's not locked, lock for this user
-        $lockeduntil=date('Y-m-d H:i:s',$now+$CONFIG['record_lock_delay']);
+        $lockeduntil = date('Y-m-d H:i:s',$now+$CONFIG['record_lock_delay']);
         $sql = "UPDATE tempincoming SET locked='{$sit[2]}', lockeduntil='{$lockeduntil}' WHERE tempincoming.id='{$incomingid}' AND (locked = 0 OR locked IS NULL)";
         $result = mysql_query($sql);
         if (mysql_error()) trigger_error("MySQL Query Error ".mysql_error(), E_USER_ERROR);

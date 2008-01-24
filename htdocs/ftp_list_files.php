@@ -102,7 +102,7 @@ while (list($id, $filename, $size, $userid, $shortdescription, $path, $downloads
     echo "<td>$pretty_file_size</td>";
     echo "<td>$shortdescription</td>";
     echo "<td>$fileversion</td>";
-    echo "<td>".date($CONFIG['dateformat_filedatetime'],$filedate)."</td>";
+    echo "<td>".ldate($CONFIG['dateformat_filedatetime'],$filedate)."</td>";
     echo "<td>";
     if ($expiry==0)
     {
@@ -110,7 +110,7 @@ while (list($id, $filename, $size, $userid, $shortdescription, $path, $downloads
     }
     else
     {
-        echo date($CONFIG['dateformat_filedatetime'],$expiry);
+        echo ldate($CONFIG['dateformat_filedatetime'],$expiry);
     }
     echo "</td>";
     echo "</tr>\n";

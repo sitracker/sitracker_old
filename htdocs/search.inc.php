@@ -256,10 +256,10 @@ if (!empty($search_string))
                 $entry['score'] = 10 + search_score_adjust($sterms, $entry['string']);
                 $entry['title'] = $sresult->title;
                 $entry['date'] = $sresult->lastupdated;
-                $entry['extra']['opened'] = date($CONFIG['dateformat_datetime'],$sresult->opened);
+                $entry['extra']['opened'] = ldate($CONFIG['dateformat_datetime'],$sresult->opened);
                 if ($sresult->status == 2)
                 {
-                    $entry['extra']['closed'] = date($CONFIG['dateformat_datetime'],$sresult->closed);
+                    $entry['extra']['closed'] = ldate($CONFIG['dateformat_datetime'],$sresult->closed);
                 }
 
                 foreach ($sterms AS $sterm)
@@ -291,10 +291,10 @@ if (!empty($search_string))
                     $entry['score'] = 8 + search_score_adjust($sterms, $entry['string']);
                     $entry['title'] = $sresult->title;
                     $entry['date'] = $sresult->timestamp;
-                    $entry['extra']['opened'] = date($CONFIG['dateformat_datetime'],$sresult->opened);
+                    $entry['extra']['opened'] = ldate($CONFIG['dateformat_datetime'],$sresult->opened);
                     if ($sresult->status == 2)
                     {
-                        $entry['extra']['closed'] = date($CONFIG['dateformat_datetime'],$sresult->closed);
+                        $entry['extra']['closed'] = ldate($CONFIG['dateformat_datetime'],$sresult->closed);
                     }
                     search_build_results($srch_results,$entry);
                     unset($entry);
@@ -419,22 +419,22 @@ if (!empty($search_string))
             echo "<td>".ucfirst($type).": {$sresult['id']}</td>";
             switch ($type)
             {
-                case 'incident': 
-                    $url = "javascript:incident_details_window('{$sresult['id']}', 'incident{$sresult['id']}')"; 
+                case 'incident':
+                    $url = "javascript:incident_details_window('{$sresult['id']}', 'incident{$sresult['id']}')";
                     break;
-                case 'contact': 
-                    $url = "contact_details.php?id={$sresult['id']}"; 
+                case 'contact':
+                    $url = "contact_details.php?id={$sresult['id']}";
                     break;
-                case 'site': 
-                    $url = "site_details.php?id={$sresult['id']}"; 
+                case 'site':
+                    $url = "site_details.php?id={$sresult['id']}";
                     break;
-                case 'contract': 
-                    $url = "contract_details.php?id={$sresult['id']}"; 
+                case 'contract':
+                    $url = "contract_details.php?id={$sresult['id']}";
                     break;
-                case 'kb': 
-                    $url = "kb_view_article.php?id={$sresult['id']}"; 
+                case 'kb':
+                    $url = "kb_view_article.php?id={$sresult['id']}";
                     break;
-                default: 
+                default:
                     $url = "javascript:alert('nothing to link to');";
             }
             echo "<td style='width:400px;'><a href=\"$url\" class='info'>{$sresult['title']}";
@@ -457,7 +457,7 @@ if (!empty($search_string))
             echo "<td>";
             if ($sresult['date'] > 0)
             {
-                echo date($CONFIG['dateformat_datetime'],$sresult['date']);
+                echo ldate($CONFIG['dateformat_datetime'],$sresult['date']);
             }
             echo "</td>";
             echo "</tr>\n";

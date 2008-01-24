@@ -79,7 +79,7 @@ elseif ($_REQUEST['mode']=='report')
     {
         // FIXME strip slashes
         $product="";
-        $nicedate=date('d/m/Y',$row->opened);
+        $nicedate = ldate('d/m/Y',$row->opened);
         $html .= "<tr class='shade2'><td>{$row->name}</td>";
         $html .= "<td>{$row->address1}</td><td>{$row->address2}</td>";
         $html .= "<td>{$row->city}</td><td>{$row->county}</td>";

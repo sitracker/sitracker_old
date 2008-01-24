@@ -109,10 +109,10 @@ while ($row=mysql_fetch_object($result))
     if ($row->status==2) echo "<td>Closed, ".closingstatus_name($row->closingstatus)."</td>";
     else echo "<td>".incidentstatus_name($row->status)."</td>";
     echo "<td>".user_realname($row->owner,TRUE)."</td>";
-    echo "<td>".date($CONFIG['dateformat_date'],$row->opened)."</td>";
+    echo "<td>".ldate($CONFIG['dateformat_date'],$row->opened)."</td>";
     if ($row->closed > 0)
     {
-        echo "<td>".date($CONFIG['dateformat_date'], $row->closed)."</td>";
+        echo "<td>".ldate($CONFIG['dateformat_date'], $row->closed)."</td>";
         echo "<td>".format_seconds($row->duration_closed)."</td>";
     }
     else echo "<td colspan='2'>-</td>";

@@ -19,7 +19,7 @@ include ('classes.inc.php');
 require ('triggers.inc.php');
 
 // Version number of the application, (numbers only)
-$application_version='3.40';
+$application_version = '3.40';
 // Revision string, e.g. 'beta2' or 'svn' or ''
 $application_revision = 'svn';
 
@@ -41,6 +41,8 @@ if (version_compare(PHP_VERSION, "5.1.0", ">="))
     date_default_timezone_set($CONFIG['timezone']);
 }
 
+// try to figure out what path delimeter is being used (for windows or unix)...
+$fsdelim = (strstr($_SERVER['SCRIPT_FILENAME'],"/")) ? "/" : "\\";
 
 // Journal Logging
 // 0 = No logging
@@ -1874,13 +1876,16 @@ function userstatus_drop_down($name, $id, $userdisable=FALSE)
 
     while ($statuses = mysql_fetch_array($result))
     {
-        $html .= "<option ";
-        if ($statuses["id"] == $id)
+        if ($statuses["id"] > 0)
         {
-            $html .= "selected='selected' ";
+            $html .= "<option ";
+            if ($statuses["id"] == $id)
+            {
+                $html .= "selected='selected' ";
+            }
+            $html .= "value='{$statuses["id"]}'>";
+            $html .= "{$statuses["name"]}</option>\n";
         }
-        $html .= "value='{$statuses["id"]}'>";
-        $html .= "{$statuses["name"]}</option>\n";
     }
     $html .= "</select>\n";
 
@@ -1909,14 +1914,17 @@ function userstatus_bardrop_down($name, $id)
     $html = "<select name='$name' title='Set your status' onchange=\"if (this.options[this.selectedIndex].value != 'null') { window.open(this.options[this.selectedIndex].value,'_top') }\">\n";
     while ($statuses = mysql_fetch_array($result))
     {
-        $html .= "<option ";
-        if ($statuses["id"] == $id)
+        if ($statuses["id"] > 0)
         {
-            $html .= "selected='selected' ";
-        }
+            $html .= "<option ";
+            if ($statuses["id"] == $id)
+            {
+                $html .= "selected='selected' ";
+            }
 
-        $html .= "value='set_user_status.php?mode=setstatus&amp;userstatus={$statuses['id']}'>";
-        $html .= "{$statuses["name"]}</option>\n";
+            $html .= "value='set_user_status.php?mode=setstatus&amp;userstatus={$statuses['id']}'>";
+            $html .= "{$statuses["name"]}</option>\n";
+        }
     }
     $html .= "<option value='set_user_status.php?mode=setaccepting&amp;accepting=Yes' style='color: #00AA00; border-top: 1px solid black;'>{$GLOBALS['strAccepting']}</option>\n";
     $html .= "<option value='set_user_status.php?mode=setaccepting&amp;accepting=No' style='color: #FF0000;'>{$GLOBALS['strNotAccepting']}</option>\n";
@@ -6872,6 +6880,19 @@ function truncate_string($text, $maxlength=255, $html=TRUE)
 */
 function ldate($format, $date)
 {
+    if ($_SESSION['utcoffset'] != 0)
+    {
+        // Adjust the date back to UTC
+        $tz = strftime('%z', $date);
+        $tzmins = substr($tz, -4, 2) + (substr($tz, -4, 2) * 60);
+        if ($tz{0} == '+') $date -= $tzmins;
+        else $date += $tzmins;
+
+        // Adjust the display time to the users local timezone
+        $useroffsetsec = $_SESSION['utcoffset'] * 60;
+        $date += $useroffsetsec;
+    }
+
     $datestring = date($format, $date);
 
     // Internationalise full day names
@@ -6964,6 +6985,7 @@ function open_activities_for_incident($incientid)
     return $num;
 }
 
+
 function mark_task_completed($taskid, $incident)
 {
     if(!$incident)
@@ -6984,6 +7006,7 @@ function mark_task_completed($taskid, $incident)
     mysql_query($sql);
     if (mysql_error()) trigger_error(mysql_error(),E_USER_ERROR);
 }
+
 
 // -------------------------- // -------------------------- // --------------------------
 // leave this section at the bottom of functions.inc.php ================================

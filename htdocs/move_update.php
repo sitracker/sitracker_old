@@ -49,7 +49,7 @@ if ($incidentid=='')
 
     while ($updates = mysql_fetch_array($result))
     {
-        $update_timestamp_string = date($CONFIG['dateformat_datetime'], $updates["timestamp"]);
+        $update_timestamp_string = ldate($CONFIG['dateformat_datetime'], $updates["timestamp"]);
         ?>
         <br />
         <table align='center' width="95%">
@@ -151,7 +151,7 @@ else
         if (mysql_error()) trigger_error("MySQL Query Error ".mysql_error(), E_USER_ERROR);
         list($oldincidentid, $bodytext, $timestamp)=mysql_fetch_row($uresult);
         if ($oldincidentid==0) $oldincidentid='Inbox';
-        $prettydate=date('r', $timestamp);
+        $prettydate = ldate('r', $timestamp);
         // prepend 'moved' header to bodytext
         $body ="Moved from <b>$oldincidentid</b> -> <b>$incidentid</b> by: <b>".user_realname($sit[2])."</b>\n";
         $body .="Original Message Received at: <b>$prettydate</b>\n";

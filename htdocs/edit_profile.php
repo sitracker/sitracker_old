@@ -114,7 +114,7 @@ if (empty($mode))
     }
     else
     {
-        echo "None set";
+        echo "{$strNotSet}";
     }
     echo "</td></tr>";
     echo "<tr><th colspan='2'>{$strWorkStatus}</th></tr>";
@@ -173,6 +173,8 @@ if (empty($mode))
     }
     echo "</select>";
     echo "</td></tr>\n";
+
+    echo "<tr><th>{$strUTCOffset}:</th><td>".array_drop_down($availabletimezones, 'utcoffset', $user->var_utc_offset)."</td></tr>\n";
 
     echo "<tr><th>{$strInterfaceStyle}:</th><td>".interfacestyle_drop_down('style', $user->var_style)."</td></tr>\n";
     echo "<tr><th>{$strIncidentRefresh}:</th>";
@@ -253,6 +255,7 @@ elseif ($mode=='save')
     $emailonreassign = cleanvar($_POST['emailonreassign']);
     $style = cleanvar($_POST['style']);
     $vari18n = cleanvar($_POST['vari18n']);
+    $utcoffset = cleanvar($_POST['utcoffset']);
     $accepting = cleanvar($_POST['accepting']);
     $roleid = cleanvar($_POST['roleid']);
     $holiday_entitlement = cleanvar($_POST['holiday_entitlement']);
@@ -365,7 +368,8 @@ elseif ($mode=='save')
             $sql .= "holiday_entitlement='{$holiday_entitlement}', ";
         }
         $sql .= "var_update_order='$updateorder', var_num_updates_view='$updatesperpage', var_style='$style', signature='$signature', message='$message', status='$status', accepting='$accepting', ";
-        $sql .= "var_collapse='$collapse', var_notify_on_reassign='$emailonreassign', var_i18n='{$vari18n}' WHERE id='$edituserid' LIMIT 1";
+        $sql .= "var_collapse='$collapse', var_notify_on_reassign='$emailonreassign', var_i18n='{$vari18n}', var_utc_offset='{$utcoffset}' ";
+        $sql .= "WHERE id='$edituserid' LIMIT 1";
         $result = mysql_query($sql);
         if (mysql_error()) trigger_error("MySQL Query Error ".mysql_error(), E_USER_ERROR);
 
@@ -379,6 +383,7 @@ elseif ($mode=='save')
             $_SESSION['update_order'] = $updateorder;
             $_SESSION['num_update_view'] = $updatesperpage;
             $_SESSION['lang'] = $vari18n;
+            $_SESSION['utcoffset'] = $utcoffset;
         }
 
         //only want to reassign to backup if you've changed you status

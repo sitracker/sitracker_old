@@ -66,9 +66,9 @@ switch ($mode)
         echo "<tr><th>File Version:</th><td>";
         echo "<input type='text' size='40' name='fileversion' value='{$frow['fileversion']}' />";
         echo "</td></tr>\n";
-        echo "<tr><th>File Date:</th><td>".date('D jS M Y @ g:i A',$frow['filedate'])." <strong>by</strong> ".user_realname($frow['userid'],TRUE). "</td></tr>\n";
+        echo "<tr><th>File Date:</th><td>".ldate('D jS M Y @ g:i A',$frow['filedate'])." <strong>by</strong> ".user_realname($frow['userid'],TRUE). "</td></tr>\n";
 
-        if ($frow['expiry']>0) echo "<tr><th>Expiry:</th><td>".date('D jS M Y @ g:i A',$frow['expiry'])." </td></tr>\n";
+        if ($frow['expiry']>0) echo "<tr><th>Expiry:</th><td>".ldate('D jS M Y @ g:i A',$frow['expiry'])." </td></tr>\n";
 
         echo "</table>\n\n";
         echo "<input type='hidden' name='id' value='{$id}' />";

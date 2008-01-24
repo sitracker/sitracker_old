@@ -426,9 +426,9 @@ elseif ($_REQUEST['mode']=='report')
     $rowcount=0;
     while ($row = mysql_fetch_object($result))
     {
-        $nicedate=date('d/m/Y',$row->opened);
-        $niceclose = date('d/m/Y',$row->closed);
-	$ext = external_escalation($escalated_array, $row->incid);
+        $nicedate = ldate('d/m/Y',$row->opened);
+        $niceclose = ldate('d/m/Y',$row->closed);
+        $ext = external_escalation($escalated_array, $row->incid);
         $html .= "<tr class='shade2'><td>$nicedate</td><td>{$niceclose}</td><td><a href='../incident_details.php?id={$row->incid}'>{$row->incid}</a></td><td>{$row->title}</td><td>{$row->realname}</td><td>$ext</td></tr>";
         $csv .="'".$nicedate."','".$niceclose."', '{$row->incid}','{$row->title}','{$row->realname},'$ext'\n";
     }

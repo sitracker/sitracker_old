@@ -52,7 +52,7 @@ else
     {
         session_regenerate_id();
     }
-    
+
     if (!version_compare(phpversion(),"4.3.3",">="))
     {
         setcookie(session_name(), session_id(),ini_get("session.cookie_lifetime"), "/");
@@ -115,7 +115,7 @@ switch ($page)
                 }
                 echo "</td>";
                 echo "<td>{$contract->incidents_used}</td>";
-                echo "<td>".date($CONFIG['dateformat_date'],$contract->expirydate)."</td>";
+                echo "<td>".ldate($CONFIG['dateformat_date'],$contract->expirydate)."</td>";
                 echo "<td><a href='$_SERVER[PHP_SELF]?page=add&amp;contractid={$contract->id}'>{$strAddIncident}</a></td></tr>\n";
                 if ($shade == 'shade1') $shade = 'shade2';
                 else $shade = 'shade1';
@@ -161,7 +161,7 @@ switch ($page)
             {
                 echo colheader('actions', $strOperation);
             }
-            
+
             echo "</tr>\n";
             while ($incident = mysql_fetch_object($result))
             {
@@ -171,7 +171,7 @@ switch ($page)
                 {
                     echo software_name($incident->softwareid)."<br />";
                 }
-                
+
                 echo "<strong><a href='portal.php?page=showincident&amp;id={$incident->id}'>{$incident->title}</a></strong></td>";
                 echo "<td>".format_date_friendly($incident->lastupdated)."</td>";
                 echo "<td>".incidentstatus_name($incident->status)."</td>";
@@ -313,17 +313,17 @@ switch ($page)
             {
                 $updatetext .= "<b>Problem Description</b>\n{$probdesc}\n\n";
             }
-            
+
             if (!empty($workarounds))
             {
                 $updatetext .= "<b>Workarounds Attempted</b>\n{$workarounds}\n\n";
             }
-            
+
             if (!empty($reproduction))
             {
                 $updatetext .= "<b>Problem Reproduction</b>\n{$reproduction}\n\n";
             }
-            
+
             if (!empty($impact))
             {
                 $updatetext .= "<b>Customer Impact</b>\n{$impact}\n\n";
@@ -412,13 +412,13 @@ switch ($page)
                 $errors = 1;
                 echo "<p class='error'>You must enter a surname</p>\n";
             }
-            
+
             if ($email == "" OR $email=='none' OR $email=='n/a')
             {
                 $errors = 1;
                 echo "<p class='error'>You must enter an email address</p>\n";
             }
-            
+
             if ($errors == 0)
             {
                 $updatesql = "UPDATE contacts SET forenames='$forenames', surname='$surname', department='$department', address1='$address1', address2='$address2', county='$county', country='$country', postcode='$postcode', phone='$phone', fax='$fax', email='$email' ";
@@ -499,7 +499,7 @@ switch ($page)
 
         $sql  = "SELECT * FROM `{$dbUpdates}` WHERE incidentid='{$incidentid}' AND customervisibility='show' ";
         $sql .= "ORDER BY timestamp DESC, id DESC";
-        
+
         if ($offset > 0)
         {
             if (empty($records))
@@ -543,7 +543,7 @@ switch ($page)
             {
                 $firstid = $update->id;
             }
-            
+
             $updateid = $update->id;
             $updatebody=trim($update->bodytext);
 
@@ -637,7 +637,7 @@ switch ($page)
                     {
                         echo "<div class='detailentryhidden'>\n";
                     }
-                    
+
                     if ($updatebodylen > 5)
                     {
                         echo nl2br($updatebody);

@@ -148,7 +148,7 @@ else
                 <td align='center' class='<?php echo $class; ?>' width='100'><?php echo site_name($results["siteid"]) ?></td>
                 <td align='center' class='<?php echo $class; ?>' width='50'><?php echo priority_name($results["priority"]) ?></td>
                 <td align='center' class='<?php echo $class; ?>' width='100'><?php echo user_realname($results["owner"],TRUE) ?></td>
-                <td align='center' class='<?php echo $class; ?>' width='150'><?php echo date($CONFIG['dateformat_datetime'], $results["lastupdated"]); ?></td>
+                <td align='center' class='<?php echo $class; ?>' width='150'><?php echo ldate($CONFIG['dateformat_datetime'], $results["lastupdated"]); ?></td>
                 <td align='center' class='<?php echo $class; ?>' width='50'><?php echo $results["type"] ?></td>
                 <td align='center' class='<?php echo $class; ?>' width='50'><?php echo incidentstatus_name($results["status"]); ?></td>
                 </tr>

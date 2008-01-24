@@ -202,7 +202,7 @@ switch ($mode)
                     $hashcode1=trim($hashcode2);
                     $hashcode=urlencode($hashcode1);
                     echo "<tr class='$shade'>";
-                    echo "<td>".date($CONFIG['dateformat_datetime'],mysqlts2date($resp->created))."</td>";
+                    echo "<td>".ldate($CONFIG['dateformat_datetime'],mysqlts2date($resp->created))."</td>";
                     echo "<td><a href='contact_details.php?id={$resp->contactid}' title='{$resp->email}'>".contact_realname($resp->contactid)."</a></td>";
                     echo "<td><a href=\"javascript:incident_details_window('{$resp->incidentid}','incident{$resp->incidentid}')\">Incident [{$resp->incidentid}]</a> - ";
                     echo incident_title($resp->incidentid)."</td>";

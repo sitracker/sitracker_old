@@ -270,7 +270,7 @@ if (mysql_num_rows($resultnew) >= 1)
         list($update_userid, $update_type, $update_currentowner, $update_currentstatus, $update_body, $update_timestamp, $update_nextaction, $update_id) = incident_lastupdate($new->id);
         $update_body = parse_updatebody($update_body);
         $html = "<tr class='shade1'><td />";
-        $html .= "<td align='center'>".date($CONFIG['dateformat_datetime'], $new->opened)."</td>";
+        $html .= "<td align='center'>".ldate($CONFIG['dateformat_datetime'], $new->opened)."</td>";
         $html .= "<td>".contact_realname($new->contact)."</td>";
         $html .= "<td>".product_name($new->product)." / ".software_name($new->softwareid)."<br />";
         $html .= "[{$new->id}] <a href=\"javascript:incident_details_window('{$new->id}','holdingview');\" class='info'>{$new->title}<span>{$update_body}</span></a></td>";
@@ -329,7 +329,7 @@ else if ($spamcount == 0)
 if ($spamcount > 0)
 {
     echo "<h2>{$strSpamEmail}";
-    if($spamcount > 1) echo "s"; // FIXME i18n cant we do this ? 
+    if($spamcount > 1) echo "s"; // FIXME i18n cant we do this ?
     echo " ({$spamcount} {$strTotal})</h2>\n";
     echo "<p align='center'>{$strIncomingEmailSpam}</p>";
 
@@ -438,7 +438,7 @@ if (mysql_num_rows($result) >= 1)
         if (($assign->owner == $assign->originalowner || $assign->towner == $assign->originalowner) AND $useraccepting=='no')
         {
             echo "<tr class='shade1'>";
-            echo "<td align='center'>".date($CONFIG['dateformat_datetime'], $assign->lastupdated)."</td>";
+            echo "<td align='center'>".ldate($CONFIG['dateformat_datetime'], $assign->lastupdated)."</td>";
             echo "<td>".user_realname($assign->originalowner,TRUE)."</td>";
             echo "<td>".software_name($assign->softwareid)."<br />[<a href=\"javascript:wt_winpopup('incident_details.php?id={$assign->id}&amp;popup=yes', 'mini')\">{$assign->id}</a>] ".$assign->title."</td>";
             $userstatus = userstatus_name($assign->userstatus);
@@ -461,7 +461,7 @@ if (mysql_num_rows($result) >= 1)
         {
             // display a row to assign the incident back to the original owner
             echo "<tr class='shade2'>";
-            echo "<td>".date($CONFIG['dateformat_datetime'], $assign->lastupdated)."</td>";
+            echo "<td>".ldate($CONFIG['dateformat_datetime'], $assign->lastupdated)."</td>";
             echo "<td>".user_realname($assign->owner,TRUE)."</td>";
             echo "<td>[<a href=\"javascript:wt_winpopup('incident_details.php?id={$assign->id}&amp;popup=yes', 'mini')\">{$assign->id}</a>] {$assign->title}</td>";
             $userstatus = user_status($assign->originalowner);
