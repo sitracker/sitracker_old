@@ -6616,9 +6616,18 @@ function truncate_string($text, $maxlength=255, $html=TRUE)
 */
 function ldate($format, $date)
 {
-    // Adjust the display time to the users local timezone
-    $utcoffsetsec = $_SESSION['utcoffset'] * 60;
-    $date += $utcoffsetsec;
+    if ($_SESSION['utcoffset'] != 0)
+    {
+        // Adjust the date back to UTC
+        $tz = strftime('%z', $date);
+        $tzmins = substr($tz, -4, 2) + (substr($tz, -4, 2) * 60);
+        if ($tz{0} == '+') $date -= $tzmins;
+        else $date += $tzmins;
+
+        // Adjust the display time to the users local timezone
+        $useroffsetsec = $_SESSION['utcoffset'] * 60;
+        $date += $useroffsetsec;
+    }
 
     $datestring = date($format, $date);
 
