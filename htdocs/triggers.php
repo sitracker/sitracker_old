@@ -107,6 +107,16 @@ switch ($_REQUEST['mode'])
         if (!empty($triggerarray[$id]['name'])) $name = $triggerarray[$id]['name'];
         else $name = $id;
         echo "<h3>Add Action to '{$name}' trigger</h3>"; // FIXME i18n add action/new action
+        echo "<p align='center'>{$triggerarray[$id]['description']}</p>";
+        if (is_array($triggerarray[$id]['optional']))
+        {
+            echo "<p align='center'>The following optional parameters may be used: ";
+            foreach ($triggerarray[$id]['optional'] AS $param)
+            {
+                echo "<var>{$param}</var> &nbsp; ";
+            }
+            echo "</p>";
+        }
 
         echo "<table align='center'><tr><th>{$strAction}</th><th>{$strTemplate}</th><th>{$strParameters}</th></tr>\n";
         echo "<tr>";
