@@ -6616,6 +6616,10 @@ function truncate_string($text, $maxlength=255, $html=TRUE)
 */
 function ldate($format, $date)
 {
+    // Adjust the display time to the users local timezone
+    $utcoffsetsec = $_SESSION['utcoffset'] * 60;
+    $date += $utcoffsetsec;
+
     $datestring = date($format, $date);
 
     // Internationalise full day names
@@ -6708,6 +6712,7 @@ function open_activities_for_incident($incientid)
     return $num;
 }
 
+
 function mark_task_completed($taskid, $incident)
 {
     if(!$incident)
@@ -6728,6 +6733,7 @@ function mark_task_completed($taskid, $incident)
     mysql_query($sql);
     if (mysql_error()) trigger_error(mysql_error(),E_USER_ERROR);
 }
+
 
 // -------------------------- // -------------------------- // --------------------------
 // leave this section at the bottom of functions.inc.php ================================

@@ -420,7 +420,7 @@ if (mysql_num_rows($result) >=1 )
                 $task->name = $strUntitled;
             }
 
-            echo "<a href='view_task.php?id={$task->id}' class='info'>".$task->name;
+            echo "<a href='view_task.php?id={$task->id}' class='info'>".truncate_string($task->name, 100);
             echo "</a>";
 
             echo "</td>";

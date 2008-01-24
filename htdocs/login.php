@@ -61,6 +61,7 @@ elseif (authenticate($username, $password) == 1)
     $_SESSION['num_update_view'] = $user->var_num_updates_view;
     $_SESSION['collapse'] = $user->var_collapse;
     $_SESSION['groupid'] = is_null($user->groupid) ? 0 : $user->groupid;
+    $_SESSION['utcoffset'] = $user->var_utc_offset;
 
     // Delete any old session user notices
     $sql = "DELETE FROM notices WHERE durability='session' AND userid={$_SESSION['userid']}";

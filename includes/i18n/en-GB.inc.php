@@ -1059,6 +1059,8 @@ $strUsersNoGroup = 'Users with no group';
 $strUsersTasks = '%s\'s Tasks';
 $strUsersBoldSkills = 'Users shows in bold typeface are known to have relevant skills';
 $strUseThisInFuture = 'Use this in future';
+# Offset from Coordinated Universal Time / Temps Universel Coordonné
+$strUTCOffset = 'UTC Offset (Timezone)';
 
 $strValue = 'Value';
 $strVariable = 'Variable';

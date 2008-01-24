@@ -1592,6 +1592,9 @@ UPDATE `incidentstatus` SET `name` = 'strAwaitingSupportResponse' WHERE `inciden
 UPDATE `incidentstatus` SET `name` = 'strAwaitingClosure' WHERE `incidentstatus`.`id` =7 LIMIT 1 ;
 UPDATE `incidentstatus` SET `name` = 'strAwaitingCustomerAction' WHERE `incidentstatus`.`id` =8 LIMIT 1 ;
 UPDATE `incidentstatus` SET `name` = 'strUnsupported' WHERE `incidentstatus`.`id` =9 LIMIT 1 ;
+-- INL 24Jan08
+ALTER TABLE `users` ADD `var_utc_offset` INT NOT NULL DEFAULT '0' COMMENT 'Offset from UTC (timezone) in minutes' AFTER `var_i18n` ;
+
 ";
 
 
