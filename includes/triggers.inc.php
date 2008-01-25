@@ -514,7 +514,7 @@ function email_templates($name, $selected = '')
     $query = mysql_query($sql);
     while ($template = mysql_fetch_object($query))
     {
-        $html .= "<option value='{$template->id}'>{$template->id}</option>\n";
+        $html .= "<option value='{$template->id}'>{$template->name}</option>\n";
     }
     $html .= "</select>\n";
     return $html;

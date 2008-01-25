@@ -22,33 +22,11 @@ $title = $strTriggers;
 
 switch ($_REQUEST['mode'])
 {
-    case 'save':
-        $newtrigger = cleanvar($_POST['new_trigger']);
-        $newaction = cleanvar($_POST['new_action']);
-        $newparams = cleanvar($_POST['new_params']);
-        if ($newaction == "ACTION_EMAIL")
-        {
-            $newtemplate = cleanvar($_POST['new_email_template']);
-        }
-        elseif ($newaction == "ACTION_NOTICE")
-        {
-            $newtemplate = cleanvar($_POST['new_notice_template']);
-        }
-
-        $sql = "INSERT into `{$dbTriggers}` (triggerid, userid, action, template, parameters) ";
-        $sql .= "VALUES ('{$newtrigger}', '{$sit[2]}', '{$newaction}', '{$newtemplate}', '{$newparams}')";
-        if (mysql_query($sql))
-        {
-            html_redirect($_SERVER[PHP_SELF], TRUE);
-        }
-        if (mysql_error()) trigger_error(mysql_error(),E_USER_WARNING);
-        break;
-
     case 'delete':
         $id = cleanvar($_GET['id']);
         if (!is_numeric($id)) html_redirect($_SERVER['PHP_SELF'], FALSE);
 
-        $sql = "DELETE FROM `{$dbTriggers}` WHERE triggerid = $id LIMIT 1";
+        $sql = "DELETE FROM `{$dbTriggers}` WHERE id = $id LIMIT 1";
         mysql_query($sql);
         if (mysql_error()) trigger_error(mysql_error(),E_USER_WARNING);
         if (mysql_affected_rows() >= 1) html_redirect($_SERVER['PHP_SELF']);
@@ -117,8 +95,8 @@ switch ($_REQUEST['mode'])
             }
             echo "</p>";
         }
-
-        echo "<table align='center'><tr><th>{$strAction}</th><th>{$strTemplate}</th><th>{$strParameters}</th></tr>\n";
+        echo "<form action='{$_SERVER['PHP_SELF']}' method='post'>";
+        echo "<table align='center'><tr><th>{$strAction}</th><th>{$strTemplate}</th><th>Extra {$strParameters}</th></tr>\n"; // FIXME extra, rules
         echo "<tr>";
         echo "<td><select name='new_action' id='new_action' onchange='switch_template();'>";
         echo "<option value='ACTION_NONE'>{$strNone}</option>\n";
@@ -136,11 +114,41 @@ switch ($_REQUEST['mode'])
         echo "<div id='journalbox' style='display:none;'>{$strNone}</div>";
         echo "</td>";
         echo "<td><div id='parametersbox' style='display:none;'><input type='text' name='parameters' size='30' /></div></td>";
+        echo "</tr>";
+        echo "<tr><td colspan='3'><label>Rules:</label> <textarea cols='30' rows='5' name='rules'></textarea></td></tr>";
         echo "</table>\n";
+        echo "<input type='hidden' name='mode' value='save' />";
+        echo "<input type='hidden' name='id' value='{$id}' />";
+        echo "<p><input type='submit' value=\"{$strSave}\" /></p>";
+        echo "</form>";
 
         echo "<p align='center'><a href='{$_SERVER['PHP_SELF']}'>{$strBackToList}</a></p>\n";
         include ('htmlfooter.inc.php');
         break;
+
+    case 'save':
+        $id = cleanvar($_POST['id']);
+        // Check that this is a defined trigger
+        if (!array_key_exists($id, $triggerarray))
+        {
+            html_redirect($_SERVER['PHP_SELF'], FALSE);
+            exit;
+        }
+        $action = cleanvar($_POST['new_action']);
+        $noticetemplate = cleanvar($_POST['noticetemplate']);
+        $emailtemplate = cleanvar($_POST['emailtemplate']);
+        $parameters = cleanvar($_POST['parameters']);
+        $rules = cleanvar($_POST['rules']);
+
+        if ($action == 'ACTION_NOTICE') $templateid = $noticetemplate;
+        elseif ($action == 'ACTION_EMAIL') $templateid = $emailtemplate;
+        else $templateid = 0;
+
+        $sql = "INSERT INTO `{$dbTriggers}` (triggerid, userid, action, template, parameters, checks) ";
+        $sql .= "VALUES ('{$id}', '{$userid}', '{$action}', '{$templateid}', '{$parameters}', '{$rules}')";
+        mysql_query($sql);
+        if (mysql_error()) trigger_error(mysql_error(),E_USER_ERROR);
+        //drop through and list...
 
     case 'list':
     default:
@@ -156,7 +164,7 @@ switch ($_REQUEST['mode'])
         foreach($triggerarray AS $trigger => $triggervar)
         {
             echo "<tr class='$shade'>";
-            echo "<td><img src='{$CONFIG['application_webpath']}images/icons/{$iconset}/16x16/trigger.png' width='16' height='16' alt='' /> ";
+            echo "<td style='vertical-align: top;'><img src='{$CONFIG['application_webpath']}images/icons/{$iconset}/16x16/trigger.png' width='16' height='16' alt='' /> ";
             echo "<strong>";
             if (!empty($triggervar['name'])) echo "{$triggervar['name']}";
             else echo "{$trigger}";
@@ -175,6 +183,7 @@ switch ($_REQUEST['mode'])
                 {
                     echo "<img src='{$CONFIG['application_webpath']}images/icons/{$iconset}/16x16/triggeraction.png' width='16' height='16' alt='' /> {$trigaction->action}";
                     if (!empty($trigaction->checks)) echo " ({$trigaction->checks})";
+                    echo " <a href='{$_SERVER['PHP_SELF']}?mode=delete&amp;id={$trigaction->id}' title=\"{$strDelete}\"><img src='{$CONFIG['application_webpath']}images/icons/{$iconset}/12x12/delete.png' width='12' height='12' alt='' /></a>";
                     echo "<br />\n";
                 }
             }

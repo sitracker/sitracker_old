@@ -92,6 +92,8 @@ form p { text-align: center; }
 table.vertical { border: 1px solid #CCCCFF; }
 table.vertical th { text-align: right; }
 
+a img { border: 0px;}
+
 div.windowbox
 {
     margin-left: auto;
