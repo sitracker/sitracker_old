@@ -1641,20 +1641,20 @@ CREATE TABLE `noticetemplates` (
 `durability` ENUM( 'sticky', 'session' ) NOT NULL DEFAULT 'sticky'
 ) ENGINE = MYISAM ;
 
--- TODO 3.40 this needs completing and adding to the main SQL
-INSERT INTO `noticetemplates` (`id`, `name`, `type`, `description`, `text`, `linktext`, `link`, `durability`) VALUES
-(1, 'TRIGGER_INCIDENT_CREATED', 0, '', 'Incident <incidentid> - <incidenttitle> has been logged', 'View Incident', 'javascript:incident_details_window(<incidentid>)', 'sticky'),
-(2, 'TRIGGER_INCIDENT_ASSIGNED', 0, '', 'Incident <incidentid> - <incidenttitle> has been assigned to you', 'View Incident', 'javascript:incident_details_window(<incidentid>)', 'sticky'),
-(3, 'TRIGGER_INCIDENT_NEARING_SLA', 0, '', 'Incident <incidentid> - <incidenttitle> is nearing its SLA', 'View Incident', 'javascript:incident_details_window(<incidentid>)', 'sticky'),
-(4, 'TRIGGER_USERS_INCIDENT_NEARING_SLA', 0, '', '<incidentowner>''s incident <incidentid> - <incidenttitle> is nearing its SLA', 'View Incident', 'javascript:incident_details_window(<incidentid>)', 'sticky'),
-(5, 'TRIGGER_INCIDENT_EXCEEDED_SLA', 0, '', 'Incident <incidentid> - <incidenttitle> has exceeded its SLA', 'View Incident', 'javascript:incident_details_window(<incidentid>)', 'sticky'),
-(6, 'TRIGGER_INCIDENT_REVIEW_DUE', 0, '', 'Incident <incidentid> - <incidenttitle> is due for review', 'View Incident', 'javascript:incident_details_window(<incidentid>)', 'sticky'),
-(7, 'TRIGGER_CRITICAL_INCIDENT_LOGGED', 0, '', 'The critical incident <incidentid> - <incidenttitle> has been logged for <customersite>', 'View Incident', 'javascript:incident_details_window(<incidentid>)', 'sticky'),
-(8, 'TRIGGER_KB_CREATED', 0, '', 'KB Article <KBname> has been created', NULL, NULL, 'sticky'),
-(9, 'TRIGGER_NEW_HELD_EMAIL', 0, '', 'There is a new email in the holding queue', 'View Holding Queue', '<sitpath>/review_incoming_updates.php', 'sticky'),
-(10, 'TRIGGER_MINS_HELD_EMAIL', 0, '', 'There has been an email in the holding queue for <holdingmins> minutes', 'View Holding Queue', '<sitpath>/review_incoming_updates.php', 'sticky'),
-(11, 'TRIGGER_SIT_UPGRADED', 0, '', 'SiT! has been upgraded to <sitversion>', 'What\'s New?', '<sitpath>/releasenotes.php', 'sticky'),
-(12, 'TRIGGER_INCIDENT_OWNED_CLOSED_BY_USER', 0, '', 'Your incident <incidentid> - <incidenttitle> has been closed by <engineerclosedname>', NULL, NULL, 'sticky');
+INSERT INTO `noticetemplates` (`id`, `type`, `description`, `text`, `linktext`, `link`, `durability`) VALUES 
+('TRIGGER_INCIDENT_CREATED', 0, 'Used when a new incident has been created', 'Incident <incidentid> - <incidenttitle> has been logged', 'View Incident', 'javascript:incident_details_window(<incidentid>)', 'sticky'),
+('TRIGGER_INCIDENT_ASSIGNED_TRIGGER', 0, 'Used when a new incident is assigned to you', 'Incident <incidentid> - <incidenttitle> has been assigned to you', 'View Incident', 'javascript:incident_details_window(<incidentid>)', 'sticky'),
+('TRIGGER_INCIDENT_NEARING_SLA_TRIGGER', 0, 'Used when one of your incidents nears an SLA', 'Incident <incidentid> - <incidenttitle> is nearing its SLA', 'View Incident', 'javascript:incident_details_window(<incidentid>)', 'sticky'),
+('TRIGGER_USERS_INCIDENT_NEARING_SLA_TRIGGER', 0, 'Used when a user\\''s incident you are watching is assigned to you', '<incidentowner>\\''s incident <incidentid> - <incidenttitle> is nearing its SLA', 'View Incident', 'javascript:incident_details_window(<incidentid>)', 'sticky'),
+('TRIGGER_INCIDENT_EXCEEDED_SLA_TRIGGER', 0, 'Used when one of your incidents exceeds an SLA', 'Incident <incidentid> - <incidenttitle> has exceeded its SLA', 'View Incident', 'javascript:incident_details_window(<incidentid>)', 'sticky'),
+('TRIGGER_INCIDENT_REVIEW_DUE', 0, 'Used when an incident is due a review', 'Incident <incidentid> - <incidenttitle> is due for review', 'View Incident', 'javascript:incident_details_window(<incidentid>)', 'sticky'),
+('TRIGGER_KB_CREATED_TRIGGER', 0, 'Used when a new Knowledgebase article is created', 'KB Article <KBname> has been created', NULL, NULL, 'sticky'),
+('TRIGGER_NEW_HELD_EMAIL', 0, 'Used when there is a new email in the holding queue', 'There is a new email in the holding queue', 'View Holding Queue', '<sitpath>/review_incoming_updates.php', 'sticky'),
+('TRIGGER_MINS_HELD_EMAIL', 0, 'Used when there is a new email in the holding queue for x minutes', 'There has been an email in the holding queue for <holdingmins> minutes', 'View Holding Queue', '<sitpath>/review_incoming_updates.php', 'sticky'),
+('TRIGGER_SIT_UPGRADED', 0, 'Used when the system is upgraded', 'SiT! has been upgraded to <sitversion>', 'What\\''s New?', '<sitpath>/releasenotes.php', 'sticky'),
+('TRIGGER_INCIDENT_OWNED_CLOSED_BY_USER', 0, 'Used when one of your incidents is closed by another engineer', 'Your incident <incidentid> - <incidenttitle> has been closed by <engineerclosedname>', NULL, NULL, 'sticky'),
+('TRIGGER_USER_SET_TO_AWAY', 0, 'Used when a watched user goes away', '<realname> is now [b]not accepting[/b] incidents', NULL, 'userid=1', 'sticky'),
+('TRIGGER_USER_RETURNS', 0, 'Used when a user sets back to accepting', '<realname> is now [b]accepting[/b] incidents', NULL, NULL, 'sticky');
 
 -- KMH 06/01/08
 ALTER TABLE `emailtype` ADD `triggerid` INT( 11 ) NULL ;
