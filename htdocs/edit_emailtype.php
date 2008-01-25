@@ -80,11 +80,23 @@ elseif ($action == "edit")
         if (mysql_error()) trigger_error("MySQL Query Error ".mysql_error(), E_USER_ERROR);
         $emailtype = mysql_fetch_array($result);
         echo "<h2>{$strEdit} ".ucfirst($emailtype['type'])." {$strEmailTemplate}</h2>";
+
+
         echo "<h5>".sprintf($strMandatoryMarked,"<sup class='red'>*</sup>")."</h5>";
         echo "<p align='center'>{$strListOfSpecialIdentifiersEmail}.</p>";
         echo "<form name='edittemplate' action='{$_SERVER['PHP_SELF']}?action=update' method='post' onsubmit='return confirm_submit(\"{$strAreYouSureEditEmailTemplate}\")'>";
 
         echo "<table align='center' class='vertical'>";
+
+        $tsql = "SELECT * FROM `{$dbTriggers}` WHERE action = 'ACTION_EMAIL' AND template = '$id' LIMIT 1";
+        $tresult = mysql_query($tsql);
+        if (mysql_error()) trigger_error("MySQL Query Error ".mysql_error(), E_USER_ERROR);
+        if (mysql_num_rows($tresult) >= 1)
+        {
+            $trigaction = mysql_fetch_object($tresult);
+            echo "<tr><th>{$strTrigger}</th><td>".trigger_description($triggerarray[$trigaction->triggerid])."<br /><br />";
+            echo triggeraction_description($trigaction)."</td></tr>";
+        }
 
         echo "<tr><th>{$strEmailTemplate}: <sup class='red'>*</sup></th><td>";
         echo "<input maxlength='50' name='name' size='35' value='{$emailtype['name']}' ";

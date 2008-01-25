@@ -1639,7 +1639,7 @@ CREATE TABLE `noticetemplates` (
 `durability` ENUM( 'sticky', 'session' ) NOT NULL DEFAULT 'sticky'
 ) ENGINE = MYISAM ;
 
-INSERT INTO `noticetemplates` (`id`, `type`, `description`, `text`, `linktext`, `link`, `durability`) VALUES 
+INSERT INTO `noticetemplates` (`id`, `type`, `description`, `text`, `linktext`, `link`, `durability`) VALUES
 ('TRIGGER_INCIDENT_CREATED', 0, 'Used when a new incident has been created', 'Incident <incidentid> - <incidenttitle> has been logged', 'View Incident', 'javascript:incident_details_window(<incidentid>)', 'sticky'),
 ('TRIGGER_INCIDENT_ASSIGNED_TRIGGER', 0, 'Used when a new incident is assigned to you', 'Incident <incidentid> - <incidenttitle> has been assigned to you', 'View Incident', 'javascript:incident_details_window(<incidentid>)', 'sticky'),
 ('TRIGGER_INCIDENT_NEARING_SLA_TRIGGER', 0, 'Used when one of your incidents nears an SLA', 'Incident <incidentid> - <incidenttitle> is nearing its SLA', 'View Incident', 'javascript:incident_details_window(<incidentid>)', 'sticky'),
@@ -1699,7 +1699,7 @@ INSERT INTO triggers (triggerid, userid, action) VALUES ('TRIGGER_INCIDENT_OWNED
 ALTER TABLE `triggers` ADD INDEX ( `userid` );
 
 -- KMHO 25/01/08
- ALTER TABLE `emailtype` CHANGE `type` `type` ENUM( 'user', 'system', 'customer' ) CHARACTER SET latin1 COLLATE latin1_swedish_ci NOT NULL DEFAULT 'user' 
+ALTER TABLE `emailtype` CHANGE `type` `type` ENUM( 'user', 'system', 'customer' ) NOT NULL DEFAULT 'user';
 ";
 
 // Important: When making changes to the schema you must add SQL to make the alterations

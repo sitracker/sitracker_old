@@ -218,6 +218,7 @@ function trigger_action($userid, $triggerid, $action, $paramarray)
     }
 }
 
+
 /**
     * Replaces template variables with their values
     * @author Kieran Hogg
@@ -366,6 +367,8 @@ function trigger_replace_email_specials($string, $paramarray)
 
     return preg_replace($email_regex,$email_replace,$string);
 }
+
+
 /**
     * Sends an email for a trigger
     * @author Kieran Hogg
@@ -423,6 +426,8 @@ function send_trigger_email($userid, $triggertype, $template, $paramarray)
         $dbg .= $email;
     }
 }
+
+
 /**
     * Creates a trigger notice
     * @author Kieran Hogg
@@ -471,6 +476,7 @@ function create_trigger_notice($userid, $noticetext='', $triggertype='',
     }
 }
 
+
 /**
     * Displays a <select> with the list of triggers
     * @author Kieran Hogg
@@ -516,6 +522,7 @@ function email_templates($name, $selected = '')
     return $html;
 }
 
+
 /**
     * Displays a <select> with the list of notice templates
     * @author Kieran Hogg
@@ -534,6 +541,7 @@ function notice_templates($name, $selected = '')
     $html .= "</select>\n";
     return $html;
 }
+
 
 /**
     * Checks array of parameters against list of parameters
@@ -626,4 +634,65 @@ function trigger_checks($checkstrings, $paramarray)
     }
     return $passed;
 }
+
+
+function trigger_description($triggervar)
+{
+    global $CONFIG, $iconset, $triggerarray;
+    $html = "<img src='{$CONFIG['application_webpath']}images/icons/{$iconset}/16x16/trigger.png' width='16' height='16' alt='' /> ";
+    $html .= "<strong>";
+    if (!empty($triggervar['name'])) $html .= "{$triggervar['name']}";
+    else $html .= "{$trigger}";
+    $html .= "</strong><br />\n";
+    $html .= $triggervar['description'];
+    return $html;
+}
+
+
+/**
+    * Formats a human readable description of a trigger action
+    * @author Ivan Lucas
+    * @param $trigaction object. mysql fetch object of triggers db table
+    * @param $editlink bool. Do a hyperlink to edit template when TRUE
+    * @returns HTML
+*/
+function triggeraction_description($trigaction, $editlink=FALSE)
+{
+    global $CONFIG, $iconset, $actionarray;
+    $html = "<img src='{$CONFIG['application_webpath']}images/icons/{$iconset}/16x16/triggeraction.png' width='16' height='16' alt='' /> ";
+    if (!empty($trigaction->checks)) $html .= "When {$trigaction->checks} ";
+    if (!empty($trigaction->template))
+    {
+        if ($trigaction->action == 'ACTION_EMAIL')
+        {
+            $templatename = db_read_column('name', 'emailtype', $trigaction->template);
+            if ($editlink) $template = "<a href='edit_emailtype.php?id={$trigaction->template}&amp;action=edit&amp;template=email'>";
+            $template .= "{$templatename}";
+            if ($editlink) $template .= "</a>";
+        }
+        elseif  ($trigaction->action == 'ACTION_NOTICE')
+        {
+            $templatename = db_read_column('name', 'noticetemplates', $trigaction->template);
+            if ($editlink) $template = "<a href='edit_emailtype.php?id={$templatename}&amp;action=edit&amp;template=notice'>";
+            $template .= "{$templatename}";
+            if ($editlink) $template .= "</a>";
+        }
+        else
+        {
+            $template = $trigaction->template;
+        }
+        $html .= sprintf($actionarray[$trigaction->action]['description'], $template);
+        $html .= " ";
+    }
+    else
+    {
+        $html .= "{$actionarray[$trigaction->action]['description']} ";
+        //                         echo "{$actionarray[$trigaction->action]['name']} ";
+    }
+    if (!empty($trigaction->userid)) $html .= " for ".user_realname($trigaction->userid).". ";
+    if (!empty($trigaction->parameters)) $html .= " using {$trigaction->parameters}.";
+
+    return $html;
+}
+
 ?>

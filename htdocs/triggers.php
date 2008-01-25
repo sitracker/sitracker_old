@@ -171,12 +171,7 @@ switch ($_REQUEST['mode'])
         {
             echo "<tr class='$shade'>";
             echo "<td style='vertical-align: top; width: 25%;'>";
-            echo "<img src='{$CONFIG['application_webpath']}images/icons/{$iconset}/16x16/trigger.png' width='16' height='16' alt='' /> ";
-            echo "<strong>";
-            if (!empty($triggervar['name'])) echo "{$triggervar['name']}";
-            else echo "{$trigger}";
-            echo "</strong><br />\n";
-            echo $triggervar['description'];
+            echo trigger_description($triggervar);
             echo "</td>";
             // List actions for this trigger
             echo "<td>";
@@ -188,35 +183,7 @@ switch ($_REQUEST['mode'])
             {
                 while ($trigaction = mysql_fetch_object($result))
                 {
-                    echo "<img src='{$CONFIG['application_webpath']}images/icons/{$iconset}/16x16/triggeraction.png' width='16' height='16' alt='' /> ";
-
-                    if (!empty($trigaction->checks)) echo "When {$trigaction->checks} ";
-                    if (!empty($trigaction->template))
-                    {
-                        if ($trigaction->action == 'ACTION_EMAIL')
-                        {
-                            $templatename = db_read_column('name', 'emailtype', $trigaction->template);
-                            $template = "<a href='edit_emailtype.php?id={$trigaction->template}&amp;action=edit&amp;template=email'>{$templatename}</a>";
-                        }
-                        elseif  ($trigaction->action == 'ACTION_NOTICE')
-                        {
-                            $templatename = db_read_column('name', 'noticetemplates', $trigaction->template);
-                            $template = "<a href='edit_emailtype.php?id={$templatename}&amp;action=edit&amp;template=notice'>{$templatename}</a>";
-                        }
-                        else
-                        {
-                            $template = $trigaction->template;
-                        }
-                        echo sprintf($actionarray[$trigaction->action]['description'], $template);
-                        echo " ";
-                    }
-                    else
-                    {
-                        echo "{$actionarray[$trigaction->action]['description']} ";
-//                         echo "{$actionarray[$trigaction->action]['name']} ";
-                    }
-                    if (!empty($trigaction->userid)) echo " for ".user_realname($trigaction->userid).". ";
-                    if (!empty($trigaction->parameters)) echo " using {$trigaction->parameters}.";
+                    echo triggeraction_description($trigaction, TRUE);
 
                     echo " <a href='{$_SERVER['PHP_SELF']}?mode=delete&amp;id={$trigaction->id}' title=\"{$strDelete}\"><img src='{$CONFIG['application_webpath']}images/icons/{$iconset}/12x12/delete.png' width='12' height='12' alt='' /></a>";
                     echo "<br />\n";
