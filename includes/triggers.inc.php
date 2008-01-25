@@ -77,10 +77,15 @@ define(ACTION_NONE, 1);
 define(ACTION_NOTICE, 2);
 define(ACTION_EMAIL, 3);
 define(ACTION_JOURNAL, 4);
-$actionarray = array(ACTION_NONE,
-                ACTION_NOTICE,
-                ACTION_EMAIL,
-                ACTION_JOURNAL);
+
+$actionarray[ACTION_NONE] = array('name' => 'None',
+                                  'description' => 'Does nothing');
+$actionarray[ACTION_NOTICE] = array('name' => 'Notice',
+                                    'description' => 'Creates a notice based on a template');
+$actionarray[ACTION_EMAIL] = array('name' => 'Email',
+                                   'description' => 'Send an email based on a template');
+$actionarray[ACTION_JOURNAL] = array('name' => 'Journal',
+                                     'description' => 'Created an entry in the System Journal');
 
 
 /**
