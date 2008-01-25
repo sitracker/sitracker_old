@@ -128,9 +128,9 @@ array('name' => 'Own Incident Closed By User',
 
 
 // Template variables
-$typevars['incident'] = array('{contactemail}', '{contactname}');
+$triggertypevars['incident'] = array('{contactemail}', '{contactname}');
 
-$tvararray['{contactemail}'] = array('description' => 'Email address of incident contact',
+$ttvararray['{contactemail}'] = array('description' => 'Email address of incident contact',
                                      'replacement' => 'contact_email($contactid)',
                                      'action' => 'ACTION_EMAIL');
 

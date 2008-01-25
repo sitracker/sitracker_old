@@ -139,7 +139,17 @@ elseif ($action == "edit")
         if ($emailtype['type']=='user') echo "<p align='center'><a href='{$_SERVER['PHP_SELF']}?action=delete&amp;id={$id}'>{$strDelete}</a></p>";
         // FIXME i18n email templates
 
-        echo "<p align='center'>{$strFollowingSpecialIdentifiers}</p>";
+        echo "<p align='center'>{$strFollowingSpecialIdentifiers}";
+
+        echo "<dl>";
+        foreach ($triggertypevars[$emailtype['type']] AS $triggertypevar => $identifier)
+        {
+            echo "<dt>{$identifier}</dt><dd>{$ttvararray[$identifier]['description']} <br />";
+        }
+        echo "</dl></p>";
+        echo "<hr />";
+        // FIXME these old specifiers are DEPRECATED as of 3.40 INL 25Jan08
+
         echo "<table align='center' class='vertical'>";
         echo "<tr><th>&lt;contactemail&gt;</th><td>{$strIncidentsContactEmail}</td></tr>";
         echo "<tr><th>&lt;contactname&gt;</th><td>Full Name of incident contact</td></tr>";
