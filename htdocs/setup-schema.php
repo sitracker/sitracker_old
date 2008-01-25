@@ -117,10 +117,9 @@ CREATE TABLE `emailsig` (
 
 INSERT INTO `emailsig` (`id`, `signature`) VALUES (1, '--\r\n... Powered by Open Source Software: Support Incident Tracker (SiT!) is available free from http://sourceforge.net/projects/sitracker/');
 
-CREATE TABLE `emailtype` (
-  `id` int(11) NOT NULL auto_increment,
-  `name` varchar(50) default NULL,
-  `type` enum('user','system') NOT NULL default 'user',
+CREATE TABLE IF NOT EXISTS `emailtype` (
+  `id` varchar(50) NOT NULL,
+  `type` enum('user','system','customer') NOT NULL default 'user',
   `description` text NOT NULL,
   `tofield` varchar(100) default NULL,
   `fromfield` varchar(100) default NULL,
@@ -131,7 +130,6 @@ CREATE TABLE `emailtype` (
   `body` text,
   `customervisibility` enum('show','hide') NOT NULL default 'show',
   `storeinlog` enum('No','Yes') NOT NULL default 'Yes',
-  `triggerid` INT( 11 ) NULL,
   PRIMARY KEY  (`id`)
 ) ENGINE=MyISAM;
 
@@ -1699,6 +1697,9 @@ INSERT INTO triggers (triggerid, userid, action) VALUES ('TRIGGER_USER_RETURNS',
 INSERT INTO triggers (triggerid, userid, action) VALUES ('TRIGGER_INCIDENT_OWNED_CLOSED_BY_USER', '0', 'ACTION_JOURNAL');
 -- INL 24Jan08 TODO add to above ^^
 ALTER TABLE `triggers` ADD INDEX ( `userid` );
+
+-- KMHO 25/01/08
+ ALTER TABLE `emailtype` CHANGE `type` `type` ENUM( 'user', 'system', 'customer' ) CHARACTER SET latin1 COLLATE latin1_swedish_ci NOT NULL DEFAULT 'user' 
 ";
 
 // Important: When making changes to the schema you must add SQL to make the alterations
