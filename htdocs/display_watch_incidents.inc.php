@@ -64,14 +64,14 @@ if (mysql_num_rows($result) > 0)
 {
     $header_printed = FALSE;
     $previous = 0;
-    while($obj = mysql_fetch_object($result))
+    while ($obj = mysql_fetch_object($result))
     {
-        if($obj->type !=3 AND $previous == 3)
+        if ($obj->type !=3 AND $previous == 3)
         {
             echo "</table>";
         }
 
-        if($obj->type == 3 AND !$header_printed)
+        if ($obj->type == 3 AND !$header_printed)
         {
             echo "<table align='center' style='width: 100%'>";
         }
@@ -80,7 +80,7 @@ if (mysql_num_rows($result) > 0)
             echo "<table align='center' style='width: 100%'>";
         }
 
-        switch($obj->type)
+        switch ($obj->type)
         {
             case '0': //Site
                 $sql = "SELECT incidents.id, incidents.title, incidents.status, incidents.servicelevel, incidents.maintenanceid, incidents.priority, contacts.forenames, contacts.surname, contacts.siteid ";
@@ -152,9 +152,10 @@ if (mysql_num_rows($result) > 0)
             
             $iresult = mysql_query($sql);
             if (mysql_error()) trigger_error(mysql_error(),E_USER_ERROR);
-            if(mysql_num_rows($iresult) > 0)
+            
+            if (mysql_num_rows($iresult) > 0)
             {
-                if($obj->type == 3 AND !$header_printed)
+                if ($obj->type == 3 AND !$header_printed)
                 {
                     echo "<tr><th colspan='3'>{$strIncidents}</th></tr>";
                     echo "<tr>";
@@ -184,7 +185,10 @@ if (mysql_num_rows($result) > 0)
                     echo "<span><strong>{$GLOBALS['strCustomer']}:</strong> ".sprintf($strXofX, "{$incident->forenames} {$incident->surname}",site_name($incident->siteid));
                     list($update_userid, $update_type, $update_currentowner, $update_currentstatus, $update_body, $update_timestamp, $update_nextaction, $update_id)=incident_lastupdate($incident->id);
                     $update_body = parse_updatebody($update_body);
-                    if (!empty($update_body) AND $update_body!='...') echo "<br />{$update_body}";
+                    if (!empty($update_body) AND $update_body!='...')
+                    {
+                        echo "<br />{$update_body}";
+                    }
                     echo "</span></a></td>";
                     echo "<td>".incidentstatus_name($incident->status)."</td>";
                     echo "</tr>\n";
@@ -206,7 +210,7 @@ if (mysql_num_rows($result) > 0)
                 }
             }
         }
-        if($obj->type == 3 AND !$header_printed)
+        if ($obj->type == 3 AND !$header_printed)
         {
             echo "</table>\n";
         }
