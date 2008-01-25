@@ -21,67 +21,121 @@ include ('mime.inc.php');
  *   required - parameters the triggers needs to fire
  *   optional - Rules the trigger can check, mimics 'subscription'-type events
  */
-$triggerarray['TRIGGER_INCIDENT_CREATED'] = array('name' => 'Incident Created',
-                                                  'description' => 'A new incident has been created',
-                                                  'required' => array('incidentid'),
-                                                  'optional' => array('contactid', 'siteid', 'priority'),
-                                                  'type' => 'incident');
+$triggerarray['TRIGGER_INCIDENT_CREATED'] =
+array('name' => 'Incident Created',
+      'description' => 'Occurs when a new incident has been created',
+      'required' => array('incidentid'),
+      'optional' => array('contactid', 'siteid', 'priority')
+      );
 
-$triggerarray['TRIGGER_INCIDENT_ASSIGNED'] = array('name' => 'Incident Assigned',
-                                                   'description' => 'Occurs when a new incident is assigned to you',
-                                                   'required' => array('incidentid', 'userid'),
-                                                   'optional' => array());
+$triggerarray['TRIGGER_INCIDENT_ASSIGNED'] =
+array('name' => 'Incident Assigned',
+      'description' => 'Occurs when a new incident is assigned to you',
+      'required' => array('incidentid', 'userid'),
+      'optional' => array()
+      );
 
 $triggerarray['TRIGGER_INCIDENT_ASSIGNED_WHILE_AWAY'] =
-                                            array('name' => 'Incident Assigned While Away',
-                                                  'description' => 'Occurs when a new incident is assigned to you and you are set to not accepting');
+array('name' => 'Incident Assigned While Away',
+      'description' => 'Occurs when a new incident is assigned to you and you are set to not accepting',
+      'required' => array('incidentid', 'userid'),
+      'optional' => array()
+     );
 
-$triggerarray['TRIGGER_INCIDENT_ASSIGNED_WHILE_OFFLINE'] = array('name' => 'Incident Assigned While Offline',
-                                                                 'description' => 'Occurs when a new incident is assigned to you and your status is offline');
+$triggerarray['TRIGGER_INCIDENT_ASSIGNED_WHILE_OFFLINE'] =
+array('name' => 'Incident Assigned While Offline',
+      'description' => 'Occurs when a new incident is assigned to you and your status is offline',
+      'required' => array('incidentid', 'userid'),
+      'optional' => array()
+      );
 
-$triggerarray['TRIGGER_INCIDENT_NEARING_SLA'] = array('name' => 'Incident Nearing SLA',
-                                                      'description' => 'Occurs when one of your incidents nears an SLA');
+$triggerarray['TRIGGER_INCIDENT_NEARING_SLA'] =
+array('name' => 'Incident Nearing SLA',
+      'description' => 'Occurs when an incidents nears an SLA',
+      'required' => array('incidentid'),
+      'optional' => array('ownerid')
+      );
 
-$triggerarray['TRIGGER_INCIDENT_EXCEEDED_SLA'] = array('name' => 'Incident Exceeded SLA',
-                                                       'description' => 'Occurs when one of your incidents exceeds an SLA');
+$triggerarray['TRIGGER_INCIDENT_REVIEW_DUE'] =
+array('name' => 'Incident Review Due',
+      'description' => 'Occurs when an incident is due a review',
+      'required' => array('revieweruserid'),
+      'optional' => array(),
+      );
 
-$triggerarray['TRIGGER_INCIDENT_REVIEW_DUE'] = array('name' => 'Incident Review Due',
-                                                     'description' => 'Occurs when an incident is due a review');
-// Note: removed the critical incident created trigger, need to recreate this using checks
-$triggerarray['TRIGGER_KB_CREATED'] = array('name' => 'Knowledgebase Article Created',
-                                            'description' => 'Occurs when a new Knowledgebase article is created');
+$triggerarray['TRIGGER_KB_CREATED'] =
+array('name' => 'Knowledgebase Article Created',
+      'description' => 'Occurs when a new Knowledgebase article is created',
+      'required' => array('kbid'),
+      'optional' => array()
+      );
 
-$triggerarray['TRIGGER_NEW_HELD_EMAIL'] = array('name' => 'New Held Email',
-                                                'description' => 'Occurs when there is a new email in the holding queue');
+$triggerarray['TRIGGER_NEW_HELD_EMAIL'] =
+array('name' => 'New Held Email',
+      'description' => 'Occurs when there is a new email in the holding queue',
+      'required' => array(),
+      'optional' => array()
+      );
 
-$triggerarray['TRIGGER_WAITING_HELD_EMAIL'] = array('name' => 'Waiting Held Email',
-                                                    'description' => 'Occurs when there is a new email in the holding queue for x minutes');
+$triggerarray['TRIGGER_WAITING_HELD_EMAIL'] =
+array('name' => 'Waiting Held Email',
+      'description' => 'Occurs when there is a new email in the holding queue for x minutes',
+      'required' => array('minswaiting'),
+      'optional' => array()
+      );
 
-$triggerarray['TRIGGER_USER_SET_TO_AWAY'] = array('name' => 'User Set To Away',
-                                                  'description' => 'Occurs when one of your watched engineer goes away');
+$triggerarray['TRIGGER_USER_SET_TO_AWAY'] =
+array('name' => 'User Set To Away',
+      'description' => 'Occurs when one of your watched engineer goes away',
+      'required' => array('engineerid'),
+      'optional' => array()
+      );
+$triggerarray['TRIGGER_USER_RETURNS'] =
+array('name' => 'User Returns',
+      'description' => 'Occurs when one of your watched engineers returns',
+      'required' => array(),
+      'optional' => array()
+      );
 
-$triggerarray['TRIGGER_SIT_UPGRADED'] = array('name' => 'SiT! Upgraded',
-                                              'description' => 'Occurs when the system is upgraded');
+$triggerarray['TRIGGER_SIT_UPGRADED'] =
+array('name' => 'SiT! Upgraded',
+      'description' => 'Occurs when the system is upgraded',
+      'required' => array('sitversion'),
+      'optional' => array()
+      );
 
-$triggerarray['TRIGGER_USER_RETURNS'] = array('name' => 'User Returns',
-                                              'description' => 'Occurs when one of your watched engineers returns');
+$triggerarray['TRIGGER_INCIDENT_OWNED_CLOSED_BY_USER'] =
+array('name' => 'Own Incident Closed By User',
+      'description' => 'Occurs when one of your incidents is closed by another engineer',
+      'required' => array('engineerid'),
+      'optional' => array()
+      );
 
-$triggerarray['TRIGGER_INCIDENT_OWNED_CLOSED_BY_USER'] = array('name' => 'Own Incident Closed By User',
-                                                               'description' => 'Occurs when one of your incidents is closed by another engineer');
 //set up all the action types
 define(ACTION_NONE, 1);
 define(ACTION_NOTICE, 2);
 define(ACTION_EMAIL, 3);
 define(ACTION_JOURNAL, 4);
 
-$actionarray['ACTION_NONE'] = array('name' => $strNone,
-                                  'description' => 'Do nothing');
-$actionarray['ACTION_NOTICE'] = array('name' => 'Notice',
-                                    'description' => 'Create a notice based on %s');
-$actionarray['ACTION_EMAIL'] = array('name' => 'Email',
-                                   'description' => 'Send an email based on a %s template');
-$actionarray['ACTION_JOURNAL'] = array('name' => 'Journal',
-                                     'description' => 'Log the trigger in the system journal');
+$actionarray['ACTION_NONE'] =
+array('name' => $strNone,
+      'description' => 'Do nothing'
+      );
+
+$actionarray['ACTION_NOTICE'] =
+array('name' => 'Notice',
+      'description' => 'Create a notice based on %s'
+      );
+
+$actionarray['ACTION_EMAIL'] =
+array('name' => 'Email',
+      'description' => 'Send an email based on a %s template'
+      );
+
+$actionarray['ACTION_JOURNAL'] =
+array('name' => 'Journal',
+      'description' => 'Log the trigger in the system journal'
+      );
 
 
 /**
