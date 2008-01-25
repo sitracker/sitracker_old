@@ -85,7 +85,7 @@ switch ($_REQUEST['mode'])
         if (!empty($triggerarray[$id]['name'])) $name = $triggerarray[$id]['name'];
         else $name = $id;
         echo "<h3>Add Action to '{$name}' trigger</h3>"; // FIXME i18n add action/new action
-        echo "<p align='center'>{$triggerarray[$id]['description']}</p>";
+        echo "<p align='center'>{$triggerarray[$id]['description']} (Type: {$triggerarray[$id]['type']})</p>"; // FIXME remove displaying type before release
         if (is_array($triggerarray[$id]['optional']))
         {
             echo "<p align='center'>The following optional parameters may be used: ";
@@ -111,7 +111,7 @@ switch ($_REQUEST['mode'])
         echo notice_templates('noticetemplate');
         echo "</div>\n";
         echo "<div id='emailtemplatesbox' style='display:none;'>";
-        echo email_templates('emailtemplate');
+        echo email_templates($triggerarray[$id]['type'], 'emailtemplate');
         echo "</div>\n";
         echo "<div id='journalbox' style='display:none;'>{$strNone}</div>";
         echo "</td>";

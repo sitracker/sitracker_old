@@ -1699,7 +1699,7 @@ INSERT INTO triggers (triggerid, userid, action) VALUES ('TRIGGER_INCIDENT_OWNED
 ALTER TABLE `triggers` ADD INDEX ( `userid` );
 
 -- KMHO 25/01/08
-ALTER TABLE `emailtype` CHANGE `type` `type` ENUM( 'user', 'system', 'customer' ) NOT NULL DEFAULT 'user';
+ALTER TABLE `emailtype` CHANGE `type` `type` ENUM( 'usertemplate', 'system', 'contact', 'site', 'incident', 'kb', 'user') NOT NULL DEFAULT COMMENT 'usertemplate is personal template owned by a user, user is a template relating to a user' 'user';
 ";
 
 // Important: When making changes to the schema you must add SQL to make the alterations

@@ -97,13 +97,15 @@ elseif ($action == "edit")
             echo "<tr><th>{$strTrigger}</th><td>".trigger_description($triggerarray[$trigaction->triggerid])."<br /><br />";
             echo triggeraction_description($trigaction)."</td></tr>";
         }
-
+        echo "<tr><th>Template Type:</th><td>{$emailtype['type']}";  // FIXME i18n template type
+        if ($emailtype['type'] != $triggerarray[$trigaction->triggerid]['type']) echo "<p class='warning'>Trigger type mismatch</p>";
+        echo "</td></tr>\n";
         echo "<tr><th>{$strEmailTemplate}: <sup class='red'>*</sup></th><td>";
         echo "<input maxlength='50' name='name' size='35' value='{$emailtype['name']}' ";
         // if ($emailtype['type']=='system') echo "readonly='readonly' ";
         echo "/>";
         echo "</td></tr>\n";
-        echo "<tr><th>{$strDescription}: <sup class='red'>*</sup></th><td><input  name='description' size='50' value=\"{$emailtype["description"]}\" /></td></tr>\n";
+        echo "<tr><th>{$strDescription}: <sup class='red'>*</sup></th><td><textarea name='description' cols='50' rows='5'>{$emailtype["description"]}\"</textarea></td></tr>\n";
         echo "<tr><th>&nbsp;</th><td>&nbsp;</td></tr>";
         echo "<tr><th>{$strTo}: <sup class='red'>*</sup></th><td><input maxlength='100' name='tofield' size='30' value=\"{$emailtype["tofield"]}\" /></td></tr>\n";
         echo "<tr><th>{$strFrom}: <sup class='red'>*</sup></th><td><input maxlength='100' name='fromfield' size='30' value=\"{$emailtype["fromfield"]}\" /></td></tr>\n";

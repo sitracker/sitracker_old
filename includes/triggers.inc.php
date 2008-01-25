@@ -20,40 +20,46 @@ include ('mime.inc.php');
  *   description - when the trigger is fired
  *   required - parameters the triggers needs to fire
  *   optional - Rules the trigger can check, mimics 'subscription'-type events
+ *   type - Trigger type (eg. incident, contact etc)
  */
 $triggerarray['TRIGGER_INCIDENT_CREATED'] =
 array('name' => 'Incident Created',
       'description' => 'Occurs when a new incident has been created',
       'required' => array('incidentid'),
-      'optional' => array('contactid', 'siteid', 'priority')
+      'optional' => array('contactid', 'siteid', 'priority'),
+      'type' => 'incident'
       );
 
 $triggerarray['TRIGGER_INCIDENT_ASSIGNED'] =
 array('name' => 'Incident Assigned',
       'description' => 'Occurs when a new incident is assigned to you',
       'required' => array('incidentid', 'userid'),
-      'optional' => array()
+      'optional' => array(),
+      'type' => 'incident'
       );
 
 $triggerarray['TRIGGER_INCIDENT_ASSIGNED_WHILE_AWAY'] =
 array('name' => 'Incident Assigned While Away',
       'description' => 'Occurs when a new incident is assigned to you and you are set to not accepting',
       'required' => array('incidentid', 'userid'),
-      'optional' => array()
+      'optional' => array(),
+      'type' => 'incident'
      );
 
 $triggerarray['TRIGGER_INCIDENT_ASSIGNED_WHILE_OFFLINE'] =
 array('name' => 'Incident Assigned While Offline',
       'description' => 'Occurs when a new incident is assigned to you and your status is offline',
       'required' => array('incidentid', 'userid'),
-      'optional' => array()
+      'optional' => array(),
+      'type' => 'incident'
       );
 
 $triggerarray['TRIGGER_INCIDENT_NEARING_SLA'] =
 array('name' => 'Incident Nearing SLA',
       'description' => 'Occurs when an incidents nears an SLA',
       'required' => array('incidentid'),
-      'optional' => array('ownerid')
+      'optional' => array('ownerid'),
+      'type' => 'incident'
       );
 
 $triggerarray['TRIGGER_INCIDENT_REVIEW_DUE'] =
@@ -61,55 +67,74 @@ array('name' => 'Incident Review Due',
       'description' => 'Occurs when an incident is due a review',
       'required' => array('revieweruserid'),
       'optional' => array(),
+      'type' => 'incident'
       );
 
 $triggerarray['TRIGGER_KB_CREATED'] =
 array('name' => 'Knowledgebase Article Created',
       'description' => 'Occurs when a new Knowledgebase article is created',
       'required' => array('kbid'),
-      'optional' => array()
+      'optional' => array(),
+      'type' => 'kb'
       );
 
 $triggerarray['TRIGGER_NEW_HELD_EMAIL'] =
 array('name' => 'New Held Email',
       'description' => 'Occurs when there is a new email in the holding queue',
       'required' => array(),
-      'optional' => array()
+      'optional' => array(),
+      'type' => 'incident'
       );
 
 $triggerarray['TRIGGER_WAITING_HELD_EMAIL'] =
 array('name' => 'Waiting Held Email',
       'description' => 'Occurs when there is a new email in the holding queue for x minutes',
       'required' => array('minswaiting'),
-      'optional' => array()
+      'optional' => array(),
+      'type' => 'system'
       );
 
 $triggerarray['TRIGGER_USER_SET_TO_AWAY'] =
 array('name' => 'User Set To Away',
       'description' => 'Occurs when one of your watched engineer goes away',
       'required' => array('engineerid'),
-      'optional' => array()
+      'optional' => array(),
+      'type' => 'incident',
+      'type' => 'incident'
       );
 $triggerarray['TRIGGER_USER_RETURNS'] =
 array('name' => 'User Returns',
       'description' => 'Occurs when one of your watched engineers returns',
       'required' => array(),
-      'optional' => array()
+      'optional' => array(),
+      'type' => 'user'
       );
 
 $triggerarray['TRIGGER_SIT_UPGRADED'] =
 array('name' => 'SiT! Upgraded',
       'description' => 'Occurs when the system is upgraded',
       'required' => array('sitversion'),
-      'optional' => array()
+      'optional' => array(),
+      'type' => 'system'
       );
 
 $triggerarray['TRIGGER_INCIDENT_OWNED_CLOSED_BY_USER'] =
 array('name' => 'Own Incident Closed By User',
       'description' => 'Occurs when one of your incidents is closed by another engineer',
       'required' => array('engineerid'),
-      'optional' => array()
+      'optional' => array(),
+      'type' => 'incident'
       );
+
+
+// Template variables
+$typevars['incident'] = array('{contactemail}', '{contactname}');
+
+$tvararray['{contactemail}'] = array('description' => 'Email address of incident contact',
+                                     'replacement' => 'contact_email($contactid)',
+                                     'action' => 'ACTION_EMAIL');
+
+
 
 //set up all the action types
 define(ACTION_NONE, 1);
