@@ -196,7 +196,7 @@ switch ($_REQUEST['mode'])
                         if ($trigaction->action == 'ACTION_EMAIL')
                         {
                             $templatename = db_read_column('name', 'emailtype', $trigaction->template);
-                            $template = "<a href='edit_emailtype.php?id={$templatename}&amp;action=edit&amp;template=email'>{$templatename}</a>";
+                            $template = "<a href='edit_emailtype.php?id={$trigaction->template}&amp;action=edit&amp;template=email'>{$templatename}</a>";
                         }
                         elseif  ($trigaction->action == 'ACTION_NOTICE')
                         {
