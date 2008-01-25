@@ -26,30 +26,52 @@ $triggerarray['TRIGGER_INCIDENT_CREATED'] = array('name' => 'Incident Created',
                                                   'required' => array('incidentid'),
                                                   'optional' => array('contactid', 'siteid', 'priority'));
 
-$triggerarray['TRIGGER_INCIDENT_ASSIGNED'] = array('description' => 'Occurs when a new incident is assigned to you',
+$triggerarray['TRIGGER_INCIDENT_ASSIGNED'] = array('name' => 'Incident Assigned',
+                                                   'description' => 'Occurs when a new incident is assigned to you',
                                                    'required' => array('incidentid', 'userid'),
                                                    'optional' => array());
 
 $triggerarray['TRIGGER_INCIDENT_ASSIGNED_WHILE_AWAY'] =
-                                            array('description' => 'Occurs when a new incident is assigned to you and you are set to not accepting');
+                                            array('name' => 'Incident Assigned While Away',
+                                                  'description' => 'Occurs when a new incident is assigned to you and you are set to not accepting');
 
-$triggerarray['TRIGGER_INCIDENT_ASSIGNED_WHILE_OFFLINE'] = array('description' => 'Occurs when a new incident is assigned to you and your status is offline');
-$triggerarray['TRIGGER_INCIDENT_NEARING_SLA'] = array('description' => 'Occurs when one of your incidents nears an SLA');
-$triggerarray['TRIGGER_USERS_INCIDENT_NEARING_SLA'] = array('description' => 'Occurs when a user\'s incident you are watching is assigned to you',
+$triggerarray['TRIGGER_INCIDENT_ASSIGNED_WHILE_OFFLINE'] = array('name' => 'Incident Assigned While Offline',
+                                                                 'description' => 'Occurs when a new incident is assigned to you and your status is offline');
+
+$triggerarray['TRIGGER_INCIDENT_NEARING_SLA'] = array('name' => 'Incident Nearing SLA',
+                                                      'description' => 'Occurs when one of your incidents nears an SLA');
+
+$triggerarray['TRIGGER_USERS_INCIDENT_NEARING_SLA'] = array('name' => 'User\'s Incident Nearing SLA',
+                                                            'description' => 'Occurs when a user\'s incident you are watching is assigned to you',
                                                             'required' => array('incidentid'),
                                                             'optional' => array('userid'));
 
-$triggerarray['TRIGGER_INCIDENT_EXCEEDED_SLA'] = array('description' => 'Occurs when one of your incidents exceeds an SLA');
-$triggerarray['TRIGGER_INCIDENT_REVIEW_DUE'] = array('description' => 'Occurs when an incident is due a review');
-// Note: removed the critical incident created trigger, need to recreate this using checks
-$triggerarray['TRIGGER_KB_CREATED'] = array('description' => 'Occurs when a new Knowledgebase article is created');
-$triggerarray['TRIGGER_NEW_HELD_EMAIL'] = array('description' => 'Occurs when there is a new email in the holding queue');
-$triggerarray['TRIGGER_WAITING_HELD_EMAIL'] = array('description' => 'Occurs when there is a new email in the holding queue for x minutes');
-$triggerarray['TRIGGER_USER_SET_TO_AWAY'] = array('description' => 'Occurs when one of your watched engineer goes away');
-$triggerarray['TRIGGER_SIT_UPGRADED'] = array('description' => 'Occurs when the system is upgraded');
-$triggerarray['TRIGGER_USER_RETURNS'] = array('description' => 'Occurs when one of your watched engineers returns');
-$triggerarray['TRIGGER_INCIDENT_OWNED_CLOSED_BY_USER'] = array('description' => 'Occurs when one of your incidents is closed by another engineer');
+$triggerarray['TRIGGER_INCIDENT_EXCEEDED_SLA'] = array('name' => 'Incident Exceeded SLA',
+                                                       'description' => 'Occurs when one of your incidents exceeds an SLA');
 
+$triggerarray['TRIGGER_INCIDENT_REVIEW_DUE'] = array('name' => 'Incident Review Due',
+                                                     'description' => 'Occurs when an incident is due a review');
+// Note: removed the critical incident created trigger, need to recreate this using checks
+$triggerarray['TRIGGER_KB_CREATED'] = array('name' => 'Knowledgebase Article Created',
+                                            'description' => 'Occurs when a new Knowledgebase article is created');
+
+$triggerarray['TRIGGER_NEW_HELD_EMAIL'] = array('name' => 'New Held Email',
+                                                'description' => 'Occurs when there is a new email in the holding queue');
+
+$triggerarray['TRIGGER_WAITING_HELD_EMAIL'] = array('name' => 'Waiting Held Email',
+                                                    'description' => 'Occurs when there is a new email in the holding queue for x minutes');
+
+$triggerarray['TRIGGER_USER_SET_TO_AWAY'] = array('name' => 'User Set To Away',
+                                                  'description' => 'Occurs when one of your watched engineer goes away');
+
+$triggerarray['TRIGGER_SIT_UPGRADED'] = array('name' => 'SiT! Upgraded',
+                                              'description' => 'Occurs when the system is upgraded');
+
+$triggerarray['TRIGGER_USER_RETURNS'] = array('name' => 'User Returns',
+                                              'description' => 'Occurs when one of your watched engineers returns');
+
+$triggerarray['TRIGGER_INCIDENT_OWNED_CLOSED_BY_USER'] = array('name' => 'Own Incident Closed By User',
+                                                               'description' => 'Occurs when one of your incidents is closed by another engineer');
 //set up all the action types
 define(ACTION_NONE, 1);
 define(ACTION_NOTICE, 2);
