@@ -167,14 +167,58 @@ $ttvararray['{contactname}'] = array('description' => 'Full Name of contact',
                                      'replacement' => 'contact_realname($contactid)');
 
 $ttvararray['{contactfirstname}'] = array('description' => 'First Name of contact',
-                                     'replacement' => '');
+                                     'replacement' => "strtok(contact_realname(\$contactid),' ')");
+
+$ttvararray['{contactsite}'] = array('description' => 'Site name',
+                                     'replacement' => 'contact_site($contactid)');
+
+$ttvararray['{contactphone}'] = array('description' => 'Contact phone number',
+                                     'replacement' => 'contact_site($contactid)');
+
+$ttvararray['{contactnotify}'] = array('description' => 'The Notify Contact email address (if set)',
+                                     'replacement' => 'contact_notify_email($contactid)');
+
+$ttvararray['{incidentid}'] = array('description' => 'Incident ID',
+                                     'replacement' => '$incidentid');
+
 
 
 // Array of template variables available for each trigger type
 $triggertypevars['incident'] = array('{contactemail}', '{contactname}', '{contactfirstname}',
-                                     '{contactsite}');
-
-
+                                     '{contactsite}', '{contactphone}', '{contactnotify}',
+                                     '{incidentid}');
+/*
+        8 => $incident->externalid,
+        9 => incident_ccemail($incidentid),
+        10 => incident_externalengineer($incidentid),
+        11 => strtok(incident_externalengineer($incidentid),' '),
+        12 => incident_externalemail($incidentid),
+        13 => incident_title($incidentid),
+        14 => priority_name(incident_priority($incidentid)),
+        15 => software_name($incident->softwareid),
+        16 => user_realname($incident->owner),
+        17 => user_email($userid),
+        18 => user_realname($userid),
+        19 => $CONFIG['application_name'],
+        20 => $CONFIG['application_shortname'],
+        21 => $application_version_string,
+        22 => $CONFIG['support_email'],
+        23 => $CONFIG['sales_email'],
+        24 => $CONFIG['support_manager_email'],
+        25 => user_signature($userid),
+        26 => global_signature(),
+        27 => date("jS F Y"),
+        28 => user_email(db_read_column('owner', 'sites',
+                                        db_read_column('siteid','contacts',
+                                                       $contactid))),
+        29 => incident_firstupdate($incidentid),
+        30 => contact_email(contact_notify($contactid, 2)),
+        31 => contact_email(contact_notify($contactid, 3)),
+        32 => contact_email(contact_notify($contactid, 4)),
+        33 => $baseurl.'feedback.php?ax='.urlencode(trim(base64_encode(
+                gzcompress(str_rot13(urlencode($CONFIG['feedback_form']).'&&'.
+                urlencode($contactid).'&&'.urlencode($incidentid))))))
+*/
 
 /**
     * Master trigger function, creates a new trigger

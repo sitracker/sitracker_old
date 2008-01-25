@@ -182,7 +182,9 @@ elseif ($action == "edit")
         echo "<dl>";
         foreach ($triggertypevars[$template->type] AS $triggertypevar => $identifier)
         {
-            echo "<dt><code>{$identifier}</code></dt><dd>{$ttvararray[$identifier]['description']} <br />";
+            echo "<dt><code>{$identifier}</code></dt>";
+            if (!empty($ttvararray[$identifier]['description'])) echo "<dd>{$ttvararray[$identifier]['description']}";
+            echo "<br />";
         }
         echo "</dl>";
         echo "<hr />";
