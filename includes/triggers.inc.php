@@ -202,6 +202,7 @@ function trigger($triggerid, $paramarray='')
         $sql .= "AND userid={$userid}";
     }
     $query = mysql_query($sql);
+    if (mysql_error()) trigger_error("MySQL Query Error ".mysql_error(), E_USER_WARNING);
     while ($result = mysql_fetch_object($query))
     {
         //see if we have any checks first
@@ -263,6 +264,7 @@ function trigger_action($userid, $triggerid, $action, $paramarray)
     $sql = "SELECT template FROM triggers WHERE userid='{$userid}' AND
             triggerid='{$triggerid}'";
     $query = mysql_query($sql);
+    if (mysql_error()) trigger_error("MySQL Query Error ".mysql_error(), E_USER_WARNING);
     $template = mysql_fetch_object($query);
     $template = $template->template;
 
@@ -474,6 +476,7 @@ function send_trigger_email($userid, $triggertype, $template, $paramarray)
 
     $sql = "SELECT * FROM emailtype WHERE id='{$triggertype}'";
     $query = mysql_query($sql);
+    if (mysql_error()) trigger_error("MySQL Query Error ".mysql_error(), E_USER_WARNING);
     if ($query)
     {
         $result = mysql_fetch_object($query);
@@ -532,6 +535,7 @@ function create_trigger_notice($userid, $noticetext='', $triggertype='',
         //this is a trigger notice, get notice template
         $sql = "SELECT * from noticetemplates WHERE id='{$template}'";
         $query = mysql_query($sql);
+        if (mysql_error()) trigger_error("MySQL Query Error ".mysql_error(), E_USER_WARNING);
         if ($query)
         {
             $notice = mysql_fetch_object($query);
@@ -546,7 +550,7 @@ function create_trigger_notice($userid, $noticetext='', $triggertype='',
                             '{$noticelinktext}', '{$noticelink}', '', NOW())";
                             //echo $sql;
             mysql_query($sql);
-            if (mysql_error()) trigger_error(mysql_error(),E_USER_WARNING);
+            if (mysql_error()) trigger_error("MySQL Query Error ".mysql_error(), E_USER_WARNING);
         }
         else
         {
@@ -584,18 +588,21 @@ function triggers_drop_down($name, $selected = '')
 
 /**
     * Displays a <select> with the list of email templates
-    * @author Kieran Hogg
+    * @author Kieran Hogg, Ivan Lucas
+    * @param $triggertype string. The type of trigger (incident, contact...)
     * @param $name string. The name for the select
     * @param $selected string. The name of the selected item
 */
-function email_templates($name, $selected = '')
+function email_templates($triggertype, $name, $selected = '')
 {
+    global $dbEmailType;
     $html .= "<select id='{$name}' name='{$name}'>";
-    $sql = "SELECT * FROM emailtype WHERE type='system' ORDER BY id";
-    $query = mysql_query($sql);
-    while ($template = mysql_fetch_object($query))
+    $sql = "SELECT * FROM `{$dbEmailType}` WHERE id NOT IN (SELECT template FROM triggers) AND type='{$triggertype}' ORDER BY id";
+    $result = mysql_query($sql);
+    if (mysql_error()) trigger_error("MySQL Query Error ".mysql_error(), E_USER_WARNING);
+    while ($template = mysql_fetch_object($result))
     {
-        $html .= "<option value='{$template->id}'>{$template->name}</option>\n";
+        $html .= "<option value='{$template->id}'>{$template->id}</option>\n";
     }
     $html .= "</select>\n";
     return $html;
@@ -610,9 +617,11 @@ function email_templates($name, $selected = '')
 */
 function notice_templates($name, $selected = '')
 {
+    global $dbNoticeTemplates;
     $html .= "<select id='{$name}' name='{$name}'>";
-    $sql = "SELECT * FROM noticetemplates";
+    $sql = "SELECT * FROM `{$dbNoticeTemplates}`";
     $query = mysql_query($sql);
+    if (mysql_error()) trigger_error("MySQL Query Error ".mysql_error(), E_USER_WARNING);
     while ($template = mysql_fetch_object($query))
     {
         $html .= "<option value='{$template->id}'>{$template->name}</option>\n";
@@ -646,6 +655,7 @@ function trigger_checks($checkstrings, $paramarray)
                 $sql .= "AND incidents.contact=contacts.id ";
                 $sql .= "AND sites.id=contacts.siteid";
                 $query = mysql_query($sql);
+                if (mysql_error()) trigger_error("MySQL Query Error ".mysql_error(), E_USER_WARNING);
                 if($query)
                 {
                     $result = mysql_fetch_object($query);
@@ -663,6 +673,7 @@ function trigger_checks($checkstrings, $paramarray)
                 $sql .= "WHERE incidents.id={$paramarray[incidentid]} ";
                 $sql .= "AND incidents.contact=contacts.id ";
                 $query = mysql_query($sql);
+                if (mysql_error()) trigger_error("MySQL Query Error ".mysql_error(), E_USER_WARNING);
                 if($query)
                 {
                     $result = mysql_fetch_object($query);
@@ -679,6 +690,7 @@ function trigger_checks($checkstrings, $paramarray)
                 $sql .= "FROM incidents ";
                 $sql .= "WHERE incidents.id={$paramarray[incidentid]} ";
                 $query = mysql_query($sql);
+                if (mysql_error()) trigger_error("MySQL Query Error ".mysql_error(), E_USER_WARNING);
                 if($query)
                 {
                     $result = mysql_fetch_object($query);
@@ -695,6 +707,7 @@ function trigger_checks($checkstrings, $paramarray)
                 $sql .= "FROM incidents ";
                 $sql .= "WHERE incidents.id={$paramarray[incidentid]} ";
                 $query = mysql_query($sql);
+                if (mysql_error()) trigger_error("MySQL Query Error ".mysql_error(), E_USER_WARNING);
                 if($query)
                 {
                     $result = mysql_fetch_object($query);
@@ -715,6 +728,12 @@ function trigger_checks($checkstrings, $paramarray)
 }
 
 
+/**
+    * Formats a human readable description of a trigger
+    * @author Ivan Lucas
+    * @param $triggervar array. An individual trigger array
+    * @returns HTML
+*/
 function trigger_description($triggervar)
 {
     global $CONFIG, $iconset, $triggerarray;
@@ -744,7 +763,7 @@ function triggeraction_description($trigaction, $editlink=FALSE)
     {
         if ($trigaction->action == 'ACTION_EMAIL')
         {
-            $templatename = db_read_column('name', 'emailtype', $trigaction->template);
+            $templatename = $trigaction->template;
             if ($editlink) $template = "<a href='edit_emailtype.php?id={$trigaction->template}&amp;action=edit&amp;template=email'>";
             $template .= "{$templatename}";
             if ($editlink) $template .= "</a>";

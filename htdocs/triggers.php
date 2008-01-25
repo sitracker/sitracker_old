@@ -28,7 +28,7 @@ switch ($_REQUEST['mode'])
 
         $sql = "DELETE FROM `{$dbTriggers}` WHERE id = $id LIMIT 1";
         mysql_query($sql);
-        if (mysql_error()) trigger_error(mysql_error(),E_USER_WARNING);
+        if (mysql_error()) trigger_error("MySQL Query Error ".mysql_error(), E_USER_WARNING);
         if (mysql_affected_rows() >= 1) html_redirect($_SERVER['PHP_SELF']);
         else html_redirect($_SERVER['PHP_SELF'], FALSE);
         break;
@@ -153,7 +153,7 @@ switch ($_REQUEST['mode'])
         $sql = "INSERT INTO `{$dbTriggers}` (triggerid, userid, action, template, parameters, checks) ";
         $sql .= "VALUES ('{$id}', '{$userid}', '{$action}', '{$templateid}', '{$parameters}', '{$rules}')";
         mysql_query($sql);
-        if (mysql_error()) trigger_error(mysql_error(),E_USER_ERROR);
+        if (mysql_error()) trigger_error("MySQL Query Error ".mysql_error(), E_USER_WARNING);
         //drop through and list...
 
     case 'list':
@@ -178,14 +178,15 @@ switch ($_REQUEST['mode'])
             $sql = "SELECT * FROM `{$dbTriggers}` WHERE triggerid = '$trigger' ORDER BY action, template";
             if (!$adminuser) $sql .= "AND userid='{$sit[2]}'";
             $result = mysql_query($sql);
-            if (mysql_error()) trigger_error(mysql_error(),E_USER_WARNING);
+            if (mysql_error()) trigger_error("MySQL Query Error ".mysql_error(), E_USER_WARNING);
             if (mysql_num_rows($result) >= 1)
             {
                 while ($trigaction = mysql_fetch_object($result))
                 {
                     echo triggeraction_description($trigaction, TRUE);
 
-                    echo " <a href='{$_SERVER['PHP_SELF']}?mode=delete&amp;id={$trigaction->id}' title=\"{$strDelete}\"><img src='{$CONFIG['application_webpath']}images/icons/{$iconset}/12x12/delete.png' width='12' height='12' alt='' /></a>";
+                    echo " <a href='{$_SERVER['PHP_SELF']}?mode=delete&amp;id={$trigaction->id}' title=\"{$strDelete}\">";
+                    echo "<img src='{$CONFIG['application_webpath']}images/icons/{$iconset}/12x12/delete.png' width='12' height='12' alt='' /></a>";
                     echo "<br />\n";
                 }
             }

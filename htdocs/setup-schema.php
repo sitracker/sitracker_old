@@ -1699,7 +1699,17 @@ INSERT INTO triggers (triggerid, userid, action) VALUES ('TRIGGER_INCIDENT_OWNED
 ALTER TABLE `triggers` ADD INDEX ( `userid` );
 
 -- KMHO 25/01/08
-ALTER TABLE `emailtype` CHANGE `type` `type` ENUM( 'usertemplate', 'system', 'contact', 'site', 'incident', 'kb', 'user') NOT NULL DEFAULT COMMENT 'usertemplate is personal template owned by a user, user is a template relating to a user' 'user';
+ALTER TABLE `emailtype` CHANGE `type` `type` ENUM( 'usertemplate', 'system', 'contact', 'site', 'incident', 'kb', 'user') NOT NULL COMMENT 'usertemplate is personal template owned by a user, user is a template relating to a user' DEFAULT 'user';
+
+-- INL 25Jan08
+UPDATE `emailtype` SET `type` = 'incident' WHERE `id` = 'INCIDENT_CLOSURE' ;
+UPDATE `emailtype` SET `type` = 'incident' WHERE `id` = 'INCIDENT_LOGGED_CALL' ;
+UPDATE `emailtype` SET `type` = 'incident' WHERE `id` = 'INCIDENT_CLOSED' ;
+UPDATE `emailtype` SET `type` = 'incident' WHERE `id` = 'OUT_OF_SLA' ;
+UPDATE `emailtype` SET `type` = 'incident' WHERE `id` = 'OUT_OF_REVIEW' ;
+UPDATE `emailtype` SET `type` = 'incident' WHERE `id` = 'INCIDENT UPDATED' ;
+UPDATE `emailtype` SET `type` = 'incident' WHERE `id` = 'INCIDENT CLOSED EXTERNAL' ;
+UPDATE `emailtype` SET `type` = 'incident' WHERE `id` = 'INCIDENT_LOGGED_EMAIL' ;
 ";
 
 // Important: When making changes to the schema you must add SQL to make the alterations

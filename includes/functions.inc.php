@@ -229,7 +229,7 @@ function db_read_column($column, $table, $id)
 {
     $sql = "SELECT `$column` FROM `$table` WHERE id='$id' LIMIT 1";
     $result = mysql_query($sql);
-    if (mysql_error()) trigger_error(mysql_error(),E_USER_WARNING);
+    if (mysql_error()) trigger_error("MySQL Query Error ".mysql_error(), E_USER_WARNING);
     list($column) = mysql_fetch_row($result);
 
     return $column;
