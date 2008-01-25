@@ -78,13 +78,13 @@ define(ACTION_NOTICE, 2);
 define(ACTION_EMAIL, 3);
 define(ACTION_JOURNAL, 4);
 
-$actionarray[ACTION_NONE] = array('name' => 'None',
-                                  'description' => 'Does nothing');
-$actionarray[ACTION_NOTICE] = array('name' => 'Notice',
-                                    'description' => 'Creates a notice based on a template');
-$actionarray[ACTION_EMAIL] = array('name' => 'Email',
-                                   'description' => 'Send an email based on a template');
-$actionarray[ACTION_JOURNAL] = array('name' => 'Journal',
+$actionarray['ACTION_NONE'] = array('name' => $strNone,
+                                  'description' => 'Do nothing');
+$actionarray['ACTION_NOTICE'] = array('name' => 'Notice',
+                                    'description' => 'Create a notice based on %s');
+$actionarray['ACTION_EMAIL'] = array('name' => 'Email',
+                                   'description' => 'Send an email based on a %s template');
+$actionarray['ACTION_JOURNAL'] = array('name' => 'Journal',
                                      'description' => 'Created an entry in the System Journal');
 
 
@@ -134,7 +134,6 @@ function trigger($triggerid, $paramarray='')
         {
             if (!trigger_checks($result->checks, $paramarray))
             {
-                trigger_error("Trigger '{$triggerid}' failed checks", E_USER_WARNING);
                 return;
             }
         }
@@ -213,7 +212,8 @@ function trigger_action($userid, $triggerid, $action, $paramarray)
                                   $paramarray);
             break;
         case "ACTION_JOURNAL":
-            $journalbody = implode($paramarray);
+            if (is_array($paramarray)) $journalbody = implode($paramarray);
+            else $journalbody = '';
             journal(CFG_LOGGING_NORMAL, $triggerid, "Trigger Fired ({$journalbody})", 0, $userid);
         case "ACTION_NONE":
         //fallthrough

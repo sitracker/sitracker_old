@@ -164,7 +164,8 @@ switch ($_REQUEST['mode'])
         foreach($triggerarray AS $trigger => $triggervar)
         {
             echo "<tr class='$shade'>";
-            echo "<td style='vertical-align: top;'><img src='{$CONFIG['application_webpath']}images/icons/{$iconset}/16x16/trigger.png' width='16' height='16' alt='' /> ";
+            echo "<td style='vertical-align: top; width: 25%;'>";
+            echo "<img src='{$CONFIG['application_webpath']}images/icons/{$iconset}/16x16/trigger.png' width='16' height='16' alt='' /> ";
             echo "<strong>";
             if (!empty($triggervar['name'])) echo "{$triggervar['name']}";
             else echo "{$trigger}";
@@ -181,8 +182,22 @@ switch ($_REQUEST['mode'])
             {
                 while ($trigaction = mysql_fetch_object($result))
                 {
-                    echo "<img src='{$CONFIG['application_webpath']}images/icons/{$iconset}/16x16/triggeraction.png' width='16' height='16' alt='' /> {$trigaction->action}";
-                    if (!empty($trigaction->checks)) echo " ({$trigaction->checks})";
+                    echo "<img src='{$CONFIG['application_webpath']}images/icons/{$iconset}/16x16/triggeraction.png' width='16' height='16' alt='' /> ";
+
+                    if (!empty($trigaction->checks)) echo "When {$trigaction->checks} ";
+                    if (!empty($trigaction->template))
+                    {
+                        $template = $trigaction->template;
+                        echo sprintf($actionarray[$trigaction->action]['description'], $template);
+                        echo " ";
+                    }
+                    else
+                    {
+                        echo "{$actionarray[$trigaction->action]['name']} ";
+                    }
+                    if (!empty($trigaction->userid)) echo " for <img src='{$CONFIG['application_webpath']}images/icons/{$iconset}/16x16/user.png' width='16' height='16' alt='' /> user ".user_realname($trigaction->userid).". ";
+                    else echo "for all users.";
+
                     echo " <a href='{$_SERVER['PHP_SELF']}?mode=delete&amp;id={$trigaction->id}' title=\"{$strDelete}\"><img src='{$CONFIG['application_webpath']}images/icons/{$iconset}/12x12/delete.png' width='12' height='12' alt='' /></a>";
                     echo "<br />\n";
                 }
@@ -198,6 +213,7 @@ switch ($_REQUEST['mode'])
             else $shade = 'shade1';
         }
         echo "</table>";
+        echo "<p align='center'><a href='triggertest.php'>Test Triggers</a></p>";
         include ('htmlfooter.inc.php');
 }
 ?>

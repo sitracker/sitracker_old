@@ -1929,7 +1929,7 @@ function userstatus_bardrop_down($name, $id)
     $html .= "<option value='set_user_status.php?mode=setaccepting&amp;accepting=Yes' style='color: #00AA00; border-top: 1px solid black;'>{$GLOBALS['strAccepting']}</option>\n";
     $html .= "<option value='set_user_status.php?mode=setaccepting&amp;accepting=No' style='color: #FF0000;'>{$GLOBALS['strNotAccepting']}</option>\n";
     $html .= "</select>\n";
-    trigger("USER_SET_TO_AWAY", array('userid' => $id));
+
     return $html;
 }
 
