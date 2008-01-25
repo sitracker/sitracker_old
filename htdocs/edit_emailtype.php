@@ -22,6 +22,7 @@ require ('auth.inc.php');
 // External variables
 $id = cleanvar($_REQUEST['id']);
 $action = $_REQUEST['action'];
+$templatetype = cleanvar($_REQUEST['template']);
 
 if (empty($action) OR $action == "showform")
 {
@@ -70,25 +71,37 @@ if (empty($action) OR $action == "showform")
 }
 elseif ($action == "edit")
 {
-    include ('htmlheader.inc.php');
-    // Show edit email type form
-    if (!empty($id))
+    // Retrieve the template from the database, whether it's email or notice
+    switch ($templatetype)
     {
-        // extract email type details
-        $sql = "SELECT * FROM `{$dbEmailType}` WHERE id='$id'";
-        $result = mysql_query($sql);
-        if (mysql_error()) trigger_error("MySQL Query Error ".mysql_error(), E_USER_ERROR);
-        $emailtype = mysql_fetch_array($result);
-        echo "<h2>{$strEdit} ".ucfirst($emailtype['type'])." {$strEmailTemplate}</h2>";
+        case 'email':
+            $sql = "SELECT * FROM `{$dbEmailType}` WHERE id='$id'";
+            $title = "{$strEdit}: $strEmailTemplate";
+            $action = 'ACTION_EMAIL';
+            break;
 
+        case 'notice':
+        default:
+            $sql = "SELECT * FROM `{$dbNoticeTemplates}` WHERE name='$id' LIMIT 1";
+            $title = "{$strEdit}: Notice Template"; // FIXME i18n edit notice template
+            $action = 'ACTION_NOTICE';
+    }
+    $result = mysql_query($sql);
+    $template = mysql_fetch_object($result);
+    if (mysql_error()) trigger_error("MySQL Query Error ".mysql_error(), E_USER_ERROR);
 
+    include ('htmlheader.inc.php');
+
+    if (mysql_num_rows($result) > 0)
+    {
+        echo "<h2>{$title}</h2>";
         echo "<h5>".sprintf($strMandatoryMarked,"<sup class='red'>*</sup>")."</h5>";
         echo "<p align='center'>{$strListOfSpecialIdentifiersEmail}.</p>";
+        echo "<div style='width: 48%; float: left;'>";
         echo "<form name='edittemplate' action='{$_SERVER['PHP_SELF']}?action=update' method='post' onsubmit='return confirm_submit(\"{$strAreYouSureEditEmailTemplate}\")'>";
+        echo "<table class='vertical' width='100%'>";
 
-        echo "<table align='center' class='vertical'>";
-
-        $tsql = "SELECT * FROM `{$dbTriggers}` WHERE action = 'ACTION_EMAIL' AND template = '$id' LIMIT 1";
+        $tsql = "SELECT * FROM `{$dbTriggers}` WHERE action = '{$action}' AND template = '$id' LIMIT 1";
         $tresult = mysql_query($tsql);
         if (mysql_error()) trigger_error("MySQL Query Error ".mysql_error(), E_USER_ERROR);
         if (mysql_num_rows($tresult) >= 1)
@@ -97,39 +110,60 @@ elseif ($action == "edit")
             echo "<tr><th>{$strTrigger}</th><td>".trigger_description($triggerarray[$trigaction->triggerid])."<br /><br />";
             echo triggeraction_description($trigaction)."</td></tr>";
         }
-        echo "<tr><th>Template Type:</th><td>{$emailtype['type']}";  // FIXME i18n template type
-        if ($emailtype['type'] != $triggerarray[$trigaction->triggerid]['type']) echo "<p class='warning'>Trigger type mismatch</p>";
-        echo "</td></tr>\n";
-        echo "<tr><th>{$strEmailTemplate}: <sup class='red'>*</sup></th><td>";
-        echo "<input maxlength='50' name='name' size='35' value='{$emailtype['name']}' ";
-        // if ($emailtype['type']=='system') echo "readonly='readonly' ";
-        echo "/>";
-        echo "</td></tr>\n";
-        echo "<tr><th>{$strDescription}: <sup class='red'>*</sup></th><td><textarea name='description' cols='50' rows='5'>{$emailtype["description"]}\"</textarea></td></tr>\n";
-        echo "<tr><th>&nbsp;</th><td>&nbsp;</td></tr>";
-        echo "<tr><th>{$strTo}: <sup class='red'>*</sup></th><td><input maxlength='100' name='tofield' size='30' value=\"{$emailtype["tofield"]}\" /></td></tr>\n";
-        echo "<tr><th>{$strFrom}: <sup class='red'>*</sup></th><td><input maxlength='100' name='fromfield' size='30' value=\"{$emailtype["fromfield"]}\" /></td></tr>\n";
-        echo "<tr><th>{$strReplyTo}: <sup class='red'>*</sup></th><td><input maxlength='100' name='replytofield' size='30' value=\"{$emailtype["replytofield"]}\" /></td></tr>\n";
-        echo "<tr><th>{$strCC}:</th><td><input maxlength='100' name='ccfield' size='30' value=\"{$emailtype["ccfield"]}\" /></td></tr>\n";
-        echo "<tr><th>{$strBCC}:</th><td><input maxlength='100' name='bccfield' size='30' value=\"{$emailtype["bccfield"]}\" /></td></tr>\n";
-        echo "<tr><th>{$strSubject}:</th><td><input maxlength='255' name='subjectfield' size='50' value=\"{$emailtype["subjectfield"]}\" /></td></tr>\n";
-        echo "<tr><th></th><td><label><input type='checkbox' name='storeinlog' value='Yes' ";
-        if ($emailtype['storeinlog'] == 'Yes')
+        else
         {
-            echo "checked='checked'";
+            echo "<tr><th>{$strTrigger}</th><td>{$strNone}</td></tr>\n";
         }
-        echo " /> {$strStoreInLog}</label>";
-        echo " &nbsp; (<input type='checkbox' name='cust_vis' value='yes' ";
-        if ($emailtype['customervisibility'] == 'show')
+        echo "<tr><th>{$strID}: <sup class='red'>*</sup></th><td>";
+        echo "<input maxlength='50' name='name' size='35' value='{$template->id} 'readonly='readonly' disabled='disabled' /></td></tr>\n";
+        echo "<tr><th>Template Type:</th><td>{$template->type}";  // FIXME Temporary, remove before release
+        echo "<tr><th>{$strDescription}: <sup class='red'>*</sup></th><td><textarea name='description' cols='50' rows='5'>{$template->description}</textarea></td></tr>\n";
+        switch ($templatetype)
         {
-            echo "checked='checked'";
+            case 'email':
+
+                echo "<tr><th colspan='2'>{$strEmail}</th></tr>"; // FIXME i18n defaults
+                echo "<tr><th>{$strTo}: <sup class='red'>*</sup></th><td><input maxlength='100' name='tofield' size='40' value=\"{$template->tofield}\" /></td></tr>\n";
+                echo "<tr><th>{$strFrom}: <sup class='red'>*</sup></th><td><input maxlength='100' name='fromfield' size='40' value=\"{$template->fromfield}\" /></td></tr>\n";
+                echo "<tr><th>{$strReplyTo}: <sup class='red'>*</sup></th><td><input maxlength='100' name='replytofield' size='40' value=\"{$template->replytofield}\" /></td></tr>\n";
+                echo "<tr><th>{$strCC}:</th><td><input maxlength='100' name='ccfield' size='40' value=\"{$template->ccfield}\" /></td></tr>\n";
+                echo "<tr><th>{$strBCC}:</th><td><input maxlength='100' name='bccfield' size='40' value=\"{$template->bccfield}\" /></td></tr>\n";
+                echo "<tr><th>{$strSubject}:</th><td><input maxlength='255' name='subjectfield' size='60' value=\"{$template->subjectfield}\" /></td></tr>\n";
+                break;
+
+            case 'notice':
+
+                echo "<tr><th>{$strNotice}</th><td>TODO</td></tr>\n";
+
         }
-        echo " /> {$strVisibleToCustomer})";
-        echo "</td></tr>";
-        echo "</table>";
-        echo "<p>{$strEmail}:<br />";
-        echo "<textarea name='bodytext' rows='20' cols='60'>{$emailtype["body"]}</textarea>\n";
-        echo "</p>";
+
+        // Set template type to the trigger type if no type is already specified
+        if (empty($template->type)) $template->type = $triggerarray[$trigaction->triggerid]['type'];
+
+        if ($trigaction AND $template->type != $triggerarray[$trigaction->triggerid]['type']) echo "<p class='warning'>Trigger type mismatch</p>";
+        echo "</td></tr>\n";
+
+        echo "</td></tr>\n";
+        if ($template->type=='incident')
+        {
+            echo "<tr><th></th><td><label><input type='checkbox' name='storeinlog' value='Yes' ";
+            if ($template->storeinlog == 'Yes')
+            {
+                echo "checked='checked'";
+            }
+            echo " /> {$strStoreInLog}</label>";
+            echo " &nbsp; (<input type='checkbox' name='cust_vis' value='yes' ";
+            if ($emailtype['customervisibility'] == 'show')
+            {
+                echo "checked='checked'";
+            }
+            echo " /> {$strVisibleToCustomer})";
+            echo "</td></tr>\n";
+        }
+        if ($templatetype=='email') $body = $template->body;
+        else $body = $template->text;
+        echo "<tr><th>{$strText}</th><td><textarea name='bodytext' rows='20' cols='50'>{$body}</textarea></td>";
+        echo "</table>\n";
 
         echo "<p>";
         echo "<input name='type' type='hidden' value='{$emailtype['type']}' />";
@@ -137,17 +171,22 @@ elseif ($action == "edit")
         echo "<input name='submit' type='submit' value=\"{$strSave}\" />";
         echo "</p>\n";
         if ($emailtype['type']=='user') echo "<p align='center'><a href='{$_SERVER['PHP_SELF']}?action=delete&amp;id={$id}'>{$strDelete}</a></p>";
-        // FIXME i18n email templates
+        echo "</form>";
+        echo "</div>";
 
-        echo "<p align='center'>{$strFollowingSpecialIdentifiers}";
 
+            // FIXME i18n email templates
+        echo "<div style='width: 48%; float: right; border: 1px solid #CCCCFF; padding: 10px;'>";
+        echo "<h4>Template Variables</h4>"; // FIXME template variables
+        echo "<p align='center'>{$strFollowingSpecialIdentifiers}</p>";
         echo "<dl>";
-        foreach ($triggertypevars[$emailtype['type']] AS $triggertypevar => $identifier)
+        foreach ($triggertypevars[$template->type] AS $triggertypevar => $identifier)
         {
-            echo "<dt>{$identifier}</dt><dd>{$ttvararray[$identifier]['description']} <br />";
+            echo "<dt><code>{$identifier}</code></dt><dd>{$ttvararray[$identifier]['description']} <br />";
         }
-        echo "</dl></p>";
+        echo "</dl>";
         echo "<hr />";
+        echo "<h3>DEPRECATED</h3>";
         // FIXME these old specifiers are DEPRECATED as of 3.40 INL 25Jan08
 
         echo "<table align='center' class='vertical'>";
@@ -191,7 +230,9 @@ elseif ($action == "edit")
 
         plugin_do('emailtemplate_list');
         echo "</table>\n";
-        echo "</form>";
+        echo "</div>";
+
+        echo "<p style='clear:both; margin-top: 2em;' align='center'><a href='{$_SERVER['PHP_SELF']}'>{$strBackToList}</a></p>";
 
         include ('htmlfooter.inc.php');
     }

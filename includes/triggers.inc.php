@@ -127,15 +127,6 @@ array('name' => 'Own Incident Closed By User',
       );
 
 
-// Template variables
-$triggertypevars['incident'] = array('{contactemail}', '{contactname}');
-
-$ttvararray['{contactemail}'] = array('description' => 'Email address of incident contact',
-                                     'replacement' => 'contact_email($contactid)',
-                                     'action' => 'ACTION_EMAIL');
-
-
-
 //set up all the action types
 define(ACTION_NONE, 1);
 define(ACTION_NOTICE, 2);
@@ -161,6 +152,28 @@ $actionarray['ACTION_JOURNAL'] =
 array('name' => 'Journal',
       'description' => 'Log the trigger in the system journal'
       );
+
+/**
+    * Template variables
+    * description - Friendly label
+    * replacement - Quoted PHP code to be run to perform the template var replacement
+    * action - Optional field, when set the var will only be available for that action
+*/
+$ttvararray['{contactemail}'] = array('description' => 'Email address of contact',
+                                     'replacement' => 'contact_email($contactid)',
+                                     'action' => 'ACTION_EMAIL');
+
+$ttvararray['{contactname}'] = array('description' => 'Full Name of contact',
+                                     'replacement' => 'contact_realname($contactid)');
+
+$ttvararray['{contactfirstname}'] = array('description' => 'First Name of contact',
+                                     'replacement' => '');
+
+
+// Array of template variables available for each trigger type
+$triggertypevars['incident'] = array('{contactemail}', '{contactname}', '{contactfirstname}',
+                                     '{contactsite}');
+
 
 
 /**
