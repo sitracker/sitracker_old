@@ -51,20 +51,20 @@ switch ($_REQUEST['mode'])
             if ($('new_action').value == 'ACTION_NOTICE')
             {
                 $('noticetemplatesbox').show();
-                $('parametersbox').show();
+//                 $('parametersbox').show();
                 $('emailtemplatesbox').hide();
                 $('journalbox').hide();
             }
             else if ($('new_action').value == 'ACTION_EMAIL')
             {
                 $('emailtemplatesbox').show();
-                $('parametersbox').show();
+//                 $('parametersbox').show();
                 $('noticetemplatesbox').hide();
                 $('journalbox').hide();
             }
             else if ($('new_action').value == 'ACTION_JOURNAL')
             {
-                $('parametersbox').show();
+//                 $('parametersbox').show();
                 $('journalbox').show();
                 $('emailtemplatesbox').hide();
                 $('noticetemplatesbox').hide();
@@ -73,7 +73,7 @@ switch ($_REQUEST['mode'])
             {
                 $('noticetemplatesbox').hide();
                 $('emailtemplatesbox').hide();
-                $('parametersbox').hide();
+//                 $('parametersbox').hide();
                 $('journalbox').hide();
             }
         }
@@ -96,7 +96,9 @@ switch ($_REQUEST['mode'])
             echo "</p>";
         }
         echo "<form action='{$_SERVER['PHP_SELF']}' method='post'>";
-        echo "<table align='center'><tr><th>{$strAction}</th><th>{$strTemplate}</th><th>Extra {$strParameters}</th></tr>\n"; // FIXME extra, rules
+        echo "<table align='center'><tr><th>{$strAction}</th><th>{$strTemplate}</th>";
+        // echo "<th>Extra {$strParameters}</th>";
+        echo "</tr>\n"; // FIXME extra, rules
         echo "<tr>";
         echo "<td><select name='new_action' id='new_action' onchange='switch_template();'>";
         echo "<option value='ACTION_NONE'>{$strNone}</option>\n";
@@ -113,9 +115,13 @@ switch ($_REQUEST['mode'])
         echo "</div>\n";
         echo "<div id='journalbox' style='display:none;'>{$strNone}</div>";
         echo "</td>";
-        echo "<td><div id='parametersbox' style='display:none;'><input type='text' name='parameters' size='30' /></div></td>";
+//         echo "<td><div id='parametersbox' style='display:none;'><input type='text' name='parameters' size='30' /></div></td>";
         echo "</tr>";
-        echo "<tr><td colspan='3'><label>Rules:</label> <textarea cols='30' rows='5' name='rules'></textarea></td></tr>";
+        if (!empty($triggerarray[$id]['optional']))
+        {
+            echo "<tr><td colspan='3'><label>Rules:</label> <textarea cols='30' rows='5' name='rules'></textarea></td></tr>";
+        }
+        else echo "<tr><td colspan='3'>Rules are not definable for this trigger action<td></tr>";
         echo "</table>\n";
         echo "<input type='hidden' name='mode' value='save' />";
         echo "<input type='hidden' name='id' value='{$id}' />";
@@ -174,7 +180,7 @@ switch ($_REQUEST['mode'])
             echo "</td>";
             // List actions for this trigger
             echo "<td>";
-            $sql = "SELECT * FROM `{$dbTriggers}` WHERE triggerid = '$trigger' ";
+            $sql = "SELECT * FROM `{$dbTriggers}` WHERE triggerid = '$trigger' ORDER BY action, template";
             if (!$adminuser) $sql .= "AND userid='{$sit[2]}'";
             $result = mysql_query($sql);
             if (mysql_error()) trigger_error(mysql_error(),E_USER_WARNING);
@@ -187,16 +193,30 @@ switch ($_REQUEST['mode'])
                     if (!empty($trigaction->checks)) echo "When {$trigaction->checks} ";
                     if (!empty($trigaction->template))
                     {
-                        $template = $trigaction->template;
+                        if ($trigaction->action == 'ACTION_EMAIL')
+                        {
+                            $templatename = db_read_column('name', 'emailtype', $trigaction->template);
+                            $template = "<a href='edit_emailtype.php?id={$templatename}&amp;action=edit&amp;template=email'>{$templatename}</a>";
+                        }
+                        elseif  ($trigaction->action == 'ACTION_NOTICE')
+                        {
+                            $templatename = db_read_column('name', 'noticetemplates', $trigaction->template);
+                            $template = "<a href='edit_emailtype.php?id={$templatename}&amp;action=edit&amp;template=notice'>{$templatename}</a>";
+                        }
+                        else
+                        {
+                            $template = $trigaction->template;
+                        }
                         echo sprintf($actionarray[$trigaction->action]['description'], $template);
                         echo " ";
                     }
                     else
                     {
-                        echo "{$actionarray[$trigaction->action]['name']} ";
+                        echo "{$actionarray[$trigaction->action]['description']} ";
+//                         echo "{$actionarray[$trigaction->action]['name']} ";
                     }
-                    if (!empty($trigaction->userid)) echo " for <img src='{$CONFIG['application_webpath']}images/icons/{$iconset}/16x16/user.png' width='16' height='16' alt='' /> user ".user_realname($trigaction->userid).". ";
-                    else echo "for all users.";
+                    if (!empty($trigaction->userid)) echo " for ".user_realname($trigaction->userid).". ";
+                    if (!empty($trigaction->parameters)) echo " using {$trigaction->parameters}.";
 
                     echo " <a href='{$_SERVER['PHP_SELF']}?mode=delete&amp;id={$trigaction->id}' title=\"{$strDelete}\"><img src='{$CONFIG['application_webpath']}images/icons/{$iconset}/12x12/delete.png' width='12' height='12' alt='' /></a>";
                     echo "<br />\n";

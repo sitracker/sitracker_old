@@ -19,12 +19,13 @@ include ('mime.inc.php');
  * id - trigger name
  *   description - when the trigger is fired
  *   required - parameters the triggers needs to fire
- *   optional - parameters the trigger can check on, mimics 'subscription'-type events
+ *   optional - Rules the trigger can check, mimics 'subscription'-type events
  */
 $triggerarray['TRIGGER_INCIDENT_CREATED'] = array('name' => 'Incident Created',
                                                   'description' => 'A new incident has been created',
                                                   'required' => array('incidentid'),
-                                                  'optional' => array('contactid', 'siteid', 'priority'));
+                                                  'optional' => array('contactid', 'siteid', 'priority'),
+                                                  'type' => 'incident');
 
 $triggerarray['TRIGGER_INCIDENT_ASSIGNED'] = array('name' => 'Incident Assigned',
                                                    'description' => 'Occurs when a new incident is assigned to you',
@@ -40,11 +41,6 @@ $triggerarray['TRIGGER_INCIDENT_ASSIGNED_WHILE_OFFLINE'] = array('name' => 'Inci
 
 $triggerarray['TRIGGER_INCIDENT_NEARING_SLA'] = array('name' => 'Incident Nearing SLA',
                                                       'description' => 'Occurs when one of your incidents nears an SLA');
-
-$triggerarray['TRIGGER_USERS_INCIDENT_NEARING_SLA'] = array('name' => 'User\'s Incident Nearing SLA',
-                                                            'description' => 'Occurs when a user\'s incident you are watching is assigned to you',
-                                                            'required' => array('incidentid'),
-                                                            'optional' => array('userid'));
 
 $triggerarray['TRIGGER_INCIDENT_EXCEEDED_SLA'] = array('name' => 'Incident Exceeded SLA',
                                                        'description' => 'Occurs when one of your incidents exceeds an SLA');
@@ -85,7 +81,7 @@ $actionarray['ACTION_NOTICE'] = array('name' => 'Notice',
 $actionarray['ACTION_EMAIL'] = array('name' => 'Email',
                                    'description' => 'Send an email based on a %s template');
 $actionarray['ACTION_JOURNAL'] = array('name' => 'Journal',
-                                     'description' => 'Created an entry in the System Journal');
+                                     'description' => 'Log the trigger in the system journal');
 
 
 /**

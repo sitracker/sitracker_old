@@ -127,9 +127,8 @@ while ($incident=mysql_fetch_array($incident_result)) {
             if ($reach >= ($CONFIG['urgent_threshold'] * 0.01))
             {
                 $timetil = $times['next_sla_time']-$newSlaTime;
- 
+
                 trigger("TRIGGER_INCIDENT_NEARING_SLA", array('incidentid' => $incident['id'], 'nextslatime' => $times['next_sla_time']));
-                trigger("TRIGGER_USERS_INCIDENT_NEARING_SLA", array('incidentid' => $incident['id'], 'nextslatime' => $times['next_sla_time'], 'user' => $reviewInfo['currentowner']));
             }
         }
     }
