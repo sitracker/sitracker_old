@@ -25,7 +25,7 @@ foreach(array('user') as $var)
 if ( ($user == "") || (($user != $_SESSION['userid']) && (!user_permission($_SESSION['userid'], 50))))
     $user = $_SESSION['userid'];
 
-echo "var user = '$user';\n\n";  // FIXME remove debugging?
+echo "var user = '$user';\n\n";  
 ?>
 
 /************************************************************************************************************
@@ -615,7 +615,7 @@ function clearAppointments()
 
 function saveAnItemToServer(inputId)
 {
-    if (appointmentProperties[inputId]['completion'] < 2)
+    if (appointmentProperties[inputId]['completion'] === undefined || appointmentProperties[inputId]['completion'] < 2)
     {
         if (!appointmentProperties[inputId]['description']) appointmentProperties[inputId]['description']='';
         if (!appointmentProperties[inputId]['bgColorCode']) appointmentProperties[inputId]['bgColorCode']='';

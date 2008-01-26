@@ -41,12 +41,12 @@ echo "<script type='text/javascript'>
         {
             this.domNode.style.backgroundColor = '#ddf';
             var saveString = '?saveAnItem=true'
-            + '&amp;description=' + escape(e.dragObject.domNode.innerHTML)
-            + '&amp;name=' + escape(e.dragObject.domNode.id)
-            + '&amp;droptarget=' + this.domNode.id
-            + '&amp;week=' + dateStartOfWeek.getTime()
-            + '&amp;user=' + $user
-            + '&amp;newItem=2';
+            + '&description=' + escape(e.dragObject.domNode.innerHTML)
+            + '&name=' + escape(e.dragObject.domNode.id)
+            + '&droptarget=' + this.domNode.id
+            + '&week=' + dateStartOfWeek.getTime()
+            + '&user=' + $user
+            + '&newItem=2';
 
 
             var newid;

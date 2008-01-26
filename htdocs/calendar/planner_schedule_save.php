@@ -55,7 +55,8 @@ if (isset($_GET['saveAnItem']))
                     "',startdate='".date("Y-m-d H:i:s",strtotime($eventStartDate)) .
                     "',enddate='".date("Y-m-d H:i:s",strtotime($eventEndDate)) .
                     "' WHERE id='" . $id . "' AND completion < '1'";
-            mysql_query($SQL);
+            mysql_query($sql);
+            echo $sql;
             if (mysql_error())
             {
                 trigger_error(mysql_error(),E_USER_ERROR);
