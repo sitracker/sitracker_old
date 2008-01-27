@@ -23,8 +23,8 @@ $schema = "CREATE TABLE `billing_periods` (
 `servicelevelid` INT( 5 ) NOT NULL ,
 `engineerperiod` INT NOT NULL COMMENT 'In minutes',
 `customerperiod` INT NOT NULL COMMENT 'In minutes',
-`priority` INT( 4 ) NOT NULL AFTER `servicelevelid`,
-`tag` VARCHAR( 10 ) NOT NULL AFTER `priority`,
+`priority` INT( 4 ) NOT NULL ,
+`tag` VARCHAR( 10 ) NOT NULL ,
 PRIMARY KEY ( `servicelevelid`,`priority` )
 ) ENGINE = MYISAM ;
 
@@ -1240,9 +1240,9 @@ CREATE TABLE IF NOT EXISTS `notices` (
 ) ENGINE=MyISAM AUTO_INCREMENT=1 ;
 
 CREATE TABLE `triggers` (
-`triggerid` TINYINT NOT NULL ,
+`triggerid` VARCHAR(255) NOT NULL ,
 `userid` TINYINT NOT NULL ,
-`action` TINYINT NOT NULL DEFAULT '1' ,
+`action` enum('ACTION_NONE', 'ACTION_NOTICE', 'ACTION_EMAIL', 'ACTION_JOURNAL') NOT NULL DEFAULT 'ACTION_NONE' ,
 `parameters` VARCHAR( 255 ) NULL ,
 PRIMARY KEY ( `triggerid` , `userid` , `action` )
 ) ENGINE = MYISAM ;
