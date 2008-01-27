@@ -1,4 +1,4 @@
- <?php
+<?php
 // setup.php - Install/Upgrade and set up plugins
 //
 // SiT (Support Incident Tracker) - Support call tracking system
