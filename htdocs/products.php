@@ -73,7 +73,7 @@ if (empty($productid) AND $display!='skills')
                     }
                     else
                     {
-                        echo "{$countcontracts}";
+                        echo $countcontracts;
                     }
                     echo "</td>";
                     // FIXME link to delete product
@@ -84,12 +84,15 @@ if (empty($productid) AND $display!='skills')
                 }
                 echo "</table>\n";
             }
-            else echo "<p class='warning'>No products for this vendor</p>\n";
+            else
+            {
+                echo "<p class='warning'>{$strNoProductsForThisVendor}</p>\n";
+            }
         }
     }
     else
     {
-        echo "<p class='error'>No vendors defined</p>";
+        echo "<p class='error'>{$strNoVendorsDefined}</p>";
     }
 
 
@@ -101,7 +104,8 @@ if (empty($productid) AND $display!='skills')
         echo "<h2><img src='{$CONFIG['application_webpath']}images/icons/{$iconset}/32x32/skill.png' width='32' height='32' alt='' /> Skills not linked</h2>";
         echo "<p align='center'>These skills are not linked to any product</p>";
         echo "<table summary='' align='center' width='55%'>";
-        echo "<tr><th>{$strSkill}</th><th>{$strLifetime}</th><th>Engineers</th><th>{$strIncidents}</th><th>{$strOperation}</th></tr>";
+        echo "<tr><th>{$strSkill}</th><th>{$strLifetime}</th>";
+        echo "<th>Engineers</th><th>{$strIncidents}</th><th>{$strOperation}</th></tr>";
         while ($software = mysql_fetch_array($result))
         {
             $ssql = "SELECT COUNT(userid) FROM usersoftware, users WHERE usersoftware.userid = users.id AND users.status!=0 AND usersoftware.softwareid='{$software['id']}'";
@@ -119,7 +123,7 @@ if (empty($productid) AND $display!='skills')
             echo "<td>";
             if ($software['lifetime_start'] > 1)
             {
-                echo ldate($CONFIG['dateformat_shortdate'],mysql2date($software['lifetime_start'])).' to '; // FIXME i18n 'to'
+                echo ldate($CONFIG['dateformat_shortdate'],mysql2date($software['lifetime_start'])).' {$strTo} ';
             }
             else
             {
@@ -159,7 +163,9 @@ elseif (empty($productid) AND ($display=='skills' OR $display=='software'))
     if (mysql_num_rows($result) >= 1)
     {
         echo "<table align='center'>";
-        echo "<tr><th>{$strSkill}</th><th>{$strVendor}</th><th>{$strLifetime}</th><th>Linked to # Products</th><th>Engineers</th><th>{$strIncidents}</th><th>{$strOperation}</th></tr>"; // FIXME i18n
+        echo "<tr><th>{$strSkill}</th><th>{$strVendor}</th>";
+        echo "<th>{$strLifetime}</th><th>{$strLinkedToNumProducts}</th>";
+        echo "<th>{$strEngineers}</th><th>{$strIncidents}</th><th>{$strOperation}</th></tr>";
         $shade = 'shade1';
         while ($software = mysql_fetch_object($result))
         {
@@ -196,7 +202,7 @@ elseif (empty($productid) AND ($display=='skills' OR $display=='software'))
             echo "<td>";
             if ($software->lifetime_start > 1)
             {
-                echo ldate($CONFIG['dateformat_shortdate'],$lifetime_start).' to '; // FIXME i18n 'to'
+                echo ldate($CONFIG['dateformat_shortdate'],$lifetime_start).' {$strTo} ';
             }
             else
             {
@@ -239,10 +245,13 @@ else
         while ($product = mysql_fetch_object($presult))
         {
             echo "<h2><img src='{$CONFIG['application_webpath']}images/icons/{$iconset}/32x32/product.png' width='32' height='32' alt='' /> Product: {$product->name}</h2>";
-            echo "<p align='center'><a href='edit_product.php?id={$product->id}'>Edit</a> | <a href='delete_product.php?id={$product->id}'>{$strDelete}</a></p>";
+            echo "<p align='center'><a href='edit_product.php?id={$product->id}'>Edit</a> ";
+            echo "| <a href='delete_product.php?id={$product->id}'>{$strDelete}</a></p>";
             $tags = list_tags($product->id, TAG_PRODUCT, TRUE);
+            
             if (!empty($tags)) echo "<div style='width: 50%; margin: auto;'>{$tags}</div><br />\n";
             echo "<table summary='List of skills linked to product' align='center'>";
+            
             if (!empty($product->description)) echo "<tr class='shade1'><td colspan='0'>".nl2br($product->description)."</td></tr>";
 
             $swsql = "SELECT * FROM softwareproducts, software WHERE softwareproducts.softwareid=software.id AND productid='{$product->id}' ORDER BY name";
@@ -251,7 +260,9 @@ else
 
             if (mysql_num_rows($swresult) > 0)
             {
-                echo "<tr><th>{$strSkill}</th><th>{$strLifetime}</th><th>{$strEngineers}</th><th>{$strIncidents}</th><th>Actions</th></tr>";
+                echo "<tr><th>{$strSkill}</th><th>{$strLifetime}</th>";
+                echo "<th>{$strEngineers}</th><th>{$strIncidents}</th>";
+                echo "<th>{$strActions}</th></tr>";
                 $shade='shade2';
                 while ($software=mysql_fetch_array($swresult))
                 {
@@ -270,7 +281,7 @@ else
                     echo "<td>";
                     if ($software['lifetime_start'] > 1)
                     {
-                        echo ldate($CONFIG['dateformat_shortdate'],mysql2date($software['lifetime_start'])).' to '; // FIXME i18n 'to'
+                        echo ldate($CONFIG['dateformat_shortdate'],mysql2date($software['lifetime_start'])).' {$strTo} ';
                     }
                     else
                     {
@@ -299,23 +310,23 @@ else
             }
             else
             {
-                echo "<tr><td>&nbsp;</td><td><em>No skills linked to this product</em></td><td>&nbsp;</td></tr>\n";// FIXME i18n
+                echo "<tr><td>&nbsp;</td><td><em>{$strNoSkillsLinkedToProduct}</em></td><td>&nbsp;</td></tr>\n";
             }
             echo "</table>\n";
-            echo "<p align='center'><a href='add_product_software.php?productid={$product->id}'>Link skill to {$product->name}</a></p>\n";// FIXME i18n
+            echo "<p align='center'><a href='add_product_software.php?productid={$product->id}'>".sprintf($strLinkSkillToX, $product->name)."</a></p>\n";
 
             $sql = "SELECT * FROM maintenance WHERE product='{$product->id}' ORDER BY id DESC";
             $result = mysql_query($sql);
             if (mysql_error()) trigger_error(mysql_error(),E_USER_ERROR);
             if (mysql_num_rows($result) >= 1)
             {
-                echo "<h3>Related Contracts</h3>";// FIXME i18n
+                echo "<h3>{$strRelatedContracts}</h3>";
                 echo "<table align='center'>";
                 echo "<tr><th>{$strContract}</th><th>{$strSite}</th></tr>";
                 $shade = 'shade1';
                 while ($contract = mysql_fetch_object($result))
                 {
-                    if ($contract->term=='yes' OR $contract->expirydate < $now)
+                    if ($contract->term == 'yes' OR $contract->expirydate < $now)
                     {
                         $shade = "expired";
                     }
@@ -356,9 +367,12 @@ else
         }
 
     }
-    else echo "<p class='error'>No matching product</p>";// FIXME i18n
+    else
+    {
+        echo "<p class='error'>{$strNoMatchingProduct}</p>";
+    }
 
-    echo "<p align='center'><a href='{$_SERVER['PHP_SELF']}#{$productid}'>Back to list of products</a></p>";
+    echo "<p align='center'><a href='{$_SERVER['PHP_SELF']}#{$productid}'>{$strBackToList}</a></p>";
 }
 
 echo "<p align='center'><a href='add_vendor.php'>{$strAddVendor}</a> | <a href='add_product.php'>{$strAddProduct}</a> | <a href='add_software.php'>{$strAddSkill}</a>";

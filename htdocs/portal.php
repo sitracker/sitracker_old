@@ -131,9 +131,9 @@ switch ($page)
     //show their open incidents
     case 'incidents':
         $showclosed = $_REQUEST['showclosed'];
-        if(empty($showclosed)) $showclosed = "false";
+        if (empty($showclosed)) $showclosed = "false";
 
-        if($showclosed == "true")
+        if ($showclosed == "true")
         {
             echo "<h2>{$strYourClosedIncidents}</h2>";
             echo "<p align='center'><a href='$_SERVER[PHP_SELF]?page=incidents&amp;showclosed=false'>{$strShowOpenIncidents}</a></p>";
@@ -157,7 +157,7 @@ switch ($page)
             echo colheader('title',$strTitle);
             echo colheader('lastupdated',$strLastUpdated);
             echo colheader('status',$strStatus);
-            if($showclosed == "false")
+            if ($showclosed == "false")
             {
                 echo colheader('actions', $strOperation);
             }
@@ -165,7 +165,8 @@ switch ($page)
             echo "</tr>\n";
             while ($incident = mysql_fetch_object($result))
             {
-                echo "<tr class='$shade'><td><a href='portal.php?page=showincident&amp;id={$incident->id}'>{$incident->id}</a></td>";
+                echo "<tr class='$shade'><td>";
+                echo "<a href='portal.php?page=showincident&amp;id={$incident->id}'>{$incident->id}</a></td>";
                 echo "<td>";
                 if (!empty($incident->softwareid))
                 {
@@ -183,7 +184,7 @@ switch ($page)
                     //check if the customer has requested a closure
                     $lastupdate = list($update_userid, $update_type, $update_currentowner, $update_currentstatus, $update_body, $update_timestamp, $update_nextaction, $update_id)=incident_lastupdate($incident->id);
 
-                    if($lastupdate[1] == "customerclosurerequest")
+                    if ($lastupdate[1] == "customerclosurerequest")
                     {
                         echo "{$strClosureRequested}</td>";
                     }
@@ -198,14 +199,17 @@ switch ($page)
             }
             echo "</table>";
         }
-        else echo "<p class='info'>{$strNoIncidents}</p>";
+        else
+        {
+            echo "<p class='info'>{$strNoIncidents}</p>";
+        }
 
         echo "<p align='center'><a href='{$_SERVER[PHP_SELF]}?page=entitlement'>{$strAddIncident}</a></p>";
     break;
 
     //update an open incident
     case 'update':
-        if(empty($_REQUEST['update']))
+        if (empty($_REQUEST['update']))
         {
             $id = $_REQUEST['id'];
             echo "<h2>{$strUpdateIncident} {$_REQUEST['id']}</h2>";
@@ -240,7 +244,7 @@ switch ($page)
 
     //close an open incident
     case 'close':
-        if(empty($_REQUEST['reason']))
+        if (empty($_REQUEST['reason']))
         {
             $id = $_REQUEST['id'];
             echo "<h2>{$strClosureRequestForIncident} {$_REQUEST['id']}</h2>";
@@ -255,7 +259,7 @@ switch ($page)
             $user = mysql_fetch_object($result);
             if (mysql_error()) trigger_error("MySQL Query Error ".mysql_error(), E_USER_ERROR);
 
-            $reason = "Incident closure requested via the portal by <b>{$user->forenames} {$user->surname}</b>\n\n";
+            $reason = "Incident closure requested via the portal by <b>{$user->forenames} {$user->surname}</b>\n\n"; // FIXME i18n ? not sure?
             $reason .= "<b>Reason:</b> {$_REQUEST['reason']}";
             $sql = "INSERT into updates (incidentid, userid, type, currentstatus, bodytext, timestamp, customervisibility) ";
             $sql .= "VALUES('{$_REQUEST['id']}', '0', 'customerclosurerequest',  '1', '{$reason}',
@@ -275,7 +279,7 @@ switch ($page)
 
     //add a new incident
     case 'add':
-        if(!$_REQUEST['action'])
+        if (!$_REQUEST['action'])
         {
             echo "<h2>{$strAddIncident}</h2>";
             echo "<table align='center' width='50%' class='vertical'>";
@@ -287,7 +291,7 @@ switch ($page)
             echo "<tr><th>{$strProblemDescription}:<br />{$strProblemDescriptionCustomerText}</th><td><textarea name='probdesc' rows='10' cols='60'></textarea></td></tr>";
             echo "<tr><th>{$strWorkAroundsAttempted}:<br />{$strWorkAroundsAttemptedCustomerText}</th><td><textarea name='workarounds' rows='10' cols='60'></textarea></td></tr>";
             echo "<tr><th>{$strProblemReproduction}:<br />{$strProblemReproductionCustomerText}</th><td><textarea name='reproduction' rows='10' cols='60'></textarea></td></tr>";
-            echo "<tr><th>$strCustomerImpact:<br />{$strCustomerImpactCustomerText}</th><td><textarea name='impact' rows='10' cols='60'></textarea></td></tr>";
+            echo "<tr><th>{$strCustomerImpact}:<br />{$strCustomerImpactCustomerText}</th><td><textarea name='impact' rows='10' cols='60'></textarea></td></tr>";
 
             echo "</table>";
             echo "<input name='contractid' value='{$_REQUEST['contractid']}' type='hidden'>";
@@ -308,25 +312,25 @@ switch ($page)
             $impact = cleanvar($_REQUEST['impact']);
             $servicelevel = servicelevel_id2tag(maintenance_servicelevel($contractid));
 
-            $updatetext = "Opened via the portal by <b>".contact_realname($contactid)."</b>\n\n";
+            $updatetext = "Opened via the portal by <b>".contact_realname($contactid)."</b>\n\n"; // FIXME i18n
             if (!empty($probdesc))
             {
-                $updatetext .= "<b>Problem Description</b>\n{$probdesc}\n\n";
+                $updatetext .= "<b>{$strProblemDescription}</b>\n{$probdesc}\n\n";
             }
 
             if (!empty($workarounds))
             {
-                $updatetext .= "<b>Workarounds Attempted</b>\n{$workarounds}\n\n";
+                $updatetext .= "<b>{$strWorkAroundsAttempted}</b>\n{$workarounds}\n\n";
             }
 
             if (!empty($reproduction))
             {
-                $updatetext .= "<b>Problem Reproduction</b>\n{$reproduction}\n\n";
+                $updatetext .= "<b>{$strProblemReproduction}</b>\n{$reproduction}\n\n";
             }
 
             if (!empty($impact))
             {
-                $updatetext .= "<b>Customer Impact</b>\n{$impact}\n\n";
+                $updatetext .= "<b>{$strCustomerImpact}</b>\n{$impact}\n\n";
             }
 
             //create new incident
@@ -410,13 +414,13 @@ switch ($page)
             if ($surname == '')
             {
                 $errors = 1;
-                echo "<p class='error'>You must enter a surname</p>\n";
+                echo "<p class='error'>You must enter a surname</p>\n"; // FIXME i18n
             }
 
             if ($email == "" OR $email=='none' OR $email=='n/a')
             {
                 $errors = 1;
-                echo "<p class='error'>You must enter an email address</p>\n";
+                echo "<p class='error'>{$strMustEnterEmail}</p>\n";
             }
 
             if ($errors == 0)
@@ -462,7 +466,7 @@ switch ($page)
         $result = mysql_query($sql);
         $user = mysql_fetch_object($result);
 
-        echo "<h2>Details: {$incidentid} - {$user->title}</h2>"; // FIXME i18n
+        echo "<h2>{$strDetails}: {$incidentid} - {$user->title}</h2>"; // FIXME i18n
 
         if ($user->status != 2)
         {
@@ -471,7 +475,7 @@ switch ($page)
             //check if the customer has requested a closure
             $lastupdate = list($update_userid, $update_type, $update_currentowner, $update_currentstatus, $update_body, $update_timestamp, $update_nextaction, $update_id)=incident_lastupdate($incidentid);
 
-            if($lastupdate[1] == "customerclosurerequest")
+            if ($lastupdate[1] == "customerclosurerequest")
             {
                 echo "{$strClosureRequested}</td>";
             }
@@ -620,7 +624,7 @@ switch ($page)
                 {
                     echo "<img src='{$CONFIG['application_webpath']}images/icons/{$iconset}/16x16/{$updatetypes['research']['icon']}' width='16' height='16' alt='Research' />";
                     echo "<span>Click to {$newmode}</span></a> ";
-                    if($update->sla != '')
+                    if ($update->sla != '')
                     {
                         echo "<img src='{$CONFIG['application_webpath']}images/icons/{$iconset}/16x16/{$slatypes[$update->sla]['icon']}' width='16' height='16' alt='{$update->type}' />";
                     }
