@@ -12,7 +12,7 @@
 $permission = 33; // Send Emails
 require ('db_connect.inc.php');
 require ('functions.inc.php');
-include ('mime.inc.php');
+// include ('mime.inc.php');
 
 // This page requires authentication
 require ('auth.inc.php');

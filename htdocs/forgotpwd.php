@@ -14,7 +14,6 @@
 $permission = 0; // not required
 require ('db_connect.inc.php');
 require ('functions.inc.php');
-include ('mime.inc.php');
 
 $title = 'Forgotten Password';
 
