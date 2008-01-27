@@ -706,7 +706,7 @@ switch ($_REQUEST['action'])
                         echo "<p>Username:<br /><input type='text' name='username' value='admin' disabled='disabled' /> (cannot be changed)</p>";
                         echo "<p><label>Password:<br /><input type='password' name='password' size='30' maxlength='50' /></label></p>";
                         echo "<p><label>Confirm Password:<br /><input type='password' name='passwordagain' size='30' maxlength='50' /></label></p>";
-                        echo "<p><label>Email:<br /><input type='text' size='30' maxlength='255' /></label></p>";
+                        echo "<p><label>Email:<br /><input type='text' name='email' size='30' maxlength='255' /></label></p>";
                         echo "<p><input type='submit' value='Create Admin' />";
                         echo "<input type='hidden' name='action' value='createadminuser' />";
                         echo "</form>";
