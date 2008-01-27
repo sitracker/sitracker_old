@@ -631,7 +631,7 @@ function get_users_appointments($user, $start, $end)
                 break;
 
                 case '1':
-                    $bgcolor = '#FFFFDD';
+                    $bgcolor = '#FFFFBB';
                 break;
 
                 default:
