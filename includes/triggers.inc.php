@@ -554,7 +554,7 @@ function trigger_replace_email_specials($string, $paramarray)
 */
 function send_trigger_email($userid, $triggertype, $template, $paramarray)
 {
-    global $CONFIG, $dbg;
+    global $CONFIG, $dbg, $dbEmailTemplates;
     if ($CONFIG['debug'])
     {
         $dbg .= "TRIGGER: send_trigger_email({$userid},{$triggertype},
@@ -567,7 +567,7 @@ function send_trigger_email($userid, $triggertype, $template, $paramarray)
         $incidentid = $paramarray['incidentid'];
     }
 
-    $sql = "SELECT * FROM emailtype WHERE id='{$triggertype}'";
+    $sql = "SELECT * FROM `{$dbEmailTemplates}` WHERE id='{$triggertype}'";
     $query = mysql_query($sql);
     if (mysql_error()) trigger_error("MySQL Query Error ".mysql_error(), E_USER_WARNING);
     if ($query)
@@ -823,21 +823,21 @@ function trigger_description($triggervar)
 */
 function triggeraction_description($trigaction, $editlink=FALSE)
 {
-    global $CONFIG, $iconset, $actionarray;
+    global $CONFIG, $iconset, $actionarray, $dbEmailTemplates, $dbNoticeTemplates;
     $html = "<img src='{$CONFIG['application_webpath']}images/icons/{$iconset}/16x16/triggeraction.png' width='16' height='16' alt='' /> ";
     if (!empty($trigaction->checks)) $html .= "When {$trigaction->checks} ";
     if (!empty($trigaction->template))
     {
         if ($trigaction->action == 'ACTION_EMAIL')
         {
-            $templatename = db_read_column('name', 'emailtype', $trigaction->template);
+            $templatename = db_read_column('name', $dbEmailTemplates, $trigaction->template);
             if ($editlink) $template = "<a href='templates.php?id={$trigaction->template}&amp;action=edit&amp;template=email'>";
             $template .= "{$templatename}";
             if ($editlink) $template .= "</a>";
         }
         elseif  ($trigaction->action == 'ACTION_NOTICE')
         {
-            $templatename = db_read_column('name', 'noticetemplates', $trigaction->template);
+            $templatename = db_read_column('name', $dbNoticeTemplates, $trigaction->template);
             if ($editlink) $template = "<a href='templates.php?id={$trigaction->template}&amp;action=edit&amp;template=notice'>";
             $template .= "{$templatename}";
             if ($editlink) $template .= "</a>";
