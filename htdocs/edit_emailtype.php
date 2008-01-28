@@ -24,7 +24,7 @@ $id = cleanvar($_REQUEST['id']);
 $action = $_REQUEST['action'];
 $templatetype = cleanvar($_REQUEST['template']);
 
-if (empty($action) OR $action == "showform")
+if (empty($action) OR $action == 'showform' OR $action == 'list')
 {
     // Show select email type form
     include ('htmlheader.inc.php');
@@ -41,26 +41,27 @@ if (empty($action) OR $action == "showform")
     if (mysql_error()) trigger_error("MySQL Query Error ".mysql_error(), E_USER_ERROR);
     while ($email = mysql_fetch_object($result))
     {
-        $templates[$email->id] = array('id' => $email->id, 'template' => 'email', 'type' => $email->type, 'desc' => $email->description);
+        $templates[$email->id] = array('id' => $email->id, 'template' => 'email', 'name'=> $email->name,'type' => $email->type, 'desc' => $email->description);
     }
     $sql = "SELECT * FROM `{$dbNoticeTemplates}` ORDER BY id";
     $result = mysql_query($sql);
     if (mysql_error()) trigger_error("MySQL Query Error ".mysql_error(), E_USER_ERROR);
     while ($notice = mysql_fetch_object($result))
     {
-        $templates[$notice->name] = array('id' => $notice->name, 'template' => 'notice', 'type' => $notice->type, 'desc' => $notice->description);
+        $templates[$notice->name] = array('id' => $notice->id, 'template' => 'notice', 'name'=> $notice->name, 'type' => $notice->type, 'desc' => $notice->description);
     }
     ksort($templates);
     $shade='shade1';
     echo "<table align='center'>";
-    echo "<tr><th>{$strType}</th><th>{$strID}</th><th>{$strDescription}</th><th>{$strOperation}</th></tr>";
+    echo "<tr><th>{$strType}</th><th>{$strID}</th><th>{$strTemplate}</th><th>{$strDescription}</th><th>{$strOperation}</th></tr>";
     foreach ($templates AS $template)
     {
         echo "<tr class='{$shade}'>";
         echo "<td>{$template['type']} {$template['template']}</td>";
         echo "<td>{$template['id']}</td>";
+        echo "<td>{$template['name']}</td>";
         echo "<td>{$template['desc']}</td>";
-        echo "<td><a href='{$_SERVER['PHP_SELF']}?id={$template['id']}&amp;action=edit&amp;template={$template['template']}'>{$strEdit}</a></td>";
+        echo "<td><a href='{$_SERVER['PHP_SELF']}?id={$template['id']}&amp;action=edit&amp;template={$template['id']}'>{$strEdit}</a></td>";
         echo "</tr>\n";
         if ($shade=='shade1') $shade='shade2';
         else $shade='shade1';
