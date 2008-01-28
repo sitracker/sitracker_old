@@ -72,6 +72,39 @@ if (empty($action) OR $action == 'showform' OR $action == 'list')
 }
 elseif ($action == "edit")
 {
+    ?>
+    <script type='text/javascript'>
+
+    function recordFocusElement(element)
+    {
+        $('focuselement').value = element.identify();
+    }
+
+    function clearFocusElement()
+    {
+        $('focuselement').value = '';
+    }
+
+    function insertTemplateVar(tvar)
+    {
+        var element = $('focuselement').value;
+        if (element.length > 0)
+        {
+            var start = $(element).selectionStart;
+            var end = $(element).selectionEnd;
+//             alert('start:' + start + '  end: ' + end + 'len: ' + $(element).textLength);
+            $(element).value = $(element).value.substring(0, start) + tvar + $(element).value.substring(end, $(element).textLength);
+        }
+        else
+        {
+            alert('Select a field that supports template variables, then click a variable to insert it');
+        }
+    }
+
+</script>
+    <?php
+
+
     // Retrieve the template from the database, whether it's email or notice
     switch ($templatetype)
     {
@@ -123,26 +156,35 @@ elseif ($action == "edit")
         echo "<input maxlength='50' name='name' size='5' value='{$template->id} 'readonly='readonly' disabled='disabled' /></td></tr>\n";
         echo "<tr><th>Template Type:</th><td>{$template->type}";  // FIXME Temporary, remove before release
         echo "<tr><th>{$strTemplate}: <sup class='red'>*</sup></th><td><input maxlength='100' name='name' size='40' value=\"{$template->name}\" /></td></tr>\n";
-        echo "<tr><th>{$strDescription}: <sup class='red'>*</sup></th><td><textarea name='description' cols='50' rows='5'>{$template->description}</textarea></td></tr>\n";
+        echo "<tr><th>{$strDescription}: <sup class='red'>*</sup></th><td><textarea name='description' cols='50' rows='5' onfocus=\"clearFocusElement(this);\">{$template->description}</textarea></td></tr>\n";
         switch ($templatetype)
         {
             case 'email':
 
                 echo "<tr><th colspan='2'>{$strEmail}</th></tr>"; // FIXME i18n defaults
-                echo "<tr><th>{$strTo}: <sup class='red'>*</sup></th><td><input maxlength='100' name='tofield' size='40' value=\"{$template->tofield}\" /></td></tr>\n";
-                echo "<tr><th>{$strFrom}: <sup class='red'>*</sup></th><td><input maxlength='100' name='fromfield' size='40' value=\"{$template->fromfield}\" /></td></tr>\n";
-                echo "<tr><th>{$strReplyTo}: <sup class='red'>*</sup></th><td><input maxlength='100' name='replytofield' size='40' value=\"{$template->replytofield}\" /></td></tr>\n";
-                echo "<tr><th>{$strCC}:</th><td><input maxlength='100' name='ccfield' size='40' value=\"{$template->ccfield}\" /></td></tr>\n";
-                echo "<tr><th>{$strBCC}:</th><td><input maxlength='100' name='bccfield' size='40' value=\"{$template->bccfield}\" /></td></tr>\n";
-                echo "<tr><th>{$strSubject}:</th><td><input maxlength='255' name='subjectfield' size='60' value=\"{$template->subjectfield}\" /></td></tr>\n";
+                echo "<tr><th>{$strTo}: <sup class='red'>*</sup></th>";
+                echo "<td><input id='tofield' maxlength='100' name='tofield' size='40' value=\"{$template->tofield}\" onfocus=\"recordFocusElement(this);\" /></td></tr>\n";
+                echo "<tr><th>{$strFrom}: <sup class='red'>*</sup></th>";
+                echo "<td><input id='fromfield' maxlength='100' name='fromfield' size='40' value=\"{$template->fromfield}\" onfocus=\"recordFocusElement(this);\" /></td></tr>\n";
+                echo "<tr><th>{$strReplyTo}: <sup class='red'>*</sup></th>";
+                echo "<td><input id='replytofield' maxlength='100' name='replytofield' size='40' value=\"{$template->replytofield}\" onfocus=\"recordFocusElement(this);\" /></td></tr>\n";
+                echo "<tr><th>{$strCC}:</th>";
+                echo "<td><input id='ccfield' maxlength='100' name='ccfield' size='40' value=\"{$template->ccfield}\" onfocus=\"recordFocusElement(this);\" /></td></tr>\n";
+                echo "<tr><th>{$strBCC}:</th>";
+                echo "<td><input id='bccfield' maxlength='100' name='bccfield' size='40' value=\"{$template->bccfield}\" onfocus=\"recordFocusElement(this);\" /></td></tr>\n";
+                echo "<tr><th>{$strSubject}:</th>";
+                echo "<td><input id='subject' maxlength='255' name='subjectfield' size='60' value=\"{$template->subjectfield}\" onfocus=\"recordFocusElement(this);\" /></td></tr>\n";
                 break;
 
             case 'notice':
 
                 echo "<tr><th>{$strNotice}</th><td>TODO</td></tr>\n";
-                echo "<tr><th>Link Text</th><td><input maxlength='50' name='linktext' size='50' value=\"{$template->linktext}\" /></td></tr>\n";
-                echo "<tr><th>Link</th><td><input maxlength='100' name='link' size='50' value=\"{$template->link}\" /></td></tr>\n";
-                echo "<tr><th>Durability</th><td><input maxlength='100' name='durability' size='10' value=\"{$template->durability}\" /></td></tr>\n";
+                echo "<tr><th>Link Text</th>";
+                echo "<td><input id='linktext' maxlength='50' name='linktext' size='50' value=\"{$template->linktext}\" onfocus=\"recordFocusElement(this);\" /></td></tr>\n";
+                echo "<tr><th>Link</th>";
+                echo "<td><input id='link' maxlength='100' name='link' size='50' value=\"{$template->link}\"  onfocus=\"recordFocusElement(this);\" /></td></tr>\n";
+                echo "<tr><th>Durability</th>";
+                echo "<td><input id='durability' maxlength='100' name='durability' size='10' value=\"{$template->durability}\" onfocus=\"recordFocusElement(this);\" /></td></tr>\n";
 
         }
 
@@ -152,7 +194,8 @@ elseif ($action == "edit")
 
         if ($templatetype=='email') $body = $template->body;
         else $body = $template->text;
-        echo "<tr><th>{$strText}</th><td><textarea name='bodytext' rows='20' cols='50'>{$body}</textarea></td>";
+        echo "<tr><th>{$strText}</th>";
+        echo "<td><textarea id='bodytext' name='bodytext' rows='20' cols='50' onfocus=\"recordFocusElement(this);\">{$body}</textarea></td>";
 
         if ($template->type=='incident')
         {
@@ -175,6 +218,7 @@ elseif ($action == "edit")
         echo "<p>";
         echo "<input name='type' type='hidden' value='{$template->type}' />";
         echo "<input name='template' type='hidden' value='{$templatetype}' />";
+        echo "<input name='focuselement' id='focuselement' type='hidden' value='' />";
         echo "<input name='id' type='hidden' value='{$id}' />";
         echo "<input name='submit' type='submit' value=\"{$strSave}\" />";
         echo "</p>\n";
@@ -193,7 +237,7 @@ elseif ($action == "edit")
             echo "<dl>";
             foreach ($triggertypevars[$template->type] AS $triggertypevar => $identifier)
             {
-                echo "<dt><code>{$identifier}</code></dt>";
+                echo "<dt><code><a href=\"javascript:insertTemplateVar('{$identifier}');\">{$identifier}</a></code></dt>";
                 if (!empty($ttvararray[$identifier]['description'])) echo "<dd>{$ttvararray[$identifier]['description']}";
                 echo "<br />";
             }
