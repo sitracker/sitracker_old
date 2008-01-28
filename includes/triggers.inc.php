@@ -669,7 +669,7 @@ function email_templates($triggertype, $name, $selected = '')
     if (mysql_error()) trigger_error("MySQL Query Error ".mysql_error(), E_USER_WARNING);
     while ($template = mysql_fetch_object($result))
     {
-        $html .= "<option value='{$template->id}'>{$template->id}</option>\n";
+        $html .= "<option value='{$template->id}'>{$template->name}</option>\n";
     }
     $html .= "</select>\n";
     return $html;
@@ -830,7 +830,7 @@ function triggeraction_description($trigaction, $editlink=FALSE)
     {
         if ($trigaction->action == 'ACTION_EMAIL')
         {
-            $templatename = $trigaction->template;
+            $templatename = db_read_column('name', 'emailtype', $trigaction->template);
             if ($editlink) $template = "<a href='edit_emailtype.php?id={$trigaction->template}&amp;action=edit&amp;template=email'>";
             $template .= "{$templatename}";
             if ($editlink) $template .= "</a>";

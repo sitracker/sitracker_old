@@ -33,7 +33,7 @@ if (empty($action) OR $action == "showform")
     echo "<p align='center'>Please be very careful when editing existing templates, {$CONFIG['application_shortname']} relies on some of these templates to
     send emails out automatically, if in doubt - seek advice.</p>";
     echo "<p align='center'>{$strTemplatesShouldNotBeginWith}</p>";
-    echo "<p align='center'><a href='add_emailtype.php?action=showform'>{$strAddEmailTemplate}</a> | ";
+    echo "<p align='center'><a href='triggers.php'>{$strTriggers}</a> | <a href='add_emailtype.php?action=showform'>{$strAddEmailTemplate}</a> | ";
     echo "<a href='edit_global_signature.php'>{$strEditGlobalSignature}</a></p>";
 
     $sql = "SELECT * FROM `{$dbEmailType}` ORDER BY id";

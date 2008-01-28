@@ -1723,6 +1723,10 @@ UPDATE `emailtype` SET `type` = 'incident' WHERE `id` = 'INCIDENT_LOGGED_EMAIL' 
 -- KMH 27/01/08
 ALTER TABLE `triggers` ADD `template` VARCHAR( 255 ) NOT NULL AFTER `action` ;
 ALTER TABLE `triggers` ADD `checks` VARCHAR( 255 ) NULL ;
+
+-- INL 28/01/08
+ALTER TABLE `triggers` CHANGE `template` `template` INT( 11 ) NOT NULL
+
 ";
 
 // Important: When making changes to the schema you must add SQL to make the alterations
