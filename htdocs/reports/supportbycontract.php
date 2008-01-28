@@ -50,7 +50,7 @@ while ($site = mysql_fetch_object($result))
     $msql .= "WHERE m.product=p.id ";
     $msql .= "AND m.reseller=r.id AND licence_type=l.id AND admincontact=c.id ";
     $msql .= "AND m.site = '{$site->id}' ";
-    $msql .= "AND p.vendorid=2 ";    // novell products only
+//     $msql .= "AND p.vendorid=2 ";    // novell products only
     $msql .= "AND m.term!='yes' ";
     $msql .= "AND m.expirydate > '$now' ";     $msql .= "ORDER BY expirydate DESC";
 

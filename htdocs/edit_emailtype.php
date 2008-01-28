@@ -187,49 +187,6 @@ elseif ($action == "edit")
             echo "<br />";
         }
         echo "</dl>";
-        echo "<hr />";
-        echo "<h3>DEPRECATED</h3>";
-        // FIXME these old specifiers are DEPRECATED as of 3.40 INL 25Jan08
-
-        echo "<table align='center' class='vertical'>";
-        echo "<tr><th>&lt;contactemail&gt;</th><td>{$strIncidentsContactEmail}</td></tr>";
-        echo "<tr><th>&lt;contactname&gt;</th><td>Full Name of incident contact</td></tr>";
-        echo "<tr><th>&lt;contactfirstname&gt;</th><td>First Name of incident contact</td></tr>";
-        echo "<tr><th>&lt;contactsite&gt;</th><td>Site name of incident contact</td></tr>";
-        echo "<tr><th>&lt;contactphone&gt;</th><td>Phone number of incident contact</td></tr>";
-        echo "<tr><th>&lt;contactnotify&gt;</th><td>The 'Notify Contact' email address (if set)</td></tr>";
-        echo "<tr><th>&lt;contactnotify2&gt;</th><td>(or 3 or 4) The 'Notify Contact' email address (if set) of the notify contact recursively</td></tr>";
-        echo "<tr><th>&lt;incidentid&gt;</th><td>{$strIncidentID}</td></tr>";
-        echo "<tr><th>&lt;incidentexternalid&gt;</th><td>{$strExternalID}</td></tr>";
-        echo "<tr><th>&lt;incidentexternalengineer&gt;</th><td>{$strExternalEngineersName}</td></tr>";
-        echo "<tr><th>&lt;incidentexternalengineerfirstname&gt;</th><td>{$strExternalEngineersFirstName}</td></tr>";
-        echo "<tr><th>&lt;incidentexternalemail&gt;</th><td>{$strExternalEngineerEmail}</td></tr>";
-        echo "<tr><th>&lt;incidentccemail&gt;</th><td>{$strIncidentCCList}</td></tr>";
-        echo "<tr><th>&lt;incidenttitle&gt;</th><td>{$strIncidentTitle}</td></tr>";
-        echo "<tr><th>&lt;incidentpriority&gt;</th><td>P{$strIncidentPriority}</td></tr>";
-        echo "<tr><th>&lt;incidentsoftware&gt;</th><td>{$strSkillAssignedToIncident}</td></tr>";
-        echo "<tr><th>&lt;incidentowner&gt;</th><td>{$strIncidentOwnersFullName}</td></tr>";
-        echo "<tr><th>&lt;incidentreassignemailaddress&gt;</th><td>The email address of the person a call has been reassigned to</td></tr>";
-        echo "<tr><th>&lt;incidentfirstupdate&gt;</th><td>{$strFirstCustomerVisibleUpdate}</td></tr>";
-        echo "<tr><th>&lt;useremail&gt;</th><td>{$strCurrentUserEmailAddress}</td></tr>";
-        echo "<tr><th>&lt;userrealname&gt;</th><td>{$strFullNameCurrentUser}</td></tr>";
-        echo "<tr><th>&lt;signature&gt;</th><td>{$strCurrentUsersSignature}</td></tr>";
-        echo "<tr><th>&lt;novellid&gt;</th><td>Novell ID of current user</td></tr>";
-        echo "<tr><th>&lt;microsoftid&gt;</th><td>Microsoft ID of current user</td></tr>";
-        echo "<tr><th>&lt;dseid&gt;</th><td>DSE ID of current user</td></tr>";
-        echo "<tr><th>&lt;cheyenneid&gt;</th><td>Cheyenne ID of current user</td></tr>";
-        echo "<tr><th>&lt;applicationname&gt;</th><td>'{$CONFIG['application_name']}'</td></tr>";
-        echo "<tr><th>&lt;applicationversion&gt;</th><td>'{$application_version_string}'</td></tr>";
-        echo "<tr><th>&lt;applicationshortname&gt;</th><td>'{$CONFIG['application_shortname']}'</td></tr>";
-        echo "<tr><th>&lt;supportemail&gt;</th><td>{$strSupportEmailAddress}</td></tr>";
-        echo "<tr><th>&lt;supportmanageremail&gt;</th><td>{$strSupportManagersEmailAddress}</td></tr>";
-        echo "<tr><th>&lt;info1&gt;</th><td>Additional Info #1 (template dependent)</td></tr>";
-        echo "<tr><th>&lt;info2&gt;</th><td>Additional Info #2 (template dependent)</td></tr>";
-
-        echo "<tr><th>&lt;salespersonemail&gt;</th><td>{$strSalespersonAssignedToContactsSiteEmail}</td></tr>";
-        echo "<tr><th>&lt;globalsignature&gt;</th><td>{$strGlobalSignature}</td></tr>";
-        echo "<tr><th>&lt;todaysdate&gt;</th><td>{$strCurrentDate}</td></tr>";
-
         plugin_do('emailtemplate_list');
         echo "</table>\n";
         echo "</div>";

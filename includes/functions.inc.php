@@ -2438,34 +2438,7 @@ function emailtype_replace_specials($string, $incidentid=0, $userid=0)
         $email_regex[] = '/<incidentreassignemailaddress>/s';
         $email_replace[] = user_email($incident->owner);
     }
-
-    //TODO move to seperate plugin
-    if (function_exists('escid_novellid'))
-    {
-        $email_regex[] = '/<novellid>/s';
-        $email_replace[] = escid_novellid($userid);
-    }
-
-    if (function_exists('escid_microsoftid'))
-    {
-        $email_regex[] = '/<microsoftid>/s';
-        $email_replace[] = escid_microsoftid($userid);
-    }
-
-    if (function_exists('escid_dseid'))
-    {
-        $email_regex[] = '/<dseid>/s';
-        $email_replace[] = escid_dseid($userid);
-    }
-
-    if (function_exists('escid_cheyenneid'))
-    {
-        $email_regex[] = '/<cheyenneid>/s';
-        $email_replace[] = escid_cheyenneid($userid);
-    }
-    return preg_replace($email_regex,$email_replace,$string);
 }
-
 
 
 /**

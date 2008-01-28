@@ -53,10 +53,6 @@ if (empty($submit))
     echo "<tr><th>&lt;useremail&gt;</th><td>Email address of current user</td></tr>";
     echo "<tr><th>&lt;userrealname&gt;</th><td>Real name of current user</td></tr>";
     echo "<tr><th>&lt;signature&gt;</th><td>Signature of current user</td></tr>";
-    echo "<tr><th>&lt;novellid&gt;</th><td>Novell ID of current user</td></tr>";
-    echo "<tr><th>&lt;microsoftid&gt;</th><td>Microsoft ID of current user</td></tr>";
-    echo "<tr><th>&lt;dseid&gt;</th><td>DSE ID of current user</td></tr>";
-    echo "<tr><th>&lt;cheyenneid&gt;</th><td>Cheyenne ID of current user</td></tr>";
     echo "<tr><th>&lt;applicationname&gt;</th><td>Name of this application</td></tr>";
     echo "<tr><th>&lt;applicationshortname&gt;</th><td>Short name of this application</td></tr>";
     echo "<tr><th>&lt;applicationversion&gt;</th><td>Version number of this application</td></tr>";

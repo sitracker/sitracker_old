@@ -154,71 +154,107 @@ array('name' => 'Journal',
       );
 
 /**
-    * Template variables
+    * Template variables (Alphabetical order)
     * description - Friendly label
     * replacement - Quoted PHP code to be run to perform the template var replacement
     * action - Optional field, when set the var will only be available for that action
 */
-$ttvararray['{contactemail}'] = array('description' => 'Email address of contact',
+$ttvararray['{applicationname}'] = array('description' => $CONFIG['application_name'],
+                                     'replacement' => '$CONFIG[\'application_name\']');
+
+$ttvararray['{applicationshortname}'] = array('description' => $CONFIG['application_shortname'],
+                                     'replacement' => '$CONFIG[\'application_shortname\']');
+
+$ttvararray['{applicationversion}'] = array('description' => $application_version_string,
+                                     'replacement' => '$application_version_string');
+
+$ttvararray['{contactemail}'] = array('description' => $strIncidentsContactEmail,
                                      'replacement' => 'contact_email($contactid)',
                                      'action' => 'ACTION_EMAIL');
-
-$ttvararray['{contactname}'] = array('description' => 'Full Name of contact',
-                                     'replacement' => 'contact_realname($contactid)');
 
 $ttvararray['{contactfirstname}'] = array('description' => 'First Name of contact',
                                      'replacement' => "strtok(contact_realname(\$contactid),' ')");
 
-$ttvararray['{contactsite}'] = array('description' => 'Site name',
-                                     'replacement' => 'contact_site($contactid)');
-
-$ttvararray['{contactphone}'] = array('description' => 'Contact phone number',
-                                     'replacement' => 'contact_site($contactid)');
+$ttvararray['{contactname}'] = array('description' => 'Full Name of contact',
+                                     'replacement' => 'contact_realname($contactid)');
 
 $ttvararray['{contactnotify}'] = array('description' => 'The Notify Contact email address (if set)',
                                      'replacement' => 'contact_notify_email($contactid)');
 
-$ttvararray['{incidentid}'] = array('description' => 'Incident ID',
+$ttvararray['{contactphone}'] = array('description' => 'Contact phone number',
+                                     'replacement' => 'contact_site($contactid)');
+
+$ttvararray['{contactsite}'] = array('description' => 'Site name',
+                                     'replacement' => 'contact_site($contactid)');
+
+$ttvararray['{globalsignature}'] = array('description' => $strGlobalSignature,
+                                     'replacement' => '');
+
+$ttvararray['{incidentccemail}'] = array('description' => $strIncidentCCList,
+                                     'replacement' => 'incident_ccemail($incidentid)');
+
+$ttvararray['{incidentexternalemail}'] = array('description' => $strExternalEngineerEmail,
+                                     'replacement' => '');
+
+$ttvararray['{incidentexternalengineerfirstname}'] = array('description' => $strExternalEngineersFirstName,
+                                     'replacement' => '');
+
+$ttvararray['{incidentexternalid}'] = array('description' => "{$GLOBALS['strExternalID']}",
+                                     'replacement' => '$incident->externalid');
+
+$ttvararray['{incidentfirstupdate}'] = array('description' => $strFirstCustomerVisibleUpdate,
+                                     'replacement' => '');
+
+$ttvararray['{incidentid}'] = array('description' => $GLOBALS['strIncidentID'],
                                      'replacement' => '$incidentid');
 
+$ttvararray['{incidentowner}'] = array('description' => $strIncidentOwnersFullName,
+                                     'replacement' => '');
+
+$ttvararray['{incidentpriority}'] = array('description' => $strIncidentPriority,
+                                     'replacement' => '');
+
+$ttvararray['{incidentreassignemailaddress}'] = array('description' => 'The email address of the person a call has been reassigned to',
+                                     'replacement' => '');
+
+$ttvararray['{incidentsoftware}'] = array('description' => $strSkillAssignedToIncident,
+                                     'replacement' => '');
+
+$ttvararray['{incidenttitle}'] = array('description' => $strIncidentTitle,
+                                     'replacement' => 'incident_title($incidentid)');
+
+$ttvararray['{salespersonemail}'] = array('description' => $strSalespersonAssignedToContactsSiteEmail,
+                                     'replacement' => '');
+
+$ttvararray['{signature}'] = array('description' => $strCurrentUsersSignature,
+                                     'replacement' => '');
+
+$ttvararray['{supportemail}'] = array('description' => $strSupportEmailAddress,
+                                     'replacement' => '');
+
+$ttvararray['{supportmanageremail}'] = array('description' => $strSupportManagersEmailAddress,
+                                     'replacement' => '');
+
+$ttvararray['{todaysdate}'] = array('description' => $strCurrentDate,
+                                     'replacement' => '');
+
+$ttvararray['{useremail}'] = array('description' => $strCurrentUserEmailAddress,
+                                     'replacement' => '');
+
+$ttvararray['{userrealname}'] = array('description' => $strFullNameCurrentUser,
+                                     'replacement' => '');
 
 
 // Array of template variables available for each trigger type
 $triggertypevars['incident'] = array('{contactemail}', '{contactname}', '{contactfirstname}',
                                      '{contactsite}', '{contactphone}', '{contactnotify}',
-                                     '{incidentid}');
-/*
-        8 => $incident->externalid,
-        9 => incident_ccemail($incidentid),
-        10 => incident_externalengineer($incidentid),
-        11 => strtok(incident_externalengineer($incidentid),' '),
-        12 => incident_externalemail($incidentid),
-        13 => incident_title($incidentid),
-        14 => priority_name(incident_priority($incidentid)),
-        15 => software_name($incident->softwareid),
-        16 => user_realname($incident->owner),
-        17 => user_email($userid),
-        18 => user_realname($userid),
-        19 => $CONFIG['application_name'],
-        20 => $CONFIG['application_shortname'],
-        21 => $application_version_string,
-        22 => $CONFIG['support_email'],
-        23 => $CONFIG['sales_email'],
-        24 => $CONFIG['support_manager_email'],
-        25 => user_signature($userid),
-        26 => global_signature(),
-        27 => date("jS F Y"),
-        28 => user_email(db_read_column('owner', 'sites',
-                                        db_read_column('siteid','contacts',
-                                                       $contactid))),
-        29 => incident_firstupdate($incidentid),
-        30 => contact_email(contact_notify($contactid, 2)),
-        31 => contact_email(contact_notify($contactid, 3)),
-        32 => contact_email(contact_notify($contactid, 4)),
-        33 => $baseurl.'feedback.php?ax='.urlencode(trim(base64_encode(
-                gzcompress(str_rot13(urlencode($CONFIG['feedback_form']).'&&'.
-                urlencode($contactid).'&&'.urlencode($incidentid))))))
-*/
+                                     '{incidentid}', '{incidentexternalid}', '{incidentexternalengineer}',
+                                     '{incidentexternalemail}', '{incidentccemail}', '{incidenttitle}',
+                                     '{incidentpriority}', '{incidentsoftware}','{incidentowner}',
+                                     '{useremail}', '{incidentfirstupdate}');
+
+asort($triggertypevars['incident']);
+
 
 /**
     * Master trigger function, creates a new trigger
@@ -626,9 +662,9 @@ function create_trigger_notice($userid, $noticetext='', $triggertype='',
 */
 function email_templates($triggertype, $name, $selected = '')
 {
-    global $dbEmailType;
+    global $dbEmailType, $dbTriggers;;
     $html .= "<select id='{$name}' name='{$name}'>";
-    $sql = "SELECT * FROM `{$dbEmailType}` WHERE id NOT IN (SELECT template FROM triggers) AND type='{$triggertype}' ORDER BY id";
+    $sql = "SELECT * FROM `{$dbEmailType}` WHERE id NOT IN (SELECT template FROM `{$dbTriggers}`) AND type='{$triggertype}' ORDER BY id";
     $result = mysql_query($sql);
     if (mysql_error()) trigger_error("MySQL Query Error ".mysql_error(), E_USER_WARNING);
     while ($template = mysql_fetch_object($result))
