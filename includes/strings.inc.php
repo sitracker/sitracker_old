@@ -71,7 +71,7 @@ $hmenu[103010] = array_merge(array (10=> array ( 'perm'=> 22, 'name'=> $strManag
 ), $hmenu[103010]);
 if (!is_array($hmenu[103020])) $hmenu[103020] = array();
 $hmenu[103020] = array_merge(array (10=> array ( 'perm'=> 16, 'name'=> $strAddTemplate, 'url'=>"{$CONFIG['application_webpath']}add_emailtype.php?action=showform"),
-                        20=> array ( 'perm'=> 17, 'name'=> $strEditTemplate, 'url'=>"{$CONFIG['application_webpath']}edit_emailtype.php?action=showform"),
+                        20=> array ( 'perm'=> 17, 'name'=> $strEditTemplate, 'url'=>"{$CONFIG['application_webpath']}templates.php"),
                         30=> array ( 'perm'=> 43, 'name'=> $strGlobalSignature, 'url'=>"{$CONFIG['application_webpath']}edit_global_signature.php")
 ), $hmenu[103020]);
 if (!is_array($hmenu[103090])) $hmenu[103090] = array();

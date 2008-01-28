@@ -831,14 +831,14 @@ function triggeraction_description($trigaction, $editlink=FALSE)
         if ($trigaction->action == 'ACTION_EMAIL')
         {
             $templatename = db_read_column('name', 'emailtype', $trigaction->template);
-            if ($editlink) $template = "<a href='edit_emailtype.php?id={$trigaction->template}&amp;action=edit&amp;template=email'>";
+            if ($editlink) $template = "<a href='templates.php?id={$trigaction->template}&amp;action=edit&amp;template=email'>";
             $template .= "{$templatename}";
             if ($editlink) $template .= "</a>";
         }
         elseif  ($trigaction->action == 'ACTION_NOTICE')
         {
             $templatename = db_read_column('name', 'noticetemplates', $trigaction->template);
-            if ($editlink) $template = "<a href='edit_emailtype.php?id={$trigaction->template}&amp;action=edit&amp;template=notice'>";
+            if ($editlink) $template = "<a href='templates.php?id={$trigaction->template}&amp;action=edit&amp;template=notice'>";
             $template .= "{$templatename}";
             if ($editlink) $template .= "</a>";
         }

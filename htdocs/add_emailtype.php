@@ -152,7 +152,7 @@ else
         {
             $id=mysql_insert_id();
             journal(CFG_LOGGING_FULL, 'Administration', 'Email template $id was added', CFG_JOURNAL_ADMIN, $id);
-            html_redirect("edit_emailtype.php?action=showform");
+            html_redirect("templates.php");
         }
     }
 }

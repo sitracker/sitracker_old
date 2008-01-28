@@ -49,7 +49,7 @@ if (user_permission($sit[2],22)) // Administrate
     echo "<thead><tr><th>{$strAdministratorsOnly}</th></tr></thead>";
     echo "<tbody>";
     echo "<tr><td><a href='manage_users.php'>{$strManageUsers}</a></td></tr>";
-    echo "<tr><td><a href='edit_emailtype.php?action=showform'>{$strManageEmailTemplates}</a></td></tr>";
+    echo "<tr><td><a href='templates.php'>{$strManageEmailTemplates}</a></td></tr>";
     echo "<tr><td><a href='browse_journal.php'>{$strBrowse} {$CONFIG['application_shortname']} {$strJournal}</a></td></tr>";
     echo "<tr><td><a href='service_levels.php'>{$strServiceLevels}</a></td></tr>";
     echo "<tr><td><a href='add_productinfo.php?action=showform'>{$strAddProductInformation}</a></td></tr>";
