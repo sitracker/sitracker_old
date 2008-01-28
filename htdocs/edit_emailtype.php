@@ -82,7 +82,7 @@ elseif ($action == "edit")
 
         case 'notice':
         default:
-            $sql = "SELECT * FROM `{$dbNoticeTemplates}` WHERE name='$id' LIMIT 1";
+            $sql = "SELECT * FROM `{$dbNoticeTemplates}` WHERE id='$id' LIMIT 1";
             $title = "{$strEdit}: Notice Template"; // FIXME i18n edit notice template
             $action = 'ACTION_NOTICE';
     }

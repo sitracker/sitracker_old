@@ -838,7 +838,7 @@ function triggeraction_description($trigaction, $editlink=FALSE)
         elseif  ($trigaction->action == 'ACTION_NOTICE')
         {
             $templatename = db_read_column('name', 'noticetemplates', $trigaction->template);
-            if ($editlink) $template = "<a href='edit_emailtype.php?id={$templatename}&amp;action=edit&amp;template=notice'>";
+            if ($editlink) $template = "<a href='edit_emailtype.php?id={$trigaction->template}&amp;action=edit&amp;template=notice'>";
             $template .= "{$templatename}";
             if ($editlink) $template .= "</a>";
         }
