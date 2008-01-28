@@ -587,8 +587,7 @@ function send_trigger_email($userid, $triggertype, $template, $paramarray)
     $mime = new MIME_mail($from, $toemail, $subject, $body, '', $mailerror);
 
     $mailok=$mime->send_mail();
-    if ($mailok==FALSE) trigger_error('Internal error sending email: '.
-                                      $mailerror.'','send_mail() failed');
+    if ($mailok==FALSE) trigger_error('Internal error sending email: '. $mailerror.' send_mail() failed', E_USER_ERROR);
 
     if ($CONFIG['debug'])
     {
@@ -754,9 +753,9 @@ function trigger_checks($checkstrings, $paramarray)
             break;
 
             case 'userid':
-                $sql = "SELECT incidents.owner AS userid ";
+                $sql = "SELECT i.owner AS userid ";
                 $sql .= "FROM `{$dbIncidents}` AS i ";
-                $sql .= "WHERE i.id={$paramarray[incidentid]} ";
+                $sql .= "WHERE i.id='{$paramarray[incidentid]}' ";
                 $query = mysql_query($sql);
                 if (mysql_error()) trigger_error("MySQL Query Error ".mysql_error(), E_USER_WARNING);
                 if($query)
