@@ -94,9 +94,9 @@ elseif ($_REQUEST['mode']=='report')
     $sql .= "WHERE c.siteid = s.id AND s.typeid = st.typeid AND i.opened > ($now-60*60*24*365.25) ";
     $sql .= "AND i.contact=c.id";
 
-    if (empty($incsql)==FALSE OR empty($excsql)==FALSE) $sql .= " AND ";
+    if (empty($incsql) == FALSE OR empty($excsql) == FALSE) $sql .= " AND ";
     if (!empty($incsql)) $sql .= "$incsql";
-    if (empty($incsql)==FALSE AND empty($excsql)==FALSE) $sql .= " AND ";
+    if (empty($incsql) == FALSE AND empty($excsql) == FALSE) $sql .= " AND ";
     if (!empty($excsql)) $sql .= "$excsql";
 
     $sql .= " ORDER BY site, incid ASC ";
@@ -111,8 +111,8 @@ elseif ($_REQUEST['mode']=='report')
     $html .= "<table width='99%' align='center'>";
     $html .= "<tr><th>{$strOpened}</th><th>{$strIncident}</th><th>{$strExternalID}</th><th>{$strTitle}</th><th>{$strContact}</th><th>{$strSite}</th><th>{$strType}</th></tr>";
     $csvfieldheaders .= "{$strOpened},{$strIncident},{$strExternalID},{$strTitle},{$strContact},{$strSite},{$strType}\r\n";
-    $rowcount=0;
-    $externalincidents=0;
+    $rowcount = 0;
+    $externalincidents = 0;
     while ($row = mysql_fetch_object($result))
     {
         $nicedate = ldate('d/m/Y',$row->opened);
@@ -124,7 +124,10 @@ elseif ($_REQUEST['mode']=='report')
             $sitetotals[$row->siteid]['extincidents']++;
         }
         $sitetotals[$row->siteid]['incidents']++;
-        if ($sitetotals[$row->siteid]['name']=='') $sitetotals[$row->siteid]['name']=$row->site;
+        if ($sitetotals[$row->siteid]['name'] == '')
+        {
+            $sitetotals[$row->siteid]['name'] = $row->site;
+        }
 
     }
 
@@ -132,15 +135,22 @@ elseif ($_REQUEST['mode']=='report')
     {
         foreach ($sitetotals AS $sitetotal)
         {
-            if ($sitetotal['incidents'] >= 1) $externalpercent = number_format(($sitetotal['extincidents'] / $sitetotal['incidents'] * 100),1);
-            $html .= "<tr class='shade1'><td colspan='0'>Number of incidents logged by {$sitetotal['name']}: {$sitetotal['incidents']}, Logged externally: {$sitetotal['extincidents']} ({$externalpercent}%)</td></tr>\n";
+            if ($sitetotal['incidents'] >= 1)
+            {
+                $externalpercent = number_format(($sitetotal['extincidents'] / $sitetotal['incidents'] * 100),1);
+            }
+            $html .= "<tr class='shade1'><td colspan='0'>Number of incidents logged by {$sitetotal['name']}: {$sitetotal['incidents']}, Logged externally: {$sitetotal['extincidents']} ({$externalpercent}%)</td></tr>\n"; //FIXME i18n
         }
     }
 
-    if ($numrows >= 1) $externalpercent = number_format(($externalincidents / $numrows * 100),1);
+    if ($numrows >= 1)
+    {
+        $externalpercent = number_format(($externalincidents / $numrows * 100),1);
+    }
+    
     if ($showtotals)
     {
-        $html .= "<tfoot><tr><td colspan='0'>Total Number of incidents logged: {$numrows}, Logged externally: {$externalincidents} ({$externalpercent}%)</td></tr></tfoot>\n";
+        $html .= "<tfoot><tr><td colspan='0'>Total Number of incidents logged: {$numrows}, Logged externally: {$externalincidents} ({$externalpercent}%)</td></tr></tfoot>\n"; // FIXME i18n
     }
 
     $html .= "</table>";

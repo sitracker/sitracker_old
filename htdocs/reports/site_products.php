@@ -45,15 +45,15 @@ if (empty($_REQUEST['mode']))
     echo "</form>";
 
     echo "<table align='center'><tr><td>";
-    echo "<h4>When outputting to a CSV file the format is as follows:</h4>"; // FIXME i18n
-    echo "<strong>Field 1:</strong> {$strSite}<br />"; // FIXME i18n
-    echo "<strong>Field 2:</strong> {$strAddress1}<br />"; // FIXME i18n
-    echo "<strong>Field 3:</strong> {$strAddress2}<br />"; // FIXME i18n
-    echo "<strong>Field 4:</strong> {$strCity}<br />"; // FIXME i18n
-    echo "<strong>Field 5:</strong> {$strCounty}<br />"; // FIXME i18n
-    echo "<strong>Field 6:</strong> {$strCountry}<br />"; // FIXME i18n
-    echo "<strong>Field 7:</strong> {$strPostcode}<br />"; // FIXME i18n
-    echo "<strong>Field 8:</strong> {$strProducts}<br />"; // FIXME i18n
+    echo "<h4>{$strCSVFileFormatAsFollows}:</h4>";
+    echo "<strong>{$strField1}:</strong> {$strSite}<br />";
+    echo "<strong>{$strField1}:</strong> {$strAddress1}<br />";
+    echo "<strong>{$strField1}:</strong> {$strAddress2}<br />";
+    echo "<strong>{$strField1}:</strong> {$strCity}<br />";
+    echo "<strong>{$strField1}:</strong> {$strCounty}<br />";
+    echo "<strong>{$strField1}:</strong> {$strCountry}<br />";
+    echo "<strong>{$strField1}:</strong> {$strPostcode}<br />";
+    echo "<strong>{$strField1}:</strong> {$strProducts}<br />";
     echo "</td></tr></table>";
     include ('htmlfooter.inc.php');
 }

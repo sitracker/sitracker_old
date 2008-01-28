@@ -93,11 +93,11 @@ elseif ($step == '1')
 
     if ($user == $sit[2])
     {
-        echo "<h2>Book ".holiday_type($type)."</h2>";// FIXME i18n
+        echo "<h2>{$strBook} ".holiday_type($type)."</h2>";
     }
     else
     {
-        echo "<h2>Book ".holiday_type($type)." for ".user_realname($user)."</h2>";// FIXME i18n
+        echo "<h2>{$strBook} ".holiday_type($type)." for ".user_realname($user)."</h2>";
     }
 
     if ($type == '2')
@@ -124,7 +124,7 @@ elseif ($step == '1')
         unset($newend);
     }
 
-    echo "<p align='center'><strong>Select Days</strong></p>";// FIXME i18n
+    echo "<p align='center'><strong>{$strSelectDays}</strong></p>";
 
     echo "<table align='center' width='550' class='vertical'>";
     echo "<tr><th>{$strStartDate}</th><td>".ldate($CONFIG['dateformat_date'],$start)."</td></tr>";

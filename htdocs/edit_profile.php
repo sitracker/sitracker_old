@@ -295,7 +295,10 @@ elseif ($mode=='save')
             $result = mysql_query($sql);
             if (mysql_error()) trigger_error("MySQL Query Error ".mysql_error(), E_USER_ERROR);
 
-            if (mysql_affected_rows() < 1) { throw_error("!Error password change failed - new password", "$newpassword1"); }
+            if (mysql_affected_rows() < 1)
+            {
+                throw_error("!Error password change failed - new password", "$newpassword1");
+            }
             $confirm_message = "<h2>Password Changed</h2>\n<p align='center'>You should log out and log back in again</p>\n<p align='center'>Please wait while you are redirected.</p>"; // FIXME i18n
         }
         else
@@ -308,13 +311,13 @@ elseif ($mode=='save')
     if ($realname == "")
     {
         $errors = 1;
-        $error_string .= "<h5 class='error'>You must enter a real name</h5>\n";// FIXME i18n
+        $error_string .= "<h5 class='error'>{$strMustEnterName}</h5>\n";
     }
     // check for blank email address
     if ($email == "")
     {
         $errors = 1;
-        $error_string .= "<h5 class='error'>You must enter an email address</h5>\n";// FIXME i18n
+        $error_string .= "<h5 class='error'>{$strMustEnterEmail}</h5>\n";
     }
     else
     {
@@ -330,7 +333,7 @@ elseif ($mode=='save')
     if ($countexisting > 1)
     {
         $errors++;
-        $error_string .= "<h5 class='error'>Email must be unique</h5>\n";
+        $error_string .= "<h5 class='error'>{$strEmailMustBeUnique}</h5>\n";
     }
     // update database if no errors
     if ($errors == 0)
@@ -363,7 +366,7 @@ elseif ($mode=='save')
             $sql .= "roleid='{$roleid}', ";
         }
 
-        if (!empty($holiday_entitlement) AND $edituserpermission==TRUE)
+        if (!empty($holiday_entitlement) AND $edituserpermission == TRUE)
         {
             $sql .= "holiday_entitlement='{$holiday_entitlement}', ";
         }
