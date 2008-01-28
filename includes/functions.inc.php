@@ -912,64 +912,64 @@ function contact_vcard($id)
 
 function emailtype_to($id)
 {
-    return db_read_column('tofield', 'emailtype', $id);
+    return db_read_column('tofield', $GLOBALS['dbEmailTemplates'], $id);
 }
 
 
 function emailtype_from($id)
 {
-    return db_read_column('fromfield', 'emailtype', $id);
+    return db_read_column('fromfield', $GLOBALS['dbEmailTemplates'], $id);
 }
 
 
 function emailtype_replyto($id)
 {
-    return db_read_column('replytofield', 'emailtype', $id);
+    return db_read_column('replytofield', $GLOBALS['dbEmailTemplates'], $id);
 }
 
 
 function emailtype_cc($id)
 {
-   return db_read_column('ccfield', 'emailtype', $id);
+   return db_read_column('ccfield', $GLOBALS['dbEmailTemplates'], $id);
 }
 
 
 function emailtype_bcc($id)
 {
-    return db_read_column('bccfield', 'emailtype', $id);
+    return db_read_column('bccfield', $GLOBALS['dbEmailTemplates'], $id);
 }
 
 
 function emailtype_subject($id)
 {
-    return db_read_column('subjectfield', 'emailtype', $id);
+    return db_read_column('subjectfield', $GLOBALS['dbEmailTemplates'], $id);
 }
 
 
 function emailtype_body($id)
 {
-    return db_read_column('body', 'emailtype', $id);
+    return db_read_column('body', $GLOBALS['dbEmailTemplates'], $id);
 }
 
 function emailtype_customervisibility($id)
 {
-    return db_read_column('customervisibility', 'emailtype', $id);
+    return db_read_column('customervisibility', $GLOBALS['dbEmailTemplates'], $id);
 }
 
 function emailtype_storeinlog($id)
 {
-    return db_read_column('storeinlog', 'emailtype', $id);
+    return db_read_column('storeinlog', $GLOBALS['dbEmailTemplates'], $id);
 }
 
 function incident_owner($id)
 {
-    return db_read_column('owner', 'incidents', $id);
+    return db_read_column('owner', $GLOBALS['dbIncidents'], $id);
 }
 
 
 function incident_contact($id)
 {
-    return db_read_column('contact', 'incidents', $id);
+    return db_read_column('contact', $GLOBALS['dbIncidents'], $id);
 }
 
 

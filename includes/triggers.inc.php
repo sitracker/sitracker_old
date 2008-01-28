@@ -707,6 +707,7 @@ function notice_templates($name, $selected = '')
 */
 function trigger_checks($checkstrings, $paramarray)
 {
+    global $dbSites, $dbIncidents, $dbContacts;
     $passed = FALSE;
 
     $checks = explode(",", $checkstrings);
@@ -716,11 +717,11 @@ function trigger_checks($checkstrings, $paramarray)
         switch($values[0])
         {
             case 'siteid':
-                $sql = "SELECT sites.id AS siteid ";
-                $sql .= "FROM sites, incidents, contacts ";
-                $sql .= "WHERE incidents.id={$paramarray[incidentid]} ";
-                $sql .= "AND incidents.contact=contacts.id ";
-                $sql .= "AND sites.id=contacts.siteid";
+                $sql = "SELECT s.id AS siteid ";
+                $sql .= "FROM `{$dbSites}` AS s, `{$dbIncidents}` AS i, `{$dbContacts}` ";
+                $sql .= "WHERE i.id={$paramarray[incidentid]} ";
+                $sql .= "AND i.contact=c.id ";
+                $sql .= "AND s.id=c.siteid";
                 $query = mysql_query($sql);
                 if (mysql_error()) trigger_error("MySQL Query Error ".mysql_error(), E_USER_WARNING);
                 if($query)
@@ -735,10 +736,10 @@ function trigger_checks($checkstrings, $paramarray)
             break;
 
             case 'contactid':
-                $sql = "SELECT contacts.id AS contactid ";
-                $sql .= "FROM incidents, contacts ";
-                $sql .= "WHERE incidents.id={$paramarray[incidentid]} ";
-                $sql .= "AND incidents.contact=contacts.id ";
+                $sql = "SELECT c.id AS contactid ";
+                $sql .= "FROM `{$dbIncidents}` AS i, `{$dbContacts}` AS c ";
+                $sql .= "WHERE i.id={$paramarray[incidentid]} ";
+                $sql .= "AND i.contact=c.id ";
                 $query = mysql_query($sql);
                 if (mysql_error()) trigger_error("MySQL Query Error ".mysql_error(), E_USER_WARNING);
                 if($query)
@@ -754,8 +755,8 @@ function trigger_checks($checkstrings, $paramarray)
 
             case 'userid':
                 $sql = "SELECT incidents.owner AS userid ";
-                $sql .= "FROM incidents ";
-                $sql .= "WHERE incidents.id={$paramarray[incidentid]} ";
+                $sql .= "FROM `{$dbIncidents}` AS i ";
+                $sql .= "WHERE i.id={$paramarray[incidentid]} ";
                 $query = mysql_query($sql);
                 if (mysql_error()) trigger_error("MySQL Query Error ".mysql_error(), E_USER_WARNING);
                 if($query)
@@ -770,9 +771,9 @@ function trigger_checks($checkstrings, $paramarray)
             break;
 
             case 'sla':
-                $sql = "SELECT incidents.servicelevel AS sla ";
-                $sql .= "FROM incidents ";
-                $sql .= "WHERE incidents.id={$paramarray[incidentid]} ";
+                $sql = "SELECT i.servicelevel AS sla ";
+                $sql .= "FROM `{$dbIncidents}` AS i ";
+                $sql .= "WHERE i.id={$paramarray[incidentid]} ";
                 $query = mysql_query($sql);
                 if (mysql_error()) trigger_error("MySQL Query Error ".mysql_error(), E_USER_WARNING);
                 if($query)

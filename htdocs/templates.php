@@ -78,11 +78,13 @@ elseif ($action == "edit")
     function recordFocusElement(element)
     {
         $('focuselement').value = element.identify();
+        $('templatevariables').show();
     }
 
     function clearFocusElement()
     {
         $('focuselement').value = '';
+        $('templatevariables').hide();
     }
 
     function insertTemplateVar(tvar)
@@ -177,8 +179,7 @@ elseif ($action == "edit")
                 break;
 
             case 'notice':
-
-                echo "<tr><th>{$strNotice}</th><td>TODO</td></tr>\n";
+                // FIXME i18n
                 echo "<tr><th>Link Text</th>";
                 echo "<td><input id='linktext' maxlength='50' name='linktext' size='50' value=\"{$template->linktext}\" onfocus=\"recordFocusElement(this);\" /></td></tr>\n";
                 echo "<tr><th>Link</th>";
@@ -229,7 +230,7 @@ elseif ($action == "edit")
 
 
             // FIXME i18n email templates
-        echo "<div style='width: 48%; float: right; border: 1px solid #CCCCFF; padding: 10px;'>";
+        echo "<div id='templatevariables' style='width: 48%; float: right; border: 1px solid #CCCCFF; padding: 10px; display:none;'>";
         echo "<h4>Template Variables</h4>"; // FIXME template variables
         if (is_array($triggertypevars[$template->type]))
         {
