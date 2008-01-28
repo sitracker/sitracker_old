@@ -126,6 +126,14 @@ array('name' => 'Own Incident Closed By User',
       'type' => 'incident'
       );
 
+$triggerarray['TRIGGER_LANGUAGE_DIFFERS'] =
+array('name' => 'Current Language Differs',
+      'description' => 'Occurs when your current language setting is different to your profile setting',
+      'required' => array('currentlang', 'profilelang'),
+      'optional' => array(),
+      'type' => 'system'
+     );
+
 
 //set up all the action types
 define(ACTION_NONE, 1);
@@ -422,7 +430,9 @@ function trigger_replace_specials($string, $paramarray)
                             4 => '/<sitpath>/s',
                             5 => '/<sitversion>/s',
                             6 => '/<engineerclosedname>/s',
-                            7 => '/<realname>/s'
+                            7 => '/<realname>/s',
+                            8 => '/<currentlang>/s',
+                            9 => '/<profilelang>/s'
                             );
 
     $trigger_replace = array(0 => $paramarray['incidentid'],
@@ -433,6 +443,8 @@ function trigger_replace_specials($string, $paramarray)
                                 5 => $application_version,
                                 6 => $paramarray['engineerclosedname'],
                                 7 => user_realname($paramarray['userid']),
+                                8 => $paramarray['currentlang'],
+                                9 => $paramarray['profilelang']
                             );
 
     return preg_replace($trigger_regex,$trigger_replace,$string);
