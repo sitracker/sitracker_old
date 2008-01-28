@@ -96,8 +96,7 @@ elseif ($action == "edit")
     if (mysql_num_rows($result) > 0)
     {
         echo "<h2>{$title}</h2>";
-        echo "<h5>".sprintf($strMandatoryMarked,"<sup class='red'>*</sup>")."</h5>";
-        echo "<p align='center'>{$strListOfSpecialIdentifiersEmail}.</p>";
+        echo "<p align='center'>".sprintf($strMandatoryMarked,"<sup class='red'>*</sup>")."</p>";
         echo "<div style='width: 48%; float: left;'>";
         echo "<form name='edittemplate' action='{$_SERVER['PHP_SELF']}?action=update' method='post' onsubmit='return confirm_submit(\"{$strAreYouSureEditEmailTemplate}\")'>";
         echo "<table class='vertical' width='100%'>";
@@ -115,9 +114,15 @@ elseif ($action == "edit")
         {
             echo "<tr><th>{$strTrigger}</th><td>{$strNone}</td></tr>\n";
         }
+
+        // Set template type to the trigger type if no type is already specified
+        if (empty($template->type)) $template->type = $triggerarray[$trigaction->triggerid]['type'];
+
+
         echo "<tr><th>{$strID}: <sup class='red'>*</sup></th><td>";
         echo "<input maxlength='50' name='name' size='35' value='{$template->id} 'readonly='readonly' disabled='disabled' /></td></tr>\n";
         echo "<tr><th>Template Type:</th><td>{$template->type}";  // FIXME Temporary, remove before release
+        echo "<tr><th>{$strTemplate}: <sup class='red'>*</sup></th><td><input maxlength='100' name='name' size='40' value=\"{$template->name}\" /></td></tr>\n";
         echo "<tr><th>{$strDescription}: <sup class='red'>*</sup></th><td><textarea name='description' cols='50' rows='5'>{$template->description}</textarea></td></tr>\n";
         switch ($templatetype)
         {
@@ -135,16 +140,20 @@ elseif ($action == "edit")
             case 'notice':
 
                 echo "<tr><th>{$strNotice}</th><td>TODO</td></tr>\n";
+                echo "<tr><th>Link Text</th><td><input maxlength='50' name='linktext' size='50' value=\"{$template->linktext}\" /></td></tr>\n";
+                echo "<tr><th>Link</th><td><input maxlength='100' name='linktext' size='50' value=\"{$template->link}\" /></td></tr>\n";
+                echo "<tr><th>Durability</th><td><input maxlength='100' name='linktext' size='10' value=\"{$template->durability}\" /></td></tr>\n";
 
         }
-
-        // Set template type to the trigger type if no type is already specified
-        if (empty($template->type)) $template->type = $triggerarray[$trigaction->triggerid]['type'];
 
         if ($trigaction AND $template->type != $triggerarray[$trigaction->triggerid]['type']) echo "<p class='warning'>Trigger type mismatch</p>";
         echo "</td></tr>\n";
 
-        echo "</td></tr>\n";
+
+        if ($templatetype=='email') $body = $template->body;
+        else $body = $template->text;
+        echo "<tr><th>{$strText}</th><td><textarea name='bodytext' rows='20' cols='50'>{$body}</textarea></td>";
+
         if ($template->type=='incident')
         {
             echo "<tr><th></th><td><label><input type='checkbox' name='storeinlog' value='Yes' ";
@@ -161,9 +170,6 @@ elseif ($action == "edit")
             echo " /> {$strVisibleToCustomer})";
             echo "</td></tr>\n";
         }
-        if ($templatetype=='email') $body = $template->body;
-        else $body = $template->text;
-        echo "<tr><th>{$strText}</th><td><textarea name='bodytext' rows='20' cols='50'>{$body}</textarea></td>";
         echo "</table>\n";
 
         echo "<p>";
@@ -171,6 +177,7 @@ elseif ($action == "edit")
         echo "<input name='id' type='hidden' value='{$id}' />";
         echo "<input name='submit' type='submit' value=\"{$strSave}\" />";
         echo "</p>\n";
+        // FIXME when to allow deletion?
         if ($emailtype['type']=='user') echo "<p align='center'><a href='{$_SERVER['PHP_SELF']}?action=delete&amp;id={$id}'>{$strDelete}</a></p>";
         echo "</form>";
         echo "</div>";
@@ -179,15 +186,22 @@ elseif ($action == "edit")
             // FIXME i18n email templates
         echo "<div style='width: 48%; float: right; border: 1px solid #CCCCFF; padding: 10px;'>";
         echo "<h4>Template Variables</h4>"; // FIXME template variables
-        echo "<p align='center'>{$strFollowingSpecialIdentifiers}</p>";
-        echo "<dl>";
-        foreach ($triggertypevars[$template->type] AS $triggertypevar => $identifier)
+        if (is_array($triggertypevars[$template->type]))
         {
-            echo "<dt><code>{$identifier}</code></dt>";
-            if (!empty($ttvararray[$identifier]['description'])) echo "<dd>{$ttvararray[$identifier]['description']}";
-            echo "<br />";
+            echo "<p align='center'>{$strFollowingSpecialIdentifiers}</p>";
+            echo "<dl>";
+            foreach ($triggertypevars[$template->type] AS $triggertypevar => $identifier)
+            {
+                echo "<dt><code>{$identifier}</code></dt>";
+                if (!empty($ttvararray[$identifier]['description'])) echo "<dd>{$ttvararray[$identifier]['description']}";
+                echo "<br />";
+            }
+            echo "</dl>";
         }
-        echo "</dl>";
+        else
+        {
+            echo "<p align='center'>{$strNoneAvailable}</p>";
+        }
         plugin_do('emailtemplate_list');
         echo "</table>\n";
         echo "</div>";

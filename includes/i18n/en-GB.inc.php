@@ -584,7 +584,6 @@ $strListShowsContacts = 'This list shows contacts that matched your search, if s
 $strListShowsContracts = 'This list shows contracts, i.e. supported contacts and the products they are supported for. Click on the appropriate \'%s\' link to begin adding the incident';
 $strListSkills = 'List Skills';
 $strLinkSkillToX = 'Link skill to %s';
-$strListOfSpecialIdentifiersEmail = 'A list of special identifiers that can be used in these fields is given at the bottom of the page';
 $strLoggedUnder = 'This incident is logged under contract %d';
 $strLogged = 'logged';
 $strLoggedInAs = 'Logged in as: %s';
