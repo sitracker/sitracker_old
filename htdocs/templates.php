@@ -61,7 +61,7 @@ if (empty($action) OR $action == 'showform' OR $action == 'list')
         echo "<td>{$template['id']}</td>";
         echo "<td>{$template['name']}</td>";
         echo "<td>{$template['desc']}</td>";
-        echo "<td><a href='{$_SERVER['PHP_SELF']}?id={$template['id']}&amp;action=edit&amp;template={$template['id']}'>{$strEdit}</a></td>";
+        echo "<td><a href='{$_SERVER['PHP_SELF']}?id={$template['id']}&amp;action=edit&amp;template={$template['template']}'>{$strEdit}</a></td>";
         echo "</tr>\n";
         if ($shade=='shade1') $shade='shade2';
         else $shade='shade1';
@@ -98,7 +98,7 @@ elseif ($action == "edit")
         echo "<h2>{$title}</h2>";
         echo "<p align='center'>".sprintf($strMandatoryMarked,"<sup class='red'>*</sup>")."</p>";
         echo "<div style='width: 48%; float: left;'>";
-        echo "<form name='edittemplate' action='{$_SERVER['PHP_SELF']}?action=update' method='post' onsubmit='return confirm_submit(\"{$strAreYouSureEditEmailTemplate}\")'>";
+        echo "<form name='edittemplate' action='{$_SERVER['PHP_SELF']}?action=update' method='post' onsubmit='return confirm_submit(\"{$strAreYouSureMakeTheseChanges}\")'>";
         echo "<table class='vertical' width='100%'>";
 
         $tsql = "SELECT * FROM `{$dbTriggers}` WHERE action = '{$action}' AND template = '$id' LIMIT 1";
@@ -120,7 +120,7 @@ elseif ($action == "edit")
 
 
         echo "<tr><th>{$strID}: <sup class='red'>*</sup></th><td>";
-        echo "<input maxlength='50' name='name' size='35' value='{$template->id} 'readonly='readonly' disabled='disabled' /></td></tr>\n";
+        echo "<input maxlength='50' name='name' size='5' value='{$template->id} 'readonly='readonly' disabled='disabled' /></td></tr>\n";
         echo "<tr><th>Template Type:</th><td>{$template->type}";  // FIXME Temporary, remove before release
         echo "<tr><th>{$strTemplate}: <sup class='red'>*</sup></th><td><input maxlength='100' name='name' size='40' value=\"{$template->name}\" /></td></tr>\n";
         echo "<tr><th>{$strDescription}: <sup class='red'>*</sup></th><td><textarea name='description' cols='50' rows='5'>{$template->description}</textarea></td></tr>\n";
@@ -141,8 +141,8 @@ elseif ($action == "edit")
 
                 echo "<tr><th>{$strNotice}</th><td>TODO</td></tr>\n";
                 echo "<tr><th>Link Text</th><td><input maxlength='50' name='linktext' size='50' value=\"{$template->linktext}\" /></td></tr>\n";
-                echo "<tr><th>Link</th><td><input maxlength='100' name='linktext' size='50' value=\"{$template->link}\" /></td></tr>\n";
-                echo "<tr><th>Durability</th><td><input maxlength='100' name='linktext' size='10' value=\"{$template->durability}\" /></td></tr>\n";
+                echo "<tr><th>Link</th><td><input maxlength='100' name='link' size='50' value=\"{$template->link}\" /></td></tr>\n";
+                echo "<tr><th>Durability</th><td><input maxlength='100' name='durability' size='10' value=\"{$template->durability}\" /></td></tr>\n";
 
         }
 
@@ -163,7 +163,7 @@ elseif ($action == "edit")
             }
             echo " /> {$strStoreInLog}</label>";
             echo " &nbsp; (<input type='checkbox' name='cust_vis' value='yes' ";
-            if ($emailtype['customervisibility'] == 'show')
+            if ($template->customervisibility == 'show')
             {
                 echo "checked='checked'";
             }
@@ -173,12 +173,13 @@ elseif ($action == "edit")
         echo "</table>\n";
 
         echo "<p>";
-        echo "<input name='type' type='hidden' value='{$emailtype['type']}' />";
+        echo "<input name='type' type='hidden' value='{$template->type}' />";
+        echo "<input name='template' type='hidden' value='{$templatetype}' />";
         echo "<input name='id' type='hidden' value='{$id}' />";
         echo "<input name='submit' type='submit' value=\"{$strSave}\" />";
         echo "</p>\n";
         // FIXME when to allow deletion?
-        if ($emailtype['type']=='user') echo "<p align='center'><a href='{$_SERVER['PHP_SELF']}?action=delete&amp;id={$id}'>{$strDelete}</a></p>";
+        if ($template->type=='user') echo "<p align='center'><a href='{$_SERVER['PHP_SELF']}?action=delete&amp;id={$id}'>{$strDelete}</a></p>";
         echo "</form>";
         echo "</div>";
 
@@ -232,61 +233,29 @@ elseif ($action == "delete")
 }
 elseif ($action == "update")
 {
-    // Add new email type
-
     // External variables
+    $template = cleanvar($_POST['template']);
     $name = cleanvar($_POST['name']);
     $description = cleanvar($_POST['description']);
-    // We don't strip tags because that would also strip our special tags
-    $tofield = mysql_real_escape_string($_POST['tofield']);
-    $fromfield = mysql_real_escape_string($_POST['fromfield']);
-    $replytofield = mysql_real_escape_string($_POST['replytofield']);
-    $ccfield = mysql_real_escape_string($_POST['ccfield']);
-    $bccfield = mysql_real_escape_string($_POST['bccfield']);
-    $subjectfield = mysql_real_escape_string($_POST['subjectfield']);
-    $bodytext = mysql_real_escape_string($_POST['bodytext']);
+
+    $tofield = cleanvar($_POST['tofield']);
+    $fromfield = cleanvar($_POST['fromfield']);
+    $replytofield = cleanvar($_POST['replytofield']);
+    $ccfield = cleanvar($_POST['ccfield']);
+    $bccfield = cleanvar($_POST['bccfield']);
+    $subjectfield = cleanvar($_POST['subjectfield']);
+    $bodytext = cleanvar($_POST['bodytext']);
+
+    $link = cleanvar($_POST['link']);
+    $linktext = cleanvar($_POST['linktext']);
+    $durability = cleanvar($_POST['durability']);
+
     $cust_vis = cleanvar($_POST['cust_vis']);
     $storeinlog = cleanvar($_POST['storeinlog']);
     $id = cleanvar($_POST['id']);
     $type = cleanvar($_POST['type']);
 
-    // check form input
-    $errors = 0;
-    // check for blank name
-    if ($name == "")
-    {
-        $errors = 1;
-        echo "<p class='error'>You must enter a name for the email type</p>\n";
-    }
-    // check for blank to field
-    if ($tofield == "")
-    {
-        $errors = 1;
-        echo "<p class='error'>You must enter a 'To' field</p>\n";
-    }
-    // check for blank from field
-    if ($fromfield == "")
-    {
-        $errors = 1;
-        echo "<p class='error'>You must enter a 'From' field</p>\n";
-    }
-    // check for blank reply to field
-    if ($replytofield == "")
-    {
-        $errors = 1;
-        echo "<p class='error'>You must enter a 'Reply To' field</p>\n";
-    }
-    // check for blank type
-    if ($type == "")
-    {
-        $errors = 1;
-        trigger_error("Invalid input, blank type",E_USER_ERROR);
-    }
-    if ($type == 'system' AND is_numeric($name))
-    {
-        $errors++;
-        echo "<p class='error'>System email templates cannot have a name that consists soley of numbers</p>\n";
-    }
+//     echo "<pre>".print_r($_POST,true)."</pre>";
 
     // User templates may not have _ (underscore) in their names, we replace with spaces
     // in contrast system templates must have _ (underscore) instead of spaces, so we do a replace
@@ -301,22 +270,38 @@ elseif ($action == "update")
     if ($storeinlog=='Yes') $storeinlog='Yes';
     else $storeinlog='No';
 
-
-    if ($errors == 0)
+    switch ($template)
     {
-        $sql  = "UPDATE emailtype SET name='$name', description='$description', tofield='$tofield', fromfield='$fromfield', ";
-        $sql .= "replytofield='$replytofield', ccfield='$ccfield', bccfield='$bccfield', subjectfield='$subjectfield', ";
-        $sql .= "body='$bodytext', customervisibility='$cust_vis', storeinlog='$storeinlog' ";
-        $sql .= "WHERE id='$id' LIMIT 1";
-        $result = mysql_query($sql);
-        if (mysql_error()) trigger_error("MySQL Query Error ".mysql_error(), E_USER_ERROR);
+        case 'email':
+            $sql  = "UPDATE `{$dbEmailTemplates}` SET name='$name', description='$description', tofield='$tofield', fromfield='$fromfield', ";
+            $sql .= "replytofield='$replytofield', ccfield='$ccfield', bccfield='$bccfield', subjectfield='$subjectfield', ";
+            $sql .= "body='$bodytext', customervisibility='$cust_vis', storeinlog='$storeinlog' ";
+            $sql .= "WHERE id='$id' LIMIT 1";
+        break;
 
-        if (!$result) echo "<p class='error'>Update of Email Type Failed\n";
-        else
-        {
-            journal(CFG_LOGGING_NORMAL, 'Email Template Updated', "Email Template {$type} was modified", CFG_JOURNAL_ADMIN, $type);
-            html_redirect("edit_emailtype.php");
-        }
+        case 'notice':
+            $sql  = "UPDATE `{$dbNoticeTemplates}` SET name='$name', description='$description', type='', ";
+            $sql .= "linktext='{$linktext}', link='{$link}', durability='{$durability}', ";
+            $sql .= "text='$bodytext' ";
+            $sql .= "WHERE id='$id' LIMIT 1";
+        break;
+
+        default:
+            trigger_error('Error: Invalid template type', E_USER_WARNING);
+            html_redirect($_SERVER['PHP_SELF'], FALSE);
+    }
+
+//     echo $sql;
+    $result = mysql_query($sql);
+    if (mysql_error()) trigger_error("MySQL Query Error ".mysql_error(), E_USER_ERROR);
+    if ($result)
+    {
+        journal(CFG_LOGGING_NORMAL, 'Email Template Updated', "Email Template {$type} was modified", CFG_JOURNAL_ADMIN, $type);
+        html_redirect($_SERVER['PHP_SELF']);
+    }
+    else
+    {
+        html_redirect($_SERVER['PHP_SELF'], FALSE);
     }
 }
 ?>
