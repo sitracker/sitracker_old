@@ -1,5 +1,5 @@
 <?php
-// edit_emailtype.php - Form for editing email templates
+// templates.php - Manage email and notice templates
 //
 // SiT (Support Incident Tracker) - Support call tracking system
 // Copyright (C) 2000-2008 Salford Software Ltd. and Contributors
@@ -9,7 +9,7 @@
 //
 
 @include ('set_include_path.inc.php');
-$permission = 17; // Edit Email Template
+$permission = 17; // Edit Template
 
 require ('db_connect.inc.php');
 require ('functions.inc.php');
@@ -36,7 +36,7 @@ if (empty($action) OR $action == 'showform' OR $action == 'list')
     echo "<p align='center'><a href='triggers.php'>{$strTriggers}</a> | <a href='add_emailtype.php?action=showform'>{$strAddEmailTemplate}</a> | ";
     echo "<a href='edit_global_signature.php'>{$strEditGlobalSignature}</a></p>";
 
-    $sql = "SELECT * FROM `{$dbEmailType}` ORDER BY id";
+    $sql = "SELECT * FROM `{$dbEmailTemplates}` ORDER BY id";
     $result = mysql_query($sql);
     if (mysql_error()) trigger_error("MySQL Query Error ".mysql_error(), E_USER_ERROR);
     while ($email = mysql_fetch_object($result))
@@ -76,7 +76,7 @@ elseif ($action == "edit")
     switch ($templatetype)
     {
         case 'email':
-            $sql = "SELECT * FROM `{$dbEmailType}` WHERE id='$id'";
+            $sql = "SELECT * FROM `{$dbEmailTemplates}` WHERE id='$id'";
             $title = "{$strEdit}: $strEmailTemplate";
             $action = 'ACTION_EMAIL';
             break;
@@ -224,7 +224,7 @@ elseif ($action == "delete")
         exit;
     }
     // We only allow user templates to be deleted
-    $sql = "DELETE FROM `{$dbEmailType}` WHERE id='$id' AND type='user' LIMIT 1";
+    $sql = "DELETE FROM `{$dbEmailTemplates}` WHERE id='$id' AND type='user' LIMIT 1";
     mysql_query($sql);
     if (mysql_error()) trigger_error(mysql_error(),E_USER_ERROR);
     header("Location: {$_SERVER['PHP_SELF']}?action=showform");

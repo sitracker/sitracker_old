@@ -623,7 +623,7 @@ $emailtype|$newincidentstatus|$timetonextaction_none|$timetonextaction_days|$tim
             }
 
             // Lookup the email template (we need this to find out if the update should be visible or not)
-            $sql = "SELECT * FROM `{$dbEmailType}` WHERE id='$emailtype' ";
+            $sql = "SELECT * FROM `{$dbEmailTemplates}` WHERE id='$emailtype' ";
             $result = mysql_query($sql);
             if (mysql_error()) trigger_error("MySQL Query Error ".mysql_error(), E_USER_ERROR);
             if (mysql_num_rows($result) < 1) trigger_error("Email template '{$meailtype}' not found",E_USER_ERROR);

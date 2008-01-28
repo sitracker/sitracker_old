@@ -1726,7 +1726,7 @@ ALTER TABLE `triggers` ADD `checks` VARCHAR( 255 ) NULL ;
 
 -- INL 28/01/08
 ALTER TABLE `triggers` CHANGE `template` `template` INT( 11 ) NOT NULL
-
+RENAME TABLE `emailtype`  TO `emailtemplates` ;
 ";
 
 // Important: When making changes to the schema you must add SQL to make the alterations

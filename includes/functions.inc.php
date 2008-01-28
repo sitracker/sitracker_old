@@ -1943,9 +1943,9 @@ function userstatus_bardrop_down($name, $id)
 */
 function emailtype_drop_down($name, $id)
 {
-    global $dbEmailType;
+    global $dbEmailTemplates;
     // INL 22Apr05 Added a filter to only show user templates
-    $sql  = "SELECT id, name, description FROM `{$dbEmailType}` WHERE type='user' ORDER BY name ASC";
+    $sql  = "SELECT id, name, description FROM `{$dbEmailTemplates}` WHERE type='user' ORDER BY name ASC";
     $result = mysql_query($sql);
     if (mysql_error()) trigger_error(mysql_error(),E_USER_WARNING);
 
@@ -3446,7 +3446,7 @@ function send_template_email($template, $incidentid, $info1='', $info2='')
 {
     throw_error("send_template_email() is deprecated in 3.40+", "Use trigger() instead");
     global $CONFIG, $application_version_string, $sit, $now;
-    global $dbUpdates, $dbEmailType;
+    global $dbUpdates, $dbEmailTemplates;
     if (empty($template)) throw_error('Blank template ID:', 'send_template_email()');
     if (empty($incidentid)) throw_error('Blank incident ID:', 'send_template_email()');
 
@@ -3457,7 +3457,7 @@ function send_template_email($template, $incidentid, $info1='', $info2='')
     else
     {
         // Lookup the template id using the name
-        $sql = "SELECT id FROM `{$dbEmailtype}` WHERE name='$template' LIMIT 1";
+        $sql = "SELECT id FROM `{$dbEmailTemplates}` WHERE name='$template' LIMIT 1";
         $result = mysql_query($sql);
         if (mysql_error()) trigger_error(mysql_error(),E_USER_WARNING);
         list($templateid) = mysql_fetch_row($result);
