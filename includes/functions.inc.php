@@ -1319,7 +1319,7 @@ function contact_site_drop_down($name, $id, $siteid='', $exclude='')
     $result = mysql_query($sql);
     if (mysql_error()) trigger_error(mysql_error(),E_USER_WARNING);
 
-
+    echo "<select name='$name'>";
     while ($contacts = mysql_fetch_object($result))
     {
             if ($contacts->contactid != $exclude)
