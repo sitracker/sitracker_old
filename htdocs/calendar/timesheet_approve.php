@@ -33,7 +33,7 @@ if ($user == '')
     $mygroup = mysql_fetch_array($uresult);
     $sql = "SELECT DISTINCT owner FROM `{$dbTasks}` AS t, `{$dbUsers}` AS u, `{$dbGroups}` AS g ";
     $sql .= "WHERE completion = 1 AND distribution='event' AND u.groupid = {$mygroup['groupid']} AND ";
-    $sql .= "us.id = t.owner ORDER BY owner";
+    $sql .= "u.id = t.owner ORDER BY owner";
     $result = mysql_query($sql);
     if (mysql_error()) trigger_error("MySQL Query Error ".mysql_error(), E_USER_ERROR);
     if (mysql_num_rows($result) > 0)
