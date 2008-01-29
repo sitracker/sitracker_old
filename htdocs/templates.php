@@ -157,6 +157,9 @@ elseif ($action == "edit")
         echo "<tr><th>{$strID}: <sup class='red'>*</sup></th><td>";
         echo "<input maxlength='50' name='name' size='5' value='{$template->id} 'readonly='readonly' disabled='disabled' /></td></tr>\n";
         echo "<tr><th>Template Type:</th><td>{$template->type}";  // FIXME Temporary, remove before release
+        echo "<br />required: ".print_r($triggerarray[$trigaction->triggerid]['required'], true)."<br />";
+        echo "</td><tr>";
+
         echo "<tr><th>{$strTemplate}: <sup class='red'>*</sup></th><td><input maxlength='100' name='name' size='40' value=\"{$template->name}\" /></td></tr>\n";
         echo "<tr><th>{$strDescription}: <sup class='red'>*</sup></th><td><textarea name='description' cols='50' rows='5' onfocus=\"clearFocusElement(this);\">{$template->description}</textarea></td></tr>\n";
         switch ($templatetype)
@@ -230,24 +233,32 @@ elseif ($action == "edit")
 
 
             // FIXME i18n email templates
+        // Show a list of available template variables.  Only variables that have 'requires' matching the 'required'
+        // that the trigger provides is shown
         echo "<div id='templatevariables' style='width: 48%; float: right; border: 1px solid #CCCCFF; padding: 10px; display:none;'>";
         echo "<h4>Template Variables</h4>"; // FIXME template variables
-        if (is_array($triggertypevars[$template->type]))
+        echo "<p align='center'>{$strFollowingSpecialIdentifiers}</p>";
+        echo "<dl>";
+        foreach ($ttvararray AS $identifier => $ttvar)
         {
-            echo "<p align='center'>{$strFollowingSpecialIdentifiers}</p>";
-            echo "<dl>";
-            foreach ($triggertypevars[$template->type] AS $triggertypevar => $identifier)
+            $showtvar = FALSE;
+            if (empty($ttvar['requires'])) $showtvar = TRUE;
+            else
+            {
+                if (!is_array($ttvar['requires'])) $ttvar['requires'] = array($ttvar['requires']);
+                foreach ($ttvar['requires'] as $needle)
+                {
+                    if (in_array($needle, $triggerarray[$trigaction->triggerid]['required'])) $showtvar = TRUE;
+                }
+            }
+            if ($showtvar)
             {
                 echo "<dt><code><a href=\"javascript:insertTemplateVar('{$identifier}');\">{$identifier}</a></code></dt>";
-                if (!empty($ttvararray[$identifier]['description'])) echo "<dd>{$ttvararray[$identifier]['description']}";
+                if (!empty($ttvar['description'])) echo "<dd>{$ttvar['description']}";
                 echo "<br />";
             }
-            echo "</dl>";
         }
-        else
-        {
-            echo "<p align='center'>{$strNoneAvailable}</p>";
-        }
+        echo "</dl>";
         plugin_do('emailtemplate_list');
         echo "</table>\n";
         echo "</div>";

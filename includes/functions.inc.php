@@ -3436,6 +3436,7 @@ function html_checkbox($name,$state)
     }
 }
 
+
 /**
     * Sends an email, replacing certain special keys with values based on the email
     * template chosen

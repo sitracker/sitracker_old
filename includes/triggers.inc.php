@@ -8,6 +8,7 @@
 // of the GNU General Public License, incorporated herein by reference.
 
 // Author: Kieran Hogg <kieran_hogg[at]users.sourceforge.net>
+//         Ivan Lucas <ivanlucas[at]users.sourceforge.net>
 
 include ('mime.inc.php');
 
@@ -27,8 +28,7 @@ array('name' => 'Incident Created',
       'description' => 'Occurs when a new incident has been created',
       'required' => array('incidentid'),
       'optional' => array('contactid', 'siteid', 'priority'),
-      'type' => 'incident'
-      );
+      'type' => 'incident');
 
 $triggerarray['TRIGGER_INCIDENT_ASSIGNED'] =
 array('name' => 'Incident Assigned',
@@ -165,6 +165,7 @@ array('name' => 'Journal',
     * Template variables (Alphabetical order)
     * description - Friendly label
     * replacement - Quoted PHP code to be run to perform the template var replacement
+    * requires -Optional field. single string or array. Specifies the 'required' params from the trigger that is needed for this replacement
     * action - Optional field, when set the var will only be available for that action
 */
 $ttvararray['{applicationname}'] = array('description' => $CONFIG['application_name'],
@@ -177,61 +178,83 @@ $ttvararray['{applicationversion}'] = array('description' => $application_versio
                                      'replacement' => '$application_version_string');
 
 $ttvararray['{contactemail}'] = array('description' => $strIncidentsContactEmail,
+                                      'requires' => 'contactid',
                                      'replacement' => 'contact_email($contactid)',
                                      'action' => 'ACTION_EMAIL');
 
 $ttvararray['{contactfirstname}'] = array('description' => 'First Name of contact',
+                                     'requires' => 'contactid',
                                      'replacement' => "strtok(contact_realname(\$contactid),' ')");
 
 $ttvararray['{contactname}'] = array('description' => 'Full Name of contact',
+                                     'requires' => 'contactid',
                                      'replacement' => 'contact_realname($contactid)');
 
 $ttvararray['{contactnotify}'] = array('description' => 'The Notify Contact email address (if set)',
+                                      'requires' => 'contactid',
                                      'replacement' => 'contact_notify_email($contactid)');
 
 $ttvararray['{contactphone}'] = array('description' => 'Contact phone number',
+                                     'requires' => 'contactid',
                                      'replacement' => 'contact_site($contactid)');
 
 $ttvararray['{contactsite}'] = array('description' => 'Site name',
+                                     'requires' => 'siteid',
                                      'replacement' => 'contact_site($contactid)');
 
 $ttvararray['{globalsignature}'] = array('description' => $strGlobalSignature,
-                                     'replacement' => '');
+                                     'replacement' => 'global_signature()');
 
 $ttvararray['{incidentccemail}'] = array('description' => $strIncidentCCList,
+                                     'requires' => 'incidentid',
                                      'replacement' => 'incident_ccemail($incidentid)');
 
 $ttvararray['{incidentexternalemail}'] = array('description' => $strExternalEngineerEmail,
-                                     'replacement' => '');
+                                     'requires' => 'incidentid',
+                                     'replacement' => 'incident_externalemail($incidentid)');
+
+$ttvararray['{incidentexternalengineer}'] = array('description' => $strExternalEngineer,
+                                     'requires' => 'incidentid',
+                                     'replacement' => 'incident_externalengineer($incidentid)');
+
 
 $ttvararray['{incidentexternalengineerfirstname}'] = array('description' => $strExternalEngineersFirstName,
-                                     'replacement' => '');
+                                     'requires' => 'incidentid',
+                                     'replacement' => 'strtok(incident_externalengineer($incidentid),\' \')');
 
 $ttvararray['{incidentexternalid}'] = array('description' => "{$GLOBALS['strExternalID']}",
+                                     'requires' => 'incidentid',
                                      'replacement' => '$incident->externalid');
 
 $ttvararray['{incidentfirstupdate}'] = array('description' => $strFirstCustomerVisibleUpdate,
                                      'replacement' => '');
 
 $ttvararray['{incidentid}'] = array('description' => $GLOBALS['strIncidentID'],
-                                     'replacement' => '$incidentid');
+                                     'requires' => 'incidentid',
+                                     'replacement' => '$paramarray[incidentid]');
 
 $ttvararray['{incidentowner}'] = array('description' => $strIncidentOwnersFullName,
+                                     'requires' => 'incidentid',
                                      'replacement' => '');
 
 $ttvararray['{incidentpriority}'] = array('description' => $strIncidentPriority,
+                                     'requires' => 'incidentid',
                                      'replacement' => '');
 
 $ttvararray['{incidentreassignemailaddress}'] = array('description' => 'The email address of the person a call has been reassigned to',
+                                     'requires' => 'incidentid',
                                      'replacement' => '');
 
 $ttvararray['{incidentsoftware}'] = array('description' => $strSkillAssignedToIncident,
+                                     'requires' => 'incidentid',
                                      'replacement' => '');
 
 $ttvararray['{incidenttitle}'] = array('description' => $strIncidentTitle,
+                                     'requires' => 'incidentid',
                                      'replacement' => 'incident_title($incidentid)');
 
 $ttvararray['{salespersonemail}'] = array('description' => $strSalespersonAssignedToContactsSiteEmail,
+                                     'requires' => 'siteid',
                                      'replacement' => '');
 
 $ttvararray['{signature}'] = array('description' => $strCurrentUsersSignature,
@@ -253,17 +276,6 @@ $ttvararray['{userrealname}'] = array('description' => $strFullNameCurrentUser,
                                      'replacement' => '');
 
 
-// Array of template variables available for each trigger type
-$triggertypevars['incident'] = array('{contactemail}', '{contactname}', '{contactfirstname}',
-                                     '{contactsite}', '{contactphone}', '{contactnotify}',
-                                     '{incidentid}', '{incidentexternalid}', '{incidentexternalengineer}',
-                                     '{incidentexternalemail}', '{incidentccemail}', '{incidenttitle}',
-                                     '{incidentpriority}', '{incidentsoftware}','{incidentowner}',
-                                     '{useremail}', '{incidentfirstupdate}');
-
-asort($triggertypevars['incident']);
-
-
 /**
     * Master trigger function, creates a new trigger
     * @author Kieran Hogg
@@ -274,6 +286,7 @@ asort($triggertypevars['incident']);
 function trigger($triggerid, $paramarray='')
 {
     global $sit, $CONFIG, $dbg, $dbTriggers, $triggerarray;
+    global $dbTriggers;
 
     // Check that this is a defined trigger
     if (!array_key_exists($triggerid, $triggerarray))
@@ -302,23 +315,24 @@ function trigger($triggerid, $paramarray='')
     {
         $sql .= "AND userid={$userid}";
     }
-    $query = mysql_query($sql);
+    $result = mysql_query($sql);
+    echo $sql;
     if (mysql_error()) trigger_error("MySQL Query Error ".mysql_error(), E_USER_WARNING);
-    while ($result = mysql_fetch_object($query))
+    while ($triggerobj = mysql_fetch_object($result))
     {
         //see if we have any checks first
-        if(!empty($result->checks))
+        if(!empty($triggerobj->checks))
         {
-            if (!trigger_checks($result->checks, $paramarray))
+            if (!trigger_checks($triggerobj->checks, $paramarray))
             {
                 return;
             }
         }
 
         //if we have any params from the actual trigger, append to user params
-        if (!empty($result->parameters))
+        if (!empty($triggerobj->parameters))
         {
-            $resultparams = explode(",", $result->parameters);
+            $resultparams = explode(",", $triggerobj->parameters);
             foreach ($resultparams as $assigns)
             {
                 $values = explode("=", $assigns);
@@ -332,11 +346,11 @@ function trigger($triggerid, $paramarray='')
 
         if ($CONFIG['debug'])
         {
-            $dbg .= "TRIGGER: trigger_action({$result->userid}, {$triggerid},
-                    {$result->action}, {$paramarray}) called \n";
+            $dbg .= "TRIGGER: trigger_action({$triggerobj->userid}, {$triggerid},
+                    {$triggerobj->action}, {$paramarray}) called \n";
         }
-        trigger_action($result->userid, $triggerid, $result->action,
-                       $paramarray);
+        trigger_action($triggerobj->userid, $triggerid, $triggerobj->action,
+                       $paramarray, $triggerobj->template);
     }
     return;
 }
@@ -352,32 +366,24 @@ function trigger($triggerid, $paramarray='')
     * trigger
     * @return boolean. TRUE if the user has the permission, otherwise FALSE
 */
-function trigger_action($userid, $triggerid, $action, $paramarray)
+function trigger_action($userid, $triggerid, $action, $paramarray, $template)
 {
     global $CONFIG, $dbg;
+    global $dbTriggers;
     if ($CONFIG['debug'])
     {
         $dbg .= "TRIGGER: trigger_action($userid, $triggerid, $action,
-                $paramarray) received\n";
+                $paramarray, $template) received\n";
     }
-
-    //get the template type
-    $sql = "SELECT template FROM triggers WHERE userid='{$userid}' AND
-            triggerid='{$triggerid}'";
-    $query = mysql_query($sql);
-    if (mysql_error()) trigger_error("MySQL Query Error ".mysql_error(), E_USER_WARNING);
-    $template = mysql_fetch_object($query);
-    $template = $template->template;
 
     switch ($action)
     {
         case "ACTION_EMAIL":
             if ($CONFIG['debug'])
             {
-                $dbg .= "TRIGGER: send_trigger_email($userid, $triggerid,
-                        $template, $paramarray)\n";
+                $dbg .= "TRIGGER: send_trigger_email($userid, $triggerid, $template, $paramarray)\n";
             }
-            send_trigger_email($userid, $triggerid, $template, $paramarray);
+            $rtnvalue = send_trigger_email($userid, $triggerid, $template, $paramarray);
             break;
 
         case "ACTION_NOTICE":
@@ -386,68 +392,71 @@ function trigger_action($userid, $triggerid, $action, $paramarray)
                 $dbg .= "TRIGGER: create_trigger_notice($userid, '',
                         $triggerid, $template, $paramarray) called";
             }
-            create_trigger_notice($userid, '', $triggerid, $template,
+            $rtnvalue = create_trigger_notice($userid, '', $triggerid, $template,
                                   $paramarray);
             break;
+
         case "ACTION_JOURNAL":
             if (is_array($paramarray)) $journalbody = implode($paramarray);
             else $journalbody = '';
-            journal(CFG_LOGGING_NORMAL, $triggerid, "Trigger Fired ({$journalbody})", 0, $userid);
+            $rtnvalue = journal(CFG_LOGGING_NORMAL, $triggerid, "Trigger Fired ({$journalbody})", 0, $userid);
+
         case "ACTION_NONE":
         //fallthrough
         default:
             break;
     }
+
+    return $rtnvalue;
 }
 
 
 /**
     * Replaces template variables with their values
     * @author Kieran Hogg
+    * @param $triggerid string. The id/name of the trigger being used
     * @param $string string. The string containing the variables
     * @param $paramarray array. An array containing values to be substitute
     * into the string
     * @return string. The string with variables replaced
 */
-function trigger_replace_specials($string, $paramarray)
+function trigger_replace_specials($triggerid, $string, $paramarray)
 {
     global $CONFIG, $application_version, $application_version_string, $dbg;
     global $dbIncidents;
+    global $triggerarray, $ttvararray;
+
     if ($CONFIG['debug'])
     {
-        /*$dbg .= "TRIGGER: notice string before - $string\n";
-        $dbg .= "TRIGGER: param array: ".print_r($paramarray);*/
+        $dbg .= "\nTRIGGER: notice string before - $string\n";
+        $dbg .= "TRIGGER: param array: ".print_r($paramarray);
     }
 
     $url = parse_url($_SERVER['HTTP_REFERER']);
     $baseurl = "{$url['scheme']}://{$url['host']}";
     $baseurl .= "{$CONFIG['application_webpath']}";
 
-    $trigger_regex = array(0 => '/<incidentid>/s',
-                            1 => '/<incidenttitle>/s',
-                            2 => '/<incidentowner>/s',
-                            3 => '/<KBname>/s',
-                            4 => '/<sitpath>/s',
-                            5 => '/<sitversion>/s',
-                            6 => '/<engineerclosedname>/s',
-                            7 => '/<realname>/s',
-                            8 => '/<currentlang>/s',
-                            9 => '/<profilelang>/s'
-                            );
+    foreach ($ttvararray AS $identifier => $ttvar)
+    {
+        $usetvar = FALSE;
+        if (empty($ttvar['requires'])) $usetvar = TRUE;
+        else
+        {
+            if (!is_array($ttvar['requires'])) $ttvar['requires'] = array($ttvar['requires']);
+            foreach ($ttvar['requires'] as $needle)
+            {
+                if (in_array($needle, $triggerarray[$triggerid]['required'])) $usetvar = TRUE;
+            }
+        }
+        if ($usetvar)
+        {
+            $trigger_regex[] = "/{$identifier}/s";
+            if (!empty($ttvar['replacement'])) eval("\$res = {$ttvar['replacement']};");
+            $trigger_replace[] = $res;
+        }
+    }
 
-    $trigger_replace = array(0 => $paramarray['incidentid'],
-                                1 => incident_title($paramarray['incidentid']),
-                                2 => $paramarray['incidentowner'],
-                                3 => $paramarray['KBname'],
-                                4 => $baseurl,
-                                5 => $application_version,
-                                6 => $paramarray['engineerclosedname'],
-                                7 => user_realname($paramarray['userid']),
-                                8 => $paramarray['currentlang'],
-                                9 => $paramarray['profilelang']
-                            );
-
-    return preg_replace($trigger_regex,$trigger_replace,$string);
+    return preg_replace($trigger_regex, $trigger_replace, $string);
 }
 
 
@@ -559,19 +568,19 @@ function trigger_replace_email_specials($string, $paramarray)
     * Sends an email for a trigger
     * @author Kieran Hogg
     * @param $userid integer. The user to send the email to
-    * @param $triggertype string. The type of trigger to apply
+    * @param $triggerid string. The triggerid/name of the trigger
     * @param $template string. The name of the email template to use
     * @param $paramarray array. The array of extra parameters to apply to the
     * trigger
 */
-function send_trigger_email($userid, $triggertype, $template, $paramarray)
+function send_trigger_email($userid, $triggerid, $template, $paramarray)
 {
     global $CONFIG, $dbg, $dbEmailTemplates;
     if ($CONFIG['debug'])
     {
-        $dbg .= "TRIGGER: send_trigger_email({$userid},{$triggertype},
-                {$paramarray})";
+        $dbg .= "TRIGGER: send_trigger_email({$userid},{$triggertype}, {$paramarray})\n";
     }
+    // $triggerarray[$triggerid]['type'])
 
     //if we have an incidentid, get it to pass to emailtype_replace_specials()
     if (!empty($paramarray['incidentid']))
@@ -579,32 +588,31 @@ function send_trigger_email($userid, $triggertype, $template, $paramarray)
         $incidentid = $paramarray['incidentid'];
     }
 
-    $sql = "SELECT * FROM `{$dbEmailTemplates}` WHERE id='{$triggertype}'";
-    $query = mysql_query($sql);
+    $sql = "SELECT * FROM `{$dbEmailTemplates}` WHERE id='{$template}'";
+    $result = mysql_query($sql);
     if (mysql_error()) trigger_error("MySQL Query Error ".mysql_error(), E_USER_WARNING);
-    if ($query)
+    if ($result)
     {
-        $result = mysql_fetch_object($query);
+        $template = mysql_fetch_object($result);
     }
-    $emailtype = $result->id;
-    $from = emailtype_replace_specials(emailtype_from($emailtype), $incidentid,
-                                       $userid);
-    $toemail = emailtype_replace_specials(emailtype_to($emailtype), $incidentid,
-                                          $userid);
-    $subject = emailtype_replace_specials(emailtype_subject($emailtype),
-                                          $incidentid, $userid);
-    $body = emailtype_replace_specials(emailtype_body($emailtype), $incidentid,
-                                       $userid);
+
+    $body = "This is an email\n\n\n";
+    $body .= trigger_replace_specials($triggerid, $template->body, $paramarray);
+
+
+// DEBUG
+    $from = 'ivan@salfordsoftware.co.uk';
+    $toemail = 'ivan@salfordsoftware.co.uk';
+    $subject = 'testing triggers';
 
     $mime = new MIME_mail($from, $toemail, $subject, $body, '', $mailerror);
+    $mailok = $mime->send_mail();
 
-    $mailok=$mime->send_mail();
     if ($mailok==FALSE) trigger_error('Internal error sending email: '. $mailerror.' send_mail() failed', E_USER_ERROR);
 
     if ($CONFIG['debug'])
     {
-        $dbg .= "TRIGGER: emailtype_replace_specials($string, $incidentid,
-                $userid)";
+        $dbg .= "TRIGGER: emailtype_replace_specials($string, $incidentid, $userid)\n";
     }
     $email = emailtype_replace_specials($string, $incidentid, $userid);
     if ($CONFIG['debug'])
@@ -643,9 +651,9 @@ function create_trigger_notice($userid, $noticetext='', $triggertype='',
         if ($query)
         {
             $notice = mysql_fetch_object($query);
-            $noticetext = trigger_replace_specials($notice->text, $paramarray);
-            $noticelinktext = trigger_replace_specials($notice->linktext, $paramarray);
-            $noticelink = trigger_replace_specials($notice->link, $paramarray);
+            $noticetext = trigger_replace_specials($triggertype, $notice->text, $paramarray);
+            $noticelinktext = trigger_replace_specials($triggertype, $notice->linktext, $paramarray);
+            $noticelink = trigger_replace_specials($triggertype, $notice->link, $paramarray);
             if ($CONFIG['debug']) $dbg .= $noticetext."\n";
 
             $sql = "INSERT into notices(userid, type, text, linktext, link,

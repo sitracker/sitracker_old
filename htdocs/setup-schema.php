@@ -1727,6 +1727,23 @@ ALTER TABLE `triggers` ADD `checks` VARCHAR( 255 ) NULL ;
 -- INL 28/01/08
 ALTER TABLE `triggers` CHANGE `template` `template` INT( 11 ) NOT NULL ;
 RENAME TABLE `emailtype`  TO `emailtemplates` ;
+
+-- INL 29/01/08
+ALTER TABLE `contacts` ADD `created` DATETIME NULL ,
+ADD `createdby` INT NULL ,
+ADD `modified` DATETIME NULL ,
+ADD `modifiedby` INT NULL ;
+
+ALTER TABLE `sites` ADD `created` DATETIME NULL ,
+ADD `createdby` INT NULL ,
+ADD `modified` DATETIME NULL ,
+ADD `modifiedby` INT NULL ;
+
+ALTER TABLE `emailtemplates` ADD `created` DATETIME NULL ,
+ADD `createdby` INT NULL ,
+ADD `modified` DATETIME NULL ,
+ADD `modifiedby` INT NULL ;
+
 ";
 
 // Important: When making changes to the schema you must add SQL to make the alterations

@@ -47,13 +47,13 @@ foreach ($parts as $part)
 
     if (($schedule == -1) || ($comments != ""))
     {
-        //trigger(TRIGGER_TIMESHEET_CREATED_STATUS,
+        //trigger('TRIGGER_TIMESHEET_CREATED_STATUS',
         //    "status=" . str_replace(array(',', '='), '', $bodytext));
     }
     else
     {
         //echo TRIGGER_TIMESHEET_CREATED;
-        //trigger(TRIGGER_TIMESHEET_CREATED, array('notifyemail=tom@salfordsoftware.co.uk'));
+        //trigger('TRIGGER_TIMESHEET_CREATED', array('notifyemail=tom@salfordsoftware.co.uk'));
     }
 
     if (($schedule != 0) || ($comments != ""))
