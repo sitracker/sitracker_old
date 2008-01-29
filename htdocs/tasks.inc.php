@@ -576,8 +576,8 @@ if (mysql_num_rows($result) >=1 )
         $engineerPeriod = $billingObj->engineerperiod * 60;  //to seconds
         $customerPeriod = $billingObj->customerperiod * 60;
 
-        if(empty($engineerPeriod) OR $engineerPeriod == 0) $engineerPeriod = 3600;
-        if(empty($customerPeriod) OR $customerPeriod == 0) $customerPeriod = 3600;
+        if (empty($engineerPeriod) OR $engineerPeriod == 0) $engineerPeriod = 3600;
+        if (empty($customerPeriod) OR $customerPeriod == 0) $customerPeriod = 3600;
 
         echo "<h3>{$strActivityBilling}</h3>";
         echo "<p align='center'>{$strActivityBillingInfo}</p>";
@@ -637,7 +637,7 @@ if (mysql_num_rows($result) >=1 )
 
                 if (!empty($count['engineer']))
                 {
-                    while ($customerDur > 0)
+                    while ($engineerDur > 0)
                     {
                         $saved = "false";
                         foreach ($count['engineer'] AS $ind)
@@ -653,10 +653,10 @@ if (mysql_num_rows($result) >=1 )
                             {
                                 //echo "IND:{$ind}:START:{$act['starttime']}<br />";
                                 // already have something which starts in this period just need to check it fits in the period
-                                if($ind + $engineerPeriod > $activity['starttime'] + $customerDur)
+                                if($ind + $engineerPeriod > $activity['starttime'] + $engineerDur)
                                 {
                                     $remainderInPeriod = ($ind + $engineerPeriod) - $activity['starttime'];
-                                    $customerDur -= $remainderInPeriod;
+                                    $engineerDur -= $remainderInPeriod;
 
                                     $saved = "true";
                                 }
@@ -671,7 +671,7 @@ if (mysql_num_rows($result) >=1 )
 
                             $startTime += $engineerPeriod;
 
-                            $customerDur -= $engineerPeriod;
+                            $engineerDur -= $engineerPeriod;
                         }
                     }
                 }
@@ -692,7 +692,7 @@ if (mysql_num_rows($result) >=1 )
 
                 if (!empty($count['customer']))
                 {
-                    while ($engineerDur > 0)
+                    while ($customerDur > 0)
                     {
                         $saved = "false";
                         foreach ($count['customer'] AS $ind)
@@ -710,8 +710,8 @@ if (mysql_num_rows($result) >=1 )
                                 // already have something which starts in this period just need to check it fits in the period
                                 if ($ind + $customerPeriod > $activity['starttime'] + $activity['duration'])
                                 {
-                                    $remainderInPeriod = ($ind+$customerPeriod) - $engineerDur;
-                                    $engineerDur -= $remainderInPeriod;
+                                    $remainderInPeriod = ($ind+$customerPeriod) - $customerDur;
+                                    $customerDur -= $remainderInPeriod;
 
                                     $saved = "true";
                                 }
@@ -726,7 +726,7 @@ if (mysql_num_rows($result) >=1 )
 
                             $startTime += $customerPeriod;
 
-                            $engineerDur -= $customerPeriod; // was just -
+                            $customerDur -= $customerPeriod; // was just -
                         }
                     }
                 }
@@ -756,7 +756,7 @@ if (mysql_num_rows($result) >=1 )
             print_r($count);
             echo "</pre>";
             */
-            if($shade == "shade1") $shade = "shade2";
+            if ($shade == "shade1") $shade = "shade2";
             else $shade = "shade2";
         }
         echo "<tr><td>{$strTOTALS}</td><td>".round($tduration/60)."</td>";
