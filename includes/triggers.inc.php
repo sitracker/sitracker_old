@@ -235,7 +235,7 @@ $ttvararray['{incidentid}'] = array('description' => $GLOBALS['strIncidentID'],
 
 $ttvararray['{incidentowner}'] = array('description' => $strIncidentOwnersFullName,
                                      'requires' => 'incidentid',
-                                     'replacement' => '');
+                                     'replacement' => 'user_realname(incident_owner($incidentid))');
 
 $ttvararray['{incidentpriority}'] = array('description' => $strIncidentPriority,
                                      'requires' => 'incidentid',
@@ -270,7 +270,7 @@ $ttvararray['{todaysdate}'] = array('description' => $strCurrentDate,
                                      'replacement' => '');
 
 $ttvararray['{useremail}'] = array('description' => $strCurrentUserEmailAddress,
-                                     'replacement' => '');
+                                     'replacement' => 'user_email($_SESSION[\'userid\'])');
 
 $ttvararray['{userrealname}'] = array('description' => $strFullNameCurrentUser,
                                      'replacement' => '');
@@ -453,6 +453,7 @@ function trigger_replace_specials($triggerid, $string, $paramarray)
             $trigger_regex[] = "/{$identifier}/s";
             if (!empty($ttvar['replacement'])) eval("\$res = {$ttvar['replacement']};");
             $trigger_replace[] = $res;
+            unset($res);
         }
     }
 
@@ -596,17 +597,13 @@ function send_trigger_email($userid, $triggerid, $template, $paramarray)
         $template = mysql_fetch_object($result);
     }
 
-    $body = "This is an email\n\n\n";
+    $from = trigger_replace_specials($triggerid, $template->fromfield, $paramarray);
+    $toemail = trigger_replace_specials($triggerid, $template->tofield, $paramarray);
+    $subject = trigger_replace_specials($triggerid, $template->subjectfield, $paramarray);
     $body .= trigger_replace_specials($triggerid, $template->body, $paramarray);
 
 
-// DEBUG
-    $from = 'ivan@salfordsoftware.co.uk';
-    $toemail = 'ivan@salfordsoftware.co.uk';
-    $subject = 'testing triggers';
-
-    $mime = new MIME_mail($from, $toemail, $subject, $body, '', $mailerror);
-    $mailok = $mime->send_mail();
+    $mailok = send_email($toemail, $from, $subject, $body);
 
     if ($mailok==FALSE) trigger_error('Internal error sending email: '. $mailerror.' send_mail() failed', E_USER_ERROR);
 

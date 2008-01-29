@@ -3526,6 +3526,36 @@ function send_template_email($template, $incidentid, $info1='', $info2='')
 }
 
 
+function send_email($to, $from, $subject, $body, $replyto='', $cc='', $bcc='')
+{
+    global $CONFIG;
+
+    $extra_headers  = "From: {$from}\n";
+    if (!empty($replyto)) $extra_headers .= "Reply-To: {$replyto}\n";
+    $extra_headers .= "Errors-To: {$CONFIG['support_email']}\n";
+    $extra_headers .= "X-Mailer: {$CONFIG['application_shortname']} {$application_version_string}/PHP " . phpversion()."\n";
+    $extra_headers .= "X-Originating-IP: {$_SERVER['REMOTE_ADDR']}";
+//     if ($email_cc != '')
+//     {
+//         $extra_headers .= "CC: $cc";
+//     }
+//     if ($email_bcc != "")
+//     {
+//         $extra_headers .= "BCC: $bcc";
+//     }
+//     $extra_headers .= "\r\n";
+
+    if ($CONFIG['demo'])
+    {
+        $rtnvalue = TRUE;
+    }
+    else
+    {
+        $rtnvalue = mail($to, $subject, $body, $extra_headers);
+    }
+}
+
+
 /**
     * Generates and returns a random alphanumeric password
     * @author Ivan Lucas
