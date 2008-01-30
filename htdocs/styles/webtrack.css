@@ -554,6 +554,17 @@ div.taglist
     font-size: 120%;
     -moz-border-radius: 6px;
 }
+
+.tagcloud
+{
+    word-spacing: 7px;
+}
+
+.taglevel1 { color: #518BFF; }
+.taglevel2 { color: #3A64B8; }
+.taglevel3 { color: #27437B; }
+.taglevel4 { color: #1F3663; }
+
 div.img-dec img
 {
 margin: 5px;

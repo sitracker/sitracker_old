@@ -6502,12 +6502,16 @@ function show_tag_cloud($orderby="name", $showcount=FALSE)
     }
     if (mysql_num_rows($result) > 0)
     {
-        $html .= "<table align='center'><tr><td>";
+        $html .= "<table align='center'><tr><td class='tagcloud'>";
         while ($obj = mysql_fetch_object($result))
         {
-            $size = log($obj->occurrences * 100) * 40;
+            $size = round(log($obj->occurrences * 100) * 32);
             if ($size==0) $size=100;
-            $html .= "<a href='view_tags.php?tagid=$obj->tagid' style='font-size: {$size}%;' title='{$obj->occurrences}'>";
+            if ($size > 0 AND $size <= 100) $taglevel = 'taglevel1';
+            if ($size > 100 AND $size <= 150) $taglevel = 'taglevel2';
+            if ($size > 150 AND $size <= 200) $taglevel = 'taglevel3';
+            if ($size > 200) $taglevel = 'taglevel4';
+            $html .= "<a href='view_tags.php?tagid=$obj->tagid' class='$taglevel' style='font-size: {$size}%; font-weight: normal;' title='{$obj->occurrences}'>";
             if (array_key_exists($obj->name, $CONFIG['tag_icons']))
             {
                 $html .= "{$obj->name}&nbsp;<img src='images/icons/sit/";
@@ -6524,7 +6528,7 @@ function show_tag_cloud($orderby="name", $showcount=FALSE)
             else $html .= $obj->name;
             $html .= "</a>";
             if ($showcount) $html .= "({$obj->occurrences})";
-            $html .= " &nbsp;\n";
+            $html .= " \n";//&nbsp;\n";
         }
         $html .= "</td></tr></table>";
     }
