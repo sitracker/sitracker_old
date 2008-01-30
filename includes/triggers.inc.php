@@ -202,6 +202,10 @@ $ttvararray['{contactsite}'] = array('description' => 'Site name',
                                      'requires' => 'siteid',
                                      'replacement' => 'contact_site($contactid)');
 
+$ttvararray['{feedbackurl}'] = array('description' => '',
+                                     'requires' => 'incidentid',
+                                     'replacement' => '$baseurl.\'feedback.php?ax=\'.urlencode(trim(base64_encode(gzcompress(str_rot13(urlencode($CONFIG[\'feedback_form\']).\'&&\'.urlencode($contactid).\'&&\'.urlencode($incidentid))))))');
+
 $ttvararray['{globalsignature}'] = array('description' => $strGlobalSignature,
                                      'replacement' => 'global_signature()');
 
@@ -237,43 +241,47 @@ $ttvararray['{incidentowner}'] = array('description' => $strIncidentOwnersFullNa
                                      'requires' => 'incidentid',
                                      'replacement' => 'user_realname(incident_owner($incidentid))');
 
+$ttvararray['{incidentowneremail}'] = array('description' => 'Incident Owners Email Address',
+                                     'requires' => 'incidentid',
+                                     'replacement' => 'user_email(incident_owner($incidentid))');
+
 $ttvararray['{incidentpriority}'] = array('description' => $strIncidentPriority,
                                      'requires' => 'incidentid',
-                                     'replacement' => '');
-
-$ttvararray['{incidentreassignemailaddress}'] = array('description' => 'The email address of the person a call has been reassigned to',
-                                     'requires' => 'incidentid',
-                                     'replacement' => '');
+                                     'replacement' => 'priority_name(incident_priority($incidentid))');
 
 $ttvararray['{incidentsoftware}'] = array('description' => $strSkillAssignedToIncident,
                                      'requires' => 'incidentid',
-                                     'replacement' => '');
+                                     'replacement' => 'software_name(db_read_column(\'softwareid\', $GLOBALS[\'dbIncidents\'], $incidentid)\')');
 
 $ttvararray['{incidenttitle}'] = array('description' => $strIncidentTitle,
                                      'requires' => 'incidentid',
                                      'replacement' => 'incident_title($incidentid)');
 
+$ttvararray['{salesperson}'] = array('description' => 'Salesperson',
+                                     'requires' => 'siteid',
+                                     'replacement' => 'user_realname(db_read_column(\'owner\', $GLOBALS[\'dbSites\'], $siteid))');
+
 $ttvararray['{salespersonemail}'] = array('description' => $strSalespersonAssignedToContactsSiteEmail,
                                      'requires' => 'siteid',
-                                     'replacement' => '');
+                                     'replacement' => 'user_email(db_read_column(\'owner\', $GLOBALS[\'dbSites\'], $siteid))');
 
 $ttvararray['{signature}'] = array('description' => $strCurrentUsersSignature,
-                                     'replacement' => '');
+                                     'replacement' => 'user_signature($_SESSION[\'userid\'])');
 
 $ttvararray['{supportemail}'] = array('description' => $strSupportEmailAddress,
-                                     'replacement' => '');
+                                     'replacement' => '$CONFIG[\'support_email\']');
 
 $ttvararray['{supportmanageremail}'] = array('description' => $strSupportManagersEmailAddress,
-                                     'replacement' => '');
+                                     'replacement' => '$CONFIG[\'support_manager_email\']');
 
 $ttvararray['{todaysdate}'] = array('description' => $strCurrentDate,
-                                     'replacement' => '');
+                                     'replacement' => 'ldate("jS F Y")');
 
 $ttvararray['{useremail}'] = array('description' => $strCurrentUserEmailAddress,
                                      'replacement' => 'user_email($_SESSION[\'userid\'])');
 
 $ttvararray['{userrealname}'] = array('description' => $strFullNameCurrentUser,
-                                     'replacement' => '');
+                                     'replacement' => 'user_realname($_SESSION[\'userid\'])');
 
 
 /**

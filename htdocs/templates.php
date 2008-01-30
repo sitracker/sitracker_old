@@ -238,6 +238,7 @@ elseif ($action == "edit")
         echo "<div id='templatevariables' style='width: 48%; float: right; border: 1px solid #CCCCFF; padding: 10px; display:none;'>";
         echo "<h4>Template Variables</h4>"; // FIXME template variables
         echo "<p align='center'>{$strFollowingSpecialIdentifiers}</p>";
+
         echo "<dl>";
         foreach ($ttvararray AS $identifier => $ttvar)
         {

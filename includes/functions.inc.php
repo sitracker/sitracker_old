@@ -16,7 +16,6 @@
 // use SQL joins.
 
 include ('classes.inc.php');
-require ('triggers.inc.php');
 
 // Version number of the application, (numbers only)
 $application_version = '3.40';
@@ -152,6 +151,9 @@ if (get_magic_quotes_gpc())
 //     $GLOBALS should never be modified directly).  $GLOBALS also contains
 //     infinite recursion, so it's dangerous...
 }
+
+
+require ('triggers.inc.php');
 
 
 /**
@@ -6878,12 +6880,13 @@ function truncate_string($text, $maxlength=255, $html=TRUE)
     * Returns a localised and translated date
     * @author Ivan Lucas
     * @param $format string. date() format
-    * @param $date int. UNIX timestamp
+    * @param $date int. UNIX timestamp.  Uses 'now' if ommitted
     * @returns string. An internationised date/time string
     * @todo  th/st and am/pm maybe?
 */
-function ldate($format, $date)
+function ldate($format, $date='')
 {
+    if ($date=='') $date = $GLOBALS['now'];
     if ($_SESSION['utcoffset'] != 0)
     {
         // Adjust the date back to UTC
