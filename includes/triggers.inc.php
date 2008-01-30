@@ -903,11 +903,10 @@ function trigger_revoke($triggerid, $userid, $referenceid=0)
     $result = mysql_query($sql);
     while($triggerobj = @mysql_fetch_object($result))
     {
-        print_r($triggerobj);
         $templatesql = "DELETE FROM {$GLOBALS['dbNotices']} ";
         $templatesql .= "WHERE template={$triggerobj->template} ";
         $templatesql .= "AND userid={$userid} ";
-        echo $templatesql;
+
         if($referenceid != 0)
         {
             $templatesql .= "AND referenceid={$referenceid}";
