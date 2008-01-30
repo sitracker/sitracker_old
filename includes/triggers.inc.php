@@ -885,4 +885,35 @@ function triggeraction_description($trigaction, $editlink=FALSE)
     return $html;
 }
 
+/**
+    * Revokes any triggers of that type/reference
+    * @author Kieran Hogg
+    * @param $triggerid string. Type of trigger
+    * @param $userid integer. ID of the user to revoke from
+    * @param $referenceid integer. Reference of the notice
+*/
+//TODO should this be limited to one delete, is there ever more than one?
+//TODO make it fail quietly
+function trigger_revoke($triggerid, $userid, $referenceid=0)
+{
+    global $GLOBALS;
+    //find all triggers of this type and user
+    $sql = "SELECT * FROM {$GLOBALS['dbTriggers']} WHERE triggerid='{$triggerid}' ";
+    $sql .= "AND userid={$userid} AND action='ACTION_NOTICE' AND template!=0";
+    $result = mysql_query($sql);
+    while($triggerobj = @mysql_fetch_object($result))
+    {
+        print_r($triggerobj);
+        $templatesql = "DELETE FROM {$GLOBALS['dbNotices']} ";
+        $templatesql .= "WHERE template={$triggerobj->template} ";
+        $templatesql .= "AND userid={$userid} ";
+        echo $templatesql;
+        if($referenceid != 0)
+        {
+            $templatesql .= "AND referenceid={$referenceid}";
+        }
+        $result = @mysql_query($templatesql);
+        if (mysql_error()) trigger_error("MySQL Query Error ".mysql_error(), E_USER_WARNING);
+    }
+}
 ?>
