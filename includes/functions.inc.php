@@ -2336,9 +2336,12 @@ function product_name($id)
 
 // Returns a string with all occurrences of emailtype special identifiers (in angle brackets) replaced
 // with their appropriate values.
+// DEPRECATED in favour of trigger_replace_specials() from 3.40
 function emailtype_replace_specials($string, $incidentid=0, $userid=0)
 {
     global $CONFIG, $application_version, $application_version_string, $dbIncidents;
+
+    trigger_error('emailtype_replace_specials() is DEPRECATED', E_USER_WARNING);
 
     $contactid = incident_contact($incidentid);
 
@@ -6608,6 +6611,7 @@ function array_remove_duplicate($array, $field)
     return $new;
 }
 
+
 // This function doesn't exist for PHP4 so use this instead
 if (!function_exists("stripos"))
 {
@@ -6642,6 +6646,7 @@ function string_find_all($haystack, $needle, $limit=0)
     }
     return $positions;
 }
+
 
 // Implode assocative array
 function implode_assoc($glue1, $glue2, $array)
@@ -6697,6 +6702,7 @@ function time_dropdown($name, $time='')
     $html .= "</select>";
     return $html;
 }
+
 
 /**
     * @author Kieran Hogg
@@ -6768,6 +6774,7 @@ function user_online_icon($user)
     }
 }
 
+
 /**
     * Returns users online status
     * @author Kieran Hogg
@@ -6807,6 +6814,7 @@ function show_form_errors($formname)
     return $html;
 }
 
+
 /**
     * Cleans form errors
     * @author Kieran Hogg
@@ -6816,6 +6824,7 @@ function clear_form_errors($formname)
 {
     unset($_SESSION['formerrors'][$formname]);
 }
+
 
 /**
     * Cleans form data

@@ -470,110 +470,6 @@ function trigger_replace_specials($triggerid, $string, $paramarray)
 
 
 /**
-    * Replaces email template variables with their values
-    * @author Kieran Hogg
-    * @param $string string. The string containing the variables
-    * @param $paramarray array. An array containing values to be substitute
-    * into the string
-    * @return string. The string with variables replaced
-    * @notes Temporary function, should be intergrated into
-    * trigger_email_specials()
-*/
-function trigger_replace_email_specials($string, $paramarray)
-{
-    global $CONFIG, $application_version, $application_version_string, $dbg;
-    global $dbIncidents;
-    if ($CONFIG['debug'])
-    {
-        $dbg .= "TRIGGER: notice string before - $string\n";
-        $dbg .= "TRIGGER: param array: ".print_r($paramarray);
-    }
-
-    $url = parse_url($_SERVER['HTTP_REFERER']);
-    $baseurl = "{$url['scheme']}://{$url['host']}";
-    $baseurl.= "{$CONFIG['application_webpath']}";
-
-    $email_regex = array(0 => '/<contactemail>/s',
-                         1 => '/<contactname>/s',
-                         2 => '/<contactfirstname>/s',
-                         3 => '/<contactsite>/s',
-                         4 => '/<contactphone>/s',
-                         5 => '/<contactmanager>/s',
-                         6 => '/<contactnotify>/s',
-                         7 => '/<incidentid>/s',
-                         8 => '/<incidentexternalid>/s',
-                         9 => '/<incidentccemail>/s',
-                         10 => '/<incidentexternalengineer>/s',
-                         11 => '/<incidentexternalengineerfirstname>/s',
-                         12 => '/<incidentexternalemail>/s',
-                         13 => '/<incidenttitle>/s',
-                         14 => '/<incidentpriority>/s',
-                         15 => '/<incidentsoftware>/s',
-                         16 => '/<incidentowner>/s',
-                         17 => '/<useremail>/s',
-                         18 => '/<userrealname>/s',
-                         19 => "/<applicationname>/s",
-                         20 => '/<applicationshortname>/s',
-                         21 => '/<applicationversion>/s',
-                         22 => '/<supportemail>/s',
-                         23 => '/<salesemail>/s',
-                         24 => '/<supportmanageremail>/s',
-                         25 => '/<signature>/s',
-                         26 => '/<globalsignature>/s',
-                         27 => '/<todaysdate>/s',
-                         28 => '/<salespersonemail>/s',
-                         29 => '/<incidentfirstupdate>/s',
-                         30 => '/<contactnotify2>/s',
-                         31 => '/<contactnotify3>/s',
-                         32 => '/<contactnotify4>/s',
-                         33 => '/<feedbackurl>/s'
-                        );
-
-    $email_replace = array(0 => contact_email($contactid),
-        1 => contact_realname($contactid),
-        2 => strtok(contact_realname($contactid),' '),
-        3 => contact_site($contactid),
-        4 => contact_phone($contactid),
-        5 => contact_notify_email($contactid),
-        6 => contact_notify_email($contactid),
-        7 => $incidentid,
-        8 => $incident->externalid,
-        9 => incident_ccemail($incidentid),
-        10 => incident_externalengineer($incidentid),
-        11 => strtok(incident_externalengineer($incidentid),' '),
-        12 => incident_externalemail($incidentid),
-        13 => incident_title($incidentid),
-        14 => priority_name(incident_priority($incidentid)),
-        15 => software_name($incident->softwareid),
-        16 => user_realname($incident->owner),
-        17 => user_email($userid),
-        18 => user_realname($userid),
-        19 => $CONFIG['application_name'],
-        20 => $CONFIG['application_shortname'],
-        21 => $application_version_string,
-        22 => $CONFIG['support_email'],
-        23 => $CONFIG['sales_email'],
-        24 => $CONFIG['support_manager_email'],
-        25 => user_signature($userid),
-        26 => global_signature(),
-        27 => date("jS F Y"),
-        28 => user_email(db_read_column('owner', 'sites',
-                                        db_read_column('siteid','contacts',
-                                                       $contactid))),
-        29 => incident_firstupdate($incidentid),
-        30 => contact_email(contact_notify($contactid, 2)),
-        31 => contact_email(contact_notify($contactid, 3)),
-        32 => contact_email(contact_notify($contactid, 4)),
-        33 => $baseurl.'feedback.php?ax='.urlencode(trim(base64_encode(
-                gzcompress(str_rot13(urlencode($CONFIG['feedback_form']).'&&'.
-                urlencode($contactid).'&&'.urlencode($incidentid))))))
-        );
-
-    return preg_replace($email_regex,$email_replace,$string);
-}
-
-
-/**
     * Sends an email for a trigger
     * @author Kieran Hogg
     * @param $userid integer. The user to send the email to
@@ -885,6 +781,7 @@ function triggeraction_description($trigaction, $editlink=FALSE)
     return $html;
 }
 
+
 /**
     * Revokes any triggers of that type/reference
     * @author Kieran Hogg
@@ -898,7 +795,7 @@ function trigger_revoke($triggerid, $userid, $referenceid=0)
 {
     global $GLOBALS;
     //find all triggers of this type and user
-    $sql = "SELECT * FROM {$GLOBALS['dbTriggers']} WHERE triggerid='{$triggerid}' ";
+    $sql = "SELECT * FROM `{$GLOBALS['dbTriggers']}` WHERE triggerid='{$triggerid}' ";
     $sql .= "AND userid={$userid} AND action='ACTION_NOTICE' AND template!=0";
     $result = mysql_query($sql);
     while($triggerobj = @mysql_fetch_object($result))

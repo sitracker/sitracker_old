@@ -9,7 +9,7 @@
 //
 
 // Author: Kieran Hogg <kieran_hogg[at]users.sourceforge.net>
-// Author: Kieran Hogg <kieran_hogg[at]users.sourceforge.net>
+// Author: Ivan Lucas <ivanlucas[at]users.sourceforge.net>
 
 @include ('set_include_path.inc.php');
 $permission = 22; // TODO 3.40 set a permission for triggers
