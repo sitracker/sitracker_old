@@ -251,7 +251,7 @@ $ttvararray['{incidentpriority}'] = array('description' => $strIncidentPriority,
 
 $ttvararray['{incidentsoftware}'] = array('description' => $strSkillAssignedToIncident,
                                      'requires' => 'incidentid',
-                                     'replacement' => 'software_name(db_read_column(\'softwareid\', $GLOBALS[\'dbIncidents\'], $incidentid)\');');
+                                     'replacement' => 'software_name(db_read_column("softwareid", $GLOBALS["dbIncidents"], $paramarray[incidentid]));');
 
 $ttvararray['{incidenttitle}'] = array('description' => $strIncidentTitle,
                                      'requires' => 'incidentid',
@@ -556,6 +556,7 @@ function create_trigger_notice($userid, $noticetext='', $triggertype='',
         {
             $notice = mysql_fetch_object($query);
             $noticetext = trigger_replace_specials($triggertype, $notice->text, $paramarray);
+            echo "<h1>trigger_replace_specials($triggertype, $notice->text, $paramarray)</h1>";
             $noticelinktext = trigger_replace_specials($triggertype, $notice->linktext, $paramarray);
             $noticelink = trigger_replace_specials($triggertype, $notice->link, $paramarray);
             if ($CONFIG['debug']) $dbg .= $noticetext."\n";
