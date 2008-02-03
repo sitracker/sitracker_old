@@ -171,7 +171,7 @@ function draw_file_row($file, $delim, $incidentid, $incident_attachment_fspath)
     $filesize = filesize($file);
     while ($filesize >= pow(1024,$j)) ++$j;
     $file_size = round($filesize / pow(1024,$j-1) * 100) / 100 . ' ' . $ext[$j-1];
-    if (function_exists('mime_content_type')
+    if (function_exists('mime_content_type'))
     {
         // FIXME mime_content_type requires php > 4.3 and is deprecated
         $mime_type = mime_content_type($file);

@@ -26,7 +26,7 @@ $enddate = $startdate + 86400 * 7;
 
 $sql = "UPDATE `{$dbTasks}` SET completion = 1 ";
 $sql.= "WHERE startdate >= '" . date("Y-m-d H:i:s",$startdate) . "' ";
-$sql.= "AND     enddate <  '" . date("Y-m-d H:i:s",$enddate)) . "' ";
+$sql.= "AND     enddate <  '" . date("Y-m-d H:i:s",$enddate) . "' ";
 $sql.= "AND completion = 0";
 
 mysql_query($sql);
