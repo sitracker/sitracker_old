@@ -201,7 +201,7 @@ function authenticate($username, $password)
     $sql .= "WHERE username='$username' AND password='$password' AND status!=0 ";
     // a status of 0 means the user account is disabled
     $result = mysql_query($sql);
-    if (mysql_error()) trigger_error(mysql_error(),E_USER_WARNING);
+    if (mysql_error()) trigger_error(mysql_error(),E_USER_ERROR);
 
     // return appropriate value
     if (mysql_num_rows($result) == 0)
