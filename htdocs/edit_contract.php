@@ -180,6 +180,7 @@ else if ($action == "update")
     $incidentpoolid = cleanvar($_POST['incidentpoolid']);
     $expirydate = strtotime($_REQUEST['expirydate']);
     $product = cleanvar($_POST['product']);
+    $productonly = cleanvar($_POST['productonly']);
     $contacts = cleanvar($_REQUEST['contacts']);
     if($_REQUEST['noexpiry'] == 'on') $expirydate = '-1';
 
