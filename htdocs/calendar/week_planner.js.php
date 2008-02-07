@@ -1076,7 +1076,7 @@ function updateHeaderDates()
 
 
     for (var no=0;no < subDivs.length;no++){
-        var year = tmpDate2.getYear() + 1900;
+        var year = tmpDate2.getFullYear(); // + 1900;
         var month = tmpDate2.getMonth()/1 + 1;
         var date = tmpDate2.getDate();
         var tmpHeaderFormat = " " + headerDateFormat;
