@@ -535,6 +535,7 @@ $strInstallDashboardComponents = 'Install new dashboard component';
 $strInstallDashboardComponentFailed = 'Instalation of dashboard component(s) failed';
 $strInterfaceStyle = 'Interface Style (Theme)';
 $strInternalEngineer = 'Internal Engineer';
+$strInterval = 'Interval';
 $strInvalidCredentials = 'Invalid username/password combination';
 $strInvalidDetails = 'Invalid Details';
 $strInvalidEmailAddress = 'Invalid email address';
@@ -563,6 +564,8 @@ $strKnowledgeBaseArticle = 'KnowledgeBase Article';
 
 $strLanguage = 'Language';
 $strLastMonth = 'Last month';
+# Last time an action was executed
+$strLastRan = 'Last Ran';
 $strLastUpdated = 'Last Updated';
 $strLastYear = 'Last year';
 $strLength = 'Length';

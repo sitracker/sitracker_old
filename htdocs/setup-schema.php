@@ -1744,6 +1744,20 @@ ADD `createdby` INT NULL ,
 ADD `modified` DATETIME NULL ,
 ADD `modifiedby` INT NULL ;
 
+-- INL 7Feb08
+CREATE TABLE `scheduler` (
+ `id` int(11) NOT NULL auto_increment,
+  `action` varchar(50) NOT NULL,
+  `params` varchar(255) NOT NULL,
+  `status` enum('enabled','disabled') NOT NULL default 'enabled',
+  `start` datetime NOT NULL,
+  `end` datetime NOT NULL,
+  `interval` int(11) NOT NULL,
+  `lastran` datetime NOT NULL,
+  PRIMARY KEY  (`id`),
+  KEY `job` (`action`)INDEX ( `job` )
+) ENGINE = MYISAM ;
+
 ";
 
 // Important: When making changes to the schema you must add SQL to make the alterations

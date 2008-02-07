@@ -277,4 +277,7 @@ $availabletimezones = array('-720' => 'UTC-12',
                             '840' => 'UTC+14',
                            );
 
+
+$availableactions = array('CloseIncidents', 'PurgeJournal', 'SetUserStatus', 'ChaseCustomers', 'Trigger');
+
 ?>

@@ -107,6 +107,7 @@ $dbRelatedIncidents = "{$CONFIG['db_tableprefix']}relatedincidents";
 $dbResellers = "{$CONFIG['db_tableprefix']}resellers";
 $dbRolePermissions = "{$CONFIG['db_tableprefix']}rolepermissions";
 $dbRoles = "{$CONFIG['db_tableprefix']}roles";
+$dbScheduler = "{$CONFIG['db_tableprefix']}scheduler";
 $dbServiceLevels = "{$CONFIG['db_tableprefix']}servicelevels";
 $dbSetTags = "{$CONFIG['db_tableprefix']}set_tags";
 $dbSiteContacts = "{$CONFIG['db_tableprefix']}sitecontacts";
