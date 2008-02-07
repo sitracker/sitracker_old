@@ -158,7 +158,8 @@ table.timesheet td, table.timesheet th
 	font-family:arial;
 	height:20px;
 	line-height:20px;
-	border-right:1px solid #CCC;	
+	border-right:1px solid #CCC;
+	font-size: 12px;
 }
 
 .weekScheduler_anAppointment

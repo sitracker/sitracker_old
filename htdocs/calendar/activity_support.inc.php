@@ -28,11 +28,16 @@ if ($level == "")
         {
             if (level == 0)
             {
+                $('newactivityalias').value = 'Support';
                 var newid = weekSchedule_ajaxObjects.length;
                 weekSchedule_ajaxObjects[newid] = new sack();
                 weekSchedule_ajaxObjects[newid].requestFile = 'calendar/activity_support.inc.php?level=' + level + '&data=' + getSelectedActivity() + '&ws=' + dateStartOfWeek.getTime();
                 weekSchedule_ajaxObjects[newid].onCompletion = function(){ activitySupportCallback(level, newid); };
                 weekSchedule_ajaxObjects[newid].runAJAX();
+            }
+            else
+            {
+            	$('newactivityalias').value = $('addactivityselect1').value;
             }
         }
 
@@ -67,7 +72,6 @@ if ($level == "")
                 $('addactivitydescription' + level).innerHTML = incidents[i]['description'];
                 $('addactivitydescription' + level).parentNode.parentNode.style.display = 'table-row';
                 var incidentname = '" . $strIncident . " ' + incidents[i]['id'];
-                $('newactivityalias').value = incidentname;
                 hint = incidents[i]['title'];
                 appendOption($('addactivityselect' + level), incidentname + ' - ' + hint, incidentname);
             }
