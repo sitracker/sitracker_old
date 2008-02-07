@@ -4635,7 +4635,11 @@ function calculate_working_time($t1,$t2) {
 }
 
 
-function is_active_status($status, $states) {
+/**
+  * @author Ivan Lucas
+*/
+function is_active_status($status, $states)
+{
     if (in_array($status,$states)) return false;
     else return true;
 }
@@ -4645,6 +4649,11 @@ function is_active_status($status, $states) {
     * Calculate the engineer working time between two timestamps for a given incident
     i.e. ignore times when customer has action
     * @author Ivan Lucas
+    @param $incidentid integer - The incident ID to perform a calculation on
+    @param $t1 integer - UNIX Timestamp. Start of range
+    @param $t2 integer - UNIX Timestamp. End of range
+    @param $states array (optional) Does not count time when the incident is set to
+           any of the states in this array. (Default is closed, awaiting closure and awaiting customer action)
 */
 function calculate_incident_working_time($incidentid, $t1, $t2, $states=array(2,7,8))
 {
