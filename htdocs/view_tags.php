@@ -140,7 +140,7 @@ else
             $count++;
             if ($col >= 3 OR $count == $num_tags)
             {
-                 echo "</tr>\n";
+                echo "</tr>\n";
                 $col=0;
             }
         }
