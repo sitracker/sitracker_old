@@ -254,7 +254,16 @@ else
         }
     }
     echo "<h2><img src='{$CONFIG['application_webpath']}images/icons/{$iconset}/32x32/task.png' width='32' height='32' alt='' /> ";
-    echo user_realname($user,TRUE) . "'s {$strTasks}:</h2>"; // FIXME i18n
+    
+    if ($user == 'all')
+    {
+        echo $strAll;
+    }
+    else
+    {
+        echo user_realname($user,TRUE)."'s "; // FIXME i18n
+    }
+    echo " {$strTasks}:</h2>";
 
     // show drop down select for task view options
     echo "<form action='{$_SERVER['PHP_SELF']}' style='text-align: center;'>";
@@ -284,22 +293,27 @@ else
     echo "</select>\n";
     echo "</form><br />";
 
-    $sql = "SELECT * FROM tasks WHERE owner='$user' ";
+    $sql = "SELECT * FROM tasks WHERE ";
+    if ($user != 'all')
+    {
+        $sql .= "owner='$user' AND ";
+    }
+    
     if ($show=='' OR $show=='active' )
     {
-        $sql .= "AND (completion < 100 OR completion='' OR completion IS NULL)  AND distribution != 'incident' ";
+        $sql .= "(completion < 100 OR completion='' OR completion IS NULL)  AND distribution != 'incident' ";
     }
     elseif ($show == 'completed')
     {
-        $sql .= "AND (completion = 100) AND distribution != 'incident' ";
+        $sql .= " (completion = 100) AND distribution != 'incident' ";
     }
     elseif ($show == 'incidents')
     {
-        $sql .= "AND distribution = 'incident' ";
+        $sql .= " distribution = 'incident' ";
     }
     else
     {
-        $sql .= "AND 1=2 "; // force no results for other cases
+        $sql .= "1=2 "; // force no results for other cases
     }
 
     if ($user != $sit[2])
