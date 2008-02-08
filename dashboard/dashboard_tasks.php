@@ -20,7 +20,7 @@ function dashboard_tasks($row,$dashboardid)
     echo "</a></div>";
     echo "<div class='window'>";
 
-    $sql = "SELECT * FROM tasks WHERE owner='$user' AND (completion < 100 OR completion='' OR completion IS NULL) AND distribution != 'incident' ";
+    $sql = "SELECT * FROM tasks WHERE owner='$user' AND (completion < 100 OR completion='' OR completion IS NULL) AND (distribution = 'public' OR distribution = 'private') ";
     if (!empty($sort))
     {
         if ($sort=='id') $sql .= "ORDER BY id ";
