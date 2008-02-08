@@ -19,6 +19,7 @@ require('functions.inc.php');
 require('auth.inc.php');
 
 $toget = cleanvar($_REQUEST['toget']);
+$selected = cleanvar($_REQUEST['selected']);
 
 if (!empty($toget))
 {
@@ -30,7 +31,12 @@ if (!empty($toget))
             if (mysql_error()) trigger_error(mysql_error(),E_USER_ERROR);
             while ($obj = mysql_fetch_object($result))
             {
-                echo "<option value='{$obj->tag}'>{$obj->tag}</option>";
+                $strIsSelected = "";
+                if ($obj->tag == $selected)
+                {
+                    $strIsSelected = "selected='selected'";
+                }
+                echo "<option value='{$obj->tag}' $strIsSelected>{$obj->tag}</option>";
             }
             break;
         case 'products':
@@ -39,7 +45,12 @@ if (!empty($toget))
             if (mysql_error()) trigger_error(mysql_error(),E_USER_ERROR);
             while ($obj = mysql_fetch_object($result))
             {
-                echo "<option value='{$obj->id}'>{$obj->name}</option>";
+                $strIsSelected = "";
+                if ($obj->id == $selected)
+                {
+                    $strIsSelected = "selected='selected'";
+                }
+                echo "<option value='{$obj->id}' $strIsSelected>{$obj->name}</option>";
             }
             break;
         case 'skills':
@@ -48,7 +59,12 @@ if (!empty($toget))
             if (mysql_error()) trigger_error(mysql_error(),E_USER_ERROR);
             while ($obj = mysql_fetch_object($result))
             {
-                echo "<option value='{$obj->id}'>{$obj->name}</option>";
+                $strIsSelected = "";
+                if ($obj->id == $selected)
+                {
+                    $strIsSelected = "selected='selected'";
+                }
+                echo "<option value='{$obj->id}' $strIsSelected>{$obj->name}</option>";
             }
             break;
     }
