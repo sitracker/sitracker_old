@@ -329,8 +329,11 @@ else
         $sql .= "1=2 "; // force no results for other cases
     }
 
-    
-    if ($user != $sit[2]) // AND $user != 'all' AND $show != 'incidents')
+    if ($user == 'all' AND $show == 'incidents')
+    {
+        // ALL all incident tasks to be viewed
+    }
+    else if ($user != $sit[2])
     {
         $sql .= "AND distribution='public' ";
     }
@@ -354,7 +357,7 @@ else
     {
         $sql .= "ORDER BY IF(duedate,duedate,99999999) ASC, duedate ASC, startdate DESC, priority DESC, completion ASC";
     }
-echo $sql;
+
     $result = mysql_query($sql);
     if (mysql_error()) trigger_error(mysql_error(),E_USER_ERROR);
 }
