@@ -396,8 +396,11 @@ if (mysql_num_rows($result) >=1 )
 
         echo colheader('id', $strID, $sort, $order, $filter);
         echo colheader('name', $strTask, $sort, $order, $filter);
-        echo colheader('priority', $strPriority, $sort, $order, $filter);
-        echo colheader('completion', $strCompletion, $sort, $order, $filter);
+        if ($show != 'incidents')
+        {
+            echo colheader('priority', $strPriority, $sort, $order, $filter);
+            echo colheader('completion', $strCompletion, $sort, $order, $filter);
+        }
         echo colheader('startdate', $strStartDate, $sort, $order, $filter);
         echo colheader('duedate', $strDueDate, $sort, $order, $filter);
         if ($show == 'completed') echo colheader('enddate', $strEndDate, $sort, $order, $filter);
@@ -436,6 +439,7 @@ if (mysql_num_rows($result) >=1 )
             echo "<td>";
             if ($obj = mysql_fetch_object($resultIncident))
             {
+                $incidentidL = $obj->linkcolref;
                 echo "<a href=\"javascript:incident_details_window('{$obj->linkcolref}','incident{$obj->linkcolref}')\" class='info'>";
                 echo $obj->linkcolref;
                 echo "</a>";
@@ -476,12 +480,24 @@ if (mysql_num_rows($result) >=1 )
                 $task->name = $strUntitled;
             }
 
-            echo "<a href='view_task.php?id={$task->id}' class='info'>".truncate_string($task->name, 100);
+            if ($show == 'incidents')
+            {
+                echo "<a href=\"javascript:incident_details_window('{$incidentidL}','incident{$incidentidL}')\" class='info'>";
+            }
+            else
+            {
+                echo "<a href='view_task.php?id={$task->id}' class='info'>";
+            }
+            
+            echo truncate_string($task->name, 100);
             echo "</a>";
 
             echo "</td>";
-            echo "<td>".priority_icon($task->priority).priority_name($task->priority)."</td>";
-            echo "<td>".percent_bar($task->completion)."</td>";
+            if ($show != 'incidents')
+            {
+                echo "<td>".priority_icon($task->priority).priority_name($task->priority)."</td>";
+                echo "<td>".percent_bar($task->completion)."</td>";
+            }
         }
 
         if($mode != 'incident')
