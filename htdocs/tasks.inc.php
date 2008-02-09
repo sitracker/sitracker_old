@@ -354,7 +354,7 @@ else
     {
         $sql .= "ORDER BY IF(duedate,duedate,99999999) ASC, duedate ASC, startdate DESC, priority DESC, completion ASC";
     }
-
+echo $sql;
     $result = mysql_query($sql);
     if (mysql_error()) trigger_error(mysql_error(),E_USER_ERROR);
 }
@@ -423,15 +423,15 @@ if (mysql_num_rows($result) >=1 )
         }
         else if (empty($incidentid))
         {
-            $sql = "SELECT DISTINCT origcolref, linkcolref ";
-            $sql .= "FROM links, linktypes ";
-            $sql .= "WHERE links.linktype=4 ";
-            $sql .= "AND origcolref={$task->id} ";
-            $sql .= "AND direction='left'";
-            $result = mysql_query($sql);
+            $sqlIncident = "SELECT DISTINCT origcolref, linkcolref ";
+            $sqlIncident .= "FROM links, linktypes ";
+            $sqlIncident .= "WHERE links.linktype=4 ";
+            $sqlIncident .= "AND origcolref={$task->id} ";
+            $sqlIncident .= "AND direction='left'";
+            $resultIncident = mysql_query($sqlIncident);
 
             echo "<td>";
-            if ($obj = mysql_fetch_object($result))
+            if ($obj = mysql_fetch_object($resultIncident))
             {
                 echo "<a href=\"javascript:incident_details_window('{$obj->linkcolref}','incident{$obj->linkcolref}')\" class='info'>";
                 echo $obj->linkcolref;
