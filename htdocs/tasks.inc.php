@@ -267,10 +267,27 @@ else
     if ($show != 'incidents')
     {
         echo " {$strTasks}:</h2>";
+        if ($user != 'all')
+        {
+            echo "<p align='center'><a href='{$_SERVER['PHP_SELF']}?user=all&amp;show={$show}&amp;sort={$sort}&amp;order={$order}'>{$strShowAll}</a></p>";
+        }
+        else
+        {
+            echo "<p align='center'><a href='{$_SERVER['PHP_SELF']}?show={$show}&amp;sort={$sort}&amp;order={$order}'>{$strShowMine}</a></p>";
+        }
     }
     else
     {
         echo " {$strActivities}:</h2>";
+        
+        if ($user == 'all')
+        {
+            echo "<p align='center'><a href='{$_SERVER['PHP_SELF']}?show=incidents&amp;user=all'>{$strShowAll}</a></p>";
+        }
+        else
+        {
+            echo "<p align='center'><a href='{$_SERVER['PHP_SELF']}?show=incidents'>{$strShowMine}</a></p>";
+        }
     }
 
     // show drop down select for task view options
@@ -340,14 +357,14 @@ else
 
     if (!empty($sort))
     {
-        if ($sort=='id') $sql .= "ORDER BY id ";
-        elseif ($sort=='name') $sql .= "ORDER BY name ";
-        elseif ($sort=='priority') $sql .= "ORDER BY priority ";
-        elseif ($sort=='completion') $sql .= "ORDER BY completion ";
-        elseif ($sort=='startdate') $sql .= "ORDER BY startdate ";
-        elseif ($sort=='duedate') $sql .= "ORDER BY duedate ";
-        elseif ($sort=='enddate') $sql .= "ORDER BY enddate ";
-        elseif ($sort=='distribution') $sql .= "ORDER BY distribution ";
+        if ($sort == 'id') $sql .= "ORDER BY id ";
+        elseif ($sort == 'name') $sql .= "ORDER BY name ";
+        elseif ($sort == 'priority') $sql .= "ORDER BY priority ";
+        elseif ($sort == 'completion') $sql .= "ORDER BY completion ";
+        elseif ($sort == 'startdate') $sql .= "ORDER BY startdate ";
+        elseif ($sort == 'duedate') $sql .= "ORDER BY duedate ";
+        elseif ($sort == 'enddate') $sql .= "ORDER BY enddate ";
+        elseif ($sort == 'distribution') $sql .= "ORDER BY distribution ";
         else $sql .= "ORDER BY id ";
 
         if ($order=='a' OR $order=='ASC' OR $order='') $sql .= "ASC";
@@ -403,7 +420,15 @@ if (mysql_num_rows($result) >=1 )
         }
         echo colheader('startdate', $strStartDate, $sort, $order, $filter);
         echo colheader('duedate', $strDueDate, $sort, $order, $filter);
-        if ($show == 'completed') echo colheader('enddate', $strEndDate, $sort, $order, $filter);
+        if ($show == 'completed')
+        {
+            echo colheader('enddate', $strEndDate, $sort, $order, $filter);
+        }
+        
+        if ($show == 'incidents')
+        {
+            echo colheader('owner', $strOwner, $sort, $order, $filter);        
+        }
     }
     else
     {
@@ -429,11 +454,12 @@ if (mysql_num_rows($result) >=1 )
         }
         else if (empty($incidentid))
         {
-            $sqlIncident = "SELECT DISTINCT origcolref, linkcolref ";
-            $sqlIncident .= "FROM links, linktypes ";
+            $sqlIncident = "SELECT DISTINCT origcolref, linkcolref, incidents.title ";
+            $sqlIncident .= "FROM links, linktypes, incidents ";
             $sqlIncident .= "WHERE links.linktype=4 ";
-            $sqlIncident .= "AND origcolref={$task->id} ";
-            $sqlIncident .= "AND direction='left'";
+            $sqlIncident .= "AND links.origcolref={$task->id} ";
+            $sqlIncident .= "AND links.direction='left' ";
+            $sqlIncident .= "AND incidents.id = links.linkcolref ";
             $resultIncident = mysql_query($sqlIncident);
 
             echo "<td>";
@@ -443,6 +469,7 @@ if (mysql_num_rows($result) >=1 )
                 echo "<a href=\"javascript:incident_details_window('{$obj->linkcolref}','incident{$obj->linkcolref}')\" class='info'>";
                 echo $obj->linkcolref;
                 echo "</a>";
+                $incidentTitle = $obj->title;
             }           
             echo "</td>";
         }
@@ -450,7 +477,7 @@ if (mysql_num_rows($result) >=1 )
         if ($user == $sit[2])
         {
             echo "<td>";
-            if ($task->distribution=='private')
+            if ($task->distribution == 'private')
             {
                 echo " <img src='{$CONFIG['application_webpath']}images/icons/{$iconset}/16x16/private.png' width='16' height='16' title='Private' alt='Private' />";
             }
@@ -478,6 +505,10 @@ if (mysql_num_rows($result) >=1 )
             if (empty($task->name))
             {
                 $task->name = $strUntitled;
+            }
+
+            if (!empty($incidentTitle)){
+                $task->name = $incidentTitle;
             }
 
             if ($show == 'incidents')
@@ -578,7 +609,7 @@ if (mysql_num_rows($result) >=1 )
 
             echo "</td>";
         }
-        if($mode == 'incident')
+        if($mode == 'incident' OR $show == 'incidents')
         {
             echo "<td>".user_realname($task->owner)."</td>";
         }
@@ -626,7 +657,7 @@ if (mysql_num_rows($result) >=1 )
             echo "<p align='center'><a href='add_task.php?incident={$id}'>{$strStartNewActivity}</a></p>";
         }
     }
-    else
+    else if ($show != 'incidents')
     {
         echo "<p align='center'><a href='add_task.php'>{$strAddTask}</a></p>";
     }
@@ -676,7 +707,7 @@ if (mysql_num_rows($result) >=1 )
         echo "</pre>";
         */
 
-        foreach($billing AS $engineer)
+        foreach ($billing AS $engineer)
         {
             /*
                 [eng][starttime]
@@ -690,7 +721,7 @@ if (mysql_num_rows($result) >=1 )
             $count['engineer'];
             $count['customer'];
 
-            foreach($engineer AS $activity)
+            foreach ($engineer AS $activity)
             {
                 $owner = user_realname($activity['owner']);
                 $duration += $activity['duration'];
@@ -848,13 +879,13 @@ else
     }
 
     echo "</p>";
-    if($mode == 'incident')
+    if ($mode == 'incident')
     {
         echo "<p align='center'>";
         echo "<a href='add_task.php?incident={$id}'>{$strStartNewActivity}";
         echo "</a></p>";
     }
-    else
+    else if ($show != 'incidents')
     {
         echo "<p align='center'><a href='add_task.php'>{$strAddTask}</a></p>";
     }

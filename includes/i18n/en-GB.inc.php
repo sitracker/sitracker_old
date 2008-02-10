@@ -930,6 +930,7 @@ $strShowActiveOnly = 'Show Active Only';
 $strShowAll = 'Show All';
 $strShowClosedIncidents = 'Show closed incidents';
 $strShowExpired = 'Show Expired';
+$strShowMine = 'Show Mine';
 $strShowRenewals = 'Show Renewals';
 $strShowOpenIncidents = 'Show open incidents';
 $strShowOrphandedContacts = 'Show orphaned contacts (no site)';
