@@ -1745,7 +1745,7 @@ function incidentstatus_drop_down($name, $id)
         }
 
         $html .= "value='{$statuses['id']}'";
-        $html .= ">{$GLOBALS[$statuses['name']]}</option>\n";
+        $html .= ">{$statuses['name']}</option>\n";
     }
     $html .= "</select>\n";
     return $html;
