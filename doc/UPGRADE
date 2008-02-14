@@ -28,6 +28,10 @@ This version supports table prefixes, if you use this feature
 any plugins you have installed that are not designed to work
 with 3.40 may break.
 
+The scheduler, auto.php no longer accepts parameters. Scheduled
+actions are now configured from within SiT by going to SiT! ->
+Control Panel -> Scheduler.
+
 
 Upgrading to 3.31
 -----------------

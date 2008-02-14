@@ -86,11 +86,23 @@ define('HOL_TRAINING', 4);
 define('HOL_FREE', 5); // Compassionate/Maternity/Paterity/etc/free
 define('HOL_PUBLIC', 10);  // Public Holiday (eg. Bank Holiday)
 
-
 //default notice types
 define('NORMAL_NOTICE_TYPE', 0);
 define('WARNING_NOTICE_TYPE', 1);
 define('CRITICAL_NOTICE_TYPE', 2);
+
+// Incident statuses
+define("STATUS_ACTIVE",1);
+define("STATUS_CLOSED",2);
+define("STATUS_RESEARCH",3);
+define("STATUS_LEFTMESSAGE",4);
+define("STATUS_COLLEAGUE",5);
+define("STATUS_SUPPORT",6);
+define("STATUS_CLOSING",7);
+define("STATUS_CUSTOMER",8);
+define("STATUS_UNSUPPORTED",9);
+define("STATUS_UNASSIGNED",10);
+
 
 // Decide which language to use and setup internationalisation
 require('i18n/en-GB.inc.php');
@@ -6877,17 +6889,6 @@ function truncate_string($text, $maxlength=255, $html=TRUE)
     return $text;
 }
 
-/**
-    * Creates a new notice, used as standalone and in triggers
-    * @author Kieran Hogg
-    * @param $userid int. ID of the user to create the trigger for
-    * @param $noticetext string. The actual text of the notice if needed, should be less and less
-    *                            needed as we use templates instead of standalone ones.
-    * @param $triggertype int. Type of trigger, used to find the right template. Default blank.
-    * @param $parameters string. List of parameters passed from the trigger, e.g. incident id etc.
-    * @returns boolean. Success or fail.
-    * NOTES: work in progress, skeleton code atm 18/12/07
-*/
 
 /**
     * Returns a localised and translated date
@@ -6969,11 +6970,12 @@ function ldate($format, $date='')
 
 function open_activities_for_incident($incientid)
 {
+    global $dblink, $dbLinkTypes, $dbTasks;
     // Running Activities
 
     $sql = "SELECT DISTINCT origcolref, linkcolref ";
-    $sql .= "FROM links, linktypes ";
-    $sql .= "WHERE links.linktype=4 ";
+    $sql .= "FROM `{$dbLinks}` AS l, `{$dbLinkTypes}` AS lt ";
+    $sql .= "WHERE l.linktype=4 ";
     $sql .= "AND linkcolref={$incientid} ";
     $sql .= "AND direction='left'";
     $result = mysql_query($sql);
@@ -6981,7 +6983,7 @@ function open_activities_for_incident($incientid)
     if (mysql_num_rows($result) > 0)
     {
         //get list of tasks
-        $sql = "SELECT * FROM tasks WHERE enddate IS NULL ";
+        $sql = "SELECT * FROM `{$dbTasks}` WHERE enddate IS NULL ";
         while($tasks = mysql_fetch_object($result))
         {
             if (empty($orSQL)) $orSQL = "(";
@@ -7008,11 +7010,12 @@ function open_activities_for_incident($incientid)
 
 function mark_task_completed($taskid, $incident)
 {
+    global $dbNotes, $dbTasks;
     if(!$incident)
     {
         // Insert note to say what happened
         $bodytext="Task marked 100% complete by {$_SESSION['realname']}:\n\n".$bodytext;
-        $sql = "INSERT INTO notes ";
+        $sql = "INSERT INTO `{$dbNotes}` ";
         $sql .= "(userid, bodytext, link, refid) ";
         $sql .= "VALUES ('0', '{$bodytext}', '10', '{$taskid}')";
         mysql_query($sql);
@@ -7020,13 +7023,64 @@ function mark_task_completed($taskid, $incident)
     }
 
     $enddate = date('Y-m-d H:i:s');
-    $sql = "UPDATE tasks ";
+    $sql = "UPDATE `{$dbTasks}` ";
     $sql .= "SET completion='100', enddate='$enddate' ";
     $sql .= "WHERE id='$taskid' LIMIT 1";
     mysql_query($sql);
     if (mysql_error()) trigger_error(mysql_error(),E_USER_ERROR);
 }
 
+/**
+    * Finds out which scheduled tasks should be run right now
+    * @author Ivan Lucas
+**/
+function schedule_actions_due()
+{
+    global $now;
+    global $dbScheduler;
+
+    $actions = FALSE;
+    $sql = "SELECT * FROM `{$dbScheduler}` WHERE status = 'enabled' ";
+    $sql .= "AND UNIX_TIMESTAMP(start) <= $now AND UNIX_TIMESTAMP(end) >= $now ";
+    $sql .= "AND UNIX_TIMESTAMP(lastran) + `interval` < $now";
+    $result = mysql_query($sql);
+    if (mysql_error()) trigger_error(mysql_error(),E_USER_WARNING);
+    if (mysql_num_rows($result) > 0)
+    {
+        while ($action = mysql_fetch_object($result))
+        {
+            $actions[$action->action] = $actions->params;
+        }
+    }
+    return $actions;
+}
+
+
+/**
+    * Mark a schedule action as done
+    * @author Ivan Lucas
+    * @param $doneaction string. Name of scheduled action
+    * @param $success bool. Was the run successful, TRUE = Yes, FALSE = No
+**/
+function schedule_action_done($doneaction, $success=TRUE)
+{
+    global $now;
+    global $dbScheduler;
+
+    $nowdate = date('Y-m-d H:i:s', $now);
+    $sql = "UPDATE `{$dbScheduler}` SET lastran = '$nowdate' ";
+    if ($success == FALSE) $sql .= ", success=0, status='disabled' ";
+    else $sql .= ", success=1 ";
+    $sql .= "WHERE action = '{$doneaction}'";
+    mysql_query($sql);
+    if (mysql_error())
+    {
+        trigger_error(mysql_error(),E_USER_ERROR);
+        return FALSE;
+    }
+    if (mysql_affected_rows() > 0) return TRUE;
+    else return FALSE;
+}
 
 // -------------------------- // -------------------------- // --------------------------
 // leave this section at the bottom of functions.inc.php ================================

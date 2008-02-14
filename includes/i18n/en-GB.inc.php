@@ -656,6 +656,7 @@ $strMySubstitutes = 'My Substitutes';
 
 $strName = 'Name';
 $strNeedsSubstitueEngineers = '%s need substitute engineers to be defined';
+$strNever = 'Never';
 $strNewContact = 'New Contact';
 $strNewContract = 'New Contract';
 $strNewEmail = 'New Email (none of the above)';
@@ -897,6 +898,7 @@ $strSalespersonAssignedToContactsSiteEmail = 'The email address of the salespers
 $strSat = 'Sat';
 $strSaturday = 'Saturday';
 $strSave = 'Save';
+$strScheduler = 'Scheduler';
 $strScore = 'Score';
 $strScreen = 'Screen';
 $strSearch = 'Search';
