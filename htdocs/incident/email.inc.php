@@ -331,12 +331,13 @@ $emailtype|$newincidentstatus|$timetonextaction_none|$timetonextaction_days|$tim
 
             var meta = byId('emailtype').value+"|"+byId('newincidentstatus').value+"|"+byId('timetonextaction_none').value+"|";
             meta = meta+byId('timetonextaction_days').value+"|"+byId('timetonextaction_hours').value+"|";
-            meta = meta+byId('timetonextaction_minutes').value+"|"+byId('day').value+"|"+byId('month').value+"|";
-            meta = meta+byId('year').value+"|"+byId('target').value+"|"+byId('chase_customer').value+"|";
+            meta = meta+byId('timetonextaction_minutes').value+"||||";
+            //+byId('day').value+"|"+byId('month').value+"|"+byId('year').value+"|";
+            meta = meta+byId('target').value+"|"+byId('chase_customer').value+"|";
             meta = meta+byId('chase_manager').value+"|"+byId('fromfield').value+"|"+byId('replytofield').value+"|";
             meta = meta+byId('ccfield').value+"|"+byId('bccfield').value+"|"+byId('tofield').value+"|";
             meta = meta+urlencode(byId('subjectfield').value)+"|"+urlencode(byId('bodytext').value)+"|"
-            meta = meta+byId('date').value+"|"+byid('timeoffset').value;
+            meta = meta+byId('date').value+"|"+byId('timeoffset').value;
 
             if(toPass != "")
             {
@@ -482,7 +483,9 @@ $emailtype|$newincidentstatus|$timetonextaction_none|$timetonextaction_days|$tim
             echo "</td></tr>";
             if ($CONFIG['enable_spellchecker'] == TRUE)
             {
-                echo "<tr><th>&nbsp;</th><td><input type='checkbox' name='spellcheck' value='yes' /> Check Spelling before sending</td></tr>\n";
+                echo "<tr><th>&nbsp;</th>";
+                echo "<td><input type='checkbox' name='spellcheck' value='yes' />";
+                echo "Check Spelling before sending</td></tr>\n"; // FIXME i18n
             }
             echo "</table>";
             echo "<p align='center'>";
