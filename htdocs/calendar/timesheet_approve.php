@@ -58,6 +58,10 @@ if ($user == '')
             {
                 $sd = strtotime('last monday', $sd);
             }
+            else
+            {
+                $sd = strtotime('midnight', $sd);
+            }
             echo "<td>".date($CONFIG['dateformat_date'], $sd) ."</td>";
             echo "<td>";
             echo "<a href=\"timesheet_approve.php?user={$owner->owner}&amp;date=$sd\">{$strView}</a>";
