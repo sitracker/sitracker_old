@@ -380,6 +380,10 @@ if (mysql_num_rows($result) >=1 )
         {
             echo colheader('markcomplete', '', $sort, $order, $filter);
         }
+        else
+        {
+            echo colheader('incidentid', $strIncident, $sort, $order, $filter);
+        }
 
         if ($user == $sit[2])
         {
@@ -419,6 +423,24 @@ if (mysql_num_rows($result) >=1 )
         if ($mode != 'incident' AND $show != 'incidents')
         {
             echo "<td align='center'><input type='checkbox' name='selected[]' value='{$task->id}' /></td>";
+        }
+        else if (empty($incidentid))
+        {
+            $sql = "SELECT DISTINCT origcolref, linkcolref ";
+            $sql .= "FROM links, linktypes ";
+            $sql .= "WHERE links.linktype=4 ";
+            $sql .= "AND origcolref={$task->id} ";
+            $sql .= "AND direction='left'";
+            $result = mysql_query($sql);
+
+            echo "<td>";
+            if ($obj = mysql_fetch_object($result))
+            {
+                echo "<a href=\"javascript:incident_details_window('{$obj->linkcolref}','incident{$obj->linkcolref}')\" class='info'>";
+                echo $obj->linkcolref;
+                echo "</a>";
+            }           
+            echo "</td>";
         }
 
         if ($user == $sit[2])
