@@ -1766,7 +1766,8 @@ INSERT INTO `scheduler` (`id`, `action`, `params`, `description`, `status`, `sta
 (2, 'SetUserStatus', '', '(EXPERIMENTAL) This will set users status based on data from their holiday calendar.  e.g. Out of Office/Away sick.', 'disabled', '2008-02-03 01:00:00', '0000-00-00 00:00:00', 1800, '0000-00-00 00:00:00', 1),
 (3, 'PurgeJournal', '', 'Delete old journal entries according to the config setting <var>journal_purge_after</var>', 'disabled', '2008-01-01 00:00:00', '0000-00-00 00:00:00', 43200, '0000-00-00 00:00:00', 1),
 (4, 'TimeCalc', '', 'Calculate SLA Target Times and trigger OUT_OF_SLA and OUT_OF_REVIEW system email templates where appropriate.', 'disabled', '2008-01-01 00:00:00', '0000-00-00 00:00:00', 60, '0000-00-00 00:00:00', 1),
-(5, 'ChaseCustomers', '', 'Chase customers', 'disabled', '2008-01-01 00:00:00', '0000-00-00 00:00:00', 3600, '0000-00-00 00:00:00', 1);
+(5, 'ChaseCustomers', '', 'Chase customers', 'disabled', '2008-01-01 00:00:00', '0000-00-00 00:00:00', 3600, '0000-00-00 00:00:00', 1),
+(6, 'CheckWaitingEmail', '', 'Checks the holding queue for emails and fires the TRIGGER_WAITING_HELD_EMAIL trigger when it finds some.', 'enabled', '2008-01-01 00:00:00', '0000-00-00 00:00:00', 60, '0000-00-00 00:00:00', 1);
 ";
 
 // Important: When making changes to the schema you must add SQL to make the alterations

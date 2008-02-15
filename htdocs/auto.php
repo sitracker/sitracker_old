@@ -34,6 +34,7 @@ function saction_test()
 function saction_CloseIncidents()
 {
     $success = TRUE;
+    global $dbIncidents, $dbUpdates;
 
     $sql = "SELECT * FROM `{$dbIncidents}` WHERE status='7' AND (($now - lastupdated) > '{$CONFIG['closure_delay']}') AND (timeofnextaction='0' OR timeofnextaction<='$now') ";
     $result=mysql_query($sql);
@@ -72,6 +73,7 @@ function saction_CloseIncidents()
 **/
 function saction_PurgeJournal()
 {
+    global $dbJournal;
     $success = TRUE;
     $purgedate = date('YmdHis',($now - $CONFIG['journal_purge_after']));
     $sql = "DELETE FROM `{$dbJournal}` WHERE timestamp < $purgedate";
@@ -234,6 +236,7 @@ function saction_TimeCalc()
 
 function saction_SetUserStatus()
 {
+    global $dbHolidays, $dbUsers;
     // Find users with holidays today who don't have correct status
     $success = TRUE;
     $startdate = mktime(0,0,0,date('m'),date('d'),date('Y'));
@@ -333,6 +336,7 @@ function saction_SetUserStatus()
         $success = FALSE;
         trigger_error(mysql_error(),E_USER_WARNING);
     }
+    return $success;
 }
 
 
@@ -489,6 +493,37 @@ function saction_ChaseCustomers()
     }
     return $success;
 }
+
+
+/** Check the holding queue for waiting email
+    * @author Ivan Lucas
+*/
+function saction_CheckWaitingEmail()
+{
+    global $dbTempIncoming, $dbUpdates;
+    $success = TRUE;
+
+    $sql = "SELECT COUNT(ti.id), UNIX_TIMESTAMP(NOW()) - `timestamp` AS minswaiting FROM `{$dbTempIncoming}` AS ti ";
+    $sql .= "LEFT JOIN `{$dbUpdates}` AS u ON ti.updateid = u.id GROUP BY ti.id";
+    $result = mysql_query($sql);
+    if (mysql_error())
+    {
+        trigger_error("MySQL Query Error".mysql_error(), E_USER_WARNING);
+        $success = FALSE;
+    }
+    list($count, $minswaiting) = mysql_fetch_row($result);
+    if ($count > 0)
+    {
+        trigger("TRIGGER_WAITING_HELD_EMAIL", array('minswaiting' => $minswaiting));
+    }
+
+    return $success;
+}
+
+// PurgeAttachments
+
+
+// Look for the review due trigger, where did it go
 
 
 // =======================================================================================

@@ -117,14 +117,15 @@ switch ($_REQUEST['mode'])
         if (mysql_num_rows($result) >= 1)
         {
             echo "<table align='center'>";
-            echo "<tr><th>{$strAction}</th><th>{$strStartDate}</th><th>{$strInterval}</th><th>{$strEndDate}</th><th>{$strLastRan}</th></tr>\n";
+            echo "<tr><th>{$strAction}</th><th>{$strStartDate}</th><th>{$strInterval}</th>";
+            echo "<th>{$strEndDate}</th><th>{$strLastRan}</th><th>Next Run</th></tr>\n";
             $shade = 'shade1';
             while ($schedule = mysql_fetch_object($result))
             {
                 $lastruntime = mysql2date($schedule->lastran);
                 if ($schedule->success == 0) $shade = 'critical';
                 elseif ($schedule->status == 'disabled') $shade = 'expired';
-                elseif ($lastruntime + $schedule->interval < $now) $shade = 'notice';
+                elseif ($lastruntime > 0 AND $lastruntime + $schedule->interval < $now) $shade = 'notice';
                 echo "<tr class='{$shade}'>";
                 echo "<td><a class='info' href='{$_SERVER['PHP_SELF']}?mode=edit&amp;id={$schedule->id}'>{$schedule->action}<span>{$schedule->description}</span></a></td>";
                 echo "<td>{$schedule->start}</td>";
@@ -138,17 +139,23 @@ switch ($_REQUEST['mode'])
                 if ($lastruntime > 0) echo "{$schedule->lastran}";
                 else echo $strNever;
                 echo "</td>";
+                echo "<td>";
+                if ($schedule->status == 'enabled')
+                {
+                    if ($lastruntime > 0) $nextruntime = $lastruntime + $schedule->interval;
+                    else $nextruntime = $now;;
+                    echo date($CONFIG['dateformat_datetime'],$nextruntime);
+                }
+                else echo $strNever;
+                echo "</td>";
                 echo "</tr>";
                 if ($shade == 'shade1') $shade = 'shade2';
                 else $shade = 'shade1';
             }
             echo "</table>\n";
         }
-        $actions = schedule_actions_due();
-        echo "<pre>".print_r($actions,true)."</pre>";
+
         include ('htmlfooter.inc.php');
-
 }
-
 
 ?>

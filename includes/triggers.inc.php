@@ -324,7 +324,7 @@ function trigger($triggerid, $paramarray='')
         $sql .= "AND userid={$userid}";
     }
     $result = mysql_query($sql);
-    echo $sql;
+//     echo $sql;
     if (mysql_error()) trigger_error("MySQL Query Error ".mysql_error(), E_USER_WARNING);
     while ($triggerobj = mysql_fetch_object($result))
     {
