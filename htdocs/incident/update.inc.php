@@ -471,7 +471,11 @@ function display_update_page($draftid=-1)
     $j = 0;
     $ext = array($strBytes, $strKBytes, $strMBytes, $strGBytes, $strTBytes);
     $att_file_size = $CONFIG['upload_max_filesize'];
-    while ($att_file_size >= pow(1024,$j)) ++$j;
+    while ($att_file_size >= pow(1024,$j))
+    {
+        ++$j;
+    }
+    
     $att_file_size = round($att_file_size / pow(1024,$j-1) * 100) / 100 . ' ' . $ext[$j-1];
 
     echo "<th align='right' valign='top'>{$GLOBALS['strAttachFile']}";
@@ -483,8 +487,15 @@ function display_update_page($draftid=-1)
     echo "</table>";
     echo "<p class='center'>";
     echo "<input type='hidden' name='action' value='update' />";
-    if ($draftid == -1) $localdraft = "";
-    else $localdraft = $draftid;
+    if ($draftid == -1)
+    {
+        $localdraft = "";
+    }
+    else
+    {
+        $localdraft = $draftid;
+    }
+    
     echo "<input type='hidden' name='draftid' id='draftid' value='{$localdraft}' />";
     echo "<input type='hidden' name='storepriority' value='".incident_priority($id)."' />";
     echo "<input type='submit' name='submit' value='{$GLOBALS['strUpdateIncident']}' /></p>";
@@ -702,9 +713,10 @@ else
     $att_max_filesize = return_bytes($CONFIG['upload_max_filesize']);
     $incident_attachment_fspath = $CONFIG['attachment_fspath'] . $id;
     if ($_FILES['attachment']['name'] != "")
-    {
+    {       
         // try to figure out what delimeter is being used (for windows or unix)...
-        $delim = (strstr($filesarray[$c],"/")) ? "/" : "\\";
+        //.... // $delim = (strstr($filesarray[$c],"/")) ? "/" : "\\";
+        $delim = (strstr($_FILES['attachment']['tmp_name'],"/")) ? "/" : "\\";
 
         // make incident attachment dir if it doesn't exist
         $umask = umask(0000);
