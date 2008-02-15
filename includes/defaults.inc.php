@@ -45,9 +45,6 @@ $CONFIG['dateformat_shorttime'] = 'H:i';
 $CONFIG['dateformat_date'] = 'jS M Y';
 $CONFIG['dateformat_time'] = 'g:ia';
 
-// The amount of time (in seconds) to wait before closing when an incident is marked for closure
-$CONFIG['closure_delay'] = 554400; // close after six days and 10 hours
-
 // Array containing working days (0=Sun, 1=Mon ... 6=Sat)
 $CONFIG['working_days'] = array(1,2,3,4,5);
 // Times of the start and end of the working day (in seconds)

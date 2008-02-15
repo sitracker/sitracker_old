@@ -30,13 +30,16 @@ function saction_test()
 /**
     * Select incidents awaiting closure for more than a week where the next action time is not set or has passed
     * @author Ivan Lucas
+    * @param $closure_delay int. The amount of time (in seconds) to wait before closing
 **/
-function saction_CloseIncidents()
+function saction_CloseIncidents($closure_delay)
 {
     $success = TRUE;
     global $dbIncidents, $dbUpdates;
 
-    $sql = "SELECT * FROM `{$dbIncidents}` WHERE status='7' AND (($now - lastupdated) > '{$CONFIG['closure_delay']}') AND (timeofnextaction='0' OR timeofnextaction<='$now') ";
+    if ($closure_delay < 1) $closure_delay = 554400; // Default  six days and 10 hours
+
+    $sql = "SELECT * FROM `{$dbIncidents}` WHERE status='7' AND (($now - lastupdated) > '{$closure_delay}') AND (timeofnextaction='0' OR timeofnextaction<='$now') ";
     $result=mysql_query($sql);
     if (mysql_error())
     {
@@ -520,9 +523,7 @@ function saction_CheckWaitingEmail()
     return $success;
 }
 
-// PurgeAttachments
-
-
+// TODO PurgeAttachments
 // Look for the review due trigger, where did it go
 
 

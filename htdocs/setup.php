@@ -62,8 +62,6 @@ $CFGVAR['dateformat_shortdate']['title'] = 'Short date format';
 $CFGVAR['dateformat_shorttime']['title'] = 'Short time format';
 $CFGVAR['dateformat_date']['title'] = 'Long date format';
 $CFGVAR['dateformat_time']['title'] = 'Long time format';
-$CFGVAR['closure_delay']['title'] = 'Closure Delay';
-$CFGVAR['closure_delay']['help'] = 'The amount of time (in seconds) to wait before closing when an incident is marked for closure';
 $CFGVAR['working_days']['title'] = 'Array containing working days (0=Sun, 1=Mon ... 6=Sat)';
 $CFGVAR['start_working_day']['title'] = 'Time of the start of the working day (in seconds)';
 $CFGVAR['end_working_day']['title'] = 'Time of the end of the working day (in seconds)';
@@ -145,7 +143,7 @@ function setup_configure()
     foreach ($configfiles AS $config_filename)
     {
         if (file_exists($config_filename)) $cfg_file_exists = TRUE;
-        
+
         if (is_writable($config_filename)) $cfg_file_writable = TRUE;
     }
     if ($cfg_file_exists)
@@ -224,6 +222,7 @@ function setup_configure()
     return $html;
 }
 
+
 function setup_exec_sql($sqlquerylist)
 {
     global $CONFIG;
@@ -247,6 +246,7 @@ function setup_exec_sql($sqlquerylist)
     }
     return $html;
 }
+
 
 // Returns TRUE if an admin account exists, or false if not
 function setup_check_adminuser()
@@ -566,6 +566,22 @@ switch ($_REQUEST['action'])
                             }
                             echo "<p>".mysql_num_rows($result)." incidents upgraded</p>";
                         }
+                        if ($installed_version < 3.40)
+                        {
+                            if ($CONFIG['closure_delay'] > 0 AND $CONFIG['closure_delay'] != 554400)
+                            {
+                                echo "<p>Inserting value from deprecated config variable <var>closure_delay</var> into scheduler</p>";
+                                $sql = "UPDATE scheduler SET params = '{$CONFIG['closure_delay'}' WHERE action = 'CloseIncidents' LIMIT 1";
+                                mysql_query($sql);
+                                if (mysql_error())
+                                {
+                                    trigger_error(mysql_error(),E_USER_WARNING);
+                                    echo "<p><strong>FAILED:</strong> $sql</p>";
+                                    $upgradeok = FALSE;
+                                }
+                                else echo "<p><strong>OK:</strong> $sql</p>";
+                            }
+                        }
                         elseif ($installed_version == $application_version)
                         {
                             echo "<p>Everything is up to date</p>";
@@ -633,7 +649,7 @@ switch ($_REQUEST['action'])
                             $installed_version = $application_version;
                             echo "<h2>Upgrade complete</h2>";
                             echo "<p>Upgraded to v{$application_version}</p>";
-                            
+
                             trigger("TRIGGER_SIT_UPGRADED", array('version' => $application_version));
                         }
                         else

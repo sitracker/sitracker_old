@@ -1749,6 +1749,7 @@ CREATE TABLE IF NOT EXISTS `scheduler` (
   `id` int(11) NOT NULL auto_increment,
   `action` varchar(50) NOT NULL,
   `params` varchar(255) NOT NULL,
+  `paramslabel` varchar(255) default NULL,
   `description` tinytext NOT NULL,
   `status` enum('enabled','disabled') NOT NULL default 'enabled',
   `start` datetime NOT NULL,
@@ -1758,7 +1759,7 @@ CREATE TABLE IF NOT EXISTS `scheduler` (
   `success` tinyint(1) NOT NULL default '1',
   PRIMARY KEY  (`id`),
   KEY `job` (`action`)
-) ENGINE=MyISAM  DEFAULT CHARSET=latin1 AUTO_INCREMENT=6 ;
+) ENGINE=MyISAM  ;
 
 
 INSERT INTO `scheduler` (`id`, `action`, `params`, `description`, `status`, `start`, `end`, `interval`, `lastran`, `success`) VALUES
@@ -1768,6 +1769,8 @@ INSERT INTO `scheduler` (`id`, `action`, `params`, `description`, `status`, `sta
 (4, 'TimeCalc', '', 'Calculate SLA Target Times and trigger OUT_OF_SLA and OUT_OF_REVIEW system email templates where appropriate.', 'disabled', '2008-01-01 00:00:00', '0000-00-00 00:00:00', 60, '0000-00-00 00:00:00', 1),
 (5, 'ChaseCustomers', '', 'Chase customers', 'disabled', '2008-01-01 00:00:00', '0000-00-00 00:00:00', 3600, '0000-00-00 00:00:00', 1),
 (6, 'CheckWaitingEmail', '', 'Checks the holding queue for emails and fires the TRIGGER_WAITING_HELD_EMAIL trigger when it finds some.', 'enabled', '2008-01-01 00:00:00', '0000-00-00 00:00:00', 60, '0000-00-00 00:00:00', 1);
+-- INL 15Feb08 FIXME all this scheduler data is temporary, needs tidying before release
+INSERT INTO `scheduler` (`id`, `action`, `params`, `paramslabel`, `description`, `status`, `start`, `end`, `interval`, `lastran`, `success`) VALUES (1, 'CloseIncidents', '554400', 'closure_delay', 'Close incidents that have been marked for closure for longer than the <var>closure_delay</var> parameter (which is in seconds)', 'enabled', '2008-02-14 01:23:00', '0000-00-00 00:00:00', 60, '2008-02-15 16:35:06', 1);
 ";
 
 // Important: When making changes to the schema you must add SQL to make the alterations

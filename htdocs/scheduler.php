@@ -41,6 +41,12 @@ switch ($_REQUEST['mode'])
             $statuslist = array('enabled' => $strEnabled ,'disabled' => $strDisabled);
             echo "<td>".array_drop_down($statuslist, 'status', $saction->status);
             echo "</td></tr>\n";
+            if (!empty($saction->paramslabel))
+            {
+                echo "<tr><th><label for='params'>{$strParameters}</label></th>";
+                echo "<td>{$saction->paramslabel}: <input type='text' id='params' name='params' value='{$saction->params}' size='15' maxlength='255' />";
+                echo "</tr>";
+            }
             echo "<tr><th><label for='startdate'>{$strStartDate}</label></th>";
             $startdate = date('Y-m-d',mysql2date($saction->start));
             $starttime = date('H:i',mysql2date($saction->start));
@@ -83,6 +89,7 @@ switch ($_REQUEST['mode'])
         else $end = '0000-00-00 00:00';
 
         $status = cleanvar($_REQUEST['status']);
+        $params = cleanvar($_REQUEST['params']);
         $interval = cleanvar($_REQUEST['interval']);
         if ($interval <= 0)
         {
@@ -94,6 +101,10 @@ switch ($_REQUEST['mode'])
         if ($status = 'enabled')
         {
             $sql .= " , `success` = '1'";
+        }
+        if (!empty($params))
+        {
+            $sql .= " , `params` = '{$params}'";
         }
         $sql .= " WHERE `id` = $id LIMIT 1";
         mysql_query($sql);
@@ -107,6 +118,7 @@ switch ($_REQUEST['mode'])
 
     case 'list':
     default:
+        $refresh = 60;
         include ('htmlheader.inc.php');
         echo "<h2>{$strScheduler}</h2>";
 
@@ -127,7 +139,11 @@ switch ($_REQUEST['mode'])
                 elseif ($schedule->status == 'disabled') $shade = 'expired';
                 elseif ($lastruntime > 0 AND $lastruntime + $schedule->interval < $now) $shade = 'notice';
                 echo "<tr class='{$shade}'>";
-                echo "<td><a class='info' href='{$_SERVER['PHP_SELF']}?mode=edit&amp;id={$schedule->id}'>{$schedule->action}<span>{$schedule->description}</span></a></td>";
+                echo "<td><a class='info' href='{$_SERVER['PHP_SELF']}?mode=edit&amp;id={$schedule->id}'>{$schedule->action}";
+                echo "<span>";
+                echo "{$schedule->description}";
+                if (!empty($schedule->params)) echo "\n<br /><strong>{$schedule->paramslabel} = {$schedule->params}</strong>";
+                echo "</span></a></td>";
                 echo "<td>{$schedule->start}</td>";
                 echo "<td>".format_seconds($schedule->interval)."</td>";
                 echo "<td>";
@@ -153,6 +169,9 @@ switch ($_REQUEST['mode'])
                 else $shade = 'shade1';
             }
             echo "</table>\n";
+
+            // TODO add a check to see if any of the above actions are long overdue, if they are
+            // print a message explaining how to set up cron/scheduling
         }
 
         include ('htmlfooter.inc.php');
