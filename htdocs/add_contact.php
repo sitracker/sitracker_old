@@ -218,9 +218,32 @@ else
     // add contact if no errors
     if ($errors == 0)
     {
-        if (!empty($dataprotection_email)) $dataprotection_email='Yes'; else $dataprotection_email='No';
-        if (!empty($dataprotection_phone)) $dataprotection_phone='Yes'; else $dataprotection_phone='No';
-        if (!empty($dataprotection_address)) $dataprotection_address='Yes'; else $dataprotection_address='No';
+        if (!empty($dataprotection_email))
+        {
+            $dataprotection_email='Yes';
+        }
+        else
+        {
+            $dataprotection_email='No';
+        }
+
+        if (!empty($dataprotection_phone))
+        {
+            $dataprotection_phone='Yes';
+        }
+        else
+        {
+            $dataprotection_phone='No';
+        }
+
+        if (!empty($dataprotection_address))
+        {
+            $dataprotection_address='Yes';
+        }
+        else
+        {
+            $dataprotection_address='No';
+        }
 
         // generate username and password
 

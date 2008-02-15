@@ -1,3 +1,8 @@
+Changes in v3.32 - Unreleased
+-----------------------------------------------------------------------
+* Escalated Incidents report is now filterable
+
+
 Changes in v3.31 - Released 19 December 2007
 -----------------------------------------------------------------------
 * Software now has a vendor (allows more accurate stats)

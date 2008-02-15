@@ -50,15 +50,70 @@ echo "</script>";
 
 echo "<h2>{$strExternalEngineerCallDistribution}</h2>";
 
-echo "<form action='{$_SERVER['PHP_SELF']}' method='post' id='filterform'><p align='center'>";
-echo "{$strFilter}:";
-echo "<input type='radio' name='filterby' value='sla' onclick=\"get_and_display('../get_bits_and_pieces.inc.php?toget=slas', 'filter'); hide_filter(false);\">{$strBySLA}</input>";
-echo "<input type='radio' name='filterby' value='softwareid' onclick=\"get_and_display('../get_bits_and_pieces.inc.php?toget=skills', 'filter'); hide_filter(false);\">{$strBySkill}</input>";
-echo "<input type='radio' name='filterby' value='product' onclick=\"get_and_display('../get_bits_and_pieces.inc.php?toget=products', 'filter'); hide_filter(false);\">{$strByProduct}</input>";
-echo "<br />";
-echo "<select id='filter' name='filter'>";
-echo "</select>";
-echo "<script type='text/javascript'>hide_filter(true);</script>";
+$filterSQL = "";
+
+if (!empty($filterby))
+{
+    switch ($filterby)
+    {
+        case 'sla':
+            $filterSQL = "AND incidents.servicelevel = '{$filter}' ";
+            $slaChecked = "checked='yes'";
+            break;
+        case 'maintenanceid':
+            $filterSQL = "AND incidents.maintenanceid = '{$filter}' ";
+            $maintenanceChecked = "checked='yes'";
+            break;
+        case 'softwareid':
+            $filterSQL = "AND incidents.softwareid = '{$filter}' ";
+            $softwareChecked = "checked='yes'";
+            break;
+        case 'product':
+            $filterSQL = "AND incidents.product = '{$filter}' ";
+            $productCheck = "checked='yes'";
+            break;
+        default:
+            $noneChecked = "checked='yes'";
+            break;
+     }
+        
+}
+
+echo "<form action='{$_SERVER['PHP_SELF']}' method='post' id='filterform'><p align='center'>\n";
+echo "{$strFilter}:\n";
+echo "<input type='radio' name='filterby' value='none' onclick=\"hide_filter(true);\" {$nonChecked} />{$strNone} \n";
+echo "<input type='radio' name='filterby' value='sla' onclick=\"get_and_display('../get_bits_and_pieces.inc.php?toget=slas', 'filter'); hide_filter(false);\" {$slaChecked} />{$strBySLA} \n";
+echo "<input type='radio' name='filterby' value='softwareid' onclick=\"get_and_display('../get_bits_and_pieces.inc.php?toget=skills', 'filter'); hide_filter(false);\" {$softwareChecked} />{$strBySkill} \n";
+echo "<input type='radio' name='filterby' value='product' onclick=\"get_and_display('../get_bits_and_pieces.inc.php?toget=products', 'filter'); hide_filter(false);\" {$productCheck} />{$strByProduct} \n";
+echo "<br />\n";
+echo "<select id='filter' name='filter'>\n";
+echo "<option />";
+echo "</select>\n";
+
+if (!empty($filterby))
+{
+    echo "<script type='text/javascript'>";
+    switch ($filterby)
+    {
+        case 'sla':
+            echo "get_and_display('../get_bits_and_pieces.inc.php?toget=slas&selected={$filter}', 'filter'); hide_filter(false);";
+            break;
+        case 'softwareid':
+            echo "get_and_display('../get_bits_and_pieces.inc.php?toget=skills&selected={$filter}', 'filter'); hide_filter(false);";
+            break;
+        case 'product':
+            echo "get_and_display('../get_bits_and_pieces.inc.php?toget=products&selected={$filter}', 'filter'); hide_filter(false);";
+            break;
+        default:
+            echo "hide_filter(true);";
+            break;
+     }
+     echo "</script>";
+}
+else
+{
+    echo "<script type='text/javascript'>hide_filter(true);</script>";
+}
 echo "<input type='submit' name='go' value='{$strGo}' />";
 echo "</p></form>";
 
@@ -91,6 +146,7 @@ while ($escalations = mysql_fetch_object($escs))
                     break;
              }
         }
+        $sql .= $filterSQL;
 
         $sql .= "ORDER BY externalengineer";
 
