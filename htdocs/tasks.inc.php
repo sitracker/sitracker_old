@@ -67,7 +67,7 @@ if (!empty($selected))
 }
 
 
-if(!empty($incident))
+if (!empty($incident))
 {
 ?>
 <script type='text/javascript'>
@@ -234,7 +234,7 @@ setInterval("countUp()", 1000); //every 1 seconds
 else
 {
     // Defaults
-    if (empty($user) OR $user=='current')
+    if (empty($user) OR $user == 'current')
     {
         $user=$sit[2];
     }
@@ -256,7 +256,24 @@ else
         }
     }
     echo "<h2><img src='{$CONFIG['application_webpath']}images/icons/{$iconset}/32x32/task.png' width='32' height='32' alt='' /> ";
-    echo user_realname($user,TRUE) . "'s {$strTasks}:</h2>"; // FIXME i18n
+    
+    if ($user == 'all')
+    {
+        echo $strAll;
+    }
+    else
+    {
+        echo user_realname($user,TRUE)."'s "; // FIXME i18n
+    }
+    
+    if ($show != 'incidents')
+    {
+        echo " {$strTasks}:</h2>";
+    }
+    else
+    {
+        echo " {$strActivities}:</h2>";
+    }
 
     // show drop down select for task view options
     echo "<form action='{$_SERVER['PHP_SELF']}' style='text-align: center;'>";
@@ -286,25 +303,37 @@ else
     echo "</select>\n";
     echo "</form><br />";
 
-    $sql = "SELECT * FROM `{$dbTasks}` WHERE owner='$user' ";
+
+    $sql = "SELECT * FROM `{$dbTasks}` WHERE ";
+    if ($user != 'all')
+    {
+        $sql .= "owner='$user' AND ";
+    }
+
     if ($show=='' OR $show=='active' )
     {
-        $sql .= "AND (completion < 100 OR completion='' OR completion IS NULL) AND (distribution = 'public' OR distribution = 'private') ";
+        $sql .= "(completion < 100 OR completion='' OR completion IS NULL)  AND (distribution = 'public' OR distribution = 'private') ";
     }
     elseif ($show == 'completed')
     {
-        $sql .= "AND (completion = 100) AND (distribution = 'public' OR distribution = 'private') ";
+        $sql .= " (completion = 100) AND (distribution = 'public' OR distribution = 'private') ";
     }
     elseif ($show == 'incidents')
     {
-        $sql .= "AND distribution = 'incident' ";
+        $sql .= " distribution = 'incident' ";
+
+        if (empty($incidentid))
+        {
+            $sql .= "AND (completion < 100 OR completion='' OR completion IS NULL) ";
+        }
     }
     else
     {
-        $sql .= "AND 1=2 "; // force no results for other cases
+        $sql .= "1=2 "; // force no results for other cases
     }
 
-    if ($user != $sit[2])
+
+    if ($user != $sit[2]) // AND $user != 'all' AND $show != 'incidents')
     {
         $sql .= "AND distribution='public' ";
     }
@@ -347,7 +376,10 @@ if (mysql_num_rows($result) >=1 )
         $totalduration = 0;
         $closedduration = 0;
 
-        echo colheader('markcomplete', '', $sort, $order, $filter);
+        if ($show != 'incidents')
+        {
+            echo colheader('markcomplete', '', $sort, $order, $filter);
+        }
 
         if ($user == $sit[2])
         {
@@ -384,7 +416,7 @@ if (mysql_num_rows($result) >=1 )
         $enddate = mysql2date($task->enddate);
         $lastupdated = mysql2date($task->lastupdated);
         echo "<tr class='$shade'>";
-        if ($mode != 'incident')
+        if ($mode != 'incident' AND $show != 'incidents')
         {
             echo "<td align='center'><input type='checkbox' name='selected[]' value='{$task->id}' /></td>";
         }
@@ -530,7 +562,7 @@ if (mysql_num_rows($result) >=1 )
         echo "</script>";
         echo "</td></tr>";
     }
-    else
+    else if ($show != 'incidents')
     {
         echo "<tr>";
         echo "<td colspan='7'><a href=\"javascript: submitform()\">{$strMarkComplete}</a></td>";
