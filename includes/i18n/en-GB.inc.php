@@ -158,11 +158,14 @@ $strBrowseJournal = 'Browse Journal';
 $strBrowseKB = 'Browse KnowledgeBase';
 $strBrowseSites = 'Browse sites';
 $strBulkModify = 'Bulk Modify';
+$strByMaintenance = 'By Maintenance';
 $strByReseller = 'By Reseller';
 # e.g. Ordered By Product
 $strByProduct = 'By Product';
+$strBySkill = 'By Skill';
 $strBytes = 'Bytes';
 $strByDate = 'By Date';
+$strBySLA = 'By SLA';
 $strByVendor = 'By Vendor';
 
 $strCalendar = 'Calendar';
@@ -411,6 +414,7 @@ $strFileManagement = 'File Management';
 $strFilename = 'Filename';
 # e.g. computer files
 $strFiles = 'Files';
+$strFilter = 'Filter';
 $strFinalUpdate = 'Final Update';
 $strFindContact = 'Find Contact';
 $strFirstCustomerVisibleUpdate = 'The first customer visible update in the incident log';

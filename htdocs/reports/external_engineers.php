@@ -20,7 +20,12 @@ include ('db_connect.inc.php');
 include ('functions.inc.php');
 require ('auth.inc.php');
 
+
 include ('htmlheader.inc.php');
+
+$filterby = cleanvar($_REQUEST['filterby']);
+$filter = cleanvar($_REQUEST['filter']);
+
 echo "<script type='text/javascript'>";
 ?>
 function incident_details_window_l(incidentid,second)
@@ -28,20 +33,65 @@ function incident_details_window_l(incidentid,second)
     URL = "<?php  echo $CONFIG['application_uriprefix'].$CONFIG['application_webpath'] ?>incident_details.php?id=" + incidentid + "&amp;javascript=enabled";
     window.open(URL, "sit_popup", "toolbar=yes,status=yes,menubar=no,scrollbars=yes,resizable=yes,width=700,height=600");
 }
+
+function hide_filter(hide)
+{
+    if(hide==true)
+    {
+        $('filter').hide();
+    }
+    else
+    {
+        $('filter').show();
+    }
+}
 <?php
 echo "</script>";
 
 echo "<h2>{$strExternalEngineerCallDistribution}</h2>";
+
+echo "<form action='{$_SERVER['PHP_SELF']}' method='post' id='filterform'><p align='center'>";
+echo "{$strFilter}:";
+echo "<input type='radio' name='filterby' value='sla' onclick=\"get_and_display('../get_bits_and_pieces.inc.php?toget=slas', 'filter'); hide_filter(false);\">{$strBySLA}</input>";
+echo "<input type='radio' name='filterby' value='softwareid' onclick=\"get_and_display('../get_bits_and_pieces.inc.php?toget=skills', 'filter'); hide_filter(false);\">{$strBySkill}</input>";
+echo "<input type='radio' name='filterby' value='product' onclick=\"get_and_display('../get_bits_and_pieces.inc.php?toget=products', 'filter'); hide_filter(false);\">{$strByProduct}</input>";
+echo "<br />";
+echo "<select id='filter' name='filter'>";
+echo "</select>";
+echo "<script type='text/javascript'>hide_filter(true);</script>";
+echo "<input type='submit' name='go' value='{$strGo}' />";
+echo "</p></form>";
 
 $sql = "SELECT id, name FROM `{$dbEscalationPaths}`";
 $escs = mysql_query($sql);
 while ($escalations = mysql_fetch_object($escs))
 {
         $html .= "<h3>{$escalations->name}</h3>";
+
         $sql = "SELECT i.*, sw.name, c.forenames, c.surname, s.name AS siteName ";
         $sql .= "FROM `{$dbIncidents}` AS i, `{$dbSoftware}` AS sw, `{$dbContacts}` AS c, `{$dbSites}` AS s ";
         $sql .= "WHERE escalationpath = '{$escalations->id}' AND closed = '0' AND sw.id = i.softwareid ";
         $sql .= " AND i.contact = c.id AND c.siteid = s.id ";
+
+        if (!empty($filterby))
+        {
+            switch($filterby)
+            {
+                case 'sla':
+                    $sql .= "AND i.servicelevel = '{$filter}' ";
+                    break;
+                case 'maintenanceid':
+                    $sql .= "AND i.maintenanceid = '{$filter}' ";
+                    break;
+                case 'softwareid':
+                    $sql .= "AND i.softwareid = '{$filter}' ";
+                    break;
+                case 'product':
+                    $sql .= "AND i.product = '{$filter}' ";
+                    break;
+             }
+        }
+
         $sql .= "ORDER BY externalengineer";
 
         $result = mysql_query($sql);
