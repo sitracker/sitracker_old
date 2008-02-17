@@ -1,6 +1,9 @@
 Changes in v3.32 - Unreleased
 -----------------------------------------------------------------------
 * Escalated Incidents report is now filterable
+* Japanese Translation
+* Ability to list open activties/times tasks for site/user/all
+* Ability to view all open activities
 
 
 Changes in v3.31 - Released 19 December 2007

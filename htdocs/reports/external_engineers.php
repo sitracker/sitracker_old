@@ -76,7 +76,6 @@ if (!empty($filterby))
             $noneChecked = "checked='yes'";
             break;
      }
-        
 }
 
 echo "<form action='{$_SERVER['PHP_SELF']}' method='post' id='filterform'><p align='center'>\n";
@@ -190,7 +189,8 @@ while ($escalations = mysql_fetch_object($escs))
                 if (empty($engineer['1']))  $engineer['1'] = 0;
 
                 $html .= "<tr>";
-                $html .= "<td class='shade1'>{$engineer['name']}</td><td class='shade1'>".$engineer['count']."</td>";
+                $html .= "<td class='shade1'>{$engineer['name']}</td>";
+                $html .= "<td class='shade1'>".$engineer['count']."</td>";
                 $html .= "<td class='shade1'>".$engineer['4']."</td>";
                 $html .= "<td class='shade1'>".$engineer['3']."</td>";
                 $html .= "<td class='shade1'>".$engineer['2']."</td>";
@@ -200,24 +200,31 @@ while ($escalations = mysql_fetch_object($escs))
                 foreach ($engineer['calls'] AS $call)
                 {
                     $replace = array("Response","Action");
-                    $html .= "<tr><td width='50%'>{$call['text']}</td><td width='12%'>".user_realname($call['localowner']);
-                    if (!empty($call['salfordtowner'])) $html .= "<br />T: ".user_realname($call['salfordtowner']);
-                    $html .= "</td><td width='25%'>".$call['software']."</td><td>".str_replace($replace,"",incidentstatus_name($call['status']))."</td></tr>";
+                    $html .= "<tr><td width='50%'>{$call['text']}</td>";
+                    $html .= "<td width='12%'>".user_realname($call['localowner']);
+                    if(!empty($call['salfordtowner']))
+                    {
+                        $html .= "<br />T: ".user_realname($call['salfordtowner']);
+                    }
+                    $html .= "</td><td width='25%'>".$call['software']."</td>";
+                    $html .= "<td>".str_replace($replace,"",incidentstatus_name($call['status']))."</td></tr>";
                 }
                 $html .= "</table>\n\n";
                 $html .= "</td>";
-                $total+=$engineer['count'];
-                $c['4']+=$engineer['4'];
-                $c['3']+=$engineer['3'];
-                $c['2']+=$engineer['2'];
-                $c['1']+=$engineer['1'];
+                $total += $engineer['count'];
+                $c['4'] += $engineer['4'];
+                $c['3'] += $engineer['3'];
+                $c['2'] += $engineer['2'];
+                $c['1'] += $engineer['1'];
                 $html .= "</tr>\n";
             }
             $html .= "<tr><td>{$strTotal}:</td><td>{$total}</td>";
-            if (empty($c['4'])) $c['4']=0;
-            if (empty($c['3'])) $c['3']=0;
-            if (empty($c['2'])) $c['2']=0;
-            if (empty($c['1'])) $c['1']=0;
+
+            if (empty($c['4'])) $c['4'] = 0;
+            if (empty($c['3'])) $c['3'] = 0;
+            if (empty($c['2'])) $c['2'] = 0;
+            if (empty($c['1'])) $c['1'] = 0;
+
             $html .= "<td>".$c['4']."</td>";
             $html .= "<td>".$c['3']."</td>";
             $html .= "<td>".$c['2']."</td>";
@@ -226,7 +233,9 @@ while ($escalations = mysql_fetch_object($escs))
             $html .= "</table>\n\n";
         }
         else
+        {
             $html .= "<p align='center'>{$strNoIncidents}</p>";
+        }
     unset($obj);
     unset($esc);
 }

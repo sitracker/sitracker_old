@@ -6976,7 +6976,12 @@ function ldate($format, $date='')
     return $datestring;
 }
 
-
+/**
+    * Returns the number of open activities/timed tasks for an incident
+    * @author Paul Heaney
+    * @param $incidentid int. Incident ID you want
+    * @returns int. Number of open activities for the incident (0 if non)
+*/
 function open_activities_for_incident($incientid)
 {
     global $dblink, $dbLinkTypes, $dbTasks;
@@ -6993,7 +6998,7 @@ function open_activities_for_incident($incientid)
     {
         //get list of tasks
         $sql = "SELECT * FROM `{$dbTasks}` WHERE enddate IS NULL ";
-        while($tasks = mysql_fetch_object($result))
+        while ($tasks = mysql_fetch_object($result))
         {
             if (empty($orSQL)) $orSQL = "(";
             else $orSQL .= " OR ";
@@ -7016,6 +7021,33 @@ function open_activities_for_incident($incientid)
     return $num;
 }
 
+/**
+    * Returns the number of open activities/timed tasks for a site
+    * @author Paul Heaney
+    * @param $siteid int. Site ID you want
+    * @returns int. Number of open activities for the site (0 if non)
+*/
+function open_activities_for_site($siteid)
+{
+    $openactivites = 0;
+
+    if (!empty($siteid) AND $siteid != 0)
+    {
+        $sql = "SELECT i.id FROM `{$dbIncidents}` i, `{$dbContacts}` c ";
+        $sql .= "WHERE i.contact = c.id AND ";
+        $sql .= "c.siteid = {$siteid} AND ";
+        $sql .= "(i.status != 2 AND i.status != 7)";
+
+        $result = mysql_query($sql);
+
+        while ($obj = mysql_fetch_object($result))
+        {
+            $openactivites += open_activities_for_incident($obj->id);
+        }
+    }
+
+    return $openactivites;
+}
 
 function mark_task_completed($taskid, $incident)
 {

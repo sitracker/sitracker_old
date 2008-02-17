@@ -13,14 +13,13 @@
 //          Paul Heaney <paulheaney[at]users.sourceforge.net>
 // called by tasks.php
 
-// NOTE/FIXME billing code needs sensible variable names etc PH 21/01/2008
-
 // External variables
 $user = cleanvar($_REQUEST['user']);
 $show = cleanvar($_REQUEST['show']);
 $sort = cleanvar($_REQUEST['sort']);
 $order = cleanvar($_REQUEST['order']);
 $incident = cleanvar($_REQUEST['incident']);
+$siteid = cleanvar($_REQUEST['siteid']);
 
 $mode;
 
@@ -231,12 +230,54 @@ setInterval("countUp()", 1000); //every 1 seconds
     }
     echo "<p align='center'>{$strIncidentActivitiesIntro}</p>";
 }
+elseif (!empty($siteid))
+{
+    // Find all tasks for site
+    $sql = "SELECT incidents.id FROM incidents, contacts ";
+    $sql .= "WHERE incidents.contact = contacts.id AND ";
+    $sql .= "contacts.siteid = {$siteid} AND ";
+    $sql .= "(incidents.status != 2 AND incidents.status != 7)";
+    $result = mysql_query($sql);
+
+    $sqlTask = "SELECT * FROM tasks WHERE enddate IS NULL  ";
+        
+    while ($obj = mysql_fetch_object($result))
+    {
+        //get info for incident-->task linktype
+        $sql = "SELECT DISTINCT origcolref, linkcolref ";
+        $sql .= "FROM links, linktypes ";
+        $sql .= "WHERE links.linktype=4 ";
+        $sql .= "AND linkcolref={$obj->id} ";
+        $sql .= "AND direction='left'";
+        $resultLinks = mysql_query($sql);
+    
+        //get list of tasks
+        while ($tasks = mysql_fetch_object($resultLinks))
+        {
+            //$sqlTask .= "OR id={$tasks->origcolref} ";
+            if (empty($orSQL)) $orSQL = "(";
+            else $orSQL .= " OR ";
+            $orSQL .= "id={$tasks->origcolref} ";
+        }
+        
+        if (!empty($orSQL))
+        {
+            $sqlTask .= "AND {$orSQL})";
+        }
+    }
+    
+    $result = mysql_query($sqlTask);
+    
+    $show = 'incidents';
+    //$show = 'incidents';
+    echo "<h2>".sprintf($strActivitiesForX, site_name($siteid))."</h2>";
+}
 else
 {
     // Defaults
     if (empty($user) OR $user == 'current')
     {
-        $user=$sit[2];
+        $user = $sit[2];
     }
 
     // If the user is passed as a username lookup the userid
@@ -252,7 +293,7 @@ else
         }
         else
         {
-            $user=$sit[2]; // force to current user if username not found
+            $user = $sit[2]; // force to current user if username not found
         }
     }
     echo "<h2><img src='{$CONFIG['application_webpath']}images/icons/{$iconset}/32x32/task.png' width='32' height='32' alt='' /> ";
@@ -282,7 +323,7 @@ else
     {
         echo " {$strActivities}:</h2>";
         
-        if ($user == 'all')
+        if ($user != 'all')
         {
             echo "<p align='center'><a href='{$_SERVER['PHP_SELF']}?show=incidents&amp;user=all'>{$strShowAll}</a></p>";
         }
@@ -385,7 +426,7 @@ else
 //common code
 if (mysql_num_rows($result) >=1 )
 {
-    if($show) $filter=array('show' => $show);
+    if ($show) $filter = array('show' => $show);
     echo "<form action='{$_SERVER['PHP_SELF']}' name='tasks'  method='post'>";
     echo "<br /><table align='center'>";
     echo "<tr>";

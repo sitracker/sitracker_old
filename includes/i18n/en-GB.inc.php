@@ -35,6 +35,7 @@ $strActivityBilling = 'Activity Billing';
 $strActivityBillingInfo = 'Only closed activities are shown for billing.';
 $strActivityList = 'Activity List';
 $strActivityMarkedCompleteSuccessfully = 'Activity Marked Complete Successfully';
+$strActivitiesForX = 'Activities for %s';
 # i.e. Create, New
 $strAdd = 'Add';
 $strAddContact = 'Add Contact';
@@ -911,6 +912,8 @@ $strSearchInDomain = 'Searching for "%s" in %s&hellip;';
 $strSearchInDomainNotAvailableYet = 'Searching in this domain not available yet';
 $strSeconds = 'Seconds';
 $strSeeOlderVersions = 'See Older Versions';
+# Where you whould click for more information/details
+$strSeeHere = 'See Here';
 $strSelect = 'Select';
 $strSelectDays = 'Select Days';
 $strSelectYourSkills = 'Select your skills. Having skills means that you are available to receive incidents with those skills.';
