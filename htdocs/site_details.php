@@ -46,7 +46,11 @@ while ($siterow = mysql_fetch_array($siteresult))
         echo "<tr><th>{$strStatus}:</th><td><span class='expired'>{$strInactive}</span></td></tr>";
     }
     $tags = list_tags($id, 3, TRUE);
-    if (!empty($tags)) echo "<tr><th>{$strTags}:</th><td>{$tags}</td></tr>";
+    if (!empty($tags))
+    {
+        echo "<tr><th>{$strTags}:</th><td>{$tags}</td></tr>";
+    }
+    
     echo "<tr><th>{$strDepartment}:</th><td>{$siterow['department']}</td></tr>";
     echo "<tr><th>{$strAddress1}:</th><td>{$siterow['address1']}</td></tr>";
     echo "<tr><th>{$strAddress2}:</th><td>{$siterow['address2']}</td></tr>";
@@ -58,15 +62,27 @@ while ($siterow = mysql_fetch_array($siteresult))
     echo "<tr><th>{$strFax}:</th><td>{$siterow['fax']}</td></tr>";
     echo "<tr><th>{$strEmail}:</th><td><a href=\"mailto:".$siterow['email']."\">".$siterow['email']."</a></td></tr>";
     echo "<tr><th>{$strWebsite}:</th><td>";
-    if (!empty($siterow['websiteurl'])) echo "<a href=\"{$siterow['websiteurl']}\">{$siterow['websiteurl']}</a>";
+    if (!empty($siterow['websiteurl']))
+    {
+        echo "<a href=\"{$siterow['websiteurl']}\">{$siterow['websiteurl']}</a>";
+    }
+    
     echo "</td></tr>";
     echo "<tr><th>{$strNotes}:</th><td>".nl2br($siterow['notes'])."</td></tr>";
     echo "<tr><td colspan='2'>&nbsp;</td></tr>";
-    echo "<tr><th>{$strIncidents}:</th><td>See <a href=\"contact_support.php?id=".$siterow['id']."&amp;mode=site\">here</a></td></tr>";
-    echo "<tr><th>Site Incident Pool:</th><td>{$siterow['freesupport']} Incidents remaining</td></tr>";
+    echo "<tr><th>{$strIncidents}:</th><td><a href=\"contact_support.php?id=".$siterow['id']."&amp;mode=site\">{$strSeeHere}</a></td></tr>";
+    echo "<tr><th>{$strActivities}:</th><td>".open_activities_for_site($siterow['id'])." <a href='tasks.php?siteid={$siterow['id']}'>{$strSeeHere}</a></td></tr>";
+    echo "<tr><th>Site Incident Pool:</th><td>{$siterow['freesupport']} Incidents remaining</td></tr>"; // FIXME i18n
     echo "<tr><th>{$strSalesperson}:</th><td>";
-    if ($siterow['owner']>=1) echo user_realname($siterow['owner'],TRUE);
-    else echo $strNotSet;
+    if ($siterow['owner'] >= 1)
+    {
+        echo user_realname($siterow['owner'],TRUE);
+    }
+    else
+    {
+        echo $strNotSet;
+    }
+    
     echo "</td></tr>\n";
 }
 mysql_free_result($siteresult);
@@ -82,44 +98,79 @@ echo "</p>";
 echo "<h3>{$strContacts}</h3>";
 
 // List Contacts
-$sql="SELECT * FROM contacts WHERE siteid='$id' ORDER BY surname, forenames";
+$sql = "SELECT * FROM contacts WHERE siteid='{$id}' ORDER BY surname, forenames";
 $contactresult = mysql_query($sql);
 if (mysql_error()) trigger_error("MySQL Query Error ".mysql_error(), E_USER_ERROR);
+
 $countcontacts = mysql_num_rows($contactresult);
 if ($countcontacts > 0)
 {
     echo "<p align='center'>".sprintf($strContactsMulti, $countcontacts)."</p>";
     echo "<table align='center'>";
-    echo "<tr><th>{$strName}</th><th>{$strJobTitle}</th><th>{$strDepartment}</th><th>{$strTelephone}</th><th>{$strEmail}</th><th>{$strAddress}</th><th>{$strDataProtection}</th><th>{$strNotes}</th></tr>";
-    $shade='shade1';
-    while ($contactrow=mysql_fetch_array($contactresult))
+    echo "<tr><th>{$strName}</th><th>{$strJobTitle}</th>";
+    echo "<th>{$strDepartment}</th><th>{$strTelephone}</th>";
+    echo "<th>{$strEmail}</th><th>{$strAddress}</th>";
+    echo "<th>{$strDataProtection}</th><th>{$strNotes}</th></tr>";
+    
+    $shade = 'shade1';
+    
+    while ($contactrow = mysql_fetch_array($contactresult))
     {
-        if ($contactrow['active']=='false') $shade='expired';
+        if ($contactrow['active'] == 'false') $shade='expired';
         echo "<tr class='$shade'>";
         echo "<td><img src='{$CONFIG['application_webpath']}images/icons/{$iconset}/16x16/contact.png' width='16' height='16' alt='' /> ";
         echo "<a href=\"contact_details.php?id=".$contactrow['id']."\">{$contactrow['forenames']} {$contactrow['surname']}</a></td>";
         echo "<td>{$contactrow['jobtitle']}</td>";
         echo "<td>{$contactrow['department']}</td>";
-        if ($contactrow['dataprotection_phone']!='Yes') echo "<td>{$contactrow['phone']}</td>";
-        else echo "<td><strong>{$strWithheld}</strong></td>";
-        if ($contactrow['dataprotection_email']!='Yes') echo "<td>{$contactrow['email']}</td>";
-        else echo "<td><strong>{$strWithheld}</strong></td>";
-        if ($contactrow['dataprotection_address']!='Yes')
+        if ($contactrow['dataprotection_phone'] != 'Yes')
+        {
+            echo "<td>{$contactrow['phone']}</td>";
+        }
+        else
+        {
+            echo "<td><strong>{$strWithheld}</strong></td>";
+        }
+        
+        if ($contactrow['dataprotection_email'] != 'Yes')
+        {
+            echo "<td>{$contactrow['email']}</td>";
+        }
+        else
+        {
+            echo "<td><strong>{$strWithheld}</strong></td>";
+        }
+        
+        if ($contactrow['dataprotection_address'] != 'Yes')
         {
             echo "<td>";
-            if (!empty($contactrow['address1'])) echo $contactrow['address1'];
+            if (!empty($contactrow['address1']))
+            {
+                echo $contactrow['address1'];
+            }
             echo "</td>";
         }
         else echo "<td><strong>{$strWithheld}</strong></td>";
         echo "<td>";
-        if ($contactrow['dataprotection_email']=='Yes') { echo "<strong>{$strNoEmail}</strong>, "; }
-        if ($contactrow['dataprotection_phone']=='Yes') { echo "<strong>{$strNoCalls}</strong>, "; }
-        if ($contactrow['dataprotection_address']=='Yes') { echo "<strong>{$strNoPost}</strong>"; }
+        if ($contactrow['dataprotection_email'] == 'Yes')
+        {
+            echo "<strong>{$strNoEmail}</strong>, ";
+        }
+        
+        if ($contactrow['dataprotection_phone'] == 'Yes')
+        {
+            echo "<strong>{$strNoCalls}</strong>, ";
+        }
+        
+        if ($contactrow['dataprotection_address'] == 'Yes')
+        {
+            echo "<strong>{$strNoPost}</strong>";
+        }
+            
         echo "</td>";
         echo "<td>".nl2br(substr($contactrow['notes'], 0, 500))."</td>";
         echo "</tr>";
-        if ($shade=='shade1') $shade='shade2';
-        else $shade='shade1';
+        if ($shade == 'shade1') $shade = 'shade2';
+        else $shade = 'shade1';
     }
     echo "</table>\n";
 }
@@ -154,7 +205,7 @@ if (user_permission($sit[2],19)) // View contracts
     // connect to database and execute query
     $result = mysql_query($sql);
     if (mysql_error()) trigger_error("MySQL Query Error ".mysql_error(), E_USER_ERROR);
-    $countcontracts=mysql_num_rows($result);
+    $countcontracts = mysql_num_rows($result);
     if ($countcontracts > 0)
     {
         ?>
