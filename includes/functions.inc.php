@@ -7022,6 +7022,7 @@ function open_activities_for_incident($incientid)
     return $num;
 }
 
+
 /**
     * Returns the number of open activities/timed tasks for a site
     * @author Paul Heaney
@@ -7049,6 +7050,7 @@ function open_activities_for_site($siteid)
 
     return $openactivites;
 }
+
 
 function mark_task_completed($taskid, $incident)
 {
