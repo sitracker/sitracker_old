@@ -6984,7 +6984,7 @@ function ldate($format, $date='')
 */
 function open_activities_for_incident($incientid)
 {
-    global $dblink, $dbLinkTypes, $dbTasks;
+    global $dbLinks, $dbLinkTypes, $dbTasks;
     // Running Activities
 
     $sql = "SELECT DISTINCT origcolref, linkcolref ";
@@ -6993,6 +6993,7 @@ function open_activities_for_incident($incientid)
     $sql .= "AND linkcolref={$incientid} ";
     $sql .= "AND direction='left'";
     $result = mysql_query($sql);
+    if (mysql_error()) trigger_error(mysql_error(),E_USER_WARNING);
 
     if (mysql_num_rows($result) > 0)
     {
