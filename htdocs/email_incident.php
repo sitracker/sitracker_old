@@ -20,6 +20,7 @@ require ('auth.inc.php');
 // External variables
 $step = cleanvar($_REQUEST['step']);
 $id = cleanvar($_REQUEST['id']);
+$menu = cleanvar($_REQUEST['menu']);
 $incidentid=$id;
 $draftid = cleanvar($_REQUEST['draftid']);
 if (empty($draftid)) $draftid = -1;
