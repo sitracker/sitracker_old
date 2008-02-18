@@ -1134,6 +1134,7 @@ $strXDays = '%s Days';
 $strXHours = '%s Hours';
 $strXMinute = '%s Minute';
 $strXMinutes = '%s Minutes';
+$strXMonths = '%s Months';
 # e.g. 'Fred of ACME Inc'. i.e. Name of Site
 $strXofX = '%s of %s';
 $strXSeconds = '%s Seconds';
