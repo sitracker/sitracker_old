@@ -217,16 +217,16 @@ switch ($step)
             if ($obj->type == 'auto_chase_phone')
             {
                 echo "<tr><th>{$strCustomerChaseUpdate}</th><td>";
-                echo "<input type='radio' name='chase_customer' value='no' checked='yes' />{$strNo} ";
-                echo "<input type='radio' name='chase_customer' value='yes' />{$strYes}";
+                echo "<label><input type='radio' name='chase_customer' value='no' checked='yes' />{$strNo}</label> ";
+                echo "<label><input type='radio' name='chase_customer' value='yes' />{$strYes}</label>";
                 echo "</td></tr>";
             }
 
             if ($obj->type == 'auto_chase_manager')
             {
                 echo "<tr><th>{$strManagerChaseUpdate}</th>";
-                echo "<input type='radio' name='chase_manager' value='no' checked='yes' />{$strNo} ";
-                echo "<input type='radio' name='chase_manager' value='yes' />{$strYes}";
+                echo "<label><input type='radio' name='chase_manager' value='no' checked='yes' />{$strNo}</label> ";
+                echo "<label><input type='radio' name='chase_manager' value='yes' />{$strYes}</label>";
                 echo "</td></tr>";
             }
         }
@@ -236,7 +236,39 @@ switch ($step)
         echo "</td></tr>\n";
         echo "<tr><th>{$strTimeToNextAction}:</th>";
         echo "<td>";
-        echo "<input type='radio' name='timetonextaction_none' value='none' checked='checked' />None<br />";
+        echo "Place the incident in the waiting queue?<br />";
+        echo "<label><input type='radio' name='timetonextaction_none' id='ttna_time' value='time' onchange=\"update_ttna();\" />";
+        echo "For <em>x</em> days, hours, minutes</label><br />"; // FIXME i18n for x days,. hours, minutes
+        echo "<span id='ttnacountdown'";
+        if (empty($na_days) AND empty($na_hours) AND empty($na_minutes)) echo " style='display: none;'";
+        echo ">";
+        echo "&nbsp;&nbsp;&nbsp;<input maxlength='3' name='timetonextaction_days' id='timetonextaction_days' value='{$na_days}' onclick='window.document.updateform.timetonextaction_none[0].checked = true;' size='3' /> {$GLOBALS['strDays']}&nbsp;";
+        echo "<input maxlength='2' name='timetonextaction_hours' id='timetonextaction_hours' value='{$na_hours}' onclick='window.document.updateform.timetonextaction_none[0].checked = true;' size='3' /> {$GLOBALS['strHours']}&nbsp;";
+        echo "<input maxlength='2' name='timetonextaction_minutes' id='timetonextaction_minutes' value='{$na_minutes}' onclick='window.document.updateform.timetonextaction_none[0].checked = true;' size='3' /> {$GLOBALS['strMinutes']}";
+        echo "<br /></span>";
+
+        echo "<input type='radio' name='timetonextaction_none' id='ttna_date' value='date' onchange=\"update_ttna();\" />Until specific date and time<br />"; //FIXME i18n Until specific date and time
+        echo "<span id='ttnadate' style='display: none;'>";
+        echo "<input name='date' id='date' size='10' value='{$date}' onclick=\"window.document.updateform.timetonextaction_none[1].checked = true;\"/> ";
+        echo date_picker('updateform.date');
+        echo " <select name='timeoffset' id='timeoffset' onchange='window.document.updateform.timetonextaction_none[1].checked = true;'>";
+        echo "<option value='0'></option>";
+        echo "<option value='0'>8:00 AM</option>";
+        echo "<option value='1'>9:00 AM</option>";
+        echo "<option value='2'>10:00 AM</option>";
+        echo "<option value='3'>11:00 AM</option>";
+        echo "<option value='4'>12:00 PM</option>";
+        echo "<option value='5'>1:00 PM</option>";
+        echo "<option value='6'>2:00 PM</option>";
+        echo "<option value='7'>3:00 PM</option>";
+        echo "<option value='8'>4:00 PM</option>";
+        echo "<option value='9'>5:00 PM</option>";
+        echo "</select>";
+        echo "<br /></span>";
+        echo "<label><input checked='checked' type='radio' name='timetonextaction_none' id='ttna_none' onchange=\"update_ttna();\" onclick=\"window.document.updateform.timetonextaction_days.value = ''; window.document.updateform.timetonextaction_hours.value = ''; window.document.updateform.timetonextaction_minutes.value = '';\" value='None' />Unspecified</label>";
+
+
+    /*    echo "<input type='radio' name='timetonextaction_none' value='none' checked='checked' onchange=\"update_ttna();\" />{$strNone}<br />";
         echo "<input type='radio' name='timetonextaction_none' value='time' />In <em>x</em> days, hours, minutes<br />&nbsp;&nbsp;&nbsp;";
         echo "<input maxlength='3' name='timetonextaction_days' onclick='window.document.updateform.timetonextaction_none[1].checked = true;' size='3' /> Days&nbsp;";
         echo "<input maxlength='2' name='timetonextaction_hours' onclick='window.document.updateform.timetonextaction_none[1].checked = true;' size='3' /> Hours&nbsp;";
@@ -257,7 +289,7 @@ switch ($step)
         echo "<option value='8'>4:00 PM</option>";
         echo "<option value='9'>5:00 PM</option>";
         echo "</select>";
-        echo "<br />";
+    */    echo "<br />";
         echo "</td></tr>";
         echo "</table>";
         echo "<p align='center'>";
@@ -421,13 +453,18 @@ $emailtype|$newincidentstatus|$timetonextaction_none|$timetonextaction_days|$tim
         {
             if ($draftid == -1)
             {
-                $from = emailtype_replace_specials(emailtype_from($emailtype), $id, $sit[2]);
-                $replyTo = emailtype_replace_specials(emailtype_replyto($emailtype), $id, $sit[2]);
-                $ccemail = emailtype_replace_specials(emailtype_cc($emailtype), $id, $sit[2]);
-                $bccemail = emailtype_replace_specials(emailtype_bcc($emailtype), $id, $sit[2]);
-                $toemail = emailtype_replace_specials(emailtype_to($emailtype), $id, $sit[2]);
-                $subject = emailtype_replace_specials(emailtype_subject($emailtype), $id, $sit[2]);
-                $body = emailtype_replace_specials(emailtype_body($emailtype), $id, $sit[2]);
+                $tsql = "SELECT * FROM `{$dbEmailTemplates}` WHERE id=$emailtype";
+                $tresult = mysql_query($tsql);
+                if (mysql_error()) trigger_error(mysql_error(),E_USER_WARNING);
+                $template = mysql_fetch_object($tresult);
+
+                $from = replace_specials($template->fromfield, array('incidentid' => $id, 'userid' => $sit[2]));
+                $replyto = replace_specials($template->replytofield, array('incidentid' => $id, 'userid' => $sit[2]));
+                $ccemail = replace_specials($template->ccfield, array('incidentid' => $id, 'userid' => $sit[2]));
+                $bccemail = replace_specials($template->bccfield, array('incidentid' => $id, 'userid' => $sit[2]));
+                $toemail = replace_specials($template->tofield, array('incidentid' => $id, 'userid' => $sit[2]));
+                $subject = replace_specials($template->subjectfield, array('incidentid' => $id, 'userid' => $sit[2]));
+                $body = replace_specials($template->body, array('incidentid' => $id, 'userid' => $sit[2]));
             }
             else
             {

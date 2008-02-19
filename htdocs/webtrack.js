@@ -265,3 +265,25 @@ function resetTextAreaLength ( e )
     e.cols = MIN_COLS ;
     e.rows = MIN_ROWS ;
 }
+
+
+// Display/Hide the time to next action fields
+// Author: Ivan Lucas
+function update_ttna() {
+        if ($('ttna_time').checked)
+        {
+        $('ttnacountdown').show();
+        $('ttnadate').hide();
+        }
+        if ($('ttna_date').checked)
+        {
+        $('ttnacountdown').hide();
+        $('ttnadate').show();
+        }
+        if ($('ttna_none').checked)
+        {
+        $('ttnacountdown').hide();
+        $('ttnadate').hide();
+        }
+}
+

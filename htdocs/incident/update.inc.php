@@ -155,26 +155,6 @@ function display_update_page($draftid=-1)
         object.updatetype.options[Current].value = object.currentText.value;
     }
 
-    // Display/Hide the time to next action fields
-    // Author: Ivan Lucas
-    function update_ttna() {
-         if ($('ttna_time').checked)
-         {
-            $('ttnacountdown').show();
-            $('ttnadate').hide();
-         }
-         if ($('ttna_date').checked)
-         {
-            $('ttnacountdown').hide();
-            $('ttnadate').show();
-         }
-         if ($('ttna_none').checked)
-         {
-            $('ttnacountdown').hide();
-            $('ttnadate').hide();
-         }
-    }
-
     <?php
         echo "var draftid = {$draftid}";
     ?>
@@ -475,7 +455,7 @@ function display_update_page($draftid=-1)
     {
         ++$j;
     }
-    
+
     $att_file_size = round($att_file_size / pow(1024,$j-1) * 100) / 100 . ' ' . $ext[$j-1];
 
     echo "<th align='right' valign='top'>{$GLOBALS['strAttachFile']}";
@@ -495,7 +475,7 @@ function display_update_page($draftid=-1)
     {
         $localdraft = $draftid;
     }
-    
+
     echo "<input type='hidden' name='draftid' id='draftid' value='{$localdraft}' />";
     echo "<input type='hidden' name='storepriority' value='".incident_priority($id)."' />";
     echo "<input type='submit' name='submit' value='{$GLOBALS['strUpdateIncident']}' /></p>";
@@ -713,7 +693,7 @@ else
     $att_max_filesize = return_bytes($CONFIG['upload_max_filesize']);
     $incident_attachment_fspath = $CONFIG['attachment_fspath'] . $id;
     if ($_FILES['attachment']['name'] != "")
-    {       
+    {
         // try to figure out what delimeter is being used (for windows or unix)...
         //.... // $delim = (strstr($filesarray[$c],"/")) ? "/" : "\\";
         $delim = (strstr($_FILES['attachment']['tmp_name'],"/")) ? "/" : "\\";
