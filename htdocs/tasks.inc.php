@@ -233,20 +233,20 @@ setInterval("countUp()", 1000); //every 1 seconds
 elseif (!empty($siteid))
 {
     // Find all tasks for site
-    $sql = "SELECT incidents.id FROM incidents, contacts ";
-    $sql .= "WHERE incidents.contact = contacts.id AND ";
-    $sql .= "contacts.siteid = {$siteid} AND ";
-    $sql .= "(incidents.status != 2 AND incidents.status != 7)";
+    $sql = "SELECT i.id FROM `{$dbIncidents}` AS i, `{$dbContacts}` AS c ";
+    $sql .= "WHERE i.contact = c.id AND ";
+    $sql .= "c.siteid = {$siteid} AND ";
+    $sql .= "(i.status != 2 AND i.status != 7)";
     $result = mysql_query($sql);
 
-    $sqlTask = "SELECT * FROM tasks WHERE enddate IS NULL  ";
+    $sqlTask = "SELECT * FROM `{$dbTasks}` WHERE enddate IS NULL  ";
         
     while ($obj = mysql_fetch_object($result))
     {
         //get info for incident-->task linktype
         $sql = "SELECT DISTINCT origcolref, linkcolref ";
-        $sql .= "FROM links, linktypes ";
-        $sql .= "WHERE links.linktype=4 ";
+        $sql .= "FROM `{$dbLinks}` AS l, `{$dbLinkTypes}` AS lt ";
+        $sql .= "WHERE l.linktype=4 ";
         $sql .= "AND linkcolref={$obj->id} ";
         $sql .= "AND direction='left'";
         $resultLinks = mysql_query($sql);
@@ -499,11 +499,11 @@ if (mysql_num_rows($result) >=1 )
         else if (empty($incidentid))
         {
             $sqlIncident = "SELECT DISTINCT origcolref, linkcolref, incidents.title ";
-            $sqlIncident .= "FROM links, linktypes, incidents ";
-            $sqlIncident .= "WHERE links.linktype=4 ";
-            $sqlIncident .= "AND links.origcolref={$task->id} ";
-            $sqlIncident .= "AND links.direction='left' ";
-            $sqlIncident .= "AND incidents.id = links.linkcolref ";
+            $sqlIncident .= "FROM `{$dbLinks}` AS l, `{$dbLinkTypes}` AS lt, `{$dbIncidents}` AS i ";
+            $sqlIncident .= "WHERE l.linktype=4 ";
+            $sqlIncident .= "AND l.origcolref={$task->id} ";
+            $sqlIncident .= "AND l.direction='left' ";
+            $sqlIncident .= "AND i.id = l.linkcolref ";
             $resultIncident = mysql_query($sqlIncident);
 
             echo "<td>";

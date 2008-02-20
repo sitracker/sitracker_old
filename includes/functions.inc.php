@@ -760,9 +760,9 @@ function contact_count_open_incidents($id)
 */
 function contact_productsupport($contactid, $productid)
 {
-    global $now;
+    global $now, $dbContactProducts;
     // check support
-    $sql = "SELECT id, expirydate FROM contactproducts WHERE contactid=$contactid AND productid=$productid";
+    $sql = "SELECT id, expirydate FROM `{$dbContactProducts}` WHERE contactid={$contactid} AND productid={$productid}";
     $result = mysql_query($sql);
 
     if (mysql_num_rows($result) == 0)
@@ -794,8 +794,9 @@ function contact_productsupport($contactid, $productid)
 */
 function contact_productsupport_expiryday($contactid, $productid)
 {
+    global $dbContactProducts;
     // check support
-    $sql = "SELECT id, expirydate FROM contactproducts WHERE contactid=$contactid AND productid=$productid";
+    $sql = "SELECT id, expirydate FROM `{$dbContactProducts}` WHERE contactid={$contactid} AND productid={$productid}";
     $result = mysql_query($sql);
 
     if (mysql_num_rows($result) == 0)
@@ -821,8 +822,9 @@ function contact_productsupport_expiryday($contactid, $productid)
 */
 function contact_productsupport_expirymonth($contactid, $productid)
 {
+    global $dbContactProducts;
     // check support
-    $sql = "SELECT id, expirydate FROM contactproducts WHERE contactid=$contactid AND productid=$productid";
+    $sql = "SELECT id, expirydate FROM `{$dbContactProducts}` WHERE contactid={$contactid} AND productid={$productid}";
     $result = mysql_query($sql);
 
     if (mysql_num_rows($result) == 0)
@@ -848,8 +850,9 @@ function contact_productsupport_expirymonth($contactid, $productid)
 */
 function contact_productsupport_expiryyear($contactid, $productid)
 {
+    global $dbContactProducts;
     // check support
-    $sql = "SELECT id, expirydate FROM contactproducts WHERE contactid=$contactid AND productid=$productid";
+    $sql = "SELECT id, expirydate FROM `{$dbContactProducts}` WHERE contactid={$contactid} AND productid={$productid}";
     $result = mysql_query($sql);
 
     if (mysql_num_rows($result) == 0)
@@ -873,7 +876,7 @@ function contact_productsupport_expiryyear($contactid, $productid)
 */
 function contact_vcard($id)
 {
-    global $dbContacts;
+    global $dbContacts, $dbSites;
     $sql = "SELECT *, s.name AS sitename, s.address1 AS siteaddress1, s.address2 AS siteaddress2, ";
     $sql .= "s.city AS sitecity, s.county AS sitecounty, s.country AS sitecountry, s.postcode AS sitepostcode ";
     $sql .= "FROM `{$dbContacts}` AS c, `{$dbSites}` AS s ";
@@ -2061,7 +2064,7 @@ function priority_drop_down($name, $id, $max=4, $disable=FALSE)
 function contactproducts_drop_down($name, $contactid)
 {
     // extract products
-    $sql  = "SELECT * FROM products ORDER BY name ASC";
+    $sql  = "SELECT * FROM `{$dbProducts}` ORDER BY name ASC";
     $result = mysql_query($sql);
 
     // print HTML
@@ -2996,7 +2999,7 @@ function servicelevel_id2tag($id)
 */
 function servicelevel_tag2id($sltag)
 {
-    $sql = "SELECT id FROM servicelevels WHERE tag = '{$sltag}' AND priority=1";
+    $sql = "SELECT id FROM `{$dbServiceLevels}` WHERE tag = '{$sltag}' AND priority=1";
     $result = mysql_query($sql);
     if (mysql_error()) trigger_error(mysql_error(),E_USER_WARNING);
     list($id) = mysql_fetch_row($result);
@@ -3392,8 +3395,10 @@ function countdaycurrentincidents($day, $month, $year)
 */
 function print_contact_flags($id, $editlink=FALSE)
 {
-    $sql = "SELECT contactflags.flag, flags.name FROM contactflags, flags ";
-    $sql .= "WHERE contactflags.flag=flags.flag AND contactflags.contactid='$id' ";
+    global $dbContactFlags, $dbFlags;
+    $sql = "SELECT cf.flag, f.name ";
+    $sql .= "FROM `{$dbContactFlags}` AS cf, `{$dbFlags}` AS f ";
+    $sql .= "WHERE cf.flag=f.flag AND cf.contactid='$id' ";
     $result= mysql_query($sql);
     if (mysql_error()) trigger_error(mysql_error(),E_USER_WARNING);
     while ($contactflagrows = mysql_fetch_array($result) )
@@ -3425,7 +3430,8 @@ function print_contact_flags($id, $editlink=FALSE)
 */
 function check_contact_flag($id, $flag)
 {
-    $sql = "SELECT flag FROM contactflags WHERE contactid='$id' AND flag='$flag'";
+    global $dbContactFlags;
+    $sql = "SELECT flag FROM `{$dbContactFlags}` WHERE contactid='{$id}' AND flag='{$flag}'";
     $result = mysql_query($sql);
     if (mysql_error()) trigger_error(mysql_error(),E_USER_WARNING);
 }
@@ -4093,8 +4099,9 @@ function holidaytype_drop_down($name, $id)
  */
 function user_group_id($userid)
 {
+    global $dbUsers;
     // get groupid
-    $sql = "SELECT groupid FROM users WHERE id='{$userid}' ";
+    $sql = "SELECT groupid FROM `{$dbUsers}` WHERE id='{$userid}' ";
     $result = mysql_query($sql);
     if (mysql_error()) trigger_error(mysql_error(),E_USER_WARNING);
     list($groupid) = mysql_fetch_row($result);
@@ -5056,13 +5063,15 @@ function remove_slashes($string)
 */
 function contact_manager_email($contactid)
 {
-    $sql = "SELECT siteid FROM contacts WHERE id='$contactid' LIMIT 1";
+    global $dbContacts;
+    $sql = "SELECT siteid FROM `{$dbContacts}` WHERE id='{$contactid}' LIMIT 1";
     $result = mysql_query($sql);
     if (mysql_error()) trigger_error(mysql_error(),E_USER_WARNING);
     list($siteid) = mysql_fetch_row($result);
 
-    $sql = "SELECT * FROM contacts,contactflags WHERE contacts.id=contactflags.contactid ";
-    $sql .= "AND contacts.siteid='{$siteid}' AND contactflags.flag='MGR'";
+    $sql = "SELECT * FROM `{$dbContacts}` AS c, `{$dbContactFlags}` AS cf ";
+    $sql .= "WHERE c.id=cf.contactid ";
+    $sql .= "AND c.siteid='{$siteid}' AND cf.flag='MGR'";
     $result = mysql_query($sql);
     if (mysql_error()) trigger_error(mysql_error(),E_USER_WARNING);
 
@@ -7083,7 +7092,7 @@ function open_activities_for_site($siteid)
 
     if (!empty($siteid) AND $siteid != 0)
     {
-        $sql = "SELECT i.id FROM `{$dbIncidents}` i, `{$dbContacts}` c ";
+        $sql = "SELECT i.id FROM `{$dbIncidents}` AS i, `{$dbContacts}` AS c ";
         $sql .= "WHERE i.contact = c.id AND ";
         $sql .= "c.siteid = {$siteid} AND ";
         $sql .= "(i.status != 2 AND i.status != 7)";

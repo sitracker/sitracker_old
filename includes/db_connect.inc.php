@@ -66,6 +66,8 @@ if (mysql_error())
 // Table Names
 $dbBillingPeriods = "{$CONFIG['db_tableprefix']}billing_periods";
 $dbClosingStatus = "{$CONFIG['db_tableprefix']}closingstatus";
+$dbContactFlags = "{$CONFIG['db_tableprefix']}contactflags";
+$dbContactProducts = "{$CONFIG['db_tableprefix']}contactproducts";
 $dbContacts = "{$CONFIG['db_tableprefix']}contacts";
 $dbDashboard = "{$CONFIG['db_tableprefix']}dashboard";
 $dbDashboardRSS = "{$CONFIG['db_tableprefix']}dashboard_rss";

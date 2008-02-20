@@ -26,7 +26,7 @@ if (!empty($toget))
     switch ($toget)
     {
         case 'slas':
-            $sql = "SELECT DISTINCT tag FROM servicelevels";
+            $sql = "SELECT DISTINCT tag FROM `{$dbServiceLevels}`";
             $result = mysql_query($sql);
             if (mysql_error()) trigger_error(mysql_error(),E_USER_ERROR);
             while ($obj = mysql_fetch_object($result))
@@ -40,7 +40,7 @@ if (!empty($toget))
             }
             break;
         case 'products':
-            $sql = "SELECT id, name FROM products ORDER BY name ASC";
+            $sql = "SELECT id, name FROM `{$dbProducts}` ORDER BY name ASC";
             $result = mysql_query($sql);
             if (mysql_error()) trigger_error(mysql_error(),E_USER_ERROR);
             while ($obj = mysql_fetch_object($result))
@@ -54,7 +54,7 @@ if (!empty($toget))
             }
             break;
         case 'skills':
-            $sql = "SELECT id, name FROM software ORDER BY name ASC";
+            $sql = "SELECT id, name FROM `{$dbSoftware}` ORDER BY name ASC";
             $result = mysql_query($sql);
             if (mysql_error()) trigger_error(mysql_error(),E_USER_ERROR);
             while ($obj = mysql_fetch_object($result))
