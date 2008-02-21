@@ -159,11 +159,39 @@ switch ($_REQUEST['mode'])
     case 'list':
     default:
         //display the list
+
+        // External vars
+        if (is_numeric($_REQUEST['user'])) $selecteduser = $_REQUEST['user'];
+        else $selecteduser = 0;
+
         $adminuser = user_permission($sit[2],22); // Admin user
         include ('htmlheader.inc.php');
         echo "<h2><img src='{$CONFIG['application_webpath']}images/icons/{$iconset}/32x32/trigger.png' width='32' height='32' alt='' /> ";
         echo "$title</h2>";
         echo "<p align='center'>A list of available triggers and the actions that are set when triggers occur</p>"; // TODO triggers blurb
+
+        if ($adminuser)
+        {
+            $sql  = "SELECT id, realname FROM `{$dbUsers}` WHERE status > 0 ORDER BY realname ASC";
+            $result = mysql_query($sql);
+            if (mysql_error()) trigger_error(mysql_error(),E_USER_WARNING);
+
+            $userarr[-1] = $strAll;
+            $userarr[0] = $CONFIG['application_shortname'];
+
+            while ($userobj = mysql_fetch_object($result))
+            {
+                $userarr[$userobj->id] = $userobj->realname;
+            }
+            echo "<form>";
+            echo "<p>{$strUser}: ".array_drop_down($userarr, 'user', $selecteduser, "onchange=\"window.location.href='{$_SERVER['PHP_SELF']}?user=' + this.options[this.selectedIndex].value;\"")."</p>\n";
+            echo "</form>\n";
+        }
+        else
+        {
+            // User has no admin rights so force the selection to the current user
+            $selecteduser = $sit[2];
+        }
         echo "<table align='center'><tr><th>{$strTrigger}</th><th>{$strActions}</th><th>{$strOperation}</th></tr>\n";
 
         $shade = 'shade1';
@@ -175,7 +203,9 @@ switch ($_REQUEST['mode'])
             echo "</td>";
             // List actions for this trigger
             echo "<td>";
-            $sql = "SELECT * FROM `{$dbTriggers}` WHERE triggerid = '$trigger' ORDER BY action, template";
+            $sql = "SELECT * FROM `{$dbTriggers}` WHERE triggerid = '$trigger' ";
+            if ($selecteduser > -1) $sql .= "AND userid = {$selecteduser} ";
+            $sql .= "ORDER BY action, template";
             if (!$adminuser) $sql .= "AND userid='{$sit[2]}'";
             $result = mysql_query($sql);
             if (mysql_error()) trigger_error("MySQL Query Error ".mysql_error(), E_USER_WARNING);

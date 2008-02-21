@@ -11,13 +11,13 @@ include ('htmlheader.inc.php');
 
 echo "<h5>Ready, aim....</h5>";
 echo "<h4>Fire!</h4>";
-trigger('TRIGGER_INCIDENT_CREATED', array('incidentid' => 1, 'incidenttitle' => "test incident"));
+// trigger('TRIGGER_INCIDENT_CREATED', array('incidentid' => 1, 'incidenttitle' => "test incident"));
 // trigger('TRIGGER_INCIDENT_OWNED_CLOSED_BY_USER', array('incidentid' => 1, 'incidenttitle' => "test incident", 'engineerclosedname' => "Joe Blogs"));
 // trigger('TRIGGER_INCIDENT_CREATED', array('incidentid' => 1, 'incidenttitle' => "test incident"));
-// trigger('TRIGGER_INCIDENT_ASSIGNED', array('incidentid' => 1, 'incidenttitle' => "test incident", 'user' => 2));
+// trigger('TRIGGER_INCIDENT_ASSIGNED', array('incidentid' => 1, 'incidenttitle' => "test incident", 'userid' => 1));
 // trigger('TRIGGER_INCIDENT_ASSIGNED_WHILE_AWAY', array('incidentid' => 1, 'incidenttitle' => "test incident", 'user' => 2));
 // trigger('TRIGGER_INCIDENT_ASSIGNED_WHILE_OFFLINE', array('incidentid' => 1, 'incidenttitle' => "test incident", 'user' => 2));
-// trigger('TRIGGER_INCIDENT_NEARING_SLA', array('incidentid' => 1, 'incidenttitle' => "test incident"));
+trigger('TRIGGER_INCIDENT_NEARING_SLA', array('incidentid' => 1, 'incidenttitle' => "test incident", 'userid' => 1));
 // trigger('TRIGGER_INCIDENT_REVIEW_DUE', array('incidentid' => 1, 'incidenttitle' => "test incident"));
 // trigger('TRIGGER_INCIDENT_CREATED', array('incidentid' => 1, 'incidenttitle' => "test incident", "priority" => 4));
 // trigger('TRIGGER_KB_CREATED', array('KBname' => 'KB Article'));

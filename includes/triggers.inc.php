@@ -315,7 +315,7 @@ function trigger_replace_specials($triggerid, $string, $paramarray)
     if ($CONFIG['debug'])
     {
         $dbg .= "\nTRIGGER: notice string before - $string\n";
-        $dbg .= "TRIGGER: param array: ".print_r($paramarray);
+        $dbg .= "TRIGGER: param array: ".print_r($paramarray,true);
     }
 
     $url = parse_url($_SERVER['HTTP_REFERER']);
@@ -391,16 +391,6 @@ function send_trigger_email($userid, $triggerid, $template, $paramarray)
     $mailok = send_email($toemail, $from, $subject, $body);
 
     if ($mailok==FALSE) trigger_error('Internal error sending email: '. $mailerror.' send_mail() failed', E_USER_ERROR);
-
-    if ($CONFIG['debug'])
-    {
-        $dbg .= "TRIGGER: emailtype_replace_specials($string, $incidentid, $userid)\n";
-    }
-    $email = emailtype_replace_specials($string, $incidentid, $userid);
-    if ($CONFIG['debug'])
-    {
-        $dbg .= $email;
-    }
 }
 
 
@@ -418,7 +408,7 @@ function send_trigger_email($userid, $triggerid, $template, $paramarray)
 function create_trigger_notice($userid, $noticetext='', $triggertype='',
                                $template, $paramarray='')
 {
-    global $CONFIG, $dbg;
+    global $CONFIG, $dbg, $dbNoticeTemplates;
     /*if ($CONFIG['debug'])
     {
         $dbg .= print_r($paramarray)."\n";
@@ -427,19 +417,21 @@ function create_trigger_notice($userid, $noticetext='', $triggertype='',
     if (!empty($template))
     {
         //this is a trigger notice, get notice template
-        $sql = "SELECT * from noticetemplates WHERE id='{$template}'";
+        $sql = "SELECT * FROM `{$dbNoticeTemplates}` WHERE id='{$template}'";
         $query = mysql_query($sql);
         if (mysql_error()) trigger_error("MySQL Query Error ".mysql_error(), E_USER_WARNING);
         if ($query)
         {
             $notice = mysql_fetch_object($query);
             $noticetext = trigger_replace_specials($triggertype, $notice->text, $paramarray);
-            echo "<h1>trigger_replace_specials($triggertype, $notice->text, $paramarray)</h1>";
+//             echo "<h1>trigger_replace_specials($triggertype, $notice->text, $paramarray)</h1>";
             $noticelinktext = trigger_replace_specials($triggertype, $notice->linktext, $paramarray);
             $noticelink = trigger_replace_specials($triggertype, $notice->link, $paramarray);
             if ($CONFIG['debug']) $dbg .= $noticetext."\n";
 
-            $sql = "INSERT into notices(userid, type, text, linktext, link,
+            if ($userid == 0 AND $paramarray['userid'] > 0) $userid = $paramarray['userid'];
+
+            $sql = "INSERT into notices (userid, type, text, linktext, link,
                                         referenceid, timestamp) ";
             $sql .= "VALUES ({$userid}, '{$notice->type}', '{$noticetext}',
                             '{$noticelinktext}', '{$noticelink}', '', NOW())";

@@ -157,7 +157,9 @@ elseif ($action == "edit")
         echo "<tr><th>{$strID}: <sup class='red'>*</sup></th><td>";
         echo "<input maxlength='50' name='name' size='5' value='{$template->id} 'readonly='readonly' disabled='disabled' /></td></tr>\n";
         echo "<tr><th>Template Type:</th><td>{$template->type}";  // FIXME Temporary, remove before release
-        echo "<br />required: ".print_r($triggerarray[$trigaction->triggerid]['required'], true)."<br />";
+        if ($template->type == 'user') $required = array('incidentid', 'userid');
+        else $required = $triggerarray[$trigaction->triggerid]['required'];
+        echo "<br />required: ".print_r($required, true)."<br />";
         echo "</td><tr>";
 
         echo "<tr><th>{$strTemplate}: <sup class='red'>*</sup></th><td><input maxlength='100' name='name' size='40' value=\"{$template->name}\" /></td></tr>\n";
@@ -238,6 +240,7 @@ elseif ($action == "edit")
         echo "<div id='templatevariables' style='width: 48%; float: right; border: 1px solid #CCCCFF; padding: 10px; display:none;'>";
         echo "<h4>Template Variables</h4>"; // FIXME template variables
         echo "<p align='center'>{$strFollowingSpecialIdentifiers}</p>";
+        if (!is_array($required)) echo "<p class='info'>Some of these identifiers might not be available once you add a trigger</p>";
 
         echo "<dl>";
         foreach ($ttvararray AS $identifier => $ttvar)
@@ -249,7 +252,7 @@ elseif ($action == "edit")
                 if (!is_array($ttvar['requires'])) $ttvar['requires'] = array($ttvar['requires']);
                 foreach ($ttvar['requires'] as $needle)
                 {
-                    if (in_array($needle, $triggerarray[$trigaction->triggerid]['required'])) $showtvar = TRUE;
+                    if (!is_array($required) OR in_array($needle, $required)) $showtvar = TRUE;
                 }
             }
             if ($showtvar)

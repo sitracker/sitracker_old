@@ -1210,9 +1210,9 @@ function incident_sla_history($incidentid)
 */
 function array_drop_down($array, $name, $setting='', $enablefield='')
 {
-    $html = "<select name='$name' id='$name' $enablefield>";
+    $html = "<select name='$name' id='$name' $enablefield>\n";
 
-    if (array_key_exists($setting, $array) AND in_array($setting, $array)==FALSE)
+    if (array_key_exists($setting, $array) AND in_array((string)$setting, $array)==FALSE)
     {
         $usekey=TRUE;
     }
@@ -1220,7 +1220,6 @@ function array_drop_down($array, $name, $setting='', $enablefield='')
     {
         $usekey=FALSE;
     }
-
     foreach ($array AS $key => $value)
     {
         $value = htmlentities($value, ENT_COMPAT, $GLOBALS['i18ncharset']);
@@ -3088,8 +3087,28 @@ function sit_error_handler($errno, $errstr, $errfile, $errline, $errcontext)
         elseif ($errno & $warnings) $class = 'warning';
         else $class='error';
         echo "<p class='{$class}'><strong>{$errortype[$errno]} [{$errno}]</strong><br />";
-        echo "{$errstr} in {$errfile} @ line {$errline}</p>";
-
+        echo "{$errstr} in {$errfile} @ line {$errline}";
+        if ($CONFIG['debug'])
+        {
+            $backtrace = debug_backtrace();
+            echo "<br /><strong>Backtrace</strong>:";
+            foreach ($backtrace AS $trace)
+            {
+                if (!empty($trace['file']))
+                {
+                    echo "<br />{$trace['file']} @ line {$trace['line']}";
+                    if (!empty($trace['function']))
+                    {
+                        echo " {$trace['function']}() ";
+//                         foreach ($trace['args'] AS $arg)
+//                         {
+//                             echo "$arg &bull; ";
+//                         }
+                    }
+                }
+            }
+        }
+        echo "</p>";
         // Tips, to help diagnose errors
         if (strpos($errstr, 'Unknown column')!==FALSE OR
             preg_match("/Table '(.*)' doesn't exist/", $errstr))
@@ -3606,6 +3625,9 @@ function send_email($to, $from, $subject, $body, $replyto='', $cc='', $bcc='')
     $extra_headers .= "Errors-To: {$CONFIG['support_email']}\n";
     $extra_headers .= "X-Mailer: {$CONFIG['application_shortname']} {$application_version_string}/PHP " . phpversion()."\n";
     $extra_headers .= "X-Originating-IP: {$_SERVER['REMOTE_ADDR']}";
+
+    // FIXME CC and BCC
+
 //     if ($email_cc != '')
 //     {
 //         $extra_headers .= "CC: $cc";
@@ -3624,6 +3646,7 @@ function send_email($to, $from, $subject, $body, $replyto='', $cc='', $bcc='')
     {
         $rtnvalue = mail($to, $subject, $body, $extra_headers);
     }
+    return $rtnvalue;
 }
 
 
