@@ -6413,7 +6413,7 @@ function remove_tag($id, $type, $tag)
     {
         $tagid = get_tag_id($tag);
         // Ignore errors, die silently
-        $sql = "DELETE FROM `{$dbSetTags}` WHERE id = '$id' AND type = '$type' AND tagid = '$tagid')";
+        $sql = "DELETE FROM `{$dbSetTags}` WHERE id = '$id' AND type = '$type' AND tagid = '$tagid'";
         $result = @mysql_query($sql);
 
         // Check tag usage count and remove disused tags completely
