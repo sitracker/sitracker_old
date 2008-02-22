@@ -57,7 +57,7 @@ echo "</form>";
 
 $sql = "SELECT type, id FROM dashboard_watch_incidents WHERE userid = {$sit[2]} ORDER BY type";
 $result = mysql_query($sql);
-if (mysql_error()) trigger_error(mysql_error(),E_USER_ERROR);
+if (mysql_error()) trigger_error(mysql_error(),E_USER_WARNING);
 
 
 if (mysql_num_rows($result) > 0)
@@ -84,7 +84,7 @@ if (mysql_num_rows($result) > 0)
         {
             case '0': //Site
                 $sql = "SELECT i.id, i.title, i.status, i.servicelevel, i.maintenanceid, i.priority, c.forenames, c.surname, c.siteid ";
-                $sql .= "FROM `{$dbIncidents}` AS i, `{$dbContacts}`  AS c";
+                $sql .= "FROM `{$dbIncidents}` AS i, `{$dbContacts}`  AS c ";
                 $sql .= "WHERE i.contact = c.id AND c.siteid = {$obj->id} ";
                 $sql .= "AND i.status != 2 AND i.status != 7 ";
 
@@ -133,7 +133,7 @@ if (mysql_num_rows($result) > 0)
 
         if (!empty($sql))
         {
-            
+
             switch ($queue)
             {
                 case 1: // awaiting action
@@ -147,12 +147,12 @@ if (mysql_num_rows($result) > 0)
                     break;
                 case 5: // ALL
                 default:
-                    break;  
+                    break;
             }
-            
+
             $iresult = mysql_query($sql);
-            if (mysql_error()) trigger_error(mysql_error(),E_USER_ERROR);
-            
+            if (mysql_error()) trigger_error(mysql_error(),E_USER_WARNING);
+
             if (mysql_num_rows($iresult) > 0)
             {
                 if ($obj->type == 3 AND !$header_printed)
