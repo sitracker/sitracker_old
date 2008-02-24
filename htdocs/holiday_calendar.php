@@ -66,7 +66,10 @@ function draw_calendar($nmonth, $nyear)
         # This should probably be recursed, but it works as it is
         $monthOrig = date('m',mktime(0,0,0,$nmonth,1,$nyear));
         $monthTest = date('m',mktime(0,0,0,$nmonth,$lastday,$nyear));
-        if ($monthTest != $monthOrig) { $lastday -= 1; }
+        if ($monthTest != $monthOrig)
+        {
+            $lastday -= 1;
+        }
     }
     while ($monthTest != $monthOrig);
     $monthName = date('F',mktime(0,0,0,$nmonth,1,$nyear));
@@ -88,29 +91,29 @@ function draw_calendar($nmonth, $nyear)
     echo "\n<table summary='{$monthName} {$nyear}'>";
 
     /* Make navigation control for months */
-    if ($nmonth>=1)
+    if ($nmonth >= 1)
     {
-        $prevmonth=$nmonth-1;
-        $prevyear=$nyear;
-        $nextmonth=$nmonth+1;
+        $prevmonth = $nmonth-1;
+        $prevyear = $nyear;
+        $nextmonth = $nmonth+1;
     }
     
-    if ($nmonth==1)
+    if ($nmonth == 1)
     {
-        $prevmonth=12;
-        $prevyear=$nyear-1;
+        $prevmonth = 12;
+        $prevyear = $nyear - 1;
     }
     
-    if ($nmonth<12)
+    if ($nmonth < 12)
     {
         // $nextmonth=nmonth+1;
-        $nextyear=$nyear;
+        $nextyear = $nyear;
     }
     
-    if ($nmonth==12)
+    if ($nmonth == 12)
     {
-        $nextmonth=1;
-        $nextyear=$nyear+1;
+        $nextmonth = 1;
+        $nextyear = $nyear + 1;
     }
     
     echo "<tr><th colspan='7'>";
@@ -972,7 +975,7 @@ else
         }
         echo "</select></form>";
 
-        $sql = "SELECT * from holidays WHERE userid='{$user}' AND approved=0 AND type='$type'";
+        $sql = "SELECT * from holidays WHERE userid='{$user}' AND approved=0 AND type='{$type}'";
         $result = mysql_query($sql);
         if (mysql_error()) trigger_error("MySQL Query Error ".mysql_error(), E_USER_ERROR);
         if (mysql_num_rows($result))

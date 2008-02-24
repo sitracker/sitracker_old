@@ -20,8 +20,8 @@
 // Requested by Rob Shepley, 3 Oct 05
 
 @include('../set_include_path.inc.php');
-$permission=37; // Run Reports
-$title='Yearly Engineer/Incident Report';
+$permission = 37; // Run Reports
+$title = 'Yearly Engineer/Incident Report';
 require('db_connect.inc.php');
 require('functions.inc.php');
 
@@ -305,14 +305,14 @@ elseif ($_REQUEST['statistics'] == 'on')
 
     }
 
-    if ($_POST['output']=='screen')
+    if ($_POST['output'] == 'screen')
     {
         include('htmlheader.inc.php');
         echo "<h2>Engineer statistics for past year</h2>";
         echo $html;
         include('htmlfooter.inc.php');
     }
-    elseif ($_POST['output']=='csv')
+    elseif ($_POST['output'] == 'csv')
     {
         // --- CSV File HTTP Header
         header("Content-type: text/csv\r\n");
@@ -321,7 +321,7 @@ elseif ($_REQUEST['statistics'] == 'on')
         echo $csv;
     }
 }
-elseif ($_REQUEST['mode']=='report')
+elseif ($_REQUEST['mode'] == 'report')
 {
     if (!empty($_POST['startdate'])) $startdate = strtotime($_POST['startdate']);
     else $startdate = mktime(0,0,0,1,1,date('Y'));
@@ -374,9 +374,9 @@ elseif ($_REQUEST['mode']=='report')
 
 
 
-    if (empty($incsql)==FALSE OR empty($excsql)==FALSE) $sql .= " AND ";
+    if (empty($incsql) == FALSE OR empty($excsql) == FALSE) $sql .= " AND ";
     if (!empty($incsql)) $sql .= "$incsql";
-    if (empty($incsql)==FALSE AND empty($excsql)==FALSE) $sql .= " AND ";
+    if (empty($incsql) == FALSE AND empty($excsql) == FALSE) $sql .= " AND ";
     if (!empty($excsql)) $sql .= "$excsql";
 
     $sql .= " ORDER BY realname, incidents.id ASC ";
@@ -415,7 +415,8 @@ elseif ($_REQUEST['mode']=='report')
 
     $escalated_array = array($numrows_esc);
     $count = 0;
-    while($row = mysql_fetch_object($result_esc)){
+    while ($row = mysql_fetch_object($result_esc))
+    {
         $escalated_array[$count] = $row->incid;
         $count++;
     }
@@ -429,7 +430,14 @@ elseif ($_REQUEST['mode']=='report')
     while ($row = mysql_fetch_object($result))
     {
         $nicedate = ldate('d/m/Y',$row->opened);
-        $niceclose = ldate('d/m/Y',$row->closed);
+        if ($row->closed > 0)
+        {
+            $niceclose = ldate('d/m/Y',$row->closed);
+        }
+        else
+        {
+            $niceclose = $strOpen;
+        }
         $ext = external_escalation($escalated_array, $row->incid);
         $html .= "<tr class='shade2'><td>$nicedate</td><td>{$niceclose}</td><td><a href='../incident_details.php?id={$row->incid}'>{$row->incid}</a></td><td>{$row->title}</td><td>{$row->realname}</td><td>$ext</td></tr>";
         $csv .="'".$nicedate."','".$niceclose."', '{$row->incid}','{$row->title}','{$row->realname},'$ext'\n";

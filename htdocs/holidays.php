@@ -18,13 +18,25 @@ require('functions.inc.php');
 // This page requires authentication
 require('auth.inc.php');
 
-$approver = user_permission($sit[2],50); // Approve holidays
+$approver = user_permission($sit[2], 50); // Approve holidays
 
-if (!empty($_REQUEST['user'])) $user = cleanvar($_REQUEST['user']);
-else $user = $sit[2];
+if (!empty($_REQUEST['user']))
+{
+    $user = cleanvar($_REQUEST['user']);
+}
+else
+{
+    $user = $sit[2];
+}
 
-if ($user==$sit[2]) $title= sprintf($strUsersHolidays, $_SESSION['realname']);
-else $title = user_realname($user)."'s Holidays";
+if ($user == $sit[2])
+{
+    $title = sprintf($strUsersHolidays, $_SESSION['realname']);
+}
+else
+{
+    $title = user_realname($user)."'s Holidays"; //FIXME i18n
+}
 
 include('htmlheader.inc.php');
 echo "<h2><img src='{$CONFIG['application_webpath']}images/icons/{$iconset}/32x32/holiday.png' width='32' height='32' alt='' /> ";
@@ -36,25 +48,27 @@ echo " | <a href='holiday_calendar.php'>{$strHolidayPlanner}</a>";
 if ($approver)
 {
     echo " | <a href='holiday_request.php?user=";
-    if (user==$sit[2]) echo "all";
+    if (user == $sit[2]) echo "all";
     else echo $user;
     echo "&amp;mode=approval'>{$strApproveHolidays}</a>";
 }
 echo "</p>\n";
 
 // Entitlement
-if ($user==$sit[2] OR $approver==TRUE)
+if ($user == $sit[2] OR $approver == TRUE)
 {
     // Only shown when viewing your own holidays or when you're an approver
     echo "<table align='center' width='450'>\n";
     echo "<tr><th class='subhead'>{$strHolidays}</th></tr>\n";
     echo "<tr class='shade1'><td><strong>{$strHolidayEntitlement}</strong>:</td></tr>\n";
     echo "<tr class='shade2'><td>";
-    $entitlement=user_holiday_entitlement($user);
-    $holidaystaken=user_count_holidays($user, 1);
+    $entitlement = user_holiday_entitlement($user);
+    $holidaystaken = user_count_holidays($user, 1);
+    $awaitingapproval = user_count_holidays($user, 1, 0, array(0));
     echo "$entitlement {$strDays}, ";
     echo "$holidaystaken {$strtaken}, ";
     printf ($strRemaining, $entitlement-$holidaystaken);
+    if ($awaitingapproval > 0) echo ", {$awaitingapproval} {$strAwaitingApproval} ";
     echo "</td></tr>\n";
     echo "<tr class='shade1'><td ><strong>{$strOtherLeave}</strong>:</td></tr>\n";
     echo "<tr class='shade2'><td>";
@@ -73,10 +87,10 @@ echo "<tr><th colspan='4' class='subhead'>{$strHolidayList}</th></tr>\n";
 $sql = "SELECT * FROM holidays WHERE userid='{$user}' AND approved=0 ORDER BY startdate ASC";
 $result = mysql_query($sql);
 if (mysql_error()) trigger_error("MySQL Query Error ".mysql_error(), E_USER_ERROR);
-$numwaiting=mysql_num_rows($result);
+$numwaiting = mysql_num_rows($result);
 if ($numwaiting > 0)
 {
-    if ($user==$sit[2])
+    if ($user == $sit[2] OR $approver == TRUE)
     {
         // Show dates waiting approval, but only to owner
         echo "<tr class='shade2'><td colspan='4'><strong>{$strDatesNotYetApproved}</strong>:</td></tr>";
@@ -92,10 +106,25 @@ if ($numwaiting > 0)
             echo holiday_approval_status($dates['approved'], $dates['approvedby']);
             echo "</td>";
             echo "<td>";
-            if ($dates['length']=='pm' OR $dates['length']=='day') echo "<a href='add_holiday.php?type={$dates['type']}&amp;user=$user&amp;year=".date('Y',$dates['startdate'])."&amp;month=".date('m',$dates['startdate'])."&amp;day=".date('d',$dates['startdate'])."&amp;length=am' onclick=\"return window.confirm('".date('l jS F Y', $dates['startdate']).": {$strHolidayMorningOnlyConfirm}');\" title='{$strHolidayMorningOnly}'>{$strAM}</a> | ";
-            if ($dates['length']=='am' OR $dates['length']=='day') echo "<a href='add_holiday.php?type={$dates['type']}&amp;user=$user&amp;year=".date('Y',$dates['startdate'])."&amp;month=".date('m',$dates['startdate'])."&amp;day=".date('d',$dates['startdate'])."&amp;length=pm' onclick=\"return window.confirm('".date('l jS F Y', $dates['startdate']).": {$strHolidayAfternoonOnlyConfirm}');\" title='{$strHolidayAfternoonOnly}'>{$strPM}</a> | ";
-            if ($dates['length']=='am' OR $dates['length']=='pm') echo "<a href='add_holiday.php?type={$dates['type']}&amp;user=$user&amp;year=".date('Y',$dates['startdate'])."&amp;month=".date('m',$dates['startdate'])."&amp;day=".date('d',$dates['startdate'])."&amp;length=day' onclick=\"return window.confirm('".date('l jS F Y', $dates['startdate']).": {$strHolidayFullDayConfirm}');\" title='{$strHolidayFullDay}'>{$strAllDay}</a> | ";
-            if ($sit[2]==$user) echo "<a href='add_holiday.php?year=".date('Y',$dates['startdate'])."&amp;month=".date('m',$dates['startdate'])."&amp;day=".date('d',$dates['startdate'])."&amp;user={$sit[2]}&amp;type={$dates['type']}&amp;length=0&amp;return=holidays' onclick=\"return window.confirm('".date('l jS F Y', $dates['startdate']).": {$strHolidayCancelConfirm}');\" title='{$strHolidayCancel}'>cancel</a>";
+            if ($dates['length'] == 'pm' OR $dates['length'] == 'day')
+            {
+                echo "<a href='add_holiday.php?type={$dates['type']}&amp;user=$user&amp;year=".date('Y',$dates['startdate'])."&amp;month=".date('m',$dates['startdate'])."&amp;day=".date('d',$dates['startdate'])."&amp;length=am' onclick=\"return window.confirm('".date('l jS F Y', $dates['startdate']).": {$strHolidayMorningOnlyConfirm}');\" title='{$strHolidayMorningOnly}'>{$strAM}</a> | ";
+            }
+            
+            if ($dates['length'] == 'am' OR $dates['length'] == 'day')
+            {
+                echo "<a href='add_holiday.php?type={$dates['type']}&amp;user=$user&amp;year=".date('Y',$dates['startdate'])."&amp;month=".date('m',$dates['startdate'])."&amp;day=".date('d',$dates['startdate'])."&amp;length=pm' onclick=\"return window.confirm('".date('l jS F Y', $dates['startdate']).": {$strHolidayAfternoonOnlyConfirm}');\" title='{$strHolidayAfternoonOnly}'>{$strPM}</a> | ";
+            }
+            
+            if ($dates['length'] == 'am' OR $dates['length'] == 'pm')
+            {
+                echo "<a href='add_holiday.php?type={$dates['type']}&amp;user=$user&amp;year=".date('Y',$dates['startdate'])."&amp;month=".date('m',$dates['startdate'])."&amp;day=".date('d',$dates['startdate'])."&amp;length=day' onclick=\"return window.confirm('".date('l jS F Y', $dates['startdate']).": {$strHolidayFullDayConfirm}');\" title='{$strHolidayFullDay}'>{$strAllDay}</a> | ";
+            }
+            
+            if ($sit[2] == $user)
+            {
+                echo "<a href='add_holiday.php?year=".date('Y',$dates['startdate'])."&amp;month=".date('m',$dates['startdate'])."&amp;day=".date('d',$dates['startdate'])."&amp;user={$sit[2]}&amp;type={$dates['type']}&amp;length=0&amp;return=holidays' onclick=\"return window.confirm('".date('l jS F Y', $dates['startdate']).": {$strHolidayCancelConfirm}');\" title='{$strHolidayCancel}'>cancel</a>";
+            }
             echo "</td></tr>\n";
         }
         echo "<tr class='shade1'><td colspan='4'><a href='holiday_request.php?action=resend'>{$strSendReminderRequest}</a></td></tr>";

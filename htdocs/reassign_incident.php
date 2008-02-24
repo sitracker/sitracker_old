@@ -74,7 +74,7 @@ switch ($action)
             $bodytext = "(Incident assignment was forced because the user was not accepting)<hr>\n" . $bodytext;   // FIXME i18n forced assign bodytext
         }
 
-        if ($temporary=='yes') $assigntype = 'tempassigning';
+        if ($temporary == 'yes') $assigntype = 'tempassigning';
         else $assigntype = 'reassigning';
 
         if ($_REQUEST['cust_vis']=='yes') $customervisibility='show';
@@ -82,11 +82,27 @@ switch ($action)
 
         $sql  = "INSERT INTO updates (incidentid, userid, bodytext, type, timestamp, currentowner, currentstatus, customervisibility) ";
         $sql .= "VALUES ($id, $sit[2], '$bodytext', '$assigntype', '$now', ";
-        if ($temporary != 'yes' AND $incident->towner > 0 AND $sit[2]==$incident->owner) $sql .= "'{$sit[2]}', ";
-        elseif ($temporary != 'yes' AND $sit[2]==$incident->towner)  $sql .= "'{$incident->owner}', ";
-        elseif ($temporary == 'yes' AND $incident->towner < 1 AND $sit[2]!=$incident->owner) $sql .= "'{$sit[2]}', ";
-        elseif ($temporary=='yes') $sql .= "'{$userid}', ";
-        else $sql .= "'{$userid}', ";
+        if ($temporary != 'yes' AND $incident->towner > 0 AND $sit[2] == $incident->owner)
+        {
+            $sql .= "'{$sit[2]}', ";
+        }
+        elseif ($temporary != 'yes' AND $sit[2] == $incident->towner)
+        {
+            $sql .= "'{$incident->owner}', ";
+        }
+        elseif ($temporary == 'yes' AND $incident->towner < 1 AND $sit[2] != $incident->owner)
+        {
+            $sql .= "'{$sit[2]}', ";
+        }
+        elseif ($temporary == 'yes')
+        {
+            $sql .= "'{$userid}', ";
+        }
+        else
+        {
+            $sql .= "'{$userid}', ";
+        }
+        
         $sql .= "'$newstatus', '$customervisibility')";
         $result = mysql_query($sql);
         if (mysql_error()) trigger_error("MySQL Query Error ".mysql_error(), E_USER_ERROR);
@@ -135,7 +151,10 @@ switch ($action)
         if ($incident->towner > 0)
         {
             echo " ({$strTemp}: ";
-            if ($sit[2]==$incident->towner) echo "{$strYou} (".user_realname($incident->towner,TRUE).")";
+            if ($sit[2] == $incident->towner)
+            {
+                echo "{$strYou} (".user_realname($incident->towner,TRUE).")";
+            }
             else echo user_realname($incident->towner,TRUE);
             echo ")";
         }
@@ -171,16 +190,30 @@ switch ($action)
             $ssql = "SELECT softwareid FROM usersoftware WHERE userid={$suguser->id} AND softwareid={$incident->softwareid} ";
             $sresult = mysql_query($ssql);
             if (mysql_error()) trigger_error("MySQL Query Error".mysql_error(), E_USER_ERROR);
-            if (mysql_num_rows($sresult) >=1 ) echo "<strong>{$suguser->realname}</strong>";
-            else echo $suguser->realname;
+            if (mysql_num_rows($sresult) >=1 )
+            {
+                echo "<strong>{$suguser->realname}</strong>";
+            }
+            else
+            {
+                echo $suguser->realname;
+            }
+            
             echo "</label></td>";
             echo "<td>".user_online($suguser->id).userstatus_name($suguser->status)."</td>";
             $incpriority = user_incidents($suguser->id);
             $countincidents = ($incpriority['1']+$incpriority['2']+$incpriority['3']+$incpriority['4']);
 
-            if ($countincidents >= 1) $countactive=user_activeincidents($suguser->id);
-            else $countactive=0;
-            $countdiff=$countincidents-$countactive;
+            if ($countincidents >= 1)
+            {
+                $countactive=user_activeincidents($suguser->id);
+            }
+            else
+            {
+                $countactive=0;
+            }
+            
+            $countdiff = $countincidents-$countactive;
             echo "<td align='center'>$countactive / {$countdiff}</td>";
             echo "<td align='center'>".$incpriority['4']."</td>";
             echo "<td align='center'>".$incpriority['3']."</td>";
@@ -280,7 +313,10 @@ switch ($action)
         else
         {
             echo "<tr><th>{$strTemporaryOwner}:</th><td><label><input type='checkbox' name='temporary' value='yes' ";
-            if ($sit[2] != $incident->owner AND $sit[2] != $incident->towner) echo "disabled='disabled' ";
+            if ($sit[2] != $incident->owner AND $sit[2] != $incident->towner)
+            {
+                echo "disabled='disabled' ";
+            }
             echo "/> ";
             if ($incident->towner > 0) echo "{$strChangeTemporaryOwner}";
             else echo "{$strAssignTemporarily}";

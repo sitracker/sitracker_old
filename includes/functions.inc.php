@@ -592,10 +592,23 @@ function user_holiday($userid, $type=0, $year, $month, $day, $length=FALSE)
     * @param $date integer. (optional) UNIX timestamp. Only counts holidays before this date
     * @returns integer. Number of days holiday
 */
-function user_count_holidays($userid, $type, $date=0)
+function user_count_holidays($userid, $type, $date=0, $approved=array(0,1,2))
 {
-    $sql = "SELECT id FROM holidays WHERE userid='$userid' AND type='$type' AND length='day' AND approved >= 0 AND approved < 2 ";
+    // $sql = "SELECT id FROM holidays WHERE userid='$userid' AND type='$type' AND length='day' AND approved >= 0 AND approved < 2 ";
+    $sql = "SELECT id FROM holidays WHERE userid='$userid' AND type='$type' AND length='day' AND approved >= 0 ";
     if ($date > 0) $sql .= "AND startdate < $date";
+    if (is_array($approved))
+    {
+        $sql .= "AND (";
+        
+        for ($i = 0; $i < sizeof($approved); $i++)
+        {
+            $sql .= "approved = {$approved[$i]} ";
+            if ($i < sizeof($approved)-1) $sql .= "OR ";
+        }
+        
+        $sql .= ") ";
+    }
     $result = mysql_query($sql);
     if (mysql_error()) trigger_error(mysql_error(),E_USER_WARNING);
     $full_days = mysql_num_rows($result);
