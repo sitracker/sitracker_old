@@ -429,6 +429,7 @@ $strForgottenDetails = 'Forgotten your details?';
 $strForgottenPasswordDetails = 'Forgotten Password Details';
 $strForm = 'Form';
 $strForwardOneYear = 'Forward One Year';
+$strFreeLeave = 'Free Leave';
 # Short for 'Friday'
 $strFri = 'Fri';
 $strFriday = 'Friday';
