@@ -51,7 +51,7 @@ while ($qrow = mysql_fetch_object($qresult))
 
 $msql = "SELECT *, cs.name AS closingstatusname, s.name AS sitename, s.id as siteid, (i.closed - i.opened) AS duration, \n";
 $msql .= "fr.id AS reportid, c.id AS contactid ";
-$msql .= "FROM `{$dbFeedbackRespondents}` AS fr, `{$dbIncidents}` AS i, `{$dbContacts}` AS c, `{$dbSites} AS s, `{$dbClosingStatus}` AS cs WHERE fr.incidentid = i.id \n";
+$msql .= "FROM `{$dbFeedbackRespondents}` AS fr, `{$dbIncidents}` AS i, `{$dbContacts}` AS c, `{$dbSites}` AS s, `{$dbClosingStatus}` AS cs WHERE fr.incidentid = i.id \n";
 $msql .= "AND i.contact = c.id ";
 $msql .= "AND c.siteid = s.id ";
 $msql .= "AND i.closingstatus = cs.id ";
@@ -130,12 +130,12 @@ if (mysql_num_rows($mresult) >= 1)
         if (mysql_error()) trigger_error(mysql_error(), E_USER_ERROR);
         $crow = mysql_fetch_object($cresult);
         $textquestion = $crow->id;
-        $csql = "SELECT DISTINCT incidents.id as incidentid, result, incidents.title as title
+        $csql = "SELECT DISTINCT i.id as incidentid, result, i.title as title
                  FROM `{$dbFeedbackRespondents}` AS fr, `{$dbIncidents}` AS i, `{$dbUsers}` AS u, `{$dbFeedbackResults}` AS r
                  WHERE fr.incidentid = i.id
                  AND i.owner = u.id
                  AND fr.id = r.respondentid
-                 AND fr.questionid = '$textquestion'
+                 AND r.questionid = '$textquestion'
                  AND fr.id = '$mrow->reportid'
                  ORDER BY i.contact, i.id";
         $cresult = mysql_query($csql);
@@ -157,7 +157,7 @@ if (mysql_num_rows($mresult) >= 1)
         while ($qrow = mysql_fetch_object($qresult))
         {
             $numquestions++;
-            $sql = "SELECT * FROM `{$dbFeedbackRespondents}`, `{$dbIncidents}`, `{$dbUsers}`, `{$dbFeedbackResults}` ";
+            $sql = "SELECT * FROM `{$dbFeedbackRespondents}` AS fr, `{$dbIncidents}` AS i, `{$dbUsers}` AS u, `{$dbFeedbackResults}` AS r ";
             $sql .= "WHERE fr.incidentid = i.id ";
             $sql .= "AND i.owner = u.id ";
             $sql .= "AND fr.id = r.respondentid ";
