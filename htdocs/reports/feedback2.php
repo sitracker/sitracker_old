@@ -21,7 +21,7 @@ require ('auth.inc.php');
 
 include ('htmlheader.inc.php');
 
-$formid=$CONFIG['feedback_form'];
+$formid = $CONFIG['feedback_form'];
 
 echo "<div style='margin: 20px'>";
 echo "<h2>Average <a href='{$CONFIG['application_webpath']}reports/feedback.php'>Feedback</a> Scores: By Engineer</h2>";
@@ -52,7 +52,7 @@ if (mysql_num_rows($uresult) >= 1)
                 $html .= "Q{$qrow->taborder}: {$qrow->question} &nbsp;";
                 $sql = "SELECT * FROM `{$dbFeedbackRespondents}` AS fr, `{$dbIncidents}` AS i, `{$dbUsers}` AS u, `{$dbFeedbackResults}` AS r ";
                 $sql .= "WHERE fr.incidentid = i.id ";
-                $sql .= "AND i.owner = users.id ";
+                $sql .= "AND i.owner = u.id ";
                 $sql .= "AND fr.id = r.respondentid ";
                 $sql .= "AND r.questionid = '$qrow->id' ";
                 $sql .= "AND u.id = '$user->id' ";
