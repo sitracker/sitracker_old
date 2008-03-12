@@ -68,8 +68,7 @@ switch($action)
         }
         else
         {
-            // FIXME redundant i18n string
-            html_redirect("edit_watch_incidents.php", TRUE, $strWatchIncidentsAdded);
+            html_redirect("edit_watch_incidents.php", TRUE, $strAddedSuccessfully);
         }
         break;
     case 'delete':
@@ -85,8 +84,7 @@ switch($action)
         }
         else
         {
-            // FIXME redundant i18n string
-            html_redirect("edit_watch_incidents.php", TRUE, $strWatchIncidentsRemovalSucceded);
+            html_redirect("edit_watch_incidents.php", TRUE, $strRemovedSuccessful);
         }
         break;
     default:

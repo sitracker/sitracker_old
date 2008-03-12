@@ -271,7 +271,7 @@ switch ($page)
             $user = mysql_fetch_object($result);
             if (mysql_error()) trigger_error("MySQL Query Error ".mysql_error(), E_USER_ERROR);
 
-            $reason = "Incident closure requested via the portal by <b>{$user->forenames} {$user->surname}</b>\n\n"; // FIXME i18n ? not sure?
+            $reason = "Incident closure requested via the portal by <b>{$user->forenames} {$user->surname}</b>\n\n";
             $reason .= "<b>Reason:</b> {$_REQUEST['reason']}";
             $sql = "INSERT into updates (incidentid, userid, type, currentstatus, bodytext, timestamp, customervisibility) ";
             $sql .= "VALUES('{$_REQUEST['id']}', '0', 'customerclosurerequest',  '1', '{$reason}',
@@ -322,7 +322,7 @@ switch ($page)
             $impact = cleanvar($_REQUEST['impact']);
             $servicelevel = servicelevel_id2tag(maintenance_servicelevel($contractid));
 
-            $updatetext = "Opened via the portal by <b>".contact_realname($contactid)."</b>\n\n"; // FIXME i18n
+            $updatetext = "Opened via the portal by <b>".contact_realname($contactid)."</b>\n\n";
             if (!empty($probdesc))
             {
                 $updatetext .= "<b>{$strProblemDescription}</b>\n{$probdesc}\n\n";
@@ -424,7 +424,7 @@ switch ($page)
             if ($surname == '')
             {
                 $errors = 1;
-                echo "<p class='error'>You must enter a surname</p>\n"; // FIXME i18n
+                echo "<p class='error'>".sprinf($strYouMustEnter, $strSurname)."</p>\n";
             }
 
             if ($email == "" OR $email=='none' OR $email=='n/a')
@@ -476,7 +476,7 @@ switch ($page)
         $result = mysql_query($sql);
         $user = mysql_fetch_object($result);
 
-        echo "<h2>{$strDetails}: {$incidentid} - {$user->title}</h2>"; // FIXME i18n
+        echo "<h2>{$strDetails}: {$incidentid} - {$user->title}</h2>";
 
         if ($user->status != 2)
         {
