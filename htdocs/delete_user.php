@@ -10,7 +10,7 @@
 
 // Authors: Valdemaras Pipiras <info[at]ambernet.lt>
 //          Ivan Lucas <ivanlucas[at]users.sourceforge.net>
-
+// TODO 3.40 if we user MYSQL 5's relation functions, we can simply delete the user
 @include('set_include_path.inc.php');
 $permission=20;  // Manage users
 require('db_connect.inc.php');
@@ -79,9 +79,8 @@ if (!empty($userid))
     else
     {
         include('htmlheader.inc.php');
-        // FIXME i18n error
-        echo "<p class='error'>Sorry, this user cannot be deleted because it has been associated with one or more files, links, notes or skills/software</p>";
-        echo "<p align='center'><a href='users.php#{$userid}'>Return to users list</a></p>";
+        echo "<p class='error'>{$strCannotDeleteUser}</p>";
+        echo "<p align='center'><a href='users.php#{$userid}'>{$strReturnToList}</a></p>";
         include('htmlfooter.inc.php');
     }
 }

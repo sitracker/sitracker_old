@@ -66,10 +66,31 @@ $filter = array('page' => $page);
 
 include('htmlheader.inc.php');
 
+//find contracts
+$sql = "SELECT maintenance.*, products.*, ";
+$sql .= "(maintenance.incident_quantity - maintenance.incidents_used) AS availableincidents ";
+$sql .= "FROM supportcontacts, maintenance, products ";
+$sql .= "WHERE supportcontacts.maintenanceid=maintenance.id ";
+$sql .= "AND maintenance.product=products.id ";
+$sql .= "AND supportcontacts.contactid='{$_SESSION['contactid']}'";
+$result = mysql_query($sql);
+if (mysql_error()) trigger_error(mysql_error(),E_USER_ERROR);
+$numcontracts = mysql_num_rows($result);
+
 echo "<div id='menu'>\n";
 echo "<ul id='menuList'>\n";
 echo "<li><a href='logout.php'>{$strLogout}</a></li>";
-echo "<li><a href='portal.php?page=entitlement'>{$strEntitlement}</a></li>";
+if($numcontracts == 1)
+{
+    //only one contract
+    echo "<li><a href='portal.php?page=add'>{$strAddIncident}</a></li>";
+    $contractobj = mysql_fetch_object($result);
+    $contractid = $contractobj->id;
+}
+else
+{
+    echo "<li><a href='portal.php?page=entitlement'>{$strEntitlement}</a></li>";
+}
 echo "<li><a href='portal.php?page=incidents'>{$strIncidents}</a></li>";
 echo "<li><a href='portal.php?page=details'>{$strDetails}</a></li>";
 echo "</ul>";
@@ -80,15 +101,6 @@ switch ($page)
     //show the user's contracts
     case 'entitlement':
         echo "<h2>{$strYourSupportEntitlement}</h2>";
-        $sql = "SELECT maintenance.*, products.*, ";
-        $sql .= "(maintenance.incident_quantity - maintenance.incidents_used) AS availableincidents ";
-        $sql .= "FROM supportcontacts, maintenance, products ";
-        $sql .= "WHERE supportcontacts.maintenanceid=maintenance.id ";
-        $sql .= "AND maintenance.product=products.id ";
-        $sql .= "AND supportcontacts.contactid='{$_SESSION['contactid']}'";
-        $result = mysql_query($sql);
-        if (mysql_error()) trigger_error(mysql_error(),E_USER_ERROR);
-        $numcontracts = mysql_num_rows($result);
         if ($numcontracts >= 1)
         {
             echo "<table align='center'>";
@@ -284,17 +296,15 @@ switch ($page)
             echo "<h2>{$strAddIncident}</h2>";
             echo "<table align='center' width='50%' class='vertical'>";
             echo "<form action='{$_SERVER[PHP_SELF]}?page=add&action=submit' method='post'>";
-            echo "<tr><th>{$strSoftware}:</th><td>".softwareproduct_drop_down('software', 1, $_REQUEST['contractid'])."</td></tr>";
-            echo "<tr><th>{$strSoftwareVersion}:<t/h><td><input maxlength='100' name='version' size=40 type='text' /></td></tr>";
-            echo "<tr><th>{$strServicePacksApplied}:</th><td><input maxlength='100' name='productservicepacks' size=40 type='text' /></td></tr>";
             echo "<tr><th>{$strIncidentTitle}:</th><td><input maxlength='100' name='title' size=40 type='text' /></td></tr>";
-            echo "<tr><th>{$strProblemDescription}:<br />{$strProblemDescriptionCustomerText}</th><td><textarea name='probdesc' rows='10' cols='60'></textarea></td></tr>";
-            echo "<tr><th>{$strWorkAroundsAttempted}:<br />{$strWorkAroundsAttemptedCustomerText}</th><td><textarea name='workarounds' rows='10' cols='60'></textarea></td></tr>";
-            echo "<tr><th>{$strProblemReproduction}:<br />{$strProblemReproductionCustomerText}</th><td><textarea name='reproduction' rows='10' cols='60'></textarea></td></tr>";
-            echo "<tr><th>{$strCustomerImpact}:<br />{$strCustomerImpactCustomerText}</th><td><textarea name='impact' rows='10' cols='60'></textarea></td></tr>";
+            echo "<tr><th width='20%'>{$strProblemDescription}:</th><td><textarea name='probdesc' rows='20' cols='60'>";
+            echo "* Please describe the problem\n\n\n* What steps have you taken to try and fix it?\n\n\n";
+            echo "* Is the problem persistent or intermittent?\n\n\n* How can you reproduce the problem?\n\n\n";
+            echo "* How is this affecting you or others?\n\n\n";
+            echo "</textarea></td></tr>";
 
             echo "</table>";
-            echo "<input name='contractid' value='{$_REQUEST['contractid']}' type='hidden'>";
+            echo "<input name='contractid' value='{$contractid}' type='hidden'>";
             echo "<p align='center'><input type='submit' value='{$strAddIncident}' /></p>";
             echo "</form>";
         }
