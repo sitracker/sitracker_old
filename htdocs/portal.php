@@ -666,7 +666,18 @@ switch ($page)
                 echo "<p class='info'>{$strNoIncidents}</p>";
             }
 
-            echo "<p align='center'><a href='{$_SERVER[PHP_SELF]}?page=entitlement'>{$strAddIncident}</a></p>";
+            echo "<p align='center'>";
+            if($numcontracts == 1)
+            {
+                //only one contract
+                echo "<a href='portal.php?page=add'>{$strAddIncident}</a></li>";
+            }
+            else
+            {
+                echo "<a href='{$_SERVER[PHP_SELF]}?page=entitlement'>";
+            }
+
+            echo "{$strAddIncident}</a></p>";
         break;
 }
 
