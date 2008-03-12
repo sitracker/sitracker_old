@@ -33,7 +33,7 @@ if ($_REQUEST['action']=='reconfigure')
 }
 
 // These are the required variables we want to configure during installation
-$SETUP = array('db_hostname','db_database','db_username','db_password','application_fspath','application_webpath');
+$SETUP = array('db_hostname','db_database','db_username','db_password','application_fspath','application_webpath', 'attachment_fspath', 'attachment_webpath');
 
 // Descriptions of all the config variables
 $CFGVAR['db_hostname']['title']='MySQL Database Hostname';
@@ -152,7 +152,7 @@ function setup_configure()
         if ($numconfigfiles < 2) $html .= "<h2>Found an existing <var>config.inc.php</var> file</h2>";
         else
         {
-            $html .= "<h2>Found more than one existing config file</h2>";
+            $html .= "<p class='error'>Found more than one existing config file</p>";
             if ($cfg_file_writable)
             {
                 $html .= "<ul>";
@@ -287,7 +287,22 @@ echo "h1,h2,h3,h4,h5 { background-color: #203894; padding: 0.1em; border: 1px so
 echo "h4 {background-color: #F7FAFF; color: #000; border: 1px solid #3165CD; }\n";
 echo "div.configvar1 {background-color: #F7FAFF; border: 1px solid black; margin-bottom: 10px;} ";
 echo "div.configvar2 {background-color: green; border: 1px solid black; margin-bottom: 10px;} ";
-echo ".error {background: #FFFFCC; border: 1px solid red; color: red; padding: 2px;}\n";
+echo ".error {background-position: 3px 2px;
+  background-repeat: no-repeat;
+  padding: 3px 3px 3px 22px;
+  min-height: 16px;
+  -moz-border-radius: 5px;
+  /* display: inline; */
+  border: 1px solid #000;
+  margin-left: 2em;
+  margin-right: 2em;
+  width: auto;
+  text-align: left;
+    background-image: url('images/icons/sit/16x16/warning.png');
+  color: #5A3612;
+  border: 1px solid #A26120;
+  background-color: #FFECD7;
+}";
 echo ".help {background: #F7FAFF; border: 1px solid #3165CD; color: #203894; padding: 2px;}\n";
 echo ".helptip { color: #203894;}\n";
 echo ".warning {background: #FFFFE6; border: 2px solid #FFFF31; color: red; padding: 2px;}\n";
@@ -422,7 +437,6 @@ switch ($_REQUEST['action'])
         $db = @mysql_connect($CONFIG['db_hostname'], $CONFIG['db_username'], $CONFIG['db_password']);
         if (mysql_error())
         {
-            echo "<p class='error'>".mysql_error()."<br />Could not connect to database server '{$CONFIG['db_hostname']}'.  Did you configure the hostname correctly? Is the MySQL Server running?</p>";
             echo setup_configure();
         }
         else
@@ -488,7 +502,15 @@ switch ($_REQUEST['action'])
                 {
                     echo "<h2>Creating new database schema...</h2>";
                     // No users table or empty users table, proceed to install
-                    echo setup_exec_sql($schema);
+                    $errors = setup_exec_sql($schema);
+                    if(empty($errors))
+                    {
+                        echo "<p>Database created OK</p>";
+                    }
+                    else
+                    {
+                        echo $errors;
+                    }
                     // Set the system version number
                     $sql = "INSERT INTO system ( id, version) VALUES (0, $application_version)";
                     mysql_query($sql);
@@ -674,15 +696,17 @@ switch ($_REQUEST['action'])
                     elseif (file_exists($CONFIG['attachment_fspath']) == FALSE)
                     {
                         echo "<p class='error'>The attachment path that you have configured ({$CONFIG['attachment_fspath']}) does not exist, please create this directory or alter the \$CONFIG['attachment_fspath'] configuration variable to point to a directory that does exist.</p>";
+                        echo "<p>After fixing this problem, you must run <a href='{$_SERVER['PHP_SELF']}?checkinstallcomplete' class='button'>setup</a> again to create an admin account.</p>";
                     }
                     elseif (is_writable($CONFIG['attachment_fspath']) == FALSE)
                     {
                         echo "<p class='error'>Attachment path '{$CONFIG['attachment_fspath']}' not writable<br />";
                         echo "Permissions:  <code>{$CONFIG['attachment_fspath']} ".file_permissions_info(fileperms($CONFIG['attachment_fspath']));
                         echo " (".substr(sprintf('%o', fileperms($CONFIG['attachment_fspath'])), -4).")</code><br />";
-                        echo "To fix this run the following command at the console (or set other appropriate permissions to allow write access)<br /><br />";
+                        echo "If installing on Linux you can run the following command at the console (or set other appropriate permissions to allow write access)<br /><br />";
                         echo "<code>chmod -R 777 {$CONFIG['attachment_fspath']}</code>";
                         echo "</p>";
+                        echo "<p>After fixing this, please re-run <a href='{$_SERVER[PHP_SELF]}?checkinstallcomplete' class='button'>setup</a> to create an admin account.</p>";
                     }
                     elseif(!isset($_REQUEST))
                     {
@@ -699,7 +723,7 @@ switch ($_REQUEST['action'])
                         echo "<p>Username:<br /><input type='text' name='username' value='admin' disabled='disabled' /> (cannot be changed)</p>";
                         echo "<p><label>Password:<br /><input type='password' name='password' size='30' maxlength='50' /></label></p>";
                         echo "<p><label>Confirm Password:<br /><input type='password' name='passwordagain' size='30' maxlength='50' /></label></p>";
-                        echo "<p><label>Email:<br /><input type='text' size='30' maxlength='255' /></label></p>";
+                        echo "<p><label>Email:<br /><input type='text' name='email' size='30' maxlength='255' /></label></p>";
                         echo "<p><input type='submit' value='Create Admin' />";
                         echo "<input type='hidden' name='action' value='createadminuser' />";
                         echo "</form>";
