@@ -666,6 +666,7 @@ switch ($page)
                 echo "<p class='info'>{$strNoIncidents}</p>";
             }
 
+            //FIXME i think the add page expects the contractid in a hiddent form field
             echo "<p align='center'>";
             if($numcontracts == 1)
             {
