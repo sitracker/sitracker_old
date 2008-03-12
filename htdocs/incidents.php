@@ -122,7 +122,7 @@ switch($type)
             case 4: // All Closed
                 echo "<span style='color: Gray'>{$strAllClosed}</span>";
                 $sql .= "AND status='2' ";
-                if ($CONFIG['hide_closed_incidents_older_than'] > -1)
+                if ($CONFIG['hide_closed_incidents_older_than'] > -1 AND $_GET['show'] != 'all')
                 {
                     $old = $now - ($CONFIG['hide_closed_incidents_older_than'] * 86400);
                     $sql .= "AND closed >= {$old} ";
@@ -185,6 +185,18 @@ switch($type)
         }
         echo "</select>\n";
         echo "</form>";
+
+        if ($queue == 4 AND $CONFIG['hide_closed_incidents_older_than'] != -1 AND $_GET['show'] != 'all')
+        {
+            echo "<p class='info'>".sprintf($strHidingIncidentsOlderThan, $CONFIG['hide_closed_incidents_older_than']);
+            echo " - <a href='{$_SERVER['PHP_SELF']}?{$_SERVER['QUERY_STRING']}&show=all'>".$strShowAll."</a></p>";
+        }
+        elseif($queue == 4 AND $CONFIG['hide_closed_incidents_older_than'] != -1)
+        {
+            echo "<p class='info'>{$strShowingAllIncidents} - ";
+            echo "<a href='{$_SERVER['PHP_SELF']}?user=$user&amp;type=$type&amp;queue=4'>";
+            echo sprintf($strOnlyShowNewerThan, $CONFIG['hide_closed_incidents_older_than'])."</a></p>";
+        }
 
         if (!empty($softwareid)) echo "<p align='center'>Filter active: only displaying incidents for ".software_name($softwareid)."</p>";
         if ($user=='all') echo "<p align='center'>There are <strong>{$rowcount}</strong> incidents in this list.</p>";
@@ -262,6 +274,11 @@ switch($type)
                 case 4: // All Closed
                     echo "<h2>{$strOtherIncidents}: <span style='color: Gray'>{$strAllClosed}</span></h2>\n";
                     $sql .= "AND status='2' ";
+                    if ($CONFIG['hide_closed_incidents_older_than'] > -1 AND $_GET['show'] != 'all')
+                    {
+                        $old = $now - ($CONFIG['hide_closed_incidents_older_than'] * 86400);
+                        $sql .= "AND closed >= {$old} ";
+                    }
                 break;
 
                 default:
