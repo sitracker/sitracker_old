@@ -79,7 +79,7 @@ $numcontracts = mysql_num_rows($result);
 
 echo "<div id='menu'>\n";
 echo "<ul id='menuList'>\n";
-echo "<li><a href='logout.php'>{$strLogout}</a></li>";
+echo "<li><a href='portal.php?page=incidents'>{$strIncidents}</a></li>";
 if($numcontracts == 1)
 {
     //only one contract
@@ -91,8 +91,9 @@ else
 {
     echo "<li><a href='portal.php?page=entitlement'>{$strEntitlement}</a></li>";
 }
-echo "<li><a href='portal.php?page=incidents'>{$strIncidents}</a></li>";
 echo "<li><a href='portal.php?page=details'>{$strDetails}</a></li>";
+echo "<li><a href='logout.php'>{$strLogout}</a></li>";
+
 echo "</ul>";
 echo "</div>";
 
@@ -138,85 +139,6 @@ switch ($page)
         {
             echo "<p class='info'>{$strNone}</p>";
         }
-    break;
-
-    //show their open incidents
-    case 'incidents':
-        $showclosed = $_REQUEST['showclosed'];
-        if (empty($showclosed)) $showclosed = "false";
-
-        if ($showclosed == "true")
-        {
-            echo "<h2>{$strYourClosedIncidents}</h2>";
-            echo "<p align='center'><a href='$_SERVER[PHP_SELF]?page=incidents&amp;showclosed=false'>{$strShowOpenIncidents}</a></p>";
-            $sql = "SELECT * FROM incidents WHERE status = 2 AND contact = '{$_SESSION['contactid']}'";
-        }
-        else
-        {
-            echo "<h2>{$strYourCurrentOpenIncidents}</h2>";
-            echo "<p align='center'><a href='$_SERVER[PHP_SELF]?page=incidents&amp;showclosed=true'>{$strShowClosedIncidents}</a></p>";
-            $sql = "SELECT * FROM incidents WHERE status != 2 AND contact = '{$_SESSION['contactid']}'";
-        }
-        $result = mysql_query($sql);
-        if (mysql_error()) trigger_error(mysql_error(),E_USER_ERROR);
-        $numincidents = mysql_num_rows($result);
-        if ($numincidents >= 1)
-        {
-            $shade='shade1';
-            echo "<table align='center'>";
-            echo "<tr>";
-            echo colheader('id', $strID, $sort, $order, $filter);
-            echo colheader('title',$strTitle);
-            echo colheader('lastupdated',$strLastUpdated);
-            echo colheader('status',$strStatus);
-            if ($showclosed == "false")
-            {
-                echo colheader('actions', $strOperation);
-            }
-
-            echo "</tr>\n";
-            while ($incident = mysql_fetch_object($result))
-            {
-                echo "<tr class='$shade'><td>";
-                echo "<a href='portal.php?page=showincident&amp;id={$incident->id}'>{$incident->id}</a></td>";
-                echo "<td>";
-                if (!empty($incident->softwareid))
-                {
-                    echo software_name($incident->softwareid)."<br />";
-                }
-
-                echo "<strong><a href='portal.php?page=showincident&amp;id={$incident->id}'>{$incident->title}</a></strong></td>";
-                echo "<td>".format_date_friendly($incident->lastupdated)."</td>";
-                echo "<td>".incidentstatus_name($incident->status)."</td>";
-
-                if ($showclosed == "false")
-                {
-                    echo "<td><a href='{$_SERVER[PHP_SELF]}?page=update&amp;id={$incident->id}'>{$strUpdate}</a> | ";
-
-                    //check if the customer has requested a closure
-                    $lastupdate = list($update_userid, $update_type, $update_currentowner, $update_currentstatus, $update_body, $update_timestamp, $update_nextaction, $update_id)=incident_lastupdate($incident->id);
-
-                    if ($lastupdate[1] == "customerclosurerequest")
-                    {
-                        echo "{$strClosureRequested}</td>";
-                    }
-                    else
-                    {
-                        echo "<a href='{$_SERVER[PHP_SELF]}?page=close&amp;id={$incident->id}'>{$strRequestClosure}</a></td>";
-                    }
-                }
-                echo "</tr>";
-                if ($shade == 'shade1') $shade = 'shade2';
-                else $shade = 'shade1';
-            }
-            echo "</table>";
-        }
-        else
-        {
-            echo "<p class='info'>{$strNoIncidents}</p>";
-        }
-
-        echo "<p align='center'><a href='{$_SERVER[PHP_SELF]}?page=entitlement'>{$strAddIncident}</a></p>";
     break;
 
     //update an open incident
@@ -666,10 +588,86 @@ switch ($page)
         }
         break;
 
-
-    case '':
+    //show their open incidents
+    case 'incidents':
+        //fallthrough
     default:
-        echo "<p align='center'>{$strWelcome} ".contact_realname($_SESSION['contactid'])."</p>";
+            $showclosed = $_REQUEST['showclosed'];
+            if (empty($showclosed)) $showclosed = "false";
+
+            if ($showclosed == "true")
+            {
+                echo "<h2>{$strYourClosedIncidents}</h2>";
+                echo "<p align='center'><a href='$_SERVER[PHP_SELF]?page=incidents&amp;showclosed=false'>{$strShowOpenIncidents}</a></p>";
+                $sql = "SELECT * FROM incidents WHERE status = 2 AND contact = '{$_SESSION['contactid']}'";
+            }
+            else
+            {
+                echo "<h2>{$strYourCurrentOpenIncidents}</h2>";
+                echo "<p align='center'><a href='$_SERVER[PHP_SELF]?page=incidents&amp;showclosed=true'>{$strShowClosedIncidents}</a></p>";
+                $sql = "SELECT * FROM incidents WHERE status != 2 AND contact = '{$_SESSION['contactid']}'";
+            }
+            $result = mysql_query($sql);
+            if (mysql_error()) trigger_error(mysql_error(),E_USER_ERROR);
+            $numincidents = mysql_num_rows($result);
+            if ($numincidents >= 1)
+            {
+                $shade='shade1';
+                echo "<table align='center'>";
+                echo "<tr>";
+                echo colheader('id', $strID, $sort, $order, $filter);
+                echo colheader('title',$strTitle);
+                echo colheader('lastupdated',$strLastUpdated);
+                echo colheader('status',$strStatus);
+                if ($showclosed == "false")
+                {
+                    echo colheader('actions', $strOperation);
+                }
+
+                echo "</tr>\n";
+                while ($incident = mysql_fetch_object($result))
+                {
+                    echo "<tr class='$shade'><td>";
+                    echo "<a href='portal.php?page=showincident&amp;id={$incident->id}'>{$incident->id}</a></td>";
+                    echo "<td>";
+                    if (!empty($incident->softwareid))
+                    {
+                        echo software_name($incident->softwareid)."<br />";
+                    }
+
+                    echo "<strong><a href='portal.php?page=showincident&amp;id={$incident->id}'>{$incident->title}</a></strong></td>";
+                    echo "<td>".format_date_friendly($incident->lastupdated)."</td>";
+                    echo "<td>".incidentstatus_name($incident->status)."</td>";
+
+                    if ($showclosed == "false")
+                    {
+                        echo "<td><a href='{$_SERVER[PHP_SELF]}?page=update&amp;id={$incident->id}'>{$strUpdate}</a> | ";
+
+                        //check if the customer has requested a closure
+                        $lastupdate = list($update_userid, $update_type, $update_currentowner, $update_currentstatus, $update_body, $update_timestamp, $update_nextaction, $update_id)=incident_lastupdate($incident->id);
+
+                        if ($lastupdate[1] == "customerclosurerequest")
+                        {
+                            echo "{$strClosureRequested}</td>";
+                        }
+                        else
+                        {
+                            echo "<a href='{$_SERVER[PHP_SELF]}?page=close&amp;id={$incident->id}'>{$strRequestClosure}</a></td>";
+                        }
+                    }
+                    echo "</tr>";
+                    if ($shade == 'shade1') $shade = 'shade2';
+                    else $shade = 'shade1';
+                }
+                echo "</table>";
+            }
+            else
+            {
+                echo "<p class='info'>{$strNoIncidents}</p>";
+            }
+
+            echo "<p align='center'><a href='{$_SERVER[PHP_SELF]}?page=entitlement'>{$strAddIncident}</a></p>";
+        break;
 }
 
 include('htmlfooter.inc.php');
