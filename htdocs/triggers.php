@@ -12,11 +12,25 @@
 // Author: Ivan Lucas <ivanlucas[at]users.sourceforge.net>
 
 @include ('set_include_path.inc.php');
-$permission = 22; // TODO 3.40 set a permission for triggers
+$permission = 0; // TODO 3.40 set a permission for triggers
 require ('db_connect.inc.php');
 require ('functions.inc.php');
 // This page requires authentication
 require ('auth.inc.php');
+
+$adminuser = user_permission($sit[2],22); // Admin user
+
+// External vars
+// We only allow setting the selecteduser if the user is an admin, otherwise we use self
+if ($adminuser)
+{
+    if (is_numeric($_REQUEST['user'])) $selecteduser = $_REQUEST['user'];
+    else $selecteduser = 0;
+}
+else
+{
+    $selecteduser = $_SESSION['userid'];
+}
 
 $title = $strTriggers;
 
@@ -25,6 +39,8 @@ switch ($_REQUEST['mode'])
     case 'delete':
         $id = cleanvar($_GET['id']);
         if (!is_numeric($id)) html_redirect($_SERVER['PHP_SELF'], FALSE);
+
+        // TODO needs a check that the user has permission to delete the trigger
 
         $sql = "DELETE FROM `{$dbTriggers}` WHERE id = $id LIMIT 1";
         mysql_query($sql);
@@ -95,15 +111,17 @@ switch ($_REQUEST['mode'])
             }
             echo "</p>";
         }
-        echo "<form action='{$_SERVER['PHP_SELF']}' method='post'>";
+        echo "<form name='addtrigger' action='{$_SERVER['PHP_SELF']}' method='post'>";
         echo "<table align='center'><tr><th>{$strAction}</th><th>{$strTemplate}</th>";
         // echo "<th>Extra {$strParameters}</th>";
         echo "</tr>\n"; // FIXME extra, rules
+
+        // ACTION_NOTICE is only applicable when a userid is specified or for 'all'
         echo "<tr>";
         echo "<td><select name='new_action' id='new_action' onchange='switch_template();'>";
         echo "<option value='ACTION_NONE'>{$strNone}</option>\n";
         echo "<option value='ACTION_EMAIL'>{$strEmail}</option>\n";
-        echo "<option value='ACTION_NOTICE'>{$strNotice}</option>\n";
+        if ($selecteduser != 0) echo "<option value='ACTION_NOTICE'>{$strNotice}</option>\n";
         echo "<option value='ACTION_JOURNAL'>{$strJournal}</option>\n";
         echo "</select></td>";
         echo "<td>";
@@ -125,6 +143,7 @@ switch ($_REQUEST['mode'])
         echo "</table>\n";
         echo "<input type='hidden' name='mode' value='save' />";
         echo "<input type='hidden' name='id' value='{$id}' />";
+        echo "<input type='hidden' name='user' value='{$selecteduser}' />";
         echo "<p><input type='submit' value=\"{$strSave}\" /></p>";
         echo "</form>";
 
@@ -159,12 +178,6 @@ switch ($_REQUEST['mode'])
     case 'list':
     default:
         //display the list
-
-        // External vars
-        if (is_numeric($_REQUEST['user'])) $selecteduser = $_REQUEST['user'];
-        else $selecteduser = 0;
-
-        $adminuser = user_permission($sit[2],22); // Admin user
         include ('htmlheader.inc.php');
         echo "<h2><img src='{$CONFIG['application_webpath']}images/icons/{$iconset}/32x32/trigger.png' width='32' height='32' alt='' /> ";
         echo "$title</h2>";
@@ -225,7 +238,7 @@ switch ($_REQUEST['mode'])
                 echo "{$strNone}";
             }
             echo "</td>";
-            echo "<td><a href='{$_SERVER['PHP_SELF']}?mode=add&amp;id={$trigger}'>Add Action</a></td>"; // TODO link to add page
+            echo "<td><a href='{$_SERVER['PHP_SELF']}?mode=add&amp;id={$trigger}&amp;user={$selecteduser}'>{$strAdd}</a></td>"; // TODO link to add page
             echo "</tr>\n";
             if ($shade == 'shade1') $shade = 'shade2';
             else $shade = 'shade1';
