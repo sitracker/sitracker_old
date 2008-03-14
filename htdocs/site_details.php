@@ -45,7 +45,7 @@ while ($siterow = mysql_fetch_array($siteresult))
     {
         echo "<tr><th>{$strStatus}:</th><td><span class='expired'>{$strInactive}</span></td></tr>";
     }
-    $tags = list_tags($id, 3, TRUE);
+    $tags = list_tags($id, TAG_SITE, TRUE);
     if (!empty($tags))
     {
         echo "<tr><th>{$strTags}:</th><td>{$tags}</td></tr>";
@@ -90,9 +90,9 @@ while ($siterow = mysql_fetch_array($siteresult))
 
     echo "</td></tr>\n";
 }
-mysql_free_result($siteresult);
 
 plugin_do('site_details');
+mysql_free_result($siteresult);
 
 echo "</table>\n";
 echo "<p align='center'><a href='edit_site.php?action=edit&amp;site={$id}'>{$strEdit}</a> | ";

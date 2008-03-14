@@ -38,46 +38,33 @@ if (empty($_REQUEST['mode']))
     include ('htmlheader.inc.php');
     echo "<h2>{$strMarketingMailshot}</h2>";
     echo "<form action='{$_SERVER['PHP_SELF']}' method='post'>";
-    echo "<table align='center'>";
-    echo "<tr><th>{$strInclude}</th><th>{$strExclude}</th></tr>";
-    echo "<tr><td>";
+    echo "<table align='center' class='vertical'>";
+    echo "<tr><th>{$strFilter}: {$strTag}</th><td><input type='text' name='filtertags' value='' size='15' /></td></tr>";
+    echo "<tr><th>{$strInclude}: {$strProducts}</th>";
+    echo "<td>";
     $sql   = "SELECT * FROM `{$dbProducts}` ORDER BY name";
     $result = mysql_query($sql);
     if (mysql_error()) trigger_error("MySQL Query Error ".mysql_error(), E_USER_ERROR);
-    echo "<select name='inc[]' multiple='multiple' size='20'>";
+    echo "<select name='inc[]' multiple='multiple' size='6'>";
     while ($product = mysql_fetch_object($result))
     {
         echo "<option value='{$product->id}'>$product->name</option>\n";
     }
     echo "</select>";
-    echo "</td>";
+    echo "</td></tr>\n";
+    echo "<tr>";
+    echo "<th>{$strExclude}: {$strProducts}</th>";
     echo "<td>";
     $sql = "SELECT * FROM `{$dbProducts}` ORDER BY name";
     $result = mysql_query($sql);
     if (mysql_error()) trigger_error(mysql_error(),E_USER_ERROR);
-    echo "<select name='exc[]' multiple='multiple' size='20'>";
+    echo "<select name='exc[]' multiple='multiple' size='6'>";
     while ($product = mysql_fetch_object($result))
     {
         echo "<option value='{$product->id}'>$product->name</option>\n";
     }
     echo "</select>";
     echo "</td></tr>\n";
-    /*
-    echo "<tr><td align='right' width='200' class='shade1'><b>Table 2</b>:</td>";
-    echo "<td width=400 class='shade2'>";
-    $result = mysql_list_tables($db_database);
-    echo "<select name='table1'>";
-    while ($row = mysql_fetch_row($result))
-    {
-        echo "<option value='{$row[0]}'>{$row[0]}</option>\n";
-    }
-    echo "</select>";
-    echo "</td></tr>\n";
-    */
-
-    // echo "<tr><td align='right' width='200' class='shade1'><b>Limit to</b>:</td>";
-    // echo "<td width=400 class='shade2'><input type='text' name='limit' value='9999' size='4' /> Records</td></tr>";
-
     echo "<tr><td  colspan='2'><label><input type='checkbox' name='activeonly' value='yes' /> {$strShowActiveOnly}</label></td></tr>";
 
     echo "<tr><td colspan='2'>{$strOutput}: <select name='output'>";
@@ -115,6 +102,8 @@ elseif ($_REQUEST['mode']=='report')
 {
     // don't include anything excluded
     if (is_array($_POST['inc']) && is_array($_POST['exc'])) $_POST['inc']=array_values(array_diff($_POST['inc'],$_POST['exc']));
+
+    $filtertags = cleanvar($_POST['filtertags']);
 
     $includecount=count($_POST['inc']);
     if ($includecount >= 1)
@@ -177,7 +166,15 @@ elseif ($_REQUEST['mode']=='report')
     $rowcount=0;
     while ($row = mysql_fetch_object($result))
     {
-        if ($row->contactemail!=$lastemail)
+        $tags = list_tags($row->siteid, TAG_SITE, FALSE);
+        $tags = explode(', ', $tags);
+        if (!empty($filtertags))
+        {
+            if (in_array($filtertags, $tags)) $hide = FALSE;
+            else $hide = TRUE;
+        }
+        else $hide = FALSE;
+        if ($row->contactemail!=$lastemail AND $hide == FALSE)
         {
             $html .= "<tr class='shade2'><td>{$row->forenames}</td><td>{$row->surname}</td>";
             if ($row->dataprotection_email!='Yes') $html .= "<td>{$row->contactemail}</td>";

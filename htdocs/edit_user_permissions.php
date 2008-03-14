@@ -23,7 +23,7 @@ $title = $strSetPermissions;
 // Restrict resetting passwords in demo mode for all but the first user (usually admin)
 if ($CONFIG['demo'] AND $_SESSION['userid']!=1)
 {
-    html_redirect("manage_users.php", FALSE, "You cannot reset passwords while in DEMO MODE"); // FIXME i18n demo mode
+    html_redirect("manage_users.php", FALSE, $strCannotPerformOperationInDemo);
 }
 
 
@@ -59,8 +59,7 @@ if (empty($action) OR $action == "showform")
         while ($perm = mysql_fetch_object($presult))
         {
             echo "<tr class='$class'>";
-            // FIXME i18n tooltip 'check who has permissions'
-            echo "<td><a href='{$PHP_SELF}?action=check&amp;perm={$perm->id}' title='Check who has this permission'>{$perm->id}</a> {$perm->name}</td>";
+            echo "<td><a href='{$PHP_SELF}?action=check&amp;perm={$perm->id}' title='{$strCheckWhoHasThisPermission}'>{$perm->id}</a> {$perm->name}</td>";
             mysql_data_seek($result, 0);
             while ($rolerow = mysql_fetch_object($result))
             {
@@ -284,7 +283,7 @@ elseif ($action == "update")
 }
 elseif ($action == "check")
 {
-    echo "<h2>Check User &amp; Role Permissions</h2>"; // FIXME i18n check user and role permissions
+    echo "<h2>{$strCheckUserAndRolePermissions}</h2>";
     if (!empty($perm))
     {
         echo "<h3>Role Permission: {$perm} - ".permission_name($perm)."</h3>";

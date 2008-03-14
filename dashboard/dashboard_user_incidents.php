@@ -15,6 +15,7 @@ function dashboard_user_incidents($row,$dashboardid)
     global $user;
     global $sit;
     global $now;
+    global $GLOBALS;
     global $CONFIG;
     global $iconset;
     global $dbIncidents, $dbContacts, $dbPriority;
@@ -45,10 +46,11 @@ function dashboard_user_incidents($row,$dashboardid)
     $sql .= "(IF ((status >= 5 AND status <=8), ($now - lastupdated) > ({$CONFIG['regular_contact_days']} * 86400), 1=2 ) ";  // awaiting
     $sql .= "OR IF (status='1' OR status='3' OR status='4', 1=1 , 1=2) ";  // active, research, left message - show all
     $sql .= ") AND timeofnextaction < $now ) ";
+
     echo "<div class='windowbox' style='width: 95%' id='$row-$dashboardid'>";
     echo "<div class='windowtitle'><a href='incidents.php?user=current&amp;queue=1&amp;type=support'>";
     echo "<img src='{$CONFIG['application_webpath']}images/icons/{$iconset}/16x16/support.png' width='16' height='16' alt='' /> ";
-    if ($CONFIG['debug']) printf($GLOBALS['strUserIncidents'], user_realname($user,TRUE));
+    echo sprintf($GLOBALS['strUserIncidents'], user_realname($user,TRUE));
     echo "</a> ({$GLOBALS['strActionNeeded']})</div>";
     echo "<div class='window'>";
 

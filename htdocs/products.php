@@ -76,8 +76,7 @@ if (empty($productid) AND $display!='skills')
                         echo $countcontracts;
                     }
                     echo "</td>";
-                    // FIXME link to delete product
-                    // echo "<td><a href='edit_product.php?id={$product->id}'>Edit</a> | <a href='delete_product.php?id={$product->id}'>Delete</a></td>";
+                    echo "<td><a href='edit_product.php?id={$product->id}'>Edit</a> | <a href='delete_product.php?id={$product->id}'>Delete</a></td>";
                     echo "</tr>\n";
                     if ($shade == 'shade1') $shade = 'shade2';
                     else $shade = 'shade1';
@@ -246,10 +245,10 @@ else
             echo "<p align='center'><a href='edit_product.php?id={$product->id}'>Edit</a> ";
             echo "| <a href='delete_product.php?id={$product->id}'>{$strDelete}</a></p>";
             $tags = list_tags($product->id, TAG_PRODUCT, TRUE);
-            
+
             if (!empty($tags)) echo "<div style='width: 50%; margin: auto;'>{$tags}</div><br />\n";
             echo "<table summary='List of skills linked to product' align='center'>";
-            
+
             if (!empty($product->description)) echo "<tr class='shade1'><td colspan='0'>".nl2br($product->description)."</td></tr>";
 
             $swsql = "SELECT * FROM `{$dbSoftwareProducts}` AS sp, software WHERE sp.softwareid=software.id AND productid='{$product->id}' ORDER BY name";

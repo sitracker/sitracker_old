@@ -66,12 +66,34 @@ $filter = array('page' => $page);
 
 include ('htmlheader.inc.php');
 
+//find contracts
+$sql = "SELECT maintenance.*, products.*, ";
+$sql .= "(maintenance.incident_quantity - maintenance.incidents_used) AS availableincidents ";
+$sql .= "FROM supportcontacts, maintenance, products ";
+$sql .= "WHERE supportcontacts.maintenanceid=maintenance.id ";
+$sql .= "AND maintenance.product=products.id ";
+$sql .= "AND supportcontacts.contactid='{$_SESSION['contactid']}'";
+$result = mysql_query($sql);
+if (mysql_error()) trigger_error(mysql_error(),E_USER_ERROR);
+$numcontracts = mysql_num_rows($result);
+
 echo "<div id='menu'>\n";
 echo "<ul id='menuList'>\n";
-echo "<li><a href='logout.php'>{$strLogout}</a></li>";
-echo "<li><a href='portal.php?page=entitlement'>{$strEntitlement}</a></li>";
 echo "<li><a href='portal.php?page=incidents'>{$strIncidents}</a></li>";
+if($numcontracts == 1)
+{
+    //only one contract
+    echo "<li><a href='portal.php?page=add'>{$strAddIncident}</a></li>";
+    $contractobj = mysql_fetch_object($result);
+    $contractid = $contractobj->id;
+}
+else
+{
+    echo "<li><a href='portal.php?page=entitlement'>{$strEntitlement}</a></li>";
+}
 echo "<li><a href='portal.php?page=details'>{$strDetails}</a></li>";
+echo "<li><a href='logout.php'>{$strLogout}</a></li>";
+
 echo "</ul>";
 echo "</div>";
 
@@ -80,15 +102,12 @@ switch ($page)
     //show the user's contracts
     case 'entitlement':
         echo "<h2>{$strYourSupportEntitlement}</h2>";
-        $sql = "SELECT m.*, p.*, ";
-        $sql .= "(m.incident_quantity - m.incidents_used) AS availableincidents ";
-        $sql .= "FROM `{$dbSupportContacts}` AS sc, `{$dbMaintenance}` AS m, `{$dbProducts}` AS p ";
-        $sql .= "WHERE sc.maintenanceid = m.id ";
-        $sql .= "AND m.product = p.id ";
-        $sql .= "AND sc.contactid = '{$_SESSION['contactid']}'";
-        $result = mysql_query($sql);
-        if (mysql_error()) trigger_error(mysql_error(),E_USER_ERROR);
-        $numcontracts = mysql_num_rows($result);
+        $sql = "SELECT maintenance.*, products.*, ";
+        $sql .= "(maintenance.incident_quantity - maintenance.incidents_used) AS availableincidents ";
+        $sql .= "FROM supportcontacts, maintenance, products ";
+        $sql .= "WHERE supportcontacts.maintenanceid=maintenance.id ";
+        $sql .= "AND maintenance.product=products.id ";
+        $sql .= "AND supportcontacts.contactid='{$_SESSION['contactid']}'";
         if ($numcontracts >= 1)
         {
             echo "<table align='center'>";
@@ -128,85 +147,8 @@ switch ($page)
         }
     break;
 
-    //show their open incidents
-    case 'incidents':
-        $showclosed = $_REQUEST['showclosed'];
-        if (empty($showclosed)) $showclosed = "false";
-
-        if ($showclosed == "true")
-        {
-            echo "<h2>{$strYourClosedIncidents}</h2>";
-            echo "<p align='center'><a href='$_SERVER[PHP_SELF]?page=incidents&amp;showclosed=false'>{$strShowOpenIncidents}</a></p>";
             $sql = "SELECT * FROM `{$dbIncidents}` WHERE status = 2 AND contact = '{$_SESSION['contactid']}'";
-        }
-        else
-        {
-            echo "<h2>{$strYourCurrentOpenIncidents}</h2>";
-            echo "<p align='center'><a href='$_SERVER[PHP_SELF]?page=incidents&amp;showclosed=true'>{$strShowClosedIncidents}</a></p>";
             $sql = "SELECT * FROM `{$dbIncidents}` WHERE status != 2 AND contact = '{$_SESSION['contactid']}'";
-        }
-        $result = mysql_query($sql);
-        if (mysql_error()) trigger_error(mysql_error(),E_USER_ERROR);
-        $numincidents = mysql_num_rows($result);
-        if ($numincidents >= 1)
-        {
-            $shade='shade1';
-            echo "<table align='center'>";
-            echo "<tr>";
-            echo colheader('id', $strID, $sort, $order, $filter);
-            echo colheader('title',$strTitle);
-            echo colheader('lastupdated',$strLastUpdated);
-            echo colheader('status',$strStatus);
-            if ($showclosed == "false")
-            {
-                echo colheader('actions', $strOperation);
-            }
-
-            echo "</tr>\n";
-            while ($incident = mysql_fetch_object($result))
-            {
-                echo "<tr class='$shade'><td>";
-                echo "<a href='portal.php?page=showincident&amp;id={$incident->id}'>{$incident->id}</a></td>";
-                echo "<td>";
-                if (!empty($incident->softwareid))
-                {
-                    echo software_name($incident->softwareid)."<br />";
-                }
-
-                echo "<strong><a href='portal.php?page=showincident&amp;id={$incident->id}'>{$incident->title}</a></strong></td>";
-                echo "<td>".format_date_friendly($incident->lastupdated)."</td>";
-                echo "<td>".incidentstatus_name($incident->status)."</td>";
-
-                if ($showclosed == "false")
-                {
-                    echo "<td><a href='{$_SERVER[PHP_SELF]}?page=update&amp;id={$incident->id}'>{$strUpdate}</a> | ";
-
-                    //check if the customer has requested a closure
-                    $lastupdate = list($update_userid, $update_type, $update_currentowner, $update_currentstatus, $update_body, $update_timestamp, $update_nextaction, $update_id)=incident_lastupdate($incident->id);
-
-                    if ($lastupdate[1] == "customerclosurerequest")
-                    {
-                        echo "{$strClosureRequested}</td>";
-                    }
-                    else
-                    {
-                        echo "<a href='{$_SERVER[PHP_SELF]}?page=close&amp;id={$incident->id}'>{$strRequestClosure}</a></td>";
-                    }
-                }
-                echo "</tr>";
-                if ($shade == 'shade1') $shade = 'shade2';
-                else $shade = 'shade1';
-            }
-            echo "</table>";
-        }
-        else
-        {
-            echo "<p class='info'>{$strNoIncidents}</p>";
-        }
-
-        echo "<p align='center'><a href='{$_SERVER[PHP_SELF]}?page=entitlement'>{$strAddIncident}</a></p>";
-    break;
-
     //update an open incident
     case 'update':
         if (empty($_REQUEST['update']))
@@ -259,7 +201,7 @@ switch ($page)
             $user = mysql_fetch_object($result);
             if (mysql_error()) trigger_error("MySQL Query Error ".mysql_error(), E_USER_ERROR);
 
-            $reason = "Incident closure requested via the portal by <b>{$user->forenames} {$user->surname}</b>\n\n"; // FIXME i18n ? not sure?
+            $reason = "Incident closure requested via the portal by <b>{$user->forenames} {$user->surname}</b>\n\n";
             $reason .= "<b>Reason:</b> {$_REQUEST['reason']}";
             $sql = "INSERT into updates (incidentid, userid, type, currentstatus, bodytext, timestamp, customervisibility) ";
             $sql .= "VALUES('{$_REQUEST['id']}', '0', 'customerclosurerequest',  '1', '{$reason}',
@@ -284,17 +226,15 @@ switch ($page)
             echo "<h2>{$strAddIncident}</h2>";
             echo "<table align='center' width='50%' class='vertical'>";
             echo "<form action='{$_SERVER[PHP_SELF]}?page=add&action=submit' method='post'>";
-            echo "<tr><th>{$strSoftware}:</th><td>".softwareproduct_drop_down('software', 1, $_REQUEST['contractid'])."</td></tr>";
-            echo "<tr><th>{$strSoftwareVersion}:<t/h><td><input maxlength='100' name='version' size=40 type='text' /></td></tr>";
-            echo "<tr><th>{$strServicePacksApplied}:</th><td><input maxlength='100' name='productservicepacks' size=40 type='text' /></td></tr>";
             echo "<tr><th>{$strIncidentTitle}:</th><td><input maxlength='100' name='title' size=40 type='text' /></td></tr>";
-            echo "<tr><th>{$strProblemDescription}:<br />{$strProblemDescriptionCustomerText}</th><td><textarea name='probdesc' rows='10' cols='60'></textarea></td></tr>";
-            echo "<tr><th>{$strWorkAroundsAttempted}:<br />{$strWorkAroundsAttemptedCustomerText}</th><td><textarea name='workarounds' rows='10' cols='60'></textarea></td></tr>";
-            echo "<tr><th>{$strProblemReproduction}:<br />{$strProblemReproductionCustomerText}</th><td><textarea name='reproduction' rows='10' cols='60'></textarea></td></tr>";
-            echo "<tr><th>{$strCustomerImpact}:<br />{$strCustomerImpactCustomerText}</th><td><textarea name='impact' rows='10' cols='60'></textarea></td></tr>";
+            echo "<tr><th width='20%'>{$strProblemDescription}:</th><td><textarea name='probdesc' rows='20' cols='60'>";
+            echo "* Please describe the problem\n\n\n* What steps have you taken to try and fix it?\n\n\n";
+            echo "* Is the problem persistent or intermittent?\n\n\n* How can you reproduce the problem?\n\n\n";
+            echo "* How is this affecting you or others?\n\n\n";
+            echo "</textarea></td></tr>";
 
             echo "</table>";
-            echo "<input name='contractid' value='{$_REQUEST['contractid']}' type='hidden'>";
+            echo "<input name='contractid' value='{$contractid}' type='hidden'>";
             echo "<p align='center'><input type='submit' value='{$strAddIncident}' /></p>";
             echo "</form>";
         }
@@ -312,7 +252,7 @@ switch ($page)
             $impact = cleanvar($_REQUEST['impact']);
             $servicelevel = servicelevel_id2tag(maintenance_servicelevel($contractid));
 
-            $updatetext = "Opened via the portal by <b>".contact_realname($contactid)."</b>\n\n"; // FIXME i18n
+            $updatetext = "Opened via the portal by <b>".contact_realname($contactid)."</b>\n\n";
             if (!empty($probdesc))
             {
                 $updatetext .= "<b>{$strProblemDescription}</b>\n{$probdesc}\n\n";
@@ -414,7 +354,7 @@ switch ($page)
             if ($surname == '')
             {
                 $errors = 1;
-                echo "<p class='error'>You must enter a surname</p>\n"; // FIXME i18n
+                echo "<p class='error'>".sprinf($strYouMustEnter, $strSurname)."</p>\n";
             }
 
             if ($email == "" OR $email=='none' OR $email=='n/a')
@@ -466,7 +406,7 @@ switch ($page)
         $result = mysql_query($sql);
         $user = mysql_fetch_object($result);
 
-        echo "<h2>{$strDetails}: {$incidentid} - {$user->title}</h2>"; // FIXME i18n
+        echo "<h2>{$strDetails}: {$incidentid} - {$user->title}</h2>";
 
         if ($user->status != 2)
         {
@@ -656,10 +596,98 @@ switch ($page)
         }
         break;
 
-
-    case '':
+    //show their open incidents
+    case 'incidents':
+        //fallthrough
     default:
-        echo "<p align='center'>{$strWelcome} ".contact_realname($_SESSION['contactid'])."</p>";
+            $showclosed = $_REQUEST['showclosed'];
+            if (empty($showclosed)) $showclosed = "false";
+
+            if ($showclosed == "true")
+            {
+                echo "<h2>{$strYourClosedIncidents}</h2>";
+                echo "<p align='center'><a href='$_SERVER[PHP_SELF]?page=incidents&amp;showclosed=false'>{$strShowOpenIncidents}</a></p>";
+                $sql = "SELECT * FROM incidents WHERE status = 2 AND contact = '{$_SESSION['contactid']}'";
+            }
+            else
+            {
+                echo "<h2>{$strYourCurrentOpenIncidents}</h2>";
+                echo "<p align='center'><a href='$_SERVER[PHP_SELF]?page=incidents&amp;showclosed=true'>{$strShowClosedIncidents}</a></p>";
+                $sql = "SELECT * FROM incidents WHERE status != 2 AND contact = '{$_SESSION['contactid']}'";
+            }
+            $result = mysql_query($sql);
+            if (mysql_error()) trigger_error(mysql_error(),E_USER_ERROR);
+            $numincidents = mysql_num_rows($result);
+            if ($numincidents >= 1)
+            {
+                $shade='shade1';
+                echo "<table align='center'>";
+                echo "<tr>";
+                echo colheader('id', $strID, $sort, $order, $filter);
+                echo colheader('title',$strTitle);
+                echo colheader('lastupdated',$strLastUpdated);
+                echo colheader('status',$strStatus);
+                if ($showclosed == "false")
+                {
+                    echo colheader('actions', $strOperation);
+                }
+
+                echo "</tr>\n";
+                while ($incident = mysql_fetch_object($result))
+                {
+                    echo "<tr class='$shade'><td>";
+                    echo "<a href='portal.php?page=showincident&amp;id={$incident->id}'>{$incident->id}</a></td>";
+                    echo "<td>";
+                    if (!empty($incident->softwareid))
+                    {
+                        echo software_name($incident->softwareid)."<br />";
+                    }
+
+                    echo "<strong><a href='portal.php?page=showincident&amp;id={$incident->id}'>{$incident->title}</a></strong></td>";
+                    echo "<td>".format_date_friendly($incident->lastupdated)."</td>";
+                    echo "<td>".incidentstatus_name($incident->status)."</td>";
+
+                    if ($showclosed == "false")
+                    {
+                        echo "<td><a href='{$_SERVER[PHP_SELF]}?page=update&amp;id={$incident->id}'>{$strUpdate}</a> | ";
+
+                        //check if the customer has requested a closure
+                        $lastupdate = list($update_userid, $update_type, $update_currentowner, $update_currentstatus, $update_body, $update_timestamp, $update_nextaction, $update_id)=incident_lastupdate($incident->id);
+
+                        if ($lastupdate[1] == "customerclosurerequest")
+                        {
+                            echo "{$strClosureRequested}</td>";
+                        }
+                        else
+                        {
+                            echo "<a href='{$_SERVER[PHP_SELF]}?page=close&amp;id={$incident->id}'>{$strRequestClosure}</a></td>";
+                        }
+                    }
+                    echo "</tr>";
+                    if ($shade == 'shade1') $shade = 'shade2';
+                    else $shade = 'shade1';
+                }
+                echo "</table>";
+            }
+            else
+            {
+                echo "<p class='info'>{$strNoIncidents}</p>";
+            }
+
+            //FIXME i think the add page expects the contractid in a hiddent form field
+            echo "<p align='center'>";
+            if($numcontracts == 1)
+            {
+                //only one contract
+                echo "<a href='portal.php?page=add'>{$strAddIncident}</a></li>";
+            }
+            else
+            {
+                echo "<a href='{$_SERVER[PHP_SELF]}?page=entitlement'>";
+            }
+
+            echo "{$strAddIncident}</a></p>";
+        break;
 }
 
 include ('htmlfooter.inc.php');
