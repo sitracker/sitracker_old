@@ -61,6 +61,8 @@ if (empty($submit))
     echo "/> ";
     echo date_picker('addsoftware.lifetime_end');
     echo "</td></tr>\n";
+    echo "<tr><th>{$strTags}:</th>";
+    echo "<td><textarea rows='2' cols='30' name='tags'></textarea></td></tr>\n";
     echo "</table>";
     echo "<p align='center'><input name='submit' type='submit' value='{$strAddSkill}' /></p>";
     echo "<p class='warning'>{$strAvoidDupes}</p>";
@@ -74,10 +76,25 @@ else
 {
     // External variables
     $name = cleanvar($_REQUEST['name']);
-    if (!empty($_REQUEST['lifetime_start'])) $lifetime_start = date('Y-m-d',strtotime($_REQUEST['lifetime_start']));
-    else $lifetime_start = '';
-    if (!empty($_REQUEST['lifetime_end'])) $lifetime_end = date('Y-m-d',strtotime($_REQUEST['lifetime_end']));
-    else $lifetime_end = '';
+    $tags = cleanvar($_REQUEST['tags']);
+    $vendor = cleanvar($_REQUEST['vendor']);
+    if (!empty($_REQUEST['lifetime_start']))
+    {
+        $lifetime_start = date('Y-m-d',strtotime($_REQUEST['lifetime_start']));
+    }
+    else
+    {
+        $lifetime_start = '';
+    }
+    
+    if (!empty($_REQUEST['lifetime_end']))
+    {
+        $lifetime_end = date('Y-m-d',strtotime($_REQUEST['lifetime_end']));
+    }    
+    else
+    {
+        $lifetime_end = '';
+    }
 
     $_SESSION['formdata']['add_software'] = $_REQUEST;
 
@@ -96,20 +113,25 @@ else
     if (mysql_num_rows($result) >= 1)
     {
         $errors++;
-        $_SESSION['formerrors']['add_software']['duplicate'] .= "A record already exists with that skill name";
+        $_SESSION['formerrors']['add_software']['duplicate'] .= "A record already exists with that skill name"; // FIXME i18n
     }
 
     // add product if no errors
     if ($errors == 0)
     {
-        $sql = "INSERT INTO `{$dbSoftware}` (name, lifetime_start, lifetime_end) VALUES ('$name','$lifetime_start','$lifetime_end')";
+        $sql = "INSERT INTO `{$dbSoftware}` (name, vendorid, lifetime_start, lifetime_end) VALUES ('$name','$vendor','$lifetime_start','$lifetime_end')";
         $result = mysql_query($sql);
         if (mysql_error()) trigger_error("MySQL Query Error ".mysql_error(), E_USER_ERROR);
 
-        if (!$result) echo "<p class='error'>Addition of Skill Failed\n";
+        if (!$result)
+        {
+            echo "<p class='error'>Addition of Skill Failed\n"; // FIXME i18n
+        }
         else
         {
-            $id=mysql_insert_id();
+            $id = mysql_insert_id();
+            replace_tags(TAG_SKILL, $id, $tags);
+
             journal(CFG_LOGGING_DEBUG, 'Skill Added', "Skill {$id} was added", CFG_JOURNAL_DEBUG, $id);
             html_redirect("products.php");
             //clear form data
