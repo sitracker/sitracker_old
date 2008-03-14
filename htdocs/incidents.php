@@ -121,6 +121,11 @@ switch ($type)
             case 4: // All Closed
                 echo "<span style='color: Gray'>{$strAllClosed}</span>";
                 $sql .= "AND status='2' ";
+                if ($CONFIG['hide_closed_incidents_older_than'] > -1)
+                {
+                    $old = $now - ($CONFIG['hide_closed_incidents_older_than'] * 86400);
+                    $sql .= "AND closed >= {$old} ";
+                }
             break;
 
             default:

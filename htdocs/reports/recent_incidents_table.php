@@ -18,6 +18,15 @@ require ('functions.inc.php');
 // This page requires authentication
 require ('auth.inc.php');
 include ('htmlheader.inc.php');
+echo "<script type='text/javascript'>";
+?>
+function incident_details_window_l(incidentid,second)
+{
+    URL = "<?php  echo $CONFIG['application_uriprefix'].$CONFIG['application_webpath'] ?>incident_details.php?id=" + incidentid + "&amp;javascript=enabled";
+    window.open(URL, "sit_popup", "toolbar=yes,status=yes,menubar=no,scrollbars=yes,resizable=yes,width=700,height=600");
+}
+<?php
+echo "</script>";
 
 $sites = array();
 
@@ -42,9 +51,9 @@ if (mysql_num_rows($result) > 0)
     {
         if ($prvincid!=$row->id)
         {
-            echo "<b>[{$row->siteid}] {$row->name}</b> Incident: <a href='{$CONFIG['application_uriprefix']}{$CONFIG['application_webpath']}incident_details.php?id={$row->id}'>{$row->id}</a>  ";
-            echo "Date: ".ldate('d M Y', $row->opened)." ";
-            echo "Product: ".product_name($row->product);
+            echo "<strong>[{$row->siteid}] {$row->name}</strong> {$strIncident}: <a href=\"javascript:incident_details_window_l('{$row->id}', 'incident{$row->id}')\">{$row->id}</a>  ";
+            echo "{$strDate}: ".ldate('d M Y', $row->opened)." ";
+            echo "{$strProduct}: ".product_name($row->product);
             $site=$row->siteid;
             $$site++;
             $sites[]=$row->siteid;

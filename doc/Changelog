@@ -4,6 +4,9 @@ Changes in v3.32 - Unreleased
 * Japanese Translation
 * Ability to list open activties/times tasks for site/user/all
 * Ability to view all open activities
+* Ability to view all holidays not requested
+* Holidays page shows number pending approval
+* Holidays page shows list of holidays waitig approval if your an approver
 
 
 Changes in v3.31 - Released 19 December 2007

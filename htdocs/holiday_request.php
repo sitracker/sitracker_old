@@ -28,6 +28,86 @@ $memo = cleanvar($_REQUEST['memo']);
 $approvaluser = cleanvar($_REQUEST['approvaluser']);
 
 include ('htmlheader.inc.php');
+
+function display_holiday_table($result)
+{
+    global $user, $approver, $mode;
+    
+    echo "<table align='center'>";
+    echo "<tr>";
+    if ($user == 'all' && $approver == TRUE)
+    {
+        echo "<th>{$GLOBALS['strName']}</th>";
+    }
+    echo "<th>{$GLOBALS['strDate']}</th><th>{$GLOBALS['strLength']}</th><th>{$GLOBALS['strType']}</th>";
+    if ($approver AND $mode == 'approval')
+    {
+        echo "<th>{$GLOBALS['strOperation']}</th><th>{$GLOBALS['strGroupMembersAway']}</th>";
+    }
+    else
+    {
+        echo "<th>{$GLOBALS['strStatus']}</th>";
+    }
+
+    echo "</tr>";
+    while ($holiday = mysql_fetch_object($result))
+    {
+        echo "<tr class='shade2'>";
+        if ($user=='all' && $approver==TRUE)
+        {
+            echo "<td><a href='{$_SERVER['PHP_SELF']}?user={$holiday->userid}&amp;mode=approval'>";
+            echo user_realname($holiday->userid,TRUE);
+            echo "</a></td>";
+        }
+        echo "<td>".ldate('l j F Y', $holiday->startdate)."</td>";
+        echo "<td>";
+        if ($holiday->length=='am') echo $GLOBALS['strMorning'];
+        if ($holiday->length=='pm') echo $GLOBALS['strAfternoon'];
+        if ($holiday->length=='day') echo $GLOBALS['strFullDay'];
+        echo "</td>";
+        echo "<td>".holiday_type($holiday->type)."</td>";
+        if ($approver == TRUE)
+        {
+            if ($sit[2] != $holiday->userid AND $mode == 'approval')
+            {
+                echo "<td>";
+                $approvetext = $GLOBALS['strApprove'];
+                if ($holiday->type == 2) $approvetext = $GLOBALS['strAcknowledge'];
+                echo "<a href=\"holiday_approve.php?approve=TRUE&amp;user={$holiday->userid}&amp;view={$user}&amp;startdate={$holiday->startdate}&amp;type={$holiday->type}&amp;length={$holiday->length}\">{$approvetext}</a> | ";
+                echo "<a href=\"holiday_approve.php?approve=FALSE&amp;user={$holiday->userid}&amp;view={$user}&amp;startdate={$holiday->startdate}&amp;type={$holiday->type}&amp;length={$holiday->length}\">{$GLOBALS['strDecline']}</a>";
+                if ($holiday->type == 1)
+                {
+                    echo " | <a href=\"holiday_approve.php?approve=FREE&amp;user={$holiday->userid}&amp;view={$user}&amp;startdate={$holiday->startdate}&amp;type={$holiday->type}&amp;length={$holiday->length}\">{$GLOBALS['$strFreeLeave']}</a>";
+                }
+                echo "</td>";
+            }
+            else
+            {
+                echo "<td>";
+
+                if ($holiday->approvedby > 0)
+                {
+                    echo sprintf($GLOBALS['strRequestSentToX'], user_realname($holiday->approvedby,TRUE));
+                }
+                else
+                {
+                    echo $GLOBALS['strRequestNotSent'];
+                    $waiting = TRUE;
+                }
+                echo "</td>";
+            }
+            if ($approver == TRUE AND $mode == 'approval')
+            {
+                echo "<td>";
+                echo check_group_holiday($holiday->userid, $holiday->startdate, $holiday->length);
+                echo "</td>";
+            }
+        }
+        echo "</tr>";
+    }
+    echo "</table>";
+}
+
 if (empty($user)) $user=$sit[2];
 if (!$sent)
 {
@@ -58,83 +138,16 @@ if (!$sent)
 
     $sql = "SELECT * FROM `{$dbHolidays}` WHERE approved=0 ";
     if (!empty($type)) $sql .= "AND type='$type' ";
-    if ($mode!='approval' || $user!='all') $sql.="AND userid='$user' ";
-    if ($approver==TRUE && $mode=='approval') $sql .= "AND approvedby={$sit[2]} ";
+    if ($mode != 'approval' || $user != 'all') $sql.="AND userid='$user' ";
+    if ($approver == TRUE && $mode == 'approval') $sql .= "AND approvedby={$sit[2]} ";
     $sql .= "ORDER BY startdate, length";
     $result = mysql_query($sql);
     if (mysql_error()) trigger_error("MySQL Query Error ".mysql_error(), E_USER_ERROR);
-    if (mysql_num_rows($result)>0)
+    if (mysql_num_rows($result) > 0)
     {
-        echo "<table align='center'>";
-        echo "<tr>";
-        if ($user == 'all' && $approver == TRUE)
-        {
-            echo "<th>{$strName}</th>";
-        }
-        echo "<th>{$strDate}</th><th>{$strLength}</th><th>{$strType}</th>";
-        if ($approver AND $mode == 'approval')
-        {
-            echo "<th>{$strOperation}</th><th>{$strGroupMembersAway}</th>";
-        }
-        else
-        {
-            echo "<th>{$strStatus}</th>";
-        }
 
-        echo "</tr>";
-        while ($holiday=mysql_fetch_object($result))
-        {
-            echo "<tr class='shade2'>";
-            if ($user=='all' && $approver==TRUE)
-            {
-                echo "<td><a href='{$_SERVER['PHP_SELF']}?user={$holiday->userid}&amp;mode=approval'>";
-                echo user_realname($holiday->userid,TRUE);
-                echo "</a></td>";
-            }
-            echo "<td>".ldate('l j F Y', $holiday->startdate)."</td>";
-            echo "<td>";
-            if ($holiday->length=='am') echo $strMorning;
-            if ($holiday->length=='pm') echo $strAfternoon;
-            if ($holiday->length=='day') echo $strFullDay;
-            echo "</td>";
-            echo "<td>".holiday_type($holiday->type)."</td>";
-            if ($approver == TRUE)
-            {
-                if ($sit[2] != $holiday->userid AND $mode == 'approval')
-                {
-                    echo "<td>";
-                    $approvetext = $strApprove;
-                    if ($holiday->type == 2) $approvetext = $strAcknowledge;
-                    echo "<a href=\"holiday_approve.php?approve=TRUE&amp;user={$holiday->userid}&amp;view={$user}&amp;startdate={$holiday->startdate}&amp;type={$holiday->type}&amp;length={$holiday->length}\">{$approvetext}</a> | ";
-                    echo "<a href=\"holiday_approve.php?approve=FALSE&amp;user={$holiday->userid}&amp;view={$user}&amp;startdate={$holiday->startdate}&amp;type={$holiday->type}&amp;length={$holiday->length}\">{$strDecline}</a>";
-                    if ($holiday->type==1) echo " | <a href=\"holiday_approve.php?approve=FREE&amp;user={$holiday->userid}&amp;view={$user}&amp;startdate={$holiday->startdate}&amp;type={$holiday->type}&amp;length={$holiday->length}\">Free Leave</a>"; // FIMXE i18n free leave
-                    echo "</td>";
-                }
-                else
-                {
-                    echo "<td>";
+        display_holiday_table($result);
 
-                    if ($holiday->approvedby > 0)
-                    {
-                        echo sprintf($strRequestSentToX, user_realname($holiday->approvedby,TRUE));
-                    }
-                    else
-                    {
-                        echo $strRequestNotSent;
-                        $waiting=TRUE;
-                    }
-                    echo "</td>";
-                }
-                if ($approver==TRUE AND $mode=='approval')
-                {
-                    echo "<td>";
-                    echo check_group_holiday($holiday->userid, $holiday->startdate, $holiday->length);
-                    echo "</td>";
-                }
-            }
-            echo "</tr>";
-        }
-        echo "</table>";
         if ($mode == 'approval')
         {
             echo "<p align='center'><a href='holiday_approve.php?approve=TRUE&amp;user=$user&amp;view=$user&amp;startdate=all&amp;type=all'>{$strApproveAll}</a></p>";
@@ -190,6 +203,27 @@ if (!$sent)
     {
         echo "<p class='info'>{$strRequestNoHolidaysAwaitingYourApproval}</p>";
     }
+    
+    
+    if ($approver AND $user == 'all')
+    {
+        // Show all holidays where requests have not been sent
+        
+        $sql = "SELECT * FROM holidays WHERE approved = 0 AND userid != 0 ";
+        if (!empty($type)) $sql .= "AND type='$type' ";
+        if ($mode == 'approval') $sql .= "AND approvedby = 0 ";
+        $sql .= "ORDER BY startdate, length";
+        $result = mysql_query($sql);
+        
+        if (mysql_num_rows($result) > 0)
+        {
+            echo "<h2>{$strDatesNotRequested}</h2>";
+            
+            $mode = "notapprove";
+            
+            display_holiday_table($result);
+        }
+    }
 }
 else
 {
@@ -222,7 +256,7 @@ else
             if (strlen($memo)>3)
             {
                 $bodytext .= "{$strCommentsSentWithRequest}:\n\n";
-                $bodytext .= "---\n$memo\n---\n\n";
+                $bodytext .= "---\n{$memo}\n---\n\n";
             }
             $url = parse_url($_SERVER['HTTP_REFERER']);
             $approveurl = "{$url['scheme']}://{$url['host']}{$url['path']}";
@@ -242,7 +276,7 @@ else
         $extra_headers .= "X-Originating-IP: {$_SERVER['REMOTE_ADDR']}\n";
         $rtnvalue = mail($email_to, $email_subject, $bodytext, $extra_headers);
 
-        if ($rtnvalue===TRUE)
+        if ($rtnvalue === TRUE)
         {
             echo "<p align='center'>{$strRequestSent}</p>";
             echo "<p align='center'>".nl2br($holidaylist)."</p>";
