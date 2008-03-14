@@ -59,7 +59,7 @@ switch ($mode)
             {
                 $numquestions++;
                 $html .= "<tr><th>Q{$qrow->taborder}: {$qrow->question}</th>";
-                $sql = "SELECT * FROM `{$dbFeedbackRespondents}` AS f, `{$dbIncidents}` AS i, `{$dbUsers}` AS u, `{$dbFeedbackresults}` AS r ";
+                $sql = "SELECT * FROM `{$dbFeedbackRespondents}` AS f, `{$dbIncidents}` AS i, `{$dbUsers}` AS u, `{$dbFeedbackResults}` AS r ";
                 $sql .= "WHERE f.incidentid=i.id ";
                 $sql .= "AND i.owner=u.id ";
                 $sql .= "AND f.id=r.respondentid ";
@@ -69,10 +69,10 @@ switch ($mode)
                 $sql .= "ORDER BY i.owner, i.id";
                 $result = mysql_query($sql);
                 if (mysql_error()) trigger_error(mysql_error(), E_USER_ERROR);
-                $numresults=0;
-                $cumul=0;
-                $percent=0;
-                $average=0;
+                $numresults = 0;
+                $cumul = 0;
+                $percent = 0;
+                $average = 0;
                 while ($row = mysql_fetch_object($result))
                 {
                     if (!empty($row->result))
@@ -88,8 +88,8 @@ switch ($mode)
                 // <strong>({$percent}%)</strong><br />";
             }
             $html .= "</table>\n";
-            $total_average=number_format($totalresult/$numquestions,2);
-            $total_percent=number_format((($total_average-1) * (100 / ($CONFIG['feedback_max_score'] -1))), 0);
+            $total_average = number_format($totalresult/$numquestions,2);
+            $total_percent = number_format((($total_average-1) * (100 / ($CONFIG['feedback_max_score'] -1))), 0);
 
             $qsql = "SELECT * FROM `{$dbFeedbackQuestions}` WHERE formid='{$response->formid}' AND type='text' ORDER BY taborder";
             $qresult = mysql_query($qsql);
@@ -117,13 +117,16 @@ switch ($mode)
                         {
                             $html .= "<p align='center'>{$row->result}</p>";
                         }
-                        else $html .= "<p align='center'><em>{$strNoAnswerGiven}</em></p>";
+                        else
+                        {
+                            $html .= "<p align='center'><em>{$strNoAnswerGiven}</em></p>";
+                        }
                     }
                 }
             }
 
             $html .= "<p align='center'>{$strPositivity}: {$total_average} <strong>({$total_percent}%)</strong></p>";
-            $surveys+=$numresults;
+            $surveys += $numresults;
 
             //if ($total_average>0)
             echo $html;
