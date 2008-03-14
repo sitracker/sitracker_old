@@ -74,6 +74,7 @@ else
 {
     // External variables
     $name = cleanvar($_REQUEST['name']);
+    $vendor = cleanvar($_REQUEST['vendor']);
     if (!empty($_REQUEST['lifetime_start'])) $lifetime_start = date('Y-m-d',strtotime($_REQUEST['lifetime_start']));
     else $lifetime_start = '';
     if (!empty($_REQUEST['lifetime_end'])) $lifetime_end = date('Y-m-d',strtotime($_REQUEST['lifetime_end']));
@@ -102,7 +103,7 @@ else
     // add product if no errors
     if ($errors == 0)
     {
-        $sql = "INSERT INTO software (name, lifetime_start, lifetime_end) VALUES ('$name','$lifetime_start','$lifetime_end')";
+        $sql = "INSERT INTO software (name, vendorid, lifetime_start, lifetime_end) VALUES ('$name','$vendor','$lifetime_start','$lifetime_end')";
         $result = mysql_query($sql);
         if (mysql_error()) trigger_error("MySQL Query Error ".mysql_error(), E_USER_ERROR);
 
