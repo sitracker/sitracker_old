@@ -706,206 +706,49 @@ if (mysql_num_rows($result) >=1 )
         echo "<p align='center'><a href='add_task.php'>{$strAddTask}</a></p>";
     }
 
+    echo "<h3>{$strActivityBilling}</h3>";
+    echo "<p align='center'>{$strActivityBillingInfo}</p>";
+
+    $billing = make_incident_billing_array($incidentid);
+    
     if (!empty($billing))
-    {
-        $billingSQL = "SELECT * FROM billing_periods WHERE tag='{$servicelevel_tag}' AND priority='{$priority}'";
-
-        //echo $billingSQL;
-
-        $billingresult = mysql_query($billingSQL);
-        if (mysql_error()) trigger_error("MySQL Query Error ".mysql_error(), E_USER_ERROR);
-        $billingObj = mysql_fetch_object($billingresult);
-
-        unset($billingresult);
-
-        $engineerPeriod = $billingObj->engineerperiod * 60;  //to seconds
-        $customerPeriod = $billingObj->customerperiod * 60;
-
-        if (empty($engineerPeriod) OR $engineerPeriod == 0) $engineerPeriod = 3600;
-        if (empty($customerPeriod) OR $customerPeriod == 0) $customerPeriod = 3600;
-
-        echo "<h3>{$strActivityBilling}</h3>";
-        echo "<p align='center'>{$strActivityBillingInfo}</p>";
-
-
+    {    
         echo "<p><table align='center'>";
-        echo "<tr><td></td><th>{$strMinutes}</th></th></tr>";
-        echo "<tr><th>{$strBillingEngineerPeriod}</th>";
-        echo "<td>".($engineerPeriod/60)."</td></tr>";
-        echo "<tr><th>{$strBillingCustomerPeriod}</th>";
-        echo "<td>".($customerPeriod/60)."</td></tr>";
+        echo "<tr><td></td><th>{$GLOBALS['strMinutes']}</th></th></tr>";
+        echo "<tr><th>{$GLOBALS['strBillingEngineerPeriod']}</th>";
+        echo "<td>".($billing[-1]['engineerperiod']/60)."</td></tr>";
+        echo "<tr><th>{$GLOBALS['strBillingCustomerPeriod']}</th>";
+        echo "<td>".($billing[-1]['customerperiod']/60)."</td></tr>";
         echo "</table></p>";
-
+    
         echo "<br />";
-
+    
         echo "<table align='center'>";
-
-        echo "<tr><th>{$strOwner}</th><th>{$strTotalMinutes }</th>";
-        echo "<th>{$strBillingEngineerPeriod}</th>";
-        echo "<th>{$strBillingCustomerPeriod}</th></tr>";
+    
+        echo "<tr><th>{$GLOBALS['strOwner']}</th><th>{$GLOBALS['strTotalMinutes']}</th>";
+        echo "<th>{$GLOBALS['strBillingEngineerPeriod']}</th>";
+        echo "<th>{$GLOBALS['strBillingCustomerPeriod']}</th></tr>";
         $shade = "shade1";
-
-        /*
-        echo "<pre>";
-        print_r($billing);
-        echo "</pre>";
-        */
-
+    
         foreach ($billing AS $engineer)
         {
-            /*
-                [eng][starttime]
-            */
-
-            $owner = "";
-            $duration = 0;
-
-            unset($count);
-
-            $count['engineer'];
-            $count['customer'];
-
-            foreach ($engineer AS $activity)
+            if (!empty($engineer['totalduration']))
             {
-                $owner = user_realname($activity['owner']);
-                $duration += $activity['duration'];
-
-                /*
-                echo "<pre>";
-                print_r($count);
-                echo "</pre>";
-                */
-
-                $customerDur = $activity['duration'];
-                $engineerDur = $activity['duration'];
-                $startTime = $activity['starttime'];
-
-                if (!empty($count['engineer']))
-                {
-                    while ($engineerDur > 0)
-                    {
-                        $saved = "false";
-                        foreach ($count['engineer'] AS $ind)
-                        {
-                            /*
-                            echo "<pre>";
-                            print_r($ind);
-                            echo "</pre>";
-                            */
-                            //  echo "IN:{$ind}:START:{$act['starttime']}:ENG:{$engineerPeriod}<br />";
-
-                            if($ind <= $activity['starttime'] AND $ind <= ($activity['starttime'] + $engineerPeriod))
-                            {
-                                //echo "IND:{$ind}:START:{$act['starttime']}<br />";
-                                // already have something which starts in this period just need to check it fits in the period
-                                if($ind + $engineerPeriod > $activity['starttime'] + $engineerDur)
-                                {
-                                    $remainderInPeriod = ($ind + $engineerPeriod) - $activity['starttime'];
-                                    $engineerDur -= $remainderInPeriod;
-
-                                    $saved = "true";
-                                }
-                            }
-                        }
-                        //echo "Saved: {$saved}<br />";
-                        if ($saved == "false" AND $activity['duration'] > 0)
-                        {
-                            //echo "BB:".$activity['starttime'].":SAVED:{$saved}:DUR:{$activity['duration']}<br />";
-                            // need to add a new block
-                            $count['engineer'][$startTime] = $startTime;
-
-                            $startTime += $engineerPeriod;
-
-                            $engineerDur -= $engineerPeriod;
-                        }
-                    }
-                }
-                else
-                {
-                    $count['engineer'][$activity['starttime']] = $activity['starttime'];
-                    $localDur = $activity['duration'] - $engineerPeriod;
-
-                    while ($localDur > 0)
-                    {
-                        $startTime += $engineerPeriod;
-                        $count['engineer'][$startTime] = $startTime;
-                        $localDur -= $engineerPeriod; // was just -
-                    }
-                }
-
-                $startTime = $activity['starttime'];
-
-                if (!empty($count['customer']))
-                {
-                    while ($customerDur > 0)
-                    {
-                        $saved = "false";
-                        foreach ($count['customer'] AS $ind)
-                        {
-                            /*
-                            echo "<pre>";
-                            print_r($ind);
-                            echo "</pre>";
-                            */
-                            //echo "IN:{$ind}:START:{$act['starttime']}:ENG:{$engineerPeriod}<br />";
-
-                            if ($ind <= $activity['starttime'] AND $ind <= ($activity['starttime'] + $customerPeriod))
-                            {
-                                //echo "IND:{$ind}:START:{$activity['starttime']}<br />";
-                                // already have something which starts in this period just need to check it fits in the period
-                                if ($ind + $customerPeriod > $activity['starttime'] + $activity['duration'])
-                                {
-                                    $remainderInPeriod = ($ind+$customerPeriod) - $customerDur;
-                                    $customerDur -= $remainderInPeriod;
-
-                                    $saved = "true";
-                                }
-                            }
-                        }
-
-                        if ($saved == "false" AND $activity['duration'] > 0)
-                        {
-                            //echo "BB:".$activity['starttime'].":SAVED:{$saved}:DUR:{$activity['duration']}<br />";
-                            // need to add a new block
-                            $count['customer'][$startTime] = $startTime;
-
-                            $startTime += $customerPeriod;
-
-                            $customerDur -= $customerPeriod; // was just -
-                        }
-                    }
-                }
-                else
-                {
-                    $count['customer'][$activity['starttime']] = $activity['starttime'];
-                    $localDur = $activity['duration'] - $customerPeriod;
-
-                    while($localDur > 0)
-                    {
-                        $starttime += $customerPeriod;
-                        $count['customer'][$starttime] = $starttime;
-                        $localDur -= $customerPeriod;
-                    }
-                }
+                $totals = $engineer;
             }
-
-            echo "<tr class='{$shade}'><td>{$owner}</td>";
-            echo "<td>".round($duration/60)."</td>";
-            echo "<td>".sizeof($count['engineer'])."</td>";
-            echo "<td>".sizeof($count['customer'])."</td></tr>";
-            $tduration += $duration;
-            $totalengineerperiods += sizeof($count['engineer']);
-            $totalcustomerperiods += sizeof($count['customer']);
-            /*
-            echo "<pre>";
-            print_r($count);
-            echo "</pre>";
-            */
+            else
+            {
+                echo "<tr class='{$shade}'><td>{$engineer['owner']}</td>";
+                echo "<td>".round($engineer['duration']/60)."</td>";
+                echo "<td>".sizeof($engineer['engineerperiods'])."</td>";
+                echo "<td>".sizeof($engineer['customerperiods'])."</td></tr>";        
+            }
+            
             if ($shade == "shade1") $shade = "shade2";
             else $shade = "shade2";
         }
-        echo "<tr><td>{$strTOTALS}</td><td>".round($tduration/60)."</td>";
-        echo "<td>{$totalengineerperiods}</td><td>{$totalcustomerperiods}</td></tr>";
+        echo "<tr><td>{$GLOBALS['strTOTALS']}</td><td>".round($totals['totalduration']/60)."</td>";
+        echo "<td>{$totals['totalengineerperiods']}</td><td>{$totals['totalcustomerperiods']}</td></tr>";
         echo "</table></p>";
     }
 

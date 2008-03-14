@@ -7111,6 +7111,8 @@ function open_activities_for_incident($incientid)
 */
 function open_activities_for_site($siteid)
 {
+    global $dbIncidents, $dbContacts;
+
     $openactivites = 0;
 
     if (!empty($siteid) AND $siteid != 0)
@@ -7204,6 +7206,295 @@ function schedule_action_done($doneaction, $success=TRUE)
     }
     if (mysql_affected_rows() > 0) return TRUE;
     else return FALSE;
+}
+
+/**
+ * Make a billing array for a incident
+ * @author Paul Heaney
+ * @param $incidentid - Incident number of the incident to create the array from
+ * @todo Can this be merged into make_incident_billing_array? Does it serve any purpose on its own?
+**/
+function get_incident_billing_details($incidentid)
+{
+    global $dbUpdates;
+    /*
+     $array[owner][] = array(owner, starttime, duration)      
+     */
+    $sql = "SELECT * FROM `{$dbUpdates}` WHERE incidentid = {$incidentid} AND duration IS NOT NULL";
+    $result = mysql_query($sql);
+    if (mysql_error())
+    {
+        trigger_error(mysql_error(),E_USER_ERROR);
+        return FALSE;
+    }
+    
+    if (mysql_num_rows($result) > 0)
+    {
+        while($obj = mysql_fetch_object($result))
+        {
+            $temparray['owner'] = $obj->userid;
+            $temparray['starttime'] = ($obj->timestamp-$obj->duration);
+            $temparray['duration'] = $obj->duration;
+            $billing[$obj->userid][] = $temparray;
+        }
+    }
+    
+    return $billing;
+}
+
+
+function make_incident_billing_array($incidentid)
+{
+    $billing = get_incident_billing_details($incidentid);
+    
+    $sql = "SELECT servicelevel, priority FROM `{$GLOBALS['dbIncidents']}` WHERE id = {$incidentid}";
+    $result = mysql_query($sql);
+    if (mysql_error())
+    {
+        trigger_error(mysql_error(),E_USER_ERROR);
+        return FALSE;
+    }
+
+    $incident = mysql_fetch_object($result);
+    $servicelevel_tag = $incident->servicelevel;
+    $priority = $incident->priority;
+    
+    if (!empty($billing))
+    {
+        $billingSQL = "SELECT * FROM `{$GLOBALS['dbBillingPeriods']}` WHERE tag='{$servicelevel_tag}' AND priority='{$priority}'";
+
+        /*
+        echo "<pre>";
+        print_r($billing);
+        echo "</pre>";
+        
+        echo "<pre>";
+        print_r(make_billing_array($incidentid));
+        echo "</pre>";
+        */
+
+        //echo $billingSQL;
+
+        $billingresult = mysql_query($billingSQL);
+        // echo $billingSQL;
+        if (mysql_error()) trigger_error("MySQL Query Error ".mysql_error(), E_USER_ERROR);
+        $billingObj = mysql_fetch_object($billingresult);
+
+        unset($billingresult);
+
+        $engineerPeriod = $billingObj->engineerperiod * 60;  //to seconds
+        $customerPeriod = $billingObj->customerperiod * 60;
+
+        if (empty($engineerPeriod) OR $engineerPeriod == 0) $engineerPeriod = 3600;
+        if (empty($customerPeriod) OR $customerPeriod == 0) $customerPeriod = 3600;
+
+        /*
+        echo "<pre>";
+        print_r($billing);
+        echo "</pre>";
+        */
+
+        foreach ($billing AS $engineer)
+        {
+            /*
+                [eng][starttime]
+            */
+
+            $owner = "";
+            $duration = 0;
+
+            unset($count);
+
+            $count['engineer'];
+            $count['customer'];
+
+            foreach ($engineer AS $activity)
+            {
+                $owner = user_realname($activity['owner']);
+                $duration += $activity['duration'];
+
+                /*
+                echo "<pre>";
+                print_r($count);
+                echo "</pre>";
+                */
+
+                $customerDur = $activity['duration'];
+                $engineerDur = $activity['duration'];
+                $startTime = $activity['starttime'];
+
+                if (!empty($count['engineer']))
+                {
+                    while ($engineerDur > 0)
+                    {
+                        $saved = "false";
+                        foreach ($count['engineer'] AS $ind)
+                        {
+                            /*
+                            echo "<pre>";
+                            print_r($ind);
+                            echo "</pre>";
+                            */
+                            //  echo "IN:{$ind}:START:{$act['starttime']}:ENG:{$engineerPeriod}<br />";
+
+                            if($ind <= $activity['starttime'] AND $ind <= ($activity['starttime'] + $engineerPeriod))
+                            {
+                                //echo "IND:{$ind}:START:{$act['starttime']}<br />";
+                                // already have something which starts in this period just need to check it fits in the period
+                                if($ind + $engineerPeriod > $activity['starttime'] + $engineerDur)
+                                {
+                                    $remainderInPeriod = ($ind + $engineerPeriod) - $activity['starttime'];
+                                    $engineerDur -= $remainderInPeriod;
+
+                                    $saved = "true";
+                                }
+                            }
+                        }
+                        //echo "Saved: {$saved}<br />";
+                        if ($saved == "false" AND $activity['duration'] > 0)
+                        {
+                            //echo "BB:".$activity['starttime'].":SAVED:{$saved}:DUR:{$activity['duration']}<br />";
+                            // need to add a new block
+                            $count['engineer'][$startTime] = $startTime;
+
+                            $startTime += $engineerPeriod;
+
+                            $engineerDur -= $engineerPeriod;
+                        }
+                    }
+                }
+                else
+                {
+                    $count['engineer'][$activity['starttime']] = $activity['starttime'];
+                    $localDur = $activity['duration'] - $engineerPeriod;
+
+                    while ($localDur > 0)
+                    {
+                        $startTime += $engineerPeriod;
+                        $count['engineer'][$startTime] = $startTime;
+                        $localDur -= $engineerPeriod; // was just -
+                    }
+                }
+
+                $startTime = $activity['starttime'];
+
+                if (!empty($count['customer']))
+                {
+                    while ($customerDur > 0)
+                    {
+                        $saved = "false";
+                        foreach ($count['customer'] AS $ind)
+                        {
+                            /*
+                            echo "<pre>";
+                            print_r($ind);
+                            echo "</pre>";
+                            */
+                            //echo "IN:{$ind}:START:{$act['starttime']}:ENG:{$engineerPeriod}<br />";
+
+                            if ($ind <= $activity['starttime'] AND $ind <= ($activity['starttime'] + $customerPeriod))
+                            {
+                                //echo "IND:{$ind}:START:{$activity['starttime']}<br />";
+                                // already have something which starts in this period just need to check it fits in the period
+                                if ($ind + $customerPeriod > $activity['starttime'] + $activity['duration'])
+                                {
+                                    $remainderInPeriod = ($ind+$customerPeriod) - $customerDur;
+                                    $customerDur -= $remainderInPeriod;
+
+                                    $saved = "true";
+                                }
+                            }
+                        }
+
+                        if ($saved == "false" AND $activity['duration'] > 0)
+                        {
+                            //echo "BB:".$activity['starttime'].":SAVED:{$saved}:DUR:{$activity['duration']}<br />";
+                            // need to add a new block
+                            $count['customer'][$startTime] = $startTime;
+
+                            $startTime += $customerPeriod;
+
+                            $customerDur -= $customerPeriod; // was just -
+                        }
+                    }
+                }
+                else
+                {
+                    $count['customer'][$activity['starttime']] = $activity['starttime'];
+                    $localDur = $activity['duration'] - $customerPeriod;
+
+                    while($localDur > 0)
+                    {
+                        $starttime += $customerPeriod;
+                        $count['customer'][$starttime] = $starttime;
+                        $localDur -= $customerPeriod;
+                    }
+                }
+            }
+
+            $tduration += $duration;
+            $totalengineerperiods += sizeof($count['engineer']);
+            $totalcustomerperiods += sizeof($count['customer']);
+            /*
+            echo "<pre>";
+            print_r($count);
+            echo "</pre>";
+            */
+            
+            $billing_a[$activity['owner']]['owner'] = $owner;
+            $billing_a[$activity['owner']]['duration'] = $duration;
+            $billing_a[$activity['owner']]['engineerperiods'] = $count['engineer'];
+            $billing_a[$activity['owner']]['customerperiods'] = $count['customer'];
+        }
+        
+        if (empty($totalengineerperiods)) $totalengineerperiods = 0;
+        if (empty($totalcustomerperiods)) $totalcustomerperiods = 0;
+        if (empty($tduration)) $tduration = 0;
+        
+        $billing_a[-1]['totalduration'] = $tduration;
+        $billing_a[-1]['totalengineerperiods'] = $totalengineerperiods;
+        $billing_a[-1]['totalcustomerperiods'] = $totalcustomerperiods;
+        $billing_a[-1]['customerperiod'] = $customerPeriod;
+        $billing_a[-1]['engineerperiod'] = $engineerPeriod;
+    }
+    
+    return $billing_a;
+}
+
+// NOTE: The following returns the billable periods of a site, could run into issues if multiple different periods used for a site
+function billable_units_site($siteid, $startdate=0, $enedate=0)
+{
+    $sql = "SELECT i.id FROM `{$GLOBALS['dbIncidents']}` AS i, `{$GLOBALS['dbContacts']}` AS c WHERE c.id = i.contact AND c.siteid = {$siteid} ";
+    if ($startdate != 0)
+    {
+        $sql .= "AND closed >= {$startdate} ";
+    }
+    
+    if ($enedate != 0)
+    {
+        $sql .= "AND closed <= {$enedate} ";
+    }
+
+    $result = mysql_query($sql);
+    if (mysql_error())
+    {
+        trigger_error(mysql_error(),E_USER_ERROR);
+        return FALSE;
+    }
+    
+    $units = 0;
+    
+    if (mysql_num_rows($result) > 0)
+    {
+        while ($obj = mysql_fetch_object($result))
+        {
+            $a = make_incident_billing_array($obj->id);
+            $units += $a[-1]['totalcustomerperiods'];
+        }
+    }
+    
+    return $units;
+    
 }
 
 // -------------------------- // -------------------------- // --------------------------
