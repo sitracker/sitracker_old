@@ -29,6 +29,8 @@ echo "</td></tr>";
 echo "<tr><th>Type:</th><td>";
 echo "<input type='radio' name='type' value='byengineer' />Engineer ";
 echo "<input type='radio' name='type' value='bycustomer' />Customer ";
+echo "<input type='radio' name='type' value='bysite' />Site ";
+echo "<input type='radio' name='type' value='byproduct' />Product ";
 echo "</td></tr>";
 
 echo "</table>";

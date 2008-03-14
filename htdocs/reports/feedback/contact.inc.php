@@ -28,6 +28,7 @@ function incident_details_window(incidentid,win)
 echo "</script>";
 echo "<div style='margin: 20px'>";
 echo "<h2><a href='{$CONFIG['application_webpath']}reports/feedback.php'>Feedback</a> Scores: By Contact</h2>";
+echo feedback_between_dates();
 echo "<p>This report shows customer responses and a percentage figure indicating the overall positivity of customers toward ";
 echo "incidents logged by the user(s) shown:</p>";
 
