@@ -336,7 +336,7 @@ function appointment_popup($mode, $year, $month, $day, $time, $group, $user)
 */
 function draw_chart($mode, $year, $month='', $day='', $groupid='', $userid='')
 {
-    global $plugin_calendar, $sit, $dbUsers;
+    global $plugin_calendar, $sit, $dbUsers, $dbGroups, $dbHolidays;
     if (empty($day)) $day = date('d');
 
     if ($mode == 'month')
