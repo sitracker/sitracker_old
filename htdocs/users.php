@@ -43,39 +43,17 @@ else $filtergroup = $groupid;
 
 include ('htmlheader.inc.php');
 
-$gsql = "SELECT * FROM `{$dbGroups}` ORDER BY name";
-$gresult = mysql_query($gsql);
-if (mysql_error()) trigger_error(mysql_error(),E_USER_ERROR);
-while ($group = mysql_fetch_object($gresult))
-{
-    $grouparr[$group->id]=$group->name;
-}
-$numgroups = count($grouparr);
 echo "<h2><img src='{$CONFIG['application_webpath']}images/icons/{$iconset}/32x32/user.png' width='32' height='32' alt='' /> ";
 echo "{$strUsers}</h2>";
-if ($numgroups >= 1)
-{
-    echo "<form action='{$_SERVER['PHP_SELF']}' style='text-align: center;' method='get'>";
-    echo "{$strGroup}: <select name='choosegroup' onchange='window.location.href=this.options[this.selectedIndex].value'>";
-    echo "<option value='{$_SERVER['PHP_SELF']}?gid=all'";
-    if ($filtergroup=='all') echo " selected='selected'";
-    echo ">All</option>\n";
-    foreach ($grouparr AS $groupid => $groupname)
-{
-        echo "<option value='{$_SERVER['PHP_SELF']}?gid={$groupid}'";
-        if ($groupid == $filtergroup) echo " selected='selected'";
-        echo ">$groupname</option>\n";
-}
-    echo "<option value='{$_SERVER['PHP_SELF']}?gid=0'";
-    if ($filtergroup=='0') echo " selected='selected'";
-    echo ">{$strUsersNoGroup}</option>\n";
-    echo "</select>\n";
-    echo "</form>\n<br />";
-}
+
+$numgroups = group_selector($groupid);
 
 $sql  = "SELECT * FROM `{$dbUsers}` WHERE status!=0 ";  // status=0 means account disabled
 if ($numgroups >= 1 AND $filtergroup=='0') $sql .= "AND (groupid='0' OR groupid='' OR groupid IS NULL) ";
-elseif ($numgroups < 1 OR $filtergroup=='all') { $sql .= "AND 1=1 "; }
+elseif ($numgroups < 1 OR $filtergroup=='all')
+{
+    $sql .= "AND 1=1 ";
+}
 else $sql .= "AND groupid='{$filtergroup}'";
 
 // Sorting

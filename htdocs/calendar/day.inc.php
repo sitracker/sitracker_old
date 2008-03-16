@@ -16,20 +16,28 @@ if (realpath(__FILE__) == realpath($_SERVER['SCRIPT_FILENAME']))
     exit;
 }
 
+$gidurl = '';
+if (!empty($groupid)) $gidurl = "&amp;gid={$groupid}";
+
 // skip over weekends in day view
-if (date('D',mktime(0,0,0,$month,$day,$year))=='Sat') $day-=1;
-if (date('D',mktime(0,0,0,$month,$day,$year))=='Sun') $day+=1;
-if (date('D',mktime(0,0,0,$month,$day,$year))=='Mon') $pdate=mktime(0,0,0,$month,$day-3,$year);
-else $pdate=mktime(0,0,0,$month,$day-1,$year);
-if (date('D',mktime(0,0,0,$month,$day,$year))=='Fri') $ndate=mktime(0,0,0,$month,$day+3,$year);
-else $ndate=mktime(0,0,0,$month,$day+1,$year);
+if (date('D',mktime(0,0,0,$month,$day,$year)) == 'Sat') $day -= 1;
+if (date('D',mktime(0,0,0,$month,$day,$year)) == 'Sun') $day += 1;
+if (date('D',mktime(0,0,0,$month,$day,$year)) == 'Mon') $pdate = mktime(0,0,0,$month,$day-3,$year);
+else $pdate = mktime(0,0,0,$month,$day-1,$year);
+if (date('D',mktime(0,0,0,$month,$day,$year)) == 'Fri') $ndate = mktime(0,0,0,$month,$day+3,$year);
+else $ndate = mktime(0,0,0,$month,$day+1,$year);
 echo "<h2>Day View</h2>";
 echo "<p align='center'>";
-echo "<a href='{$_SERVER['PHP_SELF']}?display=day&amp;year=".date('Y',$pdate)."&amp;month=".date('m',$pdate)."&amp;day=".date('d',$pdate)."'>&lt;</a> ";
+echo "<a href='{$_SERVER['PHP_SELF']}?display=day&amp;year=".date('Y',$pdate)."&amp;month=".date('m',$pdate)."&amp;day=".date('d',$pdate)."{$gidurl}'>&lt;</a> ";
 echo date('l dS F Y',mktime(0,0,0,$month,$day,$year));
-echo " <a href='{$_SERVER['PHP_SELF']}?display=day&amp;year=".date('Y',$ndate)."&amp;month=".date('m',$ndate)."&amp;day=".date('d',$ndate)."'>&gt;</a>";
+echo " <a href='{$_SERVER['PHP_SELF']}?display=day&amp;year=".date('Y',$ndate)."&amp;month=".date('m',$ndate)."&amp;day=".date('d',$ndate)."{$gidurl}'>&gt;</a>";
 echo "</p>";
-echo draw_chart('day', $year, $month, $day, '', $user);
+
+$numgroups = group_selector($groupid, "display=day&amp;year={$year}&amp;month={$month}&amp;day={$day}");
+
+if ($groupid == 'all') $groupid = '';
+
+echo draw_chart('day', $year, $month, $day, $groupid, $user);
 
 
 ?>

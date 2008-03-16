@@ -1701,6 +1701,40 @@ function group_drop_down($name, $selected)
     return $html;
 }
 
+function group_selector($selected, $urlargs='')
+{
+    $gsql = "SELECT * FROM `{$GLOBALS['dbGroups']}` ORDER BY name";
+    $gresult = mysql_query($gsql);
+    if (mysql_error()) trigger_error(mysql_error(),E_USER_ERROR);
+    while ($group = mysql_fetch_object($gresult))
+    {
+        $grouparr[$group->id] = $group->name;
+    }
+    $numgroups = count($grouparr);
+
+    if ($numgroups >= 1)
+    {
+        echo "<form action='{$_SERVER['PHP_SELF']}?{$urlargs}' style='text-align: center;' method='get'>";
+        echo "{$GLOBALS['strGroup']}: <select name='choosegroup' onchange='window.location.href=this.options[this.selectedIndex].value'>";
+        echo "<option value='{$_SERVER['PHP_SELF']}?{$urlargs}&amp;gid=all'";
+        if ($selected == 'all') echo " selected='selected'";
+        echo ">All</option>\n";
+        foreach ($grouparr AS $groupid => $groupname)
+        {
+            echo "<option value='{$_SERVER['PHP_SELF']}?{$urlargs}&amp;gid={$groupid}'";
+            if ($groupid == $selected) echo " selected='selected'";
+            echo ">{$groupname}</option>\n";
+        }
+        echo "<option value='{$_SERVER['PHP_SELF']}?{$urlargs}&amp;gid=0'";
+        if ($selected == '0') echo " selected='selected'";
+        echo ">{$GLOBALS['strUsersNoGroup']}</option>\n";
+        echo "</select>\n";
+        echo "</form>\n<br />";
+    }
+
+    return $numgroups;
+}
+
 
 /**
     * Return HTML for a box to select interface style/theme

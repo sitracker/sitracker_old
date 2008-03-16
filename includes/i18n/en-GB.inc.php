@@ -1141,11 +1141,12 @@ $strWatchIncidentsAdded = 'Watch Incidents added';
 $strWatchIncidentsRemovalSucceded = 'Watch incidents removal succeded';
 $strWatchingAll = 'Watching All';
 $strWebupdate = 'Web update';
-$strWeek = 'Week';
 # Short for 'Wednesday'
 $strWed = 'Wed';
 $strWednesday = 'Wednesday';
+$strWeek = 'Week';
 $strWelcome = 'Welcome';
+$strWeekView = 'Week View';
 $strWhosAwayToday = 'Who\'s Away Today?';
 $strWorkaround = 'Workaround';
 $strWorkAroundsAttempted = 'Workarounds Attempted';

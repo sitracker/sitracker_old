@@ -44,14 +44,19 @@ else
 
 $plugin_calendar = plugin_do('holiday_chart_cal');
 
-echo month_select($month, $year);
+echo month_select($month, $year, $gidurl);
 echo "<p align='center'><a href='{$_SERVER['PHP_SELF']}?month={$prevmonth}&amp;";
-echo "year={$prevyear}' title='Previous Month'>&lt;</a> ";
+echo "year={$prevyear}{$gidurl}' title='Previous Month'>&lt;</a> ";
 echo date('F Y',mktime(0,0,0,$month,1,$year));
-echo " <a href='{$_SERVER['PHP_SELF']}?month={$nextmonth}&amp;year={$nextyear}' ";
+echo " <a href='{$_SERVER['PHP_SELF']}?month={$nextmonth}&amp;year={$nextyear}{$gidurl}' ";
 echo "title='Next Month'>&gt;</a></p>";
 
-echo draw_chart('month', $year, $month, $day, '', $user);
+// echo draw_chart('month', $year, $month, $day, '', $user);
 
+$numgroups = group_selector($groupid, "display=day&amp;year={$year}&amp;month={$month}&amp;day={$day}");
+
+if ($groupid == 'all') $groupid = '';
+
+echo draw_chart('month', $year, $month, $day, $groupid, $user);
 
 ?>
