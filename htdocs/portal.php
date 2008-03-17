@@ -268,8 +268,8 @@ switch ($page)
             //create new incident
             $sql  = "INSERT INTO incidents (title, owner, contact, priority, servicelevel, status, type, maintenanceid, ";
             $sql .= "product, softwareid, productversion, productservicepacks, opened, lastupdated) ";
-            $sql .= "VALUES ('$incidenttitle', '0', '$contactid', '1', '$servicelevel', '1', 'Support', '', ";
-            $sql .= "'$contractid', '$software', '$softwareversion', '$softwareservicepacks', '$now', '$now')";
+            $sql .= "VALUES ('$incidenttitle', '0', '$contactid', '1', '$servicelevel', '1', 'Support', '$contractid', ";
+            $sql .= "'$software', '', '', '$softwareservicepacks', '$now', '$now')";
             $result = mysql_query($sql);
             if (mysql_error()) trigger_error("MySQL Query Error ".mysql_error(), E_USER_ERROR);
 
