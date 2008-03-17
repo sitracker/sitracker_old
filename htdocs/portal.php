@@ -61,6 +61,7 @@ else
 
 // External variables
 $page = cleanvar($_REQUEST['page']);
+$contractid = cleanvar($_REQUEST['contractid']);
 
 $filter = array('page' => $page);
 
