@@ -106,7 +106,7 @@ if ($action == "showform" OR $action=='')
     echo "<tbody id='hidden' style='display:none'>"; //FIXME not XHTML
 
     echo "<tr><th>{$strReseller}</th><td>";
-    reseller_drop_down("reseller", 0);
+    reseller_drop_down("reseller", 1);
     echo "</td></tr>\n";
 
     echo "<tr><th>{$strLicenseQuantity}</th><td><input value='0' maxlength='7' name='licence_quantity' size='5' />";
@@ -197,7 +197,7 @@ elseif ($action == "add")
         {
             $productonly = 'no';
         }
-        
+
         if ($productonly=='yes')
         {
             $term = 'yes';
@@ -206,7 +206,7 @@ elseif ($action == "add")
         {
             $term = 'no';
         }
-        
+
         if(empty($reseller) OR $reseller == 0)
         {
             $reseller = "NULL";
@@ -215,7 +215,7 @@ elseif ($action == "add")
         {
             $reseller = "'{$reseller}'";
         }
-        
+
         if(empty($licence_type) OR $licence_type == 0)
         {
             $licence_type = "NULL";
@@ -224,7 +224,7 @@ elseif ($action == "add")
         {
             $licence_type = "'{$licence_type}'";
         }
-            
+
         // NOTE above is so we can insert null so browse_contacts etc can see the contract rather than inserting 0
         $sql  = "INSERT INTO maintenance (site, product, reseller, expirydate, licence_quantity, licence_type, notes, ";
         $sql .= "admincontact, servicelevelid, incidentpoolid, incident_quantity, productonly, term, supportedcontacts, allcontactssupported) ";

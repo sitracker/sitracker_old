@@ -55,6 +55,8 @@ $CFGVAR['support_manager_email']['title'] = 'The email address of the person in 
 $CFGVAR['bugtracker_name']['title'] = 'Bug tracker name';
 $CFGVAR['bugtracker_url']['title'] = 'Bug tracker url';
 $CFGVAR['timezone']['title'] = 'Timezone';
+$CFGVAR['hide_closed_incidents_older_than']['title'] = 'Hide closed incidents older than';
+$CFGVAR['hide_closed_incidents_older_than']['help'] = "Incidents closed more than this number of days ago aren't show in the incident queue, -1 means disabled";
 $CFGVAR['dateformat_datetime']['title'] = 'Date and Time format';
 $CFGVAR['dateformat_datetime']['help'] = "See <a href='http://www.php.net/manual/en/function.date.php'>http://www.php.net/manual/en/function.date.php</a> for help with date formats";
 $CFGVAR['dateformat_filedatetime']['title'] = 'Date and Time format to use for files';
