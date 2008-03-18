@@ -1,12 +1,37 @@
 Changes in v3.32 - Unreleased
 -----------------------------------------------------------------------
 * Escalated Incidents report is now filterable
-* Japanese Translation
+* More strings internationalised
+* Spanish / Colombian (es-CO) Translation
+* Japanese (ja-JP) Translation
+* Italian (it-IT) Translation
+* Updated German (de-DE) Translation
+* Updated French (fr-FR) Translation
 * Ability to list open activties/times tasks for site/user/all
 * Ability to view all open activities
 * Ability to view all holidays not requested
 * Holidays page shows number pending approval
 * Holidays page shows list of holidays waitig approval if your an approver
+* Added auto saving of emails (drafts) including 'meta' data i.e. to, from  etc
+* Setup fixes
+* Save vendor when you add software/skill
+* Improved marketing report
+* Some customer portal improvements
+* Allow filtering on escalate_engineer report
+* Fix attachment/upload problems on different platforms
+* Users can now set their own timezone (assumes system time is UTC)
+* Dates are now localised
+* Remove dependency on mime_content_type
+* Added new config setting $CONFIG['hide_closed_incidents_older_than']
+* Fix for SF#1886389 "Product Only" not saved
+* Prevent closure when no engineer assigned (resolves 1862194)
+* Fix SF#1863871 Update Attachment URL's broken.
+* Watch incidents dashlet now has dropdown to allow status selection
+* Fix a bug with setting public holidays
+  (public holidays were set as user holidays of the user setting them)
+* Fix set_include_path.inc.php path in reports
+* Plus many more minor changes and fixes
+
 
 Changes in v3.31 - Released 19 December 2007
 -----------------------------------------------------------------------
