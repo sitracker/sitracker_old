@@ -7424,7 +7424,16 @@ function make_incident_billing_array($incidentid)
                 */
 
                 group_billing_periods($count, 'engineer', $activity, $engineerPeriod);
-                group_billing_periods($count, 'customer', $activity, $customerPeriod);
+                
+                // Optimisation no need to compute again if we already have the details
+                if ($engineerPeriod != $customerPeriod)
+                {
+                    group_billing_periods($count, 'customer', $activity, $customerPeriod);
+                }
+                else
+                {
+                    $count['customer'] = $count['engineer'];
+                }
             }
 
             $tduration += $duration;
