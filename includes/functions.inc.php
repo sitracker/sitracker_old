@@ -7288,6 +7288,64 @@ function get_incident_billing_details($incidentid)
     return $billing;
 }
 
+function group_billing_periods(&$count, $countType, $activity, $period)
+{
+    $duration = $activity['duration'];
+    $startTime = $activity['starttime'];
+    
+    if (!empty($count[$countType]))
+    {
+        while ($duration > 0)
+        {
+            $saved = "false";
+            foreach ($count[$countType] AS $ind)
+            {
+                /*
+                echo "<pre>";
+                print_r($ind);
+                echo "</pre>";
+                */
+                //echo "IN:{$ind}:START:{$act['starttime']}:ENG:{$engineerPeriod}<br />";
+
+                if($ind <= $activity['starttime'] AND $ind <= ($activity['starttime'] + $period))
+                {
+                    //echo "IND:{$ind}:START:{$act['starttime']}<br />";
+                    // already have something which starts in this period just need to check it fits in the period
+                    if($ind + $period > $activity['starttime'] + $duration)
+                    {
+                        $remainderInPeriod = ($ind + $period) - $activity['starttime'];
+                        $duration -= $remainderInPeriod;
+
+                        $saved = "true";
+                    }
+                }
+            }
+            //echo "Saved: {$saved}<br />";
+            if ($saved == "false" AND $activity['duration'] > 0)
+            {
+                //echo "BB:".$activity['starttime'].":SAVED:{$saved}:DUR:{$activity['duration']}<br />";
+                // need to add a new block
+                $count[$countType][$startTime] = $startTime;
+
+                $startTime += $period;
+
+                $duration -= $period;
+            }
+        }
+    }
+    else
+    {
+        $count[$countType][$activity['starttime']] = $activity['starttime'];
+        $localDur = $activity['duration'] - $period;
+
+        while ($localDur > 0)
+        {
+            $startTime += $period;
+            $count[$countType][$startTime] = $startTime;
+            $localDur -= $period; // was just -
+        }
+    }
+}
 
 function make_incident_billing_array($incidentid)
 {
@@ -7365,117 +7423,8 @@ function make_incident_billing_array($incidentid)
                 echo "</pre>";
                 */
 
-                $customerDur = $activity['duration'];
-                $engineerDur = $activity['duration'];
-                $startTime = $activity['starttime'];
-
-                if (!empty($count['engineer']))
-                {
-                    while ($engineerDur > 0)
-                    {
-                        $saved = "false";
-                        foreach ($count['engineer'] AS $ind)
-                        {
-                            /*
-                            echo "<pre>";
-                            print_r($ind);
-                            echo "</pre>";
-                            */
-                            //  echo "IN:{$ind}:START:{$act['starttime']}:ENG:{$engineerPeriod}<br />";
-
-                            if($ind <= $activity['starttime'] AND $ind <= ($activity['starttime'] + $engineerPeriod))
-                            {
-                                //echo "IND:{$ind}:START:{$act['starttime']}<br />";
-                                // already have something which starts in this period just need to check it fits in the period
-                                if($ind + $engineerPeriod > $activity['starttime'] + $engineerDur)
-                                {
-                                    $remainderInPeriod = ($ind + $engineerPeriod) - $activity['starttime'];
-                                    $engineerDur -= $remainderInPeriod;
-
-                                    $saved = "true";
-                                }
-                            }
-                        }
-                        //echo "Saved: {$saved}<br />";
-                        if ($saved == "false" AND $activity['duration'] > 0)
-                        {
-                            //echo "BB:".$activity['starttime'].":SAVED:{$saved}:DUR:{$activity['duration']}<br />";
-                            // need to add a new block
-                            $count['engineer'][$startTime] = $startTime;
-
-                            $startTime += $engineerPeriod;
-
-                            $engineerDur -= $engineerPeriod;
-                        }
-                    }
-                }
-                else
-                {
-                    $count['engineer'][$activity['starttime']] = $activity['starttime'];
-                    $localDur = $activity['duration'] - $engineerPeriod;
-
-                    while ($localDur > 0)
-                    {
-                        $startTime += $engineerPeriod;
-                        $count['engineer'][$startTime] = $startTime;
-                        $localDur -= $engineerPeriod; // was just -
-                    }
-                }
-
-                $startTime = $activity['starttime'];
-
-                if (!empty($count['customer']))
-                {
-                    while ($customerDur > 0)
-                    {
-                        $saved = "false";
-                        foreach ($count['customer'] AS $ind)
-                        {
-                            /*
-                            echo "<pre>";
-                            print_r($ind);
-                            echo "</pre>";
-                            */
-                            //echo "IN:{$ind}:START:{$act['starttime']}:ENG:{$engineerPeriod}<br />";
-
-                            if ($ind <= $activity['starttime'] AND $ind <= ($activity['starttime'] + $customerPeriod))
-                            {
-                                //echo "IND:{$ind}:START:{$activity['starttime']}<br />";
-                                // already have something which starts in this period just need to check it fits in the period
-                                if ($ind + $customerPeriod > $activity['starttime'] + $activity['duration'])
-                                {
-                                    $remainderInPeriod = ($ind+$customerPeriod) - $customerDur;
-                                    $customerDur -= $remainderInPeriod;
-
-                                    $saved = "true";
-                                }
-                            }
-                        }
-
-                        if ($saved == "false" AND $activity['duration'] > 0)
-                        {
-                            //echo "BB:".$activity['starttime'].":SAVED:{$saved}:DUR:{$activity['duration']}<br />";
-                            // need to add a new block
-                            $count['customer'][$startTime] = $startTime;
-
-                            $startTime += $customerPeriod;
-
-                            $customerDur -= $customerPeriod; // was just -
-                        }
-                    }
-                }
-                else
-                {
-                    $count['customer'][$activity['starttime']] = $activity['starttime'];
-                    $localDur = $activity['duration'] - $customerPeriod;
-
-                    while($localDur > 0)
-                    {
-                        $starttime += $customerPeriod;
-                        $count['customer'][$starttime] = $starttime;
-                        $localDur -= $customerPeriod;
-                    }
-                }
+                group_billing_periods($count, 'engineer', $activity, $engineerPeriod);
+                group_billing_periods($count, 'customer', $activity, $customerPeriod);
             }
 
             $tduration += $duration;
@@ -7508,7 +7457,7 @@ function make_incident_billing_array($incidentid)
 }
 
 // NOTE: The following returns the billable periods of a site, could run into issues if multiple different periods used for a site
-function billable_units_site($siteid, $startdate=0, $enedate=0)
+function billable_units_site($siteid, $startdate=0, $enddate=0)
 {
     $sql = "SELECT i.id FROM `{$GLOBALS['dbIncidents']}` AS i, `{$GLOBALS['dbContacts']}` AS c WHERE c.id = i.contact AND c.siteid = {$siteid} ";
     if ($startdate != 0)
@@ -7518,7 +7467,7 @@ function billable_units_site($siteid, $startdate=0, $enedate=0)
     
     if ($enedate != 0)
     {
-        $sql .= "AND closed <= {$enedate} ";
+        $sql .= "AND closed <= {$enddate} ";
     }
 
     $result = mysql_query($sql);
