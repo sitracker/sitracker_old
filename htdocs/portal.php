@@ -607,7 +607,7 @@ switch ($page)
             {
                 echo "<h2>{$strYourClosedIncidents}</h2>";
                 echo "<p align='center'><a href='$_SERVER[PHP_SELF]?page=incidents&amp;showclosed=false'>{$strShowOpenIncidents}</a></p>";
-                $sql = "SELECT * FROM incidents WHERE status = 2 AND contact = '{$_SESSION['contactid']}'";
+                $sql = "SELECT * FROM incidents WHERE status = 2 AND contact = '{$_SESSION['contactid']}' ORDER BY closed DESC";
             }
             else
             {
