@@ -85,9 +85,10 @@ echo "<li><a href='portal.php?page=incidents'>{$strIncidents}</a></li>";
 if($numcontracts == 1)
 {
     //only one contract
-    echo "<li><a href='portal.php?page=add'>{$strAddIncident}</a></li>";
     $contractobj = mysql_fetch_object($result);
     $contractid = $contractobj->id;
+    $productid  = $contractobj->product;
+    echo "<li><a href='portal.php?page=add&amp;contractid={$contractid}&amp;product={$productid}'>{$strAddIncident}</a></li>";
 }
 else
 {
