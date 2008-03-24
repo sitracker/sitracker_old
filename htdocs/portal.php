@@ -67,12 +67,14 @@ $filter = array('page' => $page);
 include ('htmlheader.inc.php');
 
 //find contracts
-$sql = "SELECT maintenance.*, products.*, ";
-$sql .= "(maintenance.incident_quantity - maintenance.incidents_used) AS availableincidents ";
-$sql .= "FROM supportcontacts, maintenance, products ";
-$sql .= "WHERE supportcontacts.maintenanceid=maintenance.id ";
-$sql .= "AND maintenance.product=products.id ";
-$sql .= "AND supportcontacts.contactid='{$_SESSION['contactid']}'";
+$sql = "SELECT m.*, p.name, ";
+$sql .= "(m.incident_quantity - m.incidents_used) AS availableincidents ";
+$sql .= "FROM `{$dbSupportContacts}` AS sc, `{$dbMaintenance}` AS m, `{$dbProducts}` AS p ";
+$sql .= "WHERE sc.maintenanceid=m.id ";
+$sql .= "AND m.product=p.id ";
+$sql .= "AND sc.contactid='{$_SESSION['contactid']}' ";
+$sql .= "ORDER BY expirydate DESC";
+
 $result = mysql_query($sql);
 if (mysql_error()) trigger_error(mysql_error(),E_USER_ERROR);
 $numcontracts = mysql_num_rows($result);

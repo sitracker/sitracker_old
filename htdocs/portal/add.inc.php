@@ -21,8 +21,9 @@ if (!$_REQUEST['action'])
     echo "<h2>{$strAddIncident}</h2>";
     echo "<table align='center' width='50%' class='vertical'>";
     echo "<form action='{$_SERVER[PHP_SELF]}?page=add&action=submit' method='post'>";
+    echo "<tr><th>{$strSkill}:</th><td>".softwareproduct_drop_down('software', 1, cleanvar($_REQUEST['product']))."</td></tr>";
     echo "<tr><th>{$strIncidentTitle}:</th><td><input maxlength='100' name='title' size=40 type='text' /></td></tr>";
-    echo "<tr><th width='20%'>{$strProblemDescription}:</th><td><textarea name='probdesc' rows='20' cols='60'>";
+    echo "<tr><th width='20%'>{$strProblemDescription}:</th><td><textarea name='probdesc' rows='20' cols='60'>";    
     echo "* Please describe the problem\n\n\n* What steps have you taken to try and fix it?\n\n\n";
     echo "* Is the problem persistent or intermittent?\n\n\n* How can you reproduce the problem?\n\n\n";
     echo "* How is this affecting you or others?\n\n\n";
@@ -71,8 +72,8 @@ else //submit
     //create new incident
     $sql  = "INSERT INTO `{$dbIncidents}` (title, owner, contact, priority, servicelevel, status, type, maintenanceid, ";
     $sql .= "product, softwareid, productversion, productservicepacks, opened, lastupdated) ";
-    $sql .= "VALUES ('$incidenttitle', '0', '$contactid', '1', '$servicelevel', '1', 'Support', '', ";
-    $sql .= "'$contractid', '$software', '$softwareversion', '$softwareservicepacks', '$now', '$now')";
+    $sql .= "VALUES ('{$incidenttitle}', '0', '{$contactid}', '1', '{$servicelevel}', '1', 'Support', '', ";
+    $sql .= "'{$contractid}', '{$software}', '{$softwareversion}', '{$softwareservicepacks}', '{$now}', '{$now}')";
     $result = mysql_query($sql);
     if (mysql_error()) trigger_error("MySQL Query Error ".mysql_error(), E_USER_ERROR);
 
@@ -82,14 +83,14 @@ else //submit
     // Create a new update
     $sql  = "INSERT INTO `{$dbUpdates}` (incidentid, userid, type, bodytext, timestamp, currentowner, ";
     $sql .= "currentstatus, customervisibility) ";
-    $sql .= "VALUES ('$incidentid', '0', 'opening', '$updatetext', '$now', '', ";
+    $sql .= "VALUES ('{$incidentid}', '0', 'opening', '{$updatetext}', '{$now}', '', ";
     $sql .= "'1', 'show')";
     $result = mysql_query($sql);
     if (mysql_error()) trigger_error("MySQL Query Error ".mysql_error(), E_USER_ERROR);
 
     // get the service level
     // find out when the initial response should be according to the service level
-    if (empty($servicelevel) OR $servicelevel==0)
+    if (empty($servicelevel) OR $servicelevel == 0)
     {
         // FIXME: for now we use id but in future use tag, once maintenance uses tag
         $servicelevel = maintenance_servicelevel($contractid);
@@ -110,14 +111,14 @@ else //submit
     // Insert the first SLA update, this indicates the start of an incident
     // This insert could possibly be merged with another of the 'updates' records, but for now we keep it seperate for clarity
     $sql  = "INSERT INTO `{$dbUpdates}` (incidentid, userid, type, timestamp, currentowner, currentstatus, customervisibility, sla, bodytext) ";
-    $sql .= "VALUES ('$incidentid', '0', 'slamet', '$now', '0', '1', 'hide', 'opened','The incident is open and awaiting action.')";
+    $sql .= "VALUES ('{$incidentid}', '0', 'slamet', '{$now}', '0', '1', 'hide', 'opened','The incident is open and awaiting action.')";
     mysql_query($sql);
     if (mysql_error()) trigger_error("MySQL Query Error ".mysql_error(), E_USER_ERROR);
 
     // Insert the first Review update, this indicates the review period of an incident has started
     // This insert could possibly be merged with another of the 'updates' records, but for now we keep it seperate for clarity
     $sql  = "INSERT INTO `{$dbUpdates}` (incidentid, userid, type, timestamp, currentowner, currentstatus, customervisibility, sla, bodytext) ";
-    $sql .= "VALUES ('$incidentid', '0', 'reviewmet', '$now', '0', '1', 'hide', 'opened','')";
+    $sql .= "VALUES ('{$incidentid}', '0', 'reviewmet', '{$now}', '0', '1', 'hide', 'opened','')";
     mysql_query($sql);
     if (mysql_error()) trigger_error("MySQL Query Error ".mysql_error(), E_USER_ERROR);
 

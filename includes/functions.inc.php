@@ -3044,7 +3044,7 @@ function servicelevel_id2tag($id)
 */
 function servicelevel_tag2id($sltag)
 {
-    $sql = "SELECT id FROM `{$dbServiceLevels}` WHERE tag = '{$sltag}' AND priority=1";
+    $sql = "SELECT id FROM `{$GLOBALS['dbServiceLevels']}` WHERE tag = '{$sltag}' AND priority=1";
     $result = mysql_query($sql);
     if (mysql_error()) trigger_error(mysql_error(),E_USER_WARNING);
     list($id) = mysql_fetch_row($result);

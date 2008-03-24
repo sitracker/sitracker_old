@@ -15,14 +15,8 @@ if (realpath(__FILE__) == realpath($_SERVER['SCRIPT_FILENAME']))
     exit;
 }
 
-
 echo "<h2>{$strYourSupportEntitlement}</h2>";
-$sql = "SELECT m.*, p.*, ";
-$sql .= "(m.incident_quantity - m.incidents_used) AS availableincidents ";
-$sql .= "FROM `{$dbSupportContacts}` AS sc, `{$dbMaintenance}` AS m, `{$dbProducts}` AS p ";
-$sql .= "WHERE sc.maintenanceid=m.id ";
-$sql .= "AND m.product=p.id ";
-$sql .= "AND sc.contactid='{$_SESSION['contactid']}'";
+
 if ($numcontracts >= 1)
 {
     echo "<table align='center'>";
@@ -50,7 +44,12 @@ if ($numcontracts >= 1)
         echo "</td>";
         echo "<td>{$contract->incidents_used}</td>";
         echo "<td>".ldate($CONFIG['dateformat_date'],$contract->expirydate)."</td>";
-        echo "<td><a href='$_SERVER[PHP_SELF]?page=add&amp;contractid={$contract->id}'>{$strAddIncident}</a></td></tr>\n";
+        echo "<td>";
+        if ($contract->expirydate > $now)
+        {
+            echo "<a href='$_SERVER[PHP_SELF]?page=add&amp;contractid={$contract->id}&amp;product={$contract->product}'>{$strAddIncident}</a>";
+        }
+        echo "</td></tr>\n";
         if ($shade == 'shade1') $shade = 'shade2';
         else $shade = 'shade1';
     }

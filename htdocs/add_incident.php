@@ -144,8 +144,14 @@ elseif ($action=='findcontact')
             $incidents_remaining = $contactrow['incident_quantity'] - $contactrow['incidents_used'];
 
             $str = "<tr class='$class'>";
-            if ($contactrow['expirydate']<$now AND $contactrow['expirydate'] != '-1') $str .=  "<td>{$GLOBALS['strExpired']}</td>";
-            elseif ($contactrow['term']=='yes') $str .=  "<td>{$GLOBALS['strTerminated']}</td>";
+            if ($contactrow['expirydate'] < $now AND $contactrow['expirydate'] != '-1')
+            {
+                $str .=  "<td>{$GLOBALS['strExpired']}</td>";
+            }
+            elseif ($contactrow['term'] == 'yes')
+            {
+                $str .=  "<td>{$GLOBALS['strTerminated']}</td>";
+            }
             elseif ($contactrow['incident_quantity'] >= 1 AND $contactrow['incidents_used'] >= $contactrow['incident_quantity'])
             {
                 $str .= "<td class='expired'>{$GLOBALS['strZeroRemaining']} ({$contactrow['incidents_used']}/{$contactrow['incident_quantity']} {$strUsed})</td>";
@@ -153,8 +159,14 @@ elseif ($action=='findcontact')
             else
             {
                 $str .=  "<td><a href=\"{$_SERVER['PHP_SELF']}?action=incidentform&amp;type=support&amp;contactid=".$contactrow['contactid']."&amp;maintid=".$contactrow['maintenanceid']."&amp;producttext=".urlencode($contactrow['productname'])."&amp;productid=".$contactrow['productid']."&amp;updateid=$updateid&amp;siteid=".$contactrow['siteid']."&amp;win={$win}\" onclick=\"return confirm_support();\">{$GLOBALS['strAddIncident']}</a> ";
-                if ($contactrow['incident_quantity']==0) $str .=  "({$GLOBALS['strUnlimited']})";
-                else $str .= "(".sprintf($strRemaining, $incidents_remaining).")";
+                if ($contactrow['incident_quantity'] == 0)
+                {
+                    $str .=  "({$GLOBALS['strUnlimited']})";
+                }
+                else
+                {
+                    $str .= "(".sprintf($strRemaining, $incidents_remaining).")";
+                }
             }
             $str .=  "</td>";
             $str .=  '<td>'.$contactrow['forenames'].' '.$contactrow['surname'].'</td>';
@@ -178,7 +190,7 @@ elseif ($action=='findcontact')
 
         $headers = "<tr><th>&nbsp;</th><th>{$strName}</th><th>{$strSite}</th><th>{$strContract}</th><th>{$strServiceLevel}</th><th>{$strExpiryDate}</th></tr>";
 
-        while ($contactrow=mysql_fetch_array($result))
+        while ($contactrow = mysql_fetch_array($result))
         {
             if (empty($CONFIG['preferred_maintenance']) OR
                 in_array(servicelevel_id2tag($contactrow['servicelevelid']), $CONFIG['preferred_maintenance']))
@@ -226,10 +238,10 @@ elseif ($action=='findcontact')
         else $sql .= "AND c.id = '$contactid' ";
 
         $sql .= "ORDER by c.surname, c.forenames ";
-        $result=mysql_query($sql);
+        $result = mysql_query($sql);
         if (mysql_error()) trigger_error("MySQL Query Error ".mysql_error(), E_USER_ERROR);
 
-        if (mysql_num_rows($result)>0)
+        if (mysql_num_rows($result) > 0)
         {
             echo "<h3><img src='{$CONFIG['application_webpath']}images/icons/{$iconset}/32x32/contact.png' width='32' height='32' alt='' /> ";
             echo "{$strContacts}</h3>\n";
@@ -241,10 +253,10 @@ elseif ($action=='findcontact')
             echo "<th>{$strSite}</th>";
             echo "</tr>\n";
 
-            while ($contactrow=mysql_fetch_array($result))
+            while ($contactrow = mysql_fetch_array($result))
             {
                 echo "<tr class='shade2'>";
-                $site_incident_pool=db_read_column('freesupport', 'sites', $contactrow['siteid']);
+                $site_incident_pool = db_read_column('freesupport', 'sites', $contactrow['siteid']);
                 if ($site_incident_pool > 0)
                 {
                     echo "<td><a href=\"{$_SERVER['PHP_SELF']}?action=incidentform&amp;type=free&amp;contactid=".$contactrow['contactid']."&amp;updateid=$updateid&amp;win={$win}\" onclick=\"return confirm_free();\">";
@@ -301,10 +313,10 @@ elseif ($action=='findcontact')
             echo "<th>{$strSite}</th>";
             echo "</tr>\n";
 
-            while ($contactrow=mysql_fetch_array($result))
+            while ($contactrow = mysql_fetch_array($result))
             {
                 echo "<tr class='shade2'>";
-                $site_incident_pool=db_read_column('freesupport', 'sites', $contactrow['siteid']);
+                $site_incident_pool = db_read_column('freesupport', 'sites', $contactrow['siteid']);
                 if ($site_incident_pool > 0)
                 {
                     echo "<td><a href=\"{$_SERVER['PHP_SELF']}?action=incidentform&amp;type=free&amp;contactid=".$contactrow['contactid']."&amp;updateid=$updateid&amp;win={$win}\" onclick=\"return confirm_free();\">";
