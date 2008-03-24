@@ -45,7 +45,7 @@ function generate_row($update)
     if (!empty($update['fromaddr']))
     {
         // Have a look if we've got a customer or user with this email address
-        $sql = "SELECT COUNT(id) FROM `{$dbContacts}` WHERE email LIKE '%{$update['fromaddr']}%'";
+        $sql = "SELECT COUNT(id) FROM `{$GLOBALS['dbContacts']}` WHERE email LIKE '%{$update['fromaddr']}%'";
         $result = mysql_query($sql);
         if (mysql_error()) trigger_error(mysql_error(),E_USER_WARNING);
         list($contactmatches) = mysql_fetch_row($result);
@@ -124,7 +124,7 @@ function deldir($location)
     rmdir($location);
 }
 
-$title = 'Review Held Updates';
+$title = 'Review Held Updates'; // FIXME i18n
 $refresh = $_SESSION['incident_refresh'];
 $selected = $_POST['selected'];
 include ('htmlheader.inc.php');

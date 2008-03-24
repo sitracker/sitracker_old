@@ -15,13 +15,15 @@ if (realpath(__FILE__) == realpath($_SERVER['SCRIPT_FILENAME']))
     exit;
 }
 
+$contractid = cleanvar($_REQUEST['contractid']);
+$productid = cleanvar($_REQUEST['product']);
 
 if (!$_REQUEST['action'])
 {
     echo "<h2>{$strAddIncident}</h2>";
     echo "<table align='center' width='50%' class='vertical'>";
     echo "<form action='{$_SERVER[PHP_SELF]}?page=add&action=submit' method='post'>";
-    echo "<tr><th>{$strSkill}:</th><td>".softwareproduct_drop_down('software', 1, cleanvar($_REQUEST['product']))."</td></tr>";
+    echo "<tr><th>{$strSkill}:</th><td>".softwareproduct_drop_down('software', 1, $productid)."</td></tr>";
     echo "<tr><th>{$strIncidentTitle}:</th><td><input maxlength='100' name='title' size=40 type='text' /></td></tr>";
     echo "<tr><th width='20%'>{$strProblemDescription}:</th><td><textarea name='probdesc' rows='20' cols='60'>";    
     echo "* Please describe the problem\n\n\n* What steps have you taken to try and fix it?\n\n\n";
@@ -31,6 +33,7 @@ if (!$_REQUEST['action'])
 
     echo "</table>";
     echo "<input name='contractid' value='{$contractid}' type='hidden'>";
+    echo "<input name='productid' value='{$productid}' type='hidden'>";
     echo "<p align='center'><input type='submit' value='{$strAddIncident}' /></p>";
     echo "</form>";
 }
@@ -38,6 +41,7 @@ else //submit
 {
     $contactid = $_SESSION['contactid'];
     $contractid = cleanvar($_REQUEST['contractid']);
+    $productid = cleanvar($_REQUEST['productid']);
     $software = cleanvar($_REQUEST['software']);
     $softwareversion = cleanvar($_REQUEST['version']);
     $softwareservicepacks = cleanvar($_REQUEST['productservicepacks']);
@@ -72,8 +76,8 @@ else //submit
     //create new incident
     $sql  = "INSERT INTO `{$dbIncidents}` (title, owner, contact, priority, servicelevel, status, type, maintenanceid, ";
     $sql .= "product, softwareid, productversion, productservicepacks, opened, lastupdated) ";
-    $sql .= "VALUES ('{$incidenttitle}', '0', '{$contactid}', '1', '{$servicelevel}', '1', 'Support', '', ";
-    $sql .= "'{$contractid}', '{$software}', '{$softwareversion}', '{$softwareservicepacks}', '{$now}', '{$now}')";
+    $sql .= "VALUES ('{$incidenttitle}', '0', '{$contactid}', '1', '{$servicelevel}', '1', 'Support', '{$contractid}', ";
+    $sql .= "'{$productid}', '{$software}', '{$softwareversion}', '{$softwareservicepacks}', '{$now}', '{$now}')";
     $result = mysql_query($sql);
     if (mysql_error()) trigger_error("MySQL Query Error ".mysql_error(), E_USER_ERROR);
 

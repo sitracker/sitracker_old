@@ -139,6 +139,7 @@ elseif ($CONFIG['portal'] == TRUE)
         $_SESSION['portalauth'] = TRUE;
 
         $_SESSION['contactid'] = $contact->id;
+        $_SESSION['siteid'] = $contact->siteid;
         header("Location: portal.php");
         exit;
     }
