@@ -23,13 +23,16 @@ install: build
 	dh_clean -k
 
 	# Install application files
-	install	-D -m 644 *.php debian/sit/usr/share/sit
-	install	-D -m 644 htdocs/*.php htdocs/*.js htdocs/*.ico debian/sit/usr/share/sit/htdocs
-	install	-D -m 644 htdocs/auto/*.php debian/sit/usr/share/sit/htdocs/auto
-	install	-D -m 644 htdocs/help/*.php debian/sit/usr/share/sit/htdocs/help
- 
+	install	-D -m 644 -g www-data *.php debian/sit/usr/share/sit
+	install	-D -m 644 -g www-data htdocs/*.php htdocs/*.js htdocs/*.ico debian/sit/usr/share/sit/htdocs
+	install	-D -m 644 -g www-data htdocs/auto/*.php debian/sit/usr/share/sit/htdocs/auto
+	install	-D -m 644 -g www-data htdocs/help/*.php debian/sit/usr/share/sit/htdocs/help
+
 	cp -r auto help images incident reports scripts statistics styles debian/sit/usr/share/sit/htdocs
-	
+
+    # make the attachments directory writable
+    # chmod 775 debian/sit/usr/share/sit/attachments
+
 	# Install configuration files
 #	install -D -m 644 -o www-data debian/config_inc.php debian/sit/etc/sit/config_inc.php.template
 #	install -D -m 644 -o www-data debian/config_local.php debian/sit/etc/sit/

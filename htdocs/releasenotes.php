@@ -1,4 +1,11 @@
 <?php
+// releasenotes.php - Release notes summary
+//
+// SiT (Support Incident Tracker) - Support call tracking system
+// Copyright (C) 2000-2008 Salford Software Ltd. and Contributors
+//
+// This software may be used and distributed according to the terms
+// of the GNU General Public License, incorporated herein by reference.
 
 @include ('set_include_path.inc.php');
 $permission = 0;
@@ -12,6 +19,31 @@ echo "<h2>Release Notes</h2>";
 
 echo "<div id='help'>";
 echo "<p>For the latest notes on this release please <a href='http://sitracker.sourceforge.net/ReleaseNotes'>see the SiT website</a>, a summary is shown below:</p>";
+echo "<h3>v3.32</h3>";
+echo '<div>
+    <p><strong>Internationalisation</strong></p>
+    <ul><li>More strings are internationalised</li>
+    <li>New Spanish / Colombian (es-CO) translation</li>
+    <li>New Japanese (ja-JP) translation</li>
+    <li>Updated German (de-DE) translation</li>
+    <li>Updated French (fr-FR) translation</li>
+    </ul>
+
+    <p><strong>Localisation</strong></p>
+    <ul><li>Users can now set their own local timezone</li>
+    <li>Dates and times are displayed in the users\' local timezone</li>
+    </ul>
+
+    <p><strong>Drafts</strong></p>
+    <ul><li>Drafts are now saved automatically every few seconds while typing incident updates or emails. You can return to these drafts later and continue writing from where you left off</li>
+    </ul>
+
+    <p><strong>Hide old incidents</strong></p>
+    <ul><li>A new config variable <code>$CONFIG[\'hide_closed_incidents_older_than\']</code> has been added, when set this hides old incidents from users\' closed incidents queues. This is useful if you want to archive incidents after a time, for example after 6 months. Of course you can still search these incidents.</li>
+    </ul>
+
+';
+
 echo "<h3>v3.31</h3>";
 echo '<div>
 

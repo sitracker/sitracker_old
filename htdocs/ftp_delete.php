@@ -31,7 +31,7 @@ $frow = mysql_fetch_array($result);
 $conn_id = ftp_connect($CONFIG['ftp_hostname']);
 
 // login with username and password
-$login_result = ftp_login($conn_id, $CONFIG['ftp_username'], $CONFIG['ftp_user_pass']);
+$login_result = ftp_login($conn_id, $CONFIG['ftp_username'], $CONFIG['ftp_password']);
 
 // check connection
 if ((!$conn_id) || (!$login_result))

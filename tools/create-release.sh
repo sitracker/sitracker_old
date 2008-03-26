@@ -27,10 +27,12 @@ SVNREV=`svnversion .`
 find -name "\.svn" | xargs rm -rf
 
 # Now grab the app version number
-SITVER=$(grep ^\$application_version= includes/functions.inc.php|awk -F "'|'" '{print $2}')
+SITVER=$(grep ^\$application_version.= includes/functions.inc.php|awk -F "'|'" '{print $2}')
 
 # Now find out if this is a proper release
-SITREV=$(grep ^\$application_revision= includes/functions.inc.php|awk -F "'|'" '{print $2}')
+SITREV=$(grep ^\$application_revision.= includes/functions.inc.php|awk -F "'|'" '{print $2}')
+
+SITSIZE=`du -sk | cut -f1`
 
 # Now we've got version and rev Create the release name
 if [ -n $SITREV ]; then
@@ -73,9 +75,10 @@ echo "sit ($SITVER) unstable; urgency=low" > "$SITDIR/DEBIAN/changelog"
 # TODO append the svn changelog *since the last release only* into the debian/changelog file
 #svn2cl -o debian/changelog
 
-# TODO build a .deb package
+# build a .deb package
 
 sed -i 's/!SITVERSION!/'$SITVER'/g' $TMPDIR/$SITDIR/DEBIAN/control
+sed -i 's/!SITSIZE!/'$SITSIZE'/g' $TMPDIR/$SITDIR/DEBIAN/control
 
 mkdir -p /tmp/sit.$$/deb/etc/
 mkdir -p /tmp/sit.$$/deb/usr/share/sit/
@@ -95,4 +98,8 @@ sudo chown -R root:root /tmp/sit.$$/deb/usr
 sudo chown -R root:root /tmp/sit.$$/deb/etc
 chmod 755 /tmp/sit.$$/deb/DEBIAN/post*
 
-dpkg -b /tmp/sit.$$/deb/ /tmp/sit.$$/packages/$SITDIR.deb
+# Make a debian package
+dpkg -b /tmp/sit.$$/deb/ $PUBDIR/$SITDIR.deb
+
+# Make a tar.gz package
+cp $TMPDIR/$RELNAME.orig.tar.gz $PUBDIR/$RELNAME.tar.gz

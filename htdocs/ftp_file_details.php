@@ -47,7 +47,7 @@ $pretty_file_size = round($pretty_file_size / pow(1024,$j-1) * 100) / 100 . ' ' 
 <?php
 if ($frow['path']=='') $ftp_path=$CONFIG['ftp_path']; else $ftp_path=$CONFIG['ftp_path'].substr($frow['path'],1).'/';
 ?>
-<tr><th>Location:</th><td><a href="<?php echo 'ftp://'.$CONFIG['ftp_server'].$ftp_path.$frow['filename']; ?>"><code><?php echo 'ftp://'.$ftp_server.$ftp_path.$frow['filename']; ?></code></a></td></tr>
+<tr><th>Location:</th><td><a href="<?php echo 'ftp://'.$CONFIG['ftp_hostname'].$ftp_path.$frow['filename']; ?>"><code><?php echo 'ftp://'.$CONFIG['ftp_hostname'].$ftp_path.$frow['filename']; ?></code></a></td></tr>
 <tr><th>Title:</th><td><?php echo $frow['shortdescription']; ?></td></tr>
 <tr><th>Web Category:</th><td><?php echo $frow['webcategory']; ?></td></tr>
 <tr><th>Description:</th><td><?php echo $frow['longdescription']; ?></td></tr>

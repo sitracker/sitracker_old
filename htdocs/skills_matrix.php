@@ -97,23 +97,21 @@ if ($countusers > 0)
             $countusers--;
         }
     }
-}
-mysql_data_seek($usersresult, 0);
-
+    mysql_data_seek($usersresult, 0);
 $sql = "SELECT u.id, u.realname, s.name ";
 $sql .= "FROM `{$dbUserSoftware}` AS us RIGHT JOIN `{$dbSoftware}` AS s ON (us.softwareid = s.id) ";
 $sql .= "LEFT JOIN `{$dbUsers}` AS u ON us.userid = u.id ";
 $sql .= " WHERE (u.status <> 0 OR u.status IS NULL) ";
 if (empty($legacy)) $sql .= "AND (s.lifetime_end > NOW() OR s.lifetime_end = '0000-00-00' OR s.lifetime_end is NULL) ";
 if ($numgroups >= 1 AND $filtergroup=='0') $sql .= "AND (u.groupid='0' OR u.groupid='' OR u.groupid IS NULL) ";
-elseif ($numgroups < 1 OR $filtergroup=='all') { $sql .= "AND 1=1 "; }
+    elseif ($numgroups < 1 OR $filtergroup=='all') { $sql .= "AND 1=1 "; }
 else $sql .= "AND (u.groupid='{$filtergroup}' OR u.groupid IS NULL)";
 $sql .= " ORDER BY s.name, u.id";
+    $result = mysql_query($sql);
+    if (mysql_error()) trigger_error(mysql_error(),E_USER_WARNING);
 
-$result = mysql_query($sql);
-if (mysql_error()) trigger_error(mysql_error(),E_USER_WARNING);
-
-$countskills = mysql_num_rows($result);
+    $countskills = mysql_num_rows($result);
+}
 
 if ($countskills > 0 AND $countusers > 0)
 {
@@ -170,7 +168,8 @@ if ($countskills > 0 AND $countusers > 0)
     foreach ($counting AS $c) echo "<td align='center'><strong>{$c}</strong></td>";
     echo "</tr>\n";
     echo "</table>";
-} else echo "<p align='center'>{$strNothingToDisplay}</p>";
+}
+else echo "<p align='center'>{$strNothingToDisplay}</p>";
 
 include ('htmlfooter.inc.php');
 

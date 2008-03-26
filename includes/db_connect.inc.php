@@ -3,6 +3,7 @@
 //
 // SiT (Support Incident Tracker) - Support call tracking system
 // Copyright (C) 2000-2007 Salford Software Ltd. and Contributors
+// Copyright (C) 2000-2008 Salford Software Ltd. and Contributors
 //
 // This software may be used and distributed according to the terms
 // of the GNU General Public License, incorporated herein by reference.
@@ -51,6 +52,11 @@ mysql_select_db($CONFIG['db_database'], $db);
 if (mysql_error())
 {
     // TODO add some detection for missing database
+    if (strpos(mysql_error(), 'Unknown database')!==FALSE)
+    {
+        header("Location: setup.php");
+        exit;
+    }
     // Attempt socket connection to database to check if server is alive
     if (!fsockopen($CONFIG['db_hostname'], 3306, $errno, $errstr, 5))
     {

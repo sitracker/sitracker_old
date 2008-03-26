@@ -108,13 +108,13 @@ else if ($action == "add")
         if (!$result)
         {
             include ('htmlheader.inc.php');
-            echo "<p class='error'>Addition of support contact failed\n";
+            echo "<p class='error'>Addition of support contact failed</p>\n";
             include ('htmlfooter.inc.php');
         }
         // update database and show success message
         else
         {
-            if ($context=='contact') html_redirect("contact_details.php?id=$contactid");
+            if ($context == 'contact') html_redirect("contact_details.php?id=$contactid");
             else html_redirect("contract_details.php?id=$maintid");
         }
     }

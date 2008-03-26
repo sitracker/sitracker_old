@@ -61,6 +61,7 @@ else
 
 // External variables
 $page = cleanvar($_REQUEST['page']);
+$contractid = cleanvar($_REQUEST['contractid']);
 
 $filter = array('page' => $page);
 
@@ -84,6 +85,8 @@ echo "<ul id='menuList'>\n";
 echo "<li><a href='portal.php?page=incidents'>{$strIncidents}</a></li>";
 if($numcontracts == 1)
 {
+    $onlycontract = mysql_fetch_object($result);
+ 
     //only one contract
     $contractobj = mysql_fetch_object($result);
     $contractid = $contractobj->id;
@@ -105,10 +108,17 @@ switch ($page)
     //show the user's contracts
     case 'entitlement':
         include ('portal/entitlement.inc.php');
+		if($contract->expirydate == -1)
+	 	    echo $strUnlimited;
+		else
+                    echo ldate($CONFIG['dateformat_date'],$contract->expirydate);
+		echo "</td>";
+	include 'htmlfooter.inc.php';
         break;
     //update an open incident
     case 'update':
         include ('portal/update.inc.php');
+	    include('htmlfooter.inc.php');
         break;
     //close an open incident
     case 'close':
@@ -117,10 +127,32 @@ switch ($page)
     //add a new incident
     case 'add':
         include ('portal/add.inc.php');
+
+	    //stop people changing the contractid
+
+	    $sql = "SELECT products.*, maintenance.*, maintenance.id AS id, ";
+	    $sql .= "(maintenance.incident_quantity - maintenance.incidents_used) AS availableincidents ";
+	    $sql .= "FROM supportcontacts, maintenance, products ";
+	    $sql .= "WHERE supportcontacts.maintenanceid=maintenance.id ";
+	    $sql .= "AND maintenance.product=products.id ";
+	    $sql .= "AND supportcontacts.contactid='{$_SESSION['contactid']}'";	
+	    $sql .= "AND maintenance.id='{$contractid}'";
+	    $checkcontract = mysql_query($sql);
+
+	    //FIXME i18n; right function?
+	    if(mysql_num_rows($checkcontract) == 0)
+	    {
+		throw_error("You do not have access to that contract");
+		die();
+	    }
+
+
+	include('htmlfooter.inc.php');
         break;
     //show user's details
     case 'details':
         include ('portal/details.inc.php');
+	include('htmlfooter.inc.php');
         break;
     //show specified incident
     case 'showincident':

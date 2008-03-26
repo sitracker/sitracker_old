@@ -615,13 +615,13 @@ function user_count_holidays($userid, $type, $date=0, $approved=array(0,1,2))
     if (is_array($approved))
     {
         $sql .= "AND (";
-        
+
         for ($i = 0; $i < sizeof($approved); $i++)
         {
             $sql .= "approved = {$approved[$i]} ";
             if ($i < sizeof($approved)-1) $sql .= "OR ";
         }
-        
+
         $sql .= ") ";
     }
     $result = mysql_query($sql);
