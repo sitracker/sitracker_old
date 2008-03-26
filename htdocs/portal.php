@@ -113,6 +113,11 @@ switch ($page)
 		else
                     echo ldate($CONFIG['dateformat_date'],$contract->expirydate);
 		echo "</td>";
+		if ($contract->expirydate > $now)
+		{
+		    echo "<a href='$_SERVER[PHP_SELF]?page=add&amp;contractid={$contract->id}'>{$strAddIncident}</a>";
+		}
+		echo "</td></tr>\n";
 	include 'htmlfooter.inc.php';
         break;
     //update an open incident

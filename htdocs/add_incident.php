@@ -366,13 +366,12 @@ elseif ($action=='incidentform')
     <input type="hidden" name="siteid" value="<?php echo $siteid ?>" />
     <?php
     if (!empty($updateid)) echo "<input type='hidden' name='updateid' value='$updateid' />";
-    ?>
-    <table align='center' class='vertical' width='60%'>
-    <tr><th>Name:<br /><a href="edit_contact.php?action=edit&amp;contact=<?php echo $contactid; ?>">Edit</a></th><td><h3><?php echo contact_realname($contactid); ?></h3></td></tr>
-    <tr><th>Email:</th><td><?php echo contact_email($contactid); ?></td></tr>
-    <tr><th>Telephone:</th><td><?php echo contact_phone($contactid); ?></td></tr>
-    <tr><th>Fax:</th><td><?php echo contact_fax($contactid); ?></td></tr>
-    <?php
+
+    echo "<table align='center' class='vertical' width='60%'>";
+    echo "<tr><th>{$strName}:<br /><a href='edit_contact.php?action=edit&amp;contact={$contactid}'>{$strEdit}</a></th><td><h3>".contact_realname($contactid)."></h3></td></tr>";
+    echo "<tr><th>{$strEmail}:</th><td>".contact_email($contactid)."</td></tr>";
+    echo "<tr><th>{$strTelephone}:</th><td>".contact_phone($contactid)."</td></tr>";
+    echo "<tr><th>{$strFax}:</th><td>".contact_fax($contactid)."</td></tr>";
     if ($type == 'free')
     {
         echo "<tr><th>{$strServiceLevel}:</th><td>".serviceleveltag_drop_down('servicelevel',$CONFIG['default_service_level'], TRUE)."</td></tr>";
@@ -401,8 +400,10 @@ elseif ($action=='incidentform')
         while ($productinforow=mysql_fetch_array($result))
         {
             echo "<tr><th>{$productinforow['information']}";
-            if ($productinforow['moreinformation']!='')
+            if ($productinforow['moreinformation'] != '')
+            {
                 echo "<br />\n".$productinforow['moreinformation'];
+            }
             echo ": <sup class='red'>*</sup>";
             echo "</th>";
             echo "<td><input maxlength='100' name='{$productinforow['id']}' size='40' type='text' /></td></tr>\n";
