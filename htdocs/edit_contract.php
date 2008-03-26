@@ -106,7 +106,7 @@ if ($action == "edit")
 
         echo "<tr><th>{$strExpiryDate}: <sup class='red'>*</sup></th>";
         echo "<td><input name='expirydate' size='10' value='";
-        if ($maint['expirydate'] > 0) echo date('Y-m-d',$maint['expirydate']);
+        if ($maint['expirydate'] > 0) echo ldate('Y-m-d',$maint['expirydate']);
         echo "' /> ".date_picker('maintform.expirydate');
         if ($maint['expirydate'] == '-1')
         {

@@ -13,7 +13,7 @@ if ($_SESSION['auth']==TRUE)
     echo " running ";
     if ($CONFIG['demo']) echo "in DEMO mode ";
     echo "on ".strip_tags($_SERVER["SERVER_SOFTWARE"]);
-    echo " at ".date('H:i',$now);
+    echo " at ".ldate('H:i',$now);
 }
 echo "</div>\n";
 if ($CONFIG['debug'] == TRUE)

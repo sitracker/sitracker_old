@@ -11,20 +11,11 @@
 
 @include ('set_include_path.inc.php');
 
-if (version_compare(PHP_VERSION, "5.0.0", ">="))
+if (!@include('db_connect.inc.php'))
 {
-    try
-    {
-        if (!@include ('db_connect.inc.php')) throw new Exception('Failed to include essential file, include path is probably wrong');
-    }
-    catch (Exception $e)
-    {
-        header("Location: setup.php");
-        exit;
-        // print $e->getMessage();
-    }
+    header("Location: setup.php#include_failed");
+    exit;
 }
-else require ('db_connect.inc.php');
 
 session_name($CONFIG['session_name']);
 session_start();

@@ -7036,11 +7036,12 @@ function truncate_string($text, $maxlength=255, $html=TRUE)
 function ldate($format, $date='')
 {
     if ($date=='') $date = $GLOBALS['now'];
-    if ($_SESSION['utcoffset'] != 0)
+    if ($_SESSION['utcoffset'] != '')
     {
         // Adjust the date back to UTC
         $tz = strftime('%z', $date);
-        $tzmins = substr($tz, -4, 2) + (substr($tz, -4, 2) * 60);
+        $tzmins = substr($tz, -4, 2) * (substr($tz, -4, 2) * 60);
+        $tzmins *= 60; // convert to seconds
         if ($tz{0} == '+') $date -= $tzmins;
         else $date += $tzmins;
 

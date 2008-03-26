@@ -240,7 +240,7 @@ elseif (!empty($siteid))
     $result = mysql_query($sql);
 
     $sqlTask = "SELECT * FROM `{$dbTasks}` WHERE enddate IS NULL  ";
-        
+
     while ($obj = mysql_fetch_object($result))
     {
         //get info for incident-->task linktype
@@ -250,7 +250,7 @@ elseif (!empty($siteid))
         $sql .= "AND linkcolref={$obj->id} ";
         $sql .= "AND direction='left'";
         $resultLinks = mysql_query($sql);
-    
+
         //get list of tasks
         while ($tasks = mysql_fetch_object($resultLinks))
         {
@@ -259,15 +259,15 @@ elseif (!empty($siteid))
             else $orSQL .= " OR ";
             $orSQL .= "id={$tasks->origcolref} ";
         }
-        
+
         if (!empty($orSQL))
         {
             $sqlTask .= "AND {$orSQL})";
         }
     }
-    
+
     $result = mysql_query($sqlTask);
-    
+
     $show = 'incidents';
     //$show = 'incidents';
     echo "<h2>".sprintf($strActivitiesForX, site_name($siteid))."</h2>";
@@ -297,7 +297,7 @@ else
         }
     }
     echo "<h2><img src='{$CONFIG['application_webpath']}images/icons/{$iconset}/32x32/task.png' width='32' height='32' alt='' /> ";
-    
+
     if ($user == 'all')
     {
         echo $strAll;
@@ -306,7 +306,7 @@ else
     {
         echo user_realname($user,TRUE)."'s "; // FIXME i18n
     }
-    
+
     if ($show != 'incidents')
     {
         echo " {$strTasks}:</h2>";
@@ -322,7 +322,7 @@ else
     else
     {
         echo " {$strActivities}:</h2>";
-        
+
         if ($user != 'all')
         {
             echo "<p align='center'><a href='{$_SERVER['PHP_SELF']}?show=incidents&amp;user=all'>{$strShowAll}</a></p>";
@@ -468,10 +468,10 @@ if (mysql_num_rows($result) >=1 )
         {
             echo colheader('enddate', $strEndDate, $sort, $order, $filter);
         }
-        
+
         if ($show == 'incidents')
         {
-            echo colheader('owner', $strOwner, $sort, $order, $filter);        
+            echo colheader('owner', $strOwner, $sort, $order, $filter);
         }
     }
     else
@@ -514,7 +514,7 @@ if (mysql_num_rows($result) >=1 )
                 echo $obj->linkcolref;
                 echo "</a>";
                 $incidentTitle = $obj->title;
-            }           
+            }
             echo "</td>";
         }
 
@@ -563,7 +563,7 @@ if (mysql_num_rows($result) >=1 )
             {
                 echo "<a href='view_task.php?id={$task->id}' class='info'>";
             }
-            
+
             echo truncate_string($task->name, 100);
             echo "</a>";
 
@@ -591,7 +591,7 @@ if (mysql_num_rows($result) >=1 )
             echo ">";
             if ($startdate > 0)
             {
-                echo date($CONFIG['dateformat_date'],$startdate);
+                echo ldate($CONFIG['dateformat_date'],$startdate);
             }
 
             echo "</td>";
@@ -604,7 +604,7 @@ if (mysql_num_rows($result) >=1 )
             echo ">";
             if ($duedate > 0)
             {
-                echo date($CONFIG['dateformat_date'],$duedate);
+                echo ldate($CONFIG['dateformat_date'],$duedate);
             }
             echo "</td>";
         }
@@ -648,7 +648,7 @@ if (mysql_num_rows($result) >=1 )
             echo "<td>";
             if ($enddate > 0)
             {
-                echo date($CONFIG['dateformat_date'],$enddate);
+                echo ldate($CONFIG['dateformat_date'],$enddate);
             }
 
             echo "</td>";

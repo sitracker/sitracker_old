@@ -8,7 +8,7 @@
 // of the GNU General Public License, incorporated herein by reference.
 //
 //  Author: Ivan Lucas
-//  Notes: These variables are overwritten by config.inc.php and/or webtrack.conf
+//  Notes: These variables are overwritten by config.inc.php and/or webtrack.conf or sit.conf
 
 $CONFIG['application_name'] = 'SiT! Support Incident Tracker';
 $CONFIG['application_shortname'] = 'SiT!';

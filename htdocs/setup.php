@@ -801,7 +801,7 @@ switch ($_REQUEST['action'])
                         echo "<p>SiT! v".number_format($installed_version,2)." is installed and ready.<br /><br /> <a href='index.php' class='button'>Run SiT!</a></p>";
                         if ($_SESSION['userid']==1)
                         {
-                            echo "<p>As administrator you can <a href='{$_SERVER['PHP_SELF']}?action=reconfigure' class='button'>reconfigure</a> SiT!</p>";
+                            echo "<br /><p>As administrator you can <a href='{$_SERVER['PHP_SELF']}?action=reconfigure'>reconfigure</a> SiT!</p>";
                         }
                     }
                 }
