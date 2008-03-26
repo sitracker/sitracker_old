@@ -1161,6 +1161,7 @@ $strWithheld = 'Withheld';
 
 $strXIncidentsLeft = '%s Incidents Left';
 $strXDays = '%s Days';
+$strXHour = '%s Hour';
 $strXHours = '%s Hours';
 $strXMinute = '%s Minute';
 $strXMinutes = '%s Minutes';
