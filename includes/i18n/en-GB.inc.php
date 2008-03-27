@@ -324,6 +324,7 @@ $strEditContract = 'Edit Contract';
 $strEditGlobalSignature = 'Edit Global Signature';
 $strEdited = 'Edited';
 $strEditedBy = 'Edited by %s';
+$strEditEmail = 'Edit email';
 $strEditEscalationPath = 'Edit Escalation Path';
 $strEditEscalationPathFailed = 'Edit Escalation Path Failed';
 $strEditHolidays = 'Edit Holidays';

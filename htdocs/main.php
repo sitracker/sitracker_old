@@ -251,12 +251,6 @@ foreach ($arr AS $a)
 
 echo "</td></tr></table>\n";
 
-// Check users email address
-if (empty($_SESSION['email']) OR !preg_match('/^[A-z0-9][\w.-]*@[A-z0-9][\w\-\.]+\.[A-z0-9]{2,6}$/',$_SESSION['email']))
-{
-    echo "<p class='error'>Please <a href='edit_profile.php'>edit your profile</a> and set a valid email address</p>"; // FIXME i18n
-}
-
 //  Users Login Details
 echo "<div id='userbar'>".sprintf($strLoggedInAs, "<strong>{$sit[0]}</strong>");
 echo " currently <strong>".userstatus_name(user_status($sit[2]))."</strong> and ";

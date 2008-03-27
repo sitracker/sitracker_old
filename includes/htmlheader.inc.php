@@ -238,6 +238,12 @@ if ($noticeaction == 'dismiss_notice')
     }
 }
 
+// Check users email address
+if (empty($_SESSION['email']) OR !preg_match('/^[A-z0-9][\w.-]*@[A-z0-9][\w\-\.]+\.[A-z0-9]{2,6}$/',$_SESSION['email']))
+{
+    echo "<p class='error'>{$strInvalidEmailAddress} - <a href='edit_profile.php'>{$strEditEmail}</a></p>";
+}
+
 
 //display global notices
 if ($sit[0] != '')
