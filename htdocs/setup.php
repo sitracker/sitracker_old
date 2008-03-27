@@ -631,7 +631,7 @@ switch ($_REQUEST['action'])
                             if ($CONFIG['closure_delay'] > 0 AND $CONFIG['closure_delay'] != 554400)
                             {
                                 echo "<p>Inserting value from deprecated config variable <var>closure_delay</var> into scheduler</p>";
-                                $sql = "UPDATE scheduler SET params = '{$CONFIG['closure_delay'}' WHERE action = 'CloseIncidents' LIMIT 1";
+                                $sql = "UPDATE scheduler SET params = '{$CONFIG['closure_delay']}' WHERE action = 'CloseIncidents' LIMIT 1";
                                 mysql_query($sql);
                                 if (mysql_error())
                                 {
