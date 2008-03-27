@@ -237,17 +237,16 @@ if ($noticeaction == 'dismiss_notice')
         if (mysql_error()) trigger_error(mysql_error(),E_USER_WARNING);
     }
 }
-
-// Check users email address
-if (empty($_SESSION['email']) OR !preg_match('/^[A-z0-9][\w.-]*@[A-z0-9][\w\-\.]+\.[A-z0-9]{2,6}$/',$_SESSION['email']))
-{
-    echo "<p class='error'>{$strInvalidEmailAddress} - <a href='edit_profile.php'>{$strEditEmail}</a></p>";
-}
-
-
-//display global notices
 if ($sit[0] != '')
 {
+    // Check users email address
+    if (empty($_SESSION['email']) OR !preg_match('/^[A-z0-9][\w.-]*@[A-z0-9][\w\-\.]+\.[A-z0-9]{2,6}$/',$_SESSION['email'])) 
+    {
+        echo "<p class='error'>{$strInvalidEmailAddress} - <a href='edit_profile.php'>{$strEditEmail}</a></p>";
+    }
+
+
+    //display global notices
     $noticesql = "SELECT * FROM `${GLOBALS['dbNotices']}` ";
     // Don't show more than 20 notices, saftey cap
     $noticesql .= "WHERE userid={$sit[2]} ORDER BY timestamp DESC LIMIT 20"; 

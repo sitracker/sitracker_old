@@ -162,7 +162,8 @@ $CONFIG['journal_loglevel'] = 3;
 // How long should we keep journal entries, entries older than this will be purged (deleted)
 $CONFIG['journal_purge_after'] = 60 * 60 * 24 * 180;  // 180 Days
 
-$CONFIG['logout_url'] = $CONFIG['application_webpath'];
+// When left blank this defaults to $CONFIG['application_webpath'], setting that here will take the value of the default
+$CONFIG['logout_url'] = '';
 
 $CONFIG['error_logfile'] = "{$CONFIG['application_fspath']}logs/sit.log";
 
