@@ -9,21 +9,21 @@
 //
 // Author: Paul Heaney <paulheaney[at]users.sourceforge.net>
 
-@include('../set_include_path.inc.php');
-$permission=67; // Run Reports
+@include ('../set_include_path.inc.php');
+$permission = 67; // Run Reports
 $title='Incidents open/closed by period';
-require('db_connect.inc.php');
-require('functions.inc.php');
+require ('db_connect.inc.php');
+require ('functions.inc.php');
 
 
 // This page requires authentication
-require('auth.inc.php');
+require ('auth.inc.php');
 
-include('htmlheader.inc.php');
-$startdate=strtotime($_REQUEST['startdate']);
-$enddate=strtotime($_REQUEST['enddate']);
+include ('htmlheader.inc.php');
+$startdate = strtotime($_REQUEST['startdate']);
+$enddate = strtotime($_REQUEST['enddate']);
 
-if(empty($startdate))
+if (empty($startdate))
 {
     echo "<h2>$title</h2>";
     echo "<form action='{$_SERVER['PHP_SELF']}' id='incidentsbysoftware' method='post'>";
@@ -43,14 +43,14 @@ if(empty($startdate))
 else
 {
 
-    if($startdate < $enddate)
+    if ($startdate < $enddate)
     {
         // opened
-        $sql = "SELECT id,owner,opened,title FROM incidents ";
+        $sql = "SELECT id, owner, opened, title FROM `{$dbIncidents}` ";
         $sql .= "WHERE opened BETWEEN '{$startdate}' AND '{$enddate}'  ORDER BY opened";
         $result= mysql_query($sql);
 
-        while($incident = mysql_fetch_object($result))
+        while ($incident = mysql_fetch_object($result))
         {
             $stats[date('Y-m-d', $incident->opened)]['date']=date('l d/m/Y', $incident->opened);
             $stats[date('Y-m-d', $incident->opened)][$incident->id]['opened']['id'] = $incident->id;
@@ -61,13 +61,13 @@ else
         }
 
         // opened
-        $sql = "SELECT id,owner,closed,title FROM incidents ";
+        $sql = "SELECT id, owner, closed, title FROM `{$dbIncidents}` ";
         $sql .= "WHERE closed BETWEEN '{$startdate}' AND '{$enddate}'  ORDER BY closed ";
         $result= mysql_query($sql);
 
         //$stats=array();
 
-        while($incident = mysql_fetch_object($result))
+        while ($incident = mysql_fetch_object($result))
         {
             $stats[date('Y-m-d', $incident->closed)]['date']=date('l d/m/Y', $incident->closed);
             $stats[date('Y-m-d', $incident->closed)][$incident->id]['closed']['id'] = $incident->id;
@@ -84,7 +84,7 @@ else
         echo "</pre>";
 */
 
-        foreach($stats AS $day)
+        foreach ($stats AS $day)
         {
             /*
             echo "<pre>";
@@ -97,20 +97,19 @@ else
             $closed=0;
             $owners=array();
             $right='';
-            foreach($day AS $d)
+            foreach ($day AS $d)
             {
-
-                if(is_array($d))
+                if (is_array($d))
                 {
                     /*
                     echo "<pre>";
                     print_r($d);
                     echo "</pre>";
                     */
-                    foreach($d AS $a)
+                    foreach ($d AS $a)
                     {
                         $right .= "<tr><td>".$a['type']."</td><td><a href='../incident_details.php?id=".$a['id']."' style='color: #000000;'>".$a['id']."</td><td>".$a['title']."</a></td><td>".user_realname($a['owner'])."</td></tr>";
-                        if($a['type']=='opened')
+                        if ($a['type']=='opened')
                         {
                             $opened++;
                             $owners[$a['owner']]['owner']=$a['owner'];
@@ -130,15 +129,15 @@ else
             echo "<tr><td>{$strOpened}</td><td>{$opened}</td></tr>";
             echo "<tr><td>{$strClosed}</td><td>{$closed}</td></tr>";
             echo "<table><tr><th>User</th><th>Opened</th><th>Closed</th></tr>";
-            foreach($owners AS $o)
+            foreach ($owners AS $o)
             {
                 echo "<tr>";
                 echo "<td>".user_realname($o['owner'])."</td><td>";
-                if($o['closed']!=0) echo $o['closed'];
+                if ($o['closed']!=0) echo $o['closed'];
                 else echo "0";
 
                 echo "</td><td>";
-                if($o['opened']!=0) echo $o['opened'];
+                if ($o['opened']!=0) echo $o['opened'];
                 else echo "0";
                 echo "</td>";
                 echo "</tr>";
@@ -155,5 +154,5 @@ else
     }
 }
 
-include('htmlfooter.inc.php');
+include ('htmlfooter.inc.php');
 ?>

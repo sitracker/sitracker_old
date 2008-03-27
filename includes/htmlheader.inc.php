@@ -32,6 +32,7 @@ else
 {
     echo "{$CONFIG['application_name']}{$extratitlestring}";
 }
+
 echo "</title>\n";
 echo "<link rel='SHORTCUT ICON' href='{$CONFIG['application_webpath']}images/sit_favicon.png' />\n";
 echo "<style type='text/css'>@import url('{$CONFIG['application_webpath']}styles/webtrack.css');</style>\n";
@@ -44,7 +45,7 @@ else
     $styleid = $CONFIG['default_interface_style'];
 }
 
-$csssql = "SELECT cssurl, iconset FROM interfacestyles WHERE id='{$styleid}'";
+$csssql = "SELECT cssurl, iconset FROM `{$GLOBALS['dbInterfaceStyles']}` WHERE id='{$styleid}'";
 $cssresult = mysql_query($csssql);
 if (mysql_error())trigger_error(mysql_error(),E_USER_WARNING);
 
@@ -183,13 +184,34 @@ if ($sit[0] != '')
         echo "</li>\n";
     }
     echo "</ul>\n\n";
+
+    echo "<script type='text/javascript'>";
+    ?>
+        function jumpto()
+        {
+            incident_details_window(document.jumptoincident.incident.value, 'incident'+document.jumptoincident.incident.value);
+        }
+
+        function clear()
+        {
+            document.jumptoincident.incident.value = "";
+        }
+    <?php
+    echo "</script>";
+
+    echo "<div align='right'>";
+    echo "<form name='jumptoincident' action='' method='post'>";
+    echo "<input type='text' name='incident' id='incident' size='10' value='{$strIncidentNumAbb}' onclick='clear()'/> ";
+    echo "<input type='submit' value='{$strGo}' onclick='jumpto()' />";
+    echo "</form>";
+    echo "</div>";
     echo "</div>\n";
 }
 
 if (!isset($refresh))
 {
     //update last seen (only if this is a page that does not auto-refresh)
-    $lastseensql = "UPDATE LOW_PRIORITY users SET lastseen=NOW() WHERE id='{$_SESSION['userid']}' LIMIT 1";
+    $lastseensql = "UPDATE LOW_PRIORITY `{$GLOBALS['dbUsers']}` SET lastseen=NOW() WHERE id='{$_SESSION['userid']}' LIMIT 1";
     mysql_query($lastseensql);
     if (mysql_error()) trigger_error(mysql_error(), E_USER_WARNING);
 }
@@ -204,13 +226,13 @@ if ($noticeaction == 'dismiss_notice')
 {
     if (is_numeric($noticeid))
     {
-        $sql = "DELETE FROM notices WHERE id={$noticeid} AND userid={$sit[2]}";
+        $sql = "DELETE FROM `{$GLOBALS['dbNotices']}` WHERE id={$noticeid} AND userid={$sit[2]}";
         mysql_query($sql);
         if (mysql_error()) trigger_error(mysql_error(),E_USER_WARNING);
     }
     elseif ($noticeid == 'all')
     {
-        $sql = "DELETE FROM notices WHERE userid={$sit[2]} LIMIT 20"; // only delete 20 max as we only show 20 max
+        $sql = "DELETE FROM `{$GLOBALS['dbNotices']}` WHERE userid={$sit[2]} LIMIT 20"; // only delete 20 max as we only show 20 max
         mysql_query($sql);
         if (mysql_error()) trigger_error(mysql_error(),E_USER_WARNING);
     }
@@ -220,8 +242,9 @@ if ($noticeaction == 'dismiss_notice')
 //display global notices
 if ($sit[0] != '')
 {
-    $noticesql = "SELECT * FROM notices ";
-    $noticesql .= "WHERE userid={$sit[2]} ORDER BY timestamp DESC LIMIT 20"; // Don't show more than 20 notices, saftey cap
+    $noticesql = "SELECT * FROM `${GLOBALS['dbNotices']}` ";
+    // Don't show more than 20 notices, saftey cap
+    $noticesql .= "WHERE userid={$sit[2]} ORDER BY timestamp DESC LIMIT 20"; 
     $noticeresult = mysql_query($noticesql);
     if (mysql_error()) trigger_error(mysql_error(),E_USER_WARNING);
     if (mysql_num_rows($noticeresult) > 0)
@@ -230,10 +253,8 @@ if ($sit[0] != '')
 
         foreach ($keys AS $key)
         {
-            if ($key != 'sit' AND $key != 'SiTsessionID')
+            if ($key != 'noticeid')
             {
-                //$url[]= "{$key}=".$_REQUEST[$key];
-                //$alink .= "&amp;{$key}=".$_REQUEST[$key];
                 $url .= "&amp;{$key}=".$_GET[$key];
             }
         }
@@ -242,92 +263,74 @@ if ($sit[0] != '')
         {
             $notice->text = bbcode($notice->text);
             //check for the notice types
-            if ($notice->type == SIT_UPGRADED_NOTICE)
+            if ($notice->type == WARNING_NOTICE_TYPE)
             {
-                $notice->text = str_replace('$strSitUpgraded', sprintf($strSitUpgraded, $CONFIG['application_shortname'], "v{$application_version} {$application_revision}"), $notice->text);
-            }
-            elseif ($notice->type == WARNING_NOTICE_TYPE)
-            {
-                echo "<div class='warning'><p class='warning'>";
-                echo "<span>(<a href='{$_SERVER[PHP_SELF]}?noticeaction=dismiss_notice&amp;noticeid={$notice->id}{$url}'>{$strDismiss}</a>)</span>";
-                echo $notice->text;
+                $class = 'warning';
             }
             elseif ($notice->type == CRITICAL_NOTICE_TYPE)
             {
                 echo "<div class='error'><p class='error'>";
                 echo $notice->text;
+
                 if($notice->resolutionpage)
                 {
                     $redirpage = $CONFIG['application_webpath'].$notice->resolutionpage;
                 }
             }
-            elseif ($notice->type == OUT_OF_SLA_TYPE OR $notice->type == NEARING_SLA_TYPE)
+            else
             {
-                echo "<div class='error'><p class='warning'>";
-                echo "<span>(<a href='{$_SERVER[PHP_SELF]}?noticeaction=dismiss_notice&amp;noticeid={$notice->id}{$url}'>{$strDismiss}</a>)</span>";
-                echo "{$notice->text}";
-                if (!empty($notice->link))
-                {
-                    echo " - <a href=\"{$notice->link}\">";
-                    if (substr($notice->linktext, 0, 4)=='$str')
-                    {
-                        $v = substr($notice->linktext, 1);
-                        echo $GLOBALS[$v];
-                    }
-                    else
-                    {
-                        echo $notice->linktext;
-                    }
-                    echo "</a>";
-                }
+                $class = 'info';
+            }
+            
+            echo "<div class='{$class}'><p class='info'>";
+            echo "<span>(<a href='{$_SERVER[PHP_SELF]}?noticeaction=dismiss_notice&amp;noticeid={$notice->id}{$url}'>{$strDismiss}</a>)</span>";
+            if (substr($notice->text, 0, 4) == '$str')
+            {
+                $v = substr($notice->text, 1);
+                echo $GLOBALS[$v];
             }
             else
             {
-                echo "<div class='info'><p class='info'>";
-                echo "<span>(<a href='{$_SERVER[PHP_SELF]}?noticeaction=dismiss_notice&amp;noticeid={$notice->id}{$url}'>{$strDismiss}</a>)</span>";
-                if (substr($notice->text, 0, 4) == '$str')
+                echo $notice->text;
+            }
+
+            if (!empty($notice->link))
+            {
+                echo " - <a href='{$notice->link}'>";
+                if (substr($notice->linktext, 0, 4)=='$str')
                 {
-                    $v = substr($notice->text, 1);
+                    $v = substr($notice->linktext, 1);
                     echo $GLOBALS[$v];
                 }
                 else
                 {
-                    echo $notice->text;
+                    echo $notice->linktext;
                 }
-
-                if (!empty($notice->link))
-                {
-                    echo " - <a href='{$notice->link}'>";
-                    if (substr($notice->linktext, 0, 4)=='$str')
-                    {
-                        $v = substr($notice->linktext, 1);
-                        echo $GLOBALS[$v];
-                    }
-                    else
-                    {
-                        echo $notice->linktext;
-                    }
-                    echo "</a>";
-                }
+                echo "</a>";
             }
-            echo "</p></div>";
+        
+        echo "<sub>";
+        echo "<em> ".format_date_friendly(strtotime($notice->timestamp))."</em>";
+        echo "</sub></p></div>";
         }
 
         if (mysql_num_rows($noticeresult) > 1)
         {
-            $keys = array_keys($_REQUEST);
+            //fix the GET keys to stop breaking urls
+            $keys = array_keys($_GET);
 
-            $alink = "{$_SERVER[PHP_SELF]}?noticeaction=dismiss_notice&amp;noticeid=all";
+            $file = $_SERVER[PHP_SELF];
+            $end = "noticeaction=dismiss_notice&amp;noticeid=all";
 
             foreach ($keys AS $key)
             {
                 if ($key != 'sit' AND $key != 'SiTsessionID')
                 {
                     //$url[]= "{$key}=".$_REQUEST[$key];
-                    $alink .= "&amp;{$key}=".$_REQUEST[$key];
+                    $link .= $key."=".$_REQUEST[$key]."&amp;";
                 }
             }
-
+            $alink = $file."?".$link.$end;
             echo "<p align='right' style='padding-right:32px'><a href='{$alink}'>{$strDismissAll}</a></p>";
         }
     }

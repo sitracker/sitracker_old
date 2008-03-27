@@ -11,13 +11,13 @@
 // Authors: Valdemaras Pipiras <info[at]ambernet.lt>
 //          Ivan Lucas <ivanlucas[at]users.sourceforge.net>
 // TODO 3.40 if we user MYSQL 5's relation functions, we can simply delete the user
-@include('set_include_path.inc.php');
-$permission=20;  // Manage users
-require('db_connect.inc.php');
-require('functions.inc.php');
+@include ('set_include_path.inc.php');
+$permission = 20;  // Manage users
+require ('db_connect.inc.php');
+require ('functions.inc.php');
 
 // This page requires authentication
-require('auth.inc.php');
+require ('auth.inc.php');
 
 // External variables
 $userid = cleanvar($_REQUEST['userid']);
@@ -26,32 +26,32 @@ if (!empty($userid))
 {
     $errors=0;
     // Check there are no files linked to this user
-    $sql = "SELECT userid FROM files WHERE userid=$userid LIMIT 1";
+    $sql = "SELECT userid FROM `{$dbFiles}` WHERE userid=$userid LIMIT 1";
     $result = mysql_query($sql);
     if (mysql_num_rows($result)>=1) $errors++;
 
     // check there are no links linked to this product
-    $sql = "SELECT userid FROM links WHERE userid=$userid LIMIT 1";
+    $sql = "SELECT userid FROM `{$dbLinks}` WHERE userid=$userid LIMIT 1";
     $result = mysql_query($sql);
     if (mysql_num_rows($result)>=1) $errors++;
 
     // check there are no notes linked to this product
-    $sql = "SELECT userid FROM notes WHERE userid=$userid LIMIT 1";
+    $sql = "SELECT userid FROM `{$dbNotes}` WHERE userid=$userid LIMIT 1";
     $result = mysql_query($sql);
     if (mysql_num_rows($result)>=1) $errors++;
 
     // Check there is no software linked to this user
-    $sql = "SELECT softwareid FROM usersoftware WHERE userid=$userid LIMIT 1";
+    $sql = "SELECT softwareid FROM `{$dbUserSoftware}` WHERE userid=$userid LIMIT 1";
     $result = mysql_query($sql);
     if (mysql_num_rows($result)>=1) $errors++;
 
     // Check there are no incidents linked to this user
-    $sql = "SELECT id FROM incidents WHERE owner=$userid OR towner=$userid LIMIT 1";
+    $sql = "SELECT id FROM `{$dbIncidents}` WHERE owner=$userid OR towner=$userid LIMIT 1";
     $result = mysql_query($sql);
     if (mysql_num_rows($result)>=1) $errors++;
 
     // Check there are no updates by this user
-    $sql = "SELECT id FROM updates WHERE userid=$userid LIMIT 1";
+    $sql = "SELECT id FROM `{$dbUpdates}` WHERE userid=$userid LIMIT 1";
     $result = mysql_query($sql);
     if (mysql_num_rows($result)>=1) $errors++;
 
@@ -62,12 +62,12 @@ if (!empty($userid))
     if ($errors==0)
     {
         $sql = Array();
-        $sql[] = "DELETE FROM users WHERE id = $userid LIMIT 1";
-        $sql[] = "DELETE FROM holidays WHERE userid = $userid";
-        $sql[] = "DELETE FROM usergroups WHERE userid = $userid";
-        $sql[] = "DELETE FROM userpermissions WHERE userid = $userid";
+        $sql[] = "DELETE FROM `{$dbUsers}` WHERE id = $userid LIMIT 1";
+        $sql[] = "DELETE FROM `{$dbHolidays}` WHERE userid = $userid";
+        $sql[] = "DELETE FROM `{$dbUserGroups}` WHERE userid = $userid";
+        $sql[] = "DELETE FROM `{$dbUserPermissions}` WHERE userid = $userid";
 
-        foreach($sql as $query)
+        foreach ($sql as $query)
         {
             $result = mysql_query($query);
             if (mysql_error()) trigger_error(mysql_error(),E_USER_ERROR);
@@ -78,10 +78,10 @@ if (!empty($userid))
     }
     else
     {
-        include('htmlheader.inc.php');
+        include ('htmlheader.inc.php');
         echo "<p class='error'>{$strCannotDeleteUser}</p>";
         echo "<p align='center'><a href='users.php#{$userid}'>{$strReturnToList}</a></p>";
-        include('htmlfooter.inc.php');
+        include ('htmlfooter.inc.php');
     }
 }
 else

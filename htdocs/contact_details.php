@@ -8,21 +8,20 @@
 // of the GNU General Public License, incorporated herein by reference.
 //
 
-
 // Author: Ivan Lucas <ivanlucas[at]users.sourceforge.net>
 // Created: 24th May 2001
 // Purpose: Show All Contact Details
 // This Page Is Valid XHTML 1.0 Transitional! 27Oct05
 
-@include('set_include_path.inc.php');
-$permission=12;  // view contacts
+@include ('set_include_path.inc.php');
+$permission = 12;  // view contacts
 
-require('db_connect.inc.php');
-require('functions.inc.php');
-$title='Contact Details';
+require ('db_connect.inc.php');
+require ('functions.inc.php');
+$title = 'Contact Details';
 
 // This page requires authentication
-require('auth.inc.php');
+require ('auth.inc.php');
 
 // External variables
 $id = mysql_real_escape_string($_REQUEST['id']);
@@ -37,10 +36,10 @@ if ($output == 'vcard')
     exit;
 }
 
-include('htmlheader.inc.php');
+include ('htmlheader.inc.php');
 
 // Display contacts
-$sql = "SELECT * FROM contacts WHERE id='$id' ";
+$sql = "SELECT * FROM `{$dbContacts}` WHERE id='{$id}' ";
 $contactresult = mysql_query($sql);
 if (mysql_error()) trigger_error("MySQL Query Error ".mysql_error(), E_USER_WARNING);
 while ($contactrow = mysql_fetch_array($contactresult))
@@ -48,7 +47,7 @@ while ($contactrow = mysql_fetch_array($contactresult))
     // Lookup the site address if this contact hasn't got a specific address set
     if ($contactrow['address1'] == '')
     {
-        $sitesql = "SELECT * FROM sites WHERE id='{$contactrow['siteid']}' LIMIT 1";
+        $sitesql = "SELECT * FROM `{$dbSites}` WHERE id='{$contactrow['siteid']}' LIMIT 1";
         $siteresult = mysql_query($sitesql);
         if (mysql_error()) trigger_error("MySQL Query Error ".mysql_error(), E_USER_WARNING);
         $site = mysql_fetch_object($siteresult);
@@ -81,10 +80,6 @@ while ($contactrow = mysql_fetch_array($contactresult))
         echo "<tr><th>{$strTags}:</th><td>{$tags}</td></tr>\n";
     }
 
-    // Flags are deprecated as of v3.30 in favour of tags - INL
-    // echo "<tr><th>Flags:</th><td>";
-    // print_contact_flags($id);
-    //echo "</td></tr>";
     echo "<tr><th>{$strJobTitle}:</th><td>{$contactrow['jobtitle']}</td></tr>\n";
     echo "<tr><th>{$strSite}:</th><td>";
     echo "<a href='site_details.php?id={$contactrow['siteid']}'>";
@@ -200,15 +195,6 @@ while ($contactrow = mysql_fetch_array($contactresult))
         echo "</td></tr>\n";
     }
 
-//      DEPRECATED as of v3.30 in favour of Notify contacts (see above)
-//     $contact_manager=contact_manager_email($id);
-//     if ($contact_manager != '')
-//     {
-//         echo "<tr><th>Managers Email:</th><td>";
-//         echo contact_manager_email($id);
-//         echo "</td></tr>";
-//     }
-
     plugin_do('contact_details');
 
     if ($contactrow['timestamp_modified'] > 0)
@@ -230,11 +216,10 @@ while ($contactrow = mysql_fetch_array($contactresult))
     if (user_permission($sit[2],30)) // view supported products
     {
         echo "<h4>{$strContracts}:</h4>";
-        $sql  = "SELECT supportcontacts.maintenanceid AS maintenanceid, maintenance.product, products.name AS productname, ";
-        $sql .= "maintenance.expirydate, maintenance.term ";
-        $sql .= "FROM supportcontacts, maintenance, products ";
-        $sql .= "WHERE supportcontacts.maintenanceid=maintenance.id ";
-        $sql .= "AND maintenance.product=products.id AND supportcontacts.contactid='{$id}' ";
+        $sql  = "SELECT sc.maintenanceid AS maintenanceid, m.product, p.name AS productname, ";
+        $sql .= "m.expirydate, m.term ";
+        $sql .= "FROM `{$dbSupportContacts}` AS sc, `{$dbMaintenance}` AS m, `{$dbProducts}` AS p ";
+        $sql .= "WHERE sc.maintenanceid=m.id AND m.product=p.id AND sc.contactid='$id' ";
         $result = mysql_query($sql);
         if (mysql_error()) trigger_error("MySQL Query Error ".mysql_error(), E_USER_ERROR);
         if (mysql_num_rows($result)>0)
@@ -261,7 +246,7 @@ while ($contactrow = mysql_fetch_array($contactresult))
                 echo "<tr><td class='$shade'>";
                 echo "<img src='{$CONFIG['application_webpath']}images/icons/{$iconset}/16x16/contract.png' width='16' height='16' alt='' /> ";
                 echo "<a href='contract_details.php?id={$supportedrow['maintenanceid']}'>{$strContract}: {$supportedrow['maintenanceid']}</a></td>";
-                echo "<td class='$shade'>".$supportedrow['productname']."</td>";
+                echo "<td class='$shade'>{$supportedrow['productname']}</td>";
                 echo "<td class='$shade'>".ldate($CONFIG['dateformat_date'], $supportedrow['expirydate']);
                 if ($supportedrow['term'] == 'yes')
                 {
@@ -290,5 +275,5 @@ while ($contactrow = mysql_fetch_array($contactresult))
 }
 mysql_free_result($contactresult);
 
-include('htmlfooter.inc.php');
+include ('htmlfooter.inc.php');
 ?>

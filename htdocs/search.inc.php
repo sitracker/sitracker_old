@@ -49,7 +49,6 @@ if ($searchmode != 'related')
 // echo "<table align='center'>";
 // echo "<tr><th>OTHER SEARCHES</th></tr>";
 // echo "<tr><td><a href='advanced_search_incidents.php'>Search for an Incident</a> (Advanced)</td></tr>";
-// // echo "<tr><td class='shade2' width=350><a href='search_contacts.php'>Search for a Contact</a></td></tr>";
 // echo "<tr><td><a href='search_renewals.php'>Search Contract Renewals</a></td></tr>";
 // // #echo "<tr><td class='shade2' width=350><a href='search_sites.php'>Search for a Site</a></td></tr>";
 // // echo "<tr><td class='shade2' width=350><a href='search_maintenance.php'>Search for a Maintenance Contract</a></td></tr>";
@@ -75,6 +74,7 @@ function search_highlight($x,$var)
     {
         $xtemp = "";
         $i=0;
+
         while ($i < strlen($x))
         {
             if ((($i + strlen($var)) <= strlen($x)) && (strcasecmp($var, substr($x, $i, strlen($var))) == 0))
@@ -201,7 +201,7 @@ function search_score_adjust($sterms, $string)
     $score_modifier=0;
     if ($string != 'AND' && $string!='OR' && $string != 'NOT')
     {
-        foreach($sterms AS $sterm)
+        foreach ($sterms AS $sterm)
         {
             $positions=string_find_all($string, $sterm);
             if (count($positions) >0 ) $score_modifier+=$numpositions;
@@ -212,7 +212,7 @@ function search_score_adjust($sterms, $string)
 
 // Remove some characters
 // '\\"'
-$removechars=array(',',';',"'");
+$removechars = array(',',';',"'");
 $search_string = str_replace($removechars, '', $search_string);
 
 if (!empty($search_string))
@@ -228,13 +228,15 @@ if (!empty($search_string))
         case 'all':
             // All search not supported now, so just do incidents instead
         case 'incidents':
-            $sql = "SELECT * FROM incidents WHERE ";
+            $sql = "SELECT * FROM `{$dbIncidents}` WHERE ";
             if (is_numeric($sterms[0])) $sql .= search_build_query('id', $sterms)."OR ";
             $sql .= search_build_query('title', $sterms);
+
             if (!empty($software) AND $software != '0')
             {
                 $sql .= "AND softwareid = {$software}";
             }
+
 //             if ($CONFIG['debug'])  echo "<pre>$sql</pre>";
             $result = mysql_query($sql);
             if (mysql_error()) trigger_error(mysql_error(),E_USER_WARNING);
@@ -273,10 +275,11 @@ if (!empty($search_string))
             if ($searchmode != 'related')
             {
             // Incident updates
-                $sql = "SELECT DISTINCT incidents.id AS incidentid, incidents.title, updates.bodytext, updates.timestamp, incidents.opened, incidents.closed FROM incidents,updates WHERE ";
-                $sql .= "updates.incidentid = incidents.id AND (";
-                $sql .= search_build_query('updates.bodytext', $sterms);
-                $sql .= ") GROUP BY incidents.id";
+                $sql = "SELECT DISTINCT i.id AS incidentid, i.title, u.bodytext, u.timestamp, i.opened, i.closed ";
+                $sql .= "FROM `{$dbIncidents}` AS i, `{$dbUpdates}` AS u WHERE ";
+                $sql .= "u.incidentid = i.id AND (";
+                $sql .= search_build_query('u.bodytext', $sterms);
+                $sql .= ") GROUP BY i.id";
                 $result = mysql_query($sql);
 //                 if ($CONFIG['debug']) echo $sql;
                 if (mysql_error()) trigger_error(mysql_error(),E_USER_WARNING);
@@ -301,7 +304,7 @@ if (!empty($search_string))
         break;
 
         case 'customers':
-            $sql = "SELECT *, contacts.id AS contactid FROM contacts WHERE ";
+            $sql = "SELECT *, c.id AS contactid FROM `{$dbContacts}` AS c WHERE ";
             $sql .= search_build_query("CONCAT(forenames,' ',surname)", $sterms);
 //             echo "<pre>$sql</pre>";
             $result = mysql_query($sql);
@@ -319,7 +322,7 @@ if (!empty($search_string))
             }
 
             // Sites
-            $sql = "SELECT * FROM sites WHERE ";
+            $sql = "SELECT * FROM `{$dbSites}` WHERE ";
             $sql .= search_build_query('name', $sterms);
 //             echo "<pre>$sql</pre>";
             $result = mysql_query($sql);
@@ -338,8 +341,8 @@ if (!empty($search_string))
             break;
 
         case 'maintenance':
-            $sql = "SELECT *,maintenance.id AS maintid FROM maintenance,sites WHERE maintenance.site=sites.id AND (";
-            $sql .= search_build_query('sites.name', $sterms);
+            $sql = "SELECT *, m.id AS maintid FROM `{$dbMaintenance}` AS m, `{$dbSites}` AS s WHERE m.site = s.id AND (";
+            $sql .= search_build_query('s.name', $sterms);
             $sql .= ")";
 //             echo "<pre>$sql</pre>";
             $result = mysql_query($sql);
@@ -359,7 +362,7 @@ if (!empty($search_string))
             break;
 
         case 'knowledgebase':
-            $sql = "SELECT * FROM kbarticles WHERE ";
+            $sql = "SELECT * FROM `{$dbKBArticles}` WHERE ";
             $sql .= search_build_query('title', $sterms);
 //             echo "<pre>$sql</pre>";
             $result = mysql_query($sql);
@@ -408,7 +411,7 @@ if (!empty($search_string))
         echo colheader('date', $strDate, $sort, $order, $filter);
         echo "</tr>";
         $shade='shade1';
-        foreach($srch_results AS $sresult)
+        foreach ($srch_results AS $sresult)
         {
             $type = explode('-',$sresult['ref']);
             $type = $type[0];
@@ -438,7 +441,7 @@ if (!empty($search_string))
             if (is_array($sresult['extra']))
             {
                 echo "<span>";
-                foreach($sresult['extra'] AS $extrakey => $extravalue)
+                foreach ($sresult['extra'] AS $extrakey => $extravalue)
                 {
                     echo "<strong>".ucfirst($extrakey)."</strong>: $extravalue<br />\n";
                 }

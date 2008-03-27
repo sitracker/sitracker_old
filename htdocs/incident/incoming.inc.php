@@ -18,17 +18,17 @@ if (realpath(__FILE__) == realpath($_SERVER['SCRIPT_FILENAME']))
 }
 $incomingid = cleanvar($_REQUEST['id']);
 
-if($_REQUEST['action'] == "updatereason")
+if ($_REQUEST['action'] == "updatereason")
 {
     $newreason = cleanvar($_REQUEST['newreason']);
-    $update = "UPDATE tempincoming SET reason='{$newreason}' WHERE id={$incomingid}";
+    $update = "UPDATE `{$dbTempIncoming}` SET reason='{$newreason}' WHERE id={$incomingid}";
     $result = mysql_query($update);
     if (mysql_error()) trigger_error(mysql_error(),E_USER_ERROR);
     unset($result);
 }
 
 $action = cleanvar($_REQUEST['action']);
-$sql = "SELECT * FROM tempincoming WHERE id='{$incomingid}' LIMIT 1";
+$sql = "SELECT * FROM `{$dbTempIncoming}` WHERE id='{$incomingid}' LIMIT 1";
 $result = mysql_query($sql);
 if (mysql_error()) trigger_error(mysql_error(),E_USER_ERROR);
 if (mysql_num_rows($result) > 0)
@@ -47,17 +47,17 @@ if (mysql_num_rows($result) > 0)
     elseif ($incoming->locked != $sit[2])
     {
         $lockedby = $incoming->locked;
-        $lockedbysql = "SELECT realname FROM users WHERE id={$lockedby}";
+        $lockedbysql = "SELECT realname FROM `{$dbUsers}` WHERE id={$lockedby}";
         $lockedbyresult = mysql_query($lockedbysql);
         if (mysql_error()) trigger_error("MySQL Query Error ".mysql_error(), E_USER_ERROR);
-        while($row = mysql_fetch_object($lockedbyresult))
+        while ($row = mysql_fetch_object($lockedbyresult))
             $lockedbyname = $row->realname;
     }
     else
         $lockedbyname = "you";
 
     echo "<div class='detailinfo'>";
-    if($lockedbyname == "you")
+    if ($lockedbyname == "you")
     {
         echo "<div class='detaildate'>
                 <form method='post' action='{$_SERVER['PHP_SELF']}?id={$incomingid}&win=incomingview&action=updatereason'>
@@ -75,7 +75,7 @@ if (mysql_num_rows($result) > 0)
     echo "<img src='{$CONFIG['application_webpath']}images/icons/{$iconset}/16x16/locked.png' alt='Locked' /> Locked by {$lockedbyname}</div>";
 
     //echo "<pre>".print_r($incoming,true)."</pre>";
-    $usql = "SELECT * FROM updates WHERE id='{$incoming->updateid}'";
+    $usql = "SELECT * FROM `{$dbUpdates}` WHERE id='{$incoming->updateid}'";
     $uresult = mysql_query($usql);
     while ($update = mysql_fetch_object($uresult))
     {

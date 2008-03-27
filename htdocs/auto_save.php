@@ -9,13 +9,13 @@
 //
 // Author: Paul Heaney <paulheaney[at]users.sourceforge.net>
 
-@include('set_include_path.inc.php');
-$permission=0; // not required
-require('db_connect.inc.php');
-require('functions.inc.php');
+@include ('set_include_path.inc.php');
+$permission = 0; // not required
+require ('db_connect.inc.php');
+require ('functions.inc.php');
 
 // This page requires authentication
-require('auth.inc.php');
+require ('auth.inc.php');
 
 $userid = cleanvar($_REQUEST['userid']);
 $incidentid = cleanvar($_REQUEST['incidentid']);
@@ -24,15 +24,15 @@ $draftid = cleanvar($_REQUEST['draftid']);
 $meta = cleanvar($_REQUEST['meta']);
 $content = cleanvar($_REQUEST['content']);
 
-if($userid == $_SESSION['userid'])
+if ($userid == $_SESSION['userid'])
 {
-    if($draftid == -1)
+    if ($draftid == -1)
     {
-        $sql = "INSERT INTO drafts (userid,incidentid,type,meta,content,lastupdate) VALUES ('{$userid}','{$incidentid}','{$type}','{$meta}','{$content}','{$now}')";
+        $sql = "INSERT INTO `{$dbDrafts}` (userid,incidentid,type,meta,content,lastupdate) VALUES ('{$userid}','{$incidentid}','{$type}','{$meta}','{$content}','{$now}')";
     }
     else
     {
-        $sql = "UPDATE drafts SET content = '{$content}', meta = '{$meta}', lastupdate = '{$now}' WHERE id = {$draftid}";
+        $sql = "UPDATE `{$dbDrafts}` SET content = '{$content}', meta = '{$meta}', lastupdate = '{$now}' WHERE id = {$draftid}";
     }
     $result = mysql_query($sql);
     if (mysql_error()) trigger_error("MySQL Query Error ".mysql_error(), E_USER_ERROR);

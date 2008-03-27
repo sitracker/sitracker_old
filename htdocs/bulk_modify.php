@@ -9,16 +9,16 @@
 //
 // Author: Paul Heaney <paulheaney[at]users.sourceforge.net>
 
-@include('set_include_path.inc.php');
-$permission=7; // Edit Incidents
+@include ('set_include_path.inc.php');
+$permission = 7; // Edit Incidents
 
-require('db_connect.inc.php');
-require('functions.inc.php');
+require ('db_connect.inc.php');
+require ('functions.inc.php');
 
 // This page requires authentication
-require('auth.inc.php');
+require ('auth.inc.php');
 
-include('htmlheader.inc.php');
+include ('htmlheader.inc.php');
 
 $action = cleanvar($_REQUEST['action']);
 
@@ -27,7 +27,7 @@ $action = cleanvar($_REQUEST['action']);
         case 'external_esc': //show external escalation modification page
             echo "<h2>{$strBulkModify}: {$strExternalEngineersName}</h2>";
             $sql = "SELECT distinct(externalemail), externalengineer ";
-            $sql .= "FROM `incidents` WHERE closed = '0' AND externalemail!=''";
+            $sql .= "FROM `{$dbIncidents}` WHERE closed = '0' AND externalemail!=''";
 
             $result = mysql_query($sql);
             if (mysql_error()) trigger_error(mysql_error(),E_USER_ERROR);
@@ -73,7 +73,7 @@ External email:  -&gt; <b>foo@pheaney.co.uk</b>
 
             //list incidents with this old email address so we can update them
 
-            $sql = "SELECT id FROM incidents WHERE closed = '0' AND externalemail = '".$old_email_address."'";
+            $sql = "SELECT id FROM `{$dbIncidents}` WHERE closed = '0' AND externalemail = '".$old_email_address."'";
             $result = mysql_query($sql);
             if (mysql_error()) trigger_error(mysql_error(),E_USER_ERROR);
 
@@ -81,14 +81,14 @@ External email:  -&gt; <b>foo@pheaney.co.uk</b>
             {
                 $bodytext = "{$strExternalEngineer}: ".$old_external_engineer." -&gt; [b]". $new_extenal_engineer."[/b]\n";
                 $bodytext .= "{$strExternalEmail}: ".$old_email_address." -&gt; [b]".$new_external_email."[/b]\n<hr>";
-                $sql  = "INSERT INTO updates (incidentid, userid, type, bodytext, timestamp) ";
+                $sql  = "INSERT INTO `{$dbUpdates}` (incidentid, userid, type, bodytext, timestamp) ";
                 $sql .= "VALUES ('".$row['id']."', '".$sit[2]."', 'editing', '$bodytext', '".time()."')";
                 $result = mysql_query($sql);
                 if (mysql_error()) trigger_error("MySQL Query Error ".mysql_error(), E_USER_ERROR);
             }
 
 
-            $sql = "UPDATE incidents SET externalengineer = '{$new_extenal_engineer}', externalemail = '{$new_external_email}' ";
+            $sql = "UPDATE `{$dbIncidents}` SET externalengineer = '{$new_extenal_engineer}', externalemail = '{$new_external_email}' ";
             $sql .= " WHERE externalemail = '{$old_email_address}' AND closed = '0'";
             $result = mysql_query($sql);
             if (mysql_error()) trigger_error(mysql_error(),E_USER_ERROR);
@@ -100,6 +100,6 @@ External email:  -&gt; <b>foo@pheaney.co.uk</b>
     }
 
 
-include('htmlfooter.inc.php');
+include ('htmlfooter.inc.php');
 
 ?>

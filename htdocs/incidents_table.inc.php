@@ -20,38 +20,38 @@ if (realpath(__FILE__) == realpath($_SERVER['SCRIPT_FILENAME']))
 
 if ($CONFIG['debug']) echo "<!-- Support Incidents Table -->";
 
-if(empty($incidents_minimal)) echo "<table align='center' style='width:95%;'>";
+if (empty($incidents_minimal)) echo "<table align='center' style='width:95%;'>";
 else echo  "<table align='center' style='width:99%;'>";
 
-if(!empty($incidents_minimal)) echo "<col width='15%'></col>";
+if (!empty($incidents_minimal)) echo "<col width='15%'></col>";
 else echo "<col width='10%'></col>";
-if(!empty($incidents_minimal)) echo "<col width='30%'></col>";
+if (!empty($incidents_minimal)) echo "<col width='30%'></col>";
 else echo "<col width='23%'></col>";
-if(!empty($incidents_minimal)) echo "<col width='23%'></col>";
+if (!empty($incidents_minimal)) echo "<col width='23%'></col>";
 else echo "<col width='17%'></col>";
-if(!empty($incidents_minimal)) echo "<col width='7%'></col>";
+if (!empty($incidents_minimal)) echo "<col width='7%'></col>";
 else echo "<col width='7%'></col>";
-if(empty($incidents_minimal)) echo "<col width='10%'></col>";
-if(!empty($incidents_minimal)) echo "<col width='30%'></col>";
+if (empty($incidents_minimal)) echo "<col width='10%'></col>";
+if (!empty($incidents_minimal)) echo "<col width='30%'></col>";
 else echo "<col width='15%'></col>";
-if(!empty($incidents_minimal)) echo "<col width='15%'></col>";
+if (!empty($incidents_minimal)) echo "<col width='15%'></col>";
 else echo "<col width='10%'></col>";
-if(empty($incidents_minimal)) echo "<col width='10%'></col>";
-if(empty($incidents_minimal)) echo "<col width='8%'></col>";
+if (empty($incidents_minimal)) echo "<col width='10%'></col>";
+if (empty($incidents_minimal)) echo "<col width='8%'></col>";
 
 echo "<tr>";
 
-$filter=array('queue' => $queue,
-              'user' => $user,
-              'type' => $type);
+$filter = array('queue' => $queue,
+                'user' => $user,
+                'type' => $type);
 echo colheader('id',$strID,$sort, $order, $filter);
 echo colheader('title',$strTitle,$sort, $order, $filter);
 echo colheader('contact',$strContact,$sort, $order, $filter);
 echo colheader('priority',$strPriority,$sort, $order, $filter);
-if(empty($incidents_minimal)) echo colheader('status',$strStatus,$sort, $order, $filter);
+if (empty($incidents_minimal)) echo colheader('status',$strStatus,$sort, $order, $filter);
 echo colheader('lastupdated',$strLastUpdated,$sort, $order, $filter);
-if(empty($incidents_minimal)) echo colheader('nextaction',$strSLATarget,$sort, $order, $filter);
-if(empty($incidents_minimal)) echo colheader('duration',$strInfo,$sort, $order, $filter);
+if (empty($incidents_minimal)) echo colheader('nextaction',$strSLATarget,$sort, $order, $filter);
+if (empty($incidents_minimal)) echo colheader('duration',$strInfo,$sort, $order, $filter);
 echo "</tr>";
 // Display the Support Incidents Themselves
 $shade = 0;
@@ -81,7 +81,7 @@ while ($incidents = mysql_fetch_array($result))
     if ($incidents['lastupdated'] > $now - 300)
     {
         $when = sprintf($strAgo, format_seconds($now - $incidents['lastupdated']));
-        if($when == 0) $when = $strJustNow;
+        if ($when == 0) $when = $strJustNow;
         $updated = "<em style='color: #640000; font-weight: bolder;'>{$when}</em>";
     }
     elseif ($incidents['lastupdated'] > $now - 1800)
@@ -114,7 +114,7 @@ while ($incidents = mysql_fetch_array($result))
     $tag = $incidents['servicelevel'];
     if ($tag=='') $tag = servicelevel_id2tag(maintenance_servicelevel($incidents['maintenanceid']));
 
-    $slsql = "SELECT * FROM servicelevels WHERE tag='{$tag}' AND priority='{$incidents['priority']}' ";
+    $slsql = "SELECT * FROM `{$dbServiceLevels}` WHERE tag='{$tag}' AND priority='{$incidents['priority']}' ";
     $slresult = mysql_query($slsql);
     if (mysql_error()) trigger_error("mysql query error ".mysql_error(), E_USER_ERROR);
     $servicelevel = mysql_fetch_object($slresult);
@@ -160,7 +160,7 @@ while ($incidents = mysql_fetch_array($result))
 
     // ======= Row Colors / Shading =======
     // Define Row Shading lowest to highest priority so that unimportant colors are overwritten by important ones
-    switch($queue)
+    switch ($queue)
     {
         case 1: // Action Needed
             $class='shade2';
@@ -286,7 +286,7 @@ while ($incidents = mysql_fetch_array($result))
     }
     echo "</td>\n";
 
-    if(empty($incidents_minimal))
+    if (empty($incidents_minimal))
     {
         echo "<td align='center'>";
         if ($incidents['status'] == 5 AND $incidents['towner'] == $user)
@@ -307,9 +307,9 @@ while ($incidents = mysql_fetch_array($result))
     }
     echo "<td align='center'>";
     echo "{$updated}";
-    if(empty($incidents_minimal)) echo "<br />by {$update_user}";
+    if (empty($incidents_minimal)) echo "<br />by {$update_user}";
 
-    if(empty($incidents_minimal))
+    if (empty($incidents_minimal))
     {
         if ($incidents['towner'] > 0 AND $incidents['towner'] != $user)
         {
@@ -322,7 +322,7 @@ while ($incidents = mysql_fetch_array($result))
     }
     echo "</td>\n";
 
-    if(empty($incidents_minimal))
+    if (empty($incidents_minimal))
     {
         echo "<td align='center' title='{$explain}'>";
         // Next Action
@@ -359,7 +359,7 @@ while ($incidents = mysql_fetch_array($result))
     ##if ($update_nextaction!=target_type_name($target->type))
     ##  echo "$update_nextaction";
     ##if (!empty($timetonextactionstring)) echo "<br />$timetonextaction_string";
-    if(empty($incidents_minimal))
+    if (empty($incidents_minimal))
     {
         // Final column
         if ($reviewremain>0 && $reviewremain<=2400)
@@ -391,6 +391,7 @@ while ($incidents = mysql_fetch_array($result))
     echo "</tr>\n";
 }
 echo "</table>\n\n";
+
 if(empty($incidents_minimal) && $user != 'all')
 
 if($rowcount != 1)
@@ -401,5 +402,6 @@ else
 {
     echo "<p align='center'>".sprintf($strSingleIncident, $rowcount)."</p>";
 }
+
 if ($CONFIG['debug']) echo "<!-- End of Support Incidents Table -->\n";
 ?>

@@ -10,13 +10,13 @@
 
 // Author: Ivan Lucas <ivanlucas[at]users.sourceforge.net>
 
-@include('set_include_path.inc.php');
-$permission=56; // Add Software
+@include ('set_include_path.inc.php');
+$permission = 56; // Add Software
 
-require('db_connect.inc.php');
-require('functions.inc.php');
+require ('db_connect.inc.php');
+require ('functions.inc.php');
 // This page requires authentication
-require('auth.inc.php');
+require ('auth.inc.php');
 
 // External variables
 $id = cleanvar($_REQUEST['id']);
@@ -26,11 +26,11 @@ if (empty($action) OR $action=='edit')
 {
     $title = $strEditSkill;
     // Show add product form
-    include('htmlheader.inc.php');
+    include ('htmlheader.inc.php');
 
     echo "<h2><img src='{$CONFIG['application_webpath']}images/icons/{$iconset}/32x32/skill.png' width='32' height='32' alt='' /> ";
     echo "{$title}</h2>";
-    $sql = "SELECT * FROM software WHERE id='$id' LIMIT 1";
+    $sql = "SELECT * FROM `{$dbSoftware}` WHERE id='$id' LIMIT 1";
     $result = mysql_query($sql);
     if (mysql_error()) trigger_error(mysql_error(),E_USER_ERROR);
     while ($software = mysql_fetch_object($result))
@@ -66,34 +66,34 @@ if (empty($action) OR $action=='edit')
     echo "<p align='center'><input name='submit' type='submit' value='{$strSave}' /></p>";
     echo "</form>\n";
     echo "<p align='center'><a href='products.php'>{$strReturnWithoutSaving}</a></p>";
-    include('htmlfooter.inc.php');
+    include ('htmlfooter.inc.php');
 }
-elseif($action=='delete')
+elseif ($action=='delete')
 {
     // Delete
     // First check there are no incidents using this software
-    $sql = "SELECT count(id) FROM incidents WHERE softwareid='$id'";
+    $sql = "SELECT count(id) FROM `{$dbIncidents}` WHERE softwareid='$id'";
     $result = mysql_query($sql);
     if (mysql_error()) trigger_error(mysql_error(),E_USER_ERROR);
     list($countincidents) = mysql_fetch_row($result);
     if ($countincidents >=1)
     {
-        include('htmlheader.inc.php');
+        include ('htmlheader.inc.php');
         echo "<p class='error'>Sorry, this skill cannot be deleted because it has been associated with one or more incidents</p>"; // FIXME i18n
         echo "<p align='center'><a href='products.php?display=skills'>{$strReturnToProductList}</a></p>";
-        include('htmlfooter.inc.php');
+        include ('htmlfooter.inc.php');
     }
     else
     {
-        $sql = "DELETE FROM software WHERE id='$id'";
+        $sql = "DELETE FROM `{$dbSoftware}` WHERE id='$id'";
         mysql_query($sql);
         if (mysql_error()) trigger_error(mysql_error(),E_USER_ERROR);
 
-        $sql = "DELETE FROM softwareproducts WHERE softwareid='$id'";
+        $sql = "DELETE FROM `{$dbSoftwareProducts}` WHERE softwareid='$id'";
         mysql_query($sql);
         if (mysql_error()) trigger_error(mysql_error(),E_USER_ERROR);
 
-        $sql = "DELETE FROM usersoftware WHERE softwareid='$id'";
+        $sql = "DELETE FROM `{$dbUserSoftware}` WHERE softwareid='$id'";
         mysql_query($sql);
         if (mysql_error()) trigger_error(mysql_error(),E_USER_ERROR);
 
@@ -141,9 +141,9 @@ else
     }
     else
     {
-        include('htmlheader.inc.php');
+        include ('htmlheader.inc.php');
         echo $errors_string;
-        include('htmlfooter.inc.php');
+        include ('htmlfooter.inc.php');
     }
 }
 ?>

@@ -10,21 +10,21 @@
 // Author: Ivan Lucas <ivanlucas[at]users.sourceforge.net>
 // This Page Is Valid XHTML 1.0 Transitional!  31Oct05
 
-@include('set_include_path.inc.php');
-$permission=14; // View Users
+@include ('set_include_path.inc.php');
+$permission = 14; // View Users
 $title = "User Skills";
-require('db_connect.inc.php');
-require('functions.inc.php');
+require ('db_connect.inc.php');
+require ('functions.inc.php');
 
 // This page requires authentication
-require('auth.inc.php');
+require ('auth.inc.php');
 
 // External Variables
 $sort = cleanvar($_REQUEST['sort']);
 
-include('htmlheader.inc.php');
+include ('htmlheader.inc.php');
 
-$sql  = "SELECT * FROM users WHERE status!=0";  // status=0 means account disabled
+$sql  = "SELECT * FROM `{$dbUsers}` WHERE status!=0";  // status=0 means account disabled
 
 // sort users by realname by default
 if (empty($sort) || $sort == "realname")  $sql .= " ORDER BY realname ASC";
@@ -58,7 +58,7 @@ while ($users = mysql_fetch_array($result))
     echo "</td></tr>\n";
     echo "<tr>";
     echo "<td class='$class'>";
-    $ssql = "SELECT * FROM usersoftware, software WHERE usersoftware.softwareid = software.id AND usersoftware.userid='{$users['id']}' ORDER BY software.name ";
+    $ssql = "SELECT * FROM `{$dbUserSoftware}` AS us, `{$dbSoftware}` AS s WHERE us.softwareid = s.id AND us.userid='{$users['id']}' ORDER BY s.name ";
     $sresult = mysql_query($ssql);
     $countskills=mysql_num_rows($sresult);
     $nobackup=0;
@@ -97,5 +97,5 @@ echo "</table>\n";
 // free result and disconnect
 mysql_free_result($result);
 
-include('htmlfooter.inc.php');
+include ('htmlfooter.inc.php');
 ?>

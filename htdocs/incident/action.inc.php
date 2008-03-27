@@ -112,7 +112,7 @@ if ($_REQUEST['action'] != 'doit')
     // Do whatever
 
     // Cleanup
-    foreach($_SESSION as $key => $value )
+    foreach ($_SESSION as $key => $value )
         if (strncmp($key,$incidentid,5) === 0) unset($_SESSION['key']);
 }
 
@@ -148,8 +148,8 @@ if (!isset($_SESSION[$incidentid.'cs']))
       $cs |= 16;
 
     $sql  = "SELECT p.vendorid ";
-    $sql .= "FROM maintenance m, products p ";
-    $sql .= "WHERE (m.id='{$incident->maintenanceid}' AND m.product=p.id) ";
+    $sql .= "FROM `{$dbMaintenance}` AS m, `{$dbProducts}` AS p ";
+    $sql .= "WHERE (m.id='{$incident->maintenanceid}' AND m.product = p.id) ";
 
     $result = mysql_query($sql);
     if (mysql_error()) trigger_error("MySQL Query Error ".mysql_error(), E_USER_ERROR);

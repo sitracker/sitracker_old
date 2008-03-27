@@ -47,6 +47,8 @@ $hmenu[1020] = array (10=> array ( 'perm'=> 4, 'name'=> $strMyProfile, 'url'=>"{
                       50=> array ( 'perm'=> 4, 'name'=> $strMyDashboard, 'url'=>"{$CONFIG['application_webpath']}manage_user_dashboard.php")
 );
 // configure
+
+// TODO v3.40 set a permission for triggers
 if (!is_array($hmenu[1030])) $hmenu[1030] = array();
 $hmenu[1030] = array_merge(array (10=> array ( 'perm'=> 22, 'name'=> $strUsers, 'url'=>"{$CONFIG['application_webpath']}manage_users.php", 'submenu'=>"103010"),
                       20=> array ( 'perm'=> 0, 'name'=> $strEmailSettings, 'url'=>"", 'submenu'=>"103020"),
@@ -57,7 +59,9 @@ $hmenu[1030] = array_merge(array (10=> array ( 'perm'=> 22, 'name'=> $strUsers, 
                       70=> array ( 'perm'=> 64, 'name'=> $strEscalationPaths, 'url'=>"{$CONFIG['application_webpath']}escalation_paths.php"),
                       80=> array ( 'perm'=> 66, 'name'=> $strManageDashboardComponents, 'url'=>"{$CONFIG['application_webpath']}manage_dashboard.php"),
                       90=> array ( 'perm'=> 69, 'name'=> $strNotices, 'url'=>"{$CONFIG['application_webpath']}notices.php"),
-                      100=> array ( 'perm'=> 49, 'name'=> $strFeedbackForms, 'url'=>"", 'submenu'=>"103090")
+                      100=> array ( 'perm'=> 22, 'name'=> $strTriggers, 'url'=>"{$CONFIG['application_webpath']}triggers.php"),
+                      110=> array ( 'perm'=> 22, 'name'=> $strScheduler, 'url'=>"{$CONFIG['application_webpath']}scheduler.php"),
+                      120=> array ( 'perm'=> 49, 'name'=> $strFeedbackForms, 'url'=>"", 'submenu'=>"103090")
 ), $hmenu[1030]);
 if (!is_array($hmenu[103010])) $hmenu[103010] = array();
 $hmenu[103010] = array_merge(array (10=> array ( 'perm'=> 22, 'name'=> $strManageUsers, 'url'=>"{$CONFIG['application_webpath']}manage_users.php"),
@@ -68,7 +72,7 @@ $hmenu[103010] = array_merge(array (10=> array ( 'perm'=> 22, 'name'=> $strManag
 ), $hmenu[103010]);
 if (!is_array($hmenu[103020])) $hmenu[103020] = array();
 $hmenu[103020] = array_merge(array (10=> array ( 'perm'=> 16, 'name'=> $strAddTemplate, 'url'=>"{$CONFIG['application_webpath']}add_emailtype.php?action=showform"),
-                        20=> array ( 'perm'=> 17, 'name'=> $strEditTemplate, 'url'=>"{$CONFIG['application_webpath']}edit_emailtype.php?action=showform"),
+                        20=> array ( 'perm'=> 17, 'name'=> $strEditTemplate, 'url'=>"{$CONFIG['application_webpath']}templates.php"),
                         30=> array ( 'perm'=> 43, 'name'=> $strGlobalSignature, 'url'=>"{$CONFIG['application_webpath']}edit_global_signature.php")
 ), $hmenu[103020]);
 if (!is_array($hmenu[103090])) $hmenu[103090] = array();
@@ -275,5 +279,129 @@ $availabletimezones = array('-720' => 'UTC-12',
                             '780' => 'UTC+13',
                             '840' => 'UTC+14',
                            );
+
+
+/**
+    * Template variables (Alphabetical order)
+    * description - Friendly label
+    * replacement - Quoted PHP code to be run to perform the template var replacement
+    * requires -Optional field. single string or array. Specifies the 'required' params from the trigger that is needed for this replacement
+    * action - Optional field, when set the var will only be available for that action
+*/
+$ttvararray['{applicationname}'] = array('description' => $CONFIG['application_name'],
+                                     'replacement' => '$CONFIG[\'application_name\'];');
+
+$ttvararray['{applicationshortname}'] = array('description' => $CONFIG['application_shortname'],
+                                     'replacement' => '$CONFIG[\'application_shortname\'];');
+
+$ttvararray['{applicationversion}'] = array('description' => $application_version_string,
+                                     'replacement' => '$application_version_string;');
+
+$ttvararray['{contactemail}'] = array('description' => $strIncidentsContactEmail,
+                                      'requires' => 'contactid',
+                                     'replacement' => 'contact_email($contactid);',
+                                     'action' => 'ACTION_EMAIL');
+
+$ttvararray['{contactfirstname}'] = array('description' => 'First Name of contact',
+                                     'requires' => 'contactid',
+                                     'replacement' => "strtok(contact_realname(\$contactid),' ');");
+
+$ttvararray['{contactname}'] = array('description' => 'Full Name of contact',
+                                     'requires' => 'contactid',
+                                     'replacement' => 'contact_realname($contactid);');
+
+$ttvararray['{contactnotify}'] = array('description' => 'The Notify Contact email address (if set)',
+                                      'requires' => 'contactid',
+                                     'replacement' => 'contact_notify_email($contactid);');
+
+$ttvararray['{contactphone}'] = array('description' => 'Contact phone number',
+                                     'requires' => 'contactid',
+                                     'replacement' => 'contact_site($contactid);');
+
+$ttvararray['{contactsite}'] = array('description' => 'Site name',
+                                     'requires' => 'siteid',
+                                     'replacement' => 'contact_site($contactid);');
+
+$ttvararray['{feedbackurl}'] = array('description' => '',
+                                     'requires' => 'incidentid',
+                                     'replacement' => '$baseurl.\'feedback.php?ax=\'.urlencode(trim(base64_encode(gzcompress(str_rot13(urlencode($CONFIG[\'feedback_form\']).\'&&\'.urlencode($contactid).\'&&\'.urlencode($incidentid))))));');
+
+$ttvararray['{globalsignature}'] = array('description' => $strGlobalSignature,
+                                     'replacement' => 'global_signature();');
+
+$ttvararray['{incidentccemail}'] = array('description' => $strIncidentCCList,
+                                     'requires' => 'incidentid',
+                                     'replacement' => 'incident_ccemail($paramarray[incidentid]);');
+
+$ttvararray['{incidentexternalemail}'] = array('description' => $strExternalEngineerEmail,
+                                     'requires' => 'incidentid',
+                                     'replacement' => 'incident_externalemail($paramarray[incidentid]);');
+
+$ttvararray['{incidentexternalengineer}'] = array('description' => $strExternalEngineer,
+                                     'requires' => 'incidentid',
+                                     'replacement' => 'incident_externalengineer($paramarray[incidentid]);');
+
+
+$ttvararray['{incidentexternalengineerfirstname}'] = array('description' => $strExternalEngineersFirstName,
+                                     'requires' => 'incidentid',
+                                     'replacement' => 'strtok(incident_externalengineer($paramarray[incidentid]),\' \');');
+
+$ttvararray['{incidentexternalid}'] = array('description' => "{$GLOBALS['strExternalID']}",
+                                     'requires' => 'incidentid',
+                                     'replacement' => '$incident->externalid;');
+
+$ttvararray['{incidentfirstupdate}'] = array('description' => $strFirstCustomerVisibleUpdate,
+                                     'replacement' => '');
+
+$ttvararray['{incidentid}'] = array('description' => $GLOBALS['strIncidentID'],
+                                     'requires' => 'incidentid',
+                                     'replacement' => '$paramarray[incidentid];');
+
+$ttvararray['{incidentowner}'] = array('description' => $strIncidentOwnersFullName,
+                                     'requires' => 'incidentid',
+                                     'replacement' => 'user_realname(incident_owner($paramarray[incidentid]));');
+
+$ttvararray['{incidentowneremail}'] = array('description' => 'Incident Owners Email Address',
+                                     'requires' => 'incidentid',
+                                     'replacement' => 'user_email(incident_owner($paramarray[incidentid]));');
+
+$ttvararray['{incidentpriority}'] = array('description' => $strIncidentPriority,
+                                     'requires' => 'incidentid',
+                                     'replacement' => 'priority_name(incident_priority($paramarray[incidentid]));');
+
+$ttvararray['{incidentsoftware}'] = array('description' => $strSkillAssignedToIncident,
+                                     'requires' => 'incidentid',
+                                     'replacement' => 'software_name(db_read_column("softwareid", $GLOBALS["dbIncidents"], $paramarray[incidentid]));');
+
+$ttvararray['{incidenttitle}'] = array('description' => $strIncidentTitle,
+                                     'requires' => 'incidentid',
+                                     'replacement' => 'incident_title($paramarray[incidentid]);');
+
+$ttvararray['{salesperson}'] = array('description' => 'Salesperson',
+                                     'requires' => 'siteid',
+                                     'replacement' => 'user_realname(db_read_column(\'owner\', $GLOBALS[\'dbSites\'], $siteid));');
+
+$ttvararray['{salespersonemail}'] = array('description' => $strSalespersonAssignedToContactsSiteEmail,
+                                     'requires' => 'siteid',
+                                     'replacement' => 'user_email(db_read_column(\'owner\', $GLOBALS[\'dbSites\'], $siteid));');
+
+$ttvararray['{signature}'] = array('description' => $strCurrentUsersSignature,
+                                     'replacement' => 'user_signature($_SESSION[\'userid\']);');
+
+$ttvararray['{supportemail}'] = array('description' => $strSupportEmailAddress,
+                                     'replacement' => '$CONFIG[\'support_email\'];');
+
+$ttvararray['{supportmanageremail}'] = array('description' => $strSupportManagersEmailAddress,
+                                     'replacement' => '$CONFIG[\'support_manager_email\'];');
+
+$ttvararray['{todaysdate}'] = array('description' => $strCurrentDate,
+                                     'replacement' => 'ldate("jS F Y");');
+
+$ttvararray['{useremail}'] = array('description' => $strCurrentUserEmailAddress,
+                                     'replacement' => 'user_email($_SESSION[\'userid\']);');
+
+$ttvararray['{userrealname}'] = array('description' => $strFullNameCurrentUser,
+                                     'replacement' => 'user_realname($_SESSION[\'userid\']);');
+
 
 ?>

@@ -9,19 +9,19 @@
 //
 // Author: Kieran Hogg[at]users.sourceforge.net>
 
-@include('set_include_path.inc.php');
+@include ('set_include_path.inc.php');
 
-$permission=69;
+$permission = 69;
 
-require('db_connect.inc.php');
-require('functions.inc.php');
-require('auth.inc.php');
+require ('db_connect.inc.php');
+require ('functions.inc.php');
+require ('auth.inc.php');
 
 
 $action = cleanvar($_REQUEST['action']);
 if ($action == 'new')
 {
-    include('htmlheader.inc.php');
+    include ('htmlheader.inc.php');
     echo "<h2>{$strNotices}</h2>";
     echo "<p align='center'>{$strNoticesBlurb}</p>";
     echo "<table align='center'><tr><th>{$strCode}</th><th>{$strOutput}</th></tr>";
@@ -46,7 +46,7 @@ if ($action == 'new')
     echo "<input type='submit' value='{$strSave}' />";
     echo "</form></div>";
     echo "<p align='center'><a href='notices.php'>{$strReturnWithoutSaving}</a></p>";
-    include('htmlfooter.inc.php');
+    include ('htmlfooter.inc.php');
 }
 elseif ($action == 'post')
 {
@@ -56,11 +56,11 @@ elseif ($action == 'post')
     $gid = md5($text);
 
     //post new notice
-    $sql = "SELECT id FROM users WHERE status != 0";
+    $sql = "SELECT id FROM `{$dbUsers}` WHERE status != 0";
     $result = mysql_query($sql);
     while ($user = mysql_fetch_object($result))
     {
-        $sql = "INSERT INTO notices (userid, gid, type, text, timestamp, durability) ";
+        $sql = "INSERT INTO `{$dbNotices}` (userid, gid, type, text, timestamp, durability) ";
         $sql .= "VALUES({$user->id}, '{$gid}', {$type}, '{$text}', NOW(), '{$durability}')";
         mysql_query($sql);
         if (mysql_error()) trigger_error(mysql_error(),E_USER_WARNING);
@@ -72,12 +72,12 @@ elseif ($action == 'delete')
 {
     $noticeid = cleanvar($_REQUEST['id']);
 
-    $sql = "SELECT gid FROM notices WHERE id='{$noticeid}'";
+    $sql = "SELECT gid FROM `{$dbNotices}` WHERE id='{$noticeid}'";
     $result = mysql_query($sql);
     if (mysql_error()) trigger_error(mysql_error(),E_USER_WARNING);
     $gid = mysql_fetch_object($result);
 
-    $sql = "DELETE FROM notices WHERE gid='{$gid->gid}'";
+    $sql = "DELETE FROM `{$dbNotices}` WHERE gid='{$gid->gid}'";
     mysql_query($sql);
     if (mysql_error()) trigger_error(mysql_error(),E_USER_WARNING);
 
@@ -85,11 +85,11 @@ elseif ($action == 'delete')
 }
 else
 {
-    include('htmlheader.inc.php');
+    include ('htmlheader.inc.php');
     echo "<h2>{$strNotices}</h2>";
 
     //get all notices
-    $sql = "SELECT * FROM notices WHERE type=".NORMAL_NOTICE_TYPE." OR type=".WARNING_NOTICE_TYPE." ";
+    $sql = "SELECT * FROM `{$dbNotices}` WHERE type=".NORMAL_NOTICE_TYPE." OR type=".WARNING_NOTICE_TYPE." ";
     $sql .= "GROUP BY gid";
     $result = mysql_query($sql);
     if (mysql_error()) trigger_error(mysql_error(),E_USER_WARNING);
@@ -116,7 +116,7 @@ else
     }
 
     echo "<p align='center'><a href='{$_SERVER[PHP_SELF]}?action=new'>{$strPostNewNotice}</a></p>";
-    include('htmlfooter.inc.php');
+    include ('htmlfooter.inc.php');
 }
 
 ?>

@@ -8,13 +8,13 @@
 // of the GNU General Public License, incorporated herein by reference.
 //
 
-@include('set_include_path.inc.php');
-$permission=42; // Delete Incident Updates
-require('db_connect.inc.php');
-require('functions.inc.php');
+@include ('set_include_path.inc.php');
+$permission = 42; // Delete Incident Updates
+require ('db_connect.inc.php');
+require ('functions.inc.php');
 
 // This page requires authentication
-require('auth.inc.php');
+require ('auth.inc.php');
 
 // External variables
 $updateid = cleanvar($_REQUEST['updateid']);
@@ -24,11 +24,11 @@ $tempid = cleanvar($_REQUEST['tempid']);
 if (empty($updateid)) throw_error('!Error: Update ID was not set, not deleting!', $updateid);
 
 // We delete using ID and timestamp to make sure we dont' delete the wrong update by accident
-$sql = "DELETE FROM updates WHERE id='$updateid' AND timestamp='$timestamp'";  // We might in theory have more than one ...
+$sql = "DELETE FROM `{$dbUpdates}` WHERE id='$updateid' AND timestamp='$timestamp'";  // We might in theory have more than one ...
 mysql_query($sql);
 if (mysql_error()) trigger_error("MySQL Query Error ".mysql_error(), E_USER_ERROR);
 
-$sql = "DELETE FROM tempincoming WHERE id='$tempid'";
+$sql = "DELETE FROM `{$dbTempIncoming}` WHERE id='$tempid'";
 mysql_query($sql);
 if (mysql_error()) trigger_error("MySQL Query Error ".mysql_error(), E_USER_ERROR);
 

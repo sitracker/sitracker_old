@@ -10,13 +10,13 @@
 
 // This Page Is Valid XHTML 1.0 Transitional!  31Oct05
 
-@include('set_include_path.inc.php');
-$permission=1; // Add new contact
+@include ('set_include_path.inc.php');
+$permission = 1; // Add new contact
 
-require('db_connect.inc.php');
-require('functions.inc.php');
+require ('db_connect.inc.php');
+require ('functions.inc.php');
 // This page requires authentication
-require('auth.inc.php');
+require ('auth.inc.php');
 
 // External variables
 $siteid = mysql_real_escape_string($_REQUEST['siteid']);
@@ -27,7 +27,7 @@ $submit = $_REQUEST['submit'];
 //     echo "<p class='error'>Form Error</p>";
 if (empty($submit) OR !empty($_SESSION['formerrors']['add_contact']))
 {
-    include('htmlheader.inc.php');
+    include ('htmlheader.inc.php');
     ?>
     <script type="text/javascript" src="scripts/dojo/dojo.js"></script>
     <script type='text/javascript'>
@@ -150,7 +150,7 @@ if (empty($submit) OR !empty($_SESSION['formerrors']['add_contact']))
     //cleanup form vars
     clear_form_data('add_contact');
     echo "<h5 class='warning'>{$strAvoidDupes}.</h5>";
-    include('htmlfooter.inc.php');
+    include ('htmlfooter.inc.php');
 }
 else
 {
@@ -206,7 +206,7 @@ else
         $_SESSION['formerrors']['add_contact']['siteid'] = $strMustSelectSite;
     }
     // Check this is not a duplicate
-    $sql = "SELECT id FROM contacts WHERE email='$email' AND LCASE(surname)=LCASE('$surname') LIMIT 1";
+    $sql = "SELECT id FROM `{$dbContacts}` WHERE email='$email' AND LCASE(surname)=LCASE('$surname') LIMIT 1";
     $result = mysql_query($sql);
     if (mysql_num_rows($result) >= 1)
     {
@@ -250,7 +250,7 @@ else
         $username = strtolower(substr($surname, 0, strcspn($surname, " ")));
         $password = generate_password();
 
-        $sql  = "INSERT INTO contacts (username, password, courtesytitle, forenames, surname, jobtitle, ";
+        $sql  = "INSERT INTO `{$dbContacts}` (username, password, courtesytitle, forenames, surname, jobtitle, ";
         $sql .= "siteid, address1, address2, city, county, country, postcode, email, phone, mobile, fax, ";
         $sql .= "department, notes, dataprotection_email, dataprotection_phone, dataprotection_address, ";
         $sql .= "timestamp_added, timestamp_modified) ";
@@ -264,14 +264,14 @@ else
         // concatenate username with insert id to make unique
         $newid = mysql_insert_id();
         $username = $username . $newid;
-        $sql = "UPDATE contacts SET username='$username' WHERE id='$newid'";
+        $sql = "UPDATE `{$dbContacts}` SET username='$username' WHERE id='$newid'";
         $result = mysql_query($sql);
         if (mysql_error()) trigger_error("MySQL Query Error ".mysql_error(), E_USER_ERROR);
 
         if (!$result) echo "<p class='error'>Addition of Contact Failed\n";
         else
         {
-            $sql = "SELECT username, password FROM contacts WHERE id=$newid";
+            $sql = "SELECT username, password FROM `{$dbContacts}` WHERE id=$newid";
             $result = mysql_query($sql);
             if (mysql_error()) trigger_error("MySQL Query Error ".mysql_error(), E_USER_ERROR);
             $newcontact = mysql_fetch_array($result);

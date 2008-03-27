@@ -8,14 +8,14 @@
 // of the GNU General Public License, incorporated herein by reference.
 //
 
-@include('set_include_path.inc.php');
-$permission=33; // Send Emails
-require('db_connect.inc.php');
-require('functions.inc.php');
-include('mime.inc.php');
+@include ('set_include_path.inc.php');
+$permission = 33; // Send Emails
+require ('db_connect.inc.php');
+require ('functions.inc.php');
+// include ('mime.inc.php');
 
 // This page requires authentication
-require('auth.inc.php');
+require ('auth.inc.php');
 
 // External variables
 $step = cleanvar($_REQUEST['step']);
@@ -23,10 +23,10 @@ $id = cleanvar($_REQUEST['id']);
 $menu = cleanvar($_REQUEST['menu']);
 $incidentid=$id;
 $draftid = cleanvar($_REQUEST['draftid']);
-if(empty($draftid)) $draftid = -1;
+if (empty($draftid)) $draftid = -1;
 
 $title = $strEmail;
 
-include('incident/email.inc.php');
+include ('incident/email.inc.php');
 
 ?>

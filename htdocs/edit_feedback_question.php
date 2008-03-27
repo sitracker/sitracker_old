@@ -9,13 +9,13 @@
 //
 
 // by Ivan Lucas, June 2004
-@include('set_include_path.inc.php');
-$permission=49; // Edit Feedback Forms
+@include ('set_include_path.inc.php');
+$permission = 49; // Edit Feedback Forms
 
-require('db_connect.inc.php');
-require('functions.inc.php');
+require ('db_connect.inc.php');
+require ('functions.inc.php');
 // This page requires authentication
-require('auth.inc.php');
+require ('auth.inc.php');
 
 function qtype_listbox($type)
 {
@@ -77,11 +77,11 @@ switch ($action)
     break;
 
     default:
-        include('htmlheader.inc.php');
+        include ('htmlheader.inc.php');
 
         echo "<h2 align='center'>$title</h2>\n";
 
-        $sql = "SELECT * FROM feedbackquestions WHERE id = '$qid'";
+        $sql = "SELECT * FROM `{$dbFeedbackQuestions}` WHERE id = '$qid'";
         $result = mysql_query($sql);
         if (mysql_error()) trigger_error ("MySQL Error: ".mysql_error(), E_USER_ERROR);
 
@@ -133,7 +133,7 @@ switch ($action)
 
             echo "</table>";
         }
-        include('htmlfooter.inc.php');
+        include ('htmlfooter.inc.php');
     break;
 }
 ?>

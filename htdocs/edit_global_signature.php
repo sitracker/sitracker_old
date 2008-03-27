@@ -14,11 +14,11 @@
 //          Paul Heaney <paulheaney[at]users.sourceforge.net>
 
 
-@include('set_include_path.inc.php');
+@include ('set_include_path.inc.php');
 
 function get_globalsignature($sig_id)
 {
-    $sql = "SELECT signature FROM emailsig WHERE id = $sig_id";
+    $sql = "SELECT signature FROM `{$dbEmailsig}` WHERE id = $sig_id";
     $result=mysql_query($sql);
     list($signature)=mysql_fetch_row($result);
     mysql_free_result($result);
@@ -27,7 +27,7 @@ function get_globalsignature($sig_id)
 
 function delete_signature($sig_id)
 {
-    $sql = "DELETE FROM emailsig WHERE id = $sig_id";
+    $sql = "DELETE FROM `{$dbEmailsig}` WHERE id = $sig_id";
     mysql_query($sql);
     if (mysql_error()) trigger_error("MySQL Query Error ".mysql_error(), E_USER_ERROR);
 
@@ -35,13 +35,13 @@ function delete_signature($sig_id)
     html_redirect("edit_global_signature.php");
 }
 
-$permission=43; // Edit global signature
+$permission = 43; // Edit global signature
 
 
-require('db_connect.inc.php');
-require('functions.inc.php');
+require ('db_connect.inc.php');
+require ('functions.inc.php');
 // This page requires authentication
-require('auth.inc.php');
+require ('auth.inc.php');
 
 $title = $strGlobalSignature;
 
@@ -51,14 +51,14 @@ $sig_id = cleanvar($_REQUEST['sig_id']);
 $signature = cleanvar($_REQUEST['signature']);
 $formaction = cleanvar($_REQUEST['formaction']);
 
-if(!empty($signature))
+if (!empty($signature))
 {
     //we've been passed a signature - ie we must either be deleting or editing on actual signature
-    switch($formaction)
+    switch ($formaction)
     {
         case 'add':
             //then we're adding a new signature
-            $sql = "INSERT INTO emailsig (signature) VALUES ('$signature') ";
+            $sql = "INSERT INTO `{$dbEmailSig}` (signature) VALUES ('$signature') ";
             mysql_query($sql);
             if (mysql_error()) trigger_error("MySQL Query Error ".mysql_error(), E_USER_ERROR);
 
@@ -67,7 +67,7 @@ if(!empty($signature))
         break;
 
         case 'edit':
-            $sql = "UPDATE emailsig SET signature = '$signature' WHERE id = ".$sig_id;
+            $sql = "UPDATE `{$dbEmailSig}` SET signature = '$signature' WHERE id = ".$sig_id;
             mysql_query($sql);
             if (mysql_error()) trigger_error("MySQL Query Error ".mysql_error(), E_USER_ERROR);
 
@@ -77,16 +77,16 @@ if(!empty($signature))
   }
 
 }
-elseif(empty($action))
+elseif (empty($action))
 {
     //The just view the global signatures
-    include('htmlheader.inc.php');
+    include ('htmlheader.inc.php');
 
     echo "<h2>{$title}</h2>";
 
-    $sql = "SELECT id, signature FROM emailsig ORDER BY id ASC";
+    $sql = "SELECT id, signature FROM `{$dbEmailsig}` ORDER BY id ASC";
     $result = mysql_query($sql);
-    if(mysql_error()) trigger_error(mysql_error(), E_USER_WARNING);
+    if (mysql_error()) trigger_error(mysql_error(), E_USER_WARNING);
 
     echo "<p align='center'>{$strOneOfTheSignaturesWillBeInserted}<br /><br />";
     echo "{$strGlobalSignatureRemember}</p>";
@@ -95,7 +95,7 @@ elseif(empty($action))
 
     echo "<table align='center' width='60%'>";
     echo "<tr><th>{$strGlobalSignature}</th><th>{$strOperation}</th></tr>";
-    while($signature = mysql_fetch_array($result))
+    while ($signature = mysql_fetch_array($result))
     {
         $id = $signature['id'];
         echo "<tr>";
@@ -106,12 +106,12 @@ elseif(empty($action))
     }
     echo "</table>";
 
-    include('htmlfooter.inc.php');
+    include ('htmlfooter.inc.php');
 }
-elseif(!empty($action))
+elseif (!empty($action))
 {
-    include('htmlheader.inc.php');
-    switch($action)
+    include ('htmlheader.inc.php');
+    switch ($action)
     {
         case 'add':
             echo "<h2>{$strGlobalSignature}: {$strAdd}</h2>";
@@ -158,6 +158,6 @@ elseif(!empty($action))
             echo "</form>\n";
         break;
     }
-    include('htmlfooter.inc.php');
+    include ('htmlfooter.inc.php');
 }
 ?>

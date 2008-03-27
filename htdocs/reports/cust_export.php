@@ -13,14 +13,14 @@
 // This Page Is Valid XHTML 1.0 Transitional!  4Feb06
 // FIXME i18n
 
-@include('../set_include_path.inc.php');
-$permission=37; // Run Reports
+@include ('../set_include_path.inc.php');
+$permission = 37; // Run Reports
 
-require('db_connect.inc.php');
-require('functions.inc.php');
+require ('db_connect.inc.php');
+require ('functions.inc.php');
 
 // This page requires authentication
-require('auth.inc.php');
+require ('auth.inc.php');
 
 $title = $strCustomerExport;
 
@@ -40,36 +40,23 @@ if (!function_exists('strip_comma'))
 
 if (empty($_REQUEST['mode']))
 {
-    include('htmlheader.inc.php');
+    include ('htmlheader.inc.php');
     echo "<h2>$title</h2>";
     echo "<form action='{$_SERVER['PHP_SELF']}' method='post'>";
     echo "<table align='center'>";
     echo "<tr><th colspan='2' align='center'>{$strInclude}</th></tr>";
     // echo "<th align='center' width='300' class='shade1'>Exclude</th>";
     echo "<tr><td align='center' colspan='2'>";
-    $sql = "SELECT * FROM sites ORDER BY name";
+    $sql = "SELECT * FROM `{$dbSites}` ORDER BY name";
     $result = mysql_query($sql);
     if (mysql_error()) trigger_error("MySQL Query Error ".mysql_error(), E_USER_ERROR);
     echo "<select name='inc[]' multiple='multiple' size='20'>";
     while ($site = mysql_fetch_object($result))
     {
-        echo "<option value='{$site->id}'>$site->name</option>\n";
+        echo "<option value='{$site->id}'>{$site->name}</option>\n";
     }
     echo "</select>";
     echo "</td>";
-    /*
-    echo "<td width='300' class='shade2'>";
-    $sql = "SELECT * FROM sites ORDER BY name";
-    $result = mysql_query($sql);
-    if (mysql_error()) trigger_error("MySQL Query Error ".mysql_error(), E_USER_ERROR);
-    echo "<select name='exc[]' multiple='multiple' size='20'>";
-    while ($site = mysql_fetch_object($result))
-    {
-        echo "<option value='{$site->id}'>$site->name</option>\n";
-    }
-    echo "</select>";
-    echo "</td>";
-    */
     echo "</tr>\n";
     echo "<tr>";
     echo "<td colspan='2'>";
@@ -101,7 +88,7 @@ if (empty($_REQUEST['mode']))
     echo "<strong>Field 11:</strong> {$strSite}<br />";
     echo "<strong>Field 12:</strong> {$strProducts} <em>(Lists all the customers products regardless of selections made above)</em><br />";
     echo "</td></tr></table>";
-    include('htmlfooter.inc.php');
+    include ('htmlfooter.inc.php');
 }
 elseif ($_REQUEST['mode']=='report')
 {
@@ -134,15 +121,15 @@ elseif ($_REQUEST['mode']=='report')
     $excsql .= ")";
     }
     */
-    $sql = "SELECT *, contacts.id AS contactid, sites.name AS site, contacts.email AS cemail FROM contacts ";
-    $sql .= "LEFT JOIN sites ON contacts.siteid=sites.id ";
+    $sql = "SELECT *, c.id AS contactid, s.name AS site, c.email AS cemail FROM `{$dbContacts}` ";
+    $sql .= "LEFT JOIN `{$dbSites}` AS s ON c.siteid = s.id ";
 
     if (empty($incsql)==FALSE OR empty($excsql)==FALSE) $sql .= "WHERE ";
     if (!empty($incsql)) $sql .= "$incsql";
     if (empty($incsql)==FALSE AND empty($excsql)==FALSE) $sql .= " AND ";
     if (!empty($excsql)) $sql .= "$excsql";
 
-    $sql .= " ORDER BY contacts.email ASC ";
+    $sql .= " ORDER BY c.email ASC ";
 
     $result = mysql_query($sql);
     if (mysql_error()) trigger_error("MySQL Query Error ".mysql_error(), E_USER_ERROR);
@@ -172,10 +159,10 @@ elseif ($_REQUEST['mode']=='report')
 
             $html .= "<td>{$row->site}</td>";
 
-            $psql = "SELECT * FROM supportcontacts, maintenance, products WHERE ";
-            $psql .= "supportcontacts.maintenanceid=maintenance.id AND ";
-            $psql .= "maintenance.product=products.id ";
-            $psql .= "AND supportcontacts.contactid='$row->contactid' ";
+            $psql = "SELECT * FROM `{$dbSupportContacts}` AS sc, `{$dbMaintenance}` AS m, `{$dbProducts}` AS p WHERE ";
+            $psql .= "sc.maintenanceid = m.id AND ";
+            $psql .= "m.product = p.id ";
+            $psql .= "AND sc.contactid = '$row->contactid' ";
             $html .= "<td>";
         // FIXME dataprotection_address csv
 
@@ -223,9 +210,9 @@ elseif ($_REQUEST['mode']=='report')
 
     if ($_POST['output']=='screen')
     {
-        include('htmlheader.inc.php');
+        include ('htmlheader.inc.php');
         echo $html;
-        include('htmlfooter.inc.php');
+        include ('htmlfooter.inc.php');
     }
     elseif ($_POST['output']=='csv')
     {

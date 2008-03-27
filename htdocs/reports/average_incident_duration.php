@@ -12,17 +12,17 @@
 //
 // Comments: How long do we take to close incidents?
 
-@include('../set_include_path.inc.php');
+@include ('../set_include_path.inc.php');
 set_time_limit(60);
 
-$title='Average Incident Duration';
-$permission=37; // Run Reports
+$title = 'Average Incident Duration';
+$permission = 37; // Run Reports
 
-require('db_connect.inc.php');
-require('functions.inc.php');
+require ('db_connect.inc.php');
+require ('functions.inc.php');
 
 // This page requires authentication
-require('auth.inc.php');
+require ('auth.inc.php');
 
 $id = cleanvar($_REQUEST['id']);
 $mode = cleanvar($_REQUEST['mode']);
@@ -41,7 +41,8 @@ else $states = explode(',',$_REQUEST['states']);
 */
 function count_incident_stats($incidentid)
 {
-    $sql = "SELECT count(DISTINCT currentowner),count(id) FROM updates WHERE incidentid='$incidentid' AND userid!=0 GROUP BY userid";
+    global $dbUpdates;
+    $sql = "SELECT count(DISTINCT currentowner),count(id) FROM `{$dbUpdates}` WHERE incidentid='$incidentid' AND userid!=0 GROUP BY userid";
     $result = mysql_query($sql);
     if (mysql_error()) trigger_error(mysql_error(),E_USER_ERROR);
     list($unique_users,$num_updates) = mysql_fetch_row($result);
@@ -57,8 +58,9 @@ function count_incident_stats($incidentid)
 */
 function average_incident_duration($start,$end,$states)
 {
-    $sql = "SELECT opened, closed, (closed - opened) AS duration_closed, incidents.id AS incidentid ";
-    $sql .= "FROM incidents ";
+    global $dbIncidents;
+    $sql = "SELECT opened, closed, (closed - opened) AS duration_closed, i.id AS incidentid ";
+    $sql .= "FROM `{$dbIncidents}` AS i ";
     $sql .= "WHERE status='2' ";
     if ($start > 0) $sql .= "AND opened >= $start ";
     if ($end > 0) $sql .= "AND opened <= $end ";
@@ -93,7 +95,7 @@ function average_incident_duration($start,$end,$states)
 
 
 // get the first date
-$sql = "SELECT opened FROM incidents ORDER BY id ASC LIMIT 1";
+$sql = "SELECT opened FROM `{$dbIncidents}` ORDER BY id ASC LIMIT 1";
 $result = mysql_query($sql);
 if (mysql_error()) trigger_error(mysql_error(),E_USER_ERROR);
 list($firstdate)=mysql_fetch_row($result);
@@ -158,9 +160,9 @@ if ($_REQUEST['output']=='csv')
 }
 else
 {
-    include('htmlheader.inc.php');
+    include ('htmlheader.inc.php');
     echo $html;
-    include('htmlfooter.inc.php');
+    include ('htmlfooter.inc.php');
 }
 
 

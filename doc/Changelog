@@ -1,4 +1,8 @@
-Changes in v3.32 - Unreleased
+Changes in v3.40 - Unreleased
+-----------------------------------------------------------------------
+
+
+Changes in v3.32 - Released 26 March 2008
 -----------------------------------------------------------------------
 * Escalated Incidents report is now filterable
 * More strings internationalised
@@ -7,7 +11,7 @@ Changes in v3.32 - Unreleased
 * Italian (it-IT) Translation
 * Updated German (de-DE) Translation
 * Updated French (fr-FR) Translation
-* Ability to list open activties/times tasks for site/user/all
+* Ability to list open activities/times tasks for site/user/all
 * Ability to view all open activities
 * Ability to view all holidays not requested
 * Holidays page shows number pending approval
@@ -19,7 +23,7 @@ Changes in v3.32 - Unreleased
 * Some customer portal improvements
 * Allow filtering on escalate_engineer report
 * Fix attachment/upload problems on different platforms
-* Users can now set their own timezone (assumes system time is UTC)
+* Users can now set their own timezone
 * Dates are now localised
 * Remove dependency on mime_content_type
 * Added new config setting $CONFIG['hide_closed_incidents_older_than']

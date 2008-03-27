@@ -10,28 +10,28 @@
 
 // Author: Ivan Lucas <ivanlucas[at]users.sourceforge.net>
 
-@include('set_include_path.inc.php');
-$permission=44; // Publish Files to FTP site
+@include ('set_include_path.inc.php');
+$permission = 44; // Publish Files to FTP site
 
-require('db_connect.inc.php');
-require('functions.inc.php');
+require ('db_connect.inc.php');
+require ('functions.inc.php');
 
 // This page requires authentication
-require('auth.inc.php');
+require ('auth.inc.php');
 
 // seed with microseconds since last "whole" second
 mt_srand((double)microtime()*1000000);
-$maxVal=1000000;
-$minVal=1;
+$maxVal = 1000000;
+$minVal = 1;
 $randvala = (mt_rand() % ($maxVal-$minVal)) + $minVal;
 // seed with current time
 mt_srand($now);
 $maxVal=1000000;
 $minVal=1;
 $randvalb = (mt_rand() % ($maxVal-$minVal)) + $minVal;
-$randomdir=dechex(crc32($randvala.$randvalb));
+$randomdir = dechex(crc32($randvala.$randvalb));
 
-$filesize=filesize($source_file);
+$filesize = filesize($source_file);
 // calculate filesize
 $j = 0;
 $ext = array($strBytes, $strKBytes, $strMBytes, $strGBytes, $strTBytes);
@@ -43,7 +43,7 @@ $pretty_file_size = round($pretty_file_size / pow(1024,$j-1) * 100) / 100 . ' ' 
 if (!isset($temp_directory))
 {
     // show form
-    include('htmlheader.inc.php');
+    include ('htmlheader.inc.php');
     ?>
     <h2>FTP Publish</h2>
     <form name="publishform" action="<?php echo $_SERVER['PHP_SELF']; ?>" method="post">
@@ -104,12 +104,12 @@ if (!isset($temp_directory))
     </form>
     <?php
 
-    include('htmlfooter.inc.php');
+    include ('htmlfooter.inc.php');
 }
 else
 {
     // publish file
-    include('htmlheader.inc.php');
+    include ('htmlheader.inc.php');
     echo "<h2>FTP Publish</h2>";
     // set up basic connection
     $conn_id = ftp_connect($CONFIG['ftp_hostname']);
@@ -178,13 +178,13 @@ else
         }
 
         // store file details in database
-        $sql = "INSERT INTO files (filename, size, userid, shortdescription, longdescription, path, date, expiry, fileversion) ";
+        $sql = "INSERT INTO `{$dbFiles}` (filename, size, userid, shortdescription, longdescription, path, date, expiry, fileversion) ";
         $sql .= "VALUES ('$destination_file', '$filesize', '".$sit[2]."', '$shortdescription', '$longdescription', '".$temp_directory.'/'."', '$now', '$expirydate' ,'$fileversion')";
         mysql_query($sql);
         if (mysql_error()) trigger_error("MySQL Query Error ".mysql_error(), E_USER_ERROR);
     }
     // close the FTP stream
     ftp_quit($conn_id);
-    include('htmlfooter.inc.php');
+    include ('htmlfooter.inc.php');
 }
 ?>

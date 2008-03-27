@@ -130,7 +130,7 @@ echo "</td>";
 echo "</tr>\n";
 
 // Incident relationships
-$rsql = "SELECT * FROM relatedincidents WHERE incidentid='$id' OR relatedid='$id'";
+$rsql = "SELECT * FROM `{$dbRelatedIncidents}` WHERE incidentid='$id' OR relatedid='$id'";
 $rresult = mysql_query($rsql);
 if (mysql_error()) trigger_error(mysql_error(),E_USER_WARNING);
 if (mysql_num_rows($rresult) >= 1)

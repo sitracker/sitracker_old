@@ -13,13 +13,13 @@
 // This Page Is Valid XHTML 1.0 Transitional!   4Nov05
 // 24Apr02 INL Fixed a divide by zero bug
 
-@include('set_include_path.inc.php');
-$permission=6; // view incidents
+@include ('set_include_path.inc.php');
+$permission = 6; // view incidents
 
-require('db_connect.inc.php');
-require('functions.inc.php');
+require ('db_connect.inc.php');
+require ('functions.inc.php');
 // This page requires authentication
-require('auth.inc.php');
+require ('auth.inc.php');
 
 // External variables
 $id = cleanvar($_REQUEST['id']);
@@ -30,28 +30,30 @@ if (!empty($_REQUEST['end'])) $end = strtotime($_REQUEST['end']);
 else $end=0;
 $status = $_REQUEST['status'];
 
-include('htmlheader.inc.php');
+include ('htmlheader.inc.php');
 
 if ($mode=='site') echo "<h2>".site_name($id)."</h2>";
 else echo "<h2>".contact_realname($id)."</h2>";
 
 if ($mode=='site')
 {
-    $sql = "SELECT *, (closed - opened) AS duration_closed, incidents.id AS incidentid FROM incidents, contacts ";
-    $sql .= "WHERE incidents.contact=contacts.id ";
-    if (!empty($id) AND $id != 'all') $sql .= "AND contacts.siteid='$id' ";
-    if ($status=='open') $sql .= "AND incidents.status!=2 ";
-    elseif ($status=='closed') $sql .= "AND incidents.status=2 ";
+    $sql = "SELECT *, (closed - opened) AS duration_closed, i.id AS incidentid ";
+    $sql .= "FROM `{$dbIncidents}` AS i, `{$dbContacts}` AS c ";
+    $sql .= "WHERE i.contact = c.id ";
+    if (!empty($id) AND $id != 'all') $sql .= "AND c.siteid = '$id' ";
+    if ($status=='open') $sql .= "AND i.status != 2 ";
+    elseif ($status=='closed') $sql .= "AND i.status = 2 ";
     if ($start > 0) $sql .= "AND opened >= $start ";
     if ($end > 0) $sql .= "AND opened <= $end ";
     $sql .= "ORDER BY opened DESC";
 }
 else
 {
-    $sql = "SELECT *, (closed - opened) AS duration_closed, incidents.id AS incidentid FROM incidents WHERE ";
+    $sql = "SELECT *, (closed - opened) AS duration_closed, i.id AS incidentid ";
+    $sql .= "FROM `{$dbIncidents}` WHERE ";
     $sql .= "contact='$id' ";
-    if ($status=='open') $sql .= "AND incidents.status!=2 ";
-    elseif ($status=='closed') $sql .= "AND incidents.status=2 ";
+    if ($status=='open') $sql .= "AND i.status!=2 ";
+    elseif ($status=='closed') $sql .= "AND i.status=2 ";
     $sql .= "ORDER BY opened DESC";
 }
 $result = mysql_query($sql);
@@ -71,12 +73,12 @@ echo "<th>Closed</th>";
 echo "<th>Duration</th>";
 echo "<th>SLA</th>";
 echo "</tr>";
-$shade='shade1';
-$totalduration=0;
-$countclosed=0;
-$countincidents=0;
-$countextincidents=0;
-$countslaexceeded=0;
+$shade = 'shade1';
+$totalduration = 0;
+$countclosed = 0;
+$countincidents = 0;
+$countextincidents = 0;
+$countslaexceeded = 0;
 $productlist = array();
 $softwarelist = array();
 if ($mode=='site') $contactlist = array();
@@ -84,7 +86,7 @@ while ($row=mysql_fetch_object($result))
 {
     $targetmet = TRUE;
     if ($row->status==2) $shade='expired';
-    else $shade='shade1';
+    else $shade = 'shade1';
     echo "<tr class='$shade'>";
     echo "<td>".$row->incidentid."</td>";
     // title
@@ -118,7 +120,7 @@ while ($row=mysql_fetch_object($result))
     $slahistory = incident_sla_history($row->incidentid);
     if (is_array($slahistory))
     {
-        foreach($slahistory AS $history)
+        foreach ($slahistory AS $history)
         {
             if ($history['targetmet'] == FALSE) $targetmet = FALSE;
         }
@@ -239,5 +241,5 @@ if ($countproducts >= 1 OR $contactcontacts >= 1)
     }
 }
 
-include('htmlfooter.inc.php');
+include ('htmlfooter.inc.php');
 ?>

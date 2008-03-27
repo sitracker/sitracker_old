@@ -10,18 +10,18 @@
 
 // This Page Is Valid XHTML 1.0 Transitional!  10Jan06
 
-@include('set_include_path.inc.php');
-$permission=6; // View Incidents
+@include ('set_include_path.inc.php');
+$permission = 6; // View Incidents
 
-require('db_connect.inc.php');
-require('functions.inc.php');
+require ('db_connect.inc.php');
+require ('functions.inc.php');
 // This page requires authentication
-require('auth.inc.php');
+require ('auth.inc.php');
 
 // External variables
 $search_string = cleanvar($_REQUEST['search_string']);
 
-include('htmlheader.inc.php');
+include ('htmlheader.inc.php');
 
 // show search incidents form
 if (empty($search_string))
@@ -66,10 +66,11 @@ else
         // build SQL
         if ($fields == "all" || $fields=='')
         {
-            $sql  = "SELECT incidents.id, externalid, title, priority, siteid, owner, type, surname, forenames, lastupdated, status FROM incidents, contacts, priority WHERE contact=contacts.id ";
-            $sql .= "AND incidents.priority=priority.id AND ";
+            $sql  = "SELECT i.id, externalid, title, priority, siteid, owner, type, surname, forenames, lastupdated, status ";
+            $sql .= "FROM `{$dbIncidents}` AS i, `{$dbContacts}` AS c, `{$dbPriority}` AS pr WHERE contact = c.id ";
+            $sql .= "AND i.priority = pr.id AND ";
             $sql .= "(title LIKE ('%$search_string%') OR ";
-            $sql .= "incidents.id LIKE ('%$search_string%') OR ";
+            $sql .= "i.id LIKE ('%$search_string%') OR ";
             $sql .= "externalid LIKE ('%$search_string%') OR ";
             $sql .= "surname LIKE ('%$search_string%') OR ";
             $sql .= "forenames LIKE ('%$search_string%') OR ";
@@ -77,23 +78,28 @@ else
         }
         elseif ($fields == "title")
         {
-            $sql  = "SELECT incidents.id, externalid, title, priority, siteid, owner, type, surname, forenames, lastupdated, status, contacts.siteid AS siteid FROM incidents, contacts WHERE contact=contacts.id AND title LIKE ('%$search_string%')";
+            $sql  = "SELECT i.id, externalid, title, priority, siteid, owner, type, surname, forenames, lastupdated, status, c.siteid AS siteid ";
+            $sql .= "FROM `{$dbIncidents}` AS i, `{$dbContacts}` AS c WHERE contact = c.id AND title LIKE ('%$search_string%')";
         }
         elseif ($fields == "id")
         {
-            $sql  = "SELECT incidents.id, externalid, title, priority, siteid, owner, type, surname, forenames, lastupdated, status, contacts.siteid AS siteid FROM incidents, contacts WHERE contact=contacts.id AND incidents.id LIKE ('%$search_string%')";
+            $sql  = "SELECT i.id, externalid, title, priority, siteid, owner, type, surname, forenames, lastupdated, status, c.siteid AS siteid ";
+            $sql .= "FROM `{$dbIncidents}` AS i, `{$dbContacts}` AS c WHERE contact = c.id AND i.id LIKE ('%$search_string%')";
         }
         elseif ($fields == "externalid")
         {
-            $sql  = "SELECT incidents.id, externalid, title, priority, siteid, owner, type, surname, forenames, lastupdated, status, contacts.siteid AS siteid FROM incidents, contacts WHERE contact=contacts.id AND externalid LIKE ('%$search_string%')";
+            $sql  = "SELECT i.id, externalid, title, priority, siteid, owner, type, surname, forenames, lastupdated, status, c.siteid AS siteid ";
+            $sql .= "FROM `{$dbIncidents}` AS i, `{$dbContacts}` AS c WHERE contact=c.id AND externalid LIKE ('%$search_string%')";
         }
         elseif ($fields == "contact")
         {
-            $sql  = "SELECT incidents.id, externalid, title, priority, siteid, owner, type, surname, forenames, lastupdated, status, contacts.siteid AS siteid FROM incidents, contacts WHERE contact=contacts.id AND surname LIKE ('%$search_string%')";
+            $sql  = "SELECT i.id, externalid, title, priority, siteid, owner, type, surname, forenames, lastupdated, status, c.siteid AS siteid ";
+            $sql .= "FROM `{$dbIncidents}` AS i, `{$dbContacts}` AS c WHERE contact=c.id AND surname LIKE ('%$search_string%')";
         }
         elseif ($fields == "site")
         {
-            $sql  = "SELECT incidents.id, externalid, title, priority, siteid, owner, type, surname, forenames, lastupdated, status, contacts.siteid AS siteid FROM incidents, contacts, sites WHERE contact=contacts.id AND contacts.siteid=sites.id AND sites.name LIKE ('%$search_string%') ORDER BY incidents.id";
+            $sql  = "SELECT i.id, externalid, title, priority, siteid, owner, type, surname, forenames, lastupdated, status, c.siteid AS siteid ";
+            $sql .= "FROM `{$dbIncidents}` AS i, `{$dbContacts}` AS c, `{$dbSites}` AS s WHERE contact = c.id AND c.siteid = s.id AND s.name LIKE ('%$search_string%') ORDER BY i.id";
         }
 
         $result = mysql_query($sql);
@@ -157,5 +163,5 @@ else
         echo "<p align='center'><a href=\"search_incidents.php\">Search Again</a></p>";
     }
 }
-include('htmlfooter.inc.php');
+include ('htmlfooter.inc.php');
 ?>

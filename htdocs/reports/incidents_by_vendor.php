@@ -10,20 +10,20 @@
 
 // Authors: Paul Heaney <paulheaney[at]users.sourceforge.net>
 
-@include('../set_include_path.inc.php');
-$permission=37; // Run Reports
+@include ('../set_include_path.inc.php');
+$permission = 37; // Run Reports
 
-require('db_connect.inc.php');
-require('functions.inc.php');
+require ('db_connect.inc.php');
+require ('functions.inc.php');
 
 // This page requires authentication
-require('auth.inc.php');
+require ('auth.inc.php');
 
 $title = $strIncidentsByVendor;
 
 if (empty($_REQUEST['mode']))
 {
-    include('htmlheader.inc.php');
+    include ('htmlheader.inc.php');
 
     echo "<h2>$title</h2>";
     echo "<form action='{$_SERVER['PHP_SELF']}' id='incidentsbyvendor' method='post'>";
@@ -43,40 +43,33 @@ if (empty($_REQUEST['mode']))
     echo "</p>";
     echo "</form>";
 
-    include('htmlfooter.inc.php');
+    include ('htmlfooter.inc.php');
 }
 else
 {
-/*
-SELECT COUNT( incidents.id ) , products.vendorid, vendors.name
-FROM incidents, products, vendors
-WHERE incidents.product = products.id
-AND products.vendorid = vendors.id
-GROUP BY products.vendorid
-LIMIT 0 , 30
-*/
     $startdate = strtotime($_REQUEST['startdate']);
     $enddate = strtotime($_REQUEST['enddate']);
 
-    $sql = "SELECT COUNT(incidents.id) AS volume, products.vendorid, vendors.name  FROM incidents, products, vendors WHERE incidents.product = products.id AND incidents.opened >= '{$startdate}' AND incidents.opened <= '{$enddate}' ";
-    $sql .= "AND products.vendorid = vendors.id GROUP BY products.vendorid";
+    $sql = "SELECT COUNT(i.id) AS volume, p.vendorid, p.name ";
+    $sql .= "FROM `{$dbIncidents}` AS i, `{$dbProducts}` AS p, `{$dbVendors}` AS v WHERE i.product = p.id AND i.opened >= '{$startdate}' AND i.opened <= '{$enddate}' ";
+    $sql .= "AND p.vendorid = v.id GROUP BY p.vendorid";
 
     $result = mysql_query($sql);
     if (mysql_error()) trigger_error("MySQL Query Error ".mysql_error(), E_USER_ERROR);
 
-    include('htmlheader.inc.php');
+    include ('htmlheader.inc.php');
 
     echo "<h2>$title</h2>";
 
     // FIXME i18n for the period N to N
     echo "<p align='center'>For the period {$_REQUEST['startdate']} to {$_REQUEST['enddate']}</p>";
 
-    if(mysql_num_rows($result) > 0)
+    if (mysql_num_rows($result) > 0)
     {
         echo "<p>";
         echo "<table class='vertical' align='center'>";
         echo "<tr><th>{$strVendor}</th><th>{$strIncidents}</th></tr>";
-        while($row = mysql_fetch_array($result))
+        while ($row = mysql_fetch_array($result))
         {
             echo "<tr><td class='shade1'>".$row['name']."</td><td class='shade1'>".$row['volume']."</td></tr>";
         }
@@ -84,7 +77,7 @@ LIMIT 0 , 30
         echo "</p>";
     }
 
-    include('htmlfooter.inc.php');
+    include ('htmlfooter.inc.php');
 
 }
 

@@ -207,19 +207,21 @@ setInterval("countUp()", 1000); //every 1 seconds
 
     //get info for incident-->task linktype
     $sql = "SELECT DISTINCT origcolref, linkcolref ";
-    $sql .= "FROM links, linktypes ";
-    $sql .= "WHERE links.linktype=4 ";
-    $sql .= "AND linkcolref={$incident} ";
-    $sql .= "AND direction='left'";
+    $sql .= "FROM `{$dbLinks}` AS l, `{$dbLinkTypes}` AS lt ";
+    $sql .= "WHERE l.linktype = 4 ";
+    $sql .= "AND linkcolref = {$incident} ";
+    $sql .= "AND direction = 'left'";
     $result = mysql_query($sql);
+    if (mysql_error()) trigger_error(mysql_error(),E_USER_WARNING);
 
     //get list of tasks
-    $sql = "SELECT * FROM tasks WHERE 1=0 ";
+    $sql = "SELECT * FROM `{$dbTasks}` WHERE 1=0 ";
     while ($tasks = mysql_fetch_object($result))
     {
         $sql .= "OR id={$tasks->origcolref} ";
     }
     $result = mysql_query($sql);
+    if (mysql_error()) trigger_error(mysql_error(),E_USER_WARNING);
 
     if ($mode == 'incident')
     {
@@ -231,24 +233,24 @@ setInterval("countUp()", 1000); //every 1 seconds
 elseif (!empty($siteid))
 {
     // Find all tasks for site
-    $sql = "SELECT incidents.id FROM incidents, contacts ";
-    $sql .= "WHERE incidents.contact = contacts.id AND ";
-    $sql .= "contacts.siteid = {$siteid} AND ";
-    $sql .= "(incidents.status != 2 AND incidents.status != 7)";
+    $sql = "SELECT i.id FROM `{$dbIncidents}` AS i, `{$dbContacts}` AS c ";
+    $sql .= "WHERE i.contact = c.id AND ";
+    $sql .= "c.siteid = {$siteid} AND ";
+    $sql .= "(i.status != 2 AND i.status != 7)";
     $result = mysql_query($sql);
 
-    $sqlTask = "SELECT * FROM tasks WHERE enddate IS NULL  ";
-        
+    $sqlTask = "SELECT * FROM `{$dbTasks}` WHERE enddate IS NULL  ";
+
     while ($obj = mysql_fetch_object($result))
     {
         //get info for incident-->task linktype
         $sql = "SELECT DISTINCT origcolref, linkcolref ";
-        $sql .= "FROM links, linktypes ";
-        $sql .= "WHERE links.linktype=4 ";
+        $sql .= "FROM `{$dbLinks}` AS l, `{$dbLinkTypes}` AS lt ";
+        $sql .= "WHERE l.linktype=4 ";
         $sql .= "AND linkcolref={$obj->id} ";
         $sql .= "AND direction='left'";
         $resultLinks = mysql_query($sql);
-    
+
         //get list of tasks
         while ($tasks = mysql_fetch_object($resultLinks))
         {
@@ -257,15 +259,15 @@ elseif (!empty($siteid))
             else $orSQL .= " OR ";
             $orSQL .= "id={$tasks->origcolref} ";
         }
-        
+
         if (!empty($orSQL))
         {
             $sqlTask .= "AND {$orSQL})";
         }
     }
-    
+
     $result = mysql_query($sqlTask);
-    
+
     $show = 'incidents';
     //$show = 'incidents';
     echo "<h2>".sprintf($strActivitiesForX, site_name($siteid))."</h2>";
@@ -281,7 +283,7 @@ else
     // If the user is passed as a username lookup the userid
     if (!is_number($user) AND $user != 'current' AND $user != 'all')
     {
-        $usql = "SELECT id FROM users WHERE username='{$user}' LIMIT 1";
+        $usql = "SELECT id FROM `{$dbUsers}` WHERE username='{$user}' LIMIT 1";
         $uresult = mysql_query($usql);
         if (mysql_error()) trigger_error(mysql_error(),E_USER_WARNING);
 
@@ -295,7 +297,7 @@ else
         }
     }
     echo "<h2><img src='{$CONFIG['application_webpath']}images/icons/{$iconset}/32x32/task.png' width='32' height='32' alt='' /> ";
-    
+
     if ($user == 'all')
     {
         echo $strAll;
@@ -304,7 +306,7 @@ else
     {
         echo user_realname($user,TRUE)."'s "; // FIXME i18n
     }
-    
+
     if ($show != 'incidents')
     {
         echo " {$strTasks}:</h2>";
@@ -320,7 +322,7 @@ else
     else
     {
         echo " {$strActivities}:</h2>";
-        
+
         if ($user != 'all')
         {
             echo "<p align='center'><a href='{$_SERVER['PHP_SELF']}?show=incidents&amp;user=all'>{$strShowAll}</a></p>";
@@ -359,12 +361,13 @@ else
     echo "</select>\n";
     echo "</form><br />";
 
-    $sql = "SELECT * FROM tasks WHERE ";
+
+    $sql = "SELECT * FROM `{$dbTasks}` WHERE ";
     if ($user != 'all')
     {
         $sql .= "owner='$user' AND ";
     }
-    
+
     if ($show=='' OR $show=='active' )
     {
         $sql .= "(completion < 100 OR completion='' OR completion IS NULL)  AND (distribution = 'public' OR distribution = 'private') ";
@@ -376,7 +379,7 @@ else
     elseif ($show == 'incidents')
     {
         $sql .= " distribution = 'incident' ";
-        
+
         if (empty($incidentid))
         {
             $sql .= "AND (completion < 100 OR completion='' OR completion IS NULL) ";
@@ -465,10 +468,10 @@ if (mysql_num_rows($result) >=1 )
         {
             echo colheader('enddate', $strEndDate, $sort, $order, $filter);
         }
-        
+
         if ($show == 'incidents')
         {
-            echo colheader('owner', $strOwner, $sort, $order, $filter);        
+            echo colheader('owner', $strOwner, $sort, $order, $filter);
         }
     }
     else
@@ -496,11 +499,11 @@ if (mysql_num_rows($result) >=1 )
         else if (empty($incidentid))
         {
             $sqlIncident = "SELECT DISTINCT origcolref, linkcolref, incidents.title ";
-            $sqlIncident .= "FROM links, linktypes, incidents ";
-            $sqlIncident .= "WHERE links.linktype=4 ";
-            $sqlIncident .= "AND links.origcolref={$task->id} ";
-            $sqlIncident .= "AND links.direction='left' ";
-            $sqlIncident .= "AND incidents.id = links.linkcolref ";
+            $sqlIncident .= "FROM `{$dbLinks}` AS l, `{$dbLinkTypes}` AS lt, `{$dbIncidents}` AS i ";
+            $sqlIncident .= "WHERE l.linktype=4 ";
+            $sqlIncident .= "AND l.origcolref={$task->id} ";
+            $sqlIncident .= "AND l.direction='left' ";
+            $sqlIncident .= "AND i.id = l.linkcolref ";
             $resultIncident = mysql_query($sqlIncident);
 
             echo "<td>";
@@ -511,7 +514,7 @@ if (mysql_num_rows($result) >=1 )
                 echo $obj->linkcolref;
                 echo "</a>";
                 $incidentTitle = $obj->title;
-            }           
+            }
             echo "</td>";
         }
 
@@ -560,7 +563,7 @@ if (mysql_num_rows($result) >=1 )
             {
                 echo "<a href='view_task.php?id={$task->id}' class='info'>";
             }
-            
+
             echo truncate_string($task->name, 100);
             echo "</a>";
 
@@ -588,7 +591,7 @@ if (mysql_num_rows($result) >=1 )
             echo ">";
             if ($startdate > 0)
             {
-                echo date($CONFIG['dateformat_date'],$startdate);
+                echo ldate($CONFIG['dateformat_date'],$startdate);
             }
 
             echo "</td>";
@@ -601,7 +604,7 @@ if (mysql_num_rows($result) >=1 )
             echo ">";
             if ($duedate > 0)
             {
-                echo date($CONFIG['dateformat_date'],$duedate);
+                echo ldate($CONFIG['dateformat_date'],$duedate);
             }
             echo "</td>";
         }
@@ -645,7 +648,7 @@ if (mysql_num_rows($result) >=1 )
             echo "<td>";
             if ($enddate > 0)
             {
-                echo date($CONFIG['dateformat_date'],$enddate);
+                echo ldate($CONFIG['dateformat_date'],$enddate);
             }
 
             echo "</td>";
@@ -703,206 +706,49 @@ if (mysql_num_rows($result) >=1 )
         echo "<p align='center'><a href='add_task.php'>{$strAddTask}</a></p>";
     }
 
+    echo "<h3>{$strActivityBilling}</h3>";
+    echo "<p align='center'>{$strActivityBillingInfo}</p>";
+
+    $billing = make_incident_billing_array($incidentid);
+    
     if (!empty($billing))
-    {
-        $billingSQL = "SELECT * FROM billing_periods WHERE tag='{$servicelevel_tag}' AND priority='{$priority}'";
-
-        //echo $billingSQL;
-
-        $billingresult = mysql_query($billingSQL);
-        if (mysql_error()) trigger_error("MySQL Query Error ".mysql_error(), E_USER_ERROR);
-        $billingObj = mysql_fetch_object($billingresult);
-
-        unset($billingresult);
-
-        $engineerPeriod = $billingObj->engineerperiod * 60;  //to seconds
-        $customerPeriod = $billingObj->customerperiod * 60;
-
-        if (empty($engineerPeriod) OR $engineerPeriod == 0) $engineerPeriod = 3600;
-        if (empty($customerPeriod) OR $customerPeriod == 0) $customerPeriod = 3600;
-
-        echo "<h3>{$strActivityBilling}</h3>";
-        echo "<p align='center'>{$strActivityBillingInfo}</p>";
-
-
+    {    
         echo "<p><table align='center'>";
-        echo "<tr><td></td><th>{$strMinutes}</th></th></tr>";
-        echo "<tr><th>{$strBillingEngineerPeriod}</th>";
-        echo "<td>".($engineerPeriod/60)."</td></tr>";
-        echo "<tr><th>{$strBillingCustomerPeriod}</th>";
-        echo "<td>".($customerPeriod/60)."</td></tr>";
+        echo "<tr><td></td><th>{$GLOBALS['strMinutes']}</th></th></tr>";
+        echo "<tr><th>{$GLOBALS['strBillingEngineerPeriod']}</th>";
+        echo "<td>".($billing[-1]['engineerperiod']/60)."</td></tr>";
+        echo "<tr><th>{$GLOBALS['strBillingCustomerPeriod']}</th>";
+        echo "<td>".($billing[-1]['customerperiod']/60)."</td></tr>";
         echo "</table></p>";
-
+    
         echo "<br />";
-
+    
         echo "<table align='center'>";
-
-        echo "<tr><th>{$strOwner}</th><th>{$strTotalMinutes }</th>";
-        echo "<th>{$strBillingEngineerPeriod}</th>";
-        echo "<th>{$strBillingCustomerPeriod}</th></tr>";
+    
+        echo "<tr><th>{$GLOBALS['strOwner']}</th><th>{$GLOBALS['strTotalMinutes']}</th>";
+        echo "<th>{$GLOBALS['strBillingEngineerPeriod']}</th>";
+        echo "<th>{$GLOBALS['strBillingCustomerPeriod']}</th></tr>";
         $shade = "shade1";
-
-        /*
-        echo "<pre>";
-        print_r($billing);
-        echo "</pre>";
-        */
-
+    
         foreach ($billing AS $engineer)
         {
-            /*
-                [eng][starttime]
-            */
-
-            $owner = "";
-            $duration = 0;
-
-            unset($count);
-
-            $count['engineer'];
-            $count['customer'];
-
-            foreach ($engineer AS $activity)
+            if (!empty($engineer['totalduration']))
             {
-                $owner = user_realname($activity['owner']);
-                $duration += $activity['duration'];
-
-                /*
-                echo "<pre>";
-                print_r($count);
-                echo "</pre>";
-                */
-
-                $customerDur = $activity['duration'];
-                $engineerDur = $activity['duration'];
-                $startTime = $activity['starttime'];
-
-                if (!empty($count['engineer']))
-                {
-                    while ($engineerDur > 0)
-                    {
-                        $saved = "false";
-                        foreach ($count['engineer'] AS $ind)
-                        {
-                            /*
-                            echo "<pre>";
-                            print_r($ind);
-                            echo "</pre>";
-                            */
-                            //  echo "IN:{$ind}:START:{$act['starttime']}:ENG:{$engineerPeriod}<br />";
-
-                            if($ind <= $activity['starttime'] AND $ind <= ($activity['starttime'] + $engineerPeriod))
-                            {
-                                //echo "IND:{$ind}:START:{$act['starttime']}<br />";
-                                // already have something which starts in this period just need to check it fits in the period
-                                if($ind + $engineerPeriod > $activity['starttime'] + $engineerDur)
-                                {
-                                    $remainderInPeriod = ($ind + $engineerPeriod) - $activity['starttime'];
-                                    $engineerDur -= $remainderInPeriod;
-
-                                    $saved = "true";
-                                }
-                            }
-                        }
-                        //echo "Saved: {$saved}<br />";
-                        if ($saved == "false" AND $activity['duration'] > 0)
-                        {
-                            //echo "BB:".$activity['starttime'].":SAVED:{$saved}:DUR:{$activity['duration']}<br />";
-                            // need to add a new block
-                            $count['engineer'][$startTime] = $startTime;
-
-                            $startTime += $engineerPeriod;
-
-                            $engineerDur -= $engineerPeriod;
-                        }
-                    }
-                }
-                else
-                {
-                    $count['engineer'][$activity['starttime']] = $activity['starttime'];
-                    $localDur = $activity['duration'] - $engineerPeriod;
-
-                    while ($localDur > 0)
-                    {
-                        $startTime += $engineerPeriod;
-                        $count['engineer'][$startTime] = $startTime;
-                        $localDur -= $engineerPeriod; // was just -
-                    }
-                }
-
-                $startTime = $activity['starttime'];
-
-                if (!empty($count['customer']))
-                {
-                    while ($customerDur > 0)
-                    {
-                        $saved = "false";
-                        foreach ($count['customer'] AS $ind)
-                        {
-                            /*
-                            echo "<pre>";
-                            print_r($ind);
-                            echo "</pre>";
-                            */
-                            //echo "IN:{$ind}:START:{$act['starttime']}:ENG:{$engineerPeriod}<br />";
-
-                            if ($ind <= $activity['starttime'] AND $ind <= ($activity['starttime'] + $customerPeriod))
-                            {
-                                //echo "IND:{$ind}:START:{$activity['starttime']}<br />";
-                                // already have something which starts in this period just need to check it fits in the period
-                                if ($ind + $customerPeriod > $activity['starttime'] + $activity['duration'])
-                                {
-                                    $remainderInPeriod = ($ind+$customerPeriod) - $customerDur;
-                                    $customerDur -= $remainderInPeriod;
-
-                                    $saved = "true";
-                                }
-                            }
-                        }
-
-                        if ($saved == "false" AND $activity['duration'] > 0)
-                        {
-                            //echo "BB:".$activity['starttime'].":SAVED:{$saved}:DUR:{$activity['duration']}<br />";
-                            // need to add a new block
-                            $count['customer'][$startTime] = $startTime;
-
-                            $startTime += $customerPeriod;
-
-                            $customerDur -= $customerPeriod; // was just -
-                        }
-                    }
-                }
-                else
-                {
-                    $count['customer'][$activity['starttime']] = $activity['starttime'];
-                    $localDur = $activity['duration'] - $customerPeriod;
-
-                    while($localDur > 0)
-                    {
-                        $starttime += $customerPeriod;
-                        $count['customer'][$starttime] = $starttime;
-                        $localDur -= $customerPeriod;
-                    }
-                }
+                $totals = $engineer;
             }
-
-            echo "<tr class='{$shade}'><td>{$owner}</td>";
-            echo "<td>".round($duration/60)."</td>";
-            echo "<td>".sizeof($count['engineer'])."</td>";
-            echo "<td>".sizeof($count['customer'])."</td></tr>";
-            $tduration += $duration;
-            $totalengineerperiods += sizeof($count['engineer']);
-            $totalcustomerperiods += sizeof($count['customer']);
-            /*
-            echo "<pre>";
-            print_r($count);
-            echo "</pre>";
-            */
+            else
+            {
+                echo "<tr class='{$shade}'><td>{$engineer['owner']}</td>";
+                echo "<td>".round($engineer['duration']/60)."</td>";
+                echo "<td>".sizeof($engineer['engineerperiods'])."</td>";
+                echo "<td>".sizeof($engineer['customerperiods'])."</td></tr>";        
+            }
+            
             if ($shade == "shade1") $shade = "shade2";
             else $shade = "shade2";
         }
-        echo "<tr><td>{$strTOTALS}</td><td>".round($tduration/60)."</td>";
-        echo "<td>{$totalengineerperiods}</td><td>{$totalcustomerperiods}</td></tr>";
+        echo "<tr><td>{$GLOBALS['strTOTALS']}</td><td>".round($totals['totalduration']/60)."</td>";
+        echo "<td>{$totals['totalengineerperiods']}</td><td>{$totals['totalcustomerperiods']}</td></tr>";
         echo "</table></p>";
     }
 

@@ -12,19 +12,19 @@
 
 // FIXME this isn't on the menu, is it still required?
 
-@include('set_include_path.inc.php');
-$permission=27; // View your calendar
-require('db_connect.inc.php');
-require('functions.inc.php');
+@include ('set_include_path.inc.php');
+$permission = 27; // View your calendar
+require ('db_connect.inc.php');
+require ('functions.inc.php');
 $title="Incident Calendar";
 
 // This page requires authentication
-require('auth.inc.php');
+require ('auth.inc.php');
 
 // External variables
 
 
-include('htmlheader.inc.php');
+include ('htmlheader.inc.php');
 
 /**
     * @author Ivan Lucas
@@ -120,13 +120,13 @@ function draw_calendar($nmonth, $nyear)
        print("</tr>\n");
 
        print("<tr>\n");
-       while($dayRow < $firstday)
+       while ($dayRow < $firstday)
        {
          print("<td><!-- This day in last month --></td>");
          $dayRow += 1;
        }
        $day = 0;
-       if($frametarget)
+       if ($frametarget)
        {
          $targetString = 'target = '.$frametarget;
        }
@@ -134,9 +134,9 @@ function draw_calendar($nmonth, $nyear)
        {
          $targetString = '';
        }
-       while($day < $lastday)
+       while ($day < $lastday)
        {
-         if(($dayRow % 7) == 0)
+         if (($dayRow % 7) == 0)
          {
            print("</tr>\n<tr>\n");
          }
@@ -226,5 +226,5 @@ function draw_calendar($nmonth, $nyear)
       }
       echo "</table>\n";
 
-      include('htmlfooter.inc.php');
+      include ('htmlfooter.inc.php');
 ?>

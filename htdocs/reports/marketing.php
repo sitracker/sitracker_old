@@ -10,14 +10,14 @@
 
 // Author: Ivan Lucas <ivanlucas[at]users.sourceforge.net>
 
-@include('../set_include_path.inc.php');
-$permission=37; // Run Reports
+@include ('../set_include_path.inc.php');
+$permission = 37; // Run Reports
 
-require('db_connect.inc.php');
-require('functions.inc.php');
+require ('db_connect.inc.php');
+require ('functions.inc.php');
 
 // This page requires authentication
-require('auth.inc.php');
+require ('auth.inc.php');
 
 // Temporary: put in place so that this 3.07 feature can be used under 3.06
 if (!function_exists('strip_comma'))
@@ -35,14 +35,14 @@ if (!function_exists('strip_comma'))
 
 if (empty($_REQUEST['mode']))
 {
-    include('htmlheader.inc.php');
+    include ('htmlheader.inc.php');
     echo "<h2>{$strMarketingMailshot}</h2>";
     echo "<form action='{$_SERVER['PHP_SELF']}' method='post'>";
     echo "<table align='center' class='vertical'>";
     echo "<tr><th>{$strFilter}: {$strTag}</th><td><input type='text' name='filtertags' value='' size='15' /></td></tr>";
     echo "<tr><th>{$strInclude}: {$strProducts}</th>";
     echo "<td>";
-    $sql   = "SELECT * FROM products ORDER BY name";
+    $sql   = "SELECT * FROM `{$dbProducts}` ORDER BY name";
     $result = mysql_query($sql);
     if (mysql_error()) trigger_error("MySQL Query Error ".mysql_error(), E_USER_ERROR);
     echo "<select name='inc[]' multiple='multiple' size='6'>";
@@ -55,7 +55,7 @@ if (empty($_REQUEST['mode']))
     echo "<tr>";
     echo "<th>{$strExclude}: {$strProducts}</th>";
     echo "<td>";
-    $sql = "SELECT * FROM products ORDER BY name";
+    $sql = "SELECT * FROM `{$dbProducts}` ORDER BY name";
     $result = mysql_query($sql);
     if (mysql_error()) trigger_error(mysql_error(),E_USER_ERROR);
     echo "<select name='exc[]' multiple='multiple' size='6'>";
@@ -96,7 +96,7 @@ if (empty($_REQUEST['mode']))
     echo "<strong>Field 11:</strong> {$strTelephone}<br />";
     echo "<strong>Field 12:</strong> {$strProducts} <em>(Lists all the customers products regardless of selections made above)</em><br />";
     echo "</td></tr></table>";
-    include('htmlfooter.inc.php');
+    include ('htmlfooter.inc.php');
 }
 elseif ($_REQUEST['mode']=='report')
 {
@@ -132,22 +132,22 @@ elseif ($_REQUEST['mode']=='report')
         $excsql .= ")";
     }
 
-    $sql  = "SELECT *, contacts.id AS contactid, contacts.email AS contactemail, sites.name AS sitename FROM maintenance ";
-    $sql .= "LEFT JOIN supportcontacts ON maintenance.id=supportcontacts.maintenanceid ";
-    $sql .= "LEFT JOIN contacts ON supportcontacts.contactid=contacts.id ";
-    $sql .= "LEFT JOIN sites ON contacts.siteid = sites.id ";
+    $sql  = "SELECT *, c.id AS contactid, c.email AS contactemail, s.name AS sitename FROM `{$dbMaintenance}` AS m ";
+    $sql .= "LEFT JOIN `{$dbSupportContacts}` AS sc ON m.id = sc.maintenanceid ";
+    $sql .= "LEFT JOIN `{$dbContacts}` AS c ON sc.contactid = cs.id ";
+    $sql .= "LEFT JOIN `{$dbSites}` AS s ON c.siteid = s.id ";
 
     if (empty($incsql)==FALSE OR empty($excsql)==FALSE OR $_REQUEST['activeonly']=='yes') $sql .= "WHERE ";
     if ($_REQUEST['activeonly']=='yes')
     {
-        $sql .= "maintenance.term!='yes' AND maintenance.expirydate > '$now' ";
+        $sql .= "m.term!='yes' AND m.expirydate > '$now' ";
         if (empty($incsql)==FALSE OR empty($excsql)==FALSE) $sql .= "AND ";
     }
     if (!empty($incsql)) $sql .= "$incsql";
     if (empty($incsql)==FALSE AND empty($excsql)==FALSE) $sql .= " AND ";
     if (!empty($excsql)) $sql .= "$excsql";
 
-    $sql .= " ORDER BY contacts.email ASC ";
+    $sql .= " ORDER BY c.email ASC ";
 
     $result = mysql_query($sql);
     if (mysql_error()) trigger_error(mysql_error(),E_USER_ERROR);
@@ -187,10 +187,10 @@ elseif ($_REQUEST['mode']=='report')
             if ($row->dataprotection_phone!='Yes') $html .= "<td>{$row->phone}</td>";
             else $html .= "<td><em style='color: red';>{$strWithheld}</em></td>";
 
-            $psql = "SELECT * FROM supportcontacts, maintenance, products WHERE ";
-            $psql .= "supportcontacts.maintenanceid=maintenance.id AND ";
-            $psql .= "maintenance.product=products.id ";
-            $psql .= "AND supportcontacts.contactid='$row->contactid' ";
+            $psql = "SELECT * FROM `{$dbSupportContacts}` AS sc, `{$dbMaintenance}` AS m, `{$dbProducts}` AS p WHERE ";
+            $psql .= "sc.maintenanceid = m.id AND ";
+            $psql .= "m.product = p.id ";
+            $psql .= "AND sc.contactid = '$row->contactid' ";
             $html .= "<td>";
 
             // FIXME dataprotection_address for csv
@@ -236,9 +236,9 @@ elseif ($_REQUEST['mode']=='report')
 
     if ($_POST['output']=='screen')
     {
-        include('htmlheader.inc.php');
+        include ('htmlheader.inc.php');
         echo $html;
-        include('htmlfooter.inc.php');
+        include ('htmlfooter.inc.php');
     }
     elseif ($_POST['output']=='csv')
     {

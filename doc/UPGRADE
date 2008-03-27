@@ -10,12 +10,43 @@ Upgrading Support Incident Tracker
 
 To upgrade simply copy all the new files over the existing ones being
 careful not to overwrite your config.inc.php or any custom themes you
-might have.  Then run setup.php in your browser and follow the
-instructions on-screen.
+might have.
+
+If you cannot edit php.ini and have set the include path using the
+alternative method of editing set_include_path.inc.php you will need
+to edit this file again and set the path anew.
+
+Then run setup.php in your browser and follow the instructions on-screen.
 
 Further instructions and notes about specific upgrades follow, if you
 upgrading and skipping several versions listed below you should read
 everything carefully to make sure you've met all the requirements:
+
+Upgrading to 3.40
+-----------------
+This version supports table prefixes, if you use this feature
+any plugins you have installed that are not designed to work
+with 3.40 may break.
+will default to UTC until they explicity set it by editing
+their profile.  You should pass this information on to your
+users that reside in timezones other than system timezone.
+
+The scheduler, auto.php no longer accepts parameters. Scheduled
+actions are now configured from within SiT by going to SiT! ->
+Control Panel -> Scheduler.
+
+
+Upgrading to 3.32
+-----------------
+New in this version is the ability for users to set their own
+local timezone in their profile.  This will adjust the display
+of dates and times to the users timezone.  Users timezones
+will default to UTC until they explicity set it by editing
+their profile.  You should pass this information on to your
+users that reside in timezones other than system timezone.
+
+Incidents can no longer be closed if they have not been
+assigned.  It was never intended that this be the case.
 
 
 Upgrading to 3.31

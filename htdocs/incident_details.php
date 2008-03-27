@@ -10,13 +10,13 @@
 
 // This file will soon be superceded by incident.php - 20Oct05 INL
 
-@include('set_include_path.inc.php');
-$permission=61; // View Incident Details
-require('db_connect.inc.php');
-require('functions.inc.php');
+@include ('set_include_path.inc.php');
+$permission = 61; // View Incident Details
+require ('db_connect.inc.php');
+require ('functions.inc.php');
 
 // This page requires authentication
-require('auth.inc.php');
+require ('auth.inc.php');
 
 // External variables
 $incidentid = cleanvar($_REQUEST['id']);
@@ -24,10 +24,10 @@ $id = $incidentid;
 
 if ($_REQUEST['win']=='incomingview')
 {
-    $title='Incoming';
-    $incidentid='';
-    include('incident_html_top.inc.php');
-    include('incident/incoming.inc.php');
+    $title = 'Incoming';
+    $incidentid = '';
+    include ('incident_html_top.inc.php');
+    include ('incident/incoming.inc.php');
 }
 elseif ($_REQUEST['win']=='jump')
 {
@@ -62,12 +62,12 @@ else
 {
     $title = $strDetails;
     
-    include('incident_html_top.inc.php');
+    include ('incident_html_top.inc.php');
 
-    include('incident/details.inc.php');
+    include ('incident/details.inc.php');
 
-    include('incident/log.inc.php');
+    include ('incident/log.inc.php');
 }
 
-include('incident_html_bottom.inc.php');
+include ('incident_html_bottom.inc.php');
 ?>

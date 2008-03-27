@@ -10,24 +10,24 @@
 
 // Author: Paul Heaney <paulheaney[at]users.sourceforge.net>
 
-@include('set_include_path.inc.php');
-$permission=49; // Edit Feedback Forms
+@include ('set_include_path.inc.php');
+$permission = 49; // Edit Feedback Forms
 
-require('db_connect.inc.php');
-require('functions.inc.php');
+require ('db_connect.inc.php');
+require ('functions.inc.php');
 // This page requires authentication
-require('auth.inc.php');
+require ('auth.inc.php');
 
 $title = "Browse Feedback Forms";
-include('htmlheader.inc.php');
+include ('htmlheader.inc.php');
 
 echo "<h2>".$title."</h2>";
 
-$sql = "SELECT * FROM feedbackforms";
+$sql = "SELECT * FROM `{$dbFeedbackForms}`";
 $result = mysql_query($sql);
 if (mysql_error()) trigger_error(mysql_error(),E_USER_ERROR);
 
-if(mysql_num_rows($result) > 0)
+if (mysql_num_rows($result) > 0)
 {
     echo "<div style='margin-left: auto; margin-right: auto; width: 70%;'>";
     while ($obj = mysql_fetch_object($result))
@@ -47,6 +47,6 @@ else
     echo "<p align='center'><a href='edit_feedback_form.php?action=new'>Create new form</a></p>";
 }
 
-include('htmlfooter.inc.php');
+include ('htmlfooter.inc.php');
 
 ?>

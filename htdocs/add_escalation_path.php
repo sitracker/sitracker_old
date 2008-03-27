@@ -11,21 +11,21 @@
 
 //// This Page Is Valid XHTML 1.0 Transitional!  (1 Oct 2006)
 
-@include('set_include_path.inc.php');
-$permission=64; // Manage escalation paths
+@include ('set_include_path.inc.php');
+$permission = 64; // Manage escalation paths
 
-require('db_connect.inc.php');
-require('functions.inc.php');
+require ('db_connect.inc.php');
+require ('functions.inc.php');
 // This page requires authentication
-require('auth.inc.php');
+require ('auth.inc.php');
 
 $submit = $_REQUEST['submit'];
 
 $title = $strNewEscalationPath;
 
-if(empty($submit))
+if (empty($submit))
 {
-    include('htmlheader.inc.php');
+    include ('htmlheader.inc.php');
 
     echo show_form_errors('add_escalation_path');
     clear_form_errors('add_escalation_path');
@@ -36,35 +36,35 @@ if(empty($submit))
     echo "<table class='vertical'>";
 
     echo "<tr><th>{$strName}<sup class='red'>*</sup></th><td><input name='name'";
-    if($_SESSION['formdata']['add_escalation_path']['name'] != "")
+    if ($_SESSION['formdata']['add_escalation_path']['name'] != "")
     {
         echo "value='{$_SESSION['formdata']['add_escalation_path']['name']}'";
     }
     echo "/></td></tr>";
 
     echo "<tr><th>{$strTrackURL}<br /></th><td><input name='trackurl'";
-    if($_SESSION['formdata']['add_escalation_path']['trackurl'] != "")
+    if ($_SESSION['formdata']['add_escalation_path']['trackurl'] != "")
     {
         echo "value='{$_SESSION['formdata']['add_escalation_path']['trackurl']}'";
     }
     echo "/><br />{$strNoteInsertExternalID}</td></tr>";
 
     echo "<tr><th>{$strHomeURL}</th><td><input name='homeurl'";
-    if($_SESSION['formdata']['add_escalation_path']['homeurl'] != "")
+    if ($_SESSION['formdata']['add_escalation_path']['homeurl'] != "")
     {
         echo "value='{$_SESSION['formdata']['add_escalation_path']['homeurl']}'";
     }
     echo "/></td></tr>";
 
     echo "<tr><th>{$strTitle}</th><td><input name='title'";
-    if($_SESSION['formdata']['add_escalation_path']['title'] != "")
+    if ($_SESSION['formdata']['add_escalation_path']['title'] != "")
     {
         echo "value='{$_SESSION['formdata']['add_escalation_path']['title']}'";
     }
     echo "/></td></tr>";
 
     echo "<tr><th>{$strEmailDomain}</th><td><input name='emaildomain'";
-    if($_SESSION['formdata']['add_escalation_path']['emaildomain'] != "")
+    if ($_SESSION['formdata']['add_escalation_path']['emaildomain'] != "")
     {
         echo "value='{$_SESSION['formdata']['add_escalation_path']['emaildomain']}'";
     }
@@ -76,7 +76,7 @@ if(empty($submit))
 
     echo "</form>";
 
-    include('htmlfooter.inc.php');
+    include ('htmlfooter.inc.php');
     clear_form_data('add_escalation_path');
 
 }
@@ -91,15 +91,15 @@ else
     $_SESSION['formdata']['add_escalation_path'] = $_REQUEST;
 
     $errors = 0;
-    if(empty($name))
+    if (empty($name))
     {
         $errors++;
         $_SESSION['formerrors']['add_escalation_path']['name'] = $strMustEnterNameEscalationPath;
     }
 
-    if($errors == 0)
+    if ($errors == 0)
     {
-        $sql = "INSERT INTO escalationpaths (name,track_url,home_url,url_title,email_domain) VALUES ";
+        $sql = "INSERT INTO `{$dbEscalationPaths}` (name,track_url,home_url,url_title,email_domain) VALUES ";
         $sql .= " ('{$name}','{$trackurl}','{$homeurl}','{$title}','{$emaildomain}')";
         $result = mysql_query($sql);
         if (mysql_error()) trigger_error(mysql_error(),E_USER_ERROR);

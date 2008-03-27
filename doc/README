@@ -112,44 +112,16 @@ See the UPGRADE file for instructions
 Regular Scheduled Tasks
 -----------------------
 SiT! has a script called auto.php that you should run periodically via
-a crontab or other method.
+a crontab or other method. (e.g. http://www.webcron.org/)
 
-When called via http the auto.php script accepts two parameters
-'actions' and 'verbose'.
-
-    actions     a comma seperated list of tasks to run (no spaces) or
-                'all' to run all tasks
-    verbose     when 'true' text will be output describing whats
-                happening, if omited the script will produce no output
-
-e.g. http://localhost/sit/auto.php?actions=CloseIncidents,PurgeJournal
-or   http://localhost/sit/auto.php?actions=TimeCalc&verbose=TRUE
-
-When called from the console the auto.php again accepts two
-parameters, the first being a comma seperated list of tasks to run
-(no spaces) or 'all' to run all tasks.
-
-e.g. php -f htdocs/auto.php CloseIncidents,PurgeJournal
-
-Actions:
-    CloseIncidents      Close incidents that are marked for closure
-                        according to the config setting
-                        $CONFIG['closure_delay']
-
-    PurgeJournal        Delete old journal entries according to the
-                        config setting $CONFIG['journal_purge_after']
-
-    TimeCalc            Calculate SLA Target Times and trigger
-                        OUT_OF_SLA and OUT_OF_REVIEW system email
-                        templates where appropriate.
-
-    SetUserStatus       (Experimental!) This will set users status
-                        based on data from their holiday calendar.
-                        e.g. Out of Office/Away sick.
+The auto.php script can be run via HTTP or from the console.
 
 An example crontab might look like this:
-6 * * * * /usr/bin/php -f /var/www/sit/htdocs/auto.php TimeCalc
-30 * * * * /usr/bin/php -f /var/www/sit/htdocs/auto.php CloseIncidents,PurgeJournal
+1 * * * * /usr/bin/php -f /var/www/sit/htdocs/auto.php
+
+The actual schedule is now configured within SiT itself by going
+to SiT! -> Control Panel -> Scheduler.  auto.php no longer accepts
+parameters.
 
 
 Inbound email

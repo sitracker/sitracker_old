@@ -18,22 +18,23 @@ function dashboard_user_incidents($row,$dashboardid)
     global $GLOBALS;
     global $CONFIG;
     global $iconset;
+    global $dbIncidents, $dbContacts, $dbPriority;
     $user = "current";
 
 
     // Create SQL for chosen queue
     // If you alter this SQL also update the function user_activeincidents($id)
-    if ($user=='current') $user=$sit[2];
+    if ($user=='current') $user = $sit[2];
     // If the user is passed as a username lookup the userid
     if (!is_number($user) AND $user!='current' AND $user!='all')
     {
-        $usql = "SELECT id FROM users WHERE username='$user' LIMIT 1";
+        $usql = "SELECT id FROM `{$dbUsers}` WHERE username='$user' LIMIT 1";
         $uresult = mysql_query($usql);
         if (mysql_error()) trigger_error(mysql_error(),E_USER_WARNING);
         if (mysql_num_rows($uresult) >= 1) list($user) = mysql_fetch_row($uresult);
         else $user=$sit[2]; // force to current user if username not found
     }
-    $sql = $selectsql . "WHERE contact=contacts.id AND incidents.priority=priority.id ";
+    $sql =  "WHERE i.contact = c.id AND i.priority = p.id ";
     if ($user!='all') $sql .= "AND (owner='$user' OR towner='$user') ";
 
 
@@ -47,23 +48,23 @@ function dashboard_user_incidents($row,$dashboardid)
     $sql .= ") AND timeofnextaction < $now ) ";
 
     echo "<div class='windowbox' style='width: 95%' id='$row-$dashboardid'>";
-    echo "<div class='windowtitle'><a href='incidents.php?user=current&amp;queue=1&amp;type=support'>
-        <img src='{$CONFIG['application_webpath']}images/icons/{$iconset}/16x16/support.png' width='16' height='16' alt='' /> ";
+    echo "<div class='windowtitle'><a href='incidents.php?user=current&amp;queue=1&amp;type=support'>";
+    echo "<img src='{$CONFIG['application_webpath']}images/icons/{$iconset}/16x16/support.png' width='16' height='16' alt='' /> ";
     echo sprintf($GLOBALS['strUserIncidents'], user_realname($user,TRUE));
     echo "</a> ({$GLOBALS['strActionNeeded']})</div>";
     echo "<div class='window'>";
 
-    $selectsql = "SELECT incidents.id, externalid, title, owner, towner, priority, status, siteid, forenames, surname, email, incidents.maintenanceid, ";
+    $selectsql = "SELECT i.id, externalid, title, owner, towner, priority, status, siteid, forenames, surname, email, i.maintenanceid, ";
     $selectsql .= "servicelevel, softwareid, lastupdated, timeofnextaction, ";
     $selectsql .= "(timeofnextaction - $now) AS timetonextaction, opened, ($now - opened) AS duration, closed, (closed - opened) AS duration_closed, type, ";
     $selectsql .= "($now - lastupdated) AS timesincelastupdate ";
-    $selectsql .= "FROM incidents, contacts, priority ";
+    $selectsql .= "FROM `{$dbIncidents}` AS i, `{$dbContacts}` AS c, `{$dbPriority}` AS p ";
     // Create SQL for Sorting
-    switch($sort)
+    switch ($sort)
     {
         case 'id': $sql .= " ORDER BY id $sortorder"; break;
         case 'title': $sql .= " ORDER BY title $sortorder"; break;
-        case 'contact': $sql .= " ORDER BY contacts.surname $sortorder, contacts.forenames $sortorder"; break;
+        case 'contact': $sql .= " ORDER BY c.surname $sortorder, c.forenames $sortorder"; break;
         case 'priority': $sql .=  " ORDER BY priority $sortorder, lastupdated ASC"; break;
         case 'status': $sql .= " ORDER BY status $sortorder"; break;
         case 'lastupdated': $sql .= " ORDER BY lastupdated $sortorder"; break;
@@ -99,10 +100,10 @@ function dashboard_user_incidents($row,$dashboardid)
     {
         // Incidents Table
         $incidents_minimal = true;
-        //include('incidents_table.inc.php');
+        //include ('incidents_table.inc.php');
         $shade='shade1';
         echo "<table style='width: 100%;'>";
-        while($row = mysql_fetch_array($result))
+        while ($row = mysql_fetch_array($result))
         {
             list($update_userid, $update_type, $update_currentowner, $update_currentstatus, $update_body, $update_timestamp, $update_nextaction, $update_id)=incident_lastupdate($row['id']);
             $update_body = parse_updatebody($update_body);

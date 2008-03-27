@@ -10,13 +10,13 @@
 
 // Author: Ivan Lucas <ivanlucas[at]users.sourceforge.net>
 
-@include('set_include_path.inc.php');
-$permission=27; // View your calendar
-require('db_connect.inc.php');
-require('functions.inc.php');
-$title="Holiday Calendar";
+@include ('set_include_path.inc.php');
+$permission = 27; // View your calendar
+require ('db_connect.inc.php');
+require ('functions.inc.php');
+$title = "Holiday Calendar";
 // This page requires authentication
-require('auth.inc.php');
+require ('auth.inc.php');
 
 // Valid user
 
@@ -30,14 +30,14 @@ $length = cleanvar($_REQUEST['length']);
 $return = cleanvar($_REQUEST['return']);
 
 // startdate in unix format
-$startdate=mktime(0,0,0,$month,$day,$year);
-$enddate=mktime(23,59,59,$month,$day,$year);
-if ($length=='') $length='day';
+$startdate = mktime(0,0,0,$month,$day,$year);
+$enddate = mktime(23,59,59,$month,$day,$year);
+if ($length=='') $length = 'day';
 
-if (user_permission($sit[2],50)) $approver=TRUE;
-else $approver=FALSE;
-if (user_permission($sit[2],22)) $adminuser=TRUE;
-else $adminuser=FALSE;
+if (user_permission($sit[2],50)) $approver = TRUE;
+else $approver = FALSE;
+if (user_permission($sit[2],22)) $adminuser = TRUE;
+else $adminuser = FALSE;
 
 // Holiday types (for reference)
 // 1 = Holiday
@@ -53,7 +53,7 @@ list($dtype, $dlength, $dapproved, $dapprovedby)=user_holiday($user, 0, $year, $
 if ($length=='0' AND ($approver==TRUE AND ($dapprovedby=$sit[2] OR $adminuser==TRUE)))
 {
     // Delete the holiday
-    $sql = "DELETE FROM holidays ";
+    $sql = "DELETE FROM `{$dbHolidays}` ";
     $sql .= "WHERE userid='$user' AND startdate >= '$startdate' AND startdate < '$enddate' AND type='$type' ";
     if (!$adminuser) $sql .= "AND (approvedby='{$sit[2]}' OR userid={$sit[2]}) ";
     $result = mysql_query($sql);
@@ -72,7 +72,7 @@ else
             if ($length=='0')
             {
                 // FIXME: doesn't check permission or anything
-                $sql = "DELETE FROM holidays ";
+                $sql = "DELETE FROM `{$dbHolidays}` ";
                 $sql .= "WHERE userid='$user' AND startdate='$startdate' AND type='$type' ";
                 $result = mysql_query($sql);
                 // echo $sql;
@@ -83,7 +83,7 @@ else
             else
             {
                 // there is an existing booking so alter it
-                $sql = "UPDATE holidays SET length='$length' ";
+                $sql = "UPDATE `{$dbHolidays}` SET length='$length' ";
                 $sql .= "WHERE userid='$user' AND startdate='$startdate' AND type='$type' AND length='$dlength'";
                 $result = mysql_query($sql);
 //                 echo $sql;
@@ -94,7 +94,7 @@ else
         else
         {
             // there is no holiday on this day, so make one
-            $sql = "INSERT INTO holidays ";
+            $sql = "INSERT INTO `{$dbHolidays}` ";
             $sql .= "SET userid='$user', type='$type', startdate='$startdate', length='$length' ";
             $result = mysql_query($sql);
             $dlength=$length;

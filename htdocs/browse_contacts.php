@@ -12,13 +12,13 @@
 
 // TODO This page fails XHTML validation because of dojo attributes - INL 12/12/07
 
-@include('set_include_path.inc.php');
-$permission=12; // View Contacts
+@include ('set_include_path.inc.php');
+$permission = 12; // View Contacts
 
-require('db_connect.inc.php');
-require('functions.inc.php');
+require ('db_connect.inc.php');
+require ('functions.inc.php');
 // This page requires authentication
-require('auth.inc.php');
+require ('auth.inc.php');
 
 $title = $strBrowseContacts;
 
@@ -26,12 +26,12 @@ $title = $strBrowseContacts;
 $search_string = cleanvar($_REQUEST['search_string']);
 $submit_value = cleanvar($_REQUEST['submit']);
 $displayinactive = cleanvar($_REQUEST['displayinactive']);
-if(empty($displayinactive)) $displayinactive = "false";
+if (empty($displayinactive)) $displayinactive = "false";
 
-if($submit_value == 'go')
+if ($submit_value == 'go')
 {
         // build SQL
-        $sql  = "SELECT * FROM contacts ";
+        $sql  = "SELECT * FROM `{$dbContacts}` ";
         $search_string_len=strlen($search_string);
         if ($search_string != '*')
         {
@@ -53,7 +53,7 @@ if($submit_value == 'go')
         $result = mysql_query($sql);
         if (mysql_error()) trigger_error("MySQL Query Error ".mysql_error(), E_USER_ERROR);
 
-        if(mysql_num_rows($result) == 1)
+        if (mysql_num_rows($result) == 1)
         {
             //go straight to the contact
             $row = mysql_fetch_array($result);
@@ -62,7 +62,7 @@ if($submit_value == 'go')
         }
 }
 
-include('htmlheader.inc.php');
+include ('htmlheader.inc.php');
 
 if ($search_string=='') $search_string='a';
 ?>
@@ -75,7 +75,7 @@ window.open(URL, "contact_products_window", "toolbar=no,status=yes,menubar=no,sc
 </script>
 <script type="text/javascript" src="scripts/dojo/dojo.js"></script>
 <script type="text/javascript">
-    dojo.require("dojo.widget.ComboBox");
+    dojo.require ("dojo.widget.ComboBox");
 </script>
 <?php
 echo "<h2><img src='{$CONFIG['application_webpath']}images/icons/{$iconset}/32x32/contact.png' width='32' height='32' alt='' /> ";
@@ -91,17 +91,17 @@ echo "{$strBrowseContacts}</h2>";
     <input dojoType='ComboBox' dataUrl='autocomplete.php?action=contact' style='width: 300px;' name='search_string' />
     <?php echo "<input name='submit' type='submit' value=\"{$strGo}\" /></p>";
     echo "</form>\n";
-        if($displayinactive=="true")
+        if ($displayinactive=="true")
         {
             echo "<a href='".$_SERVER['PHP_SELF']."?displayinactive=false";
-            if(!empty($search_string)) echo "&amp;search_string={$search_string}";
+            if (!empty($search_string)) echo "&amp;search_string={$search_string}";
             echo "'>{$strShowActiveOnly}</a>";
             $inactivestring="displayinactive=true";
         }
         else
         {
             echo "<a href='".$_SERVER['PHP_SELF']."?displayinactive=true";
-            if(!empty($search_string)) echo "&amp;search_string={$search_string}";
+            if (!empty($search_string)) echo "&amp;search_string={$search_string}";
             echo "'>Show inactive</a>";
             $inactivestring="displayinactive=false";
         }
@@ -159,31 +159,31 @@ else
     // search for criteria
     if ($errors == 0)
     {
-        if($submit_value != 'go')
+        if ($submit_value != 'go')
         {
             // Don't  need to do this again, already done above, us the results of that
             // build SQL
-            $sql  = "SELECT contacts.* FROM contacts,sites ";
-            $sql .= "WHERE contacts.siteid = sites.id ";
+            $sql  = "SELECT c.* FROM `{$dbContacts}` AS c, `{$dbSites}` AS s ";
+            $sql .= "WHERE c.siteid = s.id ";
             $search_string_len=strlen($search_string);
             if ($search_string != '*')
             {
                 $sql .= " AND (";
-                if ($search_string_len<=6) $sql .= "contacts.id=('$search_string') OR ";
+                if ($search_string_len<=6) $sql .= "c.id=('$search_string') OR ";
                 if ($search_string_len<=2)
                 {
-                    $sql .= "SUBSTRING(contacts.surname,1,$search_string_len)=('$search_string') ";
+                    $sql .= "SUBSTRING(c.surname,1,$search_string_len)=('$search_string') ";
                 }
                 else
                 {
-                    $sql .= "contacts.surname LIKE '%$search_string%' OR contacts.forenames LIKE '%$search_string%' OR ";
-                    $sql .= "CONCAT(contacts.forenames,' ',contacts.surname) LIKE '%$search_string%'";
+                    $sql .= "c.surname LIKE '%$search_string%' OR c.forenames LIKE '%$search_string%' OR ";
+                    $sql .= "CONCAT(c.forenames,' ',c.surname) LIKE '%$search_string%'";
                 }
                 $sql .= " ) ";
             }
-            if($displayinactive=="false")
+            if ($displayinactive=="false")
             {
-                $sql .= " AND contacts.active = 'true' AND sites.active = 'true'";
+                $sql .= " AND c.active = 'true' AND s.active = 'true'";
             }
             $sql .= " ORDER BY surname ASC";
 
@@ -237,5 +237,5 @@ else
         mysql_free_result($result);
     }
 }
-include('htmlfooter.inc.php');
+include ('htmlfooter.inc.php');
 ?>

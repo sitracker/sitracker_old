@@ -22,10 +22,10 @@ $sql = get_sql_statement($startdate,$enddate,$query,false);
 $result= mysql_query($sql);
 if (mysql_error()) trigger_error("MySQL Query Error ".mysql_error(), E_USER_ERROR);
 
-$start_str=date("Y-m-d",$startdate);
-$end_str=date("Y-m-d",$enddate);
+$start_str = date("Y-m-d",$startdate);
+$end_str = date("Y-m-d",$enddate);
 
-switch($query)
+switch ($query)
 {
     case 0:
         $type='opened';
@@ -38,22 +38,22 @@ switch($query)
         break;
 }
 
-if($start_str==$end_str) echo "<h2>".sprintf($strIncidentsVerbOnDate, $type, $start_str)."</h2>";
+if ($start_str==$end_str) echo "<h2>".sprintf($strIncidentsVerbOnDate, $type, $start_str)."</h2>";
 else echo "<h2>".sprintf($strIncidentsVerbBetweenDates, $type, $start_str, $end_str)."</h2>";
 
 echo "<table align='center'>";
 
-if(mysql_num_rows($result) > 0)
+if (mysql_num_rows($result) > 0)
 {
     echo "<tr><th>{$strID}</th><th>{$strTitle}</th><th>{$strOpened}</th><th>{$strClosed}</th><th>{$strOwner}</th><th>{$strCustomer}</th><th>{$strSite}</th></tr>";
-    
-    while($row = mysql_fetch_array($result))
+
+    while ($row = mysql_fetch_array($result))
     {
         echo "<tr>";
         echo "<td><a href=\"javascript:incident_details_window('{$row['id']}','incident{$row['id']}')\" class='info'>{$row['id']}</a></td>";
         echo "<td><a href=\"javascript:incident_details_window('{$row['id']}','incident{$row['id']}')\" class='info'>{$row['title']}</a></td>";
         echo "<td>".date($CONFIG['dateformat_datetime'],$row['opened'])."</td>";
-        if($row['status'] != 2)
+        if ($row['status'] != 2)
         {
             echo "<td>{$strCurrentlyOpen}</td>";
         }
@@ -62,7 +62,9 @@ if(mysql_num_rows($result) > 0)
             echo "<td>".date($CONFIG['dateformat_datetime'],$row['closed'])."</td>";
         }
         echo "<td>".user_realname($row['owner'])."</td>";
-        $sql = "SELECT contacts.forenames,contacts.surname, sites.name FROM contacts,sites WHERE sites.id = contacts.siteid AND contacts.id = {$row['contact']}";
+        $sql = "SELECT c.forenames, c.surname, s.name ";
+        $sql .= "FROM `{$dbContacts}` AS c, `{$dbSites}` AS s ";
+        $sql .= "WHERE s.id = c.siteid AND c.id = {$row['contact']}";
         $contactResult = mysql_query($sql);
         if (mysql_error()) trigger_error("MySQL Query Error ".mysql_error(), E_USER_ERROR);
         $contact = mysql_fetch_array($contactResult);
@@ -70,7 +72,7 @@ if(mysql_num_rows($result) > 0)
         echo "<td>{$contact['name']}</td>";
         echo "</tr>";
     }
-    
+
     echo "</table>";
 }
 else

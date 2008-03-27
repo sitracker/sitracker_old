@@ -10,16 +10,16 @@
 
 // Author: Ivan Lucas <ivanlucas[at]users.sourceforge.net>
 
-@include('set_include_path.inc.php');
+@include ('set_include_path.inc.php');
 if (empty($_REQUEST['user'])
     OR $_REQUEST['user']=='current'
     OR $_REQUEST['userid']==$_SESSION['userid']) $permission=58; // Edit your software skills
 else $permission=59; // Manage users software skills
 
-require('db_connect.inc.php');
-require('functions.inc.php');
+require ('db_connect.inc.php');
+require ('functions.inc.php');
 // This page requires authentication
-require('auth.inc.php');
+require ('auth.inc.php');
 
 // External Variables
 $submit=$_REQUEST['submit'];
@@ -28,8 +28,8 @@ else $user = cleanvar($_REQUEST['user']);
 
 if (empty($submit))
 {
-    include('htmlheader.inc.php');
-    $sql = "SELECT * FROM usersoftware, software WHERE usersoftware.softwareid=software.id AND userid='$user' ORDER BY name";
+    include ('htmlheader.inc.php');
+    $sql = "SELECT * FROM `{$dbUserSoftware}` AS us, `{$dbSoftware}` AS s WHERE us.softwareid = s.id AND userid = '$user' ORDER BY name";
     $result = mysql_query($sql);
     if (mysql_num_rows($result) >= 1)
     {
@@ -45,7 +45,7 @@ if (empty($submit))
     echo "<table align='center'>";
     echo "<tr><th>{$strNOSkills}</th><th>&nbsp;</th><th>{$strHAVESkills}</th></tr>";
     echo "<tr><td align='center' width='300' class='shade1'>";
-    $sql = "SELECT * FROM software ORDER BY name";
+    $sql = "SELECT * FROM `{$dbSoftware}` ORDER BY name";
     $result = mysql_query($sql);
     if (mysql_num_rows($result) >= 1)
     {
@@ -76,7 +76,7 @@ if (empty($submit))
     echo "<input type='button' value='&lt;&lt;' title='Remove All' onclick=\"copyAll(this.form.elements['expertise[]'],this.form.elements['noskills[]'])\" /><br />";
     echo "</td>";
     echo "<td class='shade1'>";
-    $sql = "SELECT * FROM usersoftware, software WHERE usersoftware.softwareid=software.id AND userid='{$user}' ORDER BY name";
+    $sql = "SELECT * FROM `{$dbUserSoftware}` AS us, `{$dbSoftware}` AS s WHERE us.softwareid = s.id AND userid = '{$user}' ORDER BY name";
     $result = mysql_query($sql);
     echo "<select name='expertise[]' multiple='multiple' size='20' style='width: 100%;  min-width: 200px;'>";
     while ($software = mysql_fetch_object($result))
@@ -94,7 +94,7 @@ if (empty($submit))
     echo "<p align='center'><input name='submit' type='submit' value='{$strSave}' /></p>";
     echo "</form>\n";
 
-    include('htmlfooter.inc.php');
+    include ('htmlfooter.inc.php');
 }
 else
 {
@@ -113,7 +113,7 @@ else
     // FIXME: whatabout cases where the user is a backup for one of the products
     // he removes? or if the backup user leaves the company?
 
-    //$sql = "DELETE FROM usersoftware WHERE userid='{$_POST['userid']}'";
+    //$sql = "DELETE FROM `{$dbUserSoftware}` WHERE userid='{$_POST['userid']}'";
     //mysql_query($sql);
     //if (mysql_error()) trigger_error("MySQL Query Error ".mysql_error(), E_USER_ERROR);
 
@@ -122,11 +122,11 @@ else
         $expertise=array_unique($expertise);
         foreach ($expertise AS $value)
         {
-            $checksql = "SELECT userid FROM usersoftware WHERE userid='{$_POST['userid']}' AND softwareid='$value' LIMIT 1";
+            $checksql = "SELECT userid FROM `{$dbUserSoftware}` WHERE userid='{$_POST['userid']}' AND softwareid='$value' LIMIT 1";
             $checkresult=mysql_query($checksql);
             if (mysql_num_rows($checkresult)< 1)
             {
-                $sql = "INSERT DELAYED INTO usersoftware (userid, softwareid) VALUES ('{$_POST['userid']}', '$value')";
+                $sql = "INSERT DELAYED INTO `{$dbUserSoftware}` (userid, softwareid) VALUES ('{$_POST['userid']}', '$value')";
                 // echo "$sql <br />";
                 mysql_query($sql);
                 if (mysql_error()) trigger_error("MySQL Query Error ".mysql_error(), E_USER_ERROR);
@@ -142,12 +142,12 @@ else
         foreach ($noskills AS $value)
         {
             // Remove the software listed that we don't support
-            $sql = "DELETE FROM usersoftware WHERE userid='{$_POST['userid']}' AND softwareid='$value' LIMIT 1";
+            $sql = "DELETE FROM `{$dbUserSoftware}` WHERE userid='{$_POST['userid']}' AND softwareid='$value' LIMIT 1";
             mysql_query($sql);
             if (mysql_error()) trigger_error("MySQL Query Error ".mysql_error(), E_USER_ERROR);
 
             // If we are providing backup for a skill we don't have - reset that back to nobody providing backup
-            $sql = "UPDATE usersoftware SET backupid='0' WHERE backupid='{$_POST['userid']}' AND softwareid='$value' LIMIT 1";
+            $sql = "UPDATE `{$dbUserSoftware}` SET backupid='0' WHERE backupid='{$_POST['userid']}' AND softwareid='$value' LIMIT 1";
             mysql_query($sql);
             if (mysql_error()) trigger_error("MySQL Query Error ".mysql_error(), E_USER_ERROR);
         }
@@ -156,7 +156,7 @@ else
     journal(CFG_LOGGING_MAX,'Skillset Updated',"Users Skillset was Changed",CFG_JOURNAL_USER,0);
 
     // Have a look to see if any of the software we support is lacking a backup/substitute engineer
-    $sql = "SELECT userid FROM usersoftware WHERE userid='{$_POST['userid']}' AND backupid='0' LIMIT 1";
+    $sql = "SELECT userid FROM `{$dbUserSoftware}` WHERE userid='{$_POST['userid']}' AND backupid='0' LIMIT 1";
     $result=mysql_query($sql);
     if (mysql_error()) trigger_error("MySQL Query Error ".mysql_error(), E_USER_ERROR);
     $lacking=mysql_num_rows($result);

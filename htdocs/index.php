@@ -9,27 +9,18 @@
 //
 // This Page Is Valid XHTML 1.0 Transitional! 31Oct05
 
-@include('set_include_path.inc.php');
+@include ('set_include_path.inc.php');
 
-if (version_compare(PHP_VERSION, "5.0.0", ">="))
+if (!@include('db_connect.inc.php'))
 {
-    try
-    {
-        if (!@include('db_connect.inc.php')) throw new Exception('Failed to include essential file, include path is probably wrong');
-    }
-    catch (Exception $e)
-    {
-        header("Location: setup.php");
-        exit;
-        // print $e->getMessage();
-    }
+    header("Location: setup.php#include_failed");
+    exit;
 }
-else require('db_connect.inc.php');
 
 session_name($CONFIG['session_name']);
 session_start();
-include('strings.inc.php');
-require('functions.inc.php');
+include ('strings.inc.php');
+require ('functions.inc.php');
 
 if ($_SESSION['auth'] != TRUE)
 {
@@ -38,7 +29,7 @@ if ($_SESSION['auth'] != TRUE)
     $page = htmlentities(strip_tags(str_replace('..','',str_replace('//','',str_replace(':','',urldecode($_REQUEST['page']))))),ENT_COMPAT, $GLOBALS['i18ncharset']);
 
     // Invalid user, show log in form
-    include('htmlheader.inc.php');
+    include ('htmlheader.inc.php');
     if ($id == 1)
     {
         echo "<p class='error'>".sprintf($strEnterCredentials, $CONFIG['application_shortname'])."</p><br />";
@@ -94,7 +85,7 @@ if ($_SESSION['auth'] != TRUE)
     echo "<br /><a href='forgotpwd.php'>{$strForgottenDetails}</a>";
     echo "</form>\n";
     echo "</div>\n</div>\n";
-    include('htmlfooter.inc.php');
+    include ('htmlfooter.inc.php');
 }
 else
 {

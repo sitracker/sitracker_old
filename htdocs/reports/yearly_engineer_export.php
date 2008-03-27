@@ -19,18 +19,18 @@
 
 // Requested by Rob Shepley, 3 Oct 05
 
-@include('../set_include_path.inc.php');
+@include ('../set_include_path.inc.php');
 $permission = 37; // Run Reports
 $title = 'Yearly Engineer/Incident Report';
-require('db_connect.inc.php');
-require('functions.inc.php');
+require ('db_connect.inc.php');
+require ('functions.inc.php');
 
 // This page requires authentication
-require('auth.inc.php');
+require ('auth.inc.php');
 
 if (empty($_REQUEST['mode']))
 {
-    include('htmlheader.inc.php');
+    include ('htmlheader.inc.php');
     echo "<h2>$title</h2>";
     echo "<form action='{$_SERVER['PHP_SELF']}' method='post' id='incidentsbyengineer'>";
     echo "<table align='center' class='vertical'>";
@@ -49,7 +49,7 @@ if (empty($_REQUEST['mode']))
     echo "</td></tr>";
     echo "<tr><th colspan='2'>{$strInclude}</th></tr>";
     echo "<tr><td align='center' colspan='2'>";
-    $sql = "SELECT * FROM users WHERE status > 0 ORDER BY username";
+    $sql = "SELECT * FROM `{$dbUsers}` WHERE status > 0 ORDER BY username";
     $result = mysql_query($sql);
     if (mysql_error()) trigger_error("MySQL Query Error ".mysql_error(), E_USER_ERROR);
     echo "<select name='inc[]' multiple='multiple' size='20'>";
@@ -76,7 +76,7 @@ if (empty($_REQUEST['mode']))
     echo "<input type='submit' value=\"{$strRunReport}\" />";
     echo "</p>";
     echo "</form>";
-    include('htmlfooter.inc.php');
+    include ('htmlfooter.inc.php');
 }
 elseif ($_REQUEST['statistics'] == 'on')
 {
@@ -96,8 +96,8 @@ elseif ($_REQUEST['statistics'] == 'on')
         for ($i = 0; $i < $includecount; $i++)
         {
             // $html .= "{$_POST['inc'][$i]} <br />";
-            $incsql .= "users.id={$_POST['inc'][$i]}";
-            $incsql_esc .= "incidents.owner={$_POST['inc'][$i]}";
+            $incsql .= "u.id={$_POST['inc'][$i]}";
+            $incsql_esc .= "i.owner={$_POST['inc'][$i]}";
             if ($i < ($includecount-1)) $incsql .= " OR ";
             if ($i < ($includecount-1)) $incsql_esc .= " OR ";
         }
@@ -105,20 +105,20 @@ elseif ($_REQUEST['statistics'] == 'on')
         $incsql_esc .= ")";
     }
 
-    $sql = "SELECT COUNT(DISTINCT incidents.id) AS numberOpened, users.id, users.realname ";
-    $sql .= "FROM users, incidents ";
-    $sql .= "WHERE users.id=incidents.owner AND incidents.opened >= {$startdate} AND incidents.opened <= {$enddate} ";
+    $sql = "SELECT COUNT(DISTINCT i.id) AS numberOpened, u.id, u.realname ";
+    $sql .= "FROM `{$dbUsers}` AS u, `{$dbIncidents}` AS i ";
+    $sql .= "WHERE u.id=i.owner AND i.opened >= {$startdate} AND i.opened <= {$enddate} ";
     //$sql .= "WHERE users.id=incidents.owner AND incidents.opened > ($now-60*60*24*365.25) ";
     /*$sql .= "WHERE users.id=incidents.owner "; // AND incidents.opened > ($now-60*60*24*365.25) ";
-    if($type == "opened")
+    if ($type == "opened")
     {
         $sql .= " AND incidents.opened >= {$startdate} AND incidents.opened <= {$enddate} ";
     }
-    else if($type == "closed")
+    else if ($type == "closed")
     {
         $sql .= " AND incidents.closed >= {$startdate} AND incidents.closed <= {$enddate} ";
     }
-    else if($type == "both")
+    else if ($type == "both")
     {
         $sql .= " AND ((incidents.opened >= {$startdate} AND incidents.opened <= {$enddate}) ";
         $sql .= " OR (incidents.closed >= {$startdate} AND incidents.closed <= {$enddate})) ";
@@ -129,7 +129,7 @@ elseif ($_REQUEST['statistics'] == 'on')
     if (empty($incsql)==FALSE AND empty($excsql)==FALSE) $sql .= " AND ";
     if (!empty($excsql)) $sql .= "$excsql";
 
-    $sql .= " GROUP BY users.id ";
+    $sql .= " GROUP BY u.id ";
 
     //echo $sql;
 
@@ -138,9 +138,9 @@ elseif ($_REQUEST['statistics'] == 'on')
     $numrows = mysql_num_rows($result);
 
     $totalOpened = 0;
-    if($numrows > 0)
+    if ($numrows > 0)
     {
-        while($obj = mysql_fetch_object($result))
+        while ($obj = mysql_fetch_object($result))
         {
             $data[$obj->id]['realname'] = $obj->realname;
             $data[$obj->id]['opened'] = $obj->numberOpened;
@@ -152,17 +152,17 @@ elseif ($_REQUEST['statistics'] == 'on')
     //    CLOSED
     //
 
-    $sql = "SELECT COUNT(incidents.id) AS numberClosed, users.id, users.realname ";
-    $sql .= "FROM users, incidents ";
-    $sql .= "WHERE users.id=incidents.owner"; //AND incidents.closed > ($now-60*60*24*365.25) ";
-    $sql .= " AND incidents.closed >= {$startdate} AND incidents.closed <= {$enddate} ";
+    $sql = "SELECT COUNT(i.id) AS numberClosed, u.id, u.realname ";
+    $sql .= "FROM `{$dbUsers}` AS u, `{$dbIncidents}` AS i ";
+    $sql .= "WHERE u.id=i.owner"; //AND incidents.closed > ($now-60*60*24*365.25) ";
+    $sql .= " AND i.closed >= {$startdate} AND i.closed <= {$enddate} ";
 
     if (empty($incsql)==FALSE OR empty($excsql)==FALSE) $sql .= " AND ";
     if (!empty($incsql)) $sql .= "$incsql";
     if (empty($incsql)==FALSE AND empty($excsql)==FALSE) $sql .= " AND ";
     if (!empty($excsql)) $sql .= "$excsql";
 
-    $sql .= " GROUP BY users.id ";
+    $sql .= " GROUP BY u.id ";
 
     //echo $sql;
 
@@ -171,9 +171,9 @@ elseif ($_REQUEST['statistics'] == 'on')
     $numrows = mysql_num_rows($result);
 
     $totalClosed = 0;
-    if($numrows > 0)
+    if ($numrows > 0)
     {
-        while($obj = mysql_fetch_object($result))
+        while ($obj = mysql_fetch_object($result))
         {
             $data[$obj->id]['realname'] = $obj->realname;
             $data[$obj->id]['closed'] = $obj->numberClosed;
@@ -184,37 +184,38 @@ elseif ($_REQUEST['statistics'] == 'on')
     //mysqldump version
     // Escalated
     //
-    $sql = "SELECT COUNT(DISTINCT(incidentid)) AS numberEscalated, users.id, users.realname FROM updates, incidents,users WHERE  users.id=incidents.owner AND updates.incidentid = incidents.id  AND updates.bodytext LIKE \"External ID%\"";
-    if($type == "opened")
+    // FIXME this SQL uses the bodytext to find out which incidents have been escalated
+    $sql = "SELECT COUNT(DISTINCT(incidentid)) AS numberEscalated, u.id, u.realname ";
+    $sql .= "FROM `{$dbUpdates}` AS up, `{$dbIncidents}` AS i, `{$dbUsers}` AS u ";
+    $sql .= "WHERE  u.id = i.owner AND up.incidentid = i.id  AND up.bodytext LIKE \"External ID%\"";
+    if ($type == "opened")
     {
-        $sql .= " AND incidents.opened >= {$startdate} AND incidents.opened <= {$enddate} ";
+        $sql .= " AND i.opened >= {$startdate} AND i.opened <= {$enddate} ";
     }
-    else if($type == "closed")
+    else if ($type == "closed")
     {
-        $sql .= " AND incidents.closed >= {$startdate} AND incidents.closed <= {$enddate} ";
+        $sql .= " AND i.closed >= {$startdate} AND i.closed <= {$enddate} ";
     }
-    else if($type == "both")
+    else if ($type == "both")
     {
-        $sql .= " AND ((incidents.opened >= {$startdate} AND incidents.opened <= {$enddate}) ";
-        $sql .= " OR (incidents.closed >= {$startdate} AND incidents.closed <= {$enddate})) ";
+        $sql .= " AND ((i.opened >= {$startdate} AND i.opened <= {$enddate}) ";
+        $sql .= " OR (i.closed >= {$startdate} AND i.closed <= {$enddate})) ";
     }
     if (empty($incsql)==FALSE OR empty($excsql)==FALSE) $sql .= " AND ";
     if (!empty($incsql)) $sql .= "$incsql";
     if (empty($incsql)==FALSE AND empty($excsql)==FALSE) $sql .= " AND ";
     if (!empty($excsql)) $sql .= "$excsql";
 
-    $sql .= " GROUP BY users.id ";
-
-    //echo $sql;
+    $sql .= " GROUP BY u.id ";
 
     $result = mysql_query($sql);
     if (mysql_error()) trigger_error("MySQL Query Error ".mysql_error(), E_USER_ERROR);
     $numrows = mysql_num_rows($result);
 
     $totalEscalated = 0;
-    if($numrows > 0)
+    if ($numrows > 0)
     {
-        while($obj = mysql_fetch_object($result))
+        while ($obj = mysql_fetch_object($result))
         {
             $data[$obj->id]['realname'] = $obj->realname;
             $data[$obj->id]['escalated'] = $obj->numberEscalated;
@@ -222,12 +223,7 @@ elseif ($_REQUEST['statistics'] == 'on')
         }
     }
 
-
-    /*echo "<pre>";
-    print_r($data);
-    echo "</pre>";*/
-
-    if(sizeof($data) > 0)
+    if (sizeof($data) > 0)
     {
         $html .= "<table align='center'>";
         $html .= "<tr>";
@@ -245,17 +241,17 @@ elseif ($_REQUEST['statistics'] == 'on')
         $csv .= "Avg Closed (Month),Percentage escalated\n";
 
         $class="class='shade1'";
-        foreach($data AS $engineer)
+        foreach ($data AS $engineer)
         {
             $html .= "<tr>";
             $html .= "<td {$class}>".$engineer['realname']."</td>";
-            if(empty($engineer['opened'])) $open = 0;
+            if (empty($engineer['opened'])) $open = 0;
             else $open = $engineer['opened'];
             $html .= "<td {$class}>{$open}</td>";
-            if(empty($engineer['escalated'])) $escalated = 0;
+            if (empty($engineer['escalated'])) $escalated = 0;
             else $escalated = $engineer['escalated'];
             $html .= "<td {$class}>{$escalated}</td>";
-            if(empty($engineer['closed'])) $closed = 0;
+            if (empty($engineer['closed'])) $closed = 0;
             else $closed = $engineer['closed'];
             $html .= "<td {$class}>{$closed}</td>";
             $html .= "<td {$class}>".round($engineer['opened']/12,2)."</td>"; //The average over a 12mnth period
@@ -274,7 +270,7 @@ elseif ($_REQUEST['statistics'] == 'on')
             $csv .= round(($engineer['escalated']/$engineer['opened'])*100,2)."%\n";
 
 
-            if($class=="class='shade1'") $class="class='shade2'";
+            if ($class=="class='shade1'") $class="class='shade2'";
             else $class="class='shade1'";
         }
         $html .= "<tr>";
@@ -307,10 +303,10 @@ elseif ($_REQUEST['statistics'] == 'on')
 
     if ($_POST['output'] == 'screen')
     {
-        include('htmlheader.inc.php');
+        include ('htmlheader.inc.php');
         echo "<h2>Engineer statistics for past year</h2>";
         echo $html;
-        include('htmlfooter.inc.php');
+        include ('htmlfooter.inc.php');
     }
     elseif ($_POST['output'] == 'csv')
     {
@@ -355,21 +351,22 @@ elseif ($_REQUEST['mode'] == 'report')
         $incsql_esc .= ")";
     }
 //
-    $sql = "SELECT incidents.id AS incid, incidents.title AS title,users.realname AS realname, users.id AS userid, ";
-    $sql .= "incidents.opened AS opened, incidents.closed AS closed FROM users, incidents ";
-    $sql .= "WHERE users.id=incidents.owner "; // AND incidents.opened > ($now-60*60*24*365.25) ";
-    if($type == "opened")
+    $sql = "SELECT i.id AS incid, i.title AS title, u.realname AS realname, u.id AS userid, ";
+    $sql .= "i.opened AS opened, i.closed AS closed ";
+    $sql .= "FROM `{$dbUsers}` AS u, `{$dbIncidents}` AS i ";
+    $sql .= "WHERE u.id = i.owner "; // AND incidents.opened > ($now-60*60*24*365.25) ";
+    if ($type == "opened")
     {
-        $sql .= " AND incidents.opened >= {$startdate} AND incidents.opened <= {$enddate} ";
+        $sql .= " AND i.opened >= {$startdate} AND i.opened <= {$enddate} ";
     }
-    else if($type == "closed")
+    else if ($type == "closed")
     {
-        $sql .= " AND incidents.closed >= {$startdate} AND incidents.closed <= {$enddate} ";
+        $sql .= " AND i.closed >= {$startdate} AND i.closed <= {$enddate} ";
     }
-    else if($type == "both")
+    else if ($type == "both")
     {
-        $sql .= " AND ((incidents.opened >= {$startdate} AND incidents.opened <= {$enddate}) ";
-        $sql .= " OR (incidents.closed >= {$startdate} AND incidents.closed <= {$enddate})) ";
+        $sql .= " AND ((i.opened >= {$startdate} AND i.opened <= {$enddate}) ";
+        $sql .= " OR (i.closed >= {$startdate} AND i.closed <= {$enddate})) ";
     }
 
 
@@ -379,32 +376,33 @@ elseif ($_REQUEST['mode'] == 'report')
     if (empty($incsql) == FALSE AND empty($excsql) == FALSE) $sql .= " AND ";
     if (!empty($excsql)) $sql .= "$excsql";
 
-    $sql .= " ORDER BY realname, incidents.id ASC ";
+    $sql .= " ORDER BY realname, i.id ASC ";
 
     $result = mysql_query($sql);
     if (mysql_error()) trigger_error("MySQL Query Error: $sql ".mysql_error(), E_USER_ERROR);
     $numrows = mysql_num_rows($result);
 
-    //$sql_esc = "SELECT distinct(incidentid) AS incid FROM updates, incidents WHERE updates.incidentid = incidents.id AND incidents.opened > ($now-60*60*24*365.25)  AND updates.bodytext LIKE \"External ID%\"";
-    $sql_esc = "SELECT distinct(incidentid) AS incid FROM updates, incidents WHERE updates.incidentid = incidents.id AND updates.bodytext LIKE \"External ID%\" ";
-    if($type == "opened")
+    // FIXME this SQL use the incident body to determine whether it's been escalated
+    $sql_esc = "SELECT distinct(incidentid) AS incid ";
+    $sql_esc .= "FROM `{$dbUpdates}` AS u, `{$dbIncidents}` AS i ";
+    $sql_esc .= "WHERE u.incidentid = i.id AND u.bodytext LIKE \"External ID%\" ";
+    if ($type == "opened")
     {
-        $sql_esc .= " AND incidents.opened >= {$startdate} AND incidents.opened <= {$enddate} ";
+        $sql_esc .= " AND i.opened >= {$startdate} AND i.opened <= {$enddate} ";
     }
-    else if($type == "closed")
+    else if ($type == "closed")
     {
-        $sql_esc .= " AND incidents.closed >= {$startdate} AND incidents.closed <= {$enddate} ";
+        $sql_esc .= " AND i.closed >= {$startdate} AND i.closed <= {$enddate} ";
     }
-    else if($type == "both")
+    else if ($type == "both")
     {
-        $sql_esc .= " AND ((incidents.opened >= {$startdate} AND incidents.opened <= {$enddate}) ";
-        $sql_esc .= " OR (incidents.closed >= {$startdate} AND incidents.closed <= {$enddate})) ";
+        $sql_esc .= " AND ((i.opened >= {$startdate} AND i.opened <= {$enddate}) ";
+        $sql_esc .= " OR (i.closed >= {$startdate} AND i.closed <= {$enddate})) ";
     }
 
-
-    if (empty($incsql_esc)==FALSE OR empty($excsql)==FALSE) $sql_esc .= " AND ";
+    if (empty($incsql_esc) == FALSE OR empty($excsql) == FALSE) $sql_esc .= " AND ";
     if (!empty($incsql)) $sql_esc .= "$incsql_esc";
-    if (empty($incsql_sc)==FALSE AND empty($excsql)==FALSE) $sql_esc .= " AND ";
+    if (empty($incsql_sc) == FALSE AND empty($excsql) == FALSE) $sql_esc .= " AND ";
     if (!empty($excsql)) $sql_esc .= "$excsql";
 
     $sql_esc .= " GROUP BY incidentid";
@@ -448,9 +446,9 @@ elseif ($_REQUEST['mode'] == 'report')
 
     if ($_POST['output']=='screen')
     {
-        include('htmlheader.inc.php');
+        include ('htmlheader.inc.php');
         echo $html;
-        include('htmlfooter.inc.php');
+        include ('htmlfooter.inc.php');
     }
     elseif ($_POST['output']=='csv')
     {

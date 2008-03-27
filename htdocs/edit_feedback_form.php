@@ -9,13 +9,13 @@
 //
 
 // by Ivan Lucas, June 2004
-@include('set_include_path.inc.php');
-$permission=49; // Edit Feedback Forms
+@include ('set_include_path.inc.php');
+$permission = 49; // Edit Feedback Forms
 
-require('db_connect.inc.php');
-require('functions.inc.php');
+require ('db_connect.inc.php');
+require ('functions.inc.php');
 // This page requires authentication
-require('auth.inc.php');
+require ('auth.inc.php');
 
 // External Variables
 $formid = cleanvar($_REQUEST['formid']);
@@ -32,10 +32,10 @@ switch ($_REQUEST['action'])
         $thanks = cleanvar($_REQUEST['thanks']);
         $isnew = cleanvar($_REQUEST['isnew']);
 
-        if($isnew == "yes")
+        if ($isnew == "yes")
         {
             // need to insert
-            $sql = "INSERT INTO feedbackforms (name,introduction,thanks,description) VALUES ";
+            $sql = "INSERT INTO `{$dbFeedbackForms}` (name,introduction,thanks,description) VALUES ";
             $sql .= "('{$name}','{$introduction}','{$thanks}','{$description}')";
             mysql_query($sql);
             if (mysql_error()) trigger_error(mysql_error(),E_USER_ERROR);
@@ -43,7 +43,7 @@ switch ($_REQUEST['action'])
         }
         else
         {
-            $sql = "UPDATE feedbackforms ";
+            $sql = "UPDATE `{$dbFeedbackForms}` ";
             $sql .= "SET name='$name', description='$description', introduction='$introduction', thanks='$thanks' ";
             $sql .= "WHERE id='$formid' LIMIT 1";
             mysql_query($sql);
@@ -55,7 +55,7 @@ switch ($_REQUEST['action'])
     break;
 
     case 'new':
-        include('htmlheader.inc.php');
+        include ('htmlheader.inc.php');
         echo "<h3>Create feedback form</h3>";
         echo "<form action='{$_SERVER['PHP_SELF']}' method='post'>";
         echo "<table summary='Form' align='center'>";
@@ -99,17 +99,17 @@ switch ($_REQUEST['action'])
         echo "</tr>";
         echo "</table>";
         echo "</form>";
-        include('htmlfooter.inc.php');
+        include ('htmlfooter.inc.php');
         break;
     default:
-        $sql = "SELECT * FROM feedbackforms WHERE id='{$formid}'";
+        $sql = "SELECT * FROM `{$dbFeedbackForms}` WHERE id='{$formid}'";
         $result = mysql_query($sql);
         if (mysql_error()) trigger_error(mysql_error(),E_USER_WARNING);
 
-        include('htmlheader.inc.php');
+        include ('htmlheader.inc.php');
         echo "<h3>{$title}</h3>";
 
-        $sql = "SELECT * FROM feedbackforms WHERE id = '$formid'";
+        $sql = "SELECT * FROM `{$dbFeedbackForms}` WHERE id = '$formid'";
         $result = mysql_query($sql);
         if (mysql_error()) trigger_error ("MySQL Error: ".mysql_error(), E_USER_ERROR);
         if (mysql_num_rows($result) >= 1)
@@ -149,7 +149,7 @@ switch ($_REQUEST['action'])
                 echo "<td>";
 
                 // echo "<tr><th>Q</th><th>Question</th><th>Text</th></tr>\n<tr><th>Type</th><th>Reqd</th><th>Options</th></tr>\n";
-                $qsql  = "SELECT * FROM feedbackquestions ";
+                $qsql  = "SELECT * FROM `{$dbFeedbackQuestions}` ";
                 $qsql .= "WHERE formid='$formid' ORDER BY taborder";
                 $qresult = mysql_query($qsql);
                 if (mysql_num_rows($qresult) > 0)
@@ -182,7 +182,7 @@ switch ($_REQUEST['action'])
             }
         }
         else echo "<p class='error'>No feedback form found</p>";
-        include('htmlfooter.inc.php');
+        include ('htmlfooter.inc.php');
     break;
 }
 ?>

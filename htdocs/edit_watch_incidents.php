@@ -9,28 +9,28 @@
 //
 // Author: Paul Heaney <paulheaney[at]users.sourceforge.net>
 
-@include('set_include_path.inc.php');
-$permission=0; // not required
-require('db_connect.inc.php');
-require('functions.inc.php');
+@include ('set_include_path.inc.php');
+$permission = 0; // not required
+require ('db_connect.inc.php');
+require ('functions.inc.php');
 
 // This page requires authentication
-require('auth.inc.php');
+require ('auth.inc.php');
 
 
 $action = $_REQUEST['action'];
 
-switch($action)
+switch ($action)
 {
     case 'add':
-        include('htmlheader.inc.php');
+        include ('htmlheader.inc.php');
         $type = $_REQUEST['type'];
         echo "<h2>{$strWatchAddSet}</h2>";
         echo "<form action='{$_SERVER['PHP_SELF']}?action=do_add&type={$type}' method='post'>";
         echo "<table class='vertical'>";
         echo "<tr><td>";
 
-        switch($type)
+        switch ($type)
         {
             case '0': //site
                 echo "{$strSite}: ";
@@ -53,12 +53,12 @@ switch($action)
         echo "</td><tr>";
         echo "</table>";
         echo "<p align='center'><input name='submit' type='submit' value='{$strAdd}' /></p>";
-        include('htmlfooter.inc.php');
+        include ('htmlfooter.inc.php');
         break;
     case 'do_add':
         $id = $_REQUEST['id'];
         $type = $_REQUEST['type'];
-        $sql = "INSERT INTO dashboard_watch_incidents VALUES ({$sit[2]},'{$type}','{$id}')";
+        $sql = "INSERT INTO `{$dbDashboardWatchIncidents}` VALUES ({$sit[2]},'{$type}','{$id}')";
         $result = mysql_query($sql);
         if (mysql_error()) trigger_error(mysql_error(),E_USER_ERROR);
 
@@ -74,7 +74,7 @@ switch($action)
     case 'delete':
         $id = $_REQUEST['id'];
         $type = $_REQUEST['type'];
-        $sql = "DELETE FROM dashboard_watch_incidents WHERE id = '{$id}' AND userid = {$sit[2]} AND type = '{$type}'";
+        $sql = "DELETE FROM `{$dbDashboardWatchIncidents}` WHERE id = '{$id}' AND userid = {$sit[2]} AND type = '{$type}'";
         $result = mysql_query($sql);
         if (mysql_error()) trigger_error(mysql_error(),E_USER_ERROR);
 
@@ -88,13 +88,13 @@ switch($action)
         }
         break;
     default:
-        include('htmlheader.inc.php');
+        include ('htmlheader.inc.php');
         echo "<h2>{$strEditWatchedIncidents}</h2>";
 
         echo "<table align='center'>";
         for($i = 0; $i < 4; $i++)
         {
-            $sql = "SELECT * FROM dashboard_watch_incidents WHERE userid = {$sit[2]} AND type = {$i}";
+            $sql = "SELECT * FROM `{$dbDashboardWatchIncidents}` WHERE userid = {$sit[2]} AND type = {$i}";
 
             $result = mysql_query($sql);
             if (mysql_error()) trigger_error(mysql_error(),E_USER_ERROR);
@@ -135,32 +135,32 @@ switch($action)
                     switch ($obj->type)
                     {
                         case 0: //site
-                            $sql = "SELECT name FROM sites WHERE id = {$obj->id}";
+                            $sql = "SELECT name FROM `{$dbSites}` WHERE id = {$obj->id}";
                             $iresult = mysql_query($sql);
                             if (mysql_error()) trigger_error(mysql_error(),E_USER_ERROR);
                             $iobj = mysql_fetch_object($iresult);
                             $name = $iobj->name;
                             break;
                         case 1: //contact
-                            $sql = "SELECT forenames, surname FROM contacts WHERE id = {$obj->id}";
+                            $sql = "SELECT forenames, surname FROM `{$dbContacts}` WHERE id = {$obj->id}";
                             $iresult = mysql_query($sql);
                             if (mysql_error()) trigger_error(mysql_error(),E_USER_ERROR);
                             $iobj = mysql_fetch_object($iresult);
                             $name = $iobj->forenames.' '.$iobj->surname;
                             break;
                         case 2: //Engineer
-                            $sql = "SELECT realname FROM users WHERE id = {$obj->id}";
+                            $sql = "SELECT realname FROM `{$dbUsers}` WHERE id = {$obj->id}";
                             $iresult = mysql_query($sql);
                             if (mysql_error()) trigger_error(mysql_error(),E_USER_ERROR);
                             $iobj = mysql_fetch_object($iresult);
                             $name = $iobj->realname;
                             break;
                         case 3: //Incident
-                            $sql = "SELECT title FROM incidents WHERE id = {$obj->id}";
+                            $sql = "SELECT title FROM `{$dbIncidents}` WHERE id = {$obj->id}";
                             $iresult = mysql_query($sql);
                             if (mysql_error()) trigger_error(mysql_error(),E_USER_ERROR);
                             $iobj = mysql_fetch_object($iresult);
-                            $name = "[{$obj->id}] ".$iobj->title;
+                            $name = "<a href=\"javascript:incident_details_window('{$obj->id}','incident{$obj->id}')\" class='info'>[{$obj->id}] {$iobj->title}</a>";
                             break;
 
                     }
@@ -176,7 +176,7 @@ switch($action)
             }
         }
         echo "</table>";
-        include('htmlfooter.inc.php');
+        include ('htmlfooter.inc.php');
         break;
 }
 

@@ -9,14 +9,14 @@
 //
 // Author: Ivan Lucas <ivanlucas[at]users.sourceforge.net>
 
-@include('set_include_path.inc.php');
-$permission=35;  // Set your status
+@include ('set_include_path.inc.php');
+$permission = 35;  // Set your status
 
-require('db_connect.inc.php');
-require('functions.inc.php');
+require ('db_connect.inc.php');
+require ('functions.inc.php');
 
 // This page requires authentication
-require('auth.inc.php');
+require ('auth.inc.php');
 
 // External variables
 $mode = cleanvar($_REQUEST['mode']);
@@ -25,10 +25,10 @@ $accepting = cleanvar($_REQUEST['accepting']);
 $incidentid = cleanvar($_REQUEST['incidentid']);
 $originalowner = cleanvar($_REQUEST['originalowner']);
 
-switch($mode)
+switch ($mode)
 {
     case 'setstatus':
-        $sql  = "UPDATE users SET status='$userstatus'";
+        $sql  = "UPDATE `{$dbUsers}` SET status='$userstatus'";
         switch ($userstatus)
         {
             case 1: // in office
@@ -76,31 +76,21 @@ switch($mode)
 
         incident_backup_switchover($sit[2], $accepting);
 
-        //if user is not accepting, tell them
+        //if user is not accepting
         if ($accepting == 'No')
         {
-            //check to see if they have one already
-            $sql = "SELECT id FROM notices WHERE type=".USER_STILL_AWAY_TYPE." ";
-            $sql .= "AND userid={$_SESSION['userid']}";
-            $result = mysql_query($sql);
-            if (mysql_error()) trigger_error(mysql_error(), E_USER_ERROR);
-
-            if(empty($result) OR mysql_num_rows($result) == 0)
-            {
-                $gid = md5($strUserStillAway);
-                $sql = "INSERT INTO notices (userid, type, text, timestamp, gid) ";
-                $sql .= "VALUES({$_SESSION['userid']}, ".USER_STILL_AWAY_TYPE.",";
-                $sql .= "'".mysql_real_escape_string($strYouACurrentlyNotAccepting)."', NOW(), '{$gid}')";
-                mysql_query($sql);
-                if (mysql_error()) trigger_error(mysql_error(), E_USER_ERROR);
-            }
+            trigger("TRIGGER_USER_SET_TO_AWAY", array('userid' => $sit[2]));
+        }
+        if ($accepting == 'Yes')
+        {
+            trigger("TRIGGER_USER_RETURNS", array('userid' => $sit[2]));
         }
 
         header('Location: index.php');
     break;
 
     case 'setaccepting':
-        $sql  = "UPDATE users SET accepting='$accepting' ";
+        $sql  = "UPDATE `{$dbUsers}` SET accepting='$accepting' ";
         $sql .= "WHERE id='$sit[2]' LIMIT 1";
         $result = mysql_query($sql);
         if (mysql_error()) trigger_error(mysql_error(),E_USER_ERROR);

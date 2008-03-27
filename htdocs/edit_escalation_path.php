@@ -11,24 +11,24 @@
 
 //// This Page Is Valid XHTML 1.0 Transitional!  (7 Oct 2006)
 
-@include('set_include_path.inc.php');
-$permission=64; // Manage escalation paths
-require('db_connect.inc.php');
-require('functions.inc.php');
+@include ('set_include_path.inc.php');
+$permission = 64; // Manage escalation paths
+require ('db_connect.inc.php');
+require ('functions.inc.php');
 
 // This page requires authentication
-require('auth.inc.php');
+require ('auth.inc.php');
 
-if(empty($_REQUEST['mode']))
+if (empty($_REQUEST['mode']))
 {
     $title = $strEditEscalationPath;
     //show page
     $id = $_REQUEST['id'];
-    $sql = "SELECT * FROM escalationpaths WHERE id = {$id}";
+    $sql = "SELECT * FROM `{$dbEscalationPaths}` WHERE id = {$id}";
     $result = mysql_query($sql);
     if (mysql_error()) trigger_error(mysql_error(),E_USER_ERROR);
 
-    include('htmlheader.inc.php');
+    include ('htmlheader.inc.php');
 
     echo "<h2>{$title}</h2>";
 
@@ -50,7 +50,7 @@ if(empty($_REQUEST['mode']))
 
         echo "</form>";
     }
-    include('htmlfooter.inc.php');
+    include ('htmlfooter.inc.php');
 }
 else
 {
@@ -63,15 +63,15 @@ else
     $emaildomain = cleanvar($_REQUEST['emaildomain']);
 
     $errors = 0;
-    if(empty($name))
+    if (empty($name))
     {
         $errors++;
         echo "<p class='error'>{$strMustEnterNameEscalationPath}</p>\n";
     }
 
-    if($errors == 0)
+    if ($errors == 0)
     {
-        $sql = "UPDATE escalationpaths SET name = '{$name}', track_url = '{$trackurl}', ";
+        $sql = "UPDATE `{$dbEscalationPaths}` SET name = '{$name}', track_url = '{$trackurl}', ";
         $sql .= " home_url = '{$homeurl}', url_title = '{$title}', email_domain = '{$emaildomain}' ";
         $sql .= " WHERE id = '{$id}'";
         $result = mysql_query($sql);

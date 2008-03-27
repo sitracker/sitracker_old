@@ -11,13 +11,13 @@
 // This Page fails XHTML validation because of collapsable tbody in the table - INL 12/12/07
 // FIXME make XHTML complient - PH 13/12/07
 
-@include('set_include_path.inc.php');
-$permission=39; // Add Maintenance Contract
+@include ('set_include_path.inc.php');
+$permission = 39; // Add Maintenance Contract
 
-require('db_connect.inc.php');
-require('functions.inc.php');
+require ('db_connect.inc.php');
+require ('functions.inc.php');
 // This page requires authentication
-require('auth.inc.php');
+require ('auth.inc.php');
 
 $title = $strAddContract;
 
@@ -28,7 +28,7 @@ $siteid = cleanvar($_REQUEST['siteid']);
 // Show add maintenance form
 if ($action == "showform" OR $action=='')
 {
-    include('htmlheader.inc.php');
+    include ('htmlheader.inc.php');
 
     echo show_form_errors('add_contract');
     clear_form_errors('add_contract');
@@ -39,7 +39,7 @@ if ($action == "showform" OR $action=='')
     echo "<table align='center' class='vertical'>";
 
     echo "<tr><th>{$strSite} <sup class='red'>*</sup></th><td>";
-    if($_SESSION['formdata']['add_contract']['site'] != "")
+    if ($_SESSION['formdata']['add_contract']['site'] != "")
     {
         echo site_drop_down("site", $_SESSION['formdata']['add_contract']['site'])." </td></tr>\n";
     }
@@ -54,7 +54,7 @@ if ($action == "showform" OR $action=='')
 
     echo "<input type='hidden' name ='contacts' value='amount' />";
     echo "{$strLimitTo} <input size='2' name='amount' ";
-    if($_SESSION['formdata']['add_contract']['contacts'] != "")
+    if ($_SESSION['formdata']['add_contract']['contacts'] != "")
     {
         echo "value='{$_SESSION['formdata']['add_contract']['amount']}'";
     }
@@ -67,7 +67,7 @@ if ($action == "showform" OR $action=='')
     // echo "{$strAllSiteContactsSupported}";
     echo "</td></tr>";
     echo "<tr><th>{$strProduct} <sup class='red'>*</sup></th><td>";
-    if($_SESSION['formdata']['add_contract']['product'] != "")
+    if ($_SESSION['formdata']['add_contract']['product'] != "")
     {
         echo product_drop_down("product", $_SESSION['formdata']['add_contract']['product'])."</td></tr>\n";
     }
@@ -78,18 +78,18 @@ if ($action == "showform" OR $action=='')
 
     echo "<tr><th>{$strExpiryDate} <sup class='red'>*</sup></th>";
     echo "<td><input name='expiry' size='10' ";
-    if($_SESSION['formdata']['add_contract']['expiry'] != "")
+    if ($_SESSION['formdata']['add_contract']['expiry'] != "")
         echo "value='{$_SESSION['formdata']['add_contract']['expiry']}'";
     echo "/> ".date_picker('addcontract.expiry');
     echo "<input type='checkbox' name='noexpiry' ";
-    if($_SESSION['formdata']['add_contract']['noexpiry'] == "on")
+    if ($_SESSION['formdata']['add_contract']['noexpiry'] == "on")
     {
         echo "checked='checked' ";
     }
     echo "onclick=\"this.form.expiry.value=''\" /> {$strUnlimited}</td></tr>\n";
 
     echo "<tr><th>{$strServiceLevel}</th><td>";
-    if($_SESSION['formdata']['add_contract']['servicelevelid'] != "")
+    if ($_SESSION['formdata']['add_contract']['servicelevelid'] != "")
     {
         echo servicelevel_drop_down('servicelevelid', $_SESSION['formdata']['add_contract']['servicelevelid'], TRUE)."</td></tr>\n";
     }
@@ -125,7 +125,7 @@ if ($action == "showform" OR $action=='')
     echo "</table>\n";
     echo "<p align='center'><input name='submit' type='submit' value=\"{$strAddContract}\" /></p>";
     echo "</form>";
-    include('htmlfooter.inc.php');
+    include ('htmlfooter.inc.php');
 
     clear_form_data('add_contract');
 
@@ -146,11 +146,11 @@ elseif ($action == "add")
     $productonly = cleanvar($_REQUEST['productonly']);
     $term = cleanvar($_REQUEST['term']);
     $contacts = cleanvar($_REQUEST['contacts']);
-    if($_REQUEST['noexpiry'] == 'on') $expirydate = '-1';
+    if ($_REQUEST['noexpiry'] == 'on') $expirydate = '-1';
 
     $allcontacts = 'No';
-    if($contacts == 'amount') $amount = cleanvar($_REQUEST['amount']);
-    elseif($contacts == 'all') $allcontacts = 'Yes';
+    if ($contacts == 'amount') $amount = cleanvar($_REQUEST['amount']);
+    elseif ($contacts == 'all') $allcontacts = 'Yes';
 
     $incident_pools = explode(',', "0,{$CONFIG['incident_pools']}");
     $incident_quantity = $incident_pools[$_POST['incident_poolid']];
@@ -226,7 +226,7 @@ elseif ($action == "add")
         }
 
         // NOTE above is so we can insert null so browse_contacts etc can see the contract rather than inserting 0
-        $sql  = "INSERT INTO maintenance (site, product, reseller, expirydate, licence_quantity, licence_type, notes, ";
+        $sql  = "INSERT INTO `{$dbMaintenance}` (site, product, reseller, expirydate, licence_quantity, licence_type, notes, ";
         $sql .= "admincontact, servicelevelid, incidentpoolid, incident_quantity, productonly, term, supportedcontacts, allcontactssupported) ";
         $sql .= "VALUES ('$site', '$product', $reseller, '$expirydate', '$licence_quantity', $licence_type, '$notes', ";
         $sql .= "'$admincontact', '$servicelevelid', '$incidentpoolid', '$incident_quantity', '$productonly', '$term', '$amount', '$allcontacts')";
@@ -245,9 +245,9 @@ elseif ($action == "add")
         if ($addition_errors == 1)
         {
             // show addition error message
-            include('htmlheader.inc.php');
+            include ('htmlheader.inc.php');
             echo $addition_errors_string;
-            include('htmlfooter.inc.php');
+            include ('htmlfooter.inc.php');
         }
         else
         {
@@ -262,7 +262,7 @@ elseif ($action == "add")
     else
     {
         // show error message if errors
-        include('htmlheader.inc.php');
+        include ('htmlheader.inc.php');
         html_redirect("add_contract.php", FALSE);
     }
 }

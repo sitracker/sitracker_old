@@ -16,6 +16,9 @@
 // *AND* you must also change $schema[] for new installations (at the top of the file)
 
 // TODO we need to clean this schema up to make it confirmed compatible with mysql4
+
+// TODO 3.40 Make this use a configured table prefix
+
 $schema = "CREATE TABLE `billing_periods` (
 `servicelevelid` INT( 5 ) NOT NULL ,
 `engineerperiod` INT NOT NULL COMMENT 'In minutes',
@@ -42,30 +45,6 @@ INSERT INTO `closingstatus` VALUES (7, 'Unsupported');
 INSERT INTO `closingstatus` VALUES (8, 'Support Expired');
 INSERT INTO `closingstatus` VALUES (9, 'Unsolved');
 INSERT INTO `closingstatus` VALUES (10, 'Escalated');
-
-CREATE TABLE `contactflags` (
- `contactid` int(11) default NULL,
- `flag` char(3) NOT NULL default '',
-  KEY `contactid` (`contactid`),
-  KEY `flag` (`flag`)
-) ENGINE=MyISAM;
-
-CREATE TABLE `contactproducts` (
- `id` int(11) NOT NULL auto_increment,
- `contactid` int(11) default NULL,
- `productid` int(11) default NULL,
- `maintenancecontractid` int(11) default NULL,
- `maintenancecontactid` int(11) default NULL,
- `expirydate` int(11) default NULL,
- `incidentpoolid` int(11) NOT NULL default '0',
- `servicelevelid` int(11) NOT NULL default '1',
- PRIMARY KEY  (`id`),
- KEY `maintenancecontractid` (`maintenancecontractid`),
- KEY `maintenancecontactid` (`maintenancecontactid`),
- KEY `incidentpoolid` (`incidentpoolid`),
- KEY `servicelevelid` (`servicelevelid`)
-) ENGINE=MyISAM;
-
 
 CREATE TABLE `contacts` (
   `id` int(11) NOT NULL auto_increment,
@@ -138,10 +117,9 @@ CREATE TABLE `emailsig` (
 
 INSERT INTO `emailsig` (`id`, `signature`) VALUES (1, '--\r\n... Powered by Open Source Software: Support Incident Tracker (SiT!) is available free from http://sourceforge.net/projects/sitracker/');
 
-CREATE TABLE `emailtype` (
-  `id` int(11) NOT NULL auto_increment,
-  `name` varchar(50) default NULL,
-  `type` enum('user','system') NOT NULL default 'user',
+CREATE TABLE IF NOT EXISTS `emailtype` (
+  `id` varchar(50) NOT NULL,
+  `type` enum( 'usertemplate', 'system', 'contact', 'site', 'incident', 'kb', 'user') NOT NULL COMMENT 'usertemplate is personal template owned by a user, user is a template relating to a user' DEFAULT 'user',
   `description` text NOT NULL,
   `tofield` varchar(100) default NULL,
   `fromfield` varchar(100) default NULL,
@@ -156,19 +134,28 @@ CREATE TABLE `emailtype` (
 ) ENGINE=MyISAM;
 
 -- FIXME remove ID columns
-
-INSERT INTO `emailtype` VALUES (1,'Support Email','user','','<contactemail>','<supportemail>','<supportemail>','','<useremail>','[<incidentid>] - <incidenttitle>','<contactfirstname>,\r\n\r\n<signature>\r\n<globalsignature>', 'show', 'yes');
-INSERT INTO `emailtype` VALUES (2,'User Email','user','','<contactemail>','<useremail>','<useremail>','','','','<signature>\r\n<globalsignature>\r\n', 'show', 'yes');
-INSERT INTO `emailtype` VALUES (5,'INCIDENT_CLOSURE','system','Notify contact that the incident has been marked for closure and will be closed shortly','<contactemail>','<supportemail>','<supportemail>','','<useremail>','[<incidentid>] - <incidenttitle>','<contactfirstname>,\r\n\r\nIncident <incidentid> has been marked for closure. If you still have outstanding issues relating to this incident then please reply with details, otherwise it will be closed after the next seven days.\r\n\r\n<signature>\r\n<globalsignature>', 'show', 'yes');
-INSERT INTO `emailtype` VALUES (12,'INCIDENT_LOGGED_CALL','system','Acknowledge the contacts telephone call and notify them of the new incident number','<contactemail>','<supportemail>','<supportemail>','','<useremail>','[<incidentid>] - <incidenttitle>','Thank you for your call. The incident <incidentid> has been generated and your details stored in our tracking system. \r\n\r\nYou will be receiving a response from one of our product specialists as soon as possible. When referring to this incident please remember to quote incident <incidentid> in \r\nall communications. \r\n\r\nFor all email communications please title your email as [<incidentid>] - <incidenttitle>\r\n\r\n<globalsignature>\r\n', 'show', 'no');
-INSERT INTO `emailtype` VALUES (13,'INCIDENT_CLOSED','system','Notify contact that an incident has now been closed','<contactemail>','<supportemail>','<supportemail>','','','[<incidentid>] - <incidenttitle> - Closed','This is an automated message to let you know that Incident <incidentid> has now been closed. \r\n\r\n<globalsignature>', 'show', 'yes');
-INSERT INTO `emailtype` VALUES (42, 'OUT_OF_SLA', 'system', '', '<supportmanager>', '<supportemail>', '<supportemail>', '<useremail>', '', '<applicationshortname> SLA: Incident <incidentid> now outside SLA', 'This is an automatic notification that this incident has gone outside its SLA.  The SLA target <info1> expired <info2> minutes ago.\n\nIncident: [<incidentid>] - <incidenttitle>\nOwner: <incidentowner>\nPriority: <incidentpriority>\nExternal Id: <incidentexternalid>\nExternal Engineer: <incidentexternalengineer>\nSite: <contactsite>\nContact: <contactname>\n\n--\n<applicationshortname> v<applicationversion>\n<todaysdate>\n', 'hide', 'yes');
-INSERT INTO `emailtype` VALUES (43, 'OUT_OF_REVIEW', 'system', '', '<supportmanager>', '<useremail>', '<supportemail>', '<supportemail>', '', '<applicationshortname> Review: Incident <incidentid> due for review soon', 'This is an automatic notification that this incident [<incidentid>] will soon be due for review.\n\nIncident: [<incidentid>] - <incidenttitle>\nEngineer: <incidentowner>\nPriority: <incidentpriority>\nExternal Id: <incidentexternalid>\nExternal Engineer: <incidentexternalengineer>\nSite: <contactsite>\nContact: <contactname>\n\n--\n<applicationshortname> v<applicationversion>\n<todaysdate>', 'hide', 'yes');
-INSERT INTO `emailtype` VALUES (48,'INCIDENT_UPDATED','system','Acknoweldge contacts email and update to incident','<contactemail>','<supportemail>','<supportemail>','','','[<incidentid>] - <incidenttitle>','Thank you for your email. The incident <incidentid> has been updated and your details stored in our support database. \r\n\r\nYou will be receiving a response from one of our product specialists as soon as possible.\r\n\r\n<globalsignature>', 'show', 'no');
-INSERT INTO `emailtype` VALUES (49,'INCIDENT_CLOSED_EXTERNAL','system','Notify external engineer that an incident has been closed','<incidentexternalemail>','<supportemail>','<supportemail>','','','Incident ref #<incidentexternalid>  - <incidenttitle> CLOSED - [<incidentid>]','<incidentexternalengineerfirstname>,\r\n\r\nThis is an automated email to let you know that Incident <incidentexternalid> has been closed within our tracking system.\r\n\r\nMany thanks for your help.\r\n\r\n<signature>\r\n<globalsignature>', 'hide', 'no');
-INSERT INTO `emailtype` VALUES (9,'INCIDENT_LOGGED_EMAIL','system','Acknowledge the contacts email and notify them of the new incident number','<contactemail>','<supportemail>','<supportemail>','','<useremail>','[<incidentid>] - <incidenttitle>','Thank you for your email. The incident <incidentid> has been generated and your details stored in our tracking system. \r\n\r\nYou will be receiving a response from one of our product specialists as soon as possible. When referring to this incident please remember to quote incident <incidentid> in \r\nall communications.\r\n\r\nFor all email communications please title your email as [<incidentid>] - <incidenttitle>\r\n\r\n<globalsignature>', 'show', 'no');
-INSERT INTO `emailtype` (`name`, `type`, `description`, `tofield`, `fromfield`, `replytofield`, `ccfield`, `bccfield`, `subjectfield`, `body`, `customervisibility`, `storeinlog`) VALUES ('INCIDENT_REASSIGNED_USER_NOTIFY', 'system', 'Notify user when call assigned to them', '<incidentreassignemailaddress>', '<supportemail>', '<supportemail>', '', '', 'A <incidentpriority> priority call ([<incidentid>] - <incidenttitle>) has been reassigned to you', 'Hi,\r\n\r\nIncident [<incidentid>] entitled <incidenttitle> has been reassigned to you.\r\n\r\nThe details of this incident are:\r\n\r\nPriority: <incidentpriority>\r\nContact: <contactname>\r\nSite: <contactsite>\r\n\r\n\r\nRegards\r\n<applicationname>\r\n\r\n\r\n---\r\n<todaysdate> - <applicationshortname> <applicationversion>', 'hide', 'No');
-INSERT INTO `emailtype` (`name`, `type`, `description`, `tofield`, `fromfield`, `replytofield`, `ccfield`, `bccfield`, `subjectfield`, `body`, `customervisibility`, `storeinlog`) VALUES ('NEARING_SLA', 'system', 'Notification when an incident nears its SLA target', '<supportmanageremail>', '<supportemail>', '<supportemail>', '<useremail>', '', '<applicationshortname> SLA: Incident <incidentid> about to breach SLA', 'This is an automatic notification that this incident is about to breach its SLA.  The SLA target <info1> will expire in <info2> minutes.\r\n\r\nIncident: [<incidentid>] - <incidenttitle>\r\nOwner: <incidentowner>\r\nPriority: <incidentpriority>\r\nExternal Id: <incidentexternalid>\r\nExternal Engineer: <incidentexternalengineer>\r\nSite: <contactsite>\r\nContact: <contactname>\r\n\r\n--\r\n<applicationshortname> v<applicationversion>\r\n<todaysdate>\r\n', 'hide', 'Yes');
+INSERT INTO `emailtype`(`id`, `type`, `description`, `tofield`, `fromfield`, `replytofield`, `ccfield`, `bccfield`, `subjectfield`, `body`, `customervisibility`, `storeinlog`)
+VALUES ('Support Email','user','','<contactemail>','<supportemail>','<supportemail>','','<useremail>','[<incidentid>] - <incidenttitle>','<contactfirstname>,\r\n\r\n<signature>\r\n<globalsignature>', 'show', 'yes');
+INSERT INTO `emailtype`(`id`, `type`, `description`, `tofield`, `fromfield`, `replytofield`, `ccfield`, `bccfield`, `subjectfield`, `body`, `customervisibility`, `storeinlog`)
+VALUES ('User Email','user','','<contactemail>','<useremail>','<useremail>','','','','<signature>\r\n<globalsignature>\r\n', 'show', 'yes');
+INSERT INTO `emailtype`(`id`, `type`, `description`, `tofield`, `fromfield`, `replytofield`, `ccfield`, `bccfield`, `subjectfield`, `body`, `customervisibility`, `storeinlog`)
+VALUES ('INCIDENT_CLOSURE','system','Notify contact that the incident has been marked for closure and will be closed shortly','<contactemail>','<supportemail>','<supportemail>','','<useremail>','[<incidentid>] - <incidenttitle>','<contactfirstname>,\r\n\r\nIncident <incidentid> has been marked for closure. If you still have outstanding issues relating to this incident then please reply with details, otherwise it will be closed after the next seven days.\r\n\r\n<signature>\r\n<globalsignature>', 'show', 'yes');
+INSERT INTO `emailtype`(`id`, `type`, `description`, `tofield`, `fromfield`, `replytofield`, `ccfield`, `bccfield`, `subjectfield`, `body`, `customervisibility`, `storeinlog`)
+VALUES ('INCIDENT_LOGGED_CALL','system','Acknowledge the contacts telephone call and notify them of the new incident number','<contactemail>','<supportemail>','<supportemail>','','<useremail>','[<incidentid>] - <incidenttitle>','Thank you for your call. The incident <incidentid> has been generated and your details stored in our tracking system. \r\n\r\nYou will be receiving a response from one of our product specialists as soon as possible. When referring to this incident please remember to quote incident <incidentid> in \r\nall communications. \r\n\r\nFor all email communications please title your email as [<incidentid>] - <incidenttitle>\r\n\r\n<globalsignature>\r\n', 'show', 'no');
+INSERT INTO `emailtype`(`id`, `type`, `description`, `tofield`, `fromfield`, `replytofield`, `ccfield`, `bccfield`, `subjectfield`, `body`, `customervisibility`, `storeinlog`)
+VALUES ('INCIDENT_CLOSED','system','Notify contact that an incident has now been closed','<contactemail>','<supportemail>','<supportemail>','','','[<incidentid>] - <incidenttitle> - Closed','This is an automated message to let you know that Incident <incidentid> has now been closed. \r\n\r\n<globalsignature>', 'show', 'yes');
+INSERT INTO `emailtype`(`id`, `type`, `description`, `tofield`, `fromfield`, `replytofield`, `ccfield`, `bccfield`, `subjectfield`, `body`, `customervisibility`, `storeinlog`)
+VALUES ('OUT_OF_SLA', 'system', '', '<supportmanager>', '<supportemail>', '<supportemail>', '<useremail>', '', '<applicationshortname> SLA: Incident <incidentid> now outside SLA', 'This is an automatic notification that this incident has gone outside its SLA.  The SLA target <info1> expired <info2> minutes ago.\n\nIncident: [<incidentid>] - <incidenttitle>\nOwner: <incidentowner>\nPriority: <incidentpriority>\nExternal Id: <incidentexternalid>\nExternal Engineer: <incidentexternalengineer>\nSite: <contactsite>\nContact: <contactname>\n\n--\n<applicationshortname> v<applicationversion>\n<todaysdate>\n', 'hide', 'yes');
+INSERT INTO `emailtype`(`id`, `type`, `description`, `tofield`, `fromfield`, `replytofield`, `ccfield`, `bccfield`, `subjectfield`, `body`, `customervisibility`, `storeinlog`)
+VALUES ('OUT_OF_REVIEW', 'system', '', '<supportmanager>', '<useremail>', '<supportemail>', '<supportemail>', '', '<applicationshortname> Review: Incident <incidentid> due for review soon', 'This is an automatic notification that this incident [<incidentid>] will soon be due for review.\n\nIncident: [<incidentid>] - <incidenttitle>\nEngineer: <incidentowner>\nPriority: <incidentpriority>\nExternal Id: <incidentexternalid>\nExternal Engineer: <incidentexternalengineer>\nSite: <contactsite>\nContact: <contactname>\n\n--\n<applicationshortname> v<applicationversion>\n<todaysdate>', 'hide', 'yes');
+INSERT INTO `emailtype`(`id`, `type`, `description`, `tofield`, `fromfield`, `replytofield`, `ccfield`, `bccfield`, `subjectfield`, `body`, `customervisibility`, `storeinlog`)
+VALUES ('INCIDENT_UPDATED','system','Acknoweldge contacts email and update to incident','<contactemail>','<supportemail>','<supportemail>','','','[<incidentid>] - <incidenttitle>','Thank you for your email. The incident <incidentid> has been updated and your details stored in our support database. \r\n\r\nYou will be receiving a response from one of our product specialists as soon as possible.\r\n\r\n<globalsignature>', 'show', 'no');
+INSERT INTO `emailtype`(`id`, `type`, `description`, `tofield`, `fromfield`, `replytofield`, `ccfield`, `bccfield`, `subjectfield`, `body`, `customervisibility`, `storeinlog`)
+VALUES ('INCIDENT_CLOSED_EXTERNAL','system','Notify external engineer that an incident has been closed','<incidentexternalemail>','<supportemail>','<supportemail>','','','Incident ref #<incidentexternalid>  - <incidenttitle> CLOSED - [<incidentid>]','<incidentexternalengineerfirstname>,\r\n\r\nThis is an automated email to let you know that Incident <incidentexternalid> has been closed within our tracking system.\r\n\r\nMany thanks for your help.\r\n\r\n<signature>\r\n<globalsignature>', 'hide', 'no');
+INSERT INTO `emailtype`(`id`, `type`, `description`, `tofield`, `fromfield`, `replytofield`, `ccfield`, `bccfield`, `subjectfield`, `body`, `customervisibility`, `storeinlog`)
+VALUES ('INCIDENT_LOGGED_EMAIL','system','Acknowledge the contacts email and notify them of the new incident number','<contactemail>','<supportemail>','<supportemail>','','<useremail>','[<incidentid>] - <incidenttitle>','Thank you for your email. The incident <incidentid> has been generated and your details stored in our tracking system. \r\n\r\nYou will be receiving a response from one of our product specialists as soon as possible. When referring to this incident please remember to quote incident <incidentid> in \r\nall communications.\r\n\r\nFor all email communications please title your email as [<incidentid>] - <incidenttitle>\r\n\r\n<globalsignature>', 'show', 'no');
+INSERT INTO `emailtype` (`id`, `type`, `description`, `tofield`, `fromfield`, `replytofield`, `ccfield`, `bccfield`, `subjectfield`, `body`, `customervisibility`, `storeinlog`) VALUES ('INCIDENT_REASSIGNED_USER_NOTIFY', 'system', 'Notify user when call assigned to them', '<incidentreassignemailaddress>', '<supportemail>', '<supportemail>', '', '', 'A <incidentpriority> priority call ([<incidentid>] - <incidenttitle>) has been reassigned to you', 'Hi,\r\n\r\nIncident [<incidentid>] entitled <incidenttitle> has been reassigned to you.\r\n\r\nThe details of this incident are:\r\n\r\nPriority: <incidentpriority>\r\nContact: <contactname>\r\nSite: <contactsite>\r\n\r\n\r\nRegards\r\n<applicationname>\r\n\r\n\r\n---\r\n<todaysdate> - <applicationshortname> <applicationversion>', 'hide', 'No');
+INSERT INTO `emailtype` (`id`, `type`, `description`, `tofield`, `fromfield`, `replytofield`, `ccfield`, `bccfield`, `subjectfield`, `body`, `customervisibility`, `storeinlog`) VALUES ('NEARING_SLA', 'system', 'Notification when an incident nears its SLA target', '<supportmanageremail>', '<supportemail>', '<supportemail>', '<useremail>', '', '<applicationshortname> SLA: Incident <incidentid> about to breach SLA', 'This is an automatic notification that this incident is about to breach its SLA.  The SLA target <info1> will expire in <info2> minutes.\r\n\r\nIncident: [<incidentid>] - <incidenttitle>\r\nOwner: <incidentowner>\r\nPriority: <incidentpriority>\r\nExternal Id: <incidentexternalid>\r\nExternal Engineer: <incidentexternalengineer>\r\nSite: <contactsite>\r\nContact: <contactname>\r\n\r\n--\r\n<applicationshortname> v<applicationversion>\r\n<todaysdate>\r\n', 'hide', 'Yes');
 
 CREATE TABLE `escalationpaths` (
   `id` int(11) NOT NULL auto_increment,
@@ -1021,7 +1008,7 @@ CREATE TABLE `tasks` (
   `enddate` datetime default NULL,
   `completion` tinyint(4) default NULL,
   `value` float(6,2) default NULL,
-  `distribution` enum('public','private', 'incident') NOT NULL default 'public',
+  `distribution` enum('public','private', 'incident', 'event') NOT NULL default 'public',
   `created` datetime NOT NULL default '0000-00-00 00:00:00',
   `lastupdated` timestamp(14) NOT NULL,
   PRIMARY KEY  (`id`),
@@ -1241,7 +1228,7 @@ INSERT INTO `vendors` VALUES (1,'Default');
 CREATE TABLE IF NOT EXISTS `notices` (
   `id` int(11) NOT NULL auto_increment,
   `userid` int(11) NOT NULL,
-  `gid` text,
+  `template` varchar(255) NULL,
   `type` tinyint(4) NOT NULL,
   `text` tinytext NOT NULL,
   `linktext` varchar(50) default NULL,
@@ -1252,6 +1239,41 @@ CREATE TABLE IF NOT EXISTS `notices` (
   PRIMARY KEY  (`id`)
 ) ENGINE=MyISAM AUTO_INCREMENT=1 ;
 
+CREATE TABLE `triggers` (
+`triggerid` VARCHAR(255) NOT NULL ,
+`userid` TINYINT NOT NULL ,
+`action` enum('ACTION_NONE', 'ACTION_NOTICE', 'ACTION_EMAIL', 'ACTION_JOURNAL') NOT NULL DEFAULT 'ACTION_NONE' ,
+`parameters` VARCHAR( 255 ) NULL ,
+PRIMARY KEY ( `triggerid` , `userid` , `action` )
+) ENGINE = MYISAM ;
+
+INSERT INTO triggers (triggerid, userid, action) VALUES ('TRIGGER_INCIDENT_CREATED', '0', 'ACTION_JOURNAL');
+INSERT INTO triggers (triggerid, userid, action) VALUES ('TRIGGER_INCIDENT_ASSIGNED', '0', 'ACTION_JOURNAL');
+INSERT INTO triggers (triggerid, userid, action) VALUES ('TRIGGER_INCIDENT_ASSIGNED_WHILE_AWAY', '0', 'ACTION_JOURNAL');
+INSERT INTO triggers (triggerid, userid, action) VALUES ('TRIGGER_INCIDENT_ASSIGNED_WHILE_OFFLINE', '0', 'ACTION_JOURNAL');
+INSERT INTO triggers (triggerid, userid, action) VALUES ('TRIGGER_INCIDENT_NEARING_SLA', '0', 'ACTION_JOURNAL');
+INSERT INTO triggers (triggerid, userid, action) VALUES ('TRIGGER_USERS_INCIDENT_NEARING_SLA', '0', 'ACTION_JOURNAL');
+INSERT INTO triggers (triggerid, userid, action) VALUES ('TRIGGER_INCIDENT_EXCEEDED_SLA', '0', 'ACTION_JOURNAL');
+INSERT INTO triggers (triggerid, userid, action) VALUES ('TRIGGER_INCIDENT_REVIEW_DUE', '0', 'ACTION_JOURNAL');
+INSERT INTO triggers (triggerid, userid, action) VALUES ('TRIGGER_CRITICAL_INCIDENT_CREATED', '0', 'ACTION_JOURNAL');
+INSERT INTO triggers (triggerid, userid, action) VALUES ('TRIGGER_KB_CREATED', '0', 'ACTION_JOURNAL');
+INSERT INTO triggers (triggerid, userid, action) VALUES ('TRIGGER_NEW_HELD_EMAIL', '0', 'ACTION_JOURNAL');
+INSERT INTO triggers (triggerid, userid, action) VALUES ('TRIGGER_WAITING_HELD_EMAIL', '0', 'ACTION_JOURNAL');
+INSERT INTO triggers (triggerid, userid, action) VALUES ('TRIGGER_USER_SET_TO_AWAY', '0', 'ACTION_JOURNAL');
+INSERT INTO triggers (triggerid, userid, action) VALUES ('TRIGGER_SIT_UPGRADED', '0', 'ACTION_JOURNAL');
+INSERT INTO triggers (triggerid, userid, action) VALUES ('TRIGGER_USER_RETURNS', '0', 'ACTION_JOURNAL');
+INSERT INTO triggers (triggerid, userid, action) VALUES ('TRIGGER_INCIDENT_OWNED_CLOSED_BY_USER', '0', 'ACTION_JOURNAL');
+
+CREATE TABLE `noticetemplates` (
+`id` INT( 11 ) NOT NULL AUTO_INCREMENT PRIMARY KEY ,
+`name` VARCHAR( 255 ) NOT NULL ,
+`type` TINYINT( 4 ) NOT NULL ,
+`description` VARCHAR( 255 ) NOT NULL ,
+`text` TINYTEXT NOT NULL ,
+`linktext` VARCHAR( 50 ) NULL ,
+`link` VARCHAR( 100 ) NULL ,
+`durability` ENUM( 'sticky', 'session' ) NOT NULL DEFAULT 'sticky'
+) ENGINE = MYISAM ;
 ";
 
 // ********************************************************************
@@ -1456,7 +1478,7 @@ CREATE TABLE `linktypes` (
 INSERT INTO `linktypes` VALUES (1,'Task','Subtask','Parent Task','tasks','id','tasks','id','name','','view_task.php?id=%id%'),(2,'Contact','Contact','Contact Task','tasks','id','contacts','id','forenames','','contact_details.php?id=%id%'),(3,'Site','Site','Site Task','tasks','id','sites','id','name','','site_details.php?id=%id%'),(4,'Incident','Incident','Task','tasks','id','incidents','id','title','','incident_details.php?id=%id%');
 
 ALTER TABLE `users` ADD `var_num_updates_view` INT NOT NULL DEFAULT '15' AFTER `var_update_order` ;
-INSERT INTO `emailtype` (`name`, `type`, `description`, `tofield`, `fromfield`, `replytofield`, `ccfield`, `bccfield`, `subjectfield`, `body`, `customervisibility`, `storeinlog`) VALUES ('NEARING_SLA', 'system', 'Notification when an incident nears its SLA target', '<supportmanageremail>', '<supportemail>', '<supportemail>', '<useremail>', '', '<applicationshortname> SLA: Incident <incidentid> about to breach SLA', 'This is an automatic notification that this incident is about to breach it\'s SLA.  The SLA target <info1> will expire in <info2> minutes.\r\n\r\nIncident: [<incidentid>] - <incidenttitle>\r\nOwner: <incidentowner>\r\nPriority: <incidentpriority>\r\nExternal Id: <incidentexternalid>\r\nExternal Engineer: <incidentexternalengineer>\r\nSite: <contactsite>\r\nContact: <contactname>\r\n\r\n--\r\n<applicationshortname> v<applicationversion>\r\n<todaysdate>\r\n', 'hide', 'Yes');
+INSERT INTO `emailtype` (`id`, `type`, `description`, `tofield`, `fromfield`, `replytofield`, `ccfield`, `bccfield`, `subjectfield`, `body`, `customervisibility`, `storeinlog`) VALUES ('NEARING_SLA', 'system', 'Notification when an incident nears its SLA target', '<supportmanageremail>', '<supportemail>', '<supportemail>', '<useremail>', '', '<applicationshortname> SLA: Incident <incidentid> about to breach SLA', 'This is an automatic notification that this incident is about to breach it\'s SLA.  The SLA target <info1> will expire in <info2> minutes.\r\n\r\nIncident: [<incidentid>] - <incidenttitle>\r\nOwner: <incidentowner>\r\nPriority: <incidentpriority>\r\nExternal Id: <incidentexternalid>\r\nExternal Engineer: <incidentexternalengineer>\r\nSite: <contactsite>\r\nContact: <contactname>\r\n\r\n--\r\n<applicationshortname> v<applicationversion>\r\n<todaysdate>\r\n', 'hide', 'Yes');
 
 INSERT INTO `permissions` VALUES (65, 'Delete Products');
 INSERT INTO `rolepermissions` (`roleid`, `permissionid`, `granted`) VALUES (1, 65, 'true');
@@ -1597,6 +1619,159 @@ ALTER TABLE `users` ADD `var_utc_offset` INT NOT NULL DEFAULT '0' COMMENT 'Offse
 INSERT INTO `userstatus` (`id` ,`name`) VALUES ('0', 'Account Disabled');
 ";
 
+$upgrade_schema[340] = "
+-- KMH 17/12/07
+CREATE TABLE IF NOT EXISTS `triggers` (
+  `id` int(11) NOT NULL auto_increment,
+  `triggerid` varchar(50) NOT NULL,
+  `userid` tinyint(4) NOT NULL,
+  `action` enum('ACTION_NONE','ACTION_EMAIL','ACTION_NOTICE','ACTION_JOURNAL') NOT NULL default 'ACTION_NONE',
+  `template` varchar(50) NOT NULL,
+  `parameters` varchar(255) default NULL,
+  `checks` varchar(255) default NULL,
+  PRIMARY KEY  (`id`),
+  KEY `triggerid` (`triggerid`)
+) ENGINE=MyISAM ;
+
+DROP TABLE IF EXISTS `contactflags`;
+DROP TABLE IF EXISTS `contactproducts`;
+
+-- KMH 18/12/07
+CREATE TABLE `noticetemplates` (
+`id` INT( 11 ) NOT NULL AUTO_INCREMENT PRIMARY KEY ,
+`name` VARCHAR( 255 ) NOT NULL ,
+`type` TINYINT( 4 ) NOT NULL ,
+`description` VARCHAR( 255 ) NOT NULL ,
+`text` TINYTEXT NOT NULL ,
+`linktext` VARCHAR( 50 ) NULL ,
+`link` VARCHAR( 100 ) NULL ,
+`durability` ENUM( 'sticky', 'session' ) NOT NULL DEFAULT 'sticky'
+) ENGINE = MYISAM ;
+
+INSERT INTO `noticetemplates` (`id`, `type`, `description`, `text`, `linktext`, `link`, `durability`) VALUES
+('TRIGGER_INCIDENT_CREATED', 0, 'Used when a new incident has been created', 'Incident <incidentid> - <incidenttitle> has been logged', 'View Incident', 'javascript:incident_details_window(<incidentid>)', 'sticky'),
+('TRIGGER_INCIDENT_ASSIGNED_TRIGGER', 0, 'Used when a new incident is assigned to you', 'Incident <incidentid> - <incidenttitle> has been assigned to you', 'View Incident', 'javascript:incident_details_window(<incidentid>)', 'sticky'),
+('TRIGGER_INCIDENT_NEARING_SLA_TRIGGER', 0, 'Used when one of your incidents nears an SLA', 'Incident <incidentid> - <incidenttitle> is nearing its SLA', 'View Incident', 'javascript:incident_details_window(<incidentid>)', 'sticky'),
+('TRIGGER_USERS_INCIDENT_NEARING_SLA_TRIGGER', 0, 'Used when a user\\''s incident you are watching is assigned to you', '<incidentowner>\\''s incident <incidentid> - <incidenttitle> is nearing its SLA', 'View Incident', 'javascript:incident_details_window(<incidentid>)', 'sticky'),
+('TRIGGER_INCIDENT_EXCEEDED_SLA_TRIGGER', 0, 'Used when one of your incidents exceeds an SLA', 'Incident <incidentid> - <incidenttitle> has exceeded its SLA', 'View Incident', 'javascript:incident_details_window(<incidentid>)', 'sticky'),
+('TRIGGER_INCIDENT_REVIEW_DUE', 0, 'Used when an incident is due a review', 'Incident <incidentid> - <incidenttitle> is due for review', 'View Incident', 'javascript:incident_details_window(<incidentid>)', 'sticky'),
+('TRIGGER_KB_CREATED_TRIGGER', 0, 'Used when a new Knowledgebase article is created', 'KB Article <KBname> has been created', NULL, NULL, 'sticky'),
+('TRIGGER_NEW_HELD_EMAIL', 0, 'Used when there is a new email in the holding queue', 'There is a new email in the holding queue', 'View Holding Queue', '<sitpath>/review_incoming_updates.php', 'sticky'),
+('TRIGGER_MINS_HELD_EMAIL', 0, 'Used when there is a new email in the holding queue for x minutes', 'There has been an email in the holding queue for <holdingmins> minutes', 'View Holding Queue', '<sitpath>/review_incoming_updates.php', 'sticky'),
+('TRIGGER_SIT_UPGRADED', 0, 'Used when the system is upgraded', 'SiT! has been upgraded to <sitversion>', 'What\\''s New?', '<sitpath>/releasenotes.php', 'sticky'),
+('TRIGGER_INCIDENT_OWNED_CLOSED_BY_USER', 0, 'Used when one of your incidents is closed by another engineer', 'Your incident <incidentid> - <incidenttitle> has been closed by <engineerclosedname>', NULL, NULL, 'sticky'),
+('TRIGGER_USER_SET_TO_AWAY', 0, 'Used when a watched user goes away', '<realname> is now [b]not accepting[/b] incidents', NULL, 'userid=1', 'sticky'),
+('TRIGGER_USER_RETURNS', 0, 'Used when a user sets back to accepting', '<realname> is now [b]accepting[/b] incidents', NULL, NULL, 'sticky');
+
+-- KMH 06/01/08
+ALTER TABLE `emailtype` ADD `triggerid` INT( 11 ) NULL ;
+INSERT INTO `emailtype` (`id` ,`type` ,`description` ,`tofield` ,`fromfield` ,`replytofield` ,`ccfield` ,`bccfield` ,`subjectfield` ,`body` ,`customervisibility` ,
+`storeinlog` ,`triggerid`)VALUES ('TRIGGER_INCIDENT_LOGGED', 'system', 'Trigger email sent when a new incident is logged.', '<useremail>', '<supportemail>', NULL , NULL , NULL , '[<incidentid>] - <incidenttitle>', 'Hello <contactfirstname>,\r\n\r\nIncident <incidentid> - <incidenttitle> has been logged.\r\n\r\n<signature> <globalsignature>\r\n-------------\r\nThis email is sent as a result of a system trigger. If you do not want to receive these emails, you can disable them from the ''Triggers'' page.', 'hide', 'No', '1');
+
+-- KMH 08/01/08
+ALTER TABLE `emailtype` DROP `id` ;
+ALTER TABLE `emailtype` CHANGE `name` `id` VARCHAR( 50 ) NOT NULL ;
+ALTER TABLE `emailtype` ADD PRIMARY KEY ( `id` );
+
+-- KMH 09/01/08
+INSERT INTO `emailtype` (`id`, `type`, `description`, `tofield`, `fromfield`, `replytofield`, `ccfield`, `bccfield`, `subjectfield`, `body`, `customervisibility`, `storeinlog`) VALUES
+('TRIGGER_INCIDENT_CREATED', 'system', 'Trigger email sent when a new incident is logged.', '<useremail>', '<supportemail>', NULL, NULL, NULL, '[<incidentid>] - <incidenttitle>', 'Hello <contactfirstname>,\r\n\r\nIncident <incidentid> - <incidenttitle> has been logged.\r\n\r\n<signature> <globalsignature>\r\n-------------\r\nThis email is sent as a result of a system trigger. If you do not want to receive these emails, you can disable them from the ''Triggers'' page.', 'hide', 'No'),
+('TRIGGER_INCIDENT_NEARING_SLA', 'system', 'Trigger email sent when an incident is nearing its SLA.', '<useremail>', '<supportemail>', NULL, NULL, NULL, '[<incidentid>] - <incidenttitle>: SLA approaching', 'Hello <contactfirstname>,\r\n\r\nIncident <incidentid> - <incidenttitle> is approaching its SLA.\r\n\r\n<signature> <globalsignature>\r\n-------------\r\nThis email is sent as a result of a system trigger. If you do not want to receive these emails, you can disable them from the ''Triggers'' page.', 'hide', 'No'),
+('TRIGGER_INCIDENT_ASSIGNED', 'user', 'Notify user when call assigned to them', '<useremail>', '<supportemail>', NULL, NULL, NULL, '[<incidentid>] - <incidenttitle>: has been assigned to you', 'Hello <contactfirstname>,\r\n\r\nIncident <incidentid> - <incidenttitle> has been assigned to you.\r\n\r\n<signature> <globalsignature>\r\n-------------\r\nThis email is sent as a result of a system trigger. If you do not want to receive these emails, you can disable them from the ''Triggers'' page.', 'show', 'Yes');
+
+INSERT INTO `noticetemplates` (`id`, `type`, `description`, `text`, `linktext`, `link`, `durability`) VALUES
+('INCIDENT_OWNED_CLOSED_BY_USER', 0, '', 'Your incident <incidentid> - <incidenttitle> has been closed by <engineerclosedname>', NULL, NULL, 'sticky');
+
+-- KMH 17/01/08
+ALTER TABLE `notices` CHANGE `gid` `template` VARCHAR( 255 ) NULL DEFAULT NULL;
+-- INL 22/01/08
+ALTER TABLE `tasks` CHANGE `distribution` `distribution` ENUM( 'public', 'private', 'incident', 'event' );
+-- KMH 23/01/08
+ALTER TABLE `triggers` ADD `checks` VARCHAR( 255 ) NULL ;
+INSERT INTO triggers (triggerid, userid, action) VALUES ('TRIGGER_INCIDENT_CREATED', '0', 'ACTION_JOURNAL');
+INSERT INTO triggers (triggerid, userid, action) VALUES ('TRIGGER_INCIDENT_ASSIGNED', '0', 'ACTION_JOURNAL');
+INSERT INTO triggers (triggerid, userid, action) VALUES ('TRIGGER_INCIDENT_ASSIGNED_WHILE_AWAY', '0', 'ACTION_JOURNAL');
+INSERT INTO triggers (triggerid, userid, action) VALUES ('TRIGGER_INCIDENT_ASSIGNED_WHILE_OFFLINE', '0', 'ACTION_JOURNAL');
+INSERT INTO triggers (triggerid, userid, action) VALUES ('TRIGGER_INCIDENT_NEARING_SLA', '0', 'ACTION_JOURNAL');
+INSERT INTO triggers (triggerid, userid, action) VALUES ('TRIGGER_USERS_INCIDENT_NEARING_SLA', '0', 'ACTION_JOURNAL');
+INSERT INTO triggers (triggerid, userid, action) VALUES ('TRIGGER_INCIDENT_EXCEEDED_SLA', '0', 'ACTION_JOURNAL');
+INSERT INTO triggers (triggerid, userid, action) VALUES ('TRIGGER_INCIDENT_REVIEW_DUE', '0', 'ACTION_JOURNAL');
+INSERT INTO triggers (triggerid, userid, action) VALUES ('TRIGGER_CRITICAL_INCIDENT_CREATED', '0', 'ACTION_JOURNAL');
+INSERT INTO triggers (triggerid, userid, action) VALUES ('TRIGGER_KB_CREATED', '0', 'ACTION_JOURNAL');
+INSERT INTO triggers (triggerid, userid, action) VALUES ('TRIGGER_NEW_HELD_EMAIL', '0', 'ACTION_JOURNAL');
+INSERT INTO triggers (triggerid, userid, action) VALUES ('TRIGGER_WAITING_HELD_EMAIL', '0', 'ACTION_JOURNAL');
+INSERT INTO triggers (triggerid, userid, action) VALUES ('TRIGGER_USER_SET_TO_AWAY', '0', 'ACTION_JOURNAL');
+INSERT INTO triggers (triggerid, userid, action) VALUES ('TRIGGER_SIT_UPGRADED', '0', 'ACTION_JOURNAL');
+INSERT INTO triggers (triggerid, userid, action) VALUES ('TRIGGER_USER_RETURNS', '0', 'ACTION_JOURNAL');
+INSERT INTO triggers (triggerid, userid, action) VALUES ('TRIGGER_INCIDENT_OWNED_CLOSED_BY_USER', '0', 'ACTION_JOURNAL');
+-- INL 24Jan08 TODO add to above ^^
+ALTER TABLE `triggers` ADD INDEX ( `userid` );
+
+-- KMHO 25/01/08
+ALTER TABLE `emailtype` CHANGE `type` `type` ENUM( 'usertemplate', 'system', 'contact', 'site', 'incident', 'kb', 'user') NOT NULL COMMENT 'usertemplate is personal template owned by a user, user is a template relating to a user' DEFAULT 'user';
+
+-- INL 25Jan08
+UPDATE `emailtype` SET `type` = 'incident' WHERE `id` = 'INCIDENT_CLOSURE' ;
+UPDATE `emailtype` SET `type` = 'incident' WHERE `id` = 'INCIDENT_LOGGED_CALL' ;
+UPDATE `emailtype` SET `type` = 'incident' WHERE `id` = 'INCIDENT_CLOSED' ;
+UPDATE `emailtype` SET `type` = 'incident' WHERE `id` = 'OUT_OF_SLA' ;
+UPDATE `emailtype` SET `type` = 'incident' WHERE `id` = 'OUT_OF_REVIEW' ;
+UPDATE `emailtype` SET `type` = 'incident' WHERE `id` = 'INCIDENT UPDATED' ;
+UPDATE `emailtype` SET `type` = 'incident' WHERE `id` = 'INCIDENT CLOSED EXTERNAL' ;
+UPDATE `emailtype` SET `type` = 'incident' WHERE `id` = 'INCIDENT_LOGGED_EMAIL' ;
+
+-- KMH 27/01/08
+ALTER TABLE `triggers` ADD `template` VARCHAR( 255 ) NOT NULL AFTER `action` ;
+ALTER TABLE `triggers` ADD `checks` VARCHAR( 255 ) NULL ;
+
+-- INL 28/01/08
+ALTER TABLE `triggers` CHANGE `template` `template` INT( 11 ) NOT NULL ;
+RENAME TABLE `emailtype`  TO `emailtemplates` ;
+
+-- INL 29/01/08
+ALTER TABLE `contacts` ADD `created` DATETIME NULL ,
+ADD `createdby` INT NULL ,
+ADD `modified` DATETIME NULL ,
+ADD `modifiedby` INT NULL ;
+
+ALTER TABLE `sites` ADD `created` DATETIME NULL ,
+ADD `createdby` INT NULL ,
+ADD `modified` DATETIME NULL ,
+ADD `modifiedby` INT NULL ;
+
+ALTER TABLE `emailtemplates` ADD `created` DATETIME NULL ,
+ADD `createdby` INT NULL ,
+ADD `modified` DATETIME NULL ,
+ADD `modifiedby` INT NULL ;
+
+-- INL 14Feb08
+CREATE TABLE IF NOT EXISTS `scheduler` (
+  `id` int(11) NOT NULL auto_increment,
+  `action` varchar(50) NOT NULL,
+  `params` varchar(255) NOT NULL,
+  `paramslabel` varchar(255) default NULL,
+  `description` tinytext NOT NULL,
+  `status` enum('enabled','disabled') NOT NULL default 'enabled',
+  `start` datetime NOT NULL,
+  `end` datetime NOT NULL,
+  `interval` int(11) NOT NULL,
+  `lastran` datetime NOT NULL,
+  `success` tinyint(1) NOT NULL default '1',
+  PRIMARY KEY  (`id`),
+  KEY `job` (`action`)
+) ENGINE=MyISAM  ;
+
+
+INSERT INTO `scheduler` (`id`, `action`, `params`, `description`, `status`, `start`, `end`, `interval`, `lastran`, `success`) VALUES
+(1, 'CloseIncidents', '', 'Close incidents that are marked for closure according to the config setting <var>closure_delay</var>', 'disabled', '2008-02-14 01:23:00', '0000-00-00 00:00:00', 1800, '0000-00-00 00:00:00', 1),
+(2, 'SetUserStatus', '', '(EXPERIMENTAL) This will set users status based on data from their holiday calendar.  e.g. Out of Office/Away sick.', 'disabled', '2008-02-03 01:00:00', '0000-00-00 00:00:00', 1800, '0000-00-00 00:00:00', 1),
+(3, 'PurgeJournal', '', 'Delete old journal entries according to the config setting <var>journal_purge_after</var>', 'disabled', '2008-01-01 00:00:00', '0000-00-00 00:00:00', 43200, '0000-00-00 00:00:00', 1),
+(4, 'TimeCalc', '', 'Calculate SLA Target Times and trigger OUT_OF_SLA and OUT_OF_REVIEW system email templates where appropriate.', 'disabled', '2008-01-01 00:00:00', '0000-00-00 00:00:00', 60, '0000-00-00 00:00:00', 1),
+(5, 'ChaseCustomers', '', 'Chase customers', 'disabled', '2008-01-01 00:00:00', '0000-00-00 00:00:00', 3600, '0000-00-00 00:00:00', 1),
+(6, 'CheckWaitingEmail', '', 'Checks the holding queue for emails and fires the TRIGGER_WAITING_HELD_EMAIL trigger when it finds some.', 'enabled', '2008-01-01 00:00:00', '0000-00-00 00:00:00', 60, '0000-00-00 00:00:00', 1);
+-- INL 15Feb08 FIXME all this scheduler data is temporary, needs tidying before release
+INSERT INTO `scheduler` (`id`, `action`, `params`, `paramslabel`, `description`, `status`, `start`, `end`, `interval`, `lastran`, `success`) VALUES (1, 'CloseIncidents', '554400', 'closure_delay', 'Close incidents that have been marked for closure for longer than the <var>closure_delay</var> parameter (which is in seconds)', 'enabled', '2008-02-14 01:23:00', '0000-00-00 00:00:00', 60, '2008-02-15 16:35:06', 1);
+";
 
 // Important: When making changes to the schema you must add SQL to make the alterations
 // to existing databases in $upgrade_schema[] *AND* you must also change $schema[] for

@@ -29,7 +29,7 @@ else
     echo "<link rel='stylesheet' href='styles/webtrack1.css' />\n";
 }
 
-$csssql = "SELECT cssurl, iconset FROM interfacestyles WHERE id='{$styleid}'";
+$csssql = "SELECT cssurl, iconset FROM `{$dbInterfaceStyles}` WHERE id='{$styleid}'";
 $cssresult = mysql_query($csssql);
 if (mysql_error()) trigger_error(mysql_error(),E_USER_WARNING);
 else list($cssurl, $iconset) = mysql_fetch_row($cssresult);
@@ -56,110 +56,6 @@ function gotab(tab) {
     document.actiontabs.submit();
 }
 </script>
-
-
-<style type='text/css'>
-
-#detailsummary
-{
-    background: #F7FAFF;
-    margin-left: auto;
-    margin-right: auto;
-    border-bottom: 3px solid #203894;
-}
-#detailsummary table, .detailentry table
-{
-    width: 100%;
-    background-color: transparent;
-}
-#detailsummary table td
-{
-    vertical-align: top;
-}
-#detailsummary h1
-{
-    font-size: 150%;
-    margin: 0px;
-    padding: 0px;
-    text-align: center;
-}
-#detailsummary img
-{
-    vertical-align: text-top;
-}
-
-#tabcontainer
-{
-    width: 100%;
-    background: #fff;
-    padding-left: 0px;
-    border-bottom: 2px dotted #9C9C9C;
-}
-#tabnav
-{
-    height: 20px;
-    margin: 0;
-    padding-left: 10px;
-}
-
-#tabnav li
-{
-    margin: 0;
-    padding: 0;
-    display: inline;
-    list-style-type: none;
-}
-
-#tabnav a:link, #tabnav a:visited, .submit
-{
-    float: left;
-    background: #F6F2FF;
-    font-size: 10px;
-    line-height: 14px;
-    font-weight: bold;
-    padding: 2px 10px 2px 10px;
-    margin-right: 4px;
-    border: 1px solid #ccc;
-    text-decoration: none;
-    color: #666;
-}
-
-#tabnav a:link.active, #tabnav a:visited.active, .active
-{
-    border-bottom: 1px solid #fff;
-    background: #fff;
-    color: #000;
-}
-
-#tabnav a:hover
-{
-    background: #fff;
-}
-
-
-span.quoteirrel { color: grey; }
-span.quote1 { color: #749BC2; }
-span.quote2 { color: green; }
-span.quote3 { color: magenta; }
-span.quote4 { color: #FF9933; }
-span.sig { color: red; }
-
-.on {background-color:#84C1DF;}
-.off {background-color:white;}
-
-#navmenu
-{
-    color: white;
-    background: #203894;
-    padding-left: 20px;
-    padding-top: 2px;
-    padding-bottom: 2px;
-    text-align: center;
-}
-#navmenu a { color: white; }
-#navmenu a em { color: #ddd; }
-
-</style>
 <script type="text/javascript" src="helptip.js"></script>
 <script type="text/javascript">
 <!--
@@ -187,15 +83,15 @@ function help_window(helpid)
 }
 
 
-if(document.layers)
+if (document.layers)
 {
    thisbrowser="NN4";
 }
-if(document.all)
+if (document.all)
 {
    thisbrowser="ie"
 }
-if(!document.all && document.getElementById)
+if (!document.all && document.getElementById)
 {
    thisbrowser="NN6";
 }
@@ -257,15 +153,15 @@ function Hide(button,element)
 $incidentid=$id;
 // Retrieve incident
 // extract incident details
-$sql  = "SELECT *, incidents.id AS incidentid, ";
-$sql .= "contacts.id AS contactid, contacts.notes AS contactnotes, servicelevel ";
-$sql .= "FROM incidents, contacts ";
-$sql .= "WHERE (incidents.id='{$incidentid}' AND incidents.contact=contacts.id) ";
-$sql .= " OR incidents.contact=NULL ";
+$sql  = "SELECT *, i.id AS incidentid, ";
+$sql .= "c.id AS contactid, c.notes AS contactnotes, servicelevel ";
+$sql .= "FROM `{$dbIncidents}` AS i, `{$dbContacts}` AS c ";
+$sql .= "WHERE (i.id='{$incidentid}' AND i.contact = c.id) ";
+$sql .= " OR i.contact=NULL ";
 $incidentresult = mysql_query($sql);
 if (mysql_error()) trigger_error("MySQL Query Error ".mysql_error(), E_USER_ERROR);
 $incident = mysql_fetch_object($incidentresult);
-$sitesql = "SELECT name, notes FROM sites WHERE id = '{$incident->siteid}'";
+$sitesql = "SELECT name, notes FROM `{$dbSites}` WHERE id = '{$incident->siteid}'";
 $siteresult = mysql_query($sitesql);
 if (mysql_error()) trigger_error(mysql_error(),E_USER_WARNING);
 $site = mysql_fetch_object($siteresult);
@@ -281,7 +177,6 @@ else
 }
 
 unset($site);
-
 if (!empty($incident->contactnotes))
 {
     $contact_notes = "<img src='{$CONFIG['application_webpath']}images/icons/{$iconset}/16x16/contact.png' width='16' height='16' alt='' /> <strong>{$strContactNotes}</strong><br />".nl2br($incident->contactnotes);
@@ -298,13 +193,16 @@ if ($incident->softwareid > 0)
 }
 
 $servicelevel_id = maintenance_servicelevel($incident->maintenanceid);
+
 $servicelevel_tag = $incident->servicelevel;
 if ($servicelevel_tag=='')
 {
     $servicelevel_tag = servicelevel_id2tag(maintenance_servicelevel($incident->maintenanceid));
 }
 
-$servicelevel_name=servicelevel_name($servicelevelid);
+
+$servicelevel_name = servicelevel_name($servicelevelid);
+
 if($incident->closed == 0)
 {
     $closed = time();
@@ -315,10 +213,11 @@ else
 }
 
 $opened_for = format_seconds($closed - $incident->opened);
+
 $priority = $incident->priority;
 
 // Lookup the service level times
-$slsql = "SELECT * FROM servicelevels WHERE tag='{$servicelevel_tag}' AND priority='{$incident->priority}' ";
+$slsql = "SELECT * FROM `{$dbServiceLevels}` WHERE tag='{$servicelevel_tag}' AND priority='{$incident->priority}' ";
 $slresult = mysql_query($slsql);
 if (mysql_error()) trigger_error("MySQL Query Error ".mysql_error(), E_USER_ERROR);
 $servicelevel = mysql_fetch_object($slresult);
@@ -386,12 +285,12 @@ if ($menu != 'hide')
     if ($_REQUEST['win']=='incomingview')
     {
         $insql = "SELECT emailfrom, contactid, updateid, tempincoming.id, timestamp
-                FROM tempincoming, updates
-                WHERE tempincoming.id={$id}
-                AND tempincoming.updateid=updates.id";
+                FROM `{$dbTempIncoming}` AS ti, `{$dbUpdates}` AS u
+                WHERE ti.id = {$id}
+                AND ti.updateid = u.id";
         $query = mysql_query($insql);
         if (mysql_error()) trigger_error(mysql_error(),E_USER_WARNING);
-        while($inupdate = mysql_fetch_object($query))
+        while ($inupdate = mysql_fetch_object($query))
         {
             echo "<a class='barlink' href='unlock_update.php?id={$id}'>{$strUnlock}</a> | ";
             echo "<a class='barlink' href=\"javascript:window.opener.location='move_update.php?updateid={$inupdate->updateid}&amp;incidentidnumber={$update['incidentid']}'; window.close();\" >{$strAssign}</a> | ";

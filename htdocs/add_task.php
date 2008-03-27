@@ -28,7 +28,7 @@ $incident = $_REQUEST['incident'];
 
 if ($incident)
 {
-    $sql = "INSERT INTO tasks(owner, name, priority, distribution, startdate, created, lastupdated) ";
+    $sql = "INSERT INTO `{$dbTasks}` (owner, name, priority, distribution, startdate, created, lastupdated) ";
     $sql .= "VALUES('$sit[2]', 'Activity for Incident {$incident}', 1, 'incident', NOW(), NOW(), NOW())";
 
     mysql_query($sql);

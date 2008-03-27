@@ -27,8 +27,9 @@ if (empty($offset)) $offset=0;
 */
 function count_updates($incidentid)
 {
+    global $dbUpdates;
     $count_updates = 0;
-    $sql = "SELECT COUNT(id) FROM updates WHERE incidentid='{$incidentid}'";
+    $sql = "SELECT COUNT(id) FROM `{$dbUpdates}` WHERE incidentid='{$incidentid}'";
     $result = mysql_query($sql);
     if (mysql_error()) trigger_error("MySQL Query Error ".mysql_error(), E_USER_ERROR);
     list ($count_updates) = mysql_fetch_row($result);
@@ -85,7 +86,7 @@ $records = strtolower(cleanvar($_REQUEST['records']));
 
 if ($incidentid=='' OR $incidentid < 1) trigger_error("Incident ID cannot be zero or blank", E_USER_ERROR);
 
-$sql  = "SELECT * FROM updates WHERE incidentid='{$incidentid}' ";
+$sql  = "SELECT * FROM `{$dbUpdates}` WHERE incidentid='{$incidentid}' ";
 // Don't show hidden updates if we're on the customer view tab
 if (strtolower($selectedtab)=='customer_view') $sql .= "AND customervisibility='show' ";
 $sql .= "ORDER BY timestamp {$_SESSION['update_order']}, id {$_SESSION['update_order']} ";
@@ -97,8 +98,8 @@ if ($offset > 0)
 $result = mysql_query($sql);
 if (mysql_error()) trigger_error("MySQL Query Error $sql".mysql_error(), E_USER_ERROR);
 
-$keeptags=array('b','i','u','hr','&lt;', '&gt;');
-foreach($keeptags AS $keeptag)
+$keeptags = array('b','i','u','hr','&lt;', '&gt;');
+foreach ($keeptags AS $keeptag)
 {
     if (substr($keeptag,0,1)=='&')
     {
@@ -121,10 +122,10 @@ foreach($keeptags AS $keeptag)
 }
 
 //echo log_nav_bar();
-$count=0;
+$count = 0;
 while ($update = mysql_fetch_object($result))
 {
-    if(empty($firstid)) $firstid = $update->id;
+    if (empty($firstid)) $firstid = $update->id;
     $updateid = $update->id;
     $updatebody=trim($update->bodytext);
     $updatebodylen=strlen($updatebody);
@@ -233,7 +234,7 @@ while ($update = mysql_fetch_object($result))
     $next = $offset + $_SESSION['num_update_view'];
 
     echo "<div class='detaildate'>";
-    if($count==0)
+    if ($count==0)
     {
         if ($offset > 0)
         {
@@ -278,7 +279,7 @@ while ($update = mysql_fetch_object($result))
     {
         echo "<img src='{$CONFIG['application_webpath']}images/icons/{$iconset}/16x16/{$updatetypes['research']['icon']}' width='16' height='16' alt='Research' />";
         echo "<span>Click to {$newmode}</span></a> ";
-        if($update->sla != '') echo "<img src='{$CONFIG['application_webpath']}images/icons/{$iconset}/16x16/{$slatypes[$update->sla]['icon']}' width='16' height='16' alt='{$update->type}' />";
+        if ($update->sla != '') echo "<img src='{$CONFIG['application_webpath']}images/icons/{$iconset}/16x16/{$slatypes[$update->sla]['icon']}' width='16' height='16' alt='{$update->type}' />";
         echo "Updated ({$update->type}) by {$updateuser}";
     }
 

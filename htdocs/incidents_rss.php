@@ -10,18 +10,18 @@
 
 // This feature is experimental as of 22Sep06
 
-@include('set_include_path.inc.php');
-require('db_connect.inc.php');
-require('functions.inc.php');
+@include ('set_include_path.inc.php');
+require ('db_connect.inc.php');
+require ('functions.inc.php');
 
 // This script requires no authentication
 // The information it reveals should not be sensitive
 
-$userid=cleanvar($_REQUEST['user']);
+$userid = cleanvar($_REQUEST['user']);
 
 if (!is_numeric($userid)) trigger_error('Invalid userid', E_USER_ERROR);
 
-$sql = "SELECT * FROM incidents WHERE (owner='$userid' OR towner='$userid') ";
+$sql = "SELECT * FROM `{$dbIncidents}` WHERE (owner='$userid' OR towner='$userid') ";
 $sql .= "AND (status!='2') LIMIT 5";  // not closed
 
 $result = mysql_query($sql);

@@ -12,35 +12,35 @@
 // Email:    paul.lees[at]salfordsoftware.co.uk
 // Comments: hack of Ivan's code, Addresses of ALL Supported Customers
 
-@include('../set_include_path.inc.php');
+@include ('../set_include_path.inc.php');
 
-$permission=37; // Run Reports
+$permission = 37; // Run Reports
 
-require('db_connect.inc.php');
-require('functions.inc.php');
+require ('db_connect.inc.php');
+require ('functions.inc.php');
 
 // This page requires authentication
-require('auth.inc.php');
+require ('auth.inc.php');
 
-include('htmlheader.inc.php');
+include ('htmlheader.inc.php');
 
 echo "<h2>Report: Address of ALL Supported Customers</h2>";
 echo "<h3>(Doesn't check for expiry)</h3>";
 
 
-$sql  = "SELECT DISTINCT contacts.address1, contacts.address2, contacts.city, contacts.county, contacts.country, contacts.postcode ";
-$sql.="FROM contacts LEFT JOIN contactproducts ON contacts.id=contactproducts.contactid ";
+$sql  = "SELECT DISTINCT c.address1, c.address2, c.city, c.county, c.country, c.postcode ";
+$sql .= "FROM `{$dbContacts}` AS c LEFT JOIN `{$dbContactProducts}` ON c.id = `{$dbContactProducts}`.contactid ";
 //$sql.="WHERE productid='1' OR productid='77' OR productid='55' ";
 //$sql.="ORDER BY email ASC ";
 //$sql.="LIMIT 100";
-$result=mysql_query($sql);
+$result = mysql_query($sql);
 if (mysql_error()) trigger_error("MySQL Query Error ".mysql_error(), E_USER_ERROR);
-$count=mysql_num_rows($result);
-echo "<b>Found $count records</b><br /><br />";
+$count = mysql_num_rows($result);
+echo "<strong>Found $count records</strong><br /><br />";
 
-if($result)
+if ($result)
 {
-    while($address=mysql_fetch_array($result))
+    while ($address=mysql_fetch_array($result))
     {
         echo $address['address1'];
         echo "<br />";
@@ -63,5 +63,5 @@ else
 mysql_free_result($result);
 
 
-include('htmlfooter.inc.php');
+include ('htmlfooter.inc.php');
 ?>

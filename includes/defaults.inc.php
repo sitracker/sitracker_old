@@ -8,7 +8,7 @@
 // of the GNU General Public License, incorporated herein by reference.
 //
 //  Author: Ivan Lucas
-//  Notes: These variables are overwritten by config.inc.php and/or webtrack.conf
+//  Notes: These variables are overwritten by config.inc.php and/or webtrack.conf or sit.conf
 
 $CONFIG['application_name'] = 'SiT! Support Incident Tracker';
 $CONFIG['application_shortname'] = 'SiT!';
@@ -24,6 +24,9 @@ $CONFIG['db_username'] = '';
 $CONFIG['db_password'] = '';
 // the name of the database to use
 $CONFIG['db_database'] = 'sit';
+
+// Prefix database tables with the a string (e.g. 'sit_', use this if the database you are using is shared with other applications
+$CONFIG['db_tableprefix'] = '';
 
 $CONFIG['home_country'] = 'UNITED KINGDOM';
 
@@ -41,9 +44,6 @@ $CONFIG['dateformat_shortdate'] = 'd/m/y';
 $CONFIG['dateformat_shorttime'] = 'H:i';
 $CONFIG['dateformat_date'] = 'jS M Y';
 $CONFIG['dateformat_time'] = 'g:ia';
-
-// The amount of time (in seconds) to wait before closing when an incident is marked for closure
-$CONFIG['closure_delay'] = 554400; // close after six days and 10 hours
 
 // Array containing working days (0=Sun, 1=Mon ... 6=Sat)
 $CONFIG['working_days'] = array(1,2,3,4,5);
@@ -146,7 +146,7 @@ $CONFIG['critical_threshold'] = 95;
 $CONFIG['demo'] = FALSE;
 
 // Output extra debug information, some as HTML comments and some in the page footer
-$CONFIG['debug'] = FALSE;
+$CONFIG['debug'] = TRUE;
 
 // Enable user portal
 $CONFIG['portal'] = FALSE;

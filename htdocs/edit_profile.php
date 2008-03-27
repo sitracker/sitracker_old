@@ -10,12 +10,12 @@
 
 
 // This Page Is Valid XHTML 1.0 Transitional!  1Nov05
-@include('set_include_path.inc.php');
-$permission=4; // Edit your profile
-require('db_connect.inc.php');
-require('functions.inc.php');
+@include ('set_include_path.inc.php');
+$permission = 4; // Edit your profile
+require ('db_connect.inc.php');
+require ('functions.inc.php');
 // This page requires authentication
-require('auth.inc.php');
+require ('auth.inc.php');
 
 // External variables
 $mode = $_REQUEST['mode'];
@@ -32,9 +32,9 @@ else
 
 if (empty($mode))
 {
-    include('htmlheader.inc.php');
+    include ('htmlheader.inc.php');
 
-    $sql = "SELECT * FROM users WHERE id='$edituserid' LIMIT 1";
+    $sql = "SELECT * FROM `{$dbUsers}` WHERE id='{$edituserid}' LIMIT 1";
     $result = mysql_query($sql);
     if (mysql_error()) trigger_error("MySQL Query Error ".mysql_error(), E_USER_ERROR);
 
@@ -106,7 +106,7 @@ if (empty($mode))
 
     if ($user->groupid >= 1)
     {
-        $sql="SELECT name FROM groups WHERE id='{$user->groupid}' ";
+        $sql = "SELECT name FROM `{$dbGroups}` WHERE id='{$user->groupid}' ";
         $result = mysql_query($sql);
         if (mysql_error()) trigger_error(mysql_error(),E_USER_ERROR);
         $group = mysql_fetch_object($result);
@@ -162,7 +162,7 @@ if (empty($mode))
 
     foreach ($availablelanguages AS $langcode => $language)
     {
-        if($langcode == $selectedlang)
+        if ($langcode == $selectedlang)
         {
             echo "<option value='$langcode' selected='selected'>$language</option>\n";
         }
@@ -174,6 +174,7 @@ if (empty($mode))
     echo "</select>";
     echo "</td></tr>\n";
 
+    if ($user->var_utc_offset == '') $user->var_utc_offset = 0;
     echo "<tr><th>{$strUTCOffset}:</th><td>".array_drop_down($availabletimezones, 'utcoffset', $user->var_utc_offset)."</td></tr>\n";
 
     echo "<tr><th>{$strInterfaceStyle}:</th><td>".interfacestyle_drop_down('style', $user->var_style)."</td></tr>\n";
@@ -227,7 +228,7 @@ if (empty($mode))
     echo "<p><input name='reset' type='reset' value='{$strReset}' /> <input name='submit' type='submit' value='{$strSave}' /></p>";
     echo "</form>\n";
 
-    include('htmlfooter.inc.php');
+    include ('htmlfooter.inc.php');
 }
 elseif ($mode=='save')
 {
@@ -271,11 +272,16 @@ elseif ($mode=='save')
         exit;
     }
 
+    $sql = "SELECT * FROM `{$dbUsers}` AS u WHERE id = {$userid}";
+
     // If users status is set to 0 (disabled) force 'accepting' to no
     if ($status==0) $accepting='No';
 
     // Update user profile
     $errors = 0;
+    $result = mysql_query($sql);
+    if (mysql_error()) trigger_error("MySQL Query Error ".mysql_error(), E_USER_ERROR);
+    $userdetails = mysql_fetch_row($result);
 
     // check for change of password
     if ($password != "" && $newpassword1 != "" && $newpassword2 != "")
@@ -286,7 +292,7 @@ elseif ($mode=='save')
             $password = strtoupper(md5($password));
             $newpassword1 = strtoupper(md5($newpassword1));
             $newpassword2 = strtoupper(md5($newpassword2));
-            $sql = "UPDATE users SET password='$newpassword1' WHERE id='$edituserid'";
+            $sql = "UPDATE `{$dbUsers}` SET password='$newpassword1' WHERE id='{$edituserid}'";
             $result = mysql_query($sql);
             if (mysql_error()) trigger_error("MySQL Query Error ".mysql_error(), E_USER_ERROR);
 
@@ -317,11 +323,11 @@ elseif ($mode=='save')
     else
     {
         //we updated our email, dimiss notice
-        $sql = "DELETE FROM usernotices WHERE userid={$sit[2]} and noticeid=2";
+        $sql = "DELETE FROM `{$dbUserNotices}` WHERE userid={$sit[2]} and noticeid=2";
         @mysql_query($sql);
     }
     // Check email address is unique (discount disabled accounts)
-    $sql = "SELECT COUNT(id) FROM users WHERE status > 0 AND email='$email'";
+    $sql = "SELECT COUNT(id) FROM `{$dbUsers}` WHERE status > 0 AND email='$email'";
     $result = mysql_query($sql);
     if (mysql_error()) trigger_error(mysql_error(),E_USER_ERROR);
     list($countexisting) = mysql_fetch_row($result);
@@ -333,7 +339,7 @@ elseif ($mode=='save')
     // update database if no errors
     if ($errors == 0)
     {
-        if(!empty($collapse))
+        if (!empty($collapse))
         {
             $collapse = 'true';
         }
@@ -342,7 +348,10 @@ elseif ($mode=='save')
             $collapse = 'false';
         }
 
-        if(!empty($emailonreassign))
+        //$oldstatus = user_status($userid);
+        $oldstatus = $userdetails['status'];
+
+        if (!empty($emailonreassign))
         {
             $emailonreassign = 'true';
         }
@@ -351,9 +360,7 @@ elseif ($mode=='save')
             $emailonreassign = 'false';
         }
 
-        $oldstatus = user_status($edituserid);
-
-        $sql  = "UPDATE users SET realname='$realname', title='$jobtitle', email='$email', qualifications='$qualifications', ";
+        $sql  = "UPDATE `{$dbUsers}` SET realname='$realname', title='$jobtitle', email='$email', qualifications='$qualifications', ";
         $sql .= "phone='$phone', mobile='$mobile', aim='$aim', icq='$icq', msn='$msn', fax='$fax', var_incident_refresh='$incidentrefresh', ";
         if ($edituserid != 1 AND !empty($_REQUEST['roleid']) AND $edituserpermission==TRUE)
         {
@@ -393,9 +400,9 @@ elseif ($mode=='save')
 
         if (!$result)
         {
-            include('htmlheader.inc.php');
+            include ('htmlheader.inc.php');
             throw_error('!Error while updating users table', '');
-            include('htmlfooter.inc.php');
+            include ('htmlfooter.inc.php');
         }
         else
         {
@@ -409,7 +416,7 @@ elseif ($mode=='save')
             else
             {
                 //if this was the admin changing his password for the first time
-                if($sit[2] == '1')
+                if ($sit[2] == '1')
                 {
                     $sql = "UPDATE usernotices SET dimissed=1 WHERE userid={$sit[2]} and updateid=1";
                     @mysql_query($sql);
@@ -422,18 +429,18 @@ elseif ($mode=='save')
     else
     {
         // print error string
-        include('htmlheader.inc.php');
+        include ('htmlheader.inc.php');
         echo $error_string;
-        include('htmlfooter.inc.php');
+        include ('htmlfooter.inc.php');
     }
 }
 elseif ($mode == 'savesessionlang')
 {
 
-    $sql = "UPDATE users SET var_i18n = '{$_SESSION['lang']}' WHERE id = {$sit[2]}";
+    $sql = "UPDATE `{$dbUsers}` SET var_i18n = '{$_SESSION['lang']}' WHERE id = {$sit[2]}";
     mysql_query($sql);
     if (mysql_error()) trigger_error("MySQL Query Error ".mysql_error(), E_USER_ERROR);
-    $sql = "DELETE FROM notices WHERE type=".USER_LANG_DIFFERS_TYPE." AND userid={$sit[2]}";
+    $sql = "DELETE FROM `{$dbNotices}` WHERE type=".USER_LANG_DIFFERS_TYPE." AND userid={$sit[2]}";
     mysql_query($sql);
     if (mysql_error()) trigger_error("MySQL Query Error ".mysql_error(), E_USER_ERROR);
     html_redirect("main.php");

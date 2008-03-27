@@ -12,13 +12,13 @@
 
 // FIXME i18n whole page
 
-@include('set_include_path.inc.php');
-$permission=19; // View Contracts
-require('db_connect.inc.php');
-require('functions.inc.php');
+@include ('set_include_path.inc.php');
+$permission = 19; // View Contracts
+require ('db_connect.inc.php');
+require ('functions.inc.php');
 
 // This page requires authentication
-require('auth.inc.php');
+require ('auth.inc.php');
 
 // External variables
 $search_string = cleanvar($_REQUEST['search_string']);
@@ -29,7 +29,7 @@ $hideexpired = cleanvar($_REQUEST['hideexpired']);
 // show search maintenance form
 if (empty($search_string))
 {
-    include('htmlheader.inc.php');
+    include ('htmlheader.inc.php');
     ?>
     <h2>Search Contracts</h2>
     <form action="<?php echo $_SERVER['PHP_SELF'] ?>" method="get">
@@ -52,12 +52,12 @@ if (empty($search_string))
     <p><input name="submit" type="submit" value="Search" /></p>
     </form>
     <?php
-    include('htmlfooter.inc.php');
+    include ('htmlfooter.inc.php');
 }
 else
 {
     // perform search
-    include('htmlheader.inc.php');
+    include ('htmlheader.inc.php');
     // check input
     if ($search_string == "")
     {
@@ -70,66 +70,85 @@ else
         // build SQL
         if ($fields=='' OR $fields == "all")
         {
-            $sql  = "SELECT maintenance.id AS maintid, sites.name AS site, products.name AS product, resellers.name AS reseller, licence_quantity, licencetypes.name AS licence_type, expirydate, admincontact, contacts.forenames AS admincontactforenames, contacts.surname AS admincontactsurnname, maintenance.notes, maintenance.term FROM maintenance, sites, contacts, products, licencetypes, resellers WHERE ";
-            $sql .= "(maintenance.site=sites.id AND product=products.id AND reseller=resellers.id AND licence_type=licencetypes.id AND admincontact=contacts.id) AND ";
-            $sql .= "(maintenance.id LIKE ('%$search_string%') OR ";
-            $sql .= "sites.name LIKE ('%$search_string%') OR ";
-            $sql .= "products.name LIKE ('%$search_string%') OR ";
-            $sql .= "resellers.name LIKE ('%$search_string%') OR ";
+            $sql  = "SELECT m.id AS maintid, s.name AS site, p.name AS product, r.name AS reseller, ";
+            $sql .= "licence_quantity, lt.name AS licence_type, expirydate, admincontact, c.forenames AS admincontactforenames, ";
+            $sql .= "c.surname AS admincontactsurnname, m.notes, m.term ";
+            $sql .= "FROM `{$dbMaintenance}` AS m, `{$dbSites}` AS s, `{$dbContacts}` AS c, `{$dbProducts}` AS p, `{$dbLicenceTypes}` AS lt, `{$dbResellers}` AS r ";
+            $sql .= "WHERE ";
+            $sql .= "(m.site = s.id AND product = p.id AND reseller = r.id AND licence_type = lt.id AND admincontact = c.id) AND ";
+            $sql .= "(m.id LIKE ('%$search_string%') OR ";
+            $sql .= "s.name LIKE ('%$search_string%') OR ";
+            $sql .= "p.name LIKE ('%$search_string%') OR ";
+            $sql .= "r.name LIKE ('%$search_string%') OR ";
             $sql .= "licencetypes.name LIKE ('%$search_string%') OR ";
-            $sql .= "contacts.surname LIKE ('%$search_string%'))";
-            if ($hideterminated=='yes') $sql .= " AND NOT maintenance.term = 'yes'";
-            if ($hideexpired=='yes') $sql .= " AND maintenance.expirydate > {$now}";
+            $sql .= "c.surname LIKE ('%$search_string%'))";
+            if ($hideterminated=='yes') $sql .= " AND NOT m.term = 'yes'";
+            if ($hideexpired=='yes') $sql .= " AND m.expirydate > {$now}";
         }
         elseif ($fields == "id")
         {
-            $sql  = "SELECT maintenance.id AS maintid, sites.name AS site, products.name AS product, resellers.name AS reseller, licence_quantity, licencetypes.name AS licence_type, expirydate, admincontact, contacts.forenames AS admincontactforenames, contacts.surname AS admincontactsurnname, maintenance.notes, maintenance.term FROM maintenance, sites, contacts, products, licencetypes, resellers WHERE ";
-            $sql .= "(maintenance.site=sites.id AND product=products.id AND reseller=resellers.id AND licence_type=licencetypes.id AND admincontact=contacts.id) AND ";
-            $sql .= "(maintenance.id LIKE ('%$search_string%'))";
-            if ($hideterminated=='yes') $sql .= " AND NOT maintenance.term ='yes'";
-            if ($hideexpired=='yes') $sql .= " AND maintenance.expirydate > {$now}";
+            $sql  = "SELECT m.id AS maintid, s.name AS site, p.name AS product, r.name AS reseller, ";
+            $sql .= "licence_quantity, lt.name AS licence_type, expirydate, admincontact, c.forenames AS admincontactforenames, ";
+            $sql .= "c.surname AS admincontactsurnname, m.notes, m.term ";
+            $sql .= "FROM `{$dbMaintenance}` AS m, `{$dbSites}` AS s, `{$dbContacts}` AS c, `{$dbProducts}` AS p, `{$dbLicenceTypes}` AS lt, `{$dbResellers}` AS r ";
+            $sql .= "WHERE ";
+            $sql .= "(m.site = s.id AND product = p.id AND reseller = r.id AND licence_type = lt.id AND admincontact = c.id) AND ";
+            $sql .= "(m.id LIKE ('%$search_string%'))";
+            if ($hideterminated=='yes') $sql .= " AND NOT m.term ='yes'";
+            if ($hideexpired=='yes') $sql .= " AND m.expirydate > {$now}";
         }
         elseif ($fields == "site")
         {
-            $sql  = "SELECT maintenance.id AS maintid, sites.name AS site, products.name AS product, resellers.name AS reseller, licence_quantity, licencetypes.name AS licence_type, expirydate, admincontact, contacts.forenames AS admincontactforenames, contacts.surname AS admincontactsurnname, maintenance.notes, maintenance.term FROM maintenance, sites, contacts, products, licencetypes, resellers WHERE ";
-            $sql .= "(maintenance.site=sites.id AND product=products.id AND reseller=resellers.id AND licence_type=licencetypes.id AND admincontact=contacts.id) AND ";
-            $sql .= "(sites.name LIKE ('%$search_string%'))";
-            if ($hideterminated=='yes') $sql .= " AND maintenance.term!='yes'";
-            if ($hideexpired=='yes') $sql .= " AND maintenance.expirydate > {$now}";
+            $sql  = "SELECT m.id AS maintid, s.name AS site, p.name AS product, r.name AS reseller, ";
+            $sql .= "licence_quantity, lt.name AS licence_type, expirydate, admincontact, c.forenames AS admincontactforenames, ";
+            $sql .= "c.surname AS admincontactsurnname, m.notes, m.term ";
+            $sql .= "FROM `{$dbMaintenance}` AS m, `{$dbSites}` AS s, `{$dbContacts}` AS c, `{$dbProducts}` AS p, `{$dbLicenceTypes}` AS lt, `{$dbResellers}` AS r ";
+            $sql .= "WHERE ";
+            $sql .= "(m.site = s.id AND product = p.id AND reseller = r.id AND licence_type = lt.id AND admincontact = c.id) AND ";
+            $sql .= "(s.name LIKE ('%$search_string%'))";
+            if ($hideterminated=='yes') $sql .= " AND m.term!='yes'";
+            if ($hideexpired=='yes') $sql .= " AND m.expirydate > {$now}";
         }
         elseif ($fields == "product")
         {
-            $sql  = "SELECT maintenance.id AS maintid, sites.name AS site, products.name AS product, resellers.name AS reseller, licence_quantity, licencetypes.name AS licence_type, expirydate, admincontact, contacts.forenames AS admincontactforenames, contacts.surname AS admincontactsurnname, maintenance.notes, maintenance.term FROM maintenance, sites, contacts, products, licencetypes, resellers WHERE ";
-            $sql .= "(maintenance.site=sites.id AND product=products.id AND reseller=resellers.id AND licence_type=licencetypes.id AND admincontact=contacts.id) AND ";
-            $sql .= "(products.name LIKE ('%$search_string%'))";
-            if ($hideterminated=='yes') $sql .= " AND maintenance.term!='yes'";
-            if ($hideexpired=='yes') $sql .= " AND maintenance.expirydate > {$now}";
+            $sql  = "SELECT m.id AS maintid, s.name AS site, p.name AS product, r.name AS reseller, ";
+            $sql .= "licence_quantity, lt.name AS licence_type, expirydate, admincontact, c.forenames AS admincontactforenames, ";
+            $sql .= "c.surname AS admincontactsurnname, m.notes, m.term ";
+            $sql .= "FROM `{$dbMaintenance}` AS m, `{$dbSites}` AS s, `{$dbContacts}` AS c, `{$dbProducts}` AS p, `{$dbLicenceTypes}` AS lt, `{$dbResellers}` AS r ";
+            $sql .= "WHERE ";
+            $sql .= "(m.site = s.id AND product = p.id AND reseller = r.id AND licence_type = lt.id AND admincontact = c.id) AND ";
+            $sql .= "(p.name LIKE ('%$search_string%'))";
+            if ($hideterminated=='yes') $sql .= " AND m.term!='yes'";
+            if ($hideexpired=='yes') $sql .= " AND m.expirydate > {$now}";
         }
         elseif ($fields == "admincontact")
         {
-            $sql  = "SELECT maintenance.id AS maintid, sites.name AS site, products.name AS product, resellers.name AS reseller, licence_quantity, licencetypes.name AS licence_type, expirydate, admincontact, contacts.forenames AS admincontactforenames, contacts.surname AS admincontactsurnname, maintenance.notes, maintenance.term FROM maintenance, sites, contacts, products, licencetypes, resellers WHERE ";
-            $sql .= "(maintenance.site=sites.id AND product=products.id AND reseller=resellers.id AND licence_type=licencetypes.id AND admincontact=contacts.id) AND ";
-            $sql .= "(contacts.surname LIKE ('%$search_string%'))";
-            if ($hideterminated=='yes') $sql .= " AND maintenance.term!='yes'";
-            if ($hideexpired=='yes') $sql .= " AND maintenance.expirydate > {$now}";
+            $sql  = "SELECT m.id AS maintid, s.name AS site, p.name AS product, r.name AS reseller, licence_quantity, lt.name AS licence_type, expirydate, admincontact, c.forenames AS admincontactforenames, c.surname AS admincontactsurnname, m.notes, m.term ";
+            $sql .= "FROM `{$dbMaintenance}` AS m, `{$dbSites}` AS s, `{$dbContacts}` AS c, `{$dbProducts}` AS p, `{$dbLicenceTypes}` AS lt, `{$dbResellers}` AS r ";
+            $sql .= "WHERE ";
+            $sql .= "(m.site = s.id AND product = p.id AND reseller = r.id AND licence_type = lt.id AND admincontact = c.id) AND ";
+            $sql .= "(c.surname LIKE ('%$search_string%'))";
+            if ($hideterminated=='yes') $sql .= " AND m.term!='yes'";
+            if ($hideexpired=='yes') $sql .= " AND m.expirydate > {$now}";
         }
         elseif ($fields == "reseller")
         {
-            $sql  = "SELECT maintenance.id AS maintid, sites.name AS site, products.name AS product, resellers.name AS reseller, licence_quantity, licencetypes.name AS licence_type, expirydate, admincontact, contacts.forenames AS admincontactforenames, contacts.surname AS admincontactsurnname, maintenance.notes, maintenance.term FROM maintenance, sites, contacts, products, licencetypes, resellers WHERE ";
-            $sql .= "(maintenance.site=sites.id AND product=products.id AND reseller=resellers.id AND licence_type=licencetypes.id AND admincontact=contacts.id) AND ";
-            $sql .= "(resellers.name LIKE ('%$search_string%'))";
-            if ($hideterminated=='yes') $sql .= " AND maintenance.term!='yes'";
-            if ($hideexpired=='yes') $sql .= " AND maintenance.expirydate > {$now}";
+            $sql  = "SELECT m.id AS maintid, s.name AS site, p.name AS product, resellers.name AS reseller, licence_quantity, licencetypes.name AS licence_type, expirydate, admincontact, c.forenames AS admincontactforenames, c.surname AS admincontactsurnname, m.notes, m.term ";
+            $sql .= "FROM `{$dbMaintenance}` AS m, `{$dbSites}` AS s, `{$dbContacts}` AS c, `{$dbProducts}` AS p, `{$dbLicenceTypes}` AS lt, `{$dbResellers}` AS r WHERE ";
+            $sql .= "(m.site = s.id AND product = p.id AND reseller = r.id AND licence_type = lt.id AND admincontact = c.id) AND ";
+            $sql .= "(r.name LIKE ('%$search_string%'))";
+            if ($hideterminated=='yes') $sql .= " AND m.term!='yes'";
+            if ($hideexpired=='yes') $sql .= " AND m.expirydate > {$now}";
         }
         elseif ($fields == "licence_type")
         {
-            $sql  = "SELECT maintenance.id AS maintid, sites.name AS site, products.name AS product, resellers.name AS reseller, licence_quantity, licencetypes.name AS licence_type, expirydate, admincontact, contacts.forenames AS admincontactforenames, contacts.surname AS admincontactsurnname, maintenance.notes, maintenance.term FROM maintenance, sites, contacts, products, licencetypes, resellers WHERE ";
-            $sql .= "(maintenance.site=sites.id AND product=products.id AND reseller=resellers.id AND licence_type=licencetypes.id AND admincontact=contacts.id) AND ";
-            $sql .= "(licencetypes.name LIKE ('%$search_string%'))";
-            if ($hideterminated=='yes') $sql .= " AND maintenance.term!='yes'";
-            if ($hideexpired=='yes') $sql .= " AND maintenance.expirydate > {$now}";
+            $sql  = "SELECT m.id AS maintid, s.name AS site, products.name AS product, resellers.name AS reseller, licence_quantity, licencetypes.name AS licence_type, expirydate, admincontact, c.forenames AS admincontactforenames, c.surname AS admincontactsurnname, m.notes, m.term ";
+            $sql .= "FROM `{$dbMaintenance}` AS m, `{$dbSites}` AS s, `{$dbContacts}` AS c, `{$dbProducts}` AS p, `{$dbLicenceTypes}` AS lt, `{$dbResellers}` AS r WHERE ";
+            $sql .= "(m.site = s.id AND product = p.id AND reseller = r.id AND licence_type = lt.id AND admincontact = c.id) AND ";
+            $sql .= "(lt.name LIKE ('%$search_string%'))";
+            if ($hideterminated=='yes') $sql .= " AND m.term!='yes'";
+            if ($hideexpired=='yes') $sql .= " AND m.expirydate > {$now}";
         }
-
         $sql .= " ORDER BY site ASC";
 
         $result = mysql_query($sql);
@@ -146,7 +165,7 @@ else
             <script type="text/javascript">
             function support_contacts_window(maintenanceid)
             {
-                URL = "support_contacts.php?maintid=" + maintenanceid;
+                URL = "support_c.php?maintid=" + maintenanceid;
                 window.open(URL, "support_contacts_window", "toolbar=no,status=yes,menubar=no,scrollbars=yes,resizable=yes,width=450,height=240");
             }
             function contact_details_window(contactid)
@@ -199,6 +218,6 @@ else
             <?php
         }
     }
-    include('htmlfooter.inc.php');
+    include ('htmlfooter.inc.php');
 }
 ?>

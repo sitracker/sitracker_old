@@ -12,33 +12,33 @@
 
 // This Page Is Valid XHTML 1.0 Transitional!   15Mar06
 
-@include('../set_include_path.inc.php');
-$permission=37; // Run Reports
+@include ('../set_include_path.inc.php');
+$permission = 37; // Run Reports
 
-require('db_connect.inc.php');
-require('functions.inc.php');
+require ('db_connect.inc.php');
+require ('functions.inc.php');
 
 // This page requires authentication
-require('auth.inc.php');
+require ('auth.inc.php');
 
 $title = $strIncidentsBySite;
 
 if (empty($_REQUEST['mode']))
 {
-    include('htmlheader.inc.php');
+    include ('htmlheader.inc.php');
     echo "<h2>$title</h2>";
     echo "<p align='center'>This report lists the incidents that each site has logged over the past twelve months.</p>";
     echo "<form action='{$_SERVER['PHP_SELF']}' method='post'>";
     echo "<table summary='Site Selection Table' align='center'>";
     echo "<tr><th colspan='2' align='center'>Include</th></tr>";
     echo "<tr><td align='center' colspan='2'>";
-    $sql = "SELECT * FROM sites ORDER BY name";
+    $sql = "SELECT * FROM `{$dbSites}` ORDER BY name";
     $result = mysql_query($sql);
     if (mysql_error()) trigger_error("MySQL Query Error ".mysql_error(), E_USER_ERROR);
     echo "<select name='inc[]' multiple='multiple' size='20'>";
     while ($site = mysql_fetch_object($result))
     {
-        echo "<option value='{$site->id}'>$site->name</option>\n";
+        echo "<option value='{$site->id}'>{$site->name}</option>\n";
     }
     echo "</select>";
     echo "</td>";
@@ -59,7 +59,7 @@ if (empty($_REQUEST['mode']))
     echo "<input type='submit' value=\"{$strRunReport}\" />";
     echo "</p>";
     echo "</form>";
-    include('htmlfooter.inc.php');
+    include ('htmlfooter.inc.php');
 }
 elseif ($_REQUEST['mode']=='report')
 {
@@ -87,12 +87,12 @@ elseif ($_REQUEST['mode']=='report')
         }
         $incsql .= ")";
     }
-    $sql = "SELECT incidents.id AS incid, incidents.title AS title, contacts.id AS contactid, sites.name AS site, contacts.email AS cemail, ";
-    $sql .= "CONCAT(contacts.forenames,' ',contacts.surname) AS cname, incidents.opened as opened, sitetypes.typename, incidents.externalid AS externalid, ";
-    $sql .= "sites.id AS siteid ";
-    $sql .= "FROM contacts, sites, sitetypes, incidents ";
-    $sql .= "WHERE contacts.siteid=sites.id AND sites.typeid=sitetypes.typeid AND incidents.opened > ($now-60*60*24*365.25) ";
-    $sql .= "AND incidents.contact=contacts.id";
+    $sql = "SELECT i.id AS incid, i.title AS title, c.id AS contactid, s.name AS site, c.email AS cemail, ";
+    $sql .= "CONCAT(c.forenames,' ',c.surname) AS cname, i.opened as opened, st.typename, i.externalid AS externalid, ";
+    $sql .= "s.id AS siteid ";
+    $sql .= "FROM `{$dbContacts}` AS c, `{$dbSites}` AS s, `{$dbSiteTypes}` AS st, `{$dbIncidents}` AS i ";
+    $sql .= "WHERE c.siteid = s.id AND s.typeid = st.typeid AND i.opened > ($now-60*60*24*365.25) ";
+    $sql .= "AND i.contact=c.id";
 
     if (empty($incsql) == FALSE OR empty($excsql) == FALSE) $sql .= " AND ";
     if (!empty($incsql)) $sql .= "$incsql";
@@ -159,9 +159,9 @@ elseif ($_REQUEST['mode']=='report')
 
     if ($_POST['output']=='screen')
     {
-        include('htmlheader.inc.php');
+        include ('htmlheader.inc.php');
         echo $html;
-        include('htmlfooter.inc.php');
+        include ('htmlfooter.inc.php');
     }
     elseif ($_POST['output']=='csv')
     {

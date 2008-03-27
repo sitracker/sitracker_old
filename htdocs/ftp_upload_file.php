@@ -10,13 +10,13 @@
 
 
 // Author: Ivan Lucas <ivanlucas[at]users.sourceforge.net>
-@include('set_include_path.inc.php');
-$permission=44; // ftp publishing
-require('db_connect.inc.php');
-require('functions.inc.php');
+@include ('set_include_path.inc.php');
+$permission = 44; // ftp publishing
+require ('db_connect.inc.php');
+require ('functions.inc.php');
 
 // This page requires authentication
-require('auth.inc.php');
+require ('auth.inc.php');
 
 // External variables
 $file = cleanvar($_REQUEST['file']);
@@ -24,7 +24,7 @@ $action = cleanvar($_REQUEST['action']);
 
 if (empty($action))
 {
-    include('htmlheader.inc.php');
+    include ('htmlheader.inc.php');
     ?>
     <h2>Upload Public File</h2>
     <p align='center'>IMPORTANT: Files published here are <strong>public</strong> and available to all ftp users.</p>
@@ -83,7 +83,7 @@ if (empty($action))
     <p align='center'><a href='ftp_list_files.php'>Back to list</a></p>
     </form>
     <?php
-    include('htmlfooter.inc.php');
+    include ('htmlfooter.inc.php');
 }
 else
 {
@@ -146,7 +146,7 @@ else
         {
             // store file details in database
             // important: path must be blank for public files (all go in same dir)
-            $sql = "INSERT INTO files (filename, size, userid, shortdescription, longdescription, path, date, expiry, fileversion) ";
+            $sql = "INSERT INTO `{$dbFiles}` (filename, size, userid, shortdescription, longdescription, path, filedate, expiry, fileversion) ";
             $sql .= "VALUES ('$file_name', '$filesize', '".$sit[2]."', '$shortdescription', '$longdescription', '', '$now', '$expirydate' ,'$fileversion')";
             mysql_query($sql);
             if (mysql_error()) trigger_error("MySQL Query Error ".mysql_error(), E_USER_ERROR);

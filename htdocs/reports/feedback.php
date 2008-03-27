@@ -1,5 +1,5 @@
 <?php
-// feedback.php - Feedback report menu
+// new_feedback.php - Feedback report menu
 //
 // SiT (Support Incident Tracker) - Support call tracking system
 // Copyright (C) 2000-2008 Salford Software Ltd. and Contributors
@@ -8,47 +8,93 @@
 // of the GNU General Public License, incorporated herein by reference.
 //
 
-// Author: Ivan Lucas <ivanlucas[at]users.sourceforge.net>
+// Author:  Paul Heaney Paul Heaney <paulheaney[at]users.sourceforge.net>
 
-@include('../set_include_path.inc.php');
-$permission=37; // Run Reports
+@include ('../set_include_path.inc.php');
+$permission = 37; // Run Reports
 
-require('db_connect.inc.php');
-require('functions.inc.php');
+require ('db_connect.inc.php');
+require ('functions.inc.php');
 
 // This page requires authentication
-require('auth.inc.php');
+require ('auth.inc.php');
 
-include('htmlheader.inc.php');
-?>
-<h2>Feedback Reports</h2>
+$type = cleanvar($_REQUEST['type']);
+$dates = cleanvar($_REQUEST['dates']);
+$startdate = strtotime(cleanvar($_REQUEST['startdate']));
+$enddate = strtotime(cleanvar($_REQUEST['enddate']));
 
-<table align='center'>
-<tr><td colspan="2" class='shade1' align='right'><p class=sectiontitle>FEEDBACK REPORTS</p></td></tr>
+$formid = $CONFIG['feedback_form'];
 
-<tr>
-<td class='shade2' width='*'><a href="<?php echo $CONFIG['application_webpath']; ?>reports/feedback2.php">Feedback (by Engineer)</a><br />
-&nbsp;
-</td></tr>
+/// echo "Start: {$startdate}";
 
-<tr>
-<td class='shade2' width='*'><a href="<?php echo $CONFIG['application_webpath']; ?>reports/feedback3.php">Feedback (by Contact)</a><br />
-&nbsp;
-</td></tr>
+include ('htmlheader.inc.php');
 
-<tr>
-<td class='shade2' width='*'><a href="<?php echo $CONFIG['application_webpath']; ?>reports/feedback4.php">Feedback (by Site)</a><br />
-&nbsp;
-</td></tr>
+echo "<h2>Feedback Reports</h2>";
 
-<tr>
-<td class='shade2' width='*'><a href="<?php echo $CONFIG['application_webpath']; ?>reports/feedback5.php">Feedback (by Product)</a><br />
-&nbsp;
-</td></tr>
-<?php
-plugin_do('feedback_reports_menu');
-?>
-</table>
-<?php
-include('htmlfooter.inc.php');
+function feedback_between_dates()
+{
+    global $dates, $startdate, $enddate, $CONFIG;
+    if (!empty($startdate))
+    {
+        if (!empty($enddate))
+        {
+            if ($dates == 'feedbackin')
+            {
+                $str = "<p>Feedback between ".ldate($CONFIG['dateformat_date'], $startdate)." and ".ldate($CONFIG['dateformat_date'], $enddate)."</p>";
+            }
+            elseif ($dates == 'closedin')
+            {
+                $str = "<p>Closed between ".ldate($CONFIG['dateformat_date'], $startdate)." and ".ldate($CONFIG['dateformat_date'], $enddate)."</p>";
+            }
+        }
+        else
+        {
+            if ($dates == 'feedbackin')
+            {
+                $str = "<p>Feedback after ".ldate($CONFIG['dateformat_date'], $startdate)."</p>";
+            }
+            elseif ($dates == 'closedin')
+            {
+                $str = "<p>Closed after ".ldate($CONFIG['dateformat_date'], $startdate)."</p>";
+            }
+        }
+    }
+    elseif (!empty($enddate))
+    {
+        if ($dates == 'feedbackin')
+        {
+            $str = "<p>Feedback before ".ldate($CONFIG['dateformat_date'], $enddate)."</p>";
+        }
+        elseif ($dates == 'closedin')
+        {
+            $str = "<p>Closed before ".ldate($CONFIG['dateformat_date'], $enddate)."</p>";
+        }
+    }
+    return $str;
+}
+
+if (empty($type))
+{
+    include ('feedback/form.inc.php');
+}
+elseif ($type == 'byengineer')
+{
+    include ('feedback/engineer.inc.php');
+}
+elseif ($type == 'bycustomer')
+{
+    include ('feedback/contact.inc.php');
+}
+elseif ($type == 'bysite')
+{
+    include ('feedback/site.inc.php');
+}
+elseif ($type == 'byproduct')
+{
+    include ('feedback/product.inc.php');
+}
+
+include ('htmlfooter.inc.php');
+
 ?>

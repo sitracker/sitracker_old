@@ -13,13 +13,13 @@
 // FIXME with the new forgotten password feature introduced for 3.30
 // we may not need this now?
 
-@include('set_include_path.inc.php');
-$permission=9; // change user permissions
-require('db_connect.inc.php');
-require('functions.inc.php');
+@include ('set_include_path.inc.php');
+$permission = 9; // change user permissions
+require ('db_connect.inc.php');
+require ('functions.inc.php');
 
 // This page requires authentication
-require('auth.inc.php');
+require ('auth.inc.php');
 
 // External variables
 $id = cleanvar($_REQUEST['id']);
@@ -39,7 +39,7 @@ if ($id > 1)
     $newpasswordplain = generate_password();
     $newpassword=md5($newpasswordplain);
 
-    $sql = "UPDATE users SET password='$newpassword' WHERE id='$id'";
+    $sql = "UPDATE `{$dbUsers}` SET password='$newpassword' WHERE id='$id'";
     $result = mysql_query($sql);
     if (mysql_error()) trigger_error("MySQL Query Error ".mysql_error(), E_USER_ERROR);
     html_redirect("manage_users.php", TRUE, sprintf($strPasswordWasResetToX, $newpasswordplain));

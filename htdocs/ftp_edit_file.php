@@ -32,7 +32,7 @@ switch ($mode)
     case 'form':
         // display file details
         include('htmlheader.inc.php');
-        $sql = "SELECT * FROM files WHERE id='$id'";
+        $sql = "SELECT * FROM `{$dbFiles}` WHERE id='{$id}'";
         $result = mysql_query($sql);
         if (mysql_error()) trigger_error("MySQL Query Error ".mysql_error(), E_USER_ERROR);
         $frow=mysql_fetch_array($result);
@@ -83,7 +83,7 @@ switch ($mode)
         $longdescription=mysql_real_escape_string($_REQUEST['longdescription']);
         $fileversion=mysql_real_escape_string($_REQUEST['fileversion']);
         $webcategory=mysql_real_escape_string($_REQUEST['webcategory']);
-        $sql = "UPDATE files SET ";
+        $sql = "UPDATE `{$dbFiles}` SET ";
         $sql .= "shortdescription='$shortdescription', longdescription='$longdescription', fileversion='$fileversion', ";
         $sql .= "webcategory='$webcategory', published='yes'";
         $sql .= " WHERE id='{$id}' LIMIT 1";

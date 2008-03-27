@@ -9,13 +9,13 @@
 //
 // Author: Paul Heaney <paulheaney[at]users.sourceforge.net>
 
-@include('set_include_path.inc.php');
-$permission=66; // Install dashboard components
-require('db_connect.inc.php');
-require('functions.inc.php');
+@include ('set_include_path.inc.php');
+$permission = 66; // Install dashboard components
+require ('db_connect.inc.php');
+require ('functions.inc.php');
 
 // This page requires authentication
-require('auth.inc.php');
+require ('auth.inc.php');
 
 function beginsWith( $str, $sub ) {
    return ( substr( $str, 0, strlen( $sub ) ) === $sub );
@@ -51,12 +51,12 @@ function setup_exec_sql($sqlquerylist)
     return $html;
 }
 
-switch($_REQUEST['action'])
+switch ($_REQUEST['action'])
 {
     case 'install':
-        include('htmlheader.inc.php');
+        include ('htmlheader.inc.php');
 
-        $sql = "SELECT name FROM dashboard";
+        $sql = "SELECT name FROM `{$dbDashboard}`";
         $result = mysql_query($sql);
         if (mysql_error()) trigger_error(mysql_error(),E_USER_ERROR);
 
@@ -106,7 +106,7 @@ switch($_REQUEST['action'])
             echo "</form>\n";
         }
 
-        include('htmlfooter.inc.php');
+        include ('htmlfooter.inc.php');
 
         break;
     case 'installdashboard':
@@ -115,7 +115,7 @@ switch($_REQUEST['action'])
         {
             $count = count($dashboardcomponents);
 
-            $sql = "INSERT INTO dashboard (name) VALUES ";
+            $sql = "INSERT INTO `{$dbDashboard}` (name) VALUES ";
             for($i = 0; $i < $count; $i++)
             {
                 $sql .= "('{$dashboardcomponents[$i]}'), ";
@@ -130,11 +130,11 @@ switch($_REQUEST['action'])
             else
             {
                 // run the post install compoents
-                foreach($dashboardcomponents AS $comp)
+                foreach ($dashboardcomponents AS $comp)
                 {
-                    include("{$CONFIG['application_fspath']}dashboard/dashboard_{$comp}.php");
+                    include ("{$CONFIG['application_fspath']}dashboard/dashboard_{$comp}.php");
                     $func = "dashboard_".$comp."_install";
-                    if(function_exists($func)) $func();
+                    if (function_exists($func)) $func();
                 }
 
                 html_redirect("manage_dashboard.php");
@@ -143,29 +143,29 @@ switch($_REQUEST['action'])
         break;
     case 'upgradecomponent':
         $id = $_REQUEST['id'];
-        $sql = "SELECT * FROM dashboard WHERE id = {$id}";
+        $sql = "SELECT * FROM `{$dbDashboard}` WHERE id = {$id}";
         $result = mysql_query($sql);
         if (mysql_error()) trigger_error(mysql_error(),E_USER_ERROR);
 
-        if(mysql_num_rows($result) > 0)
+        if (mysql_num_rows($result) > 0)
         {
             $obj = mysql_fetch_object($result);
 
             $version = 1;
-            include("{$CONFIG['application_fspath']}dashboard/dashboard_{$obj->name}.php");
+            include ("{$CONFIG['application_fspath']}dashboard/dashboard_{$obj->name}.php");
             $func = "dashboard_{$obj->name}_get_version";
 
-            if(function_exists($func))
+            if (function_exists($func))
             {
                 $version = $func();
             }
 
-            if($version > $dashboardnames->version)
+            if ($version > $dashboardnames->version)
             {
                 // apply all upgrades since running version
                 $func = "dashboard_{$obj->name}_upgrade";
 
-                if(function_exists($func))
+                if (function_exists($func))
                 {
                     $schema = $func();
                     for($i = $obj->version; $i <= $version; $i++)
@@ -201,7 +201,7 @@ switch($_REQUEST['action'])
         $result = mysql_query($sql);
         if (mysql_error()) trigger_error(mysql_error(),E_USER_ERROR);
 
-        if(!$result)
+        if (!$result)
         {
             echo "<p class='error'>{$strChangeStateFailed}</p>";
         }
@@ -211,9 +211,9 @@ switch($_REQUEST['action'])
         }
         break;
     default:
-        include('htmlheader.inc.php');
+        include ('htmlheader.inc.php');
 
-        $sql = "SELECT * FROM dashboard";
+        $sql = "SELECT * FROM `{$dbDashboard}`";
         $result = mysql_query($sql);
         if (mysql_error()) trigger_error(mysql_error(),E_USER_ERROR);
 
@@ -236,6 +236,7 @@ switch($_REQUEST['action'])
             {
                 $opposite = "true";
             }
+
             echo "<tr class='shade2'><td>{$dashboardnames->id}</td>";
             echo "<td>{$dashboardnames->name}</td>";
             echo "<td><a href='".$_SERVER['PHP_SELF']."?action=enable&amp;id={$dashboardnames->id}&amp;enable={$opposite}'>{$dashboardnames->enabled}</a></td>";
@@ -244,15 +245,15 @@ switch($_REQUEST['action'])
             echo "<td>";
 
             $version = 1;
-            include("{$CONFIG['application_fspath']}dashboard/dashboard_{$dashboardnames->name}.php");
+            include ("{$CONFIG['application_fspath']}dashboard/dashboard_{$dashboardnames->name}.php");
             $func = "dashboard_{$dashboardnames->name}_get_version";
 
-            if(function_exists($func))
+            if (function_exists($func))
             {
                 $version = $func();
             }
 
-            if($version > $dashboardnames->version)
+            if ($version > $dashboardnames->version)
             {
                 echo "<a href='{$_SERVER['PHP_SELF']}?action=upgradecomponent&amp;id={$dashboardnames->id}'>{$strYes}</a>";
             }
@@ -267,7 +268,7 @@ switch($_REQUEST['action'])
 
         echo "<p align='center'><a href='".$_SERVER['PHP_SELF']."?action=install'>{$strInstall}</a></p>";
 
-        include('htmlfooter.inc.php');
+        include ('htmlfooter.inc.php');
         break;
 }
 

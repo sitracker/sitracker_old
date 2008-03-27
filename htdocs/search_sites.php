@@ -8,14 +8,14 @@
 // of the GNU General Public License, incorporated herein by reference.
 //
 
-@include('set_include_path.inc.php');
-$permission=11; // View Sites
+@include ('set_include_path.inc.php');
+$permission = 11; // View Sites
 
-require('db_connect.inc.php');
-require('functions.inc.php');
+require ('db_connect.inc.php');
+require ('functions.inc.php');
 
 // This page requires authentication
-require('auth.inc.php');
+require ('auth.inc.php');
 
 // External variables
 $search_string = cleanvar($_REQUEST['search_string']);
@@ -24,7 +24,7 @@ $user = cleanvar($_REQUEST['user']);
 // show search sites form
 if (empty($search_string))
 {
-    include('htmlheader.inc.php');
+    include ('htmlheader.inc.php');
     ?>
     <h2>Search Sites</h2>
     <form action="<?php echo $_SERVER['PHP_SELF'] ?>" method="post">
@@ -44,12 +44,12 @@ if (empty($search_string))
     <input name="submit" type="submit" value="Search" />
     </form>
     <?php
-    include('htmlfooter.inc.php');
+    include ('htmlfooter.inc.php');
 }
 else
 {
     // perform search
-    include('htmlheader.inc.php');
+    include ('htmlheader.inc.php');
 
     // check input
     if ($search_string == "" AND $user=="")
@@ -64,24 +64,24 @@ else
         // build SQL
         if ($fields == "all")
         {
-            $sql  = "SELECT id, name, address1 FROM sites WHERE ";
+            $sql  = "SELECT id, name, address1 FROM `{$dbSites}` WHERE ";
             $sql .= "id LIKE ('%$search_string%') OR ";
             $sql .= "name LIKE ('%$search_string%') OR ";
             $sql .= "address1 LIKE ('%$search_string%')";
         }
         else if ($fields == "id")
         {
-            $sql  = "SELECT id, name, address1 FROM sites WHERE ";
+            $sql  = "SELECT id, name, address1 FROM `{$dbSites}` WHERE ";
             $sql .= "id LIKE ('%$search_string%')";
         }
         else if ($fields == "name")
         {
-            $sql  = "SELECT id, name, address1 FROM sites WHERE ";
+            $sql  = "SELECT id, name, address1 FROM `{$dbSites}` WHERE ";
             $sql .= "name LIKE ('%$search_string%')";
         }
         else if ($fields == "address1")
         {
-            $sql  = "SELECT id, name, address1 FROM sites WHERE ";
+            $sql  = "SELECT id, name, address1 FROM `{$dbSites}` WHERE ";
             $sql .= "address1 LIKE ('%$search_string%')";
         }
 
@@ -133,6 +133,6 @@ else
             <?php
         }
     }
-    include('htmlfooter.inc.php');
+    include ('htmlfooter.inc.php');
 }
 ?>

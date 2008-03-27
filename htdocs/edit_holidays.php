@@ -8,23 +8,23 @@
 // of the GNU General Public License, incorporated herein by reference.
 //
 
-@include('set_include_path.inc.php');
-$permission=22; // Administrate
-require('db_connect.inc.php');
-require('functions.inc.php');
+@include ('set_include_path.inc.php');
+$permission = 22; // Administrate
+require ('db_connect.inc.php');
+require ('functions.inc.php');
 // This page requires authentication
-require('auth.inc.php');
+require ('auth.inc.php');
 
 $title = $strEditHolidays;
 
-switch($_REQUEST['action'])
+switch ($_REQUEST['action'])
 {
     case 'save':
         $max_carryover = cleanvar($_REQUEST['max_carryover']);
         $archivedate = strtotime($_REQUEST['archivedate']);
         if ($archivedate < 1000) $archivedate = $now;
         $default_entitlement = cleanvar($_REQUEST['default_entitlement']);
-        $sql = "SELECT * FROM users WHERE status >= 1";
+        $sql = "SELECT * FROM `{$dbUsers}` WHERE status >= 1";
         $result = mysql_query($sql);
         if (mysql_error()) trigger_error(mysql_error(),E_USER_WARNING);
         while ($users = mysql_fetch_object($result))
@@ -40,12 +40,12 @@ switch($_REQUEST['action'])
                 $new_entitlement = $default_entitlement + $carryover;
 
                 // Archive previous holiday
-                $hsql = "UPDATE holidays SET approved = approved+10 WHERE approved <= 7 AND userid={$users->id} AND startdate < $archivedate";
+                $hsql = "UPDATE `{$dbHolidays}` SET approved = approved+10 WHERE approved <= 7 AND userid={$users->id} AND startdate < $archivedate";
                 mysql_query($hsql);
                 if (mysql_error()) trigger_error(mysql_error(),E_USER_ERROR);
 
                 // Update Holiday Entitlement
-                $usql = "UPDATE users SET holiday_entitlement = $new_entitlement WHERE id={$users->id} LIMIT 1";
+                $usql = "UPDATE `{$dbUsers}` SET holiday_entitlement = $new_entitlement WHERE id={$users->id} LIMIT 1";
                 mysql_query($usql);
                 if (mysql_error()) trigger_error(mysql_error(),E_USER_ERROR);
             }
@@ -57,10 +57,10 @@ switch($_REQUEST['action'])
 
     case 'form':
     default:
-        include('htmlheader.inc.php');
+        include ('htmlheader.inc.php');
         echo "<h2>$title</h2>";
 
-        $sql = "SELECT * FROM users WHERE status >= 1 ORDER BY realname ASC";
+        $sql = "SELECT * FROM `{$dbUsers}` WHERE status >= 1 ORDER BY realname ASC";
         $result = mysql_query($sql);
         if (mysql_error()) trigger_error(mysql_error(),E_USER_WARNING);
 
@@ -103,7 +103,7 @@ switch($_REQUEST['action'])
         echo "<input type='hidden' name='action' value='save' />";
         echo "<input type='submit' name='submit' value='{$strSave}' /></p>";
         echo "</form>";
-        include('htmlfooter.inc.php');
+        include ('htmlfooter.inc.php');
     break;
 }
 ?>

@@ -9,13 +9,13 @@
 //
 
 // Authors: Ivan Lucas <ivanlucas[at]users.sourceforge.net>, Tom Gerrard
-@include('set_include_path.inc.php');
-$permission=54; // View KB
+@include ('set_include_path.inc.php');
+$permission = 54; // View KB
 
-require('db_connect.inc.php');
-require('functions.inc.php');
+require ('db_connect.inc.php');
+require ('functions.inc.php');
 // This page requires authentication
-require('auth.inc.php');
+require ('auth.inc.php');
 
 // Valid user, check permissions
 if (user_permission($sit[2],$permission))
@@ -28,12 +28,12 @@ if (user_permission($sit[2],$permission))
         exit;
     }
 
-    include('htmlheader.inc.php');
+    include ('htmlheader.inc.php');
 
     echo "<div id='kbarticle'>";
     echo "<table summary='{$strKnowledgeBaseArticle}'><tr><td>";
 
-    $sql = "SELECT * FROM kbarticles WHERE docid='{$id}' LIMIT 1";
+    $sql = "SELECT * FROM `{$dbKBArticles}` WHERE docid='{$id}' LIMIT 1";
     $result = mysql_query($sql);
     if (mysql_error()) trigger_error("MySQL Query Error ".mysql_error(), E_USER_ERROR);
     $kbarticle = mysql_fetch_object($result);
@@ -42,8 +42,9 @@ if (user_permission($sit[2],$permission))
     echo "<h2>{$kbarticle->title}</h2>";
 
     // Lookup what software this applies to
-    $ssql = "SELECT * FROM kbsoftware, software WHERE kbsoftware.softwareid=software.id AND kbsoftware.docid='{$id}' ";
-    $ssql .= "ORDER BY software.name";
+    $ssql = "SELECT * FROM `{$dbKBSoftware}` AS kbs, `{$dbSoftware}` AS s ";
+    $ssql .= "WHERE kbs.softwareid = s.id AND kbs.docid = '{$id}' ";
+    $ssql .= "ORDER BY s.name";
     $sresult = mysql_query($ssql);
     if (mysql_error()) trigger_error("MySQL Query Error ".mysql_error(), E_USER_ERROR);
     if (mysql_num_rows($sresult) >= 1)
@@ -57,7 +58,7 @@ if (user_permission($sit[2],$permission))
         echo "</ul>\n";
     }
 
-    $csql = "SELECT * FROM kbcontent WHERE docid='{$id}' ";
+    $csql = "SELECT * FROM `{$dbKBContent}` WHERE docid='{$id}' ";
     $cresult = mysql_query($csql);
     if (mysql_error()) trigger_error("MySQL Query Error ".mysql_error(), E_USER_ERROR);
     while ($kbcontent = mysql_fetch_object($cresult))
@@ -141,6 +142,6 @@ if (user_permission($sit[2],$permission))
 
     echo "<p align='center'><a href='kb_edit_article.php?id={$kbarticle->docid}'>{$strEdit}</a></p>";
 
-    include('htmlfooter.inc.php');
+    include ('htmlfooter.inc.php');
 }
 ?>

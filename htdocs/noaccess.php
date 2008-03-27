@@ -9,15 +9,15 @@
 //
 // Author: Ivan Lucas <ivanlucas[at]users.sourceforge.net>
 
-@include('set_include_path.inc.php');
-require('db_connect.inc.php');
-require('functions.inc.php');
+@include ('set_include_path.inc.php');
+require ('db_connect.inc.php');
+require ('functions.inc.php');
 
 // External variables
 $username = cleanvar($_REQUEST['username']);
 $id = cleanvar($_REQUEST['id']);
 
-include('htmlheader.inc.php');
+include ('htmlheader.inc.php');
 
 // log the failure
 if ($username != '')
@@ -56,6 +56,6 @@ echo "<p align='center'>If you feel that you should have access to this particul
 echo "<p align='center'><a href=\"javascript:history.back();\">Back</a></p>";
 
 
-include('htmlfooter.inc.php');
+include ('htmlfooter.inc.php');
 
 ?>

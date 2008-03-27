@@ -11,14 +11,14 @@
 
 // This Page Is Valid XHTML 1.0 Transitional!   31Oct05
 
-@include('set_include_path.inc.php');
-$permission=6; // View Incidents
-$title='Incidents List';
+@include ('set_include_path.inc.php');
+$permission = 6; // View Incidents
+$title = 'Incidents List';
 
-require('db_connect.inc.php');
-require('functions.inc.php');
+require ('db_connect.inc.php');
+require ('functions.inc.php');
 // This page requires authentication
-require('auth.inc.php');
+require ('auth.inc.php');
 
 // External variables
 $type = cleanvar($_REQUEST['type']);
@@ -36,7 +36,7 @@ if (empty($sort)) $sort='priority';
 if (empty($queue)) $queue=1;
 
 $refresh = $_SESSION['incident_refresh'];
-include('htmlheader.inc.php');
+include ('htmlheader.inc.php');
 ?>
 <script type="text/javascript">
 function statusform_submit(user)
@@ -49,7 +49,7 @@ function statusform_submit(user)
 <?php
 
 // Extract escalation paths
-$epsql = "SELECT id, name, track_url, home_url, url_title FROM escalationpaths";
+$epsql = "SELECT id, name, track_url, home_url, url_title FROM `{$dbEscalationPaths}`";
 $epresult = mysql_query($epsql);
 if (mysql_error()) trigger_error(mysql_error(),E_USER_ERROR);
 if (mysql_num_rows($epresult) >= 1)
@@ -64,13 +64,13 @@ if (mysql_num_rows($epresult) >= 1)
 }
 
 // Generic bit of SQL, common to both queue types
-$selectsql = "SELECT incidents.id, escalationpath, externalid, title, owner, towner, priority, status, closingstatus, siteid, contacts.id AS contactid, forenames, surname, phone, email, incidents.maintenanceid, ";
+$selectsql = "SELECT i.id, escalationpath, externalid, title, owner, towner, priority, status, closingstatus, siteid, c.id AS contactid, forenames, surname, phone, email, i.maintenanceid, ";
 $selectsql .= "servicelevel, softwareid, lastupdated, timeofnextaction, ";
 $selectsql .= "(timeofnextaction - $now) AS timetonextaction, opened, ($now - opened) AS duration, closed, (closed - opened) AS duration_closed, type, ";
 $selectsql .= "($now - lastupdated) AS timesincelastupdate ";
-$selectsql .= "FROM incidents, contacts, priority ";
+$selectsql .= "FROM `{$dbIncidents}` AS i, `{$dbContacts}` AS c, `{$dbPriority}` AS pr ";
 
-switch($type)
+switch ($type)
 {
     case 'support':
         // Create SQL for chosen queue
@@ -79,27 +79,26 @@ switch($type)
         // If the user is passed as a username lookup the userid
         if (!is_number($user) AND $user!='current' AND $user!='all')
         {
-            $usql = "SELECT id FROM users WHERE username='$user' LIMIT 1";
+            $usql = "SELECT id FROM `{$dbUsers}` WHERE username='$user' LIMIT 1";
             $uresult = mysql_query($usql);
             if (mysql_error()) trigger_error(mysql_error(),E_USER_WARNING);
             if (mysql_num_rows($uresult) >= 1) list($user) = mysql_fetch_row($uresult);
             else $user=$sit[2]; // force to current user if username not found
         }
-        $sql = $selectsql . "WHERE contact=contacts.id AND incidents.priority=priority.id ";
+        $sql = $selectsql . "WHERE contact = c.id AND i.priority = pr.id ";
         if ($user!='all') $sql .= "AND (owner='$user' OR towner='$user') ";
         if (!empty($softwareid)) $sql .= "AND softwareid='$softwareid' ";
 
-        if(!empty($maintexclude)) $sql .= "AND incidents.maintenanceid != '{$maintexclude}' ";
+        if (!empty($maintexclude)) $sql .= "AND i.maintenanceid != '{$maintexclude}' ";
 
         echo "<h2>";
         if ($user!='all') echo sprintf($strUserIncidents, user_realname($user,TRUE)).": ";
         else echo "{$strWatchingAll} ";
 
-        switch($queue)
+        switch ($queue)
         {
             case 1: // Action Needed
                 echo "<span style='color: Red'>{$strActionNeeded}</span>";
-
                 $sql .= "AND (status!='2') ";  // not closed
                 // the "1=2" obviously false else expression is to prevent records from showing unless the IF condition is true
                 $sql .= "AND ((timeofnextaction > 0 AND timeofnextaction < $now) OR ";
@@ -132,19 +131,18 @@ switch($type)
             default:
                 trigger_error("Invalid queue ($queue) on query string",E_USER_NOTICE);
             break;
-        }
+        }        // Create SQL for Sorting
+                
         echo "</h2>\n";
-
-        // Create SQL for Sorting
         if (!empty($sort))
         {
             if ($order=='a' OR $order=='ASC' OR $order='') $sortorder = "ASC";
             else $sortorder = "DESC";
-            switch($sort)
+            switch ($sort)
             {
                 case 'id': $sql .= " ORDER BY id $sortorder"; break;
                 case 'title': $sql .= " ORDER BY title $sortorder"; break;
-                case 'contact': $sql .= " ORDER BY contacts.surname $sortorder, contacts.forenames $sortorder"; break;
+                case 'contact': $sql .= " ORDER BY c.surname $sortorder, c.forenames $sortorder"; break;
                 case 'priority': $sql .=  " ORDER BY priority $sortorder, lastupdated ASC"; break;
                 case 'status': $sql .= " ORDER BY status $sortorder"; break;
                 case 'lastupdated': $sql .= " ORDER BY lastupdated $sortorder"; break;
@@ -206,7 +204,7 @@ switch($type)
         if (mysql_num_rows($result) >= 1)
         {
             // Incidents Table
-            include('incidents_table.inc.php');
+            include ('incidents_table.inc.php');
         }
         else echo "<h5>{$strNoIncidents}</h5>";
 
@@ -217,7 +215,7 @@ switch($type)
         // EXPERTISE QUEUE
         // ***
         if ($user=='current') $user=$sit[2];
-        $softsql = "SELECT * FROM usersoftware WHERE userid='$user' ";
+        $softsql = "SELECT * FROM `{$dbUserSoftware}` WHERE userid='$user' ";
         $softresult = mysql_query($softsql);
         if (mysql_error()) trigger_error("MySQL Query Error ".mysql_error(), E_USER_ERROR);
 
@@ -240,7 +238,7 @@ switch($type)
             $incsql .= ")";
 
             // Create SQL for chosen queue
-            $sql = $selectsql . "WHERE contact=contacts.id AND incidents.priority=priority.id ";
+            $sql = $selectsql . "WHERE contact=c.id AND i.priority=pr.id ";
             $sql .= "AND owner!='$user' AND towner!='$user' ";
             $sql .= "AND $incsql ";
 
@@ -248,7 +246,7 @@ switch($type)
 
             //   $sql .= "AND
 
-            switch($queue)
+            switch ($queue)
             {
                 case 1: // Action Needed
                     echo "<h2>{$strOtherIncidents}: <span style='color: Red'>{$strActionNeeded}</span></h2>\n";
@@ -268,11 +266,13 @@ switch($type)
 
                 case 3: // All Open
                     echo "<h2>{$strOtherIncidents}: <span style='color: Blue'>{$strAllOpen}</span></h2>\n";
+                    echo "</h2><hr /><br />";
                     $sql .= "AND status!='2' ";
                 break;
 
                 case 4: // All Closed
                     echo "<h2>{$strOtherIncidents}: <span style='color: Gray'>{$strAllClosed}</span></h2>\n";
+                    echo "</h2><hr /><br />";
                     $sql .= "AND status='2' ";
                     if ($CONFIG['hide_closed_incidents_older_than'] > -1 AND $_GET['show'] != 'all')
                     {
@@ -287,11 +287,11 @@ switch($type)
             }
 
             // Create SQL for Sorting
-            switch($sort)
+            switch ($sort)
             {
                 case 'id': $sql .= " ORDER BY id $sortorder"; break;
                 case 'title': $sql .= " ORDER BY title $sortorder"; break;
-                case 'contact': $sql .= " ORDER BY contacts.surname $sortorder, contacts.forenames $sortorder"; break;
+                case 'contact': $sql .= " ORDER BY c.surname $sortorder, c.forenames $sortorder"; break;
                 case 'priority': $sql .=  " ORDER BY priority $sortorder, lastupdated ASC"; break;
                 case 'status': $sql .= " ORDER BY status $sortorder"; break;
                 case 'lastupdated': $sql .= " ORDER BY lastupdated $sortorder"; break;
@@ -308,7 +308,7 @@ switch($type)
             if ($rowcount >= 1)
             {
                 // Incidents Table
-                include('incidents_table.inc.php');
+                include ('incidents_table.inc.php');
             }
             else echo "<h5>{$strNoIncidents}</h5>";
 
@@ -316,5 +316,5 @@ switch($type)
             // ***
         }
 }
-include('htmlfooter.inc.php');
+include ('htmlfooter.inc.php');
 ?>

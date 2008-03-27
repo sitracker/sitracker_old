@@ -10,13 +10,12 @@
 // Authors: Paul Heaney <paulheaney[at]users.sourceforge.net>
 //          Ivan Lucas <ivanlucas[at]users.sourceforge.net>
 
-@include('set_include_path.inc.php');
-$permission=0; // not required
-require('db_connect.inc.php');
-require('functions.inc.php');
-include('mime.inc.php');
+@include ('set_include_path.inc.php');
+$permission = 0; // not required
+require ('db_connect.inc.php');
+require ('functions.inc.php');
 
-$title='Forgotten Password';
+$title = 'Forgotten Password';
 
 // External variables
 $email = cleanvar($_REQUEST['emailaddress']);
@@ -24,17 +23,17 @@ $username = cleanvar($_REQUEST['username']);
 $userid = cleanvar($_REQUEST['userid']);
 $userhash = cleanvar($_REQUEST['hash']);
 
-switch($_REQUEST['action'])
+switch ($_REQUEST['action'])
 {
     case 'forgotpwd':
-        include('htmlheader.inc.php');
+        include ('htmlheader.inc.php');
         // First look to see if this is a SiT user
-        $sql = "SELECT id, username, password FROM users WHERE email = '{$email}' LIMIT 1";
+        $sql = "SELECT id, username, password FROM `{$dbUsers}` WHERE email = '{$email}' LIMIT 1";
         $userresult = mysql_query($sql);
         if (mysql_error()) trigger_error(mysql_error(),E_USER_WARNING);
         $usercount = mysql_num_rows($userresult);
         $userdetails = mysql_fetch_object($userresult);
-        if($usercount == 1)
+        if ($usercount == 1)
         {
             $extra_headers = "Reply-To: {$CONFIG['support_email']}\n";
             $extra_headers .= "X-Mailer: {$CONFIG['application_shortname']} {$application_version_string}/PHP " . phpversion() . "\n";
@@ -53,14 +52,14 @@ switch($_REQUEST['action'])
         else
         {
             // This is a SiT contact, not a user
-            $sql = "SELECT username,password FROM contacts WHERE email = '{$email}' LIMIT 1";
+            $sql = "SELECT username, password FROM `{$dbContacts}` WHERE email = '{$email}' LIMIT 1";
             $contactresult = mysql_query($sql);
             if (mysql_error()) trigger_error(mysql_error(),E_USER_WARNING);
 
             $contactcount = mysql_num_rows($contactresult);
-            if($contactcount == 1)
+            if ($contactcount == 1)
             {
-                while($row = mysql_fetch_object($contactresult))
+                while ($row = mysql_fetch_object($contactresult))
                 {
                     $extra_headers = "Reply-To: {$CONFIG['support_email']}\n";
                     $extra_headers .= "X-Mailer: {$CONFIG['application_shortname']} {$application_version_string}/PHP " . phpversion() . "\n";
@@ -79,12 +78,12 @@ switch($_REQUEST['action'])
                 echo "<p><a href='index.php'>{$strBackToLoginPage}</a></p>";
             }
         }
-        include('htmlfooter.inc.php');
+        include ('htmlfooter.inc.php');
     break;
 
     case 'confirmreset':
-        include('htmlheader.inc.php');
-        $sql = "SELECT id, username, password FROM users WHERE id = '{$userid}' LIMIT 1";
+        include ('htmlheader.inc.php');
+        $sql = "SELECT id, username, password FROM `{$dbUsers}` WHERE id = '{$userid}' LIMIT 1";
         $userresult = mysql_query($sql);
         if (mysql_error()) trigger_error(mysql_error(),E_USER_WARNING);
         $usercount = mysql_num_rows($userresult);
@@ -122,12 +121,12 @@ switch($_REQUEST['action'])
             echo "<p>{$strDidYouPasteFullURL}</p>";
             echo "<p><a href='index.php'>{$strBackToLoginPage}</a></p>";
         }
-        include('htmlfooter.inc.php');
+        include ('htmlfooter.inc.php');
     break;
 
     case 'resetpasswordform':
-        include('htmlheader.inc.php');
-        $sql = "SELECT id, username, password FROM users WHERE id = '{$userid}' LIMIT 1";
+        include ('htmlheader.inc.php');
+        $sql = "SELECT id, username, password FROM `{$dbUsers}` WHERE id = '{$userid}' LIMIT 1";
         $userresult = mysql_query($sql);
         if (mysql_error()) trigger_error(mysql_error(),E_USER_WARNING);
         $usercount = mysql_num_rows($userresult);
@@ -168,14 +167,14 @@ switch($_REQUEST['action'])
             echo "<p>{$strInvalidUserID}</p>";
             echo "<p><a href='index.php'>{$strBackToLoginPage}</a></p>";
         }
-        include('htmlfooter.inc.php');
+        include ('htmlfooter.inc.php');
     break;
 
     case 'savepassword':
         $newpassword1 = cleanvar($_REQUEST['newpassword1']);
         $newpassword2 = cleanvar($_REQUEST['newpassword2']);
-        include('htmlheader.inc.php');
-        $sql = "SELECT id, username, password FROM users WHERE id = '{$userid}' LIMIT 1";
+        include ('htmlheader.inc.php');
+        $sql = "SELECT id, username, password FROM `{$dbUsers}` WHERE id = '{$userid}' LIMIT 1";
         $userresult = mysql_query($sql);
         if (mysql_error()) trigger_error(mysql_error(),E_USER_WARNING);
         $usercount = mysql_num_rows($userresult);
@@ -187,7 +186,7 @@ switch($_REQUEST['action'])
             {
                 if ($newpassword1==$newpassword2)
                 {
-                    $usql = "UPDATE users SET password=MD5({$newpassword1}) WHERE id={$userid} LIMIT 1";
+                    $usql = "UPDATE `{$dbUsers}` SET password=MD5({$newpassword1}) WHERE id={$userid} LIMIT 1";
                     mysql_query($usql);
                     echo "<h3>{$strPasswordReset}</h3>";
                     echo "<p>Your password has been reset, you can now login using the new details.</p>"; // FIXME i18n
@@ -213,12 +212,12 @@ switch($_REQUEST['action'])
             echo "<p>{$strInvalidUserID}</p>";
             echo "<p><a href='index.php'>{$strBackToLoginPage}</a></p>";
         }
-        include('htmlfooter.inc.php');
+        include ('htmlfooter.inc.php');
     break;
 
     case 'form':
     default:
-        include('htmlheader.inc.php');
+        include ('htmlheader.inc.php');
         echo "<h2>{$title}</h2>";
         echo "<form action='{$_SERVER['PHP_SELF']}' method='post'>";
 
@@ -229,7 +228,7 @@ switch($_REQUEST['action'])
         echo "<input type='hidden' name='action' value='forgotpwd' />";
         echo "</form>";
 
-        include('htmlfooter.inc.php');
+        include ('htmlfooter.inc.php');
     break;
 }
 

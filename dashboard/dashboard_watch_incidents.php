@@ -40,8 +40,9 @@ function dashboard_watch_incidents_install()
     {
         echo "<p>Dashboard watch incidents failed to install, please run the following SQL statement on the SiT database to create the required schema.</p>";
         echo "<pre>{$schema}</pre>";
-        $res=FALSE;
-    } else $res=TRUE;
+        $res = FALSE;
+    }
+    else $res = TRUE;
 
     return $res;
 }

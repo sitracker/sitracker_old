@@ -18,20 +18,20 @@
 // Notes:
 //  Counts activate calls within the specified period (i.e. those with a lastupdate time > timespecified)
 
-@include('../set_include_path.inc.php');
-$permission=37; // Run Reports
+@include ('../set_include_path.inc.php');
+$permission = 37; // Run Reports
 
-require('db_connect.inc.php');
-require('functions.inc.php');
+require ('db_connect.inc.php');
+require ('functions.inc.php');
 
 // This page requires authentication
-require('auth.inc.php');
+require ('auth.inc.php');
 
 $title = $strIncidentsBySkill;
 
 if (empty($_REQUEST['mode']))
 {
-    include('htmlheader.inc.php');
+    include ('htmlheader.inc.php');
 
     echo "<h2>$title</h2>";
     echo "<form action='{$_SERVER['PHP_SELF']}' id='incidentsbysoftware' method='post'>";
@@ -54,20 +54,21 @@ if (empty($_REQUEST['mode']))
     echo "</p>";
     echo "</form>\n";
 
-    include('htmlfooter.inc.php');
+    include ('htmlfooter.inc.php');
 }
 else
 {
+    // FIXME sanitize input $_REQUEST vars
     $monthbreakdownstatus = $_REQUEST['monthbreakdown'];
     $startdate = strtotime($_REQUEST['startdate']);
     $enddate = strtotime($_REQUEST['enddate']);
-    $sql = "SELECT count(software.id) AS softwarecount, software.name, software.id ";
-    $sql .= "FROM software, incidents ";
-    $sql .= "WHERE software.id = incidents.softwareid AND incidents.opened >= '{$startdate}' ";
-    $sql .= "AND incidents.opened <= '{$enddate}' ";
+    $sql = "SELECT count(s.id) AS softwarecount, s.name, s.id ";
+    $sql .= "FROM `{$dbSoftware}` AS s, `{$dbIncidents}` AS i ";
+    $sql .= "WHERE s.id = i.softwareid AND i.opened >= '{$startdate}' ";
+    $sql .= "AND i.opened <= '{$enddate}' ";
     $software = $_REQUEST['software'];
-    if(!empty($software)) $sql .= "AND software.name LIKE '%{$software}%' ";
-    $sql .= "GROUP BY software.id ORDER BY softwarecount DESC";
+    if (!empty($software)) $sql .= "AND s.name LIKE '%{$software}%' ";
+    $sql .= "GROUP BY s.id ORDER BY softwarecount DESC";
     $result = mysql_query($sql);
     if (mysql_error()) trigger_error("MySQL Query Error ".mysql_error(), E_USER_ERROR);
 
@@ -76,7 +77,7 @@ else
     $softwareID[0] = 0;
     $c = 0;
     $count = 0;
-    while($row = mysql_fetch_array($result))
+    while ($row = mysql_fetch_array($result))
     {
         $countArray[$c] = $row['softwarecount'];
         $count += $countArray[$c];
@@ -85,10 +86,10 @@ else
         $c++;
     }
 
-    include('htmlheader.inc.php');
+    include ('htmlheader.inc.php');
     // FIXME i18n
 
-    $sqlSLA = "SELECT DISTINCT(tag) FROM servicelevels";
+    $sqlSLA = "SELECT DISTINCT(tag) FROM `{$dbServiceLevels}`";
     $resultSLA = mysql_query($sqlSLA);
     if (mysql_error()) trigger_error("MySQL Query Error ".mysql_error(), E_USER_ERROR);
 
@@ -99,7 +100,7 @@ else
     echo "<p>";
     echo "<table class='vertical' align='center'>";
     echo "<tr><th>Number of calls</th><th>%</th><th>{$strSkill}</th>";
-    while($sla = mysql_fetch_object($resultSLA))
+    while ($sla = mysql_fetch_object($resultSLA))
     {
         echo "<th>".$sla->tag."</th>";
         $slas[$sla->tag]['name'] = $sla->tag;
@@ -123,33 +124,34 @@ else
             $others += $countArray[$i];
         }
 
-        $sqlN = "SELECT id, servicelevel, opened FROM incidents WHERE softwareid = '".$softwareID[$i]."'";
+        $sqlN = "SELECT id, servicelevel, opened FROM `{$dbIncidents}` WHERE softwareid = '".$softwareID[$i]."'";
         $sqlN .= " AND opened >= '{$startdate}' AND opened <= '{$enddate}' ORDER BY opened";
 
         $resultN = mysql_query($sqlN);
         if (mysql_error()) trigger_error("MySQL Query Error ".mysql_error(), E_USER_ERROR);
         $numrows = mysql_num_rows($resultN);
 
-        foreach($slas AS &$slaReset)
+        foreach ($slas AS &$slaReset)
         {
             $slaReset['notEscalated'] = 0;
             $slaReset['escalated'] = 0;
         }
 
 
-        if($numrows > 0)
+        if ($numrows > 0)
         {
             unset($monthbreakdown);
-            while($obj = mysql_fetch_object($resultN))
+            while ($obj = mysql_fetch_object($resultN))
             {
                 $datestr = date("M y",$obj->opened);
 
-                $sqlL = "SELECT count(id) FROM updates WHERE updates.bodytext LIKE \"External ID%\" AND incidentid = '".$obj->id."'";
+                // FIXME this sql uses the body to find out which incidents have been escalated
+                $sqlL = "SELECT count(id) FROM `{$dbUpdates}` AS u WHERE u.bodytext LIKE \"External ID%\" AND incidentid = '".$obj->id."'";
                 $resultL = mysql_query($sqlL);
                 if (mysql_error()) trigger_error("MySQL Query Error ".mysql_error(), E_USER_ERROR);
                 list($numrowsL) = mysql_fetch_row($resultL);
 
-                if($numrowsL > 0) $slas[$obj->servicelevel]['escalated']++;
+                if ($numrowsL > 0) $slas[$obj->servicelevel]['escalated']++;
                 else $slas[$obj->servicelevel]['notEscalated']++;
 
                 $monthbreakdown[$datestr][$obj->servicelevel]++;
@@ -160,26 +162,26 @@ else
         echo "<td>{$percentage}%</td>";
         echo "<td>{$softwareNames[$i]}</td>";
 
-        foreach($slas AS $sla)
+        foreach ($slas AS $sla)
         {
             echo "<td>";
             echo ($sla['notEscalated']+$sla['escalated'])." / ".$sla['escalated'];
             echo "</td>";
         }
 
-        if($monthbreakdownstatus === "on")
+        if ($monthbreakdownstatus === "on")
         {
             echo "<tr class='$shade'><td></td><td colspan='".(count($slas)+2)."'>";
             echo "<table style='width: 100%'><tr>";
-            foreach($monthbreakdown AS $month) echo "<th>{$month['month']}</th>";
+            foreach ($monthbreakdown AS $month) echo "<th>{$month['month']}</th>";
             echo "</tr>\n<tr>";
-            foreach($monthbreakdown AS $month)
+            foreach ($monthbreakdown AS $month)
             {//echo "<pre>".print_r($month)."</pre>";
 	            echo "<td><table>";
                 $total=0;
-                foreach($slas AS $slaNames)
+                foreach ($slas AS $slaNames)
                 {
-                    if(empty($month[$slaNames['name']])) $month[$slaNames['name']] = 0;
+                    if (empty($month[$slaNames['name']])) $month[$slaNames['name']] = 0;
                     echo "<tr>";
                     echo "<td>".$slaNames['name']."</td><td>".$month[$slaNames['name']]."</td>";
                     echo "</tr>\n";
@@ -205,13 +207,13 @@ else
     }
     echo "</table>";
 
-    if($monthbreakdownstatus === "on")
+    if ($monthbreakdownstatus === "on")
     {
         echo "<p><table align='center'>";
         echo "<tr><th>Month</th><th>Number of calls</th></tr>";
         $shade='shade1';
 
-        foreach($monthtotals AS $m)
+        foreach ($monthtotals AS $m)
         {
             echo "<tr class='$shade'>";
             echo "<td>".$m['month']."</td><td align='center'>".$m['value']."</td><tr>";
@@ -233,7 +235,7 @@ else
         $shade = "shade1";
         $csv = ",";
         echo "<p><table align='center'><tr><td></td>";
-        foreach($months AS $m)
+        foreach ($months AS $m)
         {
             echo "<th>{$m}</th>";
             $csv .= "{$m},";
@@ -243,7 +245,7 @@ else
         $js_coordCounter = 0;
         $min = 0;
         $max = 0;
-        foreach($skilltotals AS $skill)
+        foreach ($skilltotals AS $skill)
         {
 
             echo "<tr class='{$shade}'><td>{$skill['name']}</td>";
@@ -251,16 +253,16 @@ else
             $sum = 0;
             $counter = 0;
             $coords = "";
-            foreach($months AS $m)
+            foreach ($months AS $m)
             {
                 $val = $skill[$m]['numberofincidents'];
-                if(empty($val)) $val = 0;
+                if (empty($val)) $val = 0;
                 echo "<td>{$val}</td>";
                 $csv .= "{$val},";
                 $sum += $val;
 
-                if($val < $min) $min = $val;
-                if($val > $max) $max = $val;
+                if ($val < $min) $min = $val;
+                if ($val > $max) $max = $val;
 
                 $coords .= "{ x: {$counter}, y: {$val} }, ";
                 $counter++;
@@ -270,13 +272,13 @@ else
 
             $percentage = ($sum / $total) * 100;
 
-            if($shade == "shade1") $shade = "shade2";
+            if ($shade == "shade1") $shade = "shade2";
             else $shade = "shade1";
 
             $clgth = strlen($coords)-2;
             $coords = substr($coords, 0, $clgth);
 
-            if($percentage >= 5)
+            if ($percentage >= 5)
             {
                 //only show on graph items with 5% or more of the share
                 $javascript .= "var d{$js_coordCounter} = [ {$coords} ]\n\n";
@@ -302,7 +304,7 @@ else
         $javascript .= "xA.label = \"Months\";\n";
         /*$javascript .= "xA.labels = [ "Mon", "Tue", 2, 3, 4, 5 ];";*/
         $javascript .= "xA.labels = [";
-        foreach($months AS $m)
+        foreach ($months AS $m)
         {
             $javascript .= "\"{$m}\", ";
         }
@@ -338,7 +340,7 @@ else
 
         echo "<tr><th>Totals</th>";
         $csv .= "\nTotals,";
-        foreach($months AS $m)
+        foreach ($months AS $m)
         {
             echo "<td>";
             echo $monthtotals[$m]['value'];
@@ -355,10 +357,10 @@ echo "</pre>";
 /*
         echo "<script src=\"../scripts/dojo/dojo.js\"></script>";
         echo "<script>";
-            echo "dojo.require('dojo.collections.Store');";
-            echo "dojo.require('dojo.charting.Chart');";
-            echo "dojo.require('dojo.widget.ContentPane');";
-            echo "dojo.require('dojo.json');";
+            echo "dojo.require ('dojo.collections.Store');";
+            echo "dojo.require ('dojo.charting.Chart');";
+            echo "dojo.require ('dojo.widget.ContentPane');";
+            echo "dojo.require ('dojo.json');";
 
             echo "var legend;";
 
@@ -419,7 +421,7 @@ echo "</pre>";
         echo "\n</div></p>";
     }
 
-    include('htmlfooter.inc.php');
+    include ('htmlfooter.inc.php');
 
 }
 
@@ -427,7 +429,7 @@ echo "</pre>";
 function date_to_str($date)
 {
     $s = explode(" ",$date);
-    switch($s[0])
+    switch ($s[0])
     {
         case 'Jan': return $s[1]."01";
             break;

@@ -10,14 +10,14 @@
 
 // Authors: Kieran Hogg <kieran_hogg[at]users.sourceforge.net>
 
-@include('set_include_path.inc.php');
-$permission=0; // Allow all auth users
+@include ('set_include_path.inc.php');
+$permission = 0; // Allow all auth users
 
-require('db_connect.inc.php');
-require('functions.inc.php');
+require ('db_connect.inc.php');
+require ('functions.inc.php');
 
 // This page requires authentication
-require('auth.inc.php');
+require ('auth.inc.php');
 
 $title = $strViewTask;
 
@@ -27,16 +27,16 @@ $id = cleanvar($_REQUEST['incident']);
 $taskid = cleanvar($_REQUEST['id']);
 $mode = cleanvar($_REQUEST['mode']);
 
-if($mode == 'incident')
+if ($mode == 'incident')
 {
-    include('incident_html_top.inc.php');
+    include ('incident_html_top.inc.php');
 }
 else
 {
-    include('htmlheader.inc.php');
+    include ('htmlheader.inc.php');
 }
 
-require('view_task.inc.php');
-include('htmlfooter.inc.php');
+require ('view_task.inc.php');
+include ('htmlfooter.inc.php');
 
 ?>

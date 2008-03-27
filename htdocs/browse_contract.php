@@ -12,13 +12,13 @@
 
 // TODO This page fails XHTML validation because of dojo attributes - INL 12/12/07
 
-@include('set_include_path.inc.php');
-$permission=19; // View Maintenance Contracts
+@include ('set_include_path.inc.php');
+$permission = 19; // View Maintenance Contracts
 
-require('db_connect.inc.php');
-require('functions.inc.php');
+require ('db_connect.inc.php');
+require ('functions.inc.php');
 // This page requires authentication
-require('auth.inc.php');
+require ('auth.inc.php');
 
 $title = $strBrowseContracts;
 
@@ -30,11 +30,11 @@ $sort = cleanvar($_REQUEST['sort']);
 $order = cleanvar($_REQUEST['order']);
 $activeonly = cleanvar($_REQUEST['activeonly']);
 
-include('htmlheader.inc.php');
+include ('htmlheader.inc.php');
 ?>
 <script type="text/javascript" src="scripts/dojo/dojo.js"></script>
 <script type="text/javascript">
-    dojo.require("dojo.widget.ComboBox");
+    dojo.require ("dojo.widget.ComboBox");
 </script>
 <?php
 echo "<h2><img src='{$CONFIG['application_webpath']}images/icons/{$iconset}/32x32/contract.png' width='32' height='32' alt='' /> ";
@@ -103,14 +103,14 @@ if (empty($search_string) && empty($productid))
 }
 */
 // search for criteria
-$sql  = "SELECT DISTINCT maintenance.id AS maintid, sites.name AS site, products.name AS product, resellers.name AS reseller, licence_quantity, ";
-$sql .= "licencetypes.name AS licence_type, expirydate, admincontact, contacts.forenames AS admincontactforenames, contacts.surname AS admincontactsurname, maintenance.notes, sites.id AS siteid, ";
-$sql .= "maintenance.term AS term, maintenance.productonly AS productonly ";
-$sql .= "FROM sites, contacts, products, maintenance ";
-$sql .= "LEFT JOIN licencetypes ON maintenance.licence_type=licencetypes.id ";
-$sql .= "LEFT JOIN resellers ON resellers.id = maintenance.reseller ";
-$sql .= "WHERE (maintenance.site=sites.id AND product=products.id AND admincontact=contacts.id) ";
-if ($activeonly == 'yes')
+$sql  = "SELECT DISTINCT m.id AS maintid, s.name AS site, p.name AS product, r.name AS reseller, licence_quantity, ";
+$sql .= "l.name AS licence_type, expirydate, admincontact, ";
+$sql .= "c.forenames AS admincontactforenames, c.surname AS admincontactsurname, m.notes, s.id AS siteid, ";
+$sql .= "m.term AS term, m.productonly AS productonly ";
+$sql .= "FROM `{$dbMaintenance}` AS m, `{$dbSites}` AS s, `{$dbContacts}` AS c, `{$dbProducts}` AS p, `{$dbLicenceTypes}` AS l, `{$dbResellers}` AS r ";
+$sql .= "WHERE (m.site = s.id AND product = p.id AND admincontact = c.id) ";
+$sql .= "AND (reseller = r.id OR reseller = NULL) AND (licence_type = l.id OR licence_type = NULL) ";
+if ($activeonly=='yes')
 {
     $sql .= "AND term!='yes' AND (expirydate > $now OR expirydate = '-1') ";
 }
@@ -119,32 +119,32 @@ if ($search_string != '*')
 {
     if (strlen($search_string)==1)
     {
-        $sql .= "AND SUBSTRING(sites.name,1,1)=('$search_string') ";
+        $sql .= "AND SUBSTRING(s.name,1,1)=('$search_string') ";
     }
     else
     {
-        $sql .= "AND (sites.name LIKE '%$search_string%' ";
-        $sql .= "OR maintenance.id = '$search_string') ";
+        $sql .= "AND (s.name LIKE '%$search_string%' ";
+        $sql .= "OR m.id = '$search_string') ";
     }
 
     if ($productid)
     {
-        $sql .= "AND maintenance.product='$productid' ";
+        $sql .= "AND m.product='$productid' ";
     }
 
     if (!empty($resellerid))
     {
-        $sql .= "AND maintenance.reseller='{$resellerid}' ";
+        $sql .= "AND m.reseller='{$resellerid}' ";
     }
 }
 if (!empty($sort))
 {
     if ($sort=='expiry') $sql .= "ORDER BY expirydate ";
-    elseif ($sort=='id') $sql .= "ORDER BY maintenance.id ";
-    elseif ($sort=='product') $sql .= " ORDER BY products.name ";
-    elseif ($sort=='site') $sql .= " ORDER BY sites.name ";
-    elseif ($sort=='reseller') $sql .= " ORDER BY resellers.name ";
-    else $sql .= " ORDER BY sites.name ";
+    elseif ($sort=='id') $sql .= "ORDER BY m.id ";
+    elseif ($sort=='product') $sql .= " ORDER BY p.name ";
+    elseif ($sort=='site') $sql .= " ORDER BY s.name ";
+    elseif ($sort=='reseller') $sql .= " ORDER BY r.name ";
+    else $sql .= " ORDER BY s.name ";
 
     if ($order=='a' OR $order=='ASC' OR $order='') $sql .= "ASC";
     else $sql .= "DESC";
@@ -273,6 +273,6 @@ else
     echo "</table>";
     // free result and disconnect
     mysql_free_result($result);
-    include('htmlfooter.inc.php');
+    include ('htmlfooter.inc.php');
 }
 ?>

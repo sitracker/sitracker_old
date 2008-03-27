@@ -10,33 +10,32 @@
 
 // Author: Ivan Lucas <ivanlucas[at]users.sourceforge.net>
 
-@include('../set_include_path.inc.php');
-$permission=37; // Run Reports
+@include ('../set_include_path.inc.php');
+$permission = 37; // Run Reports
 
-require('db_connect.inc.php');
-require('functions.inc.php');
+require ('db_connect.inc.php');
+require ('functions.inc.php');
 
 // This page requires authentication
-require('auth.inc.php');
+require ('auth.inc.php');
 
-include('htmlheader.inc.php');
+include ('htmlheader.inc.php');
 
 $formid=$CONFIG['feedback_form'];
 $now = time();
-
 echo "<div style='margin: 20px'>";
 echo "<h2><a href='/reports/feedback.php'>Feedback</a> Scores: By Incident</h2>";
 echo "<p>This report shows average customer responses and a percentage figure indicating the overall positivity of sites regarding ";
 echo "incidents logged:</p>";
 
-$rcount=1;
-$survcount=0;
+$rcount = 1;
+$survcount = 0;
 
 $msql = "SELECT *,  \n";
-$msql .= "feedbackreport.id AS reportid, incidents.id AS incidentid \n";
-$msql .= "FROM feedbackreport, incidents WHERE feedbackreport.incidentid=incidents.id \n";
-$msql .= "AND feedbackreport.incidentid > 0 \n";
-$msql .= "ORDER BY incidents.id ASC \n";
+$msql .= "rep.id AS reportid, i.id AS incidentid \n";
+$msql .= "FROM `{$dbFeedbackReport}` AS rep, `{$dbIncidents}` WHERE rep.incidentid = i.id \n";
+$msql .= "AND rep.incidentid > 0 \n";
+$msql .= "ORDER BY i.id ASC \n";
 $mresult = mysql_query($msql);
 if (mysql_error()) trigger_error(mysql_error(), E_USER_ERROR);
 while ($mrow = mysql_fetch_object($mresult))
@@ -44,20 +43,20 @@ while ($mrow = mysql_fetch_object($mresult))
     $totalresult=0;
     $numquestions=0;
     $html = "<h3><a href='/incident_details.php?id={$mrow->incidentid}' title='Jump to incident'>{$mrow->incidentid}</a></h3>";
-    $qsql = "SELECT * FROM feedbackquestions WHERE formid='{$formid}' AND type='rating' ORDER BY taborder";
+    $qsql = "SELECT * FROM `{$dbFeedbackQuestions}` WHERE formid='{$formid}' AND type='rating' ORDER BY taborder";
     $qresult = mysql_query($qsql);
     if (mysql_error()) trigger_error(mysql_error(), E_USER_ERROR);
     while ($qrow = mysql_fetch_object($qresult))
     {
         $numquestions++;
         $html .= "Q{$qrow->taborder}: {$qrow->question} &nbsp;";
-        $sql = "SELECT * FROM feedbackreport, incidents, users, feedbackresults ";
-        $sql .= "WHERE feedbackreport.incidentid=incidents.id ";
-        $sql .= "AND incidents.owner=users.id ";
-        $sql .= "AND feedbackreport.id=feedbackresults.respondentid ";
-        $sql .= "AND feedbackresults.questionid='$qrow->id' ";
-        $sql .= "AND feedbackreport.id='$mrow->reportid' ";
-        $sql .= "ORDER BY incidents.owner, incidents.id";
+        $sql = "SELECT * FROM `{$dbFeedbackReport}` AS rep, `{$dbIncidents}` AS i, `{$dbUsers}` AS u, `{$dbFeedbackResults}` AS r ";
+        $sql .= "WHERE rep.incidentid = i.id ";
+        $sql .= "AND i.owner = u.id ";
+        $sql .= "AND rep.id = r.respondentid ";
+        $sql .= "AND r.questionid = '{$qrow->id}' ";
+        $sql .= "AND rep.id='{$mrow->reportid}' ";
+        $sql .= "ORDER BY i.owner, i.id";
         $result = mysql_query($sql);
         if (mysql_error()) trigger_error(mysql_error(), E_USER_ERROR);
         $numresults=0;
@@ -123,6 +122,6 @@ while ($mrow = mysql_fetch_object($mresult))
 echo "<h2>$survcount Surveys</h2>";
 
 echo "</div>\n";
-include('htmlfooter.inc.php');
+include ('htmlfooter.inc.php');
 
 ?>

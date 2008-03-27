@@ -10,15 +10,15 @@
 
 // Author: Ivan Lucas <ivanlucas[at]users.sourceforge.net>
 
-@include('set_include_path.inc.php');
-$permission=16; // Add Email Template
+@include ('set_include_path.inc.php');
+$permission = 16; // Add Email Template
 
-require('db_connect.inc.php');
-require('functions.inc.php');
+require ('db_connect.inc.php');
+require ('functions.inc.php');
 // This page requires authentication
-require('auth.inc.php');
+require ('auth.inc.php');
 
-include('htmlheader.inc.php');
+include ('htmlheader.inc.php');
 
 // External variables
 $submit=$_REQUEST['submit'];
@@ -53,10 +53,6 @@ if (empty($submit))
     echo "<tr><th>&lt;useremail&gt;</th><td>Email address of current user</td></tr>";
     echo "<tr><th>&lt;userrealname&gt;</th><td>Real name of current user</td></tr>";
     echo "<tr><th>&lt;signature&gt;</th><td>Signature of current user</td></tr>";
-    echo "<tr><th>&lt;novellid&gt;</th><td>Novell ID of current user</td></tr>";
-    echo "<tr><th>&lt;microsoftid&gt;</th><td>Microsoft ID of current user</td></tr>";
-    echo "<tr><th>&lt;dseid&gt;</th><td>DSE ID of current user</td></tr>";
-    echo "<tr><th>&lt;cheyenneid&gt;</th><td>Cheyenne ID of current user</td></tr>";
     echo "<tr><th>&lt;applicationname&gt;</th><td>Name of this application</td></tr>";
     echo "<tr><th>&lt;applicationshortname&gt;</th><td>Short name of this application</td></tr>";
     echo "<tr><th>&lt;applicationversion&gt;</th><td>Version number of this application</td></tr>";
@@ -98,7 +94,7 @@ if (empty($submit))
     echo "</table>";
     echo "<p align='center'><input name='submit' type='submit' value='{$strAdd}' /></p>";
     echo "</form>";
-    include('htmlfooter.inc.php');
+    include ('htmlfooter.inc.php');
 }
 else
 {
@@ -145,7 +141,7 @@ else
         if ($_REQUEST['storeinlog']=='yes') $storeinlog='Yes';
         else $storeinlog='No';
 
-        $sql  = "INSERT INTO emailtype (name, description, tofield, fromfield, replytofield, ccfield, bccfield, subjectfield, body, customervisibility, storeinlog) ";
+        $sql  = "INSERT INTO `{$dbEmailTemplates}` (name, description, tofield, fromfield, replytofield, ccfield, bccfield, subjectfield, body, customervisibility, storeinlog) ";
         $sql .= "VALUES ('$name', '$description', '$tofield', '$fromfield', '$replytofield', '$ccfield', ";
         $sql .= "'$bccfield', '$subjectfield', '$bodytext', '$cust_vis', '$storeinlog')";
         $result = mysql_query($sql);
@@ -156,7 +152,7 @@ else
         {
             $id=mysql_insert_id();
             journal(CFG_LOGGING_FULL, 'Administration', 'Email template $id was added', CFG_JOURNAL_ADMIN, $id);
-            html_redirect("edit_emailtype.php?action=showform");
+            html_redirect("templates.php");
         }
     }
 }

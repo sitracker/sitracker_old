@@ -10,22 +10,22 @@
 
 // Author: Ivan Lucas <ivanlucas[at]users.sourceforge.net>
 
-@include('set_include_path.inc.php');
-$permission=61; // View Incident Details
+@include ('set_include_path.inc.php');
+$permission = 61; // View Incident Details
 
-require('db_connect.inc.php');
-require('functions.inc.php');
+require ('db_connect.inc.php');
+require ('functions.inc.php');
 
 // This page requires authentication
-require('auth.inc.php');
+require ('auth.inc.php');
 
 // External variables
 $id = cleanvar($_REQUEST['id']);
 
 $title = 'Relations';
-include('incident_html_top.inc.php');
+include ('incident_html_top.inc.php');
 
-include('incident/relationships.inc.php');
+include ('incident/relationships.inc.php');
 
-include('incident_html_bottom.inc.php');
+include ('incident_html_bottom.inc.php');
 ?>

@@ -10,28 +10,28 @@
 
 // Author: Ivan Lucas <ivanlucas[at]users.sourceforge.net>
 
-@include('set_include_path.inc.php');
-$permission=23; // Edit user
+@include ('set_include_path.inc.php');
+$permission = 23; // Edit user
 
-require('db_connect.inc.php');
-require('functions.inc.php');
+require ('db_connect.inc.php');
+require ('functions.inc.php');
 
 $title = $strUserGroups;
 
 // This page requires authentication
-require('auth.inc.php');
+require ('auth.inc.php');
 
 $action = cleanvar($_REQUEST['action']);
 
 switch ($action)
 {
     case 'savemembers':
-        $sql = "SELECT * FROM users ORDER BY realname";
+        $sql = "SELECT * FROM `{$dbUsers}` ORDER BY realname";
         $result = mysql_query($sql);
         if (mysql_error()) trigger_error(mysql_error(),E_USER_ERROR);
         while ($user = mysql_fetch_object($result))
         {
-            $usql = "UPDATE users SET groupid = '".cleanvar($_POST["group{$user->id}"])."' WHERE id='{$user->id}'";
+            $usql = "UPDATE `{$dbUsers}` SET groupid = '".cleanvar($_POST["group{$user->id}"])."' WHERE id='{$user->id}'";
             mysql_query($usql);
             if (mysql_error()) trigger_error(mysql_error(),E_USER_ERROR);
         }
@@ -45,7 +45,7 @@ switch ($action)
             html_redirect("usergroups.php", FALSE, $strGroupNameMustNotBeEmpty);
             exit;
         }
-        $sql = "INSERT INTO groups (name) VALUES ('{$group}')";
+        $sql = "INSERT INTO `{$dbGroups}` (name) VALUES ('{$group}')";
         mysql_query($sql);
         if (mysql_error()) trigger_error(mysql_error(),E_USER_ERROR);
         html_redirect("usergroups.php");
@@ -54,23 +54,23 @@ switch ($action)
     case 'deletegroup':
         $groupid = cleanvar($_REQUEST['groupid']);
         // Remove group membership for all users currently assigned to this group
-        $sql = "UPDATE users SET groupid = '' WHERE groupid = '{$groupid}'";
+        $sql = "UPDATE `{$dbUsers}` SET groupid = '' WHERE groupid = '{$groupid}'";
         mysql_query($sql);
         if (mysql_error()) trigger_error(mysql_error(),E_USER_ERROR);
 
         // Remove the group
-        $sql = "DELETE FROM groups WHERE id='{$groupid}' LIMIT 1";
+        $sql = "DELETE FROM `{$dbGroups}` WHERE id='{$groupid}' LIMIT 1";
         mysql_query($sql);
         if (mysql_error()) trigger_error(mysql_error(),E_USER_ERROR);
         html_redirect("usergroups.php");
     break;
 
     default:
-        include('htmlheader.inc.php');
+        include ('htmlheader.inc.php');
 
         echo "<h2>{$title}</h2>";
 
-        $gsql = "SELECT * FROM groups ORDER BY name";
+        $gsql = "SELECT * FROM `{$dbGroups}` ORDER BY name";
         $gresult = mysql_query($gsql);
         if (mysql_error()) trigger_error(mysql_error(),E_USER_ERROR);
         while ($group = mysql_fetch_object($gresult))
@@ -85,7 +85,7 @@ switch ($action)
         echo "<tr><th>{$strGroup}</th><th>{$strOperation}</th></tr>\n";
         if ($numgroups >= 1)
         {
-            foreach($grouparr AS $groupid => $groupname)
+            foreach ($grouparr AS $groupid => $groupname)
             {
                 echo "<tr><td>$groupname</td><td><a href='usergroups.php?groupid={$groupid}&amp;action=deletegroup'>{$strDelete}</a></td></tr>\n";
             }
@@ -98,7 +98,7 @@ switch ($action)
 
         echo "<h3>{$strGroupMembership}</h3>";
 
-        $sql = "SELECT * FROM users WHERE status !=0 ORDER BY realname";  // status=0 means left company
+        $sql = "SELECT * FROM `{$dbUsers}` WHERE status !=0 ORDER BY realname";  // status=0 means left company
         $result = mysql_query($sql);
         if (mysql_error()) trigger_error(mysql_error(),E_USER_ERROR);
 
@@ -115,6 +115,6 @@ switch ($action)
         echo "<p><input type='hidden' name='action' value='savemembers' /><input type='submit' value='{$strSave}' /></p>";
         echo "</form>";
 
-        include('htmlfooter.inc.php');
+        include ('htmlfooter.inc.php');
 }
 ?>

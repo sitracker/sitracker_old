@@ -12,13 +12,13 @@
 
 // This Page Is Valid XHTML 1.0 Transitional!
 
-@include('set_include_path.inc.php');
-$permission=55; // Delete Sites/Contacts
+@include ('set_include_path.inc.php');
+$permission = 55; // Delete Sites/Contacts
 
-require('db_connect.inc.php');
-require('functions.inc.php');
+require ('db_connect.inc.php');
+require ('functions.inc.php');
 // This page requires authentication
-require('auth.inc.php');
+require ('auth.inc.php');
 
 // External variables
 $id = cleanvar($_REQUEST['id']);
@@ -26,7 +26,7 @@ $destinationid = cleanvar($_REQUEST['destinationid']);
 
 if (empty($id))
 {
-    include('htmlheader.inc.php');
+    include ('htmlheader.inc.php');
     echo "<h2>Select Site To Delete</h2>";
     echo "<form action='{$_SERVER['PHP_SELF']}?action=delete' method='post'>";
     echo "<table>";
@@ -34,15 +34,15 @@ if (empty($id))
     echo "</table>";
     echo "<p><input name='submit' type='submit' value='Continue' /></p>";
     echo "</form>";
-    include('htmlfooter.inc.php');
+    include ('htmlfooter.inc.php');
 }
 else
 {
     if (empty($destinationid))
     {
-        include('htmlheader.inc.php');
+        include ('htmlheader.inc.php');
         echo "<h2>Delete Site</h2>";
-        $sql="SELECT * FROM sites WHERE id='$id' LIMIT 1";
+        $sql="SELECT * FROM `{$dbSites}` WHERE id='$id' LIMIT 1";
         $siteresult = mysql_query($sql);
         $site=mysql_fetch_object($siteresult);
         if (mysql_error()) trigger_error(mysql_error(),E_USER_ERROR);
@@ -53,7 +53,7 @@ else
         echo "</table>";
 
         // Look for associated contacts
-        $sql = "SELECT COUNT(id) FROM contacts WHERE siteid='$id'";
+        $sql = "SELECT COUNT(id) FROM `{$dbContacts}` WHERE siteid='$id'";
         $result = mysql_query($sql);
         if (mysql_error()) trigger_error(mysql_error(),E_USER_ERROR);
         list($numcontacts) = mysql_fetch_row($result);
@@ -63,7 +63,7 @@ else
         }
 
         // Look for associated maintenance contracts
-        $sql = "SELECT COUNT(id) FROM maintenance WHERE site='$id'";
+        $sql = "SELECT COUNT(id) FROM `{$dbMaintenance}` WHERE site='$id'";
         $result = mysql_query($sql);
         if (mysql_error()) trigger_error(mysql_error(),E_USER_ERROR);
         list($numcontracts) = mysql_fetch_row($result);
@@ -84,7 +84,7 @@ else
         }
         else
         {
-            $sql = "DELETE FROM sites WHERE id='$id' LIMIT 1";
+            $sql = "DELETE FROM `{$dbSites}` WHERE id='$id' LIMIT 1";
             $result = mysql_query($sql);
             if (mysql_error()) trigger_error(mysql_error(),E_USER_ERROR);
             else
@@ -93,7 +93,7 @@ else
                 html_redirect("browse_sites.php?search_string=A");
             }
         }
-        include('htmlfooter.inc.php');
+        include ('htmlfooter.inc.php');
     }
     else
     {
@@ -104,11 +104,11 @@ else
         if (mysql_error()) trigger_error(mysql_error(),E_USER_ERROR);
 
         // Move contracts
-        $sql = "UPDATE maintenance SET site='$destinationid' WHERE site='$id'";
+        $sql = "UPDATE `{$dbMaintenance}` SET site='$destinationid' WHERE site='$id'";
         mysql_query($sql);
         if (mysql_error()) trigger_error(mysql_error(),E_USER_ERROR);
 
-        $sql = "DELETE FROM sites WHERE id='$id' LIMIT 1";
+        $sql = "DELETE FROM `{$dbSites}` WHERE id='$id' LIMIT 1";
         $result = mysql_query($sql);
         if (mysql_error()) trigger_error(mysql_error(),E_USER_ERROR);
 

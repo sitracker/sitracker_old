@@ -10,17 +10,17 @@
 
 // This Page Is Valid XHTML 1.0 Transitional! 16Nov05
 
-@include('set_include_path.inc.php');
-$permission=22; // Administrate
-require('db_connect.inc.php');
-require('functions.inc.php');
+@include ('set_include_path.inc.php');
+$permission = 22; // Administrate
+require ('db_connect.inc.php');
+require ('functions.inc.php');
 // This page requires authentication
-require('auth.inc.php');
+require ('auth.inc.php');
 
-include('htmlheader.inc.php');
+include ('htmlheader.inc.php');
 
-$sql  = "SELECT *,users.id AS userid FROM users, roles ";
-$sql .= "WHERE users.roleid=roles.id ";
+$sql  = "SELECT *,u.id AS userid FROM `{$dbUsers}` AS u, `{$dbRoles}` AS r ";
+$sql .= "WHERE u.roleid = r.id ";
 
 // sort users by realname by default
 if (!isset($sort) || $sort == "realname") $sql .= " ORDER BY IF(status> 0,1,0) DESC, realname ASC";
@@ -124,7 +124,7 @@ while ($users = mysql_fetch_array($result))
     echo "</td><td>";
     echo userstatus_name($users["status"]);
     echo "</td><td>";
-    if($users["accepting"]=='Yes') echo $strYes;
+    if ($users["accepting"]=='Yes') echo $strYes;
     else echo "<span class='error'>{$strNo}</span>";
     echo "</td></tr>";
     // invert shade
@@ -136,5 +136,5 @@ echo "</table>\n";
 // free result and disconnect
 mysql_free_result($result);
 
-include('htmlfooter.inc.php');
+include ('htmlfooter.inc.php');
 ?>

@@ -8,13 +8,13 @@
 // of the GNU General Public License, incorporated herein by reference.
 //
 
-@include('set_include_path.inc.php');
-$permission=8; // Update Incidents
-require('db_connect.inc.php');
-require('functions.inc.php');
+@include ('set_include_path.inc.php');
+$permission = 8; // Update Incidents
+require ('db_connect.inc.php');
+require ('functions.inc.php');
 
 // This page requires authentication
-require('auth.inc.php');
+require ('auth.inc.php');
 
 // External variables
 $incidentid = cleanvar($_REQUEST['incidentid']);
@@ -25,7 +25,7 @@ $send_email = cleanvar($_REQUEST['send_email']);
 if ($incidentid=='')
 {
     $title = "Move Update $updateid";
-    include('htmlheader.inc.php');
+    include ('htmlheader.inc.php');
     echo "<h2>$title</h2>";
     if ($error=='1')
     {
@@ -43,7 +43,7 @@ if ($incidentid=='')
     </div>
     <?php
 
-    $sql  = "SELECT * FROM updates WHERE id='$updateid' ";
+    $sql  = "SELECT * FROM `{$dbUpdates}` WHERE id='$updateid' ";
     $result = mysql_query($sql);
     if (mysql_error()) trigger_error("MySQL Query Error ".mysql_error(), E_USER_ERROR);
 
@@ -137,20 +137,16 @@ if ($incidentid=='')
         </td></tr>
         </table>
         <?php
-        include('htmlfooter.inc.php');
+        include ('htmlfooter.inc.php');
     }
 }
 else
 {
     // check that the incident is still open.  i.e. status not = closed
-    //$sql = "SELECT id FROM incidents WHERE id='$incidentid' AND status!=2";
-    //$result=mysql_query($sql);
-    //if (mysql_error()) trigger_error("MySQL Query Error ".mysql_error(), E_USER_ERROR);
-    //if (mysql_num_rows($result) > 0)
-    if (incident_open($incidentid) == "Yes")
+    if (incident_open($incidentid) == $GLOBALS['strYes'])
     {
         // retrieve the update body so that we can insert time headers
-        $sql = "SELECT incidentid, bodytext, timestamp FROM updates WHERE id='$updateid'";
+        $sql = "SELECT incidentid, bodytext, timestamp FROM `{$dbUpdates}` WHERE id='$updateid'";
         $uresult=mysql_query($sql);
         if (mysql_error()) trigger_error("MySQL Query Error ".mysql_error(), E_USER_ERROR);
         list($oldincidentid, $bodytext, $timestamp)=mysql_fetch_row($uresult);
@@ -168,7 +164,7 @@ else
         if (mysql_error()) trigger_error("MySQL Query Error ".mysql_error(), E_USER_ERROR);
 
         // update the incident record, change the incident status to active
-        $sql = "UPDATE incidents SET status='1', lastupdated='$now', timeofnextaction='0' WHERE id='$incidentid'";
+        $sql = "UPDATE `{$dbIncidents}` SET status='1', lastupdated='$now', timeofnextaction='0' WHERE id='$incidentid'";
         mysql_query($sql);
         if (mysql_error()) trigger_error("MySQL Query Error ".mysql_error(), E_USER_ERROR);
 
@@ -200,7 +196,7 @@ else
         }
 
         //remove from tempincoming to prevent build up
-        $sql = "DELETE FROM tempincoming WHERE updateid='$updateid'";
+        $sql = "DELETE FROM `{$dbTempIncoming}` WHERE updateid='$updateid'";
         mysql_query($sql);
         if (mysql_error()) trigger_error("MySQL Query Error ".mysql_error(), E_USER_ERROR);
 

@@ -10,14 +10,14 @@
 
 // Author: Ivan Lucas <ivanlucas[at]users.sourceforge.net>
 
-@include('set_include_path.inc.php');
-$permission=19; // View Maintenance Contracts
-require('db_connect.inc.php');
-require('functions.inc.php');
+@include ('set_include_path.inc.php');
+$permission = 19; // View Maintenance Contracts
+require ('db_connect.inc.php');
+require ('functions.inc.php');
 $title='Search Renewals';
 
 // This page requires authentication
-require('auth.inc.php');
+require ('auth.inc.php');
 
 // External variables
 $expire = cleanvar($_REQUEST['expire']);
@@ -25,7 +25,7 @@ $expire = cleanvar($_REQUEST['expire']);
 // show search renewal form
 if (empty($expire))
 {
-    include('htmlheader.inc.php');
+    include ('htmlheader.inc.php');
     ?>
     <h2><?php echo $title; ?></h2>
     <form action="<?php echo $_SERVER['PHP_SELF']; ?>" method="post">
@@ -34,12 +34,12 @@ if (empty($expire))
     // FIXME i18n
     echo "<p><input name='submit' type='submit' value=\"{$strSearch}\" /></p>";
     echo "</form>\n";
-    include('htmlfooter.inc.php');
+    include ('htmlfooter.inc.php');
 }
 else
 {
     // perform search
-    include('htmlheader.inc.php');
+    include ('htmlheader.inc.php');
     // check input
     if ($expire == "")
     {
@@ -57,8 +57,11 @@ else
         $now = time();
         $max_expiry = $now + ($expire * 86400);
         // build SQL
-        $sql  = "SELECT maintenance.id AS maintid, sites.name AS site, products.name AS product, resellers.name AS reseller, licence_quantity, licencetypes.name AS licence_type, expirydate, admincontact, contacts.forenames AS admincontactforenames, contacts.surname AS admincontactsurname, maintenance.notes FROM maintenance, sites, contacts, products, licencetypes, resellers WHERE ";
-        $sql .= "(maintenance.site=sites.id AND product=products.id AND reseller=resellers.id AND licence_type=licencetypes.id AND admincontact=contacts.id) AND ";
+        $sql  = "SELECT m.id AS maintid, s.name AS site, p.name AS product, r.name AS reseller, ";
+        $sql .= "licence_quantity, l.name AS licence_type, expirydate, admincontact, ";
+        $sql .= "c.forenames AS admincontactforenames, c.surname AS admincontactsurname, m.notes ";
+        $sql .= "FROM `{$dbMaintenance}` AS m, `{$dbSites}` AS s, `{$dbContacts}` AS c, `{$dbProducts}` AS p, `{$dbLicenceTypes}` AS l, `{$dbResellers}` AS r ";
+        $sql .= "WHERE (m.site = s.id AND product = p.id AND reseller = r.id AND licence_type = l.id AND admincontact = c.id) AND ";
         $sql .= "expirydate <= $max_expiry AND expirydate >= $now ORDER BY expirydate ASC";
 
         $result = mysql_query($sql);
@@ -125,6 +128,6 @@ else
             <?php
         }
     }
-    include('htmlfooter.inc.php');
+    include ('htmlfooter.inc.php');
 }
 ?>

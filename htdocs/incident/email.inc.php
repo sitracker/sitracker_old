@@ -18,15 +18,15 @@ if (realpath(__FILE__) == realpath($_SERVER['SCRIPT_FILENAME']))
 
 //if (empty($step)) $step=1;
 
-if(empty($step))
+if (empty($step))
 {
     $action = $_REQUEST['action'];
 
-    if($action == "deletedraft")
+    if ($action == "deletedraft")
     {
-        if($draftid != -1)
+        if ($draftid != -1)
         {
-            $sql = "DELETE FROM drafts WHERE id = {$draftid}";
+            $sql = "DELETE FROM `{$dbDrafts}` WHERE id = {$draftid}";
             $result = mysql_query($sql);
             if (mysql_error()) trigger_error(mysql_error(),E_USER_ERROR);
         }
@@ -34,13 +34,13 @@ if(empty($step))
         exit;
     }
 
-    $sql = "SELECT * FROM drafts WHERE type = 'email' AND userid = '{$sit[2]}' AND incidentid = '{$id}'";
+    $sql = "SELECT * FROM `{$dbDrafts}` WHERE type = 'email' AND userid = '{$sit[2]}' AND incidentid = '{$id}'";
     $result = mysql_query($sql);
     if (mysql_error()) trigger_error(mysql_error(),E_USER_ERROR);
 
-    if(mysql_num_rows($result) > 0)
+    if (mysql_num_rows($result) > 0)
     {
-        include('incident_html_top.inc.php');
+        include ('incident_html_top.inc.php');
 
         echo "<h2>{$title}</h2>";
 
@@ -48,7 +48,7 @@ if(empty($step))
 
         echo "<p align='center'><a href='".$_SERVER['PHP_SELF']."?step=1&amp;id={$id}'>{$strNewEmail}</a></p>";
 
-        include('incident_html_bottom.inc.php');
+        include ('incident_html_bottom.inc.php');
 
         exit;
     }
@@ -62,7 +62,7 @@ switch ($step)
 {
     case 1:
         // show form 1
-        include('incident_html_top.inc.php');
+        include ('incident_html_top.inc.php');
         ?>
         <script type="text/javascript">
         <!--
@@ -206,27 +206,27 @@ switch ($step)
         }
         echo "</select>\n</td></tr>";
 
-        if($CONFIG['auto_chase'] == TRUE)
+        if ($CONFIG['auto_chase'] == TRUE)
         {
-            $sql = "SELECT * FROM updates WHERE incidentid = {$id} ORDER BY timestamp DESC LIMIT 1";
+            $sql = "SELECT * FROM `{$dbUpdates}` WHERE incidentid = {$id} ORDER BY timestamp DESC LIMIT 1";
             $result = mysql_query($sql);
             if (mysql_error()) trigger_error("MySQL Query Error ".mysql_error(), E_USER_ERROR);
 
             $obj = mysql_fetch_object($result);
 
-            if($obj->type == 'auto_chase_phone')
+            if ($obj->type == 'auto_chase_phone')
             {
                 echo "<tr><th>{$strCustomerChaseUpdate}</th><td>";
-                echo "<input type='radio' name='chase_customer' value='no' checked='yes' />{$strNo} ";
-                echo "<input type='radio' name='chase_customer' value='yes' />{$strYes}";
+                echo "<label><input type='radio' name='chase_customer' value='no' checked='yes' />{$strNo}</label> ";
+                echo "<label><input type='radio' name='chase_customer' value='yes' />{$strYes}</label>";
                 echo "</td></tr>";
             }
 
-            if($obj->type == 'auto_chase_manager')
+            if ($obj->type == 'auto_chase_manager')
             {
                 echo "<tr><th>{$strManagerChaseUpdate}</th>";
-                echo "<input type='radio' name='chase_manager' value='no' checked='yes' />{$strNo} ";
-                echo "<input type='radio' name='chase_manager' value='yes' />{$strYes}";
+                echo "<label><input type='radio' name='chase_manager' value='no' checked='yes' />{$strNo}</label> ";
+                echo "<label><input type='radio' name='chase_manager' value='yes' />{$strYes}</label>";
                 echo "</td></tr>";
             }
         }
@@ -236,7 +236,39 @@ switch ($step)
         echo "</td></tr>\n";
         echo "<tr><th>{$strTimeToNextAction}:</th>";
         echo "<td>";
-        echo "<input type='radio' name='timetonextaction_none' value='none' checked='checked' />None<br />";
+        echo "Place the incident in the waiting queue?<br />";
+        echo "<label><input type='radio' name='timetonextaction_none' id='ttna_time' value='time' onchange=\"update_ttna();\" />";
+        echo "For <em>x</em> days, hours, minutes</label><br />"; // FIXME i18n for x days,. hours, minutes
+        echo "<span id='ttnacountdown'";
+        if (empty($na_days) AND empty($na_hours) AND empty($na_minutes)) echo " style='display: none;'";
+        echo ">";
+        echo "&nbsp;&nbsp;&nbsp;<input maxlength='3' name='timetonextaction_days' id='timetonextaction_days' value='{$na_days}' onclick='window.document.updateform.timetonextaction_none[0].checked = true;' size='3' /> {$GLOBALS['strDays']}&nbsp;";
+        echo "<input maxlength='2' name='timetonextaction_hours' id='timetonextaction_hours' value='{$na_hours}' onclick='window.document.updateform.timetonextaction_none[0].checked = true;' size='3' /> {$GLOBALS['strHours']}&nbsp;";
+        echo "<input maxlength='2' name='timetonextaction_minutes' id='timetonextaction_minutes' value='{$na_minutes}' onclick='window.document.updateform.timetonextaction_none[0].checked = true;' size='3' /> {$GLOBALS['strMinutes']}";
+        echo "<br /></span>";
+
+        echo "<input type='radio' name='timetonextaction_none' id='ttna_date' value='date' onchange=\"update_ttna();\" />Until specific date and time<br />"; //FIXME i18n Until specific date and time
+        echo "<span id='ttnadate' style='display: none;'>";
+        echo "<input name='date' id='date' size='10' value='{$date}' onclick=\"window.document.updateform.timetonextaction_none[1].checked = true;\"/> ";
+        echo date_picker('updateform.date');
+        echo " <select name='timeoffset' id='timeoffset' onchange='window.document.updateform.timetonextaction_none[1].checked = true;'>";
+        echo "<option value='0'></option>";
+        echo "<option value='0'>8:00 AM</option>";
+        echo "<option value='1'>9:00 AM</option>";
+        echo "<option value='2'>10:00 AM</option>";
+        echo "<option value='3'>11:00 AM</option>";
+        echo "<option value='4'>12:00 PM</option>";
+        echo "<option value='5'>1:00 PM</option>";
+        echo "<option value='6'>2:00 PM</option>";
+        echo "<option value='7'>3:00 PM</option>";
+        echo "<option value='8'>4:00 PM</option>";
+        echo "<option value='9'>5:00 PM</option>";
+        echo "</select>";
+        echo "<br /></span>";
+        echo "<label><input checked='checked' type='radio' name='timetonextaction_none' id='ttna_none' onchange=\"update_ttna();\" onclick=\"window.document.updateform.timetonextaction_days.value = ''; window.document.updateform.timetonextaction_hours.value = ''; window.document.updateform.timetonextaction_minutes.value = '';\" value='None' />Unspecified</label>";
+
+
+    /*    echo "<input type='radio' name='timetonextaction_none' value='none' checked='checked' onchange=\"update_ttna();\" />{$strNone}<br />";
         echo "<input type='radio' name='timetonextaction_none' value='time' />In <em>x</em> days, hours, minutes<br />&nbsp;&nbsp;&nbsp;";
         echo "<input maxlength='3' name='timetonextaction_days' onclick='window.document.updateform.timetonextaction_none[1].checked = true;' size='3' /> Days&nbsp;";
         echo "<input maxlength='2' name='timetonextaction_hours' onclick='window.document.updateform.timetonextaction_none[1].checked = true;' size='3' /> Hours&nbsp;";
@@ -257,7 +289,7 @@ switch ($step)
         echo "<option value='8'>4:00 PM</option>";
         echo "<option value='9'>5:00 PM</option>";
         echo "</select>";
-        echo "<br />";
+    */    echo "<br />";
         echo "</td></tr>";
         echo "</table>";
         echo "<p align='center'>";
@@ -265,14 +297,14 @@ switch ($step)
         echo "<input type='hidden' name='menu' value='$menu' />";
         echo "<input name='submit1' type='submit' value='{$strContinue}' /></p>";
         echo "</form>\n";
-        include('incident_html_bottom.inc.php');
+        include ('incident_html_bottom.inc.php');
     break;
 
     case 2:
         // show form 2
-        if($draftid != -1)
+        if ($draftid != -1)
         {
-            $draftsql = "SELECT * FROM drafts WHERE id = {$draftid}";
+            $draftsql = "SELECT * FROM `{$dbDrafts}` WHERE id = {$draftid}";
             $draftresult = mysql_query($draftsql);
             if (mysql_error()) trigger_error(mysql_error(),E_USER_ERROR);
             $draftobj = mysql_fetch_object($draftresult);
@@ -280,7 +312,7 @@ switch ($step)
             $metadata = explode("|",$draftobj->meta);
         }
 
-        include('incident_html_top.inc.php');
+        include ('incident_html_top.inc.php');
         ?>
         <script type='text/javascript'>
         function confirm_send_mail()
@@ -339,28 +371,28 @@ $emailtype|$newincidentstatus|$timetonextaction_none|$timetonextaction_days|$tim
             meta = meta+urlencode(byId('subjectfield').value)+"|"+urlencode(byId('bodytext').value)+"|"
             meta = meta+byId('date').value+"|"+byId('timeoffset').value;
 
-            if(toPass != "")
+            if (toPass != "")
             {
                 xmlhttp.open("GET", "auto_save.php?userid="+<?php echo $_SESSION['userid']; ?>+"&type=email&incidentid="+<?php echo $id; ?>+"&draftid="+draftid+"&meta="+meta+"&content="+escape(toPass), true);
 
                 xmlhttp.onreadystatechange=function() {
                     //remove this in the future after testing
                     if (xmlhttp.readyState==4) {
-                        if(xmlhttp.responseText != ""){
+                        if (xmlhttp.responseText != ""){
                             //alert(xmlhttp.responseText);
-                            if(draftid == -1)
+                            if (draftid == -1)
                             {
                                 draftid = xmlhttp.responseText;
                             }
                             var currentTime = new Date();
                             var hours = currentTime.getHours();
                             var minutes = currentTime.getMinutes();
-                            if(minutes < 10)
+                            if (minutes < 10)
                             {
                                 minutes = "0"+minutes;
                             }
                             var seconds = currentTime.getSeconds();
-                            if(seconds < 10)
+                            if (seconds < 10)
                             {
                                 seconds = "0"+seconds;
                             }
@@ -378,7 +410,7 @@ $emailtype|$newincidentstatus|$timetonextaction_none|$timetonextaction_days|$tim
         </script>
         <?php
         // External vars
-        if($draftid == -1)
+        if ($draftid == -1)
         {
             $emailtype = cleanvar($_REQUEST['emailtype']);
             $newincidentstatus = cleanvar($_REQUEST['newincidentstatus']);
@@ -419,15 +451,20 @@ $emailtype|$newincidentstatus|$timetonextaction_none|$timetonextaction_days|$tim
         }
         else
         {
-            if($draftid == -1)
+            if ($draftid == -1)
             {
-                $from = emailtype_replace_specials(emailtype_from($emailtype), $id, $sit[2]);
-                $replyTo = emailtype_replace_specials(emailtype_replyto($emailtype), $id, $sit[2]);
-                $ccemail = emailtype_replace_specials(emailtype_cc($emailtype), $id, $sit[2]);
-                $bccemail = emailtype_replace_specials(emailtype_bcc($emailtype), $id, $sit[2]);
-                $toemail = emailtype_replace_specials(emailtype_to($emailtype), $id, $sit[2]);
-                $subject = emailtype_replace_specials(emailtype_subject($emailtype), $id, $sit[2]);
-                $body = emailtype_replace_specials(emailtype_body($emailtype), $id, $sit[2]);
+                $tsql = "SELECT * FROM `{$dbEmailTemplates}` WHERE id=$emailtype";
+                $tresult = mysql_query($tsql);
+                if (mysql_error()) trigger_error(mysql_error(),E_USER_WARNING);
+                $template = mysql_fetch_object($tresult);
+
+                $from = replace_specials($template->fromfield, array('incidentid' => $id, 'userid' => $sit[2]));
+                $replyto = replace_specials($template->replytofield, array('incidentid' => $id, 'userid' => $sit[2]));
+                $ccemail = replace_specials($template->ccfield, array('incidentid' => $id, 'userid' => $sit[2]));
+                $bccemail = replace_specials($template->bccfield, array('incidentid' => $id, 'userid' => $sit[2]));
+                $toemail = replace_specials($template->tofield, array('incidentid' => $id, 'userid' => $sit[2]));
+                $subject = replace_specials($template->subjectfield, array('incidentid' => $id, 'userid' => $sit[2]));
+                $body = replace_specials($template->body, array('incidentid' => $id, 'userid' => $sit[2]));
             }
             else
             {
@@ -508,7 +545,7 @@ $emailtype|$newincidentstatus|$timetonextaction_none|$timetonextaction_days|$tim
             echo "<input name='submit2' type='submit' value='{$strSendEmail}' />";
             echo "</p>\n</form>\n";
         }
-        include('incident_html_bottom.inc.php');
+        include ('incident_html_bottom.inc.php');
     break;
 
     case 3:
@@ -559,7 +596,7 @@ $emailtype|$newincidentstatus|$timetonextaction_none|$timetonextaction_days|$tim
         // spellcheck email if required
         if ($spellcheck == 'yes')
         {
-            include('spellcheck_email.php');
+            include ('spellcheck_email.php');
             exit;
         }
         if ($encoded=='yes')
@@ -626,7 +663,7 @@ $emailtype|$newincidentstatus|$timetonextaction_none|$timetonextaction_days|$tim
             }
 
             // Lookup the email template (we need this to find out if the update should be visible or not)
-            $sql = "SELECT * FROM emailtype WHERE id='$emailtype' ";
+            $sql = "SELECT * FROM `{$dbEmailTemplates}` WHERE id='$emailtype' ";
             $result = mysql_query($sql);
             if (mysql_error()) trigger_error("MySQL Query Error ".mysql_error(), E_USER_ERROR);
             if (mysql_num_rows($result) < 1) trigger_error("Email template '{$meailtype}' not found",E_USER_ERROR);
@@ -689,14 +726,14 @@ $emailtype|$newincidentstatus|$timetonextaction_none|$timetonextaction_days|$tim
 
                 if ($newincidentstatus != incident_status($id))
                 {
-                    $sql = "UPDATE incidents SET status='$newincidentstatus', lastupdated='$now', timeofnextaction='$timeofnextaction' WHERE id='$id'";
+                    $sql = "UPDATE `{$dbIncidents}` SET status='$newincidentstatus', lastupdated='$now', timeofnextaction='$timeofnextaction' WHERE id='$id'";
                     mysql_query($sql);
                     if (mysql_error()) trigger_error("MySQL Query Error ".mysql_error(), E_USER_ERROR);
                     $updateheader = "New Status: <b>" . incidentstatus_name($newincidentstatus) . "</b>\n\n";
                 }
                 else
                 {
-                    mysql_query("UPDATE incidents SET lastupdated='$now', timeofnextaction='$timeofnextaction' WHERE id='$id'");
+                    mysql_query("UPDATE `{$dbIncidents}` SET lastupdated='$now', timeofnextaction='$timeofnextaction' WHERE id='$id'");
                     if (mysql_error()) trigger_error("MySQL Query Error ".mysql_error(), E_USER_ERROR);
                 }
 
@@ -738,7 +775,7 @@ $emailtype|$newincidentstatus|$timetonextaction_none|$timetonextaction_days|$tim
                 $updatebody = $timetext . $updateheader . $bodytext;
                 $updatebody=mysql_real_escape_string($updatebody);
 
-                $sql  = "INSERT INTO updates (incidentid, userid, bodytext, type, timestamp, currentstatus,customervisibility) ";
+                $sql  = "INSERT INTO `{$dbUpdates}` (incidentid, userid, bodytext, type, timestamp, currentstatus,customervisibility) ";
                 $sql .= "VALUES ($id, $sit[2], '$updatebody', 'email', '$now', '$newincidentstatus', '{$emailtype->customervisibility}')";
                 mysql_query($sql);
                 if (mysql_error()) trigger_error("MySQL Query Error ".mysql_error(), E_USER_ERROR);
@@ -752,22 +789,22 @@ $emailtype|$newincidentstatus|$timetonextaction_none|$timetonextaction_days|$tim
                     break;
 
                     case 'initialresponse':
-                        $sql  = "INSERT INTO updates (incidentid, userid, type, timestamp, currentowner, currentstatus, customervisibility, sla, bodytext) ";
+                        $sql  = "INSERT INTO `{$dbUpdates}` (incidentid, userid, type, timestamp, currentowner, currentstatus, customervisibility, sla, bodytext) ";
                         $sql .= "VALUES ('$id', '".$sit[2]."', 'slamet', '$now', '".$sit[2]."', '$newincidentstatus', 'show', 'initialresponse','The Initial Response has been made.')";
                     break;
 
                     case 'probdef':
-                        $sql  = "INSERT INTO updates (incidentid, userid, type, timestamp, currentowner, currentstatus, customervisibility, sla, bodytext) ";
+                        $sql  = "INSERT INTO `{$dbUpdates}` (incidentid, userid, type, timestamp, currentowner, currentstatus, customervisibility, sla, bodytext) ";
                         $sql .= "VALUES ('$id', '".$sit[2]."', 'slamet', '$now', '".$sit[2]."', '$newincidentstatus', 'show', 'probdef','The problem has been defined.')";
                     break;
 
                     case 'actionplan':
-                        $sql  = "INSERT INTO updates (incidentid, userid, type, timestamp, currentowner, currentstatus, customervisibility, sla, bodytext) ";
+                        $sql  = "INSERT INTO `{$dbUpdates}` (incidentid, userid, type, timestamp, currentowner, currentstatus, customervisibility, sla, bodytext) ";
                         $sql .= "VALUES ('$id', '".$sit[2]."', 'slamet', '$now', '".$sit[2]."', '$newincidentstatus', 'show', 'actionplan','An action plan has been made.')";
                     break;
 
                     case 'solution':
-                        $sql  = "INSERT INTO updates (incidentid, userid, type, timestamp, currentowner, currentstatus, customervisibility, sla, bodytext) ";
+                        $sql  = "INSERT INTO `{$dbUpdates}` (incidentid, userid, type, timestamp, currentowner, currentstatus, customervisibility, sla, bodytext) ";
                         $sql .= "VALUES ('$id', '".$sit[2]."', 'slamet', '$now', '".$sit[2]."', '$newincidentstatus', 'show', 'solution','The incident has been resolved or reprioritised.\nThe issue should now be brought to a close or a new problem definition created within the service level.')";
                     break;
                 }
@@ -779,36 +816,36 @@ $emailtype|$newincidentstatus|$timetonextaction_none|$timetonextaction_days|$tim
                 if ($target!='none')
                 {
                     // Reset the slaemail sent column, so that email reminders can be sent if the new sla target goes out
-                    $sql = "UPDATE incidents SET slaemail='0', slanotice='0' WHERE id='$id' LIMIT 1";
+                    $sql = "UPDATE `{$dbIncidents}` SET slaemail='0', slanotice='0' WHERE id='$id' LIMIT 1";
                     mysql_query($sql);
                     if (mysql_error()) trigger_error("MySQL Query Error ".mysql_error(), E_USER_ERROR);
                 }
 
-                if(!empty($chase_customer))
+                if (!empty($chase_customer))
                 {
-                    $sql_insert = "INSERT INTO updates (incidentid, userid, type, bodytext, timestamp, customervisibility) VALUES ('{$id}','{$sit['2']}','auto_chased_phone','Customer has been called to chase','{$now}','hide')";
+                    $sql_insert = "INSERT INTO `{$dbUpdates}` (incidentid, userid, type, bodytext, timestamp, customervisibility) VALUES ('{$id}','{$sit['2']}','auto_chased_phone','Customer has been called to chase','{$now}','hide')";
                     mysql_query($sql_insert);
                     if (mysql_error()) trigger_error("MySQL Query Error ".mysql_error(), E_USER_ERROR);
 
-                    $sql_update = "UPDATE incidents SET lastupdated = '{$now}' WHERE id = {$id}";
+                    $sql_update = "UPDATE `{$dbIncidents}` SET lastupdated = '{$now}' WHERE id = {$id}";
                     mysql_query($sql_update);
                     if (mysql_error()) trigger_error("MySQL Query Error ".mysql_error(), E_USER_ERROR);
                 }
 
-                if(!empty($chase_manager))
+                if (!empty($chase_manager))
                 {
-                    $sql_insert = "INSERT INTO updates (incidentid, userid, type, bodytext, timestamp, customervisibility) VALUES ('{$id}','{$sit['2']}','auto_chased_manager','Manager has been called to chase','{$now}','hide')";
+                    $sql_insert = "INSERT INTO `{$dbUpdates}` (incidentid, userid, type, bodytext, timestamp, customervisibility) VALUES ('{$id}','{$sit['2']}','auto_chased_manager','Manager has been called to chase','{$now}','hide')";
                     mysql_query($sql_insert);
                     if (mysql_error()) trigger_error("MySQL Query Error ".mysql_error(), E_USER_ERROR);
 
-                    $sql_update = "UPDATE incidents SET lastupdated = '{$now}' WHERE id = {$id}";
+                    $sql_update = "UPDATE `{$dbIncidents}` SET lastupdated = '{$now}' WHERE id = {$id}";
                     mysql_query($sql_update);
                     if (mysql_error()) trigger_error("MySQL Query Error ".mysql_error(), E_USER_ERROR);
                 }
 
-                if($draftid != -1)
+                if ($draftid != -1)
                 {
-                    $sql = "DELETE FROM drafts WHERE id = {$draftid}";
+                    $sql = "DELETE FROM `{$dbDrafts}` WHERE id = {$draftid}";
                     mysql_query($sql);
                     if (mysql_error()) trigger_error(mysql_error(),E_USER_ERROR);
                 }
@@ -822,17 +859,17 @@ $emailtype|$newincidentstatus|$timetonextaction_none|$timetonextaction_days|$tim
             }
             else
             {
-                include('incident_html_top.inc.php');
+                include ('incident_html_top.inc.php');
                 echo "<p class='error'>Error sending email: $mailerror</p>\n";
-                include('incident_html_bottom.inc.php');
+                include ('incident_html_bottom.inc.php');
             }
         }
         else
         {
             // there were errors
-            include('incident_html_top.inc.php');
+            include ('incident_html_top.inc.php');
             echo $error_string;
-            include('incident_html_bottom.inc.php');
+            include ('incident_html_bottom.inc.php');
         }
     break;
 

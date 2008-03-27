@@ -9,17 +9,17 @@
 //
 // Author: Ivan Lucas <ivanlucas[at]users.sourceforge.net>
 
-@include('set_include_path.inc.php');
-require('db_connect.inc.php');
+@include ('set_include_path.inc.php');
+require ('db_connect.inc.php');
 
 session_name($CONFIG['session_name']);
 session_start();
 if (function_exists('session_regenerate_id')) session_regenerate_id();
-if(!version_compare(phpversion(),"4.3.3",">=")) setcookie(session_name(), session_id(),ini_get("session.cookie_lifetime"), "/");
+if (!version_compare(phpversion(),"4.3.3",">=")) setcookie(session_name(), session_id(),ini_get("session.cookie_lifetime"), "/");
 
 $language = $_POST['lang'];
 
-require('functions.inc.php');
+require ('functions.inc.php');
 
 // External vars
 $password = md5($_REQUEST['password']);
@@ -27,7 +27,7 @@ $username = cleanvar($_REQUEST['username']);
 $public_browser = cleanvar($_REQUEST['public_browser']);
 $page = strip_tags(str_replace('..','',str_replace('//','',str_replace(':','',urldecode($_REQUEST['page'])))));
 
-if(empty($_REQUEST['username']) AND empty($_REQUEST['password']) AND $language != $_SESSION['lang'])
+if (empty($_REQUEST['username']) AND empty($_REQUEST['password']) AND $language != $_SESSION['lang'])
 {
     if ($language!='default')
     {
@@ -45,7 +45,7 @@ elseif (authenticate($username, $password) == 1)
     $_SESSION['auth'] = TRUE;
 
     // Retrieve users profile
-    $sql = "SELECT * FROM users WHERE username='$username' AND password='$password' LIMIT 1";
+    $sql = "SELECT * FROM `{$dbUsers}` WHERE username='$username' AND password='$password' LIMIT 1";
     $result = mysql_query($sql);
     if (mysql_error()) trigger_error(mysql_error(), E_USER_ERROR);
     if (mysql_num_rows($result) < 1) trigger_error("No such user", E_USER_ERROR);
@@ -64,14 +64,14 @@ elseif (authenticate($username, $password) == 1)
     $_SESSION['utcoffset'] = $user->var_utc_offset;
 
     // Delete any old session user notices
-    $sql = "DELETE FROM notices WHERE durability='session' AND userid={$_SESSION['userid']}";
+    $sql = "DELETE FROM `{$dbNotices}` WHERE durability='session' AND userid={$_SESSION['userid']}";
     mysql_query($sql);
     if (mysql_error()) trigger_error(mysql_error(), E_USER_ERROR);
 
     //check if the session lang is different the their profiles
-    if($_SESSION['lang'] != '' AND $_SESSION['lang'] != $user->var_i18n)
+    if ($_SESSION['lang'] != '' AND $_SESSION['lang'] != $user->var_i18n)
     {
-        $sql = "INSERT INTO notices (text, linktext, link, type, userid, durability) ";
+        $sql = "INSERT INTO `{$dbNotices}` (text, linktext, link, type, userid, durability) ";
         $sql .= "VALUES('\$strYourCurrentLanguage', '\$strUseThisInFuture', '{$CONFIG['application_webpath']}edit_profile.php?mode=savesessionlang',  ".USER_LANG_DIFFERS_TYPE.", {$_SESSION['userid']}, 'session') ";
         mysql_query($sql);
         if (mysql_error()) trigger_error(mysql_error(), E_USER_ERROR);
@@ -85,8 +85,8 @@ elseif (authenticate($username, $password) == 1)
     // The zero permission is added to all users, zero means everybody can access
     $userpermissions[] = 0;
     // First lookup the role permissions
-    $sql = "SELECT * FROM users, rolepermissions WHERE users.roleid=rolepermissions.roleid ";
-    $sql .= "AND users.id = '{$_SESSION['userid']}' AND granted='true'";
+    $sql = "SELECT * FROM `{$dbUsers}` AS u, `{$dbRolePermissions}` AS rp WHERE u.roleid = rp.roleid ";
+    $sql .= "AND u.id = '{$_SESSION['userid']}' AND granted='true'";
     $result = mysql_query($sql);
     if (mysql_error()) trigger_error(mysql_error(),E_USER_ERROR);
     if (mysql_num_rows($result) >= 1)
@@ -98,7 +98,7 @@ elseif (authenticate($username, $password) == 1)
     }
 
     // Next lookup the individual users permissions
-    $sql = "SELECT * FROM userpermissions WHERE userid = '{$_SESSION['userid']}' AND granted='true' ";
+    $sql = "SELECT * FROM `{$dbUserPermissions}` WHERE userid = '{$_SESSION['userid']}' AND granted='true' ";
     $result = mysql_query($sql);
     if (mysql_error()) trigger_error(mysql_error(),E_USER_ERROR);
     if (mysql_num_rows($result) >= 1)
@@ -122,12 +122,12 @@ elseif (authenticate($username, $password) == 1)
         exit;
     }
 }
-elseif($CONFIG['portal'] == TRUE)
+elseif ($CONFIG['portal'] == TRUE)
 {
     // Invalid user and portal enabled
     // Have a look if this is a contact trying to login
     $portalpassword = cleanvar($_REQUEST['password']);
-    $sql = "SELECT * FROM contacts WHERE username='{$username}' AND password='{$portalpassword}' LIMIT 1";
+    $sql = "SELECT * FROM `{$dbContacts}` WHERE username='{$username}' AND password='{$portalpassword}' LIMIT 1";
     $result = mysql_query($sql);
     if (mysql_error()) trigger_error(mysql_error(),E_USER_ERROR);
     if (mysql_num_rows($result) >= 1)
@@ -139,6 +139,7 @@ elseif($CONFIG['portal'] == TRUE)
         $_SESSION['portalauth'] = TRUE;
 
         $_SESSION['contactid'] = $contact->id;
+        $_SESSION['siteid'] = $contact->siteid;
         header("Location: portal.php");
         exit;
     }

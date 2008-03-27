@@ -15,37 +15,37 @@ $dashboard_statistics_version = 1;
 
 function dashboard_statistics($row,$dashboardid)
 {
-    global $todayrecent;
+    global $todayrecent, $dbIncidents, $dbKBArticles;
     // Count incidents logged today
-    $sql = "SELECT id FROM incidents WHERE opened > '$todayrecent'";
+    $sql = "SELECT id FROM `{$dbIncidents}` WHERE opened > '$todayrecent'";
     $result = mysql_query($sql);
     if (mysql_error()) trigger_error("MySQL Query Error ".mysql_error(), E_USER_ERROR);
     $todaysincidents=mysql_num_rows($result);
     mysql_free_result($result);
 
     // Count incidents updated today
-    $sql = "SELECT id FROM incidents WHERE lastupdated > '$todayrecent'";
+    $sql = "SELECT id FROM `{$dbIncidents}` WHERE lastupdated > '$todayrecent'";
     $result = mysql_query($sql);
     if (mysql_error()) trigger_error("MySQL Query Error ".mysql_error(), E_USER_ERROR);
     $todaysupdated=mysql_num_rows($result);
     mysql_free_result($result);
 
     // Count incidents closed today
-    $sql = "SELECT id FROM incidents WHERE closed > '$todayrecent'";
+    $sql = "SELECT id FROM `{$dbIncidents}` WHERE closed > '$todayrecent'";
     $result = mysql_query($sql);
     if (mysql_error()) trigger_error("MySQL Query Error ".mysql_error(), E_USER_ERROR);
     $todaysclosed=mysql_num_rows($result);
     mysql_free_result($result);
 
     // count total number of SUPPORT incidents that are open at this time (not closed)
-    $sql = "SELECT id FROM incidents WHERE status!=2 AND status!=9 AND status!=7 AND type='support'";
+    $sql = "SELECT id FROM `{$dbIncidents}` WHERE status!=2 AND status!=9 AND status!=7 AND type='support'";
     $result = mysql_query($sql);
     if (mysql_error()) trigger_error("MySQL Query Error ".mysql_error(), E_USER_ERROR);
     $supportopen=mysql_num_rows($result);
     mysql_free_result($result);
 
         // Count kb articles published today
-    $sql = "SELECT docid FROM kbarticles WHERE published > '".date('Y-m-d')."'";
+    $sql = "SELECT docid FROM `{$dbKBArticles}` WHERE published > '".date('Y-m-d')."'";
     $result = mysql_query($sql);
     if (mysql_error()) trigger_error("MySQL Query Error ".mysql_error(), E_USER_ERROR);
     $kbpublished=mysql_num_rows($result);

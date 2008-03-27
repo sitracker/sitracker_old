@@ -10,13 +10,13 @@
 
 // Author: Kieran Hogg <kieran_hogg[at]users.sourceforge.net>
 
-@include('set_include_path.inc.php');
-$permission=0; // not required
-require('db_connect.inc.php');
-require('functions.inc.php');
+@include ('set_include_path.inc.php');
+$permission = 0; // not required
+require ('db_connect.inc.php');
+require ('functions.inc.php');
 
-require('auth.inc.php');
-include('htmlheader.inc.php');
+require ('auth.inc.php');
+include ('htmlheader.inc.php');
 
 $i18npath = '../includes/i18n/';
 
@@ -69,7 +69,7 @@ $languages = array('ar' => 'Arabic',
                    'zh-CN' => 'Chinese (Simplified)'
                   );
 
-if(!$_REQUEST['mode'])
+if (!$_REQUEST['mode'])
 {
     echo "<h2>{$strTranslation}</h2>";
     echo "<div align='center'><p>{$strHelpToTranslate}</p>";
@@ -87,7 +87,7 @@ if(!$_REQUEST['mode'])
     echo "<input type='submit' value='$strTranslate' />";
     echo "</form></div>\n";
 }
-elseif($_REQUEST['mode'] == "show")
+elseif ($_REQUEST['mode'] == "show")
 {
     //open english file
     $englishfile = "{$i18npath}/en-GB.inc.php";
@@ -97,7 +97,7 @@ elseif($_REQUEST['mode'] == "show")
     $lines = explode("\n", $theData);
     $langstrings['en-GB'];
     $englishvalues = array();
-    foreach($lines as $values)
+    foreach ($lines as $values)
     {
         $badchars = array("$", "\"", "\\", "<?php", "?>");
         $values = trim(str_replace($badchars, '', $values));
@@ -109,7 +109,7 @@ elseif($_REQUEST['mode'] == "show")
         $vars[0] = trim($vars[0]);
         $vars[1] = trim($vars[1]);
 
-        if(substr($vars[0], 0, 3) == "str")
+        if (substr($vars[0], 0, 3) == "str")
         {
             //remove leading and trailing quotation marks
             $vars[1] = substr_replace($vars[1], "",-2);
@@ -122,9 +122,9 @@ elseif($_REQUEST['mode'] == "show")
         }
         else
         {
-            if(substr($values, 0, 4) == "lang")
+            if (substr($values, 0, 4) == "lang")
                 $languagestring=$values;
-            if(substr($values, 0, 4) == "i18n")
+            if (substr($values, 0, 4) == "i18n")
                 $i18ncharset=$values;
         }
         $lastkey = $vars[0];
@@ -143,11 +143,11 @@ elseif($_REQUEST['mode'] == "show")
         fclose($fh);
         $lines = explode("\n", $theData);
         //print_r($lines);
-        foreach($lines as $values)
+        foreach ($lines as $values)
         {
             $badchars = array("$", "\"", "\\", "<?php", "?>");
             $values = trim(str_replace($badchars, '', $values));
-            if(substr($values, 0, 3) == "str")
+            if (substr($values, 0, 3) == "str")
             {
                 $vars = explode("=", $values);
                 $vars[0] = trim($vars[0]);
@@ -163,7 +163,7 @@ elseif($_REQUEST['mode'] == "show")
     echo "<table align='center'><tr><th>{$strVariable}</th><th>en-GB ({$strEnglish})</th><th>{$_REQUEST['lang']}</th></tr>";
 
     $shade = 'shade1';
-    foreach(array_keys($englishvalues) as $key)
+    foreach (array_keys($englishvalues) as $key)
     {
         if ($_REQUEST['lang']=='zz') $foreignvalues[$key] = $key;
         echo "<tr class='$shade'><td><label for=\"{$key}\"><code>{$key}</code></td><td><input name='english_{$key}' value=\"".htmlentities($englishvalues[$key], ENT_QUOTES, 'UTF-8')."\" size=\"45\" readonly='readonly' /></td>";
@@ -179,7 +179,7 @@ elseif($_REQUEST['mode'] == "show")
 
     echo "</form>\n";
 }
-elseif($_REQUEST['mode'] == "save")
+elseif ($_REQUEST['mode'] == "save")
 {
     $lang = cleanvar($_REQUEST['lang']);
     $origcount = cleanvar($_REQUEST['origcount']);
@@ -194,9 +194,9 @@ elseif($_REQUEST['mode'] == "save")
 
     $lastchar='';
     $translatedcount=0;
-    foreach(array_keys($_POST) as $key)
+    foreach (array_keys($_POST) as $key)
     {
-        if(!empty($_POST[$key]) AND substr($key, 0, 3) == "str")
+        if (!empty($_POST[$key]) AND substr($key, 0, 3) == "str")
         {
             if ($lastchar!='' AND substr($key, 3, 1) != $lastchar) $i18nfile .= "\n";
             $i18nfile .= "\${$key} = '".addslashes($_POST[$key])."';\n";
@@ -215,5 +215,5 @@ else
 {
     die('Invalid mode');
 }
-include('htmlfooter.inc.php');
+include ('htmlfooter.inc.php');
 ?>

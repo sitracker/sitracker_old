@@ -9,14 +9,14 @@
 //
 // Author: Ivan Lucas <ivanlucas[at]users.sourceforge.net>
 
-@include('set_include_path.inc.php');
-$permission=27; /* View your calendar */
-require('db_connect.inc.php');
-require('functions.inc.php');
-$title="Holiday Request";
+@include ('set_include_path.inc.php');
+$permission = 27; /* View your calendar */
+require ('db_connect.inc.php');
+require ('functions.inc.php');
+$title = "Holiday Request";
 
 // This page requires authentication
-require('auth.inc.php');
+require ('auth.inc.php');
 
 // External variables
 $user = cleanvar($_REQUEST['user']);
@@ -27,7 +27,7 @@ $type = cleanvar($_REQUEST['type']);
 $memo = cleanvar($_REQUEST['memo']);
 $approvaluser = cleanvar($_REQUEST['approvaluser']);
 
-include('htmlheader.inc.php');
+include ('htmlheader.inc.php');
 
 function display_holiday_table($result)
 {
@@ -136,7 +136,7 @@ if (!$sent)
         echo "<p align='center'><a href='holiday_request.php?user=all&amp;mode=approval'>{$strShowAll}</a></p>";
     }
 
-    $sql = "SELECT * FROM holidays WHERE approved=0 ";
+    $sql = "SELECT * FROM `{$dbHolidays}` WHERE approved=0 ";
     if (!empty($type)) $sql .= "AND type='$type' ";
     if ($mode != 'approval' || $user != 'all') $sql.="AND userid='$user' ";
     if ($approver == TRUE && $mode == 'approval') $sql .= "AND approvedby={$sit[2]} ";
@@ -156,11 +156,12 @@ if (!$sent)
         {
             $groupid = user_group_id($sit[2]);
             // extract users (only show users with permission to approve that are not disabled accounts)
-            $sql  = "SELECT DISTINCT id, realname, accepting, groupid FROM users, userpermissions, rolepermissions ";
-            $sql .= "WHERE users.id=userpermissions.userid AND users.roleid=rolepermissions.roleid ";
-            $sql .= "AND (userpermissions.permissionid=50 AND userpermissions.granted='true' OR ";
-            $sql .= "rolepermissions.permissionid=50 AND rolepermissions.granted='true') ";
-            $sql .= "AND users.id != {$sit[2]} AND users.status > 0 ORDER BY realname ASC";
+            $sql  = "SELECT DISTINCT id, realname, accepting, groupid ";
+            $sql .= "FROM `{$dbUsers}` AS u, `{$dbUserPermissions}` AS up, `{$dbRolePermissions}` AS rp ";
+            $sql .= "WHERE u.id = up.userid AND u.roleid = rp.roleid ";
+            $sql .= "AND (up.permissionid = 50 AND up.granted = 'true' OR ";
+            $sql .= "rp.permissionid = 50 AND rp.granted = 'true') ";
+            $sql .= "AND u.id != {$sit[2]} AND u.status > 0 ORDER BY realname ASC";
             $result = mysql_query($sql);
             if (mysql_error()) trigger_error(mysql_error(),E_USER_ERROR);
             $numapprovers = mysql_num_rows($result);
@@ -232,7 +233,7 @@ else
     }
     else
     {
-        $sql = "SELECT * FROM holidays WHERE approved=0 ";
+        $sql = "SELECT * FROM `{$dbHolidays}` WHERE approved=0 ";
         if ($action!='resend') $sql .= "AND approvedby=0 ";
         if ($user!='all' || $approver==FALSE) $sql .= "AND userid='{$user}' ";
         $sql .= "ORDER BY startdate, length";
@@ -263,7 +264,7 @@ else
             $bodytext .= "to approve or decline these requests."; //FIXME i18n
         }
         // Mark the userid of the person who will approve the request so that they can see them
-        $sql = "UPDATE holidays SET approvedby='{$approvaluser}' WHERE userid='{$user}' AND approved=0";
+        $sql = "UPDATE `{$dbHolidays}` SET approvedby='{$approvaluser}' WHERE userid='{$user}' AND approved=0";
         mysql_query($sql);
         if (mysql_error()) trigger_error(mysql_error(),E_USER_ERROR);
 
@@ -287,5 +288,5 @@ else
     }
     echo "<p align='center'><a href='holidays.php?user={$user}'>{$strMyHolidays}</p></p>";
 }
-include('htmlfooter.inc.php');
+include ('htmlfooter.inc.php');
 ?>

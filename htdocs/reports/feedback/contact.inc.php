@@ -10,20 +10,11 @@
 
 // Author: Ivan Lucas <ivanlucas[at]users.sourceforge.net>
 // Hacked: Tom Gerrard <tom.gerrard[at]salfordsoftware.co.uk>
+// Converted: Paul Heaney <paulheaney[at]users.sourceforge.net>
 
-@include('../set_include_path.inc.php');
-$permission=37; // Run Reports
-
-require('db_connect.inc.php');
-require('functions.inc.php');
-
-// This page requires authentication
-require('auth.inc.php');
-
-include('htmlheader.inc.php');
 
 $maxscore = $CONFIG['feedback_max_score'];
-$formid=$CONFIG['feedback_form'];
+$formid = $CONFIG['feedback_form'];
 $now = time();
 
 echo "<script type='text/javascript'>";
@@ -37,10 +28,11 @@ function incident_details_window(incidentid,win)
 echo "</script>";
 echo "<div style='margin: 20px'>";
 echo "<h2><a href='{$CONFIG['application_webpath']}reports/feedback.php'>Feedback</a> Scores: By Contact</h2>";
+echo feedback_between_dates();
 echo "<p>This report shows customer responses and a percentage figure indicating the overall positivity of customers toward ";
 echo "incidents logged by the user(s) shown:</p>";
 
-$qsql = "SELECT * FROM feedbackquestions WHERE formid='{$formid}' AND type='rating' ORDER BY taborder";
+$qsql = "SELECT * FROM `{$dbFeedbackQuestions}` WHERE formid='{$formid}' AND type='rating' ORDER BY taborder";
 $qresult = mysql_query($qsql);
 if (mysql_error()) trigger_error(mysql_error(), E_USER_ERROR);
 while ($qrow = mysql_fetch_object($qresult))
@@ -49,25 +41,54 @@ while ($qrow = mysql_fetch_object($qresult))
 }
 
 
-$msql = "SELECT *, closingstatus.name AS closingstatusname, sites.name AS sitename, sites.id as siteid, (incidents.closed - incidents.opened) AS duration, \n";
-$msql .= "feedbackrespondents.id AS reportid, contacts.id AS contactid ";
-$msql .= "FROM feedbackrespondents, incidents, contacts, sites, closingstatus WHERE feedbackrespondents.incidentid=incidents.id \n";
-$msql .= "AND incidents.contact=contacts.id ";
-$msql .= "AND contacts.siteid=sites.id ";
-$msql .= "AND incidents.closingstatus=closingstatus.id ";
-$msql .= "AND feedbackrespondents.incidentid > 0 \n";
-$msql .= "AND feedbackrespondents.completed = 'yes' \n";
-if (!empty($id)) $msql .= "AND incidents.contact='$id' \n";
-else $msql .= "ORDER BY contacts.surname ASC, contacts.forenames ASC, incidents.contact ASC , incidents.id ASC \n";
+$msql = "SELECT *, cs.name AS closingstatusname, s.name AS sitename, s.id as siteid, (i.closed - i.opened) AS duration, \n";
+$msql .= "fr.id AS reportid, c.id AS contactid ";
+$msql .= "FROM `{$dbFeedbackRespondents}` AS fr, `{$dbIncidents}` AS i, `{$dbContacts}` AS c, `{$dbSites}` AS s, `{$dbClosingStatus}` AS cs WHERE fr.incidentid = i.id \n";
+$msql .= "AND i.contact = c.id ";
+$msql .= "AND c.siteid = s.id ";
+$msql .= "AND i.closingstatus = cs.id ";
+$msql .= "AND fr.incidentid > 0 \n";
+$msql .= "AND fr.completed = 'yes' \n";
+
+if (!empty($startdate))
+{
+    if ($dates == 'feedbackin')
+    {
+        $msql .= "AND fr.created >= '{$startdate}' ";
+    }
+    elseif ($dates == 'closedin')
+    {
+        $msql .= "AND i.closed >= '{$startdate}' ";
+    }
+    
+    //echo "DATES {$dates}";
+}
+
+if (!empty($enddate))
+{
+    if ($dates == 'feedbackin')
+    {
+        $msql .= "AND fr.created <= '{$enddate}' ";
+    }
+    elseif ($dates == 'closedin')
+    {
+        $msql .= "AND i.closed <= '{$enddate}' ";
+    }
+}
+
+if (!empty($id)) $msql .= "AND i.contact='$id' \n";
+else $msql .= "ORDER BY c.surname ASC, c.forenames ASC, i.contact ASC , i.id ASC \n";
 $mresult = mysql_query($msql);
 if (mysql_error()) trigger_error(mysql_error(), E_USER_ERROR);
 
 if (mysql_num_rows($mresult) >= 1)
 {
-    $prevcontactid=0;
-    $countcontacts=0;
+    $prevcontactid = 0;
+    $countcontacts = 0;
     for ($i = 0; $i <= 10; $i++)
+    {
       $counter[$i] = 0;
+    }
 
     $surveys=0;
     if ($CONFIG['debug']) echo "<h4>$msql</h4>";
@@ -125,43 +146,98 @@ if (mysql_num_rows($mresult) >= 1)
         $numquestions=0;
         $surveys++;
         $html = "<h4 style='text-align: left;'><a href='../contact_details.php?id={$mrow->contactid}' title='Jump to Contact'>{$mrow->forenames} {$mrow->surname}</a>, <a href='../site_details.php?id={$mrow->siteid}&action=show' title='Jump to site'>{$mrow->sitename}</a></h4>";
-        $csql = "SELECT * FROM feedbackquestions WHERE formid='{$formid}' AND type='text' ORDER BY id DESC";
+        $csql = "SELECT * FROM `{$dbFeedbackQuestions}` WHERE formid='{$formid}' AND type='text' ORDER BY id DESC";
         $cresult = mysql_query($csql);
         if (mysql_error()) trigger_error(mysql_error(), E_USER_ERROR);
         $crow = mysql_fetch_object($cresult);
         $textquestion = $crow->id;
-        $csql = "SELECT distinct incidents.id as incidentid, result, incidents.title as title FROM feedbackrespondents, incidents, users, feedbackresults
-                WHERE feedbackrespondents.incidentid=incidents.id
-                AND incidents.owner=users.id
-                AND feedbackrespondents.id=feedbackresults.respondentid
-                AND feedbackresults.questionid='$textquestion'
-                AND feedbackrespondents.id='$mrow->reportid'
-                ORDER BY incidents.contact, incidents.id";
+        $csql = "SELECT DISTINCT i.id as incidentid, result, i.title as title
+                 FROM `{$dbFeedbackRespondents}` AS fr, `{$dbIncidents}` AS i, `{$dbUsers}` AS u, `{$dbFeedbackResults}` AS r
+                 WHERE fr.incidentid = i.id
+                 AND i.owner = u.id
+                 AND fr.id = r.respondentid
+                 AND r.questionid = '$textquestion'
+                 AND fr.id = '$mrow->reportid' ";
+        if (!empty($startdate))
+        {
+            if ($dates == 'feedbackin')
+            {
+                $csql .= "AND fr.created >= '{$startdate}' ";
+            }
+            elseif ($dates == 'closedin')
+            {
+                $csql .= "AND i.closed >= '{$startdate}' ";
+            }
+            
+            //echo "DATES {$dates}";
+        }
+        
+        if (!empty($enddate))
+        {
+            if ($dates == 'feedbackin')
+            {
+                $csql .= "AND fr.created <= '{$enddate}' ";
+            }
+            elseif ($dates == 'closedin')
+            {
+                $csql .= "AND i.closed <= '{$enddate}' ";
+            }
+        }
+        $csql .= "ORDER BY i.contact, i.id";
         $cresult = mysql_query($csql);
 
         if (mysql_error()) trigger_error(mysql_error(), E_USER_ERROR);
 
-        while ($crow = mysql_fetch_object($cresult)){
-          if ($crow->result != "")
-            $html.= "<p>{$crow->result}<br /><em><a href=\"javascript:incident_details_window(\'{$crow->incidentid}\',\'incident35393\')\">{$crow->incidentid}</a> {$crow->title}</em></p>";
+        while ($crow = mysql_fetch_object($cresult))
+        {
+            if ($crow->result != "")
+            {
+                $html.= "<p>{$crow->result}<br /><em><a href=\"javascript:incident_details_window(\'{$crow->incidentid}\',\'incident35393\')\">{$crow->incidentid}</a> {$crow->title}</em></p>";
+            }
         }
 
-        $qsql = "SELECT * FROM feedbackquestions WHERE formid='{$formid}' AND type='rating' ORDER BY taborder";
+        $qsql = "SELECT * FROM `{$dbFeedbackQuestions}` WHERE formid='{$formid}' AND type='rating' ORDER BY taborder";
         $qresult = mysql_query($qsql);
 
         if (mysql_error()) trigger_error(mysql_error(), E_USER_ERROR);
         while ($qrow = mysql_fetch_object($qresult))
         {
             $numquestions++;
-            $sql = "SELECT * FROM feedbackrespondents, incidents, users, feedbackresults ";
-            $sql .= "WHERE feedbackrespondents.incidentid=incidents.id ";
-            $sql .= "AND incidents.owner=users.id ";
-            $sql .= "AND feedbackrespondents.id=feedbackresults.respondentid ";
-            $sql .= "AND feedbackresults.questionid='$qrow->id' ";
-            $sql .= "AND feedbackrespondents.id='$mrow->reportid' ";
-            $sql .= "ORDER BY incidents.contact, incidents.id";
+            $sql = "SELECT * FROM `{$dbFeedbackRespondents}` AS fr, `{$dbIncidents}` AS i, `{$dbUsers}` AS u, `{$dbFeedbackResults}` AS r ";
+            $sql .= "WHERE fr.incidentid = i.id ";
+            $sql .= "AND i.owner = u.id ";
+            $sql .= "AND fr.id = r.respondentid ";
+            $sql .= "AND r.questionid = '$qrow->id' ";
+            $sql .= "AND fr.id = '$mrow->reportid' ";
+            
+            if (!empty($startdate))
+            {
+                if ($dates == 'feedbackin')
+                {
+                    $sql .= "AND fr.created >= '{$startdate}' ";
+                }
+                elseif ($dates == 'closedin')
+                {
+                    $sql .= "AND i.closed >= '{$startdate}' ";
+                }
+                
+                //echo "DATES {$dates}";
+            }
+            
+            if (!empty($enddate))
+            {
+                if ($dates == 'feedbackin')
+                {
+                    $sql .= "AND fr.created <= '{$enddate}' ";
+                }
+                elseif ($dates == 'closedin')
+                {
+                    $sql .= "AND i.closed <= '{$enddate}' ";
+                }
+            }
+            
+            $sql .= "ORDER BY i.contact, i.id";
             $result = mysql_query($sql);
-
             if (mysql_error()) trigger_error(mysql_error(), E_USER_ERROR);
             $numresults=0;
             $cumul=0;
@@ -222,5 +298,5 @@ else
 }
 
 echo "</div>\n";
-include('htmlfooter.inc.php');
+
 ?>

@@ -12,20 +12,20 @@
 
 // This Page Is Valid XHTML 1.0 Transitional!   31Oct05
 
-@include('set_include_path.inc.php');
-$permission=55; // Delete Sites/Contacts
+@include ('set_include_path.inc.php');
+$permission = 55; // Delete Sites/Contacts
 
-require('db_connect.inc.php');
-require('functions.inc.php');
+require ('db_connect.inc.php');
+require ('functions.inc.php');
 // This page requires authentication
-require('auth.inc.php');
+require ('auth.inc.php');
 
 // External variables
 $process = $_REQUEST['process'];
 $id = cleanvar($_REQUEST['id']);
 $newcontact = mysql_real_escape_string($_REQUEST['newcontact']);
 
-include('htmlheader.inc.php');
+include ('htmlheader.inc.php');
 if (empty($process))
 {
     if (empty($id))
@@ -51,7 +51,7 @@ if (empty($process))
         </script>
         <?php
         echo "<h2>Delete Contact</h2>\n";
-        $sql="SELECT * FROM contacts WHERE id='$id' ";
+        $sql="SELECT * FROM `{$dbContacts}` WHERE id='$id' ";
         $contactresult = mysql_query($sql);
         if (mysql_error()) trigger_error("MySQL Query Error ".mysql_error(), E_USER_ERROR);
         while ($contactrow=mysql_fetch_array($contactresult))
@@ -73,10 +73,10 @@ if (empty($process))
         {
             echo "<p align='center' class='error'>There are $totalincidents incidents assigned to this contact</p>";
         }
-        $sql  = "SELECT supportcontacts.maintenanceid AS maintenanceid, maintenance.product, products.name AS productname, ";
-        $sql .= "maintenance.expirydate, maintenance.term ";
-        $sql .= "FROM supportcontacts, maintenance, products ";
-        $sql .= "WHERE supportcontacts.maintenanceid=maintenance.id AND maintenance.product=products.id AND supportcontacts.contactid='$id' ";
+        $sql  = "SELECT sc.maintenanceid AS maintenanceid, m.product, p.name AS productname, ";
+        $sql .= "m.expirydate, m.term ";
+        $sql .= "FROM `{$dbSupportContacts}` AS sc, `{$dbMaintenance}` AS m, `{$dbProducts}` AS p ";
+        $sql .= "WHERE sc.maintenanceid = m.id AND m.product = p.id AND sc.contactid = '$id' ";
         $result=mysql_query($sql);
         if (mysql_error()) trigger_error("MySQL Query Error ".mysql_error(), E_USER_ERROR);
         $totalcontracts=mysql_num_rows($result);
@@ -89,7 +89,7 @@ if (empty($process))
         {
             echo "<form action='{$_SERVER['PHP_SELF']}' method='post'>\n";
             echo "<p align='center'>Before you can delete you must select another contact to receive any incidents and/or maintenance contracts.</p>";
-            $sql  = "SELECT id, forenames, surname, siteid FROM contacts ORDER BY surname ASC";
+            $sql  = "SELECT id, forenames, surname, siteid FROM `{$dbContacts}` ORDER BY surname ASC";
             $result = mysql_query($sql);
             echo "<p align='center'>";
             echo "<select name='newcontact'>";
@@ -131,28 +131,28 @@ if (empty($process))
             echo "</form>\n";
         }
     }
-    include('htmlfooter.inc.php');
+    include ('htmlfooter.inc.php');
 }
 else
 {
     // save to db
     if (!empty($newcontact))
     {
-        $sql = "UPDATE supportcontacts SET contactid='{$newcontact}' WHERE contactid='{$id}' ";
+        $sql = "UPDATE `{$dbSupportContacts}` SET contactid='$newcontact' WHERE contactid='$id' ";
         mysql_query($sql);
         if (mysql_error()) trigger_error("MySQL Query Error ".mysql_error(), E_USER_ERROR);
 
-        $sql = "UPDATE incidents SET contact='{$newcontact}' WHERE contact='{$id}' ";
+        $sql = "UPDATE `{$dbIncidents}` SET contact='$newcontact' WHERE contact='$id' ";
         mysql_query($sql);
         if (mysql_error()) trigger_error("MySQL Query Error ".mysql_error(), E_USER_ERROR);
 
-        $sql = "UPDATE maintenance SET admincontact='{$newcontact}' WHERE admincontact='{$id}' ";
+        $sql = "UPDATE `{$dbMaintenance}` SET admincontact='$newcontact' WHERE admincontact='$id' ";
         mysql_query($sql);
         if (mysql_error()) trigger_error("MySQL Query Error ".mysql_error(), E_USER_ERROR);
     }
 
     // do the delete
-    $sql = "DELETE FROM contacts WHERE id='$id' LIMIT 1";
+    $sql = "DELETE FROM `{$dbContacts}` WHERE id='$id' LIMIT 1";
     mysql_query($sql);
     if (mysql_error()) trigger_error("MySQL Query Error ".mysql_error(), E_USER_ERROR);
 

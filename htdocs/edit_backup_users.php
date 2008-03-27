@@ -12,9 +12,9 @@
 // Author: Ivan Lucas <ivanlucas[at]users.sourceforge.net>
 
 // This Page Is Valid XHTML 1.0 Transitional!   3Nov05
-@include('set_include_path.inc.php');
-require('db_connect.inc.php');
-require('functions.inc.php');
+@include ('set_include_path.inc.php');
+require ('db_connect.inc.php');
+require ('functions.inc.php');
 
 if (empty($_REQUEST['user'])
     OR $_REQUEST['user']=='current'
@@ -29,7 +29,7 @@ else
 }
 
 // This page requires authentication
-require('auth.inc.php');
+require ('auth.inc.php');
 
 // Valid user with Permission
 // External variables
@@ -50,7 +50,7 @@ if (empty($save))
     $default = cleanvar($_REQUEST['default']);
     $softlist = $_REQUEST['softlist'];
 
-    include('htmlheader.inc.php');
+    include ('htmlheader.inc.php');
     echo "<h2>".sprintf($strDefineSubstituteEngineersFor, user_realname($user,TRUE))."</h2>\n";
     echo "<form name='def' action='{$_SERVER['PHP_SELF']}' method='post'>";
     echo "<input type='hidden' name='user' value='{$user}' />";
@@ -59,7 +59,8 @@ if (empty($save))
     echo "</p>";
     echo "</form>";
 
-    $sql = "SELECT * FROM usersoftware, software WHERE usersoftware.softwareid=software.id AND userid='{$user}' ORDER BY name";
+    $sql = "SELECT * FROM `{$dbUserSoftware}` AS us, `{$dbSoftware}` AS s ";
+    $sql .= "WHERE us.softwareid = s.id AND userid='{$user}' ORDER BY name";
     $result = mysql_query($sql);
     $countsw = mysql_num_rows($result);
     
@@ -97,7 +98,7 @@ if (empty($save))
     {
         echo "<h5 class='error'>{$strNoResults}</h5>";
     }
-    include('htmlfooter.inc.php');
+    include ('htmlfooter.inc.php');
 }
 else
 {
@@ -107,7 +108,7 @@ else
     $user=cleanvar($_REQUEST['user']);
     foreach ($backup AS $key=>$backupid)
     {
-        $sql = "UPDATE usersoftware SET backupid='$backupid' WHERE userid='$user' AND softwareid='{$softlist[$key]}' LIMIT 1 ";
+        $sql = "UPDATE `{$dbUserSoftware}` SET backupid='$backupid' WHERE userid='$user' AND softwareid='{$softlist[$key]}' LIMIT 1 ";
         // echo "{$softlist[$key]} -- $key -- $value<br />";
         //echo "$sql <br />";
         mysql_query($sql);

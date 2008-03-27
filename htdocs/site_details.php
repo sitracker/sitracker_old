@@ -12,18 +12,18 @@
 // Created: 9th March 2001
 // This Page Is Valid XHTML 1.0 Transitional! 27Oct05
 
-@include('set_include_path.inc.php');
-$permission=11; // View Sites
-require('db_connect.inc.php');
-require('functions.inc.php');
+@include ('../set_include_path.inc.php');
+$permission = 11; // View Sites
+require ('db_connect.inc.php');
+require ('functions.inc.php');
 
 // This page requires authentication
-require('auth.inc.php');
+require ('auth.inc.php');
 
 // External variables
-$id=cleanvar($_REQUEST['id']);
+$id = cleanvar($_REQUEST['id']);
 
-include('htmlheader.inc.php');
+include ('htmlheader.inc.php');
 
 if ($id=='')
 {
@@ -33,7 +33,7 @@ if ($id=='')
 
 // Display site
 echo "<table align='center' class='vertical'>";
-$sql="SELECT * FROM sites WHERE id='$id' ";
+$sql="SELECT * FROM `{$dbSites}` WHERE id='$id' ";
 $siteresult = mysql_query($sql);
 if (mysql_error()) trigger_error(mysql_error(),E_USER_WARNING);
 while ($siterow = mysql_fetch_array($siteresult))
@@ -50,7 +50,7 @@ while ($siterow = mysql_fetch_array($siteresult))
     {
         echo "<tr><th>{$strTags}:</th><td>{$tags}</td></tr>";
     }
-    
+
     echo "<tr><th>{$strDepartment}:</th><td>{$siterow['department']}</td></tr>";
     echo "<tr><th>{$strAddress1}:</th><td>{$siterow['address1']}</td></tr>";
     echo "<tr><th>{$strAddress2}:</th><td>{$siterow['address2']}</td></tr>";
@@ -66,12 +66,17 @@ while ($siterow = mysql_fetch_array($siteresult))
     {
         echo "<a href=\"{$siterow['websiteurl']}\">{$siterow['websiteurl']}</a>";
     }
-    
+
     echo "</td></tr>";
     echo "<tr><th>{$strNotes}:</th><td>".nl2br($siterow['notes'])."</td></tr>";
     echo "<tr><td colspan='2'>&nbsp;</td></tr>";
     echo "<tr><th>{$strIncidents}:</th><td><a href=\"contact_support.php?id=".$siterow['id']."&amp;mode=site\">{$strSeeHere}</a></td></tr>";
     echo "<tr><th>{$strActivities}:</th><td>".open_activities_for_site($siterow['id'])." <a href='tasks.php?siteid={$siterow['id']}'>{$strSeeHere}</a></td></tr>";
+    $billableunits = billable_units_site($siterow['id'], $now-2678400); // Last 31 days
+    if ($billableunits > 0)
+    {
+        echo "<tr><th>Units used in last 31 days:</th><td>{$billableunits}</td></tr>"; // More appropriate label
+    }
     echo "<tr><th>Site Incident Pool:</th><td>{$siterow['freesupport']} Incidents remaining</td></tr>"; // FIXME i18n
     echo "<tr><th>{$strSalesperson}:</th><td>";
     if ($siterow['owner'] >= 1)
@@ -82,7 +87,7 @@ while ($siterow = mysql_fetch_array($siteresult))
     {
         echo $strNotSet;
     }
-    
+
     echo "</td></tr>\n";
 }
 
@@ -98,7 +103,8 @@ echo "</p>";
 echo "<h3>{$strContacts}</h3>";
 
 // List Contacts
-$sql = "SELECT * FROM contacts WHERE siteid='{$id}' ORDER BY surname, forenames";
+
+$sql="SELECT * FROM `{$dbContacts}` WHERE siteid='{$id}' ORDER BY surname, forenames";
 $contactresult = mysql_query($sql);
 if (mysql_error()) trigger_error("MySQL Query Error ".mysql_error(), E_USER_ERROR);
 
@@ -111,9 +117,9 @@ if ($countcontacts > 0)
     echo "<th>{$strDepartment}</th><th>{$strTelephone}</th>";
     echo "<th>{$strEmail}</th><th>{$strAddress}</th>";
     echo "<th>{$strDataProtection}</th><th>{$strNotes}</th></tr>";
-    
+
     $shade = 'shade1';
-    
+
     while ($contactrow = mysql_fetch_array($contactresult))
     {
         if ($contactrow['active'] == 'false') $shade='expired';
@@ -130,7 +136,7 @@ if ($countcontacts > 0)
         {
             echo "<td><strong>{$strWithheld}</strong></td>";
         }
-        
+
         if ($contactrow['dataprotection_email'] != 'Yes')
         {
             echo "<td>{$contactrow['email']}</td>";
@@ -139,7 +145,7 @@ if ($countcontacts > 0)
         {
             echo "<td><strong>{$strWithheld}</strong></td>";
         }
-        
+
         if ($contactrow['dataprotection_address'] != 'Yes')
         {
             echo "<td>";
@@ -155,17 +161,17 @@ if ($countcontacts > 0)
         {
             echo "<strong>{$strNoEmail}</strong>, ";
         }
-        
+
         if ($contactrow['dataprotection_phone'] == 'Yes')
         {
             echo "<strong>{$strNoCalls}</strong>, ";
         }
-        
+
         if ($contactrow['dataprotection_address'] == 'Yes')
         {
             echo "<strong>{$strNoPost}</strong>";
         }
-            
+
         echo "</td>";
         echo "<td>".nl2br(substr($contactrow['notes'], 0, 500))."</td>";
         echo "</tr>";
@@ -187,19 +193,14 @@ if (user_permission($sit[2],19)) // View contracts
     echo "<h3>{$strContracts}<a id='contracts'></a></h3>";
 
     // Display contracts
-    /*$sql  = "SELECT maintenance.id AS maintid, maintenance.term AS term, products.name AS product, resellers.name AS reseller, licence_quantity, licencetypes.name AS licence_type, expirydate, admincontact, contacts.forenames AS admincontactsforenames, contacts.surname AS admincontactssurname, maintenance.notes AS maintnotes ";
-    $sql .= "FROM maintenance, contacts, products, licencetypes, resellers ";
-    $sql .= "WHERE maintenance.product=products.id AND (maintenance.reseller=resellers.id OR reseller IS NULL) ";
-    $sql .= "AND (licence_type=licencetypes.id OR licence_type IS NULL) ";
-    $sql .= "AND admincontact=contacts.id AND maintenance.site = '$id' ";
-    $sql .= "ORDER BY expirydate DESC";*/
-
-    $sql  = "SELECT maintenance.id AS maintid, maintenance.term AS term, products.name AS product, resellers.name AS reseller, licence_quantity, licencetypes.name AS licence_type, expirydate, admincontact, contacts.forenames AS admincontactsforenames, contacts.surname AS admincontactssurname, maintenance.notes AS maintnotes ";
-    $sql .= "FROM contacts, products, maintenance ";
-    $sql .= "LEFT JOIN licencetypes ON maintenance.licence_type=licencetypes.id ";
-    $sql .= "LEFT JOIN resellers ON resellers.id = maintenance.reseller ";
-    $sql .= "WHERE maintenance.product=products.id ";
-    $sql .= "AND admincontact=contacts.id AND maintenance.site = '{$id}' ";
+    $sql  = "SELECT m.id AS maintid, m.term AS term, p.name AS product, r.name AS reseller, ";
+    $sql .= "licence_quantity, lt.name AS licence_type, expirydate, admincontact, ";
+    $sql .= "c.forenames AS admincontactsforenames, c.surname AS admincontactssurname, m.notes AS maintnotes ";
+    $sql .= "FROM `{$dbContacts}` AS c, `{$dbProducts}` AS p, `{$dbMaintenance}` AS m ";
+    $sql .= "LEFT JOIN `{$dbLicenceTypes}` AS lt ON m.licence_type = lt.id ";
+    $sql .= "LEFT JOIN `{$dbResellers}` AS r ON r.id = m.reseller ";
+    $sql .= "WHERE m.product = p.id ";
+    $sql .= "AND admincontact = c.id AND m.site = '{$id}' ";
     $sql .= "ORDER BY expirydate DESC";
 
     // connect to database and execute query
@@ -277,7 +278,7 @@ if (user_permission($sit[2],19)) // View contracts
 
             echo "</td>";
             echo "<td class='{$class}'>".ldate($CONFIG['dateformat_date'], $results['expirydate'])."</td>";
-            echo "<td class='{$class}'>{$results['admincontactsforenames']} {$results['admincontactssurname']}></td>";
+            echo "<td class='{$class}'>{$results['admincontactsforenames']}  {$results['admincontactssurname']}</td>";
             echo "<td class='{$class}'>";
             if ($results['maintnotes'] == '')
             {
@@ -299,6 +300,6 @@ if (user_permission($sit[2],19)) // View contracts
     echo "<p align='center'><a href='add_contract.php?action=showform&amp;siteid=$id'>{$strAddContract}</a></p>";
 }
 
-include('htmlfooter.inc.php');
+include ('htmlfooter.inc.php');
 
 ?>

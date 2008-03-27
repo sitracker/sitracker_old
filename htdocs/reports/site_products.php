@@ -8,18 +8,18 @@
 // of the GNU General Public License, incorporated herein by reference.
 //
 
-@include('../set_include_path.inc.php');
-$permission=37; // Run Reports
+@include ('../set_include_path.inc.php');
+$permission = 37; // Run Reports
 $title = $strSiteProducts;
-require('db_connect.inc.php');
-require('functions.inc.php');
+require ('db_connect.inc.php');
+require ('functions.inc.php');
 
 // This page requires authentication
-require('auth.inc.php');
+require ('auth.inc.php');
 
 if (empty($_REQUEST['mode']))
 {
-    include('htmlheader.inc.php');
+    include ('htmlheader.inc.php');
     echo "<h2>{$title}</h2>";
     echo "<form action='{$_SERVER['PHP_SELF']}' method='post'>";
     echo "<table align='center'>";
@@ -55,12 +55,12 @@ if (empty($_REQUEST['mode']))
     echo "<strong>{$strField1}:</strong> {$strPostcode}<br />";
     echo "<strong>{$strField1}:</strong> {$strProducts}<br />";
     echo "</td></tr></table>";
-    include('htmlfooter.inc.php');
+    include ('htmlfooter.inc.php');
 }
 elseif ($_REQUEST['mode']=='report')
 {
     $type = cleanvar($_REQUEST['type']);
-    $sql = "SELECT * FROM sites WHERE typeid='$type' ORDER BY name";
+    $sql = "SELECT * FROM `{$dbSites}` WHERE typeid='$type' ORDER BY name";
 
     $result = mysql_query($sql);
     if (mysql_error()) trigger_error(mysql_error(),E_USER_ERROR);
@@ -85,13 +85,13 @@ elseif ($_REQUEST['mode']=='report')
         $html .= "<td>{$row->city}</td><td>{$row->county}</td>";
         $html .= "<td>{$row->country}</td><td>{$row->postcode}</td>";
         $html .= "<td>";
-        $psql  = "SELECT maintenance.id AS maintid, maintenance.term AS term, products.name AS product, ";
-        $psql .= "maintenance.admincontact AS admincontact, ";
-        $psql .= "resellers.name AS reseller, licence_quantity, licencetypes.name AS licence_type, expirydate, admincontact, contacts.forenames AS admincontactsforenames, contacts.surname AS admincontactssurname, maintenance.notes AS maintnotes ";
-        $psql .= "FROM maintenance, contacts, products, licencetypes, resellers ";
-        $psql .= "WHERE maintenance.product=products.id AND maintenance.reseller=resellers.id AND licence_type=licencetypes.id AND admincontact=contacts.id ";
-        $psql .= "AND maintenance.site = '{$row->id}' ";
-        $psql .= "ORDER BY products.name ASC";
+        $psql  = "SELECT m.id AS maintid, m.term AS term, p.name AS product, ";
+        $psql .= "m.admincontact AS admincontact, ";
+        $psql .= "r.name AS reseller, licence_quantity, lt.name AS licence_type, expirydate, admincontact, c.forenames AS admincontactsforenames, c.surname AS admincontactssurname, m.notes AS maintnotes ";
+        $psql .= "FROM `{$dbMaintenance}` AS m, `{$dbContacts}` AS c, `{$dbProducts}` AS p, `{$dbLicenceTypes}` AS lt, `{$dbResellers}` AS r ";
+        $psql .= "WHERE m.product = p.id AND m.reseller = r.id AND licence_type = lt.id AND admincontact = c.id ";
+        $psql .= "AND m.site = '{$row->id}' ";
+        $psql .= "ORDER BY p.name ASC";
         $presult = mysql_query($psql);
         if (mysql_error()) trigger_error("MySQL Query Error ".mysql_error(), E_USER_ERROR);
         while ($prod = mysql_fetch_object($presult))
@@ -110,9 +110,9 @@ elseif ($_REQUEST['mode']=='report')
 
     if ($_POST['output']=='screen')
     {
-        include('htmlheader.inc.php');
+        include ('htmlheader.inc.php');
         echo $html;
-        include('htmlfooter.inc.php');
+        include ('htmlfooter.inc.php');
     }
     elseif ($_POST['output']=='csv')
     {

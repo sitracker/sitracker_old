@@ -13,13 +13,13 @@
 // Warning: Unknown: Your script possibly relies on a session side-effect which existed until PHP 4.2.3. Please be advised that the session extension does not consider global variables as a source of data, unless register_globals is enabled. You can disable this functionality and this warning by setting session.bug_compat_42 or session.bug_compat_warn to off, respectively. in Unknown on line 0
 // Not sure why - Ivan 6Sep06
 
-@include('set_include_path.inc.php');
-$permission=14; // View Users
-require('db_connect.inc.php');
-require('functions.inc.php');
+@include ('set_include_path.inc.php');
+$permission = 14; // View Users
+require ('db_connect.inc.php');
+require ('functions.inc.php');
 
 // This page requires authentication
-require('auth.inc.php');
+require ('auth.inc.php');
 
 // External variables
 $sort = cleanvar($_REQUEST['sort']);
@@ -29,9 +29,9 @@ $changeuser = cleanvar($_REQUEST['user']);
 $newstatus = cleanvar($_REQUEST['status']);
 
 //TODO: maybe put this in another file?
-if($changeuser AND $newstatus)
+if ($changeuser AND $newstatus)
 {
-    $sql = "UPDATE users SET accepting='{$newstatus}' WHERE id={$changeuser}";
+    $sql = "UPDATE `{$dbUsers}` SET accepting='{$newstatus}' WHERE id={$changeuser}";
     @mysql_query($sql);
 }
 
@@ -41,41 +41,19 @@ if ($groupid=='all') $filtergroup = 'all';
 elseif ($groupid=='') $filtergroup = $_SESSION['groupid'];
 else $filtergroup = $groupid;
 
-include('htmlheader.inc.php');
+include ('htmlheader.inc.php');
 
-$gsql = "SELECT * FROM groups ORDER BY name";
-$gresult = mysql_query($gsql);
-if (mysql_error()) trigger_error(mysql_error(),E_USER_ERROR);
-while ($group = mysql_fetch_object($gresult))
-{
-    $grouparr[$group->id]=$group->name;
-}
-$numgroups = count($grouparr);
 echo "<h2><img src='{$CONFIG['application_webpath']}images/icons/{$iconset}/32x32/user.png' width='32' height='32' alt='' /> ";
 echo "{$strUsers}</h2>";
-if ($numgroups >= 1)
-{
-    echo "<form action='{$_SERVER['PHP_SELF']}' style='text-align: center;' method='get'>";
-    echo "{$strGroup}: <select name='choosegroup' onchange='window.location.href=this.options[this.selectedIndex].value'>";
-    echo "<option value='{$_SERVER['PHP_SELF']}?gid=all'";
-    if ($filtergroup=='all') echo " selected='selected'";
-    echo ">All</option>\n";
-    foreach($grouparr AS $groupid => $groupname)
-{
-        echo "<option value='{$_SERVER['PHP_SELF']}?gid={$groupid}'";
-        if ($groupid == $filtergroup) echo " selected='selected'";
-        echo ">$groupname</option>\n";
-}
-    echo "<option value='{$_SERVER['PHP_SELF']}?gid=0'";
-    if ($filtergroup=='0') echo " selected='selected'";
-    echo ">{$strUsersNoGroup}</option>\n";
-    echo "</select>\n";
-    echo "</form>\n<br />";
-}
 
-$sql  = "SELECT * FROM users WHERE status!=0 ";  // status=0 means account disabled
+$numgroups = group_selector($groupid);
+
+$sql  = "SELECT * FROM `{$dbUsers}` WHERE status!=0 ";  // status=0 means account disabled
 if ($numgroups >= 1 AND $filtergroup=='0') $sql .= "AND (groupid='0' OR groupid='' OR groupid IS NULL) ";
-elseif ($numgroups < 1 OR $filtergroup=='all') { $sql .= "AND 1=1 "; }
+elseif ($numgroups < 1 OR $filtergroup=='all')
+{
+    $sql .= "AND 1=1 ";
+}
 else $sql .= "AND groupid='{$filtergroup}'";
 
 // Sorting
@@ -100,7 +78,7 @@ if (mysql_error()) trigger_error("MySQL Query Error ".mysql_error(), E_USER_ERRO
 
 echo "<table align='center' style='width: 95%;'>";
 echo "<tr>";
-$filter=array('gid' => $filtergroup);
+$filter = array('gid' => $filtergroup);
 echo colheader('realname', $strName, $sort, $order, $filter);
 echo "<th colspan='5'>{$strIncidentsinQueue}</th>";
 echo colheader('phone',$strTelephone,$sort, $order, $filter);
@@ -173,14 +151,14 @@ while ($users = mysql_fetch_array($result))
     <td align='left'>
     <?php
     //see if the users has been active in the last 30mins
-    echo user_online($users[id]);
+    echo user_online_icon($users[id]);
     echo userstatus_name($users["status"]);
     echo "</td><td align='center'>";
     echo $users["accepting"]=='Yes' ? $strYes : "<span class='error'>{$strNo}</span>";
     echo "</td><td>";
     echo "<a href='holidays.php?user={$users['id']}' title='{$strHolidays}'><img src='{$CONFIG['application_webpath']}images/icons/{$iconset}/16x16/holiday.png' width='16' height='16' alt='{$strHolidays}' style='border:none;' /></a> ";
     echo "<a href='tasks.php?user={$users['id']}' title='{$strTasks}'><img src='{$CONFIG['application_webpath']}images/icons/{$iconset}/16x16/task.png' width='16' height='16' alt='Todo icon' style='border:none;' /></a> ";
-    $sitesql = "SELECT COUNT(id) FROM sites WHERE owner='{$users['id']}'";
+    $sitesql = "SELECT COUNT(id) FROM `{$dbSites}` WHERE owner='{$users['id']}'";
     $siteresult = mysql_query($sitesql);
     if (mysql_error()) trigger_error(mysql_error(),E_USER_WARNING);
     list($ownedsites) = mysql_fetch_row($siteresult);
@@ -196,5 +174,5 @@ echo "</table>\n";
 
 mysql_free_result($result);
 
-include('htmlfooter.inc.php');
+include ('htmlfooter.inc.php');
 ?>

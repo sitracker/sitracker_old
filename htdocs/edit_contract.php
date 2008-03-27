@@ -8,13 +8,13 @@
 // of the GNU General Public License, incorporated herein by reference.
 //
 
-@include('set_include_path.inc.php');
-$permission=21; // Edit Contracts
+@include ('set_include_path.inc.php');
+$permission = 21; // Edit Contracts
 
-require('db_connect.inc.php');
-require('functions.inc.php');
+require ('db_connect.inc.php');
+require ('functions.inc.php');
 // This page requires authentication
-require('auth.inc.php');
+require ('auth.inc.php');
 
 $title = $strEditContract;
 
@@ -25,7 +25,7 @@ $changeproduct = cleanvar($_REQUEST['changeproduct']);
 
 if (empty($action) OR $action == "showform")
 {
-    include('htmlheader.inc.php');
+    include ('htmlheader.inc.php');
     echo "<h2><img src='{$CONFIG['application_webpath']}images/icons/{$iconset}/32x32/contract.png' width='32' height='32' alt='' /> ";
     echo "Select Contract to Edit</h2>";
     echo "<form action='{$_SERVER['PHP_SELF']}?action=edit' method='post'>";
@@ -36,18 +36,18 @@ if (empty($action) OR $action == "showform")
     echo "</table>\n";
     echo "<p align='center'><input name='submit' type='submit' value=\"$strContinue\" /></p>\n";
     echo "</form>\n";
-    include('htmlfooter.inc.php');
+    include ('htmlfooter.inc.php');
 }
 
 
 if ($action == "edit")
 {
     // Show edit maintenance form
-    include('htmlheader.inc.php');
+    include ('htmlheader.inc.php');
     if ($maintid == 0) echo "<p class='error'>You must select a contract</p>\n";
     else
     {
-        $sql = "SELECT * FROM maintenance WHERE id='$maintid'";
+        $sql = "SELECT * FROM `{$dbMaintenance}` WHERE id='$maintid'";
         $result = mysql_query($sql);
         if (mysql_error()) trigger_error("MySQL Error", E_USER_ERROR);
         $maint = mysql_fetch_array($result);
@@ -84,7 +84,7 @@ if ($action == "edit")
         // echo "<input value='amount' type='radio' name='contacts' checked='checked' />";
         echo "{$strLimitTo} <input size='2' value='{$maint[supportedcontacts]}' name='amount' /> {$strSupportedContacts} ({$str0MeansUnlimited})<br />";
         //         echo "<input type='radio' value='all' name='contacts'";
-        //         if($maint[allcontactssupported] == 'Yes')
+        //         if ($maint[allcontactssupported] == 'Yes')
         //         echo "checked='checked'";
         //         echo " />{$strAllSiteContactsSupported}</td></tr>";
         echo "<tr><th>{$strProduct}: <sup class='red'>*</sup></th><td>";
@@ -106,9 +106,9 @@ if ($action == "edit")
 
         echo "<tr><th>{$strExpiryDate}: <sup class='red'>*</sup></th>";
         echo "<td><input name='expirydate' size='10' value='";
-        if ($maint['expirydate'] > 0) echo date('Y-m-d',$maint['expirydate']);
+        if ($maint['expirydate'] > 0) echo ldate('Y-m-d',$maint['expirydate']);
         echo "' /> ".date_picker('maintform.expirydate');
-        if($maint['expirydate'] == '-1')
+        if ($maint['expirydate'] == '-1')
         {
             echo "<input type='checkbox' checked='checked' name='noexpiry' /> {$strUnlimited}";
         }
@@ -163,7 +163,7 @@ if ($action == "edit")
         echo "<p align='center'><a href='contract_details.php?id={$maintid}'>{$strReturnWithoutSaving}</a></p>";
         mysql_free_result($result);
     }
-    include('htmlfooter.inc.php');
+    include ('htmlfooter.inc.php');
 }
 else if ($action == "update")
 {
@@ -182,11 +182,11 @@ else if ($action == "update")
     $product = cleanvar($_POST['product']);
     $productonly = cleanvar($_POST['productonly']);
     $contacts = cleanvar($_REQUEST['contacts']);
-    if($_REQUEST['noexpiry'] == 'on') $expirydate = '-1';
+    if ($_REQUEST['noexpiry'] == 'on') $expirydate = '-1';
 
     $allcontacts = 'No';
-    if($contacts == 'amount') $amount = cleanvar($_REQUEST['amount']);
-    elseif($contacts == 'all') $allcontacts = 'Yes';
+    if ($contacts == 'amount') $amount = cleanvar($_REQUEST['amount']);
+    elseif ($contacts == 'all') $allcontacts = 'Yes';
 
     // Update maintenance
     $errors = 0;
@@ -228,7 +228,7 @@ else if ($action == "update")
         if (empty($productonly)) $productonly='no';
         if ($productonly=='yes') $terminated='yes';
 
-        $sql  = "UPDATE maintenance SET reseller='$reseller', expirydate='$expirydate', licence_quantity='$licence_quantity', ";
+        $sql  = "UPDATE `{$dbMaintenance}` SET reseller='$reseller', expirydate='$expirydate', licence_quantity='$licence_quantity', ";
         $sql .= "licence_type='$licence_type', notes='$notes', admincontact=$admincontact, term='$terminated', servicelevelid='$servicelevelid', ";
         $sql .= "incident_quantity='$incident_quantity', ";
         $sql .= "incidentpoolid='$incidentpoolid', productonly='$productonly', ";
@@ -241,9 +241,9 @@ else if ($action == "update")
         // show error message if addition failed
         if (!$result)
         {
-            include('htmlheader.inc.php');
+            include ('htmlheader.inc.php');
             echo "<p class='error'>Maintenance update failed)\n";
-            include('htmlfooter.inc.php');
+            include ('htmlfooter.inc.php');
         }
         // show success message
         else
@@ -255,9 +255,9 @@ else if ($action == "update")
     // show error message if errors
     else
     {
-        include('htmlheader.inc.php');
+        include ('htmlheader.inc.php');
         echo $errors_string;
-        include('htmlfooter.inc.php');
+        include ('htmlfooter.inc.php');
     }
 }
 ?>

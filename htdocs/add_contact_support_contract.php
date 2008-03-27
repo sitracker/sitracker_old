@@ -10,13 +10,13 @@
 
 // Author: Ivan Lucas <ivanlucas[at]users.sourceforge.net>
 
-@include('set_include_path.inc.php');
-$permission=32;  // Edit Supported Products
-require('db_connect.inc.php');
-require('functions.inc.php');
+@include ('set_include_path.inc.php');
+$permission = 32;  // Edit Supported Products
+require ('db_connect.inc.php');
+require ('functions.inc.php');
 
 // This page requires authentication
-require('auth.inc.php');
+require ('auth.inc.php');
 
 // External Variables
 $maintid = cleanvar($_REQUEST['maintid']);
@@ -28,7 +28,7 @@ $action = $_REQUEST['action'];
 if (empty($action) || $action == "showform")
 {
     $title="Associate person with Contract"; // TODO i18n
-    include('htmlheader.inc.php');
+    include ('htmlheader.inc.php');
     echo "<h2>Link a contract with a support contact</h2>"; //TODO i18n
     echo "<form action='{$_SERVER['PHP_SELF']}?action=add' method='post'>";
     echo "<input type='hidden' name='context' value='{$context}' />";
@@ -43,8 +43,8 @@ if (empty($action) || $action == "showform")
     }
     else
     {
-        $sql = "SELECT sites.name, products.name FROM maintenance, sites, products WHERE maintenance.site=sites.id ";
-        $sql .= "AND maintenance.product=products.id AND maintenance.id='$maintid'";
+        $sql = "SELECT s.name, p.name FROM `{$dbMaintenance}` m, `{$dbSites}` s, `{$dbProducts}` p WHERE m.site=s.id ";
+        $sql .= "AND m.product=p.id AND m.id='$maintid'";
         $result=mysql_query($sql);
         if (mysql_error()) trigger_error("MySQL Query Error ".mysql_error(), E_USER_ERROR);
         list($sitename, $product)=mysql_fetch_row($result);
@@ -68,7 +68,7 @@ if (empty($action) || $action == "showform")
     echo "<p align='center'><input name='submit' type='submit' value='{$strContinue}' /></p>";
     echo "</form>";
 
-    include('htmlfooter.inc.php');
+    include ('htmlfooter.inc.php');
 }
 else if ($action == "add")
 {
@@ -87,11 +87,11 @@ else if ($action == "add")
         $errors_string .= "<p class='error'>Something weird has happened, better call technical support</p>\n";
     }
 
-    $sql = "SELECT * FROM supportcontacts WHERE maintenanceid = '{$maintid}' AND contactid = '{$contactid}'";
+    $sql = "SELECT * FROM `{$dbSupportContacts}` WHERE maintenanceid = '{$maintid}' AND contactid = '{$contactid}'";
     $result = mysql_query($sql);
     if (mysql_error()) trigger_error(mysql_error(),E_USER_ERROR);
 
-    if(mysql_num_rows($result) > 0)
+    if (mysql_num_rows($result) > 0)
     {
         $errors = 1;
         $errors_string .= "<p class='error'>A contact can only be listed once per support contract</p>\n";
@@ -100,32 +100,32 @@ else if ($action == "add")
     // add maintenance support contact if no errors
     if ($errors == 0)
     {
-        $sql  = "INSERT INTO supportcontacts (maintenanceid, contactid) VALUES ($maintid, $contactid)";
+        $sql  = "INSERT INTO `{$dbSupportContacts}` (maintenanceid, contactid) VALUES ($maintid, $contactid)";
         $result = mysql_query($sql);
         if (mysql_error()) trigger_error("MySQL Query Error ".mysql_error(), E_USER_ERROR);
 
         // show error message if addition failed
         if (!$result)
         {
-            include('htmlheader.inc.php');
-            echo "<p class='error'>Addition of support contact failed\n";
-            include('htmlfooter.inc.php');
+            include ('htmlheader.inc.php');
+            echo "<p class='error'>Addition of support contact failed</p>\n";
+            include ('htmlfooter.inc.php');
         }
         // update database and show success message
         else
         {
-            if ($context=='contact') html_redirect("contact_details.php?id=$contactid");
+            if ($context == 'contact') html_redirect("contact_details.php?id=$contactid");
             else html_redirect("contract_details.php?id=$maintid");
         }
     }
     else
     {
         // show error message if errors
-        include('htmlheader.inc.php');
+        include ('htmlheader.inc.php');
         echo $errors_string;
 
         echo "<p align='center'><a href='contract_details.php?id={$maintid}'>Return</a></p>";
-        include('htmlfooter.inc.php');
+        include ('htmlfooter.inc.php');
     }
 }
 ?>

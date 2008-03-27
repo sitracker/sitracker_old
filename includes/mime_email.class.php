@@ -135,7 +135,7 @@ class mime_email
 
     function dump($complete_email = false) {
 
-		if($complete_email) {
+		if ($complete_email) {
 			echo "============= RAW EMAIL================<br> ";
 			while ( list ($linenbr, $line) = each ($this->rawemail) ) {
 				echo htmlentities($line) . "<br>";
@@ -209,7 +209,7 @@ class mime_email
 			// if there is a blank line, we know that the header ended and
 			// now the body begins, but we dont need the body right now,
 			// so we break out of the loop
-			if(trim($line) == "") {$this->bodystart = $hc; break;}
+			if (trim($line) == "") {$this->bodystart = $hc; break;}
 
     		if ( (!$from) and (eregi ("^From:(.*)", $line, $match)) ) {
       			$this->from = trim ( $match[1] );
@@ -255,7 +255,7 @@ class mime_email
 
 				//check to see if content-type is splitted up into several lines
 				//if yes, the first line ends with a colon ";"
-				if(substr(trim($match[1]), strlen(trim($match[1]))-1,1)==";") {
+				if (substr(trim($match[1]), strlen(trim($match[1]))-1,1)==";") {
 					$ctypecontinue = true;
 					$ctypelinehold = $match[1];
 				}
@@ -271,7 +271,7 @@ class mime_email
 
 	   	  	} elseif ($ctypecontinue && !eregi(":",$line)) {
 	   	  		$o++;
-	   	  		if(substr(trim($line), strlen(trim($line))-1,1)==";") {
+	   	  		if (substr(trim($line), strlen(trim($line))-1,1)==";") {
 	   	  			$ctypelinehold .= $line;
 	   	  	}
 	   	  	else {
@@ -287,7 +287,7 @@ class mime_email
     	//split from adress like: Firstname Lastname <foo@bar.com>  into two data pieces
     	// name will be stored in from_name and adress will be stored in from_email
 		// cut away these silly quotations BTW (if there are any)
-		if(eregi ("<(.*)>$", $this->from, $match)) {
+		if (eregi ("<(.*)>$", $this->from, $match)) {
 			$this->from_email = $match[1];
 			$this->from_name = str_replace("\"", "", substr($this->from,0,strpos($this->from,"<")-1));
 		}
@@ -298,14 +298,14 @@ class mime_email
 
     	// do some FLAG things (only the first shot, a multipart/mixed can also be HTML email, but this
     	// 						will be checked in the body part, not here)
-    	if(strtolower($this->contenttype) == "multipart/mixed") $this->isATTACHMENTmail = true;
-    	if(strtolower($this->contenttype) == "multipart/alternative") $this->isHTMLmail = true;
-    	if(strtolower($this->contenttype) == "text/plain") {$this->isHTMLmail = false;$this->isATTACHMENTmail = false;}
+    	if (strtolower($this->contenttype) == "multipart/mixed") $this->isATTACHMENTmail = true;
+    	if (strtolower($this->contenttype) == "multipart/alternative") $this->isHTMLmail = true;
+    	if (strtolower($this->contenttype) == "text/plain") {$this->isHTMLmail = false;$this->isATTACHMENTmail = false;}
     	$ctypecontinue = false;
     	$ctypelinehold = "";
 
     	// if htmlentities flag is on, convert all normally visible attributes according to htmlentities
-    	if($varhtmlentities) {
+    	if ($varhtmlentities) {
     		$this->from = htmlentities($this->from);
     		$this->to = htmlentities($this->to);
     		$this->subject = htmlentities($this->subject);
@@ -326,7 +326,7 @@ class mime_email
 
 	function parseBody($rawemail)
 	{
-		if($this->contenttype == "text/plain" or $this->contenttype=="") {
+		if ($this->contenttype == "text/plain" or $this->contenttype=="") {
 			//
 			// just a text/plain email, thats easy
 			//
@@ -334,12 +334,12 @@ class mime_email
 				$body .= $rawemail[$l];
 			}
 
-			if($this->contenttransencoding=="quoted-printable")
+			if ($this->contenttransencoding=="quoted-printable")
 				$this->emailtextplain = quoted_printable_decode($body);
 			else
 				$this->emailtextplain = $body;
 
-			if($varhtmlentities) $this->emailtextplain = htmlentities($this->emailtextplain);
+			if ($varhtmlentities) $this->emailtextplain = htmlentities($this->emailtextplain);
 		}
 		else {
 			//
@@ -369,22 +369,22 @@ class mime_email
 
 			$line = trim($line);
 
-			if(($hit and eregi("^--".$boundary,$line)) or
+			if (($hit and eregi("^--".$boundary,$line)) or
 				($hit and eregi("^--".$boundary."--",$line)) or
 				($hit and eregi("^--".$newboundary,$line)) or
 				($hit and eregi("^--".$newboundary."--",$line))) { $hit = false; $body = false;}
 
-			if($hit) {
+			if ($hit) {
 				$i++;
 				// -------------------------------------------------------
-				if(eregi ("^Content-Type:(.*)", $line, $match)) {
+				if (eregi ("^Content-Type:(.*)", $line, $match)) {
 
 					$my_mime_block = new mime_block();
 					$cdispocontinue = false;
 
 					//check to see if content-type is splitted up into several lines
 					//if yes, the first line ends with a colon ";"
-					if(substr($match[1], strlen(trim($match[1])),1)==";") {
+					if (substr($match[1], strlen(trim($match[1])),1)==";") {
 						$ctypecontinue = true;
 						$ctypelinehold = $match[1];
 					}
@@ -396,25 +396,25 @@ class mime_email
 						$my_mime_block->setMimeContentTypeCharset($myhash[charset]);
 						$my_mime_block->setMimeContentTypeName($myhash[name]);
 
-						if($my_mime_block->getMimeContentTypeBoundary()!="")
+						if ($my_mime_block->getMimeContentTypeBoundary()!="")
 							$newboundary = $myhash[boundary];
 					}
 
 				// -------------------------------------------------------
-				} elseif(eregi ("^Content-Transfer-Encoding:(.*)", $line, $match)) {
+				} elseif (eregi ("^Content-Transfer-Encoding:(.*)", $line, $match)) {
 					$my_mime_block->setMimeTransferEncoding(htmlentities(trim ( $match[1] )));
 					$cdispocontinue = false;
 					$ctypecontinue = false;
 
 				// -------------------------------------------------------
-				} elseif(eregi ("^Content-Disposition:(.*)", $line, $match)) {
+				} elseif (eregi ("^Content-Disposition:(.*)", $line, $match)) {
 
 					$ctypecontinue = false;
 
 					//check to see if content-disposition is splitted up into several lines
 					//if yes, the first line ends with a colon ";"
 
-					if(substr(trim($match[1]), strlen(trim($match[1]))-1,1)==";") {
+					if (substr(trim($match[1]), strlen(trim($match[1]))-1,1)==";") {
 						$cdispocontinue = true;
 						$cdispolinehold = $match[1];
 					}
@@ -430,7 +430,7 @@ class mime_email
 	   	  			//
 	   	  			// the line is a continue line for content-type
 	   	  			//
-	   	  			if(substr($line, strlen($line)-1,1)==";") {
+	   	  			if (substr($line, strlen($line)-1,1)==";") {
 	   	  				//
 	   	  				// the line will be continued again, so no object write just append the string
 	   	  				//
@@ -454,7 +454,7 @@ class mime_email
 	   	  			//
 	   	  			//  the line is a continue line for content-disposition
 	   	  			//
-	   	  			if(substr($line, strlen($line)-1,1)==";") {
+	   	  			if (substr($line, strlen($line)-1,1)==";") {
 	   	  				//
 	   	  				// the line will be continued again, so no object write just append the string
 	   	  				//
@@ -474,27 +474,27 @@ class mime_email
 	   	  		// -------------------------------------------------------
 
 				// we append each line oif the body and append manually a newline...
-				if($body) {
+				if ($body) {
 					 $bodycontent .= $line . "\n";
 				}
 
-				if($line =="") $body = true;
+				if ($line =="") $body = true;
 			}
 
-			if($line == "--" . $boundary OR $line == "--" . $boundary . "--") {
+			if ($line == "--" . $boundary OR $line == "--" . $boundary . "--") {
 				$z++;
 				$hit = true;
 
 				// only add content to array if this is not the first MIME marker
-				if($z>1) {
+				if ($z>1) {
 					$my_mime_block->setMimeContent($bodycontent);
 					$this->mime_block[] = $my_mime_block;
-					if($myhash[type]=="text/plain") {
-						if($varhtmlentities) $this->emailtextplain = htmlentities($bodycontent);
+					if ($myhash[type]=="text/plain") {
+						if ($varhtmlentities) $this->emailtextplain = htmlentities($bodycontent);
 						else $this->emailtextplain = $bodycontent;
 					}
 
-					if($myhash[type]=="text/html") {
+					if ($myhash[type]=="text/html") {
 						$this->emailtexthtml = $bodycontent;
 						$this->isHTMLmail = true;
 					}
@@ -504,7 +504,7 @@ class mime_email
 				$bodycontent = "";
 
 				// if boundary ends....leave the loop, because of performance gains with large attachment
-				if($line == "--" . $boundary . "--") break;
+				if ($line == "--" . $boundary . "--") break;
 			}
 		}
 
@@ -513,7 +513,7 @@ class mime_email
 		//$time = $time_end - $time_start;
 		//echo "<h3>echo *LOOP Start: $time_start   End: $time_end    Diff: $time</h3>";
 
-		if($newboundary != "" and $newboundary != "ThisIsAUniqueLineFromMarcLogemann") $this->parseBoundary($newboundary, $rawemail);
+		if ($newboundary != "" and $newboundary != "ThisIsAUniqueLineFromMarcLogemann") $this->parseBoundary($newboundary, $rawemail);
 	}
 
 
@@ -526,11 +526,11 @@ class mime_email
 	{
    		$ctline = trim($ctline);
 
-   		if(!strpos($ctline,";")) $endpointer = strlen($ctline); else $endpointer = strpos($ctline,";");
+   		if (!strpos($ctline,";")) $endpointer = strlen($ctline); else $endpointer = strpos($ctline,";");
     	$hashmap[type] = substr($ctline,0,$endpointer);
 
-    	if(eregi("charset", $ctline)) {
-    		if(strpos($ctline, ";", strpos($ctline, "charset"))>0) {
+    	if (eregi("charset", $ctline)) {
+    		if (strpos($ctline, ";", strpos($ctline, "charset"))>0) {
     			//
     			// if charset is not at the end of the string and therefore a colon is present
 				//
@@ -551,10 +551,10 @@ class mime_email
     	}
 
 
-    	if(eregi("boundary", $ctline)) $hashmap[boundary] = str_replace("\"","", substr($ctline,
+    	if (eregi("boundary", $ctline)) $hashmap[boundary] = str_replace("\"","", substr($ctline,
     	  												strpos($ctline,"=",strpos($ctline,"boundary"))+1,
     	  												strlen($ctline)- strpos($ctline,"=")));
-    	if(eregi("name", $ctline)) $hashmap[name] = str_replace("\"","", substr($ctline,
+    	if (eregi("name", $ctline)) $hashmap[name] = str_replace("\"","", substr($ctline,
     	  												strpos($ctline,"=",strpos($ctline,"name"))+1,
     	  												strlen($ctline)- strpos($ctline,"=")));
     	return $hashmap;
@@ -569,10 +569,10 @@ class mime_email
 	{
    		$cdline = trim($cdline);
 
-   		if(!strpos($cdline,";")) $endpointer = strlen($cdline); else $endpointer = strpos($cdline,";");
+   		if (!strpos($cdline,";")) $endpointer = strlen($cdline); else $endpointer = strpos($cdline,";");
     	$hashmap[type] = trim(substr($cdline,0,$endpointer));
 
-    	if(eregi("filename", $cdline)) $hashmap[name] = str_replace("\"","", substr($cdline,
+    	if (eregi("filename", $cdline)) $hashmap[name] = str_replace("\"","", substr($cdline,
     	  												strpos($cdline,"=",strpos($cdline,"filename"))+1,
     	  												strlen($cdline)- strpos($cdline,"=")));
     	return $hashmap;

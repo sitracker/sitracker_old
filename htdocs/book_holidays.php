@@ -10,13 +10,13 @@
 
 // This Page Is Valid XHTML 1.0 Transitional! 13Sep06
 // Author: Ivan Lucas <ivanlucas[at]users.sourceforge.net>
-@include('set_include_path.inc.php');
-$permission=27; // view your calendar
+@include ('set_include_path.inc.php');
+$permission = 27; // view your calendar
 
-require('db_connect.inc.php');
-require('functions.inc.php');
+require ('db_connect.inc.php');
+require ('functions.inc.php');
 // This page requires authentication
-require('auth.inc.php');
+require ('auth.inc.php');
 
 // External variables
 $step = $_REQUEST['step'];
@@ -32,7 +32,7 @@ else
 
 if (empty($step))
 {
-    include('htmlheader.inc.php');
+    include ('htmlheader.inc.php');
     // The JavaScript date picker used on this page came from an article at
     // http://www.dagblastit.com/~tmcclure/dhtml/calendar.html
     // The website states
@@ -65,7 +65,7 @@ if (empty($step))
     echo "<input type='hidden' name='step' value='1' />";
     echo "<input type='submit' value=\"{$strBookHoliday}\" /></p>";
     echo "</form>";
-    include('htmlfooter.inc.php');
+    include ('htmlfooter.inc.php');
 }
 elseif ($step == '1')
 {
@@ -74,7 +74,7 @@ elseif ($step == '1')
     $end = cleanvar($_REQUEST['end']);
     $type = cleanvar($_REQUEST['type']);
 
-    include('htmlheader.inc.php');
+    include ('htmlheader.inc.php');
     $start = strtotime($start);
     $end = strtotime($end);
     if ($start == 0 && $end == 0)
@@ -146,7 +146,7 @@ elseif ($step == '1')
     {
         if (date('D',$day) != 'Sat' && date('D',$day) != 'Sun')
         {
-            $sql = "SELECT * FROM holidays WHERE startdate = '$day' AND userid='{$user}'";
+            $sql = "SELECT * FROM `{$dbHolidays}` WHERE startdate = '$day' AND userid='{$user}'";
             $result = mysql_query($sql);
             if (mysql_error()) trigger_error("MySQL Query Error ".mysql_error(), E_USER_ERROR);
 
@@ -226,7 +226,7 @@ elseif ($step == '1')
             }
             else
             {
-                $sql = "SELECT * FROM holidays WHERE startdate = '{$day}' AND type='10' ";
+                $sql = "SELECT * FROM `{$dbHolidays}` WHERE startdate = '{$day}' AND type='10' ";
                 $result = mysql_query($sql);
                 if (mysql_error()) trigger_error("MySQL Query Error ".mysql_error(), E_USER_ERROR);
                 if (mysql_num_rows($result) > 0)
@@ -272,7 +272,7 @@ elseif ($step == '1')
     echo "<br />";
 
     echo "<p align='center'><a href='book_holidays.php?user={$user}'>Abandon this booking and try again</a></p>";// FIXME i18n
-    include('htmlfooter.inc.php');
+    include ('htmlfooter.inc.php');
 }
 else
 {
@@ -302,7 +302,7 @@ else
         {
             // check to see if there is other holiday booked on this day
             // and modify that where required.
-            $sql = "INSERT INTO holidays (userid, type, startdate, length, approved, approvedby) ";
+            $sql = "INSERT INTO `{$dbHolidays}` (userid, type, startdate, length, approved, approvedby) ";
             $sql .= "VALUES ('{$user}', '$type', '{$$d}', '{$$len}', '0', '$approvaluser') ";
             mysql_query($sql);
             if (mysql_error()) trigger_error("MySQL Query Error ".mysql_error(), E_USER_ERROR);

@@ -27,8 +27,10 @@ $id = cleanvar($_REQUEST['id']);
 include('htmlheader.inc.php');
 
 // Display Maintenance
-$sql  = "SELECT maintenance.*, maintenance.notes AS maintnotes, sites.name AS sitename FROM maintenance, sites ";
-$sql .= "WHERE sites.id = maintenance.site AND maintenance.id='{$id}' ";
+
+$sql  = "SELECT m.*, m.notes AS maintnotes, s.name AS sitename, r.name AS resellername, lt.name AS licensetypename ";
+$sql .= "FROM `{$dbMaintenance}` AS m, `{$dbSites}` AS s, `{$dbResellers}` AS r, `{$dbLicenceTypes}` AS lt ";
+$sql .= "WHERE s.id = m.site AND m.id='{$id}' AND m.reseller = r.id AND m.licence_type = lt.id";
 $maintresult = mysql_query($sql);
 if (mysql_error()) trigger_error("MySQL Query Error ".mysql_error(), E_USER_ERROR);
 
@@ -60,13 +62,13 @@ echo "<td><a href=\"contact_details.php?id=".$maintrow['admincontact']."\">".con
 
 echo "<tr><th>{$strReseller}:</th><td>";
 
-if (empty($results['reseller']))
+if (empty($results['resellername']))
 {
     echo $strNoReseller;
 }
 else
 {
-    echo reseller_name($maintrow['reseller']);
+    echo $maintrow['resellername'];
 }
 echo "</td></tr>";
 echo "<tr><th>{$strProduct}:</th><td>".product_name($maintrow['product'])."</td></tr>";
@@ -93,7 +95,7 @@ echo "</td></tr>";
 if ($maintrow['licence_quantity'] != '0')
 {
     echo "<tr><th>{$strLicense}:</th>";
-    echo "<td>".$maintrow['licence_quantity'].' '.licence_type($maintrow['licence_type'])."</td></tr>\n";
+    echo "<td>{$maintrow['licence_quantity']} {$maintrow['licensetypename']}</td></tr>\n";
 }
 
 echo "<tr><th>{$strServiceLevel}:</th><td>".servicelevel_name($maintrow['servicelevelid'])."</td></tr>";

@@ -30,7 +30,7 @@ else
 {
     // Attempt to prevent session fixation attacks
     if (function_exists('session_regenerate_id')) session_regenerate_id();
-    if(!version_compare(phpversion(),"4.3.3",">=")) setcookie(session_name(), session_id(),ini_get("session.cookie_lifetime"), "/");
+    if (!version_compare(phpversion(),"4.3.3",">=")) setcookie(session_name(), session_id(),ini_get("session.cookie_lifetime"), "/");
 
     // Conversions for when register_globals=off
     // We've migrated away from using cookies and now use sessions
@@ -38,9 +38,9 @@ else
     $sit[1] = 'obsolete'; // FIXME Check $sit[1] is unused then remove
     $sit[2] = $_SESSION['userid'];
     // Load session language if it is set and different to the default language
-    if (!empty($_SESSION['lang']) AND $_SESSION['lang'] != $CONFIG['default_i18n']) include("i18n/{$_SESSION['lang']}.inc.php");
+    if (!empty($_SESSION['lang']) AND $_SESSION['lang'] != $CONFIG['default_i18n']) include ("i18n/{$_SESSION['lang']}.inc.php");
     elseif (empty($_SESSION['lang'])) $_SESSION['lang'] = $CONFIG['default_i18n'];
-    include('strings.inc.php');
+    include ('strings.inc.php');
 }
 
 if (!is_array($permission)) { $permission = array($permission); }

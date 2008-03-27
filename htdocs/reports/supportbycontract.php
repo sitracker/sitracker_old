@@ -12,15 +12,15 @@
 // Email:    ivanlucas[at]users.sourceforge.net
 // Comments: List supported contacts by contract
 
-@include('../set_include_path.inc.php');
-$permission=19; /* View Maintenance Contracts */
-$title='Supported contacts by Contract';
-$now=time();
-require('db_connect.inc.php');
-require('functions.inc.php');
+@include ('../set_include_path.inc.php');
+$permission = 19; /* View Maintenance Contracts */
+$title = 'Supported contacts by Contract';
+
+require ('db_connect.inc.php');
+require ('functions.inc.php');
 
 // This page requires authentication
-require('auth.inc.php');
+require ('auth.inc.php');
 
 $siteid = cleanvar($_REQUEST['siteid']);
 
@@ -33,26 +33,26 @@ if ($_REQUEST['mode']=='csv')
 }
 else
 {
-    include('htmlheader.inc.php');
+    include ('htmlheader.inc.php');
 }
 
-$sql = "SELECT *, sites.name AS sitename FROM sites ";
+$sql = "SELECT *, s.name AS sitename FROM `{$dbSites}` AS s ";
 if (!empty($_REQUEST['siteid'])) $sql .= "WHERE id='{$siteid}'";
-else $sql .= "ORDER BY sites.name";
+else $sql .= "ORDER BY s.name";
 $result = mysql_query($sql);
 if (mysql_error()) trigger_error(mysql_error(), E_USER_ERROR);
 while ($site = mysql_fetch_object($result))
 {
-    $msql  = "SELECT maintenance.id AS maintid, maintenance.term AS term, products.name AS product, resellers.name AS reseller, ";
-    $msql .= "licence_quantity, licencetypes.name AS licence_type, expirydate, admincontact, contacts.forenames AS admincontactsforenames, ";
-    $msql .= "contacts.surname AS admincontactssurname, maintenance.notes AS maintnotes ";
-    $msql .= "FROM maintenance, contacts, products, licencetypes, resellers ";
-    $msql .= "WHERE maintenance.product=products.id ";
-    $msql .= "AND maintenance.reseller=resellers.id AND licence_type=licencetypes.id AND admincontact=contacts.id ";
-    $msql .= "AND maintenance.site = '{$site->id}' ";
-    $msql .= "AND products.vendorid=2 ";    // novell products only
-    $msql .= "AND maintenance.term!='yes' ";
-    $msql .= "AND maintenance.expirydate > '$now' ";     $msql .= "ORDER BY expirydate DESC";
+    $msql  = "SELECT m.id AS maintid, m.term AS term, p.name AS product, r.name AS reseller, ";
+    $msql .= "licence_quantity, l.name AS licence_type, expirydate, admincontact, c.forenames AS admincontactsforenames, ";
+    $msql .= "c.surname AS admincontactssurname, m.notes AS maintnotes ";
+    $msql .= "FROM `{$dbMaintenance}` AS m, `{$dbContacts}` AS c, `{$dbProducts}` AS p, `{$dbLicenceTypes}` AS l, `{$dbResellers}` AS r ";
+    $msql .= "WHERE m.product=p.id ";
+    $msql .= "AND m.reseller=r.id AND licence_type=l.id AND admincontact=c.id ";
+    $msql .= "AND m.site = '{$site->id}' ";
+//     $msql .= "AND p.vendorid=2 ";    // novell products only
+    $msql .= "AND m.term!='yes' ";
+    $msql .= "AND m.expirydate > '$now' ";     $msql .= "ORDER BY expirydate DESC";
 
     echo "\n<!-- $msql -->\n";
     $mresult = mysql_query($msql);
@@ -69,7 +69,7 @@ while ($site = mysql_fetch_object($result))
                     echo "{$maint->product},";
                     echo "{$maint->licence_quantity} {$maint->licence_type},";
                     echo ldate($CONFIG['dateformat_date'], $maint->expirydate).",";
-                    $csql  = "SELECT * FROM supportcontacts ";
+                    $csql  = "SELECT * FROM `{$dbSupportContacts}` ";
                     $csql .= "WHERE maintenanceid='{$maint->maintid}' ";
                     $csql .= "ORDER BY contactid LIMIT 4";
                     ## echo "<!-- ($csql) -->";
@@ -98,7 +98,7 @@ while ($site = mysql_fetch_object($result))
                     echo "<td>{$maint->licence_quantity} {$maint->licence_type}</td>";
                     echo "<td>".ldate($CONFIG['dateformat_date'], $maint->expirydate)."</td>";
 
-                    $csql  = "SELECT * FROM supportcontacts ";
+                    $csql  = "SELECT * FROM `{$dbSupportContacts}` ";
                     $csql .= "WHERE maintenanceid='{$maint->maintid}' ";
                     $csql .= "ORDER BY contactid LIMIT 4";
                     ## echo "<!-- ($csql) -->";
@@ -120,6 +120,6 @@ while ($site = mysql_fetch_object($result))
 if ($_REQUEST['mode']!='csv')
 {
     echo "<p align='center'><a href='{$_SERVER['PHP_SELF']}?siteid={$siteid}&amp;mode=csv'>Download as <abbr title='Comma Seperated Values'>CSV</abbr> File</a></p>";
-    include('htmlfooter.inc.php');
+    include ('htmlfooter.inc.php');
 }
 ?>

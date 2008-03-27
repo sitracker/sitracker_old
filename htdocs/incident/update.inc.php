@@ -29,10 +29,11 @@ function display_update_page($draftid=-1)
     global $CONFIG;
     global $iconset;
     global $now;
+    global $dbDrafts;
 
-    if($draftid != -1)
+    if ($draftid != -1)
     {
-        $draftsql = "SELECT * FROM drafts WHERE id = {$draftid}";
+        $draftsql = "SELECT * FROM `{$dbDrafts}` WHERE id = {$draftid}";
         $draftresult = mysql_query($draftsql);
         if (mysql_error()) trigger_error(mysql_error(),E_USER_ERROR);
         $draftobj = mysql_fetch_object($draftresult);
@@ -154,26 +155,6 @@ function display_update_page($draftid=-1)
         object.updatetype.options[Current].value = object.currentText.value;
     }
 
-    // Display/Hide the time to next action fields
-    // Author: Ivan Lucas
-    function update_ttna() {
-         if ($('ttna_time').checked)
-         {
-            $('ttnacountdown').show();
-            $('ttnadate').hide();
-         }
-         if ($('ttna_date').checked)
-         {
-            $('ttnacountdown').hide();
-            $('ttnadate').show();
-         }
-         if ($('ttna_none').checked)
-         {
-            $('ttnacountdown').hide();
-            $('ttnadate').hide();
-         }
-    }
-
     <?php
         echo "var draftid = {$draftid}";
     ?>
@@ -203,16 +184,16 @@ function display_update_page($draftid=-1)
         var meta = byId('target').value+"|"+byId('updatetype').value+"|"+byId('cust_vis').checked+"|";
         meta += byId('priority').value+"|"+byId('newstatus').value+"|"+byId('nextaction').value+"|";
 
-        if(toPass != "")
+        if (toPass != "")
         {
             xmlhttp.open("GET", "auto_save.php?userid="+<?php echo $_SESSION['userid']; ?>+"&type=update&incidentid="+<?php echo $id; ?>+"&draftid="+draftid+"&meta="+meta+"&content="+escape(toPass), true);
 
             xmlhttp.onreadystatechange=function() {
                 //remove this in the future after testing
                 if (xmlhttp.readyState==4) {
-                    if(xmlhttp.responseText != ""){
+                    if (xmlhttp.responseText != ""){
                         //alert(xmlhttp.responseText);
-                        if(draftid == -1)
+                        if (draftid == -1)
                         {
                             draftid = xmlhttp.responseText;
                             byId('draftid').value = draftid;
@@ -220,12 +201,12 @@ function display_update_page($draftid=-1)
                         var currentTime = new Date();
                         var hours = currentTime.getHours();
                         var minutes = currentTime.getMinutes();
-                        if(minutes < 10)
+                        if (minutes < 10)
                         {
                             minutes = "0"+minutes;
                         }
                         var seconds = currentTime.getSeconds();
-                        if(seconds < 10)
+                        if (seconds < 10)
                         {
                             seconds = "0"+seconds;
                         }
@@ -266,9 +247,9 @@ function display_update_page($draftid=-1)
     $typeReviewmet = "";
 
 
-    if(!empty($metadata))
+    if (!empty($metadata))
     {
-        switch($metadata[0])
+        switch ($metadata[0])
         {
             case 'none': $targetNone = " SELECTED ";
                 break;
@@ -282,7 +263,7 @@ function display_update_page($draftid=-1)
                 break;
         }
 
-        switch($metadata[1])
+        switch ($metadata[1])
         {
             case 'research': $typeResearch = " SELECTED ";
                 break;
@@ -353,9 +334,9 @@ function display_update_page($draftid=-1)
     echo "New information, relevent to the incident.  Please be as detailed as possible and include full descriptions of any work you have performed.<br />";
     echo "<br />";
     $checkbox = "";
-    if(!empty($metadata))
+    if (!empty($metadata))
     {
-        if($metadata[2] == "true") $checkbox = "checked='checked'";
+        if ($metadata[2] == "true") $checkbox = "checked='checked'";
     }
     else
     {
@@ -363,7 +344,7 @@ function display_update_page($draftid=-1)
     }
     echo "<label><input type='checkbox' name='cust_vis' id='cust_vis' {$checkbox} value='yes' /> Make this update visible to the incident reporter<label><br />"; //FIXME i18n Make this update visible to the incident reporter
     echo "<textarea name='bodytext' id='updatelog' rows='13' cols='50'>";
-    if($draftid != -1) echo $draftobj->content;
+    if ($draftid != -1) echo $draftobj->content;
     echo "</textarea>";
     echo "<div id='updatestr'></div>";
     echo "</td></tr>";
@@ -383,7 +364,7 @@ function display_update_page($draftid=-1)
 
     $setPriorityTo = incident_priority($id);
 
-    if(!empty($metadata))
+    if (!empty($metadata))
     {
         $setPriorityTo = $metadata[3];
     }
@@ -396,7 +377,7 @@ function display_update_page($draftid=-1)
 
     $setStatusTo = incident_status($id);
 
-    if(!empty($metadata))
+    if (!empty($metadata))
     {
         $setStatusTo = $metadata[4];
     }
@@ -408,7 +389,7 @@ function display_update_page($draftid=-1)
 
     $nextAction = "";
 
-    if(!empty($metadata))
+    if (!empty($metadata))
     {
         $nextAction = $metadata[5];
     }
@@ -474,7 +455,7 @@ function display_update_page($draftid=-1)
     {
         ++$j;
     }
-    
+
     $att_file_size = round($att_file_size / pow(1024,$j-1) * 100) / 100 . ' ' . $ext[$j-1];
 
     echo "<th align='right' valign='top'>{$GLOBALS['strAttachFile']}";
@@ -494,7 +475,7 @@ function display_update_page($draftid=-1)
     {
         $localdraft = $draftid;
     }
-    
+
     echo "<input type='hidden' name='draftid' id='draftid' value='{$localdraft}' />";
     echo "<input type='hidden' name='storepriority' value='".incident_priority($id)."' />";
     echo "<input type='submit' name='submit' value='{$GLOBALS['strUpdateIncident']}' /></p>";
@@ -504,7 +485,7 @@ function display_update_page($draftid=-1)
 
 if (empty($action))
 {
-    $sql = "SELECT * FROM drafts WHERE type = 'update' AND userid = '{$sit[2]}' AND incidentid = '{$id}'";
+    $sql = "SELECT * FROM `{$dbDrafts}` WHERE type = 'update' AND userid = '{$sit[2]}' AND incidentid = '{$id}'";
     $result = mysql_query($sql);
     if (mysql_error()) trigger_error(mysql_error(),E_USER_ERROR);
 
@@ -526,24 +507,24 @@ if (empty($action))
 }
 else if ($action == "editdraft")
 {
-    include('incident_html_top.inc.php');
+    include ('incident_html_top.inc.php');
     $draftid = cleanvar($_REQUEST['draftid']);
     display_update_page($draftid);
 }
 else if ($action == "deletedraft")
 {
     $draftid = cleanvar($_REQUEST['draftid']);
-    if($draftid != -1)
+    if ($draftid != -1)
     {
-        $sql = "DELETE FROM drafts WHERE id = {$draftid}";
+        $sql = "DELETE FROM `{$dbDrafts}` WHERE id = {$draftid}";
         $result = mysql_query($sql);
         if (mysql_error()) trigger_error(mysql_error(),E_USER_ERROR);
     }
     html_redirect("update_incident.php?id={$id}");
 }
-else if($action == "newupdate")
+else if ($action == "newupdate")
 {
-    include('incident_html_top.inc.php');
+    include ('incident_html_top.inc.php');
     display_update_page();
 }
 else
@@ -632,7 +613,7 @@ else
     // Check the updatetype field, if it's blank look at the target
     if (empty($updatetype))
     {
-        switch($target)
+        switch ($target)
         {
             case 'actionplan': $updatetype='actionplan';  break;
             case 'probdef': $updatetype='probdef';  break;
@@ -647,19 +628,19 @@ else
     // visible update
     if ($cust_vis == "yes")
     {
-        $sql  = "INSERT INTO updates (incidentid, userid, type, bodytext, timestamp, currentstatus, customervisibility, nextaction) ";
+        $sql  = "INSERT INTO `{$dbUpdates}` (incidentid, userid, type, bodytext, timestamp, currentstatus, customervisibility, nextaction) ";
         $sql .= "VALUES ('$id', '$sit[2]', '$updatetype', '$bodytext', '$now', '$newstatus', 'show' , '$nextaction')";
     }
     // invisible update
     else
     {
-        $sql  = "INSERT INTO updates (incidentid, userid, type, bodytext, timestamp, currentstatus, nextaction) ";
+        $sql  = "INSERT INTO `{$dbUpdates}` (incidentid, userid, type, bodytext, timestamp, currentstatus, nextaction) ";
         $sql .= "VALUES ($id, $sit[2], '$updatetype', '$bodytext', '$now', '$newstatus', '$nextaction')";
     }
     $result = mysql_query($sql);
     if (mysql_error()) trigger_error("MySQL Query Error ".mysql_error(), E_USER_ERROR);
 
-    $sql = "UPDATE incidents SET status='$newstatus', priority='$newpriority', lastupdated='$now', timeofnextaction='$timeofnextaction' WHERE id='$id'";
+    $sql = "UPDATE `{$dbIncidents}` SET status='$newstatus', priority='$newpriority', lastupdated='$now', timeofnextaction='$timeofnextaction' WHERE id='$id'";
     mysql_query($sql);
     if (mysql_error()) trigger_error("MySQL Query Error ".mysql_error(), E_USER_ERROR);
 
@@ -672,22 +653,22 @@ else
         break;
 
         case 'initialresponse':
-            $sql  = "INSERT INTO updates (incidentid, userid, type, timestamp, currentowner, currentstatus, customervisibility, sla, bodytext) ";
+            $sql  = "INSERT INTO `{$dbUpdates}` (incidentid, userid, type, timestamp, currentowner, currentstatus, customervisibility, sla, bodytext) ";
             $sql .= "VALUES ('$id', '".$sit[2]."', 'slamet', '$now', '".$sit[2]."', '$newstatus', 'show', 'initialresponse','The Initial Response has been made.')";
         break;
 
         case 'probdef':
-            $sql  = "INSERT INTO updates (incidentid, userid, type, timestamp, currentowner, currentstatus, customervisibility, sla, bodytext) ";
+            $sql  = "INSERT INTO `{$dbUpdates}` (incidentid, userid, type, timestamp, currentowner, currentstatus, customervisibility, sla, bodytext) ";
             $sql .= "VALUES ('$id', '".$sit[2]."', 'slamet', '$now', '".$sit[2]."', '$newstatus', 'show', 'probdef','The problem has been defined.')";
         break;
 
         case 'actionplan':
-            $sql  = "INSERT INTO updates (incidentid, userid, type, timestamp, currentowner, currentstatus, customervisibility, sla, bodytext) ";
+            $sql  = "INSERT INTO `{$dbUpdates}` (incidentid, userid, type, timestamp, currentowner, currentstatus, customervisibility, sla, bodytext) ";
             $sql .= "VALUES ('$id', '".$sit[2]."', 'slamet', '$now', '".$sit[2]."', '$newstatus', 'show', 'actionplan','An action plan has been made.')";
         break;
 
         case 'solution':
-            $sql  = "INSERT INTO updates (incidentid, userid, type, timestamp, currentowner, currentstatus, customervisibility, sla, bodytext) ";
+            $sql  = "INSERT INTO `{$dbUpdates}` (incidentid, userid, type, timestamp, currentowner, currentstatus, customervisibility, sla, bodytext) ";
             $sql .= "VALUES ('$id', '".$sit[2]."', 'slamet', '$now', '".$sit[2]."', '$newstatus', 'show', 'solution','The incident has been resolved or reprioritised.\nThe issue should now be brought to a close or a new problem definition created within the service level.')";
         break;
     }
@@ -699,7 +680,7 @@ else
     if ($target!='none')
     {
         // Reset the slaemail sent column, so that email reminders can be sent if the new sla target goes out
-        $sql = "UPDATE incidents SET slaemail='0', slanotice='0' WHERE id='$id' LIMIT 1";
+        $sql = "UPDATE `{$dbIncidents}` SET slaemail='0', slanotice='0' WHERE id='$id' LIMIT 1";
         mysql_query($sql);
         if (mysql_error()) trigger_error("MySQL Query Error ".mysql_error(), E_USER_ERROR);
         //remove any SLA notices - KMH
@@ -712,7 +693,7 @@ else
     $att_max_filesize = return_bytes($CONFIG['upload_max_filesize']);
     $incident_attachment_fspath = $CONFIG['attachment_fspath'] . $id;
     if ($_FILES['attachment']['name'] != "")
-    {       
+    {
         // try to figure out what delimeter is being used (for windows or unix)...
         //.... // $delim = (strstr($filesarray[$c],"/")) ? "/" : "\\";
         $delim = (strstr($_FILES['attachment']['tmp_name'],"/")) ? "/" : "\\";
@@ -746,15 +727,15 @@ else
     }
     if (!$result)
     {
-        include('includes/incident_html_top.inc');
+        include ('includes/incident_html_top.inc');
         echo "<p class='error'>{$strUpdateIncidentFailed}</p>\n";
-        include('includes/incident_html_bottom.inc');
+        include ('includes/incident_html_bottom.inc');
     }
     else
     {
-        if($draftid != -1 AND !empty($draftid))
+        if ($draftid != -1 AND !empty($draftid))
         {
-            $sql = "DELETE FROM drafts WHERE id = {$draftid}";
+            $sql = "DELETE FROM `{$dbDrafts}` WHERE id = {$draftid}";
             $result = mysql_query($sql);
             if (mysql_error()) trigger_error(mysql_error(),E_USER_ERROR);
         }

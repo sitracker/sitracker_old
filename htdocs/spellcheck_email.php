@@ -10,9 +10,9 @@
 
 // Author: Ivan Lucas <ivanlucas[at]users.sourceforge.net>
 
-@include('set_include_path.inc.php');
+@include ('set_include_path.inc.php');
 $title="Spellcheck Email";
-include('incident_html_top.inc.php');
+include ('incident_html_top.inc.php');
 
 echo "<p>";
 
@@ -22,7 +22,11 @@ if (isset($addword))
 }
 if (isset($spellid))
 {
-    $sql = "SELECT updateid, bodytext, newincidentstatus, timetonextaction_none, timetonextaction_days, timetonextaction_hours, timetonextaction_minutes, day, month, year, fromfield, replytofield, ccfield, bccfield, tofield, subjectfield, attachmenttype, filename FROM spellcheck WHERE id='$spellid'";
+    $sql = "SELECT updateid, bodytext, newincidentstatus, timetonextaction_none, ";
+    $sql .= "timetonextaction_days, timetonextaction_hours, timetonextaction_minutes, ";
+    $sql .= "day, month, year, fromfield, replytofield, ccfield, bccfield, tofield, ";
+    $sql .= "subjectfield, attachmenttype, filename ";
+    $sql .= "FROM `{$dbSpellCheck}` WHERE id='$spellid'";
     $result=mysql_query($sql);
     list($updateid, $bodytext, $newincidentstatus, $timetonextaction_none, $timetonextaction_days, $timetonextaction_hours, $timetonextaction_minutes, $day, $month, $year, $fromfield, $replytofield, $ccfield, $bccfield, $tofield, $subjectfield, $attachmenttype, $filename) = mysql_fetch_row($result);
     if (mysql_error()) trigger_error("MySQL Query Error ".mysql_error(), E_USER_ERROR);
@@ -33,7 +37,7 @@ else
     $bodytext = str_replace('<','&#060;', $bodytext);
     $bodytext = str_replace('>','&#062;', $bodytext);
 
-    $isql = "INSERT INTO spellcheck (updateid, bodytext, newincidentstatus, timetonextaction_none, timetonextaction_days, timetonextaction_hours, timetonextaction_minutes, day, month, year, fromfield, replytofield, ccfield, bccfield, tofield, subjectfield, attachmenttype, filename) ";
+    $isql = "INSERT INTO `{$dbSpellCheck}` (updateid, bodytext, newincidentstatus, timetonextaction_none, timetonextaction_days, timetonextaction_hours, timetonextaction_minutes, day, month, year, fromfield, replytofield, ccfield, bccfield, tofield, subjectfield, attachmenttype, filename) ";
     $isql .= "VALUES (0, '".mysql_real_escape_string($bodytext)."', '$newincidentstatus', '$timetonextaction_none', '$timetonextaction_days', '$timetonextaction_hours', '$timetonextaction_minutes', '$day', '$month', '$year', '$fromfield', '$replytofield', '$ccfield', '$bccfield', '$tofield', '$subjectfield', '$attachmenttype', '$filename')";
     $result=mysql_query($isql);
     if (mysql_error()) trigger_error("MySQL Query Error ".mysql_error(), E_USER_ERROR);
@@ -57,7 +61,7 @@ else
 {
     $texttospell=$bodytext;
 }
-$spelltext=spellcheck_text($texttospell, "&id=$id&spellid=$spellid&step=3&spellcheck=yes");
+$spelltext = spellcheck_text($texttospell, "&id=$id&spellid=$spellid&step=3&spellcheck=yes");
 // $spelltext=$texttospell;
 echo "<table summary=\"spellchecker\" width=\"80%\" align=\"center\" class=\"shade2\">";
 echo "<tr class='shade1'><td align='center'><em>Spellcheck Complete</em></td></tr>";

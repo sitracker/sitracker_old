@@ -8,26 +8,26 @@
 // of the GNU General Public License, incorporated herein by reference.
 //
 
-@include('set_include_path.inc.php');
-$permission=20; // Add Users
+@include ('set_include_path.inc.php');
+$permission = 20; // Add Users
 
-require('db_connect.inc.php');
-require('functions.inc.php');
+require ('db_connect.inc.php');
+require ('functions.inc.php');
 
 // This page requires authentication
-require('auth.inc.php');
+require ('auth.inc.php');
 
 $title = $strAddUser;
 
 // External variables
 $submit = $_REQUEST['submit'];
 
-include('htmlheader.inc.php');
+include ('htmlheader.inc.php');
 
 if (empty($submit))
 {
     // Show add user form
-    $gsql = "SELECT * FROM groups ORDER BY name";
+    $gsql = "SELECT * FROM `{$dbGroups}` ORDER BY name";
     $gresult = mysql_query($gsql);
     if (mysql_error()) trigger_error(mysql_error(),E_USER_ERROR);
     while ($group = mysql_fetch_object($gresult))
@@ -46,28 +46,28 @@ if (empty($submit))
     echo "<form action='{$_SERVER['PHP_SELF']}' method='post' onsubmit='return confirm_submit(\"{$strAreYouSureAddUser}\");'>";
     echo "<table align='center' class='vertical'>\n";
     echo "<tr><th>{$strRealName} <sup class='red'>*</sup></th><td><input maxlength='50' name='realname' size='30'";
-    if($_SESSION['formdata']['add_user']['realname'] != "")
+    if ($_SESSION['formdata']['add_user']['realname'] != "")
     {
         echo "value='{$_SESSION['formdata']['add_user']['realname']}'";
     }
     echo "/></td></tr>\n";
 
     echo "<tr><th>{$strUsername} <sup class='red'>*</sup></th><td><input maxlength='50' name='username' size='30'";
-    if($_SESSION['formdata']['add_user']['username'] != "")
+    if ($_SESSION['formdata']['add_user']['username'] != "")
     {
         echo "value='{$_SESSION['formdata']['add_user']['username']}'";
     }
     echo "/></td></tr>\n";
 
     echo "<tr id='password'><th>{$strPassword} <sup class='red'>*</sup></th><td><input maxlength='50' name='password' size='30'";
-    if($_SESSION['formdata']['add_user']['password'] != "")
+    if ($_SESSION['formdata']['add_user']['password'] != "")
     {
         echo "value='{$_SESSION['formdata']['add_user']['password']}'";
     }
     echo "/></td></tr>\n";
 
     echo "<tr><th>{$strGroup}</th>";
-    if($_SESSION['formdata']['add_user']['groupid'] != "")
+    if ($_SESSION['formdata']['add_user']['groupid'] != "")
     {
         echo "<td>".group_drop_down('groupid', $_SESSION['formdata']['add_user']['groupid'])."</td>";
     }
@@ -78,7 +78,7 @@ if (empty($submit))
     echo "</tr>";
 
     echo "<tr><th>{$strRole}</th>";
-    if($_SESSION['formdata']['add_user']['roleid'] != "")
+    if ($_SESSION['formdata']['add_user']['roleid'] != "")
     {
         echo "<td>".role_drop_down('roleid', $_SESSION['formdata']['add_user']['roleid'])."</td>";
     }
@@ -89,35 +89,35 @@ if (empty($submit))
     echo "</tr>";
 
     echo "<tr><th>{$strJobTitle} <sup class='red'>*</sup></th><td><input maxlength='50' name='jobtitle' size='30'";
-    if($_SESSION['formdata']['add_user']['jobtitle'] != "")
+    if ($_SESSION['formdata']['add_user']['jobtitle'] != "")
     {
         echo "value='{$_SESSION['formdata']['add_user']['jobtitle']}'";
     }
     echo "/></td></tr>\n";
 
     echo "<tr id='email'><th>{$strEmail} <sup class='red'>*</sup></th><td><input maxlength='50' name='email' size='30'";
-    if($_SESSION['formdata']['add_user']['email'] != "")
+    if ($_SESSION['formdata']['add_user']['email'] != "")
     {
         echo "value='{$_SESSION['formdata']['add_user']['email']}'";
     }
     echo "/></td></tr>\n";
 
     echo "<tr><th>{$strTelephone}</th><td><input maxlength='50' name='phone' size='30'";
-    if($_SESSION['formdata']['add_user']['phone'] != "")
+    if ($_SESSION['formdata']['add_user']['phone'] != "")
     {
         echo "value='{$_SESSION['formdata']['add_user']['phone']}'";
     }
     echo "/></td></tr>\n";
 
     echo "<tr><th>{$strMobile}</th><td><input maxlength='50' name='mobile' size='30'";
-    if($_SESSION['formdata']['add_user']['mobile'] != "")
+    if ($_SESSION['formdata']['add_user']['mobile'] != "")
     {
         echo "value='{$_SESSION['formdata']['add_user']['mobile']}'";
     }
     echo "/></td></tr>\n";
 
     echo "<tr><th>{$strFax}</th><td><input maxlength='50' name='fax' size='30'";
-    if($_SESSION['formdata']['add_user']['fax'] != "")
+    if ($_SESSION['formdata']['add_user']['fax'] != "")
     {
         echo "value='{$_SESSION['formdata']['add_user']['fax']}'";
     }
@@ -133,7 +133,7 @@ if (empty($submit))
     echo "</table>\n";
     echo "<p><input name='submit' type='submit' value='{$strAddUser}' /></p>";
     echo "</form>\n";
-    include('htmlfooter.inc.php');
+    include ('htmlfooter.inc.php');
 
     clear_form_data('add_user');
 }
@@ -186,7 +186,7 @@ else
         $_SESSION['formerrors']['add_user']['email']= "You must enter an email address</p>\n";
     }
     // Check username is unique
-    $sql = "SELECT COUNT(id) FROM users WHERE username='$username'";
+    $sql = "SELECT COUNT(id) FROM `{$dbUsers}` WHERE username='$username'";
     $result = mysql_query($sql);
     if (mysql_error()) trigger_error(mysql_error(),E_USER_ERROR);
     list($countexisting) = mysql_fetch_row($result);
@@ -196,7 +196,7 @@ else
         $_SESSION['formerrors']['add_user']['']= "Username must be unique</p>\n";
     }
     // Check email address is unique (discount disabled accounts)
-    $sql = "SELECT COUNT(id) FROM users WHERE status > 0 AND email='$email'";
+    $sql = "SELECT COUNT(id) FROM `{$dbUsers}` WHERE status > 0 AND email='$email'";
     $result = mysql_query($sql);
     if (mysql_error()) trigger_error(mysql_error(),E_USER_ERROR);
     list($countexisting) = mysql_fetch_row($result);
@@ -210,19 +210,19 @@ else
     if ($errors == 0)
     {
         $password=strtoupper(md5($password));
-        $sql = "INSERT INTO users (username, password, realname, roleid, groupid, title, email, phone, mobile, fax, status, var_style, holiday_entitlement) ";
+        $sql = "INSERT INTO `{$dbUsers}` (username, password, realname, roleid, groupid, title, email, phone, mobile, fax, status, var_style, holiday_entitlement) ";
         $sql .= "VALUES ('$username', '$password', '$realname', '$roleid', '$groupid', '$jobtitle', '$email', '$phone', '$mobile', '$fax', 1, '{$CONFIG['default_interface_style']}', '$holiday_entitlement')";
         $result = mysql_query($sql);
         if (mysql_error()) trigger_error("MySQL Query Error ".mysql_error(), E_USER_ERROR);
         $newuserid = mysql_insert_id();
 
         // Create permissions (set to none)
-        $sql = "SELECT * FROM permissions";
+        $sql = "SELECT * FROM `{$dbPermissions}`";
         $result = mysql_query($sql);
         if (mysql_error()) trigger_error("MySQL Query Error ".mysql_error(), E_USER_ERROR);
         while ($perm = mysql_fetch_object($result))
         {
-            $psql = "INSERT INTO userpermissions (userid, permissionid, granted) ";
+            $psql = "INSERT INTO `{$dbUserPermissions}` (userid, permissionid, granted) ";
             $psql .= "VALUES ('$newuserid', '{$perm->id}', 'false')";
             mysql_query($psql);
             if (mysql_error()) trigger_error("MySQL Query Error ".mysql_error(), E_USER_ERROR);

@@ -9,14 +9,14 @@
 //
 
 // This Page Is Valid XHTML 1.0 Transitional!  13Sep06
-@include('set_include_path.inc.php');
-$permission=4; // Edit your profile
+@include ('set_include_path.inc.php');
+$permission = 4; // Edit your profile
 
-require('db_connect.inc.php');
-require('functions.inc.php');
+require ('db_connect.inc.php');
+require ('functions.inc.php');
 
 // This page requires authentication
-require('auth.inc.php');
+require ('auth.inc.php');
 
 $approver = user_permission($sit[2], 50); // Approve holidays
 
@@ -38,7 +38,7 @@ else
     $title = user_realname($user)."'s Holidays"; //FIXME i18n
 }
 
-include('htmlheader.inc.php');
+include ('htmlheader.inc.php');
 echo "<h2><img src='{$CONFIG['application_webpath']}images/icons/{$iconset}/32x32/holiday.png' width='32' height='32' alt='' /> ";
 echo "$title</h2>";
 
@@ -84,7 +84,7 @@ if ($user == $sit[2] OR $approver == TRUE)
 // Holiday List
 echo "<table align='center' width='450'>\n";
 echo "<tr><th colspan='4' class='subhead'>{$strHolidayList}</th></tr>\n";
-$sql = "SELECT * FROM holidays WHERE userid='{$user}' AND approved=0 ORDER BY startdate ASC";
+$sql = "SELECT * FROM `{$dbHolidays}` WHERE userid='{$user}' AND approved=0 ORDER BY startdate ASC";
 $result = mysql_query($sql);
 if (mysql_error()) trigger_error("MySQL Query Error ".mysql_error(), E_USER_ERROR);
 $numwaiting = mysql_num_rows($result);
@@ -143,7 +143,7 @@ $totaltaken = 0;
 
 foreach ($holidaytype AS $htypeid => $htype)
 {
-    $sql = "SELECT *, from_unixtime(startdate) AS start FROM holidays WHERE userid='{$user}' AND type={$htypeid} ";
+    $sql = "SELECT *, from_unixtime(startdate) AS start FROM `{$dbHolidays}` WHERE userid='{$user}' AND type={$htypeid} ";
     $sql.= "AND (approved=1 OR (approved=11 AND startdate >= $now)) ORDER BY startdate ASC ";
     $result = mysql_query($sql);
     if (mysql_error()) trigger_error("MySQL Query Error ".mysql_error(), E_USER_ERROR);
@@ -179,7 +179,7 @@ echo "</table>\n";
 if ($user==$sit[2])
 {
     // Only show when viewing your own holiday page
-    $sql  = "SELECT * FROM users WHERE status!=0 AND status!=1 ";  // status=0 means left company
+    $sql  = "SELECT * FROM `{$dbUsers}` WHERE status!=0 AND status!=1 ";  // status=0 means left company
     $result = mysql_query($sql);
     if (mysql_error()) trigger_error("MySQL Query Error ".mysql_error(), E_USER_ERROR);
     echo "<table align='center' width='450'>";
@@ -203,5 +203,5 @@ if ($user==$sit[2])
     else echo "<tr class='shade2'><td><em>{$strNobody}</em></td></tr>\n";
     echo "</table>";
 }
-include('htmlfooter.inc.php');
+include ('htmlfooter.inc.php');
 ?>

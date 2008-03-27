@@ -27,7 +27,7 @@ if (count($slahistory) >= 1)
 {
     echo "<table align='center'>";
     echo "<tr><th>{$strEvent}</th><th>{$strUser}</th><th>{$strTarget}</th><th>{$strActual}</th><th>{$strDateAndTime}</th></tr>\n";
-    foreach($slahistory AS $history)
+    foreach ($slahistory AS $history)
     {
         if ($history['targetmet']==FALSE) $class='critical';
         else $class='shade2';
@@ -53,10 +53,10 @@ if (count($slahistory) >= 1)
 else echo "<p align='center'>There is no history to display.<p>";
 
 //start status summary
-$sql = "SELECT updates.id as updatesid, incidentid, userid, type, timestamp, currentstatus, incidentstatus.id, incidentstatus.name as name ";
-$sql .= "FROM updates, incidentstatus ";
-$sql .= " WHERE incidentid='{$incidentid}' ";
-$sql .= " AND updates.currentstatus=incidentstatus.id ";
+$sql = "SELECT u.id AS updatesid, incidentid, userid, type, timestamp, currentstatus, is.id, is.name AS name ";
+$sql .= "FROM `{$dbUpdates}` AS u, `{$dbIncidentStatus}` AS is ";
+$sql .= " WHERE incidentid = '{$incidentid}' ";
+$sql .= " AND u.currentstatus = is.id ";
 $sql .= " ORDER BY timestamp ASC";
 
 $result = mysql_query($sql);
@@ -65,10 +65,10 @@ if (mysql_error()) trigger_error(mysql_error(), E_USER_ERROR);
 $updatearray = array();
 $last = -1;
 $laststatus;
-while($row = mysql_fetch_object($result))
+while ($row = mysql_fetch_object($result))
 {
     $updatearray[$row->currentstatus]['name'] = $row->name;
-    if($last == -1)
+    if ($last == -1)
     {
         $updatearray[$row->currentstatus]['time'] = 0;
     }
@@ -88,7 +88,7 @@ if (extension_loaded('gd'))
 {
     $data = array();
     $legends;
-    foreach($updatearray as $row)
+    foreach ($updatearray as $row)
     {
         array_push($data, $row['time']);
         $legends .= $row['name']."|";
@@ -103,7 +103,7 @@ else
 {
     echo "<table align='center'>";
     echo "<tr><th>{$strStatus}</th><th>{$strTime}</th></tr>\n";
-    foreach($updatearray as $row)
+    foreach ($updatearray as $row)
     {
         echo "<tr><td>".$row['name']. "</td><td>".format_seconds($row['time'])."</td></tr>";
     }

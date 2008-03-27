@@ -12,15 +12,15 @@
 
 // Product information is the info related to a product that is requested when adding an incident
 
-@include('set_include_path.inc.php');
-$permission=25; // Add Product Info
+@include ('set_include_path.inc.php');
+$permission = 25; // Add Product Info
 
-require('db_connect.inc.php');
-require('functions.inc.php');
+require ('db_connect.inc.php');
+require ('functions.inc.php');
 // This page requires authentication
-require('auth.inc.php');
+require ('auth.inc.php');
 
-include('htmlheader.inc.php');
+include ('htmlheader.inc.php');
 
 // Show add product information form
 if (empty($_REQUEST['submit']))
@@ -61,7 +61,7 @@ else
     // add product information if no errors
     if ($errors == 0)
     {
-        $sql = "INSERT INTO productinfo (productid, information, moreinformation) ";
+        $sql = "INSERT INTO `{$dbProductInfo}` (productid, information, moreinformation) ";
         $sql .= "VALUES ('$product', '$information', '$moreinformation')";
         $result = mysql_query($sql);
         if (mysql_error()) trigger_error(mysql_error(),E_USER_ERROR);
@@ -74,5 +74,5 @@ else
         }
     }
 }
-include('htmlfooter.inc.php');
+include ('htmlfooter.inc.php');
 ?>

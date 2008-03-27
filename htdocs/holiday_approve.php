@@ -10,14 +10,14 @@
 
 // Author: Ivan Lucas <ivanlucas[at]users.sourceforge.net>
 
-@include('set_include_path.inc.php');
-$permission=50; // Approve Holiday
-require('db_connect.inc.php');
-require('functions.inc.php');
-$title="Holiday Approval";
+@include ('set_include_path.inc.php');
+$permission = 50; // Approve Holiday
+require ('db_connect.inc.php');
+require ('functions.inc.php');
+$title = "Holiday Approval";
 
 // This page requires authentication
-require('auth.inc.php');
+require ('auth.inc.php');
 
 // External variables
 $approve = $_REQUEST['approve'];
@@ -31,13 +31,13 @@ $view = cleanvar($_REQUEST['view']);
 switch (strtolower($approve))
 {
     case 'true':
-        $sql = "UPDATE holidays SET approved='1' ";
+        $sql = "UPDATE `{$dbHolidays}` SET approved='1' ";
     break;
     case 'false':
-        $sql = "UPDATE holidays SET approved='2' ";
+        $sql = "UPDATE `{$dbHolidays}` SET approved='2' ";
     break;
     case 'free':
-        $sql = "UPDATE holidays SET approved='1', type='5' ";
+        $sql = "UPDATE `{$dbHolidays}` SET approved='1', type='5' ";
     break;
 }
 

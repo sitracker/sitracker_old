@@ -10,13 +10,13 @@
 
 // Author: Ivan Lucas <ivanlucas[at]users.sourceforge.net>
 
-@include('set_include_path.inc.php');
-$permission=24; // Add Product
+@include ('set_include_path.inc.php');
+$permission = 24; // Add Product
 
-require('db_connect.inc.php');
-require('functions.inc.php');
+require ('db_connect.inc.php');
+require ('functions.inc.php');
 // This page requires authentication
-require('auth.inc.php');
+require ('auth.inc.php');
 
 $title = $strAddProduct;
 
@@ -26,7 +26,7 @@ $submit = $_REQUEST['submit'];
 if (empty($submit))
 {
     // Show add product form
-    include('htmlheader.inc.php');
+    include ('htmlheader.inc.php');
     echo show_form_errors('add_product');
     clear_form_errors('add_product');
     echo "<h2><img src='{$CONFIG['application_webpath']}images/icons/{$iconset}/32x32/product.png' width='32' height='32' alt='' /> ";
@@ -35,7 +35,7 @@ if (empty($submit))
     echo "<form action='{$_SERVER['PHP_SELF']}' method='post' onsubmit='return confirm_submit(\"{$strAreYouSureAddProduct}\");'>";
     echo "<table align='center'>";
     echo "<tr><th>{$strVendor}<sup class='red'>*</sup></th><td>";
-    if($_SESSION['formdata']['add_product']['vendor'] != "")
+    if ($_SESSION['formdata']['add_product']['vendor'] != "")
     {
         echo vendor_drop_down('vendor', $_SESSION['formdata']['add_product']['vendor'])."</td></tr>\n";
     }
@@ -44,7 +44,7 @@ if (empty($submit))
         echo vendor_drop_down('vendor', 0)."</td></tr>\n";
     }
     echo "<tr><th>{$strProduct}<sup class='red'>*</sup></th><td><input maxlength='50' name='name' size='40' ";
-    if($_SESSION['formdata']['add_product']['name'] != "")
+    if ($_SESSION['formdata']['add_product']['name'] != "")
     {
         echo "value=".$_SESSION['formdata']['add_product']['name'];
     }
@@ -53,7 +53,7 @@ if (empty($submit))
     echo "<tr><th>{$strDescription}</th>";
     echo "<td>";
     echo "<textarea name='description' cols='40' rows='6'>";
-    if($_SESSION['formdata']['add_product']['description'] != "")
+    if ($_SESSION['formdata']['add_product']['description'] != "")
     {
         echo $_SESSION['formdata']['add_product']['description'];
     }
@@ -64,7 +64,7 @@ if (empty($submit))
     echo "<p class='warning'>{$strAvoidDupes}</p>";
     echo "</form>\n";
     echo "<p align='center'><a href='products.php'>{$strReturnWithoutSaving}</a></p>";
-    include('htmlfooter.inc.php');
+    include ('htmlfooter.inc.php');
     clear_form_data('add_product');
 
 }
@@ -93,7 +93,7 @@ else
     // add product if no errors
     if ($errors == 0)
     {
-        $sql = "INSERT INTO products (name, vendorid, description) VALUES ('$name', '$vendor', '$description')";
+        $sql = "INSERT INTO `{$dbProducts}` (name, vendorid, description) VALUES ('$name', '$vendor', '$description')";
         $result = mysql_query($sql);
         if (mysql_error()) trigger_error("MySQL Query Error ".mysql_error(), E_USER_ERROR);
 
@@ -110,7 +110,7 @@ else
     }
     else
     {
-        include('htmlheader.inc.php');
+        include ('htmlheader.inc.php');
         html_redirect("add_product.php", FALSE);
     }
 }

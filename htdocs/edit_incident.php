@@ -10,30 +10,30 @@
 
 // Soon to be replaced
 // See incident/edit.inc.php
-@include('set_include_path.inc.php');
-$permission=7; // Edit Incidents
+@include ('set_include_path.inc.php');
+$permission = 7; // Edit Incidents
 
-require('db_connect.inc.php');
-require('functions.inc.php');
+require ('db_connect.inc.php');
+require ('functions.inc.php');
 
 // This page requires authentication
-require('auth.inc.php');
+require ('auth.inc.php');
 
 // External variables
 $submit = $_REQUEST['submit'];
 $id = cleanvar($_REQUEST['id']);
-$incidentid=$id;
+$incidentid = $id;
 
 // No submit detected show edit form
 if (empty($submit))
 {
     $title = $strEdit;
-    include('incident_html_top.inc.php');
+    include ('incident_html_top.inc.php');
 
     // extract incident details
-    $sql  = "SELECT * FROM incidents WHERE id='$id'";
+    $sql  = "SELECT * FROM `{$dbIncidents}` WHERE id='$id'";
     $result = mysql_query($sql);
-    if (mysql_error()) trigger_error("MySQL Query Error ".mysql_error(), E_USER_ERROR);
+    if (mysql_error()) trigger_error("MySQL Query Error ".mysql_error(), E_USER_WARNING);
     $incident = mysql_fetch_array($result);
 
     // SUPPORT INCIDENT
@@ -49,7 +49,7 @@ if (empty($submit))
         {
             echo sprintf($strLoggedUnder, $incident['maintenanceid']).". ";
         }
-        
+
         else echo "{$strIncidentNoContract}. ";
         echo "{$strToChangeContract}.";
         echo "</td></tr>\n";
@@ -95,7 +95,7 @@ if (empty($submit))
         echo "<input name='submit' type='submit' value='{$strSave}' /></p>";
         echo "</form>\n";
     }
-    include('incident_html_bottom.inc.php');
+    include ('incident_html_bottom.inc.php');
 }
 else
 {
@@ -127,165 +127,164 @@ else
     $tags = cleanvar($_POST['tags']);
 
     // Edit the incident
-    if ($type == "Support")  // FIXME: This IF might not be needed since sales incidents are obsolete INL 29Apr03
+    // check form input
+    $errors = 0;
+
+    // check for blank contact
+    if ($contact == 0)
     {
-        // check form input
-        $errors = 0;
+        $errors += 1;
+        $error_string .= "<p class='error'>You must select a contact</p>\n";
+    }
+    // check for blank title
+    if ($title == "")
+    {
+        $errors += 1;
+        $error_string .= "<p class='error'>You must enter a title</p>\n";
+    }
 
-        // check for blank contact
-        if ($contact == 0)
+    if ($errors > 0)
+    {
+        echo "<div>$bodytext</div>";
+    }
+
+    if ($errors == 0)
+    {
+        $addition_errors = 0;
+
+        replace_tags(2, $id, $tags);
+
+        // update support incident
+        $sql = "UPDATE `{$dbIncidents}` ";
+        $sql .= "SET externalid='$externalid', ccemail='$ccemail', ";
+        $sql .= "escalationpath='$escalationpath', externalengineer='$externalengineer', externalemail='$externalemail', title='$title', ";
+        $sql .= "contact='$contact', softwareid='$software', productversion='$productversion', ";
+        $sql .= "productservicepacks='$productservicepacks', lastupdated='$now' WHERE id='$id'";
+        $result = mysql_query($sql);
+        if (mysql_error()) trigger_error("MySQL Query Error ".mysql_error(), E_USER_ERROR);
+        if (!$result)
         {
-            $errors = 1;
-            $error_string .= "<p class='error'>You must select a contact</p>\n";
+            $addition_errors = 1;
+            $addition_errors_string .= "<p class='error'>Update of incident failed</p>\n";
         }
-        // check for blank title
-        if ($title == "")
+
+        if ($addition_errors == 0)
         {
-            $errors = 1;
-            $error_string .= "<p class='error'>You must enter a title</p>\n";
-        }
+            // dump details to incident update
+            if ($oldtitle != $title) $header .= "Title: $oldtitle -&gt; <b>$title</b>\n";
+            if ($oldcontact != $contact)
+            {
+                $contactname = contact_realname($contact);
+                $contactsite = contact_site($contact);
+                $header .= "Contact: " . contact_realname($oldcontact) . " -&gt; <b>{$contactname}</b>\n";
+                $maintsiteid = maintenance_siteid(incident_maintid($id));
+                if ($maintsiteid > 0 AND contact_siteid($contact) != $maintsiteid)
+                {
+                    $maintcontactsite = site_name($maintsiteid);
+                    $header .= "Assigned to <b>{$contactname} of {$contactsite}</b> on behalf of {$maintcontactsite} (The contract holder)\n";
+                }
+            }
+            if ($oldexternalid != $externalid)
+            {
+                $header .= "External ID: ";
+                if ($oldexternalid != "")
+                {
+                    $header .= $oldexternalid;
+                }
+                else
+                {
+                    $header .= "None";
+                }
 
-        if ($errors > 0)
-        {
-            echo "<div>$bodytext</div>";
-        }
+                $header .= " -&gt; <b>";
+                if ($externalid != "")
+                {
+                    $header .= $externalid;
+                }
+                else
+                {
+                    $header .= "None";
+                }
 
-        if ($errors == 0)
-        {
-            $addition_errors = 0;
+                $header .= "</b>\n";
+            }
+            $escalationpath = db_read_column('name', $dbEscalationPaths, $escalationpath);
+            if ($oldccemail != $ccemail)
+            {
+                $header .= "CC Email: " . $oldccemail . " -&gt; <b>" . $ccemail . "</b>\n";
+            }
 
-            replace_tags(2, $id, $tags);
+            if ($oldescalationpath != $escalationpath)
+            {
+                $header .= "Escalation: " . $oldescalationpath . " -&gt; <b>" . $escalationpath . "</b>\n";
+            }
+            if ($oldexternalengineer != $externalengineer)
+            {
+                $header .= "External Engineer: " . $oldexternalengineer . " -&gt; <b>" . $externalengineer . "</b>\n";
+            }
 
-            // update support incident
-            $sql = "UPDATE incidents ";
-            $sql .= "SET externalid='$externalid', ccemail='$ccemail', ";
-            $sql .= "escalationpath='$escalationpath', externalengineer='$externalengineer', externalemail='$externalemail', title='$title', ";
-            $sql .= "contact='$contact', softwareid='$software', productversion='$productversion', ";
-            $sql .= "productservicepacks='$productservicepacks', lastupdated='$now' WHERE id='$id'";
+            if ($oldexternalemail != $externalemail)
+            {
+                $header .= "External email: " . $oldexternalemail . " -&gt; <b>" . $externalemail . "</b>\n";
+            }
+
+            if ($oldsoftware != $software)
+            {
+                $header .= "Skill: ".software_name($oldsoftware)." -&gt; <b>".software_name($software)."</b>\n";
+            }
+
+            if ($oldproductversion != $productversion)
+            {
+                $header .= "Version: ".$oldproductversion." -&gt; <b>".$productversion."</b>\n";
+            }
+
+            if ($oldproductservicepacks != $productservicepacks)
+            {
+                $header .= "Service Packs Applied: ".$oldproductservicepacks." -&gt; <b>".$productservicepacks."</b>\n";
+            }
+
+            if (!empty($header)) $header .= "<hr>";
+        //get current incident status
+            $sql = "SELECT status FROM `{$dbIncidents}` WHERE id={$id}";
+            $result = mysql_query($sql);
+            if (mysql_error()) trigger_error("MySQL Query Error ".mysql_error(), E_USER_WARNING);
+            $status = mysql_fetch_object($result);
+            $status = $status->status;
+
+            $bodytext = $header . $bodytext;
+            $bodytext = mysql_real_escape_string($bodytext);
+            $sql  = "INSERT INTO `{$dbUpdates}` (incidentid, userid, type, currentstatus, bodytext, timestamp) ";
+            $sql .= "VALUES ('$id', '$sit[2]', 'editing', '$status', '$bodytext', '$now')";
             $result = mysql_query($sql);
             if (mysql_error()) trigger_error("MySQL Query Error ".mysql_error(), E_USER_ERROR);
+
             if (!$result)
             {
                 $addition_errors = 1;
-                $addition_errors_string .= "<p class='error'>Update of incident failed</p>\n";
+                $addition_errors_string .= "<p class='error'>Addition of incident update failed</p>\n";
             }
 
-            if ($addition_errors == 0)
-            {
-                // dump details to incident update
-                if ($oldtitle != $title) $header .= "Title: $oldtitle -&gt; <b>$title</b>\n";
-                if ($oldcontact != $contact)
-                {
-                    $contactname = contact_realname($contact);
-                    $contactsite = contact_site($contact);
-                    $header .= "Contact: " . contact_realname($oldcontact) . " -&gt; <b>{$contactname}</b>\n";
-                    $maintsiteid = maintenance_siteid(incident_maintid($id));
-                    if ($maintsiteid > 0 AND contact_siteid($contact) != $maintsiteid)
-                    {
-                        $maintcontactsite = site_name($maintsiteid);
-                        $header .= "Assigned to <b>{$contactname} of {$contactsite}</b> on behalf of {$maintcontactsite} (The contract holder)\n";
-                    }
-                }
-                if ($oldexternalid != $externalid)
-                {
-                    $header .= "External ID: ";
-                    if ($oldexternalid != "")
-                    {
-                        $header .= $oldexternalid;
-                    }
-                    else
-                    {
-                        $header .= "None";
-                    }
-                    
-                    $header .= " -&gt; <b>";
-                    if ($externalid != "")
-                    {
-                        $header .= $externalid;
-                    }
-                    else
-                    {
-                        $header .= "None";
-                    }
-                        
-                    $header .= "</b>\n";
-                }
-                $escalationpath = db_read_column('name', 'escalationpaths', $escalationpath);
-                if ($oldccemail != $ccemail)
-                {
-                    $header .= "CC Email: " . $oldccemail . " -&gt; <b>" . $ccemail . "</b>\n";
-                }
-                
-                if ($oldescalationpath != $escalationpath)
-                {
-                    $header .= "Escalation: " . $oldescalationpath . " -&gt; <b>" . $escalationpath . "</b>\n";
-                }
-                if ($oldexternalengineer != $externalengineer)
-                {
-                    $header .= "External Engineer: " . $oldexternalengineer . " -&gt; <b>" . $externalengineer . "</b>\n";
-                }
-                
-                if ($oldexternalemail != $externalemail)
-                {
-                    $header .= "External email: " . $oldexternalemail . " -&gt; <b>" . $externalemail . "</b>\n";
-                }
-                
-                if ($oldsoftware != $software)
-                {
-                    $header .= "Skill: ".software_name($oldsoftware)." -&gt; <b>".software_name($software)."</b>\n";
-                }
-                
-                if ($oldproductversion != $productversion)
-                {
-                    $header .= "Version: ".$oldproductversion." -&gt; <b>".$productversion."</b>\n";
-                }
-                
-                if ($oldproductservicepacks != $productservicepacks)
-                {
-                    $header .= "Service Packs Applied: ".$oldproductservicepacks." -&gt; <b>".$productservicepacks."</b>\n";
-                }
+            plugin_do('incident_edited');
+        }
 
-                if (!empty($header)) $header .= "<hr>";
-             //get current incident status
-                $sql = "SELECT status FROM incidents WHERE id={$id}";
-                $result = mysql_query($sql);
-                $status = mysql_fetch_object($result);
-                $status = $status->status;
-
-                $bodytext = $header . $bodytext;
-                $bodytext = mysql_real_escape_string($bodytext);
-                $sql  = "INSERT INTO updates (incidentid, userid, type, currentstatus, bodytext, timestamp) ";
-                $sql .= "VALUES ('$id', '$sit[2]', 'editing', '$status', '$bodytext', '$now')";
-                $result = mysql_query($sql);
-                if (mysql_error()) trigger_error("MySQL Query Error ".mysql_error(), E_USER_ERROR);
-
-                if (!$result)
-                {
-                    $addition_errors = 1;
-                    $addition_errors_string .= "<p class='error'>Addition of incident update failed</p>\n";
-                }
-
-                plugin_do('incident_edited');
-            }
-
-            if ($addition_errors == 0)
-            {
-                journal(CFG_LOGGING_NORMAL, 'Incident Edited', "Incident $id was edited", CFG_JOURNAL_INCIDENTS, $id);
-                html_redirect("incident_details.php?id={$id}");
-            }
-            else
-            {
-                include('incident_html_top.inc.php');
-                echo $addition_errors_string;
-                include('incident_html_bottom.inc.php');
-            }
+        if ($addition_errors == 0)
+        {
+            journal(CFG_LOGGING_NORMAL, 'Incident Edited', "Incident $id was edited", CFG_JOURNAL_INCIDENTS, $id);
+            html_redirect("incident_details.php?id={$id}");
         }
         else
         {
-            include('incident_html_top.inc.php');
-            echo $error_string;
-            include('incident_html_bottom.inc.php');
+            include ('incident_html_top.inc.php');
+            echo $addition_errors_string;
+            include ('incident_html_bottom.inc.php');
         }
     }
+    else
+    {
+        include ('incident_html_top.inc.php');
+        echo $error_string;
+        include ('incident_html_bottom.inc.php');
+    }
+
 }
 ?>

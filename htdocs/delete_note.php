@@ -10,20 +10,20 @@
 
 // Author: Ivan Lucas <ivanlucas[at]users.sourceforge.net>
 
-@include('set_include_path.inc.php');
-$permission=0; // Allow all auth users
+@include ('set_include_path.inc.php');
+$permission = 0; // Allow all auth users
 
-require('db_connect.inc.php');
-require('functions.inc.php');
+require ('db_connect.inc.php');
+require ('functions.inc.php');
 
 // This page requires authentication
-require('auth.inc.php');
+require ('auth.inc.php');
 
 // External variables
 $id = cleanvar($_REQUEST['id']);
 $rpath = cleanvar($_REQUEST['rpath']);
 
-$sql = "DELETE FROM notes WHERE id='{$id}' AND userid='{$sit[2]}' LIMIT 1";
+$sql = "DELETE FROM `{$dbNotes}` WHERE id='{$id}' AND userid='{$sit[2]}' LIMIT 1";
 mysql_query($sql);
 if (mysql_error()) trigger_error(mysql_error(),E_USER_ERROR);
 if (mysql_affected_rows() >= 1) html_redirect($rpath);

@@ -13,17 +13,19 @@
 //          Kieran Hogg <kieran_hogg[at]users.sourceforge.net>
 // heavily based on the Salford Report by Paul Heaney
 
-@include('../set_include_path.inc.php');
-$permission=37; // Run Reports
+@include ('../set_include_path.inc.php');
+$permission = 37; // Run Reports
 
-include('db_connect.inc.php');
-include('functions.inc.php');
-require('auth.inc.php');
+include ('db_connect.inc.php');
+include ('functions.inc.php');
+require ('auth.inc.php');
+
+
+include ('htmlheader.inc.php');
 
 $filterby = cleanvar($_REQUEST['filterby']);
 $filter = cleanvar($_REQUEST['filter']);
 
-include('htmlheader.inc.php');
 echo "<script type='text/javascript'>";
 ?>
 function incident_details_window_l(incidentid,second)
@@ -74,7 +76,6 @@ if (!empty($filterby))
             $noneChecked = "checked='yes'";
             break;
      }
-        
 }
 
 echo "<form action='{$_SERVER['PHP_SELF']}' method='post' id='filterform'><p align='center'>\n";
@@ -115,17 +116,37 @@ else
 echo "<input type='submit' name='go' value='{$strGo}' />";
 echo "</p></form>";
 
-$sql = "SELECT id, name FROM escalationpaths";
+$sql = "SELECT id, name FROM `{$dbEscalationPaths}`";
 $escs = mysql_query($sql);
 while ($escalations = mysql_fetch_object($escs))
 {
         $html .= "<h3>{$escalations->name}</h3>";
-        $sql = "SELECT incidents.*, software.name, contacts.forenames, contacts.surname, sites.name AS siteName FROM incidents, software, contacts, sites ";
-        $sql .= "WHERE escalationpath = '{$escalations->id}' AND closed = '0' AND software.id = incidents.softwareid ";
-        $sql .= " AND incidents.contact = contacts.id AND contacts.siteid = sites.id ";
-        
+
+        $sql = "SELECT i.*, sw.name, c.forenames, c.surname, s.name AS siteName ";
+        $sql .= "FROM `{$dbIncidents}` AS i, `{$dbSoftware}` AS sw, `{$dbContacts}` AS c, `{$dbSites}` AS s ";
+        $sql .= "WHERE escalationpath = '{$escalations->id}' AND closed = '0' AND sw.id = i.softwareid ";
+        $sql .= " AND i.contact = c.id AND c.siteid = s.id ";
+
+        if (!empty($filterby))
+        {
+            switch($filterby)
+            {
+                case 'sla':
+                    $sql .= "AND i.servicelevel = '{$filter}' ";
+                    break;
+                case 'maintenanceid':
+                    $sql .= "AND i.maintenanceid = '{$filter}' ";
+                    break;
+                case 'softwareid':
+                    $sql .= "AND i.softwareid = '{$filter}' ";
+                    break;
+                case 'product':
+                    $sql .= "AND i.product = '{$filter}' ";
+                    break;
+             }
+        }
         $sql .= $filterSQL;
-        
+
         $sql .= "ORDER BY externalengineer";
 
         $result = mysql_query($sql);
@@ -135,8 +156,8 @@ while ($escalations = mysql_fetch_object($escs))
         while ($obj = mysql_fetch_object($result))
         {
             $name = $obj->externalengineer;
-            if(empty($name)) $name=$strNoNameAssociated;
-            $esc[$name]['name']=$name;
+            if (empty($name)) $name = $strNoNameAssociated;
+            $esc[$name]['name'] = $name;
             $esc[$name]['count']++;
             $esc[$name][$obj->priority]++;
             $str = "<span><strong>".$obj->forenames." ".$obj->surname."</strong><br />".$obj->siteName."</span>";
@@ -198,10 +219,12 @@ while ($escalations = mysql_fetch_object($escs))
                 $html .= "</tr>\n";
             }
             $html .= "<tr><td>{$strTotal}:</td><td>{$total}</td>";
+
             if (empty($c['4'])) $c['4'] = 0;
             if (empty($c['3'])) $c['3'] = 0;
             if (empty($c['2'])) $c['2'] = 0;
             if (empty($c['1'])) $c['1'] = 0;
+
             $html .= "<td>".$c['4']."</td>";
             $html .= "<td>".$c['3']."</td>";
             $html .= "<td>".$c['2']."</td>";
@@ -217,5 +240,5 @@ while ($escalations = mysql_fetch_object($escs))
     unset($esc);
 }
 echo $html;
-include('htmlfooter.inc.php');
+include ('htmlfooter.inc.php');
 ?>

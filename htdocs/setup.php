@@ -64,8 +64,6 @@ $CFGVAR['dateformat_shortdate']['title'] = 'Short date format';
 $CFGVAR['dateformat_shorttime']['title'] = 'Short time format';
 $CFGVAR['dateformat_date']['title'] = 'Long date format';
 $CFGVAR['dateformat_time']['title'] = 'Long time format';
-$CFGVAR['closure_delay']['title'] = 'Closure Delay';
-$CFGVAR['closure_delay']['help'] = 'The amount of time (in seconds) to wait before closing when an incident is marked for closure';
 $CFGVAR['working_days']['title'] = 'Array containing working days (0=Sun, 1=Mon ... 6=Sat)';
 $CFGVAR['start_working_day']['title'] = 'Time of the start of the working day (in seconds)';
 $CFGVAR['end_working_day']['title'] = 'Time of the end of the working day (in seconds)';
@@ -131,52 +129,68 @@ $CFGVAR['tag_icons']['help'] = "Set up an array to use an icon for specified tag
 $upgradeok = FALSE;
 $config_filename='../includes/config.inc.php';
 
+$configfiles = get_included_files();
+
+function filterconfigfiles($var)
+{
+    $poss_config_files = array('config.inc.php', 'sit.conf', 'webtrack.conf');
+    $recognised = FALSE;
+    foreach ($poss_config_files AS $poss)
+    {
+        if (substr($var, strlen($var)-strlen($poss)) == $poss) $recognised = TRUE;
+    }
+    return $recognised;
+}
+$configfiles = array_filter($configfiles, 'filterconfigfiles');
+$configfiles = array_values($configfiles);
+$numconfigfiles = count($configfiles);
+if ($numconfigfiles == 1) $config_filename = $configfiles[0];
+elseif ($numconfigfiles < 1) $configfiles[] = '../includes/config.inc.php';
+
+$cfg_file_exists = FALSE;
+$cfg_file_writable = FALSE;
+foreach ($configfiles AS $conf_filename)
+{
+    if (file_exists($conf_filename)) $cfg_file_exists = TRUE;
+    if (is_writable($conf_filename)) $cfg_file_writable = TRUE;
+}
+
 function setup_configure()
 {
-    global $SETUP, $CFGVAR, $CONFIG, $config_filename;
+    global $SETUP, $CFGVAR, $CONFIG, $configfiles, $config_filename, $cfg_file_exists, $cfg_file_writable;
     $html = '';
 
-    $configfiles = get_included_files();
-    $configfiles[] = '../includes/config.inc.php';
-    array_shift($configfiles); // Shift off this file setup.php
-    array_shift($configfiles); // Shift off defaults
-    $numconfigfiles = count($configfiles);
-
-    $cfg_file_exists = FALSE;
-    $cfg_file_writable = FALSE;
-    foreach ($configfiles AS $config_filename)
-    {
-        if (file_exists($config_filename)) $cfg_file_exists = TRUE;
-        if (is_writable($config_filename)) $cfg_file_writable = TRUE;
-    }
     if ($cfg_file_exists)
     {
-        if ($numconfigfiles < 2) $html .= "<h2>Found an existing <var>config.inc.php</var> file</h2>";
+        if ($numconfigfiles < 2)
+        {
+            $html .= "<h2>Found an existing config file <var>{$config_filename}</var></h2>";
+        }
         else
         {
             $html .= "<p class='error'>Found more than one existing config file</p>";
             if ($cfg_file_writable)
             {
                 $html .= "<ul>";
-                foreach ($configfiles AS $config_filename)
+                foreach ($configfiles AS $conf_filename)
                 {
-                    $html .= "<li><var>{$config_filename}</var></li>";
+                    $html .= "<li><var>{$conf_filename}</var></li>";
                 }
                 $html .= "</ul>";
             }
         }
-        $html .= "<p>Since you already have a config file we assume you are upgrading or reconfiguring, if this is not the case please delete the existing config file.</p>";
+        //$html .= "<p>Since you already have a config file we assume you are upgrading or reconfiguring, if this is not the case please delete the existing config file.</p>";
         if ($cfg_file_writable)
         {
-            $html .= "<p class='warning'>Important: The file permissions on the file <var>config.inc.php</var> allow the file to be modified, we recommend you make this file read-only once SiT! is configured.</p>";
+            $html .= "<p class='warning'>Important: The file permissions on the configuration file allow it to be modified, we recommend you make this file read-only once SiT! is configured.</p>";
         }
         else
         {
             $html .= "<p class='error'>A config file already exists but it is not writable</p>";
-            $html .= "<p>For security we won't show your existing settings here unless the <var>config.inc.php</var> is writable.</p>";
+            $html .= "<p>For security we won't show your existing settings here unless the configuration file is writable.</p>";
         }
     }
-    else $html .= "<h2>Configuration</h2><p>Please complete this form to create a new <var>config.inc.php</var> configuration file for SiT!</p>";
+    else $html .= "<h2>Configuration</h2><p>Please complete this form to create a new configuration file for SiT!</p>";
     $html .= "<form action='setup.php' method='post'>\n";
 
     if ($_REQUEST['config']=='advanced')
@@ -225,6 +239,7 @@ function setup_configure()
     return $html;
 }
 
+
 function setup_exec_sql($sqlquerylist)
 {
     global $CONFIG;
@@ -244,24 +259,9 @@ function setup_exec_sql($sqlquerylist)
                 $html .= "An error might also be caused by an attempt to upgrade a version that is not supported by this script.<br />";
                 $html .= "Alternatively, you may have found a bug, if you think this is the case please report it.</p>";
             }
-            else $html .= "<p><strong>OK:</strong> ".htmlspecialchars($sql)."</p>";
         }
     }
     return $html;
-}
-
-function user_notify_upgrade()
-{
-    $sql = "SELECT id FROM users WHERE status != 0";
-    $result = mysql_query($sql);
-    $gid = md5($strSitUpgraded);
-    while($user = mysql_fetch_object($result))
-    {
-        $noticesql = "INSERT into notices(userid, type, text, linktext, link, gid, timestamp) ";
-        $noticesql .= "VALUES({$user->id}, ".SIT_UPGRADED_NOTICE.", '\$strSitUpgraded', '\$strSitUpgradedLink', '{$CONFIG['application_webpath']}releasenotes.php', '{$gid}', NOW())";
-        mysql_query($noticesql);
-        if (mysql_error()) trigger_error(mysql_error(),E_USER_WARNING);
-    }
 }
 
 
@@ -286,8 +286,8 @@ echo "<meta http-equiv=\"Content-Type\" content=\"text/html;charset=UTF-8\" />\n
 echo "<style type=\"text/css\">\n";
 echo "body { background-color: #FFF; font-family: Tahoma, Helvetica, sans-serif; font-size: 10pt;}\n";
 echo "h1,h2,h3,h4,h5 { background-color: #203894; padding: 0.1em; border: 1px solid #203894; color: #FFF; }\n";
-echo "h4 {background-color: #F7FAFF; color: #000; border: 1px solid #3165CD; }\n";
-echo "div.configvar1 {background-color: #F7FAFF; border: 1px solid black; margin-bottom: 10px;} ";
+echo "h4 {background-color: #E4F9FF; color: #000; border: 1px solid #3165CD; }\n";
+echo "div.configvar1 {background-color: #F7FAFF; border: 1px solid black; margin-bottom: 10px; padding: 0px 5px 5px;} ";
 echo "div.configvar2 {background-color: green; border: 1px solid black; margin-bottom: 10px;} ";
 echo ".error {background-position: 3px 2px;
   background-repeat: no-repeat;
@@ -304,7 +304,39 @@ echo ".error {background-position: 3px 2px;
   color: #5A3612;
   border: 1px solid #A26120;
   background-color: #FFECD7;
-}";
+}
+
+a.button:link, a.button:visited
+{
+  float: left;
+  margin: 2px 5px 2px 5px;
+  padding: 2px;
+  width: 100px;
+  border-top: 1px solid #ccc;
+  border-bottom: 1px solid black;
+  border-left: 1px solid #ccc;
+  border-right: 1px solid black;
+  background: #ccc;
+  text-align: center;
+  text-decoration: none;
+  font: normal 10px Verdana;
+  color: black;
+}
+
+a.button:hover
+{
+  background: #eee;
+}
+
+a.button:active
+{
+  border-bottom: 1px solid #eee;
+  border-top: 1px solid black;
+  border-right: 1px solid #eee;
+  border-left: 1px solid black;
+}
+
+";
 echo ".help {background: #F7FAFF; border: 1px solid #3165CD; color: #203894; padding: 2px;}\n";
 echo ".helptip { color: #203894;}\n";
 echo ".warning {background: #FFFFE6; border: 2px solid #FFFF31; color: red; padding: 2px;}\n";
@@ -314,13 +346,11 @@ echo "a:link,a:visited { color: #000099; }\n";
 echo "a:hover { background: #99CCFF; }\n";
 echo "hr { background-color: #203894; margin-top: 3em; }\n";
 echo "</style>\n";
-echo "<title>Support Incident Tracker Setup</title\n";
+echo "<title>Support Incident Tracker Setup</title>\n";
 echo "</head>\n<body>\n";
 
 echo "<h1>Support Incident Tracker - Installation &amp; Setup</h1>";
-
 $include_path = ini_get('include_path');
-
 // Check that includes worked
 if ($CONFIG['application_name']=='' AND $CONFIG['application_shortname']=='')
 {
@@ -403,12 +433,13 @@ switch ($_REQUEST['action'])
         if (!$fp)
         {
             echo "<p class='error'>Could not write {$config_filename}</p>";
-            echo "<p class='help'>Copy this text and paste it into a <var>config.inc.php</var> file in the includes directory<br />";
+            echo "<p class='help'>Copy this text and paste it into a <var>config.inc.php</var> file in the includes directory or <var>sit.conf</var> in the <var>/etc</var> directory<br />";
             echo "Or change the permissions on the file so that it is writable and refresh this page to try again (if you do this remember to make it ";
             echo "read-only again afterwards)</p>";
             echo "<div style='margin-left: 5%; margin-right: 5%; background-color: white; padding: 1em;'>";
             highlight_string($newcfgfile);
             echo "</div>";
+            echo "<h2>After creating your <var>{$config_filename}</var> file</h2>";
         }
         else
         {
@@ -416,10 +447,12 @@ switch ($_REQUEST['action'])
             fwrite($fp, $newcfgfile);
             fclose($fp);
             echo "<p>Config file modified</p>";
-            echo "<p class='warning'>Important: The file permissions on the file <var>config.inc.php</var> allow the file to be modified, we recommend you now make this file read-only.</p>";
+            if (!@chmod($config_filename, 0640))
+            {
+                echo "<p class='warning'>Important: The file permissions on the file <var>{$config_filename}</var> allow the file to be modified, we recommend you now make this file read-only.</p>";
+            }
         }
-        echo "<h2>After creating your <var>config.inc.php</var> file</h2>";
-        echo "<p>Now run <a href='setup.php' class='button'>setup</a> again</p>";
+        echo "<p><a href='setup.php' class='button'>Next</a></p>";
     break;
 
     case 'reconfigure':
@@ -467,6 +500,8 @@ switch ($_REQUEST['action'])
                     if ($result)
                     {
                         echo "<p><strong>OK</strong> Database '{$CONFIG['db_database']}' created.</p>";
+                        setup_configure();
+                        echo "<p><a href='setup.php' class='button'>Next</a></p>";
                     }
                     else
                     {
@@ -477,11 +512,16 @@ switch ($_REQUEST['action'])
                 else
                 {
                     echo "<p class='help'>If this is the first time you have used SiT! you may need to create the database, ";
-                    echo "if you have the necessary MySQL permissions you can <a href='setup.php?action=createdatabase' class='button'>create the database automatically</a>.<br />";
+                    echo "if you have the necessary MySQL permissions you can create the database automatically.<br />";
                     echo "Alternatively you can create it manually by executing the SQL statement <br /><code>{$sql};</code></p";
+                    echo "<p><a href='setup.php?action=createdatabase' class='button'>Create Database</a></p>";
                 }
-                echo "<p>After creating the database run <a href='setup.php' class='button'>setup</a> again to create the database schema</p>";
-                echo setup_configure();
+                //echo "<p>After creating the database run <a href='setup.php' class='button'>setup</a> again to create the database schema</p>";
+                if (empty($CONFIG['db_database']) OR empty($CONFIG['db_username']))
+                {
+                    echo "<p>You make need to make configuration changes in order for SiT to be able access MySQL.</p>";
+                    echo setup_configure();
+                }
             }
             else
             {
@@ -519,7 +559,8 @@ switch ($_REQUEST['action'])
                     if (mysql_error()) trigger_error($sql.mysql_error(),E_USER_ERROR);
                     $installed_version = $application_version;
                     echo "<h2>Database schema created</h2>";
-                    echo "<p>If no errors were reported above you should now check the installation by running <a href='setup.php?action=checkinstallcomplete' class='button'>setup</a> again.</p>";
+                    echo "<p>If no errors were reported above you should continue and check the installation.</p>";
+                    echo "<p><a href='setup.php?action=checkinstallcomplete' class='button'>Next</a></p>";
                 }
                 else
                 {
@@ -584,6 +625,22 @@ switch ($_REQUEST['action'])
                                 else echo "<p><strong>OK:</strong> $sql</p>";
                             }
                             echo "<p>".mysql_num_rows($result)." incidents upgraded</p>";
+                        }
+                        if ($installed_version < 3.40)
+                        {
+                            if ($CONFIG['closure_delay'] > 0 AND $CONFIG['closure_delay'] != 554400)
+                            {
+                                echo "<p>Inserting value from deprecated config variable <var>closure_delay</var> into scheduler</p>";
+                                $sql = "UPDATE scheduler SET params = '{$CONFIG['closure_delay'}' WHERE action = 'CloseIncidents' LIMIT 1";
+                                mysql_query($sql);
+                                if (mysql_error())
+                                {
+                                    trigger_error(mysql_error(),E_USER_WARNING);
+                                    echo "<p><strong>FAILED:</strong> $sql</p>";
+                                    $upgradeok = FALSE;
+                                }
+                                else echo "<p><strong>OK:</strong> $sql</p>";
+                            }
                         }
                         elseif ($installed_version == $application_version)
                         {
@@ -652,8 +709,8 @@ switch ($_REQUEST['action'])
                             $installed_version = $application_version;
                             echo "<h2>Upgrade complete</h2>";
                             echo "<p>Upgraded to v{$application_version}</p>";
-                            //let's tell everyone we upgraded :)
-                            user_notify_upgrade();
+
+                            trigger("TRIGGER_SIT_UPGRADED", array('version' => $application_version));
                         }
                         else
                         {
@@ -663,8 +720,9 @@ switch ($_REQUEST['action'])
                     else
                     {
                         echo "<p>Your database schema is v".number_format($installed_version,2);
-                        if ($installed_version < $application_version) echo ", after making a backup you should <a href='setup.php?action=upgrade' class='button'>upgrade</a> your schema to v{$application_version}";
+                        if ($installed_version < $application_version) echo ", after making a backup you should upgrade your schema to v{$application_version}";
                         echo "</p>";
+                        if ($installed_version < $application_version) echo "<p><a href='setup.php?action=upgrade' class='button'>Upgrade Schema</a></p>";
                     }
 
                     if ($_REQUEST['action'] == 'createadminuser' AND setup_check_adminuser()==FALSE)
@@ -691,6 +749,14 @@ switch ($_REQUEST['action'])
                     }
                     // Check installation
                     echo "<h2>Checking installation...</h2>";
+                    if ($cfg_file_writable)
+                    {
+                        if (!@chmod($config_filename, 0640))
+                        {
+                            echo "<p class='warning'>Important: The file permissions on the configuration file <var>{$config_filename}</var> file allow it to be modified, we recommend you make this file read-only.</p>";
+                        }
+                    }
+
                     if ($CONFIG['attachment_fspath'] == '')
                     {
                         echo "<p class='error'>Attachment path must not be empty, please set the \$CONFIG['attachment_fspath'] configuration variable</p>";
@@ -726,16 +792,16 @@ switch ($_REQUEST['action'])
                         echo "<p><label>Password:<br /><input type='password' name='password' size='30' maxlength='50' /></label></p>";
                         echo "<p><label>Confirm Password:<br /><input type='password' name='passwordagain' size='30' maxlength='50' /></label></p>";
                         echo "<p><label>Email:<br /><input type='text' name='email' size='30' maxlength='255' /></label></p>";
-                        echo "<p><input type='submit' value='Create Admin' />";
+                        echo "<p><input type='submit' value='Create Admin User' />";
                         echo "<input type='hidden' name='action' value='createadminuser' />";
                         echo "</form>";
                     }
                     else
                     {
-                        echo "<p>SiT! v".number_format($installed_version,2)." is installed and ready to <a href='index.php' class='button'>run</a>.</p>";
+                        echo "<p>SiT! v".number_format($installed_version,2)." is installed and ready.<br /><br /> <a href='index.php' class='button'>Run SiT!</a></p>";
                         if ($_SESSION['userid']==1)
                         {
-                            echo "<p>As administrator you can <a href='{$_SERVER['PHP_SELF']}?action=reconfigure' class='button'>reconfigure</a> SiT!</p>";
+                            echo "<br /><p>As administrator you can <a href='{$_SERVER['PHP_SELF']}?action=reconfigure'>reconfigure</a> SiT!</p>";
                         }
                     }
                 }

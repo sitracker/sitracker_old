@@ -9,36 +9,36 @@
 //
 // Author: Paul Heaney <paulheaney[at]users.sourceforge.net>
 
-@include('set_include_path.inc.php');
-$permission=63; //FIXME define a permission
+@include ('set_include_path.inc.php');
+$permission = 63; //FIXME define a permission
 
-require('db_connect.inc.php');
-require('functions.inc.php');
+require ('db_connect.inc.php');
+require ('functions.inc.php');
 // This page requires authentication
-require('auth.inc.php');
+require ('auth.inc.php');
 
 // External variables
 $action = $_REQUEST['action'];
 
-switch($action)
+switch ($action)
 {
     case 'add':
         $name = $_REQUEST['reseller_name'];
 
         $errors = 0;
-        if(empty($name))
+        if (empty($name))
         {
             $_SESSION['formerrors']['name'] = 'Name cannot be empty';
             $errors++;
         }
 
-        if($errors != 0)
+        if ($errors != 0)
         {
             html_redirect("add_reseller.php", FALSE);
         }
         else
         {
-            $sql = "INSERT INTO resellers (name) VALUES ('$name')";
+            $sql = "INSERT INTO `{$dbResellers}` (name) VALUES ('$name')";
             $result = mysql_query($sql);
             if (mysql_error()) trigger_error("MySQL Query Error ".mysql_error(), E_USER_ERROR);
 
@@ -52,9 +52,9 @@ switch($action)
             if ($addition_errors == 1)
             {
                 // show addition error message
-                include('htmlheader.inc.php');
+                include ('htmlheader.inc.php');
                 echo $addition_errors_string;
-                include('htmlfooter.inc.php');
+                include ('htmlfooter.inc.php');
             }
             else
             {
@@ -68,7 +68,7 @@ switch($action)
         }
         break;
     default:
-        include('htmlheader.inc.php');
+        include ('htmlheader.inc.php');
         echo show_form_errors('add_reseller');
         clear_form_errors('formerrors');
         echo "<h2>{$strAddReseller}</h2>";
@@ -79,7 +79,7 @@ switch($action)
         echo "</table>";
         echo "<p align='center'><input name='submit' type='submit' value='{$strAddReseller}' /></p>";
         echo "</form>";
-        include('htmlfooter.inc.php');
+        include ('htmlfooter.inc.php');
         break;
 }
 

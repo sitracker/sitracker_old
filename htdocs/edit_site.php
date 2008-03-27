@@ -10,20 +10,20 @@
 
 // This Page Is Valid XHTML 1.0 Transitional!  6Feb06
 
-@include('set_include_path.inc.php');
-$permission=3; // Edit existing site details
-require('db_connect.inc.php');
-require('functions.inc.php');
+@include ('set_include_path.inc.php');
+$permission = 3; // Edit existing site details
+require ('db_connect.inc.php');
+require ('functions.inc.php');
 
 // This page requires authentication
-require('auth.inc.php');
+require ('auth.inc.php');
 
 // External variables
 $action = $_REQUEST['action'];
 $site = cleanvar($_REQUEST['site']);
 
 $title = $strEditSite;
-include('htmlheader.inc.php');
+include ('htmlheader.inc.php');
 
 
 // Show select site form
@@ -46,7 +46,7 @@ elseif ($action == "edit")
     }
     else
     {
-        $sql="SELECT * FROM sites WHERE id='$site' ";
+        $sql="SELECT * FROM `{$dbSites}` WHERE id='$site' ";
         $siteresult = mysql_query($sql);
         if (mysql_error()) trigger_error("MySQL Query Error ".mysql_error(), E_USER_ERROR);
         while ($siterow = mysql_fetch_array($siteresult))
@@ -165,7 +165,7 @@ elseif ($action == "update")
             $activeStr = 'false';
         }
 
-        $sql = "UPDATE sites SET name='$name', department='$department', address1='$address1', address2='$address2', city='$city', ";
+        $sql = "UPDATE `{$dbSites}` SET name='$name', department='$department', address1='$address1', address2='$address2', city='$city', ";
         $sql .= "county='$county', postcode='$postcode', country='$country', telephone='$telephone', fax='$fax', email='$email', ";
         $sql .= "websiteurl='$websiteurl', notes='$notes', typeid='$typeid', owner='$owner', freesupport='$incident_quantity', active='$activeStr' WHERE id='$site' LIMIT 1";
 
@@ -186,5 +186,5 @@ elseif ($action == "update")
         echo $errors_string;
     }
 }
-include('htmlfooter.inc.php');
+include ('htmlfooter.inc.php');
 ?>

@@ -11,13 +11,13 @@
 
 // This script is run after confirmation in close_incident.php
 
-@include('set_include_path.inc.php');
-$permision=33; // send emails
-require('db_connect.inc.php');
-require('functions.inc.php');
+@include ('set_include_path.inc.php');
+$permision = 33; // send emails
+require ('db_connect.inc.php');
+require ('functions.inc.php');
 
 // This page requires authentication
-require('auth.inc.php');
+require ('auth.inc.php');
 
 // Valid user
 
@@ -26,9 +26,9 @@ $id = cleanvar($_REQUEST['id']);
 if (empty($id))
 {
     // no id specified, should not happen unless someone is playing silly buggers
-    include('includes/incident_html_top.inc');
+    include ('includes/incident_html_top.inc');
     echo "<p class='error'>No incident id specified</p>\n";
-    include('includes/incident_html_bottom.inc');
+    include ('includes/incident_html_bottom.inc');
 }
 else
 {
@@ -61,16 +61,16 @@ else
     if (!$success)
     {
         // show error
-        include('includes/incident_html_top.inc');
+        include ('includes/incident_html_top.inc');
         echo "<p class='error'>Error sending email</p>\n";
-        include('includes/incident_html_bottom.inc');
+        include ('includes/incident_html_bottom.inc');
     }
     else
     {
         // add update
         $time = time();
         $updatebody .= "To: <b>" . $tofield . "</b>\nFrom: <b>" . $fromfield . "</b>\nReply-To: <b>" . $replytofield . "</b>\nCC: <b>" . $ccfield . "</b>\nBCC: <b>" . $bccfield . "</b>\nSubject: <b>" . $subjectfield . "</b>\n\n" . $bodytext;
-        $sql  = "INSERT INTO updates (incidentid, userid, bodytext, type, timestamp) ";
+        $sql  = "INSERT INTO `{$dbUpdates}` (incidentid, userid, bodytext, type, timestamp) ";
         $sql .= "VALUES ($id, $sit[2], '$updatebody', 'email', $time)";
         mysql_query($sql);
 

@@ -15,8 +15,10 @@
 // Most are legacy and can replaced by improving the pages that call them to
 // use SQL joins.
 
+include ('classes.inc.php');
+
 // Version number of the application, (numbers only)
-$application_version = '3.32';
+$application_version = '3.40';
 // Revision string, e.g. 'beta2' or 'svn' or ''
 $application_revision = 'svn';
 
@@ -84,16 +86,22 @@ define('HOL_TRAINING', 4);
 define('HOL_FREE', 5); // Compassionate/Maternity/Paterity/etc/free
 define('HOL_PUBLIC', 10);  // Public Holiday (eg. Bank Holiday)
 
-
 //default notice types
 define('NORMAL_NOTICE_TYPE', 0);
 define('WARNING_NOTICE_TYPE', 1);
 define('CRITICAL_NOTICE_TYPE', 2);
-define('NEARING_SLA_TYPE', 3);
-define('OUT_OF_SLA_TYPE', 4);
-define('USER_STILL_AWAY_TYPE', 5);
-define('USER_LANG_DIFFERS_TYPE', 6);
-define('SIT_UPGRADED_NOTICE', 7);
+
+// Incident statuses
+define("STATUS_ACTIVE",1);
+define("STATUS_CLOSED",2);
+define("STATUS_RESEARCH",3);
+define("STATUS_LEFTMESSAGE",4);
+define("STATUS_COLLEAGUE",5);
+define("STATUS_SUPPORT",6);
+define("STATUS_CLOSING",7);
+define("STATUS_CUSTOMER",8);
+define("STATUS_UNSUPPORTED",9);
+define("STATUS_UNASSIGNED",10);
 
 
 // Decide which language to use and setup internationalisation
@@ -102,13 +110,6 @@ if ($CONFIG['default_i18n'] != 'en-GB') @include("i18n/{$CONFIG['default_i18n']}
 if(!empty($_SESSION['lang']) AND $_SESSION['lang'] != $CONFIG['default_i18n']) include("i18n/{$_SESSION['lang']}.inc.php");
 ini_set('default_charset', $i18ncharset);
 
-
-// FIXME putting this config variable here until we fully support it - move to defaults.inc.php when ready - INL 25Nov07
-$CONFIG['db_tableprefix'] = '';
-
-// Table Names
-$dbUsers = "{$CONFIG['db_tableprefix']}users";
-// TODO add the rest of the table names here, then go through and replace hardcoded names with `{$GLOBALS['dbUsers']}` etc.
 
 // Time settings
 $now = time();
@@ -137,12 +138,12 @@ if (get_magic_quotes_gpc())
 //     All these global variables are slash-encoded by default,
 //     because    magic_quotes_gpc is set by default!
 //     (And magic_quotes_gpc affects more than just $_GET, $_POST, and $_COOKIE)
-//
+//     We don't strip slashes from $_FILES as of 3.32 as this should be safe without
+//     doing and it will break windows file paths if we do
     $_SERVER = stripslashes_array($_SERVER);
     $_GET = stripslashes_array($_GET);
     $_POST = stripslashes_array($_POST);
     $_COOKIE = stripslashes_array($_COOKIE);
-    $_FILES = stripslashes_array($_FILES);
     $_ENV = stripslashes_array($_ENV);
     $_REQUEST = stripslashes_array($_REQUEST);
     $HTTP_SERVER_VARS = stripslashes_array($HTTP_SERVER_VARS);
@@ -157,13 +158,15 @@ if (get_magic_quotes_gpc())
         $_SESSION = stripslashes_array($_SESSION, '');
         $HTTP_SESSION_VARS = stripslashes_array($HTTP_SESSION_VARS, '');
     }
-
 //     The $GLOBALS array is also slash-encoded, but when all the above are
 //     changed, $GLOBALS is updated to reflect those changes.  (Therefore
 //     $GLOBALS should never be modified directly).  $GLOBALS also contains
 //     infinite recursion, so it's dangerous...
-
 }
+
+
+require ('triggers.inc.php');
+
 
 /**
     * Strip slashes from an array
@@ -198,6 +201,7 @@ function stripslashes_array($data)
 */
 function authenticate($username, $password)
 {
+    global $dbUsers;
     if ($_SESSION['auth'] == TRUE)
     {
         // Already logged in
@@ -205,11 +209,11 @@ function authenticate($username, $password)
     }
 
     // extract user
-    $sql  = "SELECT id FROM `users` ";
+    $sql  = "SELECT id FROM `{$dbUsers}` ";
     $sql .= "WHERE username='$username' AND password='$password' AND status!=0 ";
     // a status of 0 means the user account is disabled
     $result = mysql_query($sql);
-    if (mysql_error()) trigger_error(mysql_error(),E_USER_WARNING);
+    if (mysql_error()) trigger_error(mysql_error(),E_USER_ERROR);
 
     // return appropriate value
     if (mysql_num_rows($result) == 0)
@@ -239,7 +243,7 @@ function db_read_column($column, $table, $id)
 {
     $sql = "SELECT `$column` FROM `$table` WHERE id='$id' LIMIT 1";
     $result = mysql_query($sql);
-    if (mysql_error()) trigger_error(mysql_error(),E_USER_WARNING);
+    if (mysql_error()) trigger_error("MySQL Query Error ".mysql_error(), E_USER_WARNING);
     list($column) = mysql_fetch_row($result);
 
     return $column;
@@ -286,12 +290,14 @@ function permission_name($permissionid)
     * @param $softwareid integer
     * @returns string. Skill/Software Name
     * @note Software was renamed skills for v3.30
+    * @todo FIXME i18n
 */
 function software_name($softwareid)
 {
-    global $now, $strEOL, $strEndOfLife;
+    global $now, $dbSoftware, $strEOL, $strEndOfLife;
 
-    $sql = "SELECT * FROM software WHERE id = '{$softwareid}'";
+
+    $sql = "SELECT * FROM `{$dbSoftware}` WHERE id = '{$softwareid}'";
     $result = mysql_query($sql);
     if (mysql_num_rows($result) >= 1)
     {
@@ -327,7 +333,8 @@ function software_name($softwareid)
 */
 function user_id($username, $password)
 {
-    $sql  = "SELECT id FROM users ";
+    global $dbUsers;
+    $sql  = "SELECT id FROM `{$dbUsers}` ";
     $sql .= "WHERE username='$username' AND password='$password'";
     $result = mysql_query($sql);
     if (mysql_error()) trigger_error(mysql_error(),E_USER_WARNING);
@@ -362,6 +369,7 @@ function user_realname($id, $allowhtml=FALSE)
     global $update_body;
     global $incidents;
     global $CONFIG;
+    global $dbUsers;
     if ($id >= 1)
     {
         if ($id == $_SESSION['userid'])
@@ -371,7 +379,7 @@ function user_realname($id, $allowhtml=FALSE)
         else
         {
             // return db_read_column('realname', 'users', $id);
-            $sql = "SELECT realname, status FROM users WHERE id='$id' LIMIT 1";
+            $sql = "SELECT realname, status FROM `{$dbUsers}` WHERE id='$id' LIMIT 1";
             $result = mysql_query($sql);
             if (mysql_error()) trigger_error(mysql_error(),E_USER_WARNING);
             list($realname, $status) = mysql_fetch_row($result);
@@ -389,10 +397,11 @@ function user_realname($id, $allowhtml=FALSE)
     {
         //an an incident
         preg_match('/From:[ A-Za-z@\.]*/', $update_body, $from);
-        if(!empty($from))
+        if (!empty($from))
         {
             $frommail = strtolower(substr(strstr($from[0], '@'), 1));
             $customerdomain = strtolower(substr(strstr($incidents['email'], '@'), 1));
+
             if ($frommail == $customerdomain) return $GLOBALS['strCustomer'];
 
             foreach ($CONFIG['ext_esc_partners'] AS $partner)
@@ -472,10 +481,10 @@ function user_accepting($id)
 
 function user_activeincidents($userid)
 {
-    global $CONFIG, $now;
+    global $CONFIG, $now, $dbIncidents, $dbContacts, $dbPriority;
     // This SQL must match the SQL in incidents.php
-    $sql = "SELECT incidents.id  ";
-    $sql .= "FROM incidents, contacts, priority WHERE contact=contacts.id AND incidents.priority=priority.id ";
+    $sql = "SELECT i.id  ";
+    $sql .= "FROM `{$dbIncidents}` AS i, `{$dbContacts}` AS c, `{$dbPriority}` AS pr WHERE contact = c.id AND i.priority = pr.id ";
     $sql .= "AND (owner='{$userid}' OR towner='{$userid}') ";
     $sql .= "AND (status!='2') ";  // not closed
     // the "1=2" obviously false else expression is to prevent records from showing unless the IF condition is true
@@ -494,24 +503,29 @@ function user_activeincidents($userid)
 // counts a users open incidents
 function user_countincidents($id)
 {
+    global $dbIncidents;
     // this number will never match the number shown in the active queue and is not meant to
-    $sql = "SELECT id FROM incidents WHERE (owner='{$id}' OR towner='{$id}') AND (status!=2)";
+
+    $sql = "SELECT id FROM `{$dbIncidents}` WHERE (owner='{$id}' OR towner='{$id}') AND (status!=2)";
     $result = mysql_query($sql);
     if (mysql_error()) trigger_error(mysql_error(),E_USER_WARNING);
 
     return(mysql_num_rows($result));
 }
 
+
 // counts number of incidents and priorty
 function user_incidents($id)
 {
-    $sql = "SELECT priority, count(priority) AS num FROM incidents WHERE (owner = $id OR towner = $id) AND status != 2";
+    global $dbIncidents;
+    $sql = "SELECT priority, count(priority) AS num FROM `{$dbIncidents}` WHERE (owner = $id OR towner = $id) AND status != 2";
     $sql .= " GROUP BY priority";
 
     $result = mysql_query($sql);
-    if(mysql_error()) trigger_error(mysql_error(),E_USER_WARNING);
+    if (mysql_error()) trigger_error(mysql_error(),E_USER_WARNING);
 
     $arr = array('1' => '0', '2' => '0', '3' => '0', '4' => '0');
+
 
     if (mysql_num_rows($result) > 0)
     {
@@ -538,9 +552,10 @@ function user_incidents($id)
 */
 function user_holiday($userid, $type=0, $year, $month, $day, $length=FALSE)
 {
+    global $dbHolidays;
     $startdate=mktime(0,0,0,$month,$day,$year);
     $enddate=mktime(23,59,59,$month,$day,$year);
-    $sql = "SELECT * FROM holidays WHERE startdate >= '$startdate' AND startdate < '$enddate' ";
+    $sql = "SELECT * FROM `{$dbHolidays}` WHERE startdate >= '$startdate' AND startdate < '$enddate' ";
     if ($type!=0)
     {
         $sql .= "AND (type='$type' OR type='10' OR type='5') ";
@@ -594,27 +609,29 @@ function user_holiday($userid, $type=0, $year, $month, $day, $length=FALSE)
 */
 function user_count_holidays($userid, $type, $date=0, $approved=array(0,1,2))
 {
-    // $sql = "SELECT id FROM holidays WHERE userid='$userid' AND type='$type' AND length='day' AND approved >= 0 AND approved < 2 ";
-    $sql = "SELECT id FROM holidays WHERE userid='$userid' AND type='$type' AND length='day' AND approved >= 0 ";
-    if ($date > 0) $sql .= "AND startdate < $date";
+    global $dbHolidays;
+    $sql = "SELECT id FROM `{$dbHolidays}` WHERE userid='$userid' AND type='$type' AND length='day' AND approved >= 0 AND approved < 2 ";
+    if ($date > 0) $sql .= "AND startdate < {$date}";
     if (is_array($approved))
     {
         $sql .= "AND (";
-        
+
         for ($i = 0; $i < sizeof($approved); $i++)
         {
             $sql .= "approved = {$approved[$i]} ";
             if ($i < sizeof($approved)-1) $sql .= "OR ";
         }
-        
+
         $sql .= ") ";
     }
     $result = mysql_query($sql);
     if (mysql_error()) trigger_error(mysql_error(),E_USER_WARNING);
     $full_days = mysql_num_rows($result);
 
-    $sql = "SELECT id FROM holidays ";
-    $sql .= "WHERE userid='$userid' AND type='$type' AND (length='pm' OR length='am') AND approved >= 0 AND approved < 2 ";
+
+    $sql = "SELECT id FROM `{$dbHolidays}` ";
+    $sql .= "WHERE userid='{$userid}' AND type='{$type}' AND (length='pm' OR length='am') AND approved >= 0 AND approved < 2 ";
+
     if ($date > 0)
     {
         $sql .= "AND startdate < $date";
@@ -637,7 +654,8 @@ function user_holiday_entitlement($userid)
 
 function contact_realname($id)
 {
-    $sql = "SELECT forenames, surname FROM contacts WHERE id='$id'";
+    global $dbContacts;
+    $sql = "SELECT forenames, surname FROM `{$dbContacts}` WHERE id='$id'";
     $result = mysql_query($sql);
     if (mysql_error()) trigger_error(mysql_error(),E_USER_WARNING);
 
@@ -658,8 +676,9 @@ function contact_realname($id)
 
 function contact_site($id)
 {
+    global $dbContacts, $dbSites;
     // note: this returns the site _NAME_ not the siteid - INL 17Apr02
-    $sql = "SELECT sites.name FROM contacts, sites WHERE contacts.siteid=sites.id AND contacts.id='$id'";
+    $sql = "SELECT s.name FROM `{$dbContacts}` AS c, `{$dbSites}` AS s WHERE c.siteid = s.id AND c.id = '$id'";
     $result = mysql_query($sql);
     if (mysql_error()) trigger_error(mysql_error(),E_USER_WARNING);
 
@@ -704,7 +723,8 @@ function contact_fax($id)
 
 function contact_count_incidents($id)
 {
-    $sql = "SELECT id FROM incidents WHERE contact='$id'";
+    global $dbIncidents;
+    $sql = "SELECT id FROM `{$dbIncidents}` WHERE contact='$id'";
     $result = mysql_query($sql);
     if (mysql_error()) trigger_error(mysql_error(),E_USER_WARNING);
 
@@ -723,7 +743,8 @@ function contact_count_incidents($id)
 */
 function contact_count_open_incidents($id)
 {
-    $sql = "SELECT id FROM incidents WHERE contact=$id AND status<>2";
+    global $dbIncidents;
+    $sql = "SELECT id FROM `{$dbIncidents}` WHERE contact=$id AND status<>2";
     $result = mysql_query($sql);
     if (mysql_error()) trigger_error(mysql_error(),E_USER_WARNING);
 
@@ -751,9 +772,9 @@ function contact_count_open_incidents($id)
 */
 function contact_productsupport($contactid, $productid)
 {
-    global $now;
+    global $now, $dbContactProducts;
     // check support
-    $sql = "SELECT id, expirydate FROM contactproducts WHERE contactid=$contactid AND productid=$productid";
+    $sql = "SELECT id, expirydate FROM `{$dbContactProducts}` WHERE contactid={$contactid} AND productid={$productid}";
     $result = mysql_query($sql);
 
     if (mysql_num_rows($result) == 0)
@@ -785,8 +806,9 @@ function contact_productsupport($contactid, $productid)
 */
 function contact_productsupport_expiryday($contactid, $productid)
 {
+    global $dbContactProducts;
     // check support
-    $sql = "SELECT id, expirydate FROM contactproducts WHERE contactid=$contactid AND productid=$productid";
+    $sql = "SELECT id, expirydate FROM `{$dbContactProducts}` WHERE contactid={$contactid} AND productid={$productid}";
     $result = mysql_query($sql);
 
     if (mysql_num_rows($result) == 0)
@@ -812,8 +834,9 @@ function contact_productsupport_expiryday($contactid, $productid)
 */
 function contact_productsupport_expirymonth($contactid, $productid)
 {
+    global $dbContactProducts;
     // check support
-    $sql = "SELECT id, expirydate FROM contactproducts WHERE contactid=$contactid AND productid=$productid";
+    $sql = "SELECT id, expirydate FROM `{$dbContactProducts}` WHERE contactid={$contactid} AND productid={$productid}";
     $result = mysql_query($sql);
 
     if (mysql_num_rows($result) == 0)
@@ -839,8 +862,9 @@ function contact_productsupport_expirymonth($contactid, $productid)
 */
 function contact_productsupport_expiryyear($contactid, $productid)
 {
+    global $dbContactProducts;
     // check support
-    $sql = "SELECT id, expirydate FROM contactproducts WHERE contactid=$contactid AND productid=$productid";
+    $sql = "SELECT id, expirydate FROM `{$dbContactProducts}` WHERE contactid={$contactid} AND productid={$productid}";
     $result = mysql_query($sql);
 
     if (mysql_num_rows($result) == 0)
@@ -864,10 +888,11 @@ function contact_productsupport_expiryyear($contactid, $productid)
 */
 function contact_vcard($id)
 {
-    $sql = "SELECT *, sites.name AS sitename, sites.address1 AS siteaddress1, sites.address2 AS siteaddress2, ";
-    $sql .= "sites.city AS sitecity, sites.county AS sitecounty, sites.country AS sitecountry, sites.postcode AS sitepostcode ";
-    $sql .= "FROM contacts, sites ";
-    $sql .= "WHERE contacts.siteid=sites.id AND contacts.id='$id' LIMIT 1";
+    global $dbContacts, $dbSites;
+    $sql = "SELECT *, s.name AS sitename, s.address1 AS siteaddress1, s.address2 AS siteaddress2, ";
+    $sql .= "s.city AS sitecity, s.county AS sitecounty, s.country AS sitecountry, s.postcode AS sitepostcode ";
+    $sql .= "FROM `{$dbContacts}` AS c, `{$dbSites}` AS s ";
+    $sql .= "WHERE c.siteid = s.id AND c.id = '$id' LIMIT 1";
     $result = mysql_query($sql);
     if (mysql_error()) trigger_error(mysql_error(),E_USER_WARNING);
     $contact = mysql_fetch_object($result);
@@ -916,64 +941,64 @@ function contact_vcard($id)
 
 function emailtype_to($id)
 {
-    return db_read_column('tofield', 'emailtype', $id);
+    return db_read_column('tofield', $GLOBALS['dbEmailTemplates'], $id);
 }
 
 
 function emailtype_from($id)
 {
-    return db_read_column('fromfield', 'emailtype', $id);
+    return db_read_column('fromfield', $GLOBALS['dbEmailTemplates'], $id);
 }
 
 
 function emailtype_replyto($id)
 {
-    return db_read_column('replytofield', 'emailtype', $id);
+    return db_read_column('replytofield', $GLOBALS['dbEmailTemplates'], $id);
 }
 
 
 function emailtype_cc($id)
 {
-   return db_read_column('ccfield', 'emailtype', $id);
+   return db_read_column('ccfield', $GLOBALS['dbEmailTemplates'], $id);
 }
 
 
 function emailtype_bcc($id)
 {
-    return db_read_column('bccfield', 'emailtype', $id);
+    return db_read_column('bccfield', $GLOBALS['dbEmailTemplates'], $id);
 }
 
 
 function emailtype_subject($id)
 {
-    return db_read_column('subjectfield', 'emailtype', $id);
+    return db_read_column('subjectfield', $GLOBALS['dbEmailTemplates'], $id);
 }
 
 
 function emailtype_body($id)
 {
-    return db_read_column('body', 'emailtype', $id);
+    return db_read_column('body', $GLOBALS['dbEmailTemplates'], $id);
 }
 
 function emailtype_customervisibility($id)
 {
-    return db_read_column('customervisibility', 'emailtype', $id);
+    return db_read_column('customervisibility', $GLOBALS['dbEmailTemplates'], $id);
 }
 
 function emailtype_storeinlog($id)
 {
-    return db_read_column('storeinlog', 'emailtype', $id);
+    return db_read_column('storeinlog', $GLOBALS['dbEmailTemplates'], $id);
 }
 
 function incident_owner($id)
 {
-    return db_read_column('owner', 'incidents', $id);
+    return db_read_column('owner', $GLOBALS['dbIncidents'], $id);
 }
 
 
 function incident_contact($id)
 {
-    return db_read_column('contact', 'incidents', $id);
+    return db_read_column('contact', $GLOBALS['dbIncidents'], $id);
 }
 
 
@@ -1049,13 +1074,15 @@ function incident_timeofnextaction($id)
     * @author Ivan Lucas
     * @param $incidentid The incident ID
     * @returns string HTML
+    * @todo FIXME i18n No product info
 */
 function incident_productinfo_html($incidentid)
 {
-    global $strNoProductInfo;
+    global $dbProductInfo, $dbIncidentProductInfo, $strNoProductInfo;
+
     // extract appropriate product info
-    $sql  = "SELECT *, TRIM(incidentproductinfo.information) AS info FROM productinfo, incidentproductinfo ";
-    $sql .= "WHERE incidentid=$incidentid AND productinfoid=productinfo.id AND TRIM(productinfo.information) !='' ";
+    $sql  = "SELECT *, TRIM(incidentproductinfo.information) AS info FROM `{$dbProductInfo}` AS p, {$dbIncidentProductInfo}` ipi ";
+    $sql .= "WHERE incidentid = $incidentid AND productinfoid = p.id AND TRIM(p.information) !='' ";
     $result = mysql_query($sql);
     if (mysql_error()) trigger_error(mysql_error(),E_USER_WARNING);
 
@@ -1087,23 +1114,23 @@ function incident_productinfo_html($incidentid)
 */
 function incident_sla_history($incidentid)
 {
-    global $CONFIG;
+    global $CONFIG, $dbIncidents, $dbServiceLevels, $dbUpdates;
     $working_day_mins = ($CONFIG['end_working_day'] - $CONFIG['start_working_day']) / 60;
 
     // Not the most efficient but..
-    $sql = "SELECT * FROM incidents WHERE id='{$incidentid}'";
+    $sql = "SELECT * FROM `{$dbIncidents}` WHERE id='{$incidentid}'";
     $result = mysql_query($sql);
     if (mysql_error()) trigger_error("MySQL Query Error ".mysql_error(), E_USER_ERROR);
     $incident = mysql_fetch_object($result);
 
     // Get service levels
-    $sql = "SELECT * FROM servicelevels WHERE tag='{$incident->servicelevel}' AND priority='{$incident->priority}' ";
+    $sql = "SELECT * FROM `{$dbServiceLevels}` WHERE tag='{$incident->servicelevel}' AND priority='{$incident->priority}' ";
     $result = mysql_query($sql);
     if (mysql_error()) trigger_error("MySQL Query Error ".mysql_error(), E_USER_ERROR);
     $level = mysql_fetch_object($result);
 
     // Loop through the updates in ascending order looking for service level events
-    $sql = "SELECT * FROM updates WHERE type='slamet' AND incidentid='{$incidentid}' ORDER BY id ASC, timestamp ASC";
+    $sql = "SELECT * FROM `{$dbUpdates}` WHERE type='slamet' AND incidentid='{$incidentid}' ORDER BY id ASC, timestamp ASC";
     $result = mysql_query($sql);
     if (mysql_error()) trigger_error("MySQL Query Error ".mysql_error(), E_USER_ERROR);
     $prevtime=0;
@@ -1195,8 +1222,9 @@ function incident_sla_history($incidentid)
 */
 function array_drop_down($array, $name, $setting='', $enablefield='')
 {
-    $html = "<select name='$name' id='$name' $enablefield>";
-    if (array_key_exists($setting, $array) AND in_array($setting, $array)==FALSE)
+    $html = "<select name='$name' id='$name' $enablefield>\n";
+
+    if (array_key_exists($setting, $array) AND in_array((string)$setting, $array)==FALSE)
     {
         $usekey=TRUE;
     }
@@ -1204,7 +1232,6 @@ function array_drop_down($array, $name, $setting='', $enablefield='')
     {
         $usekey=FALSE;
     }
-
     foreach ($array AS $key => $value)
     {
         $value = htmlentities($value, ENT_COMPAT, $GLOBALS['i18ncharset']);
@@ -1246,18 +1273,19 @@ function array_drop_down($array, $name, $setting='', $enablefield='')
 */
 function contact_drop_down($name, $id, $showsite=FALSE)
 {
+    global $dbContacts, $dbSites;
     if ($showsite)
     {
-        $sql  = "SELECT contacts.id AS contactid, sites.id AS siteid, surname, forenames, ";
-        $sql .= "sites.name AS sitename, sites.department AS department ";
-        $sql .= "FROM contacts, sites WHERE contacts.siteid=sites.id AND contacts.active = 'true' ";
-        $sql .= "AND sites.active = 'true' ";
-        $sql .= "ORDER BY sites.name, surname ASC, forenames ASC";
+        $sql  = "SELECT c.id AS contactid, s.id AS siteid, surname, forenames, ";
+        $sql .= "s.name AS sitename, s.department AS department ";
+        $sql .= "FROM `{$dbContacts}` AS c, `{$dbSites}` AS s WHERE c.siteid = s.id AND c.active = 'true' ";
+        $sql .= "AND s.active = 'true' ";
+        $sql .= "ORDER BY s.name, surname ASC, forenames ASC";
     }
     else
     {
-        $sql  = "SELECT contacts.id AS contactid, surname, forenames FROM contacts,sites ";
-        $sql .= "WHERE contacts.siteid = sites.id AND sites.active = 'true' AND contacts.active = 'true' ";
+        $sql  = "SELECT c.id AS contactid, surname, forenames FROM `{$dbContacts}` AS c, sites ";
+        $sql .= "WHERE c.siteid = s.id AND s.active = 'true' AND c.active = 'true' ";
         $sql .= "ORDER BY forenames ASC, surname ASC";
     }
 
@@ -1309,19 +1337,17 @@ function contact_drop_down($name, $id, $showsite=FALSE)
 /* with the given id selected.                                */
 function contact_site_drop_down($name, $id, $siteid='', $exclude='')
 {
-    $sql  = "SELECT contacts.id AS contactid, forenames, surname, siteid, sites.name AS sitename FROM contacts, sites ";
-    $sql .= "WHERE contacts.siteid=sites.id AND contacts.active = 'true' AND sites.active = 'true' ";
-    if (!empty($siteid)) $sql .= "AND sites.id='$siteid' ";
+
+    global $dbContacts, $dbSites;
+    $sql  = "SELECT c.id AS contactid, forenames, surname, siteid, s.name AS sitename ";
+    $sql .= "FROM `{$dbContacts}` AS c, `{$dbSites}` AS s ";
+    $sql .= "WHERE c.siteid = s.id AND c.active = 'true' AND s.active = 'true' ";
+    if (!empty($siteid)) $sql .= "AND s.id='$siteid' ";
     $sql .= "ORDER BY surname ASC";
     $result = mysql_query($sql);
     if (mysql_error()) trigger_error(mysql_error(),E_USER_WARNING);
 
-    $html = "<select name='$name'>\n";
-    if ($id == 0)
-    {
-        $html .= "<option selected='selected' value='0'></option>\n";
-    }
-
+    echo "<select name='$name'>";
     while ($contacts = mysql_fetch_object($result))
     {
             if ($contacts->contactid != $exclude)
@@ -1348,12 +1374,14 @@ function contact_site_drop_down($name, $id, $siteid='', $exclude='')
 /* selected.                                                  */
 function product_drop_down($name, $id)
 {
+    global $dbProducts;
     // extract products
-    $sql  = "SELECT id, name FROM products ORDER BY name ASC";
+    $sql  = "SELECT id, name FROM `{$dbProducts}` ORDER BY name ASC";
     $result = mysql_query($sql);
     if (mysql_error()) trigger_error(mysql_error(),E_USER_WARNING);
 
     $html = "<select name='{$name}' id='{$name}'>";
+
 
     if ($id == 0)
     {
@@ -1371,14 +1399,16 @@ function product_drop_down($name, $id)
     }
     $html .= "</select>\n";
     return $html;
+
 }
 
 
 function software_drop_down($name, $id)
 {
-    global $now, $strEOL;
+    global $now, $dbSoftware, $strEOL;
+
     // extract software
-    $sql  = "SELECT id, name, lifetime_end FROM software ";
+    $sql  = "SELECT id, name, lifetime_end FROM `{$dbSoftware}` ";
     $sql .= "ORDER BY name ASC";
     $result = mysql_query($sql);
     if (mysql_error()) trigger_error(mysql_error(),E_USER_WARNING);
@@ -1415,9 +1445,10 @@ function software_drop_down($name, $id)
 
 function softwareproduct_drop_down($name, $id, $productid)
 {
+    global $dbSoftware, $dbSoftwareProducts;
     // extract software
-    $sql  = "SELECT id, name FROM software, softwareproducts WHERE software.id=softwareproducts.softwareid ";
-    $sql .= "AND productid='$productid' ";
+    $sql  = "SELECT id, name FROM `{$dbSoftware}` AS s, `{$dbSoftwareProducts}` AS sp WHERE s.id = sp.softwareid ";
+    $sql .= "AND productid = '$productid' ";
     $sql .= "ORDER BY name ASC";
     $result = mysql_query($sql);
     if (mysql_error()) trigger_error(mysql_error(),E_USER_WARNING);
@@ -1452,7 +1483,8 @@ function softwareproduct_drop_down($name, $id, $productid)
 
 function vendor_drop_down($name, $id)
 {
-    $sql = "SELECT id, name FROM vendors ORDER BY name ASC";
+    global $dbVendors;
+    $sql = "SELECT id, name FROM `{$dbVendors}` ORDER BY name ASC";
     $result = mysql_query($sql);
     if (mysql_error()) trigger_error(mysql_error(),E_USER_WARNING);
     $html = "<select name='$name'>";
@@ -1478,7 +1510,8 @@ function vendor_drop_down($name, $id)
 
 function sitetype_drop_down($name, $id)
 {
-    $sql = "SELECT typeid, typename FROM sitetypes ORDER BY typename ASC";
+    global $dbSiteTypes;
+    $sql = "SELECT typeid, typename FROM `{$dbSiteTypes}` ORDER BY typename ASC";
     $result = mysql_query($sql);
     if (mysql_error()) trigger_error(mysql_error(),E_USER_WARNING);
     $html .= "<select name='$name'>\n";
@@ -1510,11 +1543,11 @@ function sitetype_drop_down($name, $id)
 */
 function supported_product_drop_down($name, $contactid, $productid)
 {
-    global $CONFIG, $strXIncidentsLeft;
+    global $CONFIG, $dbSupportContacts, $dbMaintenance, $dbProducts, $strXIncidentsLeft;
 
-    $sql = "SELECT *,products.id AS productid, products.name AS productname FROM supportcontacts,maintenance,products ";
-    $sql .= "WHERE supportcontacts.maintenanceid=maintenance.id AND maintenance.product=products.id ";
-    $sql .= "AND supportcontacts.contactid='$contactid'";
+    $sql = "SELECT *, p.id AS productid, p.name AS productname FROM `{$dbSupportContacts}` AS sc, `{$dbMaintenance}` AS m, `{$dbProducts}` AS p ";
+    $sql .= "WHERE sc.maintenanceid = m.id AND m.product = p.id ";
+    $sql .= "AND sc.contactid='$contactid'";
 
     $result = mysql_query($sql);
     if (mysql_error()) trigger_error(mysql_error(),E_USER_WARNING);
@@ -1553,7 +1586,7 @@ function supported_product_drop_down($name, $contactid, $productid)
     * @author Ivan Lucas
     * @param $name string. Name attribute
     * @param $id integer. User ID to pre-select
-    * @param $accepting boolean. when true displays the accepting status
+    * @param $accepting boolean. when true displays the accepting status. hides it when false
     * @param $exclude integer. User ID not to list
     * @param $attribs string. Extra attributes for the select control
 */
@@ -1564,7 +1597,8 @@ function user_drop_down($name, $id, $accepting=TRUE, $exclude=FALSE, $attribs=""
     // INL 19Jan05 Option exclude field to exclude a user, or an array of
     // users
 
-    $sql  = "SELECT id, realname, accepting FROM users WHERE status > 0 ORDER BY realname ASC";
+    global $dbUsers;
+    $sql  = "SELECT id, realname, accepting FROM `{$dbUsers}` WHERE status > 0 ORDER BY realname ASC";
     $result = mysql_query($sql);
     if (mysql_error()) trigger_error(mysql_error(),E_USER_WARNING);
 
@@ -1619,7 +1653,9 @@ function user_drop_down($name, $id, $accepting=TRUE, $exclude=FALSE, $attribs=""
 
 function role_drop_down($name, $id)
 {
-    $sql  = "SELECT id, rolename FROM roles ORDER BY rolename ASC";
+
+    global $dbRoles;
+    $sql  = "SELECT id, rolename FROM `{$dbRoles}` ORDER BY rolename ASC";
     $result = mysql_query($sql);
     if (mysql_error()) trigger_error(mysql_error(),E_USER_WARNING);
 
@@ -1631,13 +1667,13 @@ function role_drop_down($name, $id)
 
     while ($role = mysql_fetch_object($result))
     {
-            $html .= "<option value='{$role->id}'";
-            if ($role->id==$id)
-            {
-                $html .= " selected='selected'";
-            }
+        $html .= "<option value='{$role->id}'";
+        if ($role->id==$id)
+        {
+            $html .= " selected='selected'";
+        }
 
-            $html .= ">{$role->rolename}</option>\n";
+        $html .= ">{$role->rolename}</option>\n";
     }
     $html .= "</select>\n";
     return $html;
@@ -1665,6 +1701,40 @@ function group_drop_down($name, $selected)
     return $html;
 }
 
+function group_selector($selected, $urlargs='')
+{
+    $gsql = "SELECT * FROM `{$GLOBALS['dbGroups']}` ORDER BY name";
+    $gresult = mysql_query($gsql);
+    if (mysql_error()) trigger_error(mysql_error(),E_USER_ERROR);
+    while ($group = mysql_fetch_object($gresult))
+    {
+        $grouparr[$group->id] = $group->name;
+    }
+    $numgroups = count($grouparr);
+
+    if ($numgroups >= 1)
+    {
+        echo "<form action='{$_SERVER['PHP_SELF']}?{$urlargs}' style='text-align: center;' method='get'>";
+        echo "{$GLOBALS['strGroup']}: <select name='choosegroup' onchange='window.location.href=this.options[this.selectedIndex].value'>";
+        echo "<option value='{$_SERVER['PHP_SELF']}?{$urlargs}&amp;gid=all'";
+        if ($selected == 'all') echo " selected='selected'";
+        echo ">All</option>\n";
+        foreach ($grouparr AS $groupid => $groupname)
+        {
+            echo "<option value='{$_SERVER['PHP_SELF']}?{$urlargs}&amp;gid={$groupid}'";
+            if ($groupid == $selected) echo " selected='selected'";
+            echo ">{$groupname}</option>\n";
+        }
+        echo "<option value='{$_SERVER['PHP_SELF']}?{$urlargs}&amp;gid=0'";
+        if ($selected == '0') echo " selected='selected'";
+        echo ">{$GLOBALS['strUsersNoGroup']}</option>\n";
+        echo "</select>\n";
+        echo "</form>\n<br />";
+    }
+
+    return $numgroups;
+}
+
 
 /**
     * Return HTML for a box to select interface style/theme
@@ -1675,8 +1745,9 @@ function group_drop_down($name, $selected)
 */
 function interfacestyle_drop_down($name, $id)
 {
+    global $dbInterfaceStyles;
     // extract statuses
-    $sql  = "SELECT id, name FROM interfacestyles ORDER BY name ASC";
+    $sql  = "SELECT id, name FROM `{$dbInterfaceStyles}` ORDER BY name ASC";
     $result = mysql_query($sql);
     $html = "<select name=\"{$name}\">";
     if ($id == 0)
@@ -1707,9 +1778,9 @@ function interfacestyle_drop_down($name, $id)
 */
 function interface_style($id)
 {
-    global $CONFIG;
+    global $CONFIG, $dbInterfaceStyles;
 
-    $sql  = "SELECT cssurl, headerhtml FROM interfacestyles WHERE id='$id'";
+    $sql  = "SELECT cssurl, headerhtml FROM `{$dbInterfaceStyles}` WHERE id='$id'";
     $result = mysql_query($sql);
     if (mysql_error()) trigger_error(mysql_error(),E_USER_WARNING);
 
@@ -1738,8 +1809,9 @@ function interface_style($id)
 // name and with the given id selected.
 function incidentstatus_drop_down($name, $id)
 {
+    global $dbIncidentStatus;
     // extract statuses
-    $sql  = "SELECT id, name FROM incidentstatus WHERE id<>2 AND id<>7 AND id<>10 ORDER BY name ASC";
+    $sql  = "SELECT id, name FROM `{$dbIncidentStatus}` WHERE id<>2 AND id<>7 AND id<>10 ORDER BY name ASC";
     $result = mysql_query($sql);
     if (mysql_error()) trigger_error(mysql_error(),E_USER_WARNING);
     if (mysql_num_rows($result) < 1)
@@ -1774,8 +1846,9 @@ function incidentstatus_drop_down($name, $id)
 /* 'all' for viewing all incidents.                           */
 function incidentstatus_drop_down_all($name, $id)
 {
+    global $dbIncidentStatus;
     // extract statuses
-    $sql  = "SELECT id, name FROM incidentstatus ORDER BY name ASC";
+    $sql  = "SELECT id, name FROM `{$dbIncidentStatus}` ORDER BY name ASC";
     $result = mysql_query($sql);
 
     echo "<select name='{$name}'>\n";
@@ -1814,8 +1887,9 @@ function incidentstatus_drop_down_all($name, $id)
 */
 function closingstatus_drop_down($name, $id)
 {
+    global $dbClosingStatus;
     // extract statuses
-    $sql  = "SELECT id, name FROM closingstatus ORDER BY name ASC";
+    $sql  = "SELECT id, name FROM `{$dbClosingStatus}` ORDER BY name ASC";
     $result = mysql_query($sql);
     if (mysql_error()) trigger_error(mysql_error(),E_USER_WARNING);
     $html = "<select name='{$name}'>";
@@ -1850,8 +1924,9 @@ function closingstatus_drop_down($name, $id)
 */
 function userstatus_drop_down($name, $id, $userdisable=FALSE)
 {
+    global $dbUserStatus;
     // extract statuses
-    $sql  = "SELECT id, name FROM userstatus ORDER BY name ASC";
+    $sql  = "SELECT id, name FROM `{$dbUserStatus}` ORDER BY name ASC";
     $result = mysql_query($sql);
     if (mysql_error()) trigger_error(mysql_error(),E_USER_WARNING);
 
@@ -1892,8 +1967,9 @@ function userstatus_drop_down($name, $id, $userdisable=FALSE)
 */
 function userstatus_bardrop_down($name, $id)
 {
+    global $dbUserStatus;
     // extract statuses
-    $sql  = "SELECT id, name FROM userstatus ORDER BY name ASC";
+    $sql  = "SELECT id, name FROM `{$dbUserStatus}` ORDER BY name ASC";
     $result = mysql_query($sql);
     if (mysql_error()) trigger_error(mysql_error(),E_USER_WARNING);
 
@@ -1929,8 +2005,9 @@ function userstatus_bardrop_down($name, $id)
 */
 function emailtype_drop_down($name, $id)
 {
+    global $dbEmailTemplates;
     // INL 22Apr05 Added a filter to only show user templates
-    $sql  = "SELECT id, name, description FROM emailtype WHERE type='user' ORDER BY name ASC";
+    $sql  = "SELECT id, name, description FROM `{$dbEmailTemplates}` WHERE type='user' ORDER BY name ASC";
     $result = mysql_query($sql);
     if (mysql_error()) trigger_error(mysql_error(),E_USER_WARNING);
 
@@ -2032,7 +2109,7 @@ function priority_drop_down($name, $id, $max=4, $disable=FALSE)
 function contactproducts_drop_down($name, $contactid)
 {
     // extract products
-    $sql  = "SELECT * FROM products ORDER BY name ASC";
+    $sql  = "SELECT * FROM `{$dbProducts}` ORDER BY name ASC";
     $result = mysql_query($sql);
 
     // print HTML
@@ -2089,7 +2166,8 @@ function accepting_drop_down($name, $userid)
 */
 function escalation_path_drop_down($name, $id)
 {
-    $sql  = "SELECT id, name FROM escalationpaths ";
+    global $dbEscalationPaths;
+    $sql  = "SELECT id, name FROM `{$dbEscalationPaths}` ";
     $sql .= "ORDER BY name ASC";
     $result = mysql_query($sql);
     if (mysql_error()) trigger_error(mysql_error(),E_USER_WARNING);
@@ -2160,9 +2238,10 @@ function priority_icon($id)
 */
 function incident_lastupdate($id)
 {
+    global $dbUpdates;
     // Find the most recent update
     $sql = "SELECT userid, type, sla, currentowner, currentstatus, LEFT(bodytext,500) AS body, timestamp, nextaction, id ";
-    $sql .= "FROM updates WHERE incidentid='$id' ORDER BY timestamp DESC, id DESC LIMIT 1";
+    $sql .= "FROM `{$dbUpdates}` WHERE incidentid='$id' ORDER BY timestamp DESC, id DESC LIMIT 1";
     $result = mysql_query($sql);
     if (mysql_error()) trigger_error(mysql_error(),E_USER_WARNING);
 
@@ -2175,11 +2254,11 @@ function incident_lastupdate($id)
         $update = mysql_fetch_array($result);
 
         // In certain circumstances go back even further, find an earlier update
-        if(($update['type'] == "reassigning" AND !isset($update['body'])) OR ($update['type'] == 'slamet' AND $row['sla'] == 'opened'))
+        if (($update['type'] == "reassigning" AND !isset($update['body'])) OR ($update['type'] == 'slamet' AND $row['sla'] == 'opened'))
         {
             //check if the previous update was by userid == 0 if so then we can assume this is a new call
             $sqlPrevious = "SELECT userid, type, currentowner, currentstatus, LEFT(bodytext,500) AS body, timestamp, nextaction, id, sla, type ";
-            $sqlPrevious .= "FROM updates WHERE id < ".$update['id']." AND incidentid = '$id' ORDER BY id DESC";
+            $sqlPrevious .= "FROM `{$dbUpdates}` WHERE id < ".$update['id']." AND incidentid = '$id' ORDER BY id DESC";
             $resultPrevious = mysql_query($sqlPrevious);
             if (mysql_error()) trigger_error(mysql_error(),E_USER_WARNING);
 
@@ -2197,7 +2276,7 @@ function incident_lastupdate($id)
                     while ($row = mysql_fetch_array($resultPrevious))
                     {
                         $last = $row;
-                        if($row['userid'] != 0)
+                        if ($row['userid'] != 0)
                         {
                             if ($row['type'] == 'slamet')
                             {
@@ -2231,7 +2310,8 @@ function incident_lastupdate($id)
 */
 function incident_firstupdate($id)
 {
-    $sql = "SELECT bodytext FROM updates WHERE incidentid='$id' AND customervisibility='show' ORDER BY timestamp ASC, id ASC LIMIT 1";
+    global $dbUpdates;
+    $sql = "SELECT bodytext FROM `{$dbUpdates}` WHERE incidentid='$id' AND customervisibility='show' ORDER BY timestamp ASC, id ASC LIMIT 1";
     $result = mysql_query($sql);
     if (mysql_error()) trigger_error(mysql_error(),E_USER_WARNING);
 
@@ -2259,7 +2339,8 @@ function incident_firstupdate($id)
 */
 function incidentstatus_name($id)
 {
-    $sql = "SELECT name FROM incidentstatus WHERE id='$id'";
+    global $dbIncidentStatus;
+    $sql = "SELECT name FROM `{$dbIncidentStatus}` WHERE id='$id'";
     $result = mysql_query($sql);
     if (mysql_error()) trigger_error(mysql_error(),E_USER_WARNING);
 
@@ -2278,6 +2359,7 @@ function incidentstatus_name($id)
 
 function closingstatus_name($id)
 {
+    global $dbClosingStatus;
     if ($id != '')
     {
         $closingstatus = db_read_column('name', 'closingstatus', $id);
@@ -2287,7 +2369,7 @@ function closingstatus_name($id)
         $closingstatus = $GLOBALS['strUnknown'];
     }
 
-    return($closingstatus);
+    return ($closingstatus);
 }
 
 
@@ -2314,19 +2396,14 @@ function product_name($id)
 
 // Returns a string with all occurrences of emailtype special identifiers (in angle brackets) replaced
 // with their appropriate values.
-function emailtype_replace_specials($string, $incidentid, $userid=0)
+// DEPRECATED in favour of trigger_replace_specials() from 3.40
+function emailtype_replace_specials($string, $incidentid=0, $userid=0)
 {
-    global $CONFIG, $application_version, $application_version_string;
-    if ($incidentid == '')
-    {
-        throw_error('incident ID was blank in emailtype_replace_specials()',$string);
-    }
+    global $CONFIG, $application_version, $application_version_string, $dbIncidents;
+
+    trigger_error('emailtype_replace_specials() is DEPRECATED', E_USER_WARNING);
 
     $contactid = incident_contact($incidentid);
-    if ($contactid == 0)
-    {
-        throw_error('cannot obtain contact ID in email_replace_specials()',$contactid);
-    }
 
     $url = parse_url($_SERVER['HTTP_REFERER']);
     $baseurl = "{$url['scheme']}://{$url['host']}{$CONFIG['application_webpath']}";
@@ -2334,7 +2411,7 @@ function emailtype_replace_specials($string, $incidentid, $userid=0)
     // INL 13Jun03 Do one query to grab the incident details instead of doing a query
     // per replace-keyword - this should save a few queries
 
-    $sql = "SELECT * FROM incidents WHERE id='$incidentid'";
+    $sql = "SELECT * FROM `{$dbIncidents}` WHERE id='$incidentid'";
     $result = mysql_query($sql);
     if (mysql_error()) trigger_error(mysql_error(),E_USER_WARNING);
     $incident = mysql_fetch_object($result);
@@ -2376,13 +2453,14 @@ function emailtype_replace_specials($string, $incidentid, $userid=0)
                 );
 
 // 5 => contact_manager_email($contactid), is DEPRECATED as of v3.30
+// As of 3.40 contactmanager does the same as contactnotify
 
     $email_replace = array(0 => contact_email($contactid),
                     1 => contact_realname($contactid),
                     2 => strtok(contact_realname($contactid),' '),
                     3 => contact_site($contactid),
                     4 => contact_phone($contactid),
-                    5 => contact_manager_email($contactid),
+                    5 => contact_notify_email($contactid),
                     6 => contact_notify_email($contactid),
                     7 => $incidentid,
                     8 => $incident->externalid,
@@ -2413,7 +2491,7 @@ function emailtype_replace_specials($string, $incidentid, $userid=0)
                     33 => $baseurl.'feedback.php?ax='.urlencode(trim(base64_encode(gzcompress(str_rot13(urlencode($CONFIG['feedback_form']).'&&'.urlencode($contactid).'&&'.urlencode($incidentid))))))
                 );
 
-    if($incident->towner != 0)
+    if ($incident->towner != 0)
     {
         //$return_string = str_replace("<incidentreassignemailaddress>", user_email($incident->towner), $return_string);
         $email_regex[] = '/<incidentreassignemailaddress>/s';
@@ -2425,32 +2503,53 @@ function emailtype_replace_specials($string, $incidentid, $userid=0)
         $email_regex[] = '/<incidentreassignemailaddress>/s';
         $email_replace[] = user_email($incident->owner);
     }
+}
 
-    //TODO move to seperate plugin
-    if (function_exists('escid_novellid'))
+
+/**
+    * Replaces template variables with their values
+    * @author Ivan Lucas
+    * @param $string string. The string containing the variables
+    * @param $paramarray array. An array containing values to be substituted
+    * @return string. The string with variables replaced
+*/
+function replace_specials($string, $paramarray)
+{
+    global $CONFIG, $application_version, $application_version_string, $dbg;
+    global $dbIncidents;
+    global $ttvararray;
+
+    $required = array('incidentid');
+
+    $url = parse_url($_SERVER['HTTP_REFERER']);
+    $baseurl = "{$url['scheme']}://{$url['host']}";
+    $baseurl .= "{$CONFIG['application_webpath']}";
+
+    foreach ($ttvararray AS $identifier => $ttvar)
     {
-        $email_regex[] = '/<novellid>/s';
-        $email_replace[] = escid_novellid($userid);
+        $usetvar = FALSE;
+        if (empty($ttvar['requires'])) $usetvar = TRUE;
+        else
+        {
+            if (!is_array($ttvar['requires'])) $ttvar['requires'] = array($ttvar['requires']);
+            foreach ($ttvar['requires'] as $needle)
+            {
+                if (in_array($needle, $required)) $usetvar = TRUE;
+            }
+        }
+        if ($usetvar)
+        {
+            $tregex[] = "/{$identifier}/s";
+            if (!empty($ttvar['replacement']))
+            {
+                eval("\$res = {$ttvar[replacement]};");
+            }
+            $treplace[] = $res;
+            unset($res);
+        }
     }
 
-    if (function_exists('escid_microsoftid'))
-    {
-        $email_regex[] = '/<microsoftid>/s';
-        $email_replace[] = escid_microsoftid($userid);
-    }
-
-    if (function_exists('escid_dseid'))
-    {
-        $email_regex[] = '/<dseid>/s';
-        $email_replace[] = escid_dseid($userid);
-    }
-
-    if (function_exists('escid_cheyenneid'))
-    {
-        $email_regex[] = '/<cheyenneid>/s';
-        $email_replace[] = escid_cheyenneid($userid);
-    }
-    return preg_replace($email_regex,$email_replace,$string);
+    return preg_replace($tregex, $treplace, $string);
 }
 
 
@@ -2729,7 +2828,7 @@ function html_redirect($url, $success=TRUE, $message='')
     $title = $GLOBALS['strPleaseWaitRedirect'];
     if (!$headerdisplayed)
     {
-        include('htmlheader.inc.php');
+        include ('htmlheader.inc.php');
     }
     else
     {
@@ -2758,7 +2857,7 @@ function html_redirect($url, $success=TRUE, $message='')
         echo "<p align='center'><a href=\"{$url}\">{$GLOBALS['strContinue']}</a></p>";
     }
 
-    include('htmlfooter.inc.php');
+    include ('htmlfooter.inc.php');
 
 }
 
@@ -2778,13 +2877,15 @@ function calculate_time_of_next_action($days, $hours, $minutes)
 // with the given name and with the given id selected.
 function servicelevel_drop_down($name, $id, $collapse=FALSE)
 {
+    global $dbServiceLevels;
+
     if ($collapse)
     {
-        $sql = "SELECT DISTINCT id, tag FROM servicelevels";
+        $sql = "SELECT DISTINCT id, tag FROM `{$dbServiceLevels}`";
     }
     else
     {
-        $sql  = "SELECT id, priority FROM servicelevels";
+        $sql  = "SELECT id, priority FROM `{$dbServiceLevels}`";
     }
     $result = mysql_query($sql);
 
@@ -2819,15 +2920,18 @@ function servicelevel_drop_down($name, $id, $collapse=FALSE)
 
 function serviceleveltag_drop_down($name, $tag, $collapse=FALSE)
 {
+    global $dbServiceLevels;
+
     if ($collapse)
     {
-        $sql = "SELECT DISTINCT tag FROM servicelevels";
+        $sql = "SELECT DISTINCT tag FROM `{$dbServiceLevels}`";
     }
     else
     {
-        $sql  = "SELECT tag, priority FROM servicelevels";
+        $sql  = "SELECT tag, priority FROM `{$dbServiceLevels}`";
     }
     $result = mysql_query($sql);
+
 
     $html = "<select name='$name'>\n";
     if ($tag == '')
@@ -2887,8 +2991,8 @@ function servicelevel_name($id)
 */
 function maintenance_servicelevel($maintid)
 {
-    global $CONFIG;
-    $sql = "SELECT servicelevelid FROM maintenance WHERE id='$maintid' ";
+    global $CONFIG, $dbMaintenance;
+    $sql = "SELECT servicelevelid FROM `{$dbMaintenance}` WHERE id='{$maintid}' ";
     $result = mysql_query($sql);
     if (mysql_error()) trigger_error(mysql_error(),E_USER_WARNING);
 
@@ -2907,14 +3011,15 @@ function maintenance_servicelevel($maintid)
     {
         list($servicelevelid) = mysql_fetch_row($result);
     }
-
     return $servicelevelid;
+
 }
 
 
 function maintenance_siteid($id)
 {
-   return db_read_column('site', 'maintenance', $id);
+    return db_read_column('site', 'maintenance', $id);
+
 }
 
 
@@ -2926,7 +3031,8 @@ function maintenance_siteid($id)
 */
 function servicelevel_id2tag($id)
 {
-    return db_read_column('tag', 'servicelevels', $id);
+    global $dbServiceLevels;
+    return db_read_column('tag', $dbServiceLevels, $id);
 }
 
 
@@ -2938,7 +3044,7 @@ function servicelevel_id2tag($id)
 */
 function servicelevel_tag2id($sltag)
 {
-    $sql = "SELECT id FROM servicelevels WHERE tag = '{$sltag}' AND priority=1";
+    $sql = "SELECT id FROM `{$GLOBALS['dbServiceLevels']}` WHERE tag = '{$sltag}' AND priority=1";
     $result = mysql_query($sql);
     if (mysql_error()) trigger_error(mysql_error(),E_USER_WARNING);
     list($id) = mysql_fetch_row($result);
@@ -2962,7 +3068,8 @@ function incidents_remaining($id)
 
 function decrement_free_incidents($siteid)
 {
-    $sql = "UPDATE sites SET freesupport = (freesupport - 1) WHERE id='$siteid'";
+    global $dbSites;
+    $sql = "UPDATE `{$dbSites}` SET freesupport = (freesupport - 1) WHERE id='$siteid'";
     mysql_query($sql);
     if (mysql_affected_rows() < 1)
     {
@@ -2976,7 +3083,8 @@ function decrement_free_incidents($siteid)
 
 function increment_incidents_used($maintid)
 {
-    $sql = "UPDATE maintenance SET incidents_used = (incidents_used + 1) WHERE id='$maintid'";
+    global $dbMaintenance;
+    $sql = "UPDATE `{$dbMaintenance}` SET incidents_used = (incidents_used + 1) WHERE id='$maintid'";
     mysql_query($sql);
     if (mysql_affected_rows() < 1) trigger_error("No rows affected while updating freesupport",E_USER_ERROR);
     if (mysql_error()) trigger_error(mysql_error(),E_USER_ERROR);
@@ -3010,7 +3118,7 @@ function sit_error_handler($errno, $errstr, $errfile, $errline, $errcontext)
     E_USER_WARNING    => 'Application Warning',
     E_USER_NOTICE     => 'Application Notice');
 
-    if(defined('E_STRICT')) $errortype[E_STRICT] = 'Strict Runtime notice';
+    if (defined('E_STRICT')) $errortype[E_STRICT] = 'Strict Runtime notice';
 
 
     $trace_errors = array(E_ERROR, E_USER_ERROR);
@@ -3025,11 +3133,31 @@ function sit_error_handler($errno, $errstr, $errfile, $errline, $errcontext)
         elseif ($errno & $warnings) $class = 'warning';
         else $class='error';
         echo "<p class='{$class}'><strong>{$errortype[$errno]} [{$errno}]</strong><br />";
-        echo "{$errstr} in {$errfile} @ line {$errline}</p>";
-
+        echo "{$errstr} in {$errfile} @ line {$errline}";
+        if ($CONFIG['debug'])
+        {
+            $backtrace = debug_backtrace();
+            echo "<br /><strong>Backtrace</strong>:";
+            foreach ($backtrace AS $trace)
+            {
+                if (!empty($trace['file']))
+                {
+                    echo "<br />{$trace['file']} @ line {$trace['line']}";
+                    if (!empty($trace['function']))
+                    {
+                        echo " {$trace['function']}() ";
+//                         foreach ($trace['args'] AS $arg)
+//                         {
+//                             echo "$arg &bull; ";
+//                         }
+                    }
+                }
+            }
+        }
+        echo "</p>";
         // Tips, to help diagnose errors
         if (strpos($errstr, 'Unknown column')!==FALSE OR
-            preg_match("/MySQL Query Error Table '(.*)' doesn't exist/", $errstr))
+            preg_match("/Table '(.*)' doesn't exist/", $errstr))
         {
              echo "<p class='tip'>The SiT schema may need upgrading to fix this problem.";
              if (user_permission($sit[2], 22)) echo "Visit <a href='setup.php'>Setup</a>"; // Only show this to admin
@@ -3105,7 +3233,8 @@ function throw_user_error($message, $details='')
 /* sites, with the given name and with the given id selected. */
 function site_drop_down($name, $id)
 {
-    $sql  = "SELECT id, name, department FROM sites ORDER BY name ASC";
+    global $dbSites;
+    $sql  = "SELECT id, name, department FROM `{$dbSites}` ORDER BY name ASC";
     $result = mysql_query($sql);
 
     $html = "<select name='{$name}'>\n";
@@ -3165,8 +3294,8 @@ function maintenance_drop_down($name, $id)
 {
     // TODO make maintenance_drop_down a hierarchical selection box sites/contracts
     // extract all maintenance contracts
-    $sql  = "SELECT sites.name AS sitename, products.name AS productname, maintenance.id AS id FROM maintenance, sites, products ";
-    $sql .= "WHERE site=sites.id AND product=products.id ORDER BY sites.name ASC";
+    $sql  = "SELECT s.name AS sitename, p.name AS productname, m.id AS id FROM `{$dbMaintenance}` AS m, `{$dbSites}` AS s, `{$dbProducts}` AS p ";
+    $sql .= "WHERE site = s.id AND product = p.id ORDER BY s.name ASC";
     $result = mysql_query($sql);
 
     // print HTML
@@ -3195,7 +3324,8 @@ function maintenance_drop_down($name, $id)
 // selected.                                                  */
 function reseller_drop_down($name, $id)
 {
-    $sql  = "SELECT id, name FROM resellers ORDER BY name ASC";
+    global $dbResellers;
+    $sql  = "SELECT id, name FROM `{$dbResellers}` ORDER BY name ASC";
     $result = mysql_query($sql);
     if (mysql_error()) trigger_error(mysql_error(),E_USER_WARNING);
 
@@ -3227,7 +3357,10 @@ function reseller_drop_down($name, $id)
     echo "</select>";
 }
 
-
+/*
+ *
+ * @deprecated  - PH
+ */
 function reseller_name($id)
 {
     return db_read_column('name', 'resellers', $id);
@@ -3239,7 +3372,8 @@ function reseller_name($id)
 // selected.
 function licence_type_drop_down($name, $id)
 {
-    $sql  = "SELECT id, name FROM licencetypes ORDER BY name ASC";
+    global $dbLicenceTypes;
+    $sql  = "SELECT id, name FROM `{$dbLicenceTypes}` ORDER BY name ASC";
     $result = mysql_query($sql);
 
     // print HTML
@@ -3264,7 +3398,10 @@ function licence_type_drop_down($name, $id)
     echo "</select>";
 }
 
-
+/*
+ *
+ * @deprecated  - PH
+ */
 function licence_type($id)
 {
     return db_read_column('name', 'licencetypes', $id);
@@ -3274,9 +3411,10 @@ function licence_type($id)
 function countdayincidents($day, $month, $year)
 {
     // Counts the number of incidents opened on a specified day
+    global $dbIncidents;
     $unixstartdate=mktime(0,0,0,$month,$day,$year);
     $unixenddate=mktime(23,59,59,$month,$day,$year);
-    $sql = "SELECT count(*) FROM incidents ";
+    $sql = "SELECT count(*) FROM `{$dbIncidents}` ";
     $sql .= "WHERE opened BETWEEN '$unixstartdate' AND '$unixenddate' ";
     $result = mysql_query($sql);
     list($count) = mysql_fetch_row($result);
@@ -3288,9 +3426,10 @@ function countdayincidents($day, $month, $year)
 function countdayclosedincidents($day, $month, $year)
 {
     // Counts the number of incidents closed on a specified day
+    global $dbIncidents;
     $unixstartdate=mktime(0,0,0,$month,$day,$year);
     $unixenddate=mktime(23,59,59,$month,$day,$year);
-    $sql = "SELECT count(*) FROM incidents ";
+    $sql = "SELECT count(*) FROM `{$dbIncidents}` ";
     $sql .= "WHERE closed BETWEEN '$unixstartdate' AND '$unixenddate' ";
     $result = mysql_query($sql);
     list($count) = mysql_fetch_row($result);
@@ -3301,10 +3440,11 @@ function countdayclosedincidents($day, $month, $year)
 
 function countdaycurrentincidents($day, $month, $year)
 {
+    global $dbIncidents;
     // Counts the number of incidents opened on a specified day
     $unixstartdate=mktime(0,0,0,$month,$day,$year);
     $unixenddate=mktime(23,59,59,$month,$day,$year);
-    $sql = "SELECT count(*) FROM incidents ";
+    $sql = "SELECT count(*) FROM `{$dbIncidents}` ";
     $sql .= "WHERE opened <= '$unixenddate' AND closed >= '$unixstartdate' ";
     $result = mysql_query($sql);
     list($count) = mysql_fetch_row($result);
@@ -3320,8 +3460,10 @@ function countdaycurrentincidents($day, $month, $year)
 */
 function print_contact_flags($id, $editlink=FALSE)
 {
-    $sql = "SELECT contactflags.flag, flags.name FROM contactflags, flags ";
-    $sql .= "WHERE contactflags.flag=flags.flag AND contactflags.contactid='$id' ";
+    global $dbContactFlags, $dbFlags;
+    $sql = "SELECT cf.flag, f.name ";
+    $sql .= "FROM `{$dbContactFlags}` AS cf, `{$dbFlags}` AS f ";
+    $sql .= "WHERE cf.flag=f.flag AND cf.contactid='$id' ";
     $result= mysql_query($sql);
     if (mysql_error()) trigger_error(mysql_error(),E_USER_WARNING);
     while ($contactflagrows = mysql_fetch_array($result) )
@@ -3353,7 +3495,8 @@ function print_contact_flags($id, $editlink=FALSE)
 */
 function check_contact_flag($id, $flag)
 {
-    $sql = "SELECT flag FROM contactflags WHERE contactid='$id' AND flag='$flag'";
+    global $dbContactFlags;
+    $sql = "SELECT flag FROM `{$dbContactFlags}` WHERE contactid='{$id}' AND flag='{$flag}'";
     $result = mysql_query($sql);
     if (mysql_error()) trigger_error(mysql_error(),E_USER_WARNING);
 }
@@ -3381,7 +3524,7 @@ function add_contact_flag($id, $flag)
 */
 function journal($loglevel, $event, $bodytext, $journaltype, $refid)
 {
-    global $CONFIG, $sit;
+    global $CONFIG, $sit, $dbJournal;
     // Journal Types
     // 1 = Logon/Logoff
     // 2 = Support Incidents
@@ -3401,7 +3544,7 @@ function journal($loglevel, $event, $bodytext, $journaltype, $refid)
     $bodytext = mysql_real_escape_string($bodytext);
     if ($loglevel<=$CONFIG['journal_loglevel'])
     {
-        $sql  = "INSERT INTO journal ";
+        $sql  = "INSERT INTO `{$dbJournal}` ";
         $sql .= "(userid, event, bodytext, journaltype, refid) ";
         $sql .= "VALUES ('".$sit[2]."', '$event', '$bodytext', '$journaltype', '$refid') ";
         $result = mysql_query($sql);
@@ -3429,14 +3572,18 @@ function html_checkbox($name,$state)
     }
 }
 
+
 /**
     * Sends an email, replacing certain special keys with values based on the email
     * template chosen
+    * @deprecated
     * @author Ivan Lucas
 */
 function send_template_email($template, $incidentid, $info1='', $info2='')
 {
+    throw_error("send_template_email() is deprecated in 3.40+", "Use trigger() instead");
     global $CONFIG, $application_version_string, $sit, $now;
+    global $dbUpdates, $dbEmailTemplates;
     if (empty($template)) throw_error('Blank template ID:', 'send_template_email()');
     if (empty($incidentid)) throw_error('Blank incident ID:', 'send_template_email()');
 
@@ -3447,7 +3594,7 @@ function send_template_email($template, $incidentid, $info1='', $info2='')
     else
     {
         // Lookup the template id using the name
-        $sql = "SELECT id FROM emailtype WHERE name='$template' LIMIT 1";
+        $sql = "SELECT id FROM `{$dbEmailTemplates}` WHERE name='$template' LIMIT 1";
         $result = mysql_query($sql);
         if (mysql_error()) trigger_error(mysql_error(),E_USER_WARNING);
         list($templateid) = mysql_fetch_row($result);
@@ -3490,11 +3637,11 @@ function send_template_email($template, $incidentid, $info1='', $info2='')
 
     $extra_headers .= "\r\n";
 
-    if($email_storeinlog == 'Yes')
+    if ($email_storeinlog == 'Yes')
     {
         $bt   = "To: <b>$email_to</b>\nFrom: <b>$email_from</b>\nReply-To: <b>$emailreplyto</b>\n";
         $bt  .= "BCC: <b>$email_bcc</b>\nSubject: <b>$email_subject</b>\n<hr>".$email_body;
-        $sql = "INSERT INTO updates (incidentid, userid, type, bodytext, timestamp, customervisibility) VALUES ";
+        $sql = "INSERT INTO `{$dbUpdates}` (incidentid, userid, type, bodytext, timestamp, customervisibility) VALUES ";
         $sql .= "($incidentid, 0, 'email', '".mysql_real_escape_string($bt)."', ";
         $sql .= "$now, '$email_customervisibility')";
         $result = mysql_query($sql);
@@ -3511,6 +3658,40 @@ function send_template_email($template, $incidentid, $info1='', $info2='')
         $rtnvalue = mail($email_to, $email_subject, $email_body, $extra_headers);
     }
 
+    return $rtnvalue;
+}
+
+
+function send_email($to, $from, $subject, $body, $replyto='', $cc='', $bcc='')
+{
+    global $CONFIG;
+
+    $extra_headers  = "From: {$from}\n";
+    if (!empty($replyto)) $extra_headers .= "Reply-To: {$replyto}\n";
+    $extra_headers .= "Errors-To: {$CONFIG['support_email']}\n";
+    $extra_headers .= "X-Mailer: {$CONFIG['application_shortname']} {$application_version_string}/PHP " . phpversion()."\n";
+    $extra_headers .= "X-Originating-IP: {$_SERVER['REMOTE_ADDR']}";
+
+    // FIXME CC and BCC
+
+//     if ($email_cc != '')
+//     {
+//         $extra_headers .= "CC: $cc";
+//     }
+//     if ($email_bcc != "")
+//     {
+//         $extra_headers .= "BCC: $bcc";
+//     }
+//     $extra_headers .= "\r\n";
+
+    if ($CONFIG['demo'])
+    {
+        $rtnvalue = TRUE;
+    }
+    else
+    {
+        $rtnvalue = mail($to, $subject, $body, $extra_headers);
+    }
     return $rtnvalue;
 }
 
@@ -3572,7 +3753,7 @@ if (!function_exists('list_dir'))
         {
             natsort($result_array);
 
-            if($_SESSION['update_order'] == "desc")
+            if ($_SESSION['update_order'] == "desc")
             {
                 $result_array = array_reverse($result_array);
             }
@@ -3760,7 +3941,8 @@ function getattachmenticon($filename)
 
 function count_incoming_updates()
 {
-    $sql = "SELECT id FROM updates WHERE incidentid=0";
+    global $dbUpdates;
+    $sql = "SELECT id FROM `{$dbUpdates}` WHERE incidentid=0";
     $result = mysql_query($sql);
     $count = mysql_num_rows($result);
     mysql_free_result($result);
@@ -3770,8 +3952,8 @@ function count_incoming_updates()
 
 function global_signature()
 {
-    //$sql = "SELECT signature FROM emailsig LIMIT 1";
-    $sql = "SELECT signature FROM emailsig ORDER BY RAND() LIMIT 1";
+    global $dbEmailSig;
+    $sql = "SELECT signature FROM `{$dbEmailSig}` ORDER BY RAND() LIMIT 1";
     $result = mysql_query($sql);
     list($signature) = mysql_fetch_row($result);
     mysql_free_result($result);
@@ -3986,8 +4168,9 @@ function holidaytype_drop_down($name, $id)
  */
 function user_group_id($userid)
 {
+    global $dbUsers;
     // get groupid
-    $sql = "SELECT groupid FROM users WHERE id='{$userid}' ";
+    $sql = "SELECT groupid FROM `{$dbUsers}` WHERE id='{$userid}' ";
     $result = mysql_query($sql);
     if (mysql_error()) trigger_error(mysql_error(),E_USER_WARNING);
     list($groupid) = mysql_fetch_row($result);
@@ -3998,25 +4181,19 @@ function user_group_id($userid)
 // on the date specified
 function check_group_holiday($userid, $date, $length='day')
 {
-    /*
-    // get groupid
-    $sql = "SELECT groupid FROM users WHERE id='$userid' ";
-    $result = mysql_query($sql);
-    if (mysql_error()) trigger_error(mysql_error(),E_USER_WARNING);
-    while ($group = mysql_fetch_object($result))
-    {
-    */
+    global $dbUsers, $dbHolidays;
+
     $groupid = user_group_id($userid);
     if(!empty($groupid))
     {
         // list group members
-        $msql = "SELECT id AS userid FROM users WHERE groupid='{$groupid}' AND id!='{$userid}' ";
+        $msql = "SELECT id AS userid FROM `{$dbUsers}` WHERE groupid='{$group->groupid}' AND id!='$userid' ";
         $mresult = mysql_query($msql);
         if (mysql_error()) trigger_error(mysql_error(),E_USER_WARNING);
         while ($member = mysql_fetch_object($mresult))
         {
             // check to see if this group member has holiday
-            $hsql = "SELECT * FROM holidays WHERE userid='{$member->userid}' AND startdate='{$date}' ";
+            $hsql = "SELECT * FROM `{$dbHolidays}` WHERE userid='{$member->userid}' AND startdate='{$date}' ";
             if ($length=='am' || $length=='pm')
             {
                 $hsql .= "AND length = '$length' || length = 'day' ";
@@ -4287,18 +4464,18 @@ function country_drop_down($name, $country, $extraattributes='')
 
 function check_email($email, $check_dns = FALSE)
 {
-    if((preg_match('/(@.*@)|(\.\.)|(@\.)|(\.@)|(^\.)/', $email)) ||
+    if ((preg_match('/(@.*@)|(\.\.)|(@\.)|(\.@)|(^\.)/', $email)) ||
        (preg_match('/^.+\@(\[?)[a-zA-Z0-9\-\.]+\.([a-zA-Z]{2,3}|[0-9]{1,3})(\]?)$/',$email)))
     {
         if ($check_dns)
         {
             $host = explode('@', $email);
             // Check for MX record
-            if( checkdnsrr($host[1], 'MX') ) return TRUE;
+            if ( checkdnsrr($host[1], 'MX') ) return TRUE;
             // Check for A record
-            if( checkdnsrr($host[1], 'A') ) return TRUE;
+            if ( checkdnsrr($host[1], 'A') ) return TRUE;
             // Check for CNAME record
-            if( checkdnsrr($host[1], 'CNAME') ) return TRUE;
+            if ( checkdnsrr($host[1], 'CNAME') ) return TRUE;
         }
         else
         {
@@ -4311,9 +4488,9 @@ function check_email($email, $check_dns = FALSE)
 
 function incident_get_next_target($incidentid)
 {
-    global $now;
+    global $now, $dbUpdates;
     // Find the most recent SLA target that was met
-    $sql = "SELECT sla,timestamp FROM updates WHERE incidentid='$incidentid' AND type='slamet' ORDER BY id DESC LIMIT 1";
+    $sql = "SELECT sla,timestamp FROM `{$dbUpdates}` WHERE incidentid='$incidentid' AND type='slamet' ORDER BY id DESC LIMIT 1";
     $result = mysql_query($sql);
     if (mysql_error()) trigger_error(mysql_error(),E_USER_WARNING);
 
@@ -4415,8 +4592,8 @@ function target_radio_buttons($incidentid)
 
 function incident_get_next_review($incidentid)
 {
-    global $now;
-    $sql = "SELECT timestamp FROM updates WHERE incidentid='$incidentid' AND type='reviewmet' ORDER BY id DESC LIMIT 1";
+    global $now, $dbUpdates;
+    $sql = "SELECT timestamp FROM `{$dbUpdates}` WHERE incidentid='$incidentid' AND type='reviewmet' ORDER BY id DESC LIMIT 1";
     $result = mysql_query($sql);
     if (mysql_error()) trigger_error(mysql_error(),E_USER_WARNING);
 
@@ -4520,16 +4697,41 @@ function iso_8601_date($timestamp)
    return $date_mod;
 }
 
+/**
+    * Decide whether the time is during a public holiday
+    * @author Paul Heaney
+    * @param $time integer. Timestamp to identify
+    * @param $publicholidays array of Holiday. Public holiday to compare against
+    * @returns integer. If > 0 number of seconds left in the public holiday
+*/
+function is_public_holiday($time, $publicholidays)
+{
+    if (!empty($publicholidays))
+    {
+        foreach ($publicholidays AS $holiday)
+        {
+            if ($time >= $holiday->starttime AND $time <= $holiday->endtime)
+	        {
+	            return $holiday->endtime-$time;
+	        }
+        }
+    }
+
+    return 0;
+}
 
 /**
     * Calculate the working time between two timestamps
-    * @author Tom Gerrard, Ivan Lucas
+    * @author Tom Gerrard, Ivan Lucas, Paul Heaney
     * @param $t1 integer. The start timestamp
     * @param $t2 integer. The ending timetamp
     * @returns integer. the number of working minutes (minutes in the working day)
-    * @todo Take holidays/public holidays into account?
 */
-function calculate_working_time($t1,$t2) {
+function calculate_working_time($t1,$t2,$publicholidays) {
+
+/*
+// PH 16/12/07 Old function commented out, rewritten to support public holidays. Old code to be removed once we're happy this is stable
+
 // Note that this won't work if we have something
 // more complicated than a weekend
 
@@ -4645,6 +4847,88 @@ function calculate_working_time($t1,$t2) {
 
   $minutes= $min + ($weeks * count($CONFIG['working_days']) + $days ) * ($ewd-$swd) * 60;
   return $minutes;
+*/
+
+    global $CONFIG;
+    $swd = $CONFIG['start_working_day']/3600;
+    $ewd = $CONFIG['end_working_day']/3600;
+
+  // Just in case they are the wrong way around ...
+
+    if ( $t1 > $t2 ) {
+        $t3 = $t2;
+        $t2 = $t1;
+        $t1 = $t3;
+    }
+
+    $currenttime = $t1;
+
+    $timeworked = 0;
+
+    $t2date = getdate($ts);
+
+    while ($currenttime <= $t2)
+    {
+        $time = getdate($currenttime);
+
+        $ph = 0;
+
+        if (in_array($time['wday'], $CONFIG['working_days']) AND $time['hours'] >= $swd AND $time['hours'] <= $ewd AND (($ph = is_public_holiday($currenttime, $publicholidays)) == 0))
+        {
+            if ($t2date['yday'] == $time['yday'] AND $t2day['year'] == $time['year'])
+            {
+                // if end same day as time
+                $c = $t2 - $currenttime;
+                $timeworked += $c/60;
+                $currenttime += $c;
+            }
+            else
+            {
+                $timeworked++;
+                $currenttime += 60;  // move to the next minute
+            }
+        }
+        else
+        {
+            $midnight = 1440; // 24 * 60  minutes
+
+            // Jump closer to the next work minute
+            if (!in_array($time['wday'], $CONFIG['working_days']))
+            {
+                // Move to next day
+                $c = ($time['hours']*60) + $time['minutes'];
+                $diff = $midnight - $c;
+                $currenttime += ($diff*60); // to seconds
+
+                // Jump to start of working day
+                $currenttime += ($swd*60);
+            }
+            else if ($time['hours'] < $swd)
+            {
+                // jump to beginning of working day
+                $c = ($time['hours']*60) + $time['minutes'];
+                $diff = ($swd*60) - $c;
+                $currenttime += ($diff*60); // to seconds
+            }
+            else if ($time['hours'] > $ewd)
+            {
+                // Jump to the start of the next working day
+                $c = ($midnight - (($time['hours']*60) + $time['minutes'])) + ($swd*60);
+                $currenttime += ($c*60);
+            }
+            else if ($ph != 0)
+            {
+                // jump to the minute after the public holiday
+                $currenttime += $ph+60;
+            }
+            else
+            {
+                $currenttime += 60;  // move to the next minute
+            }
+        }
+    }
+
+    return $timeworked;
 }
 
 
@@ -4670,24 +4954,52 @@ function is_active_status($status, $states)
 */
 function calculate_incident_working_time($incidentid, $t1, $t2, $states=array(2,7,8))
 {
-    if ( $t1>$t2 ) {
-        $t3=$t2;
-        $t2=$t1;
-        $t1=$t3;
+    global $dbHolidays, $dbUpdates;
+
+    if ( $t1 > $t2 )
+    {
+        $t3 = $t2;
+        $t2 = $t1;
+        $t1 = $t3;
     }
 
-    $sql="SELECT id, currentstatus, timestamp FROM updates WHERE incidentid='$incidentid' ORDER BY id ASC";
-    $result=mysql_query($sql);
+    $startofday = mktime(0,0,0, date("m",$t1), date("d",$t1), date("Y",$t1));
+    $endofday = mktime(23,59,59, date("m",$t2), date("d",$t2), date("Y",$t2));
+
+    $sql = "SELECT * FROM `{$dbHolidays}` ";
+    $sql .= "WHERE type = 10 AND (startdate >= '{$startofday}' AND startdate <= '{$endofday}')";
+
+    $result = mysql_query($sql);
+    if (mysql_error()) trigger_error(mysql_error(),E_USER_ERROR);
+
+    $publicholidays;
+
+    if (mysql_num_rows($result) > 0)
+    {
+        // Assume public holidays are ALL day
+        while ($obj = mysql_fetch_object($result))
+        {
+            $holiday = new Holiday();
+            $holiday->starttime = $obj->startdate;
+            $holiday->endtime = ($obj->startdate+(60*60*24));
+
+            $publicholidays[] = $holiday;
+        }
+    }
+
+    $sql = "SELECT id, currentstatus, timestamp FROM `{$dbUpdates}` WHERE incidentid='$incidentid' ORDER BY id ASC";
+    $result = mysql_query($sql);
     if (mysql_error()) trigger_error(mysql_error(),E_USER_WARNING);
-    $time=0;
-    $timeptr=0;
-    $laststatus=2; // closed
+
+    $time = 0;
+    $timeptr = 0;
+    $laststatus = 2; // closed
     while ($update=mysql_fetch_array($result))
     {
         //  if ($t1<=$update['timestamp'])
         if ($t1<=$update['timestamp'])
         {
-            if ($timeptr==0)
+            if ($timeptr == 0)
             {
                 // This is the first update
                 // If it's active, set the ptr = t1
@@ -4695,10 +5007,14 @@ function calculate_incident_working_time($incidentid, $t1, $t2, $states=array(2,
                 if (is_active_status($laststatus, $states)) $timeptr=$t1;
                 else $timeptr=$update['timestamp'];
             }
+
             if ($t2<$update['timestamp'])
             {
                 // If we have reached the very end of the range, increment time to end of range, break
-                if (is_active_status($laststatus, $states)) $time+=calculate_working_time($timeptr,$t2);
+                if (is_active_status($laststatus, $states))
+                {
+                    $time += calculate_working_time($timeptr,$t2,$publicholidays);
+                }
                 break;
             }
 
@@ -4706,22 +5022,25 @@ function calculate_incident_working_time($incidentid, $t1, $t2, $states=array(2,
             if (is_active_status($laststatus, $states)!=is_active_status($update['currentstatus'], $states))
             {
                 // If it's active and we've not reached the end of the range, increment time
-                if (is_active_status($laststatus, $states) && ($t2 >= $update['timestamp'])) $time+=calculate_working_time($timeptr,$update['timestamp']);
+                if (is_active_status($laststatus, $states) && ($t2 >= $update['timestamp']))
+                {
+                    $time += calculate_working_time($timeptr,$update['timestamp'], $publicholidays);
+                }
                 else
                 {
-                    $timeptr=$update['timestamp'];
+                    $timeptr = $update['timestamp'];
                 }
                 // if it's not active set the ptr
             }
         }
-        $laststatus=$update['currentstatus'];
+        $laststatus = $update['currentstatus'];
     }
     mysql_free_result($result);
 
     // Calculate remainder
-    if ( is_active_status($laststatus, $states) && ($t2 >= $update['timestamp']))
+    if (is_active_status($laststatus, $states) && ($t2 >= $update['timestamp']))
     {
-        $time+=calculate_working_time($timeptr,$t2);
+        $time += calculate_working_time($timeptr,$t2,$publicholidays);
     }
 
     return $time;
@@ -4741,8 +5060,11 @@ function strip_comma($string)
 
 function leading_zero($length,$number)
 {
-    $length=$length-strlen($number);
-    for ($i = 0; $i < $length; $i++) { $number = "0" . $number;  }
+    $length = $length-strlen($number);
+    for ($i = 0; $i < $length; $i++)
+    {
+        $number = "0" . $number;
+    }
     return($number);
 }
 
@@ -4751,13 +5073,18 @@ function readable_date($date)
 {
     // Takes a UNIX Timestamp and resturns a string with a pretty readable date
     // e.g. Yesterday @ 5:28pm
-    if (date('dmy', $date) == ldate('dmy', time()))
-        $datestring = "{$GLOBALS['strToday']} @ ".ldate('g:ia', $date);
-    elseif (date('dmy', $date) == ldate('dmy', (time()-86400)))
-        $datestring = "{$GLOBALS['strYesterday']} @ ".ldate('g:ia', $date);
+    if (date('dmy', $date) == date('dmy', time()))
+    {
+        $datestring = "{$GLOBALS['strToday']} @ ".date('g:ia', $date);
+    }
+    elseif (date('dmy', $date) == date('dmy', (time()-86400)))
+    {
+        $datestring = "{$GLOBALS['strYesterday']} @ ".date('g:ia', $date);
+    }
     else
+    {
         $datestring = ldate("l jS M y @ g:ia", $date);
-
+    }
     return $datestring;
 }
 
@@ -4797,7 +5124,6 @@ function remove_slashes($string)
     return $string;
 }
 
-
 /**
     * @author Ivan Lucas
     * @deprecated
@@ -4806,13 +5132,15 @@ function remove_slashes($string)
 */
 function contact_manager_email($contactid)
 {
-    $sql = "SELECT siteid FROM contacts WHERE id='$contactid' LIMIT 1";
+    global $dbContacts;
+    $sql = "SELECT siteid FROM `{$dbContacts}` WHERE id='{$contactid}' LIMIT 1";
     $result = mysql_query($sql);
     if (mysql_error()) trigger_error(mysql_error(),E_USER_WARNING);
     list($siteid) = mysql_fetch_row($result);
 
-    $sql = "SELECT * FROM contacts,contactflags WHERE contacts.id=contactflags.contactid ";
-    $sql .= "AND contacts.siteid='{$siteid}' AND contactflags.flag='MGR'";
+    $sql = "SELECT * FROM `{$dbContacts}` AS c, `{$dbContactFlags}` AS cf ";
+    $sql .= "WHERE c.id=cf.contactid ";
+    $sql .= "AND c.siteid='{$siteid}' AND cf.flag='MGR'";
     $result = mysql_query($sql);
     if (mysql_error()) trigger_error(mysql_error(),E_USER_WARNING);
 
@@ -4840,12 +5168,13 @@ function contact_manager_email($contactid)
 */
 function contact_notify_email($contactid)
 {
-    $sql = "SELECT notify_contactid FROM contacts WHERE id='$contactid' LIMIT 1";
+    global $dbContacts;
+    $sql = "SELECT notify_contactid FROM `{$dbContacts}` WHERE id='$contactid' LIMIT 1";
     $result = mysql_query($sql);
     if (mysql_error()) trigger_error(mysql_error(),E_USER_WARNING);
     list($notify_contactid) = mysql_fetch_row($result);
 
-    $sql = "SELECT email FROM contacts WHERE id='$notify_contactid' LIMIT 1";
+    $sql = "SELECT email FROM `{$dbContacts}` WHERE id='$notify_contactid' LIMIT 1";
     $result = mysql_query($sql);
     if (mysql_error()) trigger_error(mysql_error(),E_USER_WARNING);
     list($email) = mysql_fetch_row($result);
@@ -4864,6 +5193,7 @@ function contact_notify_email($contactid)
 */
 function contact_notify($contactid, $level=0)
 {
+    global $dbContacts;
     $notify_contactid = 0;
     if ($level == 0)
     {
@@ -4871,7 +5201,7 @@ function contact_notify($contactid, $level=0)
     }
     else
     {
-        $sql = "SELECT notify_contactid FROM contacts WHERE id='$contactid' LIMIT 1";
+        $sql = "SELECT notify_contactid FROM `{$dbContacts}` WHERE id='$contactid' LIMIT 1";
         $result = mysql_query($sql);
         if (mysql_error()) trigger_error(mysql_error(),E_USER_WARNING);
         list($notify_contactid) = mysql_fetch_row($result);
@@ -4893,10 +5223,12 @@ function contact_notify($contactid, $level=0)
 */
 function software_backup_dropdown($name, $userid, $softwareid, $backupid)
 {
-    $sql = "SELECT *, users.id AS userid FROM usersoftware, software, users WHERE usersoftware.softwareid=software.id ";
-    $sql .= "AND software.id='$softwareid' ";
-    $sql .= "AND userid!='{$userid}' AND users.status > 0 ";
-    $sql .= "AND usersoftware.userid=users.id ";
+    global $dbUsers, $dbUserSoftware, $dbSoftware;
+    $sql = "SELECT *, u.id AS userid FROM `{$dbUserSoftware}` AS us, `{$dbSoftware}` AS s, `{$dbUsers}` AS u ";
+    $sql .= "WHERE us.softwareid = s.id ";
+    $sql .= "AND s.id = '$softwareid' ";
+    $sql .= "AND userid != '{$userid}' AND u.status > 0 ";
+    $sql .= "AND us.userid = u.id ";
     $sql .= " ORDER BY realname";
     $result = mysql_query($sql);
     if (mysql_error()) trigger_error(mysql_error(),E_USER_ERROR);
@@ -4929,9 +5261,10 @@ function software_backup_dropdown($name, $userid, $softwareid, $backupid)
 */
 function software_backup_userid($userid, $softwareid)
 {
+    global $dbUserSoftware;
     $backupid=0; // default
     // Find out who is the substitute for this user/skill
-    $sql = "SELECT backupid FROM usersoftware WHERE userid='$userid' AND softwareid='$softwareid'";
+    $sql = "SELECT backupid FROM `{$dbUserSoftware}` WHERE userid = '$userid' AND softwareid = '$softwareid'";
     $result = mysql_query($sql);
     if (mysql_error()) trigger_error(mysql_error(),E_USER_WARNING);
     list($backupid)=mysql_fetch_row($result);
@@ -4940,7 +5273,7 @@ function software_backup_userid($userid, $softwareid)
     // If that substitute is not accepting then try and find another
     if (empty($backupid) OR user_accepting($backupid)!='Yes')
     {
-        $sql = "SELECT backupid FROM usersoftware WHERE userid='$backupid' AND userid!='$userid' ";
+        $sql = "SELECT backupid FROM `{$dbUserSoftware}` WHERE userid='$backupid' AND userid!='$userid' ";
         $sql .= "AND softwareid='$softwareid' AND backupid!='$backup1'";
         $result = mysql_query($sql);
         if (mysql_error()) trigger_error(mysql_error(),E_USER_WARNING);
@@ -4951,7 +5284,7 @@ function software_backup_userid($userid, $softwareid)
     // One more iteration, is the backup of the backup accepting?  If not try another
     if (empty($backupid) OR user_accepting($backupid)!='Yes')
     {
-        $sql = "SELECT backupid FROM usersoftware WHERE userid='$backupid' AND userid!='$userid' ";
+        $sql = "SELECT backupid FROM `{$dbUserSoftware}` WHERE userid='$backupid' AND userid!='$userid' ";
         $sql .= "AND softwareid='$softwareid' AND backupid!='$backup1' AND backupid!='$backup2'";
         $result = mysql_query($sql);
         if (mysql_error()) trigger_error(mysql_error(),E_USER_WARNING);
@@ -4973,31 +5306,39 @@ function software_backup_userid($userid, $softwareid)
 */
 function incident_backup_switchover($userid, $accepting)
 {
-    global $now;
+    global $now, $dbIncidents, $dbUpdates, $dbTempAssigns, $dbUsers, $dbUserStatus;
 
-    if (strtolower($accepting)=='no')
+    $usersql = "SELECT u.*, us.name AS statusname ";
+    $usersql .= "FROM `{$dbUsers}` AS u, `{$dbUserStatus}` AS us ";
+    $usersql .= "WHERE u.id = '{$userid}' AND u.status = us.id";
+    $userresult = mysql_query($usersql);
+    if (mysql_error()) trigger_error(mysql_error(),E_USER_WARNING);
+    $user = mysql_fetch_row($userresult);
+
+    if (strtolower($accepting) == 'no')
     {
         // Look through the incidents that this user OWNS (and are not closed)
-        $sql = "SELECT * FROM incidents WHERE (owner='$userid' OR towner='$userid') AND status!=2";
+        $sql = "SELECT * FROM `{$dbIncidents}` WHERE (owner='$userid' OR towner='$userid') AND status!=2";
         $result = mysql_query($sql);
         if (mysql_error()) trigger_error(mysql_error(),E_USER_WARNING);
         while ($incident = mysql_fetch_object($result))
         {
             // Try and find a backup/substitute engineer
-            $backupid=software_backup_userid($userid, $incident->softwareid);
+            $backupid = software_backup_userid($userid, $incident->softwareid);
 
             if (empty($backupid))
             {
                 // no backup engineer found so add to the holding queue
                 // Look to see if this assignment is in the queue already
-                $fsql = "SELECT * FROM tempassigns WHERE incidentid='{$incident->id}' AND originalowner='{$userid}'";
+                $fsql = "SELECT * FROM `{$dbTempAssigns}` WHERE incidentid='{$incident->id}' AND originalowner='{$userid}'";
                 $fresult = mysql_query($fsql);
                 if (mysql_error()) trigger_error(mysql_error(),E_USER_WARNING);
                 if (mysql_num_rows($fresult) < 1)
                 {
                     // it's not in the queue, and the user isn't accepting so add it
-                    $userstatus=user_status($userid);
-                    $usql = "INSERT INTO tempassigns (incidentid,originalowner,userstatus) VALUES ('{$incident->id}', '{$userid}', '$userstatus')";
+                    //$userstatus=user_status($userid);
+                    $userstatus = $user['status'];
+                    $usql = "INSERT INTO `{$dbTempAssigns}` (incidentid,originalowner,userstatus) VALUES ('{$incident->id}', '{$userid}', '$userstatus')";
                     mysql_query($usql);
                     if (mysql_error()) trigger_error(mysql_error(),E_USER_ERROR);
                 }
@@ -5006,18 +5347,20 @@ function incident_backup_switchover($userid, $accepting)
             {
                 // do an automatic temporary reassign
                 // update incident
-                $rusql = "UPDATE incidents SET ";
+                $rusql = "UPDATE `{$dbIncidents}` SET ";
                 $rusql .= "towner='{$backupid}', lastupdated='$now' WHERE id='{$incident->id}' LIMIT 1";
                 mysql_query($rusql);
                 if (mysql_error()) trigger_error(mysql_error(),E_USER_ERROR);
 
                 // add update
                 $username=user_realname($userid);
-                $userstatus=userstatus_name(user_status($userid));
-                $usermessage=user_message($userid);
+                //$userstatus = userstatus_name(user_status($userid));
+                $userstatus = $user['statusname'];
+                //$usermessage=user_message($userid);
+                $usermessage = $user['message'];
                 $bodytext="Previous Incident Owner ({$username}) {$userstatus}  {$usermessage}";
                 $assigntype='tempassigning';
-                $risql  = "INSERT INTO updates (incidentid, userid, bodytext, type, timestamp, currentowner, currentstatus) ";
+                $risql  = "INSERT INTO `{$dbUpdates}` (incidentid, userid, bodytext, type, timestamp, currentowner, currentstatus) ";
                 $risql .= "VALUES ('{$incident->id}', '0', '$bodytext', '$assigntype', '$now', ";
                 $risql .= "'{$backupid}', ";
                 $risql .= "'{$incident->status}')";
@@ -5025,34 +5368,35 @@ function incident_backup_switchover($userid, $accepting)
                 if (mysql_error()) trigger_error(mysql_error(),E_USER_ERROR);
 
                 // Look to see if this assignment is in the queue already
-                $fsql = "SELECT * FROM tempassigns WHERE incidentid='{$incident->id}' AND originalowner='{$userid}'";
+                $fsql = "SELECT * FROM `{$dbTempAssigns}` WHERE incidentid='{$incident->id}' AND originalowner='{$userid}'";
                 $fresult = mysql_query($fsql);
                 if (mysql_error()) trigger_error(mysql_error(),E_USER_WARNING);
                 if (mysql_num_rows($fresult) < 1)
                 {
-                    $userstatus=user_status($userid);
-                    $usql = "INSERT INTO tempassigns (incidentid,originalowner,userstatus,assigned) VALUES ('{$incident->id}', '{$userid}', '$userstatus','yes')";
+                    //$userstatus=user_status($userid);
+                    $userstatus = $user['status'];
+                    $usql = "INSERT INTO `{$dbTempAssigns}` (incidentid,originalowner,userstatus,assigned) VALUES ('{$incident->id}', '{$userid}', '$userstatus','yes')";
                     mysql_query($usql);
                     if (mysql_error()) trigger_error(mysql_error(),E_USER_ERROR);
                 }
                 else
                 {
                     // mark the temp assigns table so it's not showing in the holding queue
-                    $tasql = "UPDATE tempassigns SET assigned='yes' WHERE originalowner='$userid' AND incidentid='{$incident->id}' LIMIT 1";
+                    $tasql = "UPDATE `{$dbTempAssigns}` SET assigned='yes' WHERE originalowner='$userid' AND incidentid='{$incident->id}' LIMIT 1";
                     mysql_query($tasql);
                     if (mysql_error()) trigger_error(mysql_error(),E_USER_ERROR);
                 }
             }
         }
     }
-    elseif($accepting=='')
+    elseif ($accepting=='')
     {
         // Do nothing when accepting status doesn't exist
     }
     else
     {
         // The user is now ACCEPTING, so first have a look to see if there are any reassignments in the queue
-        $sql = "SELECT * FROM tempassigns WHERE originalowner='{$userid}' ";
+        $sql = "SELECT * FROM `{$dbTempAssigns}` WHERE originalowner='{$userid}' ";
         $result = mysql_query($sql);
         if (mysql_error()) trigger_error(mysql_error(),E_USER_WARNING);
         while ($assign = mysql_fetch_object($result))
@@ -5060,38 +5404,40 @@ function incident_backup_switchover($userid, $accepting)
             if ($assign->assigned=='yes')
             {
                 // Incident has actually been reassigned, so have a look if we can grab it back.
-                $lsql = "SELECT id,status FROM incidents WHERE id='{$assign->incidentid}' AND owner='{$assign->originalowner}' AND towner!=''";
+                $lsql = "SELECT id,status FROM `{$dbIncidents}` WHERE id='{$assign->incidentid}' AND owner='{$assign->originalowner}' AND towner!=''";
                 $lresult = mysql_query($lsql);
                 if (mysql_error()) trigger_error(mysql_error(),E_USER_WARNING);
                 while ($incident = mysql_fetch_object($lresult))
                 {
                     // Find our tempassign
-                    $usql = "SELECT id,currentowner FROM updates WHERE incidentid='{$incident->id}' AND userid='0' AND type='tempassigning' ORDER BY id DESC LIMIT 1";
+                    $usql = "SELECT id,currentowner FROM `{$dbUpdates}` WHERE incidentid='{$incident->id}' AND userid='0' AND type='tempassigning' ORDER BY id DESC LIMIT 1";
                     $uresult = mysql_query($usql);
                     if (mysql_error()) trigger_error(mysql_error(),E_USER_WARNING);
                     list($prevassignid,$tempowner) = mysql_fetch_row($uresult);
 
                     // Look to see if the temporary owner has updated the incident since we temp assigned it
                     // If he has, we leave it in his queue
-                    $usql = "SELECT id FROM updates WHERE incidentid='{$incident->id}' AND id > '{$prevassignid}' AND userid='$tempowner' LIMIT 1 ";
+                    $usql = "SELECT id FROM `{$dbUpdates}` WHERE incidentid='{$incident->id}' AND id > '{$prevassignid}' AND userid='$tempowner' LIMIT 1 ";
                     $uresult = mysql_query($usql);
                     if (mysql_error()) trigger_error(mysql_error(),E_USER_WARNING);
                     if (mysql_num_rows($uresult) < 1)
                     {
                         // Incident appears not to have been updated by the temporary owner so automatically reassign back to orignal owner
                         // update incident
-                        $rusql = "UPDATE incidents SET ";
+                        $rusql = "UPDATE `{$dbIncidents}` SET ";
                         $rusql .= "towner='', lastupdated='$now' WHERE id='{$incident->id}' LIMIT 1";
                         mysql_query($rusql);
                         if (mysql_error()) trigger_error(mysql_error(),E_USER_ERROR);
 
                         // add update
                         $username=user_realname($userid);
-                        $userstatus=userstatus_name(user_status($userid));
-                        $usermessage=user_message($userid);
+                        //$userstatus = userstatus_name(user_status($userid));
+                        $userstatus = $user['statusname'];
+                        //$usermessage=user_message($userid);
+                        $usermessage = $user['message'];
                         $bodytext="Reassigning to original owner {$username} ({$userstatus})";
                         $assigntype='reassigning';
-                        $risql  = "INSERT INTO updates (incidentid, userid, bodytext, type, timestamp, currentowner, currentstatus) ";
+                        $risql  = "INSERT INTO `{$dbUpdates}` (incidentid, userid, bodytext, type, timestamp, currentowner, currentstatus) ";
                         $risql .= "VALUES ('{$incident->id}', '0', '$bodytext', '$assigntype', '$now', ";
                         $risql .= "'{$backupid}', ";
                         $risql .= "'{$incident->status}')";
@@ -5099,7 +5445,7 @@ function incident_backup_switchover($userid, $accepting)
                         if (mysql_error()) trigger_error(mysql_error(),E_USER_ERROR);
 
                         // remove from assign queue now, all done
-                        $rsql = "DELETE FROM tempassigns WHERE incidentid='{$assign->incidentid}' AND originalowner='{$assign->originalowner}'";
+                        $rsql = "DELETE FROM `{$dbTempAssigns}` WHERE incidentid='{$assign->incidentid}' AND originalowner='{$assign->originalowner}'";
                         mysql_query($rsql);
                         if (mysql_error()) trigger_error(mysql_error(),E_USER_ERROR);
                     }
@@ -5108,13 +5454,13 @@ function incident_backup_switchover($userid, $accepting)
             else
             {
                 // now have a look to see if the reassign was completed
-                $ssql = "SELECT id FROM incidents WHERE id='{$assign->incidentid}' LIMIT 1";
+                $ssql = "SELECT id FROM `{$dbIncidents}` WHERE id='{$assign->incidentid}' LIMIT 1";
                 $sresult = mysql_query($ssql);
                 if (mysql_error()) trigger_error(mysql_error(),E_USER_WARNING);
                 if (mysql_num_rows($sresult) >= 1)
                 {
                     // reassign wasn't completed, or it was already assigned back, simply remove from assign queue
-                    $rsql = "DELETE FROM tempassigns WHERE incidentid='{$assign->incidentid}' AND originalowner='{$assign->originalowner}'";
+                    $rsql = "DELETE FROM `{$dbTempAssigns}` WHERE incidentid='{$assign->incidentid}' AND originalowner='{$assign->originalowner}'";
                     mysql_query($rsql);
                     if (mysql_error()) trigger_error(mysql_error(),E_USER_ERROR);
                 }
@@ -5138,8 +5484,8 @@ function incident_backup_switchover($userid, $accepting)
 */
 function suggest_reassign_userid($incidentid, $exceptuserid=0)
 {
-    global $now;
-    $sql = "SELECT product, softwareid, priority, contact, owner FROM incidents WHERE id={$incidentid} LIMIT 1";
+    global $now, $dbUsers, $dbIncidents, $dbUserSoftware;
+    $sql = "SELECT product, softwareid, priority, contact, owner FROM `{$dbIncidents}` WHERE id={$incidentid} LIMIT 1";
     $result = mysql_query($sql);
     if (mysql_error()) trigger_error(mysql_error(),E_USER_ERROR);
 
@@ -5157,19 +5503,19 @@ function suggest_reassign_userid($incidentid, $exceptuserid=0)
         // Find the users with this skill (or all users)
         if (!empty($incident->softwareid))
         {
-            $sql = "SELECT usersoftware.userid, users.status, users.lastseen FROM usersoftware, users ";
-            $sql .= "WHERE users.id=usersoftware.userid AND users.status > 0 AND users.accepting='Yes' ";
+            $sql = "SELECT us.userid, u.status, u.lastseen FROM `{$dbUserSoftware}` AS us, `{$dbUsers}` AS u ";
+            $sql .= "WHERE u.id = us.userid AND u.status > 0 AND u.accepting='Yes' ";
             if ($exceptuserid > 0) $sql .= "AND NOT users.id = '$exceptuserid' ";
-            $sql .= "AND softwareid={$incident->softwareid}";
+            $sql .= "AND softwareid = {$incident->softwareid}";
         }
-        else $sql = "SELECT id AS userid, status, lastseen FROM users WHERE status > 0 AND users.accepting='Yes'";
+        else $sql = "SELECT id AS userid, status, lastseen FROM `{$dbUsers}` WHERE status > 0 AND users.accepting='Yes'";
         $result = mysql_query($sql);
         if (mysql_error()) trigger_error(mysql_error(),E_USER_ERROR);
 
         // Fallback to all users if we have no results from above
         if (mysql_num_rows($result) < 1)
         {
-            $sql = "SELECT id AS userid, status, lastseen FROM users WHERE status > 0 ";
+            $sql = "SELECT id AS userid, status, lastseen FROM `{$dbUsers}` WHERE status > 0 ";
             $result = mysql_query($sql);
             if (mysql_error()) trigger_error(mysql_error(),E_USER_ERROR);
         }
@@ -5198,7 +5544,7 @@ function suggest_reassign_userid($incidentid, $exceptuserid=0)
             }
 
             // Have a look at the users incident queue (owned)
-            $qsql = "SELECT id, priority, lastupdated, status, softwareid FROM incidents WHERE owner={$user->userid}";
+            $qsql = "SELECT id, priority, lastupdated, status, softwareid FROM `{$dbIncidents}` WHERE owner={$user->userid}";
             $qresult = mysql_query($qsql);
             if (mysql_error()) trigger_error(mysql_error(),E_USER_ERROR);
             $queue_size = mysql_num_rows($qresult);
@@ -5253,11 +5599,11 @@ function suggest_reassign_userid($incidentid, $exceptuserid=0)
 
 function format_external_id($externalid, $escalationpath='')
 {
-    global $CONFIG;
+    global $CONFIG, $dbEscalationPaths;
     if (!empty($escalationpath))
     {
         // Extract escalation path
-        $epsql = "SELECT id, name, track_url, home_url, url_title FROM escalationpaths ";
+        $epsql = "SELECT id, name, track_url, home_url, url_title FROM `{$dbEscalationPaths}` ";
         if (!empty($escalationpath)) $epsql .= "WHERE id='$escalationpath' ";
         $epresult = mysql_query($epsql);
         if (mysql_error()) trigger_error(mysql_error(),E_USER_ERROR);
@@ -5285,13 +5631,13 @@ function format_external_id($externalid, $escalationpath='')
     else
     {
         $html = $externalid;
-        foreach($CONFIG['ext_esc_partners'] AS $partner)
+        foreach ($CONFIG['ext_esc_partners'] AS $partner)
         {
-            if(!empty($partner['ext_callid_regexp']))
+            if (!empty($partner['ext_callid_regexp']))
             {
-                if(preg_match($partner['ext_callid_regexp'], $externalid))
+                if (preg_match($partner['ext_callid_regexp'], $externalid))
                 {
-                    if(!empty($partner['ext_url']))
+                    if (!empty($partner['ext_url']))
                     {
                         $html = "<a href='".str_replace("%externalid", $externalid, $partner['ext_url'])."' title = '".$partner['ext_url_title']."'>{$externalid}</a>";
                     }
@@ -5308,7 +5654,7 @@ function return_bytes($val)
 {
     $val = trim($val);
     $last = strtolower($val{strlen($val)-1});
-    switch($last)
+    switch ($last)
     {
         // The 'G' modifier is available since PHP 5.1.0
         case 'g': $val *= 1024;
@@ -5341,9 +5687,9 @@ function draw_tabs($tabsarray, $selected='')
 function send_feedback($contractid)
 {
     global $CONFIG;
-    foreach($CONFIG['no_feedback_contracts'] AS $contract)
+    foreach ($CONFIG['no_feedback_contracts'] AS $contract)
     {
-        if($contract == $contractid)
+        if ($contract == $contractid)
         {
             return FALSE;
         }
@@ -5355,10 +5701,11 @@ function send_feedback($contractid)
 // Creates a blank feedback form response
 function create_incident_feedback($formid, $incidentid)
 {
+    global $dbFeedbackRespondents;
     $contactid = incident_contact($incidentid);
     $email = contact_email($respondent);
 
-    $sql = "INSERT INTO feedbackrespondents (formid, contactid, email, incidentid) VALUES (";
+    $sql = "INSERT INTO `{$dbFeedbackRespondents}` (formid, contactid, email, incidentid) VALUES (";
     $sql .= "'".mysql_real_escape_string($formid)."', ";
     $sql .= "'".mysql_real_escape_string($contactid)."', ";
     $sql .= "'".mysql_real_escape_string($email)."', ";
@@ -5374,7 +5721,7 @@ function random_tip()
 {
     global $CONFIG;
     $delim="\n";
-    if(!file_exists($CONFIG['tipsfile']))
+    if (!file_exists($CONFIG['tipsfile']))
     {
         trigger_error("Tips file '{$CONFIG['tipsfile']}' was not found!  check your paths!",E_USER_WARNING);
     }
@@ -5445,8 +5792,8 @@ function cleanvar($var,$striphtml=TRUE, $transentities=TRUE)
 function external_escalation($escalated, $incid)
 {
 
-   foreach($escalated as $i => $id){
-	if($id == $incid){
+   foreach ($escalated as $i => $id){
+	if ($id == $incid){
 	   return "yes";
 	}
    }
@@ -5541,7 +5888,8 @@ function percent_bar($percent)
 
 function incident_open($incidentid)
 {
-    $sql = "SELECT id FROM incidents WHERE id='$incidentid' AND status!=2";
+    global $dbIncidents;
+    $sql = "SELECT id FROM `{$dbIncidents}` WHERE id='$incidentid' AND status!=2";
     $result=mysql_query($sql);
     if (mysql_error()) trigger_error("MySQL Query Error ".mysql_error(), E_USER_ERROR);
     if (mysql_num_rows($result) > 0)
@@ -5550,7 +5898,7 @@ function incident_open($incidentid)
     }
     else
     {
-        $sql = "SELECT id FROM incidents WHERE id = '$incidentid'";
+        $sql = "SELECT id FROM `{$dbIncidents}` WHERE id = '$incidentid'";
         $result=mysql_query($sql);
         if (mysql_error()) trigger_error("MySQL Query Error ".mysql_error(), E_USER_ERROR);
         if (mysql_num_rows($result) > 0)
@@ -5671,8 +6019,8 @@ function add_note_form($linkid, $refid)
 
 function show_notes($linkid, $refid)
 {
-    global $sit, $iconset;
-    $sql = "SELECT * FROM notes WHERE link='{$linkid}' AND refid='{$refid}' ORDER BY timestamp DESC, id DESC";
+    global $sit, $iconset, $dbNotes;
+    $sql = "SELECT * FROM `{$dbNotes}` WHERE link='{$linkid}' AND refid='{$refid}' ORDER BY timestamp DESC, id DESC";
     $result = mysql_query($sql);
     if (mysql_error()) trigger_error(mysql_error(),E_USER_ERROR);
     $countnotes = mysql_num_rows($result);
@@ -5697,7 +6045,7 @@ function dashboard_do($context, $row=0, $dashboardid=0)
 {
     global $DASHBOARDCOMP;
     $action = $DASHBOARDCOMP[$context];
-    if($action != NULL || $action != "")
+    if ($action != NULL || $action != "")
     {
         if (function_exists($action)) $action($row,$dashboardid);
     }
@@ -5705,11 +6053,12 @@ function dashboard_do($context, $row=0, $dashboardid=0)
 
 function show_dashboard_component($row, $dashboardid)
 {
-    $sql = "SELECT name FROM dashboard WHERE enabled = 'true' AND id = '$dashboardid'";
+    global $dbDashboard;
+    $sql = "SELECT name FROM `{$dbDashboard}` WHERE enabled = 'true' AND id = '$dashboardid'";
     $result = mysql_query($sql);
     if (mysql_error()) trigger_error(mysql_error(),E_USER_ERROR);
 
-    if(mysql_num_rows($result) == 1)
+    if (mysql_num_rows($result) == 1)
     {
         $obj = mysql_fetch_object($result);
         dashboard_do("dashboard_".$obj->name,'db_'.$row,$dashboardid);
@@ -5723,19 +6072,20 @@ function show_dashboard_component($row, $dashboardid)
 */
 function show_links($origtab, $colref, $level=0, $parentlinktype='', $direction='lr')
 {
+    global $dbLinkTypes, $dbLinks;
     // Maximum recursion
     $maxrecursions = 15;
 
     if ($level <= $maxrecursions)
     {
-        $sql = "SELECT * FROM linktypes WHERE origtab='$origtab' ";
+        $sql = "SELECT * FROM `{$dbLinkTypes}` WHERE origtab='$origtab' ";
         if (!empty($parentlinktype)) $sql .= "AND id='{$parentlinktype}'";
         $result = mysql_query($sql);
         if (mysql_error()) trigger_error(mysql_error(),E_USER_WARNING);
         while ($linktype = mysql_fetch_object($result))
         {
             // Look up links of this type
-            $lsql = "SELECT * FROM links WHERE linktype='{$linktype->id}' ";
+            $lsql = "SELECT * FROM `{$dbLinks}` WHERE linktype='{$linktype->id}' ";
             if ($direction=='lr') $lsql .= "AND origcolref='{$colref}'";
             elseif ($direction=='rl') $lsql .= "AND linkcolref='{$colref}'";
             $lresult = mysql_query($lsql);
@@ -5805,8 +6155,9 @@ function show_links($origtab, $colref, $level=0, $parentlinktype='', $direction=
 
 function show_create_links($table, $ref)
 {
-    $html .= "<p align='center'>Add Link: ";
-    $sql = "SELECT * FROM linktypes WHERE origtab='$table' OR linktab='$table' ";
+    global $dbLinkTypes;
+    $html .= "<p align='center'>{$GLOBALS['strAddLink']}: ";
+    $sql = "SELECT * FROM `{$dbLinkTypes}` WHERE origtab='$table' OR linktab='$table' ";
     $result = mysql_query($sql);
     if (mysql_error()) trigger_error(mysql_error(),E_USER_WARNING);
     $numlinktypes = mysql_num_rows($result);
@@ -6050,10 +6401,11 @@ function draw_chart_image($type, $width, $height, $data, $legends, $title='', $u
 */
 function get_tag_id($tag)
 {
-    $sql = "SELECT tagid FROM tags WHERE name = LOWER('$tag')";
+    global $dbTags;
+    $sql = "SELECT tagid FROM `{$dbTags}` WHERE name = LOWER('$tag')";
     $result = mysql_query($sql);
     if (mysql_error()) trigger_error(mysql_error(),E_USER_WARNING);
-    if(mysql_num_rows($result) == 1)
+    if (mysql_num_rows($result) == 1)
     {
         $id = mysql_fetch_row($result);
         return $id[0];
@@ -6061,7 +6413,7 @@ function get_tag_id($tag)
     else
     {
         //need to add
-        $sql = "INSERT INTO tags (name) VALUES (LOWER('$tag'))";
+        $sql = "INSERT INTO `{$dbTags}` (name) VALUES (LOWER('$tag'))";
         $result = mysql_query($sql);
         if (mysql_error()) trigger_error(mysql_error(),E_USER_ERROR);
         return mysql_insert_id();
@@ -6074,6 +6426,7 @@ function get_tag_id($tag)
 */
 function add_tag($id, $type, $tag)
 {
+    global $dbSetTags;
     /*
     TAG TYPES
     1 - contact
@@ -6089,7 +6442,7 @@ function add_tag($id, $type, $tag)
     {
         $tagid = get_tag_id($tag);
         // Ignore errors, die silently
-        $sql = "INSERT INTO set_tags VALUES ('$id', '$type', '$tagid')";
+        $sql = "INSERT INTO `{$dbSetTags}` VALUES ('$id', '$type', '$tagid')";
         $result = @mysql_query($sql);
     }
     return true;
@@ -6101,20 +6454,21 @@ function add_tag($id, $type, $tag)
 */
 function remove_tag($id, $type, $tag)
 {
-   if ($tag!='')
+    global $dbSetTags, $dbTags;
+    if ($tag != '')
     {
         $tagid = get_tag_id($tag);
         // Ignore errors, die silently
-        $sql = "DELETE FROM set_tags WHERE id = '$id' AND type = '$type' AND tagid = '$tagid'";
+        $sql = "DELETE FROM `{$dbSetTags}` WHERE id = '$id' AND type = '$type' AND tagid = '$tagid'";
         $result = @mysql_query($sql);
 
         // Check tag usage count and remove disused tags completely
-        $sql = "SELECT COUNT(id) FROM set_tags WHERE tagid = '$tagid'";
+        $sql = "SELECT COUNT(id) FROM `{$dbSetTags}` WHERE tagid = '$tagid'";
         $result = mysql_query($sql);
         list($count) = mysql_fetch_row($result);
         if ($count == 0)
         {
-            $sql = "DELETE FROM tags WHERE tagid = '$tagid' LIMIT 1";
+            $sql = "DELETE FROM `{$dbTags}` WHERE tagid = '$tagid' LIMIT 1";
             @mysql_query($sql);
         }
         purge_tag($tagid);
@@ -6129,8 +6483,9 @@ function remove_tag($id, $type, $tag)
 */
 function replace_tags($type, $id, $tagstring)
 {
+    global $dbSetTags;
     // first remove old tags
-    $sql = "DELETE FROM set_tags WHERE id = '$id' AND type = '$type'";
+    $sql = "DELETE FROM `{$dbSetTags}` WHERE id = '$id' AND type = '$type'";
     $result = mysql_query($sql);
     if (mysql_error()) trigger_error("MySQL Query Error ".mysql_error(), E_USER_ERROR);
 
@@ -6151,12 +6506,13 @@ function replace_tags($type, $id, $tagstring)
 function purge_tag($tagid)
 {
     // Check tag usage count and remove disused tag completely
-    $sql = "SELECT COUNT(id) FROM set_tags WHERE tagid = '$tagid'";
+    global $dbSetTags, $dbTags;
+    $sql = "SELECT COUNT(id) FROM `{$dbSetTags}` WHERE tagid = '$tagid'";
     $result = mysql_query($sql);
     list($count) = mysql_fetch_row($result);
     if ($count == 0)
     {
-        $sql = "DELETE FROM tags WHERE tagid = '$tagid' LIMIT 1";
+        $sql = "DELETE FROM `{$dbTags}` WHERE tagid = '$tagid' LIMIT 1";
         @mysql_query($sql);
     }
 }
@@ -6168,12 +6524,13 @@ function purge_tag($tagid)
 */
 function purge_tags()
 {
-    $sql = "SELECT tagid FROM tags";
+    global $dbTags;
+    $sql = "SELECT tagid FROM `{$dbTags}`";
     $result = mysql_query($sql);
     if (mysql_error()) trigger_error(mysql_error(),E_USER_ERROR);
     if (mysql_num_rows($result) > 0)
     {
-        while($tag = mysql_fetch_object($result))
+        while ($tag = mysql_fetch_object($result))
         {
             purge_tag($tag->tagid);
         }
@@ -6187,13 +6544,14 @@ function purge_tags()
 */
 function list_tags($recordid, $type, $html=TRUE)
 {
-    global $CONFIG;
+    global $CONFIG, $dbSetTags, $dbTags;
 
-    $sql = "SELECT tags.name, tags.tagid FROM set_tags, tags WHERE set_tags.tagid = tags.tagid AND ";
-    $sql .= "set_tags.type = '$type' AND set_tags.id = '$recordid'";
+    $sql = "SELECT t.name, t.tagid FROM `{$dbSetTags}` AS s, `{$dbTags}` AS t WHERE s.tagid = t.tagid AND ";
+    $sql .= "s.type = '$type' AND s.id = '$recordid'";
     $result = mysql_query($sql);
     if (mysql_error()) trigger_error(mysql_error(),E_USER_ERROR);
     $numtags = mysql_num_rows($result);
+
     if ($html AND $numtags > 0)
     {
         $str .= "<div class='taglist'>";
@@ -6232,14 +6590,14 @@ function list_tags($recordid, $type, $html=TRUE)
 */
 function list_tag_icons($recordid, $type)
 {
-    global $CONFIG;
-    $sql = "SELECT tags.name, tags.tagid FROM set_tags, tags WHERE set_tags.tagid = tags.tagid AND ";
-    $sql .= "set_tags.type = '$type' AND set_tags.id = '$recordid' AND (";
+    global $CONFIG, $dbSetTags, $dbTags;
+    $sql = "SELECT t.name, t.tagid FROM `{$dbSetTags}` AS st, `{$dbTags}` AS t WHERE st.tagid = t.tagid AND ";
+    $sql .= "st.type = '$type' AND st.id = '$recordid' AND (";
     $counticons = count($CONFIG['tag_icons']);
     $count = 1;
     foreach ($CONFIG['tag_icons'] AS $icon)
     {
-        $sql .= "tags.name = '{$icon}'";
+        $sql .= "t.name = '{$icon}'";
         if ($count < $counticons) $sql .= " OR ";
         $count++;
     }
@@ -6249,7 +6607,7 @@ function list_tag_icons($recordid, $type)
     $numtags = mysql_num_rows($result);
     if ($numtags > 0)
     {
-        while($tags = mysql_fetch_object($result))
+        while ($tags = mysql_fetch_object($result))
         {
             $str .= "<a href='view_tags.php?tagid={$tags->tagid}' title='{$tags->name}'>";
             $str .= "<img src='images/icons/sit/16x16/{$CONFIG['tag_icons'][$tags->name]}.png' style='border:0px;' alt='{$tags->name}' />";
@@ -6266,40 +6624,44 @@ function list_tag_icons($recordid, $type)
 */
 function show_tag_cloud($orderby="name", $showcount=FALSE)
 {
-    global $CONFIG;
+    global $CONFIG, $dbTags, $dbSetTags;
 
     // First purge any disused tags
     purge_tags();
-    $sql = "SELECT COUNT(name) AS occurrences, name, tags.tagid FROM tags, set_tags WHERE tags.tagid = set_tags.tagid GROUP BY name ORDER BY $orderby";
-    if($orderby == "occurrences") $sql .= " DESC";
+    $sql = "SELECT COUNT(name) AS occurrences, name, t.tagid FROM `{$dbTags}` AS t, `{$dbSetTags}` AS st WHERE t.tagid = st.tagid GROUP BY name ORDER BY $orderby";
+    if ($orderby == "occurrences") $sql .= " DESC";
     $result = mysql_query($sql);
     if (mysql_error()) trigger_error(mysql_error(),E_USER_ERROR);
 
-    $countsql = "SELECT COUNT(*) AS counted FROM set_tags GROUP BY tagid ORDER BY counted DESC LIMIT 1";
+    $countsql = "SELECT COUNT(*) AS counted FROM `{$dbSetTags}` GROUP BY tagid ORDER BY counted DESC LIMIT 1";
     $countresult = mysql_query($countsql);
     if (mysql_error()) trigger_error(mysql_error(),E_USER_ERROR);
     list($max) = mysql_fetch_row($countresult);
 
-    $countsql = "SELECT COUNT(*) AS counted FROM set_tags GROUP BY tagid ORDER BY counted ASC LIMIT 1";
+    $countsql = "SELECT COUNT(*) AS counted FROM `{$dbSetTags}` GROUP BY tagid ORDER BY counted ASC LIMIT 1";
     $countresult = mysql_query($countsql);
     if (mysql_error()) trigger_error(mysql_error(),E_USER_ERROR);
     list($min) = mysql_fetch_row($countresult);
     unset($countsql, $countresult);
 
-    if(substr($_SERVER['SCRIPT_NAME'],-8) != "main.php")
+    if (substr($_SERVER['SCRIPT_NAME'],-8) != "main.php")
     {
         //not in the dashbaord
         $html .= "<p align='center'>{$GLOBALS['strSort']}: <a href='view_tags.php?orderby=name'>{$GLOBALS['strAlphabetically']}</a> | ";
         $html .= "<a href='view_tags.php?orderby=occurrences'>{$GLOBALS['strPopularity']}</a></p>";
     }
-    if(mysql_num_rows($result) > 0)
+    if (mysql_num_rows($result) > 0)
     {
-        $html .= "<table align='center'><tr><td>";
-        while($obj = mysql_fetch_object($result))
+        $html .= "<table align='center'><tr><td class='tagcloud'>";
+        while ($obj = mysql_fetch_object($result))
         {
-            $size = log($obj->occurrences * 100) * 40;
+            $size = round(log($obj->occurrences * 100) * 32);
             if ($size==0) $size=100;
-            $html .= "<a href='view_tags.php?tagid=$obj->tagid' style='font-size: {$size}%;' title='{$obj->occurrences}'>";
+            if ($size > 0 AND $size <= 100) $taglevel = 'taglevel1';
+            if ($size > 100 AND $size <= 150) $taglevel = 'taglevel2';
+            if ($size > 150 AND $size <= 200) $taglevel = 'taglevel3';
+            if ($size > 200) $taglevel = 'taglevel4';
+            $html .= "<a href='view_tags.php?tagid=$obj->tagid' class='$taglevel' style='font-size: {$size}%; font-weight: normal;' title='{$obj->occurrences}'>";
             if (array_key_exists($obj->name, $CONFIG['tag_icons']))
             {
                 $html .= "{$obj->name}&nbsp;<img src='images/icons/sit/";
@@ -6316,7 +6678,7 @@ function show_tag_cloud($orderby="name", $showcount=FALSE)
             else $html .= $obj->name;
             $html .= "</a>";
             if ($showcount) $html .= "({$obj->occurrences})";
-            $html .= " &nbsp;\n";
+            $html .= " \n";//&nbsp;\n";
         }
         $html .= "</td></tr></table>";
     }
@@ -6335,7 +6697,7 @@ function display_drafts($type, $result)
     global $id;
     global $CONFIG;
 
-    if($type == 'update')
+    if ($type == 'update')
     {
         $page = "update_incident.php";
         $editurlspecific = "";
@@ -6396,6 +6758,7 @@ function array_remove_duplicate($array, $field)
     return $new;
 }
 
+
 // This function doesn't exist for PHP4 so use this instead
 if (!function_exists("stripos"))
 {
@@ -6408,9 +6771,9 @@ if (!function_exists("stripos"))
 
 function array_multi_search($needle, $haystack, $searchkey)
 {
-    foreach($haystack AS $thekey => $thevalue)
+    foreach ($haystack AS $thekey => $thevalue)
     {
-        if($thevalue[$searchkey] == $needle) return $thekey;
+        if ($thevalue[$searchkey] == $needle) return $thekey;
     }
     return FALSE;
 }
@@ -6420,6 +6783,7 @@ function string_find_all($haystack, $needle, $limit=0)
 {
     $positions = array();
     $currentoffset = 0;
+
     $count = 0;
     while (($pos = stripos($haystack, $needle, $offset)) !==false && ($count < $limit || $limit == 0))
     {
@@ -6429,6 +6793,7 @@ function string_find_all($haystack, $needle, $limit=0)
     }
     return $positions;
 }
+
 
 // Implode assocative array
 function implode_assoc($glue1, $glue2, $array)
@@ -6450,7 +6815,7 @@ function implode_assoc($glue1, $glue2, $array)
 */
 function time_dropdown($name, $time='')
 {
-    if($time)
+    if ($time)
     {
         $time = explode(':', $time);
     }
@@ -6464,13 +6829,13 @@ function time_dropdown($name, $time='')
             $hours = str_pad($hours, 2, "0", STR_PAD_LEFT);
             $mins = str_pad($mins, 2, "0", STR_PAD_RIGHT);
 
-            if($time AND $time[0] == $hours AND $time[1] == $mins)
+            if ($time AND $time[0] == $hours AND $time[1] == $mins)
             {
                 $html .= "<option selected='selected' value='$hours:$mins'>$hours:$mins</option>";
             }
             else
             {
-                if($time AND $time[0] == $hours AND $time[1] < $mins AND $time[1] > ($mins - 15))
+                if ($time AND $time[0] == $hours AND $time[1] < $mins AND $time[1] > ($mins - 15))
                 {
                     $html .= "<option selected='selected'           value='$time[0]:$time[1]'>$time[0]:$time[1]</option>\n";
                 }
@@ -6484,6 +6849,7 @@ function time_dropdown($name, $time='')
     $html .= "</select>";
     return $html;
 }
+
 
 /**
     * @author Kieran Hogg
@@ -6524,9 +6890,9 @@ function exact_seconds($seconds)
     $seconds -= $minutes * 60;
 
     $string;
-    if($days != 0) $string .= "{$days} {$GLOBALS['strDays']}, ";
-    if($hours != 0) $string .= "{$hours} {$GLOBALS['strHours']}, ";
-    if($minutes != 0) $string .= "{$minutes} {$GLOBALS['strMinutes']}, ";
+    if ($days != 0) $string .= "{$days} {$GLOBALS['strDays']}, ";
+    if ($hours != 0) $string .= "{$hours} {$GLOBALS['strHours']}, ";
+    if ($minutes != 0) $string .= "{$minutes} {$GLOBALS['strMinutes']}, ";
     $string .= "{$seconds} {$GLOBALS['strSeconds']}";
 
     return $string;
@@ -6539,19 +6905,42 @@ function exact_seconds($seconds)
     * @param $user The user ID of the user to check
     * @returns string. HTML of a 16x16 status icon.
 */
-function user_online($user)
+function user_online_icon($user)
 {
-    global $iconset, $now;
-    $sql = "SELECT lastseen FROM users WHERE id={$user}";
+    global $iconset, $now, $dbUsers;
+    $sql = "SELECT lastseen FROM `{$dbUsers}` WHERE id={$user}";
     $result = mysql_query($sql);
     $users = mysql_fetch_object($result);
-    if(($now - mysql2date($users->lastseen) < (60 * 30)))
+    if (($now - mysql2date($users->lastseen) < (60 * 30)))
     {
         return "<img src='{$CONFIG['application_webpath']}images/icons/{$iconset}/16x16/online.png' width='16' height='16' alt=\"{$strOnline}\" /> ";
     }
     else
     {
         return "<img src='{$CONFIG['application_webpath']}images/icons/{$iconset}/16x16/offline.png' width='16' height='16' alt=\"{$strOffline}\" /> ";
+    }
+}
+
+
+/**
+    * Returns users online status
+    * @author Kieran Hogg
+    * @param $user The user ID of the user to check
+    * @returns boolean. TRUE if online, FALSE if not
+*/
+function user_online($user)
+{
+    global $iconset, $now, $dbUsers;
+    $sql = "SELECT lastseen FROM `{$dbUsers}` WHERE id={$user}";
+    $result = mysql_query($sql);
+    $users = mysql_fetch_object($result);
+    if (($now - mysql2date($users->lastseen) < (60 * 30)))
+    {
+        return TRUE;
+    }
+    else
+    {
+        return FALSE;
     }
 }
 
@@ -6572,6 +6961,7 @@ function show_form_errors($formname)
     return $html;
 }
 
+
 /**
     * Cleans form errors
     * @author Kieran Hogg
@@ -6581,6 +6971,7 @@ function clear_form_errors($formname)
 {
     unset($_SESSION['formerrors'][$formname]);
 }
+
 
 /**
     * Cleans form data
@@ -6638,17 +7029,19 @@ function truncate_string($text, $maxlength=255, $html=TRUE)
     * Returns a localised and translated date
     * @author Ivan Lucas
     * @param $format string. date() format
-    * @param $date int. UNIX timestamp
+    * @param $date int. UNIX timestamp.  Uses 'now' if ommitted
     * @returns string. An internationised date/time string
     * @todo  th/st and am/pm maybe?
 */
-function ldate($format, $date)
+function ldate($format, $date='')
 {
-    if ($_SESSION['utcoffset'] != 0)
+    if ($date=='') $date = $GLOBALS['now'];
+    if ($_SESSION['utcoffset'] != '')
     {
         // Adjust the date back to UTC
         $tz = strftime('%z', $date);
-        $tzmins = substr($tz, -4, 2) + (substr($tz, -4, 2) * 60);
+        $tzmins = substr($tz, -4, 2) * (substr($tz, -4, 2) * 60);
+        $tzmins *= 60; // convert to seconds
         if ($tz{0} == '+') $date -= $tzmins;
         else $date += $tzmins;
 
@@ -6718,19 +7111,21 @@ function ldate($format, $date)
 */
 function open_activities_for_incident($incientid)
 {
+    global $dbLinks, $dbLinkTypes, $dbTasks;
     // Running Activities
 
     $sql = "SELECT DISTINCT origcolref, linkcolref ";
-    $sql .= "FROM links, linktypes ";
-    $sql .= "WHERE links.linktype=4 ";
+    $sql .= "FROM `{$dbLinks}` AS l, `{$dbLinkTypes}` AS lt ";
+    $sql .= "WHERE l.linktype=4 ";
     $sql .= "AND linkcolref={$incientid} ";
     $sql .= "AND direction='left'";
     $result = mysql_query($sql);
+    if (mysql_error()) trigger_error(mysql_error(),E_USER_WARNING);
 
     if (mysql_num_rows($result) > 0)
     {
         //get list of tasks
-        $sql = "SELECT * FROM tasks WHERE enddate IS NULL ";
+        $sql = "SELECT * FROM `{$dbTasks}` WHERE enddate IS NULL ";
         while ($tasks = mysql_fetch_object($result))
         {
             if (empty($orSQL)) $orSQL = "(";
@@ -6754,6 +7149,7 @@ function open_activities_for_incident($incientid)
     return $num;
 }
 
+
 /**
     * Returns the number of open activities/timed tasks for a site
     * @author Paul Heaney
@@ -6762,15 +7158,17 @@ function open_activities_for_incident($incientid)
 */
 function open_activities_for_site($siteid)
 {
+    global $dbIncidents, $dbContacts;
+
     $openactivites = 0;
-    
+
     if (!empty($siteid) AND $siteid != 0)
-    {    
-        $sql = "SELECT incidents.id FROM incidents, contacts ";
-        $sql .= "WHERE incidents.contact = contacts.id AND ";
-        $sql .= "contacts.siteid = {$siteid} AND ";
-        $sql .= "(incidents.status != 2 AND incidents.status != 7)";
-        
+    {
+        $sql = "SELECT i.id FROM `{$dbIncidents}` AS i, `{$dbContacts}` AS c ";
+        $sql .= "WHERE i.contact = c.id AND ";
+        $sql .= "c.siteid = {$siteid} AND ";
+        $sql .= "(i.status != 2 AND i.status != 7)";
+
         $result = mysql_query($sql);
 
         while ($obj = mysql_fetch_object($result))
@@ -6782,13 +7180,15 @@ function open_activities_for_site($siteid)
     return $openactivites;
 }
 
+
 function mark_task_completed($taskid, $incident)
 {
+    global $dbNotes, $dbTasks;
     if(!$incident)
     {
         // Insert note to say what happened
         $bodytext="Task marked 100% complete by {$_SESSION['realname']}:\n\n".$bodytext;
-        $sql = "INSERT INTO notes ";
+        $sql = "INSERT INTO `{$dbNotes}` ";
         $sql .= "(userid, bodytext, link, refid) ";
         $sql .= "VALUES ('0', '{$bodytext}', '10', '{$taskid}')";
         mysql_query($sql);
@@ -6796,13 +7196,311 @@ function mark_task_completed($taskid, $incident)
     }
 
     $enddate = date('Y-m-d H:i:s');
-    $sql = "UPDATE tasks ";
+    $sql = "UPDATE `{$dbTasks}` ";
     $sql .= "SET completion='100', enddate='$enddate' ";
     $sql .= "WHERE id='$taskid' LIMIT 1";
     mysql_query($sql);
     if (mysql_error()) trigger_error(mysql_error(),E_USER_ERROR);
 }
 
+/**
+    * Finds out which scheduled tasks should be run right now
+    * @author Ivan Lucas
+**/
+function schedule_actions_due()
+{
+    global $now;
+    global $dbScheduler;
+
+    $actions = FALSE;
+    $sql = "SELECT * FROM `{$dbScheduler}` WHERE status = 'enabled' ";
+    $sql .= "AND UNIX_TIMESTAMP(start) <= $now AND (UNIX_TIMESTAMP(end) >= $now OR UNIX_TIMESTAMP(end) = 0) ";
+    $sql .= "AND IF(UNIX_TIMESTAMP(lastran) > 0, UNIX_TIMESTAMP(lastran) + `interval` < $now, UNIX_TIMESTAMP(NOW()))";
+    $result = mysql_query($sql);
+    if (mysql_error()) trigger_error(mysql_error(),E_USER_WARNING);
+    if (mysql_num_rows($result) > 0)
+    {
+        while ($action = mysql_fetch_object($result))
+        {
+            $actions[$action->action] = $actions->params;
+        }
+    }
+    return $actions;
+}
+
+
+/**
+    * Mark a schedule action as done
+    * @author Ivan Lucas
+    * @param $doneaction string. Name of scheduled action
+    * @param $success bool. Was the run successful, TRUE = Yes, FALSE = No
+**/
+function schedule_action_done($doneaction, $success=TRUE)
+{
+    global $now;
+    global $dbScheduler;
+
+    $nowdate = date('Y-m-d H:i:s', $now);
+    $sql = "UPDATE `{$dbScheduler}` SET lastran = '$nowdate' ";
+    if ($success == FALSE) $sql .= ", success=0, status='disabled' ";
+    else $sql .= ", success=1 ";
+    $sql .= "WHERE action = '{$doneaction}'";
+    mysql_query($sql);
+    if (mysql_error())
+    {
+        trigger_error(mysql_error(),E_USER_ERROR);
+        return FALSE;
+    }
+    if (mysql_affected_rows() > 0) return TRUE;
+    else return FALSE;
+}
+
+/**
+ * Make a billing array for a incident
+ * @author Paul Heaney
+ * @param $incidentid - Incident number of the incident to create the array from
+ * @todo Can this be merged into make_incident_billing_array? Does it serve any purpose on its own?
+**/
+function get_incident_billing_details($incidentid)
+{
+    global $dbUpdates;
+    /*
+     $array[owner][] = array(owner, starttime, duration)      
+     */
+    $sql = "SELECT * FROM `{$dbUpdates}` WHERE incidentid = {$incidentid} AND duration IS NOT NULL";
+    $result = mysql_query($sql);
+    if (mysql_error())
+    {
+        trigger_error(mysql_error(),E_USER_ERROR);
+        return FALSE;
+    }
+    
+    if (mysql_num_rows($result) > 0)
+    {
+        while($obj = mysql_fetch_object($result))
+        {
+            $temparray['owner'] = $obj->userid;
+            $temparray['starttime'] = ($obj->timestamp-$obj->duration);
+            $temparray['duration'] = $obj->duration;
+            $billing[$obj->userid][] = $temparray;
+        }
+    }
+    
+    return $billing;
+}
+
+function group_billing_periods(&$count, $countType, $activity, $period)
+{
+    $duration = $activity['duration'];
+    $startTime = $activity['starttime'];
+    
+    if (!empty($count[$countType]))
+    {
+        while ($duration > 0)
+        {
+            $saved = "false";
+            foreach ($count[$countType] AS $ind)
+            {
+                /*
+                echo "<pre>";
+                print_r($ind);
+                echo "</pre>";
+                */
+                //echo "IN:{$ind}:START:{$act['starttime']}:ENG:{$engineerPeriod}<br />";
+
+                if($ind <= $activity['starttime'] AND $ind <= ($activity['starttime'] + $period))
+                {
+                    //echo "IND:{$ind}:START:{$act['starttime']}<br />";
+                    // already have something which starts in this period just need to check it fits in the period
+                    if($ind + $period > $activity['starttime'] + $duration)
+                    {
+                        $remainderInPeriod = ($ind + $period) - $activity['starttime'];
+                        $duration -= $remainderInPeriod;
+
+                        $saved = "true";
+                    }
+                }
+            }
+            //echo "Saved: {$saved}<br />";
+            if ($saved == "false" AND $activity['duration'] > 0)
+            {
+                //echo "BB:".$activity['starttime'].":SAVED:{$saved}:DUR:{$activity['duration']}<br />";
+                // need to add a new block
+                $count[$countType][$startTime] = $startTime;
+
+                $startTime += $period;
+
+                $duration -= $period;
+            }
+        }
+    }
+    else
+    {
+        $count[$countType][$activity['starttime']] = $activity['starttime'];
+        $localDur = $activity['duration'] - $period;
+
+        while ($localDur > 0)
+        {
+            $startTime += $period;
+            $count[$countType][$startTime] = $startTime;
+            $localDur -= $period; // was just -
+        }
+    }
+}
+
+function make_incident_billing_array($incidentid)
+{
+    $billing = get_incident_billing_details($incidentid);
+    
+    $sql = "SELECT servicelevel, priority FROM `{$GLOBALS['dbIncidents']}` WHERE id = {$incidentid}";
+    $result = mysql_query($sql);
+    if (mysql_error())
+    {
+        trigger_error(mysql_error(),E_USER_ERROR);
+        return FALSE;
+    }
+
+    $incident = mysql_fetch_object($result);
+    $servicelevel_tag = $incident->servicelevel;
+    $priority = $incident->priority;
+    
+    if (!empty($billing))
+    {
+        $billingSQL = "SELECT * FROM `{$GLOBALS['dbBillingPeriods']}` WHERE tag='{$servicelevel_tag}' AND priority='{$priority}'";
+
+        /*
+        echo "<pre>";
+        print_r($billing);
+        echo "</pre>";
+        
+        echo "<pre>";
+        print_r(make_billing_array($incidentid));
+        echo "</pre>";
+        */
+
+        //echo $billingSQL;
+
+        $billingresult = mysql_query($billingSQL);
+        // echo $billingSQL;
+        if (mysql_error()) trigger_error("MySQL Query Error ".mysql_error(), E_USER_ERROR);
+        $billingObj = mysql_fetch_object($billingresult);
+
+        unset($billingresult);
+
+        $engineerPeriod = $billingObj->engineerperiod * 60;  //to seconds
+        $customerPeriod = $billingObj->customerperiod * 60;
+
+        if (empty($engineerPeriod) OR $engineerPeriod == 0) $engineerPeriod = 3600;
+        if (empty($customerPeriod) OR $customerPeriod == 0) $customerPeriod = 3600;
+
+        /*
+        echo "<pre>";
+        print_r($billing);
+        echo "</pre>";
+        */
+
+        foreach ($billing AS $engineer)
+        {
+            /*
+                [eng][starttime]
+            */
+
+            $owner = "";
+            $duration = 0;
+
+            unset($count);
+
+            $count['engineer'];
+            $count['customer'];
+
+            foreach ($engineer AS $activity)
+            {
+                $owner = user_realname($activity['owner']);
+                $duration += $activity['duration'];
+
+                /*
+                echo "<pre>";
+                print_r($count);
+                echo "</pre>";
+                */
+
+                group_billing_periods($count, 'engineer', $activity, $engineerPeriod);
+                
+                // Optimisation no need to compute again if we already have the details
+                if ($engineerPeriod != $customerPeriod)
+                {
+                    group_billing_periods($count, 'customer', $activity, $customerPeriod);
+                }
+                else
+                {
+                    $count['customer'] = $count['engineer'];
+                }
+            }
+
+            $tduration += $duration;
+            $totalengineerperiods += sizeof($count['engineer']);
+            $totalcustomerperiods += sizeof($count['customer']);
+            /*
+            echo "<pre>";
+            print_r($count);
+            echo "</pre>";
+            */
+            
+            $billing_a[$activity['owner']]['owner'] = $owner;
+            $billing_a[$activity['owner']]['duration'] = $duration;
+            $billing_a[$activity['owner']]['engineerperiods'] = $count['engineer'];
+            $billing_a[$activity['owner']]['customerperiods'] = $count['customer'];
+        }
+        
+        if (empty($totalengineerperiods)) $totalengineerperiods = 0;
+        if (empty($totalcustomerperiods)) $totalcustomerperiods = 0;
+        if (empty($tduration)) $tduration = 0;
+        
+        $billing_a[-1]['totalduration'] = $tduration;
+        $billing_a[-1]['totalengineerperiods'] = $totalengineerperiods;
+        $billing_a[-1]['totalcustomerperiods'] = $totalcustomerperiods;
+        $billing_a[-1]['customerperiod'] = $customerPeriod;
+        $billing_a[-1]['engineerperiod'] = $engineerPeriod;
+    }
+    
+    return $billing_a;
+}
+
+// NOTE: The following returns the billable periods of a site, could run into issues if multiple different periods used for a site
+function billable_units_site($siteid, $startdate=0, $enddate=0)
+{
+    $sql = "SELECT i.id FROM `{$GLOBALS['dbIncidents']}` AS i, `{$GLOBALS['dbContacts']}` AS c WHERE c.id = i.contact AND c.siteid = {$siteid} ";
+    if ($startdate != 0)
+    {
+        $sql .= "AND closed >= {$startdate} ";
+    }
+    
+    if ($enedate != 0)
+    {
+        $sql .= "AND closed <= {$enddate} ";
+    }
+
+    $result = mysql_query($sql);
+    if (mysql_error())
+    {
+        trigger_error(mysql_error(),E_USER_ERROR);
+        return FALSE;
+    }
+    
+    $units = 0;
+    
+    if (mysql_num_rows($result) > 0)
+    {
+        while ($obj = mysql_fetch_object($result))
+        {
+            $a = make_incident_billing_array($obj->id);
+            $units += $a[-1]['totalcustomerperiods'];
+        }
+    }
+    
+    return $units;
+    
+}
 
 // -------------------------- // -------------------------- // --------------------------
 // leave this section at the bottom of functions.inc.php ================================
@@ -6815,6 +7513,7 @@ if (is_array($CONFIG['plugins']))
         // Remove any dots
         $plugin = str_replace('.','',$plugin);
         // Remove any slashes
+
         $plugin = str_replace('/','',$plugin);
         if ($plugin!='')
         {

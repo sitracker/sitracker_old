@@ -9,13 +9,13 @@
 //
 
 // Author: Ivan Lucas <ivanlucas[at]users.sourceforge.net>
-@include('set_include_path.inc.php');
+@include ('set_include_path.inc.php');
 
-$permission=13; // Reassign Incident
-require('db_connect.inc.php');
-require('functions.inc.php');
+$permission = 13; // Reassign Incident
+require ('db_connect.inc.php');
+require ('functions.inc.php');
 // This page requires authentication
-require('auth.inc.php');
+require ('auth.inc.php');
 
 $forcepermission = user_permission($sit[2],40);
 
@@ -40,7 +40,7 @@ switch ($action)
         $id = cleanvar($_REQUEST['id']);
 
         // Retrieve current incident details
-        $sql = "SELECT * FROM incidents WHERE id='$id' LIMIT 1";
+        $sql = "SELECT * FROM `{$dbIncidents}` WHERE id='$id' LIMIT 1";
         $result = mysql_query($sql);
         if (mysql_error()) trigger_error("MySQL Query Error ".mysql_error(), E_USER_ERROR);
         $incident = mysql_fetch_object($result);
@@ -49,7 +49,7 @@ switch ($action)
         $bodytext = "Status: ".incidentstatus_name($incident->status)." -&gt; <b>" . incidentstatus_name($newstatus) . "</b>\n\n" . $bodytext;
 
         // Update incident
-        $sql = "UPDATE incidents SET ";
+        $sql = "UPDATE `{$dbIncidents}` SET ";
         if ($temporary != 'yes' AND $incident->towner > 0 AND $sit[2]==$incident->owner) $sql .= "owner='{$sit[2]}', towner=0, "; // make current user = owner
         elseif ($temporary != 'yes' AND $sit[2]==$incident->towner) $sql .= "towner=0, "; // temp owner removing temp ownership
         elseif ($temporary == 'yes' AND $incident->towner < 1 AND $sit[2]!=$incident->owner) $sql .= "towner={$sit[2]}, "; // Temp to self
@@ -80,7 +80,7 @@ switch ($action)
         if ($_REQUEST['cust_vis']=='yes') $customervisibility='show';
         else $customervisibility='hide';
 
-        $sql  = "INSERT INTO updates (incidentid, userid, bodytext, type, timestamp, currentowner, currentstatus, customervisibility) ";
+        $sql  = "INSERT INTO `{$dbUpdates}` (incidentid, userid, bodytext, type, timestamp, currentowner, currentstatus, customervisibility) ";
         $sql .= "VALUES ($id, $sit[2], '$bodytext', '$assigntype', '$now', ";
         if ($temporary != 'yes' AND $incident->towner > 0 AND $sit[2] == $incident->owner)
         {
@@ -108,7 +108,7 @@ switch ($action)
         if (mysql_error()) trigger_error("MySQL Query Error ".mysql_error(), E_USER_ERROR);
 
         // Remove any tempassigns that are pending for this incident
-        $sql = "DELETE FROM tempassigns WHERE incidentid='$id'";
+        $sql = "DELETE FROM `{$dbTempAssigns}` WHERE incidentid='$id'";
         mysql_query($sql);
         if (mysql_error()) trigger_error("MySQL Query Error ".mysql_error(), E_USER_ERROR);
 
@@ -122,10 +122,10 @@ switch ($action)
     default:
         // No submit detected show reassign form
         $title = $strReassign;
-        include('incident_html_top.inc.php');
+        include ('incident_html_top.inc.php');
 
 
-        $sql = "SELECT * FROM incidents WHERE id='$id' LIMIT 1";
+        $sql = "SELECT * FROM `{$dbIncidents}` WHERE id='$id' LIMIT 1";
         $result = mysql_query($sql);
         if (mysql_error()) trigger_error("MySQL Query Error ".mysql_error(), E_USER_ERROR);
         $incident = mysql_fetch_object($result);
@@ -135,7 +135,7 @@ switch ($action)
 
         echo "<form name='assignform' action='{$_SERVER['PHP_SELF']}?id={$id}' method='post'>";
 
-        $sql = "SELECT * FROM users WHERE status!=0 ";
+        $sql = "SELECT * FROM `{$dbUsers}` WHERE status!=0 ";
         $sql .= "AND NOT id=$incident->owner ";
         if ($suggested) $sql .= "AND NOT id='$suggested' ";
         if (!$forcepermission) $sql .= "AND accepting='Yes' ";
@@ -180,14 +180,14 @@ switch ($action)
         if ($suggested)
         {
             // Suggested user is shown as the first row
-            $sugsql = "SELECT * FROM users WHERE id='$suggested' LIMIT 1";
+            $sugsql = "SELECT * FROM `{$dbUsers}` WHERE id='$suggested' LIMIT 1";
             $sugresult = mysql_query($sugsql);
             if (mysql_error()) trigger_error("MySQL Query Error ".mysql_error(), E_USER_ERROR);
             $suguser = mysql_fetch_object($sugresult);
             echo "<tr class='idle'>";
             echo "<td><label><input type='radio' name='userid' checked='checked' value='{$suguser->id}' /> ";
             // Have a look if this user has skills with this software
-            $ssql = "SELECT softwareid FROM usersoftware WHERE userid={$suguser->id} AND softwareid={$incident->softwareid} ";
+            $ssql = "SELECT softwareid FROM `{$dbUserSoftware}` WHERE userid={$suguser->id} AND softwareid={$incident->softwareid} ";
             $sresult = mysql_query($ssql);
             if (mysql_error()) trigger_error("MySQL Query Error".mysql_error(), E_USER_ERROR);
             if (mysql_num_rows($sresult) >=1 )
@@ -200,7 +200,7 @@ switch ($action)
             }
             
             echo "</label></td>";
-            echo "<td>".user_online($suguser->id).userstatus_name($suguser->status)."</td>";
+            echo "<td>".user_online_icon($suguser->id).userstatus_name($suguser->status)."</td>";
             $incpriority = user_incidents($suguser->id);
             $countincidents = ($incpriority['1']+$incpriority['2']+$incpriority['3']+$incpriority['4']);
 
@@ -236,13 +236,13 @@ switch ($action)
                 echo "<tr class='$shade'>";
                 echo "<td><label><input type='radio' name='userid' value='{$users->id}' /> ";
                 // Have a look if this user has skills with this software
-                $ssql = "SELECT softwareid FROM usersoftware WHERE userid={$users->id} AND softwareid={$incident->softwareid} ";
+                $ssql = "SELECT softwareid FROM `{$dbUserSoftware}` WHERE userid={$users->id} AND softwareid={$incident->softwareid} ";
                 $sresult = mysql_query($ssql);
                 if (mysql_error()) trigger_error("MySQL Query Error ".mysql_error(), E_USER_ERROR);
                 if (mysql_num_rows($sresult) >=1 ) echo "<strong>{$users->realname}</strong>";
                 else echo $users->realname;
                 echo "</label></td>";
-                echo "<td>".user_online($users->id).userstatus_name($users->status)."</td>";
+                echo "<td>".user_online_icon($users->id).userstatus_name($users->status)."</td>";
                 $incpriority = user_incidents($users->id);
                 $countincidents = ($incpriority['1']+$incpriority['2']+$incpriority['3']+$incpriority['4']);
 
@@ -330,7 +330,7 @@ switch ($action)
         echo "<input type='hidden' name='action' value='save' />";
         echo "<p align='center'><input name='submit' type='submit' value=\"{$strReassign}\" /></p>";
         echo "</form>\n";
-        include('incident_html_bottom.inc.php');
+        include ('incident_html_bottom.inc.php');
 }
 
 ?>

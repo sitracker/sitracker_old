@@ -12,14 +12,14 @@
 // Author: Ivan Lucas <ivanlucas[at]users.sourceforge.net>, Tom Gerrard
 // 7Oct02 INL  Added support for maintenanceid to be put into incidents table
 
-@include('set_include_path.inc.php');
-$permission=5;
-require('db_connect.inc.php');
-require('functions.inc.php');
-$title=$strAddIncident;
+@include ('set_include_path.inc.php');
+$permission = 5;
+require ('db_connect.inc.php');
+require ('functions.inc.php');
+$title = $strAddIncident;
 
 // This page requires authentication
-require('auth.inc.php');
+require ('auth.inc.php');
 
 // External variables
 $action = $_REQUEST['action'];
@@ -34,18 +34,18 @@ $type = cleanvar($_REQUEST['type']);
 $maintid = cleanvar($_REQUEST['maintid']);
 $productid = cleanvar($_REQUEST['productid']);
 $producttext = cleanvar($_REQUEST['producttext']);
-$win=cleanvar($_REQUEST['win']);
+$win = cleanvar($_REQUEST['win']);
 
 if (!empty($incomingid) AND empty($updateid)) $updateid = db_read_column('updateid', 'tempincoming', $incomingid);
 
 if (empty($action) OR $action=='showform')
 {
     // TODO This page fails XHTML validation because of dojo attributes - INL 12/12/07
-    include('htmlheader.inc.php');
+    include ('htmlheader.inc.php');
     ?>
     <script type="text/javascript" src="scripts/dojo/dojo.js"></script>
     <script type="text/javascript">
-        dojo.require("dojo.widget.ComboBox");
+        dojo.require ("dojo.widget.ComboBox");
     </script>
     <?php
     echo "<h2>{$strAddIncident} - {$strFindContact}</h2>";
@@ -74,7 +74,7 @@ if (empty($action) OR $action=='showform')
     {
         echo "<p align='center'>{$strContact} $contactid</p>";
     }
-    include('htmlfooter.inc.php');
+    include ('htmlfooter.inc.php');
 }
 elseif ($action=='findcontact')
 {
@@ -88,35 +88,35 @@ elseif ($action=='findcontact')
         header("Location: {$_SERVER['PHP_SELF']}");
         exit;
     }
-    $sql  = "SELECT *, products.name AS productname, products.id AS productid, contacts.surname AS surname, ";
-    $sql .= "maintenance.id AS maintid, maintenance.incident_quantity, maintenance.incidents_used ";
-    $sql .= "FROM supportcontacts, contacts, maintenance, products, sites ";
-    $sql .= "WHERE maintenance.product=products.id ";
-    $sql .= "AND maintenance.site=sites.id ";
-    $sql .= "AND supportcontacts.contactid=contacts.id ";
-    $sql .= "AND supportcontacts.maintenanceid=maintenance.id ";
+    $sql  = "SELECT *, p.name AS productname, p.id AS productid, c.surname AS surname, ";
+    $sql .= "m.id AS maintid, m.incident_quantity, m.incidents_used ";
+    $sql .= "FROM `{$dbSupportContacts}` AS sc, `{$dbContacts}` AS c, `{$dbMaintenance}` AS m, `{$dbProducts}` AS p, `{$dbSites}` AS s ";
+    $sql .= "WHERE m.product = p.id ";
+    $sql .= "AND m.site = s.id ";
+    $sql .= "AND sc.contactid = c.id ";
+    $sql .= "AND sc.maintenanceid = m.id ";
 //     $sql .= "OR (maintenance.allcontactssupported = 'Yes' ";
 //     $sql .= "AND contacts.siteid=sites.id)) ";
 
 
     if (empty($contactid))
     {
-        $sql .= "AND (contacts.surname LIKE '%$search_string%' OR contacts.forenames LIKE '%$search_string%' ";
-        $sql .= "OR SOUNDEX('$search_string') = SOUNDEX((CONCAT_WS(' ', contacts.forenames, contacts.surname))) ";
-        $sql .= "OR sites.name LIKE '%$search_string%') ";
+        $sql .= "AND (c.surname LIKE '%$search_string%' OR c.forenames LIKE '%$search_string%' ";
+        $sql .= "OR SOUNDEX('$search_string') = SOUNDEX((CONCAT_WS(' ', c.forenames, c.surname))) ";
+        $sql .= "OR s.name LIKE '%$search_string%') ";
     }
     else
     {
-        $sql .= "AND supportcontacts.contactid = '$contactid' ";
+        $sql .= "AND sc.contactid = '$contactid' ";
     }
 
-    $sql .= "ORDER by contacts.forenames, contacts.surname, productname, expirydate ";
+    $sql .= "ORDER by c.forenames, c.surname, productname, expirydate ";
 
     $result=mysql_query($sql);
     if (mysql_error()) trigger_error("MySQL Query Error ".mysql_error(), E_USER_ERROR);
     if (mysql_num_rows($result)>0)
     {
-        include('htmlheader.inc.php');
+        include ('htmlheader.inc.php');
         ?>
         <script type="text/javascript">
         function confirm_support()
@@ -144,8 +144,14 @@ elseif ($action=='findcontact')
             $incidents_remaining = $contactrow['incident_quantity'] - $contactrow['incidents_used'];
 
             $str = "<tr class='$class'>";
-            if ($contactrow['expirydate']<$now AND $contactrow['expirydate'] != '-1') $str .=  "<td>{$GLOBALS['strExpired']}</td>";
-            elseif ($contactrow['term']=='yes') $str .=  "<td>{$GLOBALS['strTerminated']}</td>";
+            if ($contactrow['expirydate'] < $now AND $contactrow['expirydate'] != '-1')
+            {
+                $str .=  "<td>{$GLOBALS['strExpired']}</td>";
+            }
+            elseif ($contactrow['term'] == 'yes')
+            {
+                $str .=  "<td>{$GLOBALS['strTerminated']}</td>";
+            }
             elseif ($contactrow['incident_quantity'] >= 1 AND $contactrow['incidents_used'] >= $contactrow['incident_quantity'])
             {
                 $str .= "<td class='expired'>{$GLOBALS['strZeroRemaining']} ({$contactrow['incidents_used']}/{$contactrow['incident_quantity']} {$strUsed})</td>";
@@ -153,15 +159,21 @@ elseif ($action=='findcontact')
             else
             {
                 $str .=  "<td><a href=\"{$_SERVER['PHP_SELF']}?action=incidentform&amp;type=support&amp;contactid=".$contactrow['contactid']."&amp;maintid=".$contactrow['maintenanceid']."&amp;producttext=".urlencode($contactrow['productname'])."&amp;productid=".$contactrow['productid']."&amp;updateid=$updateid&amp;siteid=".$contactrow['siteid']."&amp;win={$win}\" onclick=\"return confirm_support();\">{$GLOBALS['strAddIncident']}</a> ";
-                if ($contactrow['incident_quantity']==0) $str .=  "({$GLOBALS['strUnlimited']})";
-                else $str .= "(".sprintf($strRemaining, $incidents_remaining).")";
+                if ($contactrow['incident_quantity'] == 0)
+                {
+                    $str .=  "({$GLOBALS['strUnlimited']})";
+                }
+                else
+                {
+                    $str .= "(".sprintf($strRemaining, $incidents_remaining).")";
+                }
             }
             $str .=  "</td>";
             $str .=  '<td>'.$contactrow['forenames'].' '.$contactrow['surname'].'</td>';
             $str .=  '<td>'.$contactrow['name'].'</td>';
             $str .=  '<td><strong>'.$contactrow['maintid'].'</strong>&nbsp;'.$contactrow['productname'].'</td>';
             $str .=  '<td>'.servicelevel_id2tag($contactrow['servicelevelid']).'</td>';
-            if($contactrow['expirydate'] == '-1')
+            if ($contactrow['expirydate'] == '-1')
             {
                 $str .= "<td>{$GLOBALS['strUnlimited']}</td>";
             }
@@ -178,7 +190,7 @@ elseif ($action=='findcontact')
 
         $headers = "<tr><th>&nbsp;</th><th>{$strName}</th><th>{$strSite}</th><th>{$strContract}</th><th>{$strServiceLevel}</th><th>{$strExpiryDate}</th></tr>";
 
-        while($contactrow=mysql_fetch_array($result))
+        while ($contactrow = mysql_fetch_array($result))
         {
             if (empty($CONFIG['preferred_maintenance']) OR
                 in_array(servicelevel_id2tag($contactrow['servicelevelid']), $CONFIG['preferred_maintenance']))
@@ -191,7 +203,7 @@ elseif ($action=='findcontact')
             }
         }
 
-        if(!empty($str_prefered))
+        if (!empty($str_prefered))
         {
             echo "<h3>{$strPreferred}</h3>";
             echo "<table align='center'>";
@@ -202,34 +214,34 @@ elseif ($action=='findcontact')
 
         // NOTE: these BOTH need to be shown as you might wish to log against an alternative contract
 
-        if(!empty($str_alternative))
+        if (!empty($str_alternative))
         {
-            if(!empty($str_prefered)) echo "<h3>{$strAlternative}</h3>";
+            if (!empty($str_prefered)) echo "<h3>{$strAlternative}</h3>";
             echo "<table align='center'>";
             echo $headers;
             echo $str_alternative;
             echo "</table>\n";
         }
 
-        if(empty($str_prefered) AND empty($str_alternative))
+        if (empty($str_prefered) AND empty($str_alternative))
         {
             echo "<p class='error'>{$strNothingToDisplay}</p>";
         }
 
         // Select the contact from the list of contacts as well
-        $sql = "SELECT *, contacts.id AS contactid FROM contacts, sites WHERE contacts.siteid=sites.id ";
+        $sql = "SELECT *, c.id AS contactid FROM `{$dbContacts}` AS c, `{$dbSites}` AS s WHERE c.siteid = s.id ";
         if (empty($contactid))
         {
-            $sql .= "AND (surname LIKE '%$search_string%' OR forenames LIKE '%$search_string%' OR sites.name LIKE '%$search_string%' ";
+            $sql .= "AND (surname LIKE '%$search_string%' OR forenames LIKE '%$search_string%' OR s.name LIKE '%$search_string%' ";
             $sql .= "OR CONCAT_WS(' ', forenames, surname) LIKE '$search_string') ";
         }
-        else $sql .= "AND contacts.id = '$contactid' ";
+        else $sql .= "AND c.id = '$contactid' ";
 
-        $sql .= "ORDER by contacts.surname, contacts.forenames ";
-        $result=mysql_query($sql);
+        $sql .= "ORDER by c.surname, c.forenames ";
+        $result = mysql_query($sql);
         if (mysql_error()) trigger_error("MySQL Query Error ".mysql_error(), E_USER_ERROR);
 
-        if (mysql_num_rows($result)>0)
+        if (mysql_num_rows($result) > 0)
         {
             echo "<h3><img src='{$CONFIG['application_webpath']}images/icons/{$iconset}/32x32/contact.png' width='32' height='32' alt='' /> ";
             echo "{$strContacts}</h3>\n";
@@ -241,10 +253,10 @@ elseif ($action=='findcontact')
             echo "<th>{$strSite}</th>";
             echo "</tr>\n";
 
-            while($contactrow=mysql_fetch_array($result))
+            while ($contactrow = mysql_fetch_array($result))
             {
                 echo "<tr class='shade2'>";
-                $site_incident_pool=db_read_column('freesupport', 'sites', $contactrow['siteid']);
+                $site_incident_pool = db_read_column('freesupport', 'sites', $contactrow['siteid']);
                 if ($site_incident_pool > 0)
                 {
                     echo "<td><a href=\"{$_SERVER['PHP_SELF']}?action=incidentform&amp;type=free&amp;contactid=".$contactrow['contactid']."&amp;updateid=$updateid&amp;win={$win}\" onclick=\"return confirm_free();\">";
@@ -267,26 +279,26 @@ elseif ($action=='findcontact')
             echo "<p align='center'><a href=\"add_contact.php\">{$strAddContact}</a></p>";
         }
         echo "<p align='center'><a href=\"{$_SERVER['PHP_SELF']}?updateid={$updateid}&amp;win={$win}\">{$strSearchAgain}</a></p>";
-        include('htmlfooter.inc.php');
+        include ('htmlfooter.inc.php');
     }
     else
     {
         // This Page Is Valid XHTML 1.0 Transitional! 27Oct05
-        include('htmlheader.inc.php');
+        include ('htmlheader.inc.php');
         echo "<h2>No contract found matching ";
         if (!empty($search_string)) echo "'$search_string' ";
         if (!empty($contactid)) echo "contact id $contactid ";
         echo "</h2>\n";
         echo "<p align='center'><a href=\"add_incident.php?updateid=$updateid&amp;win={$win}\">{$strSearchAgain}</a></p>";
         // Select the contact from the list of contacts as well
-        $sql = "SELECT *, contacts.id AS contactid FROM contacts, sites WHERE contacts.siteid=sites.id ";
+        $sql = "SELECT *, c.id AS contactid FROM `{$dbContacts}` AS c, `{$dbSites}` AS s WHERE c.siteid = s.id ";
         if (empty($contactid))
         {
-            $sql .= "AND (surname LIKE '%$search_string%' OR forenames LIKE '%$search_string%' OR sites.name LIKE '%$search_string%' ";
+            $sql .= "AND (surname LIKE '%$search_string%' OR forenames LIKE '%$search_string%' OR s.name LIKE '%$search_string%' ";
             $sql .= "OR CONCAT_WS(' ', forenames, surname) = '$search_string' )";
         }
-        else $sql .= "AND contacts.id = '$contactid' ";
-        $sql .= "ORDER by contacts.surname, contacts.forenames ";
+        else $sql .= "AND c.id = '$contactid' ";
+        $sql .= "ORDER by c.surname, c.forenames ";
         $result=mysql_query($sql);
         if (mysql_error()) trigger_error("MySQL Query Error ".mysql_error(), E_USER_ERROR);
 
@@ -301,10 +313,10 @@ elseif ($action=='findcontact')
             echo "<th>{$strSite}</th>";
             echo "</tr>\n";
 
-            while($contactrow=mysql_fetch_array($result))
+            while ($contactrow = mysql_fetch_array($result))
             {
                 echo "<tr class='shade2'>";
-                $site_incident_pool=db_read_column('freesupport', 'sites', $contactrow['siteid']);
+                $site_incident_pool = db_read_column('freesupport', 'sites', $contactrow['siteid']);
                 if ($site_incident_pool > 0)
                 {
                     echo "<td><a href=\"{$_SERVER['PHP_SELF']}?action=incidentform&amp;type=free&amp;contactid=".$contactrow['contactid']."&amp;updateid=$updateid&amp;win={$win}\" onclick=\"return confirm_free();\">";
@@ -324,13 +336,13 @@ elseif ($action=='findcontact')
             echo "<h3>No matching contacts found</h3>";
             echo "<p align='center'><a href=\"add_contact.php\">{$strAddContact}</a></p>\n";
         }
-        include('htmlfooter.inc.php');
+        include ('htmlfooter.inc.php');
     }
 }
 elseif ($action=='incidentform')
 {
     // Display form to get details of the actual incident
-    include('htmlheader.inc.php');
+    include ('htmlheader.inc.php');
 
     echo "<h2>{$strAddIncident} - Get Details</h2>";
     ?>
@@ -354,13 +366,12 @@ elseif ($action=='incidentform')
     <input type="hidden" name="siteid" value="<?php echo $siteid ?>" />
     <?php
     if (!empty($updateid)) echo "<input type='hidden' name='updateid' value='$updateid' />";
-    ?>
-    <table align='center' class='vertical' width='60%'>
-    <tr><th>Name:<br /><a href="edit_contact.php?action=edit&amp;contact=<?php echo $contactid; ?>">Edit</a></th><td><h3><?php echo contact_realname($contactid); ?></h3></td></tr>
-    <tr><th>Email:</th><td><?php echo contact_email($contactid); ?></td></tr>
-    <tr><th>Telephone:</th><td><?php echo contact_phone($contactid); ?></td></tr>
-    <tr><th>Fax:</th><td><?php echo contact_fax($contactid); ?></td></tr>
-    <?php
+
+    echo "<table align='center' class='vertical' width='60%'>";
+    echo "<tr><th>{$strName}:<br /><a href='edit_contact.php?action=edit&amp;contact={$contactid}'>{$strEdit}</a></th><td><h3>".contact_realname($contactid)."></h3></td></tr>";
+    echo "<tr><th>{$strEmail}:</th><td>".contact_email($contactid)."</td></tr>";
+    echo "<tr><th>{$strTelephone}:</th><td>".contact_phone($contactid)."</td></tr>";
+    echo "<tr><th>{$strFax}:</th><td>".contact_fax($contactid)."</td></tr>";
     if ($type == 'free')
     {
         echo "<tr><th>{$strServiceLevel}:</th><td>".serviceleveltag_drop_down('servicelevel',$CONFIG['default_service_level'], TRUE)."</td></tr>";
@@ -383,14 +394,16 @@ elseif ($action=='incidentform')
         echo "<td><textarea name='probdesc' rows='10' cols='60'></textarea></td></tr>\n";
         // Insert pre-defined per-product questions from the database, these should be required fields
         // These 'productinfo' questions don't have a GUI as of 27Oct05
-        $sql = "SELECT * FROM productinfo WHERE productid='$productid'";
+        $sql = "SELECT * FROM `{$dbProductInfo}` WHERE productid='$productid'";
         $result=mysql_query($sql);
         if (mysql_error()) trigger_error("MySQL Query Error ".mysql_error(), E_USER_ERROR);
         while ($productinforow=mysql_fetch_array($result))
         {
             echo "<tr><th>{$productinforow['information']}";
-            if ($productinforow['moreinformation']!='')
+            if ($productinforow['moreinformation'] != '')
+            {
                 echo "<br />\n".$productinforow['moreinformation'];
+            }
             echo ": <sup class='red'>*</sup>";
             echo "</th>";
             echo "<td><input maxlength='100' name='{$productinforow['id']}' size='40' type='text' /></td></tr>\n";
@@ -404,13 +417,13 @@ elseif ($action=='incidentform')
     }
     else
     {
-        $sql="SELECT bodytext FROM updates WHERE id=$updateid";
+        $sql = "SELECT bodytext FROM `{$dbUpdates}` WHERE id=$updateid";
         $result=mysql_query($sql);
         if (mysql_error()) trigger_error("MySQL Query Error ".mysql_error(), E_USER_ERROR);
         $updaterow=mysql_fetch_array($result);
         $mailed_body_text = $updaterow['bodytext'];
 
-        $sql="SELECT subject FROM tempincoming WHERE updateid=$updateid";
+        $sql="SELECT subject FROM `{$dbTempIncoming}` WHERE updateid=$updateid";
         $result=mysql_query($sql);
         if (mysql_error()) trigger_error("MySQL Query Error ".mysql_error(), E_USER_ERROR);
         $updaterow=mysql_fetch_array($result);
@@ -463,11 +476,11 @@ elseif ($action=='incidentform')
     ?>
     </form>
     <?php
-    include('htmlfooter.inc.php');
+    include ('htmlfooter.inc.php');
 }
 elseif ($action=='assign')
 {
-    include('htmlheader.inc.php');
+    include ('htmlheader.inc.php');
     if ($type == "support" || $type == "free")
     {
         echo "<h2>{$strAddIncident} - Assign</h2>";
@@ -535,7 +548,7 @@ elseif ($action=='assign')
             if ($servicelevel=='') $servicelevel = $CONFIG['default_service_level'];
 
             // Check the service level priorities, look for the highest possible and reduce the chosen priority if needed
-            $sql = "SELECT priority FROM servicelevels WHERE tag='$servicelevel' ORDER BY priority DESC LIMIT 1";
+            $sql = "SELECT priority FROM `{$dbServiceLevels}` WHERE tag='$servicelevel' ORDER BY priority DESC LIMIT 1";
             $result = mysql_query($sql);
             if (mysql_error()) trigger_error(mysql_error(). "--$sql--",E_USER_ERROR);
             list($highestpriority) = mysql_fetch_row($result);
@@ -545,7 +558,7 @@ elseif ($action=='assign')
                 $priority = $highestpriority;
             }
 
-            $sql  = "INSERT INTO incidents (title, owner, contact, priority, servicelevel, status, type, maintenanceid, ";
+            $sql  = "INSERT INTO `{$dbIncidents}` (title, owner, contact, priority, servicelevel, status, type, maintenanceid, ";
             $sql .= "product, softwareid, productversion, productservicepacks, opened, lastupdated, timeofnextaction) ";
             $sql .= "VALUES ('$incidenttitle', '".$sit[2]."', '$contactid', '$priority', '$servicelevel', '1', 'Support', '$maintid', ";
             $sql .= "'$productid', '$software', '$productversion', '$productservicepacks', '$now', '$now', '$timeofnextaction')";
@@ -590,7 +603,7 @@ elseif ($action=='assign')
             else
             {
                 // Create a new update from details entered
-                $sql  = "INSERT INTO updates (incidentid, userid, type, bodytext, timestamp, currentowner, ";
+                $sql  = "INSERT INTO `{$dbUpdates}` (incidentid, userid, type, bodytext, timestamp, currentowner, ";
                 $sql .= "currentstatus, customervisibility, nextaction) ";
                 $sql .= "VALUES ('$incidentid', '{$sit[2]}', 'opening', '$updatetext', '$now', '{$sit[2]}', ";
                 $sql .= "'1', '$customervisibility', '$nextaction')";
@@ -604,9 +617,9 @@ elseif ($action=='assign')
             {
                 // FIXME: for now we use id but in future use tag, once maintenance uses tag
                 $servicelevel=maintenance_servicelevel($maintid);
-                $sql = "SELECT * FROM servicelevels WHERE id='$servicelevel' AND priority='$priority' ";
+                $sql = "SELECT * FROM `{$dbServiceLevels}` WHERE id='$servicelevel' AND priority='$priority' ";
             }
-            else $sql = "SELECT * FROM servicelevels WHERE tag='$servicelevel' AND priority='$priority' ";
+            else $sql = "SELECT * FROM `{$dbServiceLevels}` WHERE tag='$servicelevel' AND priority='$priority' ";
 
             $result = mysql_query($sql);
             if (mysql_error()) trigger_error("MySQL Query Error ".mysql_error(), E_USER_ERROR);
@@ -617,14 +630,14 @@ elseif ($action=='assign')
 
             // Insert the first SLA update, this indicates the start of an incident
             // This insert could possibly be merged with another of the 'updates' records, but for now we keep it seperate for clarity
-            $sql  = "INSERT INTO updates (incidentid, userid, type, timestamp, currentowner, currentstatus, customervisibility, sla, bodytext) ";
+            $sql  = "INSERT INTO `{$dbUpdates}` (incidentid, userid, type, timestamp, currentowner, currentstatus, customervisibility, sla, bodytext) ";
             $sql .= "VALUES ('$incidentid', '".$sit[2]."', 'slamet', '$now', '".$sit[2]."', '1', 'show', 'opened','The incident is open and awaiting action.')";
             mysql_query($sql);
             if (mysql_error()) trigger_error("MySQL Query Error ".mysql_error(), E_USER_ERROR);
 
             // Insert the first Review update, this indicates the review period of an incident has started
             // This insert could possibly be merged with another of the 'updates' records, but for now we keep it seperate for clarity
-            $sql  = "INSERT INTO updates (incidentid, userid, type, timestamp, currentowner, currentstatus, customervisibility, sla, bodytext) ";
+            $sql  = "INSERT INTO `{$dbUpdates}` (incidentid, userid, type, timestamp, currentowner, currentstatus, customervisibility, sla, bodytext) ";
             $sql .= "VALUES ('$incidentid', '{$sit[2]}', 'reviewmet', '$now', '".$sit[2]."', '1', 'hide', 'opened','')";
             mysql_query($sql);
             if (mysql_error()) trigger_error("MySQL Query Error ".mysql_error(), E_USER_ERROR);
@@ -659,7 +672,7 @@ elseif ($action=='assign')
             // List Engineers
             // We need a user type 'engineer' so we don't just list everybody
             // Status zero means account disabled
-            $sql = "SELECT * FROM users WHERE status!=0 ORDER BY realname";
+            $sql = "SELECT * FROM `{$dbUsers}` WHERE status!=0 ORDER BY realname";
             $result = mysql_query($sql);
             if (mysql_error()) trigger_error("MySQL Query Error ".mysql_error(), E_USER_ERROR);
             echo "<h3>{$strUsers}</h3>
@@ -709,29 +722,29 @@ elseif ($action=='assign')
                 echo "<td>";
 
                 // Have a look if this user has skills with this software
-                $ssql = "SELECT softwareid FROM usersoftware WHERE userid='{$userrow['id']}' AND softwareid='{$software}' ";
+                $ssql = "SELECT softwareid FROM `{$dbUserSoftware}` WHERE userid='{$userrow['id']}' AND softwareid='{$software}' ";
                 $sresult = mysql_query($ssql);
                 if (mysql_num_rows($sresult) >=1 ) echo "<strong>{$userrow['realname']}</strong>";
                 else echo $userrow['realname'];
                 echo "</td>";
                 echo "<td>".$userrow['phone']."</td>";
-                echo "<td>".user_online($userrow['id']).userstatus_name($userrow['status'])."</td>";
+                echo "<td>".user_online_icon($userrow['id']).userstatus_name($userrow['status'])."</td>";
                 echo "<td>".$userrow['message']."</td>";
                 echo "<td align='center'>";
 
-    		$incpriority = user_incidents($userrow['id']);
-    		$countincidents = ($incpriority['1']+$incpriority['2']+$incpriority['3']+$incpriority['4']);
+                $incpriority = user_incidents($userrow['id']);
+                $countincidents = ($incpriority['1']+$incpriority['2']+$incpriority['3']+$incpriority['4']);
 
                 if ($countincidents >= 1) $countactive=user_activeincidents($userrow['id']);
                 else $countactive=0;
 
                 $countdiff=$countincidents-$countactive;
 
-    		echo "$countactive / {$countdiff}</td>";
-    		echo "<td align='center'>".$incpriority['4']."</td>";
-    		echo "<td align='center'>".$incpriority['3']."</td>";
-    		echo "<td align='center'>".$incpriority['2']."</td>";
-    		echo "<td align='center'>".$incpriority['1']."</td>";
+                echo "$countactive / {$countdiff}</td>";
+                echo "<td align='center'>".$incpriority['4']."</td>";
+                echo "<td align='center'>".$incpriority['3']."</td>";
+                echo "<td align='center'>".$incpriority['2']."</td>";
+                echo "<td align='center'>".$incpriority['1']."</td>";
 
                 echo "<td align='center'>";
                 echo $userrow['accepting']=='Yes' ? $strYes : "<span class='error'>{$strNo}</span>";
@@ -742,13 +755,14 @@ elseif ($action=='assign')
             }
             echo "</table>";
             echo "<p align='center'>{$strUsersBoldSkills}.</p>";
+            trigger("TRIGGER_INCIDENT_CREATED", array('incidentid' => $incidentid, 'priority' => $priority));
         }
         else
         {
             throw_error('User input error:', $error_string);
         }
     }
-    include('htmlfooter.inc.php');
+    include ('htmlfooter.inc.php');
 }
 elseif ($action=='reassign')
 {
@@ -757,27 +771,34 @@ elseif ($action=='reassign')
     $uid = cleanvar($_REQUEST['userid']);
     $nextaction = cleanvar($_REQUST['nextaction']);
 
-    include('htmlheader.inc.php');
+    include ('htmlheader.inc.php');
     echo "<h2>{$strIncidentAdded} - {$strSummary}</h2>";
     echo "<p align='center'>{$strIncident} <a href=\"javascript:incident_details_window('$incidentid','incident{$incidentid}');\">";
     echo "{$incidentid}</a> has been moved to ";
     echo user_realname($uid)."'s <strong style='color: red'>{$strActionNeeded}</strong> queue</p>";
     $userphone = user_phone($userid);
     if ($userphone!='') echo "<p align='center'>{$strTelephone}: {$userphone}</p>";
-    $sql = "UPDATE incidents SET owner='$uid', lastupdated='$now' WHERE id='$incidentid'";
+    $sql = "UPDATE `{$dbIncidents}` SET owner='$uid', lastupdated='$now' WHERE id='$incidentid'";
     mysql_query($sql);
     if (mysql_error()) trigger_error("MySQL Query Error ".mysql_error(), E_USER_ERROR);
 
-    if(user_notification_on_reassign($uid)=='true')
+    //do assigned triggers
+    trigger("TRIGGER_INCIDENT_ASSIGNED", array('userid' => $uid, 'incidentid' => $incidentid));
+    if (!user_online($uid))
     {
-        send_template_email('INCIDENT_REASSIGNED_USER_NOTIFY', $incidentid);
+        trigger("TRIGGER_INCIDENT_ASSIGNED_WHILE_OFFLINE", array('userid' => $uid, 'incidentid' => $incidentid));
+    }
+
+    if (user_accepting($uid) == "No")
+    {
+        trigger("TRIGGER_INCIDENT_ASSIGNED_WHILE_AWAY", array('userid' => $uid, 'incidentid' => $incidentid));
     }
 
     // add update
-    $sql  = "INSERT INTO updates (incidentid, userid, type, timestamp, currentowner, currentstatus, nextaction) ";
+    $sql  = "INSERT INTO `{$dbUpdates}` (incidentid, userid, type, timestamp, currentowner, currentstatus, nextaction) ";
     $sql .= "VALUES ('$incidentid', '$sit[2]', 'reassigning', '$now', '$uid', '1', '$nextaction')";
     $result = mysql_query($sql);
     if (mysql_error()) trigger_error("MySQL Query Error ".mysql_error(), E_USER_ERROR);
-    include('htmlfooter.inc.php');
+    include ('htmlfooter.inc.php');
 }
 ?>

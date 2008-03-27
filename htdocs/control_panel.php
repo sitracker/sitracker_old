@@ -8,15 +8,15 @@
 // of the GNU General Public License, incorporated herein by reference.
 //
 
-@include('set_include_path.inc.php');
-$permission=4; // Edit your profile
+@include ('set_include_path.inc.php');
+$permission = 4; // Edit your profile
 
-require('db_connect.inc.php');
-require('functions.inc.php');
+require ('db_connect.inc.php');
+require ('functions.inc.php');
 // This page requires authentication
-require('auth.inc.php');
+require ('auth.inc.php');
 
-include('htmlheader.inc.php');
+include ('htmlheader.inc.php');
 echo "<h2>{$CONFIG['application_shortname']} {$strControlPanel}</h2>";
 echo "<table align='center'>";
 echo "<thead>";
@@ -49,7 +49,7 @@ if (user_permission($sit[2],22)) // Administrate
     echo "<thead><tr><th>{$strAdministratorsOnly}</th></tr></thead>";
     echo "<tbody>";
     echo "<tr><td><a href='manage_users.php'>{$strManageUsers}</a></td></tr>";
-    echo "<tr><td><a href='edit_emailtype.php?action=showform'>{$strManageEmailTemplates}</a></td></tr>";
+    echo "<tr><td><a href='templates.php'>{$strManageEmailTemplates}</a></td></tr>";
     echo "<tr><td><a href='browse_journal.php'>{$strBrowse} {$CONFIG['application_shortname']} {$strJournal}</a></td></tr>";
     echo "<tr><td><a href='service_levels.php'>{$strServiceLevels}</a></td></tr>";
     echo "<tr><td><a href='add_productinfo.php?action=showform'>{$strAddProductInformation}</a></td></tr>";
@@ -60,5 +60,5 @@ if (user_permission($sit[2],22)) // Administrate
 
 plugin_do('cp_menu');
 echo "</table>\n";
-include('htmlfooter.inc.php');
+include ('htmlfooter.inc.php');
 ?>

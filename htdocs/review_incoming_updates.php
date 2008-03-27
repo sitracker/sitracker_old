@@ -12,13 +12,13 @@
 
 // This Page Is Valid XHTML 1.0 Transitional! 31Oct05
 
-@include('set_include_path.inc.php');
-$permission=42;
-require('db_connect.inc.php');
-require('functions.inc.php');
+@include ('set_include_path.inc.php');
+$permission = 42;
+require ('db_connect.inc.php');
+require ('functions.inc.php');
 
 // This page requires authentication
-require('auth.inc.php');
+require ('auth.inc.php');
 
 
 /**
@@ -45,7 +45,7 @@ function generate_row($update)
     if (!empty($update['fromaddr']))
     {
         // Have a look if we've got a customer or user with this email address
-        $sql = "SELECT COUNT(id) FROM contacts WHERE email LIKE '%{$update['fromaddr']}%'";
+        $sql = "SELECT COUNT(id) FROM `{$GLOBALS['dbContacts']}` WHERE email LIKE '%{$update['fromaddr']}%'";
         $result = mysql_query($sql);
         if (mysql_error()) trigger_error(mysql_error(),E_USER_WARNING);
         list($contactmatches) = mysql_fetch_row($result);
@@ -124,23 +124,23 @@ function deldir($location)
     rmdir($location);
 }
 
-$title = 'Review Held Updates';
+$title = 'Review Held Updates'; // FIXME i18n
 $refresh = $_SESSION['incident_refresh'];
 $selected = $_POST['selected'];
-include('htmlheader.inc.php');
+include ('htmlheader.inc.php');
 
 if ($lock=$_REQUEST['lock'])
 {
     $lockeduntil = date('Y-m-d H:i:s',$now+$CONFIG['record_lock_delay']);
-    $sql = "UPDATE tempincoming SET locked='{$sit[2]}', lockeduntil='{$lockeduntil}' ";
-    $sql .= "WHERE tempincoming.id='{$lock}' AND (locked = 0 OR locked IS NULL)";
+    $sql = "UPDATE `{$dbTempIncoming}` SET locked='{$sit[2]}', lockeduntil='{$lockeduntil}' ";
+    $sql .= "WHERE id='{$lock}' AND (locked = 0 OR locked IS NULL)";
     $result = mysql_query($sql);
     if (mysql_error()) trigger_error("MySQL Query Error ".mysql_error(), E_USER_ERROR);
 }
 elseif ($unlock=$_REQUEST['unlock'])
 {
-    $sql = "UPDATE tempincoming SET locked=NULL, lockeduntil=NULL ";
-    $sql .= "WHERE tempincoming.id='{$unlock}' AND locked = '{$sit[2]}'";
+    $sql = "UPDATE `{$dbTempIncoming}` AS t SET locked=NULL, lockeduntil=NULL ";
+    $sql .= "WHERE id='{$unlock}' AND locked = '{$sit[2]}'";
     $result = mysql_query($sql);
     if (mysql_error()) trigger_error("MySQL Query Error ".mysql_error(), E_USER_ERROR);
 }
@@ -148,7 +148,7 @@ else
 {
     // Unlock any expired locks
     $nowdatel = date('Y-m-d H:i:s');
-    $sql = "UPDATE tempincoming SET locked=NULL, lockeduntil=NULL ";
+    $sql = "UPDATE `{$dbTempIncoming}` SET locked=NULL, lockeduntil=NULL ";
     $sql .= "WHERE UNIX_TIMESTAMP(lockeduntil) < '$now' ";
     mysql_query($sql);
     if (mysql_error()) trigger_error(mysql_error(),E_USER_ERROR);
@@ -161,12 +161,12 @@ if ($spam_string=$_REQUEST['delete_all_spam'])
     {
         $ids = explode('_',$spam);
 
-        $sql = "DELETE FROM tempincoming WHERE id='".$ids[1]."' AND SUBJECT LIKE '%SPAMASSASSIN%' AND updateid='".$ids[0]."' LIMIT 1";
+        $sql = "DELETE FROM `{$dbTempIncoming}` WHERE id='".$ids[1]."' AND SUBJECT LIKE '%SPAMASSASSIN%' AND updateid='".$ids[0]."' LIMIT 1";
         mysql_query($sql);
         if (mysql_error()) trigger_error("MySQL Query Error ".mysql_error(), E_USER_ERROR);
         if (mysql_affected_rows()==1)
         {
-            $sql = "DELETE FROM updates WHERE id='".$ids[0]."'";
+            $sql = "DELETE FROM `{$dbUpdates}` WHERE id='".$ids[0]."'";
             mysql_query($sql);
             if (mysql_error()) trigger_error("MySQL Query Error ".mysql_error(), E_USER_ERROR);
             $path=$CONFIG['attachment_fspath'].'updates/'.$ids[0];
@@ -176,15 +176,15 @@ if ($spam_string=$_REQUEST['delete_all_spam'])
     unset($spam_array);
 }
 
-if(!empty($selected))
+if (!empty($selected))
 {
-    foreach($selected as $updateid)
+    foreach ($selected as $updateid)
     {
-        $sql = "DELETE FROM updates WHERE id='$updateid'";
+        $sql = "DELETE FROM `{$dbUpdates}` WHERE id='$updateid'";
         mysql_query($sql);
         if (mysql_error()) trigger_error("MySQL Query Error ".mysql_error(), E_USER_ERROR);
 
-        $sql = "DELETE FROM tempincoming WHERE updateid='$updateid'";
+        $sql = "DELETE FROM `{$dbTempIncoming}` WHERE updateid='$updateid'";
         mysql_query($sql);
         if (mysql_error()) trigger_error("MySQL Query Error ".mysql_error(), E_USER_ERROR);
         $path=$incident_attachment_fspath.'updates/'.$updateid;
@@ -213,9 +213,9 @@ if(!empty($selected))
             var frm = document.held_emails.elements;
             for(i = 0; i < frm.length; i++)
             {
-                if(frm[i].type == 'checkbox')
+                if (frm[i].type == 'checkbox')
                 {
-                    if(checkStatus)
+                    if (checkStatus)
                     {
                         frm[i].checked = true;
                     }
@@ -232,17 +232,18 @@ if(!empty($selected))
 <?php
 
 // extract updates
-$sql  = 'SELECT updates.id as id, updates.bodytext as bodytext, tempincoming.emailfrom as emailfrom, tempincoming.subject as subject, ';
-$sql .= 'updates.timestamp as timestamp, tempincoming.incidentid as incidentid, tempincoming.id as tempid, tempincoming.locked as locked, ';
-$sql .= 'tempincoming.reason as reason, tempincoming.contactid as contactid, tempincoming.`from` as fromaddr ';
-$sql .= 'FROM updates, tempincoming WHERE updates.incidentid=0 AND tempincoming.updateid=updates.id ';
-$sql .= 'ORDER BY timestamp ASC, id ASC';
+$sql  = "SELECT u.id AS id, u.bodytext AS bodytext, ti.emailfrom AS emailfrom, ti.subject AS subject, ";
+$sql .= "u.timestamp AS timestamp, ti.incidentid AS incidentid, ti.id AS tempid, ti.locked AS locked, ";
+$sql .= "ti.reason AS reason, ti.contactid AS contactid, ti.`from` AS fromaddr ";
+$sql .= "FROM `{$dbUpdates}` AS u, `{$dbTempIncoming}` AS ti ";
+$sql .= "WHERE u.incidentid = 0 AND ti.updateid = u.id ";
+$sql .= "ORDER BY timestamp ASC, id ASC";
 $result = mysql_query($sql);
 if (mysql_error()) trigger_error("MySQL Query Error ".mysql_error(), E_USER_ERROR);
 $countresults = mysql_num_rows($result);
 
 $spamcount = 0;
-if($countresults > 0)
+if ($countresults > 0)
 {
     if ($countresults) mysql_data_seek($result, 0);
 
@@ -259,7 +260,7 @@ if($countresults > 0)
     }
 }
 
-$sql = "SELECT * FROM incidents WHERE owner='0' AND status!='2'";
+$sql = "SELECT * FROM `{$dbIncidents}` WHERE owner='0' AND status!='2'";
 $resultnew = mysql_query($sql);
 if (mysql_num_rows($resultnew) >= 1)
 {
@@ -293,7 +294,7 @@ if ((mysql_num_rows($resultnew) > 0) OR ($realemails > 0))
     echo "<table align='center' style='width: 95%'>";
     echo "<tr>";
     echo "<th>";
-    if($realemails > 0)
+    if ($realemails > 0)
     {
         echo "<input type='checkbox' name='selectAll' value='CheckAll' onclick=\"checkAll(this.checked);\" />";
     }
@@ -306,12 +307,12 @@ if ((mysql_num_rows($resultnew) > 0) OR ($realemails > 0))
     echo "<th>{$strOperation}</th>";
     echo "</tr>";
     sort($queuerows);
-    foreach($queuerows AS $row)
+    foreach ($queuerows AS $row)
     {
         echo $row;
     }
 
-    if($realemails > 0)
+    if ($realemails > 0)
     {
         echo "<tr><td>";
         echo "<a href=\"javascript: submitform()\" onclick='return confirm_delete();'>{$strDelete}</a>";
@@ -320,12 +321,12 @@ if ((mysql_num_rows($resultnew) > 0) OR ($realemails > 0))
     echo "</table>\n";
     echo "</form>";
 }
-else if($spamcount == 0)
+else if ($spamcount == 0)
 {
     echo "<h2>{$strNoRecords}</h2>";
 }
 
-if($spamcount > 0)
+if ($spamcount > 0)
 {
     echo "<h2>{$strSpamEmail}";
     if($spamcount > 1) echo "s"; // FIXME i18n cant we do this ?
@@ -359,25 +360,25 @@ if($spamcount > 0)
 }
 
 
-$sql = "SELECT incidents.id, incidents.title, contacts.forenames, contacts.surname, sites.name ";
-$sql .= "FROM incidents,contacts,sites ";
-$sql .= "WHERE incidents.status = 8 AND incidents.contact = contacts.id AND contacts.siteid = sites.id ";
-$sql .= "ORDER BY sites.id, incidents.contact"; //awaiting customer action
+$sql = "SELECT i.id, i.title, c.forenames, c.surname, s.name ";
+$sql .= "FROM `{$dbIncidents}` AS i,`{$dbContacts}` AS c, `{$dbSites}` AS s ";
+$sql .= "WHERE i.status = 8 AND i.contact = c.id AND c.siteid = s.id ";
+$sql .= "ORDER BY s.id, i.contact"; //awaiting customer action
 $resultchase = mysql_query($sql);
 if (mysql_num_rows($resultchase) >= 1)
 {
     $shade = 'shade1';
     while ($chase = mysql_fetch_object($resultchase))
     {
-        $sql_update = "SELECT * FROM updates WHERE incidentid = {$chase	->id} ORDER BY timestamp DESC LIMIT 1";
+        $sql_update = "SELECT * FROM `{$dbUpdates}` WHERE incidentid = {$chase	->id} ORDER BY timestamp DESC LIMIT 1";
         $result_update = mysql_query($sql_update);
         if (mysql_error()) trigger_error("MySQL Query Error ".mysql_error(), E_USER_ERROR);
 
         $obj_update = mysql_fetch_object($result_update);
 
-        if($obj_update ->type == 'auto_chase_phone' OR $obj_update ->type == 'auto_chase_manager')
+        if ($obj_update ->type == 'auto_chase_phone' OR $obj_update ->type == 'auto_chase_manager')
         {
-            if(empty($html_chase))
+            if (empty($html_chase))
             {
                 $html_chase .= "<br />";
                 $html_chase .= "<h2>{$strIncidentsRequiringChaseByPhone}</h2>";
@@ -387,7 +388,7 @@ if (mysql_num_rows($resultchase) >= 1)
                 $html_chase .= "<th>{$strSite}</th><th>{$strType}</th></tr>";
             }
 
-            if($obj_update->type == "auto_chase_phone")
+            if ($obj_update->type == "auto_chase_phone")
             {
                 $type = $strChasePhone;
             }
@@ -402,19 +403,20 @@ if (mysql_num_rows($resultchase) >= 1)
             $html_chase .= "<td>{$chase->title}</td><td>{$chase->forenames} {$chase->surname}</td>";
             $html_chase .= "<td>{$chase->name}</td><td>{$type}</td></tr>";
 
-            if($shade=='shade1') $shade='shade2';
+            if ($shade=='shade1') $shade='shade2';
             else $shade='shade1';
         }
     }
 }
 
-if(!empty($html_chase))
+if (!empty($html_chase))
 {
     echo $html_chase;
     echo "</table>";
 }
 
-$sql = "SELECT * FROM tempassigns,incidents WHERE tempassigns.incidentid=incidents.id AND assigned='no' ";
+$sql = "SELECT * FROM `{$dbTempAssigns}` AS t, `{$dbIncidents}` AS i ";
+$sql .= "WHERE t.incidentid = i.id AND assigned='no' ";
 $result = mysql_query($sql);
 
 if (mysql_num_rows($result) >= 1)
@@ -483,5 +485,5 @@ if (mysql_num_rows($result) >= 1)
 
 // TODO v3.2x Merge the sections into a single queue using an array
 
-include('htmlfooter.inc.php');
+include ('htmlfooter.inc.php');
 ?>

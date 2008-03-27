@@ -84,7 +84,7 @@ if (isset($_REQUEST['fileselection']))
     echo "Tested these files";
     echo "</div>";
     echo "<div class='detailentry'>\n";
-    foreach($fileselection AS $filesel)
+    foreach ($fileselection AS $filesel)
     {
         echo "$filesel &hellip; ";
         echo "listed";
@@ -129,7 +129,7 @@ function encode_binary($string)
    {
      if ( preg_match("/^(\w| )$/",$chars[$i]))
          $ent[$i] = $chars[$i];
-     elseif( ord($chars[$i]) < 32) $ent[$i]=".";
+     elseif ( ord($chars[$i]) < 32) $ent[$i]=".";
      else
          $ent[$i] = "&#" . ord($chars[$i]) . ";";
    }
@@ -222,7 +222,7 @@ if (file_exists($incident_attachment_fspath))
     if (count($temparray) == 0) echo "<p class='info'>No files<p>";
     else
     {
-        foreach($temparray as $value) {
+        foreach ($temparray as $value) {
             if (is_dir($value)) $dirarray[] = $value;
             elseif (is_file($value) AND substr($value,-1)!='.' AND substr($value,-8)!='mail.eml') $rfilearray[] = $value;
         }

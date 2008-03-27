@@ -14,33 +14,33 @@
 
 // FIXME Not on menu
 
-@include('../set_include_path.inc.php');
+@include ('../set_include_path.inc.php');
 
-$permission=37; // Run Reports
+$permission = 37; // Run Reports
 
-require('db_connect.inc.php');
-require('functions.inc.php');
+require ('db_connect.inc.php');
+require ('functions.inc.php');
 
 // This page requires authentication
-require('auth.inc.php');
+require ('auth.inc.php');
 
-include('htmlheader.inc.php');
+include ('htmlheader.inc.php');
 
 echo "<h2>Report: Email Address of Supported Customers</h2>";
 echo "<h4><em>(Doesn't check for expiry)</em></h4>";
 
-$sql  = "SELECT DISTINCT contacts.email ";
-$sql .= "FROM contacts LEFT JOIN contactproducts ON contacts.id=contactproducts.contactid ";
+$sql  = "SELECT DISTINCT c.email ";
+$sql .= "FROM `{$dbContacts}` AS c LEFT JOIN `{$dbSupportContacts}` ON c.id = `{$dbSupportContacts}`.contactid ";
 $sql .= "WHERE dataprotection_email != 'Yes' ";
 $sql .="ORDER BY email ASC ";
 //$sql.="LIMIT 100";
-$result=mysql_query($sql);
+$result = mysql_query($sql);
 if (mysql_error()) trigger_error("MySQL Query Error ".mysql_error(), E_USER_ERROR);
-$count=mysql_num_rows($result);
+$count = mysql_num_rows($result);
 echo "<strong>Found $count records</strong><br /><br />";
-if($result)
+if ($result)
 {
-    while(list($email)=mysql_fetch_row($result))
+    while (list($email)=mysql_fetch_row($result))
     {
         echo "$email";
         echo "<br />";
@@ -53,6 +53,6 @@ else
 mysql_free_result($result);
 mysql_close($db);
 
-include('htmlfooter.inc.php');
+include ('htmlfooter.inc.php');
 
 ?>

@@ -12,13 +12,13 @@
 // Removed mention of contactproducts - INL 08Oct01
 // This Page Is Valid XHTML 1.0 Transitional!   - INL 6Apr06
 
-@include('set_include_path.inc.php');
-$permission=6;  // view incidents
+@include ('set_include_path.inc.php');
+$permission = 6;  // view incidents
 
-require('db_connect.inc.php');
-require('functions.inc.php');
+require ('db_connect.inc.php');
+require ('functions.inc.php');
 // This page requires authentication
-require('auth.inc.php');
+require ('auth.inc.php');
 
 // Don't return more than this number of results
 $maxresults = 1000;
@@ -36,7 +36,7 @@ $search_user = cleanvar($_REQUEST['search_user']);
 $action = cleanvar($_REQUEST['action']);
 
 
-include('htmlheader.inc.php');
+include ('htmlheader.inc.php');
 // show search incidents form
 if (empty($action))
 {
@@ -113,19 +113,23 @@ else
         $recent_today = time() - (1 * 86400);
         $recent_hour = time() - (3600);
 
-        if ($search_details =='') $sql = "SELECT DISTINCT incidents.id, externalid, title, priority, siteid, owner, type, forenames, surname, lastupdated, status, opened, servicelevel FROM incidents, contacts WHERE incidents.contact=contacts.id  ";
+        if ($search_details =='')
+        {
+            $sql = "SELECT DISTINCT i.id, externalid, title, priority, siteid, owner, type, forenames, surname, lastupdated, status, opened, servicelevel ";
+            $sql .= "FROM `{$dbIncidents}` AS i, `{$dbContacts}` AS c WHERE i.contact = c.id  ";
+        }
         if ($search_details !='')
         {
-            //           $sql = "SELECT incidents.id, externalid, title, priority, site, owner, incidents.type, realname, lastupdated, status FROM incidents, contacts ";
-            //           $sql.= "LEFT JOIN updates on updates.incidentid=incidents.id WHERE contact=contacts.id ";
-            $sql = "SELECT DISTINCT incidents.id, updates.incidentid, incidents.externalid, incidents.title, incidents.priority, incidents.owner, incidents.type, incidents.lastupdated, incidents.status, contacts.forenames, contacts.surname, contacts.siteid, incidents.opened FROM updates, incidents, contacts WHERE updates.incidentid=incidents.id AND incidents.contact=contacts.id AND bodytext LIKE ('%$search_details%') ";
+            $sql = "SELECT DISTINCT i.id, u.incidentid, i.externalid, i.title, i.priority, i.owner, i.type, i.lastupdated, i.status, c.forenames, c.surname, c.siteid, i.opened ";
+            $sql .= "FROM `{$dbUpdates}` AS u, `{$dbIncidents}` AS i, `{$dbContacts}` AS c ";
+            $sql .= "WHERE u.incidentid = i.id AND i.contact = c.id AND bodytext LIKE ('%$search_details%') ";
         }
 
         if ($search_title != '') $sql.= "AND title LIKE ('%$search_title%') ";
-        if ($search_id != '') $sql.= "AND incidents.id LIKE ('%$search_id%') ";
+        if ($search_id != '') $sql.= "AND i.id LIKE ('%$search_id%') ";
         if ($search_externalid !='') $sql.= "AND externalid LIKE ('%$search_externalid%') ";
-        if ($search_contact != '') $sql.= "AND (contacts.surname LIKE '%$search_contact%' OR forenames LIKE '%$search_contact%') ";
-        if ($search_servicelevel != '') $sql.= "AND (incidents.servicelevel = '{$search_servicelevel}') ";
+        if ($search_contact != '') $sql.= "AND (c.surname LIKE '%$search_contact%' OR forenames LIKE '%$search_contact%') ";
+        if ($search_servicelevel != '') $sql.= "AND (i.servicelevel = '{$search_servicelevel}') ";
         if ($search_range == 'Closed') $sql.= "AND closed != '0' ";
         if ($search_range == 'Open') $sql.= "AND closed = '0' ";
         if ($search_date == 'Recent180') $sql.= "AND lastupdated >= '$recent_sixmonth' ";
@@ -147,12 +151,10 @@ else
         // Sorting
         if ($sort_results == 'DateASC') $sql.="ORDER BY lastupdated ASC ";
         if ($sort_results == 'DateDESC') $sql.="ORDER BY lastupdated DESC ";
-        if ($sort_results == 'IDASC') $sql.="ORDER BY incidents.id ASC ";
-        if ($sort_results == 'TitleASC') $sql.="ORDER BY incidents.title ASC ";
-        if ($sort_results == 'ContactASC') $sql.="ORDER BY contacts.surname ASC ";
-        if ($sort_results == 'SiteASC') $sql.="ORDER BY contacts.siteid ASC ";
-
-        //         if ($search_details !='') $sql.= "AND updates.bodytext = '$search_details' ";
+        if ($sort_results == 'IDASC') $sql.="ORDER BY i.id ASC ";
+        if ($sort_results == 'TitleASC') $sql.="ORDER BY i.title ASC ";
+        if ($sort_results == 'ContactASC') $sql.="ORDER BY c.surname ASC ";
+        if ($sort_results == 'SiteASC') $sql.="ORDER BY c.siteid ASC ";
 
         $sql .= "LIMIT {$maxresults}";
         $result = mysql_query($sql);
@@ -208,9 +210,9 @@ else
         echo "</table>";
         echo "<br />";
         echo "<p align='center'><a href=\"advanced_search_incidents.php\">{$strSearchAgain}</a></p>";
-        // FIXME v3.2x Replace maxresults limit with paging
+        // FIXME v3.4x Replace maxresults limit with paging
         if ($countresults >= $maxresults) printf($strMaxResults, $maxresults);
     }
 }
-include('htmlfooter.inc.php');
+include ('htmlfooter.inc.php');
 ?>

@@ -10,13 +10,13 @@
 
 
 // Author: Ivan Lucas <ivanlucas[at]users.sourceforge.net>
-@include('set_include_path.inc.php');
-$permission=29; // Edit products
+@include ('set_include_path.inc.php');
+$permission = 29; // Edit products
 
-require('db_connect.inc.php');
-require('functions.inc.php');
+require ('db_connect.inc.php');
+require ('functions.inc.php');
 // This page requires authentication
-require('auth.inc.php');
+require ('auth.inc.php');
 
 // External variables
 $id = cleanvar($_REQUEST['id']);
@@ -49,7 +49,7 @@ if ($action == 'save')
 else
 {
     $title = $strEditProduct;
-    include('htmlheader.inc.php');
+    include ('htmlheader.inc.php');
 
     echo "<h2><img src='{$CONFIG['application_webpath']}images/icons/{$iconset}/32x32/product.png' width='32' height='32' alt='' /> ";
     echo "$title</h2>\n";
@@ -57,7 +57,7 @@ else
     echo "<form action='{$_SERVER['PHP_SELF']}' method='post' >";
     echo "<table align='center' class='vertical'>";
 
-    $sql = "SELECT * FROM products WHERE id='$id' ";
+    $sql = "SELECT * FROM `{$dbProducts}` WHERE id='$id' ";
     $result = mysql_query($sql);
     if (mysql_error()) trigger_error("MySQL Query Error ".mysql_error(), E_USER_ERROR);
 
@@ -86,6 +86,6 @@ else
     echo "<p align='center'><a href='products.php'>Return to products list without saving</a></p>"; // FIXME i18n
     mysql_free_result($result);
 
-    include('htmlfooter.inc.php');
+    include ('htmlfooter.inc.php');
 }
 ?>

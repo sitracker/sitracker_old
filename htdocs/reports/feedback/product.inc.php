@@ -1,57 +1,63 @@
 <?php
-// feedback4.php - Feedback scores by site
-//
-// SiT (Support Incident Tracker) - Support call tracking system
-// Copyright (C) 2000-2008 Salford Software Ltd. and Contributors
-//
-// This software may be used and distributed according to the terms
-// of the GNU General Public License, incorporated herein by reference.
-//
-
-// Author: Ivan Lucas <ivanlucas[at]users.sourceforge.net>
-
-@include('../set_include_path.inc.php');
-$permission=37; //Run Reports
-
-require('db_connect.inc.php');
-require('functions.inc.php');
-
-// This page requires authentication
-require('auth.inc.php');
-
-include('htmlheader.inc.php');
-
-$formid=$CONFIG['feedback_form'];
-$now = time();
 
 echo "<div style='margin: 20px'>";
-echo "<h2><a href='{$CONFIG['application_webpath']}reports/feedback.php'>Feedback</a> Scores: By Site</h2>";
+echo "<h2><a href='{$CONFIG['application_webpath']}reports/feedback.php'>Feedback</a> Scores: By Product</h2>";
+echo feedback_between_dates();
 echo "<p>This report shows customer responses and a percentage figure indicating the overall positivity of customers toward ";
 echo "incidents logged by the user(s) shown:</p>";
 
-$qsql = "SELECT * FROM feedbackquestions WHERE formid='{$formid}' AND type='rating' ORDER BY taborder";
+$qsql = "SELECT * FROM `{$dbFeedbackQuestions}` WHERE formid='{$formid}' AND type='rating' ORDER BY taborder";
 $qresult = mysql_query($qsql);
 if (mysql_error()) trigger_error(mysql_error(), E_USER_ERROR);
 while ($qrow = mysql_fetch_object($qresult))
 {
-    $q[$qrow->taborder]=$qrow;
+    $q[$qrow->taborder] = $qrow;
 }
 
-$msql = "SELECT *, closingstatus.name AS closingstatusname, sites.name AS sitename, (incidents.closed - incidents.opened) AS duration, \n";
-$msql .= "feedbackrespondents.id AS reportid, contacts.id AS contactid, sites.id AS siteid \n";
-$msql .= "FROM feedbackrespondents, incidents, contacts, sites, closingstatus WHERE feedbackrespondents.incidentid=incidents.id \n";
-$msql .= "AND incidents.contact=contacts.id ";
-$msql .= "AND contacts.siteid=sites.id ";
-$msql .= "AND incidents.closingstatus=closingstatus.id ";
-$msql .= "AND feedbackrespondents.incidentid > 0 \n";
-$msql .= "AND feedbackrespondents.completed = 'yes' \n"; ///////////////////////
-$msql .= "ORDER BY sites.name, sites.department, incidents.id ASC \n";
+$msql = "SELECT *,  \n";
+$msql .= "fr.id AS reportid, \n";
+$msql .= "p.id AS productid, p.name AS productname ";
+$msql .= "FROM `{$dbFeedbackRespondents}` AS fr, `{$dbIncidents}` AS i, `{$dbProducts}` AS p ";
+$msql .= "WHERE fr.incidentid = i.id \n";
+$msql .= "AND i.product = p.id ";
+$msql .= "AND fr.incidentid > 0 \n";
+$msql .= "AND fr.completed = 'yes' \n"; ///////////////////////
+
+if (!empty($startdate))
+{
+    if ($dates == 'feedbackin')
+    {
+        $msql .= "AND fr.created >= '{$startdate}' ";
+    }
+    elseif ($dates == 'closedin')
+    {
+        $msql .= "AND i.closed >= '{$startdate}' ";
+    }
+    
+    //echo "DATES {$dates}";
+}
+
+if (!empty($enddate))
+{
+    if ($dates == 'feedbackin')
+    {
+        $msql .= "AND fr.created <= '{$enddate}' ";
+    }
+    elseif ($dates == 'closedin')
+    {
+        $msql .= "AND i.closed <= '{$enddate}' ";
+    }
+}
+
+
+$msql .= "ORDER BY p.name, i.id ASC \n";
 
 $mresult = mysql_query($msql);
 if (mysql_error()) trigger_error(mysql_error(), E_USER_ERROR);
 
-if (mysql_num_rows($mresult) >=1)
+if (mysql_num_rows($mresult) >= 1)
 {
+
     $previd=0;
     $countcontacts=0;
     $zero=0;
@@ -72,7 +78,7 @@ if (mysql_num_rows($mresult) >=1)
     while ($mrow = mysql_fetch_object($mresult))
     {
         // Only print if we have a value ({$previd} / {$mrow->contactid})
-        if ($previd!=$mrow->siteid AND $firstrun!=0)
+        if ($previd!=$mrow->productid AND $firstrun!=0)
         {
             $numones=count($storeone);
             // if ($numones<10) $numones=10;
@@ -80,57 +86,55 @@ if (mysql_num_rows($mresult) >=1)
             ## $html .= "<h3>[[$mrow->contactid]]</h3>";
             if ($numones>0)
             {
-            for($c=1;$c<=$numones;$c++)
-            {
-                if ($storeone[$c]>0) $qr=number_format($storeone[$c]/$storetwo[$c],2);
-                else $qr=0;
-                if ($storeone[$c]>0) $qp=number_format((($qr -1) * (100 / ($CONFIG['feedback_max_score'] -1))), 0);
-                else $qp=0;
-                $html .= "Q$c: {$q[$c]->question} {$qr} <strong>({$qp}%)</strong><br />";
-                $gtotal+=$qr;
+                for($c=1;$c<=$numones;$c++)
+                {
+                    if ($storeone[$c]>0) $qr=number_format($storeone[$c]/$storetwo[$c],2);
+                    else $qr=0;
+                    if ($storeone[$c]>0) $qp=number_format((($qr -1) * (100 / ($CONFIG['feedback_max_score'] -1))), 0);
+                    else $qp=0;
+                    $html .= "Q$c: {$q[$c]->question} {$qr} <strong>({$qp}%)</strong><br />";
+                    $gtotal+=$qr;
+                }
+                if ($c>0) $c--;
+                $total_average=number_format($gtotal/$c,2);
+                $total_percent=number_format((($total_average -1) * (100 / ($CONFIG['feedback_max_score'] -1))), 0);
+
+                ## ($gtotal)($c)
+                $html .= "<p>Positivity: {$total_average} <strong>({$total_percent}%)</strong>, after $surveys surveys</p>";
+                //print_r($storeone);
+                //print_r($storetwo);
             }
-            if ($c>0) $c--;
-            $total_average=number_format($gtotal/$c,2);
-            $total_percent=number_format((($total_average -1) * (100 / ($CONFIG['feedback_max_score'] -1))), 0);
+            else $html = ""; // don't print name where theres  no survey data
 
-            ## ($gtotal)($c)
-            $html .= "<p>Positivity: {$total_average} <strong>({$total_percent}%)</strong>, after $surveys surveys</p>";
-            //print_r($storeone);
-            //print_r($storetwo);
+            if ($total_average>0)
+            {
+                echo "{$html}";
+                $countcontacts++;
+
+                // Stats
+                if ($total_percent>0 AND $total_percent < 10) $zero++;
+                if ($total_percent>=10 AND $total_percent < 20) $ten++;
+                if ($total_percent>=20 AND $total_percent < 30) $twenty++;
+                if ($total_percent>=30 AND $total_percent < 40) $thirty++;
+                if ($total_percent>=40 AND $total_percent < 50) $forty++;
+                if ($total_percent>=50 AND $total_percent < 60) $fifty++;
+                if ($total_percent>=60 AND $total_percent < 70) $sixty++;
+                if ($total_percent>=70 AND $total_percent < 80) $seventy++;
+                if ($total_percent>=80 AND $total_percent < 90) $eighty++;
+                if ($total_percent>=90 AND $total_percent < 100) $ninety++;
+                if ($total_percent>=100) $hundred++;
+                ## echo "\n<hr />\n";
+            }
+            // if ($total_average>0) echo "<code>{$dbg}</code>";
+            unset($qavgavg);
+            unset($qanswer);
+            unset($dbg);
+            unset($storeone);
+            unset($storetwo);
+            unset($gtotal);
+            $surveys=0;
         }
-        else $html = ""; // don't print name where theres  no survey data
-
-        if ($total_average>0)
-        {
-            echo "{$html}";
-            $countcontacts++;
-
-            // Stats
-            if ($total_percent>0 AND $total_percent < 10) $zero++;
-            if ($total_percent>=10 AND $total_percent < 20) $ten++;
-            if ($total_percent>=20 AND $total_percent < 30) $twenty++;
-            if ($total_percent>=30 AND $total_percent < 40) $thirty++;
-            if ($total_percent>=40 AND $total_percent < 50) $forty++;
-            if ($total_percent>=50 AND $total_percent < 60) $fifty++;
-            if ($total_percent>=60 AND $total_percent < 70) $sixty++;
-            if ($total_percent>=70 AND $total_percent < 80) $seventy++;
-            if ($total_percent>=80 AND $total_percent < 90) $eighty++;
-            if ($total_percent>=90 AND $total_percent < 100) $ninety++;
-            if ($total_percent>=100) $hundred++;
-            ## echo "\n<hr />\n";
-        }
-        // if ($total_average>0) echo "<code>{$dbg}</code>";
-        unset($qavgavg);
-        unset($qanswer);
-        unset($dbg);
-        unset($storeone);
-        unset($storetwo);
-        unset($gtotal);
-        $surveys=0;
-    }
-    $firstrun=1;
-
-
+        $firstrun=1;
 
     // Loop through reports
     $totalresult=0;
@@ -139,8 +143,9 @@ if (mysql_num_rows($mresult) >=1)
     //$html = "<h2>Incident <a href='/incident_details.php?id={$mrow->incidentid}' title='Jump to Incident'>{$mrow->incidentid}</a>: <a href='#' title='Jump to Contact'>{$mrow->forenames} {$mrow->surname}</a>, {$mrow->department}, <a href='#' title='Jump to site'>{$mrow->sitename}</a></h2>";
     //$html .= "<p><strong>{$mrow->title}</strong>, opened ".date("l jS F Y @ g:i a", $mrow->opened)." for ".format_seconds($mrow->duration)." and {$mrow->closingstatusname} on ".date("l jS F Y @ g:i a", $mrow->closed)."</p>";
     // $html = "<h2><a href='/contact_details.php?id={$mrow->contactid}' title='Jump to Contact'>{$mrow->forenames} {$mrow->surname}</a>, {$mrow->department} &nbsp; <a href='#' title='Jump to site'>{$mrow->sitename}</a></h2>";
-    $html = "<h2>{$mrow->department}&nbsp; <a href='site_details.php?id={$mrow->siteid}' title='Jump to site'>{$mrow->sitename}</a></h2>";
-    $qsql = "SELECT * FROM feedbackquestions WHERE formid='{$formid}' AND type='rating' ORDER BY taborder";
+    //$html = "<h2>{$mrow->department}&nbsp; <a href='site_details.php?id={$mrow->siteid}' title='Jump to site'>{$mrow->sitename}</a></h2>";
+    $html = "<h2><a href='#?id={$mrow->productid}' title='Jump to product'>{$mrow->productname}</a></h2>";
+    $qsql = "SELECT * FROM `{$dbFeedbackQuestions}` WHERE formid='{$formid}' AND type='rating' ORDER BY taborder";
     $qresult = mysql_query($qsql);
     ## echo "$qsql";
 
@@ -149,16 +154,42 @@ if (mysql_num_rows($mresult) >=1)
     {
         $numquestions++;
         // $html .= "Q{$qrow->taborder}: {$qrow->question} &nbsp;";
-        $sql = "SELECT * FROM feedbackrespondents, incidents, users, feedbackresults ";
-        $sql .= "WHERE feedbackrespondents.incidentid=incidents.id ";
-        $sql .= "AND incidents.owner=users.id ";
-        $sql .= "AND feedbackrespondents.id=feedbackresults.respondentid ";
-        $sql .= "AND feedbackresults.questionid='$qrow->id' ";
-        $sql .= "AND feedbackrespondents.id='$mrow->reportid' ";
-        $sql .= "ORDER BY incidents.contact, incidents.id";
+        $sql = "SELECT * FROM `{$dbFeedbackRespondents}` AS fr, `{$dbIncidents}` AS i, `{$dbUsers}` AS u, `{$dbFeedbackResults}` AS r ";
+        $sql .= "WHERE fr.incidentid = i.id ";
+        $sql .= "AND i.owner = u.id ";
+        $sql .= "AND fr.id = r.respondentid ";
+        $sql .= "AND r.questionid = '$qrow->id' ";
+        $sql .= "AND fr.id = '$mrow->reportid' ";
+        
+        if (!empty($startdate))
+        {
+            if ($dates == 'feedbackin')
+            {
+                $sql .= "AND fr.created >= '{$startdate}' ";
+            }
+            elseif ($dates == 'closedin')
+            {
+                $sql .= "AND i.closed >= '{$startdate}' ";
+            }
+            
+            //echo "DATES {$dates}";
+        }
+        
+        if (!empty($enddate))
+        {
+            if ($dates == 'feedbackin')
+            {
+                $sql .= "AND fr.created <= '{$enddate}' ";
+            }
+            elseif ($dates == 'closedin')
+            {
+                $sql .= "AND i.closed <= '{$enddate}' ";
+            }
+        }
+        
+        $sql .= "ORDER BY i.contact, i.id";
         // echo "==== $sql ====";
         $result = mysql_query($sql);
-
 
         if (mysql_error()) trigger_error(mysql_error(), E_USER_ERROR);
         $numresults=0;
@@ -187,7 +218,7 @@ if (mysql_num_rows($mresult) >=1)
         }
 
         if ($numresults>0) $average=number_format(($cumul/$numresults), 2);
-        $percent =number_format((($average / $CONFIG['feedback_max_score']) * 100), 0);
+        $percent =number_format((($average / 9) * 100), 0);
         $totalresult+=$average;
 
         $qanswer[$qrow->taborder]+=$average;
@@ -199,7 +230,7 @@ if (mysql_num_rows($mresult) >=1)
     // $html .= "<p>Positivity: {$total_average} <strong>({$total_percent}%)</strong>, after $numresults surveys</p>";
     // $html .= "<hr />\n";
 
-    $previd=$mrow->siteid;
+    $previd=$mrow->productid;
     // echo "Total Avg: {$total_average}<hr />\n";
     }
 
@@ -236,6 +267,5 @@ if (mysql_num_rows($mresult) >=1)
 }
 else echo "<p class='error'>No feedback found</p>";
 echo "</div>\n";
-include('htmlfooter.inc.php');
 
 ?>

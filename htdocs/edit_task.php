@@ -10,14 +10,14 @@
 
 // Author: Ivan Lucas <ivanlucas[at]users.sourceforge.net>
 
-@include('set_include_path.inc.php');
-$permission=0; // Allow all auth users
+@include ('set_include_path.inc.php');
+$permission = 0; // Allow all auth users
 
-require('db_connect.inc.php');
-require('functions.inc.php');
+require ('db_connect.inc.php');
+require ('functions.inc.php');
 
 // This page requires authentication
-require('auth.inc.php');
+require ('auth.inc.php');
 
 $title = $strEditTask;
 
@@ -85,7 +85,7 @@ switch ($action)
         if ($startdate > $duedate AND $duedate != '' AND $duedate > 0 ) $startdate=$duedate;
         if (count($error) >= 1)
         {
-            include('htmlheader.inc.php');
+            include ('htmlheader.inc.php');
             echo "<p class='error'>Please check the data you entered</p>";
             echo "<ul class='error'>";
             foreach ($error AS $err)
@@ -93,7 +93,7 @@ switch ($action)
                 echo "<li>$err</li>";
             }
             echo "</ul>";
-            include('htmlfooter.inc.php');
+            include ('htmlfooter.inc.php');
         }
         else
         {
@@ -132,7 +132,7 @@ switch ($action)
             {
                 $bodytext="Task Edited by {$_SESSION['realname']}:\n\n".$bodytext;
                 // Link 10 = Tasks
-                $sql = "INSERT INTO notes ";
+                $sql = "INSERT INTO `{$dbNotes}` ";
                 $sql .= "(userid, bodytext, link, refid) ";
                 $sql .= "VALUES ('0', '{$bodytext}', '10',' $id')";
                 mysql_query($sql);
@@ -144,15 +144,16 @@ switch ($action)
 
     case 'markcomplete':
         //this task is for an incident, enter an update from all the notes
-        if($incident)
+        if ($incident)
         {
             //get current incident status
-            $sql = "SELECT status FROM incidents WHERE id={$incident}";
+            $sql = "SELECT status FROM `{$dbIncidents}` WHERE id={$incident}";
             $result = mysql_query($sql);
             $status = mysql_fetch_object($result);
             $status = $status->status;
 
-            $sql = "SELECT * FROM tasks WHERE id='$id'";
+            $sql = "SELECT * FROM `{$dbTasks}` WHERE id='{$id}'";
+
             $result = mysql_query($sql);
             if (mysql_error()) trigger_error(mysql_error(),E_USER_ERROR);
             if (mysql_num_rows($result) >= 1)
@@ -166,19 +167,19 @@ switch ($action)
             //get all the notes
             $notearray = array();
             $numnotes = 0;
-            $sql = "SELECT * FROM notes WHERE link='10' AND refid='{$id}'";
+            $sql = "SELECT * FROM `{$dbNotes}` WHERE link='10' AND refid='{$id}'";
             $result = mysql_query($sql);
             if (mysql_error()) trigger_error(mysql_error(),E_USER_ERROR);
             if (mysql_num_rows($result) >= 1)
             {
-                while($notes = mysql_fetch_object($result))
+                while ($notes = mysql_fetch_object($result))
                 {
                     $notesarray[$numnotes] = $notes;
                     $numnotes++;
                 }
             }
             //delete all the notes
-            $sql = "DELETE FROM notes WHERE refid='{$id}'";
+            $sql = "DELETE FROM `{$dbNotes}` WHERE refid='{$id}'";
             $result = mysql_query($sql);
             if (mysql_error()) trigger_error(mysql_error(),E_USER_ERROR);
 
@@ -196,11 +197,11 @@ switch ($action)
             $updatehtml .= "Activity completed: {$enddate}, duration was: [b]".format_seconds($duration)."[/b]";
 
             //create update
-            $sql = "INSERT INTO updates (incidentid, userid, type, currentstatus, bodytext, timestamp, duration) ";
+            $sql = "INSERT INTO `{$dbUpdates}` (incidentid, userid, type, currentstatus, bodytext, timestamp, duration) ";
             $sql .= "VALUES('{$incident}', '{$sit[2]}', 'fromtask', {$status}, '{$updatehtml}', '$now', '$duration')";
             mysql_query($sql);
             if (mysql_error()) trigger_error(mysql_error(),E_USER_ERROR);
-            
+
             mark_task_completed($id, TRUE);
         }
         else
@@ -209,17 +210,17 @@ switch ($action)
         }
 
         // FIXME redundant i18n strings
-        if($incident) html_redirect("tasks.php?incident={$incident}", TRUE, $strActivityMarkedCompleteSuccessfully);
+        if ($incident) html_redirect("tasks.php?incident={$incident}", TRUE, $strActivityMarkedCompleteSuccessfully);
         else html_redirect("tasks.php", TRUE, $strTaskMarkedCompleteSuccessfully);
     break;
 
     case 'delete':
-        $sql = "DELETE FROM tasks ";
+        $sql = "DELETE FROM `{$dbTasks}` ";
         $sql .= "WHERE id='$id' LIMIT 1";
         mysql_query($sql);
         if (mysql_error()) trigger_error(mysql_error(),E_USER_ERROR);
 
-        $sql = "DELETE FROM notes ";
+        $sql = "DELETE FROM `{$dbNotes}` ";
         $sql .= "WHERE link=10 AND refid='$id' ";
         mysql_query($sql);
         if (mysql_error()) trigger_error(mysql_error(),E_USER_ERROR);
@@ -230,10 +231,10 @@ switch ($action)
 
     case '':
     default:
-        include('htmlheader.inc.php');
+        include ('htmlheader.inc.php');
         echo "<h2><img src='{$CONFIG['application_webpath']}images/icons/{$iconset}/32x32/task.png' width='32' height='32' alt='' /> ";
         echo "$title</h2>";
-        $sql = "SELECT * FROM tasks WHERE id='$id'";
+        $sql = "SELECT * FROM `{$dbTasks}` WHERE id='$id'";
         $result = mysql_query($sql);
         if (mysql_error()) trigger_error(mysql_error(),E_USER_ERROR);
         if (mysql_num_rows($result) >= 1)
@@ -310,7 +311,7 @@ switch ($action)
 
 
         echo "<p align='center'><a href='tasks.php'>{$strTaskList}</a></p>";
-        include('htmlfooter.inc.php');
+        include ('htmlfooter.inc.php');
 }
 
 ?>
