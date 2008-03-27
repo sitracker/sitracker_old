@@ -75,11 +75,10 @@ elseif (authenticate($username, $password) == 1)
     //check if the session lang is different the their profiles
     if ($_SESSION['lang'] != '' AND $_SESSION['lang'] != $user->var_i18n)
     {
-        $sql = "INSERT INTO `{$dbNotices}` (text, linktext, link, type, userid, durability) ";
-        $sql .= "VALUES('\$strYourCurrentLanguage', '\$strUseThisInFuture', '{$CONFIG['application_webpath']}edit_profile.php?mode=savesessionlang',  ".USER_LANG_DIFFERS_TYPE.", {$_SESSION['userid']}, 'session') ";
-        mysql_query($sql);
-        if (mysql_error()) trigger_error(mysql_error(), E_USER_ERROR);
+        //FIXME need to implement this trigger
+        trigger("USER_LANGUAGE_DIFFERS", array('currentlang' => $user->var_i18n, 'sessionlang' => $_SESSION['lang']));
     }
+    
     if ($user->var_i18n != $CONFIG['default_i18n'] AND $_SESSION['lang']=='')
     {
         $_SESSION['lang'] = $user->var_i18n;
