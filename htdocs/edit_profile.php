@@ -263,6 +263,11 @@ elseif ($mode=='save')
     $password = cleanvar($_POST['oldpassword']);
     $newpassword1 = cleanvar($_POST['newpassword1']);
     $newpassword2 = cleanvar($_POST['newpassword2']);
+    
+    if(!empty($_GET['userid']))
+        $userid = intvar($_GET['userid']);
+    else
+        $userid = $sit[2];
 
     // Some extra checking here so that users can't edit other peoples profiles
     $edituserpermission = user_permission($sit[2],23); // edit user
@@ -273,7 +278,6 @@ elseif ($mode=='save')
     }
 
     $sql = "SELECT * FROM `{$dbUsers}` AS u WHERE id = {$userid}";
-
     // If users status is set to 0 (disabled) force 'accepting' to no
     if ($status==0) $accepting='No';
 
