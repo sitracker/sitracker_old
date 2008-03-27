@@ -143,7 +143,7 @@ echo "<p align='center'>";
 if($numcontracts == 1)
 {
     //only one contract
-    echo "<a href='portal.php?page=add&amp;contractid={$contractid}&amp;product={$productid}'>";
+    echo "<a href='portal.php?page=add&amp;contractid={$contractid}'>";
 }
 else
 {
@@ -151,4 +151,6 @@ else
 }
 
 echo "{$strAddIncident}</a></p>";
+include ('htmlfooter.inc.php');
+
 ?>

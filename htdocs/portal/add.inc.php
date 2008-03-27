@@ -23,7 +23,6 @@ if (!$_REQUEST['action'])
     echo "<h2>{$strAddIncident}</h2>";
     echo "<table align='center' width='50%' class='vertical'>";
     echo "<form action='{$_SERVER[PHP_SELF]}?page=add&action=submit' method='post'>";
-    echo "<tr><th>{$strSkill}:</th><td>".softwareproduct_drop_down('software', 1, $productid)."</td></tr>";
     echo "<tr><th>{$strIncidentTitle}:</th><td><input maxlength='100' name='title' size=40 type='text' /></td></tr>";
     echo "<tr><th width='20%'>{$strProblemDescription}:</th><td><textarea name='probdesc' rows='20' cols='60'>";    
     echo "* Please describe the problem\n\n\n* What steps have you taken to try and fix it?\n\n\n";
@@ -43,7 +42,6 @@ else //submit
 {
     $contactid = $_SESSION['contactid'];
     $contractid = cleanvar($_REQUEST['contractid']);
-    $productid = cleanvar($_REQUEST['productid']);
     $software = cleanvar($_REQUEST['software']);
     $softwareversion = cleanvar($_REQUEST['version']);
     $softwareservicepacks = cleanvar($_REQUEST['productservicepacks']);
