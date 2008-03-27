@@ -1619,7 +1619,7 @@ ALTER TABLE `users` ADD `var_utc_offset` INT NOT NULL DEFAULT '0' COMMENT 'Offse
 INSERT INTO `userstatus` (`id` ,`name`) VALUES ('0', 'Account Disabled');
 ";
 
-$upgrade_schema[340] = "
+$upgrade_schema[335] = "
 -- KMH 17/12/07
 CREATE TABLE IF NOT EXISTS `triggers` (
   `id` int(11) NOT NULL auto_increment,
@@ -1771,6 +1771,10 @@ INSERT INTO `scheduler` (`id`, `action`, `params`, `description`, `status`, `sta
 (6, 'CheckWaitingEmail', '', 'Checks the holding queue for emails and fires the TRIGGER_WAITING_HELD_EMAIL trigger when it finds some.', 'enabled', '2008-01-01 00:00:00', '0000-00-00 00:00:00', 60, '0000-00-00 00:00:00', 1);
 -- INL 15Feb08 FIXME all this scheduler data is temporary, needs tidying before release
 INSERT INTO `scheduler` (`id`, `action`, `params`, `paramslabel`, `description`, `status`, `start`, `end`, `interval`, `lastran`, `success`) VALUES (1, 'CloseIncidents', '554400', 'closure_delay', 'Close incidents that have been marked for closure for longer than the <var>closure_delay</var> parameter (which is in seconds)', 'enabled', '2008-02-14 01:23:00', '0000-00-00 00:00:00', 60, '2008-02-15 16:35:06', 1);
+
+-- KMH 27/03/08 !!WARNING!! can take a while on large tables
+ ALTER TABLE `updates` ADD FULLTEXT ( `bodytext`) ;
+ ALTER TABLE `incidents` ADD FULLTEXT (`title`) ;
 ";
 
 // Important: When making changes to the schema you must add SQL to make the alterations
