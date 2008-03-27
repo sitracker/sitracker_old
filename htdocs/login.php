@@ -48,7 +48,11 @@ elseif (authenticate($username, $password) == 1)
     $sql = "SELECT * FROM `{$dbUsers}` WHERE username='$username' AND password='$password' LIMIT 1";
     $result = mysql_query($sql);
     if (mysql_error()) trigger_error(mysql_error(), E_USER_ERROR);
-    if (mysql_num_rows($result) < 1) trigger_error("No such user", E_USER_ERROR);
+    if (mysql_num_rows($result) < 1)
+    {
+        $_SESSION['auth'] = FALSE;
+        trigger_error("No such user", E_USER_ERROR);
+    }
     $user = mysql_fetch_object($result);
     // Profile
     $_SESSION['userid'] = $user->id;
@@ -88,7 +92,11 @@ elseif (authenticate($username, $password) == 1)
     $sql = "SELECT * FROM `{$dbUsers}` AS u, `{$dbRolePermissions}` AS rp WHERE u.roleid = rp.roleid ";
     $sql .= "AND u.id = '{$_SESSION['userid']}' AND granted='true'";
     $result = mysql_query($sql);
-    if (mysql_error()) trigger_error(mysql_error(),E_USER_ERROR);
+    if (mysql_error())
+    {
+        $_SESSION['auth'] = FALSE;
+        trigger_error(mysql_error(),E_USER_ERROR);
+    }
     if (mysql_num_rows($result) >= 1)
     {
         while ($perm = mysql_fetch_object($result))
@@ -100,13 +108,21 @@ elseif (authenticate($username, $password) == 1)
     // Next lookup the individual users permissions
     $sql = "SELECT * FROM `{$dbUserPermissions}` WHERE userid = '{$_SESSION['userid']}' AND granted='true' ";
     $result = mysql_query($sql);
-    if (mysql_error()) trigger_error(mysql_error(),E_USER_ERROR);
+    if (mysql_error())
+    {
+        $_SESSION['auth'] = FALSE;
+        trigger_error(mysql_error(),E_USER_ERROR);
+    }
     if (mysql_num_rows($result) >= 1)
     {
         while ($perm = mysql_fetch_object($result))
         {
             $userpermissions[]=$perm->permissionid;
         }
+    }
+    else
+    {
+        $_SESSION['auth'] = FALSE;
     }
     $_SESSION['permissions'] = array_unique($userpermissions);
 
