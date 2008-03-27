@@ -18,7 +18,7 @@
 include ('classes.inc.php');
 
 // Version number of the application, (numbers only)
-$application_version = '3.40';
+$application_version = '3.35';
 // Revision string, e.g. 'beta2' or 'svn' or ''
 $application_revision = 'svn';
 
@@ -7265,7 +7265,7 @@ function get_incident_billing_details($incidentid)
 {
     global $dbUpdates;
     /*
-     $array[owner][] = array(owner, starttime, duration)      
+     $array[owner][] = array(owner, starttime, duration)
      */
     $sql = "SELECT * FROM `{$dbUpdates}` WHERE incidentid = {$incidentid} AND duration IS NOT NULL";
     $result = mysql_query($sql);
@@ -7274,7 +7274,7 @@ function get_incident_billing_details($incidentid)
         trigger_error(mysql_error(),E_USER_ERROR);
         return FALSE;
     }
-    
+
     if (mysql_num_rows($result) > 0)
     {
         while($obj = mysql_fetch_object($result))
@@ -7285,7 +7285,7 @@ function get_incident_billing_details($incidentid)
             $billing[$obj->userid][] = $temparray;
         }
     }
-    
+
     return $billing;
 }
 
@@ -7293,7 +7293,7 @@ function group_billing_periods(&$count, $countType, $activity, $period)
 {
     $duration = $activity['duration'];
     $startTime = $activity['starttime'];
-    
+
     if (!empty($count[$countType]))
     {
         while ($duration > 0)
@@ -7351,7 +7351,7 @@ function group_billing_periods(&$count, $countType, $activity, $period)
 function make_incident_billing_array($incidentid)
 {
     $billing = get_incident_billing_details($incidentid);
-    
+
     $sql = "SELECT servicelevel, priority FROM `{$GLOBALS['dbIncidents']}` WHERE id = {$incidentid}";
     $result = mysql_query($sql);
     if (mysql_error())
@@ -7363,7 +7363,7 @@ function make_incident_billing_array($incidentid)
     $incident = mysql_fetch_object($result);
     $servicelevel_tag = $incident->servicelevel;
     $priority = $incident->priority;
-    
+
     if (!empty($billing))
     {
         $billingSQL = "SELECT * FROM `{$GLOBALS['dbBillingPeriods']}` WHERE tag='{$servicelevel_tag}' AND priority='{$priority}'";
@@ -7372,7 +7372,7 @@ function make_incident_billing_array($incidentid)
         echo "<pre>";
         print_r($billing);
         echo "</pre>";
-        
+
         echo "<pre>";
         print_r(make_billing_array($incidentid));
         echo "</pre>";
@@ -7425,7 +7425,7 @@ function make_incident_billing_array($incidentid)
                 */
 
                 group_billing_periods($count, 'engineer', $activity, $engineerPeriod);
-                
+
                 // Optimisation no need to compute again if we already have the details
                 if ($engineerPeriod != $customerPeriod)
                 {
@@ -7445,24 +7445,24 @@ function make_incident_billing_array($incidentid)
             print_r($count);
             echo "</pre>";
             */
-            
+
             $billing_a[$activity['owner']]['owner'] = $owner;
             $billing_a[$activity['owner']]['duration'] = $duration;
             $billing_a[$activity['owner']]['engineerperiods'] = $count['engineer'];
             $billing_a[$activity['owner']]['customerperiods'] = $count['customer'];
         }
-        
+
         if (empty($totalengineerperiods)) $totalengineerperiods = 0;
         if (empty($totalcustomerperiods)) $totalcustomerperiods = 0;
         if (empty($tduration)) $tduration = 0;
-        
+
         $billing_a[-1]['totalduration'] = $tduration;
         $billing_a[-1]['totalengineerperiods'] = $totalengineerperiods;
         $billing_a[-1]['totalcustomerperiods'] = $totalcustomerperiods;
         $billing_a[-1]['customerperiod'] = $customerPeriod;
         $billing_a[-1]['engineerperiod'] = $engineerPeriod;
     }
-    
+
     return $billing_a;
 }
 
@@ -7474,7 +7474,7 @@ function billable_units_site($siteid, $startdate=0, $enddate=0)
     {
         $sql .= "AND closed >= {$startdate} ";
     }
-    
+
     if ($enedate != 0)
     {
         $sql .= "AND closed <= {$enddate} ";
@@ -7486,9 +7486,9 @@ function billable_units_site($siteid, $startdate=0, $enddate=0)
         trigger_error(mysql_error(),E_USER_ERROR);
         return FALSE;
     }
-    
+
     $units = 0;
-    
+
     if (mysql_num_rows($result) > 0)
     {
         while ($obj = mysql_fetch_object($result))
@@ -7497,9 +7497,9 @@ function billable_units_site($siteid, $startdate=0, $enddate=0)
             $units += $a[-1]['totalcustomerperiods'];
         }
     }
-    
+
     return $units;
-    
+
 }
 
 // -------------------------- // -------------------------- // --------------------------
