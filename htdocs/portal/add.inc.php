@@ -36,6 +36,8 @@ if (!$_REQUEST['action'])
     echo "<input name='productid' value='{$productid}' type='hidden'>";
     echo "<p align='center'><input type='submit' value='{$strAddIncident}' /></p>";
     echo "</form>";
+
+    include ('htmlfooter.inc.php');
 }
 else //submit
 {
