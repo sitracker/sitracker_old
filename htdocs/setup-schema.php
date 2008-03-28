@@ -1177,6 +1177,7 @@ CREATE TABLE `users` (
   `var_monitor` enum('true','false') NOT NULL default 'true',
   `var_notify_on_reassign` enum('true','false') NOT NULL default 'false',
   `var_i18n` varchar(20) default NULL,
+  `var_utc_offset` int(11) NOT NULL default '0' COMMENT 'Offset from UTC (timezone)',
   `listadmin` tinytext,
   `holiday_entitlement` float NOT NULL default '0',
   `qualifications` tinytext,
@@ -1206,6 +1207,7 @@ CREATE TABLE `userstatus` (
 ) ENGINE=MyISAM;
 
 
+INSERT INTO `userstatus` VALUES ('0', 'Account Disabled');
 INSERT INTO `userstatus` VALUES (1, 'In Office');
 INSERT INTO `userstatus` VALUES (2, 'Not In Office');
 INSERT INTO `userstatus` VALUES (3, 'In Meeting');
