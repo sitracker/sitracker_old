@@ -106,17 +106,17 @@ switch ($page)
     //show the user's contracts
     case 'entitlement':
         include ('portal/entitlement.inc.php');
-		if($contract->expirydate == -1)
-	 	    echo $strUnlimited;
-		else
+        if ($contract->expirydate == -1)
+            echo $strUnlimited;
+        else
                     echo ldate($CONFIG['dateformat_date'],$contract->expirydate);
-		echo "</td>";
-		if ($contract->expirydate > $now)
-		{
-		    echo "<a href='$_SERVER[PHP_SELF]?page=add&amp;contractid={$contract->id}'>{$strAddIncident}</a>";
-		}
-		echo "</td></tr>\n";
-	include 'htmlfooter.inc.php';
+        echo "</td>";
+        if ($contract->expirydate > $now)
+        {
+            echo "<a href='$_SERVER[PHP_SELF]?page=add&amp;contractid={$contract->id}'>{$strAddIncident}</a>";
+        }
+        echo "</td></tr>\n";
+        include 'htmlfooter.inc.php';
         break;
     //update an open incident
     case 'update':
@@ -130,23 +130,23 @@ switch ($page)
     case 'add':
         include ('portal/add.inc.php');
 
-	    //stop people changing the contractid
-    
-	    $sql = "SELECT products.*, maintenance.*, maintenance.id AS id, ";
-	    $sql .= "(maintenance.incident_quantity - maintenance.incidents_used) AS availableincidents ";
-	    $sql .= "FROM supportcontacts, maintenance, products ";
-	    $sql .= "WHERE supportcontacts.maintenanceid=maintenance.id ";
-	    $sql .= "AND maintenance.product=products.id ";
-	    $sql .= "AND supportcontacts.contactid='{$_SESSION['contactid']}'";	
-	    $sql .= "AND maintenance.id='{$contractid}'";
-	    $checkcontract = mysql_query($sql);
+        //stop people changing the contractid
 
-	    //FIXME i18n; right function?
-	    if(mysql_num_rows($checkcontract) == 0)
-	    {
-		user_error("You do not have access to that contract");
-		die();
-	    }
+        $sql = "SELECT products.*, maintenance.*, maintenance.id AS id, ";
+        $sql .= "(maintenance.incident_quantity - maintenance.incidents_used) AS availableincidents ";
+        $sql .= "FROM supportcontacts, maintenance, products ";
+        $sql .= "WHERE supportcontacts.maintenanceid=maintenance.id ";
+        $sql .= "AND maintenance.product=products.id ";
+        $sql .= "AND supportcontacts.contactid='{$_SESSION['contactid']}'";
+        $sql .= "AND maintenance.id='{$contractid}'";
+        $checkcontract = mysql_query($sql);
+
+        //FIXME i18n; right function?
+        if(mysql_num_rows($checkcontract) == 0)
+        {
+        user_error("You do not have access to that contract");
+        die();
+        }
 
         break;
     //show user's details
