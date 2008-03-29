@@ -513,7 +513,7 @@ CREATE TABLE `maintenance` (
   `reseller` int(11) default NULL,
   `expirydate` int(11) default NULL,
   `licence_quantity` int(11) default NULL,
-  `licence_type` int(11) default NULL default 6,
+  `licence_type` int(11) default NULL default 5,
   `incident_quantity` int(5) NOT NULL default '0',
   `incidents_used` int(5) NOT NULL default '0',
   `notes` text,
@@ -1775,8 +1775,11 @@ INSERT INTO `scheduler` (`id`, `action`, `params`, `description`, `status`, `sta
 INSERT INTO `scheduler` (`id`, `action`, `params`, `paramslabel`, `description`, `status`, `start`, `end`, `interval`, `lastran`, `success`) VALUES (1, 'CloseIncidents', '554400', 'closure_delay', 'Close incidents that have been marked for closure for longer than the <var>closure_delay</var> parameter (which is in seconds)', 'enabled', '2008-02-14 01:23:00', '0000-00-00 00:00:00', 60, '2008-02-15 16:35:06', 1);
 
 -- KMH 27/03/08 !!WARNING!! can take a while on large tables
- ALTER TABLE `updates` ADD FULLTEXT ( `bodytext`) ;
- ALTER TABLE `incidents` ADD FULLTEXT (`title`) ;
+ALTER TABLE `updates` ADD FULLTEXT ( `bodytext`) ;
+ALTER TABLE `incidents` ADD FULLTEXT (`title`) ;
+
+-- KMH 29/03/08
+ALTER TABLE `maintenance` CHANGE `licence_type` `licence_type` INT( 11 ) NULL DEFAULT '5' 
 ";
 
 // Important: When making changes to the schema you must add SQL to make the alterations
