@@ -103,6 +103,8 @@ $strArchivedNotRequested = 'Archived. Not Requested';
 $strArchivedRequested = 'Archive. Requested';
 $strArticlesPublishedRecently = 'Articles Published Recently';
 $strArticlesPublishedToday = 'Articles Published Today';
+# Which area of the product does the problem occur in?
+$strArea = 'Area';
 $strAreYouSureAddContract = 'Are you sure you want to add this contract?';
 $strAreYouSureAddEscalationPath = 'Are you sure you want to add this escalation path?';
 $strAreYouSureAddReseller = 'Are you sure you want to add this reseller?';

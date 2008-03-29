@@ -1443,7 +1443,7 @@ function software_drop_down($name, $id)
 }
 
 
-function softwareproduct_drop_down($name, $id, $productid)
+function softwareproduct_drop_down($name, $id, $productid, $visibility='internal')
 {
     global $dbSoftware, $dbSoftwareProducts;
     // extract software
@@ -1456,10 +1456,19 @@ function softwareproduct_drop_down($name, $id, $productid)
     if (mysql_num_rows($result) >=1)
     {
         $html = "<select name='$name'>";
-        if ($id == 0)
+        
+        if ($visibility == 'internal' AND $id == 0)
         {
             $html .= "<option selected='selected' value='0'></option>\n";
         }
+        elseif ($visiblity = 'external' AND $id == 0)
+        {
+            //FIXME 3.35 what language do we want to show this in?
+            //portal users don't have one, perhaps they should?
+            $html .= "<option selected='selected' value=''>I don't know</option>\n";
+        }
+        
+
 
         while ($software = mysql_fetch_array($result))
         {
