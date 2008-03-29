@@ -3301,9 +3301,11 @@ function site_name($id)
 // given id selected.
 function maintenance_drop_down($name, $id)
 {
+    global $GLOBALS;
     // TODO make maintenance_drop_down a hierarchical selection box sites/contracts
     // extract all maintenance contracts
-    $sql  = "SELECT s.name AS sitename, p.name AS productname, m.id AS id FROM `{$dbMaintenance}` AS m, `{$dbSites}` AS s, `{$dbProducts}` AS p ";
+    $sql  = "SELECT s.name AS sitename, p.name AS productname, m.id AS id ";
+    $sql .= "FROM `{$GLOBALS['dbMaintenance']}` AS m, `{$GLOBALS['dbSites']}` AS s, `{$GLOBALS['dbProducts']}` AS p ";
     $sql .= "WHERE site = s.id AND product = p.id ORDER BY s.name ASC";
     $result = mysql_query($sql);
 
