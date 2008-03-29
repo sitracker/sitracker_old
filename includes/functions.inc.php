@@ -380,6 +380,7 @@ function user_realname($id, $allowhtml=FALSE)
         {
             // return db_read_column('realname', 'users', $id);
             $sql = "SELECT realname, status FROM `{$dbUsers}` WHERE id='$id' LIMIT 1";
+            echo $sql;
             $result = mysql_query($sql);
             if (mysql_error()) trigger_error(mysql_error(),E_USER_WARNING);
             list($realname, $status) = mysql_fetch_row($result);
@@ -7511,6 +7512,29 @@ function billable_units_site($siteid, $startdate=0, $enddate=0)
 
     return $units;
 
+}
+
+/**
+ * Return an array of contacts allowed to use this contract
+ * @author Kieran Hogg
+ * @param $maintid integer - ID of the contract
+ * @returns array of supported contacts, NULL if none
+**/
+function supported_contacts($maintid)
+{
+    $sql  = "SELECT contacts.forenames, contacts.surname, supportcontacts.contactid AS contactid ";
+    $sql .= "FROM supportcontacts, contacts ";
+    $sql .= "WHERE supportcontacts.contactid=contacts.id AND supportcontacts.maintenanceid='$maintid' ";
+    $result = mysql_query($sql);
+    if(!empty($result))
+    {
+        while($row = mysql_fetch_object($result))
+        {
+            $returnarray[] = $row->contactid;
+        }
+        return $returnarray;
+    }
+    else return NULL;    
 }
 
 // -------------------------- // -------------------------- // --------------------------

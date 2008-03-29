@@ -133,19 +133,16 @@ if($maintrow['allcontactssupported'] == 'Yes')
 else
 {
     $allowedcontacts = $maintrow['supportedcontacts'];
-
+    
+    $supportedcontacts = supported_contacts($id);
 
     $sql  = "SELECT contacts.forenames, contacts.surname, supportcontacts.contactid AS contactid FROM supportcontacts, contacts ";
     $sql .= "WHERE supportcontacts.contactid=contacts.id AND supportcontacts.maintenanceid='$id' ";
     $result=mysql_query($sql);
     if (mysql_error()) trigger_error("MySQL Query Error ".mysql_error(), E_USER_ERROR);
-    if (mysql_num_rows($result)>0)
+    if ($supportedcontacts != NULL)
     {
-        $numberofcontacts = mysql_num_rows($result);
-        if ($numcontacts > $allowedcontacts)
-        {
-            echo "<p class='error'>{$strMoreContactsThanContractSupports}</p>";
-        }
+        $numberofcontacts = sizeof($supportedcontacts);
 
         if ($allowedcontacts == 0)
         {
@@ -154,13 +151,13 @@ else
         echo "<p align='center'>".sprintf($strUsedNofN, $numberofcontacts, $allowedcontacts)."</p>\n";
         echo "<table align='center'>";
         $supportcount = 1;
-        while ($supportedrow = mysql_fetch_array($result))
+        foreach($supportedcontacts AS $contact)
         {
             echo "<tr><th>{$strContact} #{$supportcount}:</th>";
             echo "<td><img src='{$CONFIG['application_webpath']}images/icons/{$iconset}/16x16/contact.png' width='16' height='16' alt='' /> ";
-            echo "<a href=\"contact_details.php?id={$supportedrow['contactid']}\">{$supportedrow['forenames']} {$supportedrow['surname']}</a>, ";
-            echo contact_site($supportedrow['contactid']). "</td>";
-            echo "<td><a href=\"delete_maintenance_support_contact.php?contactid=".$supportedrow['contactid']."&amp;maintid=$id&amp;context=maintenance\">{$strRemove}</a></td></tr>\n";
+            echo "<a href=\"contact_details.php?id={$contact}\">".contact_realname($contact)."</a>, ";
+            echo contact_site($contact). "</td>";
+            echo "<td><a href=\"delete_maintenance_support_contact.php?contactid=".$contact."&amp;maintid=$id&amp;context=maintenance\">{$strRemove}</a></td></tr>\n";
             $supportcount++;
         }
         echo "</table>";
