@@ -23,11 +23,12 @@ if (!$_REQUEST['action'])
     echo "<h2>{$strAddIncident}</h2>";
     echo "<table align='center' width='50%' class='vertical'>";
     echo "<form action='{$_SERVER[PHP_SELF]}?page=add&action=submit' method='post'>";
-    echo "<tr><th>{$strIncidentTitle}:</th><td><input maxlength='100' name='title' size=40 type='text' /></td></tr>";
-    echo "<tr><th width='20%'>{$strProblemDescription}:</th><td><textarea name='probdesc' rows='20' cols='60'>";    
-    echo "* Please describe the problem\n\n\n* What steps have you taken to try and fix it?\n\n\n";
-    echo "* Is the problem persistent or intermittent?\n\n\n* How can you reproduce the problem?\n\n\n";
-    echo "* How is this affecting you or others?\n\n\n";
+    echo "<tr><th>{$strArea}:</th><td>".softwareproduct_drop_down('software', 0, $productid, 'external')."<br />";
+    //FIXME 3.35 which language
+    echo "NOTE: Not setting one will slow down processing your incident</td></tr>";
+    echo "<tr><th>{$strTitle}:</th><td><input maxlength='100' name='title' size=40 type='text' /></td></tr>";
+    echo "<tr><th width='20%'>{$strProblemDescription}:</th><td>";
+    echo "The more information you can provide, the better</br /><textarea name='probdesc' rows='20' cols='60'>";    
     echo "</textarea></td></tr>";
 
     echo "</table>";
