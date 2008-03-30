@@ -66,7 +66,8 @@ $languages = array('ar' => 'Arabic',
                    'th-TH' => 'Thai',
                    'tr_TR' => 'Turkish',
                    'uk-UA' => 'Ukrainian',
-                   'zh-CN' => 'Chinese (Simplified)'
+                   'zh-CN' => 'Chinese (Simplified)',
+                   'zh-TW' => 'Chinese (Traditional)'
                   );
 
 if (!$_REQUEST['mode'])
