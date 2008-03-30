@@ -1,4 +1,4 @@
-trigg<?php
+<?php
 // login.php - processes the login
 //
 // SiT (Support Incident Tracker) - Support call tracking system
