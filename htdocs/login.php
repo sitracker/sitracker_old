@@ -1,4 +1,4 @@
-<?php
+trigg<?php
 // login.php - processes the login
 //
 // SiT (Support Incident Tracker) - Support call tracking system
@@ -76,7 +76,7 @@ elseif (authenticate($username, $password) == 1)
     if ($_SESSION['lang'] != '' AND $_SESSION['lang'] != $user->var_i18n)
     {
         //FIXME need to implement this trigger
-        trigger("USER_LANGUAGE_DIFFERS", array('currentlang' => $user->var_i18n, 'sessionlang' => $_SESSION['lang']));
+        trigger("TRIGGER_LANGUAGE_DIFFERS", array('currentlang' => $user->var_i18n, 'sessionlang' => $_SESSION['lang']));
     }
     
     if ($user->var_i18n != $CONFIG['default_i18n'] AND $_SESSION['lang']=='')
