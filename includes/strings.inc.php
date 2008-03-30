@@ -226,6 +226,7 @@ $slatypes['closed'] = array('icon' => 'close.png', 'text' => $strClosed);
 $availablelanguages = array('en-GB' => 'English (British)',
                             'en-US' => 'English (US)',
                             'zh-CN' => '简体中文',
+							'zh-TW' => '繁體中文',
                             'de-DE' => 'Deutsch',
                             'es-ES' => 'Español',
                             'es-CO' => 'Español (Colombia)',
