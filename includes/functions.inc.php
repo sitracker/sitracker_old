@@ -2352,12 +2352,14 @@ function incidentstatus_name($id, $type='internal')
     
     if($type == 'external')
     {
-        $sql = "SELECT ext_name FROM `{$dbIncidentStatus}` WHERE id='$id'";
+        $type = 'ext_name';
     }
     else
     {
-        $sql = "SELECT name FROM `{$dbIncidentStatus}` WHERE id='$id'";
+        $type = 'name';
     }
+    
+    $sql = "SELECT {$type} FROM `{$dbIncidentStatus}` WHERE id='$id'";
     $result = mysql_query($sql);
     if (mysql_error()) trigger_error(mysql_error(),E_USER_WARNING);
 
@@ -2367,8 +2369,8 @@ function incidentstatus_name($id, $type='internal')
     }
     else
     {
-        $incidentstatus = mysql_fetch_array($result);
-        $name = $GLOBALS[$incidentstatus['name']];
+        $incidentstatus = mysql_fetch_assoc($result);
+        $name = $GLOBALS[$incidentstatus[$type]];
     }
     return $name;
 }
