@@ -1839,7 +1839,7 @@ function incidentstatus_drop_down($name, $id)
         }
 
         $html .= "value='{$statuses['id']}'";
-        $html .= ">{$statuses['name']}</option>\n";
+        $html .= ">{$GLOBALS[$statuses['name']]}</option>\n";
     }
     $html .= "</select>\n";
     return $html;
@@ -5938,10 +5938,14 @@ function incident_open($incidentid)
 // Return HTML for a table column header (th and /th) with links for sorting
 // Filter parameter can be an assocative array containing fieldnames and values
 // to pass on the url for data filtering purposes
-function colheader($colname, $coltitle, $sort=FALSE, $order='', $filter='', $defaultorder='a')
+function colheader($colname, $coltitle, $sort=FALSE, $order='', $filter='', $defaultorder='a', $width='')
 {
     global $CONFIG;
-    $html = "<th>";
+    if($width!= '')
+        $html = "<th width='".intval($width)."%'>";
+    else
+        $html = "<th>";
+    
     $qsappend='';
     if (!empty($filter) AND is_array($filter))
     {
