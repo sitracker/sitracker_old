@@ -1,6 +1,6 @@
 <?php
 /*
-portal/incidents.inc.php - Lists incidents in the portal included by ../portal.php
+portal/index.php - Lists incidents in the portal
 
 SiT (Support Incident Tracker) - Support call tracking system
 Copyright (C) 2000-2008 Salford Software Ltd. and Contributors
@@ -9,11 +9,7 @@ This software may be used and distributed according to the terms
 of the GNU General Public License, incorporated herein by reference.
 */
 
-// Prevent script from being run directly (ie. it must always be included
-if (realpath(__FILE__) == realpath($_SERVER['SCRIPT_FILENAME']))
-{
-    exit;
-}
+include 'portalheader.inc.php';
 
 $showclosed = cleanvar($_REQUEST['showclosed']);
 $site = cleanvar($_REQUEST['site']);
@@ -100,21 +96,21 @@ if ($numincidents >= 1)
     while ($incident = mysql_fetch_object($result))
     {
         echo "<tr class='$shade'><td>";
-        echo "<a href='{$_SERVER['PHP_SELF']}?page=showincident&amp;id={$incident->id}'>{$incident->id}</a></td>";
+        echo "<a href='incident.php?id={$incident->id}'>{$incident->id}</a></td>";
         echo "<td>";
         if (!empty($incident->softwareid))
         {
             echo software_name($incident->softwareid)."<br />";
         }
 
-        echo "<strong><a href='{$_SERVER['PHP_SELF']}?page=showincident&amp;id={$incident->id}'>{$incident->title}</a></strong></td>";
+        echo "<strong><a href='incident.php?id={$incident->id}'>{$incident->title}</a></strong></td>";
         echo "<td>".format_date_friendly($incident->lastupdated)."</td>";
         echo "<td>{$incident->forenames} {$incident->surname}</td>";
         echo "<td>".incidentstatus_name($incident->status)."</td>";
 
         if ($showclosed == "false")
         {
-            echo "<td><a href='{$_SERVER[PHP_SELF]}?page=update&amp;id={$incident->id}'>{$strUpdate}</a> | ";
+            echo "<td><a href='update.php?id={$incident->id}'>{$strUpdate}</a> | ";
 
             //check if the customer has requested a closure
             $lastupdate = list($update_userid, $update_type, $update_currentowner, $update_currentstatus, $update_body, $update_timestamp, $update_nextaction, $update_id)=incident_lastupdate($incident->id);
@@ -125,7 +121,7 @@ if ($numincidents >= 1)
             }
             else
             {
-                echo "<a href='{$_SERVER[PHP_SELF]}?page=close&amp;id={$incident->id}'>{$strRequestClosure}</a></td>";
+                echo "<a href='close.php?id={$incident->id}'>{$strRequestClosure}</a></td>";
             }
         }
         echo "</tr>";
@@ -143,11 +139,11 @@ echo "<p align='center'>";
 if($numcontracts == 1)
 {
     //only one contract
-    echo "<a href='portal.php?page=add&amp;contractid={$contractid}&amp;product={$productid}'>";
+    echo "<a href='add.php?contractid={$contractid}&amp;product={$productid}'>";
 }
 else
 {
-    echo "<a href='{$_SERVER[PHP_SELF]}?page=entitlement'>";
+    echo "<a href='entitlement.php'>";
 }
 
 echo "{$strAddIncident}</a></p>";

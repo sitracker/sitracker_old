@@ -9,12 +9,7 @@ This software may be used and distributed according to the terms
 of the GNU General Public License, incorporated herein by reference.
 */
 
-// Prevent script from being run directly (ie. it must always be included
-if (realpath(__FILE__) == realpath($_SERVER['SCRIPT_FILENAME']))
-{
-    exit;
-}
-
+include 'portalheader.inc.php';
 
 $incidentid = $_REQUEST['id'];
 $sql = "SELECT title, contact, status FROM `{$dbIncidents}` WHERE id={$incidentid}";
@@ -210,4 +205,6 @@ while ($update = mysql_fetch_object($result))
         }
     }
 }
+
+include 'htmlfooter.inc.php';
 ?>

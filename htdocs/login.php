@@ -155,7 +155,7 @@ elseif ($CONFIG['portal'] == TRUE)
 
         $_SESSION['contactid'] = $contact->id;
         $_SESSION['siteid'] = $contact->siteid;
-        header("Location: portal.php");
+        header("Location: portal/");
         exit;
     }
 

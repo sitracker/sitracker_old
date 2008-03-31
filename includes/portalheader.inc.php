@@ -1,5 +1,5 @@
 <?php
-// portal.php - Simple customer interface
+// portalheader.inc.php - Header for inclusion in the portal
 //
 // SiT (Support Incident Tracker) - Support call tracking system
 // Copyright (C) 2000-2008 Salford Software Ltd. and Contributors
@@ -89,80 +89,16 @@ if($numcontracts == 1)
     $contractobj = mysql_fetch_object($result);
     $contractid = $contractobj->id;
     $productid  = $contractobj->product;
-    echo "<li><a href='portal.php?page=add&amp;contractid={$contractid}&amp;product={$productid}'>{$strAddIncident}</a></li>";
+    echo "<li><a href='add.php?contractid={$contractid}&amp;product={$productid}'>{$strAddIncident}</a></li>";
 }
 else
 {
-    echo "<li><a href='portal.php?page=entitlement'>{$strEntitlement}</a></li>";
+    echo "<li><a href='entitlement.php'>{$strEntitlement}</a></li>";
 }
-echo "<li><a href='portal.php?page=details'>{$strDetails}</a></li>";
+echo "<li><a href='details.php'>{$strDetails}</a></li>";
 echo "<li><a href='logout.php'>{$strLogout}</a></li>";
 
 echo "</ul>";
 echo "</div>";
-
-switch ($page)
-{
-    //show the user's contracts
-    case 'entitlement':
-        include ('portal/entitlement.inc.php');
-        if ($contract->expirydate == -1)
-            echo $strUnlimited;
-        else
-                    echo ldate($CONFIG['dateformat_date'],$contract->expirydate);
-        echo "</td>";
-        if ($contract->expirydate > $now)
-        {
-            echo "<a href='$_SERVER[PHP_SELF]?page=add&amp;contractid={$contract->id}'>{$strAddIncident}</a>";
-        }
-        echo "</td></tr>\n";
-        include 'htmlfooter.inc.php';
-        break;
-    //update an open incident
-    case 'update':
-        include ('portal/update.inc.php');
-        break;
-    //close an open incident
-    case 'close':
-        include ('portal/close.inc.php');
-        break;
-    //add a new incident
-    case 'add':
-        include ('portal/add.inc.php');
-
-        //stop people changing the contractid
-
-        $sql = "SELECT products.*, maintenance.*, maintenance.id AS id, ";
-        $sql .= "(maintenance.incident_quantity - maintenance.incidents_used) AS availableincidents ";
-        $sql .= "FROM supportcontacts, maintenance, products ";
-        $sql .= "WHERE supportcontacts.maintenanceid=maintenance.id ";
-        $sql .= "AND maintenance.product=products.id ";
-        $sql .= "AND supportcontacts.contactid='{$_SESSION['contactid']}'";
-        $sql .= "AND maintenance.id='{$contractid}'";
-        $checkcontract = mysql_query($sql);
-
-        //FIXME i18n; right function?
-        if(mysql_num_rows($checkcontract) == 0)
-        {
-        user_error("You do not have access to that contract");
-        die();
-        }
-
-        break;
-    //show user's details
-    case 'details':
-        include ('portal/details.inc.php');
-        break;
-    //show specified incident
-    case 'showincident':
-        include ('portal/showincident.inc.php');
-        break;
-    //show their open incidents
-    case 'incidents':
-        //fallthrough
-    default:
-        include ('portal/incidents.inc.php');
-        break;
-}
 
 ?>

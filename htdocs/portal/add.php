@@ -9,17 +9,30 @@ This software may be used and distributed according to the terms
 of the GNU General Public License, incorporated herein by reference.
 */
 
-// Prevent script from being run directly (ie. it must always be included
-if (realpath(__FILE__) == realpath($_SERVER['SCRIPT_FILENAME']))
-{
-    exit;
-}
+include 'portalheader.inc.php';
 
 $contractid = cleanvar($_REQUEST['contractid']);
 $productid = cleanvar($_REQUEST['product']);
 
 if (!$_REQUEST['action'])
 {
+    
+    $sql = "SELECT products.*, maintenance.*, maintenance.id AS id, ";
+    $sql .= "(maintenance.incident_quantity - maintenance.incidents_used) AS availableincidents ";
+    $sql .= "FROM supportcontacts, maintenance, products ";
+    $sql .= "WHERE supportcontacts.maintenanceid=maintenance.id ";
+    $sql .= "AND maintenance.product=products.id ";
+    $sql .= "AND supportcontacts.contactid='{$_SESSION['contactid']}'";
+    $sql .= "AND maintenance.id='{$contractid}'";
+    $checkcontract = mysql_query($sql);
+
+    //FIXME i18n
+    if(mysql_num_rows($checkcontract) == 0)
+    {
+        user_error("You do not have access to that contract");
+        die();
+    }
+    
     echo "<h2>{$strAddIncident}</h2>";
     echo "<table align='center' width='50%' class='vertical'>";
     echo "<form action='{$_SERVER[PHP_SELF]}?page=add&action=submit' method='post'>";
@@ -131,6 +144,5 @@ else //submit
 
     html_redirect("portal.php?page=incidents", TRUE, $strIncidentAdded);
     exit;
-
 }
 ?>

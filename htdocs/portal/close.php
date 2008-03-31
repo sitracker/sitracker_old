@@ -9,12 +9,7 @@ This software may be used and distributed according to the terms
 of the GNU General Public License, incorporated herein by reference.
 */
 
-// Prevent script from being run directly (ie. it must always be included
-if (realpath(__FILE__) == realpath($_SERVER['SCRIPT_FILENAME']))
-{
-    exit;
-}
-
+include 'portalheader.inc.php';
 
 if (empty($_REQUEST['reason']))
 {
@@ -23,6 +18,8 @@ if (empty($_REQUEST['reason']))
     echo "<div id='update' align='center'><form action='{$_SERVER[PHP_SELF]}?page=close&amp;id={$id}' method='POST'>";
     echo "<p>{$strReason}:</p><textarea name='reason' cols='50' rows='10'></textarea><br />"; 
     echo "<input type='submit'></form></div>";
+    
+    include 'htmlfooter.inc.php';
 }
 else
 {

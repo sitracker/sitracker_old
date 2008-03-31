@@ -1,19 +1,13 @@
 <?php
-/*
-portal/update.inc.php - Update incidents in the portal included by ../portal.php
+// portal/update.php - Update incidents in the portal
 
-SiT (Support Incident Tracker) - Support call tracking system
-Copyright (C) 2000-2008 Salford Software Ltd. and Contributors
+// SiT (Support Incident Tracker) - Support call tracking system
+// Copyright (C) 2000-2008 Salford Software Ltd. and Contributors
 
-This software may be used and distributed according to the terms
-of the GNU General Public License, incorporated herein by reference.
-*/
+// This software may be used and distributed according to the terms
+// of the GNU General Public License, incorporated herein by reference.
 
-// Prevent script from being run directly (ie. it must always be included
-if (realpath(__FILE__) == realpath($_SERVER['SCRIPT_FILENAME']))
-{
-    exit;
-}
+include 'portalheader.inc.php';
 
 
 if (empty($_REQUEST['update']))
@@ -47,5 +41,7 @@ else
 
     html_redirect("portal.php?page=incidents");
 }
+
+include 'htmlfooter.inc.php';
 
 ?>

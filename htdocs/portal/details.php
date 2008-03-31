@@ -9,12 +9,7 @@ This software may be used and distributed according to the terms
 of the GNU General Public License, incorporated herein by reference.
 */
 
-// Prevent script from being run directly (ie. it must always be included
-if (realpath(__FILE__) == realpath($_SERVER['SCRIPT_FILENAME']))
-{
-    exit;
-}
-
+include 'portalheader.inc.php';
 
 //if new details posted
 if (cleanvar($_REQUEST['action']) == 'update')
@@ -86,4 +81,6 @@ echo "<tr><th>{$strFax}: </th><td><input name='fax' value='{$user->fax}' /></td>
 echo "<tr><th>{$strEmail}: </th><td><input name='email' value='{$user->email}' /></td></tr>";
 echo "</table>";
 echo "<p align='center'><input type='submit' value='{$strUpdate}' /></p></form>";
+
+include 'htmlfooter.inc.php';
 ?>
