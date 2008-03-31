@@ -380,7 +380,6 @@ function user_realname($id, $allowhtml=FALSE)
         {
             // return db_read_column('realname', 'users', $id);
             $sql = "SELECT realname, status FROM `{$dbUsers}` WHERE id='$id' LIMIT 1";
-            echo $sql;
             $result = mysql_query($sql);
             if (mysql_error()) trigger_error(mysql_error(),E_USER_WARNING);
             list($realname, $status) = mysql_fetch_row($result);
