@@ -2346,10 +2346,18 @@ function incident_firstupdate($id)
     *                 Or empty string if the ID is not recognised.
     * @note The incident status database table must contain i18n keys.
 */
-function incidentstatus_name($id)
+function incidentstatus_name($id, $type='internal')
 {
     global $dbIncidentStatus;
-    $sql = "SELECT name FROM `{$dbIncidentStatus}` WHERE id='$id'";
+    
+    if($type == 'external')
+    {
+        $sql = "SELECT ext_name FROM `{$dbIncidentStatus}` WHERE id='$id'";
+    }
+    else
+    {
+        $sql = "SELECT name FROM `{$dbIncidentStatus}` WHERE id='$id'";
+    }
     $result = mysql_query($sql);
     if (mysql_error()) trigger_error(mysql_error(),E_USER_WARNING);
 

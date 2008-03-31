@@ -83,10 +83,11 @@ if ($numincidents >= 1)
     echo "<table align='center'>";
     echo "<tr>";
     echo colheader('id', $strID, $sort, $order, $filter);
-    echo colheader('title', $strTitle);
-    echo colheader('lastupdated', $strLastUpdated);
-    echo colheader('contact', $strContact);
-    echo colheader('status', $strStatus);
+    echo colheader('title', $strTitle, $sort, $order, $filter);
+    echo colheader('owner', $strOwner, $sort, $order, $filter);
+    echo colheader('lastupdated', $strLastUpdated, $sort, $order, $filter);
+    echo colheader('contact', $strContact, $sort, $order, $filter);
+    echo colheader('status', $strStatus, $sort, $order, $filter);
     if ($showclosed == "false")
     {
         echo colheader('actions', $strOperation);
@@ -104,10 +105,10 @@ if ($numincidents >= 1)
         }
 
         echo "<strong><a href='incident.php?id={$incident->id}'>{$incident->title}</a></strong></td>";
+        echo "<td>".user_realname($incident->owner)."</td>";
         echo "<td>".format_date_friendly($incident->lastupdated)."</td>";
         echo "<td>{$incident->forenames} {$incident->surname}</td>";
-        echo "<td>".incidentstatus_name($incident->status)."</td>";
-
+        echo "<td>".incidentstatus_name($incident->status, external)."</td>";
         if ($showclosed == "false")
         {
             echo "<td><a href='update.php?id={$incident->id}'>{$strUpdate}</a> | ";

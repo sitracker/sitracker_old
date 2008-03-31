@@ -369,16 +369,16 @@ CREATE TABLE `incidentstatus` (
   PRIMARY KEY  (`id`)
 ) ENGINE=MyISAM;
 
-INSERT INTO `incidentstatus` VALUES (1, 'strActive', 'Active');
-INSERT INTO `incidentstatus` VALUES (2, 'strClosed', 'Closed');
-INSERT INTO `incidentstatus` VALUES (3, 'strResearchNeeded', 'Research');
-INSERT INTO `incidentstatus` VALUES (4, 'strCalledAndLeftMessage', 'Called And Left Message');
-INSERT INTO `incidentstatus` VALUES (5, 'strAwaitingColleagueResponse', 'Internal Escalation');
-INSERT INTO `incidentstatus` VALUES (6, 'strAwaitingSupportResponse', 'External Escalation');
-INSERT INTO `incidentstatus` VALUES (7, 'strAwaitingClosure', 'Awaiting Closure');
-INSERT INTO `incidentstatus` VALUES (8, 'strAwaitingCustomerAction', 'Customer has Action');
-INSERT INTO `incidentstatus` VALUES (9, 'strUnsupported', 'Unsupported');
-INSERT INTO `incidentstatus` VALUES (10, 'strActive(Unassigned)', 'Active');
+INSERT INTO `incidentstatus` VALUES (1, 'strActive', 'strActive');
+INSERT INTO `incidentstatus` VALUES (2, 'strClosed', 'strClosed');
+INSERT INTO `incidentstatus` VALUES (3, 'strResearchNeeded', 'strResearching');
+INSERT INTO `incidentstatus` VALUES (4, 'strCalledAndLeftMessage', 'strCalledAndLeftMessage');
+INSERT INTO `incidentstatus` VALUES (5, 'strAwaitingColleagueResponse', 'strInternalEscalation');
+INSERT INTO `incidentstatus` VALUES (6, 'strAwaitingSupportResponse', 'strExternalEscalation');
+INSERT INTO `incidentstatus` VALUES (7, 'strAwaitingClosure', 'strAwaitingClosure');
+INSERT INTO `incidentstatus` VALUES (8, 'strAwaitingCustomerAction', 'strCustomerHasAction');
+INSERT INTO `incidentstatus` VALUES (9, 'strUnsupported', 'strUnsupported');
+INSERT INTO `incidentstatus` VALUES (10, 'strActiveUnassigned', 'strActive');
 
 
 
@@ -1779,7 +1779,21 @@ ALTER TABLE `updates` ADD FULLTEXT ( `bodytext`) ;
 ALTER TABLE `incidents` ADD FULLTEXT (`title`) ;
 
 -- KMH 29/03/08
-ALTER TABLE `maintenance` CHANGE `licence_type` `licence_type` INT( 11 ) NULL DEFAULT '5' 
+ALTER TABLE `maintenance` CHANGE `licence_type` `licence_type` INT( 11 ) NULL DEFAULT '5'
+
+-- KMH 31/03/08
+UPDATE `incidentstatus` SET `name` = 'strActiveUnassigned' WHERE `incidentstatus`.`id` =10 LIMIT 1 ;
+
+UPDATE `incidentstatus` SET `ext_name` = 'strActive' WHERE `incidentstatus`.`id` =1 LIMIT 1 ;
+UPDATE `incidentstatus` SET `ext_name` = 'strClosed' WHERE `incidentstatus`.`id` =2 LIMIT 1 ;
+UPDATE `incidentstatus` SET `ext_name` = 'strResearching' WHERE `incidentstatus`.`id` =3 LIMIT 1 ;
+UPDATE `incidentstatus` SET `ext_name` = 'strCalledAndLeftMessage' WHERE `incidentstatus`.`id` =4 LIMIT 1 ;
+UPDATE `incidentstatus` SET `ext_name` = 'strInternalEscalation' WHERE `incidentstatus`.`id` =5 LIMIT 1 ;
+UPDATE `incidentstatus` SET `ext_name` = 'strExternalEscalation' WHERE `incidentstatus`.`id` =6 LIMIT 1 ;
+UPDATE `incidentstatus` SET `ext_name` = 'strAwaitingClosure' WHERE `incidentstatus`.`id` =7 LIMIT 1 ;
+UPDATE `incidentstatus` SET `ext_name` = 'strYouHaveAction' WHERE `incidentstatus`.`id` =8 LIMIT 1 ;
+UPDATE `incidentstatus` SET `ext_name` = 'strUnsupported' WHERE `incidentstatus`.`id` =9 LIMIT 1 ;
+UPDATE `incidentstatus` SET `ext_name` = 'strActive' WHERE `incidentstatus`.`id` =10 LIMIT 1 ;
 ";
 
 // Important: When making changes to the schema you must add SQL to make the alterations

@@ -82,7 +82,7 @@ $numcontracts = mysql_num_rows($result);
 
 echo "<div id='menu'>\n";
 echo "<ul id='menuList'>\n";
-echo "<li><a href='portal.php?page=incidents'>{$strIncidents}</a></li>";
+echo "<li><a href='index.php'>{$strIncidents}</a></li>";
 if($numcontracts == 1)
 {
     //only one contract
