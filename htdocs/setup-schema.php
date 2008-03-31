@@ -369,16 +369,16 @@ CREATE TABLE `incidentstatus` (
   PRIMARY KEY  (`id`)
 ) ENGINE=MyISAM;
 
-INSERT INTO `incidentstatus` VALUES (1, 'Active', 'Active');
-INSERT INTO `incidentstatus` VALUES (2, 'Closed', 'Closed');
-INSERT INTO `incidentstatus` VALUES (3, 'Research Needed', 'Research');
-INSERT INTO `incidentstatus` VALUES (4, 'Called And Left Message', 'Called And Left Message');
-INSERT INTO `incidentstatus` VALUES (5, 'Awaiting Colleague Response', 'Internal Escalation');
-INSERT INTO `incidentstatus` VALUES (6, 'Awaiting Support Response', 'External Escalation');
-INSERT INTO `incidentstatus` VALUES (7, 'Awaiting Closure', 'Awaiting Closure');
-INSERT INTO `incidentstatus` VALUES (8, 'Awaiting Customer Action', 'Customer has Action');
-INSERT INTO `incidentstatus` VALUES (9, 'Unsupported', 'Unsupported');
-INSERT INTO `incidentstatus` VALUES (10, 'Active (Unassigned)', 'Active');
+INSERT INTO `incidentstatus` VALUES (1, 'strActive', 'Active');
+INSERT INTO `incidentstatus` VALUES (2, 'strClosed', 'Closed');
+INSERT INTO `incidentstatus` VALUES (3, 'strResearchNeeded', 'Research');
+INSERT INTO `incidentstatus` VALUES (4, 'strCalledAndLeftMessage', 'Called And Left Message');
+INSERT INTO `incidentstatus` VALUES (5, 'strAwaitingColleagueResponse', 'Internal Escalation');
+INSERT INTO `incidentstatus` VALUES (6, 'strAwaitingSupportResponse', 'External Escalation');
+INSERT INTO `incidentstatus` VALUES (7, 'strAwaitingClosure', 'Awaiting Closure');
+INSERT INTO `incidentstatus` VALUES (8, 'strAwaitingCustomerAction', 'Customer has Action');
+INSERT INTO `incidentstatus` VALUES (9, 'strUnsupported', 'Unsupported');
+INSERT INTO `incidentstatus` VALUES (10, 'strActive(Unassigned)', 'Active');
 
 
 
