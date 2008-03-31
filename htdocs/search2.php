@@ -23,8 +23,8 @@ echo "<h2>{$strSearch}</h2>";
 if(isset($_GET['q']))
 {
     $search = cleanvar($_GET['q']);
-    $sql = "SELECT * FROM updates, incidents ";
-    $sql .= "WHERE MATCH (bodytext, title) against ('{$search}')";
+    $sql = "SELECT * FROM updates ";
+    $sql .= "WHERE MATCH (bodytext) against ('{$search}')";
     $result = mysql_query($sql);
     
     while($row = mysql_fetch_object($result))
