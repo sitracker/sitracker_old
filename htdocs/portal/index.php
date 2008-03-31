@@ -80,7 +80,7 @@ $numincidents = mysql_num_rows($result);
 if ($numincidents >= 1)
 {
     $shade = 'shade1';
-    echo "<table align='center'>";
+    echo "<table align='center' width='70%'>";
     echo "<tr>";
     echo colheader('id', $strID, $sort, $order, $filter);
     echo colheader('title', $strTitle, $sort, $order, $filter);
@@ -90,7 +90,7 @@ if ($numincidents >= 1)
     echo colheader('status', $strStatus, $sort, $order, $filter);
     if ($showclosed == "false")
     {
-        echo colheader('actions', $strOperation);
+        echo colheader('actions', $strOperation, '', '', '', '', 15);
     }
 
     echo "</tr>\n";
