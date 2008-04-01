@@ -6569,7 +6569,7 @@ function purge_tags()
 */
 function list_tags($recordid, $type, $html=TRUE)
 {
-    global $CONFIG, $dbSetTags, $dbTags;
+    global $CONFIG, $dbSetTags, $dbTags, $iconset;
 
     $sql = "SELECT t.name, t.tagid FROM `{$dbSetTags}` AS s, `{$dbTags}` AS t WHERE s.tagid = t.tagid AND ";
     $sql .= "s.type = '$type' AND s.id = '$recordid'";
@@ -6590,7 +6590,7 @@ function list_tags($recordid, $type, $html=TRUE)
             $str .= "<a href='view_tags.php?tagid={$tags->tagid}'>".$tags->name;
             if (array_key_exists($tags->name, $CONFIG['tag_icons']))
             {
-                $str .= "&nbsp;<img src='images/icons/sit/16x16/{$CONFIG['tag_icons'][$tags->name]}.png' style='border:0px;' alt='' />";
+                $str .= "&nbsp;<img src='images/icons/{$iconset}/16x16/{$CONFIG['tag_icons'][$tags->name]}.png' style='border:0px;' alt='' />";
             }
             $str .= "</a>";
         }
@@ -6635,7 +6635,7 @@ function list_tag_icons($recordid, $type)
         while ($tags = mysql_fetch_object($result))
         {
             $str .= "<a href='view_tags.php?tagid={$tags->tagid}' title='{$tags->name}'>";
-            $str .= "<img src='images/icons/sit/16x16/{$CONFIG['tag_icons'][$tags->name]}.png' style='border:0px;' alt='{$tags->name}' />";
+            $str .= "<img src='images/icons/{$iconset}/16x16/{$CONFIG['tag_icons'][$tags->name]}.png' style='border:0px;' alt='{$tags->name}' />";
             $str .= "</a> ";
         }
     }
@@ -6689,7 +6689,7 @@ function show_tag_cloud($orderby="name", $showcount=FALSE)
             $html .= "<a href='view_tags.php?tagid=$obj->tagid' class='$taglevel' style='font-size: {$size}%; font-weight: normal;' title='{$obj->occurrences}'>";
             if (array_key_exists($obj->name, $CONFIG['tag_icons']))
             {
-                $html .= "{$obj->name}&nbsp;<img src='images/icons/sit/";
+                $html .= "{$obj->name}&nbsp;<img src='images/icons/{$iconset}/";
                 if ($size <= 200)
                 {
                     $html .= "16x16";
