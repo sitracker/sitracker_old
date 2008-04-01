@@ -15,7 +15,7 @@ $dashboard_statistics_version = 1;
 
 function dashboard_statistics($row,$dashboardid)
 {
-    global $todayrecent, $dbIncidents, $dbKBArticles;
+    global $todayrecent, $dbIncidents, $dbKBArticles, $iconset;
     // Count incidents logged today
     $sql = "SELECT id FROM `{$dbIncidents}` WHERE opened > '$todayrecent'";
     $result = mysql_query($sql);
@@ -52,7 +52,7 @@ function dashboard_statistics($row,$dashboardid)
     mysql_free_result($result);
 
     echo "<div class='windowbox' style='width: 95%' id='$row-$dashboardid'>";
-    echo "<div class='windowtitle'><a href='statistics.php'>{$GLOBALS['strTodaysStats']}</a></div>";
+    echo "<div class='windowtitle'><a href='statistics.php'><img src='{$CONFIG['application_webpath']}images/icons/{$iconset}/16x16/statistics.png' width='16' height='16' alt='' /> {$GLOBALS['strTodaysStats']}</a></div>";
     echo "<div class='window'>";
     if ($todaysincidents == 0) echo $GLOBALS['strNoIncidents'];
     elseif ($todaysincidents == 1) echo "<a href='statistics.php'>{$todaysincidents}</a> {$GLOBALS['strIncident']}";
