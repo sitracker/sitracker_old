@@ -279,7 +279,7 @@ function give_overview()
         echo "<td><table class='vertical' align='center'>";
         while ($row = mysql_fetch_array($result))
         {
-            echo "<tr><th>{$row['name']}</th><td class='shade2' align='left'>{$row['COUNT(i.id)']}</td></tr>";
+            echo "<tr><th>{$GLOBALS[$row['name']]}</th><td class='shade2' align='left'>{$row['COUNT(i.id)']}</td></tr>";
             if (strpos(strtolower($row['name']), "clos") === false)
             {
                 $openCalls += $row['COUNT(i.id)'];
