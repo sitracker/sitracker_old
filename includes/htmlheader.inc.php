@@ -201,7 +201,7 @@ if ($sit[0] != '')
 
     echo "<div align='right'>";
     echo "<form name='jumptoincident' action='' method='post'>";
-    echo "<input type='text' name='incident' id='incident' size='10' value='{$strIncidentNumAbb}' onclick='clear()'/> ";
+    echo "<input type='text' name='incident' id='incident' size='20' value='{$strIncidentNumOrSearchTerm}' onclick='clear()'/> ";
     echo "<input type='image' src='{$CONFIG['application_webpath']}images/icons/{$iconset}/16x16/find.png' alt='{$strGo}' onclick='jumpto()' />";
     echo "</form>";
     echo "</div>";
