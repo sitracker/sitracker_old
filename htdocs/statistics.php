@@ -491,7 +491,7 @@ switch ($mode)
         break;
     case 'overview': //this is the default so just fall though
     default:
-        echo "<h2>{$title} - {$strOverview}</h2>";
+        echo "<h2><img src='{$CONFIG['application_webpath']}images/icons/{$iconset}/32x32/statistics.png' width='32' height='32' alt='' /> {$title} - {$strOverview}</h2>";
         echo give_overview();
         break;
 }
