@@ -6649,7 +6649,7 @@ function list_tag_icons($recordid, $type)
 */
 function show_tag_cloud($orderby="name", $showcount=FALSE)
 {
-    global $CONFIG, $dbTags, $dbSetTags;
+    global $CONFIG, $dbTags, $dbSetTags, $iconset;
 
     // First purge any disused tags
     purge_tags();
