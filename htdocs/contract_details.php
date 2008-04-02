@@ -106,7 +106,7 @@ if ($maintrow['expirydate'] == '-1')
 }
 else
 {
-    ldate($CONFIG['dateformat_date'], $maintrow['expirydate']);
+    echo ldate($CONFIG['dateformat_date'], $maintrow['expirydate']);
 }
 
 echo "</td></tr>";
@@ -133,7 +133,7 @@ if($maintrow['allcontactssupported'] == 'Yes')
 else
 {
     $allowedcontacts = $maintrow['supportedcontacts'];
-    
+
     $supportedcontacts = supported_contacts($id);
 
     $sql  = "SELECT contacts.forenames, contacts.surname, supportcontacts.contactid AS contactid FROM supportcontacts, contacts ";
