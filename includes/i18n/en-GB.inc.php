@@ -942,10 +942,11 @@ $strSelectSkillsApplyToArticle = 'Select the skills that apply to this article';
 $strSendEmail = 'Send Email';
 $strSendEmailExplainingIncidentClosure = 'Send an email to the customer explaining that the incident has been (or will be) closed.';
 $strSendEmailExternalIncidentClosure = 'Send an email to %s asking for the external incident to be closed.';
-$strSendTranslation = 'Save the text below as %s and place in the %s directory to use it. Send it to %s for it to be included with future SiT! releases for the benefit of other users.';
+$strSendPassword = 'Send Password';
 $strSendRequest = 'Send Request';
 $strSendReminderRequest = 'Send Reminder Request';
 $strSendRequestsTo = 'Send the request(s) to';
+$strSendTranslation = 'Save the text below as %s and place in the %s directory to use it. Send it to %s for it to be included with future SiT! releases for the benefit of other users.';
 # Short for September
 $strSepAbbr = 'Sep';
 $strSeptember = 'September';

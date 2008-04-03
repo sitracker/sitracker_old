@@ -21,11 +21,13 @@ $title = 'Forgotten Password';
 $email = cleanvar($_REQUEST['emailaddress']);
 $username = cleanvar($_REQUEST['username']);
 $userid = cleanvar($_REQUEST['userid']);
+$contactid = cleanvar($_REQUEST['contactid']);
 $userhash = cleanvar($_REQUEST['hash']);
 
 switch ($_REQUEST['action'])
 {
     case 'forgotpwd':
+    case 'sendpwd':
         include ('htmlheader.inc.php');
         // First look to see if this is a SiT user
         $sql = "SELECT id, username, password FROM `{$dbUsers}` WHERE email = '{$email}' LIMIT 1";
@@ -52,7 +54,14 @@ switch ($_REQUEST['action'])
         else
         {
             // This is a SiT contact, not a user
-            $sql = "SELECT username, password FROM `{$dbContacts}` WHERE email = '{$email}' LIMIT 1";
+            if ($_REQUEST['action'] == 'sendpwd')
+            {
+                $sql = "SELECT username, password, email FROM `{$dbContacts}` WHERE id = '{$contactid}' LIMIT 1";
+            }
+            else
+            {
+                $sql = "SELECT username, password, email FROM `{$dbContacts}` WHERE email = '{$email}' LIMIT 1";
+            }
             $contactresult = mysql_query($sql);
             if (mysql_error()) trigger_error(mysql_error(),E_USER_WARNING);
 
@@ -67,8 +76,13 @@ switch ($_REQUEST['action'])
                     $extra_headers .= "\n"; // add an extra crlf to create a null line to separate headers from body
 
                     $bodytext = "{$strUsername}: {$row->username}\n{$strPassword}: {$row->password}";
-                    mail($email, $strForgottenPasswordDetails, $bodytext, $extra_headers);
-                    html_redirect("index.php", TRUE, $strDetailsSend);
+                    // TODO this mail should use a template and be good for sending new details (sendpwd)
+                    // as well as forgotten password
+                    mail($row->email, $strForgottenPasswordDetails, $bodytext, $extra_headers);
+                    if ($_REQUEST['action'] == 'sendpwd') $url = $_SERVER['HTTP_REFERER'];
+                    else $url = 'index.php';
+                    html_redirect($url, TRUE, $strDetailsSend);
+                    exit;
                 }
             }
             else

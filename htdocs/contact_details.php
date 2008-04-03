@@ -147,6 +147,7 @@ while ($contactrow = mysql_fetch_array($contactresult))
 
     echo "<tr><td colspan='2'>&nbsp;</td></tr>\n";
     echo "<tr><th>{$strAccessDetails}:</th><td>{$strUsername}: <code>{$contactrow['username']}</code>";
+    echo ", <a href='forgotpwd.php?action=sendpwd&amp;contactid=".urlencode($contactrow['id'])."'>{$strSendPassword}</a>";
     // echo ", password: <code>".$contactrow['password']."</code>";  ## Passwords no longer controlled from SiT INL 23Nov04
     echo "</td></tr>\n";
     echo "<tr><th>{$strIncidents}:</th><td>";

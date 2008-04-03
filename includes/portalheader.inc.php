@@ -96,7 +96,7 @@ else
     echo "<li><a href='entitlement.php'>{$strEntitlement}</a></li>";
 }
 echo "<li><a href='details.php'>{$strDetails}</a></li>";
-echo "<li><a href='logout.php'>{$strLogout}</a></li>";
+echo "<li><a href='../logout.php'>{$strLogout}</a></li>";
 
 echo "</ul>";
 echo "</div>";
