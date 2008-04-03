@@ -1456,7 +1456,7 @@ function softwareproduct_drop_down($name, $id, $productid, $visibility='internal
     if (mysql_num_rows($result) >=1)
     {
         $html = "<select name='$name'>";
-        
+
         if ($visibility == 'internal' AND $id == 0)
         {
             $html .= "<option selected='selected' value='0'></option>\n";
@@ -1467,7 +1467,7 @@ function softwareproduct_drop_down($name, $id, $productid, $visibility='internal
             //portal users don't have one, perhaps they should?
             $html .= "<option selected='selected' value=''>I don't know</option>\n";
         }
-        
+
 
 
         while ($software = mysql_fetch_array($result))
@@ -2349,7 +2349,7 @@ function incident_firstupdate($id)
 function incidentstatus_name($id, $type='internal')
 {
     global $dbIncidentStatus;
-    
+
     if($type == 'external')
     {
         $type = 'ext_name';
@@ -2358,7 +2358,7 @@ function incidentstatus_name($id, $type='internal')
     {
         $type = 'name';
     }
-    
+
     $sql = "SELECT {$type} FROM `{$dbIncidentStatus}` WHERE id='$id'";
     $result = mysql_query($sql);
     if (mysql_error()) trigger_error(mysql_error(),E_USER_WARNING);
@@ -5945,7 +5945,7 @@ function colheader($colname, $coltitle, $sort=FALSE, $order='', $filter='', $def
         $html = "<th width='".intval($width)."%'>";
     else
         $html = "<th>";
-    
+
     $qsappend='';
     if (!empty($filter) AND is_array($filter))
     {
@@ -7547,7 +7547,7 @@ function supported_contacts($maintid)
         }
         return $returnarray;
     }
-    else return NULL;    
+    else return NULL;
 }
 
 // -------------------------- // -------------------------- // --------------------------

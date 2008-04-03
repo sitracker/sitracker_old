@@ -945,7 +945,7 @@ $strSendRequest = 'Send Request';
 $strSendReminderRequest = 'Send Reminder Request';
 $strSendRequestsTo = 'Send the request(s) to';
 # Short for September
-$strSep = 'Sep';
+$strSepAbbr = 'Sep';
 $strSeptember = 'September';
 $strService = 'Service';
 $strServiceHistory = 'Service History';
