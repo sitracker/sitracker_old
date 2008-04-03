@@ -391,21 +391,21 @@ CREATE TABLE `interfacestyles` (
   PRIMARY KEY  (`id`)
 ) ENGINE=MyISAM AUTO_INCREMENT=16 ;
 
-INSERT INTO `interfacestyles` (`id`, `name`, `cssurl`, `iconset`, `headerhtml`) VALUES (1, 'Light Blue', 'webtrack1.css', 'sit', ''),
-(2, 'Grey', 'webtrack2.css', 'sit', ''),
-(3, 'Green', 'webtrack3.css', 'sit', ''),
-(4, 'Silver Blue', 'webtrack4.css', 'sit', ''),
-(5, 'Classic', 'webtrack5.css', 'sit', ''),
-(6, 'Orange', 'webtrack_ph2.css', 'sit', ''),
-(7, 'Yellow and Blue', 'webtrack7.css', 'sit', ''),
-(8, 'Neoteric', 'webtrack8.css', 'sit', ''),
-(9, 'Toms Linux Style', 'webtrack9.css', 'sit', ''),
-(10, 'Cool Blue', 'webtrack_ph.css', 'sit', ''),
-(11, 'Just Light', 'webtrack10.css', 'sit', ''),
-(12, 'Ex Pea', 'webtrack11.css', 'sit', ''),
-(13, 'GUI Colours', 'webtrack12.css', 'sit', ''),
-(14, 'Flashy', 'webtrack14/webtrack14.css', 'sit', ''),
-(15, 'Richard', 'webtrack15.css', 'sit', '');
+INSERT INTO `interfacestyles` (`id`, `name`, `cssurl`, `iconset`, `headerhtml`) VALUES (1, 'Light Blue', 'sit1.css', 'sit', ''),
+(2, 'Grey', 'sit2.css', 'sit', ''),
+(3, 'Green', 'sit3.css', 'sit', ''),
+(4, 'Silver Blue', 'sit4.css', 'sit', ''),
+(5, 'Classic', 'sit5.css', 'sit', ''),
+(6, 'Orange', 'sit_ph2.css', 'sit', ''),
+(7, 'Yellow and Blue', 'sit7.css', 'sit', ''),
+(8, 'Neoteric', 'sit8.css', 'sit', ''),
+(9, 'Toms Linux Style', 'sit9.css', 'sit', ''),
+(10, 'Cool Blue', 'sit_ph.css', 'sit', ''),
+(11, 'Just Light', 'sit10.css', 'sit', ''),
+(12, 'Ex Pea', 'sit11.css', 'sit', ''),
+(13, 'GUI Colours', 'sit12.css', 'sit', ''),
+(14, 'Flashy', 'sit14/sit14.css', 'sit', ''),
+(15, 'Richard', 'sit15.css', 'sit', '');
 
 
 CREATE TABLE `journal` (
