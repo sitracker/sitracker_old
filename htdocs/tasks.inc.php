@@ -225,7 +225,8 @@ setInterval("countUp()", 1000); //every 1 seconds
 
     if ($mode == 'incident')
     {
-        echo "<h2><img src='{$CONFIG['application_webpath']}images/icons/{$iconset}/32x32/task.png' width='32' height='32' alt='' /> ";
+        echo "<h2><img
+        src='{$CONFIG['application_webpath']}images/icons/{$iconset}/32x32/activities.png' width='32' height='32' alt='' /> ";
         echo "{$strActivities}</h2>";
     }
     echo "<p align='center'>{$strIncidentActivitiesIntro}</p>";
