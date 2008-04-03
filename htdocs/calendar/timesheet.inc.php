@@ -121,7 +121,7 @@ for ($i = 0; $i < 4; $i ++)
 
 echo "<input type='hidden' id='newactivityalias' name='' value='' />";
 echo "<table class='timesheet'>\n";
-echo "<tr><th id = 'addactivitydescription0>' style='width:300px; text-align: right;'>Please choose the category of activity to add:</th>";
+echo "<tr><th id = 'addactivitydescription0' style='width:300px; text-align: right;'>Please choose the category of activity to add:</th>";
 echo "<td><select id='addactivityselect0' style='width: 260px;' onchange='activityChange(\"0\", \"select\");'>\n";
 echo "<option selected='selected'></option>";
 foreach ($activity_types as $type => $xxx)
@@ -144,8 +144,9 @@ for ($i = 1; $i < 4; $i ++)
     echo "</tr>";
 }
 echo "<tr><td></td><td style='text-align:right; padding-top: 10px;'>";
-echo "<input type='button' class='weekButton' value='Add' onclick='addActivity(\"0\", \"0\", \"0\", \"\"); return false;' enabled='false' />";
-echo "<input type='button' class='weekButton' value='Close' onclick='toggleMode(); return false;' enabled='false' />";
+// INL 03Apr08 removed "enabled='false'" from the following two buttons, invalid markup, not sure what it was supposed to do
+echo "<input type='button' class='weekButton' value='Add' onclick='addActivity(\"0\", \"0\", \"0\", \"\"); return false;' />";
+echo "<input type='button' class='weekButton' value='Close' onclick='toggleMode(); return false;' />";
 echo "</td></tr>";
 echo "</table>";
 
@@ -170,8 +171,8 @@ foreach (array('Unconfirmed' => 'ddf', 'Confirmed' => 'fff', 'Waiting Approval' 
 }
 echo "</center></td>";
 echo "<td>";
-echo "<input type='button' class='weekButton' value='<< Week' onclick='displayPreviousWeek(); return false' /><br />";
-echo "<input type='button' class='weekButton' value='Week >>' onclick='displayNextWeek(); return false' style='margin-bottom: 10px;'/><br />";
+echo "<input type='button' class='weekButton' value='&lt;&lt; Week' onclick='displayPreviousWeek(); return false' /><br />";
+echo "<input type='button' class='weekButton' value='Week &gt;&gt;' onclick='displayNextWeek(); return false' style='margin-bottom: 10px;'/><br />";
 echo "<input id='addtogbutton' type='button' class='weekButton' value='$strAdd &uArr;' onclick=\"toggleMode();\" style='margin-bottom: 20px;' /><br />";
 echo "<input type='button' class='weekButton' value='Submit' onclick='submitTimesheet(); return false'/><br />";
 echo "</td>";
