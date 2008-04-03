@@ -277,7 +277,12 @@ if (user_permission($sit[2],19)) // View contracts
             }
 
             echo "</td>";
-            echo "<td class='{$class}'>".ldate($CONFIG['dateformat_date'], $results['expirydate'])."</td>";
+            echo "<td class='{$class}'>";
+            if($results['expirydate'])
+                echo $strUnlimited;
+            else	    
+                echo ldate($CONFIG['dateformat_date'], $results['expirydate']);
+            echo "</td>";
             echo "<td class='{$class}'>{$results['admincontactsforenames']}  {$results['admincontactssurname']}</td>";
             echo "<td class='{$class}'>";
             if ($results['maintnotes'] == '')
