@@ -124,7 +124,7 @@ if ($countcontacts > 0)
     {
         if ($contactrow['active'] == 'false') $shade='expired';
         echo "<tr class='$shade'>";
-        echo "<td><img src='{$CONFIG['application_webpath']}images/icons/{$iconset}/16x16/contact.png' width='16' height='16' alt='' /> ";
+        echo "<td><img src='{$CONFIG['application_webpath']}images/icons/{$iconset}/16x16/contact.png' width='16' height='16' alt='{$strContact}' /> ";
         echo "<a href=\"contact_details.php?id=".$contactrow['id']."\">{$contactrow['forenames']} {$contactrow['surname']}</a></td>";
         echo "<td>{$contactrow['jobtitle']}</td>";
         echo "<td>{$contactrow['department']}</td>";
