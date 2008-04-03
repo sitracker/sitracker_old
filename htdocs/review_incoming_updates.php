@@ -288,7 +288,7 @@ $realemails = $countresults - $spamcount;
 if ((mysql_num_rows($resultnew) > 0) OR ($realemails > 0))
 {
     $totalheld = $countresults + mysql_num_rows($resultnew) - $spamcount;
-    echo "<h2>".sprintf($strHeldEmailsNum, $realemails)."</h2>"; // was $countresults
+    echo "<h2><img src='{$CONFIG['application_webpath']}images/icons/{$iconset}/32x32/email.png' width='32' height='32' alt='{$strHeldEmails}' /> ".sprintf($strHeldEmailsNum, $realemails)."</h2>"; // was $countresults
     echo "<p align='center'>{$strIncomingEmailText}</p>";
     echo "<form action='{$_SERVER['PHP_SELF']}' name='held_emails'  method='post'>";
     echo "<table align='center' style='width: 95%'>";
@@ -423,7 +423,7 @@ if (mysql_num_rows($result) >= 1)
 {
     echo "<br />\n";
 
-    echo "<h2>{$strPendingReassignments}</h2>";
+    echo "<h2><img src='{$CONFIG['application_webpath']}images/icons/{$iconset}/32x32/reassign.png' width='32' height='32' alt='{$strPendingReassignments}' /> {$strPendingReassignments}</h2>";
     // FIXME i18n
     echo "<p align='center'>Automatic reassignments that could not be made because users were set to 'not accepting'</p>";
     echo "<table align='center' style='width: 95%;'>";
