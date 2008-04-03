@@ -23,15 +23,18 @@ global $user;
 // DHTML week planner library
 echo "<script type='text/javascript' src='{$CONFIG['application_webpath']}calendar/ajax.js'></script>\n";
 echo "<script type='text/javascript'>\n";
+echo "/* <![CDATA[ */\n";
 echo "  var itemRowHeight={$rowHeight};\n";
 echo "  var initDateToShow = '" . date('Y-m-d') . "';\n";
+echo "/* ]]> */\n";
 echo "</script>";
 echo "<script src='{$CONFIG['application_webpath']}calendar/week_planner.js.php?user=$user' type='text/javascript'></script>\n";
 
 // DOJO to drop the jobs, etc. onto the dates
 echo "<script type='text/javascript' src='{$CONFIG['application_webpath']}scripts/dojo/dojo.js' djConfig='parseOnLoad: true'></script>\n";
 
-echo "<script type='text/javascript'>
+echo "<script type='text/javascript'>\n
+    /* <![CDATA[ */\n
     var activitycount = 0;
     dojo.require('dojo.dnd.*');
     dojo.require('dojo.event.*');
@@ -74,8 +77,8 @@ echo "<script type='text/javascript'>
 
     var activityTypes = new Array();
 
-    retrievePreviousActivities();
-
+    retrievePreviousActivities();\n
+    /* ]]> */\n
     </script>
 ";
 

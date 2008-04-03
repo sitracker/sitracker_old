@@ -22,8 +22,8 @@ foreach(array('level', 'data', 'ws' ) as $var)
 if ($level == "")
 {
     $activity_types['Support'] = "";
-    echo "<script type='text/javascript'>
-
+    echo "<script type='text/javascript'>\n
+/* <![CDATA[ */\n
         function activitySupport(level)
         {
             if (level == 0)
@@ -77,8 +77,8 @@ if ($level == "")
             }
         }
 
-        activityTypes['Support'] = activitySupport;
-
+        activityTypes['Support'] = activitySupport;\n
+/* ]]> */\n
     </script>
 ";
 }
