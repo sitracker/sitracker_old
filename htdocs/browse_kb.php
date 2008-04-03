@@ -46,6 +46,7 @@ elseif (strtolower($mode)=='today') echo "<h4>{$strArticlesPublishedToday}</h4>"
         <td valign="middle">
         <?php
         echo "<a href='{$_SERVER['PHP_SELF']}?mode=RECENT'>{$strRecent}</a> | ";
+        //FIXME this doesn't make sense for other languages
         ?>
         <a href="<?php echo $_SERVER['PHP_SELF'] ?>?search_string=A">A</a> |
         <a href="<?php echo $_SERVER['PHP_SELF'] ?>?search_string=B">B</a> |
@@ -149,7 +150,7 @@ if (mysql_num_rows($result) >= 1)
         if (empty($kbarticle->title)) $kbarticle->title = $strUntitled;
         else $kbarticle->title = $kbarticle->title;
         echo "<tr class='{$shade}'>";
-        echo "<td>{$CONFIG['kb_id_prefix']}".leading_zero(4,$kbarticle->docid)."</td>";
+        echo "<td><img src='{$CONFIG['application_webpath']}images/icons/{$iconset}/16x16/kb.png' width='16' height='16' alt='' /> {$CONFIG['kb_id_prefix']}".leading_zero(4,$kbarticle->docid)."</td>";
         echo "<td>";
         // Lookup what software this applies to
         $ssql = "SELECT * FROM `{$dbKBSoftware}` AS kbs, `{$dbSoftware}` AS s WHERE kbs.softwareid = s.id ";

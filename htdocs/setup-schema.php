@@ -1794,6 +1794,23 @@ UPDATE `incidentstatus` SET `ext_name` = 'strAwaitingClosure' WHERE `incidentsta
 UPDATE `incidentstatus` SET `ext_name` = 'strYouHaveAction' WHERE `incidentstatus`.`id` =8 LIMIT 1 ;
 UPDATE `incidentstatus` SET `ext_name` = 'strUnsupported' WHERE `incidentstatus`.`id` =9 LIMIT 1 ;
 UPDATE `incidentstatus` SET `ext_name` = 'strActive' WHERE `incidentstatus`.`id` =10 LIMIT 1 ;
+
+-- KMH 03/04/08
+UPDATE `sit`.`interfacestyles` SET `cssurl` = 'sit1.css' WHERE `interfacestyles`.`id` = 1 LIMIT 1; 
+UPDATE `sit`.`interfacestyles` SET `cssurl` = 'sit2.css' WHERE `interfacestyles`.`id` = 2 LIMIT 1; 
+UPDATE `sit`.`interfacestyles` SET `cssurl` = 'sit3.css' WHERE `interfacestyles`.`id` = 3 LIMIT 1; 
+UPDATE `sit`.`interfacestyles` SET `cssurl` = 'sit4.css' WHERE `interfacestyles`.`id` = 4 LIMIT 1; 
+UPDATE `sit`.`interfacestyles` SET `cssurl` = 'sit5.css' WHERE `interfacestyles`.`id` = 5 LIMIT 1; 
+UPDATE `sit`.`interfacestyles` SET `cssurl` = 'sit_ph2.css' WHERE `interfacestyles`.`id` = 6 LIMIT 1; 
+UPDATE `sit`.`interfacestyles` SET `cssurl` = 'sit7.css' WHERE `interfacestyles`.`id` = 7 LIMIT 1; 
+UPDATE `sit`.`interfacestyles` SET `cssurl` = 'sit8.css' WHERE `interfacestyles`.`id` = 8 LIMIT 1; 
+UPDATE `sit`.`interfacestyles` SET `cssurl` = 'sit9.css' WHERE `interfacestyles`.`id` = 9 LIMIT 1; 
+UPDATE `sit`.`interfacestyles` SET `cssurl` = 'sit_ph.css' WHERE `interfacestyles`.`id` = 10 LIMIT 1;
+UPDATE `sit`.`interfacestyles` SET `cssurl` = 'sit10.css' WHERE `interfacestyles`.`id` = 11 LIMIT 1; 
+UPDATE `sit`.`interfacestyles` SET `cssurl` = 'sit11.css' WHERE `interfacestyles`.`id` = 12 LIMIT 1; 
+UPDATE `sit`.`interfacestyles` SET `cssurl` = 'sit12.css' WHERE `interfacestyles`.`id` = 13 LIMIT 1; 
+UPDATE `sit`.`interfacestyles` SET `cssurl` = 'sit13.css' WHERE `interfacestyles`.`id` = 14 LIMIT 1; 
+UPDATE `sit`.`interfacestyles` SET `cssurl` = 'sit14.css' WHERE `interfacestyles`.`id` = 15 LIMIT 1; 
 ";
 
 // Important: When making changes to the schema you must add SQL to make the alterations
