@@ -91,7 +91,7 @@ switch ($type)
 
         if (!empty($maintexclude)) $sql .= "AND i.maintenanceid != '{$maintexclude}' ";
 
-        echo "<h2>";
+        echo "<h2><img src='{$CONFIG['application_webpath']}images/icons/{$iconset}/32x32/support.png' alt='{$strSupport}' /> ";
         if ($user!='all') echo sprintf($strUserIncidents, user_realname($user,TRUE)).": ";
         else echo "{$strWatchingAll} ";
 

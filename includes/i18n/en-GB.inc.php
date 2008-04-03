@@ -81,6 +81,7 @@ $strAgo = '%s ago';
 $strAll = 'All';
 $strAllClosed = 'All Closed';
 $strAllDay = 'all day';
+$strAllIncidents = 'All Incidents';
 $strAllOpen = 'All Open';
 $strAllSiteContactsSupported = 'All of this sites\' contacts are supported';
 # i.e. Sorted by alphabet
@@ -669,6 +670,7 @@ $strMustSelectSite = 'You must select a site';
 $strMyDashboard = 'My Dashboard';
 $strMyDetails = 'My Details';
 $strMyHolidays = 'My Holidays';
+$strMyIncidents = 'My Incidents';
 $strMyProfile = 'My Profile';
 $strMySkills = 'My Skills';
 $strMySubstitutes = 'My Substitutes';

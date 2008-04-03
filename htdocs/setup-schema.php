@@ -1811,6 +1811,8 @@ UPDATE `sit`.`interfacestyles` SET `cssurl` = 'sit11.css' WHERE `interfacestyles
 UPDATE `sit`.`interfacestyles` SET `cssurl` = 'sit12.css' WHERE `interfacestyles`.`id` = 13 LIMIT 1; 
 UPDATE `sit`.`interfacestyles` SET `cssurl` = 'sit13.css' WHERE `interfacestyles`.`id` = 14 LIMIT 1; 
 UPDATE `sit`.`interfacestyles` SET `cssurl` = 'sit14.css' WHERE `interfacestyles`.`id` = 15 LIMIT 1; 
+
+UPDATE `sit`.`interfacestyles` SET `iconset` = 'oxygen' WHERE `interfacestyles`.`id` =8 LIMIT 1 ;
 ";
 
 // Important: When making changes to the schema you must add SQL to make the alterations
