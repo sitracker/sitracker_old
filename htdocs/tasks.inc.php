@@ -707,7 +707,8 @@ if (mysql_num_rows($result) >=1 )
         echo "<p align='center'><a href='add_task.php'>{$strAddTask}</a></p>";
     }
 
-    echo "<h3>{$strActivityBilling}</h3>";
+    echo "<h3><img src='{$CONFIG['application_webpath']}images/icons/{$iconset}/32x32/billing.png' width='32' height='32' alt='{$strActivityBilling}' /> ";
+    echo "{$strActivityBilling}</h3>";
     echo "<p align='center'>{$strActivityBillingInfo}</p>";
 
     $billing = make_incident_billing_array($incidentid);
