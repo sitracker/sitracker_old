@@ -47,7 +47,7 @@ if ($_SESSION['auth'] != TRUE)
 
     echo "<div style='margin-left: auto; margin-right: auto; width: 380px; text-align: center; margin-top: 3em;'>";
     echo "<form id='langselectform' action='login.php' method='post'>";
-    echo "<img src='{$CONFIG['application_webpath']}images/icons/{$iconset}/16x16/i18n.png' alt='{$strLanguage}' /> <label for='lang'>{$strLanguage}:  <select name='lang' id='lang' onchange='this.form.submit();'>";
+    echo "<img src='{$CONFIG['application_webpath']}images/icons/{$iconset}/16x16/language.png' alt='{$strLanguage}' /> <label for='lang'>{$strLanguage}:  <select name='lang' id='lang' onchange='this.form.submit();'>";
     echo "<option value='default'";
     if (empty($_SESSION['lang']))
     {

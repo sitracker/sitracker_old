@@ -12,7 +12,12 @@
 //          Kieran Hogg <kieran_hogg[at]users.sourceforge.net>
 // included by view_task.php
 
-echo "<h2><img src='{$CONFIG['application_webpath']}images/icons/{$iconset}/32x32/task.png' width='32' height='32' alt='' /> $title</h2>";
+if($mode != 'incident')
+    echo "<h2><img src='{$CONFIG['application_webpath']}images/icons/{$iconset}/32x32/task.png' width='32' height='32' alt='' /> $title</h2>";
+else
+    echo "<h2><img
+    src='{$CONFIG['application_webpath']}images/icons/{$iconset}/32x32/activities.png'
+    width='32' height='32' alt='' /> $strViewActivity</h2>";
 
 if ($mode != 'incident') echo "<div style='width: 90%; margin-left: auto; margin-right: auto;'>";
 
