@@ -64,25 +64,29 @@ Salford Software, Lancastrian Office Centre, Talbot Road, Old Trafford, Manchest
 <p align='center'>Incorporating:</p>
 
 <p align='center'>Help Tip 1.12 by <a href='http://webfx.eae.net/contact.html#erik'>Erik Arvidsson</a><br />
-Copyright &copy; 1999 - 2002 Erik Arvidsson. Licensed under the GPL.</p>
+Copyright &copy; 1999 - 2002 Erik Arvidsson. Licensed under the GPLv2.</p>
 
 <p align='center'>KDEClassic Icon theme<br />
 Completely free for commercial and non-commercial use.</p>
 
 <p align='center'>whatever:hover (csshover.htc) 1.41 by <a href='http://www.xs4all.nl/~peterned/'>Peter Nederlof</a><br />
-&copy; 2005 - Peter Nederlof.  Licensed under the LGPL.</p>
+&copy; 2005 - Peter Nederlof.  Licensed under the LGPLv2.</p>
 
 <p align='center'>Dojo 0.4.3 by <a href='http://dojotoolkit.org/'>The Dojo Foundation</a><br />
 Copyright &copy; 2004-2006 The Dojo Foundation. Licensed under the BSD license.</p>
 
 <p align='center'>MagpieRSS 0.72 by <a href='http://magpierss.sourceforge.net/'>Kellan Elliott-McCrea</a><br />
-Copyright &copy; Kellan Elliott-McCrea. Licensed under the GPL.</p>
+Copyright &copy; Kellan Elliott-McCrea. Licensed under the GPLv2.</p>
 
 <p align='center'>Prototype JavaScript framework 1.6.0.2 by <a href='http://www.prototypejs.org/'>Sam Stephenson</a><br />
 Copyright &copy; 2005-2008 Sam Stephenson. Licensed under the MIT license.</p>
 
 <p align='center'>Icons from the Crystal Project by <a href='http://www.everaldo.com/'>Everaldo Coelho</a><br />
-Copyright (c)  2006-2007 Everaldo Coelho. Licensed under the LGPL</p>
+Copyright (c)  2006-2007 Everaldo Coelho. Licensed under the LGPLv2</p>
+
+<p align='center'>Icons from the <a href='http://www.oxygen-icons.org/'>Oxygen Project</a><br />
+Copyright (c) 2008 The Oxygen Project. Licensed under the LGPLv2</p>
+
 </td></tr>
 <?php
 echo "<tr><td class='shade1' colspan='2'>{$strLicense}:</td></tr>";
