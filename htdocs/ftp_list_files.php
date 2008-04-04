@@ -28,11 +28,13 @@ $orderby = cleanvar($_REQUEST['orderby']);
 
 ?>
 <script type="text/javascript">
+//<![CDATA[
 function upload_window()
 {
     URL = "ftp_upload_file.php";
         window.open(URL, "upload_window", "toolbar=yes,status=yes,menubar=no,scrollbars=yes,resizable=yes,width=700,height=600");
 }
+//]]>
 </script>
 <?php
 echo "<h2>$title</h2>";

@@ -21,15 +21,6 @@ include ('htmlheader.inc.php');
 // External variables
 $submit=$_REQUEST['submit'];
 
-?>
-<script type='text/javascript'>
-function confirm_submit()
-{
-    return window.confirm('<?php echo $strAddNoticeConfirm ?>');
-}
-</script>
-<?php
-
 // Show add notice type form
 if (empty($submit))
 {
@@ -80,10 +71,10 @@ if (empty($submit))
     echo "<tr><th>&lt;todaysdate&gt;</th><td>Todays date</td></tr>";
 
     plugin_do('noticetemplate_list');
-    ?>
-    </table>
+    echo "</table>";
 
-    <form action="<?php echo $_SERVER['PHP_SELF']; ?>" method="post" onsubmit="return confirm_submit()">
+    echo "<form action='{$_SERVER['PHP_SELF']}' method='post' onsubmit=\"return confirm_action('{$strAreYouSureAdd}')\">";
+    ?>
     <table align='center' class='vertical'>
     <?php
     echo "<tr><th>{$strNoticeTemplate}: <sup class='red'>*</sup></th><td>";

@@ -27,7 +27,7 @@ if (empty($_REQUEST['submit']))
 {
     echo "<h2>{$strAddProductQuestion}</h2>";
     echo "<h5>".sprintf($strMandatoryMarked,"<sup class='red'>*</sup>")."</h5>";
-    echo "<form action='{$_SERVER['PHP_SELF']}' method='post' onsubmit='return confirm_submit(\"{$strAreYouSureAddProductInfo}\")'>";
+    echo "<form action='{$_SERVER['PHP_SELF']}' method='post' onsubmit='return confirm_action(\"{$strAreYouSureAddProductInfo}\")'>";
     echo "<table align='center'>";
     echo "<tr><th>Product:</th><td>".product_drop_down("product", 0)."</td></tr>";
     echo "<tr><th>Question: <sup class='red'>*</sup></th><td><input name='information' size='30' /></td></tr>";

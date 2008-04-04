@@ -76,7 +76,9 @@ if ($search_string=='') $search_string='a';
 ?>
 <script type="text/javascript" src="scripts/dojo/dojo.js"></script>
 <script type="text/javascript">
+//<![CDATA[
     dojo.require ("dojo.widget.ComboBox");
+//]]>
 </script>
 <?php
 echo "<h2><img src='{$CONFIG['application_webpath']}images/icons/{$iconset}/32x32/site.png' width='32' height='32' alt='' /> ";
@@ -153,11 +155,13 @@ if ($ownedsites > 0) echo " | <a href='browse_sites.php?owner={$sit[2]}' title='
 </table>
 
 <script type="text/javascript">
+//<![CDATA[
     function site_details_window(siteid)
     {
         URL = "site_details.php?action=edit&amp;site=" + siteid;
         window.open(URL, "site_details_window", "toolbar=no,status=yes,menubar=no,scrollbars=yes,resizable=yes,width=450,height=240");
     }
+//]]>
 </script>
 <?php
 // check input

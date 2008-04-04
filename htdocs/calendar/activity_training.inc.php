@@ -20,14 +20,14 @@ if (realpath(__FILE__) == realpath($_SERVER['SCRIPT_FILENAME']))
 $activity_types['Training'] = "";
 
 echo "<script type='text/javascript'>
-
+\n//<![CDATA[\n
     function activityTraining(level)
     {
         $('newactivityalias').value = 'Training';
     }
 
     activityTypes['Training'] = activityTraining;
-
+\n//]]>\n
 </script>
 ";
 

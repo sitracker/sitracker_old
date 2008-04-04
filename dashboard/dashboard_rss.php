@@ -24,7 +24,7 @@ function dashboard_rss($row,$dashboardid)
 
     echo "</div>";
     echo "</div>";
-    echo "<script type='text/javascript'>get_and_display('display_rss_feed.inc.php','rss_window');</script>";
+    echo "<script type='text/javascript'>\n//<![CDATA[\nget_and_display('display_rss_feed.inc.php','rss_window');\n//]]>\n</script>";
 }
 
 function dashboard_rss_install()

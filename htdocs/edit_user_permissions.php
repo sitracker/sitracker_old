@@ -44,7 +44,7 @@ if (empty($action) OR $action == "showform")
     if (mysql_num_rows($result) >= 1)
     {
         echo "<h2>{$strRolePermissions}</h2>";
-        echo "<form action='{$_SERVER['PHP_SELF']}' method='post' onsubmit='return confirm_submit(\"{$strAreYouSureMakeTheseChanges}\")'>";
+        echo "<form action='{$_SERVER['PHP_SELF']}' method='post' onsubmit=\"return confirm_action('{$strAreYouSureMakeTheseChanges}')\">";
         echo "<table align='center'>";
         echo "<tr>";
         echo "<th>{$strPermission}</th>";
@@ -102,7 +102,7 @@ elseif ($action == "edit" && (!empty($user) OR !empty($role)))
            $userrolepermission[]=$roleperm->permissionid;
         }
     }
-    echo "<form action='{$_SERVER['PHP_SELF']}?action=update' method='post' onsubmit='return confirm_submit(\"{$strAreYouSureMakeTheseChanges}\")'>";
+    echo "<form action='{$_SERVER['PHP_SELF']}?action=update' method='post' onsubmit=\"return confirm_action('{$strAreYouSureMakeTheseChanges}')\">";
     echo "<table align='center'>
     <tr>
     <th>ID</th>

@@ -42,14 +42,6 @@ if (empty($process))
     }
     else
     {
-        ?>
-        <script type='text/javascript'>
-        function confirm_submit()
-        {
-            return window.confirm('Are you sure you want to delete this contact?');
-        }
-        </script>
-        <?php
         echo "<h2>Delete Contact</h2>\n";
         $sql="SELECT * FROM `{$dbContacts}` WHERE id='$id' ";
         $contactresult = mysql_query($sql);
@@ -87,7 +79,7 @@ if (empty($process))
 
         if ($totalincidents > 0 || $totalcontracts > 0)
         {
-            echo "<form action='{$_SERVER['PHP_SELF']}' method='post'>\n";
+            echo "<form action='{$_SERVER['PHP_SELF']}' onsubmit=\"return confirm_action('{$strAreYouSureDelete}')\" method='post'>\n";
             echo "<p align='center'>Before you can delete you must select another contact to receive any incidents and/or maintenance contracts.</p>";
             $sql  = "SELECT id, forenames, surname, siteid FROM `{$dbContacts}` ORDER BY surname ASC";
             $result = mysql_query($sql);
@@ -121,7 +113,7 @@ if (empty($process))
         {
             // plain delete
             echo "<br />";
-            echo "<form action='{$_SERVER['PHP_SELF']}' method='post'>\n";
+            echo "<form action='{$_SERVER['PHP_SELF']}' onsubmit=\"return confirm_action('{$strAreYouSureDelete}')\" method='post'>\n";
             echo "<input type='hidden' name='newcontact' value='' />";  // empty
             echo "<input type='hidden' name='id' value='$id' />";
             echo "<input type='hidden' name='process' value='true' />";

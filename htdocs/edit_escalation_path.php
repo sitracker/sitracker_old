@@ -34,7 +34,7 @@ if (empty($_REQUEST['mode']))
 
     while ($details = mysql_fetch_object($result))
     {
-        echo "<form action='".$_SERVER['PHP_SELF']."' method='post' onsubmit='return confirm_submit(\"{$strAreYouSureEditEscalationPath}\")'>";
+        echo "<form action='".$_SERVER['PHP_SELF']."' method='post' onsubmit=\"return confirm_action('{$strAreYouSureMakeTheseChanges}')\">";
         echo "<table class='vertical'>";
         echo "<tr><th>{$strName}:</th><td><input name='name' value='{$details->name}'/></td></tr>";
         echo "<tr><th>{$strTrackURL}:</th><td><input name='trackurl' value='{$details->track_url}' />";

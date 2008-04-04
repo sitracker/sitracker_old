@@ -23,7 +23,7 @@ function dashboard_watch_incidents($row,$dashboardid)
 
     echo "</div>";
     echo "</div>";
-    echo "<script type='text/javascript'>get_and_display('display_watch_incidents.inc.php','watch_incidents_windows');</script>";
+    echo "<script type='text/javascript'>\n//<![CDATA[\nget_and_display('display_watch_incidents.inc.php','watch_incidents_windows');\n//]]>\n</script>";
 }
 
 function dashboard_watch_incidents_install()

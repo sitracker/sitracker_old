@@ -31,7 +31,9 @@ if (empty($submit) OR !empty($_SESSION['formerrors']['add_contact']))
     ?>
     <script type="text/javascript" src="scripts/dojo/dojo.js"></script>
     <script type='text/javascript'>
+    //<![CDATA[
         dojo.require("dojo.widget.ComboBox");
+    //]]>
     </script>
     <?php
     echo show_form_errors('add_contact');
@@ -40,7 +42,7 @@ if (empty($submit) OR !empty($_SESSION['formerrors']['add_contact']))
     echo "{$strNewContact}</h2>";
 
     echo "<h5>".sprintf($strMandatoryMarked, "<sup class='red'>*</sup>")."</h5>";
-    echo "<form name='contactform' action='{$_SERVER['PHP_SELF']}' method='post' onsubmit='return confirm_submit(\"{$strAddContractConfirm}\");'>";
+    echo "<form name='contactform' action='{$_SERVER['PHP_SELF']}' method='post' onsubmit=\"return confirm_action('{$strAreYouSureAdd}')\">";
     echo "<table align='center' class='vertical'>";
     echo "<tr><th>{$strName} <sup class='red'>*</sup><br /></th>\n";
 

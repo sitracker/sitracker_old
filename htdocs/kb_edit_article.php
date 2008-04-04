@@ -45,12 +45,6 @@ if (empty($_POST['process']))
     $docid = $id;
     include ('htmlheader.inc.php');
 
-    ?>
-    <script type="text/javascript">
-
-    </script>
-    <?php
-
     $sql = "SELECT * FROM `{$dbKBArticles}` WHERE docid='{$docid}' LIMIT 1";
     $result = mysql_query($sql);
     if (mysql_error()) trigger_error("MySQL Query Error ".mysql_error(), E_USER_ERROR);
@@ -156,7 +150,7 @@ if (empty($_POST['process']))
     echo "<p align='center'>{$strKeywords}:<br /><input type='text' name='keywords' value='{$kbarticle->keywords}' size='60' /></p>";
 
     echo "\n<script type=\"text/javascript\">\n";
-    echo "<!--\n";
+    echo "\n//<![CDATA[\n";
     echo "function change_header(element,headertext)\n";
     echo "{\n";
     echo "  var headerelement = 'header' + element; \n";
@@ -168,7 +162,7 @@ if (empty($_POST['process']))
 
     echo "  document.getElementById(element).innerHTML=content;  \n";
     echo "}\n";
-    echo "// -->\n";
+    echo "\n//]]>\n";
     echo "</script>\n";
 
     echo "<table summary='' width='95%' align='center'>";

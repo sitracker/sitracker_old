@@ -32,13 +32,13 @@ if (user_permission($sit[2],$permission))
         include ('htmlheader.inc.php');
         ?>
         <script type="text/javascript">
-        <!--
+        //<![CDATA[
         function editbox(object, boxname)
         {
             var boxname;
             object.boxname.disabled=true;
         }
-        -->
+        //]]>
         </script>
         <?php
         echo show_form_errors('kb_add_article');

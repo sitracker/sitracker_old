@@ -211,6 +211,7 @@ if (user_permission($sit[2],19)) // View contracts
     {
         ?>
         <script type="text/javascript">
+        //<![CDATA[
         function support_contacts_window(maintenanceid)
         {
             URL = "support_contacts.php?maintid=" + maintenanceid;
@@ -221,6 +222,7 @@ if (user_permission($sit[2],19)) // View contracts
             URL = "contact_details.php?contactid=" + contactid;
             window.open(URL, "contact_details_window", "toolbar=no,status=yes,menubar=no,scrollbars=yes,resizable=yes,width=450,height=240");
         }
+        //]]>
         </script>
         <p align='center'>
         <?php
@@ -280,7 +282,7 @@ if (user_permission($sit[2],19)) // View contracts
             echo "<td class='{$class}'>";
             if($results['expirydate'] == -1)
                 echo $strUnlimited;
-            else	    
+            else
                 echo ldate($CONFIG['dateformat_date'], $results['expirydate']);
             echo "</td>";
             echo "<td class='{$class}'>{$results['admincontactsforenames']}  {$results['admincontactssurname']}</td>";

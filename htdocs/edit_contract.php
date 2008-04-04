@@ -53,7 +53,7 @@ if ($action == "edit")
         $maint = mysql_fetch_array($result);
         ?>
         <script type='text/javascript'>
-        <!--
+        //<![CDATA[
 
         function set_terminated()
         {
@@ -68,7 +68,7 @@ if ($action == "edit")
                 document.maintform.terminated.checked=false;
             }
         }
-        //-->
+        //]]>
         </script>
         <?php
         echo "<h2><img src='{$CONFIG['application_webpath']}images/icons/{$iconset}/32x32/contract.png' width='32' height='32' alt='' /> ";

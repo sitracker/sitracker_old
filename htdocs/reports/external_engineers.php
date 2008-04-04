@@ -28,6 +28,7 @@ $filter = cleanvar($_REQUEST['filter']);
 
 echo "<script type='text/javascript'>";
 ?>
+//<![CDATA[
 function incident_details_window_l(incidentid,second)
 {
     URL = "<?php  echo $CONFIG['application_uriprefix'].$CONFIG['application_webpath'] ?>incident_details.php?id=" + incidentid + "&amp;javascript=enabled";
@@ -45,6 +46,7 @@ function hide_filter(hide)
         $('filter').show();
     }
 }
+//]]>
 <?php
 echo "</script>";
 
@@ -91,7 +93,7 @@ echo "</select>\n";
 
 if (!empty($filterby))
 {
-    echo "<script type='text/javascript'>";
+    echo "<script type='text/javascript'>\n//<![CDATA[\n";
     switch ($filterby)
     {
         case 'sla':
@@ -107,7 +109,7 @@ if (!empty($filterby))
             echo "hide_filter(true);";
             break;
      }
-     echo "</script>";
+     echo "\n//]]>\n</script>";
 }
 else
 {

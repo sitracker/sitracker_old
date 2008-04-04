@@ -34,7 +34,9 @@ include ('htmlheader.inc.php');
 ?>
 <script type="text/javascript" src="scripts/dojo/dojo.js"></script>
 <script type="text/javascript">
+//<![CDATA[
     dojo.require ("dojo.widget.ComboBox");
+//]]>
 </script>
 <?php
 echo "<h2><img src='{$CONFIG['application_webpath']}images/icons/{$iconset}/32x32/contract.png' width='32' height='32' alt='' /> ";
@@ -163,12 +165,13 @@ else
 {
     ?>
     <script type="text/javascript">
-
+    //<![CDATA[
     function contact_details_window(contactid)
     {
         URL = "contact_details.php?contactid=" + contactid;
         window.open(URL, "contact_details_window", "toolbar=no,status=yes,menubar=no,scrollbars=yes,resizable=yes,width=450,height=240");
     }
+    //]]>
     </script>
     <?php
     echo "<p align='center'>".sprintf($strResultsNum, mysql_num_rows($result))."</p>\n";

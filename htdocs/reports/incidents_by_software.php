@@ -334,8 +334,8 @@ else
             echo "</table></p>";
 
 
-            echo "<script src=\"../scripts/dojo/dojo.js\"></script>";
-            echo "<script>";
+            echo "<script type='text/javascript' src=\"../scripts/dojo/dojo.js\"></script>";
+            echo "<script type='text/javascript'>\n//<![CDATA[\n";
                 echo "dojo.require ('dojo.collections.Store');";
                 echo "dojo.require ('dojo.charting.Chart');";
                 echo "dojo.require ('dojo.widget.ContentPane');";
@@ -364,7 +364,7 @@ else
                     echo "a = a+\"</table>\";";
                     echo "docpane.setContent(a);";
                 echo "});";
-            echo "</script>";
+            echo "\n//]]>\n</script>";
 
             echo "<style>";
                 echo "#incidentsBySkill {";

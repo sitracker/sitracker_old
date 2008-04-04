@@ -39,12 +39,14 @@ $refresh = $_SESSION['incident_refresh'];
 include ('htmlheader.inc.php');
 ?>
 <script type="text/javascript">
+//<![CDATA[
 function statusform_submit(user)
 {
     URL = "incidents.php?status=" + window.document.statusform.status.options[window.document.statusform.status.selectedIndex].value + "&amp;user=" + user;
     window.confirm(URL);
     window.location.href = URL;
 }
+//]]>
 </script>
 <?php
 
@@ -132,7 +134,7 @@ switch ($type)
                 trigger_error("Invalid queue ($queue) on query string",E_USER_NOTICE);
             break;
         }        // Create SQL for Sorting
-                
+
         echo "</h2>\n";
         if (!empty($sort))
         {

@@ -22,12 +22,14 @@ if (empty($queue)) $queue = 5;
 
 ?>
 <script type="text/javascript">
+//<![CDATA[
 function statusform_submit(user)
 {
     URL = "incidents.php?status=" + window.document.statusform.status.options[window.document.statusform.status.selectedIndex].value + "&amp;user=" + user;
     window.confirm(URL);
     window.location.href = URL;
 }
+//]]>
 </script>
 <?php
 

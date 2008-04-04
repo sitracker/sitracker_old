@@ -25,7 +25,7 @@ $mode;
 
 ?>
 <script type='text/javascript'>
-<!--
+//<![CDATA[
 function submitform()
 {
     document.tasks.submit();
@@ -49,8 +49,7 @@ function checkAll(checkStatus)
         }
     }
 }
-
--->
+//]]>
 </script>
 <?php
 
@@ -70,7 +69,7 @@ if (!empty($incident))
 {
 ?>
 <script type='text/javascript'>
-<!--
+//<![CDATA[
 function Activity()
 {
     var id;
@@ -199,7 +198,7 @@ function countUp()
 
 setInterval("countUp()", 1000); //every 1 seconds
 
-//-->
+//]]>
 </script>
 <?php
 
@@ -614,12 +613,12 @@ if (mysql_num_rows($result) >=1 )
             echo "<td>".format_date_friendly($startdate)."</td>";
             if ($enddate == '0')
             {
-                echo "<td><script type='text/javascript'>";
+                echo "<td><script type='text/javascript'>\n//<![CDATA[\n";
                 echo "var act = new Activity();";
                 echo "act.id = {$task->id};";
                 echo "act.start = {$startdate}; ";
                 echo "addActivity(act);";
-                echo "</script>";
+                echo "\n//]]>\n</script>";
 
                 echo "$strNotCompleted</td>";
                 $duration = $now - $startdate;
@@ -670,10 +669,10 @@ if (mysql_num_rows($result) >=1 )
         echo "<tr class='{$shade}'><td><strong>{$strExact}:</strong></td>";
         echo "<td colspan='5' id='totalduration'>".exact_seconds($totalduration);
 
-        echo "<script type='text/javascript'>";
+        echo "<script type='text/javascript'>\n//<![CDATA[\n";
         if (empty($closedduration)) $closedduration = 0;
         echo "setClosedDuration({$closedduration});";
-        echo "</script>";
+        echo "\n//]]>\n</script>";
         echo "</td></tr>";
     }
     else if ($show != 'incidents')
@@ -687,7 +686,7 @@ if (mysql_num_rows($result) >=1 )
 
     if ($mode == 'incident')
     {
-        echo "<script type='text/javascript'>countUp();</script>";  //force a quick udate
+        echo "<script type='text/javascript'>\n//<![CDATA[\ncountUp();\n//]]>\n</script>";  //force a quick udate
     }
 
     //echo "<pre>";
@@ -712,9 +711,9 @@ if (mysql_num_rows($result) >=1 )
     echo "<p align='center'>{$strActivityBillingInfo}</p>";
 
     $billing = make_incident_billing_array($incidentid);
-    
+
     if (!empty($billing))
-    {    
+    {
         echo "<p><table align='center'>";
         echo "<tr><td></td><th>{$GLOBALS['strMinutes']}</th></th></tr>";
         echo "<tr><th>{$GLOBALS['strBillingEngineerPeriod']}</th>";
@@ -722,16 +721,16 @@ if (mysql_num_rows($result) >=1 )
         echo "<tr><th>{$GLOBALS['strBillingCustomerPeriod']}</th>";
         echo "<td>".($billing[-1]['customerperiod']/60)."</td></tr>";
         echo "</table></p>";
-    
+
         echo "<br />";
-    
+
         echo "<table align='center'>";
-    
+
         echo "<tr><th>{$GLOBALS['strOwner']}</th><th>{$GLOBALS['strTotalMinutes']}</th>";
         echo "<th>{$GLOBALS['strBillingEngineerPeriod']}</th>";
         echo "<th>{$GLOBALS['strBillingCustomerPeriod']}</th></tr>";
         $shade = "shade1";
-    
+
         foreach ($billing AS $engineer)
         {
             if (!empty($engineer['totalduration']))
@@ -743,9 +742,9 @@ if (mysql_num_rows($result) >=1 )
                 echo "<tr class='{$shade}'><td>{$engineer['owner']}</td>";
                 echo "<td>".round($engineer['duration']/60)."</td>";
                 echo "<td>".sizeof($engineer['engineerperiods'])."</td>";
-                echo "<td>".sizeof($engineer['customerperiods'])."</td></tr>";        
+                echo "<td>".sizeof($engineer['customerperiods'])."</td></tr>";
             }
-            
+
             if ($shade == "shade1") $shade = "shade2";
             else $shade = "shade2";
         }

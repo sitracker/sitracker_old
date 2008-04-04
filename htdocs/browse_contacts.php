@@ -66,17 +66,20 @@ include ('htmlheader.inc.php');
 
 if ($search_string=='') $search_string='a';
 ?>
-<script type="text/javascript">
-function contact_products_window(contactid)
-{
-URL = "contact_products.php?id=" + contactid;
-window.open(URL, "contact_products_window", "toolbar=no,status=yes,menubar=no,scrollbars=yes,resizable=yes,width=520,height=240");
-}
-</script>
 <script type="text/javascript" src="scripts/dojo/dojo.js"></script>
 <script type="text/javascript">
-    dojo.require ("dojo.widget.ComboBox");
+//<![CDATA[
+function contact_products_window(contactid)
+{
+    URL = "contact_products.php?id=" + contactid;
+    window.open(URL, "contact_products_window", "toolbar=no,status=yes,menubar=no,scrollbars=yes,resizable=yes,width=520,height=240");
+}
+
+dojo.require ("dojo.widget.ComboBox");
+
+//]]>
 </script>
+
 <?php
 echo "<h2><img src='{$CONFIG['application_webpath']}images/icons/{$iconset}/32x32/contact.png' width='32' height='32' alt='' /> ";
 echo "{$strBrowseContacts}</h2>";

@@ -74,6 +74,7 @@ elseif ($action == "edit")
 {
     ?>
     <script type='text/javascript'>
+    //<![CDATA[
 
     function recordFocusElement(element)
     {
@@ -102,7 +103,7 @@ elseif ($action == "edit")
             alert('Select a field that supports template variables, then click a variable to insert it');
         }
     }
-
+//]]>
 </script>
     <?php
 
@@ -133,7 +134,7 @@ elseif ($action == "edit")
         echo "<h2>{$title}</h2>";
         echo "<p align='center'>".sprintf($strMandatoryMarked,"<sup class='red'>*</sup>")."</p>";
         echo "<div style='width: 48%; float: left;'>";
-        echo "<form name='edittemplate' action='{$_SERVER['PHP_SELF']}?action=update' method='post' onsubmit='return confirm_submit(\"{$strAreYouSureMakeTheseChanges}\")'>";
+        echo "<form name='edittemplate' action='{$_SERVER['PHP_SELF']}?action=update' method='post' onsubmit=\"return confirm_action('{$strAreYouSureMakeTheseChanges}')\">";
         echo "<table class='vertical' width='100%'>";
 
         $tsql = "SELECT * FROM `{$dbTriggers}` WHERE action = '{$action}' AND template = '$id' LIMIT 1";

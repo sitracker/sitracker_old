@@ -17,7 +17,7 @@ $maxscore = $CONFIG['feedback_max_score'];
 $formid = $CONFIG['feedback_form'];
 $now = time();
 
-echo "<script type='text/javascript'>";
+echo "<script type='text/javascript'>\n//<![CDATA[\n";
 echo "
 function incident_details_window(incidentid,win)
 {
@@ -25,7 +25,7 @@ function incident_details_window(incidentid,win)
     window.open(URL, 'sit_popup', 'toolbar=yes,status=yes,menubar=no,scrollbars=yes,resizable=yes,width=700,height=600');
 }
 ";
-echo "</script>";
+echo "\n//]]>\n</script>";
 echo "<div style='margin: 20px'>";
 echo "<h2><a href='{$CONFIG['application_webpath']}reports/feedback.php'>Feedback</a> Scores: By Contact</h2>";
 echo feedback_between_dates();
@@ -60,7 +60,7 @@ if (!empty($startdate))
     {
         $msql .= "AND i.closed >= '{$startdate}' ";
     }
-    
+
     //echo "DATES {$dates}";
 }
 
@@ -168,10 +168,10 @@ if (mysql_num_rows($mresult) >= 1)
             {
                 $csql .= "AND i.closed >= '{$startdate}' ";
             }
-            
+
             //echo "DATES {$dates}";
         }
-        
+
         if (!empty($enddate))
         {
             if ($dates == 'feedbackin')
@@ -209,7 +209,7 @@ if (mysql_num_rows($mresult) >= 1)
             $sql .= "AND fr.id = r.respondentid ";
             $sql .= "AND r.questionid = '$qrow->id' ";
             $sql .= "AND fr.id = '$mrow->reportid' ";
-            
+
             if (!empty($startdate))
             {
                 if ($dates == 'feedbackin')
@@ -220,10 +220,10 @@ if (mysql_num_rows($mresult) >= 1)
                 {
                     $sql .= "AND i.closed >= '{$startdate}' ";
                 }
-                
+
                 //echo "DATES {$dates}";
             }
-            
+
             if (!empty($enddate))
             {
                 if ($dates == 'feedbackin')
@@ -235,7 +235,7 @@ if (mysql_num_rows($mresult) >= 1)
                     $sql .= "AND i.closed <= '{$enddate}' ";
                 }
             }
-            
+
             $sql .= "ORDER BY i.contact, i.id";
             $result = mysql_query($sql);
             if (mysql_error()) trigger_error(mysql_error(), E_USER_ERROR);

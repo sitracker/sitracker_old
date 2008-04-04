@@ -76,6 +76,7 @@ else
         {
             ?>
             <script type="text/javascript">
+            //<![CDATA[
             function support_contacts_window(maintenanceid)
             {
                 URL = "support_contacts.php?maintid=" + maintenanceid;
@@ -86,6 +87,7 @@ else
                 URL = "contact_details.php?id=" + contactid;
                 window.open(URL, "contact_details_window", "toolbar=no,status=yes,menubar=no,scrollbars=yes,resizable=yes,width=550,height=640");
             }
+            //]]>
             </script>
             <h2>Contracts Expiring Within The Next <?php echo $expire ?> Days</h2>
             <h5>Search yielded <?php echo mysql_num_rows($result) ?> result(s)</h5>

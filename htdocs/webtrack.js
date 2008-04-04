@@ -26,6 +26,8 @@ function wt_winpopup(url,mini)
 
 
 // Yes/No dialog
+// @param msg string - A message to display
+// @returns bool TRUE or false, depending on which button was pressed, yes = true, false = no
 function confirm_action(msg)
 {
     return window.confirm(msg);
