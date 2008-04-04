@@ -1,3 +1,4 @@
+/* Base styles*/
 h1 { font-size: 16pt; font-weight: bold; color: #FFF; background-color:
 #203894; margin: 0px; padding: 3px 0px 3px 0px; }
 #apptitle { background-image: url('../images/top.png'); background-position:
@@ -25,4 +26,114 @@ div.windowbox
 div.windowtitle
 {
     background-color: #203894;
+}
+
+
+#menu
+{
+/*  float: left; */
+  display: block;
+  color: #000;
+  margin-bottom: 5px;
+  width: 100%;
+  height: 20px;
+}
+
+#menu ul {
+  margin: 0;
+  padding: 0;
+  border: 0;
+  list-style-type: none;
+  background-color:#FFF;
+}
+
+#menu li {
+  margin: 0;
+  padding: 0;
+  border: 0;
+  display: block;
+  float: left;
+  position: relative;
+}
+
+#menu li:hover {
+  color: #900;
+  background-color: #FFF;
+}
+
+
+#menu a {
+  display: block;
+  text-decoration: none;
+  text-align: center;
+  color: #5B5B5B;
+  padding: 0.25em 0.8em 0.25em 0.8em;
+}
+
+#menu a.greyed, #menu a.greyed:hover { color: #C6C3C6; }
+
+#menu li a {
+  position: relative;
+}
+
+#menu li:hover>a, #menu a:hover {
+  color: #205D94;
+}
+
+#menu li ul {
+  visibility: hidden;
+  position: absolute;
+  z-index: 10;
+  color: #000;
+  background-color: #FFFFFF;
+  /*padding-top: 14px; */
+  padding-bottom: 0px;
+  line-height: 14px;
+  width: 130px;
+  left: -1px;
+}
+
+html>body #menu li ul {  display: none; }
+
+#menu li li {
+  width: 100%;
+  border-width: 0 1px 0 1px;
+  border-style: solid;
+  border-color: #C5C5C5;
+  background: white;
+}
+
+#menu li li ul {
+  top: 0;
+  left: 100%;
+}
+
+div#menu li:hover ul,
+#menu li:hover li:hover ul,
+#menu li:hover li:hover li:hover ul {
+    visibility: visible;
+}
+div#menu li:hover li ul,
+#menu li:hover li:hover li ul,
+#menu li:hover li:hover li:hover li ul {
+    visibility: hidden;
+}
+
+#menu ul li:hover>ul {
+  display: block;
+  visibility: visible;
+}
+
+#menu li ul a {
+  text-align: left;
+  font-weight: normal;
+  word-spacing: 0px;
+}
+
+#menu li ul a:hover
+{
+    background-color: #CCC;
+    filter:alpha(opacity=75);
+    opacity: 0.75;
+    -moz-opacity:0.75;
 }
