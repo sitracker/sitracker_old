@@ -1779,7 +1779,7 @@ ALTER TABLE `updates` ADD FULLTEXT ( `bodytext`) ;
 ALTER TABLE `incidents` ADD FULLTEXT (`title`) ;
 
 -- KMH 29/03/08
-ALTER TABLE `maintenance` CHANGE `licence_type` `licence_type` INT( 11 ) NULL DEFAULT '5'
+ALTER TABLE `maintenance` CHANGE `licence_type` `licence_type` INT( 11 ) NULL DEFAULT '5';
 
 -- KMH 31/03/08
 UPDATE `incidentstatus` SET `name` = 'strActiveUnassigned' WHERE `incidentstatus`.`id` =10 LIMIT 1 ;
