@@ -7550,6 +7550,84 @@ function supported_contacts($maintid)
     else return NULL;
 }
 
+/**
+ * Return an array of contracts which the contact is an admin contact for
+ * @author Kieran Hogg
+ * @param $maintid integer - ID of the contract
+ * @returns array of supported contracts, NULL if none
+**/
+function admin_contact_contracts($contactid, $siteid)
+{
+    $sql = "SELECT DISTINCT maintenance.id ";
+    $sql .= "FROM maintenance, contacts, sites ";
+    $sql .= "WHERE maintenance.admincontact={$contactid} ";
+    $sql .= "AND maintenance.site={$siteid} ";
+    $sql .= "AND contacts.siteid={$siteid}";
+        
+    $result = mysql_query($sql);
+    while($row = mysql_fetch_object($result))
+    {
+        $contractsarray[] = $row->id;
+    }
+    
+    return $contractsarray;
+}
+
+/**
+ * Return an array of contracts which the contact is an named contact for
+ * @author Kieran Hogg
+ * @param $maintid integer - ID of the contract
+ * @returns array of supported contracts, NULL if none
+**/
+function contact_contracts($contactid, $siteid)
+{
+    $sql = "SELECT DISTINCT m.id AS id
+            FROM `{$GLOBALS['dbMaintenance']}` AS m,
+            `{$GLOBALS['dbContacts']}` AS c,
+            `{$GLOBALS['dbSites']}` AS s,
+            `{$GLOBALS['dbSupportContacts']}` AS sc
+            WHERE m.site={$siteid}
+            AND c.siteid={$siteid}
+            AND c.id={$contactid}
+            AND sc.maintenanceid=m.id
+            AND sc.contactid=c.id
+            AND m.var_incident_visible_contacts = 'true'
+            ";
+    $result = mysql_query($sql);
+    while($row = mysql_fetch_object($result))
+    {
+        $contractsarray[] = $row->id;
+    }
+    
+    return $contractsarray;
+}
+
+/**
+ * Return an array of contracts which non-contract contacts can see incidents
+ * @author Kieran Hogg
+ * @param $maintid integer - ID of the contract
+ * @returns array of supported contracts, NULL if none
+**/
+function all_contact_contracts($contactid, $siteid)
+{
+    $sql = "SELECT DISTINCT m.id AS id
+            FROM `{$GLOBALS['dbMaintenance']}` AS m,
+            `{$GLOBALS['dbContacts']}` AS c,
+            `{$GLOBALS['dbSites']}` AS s,
+            `{$GLOBALS['dbSupportContacts']}` AS sc
+            WHERE m.site={$siteid}
+            AND m.var_incident_visible_all = 'true'
+            ";
+
+    $result = mysql_query($sql);
+    while($row = mysql_fetch_object($result))
+    {
+        $contractsarray[] = $row->id;
+    }
+    
+    return $contractsarray;
+}
+
 // -------------------------- // -------------------------- // --------------------------
 // leave this section at the bottom of functions.inc.php ================================
 

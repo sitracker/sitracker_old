@@ -1813,6 +1813,11 @@ UPDATE `sit`.`interfacestyles` SET `cssurl` = 'sit13.css' WHERE `interfacestyles
 UPDATE `sit`.`interfacestyles` SET `cssurl` = 'sit14.css' WHERE `interfacestyles`.`id` = 15 LIMIT 1; 
 
 UPDATE `sit`.`interfacestyles` SET `iconset` = 'oxygen' WHERE `interfacestyles`.`id` =8 LIMIT 1 ;
+
+ALTER TABLE `maintenance`
+ADD `var_incident_visible_contacts` ENUM( 'true', 'false' ) NOT NULL DEFAULT 'false',
+ADD `var_incident_visible_all` ENUM( 'true', 'false' ) NOT NULL DEFAULT 'false'
+;
 ";
 
 // Important: When making changes to the schema you must add SQL to make the alterations

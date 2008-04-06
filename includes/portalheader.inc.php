@@ -96,9 +96,18 @@ else
     echo "<li><a href='entitlement.php'>{$strEntitlement}</a></li>";
 }
 echo "<li><a href='details.php'>{$strDetails}</a></li>";
+if(admin_contact_contracts($_SESSION['contactid'], $_SESSION['siteid']) != NULL)
+    echo "<li><a href='admin.php'>{$strAdmin}</a></li>";
 echo "<li><a href='../logout.php'>{$strLogout}</a></li>";
 
 echo "</ul>";
+
+echo "<div align='right'>";
+echo contact_realname($_SESSION['contactid']);
+echo ", ".contact_site($_SESSION['siteid']);
 echo "</div>";
+echo "</div>";
+
+
 
 ?>
