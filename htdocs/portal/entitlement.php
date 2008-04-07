@@ -43,7 +43,7 @@ if ($numcontracts >= 1)
         echo "<td>";
         if ($contract->expirydate > $now)
         {
-            echo "<a href='$_SERVER[PHP_SELF]?page=add&amp;contractid={$contract->id}&amp;product={$contract->product}'>{$strAddIncident}</a>";
+            echo "<a href='add.php?contractid={$contract->id}&amp;product={$contract->product}'>{$strAddIncident}</a>";
         }
         echo "</td></tr>\n";
         if ($shade == 'shade1') $shade = 'shade2';
