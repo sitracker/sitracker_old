@@ -35,7 +35,6 @@ echo "<h2><img src='{$CONFIG['application_webpath']}images/icons/{$iconset}/32x3
 echo $strAdmin."</h2>";
 
 $contracts = admin_contact_contracts($_SESSION['contactid'], $_SESSION['siteid']);
-
 echo "<h3><img src='{$CONFIG['application_webpath']}images/icons/{$iconset}/32x32/privacy.png'
         alt='{$strPrivacy}' />  Privacy</h3>";
 
@@ -52,31 +51,34 @@ foreach($contracts as $contract)
     $sql = "SELECT *, m.id AS id ";
     $sql .= "FROM `{$dbMaintenance}` AS m, `{$dbProducts}` AS p ";
     $sql .= "WHERE m.id={$contract} ";
-    $sql .= "AND (m.expirydate > NOW() OR m.expirydate = -1) ";
+    $sql .= "AND (m.expirydate > UNIX_TIMESTAMP(NOW()) OR m.expirydate = -1) ";
     $sql .= "AND m.product=p.id ";
     
     $result = mysql_query($sql);
+    
     if (mysql_error()) trigger_error(mysql_error(),E_USER_ERROR);
 
-    $row = mysql_fetch_object($result);
-    if($row->expirydate == -1)
-        $row->expirydate = $strUnlimited;
-    echo "<tr><td>{$row->id}</td><td>{$row->name}</td><td>{$row->expirydate}</td>";
-    echo "<td>";
-    
-    echo "<input type='checkbox' name='contact[{$row->id}]' ";
-    if($row->var_incident_visible_contacts == 'true')
-        echo "value='on' checked='checked'";
-    else
-        echo "value='off' checked='unchecked'";
-    echo " />Contract contacts<br />";
-    
-    echo "<input type='checkbox' name='all[{$row->id}]' ";
-    if($row->var_incident_visible_all == 'true')
-        echo "checked='checked'";
-    else
-        echo "checked='unchecked'";
-    echo " />All contacts</td></tr>";
+    if($row = mysql_fetch_object($result))
+    {
+        if($row->expirydate == -1)
+            $row->expirydate = $strUnlimited;
+        echo "<tr><td>{$row->id}</td><td>{$row->name}</td><td>{$row->expirydate}</td>";
+        echo "<td>";
+        
+        echo "<input type='checkbox' name='contact[{$row->id}]' ";
+        if($row->var_incident_visible_contacts == 'true')
+            echo "value='on' checked='checked'";
+        else
+            echo "value='off' checked='unchecked'";
+        echo " />Contract contacts<br />";
+        
+        echo "<input type='checkbox' name='all[{$row->id}]' ";
+        if($row->var_incident_visible_all == 'true')
+            echo "checked='checked'";
+        else
+            echo "checked='unchecked'";
+        echo " />All contacts</td></tr>";
+    }
 }
 echo "</table>";
 echo "<p align='center'><input type='submit' id='submit' name='submit'  value='{$strUpdate}' /></form></p>";

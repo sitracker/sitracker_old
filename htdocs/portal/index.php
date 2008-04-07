@@ -163,7 +163,7 @@ if ($otherincidents != NULL)
         $sql .= "WHERE status = 2 ";
         $sql .= "AND c.id=i.contact ";
         $sql .= "AND i.contact != {$_SESSION['contactid']} ";
-        $sql .= "AND opened > ".($CONFIG['hide_closed_incidents_older_than'] * 86640)." ";
+        $sql .= "AND opened > ".($CONFIG['hide_closed_incidents_older_than'] * 86400)." ";
         $sql .= "AND c.siteid=s.id AND s.id={$_SESSION['siteid']} ";
         $sql .= "AND (1=0 "; 
         
