@@ -213,4 +213,6 @@ $CONFIG['chase_managers_manager_minutes'] = 0; // number of minutes incident has
 $CONFIG['chase_email_template'] = ''; // The template to use to send chase email
 $CONFIG['dont_chase_maintids'] = array(1 => 1); // maintence IDs not to chase
 
+$CONFIG['portal_site_incidents'] = TRUE; //users in the portal can view site incidents based on the contract options
+
 ?>

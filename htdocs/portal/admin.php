@@ -62,6 +62,8 @@ foreach($contracts as $contract)
     {
         if($row->expirydate == -1)
             $row->expirydate = $strUnlimited;
+        else
+            $row->expirydate = ldate("jS F Y", $row->timestamp);
         echo "<tr><td>{$row->id}</td><td>{$row->name}</td><td>{$row->expirydate}</td>";
         echo "<td>";
         

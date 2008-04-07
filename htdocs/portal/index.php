@@ -153,7 +153,7 @@ if(!empty($contracts))
 }
 
 
-if ($otherincidents != NULL)
+if ($CONFIG['portal_site_incidents'] AND $otherincidents != NULL)
 {
     if ($showclosed == "true")
     {
