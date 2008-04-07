@@ -16,9 +16,9 @@ if (empty($_REQUEST['reason']))
     $id = $_REQUEST['id'];
     echo "<h2>{$strClosureRequestForIncident} {$_REQUEST['id']}</h2>";
     echo "<div id='update' align='center'><form action='{$_SERVER[PHP_SELF]}?page=close&amp;id={$id}' method='POST'>";
-    echo "<p>{$strReason}:</p><textarea name='reason' cols='50' rows='10'></textarea><br />"; 
-    echo "<input type='submit'></form></div>";
-    
+    echo "<p>{$strReason}:</p><textarea name='reason' cols='50' rows='10'></textarea><br />";
+    echo "<input type='submit' value=\"{$strRequestClosure}\" /></form></div>";
+
     include 'htmlfooter.inc.php';
 }
 else
