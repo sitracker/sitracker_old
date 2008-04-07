@@ -7564,11 +7564,13 @@ function admin_contact_contracts($contactid, $siteid)
     $sql .= "WHERE maintenance.admincontact={$contactid} ";
     $sql .= "AND maintenance.site={$siteid} ";
     $sql .= "AND contacts.siteid={$siteid}";
-        
-    $result = mysql_query($sql);
-    while($row = mysql_fetch_object($result))
+
+    if($result = mysql_query($sql))
     {
-        $contractsarray[] = $row->id;
+        while($row = mysql_fetch_object($result))
+        {
+            $contractsarray[] = $row->id;
+        }
     }
     
     return $contractsarray;

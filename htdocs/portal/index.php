@@ -10,7 +10,6 @@ of the GNU General Public License, incorporated herein by reference.
 */
 
 include 'portalheader.inc.php';
-
 $showclosed = cleanvar($_REQUEST['showclosed']);
 $site = cleanvar($_REQUEST['site']);
 
@@ -121,12 +120,12 @@ echo "<img src='{$CONFIG['application_webpath']}images/icons/{$iconset}/16x16/ad
 $otherincidents = array();
 
 //if we're an admin contact
-if(admin_contact_contracts($_SESSION['contactid'], $_SESSION['siteid'] != NULL))
+if(admin_contact_contracts($_SESSION['contactid'], $_SESSION['siteid']) != NULL)
 {
     $contracts = admin_contact_contracts($_SESSION['contactid'], $_SESSION['siteid']);    
 }
 //if we're a named contact
-elseif(contact_contracts($_SESSION['contactid'], $_SESSION['siteid'] != NULL))
+elseif(contact_contracts($_SESSION['contactid'], $_SESSION['siteid']) != NULL)
 {
     $contracts = contact_contracts($_SESSION['contactid'], $_SESSION['siteid']);
 }
