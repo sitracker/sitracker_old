@@ -123,50 +123,24 @@ $otherincidents = array();
 //if we're an admin contact
 if(admin_contact_contracts($_SESSION['contactid'], $_SESSION['siteid'] != NULL))
 {
-    $contracts = admin_contact_contracts($_SESSION['contactid'], $_SESSION['siteid']);
-
-    $sql = "SELECT i.id
-            FROM `{$dbIncidents}` AS i, `{$dbMaintenance}` AS m
-            WHERE (1=0 
-            ";
-    foreach($contracts AS $contract)
-    {
-        $sql .= "OR i.maintenanceid = {$contract} ";
-    }
-    $sql .= ")";
-    $result = mysql_query($sql);
-    while($incidents = mysql_fetch_object($result))
-    {
-        $otherincidents[] = $incidents->id;
-    }
-    
+    $contracts = admin_contact_contracts($_SESSION['contactid'], $_SESSION['siteid']);    
 }
 //if we're a named contact
 elseif(contact_contracts($_SESSION['contactid'], $_SESSION['siteid'] != NULL))
 {
     $contracts = contact_contracts($_SESSION['contactid'], $_SESSION['siteid']);
-
-    $sql = "SELECT DISTINCT i.id
-            FROM `{$dbIncidents}` AS i, `{$dbMaintenance}` AS m
-            WHERE (1=0 ";
-    foreach($contracts AS $contract)
-    {
-        $sql .= "OR i.maintenanceid = {$contract} ";
-    }
-    $sql .= ")";
-    $result = mysql_query($sql);
-    while($incidents = mysql_fetch_object($result))
-    {
-        $otherincidents[] = $incidents->id;
-    }
 }
 //we're a contact(we logged in) but not on any contracts
-else
+elseif(all_contact_contracts($_SESSION['contactid'], $_SESSION['siteid']) != NULL)
 {
-    $contracts = all_contact_contracts($_SESSION['contactid'], $_SESSION['siteid']);
+    $contracts = all_contact_contracts($_SESSION['contactid'], $_SESSION['siteid']);    
+}
+if(!empty($contracts))
+{
     $sql = "SELECT DISTINCT i.id
         FROM `{$dbIncidents}` AS i, `{$dbMaintenance}` AS m
         WHERE (1=0 ";
+        
     foreach($contracts AS $contract)
     {
         $sql .= "OR i.maintenanceid = {$contract} ";
@@ -178,6 +152,7 @@ else
         $otherincidents[] = $incidents->id;
     }
 }
+
 
 if ($otherincidents != NULL)
 {

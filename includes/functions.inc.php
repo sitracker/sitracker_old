@@ -2359,7 +2359,7 @@ function incidentstatus_name($id, $type='internal')
         $type = 'name';
     }
 
-    $sql = "SELECT {$type} FROM `{$dbIncidentStatus}` WHERE id='$id'";
+    $sql = "SELECT {$type} FROM `{$dbIncidentStatus}` WHERE id='{$id}'";
     $result = mysql_query($sql);
     if (mysql_error()) trigger_error(mysql_error(),E_USER_WARNING);
 
@@ -2370,7 +2370,8 @@ function incidentstatus_name($id, $type='internal')
     else
     {
         $incidentstatus = mysql_fetch_assoc($result);
-        $name = $GLOBALS[$incidentstatus[$type]];
+        echo $GLOBALS[$incidentstatus[$type]];
+        $name = $incidentstatus[$type];
     }
     return $name;
 }
@@ -7593,12 +7594,13 @@ function contact_contracts($contactid, $siteid)
             AND sc.contactid=c.id
             AND m.var_incident_visible_contacts = 'true'
             ";
-    $result = mysql_query($sql);
-    while($row = mysql_fetch_object($result))
+    if($result = mysql_query($sql))
     {
-        $contractsarray[] = $row->id;
+        while($row = mysql_fetch_object($result))
+        {
+            $contractsarray[] = $row->id;
+        }
     }
-    
     return $contractsarray;
 }
 
@@ -7619,12 +7621,13 @@ function all_contact_contracts($contactid, $siteid)
             AND m.var_incident_visible_all = 'true'
             ";
 
-    $result = mysql_query($sql);
-    while($row = mysql_fetch_object($result))
+    if($result = mysql_query($sql))
     {
-        $contractsarray[] = $row->id;
+        while($row = mysql_fetch_object($result))
+        {
+            $contractsarray[] = $row->id;
+        }
     }
-    
     return $contractsarray;
 }
 

@@ -1134,6 +1134,7 @@ $strVariable = 'Variable';
 $strVendor = 'Vendor';
 $strVersion = 'Version';
 $strView = 'View';
+$strViewActivity = 'View Activity';
 $strViewIncidents = 'View Incidents';
 $strViewResponse = 'View Response';
 $strViewTask = 'View Task';
