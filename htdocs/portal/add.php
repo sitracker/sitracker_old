@@ -15,16 +15,16 @@ $contractid = cleanvar($_REQUEST['contractid']);
 $productid = cleanvar($_REQUEST['product']);
 
 if (!$_REQUEST['action'])
-{
-    
-    $sql = "SELECT products.*, maintenance.*, maintenance.id AS id, ";
-    $sql .= "(maintenance.incident_quantity - maintenance.incidents_used) AS availableincidents ";
-    $sql .= "FROM supportcontacts, maintenance, products ";
-    $sql .= "WHERE supportcontacts.maintenanceid=maintenance.id ";
-    $sql .= "AND maintenance.product=products.id ";
-    $sql .= "AND supportcontacts.contactid='{$_SESSION['contactid']}'";
-    $sql .= "AND maintenance.id='{$contractid}'";
+{    
+    $sql = "SELECT *, p.id AS productid, m.id AS id, ";
+    $sql .= "(m.incident_quantity - m.incidents_used) AS availableincidents ";
+    $sql .= "FROM `{$dbSupportContacts}` AS s, `{$dbMaintenance}` AS m, `{$dbProducts}` AS p ";
+    $sql .= "WHERE s.maintenanceid=m.id ";
+    $sql .= "AND m.product=p.id ";
+    $sql .= "AND s.contactid='{$_SESSION['contactid']}'";
+    $sql .= "AND m.id='{$contractid}'";
     $checkcontract = mysql_query($sql);
+    $contract = mysql_fetch_object($checkcontract);
 
     //FIXME i18n
     if(mysql_num_rows($checkcontract) == 0)
@@ -33,10 +33,10 @@ if (!$_REQUEST['action'])
         die();
     }
     
-    echo "<h2>{$strAddIncident}</h2>";
+    echo "<h2><img src='{$CONFIG['application_webpath']}images/icons/{$iconset}/32x32/add.png' alt='{$strAddIncident}' /> {$strAddIncident}</h2>";
     echo "<table align='center' width='50%' class='vertical'>";
     echo "<form action='{$_SERVER[PHP_SELF]}?page=add&action=submit' method='post'>";
-    echo "<tr><th>{$strArea}:</th><td>".softwareproduct_drop_down('software', 0, $productid, 'external')."<br />";
+    echo "<tr><th>{$strArea}:</th><td>".softwareproduct_drop_down('software', 0, $contract->productid, 'external')."<br />";
     //FIXME 3.35 which language
     echo "NOTE: Not setting one will slow down processing your incident</td></tr>";
     echo "<tr><th>{$strTitle}:</th><td><input maxlength='100' name='title' size=40 type='text' /></td></tr>";
