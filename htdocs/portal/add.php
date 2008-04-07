@@ -25,7 +25,7 @@ if (!$_REQUEST['action'])
     $sql .= "AND m.id='{$contractid}'";
     $checkcontract = mysql_query($sql);
     $contract = mysql_fetch_object($checkcontract);
-
+    $productid = $contract->productid;
     //FIXME i18n
     if(mysql_num_rows($checkcontract) == 0)
     {
@@ -36,7 +36,7 @@ if (!$_REQUEST['action'])
     echo "<h2><img src='{$CONFIG['application_webpath']}images/icons/{$iconset}/32x32/add.png' alt='{$strAddIncident}' /> {$strAddIncident}</h2>";
     echo "<table align='center' width='50%' class='vertical'>";
     echo "<form action='{$_SERVER[PHP_SELF]}?page=add&action=submit' method='post'>";
-    echo "<tr><th>{$strArea}:</th><td>".softwareproduct_drop_down('software', 0, $contract->productid, 'external')."<br />";
+    echo "<tr><th>{$strArea}:</th><td>".softwareproduct_drop_down('software', 0, $productid, 'external')."<br />";
     //FIXME 3.35 which language
     echo "NOTE: Not setting one will slow down processing your incident</td></tr>";
     echo "<tr><th>{$strTitle}:</th><td><input maxlength='100' name='title' size=40 type='text' /></td></tr>";
@@ -65,6 +65,7 @@ else //submit
     $reproduction = cleanvar($_REQUEST['reproduction']);
     $impact = cleanvar($_REQUEST['impact']);
     $servicelevel = servicelevel_id2tag(maintenance_servicelevel($contractid));
+    $productid = cleanvar($_REQUEST['productid']);
 
     $updatetext = "Opened via the portal by <b>".contact_realname($contactid)."</b>\n\n";
     if (!empty($probdesc))
@@ -142,7 +143,7 @@ else //submit
 
     plugin_do('incident_created');
 
-    html_redirect("portal.php?page=incidents", TRUE, $strIncidentAdded);
+    html_redirect("index.php", TRUE, $strIncidentAdded);
     exit;
 }
 ?>
