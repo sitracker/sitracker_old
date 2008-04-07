@@ -39,7 +39,13 @@ if ($numcontracts >= 1)
         }
         echo "</td>";
         echo "<td>{$contract->incidents_used}</td>";
-        echo "<td>".ldate($CONFIG['dateformat_date'],$contract->expirydate)."</td>";
+        echo "<td>";
+        if($contract->expirydate == -1)
+            echo $strUnlimited;
+        else
+            echo ldate($CONFIG['dateformat_date'],$contract->expirydate);
+            
+        echo "</td>";
         echo "<td>";
         if ($contract->expirydate > $now OR $contract->expirydate == -1)
         {
