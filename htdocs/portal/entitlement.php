@@ -41,7 +41,7 @@ if ($numcontracts >= 1)
         echo "<td>{$contract->incidents_used}</td>";
         echo "<td>".ldate($CONFIG['dateformat_date'],$contract->expirydate)."</td>";
         echo "<td>";
-        if ($contract->expirydate > $now)
+        if ($contract->expirydate > $now OR $contract->expirydate == -1)
         {
             echo "<a href='add.php?contractid={$contract->id}&amp;product={$contract->product}'>{$strAddIncident}</a>";
         }
