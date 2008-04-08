@@ -13,7 +13,7 @@ include 'portalheader.inc.php';
 if (empty($_REQUEST['update']))
 {
     $id = $_REQUEST['id'];
-    echo "<h2>{$strUpdateIncident} {$_REQUEST['id']}</h2>";
+    echo "<h2><img src='{$CONFIG['application_webpath']}images/icons/{$iconset}/32x32/note.png' alt='{$strUpdateIncident}' /> {$strUpdateIncident} {$_REQUEST['id']}</h2>";
     echo "<div id='update' align='center'><form action='{$_SERVER[PHP_SELF]}?page=update&amp;id=$id' method='post'>";
     echo "<p>{$strUpdate}:</p><textarea cols='50' rows='10' name='update'></textarea><br />";
     echo "<input type='submit' value=\"{$strSave}\"/></form></div>";

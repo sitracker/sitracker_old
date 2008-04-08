@@ -137,3 +137,13 @@ div#menu li:hover li ul,
     opacity: 0.75;
     -moz-opacity:0.75;
 }
+
+#portalactions
+{
+width: 20%;
+float: left;
+border: 1px dotted #9C9C9C;
+background: #F7FAFF;
+padding-left: 5px;
+}
+

@@ -19,22 +19,7 @@ $user = mysql_fetch_object($result);
 echo "<h2>[{$incidentid}] {$user->title}</h2>";
 echo "<p align='center'><strong>{$strContact}</strong>: ".contact_realname($user->contact);
 echo "<br /><strong>{$strOpened}</strong>: ".date("jS M Y", $user->opened)."</p>";
-if ($user->status != 2)
-{
-    echo "<p align='center'><a href='update.php?id={$incidentid}'>{$strUpdate}</a> | ";
 
-    //check if the customer has requested a closure
-    $lastupdate = list($update_userid, $update_type, $update_currentowner, $update_currentstatus, $update_body, $update_timestamp, $update_nextaction, $update_id)=incident_lastupdate($incidentid);
-
-    if ($lastupdate[1] == "customerclosurerequest")
-    {
-        echo "{$strClosureRequested}</td>";
-    }
-    else
-    {
-        echo "<a href='close.php?id={$incidentid}'>{$strRequestClosure}</a></p>";
-    }
-}
 
 /*
 //check if this user owns the incident
@@ -92,7 +77,25 @@ foreach ($keeptags AS $keeptag)
         $temptag[] = "[[/'.strtoupper($keeptag).']]";
     }
 }
+echo "<div id='portalactions'>";
+echo "<h3>{$strActions}</h3>";
+if ($user->status != 2)
+{
+    echo "<p><a href='update.php?id={$incidentid}'><img src='{$CONFIG['application_webpath']}images/icons/{$iconset}/16x16/note.png' alt='{$strUpdate}' /> {$strUpdate}</a></p>";
 
+    //check if the customer has requested a closure
+    $lastupdate = list($update_userid, $update_type, $update_currentowner, $update_currentstatus, $update_body, $update_timestamp, $update_nextaction, $update_id)=incident_lastupdate($incidentid);
+
+    if ($lastupdate[1] == "customerclosurerequest")
+    {
+        echo "{$strClosureRequested}</td>";
+    }
+    else
+    {
+        echo "<p><a href='close.php?id={$incidentid}'><img src='{$CONFIG['application_webpath']}images/icons/{$iconset}/16x16/close.png' /> {$strRequestClosure}</a></p>";
+    }
+}
+echo "</div>";
 echo "<div style='width:50%;margin:0 auto;'>";
 while ($update = mysql_fetch_object($result))
 {
