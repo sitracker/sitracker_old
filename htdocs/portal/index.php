@@ -13,6 +13,75 @@ include 'portalheader.inc.php';
 $showclosed = cleanvar($_REQUEST['showclosed']);
 $site = cleanvar($_REQUEST['site']);
 
+function portal_incident_table($sql)
+{
+    $result = mysql_query($sql);
+    if (mysql_error()) trigger_error(mysql_error(),E_USER_ERROR);
+    $numincidents = mysql_num_rows($result);
+    
+    if ($numincidents >= 1)
+    {
+        $shade = 'shade1';
+        $html .=  "<table align='center' width='70%'>";
+        $html .=  "<tr>";
+        $html .=  colheader('id', $GLOBALS['strID'], $sort, $order, $filter);
+        $html .=  colheader('title', $GLOBALS['strTitle'], $sort, $order, $filter);
+        $html .=  colheader('owner', $GLOBALS['strOwner'], $sort, $order, $filter);
+        $html .=  colheader('lastupdated', $GLOBALS['strLastUpdated'], $sort, $order, $filter);
+        $html .=  colheader('contact', $GLOBALS['strContact'], $sort, $order, $filter);
+        $html .=  colheader('status', $GLOBALS['strStatus'], $sort, $order, $filter);
+        if ($showclosed == "false")
+        {
+            $html .=  colheader('actions', $strOperation);
+        }
+    
+        $html .=  "</tr>\n";
+        while ($incident = mysql_fetch_object($result))
+        {
+            $html .=  "<tr class='$shade'><td>";
+            $html .=  "<a href='incident.php?id={$incident->id}'>{$incident->id}</a></td>";
+            $html .=  "<td>";
+            if (!empty($incident->softwareid))
+            {
+                $html .=  software_name($incident->softwareid)."<br />";
+            }
+    
+            $html .=  "<strong><a href='incident.php?id={$incident->id}'>{$incident->title}</a></strong></td>";
+            $html .=  "<td>".user_realname($incident->owner)."</td>";
+            $html .=  "<td>".format_date_friendly($incident->lastupdated)."</td>";
+            $html .=  "<td>{$incident->forenames} {$incident->surname}</td>";
+            $html .=  "<td>".incidentstatus_name($incident->status, external)."</td>";
+            if ($showclosed == "false")
+            {
+                $html .=  "<td><a href='update.php?id={$incident->id}'>{$strUpdate}</a> | ";
+    
+                //check if the customer has requested a closure
+                $lastupdate = list($update_userid, $update_type, $update_currentowner, $update_currentstatus, $update_body, $update_timestamp, $update_nextaction, $update_id)=incident_lastupdate($incident->id);
+    
+                if ($lastupdate[1] == "customerclosurerequest")
+                {
+                    $html .=  "{$strClosureRequested}</td>";
+                }
+                else
+                {
+                    $html .=  "<a href='close.php?id={$incident->id}'>{$strRequestClosure}</a></td>";
+                }
+            }
+            echo "</tr>";
+            if ($shade == 'shade1') $shade = 'shade2';
+            else $shade = 'shade1';
+        }
+        $html .=  "</table>";
+    }
+    else
+    {
+        $html .= "<p class='info'>{$strNoIncidents}</p>";
+    }
+    
+    return $html;
+}
+
+
 if (empty($showclosed)) $showclosed = "false";
 
 if ($showclosed == "true")
@@ -40,69 +109,8 @@ else
     $sql .= "ORDER by i.id DESC";
 }
 
-$result = mysql_query($sql);
-if (mysql_error()) trigger_error(mysql_error(),E_USER_ERROR);
-$numincidents = mysql_num_rows($result);
 
-if ($numincidents >= 1)
-{
-    $shade = 'shade1';
-    echo "<table align='center' width='70%'>";
-    echo "<tr>";
-    echo colheader('id', $strID, $sort, $order, $filter);
-    echo colheader('title', $strTitle, $sort, $order, $filter);
-    echo colheader('owner', $strOwner, $sort, $order, $filter);
-    echo colheader('lastupdated', $strLastUpdated, $sort, $order, $filter);
-    echo colheader('contact', $strContact, $sort, $order, $filter);
-    echo colheader('status', $strStatus, $sort, $order, $filter);
-    if ($showclosed == "false")
-    {
-        echo colheader('actions', $strOperation, '', '', '', '', 20);
-    }
-
-    echo "</tr>\n";
-    while ($incident = mysql_fetch_object($result))
-    {
-        echo "<tr class='$shade'><td>";
-        echo "<a href='incident.php?id={$incident->id}'>{$incident->id}</a></td>";
-        echo "<td>";
-        if (!empty($incident->softwareid))
-        {
-            echo software_name($incident->softwareid)."<br />";
-        }
-
-        echo "<strong><a href='incident.php?id={$incident->id}'>{$incident->title}</a></strong></td>";
-        echo "<td>".user_realname($incident->owner)."</td>";
-        echo "<td>".format_date_friendly($incident->lastupdated)."</td>";
-        echo "<td>{$incident->forenames} {$incident->surname}</td>";
-        echo "<td>".incidentstatus_name($incident->status, external)."</td>";
-        if ($showclosed == "false")
-        {
-            echo "<td><a href='update.php?id={$incident->id}'>{$strUpdate}</a> | ";
-
-            //check if the customer has requested a closure
-            $lastupdate = list($update_userid, $update_type, $update_currentowner, $update_currentstatus, $update_body, $update_timestamp, $update_nextaction, $update_id)=incident_lastupdate($incident->id);
-
-            if ($lastupdate[1] == "customerclosurerequest")
-            {
-                echo "{$strClosureRequested}</td>";
-            }
-            else
-            {
-                echo "<a href='close.php?id={$incident->id}'>{$strRequestClosure}</a></td>";
-            }
-        }
-        echo "</tr>";
-        if ($shade == 'shade1') $shade = 'shade2';
-        else $shade = 'shade1';
-    }
-    echo "</table>";
-}
-else
-{
-    echo "<p class='info'>{$strNoIncidents}</p>";
-}
-
+echo portal_incident_table($sql);
 echo "<p align='center'>";
 if($numcontracts == 1)
 {
@@ -192,69 +200,8 @@ if ($CONFIG['portal_site_incidents'] AND $otherincidents != NULL)
         
         $sql .= ") ORDER by i.id DESC";
     }
-    $result = mysql_query($sql);
     
-    if (mysql_error()) trigger_error(mysql_error(),E_USER_ERROR);
-    $numincidents = mysql_num_rows($result);
-
-    if ($numincidents >= 1)
-    {
-        $shade = 'shade1';
-        echo "<table align='center' width='70%'>";
-        echo "<tr>";
-        echo colheader('id', $strID, $sort, $order, $filter);
-        echo colheader('title', $strTitle, $sort, $order, $filter);
-        echo colheader('owner', $strOwner, $sort, $order, $filter);
-        echo colheader('lastupdated', $strLastUpdated, $sort, $order, $filter);
-        echo colheader('contact', $strContact, $sort, $order, $filter);
-        echo colheader('status', $strStatus, $sort, $order, $filter);
-        if ($showclosed == "false")
-        {
-            echo colheader('actions', $strOperation, '', '', '', '', 15);
-        }
-    
-        echo "</tr>\n";
-        while ($incident = mysql_fetch_object($result))
-        {
-            echo "<tr class='$shade'><td>";
-            echo "<a href='incident.php?id={$incident->id}'>{$incident->id}</a></td>";
-            echo "<td>";
-            if (!empty($incident->softwareid))
-            {
-                echo software_name($incident->softwareid)."<br />";
-            }
-    
-            echo "<strong><a href='incident.php?id={$incident->id}'>{$incident->title}</a></strong></td>";
-            echo "<td>".user_realname($incident->owner)."</td>";
-            echo "<td>".format_date_friendly($incident->lastupdated)."</td>";
-            echo "<td>{$incident->forenames} {$incident->surname}</td>";
-            echo "<td>".incidentstatus_name($incident->status, external)."</td>";
-            if ($showclosed == "false")
-            {
-                echo "<td><a href='update.php?id={$incident->id}'>{$strUpdate}</a> | ";
-    
-                //check if the customer has requested a closure
-                $lastupdate = list($update_userid, $update_type, $update_currentowner, $update_currentstatus, $update_body, $update_timestamp, $update_nextaction, $update_id)=incident_lastupdate($incident->id);
-    
-                if ($lastupdate[1] == "customerclosurerequest")
-                {
-                    echo "{$strClosureRequested}</td>";
-                }
-                else
-                {
-                    echo "<a href='close.php?id={$incident->id}'>{$strRequestClosure}</a></td>";
-                }
-            }
-            echo "</tr>";
-            if ($shade == 'shade1') $shade = 'shade2';
-            else $shade = 'shade1';
-        }
-        echo "</table>";
-        }
-        else
-        {
-            echo "<p class='info'>{$strNoIncidents}</p>";
-        }
+    echo portal_incident_table($sql);
     
 }
 
