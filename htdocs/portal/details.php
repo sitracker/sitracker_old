@@ -84,7 +84,6 @@ if (cleanvar($_REQUEST['action']) == 'update')
 }
 else
 {
-    echo "<h2>{$strYourDetails}</h2>";
     $sql = "SELECT c.username, c.password, c.forenames, c.surname, c.department, c.address1, c.address2, ";
     $sql .= "c.county, c.country, c.postcode, c.phone, c.mobile, c.fax, c.email ";
     $sql .= "FROM `{$dbContacts}` AS c, `{$dbSites}` AS s ";
@@ -94,10 +93,12 @@ else
     if (mysql_error()) trigger_error("MySQL Query Error ".mysql_error(), E_USER_ERROR);
     $user = mysql_fetch_object($query);
     
+    echo "<h2><img src='{$CONFIG['application_webpath']}images/icons/{$iconset}/32x32/contact.png' width='32' height='32' alt='' /> {$user->forenames} {$user->surname}</h2>";
+
+    
     echo "<form action='$_SERVER[PHP_SELF]?action=update' method='post'>";
     echo "<table align='center' class='vertical'>";
-    echo "<tr><th colspan='2'><h3><img src='{$CONFIG['application_webpath']}images/icons/{$iconset}/32x32/contact.png' width='32' height='32' alt='' />";
-    echo "{$user->forenames} {$user->surname}</h3></th></tr>\n";
+
     if($CONFIG['portal_usernames_can_be_changed'])
     {
         echo "<tr><th>{$strUsername}: </th><td><input name='username' value='{$user->username}' /></td></tr>";
