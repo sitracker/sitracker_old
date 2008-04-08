@@ -74,6 +74,7 @@ $sql .= "FROM `{$dbSupportContacts}` AS sc, `{$dbMaintenance}` AS m, `{$dbProduc
 $sql .= "WHERE sc.maintenanceid=m.id ";
 $sql .= "AND m.product=p.id ";
 $sql .= "AND sc.contactid='{$_SESSION['contactid']}' ";
+$sql .= "AND expirydate > (UNIX_TIMESTAMP(NOW()) - 15778463) ";
 $sql .= "ORDER BY expirydate DESC";
 
 $result = mysql_query($sql);

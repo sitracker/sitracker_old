@@ -51,6 +51,10 @@ if ($numcontracts >= 1)
         {
             echo "<a href='add.php?contractid={$contract->id}&amp;product={$contract->product}'>{$strAddIncident}</a>";
         }
+        else
+        {
+            echo $strExpired;
+        }
         echo "</td></tr>\n";
         if ($shade == 'shade1') $shade = 'shade2';
         else $shade = 'shade1';
