@@ -12,15 +12,16 @@ of the GNU General Public License, incorporated herein by reference.
 include 'portalheader.inc.php';
 
 $incidentid = $_REQUEST['id'];
-$sql = "SELECT title, contact, status FROM `{$dbIncidents}` WHERE id={$incidentid}";
+$sql = "SELECT title, contact, status, opened FROM `{$dbIncidents}` WHERE id={$incidentid}";
 $result = mysql_query($sql);
 $user = mysql_fetch_object($result);
 
-echo "<h2>{$strDetails}: {$incidentid} - {$user->title}</h2>";
-
+echo "<h2>[{$incidentid}] {$user->title}</h2>";
+echo "<p align='center'><strong>{$strContact}</strong>: ".contact_realname($user->contact);
+echo "<br /><strong>{$strOpened}</strong>: ".date("jS M Y", $user->opened)."</p>";
 if ($user->status != 2)
 {
-    echo "<p align='center'><a href='{$_SERVER[PHP_SELF]}?page=update&amp;id={$incidentid}'>{$strUpdate}</a> | ";
+    echo "<p align='center'><a href='update.php?id={$incidentid}'>{$strUpdate}</a> | ";
 
     //check if the customer has requested a closure
     $lastupdate = list($update_userid, $update_type, $update_currentowner, $update_currentstatus, $update_body, $update_timestamp, $update_nextaction, $update_id)=incident_lastupdate($incidentid);
@@ -31,7 +32,7 @@ if ($user->status != 2)
     }
     else
     {
-        echo "<a href='{$_SERVER[PHP_SELF]}?page=close&amp;id={$incidentid}'>{$strRequestClosure}</a></p>";
+        echo "<a href='close.php?id={$incidentid}'>{$strRequestClosure}</a></p>";
     }
 }
 
@@ -92,6 +93,7 @@ foreach ($keeptags AS $keeptag)
     }
 }
 
+echo "<div style='width:50%;margin:0 auto;'>";
 while ($update = mysql_fetch_object($result))
 {
     if (empty($firstid))
@@ -114,8 +116,9 @@ while ($update = mysql_fetch_object($result))
         // Put the header part (up to the <hr /> in a seperate DIV)
         if (strpos($updatebody, '<hr>') !== FALSE)
         {
-            $updatebody = "<div class='iheader'>".str_replace('<hr>',"</div>",$updatebody);
+            $updatebody = "<div class='iheader'>".str_replace("<hr>", "", $updatebody)."</div>";
         }
+        
         // Style quoted text
         // $quote[0]="/^(&gt;\s.*)\W$/m";
         // $quote[0]="/^(&gt;[\s]*.*)[\W]$/m";
@@ -174,14 +177,12 @@ while ($update = mysql_fetch_object($result))
         else
         {
             echo "<img src='{$CONFIG['application_webpath']}images/icons/{$iconset}/16x16/{$updatetypes['research']['icon']}' width='16' height='16' alt='Research' />";
-            echo "<span>Click to {$newmode}</span></a> ";
             if ($update->sla != '')
             {
                 echo "<img src='{$CONFIG['application_webpath']}images/icons/{$iconset}/16x16/{$slatypes[$update->sla]['icon']}' width='16' height='16' alt='{$update->type}' />";
             }
         }
         echo " {$updatetime}</div>";
-        echo "</div>\n";
         if ($updatebody!='')
         {
             if ($update->customervisibility == 'show')
@@ -205,6 +206,6 @@ while ($update = mysql_fetch_object($result))
         }
     }
 }
-
+echo "</div>";
 include 'htmlfooter.inc.php';
 ?>
