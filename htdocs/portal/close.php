@@ -43,6 +43,6 @@ else
     if (mysql_error()) trigger_error("MySQL Query Error ".mysql_error(), E_USER_ERROR);
 
 
-    html_redirect("portal.php?page=incidents");
+    html_redirect("index.php");
 }
 ?>
