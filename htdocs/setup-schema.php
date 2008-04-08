@@ -1817,6 +1817,10 @@ UPDATE `sit`.`interfacestyles` SET `iconset` = 'oxygen' WHERE `interfacestyles`.
 ALTER TABLE `maintenance`
 ADD `var_incident_visible_contacts` ENUM( 'true', 'false' ) NOT NULL DEFAULT 'false',
 ADD `var_incident_visible_all` ENUM( 'true', 'false' ) NOT NULL DEFAULT 'false'
+
+-- KMH 08/04/08
+ALTER TABLE `kbarticles` CHANGE `distribution` `distribution` ENUM( 'public', 'private', 'restricted' ) NOT NULL DEFAULT 'public' COMMENT 'public appears in the portal, private is info never to be released to the public, restricted is info that is sensitive but could be mentioned if asked for example' ;
+UPDATE kbarticles SET `distribution`='public' ;
 ;
 ";
 
