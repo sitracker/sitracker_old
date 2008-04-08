@@ -27,7 +27,7 @@ $title = $strBrowseKB;
 include ('htmlheader.inc.php');
 if (empty($mode) && empty($search_string)) $mode='RECENT';
 if (empty($search_string) AND empty($mode)) $search_string='a';
-echo "<h2><img src='{$CONFIG['application_webpath']}images/icons/{$iconset}/32x32/kb.png' width='32' height='32' alt='' /> ";
+echo "<h2><img src='{$CONFIG['application_webpath']}images/icons/{$iconset}/32x32/kb.png' width='32' height='32' alt='{$title}' /> ";
 echo "{$title}</h2>";
 if (strtolower($mode)=='recent') echo "<h4>{$strArticlesPublishedRecently}</h4>";
 elseif (strtolower($mode)=='today') echo "<h4>{$strArticlesPublishedToday}</h4>";
