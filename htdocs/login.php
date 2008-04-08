@@ -142,7 +142,8 @@ elseif ($CONFIG['portal'] == TRUE)
     // Invalid user and portal enabled
     // Have a look if this is a contact trying to login
     $portalpassword = cleanvar($_REQUEST['password']);
-    $sql = "SELECT * FROM `{$dbContacts}` WHERE username='{$username}' AND password='{$portalpassword}' LIMIT 1";
+    //we need plaintext and md5 as contacts created pre 3.35 will be in plaintext
+    $sql = "SELECT * FROM `{$dbContacts}` WHERE username='{$username}' AND (password='{$portalpassword}' OR password=MD5('{$portalpassword}')) LIMIT 1";
     $result = mysql_query($sql);
     if (mysql_error()) trigger_error(mysql_error(),E_USER_ERROR);
     if (mysql_num_rows($result) >= 1)

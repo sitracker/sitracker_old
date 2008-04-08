@@ -74,7 +74,9 @@ if (cleanvar($_REQUEST['action']) == 'update')
         $updatesql = "UPDATE `{$dbContacts}` SET username='$username', forenames='$forenames', surname='$surname', ";
         $updatesql .= "department='$department', address1='$address1', address2='$address2', ";
         $updatesql .= "county='$county', country='$country', postcode='$postcode', ";
-        $updatesql .= "phone='$phone', mobile='$mobile', fax='$fax', email='$email', password='$newpass' ";
+        $updatesql .= "phone='$phone', mobile='$mobile', fax='$fax', email='$email'";
+        if($newpass != '')
+            $updatesql .= ", password=MD5($newpass) ";
         $updatesql .= "WHERE id='{$_SESSION['contactid']}'";
         mysql_query($updatesql);
         if (mysql_error()) trigger_error("MySQL Query Error ".mysql_error(), E_USER_ERROR);
