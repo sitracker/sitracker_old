@@ -14,7 +14,8 @@ require ('db_connect.inc.php');
 
 session_name($CONFIG['session_name']);
 session_start();
-if (function_exists('session_regenerate_id')) session_regenerate_id();
+
+session_regenerate();
 if (!version_compare(phpversion(),"4.3.3",">=")) setcookie(session_name(), session_id(),ini_get("session.cookie_lifetime"), "/");
 
 $language = $_POST['lang'];
@@ -78,7 +79,7 @@ elseif (authenticate($username, $password) == 1)
         //FIXME need to implement this trigger
         trigger("TRIGGER_LANGUAGE_DIFFERS", array('currentlang' => $user->var_i18n, 'sessionlang' => $_SESSION['lang']));
     }
-    
+
     if ($user->var_i18n != $CONFIG['default_i18n'] AND $_SESSION['lang']=='')
     {
         $_SESSION['lang'] = $user->var_i18n;

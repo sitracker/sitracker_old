@@ -7572,7 +7572,7 @@ function admin_contact_contracts($contactid, $siteid)
             $contractsarray[] = $row->id;
         }
     }
-    
+
     return $contractsarray;
 }
 
@@ -7633,25 +7633,42 @@ function all_contact_contracts($contactid, $siteid)
     return $contractsarray;
 }
 
+
 function valid_username($username)
 {
     $username = cleanvar($username);
     $valid = TRUE;
-    
+
     $tables = array('dbUsers', 'dbContacts');
-    
+
     foreach($tables AS $table)
-    {    
+    {
         $sql = "SELECT username FROM `{$GLOBALS[$table]}` WHERE username='{$username}'";
         if($result = mysql_query($sql) AND mysql_num_rows($result) != 0)
         {
             $valid = FALSE;
         }
     }
-    
+
     return $valid;
-    
+
 }
+
+
+/**
+ * Update the current session id with a newly generated one
+ * @author Ivan Lucas
+ * @note Wrap the php function for different versions of php
+**/
+function session_regenerate()
+{
+    if (function_exists('session_regenerate_id'))
+    {
+        if (!version_compare(phpversion(),"5.1.0",">=")) session_regenerate_id(TRUE);
+        else session_regenerate_id();
+    }
+}
+
 
 // -------------------------- // -------------------------- // --------------------------
 // leave this section at the bottom of functions.inc.php ================================

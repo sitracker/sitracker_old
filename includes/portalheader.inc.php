@@ -48,10 +48,7 @@ if (!isset($_SESSION['portalauth']) OR $_SESSION['portalauth'] == FALSE)
 else
 {
     // Attempt to prevent session fixation attacks
-    if (function_exists('session_regenerate_id'))
-    {
-        session_regenerate_id();
-    }
+    session_regenerate();
 
     if (!version_compare(phpversion(),"4.3.3",">="))
     {
