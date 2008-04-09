@@ -7662,11 +7662,11 @@ function valid_username($username)
 **/
 function session_regenerate()
 {
-    if (function_exists('session_regenerate_id'))
-    {
-        if (!version_compare(phpversion(),"5.1.0",">=")) session_regenerate_id(TRUE);
-        else session_regenerate_id();
-    }
+//     if (function_exists('session_regenerate_id'))
+//     {
+//         if (!version_compare(phpversion(),"5.1.0",">=")) session_regenerate_id(FALSE);
+//         else session_regenerate_id();
+//     }
 }
 
 
@@ -7698,10 +7698,23 @@ function contract_software()
         while($row = mysql_fetch_object($result))
         {
             $softwarearray[] = $row->id;
-        }    
+        }
     }
-    
+
     return $softwarearray;
+}
+
+
+/**
+ * HTML for an ajax help link
+ * @author Ivan Lucas
+ * @param $context string.  The base filename of the popup help file in htdocs/help/en-GB/ (without the .txt extension)
+**/
+function help_link($context)
+{
+    $html = "<span class='helplink'>[<a href='javascript:void();' onmouseover=\"contexthelp(this, '$context');\">?<span></span></a>]</span>";
+
+    return $html;
 }
 
 

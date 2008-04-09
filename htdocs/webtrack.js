@@ -269,6 +269,13 @@ function resetTextAreaLength ( e )
 }
 
 
+function get_random()
+{
+    var ranNum= Math.floor(Math.random()*1000000000000);
+    return ranNum;
+}
+
+
 // Display/Hide the time to next action fields
 // Author: Ivan Lucas
 function update_ttna() {
@@ -288,4 +295,37 @@ function update_ttna() {
         $('ttnadate').hide();
         }
 }
+
+
+function hidecontexthelp(event) {
+  var element = event.element();
+   element.firstDescendant().style.display = 'none';
+  //element.addClassName('active');
+//   alert(element);
+    element.stopObserving('blur', hidecontexthelp);
+    element.stopObserving('click', hidecontexthelp);
+}
+
+function contexthelp(elem, context)
+{
+    elem.firstDescendant().style.display = 'block';
+    if (elem.firstDescendant().innerHTML == '')
+    {
+        new Ajax.Request('ajaxdata.php?action=contexthelp&context=' + context + '&rand=' + get_random(),
+            {
+                method:'get',
+                    onSuccess: function(transport)
+                    {
+                        var response = transport.responseText || "no response text";
+                        if (transport.responseText)
+                        {
+                            elem.firstDescendant().innerHTML = transport.responseText;
+                        }
+                    },
+                    onFailure: function(){ alert('Something went wrong...') }
+            });
+    }
+    elem.observe('mouseout', hidecontexthelp);
+}
+
 

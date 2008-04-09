@@ -190,7 +190,7 @@ div.window
 div.iheader { color: #666; margin-bottom:5px;}
 
 /* Information and Errors */
-sup.red { color: #F00; font-size: 125%; }
+sup.red { color: #F00; font-size: 125%; } /* FIXME doesn't need a class for this */
 td sup { color: #444; }
 p.tip,p.info, p.warning, p.error, h5.warning, h5.error
 {

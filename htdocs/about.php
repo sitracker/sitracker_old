@@ -59,7 +59,7 @@ echo "<tr><td class='shade2' colspan='2'>";
 ?>
 <p align='center'><a href='http://sitracker.sourceforge.net'>SiT! Support Incident Tracker</a> is Copyright &copy; 2000-<?php echo date('Y'); ?> <a href='http://www.salfordsoftware.co.uk/'>Salford Software Ltd.</a> and Contributors<br />
 Licensed under the GNU General Public License.<br />
-Salford Software, Lancastrian Office Centre, Talbot Road, Old Trafford, Manchester. M32 0FP.</p>
+Salford Software, Lancastrian Office Centre, Talbot Road, Old Trafford, Manchester. M32 0FP. UK</p>
 
 <p align='center'>Incorporating:</p>
 

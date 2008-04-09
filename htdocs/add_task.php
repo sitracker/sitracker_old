@@ -172,8 +172,8 @@ else
                 echo user_drop_down('taskuser', $_SESSION['formdata']['add_task']['taskuser'], FALSE);
             else
                 echo user_drop_down('taskuser', $sit[2], FALSE);
-            echo "</td></tr>";
-            echo "<tr><th>{$strPrivacy}</th>";
+            echo help_link('TaskUser')."</td></tr>";
+            echo "<tr><th>{$strPrivacy}".help_link('TaskPrivacy')."</th>";
             echo "<td>";
             if ($_SESSION['formdata']['add_task']['distribution'] == 'public')
             {

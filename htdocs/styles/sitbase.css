@@ -147,3 +147,20 @@ background: #F7FAFF;
 padding-left: 5px;
 }
 
+.helplink { vertical-align: super; color: #555; margin-left: 2px; font-size: 50%; }
+.helplink a { text-decoration: none; cursor: help; position: relative; }
+.helplink a span { display: none;     position: absolute;
+    top: 20px;
+    left: -10px;
+    width: 125px;
+    padding: 5px;
+    z-index: 100;
+    background: #CC0000;
+    color: #fff;
+    -moz-border-radius: 5px; /* this works only in camino/firefox */
+    -webkit-border-radius: 5px; /* this is just for Safari */
+    cursor: pointer;
+}
+.helplink a:hover { font-size: 99%; /* this is just for IE */ text-decoration: underline; }
+/* .helplink a:hover span { display: block; } */
+
