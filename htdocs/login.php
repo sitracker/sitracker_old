@@ -159,9 +159,30 @@ elseif ($CONFIG['portal'] == TRUE)
         // Customer session
         // Valid user
         $_SESSION['portalauth'] = TRUE;
-
         $_SESSION['contactid'] = $contact->id;
         $_SESSION['siteid'] = $contact->siteid;
+        
+        //if we're an admin contact
+        if(admin_contact_contracts($_SESSION['contactid'], $_SESSION['siteid']) != NULL)
+        {
+            $_SESSION['contracts'] = admin_contact_contracts($_SESSION['contactid'], $_SESSION['siteid']);
+            $_SESSION['usertype'] = 'admin';
+        }
+        //if we're a named contact
+        elseif(contact_contracts($_SESSION['contactid'], $_SESSION['siteid']) != NULL)
+        {
+            $_SESSION['contracts'] = contact_contracts($_SESSION['contactid'], $_SESSION['siteid']);
+            $_SESSION['usertype'] = 'contact';
+        }
+        //we're a contact(we logged in) but not on any contracts
+        elseif(all_contact_contracts($_SESSION['contactid'], $_SESSION['siteid']) != NULL)
+        {
+            $_SESSION['contracts'] = all_contact_contracts($_SESSION['contactid'], $_SESSION['siteid']);
+            $_SESSION['usertype'] = 'user';
+        }
+
+        
+        
         header("Location: portal/");
         exit;
     }

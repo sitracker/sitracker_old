@@ -7670,6 +7670,41 @@ function session_regenerate()
 }
 
 
+/**
+ * Finds the software associated with a contract
+ * @author Ivan Lucas
+ * @note Wrap the php function for different versions of php
+**/
+function contract_software()
+{
+    $contract = intval($contract);
+    $sql = "SELECT s.id
+            FROM `{$GLOBALS['dbMaintenance']}` AS m,
+                `{$GLOBALS['dbProducts']}` AS p,
+                `{$GLOBALS['dbSoftwareProducts']}` AS sp,
+                `{$GLOBALS['dbSoftware']}` AS s
+            WHERE m.product=p.id
+            AND p.id=sp.productid
+            AND sp.softwareid=s.id ";
+    $sql .= "AND (1=0 ";
+    foreach($_SESSION['contracts'] AS $contract)
+    {
+        $sql .= "OR m.id={$contract} ";
+    }
+    $sql .= ")";
+
+    if($result = mysql_query($sql))
+    {
+        while($row = mysql_fetch_object($result))
+        {
+            $softwarearray[] = $row->id;
+        }    
+    }
+    
+    return $softwarearray;
+}
+
+
 // -------------------------- // -------------------------- // --------------------------
 // leave this section at the bottom of functions.inc.php ================================
 

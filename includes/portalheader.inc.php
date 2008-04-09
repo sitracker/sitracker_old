@@ -55,7 +55,6 @@ else
         setcookie(session_name(), session_id(),ini_get("session.cookie_lifetime"), "/");
     }
 }
-
 // External variables
 $page = cleanvar($_REQUEST['page']);
 $contractid = cleanvar($_REQUEST['contractid']);
@@ -86,15 +85,20 @@ if($numcontracts == 1)
     //only one contract
     $contractobj = mysql_fetch_object($result);
     $contractid = $contractobj->id;
-    $productid  = $contractobj->product;
-    echo "<li><a href='add.php?contractid={$contractid}&amp;product={$productid}'>{$strAddIncident}</a></li>";
+    echo "<li><a href='add.php?contractid={$contractid}'>{$strAddIncident}</a></li>";
 }
 else
 {
     echo "<li><a href='entitlement.php'>{$strEntitlement}</a></li>";
 }
+
+if($CONFIG['kb_enabled'] AND $CONFIG['portal_kb_enabled'])
+{
+    echo "<li><a href='kb.php'>{$strKnowledgeBase}</a></li>";
+}
+
 echo "<li><a href='details.php'>{$strDetails}</a></li>";
-if(admin_contact_contracts($_SESSION['contactid'], $_SESSION['siteid']) != NULL)
+if($_SESSION['usertype'] == 'admin')
     echo "<li><a href='admin.php'>{$strAdmin}</a></li>";
 echo "<li><a href='../logout.php'>{$strLogout}</a></li>";
 

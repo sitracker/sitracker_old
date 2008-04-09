@@ -15,6 +15,7 @@ $site = cleanvar($_REQUEST['site']);
 
 function portal_incident_table($sql)
 {
+    global $CONFIG;
     $result = mysql_query($sql);
     if (mysql_error()) trigger_error(mysql_error(),E_USER_ERROR);
     $numincidents = mysql_num_rows($result);
@@ -48,7 +49,7 @@ function portal_incident_table($sql)
     
             $html .=  "<strong><a href='incident.php?id={$incident->id}'>{$incident->title}</a></strong></td>";
             $html .=  "<td>".user_realname($incident->owner)."</td>";
-            $html .=  "<td>".format_date_friendly($incident->lastupdated)."</td>";
+            $html .=  "<td>".ldate($CONFIG['dateformat_datetime'], $incident->lastupdated)."</td>";
             $html .=  "<td>{$incident->forenames} {$incident->surname}</td>";
             $html .=  "<td>".incidentstatus_name($incident->status, external)."</td>";
             if ($showclosed == "false")
@@ -126,22 +127,7 @@ echo "<img src='{$CONFIG['application_webpath']}images/icons/{$iconset}/16x16/ad
 
 //find list of other incidents we're allowed to see
 $otherincidents = array();
-
-//if we're an admin contact
-if(admin_contact_contracts($_SESSION['contactid'], $_SESSION['siteid']) != NULL)
-{
-    $contracts = admin_contact_contracts($_SESSION['contactid'], $_SESSION['siteid']);    
-}
-//if we're a named contact
-elseif(contact_contracts($_SESSION['contactid'], $_SESSION['siteid']) != NULL)
-{
-    $contracts = contact_contracts($_SESSION['contactid'], $_SESSION['siteid']);
-}
-//we're a contact(we logged in) but not on any contracts
-elseif(all_contact_contracts($_SESSION['contactid'], $_SESSION['siteid']) != NULL)
-{
-    $contracts = all_contact_contracts($_SESSION['contactid'], $_SESSION['siteid']);    
-}
+$contracts = $_SESSION['contracts'];
 if(!empty($contracts))
 {
     $sql = "SELECT DISTINCT i.id
@@ -165,7 +151,7 @@ if ($CONFIG['portal_site_incidents'] AND $otherincidents != NULL)
 {
     if ($showclosed == "true")
     {
-        echo "<h2>You Site's Closed Incidents</h2>";
+        echo "<h2>{$strYourSitesIncidents}</h2>";
         $sql = "SELECT DISTINCT i.id AS id, i.*, c.forenames, c.surname ";
         $sql .= "FROM `{$dbIncidents}` AS i, `{$dbContacts}` AS c, `{$dbSites}` AS s ";
         $sql .= "WHERE status = 2 ";
@@ -184,7 +170,7 @@ if ($CONFIG['portal_site_incidents'] AND $otherincidents != NULL)
     }
     else
     {
-        echo "<h2>Your Site Incidents</h2>";
+        echo "<h2>{$strYourSitesClosedIncidents}</h2>";
         $sql = "SELECT DISTINCT i.id AS id, i.*, c.forenames, c.surname ";
         $sql .= "FROM `{$dbIncidents}` AS i, `{$dbContacts}` AS c, `{$dbSites}` AS s ";
         $sql .= "WHERE status != 2 ";

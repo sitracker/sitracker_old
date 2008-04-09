@@ -216,4 +216,11 @@ $CONFIG['dont_chase_maintids'] = array(1 => 1); // maintence IDs not to chase
 $CONFIG['portal_site_incidents'] = TRUE; //users in the portal can view site incidents based on the contract options
 $CONFIG['portal_usernames_can_be_changed'] = TRUE; //portal usernames can be changed by the users
 
+//Enable/Disable sections
+$CONFIG['kb_enabled'] = TRUE;
+$CONFIG['portal_kb_enabled'] = TRUE;
+$CONFIG['tasks_enabled'] = TRUE;
+$CONFIG['calendar_enabled'] = TRUE;
+
+
 ?>
