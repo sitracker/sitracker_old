@@ -973,6 +973,7 @@ $strShowClosedIncidents = 'Show closed incidents';
 $strShowExpired = 'Show Expired';
 $strShowingAllArticles = 'Showing all articles';
 $strShowingAllIncidents = 'Showing all incidents';
+$strShowingXtoXofX = 'Showing %d to %d of %d';
 $strShowMine = 'Show Mine';
 $strShowingOnlyRelevantArticles = 'Showing only relevant articles';
 $strShowOnlyRelevant = 'Show only relevant';

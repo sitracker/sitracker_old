@@ -29,7 +29,7 @@ $view = $_GET['view'];
 $end = $start + $perpage;
 $filter = array('start' => $start, 'view' => $view);
 
-$sql = "SELECT k.*, kbs.*, s.name FROM `{$dbKBArticles}` AS k, `{$dbKBSoftware}` as kbs, `{$dbSoftware}` as s ";
+$sql = "SELECT DISTINCT k.*, kbs.*, s.name FROM `{$dbKBArticles}` AS k, `{$dbKBSoftware}` as kbs, `{$dbSoftware}` as s ";
 $sql .= "WHERE k.distribution='public' ";
 $sql .= "AND kbs.docid=k.docid ";
 $sql .= "AND kbs.softwareid=s.id ";
@@ -56,7 +56,7 @@ else
 
 //get the full SQL so we can see the total rows
 $countsql = $sql;
-
+$sql .= "GROUP BY k.docid ";
 if (!empty($sort))
 {
     if ($sort=='title') $sql .= "ORDER BY k.title ";
@@ -72,7 +72,8 @@ else
 {
     $sql .= " ORDER BY k.docid DESC ";
 }
-$sql .= " LIMIT {$start}, {$end} ";
+$sql .= " LIMIT {$start}, {$perpage} ";
+
 if($result = mysql_query($sql))
 {
     $countresult = mysql_query($countsql);
@@ -81,7 +82,8 @@ if($result = mysql_query($sql))
     {
         $end = $numtotal;
     }
-    echo "Showing {$start} to {$end} of {$numtotal}";
+    echo "<p>".sprintf($strShowingXtoXofX, $start+1, $end, $numtotal)."</p>";
+
     echo "<table align='center' width='80%'>";
     echo colheader('id', $strID, $sort, $order, $filter, '', '5');
     echo colheader('title', $strTitle, $sort, $order, $filter);
@@ -108,8 +110,6 @@ if($result = mysql_query($sql))
             $shade = 'shade1';
     }
     echo "<p align='center'>";
-
-
 
     if(!empty($_GET['start']))
     {
