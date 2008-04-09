@@ -82,10 +82,10 @@ Copyright &copy; Kellan Elliott-McCrea. Licensed under the GPLv2.</p>
 Copyright &copy; 2005-2008 Sam Stephenson. Licensed under the MIT license.</p>
 
 <p align='center'>Icons from the Crystal Project by <a href='http://www.everaldo.com/'>Everaldo Coelho</a><br />
-Copyright (c)  2006-2007 Everaldo Coelho. Licensed under the LGPLv2</p>
+Copyright &copy;  2006-2007 Everaldo Coelho. Licensed under the LGPLv2</p>
 
 <p align='center'>Icons from the <a href='http://www.oxygen-icons.org/'>Oxygen Project</a><br />
-Copyright (c) 2008 The Oxygen Project. Licensed under the LGPLv2</p>
+Copyright &copy; 2008 The Oxygen Project. Licensed under the LGPLv2</p>
 
 </td></tr>
 <?php
