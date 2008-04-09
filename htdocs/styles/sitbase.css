@@ -148,7 +148,7 @@ padding-left: 5px;
 }
 
 .helplink { vertical-align: super; color: #555; margin-left: 2px; font-size: 50%; }
-.helplink a { text-decoration: none; cursor: help; position: relative; }
+.helplink a { text-decoration: none; cursor: help; position: relative; color: #CC0000; }
 .helplink a span { display: none;     position: absolute;
     top: 20px;
     left: -10px;
@@ -160,7 +160,8 @@ padding-left: 5px;
     -moz-border-radius: 5px; /* this works only in camino/firefox */
     -webkit-border-radius: 5px; /* this is just for Safari */
     cursor: pointer;
+    text-align: left;
 }
-.helplink a:hover { font-size: 99%; /* this is just for IE */ text-decoration: underline; }
+.helplink a:hover { font-size: 99%; /* this is just for IE */ text-decoration: underline; color: #CC0000; }
 /* .helplink a:hover span { display: block; } */
 
