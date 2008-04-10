@@ -326,9 +326,10 @@ elseif ($mode=='save')
     }
     else
     {
-        //we updated our email, dimiss notice
-        $sql = "DELETE FROM `{$dbUserNotices}` WHERE userid={$sit[2]} and noticeid=2";
-        @mysql_query($sql);
+        //FIXME use triggers?
+        ////we updated our email, dimiss notice
+        //$sql = "DELETE FROM `{$dbUserNotices}` WHERE userid={$sit[2]} and noticeid=2";
+        //@mysql_query($sql);
     }
     // Check email address is unique (discount disabled accounts)
     $sql = "SELECT COUNT(id) FROM `{$dbUsers}` WHERE status > 0 AND email='$email'";

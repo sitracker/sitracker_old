@@ -134,7 +134,7 @@ elseif (authenticate($username, $password) == 1)
     // redirect
     if (empty($page))
     {
-        header ("Location: main.php?pg=welcome");
+        header ("Location: main.php");
         exit;
     }
     else
