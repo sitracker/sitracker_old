@@ -5739,30 +5739,6 @@ function create_incident_feedback($formid, $incidentid)
 }
 
 
-function random_tip()
-{
-    global $CONFIG;
-    $delim="\n";
-    if (!file_exists($CONFIG['tipsfile']))
-    {
-        trigger_error("Tips file '{$CONFIG['tipsfile']}' was not found!  check your paths!",E_USER_WARNING);
-    }
-    else
-    {
-        $fp = fopen($CONFIG['tipsfile'], "r");
-        if (!$fp) trigger_error("{$CONFIG['tipsfile']} was not found!", E_USER_WARNING);
-    }
-    $contents = fread($fp, filesize($CONFIG['tipsfile']));
-    $tips = explode($delim,$contents);
-    fclose($fp);
-    srand((double)microtime()*1000000);
-    $atip = (rand(1, sizeof($tips)) - 1);
-    $thetip = "#".($atip+1).": ".$tips[$atip];
-
-    return $thetip;
-}
-
-
 function file_permissions_info($perms)
 {
     if (($perms & 0xC000) == 0xC000) $info = 's';
