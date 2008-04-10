@@ -154,6 +154,7 @@ padding-left: 5px;
 border:1px solid #CCCCCC;
 padding:3px 3px 3px 20px;
 background:transparent url('../images/searchbg.png') no-repeat scroll 4px center;
+color: #888;
 }
 
 .helplink { vertical-align: super; color: #555; margin-left: 2px; font-size: 50%; }
