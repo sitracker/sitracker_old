@@ -60,7 +60,7 @@ if (isset($refresh) && $refresh != 0)
 
 echo "<script src='{$CONFIG['application_webpath']}scripts/prototype/prototype.js' type='text/javascript' />\n";
 echo "<script src='{$CONFIG['application_webpath']}webtrack.js' type='text/javascript' />\n";
-// To include a script for a single page, add the filename to the $pagescript variable before including htmlheader.inc.php
+// To include a script for a single page, add the filename to the $pagescripts variable before including htmlheader.inc.php
 if (is_array($pagescripts))
 {
     foreach ($pagescripts AS $pscript)
