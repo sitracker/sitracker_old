@@ -251,7 +251,7 @@ switch ($type)
             switch ($queue)
             {
                 case 1: // Action Needed
-                    echo "<h2>{$strOtherIncidents}: <span style='color: Red'>{$strActionNeeded}</span></h2>\n";
+                    echo "<h2>{$strOtherIncidents}: <span style='color: Red'>{$strActionNeeded}</span>".help_link("OtherIncidents")."</h2>\n";
                     $sql .= "AND (status!='2') ";  // not closed
                     // the "1=2" obviously false else expression is to prevent records from showing unless the IF condition is true
                     $sql .= "AND ((timeofnextaction > 0 AND timeofnextaction < $now) OR ";
