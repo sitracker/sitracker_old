@@ -1,2 +1,3 @@
-The Dashboard allows you access Dashlets, plugins that display various bits of information.<br /><br />
+The Dashboard allows you to access Dashlets, plugins that display various bits of information.
+
 You can drag and rearrange the Dashlets or click the 'Manage your Dashboard' link on the right-hand side to add new Dashlets or remove them completely.

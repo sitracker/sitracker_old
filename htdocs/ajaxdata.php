@@ -47,7 +47,7 @@ switch($action)
             fclose($fp);
         }
         else echo "Error: Missing helpfile '{$context}.txt'";
-        echo $helptext;
+        echo nl2br($helptext);
     break;
 
     default : break;
