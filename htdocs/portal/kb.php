@@ -114,7 +114,7 @@ if($result = mysql_query($sql))
     if(!empty($_GET['start']))
     {
         echo " <a href='{$_SERVER['PHP_SELF']}?start=";
-        echo $start-$perpage."'>{$strPrevious}</a> ";
+        echo $start-$perpage."&amp;sort={$sort}&amp;order={$order}&amp;view={$view}nerw'>{$strPrevious}</a> ";
     }
     else
     {
@@ -129,7 +129,6 @@ if($result = mysql_query($sql))
     {
         echo $strNext;
     }
-    echo "<p align='center'>";
 }
 else
 {
