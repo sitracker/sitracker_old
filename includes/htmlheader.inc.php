@@ -58,17 +58,26 @@ if (isset($refresh) && $refresh != 0)
    echo "<meta http-equiv='refresh' content='{$refresh}' />\n";
 }
 
-echo "<script src='{$CONFIG['application_webpath']}scripts/prototype/prototype.js' type='text/javascript'></script>\n";
-echo "<script src='{$CONFIG['application_webpath']}webtrack.js' type='text/javascript'></script>\n";
+echo "<script src='{$CONFIG['application_webpath']}scripts/prototype/prototype.js' type='text/javascript' />\n";
+echo "<script src='{$CONFIG['application_webpath']}webtrack.js' type='text/javascript' />\n";
+// To include a script for a single page, add the filename to the $pagescript variable before including htmlheader.inc.php
+if (is_array($pagescripts))
+{
+    foreach ($pagescripts AS $pscript)
+    {
+        echo "<script src='{$CONFIG['application_webpath']}scripts/{$pscript}' type='text/javascript' />\n";
+    }
+    unset($pagescripts, $pscript);
+}
 // javascript popup date library
-echo "<script src='{$CONFIG['application_webpath']}calendar.js' type='text/javascript'></script>\n";
+echo "<script src='{$CONFIG['application_webpath']}calendar.js' type='text/javascript' />\n";
 
 if ($sit[0] != '')
 {
     echo "<link rel='search' type='application/opensearchdescription+xml' title='{$CONFIG['application_shortname']} Search' href='{$CONFIG['application_webpath']}opensearch.php' />";
 }
 
-echo "</head>\n";
+echo "\n</head>\n";
 echo "<body>\n";
 echo "<h1 id='apptitle'>{$CONFIG['application_name']}</h1>\n";
 // Show menu if logged in
