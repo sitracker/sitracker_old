@@ -196,7 +196,7 @@ switch ($_REQUEST['mode'])
             {
                 $userarr[$userobj->id] = $userobj->realname;
             }
-            echo "<form>";
+            echo "<form action=''>";
             echo "<p>{$strUser}: ".array_drop_down($userarr, 'user', $selecteduser, "onchange=\"window.location.href='{$_SERVER['PHP_SELF']}?user=' + this.options[this.selectedIndex].value;\"")."</p>\n";
             echo "</form>\n";
         }
