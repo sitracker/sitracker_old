@@ -185,24 +185,12 @@ if ($sit[0] != '')
     }
     echo "</ul>\n\n";
 
-    echo "<script type='text/javascript'>";
-    ?>
-        function jumpto()
-        {
-            incident_details_window(document.jumptoincident.incident.value, 'incident'+document.jumptoincident.incident.value);
-        }
-
-        function clear()
-        {
-            document.jumptoincident.incident.value = "";
-        }
-    <?php
-    echo "</script>";
-
-    echo "<div align='right'>";
+    echo "<div id='topsearch'>";
     echo "<form name='jumptoincident' action='' method='post'>";
-    echo "<input type='text' name='incident' id='incident' size='20' value='{$strIncidentNumOrSearchTerm}' onclick='clear()'/> ";
-    echo "<input type='image' src='{$CONFIG['application_webpath']}images/icons/{$iconset}/16x16/find.png' alt='{$strGo}' onclick='jumpto()' />";
+    echo "<input type='text' name='incident' id='searchfield' size='20' value='{$strIncidentNumOrSearchTerm}'
+    onblur=\"if(this.value == '') this.value='{$strIncidentNumOrSearchTerm}';\" onfocus=\"if(this.value == '{$strIncidentNumOrSearchTerm}') this.value='';\"
+    onclick='clearjumpto()'/> ";
+    // echo "<input type='image' src='{$CONFIG['application_webpath']}images/icons/{$iconset}/16x16/find.png' alt='{$strGo}' onclick='jumpto()' />";
     echo "</form>";
     echo "</div>";
     echo "</div>\n";
@@ -240,7 +228,7 @@ if ($noticeaction == 'dismiss_notice')
 if ($sit[0] != '')
 {
     // Check users email address
-    if (empty($_SESSION['email']) OR !preg_match('/^[a-z0-9_\+-]+(\.[a-z0-9_\+-]+)*@[a-z0-9-]+(\.[a-z0-9-]+)*\.([a-z]{2,4})$/',$_SESSION['email'])) 
+    if (empty($_SESSION['email']) OR !preg_match('/^[a-z0-9_\+-]+(\.[a-z0-9_\+-]+)*@[a-z0-9-]+(\.[a-z0-9-]+)*\.([a-z]{2,4})$/',$_SESSION['email']))
     {
         echo "<p class='error'>{$strInvalidEmailAddress} - <a href='edit_profile.php'>{$strEditEmail}</a></p>";
     }
@@ -249,7 +237,7 @@ if ($sit[0] != '')
     //display global notices
     $noticesql = "SELECT * FROM `${GLOBALS['dbNotices']}` ";
     // Don't show more than 20 notices, saftey cap
-    $noticesql .= "WHERE userid={$sit[2]} ORDER BY timestamp DESC LIMIT 20"; 
+    $noticesql .= "WHERE userid={$sit[2]} ORDER BY timestamp DESC LIMIT 20";
     $noticeresult = mysql_query($noticesql);
     if (mysql_error()) trigger_error(mysql_error(),E_USER_WARNING);
     if (mysql_num_rows($noticeresult) > 0)
@@ -286,7 +274,7 @@ if ($sit[0] != '')
             {
                 $class = 'info';
             }
-            
+
             echo "<div class='{$class}'><p class='info'>";
             echo "<span>(<a href='{$_SERVER[PHP_SELF]}?noticeaction=dismiss_notice&amp;noticeid={$notice->id}{$url}'>{$strDismiss}</a>)</span>";
             if (substr($notice->text, 0, 4) == '$str')
@@ -313,7 +301,7 @@ if ($sit[0] != '')
                 }
                 echo "</a>";
             }
-        
+
         echo "<sub>";
         echo "<em> ".format_date_friendly(strtotime($notice->timestamp))."</em>";
         echo "</sub></p></div>";

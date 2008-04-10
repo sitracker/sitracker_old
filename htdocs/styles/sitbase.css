@@ -147,6 +147,15 @@ background: #F7FAFF;
 padding-left: 5px;
 }
 
+
+#topsearch { text-align: right; }
+#topsearch form {margin: 0px; }
+#topsearch #searchfield {
+border:1px solid #CCCCCC;
+padding:3px 3px 3px 20px;
+background:transparent url('../images/searchbg.png') no-repeat scroll 4px center;
+}
+
 .helplink { vertical-align: super; color: #555; margin-left: 2px; font-size: 50%; }
 .helplink a { text-decoration: none; cursor: help; position: relative; color: #CC0000; }
 .helplink a span { display: none;     position: absolute;
@@ -164,4 +173,5 @@ padding-left: 5px;
 }
 .helplink a:hover { font-size: 99%; /* this is just for IE */ text-decoration: underline; color: #CC0000; }
 /* .helplink a:hover span { display: block; } */
+
 

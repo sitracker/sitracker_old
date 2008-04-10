@@ -329,3 +329,13 @@ function contexthelp(elem, context)
 }
 
 
+function jumpto()
+{
+    incident_details_window(document.jumptoincident.incident.value, 'incident'+document.jumptoincident.incident.value);
+}
+
+
+function clearjumpto()
+{
+    document.jumptoincident.incident.value = "";
+}
