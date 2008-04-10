@@ -34,7 +34,6 @@ while ($dashboard = mysql_fetch_object($result))
 
 // Valid user
 include('htmlheader.inc.php');
-echo "<h2><img src='{$CONFIG['application_webpath']}images/icons/{$iconset}/32x32/dashboard.png' alt='' /> {$strDashboard}".help_link("Dashboard")."</h2>";
 echo "<script type=\"text/javascript\" src=\"scripts/dojo/dojo.js\"></script>";
 
 $sql = "SELECT dashboard FROM users WHERE id = '".$_SESSION['userid']."'";
@@ -77,7 +76,7 @@ $colstr = $col0.",".$col1.",".$col2;
 $cols0 = substr($cols0, 0, -1);
 $cols1 = substr($cols1, 0, -1);
 $cols2 = substr($cols2, 0, -1);
-echo "<p style='float: right; top: -10px; position: relative;'><a href='manage_user_dashboard.php' title='{$strManageYourDashboard}'>";
+echo "<p style='float: right; top: -10px; position: relative;'>".help_link("Dashboard")." <a href='manage_user_dashboard.php' title='{$strManageYourDashboard}'>";
 echo $strManageYourDashboard;
 echo " <img src='{$CONFIG['application_webpath']}images/icons/{$iconset}/16x16/dashboardadd.png' width='16' height='16' alt='' style='border: 0px;' /></a> ";
 echo "<a href=\"javascript:save_layout();\" id='savelayout' title='Save Dashboard Layout Manually'><img src='{$CONFIG['application_webpath']}images/icons/{$iconset}/16x16/save.png' width='16' height='16' alt='' style='border: 0px;' /></a></p>";
