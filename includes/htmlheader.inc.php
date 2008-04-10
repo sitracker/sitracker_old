@@ -58,19 +58,19 @@ if (isset($refresh) && $refresh != 0)
    echo "<meta http-equiv='refresh' content='{$refresh}' />\n";
 }
 
-echo "<script src='{$CONFIG['application_webpath']}scripts/prototype/prototype.js' type='text/javascript' />\n";
-echo "<script src='{$CONFIG['application_webpath']}webtrack.js' type='text/javascript' />\n";
+echo "<script src='{$CONFIG['application_webpath']}scripts/prototype/prototype.js' type='text/javascript'></script>\n";
+echo "<script src='{$CONFIG['application_webpath']}webtrack.js' type='text/javascript'></script>\n";
 // To include a script for a single page, add the filename to the $pagescripts variable before including htmlheader.inc.php
 if (is_array($pagescripts))
 {
     foreach ($pagescripts AS $pscript)
     {
-        echo "<script src='{$CONFIG['application_webpath']}scripts/{$pscript}' type='text/javascript' />\n";
+        echo "<script src='{$CONFIG['application_webpath']}scripts/{$pscript}' type='text/javascript'></script>\n";
     }
     unset($pagescripts, $pscript);
 }
 // javascript popup date library
-echo "<script src='{$CONFIG['application_webpath']}calendar.js' type='text/javascript' />\n";
+echo "<script src='{$CONFIG['application_webpath']}calendar.js' type='text/javascript'></script>\n";
 
 if ($sit[0] != '')
 {
