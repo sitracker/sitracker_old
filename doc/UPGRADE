@@ -22,7 +22,7 @@ Further instructions and notes about specific upgrades follow, if you
 upgrading and skipping several versions listed below you should read
 everything carefully to make sure you've met all the requirements:
 
-Upgrading to 3.40
+Upgrading to 3.35
 -----------------
 This version supports table prefixes, if you use this feature
 any plugins you have installed that are not designed to work
@@ -34,6 +34,13 @@ users that reside in timezones other than system timezone.
 The scheduler, auto.php no longer accepts parameters. Scheduled
 actions are now configured from within SiT by going to SiT! ->
 Control Panel -> Scheduler.
+
+The config variable $CONFIG['tipsfile'] has been deprecated and
+is now ignored, tips are now stored in htdocs/help/en-GB/tips.txt
+(and similar paths for other languages).  If you have written your
+own tips, please consider posting them on our forum so that we can
+include them in future releases for the benefit of others.
+
 
 
 Upgrading to 3.32

@@ -16,23 +16,25 @@ function dashboard_random_tip($row,$dashboardid)
     echo "<div class='windowbox' style='width: 95%' id='$row-$dashboardid'>";
     echo "<div class='windowtitle'><img src='{$CONFIG['application_webpath']}images/icons/{$iconset}/16x16/tip.png' width='16' height='16' alt='' /> {$GLOBALS['strRandomTip']}</div>";
     echo "<div class='window'>";
-    
+
     $delim="\n";
-    if (!file_exists($CONFIG['tipsfile']))
+    $tipsfile = "{$CONFIG['application_fspath']}htdocs/help/{$_SESSION['lang']}/tips.txt";
+    if (!file_exists($tipsfile)) $tipsfile = "{$CONFIG['application_fspath']}htdocs/help/en-GB/tips.txt";
+    if (!file_exists($tipsfile))
     {
-        trigger_error("Tips file '{$CONFIG['tipsfile']}' was not found!  check your paths!",E_USER_WARNING);
+        trigger_error("Tips file '{$tipsfile}' was not found!",E_USER_WARNING);
     }
     else
     {
-        $fp = fopen($CONFIG['tipsfile'], "r");
-        if (!$fp) trigger_error("{$CONFIG['tipsfile']} was not found!", E_USER_WARNING);
+        $fp = fopen($tipsfile, "r");
+        if (!$fp) trigger_error("{$tipsfile} was not found!", E_USER_WARNING);
     }
-    $contents = fread($fp, filesize($CONFIG['tipsfile']));
+    $contents = fread($fp, filesize($tipsfile));
     $tips = explode($delim,$contents);
     fclose($fp);
     srand((double)microtime()*1000000);
     $atip = (rand(1, sizeof($tips)) - 1);
-    echo "#".($atip+1).": ".$tips[$atip];
+    echo "#".($atip).": ".$tips[$atip];
 
     echo "</div>";
     echo "</div>";

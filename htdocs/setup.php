@@ -98,7 +98,6 @@ $CFGVAR['max_incoming_email_perday']['title']='maximum no. of incoming emails pe
 $CFGVAR['spam_email_subject']['title']='String to look for in email message subject to determine a message is spam';
 $CFGVAR['spam_forward']['title']='Email address to forward spam messages that are to be marked as spam';
 $CFGVAR['feedback_max_score']['title']='The max score to use in rating fields for feedback forms';
-$CFGVAR['tipsfile']['title']='Path to a file containing tips to be shown on the main page, one per line';
 $CFGVAR['changelogfile']['title']='Path to the Changelog file';
 $CFGVAR['licensefile']['title']='Path to the License file';
 $CFGVAR['creditsfile']['title']='Path to the Credits file';

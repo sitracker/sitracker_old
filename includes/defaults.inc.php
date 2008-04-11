@@ -123,7 +123,6 @@ $CONFIG['spam_email_subject']='SPAMASSASSIN';
 $CONFIG['feedback_max_score']=9;
 
 // Paths to various required files
-$CONFIG['tipsfile']= '../doc/tips.txt';
 $CONFIG['licensefile']= '../doc/LICENSE';
 $CONFIG['changelogfile']= '../doc/Changelog';
 $CONFIG['creditsfile']= '../doc/CREDITS';
