@@ -11,6 +11,8 @@
 // Author: Ivan Lucas <ivanlucas[at]users.sourceforge.net>
 
 // This Page Is Valid XHTML 1.0 Transitional! 29Nov05
+// FIXME DEPRECATED as of 3.35
+
 
 $permission = 60; // Perform Searches
 $limit_results = 2000;

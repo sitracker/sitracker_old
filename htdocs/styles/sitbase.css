@@ -40,7 +40,7 @@ div.windowtitle
 div.windowtitle div { float: right; }
 div.window table { width: 100%; }
 
-
+em.important, strong.important { color: red; }
 
 #menu
 {

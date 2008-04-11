@@ -133,7 +133,7 @@ if ($action == "edit")
 
         echo "<tr><th></th><td><a href=\"javascript:toggleDiv('hidden');\">{$strAdvanced}</a></td></tr>";
 
-        echo "<tbody id='hidden' style='display:none'>";
+        echo "<tbody id='hidden' style='display:none'>"; // FIXME tbody
 
         echo "<tr><th>{$strReseller}:</th><td>";
         echo reseller_drop_down("reseller", $maint["reseller"]);

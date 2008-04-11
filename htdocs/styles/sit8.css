@@ -242,6 +242,7 @@ strong.info,em.info,u.info,span.info
 {
    background: #E1FFFF; border: 1px solid #BFD8D8; padding: 2px; cursor: help;
 }
+
 h2.error,h3.error,h4.error,h5.error,p.error { color: red; }
 input.error, textarea.error, select.error { border: 2px solid red; }
 

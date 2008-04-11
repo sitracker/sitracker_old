@@ -49,11 +49,11 @@ if (mysql_num_rows($result) > 0)
         if ($rss = fetch_rss( $url ))
         {
 //              if ($CONFIG['debug']) echo "<pre>".print_r($rss,true)."</pre>";
-            echo "<table align='center' style='width: 100%'>";
+            echo "<table>";
             echo "<tr><th><span style='float: right;'><a href='".htmlspecialchars($url)."'>";
             echo "<img src='{$CONFIG['application_webpath']}images/icons/{$iconset}/12x12/feed-icon.png' alt='Feed Icon' />";
             echo "</a></span>";
-            echo "<a href='{$rss->channel['link']}' style='color: #000;' class='info'>{$rss->channel['title']}";
+            echo "<a href='{$rss->channel['link']}' class='direct info'>{$rss->channel['title']}";
             if (!empty($rss->image['url']) OR !empty($rss->channel['description']) OR !empty($rss->channel['icon']))
             {
                 echo "<span>";
