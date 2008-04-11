@@ -333,7 +333,7 @@ if ($sit[0] != '')
                 }
             }
             $alink = $file."?".$link.$end;
-            echo "<p align='right' style='padding-right:32px'><a href='{$alink}'>{$strDismissAll}</a></p>";
+            echo "<p id='dismissall'><a href='{$alink}'>{$strDismissAll}</a></p>";
         }
     }
 }

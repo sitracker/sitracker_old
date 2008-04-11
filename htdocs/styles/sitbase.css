@@ -41,6 +41,65 @@ div.windowtitle div { float: right; }
 div.window table { width: 100%; }
 
 em.important, strong.important { color: red; }
+option.disable { color: red; }
+option.enable { color: #00AA00; }
+option.seperator { border-top: 1px solid black; }
+
+/* Information and Errors */
+sup.red { color: #F00; font-size: 125%; } /* FIXME doesn't need a class for this */
+td sup { color: #444; }
+p.tip,p.info, p.warning, p.error, h5.warning, h5.error
+{
+  background-position: 3px 2px;
+  background-repeat: no-repeat;
+  padding: 3px 3px 3px 22px;
+  min-height: 16px;
+  -moz-border-radius: 5px;
+  /* display: inline; */
+  border: 1px solid #000;
+  margin-left: 2em;
+  margin-right: 2em;
+  width: auto;
+  text-align: left;
+}
+p.tip
+{
+  background-image: url('../images/icons/sit/16x16/tip.png');
+  color: black;
+  border: 1px solid black;;
+  background-color: #FFFFEB;
+}
+p.info
+{
+  background-image: url('../images/icons/sit/16x16/info.png');
+  color: #17446B;
+  border: 1px solid #17446B;
+  background-color: #F4F6FF;
+}
+p.info span, p.error span, p.warning span { float: right; margin-right: 10px; }
+p.warning, h5.warning
+{
+  background-image: url('../images/icons/sit/16x16/warning.png');
+  color: #5A3612;
+  border: 1px solid #A26120;
+  background-color: #FFECD7;
+}
+p.error, h5.error
+{
+  background-image: url('../images/icons/sit/16x16/error.png');
+  color: #f00;
+  border: 1px solid #f00;
+  background-color: #FFE1E1;
+}
+p.error span a { color: #f00; }
+p.warning span a { color: #5A3612; }
+p#dismissall { text-align: right; padding-right:32px; }
+
+strong.info,em.info,u.info,span.info
+{
+   background: #E1FFFF; border: 1px solid #BFD8D8; padding: 2px; cursor: help;
+}
+
 
 #menu
 {
@@ -203,3 +262,4 @@ em.updatedveryrecently { color: #640000; }
 em.updatedrecently { }
 
 p#pageoptions { float: right; top: -10px; position: relative; }
+form.filterform { margin-left: auto; margin-right: auto; margin-bottom: 1em; }

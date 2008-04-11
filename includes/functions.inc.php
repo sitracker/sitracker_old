@@ -1710,6 +1710,7 @@ function group_drop_down($name, $selected)
     return $html;
 }
 
+
 function group_selector($selected, $urlargs='')
 {
     $gsql = "SELECT * FROM `{$GLOBALS['dbGroups']}` ORDER BY name";
@@ -1723,11 +1724,11 @@ function group_selector($selected, $urlargs='')
 
     if ($numgroups >= 1)
     {
-        echo "<form action='{$_SERVER['PHP_SELF']}?{$urlargs}' style='text-align: center;' method='get'>";
+        echo "<form action='{$_SERVER['PHP_SELF']}?{$urlargs}' class='filterform' method='get'>";
         echo "{$GLOBALS['strGroup']}: <select name='choosegroup' onchange='window.location.href=this.options[this.selectedIndex].value'>";
         echo "<option value='{$_SERVER['PHP_SELF']}?{$urlargs}&amp;gid=all'";
         if ($selected == 'all') echo " selected='selected'";
-        echo ">All</option>\n";
+        echo ">{$GLOBALS['strAll']}</option>\n";
         foreach ($grouparr AS $groupid => $groupname)
         {
             echo "<option value='{$_SERVER['PHP_SELF']}?{$urlargs}&amp;gid={$groupid}'";
@@ -1738,7 +1739,7 @@ function group_selector($selected, $urlargs='')
         if ($selected == '0') echo " selected='selected'";
         echo ">{$GLOBALS['strUsersNoGroup']}</option>\n";
         echo "</select>\n";
-        echo "</form>\n<br />";
+        echo "</form>\n";
     }
 
     return $numgroups;
@@ -1942,7 +1943,7 @@ function userstatus_drop_down($name, $id, $userdisable=FALSE)
     $html = "<select name='$name'>\n";
     if ($userdisable)
     {
-        $html .= "<option style='color: red;' selected='selected' value='0'>ACCOUNT DISABLED</option>\n";
+        $html .= "<option class='disable' selected='selected' value='0'>ACCOUNT DISABLED</option>\n";
     }
 
     while ($statuses = mysql_fetch_array($result))
@@ -1997,8 +1998,8 @@ function userstatus_bardrop_down($name, $id)
             $html .= "{$statuses["name"]}</option>\n";
         }
     }
-    $html .= "<option value='set_user_status.php?mode=setaccepting&amp;accepting=Yes' style='color: #00AA00; border-top: 1px solid black;'>{$GLOBALS['strAccepting']}</option>\n";
-    $html .= "<option value='set_user_status.php?mode=setaccepting&amp;accepting=No' style='color: #FF0000;'>{$GLOBALS['strNotAccepting']}</option>\n";
+    $html .= "<option value='set_user_status.php?mode=setaccepting&amp;accepting=Yes' class='enable seperator'>{$GLOBALS['strAccepting']}</option>\n";
+    $html .= "<option value='set_user_status.php?mode=setaccepting&amp;accepting=No' class='disable'>{$GLOBALS['strNotAccepting']}</option>\n";
     $html .= "</select>\n";
 
     return $html;
