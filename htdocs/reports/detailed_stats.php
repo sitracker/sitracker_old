@@ -1,5 +1,5 @@
 <?php
-// statistics.php - Over view and stats of calls logged - intended for last 24hours
+// detailed_stats.php
 //
 // SiT (Support Incident Tracker) - Support call tracking system
 // Copyright (C) 2000-2008 Salford Software Ltd. and Contributors
@@ -108,7 +108,7 @@ else
                     */
                     foreach ($d AS $a)
                     {
-                        $right .= "<tr><td>".$a['type']."</td><td><a href='../incident_details.php?id=".$a['id']."' style='color: #000000;'>".$a['id']."</td><td>".$a['title']."</a></td><td>".user_realname($a['owner'])."</td></tr>";
+                        $right .= "<tr><td>".$a['type']."</td><td><a href='../incident_details.php?id=".$a['id']."' class='direct'>".$a['id']."</td><td>".$a['title']."</a></td><td>".user_realname($a['owner'])."</td></tr>";
                         if ($a['type']=='opened')
                         {
                             $opened++;

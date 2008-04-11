@@ -82,15 +82,15 @@ while ($incidents = mysql_fetch_array($result))
     {
         $when = sprintf($strAgo, format_seconds($now - $incidents['lastupdated']));
         if ($when == 0) $when = $strJustNow;
-        $updated = "<em style='color: #640000; font-weight: bolder;'>{$when}</em>";
+        $updated = "<em class='updatednow'>{$when}</em>";
     }
     elseif ($incidents['lastupdated'] > $now - 1800)
     {
-        $updated = "<em style='color: #640000;'>".sprintf($strAgo, format_seconds($now - $incidents['lastupdated']))."</em>";
+        $updated = "<em class='updatedveryrecently'>".sprintf($strAgo, format_seconds($now - $incidents['lastupdated']))."</em>";
     }
     elseif ($incidents['lastupdated'] > $now - 3600)
     {
-        $updated = "<em>".sprintf($strAgo, format_seconds($now - $incidents['lastupdated']))."</em>";
+        $updated = "<em class='updatedrecently'>".sprintf($strAgo, format_seconds($now - $incidents['lastupdated']))."</em>";
     }
     elseif (date('dmy', $incidents['lastupdated']) == date('dmy', $now))
     {
@@ -226,7 +226,7 @@ while ($incidents = mysql_fetch_array($result))
         echo "<strong>".ucfirst($incidents['type'])."</strong>: ";
     }
 
-    echo "<a href='incident_details.php?id={$incidents['id']}' style='color:#000;'>{$incidents['id']}</a>";
+    echo "<a href='incident_details.php?id={$incidents['id']}' class='direct'>{$incidents['id']}</a>";
     if ($externalid != "") echo "<br />{$externalid}";
     echo "</td>";
     echo "<td>";
@@ -278,7 +278,7 @@ while ($incidents = mysql_fetch_array($result))
     $blinktime = (time() - ($servicelevel->initial_response_mins * 60));
     if ($incidents['priority']==4 AND $incidents['lastupdated']<= $blinktime)
     {
-        echo "<strong style='text-decoration: blink;'>".priority_name($incidents["priority"])."</strong>";
+        echo "<strong class='critical'>".priority_name($incidents["priority"])."</strong>";
     }
     else
     {
@@ -302,7 +302,7 @@ while ($incidents = mysql_fetch_array($result))
         {
             echo "<br />".closingstatus_name($incidents['closingstatus']);
         }
-        
+
         echo "</td>\n";
     }
     echo "<td align='center'>";

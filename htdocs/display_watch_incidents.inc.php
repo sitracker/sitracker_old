@@ -32,8 +32,6 @@ function statusform_submit(user)
 //]]>
 </script>
 <?php
-
-//Removed by INL 26Nov07 in prep for 3.31 release
 echo "<form action='{$_SERVER['PHP_SELF']}' style='text-align: center;'>";
 echo "{$strQueue}: <select class='dropdown' name='queue' onchange='window.location.href=this.options[this.selectedIndex].value'>\n";
 echo "<option ";
@@ -75,11 +73,11 @@ if (mysql_num_rows($result) > 0)
 
         if ($obj->type == 3 AND !$header_printed)
         {
-            echo "<table align='center' style='width: 100%'>";
+            echo "<table>";
         }
         else if($obj->type != 3)
         {
-            echo "<table align='center' style='width: 100%'>";
+            echo "<table>";
         }
 
         switch ($obj->type)
@@ -159,7 +157,7 @@ if (mysql_num_rows($result) > 0)
             {
                 if ($obj->type == 3 AND !$header_printed)
                 {
-                    echo "<tr><th colspan='3'>{$strIncidents}</th></tr>";
+                    echo "<tr><th colspan='4'>{$strIncidents}</th></tr>";
                     echo "<tr>";
                     echo colheader('id', $GLOBALS['strID']);
                     echo colheader('title', $GLOBALS['strTitle']);

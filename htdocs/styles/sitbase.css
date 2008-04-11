@@ -13,13 +13,15 @@ th:hover { background: #E9E9E9; }
 
 tr.shade1:hover { background-color: #F2F2F2; }
 tr.shade2:hover { background-color: #F2F2F2; }
+tr.critical { background-color: #FF4433; }
 tr.critical:hover { background-color: #FFAAAB; }
+strong.critical { text-decoration: blink; }
+tr.critical strong.critical { color: #FFF; }
 tr.urgent:hover { background-color: #FFAAAB; }
 tr.expired:hover { background-color: #F2F2F2; }
 tr.notice:hover { background-color: #F2F2F2; }
 
 img { border:0px; }
-
 
 #footerbar select { font-size: 80%; }
 #statusbar { background-color: #203894; }
@@ -35,6 +37,8 @@ div.windowtitle
   background-color: #203894;
 }
 div.windowtitle div { float: right; }
+div.window table { width: 100%; }
+
 
 
 #menu
@@ -188,3 +192,9 @@ span.actionqueue { color: Red; }
 span.waitingqueue { color: Green; }
 span.openqueue { color: Blue; }
 span.closedqueue { color: Gray; }
+
+a.direct { color: #000; }
+em.updatednow { color: #640000; font-weight: bolder; }
+em.updatedveryrecently { color: #640000; }
+em.updatedrecently { }
+
