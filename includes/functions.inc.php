@@ -2343,6 +2343,7 @@ function incident_firstupdate($id)
     * Converts an incident status ID to an internationalised status string
     * @author Ivan Lucas
     * @param $id integer incident status ID
+    * @param $type string. 'internal' or 'external', where external means customer/client facing
     * @returns string Internationalised incident status.
     *                 Or empty string if the ID is not recognised.
     * @note The incident status database table must contain i18n keys.
@@ -2371,8 +2372,7 @@ function incidentstatus_name($id, $type='internal')
     else
     {
         $incidentstatus = mysql_fetch_assoc($result);
-        echo $GLOBALS[$incidentstatus[$type]];
-        $name = $incidentstatus[$type];
+        $name =  $GLOBALS[$incidentstatus[$type]];
     }
     return $name;
 }
