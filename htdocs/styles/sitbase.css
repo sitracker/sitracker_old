@@ -24,6 +24,7 @@ tr.notice:hover { background-color: #F2F2F2; }
 img { border:0px; }
 
 #footerbar select { font-size: 80%; }
+#footerbar form { margin: 0px; }
 #statusbar { background-color: #203894; }
 
 div.windowbox
@@ -169,6 +170,9 @@ div#menu li:hover li ul,
   color: #888;
 }
 
+#incidentqueues form { text-align: center; }
+
+
 .helplink { vertical-align: super; color: #555; margin-left: 2px; font-size: 50%; }
 .helplink a { text-decoration: none; cursor: help; position: relative; color: #CC0000; }
 .helplink a span { display: none; position: absolute;
@@ -198,3 +202,4 @@ em.updatednow { color: #640000; font-weight: bolder; }
 em.updatedveryrecently { color: #640000; }
 em.updatedrecently { }
 
+p#pageoptions { float: right; top: -10px; position: relative; }

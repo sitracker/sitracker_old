@@ -72,6 +72,8 @@ $selectsql .= "(timeofnextaction - $now) AS timetonextaction, opened, ($now - op
 $selectsql .= "($now - lastupdated) AS timesincelastupdate ";
 $selectsql .= "FROM `{$dbIncidents}` AS i, `{$dbContacts}` AS c, `{$dbPriority}` AS pr ";
 
+echo "<div id='incidentqueues'>";
+
 switch ($type)
 {
     case 'support':
@@ -166,7 +168,7 @@ switch ($type)
         $querystring = "?user=$user&amp;queue=$queue&amp;type=$type&amp;";
 
         // show drop down of incident status
-        echo "<form action='{$_SERVER['PHP_SELF']}' style='text-align: center;'>";
+        echo "<form action='{$_SERVER['PHP_SELF']}'>";
         echo "{$strQueue}: <select class='dropdown' name='queue' onchange='window.location.href=this.options[this.selectedIndex].value'>\n";
         echo "<option ";
         if ($queue == 1) echo "selected='selected' ";
@@ -317,6 +319,7 @@ switch ($type)
             // end of expertise queue
             // ***
         }
+        echo "</div>";
 }
 include ('htmlfooter.inc.php');
 ?>

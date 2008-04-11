@@ -102,7 +102,7 @@ switch ($action)
         {
             $sql .= "'{$userid}', ";
         }
-        
+
         $sql .= "'$newstatus', '$customervisibility')";
         $result = mysql_query($sql);
         if (mysql_error()) trigger_error("MySQL Query Error ".mysql_error(), E_USER_ERROR);
@@ -198,7 +198,7 @@ switch ($action)
             {
                 echo $suguser->realname;
             }
-            
+
             echo "</label></td>";
             echo "<td>".user_online_icon($suguser->id).userstatus_name($suguser->status)."</td>";
             $incpriority = user_incidents($suguser->id);
@@ -212,7 +212,7 @@ switch ($action)
             {
                 $countactive=0;
             }
-            
+
             $countdiff = $countincidents-$countactive;
             echo "<td align='center'>$countactive / {$countdiff}</td>";
             echo "<td align='center'>".$incpriority['4']."</td>";
@@ -228,7 +228,7 @@ switch ($action)
         if ($countusers >= 1)
         {
             // Other users are shown in a optional section
-            if ($suggested) echo "<tbody id='moreusers' style='display:none;'>";
+            if ($suggested) echo "<tbody id='moreusers' style='display:none;'>";  // FIXME tbody
             $shade='shade1';
 
             while ($users = mysql_fetch_object($result))
