@@ -94,7 +94,8 @@ else
     if (mysql_error()) trigger_error("MySQL Query Error ".mysql_error(), E_USER_ERROR);
 
     //set incident back to active
-    $sql = "UPDATE `{$dbIncidents}` SET status=1, lastupdated=$now WHERE id={$_REQUEST['id']}";
+    $id = intval($_REQUEST['id']);
+    $sql = "UPDATE `{$dbIncidents}` SET status=1, lastupdated='$now' WHERE id='{$id}'";
     mysql_query($sql);
     if (mysql_error()) trigger_error("MySQL Query Error ".mysql_error(), E_USER_ERROR);
 
