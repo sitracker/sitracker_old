@@ -47,7 +47,7 @@ function dashboard_user_incidents($row,$dashboardid)
     $sql .= "OR IF (status='1' OR status='3' OR status='4', 1=1 , 1=2) ";  // active, research, left message - show all
     $sql .= ") AND timeofnextaction < $now ) ";
 
-    echo "<div class='windowbox' style='width: 95%' id='$row-$dashboardid'>";
+    echo "<div class='windowbox' id='$row-$dashboardid'>";
     echo "<div class='windowtitle'><a href='incidents.php?user=current&amp;queue=1&amp;type=support'>";
     echo "<img src='{$CONFIG['application_webpath']}images/icons/{$iconset}/16x16/support.png' width='16' height='16' alt='' /> ";
     echo sprintf($GLOBALS['strUserIncidents'], user_realname($user,TRUE));

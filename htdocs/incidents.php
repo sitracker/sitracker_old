@@ -100,7 +100,7 @@ switch ($type)
         switch ($queue)
         {
             case 1: // Action Needed
-                echo "<span style='color: Red'>{$strActionNeeded}</span>";
+                echo "<span class='actionqueue'>{$strActionNeeded}</span>";
                 $sql .= "AND (status!='2') ";  // not closed
                 // the "1=2" obviously false else expression is to prevent records from showing unless the IF condition is true
                 $sql .= "AND ((timeofnextaction > 0 AND timeofnextaction < $now) OR ";
@@ -111,17 +111,17 @@ switch ($type)
             break;
 
             case 2: // Waiting
-                echo "<span style='color: Green'>{$strWaiting}</span>";
+                echo "<span class='waitingqueue'>{$strWaiting}</span>";
                 $sql .= "AND ((status >= 4 AND status <= 8) OR (timeofnextaction > 0 AND timeofnextaction > $now)) ";
             break;
 
             case 3: // All Open
-                echo "<span style='color: Blue'>{$strAllOpen}</span>";
+                echo "<span class='openqueue'>{$strAllOpen}</span>";
                 $sql .= "AND status!='2' ";
             break;
 
             case 4: // All Closed
-                echo "<span style='color: Gray'>{$strAllClosed}</span>";
+                echo "<span class='closedqueue'>{$strAllClosed}</span>";
                 $sql .= "AND status='2' ";
                 if ($CONFIG['hide_closed_incidents_older_than'] > -1 AND $_GET['show'] != 'all')
                 {
@@ -251,7 +251,7 @@ switch ($type)
             switch ($queue)
             {
                 case 1: // Action Needed
-                    echo "<h2>{$strOtherIncidents}: <span style='color: Red'>{$strActionNeeded}</span>".help_link("OtherIncidents")."</h2>\n";
+                    echo "<h2>{$strOtherIncidents}: <span class='actionqueue'>{$strActionNeeded}</span>".help_link("OtherIncidents")."</h2>\n";
                     $sql .= "AND (status!='2') ";  // not closed
                     // the "1=2" obviously false else expression is to prevent records from showing unless the IF condition is true
                     $sql .= "AND ((timeofnextaction > 0 AND timeofnextaction < $now) OR ";
@@ -262,18 +262,18 @@ switch ($type)
                 break;
 
                 case 2: // Waiting
-                    echo "<h2>{$strOtherIncidents}: <span style='color: Green'>{$strWaiting}</span></h2>\n";
+                    echo "<h2>{$strOtherIncidents}: <span class='waitingqueue'>{$strWaiting}</span></h2>\n";
                     $sql .= "AND (status >= 4 AND status <= 8) ";
                 break;
 
                 case 3: // All Open
-                    echo "<h2>{$strOtherIncidents}: <span style='color: Blue'>{$strAllOpen}</span></h2>\n";
+                    echo "<h2>{$strOtherIncidents}: <span class='openqueue'>{$strAllOpen}</span></h2>\n";
                     echo "</h2><hr /><br />";
                     $sql .= "AND status!='2' ";
                 break;
 
                 case 4: // All Closed
-                    echo "<h2>{$strOtherIncidents}: <span style='color: Gray'>{$strAllClosed}</span></h2>\n";
+                    echo "<h2>{$strOtherIncidents}: <span class='closedqueue'>{$strAllClosed}</span></h2>\n";
                     echo "</h2><hr /><br />";
                     $sql .= "AND status='2' ";
                     if ($CONFIG['hide_closed_incidents_older_than'] > -1 AND $_GET['show'] != 'all')

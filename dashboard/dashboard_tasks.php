@@ -14,7 +14,7 @@ function dashboard_tasks($row,$dashboardid)
 {
     global $sit, $CONFIG, $iconset, $dbTasks;
     $user = $sit[2];
-    echo "<div class='windowbox' style='width: 95%;' id='$row-$dashboardid'>";
+    echo "<div class='windowbox' id='$row-$dashboardid'>";
     echo "<div class='windowtitle'><a href='tasks.php'><img src='{$CONFIG['application_webpath']}images/icons/{$iconset}/16x16/task.png' width='16' height='16' alt='' /> ";
     printf($GLOBALS['strUsersTasks'], user_realname($user,TRUE));
     echo "</a></div>";

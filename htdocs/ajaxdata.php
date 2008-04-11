@@ -50,6 +50,9 @@ switch($action)
         echo nl2br($helptext);
     break;
 
+    case 'autocomplete_sitecontact':
+    break;
+
     default : break;
 }
 

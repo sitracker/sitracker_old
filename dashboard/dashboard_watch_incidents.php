@@ -15,8 +15,8 @@ function dashboard_watch_incidents($row,$dashboardid)
 {
     global $sit, $CONFIG, $iconset;
 
-    echo "<div class='windowbox' style='width: 95%' id='$row-$dashboardid'>";
-    echo "<div class='windowtitle'><div style='float: right'><a href='edit_watch_incidents.php'>{$GLOBALS['strEdit']}</a></div><img src='{$CONFIG['application_webpath']}images/icons/{$iconset}/16x16/support.png' width='16' height='16' alt='' /> "; printf($GLOBALS['strWatchIncidents'], user_realname($user,TRUE));
+    echo "<div class='windowbox' id='$row-$dashboardid'>";
+    echo "<div class='windowtitle'><div><a href='edit_watch_incidents.php'>{$GLOBALS['strEdit']}</a></div><img src='{$CONFIG['application_webpath']}images/icons/{$iconset}/16x16/support.png' width='16' height='16' alt='' /> "; printf($GLOBALS['strWatchIncidents'], user_realname($user,TRUE));
     echo "</div><div class='window' id='watch_incidents_windows'>";
 
     echo "<p align='center'><img src='{$CONFIG['application_webpath']}images/icons/{$iconset}/ajax-loader.gif' alt='Loading icon' /></p>";

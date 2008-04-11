@@ -1,10 +1,13 @@
 /* Base styles*/
-h1 { font-size: 16pt; font-weight: bold; color: #FFF; background-color:
-#203894; margin: 0px; padding: 3px 0px 3px 0px; }
-#apptitle { background-image: url('../images/top.png'); background-position:
-top-left; background-repeat: x-repeat; height: 50px; background-color: none}
+h1 {
+  font-size: 16pt; font-weight: bold; color: #FFF;
+  background-color: #203894; margin: 0px; padding: 3px 0px 3px 0px; }
+#apptitle {
+  background-image: url('../images/top.png');
+  background-position: top-left; background-repeat: x-repeat;
+  height: 50px; background-color: none}
 #menu { border-bottom: 1px solid #203894; padding-bottom: 4px;}
-.menuitem li{ padding-top: 3px; }
+.menuitem li { padding-top: 3px; }
 th { -moz-border-radius: 7px; -khtml-border-radius: 7px; border-radius: 7px; }
 th:hover { background: #E9E9E9; }
 
@@ -20,13 +23,15 @@ tr.notice:hover { background-color: #F2F2F2; }
 
 div.windowbox
 {
-    border: 1px solid #203894;
+  border: 1px solid #203894;
+  width: 95%;
 }
 
 div.windowtitle
 {
-    background-color: #203894;
+  background-color: #203894;
 }
+div.windowtitle div { float: right; }
 
 
 #menu
@@ -132,47 +137,51 @@ div#menu li:hover li ul,
 
 #menu li ul a:hover
 {
-    background-color: #CCC;
-    filter:alpha(opacity=75);
-    opacity: 0.75;
-    -moz-opacity:0.75;
+  background-color: #CCC;
+  filter:alpha(opacity=75);
+  opacity: 0.75;
+  -moz-opacity:0.75;
 }
 
 #portalactions
 {
-width: 20%;
-float: left;
-border: 1px dotted #9C9C9C;
-background: #F7FAFF;
-padding-left: 5px;
+  width: 20%;
+  float: left;
+  border: 1px dotted #9C9C9C;
+  background: #F7FAFF;
+  padding-left: 5px;
 }
 
 
 #topsearch { text-align: right; }
 #topsearch form {margin: 0px; }
 #topsearch #searchfield {
-border:1px solid #CCCCCC;
-padding:3px 3px 3px 20px;
-background:transparent url('../images/searchbg.png') no-repeat scroll 4px center;
-color: #888;
+  border:1px solid #CCCCCC;
+  padding:3px 3px 3px 20px;
+  background:transparent url('../images/searchbg.png') no-repeat scroll 4px center;
+  color: #888;
 }
 
 .helplink { vertical-align: super; color: #555; margin-left: 2px; font-size: 50%; }
 .helplink a { text-decoration: none; cursor: help; position: relative; color: #CC0000; }
-.helplink a span { display: none;     position: absolute;
-    top: 20px;
-    left: -10px;
-    width: 125px;
-    padding: 5px;
-    z-index: 100;
-    background: #CC0000;
-    color: #fff;
-    -moz-border-radius: 5px; /* this works only in camino/firefox */
-    -webkit-border-radius: 5px; /* this is just for Safari */
-    cursor: pointer;
-    text-align: left;
+.helplink a span { display: none; position: absolute;
+  top: 20px;
+  left: -10px;
+  width: 125px;
+  padding: 5px;
+  z-index: 100;
+  background: #CC0000;
+  color: #fff;
+  -moz-border-radius: 5px; /* this works only in camino/firefox */
+  -webkit-border-radius: 5px; /* this is just for Safari */
+  cursor: pointer;
+  text-align: left;
 }
 .helplink a:hover { font-size: 99%; /* this is just for IE */ text-decoration: underline; color: #CC0000; }
 /* .helplink a:hover span { display: block; } */
 
-
+/* Incident Queues */
+span.actionqueue { color: Red; }
+span.waitingqueue { color: Green; }
+span.openqueue { color: Blue; }
+span.closedqueue { color: Gray; }
