@@ -5942,12 +5942,12 @@ function colheader($colname, $coltitle, $sort=FALSE, $order='', $filter='', $def
         if ($order=='a')
         {
             $html .= "<a href='{$_SERVER['PHP_SELF']}?sort=$colname&amp;order=d{$qsappend}'>{$coltitle}</a> ";
-            $html .= "<img src='{$CONFIG['application_webpath']}images/sort_a.png' width='5' height='5' alt='{$GLOBALS['SortAscending']}' style='border: 0px;' /> ";
+            $html .= "<img src='{$CONFIG['application_webpath']}images/sort_a.png' width='5' height='5' alt='{$GLOBALS['SortAscending']}' /> ";
         }
         else
         {
             $html .= "<a href='{$_SERVER['PHP_SELF']}?sort=$colname&amp;order=a{$qsappend}'>{$coltitle}</a> ";
-            $html .= "<img src='{$CONFIG['application_webpath']}images/sort_d.png' width='5' height='5' alt='{$GLOBALS['SortDescending']}' style='border: 0px;' /> ";
+            $html .= "<img src='{$CONFIG['application_webpath']}images/sort_d.png' width='5' height='5' alt='{$GLOBALS['SortDescending']}' /> ";
         }
     }
     else
@@ -6031,7 +6031,7 @@ function show_notes($linkid, $refid)
         while ($note = mysql_fetch_object($result))
         {
             $html .= "<div class='detailhead note'> <div class='detaildate'>".readable_date(mysqlts2date($note->timestamp));
-            if ($sit[2]==$note->userid) $html .= "<a href='delete_note.php?id={$note->id}&amp;rpath={$_SERVER['PHP_SELF']}?{$_SERVER['QUERY_STRING']}' onclick='return confirm_delete();'><img src='{$CONFIG['application_webpath']}images/icons/{$iconset}/16x16/delete.png' width='16' height='16' alt='Delete icon' style='border: 0px;' /></a>";
+            if ($sit[2]==$note->userid) $html .= "<a href='delete_note.php?id={$note->id}&amp;rpath={$_SERVER['PHP_SELF']}?{$_SERVER['QUERY_STRING']}' onclick='return confirm_delete();'><img src='{$CONFIG['application_webpath']}images/icons/{$iconset}/16x16/delete.png' width='16' height='16' alt='Delete icon' /></a>";
             $html .= "</div>\n";
             $html .= "<img src='{$CONFIG['application_webpath']}images/icons/{$iconset}/16x16/note.png' width='16' height='16' alt='Note icon' /> ";
             $html .= "Note added by ".user_realname($note->userid,TRUE)."</div>\n";
@@ -6567,7 +6567,7 @@ function list_tags($recordid, $type, $html=TRUE)
             $str .= "<a href='view_tags.php?tagid={$tags->tagid}'>".$tags->name;
             if (array_key_exists($tags->name, $CONFIG['tag_icons']))
             {
-                $str .= "&nbsp;<img src='images/icons/{$iconset}/16x16/{$CONFIG['tag_icons'][$tags->name]}.png' style='border:0px;' alt='' />";
+                $str .= "&nbsp;<img src='images/icons/{$iconset}/16x16/{$CONFIG['tag_icons'][$tags->name]}.png' alt='' />";
             }
             $str .= "</a>";
         }
@@ -6612,7 +6612,7 @@ function list_tag_icons($recordid, $type)
         while ($tags = mysql_fetch_object($result))
         {
             $str .= "<a href='view_tags.php?tagid={$tags->tagid}' title='{$tags->name}'>";
-            $str .= "<img src='images/icons/{$iconset}/16x16/{$CONFIG['tag_icons'][$tags->name]}.png' style='border:0px;' alt='{$tags->name}' />";
+            $str .= "<img src='images/icons/{$iconset}/16x16/{$CONFIG['tag_icons'][$tags->name]}.png' alt='{$tags->name}' />";
             $str .= "</a> ";
         }
     }
@@ -6675,7 +6675,7 @@ function show_tag_cloud($orderby="name", $showcount=FALSE)
                 {
                     $html .= "32x32";
                 }
-                $html .= "/{$CONFIG['tag_icons'][$obj->name]}.png' style='border:0px;' alt='' />";
+                $html .= "/{$CONFIG['tag_icons'][$obj->name]}.png' alt='' />";
             }
             else $html .= $obj->name;
             $html .= "</a>";

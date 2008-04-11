@@ -26,7 +26,7 @@ switch ($action)
         echo "<h2><img src='{$CONFIG['application_webpath']}images/icons/{$iconset}/32x32/feed-icon.png' width='32' height='32' alt='' /> {$strAddRSSAtomFeed}</h2>";
         echo "<form action='{$_SERVER['PHP_SELF']}?action=do_add' method='post'>";
         echo "<table class='vertical'>";
-        echo "<tr><td><label><img src='{$CONFIG['application_webpath']}images/icons/{$iconset}/12x12/feed-icon.png' style='border: 0px;' alt='{$strFeedIcon}' /> ";
+        echo "<tr><td><label><img src='{$CONFIG['application_webpath']}images/icons/{$iconset}/12x12/feed-icon.png' alt='{$strFeedIcon}' /> ";
         echo "{$strRSSAtomURL}: <input type='text' name='url' size='45' /></label></td></tr>\n";
         echo "<tr><td><label>{$strDisplay}: <input type='text' name='items' size='3' value='0' /></label> ({$str0MeansUnlimited})</td></tr>";
         echo "</table>";
@@ -62,11 +62,11 @@ switch ($action)
             {
                 $feed->items=0;
             }
-            
+
             echo "<h2><img src='{$CONFIG['application_webpath']}images/icons/{$iconset}/32x32/feed-icon.png' width='32' height='32' alt='' /> {$strEditRSSAtomFeed}</h2>";
             echo "<form action='{$_SERVER['PHP_SELF']}?action=do_edit' method='post'>";
             echo "<table class='vertical'>";
-            echo "<tr><td><label><img src='{$CONFIG['application_webpath']}images/icons/{$iconset}/12x12/feed-icon.png' style='border: 0px;' alt='Feed Icon' /> ";
+            echo "<tr><td><label><img src='{$CONFIG['application_webpath']}images/icons/{$iconset}/12x12/feed-icon.png' alt='Feed Icon' /> ";
             echo "{$strRSSAtomURL}: <input type='text' name='url' size='45' value='{$feed->url}' /></label></td></tr>\n";
             echo "<tr><td><label>{$strDisplay}: <input type='text' name='items' size='3' value='{$feed->items}' /></label> ({$str0MeansUnlimited})</td></tr>";
             echo "</table>";
@@ -78,7 +78,7 @@ switch ($action)
         {
             echo "<p class='error'>{$strNoRecords}</p>";
         }
-        
+
         include ('htmlfooter.inc.php');
 
         break;
@@ -143,14 +143,14 @@ switch ($action)
                 {
                     $opposite = "true";
                 }
-                
+
                 $urlparts = parse_url($obj->url);
                 if ($obj->enabled == 'false')
                 {
                     $shade = 'expired';
                 }
-                
-                echo "<tr class='$shade'><td align='left'><a href=\"".htmlentities($obj->url,ENT_NOQUOTES, $GLOBALS['i18ncharset'])."\"><img src='{$CONFIG['application_webpath']}images/icons/{$iconset}/12x12/feed-icon.png' style='border: 0px;' alt='{strFeedIcon}' /></a> <a href=\"{$obj->url}\">{$urlparts['host']}</a></td>";
+
+                echo "<tr class='$shade'><td align='left'><a href=\"".htmlentities($obj->url,ENT_NOQUOTES, $GLOBALS['i18ncharset'])."\"><img src='{$CONFIG['application_webpath']}images/icons/{$iconset}/12x12/feed-icon.png' alt='{strFeedIcon}' /></a> <a href=\"{$obj->url}\">{$urlparts['host']}</a></td>";
                 echo "<td>";
                 if ($obj->items >= 1)
                 {
@@ -160,7 +160,7 @@ switch ($action)
                 {
                     echo $strUnlimited;
                 }
-                
+
                 echo "</td>";
                 echo "<td><a href='{$_SERVER['PHP_SELF']}?action=enable&amp;url=".urlencode($obj->url)."&amp;enable={$opposite}'>{$obj->enabled}</a></td>";
                 echo "<td><a href='{$_SERVER['PHP_SELF']}?action=edit&amp;url=".urlencode($obj->url)."'>{$strEdit}</a> | ";
@@ -174,7 +174,7 @@ switch ($action)
         {
             echo "<p align='center'>{$strNoFeedsCurrentlyPresent}</p>";
         }
-        
+
         echo "<p align='center'><a href='{$_SERVER['PHP_SELF']}?action=add'>{$strAdd}</a></p>";
         include ('htmlfooter.inc.php');
         break;
