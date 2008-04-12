@@ -68,7 +68,7 @@ if ($numgroups >= 1)
     echo "</form>\n<br />";
 }
 
-$sql = "SELECT u.id, u.realname, software.name ";
+$sql = "SELECT u.id, u.realname, s.name ";
 $sql .= "FROM `{$dbUserSoftware}` AS us RIGHT JOIN `{$dbSoftware}` AS s ON (us.softwareid = s.id) ";
 $sql .= "LEFT JOIN `{$dbUsers}` AS u ON us.userid = u.id ";
 $sql .= " WHERE (u.status <> 0 OR u.status IS NULL) ";
