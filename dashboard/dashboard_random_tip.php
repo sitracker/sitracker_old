@@ -31,10 +31,10 @@ function dashboard_random_tip($row,$dashboardid)
     }
     $contents = fread($fp, filesize($tipsfile));
     $tips = explode($delim,$contents);
-    fclose($fp);
+    array_shift($tips);
     srand((double)microtime()*1000000);
-    $atip = (rand(1, sizeof($tips)) - 1);
-    echo "#".($atip).": ".$tips[$atip];
+    $atip = (rand(1, sizeof($tips))-1);
+    echo "#".($atip+1).": ".$tips[$atip];
 
     echo "</div>";
     echo "</div>";
