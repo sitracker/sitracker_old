@@ -65,6 +65,10 @@ if (empty($dashboardid))
         }
         echo "</table>\n";
     }
+    else
+    {
+        echo "<p class='info'>There are no dashlets installed, please ask your administrator to install some.</p>";
+    }
 
     include ('htmlfooter.inc.php');
 }
