@@ -91,11 +91,13 @@ else
 {
     echo "<li><a href='entitlement.php'>{$strEntitlement}</a></li>";
 }
-
-if($CONFIG['kb_enabled'] AND $CONFIG['portal_kb_enabled'])
+$sql = "SELECT docid FROM `{$dbKBArticles}`";
+$result = mysql_query($sql);
+if($CONFIG['kb_enabled'] AND $CONFIG['portal_kb_enabled'] AND mysql_num_rows($result) > 0)
 {
     echo "<li><a href='kb.php'>{$strKnowledgeBase}</a></li>";
 }
+
 
 echo "<li><a href='details.php'>{$strDetails}</a></li>";
 if($_SESSION['usertype'] == 'admin')
