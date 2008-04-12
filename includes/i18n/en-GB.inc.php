@@ -39,6 +39,7 @@ $strActivityMarkedCompleteSuccessfully = 'Activity Marked Complete Successfully'
 $strActivitiesForX = 'Activities for %s';
 # i.e. Create, New
 $strAdd = 'Add';
+$strAddActionToXTrigger = 'Add Action to \'%s\' trigger';
 $strAddContact = 'Add Contact';
 $strAddContract = 'Add Contract';
 $strAddContractConfirm = 'Are you sure you want to add this contact?';
@@ -1095,6 +1096,7 @@ $strTranslate = 'Translate';
 $strTranslateTheString = 'Translate the english string on the left to your requested language on the right';
 $strTranslation = 'Translation';
 $strTrigger = 'Trigger';
+$strTriggerActions = 'Trigger Actions';
 $strTriggers = 'Triggers';
 # Short for 'Tuesday'
 $strTue = 'Tue';

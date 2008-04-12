@@ -97,10 +97,10 @@ switch ($_REQUEST['mode'])
         </script>
         <?php
         echo "<h2><img src='{$CONFIG['application_webpath']}images/icons/{$iconset}/32x32/triggeraction.png' width='32' height='32' alt='' /> ";
-        echo "$title</h2>";
+        echo "{$strTriggerActions}</h2>";
         if (!empty($triggerarray[$id]['name'])) $name = $triggerarray[$id]['name'];
         else $name = $id;
-        echo "<h3>Add Action to '{$name}' trigger</h3>"; // FIXME i18n add action/new action
+        echo "<h3>".sprintf($strAddActionToXTrigger, $name)."</h3>";
         echo "<p align='center'>{$triggerarray[$id]['description']} (Type: {$triggerarray[$id]['type']})</p>"; // FIXME remove displaying type before release
         if (is_array($triggerarray[$id]['optional']))
         {
