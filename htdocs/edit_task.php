@@ -11,14 +11,17 @@
 // Author: Ivan Lucas <ivanlucas[at]users.sourceforge.net>
 
 @include ('set_include_path.inc.php');
-$permission = 0; // Allow all auth users
+$permission = 70;
 
 require ('db_connect.inc.php');
 require ('functions.inc.php');
 
 // This page requires authentication
 require ('auth.inc.php');
-
+if(!$CONFIG['tasks_enabled'])
+{
+    header("Location: main.php");
+}
 $title = $strEditTask;
 
 // External variables

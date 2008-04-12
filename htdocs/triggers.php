@@ -12,7 +12,7 @@
 // Author: Ivan Lucas <ivanlucas[at]users.sourceforge.net>
 
 @include ('set_include_path.inc.php');
-$permission = 0; // TODO 3.40 set a permission for triggers
+$permission = 71;
 require ('db_connect.inc.php');
 require ('functions.inc.php');
 // This page requires authentication

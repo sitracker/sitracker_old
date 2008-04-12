@@ -15,8 +15,11 @@
 require ('db_connect.inc.php');
 require ('functions.inc.php');
 require ('auth.inc.php');
-
-$permission = 0; // Allow all auth users
+if(!$CONFIG['tasks_enabled'])
+{
+    header("Location: main.php");
+}
+$permission = 69;
 
 $id = cleanvar($_REQUEST['incident']);
 if (!empty($id))
