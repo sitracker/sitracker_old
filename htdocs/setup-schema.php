@@ -35,16 +35,16 @@ CREATE TABLE `closingstatus` (
  PRIMARY KEY  (`id`)
 ) ENGINE=MyISAM;
 
-INSERT INTO `closingstatus` VALUES (1, 'Sent Information');
-INSERT INTO `closingstatus` VALUES (2, 'Solved Problem');
-INSERT INTO `closingstatus` VALUES (3, 'Reported Bug');
-INSERT INTO `closingstatus` VALUES (4, 'Action Taken');
-INSERT INTO `closingstatus` VALUES (5, 'Duplicate');
-INSERT INTO `closingstatus` VALUES (6, 'No Longer Relevant');
-INSERT INTO `closingstatus` VALUES (7, 'Unsupported');
-INSERT INTO `closingstatus` VALUES (8, 'Support Expired');
-INSERT INTO `closingstatus` VALUES (9, 'Unsolved');
-INSERT INTO `closingstatus` VALUES (10, 'Escalated');
+INSERT INTO `closingstatus` VALUES (1, 'strSentInformation');
+INSERT INTO `closingstatus` VALUES (2, 'strSolvedProblem');
+INSERT INTO `closingstatus` VALUES (3, 'strReportedBug');
+INSERT INTO `closingstatus` VALUES (4, 'strActionTaken');
+INSERT INTO `closingstatus` VALUES (5, 'strDuplicate');
+INSERT INTO `closingstatus` VALUES (6, 'strNoLongerRelevant');
+INSERT INTO `closingstatus` VALUES (7, 'strUnsupported');
+INSERT INTO `closingstatus` VALUES (8, 'strSupportExpired');
+INSERT INTO `closingstatus` VALUES (9, 'strUnsolved');
+INSERT INTO `closingstatus` VALUES (10, 'strEscalated');
 
 CREATE TABLE `contacts` (
   `id` int(11) NOT NULL auto_increment,
@@ -1201,22 +1201,22 @@ CREATE TABLE `usersoftware` (
 
 
 CREATE TABLE `userstatus` (
-  `id` int(11) NOT NULL auto_increment,
+  `id` int(11) NOT NULL,
   `name` varchar(50) default NULL,
   PRIMARY KEY  (`id`)
 ) ENGINE=MyISAM;
 
 
-INSERT INTO `userstatus` VALUES ('0', 'Account Disabled');
-INSERT INTO `userstatus` VALUES (1, 'In Office');
-INSERT INTO `userstatus` VALUES (2, 'Not In Office');
-INSERT INTO `userstatus` VALUES (3, 'In Meeting');
-INSERT INTO `userstatus` VALUES (4, 'At Lunch');
-INSERT INTO `userstatus` VALUES (5, 'On Holiday');
-INSERT INTO `userstatus` VALUES (6, 'Working From Home');
-INSERT INTO `userstatus` VALUES (7, 'On Training Course');
-INSERT INTO `userstatus` VALUES (8, 'Absent Sick');
-INSERT INTO `userstatus` VALUES (9, 'Working Away');
+INSERT INTO `userstatus` VALUES (0, 'strAccountDisabled');
+INSERT INTO `userstatus` VALUES (1, 'strInOffice');
+INSERT INTO `userstatus` VALUES (2, 'strNotInOffice');
+INSERT INTO `userstatus` VALUES (3, 'strInMeeting');
+INSERT INTO `userstatus` VALUES (4, 'strAtLunch');
+INSERT INTO `userstatus` VALUES (5, 'strOnHoliday');
+INSERT INTO `userstatus` VALUES (6, 'strWorkingFromHome');
+INSERT INTO `userstatus` VALUES (7, 'strOnTrainingCourse');
+INSERT INTO `userstatus` VALUES (8, 'strAbsentSick');
+INSERT INTO `userstatus` VALUES (9, 'strWorkingAway');
 
 
 CREATE TABLE `vendors` (
@@ -1723,11 +1723,10 @@ UPDATE `emailtype` SET `type` = 'incident' WHERE `id` = 'INCIDENT CLOSED EXTERNA
 UPDATE `emailtype` SET `type` = 'incident' WHERE `id` = 'INCIDENT_LOGGED_EMAIL' ;
 
 -- KMH 27/01/08
-ALTER TABLE `triggers` ADD `template` VARCHAR( 255 ) NOT NULL AFTER `action` ;
 ALTER TABLE `triggers` ADD `checks` VARCHAR( 255 ) NULL ;
 
 -- INL 28/01/08
-ALTER TABLE `triggers` CHANGE `template` `template` INT( 11 ) NOT NULL ;
+ALTER TABLE `triggers` ADD `template` INT( 11 ) NOT NULL AFTER `action` ;
 RENAME TABLE `emailtype`  TO `emailtemplates` ;
 
 -- INL 29/01/08
