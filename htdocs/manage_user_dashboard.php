@@ -67,7 +67,7 @@ if (empty($dashboardid))
     }
     else
     {
-        echo "<p class='info'>There are no dashlets installed, please ask your administrator to install some.</p>";
+        echo "<p class='info'>{$strNoDashletsInstalled}</p>";
     }
 
     include ('htmlfooter.inc.php');
