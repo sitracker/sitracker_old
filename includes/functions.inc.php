@@ -2400,7 +2400,8 @@ function closingstatus_name($id)
 /* status does not exist.                                     */
 function userstatus_name($id)
 {
-    return db_read_column('name', 'userstatus', $id);
+    $status = db_read_column('name', 'userstatus', $id);
+    return $GLOBALS[$status];
 }
 
 
