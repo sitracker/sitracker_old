@@ -220,6 +220,6 @@ $CONFIG['kb_enabled'] = TRUE;
 $CONFIG['portal_kb_enabled'] = TRUE;
 $CONFIG['tasks_enabled'] = TRUE;
 $CONFIG['calendar_enabled'] = TRUE;
-
-
+$CONFIG['holidays_enabled'] = TRUE;
+$CONFIG['feedback_enabled'] = TRUE;
 ?>

@@ -98,47 +98,30 @@ if ($sit[0] != '')
     echo "<ul id='menuList'>\n";
     foreach ($hmenu[0] as $top => $topvalue)
     {
-        echo "<li class='menuitem'>";
-        // Permission Required: ".permission_name($topvalue['perm'])."
-        if ($topvalue['perm'] >=1 AND !in_array($topvalue['perm'], $_SESSION['permissions']))
+        if ((!empty($topvalue['enablevar']) AND $CONFIG[$topvalue['enablevar']])
+            OR empty($topvalue['enablevar']))
         {
-            echo "<a href='javascript:void();' class='greyed'>{$topvalue['name']}</a>";
-        }
-        else
-        {
-            echo "<a href='{$topvalue['url']}'>{$topvalue['name']}</a>";
-        }
-
-        // Do we need a submenu?
-        if ($topvalue['submenu'] > 0 AND in_array($topvalue['perm'], $_SESSION['permissions']))
-        {
-            echo "\n<ul>"; //  id='menuSub'
-            foreach ($hmenu[$topvalue['submenu']] as $sub => $subvalue)
+            echo "<li class='menuitem'>";
+            // Permission Required: ".permission_name($topvalue['perm'])."
+            if ($topvalue['perm'] >=1 AND !in_array($topvalue['perm'], $_SESSION['permissions']))
             {
-                if ($subvalue['submenu'] > 0)
+                echo "<a href='javascript:void();' class='greyed'>{$topvalue['name']}</a>";
+            }
+            else
+            {
+                echo "<a href='{$topvalue['url']}'>{$topvalue['name']}</a>";
+            }
+    
+            // Do we need a submenu?
+            if ($topvalue['submenu'] > 0 AND in_array($topvalue['perm'], $_SESSION['permissions']))
+            {
+                echo "\n<ul>"; //  id='menuSub'
+                foreach ($hmenu[$topvalue['submenu']] as $sub => $subvalue)
                 {
-                    echo "<li class='submenu'>";
-                }
-                else
-                {
-                    echo "<li>";
-                }
-
-                if ($subvalue['perm'] >=1 AND !in_array($subvalue['perm'], $_SESSION['permissions']))
-                {
-                    echo "<a href='javascript:void();' class='greyed'>{$subvalue['name']}</a>";
-                }
-                else
-                {
-                    echo "<a href=\"{$subvalue['url']}\">{$subvalue['name']}</a>";
-                }
-
-                if ($subvalue['submenu'] > 0 AND in_array($subvalue['perm'], $_SESSION['permissions']))
-                {
-                    echo "<ul>"; // id ='menuSubSub'
-                    foreach ($hmenu[$subvalue['submenu']] as $subsub => $subsubvalue)
+                    if((!empty($subvalue['enablevar']) AND $CONFIG[$subvalue['enablevar']])
+                        OR empty($subvalue['enablevar']))
                     {
-                        if ($subsubvalue['submenu'] > 0)
+                        if ($subvalue['submenu'] > 0)
                         {
                             echo "<li class='submenu'>";
                         }
@@ -146,51 +129,84 @@ if ($sit[0] != '')
                         {
                             echo "<li>";
                         }
-
-                        if ($subsubvalue['perm'] >=1 AND !in_array($subsubvalue['perm'], $_SESSION['permissions']))
+        
+                        if ($subvalue['perm'] >=1 AND !in_array($subvalue['perm'], $_SESSION['permissions']))
                         {
-                            echo "<a href=\"javascript:void();\" class='greyed'>{$subsubvalue['name']}</a>";
+                            echo "<a href='javascript:void();' class='greyed'>{$subvalue['name']}</a>";
                         }
                         else
                         {
-                            echo "<a href='{$subsubvalue['url']}'>{$subsubvalue['name']}</a>";
+                            echo "<a href=\"{$subvalue['url']}\">{$subvalue['name']}</a>";
                         }
-
-                        if ($subsubvalue['submenu'] > 0 AND in_array($subsubvalue['perm'], $_SESSION['permissions']))
+        
+                        if ($subvalue['submenu'] > 0 AND in_array($subvalue['perm'], $_SESSION['permissions']))
                         {
-                            echo "<ul>"; // id ='menuSubSubSub'
-                            foreach ($hmenu[$subsubvalue['submenu']] as $subsubsub => $subsubsubvalue)
+                            echo "<ul>"; // id ='menuSubSub'
+                            foreach ($hmenu[$subvalue['submenu']] as $subsub => $subsubvalue)
                             {
-                                if ($subsubsubvalue['submenu'] > 0)
+                                if((!empty($subsubvalue['enablevar']) AND $CONFIG[$subsubvalue['enablevar']])
+                                    OR empty($subsubvalue['enablevar']))
                                 {
-                                    echo "<li class='submenu'>";
+                                    if ($subsubvalue['submenu'] > 0)
+                                    {
+                                        echo "<li class='submenu'>";
+                                    }
+                                    else
+                                    {
+                                        echo "<li>";
+                                    }
+            
+                                    if ($subsubvalue['perm'] >=1 AND !in_array($subsubvalue['perm'], $_SESSION['permissions']))
+                                    {
+                                        echo "<a href=\"javascript:void();\" class='greyed'>{$subsubvalue['name']}</a>";
+                                    }
+                                    else
+                                    {
+                                        echo "<a href='{$subsubvalue['url']}'>{$subsubvalue['name']}</a>";
+                                    }
+            
+                                    if ($subsubvalue['submenu'] > 0 AND in_array($subsubvalue['perm'], $_SESSION['permissions']))
+                                    {
+                                        echo "<ul>"; // id ='menuSubSubSub'
+                                        foreach ($hmenu[$subsubvalue['submenu']] as $subsubsub => $subsubsubvalue)
+                                        {
+                                             if((!empty($subsubsubvalue['enablevar']) AND $CONFIG[$subsubsubvalue['enablevar']])
+                                                OR empty($subsubsubvalue['enablevar']))
+                                            {
+                                                if ($subsubsubvalue['submenu'] > 0)
+                                                {
+                                                    echo "<li class='submenu'>";
+                                                }
+                                                else
+                                                {
+                                                    echo "<li>";
+                                                }
+                
+                                                if ($subsubsubvalue['perm'] >=1 AND !in_array($subsubsubvalue['perm'], $_SESSION['permissions']))
+                                                {
+                                                    echo "<a href='javascript:void();' class='greyed'>{$subsubsubvalue['name']}</a>";
+                                                }
+                                                else
+                                                {
+                                                    echo "<a href='{$subsubsubvalue['url']}'>{$subsubsubvalue['name']}</a>";
+                                                }
+                                                echo "</li>\n";
+                                            }
+                                        }
+                                        echo "</ul>\n";
+                                    }
+                                    echo "</li>\n";
                                 }
-                                else
-                                {
-                                    echo "<li>";
-                                }
-
-                                if ($subsubsubvalue['perm'] >=1 AND !in_array($subsubsubvalue['perm'], $_SESSION['permissions']))
-                                {
-                                    echo "<a href='javascript:void();' class='greyed'>{$subsubsubvalue['name']}</a>";
-                                }
-                                else
-                                {
-                                    echo "<a href='{$subsubsubvalue['url']}'>{$subsubsubvalue['name']}</a>";
-                                }
-                                echo "</li>\n";
                             }
                             echo "</ul>\n";
                         }
                         echo "</li>\n";
                     }
-                    echo "</ul>\n";
                 }
-                echo "</li>\n";
+               echo "</ul>\n";
             }
-           echo "</ul>\n";
+            echo "</li>\n";
         }
-        echo "</li>\n";
     }
     echo "</ul>\n\n";
 
