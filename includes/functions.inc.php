@@ -1605,7 +1605,6 @@ function user_drop_down($name, $id, $accepting=TRUE, $exclude=FALSE, $attribs=""
     // INL 2Nov04 Optional accepting field, to hide the status 'Not Accepting'
     // INL 19Jan05 Option exclude field to exclude a user, or an array of
     // users
-
     global $dbUsers;
     $sql  = "SELECT id, realname, accepting FROM `{$dbUsers}` WHERE status > 0 ORDER BY realname ASC";
     $result = mysql_query($sql);
@@ -1636,6 +1635,7 @@ function user_drop_down($name, $id, $accepting=TRUE, $exclude=FALSE, $attribs=""
             else
             {
                 if ($exclude!=$users['id']) $show=TRUE;
+                else $show = FALSE;
             }
         }
         if ($show==TRUE)
@@ -1983,7 +1983,7 @@ function userstatus_bardrop_down($name, $id)
     $result = mysql_query($sql);
     if (mysql_error()) trigger_error(mysql_error(),E_USER_WARNING);
 
-    $html = "<select name='$name' title='Set your status' onchange=\"if (this.options[this.selectedIndex].value != 'null') { window.open(this.options[this.selectedIndex].value,'_top') }\">\n";
+    $html = "<select name='$name' title='{$strSetYourStatus}' onchange=\"if (this.options[this.selectedIndex].value != 'null') { window.open(this.options[this.selectedIndex].value,'_top') }\">\n";
     while ($statuses = mysql_fetch_array($result))
     {
         if ($statuses["id"] > 0)
@@ -1995,7 +1995,7 @@ function userstatus_bardrop_down($name, $id)
             }
 
             $html .= "value='set_user_status.php?mode=setstatus&amp;userstatus={$statuses['id']}'>";
-            $html .= "{$statuses["name"]}</option>\n";
+            $html .= "{$GLOBALS[$statuses['name']]}</option>\n";
         }
     }
     $html .= "<option value='set_user_status.php?mode=setaccepting&amp;accepting=Yes' class='enable seperator'>{$GLOBALS['strAccepting']}</option>\n";
