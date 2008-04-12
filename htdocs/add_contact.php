@@ -79,8 +79,6 @@ if (empty($submit) OR !empty($_SESSION['formerrors']['add_contact']))
     echo " /></td></tr>\n";
     echo "<tr><th>{$strSite} <sup class='red'>*</sup></th><td>";
     echo site_drop_down('siteid',$siteid)."</td></tr>\n";
-    // KMH REMOVED 12/12/07, form fails as dojo doesn't have the siteID
-//     echo "<input dojoType='ComboBox' dataUrl='autocomplete.php?action=sites' style='width: 300px;' name='search_string' />";
 
     echo "<tr><th>{$strDepartment}</th><td><input maxlength='255' name='department' size='35'";
     if ($_SESSION['formdata']['add_contact']['department'] != '')
@@ -98,7 +96,7 @@ if (empty($submit) OR !empty($_SESSION['formerrors']['add_contact']))
 
     echo "<label>";
     html_checkbox('dataprotection_email', 'No');
-    echo "{$strEmail} {$strDataProtection}</label>";
+    echo "{$strEmail} {$strDataProtection}</label>".help_link("EmailDataProtection");
     echo "</td></tr>\n";
 
     echo "<tr><th>{$strTelephone}</th><td><input maxlength='50' name='phone' size='35'";
@@ -110,7 +108,7 @@ if (empty($submit) OR !empty($_SESSION['formerrors']['add_contact']))
 
     echo "<label>";
     html_checkbox('dataprotection_phone', 'No');
-    echo "{$strTelephone} {$strDataProtection}</label>";
+    echo "{$strTelephone} {$strDataProtection}</label>".help_link("TelephoneDataProtection");
     echo "</td></tr>\n";
 
     echo "<tr><th>{$strMobile}</th><td><input maxlength='100' name='mobile' size='35'";
@@ -129,7 +127,7 @@ if (empty($submit) OR !empty($_SESSION['formerrors']['add_contact']))
 
     echo "<tr><th>{$strAddress}</th><td><label>";
     html_checkbox('dataprotection_address', 'No');
-    echo " {$strAddress} {$strDataProtection}</label></td></tr>\n";
+    echo " {$strAddress} {$strDataProtection}</label>".help_link("AddressDataProtection")."</td></tr>\n";
     echo "<tr><th></th><td><label><input type='checkbox' name='usesiteaddress' value='yes' onclick=\"toggleDiv('hidden')\" /> {$strSpecifyAddress}</label></td></tr>\n";
     echo "<tbody id='hidden' style='display:none'>";
     echo "<tr><th>{$strAddress1}</th><td><input maxlength='255' name='address1' size='35' /></td></tr>\n";
