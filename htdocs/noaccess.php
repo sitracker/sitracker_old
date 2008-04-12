@@ -19,6 +19,8 @@ $id = cleanvar($_REQUEST['id']);
 
 include ('htmlheader.inc.php');
 
+echo "<h2><img src='{$CONFIG['application_webpath']}images/icons/{$iconset}/32x32/permissiondenied.png' alt='{$strPermissionDenied}' />";
+echo "{$strPermissionDenied}</h2>";
 // log the failure
 if ($username != '')
 {
