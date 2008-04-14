@@ -611,6 +611,7 @@ function clearAppointments()
             appointmentProperties[prop]['id'] = false;
         }
     }
+    appointmentProperties = new Array();
 }
 
 function saveAnItemToServer(inputId)
