@@ -384,7 +384,7 @@ while ($incidents = mysql_fetch_array($result))
         {
             echo "<td align='center'>";
             if ($incidents['status'] == 2) echo "{$strAge}: ".format_seconds($incidents["duration_closed"]);
-            else echo format_seconds($incidents["duration"])." old";
+            else echo sprintf($strXold, format_seconds($incidents["duration"]));
         }
         echo "</td>";
     }

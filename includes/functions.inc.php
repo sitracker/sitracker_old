@@ -2585,8 +2585,8 @@ function replace_specials($string, $paramarray)
 */
 function format_seconds($seconds)
 {
-    global $str1Day, $str1Minute, $str1Month, $str1Hour, $strXMinute;
-    global $strXMinutes, $strXHours, $strXDays, $strXMonths, $strXYears;
+    global $str1Hour, $str1Minute, $str1Day, $str1Month;
+    global $strXHours, $strXMinutes, $strXDays, $strXMonths, $strXYears;
 
     if ($seconds <= 0)
     {
@@ -2610,7 +2610,7 @@ function format_seconds($seconds)
 
         if ($years > 0)
         {
-            $return_string .= sprintf($strXYears, $year)." ";
+            $return_string .= sprintf($strXYears, $year).' ';
         }
 
         if ($months > 0 AND $years < 2)
@@ -2621,7 +2621,7 @@ function format_seconds($seconds)
             }
             else
             {
-                $return_string .= sprintf($strXMonths, $months)." ";
+                $return_string .= sprintf($strXMonths, $months).' ';
             }
         }
 
@@ -2664,7 +2664,7 @@ function format_seconds($seconds)
         {
             if ($minutes <= 1)
             {
-                $return_string .= sprintf($strXMinute, $minutes)." ";
+                $return_string .= $str1Minute." ";
             }
             else
             {
@@ -2698,7 +2698,7 @@ function format_seconds($seconds)
 */
 function format_workday_minutes($minutes)
 {
-    global $CONFIG, $strXMinutes, $strXMinute, $strXHours, $strXHour;
+    global $CONFIG, $strXMinutes, $str1Minute, $strXHours, $strXHour;
     global $strXWorkingDay, $strXWorkingDays;
     $working_day_mins = ($CONFIG['end_working_day'] - $CONFIG['start_working_day']) / 60;
     $days = floor($minutes / $working_day_mins);
@@ -2730,7 +2730,7 @@ function format_workday_minutes($minutes)
 
     if ($days < 1 AND $hours < 8 AND $minutes == 1)
     {
-        $time .= " ".sprintf($strXMinute, $minutes);
+        $time .= " ".$str1Minute;
     }
     elseif ($days < 1 AND $hours < 8 AND $minutes > 1)
     {
@@ -2739,7 +2739,7 @@ function format_workday_minutes($minutes)
 
     if ($days == 1 AND $hours < 8 AND $minutes == 1)
     {
-        $time .= " ".sprintf($strXMinute, $minutes);
+        $time .= " ".$str1Minute;
     }
     elseif ($days == 1 AND $hours < 8 AND $minutes > 1)
     {
