@@ -1841,6 +1841,18 @@ ADD `var_incident_visible_all` ENUM( 'true', 'false' ) NOT NULL DEFAULT 'false';
 ALTER TABLE `kbarticles` CHANGE `distribution` `distribution` ENUM( 'public', 'private', 'restricted' ) NOT NULL DEFAULT 'public' COMMENT 'public appears in the portal, private is info never to be released to the public, restricted is info that is sensitive but could be mentioned if asked for example' ;
 UPDATE kbarticles SET `distribution`='public' ;
 
+-- KMH 17/04/08
+UPDATE `permissions` SET `name` = 'View your tasks' WHERE `permissions`.`id` =69 ;
+INSERT INTO `permissions` VALUES (70, 'Create/Edit your Tasks');
+INSERT INTO `permissions` VALUES (71, 'Manage your Triggers');
+INSERT INTO `permissions` VALUES (72, 'Manage System Triggers');
+INSERT INTO `rolepermissions` (`roleid`, `permissionid`, `granted`) VALUES (1, 70, 'true');
+INSERT INTO `rolepermissions` (`roleid`, `permissionid`, `granted`) VALUES (1, 71, 'true');
+INSERT INTO `rolepermissions` (`roleid`, `permissionid`, `granted`) VALUES (1, 72, 'true');
+INSERT INTO `rolepermissions` (`roleid`, `permissionid`, `granted`) VALUES (2, 70, 'true');
+INSERT INTO `rolepermissions` (`roleid`, `permissionid`, `granted`) VALUES (2, 71, 'true');
+
+
 ";
 
 // Important: When making changes to the schema you must add SQL to make the alterations
