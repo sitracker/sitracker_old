@@ -225,7 +225,7 @@ echo "<a href=\"javascript:save_layout();\" id='savelayout' title='Save Dashboar
 /* ]]> */
 </script>
 <?php
-echo "<table border=\"0\" width=\"99%\" id='cols'><tr>";
+echo "<table id='dashboardlayout' border=\"0\" width=\"99%\" id='cols'><tr>";
 echo "<td width=\"33%\" valign='top' id='col0'>";
 
 $arr = explode(",",$cols0);

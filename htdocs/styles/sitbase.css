@@ -232,7 +232,7 @@ div#menu li:hover li ul,
 #incidentqueues form { text-align: center; }
 
 
-.helplink { vertical-align: super; color: #555; margin-left: 2px; font-size: 80%; }
+.helplink { vertical-align: super; color: #555; margin-left: 2px; font-size: 85%; }
 .helplink a { text-decoration: none; cursor: help; position: relative; color: #CC0000; }
 .helplink a span { display: none; position: absolute;
   top: 20px;
