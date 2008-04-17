@@ -1262,12 +1262,17 @@ CREATE TABLE IF NOT EXISTS `notices` (
 ) ENGINE=MyISAM AUTO_INCREMENT=1 ;
 
 CREATE TABLE `triggers` (
-`triggerid` VARCHAR(255) NOT NULL ,
-`userid` TINYINT NOT NULL ,
-`action` enum('ACTION_NONE', 'ACTION_NOTICE', 'ACTION_EMAIL', 'ACTION_JOURNAL') NOT NULL DEFAULT 'ACTION_NONE' ,
-`parameters` VARCHAR( 255 ) NULL ,
-PRIMARY KEY ( `triggerid` , `userid` , `action` )
-) ENGINE = MYISAM ;
+  `id` int(11) NOT NULL auto_increment,
+  `triggerid` varchar(50) NOT NULL,
+  `userid` tinyint(4) NOT NULL,
+  `action` enum('ACTION_NONE','ACTION_EMAIL','ACTION_NOTICE','ACTION_JOURNAL') NOT NULL default 'ACTION_NONE',
+  `template` int(11) NOT NULL,
+  `parameters` varchar(255) default NULL,
+  `checks` varchar(255) default NULL,
+  PRIMARY KEY  (`id`),
+  KEY `triggerid` (`triggerid`),
+  KEY `userid` (`userid`)
+) ENGINE=MyISAM;
 
 INSERT INTO triggers (triggerid, userid, action) VALUES ('TRIGGER_INCIDENT_CREATED', '0', 'ACTION_JOURNAL');
 INSERT INTO triggers (triggerid, userid, action) VALUES ('TRIGGER_INCIDENT_ASSIGNED', '0', 'ACTION_JOURNAL');
@@ -1852,7 +1857,7 @@ INSERT INTO `rolepermissions` (`roleid`, `permissionid`, `granted`) VALUES (1, 7
 INSERT INTO `rolepermissions` (`roleid`, `permissionid`, `granted`) VALUES (2, 70, 'true');
 INSERT INTO `rolepermissions` (`roleid`, `permissionid`, `granted`) VALUES (2, 71, 'true');
 
-
+-- INLL 17/04/08 FIXME Need to check triggers schema for upgrades before 3.35 release
 ";
 
 // Important: When making changes to the schema you must add SQL to make the alterations
