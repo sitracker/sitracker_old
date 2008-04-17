@@ -17,7 +17,7 @@
 
 // TODO we need to clean this schema up to make it confirmed compatible with mysql4
 
-// TODO 3.40 Make this use a configured table prefix
+// TODO 3.35 Make this use a configured table prefix
 
 $schema = "CREATE TABLE `billing_periods` (
 `servicelevelid` INT( 5 ) NOT NULL ,
@@ -1835,12 +1835,12 @@ UPDATE `interfacestyles` SET `iconset` = 'oxygen' WHERE `interfacestyles`.`id` =
 
 ALTER TABLE `maintenance`
 ADD `var_incident_visible_contacts` ENUM( 'true', 'false' ) NOT NULL DEFAULT 'false',
-ADD `var_incident_visible_all` ENUM( 'true', 'false' ) NOT NULL DEFAULT 'false'
+ADD `var_incident_visible_all` ENUM( 'true', 'false' ) NOT NULL DEFAULT 'false';
 
 -- KMH 08/04/08
 ALTER TABLE `kbarticles` CHANGE `distribution` `distribution` ENUM( 'public', 'private', 'restricted' ) NOT NULL DEFAULT 'public' COMMENT 'public appears in the portal, private is info never to be released to the public, restricted is info that is sensitive but could be mentioned if asked for example' ;
 UPDATE kbarticles SET `distribution`='public' ;
-;
+
 ";
 
 // Important: When making changes to the schema you must add SQL to make the alterations
