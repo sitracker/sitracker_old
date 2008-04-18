@@ -10,6 +10,20 @@
 //  Author: Ivan Lucas
 //  Notes: These variables are overwritten by config.inc.php and/or webtrack.conf or sit.conf
 
+###########################################################
+####                                                   ####
+####  IMPORTANT:                                       ####
+####                                                   ####
+####    Don't modify this file to configure your       ####
+####    SiT installation, instead edit the             ####
+####    config.inc.php file.                           ####
+####                                                   ####
+####    If you don't have a config.inc.php file        ####
+####    you can use the config.inc-dist.php file       ####
+####    as a template.                                 ####
+####                                                   ####
+###########################################################
+
 $CONFIG['application_name'] = 'SiT! Support Incident Tracker';
 $CONFIG['application_shortname'] = 'SiT!';
 
