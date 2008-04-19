@@ -1929,7 +1929,6 @@ function closingstatus_drop_down($name, $id)
     * @param $name string. Name attribute
     * @param $id integer. ID of User Status to pre-select. None selected if 0 or blank.
     * @param $userdisable boolean. (optional). When TRUE an additional option is given to allow disabling of accounts
-    * @todo Requires i18n and database i18n
     * @returns string. HTML
 */
 function userstatus_drop_down($name, $id, $userdisable=FALSE)
@@ -1956,7 +1955,7 @@ function userstatus_drop_down($name, $id, $userdisable=FALSE)
                 $html .= "selected='selected' ";
             }
             $html .= "value='{$statuses["id"]}'>";
-            $html .= "{$statuses["name"]}</option>\n";
+            $html .= "{$GLOBALS[$statuses["name"]]}</option>\n";
         }
     }
     $html .= "</select>\n";
@@ -1971,8 +1970,7 @@ function userstatus_drop_down($name, $id, $userdisable=FALSE)
     * @author Ivan Lucas
     * @param $name string. Name attribute
     * @param $id integer. ID of User Status to pre-select. None selected if 0 or blank.
-    * @todo Requires i18n and database i18n
-    * @todo move inline styles to main css file
+   * @todo move inline styles to main css file
     * @returns string. HTML
 */
 function userstatus_bardrop_down($name, $id)
