@@ -861,10 +861,6 @@ INSERT INTO `rolepermissions` (`roleid`, `permissionid`, `granted`) VALUES (3, 5
 INSERT INTO `rolepermissions` (`roleid`, `permissionid`, `granted`) VALUES (3, 60, 'true');
 INSERT INTO `rolepermissions` (`roleid`, `permissionid`, `granted`) VALUES (3, 61, 'true');
 INSERT INTO `rolepermissions` (`roleid`, `permissionid`, `granted`) VALUES (3, 62, 'true');
-INSERT INTO `rolepermissions` (`roleid`, `permissionid`, `granted`) VALUES (2, 69, 'true');
-INSERT INTO `rolepermissions` (`roleid`, `permissionid`, `granted`) VALUES (2, 70, 'true');
-INSERT INTO `rolepermissions` (`roleid`, `permissionid`, `granted`) VALUES (2, 71, 'true');
-
 
 
 CREATE TABLE `servicelevels` (

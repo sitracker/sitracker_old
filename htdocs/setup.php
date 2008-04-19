@@ -777,7 +777,7 @@ switch ($_REQUEST['action'])
                         echo "</p>";
                         echo "<p>After fixing this, please re-run <a href='{$_SERVER[PHP_SELF]}?checkinstallcomplete' class='button'>setup</a> to create an admin account.</p>";
                     }
-                    elseif(!isset($_REQUEST))
+                    elseif (!isset($_REQUEST))
                     {
                         echo "<p class='error'>SiT! requires PHP 4.2.0 or later</p>";
                     }
@@ -785,7 +785,7 @@ switch ($_REQUEST['action'])
                     {
                         echo "<p class='error'>SiT! strongly recommends that you change your php.ini setting <code>register_globals</code> to OFF.</p>";
                     }
-                    elseif (setup_check_adminuser()==FALSE)
+                    elseif (setup_check_adminuser() == FALSE)
                     {
                         echo "<p><span style='color: red; font-weight: bolder;'>Important:</span> you <strong>must</strong> create an admin account before you can use SiT</p>";
                         echo "<form action='setup.php' method='post'>\n";
