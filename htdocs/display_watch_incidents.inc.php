@@ -96,11 +96,11 @@ if (mysql_num_rows($result) > 0)
                 break;
             case '1': //contact
                 $sql = "SELECT i.id, i.title, i.status, i.servicelevel, i.maintenanceid, i.priority, c.forenames, c.surname, c.siteid ";
-                $sql .= "FROM `{$dbIncidents}` AS i, `{$dbContacts}`  AS c";
+                $sql .= "FROM `{$dbIncidents}` AS i, `{$dbContacts}`  AS c ";
                 $sql .= "WHERE i.contact = c.id AND i.contact = {$obj->id} ";
                 $sql .= "AND i.status != 2 AND i.status != 7 ";
 
-                $lsql = "SELECT forenames, surname FROM `{$dbContacts}` WHERE id = {$obj->id}";
+                $lsql = "SELECT forenames, surname FROM `{$dbContacts}` WHERE id = {$obj->id} ";
                 $lresult = mysql_query($lsql);
                 if (mysql_error()) trigger_error(mysql_error(),E_USER_ERROR);
                 $lobj = mysql_fetch_object($lresult);
@@ -108,7 +108,7 @@ if (mysql_num_rows($result) > 0)
                 break;
             case '2': //engineer
                 $sql = "SELECT i.id, i.title, i.status, i.servicelevel, i.maintenanceid, i.priority, c.forenames, c.surname, c.siteid ";
-                $sql .= "FROM `{$dbIncidents}` AS i, `{$dbContacts}`  AS c";
+                $sql .= "FROM `{$dbIncidents}` AS i, `{$dbContacts}`  AS c ";
                 $sql .= "WHERE i.contact = c.id AND (i.owner = {$obj->id} OR i.towner = {$obj->id}) ";
                 $sql .= "AND i.status != 2 AND i.status != 7 ";
 
