@@ -95,12 +95,7 @@ if (mysql_error()) trigger_error("MySQL Query Error ".mysql_error(), E_USER_ERRO
 while (list($id, $filename, $size, $userid, $shortdescription, $path, $downloads, $filedate, $fileversion,
             $productid, $releaseid, $expiry, $published) = mysql_fetch_row($result))
 {
-    // calculate filesize
-    $j = 0;
-    $ext = array($strBytes, $strKBytes, $strMBytes, $strGBytes, $strTBytes);
-    $pretty_file_size = $size;
-    while ($pretty_file_size >= pow(1024,$j)) ++$j;
-    $pretty_file_size = round($pretty_file_size / pow(1024,$j-1) * 100) / 100 . ' ' . $ext[$j-1];
+    $pretty_file_size = readable_file_size($size);
 
     if ($published=='no') echo "<tr class='urgent'>";
     else echo "<tr>";
