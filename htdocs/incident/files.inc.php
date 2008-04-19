@@ -32,22 +32,7 @@ if ($_FILES['attachment']['name'] != "")
     // Check if we had an error whilst uploading
     if($_FILES['attachment']['error'] != '' AND $_FILES['attachment']['error'] != UPLOAD_ERR_OK)
     {
-        echo "<div class='detailinfo'>\n";
-
-        echo "An error occurred while uploading <strong>{$_FILES['attachment']['name']}</strong>";
-
-        echo "<p class='error'>";
-        switch ($_FILES['attachment']['error'])
-        {
-            case UPLOAD_ERR_INI_SIZE:
-            case UPLOAD_ERR_FORM_SIZE:  echo "The uploaded file was too large"; break;
-            case UPLOAD_ERR_PARTIAL: echo "The file was only partially uploaded"; break;
-            case UPLOAD_ERR_NO_FILE: echo "No file was uploaded"; break;
-            case UPLOAD_ERR_NO_TMP_DIR: echo "Temporary folder is missing"; break;
-            default: echo "An unknown file upload error occurred"; break;
-        }
-        echo "</p>";
-        echo "</div>";
+        echo get_file_upload_error_message($_FILES['attachment']['error'], $_FILES['attachment']['name']);
     }
     else
     {
@@ -94,14 +79,6 @@ if (isset($_REQUEST['fileselection']))
 }
 
 
-$j = 0;
-
-$ext = array($strBytes, $strKBytes, $strMBytes, $strGBytes, $strTBytes);
-while ($att_max_filesize >= pow(1024,$j))
-{
-    ++$j;
-}
-$attmax = round($att_max_filesize / pow(1024,$j-1) * 100) / 100 . ' ' . $ext[$j-1];
 echo "<div class='detailhead'>\n";
 echo "{$strFileManagement}";
 echo "</div>";
@@ -112,7 +89,7 @@ echo "<input type='hidden' name='action' value='{$selectedaction}' />";
 echo "<input type='hidden' name='MAX_FILE_SIZE' value='{$att_max_filesize}' />";
 // maxfilesize='{$att_file_size}'
 echo "<input class='textbox' type='file' name='attachment' size='30' /> ";
-echo "<input type='submit' value=\"{$strAttachFile}\" /> (&lt;{$attmax})";
+echo "<input type='submit' value=\"{$strAttachFile}\" /> (&lt;".readable_file_size($att_max_filesize).")";
 echo "</form>";
 echo "</div>";
 

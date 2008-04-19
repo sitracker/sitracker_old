@@ -594,13 +594,13 @@ else
     if ($timeofnextaction > ($oldtimeofnextaction+60))
     {
         $timetext = "Next Action Time: ";
-        if (($oldtimeofnextaction-$now)<1) $timetext.="None";
-        else $timetext.=date("D jS M Y @ g:i A", $oldtimeofnextaction);
-        $timetext.=" -&gt; <b>";
-        if ($timeofnextaction<1) $timetext.="None";
-        else $timetext.=date("D jS M Y @ g:i A", $timeofnextaction);
-            $timetext.="</b>\n\n";
-        $bodytext=$timetext.$bodytext;
+        if (($oldtimeofnextaction - $now) < 1) $timetext .= "None";
+        else $timetext .= date("D jS M Y @ g:i A", $oldtimeofnextaction);
+        $timetext .= " -&gt; <b>";
+        if ($timeofnextaction<1) $timetext .= "None";
+        else $timetext .= date("D jS M Y @ g:i A", $timeofnextaction);
+        $timetext .= "</b>\n\n";
+        $bodytext = $timetext.$bodytext;
     }
     // was '$attachment'
     if ($_FILES['attachment']['name'] != '' && isset($_FILES['attachment']['name']) == TRUE)

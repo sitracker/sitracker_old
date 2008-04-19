@@ -7696,6 +7696,59 @@ function help_link($context)
 }
 
 
+/**
+ * Function to return an user error message when a file fails to upload
+ * @author Paul Heaney
+ * @param errorcode The error code from $_FILES['file']['error']
+ * @param name The file name which was uploaded from $_FILES['file']['name']
+ * @return String containing the error message (in HTML)
+ */
+function get_file_upload_error_message($errorcode, $name)
+{   
+    $str = "<div class='detailinfo'>\n";
+
+    $str .=  "An error occurred while uploading <strong>{$_FILES['attachment']['name']}</strong>";
+
+    $str .=  "<p class='error'>";
+    switch ($errorcode)
+    {
+        case UPLOAD_ERR_INI_SIZE:  $str .= "The file exceded the maximum size set in PHP"; break;
+        case UPLOAD_ERR_FORM_SIZE:  $str .=  "The uploaded file was too large"; break;
+        case UPLOAD_ERR_PARTIAL: $str .=  "The file was only partially uploaded"; break;
+        case UPLOAD_ERR_NO_FILE: $str .=  "No file was uploaded"; break;
+        case UPLOAD_ERR_NO_TMP_DIR: $str .=  "Temporary folder is missing"; break;
+        default: $str .=  "An unknown file upload error occurred"; break;
+    }
+    $str .=  "</p>";
+    $str .=  "</div>";
+    
+    return $str;
+}
+
+
+/**
+ * Function to produce a user readable file size i.e 2048 bytes 1KB etc
+ *
+ * @author Paul Heaney
+ * @param filesize - filesize in bytes
+ * @return String filesize in readable format
+ *
+ */
+function readable_file_size($filesize)
+{
+    global $strBytes, $strKBytes, $strMBytes, $strGBytes, $strTBytes;
+    $j = 0;
+
+    $ext = array($strBytes, $strKBytes, $strMBytes, $strGBytes, $strTBytes);
+    while ($filesize >= pow(1024,$j))
+    {
+        ++$j;
+    }
+    $filemax = round($filesize / pow(1024,$j-1) * 100) / 100 . ' ' . $ext[$j-1];
+    
+    return $filemax;
+}
+
 // -------------------------- // -------------------------- // --------------------------
 // leave this section at the bottom of functions.inc.php ================================
 

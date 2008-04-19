@@ -22,16 +22,19 @@ require ('auth.inc.php');
 $file = cleanvar($_REQUEST['file']);
 $action = cleanvar($_REQUEST['action']);
 
+$max_filesize = return_bytes($CONFIG['upload_max_filesize']);
+
+
 if (empty($action))
 {
     include ('htmlheader.inc.php');
-    ?>
+    ?>    
     <h2>Upload Public File</h2>
     <p align='center'>IMPORTANT: Files published here are <strong>public</strong> and available to all ftp users.</p>
     <form name="publishform" action="<?php echo $_SERVER['PHP_SELF']; ?>" method="post" enctype="multipart/form-data">
     <table class='vertical'>
-    <tr><th>File <small>(&lt;<?php echo $CONFIG['upload_max_filesize']; ?> bytes)</small>:</th>
-    <td class='shade2'><input type="hidden" name="MAX_FILE_SIZE" value="<?php echo $CONFIG['upload_max_filesize']; ?>" />
+    <tr><th>File <small>(&lt;<?php echo readable_file_size($max_filesize); ?>)</small>:</th>
+    <td class='shade2'><input type="hidden" name="MAX_FILE_SIZE" value="<?php echo $max_filesize; ?>" />
     <input type="file" name="file" size="40" /></td></tr>
 
     <tr><th>Title:</th><td><input type="text" name="shortdescription" maxlength="255" size="40" /></td></tr>
@@ -93,24 +96,64 @@ else
     // TODO v3.2x ext variables
     $file_name = $_FILES['file']['name'];
 
+    $shortdescription = cleanvar($_REQUEST['shortdescription']);
+    $longdescription = cleanvar($_REQUEST['longdescription']);
+    $fileversion = cleanvar($_REQUEST['fileversion']);
+
+    $expirytype = cleanvar($_REQUEST['expiry_none']);
+    
+   
+    if ($expirytype == 'time')
+    {
+        $days = cleanvar($_REQUEST['expiry_days']);
+        $hours = cleanvar($_REQUEST['expiry_hours']);
+        $minutes = cleanva($_REQUEST['expiry_minutes']);
+        
+        if ($days < 1 && $hours < 1 && $minutes < 1)
+        {
+            $expirydate = 0;
+        }
+        else
+        {
+            $expirydate = calculate_time_of_next_action($days, $hours, $minutes);
+        }
+    }
+    elseif ($expirytype == 'date')
+    {
+        $day = cleanvar($_REQUEST['day']);
+        $month = cleanvar($_REQUEST['month']);
+        $year = cleanvar($_REQUEST['year']);
+        
+        $date = explode("-", $date);
+        $expirydate = mktime(0, 0, 0, $month, $day, $year);
+    }
+    else
+    {
+        $expirydate = 0;
+    }
+
     // receive the uploaded file to a temp directory on the local server
-    if ($_FILES['file']['error']==0)
+    if($_FILES['file']['error'] != '' AND $_FILES['file']['error'] != UPLOAD_ERR_OK)
+    {
+        echo get_file_upload_error_message($_FILES['file']['error'], $_FILES['file']['name']);
+    }
+    else
     {
         $filepath = $CONFIG['attachment_fspath'].$file_name;
-        $mv=move_uploaded_file($_FILES['file']['tmp_name'], $filepath);
+        $mv = move_uploaded_file($_FILES['file']['tmp_name'], $filepath);
         if (!mv) throw_error('!Error: Problem moving uploaded file from temp directory:',$filepath);
 
         if (!file_exists($filepath)) throw_error("Error the temporary upload file ($file) was not found at: ",$filepath);
 
         // Check file size
-        $filesize=filesize($filepath);
+        $filesize = filesize($filepath);
         if ($filesize > $CONFIG['upload_max_filesize'])
         {
             throw_error('User Error: Attachment too large or file ('.$file.') upload error - size:',filesize($filepath));
             // throwing an error isn't the nicest thing to do for the user but there seems to be no way of
             // checking file sizes at the client end before the attachment is uploaded. - INL
         }
-        if ($filesize==FALSE) throw_error('Error handling uploaded file:',$file);
+        if ($filesize == FALSE) throw_error('Error handling uploaded file:',$file);
 
 
         // set up basic connection
@@ -124,7 +167,7 @@ else
         {
             throw_error("FTP Connection failed, connecting to {$CONFIG['ftp_hostname']} for user {$CONFIG['ftp_user_name']}",'');
         }
-        $destination_filepath=$CONFIG['ftp_path'] . $file_name;
+        $destination_filepath = $CONFIG['ftp_path'] . $file_name;
 
         // check the source file exists
         if (!file_exists($filepath)) throw_error('Source file cannot be found', $filepath);
@@ -160,7 +203,6 @@ else
         // close the FTP stream
         ftp_quit($conn_id);
     }
-    else echo "<p class='error'>An error has occurred.</p>";
 
 }
 ?>

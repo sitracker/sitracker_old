@@ -48,6 +48,7 @@ echo "<table summary='files' align='center'>
     <th><a href='{$_SERVER['PHP_SELF']}?orderby=version'>{$strVersion}</a></th>
     <th><a href='{$_SERVER['PHP_SELF']}?orderby=date'>{$strDate}</a></th>
     <th><a href='{$_SERVER['PHP_SELF']}?orderby=expiry'>{$strExpiryDate}</a></th>
+    <th><a href='{$_SERVER['PHP_SELF']}?orderby=published'>{$strPublished}</a></th>
 </tr>";
 
 $sql="SELECT id, filename, size, userid, shortdescription, path, downloads, filedate, fileversion, productid, ";
@@ -56,31 +57,35 @@ $sql .="releaseid, expiry, published FROM `{$dbFiles}` ";
 switch ($orderby)
 {
     case 'filename':
-        $sql.="ORDER by filename ";
+        $sql .= "ORDER by filename ";
     break;
 
     case 'shortdescription':
-        $sql.="ORDER by shortdescription ";
+        $sql .= "ORDER by shortdescription ";
     break;
 
     case 'size':
-        $sql.="ORDER by size ";
+        $sql .= "ORDER by size ";
     break;
 
     case 'version':
-        $sql.="ORDER BY fileversion ";
+        $sql .= "ORDER BY fileversion ";
     break;
 
     case 'expiry':
-        $sql.="ORDER by expiry ";
+        $sql .= "ORDER by expiry ";
     break;
 
     case 'date':
-        $sql.="ORDER BY filedate ";
+        $sql .= "ORDER BY filedate ";
+    break;
+
+    case 'published':
+        $sql .= "ORDER BY published ";
     break;
 
     default:
-        $sql.="ORDER by filename ";
+        $sql .= "ORDER by filename ";
     break;
 }
 
@@ -88,7 +93,7 @@ $result = mysql_query($sql);
 if (mysql_error()) trigger_error("MySQL Query Error ".mysql_error(), E_USER_ERROR);
 
 while (list($id, $filename, $size, $userid, $shortdescription, $path, $downloads, $filedate, $fileversion,
-            $productid, $releaseid, $expiry, $published)=mysql_fetch_row($result))
+            $productid, $releaseid, $expiry, $published) = mysql_fetch_row($result))
 {
     // calculate filesize
     $j = 0;
@@ -106,7 +111,7 @@ while (list($id, $filename, $size, $userid, $shortdescription, $path, $downloads
     echo "<td>$fileversion</td>";
     echo "<td>".ldate($CONFIG['dateformat_filedatetime'],$filedate)."</td>";
     echo "<td>";
-    if ($expiry==0)
+    if ($expiry == 0)
     {
         echo 'Never';
     }
@@ -115,6 +120,9 @@ while (list($id, $filename, $size, $userid, $shortdescription, $path, $downloads
         echo ldate($CONFIG['dateformat_filedatetime'],$expiry);
     }
     echo "</td>";
+    
+    echo "<td>{$published}</td>";
+    
     echo "</tr>\n";
 }
 echo "</table>\n";
