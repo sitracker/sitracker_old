@@ -44,7 +44,10 @@ if ($_FILES['attachment']['name'] != "")
         if (!file_exists($incident_attachment_fspath))
         {
            $mk = mkdir($incident_attachment_fspath, 0770);
-           if (!$mk) trigger_error('Failed creating incident attachment directory: '.$incident_attachment_fspath .$id, E_USER_WARNING);
+           if (!$mk)
+           {
+             trigger_error('Failed creating incident attachment directory: '.$incident_attachment_fspath .$id, E_USER_WARNING);
+           }
         }
         // Move the uploaded file from the temp directory into the incidents attachment dir
         $mv = move_uploaded_file($_FILES['attachment']['tmp_name'], $newfilename);
@@ -99,22 +102,31 @@ echo "</div>";
 */
 function encode_binary($string)
 {
-   $chars = array();
-   $ent = null;
-   $chars = preg_split("//", $string, -1, PREG_SPLIT_NO_EMPTY);
-   for ($i = 0; $i < count($chars); $i++ )
-   {
-     if ( preg_match("/^(\w| )$/",$chars[$i]))
-         $ent[$i] = $chars[$i];
-     elseif ( ord($chars[$i]) < 32) $ent[$i]=".";
-     else
-         $ent[$i] = "&#" . ord($chars[$i]) . ";";
-   }
-
-   if ( sizeof($ent) < 1)
-     return "";
-
-   return implode("",$ent);
+    $chars = array();
+    $ent = null;
+    $chars = preg_split("//", $string, -1, PREG_SPLIT_NO_EMPTY);
+    for ($i = 0; $i < count($chars); $i++ )
+    {
+        if ( preg_match("/^(\w| )$/",$chars[$i]))
+        {
+            $ent[$i] =  $chars[$i];
+        }
+        elseif ( ord($chars[$i]) < 32)
+        {
+            $ent[$i]=".";
+        }
+        else
+        {
+            $ent[$i] = "&#" . ord($chars[$i]) . ";";
+        }
+    }
+    
+    if ( sizeof($ent) < 1)
+    {
+      return "";
+    }
+    
+    return implode("",$ent);
 }
 
 
@@ -142,12 +154,10 @@ function draw_file_row($file, $delim, $incidentid, $incident_attachment_fspath)
         // $url="attachments/".substr($filesarray[$c],strrpos($directory,$delim)+1,strlen($filesarray[$c])-strlen(urlencode($filename)).urlencode(filename));
         $url="{$CONFIG['attachment_webpath']}{$incidentid}/".str_replace('+','%20',urlencode($filename));
     }
-    // calculate filesize
-    $j = 0;
-    $ext = array($GLOBALS['strBytes'], $GLOBALS['strKBytes'], $GLOBALS['strMBytes'], $GLOBALS['strGBytes'], $GLOBALS['strTBytes']);
+
     $filesize = filesize($file);
-    while ($filesize >= pow(1024,$j)) ++$j;
-    $file_size = round($filesize / pow(1024,$j-1) * 100) / 100 . ' ' . $ext[$j-1];
+    $file_size = readable_file_size($filesize);
+    
     if (function_exists('mime_content_type'))
     {
         // FIXME mime_content_type requires php > 4.3 and is deprecated
@@ -196,12 +206,18 @@ if (file_exists($incident_attachment_fspath))
 
     // List the directories first
     $temparray = list_dir($incident_attachment_fspath, 0);
-    if (count($temparray) == 0) echo "<p class='info'>No files<p>";
+    if (count($temparray) == 0)
+    {
+        echo "<p class='info'>No files<p>";
+    }
     else
     {
         foreach ($temparray as $value) {
             if (is_dir($value)) $dirarray[] = $value;
-            elseif (is_file($value) AND substr($value,-1)!='.' AND substr($value,-8)!='mail.eml') $rfilearray[] = $value;
+            elseif (is_file($value) AND substr($value,-1) != '.' AND substr($value,-8) != 'mail.eml')
+            {
+                $rfilearray[] = $value;
+            }
         }
 
         if (count($rfilearray) >= 1)
@@ -227,8 +243,8 @@ if (file_exists($incident_attachment_fspath))
             $directory = substr($dir,0,strrpos($dir,$delim));
             $dirname = substr($dir,strrpos($dir,$delim)+1,strlen($dir));
             if (is_number($dirname) &&
-                $dirname!=$id &&
-                strlen($dirname)==10)
+                $dirname != $id &&
+                strlen($dirname) == 10)
             {
                 $dirprettyname = ldate('l jS M Y @ g:ia',$dirname);
             }
@@ -248,15 +264,18 @@ if (file_exists($incident_attachment_fspath))
             {
                 echo $headhtml;  // print the directory header bar that we drew above
                 echo "<div class='detailentry'>\n";
-                if (in_array("{$dir}{$delim}mail.eml",$tempfarray))
+                if (in_array("{$dir}{$delim}mail.eml", $tempfarray))
                 {
-                    $updatelink=readlink($dir);
-                    $updateid=substr($updatelink,strrpos($updatelink,$delim)+1,strlen($updatelink));
+                    $updatelink = readlink($dir);
+                    $updateid = substr($updatelink,strrpos($updatelink,$delim)+1,strlen($updatelink));
                     echo "<p>These files arrived by <a href='{$CONFIG['attachment_webpath']}{$incidentid}/{$dirname}/mail.eml'>email</a>, jump to the appropriate <a href='incident_details.php?id={$incidentid}#$updateid'>entry in the log</a></p>";
                 }
                 foreach ($tempfarray as $fvalue)
                 {
-                    if (is_file($fvalue) AND substr($fvalue,-8)!='mail.eml') $filearray[] = $fvalue;
+                    if (is_file($fvalue) AND substr($fvalue,-8) != 'mail.eml')
+                    {
+                        $filearray[] = $fvalue;
+                    }
                 }
                 echo "<table>\n";
                 foreach ($filearray AS $file)

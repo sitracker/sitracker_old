@@ -7,7 +7,7 @@
 // This software may be used and distributed according to the terms
 // of the GNU General Public License, incorporated herein by reference.
 //
-
+// FIXME needs i18n
 
 // Author: Ivan Lucas <ivanlucas[at]users.sourceforge.net>
 @include ('set_include_path.inc.php');
@@ -28,8 +28,9 @@ $max_filesize = return_bytes($CONFIG['upload_max_filesize']);
 if (empty($action))
 {
     include ('htmlheader.inc.php');
-    ?>    
-    <h2>Upload Public File</h2>
+ 
+    echo "<h2>Upload Public File</h2>";
+    ?>
     <p align='center'>IMPORTANT: Files published here are <strong>public</strong> and available to all ftp users.</p>
     <form name="publishform" action="<?php echo $_SERVER['PHP_SELF']; ?>" method="post" enctype="multipart/form-data">
     <table class='vertical'>
@@ -48,44 +49,50 @@ if (empty($action))
     <input type="radio" name="expiry_none" value="date" />On specified Date<br />&nbsp;&nbsp;&nbsp;
     <?php
     // Print Listboxes for a date selection
-    ?><select name='day' onclick="window.document.publishform.expiry_none[1].checked = true;"><?php
+    echo "<select name='day' onclick=\"window.document.publishform.expiry_none[1].checked = true;\">";
+    
     for ($t_day=1;$t_day<=31;$t_day++)
     {
-        echo "<option value=\"$t_day\" ";
-        if ($t_day==date("j"))
+        echo "<option value=\"{$t_day}\" ";
+        if ($t_day == date("j"))
         {
-        echo "selected='selected'";
+            echo "selected='selected'";
         }
         echo ">$t_day</option>\n";
     }
-    ?></select><select name='month' onclick="window.document.publishform.expiry_none[1].checked = true;"><?php
-    for ($t_month=1;$t_month<=12;$t_month++)
+    
+    echo "</select><select name='month' onclick=\"window.document.publishform.expiry_none[1].checked = true;\">";
+  
+    for ($t_month = 1; $t_month <= 12; $t_month++)
     {
-        echo "<option value=\"$t_month\"";
-        if ($t_month==date("n"))
+        echo "<option value=\"{$t_month}\"";
+        if ($t_month == date("n"))
         {
             echo " selected='selected'";
         }
         echo ">". date ("F", mktime(0,0,0,$t_month,1,2000)) ."</option>\n";
     }
-    ?></select><select name='year' onclick="window.document.publishform.expiry_none[1].checked = true;"><?php
-    for ($t_year=(date("Y")-1);$t_year<=(date("Y")+5);$t_year++)
+    
+    echo "</select><select name='year' onclick=\"window.document.publishform.expiry_none[1].checked = true;\">";
+    
+    for ($t_year = (date("Y")-1); $t_year <= (date("Y")+5); $t_year++)
     {
-        echo "<option value=\"$t_year\" ";
-        if ($t_year==date("Y"))
+        echo "<option value=\"{$t_year}\" ";
+        if ($t_year == date("Y"))
         {
             echo "selected='selected'";
         }
         echo ">$t_year</option>\n";
     }
-    ?></select>
-    </td>
-    </tr>
-    </table>
-    <p align='center'><input type="submit" value="Publish" /><input type="hidden" name="action" value="publish" /></p>
-    <p align='center'><a href='ftp_list_files.php'>Back to list</a></p>
-    </form>
-    <?php
+    echo "</select>";
+    echo "</td>";
+    echo "</tr>";
+    echo "</table>";
+    echo "<p align='center'><input type='submit' value='{$strPublish}' />";
+    echo "<input type='hidden' name='action' value='publish' /></p>";
+    echo "<p align='center'><a href='ftp_list_files.php'>{$strBackToList}</a></p>";
+    echo "</form>";
+    
     include ('htmlfooter.inc.php');
 }
 else

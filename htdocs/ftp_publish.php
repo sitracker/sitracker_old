@@ -26,18 +26,14 @@ $minVal = 1;
 $randvala = (mt_rand() % ($maxVal-$minVal)) + $minVal;
 // seed with current time
 mt_srand($now);
-$maxVal=1000000;
-$minVal=1;
+$maxVal = 1000000;
+$minVal = 1;
 $randvalb = (mt_rand() % ($maxVal-$minVal)) + $minVal;
 $randomdir = dechex(crc32($randvala.$randvalb));
 
 $filesize = filesize($source_file);
-// calculate filesize
-$j = 0;
-$ext = array($strBytes, $strKBytes, $strMBytes, $strGBytes, $strTBytes);
-$pretty_file_size = $filesize;
-while ($pretty_file_size >= pow(1024,$j)) ++$j;
-$pretty_file_size = round($pretty_file_size / pow(1024,$j-1) * 100) / 100 . ' ' . $ext[$j-1];
+
+$pretty_file_size = readable_file_size($filesize);
 
 // FIXME This temp variable name can't be right can it?  INL
 if (!isset($temp_directory))

@@ -851,6 +851,7 @@ $strProductOnly = 'Product Only';
 $strProducts = 'Products';
 $strPublic = 'Public';
 $strPublicHoliday = 'Public Holiday';
+$strPublish = 'Publish';
 $strPublished = 'published';
 $strPublishedOnX = 'Publised on %s';
 

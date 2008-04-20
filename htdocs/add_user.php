@@ -209,7 +209,7 @@ else
     // add information if no errors
     if ($errors == 0)
     {
-        $password=strtoupper(md5($password));
+        $password = strtoupper(md5($password));
         $sql = "INSERT INTO `{$dbUsers}` (username, password, realname, roleid, groupid, title, email, phone, mobile, fax, status, var_style, holiday_entitlement) ";
         $sql .= "VALUES ('$username', '$password', '$realname', '$roleid', '$groupid', '$jobtitle', '$email', '$phone', '$mobile', '$fax', 1, '{$CONFIG['default_interface_style']}', '$holiday_entitlement')";
         $result = mysql_query($sql);
@@ -240,6 +240,8 @@ else
         clear_form_errors('add_user');
     }
     else
+    {
         html_redirect("add_user.php", FALSE);
+    }
 }
 ?>
