@@ -398,7 +398,7 @@ INSERT INTO `interfacestyles` (`id`, `name`, `cssurl`, `iconset`, `headerhtml`) 
 (5, 'Classic', 'sit5.css', 'sit', ''),
 (6, 'Orange', 'sit_ph2.css', 'sit', ''),
 (7, 'Yellow and Blue', 'sit7.css', 'sit', ''),
-(8, 'Neoteric', 'sit8.css', 'sit', ''),
+(8, 'Neoteric', 'sit8.css', 'oxygen', ''),
 (9, 'Toms Linux Style', 'sit9.css', 'sit', ''),
 (10, 'Cool Blue', 'sit_ph.css', 'sit', ''),
 (11, 'Just Light', 'sit10.css', 'sit', ''),
