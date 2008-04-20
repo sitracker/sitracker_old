@@ -625,7 +625,7 @@ INSERT INTO `permissions` VALUES (71, 'Manage your Triggers');
 INSERT INTO `permissions` VALUES (72, 'Manage System Triggers');
 INSERT INTO `permissions` VALUES (73, 'Approve Billable Incidents');
 INSERT INTO `permissions` VALUES (74, 'Set duration without timed task (for billable incidents)');
-INSERT INTO `permissions` VALUES (75, 'Set negaive time for duration on incidents (for billable incidents - refunds)');
+INSERT INTO `permissions` VALUES (75, 'Set negative time for duration on incidents (for billable incidents - refunds)');
 
 
 CREATE TABLE `priority` (
@@ -1844,6 +1844,11 @@ ADD `var_incident_visible_all` ENUM( 'true', 'false' ) NOT NULL DEFAULT 'false';
 -- KMH 08/04/08
 ALTER TABLE `kbarticles` CHANGE `distribution` `distribution` ENUM( 'public', 'private', 'restricted' ) NOT NULL DEFAULT 'public' COMMENT 'public appears in the portal, private is info never to be released to the public, restricted is info that is sensitive but could be mentioned if asked for example' ;
 UPDATE kbarticles SET `distribution`='public' ;
+
+-- KMH 12/04/08
+ ALTER TABLE `kbcontent` ADD FULLTEXT (`content`) ;
+ ALTER TABLE `contacts` ADD FULLTEXT (`forenames`, `surname`);
+ ALTER TABLE `sites` ADD FULLTEXT (`name`) ;
 
 -- KMH 17/04/08
 UPDATE `permissions` SET `name` = 'View your tasks' WHERE `permissions`.`id` =69 ;
