@@ -2668,20 +2668,10 @@ function format_seconds($seconds)
             {
                 $return_string .= sprintf($strXMinutes, $minutes)." ";
             }
-
-//             if ($minutes > 1)
-//             {
-//                 $return_string .= "$minutes minutes";
-//             }
         }
-        /*
-            if ($months<1 AND $days<1 AND $hours<1 AND $minutes>0)
-        {
-            $return_string .= "$minutes minutes";
-        }
-        */
 
         $return_string = trim($return_string);
+        if (empty($return_string)) $return_string = "({$seconds})";
         return $return_string;
     }
 }
