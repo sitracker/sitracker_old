@@ -7685,7 +7685,8 @@ function contract_software()
 **/
 function help_link($context)
 {
-    $html = "<span class='helplink'>[<a href='javascript:void(0);' onmouseover=\"contexthelp(this, '$context');\">?<span></span></a>]</span>";
+    global $strHelpChar;
+    $html = "<span class='helplink'>[<a href='javascript:void(0);' onmouseover=\"contexthelp(this, '$context');\">{$strHelpChar}<span></span></a>]</span>";
 
     return $html;
 }
