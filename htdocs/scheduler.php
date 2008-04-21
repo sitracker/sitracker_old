@@ -121,7 +121,6 @@ switch ($_REQUEST['mode'])
         $refresh = 60;
         include ('htmlheader.inc.php');
         echo "<h2>{$strScheduler}</h2>";
-
         $sql = "SELECT * FROM `{$dbScheduler}` ORDER BY action";
         $result = mysql_query($sql);
         if (mysql_error()) trigger_error("MySQL Query Error ".mysql_error(), E_USER_WARNING);
@@ -169,6 +168,7 @@ switch ($_REQUEST['mode'])
                 else $shade = 'shade1';
             }
             echo "</table>\n";
+            echo "<p align='center'>".help_link('Scheduler')."</p>";
 
             // TODO add a check to see if any of the above actions are long overdue, if they are
             // print a message explaining how to set up cron/scheduling
