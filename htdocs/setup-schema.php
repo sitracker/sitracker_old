@@ -882,7 +882,12 @@ CREATE TABLE IF NOT EXISTS `scheduler` (
   KEY `job` (`action`)
 ) ENGINE=MyISAM  ;
 
--- FIXME INL 21Apr08 need to define default scheduler data here before release
+INSERT INTO `scheduler` (`id`, `action`, `params`, `paramslabel`, `description`, `status`, `start`, `end`, `interval`, `lastran`, `success`) VALUES (1, 'CloseIncidents', '554400', 'closure_delay', 'Close incidents that have been marked for closure for longer than the <var>closure_delay</var> parameter (which is in seconds)', 'enabled', '2008-01-01 00:00:00', '0000-00-00 00:00:00', 60, '0000-00-00 00:00:00', 1);
+INSERT INTO `scheduler` (`id`, `action`, `params`, `paramslabel`, `description`, `status`, `start`, `end`, `interval`, `lastran`, `success`) VALUES (2, 'SetUserStatus', '', NULL, '(EXPERIMENTAL) This will set users status                         based on data from their holiday calendar.                        e.g. Out of Office/Away sick.', 'enabled', '2008-01-01 00:00:00', '0000-00-00 00:00:00', 60, '0000-00-00 00:00:00', 1);
+INSERT INTO `scheduler` (`id`, `action`, `params`, `paramslabel`, `description`, `status`, `start`, `end`, `interval`, `lastran`, `success`) VALUES (3, 'PurgeJournal', '', NULL, 'Delete old journal entries according to the config setting <var>$CONFIG[''journal_purge_after'']</var>', 'enabled', '2008-01-01 00:00:00', '0000-00-00 00:00:00', 300, '0000-00-00 00:00:00', 1);
+INSERT INTO `scheduler` (`id`, `action`, `params`, `paramslabel`, `description`, `status`, `start`, `end`, `interval`, `lastran`, `success`) VALUES (4, 'TimeCalc', '', NULL, 'Calculate SLA Target Times and trigger                        OUT_OF_SLA and OUT_OF_REVIEW system email templates where appropriate.', 'enabled', '2008-01-01 00:00:00', '0000-00-00 00:00:00', 60, '0000-00-00 00:00:00', 1);
+INSERT INTO `scheduler` (`id`, `action`, `params`, `paramslabel`, `description`, `status`, `start`, `end`, `interval`, `lastran`, `success`) VALUES (5, 'ChaseCustomers', '', NULL, 'Chase customers', 'disabled', '2008-01-01 00:00:00', '0000-00-00 00:00:00', 3600, '0000-00-00 00:00:00', 1);
+INSERT INTO `scheduler` (`id`, `action`, `params`, `paramslabel`, `description`, `status`, `start`, `end`, `interval`, `lastran`, `success`) VALUES (6, 'CheckWaitingEmail', '', NULL, 'Checks the holding queue for emails and fires the TRIGGER_WAITING_HELD_EMAIL trigger when it finds some.', 'enabled', '2008-01-01 00:00:00', '0000-00-00 00:00:00', 60, '0000-00-00 00:00:00', 1);
 
 
 CREATE TABLE `servicelevels` (
@@ -1805,17 +1810,13 @@ CREATE TABLE IF NOT EXISTS `scheduler` (
   KEY `job` (`action`)
 ) ENGINE=MyISAM  ;
 
+INSERT INTO `scheduler` (`id`, `action`, `params`, `paramslabel`, `description`, `status`, `start`, `end`, `interval`, `lastran`, `success`) VALUES (1, 'CloseIncidents', '554400', 'closure_delay', 'Close incidents that have been marked for closure for longer than the <var>closure_delay</var> parameter (which is in seconds)', 'enabled', '2008-01-01 00:00:00', '0000-00-00 00:00:00', 60, '0000-00-00 00:00:00', 1);
+INSERT INTO `scheduler` (`id`, `action`, `params`, `paramslabel`, `description`, `status`, `start`, `end`, `interval`, `lastran`, `success`) VALUES (2, 'SetUserStatus', '', NULL, '(EXPERIMENTAL) This will set users status                         based on data from their holiday calendar.                        e.g. Out of Office/Away sick.', 'enabled', '2008-01-01 00:00:00', '0000-00-00 00:00:00', 60, '0000-00-00 00:00:00', 1);
+INSERT INTO `scheduler` (`id`, `action`, `params`, `paramslabel`, `description`, `status`, `start`, `end`, `interval`, `lastran`, `success`) VALUES (3, 'PurgeJournal', '', NULL, 'Delete old journal entries according to the config setting <var>$CONFIG[''journal_purge_after'']</var>', 'enabled', '2008-01-01 00:00:00', '0000-00-00 00:00:00', 300, '0000-00-00 00:00:00', 1);
+INSERT INTO `scheduler` (`id`, `action`, `params`, `paramslabel`, `description`, `status`, `start`, `end`, `interval`, `lastran`, `success`) VALUES (4, 'TimeCalc', '', NULL, 'Calculate SLA Target Times and trigger                        OUT_OF_SLA and OUT_OF_REVIEW system email templates where appropriate.', 'enabled', '2008-01-01 00:00:00', '0000-00-00 00:00:00', 60, '0000-00-00 00:00:00', 1);
+INSERT INTO `scheduler` (`id`, `action`, `params`, `paramslabel`, `description`, `status`, `start`, `end`, `interval`, `lastran`, `success`) VALUES (5, 'ChaseCustomers', '', NULL, 'Chase customers', 'disabled', '2008-01-01 00:00:00', '0000-00-00 00:00:00', 3600, '0000-00-00 00:00:00', 1);
+INSERT INTO `scheduler` (`id`, `action`, `params`, `paramslabel`, `description`, `status`, `start`, `end`, `interval`, `lastran`, `success`) VALUES (6, 'CheckWaitingEmail', '', NULL, 'Checks the holding queue for emails and fires the TRIGGER_WAITING_HELD_EMAIL trigger when it finds some.', 'enabled', '2008-01-01 00:00:00', '0000-00-00 00:00:00', 60, '0000-00-00 00:00:00', 1);
 
-INSERT INTO `scheduler` (`id`, `action`, `params`, `description`, `status`, `start`, `end`, `interval`, `lastran`, `success`) VALUES
-(1, 'CloseIncidents', '', 'Close incidents that are marked for closure according to the config setting <var>closure_delay</var>', 'disabled', '2008-02-14 01:23:00', '0000-00-00 00:00:00', 1800, '0000-00-00 00:00:00', 1),
-(2, 'SetUserStatus', '', '(EXPERIMENTAL) This will set users status based on data from their holiday calendar.  e.g. Out of Office/Away sick.', 'disabled', '2008-02-03 01:00:00', '0000-00-00 00:00:00', 1800, '0000-00-00 00:00:00', 1),
-(3, 'PurgeJournal', '', 'Delete old journal entries according to the config setting <var>journal_purge_after</var>', 'disabled', '2008-01-01 00:00:00', '0000-00-00 00:00:00', 43200, '0000-00-00 00:00:00', 1),
-(4, 'TimeCalc', '', 'Calculate SLA Target Times and trigger OUT_OF_SLA and OUT_OF_REVIEW system email templates where appropriate.', 'disabled', '2008-01-01 00:00:00', '0000-00-00 00:00:00', 60, '0000-00-00 00:00:00', 1),
-(5, 'ChaseCustomers', '', 'Chase customers', 'disabled', '2008-01-01 00:00:00', '0000-00-00 00:00:00', 3600, '0000-00-00 00:00:00', 1),
-(6, 'CheckWaitingEmail', '', 'Checks the holding queue for emails and fires the TRIGGER_WAITING_HELD_EMAIL trigger when it finds some.', 'enabled', '2008-01-01 00:00:00', '0000-00-00 00:00:00', 60, '0000-00-00 00:00:00', 1);
-
--- INL 15Feb08 FIXME all this scheduler data is temporary, needs tidying before release
-INSERT INTO `scheduler` (`id`, `action`, `params`, `paramslabel`, `description`, `status`, `start`, `end`, `interval`, `lastran`, `success`) VALUES (1, 'CloseIncidents', '554400', 'closure_delay', 'Close incidents that have been marked for closure for longer than the <var>closure_delay</var> parameter (which is in seconds)', 'enabled', '2008-02-14 01:23:00', '0000-00-00 00:00:00', 60, '2008-02-15 16:35:06', 1);
 
 -- KMH 27/03/08 !!WARNING!! can take a while on large tables
 ALTER TABLE `updates` ADD FULLTEXT ( `bodytext`) ;
