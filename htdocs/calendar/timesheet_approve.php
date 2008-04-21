@@ -122,7 +122,6 @@ else
 {
     $sql = "UPDATE `{$dbTasks}` SET completion = 2 WHERE distribution = 'event' AND owner = $user ";
     $sql.= "AND UNIX_TIMESTAMP(startdate) >= ($date - 86400 * 7) AND UNIX_TIMESTAMP(startdate) < $date";
-    echo $sql;
     mysql_query($sql);
     if (mysql_error()) trigger_error(mysql_error(),E_USER_ERROR);
     html_redirect($_SERVER['PHP_SELF']);

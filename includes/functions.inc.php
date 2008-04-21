@@ -1471,8 +1471,6 @@ function softwareproduct_drop_down($name, $id, $productid, $visibility='internal
             $html .= "<option selected='selected' value=''>{$GLOBALS['strUnknown']}</option>\n";
         }
 
-
-
         while ($software = mysql_fetch_array($result))
         {
             $html .= "<option";

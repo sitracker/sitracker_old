@@ -17,8 +17,10 @@ require('auth.inc.php');
 header('Content-Type: text/plain');
 
 foreach(array('week', 'id' ) as $var)
-    eval("\$$var=cleanvar(\$_REQUEST['$var']);");   // FIXME huge security hole here, :( eval with a request var
-
+{
+    $var = cleanvar($_REQUEST['$var']);
+    eval("\$$var=$var;");
+}
 $startdate = $week / 1000;
 $enddate = $startdate + 86400 * 7;
 
@@ -30,6 +32,7 @@ $sql.= "AND     enddate <  '" . date("Y-m-d H:i:s",$enddate) . "' ";
 $sql.= "AND completion = 0";
 
 mysql_query($sql);
+if (mysql_error()) trigger_error("MySQL Query Error ".mysql_error(), E_USER_ERROR);
 
-echo "OK";  // FIXME i18n ok.  ??
+echo "OK";  // This is parsed later so don't internationalise
 ?>

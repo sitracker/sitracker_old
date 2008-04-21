@@ -36,7 +36,6 @@ switch($action)
     break;
 
     case 'contexthelp':
-        // FIXME make this work for languages other than english, i18n, internationalise
         $context = cleanvar($_REQUEST['context']);
         $helpfile = "{$CONFIG['application_fspath']}htdocs/help/{$_SESSION['lang']}/{$context}.txt";
         if (!file_exists($helpfile)) $helpfile = "{$CONFIG['application_fspath']}htdocs/help/en-GB/{$context}.txt";
