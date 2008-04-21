@@ -37,13 +37,13 @@ switch ($_REQUEST['mode'])
             echo "<table class='vertical' width='350'>";
             echo "<tr><th>{$strAction}</th>";
             echo "<td><strong>{$saction->action}</strong><br />{$saction->description}</td></tr>\n";
-            echo "<tr><th><label for='status'>{$strStatus}</label></th>";
+            echo "<tr><th><label for='status'>{$strStatus}</label>".help_link('SchedulerStatus')."</th>";
             $statuslist = array('enabled' => $strEnabled ,'disabled' => $strDisabled);
             echo "<td>".array_drop_down($statuslist, 'status', $saction->status);
             echo "</td></tr>\n";
             if (!empty($saction->paramslabel))
             {
-                echo "<tr><th><label for='params'>{$strParameters}</label></th>";
+                echo "<tr><th><label for='params'>{$strParameters}</label>".help_link('SchedulerStatus')."</th>";
                 echo "<td>{$saction->paramslabel}: <input type='text' id='params' name='params' value='{$saction->params}' size='15' maxlength='255' />";
                 echo "</tr>";
             }
