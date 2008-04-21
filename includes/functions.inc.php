@@ -1080,7 +1080,6 @@ function incident_timeofnextaction($id)
     * @author Ivan Lucas
     * @param $incidentid The incident ID
     * @returns string HTML
-    * @todo FIXME i18n No product info
 */
 function incident_productinfo_html($incidentid)
 {
@@ -1469,9 +1468,7 @@ function softwareproduct_drop_down($name, $id, $productid, $visibility='internal
         }
         elseif ($visiblity = 'external' AND $id == 0)
         {
-            //FIXME 3.35 what language do we want to show this in?
-            //portal users don't have one, perhaps they should?
-            $html .= "<option selected='selected' value=''>I don't know</option>\n";
+            $html .= "<option selected='selected' value=''>{$GLOBALS['strUnknown']}</option>\n";
         }
 
 
