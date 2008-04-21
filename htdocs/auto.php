@@ -13,6 +13,7 @@
 
 @include ('set_include_path.inc.php');
 require ('db_connect.inc.php');
+include ('strings.inc.php');
 require ('functions.inc.php');
 
 

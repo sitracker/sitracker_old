@@ -7,8 +7,11 @@
 // This software may be used and distributed according to the terms
 // of the GNU General Public License, incorporated herein by reference.
 //
-// Authors: Ivan Lucas, Tom Gerrard - 2001 onwards
+// Authors: Ivan Lucas, <ivanlucas[at]users.sourceforge.net
+//          Tom Gerrard, <tomgerrard[at]users.sourceforge.net> - 2001 onwards
 //          Martin Kilcoyne - 2000
+//          Paul Heaney, <paulheaney[at]users.sourceforge.net>
+//          Kieran Hogg, <kieran_hogg[at]users.sourceforge.net>
 
 // Many functions here simply extract various snippets of information from
 // the database
@@ -454,6 +457,7 @@ function user_message($id)
 {
     return db_read_column('message', 'users', $id);
 }
+
 
 function user_status($id)
 {
@@ -7458,6 +7462,7 @@ function make_incident_billing_array($incidentid)
     return $billing_a;
 }
 
+
 // NOTE: The following returns the billable periods of a site, could run into issues if multiple different periods used for a site
 function billable_units_site($siteid, $startdate=0, $enddate=0)
 {
@@ -7517,6 +7522,7 @@ function supported_contacts($maintid)
     else return NULL;
 }
 
+
 /**
  * Return an array of contracts which the contact is an admin contact for
  * @author Kieran Hogg
@@ -7571,6 +7577,7 @@ function contact_contracts($contactid, $siteid)
     }
     return $contractsarray;
 }
+
 
 /**
  * Return an array of contracts which non-contract contacts can see incidents
@@ -7692,7 +7699,7 @@ function help_link($context)
  * @return String containing the error message (in HTML)
  */
 function get_file_upload_error_message($errorcode, $name)
-{   
+{
     $str = "<div class='detailinfo'>\n";
 
     $str .=  "An error occurred while uploading <strong>{$_FILES['attachment']['name']}</strong>";
@@ -7709,7 +7716,7 @@ function get_file_upload_error_message($errorcode, $name)
     }
     $str .=  "</p>";
     $str .=  "</div>";
-    
+
     return $str;
 }
 
@@ -7733,7 +7740,7 @@ function readable_file_size($filesize)
         ++$j;
     }
     $filemax = round($filesize / pow(1024,$j-1) * 100) / 100 . ' ' . $ext[$j-1];
-    
+
     return $filemax;
 }
 

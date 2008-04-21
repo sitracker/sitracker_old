@@ -7,7 +7,7 @@
 // This software may be used and distributed according to the terms
 // of the GNU General Public License, incorporated herein by reference.
 //
-// Authors: Ivan Lucas <ivanlucas[at]users.sourceforge.net, Kieran Hogg <kieran_hogg[at]users.sourceforge.net>
+// Authors: Ivan Lucas <ivanlucas[at]users.sourceforge.net>, Kieran Hogg <kieran_hogg[at]users.sourceforge.net>
 // XHTML 1.0 Transitional valid 12/11/07 - KMH
 
 @include ('set_include_path.inc.php');
