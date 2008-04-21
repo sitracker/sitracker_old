@@ -39,7 +39,7 @@ if (empty($action) OR $action == "showform")
     {
         if (!empty($softwareid))
         {
-            $name = db_read_column('name', 'software', $softwareid);
+            $name = db_read_column('name', $dbSoftware, $softwareid);
             echo "<h3><img src='{$CONFIG['application_webpath']}images/icons/{$iconset}/16x16/skill.png' width='16' height='16' alt='' /> ";
             echo "{$strSkill}: $name</h3>";
         }

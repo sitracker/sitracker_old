@@ -64,7 +64,7 @@ if (empty($mode))
     echo "<tr><th>{$strRole}:</th>";
     if ($edituserid == $sit[2] OR $edituserid == 1)
     {
-        echo "<td>".db_read_column('rolename', 'roles', $user->roleid)."</td>";
+        echo "<td>".db_read_column('rolename', $dbRoles, $user->roleid)."</td>";
     }
     else
     {
@@ -263,7 +263,7 @@ elseif ($mode=='save')
     $password = cleanvar($_POST['oldpassword']);
     $newpassword1 = cleanvar($_POST['newpassword1']);
     $newpassword2 = cleanvar($_POST['newpassword2']);
-    
+
     if(!empty($_GET['userid']))
         $userid = intval($_GET['userid']);
     else

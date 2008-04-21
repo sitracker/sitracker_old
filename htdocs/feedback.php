@@ -393,8 +393,8 @@ body { font:10pt Arial, Helvetica, sans-serif; }
                 echo "<form action='feedback.php' method='post'>\n";
                 echo "<h1>{$form->name}</h1>\n";
                 echo "<p>{$strRelatingToIncident} <strong>#{$incidentid}</strong> &mdash; <strong>".incident_title($incidentid)."</strong><br />";
-                echo sprintf($strOpenedbyXonY, contact_realname(incident_contact($incidentid)), ldate($CONFIG['dateformat_date'],db_read_column('opened', 'incidents', $incidentid)));
-                echo sprintf($strClosedOnX, ldate($CONFIG['dateformat_date'],db_read_column('closed', 'incidents', $incidentid))).".</p>";
+                echo sprintf($strOpenedbyXonY, contact_realname(incident_contact($incidentid)), ldate($CONFIG['dateformat_date'],db_read_column('opened', $dbIncidents, $incidentid)));
+                echo sprintf($strClosedOnX, ldate($CONFIG['dateformat_date'],db_read_column('closed', $dbIncidents, $incidentid))).".</p>";
 
                 if (!empty($_REQUEST['error']))
                 {

@@ -82,7 +82,7 @@ if (empty($submit))
         echo "<input name='oldtitle' type='hidden' value=\"{$incident['title']}\" />";
         echo "<input name='oldcontact' type='hidden' value=\"{$incident['contact']}\" />";
         echo "<input name='oldccemail' type='hidden' value=\"{$incident['ccemail']}\" />";
-        echo "<input name='oldescalationpath' type='hidden' value=\"".db_read_column('name', 'escalationpaths', $incident["escalationpath"])."\" />";
+        echo "<input name='oldescalationpath' type='hidden' value=\"".db_read_column('name', $dbEscalationPaths, $incident["escalationpath"])."\" />";
         echo "<input name='oldexternalid' type='hidden' value=\"{$incident['externalid']}\" />";
         echo "<input name='oldexternalengineer' type='hidden' value=\"{$incident['externalengineer']}\" />";
         echo "<input name='oldexternalemail' type='hidden' value=\"{$incident['externalemail']}\" />";

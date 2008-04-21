@@ -283,7 +283,8 @@ function user_permission($userid,$permission)
 */
 function permission_name($permissionid)
 {
-    return db_read_column('name', 'permissions', $permissionid);
+    global $dbPermissions;
+    return db_read_column('name', $dbPermissions, $permissionid);
 }
 
 
@@ -356,7 +357,8 @@ function user_id($username, $password)
 
 function user_password($id)
 {
-    return db_read_column('password', 'users', $id);
+    global $dbUsers;
+    return db_read_column('password', $dbUsers, $id);
 }
 
 
@@ -381,7 +383,6 @@ function user_realname($id, $allowhtml=FALSE)
         }
         else
         {
-            // return db_read_column('realname', 'users', $id);
             $sql = "SELECT realname, status FROM `{$dbUsers}` WHERE id='$id' LIMIT 1";
             $result = mysql_query($sql);
             if (mysql_error()) trigger_error(mysql_error(),E_USER_WARNING);
@@ -424,44 +425,45 @@ function user_realname($id, $allowhtml=FALSE)
 
 function user_email($id)
 {
+    global $dbUsers;
     if ($id == $_SESSION['userid'])
     {
         return $_SESSION['email'];
     }
     else
     {
-        return db_read_column('email', 'users', $id);
+        return db_read_column('email', $dbUsers, $id);
     }
 }
 
 
 function user_phone($id)
 {
-    return db_read_column('phone', 'users', $id);
+    return db_read_column('phone', $GLOBALS['dbUsers'], $id);
 }
 
 
 function user_mobile($id)
 {
-    return db_read_column('mobile', 'users', $id);
+    return db_read_column('mobile', $GLOBALS['dbUsers'], $id);
 }
 
 
 function user_signature($id)
 {
-    return db_read_column('signature', 'users', $id);
+    return db_read_column('signature', $GLOBALS['dbUsers'], $id);
 }
 
 
 function user_message($id)
 {
-    return db_read_column('message', 'users', $id);
+    return db_read_column('message', $GLOBALS['dbUsers'], $id);
 }
 
 
 function user_status($id)
 {
-    return db_read_column('status', 'users', $id);
+    return db_read_column('status', $GLOBALS['dbUsers'], $id);
 }
 
 
@@ -476,7 +478,7 @@ function user_status($id)
 */
 function user_accepting($id)
 {
-    $accepting = db_read_column('accepting', 'users', $id);
+    $accepting = db_read_column('accepting', $GLOBALS['dbUsers'], $id);
     if ($accepting == '')  $accepting = "NoSuchUser";
 
     return $accepting;
@@ -652,7 +654,7 @@ function user_count_holidays($userid, $type, $date=0, $approved=array(0,1,2))
 
 function user_holiday_entitlement($userid)
 {
-    return db_read_column('holiday_entitlement', 'users', $userid);
+    return db_read_column('holiday_entitlement', $GLOBALS['dbUsers'], $userid);
 }
 
 
@@ -703,25 +705,25 @@ function contact_site($id)
 
 function contact_siteid($id)
 {
-    return db_read_column('siteid', 'contacts', $id);
+    return db_read_column('siteid', $GLOBALS['contacts'], $id);
 }
 
 
 function contact_email($id)
 {
-    return db_read_column('email', 'contacts', $id);
+    return db_read_column('email', $GLOBALS['contacts'], $id);
 }
 
 
 function contact_phone($id)
 {
-    return db_read_column('phone', 'contacts', $id);
+    return db_read_column('phone', $GLOBALS['contacts'], $id);
 }
 
 
 function contact_fax($id)
 {
-    return db_read_column('fax', 'contacts', $id);
+    return db_read_column('fax', $GLOBALS['contacts'], $id);
 }
 
 
@@ -1008,7 +1010,7 @@ function incident_contact($id)
 
 function incident_maintid($id)
 {
-    $maintid = db_read_column('maintenanceid', 'incidents', $id);
+    $maintid = db_read_column('maintenanceid', $GLOBALS['dbIncidents'], $id);
     if ($maintid == '')
     {
         throw_error("!Error: No matching record while reading in incident_maintid() Incident ID:", $id);
@@ -1022,53 +1024,53 @@ function incident_maintid($id)
 
 function incident_title($id)
 {
-    return db_read_column('title', 'incidents', $id);
+    return db_read_column('title', $GLOBALS['DbIncidents'], $id);
 }
 
 
 function incident_email($id)
 {
-    return db_read_column('email', 'incidents', $id);
+    return db_read_column('email', $GLOBALS['dbIncidents'], $id);
 }
 
 
 function incident_status($id)
 {
-    return db_read_column('status', 'incidents', $id);
+    return db_read_column('status', $GLOBALS['dbIncidents'], $id);
 }
 
 
 function incident_priority($id)
 {
-    return db_read_column('priority', 'incidents', $id);
+    return db_read_column('priority', $GLOBALS['dbIncidents'], $id);
 }
 
 
 function incident_externalid($id)
 {
-    return db_read_column('externalid', 'incidents', $id);
+    return db_read_column('externalid', $GLOBALS['dbIncidents'], $id);
 }
 
 
 function incident_externalengineer($id)
 {
-    return db_read_column('externalengineer', 'incidents', $id);
+    return db_read_column('externalengineer', $GLOBALS['dbIncidents'], $id);
 }
 
 
 function incident_externalemail($id)
 {
-    return db_read_column('externalemail', 'incidents', $id);
+    return db_read_column('externalemail', $GLOBALS['dbIncidents'], $id);
 }
 
 function incident_ccemail($id)
 {
-    return db_read_column('ccemail', 'incidents', $id);
+    return db_read_column('ccemail', $GLOBALS['dbIncidents'], $id);
 }
 
 function incident_timeofnextaction($id)
 {
-    return db_read_column('timeofnextaction', 'incidents', $id);
+    return db_read_column('timeofnextaction', $GLOBALS['dbIncidents'], $id);
 }
 
 
@@ -2213,7 +2215,6 @@ function escalation_path_drop_down($name, $id)
 /* priority does not exist.                                   */
 function priority_name($id)
 {
-    //db_read_column('name','priority',)
     switch ($id)
     {
         case 1: $value = $GLOBALS['strLow']; break;
@@ -2385,7 +2386,7 @@ function closingstatus_name($id)
     global $dbClosingStatus;
     if ($id != '')
     {
-        $closingstatus = db_read_column('name', 'closingstatus', $id);
+        $closingstatus = db_read_column('name', $GLOBALS['dbClosingStatus'], $id);
     }
     else
     {
@@ -2402,7 +2403,7 @@ function closingstatus_name($id)
 /* status does not exist.                                     */
 function userstatus_name($id)
 {
-    $status = db_read_column('name', 'userstatus', $id);
+    $status = db_read_column('name', $GLOBALS['dbUserStatus'], $id);
     return $GLOBALS[$status];
 }
 
@@ -2413,7 +2414,7 @@ function userstatus_name($id)
 /* does not exist.                                            */
 function product_name($id)
 {
-    return db_read_column('name', 'products', $id);
+    return db_read_column('name', $GLOBALS['dbProducts'], $id);
 }
 
 
@@ -2507,7 +2508,7 @@ function emailtype_replace_specials($string, $incidentid=0, $userid=0)
                     25 => user_signature($userid),
                     26 => global_signature(),
                     27 => date("jS F Y"),
-                    28 => user_email(db_read_column('owner', 'sites', db_read_column('siteid','contacts',$contactid))),
+                    28 => user_email(db_read_column('owner', $GLOBALS['dbSites'], db_read_column('siteid', $GLOBALS['dbContacts'], $contactid))),
                     29 => incident_firstupdate($incidentid),
                     30 => contact_email(contact_notify($contactid, 2)),
                     31 => contact_email(contact_notify($contactid, 3)),
@@ -2986,7 +2987,7 @@ function servicelevel_name($id)
 {
     global $CONFIG;
 
-    $servicelevel = db_read_column('tag', 'servicelevels', $id);
+    $servicelevel = db_read_column('tag', $GLOBALS['dbServiceLevels'], $id);
 
     if ($servicelevel == '')
     {
@@ -3032,7 +3033,7 @@ function maintenance_servicelevel($maintid)
 
 function maintenance_siteid($id)
 {
-    return db_read_column('site', 'maintenance', $id);
+    return db_read_column('site', $GLOBALS['dbMaintenance'], $id);
 
 }
 
@@ -3070,7 +3071,7 @@ function servicelevel_tag2id($sltag)
 // Returns 'Unlimited' if theres no match on ID
 function incidents_remaining($id)
 {
-    $remaining = db_read_column('incidentsremaining', 'incidentpools', $id);
+    $remaining = db_read_column('incidentsremaining', $GLOBALS['dbIncidentPools'], $id);
     if (empty($remaining))
     {
         $remaining = '&infin;';
@@ -3291,7 +3292,7 @@ function site_drop_down($name, $id)
 
 function site_name($id)
 {
-    $sitename = db_read_column('name', 'sites', $id);
+    $sitename = db_read_column('name', $GLOBALS['dbSites'], $id);
     if (empty($sitename))
     {
         $sitename = $GLOBALS['strUnknown'];
@@ -3379,7 +3380,7 @@ function reseller_drop_down($name, $id)
  */
 function reseller_name($id)
 {
-    return db_read_column('name', 'resellers', $id);
+    return db_read_column('name', $GLOBALS['dbResellers'], $id);
 }
 
 
@@ -3420,7 +3421,7 @@ function licence_type_drop_down($name, $id)
  */
 function licence_type($id)
 {
-    return db_read_column('name', 'licencetypes', $id);
+    return db_read_column('name', $GLOBALS['dbLicenceTypes'], $id);
 }
 
 
@@ -5795,7 +5796,7 @@ function external_escalation($escalated, $incid)
 
 function user_notification_on_reassign($user)
 {
-    return db_read_column('var_notify_on_reassign', 'users', $user);
+    return db_read_column('var_notify_on_reassign', $GLOBALS['dbUsers'], $user);
 }
 
 

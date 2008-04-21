@@ -86,7 +86,7 @@ elseif ($action == "edit" && (!empty($user) OR !empty($role)))
     // Show form
     if (!empty($role) AND !empty($user)) trigger_error("Can't edit users and roles at the same time", E_USER_ERROR);
     if (!empty($user)) $object = "user: ".user_realname($user);
-    else $object = "role: ".db_read_column('rolename', 'roles', $role);
+    else $object = "role: ".db_read_column('rolename', $dbRoles, $role);
     echo "<h2>Set Permissions for {$object}</h2>";
     if (!empty($user)) echo "<p align='center'>Permissions that are inherited from the users role can not be changed.</p>";
 

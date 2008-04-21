@@ -35,7 +35,7 @@ $productid = cleanvar($_REQUEST['productid']);
 $producttext = cleanvar($_REQUEST['producttext']);
 $win = cleanvar($_REQUEST['win']);
 
-if (!empty($incomingid) AND empty($updateid)) $updateid = db_read_column('updateid', 'tempincoming', $incomingid);
+if (!empty($incomingid) AND empty($updateid)) $updateid = db_read_column('updateid', $dbTempIncoming, $incomingid);
 
 if (empty($action) OR $action=='showform')
 {
@@ -255,7 +255,7 @@ elseif ($action=='findcontact')
             while ($contactrow = mysql_fetch_array($result))
             {
                 echo "<tr class='shade2'>";
-                $site_incident_pool = db_read_column('freesupport', 'sites', $contactrow['siteid']);
+                $site_incident_pool = db_read_column('freesupport', $dbSites, $contactrow['siteid']);
                 if ($site_incident_pool > 0)
                 {
                     echo "<td><a href=\"{$_SERVER['PHP_SELF']}?action=incidentform&amp;type=free&amp;contactid=".$contactrow['contactid']."&amp;updateid=$updateid&amp;win={$win}\" onclick=\"return confirm_free();\">";
@@ -315,7 +315,7 @@ elseif ($action=='findcontact')
             while ($contactrow = mysql_fetch_array($result))
             {
                 echo "<tr class='shade2'>";
-                $site_incident_pool = db_read_column('freesupport', 'sites', $contactrow['siteid']);
+                $site_incident_pool = db_read_column('freesupport', $dbSites, $contactrow['siteid']);
                 if ($site_incident_pool > 0)
                 {
                     echo "<td><a href=\"{$_SERVER['PHP_SELF']}?action=incidentform&amp;type=free&amp;contactid=".$contactrow['contactid']."&amp;updateid=$updateid&amp;win={$win}\" onclick=\"return confirm_free();\">";

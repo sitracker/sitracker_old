@@ -447,7 +447,7 @@ else
 
         if ($addition_errors == 0)
         {   //maintenceid
-            $send_feedback = send_feedback(db_read_column('maintenanceid','incidents',$id));
+            $send_feedback = send_feedback(db_read_column('maintenanceid', $dbIncidents, $id));
             if ($CONFIG['feedback_form'] != '' AND $CONFIG['feedback_form'] > 0 AND $send_feedback == TRUE)
             {
                 create_incident_feedback($CONFIG['feedback_form'], $id);
