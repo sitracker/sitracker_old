@@ -11,7 +11,6 @@
 // This Page Is Valid XHTML 1.0 Transitional!  31Oct05
 @include ('set_include_path.inc.php');
 $permission = 10; // Edit Contacts
-$title='Edit Contact';
 
 require ('db_connect.inc.php');
 require ('functions.inc.php');
@@ -211,7 +210,7 @@ else if ($action == "update")
         */
         replace_tags(1, $contact, $tags);
 
-        $sql = "UPDATE contacts SET courtesytitle='$courtesytitle', surname='$surname', forenames='$forenames', siteid='$siteid', email='$email', phone='$phone', mobile='$mobile', fax='$fax', ";
+        $sql = "UPDATE `{$dbContacts}` SET courtesytitle='$courtesytitle', surname='$surname', forenames='$forenames', siteid='$siteid', email='$email', phone='$phone', mobile='$mobile', fax='$fax', ";
         $sql .= "address1='$address1', address2='$address2', city='$city', county='$county', postcode='$postcode', ";
         $sql .= "country='$country', dataprotection_email='$dataprotection_email', dataprotection_phone='$dataprotection_phone', ";
         $sql .= "notes='$notes', dataprotection_address='$dataprotection_address' , department='$department' , jobtitle='$jobtitle', ";
