@@ -131,14 +131,7 @@ if (empty($_REQUEST['process']))
             document.closeform.incworkaround.checked=false;
             document.closeform.incworkaround.disabled=true;
             document.closeform.workaround.disabled=true;
-            if (document.all)
-            {
-                document.all('helptext').innerHTML = "Enter some details about the incident to be stored in the incident log for future use.  You should provide a summary of the problem and information about how it was resolved.<br /><strong>Final Update</strong>:";
-            }
-            else if (document.getElementById)
-            {
-                document.getElementById('helptext').innerHTML = "Enter some details about the incident to be stored in the incident log for future use.  You should provide a summary of the problem and information about how it was resolved.<br /><strong>Final Update</strong>:";
-            }
+            $('helptext').innerHTML = "Enter some details about the incident to be stored in the incident log for future use.  You should provide a summary of the problem and information about how it was resolved.<br /><strong>Final Update</strong>:";
             // Hide the table rows for KB article
             $('titlerow').hide();
             $('symptomsrow').hide();
