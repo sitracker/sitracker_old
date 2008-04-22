@@ -728,7 +728,7 @@ switch ($_REQUEST['action'])
 
                     if ($_REQUEST['action'] == 'createadminuser' AND setup_check_adminuser()==FALSE)
                     {
-                        $password = mysql_real_escape_string($_POST['password']);
+                        $password = mysql_real_escape_string($_POST['newpassword']);
                         $passwordagain = mysql_real_escape_string($_POST['passwordagain']);
                         if ($password == $passwordagain)
                         {
@@ -790,7 +790,7 @@ switch ($_REQUEST['action'])
                         echo "<p><span style='color: red; font-weight: bolder;'>Important:</span> you <strong>must</strong> create an admin account before you can use SiT</p>";
                         echo "<form action='setup.php' method='post'>\n";
                         echo "<p>Username:<br /><input type='text' name='username' value='admin' disabled='disabled' /> (cannot be changed)</p>";
-                        echo "<p><label>Password:<br /><input type='password' name='password' size='30' maxlength='50' /></label></p>";
+                        echo "<p><label>Password:<br /><input type='password' name='newpassword' size='30' maxlength='50' /></label></p>";
                         echo "<p><label>Confirm Password:<br /><input type='password' name='passwordagain' size='30' maxlength='50' /></label></p>";
                         echo "<p><label>Email:<br /><input type='text' name='email' size='30' maxlength='255' /></label></p>";
                         echo "<p><input type='submit' value='Create Admin User' />";
