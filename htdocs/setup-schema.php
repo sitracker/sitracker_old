@@ -1889,7 +1889,7 @@ INSERT INTO `rolepermissions` (`roleid`, `permissionid`, `granted`) VALUES (2, 7
 -- PH 20/04/08 Permissions for billing (for custardpie branch)
 INSERT INTO `permissions` VALUES (73, 'Approve Billable Incidents');
 INSERT INTO `permissions` VALUES (74, 'Set duration without timed task (for billable incidents)');
-INSERT INTO `permissions` VALUES (75, 'Set negaive time for duration on incidents (for billable incidents - refunds)');
+INSERT INTO `permissions` VALUES (75, 'Set negative time for duration on incidents (for billable incidents - refunds)');
 INSERT INTO `rolepermissions` (`roleid`, `permissionid`, `granted`) VALUES (1, 73, 'true');
 INSERT INTO `rolepermissions` (`roleid`, `permissionid`, `granted`) VALUES (1, 74, 'true');
 INSERT INTO `rolepermissions` (`roleid`, `permissionid`, `granted`) VALUES (1, 75, 'true');
