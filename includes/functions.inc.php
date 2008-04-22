@@ -4747,7 +4747,7 @@ function is_public_holiday($time, $publicholidays)
     * @param $t2 integer. The ending timetamp
     * @returns integer. the number of working minutes (minutes in the working day)
 */
-function calculate_working_time($t1,$t2,$publicholidays) {
+function calculate_working_time($t1, $t2, $publicholidays) {
 
 /*
 // PH 16/12/07 Old function commented out, rewritten to support public holidays. Old code to be removed once we're happy this is stable
@@ -4887,13 +4887,16 @@ function calculate_working_time($t1,$t2,$publicholidays) {
 
     $t2date = getdate($ts);
 
+    $midnight = 1440; // 24 * 60  minutes
+
     while ($currenttime <= $t2)
     {
         $time = getdate($currenttime);
 
         $ph = 0;
 
-        if (in_array($time['wday'], $CONFIG['working_days']) AND $time['hours'] >= $swd AND $time['hours'] <= $ewd AND (($ph = is_public_holiday($currenttime, $publicholidays)) == 0))
+        if (in_array($time['wday'], $CONFIG['working_days']) AND $time['hours'] >= $swd
+            AND $time['hours'] <= $ewd AND (($ph = is_public_holiday($currenttime, $publicholidays)) == 0))
         {
             if ($t2date['yday'] == $time['yday'] AND $t2day['year'] == $time['year'])
             {
@@ -4904,42 +4907,60 @@ function calculate_working_time($t1,$t2,$publicholidays) {
             }
             else
             {
-                $timeworked++;
-                $currenttime += 60;  // move to the next minute
+                // End on a different day
+                
+                 $timeworked++;
+                 $currenttime += 60;  // move to the next minute
+                
+                //$timeworked += 60;
+                //$currenttime += (60*60);
+                
+                /*
+                // Move to next day
+                $c = ($time['hours'] * 60) + $time['minutes'];
+                $diff = $midnight - $c;
+                $currenttime += ($diff * 60); // to seconds
+
+                $timeworked += ($ewd - $c);
+
+                // Jump to start of working day
+                $currenttime += ($swd * 60);
+                */
             }
         }
         else
         {
-            $midnight = 1440; // 24 * 60  minutes
-
             // Jump closer to the next work minute
             if (!in_array($time['wday'], $CONFIG['working_days']))
             {
                 // Move to next day
-                $c = ($time['hours']*60) + $time['minutes'];
+                $c = ($time['hours'] * 60) + $time['minutes'];
                 $diff = $midnight - $c;
-                $currenttime += ($diff*60); // to seconds
+                $currenttime += ($diff * 60); // to seconds
 
                 // Jump to start of working day
-                $currenttime += ($swd*60);
+                $currenttime += ($swd * 60);
             }
             else if ($time['hours'] < $swd)
             {
                 // jump to beginning of working day
-                $c = ($time['hours']*60) + $time['minutes'];
-                $diff = ($swd*60) - $c;
-                $currenttime += ($diff*60); // to seconds
+                $c = ($time['hours'] * 60) + $time['minutes'];
+                $diff = ($swd * 60) - $c;
+                $currenttime += ($diff * 60); // to seconds
             }
             else if ($time['hours'] > $ewd)
             {
                 // Jump to the start of the next working day
-                $c = ($midnight - (($time['hours']*60) + $time['minutes'])) + ($swd*60);
-                $currenttime += ($c*60);
+                $c = ($midnight - (($time['hours'] * 60) + $time['minutes'])) + ($swd * 60);
+                $currenttime += ($c * 60);
             }
             else if ($ph != 0)
             {
                 // jump to the minute after the public holiday
-                $currenttime += $ph+60;
+                $currenttime += $ph + 60;
+                
+                // Jump to start of working day
+                $currenttime += ($swd * 60);
             }
             else
             {
@@ -5024,11 +5045,11 @@ function calculate_incident_working_time($incidentid, $t1, $t2, $states=array(2,
                 // This is the first update
                 // If it's active, set the ptr = t1
                 // otherwise set to current timestamp ???
-                if (is_active_status($laststatus, $states)) $timeptr=$t1;
-                else $timeptr=$update['timestamp'];
+                if (is_active_status($laststatus, $states)) $timeptr = $t1;
+                else $timeptr = $update['timestamp'];
             }
 
-            if ($t2<$update['timestamp'])
+            if ($t2 < $update['timestamp'])
             {
                 // If we have reached the very end of the range, increment time to end of range, break
                 if (is_active_status($laststatus, $states))
