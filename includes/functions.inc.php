@@ -6026,7 +6026,7 @@ function show_notes($linkid, $refid)
         while ($note = mysql_fetch_object($result))
         {
             $html .= "<div class='detailhead note'> <div class='detaildate'>".readable_date(mysqlts2date($note->timestamp));
-            if ($sit[2]==$note->userid) $html .= "<a href='delete_note.php?id={$note->id}&amp;rpath={$_SERVER['PHP_SELF']}?{$_SERVER['QUERY_STRING']}' onclick='return confirm_delete();'><img src='{$CONFIG['application_webpath']}images/icons/{$iconset}/16x16/delete.png' width='16' height='16' alt='Delete icon' /></a>";
+            if ($sit[2]==$note->userid) $html .= "<a href='delete_note.php?id={$note->id}&amp;rpath={$_SERVER['PHP_SELF']}?{$_SERVER['QUERY_STRING']}' onclick=\"return confirm_action('{$strAreYouSureDelete}');\"><img src='{$CONFIG['application_webpath']}images/icons/{$iconset}/16x16/delete.png' width='16' height='16' alt='Delete icon' /></a>";
             $html .= "</div>\n";
             $html .= "<img src='{$CONFIG['application_webpath']}images/icons/{$iconset}/16x16/note.png' width='16' height='16' alt='Note icon' /> ";
             $html .= "Note added by ".user_realname($note->userid,TRUE)."</div>\n";

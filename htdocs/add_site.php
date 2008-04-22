@@ -31,7 +31,7 @@ if ($action == "showform" OR $action == '')
     echo "<h2><img src='{$CONFIG['application_webpath']}images/icons/{$iconset}/32x32/site.png' width='32' height='32' alt='' /> ";
     echo "{$strNewSite}</h2>";
     echo "<h5>".sprintf($strMandatoryMarked, "<sup class='red'>*</sup>")."</h5>";
-    echo "<form action='{$_SERVER['PHP_SELF']}?action=add' method='post' onsubmit='return confirm_submit(\"{$strAreYouSureAddSite}\");'>";
+    echo "<form action='{$_SERVER['PHP_SELF']}?action=add' method='post' onsubmit='return confirm_action(\"{$strAreYouSureAddSite}\");'>";
     echo "<table align='center' class='vertical'>";
     echo "<tr><th>{$strName} <sup class='red'>*</sup></th><td><input maxlength='255' name='name' size='30' ";
     if ($_SESSION['formdata']['add_site']['name'] != "")

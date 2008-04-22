@@ -32,7 +32,7 @@ if (empty($submit))
     echo "<h2><img src='{$CONFIG['application_webpath']}images/icons/{$iconset}/32x32/product.png' width='32' height='32' alt='' /> ";
     echo "{$strNewProduct}</h2>";
     echo "<h5>".sprintf($strMandatoryMarked, "<sup class='red'>*</sup>")."</h5>";
-    echo "<form action='{$_SERVER['PHP_SELF']}' method='post' onsubmit='return confirm_submit(\"{$strAreYouSureAddProduct}\");'>";
+    echo "<form action='{$_SERVER['PHP_SELF']}' method='post' onsubmit='return confirm_action(\"{$strAreYouSureAddProduct}\");'>";
     echo "<table align='center'>";
     echo "<tr><th>{$strVendor}<sup class='red'>*</sup></th><td>";
     if ($_SESSION['formdata']['add_product']['vendor'] != "")

@@ -39,7 +39,7 @@ if (empty($action) OR $action == "showform")
 
     echo "<h2>Remove the link between a contract and a support contact</h2>";
     echo "<p align='center'>This will mean that the contact will not be able to log any further support incidents for the related product</p>";
-    echo "<form action='{$_SERVER['PHP_SELF']}?action=delete' method='post' onsubmit='return confirm_submit(\"{$strAreYouSureDeleteMaintenceContract}\")'>";
+    echo "<form action='{$_SERVER['PHP_SELF']}?action=delete' method='post' onsubmit='return confirm_action(\"{$strAreYouSureDeleteMaintenceContract}\")'>";
     echo "<input type='hidden' name='context' value='{$context}' />";
     echo "<table align='center' class='vertical'>";
 

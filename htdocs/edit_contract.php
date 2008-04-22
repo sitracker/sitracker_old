@@ -74,7 +74,7 @@ if ($action == "edit")
         echo "<h2><img src='{$CONFIG['application_webpath']}images/icons/{$iconset}/32x32/contract.png' width='32' height='32' alt='' /> ";
         echo "{$strEditContract}: {$maintid}</h2>";
         echo "<h5>".sprintf($strMandatoryMarked,"<sup class='red'>*</sup>")."</h5>";
-        echo "<form id='maintform' name='maintform' action='{$_SERVER['PHP_SELF']}?action=update' method='post' onsubmit='return confirm_submit(\"{$strAreYouSureMakeTheseChanges}\")'>\n";
+        echo "<form id='maintform' name='maintform' action='{$_SERVER['PHP_SELF']}?action=update' method='post' onsubmit='return confirm_action(\"{$strAreYouSureMakeTheseChanges}\")'>\n";
         echo "<table align='center' class='vertical'>";
         echo "<tr><th>{$strSite}: <sup class='red'>*</sup></th><td>";
         echo site_name($maint["site"]). "</td></tr>";

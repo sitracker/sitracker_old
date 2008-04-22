@@ -43,7 +43,7 @@ if (empty($submit))
     echo "<h2><img src='{$CONFIG['application_webpath']}images/icons/{$iconset}/32x32/user.png' width='32' height='32' alt='' /> ";
     echo "{$strNewUser}</h2>";
     echo "<h5>".sprintf($strMandatoryMarked,"<sup class='red'>*</sup>")."</h5>";
-    echo "<form action='{$_SERVER['PHP_SELF']}' method='post' onsubmit='return confirm_submit(\"{$strAreYouSureAddUser}\");'>";
+    echo "<form action='{$_SERVER['PHP_SELF']}' method='post' onsubmit='return confirm_action(\"{$strAreYouSureAddUser}\");'>";
     echo "<table align='center' class='vertical'>\n";
     echo "<tr><th>{$strRealName} <sup class='red'>*</sup></th><td><input maxlength='50' name='realname' size='30'";
     if ($_SESSION['formdata']['add_user']['realname'] != "")
@@ -124,7 +124,7 @@ if (empty($submit))
     echo "/></td></tr>\n";
 
     echo "<tr><th>{$strHolidayEntitlement}</th><td><input maxlength='3' name='holiday_entitlement' size='3' ";
-    if($_SESSION['formdata']['add_user']['holiday_entitlement'] != "") 
+    if($_SESSION['formdata']['add_user']['holiday_entitlement'] != "")
     {
         echo "value='{$_SESSION['formdata']['add_user']['holiday_entitlement']}'";
     }

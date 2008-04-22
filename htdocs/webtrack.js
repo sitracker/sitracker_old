@@ -158,12 +158,6 @@ function toggleDiv(obj)
     }
 }
 
-function confirm_submit(text)
-{
-    //return window.confirm('Are you sure you want to make these changes?');
-    return window.confirm(text);
-}
-
 // This Javascript code placed in the public domain at http://www.irt.org/script/1265.htm
 // "Code examples on irt.org can be freely copied and used."
 

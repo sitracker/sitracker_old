@@ -35,7 +35,7 @@ if ($action == "showform" OR $action=='')
     echo "<h2><img src='{$CONFIG['application_webpath']}images/icons/{$iconset}/32x32/contract.png' width='32' height='32' alt='' /> ";
     echo "{$strAddContract}</h2>";
     echo "<h5>".sprintf($strMandatoryMarked,"<sup class='red'>*</sup>")."</h5>";
-    echo "<form name='addcontract' action='{$_SERVER['PHP_SELF']}?action=add' method='post' onsubmit='return confirm_submit(\"{$strAreYouSureAddContract}\");'>";
+    echo "<form name='addcontract' action='{$_SERVER['PHP_SELF']}?action=add' method='post' onsubmit='return confirm_action(\"{$strAreYouSureAddContract}\");'>";
     echo "<table align='center' class='vertical'>";
 
     echo "<tr><th>{$strSite} <sup class='red'>*</sup></th><td>";

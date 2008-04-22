@@ -29,12 +29,6 @@ if (empty($action) OR $action == "showform")
     // Show select notice type form
     include ('htmlheader.inc.php');
     ?>
-    <script type="text/javascript">
-    function confirm_submit()
-    {
-        return window.confirm('Are you sure you want to edit this notice template?');
-    }
-    </script>
     <h2>Select Notice Template</h2>
     <p align='center'><a href="add_notice_templates.php?action=showform">Add Notice Template</a></p>
     <?php
@@ -70,7 +64,7 @@ elseif ($action == "edit")
         echo "<h5>".sprintf($strMandatoryMarked,"<sup class='red'>*</sup>")."</h5>";
         ?>
         <p align='center'>A list of special identifiers that can be used in these fields is given at the bottom of the page.</p>
-        <form name='edittemplate' action="<?php echo $_SERVER['PHP_SELF'] ?>?action=update" method="post" onsubmit="return confirm_submit()">
+        <form name='edittemplate' action="<?php echo $_SERVER['PHP_SELF'] ?>?action=update" method="post" onsubmit="return confirm_action('Are you sure you want to edit this notice template?')">
 
         <table align='center' class='vertical'>
         <?php

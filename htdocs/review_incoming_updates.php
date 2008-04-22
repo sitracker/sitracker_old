@@ -198,11 +198,6 @@ if (!empty($selected))
     ?>
     <script type="text/javascript">
     <!--
-        function confirm_delete()
-        {
-            return window.confirm('<?php echo $strAreYouSureDelete; ?>");
-        }
-
         function submitform()
         {
             document.held_emails.submit();
@@ -315,7 +310,7 @@ if ((mysql_num_rows($resultnew) > 0) OR ($realemails > 0))
     if ($realemails > 0)
     {
         echo "<tr><td>";
-        echo "<a href=\"javascript: submitform()\" onclick='return confirm_delete();'>{$strDelete}</a>";
+        echo "<a href=\"javascript: submitform()\" onclick=\"return confirm_action('{$strAreYouSureDelete}');\">{$strDelete}</a>";
         echo "</td></tr>";
     }
     echo "</table>\n";

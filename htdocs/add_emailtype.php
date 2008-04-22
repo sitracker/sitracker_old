@@ -78,7 +78,7 @@ if (empty($submit))
 
     echo "</table>";
 
-    echo "<form action='{$_SERVER['PHP_SELF']}' method='post' onsubmit='return confirm_submit(\"{$strAddEmailConfirm}\")'>";
+    echo "<form action='{$_SERVER['PHP_SELF']}' method='post' onsubmit='return confirm_action(\"{$strAddEmailConfirm}\")'>";
     echo "<table class='vertical'>";
     echo "<tr><th>Name Of Email Template: <sup class='red'>*</sup></th><td><input maxlength='50' name='name' size='30' /></td></tr>";
     echo "<tr><th>Description: <sup class='red'>*</sup></th><td><input maxlength='50' name='description' size='30' /></td></tr>";

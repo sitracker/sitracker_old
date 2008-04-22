@@ -32,7 +32,7 @@ if (empty($submit))
     echo "<h2><img src='{$CONFIG['application_webpath']}images/icons/{$iconset}/32x32/skill.png' width='32' height='32' alt='' /> ";
     echo "{$strNewSkill}</h2>";
     echo "<h5>".sprintf($strMandatoryMarked, "<sup class='red'>*</sup></h5>");
-    echo "<form name='addsoftware' action='{$_SERVER['PHP_SELF']}' method='post' onsubmit='return confirm_submit(\"{$strAreYouSureAddSkill}\");'>";
+    echo "<form name='addsoftware' action='{$_SERVER['PHP_SELF']}' method='post' onsubmit='return confirm_action(\"{$strAreYouSureAddSkill}\");'>";
     echo "<table class='vertical'>";
     echo "<tr><th>{$strVendor}:</th><td>";
     if ($_SESSION['formdata']['add_software']['vendor'] != "")
@@ -86,11 +86,11 @@ else
     {
         $lifetime_start = '';
     }
-    
+
     if (!empty($_REQUEST['lifetime_end']))
     {
         $lifetime_end = date('Y-m-d',strtotime($_REQUEST['lifetime_end']));
-    }    
+    }
     else
     {
         $lifetime_end = '';

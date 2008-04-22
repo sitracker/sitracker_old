@@ -53,7 +53,7 @@ elseif ($action == "edit")
         {
             echo "<h2><img src='{$CONFIG['application_webpath']}images/icons/{$iconset}/32x32/site.png' width='32' height='32' alt='' /> ";
             echo "{$strEditSite}: {$site} - ".site_name($site)."</h2>";
-            echo "<form name='edit_site' action='{$_SERVER['PHP_SELF']}?action=update' method='post' onsubmit='return confirm_submit(\"{$strAreYouSureMakeTheseChanges}\")'>";
+            echo "<form name='edit_site' action='{$_SERVER['PHP_SELF']}?action=update' method='post' onsubmit='return confirm_action(\"{$strAreYouSureMakeTheseChanges}\")'>";
             echo "<h5>".sprintf($strMandatoryMarked,"<sup class='red'>*</sup>")."</h5>";
             echo "<table align='center' class='vertical'>";
             echo "<tr><th>{$strName}: <sup class='red'>*</sup></th>";
