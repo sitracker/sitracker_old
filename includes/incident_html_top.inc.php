@@ -43,7 +43,7 @@ echo "<script src='{$CONFIG['application_webpath']}calendar.js' type='text/javas
 // if ($userstyle == "2") echo "<link rel=\"stylesheet\" href=\"styles/webtrack2.css\">\n";
 
 //update last seen
-$lastseensql = "UPDATE LOW_PRIORITY users SET lastseen=NOW() WHERE id='{$_SESSION['userid']}' LIMIT 1";
+$lastseensql = "UPDATE LOW_PRIORITY `{$dbUsers}` SET lastseen=NOW() WHERE id='{$_SESSION['userid']}' LIMIT 1";
 mysql_query($lastseensql);
 if (mysql_error()) trigger_error(mysql_error(), E_USER_WARNING);
 
@@ -99,6 +99,7 @@ if (!document.all && document.getElementById)
 
 function ShowHide(button,element)
 {
+    // FIXME deprecated as of 3.35, use prototype $(element}.toggle() instead
   if (thisbrowser=="NN6" | thisbrowser=="NN4")
   {
       if (document.getElementById(element).style.display != "none") {

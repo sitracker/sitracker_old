@@ -25,7 +25,7 @@ foreach(array('user') as $var)
 if ( ($user == "") || (($user != $_SESSION['userid']) && (!user_permission($_SESSION['userid'], 50))))
     $user = $_SESSION['userid'];
 
-echo "var user = '$user';\n\n";  
+echo "var user = '$user';\n\n";
 ?>
 
 /************************************************************************************************************
@@ -159,14 +159,14 @@ function setElementActive(e,inputDiv)
 /* updating content - this function is called from popup window */
 function setElement_txt(id,text)
 {
-    var ta = document.getElementById(id).getElementsByTagName('SELECT')[0]
+    var ta = $(id).getElementsByTagName('SELECT')[0]
     ta.value = text;
     transferTextAreaContent(false,ta);
 }
 // update bg color - this function is called from popup window */
 function setElement_color(id,color)
 {
-    document.getElementById(id).style.backgroundColor=color;
+    $(id).style.backgroundColor=color;
     appointmentProperties[id]['bgColorCode'] = color;
 }
 
@@ -249,7 +249,7 @@ function parseItemsFromServer(ajaxIndex)
 
 function updateAppointmentProperties(id)
 {
-    var obj = document.getElementById(id);
+    var obj = $(id);
     var timeArray = getTimeAsArray(obj);
     var startDate = getAppointmentDate(obj);
     var endDate = new Date();
@@ -391,7 +391,7 @@ function timerNewAppointment()
     {
         if (initMinutes)
         {
-            var topPos = mouse_y - appointmentsOffsetTop + document.documentElement.scrollTop + document.getElementById('weekScheduler_content').scrollTop;
+            var topPos = mouse_y - appointmentsOffsetTop + document.documentElement.scrollTop + $('weekScheduler_content').scrollTop;
             topPos = topPos - (getMinute(topPos) % initMinutes);
             var rest = (getMinute(topPos) % initMinutes);
             if (rest!=0) topPos = topPos - (getMinute(topPos) % initMinutes);
@@ -603,9 +603,9 @@ function clearAppointments()
     {
         if (appointmentProperties[prop]['id'])
         {
-            if (document.getElementById(appointmentProperties[prop]['id']))
+            if ($(appointmentProperties[prop]['id']))
             {
-                var obj = document.getElementById(appointmentProperties[prop]['id']);
+                var obj = $(appointmentProperties[prop]['id']);
                 obj.parentNode.removeChild(obj);
             }
             appointmentProperties[prop]['id'] = false;
@@ -987,9 +987,9 @@ function cancelSelectionEvent(e)
 }
 function initWeekScheduler()
 {
-    weekScheduler_container = document.getElementById('weekScheduler_container');
+    weekScheduler_container = $('weekScheduler_container');
     if (!document.all)weekScheduler_container.onclick = ffEndEdit;
-    weekScheduler_appointments = document.getElementById('weekScheduler_appointments');
+    weekScheduler_appointments = $('weekScheduler_appointments');
     var subDivs = weekScheduler_appointments.getElementsByTagName('DIV');
     for (var no = 0; no < subDivs.length; no ++){
         if (subDivs[no].className=='weekScheduler_appointmentHour')
@@ -1003,7 +1003,7 @@ function initWeekScheduler()
         }
 
     }
-    if (initTopHour > weekplannerStartHour)document.getElementById('weekScheduler_content').scrollTop = ((initTopHour - weekplannerStartHour)*(itemRowHeight+1));
+    if (initTopHour > weekplannerStartHour) $('weekScheduler_content').scrollTop = ((initTopHour - weekplannerStartHour)*(itemRowHeight+1));
 
     //	initTopHour
     appointmentsOffsetTop = getTopPos(weekScheduler_appointments);
@@ -1071,7 +1071,7 @@ function displayNextWeek()
 
 function updateHeaderDates()
 {
-    var weekScheduler_dayRow = document.getElementById('weekScheduler_dayRow');
+    var weekScheduler_dayRow = $('weekScheduler_dayRow');
     var subDivs = weekScheduler_dayRow.getElementsByTagName('DIV');
     var tmpDate2 = new Date(dateStartOfWeek);
 
@@ -1096,7 +1096,7 @@ function updateHeaderDates()
 }
 
 function initialise() {
-    var ds = byId('dropsources');
+    var ds = $('dropsources');
     var s = ds.getElementsByTagName('li');
     for (var x = 0; x < s.length; x++)
     {
@@ -1107,7 +1107,7 @@ function initialise() {
     var t = new Array();
     for (x = 1; x <= 7; x++)
     {
-        tg = byId('drop' + x);
+        tg = $('drop' + x);
         t[x] = new salford.dnd.DestDropTarget(tg, ['p']);
     }
 }

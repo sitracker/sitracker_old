@@ -82,14 +82,7 @@ if (empty($_REQUEST['process']))
             document.closeform.additional.disabled=false;
             document.closeform.increferences.disabled=false;
             document.closeform.references.disabled=false;
-            if (document.all)
-            {
-            document.all('helptext').innerHTML = "Select the sections you'd like to include in the article by checking the boxes beside each heading, you can add further sections later.  You don't need to include all sections, just use the ones that are relevant.<br /><strong>Knowledge Base Article</strong>:";
-            }
-            else if (document.getElementById)
-            {
-            document.getElementById('helptext').innerHTML = "Select the sections you'd like to include in the article by checking the boxes beside each heading, you can add further sections later.  You don't need to include all sections, just use the ones that are relevant.<br /><strong>Knowledge Base Article</strong>:";
-            }
+            $('helptext').innerHTML = "Select the sections you'd like to include in the article by checking the boxes beside each heading, you can add further sections later.  You don't need to include all sections, just use the ones that are relevant.<br /><strong>Knowledge Base Article</strong>:";
             // Show the table rows for KB article
             $('titlerow').show();
             $('symptomsrow').show();

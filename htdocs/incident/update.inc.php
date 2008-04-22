@@ -178,11 +178,11 @@ function display_update_page($draftid=-1)
             }
         }
 
-        var toPass = byId('updatelog').value;
+        var toPass = $('updatelog').value;
         //alert(toPass.value);
 
-        var meta = byId('target').value+"|"+byId('updatetype').value+"|"+byId('cust_vis').checked+"|";
-        meta += byId('priority').value+"|"+byId('newstatus').value+"|"+byId('nextaction').value+"|";
+        var meta = $('target').value+"|"+$('updatetype').value+"|"+$('cust_vis').checked+"|";
+        meta += $('priority').value+"|"+$('newstatus').value+"|"+$('nextaction').value+"|";
 
         if (toPass != "")
         {
@@ -196,7 +196,7 @@ function display_update_page($draftid=-1)
                         if (draftid == -1)
                         {
                             draftid = xmlhttp.responseText;
-                            byId('draftid').value = draftid;
+                            $('draftid').value = draftid;
                         }
                         var currentTime = new Date();
                         var hours = currentTime.getHours();
@@ -210,7 +210,7 @@ function display_update_page($draftid=-1)
                         {
                             seconds = "0"+seconds;
                         }
-                        byId('updatestr').innerHTML = "<?php echo "<img src='{$CONFIG['application_webpath']}images/icons/{$iconset}/16x16/info.png' /> ".$GLOBALS['strDraftLastSaved'] ?>: "+hours+":"+minutes+":"+seconds;
+                        $('updatestr').innerHTML = "<?php echo "<img src='{$CONFIG['application_webpath']}images/icons/{$iconset}/16x16/info.png' /> ".$GLOBALS['strDraftLastSaved'] ?>: "+hours+":"+minutes+":"+seconds;
                     }
                 }
             }

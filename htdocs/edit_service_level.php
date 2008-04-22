@@ -34,7 +34,7 @@ if (empty($action) OR $action == "showform")
     <!--
     function enableBillingPeriod()
     {
-        if (byId('timed').checked==true)
+        if ($('timed').checked==true)
         {
             $('engineerBillingPeriod').show();
             $('customerBillingPeriod').show();

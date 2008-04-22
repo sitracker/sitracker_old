@@ -30,6 +30,7 @@ function wt_winpopup(url,mini)
 // @returns bool TRUE or false, depending on which button was pressed, yes = true, false = no
 function confirm_action(msg)
 {
+    if (msg == '') msg = 'Are you sure?';
     return window.confirm(msg);
 }
 
@@ -63,12 +64,6 @@ function appointment(id)
         $(id).style.visibility='visible';
         $(id).style.display='block';
     }
-}
-
-
-function byId(id)
-{
-    return document.getElementById(id);
 }
 
 

@@ -87,10 +87,6 @@ echo "<a href=\"javascript:save_layout();\" id='savelayout' title='Save Dashboar
     dojo.require("dojo.dnd.*");
     dojo.require("dojo.event.*");
 
-    function byId(id){
-        return document.getElementById(id);
-    }
-
     function resetborder()
     {
         $('col0').style.border = '0px';
@@ -107,7 +103,7 @@ echo "<a href=\"javascript:save_layout();\" id='savelayout' title='Save Dashboar
         var cols2 = [<?php echo $cols2; ?>];
 
         // list one
-        var dl = byId("col0");
+        var dl = $("col0");
         var dt1=new dojo.dnd.HtmlDropTarget(dl, ["li1"]);
 
         dojo.event.connect(dt1, "onDragOver", function(e) {
@@ -121,11 +117,11 @@ echo "<a href=\"javascript:save_layout();\" id='savelayout' title='Save Dashboar
             save_layout();
         });
         for(var x=0; x<cols0.length; x++){
-            new dojo.dnd.HtmlDragSource(byId('db_0-'+cols0[x]),"li1");
+            new dojo.dnd.HtmlDragSource($('db_0-'+cols0[x]),"li1");
         }
 
         // list two
-        var dl = byId("col1");
+        var dl = $("col1");
         var dt2 = new dojo.dnd.HtmlDropTarget(dl, ["li1"]);
         dojo.event.connect(dt2, "onDragOver", function(e) {
         if ($(e.target.id)) $(e.target.id).style.border = '2px dashed #cccccc;';
@@ -137,11 +133,11 @@ echo "<a href=\"javascript:save_layout();\" id='savelayout' title='Save Dashboar
             save_layout();
         });
         for(var x=0; x<cols1.length; x++){
-            new dojo.dnd.HtmlDragSource(byId('db_1-'+cols1[x]),"li1");
+            new dojo.dnd.HtmlDragSource($('db_1-'+cols1[x]),"li1");
         }
 
         // list three
-        var dl = byId("col2");
+        var dl = $("col2");
         var dt3 = new dojo.dnd.HtmlDropTarget(dl, ["li1"]);
         dojo.event.connect(dt3, "onDragOver", function(e) {
         if ($(e.target.id)) $(e.target.id).style.border = '2px dashed #cccccc;';
@@ -153,7 +149,7 @@ echo "<a href=\"javascript:save_layout();\" id='savelayout' title='Save Dashboar
             save_layout();
         });
         for(var x=0; x<cols2.length; x++){
-            new dojo.dnd.HtmlDragSource(byId('db_2-'+cols2[x]),"li1");
+            new dojo.dnd.HtmlDragSource($('db_2-'+cols2[x]),"li1");
         }
     }
 
@@ -196,7 +192,7 @@ echo "<a href=\"javascript:save_layout();\" id='savelayout' title='Save Dashboar
 
         var toPass = "";
         for(var i = 0; i < 3; i++){
-            var col = byId("col"+i).childNodes;
+            var col = $("col"+i).childNodes;
             var s = "";
             for(var x = 0; x < col.length; x++){
                 // s = s+col.item(x).id.substr(5)+"-";

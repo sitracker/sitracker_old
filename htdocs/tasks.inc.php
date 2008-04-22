@@ -190,10 +190,10 @@ function countUp()
 
         var str = formatSeconds(secondsOpen);
 
-        byId("duration"+dataArray[i].id).innerHTML = "<em>"+str+"</em>";
+        $("duration"+dataArray[i].id).innerHTML = "<em>"+str+"</em>";
     }
 
-    byId('totalduration').innerHTML = formatSeconds(closed);
+    $('totalduration').innerHTML = formatSeconds(closed);
 }
 
 setInterval("countUp()", 1000); //every 1 seconds

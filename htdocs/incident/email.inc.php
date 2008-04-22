@@ -353,7 +353,7 @@ switch ($step)
                 }
             }
 
-            var toPass = byId('bodytext').value;
+            var toPass = $('bodytext').value;
             //alert(toPass.value);
 
 /*
@@ -361,15 +361,14 @@ Format of meta data
 $emailtype|$newincidentstatus|$timetonextaction_none|$timetonextaction_days|$timetonextaction_hours|$timetonextaction_minutes|$day|$month|$year|$target|$chase_customer|$chase_manager|$from|$replyTo|$ccemail|$bccemail|$toemail|$subject|$body
 */
 
-            var meta = byId('emailtype').value+"|"+byId('newincidentstatus').value+"|"+byId('timetonextaction_none').value+"|";
-            meta = meta+byId('timetonextaction_days').value+"|"+byId('timetonextaction_hours').value+"|";
-            meta = meta+byId('timetonextaction_minutes').value+"||||";
-            //+byId('day').value+"|"+byId('month').value+"|"+byId('year').value+"|";
-            meta = meta+byId('target').value+"|"+byId('chase_customer').value+"|";
-            meta = meta+byId('chase_manager').value+"|"+byId('fromfield').value+"|"+byId('replytofield').value+"|";
-            meta = meta+byId('ccfield').value+"|"+byId('bccfield').value+"|"+byId('tofield').value+"|";
-            meta = meta+urlencode(byId('subjectfield').value)+"|"+urlencode(byId('bodytext').value)+"|"
-            meta = meta+byId('date').value+"|"+byId('timeoffset').value;
+            var meta = $('emailtype').value+"|"+$('newincidentstatus').value+"|"+$('timetonextaction_none').value+"|";
+            meta = meta+$('timetonextaction_days').value+"|"+$('timetonextaction_hours').value+"|";
+            meta = meta+$('timetonextaction_minutes').value+"||||";
+            meta = meta+$('target').value+"|"+$('chase_customer').value+"|";
+            meta = meta+$('chase_manager').value+"|"+$('fromfield').value+"|"+$('replytofield').value+"|";
+            meta = meta+$('ccfield').value+"|"+$('bccfield').value+"|"+$('tofield').value+"|";
+            meta = meta+urlencode($('subjectfield').value)+"|"+urlencode($('bodytext').value)+"|"
+            meta = meta+$('date').value+"|"+$('timeoffset').value;
 
             if (toPass != "")
             {
@@ -396,7 +395,7 @@ $emailtype|$newincidentstatus|$timetonextaction_none|$timetonextaction_days|$tim
                             {
                                 seconds = "0"+seconds;
                             }
-                            byId('updatestr').innerHTML = "<?php echo "<img src='{$CONFIG['application_webpath']}images/icons/{$iconset}/16x16/info.png' /> ".$GLOBALS['strDraftLastSaved'] ?>: "+hours+":"+minutes+":"+seconds;
+                            $('updatestr').innerHTML = "<?php echo "<img src='{$CONFIG['application_webpath']}images/icons/{$iconset}/16x16/info.png' /> ".$GLOBALS['strDraftLastSaved'] ?>: "+hours+":"+minutes+":"+seconds;
                             $('draftid').value = draftid;
                         }
                     }

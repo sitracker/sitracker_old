@@ -155,12 +155,12 @@ if (empty($_POST['process']))
     echo "{\n";
     echo "  var headerelement = 'header' + element; \n";
     // echo "alert (headerelement);";
-    echo "  var headersize = document.getElementById(headerelement).options[document.getElementById(headerelement).selectedIndex].value; \n";
+    echo "  var headersize = $(headerelement).options[$(headerelement).selectedIndex].value; \n";
     // echo "alert (headersize);";
     // echo "  var headersize = \"h3\"; \n";
     echo "  var content=\"<\" + headersize + \" style='margin:0px; display:inline'>\" + headertext + \"</\" + headersize + \">\"; \n";
 
-    echo "  document.getElementById(element).innerHTML=content;  \n";
+    echo "  $(element).innerHTML=content;  \n";
     echo "}\n";
     echo "\n//]]>\n";
     echo "</script>\n";

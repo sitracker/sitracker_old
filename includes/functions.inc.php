@@ -705,25 +705,25 @@ function contact_site($id)
 
 function contact_siteid($id)
 {
-    return db_read_column('siteid', $GLOBALS['contacts'], $id);
+    return db_read_column('siteid', $GLOBALS['dbContacts'], $id);
 }
 
 
 function contact_email($id)
 {
-    return db_read_column('email', $GLOBALS['contacts'], $id);
+    return db_read_column('email', $GLOBALS['dbContacts'], $id);
 }
 
 
 function contact_phone($id)
 {
-    return db_read_column('phone', $GLOBALS['contacts'], $id);
+    return db_read_column('phone', $GLOBALS['dbContacts'], $id);
 }
 
 
 function contact_fax($id)
 {
-    return db_read_column('fax', $GLOBALS['contacts'], $id);
+    return db_read_column('fax', $GLOBALS['dbContacts'], $id);
 }
 
 
