@@ -17,9 +17,7 @@
 
 // TODO we need to clean this schema up to make it confirmed compatible with mysql4
 
-// TODO 3.35 Make this use a configured table prefix
-
-$schema = "CREATE TABLE `billing_periods` (
+$schema = "CREATE TABLE `{$dbBillingPeriods}` (
 `servicelevelid` INT( 5 ) NOT NULL ,
 `engineerperiod` INT NOT NULL COMMENT 'In minutes',
 `customerperiod` INT NOT NULL COMMENT 'In minutes',
@@ -29,24 +27,25 @@ PRIMARY KEY ( `servicelevelid`,`priority` )
 ) ENGINE = MYISAM ;
 
 
-CREATE TABLE `closingstatus` (
+CREATE TABLE `{$dbClosingStatus}` (
  `id` int(11) NOT NULL auto_increment,
  `name` varchar(50) default NULL,
  PRIMARY KEY  (`id`)
 ) ENGINE=MyISAM;
 
-INSERT INTO `closingstatus` VALUES (1, 'strSentInformation');
-INSERT INTO `closingstatus` VALUES (2, 'strSolvedProblem');
-INSERT INTO `closingstatus` VALUES (3, 'strReportedBug');
-INSERT INTO `closingstatus` VALUES (4, 'strActionTaken');
-INSERT INTO `closingstatus` VALUES (5, 'strDuplicate');
-INSERT INTO `closingstatus` VALUES (6, 'strNoLongerRelevant');
-INSERT INTO `closingstatus` VALUES (7, 'strUnsupported');
-INSERT INTO `closingstatus` VALUES (8, 'strSupportExpired');
-INSERT INTO `closingstatus` VALUES (9, 'strUnsolved');
-INSERT INTO `closingstatus` VALUES (10, 'strEscalated');
+INSERT INTO `{$dbClosingStatus}` VALUES (1, 'strSentInformation');
+INSERT INTO `{$dbClosingStatus}` VALUES (2, 'strSolvedProblem');
+INSERT INTO `{$dbClosingStatus}` VALUES (3, 'strReportedBug');
+INSERT INTO `{$dbClosingStatus}` VALUES (4, 'strActionTaken');
+INSERT INTO `{$dbClosingStatus}` VALUES (5, 'strDuplicate');
+INSERT INTO `{$dbClosingStatus}` VALUES (6, 'strNoLongerRelevant');
+INSERT INTO `{$dbClosingStatus}` VALUES (7, 'strUnsupported');
+INSERT INTO `{$dbClosingStatus}` VALUES (8, 'strSupportExpired');
+INSERT INTO `{$dbClosingStatus}` VALUES (9, 'strUnsolved');
+INSERT INTO `{$dbClosingStatus}` VALUES (10, 'strEscalated');
 
-CREATE TABLE `contacts` (
+
+CREATE TABLE `{$dbContacts}` (
   `id` int(11) NOT NULL auto_increment,
   `notify_contactid` int(11) NOT NULL default '0',
   `username` varchar(50) default NULL,
@@ -82,10 +81,11 @@ CREATE TABLE `contacts` (
   KEY `notify_contactid` (`notify_contactid`)
 ) ENGINE=MyISAM;
 
-INSERT INTO `contacts` (`id`, `notify_contactid`, `username`, `password`, `forenames`, `surname`, `jobtitle`, `courtesytitle`, `siteid`, `email`, `phone`, `mobile`, `fax`, `department`, `address1`, `address2`, `city`, `county`, `country`, `postcode`, `dataprotection_email`, `dataprotection_phone`, `dataprotection_address`, `timestamp_added`, `timestamp_modified`, `notes`) VALUES
+INSERT INTO `{$dbContacts}` (`id`, `notify_contactid`, `username`, `password`, `forenames`, `surname`, `jobtitle`, `courtesytitle`, `siteid`, `email`, `phone`, `mobile`, `fax`, `department`, `address1`, `address2`, `city`, `county`, `country`, `postcode`, `dataprotection_email`, `dataprotection_phone`, `dataprotection_address`, `timestamp_added`, `timestamp_modified`, `notes`) VALUES
 (1, 4, 'Acme1', '2830', 'John', 'Acme', 'Chairman', 'Mr', 1, 'acme@example.com', '0666 222111', '', '', '', '', '', '', '', '', '', 'Yes', 'Yes', 'Yes', 1132930556, 1187360933, '');
 
-CREATE TABLE `dashboard` (
+
+CREATE TABLE `{$dbDashboard}` (
   `id` int(11) NOT NULL auto_increment,
   `name` varchar(100) NOT NULL default '',
   `version` mediumint(9) NOT NULL default '1',
@@ -93,12 +93,13 @@ CREATE TABLE `dashboard` (
   PRIMARY KEY  (`id`)
 ) ENGINE=MyISAM ;
 
-INSERT INTO `dashboard` (`id`, `name`, `enabled`) VALUES (1, 'random_tip', 'true'),
+INSERT INTO `{$dbDashboard}` (`id`, `name`, `enabled`) VALUES (1, 'random_tip', 'true'),
 (2, 'statistics', 'true'),
 (3, 'tasks', 'true'),
 (4, 'user_incidents', 'true');
 
-CREATE TABLE `drafts` (
+
+CREATE TABLE `{$dbDrafts}` (
   `id` int(11) NOT NULL auto_increment,
   `userid` int(11) NOT NULL,
   `incidentid` int(11) NOT NULL,
@@ -109,15 +110,17 @@ CREATE TABLE `drafts` (
   PRIMARY KEY  (`id`)
 ) ENGINE=MyISAM ;
 
-CREATE TABLE `emailsig` (
+
+CREATE TABLE `{$dbEmailSig}` (
   `id` int(11) NOT NULL auto_increment,
   `signature` text NOT NULL,
   PRIMARY KEY  (`id`)
 )  ENGINE=MyISAM COMMENT='Global Email Signature' ;
 
-INSERT INTO `emailsig` (`id`, `signature`) VALUES (1, '--\r\n... Powered by Open Source Software: Support Incident Tracker (SiT!) is available free from http://sourceforge.net/projects/sitracker/');
+INSERT INTO `{$dbEmailSig}` (`id`, `signature`) VALUES (1, '--\r\n... Powered by Open Source Software: Support Incident Tracker (SiT!) is available free from http://sitracker.sourceforge.net/');
 
-CREATE TABLE IF NOT EXISTS `emailtype` (
+
+CREATE TABLE `{$dbEmailTemplates}` (
   `id` varchar(50) NOT NULL,
   `type` enum( 'usertemplate', 'system', 'contact', 'site', 'incident', 'kb', 'user') NOT NULL COMMENT 'usertemplate is personal template owned by a user, user is a template relating to a user' DEFAULT 'user',
   `description` text NOT NULL,
@@ -134,30 +137,31 @@ CREATE TABLE IF NOT EXISTS `emailtype` (
 ) ENGINE=MyISAM;
 
 -- FIXME remove ID columns
-INSERT INTO `emailtype`(`id`, `type`, `description`, `tofield`, `fromfield`, `replytofield`, `ccfield`, `bccfield`, `subjectfield`, `body`, `customervisibility`, `storeinlog`)
+INSERT INTO `{$dbEmailTemplates}`(`id`, `type`, `description`, `tofield`, `fromfield`, `replytofield`, `ccfield`, `bccfield`, `subjectfield`, `body`, `customervisibility`, `storeinlog`)
 VALUES ('Support Email','user','','<contactemail>','<supportemail>','<supportemail>','','<useremail>','[<incidentid>] - <incidenttitle>','<contactfirstname>,\r\n\r\n<signature>\r\n<globalsignature>', 'show', 'yes');
-INSERT INTO `emailtype`(`id`, `type`, `description`, `tofield`, `fromfield`, `replytofield`, `ccfield`, `bccfield`, `subjectfield`, `body`, `customervisibility`, `storeinlog`)
+INSERT INTO `{$dbEmailTemplates}`(`id`, `type`, `description`, `tofield`, `fromfield`, `replytofield`, `ccfield`, `bccfield`, `subjectfield`, `body`, `customervisibility`, `storeinlog`)
 VALUES ('User Email','user','','<contactemail>','<useremail>','<useremail>','','','','<signature>\r\n<globalsignature>\r\n', 'show', 'yes');
-INSERT INTO `emailtype`(`id`, `type`, `description`, `tofield`, `fromfield`, `replytofield`, `ccfield`, `bccfield`, `subjectfield`, `body`, `customervisibility`, `storeinlog`)
+INSERT INTO `{$dbEmailTemplates}`(`id`, `type`, `description`, `tofield`, `fromfield`, `replytofield`, `ccfield`, `bccfield`, `subjectfield`, `body`, `customervisibility`, `storeinlog`)
 VALUES ('INCIDENT_CLOSURE','system','Notify contact that the incident has been marked for closure and will be closed shortly','<contactemail>','<supportemail>','<supportemail>','','<useremail>','[<incidentid>] - <incidenttitle>','<contactfirstname>,\r\n\r\nIncident <incidentid> has been marked for closure. If you still have outstanding issues relating to this incident then please reply with details, otherwise it will be closed after the next seven days.\r\n\r\n<signature>\r\n<globalsignature>', 'show', 'yes');
-INSERT INTO `emailtype`(`id`, `type`, `description`, `tofield`, `fromfield`, `replytofield`, `ccfield`, `bccfield`, `subjectfield`, `body`, `customervisibility`, `storeinlog`)
+INSERT INTO `{$dbEmailTemplates}`(`id`, `type`, `description`, `tofield`, `fromfield`, `replytofield`, `ccfield`, `bccfield`, `subjectfield`, `body`, `customervisibility`, `storeinlog`)
 VALUES ('INCIDENT_LOGGED_CALL','system','Acknowledge the contacts telephone call and notify them of the new incident number','<contactemail>','<supportemail>','<supportemail>','','<useremail>','[<incidentid>] - <incidenttitle>','Thank you for your call. The incident <incidentid> has been generated and your details stored in our tracking system. \r\n\r\nYou will be receiving a response from one of our product specialists as soon as possible. When referring to this incident please remember to quote incident <incidentid> in \r\nall communications. \r\n\r\nFor all email communications please title your email as [<incidentid>] - <incidenttitle>\r\n\r\n<globalsignature>\r\n', 'show', 'no');
-INSERT INTO `emailtype`(`id`, `type`, `description`, `tofield`, `fromfield`, `replytofield`, `ccfield`, `bccfield`, `subjectfield`, `body`, `customervisibility`, `storeinlog`)
+INSERT INTO `{$dbEmailTemplates}`(`id`, `type`, `description`, `tofield`, `fromfield`, `replytofield`, `ccfield`, `bccfield`, `subjectfield`, `body`, `customervisibility`, `storeinlog`)
 VALUES ('INCIDENT_CLOSED','system','Notify contact that an incident has now been closed','<contactemail>','<supportemail>','<supportemail>','','','[<incidentid>] - <incidenttitle> - Closed','This is an automated message to let you know that Incident <incidentid> has now been closed. \r\n\r\n<globalsignature>', 'show', 'yes');
-INSERT INTO `emailtype`(`id`, `type`, `description`, `tofield`, `fromfield`, `replytofield`, `ccfield`, `bccfield`, `subjectfield`, `body`, `customervisibility`, `storeinlog`)
+INSERT INTO `{$dbEmailTemplates}`(`id`, `type`, `description`, `tofield`, `fromfield`, `replytofield`, `ccfield`, `bccfield`, `subjectfield`, `body`, `customervisibility`, `storeinlog`)
 VALUES ('OUT_OF_SLA', 'system', '', '<supportmanager>', '<supportemail>', '<supportemail>', '<useremail>', '', '<applicationshortname> SLA: Incident <incidentid> now outside SLA', 'This is an automatic notification that this incident has gone outside its SLA.  The SLA target <info1> expired <info2> minutes ago.\n\nIncident: [<incidentid>] - <incidenttitle>\nOwner: <incidentowner>\nPriority: <incidentpriority>\nExternal Id: <incidentexternalid>\nExternal Engineer: <incidentexternalengineer>\nSite: <contactsite>\nContact: <contactname>\n\n--\n<applicationshortname> v<applicationversion>\n<todaysdate>\n', 'hide', 'yes');
-INSERT INTO `emailtype`(`id`, `type`, `description`, `tofield`, `fromfield`, `replytofield`, `ccfield`, `bccfield`, `subjectfield`, `body`, `customervisibility`, `storeinlog`)
+INSERT INTO `{$dbEmailTemplates}`(`id`, `type`, `description`, `tofield`, `fromfield`, `replytofield`, `ccfield`, `bccfield`, `subjectfield`, `body`, `customervisibility`, `storeinlog`)
 VALUES ('OUT_OF_REVIEW', 'system', '', '<supportmanager>', '<useremail>', '<supportemail>', '<supportemail>', '', '<applicationshortname> Review: Incident <incidentid> due for review soon', 'This is an automatic notification that this incident [<incidentid>] will soon be due for review.\n\nIncident: [<incidentid>] - <incidenttitle>\nEngineer: <incidentowner>\nPriority: <incidentpriority>\nExternal Id: <incidentexternalid>\nExternal Engineer: <incidentexternalengineer>\nSite: <contactsite>\nContact: <contactname>\n\n--\n<applicationshortname> v<applicationversion>\n<todaysdate>', 'hide', 'yes');
-INSERT INTO `emailtype`(`id`, `type`, `description`, `tofield`, `fromfield`, `replytofield`, `ccfield`, `bccfield`, `subjectfield`, `body`, `customervisibility`, `storeinlog`)
+INSERT INTO `{$dbEmailTemplates}`(`id`, `type`, `description`, `tofield`, `fromfield`, `replytofield`, `ccfield`, `bccfield`, `subjectfield`, `body`, `customervisibility`, `storeinlog`)
 VALUES ('INCIDENT_UPDATED','system','Acknoweldge contacts email and update to incident','<contactemail>','<supportemail>','<supportemail>','','','[<incidentid>] - <incidenttitle>','Thank you for your email. The incident <incidentid> has been updated and your details stored in our support database. \r\n\r\nYou will be receiving a response from one of our product specialists as soon as possible.\r\n\r\n<globalsignature>', 'show', 'no');
-INSERT INTO `emailtype`(`id`, `type`, `description`, `tofield`, `fromfield`, `replytofield`, `ccfield`, `bccfield`, `subjectfield`, `body`, `customervisibility`, `storeinlog`)
+INSERT INTO `{$dbEmailTemplates}`(`id`, `type`, `description`, `tofield`, `fromfield`, `replytofield`, `ccfield`, `bccfield`, `subjectfield`, `body`, `customervisibility`, `storeinlog`)
 VALUES ('INCIDENT_CLOSED_EXTERNAL','system','Notify external engineer that an incident has been closed','<incidentexternalemail>','<supportemail>','<supportemail>','','','Incident ref #<incidentexternalid>  - <incidenttitle> CLOSED - [<incidentid>]','<incidentexternalengineerfirstname>,\r\n\r\nThis is an automated email to let you know that Incident <incidentexternalid> has been closed within our tracking system.\r\n\r\nMany thanks for your help.\r\n\r\n<signature>\r\n<globalsignature>', 'hide', 'no');
-INSERT INTO `emailtype`(`id`, `type`, `description`, `tofield`, `fromfield`, `replytofield`, `ccfield`, `bccfield`, `subjectfield`, `body`, `customervisibility`, `storeinlog`)
+INSERT INTO `{$dbEmailTemplates}`(`id`, `type`, `description`, `tofield`, `fromfield`, `replytofield`, `ccfield`, `bccfield`, `subjectfield`, `body`, `customervisibility`, `storeinlog`)
 VALUES ('INCIDENT_LOGGED_EMAIL','system','Acknowledge the contacts email and notify them of the new incident number','<contactemail>','<supportemail>','<supportemail>','','<useremail>','[<incidentid>] - <incidenttitle>','Thank you for your email. The incident <incidentid> has been generated and your details stored in our tracking system. \r\n\r\nYou will be receiving a response from one of our product specialists as soon as possible. When referring to this incident please remember to quote incident <incidentid> in \r\nall communications.\r\n\r\nFor all email communications please title your email as [<incidentid>] - <incidenttitle>\r\n\r\n<globalsignature>', 'show', 'no');
-INSERT INTO `emailtype` (`id`, `type`, `description`, `tofield`, `fromfield`, `replytofield`, `ccfield`, `bccfield`, `subjectfield`, `body`, `customervisibility`, `storeinlog`) VALUES ('INCIDENT_REASSIGNED_USER_NOTIFY', 'system', 'Notify user when call assigned to them', '<incidentreassignemailaddress>', '<supportemail>', '<supportemail>', '', '', 'A <incidentpriority> priority call ([<incidentid>] - <incidenttitle>) has been reassigned to you', 'Hi,\r\n\r\nIncident [<incidentid>] entitled <incidenttitle> has been reassigned to you.\r\n\r\nThe details of this incident are:\r\n\r\nPriority: <incidentpriority>\r\nContact: <contactname>\r\nSite: <contactsite>\r\n\r\n\r\nRegards\r\n<applicationname>\r\n\r\n\r\n---\r\n<todaysdate> - <applicationshortname> <applicationversion>', 'hide', 'No');
-INSERT INTO `emailtype` (`id`, `type`, `description`, `tofield`, `fromfield`, `replytofield`, `ccfield`, `bccfield`, `subjectfield`, `body`, `customervisibility`, `storeinlog`) VALUES ('NEARING_SLA', 'system', 'Notification when an incident nears its SLA target', '<supportmanageremail>', '<supportemail>', '<supportemail>', '<useremail>', '', '<applicationshortname> SLA: Incident <incidentid> about to breach SLA', 'This is an automatic notification that this incident is about to breach its SLA.  The SLA target <info1> will expire in <info2> minutes.\r\n\r\nIncident: [<incidentid>] - <incidenttitle>\r\nOwner: <incidentowner>\r\nPriority: <incidentpriority>\r\nExternal Id: <incidentexternalid>\r\nExternal Engineer: <incidentexternalengineer>\r\nSite: <contactsite>\r\nContact: <contactname>\r\n\r\n--\r\n<applicationshortname> v<applicationversion>\r\n<todaysdate>\r\n', 'hide', 'Yes');
+INSERT INTO `{$dbEmailTemplates}` (`id`, `type`, `description`, `tofield`, `fromfield`, `replytofield`, `ccfield`, `bccfield`, `subjectfield`, `body`, `customervisibility`, `storeinlog`) VALUES ('INCIDENT_REASSIGNED_USER_NOTIFY', 'system', 'Notify user when call assigned to them', '<incidentreassignemailaddress>', '<supportemail>', '<supportemail>', '', '', 'A <incidentpriority> priority call ([<incidentid>] - <incidenttitle>) has been reassigned to you', 'Hi,\r\n\r\nIncident [<incidentid>] entitled <incidenttitle> has been reassigned to you.\r\n\r\nThe details of this incident are:\r\n\r\nPriority: <incidentpriority>\r\nContact: <contactname>\r\nSite: <contactsite>\r\n\r\n\r\nRegards\r\n<applicationname>\r\n\r\n\r\n---\r\n<todaysdate> - <applicationshortname> <applicationversion>', 'hide', 'No');
+INSERT INTO `{$dbEmailTemplates}` (`id`, `type`, `description`, `tofield`, `fromfield`, `replytofield`, `ccfield`, `bccfield`, `subjectfield`, `body`, `customervisibility`, `storeinlog`) VALUES ('NEARING_SLA', 'system', 'Notification when an incident nears its SLA target', '<supportmanageremail>', '<supportemail>', '<supportemail>', '<useremail>', '', '<applicationshortname> SLA: Incident <incidentid> about to breach SLA', 'This is an automatic notification that this incident is about to breach its SLA.  The SLA target <info1> will expire in <info2> minutes.\r\n\r\nIncident: [<incidentid>] - <incidenttitle>\r\nOwner: <incidentowner>\r\nPriority: <incidentpriority>\r\nExternal Id: <incidentexternalid>\r\nExternal Engineer: <incidentexternalengineer>\r\nSite: <contactsite>\r\nContact: <contactname>\r\n\r\n--\r\n<applicationshortname> v<applicationversion>\r\n<todaysdate>\r\n', 'hide', 'Yes');
 
-CREATE TABLE `escalationpaths` (
+
+CREATE TABLE `{$dbEscalationPaths}` (
   `id` int(11) NOT NULL auto_increment,
   `name` varchar(255) default NULL,
   `track_url` varchar(255) default NULL,
@@ -167,7 +171,8 @@ CREATE TABLE `escalationpaths` (
   PRIMARY KEY  (`id`)
 ) ENGINE=MyISAM ;
 
-CREATE TABLE `feedbackforms` (
+
+CREATE TABLE `{$dbFeedbackForms}` (
   `id` int(5) NOT NULL auto_increment,
   `name` varchar(255) NOT NULL default '',
   `introduction` text NOT NULL,
@@ -178,7 +183,8 @@ CREATE TABLE `feedbackforms` (
   KEY `multi` (`multi`)
 ) ENGINE=MyISAM;
 
-CREATE TABLE `feedbackquestions` (
+
+CREATE TABLE `{$dbFeedbackQuestions}` (
   `id` int(5) NOT NULL auto_increment,
   `formid` int(5) NOT NULL default '0',
   `question` varchar(255) NOT NULL default '',
@@ -195,7 +201,7 @@ CREATE TABLE `feedbackquestions` (
 ) ENGINE=MyISAM;
 
 
-CREATE TABLE `feedbackreport` (
+CREATE TABLE `{$dbFeedbackReport}` (
   `id` int(5) NOT NULL default '0',
   `formid` int(5) NOT NULL default '0',
   `respondent` int(11) NOT NULL default '0',
@@ -214,7 +220,8 @@ CREATE TABLE `feedbackreport` (
   KEY `contactid` (`contactid`)
 ) ENGINE=MyISAM;
 
-CREATE TABLE `feedbackrespondents` (
+
+CREATE TABLE `{$dbFeedbackRespondents}` (
   `id` int(5) NOT NULL auto_increment,
   `formid` int(5) NOT NULL default '0',
   `contactid` int(11) NOT NULL default '0',
@@ -229,7 +236,7 @@ CREATE TABLE `feedbackrespondents` (
   KEY `completed` (`completed`)
 ) ENGINE=MyISAM;
 
-CREATE TABLE `feedbackresults` (
+CREATE TABLE `{$dbFeedbackResults}` (
   `id` int(5) NOT NULL auto_increment,
   `respondentid` int(5) NOT NULL default '0',
   `questionid` int(5) NOT NULL default '0',
@@ -241,7 +248,7 @@ CREATE TABLE `feedbackresults` (
 ) ENGINE=MyISAM;
 
 
-CREATE TABLE `files` (
+CREATE TABLE `{$dbFiles}` (
   `id` int(11) NOT NULL auto_increment,
   `category` enum('public','private','protected') NOT NULL default 'public',
   `filename` varchar(255) NOT NULL default '',
@@ -268,14 +275,14 @@ CREATE TABLE `files` (
 ) ENGINE=MyISAM;
 
 
-CREATE TABLE `flags` (
+CREATE TABLE `{$dbFlags}` (
   `flag` char(3) NOT NULL default '',
   `name` varchar(100) default NULL,
   PRIMARY KEY  (`flag`)
 ) ENGINE=MyISAM;
 
 
-CREATE TABLE `groups` (
+CREATE TABLE `{$dbGroups}` (
   `id` int(5) NOT NULL auto_increment,
   `name` varchar(255) NOT NULL default '',
   `imageurl` varchar(255) NOT NULL default '',
@@ -283,7 +290,7 @@ CREATE TABLE `groups` (
 ) ENGINE=MyISAM COMMENT='List of user groups' ;
 
 
-CREATE TABLE `holidays` (
+CREATE TABLE `{$dbHolidays}` (
   `id` int(11) NOT NULL auto_increment,
   `userid` int(5) NOT NULL default '0',
   `type` int(11) NOT NULL default '1',
@@ -298,7 +305,8 @@ CREATE TABLE `holidays` (
   KEY `approved` (`approved`)
 ) ENGINE=MyISAM;
 
-CREATE TABLE `incidentpools` (
+
+CREATE TABLE `{$dbIncidentPools}` (
   `id` int(11) NOT NULL auto_increment,
   `maintenanceid` int(11) NOT NULL default '0',
   `siteid` int(11) NOT NULL default '0',
@@ -309,7 +317,7 @@ CREATE TABLE `incidentpools` (
 ) ENGINE=MyISAM;
 
 
-CREATE TABLE `incidentproductinfo` (
+CREATE TABLE `{$dbIncidentProductInfo}` (
   `id` int(11) NOT NULL auto_increment,
   `incidentid` int(11) default NULL,
   `productinfoid` int(11) default NULL,
@@ -318,7 +326,7 @@ CREATE TABLE `incidentproductinfo` (
 ) ENGINE=MyISAM;
 
 
-CREATE TABLE `incidents` (
+CREATE TABLE `{$dbIncidents}` (
   `id` int(11) NOT NULL auto_increment,
   `escalationpath` int(11) default NULL,
   `externalid` varchar(50) default NULL,
@@ -362,27 +370,27 @@ CREATE TABLE `incidents` (
   KEY `servicelevel` (`servicelevel`)
 ) ENGINE=MyISAM ;
 
-CREATE TABLE `incidentstatus` (
+
+CREATE TABLE `{$dbIncidentStatus}` (
   `id` int(11) NOT NULL auto_increment,
   `name` varchar(50) default NULL,
   `ext_name` varchar(50) default NULL,
   PRIMARY KEY  (`id`)
 ) ENGINE=MyISAM;
 
-INSERT INTO `incidentstatus` VALUES (1, 'strActive', 'strActive');
-INSERT INTO `incidentstatus` VALUES (2, 'strClosed', 'strClosed');
-INSERT INTO `incidentstatus` VALUES (3, 'strResearchNeeded', 'strResearching');
-INSERT INTO `incidentstatus` VALUES (4, 'strCalledAndLeftMessage', 'strCalledAndLeftMessage');
-INSERT INTO `incidentstatus` VALUES (5, 'strAwaitingColleagueResponse', 'strInternalEscalation');
-INSERT INTO `incidentstatus` VALUES (6, 'strAwaitingSupportResponse', 'strExternalEscalation');
-INSERT INTO `incidentstatus` VALUES (7, 'strAwaitingClosure', 'strAwaitingClosure');
-INSERT INTO `incidentstatus` VALUES (8, 'strAwaitingCustomerAction', 'strCustomerHasAction');
-INSERT INTO `incidentstatus` VALUES (9, 'strUnsupported', 'strUnsupported');
-INSERT INTO `incidentstatus` VALUES (10, 'strActiveUnassigned', 'strActive');
+INSERT INTO `{$dbIncidentStatus}` VALUES (1, 'strActive', 'strActive');
+INSERT INTO `{$dbIncidentStatus}` VALUES (2, 'strClosed', 'strClosed');
+INSERT INTO `{$dbIncidentStatus}` VALUES (3, 'strResearchNeeded', 'strResearching');
+INSERT INTO `{$dbIncidentStatus}` VALUES (4, 'strCalledAndLeftMessage', 'strCalledAndLeftMessage');
+INSERT INTO `{$dbIncidentStatus}` VALUES (5, 'strAwaitingColleagueResponse', 'strInternalEscalation');
+INSERT INTO `{$dbIncidentStatus}` VALUES (6, 'strAwaitingSupportResponse', 'strExternalEscalation');
+INSERT INTO `{$dbIncidentStatus}` VALUES (7, 'strAwaitingClosure', 'strAwaitingClosure');
+INSERT INTO `{$dbIncidentStatus}` VALUES (8, 'strAwaitingCustomerAction', 'strCustomerHasAction');
+INSERT INTO `{$dbIncidentStatus}` VALUES (9, 'strUnsupported', 'strUnsupported');
+INSERT INTO `{$dbIncidentStatus}` VALUES (10, 'strActiveUnassigned', 'strActive');
 
 
-
-CREATE TABLE `interfacestyles` (
+CREATE TABLE `{$dbInterfaceStyles}` (
   `id` int(5) NOT NULL,
   `name` varchar(50) NOT NULL default '',
   `cssurl` varchar(255) NOT NULL default '',
@@ -391,7 +399,8 @@ CREATE TABLE `interfacestyles` (
   PRIMARY KEY  (`id`)
 ) ENGINE=MyISAM AUTO_INCREMENT=16 ;
 
-INSERT INTO `interfacestyles` (`id`, `name`, `cssurl`, `iconset`, `headerhtml`) VALUES (1, 'Light Blue', 'sit1.css', 'sit', ''),
+
+INSERT INTO `{$dbInterfaceStyles}` (`id`, `name`, `cssurl`, `iconset`, `headerhtml`) VALUES (1, 'Light Blue', 'sit1.css', 'sit', ''),
 (2, 'Grey', 'sit2.css', 'sit', ''),
 (3, 'Green', 'sit3.css', 'sit', ''),
 (4, 'Silver Blue', 'sit4.css', 'sit', ''),
@@ -408,7 +417,7 @@ INSERT INTO `interfacestyles` (`id`, `name`, `cssurl`, `iconset`, `headerhtml`) 
 (15, 'Richard', 'sit15.css', 'sit', '');
 
 
-CREATE TABLE `journal` (
+CREATE TABLE `{$dbJournal}` (
   `id` int(11) NOT NULL auto_increment,
   `userid` int(11) NOT NULL default '0',
   `timestamp` timestamp(14) NOT NULL,
@@ -422,7 +431,7 @@ CREATE TABLE `journal` (
 ) ENGINE=MyISAM;
 
 
-CREATE TABLE `kbarticles` (
+CREATE TABLE `{$dbKBArticles}` (
   `docid` int(5) NOT NULL auto_increment,
   `doctype` int(5) NOT NULL default '0',
   `title` varchar(255) NOT NULL default '',
@@ -438,7 +447,7 @@ CREATE TABLE `kbarticles` (
 ) ENGINE=MyISAM COMMENT='Knowledge base articles' ;
 
 
-CREATE TABLE `kbcontent` (
+CREATE TABLE `{$dbKBContent}` (
   `docid` int(5) NOT NULL default '0',
   `id` int(7) NOT NULL auto_increment,
   `ownerid` int(5) NOT NULL default '0',
@@ -455,28 +464,27 @@ CREATE TABLE `kbcontent` (
 ) ENGINE=MyISAM;
 
 
-CREATE TABLE `kbsoftware` (
+CREATE TABLE `{$dbKBSoftware}` (
   `docid` int(5) NOT NULL default '0',
   `softwareid` int(5) NOT NULL default '0',
   PRIMARY KEY  (`docid`,`softwareid`)
 ) ENGINE=MyISAM COMMENT='Links kb articles with software';
 
 
-
-CREATE TABLE `licencetypes` (
+CREATE TABLE `{$dbLicenceTypes}` (
   `id` int(11) NOT NULL auto_increment,
   `name` varchar(100) default NULL,
   PRIMARY KEY  (`id`)
 ) ENGINE=MyISAM;
 
+INSERT INTO `{$dbLicenceTypes}` VALUES (1, 'Per User');
+INSERT INTO `{$dbLicenceTypes}` VALUES (2, 'Per Workstation');
+INSERT INTO `{$dbLicenceTypes}` VALUES (3, 'Per Server');
+INSERT INTO `{$dbLicenceTypes}` VALUES (4, 'Site');
+INSERT INTO `{$dbLicenceTypes}` VALUES (5, 'Evaluation');
 
-INSERT INTO `licencetypes` VALUES (1, 'Per User');
-INSERT INTO `licencetypes` VALUES (2, 'Per Workstation');
-INSERT INTO `licencetypes` VALUES (3, 'Per Server');
-INSERT INTO `licencetypes` VALUES (4, 'Site');
-INSERT INTO `licencetypes` VALUES (5, 'Evaluation');
 
-CREATE TABLE `links` (
+CREATE TABLE `{$dbLinks}` (
      `linktype` int(11) NOT NULL default '0',
      `origcolref` int(11) NOT NULL default '0',
      `linkcolref` int(11) NOT NULL default '0',
@@ -486,7 +494,8 @@ CREATE TABLE `links` (
      KEY `userid` (`userid`)
 ) ENGINE=MyISAM ;
 
-CREATE TABLE `linktypes` (
+
+CREATE TABLE `{$dbLinkTypes}` (
      `id` int(11) NOT NULL auto_increment,
      `name` varchar(255) NOT NULL default '',
      `lrname` varchar(255) NOT NULL default '',
@@ -503,10 +512,10 @@ CREATE TABLE `linktypes` (
      KEY `linktab` (`linktab`)
 ) ENGINE=MyISAM;
 
+INSERT INTO `{$dbLinkTypes}` VALUES (1,'Task','Subtask','Parent Task','tasks','id','tasks','id','name','','view_task.php?id=%id%'),(2,'Contact','Contact','Contact Task','tasks','id','contacts','id','forenames','','contact_details.php?id=%id%'),(3,'Site','Site','Site Task','tasks','id','sites','id','name','','site_details.php?id=%id%'),(4,'Incident','Incident','Task','tasks','id','incidents','id','title','','incident_details.php?id=%id%');
 
-INSERT INTO `linktypes` VALUES (1,'Task','Subtask','Parent Task','tasks','id','tasks','id','name','','view_task.php?id=%id%'),(2,'Contact','Contact','Contact Task','tasks','id','contacts','id','forenames','','contact_details.php?id=%id%'),(3,'Site','Site','Site Task','tasks','id','sites','id','name','','site_details.php?id=%id%'),(4,'Incident','Incident','Task','tasks','id','incidents','id','title','','incident_details.php?id=%id%');
 
-CREATE TABLE `maintenance` (
+CREATE TABLE `{$dbMaintenance}` (
   `id` int(11) NOT NULL auto_increment,
   `site` int(11) default NULL,
   `product` int(11) default NULL,
@@ -530,9 +539,10 @@ CREATE TABLE `maintenance` (
 ) ENGINE=MyISAM;
 
 -- FIXME - decide what the last two fields should be by default
-INSERT INTO `maintenance`(id, site, product, reseller, expirydate, licence_quantity, licence_type, incident_quantity, incidents_used, notes, admincontact, productonly, term, servicelevelid, incidentpoolid) VALUES (1,1,1,2,1268179200,1,4,0,0,'This is an example contract.',1,'no','no',0,0);
+INSERT INTO `{$dbMaintenance}` (id, site, product, reseller, expirydate, licence_quantity, licence_type, incident_quantity, incidents_used, notes, admincontact, productonly, term, servicelevelid, incidentpoolid) VALUES (1,1,1,2,1268179200,1,4,0,0,'This is an example contract.',1,'no','no',0,0);
 
-CREATE TABLE `notes` (
+
+CREATE TABLE `{$dbNotes}` (
   `id` int(11) NOT NULL auto_increment,
   `userid` int(11) NOT NULL default '0',
   `timestamp` timestamp(14) NOT NULL,
@@ -545,105 +555,132 @@ CREATE TABLE `notes` (
   KEY `link` (`link`)
 ) ENGINE=MyISAM ;
 
-CREATE TABLE `permissions` (
+
+CREATE TABLE `{$dbNotices}` (
+  `id` int(11) NOT NULL auto_increment,
+  `userid` int(11) NOT NULL,
+  `template` varchar(255) NULL,
+  `type` tinyint(4) NOT NULL,
+  `text` tinytext NOT NULL,
+  `linktext` varchar(50) default NULL,
+  `link` varchar(100) NOT NULL,
+  `referenceid` int(11) default NULL,
+  `timestamp` timestamp NOT NULL default CURRENT_TIMESTAMP on update CURRENT_TIMESTAMP,
+  `durability` enum('sticky','session') NOT NULL default 'sticky',
+  PRIMARY KEY  (`id`)
+) ENGINE=MyISAM AUTO_INCREMENT=1 ;
+
+
+CREATE TABLE `{$dbNoticeTemplates}` (
+`id` INT( 11 ) NOT NULL AUTO_INCREMENT PRIMARY KEY ,
+`name` VARCHAR( 255 ) NOT NULL ,
+`type` TINYINT( 4 ) NOT NULL ,
+`description` VARCHAR( 255 ) NOT NULL ,
+`text` TINYTEXT NOT NULL ,
+`linktext` VARCHAR( 50 ) NULL ,
+`link` VARCHAR( 100 ) NULL ,
+`durability` ENUM( 'sticky', 'session' ) NOT NULL DEFAULT 'sticky'
+) ENGINE = MYISAM ;
+
+
+CREATE TABLE `{$dbPermissions}` (
   `id` int(5) NOT NULL auto_increment,
   `name` varchar(255) NOT NULL default '',
   PRIMARY KEY  (`id`)
 ) ENGINE=MyISAM;
 
 
-INSERT INTO `permissions` VALUES (1, 'Add new contacts');
-INSERT INTO `permissions` VALUES (2, 'Add new sites');
-INSERT INTO `permissions` VALUES (3, 'Edit existing site details');
-INSERT INTO `permissions` VALUES (4, 'Edit your profile');
-INSERT INTO `permissions` VALUES (5, 'Add Incidents');
-INSERT INTO `permissions` VALUES (6, 'View Incidents');
-INSERT INTO `permissions` VALUES (7, 'Edit Incidents');
-INSERT INTO `permissions` VALUES (8, 'Update Incidents');
-INSERT INTO `permissions` VALUES (9, 'Edit User Permissions');
-INSERT INTO `permissions` VALUES (10, 'Edit contacts');
-INSERT INTO `permissions` VALUES (11, 'View Sites');
-INSERT INTO `permissions` VALUES (12, 'View Contacts');
-INSERT INTO `permissions` VALUES (13, 'Reassign Incidents');
-INSERT INTO `permissions` VALUES (14, 'View Users');
-INSERT INTO `permissions` VALUES (15, 'Add Supported Products');
-INSERT INTO `permissions` VALUES (16, 'Add Email Templates');
-INSERT INTO `permissions` VALUES (17, 'Edit Email Templates');
-INSERT INTO `permissions` VALUES (18, 'Close Incidents');
-INSERT INTO `permissions` VALUES (19, 'View Maintenance Contracts');
-INSERT INTO `permissions` VALUES (20, 'Add Users');
-INSERT INTO `permissions` VALUES (21, 'Edit Maintenance Contracts');
-INSERT INTO `permissions` VALUES (22, 'Administrate');
-INSERT INTO `permissions` VALUES (23, 'Edit User');
-INSERT INTO `permissions` VALUES (24, 'Add Product');
-INSERT INTO `permissions` VALUES (25, 'Add Product Information');
-INSERT INTO `permissions` VALUES (26, 'Get Help');
-INSERT INTO `permissions` VALUES (27, 'View Your Calendar');
-INSERT INTO `permissions` VALUES (28, 'View Products and Software');
-INSERT INTO `permissions` VALUES (29, 'Edit Products');
-INSERT INTO `permissions` VALUES (30, 'View Supported Products');
-INSERT INTO `permissions` VALUES (32, 'Edit Supported Products');
-INSERT INTO `permissions` VALUES (33, 'Send Emails');
-INSERT INTO `permissions` VALUES (34, 'Reopen Incidents');
-INSERT INTO `permissions` VALUES (35, 'Set your status');
-INSERT INTO `permissions` VALUES (36, 'Set contact flags');
-INSERT INTO `permissions` VALUES (37, 'Run Reports');
-INSERT INTO `permissions` VALUES (38, 'View Sales Incidents');
-INSERT INTO `permissions` VALUES (39, 'Add Maintenance Contract');
-INSERT INTO `permissions` VALUES (40, 'Reassign Incident when user not accepting');
-INSERT INTO `permissions` VALUES (41, 'View Status');
-INSERT INTO `permissions` VALUES (42, 'Review/Delete Incident updates');
-INSERT INTO `permissions` VALUES (43, 'Edit Global Signature');
-INSERT INTO `permissions` VALUES (44, 'Publish files to FTP site');
-INSERT INTO `permissions` VALUES (45, 'View Mailing List Subscriptions');
-INSERT INTO `permissions` VALUES (46, 'Edit Mailing List Subscriptions');
-INSERT INTO `permissions` VALUES (47, 'Administrate Mailing Lists');
-INSERT INTO `permissions` VALUES (48, 'Add Feedback Forms');
-INSERT INTO `permissions` VALUES (49, 'Edit Feedback Forms');
-INSERT INTO `permissions` VALUES (50, 'Approve Holidays');
-INSERT INTO `permissions` VALUES (51, 'View Feedback');
-INSERT INTO `permissions` VALUES (52, 'View Hidden Updates');
-INSERT INTO `permissions` VALUES (53, 'Edit Service Levels');
-INSERT INTO `permissions` VALUES (54, 'View KB Articles');
-INSERT INTO `permissions` VALUES (55, 'Delete Sites/Contacts');
-INSERT INTO `permissions` VALUES (56, 'Add Software');
-INSERT INTO `permissions` VALUES (57, 'Disable User Accounts');
-INSERT INTO `permissions` VALUES (58, 'Edit your Software Skills');
-INSERT INTO `permissions` VALUES (59, 'Manage users software skills');
-INSERT INTO `permissions` VALUES (60, 'Perform Searches');
-INSERT INTO `permissions` VALUES (61, 'View Incident Details');
-INSERT INTO `permissions` VALUES (62, 'View Incident Attachments');
-INSERT INTO `permissions` VALUES (63, 'Add Reseller');
-INSERT INTO `permissions` VALUES (64, 'Manage Escalation Paths');
-INSERT INTO `permissions` VALUES (65, 'Delete Products');
-INSERT INTO `permissions` VALUES (66, 'Install Dashboard Components');
-INSERT INTO `permissions` VALUES (67, 'Run Management Reports');
-INSERT INTO `permissions` VALUES (68, 'Manage Holidays');
-INSERT INTO `permissions` VALUES (69, 'View your Tasks');
-INSERT INTO `permissions` VALUES (70, 'Create/Edit your Tasks');
-INSERT INTO `permissions` VALUES (71, 'Manage your Triggers');
-INSERT INTO `permissions` VALUES (72, 'Manage System Triggers');
-INSERT INTO `permissions` VALUES (73, 'Approve Billable Incidents');
-INSERT INTO `permissions` VALUES (74, 'Set duration without activity (for billable incidents)');
-INSERT INTO `permissions` VALUES (75, 'Set negative time for duration on incidents (for billable incidents - refunds)');
-INSERT INTO `permissions` VALUES (76, 'View Transactions');
-INSERT INTO `permissions` VALUES (77, 'View Billing Information');
+INSERT INTO `{$dbPermissions}` VALUES (1, 'Add new contacts');
+INSERT INTO `{$dbPermissions}` VALUES (2, 'Add new sites');
+INSERT INTO `{$dbPermissions}` VALUES (3, 'Edit existing site details');
+INSERT INTO `{$dbPermissions}` VALUES (4, 'Edit your profile');
+INSERT INTO `{$dbPermissions}` VALUES (5, 'Add Incidents');
+INSERT INTO `{$dbPermissions}` VALUES (6, 'View Incidents');
+INSERT INTO `{$dbPermissions}` VALUES (7, 'Edit Incidents');
+INSERT INTO `{$dbPermissions}` VALUES (8, 'Update Incidents');
+INSERT INTO `{$dbPermissions}` VALUES (9, 'Edit User Permissions');
+INSERT INTO `{$dbPermissions}` VALUES (10, 'Edit contacts');
+INSERT INTO `{$dbPermissions}` VALUES (11, 'View Sites');
+INSERT INTO `{$dbPermissions}` VALUES (12, 'View Contacts');
+INSERT INTO `{$dbPermissions}` VALUES (13, 'Reassign Incidents');
+INSERT INTO `{$dbPermissions}` VALUES (14, 'View Users');
+INSERT INTO `{$dbPermissions}` VALUES (15, 'Add Supported Products');
+INSERT INTO `{$dbPermissions}` VALUES (16, 'Add Email Templates');
+INSERT INTO `{$dbPermissions}` VALUES (17, 'Edit Email Templates');
+INSERT INTO `{$dbPermissions}` VALUES (18, 'Close Incidents');
+INSERT INTO `{$dbPermissions}` VALUES (19, 'View Maintenance Contracts');
+INSERT INTO `{$dbPermissions}` VALUES (20, 'Add Users');
+INSERT INTO `{$dbPermissions}` VALUES (21, 'Edit Maintenance Contracts');
+INSERT INTO `{$dbPermissions}` VALUES (22, 'Administrate');
+INSERT INTO `{$dbPermissions}` VALUES (23, 'Edit User');
+INSERT INTO `{$dbPermissions}` VALUES (24, 'Add Product');
+INSERT INTO `{$dbPermissions}` VALUES (25, 'Add Product Information');
+INSERT INTO `{$dbPermissions}` VALUES (26, 'Get Help');
+INSERT INTO `{$dbPermissions}` VALUES (27, 'View Your Calendar');
+INSERT INTO `{$dbPermissions}` VALUES (28, 'View Products and Software');
+INSERT INTO `{$dbPermissions}` VALUES (29, 'Edit Products');
+INSERT INTO `{$dbPermissions}` VALUES (30, 'View Supported Products');
+INSERT INTO `{$dbPermissions}` VALUES (32, 'Edit Supported Products');
+INSERT INTO `{$dbPermissions}` VALUES (33, 'Send Emails');
+INSERT INTO `{$dbPermissions}` VALUES (34, 'Reopen Incidents');
+INSERT INTO `{$dbPermissions}` VALUES (35, 'Set your status');
+INSERT INTO `{$dbPermissions}` VALUES (36, 'Set contact flags');
+INSERT INTO `{$dbPermissions}` VALUES (37, 'Run Reports');
+INSERT INTO `{$dbPermissions}` VALUES (38, 'View Sales Incidents');
+INSERT INTO `{$dbPermissions}` VALUES (39, 'Add Maintenance Contract');
+INSERT INTO `{$dbPermissions}` VALUES (40, 'Reassign Incident when user not accepting');
+INSERT INTO `{$dbPermissions}` VALUES (41, 'View Status');
+INSERT INTO `{$dbPermissions}` VALUES (42, 'Review/Delete Incident updates');
+INSERT INTO `{$dbPermissions}` VALUES (43, 'Edit Global Signature');
+INSERT INTO `{$dbPermissions}` VALUES (44, 'Publish files to FTP site');
+INSERT INTO `{$dbPermissions}` VALUES (45, 'View Mailing List Subscriptions');
+INSERT INTO `{$dbPermissions}` VALUES (46, 'Edit Mailing List Subscriptions');
+INSERT INTO `{$dbPermissions}` VALUES (47, 'Administrate Mailing Lists');
+INSERT INTO `{$dbPermissions}` VALUES (48, 'Add Feedback Forms');
+INSERT INTO `{$dbPermissions}` VALUES (49, 'Edit Feedback Forms');
+INSERT INTO `{$dbPermissions}` VALUES (50, 'Approve Holidays');
+INSERT INTO `{$dbPermissions}` VALUES (51, 'View Feedback');
+INSERT INTO `{$dbPermissions}` VALUES (52, 'View Hidden Updates');
+INSERT INTO `{$dbPermissions}` VALUES (53, 'Edit Service Levels');
+INSERT INTO `{$dbPermissions}` VALUES (54, 'View KB Articles');
+INSERT INTO `{$dbPermissions}` VALUES (55, 'Delete Sites/Contacts');
+INSERT INTO `{$dbPermissions}` VALUES (56, 'Add Software');
+INSERT INTO `{$dbPermissions}` VALUES (57, 'Disable User Accounts');
+INSERT INTO `{$dbPermissions}` VALUES (58, 'Edit your Software Skills');
+INSERT INTO `{$dbPermissions}` VALUES (59, 'Manage users software skills');
+INSERT INTO `{$dbPermissions}` VALUES (60, 'Perform Searches');
+INSERT INTO `{$dbPermissions}` VALUES (61, 'View Incident Details');
+INSERT INTO `{$dbPermissions}` VALUES (62, 'View Incident Attachments');
+INSERT INTO `{$dbPermissions}` VALUES (63, 'Add Reseller');
+INSERT INTO `{$dbPermissions}` VALUES (64, 'Manage Escalation Paths');
+INSERT INTO `{$dbPermissions}` VALUES (65, 'Delete Products');
+INSERT INTO `{$dbPermissions}` VALUES (66, 'Install Dashboard Components');
+INSERT INTO `{$dbPermissions}` VALUES (67, 'Run Management Reports');
+INSERT INTO `{$dbPermissions}` VALUES (68, 'Manage Holidays');
+INSERT INTO `{$dbPermissions}` VALUES (69, 'View your Tasks');
+INSERT INTO `{$dbPermissions}` VALUES (70, 'Create/Edit your Tasks');
+INSERT INTO `{$dbPermissions}` VALUES (71, 'Manage your Triggers');
+INSERT INTO `{$dbPermissions}` VALUES (72, 'Manage System Triggers');
+INSERT INTO `{$dbPermissions}` VALUES (73, 'Approve Billable Incidents');
+INSERT INTO `{$dbPermissions}` VALUES (74, 'Set duration without activity (for billable incidents)');
+INSERT INTO `{$dbPermissions}` VALUES (75, 'Set negative time for duration on incidents (for billable incidents - refunds)');
+INSERT INTO `{$dbPermissions}` VALUES (76, 'View Transactions');
+INSERT INTO `{$dbPermissions}` VALUES (77, 'View Billing Information');
 
 
-CREATE TABLE `priority` (
+CREATE TABLE `{$dbPriority}` (
   `id` int(11) NOT NULL auto_increment,
   `name` varchar(50) default NULL,
   PRIMARY KEY  (`id`)
 ) ENGINE=MyISAM COMMENT='Used in incidents.php' AUTO_INCREMENT=5 ;
 
-INSERT INTO `priority` VALUES (1, 'Low');
-INSERT INTO `priority` VALUES (2, 'Medium');
-INSERT INTO `priority` VALUES (3, 'High');
-INSERT INTO `priority` VALUES (4, 'Critical');
+INSERT INTO `{$dbPriority}` VALUES (1, 'Low');
+INSERT INTO `{$dbPriority}` VALUES (2, 'Medium');
+INSERT INTO `{$dbPriority}` VALUES (3, 'High');
+INSERT INTO `{$dbPriority}` VALUES (4, 'Critical');
 
 
-
-CREATE TABLE `productinfo` (
+CREATE TABLE `{$dbProductInfo}` (
   `id` int(11) NOT NULL auto_increment,
   `productid` int(11) default NULL,
   `information` text,
@@ -652,7 +689,7 @@ CREATE TABLE `productinfo` (
 ) ENGINE=MyISAM;
 
 
-CREATE TABLE `products` (
+CREATE TABLE `{$dbProducts}` (
   `id` int(11) NOT NULL auto_increment,
   `vendorid` int(5) NOT NULL default '0',
   `name` varchar(50) default NULL,
@@ -662,9 +699,10 @@ CREATE TABLE `products` (
   KEY `name` (`name`)
 ) ENGINE=MyISAM COMMENT='Current List of Products' ;
 
-INSERT INTO `products` VALUES (1,1,'Example Product','This is an example product.');
+INSERT INTO `{$dbProducts}` VALUES (1,1,'Example Product','This is an example product.');
 
-CREATE TABLE `relatedincidents` (
+
+CREATE TABLE `{$dbRelatedIncidents}` (
 `id` INT( 5 ) NOT NULL AUTO_INCREMENT ,
 `incidentid` INT( 5 ) NOT NULL ,
 `relation` ENUM( 'child', 'sibling' ) DEFAULT 'child' NOT NULL ,
@@ -673,202 +711,205 @@ PRIMARY KEY ( `id` ) ,
 INDEX ( `incidentid` , `relatedid` )
 ) ENGINE=MyISAM;
 
-CREATE TABLE `resellers` (
+
+CREATE TABLE `{$dbResellers}` (
   `id` tinyint(4) NOT NULL auto_increment,
   `name` varchar(100) default NULL,
   PRIMARY KEY  (`id`)
 ) ENGINE=MyISAM;
 
-INSERT INTO `resellers` VALUES (1,'Us (No Reseller)');
-INSERT INTO `resellers` VALUES (2,'Example Reseller');
+INSERT INTO `{$dbResellers}` VALUES (1,'Us (No Reseller)');
+INSERT INTO `{$dbResellers}` VALUES (2,'Example Reseller');
 
-CREATE TABLE `roles` (
+
+CREATE TABLE `{$dbRoles}` (
 `id` INT( 5 ) NOT NULL AUTO_INCREMENT ,
 `rolename` VARCHAR( 255 ) NOT NULL ,
 PRIMARY KEY ( `id` )
 ) ENGINE=MyISAM;
 
-INSERT INTO `roles` ( `id` , `rolename` ) VALUES ('1', 'Administrator');
-INSERT INTO `roles` ( `id` , `rolename` ) VALUES ('2', 'Manager');
-INSERT INTO `roles` ( `id` , `rolename` ) VALUES ('3', 'User');
+INSERT INTO `{$dbRoles}` ( `id` , `rolename` ) VALUES ('1', 'Administrator');
+INSERT INTO `{$dbRoles}` ( `id` , `rolename` ) VALUES ('2', 'Manager');
+INSERT INTO `{$dbRoles}` ( `id` , `rolename` ) VALUES ('3', 'User');
 
-CREATE TABLE `rolepermissions` (
+
+CREATE TABLE `{$dbRolePermissions}` (
 `roleid` tinyint( 4 ) NOT NULL default '0',
 `permissionid` int( 5 ) NOT NULL default '0',
 `granted` enum( 'true', 'false' ) NOT NULL default 'false',
 PRIMARY KEY ( `roleid` , `permissionid` )
 ) ENGINE=MyISAM;
 
-INSERT INTO `rolepermissions` (`roleid`, `permissionid`, `granted`) VALUES (1, 1, 'true');
-INSERT INTO `rolepermissions` (`roleid`, `permissionid`, `granted`) VALUES (1, 2, 'true');
-INSERT INTO `rolepermissions` (`roleid`, `permissionid`, `granted`) VALUES (1, 3, 'true');
-INSERT INTO `rolepermissions` (`roleid`, `permissionid`, `granted`) VALUES (1, 4, 'true');
-INSERT INTO `rolepermissions` (`roleid`, `permissionid`, `granted`) VALUES (1, 5, 'true');
-INSERT INTO `rolepermissions` (`roleid`, `permissionid`, `granted`) VALUES (1, 6, 'true');
-INSERT INTO `rolepermissions` (`roleid`, `permissionid`, `granted`) VALUES (1, 7, 'true');
-INSERT INTO `rolepermissions` (`roleid`, `permissionid`, `granted`) VALUES (1, 8, 'true');
-INSERT INTO `rolepermissions` (`roleid`, `permissionid`, `granted`) VALUES (1, 9, 'true');
-INSERT INTO `rolepermissions` (`roleid`, `permissionid`, `granted`) VALUES (1, 10, 'true');
-INSERT INTO `rolepermissions` (`roleid`, `permissionid`, `granted`) VALUES (1, 11, 'true');
-INSERT INTO `rolepermissions` (`roleid`, `permissionid`, `granted`) VALUES (1, 12, 'true');
-INSERT INTO `rolepermissions` (`roleid`, `permissionid`, `granted`) VALUES (1, 13, 'true');
-INSERT INTO `rolepermissions` (`roleid`, `permissionid`, `granted`) VALUES (1, 14, 'true');
-INSERT INTO `rolepermissions` (`roleid`, `permissionid`, `granted`) VALUES (1, 15, 'true');
-INSERT INTO `rolepermissions` (`roleid`, `permissionid`, `granted`) VALUES (1, 16, 'true');
-INSERT INTO `rolepermissions` (`roleid`, `permissionid`, `granted`) VALUES (1, 17, 'true');
-INSERT INTO `rolepermissions` (`roleid`, `permissionid`, `granted`) VALUES (1, 18, 'true');
-INSERT INTO `rolepermissions` (`roleid`, `permissionid`, `granted`) VALUES (1, 19, 'true');
-INSERT INTO `rolepermissions` (`roleid`, `permissionid`, `granted`) VALUES (1, 20, 'true');
-INSERT INTO `rolepermissions` (`roleid`, `permissionid`, `granted`) VALUES (1, 21, 'true');
-INSERT INTO `rolepermissions` (`roleid`, `permissionid`, `granted`) VALUES (1, 22, 'true');
-INSERT INTO `rolepermissions` (`roleid`, `permissionid`, `granted`) VALUES (1, 23, 'true');
-INSERT INTO `rolepermissions` (`roleid`, `permissionid`, `granted`) VALUES (1, 24, 'true');
-INSERT INTO `rolepermissions` (`roleid`, `permissionid`, `granted`) VALUES (1, 25, 'true');
-INSERT INTO `rolepermissions` (`roleid`, `permissionid`, `granted`) VALUES (1, 26, 'true');
-INSERT INTO `rolepermissions` (`roleid`, `permissionid`, `granted`) VALUES (1, 27, 'true');
-INSERT INTO `rolepermissions` (`roleid`, `permissionid`, `granted`) VALUES (1, 28, 'true');
-INSERT INTO `rolepermissions` (`roleid`, `permissionid`, `granted`) VALUES (1, 29, 'true');
-INSERT INTO `rolepermissions` (`roleid`, `permissionid`, `granted`) VALUES (1, 30, 'true');
-INSERT INTO `rolepermissions` (`roleid`, `permissionid`, `granted`) VALUES (1, 32, 'true');
-INSERT INTO `rolepermissions` (`roleid`, `permissionid`, `granted`) VALUES (1, 33, 'true');
-INSERT INTO `rolepermissions` (`roleid`, `permissionid`, `granted`) VALUES (1, 34, 'true');
-INSERT INTO `rolepermissions` (`roleid`, `permissionid`, `granted`) VALUES (1, 35, 'true');
-INSERT INTO `rolepermissions` (`roleid`, `permissionid`, `granted`) VALUES (1, 36, 'true');
-INSERT INTO `rolepermissions` (`roleid`, `permissionid`, `granted`) VALUES (1, 37, 'true');
-INSERT INTO `rolepermissions` (`roleid`, `permissionid`, `granted`) VALUES (1, 38, 'true');
-INSERT INTO `rolepermissions` (`roleid`, `permissionid`, `granted`) VALUES (1, 39, 'true');
-INSERT INTO `rolepermissions` (`roleid`, `permissionid`, `granted`) VALUES (1, 40, 'true');
-INSERT INTO `rolepermissions` (`roleid`, `permissionid`, `granted`) VALUES (1, 41, 'true');
-INSERT INTO `rolepermissions` (`roleid`, `permissionid`, `granted`) VALUES (1, 42, 'true');
-INSERT INTO `rolepermissions` (`roleid`, `permissionid`, `granted`) VALUES (1, 43, 'true');
-INSERT INTO `rolepermissions` (`roleid`, `permissionid`, `granted`) VALUES (1, 44, 'true');
-INSERT INTO `rolepermissions` (`roleid`, `permissionid`, `granted`) VALUES (1, 45, 'true');
-INSERT INTO `rolepermissions` (`roleid`, `permissionid`, `granted`) VALUES (1, 46, 'true');
-INSERT INTO `rolepermissions` (`roleid`, `permissionid`, `granted`) VALUES (1, 47, 'true');
-INSERT INTO `rolepermissions` (`roleid`, `permissionid`, `granted`) VALUES (1, 48, 'true');
-INSERT INTO `rolepermissions` (`roleid`, `permissionid`, `granted`) VALUES (1, 49, 'true');
-INSERT INTO `rolepermissions` (`roleid`, `permissionid`, `granted`) VALUES (1, 50, 'true');
-INSERT INTO `rolepermissions` (`roleid`, `permissionid`, `granted`) VALUES (1, 51, 'true');
-INSERT INTO `rolepermissions` (`roleid`, `permissionid`, `granted`) VALUES (1, 52, 'true');
-INSERT INTO `rolepermissions` (`roleid`, `permissionid`, `granted`) VALUES (1, 53, 'true');
-INSERT INTO `rolepermissions` (`roleid`, `permissionid`, `granted`) VALUES (1, 54, 'true');
-INSERT INTO `rolepermissions` (`roleid`, `permissionid`, `granted`) VALUES (1, 55, 'true');
-INSERT INTO `rolepermissions` (`roleid`, `permissionid`, `granted`) VALUES (1, 56, 'true');
-INSERT INTO `rolepermissions` (`roleid`, `permissionid`, `granted`) VALUES (1, 57, 'true');
-INSERT INTO `rolepermissions` (`roleid`, `permissionid`, `granted`) VALUES (1, 58, 'true');
-INSERT INTO `rolepermissions` (`roleid`, `permissionid`, `granted`) VALUES (1, 59, 'true');
-INSERT INTO `rolepermissions` (`roleid`, `permissionid`, `granted`) VALUES (1, 60, 'true');
-INSERT INTO `rolepermissions` (`roleid`, `permissionid`, `granted`) VALUES (1, 61, 'true');
-INSERT INTO `rolepermissions` (`roleid`, `permissionid`, `granted`) VALUES (1, 62, 'true');
-INSERT INTO `rolepermissions` (`roleid`, `permissionid`, `granted`) VALUES (1, 63, 'true');
-INSERT INTO `rolepermissions` (`roleid`, `permissionid`, `granted`) VALUES (1, 64, 'true');
-INSERT INTO `rolepermissions` (`roleid`, `permissionid`, `granted`) VALUES (1, 65, 'true');
-INSERT INTO `rolepermissions` (`roleid`, `permissionid`, `granted`) VALUES (1, 66, 'true');
-INSERT INTO `rolepermissions` (`roleid`, `permissionid`, `granted`) VALUES (1, 67, 'true');
-INSERT INTO `rolepermissions` (`roleid`, `permissionid`, `granted`) VALUES (1, 68, 'true');
-INSERT INTO `rolepermissions` (`roleid`, `permissionid`, `granted`) VALUES (1, 69, 'true');
-INSERT INTO `rolepermissions` (`roleid`, `permissionid`, `granted`) VALUES (1, 70, 'true');
-INSERT INTO `rolepermissions` (`roleid`, `permissionid`, `granted`) VALUES (1, 71, 'true');
-INSERT INTO `rolepermissions` (`roleid`, `permissionid`, `granted`) VALUES (1, 72, 'true');
-INSERT INTO `rolepermissions` (`roleid`, `permissionid`, `granted`) VALUES (1, 73, 'true');
-INSERT INTO `rolepermissions` (`roleid`, `permissionid`, `granted`) VALUES (1, 74, 'true');
-INSERT INTO `rolepermissions` (`roleid`, `permissionid`, `granted`) VALUES (1, 75, 'true');
-INSERT INTO `rolepermissions` (`roleid`, `permissionid`, `granted`) VALUES (2, 1, 'true');
-INSERT INTO `rolepermissions` (`roleid`, `permissionid`, `granted`) VALUES (2, 2, 'true');
-INSERT INTO `rolepermissions` (`roleid`, `permissionid`, `granted`) VALUES (2, 3, 'true');
-INSERT INTO `rolepermissions` (`roleid`, `permissionid`, `granted`) VALUES (2, 4, 'true');
-INSERT INTO `rolepermissions` (`roleid`, `permissionid`, `granted`) VALUES (2, 5, 'true');
-INSERT INTO `rolepermissions` (`roleid`, `permissionid`, `granted`) VALUES (2, 6, 'true');
-INSERT INTO `rolepermissions` (`roleid`, `permissionid`, `granted`) VALUES (2, 7, 'true');
-INSERT INTO `rolepermissions` (`roleid`, `permissionid`, `granted`) VALUES (2, 8, 'true');
-INSERT INTO `rolepermissions` (`roleid`, `permissionid`, `granted`) VALUES (2, 10, 'true');
-INSERT INTO `rolepermissions` (`roleid`, `permissionid`, `granted`) VALUES (2, 11, 'true');
-INSERT INTO `rolepermissions` (`roleid`, `permissionid`, `granted`) VALUES (2, 12, 'true');
-INSERT INTO `rolepermissions` (`roleid`, `permissionid`, `granted`) VALUES (2, 13, 'true');
-INSERT INTO `rolepermissions` (`roleid`, `permissionid`, `granted`) VALUES (2, 14, 'true');
-INSERT INTO `rolepermissions` (`roleid`, `permissionid`, `granted`) VALUES (2, 15, 'true');
-INSERT INTO `rolepermissions` (`roleid`, `permissionid`, `granted`) VALUES (2, 16, 'true');
-INSERT INTO `rolepermissions` (`roleid`, `permissionid`, `granted`) VALUES (2, 17, 'true');
-INSERT INTO `rolepermissions` (`roleid`, `permissionid`, `granted`) VALUES (2, 18, 'true');
-INSERT INTO `rolepermissions` (`roleid`, `permissionid`, `granted`) VALUES (2, 19, 'true');
-INSERT INTO `rolepermissions` (`roleid`, `permissionid`, `granted`) VALUES (2, 21, 'true');
-INSERT INTO `rolepermissions` (`roleid`, `permissionid`, `granted`) VALUES (2, 24, 'true');
-INSERT INTO `rolepermissions` (`roleid`, `permissionid`, `granted`) VALUES (2, 25, 'true');
-INSERT INTO `rolepermissions` (`roleid`, `permissionid`, `granted`) VALUES (2, 26, 'true');
-INSERT INTO `rolepermissions` (`roleid`, `permissionid`, `granted`) VALUES (2, 27, 'true');
-INSERT INTO `rolepermissions` (`roleid`, `permissionid`, `granted`) VALUES (2, 28, 'true');
-INSERT INTO `rolepermissions` (`roleid`, `permissionid`, `granted`) VALUES (2, 29, 'true');
-INSERT INTO `rolepermissions` (`roleid`, `permissionid`, `granted`) VALUES (2, 30, 'true');
-INSERT INTO `rolepermissions` (`roleid`, `permissionid`, `granted`) VALUES (2, 32, 'true');
-INSERT INTO `rolepermissions` (`roleid`, `permissionid`, `granted`) VALUES (2, 33, 'true');
-INSERT INTO `rolepermissions` (`roleid`, `permissionid`, `granted`) VALUES (2, 34, 'true');
-INSERT INTO `rolepermissions` (`roleid`, `permissionid`, `granted`) VALUES (2, 35, 'true');
-INSERT INTO `rolepermissions` (`roleid`, `permissionid`, `granted`) VALUES (2, 36, 'true');
-INSERT INTO `rolepermissions` (`roleid`, `permissionid`, `granted`) VALUES (2, 37, 'true');
-INSERT INTO `rolepermissions` (`roleid`, `permissionid`, `granted`) VALUES (2, 38, 'true');
-INSERT INTO `rolepermissions` (`roleid`, `permissionid`, `granted`) VALUES (2, 39, 'true');
-INSERT INTO `rolepermissions` (`roleid`, `permissionid`, `granted`) VALUES (2, 40, 'true');
-INSERT INTO `rolepermissions` (`roleid`, `permissionid`, `granted`) VALUES (2, 41, 'true');
-INSERT INTO `rolepermissions` (`roleid`, `permissionid`, `granted`) VALUES (2, 42, 'true');
-INSERT INTO `rolepermissions` (`roleid`, `permissionid`, `granted`) VALUES (2, 43, 'true');
-INSERT INTO `rolepermissions` (`roleid`, `permissionid`, `granted`) VALUES (2, 44, 'true');
-INSERT INTO `rolepermissions` (`roleid`, `permissionid`, `granted`) VALUES (2, 45, 'true');
-INSERT INTO `rolepermissions` (`roleid`, `permissionid`, `granted`) VALUES (2, 46, 'true');
-INSERT INTO `rolepermissions` (`roleid`, `permissionid`, `granted`) VALUES (2, 47, 'true');
-INSERT INTO `rolepermissions` (`roleid`, `permissionid`, `granted`) VALUES (2, 48, 'true');
-INSERT INTO `rolepermissions` (`roleid`, `permissionid`, `granted`) VALUES (2, 49, 'true');
-INSERT INTO `rolepermissions` (`roleid`, `permissionid`, `granted`) VALUES (2, 50, 'true');
-INSERT INTO `rolepermissions` (`roleid`, `permissionid`, `granted`) VALUES (2, 51, 'true');
-INSERT INTO `rolepermissions` (`roleid`, `permissionid`, `granted`) VALUES (2, 52, 'true');
-INSERT INTO `rolepermissions` (`roleid`, `permissionid`, `granted`) VALUES (2, 53, 'true');
-INSERT INTO `rolepermissions` (`roleid`, `permissionid`, `granted`) VALUES (2, 54, 'true');
-INSERT INTO `rolepermissions` (`roleid`, `permissionid`, `granted`) VALUES (2, 55, 'true');
-INSERT INTO `rolepermissions` (`roleid`, `permissionid`, `granted`) VALUES (2, 56, 'true');
-INSERT INTO `rolepermissions` (`roleid`, `permissionid`, `granted`) VALUES (2, 58, 'true');
-INSERT INTO `rolepermissions` (`roleid`, `permissionid`, `granted`) VALUES (2, 59, 'true');
-INSERT INTO `rolepermissions` (`roleid`, `permissionid`, `granted`) VALUES (2, 60, 'true');
-INSERT INTO `rolepermissions` (`roleid`, `permissionid`, `granted`) VALUES (2, 61, 'true');
-INSERT INTO `rolepermissions` (`roleid`, `permissionid`, `granted`) VALUES (2, 62, 'true');
-INSERT INTO `rolepermissions` (`roleid`, `permissionid`, `granted`) VALUES (2, 67, 'true');
-INSERT INTO `rolepermissions` (`roleid`, `permissionid`, `granted`) VALUES (2, 69, 'true');
-INSERT INTO `rolepermissions` (`roleid`, `permissionid`, `granted`) VALUES (2, 70, 'true');
-INSERT INTO `rolepermissions` (`roleid`, `permissionid`, `granted`) VALUES (2, 71, 'true');
-INSERT INTO `rolepermissions` (`roleid`, `permissionid`, `granted`) VALUES (3, 1, 'true');
-INSERT INTO `rolepermissions` (`roleid`, `permissionid`, `granted`) VALUES (3, 2, 'true');
-INSERT INTO `rolepermissions` (`roleid`, `permissionid`, `granted`) VALUES (3, 3, 'true');
-INSERT INTO `rolepermissions` (`roleid`, `permissionid`, `granted`) VALUES (3, 4, 'true');
-INSERT INTO `rolepermissions` (`roleid`, `permissionid`, `granted`) VALUES (3, 5, 'true');
-INSERT INTO `rolepermissions` (`roleid`, `permissionid`, `granted`) VALUES (3, 6, 'true');
-INSERT INTO `rolepermissions` (`roleid`, `permissionid`, `granted`) VALUES (3, 7, 'true');
-INSERT INTO `rolepermissions` (`roleid`, `permissionid`, `granted`) VALUES (3, 8, 'true');
-INSERT INTO `rolepermissions` (`roleid`, `permissionid`, `granted`) VALUES (3, 10, 'true');
-INSERT INTO `rolepermissions` (`roleid`, `permissionid`, `granted`) VALUES (3, 11, 'true');
-INSERT INTO `rolepermissions` (`roleid`, `permissionid`, `granted`) VALUES (3, 12, 'true');
-INSERT INTO `rolepermissions` (`roleid`, `permissionid`, `granted`) VALUES (3, 13, 'true');
-INSERT INTO `rolepermissions` (`roleid`, `permissionid`, `granted`) VALUES (3, 14, 'true');
-INSERT INTO `rolepermissions` (`roleid`, `permissionid`, `granted`) VALUES (3, 18, 'true');
-INSERT INTO `rolepermissions` (`roleid`, `permissionid`, `granted`) VALUES (3, 19, 'true');
-INSERT INTO `rolepermissions` (`roleid`, `permissionid`, `granted`) VALUES (3, 26, 'true');
-INSERT INTO `rolepermissions` (`roleid`, `permissionid`, `granted`) VALUES (3, 27, 'true');
-INSERT INTO `rolepermissions` (`roleid`, `permissionid`, `granted`) VALUES (3, 28, 'true');
-INSERT INTO `rolepermissions` (`roleid`, `permissionid`, `granted`) VALUES (3, 30, 'true');
-INSERT INTO `rolepermissions` (`roleid`, `permissionid`, `granted`) VALUES (3, 33, 'true');
-INSERT INTO `rolepermissions` (`roleid`, `permissionid`, `granted`) VALUES (3, 34, 'true');
-INSERT INTO `rolepermissions` (`roleid`, `permissionid`, `granted`) VALUES (3, 35, 'true');
-INSERT INTO `rolepermissions` (`roleid`, `permissionid`, `granted`) VALUES (3, 36, 'true');
-INSERT INTO `rolepermissions` (`roleid`, `permissionid`, `granted`) VALUES (3, 37, 'true');
-INSERT INTO `rolepermissions` (`roleid`, `permissionid`, `granted`) VALUES (3, 38, 'true');
-INSERT INTO `rolepermissions` (`roleid`, `permissionid`, `granted`) VALUES (3, 41, 'true');
-INSERT INTO `rolepermissions` (`roleid`, `permissionid`, `granted`) VALUES (3, 44, 'true');
-INSERT INTO `rolepermissions` (`roleid`, `permissionid`, `granted`) VALUES (3, 52, 'true');
-INSERT INTO `rolepermissions` (`roleid`, `permissionid`, `granted`) VALUES (3, 54, 'true');
-INSERT INTO `rolepermissions` (`roleid`, `permissionid`, `granted`) VALUES (3, 58, 'true');
-INSERT INTO `rolepermissions` (`roleid`, `permissionid`, `granted`) VALUES (3, 60, 'true');
-INSERT INTO `rolepermissions` (`roleid`, `permissionid`, `granted`) VALUES (3, 61, 'true');
-INSERT INTO `rolepermissions` (`roleid`, `permissionid`, `granted`) VALUES (3, 62, 'true');
+INSERT INTO `{$dbRolePermissions}` (`roleid`, `permissionid`, `granted`) VALUES (1, 1, 'true');
+INSERT INTO `{$dbRolePermissions}` (`roleid`, `permissionid`, `granted`) VALUES (1, 2, 'true');
+INSERT INTO `{$dbRolePermissions}` (`roleid`, `permissionid`, `granted`) VALUES (1, 3, 'true');
+INSERT INTO `{$dbRolePermissions}` (`roleid`, `permissionid`, `granted`) VALUES (1, 4, 'true');
+INSERT INTO `{$dbRolePermissions}` (`roleid`, `permissionid`, `granted`) VALUES (1, 5, 'true');
+INSERT INTO `{$dbRolePermissions}` (`roleid`, `permissionid`, `granted`) VALUES (1, 6, 'true');
+INSERT INTO `{$dbRolePermissions}` (`roleid`, `permissionid`, `granted`) VALUES (1, 7, 'true');
+INSERT INTO `{$dbRolePermissions}` (`roleid`, `permissionid`, `granted`) VALUES (1, 8, 'true');
+INSERT INTO `{$dbRolePermissions}` (`roleid`, `permissionid`, `granted`) VALUES (1, 9, 'true');
+INSERT INTO `{$dbRolePermissions}` (`roleid`, `permissionid`, `granted`) VALUES (1, 10, 'true');
+INSERT INTO `{$dbRolePermissions}` (`roleid`, `permissionid`, `granted`) VALUES (1, 11, 'true');
+INSERT INTO `{$dbRolePermissions}` (`roleid`, `permissionid`, `granted`) VALUES (1, 12, 'true');
+INSERT INTO `{$dbRolePermissions}` (`roleid`, `permissionid`, `granted`) VALUES (1, 13, 'true');
+INSERT INTO `{$dbRolePermissions}` (`roleid`, `permissionid`, `granted`) VALUES (1, 14, 'true');
+INSERT INTO `{$dbRolePermissions}` (`roleid`, `permissionid`, `granted`) VALUES (1, 15, 'true');
+INSERT INTO `{$dbRolePermissions}` (`roleid`, `permissionid`, `granted`) VALUES (1, 16, 'true');
+INSERT INTO `{$dbRolePermissions}` (`roleid`, `permissionid`, `granted`) VALUES (1, 17, 'true');
+INSERT INTO `{$dbRolePermissions}` (`roleid`, `permissionid`, `granted`) VALUES (1, 18, 'true');
+INSERT INTO `{$dbRolePermissions}` (`roleid`, `permissionid`, `granted`) VALUES (1, 19, 'true');
+INSERT INTO `{$dbRolePermissions}` (`roleid`, `permissionid`, `granted`) VALUES (1, 20, 'true');
+INSERT INTO `{$dbRolePermissions}` (`roleid`, `permissionid`, `granted`) VALUES (1, 21, 'true');
+INSERT INTO `{$dbRolePermissions}` (`roleid`, `permissionid`, `granted`) VALUES (1, 22, 'true');
+INSERT INTO `{$dbRolePermissions}` (`roleid`, `permissionid`, `granted`) VALUES (1, 23, 'true');
+INSERT INTO `{$dbRolePermissions}` (`roleid`, `permissionid`, `granted`) VALUES (1, 24, 'true');
+INSERT INTO `{$dbRolePermissions}` (`roleid`, `permissionid`, `granted`) VALUES (1, 25, 'true');
+INSERT INTO `{$dbRolePermissions}` (`roleid`, `permissionid`, `granted`) VALUES (1, 26, 'true');
+INSERT INTO `{$dbRolePermissions}` (`roleid`, `permissionid`, `granted`) VALUES (1, 27, 'true');
+INSERT INTO `{$dbRolePermissions}` (`roleid`, `permissionid`, `granted`) VALUES (1, 28, 'true');
+INSERT INTO `{$dbRolePermissions}` (`roleid`, `permissionid`, `granted`) VALUES (1, 29, 'true');
+INSERT INTO `{$dbRolePermissions}` (`roleid`, `permissionid`, `granted`) VALUES (1, 30, 'true');
+INSERT INTO `{$dbRolePermissions}` (`roleid`, `permissionid`, `granted`) VALUES (1, 32, 'true');
+INSERT INTO `{$dbRolePermissions}` (`roleid`, `permissionid`, `granted`) VALUES (1, 33, 'true');
+INSERT INTO `{$dbRolePermissions}` (`roleid`, `permissionid`, `granted`) VALUES (1, 34, 'true');
+INSERT INTO `{$dbRolePermissions}` (`roleid`, `permissionid`, `granted`) VALUES (1, 35, 'true');
+INSERT INTO `{$dbRolePermissions}` (`roleid`, `permissionid`, `granted`) VALUES (1, 36, 'true');
+INSERT INTO `{$dbRolePermissions}` (`roleid`, `permissionid`, `granted`) VALUES (1, 37, 'true');
+INSERT INTO `{$dbRolePermissions}` (`roleid`, `permissionid`, `granted`) VALUES (1, 38, 'true');
+INSERT INTO `{$dbRolePermissions}` (`roleid`, `permissionid`, `granted`) VALUES (1, 39, 'true');
+INSERT INTO `{$dbRolePermissions}` (`roleid`, `permissionid`, `granted`) VALUES (1, 40, 'true');
+INSERT INTO `{$dbRolePermissions}` (`roleid`, `permissionid`, `granted`) VALUES (1, 41, 'true');
+INSERT INTO `{$dbRolePermissions}` (`roleid`, `permissionid`, `granted`) VALUES (1, 42, 'true');
+INSERT INTO `{$dbRolePermissions}` (`roleid`, `permissionid`, `granted`) VALUES (1, 43, 'true');
+INSERT INTO `{$dbRolePermissions}` (`roleid`, `permissionid`, `granted`) VALUES (1, 44, 'true');
+INSERT INTO `{$dbRolePermissions}` (`roleid`, `permissionid`, `granted`) VALUES (1, 45, 'true');
+INSERT INTO `{$dbRolePermissions}` (`roleid`, `permissionid`, `granted`) VALUES (1, 46, 'true');
+INSERT INTO `{$dbRolePermissions}` (`roleid`, `permissionid`, `granted`) VALUES (1, 47, 'true');
+INSERT INTO `{$dbRolePermissions}` (`roleid`, `permissionid`, `granted`) VALUES (1, 48, 'true');
+INSERT INTO `{$dbRolePermissions}` (`roleid`, `permissionid`, `granted`) VALUES (1, 49, 'true');
+INSERT INTO `{$dbRolePermissions}` (`roleid`, `permissionid`, `granted`) VALUES (1, 50, 'true');
+INSERT INTO `{$dbRolePermissions}` (`roleid`, `permissionid`, `granted`) VALUES (1, 51, 'true');
+INSERT INTO `{$dbRolePermissions}` (`roleid`, `permissionid`, `granted`) VALUES (1, 52, 'true');
+INSERT INTO `{$dbRolePermissions}` (`roleid`, `permissionid`, `granted`) VALUES (1, 53, 'true');
+INSERT INTO `{$dbRolePermissions}` (`roleid`, `permissionid`, `granted`) VALUES (1, 54, 'true');
+INSERT INTO `{$dbRolePermissions}` (`roleid`, `permissionid`, `granted`) VALUES (1, 55, 'true');
+INSERT INTO `{$dbRolePermissions}` (`roleid`, `permissionid`, `granted`) VALUES (1, 56, 'true');
+INSERT INTO `{$dbRolePermissions}` (`roleid`, `permissionid`, `granted`) VALUES (1, 57, 'true');
+INSERT INTO `{$dbRolePermissions}` (`roleid`, `permissionid`, `granted`) VALUES (1, 58, 'true');
+INSERT INTO `{$dbRolePermissions}` (`roleid`, `permissionid`, `granted`) VALUES (1, 59, 'true');
+INSERT INTO `{$dbRolePermissions}` (`roleid`, `permissionid`, `granted`) VALUES (1, 60, 'true');
+INSERT INTO `{$dbRolePermissions}` (`roleid`, `permissionid`, `granted`) VALUES (1, 61, 'true');
+INSERT INTO `{$dbRolePermissions}` (`roleid`, `permissionid`, `granted`) VALUES (1, 62, 'true');
+INSERT INTO `{$dbRolePermissions}` (`roleid`, `permissionid`, `granted`) VALUES (1, 63, 'true');
+INSERT INTO `{$dbRolePermissions}` (`roleid`, `permissionid`, `granted`) VALUES (1, 64, 'true');
+INSERT INTO `{$dbRolePermissions}` (`roleid`, `permissionid`, `granted`) VALUES (1, 65, 'true');
+INSERT INTO `{$dbRolePermissions}` (`roleid`, `permissionid`, `granted`) VALUES (1, 66, 'true');
+INSERT INTO `{$dbRolePermissions}` (`roleid`, `permissionid`, `granted`) VALUES (1, 67, 'true');
+INSERT INTO `{$dbRolePermissions}` (`roleid`, `permissionid`, `granted`) VALUES (1, 68, 'true');
+INSERT INTO `{$dbRolePermissions}` (`roleid`, `permissionid`, `granted`) VALUES (1, 69, 'true');
+INSERT INTO `{$dbRolePermissions}` (`roleid`, `permissionid`, `granted`) VALUES (1, 70, 'true');
+INSERT INTO `{$dbRolePermissions}` (`roleid`, `permissionid`, `granted`) VALUES (1, 71, 'true');
+INSERT INTO `{$dbRolePermissions}` (`roleid`, `permissionid`, `granted`) VALUES (1, 72, 'true');
+INSERT INTO `{$dbRolePermissions}` (`roleid`, `permissionid`, `granted`) VALUES (1, 73, 'true');
+INSERT INTO `{$dbRolePermissions}` (`roleid`, `permissionid`, `granted`) VALUES (1, 74, 'true');
+INSERT INTO `{$dbRolePermissions}` (`roleid`, `permissionid`, `granted`) VALUES (1, 75, 'true');
+INSERT INTO `{$dbRolePermissions}` (`roleid`, `permissionid`, `granted`) VALUES (2, 1, 'true');
+INSERT INTO `{$dbRolePermissions}` (`roleid`, `permissionid`, `granted`) VALUES (2, 2, 'true');
+INSERT INTO `{$dbRolePermissions}` (`roleid`, `permissionid`, `granted`) VALUES (2, 3, 'true');
+INSERT INTO `{$dbRolePermissions}` (`roleid`, `permissionid`, `granted`) VALUES (2, 4, 'true');
+INSERT INTO `{$dbRolePermissions}` (`roleid`, `permissionid`, `granted`) VALUES (2, 5, 'true');
+INSERT INTO `{$dbRolePermissions}` (`roleid`, `permissionid`, `granted`) VALUES (2, 6, 'true');
+INSERT INTO `{$dbRolePermissions}` (`roleid`, `permissionid`, `granted`) VALUES (2, 7, 'true');
+INSERT INTO `{$dbRolePermissions}` (`roleid`, `permissionid`, `granted`) VALUES (2, 8, 'true');
+INSERT INTO `{$dbRolePermissions}` (`roleid`, `permissionid`, `granted`) VALUES (2, 10, 'true');
+INSERT INTO `{$dbRolePermissions}` (`roleid`, `permissionid`, `granted`) VALUES (2, 11, 'true');
+INSERT INTO `{$dbRolePermissions}` (`roleid`, `permissionid`, `granted`) VALUES (2, 12, 'true');
+INSERT INTO `{$dbRolePermissions}` (`roleid`, `permissionid`, `granted`) VALUES (2, 13, 'true');
+INSERT INTO `{$dbRolePermissions}` (`roleid`, `permissionid`, `granted`) VALUES (2, 14, 'true');
+INSERT INTO `{$dbRolePermissions}` (`roleid`, `permissionid`, `granted`) VALUES (2, 15, 'true');
+INSERT INTO `{$dbRolePermissions}` (`roleid`, `permissionid`, `granted`) VALUES (2, 16, 'true');
+INSERT INTO `{$dbRolePermissions}` (`roleid`, `permissionid`, `granted`) VALUES (2, 17, 'true');
+INSERT INTO `{$dbRolePermissions}` (`roleid`, `permissionid`, `granted`) VALUES (2, 18, 'true');
+INSERT INTO `{$dbRolePermissions}` (`roleid`, `permissionid`, `granted`) VALUES (2, 19, 'true');
+INSERT INTO `{$dbRolePermissions}` (`roleid`, `permissionid`, `granted`) VALUES (2, 21, 'true');
+INSERT INTO `{$dbRolePermissions}` (`roleid`, `permissionid`, `granted`) VALUES (2, 24, 'true');
+INSERT INTO `{$dbRolePermissions}` (`roleid`, `permissionid`, `granted`) VALUES (2, 25, 'true');
+INSERT INTO `{$dbRolePermissions}` (`roleid`, `permissionid`, `granted`) VALUES (2, 26, 'true');
+INSERT INTO `{$dbRolePermissions}` (`roleid`, `permissionid`, `granted`) VALUES (2, 27, 'true');
+INSERT INTO `{$dbRolePermissions}` (`roleid`, `permissionid`, `granted`) VALUES (2, 28, 'true');
+INSERT INTO `{$dbRolePermissions}` (`roleid`, `permissionid`, `granted`) VALUES (2, 29, 'true');
+INSERT INTO `{$dbRolePermissions}` (`roleid`, `permissionid`, `granted`) VALUES (2, 30, 'true');
+INSERT INTO `{$dbRolePermissions}` (`roleid`, `permissionid`, `granted`) VALUES (2, 32, 'true');
+INSERT INTO `{$dbRolePermissions}` (`roleid`, `permissionid`, `granted`) VALUES (2, 33, 'true');
+INSERT INTO `{$dbRolePermissions}` (`roleid`, `permissionid`, `granted`) VALUES (2, 34, 'true');
+INSERT INTO `{$dbRolePermissions}` (`roleid`, `permissionid`, `granted`) VALUES (2, 35, 'true');
+INSERT INTO `{$dbRolePermissions}` (`roleid`, `permissionid`, `granted`) VALUES (2, 36, 'true');
+INSERT INTO `{$dbRolePermissions}` (`roleid`, `permissionid`, `granted`) VALUES (2, 37, 'true');
+INSERT INTO `{$dbRolePermissions}` (`roleid`, `permissionid`, `granted`) VALUES (2, 38, 'true');
+INSERT INTO `{$dbRolePermissions}` (`roleid`, `permissionid`, `granted`) VALUES (2, 39, 'true');
+INSERT INTO `{$dbRolePermissions}` (`roleid`, `permissionid`, `granted`) VALUES (2, 40, 'true');
+INSERT INTO `{$dbRolePermissions}` (`roleid`, `permissionid`, `granted`) VALUES (2, 41, 'true');
+INSERT INTO `{$dbRolePermissions}` (`roleid`, `permissionid`, `granted`) VALUES (2, 42, 'true');
+INSERT INTO `{$dbRolePermissions}` (`roleid`, `permissionid`, `granted`) VALUES (2, 43, 'true');
+INSERT INTO `{$dbRolePermissions}` (`roleid`, `permissionid`, `granted`) VALUES (2, 44, 'true');
+INSERT INTO `{$dbRolePermissions}` (`roleid`, `permissionid`, `granted`) VALUES (2, 45, 'true');
+INSERT INTO `{$dbRolePermissions}` (`roleid`, `permissionid`, `granted`) VALUES (2, 46, 'true');
+INSERT INTO `{$dbRolePermissions}` (`roleid`, `permissionid`, `granted`) VALUES (2, 47, 'true');
+INSERT INTO `{$dbRolePermissions}` (`roleid`, `permissionid`, `granted`) VALUES (2, 48, 'true');
+INSERT INTO `{$dbRolePermissions}` (`roleid`, `permissionid`, `granted`) VALUES (2, 49, 'true');
+INSERT INTO `{$dbRolePermissions}` (`roleid`, `permissionid`, `granted`) VALUES (2, 50, 'true');
+INSERT INTO `{$dbRolePermissions}` (`roleid`, `permissionid`, `granted`) VALUES (2, 51, 'true');
+INSERT INTO `{$dbRolePermissions}` (`roleid`, `permissionid`, `granted`) VALUES (2, 52, 'true');
+INSERT INTO `{$dbRolePermissions}` (`roleid`, `permissionid`, `granted`) VALUES (2, 53, 'true');
+INSERT INTO `{$dbRolePermissions}` (`roleid`, `permissionid`, `granted`) VALUES (2, 54, 'true');
+INSERT INTO `{$dbRolePermissions}` (`roleid`, `permissionid`, `granted`) VALUES (2, 55, 'true');
+INSERT INTO `{$dbRolePermissions}` (`roleid`, `permissionid`, `granted`) VALUES (2, 56, 'true');
+INSERT INTO `{$dbRolePermissions}` (`roleid`, `permissionid`, `granted`) VALUES (2, 58, 'true');
+INSERT INTO `{$dbRolePermissions}` (`roleid`, `permissionid`, `granted`) VALUES (2, 59, 'true');
+INSERT INTO `{$dbRolePermissions}` (`roleid`, `permissionid`, `granted`) VALUES (2, 60, 'true');
+INSERT INTO `{$dbRolePermissions}` (`roleid`, `permissionid`, `granted`) VALUES (2, 61, 'true');
+INSERT INTO `{$dbRolePermissions}` (`roleid`, `permissionid`, `granted`) VALUES (2, 62, 'true');
+INSERT INTO `{$dbRolePermissions}` (`roleid`, `permissionid`, `granted`) VALUES (2, 67, 'true');
+INSERT INTO `{$dbRolePermissions}` (`roleid`, `permissionid`, `granted`) VALUES (2, 69, 'true');
+INSERT INTO `{$dbRolePermissions}` (`roleid`, `permissionid`, `granted`) VALUES (2, 70, 'true');
+INSERT INTO `{$dbRolePermissions}` (`roleid`, `permissionid`, `granted`) VALUES (2, 71, 'true');
+INSERT INTO `{$dbRolePermissions}` (`roleid`, `permissionid`, `granted`) VALUES (3, 1, 'true');
+INSERT INTO `{$dbRolePermissions}` (`roleid`, `permissionid`, `granted`) VALUES (3, 2, 'true');
+INSERT INTO `{$dbRolePermissions}` (`roleid`, `permissionid`, `granted`) VALUES (3, 3, 'true');
+INSERT INTO `{$dbRolePermissions}` (`roleid`, `permissionid`, `granted`) VALUES (3, 4, 'true');
+INSERT INTO `{$dbRolePermissions}` (`roleid`, `permissionid`, `granted`) VALUES (3, 5, 'true');
+INSERT INTO `{$dbRolePermissions}` (`roleid`, `permissionid`, `granted`) VALUES (3, 6, 'true');
+INSERT INTO `{$dbRolePermissions}` (`roleid`, `permissionid`, `granted`) VALUES (3, 7, 'true');
+INSERT INTO `{$dbRolePermissions}` (`roleid`, `permissionid`, `granted`) VALUES (3, 8, 'true');
+INSERT INTO `{$dbRolePermissions}` (`roleid`, `permissionid`, `granted`) VALUES (3, 10, 'true');
+INSERT INTO `{$dbRolePermissions}` (`roleid`, `permissionid`, `granted`) VALUES (3, 11, 'true');
+INSERT INTO `{$dbRolePermissions}` (`roleid`, `permissionid`, `granted`) VALUES (3, 12, 'true');
+INSERT INTO `{$dbRolePermissions}` (`roleid`, `permissionid`, `granted`) VALUES (3, 13, 'true');
+INSERT INTO `{$dbRolePermissions}` (`roleid`, `permissionid`, `granted`) VALUES (3, 14, 'true');
+INSERT INTO `{$dbRolePermissions}` (`roleid`, `permissionid`, `granted`) VALUES (3, 18, 'true');
+INSERT INTO `{$dbRolePermissions}` (`roleid`, `permissionid`, `granted`) VALUES (3, 19, 'true');
+INSERT INTO `{$dbRolePermissions}` (`roleid`, `permissionid`, `granted`) VALUES (3, 26, 'true');
+INSERT INTO `{$dbRolePermissions}` (`roleid`, `permissionid`, `granted`) VALUES (3, 27, 'true');
+INSERT INTO `{$dbRolePermissions}` (`roleid`, `permissionid`, `granted`) VALUES (3, 28, 'true');
+INSERT INTO `{$dbRolePermissions}` (`roleid`, `permissionid`, `granted`) VALUES (3, 30, 'true');
+INSERT INTO `{$dbRolePermissions}` (`roleid`, `permissionid`, `granted`) VALUES (3, 33, 'true');
+INSERT INTO `{$dbRolePermissions}` (`roleid`, `permissionid`, `granted`) VALUES (3, 34, 'true');
+INSERT INTO `{$dbRolePermissions}` (`roleid`, `permissionid`, `granted`) VALUES (3, 35, 'true');
+INSERT INTO `{$dbRolePermissions}` (`roleid`, `permissionid`, `granted`) VALUES (3, 36, 'true');
+INSERT INTO `{$dbRolePermissions}` (`roleid`, `permissionid`, `granted`) VALUES (3, 37, 'true');
+INSERT INTO `{$dbRolePermissions}` (`roleid`, `permissionid`, `granted`) VALUES (3, 38, 'true');
+INSERT INTO `{$dbRolePermissions}` (`roleid`, `permissionid`, `granted`) VALUES (3, 41, 'true');
+INSERT INTO `{$dbRolePermissions}` (`roleid`, `permissionid`, `granted`) VALUES (3, 44, 'true');
+INSERT INTO `{$dbRolePermissions}` (`roleid`, `permissionid`, `granted`) VALUES (3, 52, 'true');
+INSERT INTO `{$dbRolePermissions}` (`roleid`, `permissionid`, `granted`) VALUES (3, 54, 'true');
+INSERT INTO `{$dbRolePermissions}` (`roleid`, `permissionid`, `granted`) VALUES (3, 58, 'true');
+INSERT INTO `{$dbRolePermissions}` (`roleid`, `permissionid`, `granted`) VALUES (3, 60, 'true');
+INSERT INTO `{$dbRolePermissions}` (`roleid`, `permissionid`, `granted`) VALUES (3, 61, 'true');
+INSERT INTO `{$dbRolePermissions}` (`roleid`, `permissionid`, `granted`) VALUES (3, 62, 'true');
 
 
-CREATE TABLE IF NOT EXISTS `scheduler` (
+CREATE TABLE `{$dbScheduler}` (
   `id` int(11) NOT NULL auto_increment,
   `action` varchar(50) NOT NULL,
   `params` varchar(255) NOT NULL,
@@ -884,15 +925,15 @@ CREATE TABLE IF NOT EXISTS `scheduler` (
   KEY `job` (`action`)
 ) ENGINE=MyISAM  ;
 
-INSERT INTO `scheduler` (`id`, `action`, `params`, `paramslabel`, `description`, `status`, `start`, `end`, `interval`, `lastran`, `success`) VALUES (1, 'CloseIncidents', '554400', 'closure_delay', 'Close incidents that have been marked for closure for longer than the <var>closure_delay</var> parameter (which is in seconds)', 'enabled', '2008-01-01 00:00:00', '0000-00-00 00:00:00', 60, '0000-00-00 00:00:00', 1);
-INSERT INTO `scheduler` (`id`, `action`, `params`, `paramslabel`, `description`, `status`, `start`, `end`, `interval`, `lastran`, `success`) VALUES (2, 'SetUserStatus', '', NULL, '(EXPERIMENTAL) This will set users status                         based on data from their holiday calendar.                        e.g. Out of Office/Away sick.', 'enabled', '2008-01-01 00:00:00', '0000-00-00 00:00:00', 60, '0000-00-00 00:00:00', 1);
-INSERT INTO `scheduler` (`id`, `action`, `params`, `paramslabel`, `description`, `status`, `start`, `end`, `interval`, `lastran`, `success`) VALUES (3, 'PurgeJournal', '', NULL, 'Delete old journal entries according to the config setting <var>$CONFIG[''journal_purge_after'']</var>', 'enabled', '2008-01-01 00:00:00', '0000-00-00 00:00:00', 300, '0000-00-00 00:00:00', 1);
-INSERT INTO `scheduler` (`id`, `action`, `params`, `paramslabel`, `description`, `status`, `start`, `end`, `interval`, `lastran`, `success`) VALUES (4, 'TimeCalc', '', NULL, 'Calculate SLA Target Times and trigger                        OUT_OF_SLA and OUT_OF_REVIEW system email templates where appropriate.', 'enabled', '2008-01-01 00:00:00', '0000-00-00 00:00:00', 60, '0000-00-00 00:00:00', 1);
-INSERT INTO `scheduler` (`id`, `action`, `params`, `paramslabel`, `description`, `status`, `start`, `end`, `interval`, `lastran`, `success`) VALUES (5, 'ChaseCustomers', '', NULL, 'Chase customers', 'disabled', '2008-01-01 00:00:00', '0000-00-00 00:00:00', 3600, '0000-00-00 00:00:00', 1);
-INSERT INTO `scheduler` (`id`, `action`, `params`, `paramslabel`, `description`, `status`, `start`, `end`, `interval`, `lastran`, `success`) VALUES (6, 'CheckWaitingEmail', '', NULL, 'Checks the holding queue for emails and fires the TRIGGER_WAITING_HELD_EMAIL trigger when it finds some.', 'enabled', '2008-01-01 00:00:00', '0000-00-00 00:00:00', 60, '0000-00-00 00:00:00', 1);
+INSERT INTO `{$dbScheduler}` (`id`, `action`, `params`, `paramslabel`, `description`, `status`, `start`, `end`, `interval`, `lastran`, `success`) VALUES (1, 'CloseIncidents', '554400', 'closure_delay', 'Close incidents that have been marked for closure for longer than the <var>closure_delay</var> parameter (which is in seconds)', 'enabled', '2008-01-01 00:00:00', '0000-00-00 00:00:00', 60, '0000-00-00 00:00:00', 1);
+INSERT INTO `{$dbScheduler}` (`id`, `action`, `params`, `paramslabel`, `description`, `status`, `start`, `end`, `interval`, `lastran`, `success`) VALUES (2, 'SetUserStatus', '', NULL, '(EXPERIMENTAL) This will set users status                         based on data from their holiday calendar.                        e.g. Out of Office/Away sick.', 'enabled', '2008-01-01 00:00:00', '0000-00-00 00:00:00', 60, '0000-00-00 00:00:00', 1);
+INSERT INTO `{$dbScheduler}` (`id`, `action`, `params`, `paramslabel`, `description`, `status`, `start`, `end`, `interval`, `lastran`, `success`) VALUES (3, 'PurgeJournal', '', NULL, 'Delete old journal entries according to the config setting <var>\$CONFIG[''journal_purge_after'']</var>', 'enabled', '2008-01-01 00:00:00', '0000-00-00 00:00:00', 300, '0000-00-00 00:00:00', 1);
+INSERT INTO `{$dbScheduler}` (`id`, `action`, `params`, `paramslabel`, `description`, `status`, `start`, `end`, `interval`, `lastran`, `success`) VALUES (4, 'TimeCalc', '', NULL, 'Calculate SLA Target Times and trigger                        OUT_OF_SLA and OUT_OF_REVIEW system email templates where appropriate.', 'enabled', '2008-01-01 00:00:00', '0000-00-00 00:00:00', 60, '0000-00-00 00:00:00', 1);
+INSERT INTO `{$dbScheduler}` (`id`, `action`, `params`, `paramslabel`, `description`, `status`, `start`, `end`, `interval`, `lastran`, `success`) VALUES (5, 'ChaseCustomers', '', NULL, 'Chase customers', 'disabled', '2008-01-01 00:00:00', '0000-00-00 00:00:00', 3600, '0000-00-00 00:00:00', 1);
+INSERT INTO `{$dbScheduler}` (`id`, `action`, `params`, `paramslabel`, `description`, `status`, `start`, `end`, `interval`, `lastran`, `success`) VALUES (6, 'CheckWaitingEmail', '', NULL, 'Checks the holding queue for emails and fires the TRIGGER_WAITING_HELD_EMAIL trigger when it finds some.', 'enabled', '2008-01-01 00:00:00', '0000-00-00 00:00:00', 60, '0000-00-00 00:00:00', 1);
 
 
-CREATE TABLE `servicelevels` (
+CREATE TABLE `{$dbServiceLevels}` (
   `id` int(5) NOT NULL default '0',
   `tag` varchar(10) NOT NULL default '',
   `priority` int(5) NOT NULL default '0',
@@ -908,26 +949,28 @@ CREATE TABLE `servicelevels` (
   KEY `review_days` (`review_days`)
 ) ENGINE=MyISAM;
 
+INSERT INTO `{$dbServiceLevels}` VALUES (0, 'standard', 1, 320, 380, 960, 14.00, 28, 90, 0);
+INSERT INTO `{$dbServiceLevels}` VALUES (0, 'standard', 2, 240, 320, 960, 10.00, 20, 90, 0);
+INSERT INTO `{$dbServiceLevels}` VALUES (0, 'standard', 3, 120, 180, 480, 7.00, 14, 90, 0);
+INSERT INTO `{$dbServiceLevels}` VALUES (0, 'standard', 4, 60, 120, 240, 3.00, 6, 90, 0);
 
-INSERT INTO `servicelevels` VALUES (0, 'standard', 1, 320, 380, 960, 14.00, 28, 90, 0);
-INSERT INTO `servicelevels` VALUES (0, 'standard', 2, 240, 320, 960, 10.00, 20, 90, 0);
-INSERT INTO `servicelevels` VALUES (0, 'standard', 3, 120, 180, 480, 7.00, 14, 90, 0);
-INSERT INTO `servicelevels` VALUES (0, 'standard', 4, 60, 120, 240, 3.00, 6, 90, 0);
 
-CREATE TABLE `set_tags` (
+CREATE TABLE `{$dbSetTags}` (
 `id` INT NOT NULL ,
 `type` MEDIUMINT NOT NULL ,
 `tagid` INT NOT NULL ,
 PRIMARY KEY ( `id` , `type` , `tagid` )
 ) ENGINE=MYISAM;
 
-CREATE TABLE `sitecontacts` (
+
+CREATE TABLE `{$dbSiteContacts}` (
   `siteid` int(11) NOT NULL default '0',
   `contactid` int(11) NOT NULL default '0',
   PRIMARY KEY  (`siteid`,`contactid`)
 ) ENGINE=MyISAM;
 
-CREATE TABLE `sites` (
+
+CREATE TABLE `{$dbSites}` (
   `id` int(11) NOT NULL auto_increment,
   `name` varchar(255) NOT NULL default '',
   `department` varchar(255) NOT NULL default '',
@@ -953,23 +996,25 @@ CREATE TABLE `sites` (
   KEY `owner` (`owner`)
 ) ENGINE=MyISAM;
 
-INSERT INTO `sites` (`id`, `name`, `department`, `address1`, `address2`, `city`, `county`,
+INSERT INTO `{$dbSites}` (`id`, `name`, `department`, `address1`, `address2`, `city`, `county`,
 `country`, `postcode`, `telephone`, `fax`, `email`, `notes`, `typeid`, `freesupport`, `licenserx`,
  `owner`) VALUES (1, 'ACME Widgets Co.', 'Manufacturing Dept.', '21 Any Street', '',
 'Anytown', 'Anyshire', 'UNITED KINGDOM', 'AN1 0TH', '0555 555555', '0444 444444', 'acme@example.com',
 'Example site', 1, 0, 0, 0);
 
-CREATE TABLE `sitetypes` (
+
+CREATE TABLE `{$dbSiteTypes}` (
   `typeid` int(5) NOT NULL auto_increment,
   `typename` varchar(255) NOT NULL default '',
   PRIMARY KEY  (`typeid`)
 ) ENGINE=MyISAM;
 
-INSERT INTO `sitetypes` VALUES (1, 'Unclassified');
-INSERT INTO `sitetypes` VALUES (2, 'Commercial');
-INSERT INTO `sitetypes` VALUES (3, 'Academic');
+INSERT INTO `{$dbSiteTypes}` VALUES (1, 'Unclassified');
+INSERT INTO `{$dbSiteTypes}` VALUES (2, 'Commercial');
+INSERT INTO `{$dbSiteTypes}` VALUES (3, 'Academic');
 
-CREATE TABLE `software` (
+
+CREATE TABLE `{$dbSoftware}` (
   `id` int(5) NOT NULL auto_increment,
   `name` varchar(255) NOT NULL default '',
   `vendorid` INT( 5 ) NOT NULL default '0',
@@ -979,18 +1024,19 @@ CREATE TABLE `software` (
   PRIMARY KEY  (`id`)
 ) ENGINE=MyISAM COMMENT='Individual software products as they are supported' AUTO_INCREMENT=1 ;
 
-INSERT INTO `software` (`id`, `name`, `lifetime_start`, `lifetime_end`) VALUES (1, 'Example Software', NULL, NULL);
+INSERT INTO `{$dbSoftware}` (`id`, `name`, `lifetime_start`, `lifetime_end`) VALUES (1, 'Example Software', NULL, NULL);
 
-CREATE TABLE `softwareproducts` (
+
+CREATE TABLE `{$dbSoftwareProducts}` (
   `productid` int(5) NOT NULL default '0',
   `softwareid` int(5) NOT NULL default '0',
   PRIMARY KEY  (`productid`,`softwareid`)
 ) ENGINE=MyISAM COMMENT='Table to link products with software';
 
-INSERT INTO `softwareproducts` VALUES (1,1);
+INSERT INTO `{$dbSoftwareProducts}` VALUES (1,1);
 
 
-CREATE TABLE `spellcheck` (
+CREATE TABLE `{$dbSpellcheck}` (
   `id` int(11) NOT NULL auto_increment,
   `updateid` int(11) NOT NULL default '0',
   `bodytext` text NOT NULL,
@@ -1016,30 +1062,31 @@ CREATE TABLE `spellcheck` (
 ) ENGINE=MyISAM COMMENT='Temporary table used during spellcheck' ;
 
 
-CREATE TABLE `supportcontacts` (
+CREATE TABLE `{$dbSupportContacts}` (
   `id` int(11) NOT NULL auto_increment,
   `maintenanceid` int(11) default NULL,
   `contactid` int(11) default NULL,
   PRIMARY KEY  (`id`)
 ) ENGINE=MyISAM;
 
-INSERT INTO `supportcontacts` VALUES (1,1,1);
+INSERT INTO `{$dbSupportContacts}` VALUES (1,1,1);
 
 
-CREATE TABLE `system` (
+CREATE TABLE `{$dbSystem}` (
   `id` int(1) NOT NULL default '0',
   `version` float(3,2) NOT NULL default '0.00',
   PRIMARY KEY  (`id`)
 ) ENGINE=MyISAM;
 
-CREATE TABLE `tags` (
+
+CREATE TABLE `{$dbTags}` (
   `tagid` int(11) NOT NULL auto_increment,
   `name` varchar(255) NOT NULL default '',
   PRIMARY KEY  (`tagid`)
 ) ENGINE=MyISAM;
 
 
-CREATE TABLE `tasks` (
+CREATE TABLE `{$dbTasks}` (
   `id` int(11) NOT NULL auto_increment,
   `name` varchar(255) default NULL,
   `description` text NOT NULL,
@@ -1058,8 +1105,7 @@ CREATE TABLE `tasks` (
 ) ENGINE=MyISAM ;
 
 
-
-CREATE TABLE `tempassigns` (
+CREATE TABLE `{$dbTempAssigns}` (
   `incidentid` int(5) NOT NULL default '0',
   `originalowner` int(5) NOT NULL default '0',
   `userstatus` tinyint(4) NOT NULL default '1',
@@ -1068,7 +1114,8 @@ CREATE TABLE `tempassigns` (
   KEY `assigned` (`assigned`)
 ) ENGINE=MyISAM;
 
-CREATE TABLE `tempincoming` (
+
+CREATE TABLE `{$dbTempIncoming}` (
   `id` int(11) NOT NULL auto_increment,
   `updateid` int(11) NOT NULL default '0',
   `path` varchar(255) NOT NULL default '',
@@ -1084,7 +1131,8 @@ CREATE TABLE `tempincoming` (
   KEY `updateid` (`updateid`)
 ) ENGINE=MyISAM COMMENT='Temporary store for incoming attachment paths' ;
 
-CREATE TABLE `updates` (
+
+CREATE TABLE `{$dbUpdates}` (
   `id` int(11) NOT NULL auto_increment,
   `incidentid` int(11) default NULL,
   `userid` int(11) default NULL,
@@ -1105,7 +1153,7 @@ CREATE TABLE `updates` (
 ) ENGINE=MyISAM;
 
 
-CREATE TABLE `usergroups` (
+CREATE TABLE `{$dbUserGroups}` (
   `userid` int(5) NOT NULL default '0',
   `groupid` int(5) NOT NULL default '0',
   PRIMARY KEY  (`userid`,`groupid`)
@@ -1113,87 +1161,88 @@ CREATE TABLE `usergroups` (
 
 
 
-CREATE TABLE `userpermissions` (
+CREATE TABLE `{$dbUserPermissions}` (
   `userid` tinyint(4) NOT NULL default '0',
   `permissionid` int(5) NOT NULL default '0',
   `granted` enum('true','false') NOT NULL default 'false',
   PRIMARY KEY  (`userid`,`permissionid`)
 ) ENGINE=MyISAM;
 
-INSERT INTO `userpermissions` VALUES (1, 1, 'true');
-INSERT INTO `userpermissions` VALUES (1, 2, 'true');
-INSERT INTO `userpermissions` VALUES (1, 3, 'true');
-INSERT INTO `userpermissions` VALUES (1, 4, 'true');
-INSERT INTO `userpermissions` VALUES (1, 5, 'true');
-INSERT INTO `userpermissions` VALUES (1, 6, 'true');
-INSERT INTO `userpermissions` VALUES (1, 7, 'true');
-INSERT INTO `userpermissions` VALUES (1, 8, 'true');
-INSERT INTO `userpermissions` VALUES (1, 9, 'true');
-INSERT INTO `userpermissions` VALUES (1, 10, 'true');
-INSERT INTO `userpermissions` VALUES (1, 11, 'true');
-INSERT INTO `userpermissions` VALUES (1, 12, 'true');
-INSERT INTO `userpermissions` VALUES (1, 13, 'true');
-INSERT INTO `userpermissions` VALUES (1, 14, 'true');
-INSERT INTO `userpermissions` VALUES (1, 15, 'true');
-INSERT INTO `userpermissions` VALUES (1, 16, 'true');
-INSERT INTO `userpermissions` VALUES (1, 17, 'true');
-INSERT INTO `userpermissions` VALUES (1, 18, 'true');
-INSERT INTO `userpermissions` VALUES (1, 19, 'true');
-INSERT INTO `userpermissions` VALUES (1, 20, 'true');
-INSERT INTO `userpermissions` VALUES (1, 21, 'true');
-INSERT INTO `userpermissions` VALUES (1, 22, 'true');
-INSERT INTO `userpermissions` VALUES (1, 23, 'true');
-INSERT INTO `userpermissions` VALUES (1, 24, 'true');
-INSERT INTO `userpermissions` VALUES (1, 25, 'true');
-INSERT INTO `userpermissions` VALUES (1, 26, 'true');
-INSERT INTO `userpermissions` VALUES (1, 27, 'true');
-INSERT INTO `userpermissions` VALUES (1, 28, 'true');
-INSERT INTO `userpermissions` VALUES (1, 29, 'true');
-INSERT INTO `userpermissions` VALUES (1, 30, 'true');
-INSERT INTO `userpermissions` VALUES (1, 31, 'true');
-INSERT INTO `userpermissions` VALUES (1, 32, 'true');
-INSERT INTO `userpermissions` VALUES (1, 33, 'true');
-INSERT INTO `userpermissions` VALUES (1, 34, 'true');
-INSERT INTO `userpermissions` VALUES (1, 35, 'true');
-INSERT INTO `userpermissions` VALUES (1, 36, 'true');
-INSERT INTO `userpermissions` VALUES (1, 37, 'true');
-INSERT INTO `userpermissions` VALUES (1, 38, 'true');
-INSERT INTO `userpermissions` VALUES (1, 39, 'true');
-INSERT INTO `userpermissions` VALUES (1, 40, 'true');
-INSERT INTO `userpermissions` VALUES (1, 41, 'true');
-INSERT INTO `userpermissions` VALUES (1, 42, 'true');
-INSERT INTO `userpermissions` VALUES (1, 43, 'true');
-INSERT INTO `userpermissions` VALUES (1, 44, 'true');
-INSERT INTO `userpermissions` VALUES (1, 45, 'true');
-INSERT INTO `userpermissions` VALUES (1, 46, 'true');
-INSERT INTO `userpermissions` VALUES (1, 47, 'true');
-INSERT INTO `userpermissions` VALUES (1, 48, 'true');
-INSERT INTO `userpermissions` VALUES (1, 49, 'true');
-INSERT INTO `userpermissions` VALUES (1, 50, 'true');
-INSERT INTO `userpermissions` VALUES (1, 51, 'true');
-INSERT INTO `userpermissions` VALUES (1, 52, 'true');
-INSERT INTO `userpermissions` VALUES (1, 53, 'true');
-INSERT INTO `userpermissions` VALUES (1, 54, 'true');
-INSERT INTO `userpermissions` VALUES (1, 55, 'true');
-INSERT INTO `userpermissions` VALUES (1, 56, 'true');
-INSERT INTO `userpermissions` VALUES (1, 57, 'true');
-INSERT INTO `userpermissions` VALUES (1, 58, 'true');
-INSERT INTO `userpermissions` VALUES (1, 59, 'true');
-INSERT INTO `userpermissions` VALUES (1, 60, 'true');
-INSERT INTO `userpermissions` VALUES (1, 61, 'true');
-INSERT INTO `userpermissions` VALUES (1, 62, 'true');
-INSERT INTO `userpermissions` VALUES (1, 63, 'true');
-INSERT INTO `userpermissions` VALUES (1, 64, 'true');
-INSERT INTO `userpermissions` VALUES (1, 65, 'true');
-INSERT INTO `userpermissions` VALUES (1, 66, 'true');
-INSERT INTO `userpermissions` VALUES (1, 67, 'true');
-INSERT INTO `userpermissions` VALUES (1, 68, 'true');
-INSERT INTO `userpermissions` VALUES (1, 69, 'true');
-INSERT INTO `userpermissions` VALUES (1, 70, 'true');
-INSERT INTO `userpermissions` VALUES (1, 71, 'true');
-INSERT INTO `userpermissions` VALUES (1, 72, 'true');
+INSERT INTO `{$dbUserPermissions}` VALUES (1, 1, 'true');
+INSERT INTO `{$dbUserPermissions}` VALUES (1, 2, 'true');
+INSERT INTO `{$dbUserPermissions}` VALUES (1, 3, 'true');
+INSERT INTO `{$dbUserPermissions}` VALUES (1, 4, 'true');
+INSERT INTO `{$dbUserPermissions}` VALUES (1, 5, 'true');
+INSERT INTO `{$dbUserPermissions}` VALUES (1, 6, 'true');
+INSERT INTO `{$dbUserPermissions}` VALUES (1, 7, 'true');
+INSERT INTO `{$dbUserPermissions}` VALUES (1, 8, 'true');
+INSERT INTO `{$dbUserPermissions}` VALUES (1, 9, 'true');
+INSERT INTO `{$dbUserPermissions}` VALUES (1, 10, 'true');
+INSERT INTO `{$dbUserPermissions}` VALUES (1, 11, 'true');
+INSERT INTO `{$dbUserPermissions}` VALUES (1, 12, 'true');
+INSERT INTO `{$dbUserPermissions}` VALUES (1, 13, 'true');
+INSERT INTO `{$dbUserPermissions}` VALUES (1, 14, 'true');
+INSERT INTO `{$dbUserPermissions}` VALUES (1, 15, 'true');
+INSERT INTO `{$dbUserPermissions}` VALUES (1, 16, 'true');
+INSERT INTO `{$dbUserPermissions}` VALUES (1, 17, 'true');
+INSERT INTO `{$dbUserPermissions}` VALUES (1, 18, 'true');
+INSERT INTO `{$dbUserPermissions}` VALUES (1, 19, 'true');
+INSERT INTO `{$dbUserPermissions}` VALUES (1, 20, 'true');
+INSERT INTO `{$dbUserPermissions}` VALUES (1, 21, 'true');
+INSERT INTO `{$dbUserPermissions}` VALUES (1, 22, 'true');
+INSERT INTO `{$dbUserPermissions}` VALUES (1, 23, 'true');
+INSERT INTO `{$dbUserPermissions}` VALUES (1, 24, 'true');
+INSERT INTO `{$dbUserPermissions}` VALUES (1, 25, 'true');
+INSERT INTO `{$dbUserPermissions}` VALUES (1, 26, 'true');
+INSERT INTO `{$dbUserPermissions}` VALUES (1, 27, 'true');
+INSERT INTO `{$dbUserPermissions}` VALUES (1, 28, 'true');
+INSERT INTO `{$dbUserPermissions}` VALUES (1, 29, 'true');
+INSERT INTO `{$dbUserPermissions}` VALUES (1, 30, 'true');
+INSERT INTO `{$dbUserPermissions}` VALUES (1, 31, 'true');
+INSERT INTO `{$dbUserPermissions}` VALUES (1, 32, 'true');
+INSERT INTO `{$dbUserPermissions}` VALUES (1, 33, 'true');
+INSERT INTO `{$dbUserPermissions}` VALUES (1, 34, 'true');
+INSERT INTO `{$dbUserPermissions}` VALUES (1, 35, 'true');
+INSERT INTO `{$dbUserPermissions}` VALUES (1, 36, 'true');
+INSERT INTO `{$dbUserPermissions}` VALUES (1, 37, 'true');
+INSERT INTO `{$dbUserPermissions}` VALUES (1, 38, 'true');
+INSERT INTO `{$dbUserPermissions}` VALUES (1, 39, 'true');
+INSERT INTO `{$dbUserPermissions}` VALUES (1, 40, 'true');
+INSERT INTO `{$dbUserPermissions}` VALUES (1, 41, 'true');
+INSERT INTO `{$dbUserPermissions}` VALUES (1, 42, 'true');
+INSERT INTO `{$dbUserPermissions}` VALUES (1, 43, 'true');
+INSERT INTO `{$dbUserPermissions}` VALUES (1, 44, 'true');
+INSERT INTO `{$dbUserPermissions}` VALUES (1, 45, 'true');
+INSERT INTO `{$dbUserPermissions}` VALUES (1, 46, 'true');
+INSERT INTO `{$dbUserPermissions}` VALUES (1, 47, 'true');
+INSERT INTO `{$dbUserPermissions}` VALUES (1, 48, 'true');
+INSERT INTO `{$dbUserPermissions}` VALUES (1, 49, 'true');
+INSERT INTO `{$dbUserPermissions}` VALUES (1, 50, 'true');
+INSERT INTO `{$dbUserPermissions}` VALUES (1, 51, 'true');
+INSERT INTO `{$dbUserPermissions}` VALUES (1, 52, 'true');
+INSERT INTO `{$dbUserPermissions}` VALUES (1, 53, 'true');
+INSERT INTO `{$dbUserPermissions}` VALUES (1, 54, 'true');
+INSERT INTO `{$dbUserPermissions}` VALUES (1, 55, 'true');
+INSERT INTO `{$dbUserPermissions}` VALUES (1, 56, 'true');
+INSERT INTO `{$dbUserPermissions}` VALUES (1, 57, 'true');
+INSERT INTO `{$dbUserPermissions}` VALUES (1, 58, 'true');
+INSERT INTO `{$dbUserPermissions}` VALUES (1, 59, 'true');
+INSERT INTO `{$dbUserPermissions}` VALUES (1, 60, 'true');
+INSERT INTO `{$dbUserPermissions}` VALUES (1, 61, 'true');
+INSERT INTO `{$dbUserPermissions}` VALUES (1, 62, 'true');
+INSERT INTO `{$dbUserPermissions}` VALUES (1, 63, 'true');
+INSERT INTO `{$dbUserPermissions}` VALUES (1, 64, 'true');
+INSERT INTO `{$dbUserPermissions}` VALUES (1, 65, 'true');
+INSERT INTO `{$dbUserPermissions}` VALUES (1, 66, 'true');
+INSERT INTO `{$dbUserPermissions}` VALUES (1, 67, 'true');
+INSERT INTO `{$dbUserPermissions}` VALUES (1, 68, 'true');
+INSERT INTO `{$dbUserPermissions}` VALUES (1, 69, 'true');
+INSERT INTO `{$dbUserPermissions}` VALUES (1, 70, 'true');
+INSERT INTO `{$dbUserPermissions}` VALUES (1, 71, 'true');
+INSERT INTO `{$dbUserPermissions}` VALUES (1, 72, 'true');
 
-CREATE TABLE `users` (
+
+CREATE TABLE `{$dbUsers}` (
   `id` tinyint(4) NOT NULL auto_increment,
   `username` varchar(50) default NULL,
   `password` varchar(50) default NULL,
@@ -1236,7 +1285,7 @@ CREATE TABLE `users` (
 ) ENGINE=MyISAM;
 
 
-CREATE TABLE `usersoftware` (
+CREATE TABLE `{$dbUserSoftware}` (
   `userid` tinyint(4) NOT NULL default '0',
   `softwareid` int(5) NOT NULL default '0',
   `backupid` tinyint(4) NOT NULL default '0',
@@ -1245,48 +1294,35 @@ CREATE TABLE `usersoftware` (
 ) ENGINE=MyISAM COMMENT='Defines which software users have expertise with';
 
 
-CREATE TABLE `userstatus` (
+CREATE TABLE `{$dbUserStatus}` (
   `id` int(11) NOT NULL,
   `name` varchar(50) default NULL,
   PRIMARY KEY  (`id`)
 ) ENGINE=MyISAM;
 
 
-INSERT INTO `userstatus` VALUES (0, 'strAccountDisabled');
-INSERT INTO `userstatus` VALUES (1, 'strInOffice');
-INSERT INTO `userstatus` VALUES (2, 'strNotInOffice');
-INSERT INTO `userstatus` VALUES (3, 'strInMeeting');
-INSERT INTO `userstatus` VALUES (4, 'strAtLunch');
-INSERT INTO `userstatus` VALUES (5, 'strOnHoliday');
-INSERT INTO `userstatus` VALUES (6, 'strWorkingFromHome');
-INSERT INTO `userstatus` VALUES (7, 'strOnTrainingCourse');
-INSERT INTO `userstatus` VALUES (8, 'strAbsentSick');
-INSERT INTO `userstatus` VALUES (9, 'strWorkingAway');
+INSERT INTO `{$dbUserStatus}` VALUES (0, 'strAccountDisabled');
+INSERT INTO `{$dbUserStatus}` VALUES (1, 'strInOffice');
+INSERT INTO `{$dbUserStatus}` VALUES (2, 'strNotInOffice');
+INSERT INTO `{$dbUserStatus}` VALUES (3, 'strInMeeting');
+INSERT INTO `{$dbUserStatus}` VALUES (4, 'strAtLunch');
+INSERT INTO `{$dbUserStatus}` VALUES (5, 'strOnHoliday');
+INSERT INTO `{$dbUserStatus}` VALUES (6, 'strWorkingFromHome');
+INSERT INTO `{$dbUserStatus}` VALUES (7, 'strOnTrainingCourse');
+INSERT INTO `{$dbUserStatus}` VALUES (8, 'strAbsentSick');
+INSERT INTO `{$dbUserStatus}` VALUES (9, 'strWorkingAway');
 
 
-CREATE TABLE `vendors` (
+CREATE TABLE `{$dbVendors}` (
   `id` int(5) NOT NULL auto_increment,
   `name` varchar(255) NOT NULL default '',
   PRIMARY KEY  (`id`)
 ) ENGINE=MyISAM;
 
-INSERT INTO `vendors` VALUES (1,'Default');
+INSERT INTO `{$dbVendors}` VALUES (1,'Default');
 
-CREATE TABLE IF NOT EXISTS `notices` (
-  `id` int(11) NOT NULL auto_increment,
-  `userid` int(11) NOT NULL,
-  `template` varchar(255) NULL,
-  `type` tinyint(4) NOT NULL,
-  `text` tinytext NOT NULL,
-  `linktext` varchar(50) default NULL,
-  `link` varchar(100) NOT NULL,
-  `referenceid` int(11) default NULL,
-  `timestamp` timestamp NOT NULL default CURRENT_TIMESTAMP on update CURRENT_TIMESTAMP,
-  `durability` enum('sticky','session') NOT NULL default 'sticky',
-  PRIMARY KEY  (`id`)
-) ENGINE=MyISAM AUTO_INCREMENT=1 ;
 
-CREATE TABLE `triggers` (
+CREATE TABLE `{$dbTriggers}` (
   `id` int(11) NOT NULL auto_increment,
   `triggerid` varchar(50) NOT NULL,
   `userid` tinyint(4) NOT NULL,
@@ -1299,43 +1335,33 @@ CREATE TABLE `triggers` (
   KEY `userid` (`userid`)
 ) ENGINE=MyISAM;
 
-INSERT INTO triggers (triggerid, userid, action) VALUES ('TRIGGER_INCIDENT_CREATED', '0', 'ACTION_JOURNAL');
-INSERT INTO triggers (triggerid, userid, action) VALUES ('TRIGGER_INCIDENT_ASSIGNED', '0', 'ACTION_JOURNAL');
-INSERT INTO triggers (triggerid, userid, action) VALUES ('TRIGGER_INCIDENT_ASSIGNED_WHILE_AWAY', '0', 'ACTION_JOURNAL');
-INSERT INTO triggers (triggerid, userid, action) VALUES ('TRIGGER_INCIDENT_ASSIGNED_WHILE_OFFLINE', '0', 'ACTION_JOURNAL');
-INSERT INTO triggers (triggerid, userid, action) VALUES ('TRIGGER_INCIDENT_NEARING_SLA', '0', 'ACTION_JOURNAL');
-INSERT INTO triggers (triggerid, userid, action) VALUES ('TRIGGER_USERS_INCIDENT_NEARING_SLA', '0', 'ACTION_JOURNAL');
-INSERT INTO triggers (triggerid, userid, action) VALUES ('TRIGGER_INCIDENT_EXCEEDED_SLA', '0', 'ACTION_JOURNAL');
-INSERT INTO triggers (triggerid, userid, action) VALUES ('TRIGGER_INCIDENT_REVIEW_DUE', '0', 'ACTION_JOURNAL');
-INSERT INTO triggers (triggerid, userid, action) VALUES ('TRIGGER_CRITICAL_INCIDENT_CREATED', '0', 'ACTION_JOURNAL');
-INSERT INTO triggers (triggerid, userid, action) VALUES ('TRIGGER_KB_CREATED', '0', 'ACTION_JOURNAL');
-INSERT INTO triggers (triggerid, userid, action) VALUES ('TRIGGER_NEW_HELD_EMAIL', '0', 'ACTION_JOURNAL');
-INSERT INTO triggers (triggerid, userid, action) VALUES ('TRIGGER_WAITING_HELD_EMAIL', '0', 'ACTION_JOURNAL');
-INSERT INTO triggers (triggerid, userid, action) VALUES ('TRIGGER_USER_SET_TO_AWAY', '0', 'ACTION_JOURNAL');
-INSERT INTO triggers (triggerid, userid, action) VALUES ('TRIGGER_SIT_UPGRADED', '0', 'ACTION_JOURNAL');
-INSERT INTO triggers (triggerid, userid, action) VALUES ('TRIGGER_USER_RETURNS', '0', 'ACTION_JOURNAL');
-INSERT INTO triggers (triggerid, userid, action) VALUES ('TRIGGER_INCIDENT_OWNED_CLOSED_BY_USER', '0', 'ACTION_JOURNAL');
+INSERT INTO `{$dbTriggers}` (triggerid, userid, action) VALUES ('TRIGGER_INCIDENT_CREATED', '0', 'ACTION_JOURNAL');
+INSERT INTO `{$dbTriggers}` (triggerid, userid, action) VALUES ('TRIGGER_INCIDENT_ASSIGNED', '0', 'ACTION_JOURNAL');
+INSERT INTO `{$dbTriggers}` (triggerid, userid, action) VALUES ('TRIGGER_INCIDENT_ASSIGNED_WHILE_AWAY', '0', 'ACTION_JOURNAL');
+INSERT INTO `{$dbTriggers}` (triggerid, userid, action) VALUES ('TRIGGER_INCIDENT_ASSIGNED_WHILE_OFFLINE', '0', 'ACTION_JOURNAL');
+INSERT INTO `{$dbTriggers}` (triggerid, userid, action) VALUES ('TRIGGER_INCIDENT_NEARING_SLA', '0', 'ACTION_JOURNAL');
+INSERT INTO `{$dbTriggers}` (triggerid, userid, action) VALUES ('TRIGGER_USERS_INCIDENT_NEARING_SLA', '0', 'ACTION_JOURNAL');
+INSERT INTO `{$dbTriggers}` (triggerid, userid, action) VALUES ('TRIGGER_INCIDENT_EXCEEDED_SLA', '0', 'ACTION_JOURNAL');
+INSERT INTO `{$dbTriggers}` (triggerid, userid, action) VALUES ('TRIGGER_INCIDENT_REVIEW_DUE', '0', 'ACTION_JOURNAL');
+INSERT INTO `{$dbTriggers}` (triggerid, userid, action) VALUES ('TRIGGER_CRITICAL_INCIDENT_CREATED', '0', 'ACTION_JOURNAL');
+INSERT INTO `{$dbTriggers}` (triggerid, userid, action) VALUES ('TRIGGER_KB_CREATED', '0', 'ACTION_JOURNAL');
+INSERT INTO `{$dbTriggers}` (triggerid, userid, action) VALUES ('TRIGGER_NEW_HELD_EMAIL', '0', 'ACTION_JOURNAL');
+INSERT INTO `{$dbTriggers}` (triggerid, userid, action) VALUES ('TRIGGER_WAITING_HELD_EMAIL', '0', 'ACTION_JOURNAL');
+INSERT INTO `{$dbTriggers}` (triggerid, userid, action) VALUES ('TRIGGER_USER_SET_TO_AWAY', '0', 'ACTION_JOURNAL');
+INSERT INTO `{$dbTriggers}` (triggerid, userid, action) VALUES ('TRIGGER_SIT_UPGRADED', '0', 'ACTION_JOURNAL');
+INSERT INTO `{$dbTriggers}` (triggerid, userid, action) VALUES ('TRIGGER_USER_RETURNS', '0', 'ACTION_JOURNAL');
+INSERT INTO `{$dbTriggers}` (triggerid, userid, action) VALUES ('TRIGGER_INCIDENT_OWNED_CLOSED_BY_USER', '0', 'ACTION_JOURNAL');
 
-CREATE TABLE `noticetemplates` (
-`id` INT( 11 ) NOT NULL AUTO_INCREMENT PRIMARY KEY ,
-`name` VARCHAR( 255 ) NOT NULL ,
-`type` TINYINT( 4 ) NOT NULL ,
-`description` VARCHAR( 255 ) NOT NULL ,
-`text` TINYTEXT NOT NULL ,
-`linktext` VARCHAR( 50 ) NULL ,
-`link` VARCHAR( 100 ) NULL ,
-`durability` ENUM( 'sticky', 'session' ) NOT NULL DEFAULT 'sticky'
-) ENGINE = MYISAM ;
 ";
 
 // ********************************************************************
 
-$upgrade_schema[321] = "CREATE TABLE `system`
+$upgrade_schema[321] = "CREATE TABLE `{$dbSystem}`
   (`id` INT( 1 ) NOT NULL ,
   `version` FLOAT( 3, 2 ) DEFAULT '0.00' NOT NULL ,
   PRIMARY KEY ( `id` )) ENGINE=MyISAM;
 
-CREATE TABLE `feedbackforms` (
+CREATE TABLE `{$dbFeedbackForms}`` (
   `id` int(5) NOT NULL auto_increment,
   `name` varchar(255) NOT NULL default '',
   `introduction` text NOT NULL,
@@ -1345,34 +1371,34 @@ CREATE TABLE `feedbackforms` (
   PRIMARY KEY  (`id`),
   KEY `multi` (`multi`)
 ) ENGINE=MyISAM;
-ALTER TABLE `feedbackrespondents` CHANGE `respondent` `contactid` INT( 11 ) NOT NULL;
-ALTER TABLE `feedbackrespondents` CHANGE `responseref` `incidentid` INT( 11 ) NOT NULL;
-ALTER TABLE `feedbackreport` CHANGE `respondent` `respondent` INT( 11 ) NOT NULL;
-ALTER TABLE `emailtype` ADD `customervisibility` ENUM( 'show', 'hide' ) DEFAULT 'show' NOT NULL ;
+ALTER TABLE `{$dbFeedbackRespondents}` CHANGE `respondent` `contactid` INT( 11 ) NOT NULL;
+ALTER TABLE `{$dbFeedbackRespondents}` CHANGE `responseref` `incidentid` INT( 11 ) NOT NULL;
+ALTER TABLE `{$dbFeedbackReport}` CHANGE `respondent` `respondent` INT( 11 ) NOT NULL;
+ALTER TABLE `{$CONFIG['db_tableprefix']}emailtype` ADD `customervisibility` ENUM( 'show', 'hide' ) DEFAULT 'show' NOT NULL ;
 ";
 
-$upgrade_schema[322] = "CREATE TABLE `roles` (
+$upgrade_schema[322] = "CREATE TABLE `{$dbRoles}` (
 `id` INT( 5 ) NOT NULL AUTO_INCREMENT ,
 `rolename` VARCHAR( 255 ) NOT NULL ,
 PRIMARY KEY ( `id` )
 ) ENGINE=MyISAM;
 
-INSERT INTO `roles` ( `id` , `rolename` ) VALUES ('1', 'Administrator');
-INSERT INTO `roles` ( `id` , `rolename` ) VALUES ('2', 'Manager');
-INSERT INTO `roles` ( `id` , `rolename` ) VALUES ('3', 'User');
+INSERT INTO `{$dbRoles}` ( `id` , `rolename` ) VALUES ('1', 'Administrator');
+INSERT INTO `{$dbRoles}` ( `id` , `rolename` ) VALUES ('2', 'Manager');
+INSERT INTO `{$dbRoles}` ( `id` , `rolename` ) VALUES ('3', 'User');
 
-CREATE TABLE `rolepermissions` (
+CREATE TABLE `{$dbRolePermissions}` (
 `roleid` tinyint( 4 ) NOT NULL default '0',
 `permissionid` int( 5 ) NOT NULL default '0',
 `granted` enum( 'true', 'false' ) NOT NULL default 'false',
 PRIMARY KEY ( `roleid` , `permissionid` )
 ) ENGINE=MyISAM;
 
-ALTER TABLE `users` ADD `roleid` INT( 5 ) NOT NULL DEFAULT '1' AFTER `realname` ;
-ALTER TABLE `users` DROP `accesslevel` ;
+ALTER TABLE `{$dbUsers}` ADD `roleid` INT( 5 ) NOT NULL DEFAULT '1' AFTER `realname` ;
+ALTER TABLE `{$dbUsers}` DROP `accesslevel` ;
 ";
 
-$upgrade_schema[323] = "CREATE TABLE `relatedincidents` (
+$upgrade_schema[323] = "CREATE TABLE `{$dbRelatedIncidents}` (
 `id` int(5) NOT NULL auto_increment,
 `incidentid` int(5) NOT NULL default '0',
 `relation` enum('child','sibling') NOT NULL default 'child',
@@ -1382,43 +1408,42 @@ PRIMARY KEY  (`id`),
 KEY `incidentid` (`incidentid`,`relatedid`)
 ) ENGINE=MyISAM;
 
-ALTER TABLE `sites` CHANGE `notes` `notes` TEXT NOT NULL ;
+ALTER TABLE `{$dbSites}` CHANGE `notes` `notes` TEXT NOT NULL ;
 
-ALTER TABLE `sites` DROP `ftnpassword`;
+ALTER TABLE `{$dbSites}` DROP `ftnpassword`;
 
-UPDATE `permissions` SET `name` = 'View Products and Software' WHERE `id` =28 LIMIT 1 ;
-UPDATE `permissions` SET `name` = 'Edit Products' WHERE `id` =29 LIMIT 1 ;
-UPDATE `permissions` SET `name` = 'Add Feedback Forms' WHERE `id` =48 LIMIT 1 ;
-UPDATE `permissions` SET `name` = 'Edit Feedback Forms' WHERE `id` =49 LIMIT 1 ;
-UPDATE `permissions` SET `name` = 'View Feedback' WHERE `id` =51 LIMIT 1 ;
-UPDATE `permissions` SET `name` = 'Edit Service Levels' WHERE `id` =53 LIMIT 1 ;
+UPDATE `{$dbPermissions}` SET `name` = 'View Products and Software' WHERE `id` =28 LIMIT 1 ;
+UPDATE `{$dbPermissions}` SET `name` = 'Edit Products' WHERE `id` =29 LIMIT 1 ;
+UPDATE `{$dbPermissions}` SET `name` = 'Add Feedback Forms' WHERE `id` =48 LIMIT 1 ;
+UPDATE `{$dbPermissions}` SET `name` = 'Edit Feedback Forms' WHERE `id` =49 LIMIT 1 ;
+UPDATE `{$dbPermissions}` SET `name` = 'View Feedback' WHERE `id` =51 LIMIT 1 ;
+UPDATE `{$dbPermissions}` SET `name` = 'Edit Service Levels' WHERE `id` =53 LIMIT 1 ;
 
-INSERT INTO `incidentstatus` VALUES (10, 'Active (Unassigned)', 'Active');
-UPDATE `incidentstatus` SET `id` = '0' WHERE `id` =10 LIMIT 1 ;
+INSERT INTO `{$dbIncidentStatus}` VALUES (10, 'Active (Unassigned)', 'Active');
+UPDATE `{$dbIncidentStatus}` SET `id` = '0' WHERE `id` =10 LIMIT 1 ;
 ";
 
-$upgrade_schema[324] = "ALTER TABLE `users` ADD `groupid` INT( 5 ) NULL AFTER `roleid` ;
-ALTER TABLE `users` ADD INDEX ( `groupid` ) ;
-ALTER TABLE `software` ADD `lifetime_start` DATE NULL ,
-ADD `lifetime_end` DATE NULL ;
-ALTER TABLE `emailtype` ADD `storeinlog` ENUM( 'No', 'Yes' ) NOT NULL DEFAULT 'Yes';
-ALTER TABLE `updates`
+$upgrade_schema[324] = "ALTER TABLE `{$dbUsers}` ADD `groupid` INT( 5 ) NULL AFTER `roleid` ;
+ALTER TABLE `{$dbUsers}` ADD INDEX ( `groupid` ) ;
+ALTER TABLE `{$dbSoftware}` ADD `lifetime_start` DATE NULL, ADD `lifetime_end` DATE NULL ;
+ALTER TABLE `{$CONFIG['db_tableprefix']}emailtype` ADD `storeinlog` ENUM( 'No', 'Yes' ) NOT NULL DEFAULT 'Yes';
+ALTER TABLE `{$dbUpdates}`
   DROP `timesincesla`,
   DROP `timesincereview`,
   DROP `reviewcalculated`,
   DROP `slacalculated`;
-ALTER TABLE `users` ADD `var_notify_on_reassign` ENUM( 'true', 'false' ) NOT NULL DEFAULT 'false' AFTER `var_monitor`;
-UPDATE users SET `var_notify_on_reassign` = 'false';
-INSERT INTO `emailtype` (`name`, `type`, `description`, `tofield`, `fromfield`,
+ALTER TABLE `{$dbUsers}` ADD `var_notify_on_reassign` ENUM( 'true', 'false' ) NOT NULL DEFAULT 'false' AFTER `var_monitor`;
+UPDATE `{$dbUsers}` SET `var_notify_on_reassign` = 'false';
+INSERT INTO `{$CONFIG['db_tableprefix']}emailtype` (`name`, `type`, `description`, `tofield`, `fromfield`,
 `replytofield`, `ccfield`, `bccfield`, `subjectfield`, `body`, `customervisibility`,
 `storeinlog`) VALUES ('INCIDENT_REASSIGNED_USER_NOTIFY', 'system', 'Notify user when call assigned to them',
 '<incidentreassignemailaddress>', '<supportemail>','<supportemail>', '', '',
 'A <incidentpriority> priority call ([<incidentid>] - <incidenttitle>) has been reassigned to you',
 'Hi,\r\n\r\nIncident [<incidentid>] entitled <incidenttitle> has been reassigned to you.\r\n\r\nThe details of this incident are:\r\n\r\nPriority: <incidentpriority>\r\nContact: <contactname>\r\nSite: <contactsite>\r\n\r\n\r\nRegards\r\n<applicationname>\r\n\r\n\r\n---\r\n<todaysdate> - <applicationshortname> <applicationversion>',
 'hide', 'No');
-UPDATE emailtype SET `toField` = '<incidentreassignemailaddress>' WHERE `name` =  'INCIDENT_REASSIGNED_USER_NOTIFY';
+UPDATE `{$CONFIG['db_tableprefix']}emailtype` SET `toField` = '<incidentreassignemailaddress>' WHERE `name` =  'INCIDENT_REASSIGNED_USER_NOTIFY';
 
-CREATE TABLE `tasks` (
+CREATE TABLE `{$dbTasks}` (
   `id` int(11) NOT NULL auto_increment,
   `name` varchar(255) default NULL,
   `description` text NOT NULL,
@@ -1435,10 +1460,10 @@ CREATE TABLE `tasks` (
   KEY `owner` (`owner`)
 ) ENGINE=MyISAM  ;
 
-ALTER TABLE `tempincoming` ADD `lockeduntil` DATETIME NULL AFTER `locked` ;
-INSERT INTO `permissions` VALUES (63, 'Add Reseller');
+ALTER TABLE `{$dbTempIncoming}` ADD `lockeduntil` DATETIME NULL AFTER `locked` ;
+INSERT INTO `{$dbPermissions}` VALUES (63, 'Add Reseller');
 
-CREATE TABLE `notes` (
+CREATE TABLE `{$dbNotes}` (
   `id` int(11) NOT NULL auto_increment,
   `userid` int(11) NOT NULL default '0',
   `timestamp` timestamp,
@@ -1451,7 +1476,7 @@ CREATE TABLE `notes` (
   KEY `link` (`link`)
 ) ENGINE=MyISAM ;
 
-CREATE TABLE `escalationpaths` (
+CREATE TABLE `{$dbEscalationPaths}` (
   `id` int(11) NOT NULL auto_increment,
   `name` varchar(255) default NULL,
   `track_url` varchar(255) default NULL,
@@ -1461,22 +1486,22 @@ CREATE TABLE `escalationpaths` (
   PRIMARY KEY  (`id`)
 ) ENGINE=MyISAM ;
 
-ALTER TABLE `incidents` ADD `escalationpath` INT( 11 ) NULL AFTER `id` ;
-INSERT INTO `permissions` VALUES (64, 'Manage Escalation Paths');
+ALTER TABLE `{$dbIncidents}` ADD `escalationpath` INT( 11 ) NULL AFTER `id` ;
+INSERT INTO `{$dbPermissions}` VALUES (64, 'Manage Escalation Paths');
 
-CREATE TABLE `dashboard` (
+CREATE TABLE `{$dbDashboard}` (
   `id` int(11) NOT NULL auto_increment,
   `name` varchar(100) NOT NULL default '',
   `enabled` enum('true','false') NOT NULL default 'false',
   PRIMARY KEY  (`id`)
 ) ENGINE=MyISAM ;
 
-INSERT INTO `dashboard` (`id`, `name`, `enabled`) VALUES (1, 'random_tip', 'true'),
+INSERT INTO `{$dbDashboard}` (`id`, `name`, `enabled`) VALUES (1, 'random_tip', 'true'),
 (2, 'statistics', 'true'),
 (3, 'tasks', 'true'),
 (4, 'user_incidents', 'true');
 
-UPDATE `interfacestyles` SET `name` = 'Light Blue' WHERE `id` =1 LIMIT 1 ;
+UPDATE `{$dbInterfaceStyles}` SET `name` = 'Light Blue' WHERE `id` =1 LIMIT 1 ;
 ";
 
 
@@ -1484,8 +1509,8 @@ UPDATE `interfacestyles` SET `name` = 'Light Blue' WHERE `id` =1 LIMIT 1 ;
  3.25 (Actual release was 3.30)
 */
 $upgrade_schema[325] = "
-ALTER TABLE `interfacestyles` ADD `iconset` VARCHAR( 255 ) NOT NULL DEFAULT 'sit' AFTER `cssurl` ;
-ALTER TABLE `sites` ADD `websiteurl` VARCHAR( 255 ) NULL AFTER `email` ;
+ALTER TABLE `{$dbInterfaceStyles}` ADD `iconset` VARCHAR( 255 ) NOT NULL DEFAULT 'sit' AFTER `cssurl` ;
+ALTER TABLE `{$dbSites}` ADD `websiteurl` VARCHAR( 255 ) NULL AFTER `email` ;
 
 CREATE TABLE `tags` (
   `tagid` int(11) NOT NULL auto_increment,
@@ -1493,14 +1518,14 @@ CREATE TABLE `tags` (
   PRIMARY KEY  (`tagid`)
 ) ENGINE=MyISAM;
 
-CREATE TABLE `set_tags` (
+CREATE TABLE `{$dbSetTags}` (
 `id` INT NOT NULL ,
 `type` MEDIUMINT NOT NULL ,
 `tagid` INT NOT NULL ,
 PRIMARY KEY ( `id` , `type` , `tagid` )
 ) ENGINE=MYISAM;
 
-CREATE TABLE `links` (
+CREATE TABLE `{$dbLinks}` (
      `linktype` int(11) NOT NULL default '0',
      `origcolref` int(11) NOT NULL default '0',
      `linkcolref` int(11) NOT NULL default '0',
@@ -1510,7 +1535,7 @@ CREATE TABLE `links` (
      KEY `userid` (`userid`)
    ) ENGINE=MyISAM ;
 
-CREATE TABLE `linktypes` (
+CREATE TABLE `{$dbLinkTypes}` (
      `id` int(11) NOT NULL auto_increment,
      `name` varchar(255) NOT NULL default '',
      `lrname` varchar(255) NOT NULL default '',
@@ -1527,48 +1552,48 @@ CREATE TABLE `linktypes` (
      KEY `linktab` (`linktab`)
    ) ENGINE=MyISAM;
 
-INSERT INTO `linktypes` VALUES (1,'Task','Subtask','Parent Task','tasks','id','tasks','id','name','','view_task.php?id=%id%'),(2,'Contact','Contact','Contact Task','tasks','id','contacts','id','forenames','','contact_details.php?id=%id%'),(3,'Site','Site','Site Task','tasks','id','sites','id','name','','site_details.php?id=%id%'),(4,'Incident','Incident','Task','tasks','id','incidents','id','title','','incident_details.php?id=%id%');
+INSERT INTO `{$dbLinkTypes}` VALUES (1,'Task','Subtask','Parent Task','tasks','id','tasks','id','name','','view_task.php?id=%id%'),(2,'Contact','Contact','Contact Task','tasks','id','contacts','id','forenames','','contact_details.php?id=%id%'),(3,'Site','Site','Site Task','tasks','id','sites','id','name','','site_details.php?id=%id%'),(4,'Incident','Incident','Task','tasks','id','incidents','id','title','','incident_details.php?id=%id%');
 
-ALTER TABLE `users` ADD `var_num_updates_view` INT NOT NULL DEFAULT '15' AFTER `var_update_order` ;
-INSERT INTO `emailtype` (`id`, `type`, `description`, `tofield`, `fromfield`, `replytofield`, `ccfield`, `bccfield`, `subjectfield`, `body`, `customervisibility`, `storeinlog`) VALUES ('NEARING_SLA', 'system', 'Notification when an incident nears its SLA target', '<supportmanageremail>', '<supportemail>', '<supportemail>', '<useremail>', '', '<applicationshortname> SLA: Incident <incidentid> about to breach SLA', 'This is an automatic notification that this incident is about to breach it\'s SLA.  The SLA target <info1> will expire in <info2> minutes.\r\n\r\nIncident: [<incidentid>] - <incidenttitle>\r\nOwner: <incidentowner>\r\nPriority: <incidentpriority>\r\nExternal Id: <incidentexternalid>\r\nExternal Engineer: <incidentexternalengineer>\r\nSite: <contactsite>\r\nContact: <contactname>\r\n\r\n--\r\n<applicationshortname> v<applicationversion>\r\n<todaysdate>\r\n', 'hide', 'Yes');
+ALTER TABLE `{$dbUsers}` ADD `var_num_updates_view` INT NOT NULL DEFAULT '15' AFTER `var_update_order` ;
+INSERT INTO `{$dbEmailType}` (`id`, `type`, `description`, `tofield`, `fromfield`, `replytofield`, `ccfield`, `bccfield`, `subjectfield`, `body`, `customervisibility`, `storeinlog`) VALUES ('NEARING_SLA', 'system', 'Notification when an incident nears its SLA target', '<supportmanageremail>', '<supportemail>', '<supportemail>', '<useremail>', '', '<applicationshortname> SLA: Incident <incidentid> about to breach SLA', 'This is an automatic notification that this incident is about to breach it\'s SLA.  The SLA target <info1> will expire in <info2> minutes.\r\n\r\nIncident: [<incidentid>] - <incidenttitle>\r\nOwner: <incidentowner>\r\nPriority: <incidentpriority>\r\nExternal Id: <incidentexternalid>\r\nExternal Engineer: <incidentexternalengineer>\r\nSite: <contactsite>\r\nContact: <contactname>\r\n\r\n--\r\n<applicationshortname> v<applicationversion>\r\n<todaysdate>\r\n', 'hide', 'Yes');
 
-INSERT INTO `permissions` VALUES (65, 'Delete Products');
-INSERT INTO `rolepermissions` (`roleid`, `permissionid`, `granted`) VALUES (1, 65, 'true');
-INSERT INTO `userpermissions` VALUES (1, 65, 'true');
+INSERT INTO `{$dbPermissions}` VALUES (65, 'Delete Products');
+INSERT INTO `{$dbRolePermissions}` (`roleid`, `permissionid`, `granted`) VALUES (1, 65, 'true');
+INSERT INTO `{$dbUserPermissions}` VALUES (1, 65, 'true');
 
-ALTER TABLE `users` ADD `dashboard` VARCHAR( 255 ) NOT NULL DEFAULT '0-3,1-1,1-2,2-4';
+ALTER TABLE `{$dbUsers}` ADD `dashboard` VARCHAR( 255 ) NOT NULL DEFAULT '0-3,1-1,1-2,2-4';
 
-INSERT INTO `permissions` VALUES (66, 'Install Dashboard Components');
-INSERT INTO `rolepermissions` (`roleid`, `permissionid`, `granted`) VALUES (1, 66, 'true');
-INSERT INTO `userpermissions` VALUES (1, 66, 'true');
-INSERT INTO `closingstatus` ( `id` , `name` ) VALUES ( NULL , 'Escalated' );
-ALTER TABLE `tasks` ADD `enddate` DATETIME NULL AFTER `startdate` ;
+INSERT INTO `{$dbPermissions}` VALUES (66, 'Install Dashboard Components');
+INSERT INTO `{$dbRolePermissions}` (`roleid`, `permissionid`, `granted`) VALUES (1, 66, 'true');
+INSERT INTO `{$dbUserPermissions}` VALUES (1, 66, 'true');
+INSERT INTO `{$dbClosingStatus}` ( `id` , `name` ) VALUES ( NULL , 'Escalated' );
+ALTER TABLE `{$dbTasks}` ADD `enddate` DATETIME NULL AFTER `startdate` ;
 
-INSERT INTO `permissions` VALUES (67, 'Run Management Reports');
+INSERT INTO `{$dbPermissions}` VALUES (67, 'Run Management Reports');
 
-INSERT INTO `rolepermissions` (`roleid`, `permissionid`, `granted`) VALUES (1, 67, 'true');
-INSERT INTO `rolepermissions` (`roleid`, `permissionid`, `granted`) VALUES (2, 67, 'true');
-INSERT INTO `userpermissions` VALUES (1, 67, 'true');
+INSERT INTO `{$dbRolePermissions}` (`roleid`, `permissionid`, `granted`) VALUES (1, 67, 'true');
+INSERT INTO `{$dbRolePermissions}` (`roleid`, `permissionid`, `granted`) VALUES (2, 67, 'true');
+INSERT INTO `{$dbUserPermissions}` VALUES (1, 67, 'true');
 
-INSERT INTO `permissions` VALUES (68, 'Manage Holidays');
-INSERT INTO `rolepermissions` (`roleid`, `permissionid`, `granted`) VALUES (1, 68, 'true');
-INSERT INTO `rolepermissions` (`roleid`, `permissionid`, `granted`) VALUES (2, 68, 'true');
-INSERT INTO `userpermissions` VALUES (1, 68, 'true');
+INSERT INTO `{$dbPermissions}` VALUES (68, 'Manage Holidays');
+INSERT INTO `{$dbRolePermissions}` (`roleid`, `permissionid`, `granted`) VALUES (1, 68, 'true');
+INSERT INTO `{$dbRolePermissions}` (`roleid`, `permissionid`, `granted`) VALUES (2, 68, 'true');
+INSERT INTO `{$dbUserPermissions}` VALUES (1, 68, 'true');
 
-ALTER TABLE `sites` ADD `active` ENUM( 'true', 'false' ) NOT NULL DEFAULT 'true';
+ALTER TABLE `{$dbSites}` ADD `active` ENUM( 'true', 'false' ) NOT NULL DEFAULT 'true';
 
-ALTER TABLE `contacts` ADD `active` ENUM( 'true', 'false' ) NOT NULL DEFAULT 'true';
+ALTER TABLE `{$dbContacts}` ADD `active` ENUM( 'true', 'false' ) NOT NULL DEFAULT 'true';
 
 -- beta 3
-UPDATE `interfacestyles` SET `iconset` = 'sit';
+UPDATE `{$dbInterfaceStyles}` SET `iconset` = 'sit';
 
-ALTER TABLE `updates` CHANGE `type` `type` ENUM( 'default', 'editing', 'opening', 'email', 'reassigning', 'closing', 'reopening', 'auto', 'phonecallout', 'phonecallin', 'research', 'webupdate', 'emailout', 'emailin', 'externalinfo', 'probdef', 'solution', 'actionplan', 'slamet', 'reviewmet', 'tempassigning', 'auto_chase_email', 'auto_chase_phone', 'auto_chase_manager', 'auto_chased_phone','auto_chased_manager','auto_chase_managers_manager') NULL DEFAULT 'default';
+ALTER TABLE `{$dbUpdates}` CHANGE `type` `type` ENUM( 'default', 'editing', 'opening', 'email', 'reassigning', 'closing', 'reopening', 'auto', 'phonecallout', 'phonecallin', 'research', 'webupdate', 'emailout', 'emailin', 'externalinfo', 'probdef', 'solution', 'actionplan', 'slamet', 'reviewmet', 'tempassigning', 'auto_chase_email', 'auto_chase_phone', 'auto_chase_manager', 'auto_chased_phone','auto_chased_manager','auto_chase_managers_manager') NULL DEFAULT 'default';
 ";
 
 $upgrade_schema[331] = "
-ALTER TABLE `updates` CHANGE `type` `type` ENUM( 'default', 'editing', 'opening', 'email', 'reassigning', 'closing', 'reopening', 'auto', 'phonecallout', 'phonecallin', 'research', 'webupdate', 'emailout', 'emailin', 'externalinfo', 'probdef', 'solution', 'actionplan', 'slamet', 'reviewmet', 'tempassigning', 'auto_chase_email', 'auto_chase_phone', 'auto_chase_manager', 'auto_chased_phone','auto_chased_manager','auto_chase_managers_manager','customerclosurerequest') NULL DEFAULT 'default';
+ALTER TABLE `{$dbUpdates}` CHANGE `type` `type` ENUM( 'default', 'editing', 'opening', 'email', 'reassigning', 'closing', 'reopening', 'auto', 'phonecallout', 'phonecallin', 'research', 'webupdate', 'emailout', 'emailin', 'externalinfo', 'probdef', 'solution', 'actionplan', 'slamet', 'reviewmet', 'tempassigning', 'auto_chase_email', 'auto_chase_phone', 'auto_chase_manager', 'auto_chased_phone','auto_chased_manager','auto_chase_managers_manager','customerclosurerequest') NULL DEFAULT 'default';
 
-CREATE TABLE IF NOT EXISTS `drafts` (
+CREATE TABLE IF NOT EXISTS `{$dbDrafts}` (
   `id` int(11) NOT NULL auto_increment,
   `userid` int(11) NOT NULL,
   `incidentid` int(11) NOT NULL,
@@ -1579,9 +1604,9 @@ CREATE TABLE IF NOT EXISTS `drafts` (
   PRIMARY KEY  (`id`)
 ) ENGINE=MyISAM ;
 
-ALTER TABLE `software` ADD `vendorid` INT( 5 ) NOT NULL AFTER `name` ;
+ALTER TABLE `{$dbSoftware}` ADD `vendorid` INT( 5 ) NOT NULL AFTER `name` ;
 
-CREATE TABLE IF NOT EXISTS `notices` (
+CREATE TABLE IF NOT EXISTS `{$dbNotices}` (
   `id` int(11) NOT NULL auto_increment,
   `userid` int(11) NOT NULL,
   `gid` text,
@@ -1595,32 +1620,32 @@ CREATE TABLE IF NOT EXISTS `notices` (
   PRIMARY KEY  (`id`)
 ) ENGINE=MyISAM AUTO_INCREMENT=1 ;
 
-ALTER TABLE `servicelevels` ADD `timed` enum('yes','no') NOT NULL DEFAULT 'no' ;
+ALTER TABLE `{$dbServiceLevels}` ADD `timed` enum('yes','no') NOT NULL DEFAULT 'no' ;
 
-ALTER TABLE `users` ADD `var_i18n` VARCHAR( 20 ) NULL AFTER `var_notify_on_reassign` ;
+ALTER TABLE `{$dbUsers}` ADD `var_i18n` VARCHAR( 20 ) NULL AFTER `var_notify_on_reassign` ;
 
-ALTER TABLE `updates` ADD `duration` INT NULL ;
+ALTER TABLE `{$dbUpdates}` ADD `duration` INT NULL ;
 
-INSERT INTO `permissions` VALUES (69, 'Post Notices');
-INSERT INTO `rolepermissions` (`roleid`, `permissionid`, `granted`) VALUES (1, 69, 'true');
-INSERT INTO `userpermissions` (`userid`, `permissionid`, `granted`) VALUES (1, 69, 'true');
+INSERT INTO `{$dbPermissions}` VALUES (69, 'Post Notices');
+INSERT INTO `{$dbRolePermissions}` (`roleid`, `permissionid`, `granted`) VALUES (1, 69, 'true');
+INSERT INTO `{$dbUserPermissions}` (`userid`, `permissionid`, `granted`) VALUES (1, 69, 'true');
 
-ALTER TABLE `users` ADD `lastseen` TIMESTAMP NOT NULL ;
+ALTER TABLE `{$dbUsers}` ADD `lastseen` TIMESTAMP NOT NULL ;
 
-ALTER TABLE `tasks` CHANGE `distribution` `distribution` ENUM( 'public', 'private', 'incident' ) NOT NULL DEFAULT 'public' ;
+ALTER TABLE `{$dbTasks}` CHANGE `distribution` `distribution` ENUM( 'public', 'private', 'incident' ) NOT NULL DEFAULT 'public' ;
 
-ALTER TABLE `updates` CHANGE `type` `type` ENUM( 'default', 'editing', 'opening', 'email', 'reassigning', 'closing', 'reopening', 'auto', 'phonecallout', 'phonecallin', 'research', 'webupdate', 'emailout', 'emailin', 'externalinfo', 'probdef', 'solution', 'actionplan', 'slamet', 'reviewmet', 'tempassigning', 'auto_chase_email', 'auto_chase_phone', 'auto_chase_manager', 'auto_chased_phone', 'auto_chased_manager', 'auto_chase_managers_manager', 'customerclosurerequest', 'fromtask' ) NULL DEFAULT 'default' ;
+ALTER TABLE `{$dbUpdates}` CHANGE `type` `type` ENUM( 'default', 'editing', 'opening', 'email', 'reassigning', 'closing', 'reopening', 'auto', 'phonecallout', 'phonecallin', 'research', 'webupdate', 'emailout', 'emailin', 'externalinfo', 'probdef', 'solution', 'actionplan', 'slamet', 'reviewmet', 'tempassigning', 'auto_chase_email', 'auto_chase_phone', 'auto_chase_manager', 'auto_chased_phone', 'auto_chased_manager', 'auto_chase_managers_manager', 'customerclosurerequest', 'fromtask' ) NULL DEFAULT 'default' ;
 
 
 -- KMH 15Nov07
-ALTER TABLE `maintenance` ADD `supportedcontacts` INT( 255 ) NOT NULL DEFAULT '0';
-ALTER TABLE `maintenance` ADD `allcontactssupported` ENUM( 'No', 'Yes' ) NOT NULL DEFAULT 'No';
+ALTER TABLE `{$dbMaintenance}` ADD `supportedcontacts` INT( 255 ) NOT NULL DEFAULT '0';
+ALTER TABLE `{$dbMaintenance}` ADD `allcontactssupported` ENUM( 'No', 'Yes' ) NOT NULL DEFAULT 'No';
 
 -- INL 25Nov07
-DROP TABLE `holidaytypes`;
+DROP TABLE `{$CONFIG['db_tableprefix']}holidaytypes`;
 
 -- PH 26Nov07
-CREATE TABLE `billing_periods` (
+CREATE TABLE `{$dbBillingPeriods}` (
 `servicelevelid` INT( 5 ) NOT NULL ,
 `engineerperiod` INT NOT NULL COMMENT 'In minutes',
 `customerperiod` INT NOT NULL COMMENT 'In minutes',
@@ -1628,52 +1653,52 @@ PRIMARY KEY r( `servicelevelid` )
 ) ENGINE = MYISAM ;
 
 -- KMH 26/11/07
-ALTER TABLE `incidents` ADD `slanotice` TINYINT(1) NOT NULL DEFAULT '0' AFTER `slaemail` ;
+ALTER TABLE `{$dbIncidents}` ADD `slanotice` TINYINT(1) NOT NULL DEFAULT '0' AFTER `slaemail` ;
 
 -- KMH 27/11/07 Type 6 is none, workaround for browse_contact.php
-ALTER TABLE `maintenance` CHANGE `licence_type` `licence_type` INT( 11 ) NULL DEFAULT '6';
+ALTER TABLE `{$dbMaintenance}` CHANGE `licence_type` `licence_type` INT( 11 ) NULL DEFAULT '6';
 
 -- PH 1/12/07
-ALTER TABLE `billing_periods` ADD `priority` INT( 4 ) NOT NULL AFTER `servicelevelid` ;
-ALTER TABLE `billing_periods` ADD `tag` VARCHAR( 10 ) NOT NULL AFTER `priority` ;
-ALTER TABLE `billing_periods` DROP PRIMARY KEY, ADD PRIMARY KEY ( `servicelevelid` , `priority` ) ;
+ALTER TABLE `{$dbBillingPeriods}` ADD `{$dbPriority}` INT( 4 ) NOT NULL AFTER `servicelevelid` ;
+ALTER TABLE `{$dbBillingPeriods}` ADD `tag` VARCHAR( 10 ) NOT NULL AFTER `{$dbPriority}` ;
+ALTER TABLE `{$dbBillingPeriods}` DROP PRIMARY KEY, ADD PRIMARY KEY ( `servicelevelid` , `{$dbPriority}` ) ;
 
 -- KMH 4/12/07
-ALTER TABLE `flags` DROP INDEX `flag` ;
-ALTER TABLE `userstatus` DROP INDEX `id` ;
+ALTER TABLE `{$dbFlags}` DROP INDEX `flag` ;
+ALTER TABLE `{$dbUserStatus}` DROP INDEX `id` ;
 
 -- PH 9/12/07
-ALTER TABLE `dashboard` ADD `version` MEDIUMINT NOT NULL DEFAULT '1' AFTER `name` ;
+ALTER TABLE `{$dbDashboard}` ADD `version` MEDIUMINT NOT NULL DEFAULT '1' AFTER `name` ;
 
 -- INL 10/12/07
-ALTER TABLE `contacts` ADD INDEX ( `active` );
-ALTER TABLE `sites` ADD INDEX ( `active` );
-ALTER TABLE `updates` ADD INDEX ( `customervisibility` );
-DELETE FROM incidentstatus WHERE id = 0 OR id = 10;
-INSERT INTO `incidentstatus` VALUES (10, 'Active (Unassigned)', 'Active');
+ALTER TABLE `{$dbContacts}` ADD INDEX ( `active` );
+ALTER TABLE `{$dbSites}` ADD INDEX ( `active` );
+ALTER TABLE `{$dbUpdates}` ADD INDEX ( `customervisibility` );
+DELETE FROM `{$dbIncidentstatus}` WHERE id = 0 OR id = 10;
+INSERT INTO `{$dbIncidentstatus}` VALUES (10, 'Active (Unassigned)', 'Active');
 ";
 
 $upgrade_schema[332] = "
 -- INL 12Jan08
-ALTER TABLE `contacts` CHANGE `salutation` `courtesytitle` VARCHAR( 50 ) NOT NULL COMMENT 'Was ''salutation'' before 3.32';
+ALTER TABLE `{$dbContacts}` CHANGE `salutation` `courtesytitle` VARCHAR( 50 ) NOT NULL COMMENT 'Was ''salutation'' before 3.32';
 -- INL 13Jan08
-UPDATE `incidentstatus` SET `name` = 'strActive' WHERE `incidentstatus`.`id` =1 LIMIT 1 ;
-UPDATE `incidentstatus` SET `name` = 'strClosed' WHERE `incidentstatus`.`id` =2 LIMIT 1 ;
-UPDATE `incidentstatus` SET `name` = 'strResearchNeeded' WHERE `incidentstatus`.`id` =3 LIMIT 1 ;
-UPDATE `incidentstatus` SET `name` = 'strCalledAndLeftMessage' WHERE `incidentstatus`.`id` =4 LIMIT 1 ;
-UPDATE `incidentstatus` SET `name` = 'strAwaitingColleagueResponse' WHERE `incidentstatus`.`id` =5 LIMIT 1 ;
-UPDATE `incidentstatus` SET `name` = 'strAwaitingSupportResponse' WHERE `incidentstatus`.`id` =6 LIMIT 1 ;
-UPDATE `incidentstatus` SET `name` = 'strAwaitingClosure' WHERE `incidentstatus`.`id` =7 LIMIT 1 ;
-UPDATE `incidentstatus` SET `name` = 'strAwaitingCustomerAction' WHERE `incidentstatus`.`id` =8 LIMIT 1 ;
-UPDATE `incidentstatus` SET `name` = 'strUnsupported' WHERE `incidentstatus`.`id` =9 LIMIT 1 ;
+UPDATE `{$dbIncidentstatus}` SET `name` = 'strActive' WHERE `id` =1 LIMIT 1 ;
+UPDATE `{$dbIncidentstatus}` SET `name` = 'strClosed' WHERE `id` =2 LIMIT 1 ;
+UPDATE `{$dbIncidentstatus}` SET `name` = 'strResearchNeeded' WHERE `id` =3 LIMIT 1 ;
+UPDATE `{$dbIncidentstatus}` SET `name` = 'strCalledAndLeftMessage' WHERE `id` =4 LIMIT 1 ;
+UPDATE `{$dbIncidentstatus}` SET `name` = 'strAwaitingColleagueResponse' WHERE `id` =5 LIMIT 1 ;
+UPDATE `{$dbIncidentstatus}` SET `name` = 'strAwaitingSupportResponse' WHERE `id` =6 LIMIT 1 ;
+UPDATE `{$dbIncidentstatus}` SET `name` = 'strAwaitingClosure' WHERE `id` =7 LIMIT 1 ;
+UPDATE `{$dbIncidentstatus}` SET `name` = 'strAwaitingCustomerAction' WHERE `id` =8 LIMIT 1 ;
+UPDATE `{$dbIncidentstatus}` SET `name` = 'strUnsupported' WHERE `id` =9 LIMIT 1 ;
 -- INL 24Jan08
-ALTER TABLE `users` ADD `var_utc_offset` INT NOT NULL DEFAULT '0' COMMENT 'Offset from UTC (timezone) in minutes' AFTER `var_i18n` ;
-INSERT INTO `userstatus` (`id` ,`name`) VALUES ('0', 'Account Disabled');
+ALTER TABLE `{$dbUsers}` ADD `var_utc_offset` INT NOT NULL DEFAULT '0' COMMENT 'Offset from UTC (timezone) in minutes' AFTER `var_i18n` ;
+INSERT INTO `{$dbUserStatus}` (`id` ,`name`) VALUES ('0', 'Account Disabled');
 ";
 
 $upgrade_schema[335] = "
 -- KMH 17/12/07
-CREATE TABLE IF NOT EXISTS `triggers` (
+CREATE TABLE IF NOT EXISTS `{$dbTriggers}` (
   `id` int(11) NOT NULL auto_increment,
   `triggerid` varchar(50) NOT NULL,
   `userid` tinyint(4) NOT NULL,
@@ -1685,11 +1710,11 @@ CREATE TABLE IF NOT EXISTS `triggers` (
   KEY `triggerid` (`triggerid`)
 ) ENGINE=MyISAM ;
 
-DROP TABLE IF EXISTS `contactflags`;
-DROP TABLE IF EXISTS `contactproducts`;
+DROP TABLE IF EXISTS `{$CONFIG['db_tableprefix']}contactflags`;
+DROP TABLE IF EXISTS `{$CONFIG['db_tableprefix']}contactproducts`;
 
 -- KMH 18/12/07
-CREATE TABLE `noticetemplates` (
+CREATE TABLE `{$dbNoticeTemplates}` (
 `id` INT( 11 ) NOT NULL AUTO_INCREMENT PRIMARY KEY ,
 `name` VARCHAR( 255 ) NOT NULL ,
 `type` TINYINT( 4 ) NOT NULL ,
@@ -1700,7 +1725,7 @@ CREATE TABLE `noticetemplates` (
 `durability` ENUM( 'sticky', 'session' ) NOT NULL DEFAULT 'sticky'
 ) ENGINE = MYISAM ;
 
-INSERT INTO `noticetemplates` (`id`, `type`, `description`, `text`, `linktext`, `link`, `durability`) VALUES
+INSERT INTO `{$dbNoticeTemplates}` (`id`, `type`, `description`, `text`, `linktext`, `link`, `durability`) VALUES
 ('TRIGGER_INCIDENT_CREATED', 0, 'Used when a new incident has been created', 'Incident <incidentid> - <incidenttitle> has been logged', 'View Incident', 'javascript:incident_details_window(<incidentid>)', 'sticky'),
 ('TRIGGER_INCIDENT_ASSIGNED_TRIGGER', 0, 'Used when a new incident is assigned to you', 'Incident <incidentid> - <incidenttitle> has been assigned to you', 'View Incident', 'javascript:incident_details_window(<incidentid>)', 'sticky'),
 ('TRIGGER_INCIDENT_NEARING_SLA_TRIGGER', 0, 'Used when one of your incidents nears an SLA', 'Incident <incidentid> - <incidenttitle> is nearing its SLA', 'View Incident', 'javascript:incident_details_window(<incidentid>)', 'sticky'),
@@ -1716,87 +1741,87 @@ INSERT INTO `noticetemplates` (`id`, `type`, `description`, `text`, `linktext`, 
 ('TRIGGER_USER_RETURNS', 0, 'Used when a user sets back to accepting', '<realname> is now [b]accepting[/b] incidents', NULL, NULL, 'sticky');
 
 -- KMH 06/01/08
-ALTER TABLE `emailtype` ADD `triggerid` INT( 11 ) NULL ;
-INSERT INTO `emailtype` (`id` ,`type` ,`description` ,`tofield` ,`fromfield` ,`replytofield` ,`ccfield` ,`bccfield` ,`subjectfield` ,`body` ,`customervisibility` ,
+ALTER TABLE `{$CONFIG['db_tableprefix']}emailtype` ADD `triggerid` INT( 11 ) NULL ;
+INSERT INTO `{$CONFIG['db_tableprefix']}emailtype` (`id` ,`type` ,`description` ,`tofield` ,`fromfield` ,`replytofield` ,`ccfield` ,`bccfield` ,`subjectfield` ,`body` ,`customervisibility` ,
 `storeinlog` ,`triggerid`)VALUES ('TRIGGER_INCIDENT_LOGGED', 'system', 'Trigger email sent when a new incident is logged.', '<useremail>', '<supportemail>', NULL , NULL , NULL , '[<incidentid>] - <incidenttitle>', 'Hello <contactfirstname>,\r\n\r\nIncident <incidentid> - <incidenttitle> has been logged.\r\n\r\n<signature> <globalsignature>\r\n-------------\r\nThis email is sent as a result of a system trigger. If you do not want to receive these emails, you can disable them from the ''Triggers'' page.', 'hide', 'No', '1');
 
 -- KMH 08/01/08
-ALTER TABLE `emailtype` DROP `id` ;
-ALTER TABLE `emailtype` CHANGE `name` `id` VARCHAR( 50 ) NOT NULL ;
-ALTER TABLE `emailtype` ADD PRIMARY KEY ( `id` );
+ALTER TABLE `{$CONFIG['db_tableprefix']}emailtype` DROP `id` ;
+ALTER TABLE `{$CONFIG['db_tableprefix']}emailtype` CHANGE `name` `id` VARCHAR( 50 ) NOT NULL ;
+ALTER TABLE `{$CONFIG['db_tableprefix']}emailtype` ADD PRIMARY KEY ( `id` );
 
 -- KMH 09/01/08
-INSERT INTO `emailtype` (`id`, `type`, `description`, `tofield`, `fromfield`, `replytofield`, `ccfield`, `bccfield`, `subjectfield`, `body`, `customervisibility`, `storeinlog`) VALUES
+INSERT INTO `{$CONFIG['db_tableprefix']}emailtype` (`id`, `type`, `description`, `tofield`, `fromfield`, `replytofield`, `ccfield`, `bccfield`, `subjectfield`, `body`, `customervisibility`, `storeinlog`) VALUES
 ('TRIGGER_INCIDENT_CREATED', 'system', 'Trigger email sent when a new incident is logged.', '<useremail>', '<supportemail>', NULL, NULL, NULL, '[<incidentid>] - <incidenttitle>', 'Hello <contactfirstname>,\r\n\r\nIncident <incidentid> - <incidenttitle> has been logged.\r\n\r\n<signature> <globalsignature>\r\n-------------\r\nThis email is sent as a result of a system trigger. If you do not want to receive these emails, you can disable them from the ''Triggers'' page.', 'hide', 'No'),
 ('TRIGGER_INCIDENT_NEARING_SLA', 'system', 'Trigger email sent when an incident is nearing its SLA.', '<useremail>', '<supportemail>', NULL, NULL, NULL, '[<incidentid>] - <incidenttitle>: SLA approaching', 'Hello <contactfirstname>,\r\n\r\nIncident <incidentid> - <incidenttitle> is approaching its SLA.\r\n\r\n<signature> <globalsignature>\r\n-------------\r\nThis email is sent as a result of a system trigger. If you do not want to receive these emails, you can disable them from the ''Triggers'' page.', 'hide', 'No'),
 ('TRIGGER_INCIDENT_ASSIGNED', 'user', 'Notify user when call assigned to them', '<useremail>', '<supportemail>', NULL, NULL, NULL, '[<incidentid>] - <incidenttitle>: has been assigned to you', 'Hello <contactfirstname>,\r\n\r\nIncident <incidentid> - <incidenttitle> has been assigned to you.\r\n\r\n<signature> <globalsignature>\r\n-------------\r\nThis email is sent as a result of a system trigger. If you do not want to receive these emails, you can disable them from the ''Triggers'' page.', 'show', 'Yes');
 
-INSERT INTO `noticetemplates` (`id`, `type`, `description`, `text`, `linktext`, `link`, `durability`) VALUES
+INSERT INTO `{$dbNoticeTemplates}` (`id`, `type`, `description`, `text`, `linktext`, `link`, `durability`) VALUES
 ('INCIDENT_OWNED_CLOSED_BY_USER', 0, '', 'Your incident <incidentid> - <incidenttitle> has been closed by <engineerclosedname>', NULL, NULL, 'sticky');
 
 -- KMH 17/01/08
-ALTER TABLE `notices` CHANGE `gid` `template` VARCHAR( 255 ) NULL DEFAULT NULL;
+ALTER TABLE `{$dbNotices}` CHANGE `gid` `template` VARCHAR( 255 ) NULL DEFAULT NULL;
 -- INL 22/01/08
-ALTER TABLE `tasks` CHANGE `distribution` `distribution` ENUM( 'public', 'private', 'incident', 'event' );
+ALTER TABLE `{$dbTasks}` CHANGE `distribution` `distribution` ENUM( 'public', 'private', 'incident', 'event' );
 -- KMH 23/01/08
-ALTER TABLE `triggers` ADD `checks` VARCHAR( 255 ) NULL ;
-INSERT INTO triggers (triggerid, userid, action) VALUES ('TRIGGER_INCIDENT_CREATED', '0', 'ACTION_JOURNAL');
-INSERT INTO triggers (triggerid, userid, action) VALUES ('TRIGGER_INCIDENT_ASSIGNED', '0', 'ACTION_JOURNAL');
-INSERT INTO triggers (triggerid, userid, action) VALUES ('TRIGGER_INCIDENT_ASSIGNED_WHILE_AWAY', '0', 'ACTION_JOURNAL');
-INSERT INTO triggers (triggerid, userid, action) VALUES ('TRIGGER_INCIDENT_ASSIGNED_WHILE_OFFLINE', '0', 'ACTION_JOURNAL');
-INSERT INTO triggers (triggerid, userid, action) VALUES ('TRIGGER_INCIDENT_NEARING_SLA', '0', 'ACTION_JOURNAL');
-INSERT INTO triggers (triggerid, userid, action) VALUES ('TRIGGER_USERS_INCIDENT_NEARING_SLA', '0', 'ACTION_JOURNAL');
-INSERT INTO triggers (triggerid, userid, action) VALUES ('TRIGGER_INCIDENT_EXCEEDED_SLA', '0', 'ACTION_JOURNAL');
-INSERT INTO triggers (triggerid, userid, action) VALUES ('TRIGGER_INCIDENT_REVIEW_DUE', '0', 'ACTION_JOURNAL');
-INSERT INTO triggers (triggerid, userid, action) VALUES ('TRIGGER_CRITICAL_INCIDENT_CREATED', '0', 'ACTION_JOURNAL');
-INSERT INTO triggers (triggerid, userid, action) VALUES ('TRIGGER_KB_CREATED', '0', 'ACTION_JOURNAL');
-INSERT INTO triggers (triggerid, userid, action) VALUES ('TRIGGER_NEW_HELD_EMAIL', '0', 'ACTION_JOURNAL');
-INSERT INTO triggers (triggerid, userid, action) VALUES ('TRIGGER_WAITING_HELD_EMAIL', '0', 'ACTION_JOURNAL');
-INSERT INTO triggers (triggerid, userid, action) VALUES ('TRIGGER_USER_SET_TO_AWAY', '0', 'ACTION_JOURNAL');
-INSERT INTO triggers (triggerid, userid, action) VALUES ('TRIGGER_SIT_UPGRADED', '0', 'ACTION_JOURNAL');
-INSERT INTO triggers (triggerid, userid, action) VALUES ('TRIGGER_USER_RETURNS', '0', 'ACTION_JOURNAL');
-INSERT INTO triggers (triggerid, userid, action) VALUES ('TRIGGER_INCIDENT_OWNED_CLOSED_BY_USER', '0', 'ACTION_JOURNAL');
+ALTER TABLE `{$dbTriggers}` ADD `checks` VARCHAR( 255 ) NULL ;
+INSERT INTO `{$dbTriggers}` (triggerid, userid, action) VALUES ('TRIGGER_INCIDENT_CREATED', '0', 'ACTION_JOURNAL');
+INSERT INTO `{$dbTriggers}` (triggerid, userid, action) VALUES ('TRIGGER_INCIDENT_ASSIGNED', '0', 'ACTION_JOURNAL');
+INSERT INTO `{$dbTriggers}` (triggerid, userid, action) VALUES ('TRIGGER_INCIDENT_ASSIGNED_WHILE_AWAY', '0', 'ACTION_JOURNAL');
+INSERT INTO `{$dbTriggers}` (triggerid, userid, action) VALUES ('TRIGGER_INCIDENT_ASSIGNED_WHILE_OFFLINE', '0', 'ACTION_JOURNAL');
+INSERT INTO `{$dbTriggers}` (triggerid, userid, action) VALUES ('TRIGGER_INCIDENT_NEARING_SLA', '0', 'ACTION_JOURNAL');
+INSERT INTO `{$dbTriggers}` (triggerid, userid, action) VALUES ('TRIGGER_USERS_INCIDENT_NEARING_SLA', '0', 'ACTION_JOURNAL');
+INSERT INTO `{$dbTriggers}` (triggerid, userid, action) VALUES ('TRIGGER_INCIDENT_EXCEEDED_SLA', '0', 'ACTION_JOURNAL');
+INSERT INTO `{$dbTriggers}` (triggerid, userid, action) VALUES ('TRIGGER_INCIDENT_REVIEW_DUE', '0', 'ACTION_JOURNAL');
+INSERT INTO `{$dbTriggers}` (triggerid, userid, action) VALUES ('TRIGGER_CRITICAL_INCIDENT_CREATED', '0', 'ACTION_JOURNAL');
+INSERT INTO `{$dbTriggers}` (triggerid, userid, action) VALUES ('TRIGGER_KB_CREATED', '0', 'ACTION_JOURNAL');
+INSERT INTO `{$dbTriggers}` (triggerid, userid, action) VALUES ('TRIGGER_NEW_HELD_EMAIL', '0', 'ACTION_JOURNAL');
+INSERT INTO `{$dbTriggers}` (triggerid, userid, action) VALUES ('TRIGGER_WAITING_HELD_EMAIL', '0', 'ACTION_JOURNAL');
+INSERT INTO `{$dbTriggers}` (triggerid, userid, action) VALUES ('TRIGGER_USER_SET_TO_AWAY', '0', 'ACTION_JOURNAL');
+INSERT INTO `{$dbTriggers}` (triggerid, userid, action) VALUES ('TRIGGER_SIT_UPGRADED', '0', 'ACTION_JOURNAL');
+INSERT INTO `{$dbTriggers}` (triggerid, userid, action) VALUES ('TRIGGER_USER_RETURNS', '0', 'ACTION_JOURNAL');
+INSERT INTO `{$dbTriggers}` (triggerid, userid, action) VALUES ('TRIGGER_INCIDENT_OWNED_CLOSED_BY_USER', '0', 'ACTION_JOURNAL');
 -- INL 24Jan08 TODO add to above ^^
-ALTER TABLE `triggers` ADD INDEX ( `userid` );
+ALTER TABLE `{$dbTriggers}` ADD INDEX ( `userid` );
 
 -- KMHO 25/01/08
-ALTER TABLE `emailtype` CHANGE `type` `type` ENUM( 'usertemplate', 'system', 'contact', 'site', 'incident', 'kb', 'user') NOT NULL COMMENT 'usertemplate is personal template owned by a user, user is a template relating to a user' DEFAULT 'user';
+ALTER TABLE `{$CONFIG['db_tableprefix']}emailtype` CHANGE `type` `type` ENUM( 'usertemplate', 'system', 'contact', 'site', 'incident', 'kb', 'user') NOT NULL COMMENT 'usertemplate is personal template owned by a user, user is a template relating to a user' DEFAULT 'user';
 
 -- INL 25Jan08
-UPDATE `emailtype` SET `type` = 'incident' WHERE `id` = 'INCIDENT_CLOSURE' ;
-UPDATE `emailtype` SET `type` = 'incident' WHERE `id` = 'INCIDENT_LOGGED_CALL' ;
-UPDATE `emailtype` SET `type` = 'incident' WHERE `id` = 'INCIDENT_CLOSED' ;
-UPDATE `emailtype` SET `type` = 'incident' WHERE `id` = 'OUT_OF_SLA' ;
-UPDATE `emailtype` SET `type` = 'incident' WHERE `id` = 'OUT_OF_REVIEW' ;
-UPDATE `emailtype` SET `type` = 'incident' WHERE `id` = 'INCIDENT UPDATED' ;
-UPDATE `emailtype` SET `type` = 'incident' WHERE `id` = 'INCIDENT CLOSED EXTERNAL' ;
-UPDATE `emailtype` SET `type` = 'incident' WHERE `id` = 'INCIDENT_LOGGED_EMAIL' ;
+UPDATE `{$CONFIG['db_tableprefix']}emailtype` SET `type` = 'incident' WHERE `id` = 'INCIDENT_CLOSURE' ;
+UPDATE `{$CONFIG['db_tableprefix']}emailtype` SET `type` = 'incident' WHERE `id` = 'INCIDENT_LOGGED_CALL' ;
+UPDATE `{$CONFIG['db_tableprefix']}emailtype` SET `type` = 'incident' WHERE `id` = 'INCIDENT_CLOSED' ;
+UPDATE `{$CONFIG['db_tableprefix']}emailtype` SET `type` = 'incident' WHERE `id` = 'OUT_OF_SLA' ;
+UPDATE `{$CONFIG['db_tableprefix']}emailtype` SET `type` = 'incident' WHERE `id` = 'OUT_OF_REVIEW' ;
+UPDATE `{$CONFIG['db_tableprefix']}emailtype` SET `type` = 'incident' WHERE `id` = 'INCIDENT UPDATED' ;
+UPDATE `{$CONFIG['db_tableprefix']}emailtype` SET `type` = 'incident' WHERE `id` = 'INCIDENT CLOSED EXTERNAL' ;
+UPDATE `{$CONFIG['db_tableprefix']}emailtype` SET `type` = 'incident' WHERE `id` = 'INCIDENT_LOGGED_EMAIL' ;
 
 -- KMH 27/01/08
-ALTER TABLE `triggers` ADD `checks` VARCHAR( 255 ) NULL ;
+ALTER TABLE `{$dbTriggers}` ADD `checks` VARCHAR( 255 ) NULL ;
 
 -- INL 28/01/08
-ALTER TABLE `triggers` ADD `template` INT( 11 ) NOT NULL AFTER `action` ;
-RENAME TABLE `emailtype`  TO `emailtemplates` ;
+ALTER TABLE `{$dbTriggers}` ADD `template` INT( 11 ) NOT NULL AFTER `action` ;
+RENAME TABLE `{$CONFIG['db_tableprefix']}emailtype`  TO `{$dbEmailTemplates}` ;
 
 -- INL 29/01/08
-ALTER TABLE `contacts` ADD `created` DATETIME NULL ,
+ALTER TABLE `{$dbContacts}` ADD `created` DATETIME NULL ,
 ADD `createdby` INT NULL ,
 ADD `modified` DATETIME NULL ,
 ADD `modifiedby` INT NULL ;
 
-ALTER TABLE `sites` ADD `created` DATETIME NULL ,
+ALTER TABLE `{$dbSites}` ADD `created` DATETIME NULL ,
 ADD `createdby` INT NULL ,
 ADD `modified` DATETIME NULL ,
 ADD `modifiedby` INT NULL ;
 
-ALTER TABLE `emailtemplates` ADD `created` DATETIME NULL ,
+ALTER TABLE `{$dbEmailTemplates}` ADD `created` DATETIME NULL ,
 ADD `createdby` INT NULL ,
 ADD `modified` DATETIME NULL ,
 ADD `modifiedby` INT NULL ;
 
 -- INL 14Feb08
-CREATE TABLE IF NOT EXISTS `scheduler` (
+CREATE TABLE IF NOT EXISTS `{$dbScheduler}` (
   `id` int(11) NOT NULL auto_increment,
   `action` varchar(50) NOT NULL,
   `params` varchar(255) NOT NULL,
@@ -1812,91 +1837,90 @@ CREATE TABLE IF NOT EXISTS `scheduler` (
   KEY `job` (`action`)
 ) ENGINE=MyISAM  ;
 
-INSERT INTO `scheduler` (`id`, `action`, `params`, `paramslabel`, `description`, `status`, `start`, `end`, `interval`, `lastran`, `success`) VALUES (1, 'CloseIncidents', '554400', 'closure_delay', 'Close incidents that have been marked for closure for longer than the <var>closure_delay</var> parameter (which is in seconds)', 'enabled', '2008-01-01 00:00:00', '0000-00-00 00:00:00', 60, '0000-00-00 00:00:00', 1);
-INSERT INTO `scheduler` (`id`, `action`, `params`, `paramslabel`, `description`, `status`, `start`, `end`, `interval`, `lastran`, `success`) VALUES (2, 'SetUserStatus', '', NULL, '(EXPERIMENTAL) This will set users status                         based on data from their holiday calendar.                        e.g. Out of Office/Away sick.', 'enabled', '2008-01-01 00:00:00', '0000-00-00 00:00:00', 60, '0000-00-00 00:00:00', 1);
-INSERT INTO `scheduler` (`id`, `action`, `params`, `paramslabel`, `description`, `status`, `start`, `end`, `interval`, `lastran`, `success`) VALUES (3, 'PurgeJournal', '', NULL, 'Delete old journal entries according to the config setting <var>$CONFIG[''journal_purge_after'']</var>', 'enabled', '2008-01-01 00:00:00', '0000-00-00 00:00:00', 300, '0000-00-00 00:00:00', 1);
-INSERT INTO `scheduler` (`id`, `action`, `params`, `paramslabel`, `description`, `status`, `start`, `end`, `interval`, `lastran`, `success`) VALUES (4, 'TimeCalc', '', NULL, 'Calculate SLA Target Times and trigger                        OUT_OF_SLA and OUT_OF_REVIEW system email templates where appropriate.', 'enabled', '2008-01-01 00:00:00', '0000-00-00 00:00:00', 60, '0000-00-00 00:00:00', 1);
-INSERT INTO `scheduler` (`id`, `action`, `params`, `paramslabel`, `description`, `status`, `start`, `end`, `interval`, `lastran`, `success`) VALUES (5, 'ChaseCustomers', '', NULL, 'Chase customers', 'disabled', '2008-01-01 00:00:00', '0000-00-00 00:00:00', 3600, '0000-00-00 00:00:00', 1);
-INSERT INTO `scheduler` (`id`, `action`, `params`, `paramslabel`, `description`, `status`, `start`, `end`, `interval`, `lastran`, `success`) VALUES (6, 'CheckWaitingEmail', '', NULL, 'Checks the holding queue for emails and fires the TRIGGER_WAITING_HELD_EMAIL trigger when it finds some.', 'enabled', '2008-01-01 00:00:00', '0000-00-00 00:00:00', 60, '0000-00-00 00:00:00', 1);
+INSERT INTO `{$dbScheduler}` (`id`, `action`, `params`, `paramslabel`, `description`, `status`, `start`, `end`, `interval`, `lastran`, `success`) VALUES (1, 'CloseIncidents', '554400', 'closure_delay', 'Close incidents that have been marked for closure for longer than the <var>closure_delay</var> parameter (which is in seconds)', 'enabled', '2008-01-01 00:00:00', '0000-00-00 00:00:00', 60, '0000-00-00 00:00:00', 1);
+INSERT INTO `{$dbScheduler}` (`id`, `action`, `params`, `paramslabel`, `description`, `status`, `start`, `end`, `interval`, `lastran`, `success`) VALUES (2, 'SetUserStatus', '', NULL, '(EXPERIMENTAL) This will set users status                         based on data from their holiday calendar.                        e.g. Out of Office/Away sick.', 'enabled', '2008-01-01 00:00:00', '0000-00-00 00:00:00', 60, '0000-00-00 00:00:00', 1);
+INSERT INTO `{$dbScheduler}` (`id`, `action`, `params`, `paramslabel`, `description`, `status`, `start`, `end`, `interval`, `lastran`, `success`) VALUES (3, 'PurgeJournal', '', NULL, 'Delete old journal entries according to the config setting <var>\$CONFIG[''journal_purge_after'']</var>', 'enabled', '2008-01-01 00:00:00', '0000-00-00 00:00:00', 300, '0000-00-00 00:00:00', 1);
+INSERT INTO `{$dbScheduler}` (`id`, `action`, `params`, `paramslabel`, `description`, `status`, `start`, `end`, `interval`, `lastran`, `success`) VALUES (4, 'TimeCalc', '', NULL, 'Calculate SLA Target Times and trigger                        OUT_OF_SLA and OUT_OF_REVIEW system email templates where appropriate.', 'enabled', '2008-01-01 00:00:00', '0000-00-00 00:00:00', 60, '0000-00-00 00:00:00', 1);
+INSERT INTO `{$dbScheduler}` (`id`, `action`, `params`, `paramslabel`, `description`, `status`, `start`, `end`, `interval`, `lastran`, `success`) VALUES (5, 'ChaseCustomers', '', NULL, 'Chase customers', 'disabled', '2008-01-01 00:00:00', '0000-00-00 00:00:00', 3600, '0000-00-00 00:00:00', 1);
+INSERT INTO `{$dbScheduler}` (`id`, `action`, `params`, `paramslabel`, `description`, `status`, `start`, `end`, `interval`, `lastran`, `success`) VALUES (6, 'CheckWaitingEmail', '', NULL, 'Checks the holding queue for emails and fires the TRIGGER_WAITING_HELD_EMAIL trigger when it finds some.', 'enabled', '2008-01-01 00:00:00', '0000-00-00 00:00:00', 60, '0000-00-00 00:00:00', 1);
 
 
 -- KMH 27/03/08 !!WARNING!! can take a while on large tables
-ALTER TABLE `updates` ADD FULLTEXT ( `bodytext`) ;
-ALTER TABLE `incidents` ADD FULLTEXT (`title`) ;
+ALTER TABLE `{$dbUpdates}` ADD FULLTEXT ( `bodytext`) ;
+ALTER TABLE `{$dbIncidents}` ADD FULLTEXT (`title`) ;
 
 -- KMH 29/03/08
-ALTER TABLE `maintenance` CHANGE `licence_type` `licence_type` INT( 11 ) NULL DEFAULT '5';
+ALTER TABLE `{$dbMaintenance}` CHANGE `licence_type` `licence_type` INT( 11 ) NULL DEFAULT '5';
 
 -- KMH 31/03/08
-UPDATE `incidentstatus` SET `name` = 'strActiveUnassigned' WHERE `incidentstatus`.`id` =10 LIMIT 1 ;
+UPDATE `{$dbIncidentStatus}` SET `name` = 'strActiveUnassigned' WHERE `id` =10 LIMIT 1 ;
 
-UPDATE `incidentstatus` SET `ext_name` = 'strActive' WHERE `incidentstatus`.`id` =1 LIMIT 1 ;
-UPDATE `incidentstatus` SET `ext_name` = 'strClosed' WHERE `incidentstatus`.`id` =2 LIMIT 1 ;
-UPDATE `incidentstatus` SET `ext_name` = 'strResearching' WHERE `incidentstatus`.`id` =3 LIMIT 1 ;
-UPDATE `incidentstatus` SET `ext_name` = 'strCalledAndLeftMessage' WHERE `incidentstatus`.`id` =4 LIMIT 1 ;
-UPDATE `incidentstatus` SET `ext_name` = 'strInternalEscalation' WHERE `incidentstatus`.`id` =5 LIMIT 1 ;
-UPDATE `incidentstatus` SET `ext_name` = 'strExternalEscalation' WHERE `incidentstatus`.`id` =6 LIMIT 1 ;
-UPDATE `incidentstatus` SET `ext_name` = 'strAwaitingClosure' WHERE `incidentstatus`.`id` =7 LIMIT 1 ;
-UPDATE `incidentstatus` SET `ext_name` = 'strYouHaveAction' WHERE `incidentstatus`.`id` =8 LIMIT 1 ;
-UPDATE `incidentstatus` SET `ext_name` = 'strUnsupported' WHERE `incidentstatus`.`id` =9 LIMIT 1 ;
-UPDATE `incidentstatus` SET `ext_name` = 'strActive' WHERE `incidentstatus`.`id` =10 LIMIT 1 ;
+UPDATE `{$dbIncidentStatus}` SET `ext_name` = 'strActive' WHERE `id` =1 LIMIT 1 ;
+UPDATE `{$dbIncidentStatus}` SET `ext_name` = 'strClosed' WHERE `id` =2 LIMIT 1 ;
+UPDATE `{$dbIncidentStatus}` SET `ext_name` = 'strResearching' WHERE `id` =3 LIMIT 1 ;
+UPDATE `{$dbIncidentStatus}` SET `ext_name` = 'strCalledAndLeftMessage' WHERE `id` =4 LIMIT 1 ;
+UPDATE `{$dbIncidentStatus}` SET `ext_name` = 'strInternalEscalation' WHERE `id` =5 LIMIT 1 ;
+UPDATE `{$dbIncidentStatus}` SET `ext_name` = 'strExternalEscalation' WHERE `id` =6 LIMIT 1 ;
+UPDATE `{$dbIncidentStatus}` SET `ext_name` = 'strAwaitingClosure' WHERE `id` =7 LIMIT 1 ;
+UPDATE `{$dbIncidentStatus}` SET `ext_name` = 'strYouHaveAction' WHERE `id` =8 LIMIT 1 ;
+UPDATE `{$dbIncidentStatus}` SET `ext_name` = 'strUnsupported' WHERE `id` =9 LIMIT 1 ;
+UPDATE `{$dbIncidentStatus}` SET `ext_name` = 'strActive' WHERE `id` =10 LIMIT 1 ;
 
 -- KMH 03/04/08
-UPDATE `interfacestyles` SET `cssurl` = 'sit1.css' WHERE `interfacestyles`.`id` = 1 LIMIT 1;
-UPDATE `interfacestyles` SET `cssurl` = 'sit2.css' WHERE `interfacestyles`.`id` = 2 LIMIT 1;
-UPDATE `interfacestyles` SET `cssurl` = 'sit3.css' WHERE `interfacestyles`.`id` = 3 LIMIT 1;
-UPDATE `interfacestyles` SET `cssurl` = 'sit4.css' WHERE `interfacestyles`.`id` = 4 LIMIT 1;
-UPDATE `interfacestyles` SET `cssurl` = 'sit5.css' WHERE `interfacestyles`.`id` = 5 LIMIT 1;
-UPDATE `interfacestyles` SET `cssurl` = 'sit_ph2.css' WHERE `interfacestyles`.`id` = 6 LIMIT 1;
-UPDATE `interfacestyles` SET `cssurl` = 'sit7.css' WHERE `interfacestyles`.`id` = 7 LIMIT 1;
-UPDATE `interfacestyles` SET `cssurl` = 'sit8.css' WHERE `interfacestyles`.`id` = 8 LIMIT 1;
-UPDATE `interfacestyles` SET `cssurl` = 'sit9.css' WHERE `interfacestyles`.`id` = 9 LIMIT 1;
-UPDATE `interfacestyles` SET `cssurl` = 'sit_ph.css' WHERE `interfacestyles`.`id` = 10 LIMIT 1;
-UPDATE `interfacestyles` SET `cssurl` = 'sit10.css' WHERE `interfacestyles`.`id` = 11 LIMIT 1;
-UPDATE `interfacestyles` SET `cssurl` = 'sit11.css' WHERE `interfacestyles`.`id` = 12 LIMIT 1;
-UPDATE `interfacestyles` SET `cssurl` = 'sit12.css' WHERE `interfacestyles`.`id` = 13 LIMIT 1;
-UPDATE `interfacestyles` SET `cssurl` = 'sit13.css' WHERE `interfacestyles`.`id` = 14 LIMIT 1;
-UPDATE `interfacestyles` SET `cssurl` = 'sit14.css' WHERE `interfacestyles`.`id` = 15 LIMIT 1;
+UPDATE `{$dbInterfacestyles}` SET `cssurl` = 'sit1.css' WHERE `id` = 1 LIMIT 1;
+UPDATE `{$dbInterfacestyles}` SET `cssurl` = 'sit2.css' WHERE `id` = 2 LIMIT 1;
+UPDATE `{$dbInterfacestyles}` SET `cssurl` = 'sit3.css' WHERE `id` = 3 LIMIT 1;
+UPDATE `{$dbInterfacestyles}` SET `cssurl` = 'sit4.css' WHERE `id` = 4 LIMIT 1;
+UPDATE `{$dbInterfacestyles}` SET `cssurl` = 'sit5.css' WHERE `id` = 5 LIMIT 1;
+UPDATE `{$dbInterfacestyles}` SET `cssurl` = 'sit_ph2.css' WHERE `id` = 6 LIMIT 1;
+UPDATE `{$dbInterfacestyles}` SET `cssurl` = 'sit7.css' WHERE `id` = 7 LIMIT 1;
+UPDATE `{$dbInterfacestyles}` SET `cssurl` = 'sit8.css' WHERE `id` = 8 LIMIT 1;
+UPDATE `{$dbInterfacestyles}` SET `cssurl` = 'sit9.css' WHERE `id` = 9 LIMIT 1;
+UPDATE `{$dbInterfacestyles}` SET `cssurl` = 'sit_ph.css' WHERE `id` = 10 LIMIT 1;
+UPDATE `{$dbInterfacestyles}` SET `cssurl` = 'sit10.css' WHERE `id` = 11 LIMIT 1;
+UPDATE `{$dbInterfacestyles}` SET `cssurl` = 'sit11.css' WHERE `id` = 12 LIMIT 1;
+UPDATE `{$dbInterfacestyles}` SET `cssurl` = 'sit12.css' WHERE `id` = 13 LIMIT 1;
+UPDATE `{$dbInterfacestyles}` SET `cssurl` = 'sit13.css' WHERE `id` = 14 LIMIT 1;
+UPDATE `{$dbInterfacestyles}` SET `cssurl` = 'sit14.css' WHERE `id` = 15 LIMIT 1;
+UPDATE `{$dbInterfacestyles}` SET `iconset` = 'oxygen' WHERE `id` =8 LIMIT 1 ;
 
-UPDATE `interfacestyles` SET `iconset` = 'oxygen' WHERE `interfacestyles`.`id` =8 LIMIT 1 ;
-
-ALTER TABLE `maintenance`
+ALTER TABLE `{$dbMaintenance}`
 ADD `var_incident_visible_contacts` ENUM( 'true', 'false' ) NOT NULL DEFAULT 'false',
 ADD `var_incident_visible_all` ENUM( 'true', 'false' ) NOT NULL DEFAULT 'false';
 
 -- KMH 08/04/08
-ALTER TABLE `kbarticles` CHANGE `distribution` `distribution` ENUM( 'public', 'private', 'restricted' ) NOT NULL DEFAULT 'public' COMMENT 'public appears in the portal, private is info never to be released to the public, restricted is info that is sensitive but could be mentioned if asked for example' ;
-UPDATE kbarticles SET `distribution`='public' ;
+ALTER TABLE `{$dbKBArticles}` CHANGE `distribution` `distribution` ENUM( 'public', 'private', 'restricted' ) NOT NULL DEFAULT 'public' COMMENT 'public appears in the portal, private is info never to be released to the public, restricted is info that is sensitive but could be mentioned if asked for example' ;
+UPDATE `{$dbKBArticles}` SET `distribution`='public' ;
 
 -- KMH 12/04/08
- ALTER TABLE `kbcontent` ADD FULLTEXT (`content`) ;
- ALTER TABLE `contacts` ADD FULLTEXT (`forenames`, `surname`);
- ALTER TABLE `sites` ADD FULLTEXT (`name`) ;
+ ALTER TABLE `{$dbKBContent}` ADD FULLTEXT (`content`) ;
+ ALTER TABLE `{$dbContacts}` ADD FULLTEXT (`forenames`, `surname`);
+ ALTER TABLE `{$dbSites}` ADD FULLTEXT (`name`) ;
 
 -- KMH 17/04/08
-UPDATE `permissions` SET `name` = 'View your tasks' WHERE `permissions`.`id` =69 ;
-INSERT INTO `permissions` VALUES (70, 'Create/Edit your Tasks');
-INSERT INTO `permissions` VALUES (71, 'Manage your Triggers');
-INSERT INTO `permissions` VALUES (72, 'Manage System Triggers');
-INSERT INTO `rolepermissions` (`roleid`, `permissionid`, `granted`) VALUES (1, 70, 'true');
-INSERT INTO `rolepermissions` (`roleid`, `permissionid`, `granted`) VALUES (1, 71, 'true');
-INSERT INTO `rolepermissions` (`roleid`, `permissionid`, `granted`) VALUES (1, 72, 'true');
-INSERT INTO `rolepermissions` (`roleid`, `permissionid`, `granted`) VALUES (2, 70, 'true');
-INSERT INTO `rolepermissions` (`roleid`, `permissionid`, `granted`) VALUES (2, 71, 'true');
+UPDATE `{$dbPermissions}` SET `name` = 'View your tasks' WHERE `id` =69 ;
+INSERT INTO `{$dbPermissions}` VALUES (70, 'Create/Edit your Tasks');
+INSERT INTO `{$dbPermissions}` VALUES (71, 'Manage your Triggers');
+INSERT INTO `{$dbPermissions}` VALUES (72, 'Manage System Triggers');
+INSERT INTO `{$dbRolePermissions}` (`roleid`, `permissionid`, `granted`) VALUES (1, 70, 'true');
+INSERT INTO `{$dbRolePermissions}` (`roleid`, `permissionid`, `granted`) VALUES (1, 71, 'true');
+INSERT INTO `{$dbRolePermissions}` (`roleid`, `permissionid`, `granted`) VALUES (1, 72, 'true');
+INSERT INTO `{$dbRolePermissions}` (`roleid`, `permissionid`, `granted`) VALUES (2, 70, 'true');
+INSERT INTO `{$dbRolePermissions}` (`roleid`, `permissionid`, `granted`) VALUES (2, 71, 'true');
 
 -- INL 17/04/08 FIXME Need to check triggers schema for upgrades before 3.35 release
 
 -- PH 20/04/08 Permissions for billing (for custardpie branch)
-INSERT INTO `permissions` VALUES (73, 'Approve Billable Incidents');
-INSERT INTO `permissions` VALUES (74, 'Set duration without timed task (for billable incidents)');
-INSERT INTO `permissions` VALUES (75, 'Set negative time for duration on incidents (for billable incidents - refunds)');
-INSERT INTO `rolepermissions` (`roleid`, `permissionid`, `granted`) VALUES (1, 73, 'true');
-INSERT INTO `rolepermissions` (`roleid`, `permissionid`, `granted`) VALUES (1, 74, 'true');
-INSERT INTO `rolepermissions` (`roleid`, `permissionid`, `granted`) VALUES (1, 75, 'true');
+INSERT INTO `{$dbPermissions}` VALUES (73, 'Approve Billable Incidents');
+INSERT INTO `{$dbPermissions}` VALUES (74, 'Set duration without timed task (for billable incidents)');
+INSERT INTO `{$dbPermissions}` VALUES (75, 'Set negative time for duration on incidents (for billable incidents - refunds)');
+INSERT INTO `{$dbRolePermissions}` (`roleid`, `permissionid`, `granted`) VALUES (1, 73, 'true');
+INSERT INTO `{$dbRolePermissions}` (`roleid`, `permissionid`, `granted`) VALUES (1, 74, 'true');
+INSERT INTO `{$dbRolePermissions}` (`roleid`, `permissionid`, `granted`) VALUES (1, 75, 'true');
 
 -- INL 22/04/08 More permissions for billing (custardpie)
-INSERT INTO `permissions` VALUES (76, 'View Transactions');
-INSERT INTO `rolepermissions` (`roleid`, `permissionid`, `granted`) VALUES (1, 76, 'true');
+INSERT INTO `{$dbPermissions}` VALUES (76, 'View Transactions');
+INSERT INTO `{$dbRolePermissions}` (`roleid`, `permissionid`, `granted`) VALUES (1, 76, 'true');
 ";
 
 // Important: When making changes to the schema you must add SQL to make the alterations

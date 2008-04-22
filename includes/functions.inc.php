@@ -750,12 +750,11 @@ function contact_count_incidents($id)
 function contact_count_open_incidents($id)
 {
     global $dbIncidents;
-    $sql = "SELECT id FROM `{$dbIncidents}` WHERE contact=$id AND status<>2";
+    $sql = "SELECT COUNT(id) FROM `{$dbIncidents}` WHERE contact=$id AND status<>2";
     $result = mysql_query($sql);
     if (mysql_error()) trigger_error(mysql_error(),E_USER_WARNING);
 
-    $count = mysql_num_rows($result);
-
+    list($count) = mysql_fetch_row($result);
     mysql_free_result($result);
 
     return $count;
@@ -3369,7 +3368,7 @@ function reseller_drop_down($name, $id)
     echo "</select>";
 }
 
-/*
+/**
  *
  * @deprecated  - PH
  */
@@ -3410,7 +3409,7 @@ function licence_type_drop_down($name, $id)
     echo "</select>";
 }
 
-/*
+/**
  *
  * @deprecated  - PH
  */
@@ -3420,6 +3419,9 @@ function licence_type($id)
 }
 
 
+/**
+    * @author Ivan Lucas
+*/
 function countdayincidents($day, $month, $year)
 {
     // Counts the number of incidents opened on a specified day
@@ -3435,13 +3437,16 @@ function countdayincidents($day, $month, $year)
 }
 
 
+/**
+    * @author Ivan Lucas
+*/
 function countdayclosedincidents($day, $month, $year)
 {
     // Counts the number of incidents closed on a specified day
     global $dbIncidents;
     $unixstartdate=mktime(0,0,0,$month,$day,$year);
     $unixenddate=mktime(23,59,59,$month,$day,$year);
-    $sql = "SELECT count(*) FROM `{$dbIncidents}` ";
+    $sql = "SELECT COUNT(*) FROM `{$dbIncidents}` ";
     $sql .= "WHERE closed BETWEEN '$unixstartdate' AND '$unixenddate' ";
     $result = mysql_query($sql);
     list($count) = mysql_fetch_row($result);
@@ -3450,13 +3455,16 @@ function countdayclosedincidents($day, $month, $year)
 }
 
 
+/**
+    * @author Ivan Lucas
+*/
 function countdaycurrentincidents($day, $month, $year)
 {
     global $dbIncidents;
-    // Counts the number of incidents opened on a specified day
+    // Counts the number of incidents currently open on a specified day
     $unixstartdate=mktime(0,0,0,$month,$day,$year);
     $unixenddate=mktime(23,59,59,$month,$day,$year);
-    $sql = "SELECT count(*) FROM `{$dbIncidents}` ";
+    $sql = "SELECT COUNT(*) FROM `{$dbIncidents}` ";
     $sql .= "WHERE opened <= '$unixenddate' AND closed >= '$unixstartdate' ";
     $result = mysql_query($sql);
     list($count) = mysql_fetch_row($result);

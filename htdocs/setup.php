@@ -33,7 +33,7 @@ if ($_REQUEST['action']=='reconfigure')
 }
 
 // These are the required variables we want to configure during installation
-$SETUP = array('db_hostname','db_database','db_username','db_password','application_fspath','application_webpath', 'attachment_fspath', 'attachment_webpath');
+$SETUP = array('db_hostname','db_database','db_username','db_password','db_tableprefix','application_fspath','application_webpath', 'attachment_fspath', 'attachment_webpath');
 
 // Descriptions of all the config variables
 $CFGVAR['db_hostname']['title']='MySQL Database Hostname';
@@ -41,6 +41,8 @@ $CFGVAR['db_hostname']['help']="The Hostname or IP address of the MySQL Database
 $CFGVAR['db_username']['title']='MySQL Database Username';
 $CFGVAR['db_password']['title']='MySQL Database Password';
 $CFGVAR['db_database']['title']='MySQL Database Name';
+$CFGVAR['db_tableprefix']['title']='MySQL Database Table Prefix';
+$CFGVAR['db_tableprefix']['help']="Prefix database tables with the a string (e.g. 'sit_', use this if the database you are using is shared with other applications";
 $CFGVAR['application_fspath']['title']='Filesystem Path';
 $CFGVAR['application_fspath']['help']="The full absolute filesystem path to the SiT! directory with trailing slash. e.g. '/var/www/sit/'";
 $CFGVAR['application_webpath']['title'] = 'The path to SiT! from the browsers perspective with a training slash. e.g. /sit/';
@@ -267,7 +269,8 @@ function setup_exec_sql($sqlquerylist)
 // Returns TRUE if an admin account exists, or false if not
 function setup_check_adminuser()
 {
-    $sql = "SELECT id FROM users WHERE id=1 OR username='admin' OR roleid='1'";
+    global $dbUsers;
+    $sql = "SELECT id FROM `{$dbUsers}` WHERE id=1 OR username='admin' OR roleid='1'";
     $result = @mysql_query($sql);
     if (mysql_num_rows($result) >= 1) return TRUE;
     else FALSE;
@@ -467,6 +470,7 @@ switch ($_REQUEST['action'])
         {
             echo "<p class='error'>Error: Could not find the mysql extension, SiT! requires MySQL to be able to run, you should install and enable the MySQL PHP Extension then run setup again.</p>";
         }
+        require('tablenames.inc.php');
         // Connect to Database server
         $db = @mysql_connect($CONFIG['db_hostname'], $CONFIG['db_username'], $CONFIG['db_password']);
         if (mysql_error())
@@ -499,7 +503,7 @@ switch ($_REQUEST['action'])
                     if ($result)
                     {
                         echo "<p><strong>OK</strong> Database '{$CONFIG['db_database']}' created.</p>";
-                        setup_configure();
+                        echo setup_configure();
                         echo "<p><a href='setup.php' class='button'>Next</a></p>";
                     }
                     else
@@ -532,7 +536,7 @@ switch ($_REQUEST['action'])
                 // Connected to database and db selected
                 echo "<p>Connected to database - ok</p>";
                 // Check to see if we're already installed
-                $sql = "SHOW TABLES LIKE 'users'";
+                $sql = "SHOW TABLES LIKE '{$dbUsers}'";
                 $result = mysql_query($sql);
                 if (mysql_error())
                 {
@@ -553,7 +557,7 @@ switch ($_REQUEST['action'])
                         echo $errors;
                     }
                     // Set the system version number
-                    $sql = "INSERT INTO system ( id, version) VALUES (0, $application_version)";
+                    $sql = "INSERT INTO `{$dbSystem}` ( id, version) VALUES (0, $application_version)";
                     mysql_query($sql);
                     if (mysql_error()) trigger_error($sql.mysql_error(),E_USER_ERROR);
                     $installed_version = $application_version;
@@ -570,7 +574,7 @@ switch ($_REQUEST['action'])
 
                     // Have a look what version is installed
                     // First look to see if the system table exists
-                    $exists = mysql_query("SELECT 1 FROM system LIMIT 0");
+                    $exists = mysql_query("SELECT 1 FROM `{$dbSystem}` LIMIT 0");
                     if (!$exists)
                     {
                         echo "<p class='error'>Could not find a 'system' table which probably means you have a version prior to v3.21</p>";
@@ -578,7 +582,7 @@ switch ($_REQUEST['action'])
                     }
                     else
                     {
-                        $sql = "SELECT version FROM system WHERE id = 0";
+                        $sql = "SELECT version FROM `{$dbSystem}` WHERE id = 0";
                         $result = mysql_query($sql);
                         if (mysql_error()) trigger_error(mysql_error(),E_USER_WARNING);
                         list($installed_version) = mysql_fetch_row($result);
@@ -610,12 +614,12 @@ switch ($_REQUEST['action'])
                             echo "<p>Upgrading incidents data from version prior to 3.21...</p>";
                             // Fill the new servicelevel field in the incidents table using information from the maintenance contract
                             echo "<p>Upgrading incidents table to store service level...</p>";
-                            $sql = "SELECT *,incidents.id AS incidentid FROM incidents, maintenance, servicelevels WHERE incidents.maintenanceid=maintenance.id AND ";
-                            $sql .= "maintenance.servicelevelid = servicelevels.id ";
+                            $sql = "SELECT *,i.id AS incidentid FROM `{$dbIncidents}` AS i, `{$dbMaintenance}` AS m, {$dbServiceLevels}` AS sl WHERE i.maintenanceid=m.id AND ";
+                            $sql .= "m.servicelevelid = sl.id ";
                             $result = mysql_query($sql);
                             while ($row = mysql_fetch_object($result))
                             {
-                                $sql = "UPDATE incidents SET servicelevel='{$row->tag}' WHERE id='{$row->incidentid}' AND servicelevel IS NULL LIMIT 1";
+                                $sql = "UPDATE `{$dbIncidents}` SET servicelevel='{$row->tag}' WHERE id='{$row->incidentid}' AND servicelevel IS NULL LIMIT 1";
                                 mysql_query($sql);
                                 if (mysql_error())
                                 {
@@ -632,7 +636,7 @@ switch ($_REQUEST['action'])
                             if ($CONFIG['closure_delay'] > 0 AND $CONFIG['closure_delay'] != 554400)
                             {
                                 echo "<p>Inserting value from deprecated config variable <var>closure_delay</var> into scheduler</p>";
-                                $sql = "UPDATE scheduler SET params = '{$CONFIG['closure_delay']}' WHERE action = 'CloseIncidents' LIMIT 1";
+                                $sql = "UPDATE `{$dbScheduler}` SET params = '{$CONFIG['closure_delay']}' WHERE action = 'CloseIncidents' LIMIT 1";
                                 mysql_query($sql);
                                 if (mysql_error())
                                 {
@@ -657,7 +661,7 @@ switch ($_REQUEST['action'])
                         {
                             //upgrade dashboard components.
 
-                            $sql = "SELECT * FROM dashboard";
+                            $sql = "SELECT * FROM `{$dbDashboard}`";
                             $result = mysql_query($sql);
                             if (mysql_error()) trigger_error(mysql_error(),E_USER_ERROR);
 
@@ -687,7 +691,7 @@ switch ($_REQUEST['action'])
                                             setup_exec_sql($dashboard_schema[$i]);
                                         }
 
-                                        $upgrade_sql = "UPDATE dashboard SET version = '{$version}' WHERE id = {$dashboardnames->id}";
+                                        $upgrade_sql = "UPDATE `{$dbDashboard}` SET version = '{$version}' WHERE id = {$dashboardnames->id}";
                                         mysql_query($upgrade_sql);
                                         if (mysql_error()) trigger_error(mysql_error(),E_USER_ERROR);
 
@@ -704,7 +708,7 @@ switch ($_REQUEST['action'])
                         if ($upgradeok)
                         {
                             // Update the system version number
-                            $sql = "REPLACE INTO system ( id, version) VALUES (0, $application_version)";
+                            $sql = "REPLACE INTO `{$dbSystem}` ( id, version) VALUES (0, $application_version)";
                             mysql_query($sql);
                             if (mysql_error()) trigger_error(mysql_error(),E_USER_ERROR);
                             $installed_version = $application_version;
@@ -723,7 +727,7 @@ switch ($_REQUEST['action'])
                         echo "<p>Your database schema is v".number_format($installed_version,2);
                         if ($installed_version < $application_version) echo ", after making a backup you should upgrade your schema to v{$application_version}";
                         echo "</p>";
-                        if ($installed_version < $application_version) echo "<p><a href='setup.php?action=upgrade' class='button'>Upgrade Schema</a></p>";
+                        if ($installed_version < $application_version) echo "<p><a href='setup.php?action=upgrade' class='button'>Upgrade Schema</a></p><br />";
                     }
 
                     if ($_REQUEST['action'] == 'createadminuser' AND setup_check_adminuser()==FALSE)
@@ -734,7 +738,7 @@ switch ($_REQUEST['action'])
                         {
                             $password = md5($password);
                             $email = mysql_real_escape_string($_POST['email']);
-                            $sql = "INSERT INTO `users` (`id`, `username`, `password`, `realname`, `roleid`, `title`, `signature`, `email`, `status`, `var_style`, `lastseen`) ";
+                            $sql = "INSERT INTO `{$dbUsers}` (`id`, `username`, `password`, `realname`, `roleid`, `title`, `signature`, `email`, `status`, `var_style`, `lastseen`) ";
                             $sql .= "VALUES (1, 'admin', '$password', 'Administrator', 1, 'Administrator', 'Regards,\r\n\r\nSiT Administrator', '$email', '1', '8', NOW());";
                             mysql_query($sql);
                             if (mysql_error())
