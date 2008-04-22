@@ -315,3 +315,32 @@ function clearjumpto()
 {
     document.jumptoincident.incident.value = "";
 }
+
+function confirm_addword()
+{
+  return window.confirm("If you add this word to the dictionary, all future spell checks will use this as the correct spelling for all users.  Are you sure you want to continue?");
+}
+
+function email_window(incidentid)
+{
+  URL = "email_incident.php?menu=hide&id=" + incidentid;
+  window.open(URL, "email_window", "toolbar=yes,status=yes,menubar=no,scrollbars=yes,resizable=yes,width=700,height=600");
+}
+
+function close_window(incidentid)
+{
+  URL = "close_incident.php?menu=hide&id=" + incidentid;
+  window.open(URL, "email_window", "toolbar=yes,status=yes,menubar=no,scrollbars=yes,resizable=yes,width=700,height=600");
+}
+
+function help_window(helpid)
+{
+  URL = "help.php?id=" + helpid;
+  window.open(URL, "help_window", "toolbar=no,status=no,menubar=no,scrollbars=yes,resizable=yes,width=500,height=500");
+}
+
+// INL - switch tab, see php function draw_tabs_submit()
+function gotab(tab) {
+    document.actiontabs.action.value=tab;
+    document.actiontabs.submit();
+}
