@@ -19,7 +19,7 @@ function portal_incident_table($sql)
     $result = mysql_query($sql);
     if (mysql_error()) trigger_error(mysql_error(),E_USER_ERROR);
     $numincidents = mysql_num_rows($result);
-    
+
     if ($numincidents >= 1)
     {
         $shade = 'shade1';
@@ -35,7 +35,7 @@ function portal_incident_table($sql)
         {
             $html .=  colheader('actions', $strOperation);
         }
-    
+
         $html .=  "</tr>\n";
         while ($incident = mysql_fetch_object($result))
         {
@@ -46,7 +46,7 @@ function portal_incident_table($sql)
             {
                 $html .=  software_name($incident->softwareid)."<br />";
             }
-    
+
             $html .=  "<strong><a href='incident.php?id={$incident->id}'>{$incident->title}</a></strong></td>";
             $html .=  "<td>".user_realname($incident->owner)."</td>";
             $html .=  "<td>".ldate($CONFIG['dateformat_datetime'], $incident->lastupdated)."</td>";
@@ -55,17 +55,17 @@ function portal_incident_table($sql)
             if ($showclosed == "false")
             {
                 $html .=  "<td><a href='update.php?id={$incident->id}'>{$strUpdate}</a> | ";
-    
+
                 //check if the customer has requested a closure
                 $lastupdate = list($update_userid, $update_type, $update_currentowner, $update_currentstatus, $update_body, $update_timestamp, $update_nextaction, $update_id)=incident_lastupdate($incident->id);
-    
+
                 if ($lastupdate[1] == "customerclosurerequest")
                 {
                     $html .=  "{$strClosureRequested}</td>";
                 }
                 else
                 {
-                    $html .=  "<a href='close.php?id={$incident->id}'>{$strRequestClosure}</a></td>";
+                    $html .=  "<a href='close.php?id={$incident->id}'>{$GLOBALS['strRequestClosure']}</a></td>";
                 }
             }
             echo "</tr>";
@@ -76,9 +76,9 @@ function portal_incident_table($sql)
     }
     else
     {
-        $html .= "<p class='info'>{$strNoIncidents}</p>";
+        $html .= "<p class='info'>{$GLOBALS['strNoIncidents']}</p>";
     }
-    
+
     return $html;
 }
 
@@ -94,7 +94,7 @@ if ($showclosed == "true")
     echo "</p>";
     $sql = "SELECT i.*, c.forenames, c.surname FROM `{$dbIncidents}` AS i, `{$dbContacts}` AS c ";
     $sql .= "WHERE status = 2 AND c.id = i.contact ";
-    $sql .= "AND contact = '{$_SESSION['contactid']}' ";    
+    $sql .= "AND contact = '{$_SESSION['contactid']}' ";
     $sql .= "ORDER BY closed DESC";
 }
 else
@@ -106,7 +106,7 @@ else
     echo "</p>";
     $sql = "SELECT i.*, c.forenames, c.surname FROM `{$dbIncidents}` AS i, `{$dbContacts}` AS c WHERE status != 2 ";
     $sql .= "AND c.id = i.contact ";
-    $sql .= "AND i.contact = '{$_SESSION['contactid']}' ";    
+    $sql .= "AND i.contact = '{$_SESSION['contactid']}' ";
     $sql .= "ORDER by i.id DESC";
 }
 
@@ -133,7 +133,7 @@ if(!empty($contracts))
     $sql = "SELECT DISTINCT i.id
         FROM `{$dbIncidents}` AS i, `{$dbMaintenance}` AS m
         WHERE (1=0 ";
-        
+
     foreach($contracts AS $contract)
     {
         $sql .= "OR i.maintenanceid = {$contract} ";
@@ -159,8 +159,8 @@ if ($CONFIG['portal_site_incidents'] AND $otherincidents != NULL)
         $sql .= "AND i.contact != {$_SESSION['contactid']} ";
         $sql .= "AND opened > ".($CONFIG['hide_closed_incidents_older_than'] * 86400)." ";
         $sql .= "AND c.siteid=s.id AND s.id={$_SESSION['siteid']} ";
-        $sql .= "AND (1=0 "; 
-        
+        $sql .= "AND (1=0 ";
+
         foreach($otherincidents AS $maintid)
         {
             $sql .= "OR i.maintenanceid={$maintid} ";
@@ -178,17 +178,17 @@ if ($CONFIG['portal_site_incidents'] AND $otherincidents != NULL)
         $sql .= "AND i.contact != {$_SESSION['contactid']} ";
         $sql .= "AND c.siteid=s.id AND s.id={$_SESSION['siteid']} ";
         $sql .= "AND (1=0 ";
-        
+
         foreach($otherincidents AS $incident)
         {
             $sql .= "OR i.id={$incident} ";
         }
-        
+
         $sql .= ") ORDER by i.id DESC";
     }
-    
+
     echo portal_incident_table($sql);
-    
+
 }
 
 include ('htmlfooter.inc.php');
