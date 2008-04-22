@@ -258,7 +258,7 @@ function appointment_popup($mode, $year, $month, $day, $time, $group, $user)
         // Note: this first div is closed inline
         $html .= "<div class='appointment' onclick=\"appointment('app{$user}{$year}{$month}{$day}{$time}');\">";
         $html .= "<div id='app{$user}{$year}{$month}{$day}{$time}' class='appointmentdata'>";
-        $html .= "<h2><a href=\"javascript:void();\">[X]</a> {$year}-{$month}-{$day} {$time}</h2>";
+        $html .= "<h2><a href=\"javascript:void(0);\">[X]</a> {$year}-{$month}-{$day} {$time}</h2>";
         if ($mode=='book')
             $html .= "<a href='add_holiday.php?type=1&amp;user={$user}&amp;year={$year}&amp;month={$month}&amp;day={$day}&amp;length={$time}'>{$GLOBALS['strBookHoliday']}</a><br />";
 //         else $html .= "<a href=''>Cancel Holiday</a><br />";
@@ -329,12 +329,12 @@ function draw_chart($mode, $year, $month='', $day='', $groupid='', $userid='')
     {
         $usql .= "AND groupid > 0 ";  // there is always 1 group (ie. 'none')
     }
-    
+
     if (!empty($user))
     {
         $usql .= "AND id={$user} ";
     }
-    
+
     $usql .= "ORDER BY groupid, realname";
     $uresult = mysql_query($usql);
     if (mysql_error()) trigger_error(mysql_error(),E_USER_ERROR);
@@ -466,12 +466,12 @@ function draw_chart($mode, $year, $month='', $day='', $groupid='', $userid='')
                         {
                             $html .= "<td class='shade2'>";
                         }
-                        
+
                         if ($user->id == $sit[2])
                         {
                             $html .= appointment_popup('cancel', $year, $month, $cday, 'am', $group, $user->id);
                         }
-                        
+
                         $html .= "<span title='{$holidaytype[$htypes[$cday]]}'>".substr($holidaytype[$htypes[$cday]],0,$daywidth)."</span>";
                         // This plugin function takes an optional param with an associative array containing the day
                         $pluginparams = array('plugin_calendar' => $plugin_calendar,
@@ -570,12 +570,12 @@ function draw_chart($mode, $year, $month='', $day='', $groupid='', $userid='')
                         {
                             $html .= "<td class='shade2'>";
                         }
-                        
+
                         if ($user->id == $sit[2])
                         {
                             $html .= appointment_popup('cancel', $year, $month, $cday, 'pm', $group, $user->id);
                         }
-                        
+
                         $html .= "<span title='{$holidaytype[$htypes[$cday]]}'>".substr($holidaytype[$htypes[$cday]],0,$daywidth)."</span>";
                         // This plugin function takes an optional param with an associative array containing the day
                         $pluginparams = array('plugin_calendar' => $plugin_calendar,
@@ -653,28 +653,28 @@ function month_select($month, $year, $params = '')
         {
             $html .= "<span style='background: #FF0;'>";
         }
-            
+
         if (mktime(0,0,0,$cmonth,1,$cyear) == mktime(0,0,0,$month,1,$year))
         {
             $html .= "<span style='font-size: 160%'>";
         }
-            
+
         $html .= "<a href='{$SERVER['PHP_SELF']}?display=month&amp;month=$cmonth&amp;year=$cyear$params'>".date('M y',mktime(0,0,0,$cmonth,1,$cyear))."</a>";
         if (mktime(0,0,0,$cmonth,1,$cyear) == mktime(0,0,0,$month,1,$year))
         {
             $html .= "</span>";
         }
-            
+
         if (mktime(0,0,0,$cmonth,1,$cyear) == mktime(0,0,0,date('m'),1,date('Y')))
         {
             $html .= "</span>";
         }
-        
+
         if ($c < 12)
         {
             $html .= " <span style='color: #666;'>|</span> ";
         }
-        
+
         $cmonth++;
         if ($cmonth > 12)
         {

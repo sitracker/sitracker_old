@@ -316,7 +316,7 @@ function appointment_popup($mode, $year, $month, $day, $time, $group, $user)
         // Note: this first div is closed inline
         $html .= "<div class='appointment' onclick=\"appointment('app{$user}{$year}{$month}{$day}{$time}');\">";
         $html .= "<div id='app{$user}{$year}{$month}{$day}{$time}' class='appointmentdata'>";
-        $html .= "<h2><a href=\"javascript:void();\">[X]</a> {$year}-{$month}-{$day} {$time}</h2>";
+        $html .= "<h2><a href=\"javascript:void(0);\">[X]</a> {$year}-{$month}-{$day} {$time}</h2>";
         if ($mode=='book')
         {
             $html .= "<a href='add_holiday.php?type=1&amp;user={$user}&amp;year={$year}&amp;month={$month}&amp;day={$day}&amp;length={$time}'>{$GLOBALS['strBookHoliday']}</a><br />";

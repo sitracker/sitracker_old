@@ -76,7 +76,7 @@ function generate_row($update)
     $html_row .= "</td>";
 
     $html_row.="<td width='20%'><a href=\"javascript:incident_details_window('{$update['tempid']}','incomingview');\" id='update{$update['id']}' class='info'>";
-//     $html_row.="<td width='20%'><a href=\"javascript:void();\" id='update{$update['id']}' class='info' style='cursor:help;'>";
+//     $html_row.="<td width='20%'><a href=\"javascript:void(0);\" id='update{$update['id']}' class='info' style='cursor:help;'>";
     if (empty($update['subject'])) $update['subject'] = $strUntitled;
     $html_row .= htmlentities($update['subject'],ENT_QUOTES, $GLOBALS['i18ncharset']);
     $html_row .= '<span>'.parse_updatebody($updatebodytext).'</span></a></td>';

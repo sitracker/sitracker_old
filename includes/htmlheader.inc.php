@@ -105,7 +105,7 @@ if ($sit[0] != '')
             // Permission Required: ".permission_name($topvalue['perm'])."
             if ($topvalue['perm'] >=1 AND !in_array($topvalue['perm'], $_SESSION['permissions']))
             {
-                echo "<a href='javascript:void();' class='greyed'>{$topvalue['name']}</a>";
+                echo "<a href='javascript:void(0);' class='greyed'>{$topvalue['name']}</a>";
             }
             else
             {
@@ -132,7 +132,7 @@ if ($sit[0] != '')
 
                         if ($subvalue['perm'] >=1 AND !in_array($subvalue['perm'], $_SESSION['permissions']))
                         {
-                            echo "<a href='javascript:void();' class='greyed'>{$subvalue['name']}</a>";
+                            echo "<a href='javascript:void(0);' class='greyed'>{$subvalue['name']}</a>";
                         }
                         else
                         {
@@ -158,7 +158,7 @@ if ($sit[0] != '')
 
                                     if ($subsubvalue['perm'] >=1 AND !in_array($subsubvalue['perm'], $_SESSION['permissions']))
                                     {
-                                        echo "<a href=\"javascript:void();\" class='greyed'>{$subsubvalue['name']}</a>";
+                                        echo "<a href=\"javascript:void(0);\" class='greyed'>{$subsubvalue['name']}</a>";
                                     }
                                     else
                                     {
@@ -184,7 +184,7 @@ if ($sit[0] != '')
 
                                                 if ($subsubsubvalue['perm'] >=1 AND !in_array($subsubsubvalue['perm'], $_SESSION['permissions']))
                                                 {
-                                                    echo "<a href='javascript:void();' class='greyed'>{$subsubsubvalue['name']}</a>";
+                                                    echo "<a href='javascript:void(0);' class='greyed'>{$subsubsubvalue['name']}</a>";
                                                 }
                                                 else
                                                 {

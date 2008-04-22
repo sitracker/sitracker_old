@@ -101,7 +101,7 @@ if ($action == "showform" OR $action=='')
     echo "<tr><th>{$strAdminContact} <sup class='red'>*</sup></th><td>".contact_drop_down("admincontact", 0, true)."</td></tr>\n";
     echo "<tr><th>{$strNotes}</th><td><textarea cols='40' name='notes' rows='5'></textarea></td></tr>\n";
 
-    echo "<tr><th></th><td><a href=\"javascript:void();\" onclick=\"$('hidden').toggle();\">{$strMore}</a></td></tr>\n";
+    echo "<tr><th></th><td><a href=\"javascript:void(0);\" onclick=\"$('hidden').toggle();\">{$strMore}</a></td></tr>\n";
 
     echo "<tbody id='hidden' style='display:none'>"; //FIXME not XHTML
 
