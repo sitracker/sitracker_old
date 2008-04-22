@@ -131,7 +131,7 @@ if ($action == "edit")
         echo " /></td></tr>\n";
 
 
-        echo "<tr><th></th><td><a href=\"javascript:toggleDiv('hidden');\">{$strAdvanced}</a></td></tr>";
+        echo "<tr><th></th><td><a href=\"javascript:void();\" onclick=\"$('hidden').toggle();\">{$strAdvanced}</a></td></tr>";
 
         echo "<tbody id='hidden' style='display:none'>"; // FIXME tbody
 

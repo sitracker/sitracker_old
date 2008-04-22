@@ -106,7 +106,7 @@ if ($action == "showform" OR $action == '')
     }
     echo " /></td></tr>\n";
 
-    echo "<tr><th></th><td><a href=\"javascript:toggleDiv('hidden')\">{$strMore}</a></td></tr>\n";
+    echo "<tr><th></th><td><a href=\"javascript:void();\" onclick=\"$('hidden').toggle();\">{$strMore}</a></td></tr>\n";
     echo "<tbody id='hidden' class='hidden' style='display:none'>";
     echo "<tr><th>{$strFax}</th><td><input maxlength='255' name='fax' size='30'";
     if ($_SESSION['formdata']['add_site']['fax'] != "")

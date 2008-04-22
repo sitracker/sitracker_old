@@ -145,19 +145,6 @@ function get_and_display(page, component)
 }
 
 
-function toggleDiv(obj)
-{
-    var el = document.getElementById(obj);
-    if ( el.style.display != 'none' )
-    {
-        el.style.display = 'none';
-    }
-    else
-    {
-        el.style.display = '';
-    }
-}
-
 // This Javascript code placed in the public domain at http://www.irt.org/script/1265.htm
 // "Code examples on irt.org can be freely copied and used."
 
