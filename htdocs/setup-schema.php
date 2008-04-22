@@ -624,8 +624,10 @@ INSERT INTO `permissions` VALUES (70, 'Create/Edit your Tasks');
 INSERT INTO `permissions` VALUES (71, 'Manage your Triggers');
 INSERT INTO `permissions` VALUES (72, 'Manage System Triggers');
 INSERT INTO `permissions` VALUES (73, 'Approve Billable Incidents');
-INSERT INTO `permissions` VALUES (74, 'Set duration without timed task (for billable incidents)');
+INSERT INTO `permissions` VALUES (74, 'Set duration without activity (for billable incidents)');
 INSERT INTO `permissions` VALUES (75, 'Set negative time for duration on incidents (for billable incidents - refunds)');
+INSERT INTO `permissions` VALUES (76, 'View Transactions');
+INSERT INTO `permissions` VALUES (77, 'View Billing Information');
 
 
 CREATE TABLE `priority` (
@@ -1882,7 +1884,7 @@ INSERT INTO `rolepermissions` (`roleid`, `permissionid`, `granted`) VALUES (1, 7
 INSERT INTO `rolepermissions` (`roleid`, `permissionid`, `granted`) VALUES (2, 70, 'true');
 INSERT INTO `rolepermissions` (`roleid`, `permissionid`, `granted`) VALUES (2, 71, 'true');
 
--- INLL 17/04/08 FIXME Need to check triggers schema for upgrades before 3.35 release
+-- INL 17/04/08 FIXME Need to check triggers schema for upgrades before 3.35 release
 
 -- PH 20/04/08 Permissions for billing (for custardpie branch)
 INSERT INTO `permissions` VALUES (73, 'Approve Billable Incidents');
@@ -1892,6 +1894,9 @@ INSERT INTO `rolepermissions` (`roleid`, `permissionid`, `granted`) VALUES (1, 7
 INSERT INTO `rolepermissions` (`roleid`, `permissionid`, `granted`) VALUES (1, 74, 'true');
 INSERT INTO `rolepermissions` (`roleid`, `permissionid`, `granted`) VALUES (1, 75, 'true');
 
+-- INL 22/04/08 More permissions for billing (custardpie)
+INSERT INTO `permissions` VALUES (76, 'View Transactions');
+INSERT INTO `rolepermissions` (`roleid`, `permissionid`, `granted`) VALUES (1, 76, 'true');
 ";
 
 // Important: When making changes to the schema you must add SQL to make the alterations

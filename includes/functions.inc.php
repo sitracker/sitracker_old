@@ -5850,9 +5850,14 @@ function strip_bbcode_tooltip($text)
 }
 
 
+/**
+    * Uses calendar.js to make a popup date picker
+    * @author Ivan Lucas
+    * @param $formelement string. form element id, eg. myform.dateinputbox
+    * @returns string HTML
+*/
 function date_picker($formelement)
 {
-    // Parameter1: form element id, eg. myform.dateinputbox
     global $CONFIG, $iconset;
 
     $divid = "datediv".str_replace('.','',$formelement);
