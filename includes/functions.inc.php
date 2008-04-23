@@ -3436,7 +3436,7 @@ function countdayincidents($day, $month, $year)
     global $dbIncidents;
     $unixstartdate=mktime(0,0,0,$month,$day,$year);
     $unixenddate=mktime(23,59,59,$month,$day,$year);
-    $sql = "SELECT count(*) FROM `{$dbIncidents}` ";
+    $sql = "SELECT count(id) FROM `{$dbIncidents}` ";
     $sql .= "WHERE opened BETWEEN '$unixstartdate' AND '$unixenddate' ";
     $result = mysql_query($sql);
     list($count) = mysql_fetch_row($result);
@@ -3454,7 +3454,7 @@ function countdayclosedincidents($day, $month, $year)
     global $dbIncidents;
     $unixstartdate=mktime(0,0,0,$month,$day,$year);
     $unixenddate=mktime(23,59,59,$month,$day,$year);
-    $sql = "SELECT COUNT(*) FROM `{$dbIncidents}` ";
+    $sql = "SELECT COUNT(id) FROM `{$dbIncidents}` ";
     $sql .= "WHERE closed BETWEEN '$unixstartdate' AND '$unixenddate' ";
     $result = mysql_query($sql);
     list($count) = mysql_fetch_row($result);
@@ -3472,7 +3472,7 @@ function countdaycurrentincidents($day, $month, $year)
     // Counts the number of incidents currently open on a specified day
     $unixstartdate=mktime(0,0,0,$month,$day,$year);
     $unixenddate=mktime(23,59,59,$month,$day,$year);
-    $sql = "SELECT COUNT(*) FROM `{$dbIncidents}` ";
+    $sql = "SELECT COUNT(id) FROM `{$dbIncidents}` ";
     $sql .= "WHERE opened <= '$unixenddate' AND closed >= '$unixstartdate' ";
     $result = mysql_query($sql);
     list($count) = mysql_fetch_row($result);
@@ -3484,7 +3484,7 @@ function countdaycurrentincidents($day, $month, $year)
 /**
     * Takes a contact ID and prints HTML listing all the flags
     * @author Ivan Lucas
-    * @deprecated
+    * @deprecated DEPRECATED
 */
 function print_contact_flags($id, $editlink=FALSE)
 {
@@ -6667,12 +6667,12 @@ function show_tag_cloud($orderby="name", $showcount=FALSE)
     $result = mysql_query($sql);
     if (mysql_error()) trigger_error(mysql_error(),E_USER_ERROR);
 
-    $countsql = "SELECT COUNT(*) AS counted FROM `{$dbSetTags}` GROUP BY tagid ORDER BY counted DESC LIMIT 1";
+    $countsql = "SELECT COUNT(id) AS counted FROM `{$dbSetTags}` GROUP BY tagid ORDER BY counted DESC LIMIT 1";
     $countresult = mysql_query($countsql);
     if (mysql_error()) trigger_error(mysql_error(),E_USER_ERROR);
     list($max) = mysql_fetch_row($countresult);
 
-    $countsql = "SELECT COUNT(*) AS counted FROM `{$dbSetTags}` GROUP BY tagid ORDER BY counted ASC LIMIT 1";
+    $countsql = "SELECT COUNT(id) AS counted FROM `{$dbSetTags}` GROUP BY tagid ORDER BY counted ASC LIMIT 1";
     $countresult = mysql_query($countsql);
     if (mysql_error()) trigger_error(mysql_error(),E_USER_ERROR);
     list($min) = mysql_fetch_row($countresult);
