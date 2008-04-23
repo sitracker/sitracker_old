@@ -135,11 +135,6 @@ else
     $allowedcontacts = $maintrow['supportedcontacts'];
 
     $supportedcontacts = supported_contacts($id);
-
-    $sql  = "SELECT contacts.forenames, contacts.surname, supportcontacts.contactid AS contactid FROM supportcontacts, contacts ";
-    $sql .= "WHERE supportcontacts.contactid=contacts.id AND supportcontacts.maintenanceid='$id' ";
-    $result=mysql_query($sql);
-    if (mysql_error()) trigger_error("MySQL Query Error ".mysql_error(), E_USER_ERROR);
     if ($supportedcontacts != NULL)
     {
         $numberofcontacts = sizeof($supportedcontacts);
@@ -175,7 +170,8 @@ if($numberofcontacts < $allowedcontacts OR $allowedcontacts == 0)
 echo "<br />";
 echo "<h3>{$strSkillsSupportedUnderContract}:</h3>";
 // supported software
-$sql = "SELECT * FROM softwareproducts, software WHERE softwareproducts.softwareid=software.id AND productid='{$maintrow['product']}' ";
+$sql = "SELECT * FROM `{$dbSoftwareProducts}` AS sp, `{$dbSoftware}` AS s ";
+$sql .= "WHERE sp.softwareid = s.id AND productid='{$maintrow['product']}' ";
 $result=mysql_query($sql);
 if (mysql_error()) trigger_error("MySQL Query Error ".mysql_error(), E_USER_ERROR);
 

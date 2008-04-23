@@ -3173,7 +3173,8 @@ function sit_error_handler($errno, $errstr, $errfile, $errline, $errcontext)
              echo "</p>";
         }
 
-        if (strpos($errstr, 'You have an error in your SQL syntax')!==FALSE)
+        if (strpos($errstr, 'You have an error in your SQL syntax')!==FALSE OR
+            strpos($errstr, 'Query Error Incorrect table name')!==FALSE)
         {
             echo "<p class='tip'>You may have found a bug in SiT, please <a href=\"{$CONFIG['bugtracker_url']}\">report it</a>.</p>";
         }
@@ -4908,13 +4909,13 @@ function calculate_working_time($t1, $t2, $publicholidays) {
             else
             {
                 // End on a different day
-                
+
                  $timeworked++;
                  $currenttime += 60;  // move to the next minute
-                
+
                 //$timeworked += 60;
                 //$currenttime += (60*60);
-                
+
                 /*
                 // Move to next day
                 $c = ($time['hours'] * 60) + $time['minutes'];
@@ -4958,7 +4959,7 @@ function calculate_working_time($t1, $t2, $publicholidays) {
             {
                 // jump to the minute after the public holiday
                 $currenttime += $ph + 60;
-                
+
                 // Jump to start of working day
                 $currenttime += ($swd * 60);
             }
@@ -7529,6 +7530,7 @@ function billable_units_site($siteid, $startdate=0, $enddate=0)
 
 }
 
+
 /**
  * Return an array of contacts allowed to use this contract
  * @author Kieran Hogg
@@ -7537,13 +7539,15 @@ function billable_units_site($siteid, $startdate=0, $enddate=0)
 **/
 function supported_contacts($maintid)
 {
-    $sql  = "SELECT contacts.forenames, contacts.surname, supportcontacts.contactid AS contactid ";
-    $sql .= "FROM supportcontacts, contacts ";
-    $sql .= "WHERE supportcontacts.contactid=contacts.id AND supportcontacts.maintenanceid='$maintid' ";
+    global $dbSupportContacts, $dbContacts;
+    $sql  = "SELECT c.forenames, c.surname, sc.contactid AS contactid ";
+    $sql .= "FROM `{$dbSupportContacts}` AS sc, `{$dbContacts}` AS c ";
+    $sql .= "WHERE sc.contactid=c.id AND sc.maintenanceid='{$maintid}' ";
     $result = mysql_query($sql);
-    if(!empty($result))
+    if (mysql_error()) trigger_error("MySQL Query Error ".mysql_error(), E_USER_WARNING);
+    if (!empty($result))
     {
-        while($row = mysql_fetch_object($result))
+        while ($row = mysql_fetch_object($result))
         {
             $returnarray[] = $row->contactid;
         }
