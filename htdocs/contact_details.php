@@ -207,7 +207,7 @@ while ($contactrow = mysql_fetch_array($contactresult))
 
     echo "<p align='center'>";
     echo "<a href='add_incident.php?action=findcontact&amp;contactid={$id}'>{$strAddIncident}</a> | ";
-    echo "<a href='contact_details.php?id={$id}&amp;output=vcard'>vCard</a> | ";
+    echo "<a href='contact_details.php?id={$id}&amp;output=vcard'><img src='{$CONFIG['application_webpath']}images/icons/{$iconset}/16x16/vcard.png' width='16' height='16' alt='' /> vCard</a> | ";
     echo "<a href='edit_contact.php?action=edit&amp;contact={$id}'>{$strEdit}</a> | ";
     echo "<a href='delete_contact.php?id={$id}'>{$strDelete}</a>";
     echo "</p>\n";

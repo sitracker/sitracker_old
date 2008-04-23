@@ -32,7 +32,7 @@ if ($CONFIG['debug'] > 0)
 
 if ($CONFIG['db_username'] == '' OR $CONFIG['db_database'] == '')
 {
-    header("Location: setup.php");
+    header("Location: {$CONFIG['application_webpath']}setup.php");
     exit;
 }
 
@@ -40,7 +40,7 @@ if ($CONFIG['db_username'] == '' OR $CONFIG['db_database'] == '')
 $db = @mysql_connect($CONFIG['db_hostname'], $CONFIG['db_username'], $CONFIG['db_password']);
 if (mysql_error())
 {
-    header("Location: setup.php");
+    header("Location: {$CONFIG['application_webpath']}setup.php");
     exit;
 }
 // mysql_query("SET CHARACTER SET utf8");
@@ -53,7 +53,7 @@ if (mysql_error())
     // TODO add some detection for missing database
     if (strpos(mysql_error(), 'Unknown database')!==FALSE)
     {
-        header("Location: setup.php");
+        header("Location: {$CONFIG['application_webpath']}setup.php");
         exit;
     }
     // Attempt socket connection to database to check if server is alive
@@ -63,7 +63,7 @@ if (mysql_error())
     }
     else
     {
-        header("Location: setup.php");
+        header("Location: {$CONFIG['application_webpath']}setup.php");
         exit;
     }
 }

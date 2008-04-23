@@ -3168,7 +3168,7 @@ function sit_error_handler($errno, $errstr, $errfile, $errline, $errcontext)
         if (strpos($errstr, 'Unknown column')!==FALSE OR
             preg_match("/Table '(.*)' doesn't exist/", $errstr))
         {
-             echo "<p class='tip'>The SiT schema may need upgrading to fix this problem.";
+             echo "<p class='tip'>The SiT schema may need updating to fix this problem.";
              if (user_permission($sit[2], 22)) echo "Visit <a href='setup.php'>Setup</a>"; // Only show this to admin
              echo "</p>";
         }
