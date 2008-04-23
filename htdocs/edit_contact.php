@@ -85,8 +85,8 @@ elseif ($action == "edit" && isset($contact))
         echo "<input maxlength='50' name='mobile' size='40' value='{$contactrow['mobile']}' /></td></tr>\n";
         echo "<tr><th>{$strFax}:</th><td>";
         echo "<input maxlength='50' name='fax' size='40' value='{$contactrow['fax']}' /></td></tr>\n";
-        echo "<tr><th>{$strActive}:</th><td><input type='checkbox' name='active'";
-        if ($contactrow['active']=='true') echo "checked='".$siterow['active']."'";
+        echo "<tr><th>{$strActive}:</th><td><input type='checkbox' name='active' ";
+        if ($contactrow['active']=='true') echo "checked='checked'";
         echo " value='true' /></td></tr> <tr><th></th><td>";
         echo "<input type='checkbox' name='usesiteaddress' value='yes' onclick='togglecontactaddress();' ";
         if ($contactrow['address1'] !='')
@@ -110,7 +110,7 @@ elseif ($action == "edit" && isset($contact))
         echo "<input maxlength='255' name='address2' size='40' value='{$contactrow['address2']}' {$extraattributes} />";
         echo "</td></tr>\n";
         echo "<tr><th>{$strCity}:</th><td>";
-        echo "<input maxlength=255' name='city' size='40' value='{$contactrow['city']}' {$extraattributes} />";
+        echo "<input maxlength='255' name='city' size='40' value='{$contactrow['city']}' {$extraattributes} />";
         echo "</td></tr>\n";
         echo "<tr><th>{$strCounty}:</th><td>";
         echo "<input maxlength='255' name='county' size='40' value='{$contactrow['county']}' {$extraattributes} />";

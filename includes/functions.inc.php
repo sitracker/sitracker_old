@@ -1336,39 +1336,46 @@ function contact_drop_down($name, $id, $showsite=FALSE)
 }
 
 
-/*  prints the HTML for a drop down list of     */
-/* contacts along with their site, with the given name and    */
-/* with the given id selected.                                */
+/**
+    * prints the HTML for a drop down list of contacts along with their site, with the given name and
+    * and with the given id selected.
+    * @author Ivan Lucas
+    * @param $name string. The name of the field
+    * @param $id int. Select this contactID by default
+    * @param $siteid int. (optional) Filter list to show contacts from this siteID only
+    * @param $exclude int. (optional) Do not show this contactID in the list
+    * @returns string.  HTML select
+*/
 function contact_site_drop_down($name, $id, $siteid='', $exclude='')
 {
-
     global $dbContacts, $dbSites;
     $sql  = "SELECT c.id AS contactid, forenames, surname, siteid, s.name AS sitename ";
     $sql .= "FROM `{$dbContacts}` AS c, `{$dbSites}` AS s ";
     $sql .= "WHERE c.siteid = s.id AND c.active = 'true' AND s.active = 'true' ";
     if (!empty($siteid)) $sql .= "AND s.id='$siteid' ";
+    if (!empty($exclude)) $sql .= "AND c.id != $exclude ";
     $sql .= "ORDER BY surname ASC";
     $result = mysql_query($sql);
     if (mysql_error()) trigger_error(mysql_error(),E_USER_WARNING);
-
-    echo "<select name='$name'>";
-    while ($contacts = mysql_fetch_object($result))
+    $html = "<select name='$name'>";
+    if (mysql_num_rows($result) > 0)
     {
-            if ($contacts->contactid != $exclude)
+        while ($contacts = mysql_fetch_object($result))
+        {
+            $html .= "<option ";
+            if ($contacts->contactid == $id)
             {
-                $html .= "<option ";
-                if ($contacts->contactid == $id)
-                {
-                    $html .= "selected='selected' ";
-                }
-
-                $html .= "value='{$contacts->contactid}'>";
-                $html .= htmlspecialchars("{$contacts->surname}, {$contacts->forenames} - {$contacts->sitename}");
-                $html .= "</option>\n";
+                $html .= "selected='selected' ";
             }
-    }
-    $html .= "</select>\n";
 
+            $html .= "value='{$contacts->contactid}'>";
+            $html .= htmlspecialchars("{$contacts->surname}, {$contacts->forenames} - {$contacts->sitename}");
+            $html .= "</option>\n";
+        }
+    }
+    else $html .= "<option value=''>{$GLOBALS['strNone']}</option>";
+
+    $html .= "</select>\n";
     return $html;
 }
 
