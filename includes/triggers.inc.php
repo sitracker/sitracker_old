@@ -26,7 +26,7 @@ include ('mime.inc.php');
 $triggerarray['TRIGGER_INCIDENT_CREATED'] =
 array('name' => 'Incident Created',
       'description' => 'Occurs when a new incident has been created',
-      'required' => array('incidentid'),
+      'required' => array('incidentid','contactid'),
       'optional' => array('contactid', 'siteid', 'priority'),
       'type' => 'incident');
 
@@ -202,7 +202,6 @@ function trigger($triggerid, $paramarray='')
         $sql .= "AND userid={$userid}";
     }
     $result = mysql_query($sql);
-//     echo $sql;
     if (mysql_error()) trigger_error("MySQL Query Error ".mysql_error(), E_USER_WARNING);
     while ($triggerobj = mysql_fetch_object($result))
     {
@@ -299,7 +298,7 @@ function trigger_action($userid, $triggerid, $action, $paramarray, $template)
 
 /**
     * Replaces template variables with their values
-    * @author Kieran Hogg
+    * @author Kieran Hogg, Ivan Lucas
     * @param $triggerid string. The id/name of the trigger being used
     * @param $string string. The string containing the variables
     * @param $paramarray array. An array containing values to be substituted

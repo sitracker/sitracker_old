@@ -324,7 +324,7 @@ $ttvararray['{contactsite}'] = array('description' => 'Site name',
                                      'requires' => 'siteid',
                                      'replacement' => 'contact_site($contactid);');
 
-$ttvararray['{feedbackurl}'] = array('description' => '',
+$ttvararray['{feedbackurl}'] = array('description' => 'Feedback URL',
                                      'requires' => 'incidentid',
                                      'replacement' => '$baseurl.\'feedback.php?ax=\'.urlencode(trim(base64_encode(gzcompress(str_rot13(urlencode($CONFIG[\'feedback_form\']).\'&&\'.urlencode($contactid).\'&&\'.urlencode($incidentid))))));');
 

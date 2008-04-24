@@ -26,7 +26,7 @@ Upgrading to 3.35
 -----------------
 This version supports table prefixes, if you use this feature
 any plugins you have installed that are not designed to work
-with 3.40 may break.
+with 3.35 may break.
 will default to UTC until they explicity set it by editing
 their profile.  You should pass this information on to your
 users that reside in timezones other than system timezone.
@@ -41,6 +41,11 @@ is now ignored, tips are now stored in htdocs/help/en-GB/tips.txt
 own tips, please consider posting them on our forum so that we can
 include them in future releases for the benefit of others.
 
+Sending an email when an incident is logged is no longer made
+optional at the time the incident is added.  Logging an incident
+now fires the 'Incident Created' trigger which in turn sends an
+email based upon the INCIDENT_LOGGED template.
+This action can be removed if you prefer.
 
 
 Upgrading to 3.32

@@ -114,14 +114,14 @@ elseif ($action == "edit")
         case 'email':
             $sql = "SELECT * FROM `{$dbEmailTemplates}` WHERE id='$id'";
             $title = "{$strEdit}: $strEmailTemplate";
-            $action = 'ACTION_EMAIL';
+            $templateaction = 'ACTION_EMAIL';
             break;
 
         case 'notice':
         default:
             $sql = "SELECT * FROM `{$dbNoticeTemplates}` WHERE id='$id' LIMIT 1";
             $title = "{$strEdit}: Notice Template"; // FIXME i18n edit notice template
-            $action = 'ACTION_NOTICE';
+            $templateaction = 'ACTION_NOTICE';
     }
     $result = mysql_query($sql);
     $template = mysql_fetch_object($result);
@@ -137,7 +137,7 @@ elseif ($action == "edit")
         echo "<form name='edittemplate' action='{$_SERVER['PHP_SELF']}?action=update' method='post' onsubmit=\"return confirm_action('{$strAreYouSureMakeTheseChanges}')\">";
         echo "<table class='vertical' width='100%'>";
 
-        $tsql = "SELECT * FROM `{$dbTriggers}` WHERE action = '{$action}' AND template = '$id' LIMIT 1";
+        $tsql = "SELECT * FROM `{$dbTriggers}` WHERE action = '{$templateaction}' AND template = '$id' LIMIT 1";
         $tresult = mysql_query($tsql);
         if (mysql_error()) trigger_error("MySQL Query Error ".mysql_error(), E_USER_ERROR);
         if (mysql_num_rows($tresult) >= 1)

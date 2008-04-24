@@ -464,17 +464,12 @@ elseif ($action=='incidentform')
         echo "<tr><th>{$strVisibleToCustomer}:</th>\n";
         echo "<td><input name='cust_vis' type='radio' value='no' /> {$strNo} <input name='cust_vis' type='radio' value='yes' checked='checked' /> {$strYes}</td></tr>\n";
     }
-    ?>
-    <tr><th>Send Opening Email: <sup class='red'>*</sup></th>
-    <td><input name="send_email" checked='checked' type="radio" value="no" />No <input name="send_email" type="radio" value="email" />Yes, "Re: Email" <input name="send_email" type="radio" value="call" />Yes, "Re: Call"</td></tr>
-    <tr><th>Incident Priority:</th><td><?php echo priority_drop_down("priority", 1, 4, FALSE); ?> Based on the customers Business Impact</td></tr>
-    </table>
-    <?php
+    echo "<tr><th>{$strPriority}:</th><td>".priority_drop_down("priority", 1, 4, FALSE)." Based on the customers Business Impact</td></tr>";
+    echo "</table>\n";
     echo "<input type='hidden' name='win' value='{$win}' />";
     echo "<p align='center'><input name='submit' type='submit' value='{$strAddIncident}' /></p>";
-    ?>
-    </form>
-    <?php
+    echo "</form>\n";
+
     include ('htmlfooter.inc.php');
 }
 elseif ($action=='assign')
@@ -502,7 +497,6 @@ elseif ($action=='assign')
         $productversion = cleanvar($_REQUEST['productversion']);
         $productservicepacks = cleanvar($_REQUEST['productservicepacks']);
         $bodytext = cleanvar($_REQUEST['bodytext']);
-        $send_email = cleanvar($_REQUEST['send_email']);
         $cust_vis = cleanvar($_REQUEST['cust_vis']);
 
         // check form input
@@ -656,11 +650,6 @@ elseif ($action=='assign')
                 plugin_do('incident_created_contract');
             }
 
-            // Send opening email, where selected
-            if ($send_email == "call") send_template_email('INCIDENT_LOGGED_CALL', $incidentid);
-            elseif ($send_email == "email") send_template_email('INCIDENT_LOGGED_EMAIL', $incidentid);
-
-
             echo "<h3>{$strIncident}: $incidentid</h3>";
             echo "<p align='center'>";
             printf($strIncidentLoggedEngineer, $incidentid);
@@ -737,7 +726,7 @@ elseif ($action=='assign')
                 if ($countincidents >= 1) $countactive=user_activeincidents($userrow['id']);
                 else $countactive=0;
 
-                $countdiff=$countincidents-$countactive;
+                $countdiff = $countincidents-$countactive;
 
                 echo "$countactive / {$countdiff}</td>";
                 echo "<td align='center'>".$incpriority['4']."</td>";
@@ -754,7 +743,8 @@ elseif ($action=='assign')
             }
             echo "</table>";
             echo "<p align='center'>{$strUsersBoldSkills}.</p>";
-            trigger("TRIGGER_INCIDENT_CREATED", array('incidentid' => $incidentid, 'priority' => $priority));
+            trigger("TRIGGER_INCIDENT_CREATED", array('incidentid' => $incidentid, 'priority' => $priority,
+                                                      'contactid' => $contactid);
         }
         else
         {

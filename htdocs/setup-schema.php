@@ -46,7 +46,7 @@ INSERT INTO `{$dbClosingStatus}` VALUES (10, 'strEscalated');
 
 
 CREATE TABLE `{$dbContacts}` (
-  `id` int(11) NOT NULL auto_increment,
+`id` int(11) NOT NULL auto_increment,
   `notify_contactid` int(11) NOT NULL default '0',
   `username` varchar(50) default NULL,
   `password` varchar(50) default NULL,
@@ -73,13 +73,17 @@ CREATE TABLE `{$dbContacts}` (
   `timestamp_modified` int(11) default NULL,
   `notes` blob NOT NULL,
   `active` enum('true','false') NOT NULL default 'true',
+  `created` datetime default NULL,
+  `createdby` int(11) default NULL,
+  `modified` datetime default NULL,
+  `modifiedby` int(11) default NULL,
   PRIMARY KEY  (`id`),
   KEY `siteid` (`siteid`),
   KEY `username` (`username`),
   KEY `forenames` (`forenames`),
   KEY `surname` (`surname`),
   KEY `notify_contactid` (`notify_contactid`)
-) ENGINE=MyISAM;
+) TYPE=MyISAM ;
 
 INSERT INTO `{$dbContacts}` (`id`, `notify_contactid`, `username`, `password`, `forenames`, `surname`, `jobtitle`, `courtesytitle`, `siteid`, `email`, `phone`, `mobile`, `fax`, `department`, `address1`, `address2`, `city`, `county`, `country`, `postcode`, `dataprotection_email`, `dataprotection_phone`, `dataprotection_address`, `timestamp_added`, `timestamp_modified`, `notes`) VALUES
 (1, 4, 'Acme1', '2830', 'John', 'Acme', 'Chairman', 'Mr', 1, 'acme@example.com', '0666 222111', '', '', '', '', '', '', '', '', '', 'Yes', 'Yes', 'Yes', 1132930556, 1187360933, '');
@@ -1745,11 +1749,6 @@ ALTER TABLE `{$CONFIG['db_tableprefix']}emailtype` ADD `triggerid` INT( 11 ) NUL
 INSERT INTO `{$CONFIG['db_tableprefix']}emailtype` (`id` ,`type` ,`description` ,`tofield` ,`fromfield` ,`replytofield` ,`ccfield` ,`bccfield` ,`subjectfield` ,`body` ,`customervisibility` ,
 `storeinlog` ,`triggerid`)VALUES ('TRIGGER_INCIDENT_LOGGED', 'system', 'Trigger email sent when a new incident is logged.', '<useremail>', '<supportemail>', NULL , NULL , NULL , '[<incidentid>] - <incidenttitle>', 'Hello <contactfirstname>,\r\n\r\nIncident <incidentid> - <incidenttitle> has been logged.\r\n\r\n<signature> <globalsignature>\r\n-------------\r\nThis email is sent as a result of a system trigger. If you do not want to receive these emails, you can disable them from the ''Triggers'' page.', 'hide', 'No', '1');
 
--- KMH 08/01/08
-ALTER TABLE `{$CONFIG['db_tableprefix']}emailtype` DROP `id` ;
-ALTER TABLE `{$CONFIG['db_tableprefix']}emailtype` CHANGE `name` `id` VARCHAR( 50 ) NOT NULL ;
-ALTER TABLE `{$CONFIG['db_tableprefix']}emailtype` ADD PRIMARY KEY ( `id` );
-
 -- KMH 09/01/08
 INSERT INTO `{$CONFIG['db_tableprefix']}emailtype` (`id`, `type`, `description`, `tofield`, `fromfield`, `replytofield`, `ccfield`, `bccfield`, `subjectfield`, `body`, `customervisibility`, `storeinlog`) VALUES
 ('TRIGGER_INCIDENT_CREATED', 'system', 'Trigger email sent when a new incident is logged.', '<useremail>', '<supportemail>', NULL, NULL, NULL, '[<incidentid>] - <incidenttitle>', 'Hello <contactfirstname>,\r\n\r\nIncident <incidentid> - <incidenttitle> has been logged.\r\n\r\n<signature> <globalsignature>\r\n-------------\r\nThis email is sent as a result of a system trigger. If you do not want to receive these emails, you can disable them from the ''Triggers'' page.', 'hide', 'No'),
@@ -1921,6 +1920,60 @@ INSERT INTO `{$dbRolePermissions}` (`roleid`, `permissionid`, `granted`) VALUES 
 -- INL 22/04/08 More permissions for billing (custardpie)
 INSERT INTO `{$dbPermissions}` VALUES (76, 'View Transactions');
 INSERT INTO `{$dbRolePermissions}` (`roleid`, `permissionid`, `granted`) VALUES (1, 76, 'true');
+
+-- INL 23Apr08 timestamps for all user data tables
+ALTER TABLE `{$dbBillingPeriods}` ADD `created` DATETIME NULL ,
+ADD `createdby` INT NULL ,
+ADD `modified` DATETIME NULL ,
+ADD `modifiedby` INT NULL ;
+
+ALTER TABLE `{$dbEmailSig}` ADD `created` DATETIME NULL ,
+ADD `createdby` INT NULL ,
+ADD `modified` DATETIME NULL ,
+ADD `modifiedby` INT NULL ;
+
+ALTER TABLE `{$dbEscalationPaths}` ADD `created` DATETIME NULL ,
+ADD `createdby` INT NULL ,
+ADD `modified` DATETIME NULL ,
+ADD `modifiedby` INT NULL ;
+
+ALTER TABLE `{$dbFeedbackForms}` ADD `created` DATETIME NULL ,
+ADD `createdby` INT NULL ,
+ADD `modified` DATETIME NULL ,
+ADD `modifiedby` INT NULL ;
+
+ALTER TABLE `{$dbFeedbackQuestions}` ADD `created` DATETIME NULL ,
+ADD `createdby` INT NULL ,
+ADD `modified` DATETIME NULL ,
+ADD `modifiedby` INT NULL ;
+
+ALTER TABLE `{$dbFeedbackResults}` ADD `created` DATETIME NULL ,
+ADD `createdby` INT NULL ,
+ADD `modified` DATETIME NULL ,
+ADD `modifiedby` INT NULL ;
+
+ALTER TABLE `{$dbFiles}` ADD `created` DATETIME NULL ,
+ADD `createdby` INT NULL ,
+ADD `modified` DATETIME NULL ,
+ADD `modifiedby` INT NULL ;
+
+ALTER TABLE `{$dbGroups}` ADD `created` DATETIME NULL ,
+ADD `createdby` INT NULL ,
+ADD `modified` DATETIME NULL ,
+ADD `modifiedby` INT NULL ;
+
+ALTER TABLE `{$dbIncidentProductInfo}` ADD `created` DATETIME NULL ,
+ADD `createdby` INT NULL ,
+ADD `modified` DATETIME NULL ,
+ADD `modifiedby` INT NULL ;
+
+ALTER TABLE `{$dbIncidents}` ADD `created` DATETIME NULL ,
+ADD `createdby` INT NULL ,
+ADD `modified` DATETIME NULL ,
+ADD `modifiedby` INT NULL ;
+
+-- FIXME these timestamp fields ^ need adding to the main install schema INL 24 April 08
+
 ";
 
 // Important: When making changes to the schema you must add SQL to make the alterations
