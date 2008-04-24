@@ -453,12 +453,14 @@ function create_trigger_notice($userid, $noticetext='', $triggertype='',
     * @param $triggertype string. The type of trigger (incident, contact...)
     * @param $name string. The name for the select
     * @param $selected string. The name of the selected item
+    * @returns string. HTML snippet
 */
 function email_templates($triggertype, $name, $selected = '')
 {
     global $dbEmailTemplates, $dbTriggers;;
     $html .= "<select id='{$name}' name='{$name}'>";
-    $sql = "SELECT * FROM `{$dbEmailTemplates}` WHERE id NOT IN (SELECT template FROM `{$dbTriggers}`) AND type='{$triggertype}' ORDER BY id";
+    $sql = "SELECT * FROM `{$dbEmailTemplates}` ";
+    $sql .= "WHERE id NOT IN (SELECT template FROM `{$dbTriggers}`) AND type='{$triggertype}' ORDER BY id";
     $result = mysql_query($sql);
     if (mysql_error()) trigger_error("MySQL Query Error ".mysql_error(), E_USER_WARNING);
     while ($template = mysql_fetch_object($result))

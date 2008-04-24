@@ -97,6 +97,7 @@ switch ($_REQUEST['mode'])
         </script>
         <?php
         echo "<h2><img src='{$CONFIG['application_webpath']}images/icons/{$iconset}/32x32/triggeraction.png' width='32' height='32' alt='' /> ";
+        if ($selecteduser >= 1) echo user_realname($selecteduser).': ';
         echo "{$strTriggerActions}</h2>";
         if (!empty($triggerarray[$id]['name'])) $name = $triggerarray[$id]['name'];
         else $name = $id;
@@ -230,6 +231,11 @@ switch ($_REQUEST['mode'])
 
                     echo " <a href='{$_SERVER['PHP_SELF']}?mode=delete&amp;id={$trigaction->id}' title=\"{$strDelete}\">";
                     echo "<img src='{$CONFIG['application_webpath']}images/icons/{$iconset}/12x12/delete.png' width='12' height='12' alt='' /></a>";
+                    if ($selecteduser == -1)
+                    {
+                        if ($trigaction->userid == 0) echo " (<img src='{$CONFIG['application_webpath']}images/sit_favicon.png' width='16' height='16' alt='' />)";
+                        else echo " (<img src='{$CONFIG['application_webpath']}images/icons/{$iconset}/16x16/user.png' width='16' height='16' alt='' /> ".user_realname($trigaction->userid).')';
+                    }
                     echo "<br />\n";
                 }
             }
@@ -238,7 +244,9 @@ switch ($_REQUEST['mode'])
                 echo "{$strNone}";
             }
             echo "</td>";
-            echo "<td><a href='{$_SERVER['PHP_SELF']}?mode=add&amp;id={$trigger}&amp;user={$selecteduser}'>{$strAdd}</a></td>"; // TODO link to add page
+            echo "<td>";
+            if ($selecteduser != -1) echo "<a href='{$_SERVER['PHP_SELF']}?mode=add&amp;id={$trigger}&amp;user={$selecteduser}'>{$strAdd}</a>";
+            echo "</td>";
             echo "</tr>\n";
             if ($shade == 'shade1') $shade = 'shade2';
             else $shade = 'shade1';
