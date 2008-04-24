@@ -2478,9 +2478,6 @@ function emailtype_replace_specials($string, $incidentid=0, $userid=0)
                     33 => '/<feedbackurl>/s'
                 );
 
-// 5 => contact_manager_email($contactid), is DEPRECATED as of v3.30
-// As of 3.40 contactmanager does the same as contactnotify
-
     $email_replace = array(0 => contact_email($contactid),
                     1 => contact_realname($contactid),
                     2 => strtok(contact_realname($contactid),' '),
@@ -3478,68 +3475,6 @@ function countdaycurrentincidents($day, $month, $year)
     list($count) = mysql_fetch_row($result);
     mysql_free_result($result);
     return $count;
-}
-
-
-/**
-    * Takes a contact ID and prints HTML listing all the flags
-    * @author Ivan Lucas
-    * @deprecated DEPRECATED
-*/
-function print_contact_flags($id, $editlink=FALSE)
-{
-    global $dbContactFlags, $dbFlags;
-    $sql = "SELECT cf.flag, f.name ";
-    $sql .= "FROM `{$dbContactFlags}` AS cf, `{$dbFlags}` AS f ";
-    $sql .= "WHERE cf.flag=f.flag AND cf.contactid='$id' ";
-    $result= mysql_query($sql);
-    if (mysql_error()) trigger_error(mysql_error(),E_USER_WARNING);
-    while ($contactflagrows = mysql_fetch_array($result) )
-    {
-        if ($editlink==TRUE)
-        {
-            echo "<a href='edit_contact_flags.php?mode=removeflag&amp;id=$id&amp;flag={$contactflagrows['flag']}' title='{$contactflagrows['name']} (Click to Remove)'>";
-        }
-        else
-        {
-            echo "<span title=\"".$contactflagrows['name']."\">";
-        }
-
-        echo strtoupper($contactflagrows['flag']);
-        if ($editlink==TRUE) echo "</a>";
-        else echo "</span>";
-        echo ' ';
-    }
-    if (mysql_num_rows($result)==0) echo "<em>{$GLOBALS['strNone']}</em>";
-    mysql_free_result($result);
-    return TRUE;
-}
-
-/**
-    * @author Ivan Lucas
-    * @deprecated
-    * @note DEPRECATED as of 3.30 contact flags should no longer be used
-    * use tags instead
-*/
-function check_contact_flag($id, $flag)
-{
-    global $dbContactFlags;
-    $sql = "SELECT flag FROM `{$dbContactFlags}` WHERE contactid='{$id}' AND flag='{$flag}'";
-    $result = mysql_query($sql);
-    if (mysql_error()) trigger_error(mysql_error(),E_USER_WARNING);
-}
-
-/**
-    * @author Ivan Lucas
-    * @deprecated
-    * @note DEPRECATED as of 3.30 contact flags should no longer be used
-    * use tags instead
-*/
-function add_contact_flag($id, $flag)
-{
-    // first check that contact does not already have this flag
-    $sql = "";
-    trigger_error("add_contact_flag feature is not available yet", E_USER_WARNING);
 }
 
 
@@ -5171,42 +5106,6 @@ function remove_slashes($string)
     $string = str_replace("\\\"", "\"", $string);
 
     return $string;
-}
-
-/**
-    * @author Ivan Lucas
-    * @deprecated
-    * @note Uses flag MGR to determine manager
-    * @note DEPRECATED as of v3.30, remove after 3.40 release
-*/
-function contact_manager_email($contactid)
-{
-    global $dbContacts;
-    $sql = "SELECT siteid FROM `{$dbContacts}` WHERE id='{$contactid}' LIMIT 1";
-    $result = mysql_query($sql);
-    if (mysql_error()) trigger_error(mysql_error(),E_USER_WARNING);
-    list($siteid) = mysql_fetch_row($result);
-
-    $sql = "SELECT * FROM `{$dbContacts}` AS c, `{$dbContactFlags}` AS cf ";
-    $sql .= "WHERE c.id=cf.contactid ";
-    $sql .= "AND c.siteid='{$siteid}' AND cf.flag='MGR'";
-    $result = mysql_query($sql);
-    if (mysql_error()) trigger_error(mysql_error(),E_USER_WARNING);
-
-    if (mysql_num_rows($result) >= 1)
-    {
-        while ($contact = mysql_fetch_object($result))
-        {
-            $manager[]="{$contact->email}";
-        }
-        $managers=implode(", ", $manager);
-    }
-    else
-    {
-        $managers='';
-    }
-
-    return $managers;
 }
 
 

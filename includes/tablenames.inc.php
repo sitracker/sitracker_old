@@ -26,7 +26,6 @@ $dbFeedbackReport = "{$CONFIG['db_tableprefix']}feedbackreport";
 $dbFeedbackRespondents = "{$CONFIG['db_tableprefix']}feedbackrespondents";
 $dbFeedbackResults = "{$CONFIG['db_tableprefix']}feedbackresults";
 $dbFiles = "{$CONFIG['db_tableprefix']}files";
-$dbFlags = "{$CONFIG['db_tableprefix']}flags";
 $dbGroups = "{$CONFIG['db_tableprefix']}groups";
 $dbHolidays = "{$CONFIG['db_tableprefix']}holidays";
 $dbIncidentPools = "{$CONFIG['db_tableprefix']}incidentpools";

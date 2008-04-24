@@ -279,13 +279,6 @@ CREATE TABLE `{$dbFiles}` (
 ) ENGINE=MyISAM;
 
 
-CREATE TABLE `{$dbFlags}` (
-  `flag` char(3) NOT NULL default '',
-  `name` varchar(100) default NULL,
-  PRIMARY KEY  (`flag`)
-) ENGINE=MyISAM;
-
-
 CREATE TABLE `{$dbGroups}` (
   `id` int(5) NOT NULL auto_increment,
   `name` varchar(255) NOT NULL default '',
@@ -1668,7 +1661,6 @@ ALTER TABLE `{$dbBillingPeriods}` ADD `tag` VARCHAR( 10 ) NOT NULL AFTER `{$dbPr
 ALTER TABLE `{$dbBillingPeriods}` DROP PRIMARY KEY, ADD PRIMARY KEY ( `servicelevelid` , `{$dbPriority}` ) ;
 
 -- KMH 4/12/07
-ALTER TABLE `{$dbFlags}` DROP INDEX `flag` ;
 ALTER TABLE `{$dbUserStatus}` DROP INDEX `id` ;
 
 -- PH 9/12/07
@@ -1974,6 +1966,7 @@ ADD `modifiedby` INT NULL ;
 
 -- FIXME these timestamp fields ^ need adding to the main install schema INL 24 April 08
 
+DROP TABLE IF EXISTS `{$CONFIG['db_tableprefix']}flags`;
 ";
 
 // Important: When making changes to the schema you must add SQL to make the alterations
