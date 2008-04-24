@@ -20,7 +20,7 @@ function dashboard_rss($row,$dashboardid)
     echo "<div class='windowtitle'><div><a href='edit_rss_feeds.php'>{$GLOBALS['strEdit']}</a></div><img src='{$CONFIG['application_webpath']}images/icons/{$iconset}/16x16/feed-icon.png' width='16' height='16' alt='' /> {$GLOBALS['strFeeds']}</div>";
     echo "<div class='window' id='rss_window'>";
 
-    echo "<p align='center'><img src='{$CONFIG['application_webpath']}images/icons/{$iconset}/ajax-loader.gif' alt='Loading icon' /></p>";
+    echo "<p align='center'><img src='{$CONFIG['application_webpath']}images/ajax-loader.gif' alt='Loading icon' /></p>";
 
     echo "</div>";
     echo "</div>";

@@ -19,7 +19,7 @@ function dashboard_watch_incidents($row,$dashboardid)
     echo "<div class='windowtitle'><div><a href='edit_watch_incidents.php'>{$GLOBALS['strEdit']}</a></div><img src='{$CONFIG['application_webpath']}images/icons/{$iconset}/16x16/support.png' width='16' height='16' alt='' /> "; printf($GLOBALS['strWatchIncidents'], user_realname($user,TRUE));
     echo "</div><div class='window' id='watch_incidents_windows'>";
 
-    echo "<p align='center'><img src='{$CONFIG['application_webpath']}images/icons/{$iconset}/ajax-loader.gif' alt='Loading icon' /></p>";
+    echo "<p align='center'><img src='{$CONFIG['application_webpath']}images/ajax-loader.gif' alt='Loading icon' /></p>";
 
     echo "</div>";
     echo "</div>";
