@@ -20,62 +20,68 @@ function dashboard_tasks($row,$dashboardid)
     echo "</a></div>";
     echo "<div class='window'>";
 
-    $sql = "SELECT * FROM `{$dbTasks}` WHERE owner='$user' AND (completion < 100 OR completion='' OR completion IS NULL) AND ";
-    $sql .= "(distribution = 'public' OR distribution = 'private') ";
-
-    if (!empty($sort))
+    if ($CONFIG['tasks_enabled'] == TRUE)
     {
-        if ($sort=='id') $sql .= "ORDER BY id ";
-        elseif ($sort=='name') $sql .= "ORDER BY name ";
-        elseif ($sort=='priority') $sql .= "ORDER BY priority ";
-        elseif ($sort=='completion') $sql .= "ORDER BY completion ";
-        elseif ($sort=='startdate') $sql .= "ORDER BY startdate ";
-        elseif ($sort=='duedate') $sql .= "ORDER BY duedate ";
-        elseif ($sort=='distribution') $sql .= "ORDER BY distribution ";
-        else $sql = "ORDER BY id ";
-        if ($order=='a' OR $order=='ASC' OR $order='') $sql .= "ASC";
-        else $sql .= "DESC";
-    }
-    else $sql .= "ORDER BY IF(duedate,duedate,99999999) ASC, duedate ASC, startdate DESC, priority DESC, completion ASC";
+        $sql = "SELECT * FROM `{$dbTasks}` WHERE owner='$user' AND (completion < 100 OR completion='' OR completion IS NULL) AND ";
+        $sql .= "(distribution = 'public' OR distribution = 'private') ";
 
-    $result = mysql_query($sql);
-    if (mysql_error()) trigger_error(mysql_error(),E_USER_ERROR);
-
-
-
-    if (mysql_num_rows($result) >=1 )
-    {
-        echo "<table align='center' width='100%'>";
-        echo "<tr>";
-        echo colheader('id', $GLOBALS['strID']);
-        echo colheader('name', $GLOBALS['strTask']);
-        echo colheader('priority', $GLOBALS['strPriority']);
-        echo colheader('completion', $GLOBALS['strCompletion']);
-        echo "</tr>\n";
-        $shade='shade1';
-        while ($task = mysql_fetch_object($result))
+        if (!empty($sort))
         {
-            $duedate = mysql2date($task->duedate);
-            $startdate = mysql2date($task->startdate);
-            if (empty($task->name)) $task->name = $GLOBALS['strUntitled'];
-            echo "<tr class='$shade'>";
-            echo "<td>{$task->id}</td>";
-            echo "<td><a href='view_task.php?id={$task->id}' class='info'>".truncate_string($task->name, 23);
-            if (!empty($task->description)) echo "<span>".nl2br($task->description)."</span>";
-            echo "</a></td>";
-            echo "<td>".priority_icon($task->priority).priority_name($task->priority)."</td>";
-            echo "<td>".percent_bar($task->completion)."</td>";
-            echo "</tr>\n";
-            if ($shade=='shade1') $shade='shade2';
-            else $shade='shade1';
+            if ($sort=='id') $sql .= "ORDER BY id ";
+            elseif ($sort=='name') $sql .= "ORDER BY name ";
+            elseif ($sort=='priority') $sql .= "ORDER BY priority ";
+            elseif ($sort=='completion') $sql .= "ORDER BY completion ";
+            elseif ($sort=='startdate') $sql .= "ORDER BY startdate ";
+            elseif ($sort=='duedate') $sql .= "ORDER BY duedate ";
+            elseif ($sort=='distribution') $sql .= "ORDER BY distribution ";
+            else $sql = "ORDER BY id ";
+            if ($order=='a' OR $order=='ASC' OR $order='') $sql .= "ASC";
+            else $sql .= "DESC";
         }
-        echo "</table>\n";
+        else $sql .= "ORDER BY IF(duedate,duedate,99999999) ASC, duedate ASC, startdate DESC, priority DESC, completion ASC";
+
+        $result = mysql_query($sql);
+        if (mysql_error()) trigger_error(mysql_error(),E_USER_ERROR);
+
+
+
+        if (mysql_num_rows($result) >=1 )
+        {
+            echo "<table align='center' width='100%'>";
+            echo "<tr>";
+            echo colheader('id', $GLOBALS['strID']);
+            echo colheader('name', $GLOBALS['strTask']);
+            echo colheader('priority', $GLOBALS['strPriority']);
+            echo colheader('completion', $GLOBALS['strCompletion']);
+            echo "</tr>\n";
+            $shade='shade1';
+            while ($task = mysql_fetch_object($result))
+            {
+                $duedate = mysql2date($task->duedate);
+                $startdate = mysql2date($task->startdate);
+                if (empty($task->name)) $task->name = $GLOBALS['strUntitled'];
+                echo "<tr class='$shade'>";
+                echo "<td>{$task->id}</td>";
+                echo "<td><a href='view_task.php?id={$task->id}' class='info'>".truncate_string($task->name, 23);
+                if (!empty($task->description)) echo "<span>".nl2br($task->description)."</span>";
+                echo "</a></td>";
+                echo "<td>".priority_icon($task->priority).priority_name($task->priority)."</td>";
+                echo "<td>".percent_bar($task->completion)."</td>";
+                echo "</tr>\n";
+                if ($shade=='shade1') $shade='shade2';
+                else $shade='shade1';
+            }
+            echo "</table>\n";
+        }
+        else
+        {
+            echo "<p align='center'>{$GLOBALS['strNoRecords']}</p>";
+        }
     }
     else
     {
-        echo "<p align='center'>{$GLOBALS['strNoRecords']}</p>";
+        echo "<p class='warning'>{$GLOBALS['strDisabled']}</p>";
     }
-
     echo "</div>";
     echo "</div>";
 }
