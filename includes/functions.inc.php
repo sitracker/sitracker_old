@@ -244,7 +244,7 @@ function authenticate($username, $password)
 */
 function db_read_column($column, $table, $id)
 {
-    $sql = "SELECT `$column` FROM `$table` WHERE id='$id' LIMIT 1";
+    $sql = "SELECT `$column` FROM `{$table}` WHERE id='$id' LIMIT 1";
     $result = mysql_query($sql);
     if (mysql_error()) trigger_error("MySQL Query Error ".mysql_error(), E_USER_WARNING);
     list($column) = mysql_fetch_row($result);
@@ -1023,7 +1023,7 @@ function incident_maintid($id)
 
 function incident_title($id)
 {
-    return db_read_column('title', $GLOBALS['DbIncidents'], $id);
+    return db_read_column('title', $GLOBALS['dbIncidents'], $id);
 }
 
 
