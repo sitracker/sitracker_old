@@ -90,7 +90,7 @@ else
                 if ($duedate > 0) $duedate = date('Y-m-d',$duedate)." ".$duetime;
                 else $duedate='';
                 if ($startdate < 1 AND $completion > 0) $startdate = date('Y-m-d H:i:s')." ".$starttime;
-                $sql = "INSERT INTO tasks ";
+                $sql = "INSERT INTO `{$dbTasks}` ";
                 $sql .= "(name,description,priority,owner,duedate,startdate,completion,value,distribution,created) ";
                 $sql .= "VALUES ('$name','$description','$priority','$taskuser','$duedate','$startdate','$completion','$value','$distribution','".date('Y-m-d H:i:s')."')";
                 mysql_query($sql);
