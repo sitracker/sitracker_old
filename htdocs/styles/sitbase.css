@@ -263,3 +263,6 @@ em.updatedrecently { }
 
 p#pageoptions { float: right; top: -10px; position: relative; }
 form.filterform { margin-left: auto; margin-right: auto; margin-bottom: 1em; }
+
+
+.search_highlight { background: #FFFACD; font-weight: bolder; }

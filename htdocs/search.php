@@ -51,7 +51,7 @@ function search_highlight($x,$var)
         {
             if ((($i + strlen($var)) <= strlen($x)) && (strcasecmp($var, substr($x, $i, strlen($var))) == 0))
             {
-                $xtemp .= "<span style='background: #FFFACD; font-weight: bolder;'>" . substr($x, $i , strlen($var)) . "</span>";
+                $xtemp .= "<span class='search_highlight'>" . substr($x, $i , strlen($var)) . "</span>";
                 $i += strlen($var);
             }
             else
@@ -74,12 +74,12 @@ if(isset($_GET['q']))
 {
     $search = cleanvar($_GET['q']);
     $domain = strtolower($_GET['domain']);
-    
+
     //$sql = "SELECT *,incidentid AS id FROM `{$dbUpdates}` as u ";
     //$sql .= "WHERE MATCH (bodytext) against ('{$search}' IN BOOLEAN MODE) AS score FROM u ";
     //$sql .= "GROUP BY incidentid LIMIT {$start}, {$end} ";
     //$sql .= "ORDER BY score desc";
-    
+
     $sql = "SELECT *,incidentid AS id, i.title,MATCH (bodytext) AGAINST ('{$search}') AS score ";
     $sql .= "FROM `{$dbUpdates}` as u, `{$dbIncidents}` as i ";
     $sql .= "WHERE MATCH (bodytext) AGAINST ('{$search}') ";
@@ -91,7 +91,7 @@ if(isset($_GET['q']))
         elseif ($sort=='incident') $sql .= " ORDER BY k.published ";
         elseif ($sort=='date') $sql .= " ORDER BY k.keywords ";
         else $sql .= " ORDER BY u.score ";
-    
+
         if ($order=='a' OR $order=='ASC' OR $order='') $sql .= "ASC";
         else $sql .= "DESC";
     }
@@ -99,13 +99,13 @@ if(isset($_GET['q']))
     {
         $sql .= " ORDER BY score DESC ";
     }
-    
+
     $countsql = $sql;
     $sql .= "LIMIT {$start}, {$resultsperpage} ";
     if($result = mysql_query($sql))
     {
- 
-        $results = mysql_num_rows($result);        
+
+        $results = mysql_num_rows($result);
         $countresult = mysql_query($countsql);
         $results = mysql_num_rows($countresult);
         $end = $start + $resultsperpage;
@@ -140,7 +140,7 @@ if(isset($_GET['q']))
         echo colheader(result, $strResult, $sort, $order, $filter);
         echo colheader(score, $strScore, $sort, $order, $filter);
         echo colheader(date, $strDate, $sort, $order, $filter);
-    
+
         $shade = 'shade1';
         while($row = mysql_fetch_object($result))
         {
@@ -169,18 +169,19 @@ if(isset($_GET['q']))
                     <td>".search_highlight($row->bodytext, $search)."</td>
                     <td>".number_format($row->score, 2)."</td>
                     <td>".ldate($CONFIG['dateformat_datetime'], $row->timestamp)."</td></tr>";
-        
-            if($shade == 'shade1')
+
+            if ($shade == 'shade1')
                 $shade = 'shade2';
             else
                 $shade = 'shade1';
         }
-        
+
         echo "</table>";
     }
     else
     {
-        echo $strNoRecords;
+        echo "<p>{$strNoResults}</p>";
+        echo "<p><a href='search.php'>{$strSearchAgain}</a></p>";
     }
 }
 else
