@@ -61,7 +61,7 @@ $hmenu[1030] = array_merge(array (10=> array ( 'perm'=> 22, 'name'=> $strUsers, 
                       90=> array ( 'perm'=> 69, 'name'=> $strNotices, 'url'=>"{$CONFIG['application_webpath']}notices.php"),
                       100=> array ( 'perm'=> 22, 'name'=> $strTriggers, 'url'=>"{$CONFIG['application_webpath']}triggers.php"),
                       110=> array ( 'perm'=> 22, 'name'=> $strScheduler, 'url'=>"{$CONFIG['application_webpath']}scheduler.php"),
-                      120=> array ( 'perm'=> 49, 'name'=> $strFeedbackForms, 'url'=>"", 'submenu'=>"103090")
+                      120=> array ( 'perm'=> 49, 'name'=> $strFeedbackForms, 'url'=>"", 'submenu'=>"103090", 'enablevar' => 'feedback_enabled')
 ), $hmenu[1030]);
 if (!is_array($hmenu[103010])) $hmenu[103010] = array();
 $hmenu[103010] = array_merge(array (10=> array ( 'perm'=> 22, 'name'=> $strManageUsers, 'url'=>"{$CONFIG['application_webpath']}manage_users.php"),
@@ -76,8 +76,8 @@ $hmenu[103020] = array_merge(array (10=> array ( 'perm'=> 16, 'name'=> $strAddTe
                         30=> array ( 'perm'=> 43, 'name'=> $strGlobalSignature, 'url'=>"{$CONFIG['application_webpath']}edit_global_signature.php")
 ), $hmenu[103020]);
 if (!is_array($hmenu[103090])) $hmenu[103090] = array();
-$hmenu[103090] = array_merge(array (10=> array ( 'perm'=> 49, 'name'=> $strAddFeedbackForm, 'url'=>"{$CONFIG['application_webpath']}edit_feedback_form.php?action=new"),
-                        20=> array ( 'perm'=> 49, 'name'=> $strBrowseFeedbackForms, 'url'=>"{$CONFIG['application_webpath']}browse_feedback_forms.php")
+$hmenu[103090] = array_merge(array (10=> array ( 'perm'=> 49, 'name'=> $strAddFeedbackForm, 'url'=>"{$CONFIG['application_webpath']}edit_feedback_form.php?action=new", 'enablevar' => 'feedback_enabled'),
+                        20=> array ( 'perm'=> 49, 'name'=> $strBrowseFeedbackForms, 'url'=>"{$CONFIG['application_webpath']}browse_feedback_forms.php", 'enablevar' => 'feedback_enabled')
 ), $hmenu[103090]);
 if (!is_array($hmenu[1040])) $hmenu[1040] = array();
 $hmenu[1040] = array_merge(array (10=> array ( 'perm'=> 0, 'name'=> $strViewUsers, 'url'=>"{$CONFIG['application_webpath']}users.php"),
@@ -94,7 +94,7 @@ if (!is_array($hmenu[20])) $hmenu[20] = array();
 $hmenu[20] = array_merge(array (10=> array ( 'perm'=> 0, 'name'=> $strSites, 'url'=>"{$CONFIG['application_webpath']}browse_sites.php", 'submenu'=>"2010"),
                     20=> array ( 'perm'=> 0, 'name'=> $strContacts, 'url'=>"{$CONFIG['application_webpath']}browse_contacts.php?search_string=A", 'submenu'=>"2020"),
                     30=> array ( 'perm'=> 0, 'name'=> $strMaintenance, 'url'=>"{$CONFIG['application_webpath']}browse_contract.php?search_string=A", 'submenu'=>"2030"),
-                    40=> array ( 'perm'=> 0, 'name'=> $strBrowseFeedback, 'url'=>"{$CONFIG['application_webpath']}browse_feedback.php")
+                    40=> array ( 'perm'=> 0, 'name'=> $strBrowseFeedback, 'url'=>"{$CONFIG['application_webpath']}browse_feedback.php", 'enablevar' => 'feedback_enabled')
 ), $hmenu[20]);
 
 if (!is_array($hmenu[2010])) $hmenu[2010] = array();
@@ -161,7 +161,7 @@ if (!is_array($hmenu[60])) $hmenu[60] = array();
                     60=> array ( 'perm'=> 37, 'name'=> "{$strSiteProducts}", 'url'=>"{$CONFIG['application_webpath']}reports/site_products.php"),
                     65=> array ( 'perm'=> 37,  'name'=> "{$strCountContractsByProduct}", 'url'=>"{$CONFIG['application_webpath']}reports/count_contracts_by_product.php"),
                     70=> array ( 'perm'=> 37, 'name'=> "{$strSiteContracts}", 'url'=>"{$CONFIG['application_webpath']}reports/supportbycontract.php"),
-                    80=> array ( 'perm'=> 37, 'name'=> "{$strCustomerFeedback}", 'url'=>"{$CONFIG['application_webpath']}reports/feedback.php"),
+                    80=> array ( 'perm'=> 37, 'name'=> "{$strCustomerFeedback}", 'url'=>"{$CONFIG['application_webpath']}reports/feedback.php", 'enablevar' => 'feedback_enabled'),
                     90=> array ( 'perm'=> 37, 'name'=> "{$strSiteIncidents}", 'url'=>"{$CONFIG['application_webpath']}reports/site_incidents.php"),
                     100=> array ( 'perm'=> 37, 'name'=> "{$strRecentIncidents}", 'url'=>"{$CONFIG['application_webpath']}reports/recent_incidents_table.php"),
                     110=> array ( 'perm'=> 37, 'name'=> "{$strIncidentsLoggedOpenClosed}", 'url'=>"{$CONFIG['application_webpath']}reports/incident_graph.php"),
