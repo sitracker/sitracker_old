@@ -211,7 +211,7 @@ if ($sit[0] != '')
     echo "</ul>\n\n";
 
     echo "<div id='topsearch'>";
-    echo "<form name='jumptoincident' action='search.php' method='post'>";
+    echo "<form name='jumptoincident' action='search.php' method='get'>";
     echo "<input type='text' name='q' id='searchfield' size='20' value='{$strIncidentNumOrSearchTerm}'
     onblur=\"if(this.value == '') { this.style.color='#888;'; this.value='{$strIncidentNumOrSearchTerm}';}\" onfocus=\"if(this.value == '{$strIncidentNumOrSearchTerm}') { this.style.color='#000;'; this.value=''; }\"
     onclick='clearjumpto()'/> ";

@@ -30,6 +30,8 @@ $domain = cleanvar($_GET['domain']);
 $q = cleanvar($_GET['q']);
 $filter = array('start' => $start, 'domain' => $domain, 'q' => $q);
 
+if (empty($domain)) $domain = 'incidents';
+
 function search_highlight($x,$var)
 {
     //$x is the string, $var is the text to be highlighted
@@ -70,9 +72,9 @@ include ('htmlheader.inc.php');
 
 echo "<h2><img src='{$CONFIG['application_webpath']}images/icons/{$iconset}/32x32/search.png' width='32' height='32' alt='' /> {$strSearch} {$CONFIG['application_shortname']}</h2>";
 
-if(isset($_GET['q']))
+if (!empty($q))
 {
-    $search = cleanvar($_GET['q']);
+    $search = $q;
     $domain = strtolower($_GET['domain']);
 
     //$sql = "SELECT *,incidentid AS id FROM `{$dbUpdates}` as u ";
@@ -102,6 +104,7 @@ if(isset($_GET['q']))
 
     $countsql = $sql;
     $sql .= "LIMIT {$start}, {$resultsperpage} ";
+
     if($result = mysql_query($sql))
     {
 
