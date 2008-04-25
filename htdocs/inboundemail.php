@@ -11,6 +11,8 @@
 // Authors: Ivan Lucas <ivanlucas[at]users.sourceforge.net>
 //          Paul Heaney <paulheaney[at]users.sourceforge.net>
 
+// Note: do we need to handle rfc2047 encoded words in the subject?
+
 @include ('set_include_path.inc.php');
 require ('db_connect.inc.php');
 require ('functions.inc.php');

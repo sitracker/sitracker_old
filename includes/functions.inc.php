@@ -7197,6 +7197,7 @@ function schedule_action_done($doneaction, $success=TRUE)
 function get_incident_billing_details($incidentid)
 {
     global $dbUpdates;
+    if (empty($incidentid)) trigger_error('Empty incident ID', E_USER_ERROR);
     /*
      $array[owner][] = array(owner, starttime, duration)
      */

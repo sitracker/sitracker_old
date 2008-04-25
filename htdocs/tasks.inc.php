@@ -706,53 +706,55 @@ if (mysql_num_rows($result) >=1 )
         echo "<p align='center'><a href='add_task.php'>{$strAddTask}</a></p>";
     }
 
-    echo "<h3><img src='{$CONFIG['application_webpath']}images/icons/{$iconset}/32x32/billing.png' width='32' height='32' alt='{$strActivityBilling}' /> ";
-    echo "{$strActivityBilling}</h3>";
-    echo "<p align='center'>{$strActivityBillingInfo}</p>";
-
-    $billing = make_incident_billing_array($incidentid);
-
-    if (!empty($billing))
+    if ($mode == 'incident')
     {
-        echo "<p><table align='center'>";
-        echo "<tr><td></td><th>{$GLOBALS['strMinutes']}</th></th></tr>";
-        echo "<tr><th>{$GLOBALS['strBillingEngineerPeriod']}</th>";
-        echo "<td>".($billing[-1]['engineerperiod']/60)."</td></tr>";
-        echo "<tr><th>{$GLOBALS['strBillingCustomerPeriod']}</th>";
-        echo "<td>".($billing[-1]['customerperiod']/60)."</td></tr>";
-        echo "</table></p>";
+        echo "<h3><img src='{$CONFIG['application_webpath']}images/icons/{$iconset}/32x32/billing.png' width='32' height='32' alt='{$strActivityBilling}' /> ";
+        echo "{$strActivityBilling}</h3>";
+        echo "<p align='center'>{$strActivityBillingInfo}</p>";
 
-        echo "<br />";
+        $billing = make_incident_billing_array($incidentid);
 
-        echo "<table align='center'>";
-
-        echo "<tr><th>{$GLOBALS['strOwner']}</th><th>{$GLOBALS['strTotalMinutes']}</th>";
-        echo "<th>{$GLOBALS['strBillingEngineerPeriod']}</th>";
-        echo "<th>{$GLOBALS['strBillingCustomerPeriod']}</th></tr>";
-        $shade = "shade1";
-
-        foreach ($billing AS $engineer)
+        if (!empty($billing))
         {
-            if (!empty($engineer['totalduration']))
-            {
-                $totals = $engineer;
-            }
-            else
-            {
-                echo "<tr class='{$shade}'><td>{$engineer['owner']}</td>";
-                echo "<td>".round($engineer['duration']/60)."</td>";
-                echo "<td>".sizeof($engineer['engineerperiods'])."</td>";
-                echo "<td>".sizeof($engineer['customerperiods'])."</td></tr>";
-            }
+            echo "<p><table align='center'>";
+            echo "<tr><td></td><th>{$GLOBALS['strMinutes']}</th></th></tr>";
+            echo "<tr><th>{$GLOBALS['strBillingEngineerPeriod']}</th>";
+            echo "<td>".($billing[-1]['engineerperiod']/60)."</td></tr>";
+            echo "<tr><th>{$GLOBALS['strBillingCustomerPeriod']}</th>";
+            echo "<td>".($billing[-1]['customerperiod']/60)."</td></tr>";
+            echo "</table></p>";
 
-            if ($shade == "shade1") $shade = "shade2";
-            else $shade = "shade2";
+            echo "<br />";
+
+            echo "<table align='center'>";
+
+            echo "<tr><th>{$GLOBALS['strOwner']}</th><th>{$GLOBALS['strTotalMinutes']}</th>";
+            echo "<th>{$GLOBALS['strBillingEngineerPeriod']}</th>";
+            echo "<th>{$GLOBALS['strBillingCustomerPeriod']}</th></tr>";
+            $shade = "shade1";
+
+            foreach ($billing AS $engineer)
+            {
+                if (!empty($engineer['totalduration']))
+                {
+                    $totals = $engineer;
+                }
+                else
+                {
+                    echo "<tr class='{$shade}'><td>{$engineer['owner']}</td>";
+                    echo "<td>".round($engineer['duration']/60)."</td>";
+                    echo "<td>".sizeof($engineer['engineerperiods'])."</td>";
+                    echo "<td>".sizeof($engineer['customerperiods'])."</td></tr>";
+                }
+
+                if ($shade == "shade1") $shade = "shade2";
+                else $shade = "shade2";
+            }
+            echo "<tr><td>{$GLOBALS['strTOTALS']}</td><td>".round($totals['totalduration']/60)."</td>";
+            echo "<td>{$totals['totalengineerperiods']}</td><td>{$totals['totalcustomerperiods']}</td></tr>";
+            echo "</table></p>";
         }
-        echo "<tr><td>{$GLOBALS['strTOTALS']}</td><td>".round($totals['totalduration']/60)."</td>";
-        echo "<td>{$totals['totalengineerperiods']}</td><td>{$totals['totalcustomerperiods']}</td></tr>";
-        echo "</table></p>";
     }
-
 }
 else
 {
