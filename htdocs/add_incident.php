@@ -744,7 +744,7 @@ elseif ($action=='assign')
             echo "</table>";
             echo "<p align='center'>{$strUsersBoldSkills}.</p>";
             trigger("TRIGGER_INCIDENT_CREATED", array('incidentid' => $incidentid, 'priority' => $priority,
-                                                      'contactid' => $contactid);
+                                                      'contactid' => $contactid));
         }
         else
         {
