@@ -73,9 +73,9 @@ $sql .= "AND sc.contactid='{$_SESSION['contactid']}' ";
 $sql .= "AND expirydate > (UNIX_TIMESTAMP(NOW()) - 15778463) ";
 $sql .= "ORDER BY expirydate DESC";
 
-$result = mysql_query($sql);
+$contractresult = mysql_query($sql);
 if (mysql_error()) trigger_error(mysql_error(),E_USER_ERROR);
-$numcontracts = mysql_num_rows($result);
+$numcontracts = mysql_num_rows($contractresult);
 
 echo "<div id='menu'>\n";
 echo "<ul id='menuList'>\n";
@@ -108,7 +108,7 @@ echo "</ul>";
 
 echo "<div align='right'>";
 echo contact_realname($_SESSION['contactid']);
-echo ", ".contact_site($_SESSION['siteid']);
+echo ", ".contact_site($_SESSION['contactid']);
 echo "</div>";
 echo "</div>";
 
