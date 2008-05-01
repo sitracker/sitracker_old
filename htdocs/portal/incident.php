@@ -103,7 +103,8 @@ if (mysql_error()) trigger_error("MySQL Query Error $sql".mysql_error(), E_USER_
 
 while ($filerow = mysql_fetch_object($fileresult))
 {
-    echo "<a>{$filerow->filename}</a><br />";
+    $filelink = str_replace($CONFIG['attachment_fspath'], $CONFIG['attachment_webpath'], $filerow->path);
+    echo "<a href='{$filelink}{$filerow->filename}'>{$filerow->filename}</a><br />";
     echo "uploaded ";
     if ($filerow->userid != 0)
     {        
