@@ -7946,13 +7946,12 @@ function upload_file($file, $id, $type='public')
             else
             {
                 $usertype = 'contact';
-                $userid = $_SESSION['userid'];
+                $userid = $_SESSION['contactid'];
             }
-            
             $sql = "INSERT into files
                     (category, filename, size, userid, usertype, path, filedate, refid)
                     VALUES
-                    ('{$type}', '{$file['name']}', '{$file['size']}', '{$userid}', '{$usertype}', '{$filepath}', 'NOW()', '{$id}')";
+                    ('{$type}', '{$file['name']}', '{$file['size']}', '{$userid}', '{$usertype}', '{$filepath}', '{$now}', '{$id}')";
 
             $result = mysql_query($sql);
             if (mysql_error()) trigger_error("MySQL Query Error ".mysql_error(), E_USER_ERROR);
