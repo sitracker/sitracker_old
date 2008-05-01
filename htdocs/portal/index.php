@@ -31,9 +31,9 @@ function portal_incident_table($sql)
         $html .=  colheader('lastupdated', $GLOBALS['strLastUpdated'], $sort, $order, $filter);
         $html .=  colheader('contact', $GLOBALS['strContact'], $sort, $order, $filter);
         $html .=  colheader('status', $GLOBALS['strStatus'], $sort, $order, $filter);
-        if ($showclosed == "false")
+        if ($showclosed != "true")
         {
-            $html .=  colheader('actions', $strOperation);
+            $html .=  colheader('actions', $GLOBALS['strOperation']);
         }
 
         $html .=  "</tr>\n";
@@ -52,16 +52,16 @@ function portal_incident_table($sql)
             $html .=  "<td>".ldate($CONFIG['dateformat_datetime'], $incident->lastupdated)."</td>";
             $html .=  "<td>{$incident->forenames} {$incident->surname}</td>";
             $html .=  "<td>".incidentstatus_name($incident->status, external)."</td>";
-            if ($showclosed == "false")
+            if ($showclosed != "true")
             {
-                $html .=  "<td><a href='update.php?id={$incident->id}'>{$strUpdate}</a> | ";
+                $html .=  "<td><a href='update.php?id={$incident->id}'>{$GLOBALS['strUpdate']}</a> | ";
 
                 //check if the customer has requested a closure
                 $lastupdate = list($update_userid, $update_type, $update_currentowner, $update_currentstatus, $update_body, $update_timestamp, $update_nextaction, $update_id)=incident_lastupdate($incident->id);
 
                 if ($lastupdate[1] == "customerclosurerequest")
                 {
-                    $html .=  "{$strClosureRequested}</td>";
+                    $html .=  "{$GLOBALS['strClosureRequested']}</td>";
                 }
                 else
                 {
@@ -151,7 +151,7 @@ if ($CONFIG['portal_site_incidents'] AND $otherincidents != NULL)
 {
     if ($showclosed == "true")
     {
-        echo "<h2>{$strYourSitesIncidents}</h2>";
+        echo "<h2>{$strYourSitesClosedIncidents}</h2>";
         $sql = "SELECT DISTINCT i.id AS id, i.*, c.forenames, c.surname ";
         $sql .= "FROM `{$dbIncidents}` AS i, `{$dbContacts}` AS c, `{$dbSites}` AS s ";
         $sql .= "WHERE status = 2 ";
@@ -170,7 +170,8 @@ if ($CONFIG['portal_site_incidents'] AND $otherincidents != NULL)
     }
     else
     {
-        echo "<h2>{$strYourSitesClosedIncidents}</h2>";
+        echo "<h2><img src='{$CONFIG['application_webpath']}images/icons/{$iconset}/32x32/site.png' alt ='{$strYourSitesIncidents}' />
+                {$strYourSitesIncidents}</h2>";
         $sql = "SELECT DISTINCT i.id AS id, i.*, c.forenames, c.surname ";
         $sql .= "FROM `{$dbIncidents}` AS i, `{$dbContacts}` AS c, `{$dbSites}` AS s ";
         $sql .= "WHERE status != 2 ";
