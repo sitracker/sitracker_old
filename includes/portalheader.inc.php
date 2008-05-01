@@ -99,7 +99,7 @@ if($CONFIG['kb_enabled'] AND $CONFIG['portal_kb_enabled'] AND mysql_num_rows($re
 }
 
 
-echo "<li><a href='details.php'>{$strDetails}</a></li>";
+echo "<li><a href='contact_details.php'>{$strDetails}</a></li>";
 if($_SESSION['usertype'] == 'admin')
     echo "<li><a href='admin.php'>{$strAdmin}</a></li>";
 echo "<li><a href='../logout.php'>{$strLogout}</a></li>";
