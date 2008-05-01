@@ -77,11 +77,11 @@ foreach ($keeptags AS $keeptag)
         $temptag[] = "[[/'.strtoupper($keeptag).']]";
     }
 }
-echo "<div id='portalactions'>";
+echo "<div class='portaleft'>";
 echo "<h3>{$strActions}</h3>";
 if ($user->status != 2)
 {
-    echo "<p><a href='update.php?id={$incidentid}'><img src='{$CONFIG['application_webpath']}images/icons/{$iconset}/16x16/note.png' alt='{$strUpdate}' /> {$strUpdate}</a></p>";
+    echo "<p><img src='{$CONFIG['application_webpath']}images/icons/{$iconset}/16x16/note.png' alt='{$strUpdate}' /> <a href='update.php?id={$incidentid}'>{$strUpdate}</a></p>";
 
     //check if the customer has requested a closure
     $lastupdate = list($update_userid, $update_type, $update_currentowner, $update_currentstatus, $update_body, $update_timestamp, $update_nextaction, $update_id)=incident_lastupdate($incidentid);
@@ -92,10 +92,21 @@ if ($user->status != 2)
     }
     else
     {
-        echo "<p><a href='close.php?id={$incidentid}'><img src='{$CONFIG['application_webpath']}images/icons/{$iconset}/16x16/close.png' /> {$strRequestClosure}</a></p>";
+        echo "<p><img src='{$CONFIG['application_webpath']}images/icons/{$iconset}/16x16/close.png' alt='{$strRequestClosure}' /> <a href='close.php?id={$incidentid}'>{$strRequestClosure}</a></p>";
     }
 }
+
+echo "<h3>{$strFiles}</h3>";
+$filesql = "SELECT * FROM files WHERE category='incident' and refid='{$incidentid}'";
+$fileresult = mysql_query($filesql);
+if (mysql_error()) trigger_error("MySQL Query Error $sql".mysql_error(), E_USER_ERROR);
+
+while ($filerow = mysql_fetch_object($fileresult))
+{
+    echo "<a>{$filerow->filename}</a><br />uploaded by {$filerow->userid} @ ".ldate(unixtojd($filerow->filedate))."<br /><br />";
+}
 echo "</div>";
+
 echo "<div style='width:50%;margin:0 auto;'>";
 while ($update = mysql_fetch_object($result))
 {
@@ -106,6 +117,7 @@ while ($update = mysql_fetch_object($result))
 
     $updateid = $update->id;
     $updatebody=trim($update->bodytext);
+    $updatebody = preg_replace("/\[\[att\]\](.*?)\[\[\/att\]\]/", "<a href = '{$attachment_webpath}/$1'>$1</a>", $updatebody);
 
     //remove empty updates
     if (!empty($updatebody) AND $updatebody != "<hr>")
@@ -117,11 +129,12 @@ while ($update = mysql_fetch_object($result))
         $updatebody = str_replace($temptag, $origtag, $updatebody);
 
         // Put the header part (up to the <hr /> in a seperate DIV)
-        if (strpos($updatebody, '<hr>') !== FALSE)
+ /*       if (strpos($updatebody, '<hr>') !== FALSE)
         {
             $updatebody = "<div class='iheader'>".str_replace("<hr>", "", $updatebody)."</div>";
-        }
-        
+        }*/
+        $updatebody = str_replace("<hr>", "", $updatebody);
+
         // Style quoted text
         // $quote[0]="/^(&gt;\s.*)\W$/m";
         // $quote[0]="/^(&gt;[\s]*.*)[\W]$/m";
