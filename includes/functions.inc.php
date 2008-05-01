@@ -7686,6 +7686,209 @@ function readable_file_size($filesize)
     return $filemax;
 }
 
+/**
+ * Return the html of contract detatils
+ * @author Kieran Hogg
+ * @param $maintid integer - ID of the contract
+ * @returns array of supported contracts, NULL if none
+**/
+function contract_details($id, $mode='internal')
+{
+    global $CONFIG, $iconset, $dbMaintenance, $dbSites, $dbResellers, $dbLicenceTypes;
+
+    $sql  = "SELECT m.*, m.notes AS maintnotes, s.name AS sitename, r.name AS resellername, lt.name AS licensetypename ";
+    $sql .= "FROM `{$dbMaintenance}` AS m, `{$dbSites}` AS s, `{$dbResellers}` AS r, `{$dbLicenceTypes}` AS lt ";
+    $sql .= "WHERE s.id = m.site AND m.id='{$id}' AND m.reseller = r.id AND m.licence_type = lt.id";
+    
+    $maintresult = mysql_query($sql);
+    if (mysql_error()) trigger_error("MySQL Query Error ".mysql_error(), E_USER_ERROR);
+    
+    $maintrow = mysql_fetch_array($maintresult);
+    
+    $html = "<table align='center' class='vertical'>";
+    $html .= "<tr><th>{$GLOBALS[strContract]} {$GLOBALS[strID]}:</th>";
+    $html .= "<td><h3><img src='{$CONFIG['application_webpath']}images/icons/{$iconset}/32x32/contract.png' width='32' height='32' alt='' /> ";
+    $html .= "{$maintrow['id']}</h3></td></tr>";
+    $html .= "<tr><th>{$GLOBALS[strStatus]}:</th><td>";
+    if ($maintrow['term'] == 'yes')
+    {
+        $html .= "<strong>{$GLOBALS[strTerminated]}</strong>";
+    }
+    else
+    {
+        $html .= $GLOBALS[strActive];
+    }
+    
+    if ($maintrow['expirydate']<$now AND $maintrow['expirydate'] != '-1')
+    {
+        $html .= "<span class='expired'>, {$GLOBALS[strExpired]}</span>";
+    }
+    $html .= "</td></tr>\n";
+    $html .= "<tr><th>{$GLOBALS[strSite]}:</th>";
+    
+    if ($mode == 'internal')
+    {
+        $html .= "<td><a href=\"site_details.php?id=".$maintrow['site']."\">".$maintrow['sitename']."</a></td></tr>";
+    }
+    else
+    {
+        $html .= "<td><a href=\"site_details.php\">".$maintrow['sitename']."</a></td></tr>";
+    }
+    $html .= "<tr><th>{$GLOBALS[strAdminContact]}:</th>";
+    $html .= "<td><a href=\"contact_details.php?id=".$maintrow['admincontact']."\">".contact_realname($maintrow['admincontact'])."</a></td></tr>";
+    
+    $html .= "<tr><th>{$GLOBALS[strReseller]}:</th><td>";
+    
+    if (empty($results['resellername']))
+    {
+        $html .= $GLOBALS[strNoReseller];
+    }
+    else
+    {
+        $html .= $maintrow['resellername'];
+    }
+    $html .= "</td></tr>";
+    $html .= "<tr><th>{$GLOBALS[strProduct]}:</th><td>".product_name($maintrow['product'])."</td></tr>";
+    $html .= "<tr><th>{$GLOBALS[strIncidents]}:</th>";
+    $html .= "<td>";
+    $incidents_remaining = $maintrow['incident_quantity'] - $maintrow['incidents_used'];
+    
+    if ($maintrow['incident_quantity'] == 0)
+    {
+        $quantity = $GLOBALS[strUnlimited];
+    }
+    else
+    {
+        $quantity = $maintrow['incident_quantity'];
+    }
+    
+    $html .= sprintf($GLOBALS[strUsedNofN], $maintrow['incidents_used'], $quantity);
+    if ($maintrow['incidents_used'] >= $maintrow['incident_quantity'])
+    {
+        $html .= " ($GLOBALS[strZeroRemaining])";
+    }
+    
+    $html .= "</td></tr>";
+    if ($maintrow['licence_quantity'] != '0')
+    {
+        $html .= "<tr><th>{$GLOBALS[strLicense]}:</th>";
+        $html .= "<td>{$maintrow['licence_quantity']} {$maintrow['licensetypename']}</td></tr>\n";
+    }
+    
+    $html .= "<tr><th>{$GLOBALS[strServiceLevel]}:</th><td>".servicelevel_name($maintrow['servicelevelid'])."</td></tr>";
+    $html .= "<tr><th>{$GLOBALS[strExpiryDate]}:</th><td>";
+    if ($maintrow['expirydate'] == '-1')
+    {
+        $html .= "{$GLOBALS[strUnlimited]}";
+    }
+    else
+    {
+        $html .= ldate($CONFIG['dateformat_date'], $maintrow['expirydate']);
+    }
+    
+    $html .= "</td></tr>";
+    if ($maintrow['maintnotes'] != '' AND $mode=='internal')
+    {
+        $html .= "<tr><th>{$GLOBALS[strNotes]}:</th><td>".$maintrow['maintnotes']."</td></tr>";
+    }
+    $html .= "</table>";
+    $html .= "<p align='center'>";
+    $html .= "<a href=\"edit_contract.php?action=edit&amp;maintid=$id\">{$GLOBALS[strEditContract]}</a></p>";
+    
+    if (mysql_num_rows($maintresult)<1)
+    {
+        throw_error("{$GLOBALS[strNoContractsFound]}: ",$id);
+    }
+    else
+    {
+        $allowedcontacts = $maintrow['supportedcontacts'];
+    
+        $supportedcontacts = supported_contacts($id);
+        if ($supportedcontacts != NULL)
+        {
+            $numberofcontacts = sizeof($supportedcontacts);
+    
+            if ($allowedcontacts == 0)
+            {
+                $allowedcontacts = $GLOBALS[strUnlimited];
+            }
+            $html .= "<table align='center'>";
+            $supportcount = 1;
+            foreach($supportedcontacts AS $contact)
+            {
+                $html .= "<tr><th>{$GLOBALS[strContact]} #{$supportcount}:</th>";
+                $html .= "<td><img src='{$CONFIG['application_webpath']}images/icons/{$iconset}/16x16/contact.png' width='16' height='16' alt='' /> ";
+                $html .= "<a href=\"contact_details.php?id={$contact}\">".contact_realname($contact)."</a>, ";
+                $html .= contact_site($contact). "</td>";
+                
+                if ($mode == 'internal')
+                {
+                    $html .= "<td><a href=\"delete_maintenance_support_contact.php?contactid=".$contact."&amp;maintid=$id&amp;context=maintenance\">{$GLOBALS[strRemove]}</a></td></tr>\n";
+                }
+                else
+                {
+                    $html .= "<td><a href=\"{$_SERVER['PHP_SELF']}?id={$id}&amp;contactid=".$contact."&amp;action=remove\">{$GLOBALS[strRemove]}</a></td></tr>\n";
+                }
+                $supportcount++;
+            }
+            $html .= "</table>";
+        }
+        else
+        {
+            $html .= "<p align='center'>{$GLOBALS[strNoRecords]}<p>";
+        }
+    }
+    if ($numberofcontacts < $allowedcontacts OR $allowedcontacts == 0)
+    {
+        if ($mode == 'internal')
+        {
+            $html .= "<p align='center'><a href='add_contact_support_contract.php?maintid={$id}&amp;siteid={$maintrow['site']}&amp;context=maintenance'>";
+            $html .= "{$GLOBALS[strAddContact]}</a></p>";
+        }
+        else
+        {
+            $html .= "<h3>{$GLOBALS['strAddContact']}</h3>";
+            $html .= "<form action='{$_SERVER['PHP_SELF']}?id={$id}&amp;action=add' method='post' >";
+            $html .= "<p align='center'>".contact_site_drop_down('contactid', 'contactid', maintenance_siteid($id))."<br />";
+            $html .= "<input type='submit' value='{$GLOBALS['strAdd']}' /></p></form>";
+        }
+    }
+    $html .= "<br />";
+    $html .= "<h3>{$GLOBALS[strSkillsSupportedUnderContract]}:</h3>";
+    // supported software
+    $sql = "SELECT * FROM `{$GLOBALS[dbSoftwareProducts]}` AS sp, `{$GLOBALS[dbSoftware]}` AS s ";
+    $sql .= "WHERE sp.softwareid = s.id AND productid='{$maintrow['product']}' ";
+    $result=mysql_query($sql);
+    if (mysql_error()) trigger_error("MySQL Query Error ".mysql_error(), E_USER_ERROR);
+    
+    if (mysql_num_rows($result)>0)
+    {
+        $html .="<table align='center'>";
+        while ($software=mysql_fetch_array($result))
+        {
+            $html .= "<tr><td> <img src='{$CONFIG['application_webpath']}images/icons/{$iconset}/16x16/skill.png' width='16' height='16' alt='' /> ";
+            if ($software->lifetime_end > 0 AND $software->lifetime_end < $now)
+            {
+                $html .= "<span class='deleted'>";
+            }
+            $html .= $software['name'];
+            if ($software->lifetime_end > 0 AND $software->lifetime_end < $now)
+            {
+                $html .= "</span>";
+            }
+            $html .= "</td></tr>\n";
+        }
+        $html .= "</table>\n";
+    }
+    else
+    {
+        $html .= "<p align='center'>{$GLOBALS[strNone]} / {$GLOBALS[strUnknown]}<p>";
+    }
+    
+    return $html;
+}
+
+
 // -------------------------- // -------------------------- // --------------------------
 // leave this section at the bottom of functions.inc.php ================================
 
