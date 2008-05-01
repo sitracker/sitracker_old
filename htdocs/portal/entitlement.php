@@ -1,13 +1,13 @@
 <?php
-/*
-portal/entitlement.inc.php - Lists contacts entitlments in the portal included by ../portal.php
-
-SiT (Support Incident Tracker) - Support call tracking system
-Copyright (C) 2000-2008 Salford Software Ltd. and Contributors
-
-This software may be used and distributed according to the terms
-of the GNU General Public License, incorporated herein by reference.
-*/
+// portal/entitlement.inc.php - Lists contacts entitlments in the portal included by ../portal.php
+//
+// SiT (Support Incident Tracker) - Support call tracking system
+// Copyright (C) 2000-2008 Salford Software Ltd. and Contributors
+//
+// This software may be used and distributed according to the terms
+// of the GNU General Public License, incorporated herein by reference.
+//
+// Author: Kieran Hogg <kieran_hogg[at]users.sourceforge.net
 
 include 'portalheader.inc.php';
 
@@ -25,9 +25,11 @@ if ($numcontracts >= 1)
     echo colheader('actions', $strOperation);
     echo "</tr>";
     $shade = 'shade1';
-    while ($contract = mysql_fetch_object($result))
+    while ($contract = mysql_fetch_object($contractresult))
     {
-        echo "<tr class='$shade'><td>{$contract->id}</td><td>{$contract->name}</td>";
+        echo "<tr class='$shade'>";
+        echo "<td><a href='contracts.php?id={$contract->id}'>{$contract->id}</a></td>";
+        echo "<td>{$contract->name}</td>";
         echo "<td>";
         if ($contract->incident_quantity==0)
         {
