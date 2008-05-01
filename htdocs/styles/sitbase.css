@@ -210,7 +210,7 @@ div#menu li:hover li ul,
   -moz-opacity:0.75;
 }
 
-#portalactions
+.portaleft
 {
   width: 20%;
   float: left;
@@ -263,6 +263,6 @@ em.updatedrecently { }
 
 p#pageoptions { float: right; top: -10px; position: relative; }
 form.filterform { margin-left: auto; margin-right: auto; margin-bottom: 1em; }
-
+form.filterform { margin-left: auto; margin-right: auto; margin-bottom: 1em; }
 
 .search_highlight { background: #FFFACD; font-weight: bolder; }
