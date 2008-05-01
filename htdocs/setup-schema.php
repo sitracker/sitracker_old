@@ -1967,6 +1967,10 @@ ADD `modifiedby` INT NULL ;
 -- FIXME these timestamp fields ^ need adding to the main install schema INL 24 April 08
 
 DROP TABLE IF EXISTS `{$CONFIG['db_tableprefix']}flags`;
+
+-- KMH 01/05/08
+ALTER TABLE `files` CHANGE `category` `category` ENUM( 'public', 'private', 'protected', 'incident', 'kb' ) NOT NULL DEFAULT 'public' ;
+ALTER TABLE `files` ADD `refid` INT( 11 ) NULL ;
 ";
 
 // Important: When making changes to the schema you must add SQL to make the alterations
