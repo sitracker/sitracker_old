@@ -11,7 +11,7 @@
 
 include 'portalheader.inc.php';
 
-echo "<h2>{$strYourSupportEntitlement}</h2>";
+echo "<h2><img src='{$CONFIG['application_webpath']}images/icons/{$iconset}/32x32/support.png'> {$strYourSupportEntitlement}</h2>";
 
 if ($numcontracts >= 1)
 {
