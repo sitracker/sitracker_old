@@ -91,7 +91,7 @@ $CONFIG['main_dictionary_file'] = '/usr/share/dict/linux.words';
 $CONFIG['custom_dictionary_file'] = "{$CONFIG['application_fspath']}dictionary/custom.words";
 
 // The CSS file to use when no other is configured
-$CONFIG['default_css_url'] = 'styles/webtrack1.css';
+$CONFIG['default_css_url'] = 'styles/sit8.css';
 
 // The interface style that new users should use (user default style)
 $CONFIG['default_interface_style'] = 8;
@@ -226,14 +226,14 @@ $CONFIG['chase_managers_manager_minutes'] = 0; // number of minutes incident has
 $CONFIG['chase_email_template'] = ''; // The template to use to send chase email
 $CONFIG['dont_chase_maintids'] = array(1 => 1); // maintence IDs not to chase
 
-$CONFIG['portal_site_incidents'] = TRUE; //users in the portal can view site incidents based on the contract options
-$CONFIG['portal_usernames_can_be_changed'] = TRUE; //portal usernames can be changed by the users
-
 //Enable/Disable sections
 $CONFIG['kb_enabled'] = TRUE;
 $CONFIG['portal_kb_enabled'] = TRUE;
-$CONFIG['tasks_enabled'] = TRUE;
+$CONFIG['tasks_enabled'] = FALSE;
 $CONFIG['calendar_enabled'] = TRUE;
-$CONFIG['holidays_enabled'] = TRUE;
+$CONFIG['holidays_enabled'] = FALSE;
 $CONFIG['feedback_enabled'] = TRUE;
+
+$CONFIG['portal_site_incidents'] = TRUE; //users in the portal can view site incidents based on the contract options
+$CONFIG['portal_usernames_can_be_changed'] = TRUE; //portal usernames can be changed by the users
 ?>
