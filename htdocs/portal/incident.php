@@ -97,7 +97,11 @@ if ($user->status != 2)
 }
 
 echo "<h3>{$strFiles}</h3>";
-$filesql = "SELECT * FROM files WHERE category='incident' and refid='{$incidentid}'";
+$filesql = "SELECT *
+            FROM `{$dbFiles}`
+            WHERE category='incident'
+            AND refid='{$incidentid}'
+            ORDER BY filedate DESC";
 $fileresult = mysql_query($filesql);
 if (mysql_error()) trigger_error("MySQL Query Error $sql".mysql_error(), E_USER_ERROR);
 
@@ -131,7 +135,8 @@ while ($update = mysql_fetch_object($result))
 
     $updateid = $update->id;
     $updatebody=trim($update->bodytext);
-    $updatebody = preg_replace("/\[\[att\]\](.*?)\[\[\/att\]\]/", "<a href = '{$attachment_webpath}/$1'>$1</a>", $updatebody);
+    $updatebody = str_replace($CONFIG['attachment_webpath'], "", $updatebody);
+    $updatebody = preg_replace("/\[\[att\]\](.*?)\[\[\/att\]\]/", "<a href = '{$CONFIG['attachment_webpath']}/$1'>$1</a>", $updatebody);
 
     //remove empty updates
     if (!empty($updatebody) AND $updatebody != "<hr>")
