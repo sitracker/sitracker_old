@@ -103,7 +103,20 @@ if (mysql_error()) trigger_error("MySQL Query Error $sql".mysql_error(), E_USER_
 
 while ($filerow = mysql_fetch_object($fileresult))
 {
-    echo "<a>{$filerow->filename}</a><br />uploaded by {$filerow->userid} @ ".ldate(unixtojd($filerow->filedate))."<br /><br />";
+    echo "<a>{$filerow->filename}</a><br />";
+    echo "uploaded ";
+    if ($filerow->userid != 0)
+    {        
+        if ($filerow->usertype == 'contact')
+        {
+            echo "by ".contact_realname($filerow->userid)." ";
+        }
+        else
+        {
+            echo "by ".user_realname($filerow->userid)." ";
+        }
+    }
+    echo "@ ".ldate($CONFIG['dateformat_datetime'], $filerow->filedate)."<br /><br />";
 }
 echo "</div>";
 
