@@ -7888,6 +7888,79 @@ function contract_details($id, $mode='internal')
     return $html;
 }
 
+/**
+ * Return the html of contract detatils
+ * @author Ivan Lucas
+ * @param $file mixed file to upload
+ * @param $id
+ * @returns array of supported contracts, NULL if none
+**/
+function upload_file($file, $id, $type='public')
+{
+    global $CONFIG, $now;
+    $att_max_filesize = return_bytes($CONFIG['upload_max_filesize']);
+    $incident_attachment_fspath = $CONFIG['attachment_fspath'] . $id;
+    if ($file['name'] != "")
+    {
+        // try to figure out what delimeter is being used (for windows or unix)...
+        //.... // $delim = (strstr($filesarray[$c],"/")) ? "/" : "\\";
+        $delim = (strstr($file['tmp_name'],"/")) ? "/" : "\\";
+
+        // make incident attachment dir if it doesn't exist
+        $umask = umask(0000);
+        if (!file_exists($CONFIG['attachment_fspath'] . "$id"))
+        {
+            $mk = @mkdir($CONFIG['attachment_fspath'] ."$id", 0770);
+            if (!$mk) throw_error('Failed creating incident attachment directory: ',$incident_attachment_fspath .$id);
+        }
+        $mk = @mkdir($CONFIG['attachment_fspath'] .$id . "{$delim}{$now}", 0770);
+        if (!$mk) throw_error('Failed creating incident attachment (timestamp) directory: ',$incident_attachment_fspath .$id . "{$delim}{$now}");
+        umask($umask);
+        $filepath = $incident_attachment_fspath.$delim.$now.$delim;
+        $newfilename = $filepath.$file['name'];
+
+        // Move the uploaded file from the temp directory into the incidents attachment dir
+        $mv = move_uploaded_file($file['tmp_name'], $newfilename);
+        if (!$mv) trigger_error('!Error: Problem moving attachment from temp directory to: '.$newfilename, E_USER_WARNING);
+
+        //$mv=move_uploaded_file($attachment, "$filename");
+        //if (!mv) throw_error('!Error: Problem moving attachment from temp directory:',$filename);
+
+        
+
+        // Check file size before attaching
+        if ($file['size'] > $att_max_filesize)
+        {
+            throw_error('User Error: Attachment too large or file upload error - size:',$file['size']);
+            // throwing an error isn't the nicest thing to do for the user but there seems to be no guaranteed
+            // way of checking file sizes at the client end before the attachment is uploaded. - INL
+            return FALSE;
+        }
+        else
+        {            
+            if (!empty($sit[2]))
+            {
+                $usertype = 'user';
+                $userid = $sit[2];
+            }
+            else
+            {
+                $usertype = 'contact';
+                $userid = $_SESSION['userid'];
+            }
+            
+            $sql = "INSERT into files
+                    (category, filename, size, userid, usertype, path, filedate, refid)
+                    VALUES
+                    ('{$type}', '{$file['name']}', '{$file['size']}', '{$userid}', '{$usertype}', '{$filepath}', 'NOW()', '{$id}')";
+
+            $result = mysql_query($sql);
+            if (mysql_error()) trigger_error("MySQL Query Error ".mysql_error(), E_USER_ERROR);
+            
+            return $newfilename;
+        }
+    }
+}
 
 // -------------------------- // -------------------------- // --------------------------
 // leave this section at the bottom of functions.inc.php ================================
