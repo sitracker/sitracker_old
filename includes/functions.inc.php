@@ -7916,6 +7916,7 @@ function upload_file($file, $id, $type='public')
         $mk = @mkdir($CONFIG['attachment_fspath'] .$id . "{$delim}{$now}", 0770);
         if (!$mk) throw_error('Failed creating incident attachment (timestamp) directory: ',$incident_attachment_fspath .$id . "{$delim}{$now}");
         umask($umask);
+        $returnpath = $id.$delim.$now.$delim.$file['name'];
         $filepath = $incident_attachment_fspath.$delim.$now.$delim;
         $newfilename = $filepath.$file['name'];
 
@@ -7924,9 +7925,7 @@ function upload_file($file, $id, $type='public')
         if (!$mv) trigger_error('!Error: Problem moving attachment from temp directory to: '.$newfilename, E_USER_WARNING);
 
         //$mv=move_uploaded_file($attachment, "$filename");
-        //if (!mv) throw_error('!Error: Problem moving attachment from temp directory:',$filename);
-
-        
+        //if (!mv) throw_error('!Error: Problem moving attachment from temp directory:',$filename);   
 
         // Check file size before attaching
         if ($file['size'] > $att_max_filesize)
@@ -7952,11 +7951,10 @@ function upload_file($file, $id, $type='public')
                     (category, filename, size, userid, usertype, path, filedate, refid)
                     VALUES
                     ('{$type}', '{$file['name']}', '{$file['size']}', '{$userid}', '{$usertype}', '{$filepath}', '{$now}', '{$id}')";
-
             $result = mysql_query($sql);
             if (mysql_error()) trigger_error("MySQL Query Error ".mysql_error(), E_USER_ERROR);
             
-            return $newfilename;
+            return $returnpath;
         }
     }
 }
