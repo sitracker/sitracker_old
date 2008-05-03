@@ -1922,7 +1922,7 @@ function closingstatus_drop_down($name, $id)
         {
             $html .= "selected='selected' ";
         }
-        $html .= "value='{$statuses["id"]}'>{$statuses["name"]}</option>\n";
+        $html .= "value='{$statuses["id"]}'>{$GLOBALS[$statuses["name"]]}</option>\n";
     }
     $html .= "</select>\n";
 
