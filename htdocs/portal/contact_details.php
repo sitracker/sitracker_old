@@ -13,9 +13,9 @@ include 'portalheader.inc.php';
 
 if (!isset($_GET['id']))
 {
-    $id = $_SESSION['userid'];
+    $id = $_SESSION['contactid'];
 }
-elseif ($_GET['id'] != $_SESSION['userid'] AND $_SESSION['usertype'] == 'admin')
+elseif ($_GET['id'] != $_SESSION['contactid'] AND $_SESSION['usertype'] == 'admin')
 {
     $id = intval($_GET['id']);
 }
