@@ -83,7 +83,7 @@ echo "<li><a href='index.php'>{$strIncidents}</a></li>";
 if($numcontracts == 1)
 {
     //only one contract
-    $contractobj = mysql_fetch_object($result);
+    $contractobj = mysql_fetch_object($contractresult);
     $contractid = $contractobj->id;
     echo "<li><a href='add.php?contractid={$contractid}'>{$strAddIncident}</a></li>";
 }
