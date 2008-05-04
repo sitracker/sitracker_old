@@ -704,10 +704,10 @@ CREATE TABLE `{$dbRelatedIncidents}` (
 `incidentid` INT( 5 ) NOT NULL ,
 `relation` ENUM( 'child', 'sibling' ) DEFAULT 'child' NOT NULL ,
 `relatedid` INT( 5 ) NOT NULL ,
+`owner` int(5) NOT NULL default '0',
 PRIMARY KEY ( `id` ) ,
 INDEX ( `incidentid` , `relatedid` )
 ) ENGINE=MyISAM;
-
 
 CREATE TABLE `{$dbResellers}` (
   `id` tinyint(4) NOT NULL auto_increment,
@@ -1970,7 +1970,7 @@ DROP TABLE IF EXISTS `{$CONFIG['db_tableprefix']}flags`;
 
 -- KMH 01/05/08
 ALTER TABLE `files` CHANGE `category` `category` ENUM( 'public', 'private', 'protected', 'incident', 'kb' ) NOT NULL DEFAULT 'public' ;
-ALTER TABLE `files` ADD `refid` INT( 11 ) NULL ;
+ALTER TABLE `files` ADD `refid` INT( 11 ) NULL ;  // FIXME this should be implemented as a link
 ";
 
 // Important: When making changes to the schema you must add SQL to make the alterations

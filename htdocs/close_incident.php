@@ -236,7 +236,7 @@ if (empty($_REQUEST['process']))
     echo "<td>{$strSendEmailExplainingIncidentClosure}<br />";
     echo "<label><input name='send_email' checked='checked' type='radio' value='no' />{$strNo}</label> ";
     echo "<input name='send_email' type='radio' value='yes' />{$strYes}</td></tr>\n";
-    $externalemail=incident_externalemail($id);
+    $externalemail = incident_externalemail($id);
     if ($externalemail)
     {
         echo "<tr><th>".sprintf($strInformX, $strExternalEngineer).":<br />";
@@ -350,7 +350,7 @@ else
             if (mysql_error()) trigger_error("MySQL Query Error ".mysql_error(), E_USER_ERROR);
 
             //
-            if ($wait=='yes')
+            if ($wait == 'yes')
             {
                 // Update - mark for closure
                 $sql  = "INSERT INTO `{$dbUpdates}` (incidentid, userid, type, bodytext, timestamp) ";
@@ -418,7 +418,8 @@ else
                         $result = mysql_query($sql);
                         if (mysql_error()) trigger_error("MySQL Query Error ".mysql_error(), E_USER_ERROR);
 
-                        $sql = "UPDATE `{$dbIncidents}` SET status = 1 WHERE id = '$relatedid'";
+                        $sql = "UPDATE `{$dbIncidents}` SET status = 1, lastupdated = '{$now}' ";
+                        $sql .= "WHERE id = '{$relatedid}' ";
                         $result = mysql_query($sql);
                         if (mysql_error()) trigger_error("MySQL Query Error ".mysql_error(), E_USER_ERROR);
                     }
@@ -516,9 +517,9 @@ else
                 }
 
                 // Add Software Record
-                if ($softwareid>0)
+                if ($softwareid > 0)
                 {
-                    $sql="INSERT INTO `{$dbKBSoftware}` (docid,softwareid) VALUES ('{$docid}', '{$softwareid}')";
+                    $sql = "INSERT INTO `{$dbKBSoftware}` (docid,softwareid) VALUES ('{$docid}', '{$softwareid}')";
                     mysql_query($sql);
                     if (mysql_error()) trigger_error("MySQL Query Error ".mysql_error(), E_USER_ERROR);
                     journal(CFG_LOGGING_NORMAL, 'KB Article Added', "KB Article {$docid} was added", CFG_JOURNAL_KB, $docid);
