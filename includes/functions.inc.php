@@ -1137,8 +1137,8 @@ function incident_sla_history($incidentid)
     $sql = "SELECT * FROM `{$dbUpdates}` WHERE type='slamet' AND incidentid='{$incidentid}' ORDER BY id ASC, timestamp ASC";
     $result = mysql_query($sql);
     if (mysql_error()) trigger_error("MySQL Query Error ".mysql_error(), E_USER_ERROR);
-    $prevtime=0;
-    $idx=0;
+    $prevtime = 0;
+    $idx = 0;
     while ($history = mysql_fetch_object($result))
     {
         $slahistory[$idx]['targetsla'] = $history->sla;
@@ -1179,7 +1179,7 @@ function incident_sla_history($incidentid)
             $slahistory[$idx]['targetmet'] = FALSE;
         }
 
-        $prevtime=$history->timestamp;
+        $prevtime = $history->timestamp;
         $idx++;
     }
     // Get next target, but only if incident is still open
@@ -4810,7 +4810,7 @@ function calculate_working_time($t1, $t2, $publicholidays) {
 
   $minutes= $min + ($weeks * count($CONFIG['working_days']) + $days ) * ($ewd-$swd) * 60;
   return $minutes;
-*/
+ */
 
     global $CONFIG;
     $swd = $CONFIG['start_working_day']/3600;
@@ -4818,7 +4818,8 @@ function calculate_working_time($t1, $t2, $publicholidays) {
 
   // Just in case they are the wrong way around ...
 
-    if ( $t1 > $t2 ) {
+    if ( $t1 > $t2 )
+    {
         $t3 = $t2;
         $t2 = $t1;
         $t1 = $t3;
@@ -4828,11 +4829,11 @@ function calculate_working_time($t1, $t2, $publicholidays) {
 
     $timeworked = 0;
 
-    $t2date = getdate($ts);
+    $t2date = getdate($t2);
 
     $midnight = 1440; // 24 * 60  minutes
 
-    while ($currenttime <= $t2)
+    while ($currenttime < $t2) // was <=
     {
         $time = getdate($currenttime);
 
@@ -4841,7 +4842,7 @@ function calculate_working_time($t1, $t2, $publicholidays) {
         if (in_array($time['wday'], $CONFIG['working_days']) AND $time['hours'] >= $swd
             AND $time['hours'] <= $ewd AND (($ph = is_public_holiday($currenttime, $publicholidays)) == 0))
         {
-            if ($t2date['yday'] == $time['yday'] AND $t2day['year'] == $time['year'])
+            if ($t2date['yday'] == $time['yday'] AND $t2date['year'] == $time['year'])
             {
                 // if end same day as time
                 $c = $t2 - $currenttime;
@@ -4851,24 +4852,11 @@ function calculate_working_time($t1, $t2, $publicholidays) {
             else
             {
                 // End on a different day
+                $secondsintoday = (($t2date['hours']*60)*60)+($t2date['minutes']*60)+$t2date['seconds'];
 
-                 $timeworked++;
-                 $currenttime += 60;  // move to the next minute
+                $timeworked += ($CONFIG['end_working_day']-$secondsintoday)/60;
 
-                //$timeworked += 60;
-                //$currenttime += (60*60);
-
-                /*
-                // Move to next day
-                $c = ($time['hours'] * 60) + $time['minutes'];
-                $diff = $midnight - $c;
-                $currenttime += ($diff * 60); // to seconds
-
-                $timeworked += ($ewd - $c);
-
-                // Jump to start of working day
-                $currenttime += ($swd * 60);
-                */
+                $currenttime += ($midnight*$secondsintoday)+$swd;
             }
         }
         else
@@ -4978,18 +4966,24 @@ function calculate_incident_working_time($incidentid, $t1, $t2, $states=array(2,
     $time = 0;
     $timeptr = 0;
     $laststatus = 2; // closed
-    while ($update=mysql_fetch_array($result))
+    while ($update = mysql_fetch_array($result))
     {
         //  if ($t1<=$update['timestamp'])
-        if ($t1<=$update['timestamp'])
+        if ($t1 <= $update['timestamp'])
         {
             if ($timeptr == 0)
             {
                 // This is the first update
                 // If it's active, set the ptr = t1
                 // otherwise set to current timestamp ???
-                if (is_active_status($laststatus, $states)) $timeptr = $t1;
-                else $timeptr = $update['timestamp'];
+                if (is_active_status($laststatus, $states))
+                {
+                    $timeptr = $t1;
+                }
+                else
+                {
+                    $timeptr = $update['timestamp'];
+                }
             }
 
             if ($t2 < $update['timestamp'])
@@ -5003,7 +4997,7 @@ function calculate_incident_working_time($incidentid, $t1, $t2, $states=array(2,
             }
 
             // if status has changed or this is the first (active update)
-            if (is_active_status($laststatus, $states)!=is_active_status($update['currentstatus'], $states))
+            if (is_active_status($laststatus, $states) != is_active_status($update['currentstatus'], $states))
             {
                 // If it's active and we've not reached the end of the range, increment time
                 if (is_active_status($laststatus, $states) && ($t2 >= $update['timestamp']))
@@ -7478,9 +7472,9 @@ function admin_contact_contracts($contactid, $siteid)
     $sql .= "AND maintenance.site={$siteid} ";
     $sql .= "AND contacts.siteid={$siteid}";
 
-    if($result = mysql_query($sql))
+    if ($result = mysql_query($sql))
     {
-        while($row = mysql_fetch_object($result))
+        while ($row = mysql_fetch_object($result))
         {
             $contractsarray[] = $row->id;
         }
@@ -7537,9 +7531,9 @@ function all_contact_contracts($contactid, $siteid)
             AND m.var_incident_visible_all = 'true'
             ";
 
-    if($result = mysql_query($sql))
+    if ($result = mysql_query($sql))
     {
-        while($row = mysql_fetch_object($result))
+        while ($row = mysql_fetch_object($result))
         {
             $contractsarray[] = $row->id;
         }
@@ -7555,10 +7549,10 @@ function valid_username($username)
 
     $tables = array('dbUsers', 'dbContacts');
 
-    foreach($tables AS $table)
+    foreach ($tables AS $table)
     {
         $sql = "SELECT username FROM `{$GLOBALS[$table]}` WHERE username='{$username}'";
-        if($result = mysql_query($sql) AND mysql_num_rows($result) != 0)
+        if ($result = mysql_query($sql) AND mysql_num_rows($result) != 0)
         {
             $valid = FALSE;
         }
@@ -7601,15 +7595,15 @@ function contract_software()
             AND p.id=sp.productid
             AND sp.softwareid=s.id ";
     $sql .= "AND (1=0 ";
-    foreach($_SESSION['contracts'] AS $contract)
+    foreach ($_SESSION['contracts'] AS $contract)
     {
         $sql .= "OR m.id={$contract} ";
     }
     $sql .= ")";
 
-    if($result = mysql_query($sql))
+    if ($result = mysql_query($sql))
     {
-        while($row = mysql_fetch_object($result))
+        while ($row = mysql_fetch_object($result))
         {
             $softwarearray[] = $row->id;
         }
@@ -7960,6 +7954,11 @@ function upload_file($file, $id, $type='public')
     }
 }
 
+
+/**
+ * Function to return a logged in ftp connection
+ * @author Ivan Lucas
+ */
 function create_ftp_connection()
 {
     global $CONFIG;
