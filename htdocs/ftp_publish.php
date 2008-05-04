@@ -108,24 +108,12 @@ else
     include ('htmlheader.inc.php');
     echo "<h2>FTP Publish</h2>";
     // set up basic connection
-    $conn_id = ftp_connect($CONFIG['ftp_hostname']);
-
-    // login with username and password
-    $login_result = ftp_login($conn_id, $CONFIG['ftp_username'], $CONFIG['ftp_password']);
-
-    // check connection
-    if ((!$conn_id) || (!$login_result))
-    {
-        throw_error("FTP Connection failed, connecting to {$CONFIG['ftp_hostname']} for user {$CONFIG['ftp_hostname']}}",'');
-    }
-    else
-    {
-        echo "Connected to {$CONFIG['ftp_hostname']}, for user {$CONFIG['ftp_hostname']}<br />";
-    }
-    $destination_filepath=$CONFIG['ftp_path'] . $temp_directory . '/' . $destination_file;
+    $conn_id = create_ftp_connection();
+    
+    $destination_filepath = $CONFIG['ftp_path'] . $temp_directory . '/' . $destination_file;
 
     // make the temporary directory
-    $mk= @ftp_mkdir($conn_id, $CONFIG['ftp_path'] . $temp_directory);
+    $mk = @ftp_mkdir($conn_id, $CONFIG['ftp_path'] . $temp_directory);
     if (!mk) throw_error('FTP Failed creating directory', $temp_directory);
 
     // check the source file exists
@@ -180,7 +168,7 @@ else
         if (mysql_error()) trigger_error("MySQL Query Error ".mysql_error(), E_USER_ERROR);
     }
     // close the FTP stream
-    ftp_quit($conn_id);
+    ftp_close($conn_id);
     include ('htmlfooter.inc.php');
 }
 ?>

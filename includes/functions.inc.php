@@ -7763,7 +7763,8 @@ function contract_details($id, $mode='internal')
     }
     
     $html .= sprintf($GLOBALS[strUsedNofN], $maintrow['incidents_used'], $quantity);
-    if ($maintrow['incidents_used'] >= $maintrow['incident_quantity'])
+    if ($maintrow['incidents_used'] >= $maintrow['incident_quantity'] AND
+        $maintrow['incident_quantity'] != 0)
     {
         $html .= " ($GLOBALS[strZeroRemaining])";
     }
@@ -7957,6 +7958,28 @@ function upload_file($file, $id, $type='public')
             return $returnpath;
         }
     }
+}
+
+function create_ftp_connection()
+{
+    global $CONFIG;
+    
+    $conn_id = ftp_connect($CONFIG['ftp_hostname']);
+
+    // login with username and password
+    $login_result = ftp_login($conn_id, $CONFIG['ftp_username'], $CONFIG['ftp_password']);
+
+    // check connection
+    if ((!$conn_id) || (!$login_result))
+    {
+        throw_error("FTP Connection failed, connecting to {$CONFIG['ftp_hostname']} for user {$CONFIG['ftp_hostname']}}",'');
+    }
+    else
+    {
+        echo "Connected to {$CONFIG['ftp_hostname']}, for user {$CONFIG['ftp_hostname']}<br />";
+    }
+    
+    return $conn_id;
 }
 
 // -------------------------- // -------------------------- // --------------------------
