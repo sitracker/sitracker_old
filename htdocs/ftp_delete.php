@@ -41,33 +41,33 @@ if ((!$conn_id) || (!$login_result))
 if ($frow['path']!='')
 {
     // delete private file
-    $filewithpath=$CONFIG['ftp_path'] . $frow['path'] . $frow['filename'];
-    $filepath=$CONFIG['ftp_path'] . $frow['path'];
-    $dele=ftp_delete($conn_id, $filewithpath);
+    $filewithpath = $CONFIG['ftp_path'] . $frow['path'] . $frow['filename'];
+    $filepath = $CONFIG['ftp_path'] . $frow['path'];
+    $dele = ftp_delete($conn_id, $filewithpath);
     if (!$dele) throw_error('Error deleting FTP file:', $filewithpath);
     // remove the directory if it's not a public one
-    if ($filepath!=$CONFIG['ftp_path'])
+    if ($filepath != $CONFIG['ftp_path'])
     {
-        $dele=ftp_delete($conn_id, $filepath);
+        $dele = ftp_delete($conn_id, $filepath);
         if (!$dele) throw_error('Error deleting FTP folder:', $filepath);
     }
 }
 else
 {
     // delete public file
-    $filewithpath=$CONFIG['ftp_path'] . $frow['filename'];
-    $filepath=$CONFIG['ftp_path'] . $frow['path'];
-    $dele=ftp_delete($conn_id, $filewithpath);
+    $filewithpath = $CONFIG['ftp_path'] . $frow['filename'];
+    $filepath = $CONFIG['ftp_path'] . $frow['path'];
+    $dele = ftp_delete($conn_id, $filewithpath);
     if (!$dele) throw_error('Error deleting FTP file:', $filewithpath);
     // remove the directory if it's not a public one
-    if ($filepath!=$CONFIG['ftp_path'])
+    if ($filepath != $CONFIG['ftp_path'])
     {
-        $dele=ftp_delete($conn_id, $filepath);
+        $dele = ftp_delete($conn_id, $filepath);
         if (!$dele) throw_error('Error deleting FTP folder:', $filepath);
     }
 }
 // close the FTP stream
-ftp_quit($conn_id);
+ftp_close($conn_id);
 
 // remove file from database
 $sql = "DELETE FROM `{$dbFiles}` WHERE id='$id'";
