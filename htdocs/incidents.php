@@ -96,8 +96,15 @@ switch ($type)
         if (!empty($maintexclude)) $sql .= "AND i.maintenanceid != '{$maintexclude}' ";
 
         echo "<h2><img src='{$CONFIG['application_webpath']}images/icons/{$iconset}/32x32/support.png' alt='{$strSupport}' /> ";
-        if ($user!='all') echo sprintf($strUserIncidents, user_realname($user,TRUE)).": ";
-        else echo "{$strWatchingAll} ";
+        
+        if ($user != 'all')
+        {
+            echo sprintf($strUserIncidents, user_realname($user,TRUE)).": ";
+        }
+        else
+        {
+            echo "{$strWatchingAll} ";
+        }
 
         switch ($queue)
         {
@@ -161,8 +168,14 @@ switch ($type)
         $rowcount = mysql_num_rows($result);
 
         // Toggle Sorting Order
-        if ($sortorder=='ASC')  { $newsortorder='DESC'; }
-        else { $newsortorder='ASC'; }
+        if ($sortorder == 'ASC')
+        {
+            $newsortorder = 'DESC';
+        }
+        else
+        {
+            $newsortorder = 'ASC';
+        }
 
         // build querystring for hyperlinks
         $querystring = "?user=$user&amp;queue=$queue&amp;type=$type&amp;";
@@ -218,7 +231,7 @@ switch ($type)
         // *********************************************************
         // EXPERTISE QUEUE
         // ***
-        if ($user=='current') $user=$sit[2];
+        if ($user == 'current') $user = $sit[2];
         $softsql = "SELECT * FROM `{$dbUserSoftware}` WHERE userid='$user' ";
         $softresult = mysql_query($softsql);
         if (mysql_error()) trigger_error("MySQL Query Error ".mysql_error(), E_USER_ERROR);
@@ -230,7 +243,7 @@ switch ($type)
             // list expertise queus
             while ($software = mysql_fetch_object($softresult))
             {
-                $expertise[]=$software->softwareid;
+                $expertise[] = $software->softwareid;
             }
 
             $incsql .= "(";
@@ -265,7 +278,7 @@ switch ($type)
 
                 case 2: // Waiting
                     echo "<h2>{$strOtherIncidents}: <span class='waitingqueue'>{$strWaiting}</span></h2>\n";
-                    $sql .= "AND (status >= 4 AND status <= 8) ";
+                    $sql .= "AND ((status >= 4 AND status <= 8) OR (timeofnextaction > 0 AND timeofnextaction > $now)) ";
                 break;
 
                 case 3: // All Open
