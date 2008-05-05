@@ -73,8 +73,10 @@ function pausecomp(millis)
     var date = new Date();
     var curDate = null;
 
-    do { curDate = new Date(); }
-    while (curDate-date < millis);
+    do
+    {
+        curDate = new Date();
+    } while (curDate-date < millis);
 }
 
 function get_and_display(page, component)
@@ -343,4 +345,10 @@ function help_window(helpid)
 function gotab(tab) {
     document.actiontabs.action.value=tab;
     document.actiontabs.submit();
+}
+
+function close_page_redirect(url)
+{
+    window.opener.location=url;
+    window.close();
 }
