@@ -164,16 +164,8 @@ else
 
 
         // set up basic connection
-        $conn_id = ftp_connect($CONFIG['ftp_hostname']);
-
-        // login with username and password
-        $login_result = ftp_login($conn_id, $CONFIG['ftp_username'], $CONFIG['ftp_password']);
-
-        // check connection
-        if ((!$conn_id) || (!$login_result))
-        {
-            throw_error("FTP Connection failed, connecting to {$CONFIG['ftp_hostname']} for user {$CONFIG['ftp_user_name']}",'');
-        }
+        $conn_id = create_ftp_connection();
+        
         $destination_filepath = $CONFIG['ftp_path'] . $file_name;
 
         // check the source file exists
@@ -197,7 +189,7 @@ else
             // store file details in database
             // important: path must be blank for public files (all go in same dir)
             $sql = "INSERT INTO `{$dbFiles}` (filename, size, userid, shortdescription, longdescription, path, filedate, expiry, fileversion) ";
-            $sql .= "VALUES ('$file_name', '$filesize', '".$sit[2]."', '$shortdescription', '$longdescription', '', '$now', '$expirydate' ,'$fileversion')";
+            $sql .= "VALUES ('$file_name', '$filesize', '".$sit[2]."', '$shortdescription', '$longdescription', '{$CONFIG['ftp_path']}', '$now', '$expirydate' ,'$fileversion')";
             mysql_query($sql);
             if (mysql_error()) trigger_error("MySQL Query Error ".mysql_error(), E_USER_ERROR);
 

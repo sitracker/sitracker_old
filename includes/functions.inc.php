@@ -7975,7 +7975,7 @@ function create_ftp_connection()
     }
     else
     {
-        echo "Connected to {$CONFIG['ftp_hostname']}, for user {$CONFIG['ftp_hostname']}<br />";
+        echo "Connected to {$CONFIG['ftp_hostname']}, for user {$CONFIG['ftp_username']}<br />";
     }
     
     return $conn_id;

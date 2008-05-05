@@ -28,17 +28,9 @@ if (mysql_error()) trigger_error("MySQL Query Error ".mysql_error(), E_USER_ERRO
 $frow = mysql_fetch_array($result);
 
 // set up basic connection
-$conn_id = ftp_connect($CONFIG['ftp_hostname']);
+$conn_id = create_ftp_connection();
 
-// login with username and password
-$login_result = ftp_login($conn_id, $CONFIG['ftp_username'], $CONFIG['ftp_password']);
-
-// check connection
-if ((!$conn_id) || (!$login_result))
-{
-    throw_error("FTP Connection failed, connecting to {$CONFIG['ftp_hostname']} for user {$CONFIG['ftp_username']}",'');
-}
-if ($frow['path']!='')
+if ($frow['path'] != '')
 {
     // delete private file
     $filewithpath = $CONFIG['ftp_path'] . $frow['path'] . $frow['filename'];
