@@ -15,6 +15,8 @@ require ('db_connect.inc.php');
 session_name($CONFIG['session_name']);
 session_start();
 
+$_SESSION['auth'] = FALSE;
+
 if (function_exists('session_regenerate_id'))
 {
     if (!version_compare(phpversion(),"5.1.0",">=")) session_regenerate_id(TRUE);
@@ -125,10 +127,7 @@ elseif (authenticate($username, $password) == 1)
             $userpermissions[]=$perm->permissionid;
         }
     }
-    else
-    {
-        $_SESSION['auth'] = FALSE;
-    }
+
     $_SESSION['permissions'] = array_unique($userpermissions);
 
     // redirect
