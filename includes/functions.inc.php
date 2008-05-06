@@ -7798,7 +7798,7 @@ function contract_details($id, $mode='internal')
     {
         if ($maintrow['allcontactssupported'] == 'yes')
         {
-            $html .= "<p class='info'>All contacts supported</p>";
+            $html .= "<p class='info'>{$strAllSiteContactsSupported}</p>";
         }
         else
         {
