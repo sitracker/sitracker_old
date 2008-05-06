@@ -78,15 +78,13 @@ if ($action == "edit")
         echo "<table align='center' class='vertical'>";
         echo "<tr><th>{$strSite}: <sup class='red'>*</sup></th><td>";
         echo site_name($maint["site"]). "</td></tr>";
-        // TODO all supportedcontacts disabled for 3.31 release
         echo "<tr><th>{$strContacts}:</th><td>";
-        echo "<input type='hidden' name ='contacts' value='amount' />";
-        // echo "<input value='amount' type='radio' name='contacts' checked='checked' />";
+        echo "<input value='amount' type='radio' name='contacts' checked='checked' />";
         echo "{$strLimitTo} <input size='2' value='{$maint[supportedcontacts]}' name='amount' /> {$strSupportedContacts} ({$str0MeansUnlimited})<br />";
-        //         echo "<input type='radio' value='all' name='contacts'";
-        //         if ($maint[allcontactssupported] == 'Yes')
-        //         echo "checked='checked'";
-        //         echo " />{$strAllSiteContactsSupported}</td></tr>";
+        echo "<input type='radio' value='all' name='contacts'";
+        if ($maint[allcontactssupported] == 'yes')
+        echo "checked='checked'";
+        echo " />{$strAllSiteContactsSupported}</td></tr>";
         echo "<tr><th>{$strProduct}: <sup class='red'>*</sup></th><td>";
         $productname=product_name($maint["product"]);
         if (user_permission($sit[2], 22))

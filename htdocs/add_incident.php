@@ -20,6 +20,57 @@ $title = $strAddIncident;
 // This page requires authentication
 require ('auth.inc.php');
 
+function to_row($contactrow)
+{
+    global $now, $updateid, $CONFIG;
+    $str = "";
+    if ($contactrow['expirydate'] < $now || $contactrow['term'] == 'yes') $class = 'expired';
+    else $class = "shade2";
+
+    $incidents_remaining = $contactrow['incident_quantity'] - $contactrow['incidents_used'];
+
+    $str = "<tr class='$class'>";
+    if ($contactrow['expirydate'] < $now AND $contactrow['expirydate'] != '-1')
+    {
+        $str .=  "<td>{$GLOBALS['strExpired']}</td>";
+    }
+    elseif ($contactrow['term'] == 'yes')
+    {
+        $str .=  "<td>{$GLOBALS['strTerminated']}</td>";
+    }
+    elseif ($contactrow['incident_quantity'] >= 1 AND $contactrow['incidents_used'] >= $contactrow['incident_quantity'])
+    {
+        $str .= "<td class='expired'>{$GLOBALS['strZeroRemaining']} ({$contactrow['incidents_used']}/{$contactrow['incident_quantity']} {$strUsed})</td>";
+    }
+    else
+    {
+        $str .=  "<td><a href=\"{$_SERVER['PHP_SELF']}?action=incidentform&amp;type=support&amp;contactid=".$contactrow['contactid']."&amp;maintid=".$contactrow['maintenanceid']."&amp;producttext=".urlencode($contactrow['productname'])."&amp;productid=".$contactrow['productid']."&amp;updateid=$updateid&amp;siteid=".$contactrow['siteid']."&amp;win={$win}\" onclick=\"return confirm_support();\">{$GLOBALS['strAddIncident']}</a> ";
+        if ($contactrow['incident_quantity'] == 0)
+        {
+            $str .=  "({$GLOBALS['strUnlimited']})";
+        }
+        else
+        {
+            $str .= "(".sprintf($strRemaining, $incidents_remaining).")";
+        }
+    }
+    $str .=  "</td>";
+    $str .=  '<td>'.$contactrow['forenames'].' '.$contactrow['surname'].'</td>';
+    $str .=  '<td>'.$contactrow['name'].'</td>';
+    $str .=  '<td><strong>'.$contactrow['maintid'].'</strong>&nbsp;'.$contactrow['productname'].'</td>';
+    $str .=  '<td>'.servicelevel_id2tag($contactrow['servicelevelid']).'</td>';
+    if ($contactrow['expirydate'] == '-1')
+    {
+        $str .= "<td>{$GLOBALS['strUnlimited']}</td>";
+    }
+    else
+    {
+        $str .=  '<td>'.ldate($CONFIG['dateformat_date'], $contactrow['expirydate']).'</td>';
+    }
+    $str .=  "</tr>\n";
+    return $str;
+}
+
 // External variables
 $action = $_REQUEST['action'];
 $context = cleanvar($_REQUEST['context']);
@@ -94,23 +145,33 @@ elseif ($action=='findcontact')
     $sql .= "AND m.site = s.id ";
     $sql .= "AND sc.contactid = c.id ";
     $sql .= "AND sc.maintenanceid = m.id ";
-//     $sql .= "OR (maintenance.allcontactssupported = 'Yes' ";
-//     $sql .= "AND contacts.siteid=sites.id)) ";
 
-
+    $altsql  = "SELECT *, p.name AS productname, p.id AS productid, c.surname AS surname, ";
+    $altsql .= "m.id AS maintenanceid, m.incident_quantity, m.incidents_used, c.id AS contactid ";
+    $altsql .= "FROM `{$dbContacts}` AS c, `{$dbMaintenance}` AS m, `{$dbProducts}` AS p, `{$dbSites}` AS s ";
+    $altsql .= "WHERE m.product = p.id ";
+    $altsql .= "AND m.site = s.id ";
+    $altsql .= "AND m.allcontactssupported='yes' ";
+    
     if (empty($contactid))
     {
-        $sql .= "AND (c.surname LIKE '%$search_string%' OR c.forenames LIKE '%$search_string%' ";
-        $sql .= "OR SOUNDEX('$search_string') = SOUNDEX((CONCAT_WS(' ', c.forenames, c.surname))) ";
-        $sql .= "OR s.name LIKE '%$search_string%') ";
+        $newsql = "AND (c.surname LIKE '%$search_string%' OR c.forenames LIKE '%$search_string%' ";
+        $newsql .= "OR SOUNDEX('$search_string') = SOUNDEX((CONCAT_WS(' ', c.forenames, c.surname))) ";
+        $newsql .= "OR s.name LIKE '%$search_string%') ";
+        
+        $sql .= $newsql;
+        $altsql .= $newsql;
     }
     else
     {
         $sql .= "AND sc.contactid = '$contactid' ";
+        $altsql .= "AND c.id = '$contactid' ";
     }
 
     $sql .= "ORDER by c.forenames, c.surname, productname, expirydate ";
-
+    $altsql .= "ORDER by c.forenames, c.surname, productname, expirydate ";
+            
+    $altresult = mysql_query($altsql);    
     $result=mysql_query($sql);
     if (mysql_error()) trigger_error("MySQL Query Error ".mysql_error(), E_USER_ERROR);
     if (mysql_num_rows($result)>0)
@@ -133,56 +194,6 @@ elseif ($action=='findcontact')
         echo "<h3><img src='{$CONFIG['application_webpath']}images/icons/{$iconset}/32x32/contract.png' width='32' height='32' alt='' />  ";
         echo "{$strContracts}</h3>";
         echo "<p align='center'>".sprintf($strListShowsContracts, $strAddIncident).".</p>";
-        function to_row($contactrow)
-        {
-            global $now, $updateid, $CONFIG;
-            $str = "";
-            if ($contactrow['expirydate'] < $now || $contactrow['term'] == 'yes') $class = 'expired';
-            else $class = "shade2";
-
-            $incidents_remaining = $contactrow['incident_quantity'] - $contactrow['incidents_used'];
-
-            $str = "<tr class='$class'>";
-            if ($contactrow['expirydate'] < $now AND $contactrow['expirydate'] != '-1')
-            {
-                $str .=  "<td>{$GLOBALS['strExpired']}</td>";
-            }
-            elseif ($contactrow['term'] == 'yes')
-            {
-                $str .=  "<td>{$GLOBALS['strTerminated']}</td>";
-            }
-            elseif ($contactrow['incident_quantity'] >= 1 AND $contactrow['incidents_used'] >= $contactrow['incident_quantity'])
-            {
-                $str .= "<td class='expired'>{$GLOBALS['strZeroRemaining']} ({$contactrow['incidents_used']}/{$contactrow['incident_quantity']} {$strUsed})</td>";
-            }
-            else
-            {
-                $str .=  "<td><a href=\"{$_SERVER['PHP_SELF']}?action=incidentform&amp;type=support&amp;contactid=".$contactrow['contactid']."&amp;maintid=".$contactrow['maintenanceid']."&amp;producttext=".urlencode($contactrow['productname'])."&amp;productid=".$contactrow['productid']."&amp;updateid=$updateid&amp;siteid=".$contactrow['siteid']."&amp;win={$win}\" onclick=\"return confirm_support();\">{$GLOBALS['strAddIncident']}</a> ";
-                if ($contactrow['incident_quantity'] == 0)
-                {
-                    $str .=  "({$GLOBALS['strUnlimited']})";
-                }
-                else
-                {
-                    $str .= "(".sprintf($strRemaining, $incidents_remaining).")";
-                }
-            }
-            $str .=  "</td>";
-            $str .=  '<td>'.$contactrow['forenames'].' '.$contactrow['surname'].'</td>';
-            $str .=  '<td>'.$contactrow['name'].'</td>';
-            $str .=  '<td><strong>'.$contactrow['maintid'].'</strong>&nbsp;'.$contactrow['productname'].'</td>';
-            $str .=  '<td>'.servicelevel_id2tag($contactrow['servicelevelid']).'</td>';
-            if ($contactrow['expirydate'] == '-1')
-            {
-                $str .= "<td>{$GLOBALS['strUnlimited']}</td>";
-            }
-            else
-            {
-                $str .=  '<td>'.ldate($CONFIG['dateformat_date'], $contactrow['expirydate']).'</td>';
-            }
-            $str .=  "</tr>\n";
-            return $str;
-        }
 
         $str_prefered = "";
         $str_alternative = "";
@@ -280,6 +291,49 @@ elseif ($action=='findcontact')
         echo "<p align='center'><a href=\"{$_SERVER['PHP_SELF']}?updateid={$updateid}&amp;win={$win}\">{$strSearchAgain}</a></p>";
         include ('htmlfooter.inc.php');
     }
+    elseif (mysql_num_rows($altresult) > 0)
+    {
+        include ('htmlheader.inc.php');
+        ?>
+        <script type="text/javascript">
+        function confirm_support()
+        {
+            return window.confirm("<?php echo $strContractAreYouSure; ?>");
+        }
+
+        function confirm_free()
+        {
+            return window.confirm("<?php echo $strSiteAreYouSure; ?>");
+        }
+        </script>
+        <?php
+        echo "<h2>{$strAddIncident} - {$strSelect} {$strContract} / {$strContact}</h2>";
+        echo "<h3><img src='{$CONFIG['application_webpath']}images/icons/{$iconset}/32x32/contract.png' width='32' height='32' alt='' />  ";
+        echo "{$strContracts}</h3>";
+        echo "<p align='center'>".sprintf($strListShowsContracts, $strAddIncident).".</p>";
+
+        $headers = "<tr><th>&nbsp;</th><th>{$strName}</th><th>{$strSite}</th><th>{$strContract}</th><th>{$strServiceLevel}</th><th>{$strExpiryDate}</th></tr>";
+
+        while ($contactrow = mysql_fetch_array($altresult))
+        {
+            $str_prefered .= to_row($contactrow);       
+        }
+
+        echo "<h3>{$strPreferred}</h3>";
+        echo "<table align='center'>";
+        echo $headers;
+        echo $str_prefered;
+        echo "</table>\n";
+
+
+        if (empty($str_prefered))
+        {
+            echo "<p class='error'>{$strNothingToDisplay}</p>";
+        }
+
+        echo "<p align='center'><a href=\"{$_SERVER['PHP_SELF']}?updateid={$updateid}&amp;win={$win}\">{$strSearchAgain}</a></p>";
+        include ('htmlfooter.inc.php');
+    }
     else
     {
         // This Page Is Valid XHTML 1.0 Transitional! 27Oct05
@@ -335,8 +389,13 @@ elseif ($action=='findcontact')
             echo "<h3>No matching contacts found</h3>";
             echo "<p align='center'><a href=\"add_contact.php\">{$strAddContact}</a></p>\n";
         }
+        
+
         include ('htmlfooter.inc.php');
     }
+    
+
+        
 }
 elseif ($action=='incidentform')
 {

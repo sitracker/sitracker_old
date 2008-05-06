@@ -7796,44 +7796,60 @@ function contract_details($id, $mode='internal')
     }
     else
     {
-        $allowedcontacts = $maintrow['supportedcontacts'];
-    
-        $supportedcontacts = supported_contacts($id);
-        if ($supportedcontacts != NULL)
+        if ($maintrow['allcontactssupported'] == 'yes')
         {
-            $numberofcontacts = sizeof($supportedcontacts);
-    
-            if ($allowedcontacts == 0)
-            {
-                $allowedcontacts = $GLOBALS[strUnlimited];
-            }
-            $html .= "<table align='center'>";
-            $supportcount = 1;
-            foreach($supportedcontacts AS $contact)
-            {
-                $html .= "<tr><th>{$GLOBALS[strContact]} #{$supportcount}:</th>";
-                $html .= "<td><img src='{$CONFIG['application_webpath']}images/icons/{$iconset}/16x16/contact.png' width='16' height='16' alt='' /> ";
-                $html .= "<a href=\"contact_details.php?id={$contact}\">".contact_realname($contact)."</a>, ";
-                $html .= contact_site($contact). "</td>";
-                
-                if ($mode == 'internal')
-                {
-                    $html .= "<td><a href=\"delete_maintenance_support_contact.php?contactid=".$contact."&amp;maintid=$id&amp;context=maintenance\">{$GLOBALS[strRemove]}</a></td></tr>\n";
-                }
-                else
-                {
-                    $html .= "<td><a href=\"{$_SERVER['PHP_SELF']}?id={$id}&amp;contactid=".$contact."&amp;action=remove\">{$GLOBALS[strRemove]}</a></td></tr>\n";
-                }
-                $supportcount++;
-            }
-            $html .= "</table>";
+            $html .= "<p class='info'>All contacts supported</p>";
         }
         else
         {
-            $html .= "<p align='center'>{$GLOBALS[strNoRecords]}<p>";
+            $allowedcontacts = $maintrow['supportedcontacts'];
+        
+            $supportedcontacts = supported_contacts($id);
+            
+            if ($supportedcontacts != NULL)
+            {
+                $numberofcontacts = sizeof($supportedcontacts);
+    
+                if ($allowedcontacts == 0)
+                {
+                    $allowedcontacts = $GLOBALS[strUnlimited];
+                }
+    
+                $html .= "<table align='center'>";
+                $supportcount = 1;
+                foreach($supportedcontacts AS $contact)
+                {
+                    $html .= "<tr><th>{$GLOBALS[strContact]} #{$supportcount}:</th>";
+                    $html .= "<td><img src='{$CONFIG['application_webpath']}images/icons/{$iconset}/16x16/contact.png' width='16' height='16' alt='' /> ";
+                    $html .= "<a href=\"contact_details.php?id={$contact}\">".contact_realname($contact)."</a>, ";
+                    $html .= contact_site($contact). "</td>";
+                    
+                    if ($mode == 'internal')
+                    {
+                        $html .= "<td><a href=\"delete_maintenance_support_contact.php?contactid=".$contact."&amp;maintid=$id&amp;context=maintenance\">{$GLOBALS[strRemove]}</a></td></tr>\n";
+                    }
+                    else
+                    {
+                        $html .= "<td><a href=\"{$_SERVER['PHP_SELF']}?id={$id}&amp;contactid=".$contact."&amp;action=remove\">{$GLOBALS[strRemove]}</a></td></tr>\n";
+                    }
+                    $supportcount++;
+                }
+                $html .= "</table>";
+            }
+            else
+            {
+                $html .= "<p align='center'>{$GLOBALS[strNoRecords]}<p>";
+            }
         }
     }
-    if ($numberofcontacts < $allowedcontacts OR $allowedcontacts == 0)
+    
+    $html .= "<p align='center'>$strUsedNofN";
+    $html .= sprintf($GLOBALS['strUsedNofN'],
+                     "<strong>".$numberofcontacts."</strong>",
+                     "<strong>".$allowedcontacts."</strong>");
+    $html .= "</p>";
+    
+    if ($maintrow['allcontactssupported'] != 'yes' AND ($numberofcontacts < $allowedcontacts OR $allowedcontacts == 0))
     {
         if ($mode == 'internal')
         {

@@ -49,10 +49,8 @@ if ($action == "showform" OR $action=='')
     }
 
     echo "<tr><th>{$strContacts}<sup class='red'>*</sup></th><td>";
-    // TODO all supportedcontacts disabled for 3.31 release
-    // echo "<input value='amount' type='radio' name='contacts' checked='checked' />";
+    echo "<input value='amount' type='radio' name='contacts' checked='checked' />";
 
-    echo "<input type='hidden' name ='contacts' value='amount' />";
     echo "{$strLimitTo} <input size='2' name='amount' ";
     if ($_SESSION['formdata']['add_contract']['contacts'] != "")
     {
@@ -63,8 +61,8 @@ if ($action == "showform" OR $action=='')
         echo "value='0'";
     }
     echo " /> {$strSupportedContacts} ({$str0MeansUnlimited})<br />";
-    // echo "<input type='radio' value='all' name='contacts' />";
-    // echo "{$strAllSiteContactsSupported}";
+    echo "<input type='radio' value='all' name='contacts' />";
+    echo "{$strAllSiteContactsSupported}";
     echo "</td></tr>";
     echo "<tr><th>{$strProduct} <sup class='red'>*</sup></th><td>";
     if ($_SESSION['formdata']['add_contract']['product'] != "")
@@ -148,9 +146,9 @@ elseif ($action == "add")
     $contacts = cleanvar($_REQUEST['contacts']);
     if ($_REQUEST['noexpiry'] == 'on') $expirydate = '-1';
 
-    $allcontacts = 'No';
+    $allcontacts = 'no';
     if ($contacts == 'amount') $amount = cleanvar($_REQUEST['amount']);
-    elseif ($contacts == 'all') $allcontacts = 'Yes';
+    elseif ($contacts == 'all') $allcontacts = 'yes';
 
     $incident_pools = explode(',', "0,{$CONFIG['incident_pools']}");
     $incident_quantity = $incident_pools[$_POST['incident_poolid']];
