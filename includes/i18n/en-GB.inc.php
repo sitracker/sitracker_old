@@ -828,6 +828,7 @@ $strPleaseConfirmUsername = 'Please confirm your username';
 $strPleaseWaitRedirect = 'Please wait while you are redirected';
 $strPlugins = 'Plugins';
 $strPopularity = 'Popularity';
+$strPortal = 'Portal';
 $strPositivity = 'Positivity';
 $strPostcode = 'Postcode';
 $strPostNewNotice = 'Post New Notice';

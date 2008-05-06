@@ -119,6 +119,26 @@ if (count($CONFIG['plugins']) >= 1)
 }
 else echo "<p>{$strNone}</p>";
 echo "</td></tr>";
+if ($CONFIG['kb_enabled'] == FALSE OR
+    $CONFIG['portal_kb_enabled'] == FALSE OR
+    $CONFIG['tasks_enabled'] == FALSE OR
+    $CONFIG['calendar_enabled'] == FALSE OR
+    $CONFIG['holidays_enabled'] == FALSE OR
+    $CONFIG['feedback_enabled'] == FALSE OR
+    $CONFIG['portal'] == FALSE)
+{
+    echo "<tr><td class='shade1' colspan='2'>{$strAdditionalInfo}:</td></tr>";
+    echo "<tr><td class='shade2' colspan='2'>";
+    if ($CONFIG['portal'] == FALSE) echo "<p>{$strPortal} - {$strDisabled}</p>";
+    if ($CONFIG['kb_enabled'] == FALSE) echo "<p>{$strKnowledgeBase} - {$strDisabled}</p>";
+    if ($CONFIG['portal'] == TRUE AND $CONFIG['portal_kb_enabled'] == FALSE) echo "<p>{$strKnowledgeBase} ({$strPortal}) - {$strDisabled}</p>";
+    if ($CONFIG['tasks_enabled'] == FALSE) echo "<p>{$strTasks} - {$strDisabled}</p>";
+    if ($CONFIG['calendar_enabled'] == FALSE) echo "<p>{$strCalendar} - {$strDisabled}</p>";
+    if ($CONFIG['holidays_enabled'] == FALSE) echo "<p>{$strHolidays} - {$strDisabled}</p>";
+    if ($CONFIG['feedback_enabled'] == FALSE) echo "<p>{$strFeedback} - {$strDisabled}</p>";
+    echo "</td></tr>";
+
+}
 echo "</table>\n";
 
 plugin_do('about');
