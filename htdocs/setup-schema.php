@@ -1979,7 +1979,7 @@ ALTER TABLE `files` ADD `refid` INT( 11 ) NULL ;  // FIXME this should be implem
 INSERT INTO `{$dbScheduler}` (`id`, `action`, `params`, `paramslabel`, `description`, `status`, `start`, `end`, `interval`, `lastran`, `success`) VALUES (7, 'PurgeExpiredFTPItems', '', NULL, 'purges files which have expired from the FTP site when run.', 'enabled', '2008-01-01 00:00:00', '0000-00-00 00:00:00', 216000, '0000-00-00 00:00:00', 1);
 
 -- KMH 06/05/08
-ALTER TABLE `maintenance` CHANGE `allcontactssupported` `allcontactssupported` ENUM( 'no', 'yes' ) NOT NULL DEFAULT 'no' ;
+ALTER TABLE `{$dbMaintenance}` CHANGE `allcontactssupported` `allcontactssupported` ENUM( 'no', 'yes' ) NOT NULL DEFAULT 'no' ;
 ";
 
 // Important: When making changes to the schema you must add SQL to make the alterations
