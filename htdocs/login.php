@@ -87,7 +87,7 @@ elseif (authenticate($username, $password) == 1)
 
     if ($user->var_i18n != $CONFIG['default_i18n'] AND $_SESSION['lang']=='')
     {
-        $_SESSION['lang'] = $user->var_i18n;
+        $_SESSION['lang'] = is_null($user->var_i18n) ? '' : $user->var_i18n;
     }
 
     // Make an array full of users permissions
