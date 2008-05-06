@@ -32,7 +32,7 @@ include ('htmlheader.inc.php');
 function display_holiday_table($result)
 {
     global $user, $approver, $mode;
-    
+
     echo "<table align='center'>";
     echo "<tr>";
     if ($user == 'all' && $approver == TRUE)
@@ -203,24 +203,25 @@ if (!$sent)
     {
         echo "<p class='info'>{$strRequestNoHolidaysAwaitingYourApproval}</p>";
     }
-    
-    
+
+
     if ($approver AND $user == 'all')
     {
         // Show all holidays where requests have not been sent
-        
-        $sql = "SELECT * FROM holidays WHERE approved = 0 AND userid != 0 ";
+
+        $sql = "SELECT * FROM `{$dbHolidays}` WHERE approved = 0 AND userid != 0 ";
         if (!empty($type)) $sql .= "AND type='$type' ";
         if ($mode == 'approval') $sql .= "AND approvedby = 0 ";
         $sql .= "ORDER BY startdate, length";
         $result = mysql_query($sql);
-        
+        if (mysql_error()) trigger_error("MySQL Query Error ".mysql_error(), E_USER_WARNING);
+
         if (mysql_num_rows($result) > 0)
         {
             echo "<h2>{$strDatesNotRequested}</h2>";
-            
+
             $mode = "notapprove";
-            
+
             display_holiday_table($result);
         }
     }
