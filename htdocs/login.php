@@ -161,50 +161,50 @@ elseif ($CONFIG['portal'] == TRUE)
         $_SESSION['portalauth'] = TRUE;
         $_SESSION['contactid'] = $contact->id;
         $_SESSION['siteid'] = $contact->siteid;
-        
+
         //if we're an admin contact
-        if(admin_contact_contracts($_SESSION['contactid'], $_SESSION['siteid']) != NULL)
+        if (admin_contact_contracts($_SESSION['contactid'], $_SESSION['siteid']) != NULL)
         {
             $_SESSION['contracts'] = admin_contact_contracts($_SESSION['contactid'], $_SESSION['siteid']);
             $_SESSION['usertype'] = 'admin';
         }
         //if we're a named contact
-        elseif(contact_contracts($_SESSION['contactid'], $_SESSION['siteid']) != NULL)
+        elseif (contact_contracts($_SESSION['contactid'], $_SESSION['siteid']) != NULL)
         {
             $_SESSION['contracts'] = contact_contracts($_SESSION['contactid'], $_SESSION['siteid']);
             $_SESSION['usertype'] = 'contact';
         }
         //we're a contact(we logged in) but not on any contracts
-        elseif(all_contact_contracts($_SESSION['contactid'], $_SESSION['siteid']) != NULL)
+        elseif (all_contact_contracts($_SESSION['contactid'], $_SESSION['siteid']) != NULL)
         {
             $_SESSION['contracts'] = all_contact_contracts($_SESSION['contactid'], $_SESSION['siteid']);
             $_SESSION['usertype'] = 'user';
         }
 
-        
-        
         header("Location: portal/");
         exit;
     }
-
-    // Login failure
-    $_SESSION['auth'] = FALSE;
-    $_SESSION['portalauth'] = FALSE;
-    // log the failure
-    if ($username != '')
+    else
     {
-        $errdate = date('M j H:i');
-        $errmsg = "$errdate Failed login for user '{$username}' from IP: {$_SERVER['REMOTE_ADDR']}";
-        $errmsg .= "\n";
-        $errlog = @error_log($errmsg, 3, $CONFIG['access_logfile']);
-        ## if (!$errlog) echo "Fatal error logging this problem<br />";
-        unset($errdate);
-        unset($errmsg);
-        unset($errlog);
+        // Login failure
+        $_SESSION['auth'] = FALSE;
+        $_SESSION['portalauth'] = FALSE;
+        // log the failure
+        if ($username != '')
+        {
+            $errdate = date('M j H:i');
+            $errmsg = "$errdate Failed login for user '{$username}' from IP: {$_SERVER['REMOTE_ADDR']}";
+            $errmsg .= "\n";
+            $errlog = @error_log($errmsg, 3, $CONFIG['access_logfile']);
+            ## if (!$errlog) echo "Fatal error logging this problem<br />";
+            unset($errdate);
+            unset($errmsg);
+            unset($errlog);
+        }
+        // redirect
+        header ("Location: index.php?id=3");
+        exit;
     }
-    // redirect
-    header ("Location: index.php?id=3");
-    exit;
 }
 else
 {
