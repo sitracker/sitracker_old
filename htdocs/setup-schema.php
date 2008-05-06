@@ -903,8 +903,9 @@ INSERT INTO `{$dbRolePermissions}` (`roleid`, `permissionid`, `granted`) VALUES 
 INSERT INTO `{$dbRolePermissions}` (`roleid`, `permissionid`, `granted`) VALUES (3, 58, 'true');
 INSERT INTO `{$dbRolePermissions}` (`roleid`, `permissionid`, `granted`) VALUES (3, 60, 'true');
 INSERT INTO `{$dbRolePermissions}` (`roleid`, `permissionid`, `granted`) VALUES (3, 61, 'true');
-INSERT INTO `{$dbRolePermissions}` (`roleid`, `permissionid`, `granted`) VALUES (3, 62, 'true');
-
+INSERT INTO `{$dbRolePermissions}` (`roleid`, `permissionid`, `granted`) VALUES (3, 69, 'true');
+INSERT INTO `{$dbRolePermissions}` (`roleid`, `permissionid`, `granted`) VALUES (3, 70, 'true');
+INSERT INTO `{$dbRolePermissions}` (`roleid`, `permissionid`, `granted`) VALUES (3, 71, 'true');
 
 CREATE TABLE `{$dbScheduler}` (
   `id` int(11) NOT NULL auto_increment,
