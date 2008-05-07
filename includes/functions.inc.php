@@ -8021,7 +8021,7 @@ function group_user_selector($title, $level="engineer", $groupid)
 
         if ($groupid == $row->id)
         {
-            $str .= " checked ";
+            $str .= " checked='checked' ";
             $groupname = $row->name;
         }
         
