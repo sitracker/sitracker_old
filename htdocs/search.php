@@ -76,52 +76,67 @@ if (!empty($q))
 {
     $search = $q;
     $domain = strtolower($_GET['domain']);
+    
+    //INCIDENT RESULTS
+    $incidentsql = "SELECT *,incidentid AS id, i.title, ";
+    $incidentsql .= "MATCH (bodytext) AGAINST ('{$search}') AS score ";
+    $incidentsql .= "FROM `{$dbUpdates}` as u, `{$dbIncidents}` as i ";
+    $incidentsql .= "WHERE (MATCH (bodytext) AGAINST ('{$search}')) ";
+    $incidentsql .= "AND u.incidentid=i.id ";
+    $incidentsql .= "GROUP BY u.incidentid ";
 
-    //$sql = "SELECT *,incidentid AS id FROM `{$dbUpdates}` as u ";
-    //$sql .= "WHERE MATCH (bodytext) against ('{$search}' IN BOOLEAN MODE) AS score FROM u ";
-    //$sql .= "GROUP BY incidentid LIMIT {$start}, {$end} ";
-    //$sql .= "ORDER BY score desc";
 
-    $sql = "SELECT *,incidentid AS id, i.title,MATCH (bodytext) AGAINST ('{$search}') AS score ";
-    $sql .= "FROM `{$dbUpdates}` as u, `{$dbIncidents}` as i ";
-    $sql .= "WHERE MATCH (bodytext) AGAINST ('{$search}') ";
-    $sql .= "AND u.incidentid=i.id ";
-    $sql .= "GROUP BY u.incidentid ";
-    if (!empty($sort))
+    if ($domain == 'incidents')
     {
-        if ($sort=='id') $sql .= "ORDER BY k.title ";
-        elseif ($sort=='incident') $sql .= " ORDER BY k.published ";
-        elseif ($sort=='date') $sql .= " ORDER BY k.keywords ";
-        else $sql .= " ORDER BY u.score ";
-
-        if ($order=='a' OR $order=='ASC' OR $order='') $sql .= "ASC";
-        else $sql .= "DESC";
+        if (!empty($sort))
+        {
+            if ($sort=='id') $incidentsql .= "ORDER BY i.id ";
+            elseif ($sort=='incident') $incidentsql .= " ORDER BY i.title ";
+            else $incidentsql .= " ORDER BY score ";
+    
+            if ($order=='a' OR $order=='ASC' OR $order='') $incidentsql .= "ASC";
+            else $incidentsql .= "DESC";
+        }
+        else
+        {
+            $incidentsql .= " ORDER BY score DESC ";
+        }
     }
-    else
+
+    $countsql = $incidentsql;
+    
+    if ($domain == 'incidents')
     {
-        $sql .= " ORDER BY score DESC ";
+        $incidentsql .= "LIMIT {$start}, {$resultsperpage} ";
     }
 
-    $countsql = $sql;
-    $sql .= "LIMIT {$start}, {$resultsperpage} ";
-
-    if($result = mysql_query($sql))
+    if($incidentresult = mysql_query($incidentsql))
     {
-
-        $results = mysql_num_rows($result);
+        echo "<h3>{$strIncidents}</h3>";
+        $hits++;
+        $results = mysql_num_rows($incidentresult);
         $countresult = mysql_query($countsql);
-        $results = mysql_num_rows($countresult);
-        $end = $start + $resultsperpage;
+        if ($domain == 'incidents')
+        {
+            $end = $start + $resultsperpage;
+            $begin = $start;
+        }
+        else
+        {
+            $end = $resultsperpage;
+            $begin = 0;
+        }
+        
         if($end > $results)
         {
             $end = $results;
         }
-        echo "<p>".sprintf($strShowingXtoXofX, $start+1, $end, $results)."</p>";
+        echo "<p>".sprintf($strShowingXtoXofX, $begin+1, $end, $results)."</p>";
         echo "<p align='center'>";
         if(!empty($_GET['start']))
         {
-            echo " <a href='{$_SERVER['PHP_SELF']}?domain={$domain}&q={$q}&start=";
-            echo $start-$resultsperpage."'>{$strPrevious}</a> ";
+            echo " <a href='{$_SERVER['PHP_SELF']}?domain=incidents&q={$q}&start=";
+            echo $begin-$resultsperpage."'>{$strPrevious}</a> ";
         }
         else
         {
@@ -130,14 +145,15 @@ if (!empty($q))
         echo " | ";
         if($end != $numtotal)
         {
-            echo " <a href='{$_SERVER['PHP_SELF']}?domain={$domain}&q={$q}&start=";
-            echo $start+$resultsperpage."&amp;sort={$sort}&amp;order={$order}&amp;view={$view}'>{$strNext}</a> ";    }
+            echo " <a href='{$_SERVER['PHP_SELF']}?domain=incidents&q={$q}&start=";
+            echo $begin+$resultsperpage."&amp;sort={$sort}&amp;order={$order}&amp;view={$view}'>{$strNext}</a> ";    }
         else
         {
             echo $strNext;
         }
         echo "</p>";
         echo "<table align='center' width='80%'>";
+        $filter['domain'] = 'incident';
         echo "<tr>".colheader(id, $strID, $sort, $order, $filter);
         echo colheader(incident, $strIncident, $sort, $order, $filter);
         echo colheader(result, $strResult, $sort, $order, $filter);
@@ -145,28 +161,9 @@ if (!empty($q))
         echo colheader(date, $strDate, $sort, $order, $filter);
 
         $shade = 'shade1';
-        while($row = mysql_fetch_object($result))
+        while($row = mysql_fetch_object($incidentresult))
         {
-            switch ($domain)
-            {
-                case 'incidents':
-                    $url = "javascript:incident_details_window('{$row->id}', 'incident{$row->id}')";
-                    break;
-                case 'contact':
-                    $url = "contact_details.php?id={$row->id}";
-                    break;
-                case 'site':
-                    $url = "site_details.php?id={$row->id}";
-                    break;
-                case 'contract':
-                    $url = "contract_details.php?id={$row->id}";
-                    break;
-                case 'kb':
-                    $url = "kb_view_article.php?id={$row->id}";
-                    break;
-                default:
-                    $url = "javascript:alert('nothing to link to');";
-            }
+            $url = "javascript:incident_details_window('{$row->id}', 'incident{$row->id}')";
             echo "<tr class='{$shade}'><td><a href=\"{$url}\">{$row->id}</a></td>
                     <td>{$row->title}</td>
                     <td>".search_highlight($row->bodytext, $search)."</td>
@@ -181,11 +178,419 @@ if (!empty($q))
 
         echo "</table>";
     }
-    else
+
+    
+    //SITE RESULTS
+    $sitesql = "SELECT *,MATCH (name) AGAINST ('{$search}') AS score ";
+    $sitesql .= "FROM `{$dbSites}` as s ";
+    $sitesql .= "WHERE MATCH (name) AGAINST ('{$search}') ";
+
+    if ($domain == 'sites')
     {
-        echo "<p>{$strNoResults}</p>";
-        echo "<p><a href='search.php'>{$strSearchAgain}</a></p>";
+        if (!empty($sort))
+        {
+            if ($sort=='id') $sitesql .= "ORDER BY k.title ";
+            elseif ($sort=='incident') $sitesql .= " ORDER BY k.published ";
+            elseif ($sort=='date') $sitesql .= " ORDER BY k.keywords ";
+            else $sitesql .= " ORDER BY u.score ";
+    
+            if ($order=='a' OR $order=='ASC' OR $order='') $sitesql .= "ASC";
+            else $sitesql .= "DESC";
+        }
+        else
+        {
+            $sitesql .= " ORDER BY score DESC ";
+        }
     }
+
+    $countsql = $sitesql;
+    
+    if ($domain == 'sites')
+    {
+        $sitesql .= "LIMIT {$start}, {$resultsperpage} ";
+    }
+
+    if($siteresult = mysql_query($sitesql) AND mysql_num_rows($siteresult) > 0)
+    {
+        echo "<h3>{$strSites}</h3>";
+        $hits++;
+        $results = mysql_num_rows($siteresult);
+        $countresult = mysql_query($countsql);
+        $results = mysql_num_rows($countresult);
+        
+        if ($domain == 'sites')
+        {
+            $end = $start + $resultsperpage;
+            $begin = $start;
+        }
+        else
+        {
+            $end = $resultsperpage;
+            $begin = 0;
+        }
+        
+        if($end > $results)
+        {
+            $end = $results;
+        }
+        echo "<p>".sprintf($strShowingXtoXofX, $begin+1, $end, $results)."</p>";
+        echo "<p align='center'>";
+        if(!empty($_GET['start']))
+        {
+            echo " <a href='{$_SERVER['PHP_SELF']}?domain=sites&q={$q}&start=";
+            echo $begin-$resultsperpage."'>{$strPrevious}</a> ";
+        }
+        else
+        {
+            echo $strPrevious;
+        }
+        echo " | ";
+        if($end != $numtotal)
+        {
+            echo " <a href='{$_SERVER['PHP_SELF']}?domain=sites&q={$q}&start=";
+            echo $begin+$resultsperpage."&amp;sort={$sort}&amp;order={$order}&amp;view={$view}'>{$strNext}</a> ";    }
+        else
+        {
+            echo $strNext;
+        }
+        echo "</p>";
+        echo "<table align='center' width='30%'>";
+        $filter['domain'] = 'sites';
+        echo "<tr>".colheader(id, $strID, $sort, $order, $filter);
+        echo colheader(sitename, $strSiteName, $sort, $order, $filter);
+        echo colheader(dept, $strDepartment, $sort, $order, $filter);
+
+        $shade = 'shade1';
+        while($row = mysql_fetch_object($siteresult))
+        {
+            $url = "javascript:incident_details_window('{$row->id}', 'incident{$row->id}')";
+            echo "<tr class='{$shade}'>
+                    <td>{$row->id}</td>
+                    <td><a href='site_details.php?id={$row->id}&action=show'>{$row->name}</a></td>
+                    <td>{$row->department}</td>
+                  </tr>";
+
+            if ($shade == 'shade1')
+                $shade = 'shade2';
+            else
+                $shade = 'shade1';
+        }
+
+        echo "</table>";
+    }
+
+    //CONTACT RESULTS
+    $contactsql = "SELECT *, s.name AS sitename, MATCH (forenames, surname) AGAINST ('{$search}') AS score ";
+    $contactsql .= "FROM `{$dbContacts}` as c, `{$dbSites}` AS s ";
+    $contactsql .= "WHERE MATCH (forenames, surname) AGAINST ('{$search}') ";
+    $contactsql .= "AND c.siteid=s.id ";
+
+    if ($domain == 'contacts')
+    {
+        if (!empty($sort))
+        {
+            if ($sort=='id') $contactsql .= "ORDER BY k.title ";
+            elseif ($sort=='incident') $contactsql .= " ORDER BY k.published ";
+            elseif ($sort=='date') $$contactsql .= " ORDER BY k.keywords ";
+            else $contactsql .= " ORDER BY u.score ";
+    
+            if ($order=='a' OR $order=='ASC' OR $order='') $contactsql .= "ASC";
+            else $contactsql .= "DESC";
+        }
+        else
+        {
+            $contactsql .= " ORDER BY score DESC ";
+        }
+    }
+
+    $countsql = $contactsql;
+    
+    if ($domain == 'contacts')
+    {
+        $contactsql .= "LIMIT {$start}, {$resultsperpage} ";
+    }
+
+    if($contactresult = mysql_query($contactsql) AND mysql_num_rows($contactresult) > 0)
+    {
+        echo "<h3>{$strContacts}</h3>";
+        $hits++;
+        $results = mysql_num_rows($contactresult);
+        $countresult = mysql_query($countsql);
+        $results = mysql_num_rows($countresult);
+        if ($domain == 'contacts')
+        {
+            $end = $start + $resultsperpage;
+            $begin = $start;
+        }
+        else
+        {
+            $end = $resultsperpage;
+            $begin = 0;
+        }
+        
+        if($end > $results)
+        {
+            $end = $results;
+        }
+        echo "<p>".sprintf($strShowingXtoXofX, $begin+1, $end, $results)."</p>";
+        echo "<p align='center'>";
+        if(!empty($_GET['start']))
+        {
+            echo " <a href='{$_SERVER['PHP_SELF']}?domain=contacts&q={$q}&start=";
+            echo $begin-$resultsperpage."'>{$strPrevious}</a> ";
+        }
+        else
+        {
+            echo $strPrevious;
+        }
+        echo " | ";
+        if($end != $numtotal)
+        {
+            echo " <a href='{$_SERVER['PHP_SELF']}?domain=contacts&q={$q}&start=";
+            echo $begin+$resultsperpage."&amp;sort={$sort}&amp;order={$order}&amp;view={$view}'>{$strNext}</a> ";
+        }
+        else
+        {
+            echo $strNext;
+        }
+        echo "</p>";
+        echo "<table align='center' width='80%'>";
+        $filter['domain'] = 'contacts';
+        echo "<tr>".colheader(name, $strID, $sort, $order, $filter);
+        echo colheader(site, $strSiteName, $sort, $order, $filter);
+        echo colheader(email, $strEmail, $sort, $order, $filter);
+        echo colheader(telephone, $strTelephone, $sort, $order, $filter);
+        echo colheader(fax, $strFax, $sort, $order, $filter);
+        echo colheader(action, "", $sort, $order, $filter);
+
+        $shade = 'shade1';
+        while($row = mysql_fetch_object($contactresult))
+        {
+            $url = "javascript:incident_details_window('{$row->id}', 'incident{$row->id}')";
+            echo "<tr class='{$shade}'>
+                    <td>{$row->forenames} {$row->surname}</td>
+                    <td>{$row->sitename}</td>
+                    <td>{$row->email}</td>
+                    <td>{$row->telephone}</td>
+                    <td>{$row->fax}</td>
+                    <td></td>
+                  </tr>";
+
+            if ($shade == 'shade1')
+                $shade = 'shade2';
+            else
+                $shade = 'shade1';
+        }
+
+        echo "</table>";
+    }
+    
+    //USER RESULTS
+    $usersql = "SELECT *,MATCH (realname) AGAINST ('{$search}') AS score ";
+    $usersql .= "FROM `{$dbUsers}` ";
+    $usersql .= "WHERE MATCH (realname) AGAINST ('{$search}') ";
+
+    if ($domain == 'users')
+    {
+        if (!empty($sort))
+        {
+            if ($sort=='id') $usersql .= "ORDER BY k.title ";
+            elseif ($sort=='incident') $usersql .= " ORDER BY k.published ";
+            elseif ($sort=='date') $usersql .= " ORDER BY k.keywords ";
+            else $usersql .= " ORDER BY u.score ";
+    
+            if ($order=='a' OR $order=='ASC' OR $order='') $usersql .= "ASC";
+            else $usersql .= "DESC";
+        }
+        else
+        {
+            $usersql .= " ORDER BY score DESC ";
+        }
+    }
+
+    $countsql = $usersql;
+    
+    if ($domain == 'users')
+    {
+        $usersql .= "LIMIT {$start}, {$resultsperpage} ";
+    }
+    
+    if($userresult = mysql_query($usersql) AND mysql_num_rows($userresult) > 0)
+    {
+        echo "<h3>{$strUsers}</h3>";
+        $hits++;
+        $results = mysql_num_rows($userresult);
+        $countresult = mysql_query($countsql);
+        $results = mysql_num_rows($countresult);
+        if ($domain == 'users')
+        {
+            $end = $start + $resultsperpage;
+            $begin = $start;
+        }
+        else
+        {
+            $end = $resultsperpage;
+            $begin = 0;
+        }
+        
+        if($end > $results)
+        {
+            $end = $results;
+        }
+        echo "<p>".sprintf($strShowingXtoXofX, $begin+1, $end, $results)."</p>";
+        echo "<p align='center'>";
+        if(!empty($_GET['start']))
+        {
+            echo " <a href='{$_SERVER['PHP_SELF']}?domain=users&q={$q}&start=";
+            echo $begin-$resultsperpage."'>{$strPrevious}</a> ";
+        }
+        else
+        {
+            echo $strPrevious;
+        }
+        echo " | ";
+        if($end != $numtotal)
+        {
+            echo " <a href='{$_SERVER['PHP_SELF']}?domain=users&q={$q}&start=";
+            echo $begin+$resultsperpage."&amp;sort={$sort}&amp;order={$order}&amp;view={$view}'>{$strNext}</a> ";    }
+        else
+        {
+            echo $strNext;
+        }
+        echo "</p>";
+        echo "<table align='center' width='50%'>";
+        $filter['domain'] = 'users';
+        echo "<tr>".colheader(name, $strID, $sort, $order, $filter);
+        echo colheader(email, $strEmail, $sort, $order, $filter);
+        echo colheader(telephone, $strTelephone, $sort, $order, $filter);
+        
+        $shade = 'shade1';
+        while($row = mysql_fetch_object($userresult))
+        {
+            $url = "javascript:incident_details_window('{$row->id}', 'incident{$row->id}')";
+            echo "<tr class='{$shade}'>
+                    <td>{$row->realname}</td>
+                    <td>{$row->email}</td>
+                    <td>{$row->phone}</td>
+                    <td></td>
+                  </tr>";
+
+            if ($shade == 'shade1')
+                $shade = 'shade2';
+            else
+                $shade = 'shade1';
+        }
+
+        echo "</table>";
+    }
+    
+    //KB RESULTS
+    //FIXME #1191 - Can't find FULLTEXT index matching the column list 
+    $kbsql = "SELECT *,MATCH (title, keywords) AGAINST ('{$search}') AS score ";
+    $kbsql .= "FROM `{$dbKBArticles}` as k ";
+    $kbsql .= "WHERE MATCH (title, keywords) AGAINST ('{$search}') ";
+
+    if ($domain == 'kb')
+    {
+        if (!empty($sort))
+        {
+            if ($sort=='id') $kbsql .= "ORDER BY k.title ";
+            elseif ($sort=='incident') $kbsql .= " ORDER BY k.published ";
+            elseif ($sort=='date') $kbsql .= " ORDER BY k.keywords ";
+            else $kbsql .= " ORDER BY k.score ";
+    
+            if ($order=='a' OR $order=='ASC' OR $order='') $kbsql .= "ASC";
+            else $kbsql .= "DESC";
+        }
+        else
+        {
+            $kbsql .= " ORDER BY score DESC ";
+        }
+    }
+
+    $countsql = $kbsql;
+    
+    if ($domain == 'kb')
+    {
+        $kbsql .= "LIMIT {$start}, {$resultsperpage} ";
+    }
+    
+    if($kbresult = mysql_query($kbsql) AND mysql_num_rows($kbresult) > 0)
+    {
+        echo "<h3>{$strKnowledgeBase}</h3>";
+        $hits++;
+        $results = mysql_num_rows($kbresult);
+        $countresult = mysql_query($countsql);
+        $results = mysql_num_rows($countresult);
+        if ($domain == 'users')
+        {
+            $end = $start + $resultsperpage;
+            $begin = $start;
+        }
+        else
+        {
+            $end = $resultsperpage;
+            $begin = 0;
+        }
+        
+        if($end > $results)
+        {
+            $end = $results;
+        }
+        echo "<p>".sprintf($strShowingXtoXofX, $begin+1, $end, $results)."</p>";
+        echo "<p align='center'>";
+        if(!empty($_GET['start']))
+        {
+            echo " <a href='{$_SERVER['PHP_SELF']}?domain=kb&q={$q}&start=";
+            echo $begin-$resultsperpage."'>{$strPrevious}</a> ";
+        }
+        else
+        {
+            echo $strPrevious;
+        }
+        echo " | ";
+        if($end != $numtotal)
+        {
+            echo " <a href='{$_SERVER['PHP_SELF']}?domain=kb&q={$q}&start=";
+            echo $begin+$resultsperpage."&amp;sort={$sort}&amp;order={$order}&amp;view={$view}'>{$strNext}</a> ";    }
+        else
+        {
+            echo $strNext;
+        }
+        echo "</p>";
+        echo "<table align='center' width='80%'>";
+        $filter['domain'] = 'kb';
+        echo "<tr>".colheader(id, $strID, $sort, $order, $filter);
+        echo colheader(title, $strTitle, $sort, $order, $filter);
+        echo colheader(date, $strDate, $sort, $order, $filter);
+        echo colheader(author, $strAuthor, $sort, $order, $filter);
+        echo colheader(keywords, $strKeywords, $sort, $order, $filter);
+
+        $shade = 'shade1';
+        while($row = mysql_fetch_object($kbresult))
+        {
+            $url = "javascript:incident_details_window('{$row->id}', 'incident{$row->id}')";
+            echo "<tr class='{$shade}'><td><a href=\"{$url}\">{$row->name}</a></td>
+                    <td>{$row->site}</td>
+                    <td>{$row->email}</td>
+                    <td>{$row->telephone}</td>
+                    <td>{$row->fax}</td>
+                    <td></td>
+                  </tr>";
+
+            if ($shade == 'shade1')
+                $shade = 'shade2';
+            else
+                $shade = 'shade1';
+        }
+
+        echo "</table>";
+    } 
+}
+elseif (!empty($q) AND $hits == 0)
+{
+    echo "<p>{$strNoResults}</p>";
+    echo "<p><a href='search.php'>{$strSearchAgain}</a></p>";
 }
 else
 {
