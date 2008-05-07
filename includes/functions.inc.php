@@ -7997,6 +7997,76 @@ function create_ftp_connection()
     return $conn_id;
 }
 
+
+/**
+ * Fucntion to return a HTML table row with two columns.
+ * Giving radio boxes for groups and if the level is 'management' then you are able to view the users (de)selcting
+ * @param $title - text to go in the first column
+ * @param $level either management or engineer, management is able to (de)select users
+ * @param $groupid  Defalt group to select
+ * @return table of format <>tr><th /><td /></tr>
+ * @author Paul Heaney
+ */
+function group_user_selector($title, $level="engineer", $groupid)
+{
+    $str .= "<tr><th>{$title}</th>";
+    $str .= "<td align='center'>";
+    $sql = "SELECT DISTINCT(groups.name), groups.id FROM users, groups WHERE users.status > 0 AND users.groupid = groups.id ORDER BY groups.name";
+    $result = mysql_query($sql);
+    if (mysql_error()) trigger_error("MySQL Query Error ".mysql_error(), E_USER_ERROR);
+    
+    while ($row = mysql_fetch_object($result))
+    {
+        $str .= "<input type='radio' name='group' value='byweek' onclick='groupMemberSelect(\"{$row->name}\")' ";
+
+        if ($groupid == $row->id)
+        {
+            $str .= " checked ";
+            $groupname = $row->name;
+        }
+        
+        $str .= "/>{$row->name} \n";
+    }
+        
+    $str .="<br />";
+
+
+    $sql = "SELECT users.id, users.realname, groups.name FROM users, groups WHERE users.status > 0 AND users.groupid = groups.id ORDER BY username";
+    $result = mysql_query($sql);
+    if (mysql_error()) trigger_error("MySQL Query Error ".mysql_error(), E_USER_ERROR);
+    
+    if ($level == "management")
+    {
+        $str .= "<select name='users[]' id='include' multiple='multiple' size='20'>";
+    }
+    elseif ($level == "engineer")
+    {
+        $str .= "<select name='users[]' id='include' multiple='multiple' size='20' style='display:none'>";
+    }
+
+    while ($row = mysql_fetch_object($result))
+    {
+        $str .= "<option value='{$row->id}'>{$row->realname} ({$row->name})</option>\n";
+    }
+    $str .= "</select>";
+    $str .= "<br />";
+    if ($level == "engineer")
+    {
+        $visibility = " style='display:none'";
+    }
+    
+    $str .= "<input type='button' id='selectall' onclick='doSelect(true, \"include\")' value='Select All' {$visibility} />";
+    $str .= "<input type='button' id='clearselection' onclick='doSelect(false, \"include\")' value='Clear Selection' {$visibility} />";
+   
+    $str .= "</td>";
+    $str .= "</tr>\n";
+    
+    $str .= "<script type='text/javascript'>\n//<![CDATA[\ngroupMemberSelect(\"{$groupname}\");\n//]]>\n</script>";
+
+    
+    return $str;
+}
+
 // -------------------------- // -------------------------- // --------------------------
 // leave this section at the bottom of functions.inc.php ================================
 

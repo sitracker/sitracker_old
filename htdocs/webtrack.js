@@ -257,21 +257,23 @@ function get_random()
 // Display/Hide the time to next action fields
 // Author: Ivan Lucas
 function update_ttna() {
-        if ($('ttna_time').checked)
-        {
+    if ($('ttna_time').checked)
+    {
         $('ttnacountdown').show();
         $('ttnadate').hide();
-        }
-        if ($('ttna_date').checked)
-        {
+    }
+    
+    if ($('ttna_date').checked)
+    {
         $('ttnacountdown').hide();
         $('ttnadate').show();
-        }
-        if ($('ttna_none').checked)
-        {
+    }
+    
+    if ($('ttna_none').checked)
+    {
         $('ttnacountdown').hide();
         $('ttnadate').hide();
-        }
+    }
 }
 
 
@@ -351,4 +353,31 @@ function close_page_redirect(url)
 {
     window.opener.location=url;
     window.close();
+}
+
+
+/**
+ * Below used for selecting GroupMembership from a select field
+*/
+
+function doSelect(select, element)
+{
+    var includes = document.getElementById(element);
+    for(i = 0; i < includes.length; i++)
+    {
+        includes[i].selected = select;
+    }
+}
+
+function groupMemberSelect(group)
+{
+    doSelect(false, 'include');
+    var includes = document.getElementById('include');
+    for(i = 0; i < includes.length; i++)
+    {
+        if(includes[i].text.indexOf("("+group+")") > -1)
+        {
+             includes[i].selected = true;
+        }
+    }
 }
