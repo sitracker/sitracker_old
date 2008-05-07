@@ -8061,6 +8061,7 @@ function group_user_selector($title, $level="engineer", $groupid)
     $str .= "</td>";
     $str .= "</tr>\n";
     
+    // FIXME make this XHTML valid
     $str .= "<script type='text/javascript'>\n//<![CDATA[\ngroupMemberSelect(\"{$groupname}\");\n//]]>\n</script>";
 
     
