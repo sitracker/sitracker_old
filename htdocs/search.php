@@ -602,10 +602,12 @@ if (!empty($q))
         echo "</table>";
     } 
 }
-
-if (!empty($q) AND $hits == 0)
+if (!empty($q) AND strlen($q) < 3)
 {
-    echo "<h3>{$strSorry}</h3>";
+    echo "<p class='info'>{$strSearchTooShort}</p>";
+}
+elseif (!empty($q) AND $hits == 0)
+{
     echo "<p align='center'>".sprintf($strNoResultsFor, "<strong>'".$q."'</strong>")."<br />";
     echo "<a href='search.php'>{$strSearchAgain}</a></p>";
 }
