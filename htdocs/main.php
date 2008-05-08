@@ -77,8 +77,7 @@ $cols0 = substr($cols0, 0, -1);
 $cols1 = substr($cols1, 0, -1);
 $cols2 = substr($cols2, 0, -1);
 echo "<p id='pageoptions'>".help_link("Dashboard")." <a href='manage_user_dashboard.php' title='{$strManageYourDashboard}'>";
-echo $strManageYourDashboard;
-echo " <img src='{$CONFIG['application_webpath']}images/icons/{$iconset}/16x16/dashboardadd.png' width='16' height='16' alt='' /></a> ";
+echo "<img src='{$CONFIG['application_webpath']}images/icons/{$iconset}/16x16/dashboardadd.png' width='16' height='16' alt='' /></a> ";
 // FIXME i18n Save Dashboard Layout Manually
 echo "<a href=\"javascript:save_layout();\" id='savelayout' title='Save Dashboard Layout Manually'><img src='{$CONFIG['application_webpath']}images/icons/{$iconset}/16x16/save.png' width='16' height='16' alt='' /></a></p>";
 ?>

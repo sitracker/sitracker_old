@@ -262,13 +262,13 @@ function update_ttna() {
         $('ttnacountdown').show();
         $('ttnadate').hide();
     }
-    
+
     if ($('ttna_date').checked)
     {
         $('ttnacountdown').hide();
         $('ttnadate').show();
     }
-    
+
     if ($('ttna_none').checked)
     {
         $('ttnacountdown').hide();
@@ -286,9 +286,31 @@ function hidecontexthelp(event) {
     element.stopObserving('click', hidecontexthelp);
 }
 
+
+// find the real position of an element
+// http://www.quirksmode.org/js/findpos.html
+function findPos(obj) {
+    var curleft = curtop = 0;
+    if (obj.offsetParent) {
+        do {
+            curleft += obj.offsetLeft;
+            curtop += obj.offsetTop;
+
+        } while (obj = obj.offsetParent);
+    }
+    return [curleft,curtop];
+}
+
+
 function contexthelp(elem, context)
 {
     elem.firstDescendant().style.display = 'block';
+    var epos = findPos(elem.firstDescendant());
+    var vwidth = document.viewport.getWidth();
+    if (epos[0] + 125 > vwidth)
+    {
+        elem.firstDescendant().style.left = '-125px';
+    }
     if (elem.firstDescendant().innerHTML == '')
     {
         new Ajax.Request('ajaxdata.php?action=contexthelp&context=' + context + '&rand=' + get_random(),

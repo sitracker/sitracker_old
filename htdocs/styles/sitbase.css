@@ -246,6 +246,7 @@ div#menu li:hover li ul,
   -webkit-border-radius: 5px; /* this is just for Safari */
   cursor: pointer;
   text-align: left;
+  margin-right: 20px;
 }
 .helplink a:hover { font-size: 99%; /* this is just for IE */ text-decoration: underline; color: #CC0000; }
 /* .helplink a:hover span { display: block; } */
