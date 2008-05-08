@@ -368,7 +368,7 @@ if (!empty($q))
         echo "</p>";
         echo "<table align='center' width='80%'>";
         $filter['domain'] = 'contacts';
-        echo "<tr>".colheader(name, $strID, $sort, $order, $filter);
+        echo "<tr>".colheader(name, $strName, $sort, $order, $filter);
         echo colheader(site, $strSiteName, $sort, $order, $filter);
         echo colheader(email, $strEmail, $sort, $order, $filter);
         echo colheader(telephone, $strTelephone, $sort, $order, $filter);
@@ -378,9 +378,11 @@ if (!empty($q))
         $shade = 'shade1';
         while($row = mysql_fetch_object($contactresult))
         {
-            $url = "javascript:incident_details_window('{$row->id}', 'incident{$row->id}')";
             echo "<tr class='{$shade}'>
-                    <td>{$row->forenames} {$row->surname}</td>
+                    <td>
+                        <a href='contact_details.php?id={$row->contactid}'>
+                        {$row->forenames} {$row->surname}</a>
+                    </td>
                     <td>{$row->sitename}</td>
                     <td>{$row->email}</td>
                     <td>{$row->telephone}</td>
@@ -484,10 +486,9 @@ if (!empty($q))
         {
             $url = "javascript:incident_details_window('{$row->id}', 'incident{$row->id}')";
             echo "<tr class='{$shade}'>
-                    <td>{$row->realname}</td>
+                    <td>{$row->realname} ".user_online_icon($row->id)."</td>
                     <td>{$row->email}</td>
                     <td>{$row->phone}</td>
-                    <td></td>
                   </tr>";
 
             if ($shade == 'shade1')
