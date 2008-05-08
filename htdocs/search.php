@@ -295,7 +295,7 @@ if (!empty($q))
     $contactsql .= "FROM `{$dbContacts}` as c, `{$dbSites}` AS s ";
     $contactsql .= "WHERE MATCH (forenames, surname) AGAINST ('{$search}') ";
     $contactsql .= "AND c.siteid=s.id ";
-    echo $contactsql;
+
     if ($domain == 'contacts' AND !empty($sort))
     {
         if ($sort=='id') $contactsql .= "ORDER BY k.title ";
