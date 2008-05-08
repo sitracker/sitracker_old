@@ -584,13 +584,13 @@ if (!empty($q))
         $shade = 'shade1';
         while($row = mysql_fetch_object($kbresult))
         {
-            $url = "javascript:incident_details_window('{$row->id}', 'incident{$row->id}')";
-            echo "<tr class='{$shade}'><td><a href=\"{$url}\">{$row->name}</a></td>
-                    <td>{$row->site}</td>
-                    <td>{$row->email}</td>
-                    <td>{$row->telephone}</td>
-                    <td>{$row->fax}</td>
-                    <td></td>
+            echo "<tr class='{$shade}'>
+                    <td><a href='kb_view_article.php?id={$row->docid}'>
+                        {$CONFIG['kb_id_prefix']}{$row->docid}</a></td>
+                    <td>{$row->title}</td>
+                    <td>{$row->published}</td>
+                    <td>".user_realname($row->author)."</td>
+                    <td>{$row->keywords}</td>
                   </tr>";
 
             if ($shade == 'shade1')
