@@ -120,7 +120,7 @@ if (!empty($q))
 
     if($incidentresult = mysql_query($incidentsql) AND mysql_num_rows($incidentresult) > 0)
     {
-        echo "<h3>{$strIncidents}</h3>";
+        echo "<h3><img src='{$CONFIG['application_webpath']}images/icons/{$iconset}/32x32/support.png' width='32' height='32' alt='' /> {$strIncidents}</h3>";
         $hits++;
         $countresult = mysql_query($countsql);
         $results = mysql_num_rows($countresult);
@@ -221,7 +221,7 @@ if (!empty($q))
 
     if($siteresult = mysql_query($sitesql) AND mysql_num_rows($siteresult) > 0)
     {
-        echo "<h3>{$strSites}</h3>";
+        echo "<h3><img src='{$CONFIG['application_webpath']}images/icons/{$iconset}/32x32/site.png' width='32' height='32' alt='' /> {$strSites}</h3>";
         $hits++;
         $results = mysql_num_rows($siteresult);
         $countresult = mysql_query($countsql);
@@ -321,7 +321,7 @@ if (!empty($q))
 
     if($contactresult = mysql_query($contactsql) AND mysql_num_rows($contactresult) > 0)
     {
-        echo "<h3>{$strContacts}</h3>";
+        echo "<h3><img src='{$CONFIG['application_webpath']}images/icons/{$iconset}/32x32/contact.png' width='32' height='32' alt='' /> {$strContacts}</h3>";
         $hits++;
         $results = mysql_num_rows($contactresult);
         $countresult = mysql_query($countsql);
@@ -431,7 +431,7 @@ if (!empty($q))
     
     if($userresult = mysql_query($usersql) AND mysql_num_rows($userresult) > 0)
     {
-        echo "<h3>{$strUsers}</h3>";
+        echo "<h3><img src='{$CONFIG['application_webpath']}images/icons/{$iconset}/32x32/user.png' width='32' height='32' alt='' /> {$strUsers}</h3>";
         $hits++;
         $results = mysql_num_rows($userresult);
         $countresult = mysql_query($countsql);
@@ -530,7 +530,7 @@ if (!empty($q))
     
     if($kbresult = mysql_query($kbsql) AND mysql_num_rows($kbresult) > 0)
     {
-        echo "<h3>{$strKnowledgeBase}</h3>";
+        echo "<h3><img src='{$CONFIG['application_webpath']}images/icons/{$iconset}/32x32/kb.png' width='32' height='32' alt='' /> {$strKnowledgeBase}</h3>";
         $hits++;
         $results = mysql_num_rows($kbresult);
         $countresult = mysql_query($countsql);
