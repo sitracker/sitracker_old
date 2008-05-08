@@ -153,7 +153,7 @@ if (!empty($q))
         }
         else
         {
-            echo "<img src='{$CONFIG['application_webpath']}images/icons/{$iconset}/16x16/leftarrow.png' alt='{$strPrevious}' /> {$strPrevious}";
+            echo "{$strPrevious}";
         }
         echo " | ";
         if($end < $results)
@@ -164,7 +164,7 @@ if (!empty($q))
         }
         else
         {
-            echo "{$strNext} <img src='{$CONFIG['application_webpath']}images/icons/{$iconset}/16x16/rightarrow.png' alt='{$strNext}' />";
+            echo "{$strNext}";
         }
         echo "</p>";
         echo "<table align='center' width='80%'>";
@@ -257,7 +257,7 @@ if (!empty($q))
         }
         else
         {
-            echo "<img src='{$CONFIG['application_webpath']}images/icons/{$iconset}/16x16/leftarrow.png' alt='{$strPrevious}' /> {$strPrevious}";
+            echo "{$strPrevious}";
         }
         echo " | ";
         if($end != $numtotal)
@@ -268,7 +268,7 @@ if (!empty($q))
         }
         else
         {
-            echo "{$strNext} <img src='{$CONFIG['application_webpath']}images/icons/{$iconset}/16x16/rightarrow.png' alt='{$strNext}' />";;
+            echo "{$strNext}";;
         }
         echo "</p>";
         echo "<table align='center' width='30%'>";
@@ -360,7 +360,7 @@ if (!empty($q))
         }
         else
         {
-            echo "<img src='{$CONFIG['application_webpath']}images/icons/{$iconset}/16x16/leftarrow.png' alt='{$strPrevious}' /> {$strPrevious}";
+            echo "{$strPrevious}";
         }
         echo " | ";
         if($end < $results)
@@ -371,7 +371,7 @@ if (!empty($q))
         }
         else
         {
-            echo "{$strNext} <img src='{$CONFIG['application_webpath']}images/icons/{$iconset}/16x16/rightarrow.png' alt='{$strNext}' />";;
+            echo "{$strNext}";;
         }
         echo "</p>";
         echo "<table align='center' width='80%'>";
@@ -472,7 +472,7 @@ if (!empty($q))
         }
         else
         {
-            echo "<img src='{$CONFIG['application_webpath']}images/icons/{$iconset}/16x16/leftarrow.png' alt='{$strPrevious}' /> {$strPrevious}";
+            echo "{$strPrevious}";
         }
         echo " | ";
         if($end < $results)
@@ -483,7 +483,7 @@ if (!empty($q))
         }
         else
         {
-            echo "{$strNext} <img src='{$CONFIG['application_webpath']}images/icons/{$iconset}/16x16/rightarrow.png' alt='{$strNext}' />";;
+            echo "{$strNext}";;
         }
         echo "</p>";
         echo "<table align='center' width='50%'>";
@@ -566,14 +566,14 @@ if (!empty($q))
                                           "<strong>".$end."</strong>",
                                           "<strong>".$results."</strong>")."</p>";
         echo "<p align='center'>";
-        if(!empty($_GET['start']))
+        if(!empty($_GET['start']) AND $domain == 'kb')
         {
             echo " <a href='{$_SERVER['PHP_SELF']}?domain=kb&q={$q}&start=";
             echo $begin-$resultsperpage."&amp;sort={$sort}&amp;order={$order}&amp;view={$view}'>";
             echo "<img src='{$CONFIG['application_webpath']}images/icons/{$iconset}/16x16/leftarrow.png' alt='{$strPrevious}' /> {$strPrevious}</a> ";        }
         else
         {
-            echo "<img src='{$CONFIG['application_webpath']}images/icons/{$iconset}/16x16/leftarrow.png' alt='{$strPrevious}' /> {$strPrevious}";
+            echo "{$strPrevious}";
         }
         echo " | ";
         if($end < $results)
@@ -584,7 +584,7 @@ if (!empty($q))
         }
         else
         {
-            echo "{$strNext} <img src='{$CONFIG['application_webpath']}images/icons/{$iconset}/16x16/rightarrow.png' alt='{$strNext}' />";;
+            echo "{$strNext}";;
         }
         echo "</p>";
         echo "<table align='center' width='80%'>";
