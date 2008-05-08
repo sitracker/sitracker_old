@@ -291,11 +291,11 @@ if (!empty($q))
     }
 
     //CONTACT RESULTS
-    $contactsql = "SELECT *, s.name AS sitename, MATCH (forenames, surname) AGAINST ('{$search}') AS score ";
+    $contactsql = "SELECT *, c.id AS contactid, s.name AS sitename, MATCH (forenames, surname) AGAINST ('{$search}') AS score ";
     $contactsql .= "FROM `{$dbContacts}` as c, `{$dbSites}` AS s ";
     $contactsql .= "WHERE MATCH (forenames, surname) AGAINST ('{$search}') ";
     $contactsql .= "AND c.siteid=s.id ";
-
+    echo $contactsql;
     if ($domain == 'contacts' AND !empty($sort))
     {
         if ($sort=='id') $contactsql .= "ORDER BY k.title ";
@@ -385,7 +385,9 @@ if (!empty($q))
                     <td>{$row->email}</td>
                     <td>{$row->telephone}</td>
                     <td>{$row->fax}</td>
-                    <td></td>
+                    <td><a href='add_incident.php?action=findcontact&contactid={$row->contactid}'>
+                        {$strAddIncident}</a>
+                    </td>
                   </tr>";
 
             if ($shade == 'shade1')
