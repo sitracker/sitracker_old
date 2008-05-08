@@ -54,7 +54,7 @@ else echo "<p align='center'>There is no history to display.<p>";
 
 //start status summary
 $sql = "SELECT u.id AS updatesid, incidentid, userid, type, timestamp, currentstatus, is.id, is.name AS name ";
-$sql .= "FROM `{$dbUpdates}` AS u, `{$dbIncidentStatus}` AS is ";
+$sql .= "FROM `{$dbUpdates}` AS u, `{$dbIncidentStatus}` AS `is` ";
 $sql .= " WHERE incidentid = '{$incidentid}' ";
 $sql .= " AND u.currentstatus = is.id ";
 $sql .= " ORDER BY timestamp ASC";
