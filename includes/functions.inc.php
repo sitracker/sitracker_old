@@ -257,13 +257,13 @@ function db_read_column($column, $table, $id)
     * Returns TRUE or FALSE to indicate whether a given user has a given permission
     * @author Ivan Lucas
     * @param $userid integer. The userid to check
-    * @param $permission integer. The permission id to check
-    * @return boolean. TRUE if the user has the permission, otherwise FALSE
+    * @param $permission integer or array. The permission id to check, or an array of id's to check
+    * @return boolean. TRUE if the user has the permission (or all the permissions in the array), otherwise FALSE
 */
 function user_permission($userid,$permission)
 {
     // Default is no access
-    $grantaccess = FALSE;
+    $accessgranted = FALSE;
 
     if (!is_array($permission)) { $permission = array($permission); }
 
@@ -7693,12 +7693,12 @@ function contract_details($id, $mode='internal')
     $sql  = "SELECT m.*, m.notes AS maintnotes, s.name AS sitename, r.name AS resellername, lt.name AS licensetypename ";
     $sql .= "FROM `{$dbMaintenance}` AS m, `{$dbSites}` AS s, `{$dbResellers}` AS r, `{$dbLicenceTypes}` AS lt ";
     $sql .= "WHERE s.id = m.site AND m.id='{$id}' AND m.reseller = r.id AND m.licence_type = lt.id";
-    
+
     $maintresult = mysql_query($sql);
     if (mysql_error()) trigger_error("MySQL Query Error ".mysql_error(), E_USER_ERROR);
-    
+
     $maintrow = mysql_fetch_array($maintresult);
-    
+
     $html = "<table align='center' class='vertical'>";
     $html .= "<tr><th>{$GLOBALS[strContract]} {$GLOBALS[strID]}:</th>";
     $html .= "<td><h3><img src='{$CONFIG['application_webpath']}images/icons/{$iconset}/32x32/contract.png' width='32' height='32' alt='' /> ";
@@ -7712,14 +7712,14 @@ function contract_details($id, $mode='internal')
     {
         $html .= $GLOBALS[strActive];
     }
-    
+
     if ($maintrow['expirydate']<$now AND $maintrow['expirydate'] != '-1')
     {
         $html .= "<span class='expired'>, {$GLOBALS[strExpired]}</span>";
     }
     $html .= "</td></tr>\n";
     $html .= "<tr><th>{$GLOBALS[strSite]}:</th>";
-    
+
     if ($mode == 'internal')
     {
         $html .= "<td><a href=\"site_details.php?id=".$maintrow['site']."\">".$maintrow['sitename']."</a></td></tr>";
@@ -7730,9 +7730,9 @@ function contract_details($id, $mode='internal')
     }
     $html .= "<tr><th>{$GLOBALS[strAdminContact]}:</th>";
     $html .= "<td><a href=\"contact_details.php?id=".$maintrow['admincontact']."\">".contact_realname($maintrow['admincontact'])."</a></td></tr>";
-    
+
     $html .= "<tr><th>{$GLOBALS[strReseller]}:</th><td>";
-    
+
     if (empty($results['resellername']))
     {
         $html .= $GLOBALS[strNoReseller];
@@ -7746,7 +7746,7 @@ function contract_details($id, $mode='internal')
     $html .= "<tr><th>{$GLOBALS[strIncidents]}:</th>";
     $html .= "<td>";
     $incidents_remaining = $maintrow['incident_quantity'] - $maintrow['incidents_used'];
-    
+
     if ($maintrow['incident_quantity'] == 0)
     {
         $quantity = $GLOBALS[strUnlimited];
@@ -7755,21 +7755,21 @@ function contract_details($id, $mode='internal')
     {
         $quantity = $maintrow['incident_quantity'];
     }
-    
+
     $html .= sprintf($GLOBALS[strUsedNofN], $maintrow['incidents_used'], $quantity);
     if ($maintrow['incidents_used'] >= $maintrow['incident_quantity'] AND
         $maintrow['incident_quantity'] != 0)
     {
         $html .= " ($GLOBALS[strZeroRemaining])";
     }
-    
+
     $html .= "</td></tr>";
     if ($maintrow['licence_quantity'] != '0')
     {
         $html .= "<tr><th>{$GLOBALS[strLicense]}:</th>";
         $html .= "<td>{$maintrow['licence_quantity']} {$maintrow['licensetypename']}</td></tr>\n";
     }
-    
+
     $html .= "<tr><th>{$GLOBALS[strServiceLevel]}:</th><td>".servicelevel_name($maintrow['servicelevelid'])."</td></tr>";
     $html .= "<tr><th>{$GLOBALS[strExpiryDate]}:</th><td>";
     if ($maintrow['expirydate'] == '-1')
@@ -7780,7 +7780,7 @@ function contract_details($id, $mode='internal')
     {
         $html .= ldate($CONFIG['dateformat_date'], $maintrow['expirydate']);
     }
-    
+
     $html .= "</td></tr>";
     if ($maintrow['maintnotes'] != '' AND $mode=='internal')
     {
@@ -7789,7 +7789,7 @@ function contract_details($id, $mode='internal')
     $html .= "</table>";
     $html .= "<p align='center'>";
     $html .= "<a href=\"edit_contract.php?action=edit&amp;maintid=$id\">{$GLOBALS[strEditContract]}</a></p>";
-    
+
     if (mysql_num_rows($maintresult)<1)
     {
         throw_error("{$GLOBALS[strNoContractsFound]}: ",$id);
@@ -7803,18 +7803,18 @@ function contract_details($id, $mode='internal')
         else
         {
             $allowedcontacts = $maintrow['supportedcontacts'];
-        
+
             $supportedcontacts = supported_contacts($id);
-            
+
             if ($supportedcontacts != NULL)
             {
                 $numberofcontacts = sizeof($supportedcontacts);
-    
+
                 if ($allowedcontacts == 0)
                 {
                     $allowedcontacts = $GLOBALS[strUnlimited];
                 }
-    
+
                 $html .= "<table align='center'>";
                 $supportcount = 1;
                 foreach($supportedcontacts AS $contact)
@@ -7823,7 +7823,7 @@ function contract_details($id, $mode='internal')
                     $html .= "<td><img src='{$CONFIG['application_webpath']}images/icons/{$iconset}/16x16/contact.png' width='16' height='16' alt='' /> ";
                     $html .= "<a href=\"contact_details.php?id={$contact}\">".contact_realname($contact)."</a>, ";
                     $html .= contact_site($contact). "</td>";
-                    
+
                     if ($mode == 'internal')
                     {
                         $html .= "<td><a href=\"delete_maintenance_support_contact.php?contactid=".$contact."&amp;maintid=$id&amp;context=maintenance\">{$GLOBALS[strRemove]}</a></td></tr>\n";
@@ -7842,13 +7842,13 @@ function contract_details($id, $mode='internal')
             }
         }
     }
-    
+
     $html .= "<p align='center'>$strUsedNofN";
     $html .= sprintf($GLOBALS['strUsedNofN'],
                      "<strong>".$numberofcontacts."</strong>",
                      "<strong>".$allowedcontacts."</strong>");
     $html .= "</p>";
-    
+
     if ($maintrow['allcontactssupported'] != 'yes' AND ($numberofcontacts < $allowedcontacts OR $allowedcontacts == 0))
     {
         if ($mode == 'internal')
@@ -7871,7 +7871,7 @@ function contract_details($id, $mode='internal')
     $sql .= "WHERE sp.softwareid = s.id AND productid='{$maintrow['product']}' ";
     $result=mysql_query($sql);
     if (mysql_error()) trigger_error("MySQL Query Error ".mysql_error(), E_USER_ERROR);
-    
+
     if (mysql_num_rows($result)>0)
     {
         $html .="<table align='center'>";
@@ -7895,7 +7895,7 @@ function contract_details($id, $mode='internal')
     {
         $html .= "<p align='center'>{$GLOBALS[strNone]} / {$GLOBALS[strUnknown]}<p>";
     }
-    
+
     return $html;
 }
 
@@ -7936,7 +7936,7 @@ function upload_file($file, $id, $type='public')
         if (!$mv) trigger_error('!Error: Problem moving attachment from temp directory to: '.$newfilename, E_USER_WARNING);
 
         //$mv=move_uploaded_file($attachment, "$filename");
-        //if (!mv) throw_error('!Error: Problem moving attachment from temp directory:',$filename);   
+        //if (!mv) throw_error('!Error: Problem moving attachment from temp directory:',$filename);
 
         // Check file size before attaching
         if ($file['size'] > $att_max_filesize)
@@ -7947,7 +7947,7 @@ function upload_file($file, $id, $type='public')
             return FALSE;
         }
         else
-        {            
+        {
             if (!empty($sit[2]))
             {
                 $usertype = 'user';
@@ -7964,7 +7964,7 @@ function upload_file($file, $id, $type='public')
                     ('{$type}', '{$file['name']}', '{$file['size']}', '{$userid}', '{$usertype}', '{$filepath}', '{$now}', '{$id}')";
             $result = mysql_query($sql);
             if (mysql_error()) trigger_error("MySQL Query Error ".mysql_error(), E_USER_ERROR);
-            
+
             return $returnpath;
         }
     }
@@ -7978,7 +7978,7 @@ function upload_file($file, $id, $type='public')
 function create_ftp_connection()
 {
     global $CONFIG;
-    
+
     $conn_id = ftp_connect($CONFIG['ftp_hostname']);
 
     // login with username and password
@@ -7993,7 +7993,7 @@ function create_ftp_connection()
     {
         echo "Connected to {$CONFIG['ftp_hostname']}, for user {$CONFIG['ftp_username']}<br />";
     }
-    
+
     return $conn_id;
 }
 
@@ -8014,7 +8014,7 @@ function group_user_selector($title, $level="engineer", $groupid)
     $sql = "SELECT DISTINCT(groups.name), groups.id FROM users, groups WHERE users.status > 0 AND users.groupid = groups.id ORDER BY groups.name";
     $result = mysql_query($sql);
     if (mysql_error()) trigger_error("MySQL Query Error ".mysql_error(), E_USER_ERROR);
-    
+
     while ($row = mysql_fetch_object($result))
     {
         $str .= "<input type='radio' name='group' value='byweek' onclick='groupMemberSelect(\"{$row->name}\")' ";
@@ -8024,17 +8024,17 @@ function group_user_selector($title, $level="engineer", $groupid)
             $str .= " checked='checked' ";
             $groupname = $row->name;
         }
-        
+
         $str .= "/>{$row->name} \n";
     }
-        
+
     $str .="<br />";
 
 
     $sql = "SELECT users.id, users.realname, groups.name FROM users, groups WHERE users.status > 0 AND users.groupid = groups.id ORDER BY username";
     $result = mysql_query($sql);
     if (mysql_error()) trigger_error("MySQL Query Error ".mysql_error(), E_USER_ERROR);
-    
+
     if ($level == "management")
     {
         $str .= "<select name='users[]' id='include' multiple='multiple' size='20'>";
@@ -8054,17 +8054,17 @@ function group_user_selector($title, $level="engineer", $groupid)
     {
         $visibility = " style='display:none'";
     }
-    
+
     $str .= "<input type='button' id='selectall' onclick='doSelect(true, \"include\")' value='Select All' {$visibility} />";
     $str .= "<input type='button' id='clearselection' onclick='doSelect(false, \"include\")' value='Clear Selection' {$visibility} />";
-   
+
     $str .= "</td>";
     $str .= "</tr>\n";
-    
+
     // FIXME make this XHTML valid
     $str .= "<script type='text/javascript'>\n//<![CDATA[\ngroupMemberSelect(\"{$groupname}\");\n//]]>\n</script>";
 
-    
+
     return $str;
 }
 
