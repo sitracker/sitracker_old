@@ -1972,8 +1972,8 @@ ADD `modifiedby` INT NULL ;
 DROP TABLE IF EXISTS `{$CONFIG['db_tableprefix']}flags`;
 
 -- KMH 01/05/08
-ALTER TABLE `files` CHANGE `category` `category` ENUM( 'public', 'private', 'protected', 'incident', 'kb' ) NOT NULL DEFAULT 'public' ;
-ALTER TABLE `files` ADD `refid` INT( 11 ) NULL ;  // FIXME this should be implemented as a link
+ALTER TABLE `{$dbFiles}` CHANGE `category` `category` ENUM( 'public', 'private', 'protected', 'incident', 'kb' ) NOT NULL DEFAULT 'public' ;
+ALTER TABLE `{$dbFiles}` ADD `refid` INT( 11 ) NULL ;  // FIXME this should be implemented as a link
 
 -- PH  04/05/08
 INSERT INTO `{$dbScheduler}` (`id`, `action`, `params`, `paramslabel`, `description`, `status`, `start`, `end`, `interval`, `lastran`, `success`) VALUES (7, 'PurgeExpiredFTPItems', '', NULL, 'purges files which have expired from the FTP site when run.', 'enabled', '2008-01-01 00:00:00', '0000-00-00 00:00:00', 216000, '0000-00-00 00:00:00', 1);
