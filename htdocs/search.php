@@ -86,9 +86,9 @@ if (!empty($q))
     
     //INCIDENT RESULTS
     $incidentsql = "SELECT *,incidentid AS id, i.title, ";
-    $incidentsql .= "MATCH (bodytext) AGAINST ('{$search}') AS score ";
+    $incidentsql .= "MATCH (bodytext) AGAINST ('{$search}' IN BOOLEAN MODE) AS score ";
     $incidentsql .= "FROM `{$dbUpdates}` as u, `{$dbIncidents}` as i ";
-    $incidentsql .= "WHERE (MATCH (bodytext) AGAINST ('{$search}')) ";
+    $incidentsql .= "WHERE (MATCH (bodytext) AGAINST ('{$search}' IN BOOLEAN MODE)) ";
     $incidentsql .= "AND u.incidentid=i.id ";
     $incidentsql .= "GROUP BY u.incidentid ";
 
@@ -193,9 +193,9 @@ if (!empty($q))
 
     
     //SITE RESULTS
-    $sitesql = "SELECT *,MATCH (name) AGAINST ('{$search}') AS score ";
+    $sitesql = "SELECT *,MATCH (name) AGAINST ('{$search}' IN BOOLEAN MODE) AS score ";
     $sitesql .= "FROM `{$dbSites}` as s ";
-    $sitesql .= "WHERE MATCH (name) AGAINST ('{$search}') ";
+    $sitesql .= "WHERE MATCH (name) AGAINST ('{$search}' IN BOOLEAN MODE) ";
 
     if ($domain == 'sites' AND !empty($sort))
     {
@@ -291,9 +291,9 @@ if (!empty($q))
     }
 
     //CONTACT RESULTS
-    $contactsql = "SELECT *, c.id AS contactid, s.name AS sitename, MATCH (forenames, surname) AGAINST ('{$search}') AS score ";
+    $contactsql = "SELECT *, c.id AS contactid, s.name AS sitename, MATCH (forenames, surname) AGAINST ('{$search}' IN BOOLEAN MODE) AS score ";
     $contactsql .= "FROM `{$dbContacts}` as c, `{$dbSites}` AS s ";
-    $contactsql .= "WHERE MATCH (forenames, surname) AGAINST ('{$search}') ";
+    $contactsql .= "WHERE MATCH (forenames, surname) AGAINST ('{$search}' IN BOOLEAN MODE) ";
     $contactsql .= "AND c.siteid=s.id ";
 
     if ($domain == 'contacts' AND !empty($sort))
@@ -400,9 +400,9 @@ if (!empty($q))
     }
     
     //USER RESULTS
-    $usersql = "SELECT *,MATCH (realname) AGAINST ('{$search}') AS score ";
+    $usersql = "SELECT *,MATCH (realname) AGAINST ('{$search}' IN BOOLEAN MODE) AS score ";
     $usersql .= "FROM `{$dbUsers}` ";
-    $usersql .= "WHERE MATCH (realname) AGAINST ('{$search}') ";
+    $usersql .= "WHERE MATCH (realname) AGAINST ('{$search}' IN BOOLEAN MODE) ";
 
     if ($domain == 'users' AND !empty($sort))
     {
@@ -500,9 +500,9 @@ if (!empty($q))
     }
     
     //KB RESULTS
-    $kbsql = "SELECT *,MATCH (title, keywords) AGAINST ('{$search}') AS score ";
+    $kbsql = "SELECT *,MATCH (title, keywords) AGAINST ('{$search}' IN BOOLEAN MODE) AS score ";
     $kbsql .= "FROM `{$dbKBArticles}` as k ";
-    $kbsql .= "WHERE MATCH (title, keywords) AGAINST ('{$search}') ";
+    $kbsql .= "WHERE MATCH (title, keywords) AGAINST ('{$search}' IN BOOLEAN MODE) ";
 
     if ($domain == 'kb' AND !empty($sort))
     {
