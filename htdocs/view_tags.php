@@ -40,7 +40,7 @@ else
 
     include ('htmlheader.inc.php');
     echo "<h2><img src='{$CONFIG['application_webpath']}images/icons/{$iconset}/32x32/tag.png' width='32' height='32' alt='' /> <a href='view_tags.php'>{$strTag}</a>: $tagname";
-    if (array_key_exists($tagname, $CONFIG['tag_icons'])) echo "&nbsp;<img src='images/icons/sit/32x32/{$CONFIG['tag_icons'][$tagname]}.png' alt='' />";
+    if (array_key_exists($tagname, $CONFIG['tag_icons'])) echo "&nbsp;<img src='images/icons/{$iconset}/32x32/{$CONFIG['tag_icons'][$tagname]}.png' alt='' />";
     echo "</h2>";
 
 
