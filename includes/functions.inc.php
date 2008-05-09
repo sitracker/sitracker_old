@@ -6834,17 +6834,17 @@ function exact_seconds($seconds)
 */
 function user_online_icon($user)
 {
-    global $iconset, $now, $dbUsers;
+    global $iconset, $now, $dbUsers, $strOffline, $strOnline;
     $sql = "SELECT lastseen FROM `{$dbUsers}` WHERE id={$user}";
     $result = mysql_query($sql);
     $users = mysql_fetch_object($result);
     if (($now - mysql2date($users->lastseen) < (60 * 30)))
     {
-        return "<img src='{$CONFIG['application_webpath']}images/icons/{$iconset}/16x16/online.png' width='16' height='16' alt=\"{$strOnline}\" /> ";
+        return "<img src='{$CONFIG['application_webpath']}images/icons/{$iconset}/16x16/online.png' width='16' height='16' title=\"{$strOnline}\" alt=\"{$strOnline}\" /> ";
     }
     else
     {
-        return "<img src='{$CONFIG['application_webpath']}images/icons/{$iconset}/16x16/offline.png' width='16' height='16' alt=\"{$strOffline}\" /> ";
+        return "<img src='{$CONFIG['application_webpath']}images/icons/{$iconset}/16x16/offline.png' width='16' height='16' title=\"{$strOffline}\" alt=\"{$strOffline}\" /> ";
     }
 }
 
