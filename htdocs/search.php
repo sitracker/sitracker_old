@@ -497,7 +497,7 @@ if (!empty($q))
         {
             $url = "javascript:incident_details_window('{$row->id}', 'incident{$row->id}')";
             echo "<tr class='{$shade}'>
-                    <td>{$row->realname} ".user_online_icon($row->id)."</td>
+                    <td>".user_online_icon($row->id)." {$row->realname}</td>
                     <td>{$row->email}</td>
                     <td>{$row->phone}</td>
                   </tr>";
