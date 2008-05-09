@@ -616,29 +616,32 @@ if (!empty($q))
         echo "</table>";
     }
     
-    $sql = "SELECT * FROM `{$dbTags}` WHERE name='{$q}'";
+    $sql = "SELECT * FROM `{$dbTags}` WHERE name LIKE '%{$q}%'";
 
     $result = mysql_query($sql);
-    if (mysql_num_rows($result) == 1)
+    if (mysql_num_rows($result) > 0)
     {
         echo "<h3>{$strTags}</h3>";
-        $row = mysql_fetch_object($result);
-    
-        $countsql = "SELECT COUNT(id) AS counted FROM `{$dbSetTags}` ";
-        $countsql .= "WHERE tagid='{$row->tagid}' ";
-        $countsql .= "GROUP BY tagid ";
-        $countsql .= "ORDER BY counted ASC LIMIT 1";
-        $countresult = mysql_query($countsql);
-        $countrow = mysql_fetch_object($countresult);
-        
-        echo "<p align='center'><a href='view_tags.php?tagid=$row->tagid' class='taglevel1' style='font-size: 400%; font-weight: normal;' title='{$countrow->counted}'>";
-        if (array_key_exists($row->name, $CONFIG['tag_icons']))
+        echo "<p align='center'>";
+        while ($row = mysql_fetch_object($result))
         {
-            echo "{$row->name}&nbsp;<img src='images/icons/{$iconset}/32x32/{$CONFIG['tag_icons'][$row->name]}.png' alt='' />";
+            $countsql = "SELECT COUNT(id) AS counted FROM `{$dbSetTags}` ";
+            $countsql .= "WHERE tagid='{$row->tagid}' ";
+            $countsql .= "GROUP BY tagid ";
+            $countsql .= "ORDER BY counted ASC LIMIT 1";
+            $countresult = mysql_query($countsql);
+            $countrow = mysql_fetch_object($countresult);
+            
+            echo "<a href='view_tags.php?tagid=$row->tagid' class='taglevel1' style='font-size: 400%; font-weight: normal;' title='{$countrow->counted}'>";
+            if (array_key_exists($row->name, $CONFIG['tag_icons']))
+            {
+                echo "{$row->name}&nbsp;<img src='images/icons/{$iconset}/32x32/{$CONFIG['tag_icons'][$row->name]}.png' alt='' />";
+            }
+            else echo $row->name;
+            echo "</a>";
+            echo " ({$countrow->counted}) ";
         }
-        else echo $row->name;
-        echo "</a>";
-        echo " ({$countrow->counted})</p>";
+        echo  "</p>";
     }
 }
 if (!empty($q) AND strlen($q) < 3)
