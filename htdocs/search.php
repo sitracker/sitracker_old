@@ -614,7 +614,32 @@ if (!empty($q))
         }
 
         echo "</table>";
-    } 
+    }
+    
+    $sql = "SELECT * FROM `{$dbTags}` WHERE name='{$q}'";
+
+    $result = mysql_query($sql);
+    if (mysql_num_rows($result) == 1)
+    {
+        echo "<h3>{$strTags}</h3>";
+        $row = mysql_fetch_object($result);
+    
+        $countsql = "SELECT COUNT(id) AS counted FROM `{$dbSetTags}` ";
+        $countsql .= "WHERE tagid='{$row->tagid}' ";
+        $countsql .= "GROUP BY tagid ";
+        $countsql .= "ORDER BY counted ASC LIMIT 1";
+        $countresult = mysql_query($countsql);
+        $countrow = mysql_fetch_object($countresult);
+        
+        echo "<p align='center'><a href='view_tags.php?tagid=$row->tagid' class='taglevel1' style='font-size: 400%; font-weight: normal;' title='{$countrow->counted}'>";
+        if (array_key_exists($row->name, $CONFIG['tag_icons']))
+        {
+            echo "{$row->name}&nbsp;<img src='images/icons/{$iconset}/32x32/{$CONFIG['tag_icons'][$row->name]}.png' alt='' />";
+        }
+        else echo $row->name;
+        echo "</a>";
+        echo " ({$countrow->counted})</p>";
+    }
 }
 if (!empty($q) AND strlen($q) < 3)
 {
