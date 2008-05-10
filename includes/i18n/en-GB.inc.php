@@ -1162,6 +1162,7 @@ $strVendor = 'Vendor';
 $strVersion = 'Version';
 $strView = 'View';
 $strViewActivity = 'View Activity';
+$strViewContract = 'View Contract';
 $strViewIncidents = 'View Incidents';
 $strViewResponse = 'View Response';
 $strViewTask = 'View Task';

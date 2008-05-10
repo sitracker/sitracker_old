@@ -51,7 +51,7 @@ if ($numcontracts >= 1)
         echo "<td>";
         if ($view == 'details')
         {
-        	echo "<a href='contracts.php?id={$contract->id}'>{$contract->id}";
+        	echo "<a href='contracts.php?id={$contract->id}'>";
         	echo "{$strViewContract}</a>";
         }
         else
