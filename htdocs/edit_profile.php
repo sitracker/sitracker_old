@@ -74,9 +74,9 @@ if (empty($mode))
     echo "</tr>";
     echo "<tr><th>{$strRealName}:</th><td><input maxlength='50' name='realname' size='30' type='text' value=\"".$user->realname."\" /></td></tr>\n";
     echo "<tr><th>{$strJobTitle}:</th><td><input maxlength='50' name='jobtitle' size='30' type='text' value=\"".$user->title."\" /></td></tr>\n";
-    echo "<tr><th>{$strQualifications}:<br />{$strQualificationsTip}</th>";
-    echo "<td><textarea name='qualifications' rows='3' cols='40'>".$user->qualifications."</textarea></td></tr>\n";
-    echo "<tr><th>{$strEmailSignature}:<br />{$strEmailSignatureTip}</th>";
+    echo "<tr><th>{$strQualifications}: ".help_link('QualificationsTip')."</th>";
+    echo "<td><input maxlength='100' size='100' name='qualifications' value='".$user->qualifications."' /></td></tr>\n";
+    echo "<tr><th>{$strEmailSignature}: ".help_link('EmailSignatureTip')."</th>";
     echo "<td><textarea name='signature' rows='4' cols='40'>".strip_tags($user->signature)."</textarea></td></tr>\n";
     $entitlement = user_holiday_entitlement($edituserid);
     if ($edituserpermission && $edituserid!=$sit[2])
@@ -134,7 +134,7 @@ if (empty($mode))
     echo "<tr><th>{$strAccepting} {$strIncidents}:</th><td>";
     echo accepting_drop_down("accepting", $edituserid);
     echo "</td></tr>\n";
-    echo "<tr><th>{$strMessage}:<br />{$strMessageTip}</th>";
+    echo "<tr><th>{$strMessage}: ".help_link('MessageTip')."</th>";
     echo "<td><textarea name='message' rows='4' cols='40'>".strip_tags($user->message)."</textarea></td></tr>\n";
     echo "<tr><th colspan='2'>{$strContactDetails}</th></tr>";
     echo "<tr id='email'><th>{$strEmail}:<sup class='red'>*</sup></th><td><input maxlength='50' name='email' size='30' type='text' value='".strip_tags($user->email)."' /></td></tr>";
@@ -200,17 +200,13 @@ if (empty($mode))
     echo "</select>";
     echo "</td></tr>\n";
 
-    echo "<tr><th>{$strIncidentUpdatesPerPage}:</th>";
-    echo "<td><input maxlength='5' name='updatesperpage' size='3' type='text' value=\"".$user->var_num_updates_view."\" /></td></tr>\n";
-
-    echo "<tr><th>{$strCollapseData}:</th><td>";
-    html_checkbox('collapse', $user->var_collapse);
-    echo "</td></tr>\n";
+    // KMH 10/05/08 - commented out as the code doesn't actually use this
+    //echo "<tr><th>{$strIncidentUpdatesPerPage}:</th>";
+    //echo "<td><input maxlength='5' name='updatesperpage' size='3' type='text' value=\"".$user->var_num_updates_view."\" /></td></tr>\n";
 
     echo "<tr><th colspan='2'>{$strNotifications}</th></tr>\n";
-    echo "<tr><th>{$strEmailNotificationReassign}</th><td>";
-    html_checkbox('emailonreassign', $user->var_notify_on_reassign);
-    echo "</td></tr>\n";
+    echo "<tr><th></th><td>";
+    echo "{$strNotificationsMovedToTriggersPage} - <a href='triggers.php'>{$strTriggers}</a></td></tr>\n";
 
     plugin_do('edit_profile_form');
 
@@ -377,7 +373,7 @@ elseif ($mode=='save')
             $sql .= "holiday_entitlement='{$holiday_entitlement}', ";
         }
         $sql .= "var_update_order='$updateorder', var_num_updates_view='$updatesperpage', var_style='$style', signature='$signature', message='$message', status='$status', accepting='$accepting', ";
-        $sql .= "var_collapse='$collapse', var_notify_on_reassign='$emailonreassign', var_i18n='{$vari18n}', var_utc_offset='{$utcoffset}' ";
+        $sql .= "var_i18n='{$vari18n}', var_utc_offset='{$utcoffset}' ";
         $sql .= "WHERE id='$edituserid' LIMIT 1";
         $result = mysql_query($sql);
         if (mysql_error()) trigger_error("MySQL Query Error ".mysql_error(), E_USER_ERROR);

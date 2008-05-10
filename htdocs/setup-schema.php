@@ -1265,11 +1265,9 @@ CREATE TABLE `{$dbUsers}` (
   `var_update_order` enum('desc','asc') default 'desc',
   `var_num_updates_view` int(11) NOT NULL default '15',
   `var_style` int(11) default '1',
-  `var_collapse` enum('true','false') NOT NULL default 'true',
   `var_hideautoupdates` enum('true','false') NOT NULL default 'false',
   `var_hideheader` enum('true','false') NOT NULL default 'false',
   `var_monitor` enum('true','false') NOT NULL default 'true',
-  `var_notify_on_reassign` enum('true','false') NOT NULL default 'false',
   `var_i18n` varchar(20) default NULL,
   `var_utc_offset` int(11) NOT NULL default '0' COMMENT 'Offset from UTC (timezone)',
   `listadmin` tinytext,
@@ -1980,6 +1978,9 @@ INSERT INTO `{$dbScheduler}` (`id`, `action`, `params`, `paramslabel`, `descript
 
 -- KMH 06/05/08
 ALTER TABLE `{$dbMaintenance}` CHANGE `allcontactssupported` `allcontactssupported` ENUM( 'no', 'yes' ) NOT NULL DEFAULT 'no' ;
+
+-- KHM 10/05/96
+ALTER TABLE `{$dbUsers}` DROP `var_collapse`, DROP `var_notify_on_reassign`;
 ";
 
 // Important: When making changes to the schema you must add SQL to make the alterations

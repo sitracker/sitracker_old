@@ -38,6 +38,17 @@ else
 {
     $start = $_GET['start'];
 }
+$domain = cleanvar($_GET['domain']);
+if(isset($_GET['q']))
+{
+    $q = cleanvar($_GET['q']);
+}
+elseif(isset($_GET['search_string']))
+{
+    $q = $_GET['search_string'];
+}
+$filter = array('start' => $start, 'domain' => $domain, 'q' => $q);
+
 
 function search_highlight($x,$var)
 {

@@ -71,7 +71,6 @@ elseif (authenticate($username, $password) == 1)
     $_SESSION['incident_refresh'] = $user->var_incident_refresh;
     $_SESSION['update_order'] = $user->var_update_order;
     $_SESSION['num_update_view'] = $user->var_num_updates_view;
-    $_SESSION['collapse'] = $user->var_collapse;
     $_SESSION['groupid'] = is_null($user->groupid) ? 0 : $user->groupid;
     $_SESSION['utcoffset'] = $user->var_utc_offset;
 
