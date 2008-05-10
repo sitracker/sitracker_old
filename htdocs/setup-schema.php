@@ -529,7 +529,7 @@ CREATE TABLE `{$dbMaintenance}` (
   `servicelevelid` int(11) NOT NULL default '1',
   `incidentpoolid` int(11) NOT NULL default '0',
   `supportedcontacts` INT( 255 ) NOT NULL DEFAULT '0',
-  `allcontactssupported` ENUM( 'No', 'Yes' ) NOT NULL DEFAULT 'No',
+  `allcontactssupported` ENUM( 'no', 'yes' ) NOT NULL DEFAULT 'no',
   PRIMARY KEY  (`id`),
   KEY `site` (`site`),
   KEY `productonly` (`productonly`)
