@@ -7680,6 +7680,7 @@ function readable_file_size($filesize)
     return $filemax;
 }
 
+
 /**
  * Return the html of contract detatils
  * @author Kieran Hogg
@@ -7798,7 +7799,7 @@ function contract_details($id, $mode='internal')
     {
         if ($maintrow['allcontactssupported'] == 'yes')
         {
-            $html .= "<p class='info'>{$strAllSiteContactsSupported}</p>";
+            $html .= "<p class='info'>{$GLOBALS['strAllSiteContactsSupported']}</p>";
         }
         else
         {
