@@ -7843,17 +7843,17 @@ function contract_details($id, $mode='internal')
             }
         }
     }
+    
+	if ($maintrow['allcontactssupported'] != 'yes')
+	{
+	    $html .= "<p align='center'>$strUsedNofN";
+	    $html .= sprintf($GLOBALS['strUsedNofN'],
+	                     "<strong>".$numberofcontacts."</strong>",
+	                     "<strong>".$allowedcontacts."</strong>");
+	    $html .= "</p>";	
 
-    $html .= "<p align='center'>$strUsedNofN";
-    $html .= sprintf($GLOBALS['strUsedNofN'],
-                     "<strong>".$numberofcontacts."</strong>",
-                     "<strong>".$allowedcontacts."</strong>");
-    $html .= "</p>";
-
-    if ($maintrow['allcontactssupported'] != 'yes' AND ($numberofcontacts < $allowedcontacts OR $allowedcontacts == 0))
-    {
-        if ($mode == 'internal')
-        {
+	    if ($numberofcontacts < $allowedcontacts OR $allowedcontacts == 0 AND $mode == 'internal')
+	    {
             $html .= "<p align='center'><a href='add_contact_support_contract.php?maintid={$id}&amp;siteid={$maintrow['site']}&amp;context=maintenance'>";
             $html .= "{$GLOBALS[strAddContact]}</a></p>";
         }
@@ -7861,10 +7861,14 @@ function contract_details($id, $mode='internal')
         {
             $html .= "<h3>{$GLOBALS['strAddContact']}</h3>";
             $html .= "<form action='{$_SERVER['PHP_SELF']}?id={$id}&amp;action=add' method='post' >";
-            $html .= "<p align='center'>".contact_site_drop_down('contactid', 'contactid', maintenance_siteid($id))."<br />";
+            $html .= "<p align='center'>Add new supported contact: ".contact_site_drop_down('contactid', 'contactid', maintenance_siteid($id));
+            $html .= help_link('NewSupportedContact')."<br />";
             $html .= "<input type='submit' value='{$GLOBALS['strAdd']}' /></p></form>";
         }
-    }
+        
+        $html .= "<p align='center'><a>Add new site contact</a></p>";
+	}
+	
     $html .= "<br />";
     $html .= "<h3>{$GLOBALS[strSkillsSupportedUnderContract]}:</h3>";
     // supported software
