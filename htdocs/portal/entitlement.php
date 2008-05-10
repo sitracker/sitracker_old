@@ -10,7 +10,7 @@
 // Author: Kieran Hogg <kieran_hogg[at]users.sourceforge.net
 
 include 'portalheader.inc.php';
-
+$view = cleanvar($_GET['view']);
 echo "<h2><img src='{$CONFIG['application_webpath']}images/icons/{$iconset}/32x32/support.png'> {$strYourSupportEntitlement}</h2>";
 
 if ($numcontracts >= 1)
@@ -49,13 +49,21 @@ if ($numcontracts >= 1)
             
         echo "</td>";
         echo "<td>";
-        if ($contract->expirydate > $now OR $contract->expirydate == -1)
+        if ($view == 'details')
         {
-            echo "<a href='add.php?contractid={$contract->id}&amp;product={$contract->product}'>{$strAddIncident}</a>";
+        	echo "<a href='contracts.php?id={$contract->id}'>{$contract->id}";
+        	echo "{$strViewContract}</a>";
         }
         else
         {
-            echo $strExpired;
+	        if ($contract->expirydate > $now OR $contract->expirydate == -1)
+	        {
+	            echo "<a href='add.php?contractid={$contract->id}&amp;product={$contract->product}'>{$strAddIncident}</a>";
+	        }
+	        else
+	        {
+	            echo $strExpired;
+	        }
         }
         echo "</td></tr>\n";
         if ($shade == 'shade1') $shade = 'shade2';

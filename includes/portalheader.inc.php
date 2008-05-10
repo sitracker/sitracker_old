@@ -76,7 +76,6 @@ $sql .= "ORDER BY expirydate DESC";
 $contractresult = mysql_query($sql);
 if (mysql_error()) trigger_error(mysql_error(),E_USER_ERROR);
 $numcontracts = mysql_num_rows($contractresult);
-
 echo "<div id='menu'>\n";
 echo "<ul id='menuList'>\n";
 echo "<li><a href='index.php'>{$strIncidents}</a></li>";
@@ -84,6 +83,9 @@ if($numcontracts == 1)
 {
     //only one contract
     $contractobj = mysql_fetch_object($contractresult);
+    
+    //reset the pointer
+    mysql_data_seek($contractresult, 0);
     $contractid = $contractobj->id;
     echo "<li><a href='add.php?contractid={$contractid}'>{$strAddIncident}</a></li>";
 }
@@ -93,15 +95,18 @@ else
 }
 $sql = "SELECT docid FROM `{$dbKBArticles}`";
 $result = mysql_query($sql);
-if($CONFIG['kb_enabled'] AND $CONFIG['portal_kb_enabled'] AND mysql_num_rows($result) > 0)
+if ($CONFIG['kb_enabled'] AND $CONFIG['portal_kb_enabled'] AND mysql_num_rows($result) > 0)
 {
     echo "<li><a href='kb.php'>{$strKnowledgeBase}</a></li>";
 }
 
 
 echo "<li><a href='contact_details.php'>{$strDetails}</a></li>";
-if($_SESSION['usertype'] == 'admin')
+if ($_SESSION['usertype'] == 'admin')
+{
     echo "<li><a href='admin.php'>{$strAdmin}</a></li>";
+    echo "<li><a href='entitlement.php?view=details'>{$strContracts}</a></li>";    
+}
 echo "<li><a href='../logout.php'>{$strLogout}</a></li>";
 
 echo "</ul>";
