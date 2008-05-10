@@ -49,14 +49,14 @@ if (empty($mode))
     echo "<form action='{$_SERVER['PHP_SELF']}' method='post'>";
     echo "<table align='center' class='vertical'>";
     echo "<col width='250'></col><col width='*'></col>";
-    echo "<tr><th colspan='2'>{$strAbout}";
+    echo "<tr><th colspan='2'>";
     if ($edituserid == $sit[2])
     {
-        echo $strYou;
+        echo sprintf($strAboutPerson, $strYou);
     }
     else
     {
-        echo $user->realname;
+        echo sprintf($strAboutPerson, $user->realname);
     }
 
     echo "</th></tr>\n";

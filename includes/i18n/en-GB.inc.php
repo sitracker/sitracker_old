@@ -14,6 +14,8 @@ $str1Hour = '1 Hour';
 
 # e.g. About this site, i.e. more information
 $strAbout = 'About';
+# e.g. About John Smith
+$strAboutPerson = 'About %s';
 $strAboutXMinutesAgo = 'About %d Mins Ago';
 $strAbsentSick = 'Absent Sick';
 $strActual = 'Actual';
