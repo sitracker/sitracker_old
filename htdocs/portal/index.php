@@ -119,7 +119,7 @@ echo "<p align='center'>";
 if($numcontracts == 1)
 {
     //only one contract
-    echo "<a href='add.php?contractid={$contractid}&amp;product={$productid}'>";
+    echo "<a href='add.php?contractid={$contractid}'>";
 }
 else
 {

@@ -19,28 +19,30 @@ if (!$_REQUEST['action'])
     $sql = "SELECT *, p.id AS productid, m.id AS id, ";
     $sql .= "(m.incident_quantity - m.incidents_used) AS availableincidents ";
     $sql .= "FROM `{$dbSupportContacts}` AS s, `{$dbMaintenance}` AS m, `{$dbProducts}` AS p ";
-    $sql .= "WHERE s.maintenanceid=m.id ";
-    $sql .= "AND m.product=p.id ";
-    $sql .= "AND s.contactid='{$_SESSION['contactid']}'";
+    $sql .= "WHERE m.product=p.id ";
+    $sql .= "AND ((s.contactid='{$_SESSION['contactid']}' AND s.maintenanceid=m.id) ";
+    $sql .= "OR m.allcontactssupported='yes') ";
     $sql .= "AND m.id='{$contractid}'";
+
     $checkcontract = mysql_query($sql);
     $contract = mysql_fetch_object($checkcontract);
-    $productid = $contract->productid;
-    //FIXME i18n
+    $productid = $contract->productid;    
+    echo "<h2><img src='{$CONFIG['application_webpath']}images/icons/{$iconset}/32x32/add.png' alt='{$strAddIncident}' /> {$strAddIncident}</h2>";
+    
     if(mysql_num_rows($checkcontract) == 0)
     {
-        user_error("You do not have access to that contract");
-        die();
+        echo "<p class='error'>{$strPermissionDenied}</p>";
+       	include 'htmlfooter.inc.php';
+       	exit;
     }
     
-    echo "<h2><img src='{$CONFIG['application_webpath']}images/icons/{$iconset}/32x32/add.png' alt='{$strAddIncident}' /> {$strAddIncident}</h2>";
     echo "<table align='center' width='50%' class='vertical'>";
     echo "<form action='{$_SERVER[PHP_SELF]}?page=add&action=submit' method='post'>";
-    echo "<tr><th>{$strArea}:</th><td>".softwareproduct_drop_down('software', 0, $productid, 'external')."<br />";
+    echo "<tr><th>{$strArea}:</th><td class='shade1'>".softwareproduct_drop_down('software', 0, $productid, 'external')."<br />";
     //FIXME 3.35 which language
     echo "NOTE: Not setting one will slow down processing your incident</td></tr>";
-    echo "<tr><th>{$strTitle}:</th><td><input maxlength='100' name='title' size=40 type='text' /></td></tr>";
-    echo "<tr><th width='20%'>{$strProblemDescription}:</th><td>";
+    echo "<tr><th>{$strTitle}:</th><td class='shade1'><input maxlength='100' name='title' size=40 type='text' /></td></tr>";
+    echo "<tr><th width='20%'>{$strProblemDescription}:</th><td class='shade1'>";
     echo "The more information you can provide, the better</br /><textarea name='probdesc' rows='20' cols='60'>";    
     echo "</textarea></td></tr>";
 
