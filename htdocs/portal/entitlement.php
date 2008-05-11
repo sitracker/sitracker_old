@@ -10,7 +10,6 @@
 // Author: Kieran Hogg <kieran_hogg[at]users.sourceforge.net
 
 include 'portalheader.inc.php';
-$view = cleanvar($_GET['view']);
 echo "<h2><img src='{$CONFIG['application_webpath']}images/icons/{$iconset}/32x32/support.png'> {$strYourSupportEntitlement}</h2>";
 
 if ($numcontracts >= 1)
@@ -31,7 +30,7 @@ if ($numcontracts >= 1)
         echo "<td><a href='contracts.php?id={$contract->id}'>{$contract->id}</a></td>";
         echo "<td>{$contract->name}</td>";
         echo "<td>";
-        if ($contract->incident_quantity==0)
+        if ($contract->incident_quantity == 0)
         {
             echo "&#8734; {$strUnlimited}";
         }
@@ -43,27 +42,22 @@ if ($numcontracts >= 1)
         echo "<td>{$contract->incidents_used}</td>";
         echo "<td>";
         if($contract->expirydate == -1)
-            echo $strUnlimited;
-        else
-            echo ldate($CONFIG['dateformat_date'],$contract->expirydate);
-            
-        echo "</td>";
-        echo "<td>";
-        if ($view == 'details')
         {
-        	echo "<a href='contracts.php?id={$contract->id}'>";
-        	echo "{$strViewContract}</a>";
+            echo $strUnlimited;
         }
         else
         {
-	        if ($contract->expirydate > $now OR $contract->expirydate == -1)
-	        {
-	            echo "<a href='add.php?contractid={$contract->id}&amp;product={$contract->product}'>{$strAddIncident}</a>";
-	        }
-	        else
-	        {
-	            echo $strExpired;
-	        }
+            echo ldate($CONFIG['dateformat_date'],$contract->expirydate);
+        }    
+        echo "</td>";
+        echo "<td>";
+        if ($contract->expirydate > $now OR $contract->expirydate == -1)
+        {
+            echo "<a href='add.php?contractid={$contract->id}&amp;product={$contract->product}'>{$strAddIncident}</a>";
+        }
+        else
+        {
+            echo $strExpired;
         }
         echo "</td></tr>\n";
         if ($shade == 'shade1') $shade = 'shade2';

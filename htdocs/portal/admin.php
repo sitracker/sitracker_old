@@ -55,16 +55,15 @@ echo $strAdmin."</h2>";
 if ($CONFIG['portal_site_incidents'])
 {
     $contracts = admin_contact_contracts($_SESSION['contactid'], $_SESSION['siteid']);
-    echo "<h3><img src='{$CONFIG['application_webpath']}images/icons/{$iconset}/32x32/privacy.png'
-            alt='{$strPrivacy}' />  Privacy</h3>";
     
-    echo "<br /><p align='center'>{$strAdminContactForContracts}</p>";
+    echo "<p align='center'>{$strAdminContactForContracts}</p>";
     
     echo "<table align='center' class='vertical' width='60%'><tr>";
     echo colheader('id', $strID, $sort, $order, $filter);
     echo colheader('product', $strContract, $sort, $order, $filter);
     echo colheader('expiry', $strExpiryDate, $sort, $order, $filter);
     echo colheader('visbility', $strVisibility);
+    echo colheader('actions', $strActions);
     
     echo "<form action='{$_SERVER['PHP_SELF']}' method='post'>";
     foreach($contracts as $contract)
@@ -94,7 +93,7 @@ if ($CONFIG['portal_site_incidents'])
             	echo "<select disabled='disabled'>";
             	echo "<option>{$strAllSiteContactsSupported}</option>";
             	echo "</select>";
-                echo "</td></tr>";            	
+                echo "</td>";           	
             }
             else
             {
@@ -118,8 +117,9 @@ if ($CONFIG['portal_site_incidents'])
 	            }
 	            echo ">All Contacts</option></select>";
 	            echo " ".help_link('SiteIncidentVisibility');      
-	            echo "</td></tr>";
-            }           
+	            echo "</td>";
+            }
+            echo "<td><a href='contracts.php?id={$row->id}'>{$strViewContract}</a></td></tr>";
         }
         
         if ($shade == 'shade1')

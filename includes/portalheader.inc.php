@@ -105,7 +105,6 @@ echo "<li><a href='contact_details.php'>{$strDetails}</a></li>";
 if ($_SESSION['usertype'] == 'admin')
 {
     echo "<li><a href='admin.php'>{$strAdmin}</a></li>";
-    echo "<li><a href='entitlement.php?view=details'>{$strContracts}</a></li>";    
 }
 echo "<li><a href='../logout.php'>{$strLogout}</a></li>";
 

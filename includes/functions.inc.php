@@ -7690,7 +7690,7 @@ function readable_file_size($filesize)
 function contract_details($id, $mode='internal')
 {
     global $CONFIG, $iconset, $dbMaintenance, $dbSites, $dbResellers, $dbLicenceTypes;
-
+	
     $sql  = "SELECT m.*, m.notes AS maintnotes, s.name AS sitename, ";
     $sql .= "r.name AS resellername, lt.name AS licensetypename ";
     $sql .= "FROM `{$dbMaintenance}` AS m, `{$dbSites}` AS s, ";
