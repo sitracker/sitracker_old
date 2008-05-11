@@ -105,18 +105,20 @@ if (empty($search_string) && empty($productid))
 }
 */
 // search for criteria
-$sql  = "SELECT DISTINCT m.id AS maintid, s.name AS site, p.name AS product, r.name AS reseller, licence_quantity, ";
+$sql  = "SELECT DISTINCT m.id AS maintid, s.name AS site, p.name AS product, ";
+$sql .= "r.name AS reseller, licence_quantity, ";
 $sql .= "l.name AS licence_type, expirydate, admincontact, ";
-$sql .= "c.forenames AS admincontactforenames, c.surname AS admincontactsurname, m.notes, s.id AS siteid, ";
-$sql .= "m.term AS term, m.productonly AS productonly ";
-$sql .= "FROM `{$dbMaintenance}` AS m, `{$dbSites}` AS s, `{$dbContacts}` AS c, `{$dbProducts}` AS p, `{$dbLicenceTypes}` AS l, `{$dbResellers}` AS r ";
-$sql .= "WHERE (m.site = s.id AND product = p.id AND admincontact = c.id) ";
-$sql .= "AND (reseller = r.id OR reseller = NULL) AND (licence_type = l.id OR licence_type = NULL) ";
+$sql .= "c.forenames AS admincontactforenames, c.surname AS admincontactsurname, ";
+$sql .= "m.notes, s.id AS siteid, m.term AS term, m.productonly AS productonly ";
+$sql .= "FROM `{$dbMaintenance}` AS m, `{$dbSites}` AS s, `{$dbContacts}` AS c, ";
+$sql .= "`{$dbProducts}` AS p, `{$dbLicenceTypes}` AS l, `{$dbResellers}` AS r ";
+$sql .= "WHERE ((reseller = r.id AND reseller IS NOT NULL) OR reseller IS NULL) ";
+$sql .= "AND (licence_type IS NULL OR (licence_type = l.id AND licence_type IS NOT NULL)) ";
 if ($activeonly=='yes')
 {
     $sql .= "AND term!='yes' AND (expirydate > $now OR expirydate = '-1') ";
 }
-
+echo $sql;
 if ($search_string != '*')
 {
     if (strlen($search_string)==1)
@@ -209,7 +211,7 @@ else
         }
 
         echo "<tr class='{$class}'>";
-        echo "<td><a href='contract_details.php?&amp;id={$results['maintid']}'>{$strContract} {$results['maintid']}</a></td>";
+        echo "<td><a href='contract_details.php?id={$results['maintid']}'>{$strContract} {$results['maintid']}</a></td>";
         echo "<td>{$results["product"]}</td>";
         echo "<td><a href='site_details.php?id={$results['siteid']}#contracts'>".htmlspecialchars($results['site'])."</a><br />";
         echo "{$strAdminContact}: <a href='contact_details.php?mode=popup&amp;id={$results['admincontact']}' target='_blank'>{$results['admincontactforenames']} {$results['admincontactsurname']}</a></td>";

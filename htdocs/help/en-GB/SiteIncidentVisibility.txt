@@ -1,0 +1,8 @@
+<strong>No-one</strong>
+Only contract admins can view site incidents in their 'site incidents' queue
+
+<strong>Named contacts</strong>
+Named contacts for this contact are all able to see site incidents logged under their named contract
+        
+<strong>All contacts</strong>
+All contacts from your site can see all the incidents whether or not they are entitled to log any

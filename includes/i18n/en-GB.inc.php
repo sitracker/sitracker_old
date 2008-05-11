@@ -77,6 +77,7 @@ $strAddUser = 'Add User';
 $strAddVendor = 'Add Vendor';
 $strAdmin = 'Admin';
 $strAdminContact = 'Admin Contact';
+$strAdminContactForContracts = 'You are an Admin Contact for the following contracts. You can choose who is able to see those incidents in the portal.';
 $strAdministratorsOnly = 'Administrators Only';
 $strAdvanced = 'Advanced';
 $strAfternoon = 'Afternoon';

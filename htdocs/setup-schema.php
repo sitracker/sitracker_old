@@ -23,6 +23,9 @@ $schema = "CREATE TABLE `{$dbBillingPeriods}` (
 `customerperiod` INT NOT NULL COMMENT 'In minutes',
 `priority` INT( 4 ) NOT NULL,
 `tag` VARCHAR( 10 ) NOT NULL,
+`createdby` INT NULL ,
+`modified` DATETIME NULL ,
+`modifiedby` INT NULL ,
 PRIMARY KEY ( `servicelevelid`,`priority` )
 ) ENGINE = MYISAM ;
 
@@ -118,6 +121,9 @@ CREATE TABLE `{$dbDrafts}` (
 CREATE TABLE `{$dbEmailSig}` (
   `id` int(11) NOT NULL auto_increment,
   `signature` text NOT NULL,
+  `createdby` INT NULL ,
+  `modified` DATETIME NULL ,
+  `modifiedby` INT NULL ,  
   PRIMARY KEY  (`id`)
 )  ENGINE=MyISAM COMMENT='Global Email Signature' ;
 
@@ -172,6 +178,9 @@ CREATE TABLE `{$dbEscalationPaths}` (
   `home_url` varchar(255) NOT NULL default '',
   `url_title` varchar(255) default NULL,
   `email_domain` varchar(255) default NULL,
+  `createdby` INT NULL ,
+  `modified` DATETIME NULL ,
+  `modifiedby` INT NULL ,  
   PRIMARY KEY  (`id`)
 ) ENGINE=MyISAM ;
 
@@ -183,6 +192,9 @@ CREATE TABLE `{$dbFeedbackForms}` (
   `thanks` text NOT NULL,
   `description` text NOT NULL,
   `multi` enum('yes','no') NOT NULL default 'no',
+  `createdby` INT NULL ,
+  `modified` DATETIME NULL ,
+  `modifiedby` INT NULL ,
   PRIMARY KEY  (`id`),
   KEY `multi` (`multi`)
 ) ENGINE=MyISAM;
@@ -198,6 +210,9 @@ CREATE TABLE `{$dbFeedbackQuestions}` (
   `type` varchar(255) NOT NULL default 'text',
   `required` enum('true','false') NOT NULL default 'false',
   `options` text NOT NULL,
+  `createdby` INT NULL ,
+  `modified` DATETIME NULL ,
+  `modifiedby` INT NULL ,
   PRIMARY KEY  (`id`),
   KEY `taborder` (`taborder`),
   KEY `type` (`type`),
@@ -215,6 +230,9 @@ CREATE TABLE `{$dbFeedbackReport}` (
   `created` timestamp(14) NOT NULL,
   `incidentid` int(5) NOT NULL default '0',
   `contactid` int(5) NOT NULL default '0',
+  `createdby` INT NULL ,
+  `modified` DATETIME NULL ,
+  `modifiedby` INT NULL ,
   PRIMARY KEY  (`id`),
   KEY `responseref` (`responseref`),
   KEY `formid` (`formid`),
@@ -246,6 +264,9 @@ CREATE TABLE `{$dbFeedbackResults}` (
   `questionid` int(5) NOT NULL default '0',
   `result` varchar(255) NOT NULL default '',
   `resulttext` text,
+  `createdby` INT NULL ,
+  `modified` DATETIME NULL ,
+  `modifiedby` INT NULL ,
   PRIMARY KEY  (`id`),
   KEY `questionid` (`questionid`),
   KEY `respondentid` (`respondentid`)
@@ -269,6 +290,9 @@ CREATE TABLE `{$dbFiles}` (
   `productid` int(11) NOT NULL default '0',
   `releaseid` int(11) NOT NULL default '0',
   `published` enum('yes','no') NOT NULL default 'no',
+  `createdby` INT NULL ,
+  `modified` DATETIME NULL ,
+  `modifiedby` INT NULL ,
   PRIMARY KEY  (`id`),
   KEY `userid` (`userid`),
   KEY `productid` (`productid`),
@@ -283,6 +307,9 @@ CREATE TABLE `{$dbGroups}` (
   `id` int(5) NOT NULL auto_increment,
   `name` varchar(255) NOT NULL default '',
   `imageurl` varchar(255) NOT NULL default '',
+  `createdby` INT NULL ,
+  `modified` DATETIME NULL ,
+  `modifiedby` INT NULL ,
   PRIMARY KEY  (`id`)
 ) ENGINE=MyISAM COMMENT='List of user groups' ;
 
@@ -319,6 +346,9 @@ CREATE TABLE `{$dbIncidentProductInfo}` (
   `incidentid` int(11) default NULL,
   `productinfoid` int(11) default NULL,
   `information` text,
+   `createdby` INT NULL ,
+  `modified` DATETIME NULL ,
+  `modifiedby` INT NULL ,
   PRIMARY KEY  (`id`)
 ) ENGINE=MyISAM;
 
@@ -352,6 +382,9 @@ CREATE TABLE `{$dbIncidents}` (
   `slanotice` tinyint(1) NOT NULL default '0',
   `locked` tinyint(4) NOT NULL default '0',
   `locktime` int(11) NOT NULL default '0',
+  `createdby` INT NULL ,
+  `modified` DATETIME NULL ,
+  `modifiedby` INT NULL ,
   PRIMARY KEY  (`id`),
   KEY `type` (`type`),
   KEY `owner` (`owner`),
@@ -519,7 +552,7 @@ CREATE TABLE `{$dbMaintenance}` (
   `reseller` int(11) default NULL,
   `expirydate` int(11) default NULL,
   `licence_quantity` int(11) default NULL,
-  `licence_type` int(11) default NULL default 5,
+  `licence_type` int(11) default NULL,
   `incident_quantity` int(5) NOT NULL default '0',
   `incidents_used` int(5) NOT NULL default '0',
   `notes` text,
@@ -530,6 +563,8 @@ CREATE TABLE `{$dbMaintenance}` (
   `incidentpoolid` int(11) NOT NULL default '0',
   `supportedcontacts` INT( 255 ) NOT NULL DEFAULT '0',
   `allcontactssupported` ENUM( 'no', 'yes' ) NOT NULL DEFAULT 'no',
+  `var_incident_visible_contacts` ENUM( 'yes', 'no' ) NOT NULL DEFAULT 'no',
+  `var_incident_visible_all` ENUM( 'yes', 'no' ) NOT NULL DEFAULT 'no';
   PRIMARY KEY  (`id`),
   KEY `site` (`site`),
   KEY `productonly` (`productonly`)
@@ -1653,9 +1688,6 @@ PRIMARY KEY r( `servicelevelid` )
 -- KMH 26/11/07
 ALTER TABLE `{$dbIncidents}` ADD `slanotice` TINYINT(1) NOT NULL DEFAULT '0' AFTER `slaemail` ;
 
--- KMH 27/11/07 Type 6 is none, workaround for browse_contact.php
-ALTER TABLE `{$dbMaintenance}` CHANGE `licence_type` `licence_type` INT( 11 ) NULL DEFAULT '6';
-
 -- PH 1/12/07
 ALTER TABLE `{$dbBillingPeriods}` ADD `{$dbPriority}` INT( 4 ) NOT NULL AFTER `servicelevelid` ;
 ALTER TABLE `{$dbBillingPeriods}` ADD `tag` VARCHAR( 10 ) NOT NULL AFTER `{$dbPriority}` ;
@@ -1719,7 +1751,8 @@ CREATE TABLE `{$dbNoticeTemplates}` (
 `text` TINYTEXT NOT NULL ,
 `linktext` VARCHAR( 50 ) NULL ,
 `link` VARCHAR( 100 ) NULL ,
-`durability` ENUM( 'sticky', 'session' ) NOT NULL DEFAULT 'sticky'
+`durability` ENUM( 'sticky', 'session' ) NOT NULL DEFAULT 'sticky',
+ INDEX ( `userid` ),
 ) ENGINE = MYISAM ;
 
 INSERT INTO `{$dbNoticeTemplates}` (`id`, `type`, `description`, `text`, `linktext`, `link`, `durability`) VALUES
@@ -1773,8 +1806,6 @@ INSERT INTO `{$dbTriggers}` (triggerid, userid, action) VALUES ('TRIGGER_USER_SE
 INSERT INTO `{$dbTriggers}` (triggerid, userid, action) VALUES ('TRIGGER_SIT_UPGRADED', '0', 'ACTION_JOURNAL');
 INSERT INTO `{$dbTriggers}` (triggerid, userid, action) VALUES ('TRIGGER_USER_RETURNS', '0', 'ACTION_JOURNAL');
 INSERT INTO `{$dbTriggers}` (triggerid, userid, action) VALUES ('TRIGGER_INCIDENT_OWNED_CLOSED_BY_USER', '0', 'ACTION_JOURNAL');
--- INL 24Jan08 TODO add to above ^^
-ALTER TABLE `{$dbTriggers}` ADD INDEX ( `userid` );
 
 -- KMHO 25/01/08
 ALTER TABLE `{$CONFIG['db_tableprefix']}emailtype` CHANGE `type` `type` ENUM( 'usertemplate', 'system', 'contact', 'site', 'incident', 'kb', 'user') NOT NULL COMMENT 'usertemplate is personal template owned by a user, user is a template relating to a user' DEFAULT 'user';
@@ -1841,9 +1872,6 @@ INSERT INTO `{$dbScheduler}` (`id`, `action`, `params`, `paramslabel`, `descript
 ALTER TABLE `{$dbUpdates}` ADD FULLTEXT ( `bodytext`) ;
 ALTER TABLE `{$dbIncidents}` ADD FULLTEXT (`title`) ;
 
--- KMH 29/03/08
-ALTER TABLE `{$dbMaintenance}` CHANGE `licence_type` `licence_type` INT( 11 ) NULL DEFAULT '5';
-
 -- KMH 31/03/08
 UPDATE `{$dbIncidentStatus}` SET `name` = 'strActiveUnassigned' WHERE `id` =10 LIMIT 1 ;
 
@@ -1877,8 +1905,8 @@ UPDATE `{$dbInterfacestyles}` SET `cssurl` = 'sit14.css' WHERE `id` = 15 LIMIT 1
 UPDATE `{$dbInterfacestyles}` SET `iconset` = 'oxygen' WHERE `id` =8 LIMIT 1 ;
 
 ALTER TABLE `{$dbMaintenance}`
-ADD `var_incident_visible_contacts` ENUM( 'true', 'false' ) NOT NULL DEFAULT 'false',
-ADD `var_incident_visible_all` ENUM( 'true', 'false' ) NOT NULL DEFAULT 'false';
+ADD `var_incident_visible_contacts` ENUM( 'yes', 'no' ) NOT NULL DEFAULT 'no',
+ADD `var_incident_visible_all` ENUM( 'yes', 'no' ) NOT NULL DEFAULT 'no';
 
 -- KMH 08/04/08
 ALTER TABLE `{$dbKBArticles}` CHANGE `distribution` `distribution` ENUM( 'public', 'private', 'restricted' ) NOT NULL DEFAULT 'public' COMMENT 'public appears in the portal, private is info never to be released to the public, restricted is info that is sensitive but could be mentioned if asked for example' ;
@@ -1915,7 +1943,8 @@ INSERT INTO `{$dbPermissions}` VALUES (76, 'View Transactions');
 INSERT INTO `{$dbRolePermissions}` (`roleid`, `permissionid`, `granted`) VALUES (1, 76, 'true');
 
 -- INL 23Apr08 timestamps for all user data tables
-ALTER TABLE `{$dbBillingPeriods}` ADD `created` DATETIME NULL ,
+ALTER TABLE `{$dbBillingPeriods}` ADD `created` DATETIME NULL ,-- FIXME these timestamp fields ^ need adding to the main install schema INL 24 April 08
+
 ADD `createdby` INT NULL ,
 ADD `modified` DATETIME NULL ,
 ADD `modifiedby` INT NULL ;
@@ -1965,8 +1994,6 @@ ADD `createdby` INT NULL ,
 ADD `modified` DATETIME NULL ,
 ADD `modifiedby` INT NULL ;
 
--- FIXME these timestamp fields ^ need adding to the main install schema INL 24 April 08
-
 DROP TABLE IF EXISTS `{$CONFIG['db_tableprefix']}flags`;
 
 -- KMH 01/05/08
@@ -1981,6 +2008,7 @@ ALTER TABLE `{$dbMaintenance}` CHANGE `allcontactssupported` `allcontactssupport
 
 -- KHM 10/05/96
 ALTER TABLE `{$dbUsers}` DROP `var_collapse`, DROP `var_notify_on_reassign`;
+ALTER TABLE `{$dbMaintenance}` CHANGE `licence_type` `licence_type` INT( 11 ) NULL DEFAULT NULL ;
 ";
 
 // Important: When making changes to the schema you must add SQL to make the alterations

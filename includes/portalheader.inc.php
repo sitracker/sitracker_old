@@ -67,10 +67,10 @@ include ('htmlheader.inc.php');
 $sql = "SELECT m.*, p.name, ";
 $sql .= "(m.incident_quantity - m.incidents_used) AS availableincidents ";
 $sql .= "FROM `{$dbSupportContacts}` AS sc, `{$dbMaintenance}` AS m, `{$dbProducts}` AS p ";
-$sql .= "WHERE sc.maintenanceid=m.id ";
-$sql .= "AND m.product=p.id ";
-$sql .= "AND sc.contactid='{$_SESSION['contactid']}' ";
-$sql .= "AND expirydate > (UNIX_TIMESTAMP(NOW()) - 15778463) ";
+$sql .= "WHERE m.product=p.id ";
+$sql .= "AND ((sc.contactid='{$_SESSION['contactid']}' AND sc.maintenanceid=m.id) ";
+$sql .= "OR m.allcontactssupported = 'yes') ";
+$sql .= "AND (expirydate > (UNIX_TIMESTAMP(NOW()) - 15778463) OR expirydate = -1) ";
 $sql .= "ORDER BY expirydate DESC";
 
 $contractresult = mysql_query($sql);

@@ -7501,7 +7501,7 @@ function contact_contracts($contactid, $siteid)
             AND c.id={$contactid}
             AND sc.maintenanceid=m.id
             AND sc.contactid=c.id
-            AND m.var_incident_visible_contacts = 'true'
+            AND m.var_incident_visible_contacts = 'yes'
             ";
     if($result = mysql_query($sql))
     {
@@ -7528,7 +7528,7 @@ function all_contact_contracts($contactid, $siteid)
             `{$GLOBALS['dbSites']}` AS s,
             `{$GLOBALS['dbSupportContacts']}` AS sc
             WHERE m.site={$siteid}
-            AND m.var_incident_visible_all = 'true'
+            AND m.var_incident_visible_all = 'yes'
             ";
 
     if ($result = mysql_query($sql))
@@ -7691,9 +7691,14 @@ function contract_details($id, $mode='internal')
 {
     global $CONFIG, $iconset, $dbMaintenance, $dbSites, $dbResellers, $dbLicenceTypes;
 
-    $sql  = "SELECT m.*, m.notes AS maintnotes, s.name AS sitename, r.name AS resellername, lt.name AS licensetypename ";
-    $sql .= "FROM `{$dbMaintenance}` AS m, `{$dbSites}` AS s, `{$dbResellers}` AS r, `{$dbLicenceTypes}` AS lt ";
-    $sql .= "WHERE s.id = m.site AND m.id='{$id}' AND m.reseller = r.id AND m.licence_type = lt.id";
+    $sql  = "SELECT m.*, m.notes AS maintnotes, s.name AS sitename, ";
+    $sql .= "r.name AS resellername, lt.name AS licensetypename ";
+    $sql .= "FROM `{$dbMaintenance}` AS m, `{$dbSites}` AS s, ";
+    $sql .= "`{$dbResellers}` AS r, `{$dbLicenceTypes}` AS lt ";
+    $sql .= "WHERE s.id = m.site ";
+    $sql .= "AND m.id='{$id}' ";
+    $sql .= "AND m.reseller = r.id ";
+    $sql .= "AND (m.licence_type IS NULL OR m.licence_type = lt.id)";
 
     $maintresult = mysql_query($sql);
     if (mysql_error()) trigger_error("MySQL Query Error ".mysql_error(), E_USER_ERROR);

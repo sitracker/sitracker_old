@@ -83,7 +83,10 @@ function portal_incident_table($sql)
 }
 
 
-if (empty($showclosed)) $showclosed = "false";
+if (empty($showclosed)) 
+{
+	$showclosed = "false";
+}
 
 if ($showclosed == "true")
 {

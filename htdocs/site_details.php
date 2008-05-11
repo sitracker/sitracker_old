@@ -243,7 +243,12 @@ if (user_permission($sit[2],19)) // View contracts
             // define class for table row shading
             if ($shade) $class = "shade1";
             else $class = "shade2";
-            if ($results['term']=='yes' || $results['expirydate']<$now) $class = "expired";
+            if ($results['term']=='yes' OR 
+                ($results['expirydate'] < $now AND
+                $results['expirydate'] != -1))
+            {
+            	$class = "expired";
+            }
             echo "<tr>";
             echo "<td class='{$class}'><img src='{$CONFIG['application_webpath']}images/icons/{$iconset}/16x16/contract.png' width='16' height='16' alt='' /> ";
             echo "<a href='contract_details.php?id={$results['maintid']}'>{$strContract} {$results['maintid']}</a></td>";
