@@ -42,7 +42,7 @@ if($_POST['submit'])
 		$sql = "UPDATE `{$dbMaintenance}` ";
 		$sql .= $visiblesql;
 		$sql .= "WHERE id='{$id}'";
-		echo $sql;
+
 		$result = mysql_query($sql);        
 		if (mysql_error()) trigger_error(mysql_error(),E_USER_ERROR);
 
