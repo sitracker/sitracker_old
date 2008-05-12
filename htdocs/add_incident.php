@@ -252,35 +252,43 @@ elseif ($action=='findcontact')
 
         if (mysql_num_rows($result) > 0)
         {
-            echo "<h3><img src='{$CONFIG['application_webpath']}images/icons/{$iconset}/32x32/contact.png' width='32' height='32' alt='' /> ";
-            echo "{$strContacts}</h3>\n";
-            echo "<p align='center'>{$strListShowsContacts}.</p>";
-            echo "<table align='center'>";
-            echo "<tr>";
-            echo "<th>&nbsp;</th>";
-            echo "<th>{$strName}</th>";
-            echo "<th>{$strSite}</th>";
-            echo "</tr>\n";
-
+            $html = "<h3><img src='{$CONFIG['application_webpath']}images/icons/{$iconset}/32x32/contact.png' width='32' height='32' alt='' /> ";
+            $html .= "{$strContacts}</h3>\n";
+            $html .=  "<p align='center'>{$strListShowsContacts}.</p>";
+            $html .=  "<table align='center'>";
+            $html .=  "<tr>";
+            $html .=  "<th>&nbsp;</th>";
+            $html .=  "<th>{$strName}</th>";
+            $html .=  "<th>{$strSite}</th>";
+            $html .=  "</tr>\n";
+			
+            $customermatches = 0;
             while ($contactrow = mysql_fetch_array($result))
             {
-                echo "<tr class='shade2'>";
+                $html .=  "<tr class='shade2'>";
                 $site_incident_pool = db_read_column('freesupport', $dbSites, $contactrow['siteid']);
                 if ($site_incident_pool > 0)
                 {
-                    echo "<td><a href=\"{$_SERVER['PHP_SELF']}?action=incidentform&amp;type=free&amp;contactid=".$contactrow['contactid']."&amp;updateid=$updateid&amp;win={$win}\" onclick=\"return confirm_free();\">";
-                    echo "{$strAddSiteSupportIncident}</a> (".sprintf($strRemaining,$site_incident_pool).")</td>";
+                    $html .=  "<td><a href=\"{$_SERVER['PHP_SELF']}?action=incidentform&amp;type=free&amp;contactid=".$contactrow['contactid']."&amp;updateid=$updateid&amp;win={$win}\" onclick=\"return confirm_free();\">";
+                    $html .=  "{$strAddSiteSupportIncident}</a> (".sprintf($strRemaining,$site_incident_pool).")</td>";
+                	$customermatches++;
                 }
                 else
                 {
-                    echo "<td class='expired'>{$strZeroRemaining}</td>";
+                    $html .=  "<td class='expired'>{$strZeroRemaining}</td>";
                 }
-                echo '<td>'.$contactrow['forenames'].' '.$contactrow['surname'].'</td>';
-                echo '<td>'.site_name($contactrow['siteid']).'</td>';
-                echo "</tr>\n";
+                $html .=  '<td>'.$contactrow['forenames'].' '.$contactrow['surname'].'</td>';
+                $html .=  '<td>'.site_name($contactrow['siteid']).'</td>';
+                $html .=  "</tr>\n";
             }
-            echo "</table>\n";
-            echo "<p align='center'><a href='add_contact.php'>{$strAddContact}</a></p>";
+            $html .=  "</table>\n";
+            $html .= "<p align='center'><a href='add_contact.php'>{$strAddContact}</a></p>";
+            
+            if ($customermatches > 0)
+            {
+            	echo $html;
+            }
+            unset($html, $customermatches);
         }
         else
         {
@@ -356,30 +364,40 @@ elseif ($action=='findcontact')
 
         if (mysql_num_rows($result)>0)
         {
-            echo "<h3>{$strCustomers}</h3>\n";
-            echo "<p align='center'>This list shows customers that matched your search, if site-support is available you can add incidents for the site.</p>";
-            echo "<table align='center'>";
-            echo "<tr>";
-            echo "<th>&nbsp;</th>";
-            echo "<th>{$strName}</th>";
-            echo "<th>{$strSite}</th>";
-            echo "</tr>\n";
+            $html = "<h3>{$strCustomers}</h3>\n";
+            $html .= "<p align='center'>This list shows customers that matched your search, if site-support is available you can add incidents for the site.</p>";
+            $html .= "<table align='center'>";
+            $html .= "<tr>";
+            $html .= "<th>&nbsp;</th>";
+            $html .= "<th>{$strName}</th>";
+            $html .= "<th>{$strSite}</th>";
+            $html .= "</tr>\n";
 
+            $customermatches = 0;
             while ($contactrow = mysql_fetch_array($result))
             {
-                echo "<tr class='shade2'>";
+                $html .= "<tr class='shade2'>";
                 $site_incident_pool = db_read_column('freesupport', $dbSites, $contactrow['siteid']);
                 if ($site_incident_pool > 0)
                 {
-                    echo "<td><a href=\"{$_SERVER['PHP_SELF']}?action=incidentform&amp;type=free&amp;contactid=".$contactrow['contactid']."&amp;updateid=$updateid&amp;win={$win}\" onclick=\"return confirm_free();\">";
-                    echo "Add Site Support Incident</a> ({$site_incident_pool})</td>";
+                    $html .= "<td><a href=\"{$_SERVER['PHP_SELF']}?action=incidentform&amp;type=free&amp;contactid=".$contactrow['contactid']."&amp;updateid=$updateid&amp;win={$win}\" onclick=\"return confirm_free();\">";
+                    $html .= "Add Site Support Incident</a> ({$site_incident_pool})</td>";
+                    $customermatches++;
                 }
-                else echo "<td class='expired'>{$strZeroRemaining}</td>";
-                echo '<td>'.$contactrow['forenames'].' '.$contactrow['surname'].'</td>';
-                echo '<td>'.site_name($contactrow['siteid']).'</td>';
-                echo "</tr>\n";
+                else 
+                {
+                	$html .= "<td class='expired'>{$strZeroRemaining}</td>";
+                }
+                $html .= '<td>'.$contactrow['forenames'].' '.$contactrow['surname'].'</td>';
+                $html .= '<td>'.site_name($contactrow['siteid']).'</td>';
+                $html .= "</tr>\n";
             }
-            echo "</table>\n";
+            $html .= "</table>\n";
+            
+            if ($customermatches > 0)
+            {
+	           	echo $html;
+            }
 
             echo "<p align='center'><a href='add_contact.php'>{$strAddContact}</a></p>\n";
         }
