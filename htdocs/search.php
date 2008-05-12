@@ -30,7 +30,16 @@ if (!isNaN(id))
         if (mysql_num_rows($result) > 0)
         {
         ?>
-            window.location = 'incident_details.php?id=' + id + '&win=jump&return=<?php if(!empty($_SERVER['HTTP_REFERER'])) echo $_SERVER['HTTP_REFERER']; else echo $_CONFIG['application_webpath']; ?>';
+            window.location = 'incident_details.php?id=' + id + '&win=jump&return=<?php
+            if(!empty($_SERVER['HTTP_REFERER']))
+            {
+                echo $_SERVER['HTTP_REFERER'];
+            }
+            else
+            {
+                echo $_CONFIG['application_webpath'];
+            }
+            ?>';
         <?php
         }?>
 }
