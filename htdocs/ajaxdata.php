@@ -17,7 +17,7 @@ require('db_connect.inc.php');
 require('functions.inc.php');
 
 // This page requires authentication
-require('auth.inc.php');
+// require('auth.inc.php');
 
 $action = $_REQUEST['action'];
 

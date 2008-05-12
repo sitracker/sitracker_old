@@ -313,7 +313,7 @@ function contexthelp(elem, context)
     }
     if (elem.firstDescendant().innerHTML == '')
     {
-        new Ajax.Request('ajaxdata.php?action=contexthelp&context=' + context + '&rand=' + get_random(),
+        new Ajax.Request(application_webpath + 'ajaxdata.php?action=contexthelp&context=' + context + '&rand=' + get_random(),
             {
                 method:'get',
                     onSuccess: function(transport)
