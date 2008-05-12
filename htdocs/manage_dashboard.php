@@ -197,7 +197,7 @@ switch ($_REQUEST['action'])
     case 'enable':
         $id = $_REQUEST['id'];
         $enable = $_REQUEST['enable'];
-        $sql = "UPDATE dashboard SET enabled = '{$enable}' WHERE id = '{$id}'";
+        $sql = "UPDATE `{$dbDashboard}` SET enabled = '{$enable}' WHERE id = '{$id}'";
         $result = mysql_query($sql);
         if (mysql_error()) trigger_error(mysql_error(),E_USER_ERROR);
 
