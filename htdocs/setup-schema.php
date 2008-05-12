@@ -564,7 +564,7 @@ CREATE TABLE `{$dbMaintenance}` (
   `supportedcontacts` INT( 255 ) NOT NULL DEFAULT '0',
   `allcontactssupported` ENUM( 'no', 'yes' ) NOT NULL DEFAULT 'no',
   `var_incident_visible_contacts` ENUM( 'yes', 'no' ) NOT NULL DEFAULT 'no',
-  `var_incident_visible_all` ENUM( 'yes', 'no' ) NOT NULL DEFAULT 'no';
+  `var_incident_visible_all` ENUM( 'yes', 'no' ) NOT NULL DEFAULT 'no',
   PRIMARY KEY  (`id`),
   KEY `site` (`site`),
   KEY `productonly` (`productonly`)
