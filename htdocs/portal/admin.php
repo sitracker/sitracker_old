@@ -13,40 +13,55 @@ include 'portalheader.inc.php';
 
 if($_POST['submit'])
 {
+    $errors = 0;
     foreach(array_keys($_POST['visibility']) as $id)
     {
     	$id = intval($id);
     	
-		if ($id != 0)
-		{
-			switch ($_POST['visibility'][$id])
-			{
-				case 'all':
-					$visiblesql = "SET var_incident_visible_all = 'yes', ";
-					$visiblesql .= "var_incident_visible_contacts = 'no' ";
-					break;
-					
-				case 'named':
-					$visiblesql = "SET var_incident_visible_contacts = 'yes', ";
-					$visiblesql .= "var_incident_visible_all = 'no' ";					
-					break;
-					
-				case 'no-one':
-				default:
-					$visiblesql = "SET var_incident_visible_contacts = 'no', ";
-					$visiblesql .= "var_incident_visible_all = 'no' ";	
-					break;
-			}
-		}
-		
-		$sql = "UPDATE `{$dbMaintenance}` ";
-		$sql .= $visiblesql;
-		$sql .= "WHERE id='{$id}'";
+        if ($id != 0)
+        {
+            switch ($_POST['visibility'][$id])
+            {
+                case 'all':
+                    $visiblesql = "SET var_incident_visible_all = 'yes', ";
+                    $visiblesql .= "var_incident_visible_contacts = 'no' ";
+                    break;
+                        
+                case 'named':
+                    $visiblesql = "SET var_incident_visible_contacts = 'yes', ";
+                    $visiblesql .= "var_incident_visible_all = 'no' ";					
+                    break;
+                        
+                case 'no-one':
+                default:
+                    $visiblesql = "SET var_incident_visible_contacts = 'no', ";
+                    $visiblesql .= "var_incident_visible_all = 'no' ";	
+                    break;
+            }
+        }
+            
+        $sql = "UPDATE `{$dbMaintenance}` ";
+        $sql .= $visiblesql;
+        $sql .= "WHERE id='{$id}'";
 
-		$result = mysql_query($sql);        
-		if (mysql_error()) trigger_error(mysql_error(),E_USER_ERROR);
-
-   	}
+        $result = mysql_query($sql);        
+        if (mysql_error())
+        {
+            trigger_error(mysql_error(),E_USER_ERROR);
+            $errors++;
+        }
+    }
+    
+    if ($errors == 0)
+    {
+        html_redirect('admin.php', TRUE);
+        exit;
+    }
+    else
+    {
+        html_redirect('admin.php', FALSE);
+        exit;
+    }
 }
 
 echo "<h2><img src='{$CONFIG['application_webpath']}images/icons/{$iconset}/32x32/settings.png' alt='{$strAdmin}' /> ";
