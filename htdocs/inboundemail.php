@@ -84,9 +84,9 @@ if ($decoded_email->contenttype=='multipart/mixed' OR
                     // try to figure out what delimeter is being used (for windows or unix)...
                     $delim = (strstr($CONFIG['attachment_fspath'],"/")) ? "/" : "\\";
 
-                    $filename=str_replace(' ','_',$block->mime_contentdispositionname);
+                    $filename = str_replace(' ','_',$block->mime_contentdispositionname);
                     if (empty($filename)) $filename = "part{$part}";
-                    $attachment[]=$filename;
+                    $attachment[] = $filename;
                     // Write the attachment
                     $fa_dir = $CONFIG['attachment_fspath'].$incidentid;
                     if (!file_exists($fa_dir))
@@ -114,9 +114,9 @@ if ($decoded_email->contenttype=='multipart/mixed' OR
             // try to figure out what delimeter is being used (for windows or unix)...
             $delim = (strstr($CONFIG['attachment_fspath'],"/")) ? "/" : "\\";
 
-            $filename=str_replace(' ','_',$block->mime_contentdispositionname);
+            $filename = str_replace(' ','_',$block->mime_contentdispositionname);
             if (empty($filename)) $filename = "part{$part}";
-            $attachment[]=$filename;
+            $attachment[] = $filename;
             // Write the attachment
             $fa_dir = $CONFIG['attachment_fspath'].$incidentid;
             if (!file_exists($fa_dir))
@@ -174,7 +174,7 @@ if (!empty($decoded_email->subject))
 if ($count_attachments >= 1)
 {
     $headertext .= "Attachments: [b]{$count_attachments}[/b] - ";
-    $c=1;
+    $c = 1;
     foreach ($attachment AS $att)
     {
         $headertext .= "[[att]]{$att}[[/att]]";
@@ -204,6 +204,7 @@ if (empty($incidentid))
 
     // This could be a new incident or just spam
     die('Invalid incident ID or incident ID not found');
+    // FIXME incomplete, we shouldn't just die like that
 }
 else
 {
