@@ -21,10 +21,8 @@ require ('auth.inc.php');
 // External variables
 $siteid = mysql_real_escape_string($_REQUEST['siteid']);
 $submit = $_REQUEST['submit'];
-// if ($CONFIG['debug'])
-//     $debug .= print_r($_SESSION['formdata']['add_contact']);
-//
-//     echo "<p class='error'>Form Error</p>";
+
+function show_add_contact($siteid, 'internal');
 if (empty($submit) OR !empty($_SESSION['formerrors']['add_contact']))
 {
     include ('htmlheader.inc.php');

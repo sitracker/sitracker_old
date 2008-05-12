@@ -98,7 +98,7 @@ if (empty($action) OR $action=='showform')
         dojo.require ("dojo.widget.ComboBox");
     </script>
     <?php
-    echo "<h2>{$strAddIncident} - {$strFindContact}</h2>";
+    echo "<h2>".icon('add', 32)." {$strAddIncident} - {$strFindContact}</h2>";
     if (empty($siteid))
     {
         ?>
@@ -190,9 +190,8 @@ elseif ($action=='findcontact')
         }
         </script>
         <?php
-        echo "<h2>{$strAddIncident} - {$strSelect} {$strContract} / {$strContact}</h2>";
-        echo "<h3><img src='{$CONFIG['application_webpath']}images/icons/{$iconset}/32x32/contract.png' width='32' height='32' alt='' />  ";
-        echo "{$strContracts}</h3>";
+        echo "<h2>".icon('add', 32)." {$strAddIncident} - {$strSelect} {$strContract} / {$strContact}</h2>";
+        echo "<h3>".icon('contract', 32)." {$strContracts}</h3>";
         echo "<p align='center'>".sprintf($strListShowsContracts, $strAddIncident).".</p>";
 
         $str_prefered = "";
@@ -402,7 +401,7 @@ elseif ($action=='incidentform')
     // Display form to get details of the actual incident
     include ('htmlheader.inc.php');
 
-    echo "<h2>{$strAddIncident} - Get Details</h2>";
+    echo "<h2>".icon('add', 32)." {$strAddIncident} - {$strDetails}</h2>";
     ?>
     <script type="text/javascript">
     function validateForm(form)
@@ -416,20 +415,25 @@ elseif ($action=='incidentform')
     }
     </script>
 
-    <form action="<?php echo $_SERVER['PHP_SELF'] ?>?action=assign" method="post" name="supportdetails" onsubmit="return validateForm(this)">
+    <form action="<?php echo $_SERVER['PHP_SELF'] ?>?action=assign" 
+    method="post" name="supportdetails" onsubmit="return validateForm(this)">
     <input type="hidden" name="type" value="<?php echo $type ?>" />
     <input type="hidden" name="contactid" value="<?php echo $contactid ?>" />
     <input type="hidden" name="productid" value="<?php echo $productid ?>" />
     <input type="hidden" name="maintid" value="<?php echo $maintid ?>" />
     <input type="hidden" name="siteid" value="<?php echo $siteid ?>" />
     <?php
-    if (!empty($updateid)) echo "<input type='hidden' name='updateid' value='$updateid' />";
+    if (!empty($updateid)) 
+    {	
+    	echo "<input type='hidden' name='updateid' value='$updateid' />";
+    }
 
     echo "<table align='center' class='vertical' width='60%'>";
-    echo "<tr><th>{$strName}:<br /><a href='edit_contact.php?action=edit&amp;contact={$contactid}'>{$strEdit}</a></th><td><h3>".contact_realname($contactid)."</h3></td></tr>";
+    echo "<tr><th>{$strName}:<br /><a href='edit_contact.php?action=edit&amp;";
+    echo "contact={$contactid}'>{$strEdit}</a></th><td><h3>".icon('contact', 32);
+    echo " ".contact_realname($contactid)."</h3></td></tr>";
     echo "<tr><th>{$strEmail}:</th><td>".contact_email($contactid)."</td></tr>";
     echo "<tr><th>{$strTelephone}:</th><td>".contact_phone($contactid)."</td></tr>";
-    echo "<tr><th>{$strFax}:</th><td>".contact_fax($contactid)."</td></tr>";
     if ($type == 'free')
     {
         echo "<tr><th>{$strServiceLevel}:</th><td>".serviceleveltag_drop_down('servicelevel',$CONFIG['default_service_level'], TRUE)."</td></tr>";
@@ -447,9 +451,9 @@ elseif ($action=='incidentform')
     echo "<tr><td colspan='2'>&nbsp;</td></tr>";
     if (empty($updateid))
     {
-        echo "<tr><th>{$strIncidentTitle}: <sup class='red'>*</sup></th><td><input maxlength='150' name='incidenttitle' size='40' type='text' /></td></tr>\n";
-        echo "<tr><th>{$strProblemDescription}:<br />{$strProblemDescriptionEngineerText}</th>";
-        echo "<td><textarea name='probdesc' rows='10' cols='60'></textarea></td></tr>\n";
+        echo "<tr><th>{$strIncidentTitle}:<sup class='red'>*</sup></th><td><input maxlength='150' name='incidenttitle' size='40' type='text' /></td></tr>\n";
+        echo "<tr><th>{$strProblemDescription}:".help_link('ProblemDescriptionEngineer')."<br /></th>";
+        echo "<td><textarea name='probdesc' rows='5' cols='60'></textarea></td></tr>\n";
         // Insert pre-defined per-product questions from the database, these should be required fields
         // These 'productinfo' questions don't have a GUI as of 27Oct05
         $sql = "SELECT * FROM `{$dbProductInfo}` WHERE productid='$productid'";
@@ -466,12 +470,12 @@ elseif ($action=='incidentform')
             echo "</th>";
             echo "<td><input maxlength='100' name='{$productinforow['id']}' size='40' type='text' /></td></tr>\n";
         }
-        echo "<tr><th>{$strWorkAroundsAttempted}:<br />{$strWorkAroundsAttemptedEngineerText}</th>";
-        echo "<td><textarea name='workarounds' rows='10' cols='60'></textarea></td></tr>\n";
-        echo "<tr><th>{$strProblemReproduction}:<br />{$strProblemReproductionEngineerText}</th>";
-        echo "<td><textarea name='probreproduction' rows='10' cols='60'></textarea></td></tr>\n";
-        echo "<tr><th>{$strCustomerImpact}:<br />{$strCustomerImpactEngineerText}</th>";
-        echo "<td><textarea name='custimpact' rows='10' cols='60'></textarea></td></tr>\n";
+        echo "<tr><th>{$strWorkAroundsAttempted}:".help_link('WorkAroundsAttemptedEngineer')."</th>";
+        echo "<td><textarea name='workarounds' rows='5' cols='60'></textarea></td></tr>\n";
+        echo "<tr><th>{$strProblemReproduction}:".help_link('ProblemReproductionEngineer')."</th>";
+        echo "<td><textarea name='probreproduction' rows='5' cols='60'></textarea></td></tr>\n";
+        echo "<tr><th>{$strCustomerImpact}:".help_link('CustomerImpactEngineer')."</th>";
+        echo "<td><textarea name='custimpact' rows='5' cols='60'></textarea></td></tr>\n";
     }
     else
     {
@@ -497,33 +501,15 @@ elseif ($action=='incidentform')
     echo "<tr><th>{$strNextAction}:</th>";
     echo "<td>";
     echo "<input type='text' name='nextaction' maxlength='50' size='30' value='Initial Response' /><br /><br />";
-    echo "<input type='radio' name='timetonextaction_none' value='none' checked='checked' />{$strNone}<br />";
-    echo "<input type='radio' name='timetonextaction_none' value='time' />In <em>x</em> days, hours, minutes<br />&nbsp;&nbsp;&nbsp;";
-    echo "<input maxlength='3' name='timetonextaction_days' onclick='window.document.supportdetails.timetonextaction_none[1].checked = true;' size='3' /> {$strDays}";
-    echo "<input maxlength='2' name='timetonextaction_hours' onclick='window.document.supportdetails.timetonextaction_none[1].checked = true;' size='3' /> {$strHours}";
-    echo "<input maxlength='2' name='timetonextaction_minutes' onclick='window.document.supportdetails.timetonextaction_none[1].checked = true;' size='3' /> {$strMinutes}<br />";
-    echo "<input type='radio' name='timetonextaction_none' value='date' />On specified Date<br />&nbsp;&nbsp;&nbsp;";
-    echo "<input name='date' size='10' value='{$date}' onclick=\'window.document.updateform.timetonextaction_none[1].checked = true;\'/> ";
-    echo date_picker('supportdetails.date');
-
-    echo "<select name='timeoffset' onchange='window.document.updateform.timetonextaction_none[1].checked = true;' >";
-    echo "<option value='0'>9:00 AM</option>";
-    echo "<option value='1'>10:00 AM</option>";
-    echo "<option value='2'>11:00 AM</option>";
-    echo "<option value='3'>12:00 PM</option>";
-    echo "<option value='4'>1:00 PM</option>";
-    echo "<option value='5'>2:00 PM</option>";
-    echo "<option value='6'>3:00 PM</option>";
-    echo "<option value='7'>4:00 PM</option>";
-    echo "<option value='8'>5:00 PM</option>";
-    echo "</select>";
+    echo show_next_action();    
     echo "</td></tr>";
     if (empty($updateid))
     {
         echo "<tr><th>{$strVisibleToCustomer}:</th>\n";
-        echo "<td><input name='cust_vis' type='radio' value='no' /> {$strNo} <input name='cust_vis' type='radio' value='yes' checked='checked' /> {$strYes}</td></tr>\n";
+        echo "<td><input name='cust_vis' type='radio' value='yes' checked='checked' /> {$strYes} <input name='cust_vis' type='radio' value='no' /> {$strNo}";
+        echo " ".help_link('VisibleToCustomer')."</td></tr>\n";
     }
-    echo "<tr><th>{$strPriority}:</th><td>".priority_drop_down("priority", 1, 4, FALSE)." Based on the customers Business Impact</td></tr>";
+    echo "<tr><th>{$strPriority}:</th><td>".priority_drop_down("priority", 1, 4, FALSE)." </td></tr>";
     echo "</table>\n";
     echo "<input type='hidden' name='win' value='{$win}' />";
     echo "<p align='center'><input name='submit' type='submit' value='{$strAddIncident}' /></p>";

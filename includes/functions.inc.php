@@ -8060,8 +8060,128 @@ function group_user_selector($title, $level="engineer", $groupid)
     // FIXME make this XHTML valid
     $str .= "<script type='text/javascript'>\n//<![CDATA[\ngroupMemberSelect(\"{$groupname}\");\n//]]>\n</script>";
 
-
     return $str;
+}
+
+
+/**
+ * Output html for the 'time to next action' box
+ * Used in add incident and update incident
+ * @return $html string html to output
+ * @author Kieran Hogg
+ */
+function show_next_action()
+{
+	
+    $html = "{$GLOBALS['strPlaceIncidentInWaitingQueue']}<br />";
+
+    $oldtimeofnextaction = incident_timeofnextaction($id);
+    if ($oldtimeofnextaction < 1) 
+    {
+    	$oldtimeofnextaction = $now;
+    }
+    $wait_time = ($oldtimeofnextaction-$now);
+
+    $na_days = floor($wait_time / 86400);
+    $na_remainder = $wait_time % 86400;
+    $na_hours = floor($na_remainder / 3600);
+    $na_remainder = $wait_time % 3600;
+    $na_minutes = floor($na_remainder / 60);
+    if ($na_days < 0) $na_days = 0;
+    if ($na_hours < 0) $na_hours = 0;
+    if ($na_minutes < 0) $na_minutes = 0;
+    
+    $html .= "<label><input checked='checked' type='radio' ";
+    $html .= "name='timetonextaction_none' id='ttna_none' ";
+    $html .= "onchange=\"update_ttna();\" onclick=\"window.document.updateform.";
+    $html .= "timetonextaction_days.value = ''; window.document.updateform.";
+    $html .= "timetonextaction_hours.value = ''; window.document.updateform.";
+    $html .= "timetonextaction_minutes.value = '';\" value='None' />Unspecified";    
+    $html .= "</label><br />";
+    
+ 	$html .= "<label><input type='radio' name='timetonextaction_none' ";
+    $html .= "id='ttna_time' value='time' onchange=\"update_ttna();\" />";
+    $html .= "{$GLOBALS['strForXDaysHoursMinutes']}</label><br />";
+    $html .= "<span id='ttnacountdown'";
+    if (empty($na_days) AND 
+    	empty($na_hours) AND 
+    	empty($na_minutes)) 
+    {
+    	$html .= " style='display: none;'";
+    }
+    $html .= ">";
+    $html .= "&nbsp;&nbsp;&nbsp;<input maxlength='3' name='timetonextaction_days'";
+    $html .= " id='timetonextaction_days' value='{$na_days}' onclick='window.";
+    $html .= "document.updateform.timetonextaction_none[0].checked = true;' ";
+    $html .= "size='3' /> {$GLOBALS['strDays']}&nbsp;";
+    $html .= "<input maxlength='2' name='timetonextaction_hours' ";
+    $html .= "id='timetonextaction_hours' value='{$na_hours}' onclick='window.";
+    $html .= "document.updateform.timetonextaction_none[0].checked = true;' ";
+    $html .= "size='3' /> {$GLOBALS['strHours']}&nbsp;";
+    $html .= "<input maxlength='2' name='timetonextaction_minutes' id='";
+    $html .= "timetonextaction_minutes' value='{$na_minutes}' onclick='window.";
+    $html .= "document.updateform.timetonextaction_none[0].checked = true;' ";
+    $html .= "size='3' /> {$GLOBALS['strMinutes']}";
+    $html .= "<br /></span>";
+
+    $html .= "<input type='radio' name='timetonextaction_none' id='ttna_date' ";
+    $html .= "value='date' onchange=\"update_ttna();\" />Until specific date and ";
+    $html .= "time<br />"; //FIXME i18n Until specific date and time
+    $html .= "<span id='ttnadate' style='display: none;'>";
+    $html .= "<input name='date' id='date' size='10' value='{$date}' onclick=";
+    $html .= "\"window.document.updateform.timetonextaction_none[1].checked = true;\"/> ";
+    $html .= date_picker('updateform.date');
+    $html .= " <select name='timeoffset' id='timeoffset' onchange='window.";
+    $html .= "document.updateform.timetonextaction_none[1].checked = true;'>";
+    $html .= "<option value='0'></option>";
+    $html .= "<option value='0'>8:00 AM</option>";
+    $html .= "<option value='1'>9:00 AM</option>";
+    $html .= "<option value='2'>10:00 AM</option>";
+    $html .= "<option value='3'>11:00 AM</option>";
+    $html .= "<option value='4'>12:00 PM</option>";
+    $html .= "<option value='5'>1:00 PM</option>";
+    $html .= "<option value='6'>2:00 PM</option>";
+    $html .= "<option value='7'>3:00 PM</option>";
+    $html .= "<option value='8'>4:00 PM</option>";
+    $html .= "<option value='9'>5:00 PM</option>";
+    $html .= "</select>";
+    $html .= "<br /></span>";
+    
+    return $html;
+}
+
+
+/**
+ * Output the html for an icon
+ *
+ * @param string $filename filename of the string, minus extension, we assume .png
+ * @param int $size size of the icon, from: 12, 16, 32
+ * @param string $alt alt text of the icon
+ * @return string $html icon html
+ * @author Kieran Hogg
+ */
+function icon($filename, $size, $alt='')
+{
+	global $iconset;
+	$sizes = array(12, 16, 32);
+	
+	$file = "{$CONFIG['application_webpath']}images/icons/{$iconset}";
+	$file .= "/{$size}x{$size}/{$filename}.png";
+	
+	if (!file_exists($file))
+	{
+		trigger_error("No such image: ".$file, E_USER_WARNING);		
+	}
+	elseif (!in_array($size, $sizes))
+	{
+		trigger_error("Incorrect image size", E_USER_WARNING);
+	}
+	else
+	{		
+		return "<img src='{$file}' alt='{$alt}' title='{$alt}' />";
+	}
+	echo "<img src='{$filename}' alt='{$alt}' title='{$alt}' />";
+	
 }
 
 // -------------------------- // -------------------------- // --------------------------
