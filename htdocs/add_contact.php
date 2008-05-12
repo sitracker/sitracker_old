@@ -22,7 +22,6 @@ require ('auth.inc.php');
 $siteid = mysql_real_escape_string($_REQUEST['siteid']);
 $submit = $_REQUEST['submit'];
 
-function show_add_contact($siteid, 'internal');
 if (empty($submit) OR !empty($_SESSION['formerrors']['add_contact']))
 {
     include ('htmlheader.inc.php');
