@@ -7182,6 +7182,7 @@ function schedule_action_done($doneaction, $success=TRUE)
     else return FALSE;
 }
 
+
 /**
  * Make a billing array for a incident
  * @author Paul Heaney
@@ -7217,6 +7218,16 @@ function get_incident_billing_details($incidentid)
     return $billing;
 }
 
+
+/**
+ * TODO
+ * @author Paul Heaney
+ * @param $count TODO
+ * @param $countType TODO
+ * @param $activity TODO
+ * @param $period TODO
+ * @return TODO
+**/
 function group_billing_periods(&$count, $countType, $activity, $period)
 {
     $duration = $activity['duration'];
@@ -7229,13 +7240,6 @@ function group_billing_periods(&$count, $countType, $activity, $period)
             $saved = "false";
             foreach ($count[$countType] AS $ind)
             {
-                /*
-                echo "<pre>";
-                print_r($ind);
-                echo "</pre>";
-                */
-                //echo "IN:{$ind}:START:{$act['starttime']}:ENG:{$engineerPeriod}<br />";
-
                 if($ind <= $activity['starttime'] AND $ind <= ($activity['starttime'] + $period))
                 {
                     //echo "IND:{$ind}:START:{$act['starttime']}<br />";
@@ -7249,10 +7253,8 @@ function group_billing_periods(&$count, $countType, $activity, $period)
                     }
                 }
             }
-            //echo "Saved: {$saved}<br />";
             if ($saved == "false" AND $activity['duration'] > 0)
             {
-                //echo "BB:".$activity['starttime'].":SAVED:{$saved}:DUR:{$activity['duration']}<br />";
                 // need to add a new block
                 $count[$countType][$startTime] = $startTime;
 
@@ -7296,18 +7298,6 @@ function make_incident_billing_array($incidentid)
     {
         $billingSQL = "SELECT * FROM `{$GLOBALS['dbBillingPeriods']}` WHERE tag='{$servicelevel_tag}' AND priority='{$priority}'";
 
-        /*
-        echo "<pre>";
-        print_r($billing);
-        echo "</pre>";
-
-        echo "<pre>";
-        print_r(make_billing_array($incidentid));
-        echo "</pre>";
-        */
-
-        //echo $billingSQL;
-
         $billingresult = mysql_query($billingSQL);
         // echo $billingSQL;
         if (mysql_error()) trigger_error("MySQL Query Error ".mysql_error(), E_USER_ERROR);
@@ -7321,18 +7311,8 @@ function make_incident_billing_array($incidentid)
         if (empty($engineerPeriod) OR $engineerPeriod == 0) $engineerPeriod = 3600;
         if (empty($customerPeriod) OR $customerPeriod == 0) $customerPeriod = 3600;
 
-        /*
-        echo "<pre>";
-        print_r($billing);
-        echo "</pre>";
-        */
-
         foreach ($billing AS $engineer)
         {
-            /*
-                [eng][starttime]
-            */
-
             $owner = "";
             $duration = 0;
 
@@ -7345,12 +7325,6 @@ function make_incident_billing_array($incidentid)
             {
                 $owner = user_realname($activity['owner']);
                 $duration += $activity['duration'];
-
-                /*
-                echo "<pre>";
-                print_r($count);
-                echo "</pre>";
-                */
 
                 group_billing_periods($count, 'engineer', $activity, $engineerPeriod);
 
@@ -7368,11 +7342,6 @@ function make_incident_billing_array($incidentid)
             $tduration += $duration;
             $totalengineerperiods += sizeof($count['engineer']);
             $totalcustomerperiods += sizeof($count['customer']);
-            /*
-            echo "<pre>";
-            print_r($count);
-            echo "</pre>";
-            */
 
             $billing_a[$activity['owner']]['owner'] = $owner;
             $billing_a[$activity['owner']]['duration'] = $duration;
@@ -7394,8 +7363,16 @@ function make_incident_billing_array($incidentid)
     return $billing_a;
 }
 
-
-// NOTE: The following returns the billable periods of a site, could run into issues if multiple different periods used for a site
+/**
+ * TODO
+ * NOTE: The following returns the billable periods of a site,
+ * could run into issues if multiple different periods used for a site
+ * @author Paul Heaney
+ * @param $siteid TODO
+ * @param $startdate TODO
+ * @param $enddate TODO
+ * @returns $units TODO
+**/
 function billable_units_site($siteid, $startdate=0, $enddate=0)
 {
     $sql = "SELECT i.id FROM `{$GLOBALS['dbIncidents']}` AS i, `{$GLOBALS['dbContacts']}` AS c WHERE c.id = i.contact AND c.siteid = {$siteid} ";
@@ -7428,7 +7405,6 @@ function billable_units_site($siteid, $startdate=0, $enddate=0)
     }
 
     return $units;
-
 }
 
 
@@ -7487,6 +7463,7 @@ function admin_contact_contracts($contactid, $siteid)
     return $contractsarray;
 }
 
+
 /**
  * Return an array of contracts which the contact is an named contact for
  * @author Kieran Hogg
@@ -7507,9 +7484,9 @@ function contact_contracts($contactid, $siteid)
             AND sc.contactid=c.id
             AND m.var_incident_visible_contacts = 'yes'
             ";
-    if($result = mysql_query($sql))
+    if ($result = mysql_query($sql))
     {
-        while($row = mysql_fetch_object($result))
+        while ($row = mysql_fetch_object($result))
         {
             $contractsarray[] = $row->id;
         }
@@ -7546,6 +7523,12 @@ function all_contact_contracts($contactid, $siteid)
 }
 
 
+/**
+ * Checks is a given username is unique
+ * @author Kieran Hogg
+ * @param $username string - username
+ * @returns bool TRUE if valid, FALSE if not
+**/
 function valid_username($username)
 {
     $username = cleanvar($username);
@@ -7563,7 +7546,6 @@ function valid_username($username)
     }
 
     return $valid;
-
 }
 
 
