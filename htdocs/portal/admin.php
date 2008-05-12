@@ -135,4 +135,6 @@ if ($CONFIG['portal_site_incidents'])
     echo "<p align='center'><input type='submit' id='submit' name='submit'  value='{$strUpdate}' /></form></p>";
     
 }
+
+include 'htmlfooter.inc.php';
 ?>
