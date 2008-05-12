@@ -17,7 +17,7 @@ if($_POST['submit'])
     foreach(array_keys($_POST['visibility']) as $id)
     {
     	$id = intval($id);
-    	
+
         if ($id != 0)
         {
             switch ($_POST['visibility'][$id])
@@ -26,32 +26,32 @@ if($_POST['submit'])
                     $visiblesql = "SET var_incident_visible_all = 'yes', ";
                     $visiblesql .= "var_incident_visible_contacts = 'no' ";
                     break;
-                        
+
                 case 'named':
                     $visiblesql = "SET var_incident_visible_contacts = 'yes', ";
-                    $visiblesql .= "var_incident_visible_all = 'no' ";					
+                    $visiblesql .= "var_incident_visible_all = 'no' ";
                     break;
-                        
+
                 case 'no-one':
                 default:
                     $visiblesql = "SET var_incident_visible_contacts = 'no', ";
-                    $visiblesql .= "var_incident_visible_all = 'no' ";	
+                    $visiblesql .= "var_incident_visible_all = 'no' ";
                     break;
             }
         }
-            
+
         $sql = "UPDATE `{$dbMaintenance}` ";
         $sql .= $visiblesql;
         $sql .= "WHERE id='{$id}'";
 
-        $result = mysql_query($sql);        
+        $result = mysql_query($sql);
         if (mysql_error())
         {
             trigger_error(mysql_error(),E_USER_ERROR);
             $errors++;
         }
     }
-    
+
     if ($errors == 0)
     {
         html_redirect('admin.php', TRUE);
@@ -70,16 +70,16 @@ echo $strAdmin."</h2>";
 if ($CONFIG['portal_site_incidents'])
 {
     $contracts = admin_contact_contracts($_SESSION['contactid'], $_SESSION['siteid']);
-    
+
     echo "<p align='center'>{$strAdminContactForContracts}</p>";
-    
+
     echo "<table align='center' class='vertical' width='60%'><tr>";
     echo colheader('id', $strID, $sort, $order, $filter);
     echo colheader('product', $strContract, $sort, $order, $filter);
     echo colheader('expiry', $strExpiryDate, $sort, $order, $filter);
     echo colheader('visbility', $strVisibility);
     echo colheader('actions', $strActions);
-    
+
     echo "<form action='{$_SERVER['PHP_SELF']}' method='post'>";
     foreach($contracts as $contract)
     {
@@ -88,11 +88,11 @@ if ($CONFIG['portal_site_incidents'])
         $sql .= "WHERE m.id={$contract} ";
         $sql .= "AND (m.expirydate > UNIX_TIMESTAMP(NOW()) OR m.expirydate = -1) ";
         $sql .= "AND m.product=p.id ";
-        
+
         $result = mysql_query($sql);
-        
+
         if (mysql_error()) trigger_error(mysql_error(),E_USER_ERROR);
-    
+
         $shade = 'shade1';
         if($row = mysql_fetch_object($result))
         {
@@ -102,13 +102,13 @@ if ($CONFIG['portal_site_incidents'])
                 $row->expirydate = ldate("jS F Y", $row->timestamp);
             echo "<tr class='{$shade}'><td>{$row->id}</td><td>{$row->name}</td><td>{$row->expirydate}</td>";
             echo "<td>";
-            
+
             if ($row->allcontactssupported == 'yes')
             {
             	echo "<select disabled='disabled'>";
             	echo "<option>{$strAllSiteContactsSupported}</option>";
             	echo "</select>";
-                echo "</td>";           	
+                echo "</td>";
             }
             else
             {
@@ -131,12 +131,12 @@ if ($CONFIG['portal_site_incidents'])
 	            	echo " selected='selected'";
 	            }
 	            echo ">All Contacts</option></select>";
-	            echo " ".help_link('SiteIncidentVisibility');      
+	            echo " ".help_link('SiteIncidentVisibility');
 	            echo "</td>";
             }
             echo "<td><a href='contracts.php?id={$row->id}'>{$strViewContract}</a></td></tr>";
         }
-        
+
         if ($shade == 'shade1')
         {
         	$shade = 'shade2';
@@ -148,7 +148,7 @@ if ($CONFIG['portal_site_incidents'])
     }
     echo "</table>";
     echo "<p align='center'><input type='submit' id='submit' name='submit'  value='{$strUpdate}' /></form></p>";
-    
+
 }
 
 include 'htmlfooter.inc.php';

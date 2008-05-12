@@ -7466,13 +7466,17 @@ function supported_contacts($maintid)
 **/
 function admin_contact_contracts($contactid, $siteid)
 {
-    $sql = "SELECT DISTINCT maintenance.id ";
-    $sql .= "FROM maintenance, contacts, sites ";
-    $sql .= "WHERE maintenance.admincontact={$contactid} ";
-    $sql .= "AND maintenance.site={$siteid} ";
-    $sql .= "AND contacts.siteid={$siteid}";
+    $sql = "SELECT DISTINCT m.id ";
+    $sql .= "FROM `{$GLOBALS['dbMaintenance']}` AS m,
+            `{$GLOBALS['dbContacts']}` AS c,
+            `{$GLOBALS['dbSites']}` AS s ";
+    $sql .= "WHERE m.admincontact={$contactid} ";
+    $sql .= "AND m.site={$siteid} ";
+    $sql .= "AND c.siteid={$siteid}";
 
-    if ($result = mysql_query($sql))
+    $result = mysql_query($sql);
+    if (mysql_error()) trigger_error("MySQL Query Error ".mysql_error(), E_USER_WARNING);
+    if ($result)
     {
         while ($row = mysql_fetch_object($result))
         {
@@ -7690,7 +7694,7 @@ function readable_file_size($filesize)
 function contract_details($id, $mode='internal')
 {
     global $CONFIG, $iconset, $dbMaintenance, $dbSites, $dbResellers, $dbLicenceTypes;
-	
+
     $sql  = "SELECT m.*, m.notes AS maintnotes, s.name AS sitename, ";
     $sql .= "r.name AS resellername, lt.name AS licensetypename ";
     $sql .= "FROM `{$dbMaintenance}` AS m, `{$dbSites}` AS s, ";
@@ -7848,14 +7852,14 @@ function contract_details($id, $mode='internal')
             }
         }
     }
-    
+
 	if ($maintrow['allcontactssupported'] != 'yes')
 	{
 	    $html .= "<p align='center'>$strUsedNofN";
 	    $html .= sprintf($GLOBALS['strUsedNofN'],
 	                     "<strong>".$numberofcontacts."</strong>",
 	                     "<strong>".$allowedcontacts."</strong>");
-	    $html .= "</p>";	
+	    $html .= "</p>";
 
 	    if ($numberofcontacts < $allowedcontacts OR $allowedcontacts == 0 AND $mode == 'internal')
 	    {
@@ -7870,10 +7874,10 @@ function contract_details($id, $mode='internal')
             $html .= help_link('NewSupportedContact')."<br />";
             $html .= "<input type='submit' value='{$GLOBALS['strAdd']}' /></p></form>";
         }
-        
+
         $html .= "<p align='center'><a>Add new site contact</a></p>";
 	}
-	
+
     $html .= "<br />";
     $html .= "<h3>{$GLOBALS[strSkillsSupportedUnderContract]}:</h3>";
     // supported software
