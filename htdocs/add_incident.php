@@ -426,7 +426,7 @@ elseif ($action=='incidentform')
     if (!empty($updateid)) echo "<input type='hidden' name='updateid' value='$updateid' />";
 
     echo "<table align='center' class='vertical' width='60%'>";
-    echo "<tr><th>{$strName}:<br /><a href='edit_contact.php?action=edit&amp;contact={$contactid}'>{$strEdit}</a></th><td><h3>".contact_realname($contactid)."></h3></td></tr>";
+    echo "<tr><th>{$strName}:<br /><a href='edit_contact.php?action=edit&amp;contact={$contactid}'>{$strEdit}</a></th><td><h3>".contact_realname($contactid)."</h3></td></tr>";
     echo "<tr><th>{$strEmail}:</th><td>".contact_email($contactid)."</td></tr>";
     echo "<tr><th>{$strTelephone}:</th><td>".contact_phone($contactid)."</td></tr>";
     echo "<tr><th>{$strFax}:</th><td>".contact_fax($contactid)."</td></tr>";
