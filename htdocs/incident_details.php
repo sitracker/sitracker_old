@@ -36,7 +36,15 @@ elseif ($_REQUEST['win']=='jump')
         echo "<html><head>";
         echo "<script src='{$CONFIG['application_webpath']}scripts/prototype/prototype.js' type='text/javascript'></script>\n";
         echo "<script src='{$CONFIG['application_webpath']}webtrack.js' type='text/javascript'></script>\n";
-        echo "</head><body onload=\"incident_details_window($incidentid,'win');window.location='{$_SERVER['HTTP_REFERER']}';\"></body></html>";
+        if(!empty($_GET['return']))
+        {
+            $return = cleanvar($_GET['return']);
+            echo "</head><body onload=\"incident_details_window($incidentid,'win');window.location='{$return}';\"></body></html>";
+        }
+        else
+        {
+            echo "</head><body onload=\"incident_details_window($incidentid,'win');window.location='{$_SERVER['HTTP_REFERER']}';\"></body></html>";
+        }
     }
     else
     {
@@ -44,7 +52,15 @@ elseif ($_REQUEST['win']=='jump')
         echo "<html><head>";
         echo "<script src='{$CONFIG['application_webpath']}scripts/prototype/prototype.js' type='text/javascript'></script>\n";
         echo "<script src='{$CONFIG['application_webpath']}webtrack.js' type='text/javascript'></script>\n";
-        echo "</head><body onload=\"window.location='{$_SERVER['HTTP_REFERER']}';\"></body></html>";
+        if(!empty($_GET['return']))
+        {
+            $return = cleanvar($_GET['return']);
+            echo "</head><body onload=\"incident_details_window($incidentid,'win');window.location='{$return}';\"></body></html>";
+        }
+        else
+        {
+            echo "</head><body onload=\"incident_details_window($incidentid,'win');window.location='{$_SERVER['HTTP_REFERER']}';\"></body></html>";
+        }
     }
 }
 elseif ($_REQUEST['win'] == 'holdingview')

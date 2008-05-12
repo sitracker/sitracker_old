@@ -16,19 +16,22 @@ require ('functions.inc.php');
 
 // This page requires authentication
 require ('auth.inc.php');
-
-$resultsperpage = 20;
-//if(!isset($_GET['start']))
-//{
-//    $start = 0;
-//}
-//else
-//{
-//    $start = $_GET['start'];
-//}
-$domain = cleanvar($_GET['domain']);
 $q = cleanvar($_GET['q']);
-$filter = array('start' => $start, 'q' => $q);
+
+?>
+<script type='text/javascript'>
+var id = <?php echo $q; ?>;
+if (!isNaN(id))
+{
+    window.location = 'incident_details.php?id=' + id + '&win=jump&return=<?php if(!empty($_SERVER['HTTP_REFERER'])) echo $_SERVER['HTTP_REFERER']; else echo $_CONFIG['application_webpath']; ?>';
+}
+</script>
+<?php
+$resultsperpage = 20;
+$domain = cleanvar($_GET['domain']);
+$sort = cleanvar($_GET['sort']);
+$order = cleanvar($_GET['order']);
+$filter = array('start' => $start, 'order' => $order, 'q' => $q);
 $hits = 0;
 if(!isset($_GET['start']))
 {
@@ -92,8 +95,8 @@ echo "<h2><img src='{$CONFIG['application_webpath']}images/icons/{$iconset}/32x3
 
 if (!empty($q))
 {
+    //for the search plugin
     $search = $q;
-    $domain = strtolower($_GET['domain']);
     
     //INCIDENT RESULTS
     $incidentsql = "SELECT *,incidentid AS id, i.title, ";
@@ -106,18 +109,32 @@ if (!empty($q))
 
     if ($domain == 'incidents' AND !empty($sort))
     {
-        if ($sort=='id') $incidentsql .= "ORDER BY i.id ";
-        elseif ($sort=='incident') $incidentsql .= " ORDER BY i.title ";
-        else $incidentsql .= " ORDER BY score ";
+        if ($sort == 'id')
+        {
+            $incidentsql .= "ORDER BY i.id ";
+        }
+        elseif ($sort=='incident')
+        {
+            $incidentsql .= " ORDER BY i.title ";
+        }
+        else
+        {
+            $incidentsql .= " ORDER BY score ";
+        }
 
-        if ($order=='a' OR $order=='ASC' OR $order='') $incidentsql .= "ASC";
-        else $incidentsql .= "DESC";
+        if ($order=='a' OR $order=='ASC' OR $order='')
+        {
+            $incidentsql .= "ASC";
+        }
+        else
+        {
+            $incidentsql .= "DESC";
+        }
     }
     else
     {
         $incidentsql .= " ORDER BY score DESC ";
     }
-
     $countsql = $incidentsql;
     
     if ($domain == 'incidents')
