@@ -8072,11 +8072,11 @@ function group_user_selector($title, $level="engineer", $groupid)
  */
 function show_next_action()
 {
-	
+
     $html = "{$GLOBALS['strPlaceIncidentInWaitingQueue']}<br />";
 
     $oldtimeofnextaction = incident_timeofnextaction($id);
-    if ($oldtimeofnextaction < 1) 
+    if ($oldtimeofnextaction < 1)
     {
     	$oldtimeofnextaction = $now;
     }
@@ -8090,22 +8090,22 @@ function show_next_action()
     if ($na_days < 0) $na_days = 0;
     if ($na_hours < 0) $na_hours = 0;
     if ($na_minutes < 0) $na_minutes = 0;
-    
+
     $html .= "<label><input checked='checked' type='radio' ";
     $html .= "name='timetonextaction_none' id='ttna_none' ";
     $html .= "onchange=\"update_ttna();\" onclick=\"window.document.updateform.";
     $html .= "timetonextaction_days.value = ''; window.document.updateform.";
     $html .= "timetonextaction_hours.value = ''; window.document.updateform.";
-    $html .= "timetonextaction_minutes.value = '';\" value='None' />Unspecified";    
+    $html .= "timetonextaction_minutes.value = '';\" value='None' />Unspecified";
     $html .= "</label><br />";
-    
+
  	$html .= "<label><input type='radio' name='timetonextaction_none' ";
     $html .= "id='ttna_time' value='time' onchange=\"update_ttna();\" />";
     $html .= "{$GLOBALS['strForXDaysHoursMinutes']}</label><br />";
     $html .= "<span id='ttnacountdown'";
-    if (empty($na_days) AND 
-    	empty($na_hours) AND 
-    	empty($na_minutes)) 
+    if (empty($na_days) AND
+    	empty($na_hours) AND
+    	empty($na_minutes))
     {
     	$html .= " style='display: none;'";
     }
@@ -8146,7 +8146,7 @@ function show_next_action()
     $html .= "<option value='9'>5:00 PM</option>";
     $html .= "</select>";
     $html .= "<br /></span>";
-    
+
     return $html;
 }
 
@@ -8164,24 +8164,24 @@ function icon($filename, $size, $alt='')
 {
 	global $iconset;
 	$sizes = array(12, 16, 32);
-	
+
 	$file = "{$CONFIG['application_webpath']}images/icons/{$iconset}";
 	$file .= "/{$size}x{$size}/{$filename}.png";
-	
+
 	if (!file_exists($file))
 	{
-		trigger_error("No such image: ".$file, E_USER_WARNING);		
+		trigger_error("No such image: ".$file, E_USER_WARNING);
 	}
 	elseif (!in_array($size, $sizes))
 	{
 		trigger_error("Incorrect image size", E_USER_WARNING);
 	}
 	else
-	{		
+	{
 		return "<img src='{$file}' alt='{$alt}' title='{$alt}' />";
 	}
 	echo "<img src='{$filename}' alt='{$alt}' title='{$alt}' />";
-	
+
 }
 
 
@@ -8195,15 +8195,19 @@ function kb_article($id, $mode='internal')
         include 'htmlfooter.inc.php';
         exit;
     }
-    
+
+    // FIXME this aint valid, style sections need to be in the header
     echo "<style type='text/css'>
     .kbprivate
     {
         color: #FFFFFF;
-        background-color: #FF3300;
-        background-image:url({$CONFIG['application_webpath']}images/icons/{$iconset}/16x16/private.png); 
+/*         background-color: #FF3300; */
+        background-image:url({$CONFIG['application_webpath']}images/icons/{$iconset}/16x16/private.png);
         background-repeat: no-repeat;
         background-position: top right;
+        border: 2px dashed #FF3300;
+        margin: 3px 0px;
+        padding: 0px 2px;
     }
 
     .kbrestricted
@@ -8213,7 +8217,7 @@ function kb_article($id, $mode='internal')
         background-repeat: no-repeat;
         background-position: top right;
     }
-    
+
     .keykbprivate
     {
         color: #FFFFFF;
@@ -8224,11 +8228,11 @@ function kb_article($id, $mode='internal')
     {
         background-color: #DDDDDD;
     }
-    
+
     </style>";
-    
+
     echo "<div id='kbarticle'>";
-    
+
     $sql = "SELECT * FROM `{$GLOBALS['dbKBArticles']}` WHERE docid='{$id}' LIMIT 1";
     $result = mysql_query($sql);
     if (mysql_error()) trigger_error("MySQL Query Error ".mysql_error(), E_USER_ERROR);
@@ -8237,9 +8241,9 @@ function kb_article($id, $mode='internal')
     {
         $kbarticle->title = $strUntitled;
     }
-    
+
     echo "<h2 class='kbtitle'>{$kbarticle->title}</h2>";
-    
+
     // Lookup what software this applies to
     $ssql = "SELECT * FROM `{$GLOBALS['dbKBSoftware']}` AS kbs, `{$GLOBALS['dbSoftware']}` AS s ";
     $ssql .= "WHERE kbs.softwareid = s.id AND kbs.docid = '{$id}' ";
@@ -8257,7 +8261,7 @@ function kb_article($id, $mode='internal')
         }
         echo "</ul>\n";
     }
-    
+
     $csql = "SELECT * FROM `{$GLOBALS['dbKBContent']}` WHERE docid='{$id}' ";
     $cresult = mysql_query($csql);
     if (mysql_error()) trigger_error("MySQL Query Error ".mysql_error(), E_USER_ERROR);
@@ -8276,7 +8280,7 @@ function kb_article($id, $mode='internal')
                 echo "<div class='kbprivate'><h3>{$kbcontent->header}</h3>";
                 $restrictedcontent++;
             break;
-            
+
             case 'restricted':
                 if ($mode != 'internal')
                 {
@@ -8287,7 +8291,7 @@ function kb_article($id, $mode='internal')
                 echo "<div class='kbrestricted'><h3>{$kbcontent->header}</h3>";
                 $restrictedcontent++;
             break;
-            
+
             default:
                 echo "<div><h3>{$kbcontent->header}</h3>";
         }
@@ -8300,9 +8304,9 @@ function kb_article($id, $mode='internal')
         echo $kbcontent->content;
         $author[]=$kbcontent->ownerid;
         echo "</div>";
-    
+
     }
-    
+
     echo "<h3>{$GLOBALS['strArticle']}</h3>";
     echo sprintf($GLOBALS['strDocumentIDX'], $CONFIG['kb_id_prefix'], leading_zero(4,$kbarticle->docid))."<br />";
     $pubdate=mysql2date($kbarticle->published);
@@ -8310,7 +8314,7 @@ function kb_article($id, $mode='internal')
     {
         echo sprintf($GLOBALS['strPublishedOnX'], ldate($CONFIG['dateformat_date'],$pubdate))."<br />";
     }
-    
+
     if (is_array($author))
     {
         $author=array_unique($author);
@@ -8335,7 +8339,7 @@ function kb_article($id, $mode='internal')
     {
         echo "{$GLOBALS['strAuthor']}: {$author}";
     }
-    
+
     echo "<br />";
     if (!empty($kbarticle->keywords))
     {
@@ -8343,7 +8347,7 @@ function kb_article($id, $mode='internal')
         echo preg_replace("/\[([0-9]+)\]/", "<a href=\"incident_details.php?id=$1\" target=\"_blank\">$0</a>", $kbarticle->keywords);
         echo "<br />";
     }
-    
+
     if ($restrictedcontent > 0)
     {
         echo "<h3>{$GLOBALS['strKey']}</h3>";
