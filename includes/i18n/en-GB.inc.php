@@ -127,6 +127,7 @@ $strAreYouSureDeleteMaintenceContract = 'This will remove the ability to log inc
 $strAreYouSureEditEmailTemplate = 'Are you sure you want to edit this email template?';
 $strAreYouSureEditEscalationPath = 'Are you sure you want to edit this escalation path?';
 $strAreYouSureMakeTheseChanges = 'Are you sure you want to make these changes?';
+$strArticle = 'Article';
 $strApprovalStatusUnknown = 'Approval Status Unknown';
 $strAssign = 'Assign';
 $strAssignedAsFollows = 'Assigned as follows:';
@@ -309,6 +310,7 @@ $strDetailsSend = 'Details sent';
 $strDidYouPasteFullURL = 'Did you paste the full URL you received in the email?';
 # i.e. not available
 $strDisabled = 'Disabled';
+$strDisclaimer = 'Disclaimer';
 # i.e. make it go away
 $strDismiss = 'Dismiss';
 $strDismissAll = 'Dismiss All';
@@ -857,7 +859,7 @@ $strPublic = 'Public';
 $strPublicHoliday = 'Public Holiday';
 $strPublish = 'Publish';
 $strPublished = 'published';
-$strPublishedOnX = 'Publised on %s';
+$strPublishedOnX = 'Published on %s';
 
 $strQualifications = 'Qualifications';
 $strQueryByExample = 'Query By Example';
@@ -1081,6 +1083,7 @@ $strTemporarilyAssignedto = 'Temporarily assigned to %s by %s';
 $strTerminated = 'Terminated';
 $strText = 'Text';
 $strThereAreXIncidentsInThisList = 'There are %s incidents in this list';
+$strTheInfoInThisArticle = 'The information in this article applies to';
 $strThisMonth = 'This month';
 $strThisYear = 'This year';
 # Short for 'Thursday'
