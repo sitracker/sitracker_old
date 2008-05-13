@@ -447,11 +447,6 @@ div#help
     text-align: left;
     margin-bottom: 0.3em;
 }
-div#kbarticle
-{
-    width: 85%; margin: 30px auto; border: 1px solid #C5C5C5;
-}
-#kbarticle h1,#kbarticle h2,#kbarticle h3,#kbarticle h4, #kbarticle h5,#kbarticle h6 { text-align: left; background: transparent; color: black;}
 
 .datepicker { background-color: #CCCCFF; border: 1px solid black; font-family: monospace; }
 
