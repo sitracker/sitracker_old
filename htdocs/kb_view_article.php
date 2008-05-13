@@ -34,7 +34,7 @@ if (empty($id))
 include ('htmlheader.inc.php');
 
 echo "<h2>".icon('kb', 32)." {$strKnowledgeBaseArticle}</h2>";
-kb_article($id);
+echo kb_article($id);
 
 include ('htmlfooter.inc.php');
 

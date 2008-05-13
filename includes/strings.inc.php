@@ -146,7 +146,7 @@ $hmenu[40] = array_merge(array (10=> array ( 'perm'=> 0, 'name'=> $strAddTask, '
 
 // KB
 if (!is_array($hmenu[50])) $hmenu[50] = array();
-$hmenu[50] = array_merge(array (10=> array ( 'perm'=> 54, 'name'=> $strNewKBArticle, 'url'=>"{$CONFIG['application_webpath']}kb_add_article.php"),
+$hmenu[50] = array_merge(array (10=> array ( 'perm'=> 54, 'name'=> $strNewKBArticle, 'url'=>"{$CONFIG['application_webpath']}kb_article.php"),
                     20=> array ( 'perm'=> 54, 'name'=> $strBrowse, 'url'=>"{$CONFIG['application_webpath']}browse_kb.php")
 ), $hmenu[50]);
 

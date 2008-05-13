@@ -8201,7 +8201,7 @@ function kb_article($id, $mode='internal')
     }
 
     // FIXME this aint valid, style sections need to be in the header
-    echo "<style type='text/css'>
+    $html = "<style type='text/css'>
     .kbprivate
     {
         color: #FFFFFF;
@@ -8235,7 +8235,7 @@ function kb_article($id, $mode='internal')
 
     </style>";
 
-    echo "<div id='kbarticle'>";
+    $html .= "<div id='kbarticle'>";
 
     $sql = "SELECT * FROM `{$GLOBALS['dbKBArticles']}` WHERE docid='{$id}' LIMIT 1";
     $result = mysql_query($sql);
@@ -8246,7 +8246,7 @@ function kb_article($id, $mode='internal')
         $kbarticle->title = $strUntitled;
     }
 
-    echo "<h2 class='kbtitle'>{$kbarticle->title}</h2>";
+    $html .= "<h2 class='kbtitle'>{$kbarticle->title}</h2>";
 
     // Lookup what software this applies to
     $ssql = "SELECT * FROM `{$GLOBALS['dbKBSoftware']}` AS kbs, `{$GLOBALS['dbSoftware']}` AS s ";
@@ -8256,14 +8256,14 @@ function kb_article($id, $mode='internal')
     if (mysql_error()) trigger_error("MySQL Query Error ".mysql_error(), E_USER_ERROR);
     if (mysql_num_rows($sresult) >= 1)
     {
-        echo "<h3>{$GLOBALS['strEnvironment']}</h3>";
-        echo "<p>{$GLOBALS['strTheInfoInThisArticle']}:</p>\n";
-        echo "<ul>\n";
+        $html .= "<h3>{$GLOBALS['strEnvironment']}</h3>";
+        $html .= "<p>{$GLOBALS['strTheInfoInThisArticle']}:</p>\n";
+        $html .= "<ul>\n";
         while ($kbsoftware = mysql_fetch_object($sresult))
         {
-            echo "<li>{$kbsoftware->name}</li>\n";
+            $html .= "<li>{$kbsoftware->name}</li>\n";
         }
-        echo "</ul>\n";
+        $html .= "</ul>\n";
     }
 
     $csql = "SELECT * FROM `{$GLOBALS['dbKBContent']}` WHERE docid='{$id}' ";
@@ -8281,7 +8281,7 @@ function kb_article($id, $mode='internal')
                     include 'htmlfooter.inc.php';
                     exit;
                 }
-                echo "<div class='kbprivate'><h3>{$kbcontent->header}</h3>";
+                $html .= "<div class='kbprivate'><h3>{$kbcontent->header}</h3>";
                 $restrictedcontent++;
             break;
 
@@ -8292,31 +8292,31 @@ function kb_article($id, $mode='internal')
                     include 'htmlfooter.inc.php';
                     exit;
                 }
-                echo "<div class='kbrestricted'><h3>{$kbcontent->header}</h3>";
+                $html .= "<div class='kbrestricted'><h3>{$kbcontent->header}</h3>";
                 $restrictedcontent++;
             break;
 
             default:
-                echo "<div><h3>{$kbcontent->header}</h3>";
+                $html .= "<div><h3>{$kbcontent->header}</h3>";
         }
-        //echo "<{$kbcontent->headerstyle}>{$kbcontent->header}</{$kbcontent->headerstyle}>\n";
-        echo "";
+        //$html .= "<{$kbcontent->headerstyle}>{$kbcontent->header}</{$kbcontent->headerstyle}>\n";
+        $html .= "";
         $kbcontent->content=nl2br($kbcontent->content);
         $search = array("/(?<!quot;|[=\"]|:\/{2})\b((\w+:\/{2}|www\.).+?)"."(?=\W*([<>\s]|$))/i", "/(([\w\.]+))(@)([\w\.]+)\b/i");
         $replace = array("<a href=\"$1\">$1</a>", "<a href=\"mailto:$0\">$0</a>");
         $kbcontent->content = preg_replace("/href=\"www/i", "href=\"http://www", preg_replace ($search, $replace, $kbcontent->content));
-        echo $kbcontent->content;
+        $html .= $kbcontent->content;
         $author[]=$kbcontent->ownerid;
-        echo "</div>";
+        $html .= "</div>";
 
     }
 
-    echo "<h3>{$GLOBALS['strArticle']}</h3>";
-    echo sprintf($GLOBALS['strDocumentIDX'], $CONFIG['kb_id_prefix'], leading_zero(4,$kbarticle->docid))."<br />";
+    $html .= "<h3>{$GLOBALS['strArticle']}</h3>";
+    $html .= sprintf($GLOBALS['strDocumentIDX'], $CONFIG['kb_id_prefix'], leading_zero(4,$kbarticle->docid))."<br />";
     $pubdate=mysql2date($kbarticle->published);
     if ($pubdate > 0)
     {
-        echo sprintf($GLOBALS['strPublishedOnX'], ldate($CONFIG['dateformat_date'],$pubdate))."<br />";
+        $html .= sprintf($GLOBALS['strPublishedOnX'], ldate($CONFIG['dateformat_date'],$pubdate))."<br />";
     }
 
     if (is_array($author))
@@ -8326,46 +8326,47 @@ function kb_article($id, $mode='internal')
         $count=1;
         if ($countauthors > 1)
         {
-            echo "{$GLOBALS['strAuthors']}: ";
+            $html .= "{$GLOBALS['strAuthors']}: ";
         }
         else
         {
-            echo "{$GLOBALS['strAuthor']}: ";
+            $html .= "{$GLOBALS['strAuthor']}: ";
         }
         foreach ($author AS $authorid)
         {
-            echo user_realname($authorid,TRUE);
-            if ($count < $countauthors) echo ", " ;
+            $html .= user_realname($authorid,TRUE);
+            if ($count < $countauthors) $html .= ", " ;
             $count++;
         }
     }
     else
     {
-        echo "{$GLOBALS['strAuthor']}: {$author}";
+        $html .= "{$GLOBALS['strAuthor']}: {$author}";
     }
 
-    echo "<br />";
+    $html .= "<br />";
     if (!empty($kbarticle->keywords))
     {
-        echo "{$GLOBALS['strKeywords']}: ";
-        echo preg_replace("/\[([0-9]+)\]/", "<a href=\"incident_details.php?id=$1\" target=\"_blank\">$0</a>", $kbarticle->keywords);
-        echo "<br />";
+        $html .= "{$GLOBALS['strKeywords']}: ";
+        $html .= preg_replace("/\[([0-9]+)\]/", "<a href=\"incident_details.php?id=$1\" target=\"_blank\">$0</a>", $kbarticle->keywords);
+        $html .= "<br />";
     }
 
     if ($restrictedcontent > 0)
     {
-        echo "<h3>{$GLOBALS['strKey']}</h3>";
-        echo "<p><span class='keykbprivate'>{$GLOBALS['strPrivate']}</span>".help_link('KBPrivate')."<br />";
-        echo "<span class='keykbrestricted'>{$GLOBALS['strRestricted']}</span>".help_link('KBRestricted')."</p>";
+        $html .= "<h3>{$GLOBALS['strKey']}</h3>";
+        $html .= "<p><span class='keykbprivate'>{$GLOBALS['strPrivate']}</span>".help_link('KBPrivate')."<br />";
+        $html .= "<span class='keykbrestricted'>{$GLOBALS['strRestricted']}</span>".help_link('KBRestricted')."</p>";
     }
-    echo "<h3>{$GLOBALS['strDisclaimer']}</h3>";
-    echo $CONFIG['kb_disclaimer_html'];
-    echo "</div>";
+    $html .= "<h3>{$GLOBALS['strDisclaimer']}</h3>";
+    $html .= $CONFIG['kb_disclaimer_html'];
+    $html .= "</div>";
 
     if ($mode == 'internal')
     {
-        echo "<p align='center'><a href='kb_edit_article.php?id={$kbarticle->docid}'>{$GLOBALS['strEdit']}</a></p>";
+        $html .= "<p align='center'><a href='kb_article.php?id={$kbarticle->docid}'>{$GLOBALS['strEdit']}</a></p>";
     }
+    return $html;
 }
 
 // -------------------------- // -------------------------- // --------------------------
