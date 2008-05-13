@@ -215,7 +215,7 @@ else
     echo "<p align='center'>".sprintf($strMandatoryMarked, "<sup class='red'>*</sup>")."<br />";
     echo "{$strClickTitleHeaders}</p>";
     echo "<div id='kbarticle'>";
-    echo "<form action='{$_SERVER['PHP_SELF']}' method='post'>";
+    echo "<form action='{$_SERVER['PHP_SELF']}?id={$id}' method='post'>";
     echo "<h3>{$strTitle}<sup class='red'>*</sup></h3>";
     echo "<input name='title' id='title' size='50' value='{$kbobj->title}'/>";
 
