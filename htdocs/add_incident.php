@@ -523,9 +523,9 @@ elseif ($action=='incidentform')
     echo "</td></tr>";
     if (empty($updateid))
     {
-        echo "<tr><th>{$strVisibleToCustomer}:</th>\n";
-        echo "<td><input name='cust_vis' type='radio' value='yes' checked='checked' /> {$strYes} <input name='cust_vis' type='radio' value='no' /> {$strNo}";
-        echo " ".help_link('VisibleToCustomer')."</td></tr>\n";
+        echo "<tr><th>{$strVisibleToCustomer}:".help_link('VisibleToCustomer')."</th>\n";
+        echo "<td><input name='cust_vis' type='checkbox' checked='checked' />";
+        echo "</td></tr>\n";
     }
     echo "<tr><th>{$strPriority}:</th><td>".priority_drop_down("priority", 1, 4, FALSE)." </td></tr>";
     echo "</table>\n";
@@ -560,7 +560,7 @@ elseif ($action=='assign')
         $productversion = cleanvar($_REQUEST['productversion']);
         $productservicepacks = cleanvar($_REQUEST['productservicepacks']);
         $bodytext = cleanvar($_REQUEST['bodytext']);
-        $cust_vis = cleanvar($_REQUEST['cust_vis']);
+        $cust_vis = $_REQUEST['cust_vis'];
 
         // check form input
         $errors = 0;
@@ -633,7 +633,7 @@ elseif ($action=='assign')
             if ($probreproduction != "") $updatetext .= "<b>Problem Reproduction</b>\n" . $probreproduction . "\n\n";
             if ($custimpact != "") $updatetext .= "<b>Customer Impact</b>\n" . $custimpact . "\n\n";
             if ($other != "") $updatetext .= "<b>Other Details</b>\n" . $other . "\n";
-            if ($cust_vis == "yes") $customervisibility='show';
+            if ($cust_vis == "on") $customervisibility='show';
             else $customervisibility='hide';
 
             if (!empty($updateid))
