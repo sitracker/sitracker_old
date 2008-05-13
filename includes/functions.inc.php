@@ -8277,7 +8277,7 @@ function kb_article($id, $mode='internal')
             case 'private':
                 if ($mode != 'internal')
                 {
-                    trigger_error($GLOBALS['strPermissionDenied'], E_USER_ERROR);
+                    echo "<p class='error'>{$GLOBALS['strPermissionDenied']}</p>";
                     include 'htmlfooter.inc.php';
                     exit;
                 }
@@ -8288,7 +8288,7 @@ function kb_article($id, $mode='internal')
             case 'restricted':
                 if ($mode != 'internal')
                 {
-                    trigger_error($GLOBALS['strPermissionDenied'], E_USER_ERROR);
+                    echo "<p class='error'>{$GLOBALS['strPermissionDenied']}</p>";
                     include 'htmlfooter.inc.php';
                     exit;
                 }
