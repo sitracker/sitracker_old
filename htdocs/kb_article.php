@@ -247,123 +247,147 @@ else
     echo "'>{$strRestricted}</option>";
     echo "</select>";
     
-    echo "<h3><a href=\"javascript:void(0);\" onClick=\"$('summary').toggle()\">{$strSummary}</a></h3>";
-    echo "<textarea id='summary' name='summary' cols='100' rows='8' ";
+
     if (!empty($sections['Summary']))
     {
+        echo "<h3>{$strSummary}</h3>";
+        echo "<textarea id='summary' name='summary' cols='100' rows='8' ";
         echo "style='display: all'>{$sections['Summary']}";
     }
     else
     {
+        echo "<h3><a href=\"javascript:void(0);\" onClick=\"$('summary').toggle()\">{$strSummary}</a></h3>";
+        echo "<textarea id='summary' name='summary' cols='100' rows='8' ";
         echo "style='display: none'>";
     }    
     echo "</textarea>";
     
-    echo "<h3><a href=\"javascript:void(0);\" onClick=\"$('symptoms').toggle()\">";
-    echo "{$strSymptoms}</a></a></h3>";
-    echo "<textarea id='symptoms' name='symptoms' cols='100' rows='8' ";
-        if (!empty($sections['Symptoms']))
+
+    if (!empty($sections['Symptoms']))
     {
+        echo "<h3>{$strSymptoms}</h3>";
+        echo "<textarea id='symptoms' name='symptoms' cols='100' rows='8' ";
         echo "style='display: all'>{$sections['Symptoms']}";
+        
     }
     else
     {
+        echo "<h3><a href=\"javascript:void(0);\" onClick=\"$('symptoms').toggle()\">";
+        echo "{$strSymptoms}</a></h3>";
+        echo "<textarea id='symptoms' name='symptoms' cols='100' rows='8' ";
+
         echo "style='display: none'>";
     }    
     echo "</textarea>";
     
-    echo "<h3><a href=\"javascript:void(0);\" onClick=\"$('cause').toggle()\">{$strCause}</a></h3>";
-    echo "<textarea id='cause' name='cause' cols='100' rows='8' ";
-        if (!empty($sections['Cause']))
+    if (!empty($sections['Cause']))
     {
+        echo "<h3>{$strCause}</h3>";
+        echo "<textarea id='cause' name='cause' cols='100' rows='8' ";
         echo ">{$sections['Cause']}";
     }
     else
     {
+        echo "<h3><a href=\"javascript:void(0);\" onClick=\"$('cause').toggle()\">{$strCause}</a></h3>";
+        echo "<textarea id='cause' name='cause' cols='100' rows='8' ";
         echo "style='display: none'>";
     }    
     echo "</textarea>";
     
-    echo "<h3><a href=\"javascript:void(0);\" onClick=\"$('question').toggle()\">{$strQuestion}</a></h3>";
-    echo "<textarea id='question' name='question'' cols='100' rows='8' ";
     if (!empty($sections['Question']))
     {
+        echo "<h3>{$strQuestion}</h3>";
+        echo "<textarea id='question' name='question'' cols='100' rows='8' ";
         echo ">{$sections['Question']}";
     }
     else
     {
+        echo "<h3><a href=\"javascript:void(0);\" onClick=\"$('question').toggle()\">{$strQuestion}</a></h3>";
+        echo "<textarea id='question' name='question'' cols='100' rows='8' ";
         echo "style='display: none'>";
     }   
     echo "</textarea>";
     
-    echo "<h3><a href=\"javascript:void(0);\" onClick=\"$('answer').toggle()\">{$strAnswer}</a></h3>";
-    echo "<textarea id='answer' name='answer' cols='100' rows='8' ";
     if (!empty($sections['Answer']))
     {
+        echo "<h3>{$strAnswer}</h3>";
+        echo "<textarea id='answer' name='answer' cols='100' rows='8' ";
         echo ">{$sections['Answer']}";
     }
     else
     {
+        echo "<h3><a href=\"javascript:void(0);\" onClick=\"$('answer').toggle()\">{$strAnswer}</a></h3>";
+        echo "<textarea id='answer' name='answer' cols='100' rows='8' ";
         echo "style='display: none'>";
     }    
     echo "</textarea>";
     
-    echo "<h3><a href=\"javascript:void(0);\" onClick=\"$('solution').toggle()\">{$strSolution}</a></h3>";
-    echo "<textarea id='solution' name='solution' cols='100' rows='8' ";
     if (!empty($sections['Solution']))
     {
+        echo "<h3>{$strSolution}</h3>";
+        echo "<textarea id='solution' name='solution' cols='100' rows='8' ";
         echo ">{$sections['Solution']}";
     }
     else
     {
+        echo "<h3><a href=\"javascript:void(0);\" onClick=\"$('solution').toggle()\">{$strSolution}</a></h3>";
+        echo "<textarea id='solution' name='solution' cols='100' rows='8' ";
         echo "style='display: none'>";
     }    
     echo "</textarea>";
     
-    echo "<h3><a href=\"javascript:void(0);\" onClick=\"$('workaround').toggle()\">{$strWorkaround}</a></h3>";
-    echo "<textarea id='workaround' name='workaround' cols='100' rows='8' ";
     if (!empty($sections['Workaround']))
     {
+        echo "<h3>{$strWorkaround}</h3>";
+        echo "<textarea id='workaround' name='workaround' cols='100' rows='8' ";
         echo ">{$sections['Workaround']}";
     }
     else
     {
+        echo "<h3><a href=\"javascript:void(0);\" onClick=\"$('workaround').toggle()\">{$strWorkaround}</a></h3>";
+        echo "<textarea id='workaround' name='workaround' cols='100' rows='8' ";
         echo "style='display: none'>";
     }    
     echo "</textarea>";
     
-    echo "<h3><a href=\"javascript:void(0);\" onClick=\"$('status').toggle()\">{$strStatus}</a></h3>";
-    echo "<textarea id='status' name='status' cols='100' rows='8' ";
     if (!empty($sections['Status']))
     {
+        echo "<h3>{$strStatus}</h3>";
+        echo "<textarea id='status' name='status' cols='100' rows='8' ";
         echo ">{$sections['Status']}";
     }
     else
     {
+        echo "<h3><a href=\"javascript:void(0);\" onClick=\"$('status').toggle()\">{$strStatus}</a></h3>";
+        echo "<textarea id='status' name='status' cols='100' rows='8' ";
         echo "style='display: none'>";
     }    
     echo "</textarea>";
-    
-    echo "<h3><a href=\"javascript:void(0);\" onClick=\"$('additionalinfo').toggle()\">{$strAdditionalInfo}</a></h3>";
-    echo "<textarea id='additionalinfo' name='additionalinfo' cols='100' rows='8'  ";
+ 
     if (!empty($sections['Additional Info']))
-    {
+    {   
+        echo "<h3>{$strAdditionalInfo}</h3>";
+        echo "<textarea id='additionalinfo' name='additionalinfo' cols='100' rows='8'  ";
         echo ">{$sections['Additional Info']}";
     }
     else
-    {
+    {           
+        echo "<h3><a href=\"javascript:void(0);\" onClick=\"$('additionalinfo').toggle()\">{$strAdditionalInfo}</a></h3>";
+        echo "<textarea id='additionalinfo' name='additionalinfo' cols='100' rows='8'  ";
         echo "style='display: none'>";
     }    
     echo "</textarea>";
-    
-    echo "<h3><a href=\"javascript:void(0);\" onClick=\"$('references').toggle()\">{$strReferences}</a></h3>";
-    echo "<textarea id='references' name='references' cols='100' rows='8' ";
+      
     if (!empty($sections['References']))
     {
+        echo "<h3>{$strReferences}</h3>";
+        echo "<textarea id='references' name='references' cols='100' rows='8' ";
         echo ">{$sections['References']}";
     }
     else
     {
+        echo "<h3><a href=\"javascript:void(0);\" onClick=\"$('references').toggle()\">{$strReferences}</a></h3>";
+        echo "<textarea id='references' name='references' cols='100' rows='8' ";
         echo "style='display: none'>";
     }    
     echo "</textarea>";
