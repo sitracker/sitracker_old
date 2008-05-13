@@ -8164,10 +8164,16 @@ function icon($filename, $size, $alt='')
 {
 	global $iconset, $CONFIG;
 	$sizes = array(12, 16, 32);
-
-	$file = "{$CONFIG['application_webpath']}images/icons/{$iconset}";
+        if (empty($alt))
+        {
+            $alt = $filename;
+        }
+	$file = "{$CONFIG['application_fspath']}htdocs/images/icons/{$iconset}";
 	$file .= "/{$size}x{$size}/{$filename}.png";
-
+        
+        $urlpath = "{$CONFIG['application_webpath']}images/icons/{$iconset}";
+	$urlpath .= "/{$size}x{$size}/{$filename}.png";
+        
 	if (!file_exists($file))
 	{
 		trigger_error("No such image: ".$file, E_USER_WARNING);
@@ -8178,7 +8184,7 @@ function icon($filename, $size, $alt='')
 	}
 	else
 	{
-		return "<img src='{$file}' alt='{$alt}' title='{$alt}' />";
+		return "<img src='{$urlpath}' alt='{$alt}' title='{$alt}' />";
 	}
 }
 
