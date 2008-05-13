@@ -8196,6 +8196,25 @@ function kb_article($id, $mode='internal')
         exit;
     }
     
+    echo "<style type='text/css'>
+    .kbprivate
+    {
+      color: #FFFFFF;
+      background-color: #FF3300;
+      background-image:url({$CONFIG['application_webpath']}images/icons/{$iconset}/16x16/private.png); 
+      background-repeat: no-repeat;
+      background-position: top right;
+    }
+
+    .kbrestricted
+    {
+      background-color: #DDDDDD;
+      background-image:url({$CONFIG['application_webpath']}images/icons/{$iconset}/16x16/private.png);
+      background-repeat: no-repeat;
+      background-position: top right;
+    }
+    </style>";
+    
     echo "<div id='kbarticle'>";
     
     $sql = "SELECT * FROM `{$GLOBALS['dbKBArticles']}` WHERE docid='{$id}' LIMIT 1";
@@ -8241,7 +8260,7 @@ function kb_article($id, $mode='internal')
                     include 'htmlfooter.inc.php';
                     exit;
                 }
-                echo "<div class='kbprivate'>";
+                echo "<div class='kbprivate'><h3>{$kbcontent->header}".help_link('')."</h3>";
             break;
             
             case 'restricted':
@@ -8251,14 +8270,14 @@ function kb_article($id, $mode='internal')
                     include 'htmlfooter.inc.php';
                     exit;
                 }
-                echo "<div class='kbrestricted'>";
+                echo "<div class='kbrestricted'><h3>{$kbcontent->header}</h3>";
             break;
             
             default:
-                echo "<div>";
+                echo "<div><h3>{$kbcontent->header}</h3>";
         }
         //echo "<{$kbcontent->headerstyle}>{$kbcontent->header}</{$kbcontent->headerstyle}>\n";
-        echo "<h3>{$kbcontent->header}</h3>";
+        echo "";
         $kbcontent->content=nl2br($kbcontent->content);
         $search = array("/(?<!quot;|[=\"]|:\/{2})\b((\w+:\/{2}|www\.).+?)"."(?=\W*([<>\s]|$))/i", "/(([\w\.]+))(@)([\w\.]+)\b/i");
         $replace = array("<a href=\"$1\">$1</a>", "<a href=\"mailto:$0\">$0</a>");
