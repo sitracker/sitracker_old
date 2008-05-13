@@ -8187,7 +8187,7 @@ function icon($filename, $size, $alt='')
 
 function kb_article($id, $mode='internal')
 {
-    global $CONFIG;
+    global $CONFIG, $iconset;
     $id = intval($id);
     if (!is_number($id) OR $id == 0)
     {
@@ -8217,7 +8217,8 @@ function kb_article($id, $mode='internal')
     if (mysql_error()) trigger_error("MySQL Query Error ".mysql_error(), E_USER_ERROR);
     if (mysql_num_rows($sresult) >= 1)
     {
-        echo "<p>{$GLOBALS['strTheInfoInThisArticle']}</p>\n";
+        echo "<h3>{$GLOBALS['strEnvironment']}</h3>";
+        echo "<p>{$GLOBALS['strTheInfoInThisArticle']}:</p>\n";
         echo "<ul>\n";
         while ($kbsoftware = mysql_fetch_object($sresult))
         {
@@ -8240,11 +8241,7 @@ function kb_article($id, $mode='internal')
                     include 'htmlfooter.inc.php';
                     exit;
                 }
-                echo "<div style='color: blue; background: #FFD8DE; ";
-                echo "background-image:url({$CONFIG['application_webpath']}";
-                echo "images/icons/{$iconset}/16x16/private.png); ";
-                echo "background-repeat: no-repeat; background-position: ";
-                echo "top right;' title='{$strParagraphMarkedPrivate}'>";
+                echo "<div class='kbprivate'>";
             break;
             
             case 'restricted':
@@ -8254,17 +8251,14 @@ function kb_article($id, $mode='internal')
                     include 'htmlfooter.inc.php';
                     exit;
                 }
-                echo "<div style='color: red; background: #FFD8DE; background: ";
-                echo "#FFD8DE; background-image:url({$CONFIG['application_webpath']}";
-                echo "images/icons/{$iconset}/16x16/private.png); ";
-                echo "background-repeat: no-repeat; background-position: top ";
-                echo "right;' title='{$GLOBALS['strParagraphMarkedRestricted']}'>";
+                echo "<div class='kbrestricted'>";
             break;
             
             default:
                 echo "<div>";
         }
-        echo "<{$kbcontent->headerstyle}>{$kbcontent->header}</{$kbcontent->headerstyle}>\n";
+        //echo "<{$kbcontent->headerstyle}>{$kbcontent->header}</{$kbcontent->headerstyle}>\n";
+        echo "<h3>{$kbcontent->header}</h3>";
         $kbcontent->content=nl2br($kbcontent->content);
         $search = array("/(?<!quot;|[=\"]|:\/{2})\b((\w+:\/{2}|www\.).+?)"."(?=\W*([<>\s]|$))/i", "/(([\w\.]+))(@)([\w\.]+)\b/i");
         $replace = array("<a href=\"$1\">$1</a>", "<a href=\"mailto:$0\">$0</a>");
