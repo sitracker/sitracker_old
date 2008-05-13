@@ -29,11 +29,10 @@ $view = $_GET['view'];
 $end = $start + $perpage;
 $filter = array('start' => $start, 'view' => $view);
 
-$sql = "SELECT DISTINCT k.*, kbs.*, s.name FROM `{$dbKBArticles}` AS k, `{$dbKBSoftware}` as kbs, `{$dbSoftware}` as s ";
+$sql = "SELECT DISTINCT k.*, s.name FROM `{$dbKBArticles}` AS k, `{$dbSoftware}` as s ";
+$sql .= "LEFT JOIN `{$dbKBSoftware}` as kbs ";
+$sql .= "ON kbs.softwareid=s.id ";
 $sql .= "WHERE k.distribution='public' ";
-$sql .= "AND kbs.docid=k.docid ";
-$sql .= "AND kbs.softwareid=s.id ";
-
 
 if($view != 'all')
 {
@@ -82,52 +81,59 @@ if($result = mysql_query($sql))
     {
         $end = $numtotal;
     }
-    echo "<p>".sprintf($strShowingXtoXofX, $start+1, $end, $numtotal)."</p>";
-
-    echo "<table align='center' width='80%'>";
-    echo colheader('id', $strID, $sort, $order, $filter, '', '5');
-    echo colheader('title', $strTitle, $sort, $order, $filter);
-    echo colheader('date', $strDate, $sort, $order, $filter, '', '15');
-    echo colheader('author', $strAuthor, $sort, $order, $filter);
-    echo colheader('keywords', $strKeywords, $sort, $order, $filter, '', '15');
-
-    $shade = 'shade1';
-    while($row = mysql_fetch_object($result))
+    if ($numtotal > 0)
     {
-        echo "<tr class='{$shade}'>
-                <td><a href='kbarticle.php?id={$row->docid}'>
-                <img src='{$CONFIG['application_webpath']}images/icons/{$iconset}/16x16/kb.png' alt='{$strID}' />
-                    {$CONFIG['kb_id_prefix']}{$row->docid}</a></td>
-                <td>{$row->name}<br />
-                <a href='kbarticle.php?id={$row->docid}'>{$row->title}</a></td>
-                <td>".ldate($CONFIG['dateformat_date'], mysql2date($row->published))."</td>
-                <td>".user_realname($row->author)."</td>
-                <td>{$row->keywords}</td</tr>";
-                
-        if($shade == 'shade1')
-            $shade = 'shade2';
+        echo "<p>".sprintf($strShowingXtoXofX, $start+1, $end, $numtotal)."</p>";
+    
+        echo "<table align='center' width='80%'>";
+        echo colheader('id', $strID, $sort, $order, $filter, '', '5');
+        echo colheader('title', $strTitle, $sort, $order, $filter);
+        echo colheader('date', $strDate, $sort, $order, $filter, '', '15');
+        echo colheader('author', $strAuthor, $sort, $order, $filter);
+        echo colheader('keywords', $strKeywords, $sort, $order, $filter, '', '15');
+    
+        $shade = 'shade1';
+        while($row = mysql_fetch_object($result))
+        {
+            echo "<tr class='{$shade}'>
+                    <td><a href='kbarticle.php?id={$row->docid}'>
+                    <img src='{$CONFIG['application_webpath']}images/icons/{$iconset}/16x16/kb.png' alt='{$strID}' />
+                        {$CONFIG['kb_id_prefix']}{$row->docid}</a></td>
+                    <td>{$row->name}<br />
+                    <a href='kbarticle.php?id={$row->docid}'>{$row->title}</a></td>
+                    <td>".ldate($CONFIG['dateformat_date'], mysql2date($row->published))."</td>
+                    <td>".user_realname($row->author)."</td>
+                    <td>{$row->keywords}</td</tr>";
+                    
+            if($shade == 'shade1')
+                $shade = 'shade2';
+            else
+                $shade = 'shade1';
+        }
+        echo "<p align='center'>";
+    
+        if(!empty($_GET['start']))
+        {
+            echo " <a href='{$_SERVER['PHP_SELF']}?start=";
+            echo $start-$perpage."&amp;sort={$sort}&amp;order={$order}&amp;view={$view}nerw'>{$strPrevious}</a> ";
+        }
         else
-            $shade = 'shade1';
-    }
-    echo "<p align='center'>";
-
-    if(!empty($_GET['start']))
-    {
-        echo " <a href='{$_SERVER['PHP_SELF']}?start=";
-        echo $start-$perpage."&amp;sort={$sort}&amp;order={$order}&amp;view={$view}nerw'>{$strPrevious}</a> ";
+        {
+            echo $strPrevious;
+        }
+        echo " | ";
+        if($end != $numtotal)
+        {
+            echo " <a href='{$_SERVER['PHP_SELF']}?start=";
+            echo $start+$perpage."&amp;sort={$sort}&amp;order={$order}&amp;view={$view}'>{$strNext}</a> ";    }
+        else
+        {
+            echo $strNext;
+        }
     }
     else
     {
-        echo $strPrevious;
-    }
-    echo " | ";
-    if($end != $numtotal)
-    {
-        echo " <a href='{$_SERVER['PHP_SELF']}?start=";
-        echo $start+$perpage."&amp;sort={$sort}&amp;order={$order}&amp;view={$view}'>{$strNext}</a> ";    }
-    else
-    {
-        echo $strNext;
+        echo "<p align='center'>{$strNoRecords}</p>";
     }
 }
 else
