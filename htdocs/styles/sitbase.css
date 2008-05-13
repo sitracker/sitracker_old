@@ -270,6 +270,8 @@ form.filterform { margin-left: auto; margin-right: auto; margin-bottom: 1em; }
 
 div#kbarticle
 {
+    border: 1px solid;
+    padding: 5px;
     width: 55%;
     margin: 30px auto;
 }
@@ -279,5 +281,4 @@ div#kbarticle
   width: 100%;
   border-bottom: 1px #203894 solid;
 }
-
 
