@@ -8199,30 +8199,30 @@ function kb_article($id, $mode='internal')
     echo "<style type='text/css'>
     .kbprivate
     {
-      color: #FFFFFF;
-      background-color: #FF3300;
-      background-image:url({$CONFIG['application_webpath']}images/icons/{$iconset}/16x16/private.png); 
-      background-repeat: no-repeat;
-      background-position: top right;
+        color: #FFFFFF;
+        background-color: #FF3300;
+        background-image:url({$CONFIG['application_webpath']}images/icons/{$iconset}/16x16/private.png); 
+        background-repeat: no-repeat;
+        background-position: top right;
     }
 
     .kbrestricted
     {
-      background-color: #DDDDDD;
-      background-image:url({$CONFIG['application_webpath']}images/icons/{$iconset}/16x16/private.png);
-      background-repeat: no-repeat;
-      background-position: top right;
+        background-color: #DDDDDD;
+        background-image:url({$CONFIG['application_webpath']}images/icons/{$iconset}/16x16/private.png);
+        background-repeat: no-repeat;
+        background-position: top right;
     }
     
     .keykbprivate
     {
-      color: #FFFFFF;
-      background-color: #FF3300;
+        color: #FFFFFF;
+        background-color: #FF3300;
     }
 
     .keykbrestricted
     {
-      background-color: #DDDDDD;
+        background-color: #DDDDDD;
     }
     
     </style>";
@@ -8353,10 +8353,10 @@ function kb_article($id, $mode='internal')
     echo "<h3>{$GLOBALS['strDisclaimer']}</h3>";
     echo $CONFIG['kb_disclaimer_html'];
     echo "</div>";
-    
+
     if ($mode == 'internal')
     {
-        echo "<p align='center'><a href='kb_edit_article.php?id={$kbarticle->docid}'>{$strEdit}</a></p>";
+        echo "<p align='center'><a href='kb_edit_article.php?id={$kbarticle->docid}'>{$GLOBALS['strEdit']}</a></p>";
     }
 }
 
