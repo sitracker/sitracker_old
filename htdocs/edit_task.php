@@ -234,6 +234,7 @@ switch ($action)
             	trigger_error(mysql_error(),E_USER_ERROR);
             	echo "<p class='error'>";
             	echo "Couldn't add update, update will need to be done manually: {$sql}'</p>";
+            	die();
             }
             
             mark_task_completed($id, TRUE);
