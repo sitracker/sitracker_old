@@ -140,6 +140,9 @@ if (empty($submit) OR !empty($_SESSION['formerrors']['add_contact']))
         echo $_SESSION['formdata']['add_contact']['notes'];
     }
     echo "</textarea></td></tr>\n";
+    echo "<tr><th>{$strEmailDetails}</th>";
+    echo "<td><input type='checkbox' name='emaildetails' checked='checked'>";
+    echo "<label for='emaildetails'>{$strEmailContactLoginDetails}</td></tr>";
     echo "</table>\n\n";
     echo "<p><input name='submit' type='submit' value=\"{$strAddContact}\" /></p>";
     echo "</form>\n";
@@ -175,7 +178,6 @@ else
     $fax = cleanvar($_REQUEST['fax']);
     $department = cleanvar($_REQUEST['department']);
     $notes = cleanvar($_REQUEST['notes']);
-
     $_SESSION['formdata']['add_contact'] = $_REQUEST;
 
     $errors = 0;
@@ -245,7 +247,30 @@ else
         // generate username and password
 
         $username = strtolower(substr($surname, 0, strcspn($surname, " ")));
-        $password = generate_password();
+        $prepassword = generate_password();
+        
+        if ($CONFIG['portal'] AND $_POST['emaildetails'] == 'on')
+        {
+        	$extra_headers = "Reply-To: {$CONFIG['support_email']}\n";
+            $extra_headers .= "X-Mailer: {$CONFIG['application_shortname']} {$application_version_string}/PHP " . phpversion() . "\n";
+            $extra_headers .= "X-Originating-IP: {$_SERVER['REMOTE_ADDR']}\n";
+            $extra_headers .= "\n"; // add an extra crlf to create a null line to separate headers from body
+        	
+            $bodytext = "Hello $forenames\nYou have just been added as a ";
+        	$bodytext .= "contact on {$CONFIG['application_name']} ";
+        	$bodytext .= "{$CONFIG['application_uriprefix']}{$CONFIG['application_webpath']}";
+        	$bodytext .= "\nThese details allow you to the login to the portal,";
+        	$bodytext .= " where you can create, update and close your incidents";
+        	$bodytext .= ", as well as view your sites' incidents.\n\n";
+        	$bodytext .= "Your details are as follows:\n";
+        	$bodytext .= "username: {$username}\npassword: {$prepassword}\n";
+        	$bodytext .= "\nPlease note, this password cannot be recovered, ";
+        	$bodytext .= "only reset. You may change it in the portal.";
+        	
+      		mail($email, $strContactDetails, $bodytext, $extra_headers);        	
+        }
+        
+        $password = md5($prepassword);
 
         $sql  = "INSERT INTO `{$dbContacts}` (username, password, courtesytitle, forenames, surname, jobtitle, ";
         $sql .= "siteid, address1, address2, city, county, country, postcode, email, phone, mobile, fax, ";
