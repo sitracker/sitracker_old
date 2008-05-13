@@ -150,11 +150,19 @@ switch ($action)
         if ($incident)
         {
             //get current incident status
-            $sql = "SELECT status FROM `{$dbIncidents}` WHERE id={$incident}";
+            $sql = "SELECT status FROM `{$dbIncidents}` WHERE id='{$incident}'";
             $result = mysql_query($sql);
+            if (mysql_error()) trigger_error(mysql_error(),E_USER_ERROR);
             $status = mysql_fetch_object($result);
             $status = $status->status;
-
+			
+            //if we don't get an update from the incident, create one
+            //shouldn't happen in sit, but 3rd party might not set one
+            if (!isset($status) OR $status == 0)
+            {
+            	$status = 1;
+            }
+            
             $sql = "SELECT * FROM `{$dbTasks}` WHERE id='{$id}'";
 
             $result = mysql_query($sql);
@@ -165,6 +173,11 @@ switch ($action)
                 $startdate = mysql2date($task->startdate);
                 $duedate = mysql2date($task->duedate);
                 $enddate = mysql2date($task->enddate);
+            }
+            else
+            {
+            	trigger_error("Couldn't find task, dying", E_USER_ERROR);
+            	die();
             }
 
             //get all the notes
@@ -181,6 +194,11 @@ switch ($action)
                     $numnotes++;
                 }
             }
+            else
+            {
+            	trigger_error("Couldn't find any notes, dying" ,E_USER_ERROR);
+            	die();          	
+            }
             //delete all the notes
             $sql = "DELETE FROM `{$dbNotes}` WHERE refid='{$id}'";
             $result = mysql_query($sql);
@@ -192,19 +210,32 @@ switch ($action)
             $startdate = readable_date($startdate);
             $enddate = readable_date($enddate);
 
-            $updatehtml = "Update created from <a href=\"tasks.php?incident={$incident}\">Activity {$id}</a><br />Activity started: {$startdate}\n\n";
-            for($i = $numnotes-1; $i >= 0; $i--)
+            $updatehtml = "Update created from <a href=\"tasks.php?incident=";
+            $updatehtml .= "{$incident}\">Activity {$id}</a><br />Activity ";
+            $updatehtml .= "started: {$startdate}\n\n";
+            
+            for ($i = $numnotes-1; $i >= 0; $i--)
             {
-                $updatehtml .= "[b]".readable_date(mysql2date($notesarray[$i]->timestamp))."[/b]\n{$notesarray[$i]->bodytext}\n\n";
+                $updatehtml .= "[b]";
+                $updatehtml .= readable_date(mysql2date($notesarray[$i]->timestamp));
+                $updatehtml .= "[/b]\n{$notesarray[$i]->bodytext}\n\n";
             }
-            $updatehtml .= "Activity completed: {$enddate}, duration was: [b]".format_seconds($duration)."[/b]";
+            $updatehtml .= "Activity completed: {$enddate}, duration was: [b]";
+            $updatehtml .= format_seconds($duration)."[/b]";
 
             //create update
-            $sql = "INSERT INTO `{$dbUpdates}` (incidentid, userid, type, currentstatus, bodytext, timestamp, duration) ";
-            $sql .= "VALUES('{$incident}', '{$sit[2]}', 'fromtask', {$status}, '{$updatehtml}', '$now', '$duration')";
+            $sql = "INSERT INTO `{$dbUpdates}` (incidentid, userid, type, ";
+            $sql .= "currentstatus, bodytext, timestamp, duration) ";
+            $sql .= "VALUES('{$incident}', '{$sit[2]}', 'fromtask', ";
+            $sql .= "'{$status}', '{$updatehtml}', '$now', '$duration')";
             mysql_query($sql);
-            if (mysql_error()) trigger_error(mysql_error(),E_USER_ERROR);
-
+            if (mysql_error())
+            {
+            	trigger_error(mysql_error(),E_USER_ERROR);
+            	echo "<p class='error'>";
+            	echo "Couldn't add update, update will need to be done manually: {$sql}'</p>";
+            }
+            
             mark_task_completed($id, TRUE);
         }
         else
