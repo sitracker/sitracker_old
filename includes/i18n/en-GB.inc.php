@@ -379,6 +379,8 @@ $strEngineer = 'Engineer';
 $strEngineers = 'Engineers';
 $strEnglish = 'English';
 $strEnterTheCallID = 'Enter the incident number';
+#computer environment
+$strEnvironment = 'Environment';
 # Acronym for end of life
 $strEOL = 'EOL';
 $strError = 'Error';
