@@ -465,7 +465,9 @@ CREATE TABLE `{$dbKBArticles}` (
   `docid` int(5) NOT NULL auto_increment,
   `doctype` int(5) NOT NULL default '0',
   `title` varchar(255) NOT NULL default '',
-  `distribution` int(5) NOT NULL default '0',
+  `distribution` ENUM( 'public', 'private', 'restricted' ) NOT NULL DEFAULT 'public'
+  COMMENT 'public appears in the portal, private is info never to be released to the public,
+  restricted is info that is sensitive but could be mentioned if asked, for example' ,
   `published` datetime NOT NULL default '0000-00-00 00:00:00',
   `author` varchar(255) NOT NULL default '',
   `reviewed` datetime NOT NULL default '0000-00-00 00:00:00',
@@ -1909,7 +1911,7 @@ ADD `var_incident_visible_contacts` ENUM( 'yes', 'no' ) NOT NULL DEFAULT 'no',
 ADD `var_incident_visible_all` ENUM( 'yes', 'no' ) NOT NULL DEFAULT 'no';
 
 -- KMH 08/04/08
-ALTER TABLE `{$dbKBArticles}` CHANGE `distribution` `distribution` ENUM( 'public', 'private', 'restricted' ) NOT NULL DEFAULT 'public' COMMENT 'public appears in the portal, private is info never to be released to the public, restricted is info that is sensitive but could be mentioned if asked for example' ;
+ALTER TABLE `{$dbKBArticles}` CHANGE `distribution` `distribution` ENUM( 'public', 'private', 'restricted' ) NOT NULL DEFAULT 'public' COMMENT 'public appears in the portal, private is info never to be released to the public, restricted is info that is sensitive but could be mentioned if asked, for example' ;
 UPDATE `{$dbKBArticles}` SET `distribution`='public' ;
 
 -- KMH 12/04/08
