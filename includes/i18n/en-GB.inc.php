@@ -209,6 +209,7 @@ $strCheckUserAndRolePermissions = 'Check User and Role Permissions';
 $strCheckWhoHasThisPermission = 'Check who has this permission';
 $strChooseLanguage = 'Please choose your language';
 $strCity = 'City';
+$strClickTitleHeaders = 'Click title headers to enable the sections';
 # e.g. close an incident
 $strClose = 'Close';
 # e.g. incident is closed
@@ -343,6 +344,7 @@ $strEditEscalationPath = 'Edit Escalation Path';
 $strEditEscalationPathFailed = 'Edit Escalation Path Failed';
 $strEditHolidays = 'Edit Holidays';
 $strEditHolidayEntitlement = 'Edit Holiday Entitlement';
+$strEditKBArticle = 'Edit Knowledge Base Article';
 $strEditProfileFor = 'Edit User Profile for %s';
 $strEditProduct = 'Edit Product';
 $strEditRSSAtomFeed = 'Edit RSS/Atom feed';
@@ -590,6 +592,8 @@ $strJustNow = 'Just Now';
 
 $strKBSelectSectionsText = 'Enable any other relevant sections below by checking their box.';
 $strKBytes = 'KBytes';
+#e.g. graph legend
+$strKey = 'Key';
 $strKeywords = 'Keywords';
 $strKnowledgeBase = 'Knowledge Base';
 $strKnowledgeBaseArticle = 'Knowledge Base Article';

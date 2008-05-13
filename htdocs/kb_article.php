@@ -215,7 +215,7 @@ else
     echo "<div id='kbarticle'>";
     echo "<form action='{$_SERVER['PHP_SELF']}' method='post'>";
     echo "<p>".sprintf($strMandatoryMarked, "<strong><sup class='red'>*</sup></strong>")."</p>";
-    echo "<p>Click title headers to enable the sections.</p>";
+    echo "<p>{$strClickTitleHeaders}</p>";
     echo "<h3>{$strTitle}<sup class='red'>*</sup></strong></h3>";
     echo "<input name='title' id='title' size='50' value='{$kbobj->title}'/><strong>";
     
