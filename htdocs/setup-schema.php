@@ -2000,7 +2000,6 @@ DROP TABLE IF EXISTS `{$CONFIG['db_tableprefix']}flags`;
 
 -- KMH 01/05/08
 ALTER TABLE `{$dbFiles}` CHANGE `category` `category` ENUM( 'public', 'private', 'protected', 'incident', 'kb' ) NOT NULL DEFAULT 'public' ;
-ALTER TABLE `{$dbFiles}` ADD `refid` INT( 11 ) NULL ;  // FIXME this should be implemented as a link
 
 -- PH  04/05/08
 INSERT INTO `{$dbScheduler}` (`id`, `action`, `params`, `paramslabel`, `description`, `status`, `start`, `end`, `interval`, `lastran`, `success`) VALUES (7, 'PurgeExpiredFTPItems', '', NULL, 'purges files which have expired from the FTP site when run.', 'enabled', '2008-01-01 00:00:00', '0000-00-00 00:00:00', 216000, '0000-00-00 00:00:00', 1);
@@ -2008,9 +2007,14 @@ INSERT INTO `{$dbScheduler}` (`id`, `action`, `params`, `paramslabel`, `descript
 -- KMH 06/05/08
 ALTER TABLE `{$dbMaintenance}` CHANGE `allcontactssupported` `allcontactssupported` ENUM( 'no', 'yes' ) NOT NULL DEFAULT 'no' ;
 
--- KHM 10/05/96
+-- KHM 10/05/08
 ALTER TABLE `{$dbUsers}` DROP `var_collapse`, DROP `var_notify_on_reassign`;
 ALTER TABLE `{$dbMaintenance}` CHANGE `licence_type` `licence_type` INT( 11 ) NULL DEFAULT NULL ;
+
+-- KMH 13/05/08
+INSERT INTO `sit`.`linktypes` (`id` ,`name` ,`lrname` ,`rlname` ,`origtab` ,`origcol` ,`linktab` ,`linkcol` ,`selectionsql` ,`filtersql` ,`viewurl`)
+VALUES (NULL , 'Incident', 'Incident', 'File', 'incident', 'id', 'file', 'id', 'filename', '', 'incident_details.php?id=%id%');
+
 ";
 
 // Important: When making changes to the schema you must add SQL to make the alterations
