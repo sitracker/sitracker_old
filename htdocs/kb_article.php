@@ -8,9 +8,9 @@
 // of the GNU General Public License, incorporated herein by reference.
 //
 
-// This Page Is Valid XHTML 1.0 Transitional! 22Feb06
-
-// Authors: Ivan Lucas <ivanlucas[at]users.sourceforge.net>, Tom Gerrard
+// Authors: Kieran Hogg, <kieran_hogg[at]users.sourceforge.net>
+//          Ivan Lucas <ivanlucas[at]users.sourceforge.net>
+//          Tom Gerrard <tomgerrard[at]users.sourceforge.net>
 
 @include ('set_include_path.inc.php');
 $permission = 54; // view KB
@@ -187,11 +187,11 @@ else
         $sql = "SELECT * FROM `{$dbKBArticles}` WHERE docid='{$kbid}'";
         $result = mysql_query($sql);
         $kbobj = mysql_fetch_object($result);
-        
+
         $sections = array('Summary', 'Symptoms', 'Cause', 'Question', 'Answer',
                           'Solution', 'Workaround', 'Status', 'Additionalinfo',
                           'References');
-        
+
         foreach($sections AS $section)
         {
             $secsql = "SELECT * FROM `{$dbKBContent}` ";
@@ -206,39 +206,39 @@ else
                 }
             }
         }
-    }   
+    }
     else
     {
         echo "<h2>".icon('kb', 32)." {$strNewKBArticle}</h2>";
     }
 
-    echo "<p align='center'>".sprintf($strMandatoryMarked, "<strong><sup class='red'>*</sup></strong>")."<br />";
+    echo "<p align='center'>".sprintf($strMandatoryMarked, "<sup class='red'>*</sup>")."<br />";
     echo "{$strClickTitleHeaders}</p>";
     echo "<div id='kbarticle'>";
     echo "<form action='{$_SERVER['PHP_SELF']}' method='post'>";
-    echo "<h3>{$strTitle}<sup class='red'>*</sup></strong></h3>";
-    echo "<input name='title' id='title' size='50' value='{$kbobj->title}'/><strong>";
-    
+    echo "<h3>{$strTitle}<sup class='red'>*</sup></h3>";
+    echo "<input name='title' id='title' size='50' value='{$kbobj->title}'/>";
+
     echo "<h3>{$strKeywords}</h3>";
     echo "<input name='keywords' id='keywords' size='60' value='{$kbobj->keywords}' />";
-    
-    echo "<h3>{$strDistribution}<strong><sup class='red'>*</sup></strong></h3>";
+
+    echo "<h3>{$strDistribution}<sup class='red'>*</sup></h3>";
     echo "<select name='distribution'>";
-    
+
     echo "<option value='public' ";
     if ($kbobj->distribution == 'public')
     {
         echo " selected='selected' ";
     }
     echo ">{$strPublic}</option>";
-    
+
     echo "<option value='private' style='color: blue;'";
     if ($kbobj->distribution == 'private')
     {
         echo " selected='selected' ";
     }
     echo ">{$strPrivate}</option>";
-    
+
     echo "<option value='restricted' style='color: red;";
     if ($kbobj->distribution == 'restricted')
     {
@@ -246,7 +246,7 @@ else
     }
     echo "'>{$strRestricted}</option>";
     echo "</select>";
-    
+
 
     if (!empty($sections['Summary']))
     {
@@ -256,30 +256,30 @@ else
     }
     else
     {
-        echo "<h3><a href=\"javascript:void(0);\" onClick=\"$('summary').toggle()\">{$strSummary}</a></h3>";
+        echo "<h3><a href=\"javascript:void(0);\" onclick=\"$('summary').toggle()\">{$strSummary}</a></h3>";
         echo "<textarea id='summary' name='summary' cols='100' rows='8' ";
         echo "style='display: none'>";
-    }    
+    }
     echo "</textarea>";
-    
+
 
     if (!empty($sections['Symptoms']))
     {
         echo "<h3>{$strSymptoms}</h3>";
         echo "<textarea id='symptoms' name='symptoms' cols='100' rows='8' ";
         echo "style='display: all'>{$sections['Symptoms']}";
-        
+
     }
     else
     {
-        echo "<h3><a href=\"javascript:void(0);\" onClick=\"$('symptoms').toggle()\">";
+        echo "<h3><a href=\"javascript:void(0);\" onclick=\"$('symptoms').toggle()\">";
         echo "{$strSymptoms}</a></h3>";
         echo "<textarea id='symptoms' name='symptoms' cols='100' rows='8' ";
 
         echo "style='display: none'>";
-    }    
+    }
     echo "</textarea>";
-    
+
     if (!empty($sections['Cause']))
     {
         echo "<h3>{$strCause}</h3>";
@@ -288,26 +288,26 @@ else
     }
     else
     {
-        echo "<h3><a href=\"javascript:void(0);\" onClick=\"$('cause').toggle()\">{$strCause}</a></h3>";
+        echo "<h3><a href=\"javascript:void(0);\" onclick=\"$('cause').toggle()\">{$strCause}</a></h3>";
         echo "<textarea id='cause' name='cause' cols='100' rows='8' ";
         echo "style='display: none'>";
-    }    
+    }
     echo "</textarea>";
-    
+
     if (!empty($sections['Question']))
     {
         echo "<h3>{$strQuestion}</h3>";
-        echo "<textarea id='question' name='question'' cols='100' rows='8' ";
+        echo "<textarea id='question' name='question' cols='100' rows='8' ";
         echo ">{$sections['Question']}";
     }
     else
     {
-        echo "<h3><a href=\"javascript:void(0);\" onClick=\"$('question').toggle()\">{$strQuestion}</a></h3>";
-        echo "<textarea id='question' name='question'' cols='100' rows='8' ";
+        echo "<h3><a href=\"javascript:void(0);\" onclick=\"$('question').toggle()\">{$strQuestion}</a></h3>";
+        echo "<textarea id='question' name='question' cols='100' rows='8' ";
         echo "style='display: none'>";
-    }   
+    }
     echo "</textarea>";
-    
+
     if (!empty($sections['Answer']))
     {
         echo "<h3>{$strAnswer}</h3>";
@@ -316,12 +316,12 @@ else
     }
     else
     {
-        echo "<h3><a href=\"javascript:void(0);\" onClick=\"$('answer').toggle()\">{$strAnswer}</a></h3>";
+        echo "<h3><a href=\"javascript:void(0);\" onclick=\"$('answer').toggle()\">{$strAnswer}</a></h3>";
         echo "<textarea id='answer' name='answer' cols='100' rows='8' ";
         echo "style='display: none'>";
-    }    
+    }
     echo "</textarea>";
-    
+
     if (!empty($sections['Solution']))
     {
         echo "<h3>{$strSolution}</h3>";
@@ -330,12 +330,12 @@ else
     }
     else
     {
-        echo "<h3><a href=\"javascript:void(0);\" onClick=\"$('solution').toggle()\">{$strSolution}</a></h3>";
+        echo "<h3><a href=\"javascript:void(0);\" onclick=\"$('solution').toggle()\">{$strSolution}</a></h3>";
         echo "<textarea id='solution' name='solution' cols='100' rows='8' ";
         echo "style='display: none'>";
-    }    
+    }
     echo "</textarea>";
-    
+
     if (!empty($sections['Workaround']))
     {
         echo "<h3>{$strWorkaround}</h3>";
@@ -344,12 +344,12 @@ else
     }
     else
     {
-        echo "<h3><a href=\"javascript:void(0);\" onClick=\"$('workaround').toggle()\">{$strWorkaround}</a></h3>";
+        echo "<h3><a href=\"javascript:void(0);\" onclick=\"$('workaround').toggle()\">{$strWorkaround}</a></h3>";
         echo "<textarea id='workaround' name='workaround' cols='100' rows='8' ";
         echo "style='display: none'>";
-    }    
+    }
     echo "</textarea>";
-    
+
     if (!empty($sections['Status']))
     {
         echo "<h3>{$strStatus}</h3>";
@@ -358,26 +358,26 @@ else
     }
     else
     {
-        echo "<h3><a href=\"javascript:void(0);\" onClick=\"$('status').toggle()\">{$strStatus}</a></h3>";
+        echo "<h3><a href=\"javascript:void(0);\" onclick=\"$('status').toggle()\">{$strStatus}</a></h3>";
         echo "<textarea id='status' name='status' cols='100' rows='8' ";
         echo "style='display: none'>";
-    }    
+    }
     echo "</textarea>";
- 
+
     if (!empty($sections['Additional Info']))
-    {   
+    {
         echo "<h3>{$strAdditionalInfo}</h3>";
         echo "<textarea id='additionalinfo' name='additionalinfo' cols='100' rows='8'  ";
         echo ">{$sections['Additional Info']}";
     }
     else
-    {           
-        echo "<h3><a href=\"javascript:void(0);\" onClick=\"$('additionalinfo').toggle()\">{$strAdditionalInfo}</a></h3>";
+    {
+        echo "<h3><a href=\"javascript:void(0);\" onclick=\"$('additionalinfo').toggle()\">{$strAdditionalInfo}</a></h3>";
         echo "<textarea id='additionalinfo' name='additionalinfo' cols='100' rows='8'  ";
         echo "style='display: none'>";
-    }    
+    }
     echo "</textarea>";
-      
+
     if (!empty($sections['References']))
     {
         echo "<h3>{$strReferences}</h3>";
@@ -386,12 +386,12 @@ else
     }
     else
     {
-        echo "<h3><a href=\"javascript:void(0);\" onClick=\"$('references').toggle()\">{$strReferences}</a></h3>";
+        echo "<h3><a href=\"javascript:void(0);\" onclick=\"$('references').toggle()\">{$strReferences}</a></h3>";
         echo "<textarea id='references' name='references' cols='100' rows='8' ";
         echo "style='display: none'>";
-    }    
+    }
     echo "</textarea>";
-    
+
     echo "<h3>{$strDisclaimer}</h3>";
     echo $CONFIG['kb_disclaimer_html'];
     echo "<p align='center'><input type='submit' name='submit' value='";
@@ -403,7 +403,9 @@ else
     {
         echo $strAdd;
     }
-    echo "' /></form></div>";
+    echo "' /></p></form></div>";
+    include('htmlfooter.inc.php');
 }
+
 
 ?>
