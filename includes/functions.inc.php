@@ -8213,6 +8213,18 @@ function kb_article($id, $mode='internal')
       background-repeat: no-repeat;
       background-position: top right;
     }
+    
+    .keykbprivate
+    {
+      color: #FFFFFF;
+      background-color: #FF3300;
+    }
+
+    .keykbrestricted
+    {
+      background-color: #DDDDDD;
+    }
+    
     </style>";
     
     echo "<div id='kbarticle'>";
@@ -8249,6 +8261,7 @@ function kb_article($id, $mode='internal')
     $csql = "SELECT * FROM `{$GLOBALS['dbKBContent']}` WHERE docid='{$id}' ";
     $cresult = mysql_query($csql);
     if (mysql_error()) trigger_error("MySQL Query Error ".mysql_error(), E_USER_ERROR);
+    $restrictedcontent = 0;
     while ($kbcontent = mysql_fetch_object($cresult))
     {
         switch ($kbcontent->distribution)
@@ -8260,7 +8273,8 @@ function kb_article($id, $mode='internal')
                     include 'htmlfooter.inc.php';
                     exit;
                 }
-                echo "<div class='kbprivate'><h3>{$kbcontent->header}".help_link('')."</h3>";
+                echo "<div class='kbprivate'><h3>{$kbcontent->header}</h3>";
+                $restrictedcontent++;
             break;
             
             case 'restricted':
@@ -8271,6 +8285,7 @@ function kb_article($id, $mode='internal')
                     exit;
                 }
                 echo "<div class='kbrestricted'><h3>{$kbcontent->header}</h3>";
+                $restrictedcontent++;
             break;
             
             default:
@@ -8329,6 +8344,12 @@ function kb_article($id, $mode='internal')
         echo "<br />";
     }
     
+    if ($restrictedcontent > 0)
+    {
+        echo "<h3>{$GLOBALS['strKey']}</h3>";
+        echo "<p><span class='keykbprivate'>{$GLOBALS['strPrivate']}</span>".help_link('KBPrivate')."<br />";
+        echo "<span class='keykbrestricted'>{$GLOBALS['strRestricted']}</span>".help_link('KBRestricted')."</p>";
+    }
     echo "<h3>{$GLOBALS['strDisclaimer']}</h3>";
     echo $CONFIG['kb_disclaimer_html'];
     echo "</div>";
