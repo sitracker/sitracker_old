@@ -8184,6 +8184,148 @@ function icon($filename, $size, $alt='')
 	
 }
 
+
+function kb_article($id, $mode='internal')
+{
+    global $CONFIG;
+    $id = intval($id);
+    if (!is_number($id) OR $id == 0)
+    {
+        trigger_error("Incorrect KB ID", E_USER_ERROR);
+        include 'htmlfooter.inc.php';
+        exit;
+    }
+    
+    echo "<div id='kbarticle'>";
+    
+    $sql = "SELECT * FROM `{$GLOBALS['dbKBArticles']}` WHERE docid='{$id}' LIMIT 1";
+    $result = mysql_query($sql);
+    if (mysql_error()) trigger_error("MySQL Query Error ".mysql_error(), E_USER_ERROR);
+    $kbarticle = mysql_fetch_object($result);
+    if (empty($kbarticle->title))
+    {
+        $kbarticle->title = $strUntitled;
+    }
+    
+    echo "<h2 class='kbtitle'>{$kbarticle->title}</h2>";
+    
+    // Lookup what software this applies to
+    $ssql = "SELECT * FROM `{$GLOBALS['dbKBSoftware']}` AS kbs, `{$GLOBALS['dbSoftware']}` AS s ";
+    $ssql .= "WHERE kbs.softwareid = s.id AND kbs.docid = '{$id}' ";
+    $ssql .= "ORDER BY s.name";
+    $sresult = mysql_query($ssql);
+    if (mysql_error()) trigger_error("MySQL Query Error ".mysql_error(), E_USER_ERROR);
+    if (mysql_num_rows($sresult) >= 1)
+    {
+        echo "<p>{$GLOBALS['strTheInfoInThisArticle']}</p>\n";
+        echo "<ul>\n";
+        while ($kbsoftware = mysql_fetch_object($sresult))
+        {
+            echo "<li>{$kbsoftware->name}</li>\n";
+        }
+        echo "</ul>\n";
+    }
+    
+    $csql = "SELECT * FROM `{$GLOBALS['dbKBContent']}` WHERE docid='{$id}' ";
+    $cresult = mysql_query($csql);
+    if (mysql_error()) trigger_error("MySQL Query Error ".mysql_error(), E_USER_ERROR);
+    while ($kbcontent = mysql_fetch_object($cresult))
+    {
+        switch ($kbcontent->distribution)
+        {
+            case 'private':
+                if ($mode != 'internal')
+                {
+                    trigger_error($GLOBALS['strPermissionDenied'], E_USER_ERROR);
+                    include 'htmlfooter.inc.php';
+                    exit;
+                }
+                echo "<div style='color: blue; background: #FFD8DE; ";
+                echo "background-image:url({$CONFIG['application_webpath']}";
+                echo "images/icons/{$iconset}/16x16/private.png); ";
+                echo "background-repeat: no-repeat; background-position: ";
+                echo "top right;' title='{$strParagraphMarkedPrivate}'>";
+            break;
+            
+            case 'restricted':
+                if ($mode != 'internal')
+                {
+                    trigger_error($GLOBALS['strPermissionDenied'], E_USER_ERROR);
+                    include 'htmlfooter.inc.php';
+                    exit;
+                }
+                echo "<div style='color: red; background: #FFD8DE; background: ";
+                echo "#FFD8DE; background-image:url({$CONFIG['application_webpath']}";
+                echo "images/icons/{$iconset}/16x16/private.png); ";
+                echo "background-repeat: no-repeat; background-position: top ";
+                echo "right;' title='{$GLOBALS['strParagraphMarkedRestricted']}'>";
+            break;
+            
+            default:
+                echo "<div>";
+        }
+        echo "<{$kbcontent->headerstyle}>{$kbcontent->header}</{$kbcontent->headerstyle}>\n";
+        $kbcontent->content=nl2br($kbcontent->content);
+        $search = array("/(?<!quot;|[=\"]|:\/{2})\b((\w+:\/{2}|www\.).+?)"."(?=\W*([<>\s]|$))/i", "/(([\w\.]+))(@)([\w\.]+)\b/i");
+        $replace = array("<a href=\"$1\">$1</a>", "<a href=\"mailto:$0\">$0</a>");
+        $kbcontent->content = preg_replace("/href=\"www/i", "href=\"http://www", preg_replace ($search, $replace, $kbcontent->content));
+        echo $kbcontent->content;
+        $author[]=$kbcontent->ownerid;
+        echo "</div>";
+    
+    }
+    
+    echo "<h3>{$GLOBALS['strArticle']}</h3>";
+    echo sprintf($GLOBALS['strDocumentIDX'], $CONFIG['kb_id_prefix'], leading_zero(4,$kbarticle->docid))."<br />";
+    $pubdate=mysql2date($kbarticle->published);
+    if ($pubdate > 0)
+    {
+        echo sprintf($GLOBALS['strPublishedOnX'], ldate($CONFIG['dateformat_date'],$pubdate))."<br />";
+    }
+    
+    if (is_array($author))
+    {
+        $author=array_unique($author);
+        $countauthors=count($author);
+        $count=1;
+        if ($countauthors > 1)
+        {
+            echo "{$GLOBALS['strAuthors']}: ";
+        }
+        else
+        {
+            echo "{$GLOBALS['strAuthor']}: ";
+        }
+        foreach ($author AS $authorid)
+        {
+            echo user_realname($authorid,TRUE);
+            if ($count < $countauthors) echo ", " ;
+            $count++;
+        }
+    }
+    else
+    {
+        echo "{$GLOBALS['strAuthor']}: {$author}";
+    }
+    
+    echo "<br />";
+    if (!empty($kbarticle->keywords))
+    {
+        echo "{$GLOBALS['strKeywords']}: ";
+        echo preg_replace("/\[([0-9]+)\]/", "<a href=\"incident_details.php?id=$1\" target=\"_blank\">$0</a>", $kbarticle->keywords);
+        echo "<br />";
+    }
+    
+    echo "<h3>{$GLOBALS['strDisclaimer']}</h3>";
+    echo $CONFIG['kb_disclaimer_html'];
+    echo "</div>";
+    
+    if ($mode == 'internal')
+    {
+        echo "<p align='center'><a href='kb_edit_article.php?id={$kbarticle->docid}'>{$strEdit}</a></p>";
+    }
+}
+
 // -------------------------- // -------------------------- // --------------------------
 // leave this section at the bottom of functions.inc.php ================================
 
