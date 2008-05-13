@@ -267,3 +267,17 @@ form.filterform { margin-left: auto; margin-right: auto; margin-bottom: 1em; }
 form.filterform { margin-left: auto; margin-right: auto; margin-bottom: 1em; }
 
 .search_highlight { background: #FFFACD; font-weight: bolder; }
+
+div#kbarticle
+{
+    width: 55%;
+    margin: 30px auto;
+}
+#kbarticle h1,#kbarticle h3,#kbarticle h4, #kbarticle h5,#kbarticle h6
+{
+  text-align: left; background: transparent; color: black;
+  width: 100%;
+  border-bottom: 1px #203894 solid;
+}
+
+
