@@ -8162,7 +8162,7 @@ function show_next_action()
  */
 function icon($filename, $size, $alt='')
 {
-	global $iconset;
+	global $iconset, $CONFIG;
 	$sizes = array(12, 16, 32);
 
 	$file = "{$CONFIG['application_webpath']}images/icons/{$iconset}";
@@ -8180,8 +8180,6 @@ function icon($filename, $size, $alt='')
 	{
 		return "<img src='{$file}' alt='{$alt}' title='{$alt}' />";
 	}
-	echo "<img src='{$filename}' alt='{$alt}' title='{$alt}' />";
-
 }
 
 
