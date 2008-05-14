@@ -251,70 +251,70 @@ else
     echo "</select> ";
     echo help_link('KBDistribution');
 
-    echo "<h3><a href=\"javascript:void(0);\" onclick=\"Effect.toggle('summary', 'blind', { duration: 0.3 });";
+    echo "<h3><a href=\"javascript:void(0);\" onclick=\"Effect.toggle('summary', 'blind', { duration: 0.2 });";
     echo "togglePlusMinus('summaryspan');\">";
     echo "{$strSummary} <span id='summaryspan'>[+]</span></a></h3>";
     echo "<textarea id='summary' name='summary' cols='100' rows='8' ";
     echo "style='display: none; overflow: visible; white-space: nowrap;' onchange='kbSectionCollapse();'>{$sections['Summary']}";
     echo "</textarea>";
 
-    echo "<h3><a href=\"javascript:void(0);\" onclick=\"$('symptoms').toggle();";
+    echo "<h3><a href=\"javascript:void(0);\" onclick=\"Effect.toggle('symptoms', 'blind', { duration: 0.2 });";
     echo "togglePlusMinus('symptomsspan');\">";
     echo "{$strSymptoms} <span id='symptomsspan'>[+]</span></a></h3>";
     echo "<textarea id='symptoms' name='symptoms' cols='100' rows='8' ";
     echo "style='display: none' onchange='kbSectionCollapse();'>{$sections['Symptoms']}";
     echo "</textarea>";
 
-    echo "<h3><a href=\"javascript:void(0);\" onclick=\"$('cause').toggle();";
+    echo "<h3><a href=\"javascript:void(0);\" onclick=\"Effect.toggle('cause', 'blind', { duration: 0.2 });";
     echo "togglePlusMinus('causespan');\">";
     echo "{$strCause} <span id='causespan'>[+]</span></a></h3>";
     echo "<textarea id='cause' name='cause' cols='100' rows='8' ";
     echo "style='display: none' onchange='kbSectionCollapse();'>{$sections['Cause']}";
     echo "</textarea>";
 
-    echo "<h3><a href=\"javascript:void(0);\" onclick=\"$('question').toggle();";
+    echo "<h3><a href=\"javascript:void(0);\" onclick=\"Effect.toggle('question', 'blind', { duration: 0.2 });";
     echo "togglePlusMinus('questionspan');\">";
     echo "{$strQuestion} <span id='questionspan'>[+]</span></a></h3>";
     echo "<textarea id='question' name='question' cols='100' rows='8' ";
     echo "style='display: none' onchange='kbSectionCollapse();'>{$sections['Question']}";
     echo "</textarea>";
 
-    echo "<h3><a href=\"javascript:void(0);\" onclick=\"$('answer').toggle();";
+    echo "<h3><a href=\"javascript:void(0);\" onclick=\"Effect.toggle('answer', 'blind', { duration: 0.2 });";
     echo "togglePlusMinus('answerspan');\">";
     echo "{$strAnswer} <span id='answerspan'>[+]</span></a></h3>";
     echo "<textarea id='answer' name='answer' cols='100' rows='8' ";
     echo "style='display: none' onchange='kbSectionCollapse();'>{$sections['Answer']}";
     echo "</textarea>";
 
-    echo "<h3><a href=\"javascript:void(0);\" onclick=\"$('solution').toggle();";
+    echo "<h3><a href=\"javascript:void(0);\" onclick=\"Effect.toggle('solution', 'blind', { duration: 0.2 });";
     echo "togglePlusMinus('solutionspan');\">";
     echo "{$strSolution} <span id='solutionspan'>[+]</span></a></h3>";
     echo "<textarea id='solution' name='solution' cols='100' rows='8' ";
     echo "style='display: none' onchange='kbSectionCollapse();'>{$sections['Solution']}";
     echo "</textarea>";
 
-    echo "<h3><a href=\"javascript:void(0);\" onclick=\"$('workaround').toggle();";
+    echo "<h3><a href=\"javascript:void(0);\" onclick=\"Effect.toggle('workaround', 'blind', { duration: 0.2 });";
     echo "togglePlusMinus('workaroundspan');\">";
     echo "{$strWorkaround} <span id='workaroundspan'>[+]</span></a></h3>";
     echo "<textarea id='workaround' name='workaround' cols='100' rows='8' ";
     echo "style='display: none' onchange='kbSectionCollapse();'>{$sections['Workaround']}";
     echo "</textarea>";
 
-    echo "<h3><a href=\"javascript:void(0);\" onclick=\"$('status').toggle();";
+    echo "<h3><a href=\"javascript:void(0);\" onclick=\"Effect.toggle('status', 'blind', { duration: 0.2 });";
     echo "togglePlusMinus('statusspan');\">";
     echo "{$strStatus} <span id='statusspan'>[+]</span></a></h3>";
     echo "<textarea id='status' name='status' cols='100' rows='8' ";
     echo "style='display: none' onchange='kbSectionCollapse();'>{$sections['Status']}";
     echo "</textarea>";
 
-    echo "<h3><a href=\"javascript:void(0);\" onclick=\"$('additionalinfo').toggle();";
+    echo "<h3><a href=\"javascript:void(0);\" onclick=\"Effect.toggle('additionalinfo', 'blind', { duration: 0.2 });";
     echo "togglePlusMinus('additionalinfospan');\">";
     echo "{$strAdditionalInfo} <span id='additionalinfospan'>[+]</span></a></h3>";
     echo "<textarea id='additionalinfo' name='additionalinfo' cols='100' rows='8'  ";
     echo "style='display: none' onchange='kbSectionCollapse();'>{$sections['Additional Info']}";
     echo "</textarea>";
 
-    echo "<h3><a href=\"javascript:void(0);\" onclick=\"$('references').toggle();";
+    echo "<h3><a href=\"javascript:void(0);\" onclick=\"Effect.toggle('references', 'blind', { duration: 0.2 });";
     echo "togglePlusMinus('referencesspan');\">";
     echo "{$strReferences} <span id='referencesspan'>[+]</span></a></h3>";
     echo "<textarea id='references' name='references' cols='100' rows='8' ";
