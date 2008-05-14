@@ -294,3 +294,5 @@ span.required
 input.required, select.required{
   background-color: #FFD8DE;
 }
+
+div#incidentfooter { border-top: 1px solid #203894; }
