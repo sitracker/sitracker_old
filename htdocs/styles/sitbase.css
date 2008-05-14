@@ -277,7 +277,7 @@ div#kbarticle
 }
 #kbarticle h1,#kbarticle h3,#kbarticle h4, #kbarticle h5,#kbarticle h6
 {
-  text-align: left; background: transparent; color: black;
+  text-align: left; background: transparent; color: #0063dc;
   width: 100%;
   border-bottom: 1px #203894 solid;
 }
