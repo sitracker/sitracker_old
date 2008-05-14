@@ -131,9 +131,7 @@ if (!is_array($hmenu[30])) $hmenu[30] = array();
 $hmenu[30] = array_merge(array (10=> array ( 'perm'=> 5, 'name'=> $strAddIncident, 'url'=>"{$CONFIG['application_webpath']}add_incident.php"),
                     20=> array ( 'perm'=> 0, 'name'=> $strViewIncidents, 'url'=>"{$CONFIG['application_webpath']}incidents.php?user=current&amp;queue=1&amp;type=support"),
                     30=> array ( 'perm'=> 0, 'name'=> $strWatchIncidents, 'url'=>"{$CONFIG['application_webpath']}incidents.php?user=all&amp;queue=1&amp;type=support"),
-                    40=> array ( 'perm'=> 42, 'name'=> $strHoldingQueue, 'url'=>"{$CONFIG['application_webpath']}review_incoming_updates.php"),
-                    50=> array ( 'perm'=> 0, 'name'=> $strJumpToIncident,
-                                 'url'=>"javascript:var id = prompt('{$strEnterTheIncidentID}'); if (!isNaN(id)) window.location = '{$CONFIG['application_webpath']}incident_details.php?id=' + id + '&amp;win=jump';")
+                    40=> array ( 'perm'=> 42, 'name'=> $strHoldingQueue, 'url'=>"{$CONFIG['application_webpath']}review_incoming_updates.php")                    
 ), $hmenu[30]);
 
 
