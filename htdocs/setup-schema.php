@@ -280,15 +280,13 @@ CREATE TABLE `{$dbFiles}` (
   `size` bigint(11) NOT NULL default '0',
   `userid` int(11) NOT NULL default '0',
   `shortdescription` varchar(255) NOT NULL default '',
-  `longdescription` blob NOT NULL,
+  `longdescription` TEXT NOT NULL,
   `webcategory` varchar(255) NOT NULL default '',
   `path` varchar(255) NOT NULL default '',
   `downloads` int(11) NOT NULL default '0',
-  `filedate` int(11) NOT NULL default '0',
-  `expiry` int(11) NOT NULL default '0',
+  `filedate` DATETIME NOT NULL,
+  `expiry` DATETIME NOT NULL,
   `fileversion` varchar(50) NOT NULL default '',
-  `productid` int(11) NOT NULL default '0',
-  `releaseid` int(11) NOT NULL default '0',
   `published` enum('yes','no') NOT NULL default 'no',
   `createdby` INT NULL ,
   `modified` DATETIME NULL ,
@@ -2012,8 +2010,13 @@ ALTER TABLE `{$dbUsers}` DROP `var_collapse`, DROP `var_notify_on_reassign`;
 ALTER TABLE `{$dbMaintenance}` CHANGE `licence_type` `licence_type` INT( 11 ) NULL DEFAULT NULL ;
 
 -- KMH 13/05/08
-INSERT INTO `sit`.`linktypes` (`id` ,`name` ,`lrname` ,`rlname` ,`origtab` ,`origcol` ,`linktab` ,`linkcol` ,`selectionsql` ,`filtersql` ,`viewurl`)
+INSERT INTO `{$dbLinkTypes}` (`id` ,`name` ,`lrname` ,`rlname` ,`origtab` ,`origcol` ,`linktab` ,`linkcol` ,`selectionsql` ,`filtersql` ,`viewurl`)
 VALUES (NULL , 'Incident', 'Incident', 'File', 'incident', 'id', 'file', 'id', 'filename', '', 'incident_details.php?id=%id%');
+
+-- KMH 14/05/08
+ALTER TABLE `{$dbFiles}` CHANGE `filedate` `filedate` DATETIME NOT NULL ;
+ALTER TABLE `{$dbFiles}` CHANGE `expiry` `expiry` DATETIME NOT NULL ;
+ALTER TABLE `{$dbFiles}` CHANGE `longdescription` `longdescription` TEXT ;
 
 ";
 
