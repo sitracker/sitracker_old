@@ -4915,6 +4915,39 @@ function is_active_status($status, $states)
 
 
 /**
+ * Function to get an array of public holdidays
+ * @author Paul Heaney
+ * @param $startdate int - Start of the period to find public holidays in
+ * @param $enddate int - Start of the period to find public holidays in
+ * @return array of Holiday
+ */
+function get_public_holidays($startdate, $enddate)
+{
+    $sql = "SELECT * FROM `{$GLOBALS['dbHolidays']}` ";
+    $sql .= "WHERE type = 10 AND (startdate >= '{$startdate}' AND startdate <= '{$enddate}')";
+
+    $result = mysql_query($sql);
+    if (mysql_error()) trigger_error(mysql_error(),E_USER_ERROR);
+
+    $publicholidays;
+
+    if (mysql_num_rows($result) > 0)
+    {
+        // Assume public holidays are ALL day
+        while ($obj = mysql_fetch_object($result))
+        {
+            $holiday = new Holiday();
+            $holiday->starttime = $obj->startdate;
+            $holiday->endtime = ($obj->startdate+(60*60*24));
+
+            $publicholidays[] = $holiday;
+        }
+    }
+    
+    return $publicholidays;
+}
+
+/**
     * Calculate the engineer working time between two timestamps for a given incident
     i.e. ignore times when customer has action
     * @author Ivan Lucas
@@ -4938,26 +4971,7 @@ function calculate_incident_working_time($incidentid, $t1, $t2, $states=array(2,
     $startofday = mktime(0,0,0, date("m",$t1), date("d",$t1), date("Y",$t1));
     $endofday = mktime(23,59,59, date("m",$t2), date("d",$t2), date("Y",$t2));
 
-    $sql = "SELECT * FROM `{$dbHolidays}` ";
-    $sql .= "WHERE type = 10 AND (startdate >= '{$startofday}' AND startdate <= '{$endofday}')";
-
-    $result = mysql_query($sql);
-    if (mysql_error()) trigger_error(mysql_error(),E_USER_ERROR);
-
-    $publicholidays;
-
-    if (mysql_num_rows($result) > 0)
-    {
-        // Assume public holidays are ALL day
-        while ($obj = mysql_fetch_object($result))
-        {
-            $holiday = new Holiday();
-            $holiday->starttime = $obj->startdate;
-            $holiday->endtime = ($obj->startdate+(60*60*24));
-
-            $publicholidays[] = $holiday;
-        }
-    }
+    $publicholidays = get_public_holidays($startofday, $endofday);
 
     $sql = "SELECT id, currentstatus, timestamp FROM `{$dbUpdates}` WHERE incidentid='$incidentid' ORDER BY id ASC";
     $result = mysql_query($sql);

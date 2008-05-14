@@ -29,7 +29,7 @@ if (count($slahistory) >= 1)
     echo "<tr><th>{$strEvent}</th><th>{$strUser}</th><th>{$strTarget}</th><th>{$strActual}</th><th>{$strDateAndTime}</th></tr>\n";
     foreach ($slahistory AS $history)
     {
-        if ($history['targetmet']==FALSE) $class='critical';
+        if ($history['targetmet'] == FALSE) $class='critical';
         else $class='shade2';
         echo "<tr class='$class'>";
         echo "<td>";
@@ -81,8 +81,13 @@ while ($row = mysql_fetch_object($result))
     $last = $row->timestamp;
 }
 
+if ($incident->status == 7 OR $incident->status == 2) $end = $incident->closed;
+else $end = $now;
+
+$publicholidays = get_public_holidays($incident->opened, $end);
+
 //calculate the last update
-$updatearray[$laststatus]['time'] += 60 * calculate_working_time($last, time());
+$updatearray[$laststatus]['time'] += 60 * calculate_working_time($last, time(), $publicholidays);
 echo "<h3>{$strStatusSummary}</h3>";
 if (extension_loaded('gd'))
 {
