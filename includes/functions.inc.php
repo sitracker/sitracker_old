@@ -7910,13 +7910,13 @@ function contract_details($id, $mode='internal')
 }
 
 /**
- * Return the html of contract detatils
- * @author Ivan Lucas
+ * Uploads a file
+ * @author Kieran Hogg
  * @param $file mixed file to upload
  * @param $id
- * @returns array of supported contracts, NULL if none
+ * @returns string path of file
 **/
-function upload_file($file, $id, $type='public')
+function upload_file($file, $id, $type='public',)
 {
     global $CONFIG, $now;
     $att_max_filesize = return_bytes($CONFIG['upload_max_filesize']);
