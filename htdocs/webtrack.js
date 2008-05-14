@@ -403,3 +403,20 @@ function groupMemberSelect(group)
         }
     }
 }
+
+
+/*
+    Collapses or expands kb article sections as needed during edit
+*/
+function kbSectionCollapse()
+{
+    var sections = ['summary', 'symptoms', 'cause', 'question', 'answer', 'solution',
+                    'workaround', 'status', 'additionalinfo', 'references'];
+
+    for (var i=0; i <sections.length; i++)
+    {
+        if ($(sections[i]).value.length > 0) $(sections[i]).show();
+        else $(sections[i]).hide();
+    }
+}
+
