@@ -660,7 +660,6 @@ else
                 throw_error("Failed creating incident attachment directory: {$CONFIG['attachment_fspath']}{$id}{$delim}u{$updateid}");
             }
         }
-
         umask($umask);
         $newfilename = "{$CONFIG['attachment_fspath']}{$id}{$delim}u{$updateid}{$delim}{$_FILES['attachment']['name']}";
 

@@ -73,14 +73,14 @@ if ($submit_value == "go")
 
 include ('htmlheader.inc.php');
 if ($search_string=='') $search_string='a';
-?>
+/*?>
 <script type="text/javascript" src="scripts/dojo/dojo.js"></script>
 <script type="text/javascript">
 //<![CDATA[
     dojo.require ("dojo.widget.ComboBox");
 //]]>
 </script>
-<?php
+<?php*/
 echo "<h2><img src='{$CONFIG['application_webpath']}images/icons/{$iconset}/32x32/site.png' width='32' height='32' alt='' /> ";
 echo "{$strBrowseSites}</h2>";
 ?>
@@ -91,7 +91,8 @@ echo "{$strBrowseSites}</h2>";
     <!-- <p>Browse sites: <input type="text" name="search_string" /><input type="submit" value="go" /></p>-->
     <?php
     echo "<p>{$strBrowseSites}: ";
-    echo "<input dojoType='ComboBox' dataUrl='autocomplete.php?action=sites' style='width: 300px;' name='search_string' />";
+    // dojoType='ComboBox' dataUrl='autocomplete.php?action=sites'
+    echo "<input style='width: 300px;' name='search_string' onkeyup=\"autocomplete(this, 'comboresults');\" />";
     echo "<input name='submit' type='submit' value='{$strGo}' /></p>";
     echo "</form>\n";
     if ($displayinactive=="true")

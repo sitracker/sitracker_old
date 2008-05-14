@@ -342,6 +342,46 @@ function clearjumpto()
     document.jumptoincident.incident.value = "";
 }
 
+// Unfinished - INL 14May08
+function autocomplete(elem, id)
+{
+    // create a new div if it doesn't already exist
+    if ( ! document.getElementById( id ) )
+    {
+        var newNode = document.createElement( "div" );
+        newNode.style.cursor = "pointer";
+        newNode.style.border = "1px solid #000";
+        newNode.style.zIndex = 10000;
+        var suggestDiv = document.body.appendChild( newNode );
+        suggestDiv.id = id;
+        suggestDiv.className = "autocomplete";
+    }
+    else
+    {
+        suggestDiv = $(id);
+    }
+
+    if (elem.value == '')  { suggestDiv.innerHTML = 'empty'; }
+    else { suggestDiv.innerHTML = 'Code Not finished yet'; }
+
+
+
+    var x = elem.offsetLeft;
+    var y = elem.offsetTop + elem.offsetHeight;
+    var parent = elem;
+
+    while (parent.offsetParent) {
+      parent = parent.offsetParent;
+      x += parent.offsetLeft;
+      y += parent.offsetTop;
+    }
+    suggestDiv.style.position = "absolute";
+    suggestDiv.style.left = x + "px";
+    suggestDiv.style.top = y + "px"
+
+}
+
+
 function confirm_addword()
 {
   return window.confirm("If you add this word to the dictionary, all future spell checks will use this as the correct spelling for all users.  Are you sure you want to continue?");
@@ -439,4 +479,3 @@ function kbSectionCollapse()
         }
     }
 }
-

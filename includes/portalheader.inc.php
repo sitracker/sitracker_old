@@ -50,10 +50,7 @@ else
     // Attempt to prevent session fixation attacks
     session_regenerate();
 
-    if (!version_compare(phpversion(),"4.3.3",">="))
-    {
-        setcookie(session_name(), session_id(),ini_get("session.cookie_lifetime"), "/");
-    }
+    setcookie(session_name(), session_id(),ini_get("session.cookie_lifetime"), "/");
 }
 // External variables
 $page = cleanvar($_REQUEST['page']);
@@ -83,7 +80,7 @@ if($numcontracts == 1)
 {
     //only one contract
     $contractobj = mysql_fetch_object($contractresult);
-    
+
     //reset the pointer
     mysql_data_seek($contractresult, 0);
     $contractid = $contractobj->id;
