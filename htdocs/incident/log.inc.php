@@ -138,7 +138,11 @@ while ($update = mysql_fetch_object($result))
 //     $updatebody = preg_replace("/\[\[att\]\](.*?)\[\[\/att\]\]/",
 //                                "<a href = '{$CONFIG['attachment_webpath']}updates/{$update->id}/$1'>$1</a>",
 //                                $updatebody);
-    if (file_exists("{$CONFIG['attachment_fspath']}{$update->incidentid}/{$update->timestamp}"))
+    if (file_exists("{$CONFIG['attachment_fspath']}{$update->incidentid}/u{$update->id}"))
+    {
+        $attachment_webpath = "{$CONFIG['attachment_webpath']}{$update->incidentid}/u{$update->id}";
+    }
+    elseif (file_exists("{$CONFIG['attachment_fspath']}{$update->incidentid}/{$update->timestamp}"))
     {
         $attachment_webpath = "{$CONFIG['attachment_webpath']}{$update->incidentid}/{$update->timestamp}";
     }
