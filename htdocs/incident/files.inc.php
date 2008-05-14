@@ -57,7 +57,7 @@ if ($_FILES['attachment']['name'] != "")
         $mk = TRUE;
         if (!file_exists($incident_attachment_fspath))
         {
-            $mk = mkdir($incident_attachment_fspath, 0770, TRUE)
+            $mk = mkdir($incident_attachment_fspath, 0770, TRUE);
             if (!$mk)
             {
                 trigger_error('Failed creating incident attachment directory: '.$incident_attachment_fspath .$id, E_USER_WARNING);
