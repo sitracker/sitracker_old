@@ -680,7 +680,7 @@ else
         $filename = cleanvar($_FILES['attachment']['name']);
         //TODO need to change category based on update visibility
         $sql = "INSERT INTO `{$dbFiles}`(category, filename, size, userid, usertype, shortdescription, longdescription, filedate) ";
-        $sql .= "VALUES ('private', '{$filename}', '{$_FILES['attachment']['size']}', '{$sit[2]}', 'user', '', '', NOW()";
+        $sql .= "VALUES ('private', '{$filename}', '{$_FILES['attachment']['size']}', '{$sit[2]}', 'user', '', '', NOW())";
         mysql_query($sql);
         if (mysql_error())
         {
@@ -691,7 +691,7 @@ else
             $fileid = mysql_insert_id();
 
             //create link
-            $sql = "INSERT INTO `{$dbLinks}`(linktype, origcolref, linkcolref, direction,) ";
+            $sql = "INSERT INTO `{$dbLinks}`(linktype, origcolref, linkcolref, direction, userid) ";
             $sql .= "VALUES(5, '{$updateid}', '{$fileid}', 'left', '{$sit[2]}')";
             mysql_query($sql);
             if (mysql_error())
