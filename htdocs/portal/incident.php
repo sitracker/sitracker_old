@@ -98,10 +98,14 @@ if ($user->status != 2)
 
 echo "<h3>{$strFiles}</h3>";
 $filesql = "SELECT *
-            FROM `{$dbFiles}`
-            WHERE category='incident'
-            AND refid='{$incidentid}'
-            ORDER BY filedate DESC";
+            FROM `{$dbFiles}` AS f, `{$dbLinks}` AS l, `{$dbUpdates}` AS u
+            WHERE f.category='public'
+            AND l.linktype='5'
+            AND l.linkcolref=f.id
+            AND l.origcolref=u.id
+            AND u.incidentid='{$incidentid}'
+            ORDER BY f.filedate DESC";
+            
 $fileresult = mysql_query($filesql);
 if (mysql_error()) trigger_error("MySQL Query Error $sql".mysql_error(), E_USER_ERROR);
 
