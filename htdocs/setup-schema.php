@@ -542,8 +542,12 @@ CREATE TABLE `{$dbLinkTypes}` (
      KEY `linktab` (`linktab`)
 ) ENGINE=MyISAM;
 
-INSERT INTO `{$dbLinkTypes}` VALUES (1,'Task','Subtask','Parent Task','tasks','id','tasks','id','name','','view_task.php?id=%id%'),(2,'Contact','Contact','Contact Task','tasks','id','contacts','id','forenames','','contact_details.php?id=%id%'),(3,'Site','Site','Site Task','tasks','id','sites','id','name','','site_details.php?id=%id%'),(4,'Incident','Incident','Task','tasks','id','incidents','id','title','','incident_details.php?id=%id%');
-
+INSERT INTO `{$dbLinkTypes}`
+VALUES (1,'Task','Subtask','Parent Task','tasks','id','tasks','id','name','','view_task.php?id=%id%'),
+(2,'Contact','Contact','Contact Task','tasks','id','contacts','id','forenames','','contact_details.php?id=%id%'),
+(3,'Site','Site','Site Task','tasks','id','sites','id','name','','site_details.php?id=%id%'),
+(4,'Incident','Incident','Task','tasks','id','incidents','id','title','','incident_details.php?id=%id%'),
+(5,'Files', 'Update', 'File', 'updates', 'id', 'files', 'id', 'filename', '', 'incident_details.php?updateid=%id%&amp;tab=files');
 
 CREATE TABLE `{$dbMaintenance}` (
   `id` int(11) NOT NULL auto_increment,
