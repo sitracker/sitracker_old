@@ -678,9 +678,17 @@ else
             // way of checking file sizes at the client end before the attachment is uploaded. - INL
         }
         $filename = cleanvar($_FILES['attachment']['name']);
-        //TODO need to change category based on update visibility
+        if ($cust_vis == 'yes')
+        {
+        	$category = 'public';
+        }
+        else
+        {
+        	$category = 'private';
+        }
+        
         $sql = "INSERT INTO `{$dbFiles}`(category, filename, size, userid, usertype, shortdescription, longdescription, filedate) ";
-        $sql .= "VALUES ('private', '{$filename}', '{$_FILES['attachment']['size']}', '{$sit[2]}', 'user', '', '', NOW())";
+        $sql .= "VALUES ('{$category}', '{$filename}', '{$_FILES['attachment']['size']}', '{$sit[2]}', 'user', '', '', NOW())";
         mysql_query($sql);
         if (mysql_error())
         {
