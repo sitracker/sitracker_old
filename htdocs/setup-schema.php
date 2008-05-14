@@ -279,6 +279,7 @@ CREATE TABLE `{$dbFiles}` (
   `filename` varchar(255) NOT NULL default '',
   `size` bigint(11) NOT NULL default '0',
   `userid` int(11) NOT NULL default '0',
+  `usertype` ENUM( 'user', 'contact' ) NOT NULL DEFAULT 'user',
   `shortdescription` varchar(255) NOT NULL default '',
   `longdescription` TEXT NOT NULL,
   `webcategory` varchar(255) NOT NULL default '',
@@ -1947,8 +1948,7 @@ INSERT INTO `{$dbPermissions}` VALUES (76, 'View Transactions');
 INSERT INTO `{$dbRolePermissions}` (`roleid`, `permissionid`, `granted`) VALUES (1, 76, 'true');
 
 -- INL 23Apr08 timestamps for all user data tables
-ALTER TABLE `{$dbBillingPeriods}` ADD `created` DATETIME NULL ,-- FIXME these timestamp fields ^ need adding to the main install schema INL 24 April 08
-
+ALTER TABLE `{$dbBillingPeriods}` ADD `created` DATETIME NULL ,
 ADD `createdby` INT NULL ,
 ADD `modified` DATETIME NULL ,
 ADD `modifiedby` INT NULL ;
@@ -2018,6 +2018,7 @@ VALUES('Attachments', 'Update', 'File', 'updates', 'id', 'files', 'id', 'filenam
 ALTER TABLE `{$dbFiles}` CHANGE `filedate` `filedate` DATETIME NOT NULL ;
 ALTER TABLE `{$dbFiles}` CHANGE `expiry` `expiry` DATETIME NOT NULL ;
 ALTER TABLE `{$dbFiles}` CHANGE `longdescription` `longdescription` TEXT ;
+ALTER TABLE `{$dbFiles}` ADD `usertype` ENUM( 'user', 'contact' ) NOT NULL DEFAULT 'user' AFTER `userid` ;
 
 ";
 
