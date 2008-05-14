@@ -251,7 +251,7 @@ else
     echo "</select> ";
     echo help_link('KBDistribution');
 
-    echo "<h3><a href=\"javascript:void(0);\" onclick=\"Effect.toggle('summary', 'blind');";
+    echo "<h3><a href=\"javascript:void(0);\" onclick=\"Effect.toggle('summary', 'blind', { duration: 0.3 });";
     echo "togglePlusMinus('summaryspan');\">";
     echo "{$strSummary} <span id='summaryspan'>[+]</span></a></h3>";
     echo "<textarea id='summary' name='summary' cols='100' rows='8' ";
