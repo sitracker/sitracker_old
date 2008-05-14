@@ -221,6 +221,7 @@ else
 
     echo "<h3>{$strKeywords}</h3>";
     echo "<input name='keywords' id='keywords' size='60' value='{$kbobj->keywords}' />";
+    echo help_link('SeparatedBySpaces');
 
     echo "<h3>{$strDistribution}</h3>";
     echo "<select name='distribution'> ";
@@ -245,7 +246,8 @@ else
         echo " selected='selected' ";
     }
     echo "'>{$strRestricted}</option>";
-    echo "</select>";
+    echo "</select> ";
+    echo help_link('KBDistribution');
 
     echo "<h3><a href=\"javascript:void(0);\" onclick=\"$('summary').toggle();";
     echo "togglePlusMinus('summaryspan');\">";
