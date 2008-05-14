@@ -223,7 +223,7 @@ else
     echo "<input name='keywords' id='keywords' size='60' value='{$kbobj->keywords}' />";
 
     echo "<h3>{$strDistribution}</h3>";
-    echo "<select class='required' name='distribution'> ";
+    echo "<select name='distribution'> ";
 
     echo "<option value='public' ";
     if ($kbobj->distribution == 'public')
@@ -245,8 +245,7 @@ else
         echo " selected='selected' ";
     }
     echo "'>{$strRestricted}</option>";
-    echo "</select> ";
-    echo "<span class='required'>{$strRequired}</span";
+    echo "</select>";
 
     echo "<h3><a href=\"javascript:void(0);\" onclick=\"$('summary').toggle();";
     echo "togglePlusMinus('summaryspan');\">";
