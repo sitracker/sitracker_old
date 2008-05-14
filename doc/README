@@ -56,7 +56,7 @@ Installing
 
     Requirements:
         A web server (Apache recommended)
-        PHP >= 4.3.0 (Released December 2002)
+        PHP >= 5.0 (Released July 2004)
         MySQL >= 4.0.18
 
     Instructions:
@@ -216,7 +216,7 @@ sitracker-devel@lists.sourceforge.net. You can subscribe herein
 https://lists.sourceforge.net/lists/listinfo/sitracker-devel
 or post a message on our forum at http://sourceforge.net/forum/?group_id=160319
 
-We also have an IRC channel.  #sit on the freenode network, we'd love 
+We also have an IRC channel.  #sit on the freenode network, we'd love
 for you to join us, see here http://sitracker.sourceforge.net/IRC
 for more info.
 

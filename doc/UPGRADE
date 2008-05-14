@@ -24,6 +24,10 @@ everything carefully to make sure you've met all the requirements:
 
 Upgrading to 3.35
 -----------------
+As of 3.35 we've changed our minimum requirement for php to 5.0.0
+as php4 has been end-of-life for some time now and won't receive
+any patches at all after 2008-08-08.
+
 This version supports table prefixes, if you use this feature
 any plugins you have installed that are not designed to work
 with 3.35 may break.
