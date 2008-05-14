@@ -74,6 +74,14 @@ if ($_FILES['attachment']['name'] != "")
         if (mysql_error()) trigger_error(mysql_error(),E_USER_ERROR);
         $fileid =  mysql_insert_id();
 
+        //create link
+        $sql = "INSERT INTO `{$dbLinks}`(linktype, origcolref, linkcolref, direction,) ";
+        $sql .= "VALUES(5, '{$updateid}', '{$fileid}', 'left', '{$sit[2]}')";
+        mysql_query($sql);
+        if (mysql_error())
+        {
+            trigger_error("MySQL Query Error ".mysql_error(), E_USER_ERROR);
+        }
 
         echo "<div class='detailinfo'>\n";
         if ($mk AND $mv) echo "File <strong>{$_FILES['attachment']['name']}</strong> ({$_FILES['attachment']['type']} {$_FILES['attachment']['size']} bytes) uploaded OK";
@@ -176,7 +184,6 @@ function draw_file_row($file, $delim, $incidentid, $incident_attachment_fspath)
         // $url="attachments/".substr($filesarray[$c],strrpos($directory,$delim)+1,strlen($filesarray[$c])-strlen(urlencode($filename)).urlencode(filename));
         $url="{$CONFIG['attachment_webpath']}{$incidentid}/".str_replace('+','%20',urlencode($filename));
     }
-
     $filesize = filesize($file);
     $file_size = readable_file_size($filesize);
 
@@ -269,6 +276,15 @@ if (file_exists($incident_attachment_fspath))
                 strlen($dirname) == 10)
             {
                 $dirprettyname = ldate('l jS M Y @ g:ia',$dirname);
+            }
+            elseif ($dirname{0} == 'u')
+            {
+                $updateid = substr($dirname, 1);
+                $sql = "SELECT userid, timestamp, type FROM `{$GLOBALS['dbUpdates']}` WHERE id = $updateid";
+                $result = mysql_query($sql);
+                if (mysql_error()) trigger_error(mysql_error(),E_USER_WARNING);
+                $update = mysql_fetch_object($result);
+                $dirprettyname = date('l jS M Y @ g:ia',$update->timestamp) . " by ".user_realname($update->userid);
             }
             else
             {
