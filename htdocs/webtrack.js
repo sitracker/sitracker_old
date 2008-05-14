@@ -404,6 +404,17 @@ function groupMemberSelect(group)
     }
 }
 
+function togglePlusMinus(div)
+{
+    if ($(div).innerHTML == "[+]")
+    {
+        $(div).innerHTML = '[-]';
+    }
+    else
+    {
+        $(div).innerHTML = '[+]';
+    }
+}
 
 /*
     Collapses or expands kb article sections as needed during edit
