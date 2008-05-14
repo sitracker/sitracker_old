@@ -357,6 +357,8 @@ $strEditVendor = 'Edit Vendor';
 $strEditWatchedIncidents = 'Edit Watched Incidents';
 $strEmail = 'Email';
 $strEmailAddress = 'Email Address';
+$strEmailContactLoginDetails = 'Email contact login details?';
+$strEmailDetails = 'Email details';
 # eg novell.com
 $strEmailDomain = 'Email Domain';
 $strEmailFromCustomer = 'Email from customer';
