@@ -129,14 +129,24 @@ while ($incidents = mysql_fetch_array($result))
     // Calculate time remaining in SLA
     switch ($target->type)
     {
-        case 'initialresponse': $slatarget=$servicelevel->initial_response_mins; break;
-        case 'probdef': $slatarget=$servicelevel->prob_determ_mins; break;
-        case 'actionplan': $slatarget=$servicelevel->action_plan_mins; break;
-        case 'solution': $slatarget=($servicelevel->resolution_days * $working_day_mins); break;
-        default: $slaremain=0; $slatarget=0;
+        case 'initialresponse':
+            $slatarget = $servicelevel->initial_response_mins;
+            break;
+        case 'probdef':
+            $slatarget = $servicelevel->prob_determ_mins;
+            break;
+        case 'actionplan':
+            $slatarget = $servicelevel->action_plan_mins;
+            break;
+        case 'solution':
+            $slatarget = ($servicelevel->resolution_days * $working_day_mins);
+            break;
+        default:
+            $slaremain = 0;
+            $slatarget = 0;
     }
-    if ($slatarget >0) $slaremain=($slatarget - $target->since);
-    else $slaremain=0;
+    if ($slatarget > 0) $slaremain = ($slatarget - $target->since);
+    else $slaremain = 0;
 
     // Get next review time
     $reviewsince = incident_get_next_review($incidents['id']);  // time since last review in minutes
@@ -276,7 +286,7 @@ while ($incidents = mysql_fetch_array($result))
     }
 
     $blinktime = (time() - ($servicelevel->initial_response_mins * 60));
-    if ($incidents['priority']==4 AND $incidents['lastupdated']<= $blinktime)
+    if ($incidents['priority'] == 4 AND $incidents['lastupdated'] <= $blinktime)
     {
         echo "<strong class='critical'>".priority_name($incidents["priority"])."</strong>";
     }
@@ -331,7 +341,7 @@ while ($incidents = mysql_fetch_array($result))
             else echo "<strong style='color: red; background-color: white;'>&nbsp;".target_type_name($target->type)."&nbsp;</strong>";
         */
         $targettype = target_type_name($target->type);
-        if ($targettype!='')
+        if ($targettype != '')
         {
             echo $targettype;
             if ($slaremain > 0)
@@ -340,7 +350,7 @@ while ($incidents = mysql_fetch_array($result))
             }
             elseif ($slaremain < 0)
             {
-                echo "<br />".format_workday_minutes((0-$slaremain))." late";  //  ." left"
+                echo "<br />".format_workday_minutes((0 - $slaremain))." late";  //  ." left"
             }
         }
         else
