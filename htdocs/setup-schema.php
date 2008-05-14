@@ -2011,7 +2011,7 @@ ALTER TABLE `{$dbMaintenance}` CHANGE `licence_type` `licence_type` INT( 11 ) NU
 
 -- KMH 13/05/08
 INSERT INTO `{$dbLinkTypes}` (`id` ,`name` ,`lrname` ,`rlname` ,`origtab` ,`origcol` ,`linktab` ,`linkcol` ,`selectionsql` ,`filtersql` ,`viewurl`)
-VALUES (NULL , 'Incident', 'Incident', 'File', 'incident', 'id', 'file', 'id', 'filename', '', 'incident_details.php?id=%id%');
+VALUES('Files', 'Update', 'File', 'updates', 'id', 'files', 'id', 'filename', '', 'incident_details.php?updateid=%id%&amp;tab=files');
 
 -- KMH 14/05/08
 ALTER TABLE `{$dbFiles}` CHANGE `filedate` `filedate` DATETIME NOT NULL ;
