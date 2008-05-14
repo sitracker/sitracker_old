@@ -196,7 +196,7 @@ else
 }
 
 // echo "<!---SQL === $sql --->";
-echo "<p align='center'><a href='kb_add_article.php'>{$strAddNew}</a></p>";
+echo "<p align='center'><a href='kb_article.php'>{$strAddNew}</a></p>";
 
 include ('htmlfooter.inc.php');
 

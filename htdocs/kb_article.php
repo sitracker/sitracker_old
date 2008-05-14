@@ -174,7 +174,7 @@ elseif(isset($_POST['submit']))
     else
     {
         include 'htmlheader.inc.php';
-        html_redirect("kb_add_article.php", FALSE);
+        html_redirect("kb_article.php", FALSE);
     }
 }
 else
@@ -333,6 +333,7 @@ else
         echo $strAdd;
     }
     echo "' /></p></form></div>";
+    echo "<p align='center'><a href='kb_view_article.php?id=$kbid'>{$strReturnWithoutSaving}</a></p>";
     echo "<script type='text/javascript'>\n//<![CDATA[\nkbSectionCollapse();\n//]]>\n</script>";
     include('htmlfooter.inc.php');
 }
