@@ -912,6 +912,7 @@ $strRequestNotSent = 'Request not sent';
 $strRequestSent = 'Request Sent';
 $strRequestSentToX = 'Request sent to %s';
 $strRequestSentComments = 'Send comments with your request: (or leave blank)';
+$strRequired = 'Required';
 $strResearchedby = 'Researched by %s';
 $strResearching = 'Researching';
 $strResearchNeeded = 'Research Needed';
