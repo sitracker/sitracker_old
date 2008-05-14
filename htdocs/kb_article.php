@@ -253,7 +253,7 @@ else
     echo "togglePlusMinus('summaryspan');\">";
     echo "{$strSummary} <span id='summaryspan'>[+]</span></a></h3>";
     echo "<textarea id='summary' name='summary' cols='100' rows='8' ";
-    echo "style='display: none' onchange='kbSectionCollapse();'>{$sections['Summary']}";
+    echo "style='display: none; overflow: visible; white-space: nowrap;' onchange='kbSectionCollapse();'>{$sections['Summary']}";
     echo "</textarea>";
 
     echo "<h3><a href=\"javascript:void(0);\" onclick=\"$('symptoms').toggle();";

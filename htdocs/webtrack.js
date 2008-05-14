@@ -426,8 +426,17 @@ function kbSectionCollapse()
 
     for (var i=0; i <sections.length; i++)
     {
-        if ($(sections[i]).value.length > 0) $(sections[i]).show();
-        else $(sections[i]).hide();
+        var span = sections[i] + 'span';
+        if ($(sections[i]).value.length > 0)
+        {
+            $(sections[i]).show();
+            $(span).innerHTML = '[-]';
+        }
+        else
+        {
+            $(sections[i]).hide();
+            $(span).innerHTML = '[+]';
+        }
     }
 }
 
