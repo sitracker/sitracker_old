@@ -406,18 +406,9 @@ function display_update_page($draftid=-1)
     echo "</td></tr>";
     echo "<tr>";
     // calculate upload filesize
-    $j = 0;
-    $ext = array($strBytes, $strKBytes, $strMBytes, $strGBytes, $strTBytes);
-    $att_file_size = $CONFIG['upload_max_filesize'];
-    while ($att_file_size >= pow(1024,$j))
-    {
-        ++$j;
-    }
-
-    $att_file_size = round($att_file_size / pow(1024,$j-1) * 100) / 100 . ' ' . $ext[$j-1];
-
-    echo "<th align='right' valign='top'>{$strAttachFile}";
-    echo "(&lt;{$att_file_size}):</th>";
+    $att_file_size = readable_file_size($CONFIG['upload_max_filesize']);
+    echo "<th align='right' valign='top'>{$GLOBALS['strAttachFile']}";
+    echo " (&lt;{$att_file_size}):</th>";
 
     echo "<td class='shade1'><input type='hidden' name='MAX_FILE_SIZE' value='{$CONFIG['upload_max_filesize']}' />";
     echo "<input type='file' name='attachment' size='40' maxfilesize='{$CONFIG['upload_max_filesize']}' /></td>";
@@ -631,13 +622,13 @@ else
             $sql .= "VALUES ('$id', '".$sit[2]."', 'slamet', '$now', '".$sit[2]."', '$newstatus', 'show', 'solution','The incident has been resolved or reprioritised.\nThe issue should now be brought to a close or a new problem definition created within the service level.')";
         break;
     }
-    
+
     if (!empty($sql))
     {
         mysql_query($sql);
         if (mysql_error()) trigger_error("MySQL Query Error ".mysql_error(), E_USER_ERROR);
     }
-    
+
     if ($target!='none')
     {
         // Reset the slaemail sent column, so that email reminders can be sent if the new sla target goes out
@@ -649,7 +640,7 @@ else
         mysql_query($sql);
         if (mysql_error()) trigger_error("MySQL Query Error ".mysql_error(), E_USER_ERROR);
     }
-    
+
     // attach file
     $att_max_filesize = return_bytes($CONFIG['upload_max_filesize']);
     $incident_attachment_fspath = $CONFIG['attachment_fspath'] . $id;
@@ -703,7 +694,7 @@ else
         else
         {
             $fileid = mysql_insert_id();
-            
+
             //create link
             $sql = "INSERT INTO `{$dbLinks}`(linktype, origcolref, linkcolref, direction,) ";
             $sql .= "VALUES(5, '{$updateid}', '{$fileid}', 'left', '{$sit[2]}')";
