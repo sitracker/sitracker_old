@@ -4943,7 +4943,7 @@ function get_public_holidays($startdate, $enddate)
             $publicholidays[] = $holiday;
         }
     }
-    
+
     return $publicholidays;
 }
 
@@ -7621,7 +7621,7 @@ function contract_software()
 function help_link($context)
 {
     global $strHelpChar;
-    $html = "<span class='helplink'>[<a href='javascript:void(0);' onmouseover=\"contexthelp(this, '$context');\">{$strHelpChar}<span></span></a>]</span>";
+    $html = "<span class='helplink'>[<a href='javascript:void(0);' tabindex='-1' onmouseover=\"contexthelp(this, '$context');\">{$strHelpChar}<span></span></a>]</span>";
 
     return $html;
 }
