@@ -97,7 +97,7 @@ if ($user->status != 2)
 }
 
 echo "<h3>{$strFiles}</h3>";
-$filesql = "SELECT *
+$filesql = "SELECT *, u.id AS updateid
             FROM `{$dbFiles}` AS f, `{$dbLinks}` AS l, `{$dbUpdates}` AS u
             WHERE f.category='public'
             AND l.linktype='5'
@@ -108,10 +108,11 @@ $filesql = "SELECT *
             
 $fileresult = mysql_query($filesql);
 if (mysql_error()) trigger_error("MySQL Query Error $sql".mysql_error(), E_USER_ERROR);
+$delim = $fsdelim;
 
 while ($filerow = mysql_fetch_object($fileresult))
 {
-    $filelink = str_replace($CONFIG['attachment_fspath'], $CONFIG['attachment_webpath'], $filerow->path);
+    $filelink = "{$CONFIG['attachment_webpath']}{$incidentid}{$delim}u{$filerow->updateid}{$delim}";
     echo "<a href='{$filelink}{$filerow->filename}'>{$filerow->filename}</a><br />";
     echo "uploaded ";
     if ($filerow->userid != 0)
