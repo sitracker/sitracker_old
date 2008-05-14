@@ -654,17 +654,13 @@ else
         $umask = umask(0000);
         if (!file_exists("{$CONFIG['attachment_fspath']}{$id}{$delim}u{$updateid}"))
         {
-            $mk = @mkdir("{$CONFIG['attachment_fspath']}{$id}{$delim}u{$updateid}", 0770);
+            $mk = @mkdir("{$CONFIG['attachment_fspath']}{$id}{$delim}u{$updateid}", 0770, TRUE);
             if (!$mk)
             {
                 throw_error("Failed creating incident attachment directory: {$CONFIG['attachment_fspath']}{$id}{$delim}u{$updateid}");
             }
         }
-        $mk = @mkdir("{$CONFIG['attachment_fspath']}{$id}{$delim}u{$updateid}", 0770);
-        if (!$mk)
-        {
-            trigger_error("Failed creating incident attachment directory: {$CONFIG['attachment_fspath']}{$id}{$delim}u{$updateid}", E_USER_ERROR);
-        }
+
         umask($umask);
         $newfilename = "{$CONFIG['attachment_fspath']}{$id}{$delim}u{$updateid}{$delim}{$_FILES['attachment']['name']}";
 
