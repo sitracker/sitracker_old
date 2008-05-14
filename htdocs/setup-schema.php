@@ -123,7 +123,7 @@ CREATE TABLE `{$dbEmailSig}` (
   `signature` text NOT NULL,
   `createdby` INT NULL ,
   `modified` DATETIME NULL ,
-  `modifiedby` INT NULL ,  
+  `modifiedby` INT NULL ,
   PRIMARY KEY  (`id`)
 )  ENGINE=MyISAM COMMENT='Global Email Signature' ;
 
@@ -180,7 +180,7 @@ CREATE TABLE `{$dbEscalationPaths}` (
   `email_domain` varchar(255) default NULL,
   `createdby` INT NULL ,
   `modified` DATETIME NULL ,
-  `modifiedby` INT NULL ,  
+  `modifiedby` INT NULL ,
   PRIMARY KEY  (`id`)
 ) ENGINE=MyISAM ;
 
@@ -547,7 +547,7 @@ VALUES (1,'Task','Subtask','Parent Task','tasks','id','tasks','id','name','','vi
 (2,'Contact','Contact','Contact Task','tasks','id','contacts','id','forenames','','contact_details.php?id=%id%'),
 (3,'Site','Site','Site Task','tasks','id','sites','id','name','','site_details.php?id=%id%'),
 (4,'Incident','Incident','Task','tasks','id','incidents','id','title','','incident_details.php?id=%id%'),
-(5,'Files', 'Update', 'File', 'updates', 'id', 'files', 'id', 'filename', '', 'incident_details.php?updateid=%id%&amp;tab=files');
+(5,'Attachments', 'Update', 'File', 'updates', 'id', 'files', 'id', 'filename', '', 'incident_details.php?updateid=%id%&amp;tab=files');
 
 CREATE TABLE `{$dbMaintenance}` (
   `id` int(11) NOT NULL auto_increment,
@@ -2012,7 +2012,7 @@ ALTER TABLE `{$dbMaintenance}` CHANGE `licence_type` `licence_type` INT( 11 ) NU
 
 -- KMH 13/05/08
 INSERT INTO `{$dbLinkTypes}` (`id` ,`name` ,`lrname` ,`rlname` ,`origtab` ,`origcol` ,`linktab` ,`linkcol` ,`selectionsql` ,`filtersql` ,`viewurl`)
-VALUES('Files', 'Update', 'File', 'updates', 'id', 'files', 'id', 'filename', '', 'incident_details.php?updateid=%id%&amp;tab=files');
+VALUES('Attachments', 'Update', 'File', 'updates', 'id', 'files', 'id', 'filename', '', 'incident_details.php?updateid=%id%&amp;tab=files');
 
 -- KMH 14/05/08
 ALTER TABLE `{$dbFiles}` CHANGE `filedate` `filedate` DATETIME NOT NULL ;

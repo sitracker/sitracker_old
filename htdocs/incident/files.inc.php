@@ -37,21 +37,43 @@ if ($_FILES['attachment']['name'] != "")
     else
     {
         // OK to proceed
+
+        //create update
+        $updatetext = "File attached [[att]]{$_FILES['attachment']['name']}[[/att]]";
+        $sql = "INSERT INTO `{$dbUpdates}` (incidentid, userid, `type`, ";
+        $sql .= "bodytext, `timestamp`) ";
+        $sql .= "VALUES ('{$incidentid}', '{$sit[2]}', 'research', ";
+        $sql .= "'{$updatetext}', '$now')";
+        mysql_query($sql);
+        if (mysql_error()) trigger_error(mysql_error(),E_USER_ERROR);
+        $updateid = mysql_insert_id();
+
+        // Add the updateid to the attachment path
+        $incident_attachment_fspath .= "{$delim}u{$updateid}";
+
         // make incident attachment dir if it doesn't exist
         $newfilename = $incident_attachment_fspath.$delim.$_FILES['attachment']['name'];
         $umask = umask(0000);
         $mk = TRUE;
         if (!file_exists($incident_attachment_fspath))
         {
-           $mk = mkdir($incident_attachment_fspath, 0770);
-           if (!$mk)
-           {
-             trigger_error('Failed creating incident attachment directory: '.$incident_attachment_fspath .$id, E_USER_WARNING);
-           }
+            $mk = mkdir($incident_attachment_fspath, 0770, TRUE);  // recursive param requires PHP5
+            if (!$mk)
+            {
+                trigger_error('Failed creating incident attachment directory: '.$incident_attachment_fspath .$id, E_USER_WARNING);
+            }
         }
         // Move the uploaded file from the temp directory into the incidents attachment dir
         $mv = move_uploaded_file($_FILES['attachment']['tmp_name'], $newfilename);
         if (!$mv) trigger_error('!Error: Problem moving attachment from temp directory to: '.$newfilename, E_USER_WARNING);
+
+        // Create an entry in the files table
+        $sql = "INSERT INTO `{$dbFiles}` (category, filename, size, userid, filedate) ";
+        $sql .= "VALUES ('public', '{$_FILES['attachment']['name']}', '0', '{$sit[2]}', '2008-05-14 00:00:00')";
+        mysql_query($sql);
+        if (mysql_error()) trigger_error(mysql_error(),E_USER_ERROR);
+        $fileid =  mysql_insert_id();
+
 
         echo "<div class='detailinfo'>\n";
         if ($mk AND $mv) echo "File <strong>{$_FILES['attachment']['name']}</strong> ({$_FILES['attachment']['type']} {$_FILES['attachment']['size']} bytes) uploaded OK";
@@ -120,12 +142,12 @@ function encode_binary($string)
             $ent[$i] = "&#" . ord($chars[$i]) . ";";
         }
     }
-    
+
     if ( sizeof($ent) < 1)
     {
       return "";
     }
-    
+
     return implode("",$ent);
 }
 
@@ -157,7 +179,7 @@ function draw_file_row($file, $delim, $incidentid, $incident_attachment_fspath)
 
     $filesize = filesize($file);
     $file_size = readable_file_size($filesize);
-    
+
     if (function_exists('mime_content_type'))
     {
         // FIXME mime_content_type requires php > 4.3 and is deprecated
