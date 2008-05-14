@@ -284,3 +284,13 @@ div#kbarticle
 
 div#kbarticle textarea { width: 99%; }
 div#kbarticle h3 span { color: black; font-size: 70%; font-weight: normal; }
+
+span.required
+{
+  font-size: 0.8em;
+  color: red;
+}
+
+input.required, select.required{
+  background-color: #FFD8DE;
+}

@@ -213,19 +213,17 @@ else
         echo "<h2>".icon('kb', 32)." {$strNewKBArticle}</h2>";
     }
 
-    echo "<p align='center'>".sprintf($strMandatoryMarked, "<sup class='red'>*</sup>")."<br />";
-    echo "{$strClickTitleHeaders}</p>";
-
     echo "<div id='kbarticle'>";
     echo "<form action='{$_SERVER['PHP_SELF']}?id={$id}' method='post'>";
-    echo "<h3>{$strTitle}<sup class='red'>*</sup></h3>";
-    echo "<input name='title' id='title' size='50' value='{$kbobj->title}'/>";
+    echo "<h3>{$strTitle}</h3>";
+    echo "<input class='required' name='title' id='title' size='50' value='{$kbobj->title}'/> ";
+    echo "<span class='required'>{$strRequired}</span";
 
     echo "<h3>{$strKeywords}</h3>";
     echo "<input name='keywords' id='keywords' size='60' value='{$kbobj->keywords}' />";
 
-    echo "<h3>{$strDistribution}<sup class='red'>*</sup></h3>";
-    echo "<select name='distribution'>";
+    echo "<h3>{$strDistribution}</h3>";
+    echo "<select class='required' name='distribution'> ";
 
     echo "<option value='public' ";
     if ($kbobj->distribution == 'public')
@@ -247,7 +245,8 @@ else
         echo " selected='selected' ";
     }
     echo "'>{$strRestricted}</option>";
-    echo "</select>";
+    echo "</select> ";
+    echo "<span class='required'>{$strRequired}</span";
 
     echo "<h3><a href=\"javascript:void(0);\" onclick=\"$('summary').toggle();";
     echo "togglePlusMinus('summaryspan');\">";
