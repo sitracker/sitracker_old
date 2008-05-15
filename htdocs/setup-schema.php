@@ -295,7 +295,6 @@ CREATE TABLE `{$dbFiles}` (
   `modifiedby` INT NULL ,
   PRIMARY KEY  (`id`),
   KEY `userid` (`userid`),
-  KEY `productid` (`productid`),
   KEY `category` (`category`),
   KEY `filename` (`filename`),
   KEY `published` (`published`),
@@ -549,7 +548,7 @@ VALUES (1,'Task','Subtask','Parent Task','tasks','id','tasks','id','name','','vi
 (2,'Contact','Contact','Contact Task','tasks','id','contacts','id','forenames','','contact_details.php?id=%id%'),
 (3,'Site','Site','Site Task','tasks','id','sites','id','name','','site_details.php?id=%id%'),
 (4,'Incident','Incident','Task','tasks','id','incidents','id','title','','incident_details.php?id=%id%'),
-(5,'Attachments', 'Update', 'File', 'updates', 'id', 'files', 'id', 'filename', '', 'incident_details.php?updateid=%id%&amp;tab=files');
+(5,'Attachments', 'Update', 'File', 'updates', 'id', 'files', 'id', 'filename', '', 'incident_details.php?updateid=%id%&tab=files');
 
 CREATE TABLE `{$dbMaintenance}` (
   `id` int(11) NOT NULL auto_increment,
