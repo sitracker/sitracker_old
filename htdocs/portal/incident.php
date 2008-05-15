@@ -140,8 +140,8 @@ while ($update = mysql_fetch_object($result))
     }
 
     $updateid = $update->id;
-    $updatebody=trim($update->bodytext);
-    $updatebody = preg_replace("/.*\[\[att=(.*?)\]\](.*?)\[\[\/att\]\].*/s", "<a href='download.php?id=$1'>$2</a>", $updatebody);
+    $updatebody=trim($update->bodytext);    
+    $updatebody = preg_replace("/\[\[att=(.*?)\]\](.*?)\[\[\/att\]\]/s", "<a href='download.php?id=$1'>$2</a>\n", $updatebody);
 
 
     //remove empty updates
