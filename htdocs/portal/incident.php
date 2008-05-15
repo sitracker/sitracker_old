@@ -141,19 +141,8 @@ while ($update = mysql_fetch_object($result))
 
     $updateid = $update->id;
     $updatebody=trim($update->bodytext);
-    if (file_exists("{$CONFIG['attachment_fspath']}{$update->incidentid}/u{$update->id}"))
-    {
-        $attachment_webpath = "{$CONFIG['attachment_webpath']}{$update->incidentid}/u{$update->id}";
-    }
-    elseif (file_exists("{$CONFIG['attachment_fspath']}{$update->incidentid}/{$update->timestamp}"))
-    {
-        $attachment_webpath = "{$CONFIG['attachment_webpath']}{$update->incidentid}/{$update->timestamp}";
-    }
-    else
-    {
-        $attachment_webpath = "{$CONFIG['attachment_webpath']}updates/{$update->id}";
-    }
-    $updatebody = preg_replace("/\[\[att\]\](.*?)\[\[\/att\]\]/", "<a href = '{$attachment_webpath}/$1'>$1</a>", $updatebody);
+    $updatebody = preg_replace("/.*\[\[att=(.*?)\]\](.*?)\[\[\/att\]\].*/s", "<a href='download.php?id=$1'>$2</a>", $updatebody);
+
 
     //remove empty updates
     if (!empty($updatebody) AND $updatebody != "<hr>")
