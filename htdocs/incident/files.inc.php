@@ -279,14 +279,16 @@ if (file_exists($incident_attachment_fspath))
             {
                 $dirprettyname = ldate('l jS M Y @ g:ia',$dirname);
             }
-            elseif ($dirname{0} == 'u')
+            elseif ($dirname[0] == 'u')
             {
                 $updateid = substr($dirname, 1);
-                $sql = "SELECT userid, timestamp, type FROM `{$GLOBALS['dbUpdates']}` WHERE id = $updateid";
+                $sql = "SELECT userid, timestamp, type, bodytext, type FROM `{$GLOBALS['dbUpdates']}` WHERE id = $updateid";
                 $result = mysql_query($sql);
                 if (mysql_error()) trigger_error(mysql_error(),E_USER_WARNING);
                 $update = mysql_fetch_object($result);
                 $dirprettyname = date('l jS M Y @ g:ia',$update->timestamp) . " by ".user_realname($update->userid);
+                $updatetext = cleanvar($update->bodytext);
+                $updatetype = $update->type;
             }
             else
             {
@@ -322,6 +324,16 @@ if (file_exists($incident_attachment_fspath))
                 {
                     echo draw_file_row($file, $fsdelim, $incidentid, $dirname);
 
+                }
+                
+                if (!empty($updatetext) AND 
+                	$updatetype == 'email' OR
+                	$updatetype == 'webupdate')
+                {
+                	$updatetext = substr($updatetext, 0, 80)."...";
+	                echo "<span style='font-size:400%';>“</span>";
+	                echo $updatetext;
+	                echo "<span style='font-size:400%';>„</span>";
                 }
                 echo "</table>\n";
                 echo "</div>";
