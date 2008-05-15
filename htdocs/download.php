@@ -19,15 +19,39 @@ require ('functions.inc.php');
 require ('auth.inc.php');
 
 // External variables
-$file = cleanvar($_REQUEST['file']);
-$incidentid = cleanvar($_REQUEST['incidentid']);
-$incidentpath = cleanvar($_REQUEST['p']);
+$id = cleanvar(intval($_GET['id']));
 
-$file_fspath = "{$CONFIG['attachment_fspath']}{$incidentid}";
-if (!empty($incidentpath)) $file_fspath .= "{$fsdelim}{$incidentpath}";
-$file_fspath .= "{$fsdelim}{$file}";
+$sql = "SELECT *, u.id AS updateid
+        FROM `{$dbFiles}` AS f, `{$dbLinks}` AS l, `{$dbUpdates}` AS u
+        WHERE l.linktype='5'
+        AND l.origcolref=u.id
+        AND l.linkcolref='{$id}'
+        AND l.direction='left'
+        AND l.linkcolref=f.id
+        ORDER BY f.filedate DESC";
+        
+$result = mysql_query($sql);
+$fileobj = mysql_fetch_object($result);
+$incidentid = cleanvar(intval($fileobj->incidentid));
+$updateid = cleanvar(intval($fileobj->updateid));
+$filename = cleanvar($fileobj->filename);
+$visibility = $fileobj->category;
 
+$access = FALSE;
+if ($visibility == 'public' AND (isset($sit[2]) OR isset($_SESSION['contactid'])))
+{
+    $access = TRUE;
+}
+elseif ($visibility != 'public' AND isset($sit[2]))
+{
+    $access = TRUE;
+}
+else
+{
+    $access = FALSE;
+}
 
+$file_fspath = "{$CONFIG['attachment_fspath']}{$incidentid}{$fsdelim}u{$updateid}{$fsdelim}{$filename}";
 
 if (!file_exists($file_fspath))
 {
@@ -38,7 +62,7 @@ if (!file_exists($file_fspath))
         echo $file_fspath;
     exit;
 }
-elseif (TRUE == TRUE) // FIXME we need some checking here, is the user allowed to download the file?
+elseif ($access == TRUE)
 {
     $file_size = filesize($file_fspath);
     $fp = fopen($file_fspath, 'r');
@@ -47,7 +71,7 @@ elseif (TRUE == TRUE) // FIXME we need some checking here, is the user allowed t
         header("Content-Type: application/octet-stream\r\n");
         header("Content-Length: {$file_size}\r\n");
         header("Content-Disposition-Type: attachment\r\n");
-        header("Content-Disposition: filename={$file}\r\n");
+        header("Content-Disposition: filename={$filename}\r\n");
         $buffer = '';
         while (!feof($fp))
         {
