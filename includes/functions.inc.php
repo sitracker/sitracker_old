@@ -8326,11 +8326,13 @@ function kb_article($id, $mode='internal')
     }
 
     $html .= "<h3>{$GLOBALS['strArticle']}</h3>";
-    $html .= sprintf($GLOBALS['strDocumentIDX'], $CONFIG['kb_id_prefix'], leading_zero(4,$kbarticle->docid))."<br />";
+    $html .= "<strong>{$GLOBALS['strDocumentID']}</strong>: ";
+    $html .= "{$CONFIG['kb_id_prefix']}".leading_zero(4,$kbarticle->docid)."<br />";
     $pubdate=mysql2date($kbarticle->published);
     if ($pubdate > 0)
     {
-        $html .= sprintf($GLOBALS['strPublishedOnX'], ldate($CONFIG['dateformat_date'],$pubdate))."<br />";
+        $html .= "<strong>{$GLOBALS['strPublished']}</strong>: ";
+        $html .= ldate($CONFIG['dateformat_date'],$pubdate)."<br />";
     }
 
     if (is_array($author))
@@ -8340,11 +8342,11 @@ function kb_article($id, $mode='internal')
         $count=1;
         if ($countauthors > 1)
         {
-            $html .= "{$GLOBALS['strAuthors']}: ";
+            $html .= "<strong>{$GLOBALS['strAuthors']}</strong>: ";
         }
         else
         {
-            $html .= "{$GLOBALS['strAuthor']}: ";
+            $html .= "<strong>{$GLOBALS['strAuthor']}</strong>: ";
         }
         foreach ($author AS $authorid)
         {
@@ -8361,7 +8363,7 @@ function kb_article($id, $mode='internal')
     $html .= "<br />";
     if (!empty($kbarticle->keywords))
     {
-        $html .= "{$GLOBALS['strKeywords']}: ";
+        $html .= "<strong>{$GLOBALS['strKeywords']}</strong>: ";
         $html .= preg_replace("/\[([0-9]+)\]/", "<a href=\"incident_details.php?id=$1\" target=\"_blank\">$0</a>", $kbarticle->keywords);
         $html .= "<br />";
     }
