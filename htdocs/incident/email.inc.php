@@ -174,12 +174,12 @@ switch ($step)
         }
         //-->
         </script>
-        <h2>Send Incident Email</h2>
-        <form action="<?php echo $_SERVER['PHP_SELF']; ?>?id=<?php echo $id ?>" name="updateform" method="post">
-        <table align='center' class='vertical'>
-        <tr><th>Use Template:</th><td><?php echo emailtype_drop_down("emailtype", 1); ?></td></tr>
-        <tr><th>Does this email meet an SLA target?:</th><td>
         <?php
+        echo "<h2>".icon('email', 32)." {$strSendEmail}</h2>";
+        echo "<form action='{$_SERVER['PHP_SELF']}?id={$id}' name='updateform' method='post'>";
+        echo "<table align='center' class='vertical'>";
+        echo "<tr><th>{$strTemplate}</th><td>".emailtype_drop_down("emailtype", 1)."</td></tr>";
+        echo "<tr><th>{$strDoesThisUpdateMeetSLA}:</th><td>";
         $target = incident_get_next_target($id);
         echo "<select name='target' class='dropdown'>\n";
         echo "<option value='none' onclick='notarget(this.form)'>{$strNo}</option>\n";
