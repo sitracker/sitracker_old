@@ -217,6 +217,37 @@ else
 
     echo "<div id='kbarticle'>";
     echo "<form action='{$_SERVER['PHP_SELF']}?id={$id}' method='post'>";
+
+    echo "<h3>$strTheInfoInThisArticle:</h3>";
+    if ($mode == 'edit')
+    {
+        $docsoftware = array();
+        $swsql = "SELECT softwareid FROM  `{$dbKBSoftware}` WHERE docid = '{$kbobj->docid}'";
+        $swresult = mysql_query($swsql);
+        if (mysql_error()) trigger_error("MySQL Error: ".mysql_error(),E_USER_WARNING);
+        if (mysql_num_rows($swresult) > 0)
+        {
+            while ($sw = mysql_fetch_object($swresult))
+            {
+                $docsoftware[] = $sw->softwareid;
+            }
+        }
+    }
+    $listsql = "SELECT * FROM `{$dbSoftware}` ORDER BY name";
+    $listresult = mysql_query($listsql);
+    if (mysql_error()) trigger_error("MySQL Error: ".mysql_error(),E_USER_ERROR);
+    if (mysql_num_rows($listresult) > 0)
+    {
+        echo "<select name='expertise[]' multiple='multiple' size='5' style='width: 100%;'>";
+        while ($software = mysql_fetch_object($listresult))
+        {
+            echo "<option value='{$software->id}'";
+            if ($mode == 'edit' AND in_array($software->id, $docsoftware)) echo " selected='selected'";
+            echo ">{$software->name}</option>\n";
+        }
+        echo "</select>";
+    }
+
     echo "<h3>{$strTitle}</h3>";
     echo "<input class='required' name='title' id='title' size='50' value='{$kbobj->title}'/> ";
     echo "<span class='required'>{$strRequired}</span";
