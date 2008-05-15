@@ -155,10 +155,6 @@ while ($update = mysql_fetch_object($result))
     $replace = "<a href='download.php?id=$1'>$2</a>";
    
     $updatebody = preg_replace($regex, $replace, $updatebody);
-    if (is_number($fileid))
-    {
-        echo $fileid;
-    }
 
     //$updatebody = preg_replace("/\[\[att\]\](.*?)\[\[\/att\]\]/", "<a href = '{$attachment_webpath}/$1'>$1</a>", $updatebody);
 
