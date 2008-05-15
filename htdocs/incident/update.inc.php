@@ -633,6 +633,9 @@ else
             $mk = @mkdir("{$CONFIG['attachment_fspath']}{$id}{$delim}u{$updateid}", 0770, TRUE);
             if (!$mk)
             {
+                $sql = "DELETE FROM `{$dbUpdates}` WHERE id='{$updateid}'";
+                mysql_query($sql);
+                if (mysql_error()) trigger_error("MySQL Query Error ".mysql_error(), E_USER_ERROR);
                 throw_error("Failed creating incident attachment directory: {$CONFIG['attachment_fspath']}{$id}{$delim}u{$updateid}");
             }
         }
@@ -643,6 +646,9 @@ else
         $mv = move_uploaded_file($_FILES['attachment']['tmp_name'], $newfilename);
         if (!$mv)
         {
+            $sql = "DELETE FROM `{$dbUpdates}` WHERE id='{$updateid}'";
+            mysql_query($sql);
+            if (mysql_error()) trigger_error("MySQL Query Error ".mysql_error(), E_USER_ERROR);
             trigger_error('!Error: Problem moving attachment from temp directory to: '.$newfilename, E_USER_WARNING);
         }
 
