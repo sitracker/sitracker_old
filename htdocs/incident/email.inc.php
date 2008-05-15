@@ -236,36 +236,8 @@ switch ($step)
         echo "</td></tr>\n";
         echo "<tr><th>{$strTimeToNextAction}:</th>";
         echo "<td>";
-        echo "Place the incident in the waiting queue?<br />";
-        echo "<label><input type='radio' name='timetonextaction_none' id='ttna_time' value='time' onchange=\"update_ttna();\" />";
-        echo "For <em>x</em> days, hours, minutes</label><br />"; // FIXME i18n for x days,. hours, minutes
-        echo "<span id='ttnacountdown'";
-        if (empty($na_days) AND empty($na_hours) AND empty($na_minutes)) echo " style='display: none;'";
-        echo ">";
-        echo "&nbsp;&nbsp;&nbsp;<input maxlength='3' name='timetonextaction_days' id='timetonextaction_days' value='{$na_days}' onclick='window.document.updateform.timetonextaction_none[0].checked = true;' size='3' /> {$GLOBALS['strDays']}&nbsp;";
-        echo "<input maxlength='2' name='timetonextaction_hours' id='timetonextaction_hours' value='{$na_hours}' onclick='window.document.updateform.timetonextaction_none[0].checked = true;' size='3' /> {$GLOBALS['strHours']}&nbsp;";
-        echo "<input maxlength='2' name='timetonextaction_minutes' id='timetonextaction_minutes' value='{$na_minutes}' onclick='window.document.updateform.timetonextaction_none[0].checked = true;' size='3' /> {$GLOBALS['strMinutes']}";
-        echo "<br /></span>";
-
-        echo "<input type='radio' name='timetonextaction_none' id='ttna_date' value='date' onchange=\"update_ttna();\" />Until specific date and time<br />"; //FIXME i18n Until specific date and time
-        echo "<span id='ttnadate' style='display: none;'>";
-        echo "<input name='date' id='date' size='10' value='{$date}' onclick=\"window.document.updateform.timetonextaction_none[1].checked = true;\"/> ";
-        echo date_picker('updateform.date');
-        echo " <select name='timeoffset' id='timeoffset' onchange='window.document.updateform.timetonextaction_none[1].checked = true;'>";
-        echo "<option value='0'></option>";
-        echo "<option value='0'>8:00 AM</option>";
-        echo "<option value='1'>9:00 AM</option>";
-        echo "<option value='2'>10:00 AM</option>";
-        echo "<option value='3'>11:00 AM</option>";
-        echo "<option value='4'>12:00 PM</option>";
-        echo "<option value='5'>1:00 PM</option>";
-        echo "<option value='6'>2:00 PM</option>";
-        echo "<option value='7'>3:00 PM</option>";
-        echo "<option value='8'>4:00 PM</option>";
-        echo "<option value='9'>5:00 PM</option>";
-        echo "</select>";
-        echo "<br /></span>";
-        echo "<label><input checked='checked' type='radio' name='timetonextaction_none' id='ttna_none' onchange=\"update_ttna();\" onclick=\"window.document.updateform.timetonextaction_days.value = ''; window.document.updateform.timetonextaction_hours.value = ''; window.document.updateform.timetonextaction_minutes.value = '';\" value='None' />Unspecified</label>";
+        echo show_next_action();
+        echo "</td>";
 
 
     /*    echo "<input type='radio' name='timetonextaction_none' value='none' checked='checked' onchange=\"update_ttna();\" />{$strNone}<br />";
