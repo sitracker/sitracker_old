@@ -135,29 +135,38 @@ while ($update = mysql_fetch_object($result))
     $updatebody = str_replace($temptag, $origtag, $updatebody);
 
     // Insert path to attachments
-//     $updatebody = preg_replace("/\[\[att\]\](.*?)\[\[\/att\]\]/",
-//                                "<a href = '{$CONFIG['attachment_webpath']}updates/{$update->id}/$1'>$1</a>",
-//                                $updatebody);
-    if (file_exists("{$CONFIG['attachment_fspath']}{$update->incidentid}/u{$update->id}"))
+    //     $updatebody = preg_replace("/\[\[att\]\](.*?)\[\[\/att\]\]/",
+    //                                "<a href = '{$CONFIG['attachment_webpath']}updates/{$update->id}/$1'>$1</a>",
+    //                                $updatebody);
+    //if (file_exists("{$CONFIG['attachment_fspath']}{$update->incidentid}/u{$update->id}"))
+    //{
+    //    $attachment_webpath = "{$CONFIG['attachment_webpath']}{$update->incidentid}/u{$update->id}";
+    //}
+    //elseif (file_exists("{$CONFIG['attachment_fspath']}{$update->incidentid}/{$update->timestamp}"))
+    //{
+    //    $attachment_webpath = "{$CONFIG['attachment_webpath']}{$update->incidentid}/{$update->timestamp}";
+    //}
+    //else
+    //{
+    //    $attachment_webpath = "{$CONFIG['attachment_webpath']}updates/{$update->id}";
+    //}
+    
+    $regex = "/.*\[\[att=(.*?)\]\](.*?)\[\[\/att\]\].*/s";
+    $replace = "<a href='download.php?id=$1'>$2</a>";
+   
+    $updatebody = preg_replace($regex, $replace, $updatebody);
+    if (is_number($fileid))
     {
-        $attachment_webpath = "{$CONFIG['attachment_webpath']}{$update->incidentid}/u{$update->id}";
+        echo $fileid;
     }
-    elseif (file_exists("{$CONFIG['attachment_fspath']}{$update->incidentid}/{$update->timestamp}"))
-    {
-        $attachment_webpath = "{$CONFIG['attachment_webpath']}{$update->incidentid}/{$update->timestamp}";
-    }
-    else
-    {
-        $attachment_webpath = "{$CONFIG['attachment_webpath']}updates/{$update->id}";
-    }
-    $updatebody = preg_replace("/\[\[att\]\](.*?)\[\[\/att\]\]/", "<a href = '{$attachment_webpath}/$1'>$1</a>", $updatebody);
+
+    //$updatebody = preg_replace("/\[\[att\]\](.*?)\[\[\/att\]\]/", "<a href = '{$attachment_webpath}/$1'>$1</a>", $updatebody);
 
     // Put the header part (up to the <hr /> in a seperate DIV)
     if (strpos($updatebody, '<hr>')!==FALSE)
     {
         $updatebody = "<div class='iheader'>".str_replace('<hr>',"</div>",$updatebody);
     }
-
     // Style quoted text
     // $quote[0]="/^(&gt;\s.*)\W$/m";
     // $quote[0]="/^(&gt;[\s]*.*)[\W]$/m";
