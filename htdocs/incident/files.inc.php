@@ -160,7 +160,7 @@ function encode_binary($string)
 /**
     * @author Ivan Lucas
 */
-function draw_file_row($file, $fsdelim, $incidentid, $incident_attachment_fspath)
+function draw_file_row($file, $fsdelim, $incidentid, $path)
 {
     global $CONFIG;
     $filepathparts = explode($fsdelim, $file);
@@ -195,6 +195,11 @@ function draw_file_row($file, $fsdelim, $incidentid, $incident_attachment_fspath
         // At the moment we leave mime_type blank if we can't find mime_content_type
         $mime_type = '';
     }
+
+
+    // FIXME url
+    $url = "download.php?file={$filename}&amp;incidentid={$incidentid}&amp;p={$path}";
+
     $html = "<tr>";
     $html .= "<td align='right' width='5%'>";
     $html .= "<a href=\"$url\"><img src='".getattachmenticon($filename)."' alt='Icon' title='{$filename} ({$file_size})' /></a>";
@@ -315,7 +320,7 @@ if (file_exists($incident_attachment_fspath))
                 echo "<table>\n";
                 foreach ($filearray AS $file)
                 {
-                    echo draw_file_row($file, $fsdelim, $incidentid, $incident_attachment_fspath);
+                    echo draw_file_row($file, $fsdelim, $incidentid, $dirname);
 
                 }
                 echo "</table>\n";
