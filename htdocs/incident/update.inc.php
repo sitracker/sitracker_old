@@ -551,10 +551,39 @@ else
         $timetext .= "</b>\n\n";
         $bodytext = $timetext.$bodytext;
     }
+    
+    // attach file - have to do it here to get fileid
+    // TODO user file_upload
+    $att_max_filesize = return_bytes($CONFIG['upload_max_filesize']);
+    if ($_FILES['attachment']['name'] != "")
+    {
+        $filename = cleanvar($_FILES['attachment']['name']);
+        if ($cust_vis == 'yes')
+        {
+        	$category = 'public';
+        }
+        else
+        {
+        	$category = 'private';
+        }
+        
+        $sql = "INSERT INTO `{$dbFiles}`(category, filename, size, userid, usertype, shortdescription, longdescription, filedate) ";
+        $sql .= "VALUES ('{$category}', '{$filename}', '{$_FILES['attachment']['size']}', '{$sit[2]}', 'user', '', '', NOW())";
+        mysql_query($sql);
+        if (mysql_error())
+        {
+            trigger_error("MySQL Query Error ".mysql_error(), E_USER_ERROR);
+        }
+        else
+        {
+            $fileid = mysql_insert_id();
+        }
+    }
+    
     // was '$attachment'
     if ($_FILES['attachment']['name'] != '' && isset($_FILES['attachment']['name']) == TRUE)
     {
-        $bodytext = "Attachment: [[att]]{$_FILES['attachment']['name']}[[/att]]\n".$bodytext;
+        $bodytext = "Attachment: [[att=$fileid]]{$_FILES['attachment']['name']}[[/att]]\n".$bodytext;
     }
     // Debug
     ## if ($target!='') $bodytext = "Target: $target\n".$bodytext;
@@ -589,7 +618,61 @@ else
     $result = mysql_query($sql);
     if (mysql_error()) trigger_error("MySQL Query Error ".mysql_error(), E_USER_ERROR);
     $updateid = mysql_insert_id();
+    
+    //upload file, here because we need updateid
+    if ($_FILES['attachment']['name'] != "")
+    {
+        // try to figure out what delimeter is being used (for windows or unix)...
+        //.... // $delim = (strstr($filesarray[$c],"/")) ? "/" : "\\";
+        $delim = (strstr($_FILES['attachment']['tmp_name'],"/")) ? "/" : "\\";
 
+        // make incident attachment dir if it doesn't exist
+        $umask = umask(0000);
+        if (!file_exists("{$CONFIG['attachment_fspath']}{$id}{$delim}u{$updateid}"))
+        {
+            $mk = @mkdir("{$CONFIG['attachment_fspath']}{$id}{$delim}u{$updateid}", 0770, TRUE);
+            if (!$mk)
+            {
+                throw_error("Failed creating incident attachment directory: {$CONFIG['attachment_fspath']}{$id}{$delim}u{$updateid}");
+            }
+        }
+        umask($umask);
+        $newfilename = "{$CONFIG['attachment_fspath']}{$id}{$delim}u{$updateid}{$delim}{$_FILES['attachment']['name']}";
+
+        // Move the uploaded file from the temp directory into the incidents attachment dir
+        $mv = move_uploaded_file($_FILES['attachment']['tmp_name'], $newfilename);
+        if (!$mv)
+        {
+            trigger_error('!Error: Problem moving attachment from temp directory to: '.$newfilename, E_USER_WARNING);
+        }
+
+        // Check file size before attaching
+        if ($_FILES['attachment']['size'] > $att_max_filesize)
+        {
+            throw_error('User Error: Attachment too large or file upload error - size:',$_FILES['attachment']['size']);
+            // throwing an error isn't the nicest thing to do for the user but there seems to be no guaranteed
+            // way of checking file sizes at the client end before the attachment is uploaded. - INL
+        }
+        $filename = cleanvar($_FILES['attachment']['name']);
+        if ($cust_vis == 'yes')
+        {
+        	$category = 'public';
+        }
+        else
+        {
+        	$category = 'private';
+        }
+    }
+    
+    //create link
+    $sql = "INSERT INTO `{$dbLinks}`(linktype, origcolref, linkcolref, direction, userid) ";
+    $sql .= "VALUES(5, '{$updateid}', '{$fileid}', 'left', '{$sit[2]}')";
+    mysql_query($sql);
+    if (mysql_error())
+    {
+        trigger_error("MySQL Query Error ".mysql_error(), E_USER_ERROR);
+    }
+    
     $sql = "UPDATE `{$dbIncidents}` SET status='$newstatus', priority='$newpriority', lastupdated='$now', timeofnextaction='$timeofnextaction' WHERE id='$id'";
     mysql_query($sql);
     if (mysql_error()) trigger_error("MySQL Query Error ".mysql_error(), E_USER_ERROR);
@@ -641,73 +724,7 @@ else
         if (mysql_error()) trigger_error("MySQL Query Error ".mysql_error(), E_USER_ERROR);
     }
 
-    // attach file
-    $att_max_filesize = return_bytes($CONFIG['upload_max_filesize']);
-    $incident_attachment_fspath = $CONFIG['attachment_fspath'] . $id;
-    if ($_FILES['attachment']['name'] != "")
-    {
-        // try to figure out what delimeter is being used (for windows or unix)...
-        //.... // $delim = (strstr($filesarray[$c],"/")) ? "/" : "\\";
-        $delim = (strstr($_FILES['attachment']['tmp_name'],"/")) ? "/" : "\\";
 
-        // make incident attachment dir if it doesn't exist
-        $umask = umask(0000);
-        if (!file_exists("{$CONFIG['attachment_fspath']}{$id}{$delim}u{$updateid}"))
-        {
-            $mk = @mkdir("{$CONFIG['attachment_fspath']}{$id}{$delim}u{$updateid}", 0770, TRUE);
-            if (!$mk)
-            {
-                throw_error("Failed creating incident attachment directory: {$CONFIG['attachment_fspath']}{$id}{$delim}u{$updateid}");
-            }
-        }
-        umask($umask);
-        $newfilename = "{$CONFIG['attachment_fspath']}{$id}{$delim}u{$updateid}{$delim}{$_FILES['attachment']['name']}";
-
-        // Move the uploaded file from the temp directory into the incidents attachment dir
-        $mv = move_uploaded_file($_FILES['attachment']['tmp_name'], $newfilename);
-        if (!$mv)
-        {
-            trigger_error('!Error: Problem moving attachment from temp directory to: '.$newfilename, E_USER_WARNING);
-        }
-
-        // Check file size before attaching
-        if ($_FILES['attachment']['size'] > $att_max_filesize)
-        {
-            throw_error('User Error: Attachment too large or file upload error - size:',$_FILES['attachment']['size']);
-            // throwing an error isn't the nicest thing to do for the user but there seems to be no guaranteed
-            // way of checking file sizes at the client end before the attachment is uploaded. - INL
-        }
-        $filename = cleanvar($_FILES['attachment']['name']);
-        if ($cust_vis == 'yes')
-        {
-        	$category = 'public';
-        }
-        else
-        {
-        	$category = 'private';
-        }
-        
-        $sql = "INSERT INTO `{$dbFiles}`(category, filename, size, userid, usertype, shortdescription, longdescription, filedate) ";
-        $sql .= "VALUES ('{$category}', '{$filename}', '{$_FILES['attachment']['size']}', '{$sit[2]}', 'user', '', '', NOW())";
-        mysql_query($sql);
-        if (mysql_error())
-        {
-            trigger_error("MySQL Query Error ".mysql_error(), E_USER_ERROR);
-        }
-        else
-        {
-            $fileid = mysql_insert_id();
-
-            //create link
-            $sql = "INSERT INTO `{$dbLinks}`(linktype, origcolref, linkcolref, direction, userid) ";
-            $sql .= "VALUES(5, '{$updateid}', '{$fileid}', 'left', '{$sit[2]}')";
-            mysql_query($sql);
-            if (mysql_error())
-            {
-                trigger_error("MySQL Query Error ".mysql_error(), E_USER_ERROR);
-            }
-        }
-    }
     if (!$result)
     {
         include ('includes/incident_html_top.inc');

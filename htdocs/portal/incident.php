@@ -97,7 +97,7 @@ if ($user->status != 2)
 }
 
 echo "<h3>{$strFiles}</h3>";
-$filesql = "SELECT *, u.id AS updateid
+$filesql = "SELECT *, f.id AS fileid, u.id AS updateid
             FROM `{$dbFiles}` AS f, `{$dbLinks}` AS l, `{$dbUpdates}` AS u
             WHERE f.category='public'
             AND l.linktype='5'
@@ -112,8 +112,9 @@ $delim = $fsdelim;
 
 while ($filerow = mysql_fetch_object($fileresult))
 {
-    $filelink = "{$CONFIG['attachment_webpath']}{$incidentid}{$delim}u{$filerow->updateid}{$delim}";
-    echo "<a href='{$filelink}{$filerow->filename}'>{$filerow->filename}</a><br />";
+    $fileid = intval($filerow->fileid);
+    $filename = cleanvar($filerow->filename);
+    echo "<a href='download.php?id={$fileid}'>{$filename}</a><br />";
     echo "uploaded ";
     if ($filerow->userid != 0)
     {        
