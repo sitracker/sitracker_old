@@ -7916,7 +7916,7 @@ function contract_details($id, $mode='internal')
  * @param $id
  * @returns string path of file
 **/
-function upload_file($file, $id, $type='public',)
+function upload_file($file, $id, $type='public')
 {
     global $CONFIG, $now;
     $att_max_filesize = return_bytes($CONFIG['upload_max_filesize']);
