@@ -268,14 +268,27 @@ form.filterform { margin-left: auto; margin-right: auto; margin-bottom: 1em; }
 
 .search_highlight { background: #FFFACD; font-weight: bolder; }
 
-div#kbarticle
+div#kbarticle, div#
 {
     border: 1px solid;
     padding: 5px;
     width: 55%;
     margin: 30px auto;
 }
+
+div#container
+{
+    padding: 5px;
+    width: 55%;
+    margin: 30px auto;
+}
 #kbarticle h1,#kbarticle h3,#kbarticle h4, #kbarticle h5,#kbarticle h6
+{
+  text-align: left; background: transparent; color: #0063dc;
+  width: 100%;
+  border-bottom: 1px #203894 solid;
+}
+#container h1,#container h3,#container h4, #container h5,#container h6
 {
   text-align: left; background: transparent; color: #0063dc;
   width: 100%;

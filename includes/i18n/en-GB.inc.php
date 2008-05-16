@@ -784,6 +784,7 @@ $strNumOfIncidents = 'There are %s incidents in this list';
 $strNumOpenIncidents = '%s open';
 $strNumOfCalls = '# of calls';
 
+$strOccurance = 'Occurance';
 # Short for October
 $strOctAbbr = 'Oct';
 $strOctober = 'October';
@@ -944,6 +945,7 @@ $strReviewIn = 'Review in %s';
 $strRole = 'Role';
 $strRolePermissions = 'Role Permissions';
 $strRSSAtomURL = 'RSS/Atom Feed URL';
+$strRules = 'Rules';
 $strRunReport = 'Run Report';
 
 $strSalesperson = 'Salesperson';

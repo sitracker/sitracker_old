@@ -85,6 +85,7 @@ switch ($_REQUEST['mode'])
 //                 $('parametersbox').show();
                 $('emailtemplatesbox').hide();
                 $('journalbox').hide();
+                $('none').hide();
             }
             else if ($('new_action').value == 'ACTION_EMAIL')
             {
@@ -92,6 +93,7 @@ switch ($_REQUEST['mode'])
 //                 $('parametersbox').show();
                 $('noticetemplatesbox').hide();
                 $('journalbox').hide();
+                $('none').hide();
             }
             else if ($('new_action').value == 'ACTION_JOURNAL')
             {
@@ -99,6 +101,7 @@ switch ($_REQUEST['mode'])
                 $('journalbox').show();
                 $('emailtemplatesbox').hide();
                 $('noticetemplatesbox').hide();
+                $('none').hide();
             }
             else
             {
@@ -106,14 +109,13 @@ switch ($_REQUEST['mode'])
                 $('emailtemplatesbox').hide();
 //                 $('parametersbox').hide();
                 $('journalbox').hide();
+                $('none').show();
             }
         }
         -->
         </script>
         <?php
-        echo "<h2><img src='{$CONFIG['application_webpath']}images/icons/";
-        echo "{$iconset}/32x32/triggeraction.png' width='32' height='32' ";
-        echo "alt='' /> ";
+        echo "<h2>".icon('triggeraction', 32)." ";
         
         if ($selecteduser >= 1)
         {
@@ -130,26 +132,32 @@ switch ($_REQUEST['mode'])
         {
             $name = $id;
         }
-        echo "<h3>".sprintf($strAddActionToXTrigger, $name)."</h3>";
-        echo "<p align='center'>{$triggerarray[$id]['description']} (Type: {$triggerarray[$id]['type']})</p>"; // FIXME remove displaying type before release
+        echo "<div id='container'>";
+        echo "<h3>{$strTrigger}</h3>";
+        echo "<strong>{$name}</strong>";
+        
+        echo "<h3>{$strOccurance}</h3>";
+        echo $triggerarray[$id]['description'];
+        
+        echo "<h3>{$strType}</h3>";
+        echo $triggerarray[$id]['type']; // FIXME remove displaying type before release
+        
         if (is_array($triggerarray[$id]['optional']))
         {
-            echo "<p align='center'>The following optional parameters may be used: ";
+            echo "<h3>{$strParameters}</h3>";
+            echo "The following optional parameters may be used: <br />";
             foreach ($triggerarray[$id]['optional'] AS $param)
             {
                 echo "<var>{$param}</var> &nbsp; ";
             }
-            echo "</p>";
         }
-        
+        echo "<h3>{$strAction}</h3>";
         echo "<form name='addtrigger' action='{$_SERVER['PHP_SELF']}' method='post'>";
-        echo "<table align='center'><tr><th>{$strAction}</th><th>{$strTemplate}</th>";
         // echo "<th>Extra {$strParameters}</th>";
-        echo "</tr>\n"; // FIXME extra, rules
+        // FIXME extra, rules
 
         // ACTION_NOTICE is only applicable when a userid is specified or for 'all'
-        echo "<tr>";
-        echo "<td><select name='new_action' id='new_action' onchange='switch_template();'>";
+        echo "<select name='new_action' id='new_action' onchange='switch_template();'>";
         echo "<option value='ACTION_NONE'>{$strNone}</option>\n";
         echo "<option value='ACTION_EMAIL'>{$strEmail}</option>\n";
         if ($selecteduser != 0)
@@ -157,8 +165,8 @@ switch ($_REQUEST['mode'])
             echo "<option value='ACTION_NOTICE'>{$strNotice}</option>\n";
         }
         echo "<option value='ACTION_JOURNAL'>{$strJournal}</option>\n";
-        echo "</select></td>";
-        echo "<td>";
+        echo "</select>";
+        echo "<h3>{$strTemplate}</h3>";
         echo "<div id='noticetemplatesbox' style='display:none;'>";
         echo notice_templates('noticetemplate');
         echo "</div>\n";
@@ -166,14 +174,17 @@ switch ($_REQUEST['mode'])
         echo email_templates($triggerarray[$id]['type'], 'emailtemplate');
         echo "</div>\n";
         echo "<div id='journalbox' style='display:none;'>{$strNone}</div>";
-        echo "</td>";
+        echo "<div id='none'>{$strNone}</div>";
 //         echo "<td><div id='parametersbox' style='display:none;'><input type='text' name='parameters' size='30' /></div></td>";
-        echo "</tr>";
+        echo "<h3>{$strRules}</h3>";
         if (!empty($triggerarray[$id]['optional']))
         {
             echo "<tr><td colspan='3'><label>Rules:</label> <textarea cols='30' rows='5' name='rules'></textarea></td></tr>";
         }
-        else echo "<tr><td colspan='3'>Rules are not definable for this trigger action<td></tr>";
+        else
+        {
+            echo "<tr><td colspan='3'>Rules are not definable for this trigger action<td></tr>";
+        }
         echo "</table>\n";
         echo "<input type='hidden' name='mode' value='save' />";
         echo "<input type='hidden' name='id' value='{$id}' />";
