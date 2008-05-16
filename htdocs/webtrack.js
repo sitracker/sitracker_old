@@ -493,4 +493,5 @@ function insertBBCode(element, tag, endtag)
         //             alert('start:' + start + '  end: ' + end + 'len: ' + $(element).textLength);
         $(element).value = $(element).value.substring(0, start) + tag + $(element).value.substring(start, end) + endtag + $(element).value.substring(end, $(element).textLength);
     }
+    $(element).focus();
 }
