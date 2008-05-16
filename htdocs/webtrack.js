@@ -206,7 +206,7 @@ var MAX_ROWS = 10 ;
 var MIN_COLS = 40 ;
 var MAX_COLS = 80 ;
 
-function changeTextAreaLength ( e )
+function changeTextAreaLength( e )
 {
     var txtLength = e.value.length;
     var numRows = 0 ;
@@ -458,6 +458,7 @@ function togglePlusMinus(div)
 
 /*
     Collapses or expands kb article sections as needed during edit
+    Requires scriptaculous/effects.js
 */
 function kbSectionCollapse()
 {
@@ -467,15 +468,29 @@ function kbSectionCollapse()
     for (var i=0; i <sections.length; i++)
     {
         var span = sections[i] + 'span';
+        var section = sections[i] + 'section';
         if ($(sections[i]).value.length > 0)
         {
-            $(sections[i]).show();
+            //$(sections[i]).show();
+            Effect.BlindDown(section, { duration: 0.2 });
             $(span).innerHTML = '[-]';
         }
         else
         {
-            $(sections[i]).hide();
+            //$(sections[i]).hide();
+            Effect.BlindUp(section, { duration: 0.2 });
             $(span).innerHTML = '[+]';
         }
+    }
+}
+
+function insertBBCode(element, tag, endtag)
+{
+    if (element.length > 0)
+    {
+        var start = $(element).selectionStart;
+        var end = $(element).selectionEnd;
+        //             alert('start:' + start + '  end: ' + end + 'len: ' + $(element).textLength);
+        $(element).value = $(element).value.substring(0, start) + tag + $(element).value.substring(start, end) + endtag + $(element).value.substring(end, $(element).textLength);
     }
 }

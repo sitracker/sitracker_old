@@ -188,7 +188,7 @@ else
 
     echo "<h3>{$strTitle}</h3>";
     echo "<input class='required' name='title' id='title' size='50' value='{$kbobj->title}'/> ";
-    echo "<span class='required'>{$strRequired}</span";
+    echo "<span class='required'>{$strRequired}</span>";
 
     echo "<h3>{$strKeywords}</h3>";
     echo "<input name='keywords' id='keywords' size='60' value='{$kbobj->keywords}' />";
@@ -220,75 +220,105 @@ else
     echo "</select> ";
     echo help_link('KBDistribution');
 
-    echo "<h3><a href=\"javascript:void(0);\" onclick=\"Effect.toggle('summary', 'blind', { duration: 0.2 });";
+    echo "<h3><a href=\"javascript:void(0);\" onclick=\"Effect.toggle('summarysection', 'blind', { duration: 0.2 });";
     echo "togglePlusMinus('summaryspan');\">";
     echo "{$strSummary} <span id='summaryspan'>[+]</span></a></h3>";
+    echo "<div id='summarysection' style='display: none;'>";
+    echo bbcode_toolbar('summary');
     echo "<textarea id='summary' name='summary' cols='100' rows='8' ";
-    echo "style='display: none; overflow: visible; white-space: nowrap;' onchange='kbSectionCollapse();'>{$sections['Summary']}";
+    echo "style='overflow: visible; white-space: nowrap;' onchange='kbSectionCollapse();'>{$sections['Summary']}";
     echo "</textarea>";
+    echo "</div>";
 
-    echo "<h3><a href=\"javascript:void(0);\" onclick=\"Effect.toggle('symptoms', 'blind', { duration: 0.2 });";
+    echo "<h3><a href=\"javascript:void(0);\" onclick=\"Effect.toggle('symptomssection', 'blind', { duration: 0.2 });";
     echo "togglePlusMinus('symptomsspan');\">";
     echo "{$strSymptoms} <span id='symptomsspan'>[+]</span></a></h3>";
+    echo "<div id='symptomssection' style='display: none;'>";
+    echo bbcode_toolbar('symptoms');
     echo "<textarea id='symptoms' name='symptoms' cols='100' rows='8' ";
-    echo "style='display: none' onchange='kbSectionCollapse();'>{$sections['Symptoms']}";
+    echo "onchange='kbSectionCollapse();'>{$sections['Symptoms']}";
     echo "</textarea>";
+    echo "</div>";
 
-    echo "<h3><a href=\"javascript:void(0);\" onclick=\"Effect.toggle('cause', 'blind', { duration: 0.2 });";
+    echo "<h3><a href=\"javascript:void(0);\" onclick=\"Effect.toggle('causesection', 'blind', { duration: 0.2 });";
     echo "togglePlusMinus('causespan');\">";
     echo "{$strCause} <span id='causespan'>[+]</span></a></h3>";
+    echo "<div id='causesection' style='display: none;'>";
+    echo bbcode_toolbar('cause');
     echo "<textarea id='cause' name='cause' cols='100' rows='8' ";
-    echo "style='display: none' onchange='kbSectionCollapse();'>{$sections['Cause']}";
+    echo "onchange='kbSectionCollapse();'>{$sections['Cause']}";
     echo "</textarea>";
+    echo "</div>";
 
-    echo "<h3><a href=\"javascript:void(0);\" onclick=\"Effect.toggle('question', 'blind', { duration: 0.2 });";
+    echo "<h3><a href=\"javascript:void(0);\" onclick=\"Effect.toggle('questionsection', 'blind', { duration: 0.2 });";
     echo "togglePlusMinus('questionspan');\">";
     echo "{$strQuestion} <span id='questionspan'>[+]</span></a></h3>";
+    echo "<div id='questionsection' style='display: none;'>";
+    echo bbcode_toolbar('question');
     echo "<textarea id='question' name='question' cols='100' rows='8' ";
-    echo "style='display: none' onchange='kbSectionCollapse();'>{$sections['Question']}";
+    echo "onchange='kbSectionCollapse();'>{$sections['Question']}";
     echo "</textarea>";
+    echo "</div>";
 
-    echo "<h3><a href=\"javascript:void(0);\" onclick=\"Effect.toggle('answer', 'blind', { duration: 0.2 });";
+    echo "<h3><a href=\"javascript:void(0);\" onclick=\"Effect.toggle('answersection', 'blind', { duration: 0.2 });";
     echo "togglePlusMinus('answerspan');\">";
     echo "{$strAnswer} <span id='answerspan'>[+]</span></a></h3>";
+    echo "<div id='answersection' style='display: none;'>";
+    echo bbcode_toolbar('answer');
     echo "<textarea id='answer' name='answer' cols='100' rows='8' ";
     echo "style='display: none' onchange='kbSectionCollapse();'>{$sections['Answer']}";
     echo "</textarea>";
+    echo "</div>";
 
-    echo "<h3><a href=\"javascript:void(0);\" onclick=\"Effect.toggle('solution', 'blind', { duration: 0.2 });";
+    echo "<h3><a href=\"javascript:void(0);\" onclick=\"Effect.toggle('solutionsection', 'blind', { duration: 0.2 });";
     echo "togglePlusMinus('solutionspan');\">";
     echo "{$strSolution} <span id='solutionspan'>[+]</span></a></h3>";
+    echo "<div id='solutionsection' style='display: none;'>";
+    echo bbcode_toolbar('solution');
     echo "<textarea id='solution' name='solution' cols='100' rows='8' ";
-    echo "style='display: none' onchange='kbSectionCollapse();'>{$sections['Solution']}";
+    echo "onchange='kbSectionCollapse();'>{$sections['Solution']}";
     echo "</textarea>";
+    echo "</div>";
 
-    echo "<h3><a href=\"javascript:void(0);\" onclick=\"Effect.toggle('workaround', 'blind', { duration: 0.2 });";
+    echo "<h3><a href=\"javascript:void(0);\" onclick=\"Effect.toggle('workaroundsection', 'blind', { duration: 0.2 });";
     echo "togglePlusMinus('workaroundspan');\">";
     echo "{$strWorkaround} <span id='workaroundspan'>[+]</span></a></h3>";
+    echo "<div id='workaroundsection' style='display: none;'>";
+    echo bbcode_toolbar('workaround');
     echo "<textarea id='workaround' name='workaround' cols='100' rows='8' ";
-    echo "style='display: none' onchange='kbSectionCollapse();'>{$sections['Workaround']}";
+    echo "onchange='kbSectionCollapse();'>{$sections['Workaround']}";
     echo "</textarea>";
+    echo "</div>";
 
-    echo "<h3><a href=\"javascript:void(0);\" onclick=\"Effect.toggle('status', 'blind', { duration: 0.2 });";
+    echo "<h3><a href=\"javascript:void(0);\" onclick=\"Effect.toggle('statussection', 'blind', { duration: 0.2 });";
     echo "togglePlusMinus('statusspan');\">";
     echo "{$strStatus} <span id='statusspan'>[+]</span></a></h3>";
+    echo "<div id='statussection' style='display: none;'>";
+    echo bbcode_toolbar('status');
     echo "<textarea id='status' name='status' cols='100' rows='8' ";
-    echo "style='display: none' onchange='kbSectionCollapse();'>{$sections['Status']}";
+    echo "onchange='kbSectionCollapse();'>{$sections['Status']}";
     echo "</textarea>";
+    echo "</div>";
 
-    echo "<h3><a href=\"javascript:void(0);\" onclick=\"Effect.toggle('additionalinfo', 'blind', { duration: 0.2 });";
+    echo "<h3><a href=\"javascript:void(0);\" onclick=\"Effect.toggle('additionalinfosection', 'blind', { duration: 0.2 });";
     echo "togglePlusMinus('additionalinfospan');\">";
     echo "{$strAdditionalInfo} <span id='additionalinfospan'>[+]</span></a></h3>";
+    echo "<div id='additionalinfosection' style='display: none;'>";
+    echo bbcode_toolbar('additioanlinfo');
     echo "<textarea id='additionalinfo' name='additionalinfo' cols='100' rows='8'  ";
-    echo "style='display: none' onchange='kbSectionCollapse();'>{$sections['Additional Info']}";
+    echo "onchange='kbSectionCollapse();'>{$sections['Additional Info']}";
     echo "</textarea>";
+    echo "</div>";
 
-    echo "<h3><a href=\"javascript:void(0);\" onclick=\"Effect.toggle('references', 'blind', { duration: 0.2 });";
+    echo "<h3><a href=\"javascript:void(0);\" onclick=\"Effect.toggle('referencessection', 'blind', { duration: 0.2 });";
     echo "togglePlusMinus('referencesspan');\">";
     echo "{$strReferences} <span id='referencesspan'>[+]</span></a></h3>";
+    echo "<div id='referencessection' style='display: none;'>";
+    echo bbcode_toolbar('references');
     echo "<textarea id='references' name='references' cols='100' rows='8' ";
-    echo "style='display: none' onchange='kbSectionCollapse();'>{$sections['References']}";
+    echo "onchange='kbSectionCollapse();'>{$sections['References']}";
     echo "</textarea>";
+    echo "</div>";
 
     echo "<h3>{$strDisclaimer}</h3>";
     echo $CONFIG['kb_disclaimer_html'];

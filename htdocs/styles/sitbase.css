@@ -296,3 +296,18 @@ input.required, select.required{
 }
 
 div#incidentfooter { border-top: 1px solid #203894; }
+
+
+div.bbcode_toolbar a
+{
+    background: #3366CC;
+    color: white;
+    padding: 1px;
+    border: 1px solid #3366CC;
+}
+div.bbcode_toolbar a:hover
+{
+    background: white;
+    color: #3366CC;
+    text-decoration: none;
+}
