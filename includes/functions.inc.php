@@ -4064,7 +4064,7 @@ function holiday_type ($id)
         case 4: $holidaytype = $GLOBALS['strTraining']; break;
         case 5: $holidaytype = $GLOBALS['strCompassionateLeave']; break;
         case 10: $holidaytype = $GLOBALS['strPublicHoliday']; break;
-        default: $holidaytype = $GLOBALS['strHoliday']; break;
+        default: $holidaytype = $GLOBALS['strUnknown']; break;
     }
     return($holidaytype);
 }
@@ -8319,7 +8319,7 @@ function kb_article($id, $mode='internal')
         $search = array("/(?<!quot;|[=\"]|:\/{2})\b((\w+:\/{2}|www\.).+?)"."(?=\W*([<>\s]|$))/i", "/(([\w\.]+))(@)([\w\.]+)\b/i");
         $replace = array("<a href=\"$1\">$1</a>", "<a href=\"mailto:$0\">$0</a>");
         $kbcontent->content = preg_replace("/href=\"www/i", "href=\"http://www", preg_replace ($search, $replace, $kbcontent->content));
-        $html .= $kbcontent->content;
+        $html .= bbcode($kbcontent->content);
         $author[]=$kbcontent->ownerid;
         $html .= "</div>";
 
@@ -8380,7 +8380,9 @@ function kb_article($id, $mode='internal')
 
     if ($mode == 'internal')
     {
-        $html .= "<p align='center'><a href='kb_article.php?id={$kbarticle->docid}'>{$GLOBALS['strEdit']}</a></p>";
+        $html .= "<p align='center'>";
+        $html .= "<a href='browse_kb.php'>{$GLOBALS['strReturnToList']}</a> | ";
+        $html .= "<a href='kb_article.php?id={$kbarticle->docid}'>{$GLOBALS['strEdit']}</a></p>";
     }
     return $html;
 }
