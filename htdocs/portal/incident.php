@@ -97,7 +97,7 @@ if ($user->status != 2)
 }
 
 echo "<h3>{$strFiles}</h3>";
-$filesql = "SELECT *, f.id AS fileid, u.id AS updateid
+$filesql = "SELECT *, f.id AS fileid, u.id AS updateid, f.userid AS userid
             FROM `{$dbFiles}` AS f, `{$dbLinks}` AS l, `{$dbUpdates}` AS u
             WHERE f.category='public'
             AND l.linktype='5'
@@ -127,7 +127,7 @@ while ($filerow = mysql_fetch_object($fileresult))
             echo "by ".user_realname($filerow->userid)." ";
         }
     }
-    echo "@ ".ldate($CONFIG['dateformat_datetime'], $filerow->filedate)."<br /><br />";
+    echo "@ {$filerow->filedate}<br /><br />";
 }
 echo "</div>";
 
