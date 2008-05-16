@@ -29,7 +29,7 @@ if (empty($action) OR $action == 'showform' OR $action == 'list')
     // Show select email type form
     include ('htmlheader.inc.php');
 
-    echo "<h2>Templates</h2>";
+    echo "<h2>{$strTemplates}</h2>";
     echo "<p align='center'>Please be very careful when editing existing templates, {$CONFIG['application_shortname']} relies on some of these templates to
     send emails out automatically, if in doubt - seek advice.</p>";
     echo "<p align='center'>{$strTemplatesShouldNotBeginWith}</p>";
@@ -191,8 +191,20 @@ elseif ($action == "edit")
                 echo "<tr><th>Link</th>";
                 echo "<td><input id='link' maxlength='100' name='link' size='50' value=\"{$template->link}\"  onfocus=\"recordFocusElement(this);\" /></td></tr>\n";
                 echo "<tr><th>Durability</th>";
-                echo "<td><input id='durability' maxlength='100' name='durability' size='10' value=\"{$template->durability}\" onfocus=\"recordFocusElement(this);\" /></td></tr>\n";
-
+                echo "<td><select id='durability' onfocus=\"recordFocusElement(this);\">";
+                echo "<option";
+                if ($template->durability == 'sticky')
+                {
+                    echo " checked='checked' ";
+                }
+                echo ">sticky</option>";
+                echo "<option";
+                if ($template->durability == 'session')
+                {
+                    echo " checked='checked' ";
+                }
+                echo ">session</option>";
+                echo "</option></select>";
         }
 
         if ($trigaction AND $template->type != $triggerarray[$trigaction->triggerid]['type']) echo "<p class='warning'>Trigger type mismatch</p>";
