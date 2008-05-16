@@ -5797,6 +5797,31 @@ function strip_bbcode_tooltip($text)
 
 
 /**
+    * Produces a HTML toolbar for use with a textarea or input box for entering bbcode
+    * @author Ivan Lucas
+    * @param $elementid string. HTML element ID of the textarea or input
+    * @returns string HTML
+*/
+function bbcode_toolbar($elementid)
+{
+    $html = "\n<div class='bbcode_toolbar'>";
+    $html .= "<a href=\"javascript:insertBBCode('{$elementid}', '[b]', '[/b]')\">B</a> ";
+    $html .= "<a href=\"javascript:insertBBCode('{$elementid}', '[i]', '[/i]')\">I</a> ";
+    $html .= "<a href=\"javascript:insertBBCode('{$elementid}', '[u]', '[/u]')\">U</a> ";
+    $html .= "<a href=\"javascript:insertBBCode('{$elementid}', '[s]', '[/s]')\">S</a> ";
+    $html .= "<a href=\"javascript:insertBBCode('{$elementid}', '[quote]', '[/quote]')\">Quote</a> ";
+    $html .= "<a href=\"javascript:insertBBCode('{$elementid}', '[url]', '[/url]')\">Link</a> ";
+    $html .= "<a href=\"javascript:insertBBCode('{$elementid}', '[img]', '[/img]')\">Img</a> ";
+    $html .= "<a href=\"javascript:insertBBCode('{$elementid}', '[color]', '[/color]')\">Color</a> ";
+    $html .= "<a href=\"javascript:insertBBCode('{$elementid}', '[size]', '[/size]')\">Size</a> ";
+    $html .= "<a href=\"javascript:insertBBCode('{$elementid}', '[code]', '[/code]')\">Code</a> ";
+    $html .= "<a href=\"javascript:insertBBCode('{$elementid}', '', '[hr]')\">HR</a> ";
+    $html .= "</div>\n";
+    return $html;
+}
+
+
+/**
     * Uses calendar.js to make a popup date picker
     * @author Ivan Lucas
     * @param $formelement string. form element id, eg. myform.dateinputbox
