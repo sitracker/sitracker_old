@@ -484,6 +484,9 @@ function kbSectionCollapse()
     }
 }
 
+/*
+    Inserts BBCode to a textarea or input
+*/
 function insertBBCode(element, tag, endtag)
 {
     if (element.length > 0)
@@ -494,4 +497,7 @@ function insertBBCode(element, tag, endtag)
         $(element).value = $(element).value.substring(0, start) + tag + $(element).value.substring(start, end) + endtag + $(element).value.substring(end, $(element).textLength);
     }
     $(element).focus();
+    var caret = end + tag.length + endtag.length;
+    $(element).selectionStart = caret;
+    $(element).selectionEnd = caret;
 }
