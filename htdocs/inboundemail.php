@@ -27,6 +27,9 @@ while (!feof($fp))
 }
 fclose($fp);
 
+// DEBUG
+echo $rawemail;
+
 // Create and populate the email object
 $email = new mime_email;
 $email->set_emaildata($rawemail);
@@ -87,6 +90,9 @@ if ($decoded_email->contenttype=='multipart/mixed' OR
                     $filename = str_replace(' ','_',$block->mime_contentdispositionname);
                     if (empty($filename)) $filename = "part{$part}";
                     $attachment[] = $filename;
+
+                    // FIXME this assumes we always have an incident number, we don't, so this will fail for new incidents
+
                     // Write the attachment
                     $fa_dir = $CONFIG['attachment_fspath'].$incidentid;
                     if (!file_exists($fa_dir))

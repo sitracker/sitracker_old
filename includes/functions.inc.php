@@ -8408,7 +8408,7 @@ function kb_article($id, $mode='internal')
     if ($mode == 'internal')
     {
         $html .= "<p align='center'>";
-        $html .= "<a href='browse_kb.php'>{$GLOBALS['strReturnToList']}</a> | ";
+        $html .= "<a href='browse_kb.php'>{$GLOBALS['strBackToList']}</a> | ";
         $html .= "<a href='kb_article.php?id={$kbarticle->docid}'>{$GLOBALS['strEdit']}</a></p>";
     }
     return $html;

@@ -38,6 +38,7 @@ if (empty($submit) OR !empty($_SESSION['formerrors']['add_contact']))
     echo "<h2><img src='{$CONFIG['application_webpath']}images/icons/{$iconset}/32x32/contact.png' width='32' height='32' alt='' /> ";
     echo "{$strNewContact}</h2>";
 
+    echo "<h5 class='warning'>{$strAvoidDupes}.</h5>";
     echo "<h5>".sprintf($strMandatoryMarked, "<sup class='red'>*</sup>")."</h5>";
     echo "<form name='contactform' action='{$_SERVER['PHP_SELF']}' method='post' onsubmit=\"return confirm_action('{$strAreYouSureAdd}')\">";
     echo "<table align='center' class='vertical'>";
@@ -149,7 +150,6 @@ if (empty($submit) OR !empty($_SESSION['formerrors']['add_contact']))
 
     //cleanup form vars
     clear_form_data('add_contact');
-    echo "<h5 class='warning'>{$strAvoidDupes}.</h5>";
     include ('htmlfooter.inc.php');
 }
 else
@@ -248,14 +248,14 @@ else
 
         $username = strtolower(substr($surname, 0, strcspn($surname, " ")));
         $prepassword = generate_password();
-        
+
         if ($CONFIG['portal'] AND $_POST['emaildetails'] == 'on')
         {
         	$extra_headers = "Reply-To: {$CONFIG['support_email']}\n";
             $extra_headers .= "X-Mailer: {$CONFIG['application_shortname']} {$application_version_string}/PHP " . phpversion() . "\n";
             $extra_headers .= "X-Originating-IP: {$_SERVER['REMOTE_ADDR']}\n";
             $extra_headers .= "\n"; // add an extra crlf to create a null line to separate headers from body
-        	
+
             $bodytext = "Hello $forenames\nYou have just been added as a ";
         	$bodytext .= "contact on {$CONFIG['application_name']} ";
         	$bodytext .= "{$CONFIG['application_uriprefix']}{$CONFIG['application_webpath']}";
@@ -266,10 +266,10 @@ else
         	$bodytext .= "username: {$username}\npassword: {$prepassword}\n";
         	$bodytext .= "\nPlease note, this password cannot be recovered, ";
         	$bodytext .= "only reset. You may change it in the portal.";
-        	
-      		mail($email, $strContactDetails, $bodytext, $extra_headers);        	
+
+      		mail($email, $strContactDetails, $bodytext, $extra_headers);
         }
-        
+
         $password = md5($prepassword);
 
         $sql  = "INSERT INTO `{$dbContacts}` (username, password, courtesytitle, forenames, surname, jobtitle, ";

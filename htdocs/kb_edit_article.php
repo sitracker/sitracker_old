@@ -75,7 +75,7 @@ if (empty($_POST['process']))
     if (mysql_error()) trigger_error("MySQL Error: ".mysql_error(),E_USER_ERROR);
     if (mysql_num_rows($listresult) >= 1 )
     {
-        echo "<select name='software' multiple='multiple' size='7'>";
+        echo "<select name='expertise' multiple='multiple' size='7'>";
         while ($software = mysql_fetch_object($listresult))
         {
             if (is_array($expertise))

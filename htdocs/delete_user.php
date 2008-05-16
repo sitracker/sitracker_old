@@ -80,7 +80,7 @@ if (!empty($userid))
     {
         include ('htmlheader.inc.php');
         echo "<p class='error'>{$strCannotDeleteUser}</p>";
-        echo "<p align='center'><a href='users.php#{$userid}'>{$strReturnToList}</a></p>";
+        echo "<p align='center'><a href='users.php#{$userid}'>{$strBackToList}</a></p>";
         include ('htmlfooter.inc.php');
     }
 }
