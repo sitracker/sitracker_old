@@ -24,8 +24,14 @@ $adminuser = user_permission($sit[2],22); // Admin user
 // We only allow setting the selecteduser if the user is an admin, otherwise we use self
 if ($adminuser)
 {
-    if (is_numeric($_REQUEST['user'])) $selecteduser = $_REQUEST['user'];
-    else $selecteduser = 0;
+    if (is_numeric($_REQUEST['user']))
+    {
+        $selecteduser = $_REQUEST['user'];
+    }
+    else
+    {
+        $selecteduser = 0;
+    }
 }
 else
 {
@@ -38,15 +44,24 @@ switch ($_REQUEST['mode'])
 {
     case 'delete':
         $id = cleanvar($_GET['id']);
-        if (!is_numeric($id)) html_redirect($_SERVER['PHP_SELF'], FALSE);
+        if (!is_numeric($id))
+        {
+            html_redirect($_SERVER['PHP_SELF'], FALSE);
+        }
 
         // TODO needs a check that the user has permission to delete the trigger
 
         $sql = "DELETE FROM `{$dbTriggers}` WHERE id = $id LIMIT 1";
         mysql_query($sql);
         if (mysql_error()) trigger_error("MySQL Query Error ".mysql_error(), E_USER_WARNING);
-        if (mysql_affected_rows() >= 1) html_redirect($_SERVER['PHP_SELF']);
-        else html_redirect($_SERVER['PHP_SELF'], FALSE);
+        if (mysql_affected_rows() >= 1)
+        {
+            html_redirect($_SERVER['PHP_SELF']);
+        }
+        else
+        {
+            html_redirect($_SERVER['PHP_SELF'], FALSE);
+        }
         break;
 
     case 'add':
@@ -96,11 +111,25 @@ switch ($_REQUEST['mode'])
         -->
         </script>
         <?php
-        echo "<h2><img src='{$CONFIG['application_webpath']}images/icons/{$iconset}/32x32/triggeraction.png' width='32' height='32' alt='' /> ";
-        if ($selecteduser >= 1) echo user_realname($selecteduser).': ';
+        echo "<h2><img src='{$CONFIG['application_webpath']}images/icons/";
+        echo "{$iconset}/32x32/triggeraction.png' width='32' height='32' ";
+        echo "alt='' /> ";
+        
+        if ($selecteduser >= 1)
+        {
+            echo user_realname($selecteduser).': ';
+        }
+        
         echo "{$strTriggerActions}</h2>";
-        if (!empty($triggerarray[$id]['name'])) $name = $triggerarray[$id]['name'];
-        else $name = $id;
+        
+        if (!empty($triggerarray[$id]['name']))
+        {
+            $name = $triggerarray[$id]['name'];
+        }
+        else
+        {
+            $name = $id;
+        }
         echo "<h3>".sprintf($strAddActionToXTrigger, $name)."</h3>";
         echo "<p align='center'>{$triggerarray[$id]['description']} (Type: {$triggerarray[$id]['type']})</p>"; // FIXME remove displaying type before release
         if (is_array($triggerarray[$id]['optional']))
@@ -112,6 +141,7 @@ switch ($_REQUEST['mode'])
             }
             echo "</p>";
         }
+        
         echo "<form name='addtrigger' action='{$_SERVER['PHP_SELF']}' method='post'>";
         echo "<table align='center'><tr><th>{$strAction}</th><th>{$strTemplate}</th>";
         // echo "<th>Extra {$strParameters}</th>";
@@ -122,7 +152,10 @@ switch ($_REQUEST['mode'])
         echo "<td><select name='new_action' id='new_action' onchange='switch_template();'>";
         echo "<option value='ACTION_NONE'>{$strNone}</option>\n";
         echo "<option value='ACTION_EMAIL'>{$strEmail}</option>\n";
-        if ($selecteduser != 0) echo "<option value='ACTION_NOTICE'>{$strNotice}</option>\n";
+        if ($selecteduser != 0)
+        {
+            echo "<option value='ACTION_NOTICE'>{$strNotice}</option>\n";
+        }
         echo "<option value='ACTION_JOURNAL'>{$strJournal}</option>\n";
         echo "</select></td>";
         echo "<td>";
@@ -166,9 +199,18 @@ switch ($_REQUEST['mode'])
         $parameters = cleanvar($_POST['parameters']);
         $rules = cleanvar($_POST['rules']);
 
-        if ($action == 'ACTION_NOTICE') $templateid = $noticetemplate;
-        elseif ($action == 'ACTION_EMAIL') $templateid = $emailtemplate;
-        else $templateid = 0;
+        if ($action == 'ACTION_NOTICE')
+        {
+            $templateid = $noticetemplate;
+        }
+        elseif
+        {
+            ($action == 'ACTION_EMAIL') $templateid = $emailtemplate;
+        }
+        else
+        {
+            $templateid = 0;
+        }
 
         $sql = "INSERT INTO `{$dbTriggers}` (triggerid, userid, action, template, parameters, checks) ";
         $sql .= "VALUES ('{$id}', '{$userid}', '{$action}', '{$templateid}', '{$parameters}', '{$rules}')";
@@ -218,9 +260,15 @@ switch ($_REQUEST['mode'])
             // List actions for this trigger
             echo "<td>";
             $sql = "SELECT * FROM `{$dbTriggers}` WHERE triggerid = '$trigger' ";
-            if ($selecteduser > -1) $sql .= "AND userid = {$selecteduser} ";
+            if ($selecteduser > -1)
+            {
+                $sql .= "AND userid = {$selecteduser} ";
+            }
             $sql .= "ORDER BY action, template";
-            if (!$adminuser) $sql .= "AND userid='{$sit[2]}'";
+            if (!$adminuser)
+            {
+                $sql .= "AND userid='{$sit[2]}'";
+            }
             $result = mysql_query($sql);
             if (mysql_error()) trigger_error("MySQL Query Error ".mysql_error(), E_USER_WARNING);
             if (mysql_num_rows($result) >= 1)
@@ -245,11 +293,20 @@ switch ($_REQUEST['mode'])
             }
             echo "</td>";
             echo "<td>";
-            if ($selecteduser != -1) echo "<a href='{$_SERVER['PHP_SELF']}?mode=add&amp;id={$trigger}&amp;user={$selecteduser}'>{$strAdd}</a>";
+            if ($selecteduser != -1)
+            {
+                echo "<a href='{$_SERVER['PHP_SELF']}?mode=add&amp;id={$trigger}&amp;user={$selecteduser}'>{$strAdd}</a>";
+            }
             echo "</td>";
             echo "</tr>\n";
-            if ($shade == 'shade1') $shade = 'shade2';
-            else $shade = 'shade1';
+            if ($shade == 'shade1')
+            {
+                $shade = 'shade2';
+            }
+            else
+            {
+                $shade = 'shade1';
+            }
         }
         echo "</table>";
         echo "<p align='center'><a href='triggertest.php'>Test Triggers</a></p>";

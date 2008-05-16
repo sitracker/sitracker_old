@@ -187,7 +187,7 @@ function trigger($triggerid, $paramarray='')
         {
             //parse parameter array
             $dbg .= "\$paramarray[$key] = " .$paramarray[$key]."\n";
-            if($key == "user")
+            if ($key == "user")
             {
                 $userid = $paramarray[$key];
             }
@@ -206,7 +206,7 @@ function trigger($triggerid, $paramarray='')
     while ($triggerobj = mysql_fetch_object($result))
     {
         //see if we have any checks first
-        if(!empty($triggerobj->checks))
+        if (!empty($triggerobj->checks))
         {
             if (!trigger_checks($triggerobj->checks, $paramarray))
             {
@@ -282,8 +282,14 @@ function trigger_action($userid, $triggerid, $action, $paramarray, $template)
             break;
 
         case "ACTION_JOURNAL":
-            if (is_array($paramarray)) $journalbody = implode($paramarray);
-            else $journalbody = '';
+            if (is_array($paramarray))
+            {
+                $journalbody = implode($paramarray);
+            }
+            else
+            {
+                $journalbody = '';
+            }
             $rtnvalue = journal(CFG_LOGGING_NORMAL, $triggerid, "Trigger Fired ({$journalbody})", 0, $userid);
 
         case "ACTION_NONE":
@@ -330,7 +336,10 @@ function trigger_replace_specials($triggerid, $string, $paramarray)
             if (!is_array($ttvar['requires'])) $ttvar['requires'] = array($ttvar['requires']);
             foreach ($ttvar['requires'] as $needle)
             {
-                if (in_array($needle, $triggerarray[$triggerid]['required'])) $usetvar = TRUE;
+                if (in_array($needle, $triggerarray[$triggerid]['required']))
+                {
+                    $usetvar = TRUE;
+                }
             }
         }
         if ($usetvar)
