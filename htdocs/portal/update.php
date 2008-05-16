@@ -45,26 +45,120 @@ else
     $user = mysql_fetch_object($result);
     if (mysql_error()) trigger_error("MySQL Query Error ".mysql_error(), E_USER_ERROR);
 
-    //add the update
-    $update = "Updated via the portal by <b>{$user->forenames} {$user->surname}</b>\n\n";
-    $update .= $_REQUEST['update'];
+    $forenames = cleanvar($user->forenames);
+    $surname = $user->surname;
+    $update = cleanvar($_REQUEST['update']);
     
-    if($filename = upload_file($_FILES['attachment'], $id, 'incident'))
+    if (!empty($forenames) AND !empty($surname))
     {
-        $update .= "\n\n<hr>Attachment: [[att]]{$filename}[[/att]]";
+        $updatebody = "<hr><strong>".sprintf($SYSLANG['strUpdatedViaThePortalBy'], "{$forenames} {$surnames}")."</strong>\n\n";
     }
+    else
+    {
+        $updatebody = "<hr><strong>".sprintf($SYSLANG['strUpdatedViaThePortalBy'], $strCustomer)."</strong>\n\n";
+    }
+
+    if (!empty($_FILES['attachment']['name']))
+    {
+        $filename = cleanvar($_FILES['attachment']['name']);
+        $sql = "INSERT INTO `{$dbFiles}`(category, filename, size, userid, usertype, shortdescription, longdescription, filedate) ";
+        $sql .= "VALUES ('public', '{$filename}', '{$_FILES['attachment']['size']}', '{$_SESSION['contactid']}', 'contact', '', '', NOW())";
+        mysql_query($sql);
+        if (mysql_error())
+        {
+            $errors++;
+            trigger_error("MySQL Query Error ".mysql_error(), E_USER_ERROR);
+        }
+        else
+        {
+            $fileid = mysql_insert_id();
+            $updatebody = "{$SYSLANG['strAttachment']}: [[att={$fileid}]]{$filename}[[/att]]\n\n".$updatebody;
+        }
+    }
+    //add the update
+    $updatebody .= $update;
+    
     $sql = "INSERT INTO `{$dbUpdates}` (incidentid, userid, type, currentstatus, bodytext, timestamp, customervisibility) ";
-    $sql .= "VALUES('{$id}', '0', 'webupdate', '1', '{$update}', '{$now}', 'show')";
+    $sql .= "VALUES('{$id}', '0', 'webupdate', '1', '{$updatebody}', '{$now}', 'show')";
     mysql_query($sql);
     if (mysql_error()) trigger_error("MySQL Query Error ".mysql_error(), E_USER_ERROR);
+    else
+    {
+        $updateid = mysql_insert_id();
+    }
+    
+    //upload file, here because we need updateid
+    if ($_FILES['attachment']['name'] != "")
+    {
+        // try to figure out what delimeter is being used (for windows or unix)...
+        //.... // $delim = (strstr($filesarray[$c],"/")) ? "/" : "\\";
+        $delim = (strstr($_FILES['attachment']['tmp_name'],"/")) ? "/" : "\\";
 
+        // make incident attachment dir if it doesn't exist
+        $umask = umask(0000);
+        if (!file_exists("{$CONFIG['attachment_fspath']}{$id}{$fsdelim}u{$updateid}"))
+        {
+            $mk = @mkdir("{$CONFIG['attachment_fspath']}{$id}{$fsdelim}u{$updateid}", 0770, TRUE);
+            if (!$mk)
+            {
+                $errors++;
+                $sql = "DELETE FROM `{$dbUpdates}` WHERE id='{$updateid}'";
+                mysql_query($sql);
+                if (mysql_error()) trigger_error("MySQL Query Error ".mysql_error(), E_USER_ERROR);
+                throw_error("Failed creating incident attachment directory: {$CONFIG['attachment_fspath']}{$id}{$fsdelim}u{$updateid}");
+            }
+        }
+        umask($umask);
+        $newfilename = "{$CONFIG['attachment_fspath']}{$id}{$delim}u{$updateid}{$fsdelim}{$_FILES['attachment']['name']}";
+
+        // Move the uploaded file from the temp directory into the incidents attachment dir
+        $mv = move_uploaded_file($_FILES['attachment']['tmp_name'], $newfilename);
+        if (!$mv)
+        {
+            $errors++;
+            $sql = "DELETE FROM `{$dbUpdates}` WHERE id='{$updateid}'";
+            mysql_query($sql);
+            if (mysql_error()) trigger_error("MySQL Query Error ".mysql_error(), E_USER_ERROR);
+            trigger_error('!Error: Problem moving attachment from temp directory to: '.$newfilename, E_USER_WARNING);
+        }
+
+        // Check file size before attaching
+        $att_max_filesize = return_bytes($CONFIG['upload_max_filesize']);
+        if ($_FILES['attachment']['size'] > $att_max_filesize)
+        {
+            $errors++;
+            $sql = "DELETE FROM `{$dbUpdates}` WHERE id='{$updateid}'";
+            mysql_query($sql);
+            if (mysql_error()) trigger_error("MySQL Query Error ".mysql_error(), E_USER_ERROR);
+            throw_error('User Error: Attachment too large or file upload error - size:',$_FILES['attachment']['size']);
+            // throwing an error isn't the nicest thing to do for the user but there seems to be no guaranteed
+            // way of checking file sizes at the client end before the attachment is uploaded. - INL
+        }
+        $filename = cleanvar($_FILES['attachment']['name']);
+    }
+    
+    //create link
+    $sql = "INSERT INTO `{$dbLinks}`(linktype, origcolref, linkcolref, direction, userid) ";
+    $sql .= "VALUES(5, '{$updateid}', '{$fileid}', 'left', '0')";
+    mysql_query($sql);
+    if (mysql_error())
+    {
+        $errors++;
+        trigger_error("MySQL Query Error ".mysql_error(), E_USER_ERROR);
+    }
+    
     //set incident back to active
     $id = intval($_REQUEST['id']);
     $sql = "UPDATE `{$dbIncidents}` SET status=1, lastupdated='$now' WHERE id='{$id}'";
     mysql_query($sql);
     if (mysql_error())
     {
+        $errors++;
         trigger_error("MySQL Query Error ".mysql_error(), E_USER_ERROR);
+    }
+    
+    if ($errors > 0)
+    {
         html_redirect($_SERVER['PHP_SELF']."?id={$id}", FALSE);
     }
     else
