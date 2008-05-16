@@ -55,15 +55,18 @@ if (isset($_POST['submit']))
         $errors++;
     }
 
-    if ($kbid > 0)
+
+    if (empty($kbid))
     {
-        $sql[] = "UPDATE `{$dbKBArticles}` SET title='{$kbtitle}', keywords='{$keywords}', distribution='{$distribution}' WHERE docid = '{$kbid}'";
-        // Remove associated software ready for re-assocation
-        $sql[] = "DELETE FROM `{$dbKBSoftware}` WHERE docid='{$articleid}'";
+        $sqlinsert = "INSERT INTO `{$dbKBArticles}` (title, keywords, distribution, author) VALUES ('{$kbtitle}', '{$keywords}', '{$distribution}', 'BUGBUG')";
+        mysql_query($sqlinsert);
+        $kbid = mysql_insert_id();
     }
     else
     {
-        $sql[] = "INSERT";
+        $sql[] = "UPDATE `{$dbKBArticles}` SET title='{$kbtitle}', keywords='{$keywords}', distribution='{$distribution}' WHERE docid = '{$kbid}'";
+        // Remove associated software ready for re-assocation
+        $sql[] = "DELETE FROM `{$dbKBSoftware}` WHERE docid='{$kbid}'";
     }
 
     foreach($sections AS $section)
@@ -86,9 +89,7 @@ if (isset($_POST['submit']))
         {
             if (!empty($content))
             {
-                $insertsql = "INSERT INTO `{$dbKBContent}` (docid, ownerid, header, headerstyle, content, distribution) VALUES ('{$kbid}', '{$sit[2]}', '{$section}', 'h1', '{$content}', 'public')";
-                mysql_query($insertsql);
-                $kbid = mysql_insert_id();
+                $sql[] = "INSERT INTO `{$dbKBContent}` (docid, ownerid, header, headerstyle, content, distribution) VALUES ('{$kbid}', '{$sit[2]}', '{$section}', 'h1', '{$content}', 'public')";
             }
         }
     }
@@ -154,7 +155,8 @@ else
     echo "<div id='kbarticle'>";
     echo "<form action='{$_SERVER['PHP_SELF']}?id={$kbid}' method='post'>";
 
-    echo "<h3>$strTheInfoInThisArticle:</h3>";
+    echo "<h3>{$strEnvironment}</h3>";
+    echo "<p style='text-align:left'>{$strTheInfoInThisArticle}:</p>";
     if ($mode == 'edit')
     {
         $docsoftware = array();
