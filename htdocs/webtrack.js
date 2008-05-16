@@ -472,13 +472,13 @@ function kbSectionCollapse()
         if ($(sections[i]).value.length > 0)
         {
             //$(sections[i]).show();
-            Effect.BlindDown(section, { duration: 0.2 });
+            if ($(section).display == 'none') Effect.BlindDown(section, { duration: 0.2 });
             $(span).innerHTML = '[-]';
         }
         else
         {
             //$(sections[i]).hide();
-            Effect.BlindUp(section, { duration: 0.2 });
+            if ($(section).display != 'none') Effect.BlindUp(section, { duration: 0.2 });
             $(span).innerHTML = '[+]';
         }
     }

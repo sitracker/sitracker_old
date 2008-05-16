@@ -317,6 +317,7 @@ div.bbcode_toolbar a
     color: white;
     padding: 1px;
     border: 1px solid #3366CC;
+    min-width: 20px;
 }
 div.bbcode_toolbar a:hover
 {
