@@ -217,6 +217,7 @@ else
         $incidentid = 0;
     }
 
+    //this prevents duplicate emails
     $fifteenminsago = $now - 900;
     $sql = "SELECT bodytext FROM `{$dbUpdates}` ";
     $sql .= "WHERE incidentid = '{$incidentid}' AND timestamp > '{$fifteenminsago}' ";
