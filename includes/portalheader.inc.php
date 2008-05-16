@@ -14,8 +14,7 @@
 $permission = 0; // not required
 require ('db_connect.inc.php');
 require ('functions.inc.php');
-session_name($CONFIG['session_name']);
-session_start();
+
 // Load session language if it is set and different to the default language
 if (!empty($_SESSION['lang']) AND $_SESSION['lang'] != $CONFIG['default_i18n'])
 {
@@ -23,35 +22,7 @@ if (!empty($_SESSION['lang']) AND $_SESSION['lang'] != $CONFIG['default_i18n'])
 }
 require ('strings.inc.php');
 
-if ($CONFIG['portal'] == FALSE)
-{
-    // portal disabled
-    $_SESSION['portalauth'] = FALSE;
-    $page = $_SERVER['PHP_SELF'];
-    if (!empty($_SERVER['QUERY_STRING'])) $page .= '?'.$_SERVER['QUERY_STRING'];
-    $page = urlencode($page);
-    header("Location: {$CONFIG['application_webpath']}index.php?id=2&page=$page");
-    exit;
-}
-
-// Check session is authenticated, if not redirect to login page
-if (!isset($_SESSION['portalauth']) OR $_SESSION['portalauth'] == FALSE)
-{
-    $_SESSION['portalauth'] = FALSE;
-    // Invalid user
-    $page = $_SERVER['PHP_SELF'];
-    if (!empty($_SERVER['QUERY_STRING'])) $page .= '?'.$_SERVER['QUERY_STRING'];
-    $page = urlencode($page);
-    header("Location: {$CONFIG['application_webpath']}index.php?id=2&page=$page");
-    exit;
-}
-else
-{
-    // Attempt to prevent session fixation attacks
-    session_regenerate();
-
-    setcookie(session_name(), session_id(),ini_get("session.cookie_lifetime"), "/");
-}
+require ('portalauth.inc.php');
 // External variables
 $page = cleanvar($_REQUEST['page']);
 $contractid = cleanvar($_REQUEST['contractid']);
