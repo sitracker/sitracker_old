@@ -115,19 +115,18 @@ while ($filerow = mysql_fetch_object($fileresult))
     $fileid = intval($filerow->fileid);
     $filename = cleanvar($filerow->filename);
     echo "<a href='download.php?id={$fileid}'>{$filename}</a><br />";
-    echo "uploaded ";
     if ($filerow->userid != 0)
     {        
         if ($filerow->usertype == 'contact')
         {
-            echo "by ".contact_realname($filerow->userid)." ";
+            echo sprintf($strUploadedBy, contact_realname($filerow->userid))." ";
         }
         else
         {
-            echo "by ".user_realname($filerow->userid)." ";
+            echo sprintf($strUploadedBy, user_realname($filerow->userid))." ";
         }
     }
-    echo "@ {$filerow->filedate}<br /><br />";
+    echo "<br />".ldate($CONFIG['dateformat_datetime'], mysql2date($filerow->filedate))."<br /><br />";
 }
 echo "</div>";
 

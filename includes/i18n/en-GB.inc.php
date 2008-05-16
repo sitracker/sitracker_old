@@ -1143,6 +1143,7 @@ $strUpdates = 'Updates';
 $strUpdatedFromActiity = 'Updated from Activity by %s';
 $strUpdateSuccessful = 'Update Successful';
 $strUpdateType = 'Update Type';
+$strUploadedBy = 'Uploaded by %s';
 $strUnknown = 'Unknown';
 $strUnknownServiceLevel = 'Unknown service level';
 $strUnlimited = 'Unlimited';
