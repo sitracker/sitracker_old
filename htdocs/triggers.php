@@ -203,9 +203,9 @@ switch ($_REQUEST['mode'])
         {
             $templateid = $noticetemplate;
         }
-        elseif
+        elseif ($action == 'ACTION_EMAIL')
         {
-            ($action == 'ACTION_EMAIL') $templateid = $emailtemplate;
+            $templateid = $emailtemplate;
         }
         else
         {
