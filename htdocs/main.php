@@ -77,9 +77,9 @@ $cols0 = substr($cols0, 0, -1);
 $cols1 = substr($cols1, 0, -1);
 $cols2 = substr($cols2, 0, -1);
 echo "<p id='pageoptions'>".help_link("Dashboard")." <a href='manage_user_dashboard.php' title='{$strManageYourDashboard}'>";
-echo "<img src='{$CONFIG['application_webpath']}images/icons/{$iconset}/16x16/dashboardadd.png' width='16' height='16' alt='' /></a> ";
+echo "".icon('dashboardadd', 16)."</a> ";
 // FIXME i18n Save Dashboard Layout Manually
-echo "<a href=\"javascript:save_layout();\" id='savelayout' title='Save Dashboard Layout Manually'><img src='{$CONFIG['application_webpath']}images/icons/{$iconset}/16x16/save.png' width='16' height='16' alt='' /></a></p>";
+echo "<a href=\"javascript:save_layout();\" id='savelayout' title='Save Dashboard Layout Manually'>".icon('save', 16)."</a></p>";
 ?>
 <script type="text/javascript">
 /* <![CDATA[ */
@@ -248,17 +248,23 @@ foreach ($arr AS $a)
 echo "</td></tr></table>\n";
 
 //  Users Login Details
-echo "<div id='userbar'>".sprintf($strLoggedInAs, "<strong>{$sit[0]}</strong>");
-echo " currently <strong>".userstatus_name(user_status($sit[2]))."</strong> and ";
+echo "<div id='userbar'>";
 
 if (user_accepting($sit[2])!='Yes')
 {
-    echo "<span class=\"error\">{$strNotAccepting}</span>";
+    $userstatus = "<span class='error'>{$strNotAccepting}</span>";
 }
 else
 {
-    echo "<strong>{$strAccepting}</strong>";
+    $userstatus = "<strong>{$strAccepting}</strong>";
 }
+
+echo sprintf($strLoggedInAsXAndCurrentlyXAndX, 
+             "<strong>{$sit[0]}</strong>",
+			 "<strong>".userstatus_name(user_status($sit[2]))."</strong>",
+			 $userstatus);
+
+
 
 echo " calls";// FIXME i18n
 

@@ -25,6 +25,7 @@ $submit = $_REQUEST['submit'];
 if (empty($submit) OR !empty($_SESSION['formerrors']['add_contact']))
 {
     include ('htmlheader.inc.php');
+    
     ?>
     <script type="text/javascript" src="scripts/dojo/dojo.js"></script>
     <script type='text/javascript'>
@@ -35,15 +36,15 @@ if (empty($submit) OR !empty($_SESSION['formerrors']['add_contact']))
     <?php
     echo show_form_errors('add_contact');
     clear_form_errors('add_contact');
-    echo "<h2><img src='{$CONFIG['application_webpath']}images/icons/{$iconset}/32x32/contact.png' width='32' height='32' alt='' /> ";
+    echo "<h2>".icon('contact', 32)." ";
     echo "{$strNewContact}</h2>";
 
     echo "<h5 class='warning'>{$strAvoidDupes}.</h5>";
     echo "<h5>".sprintf($strMandatoryMarked, "<sup class='red'>*</sup>")."</h5>";
     echo "<form name='contactform' action='{$_SERVER['PHP_SELF']}' method='post' onsubmit=\"return confirm_action('{$strAreYouSureAdd}')\">";
     echo "<table align='center' class='vertical'>";
-    echo "<tr><th>{$strName} <sup class='red'>*</sup><br /></th>\n";
-
+    echo "<tr><th>{$strName}</th>\n";
+    
     echo "<td>";
     echo "\n<table><tr><td align='center'>{$strTitle}<br />";
     echo "<input maxlength='50' name='courtesytitle' title=\"{$strCourtesyTitle}\" size='7'";
@@ -54,19 +55,20 @@ if (empty($submit) OR !empty($_SESSION['formerrors']['add_contact']))
     echo "/></td>\n";
 
     echo "<td align='center'>{$strForenames}<br />";
-    echo "<input maxlength='100' name='forenames' size='15' title=\"{$strForenames}\"";
+    echo "<input class='required' maxlength='100' name='forenames' size='15' title=\"{$strForenames}\"";
     if ($_SESSION['formdata']['add_contact']['forenames'] != '')
     {
         echo "value='{$_SESSION['formdata']['add_contact']['forenames']}'";
     }
     echo "/></td>\n";
 
-    echo "<td align='center'>{$strSurname}<br /><input maxlength='100' name='surname' size='20' title=\"{$strSurname}\"";
+    echo "<td align='center'>{$strSurname}<br />";
+    echo "<input class='required' maxlength='100' name='surname' size='20' title=\"{$strSurname}\"";
     if ($_SESSION['formdata']['add_contact']['surname'] != '')
     {
         echo "value='{$_SESSION['formdata']['add_contact']['surname']}'";
     }
-    echo " /></td></tr>\n";
+    echo " /> <span class='required'>{$strRequired}</span></td></tr>\n";
     echo "</table>\n</td></tr>\n";
 
     echo "<tr><th>{$strJobTitle}</th><td><input maxlength='255' name='jobtitle' size='35' title=\"{$strJobTitle}\"";
@@ -75,8 +77,8 @@ if (empty($submit) OR !empty($_SESSION['formerrors']['add_contact']))
         echo "value='{$_SESSION['formdata']['add_contact']['jobtitle']}'";
     }
     echo " /></td></tr>\n";
-    echo "<tr><th>{$strSite} <sup class='red'>*</sup></th><td>";
-    echo site_drop_down('siteid',$siteid)."</td></tr>\n";
+    echo "<tr><th>{$strSite}</th><td>";
+    echo site_drop_down('siteid',$siteid, TRUE)."</td></tr>\n";
 
     echo "<tr><th>{$strDepartment}</th><td><input maxlength='255' name='department' size='35'";
     if ($_SESSION['formdata']['add_contact']['department'] != '')
@@ -85,7 +87,8 @@ if (empty($submit) OR !empty($_SESSION['formerrors']['add_contact']))
     }
     echo "/></td></tr>\n";
 
-    echo "<tr><th>{$strEmail} <sup class='red'>*</sup></th><td><input maxlength='100' name='email' size='35'";
+    echo "<tr><th>{$strEmail}</th><td>";
+    echo "<input class='required' maxlength='100' name='email' size='35'";
     if ($_SESSION['formdata']['add_contact']['email'])
     {
         echo "value='{$_SESSION['formdata']['add_contact']['email']}'";
@@ -266,9 +269,9 @@ else
         	$bodytext .= "username: {$username}\npassword: {$prepassword}\n";
         	$bodytext .= "\nPlease note, this password cannot be recovered, ";
         	$bodytext .= "only reset. You may change it in the portal.";
-
-      		mail($email, $strContactDetails, $bodytext, $extra_headers);
-        }
+        	
+        	//FIXME 3.35 use triggers
+      		mail($email, $strContactDetails, $bodytext, $extra_headers);        	}
 
         $password = md5($prepassword);
 

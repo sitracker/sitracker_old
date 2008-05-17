@@ -91,7 +91,7 @@ p.error, h5.error
   border: 1px solid #f00;
   background-color: #FFE1E1;
 }
-p.error span a { color: #f00; }
+p.error, span.error{ color: #f00; }
 p.warning span a { color: #5A3612; }
 p#dismissall { text-align: right; padding-right:32px; }
 
