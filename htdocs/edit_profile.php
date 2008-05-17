@@ -44,7 +44,7 @@ if (empty($mode))
     // FIXME This form should use one SQL query really, not call all these functions to lookup each field
     // Need to change this sometime.
 
-    echo "<h2><img src='{$CONFIG['application_webpath']}images/icons/{$iconset}/32x32/user.png' width='32' height='32' alt='' /> ";
+    echo "<h2>".icon('user', 32)." ";
     echo sprintf($strEditProfileFor, $user->realname)."</h2>";
     echo "<form action='{$_SERVER['PHP_SELF']}' method='post'>";
     echo "<table align='center' class='vertical'>";
@@ -200,9 +200,8 @@ if (empty($mode))
     echo "</select>";
     echo "</td></tr>\n";
 
-    // KMH 10/05/08 - commented out as the code doesn't actually use this
-    //echo "<tr><th>{$strIncidentUpdatesPerPage}:</th>";
-    //echo "<td><input maxlength='5' name='updatesperpage' size='3' type='text' value=\"".$user->var_num_updates_view."\" /></td></tr>\n";
+    echo "<tr><th>{$strIncidentUpdatesPerPage}:</th>";
+    echo "<td><input maxlength='5' name='updatesperpage' size='3' type='text' value=\"".$user->var_num_updates_view."\" /></td></tr>\n";
 
     echo "<tr><th colspan='2'>{$strNotifications}</th></tr>\n";
     echo "<tr><th></th><td>";
