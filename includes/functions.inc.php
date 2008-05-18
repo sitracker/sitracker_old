@@ -7870,7 +7870,7 @@ function contract_details($id, $mode='internal')
                 foreach($supportedcontacts AS $contact)
                 {
                     $html .= "<tr><th>{$GLOBALS[strContact]} #{$supportcount}:</th>";
-                    $html .= "<td>".icon('contact')." ";
+                    $html .= "<td>".icon('contact', 16)." ";
                     $html .= "<a href=\"contact_details.php?id={$contact}\">".contact_realname($contact)."</a>, ";
                     $html .= contact_site($contact). "</td>";
 
@@ -7931,7 +7931,7 @@ function contract_details($id, $mode='internal')
         $html .="<table align='center'>";
         while ($software=mysql_fetch_array($result))
         {
-            $html .= "<tr><td> ".icon('skill')." ";
+            $html .= "<tr><td> ".icon('skill', 16)." ";
             if ($software->lifetime_end > 0 AND $software->lifetime_end < $now)
             {
                 $html .= "<span class='deleted'>";
