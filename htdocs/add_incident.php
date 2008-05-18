@@ -108,7 +108,7 @@ if (empty($action) OR $action=='showform')
         <table class='vertical'>
         <?php
         echo "<tr><th><label for='search_string'>{$strContact} ";
-        echo "<img src='{$CONFIG['application_webpath']}images/icons/{$iconset}/16x16/contact.png' width='16' height='16' alt='' />";
+        echo icon('contact', 16);
         echo "</label></th><td>";
         //echo "<input type='text' name='search_string' size='30' value='{$query}' />\n";
         echo "<input dojoType='ComboBox' value='{$query}' dataUrl='autocomplete.php?action=contact' style='width: 300px;' name='search_string' id='search_string' />";
@@ -252,7 +252,7 @@ elseif ($action=='findcontact')
 
         if (mysql_num_rows($result) > 0)
         {
-            $html = "<h3><img src='{$CONFIG['application_webpath']}images/icons/{$iconset}/32x32/contact.png' width='32' height='32' alt='' /> ";
+            $html = "<h3>".icon('contact', 32, $strContact)." ";
             $html .= "{$strContacts}</h3>\n";
             $html .=  "<p align='center'>{$strListShowsContacts}.</p>";
             $html .=  "<table align='center'>";
@@ -315,7 +315,7 @@ elseif ($action=='findcontact')
         </script>
         <?php
         echo "<h2>{$strAddIncident} - {$strSelect} {$strContract} / {$strContact}</h2>";
-        echo "<h3><img src='{$CONFIG['application_webpath']}images/icons/{$iconset}/32x32/contract.png' width='32' height='32' alt='' />  ";
+        echo "<h3>".icon('contract', 32, $strContract)." ";
         echo "{$strContracts}</h3>";
         echo "<p align='center'>".sprintf($strListShowsContracts, $strAddIncident).".</p>";
 
