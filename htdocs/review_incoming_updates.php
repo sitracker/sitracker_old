@@ -49,7 +49,7 @@ function generate_row($update)
         $result = mysql_query($sql);
         if (mysql_error()) trigger_error(mysql_error(),E_USER_WARNING);
         list($contactmatches) = mysql_fetch_row($result);
-        if ($contactmatches > 0) $shade='idle';
+        if ($contactmatches > 0) $shade = 'idle';
     }
     $pluginshade = plugin_do('holdingqueue_rowshade',$update);
     $shade = $pluginshade ? $pluginshade : $shade;
@@ -154,7 +154,7 @@ else
     if (mysql_error()) trigger_error(mysql_error(),E_USER_ERROR);
 }
 
-if ($spam_string=$_REQUEST['delete_all_spam'])
+if ($spam_string == $_REQUEST['delete_all_spam'])
 {
     $spam_array = explode(',',$spam_string);
     foreach ($spam_array as $spam)
@@ -187,7 +187,7 @@ if (!empty($selected))
         $sql = "DELETE FROM `{$dbTempIncoming}` WHERE updateid='$updateid'";
         mysql_query($sql);
         if (mysql_error()) trigger_error("MySQL Query Error ".mysql_error(), E_USER_ERROR);
-        $path=$incident_attachment_fspath.'updates/'.$updateid;
+        $path = $incident_attachment_fspath.'updates/'.$updateid;
         if (file_exists($path)) deldir($path);
 
         journal(CFG_LOGGING_NORMAL, 'Incident Log Entry Deleted', "Incident Log Entry $updateid was deleted", CFG_JOURNAL_INCIDENTS, $updateid);
@@ -244,7 +244,7 @@ if ($countresults > 0)
 
     while ($updates = mysql_fetch_array($result))
     {
-        if (!stristr($updates['subject'],$CONFIG['spam_email_subject']))
+        if (!stristr($updates['subject'], $CONFIG['spam_email_subject']))
         {
             $queuerows[$updates['id']] = generate_row($updates);
         }
@@ -283,7 +283,26 @@ $realemails = $countresults - $spamcount;
 if ((mysql_num_rows($resultnew) > 0) OR ($realemails > 0))
 {
     $totalheld = $countresults + mysql_num_rows($resultnew) - $spamcount;
-    echo "<h2><img src='{$CONFIG['application_webpath']}images/icons/{$iconset}/32x32/email.png' width='32' height='32' alt='{$strHeldEmails}' /> ".sprintf($strHeldEmailsNum, $realemails)."</h2>"; // was $countresults
+    echo "<h2><img src='{$CONFIG['application_webpath']}images/icons/{$iconset}/32x32/email.png' width='32' height='32' alt='{$strHeldEmails}' /> ";
+    if ($realemails > 0)
+    {
+        echo sprintf($strHeldEmailsNum, $realemails)." ";
+    }
+    
+    if (mysql_num_rows($resultnew) > 0)
+    {
+        if ($realemails > 0) echo " and "; //FIXME i18n
+        
+        if (mysql_num_rows($resultnew) == 1)
+        {
+            echo $str1IncidentsLoggedViaPortal;
+        }
+        else
+        {
+            echo sprintf($strXIncidentsLoggedViaPortal, mysql_num_rows($resultnew));
+        }
+    }
+    echo "</h2>"; // was $countresults
     echo "<p align='center'>{$strIncomingEmailText}</p>";
     echo "<form action='{$_SERVER['PHP_SELF']}' name='held_emails'  method='post'>";
     echo "<table align='center' style='width: 95%'>";

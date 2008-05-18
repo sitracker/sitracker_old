@@ -11,6 +11,7 @@ $str1Day = '1 Day';
 $str1Minute = '1 Minute';
 $str1Month = '1 Month';
 $str1Hour = '1 Hour';
+$str1IncidentsLoggedViaPortal = '1 Incident Logged via the Portal';
 
 # e.g. About this site, i.e. more information
 $strAbout = 'About';
@@ -1212,6 +1213,7 @@ $strWorkStatus = 'Work Status';
 $strWebsite = 'Website';
 $strWithheld = 'Withheld';
 
+$strXIncidentsLoggedViaPortal = '%s Incidents Logged via the Portal';
 $strXIncidentsLeft = '%s Incidents Left';
 $strXDays = '%s Days';
 $strXHasAction = '%s Has Action';
