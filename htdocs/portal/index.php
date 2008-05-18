@@ -54,11 +54,12 @@ function portal_incident_table($sql)
                 $html .=  software_name($incident->softwareid)."<br />";
             }
 
-            $html .=  "<strong><a href='incident.php?id={$incident->id}'>{$incident->title}</a></strong></td>";
-            $html .=  "<td>".user_realname($incident->owner)."</td>";
-            $html .=  "<td>".ldate($CONFIG['dateformat_datetime'], $incident->lastupdated)."</td>";
-            $html .=  "<td>{$incident->forenames} {$incident->surname}</td>";
-            $html .=  "<td>".incidentstatus_name($incident->status, external)."</td>";
+            $html .= "<strong><a href='incident.php?id={$incident->id}'>{$incident->title}</a></strong></td>";
+            $html .= "<td>".user_realname($incident->owner)."</td>";
+            $html .= "<td>".ldate($CONFIG['dateformat_datetime'], $incident->lastupdated)."</td>";
+            $html .= "<td><a href='contactdetails.php?id={$incident->contactid}'>";
+            $html .= "{$incident->forenames} {$incident->surname}</td>";
+            $html .= "<td>".incidentstatus_name($incident->status, external)."</td>";
             if ($showclosed != "true")
             {
                 $html .=  "<td><a href='update.php?id={$incident->id}'>{$GLOBALS['strUpdate']}</a> | ";
@@ -104,7 +105,7 @@ if ($showclosed == "true")
     echo " <a href='$_SERVER[PHP_SELF]?page=incidents&amp;showclosed=false'>";
     echo "{$strShowOpenIncidents}</a>";
     echo "</p>";
-    $sql = "SELECT i.*, c.forenames, c.surname FROM `{$dbIncidents}` AS i, ";
+    $sql = "SELECT i.*, c.id AS contactid, c.forenames, c.surname FROM `{$dbIncidents}` AS i, ";
     $sql .= "`{$dbContacts}` AS c ";
     $sql .= "WHERE status = 2 AND c.id = i.contact ";
     $sql .= "AND contact = '{$_SESSION['contactid']}' ";
@@ -118,7 +119,7 @@ else
     echo icon('close', 16, $strShowClosedIncidents);
     echo " <a href='{$_SERVER['PHP_SELF']}?page=incidents&amp;showclosed=true'>{$strShowClosedIncidents}</a>";
     echo "</p>";
-    $sql = "SELECT i.*, c.forenames, c.surname FROM `{$dbIncidents}` AS i, `{$dbContacts}` AS c WHERE status != 2 ";
+    $sql = "SELECT i.*, c.id AS contactid, c.forenames, c.surname FROM `{$dbIncidents}` AS i, `{$dbContacts}` AS c WHERE status != 2 ";
     $sql .= "AND c.id = i.contact ";
     $sql .= "AND i.contact = '{$_SESSION['contactid']}' ";
     $sql .= "ORDER by i.id DESC";
@@ -166,7 +167,8 @@ if ($CONFIG['portal_site_incidents'] AND $otherincidents != NULL)
     if ($showclosed == "true")
     {
         echo "<h2>{$strYourSitesClosedIncidents}</h2>";
-        $sql = "SELECT DISTINCT i.id AS id, i.*, c.forenames, c.surname ";
+        $sql = "SELECT DISTINCT i.id AS id, i.*, c.id AS contactid, ";
+        $sql .= "c.forenames, c.surname ";
         $sql .= "FROM `{$dbIncidents}` AS i, `{$dbContacts}` AS c, `{$dbSites}` AS s ";
         $sql .= "WHERE status = 2 ";
         $sql .= "AND c.id=i.contact ";
@@ -186,7 +188,8 @@ if ($CONFIG['portal_site_incidents'] AND $otherincidents != NULL)
     {
         echo "<h2>".icon('site', 32, $strYourSitesIncidents);
         echo " {$strYourSitesIncidents}</h2>";
-        $sql = "SELECT DISTINCT i.id AS id, i.*, c.forenames, c.surname ";
+        $sql = "SELECT DISTINCT i.id AS id, i.*, c.id AS contactid, ";
+        $sql .= "c.forenames, c.surname ";
         $sql .= "FROM `{$dbIncidents}` AS i, `{$dbContacts}` AS c, `{$dbSites}` AS s ";
         $sql .= "WHERE status != 2 ";
         $sql .= "AND c.id=i.contact ";

@@ -51,6 +51,7 @@ elseif ($id != 0 AND $action == 'add' AND intval($_POST['contactid'] != 0))
     }
 }
 
+echo "<h2>".icon('contract', 32)." {$GLOBALS['strContract']}</h2>";
 
 echo contract_details($id, 'external');
 

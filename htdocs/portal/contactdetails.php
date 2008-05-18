@@ -29,7 +29,7 @@ if (!isset($_GET['id']))
 {
     $id = $_SESSION['contactid'];
 }
-elseif ($_GET['id'] != $_SESSION['contactid'])
+else
 {
     $id = intval($_GET['id']);
 }

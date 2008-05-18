@@ -58,6 +58,7 @@ $strAdditionalInfo = 'Additional Information';
 $strAddKBArticle = 'Add Knowledge Base Article';
 $strAddLink = 'Add Link';
 $strAddNew = 'Add New';
+$strAddNewSiteContact = 'Add New Site Contact';
 $strAddNote = 'Add Note';
 $strAddProduct = 'Add Product';
 $strAddProductInformation = 'Add Product Information';

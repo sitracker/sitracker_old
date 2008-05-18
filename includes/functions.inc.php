@@ -3543,16 +3543,25 @@ function journal($loglevel, $event, $bodytext, $journaltype, $refid)
 
 
 // prints the HTML for a checkbox, the 'state' value should be a 1, yes, true or 0, no, false */
-function html_checkbox($name,$state)
+function html_checkbox($name, $state, $return = FALSE)
 {
     if ($state==1 || $state=='Yes' || $state=='yes' || $state=='true' || $state=='TRUE')
     {
-        echo "<input type='checkbox' checked='checked' name='{$name}' value='{$state}' />" ;
+        $html = "<input type='checkbox' checked='checked' name='{$name}' value='{$state}' />" ;
     }
     else
     {
-        echo "<input type='checkbox' name='{$name}' value='{$state}' />" ;
+        $html = "<input type='checkbox' name='{$name}' value='{$state}' />" ;
     }
+    
+    if ($return)
+    {
+        return $html;
+    }
+    else
+    {
+        echo $html;
+    }        
 }
 
 
@@ -7785,10 +7794,21 @@ function contract_details($id, $mode='internal')
     }
     else
     {
-        $html .= "<td><a href=\"site_details.php\">".$maintrow['sitename']."</a></td></tr>";
+        $html .= "<td><a href=\"sitedetails.php\">".$maintrow['sitename']."</a></td></tr>";
     }
     $html .= "<tr><th>{$GLOBALS[strAdminContact]}:</th>";
-    $html .= "<td><a href=\"contact_details.php?id=".$maintrow['admincontact']."\">".contact_realname($maintrow['admincontact'])."</a></td></tr>";
+    
+    if ($mode == 'internal')
+    {
+    	$html .= "<td><a href=\"contact_details.php?id=";
+    	$html .= "{$maintrow['admincontact']}\">";
+    	$html .= contact_realname($maintrow['admincontact'])."</a></td></tr>";
+	}
+	else
+	{
+		$html .= "<td><a href='contactdetails.php?id={$maintrow['admincontact']}'>";
+		$html .= contact_realname($maintrow['admincontact'])."</a></td></tr>";
+	}
 
     $html .= "<tr><th>{$GLOBALS[strReseller]}:</th><td>";
 
@@ -7846,9 +7866,13 @@ function contract_details($id, $mode='internal')
         $html .= "<tr><th>{$GLOBALS[strNotes]}:</th><td>".$maintrow['maintnotes']."</td></tr>";
     }
     $html .= "</table>";
-    $html .= "<p align='center'>";
-    $html .= "<a href=\"edit_contract.php?action=edit&amp;maintid=$id\">{$GLOBALS[strEditContract]}</a></p>";
-
+    
+    if ($mode == 'internal')
+    {
+	    $html .= "<p align='center'>";
+	    $html .= "<a href=\"edit_contract.php?action=edit&amp;maintid=$id\">{$GLOBALS[strEditContract]}</a></p>";
+	}
+	$html .= "<h3>{$GLOBALS['strContacts']}</h3>";
     if (mysql_num_rows($maintresult)<1)
     {
         throw_error("{$GLOBALS[strNoContractsFound]}: ",$id);
@@ -7880,7 +7904,15 @@ function contract_details($id, $mode='internal')
                 {
                     $html .= "<tr><th>{$GLOBALS[strContact]} #{$supportcount}:</th>";
                     $html .= "<td>".icon('contact', 16)." ";
-                    $html .= "<a href=\"contact_details.php?id={$contact}\">".contact_realname($contact)."</a>, ";
+                    if ($mode == 'internal')
+                    {
+                    	$html .= "<a href=\"contact_details.php?";
+                	}
+                	else
+                	{
+                		$html .= "<a href=\"contactdetails.php?";
+                	}
+                	$html .= "id={$contact}\">".contact_realname($contact)."</a>, ";
                     $html .= contact_site($contact). "</td>";
 
                     if ($mode == 'internal')
@@ -7924,7 +7956,8 @@ function contract_details($id, $mode='internal')
             $html .= "<input type='submit' value='{$GLOBALS['strAdd']}' /></p></form>";
         }
 
-        $html .= "<p align='center'><a>Add new site contact</a></p>";
+        $html .= "<p align='center'><a href='addcontact.php'>";
+        $html .= "{$GLOBALS['strAddNewSiteContact']}</a></p>";
 	}
 
     $html .= "<br />";
@@ -8530,6 +8563,330 @@ function show_edit_site($site, $mode='internal')
     return $html;
 }
 
+
+function show_add_contact($mode = 'internal')
+{
+    $html .= show_form_errors('add_contact');
+    clear_form_errors('add_contact');
+    $html .= "<h2>".icon('contact', 32)." ";
+    $html .= "{$GLOBALS['strNewContact']}</h2>";
+
+    if ($mode == 'internal')
+    {
+        $html .= "<h5 class='warning'>{$GLOBALS['strAvoidDupes']}</h5>";
+    }
+    $html .= "<form name='contactform' action='{$_SERVER['PHP_SELF']}' ";
+    $html .= "method='post' onsubmit=\"return confirm_action('{$GLOBALS['strAreYouSureAdd']})\">";
+    $html .= "<table align='center' class='vertical'>";
+    $html .= "<tr><th>{$GLOBALS['strName']}</th>\n";
+    
+    $html .= "<td>";
+    $html .= "\n<table><tr><td align='center'>{$GLOBALS['strTitle']}<br />";
+    $html .= "<input maxlength='50' name='courtesytitle' title=\"";
+    $html .= "{$GLOBALS['strCourtesyTitle']}\" size='7'";
+    if ($_SESSION['formdata']['add_contact']['courtesytitle'] != '')
+    {
+        $html .= "value='{$_SESSION['formdata']['add_contact']['courtesytitle']}'";
+    }
+    $html .= "/></td>\n";
+
+    $html .= "<td align='center'>{$GLOBALS['strForenames']}<br />";
+    $html .= "<input class='required' maxlength='100' name='forenames' ";
+    $html .= "size='15' title=\"{$GLOBALS['strForenames']}\"";
+    if ($_SESSION['formdata']['add_contact']['forenames'] != '')
+    {
+        $html .= "value='{$_SESSION['formdata']['add_contact']['forenames']}'";
+    }
+    $html .= "/></td>\n";
+
+    $html .= "<td align='center'>{$GLOBALS['strSurname']}<br />";
+    $html .= "<input class='required' maxlength='100' name='surname' ";
+    $html .= "size='20' title=\"{$GLOBALS['strSurname']}\"";
+    if ($_SESSION['formdata']['add_contact']['surname'] != '')
+    {
+        $html .= "value='{$_SESSION['formdata']['add_contact']['surname']}'";
+    }
+    $html .= " /> <span class='required'>{$GLOBALS['strRequired']}</span></td></tr>\n";
+    $html .= "</table>\n</td></tr>\n";
+
+    $html .= "<tr><th>{$GLOBALS['strJobTitle']}</th><td><input maxlength='255'";
+    $html .= " name='jobtitle' size='35' title=\"{$GLOBALS['strJobTitle']}\"";
+    if ($_SESSION['formdata']['add_contact']['jobtitle'] != '')
+    {
+        $html .= "value='{$_SESSION['formdata']['add_contact']['jobtitle']}'";
+    }
+    $html .= " /></td></tr>\n";
+    if ($mode == 'internal')
+    {
+        $html .= "<tr><th>{$GLOBALS['strSite']}</th><td>";
+        $html .= site_drop_down('siteid',$siteid, TRUE)."</td></tr>\n";
+    }
+    else
+    {
+        $html .= "<input type='hidden' name='siteid' value='{$_SESSION['siteid']}' />";
+    }
+
+    $html .= "<tr><th>{$GLOBALS['strDepartment']}</th><td><input maxlength='255' name='department' size='35'";
+    if ($_SESSION['formdata']['add_contact']['department'] != '')
+    {
+        $html .= "value='{$_SESSION['formdata']['add_contact']['department']}'";
+    }
+    $html .= "/></td></tr>\n";
+
+    $html .= "<tr><th>{$GLOBALS['strEmail']}</th><td>";
+    $html .= "<input class='required' maxlength='100' name='email' size='35'";
+    if ($_SESSION['formdata']['add_contact']['email'])
+    {
+        $html .= "value='{$_SESSION['formdata']['add_contact']['email']}";
+    }
+    $html .= "/> ";
+
+    $html .= "<label>";
+    $html .= html_checkbox('dataprotection_email', 'No', TRUE);
+    $html .= "{$GLOBALS['strEmail']} {$GLOBALS['strDataProtection']}</label>".help_link("EmailDataProtection");
+    $html .= "</td></tr>\n";
+
+    $html .= "<tr><th>{$GLOBALS['strTelephone']}</th><td><input maxlength='50' name='phone' size='35'";
+    if ($_SESSION['formdata']['add_contact']['phone'] != '')
+    {
+        $html .= "value='{$_SESSION['formdata']['add_contact']['phone']}'";
+    }
+    $html .= "/> ";
+
+    $html .= "<label>";
+    $html .= html_checkbox('dataprotection_phone', 'No', TRUE);
+    $html .= "{$GLOBALS['strTelephone']} {$GLOBALS['strDataProtection']}</label>".help_link("TelephoneDataProtection");
+    $html .= "</td></tr>\n";
+
+    $html .= "<tr><th>{$GLOBALS['strMobile']}</th><td><input maxlength='100' name='mobile' size='35'";
+    if ($_SESSION['formdata']['add_contact']['mobile'] != '')
+    {
+        $html .= "value='{$_SESSION['formdata']['add_contact']['mobile']}'";
+    }
+    $html .= "/></td></tr>\n";
+
+    $html .= "<tr><th>{$GLOBALS['strFax']}</th><td><input maxlength='50' name='fax' size='35'";
+    if ($_SESSION['formdata']['add_contact']['fax'])
+    {
+        $html .= "value='{$_SESSION['formdata']['add_contact']['fax']}'";
+    }
+    $html .= "/></td></tr>\n";
+
+    $html .= "<tr><th>{$GLOBALS['strAddress']}</th><td><label>";
+    $html .= html_checkbox('dataprotection_address', 'No', TRUE);
+    $html .= " {$GLOBALS['strAddress']} {$GLOBALS['strDataProtection']}</label>";
+    $html .= help_link("AddressDataProtection")."</td></tr>\n";
+    $html .= "<tr><th></th><td><label><input type='checkbox' name='usesiteaddress' value='yes' onclick=\"$('hidden').toggle();\" /> {$GLOBALS['strSpecifyAddress']}</label></td></tr>\n";
+    $html .= "<tbody id='hidden' style='display:none'>";
+    $html .= "<tr><th>{$GLOBALS['strAddress1']}</th>";
+    $html .= "<td><input maxlength='255' name='address1' size='35' /></td></tr>\n";
+    $html .= "<tr><th>{$GLOBALS['strAddress2']}</th>";
+    $html .= "<td><input maxlength='255' name='address2' size='35' /></td></tr>\n";
+    $html .= "<tr><th>{$GLOBALS['strCity']}</th><td><input maxlength='255' name='city' size='35' /></td></tr>\n";
+    $html .= "<tr><th>{$GLOBALS['strCounty']}</th><td><input maxlength='255' name='county' size='35' /></td></tr>\n";
+    $html .= "<tr><th>{$GLOBALS['strCountry']}</th><td>";
+    $html .= country_drop_down('country', $CONFIG['home_country'])."</td></tr>\n";
+    $html .= "<tr><th>{$GLOBALS['strPostcode']}</th><td><input maxlength='255' name='postcode' size='35' /></td></tr>\n";
+    $html .= "</tbody>";
+    if ($mode == 'internal')
+    {
+        $html .= "<tr><th>{$GLOBALS['strNotes']}</th><td><textarea cols='60' rows='5' name='notes'>";
+	    if ($_SESSION['formdata']['add_contact']['notes'] != '')
+	    {
+	        $html .= $_SESSION['formdata']['add_contact']['notes'];
+	    }
+	    $html .= "</textarea></td></tr>\n";
+    }
+    $html .= "<tr><th>{$GLOBALS['strEmailDetails']}</th>";
+    $html .= "<td><input type='checkbox' name='emaildetails' checked='checked'>";
+    $html .= "<label for='emaildetails'>{$GLOBALS['strEmailContactLoginDetails']}</td></tr>";
+    $html .= "</table>\n\n";
+    $html .= "<p><input name='submit' type='submit' value=\"{$GLOBALS['strAddContact']}\" /></p>";
+    $html .= "</form>\n";
+
+    //cleanup form vars
+    clear_form_data('add_contact');
+    
+    return $html;
+}
+
+
+function process_add_contact()
+{
+	global $now, $CONFIG, $dbContacts;
+    // Add new contact
+    // External variables
+    $siteid = mysql_real_escape_string($_REQUEST['siteid']);
+    $email = strtolower(cleanvar($_REQUEST['email']));
+    $dataprotection_email = mysql_real_escape_string($_REQUEST['dataprotection_email']);
+    $dataprotection_phone = mysql_real_escape_string($_REQUEST['dataprotection_phone']);
+    $dataprotection_address = mysql_real_escape_string($_REQUEST['dataprotection_address']);
+    $username = cleanvar($_REQUEST['username']);
+    $courtesytitle = cleanvar($_REQUEST['courtesytitle']);
+    $forenames = cleanvar($_REQUEST['forenames']);
+    $surname = cleanvar($_REQUEST['surname']);
+    $jobtitle = cleanvar($_REQUEST['jobtitle']);
+    $address1 = cleanvar($_REQUEST['address1']);
+    $address2 = cleanvar($_REQUEST['address2']);
+    $city = cleanvar($_REQUEST['city']);
+    $county = cleanvar($_REQUEST['county']);
+    if (!empty($address1)) $country = cleanvar($_REQUEST['country']);
+    else $country='';
+    $postcode = cleanvar($_REQUEST['postcode']);
+    $phone = cleanvar($_REQUEST['phone']);
+    $mobile = cleanvar($_REQUEST['mobile']);
+    $fax = cleanvar($_REQUEST['fax']);
+    $department = cleanvar($_REQUEST['department']);
+    $notes = cleanvar($_REQUEST['notes']);
+    $_SESSION['formdata']['add_contact'] = $_REQUEST;
+
+    $errors = 0;
+    // check for blank name
+    if ($surname == "")
+    {
+        $errors++;
+        $_SESSION['formerrors']['add_contact']['surname'] = $GLOBALS['strMustEnterSurname'];
+    }
+    // check for blank site
+    if ($siteid == '')
+    {
+        $errors++;
+        $_SESSION['formerrors']['add_contact']['siteid'] = $GLOBALS['strMustSelectCustomerSite'];
+    }
+    // check for blank email
+    if ($email == "" OR $email=='none' OR $email=='n/a')
+    {
+        $errors++;
+        $_SESSION['formerrors']['add_contact']['email'] = $GLOBALS['strMustEnterEmail'];
+    }
+    if ($siteid==0 OR $siteid=='')
+    {
+        $errors++;
+        $_SESSION['formerrors']['add_contact']['siteid'] = $GLOBALS['strMustSelectSite'];
+    }
+    // Check this is not a duplicate
+    $sql = "SELECT id FROM `{$dbContacts}` WHERE email='$email' AND LCASE(surname)=LCASE('$surname') LIMIT 1";
+    $result = mysql_query($sql);
+    if (mysql_num_rows($result) >= 1)
+    {
+        $errors++;
+        $_SESSION['formerrors']['add_contact']['duplicate'] = $GLOBALS['strContactRecordExists'];
+    }
+
+
+    // add contact if no errors
+    if ($errors == 0)
+    {
+        if (!empty($dataprotection_email))
+        {
+            $dataprotection_email='Yes';
+        }
+        else
+        {
+            $dataprotection_email='No';
+        }
+
+        if (!empty($dataprotection_phone))
+        {
+            $dataprotection_phone='Yes';
+        }
+        else
+        {
+            $dataprotection_phone='No';
+        }
+
+        if (!empty($dataprotection_address))
+        {
+            $dataprotection_address='Yes';
+        }
+        else
+        {
+            $dataprotection_address='No';
+        }
+
+        // generate username and password
+
+        $username = strtolower(substr($surname, 0, strcspn($surname, " ")));
+        $prepassword = generate_password();
+
+        $password = md5($prepassword);
+
+        $sql  = "INSERT INTO `{$dbContacts}` (username, password, courtesytitle, forenames, surname, jobtitle, ";
+        $sql .= "siteid, address1, address2, city, county, country, postcode, email, phone, mobile, fax, ";
+        $sql .= "department, notes, dataprotection_email, dataprotection_phone, dataprotection_address, ";
+        $sql .= "timestamp_added, timestamp_modified) ";
+        $sql .= "VALUES ('$username', '$password', '$courtesytitle', '$forenames', '$surname', '$jobtitle', ";
+        $sql .= "'$siteid', '$address1', '$address2', '$city', '$county', '$country', '$postcode', '$email', ";
+        $sql .= "'$phone', '$mobile', '$fax', '$department', '$notes', '$dataprotection_email', ";
+        $sql .= "'$dataprotection_phone', '$dataprotection_address', '$now', '$now')";
+        $result = mysql_query($sql);
+        if (mysql_error()) trigger_error("MySQL Query Error ".mysql_error(), E_USER_ERROR);
+
+        // concatenate username with insert id to make unique
+        $newid = mysql_insert_id();
+        $username = $username . $newid;
+        $sql = "UPDATE `{$dbContacts}` SET username='$username' WHERE id='$newid'";
+        $result = mysql_query($sql);
+        if (mysql_error()) trigger_error("MySQL Query Error ".mysql_error(), E_USER_ERROR);
+
+        if (!$result)
+        {
+        	if ($mode == 'internal')
+        	{
+       			html_redirect("add_contact.php", FALSE);
+   			}
+   			else
+   			{
+   				html_redirect("addcontact.php", FALSE);
+   			}
+    	}
+        else
+        {
+            $sql = "SELECT username, password FROM `{$dbContacts}` WHERE id=$newid";
+            $result = mysql_query($sql);
+            if (mysql_error()) trigger_error("MySQL Query Error ".mysql_error(), E_USER_ERROR);
+            else
+            {
+		        if ($CONFIG['portal'] AND $_POST['emaildetails'] == 'on')
+		        {
+		        	$extra_headers = "Reply-To: {$CONFIG['support_email']}\n";
+		            $extra_headers .= "X-Mailer: {$CONFIG['application_shortname']} {$application_version_string}/PHP " . phpversion() . "\n";
+		            $extra_headers .= "X-Originating-IP: {$_SERVER['REMOTE_ADDR']}\n";
+		            $extra_headers .= "\n"; // add an extra crlf to create a null line to separate headers from body
+		
+		            $bodytext = "Hello $forenames\nYou have just been added as a ";
+		        	$bodytext .= "contact on {$CONFIG['application_name']} ";
+		        	$bodytext .= "{$CONFIG['application_uriprefix']}{$CONFIG['application_webpath']}";
+		        	$bodytext .= "\nThese details allow you to the login to the portal,";
+		        	$bodytext .= " where you can create, update and close your incidents";
+		        	$bodytext .= ", as well as view your sites' incidents.\n\n";
+		        	$bodytext .= "Your details are as follows:\n";
+		        	$bodytext .= "username: {$username}\npassword: {$prepassword}\n";
+		        	$bodytext .= "\nPlease note, this password cannot be recovered, ";
+		        	$bodytext .= "only reset. You may change it in the portal.";
+		        	
+		        	//FIXME 3.35 use triggers
+		      		echo "mail($email, $strContactDetails, $bodytext, $extra_headers)";
+		        }
+	            journal(CFG_LOGGING_NORMAL,'Contact Added',"$forenames $surname was Added",CFG_JOURNAL_CONTACTS,$newid);
+	            
+	            if ($mode == 'internal')
+	            {
+	            	html_redirect("contact_details.php?id=$newid");
+	            	exit;
+            	}
+            	else
+            	{
+            		html_redirect("contactdetails.php?id={$newid}");
+            		exit;
+        		}
+    		}	            
+        }
+        clear_form_data('add_contact');
+        clear_form_errors('add_contact');
+    }
+}
+
 // -------------------------- // -------------------------- // --------------------------
 // leave this section at the bottom of functions.inc.php ================================
 
@@ -8545,7 +8902,7 @@ if (is_array($CONFIG['plugins']))
         $plugin = str_replace('/','',$plugin);
         if ($plugin!='')
         {
-            include("{$CONFIG['application_fspath']}/plugins/{$plugin}.php");
+            include("{$CONFIG['application_fspath']}plugins/{$plugin}.php");
         }
     }
 }
