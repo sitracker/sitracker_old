@@ -32,7 +32,7 @@ if ($action == "showform" OR $action=='')
 
     echo show_form_errors('add_contract');
     clear_form_errors('add_contract');
-    echo "<h2><img src='{$CONFIG['application_webpath']}images/icons/{$iconset}/32x32/contract.png' width='32' height='32' alt='' /> ";
+    echo "<h2>".icon('contract', 32)." ";
     echo "{$strAddContract}</h2>";
     echo "<h5>".sprintf($strMandatoryMarked,"<sup class='red'>*</sup>")."</h5>";
     echo "<form name='addcontract' action='{$_SERVER['PHP_SELF']}?action=add' method='post' onsubmit='return confirm_action(\"{$strAreYouSureAddContract}\");'>";

@@ -39,7 +39,7 @@ include ('htmlheader.inc.php');
 //]]>
 </script>
 <?php
-echo "<h2><img src='{$CONFIG['application_webpath']}images/icons/{$iconset}/32x32/contract.png' width='32' height='32' alt='' /> ";
+echo "<h2>".icon('contract', 32)." ";
 echo "{$title}</h2>";
 echo "<table summary='alphamenu' align='center'><tr><td align='center'>";
 echo "<form action='{$_SERVER['PHP_SELF']}' method='get'>";

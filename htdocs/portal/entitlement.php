@@ -10,7 +10,8 @@
 // Author: Kieran Hogg <kieran_hogg[at]users.sourceforge.net
 
 include 'portalheader.inc.php';
-echo "<h2><img src='{$CONFIG['application_webpath']}images/icons/{$iconset}/32x32/support.png'> {$strYourSupportEntitlement}</h2>";
+echo "<h2>".icon('support', 32, $strYourSupportEntitlement);
+echo " {$strYourSupportEntitlement}</h2>";
 
 if ($numcontracts >= 1)
 {

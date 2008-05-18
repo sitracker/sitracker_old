@@ -224,8 +224,7 @@ setInterval("countUp()", 1000); //every 1 seconds
 
     if ($mode == 'incident')
     {
-        echo "<h2><img
-        src='{$CONFIG['application_webpath']}images/icons/{$iconset}/32x32/activities.png' width='32' height='32' alt='' /> ";
+        echo "<h2>".icon('activities', 32)." ";
         echo "{$strActivities}</h2>";
     }
     echo "<p align='center'>{$strIncidentActivitiesIntro}</p>";
@@ -296,7 +295,7 @@ else
             $user = $sit[2]; // force to current user if username not found
         }
     }
-    echo "<h2><img src='{$CONFIG['application_webpath']}images/icons/{$iconset}/32x32/task.png' width='32' height='32' alt='' /> ";
+    echo "<h2>".icon('task', 32)." ";
 
     if ($user == 'all')
     {
@@ -448,7 +447,7 @@ if (mysql_num_rows($result) >=1 )
 
         if ($user == $sit[2])
         {
-            echo colheader('distribution', "<img src='{$CONFIG['application_webpath']}images/icons/{$iconset}/16x16/private.png' width='16' height='16' title='Public/Private' alt='Private' />", $sort, $order, $filter);
+            echo colheader('distribution', icon('private', 16, $strPrivate), $sort, $order, $filter);
         }
         else
         {
@@ -523,7 +522,7 @@ if (mysql_num_rows($result) >=1 )
             echo "<td>";
             if ($task->distribution == 'private')
             {
-                echo " <img src='{$CONFIG['application_webpath']}images/icons/{$iconset}/16x16/private.png' width='16' height='16' title='Private' alt='Private' />";
+                echo icon('private', 16, 'Private');
             }
             echo "</td>";
         }
@@ -533,7 +532,7 @@ if (mysql_num_rows($result) >=1 )
             if ($enddate == '0')
             {
                 echo "<td><a href='view_task.php?id={$task->id}&amp;mode=incident&amp;incident={$id}' class='info'>";
-                echo "<img src='{$CONFIG['application_webpath']}images/icons/{$iconset}/16x16/timer.png' width='16' height='16' alt='' /> {$task->id}</a></td>";
+                echo "".icon('timer')." {$task->id}</a></td>";
             }
             else
             {
@@ -708,7 +707,7 @@ if (mysql_num_rows($result) >=1 )
 
     if ($mode == 'incident')
     {
-        echo "<h3><img src='{$CONFIG['application_webpath']}images/icons/{$iconset}/32x32/billing.png' width='32' height='32' alt='{$strActivityBilling}' /> ";
+        echo "<h3>".icon('billing', 32, $strActivityBilling)." ";
         echo "{$strActivityBilling}</h3>";
         echo "<p align='center'>{$strActivityBillingInfo}</p>";
 

@@ -70,7 +70,7 @@ function log_nav_bar()
     {
         $nav .= "<a href='{$_SERVER['PHP_SELF']}?id={$incidentid}&amp;";
         $nav .= "javascript=enabled&amp;offset={$previous}&amp;'>&lt;&lt; ";
-        $nav .= "Previous</a>";
+        $nav .= "{$GLOBALS['strPrevious']}</a>";
     }
     $nav .= "</td>";
     $nav .= "<td align='center' style='width: 34%;'>";
@@ -80,12 +80,12 @@ function log_nav_bar()
         {
         	$nav .= "<a href='{$_SERVER['PHP_SELF']}?id={$incidentid}&amp;";
         	$nav .= "javascript=enabled&amp;offset=0&amp;records=all'>";
-        	$nav .= "Show All</a>";
+        	$nav .= "{$GLOBALS['strShowAll']}</a>";
         }
         else
         {
         	$nav .= "<a href='{$_SERVER['PHP_SELF']}?id={$incidentid}&amp;";
-        	$nav .= "javascript=enabled&amp;offset=0&amp;'>Show Paged</a>";
+        	$nav .= "javascript=enabled&amp;offset=0&amp;'>{$GLOBALS['strShowPaged']}</a>";
         }
     }
     $nav .= "</td>";
@@ -236,7 +236,7 @@ while ($update = mysql_fetch_object($result))
     }
     else
     {
-        $updateheadertext = str_replace('currentowner', 'Self', $updateheadertext);
+        $updateheadertext = str_replace('currentowner', $strSelf, $updateheadertext);
     }
     
     $updateheadertext = str_replace('updateuser', $updateuser, $updateheadertext);

@@ -22,7 +22,7 @@ $id = cleanvar($_REQUEST['id']);
 
 include ('htmlheader.inc.php');
 journal(CFG_LOGGING_MAX, 'Help Viewed', "Help document $id was viewed", CFG_JOURNAL_OTHER, $id);
-echo "<h2><img src='{$CONFIG['application_webpath']}images/icons/{$iconset}/32x32/help.png' alt='{$strHelp}' /> ".permission_name($id)." {$strHelp}</h2>";
+echo "<h2>".icon('help', 32, $strHelp)." ".permission_name($id)." {$strHelp}</h2>";
 echo "<div id='help'>";
 if ($id < 0 OR $id > 200 OR $id == '' OR strlen($id) > 3)
 {

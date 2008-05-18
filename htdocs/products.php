@@ -36,8 +36,7 @@ if (empty($productid) AND $display!='skills')
     {
         while ($vendor = mysql_fetch_object($result))
         {
-            echo "<h2><img src='{$CONFIG['application_webpath']}images/icons/{$iconset}/32x32/product.png' width='32' height='32' alt='' /> ";
-            echo "{$vendor->name}</h2>";
+            echo "<h2>".icon('product', 32)." {$vendor->name}</h2>";
             $psql = "SELECT * FROM `{$dbProducts}` WHERE vendorid='{$vendor->id}' ORDER BY name";
             $presult = mysql_query($psql);
             if (mysql_error()) trigger_error("MySQL Query Error ".mysql_error(), E_USER_ERROR);
@@ -100,7 +99,7 @@ if (empty($productid) AND $display!='skills')
     if (mysql_error()) trigger_error(mysql_error(),E_USER_ERROR);
     if (mysql_num_rows($result) >= 1)
     {
-        echo "<h2><img src='{$CONFIG['application_webpath']}images/icons/{$iconset}/32x32/skill.png' width='32' height='32' alt='' /> Skills not linked</h2>";
+        echo "<h2>".icon('skill', 32)." Skills not linked</h2>";
         echo "<p align='center'>These skills are not linked to any product</p>";
         echo "<table summary='' align='center' width='55%'>";
         echo "<tr><th>{$strSkill}</th><th>{$strLifetime}</th>";
@@ -117,7 +116,7 @@ if (empty($productid) AND $display!='skills')
             if (mysql_error()) trigger_error(mysql_error(),E_USER_ERROR);
             list($countincidents) = mysql_fetch_row($sresult);
 
-            echo "<tr class='$shade'><td><img src='{$CONFIG['application_webpath']}images/icons/{$iconset}/16x16/skill.png' width='16' height='16' alt='' /> ";
+            echo "<tr class='$shade'><td>".icon('skill')." ";
             echo "{$software['name']}</td>";
             echo "<td>";
             if ($software['lifetime_start'] > 1)
@@ -154,7 +153,7 @@ if (empty($productid) AND $display!='skills')
 }
 elseif (empty($productid) AND ($display=='skills' OR $display=='software'))
 {
-    echo "<h2><img src='{$CONFIG['application_webpath']}images/icons/{$iconset}/32x32/skill.png' width='32' height='32' alt='' /> {$strSkills}</h2>";
+    echo "<h2>".icon('skill', 32)." {$strSkills}</h2>";
     $sql = "SELECT s.*, v.name AS vendorname FROM `{$dbSoftware}` AS s LEFT JOIN `{$dbVendors}` AS v ON s.vendorid = v.id ORDER BY name";
     $result = mysql_query($sql);
     if (mysql_error()) trigger_error(mysql_error(),E_USER_ERROR);
@@ -241,7 +240,7 @@ else
     {
         while ($product = mysql_fetch_object($presult))
         {
-            echo "<h2><img src='{$CONFIG['application_webpath']}images/icons/{$iconset}/32x32/product.png' width='32' height='32' alt='' /> Product: {$product->name}</h2>";
+            echo "<h2>".icon('product', 32)." Product: {$product->name}</h2>";
             echo "<p align='center'><a href='edit_product.php?id={$product->id}'>Edit</a> ";
             echo "| <a href='delete_product.php?id={$product->id}'>{$strDelete}</a></p>";
             $tags = list_tags($product->id, TAG_PRODUCT, TRUE);
@@ -273,7 +272,7 @@ else
                     if (mysql_error()) trigger_error(mysql_error(),E_USER_ERROR);
                     list($countincidents) = mysql_fetch_row($sresult);
 
-                    echo "<tr class='$shade'><td><img src='{$CONFIG['application_webpath']}images/icons/{$iconset}/16x16/skill.png' width='16' height='16' alt='' /> ";
+                    echo "<tr class='$shade'><td>".icon('skill')." ";
                     echo "{$software['name']}</td>";
                     echo "<td>";
                     if ($software['lifetime_start'] > 1)
@@ -329,7 +328,7 @@ else
                     }
 
                     echo "<tr class='{$shade}'>";
-                    echo "<td><img src='{$CONFIG['application_webpath']}images/icons/{$iconset}/16x16/contract.png' width='16' height='16' alt='' /> ";
+                    echo "<td>".icon('contract')." ";
                     echo "<a href='contract_details.php?id={$contract->id}'>".sprintf($strContractNum, $contract->id)."</a></td>";
                     echo "<td>".site_name($contract->site)."</td>";
                     echo "</tr>\n";

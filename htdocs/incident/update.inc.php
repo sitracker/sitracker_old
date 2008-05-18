@@ -210,7 +210,7 @@ function display_update_page($draftid=-1)
                         {
                             seconds = "0"+seconds;
                         }
-                        $('updatestr').innerHTML = "<?php echo "<img src='{$CONFIG['application_webpath']}images/icons/{$iconset}/16x16/info.png' /> ".$GLOBALS['strDraftLastSaved'] ?>: "+hours+":"+minutes+":"+seconds;
+                        $('updatestr').innerHTML = "<?php echo "".icon('info', 16, $GLOBALS['strDraftLastSaved']) ?>: "+hours+":"+minutes+":"+seconds;
                     }
                 }
             }
@@ -228,7 +228,7 @@ function display_update_page($draftid=-1)
     echo "<table class='vertical'>";
     echo "<tr>";
     echo "<th align='right' valign='top' width='30%;'>{$GLOBALS['strDoesThisUpdateMeetSLA']}:";
-    echo "<img src='{$CONFIG['application_webpath']}images/icons/{$iconset}/16x16/sla.png' width='16' height='16' alt='' /></th>";
+    echo icon('sla', 16)."</th>";
     echo "<td class='shade2'>";
     $target = incident_get_next_target($id);
 

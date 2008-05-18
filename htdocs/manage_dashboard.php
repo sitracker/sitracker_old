@@ -60,7 +60,7 @@ switch ($_REQUEST['action'])
         $result = mysql_query($sql);
         if (mysql_error()) trigger_error(mysql_error(),E_USER_ERROR);
 
-        echo "<h2><img src='{$CONFIG['application_webpath']}images/icons/{$iconset}/32x32/dashboard.png' width='32' height='32' alt='' /> ";
+        echo "<h2>".icon('dashboard', 32)." ";
         echo $strInstallDashboardComponents."</h2>";
         echo "<p align='center'>Please note the component must has been placed in the dashboard directory and named <var>dashboard_NAME</var></p>";
         while ($dashboardnames = mysql_fetch_object($result))
@@ -217,7 +217,7 @@ switch ($_REQUEST['action'])
         $result = mysql_query($sql);
         if (mysql_error()) trigger_error(mysql_error(),E_USER_ERROR);
 
-        echo "<h2><img src='{$CONFIG['application_webpath']}images/icons/{$iconset}/32x32/dashboard.png' width='32' height='32' alt='' /> ";
+        echo "<h2>".icon('dashboard', 32)." ";
         echo "{$strManageDashboardComponents}</h2>";
         echo "<table class='vertical' align='center'><tr>";
         echo colheader('id',$strID);

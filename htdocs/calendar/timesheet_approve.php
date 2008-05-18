@@ -24,7 +24,7 @@ foreach (array('user', 'date', 'approve' ) as $var)
 if ($user == '')
 {
     include('htmlheader.inc.php');
-    echo "<h2><img src='{$CONFIG['application_webpath']}images/icons/{$iconset}/32x32/holiday.png' width='32' height='32' alt='' /> ";
+    echo "<h2>".icon('holiday', 32)." ";
     echo $strTimesheets;
     echo "</h2>";
     $usql = "SELECT groupid FROM `{$dbUsers}` WHERE id = {$sit[2]}";

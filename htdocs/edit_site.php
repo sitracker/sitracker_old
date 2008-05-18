@@ -51,8 +51,8 @@ elseif ($action == "edit")
         if (mysql_error()) trigger_error("MySQL Query Error ".mysql_error(), E_USER_ERROR);
         while ($siterow = mysql_fetch_array($siteresult))
         {
-            echo "<h2><img src='{$CONFIG['application_webpath']}images/icons/{$iconset}/32x32/site.png' width='32' height='32' alt='' /> ";
-            echo "{$strEditSite}: {$site} - ".site_name($site)."</h2>";
+            echo "<h2>".icon('site', 32)." {$strEditSite}: {$site} - ";
+            echo site_name($site)."</h2>";
             echo "<form name='edit_site' action='{$_SERVER['PHP_SELF']}?action=update' method='post' onsubmit='return confirm_action(\"{$strAreYouSureMakeTheseChanges}\")'>";
             echo "<h5>".sprintf($strMandatoryMarked,"<sup class='red'>*</sup>")."</h5>";
             echo "<table align='center' class='vertical'>";

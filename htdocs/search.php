@@ -109,7 +109,7 @@ function search_highlight($x,$var)
 
 include ('htmlheader.inc.php');
 
-echo "<h2><img src='{$CONFIG['application_webpath']}images/icons/{$iconset}/32x32/search.png' width='32' height='32' alt='' /> {$strSearch} {$CONFIG['application_shortname']}</h2>";
+echo "<h2>".icon('search', 32)." {$strSearch} {$CONFIG['application_shortname']}</h2>";
 
 if (!empty($q))
 {
@@ -166,7 +166,7 @@ if (!empty($q))
 
     if($incidentresult = mysql_query($incidentsql) AND mysql_num_rows($incidentresult) > 0)
     {
-        echo "<h3><img src='{$CONFIG['application_webpath']}images/icons/{$iconset}/32x32/support.png' width='32' height='32' alt='' /> {$strIncidents}</h3>";
+        echo "<h3>".icon('support', 32)." {$strIncidents}</h3>";
         $hits++;
         $countresult = mysql_query($countsql);
         $results = mysql_num_rows($countresult);
@@ -195,7 +195,7 @@ if (!empty($q))
         {
             echo " <a href='{$_SERVER['PHP_SELF']}?domain=incidents&q={$q}&start=";            
             echo $begin-$resultsperpage."&amp;sort={$sort}&amp;order={$order}&amp;view={$view}'>";
-            echo "<img src='{$CONFIG['application_webpath']}images/icons/{$iconset}/16x16/leftarrow.png' alt='{$strPrevious}' /> {$strPrevious}</a> ";
+            echo icon('leftarrow', 16, $strPrevious)." {$strPrevious}</a> ";
         }
         else
         {
@@ -206,7 +206,7 @@ if (!empty($q))
         {
             echo " <a href='{$_SERVER['PHP_SELF']}?domain=incidents&q={$q}&start=";
             echo $begin+$resultsperpage."&amp;sort={$sort}&amp;order={$order}&amp;view={$view}'>{$strNext} ";
-            echo "<img src='{$CONFIG['application_webpath']}images/icons/{$iconset}/16x16/rightarrow.png' alt='{$strNext}' /></a> ";
+            echo icon('rightarrow', 16, $strNext)."</a> ";
         }
         else
         {
@@ -270,7 +270,7 @@ if (!empty($q))
 
     if($siteresult = mysql_query($sitesql) AND mysql_num_rows($siteresult) > 0)
     {
-        echo "<h3><img src='{$CONFIG['application_webpath']}images/icons/{$iconset}/32x32/site.png' width='32' height='32' alt='' /> {$strSites}</h3>";
+        echo "<h3>".icon('site', 32)." {$strSites}</h3>";
         $hits++;
         $results = mysql_num_rows($siteresult);
         $countresult = mysql_query($countsql);
@@ -299,7 +299,7 @@ if (!empty($q))
         {
             echo " <a href='{$_SERVER['PHP_SELF']}?domain=sites&q={$q}&start=";
             echo $begin-$resultsperpage."&amp;sort={$sort}&amp;order={$order}&amp;view={$view}'>";
-            echo "<img src='{$CONFIG['application_webpath']}images/icons/{$iconset}/16x16/leftarrow.png' alt='{$strPrevious}' /> {$strPrevious}</a> ";
+            echo "".icon('leftarrow', 16, $strPrevious)." {$strPrevious}</a> ";
         }
         else
         {
@@ -310,7 +310,7 @@ if (!empty($q))
         {
             echo " <a href='{$_SERVER['PHP_SELF']}?domain=sites&q={$q}&start=";
             echo $begin+$resultsperpage."&amp;sort={$sort}&amp;order={$order}&amp;view={$view}'>{$strNext} ";
-            echo "<img src='{$CONFIG['application_webpath']}images/icons/{$iconset}/16x16/rightarrow.png' alt='{$strNext}' /></a> ";
+            echo icon('rightarrow', 16, $strNext)."</a>";
         }
         else
         {
@@ -373,7 +373,7 @@ if (!empty($q))
 
     if($contactresult = mysql_query($contactsql) AND mysql_num_rows($contactresult) > 0)
     {
-        echo "<h3><img src='{$CONFIG['application_webpath']}images/icons/{$iconset}/32x32/contact.png' width='32' height='32' alt='' /> {$strContacts}</h3>";
+        echo "<h3>".icon('contact', 32)." {$strContacts}</h3>";
         $hits++;
         $results = mysql_num_rows($contactresult);
         $countresult = mysql_query($countsql);
@@ -401,8 +401,9 @@ if (!empty($q))
         if(!empty($start) AND $domain == 'contacts')
         {
             echo " <a href='{$_SERVER['PHP_SELF']}?domain=contacts&q={$q}&start=";
-            echo $begin-$resultsperpage."&amp;sort={$sort}&amp;order={$order}&amp;view={$view}'>";
-            echo "<img src='{$CONFIG['application_webpath']}images/icons/{$iconset}/16x16/leftarrow.png' alt='{$strPrevious}' /> {$strPrevious}</a> ";
+            echo $begin-$resultsperpage."&amp;sort={$sort}&amp;order={$order}";
+            echo "&amp;view={$view}'>";
+            echo icon('leftarrow', 16, $strPrevious)." {$strPrevious}</a> ";
         }
         else
         {
@@ -412,8 +413,9 @@ if (!empty($q))
         if($end < $results)
         {
             echo " <a href='{$_SERVER['PHP_SELF']}?domain=contacts&q={$q}&start=";
-            echo $begin+$resultsperpage."&amp;sort={$sort}&amp;order={$order}&amp;view={$view}'>{$strNext} ";
-            echo "<img src='{$CONFIG['application_webpath']}images/icons/{$iconset}/16x16/rightarrow.png' alt='{$strNext}' /></a> ";
+            echo $begin+$resultsperpage."&amp;sort={$sort}&amp;order={$order}";
+            echo "&amp;view={$view}'>{$strNext} ";
+            echo icon('rightarrow', 16, $strNext)."</a> ";
         }
         else
         {
@@ -485,7 +487,7 @@ if (!empty($q))
     
     if($userresult = mysql_query($usersql) AND mysql_num_rows($userresult) > 0)
     {
-        echo "<h3><img src='{$CONFIG['application_webpath']}images/icons/{$iconset}/32x32/user.png' width='32' height='32' alt='' /> {$strUsers}</h3>";
+        echo "<h3>".icon('user', 32)." {$strUsers}</h3>";
         $hits++;
         $results = mysql_num_rows($userresult);
         $countresult = mysql_query($countsql);
@@ -514,7 +516,7 @@ if (!empty($q))
         {
             echo " <a href='{$_SERVER['PHP_SELF']}?domain=users&q={$q}&start=";
             echo $begin-$resultsperpage."&amp;sort={$sort}&amp;order={$order}&amp;view={$view}'>";
-            echo "<img src='{$CONFIG['application_webpath']}images/icons/{$iconset}/16x16/leftarrow.png' alt='{$strPrevious}' /> {$strPrevious}</a> ";
+            echo icon('leftarrow', 16,  $strPrevious)." {$strPrevious}</a> ";
         }
         else
         {
@@ -525,7 +527,7 @@ if (!empty($q))
         {
             echo " <a href='{$_SERVER['PHP_SELF']}?domain=users&q={$q}&start=";
             echo $begin+$resultsperpage."&amp;sort={$sort}&amp;order={$order}&amp;view={$view}'>{$strNext} ";
-            echo "<img src='{$CONFIG['application_webpath']}images/icons/{$iconset}/16x16/rightarrow.png' alt='{$strNext}' /></a> ";
+            echo icon('rightarrow', 16,  $strNext)."</a> ";
         }
         else
         {
@@ -587,7 +589,7 @@ if (!empty($q))
     
     if($kbresult = mysql_query($kbsql) AND mysql_num_rows($kbresult) > 0)
     {
-        echo "<h3><img src='{$CONFIG['application_webpath']}images/icons/{$iconset}/32x32/kb.png' width='32' height='32' alt='' /> {$strKnowledgeBase}</h3>";
+        echo "<h3>".icon('kb', 32)." {$strKnowledgeBase}</h3>";
         $hits++;
         $results = mysql_num_rows($kbresult);
         $countresult = mysql_query($countsql);
@@ -616,7 +618,7 @@ if (!empty($q))
         {
             echo " <a href='{$_SERVER['PHP_SELF']}?domain=kb&q={$q}&start=";
             echo $begin-$resultsperpage."&amp;sort={$sort}&amp;order={$order}&amp;view={$view}'>";
-            echo "<img src='{$CONFIG['application_webpath']}images/icons/{$iconset}/16x16/leftarrow.png' alt='{$strPrevious}' /> {$strPrevious}</a> ";        }
+            echo icon('leftarrow', 16,  $strPrevious)." {$strPrevious}</a> ";        }
         else
         {
             echo "{$strPrevious}";
@@ -626,7 +628,7 @@ if (!empty($q))
         {
             echo " <a href='{$_SERVER['PHP_SELF']}?domain=kb&q={$q}&start=";
             echo $begin+$resultsperpage."&amp;sort={$sort}&amp;order={$order}&amp;view={$view}'>{$strNext} ";
-            echo "<img src='{$CONFIG['application_webpath']}images/icons/{$iconset}/16x16/rightarrow.png' alt='{$strNext}' /></a> ";
+            echo icon('rightarrow', 16,  $strNext)."</a> ";
         }
         else
         {

@@ -283,7 +283,8 @@ $realemails = $countresults - $spamcount;
 if ((mysql_num_rows($resultnew) > 0) OR ($realemails > 0))
 {
     $totalheld = $countresults + mysql_num_rows($resultnew) - $spamcount;
-    echo "<h2><img src='{$CONFIG['application_webpath']}images/icons/{$iconset}/32x32/email.png' width='32' height='32' alt='{$strHeldEmails}' /> ";
+    echo "<h2>".icon('email', 32, $strHeldEmails);
+    echo " ".sprintf($strHeldEmailsNum, $realemails)."</h2>"; // was $countresults
     if ($realemails > 0)
     {
         echo sprintf($strHeldEmailsNum, $realemails)." ";
@@ -302,7 +303,6 @@ if ((mysql_num_rows($resultnew) > 0) OR ($realemails > 0))
             echo sprintf($strXIncidentsLoggedViaPortal, mysql_num_rows($resultnew));
         }
     }
-    echo "</h2>"; // was $countresults
     echo "<p align='center'>{$strIncomingEmailText}</p>";
     echo "<form action='{$_SERVER['PHP_SELF']}' name='held_emails'  method='post'>";
     echo "<table align='center' style='width: 95%'>";
@@ -437,9 +437,9 @@ if (mysql_num_rows($result) >= 1)
 {
     echo "<br />\n";
 
-    echo "<h2><img src='{$CONFIG['application_webpath']}images/icons/{$iconset}/32x32/reassign.png' width='32' height='32' alt='{$strPendingReassignments}' /> {$strPendingReassignments}</h2>";
-    // FIXME i18n
-    echo "<p align='center'>Automatic reassignments that could not be made because users were set to 'not accepting'</p>";
+    echo "<h2>".icon('reassign', 32, $strPendingReassignments);
+    echo " {$strPendingReassignments}</h2>";
+    echo "<p align='center'>{$strAutoReassignmentsThatCouldntBeMade}</p>";
     echo "<table align='center' style='width: 95%;'>";
     echo "<tr><th title='{$strLastUpdated}'>{$strDate}</th><th title='{$strCurrentOwner}'>{$strFrom}</th>";
     echo "<th title='{$strIncidentTitle}'>{$strSubject}</th><th>{$strMessage}</th>";

@@ -40,7 +40,7 @@ if (empty($submit))
     echo show_form_errors('add_user');
     clear_form_errors('add_user');
 
-    echo "<h2><img src='{$CONFIG['application_webpath']}images/icons/{$iconset}/32x32/user.png' width='32' height='32' alt='' /> ";
+    echo "<h2>".icon('user', 32)." ";
     echo "{$strNewUser}</h2>";
     echo "<h5>".sprintf($strMandatoryMarked,"<sup class='red'>*</sup>")."</h5>";
     echo "<form action='{$_SERVER['PHP_SELF']}' method='post' onsubmit='return confirm_action(\"{$strAreYouSureAddUser}\");'>";

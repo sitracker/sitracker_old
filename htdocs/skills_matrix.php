@@ -29,7 +29,7 @@ $title = $strSkillsMatrix;
 
 include ('htmlheader.inc.php');
 
-echo "<h2><img src='{$CONFIG['application_webpath']}images/icons/{$iconset}/32x32/skill.png' width='32' height='32' alt='' /> ";
+echo "<h2>".icon('skill', 32)." ";
 echo "$title</h2>";
 if (empty($legacy)) echo "<p align='center'><a href='{$_SERVER['PHP_SELF']}?legacy=yes&amp;gid={$groupid}'>Show legacy skills</a></p>";
 else echo "<p align='center'><a href='{$_SERVER['PHP_SELF']}?gid={$groupid}'>Hide legacy skills</a></p>";
@@ -148,7 +148,8 @@ if ($countskills > 0 AND $countusers > 0)
                     {
                         //Skill in software
                         // echo "<td align='center'>&#10004;</td>"; // Doesn't work in Windows (fonts!) rubbishy O/S
-                        echo "<td align='center' class='$shade'><img src='{$CONFIG['application_webpath']}images/icons/{$iconset}/16x16/tick.png' alt='' /></td>";
+                        echo "<td align='center' class='$shade'>";
+                        echo icon('tick', 16)."</td>";
                         $counting[$user->realname]++;
                         $count++;
                     }

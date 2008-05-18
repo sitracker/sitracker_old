@@ -30,8 +30,7 @@ include ('htmlheader.inc.php');
 if (empty($action) OR $action == "showform" OR empty($contact))
 {
     // Show select contact form
-    echo "<h2><img src='{$CONFIG['application_webpath']}images/icons/{$iconset}/32x32/contact.png' width='32' height='32' alt='' /> ";
-    echo "{$strEditContact}</h2>";
+    echo "<h2>".icon('contact', 32)." {$strEditContact}</h2>";
     echo "<form action='{$_SERVER['PHP_SELF']}?action=edit' method='post'>";
     echo "<table align='center'>";
     echo "<tr><th>{$strContact}:</th><td>".contact_site_drop_down("contact", 0)."</td></tr>";
@@ -49,7 +48,7 @@ elseif ($action == "edit" && isset($contact))
     while ($contactrow=mysql_fetch_array($contactresult))
     {
         // User does not have access
-        echo "<h2><img src='{$CONFIG['application_webpath']}images/icons/{$iconset}/32x32/contact.png' width='32' height='32' alt='' /> ";
+        echo "<h2>".icon('contact', 32)." ";
         echo "{$strEditContact}: {$contact}</h2>";
         echo "<form name='contactform' action='{$_SERVER['PHP_SELF']}?action=update' method='post' onsubmit='return confirm_action(\"{$strAreYouSureMakeTheseChanges}\");'>";
         echo "<p align='center'>".sprintf($strMandatoryMarked, "<sup class='red'>*</sup>")."</p>";

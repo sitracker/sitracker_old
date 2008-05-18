@@ -79,6 +79,7 @@ switch ($_REQUEST['action'])
                     // TODO this mail should use a template and be good for sending new details (sendpwd)
                     // as well as forgotten password
                     mail($row->email, $strForgottenPasswordDetails, $bodytext, $extra_headers);
+                    
                     if ($_REQUEST['action'] == 'sendpwd') $url = $_SERVER['HTTP_REFERER'];
                     else $url = 'index.php';
                     html_redirect($url, TRUE, $strDetailsSend);

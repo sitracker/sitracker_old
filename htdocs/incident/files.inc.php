@@ -81,8 +81,17 @@ if ($_FILES['attachment']['name'] != "")
         }
 
         echo "<div class='detailinfo'>\n";
-        if ($mk AND $mv) echo "File <strong>{$_FILES['attachment']['name']}</strong> ({$_FILES['attachment']['type']} {$_FILES['attachment']['size']} bytes) uploaded OK";
-        else echo "An error occurred while uploading <strong>{$_FILES['attachment']['name']}</strong>";
+        if ($mk AND $mv)
+        {
+        	echo sprintf($strFileXUploadedOK,
+        				 "<strong>{$_FILES['attachment']['name']}</strong>",
+        				 "{$_FILES['attachment']['type']}",
+        				 "{$_FILES['attachment']['size']}");
+        }
+        else
+        {
+        	echo "An error occurred while uploading <strong>{$_FILES['attachment']['name']}</strong>";
+        }
 
         // Debug
         //echo " tmp filename: {$_FILES['attachment']['tmp_name']}<br />";
@@ -254,7 +263,7 @@ if (file_exists($incident_attachment_fspath))
         if (count($rfilearray) >= 1)
         {
             $headhtml = "<div class='detailhead'>\n";
-            $headhtml .= "<img src='{$CONFIG['application_webpath']}images/icons/{$iconset}/16x16/folder.png' alt='Root dir' title='Root dir' border='0' height='16' width='16' /> \\";
+            $headhtml .= icon('folder', 16, $strRootDirectory)." \\";
             $headhtml .= "</div>\n";
             echo $headhtml;
             echo "<div class='detailentry'>\n";
@@ -295,7 +304,7 @@ if (file_exists($incident_attachment_fspath))
                 $dirprettyname = $dirname;
             }
             $headhtml = "<div class='detailhead'>\n";
-            $headhtml .= "<img src='{$CONFIG['application_webpath']}images/icons/{$iconset}/16x16/folder.png' alt='{$id}' title='{$dir}' border='0' height='16' width='16' valign='top' /> {$dirprettyname}";
+            $headhtml .= icon('folder', 16, $id, $dir)." {$dirprettyname}";
             $headhtml .= "</div>\n";
             $tempfarray = list_dir($dir, 1);
             if (count($tempfarray) == 1 AND (substr($tempfarray[0],-8) == 'mail.eml'))

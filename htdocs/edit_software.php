@@ -28,7 +28,7 @@ if (empty($action) OR $action=='edit')
     // Show add product form
     include ('htmlheader.inc.php');
 
-    echo "<h2><img src='{$CONFIG['application_webpath']}images/icons/{$iconset}/32x32/skill.png' width='32' height='32' alt='' /> ";
+    echo "<h2>".icon('skill', 32)." ";
     echo "{$title}</h2>";
     $sql = "SELECT * FROM `{$dbSoftware}` WHERE id='$id' LIMIT 1";
     $result = mysql_query($sql);

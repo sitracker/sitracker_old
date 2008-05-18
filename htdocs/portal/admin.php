@@ -64,7 +64,7 @@ if($_POST['submit'])
     }
 }
 
-echo "<h2><img src='{$CONFIG['application_webpath']}images/icons/{$iconset}/32x32/settings.png' alt='{$strAdmin}' /> ";
+echo "<h2>".icon('settings', 32, $strAdmin)." ";
 echo $strAdmin."</h2>";
 
 if ($CONFIG['portal_site_incidents'])

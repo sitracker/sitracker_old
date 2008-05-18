@@ -16,7 +16,9 @@ function dashboard_watch_incidents($row,$dashboardid)
     global $sit, $CONFIG, $iconset;
 
     echo "<div class='windowbox' id='$row-$dashboardid'>";
-    echo "<div class='windowtitle'><div><a href='edit_watch_incidents.php'>{$GLOBALS['strEdit']}</a></div><img src='{$CONFIG['application_webpath']}images/icons/{$iconset}/16x16/support.png' width='16' height='16' alt='' /> "; printf($GLOBALS['strWatchIncidents'], user_realname($user,TRUE));
+    echo "<div class='windowtitle'><div><a href='edit_watch_incidents.php'>";
+    echo "{$GLOBALS['strEdit']}</a></div>".icon('support', 16)." ";
+    echo printf($GLOBALS['strWatchIncidents'], user_realname($user,TRUE));
     echo "</div><div class='window' id='watch_incidents_windows'>";
 
     echo "<p align='center'><img src='{$CONFIG['application_webpath']}images/ajax-loader.gif' alt='Loading icon' /></p>";
@@ -28,7 +30,7 @@ function dashboard_watch_incidents($row,$dashboardid)
 
 function dashboard_watch_incidents_install()
 {
-    $schema = "CREATE TABLE IF NOT EXISTS `dashboard_watch_incidents` (
+    $schema = "CREATE TABLE IF NOT EXISTS `{$CONFIG['db_tableprefix']}dashboard_watch_incidents` (
         `userid` tinyint(4) NOT NULL,
         `type` tinyint(4) NOT NULL,
         `id` int(11) NOT NULL,

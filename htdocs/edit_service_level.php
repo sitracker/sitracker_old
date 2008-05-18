@@ -48,8 +48,7 @@ if (empty($action) OR $action == "showform")
     --></script>
     <?php
 
-    echo "<h2><img src='{$CONFIG['application_webpath']}images/icons/{$iconset}/32x32/sla.png' width='32' height='32' alt='' /> ";
-    echo "$title</h2>";
+    echo "<h2>".icon('sla', 32)." {$title}</h2>";
     echo "<p align='center'>{$tag} ".priority_name($priority)."</p>";
 
     $sql = "SELECT * FROM `{$dbServiceLevels}` WHERE tag='$tag' AND priority='$priority'";
@@ -59,17 +58,17 @@ if (empty($action) OR $action == "showform")
 
     echo "<form name='edit_servicelevel' action='{$_SERVER['PHP_SELF']}' method='post'>";
     echo "<table class='vertical'>";
-    echo "<tr><th>{$strInitialResponse} <img src='{$CONFIG['application_webpath']}images/icons/{$iconset}/16x16/initialresponse.png' width='16' height='16' alt='' /></th>";
+    echo "<tr><th>{$strInitialResponse} ".icon('initialresponse')."</th>";
     echo "<td><input type='text' size='5' name='initial_response_mins' maxlength='5' value='{$sla->initial_response_mins}' /> {$strMinutes}</td></tr>";
-    echo "<tr><th>{$strProblemDefinition} <img src='{$CONFIG['application_webpath']}images/icons/{$iconset}/16x16/probdef.png' width='16' height='16' alt='' /></th>";
+    echo "<tr><th>{$strProblemDefinition} ".icon('probdef')."</th>";
     echo "<td><input type='text' size='5' name='prob_determ_mins' maxlength='5' value='{$sla->prob_determ_mins}' /> {$strMinutes}</td></tr>";
-    echo "<tr><th>{$strActionPlan} <img src='{$CONFIG['application_webpath']}images/icons/{$iconset}/16x16/actionplan.png' width='16' height='16' alt='' /></th>";
+    echo "<tr><th>{$strActionPlan} ".icon('actionplan')."</th>";
     echo "<td><input type='text' size='5' name='action_plan_mins' maxlength='5' value='{$sla->action_plan_mins}' /> {$strMinutes}</td></tr>";
-    echo "<tr><th>{$strResolutionReprioritisation} <img src='{$CONFIG['application_webpath']}images/icons/{$iconset}/16x16/solution.png' width='16' height='16' alt='' /></th>";
+    echo "<tr><th>{$strResolutionReprioritisation} ".icon('solution')."</th>";
     echo "<td><input type='text' size='5' name='resolution_days' maxlength='3' value='{$sla->resolution_days}' /> {$strDays}</td></tr>";
-    echo "<tr><th>{$strReview} <img src='{$CONFIG['application_webpath']}images/icons/{$iconset}/16x16/review.png' width='16' height='16' alt='' /></th>";
+    echo "<tr><th>{$strReview} ".icon('review')."</th>";
     echo "<td><input type='text' size='5' name='review_days' maxlength='3' value='{$sla->review_days}' /> {$strDays}</td></tr>";
-    echo "<tr><th>{$strTimed} <img src='{$CONFIG['application_webpath']}images/icons/{$iconset}/16x16/timer.png' width='16' height='16' alt='' /></th><td>";
+    echo "<tr><th>{$strTimed} ".icon('timer')."</th><td>";
     if ($sla->timed == 'yes')
     {
         echo "<input type='checkbox' name='timed' id='timed' onchange='enableBillingPeriod();' checked='checked' />";

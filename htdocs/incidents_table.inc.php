@@ -383,11 +383,11 @@ while ($incidents = mysql_fetch_array($result))
             echo "<td align='center' class='review'>";
             if ($reviewremain > -86400)
             {
-                echo "<img src='{$CONFIG['application_webpath']}images/icons/{$iconset}/16x16/review.png' width='16' height='16' alt='' /> {$strReviewDueNow}";
+                echo "".icon('review')." {$strReviewDueNow}";
             }
             else
             {
-                echo "<img src='{$CONFIG['application_webpath']}images/icons/{$iconset}/16x16/review.png' width='16' height='16' alt='' /> ".sprintf($strReviewDueAgo ,format_workday_minutes($reviewremain*-1));
+                echo "".icon('review')." ".sprintf($strReviewDueAgo ,format_workday_minutes($reviewremain*-1));
             }
         }
         else

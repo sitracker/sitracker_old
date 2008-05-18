@@ -13,7 +13,7 @@
 // included by view_task.php
 
 if($mode != 'incident')
-    echo "<h2><img src='{$CONFIG['application_webpath']}images/icons/{$iconset}/32x32/task.png' width='32' height='32' alt='' /> $title</h2>";
+    echo "<h2>".icon('task', 32)." $title</h2>";
 else
     echo "<h2><img
     src='{$CONFIG['application_webpath']}images/icons/{$iconset}/32x32/activities.png'
@@ -73,8 +73,15 @@ if (mysql_num_rows($result) >= 1)
         echo "<td>{$task->value}</td></tr>";
         echo "<tr><th>{$strPrivacy}</th>";
         echo "<td>";
-        if ($task->distribution=='public') echo $strPublic;
-        if ($task->distribution=='private') echo "{$strPrivate} <img src='{$CONFIG['application_webpath']}images/icons/{$iconset}/16x16/private.png' width='16' height='16' title='{$strPrivate}' alt='{$strPrivate}' />";
+        if ($task->distribution=='public')
+        {
+        	echo $strPublic;
+        }
+        if ($task->distribution=='private')
+        {
+        	echo "{$strPrivate} ";
+        	echo icon('private', 16, $strPrivate);
+        }
         echo "</td></tr>";
         echo "</table>";
         echo "<p align='center'><a href='edit_task.php?id={$taskid}'>{$strEditTask}</a>";

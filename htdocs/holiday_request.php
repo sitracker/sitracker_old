@@ -115,7 +115,7 @@ if (!$sent)
     $approver = user_permission($sit[2], 50);
 
     $waiting = FALSE;
-    echo "<h2><img src='{$CONFIG['application_webpath']}images/icons/{$iconset}/32x32/holiday.png' width='32' height='32' alt='' /> ";
+    echo "<h2>".icon('holiday', 32)." ";
     if ($user == 'all')
     {
         echo $strAll;

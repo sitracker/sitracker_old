@@ -81,7 +81,7 @@ dojo.require ("dojo.widget.ComboBox");
 </script>
 
 <?php
-echo "<h2><img src='{$CONFIG['application_webpath']}images/icons/{$iconset}/32x32/contact.png' width='32' height='32' alt='' /> ";
+echo "<h2>".icon('contact', 32)." ";
 echo "{$strBrowseContacts}</h2>";
 ?>
 <table summary="alphamenu" align="center">

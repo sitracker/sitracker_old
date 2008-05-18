@@ -13,10 +13,11 @@ include 'portalheader.inc.php';
 if (empty($_POST['update']) AND empty($_FILES))
 {
     $id = $_REQUEST['id'];
-    echo "<h2><img src='{$CONFIG['application_webpath']}images/icons/{$iconset}/32x32/note.png' alt='{$strUpdateIncident}' /> {$strUpdateIncident} {$_REQUEST['id']}</h2>";
+    echo "<h2>".icon('note', 32, $strUpdateIncident);
+    echo " {$strUpdateIncident} {$_REQUEST['id']}</h2>";
     echo "<div id='update' align='center'><form action='{$_SERVER[PHP_SELF]}?page=update&amp;id={$id}' method='post' enctype='multipart/form-data'>";
     echo "<p>{$strUpdate}:</p><textarea cols='60' rows='10' name='update'></textarea><br />";
-    echo "<p><img src='{$CONFIG['application_webpath']}images/icons/{$iconset}/16x16/attach.png' alt='{$strAttachment}' />";
+    echo "<p>".icon('attach', 16, $strAttachment);
     // calculate upload filesize
     $j = 0;
     $ext = array($strBytes, $strKBytes, $strMBytes, $strGBytes, $strTBytes);

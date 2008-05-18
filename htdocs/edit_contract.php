@@ -26,7 +26,7 @@ $changeproduct = cleanvar($_REQUEST['changeproduct']);
 if (empty($action) OR $action == "showform")
 {
     include ('htmlheader.inc.php');
-    echo "<h2><img src='{$CONFIG['application_webpath']}images/icons/{$iconset}/32x32/contract.png' width='32' height='32' alt='' /> ";
+    echo "<h2>".icon('contract', 32)." ";
     echo "Select Contract to Edit</h2>";
     echo "<form action='{$_SERVER['PHP_SELF']}?action=edit' method='post'>";
     echo "<table align='center' class='vertical'>";
@@ -71,7 +71,7 @@ if ($action == "edit")
         //]]>
         </script>
         <?php
-        echo "<h2><img src='{$CONFIG['application_webpath']}images/icons/{$iconset}/32x32/contract.png' width='32' height='32' alt='' /> ";
+        echo "<h2>".icon('contract', 32)." ";
         echo "{$strEditContract}: {$maintid}</h2>";
         echo "<h5>".sprintf($strMandatoryMarked,"<sup class='red'>*</sup>")."</h5>";
         echo "<form id='maintform' name='maintform' action='{$_SERVER['PHP_SELF']}?action=update' method='post' onsubmit='return confirm_action(\"{$strAreYouSureMakeTheseChanges}\")'>\n";

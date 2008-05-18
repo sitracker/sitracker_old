@@ -38,7 +38,7 @@ if (empty($submit))
             $expertise[]=$software->id;
         }
     }
-    echo "<h2><img src='{$CONFIG['application_webpath']}images/icons/{$iconset}/32x32/skill.png' width='32' height='32' alt='' /> ";
+    echo "<h2>".icon('skill', 32)." ";
     echo sprintf($strSkillsFor, user_realname($user,TRUE))."</h2>";
     echo "<p align='center'>{$strSelectYourSkills}</p>";
     echo "<form name='softwareform' action='{$_SERVER['PHP_SELF']}' method='post' onsubmit=\"populateHidden(document.softwareform.elements['expertise[]'],document.softwareform.choices)\">";

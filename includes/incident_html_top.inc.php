@@ -74,7 +74,7 @@ $site_name = $site->name;
 
 if (!empty($site->notes))
 {
-    $site_notes = "<img src='{$CONFIG['application_webpath']}images/icons/{$iconset}/16x16/site.png' width='16' height='16' alt='' /> <strong>{$strSiteNotes}</strong><br />".nl2br($site->notes);
+    $site_notes = "".icon('site', 16)." <strong>{$strSiteNotes}</strong><br />".nl2br($site->notes);
 }
 else
 {
@@ -84,7 +84,7 @@ else
 unset($site);
 if (!empty($incident->contactnotes))
 {
-    $contact_notes = "<img src='{$CONFIG['application_webpath']}images/icons/{$iconset}/16x16/contact.png' width='16' height='16' alt='' /> <strong>{$strContactNotes}</strong><br />".nl2br($incident->contactnotes);
+    $contact_notes = "".icon('contact')." <strong>{$strContactNotes}</strong><br />".nl2br($incident->contactnotes);
 }
 else
 {

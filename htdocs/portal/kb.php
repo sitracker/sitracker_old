@@ -11,7 +11,7 @@ of the GNU General Public License, incorporated herein by reference.
 
 include 'portalheader.inc.php';
 
-echo "<h2><img src='{$CONFIG['application_webpath']}images/icons/{$iconset}/32x32/kb.png' width='32' height='32' alt='' /> {$strKnowledgeBase}</h2>";
+echo "<h2>".icon('kb', 32)." {$strKnowledgeBase}</h2>";
 $perpage = 20;
 $order = cleanvar($_GET['order']);
 $sort = cleanvar($_GET['sort']);
@@ -95,15 +95,17 @@ if($result = mysql_query($sql))
         $shade = 'shade1';
         while($row = mysql_fetch_object($result))
         {
-            echo "<tr class='{$shade}'>
-                    <td><a href='kbarticle.php?id={$row->docid}'>
-                    <img src='{$CONFIG['application_webpath']}images/icons/{$iconset}/16x16/kb.png' alt='{$strID}' />
-                        {$CONFIG['kb_id_prefix']}{$row->docid}</a></td>
-                    <td>{$row->name}<br />
-                    <a href='kbarticle.php?id={$row->docid}'>{$row->title}</a></td>
-                    <td>".ldate($CONFIG['dateformat_date'], mysql2date($row->published))."</td>
-                    <td>".user_realname($row->author)."</td>
-                    <td>{$row->keywords}</td</tr>";
+            echo "<tr class='{$shade}'>";
+            echo "<td><a href='kbarticle.php?id={$row->docid}'>";
+            echo icon('kb', 16, $strID);
+            echo " {$CONFIG['kb_id_prefix']}{$row->docid}</a></td>";
+            echo "<td>{$row->name}<br />";
+            echo "<a href='kbarticle.php?id={$row->docid}'>{$row->title}</a></td>";
+            echo "<td>";
+            echo ldate($CONFIG['dateformat_date'], mysql2date($row->published));
+            echo "</td>";
+            echo "<td>".user_realname($row->author)."</td>";
+            echo "<td>{$row->keywords}</td</tr>";
                     
             if($shade == 'shade1')
                 $shade = 'shade2';

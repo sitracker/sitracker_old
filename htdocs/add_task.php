@@ -108,13 +108,14 @@ else
             echo show_form_errors('add_task');
             clear_form_errors('add_task');
 
-            echo "<h2><img src='{$CONFIG['application_webpath']}images/icons/{$iconset}/32x32/task.png' width='32' height='32' alt='' /> ";
+            echo "<h2>".icon('task', 32)." ";
             echo "$title</h2>";
 
             echo "<form id='addtask' action='{$_SERVER['PHP_SELF']}' method='post'>";
             echo "<table class='vertical'>";
-            echo "<tr><th>{$strTitle} <sup class='red'>*</sup></th>";
-            echo "<td><input type='text' name='name' size='35' maxlength='255'";
+            echo "<tr><th>{$strTitle}></th>";
+            echo "<td><input class='required' type='text' name='name' ";
+            echo "size='35' maxlength='255'";
             if ($_SESSION['formdata']['add_task']['name'] != '')
                 echo "value='{$_SESSION['formdata']['add_task']['name']}'";
             echo "/></td></tr>";
@@ -180,16 +181,20 @@ else
             echo "<td>";
             if ($_SESSION['formdata']['add_task']['distribution'] == 'public')
             {
-                echo "<input type='radio' name='distribution' checked='checked'value='public' /> {$strPublic}<br />";
-                echo "<input type='radio' name='distribution' value='private' /> {$strPrivate} ";
-                echo "<img src='{$CONFIG['application_webpath']}images/icons/{$iconset}/16x16/private.png' width='16' height='16' title='{$strPublic}/{$strPrivate}' alt='{$strPrivate}' /></td></tr>";
+                echo "<input type='radio' name='distribution' checked='checked'";
+                echo " value='public' /> {$strPublic}<br />";
+                echo "<input type='radio' name='distribution' value='private' />";
+                echo " {$strPrivate} ";
+                echo icon('private', 16, $strPrivate, "{$strPublic}/{$strPrivate}");
+                echo "</td></tr>";
             }
 
             else
             {
                 echo "<input type='radio' name='distribution' value='public' /> {$strPublic}<br />";
                 echo "<input type='radio' name='distribution' checked='checked' value='private' /> {$strPrivate} ";
-                echo "<img src='{$CONFIG['application_webpath']}images/icons/{$iconset}/16x16/private.png' width='16' height='16' title='{$strPublic}/{$strPrivate}' alt='{$strPrivate}' /></td></tr>";
+                echo icon('private', 16, $strPrivate, "{$strPublic}/{$strPrivate}");
+                echo "</td></tr>";
             }
             echo "</table>";
             echo "<p><input name='submit' type='submit' value='{$strAddTask}' /></p>";

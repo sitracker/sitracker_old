@@ -81,10 +81,14 @@ echo "<div class='portaleft'>";
 echo "<h3>{$strActions}</h3>";
 if ($user->status != 2)
 {
-    echo "<p><img src='{$CONFIG['application_webpath']}images/icons/{$iconset}/16x16/note.png' alt='{$strUpdate}' /> <a href='update.php?id={$incidentid}'>{$strUpdate}</a></p>";
+    echo "<p>".icon('note', 16, $strUpdate);
+    echo " <a href='update.php?id={$incidentid}'>{$strUpdate}</a></p>";
 
     //check if the customer has requested a closure
-    $lastupdate = list($update_userid, $update_type, $update_currentowner, $update_currentstatus, $update_body, $update_timestamp, $update_nextaction, $update_id)=incident_lastupdate($incidentid);
+    $lastupdate = list($update_userid, $update_type, $update_currentowner, 
+                       $update_currentstatus, $update_body, $update_timestamp, 
+                       $update_nextaction, $update_id)
+                       = incident_lastupdate($incidentid);
 
     if ($lastupdate[1] == "customerclosurerequest")
     {
@@ -92,7 +96,9 @@ if ($user->status != 2)
     }
     else
     {
-        echo "<p><img src='{$CONFIG['application_webpath']}images/icons/{$iconset}/16x16/close.png' alt='{$strRequestClosure}' /> <a href='close.php?id={$incidentid}'>{$strRequestClosure}</a></p>";
+        echo "<p>".icon('close', 16, $strRequestClosure);
+        echo " <a href='close.php?id={$incidentid}'>";
+        echo "{$strRequestClosure}</a></p>";
     }
 }
 
@@ -210,16 +216,16 @@ while ($update = mysql_fetch_object($result))
         {
             if (!empty($update->sla) AND $update->type=='slamet')
             {
-                echo "<img src='{$CONFIG['application_webpath']}images/icons/{$iconset}/16x16/{$slatypes[$update->sla]['icon']}' width='16' height='16' alt='{$update->type}' />";
+                echo icon($slatypes[$update->sla]['icon'], 16, $update->type);
             }
-            echo "<img src='{$CONFIG['application_webpath']}images/icons/{$iconset}/16x16/{$updatetypes[$update->type]['icon']}' width='16' height='16' alt='{$update->type}' />";
+            echo icon($updatetypes[$update->type]['icon'], 16, $update->type);
         }
         else
         {
-            echo "<img src='{$CONFIG['application_webpath']}images/icons/{$iconset}/16x16/{$updatetypes['research']['icon']}' width='16' height='16' alt='Research' />";
+            echo icon($updatetypes['research']['icon'], 16, $strResearch);
             if ($update->sla != '')
             {
-                echo "<img src='{$CONFIG['application_webpath']}images/icons/{$iconset}/16x16/{$slatypes[$update->sla]['icon']}' width='16' height='16' alt='{$update->type}' />";
+                echo icon($slatypes[$update->sla]['icon'],16, $update->type);
             }
         }
         echo " {$updatetime}</div>";

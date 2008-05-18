@@ -52,7 +52,8 @@ function dashboard_statistics($row,$dashboardid)
     mysql_free_result($result);
 
     echo "<div class='windowbox' id='$row-$dashboardid'>";
-    echo "<div class='windowtitle'><a href='statistics.php'><img src='{$CONFIG['application_webpath']}images/icons/{$iconset}/16x16/statistics.png' width='16' height='16' alt='' /> {$GLOBALS['strTodaysStats']}</a></div>";
+    echo "<div class='windowtitle'><a href='statistics.php'>".icon('statistics', 16);
+    echo " {$GLOBALS['strTodaysStats']}</a></div>";
     echo "<div class='window'>";
     if ($todaysincidents == 0) echo $GLOBALS['strNoIncidents'];
     elseif ($todaysincidents == 1) echo "<a href='statistics.php'>{$todaysincidents}</a> {$GLOBALS['strIncident']}";

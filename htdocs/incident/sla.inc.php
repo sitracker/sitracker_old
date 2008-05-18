@@ -16,7 +16,7 @@ if (realpath(__FILE__) == realpath($_SERVER['SCRIPT_FILENAME']))
     exit;
 }
 
-echo "<h2><img src='{$CONFIG['application_webpath']}images/icons/{$iconset}/32x32/sla.png' width='32' height='32' alt='' /> ";
+echo "<h2>".icon('sla', 32)." ";
 echo "{$strServiceHistory}</h2>";
 echo "<p align='center'>{$strServiceLevel}: {$servicelevel_tag}</p>";
 
@@ -33,7 +33,7 @@ if (count($slahistory) >= 1)
         else $class='shade2';
         echo "<tr class='$class'>";
         echo "<td>";
-        echo "<img src='{$CONFIG['application_webpath']}images/icons/{$iconset}/16x16/{$slatypes[$history['targetsla']]['icon']}' width='16' height='16' alt='' /> ";
+        echo icon($slatypes[$history['targetsla']]['icon'], 16)." ";
         echo target_type_name($history['targetsla'])."</td>";
         echo "<td>";
         if (!empty($history['userid'])) echo user_realname($history['userid'],TRUE);

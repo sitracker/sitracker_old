@@ -72,7 +72,8 @@ if (mysql_num_rows($result) > 0)
     }
 
     // FIXME locked by X
-    echo "<img src='{$CONFIG['application_webpath']}images/icons/{$iconset}/16x16/locked.png' alt='Locked' /> Locked by {$lockedbyname}</div>";
+    echo icon('locked', 16, $strLocked);
+    echo " ".sprintf($strLockedByX, $lockedbyname)."</div>";
 
     //echo "<pre>".print_r($incoming,true)."</pre>";
     $usql = "SELECT * FROM `{$dbUpdates}` WHERE id='{$incoming->updateid}'";
@@ -81,8 +82,8 @@ if (mysql_num_rows($result) > 0)
     {
         $updatetime = readable_date($update->timestamp);
         echo "<div class='detailhead'><div class='detaildate'>{$updatetime}</div>";
-        echo "<img src='{$CONFIG['application_webpath']}images/icons/{$iconset}/16x16/emailin.png' alt='' /> ";
-        echo "{$strFrom} <strong>{$incoming->emailfrom}</strong></div>";
+        echo icon('emailin', 16);
+        echo " {$strFrom} <strong>{$incoming->emailfrom}</strong></div>";
         echo "<div class='detailentry'>";
         echo parse_updatebody($update->bodytext);
         echo "</div>";

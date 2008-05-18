@@ -194,28 +194,41 @@ else
                 if ($shade) $class = "shade1";
                 else $class = "shade2";
                 echo "<tr class='$class'>";
-                ?>
-                <td><a href="contract_details.php?id=<?php echo $results['maintid'] ?>"><?php echo $results["maintid"] ?></a></td>
-                <td><?php echo $results["site"]; ?></td>
-                <td><?php echo $results["product"] ?></td>
-                <td><?php echo $results["reseller"] ?></td>
-                <td><?php echo $results["licence_quantity"] ?> <?php echo $results["licence_type"] ?></td>
-                <td><?php echo ldate($CONFIG['dateformat_date'], $results["expirydate"]); ?>
-                <?php
-                if ($results["term"]=='yes') echo "<br />Terminated";
-                ?>
-                </td>
-                <td><a href="contact_details.php?id=<?php echo $results['admincontact']?>" ><?php echo $results['admincontactforenames'].' '.$results['admincontactsurnname']; ?></a></td>                 <td align='center' width='150'><?php if ($results["notes"] == "") echo "&nbsp;"; else echo nl2br($results["notes"]); ?></td>
-                </tr>
-                <?php
+                echo "<td><a href='contract_details.php?id=";
+                echo "{$results['maintid']}'>{$results["maintid"]}</a></td>";
+                echo "<td>{$results["site"]}</td>";
+                echo "<td>{$results["product"]}</td>";
+                echo "<td>{$results["reseller"]}</td>";
+                echo "<td>{$results["licence_quantity"]} ";
+                echo "{$results["licence_type"]}</td>";
+                echo "<td>";
+                echo ldate($CONFIG['dateformat_date'], $results["expirydate"]);
+                if ($results["term"]=='yes')
+                {
+                	echo "<br />Terminated";
+                }
+                echo "</td>";
+                echo "<td><a href='contact_details.php?id=";
+                echo "{$results['admincontact']}'>";
+                echo "{$results['admincontactforenames']} ";
+                echo "{$results['admincontactsurnname']}</a></td>";
+                echo "<td align='center' width='150'>";
+                if ($results["notes"] == ""){
+                	echo "&nbsp;"; 
+                }
+                else
+                {
+                	echo nl2br($results["notes"]);
+                }
+                echo "</td></tr>";
                 // invert shade
                 if ($shade == 1) $shade = 0;
                 else $shade = 1;
             }
-            ?>
-            </table>
-            <p align='center'><a href="search.php?query=<?php echo $search_string; ?>&amp;context=maintenance">Search Again</a></p>
-            <?php
+            echo "</table>";
+            echo "<p align='center'>";
+            echo "<a href='search.php?query={$search_string}&amp;context=";
+            echo "maintenance'>{$strSearchAgain}</a></p>";
         }
     }
     include ('htmlfooter.inc.php');

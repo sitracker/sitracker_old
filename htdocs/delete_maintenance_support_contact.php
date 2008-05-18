@@ -45,26 +45,26 @@ if (empty($action) OR $action == "showform")
 
     if (empty($maintid))
     {
-        echo "<tr><th>{$strContract} <img src='{$CONFIG['application_webpath']}images/icons/{$iconset}/16x16/contract.png' width='16' height='16' alt='' /></th>";
+        echo "<tr><th>{$strContract} ".icon('contract')."</th>";
         echo "<td>";
         maintenance_drop_down("maintid", 0);
         echo "</td></tr>";
     }
     else
     {
-        echo "<tr><th>{$strContract} <img src='{$CONFIG['application_webpath']}images/icons/{$iconset}/16x16/contract.png' width='16' height='16' alt='' /></th>";
+        echo "<tr><th>{$strContract} ".icon('contract')."</th>";
         echo "<td>$maintid";
         echo "<input name=\"maintid\" type=\"hidden\" value=\"$maintid\" /></td></tr>";
     }
 
     if (empty($contactid))
     {
-        echo "<tr><th>{$strSupport} {$strContact} <img src='{$CONFIG['application_webpath']}images/icons/{$iconset}/16x16/contact.png' width='16' height='16' alt='' /></th><td width='400'>";
+        echo "<tr><th>{$strSupport} {$strContact} ".icon('contact')."</th><td width='400'>";
         echo contact_drop_down("contactid", 0)."</td></tr>";
     }
     else
     {
-        echo "<tr><th>{$strContact} <img src='{$CONFIG['application_webpath']}images/icons/{$iconset}/16x16/contact.png' width='16' height='16' alt='' /></th><td>{$contactid}";
+        echo "<tr><th>{$strContact} ".icon('contact')."</th><td>{$contactid}";
         echo "<input name='contactid' type='hidden' value='$contactid' /></td></tr>";
     }
 

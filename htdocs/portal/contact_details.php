@@ -108,7 +108,7 @@ else
     if (mysql_error()) trigger_error("MySQL Query Error ".mysql_error(), E_USER_ERROR);
     $user = mysql_fetch_object($query);
     
-    echo "<h2><img src='{$CONFIG['application_webpath']}images/icons/{$iconset}/32x32/contact.png' width='32' height='32' alt='' /> {$user->forenames} {$user->surname}</h2>";
+    echo "<h2>".icon('contact', 32)." {$user->forenames} {$user->surname}</h2>";
 
     
     echo "<form action='$_SERVER[PHP_SELF]?action=update' method='post'>";

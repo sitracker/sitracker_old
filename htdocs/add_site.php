@@ -28,7 +28,7 @@ if ($action == "showform" OR $action == '')
     echo show_form_errors('add_site');
     clear_form_errors('add_site');
 
-    echo "<h2><img src='{$CONFIG['application_webpath']}images/icons/{$iconset}/32x32/site.png' width='32' height='32' alt='' /> ";
+    echo "<h2>".icon('site', 32)." ";
     echo "{$strNewSite}</h2>";
     echo "<h5>".sprintf($strMandatoryMarked, "<sup class='red'>*</sup>")."</h5>";
     echo "<form action='{$_SERVER['PHP_SELF']}?action=add' method='post' onsubmit='return confirm_action(\"{$strAreYouSureAddSite}\");'>";

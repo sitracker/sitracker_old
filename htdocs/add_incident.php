@@ -108,7 +108,7 @@ if (empty($action) OR $action=='showform')
         <table class='vertical'>
         <?php
         echo "<tr><th><label for='search_string'>{$strContact} ";
-        echo "<img src='{$CONFIG['application_webpath']}images/icons/{$iconset}/16x16/contact.png' width='16' height='16' alt='' />";
+        echo "".icon('contact')."";
         echo "</label></th><td>";
         //echo "<input type='text' name='search_string' size='30' value='{$query}' />\n";
         echo "<input dojoType='ComboBox' value='{$query}' dataUrl='autocomplete.php?action=contact' style='width: 300px;' name='search_string' id='search_string' />";
@@ -252,7 +252,7 @@ elseif ($action=='findcontact')
 
         if (mysql_num_rows($result) > 0)
         {
-            $html = "<h3><img src='{$CONFIG['application_webpath']}images/icons/{$iconset}/32x32/contact.png' width='32' height='32' alt='' /> ";
+            $html = "<h3>".icon('contact', 32)." ";
             $html .= "{$strContacts}</h3>\n";
             $html .=  "<p align='center'>{$strListShowsContacts}.</p>";
             $html .=  "<table align='center'>";
@@ -315,7 +315,7 @@ elseif ($action=='findcontact')
         </script>
         <?php
         echo "<h2>{$strAddIncident} - {$strSelect} {$strContract} / {$strContact}</h2>";
-        echo "<h3><img src='{$CONFIG['application_webpath']}images/icons/{$iconset}/32x32/contract.png' width='32' height='32' alt='' />  ";
+        echo "<h3>".icon('contract', 32)."  ";
         echo "{$strContracts}</h3>";
         echo "<p align='center'>".sprintf($strListShowsContracts, $strAddIncident).".</p>";
 
@@ -446,32 +446,34 @@ elseif ($action=='incidentform')
     	echo "<input type='hidden' name='updateid' value='$updateid' />";
     }
 
-    echo "<table align='center' class='vertical' width='60%'>";
-    echo "<tr><th>{$strName}:<br /><a href='edit_contact.php?action=edit&amp;";
-    echo "contact={$contactid}'>{$strEdit}</a></th><td><h3>".icon('contact', 32);
-    echo " ".contact_realname($contactid)."</h3></td></tr>";
-    echo "<tr><th>{$strEmail}:</th><td>".contact_email($contactid)."</td></tr>";
-    echo "<tr><th>{$strTelephone}:</th><td>".contact_phone($contactid)."</td></tr>";
+    //echo "<table align='center' class='vertical' width='60%'>";
+	echo "<div id='kbarticle'>";
+    echo "<h3>{$strContact}</h3>";
+    echo contact_realname($contactid);
+    echo " <a href='edit_contact.php?action=edit&amp;";
+    echo "contact={$contactid}'>({$strEdit})</a><br />".contact_email($contactid);
+    echo "<br />".contact_phone($contactid);
     if ($type == 'free')
     {
-        echo "<tr><th>{$strServiceLevel}:</th><td>".serviceleveltag_drop_down('servicelevel',$CONFIG['default_service_level'], TRUE)."</td></tr>";
-        echo "<tr><th>{$strSkill}:</th><td>".software_drop_down('software', 0)."</td></tr>";
+        echo "<h3>{$strServiceLevel}</h3>".serviceleveltag_drop_down('servicelevel',$CONFIG['default_service_level'], TRUE)."</td></tr>";
+        echo "<h3>{$strSkill}</h3>".software_drop_down('software', 0)."</td></tr>";
     }
     else
     {
-        echo "<tr><th>{$strContract}:</th><td>{$maintid} - ".strip_tags($producttext)."</td></tr>";
-        echo "<tr><th>{$strSkill}:</th><td>".softwareproduct_drop_down('software', 1, $productid)."</td></tr>";
+        echo "<h3>{$strContract}</h3>{$maintid} - ".strip_tags($producttext)."</td></tr>";
+        echo "<h3>{$strSkill}</h3>".softwareproduct_drop_down('software', 1, $productid)."</td></tr>";
     }
 
     plugin_do('new_incident_form');
-    echo "<tr><th>{$strVersion}:</th><td><input maxlength='50' name='productversion' size='40' type='text' /></td></tr>\n";
-    echo "<tr><th>{$strServicePacksApplied}:</th><td><input maxlength='100' name='productservicepacks' size='40' type='text' /></td></tr>\n";
-    echo "<tr><td colspan='2'>&nbsp;</td></tr>";
+    echo "<h3>{$strVersion}</h3>";
+    echo "<input maxlength='50' name='productversion' size='40' type='text' style='display:none' />\n";
+    echo "<h3>{$strServicePacksApplied}</h3>";
+    echo "<input maxlength='100' name='productservicepacks' size='40' type='text' style='display:none' />\n";
     if (empty($updateid))
     {
-        echo "<tr><th>{$strIncidentTitle}:<sup class='red'>*</sup></th><td><input maxlength='150' name='incidenttitle' size='40' type='text' /></td></tr>\n";
-        echo "<tr><th>{$strProblemDescription}:".help_link('ProblemDescriptionEngineer')."<br /></th>";
-        echo "<td><textarea name='probdesc' rows='5' cols='60'></textarea></td></tr>\n";
+        echo "<h3>{$strIncidentTitle}<sup class='red'>*</sup></h3><input maxlength='150' name='incidenttitle' size='40' type='text' /></td></tr>\n";
+        echo "<h3>{$strProblemDescription}".help_link('ProblemDescriptionEngineer')."</h3>";
+        echo "<textarea name='probdesc' rows='5' cols='60'></textarea>\n";
         // Insert pre-defined per-product questions from the database, these should be required fields
         // These 'productinfo' questions don't have a GUI as of 27Oct05
         $sql = "SELECT * FROM `{$dbProductInfo}` WHERE productid='$productid'";
@@ -479,21 +481,20 @@ elseif ($action=='incidentform')
         if (mysql_error()) trigger_error("MySQL Query Error ".mysql_error(), E_USER_ERROR);
         while ($productinforow=mysql_fetch_array($result))
         {
-            echo "<tr><th>{$productinforow['information']}";
+            echo "<h3>{$productinforow['information']}";
             if ($productinforow['moreinformation'] != '')
             {
                 echo "<br />\n".$productinforow['moreinformation'];
             }
             echo ": <sup class='red'>*</sup>";
-            echo "</th>";
-            echo "<td><input maxlength='100' name='{$productinforow['id']}' size='40' type='text' /></td></tr>\n";
+            echo "<input maxlength='100' name='{$productinforow['id']}' size='40' type='text' />\n";
         }
-        echo "<tr><th>{$strWorkAroundsAttempted}:".help_link('WorkAroundsAttemptedEngineer')."</th>";
-        echo "<td><textarea name='workarounds' rows='5' cols='60'></textarea></td></tr>\n";
-        echo "<tr><th>{$strProblemReproduction}:".help_link('ProblemReproductionEngineer')."</th>";
-        echo "<td><textarea name='probreproduction' rows='5' cols='60'></textarea></td></tr>\n";
-        echo "<tr><th>{$strCustomerImpact}:".help_link('CustomerImpactEngineer')."</th>";
-        echo "<td><textarea name='custimpact' rows='5' cols='60'></textarea></td></tr>\n";
+        echo "<h3>{$strWorkAroundsAttempted}".help_link('WorkAroundsAttemptedEngineer').'</h3>';
+        echo "<td><textarea name='workarounds' rows='5' cols='60' style='display: none'></textarea>\n";
+        echo "<h3>{$strProblemReproduction}:".help_link('ProblemReproductionEngineer').'</h3>';
+        echo "<td><textarea name='probreproduction' rows='5' cols='60' style='display:none'></textarea>\n";
+        echo "<h3>{$strCustomerImpact}:".help_link('CustomerImpactEngineer').'</h3>';
+        echo "<td><textarea name='custimpact' rows='5' cols='60' style='display:none'></textarea>\n";
     }
     else
     {
@@ -509,25 +510,24 @@ elseif ($action=='incidentform')
         $updaterow=mysql_fetch_array($result);
         $mailed_subject=$updaterow['subject'];
 
-        echo "<tr><th>{$strIncidentTitle}: <sup class='red'>*</sup></th><td><input name='incidenttitle' size='40' type='text' value='".htmlspecialchars($mailed_subject,ENT_QUOTES)."'></td></tr>\n";
+        echo "<h3>{$strIncidentTitle}: <sup class='red'>*</sup></h3><input name='incidenttitle' size='40' type='text' value='".htmlspecialchars($mailed_subject,ENT_QUOTES)."'></td></tr>\n";
         echo "<tr><td colspan='2'>&nbsp;</td></tr>\n";
 
-        echo "<tr><th>{$strProblemDescription}:<br />{$strReceivedByEmail}</th>";
+        echo "<h3>{$strProblemDescription}:<br />{$strReceivedByEmail}</th>";
         echo "<td>".parse_updatebody($mailed_body_text)."</td></tr>\n";
         echo "<tr><td class='shade1' colspan=2>&nbsp;</td></tr>\n";
     }
-    echo "<tr><th>{$strNextAction}:</th>";
+    echo "<h3>{$strNextAction}</h3>";
     echo "<td>";
     echo "<input type='text' name='nextaction' maxlength='50' size='30' value='Initial Response' /><br /><br />";
     echo show_next_action();    
     echo "</td></tr>";
     if (empty($updateid))
     {
-        echo "<tr><th>{$strVisibleToCustomer}:".help_link('VisibleToCustomer')."</th>\n";
-        echo "<td><input name='cust_vis' type='checkbox' checked='checked' />";
-        echo "</td></tr>\n";
+        echo "<h3>{$strVisibleToCustomer}".help_link('VisibleToCustomer')."</h3>\n";
+        echo "<input name='cust_vis' type='checkbox' checked='checked' />";
     }
-    echo "<tr><th>{$strPriority}:</th><td>".priority_drop_down("priority", 1, 4, FALSE)." </td></tr>";
+    echo "<h3>{$strPriority}:</h3>".priority_drop_down("priority", 1, 4, FALSE)." </td></tr>";
     echo "</table>\n";
     echo "<input type='hidden' name='win' value='{$win}' />";
     echo "<p align='center'><input name='submit' type='submit' value='{$strAddIncident}' /></p>";

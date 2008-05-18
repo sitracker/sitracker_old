@@ -39,7 +39,7 @@ if (mysql_error()) trigger_error(mysql_error(),E_USER_WARNING);
 while ($siterow = mysql_fetch_array($siteresult))
 {
     echo "<tr><th>{$strSite}:</th><td>";
-    echo "<h3><img src='{$CONFIG['application_webpath']}images/icons/{$iconset}/32x32/site.png' width='32' height='32' alt='' /> ".$siterow['name']."</h3>";
+    echo "<h3>".icon('site', 32)." ".$siterow['name']."</h3>";
     echo "</td></tr>";
     if ($siterow['active']=='false')
     {
@@ -124,7 +124,7 @@ if ($countcontacts > 0)
     {
         if ($contactrow['active'] == 'false') $shade='expired';
         echo "<tr class='$shade'>";
-        echo "<td><img src='{$CONFIG['application_webpath']}images/icons/{$iconset}/16x16/contact.png' width='16' height='16' alt='{$strContact}' /> ";
+        echo "<td>".icon('contact', 16, $strContact);
         echo "<a href=\"contact_details.php?id=".$contactrow['id']."\">{$contactrow['forenames']} {$contactrow['surname']}</a></td>";
         echo "<td>{$contactrow['jobtitle']}</td>";
         echo "<td>{$contactrow['department']}</td>";
@@ -250,7 +250,7 @@ if (user_permission($sit[2],19)) // View contracts
             	$class = "expired";
             }
             echo "<tr>";
-            echo "<td class='{$class}'><img src='{$CONFIG['application_webpath']}images/icons/{$iconset}/16x16/contract.png' width='16' height='16' alt='' /> ";
+            echo "<td class='{$class}'>".icon('contract')." ";
             echo "<a href='contract_details.php?id={$results['maintid']}'>{$strContract} {$results['maintid']}</a></td>";
             echo "<td class='{$class}'>{$results['product']}</td>";
             echo "<td class='{$class}'>";

@@ -41,11 +41,11 @@ if (empty($step))
 
     if ($user == $sit[2])
     {
-        echo "<h2><img src='{$CONFIG['application_webpath']}images/icons/{$iconset}/32x32/holiday.png' width='32' height='32' alt='' /> Book Holidays</h2>"; // FIXME i18n
+        echo "<h2>".icon('holiday', 32)." Book Holidays</h2>"; // FIXME i18n
     }
     else
     {
-        echo "<h2><img src='{$CONFIG['application_webpath']}images/icons/{$iconset}/32x32/holiday.png' width='32' height='32' alt='' /> Book Holidays for ".user_realname($user)."</h2>"; // FIXME i18n
+        echo "<h2>".icon('holiday', 32)." Book Holidays for ".user_realname($user)."</h2>"; // FIXME i18n
     }
 
     echo "<form name='date' action='{$_SERVER['PHP_SELF']}' method='post'>\n";

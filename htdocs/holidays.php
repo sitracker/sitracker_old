@@ -39,7 +39,7 @@ else
 }
 
 include ('htmlheader.inc.php');
-echo "<h2><img src='{$CONFIG['application_webpath']}images/icons/{$iconset}/32x32/holiday.png' width='32' height='32' alt='' /> ";
+echo "<h2>".icon('holiday', 32)." ";
 echo "$title</h2>";
 
 echo "<p align='center'>";
@@ -194,7 +194,7 @@ if ($user==$sit[2])
             if ($users['accepting']=='Yes') $title .= "{$strAccepting}";
             else $title .= "{$strNotAccepting}";
             $title .= " {$strIncidents}";
-            if (!empty($users['message'])) $title.="\n".$users['message'];
+            if (!empty($users['message'])) $title.="\n(".$users['message'].")";
 
             echo "<strong>{$users['realname']}</strong>, $title";
             echo "</td></tr>\n";

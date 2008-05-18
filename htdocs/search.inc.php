@@ -29,7 +29,7 @@ if ($searchmode != 'related')
     if (empty($order)) $order='d';
 
 
-    echo "<h2><img src='{$CONFIG['application_webpath']}images/icons/{$iconset}/32x32/search.png' width='32' height='32' alt='' /> ";
+    echo "<h2>".icon('search', 32)." ";
     echo "{$strSearch} {$CONFIG['application_shortname']}</h2>\n";
     echo "<form action='{$_SERVER['PHP_SELF']}' method='get'>";
     echo "<table align='center'>";

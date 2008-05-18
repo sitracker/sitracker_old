@@ -267,7 +267,7 @@ switch ($action)
     case '':
     default:
         include ('htmlheader.inc.php');
-        echo "<h2><img src='{$CONFIG['application_webpath']}images/icons/{$iconset}/32x32/task.png' width='32' height='32' alt='' /> ";
+        echo "<h2>".icon('task', 32)." ";
         echo "$title</h2>";
         $sql = "SELECT * FROM `{$dbTasks}` WHERE id='$id'";
         $result = mysql_query($sql);
@@ -324,7 +324,7 @@ switch ($action)
                 echo "value='public' /> {$strPublic}<br />";
                 echo "<input type='radio' name='distribution' ";
                 if ($task->distribution=='private') echo "checked='checked' ";
-                echo "value='private' /> {$strPrivate} <img src='{$CONFIG['application_webpath']}images/icons/{$iconset}/16x16/private.png' width='16' height='16' title='Private' alt='Private' /></td></tr>";
+                echo "value='private' /> {$strPrivate} ".icon('private', 16, $strPrivate)."</td></tr>";
                 echo "</table>";
                 echo "<p><input name='submit' type='submit' value='{$strSave}' /></p>";
                 echo "<input type='hidden' name='action' value='edittask' />";

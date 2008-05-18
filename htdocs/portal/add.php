@@ -27,7 +27,7 @@ if (!$_REQUEST['action'])
     $checkcontract = mysql_query($sql);
     $contract = mysql_fetch_object($checkcontract);
     $productid = $contract->productid;    
-    echo "<h2><img src='{$CONFIG['application_webpath']}images/icons/{$iconset}/32x32/add.png' alt='{$strAddIncident}' /> {$strAddIncident}</h2>";
+    echo "<h2>".icon('add', 32, $strAddIncident)." {$strAddIncident}</h2>";
     
     if(mysql_num_rows($checkcontract) == 0)
     {

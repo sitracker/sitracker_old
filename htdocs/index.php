@@ -26,13 +26,20 @@ if ($_SESSION['auth'] != TRUE)
 {
     // External variables
     $id = cleanvar($_REQUEST['id']);
-    $page = htmlentities(strip_tags(str_replace('..','',str_replace('//','',str_replace(':','',urldecode($_REQUEST['page']))))),ENT_COMPAT, $GLOBALS['i18ncharset']);
+    $page = urldecode($_REQUEST['page']);
+    $page = str_replace(':','', $page);
+    $page = str_replace('//','', $page);
+    $page = str_replace('..','', $page);
+    $page = strip_tags($page);
+    $page = htmlentities($page, ENT_COMPAT, $GLOBALS['i18ncharset']);
 
     // Invalid user, show log in form
     include ('htmlheader.inc.php');
     if ($id == 1)
     {
-        echo "<p class='error'>".sprintf($strEnterCredentials, $CONFIG['application_shortname'])."</p><br />";
+        echo "<p class='error'>";
+        echo sprintf($strEnterCredentials, $CONFIG['application_shortname']);
+        echo "</p><br />";
     }
 
     if ($id == 2)
@@ -45,9 +52,12 @@ if ($_SESSION['auth'] != TRUE)
         throw_user_error("{$strInvalidCredentials}");
     }
 
-    echo "<div style='margin-left: auto; margin-right: auto; width: 380px; text-align: center; margin-top: 3em;'>";
+    echo "<div style='margin-left: auto; margin-right: auto; width: 380px;";
+    echo " text-align: center; margin-top: 3em;'>";
     echo "<form id='langselectform' action='login.php' method='post'>";
-    echo "<img src='{$CONFIG['application_webpath']}images/icons/{$iconset}/16x16/language.png' alt='{$strLanguage}' /> <label for='lang'>{$strLanguage}:  <select name='lang' id='lang' onchange='this.form.submit();'>";
+    echo icon('language', 16, $strLanguage)." <label for='lang'>";
+    echo "{$strLanguage}:  <select name='lang' id='lang' onchange=";
+    echo "'this.form.submit();'>";
     echo "<option value='default'";
     if (empty($_SESSION['lang']))
     {
@@ -64,7 +74,8 @@ if ($_SESSION['auth'] != TRUE)
     {
         if ($langcode == $_SESSION['lang'])
         {
-            echo "<option value='{$langcode}' selected='selected'>{$language}</option>\n";
+            echo "<option value='{$langcode}' selected='selected'>{$language}";
+            echo "</option>\n";
         }
         else
         {
@@ -75,11 +86,14 @@ if ($_SESSION['auth'] != TRUE)
     echo "</form>";
     echo "</div>";
     echo "<div class='windowbox' style='width: 220px;'>\n";
-    echo "<div class='windowtitle'>{$CONFIG['application_shortname']} - {$strLogin}</div>\n";
+    echo "<div class='windowtitle'>{$CONFIG['application_shortname']} - ";
+    echo "{$strLogin}</div>\n";
     echo "<div class='window'>\n";
     echo "<form id='loginform' action='login.php' method='post'>";
-    echo "<label for='username'>{$strUsername}:<br /><input id='username' name='username' size='28' type='text' /></label><br />";
-    echo "<label for='password'>{$strPassword}:<br /><input id='password' name='password' size='28' type='password' /></label><br />";
+    echo "<label for='username'>{$strUsername}:<br /><input id='username' ";
+    echo "name='username' size='28' type='text' /></label><br />";
+    echo "<label for='password'>{$strPassword}:<br /><input id='password' ";
+    echo "name='password' size='28' type='password' /></label><br />";
     echo "<input type='hidden' name='page' value='$page' />";
     echo "<input type='submit' value='{$strLogIn}' /><br />";
     echo "<br /><a href='forgotpwd.php'>{$strForgottenDetails}</a>";

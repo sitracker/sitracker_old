@@ -51,7 +51,7 @@ else
     $title = $strEditProduct;
     include ('htmlheader.inc.php');
 
-    echo "<h2><img src='{$CONFIG['application_webpath']}images/icons/{$iconset}/32x32/product.png' width='32' height='32' alt='' /> ";
+    echo "<h2>".icon('product', 32)." ";
     echo "$title</h2>\n";
 
     echo "<form action='{$_SERVER['PHP_SELF']}' method='post' >";

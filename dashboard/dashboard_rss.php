@@ -17,7 +17,8 @@ function dashboard_rss($row,$dashboardid)
     global $sit, $CONFIG, $iconset;
 
     echo "<div class='windowbox' id='$row-$dashboardid'>";
-    echo "<div class='windowtitle'><div><a href='edit_rss_feeds.php'>{$GLOBALS['strEdit']}</a></div><img src='{$CONFIG['application_webpath']}images/icons/{$iconset}/16x16/feed-icon.png' width='16' height='16' alt='' /> {$GLOBALS['strFeeds']}</div>";
+    echo "<div class='windowtitle'><div><a href='edit_rss_feeds.php'>";
+    echo "{$GLOBALS['strEdit']}</a></div>".icon('feed-icon', 16)." {$GLOBALS['strFeeds']}</div>";
     echo "<div class='window' id='rss_window'>";
 
     echo "<p align='center'><img src='{$CONFIG['application_webpath']}images/ajax-loader.gif' alt='Loading icon' /></p>";
@@ -29,7 +30,7 @@ function dashboard_rss($row,$dashboardid)
 
 function dashboard_rss_install()
 {
-    $schema = "CREATE TABLE `dashboard_rss` (
+    $schema = "CREATE TABLE `{$CONFIG['db_tableprefiX']}dashboard_rss` (
     `owner` tinyint(4) NOT NULL,
   `url` varchar(255) NOT NULL,
   `items` int(5) default NULL,
@@ -52,7 +53,7 @@ function dashboard_rss_upgrade()
 {
     $upgrade_schema[2] = "
         -- INL 22Nov07
-        ALTER TABLE `dashboard_rss` ADD `items` INT( 5 ) NULL AFTER `url`;
+        ALTER TABLE `{$CONFIG['db_tableprefiX']}dashboard_rss` ADD `items` INT( 5 ) NULL AFTER `url`;
     ";
 
     return $upgrade_schema;

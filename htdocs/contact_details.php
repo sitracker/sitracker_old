@@ -69,7 +69,7 @@ while ($contactrow = mysql_fetch_array($contactresult))
     }
 
     echo "<table align='center' class='vertical'>";
-    echo "<tr><th colspan='2'><h3><img src='{$CONFIG['application_webpath']}images/icons/{$iconset}/32x32/contact.png' width='32' height='32' alt='' /> {$contactrow['forenames']} {$contactrow['surname']}</h3></th></tr>\n";
+    echo "<tr><th colspan='2'><h3>".icon('contact', 32)." {$contactrow['forenames']} {$contactrow['surname']}</h3></th></tr>\n";
     if ($contactrow['active']=='false')
     {
         echo "<tr><th>{$strStatus}:</th><td><span class='expired'>{$strInactive}</span></td></tr>\n";
@@ -207,7 +207,7 @@ while ($contactrow = mysql_fetch_array($contactresult))
 
     echo "<p align='center'>";
     echo "<a href='add_incident.php?action=findcontact&amp;contactid={$id}'>{$strAddIncident}</a> | ";
-    echo "<a href='contact_details.php?id={$id}&amp;output=vcard'><img src='{$CONFIG['application_webpath']}images/icons/{$iconset}/16x16/vcard.png' width='16' height='16' alt='' /> vCard</a> | ";
+    echo "<a href='contact_details.php?id={$id}&amp;output=vcard'>".icon('vcard')." vCard</a> | ";
     echo "<a href='edit_contact.php?action=edit&amp;contact={$id}'>{$strEdit}</a> | ";
     echo "<a href='delete_contact.php?id={$id}'>{$strDelete}</a>";
     echo "</p>\n";
@@ -245,7 +245,7 @@ while ($contactrow = mysql_fetch_array($contactresult))
                 }
 
                 echo "<tr><td class='$shade'>";
-                echo "<img src='{$CONFIG['application_webpath']}images/icons/{$iconset}/16x16/contract.png' width='16' height='16' alt='' /> ";
+                echo "".icon('contract')." ";
                 echo "<a href='contract_details.php?id={$supportedrow['maintenanceid']}'>{$strContract}: {$supportedrow['maintenanceid']}</a></td>";
                 echo "<td class='$shade'>{$supportedrow['productname']}</td>";
                 echo "<td class='$shade'>".ldate($CONFIG['dateformat_date'], $supportedrow['expirydate']);

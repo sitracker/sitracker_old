@@ -24,7 +24,7 @@ require ('auth.inc.php');
 $title = $strEscalationPaths;
 
 include ('htmlheader.inc.php');
-echo "<h2><img src='{$CONFIG['application_webpath']}images/icons/{$iconset}/32x32/escalation.png' width='32' height='32' alt='{$strEscalationPaths}' /> $title</h2>";
+echo "<h2>".icon('escalation', 32, $strEscalationPaths)." {$title}</h2>";
 
 $sql = "SELECT * FROM `{$dbEscalationPaths}` ORDER BY name";
 $result = mysql_query($sql);

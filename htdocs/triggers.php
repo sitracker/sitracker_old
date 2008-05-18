@@ -233,7 +233,7 @@ switch ($_REQUEST['mode'])
     default:
         //display the list
         include ('htmlheader.inc.php');
-        echo "<h2><img src='{$CONFIG['application_webpath']}images/icons/{$iconset}/32x32/trigger.png' width='32' height='32' alt='' /> ";
+        echo "<h2>".icon('trigger', 32)." ";
         echo "$title</h2>";
         echo "<p align='center'>A list of available triggers and the actions that are set when triggers occur</p>"; // TODO triggers blurb
 
@@ -288,12 +288,21 @@ switch ($_REQUEST['mode'])
                 {
                     echo triggeraction_description($trigaction, TRUE);
 
-                    echo " <a href='{$_SERVER['PHP_SELF']}?mode=delete&amp;id={$trigaction->id}' title=\"{$strDelete}\">";
-                    echo "<img src='{$CONFIG['application_webpath']}images/icons/{$iconset}/12x12/delete.png' width='12' height='12' alt='' /></a>";
+                    echo " <a href='{$_SERVER['PHP_SELF']}?mode=delete&amp;";
+                    echo "id={$trigaction->id}' title=\"{$strDelete}\">";
+                    echo icon('delete', 12)."</a>";
                     if ($selecteduser == -1)
                     {
-                        if ($trigaction->userid == 0) echo " (<img src='{$CONFIG['application_webpath']}images/sit_favicon.png' width='16' height='16' alt='' />)";
-                        else echo " (<img src='{$CONFIG['application_webpath']}images/icons/{$iconset}/16x16/user.png' width='16' height='16' alt='' /> ".user_realname($trigaction->userid).')';
+                        if ($trigaction->userid == 0)
+                        {
+                        	echo " (<img src='{$CONFIG['application_webpath']}";
+                        	echo "images/sit_favicon.png' />)";
+                        }
+                        else
+                        {
+                        	echo " (".icon('user', 16)." ";
+                        	echo user_realname($trigaction->userid).')';
+                        }
                     }
                     echo "<br />\n";
                 }

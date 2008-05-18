@@ -81,7 +81,7 @@ if ($search_string=='') $search_string='a';
 //]]>
 </script>
 <?php*/
-echo "<h2><img src='{$CONFIG['application_webpath']}images/icons/{$iconset}/32x32/site.png' width='32' height='32' alt='' /> ";
+echo "<h2>".icon('site', 32)." ";
 echo "{$strBrowseSites}</h2>";
 ?>
 <table summary="alphamenu" align="center">

@@ -45,8 +45,8 @@ if (empty($dashboardid))
     $result = mysql_query($sql);
     if (mysql_error()) trigger_error(mysql_error(),E_USER_ERROR);
 
-    echo "<h2><img src='{$CONFIG['application_webpath']}images/icons/{$iconset}/32x32/dashboard.png' width='32' height='32' alt='' /> ";
-    echo "{$strDashboard}: ".user_realname($sit[2])."</h2>\n";
+    echo "<h2>".icon('dashboard', 32)." {$strDashboard}: ";
+    echo user_realname($sit[2])."</h2>\n";
 
     if (mysql_num_rows($result) > 0)
     {

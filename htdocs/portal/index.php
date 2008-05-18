@@ -90,22 +90,26 @@ if (empty($showclosed))
 
 if ($showclosed == "true")
 {
-    echo "<h2><img src='{$CONFIG['application_webpath']}images/icons/{$iconset}/32x32/support.png' alt='{$strYourClosedIncidents}' /> ";
+    echo "<h2>".icon('support', 32, $strYourClosedIncidents);
     echo "{$strYourClosedIncidents}</h2>";
-    echo "<p align='center'><img src='{$CONFIG['application_webpath']}images/icons/{$iconset}/16x16/reopen.png' alt='{$strShowOpenIncidents}' /> ";
-    echo "<a href='$_SERVER[PHP_SELF]?page=incidents&amp;showclosed=false'>{$strShowOpenIncidents}</a>";
+    echo "<p align='center'>";
+    echo icon('reopen', 16, $strShowOpenIncidents);
+    echo " <a href='$_SERVER[PHP_SELF]?page=incidents&amp;showclosed=false'>";
+    echo "{$strShowOpenIncidents}</a>";
     echo "</p>";
-    $sql = "SELECT i.*, c.forenames, c.surname FROM `{$dbIncidents}` AS i, `{$dbContacts}` AS c ";
+    $sql = "SELECT i.*, c.forenames, c.surname FROM `{$dbIncidents}` AS i, ";
+    $sql .= "`{$dbContacts}` AS c ";
     $sql .= "WHERE status = 2 AND c.id = i.contact ";
     $sql .= "AND contact = '{$_SESSION['contactid']}' ";
     $sql .= "ORDER BY closed DESC";
 }
 else
 {
-    echo "<h2><img src='{$CONFIG['application_webpath']}images/icons/{$iconset}/32x32/support.png' alt='{$strYourCurrentOpenIncidents}' /> ";
-    echo "{$strYourCurrentOpenIncidents}</h2>";
-    echo "<p align='center'><img src='{$CONFIG['application_webpath']}images/icons/{$iconset}/16x16/close.png' alt='{$strShowClosedIncidents}' /> ";
-    echo "<a href='{$_SERVER['PHP_SELF']}?page=incidents&amp;showclosed=true'>{$strShowClosedIncidents}</a>";
+    echo "<h2>".icon('support', 16, $strYourCurrentOpenIncidents);
+    echo " {$strYourCurrentOpenIncidents}</h2>";
+    echo "<p align='center'>";
+    echo icon('close', 16, $strShowClosedIncidents);
+    echo " <a href='{$_SERVER['PHP_SELF']}?page=incidents&amp;showclosed=true'>{$strShowClosedIncidents}</a>";
     echo "</p>";
     $sql = "SELECT i.*, c.forenames, c.surname FROM `{$dbIncidents}` AS i, `{$dbContacts}` AS c WHERE status != 2 ";
     $sql .= "AND c.id = i.contact ";
@@ -126,7 +130,7 @@ else
     echo "<a href='entitlement.php'>";
 }
 
-echo "<img src='{$CONFIG['application_webpath']}images/icons/{$iconset}/16x16/add.png' /> {$strAddIncident}</a></p>";
+echo icon('add', 16, $strAddIncident)."</a></p>";
 
 //find list of other incidents we're allowed to see
 $otherincidents = array();
@@ -173,8 +177,8 @@ if ($CONFIG['portal_site_incidents'] AND $otherincidents != NULL)
     }
     else
     {
-        echo "<h2><img src='{$CONFIG['application_webpath']}images/icons/{$iconset}/32x32/site.png' alt ='{$strYourSitesIncidents}' />
-                {$strYourSitesIncidents}</h2>";
+        echo "<h2>".icon('site', 32, $strYourSitesIncidents);
+        echo " {$strYourSitesIncidents}</h2>";
         $sql = "SELECT DISTINCT i.id AS id, i.*, c.forenames, c.surname ";
         $sql .= "FROM `{$dbIncidents}` AS i, `{$dbContacts}` AS c, `{$dbSites}` AS s ";
         $sql .= "WHERE status != 2 ";

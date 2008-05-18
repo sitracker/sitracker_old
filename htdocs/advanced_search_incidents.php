@@ -40,7 +40,7 @@ include ('htmlheader.inc.php');
 // show search incidents form
 if (empty($action))
 {
-    echo "<h2><img src='{$CONFIG['application_webpath']}images/icons/{$iconset}/32x32/search.png' width='32' height='32' alt='' /> ";
+    echo "<h2>".icon('search', 32)." ";
     echo "{$strSearch} ({$strAdvanced})</h2>";
     echo "<form action=\"{$_SERVER['PHP_SELF']}\" method='get'>";
     echo "<table class='vertical'>";

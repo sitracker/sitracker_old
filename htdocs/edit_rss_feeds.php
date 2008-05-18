@@ -23,10 +23,10 @@ switch ($action)
 {
     case 'add':
         include ('htmlheader.inc.php');
-        echo "<h2><img src='{$CONFIG['application_webpath']}images/icons/{$iconset}/32x32/feed-icon.png' width='32' height='32' alt='' /> {$strAddRSSAtomFeed}</h2>";
+        echo "<h2>".icon('feed-icon', 32)." {$strAddRSSAtomFeed}</h2>";
         echo "<form action='{$_SERVER['PHP_SELF']}?action=do_add' method='post'>";
         echo "<table class='vertical'>";
-        echo "<tr><td><label><img src='{$CONFIG['application_webpath']}images/icons/{$iconset}/12x12/feed-icon.png' alt='{$strFeedIcon}' /> ";
+        echo "<tr><td><label>".icon('feed-icon', 12, $strFeedIcon)." ";
         echo "{$strRSSAtomURL}: <input type='text' name='url' size='45' /></label></td></tr>\n";
         echo "<tr><td><label>{$strDisplay}: <input type='text' name='items' size='3' value='0' /></label> ({$str0MeansUnlimited})</td></tr>";
         echo "</table>";
@@ -63,7 +63,7 @@ switch ($action)
                 $feed->items=0;
             }
 
-            echo "<h2><img src='{$CONFIG['application_webpath']}images/icons/{$iconset}/32x32/feed-icon.png' width='32' height='32' alt='' /> {$strEditRSSAtomFeed}</h2>";
+            echo "<h2>".icon('feed-icon', 32)." {$strEditRSSAtomFeed}</h2>";
             echo "<form action='{$_SERVER['PHP_SELF']}?action=do_edit' method='post'>";
             echo "<table class='vertical'>";
             echo "<tr><td><label><img src='{$CONFIG['application_webpath']}images/icons/{$iconset}/12x12/feed-icon.png' alt='Feed Icon' /> ";
@@ -122,7 +122,7 @@ switch ($action)
         break;
     default:
         include ('htmlheader.inc.php');
-        echo "<h2><img src='{$CONFIG['application_webpath']}images/icons/{$iconset}/32x32/feed-icon.png' width='32' height='32' alt='' /> {$strEditRSSAtomFeed}</h2>";
+        echo "<h2>".icon('feed-icon', 32)." {$strEditRSSAtomFeed}</h2>";
 
         $sql = "SELECT * FROM `{$dbDashboardRSS}` WHERE owner = {$sit[2]}";
         $result = mysql_query($sql);

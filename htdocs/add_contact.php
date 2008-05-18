@@ -271,7 +271,8 @@ else
         	$bodytext .= "only reset. You may change it in the portal.";
         	
         	//FIXME 3.35 use triggers
-      		mail($email, $strContactDetails, $bodytext, $extra_headers);        	}
+      		mail($email, $strContactDetails, $bodytext, $extra_headers);        	
+        }
 
         $password = md5($prepassword);
 

@@ -14,7 +14,6 @@
 //          Kieran Hogg, <kieran_hogg[at]users.sourceforge.net>
 
 // Many functions here simply extract various snippets of information from
-// the database
 // Most are legacy and can replaced by improving the pages that call them to
 // use SQL joins.
 
@@ -1988,7 +1987,10 @@ function userstatus_bardrop_down($name, $id)
     $result = mysql_query($sql);
     if (mysql_error()) trigger_error(mysql_error(),E_USER_WARNING);
 
-    $html = "<select name='$name' title='{$strSetYourStatus}' onchange=\"if (this.options[this.selectedIndex].value != 'null') { window.open(this.options[this.selectedIndex].value,'_top') }\">\n";
+    $html = "<select name='$name' title='{$strSetYourStatus}' onchange=\"if ";
+    $html .= "(this.options[this.selectedIndex].value != 'null') { ";
+    $html .= "window.open(this.options[this.selectedIndex].value,'_top') }\">";
+    $html .= "\n";
     while ($statuses = mysql_fetch_array($result))
     {
         if ($statuses["id"] > 0)
@@ -1999,13 +2001,17 @@ function userstatus_bardrop_down($name, $id)
                 $html .= "selected='selected' ";
             }
 
-            $html .= "value='set_user_status.php?mode=setstatus&amp;userstatus={$statuses['id']}'>";
+            $html .= "value='set_user_status.php?mode=setstatus&amp;";
+            $html .= "userstatus={$statuses['id']}'>";
             $html .= "{$GLOBALS[$statuses['name']]}</option>\n";
         }
     }
-    $html .= "<option value='set_user_status.php?mode=setaccepting&amp;accepting=Yes' class='enable seperator'>{$GLOBALS['strAccepting']}</option>\n";
-    $html .= "<option value='set_user_status.php?mode=setaccepting&amp;accepting=No' class='disable'>{$GLOBALS['strNotAccepting']}</option>\n";
-    $html .= "</select>\n";
+    $html .= "<option value='set_user_status.php?mode=setaccepting";
+    $html .= "&amp;accepting=Yes' class='enable seperator'>";
+    $html .= "{$GLOBALS['strAccepting']}</option>\n";
+    $html .= "<option value='set_user_status.php?mode=setaccepting&amp;";
+    $html .= "accepting=No' class='disable'>{$GLOBALS['strNotAccepting']}";
+    $html .= "</option></select>\n";
 
     return $html;
 }
@@ -3245,13 +3251,18 @@ function throw_user_error($message, $details='')
 
 /*  prints the HTML for a drop down list of     */
 /* sites, with the given name and with the given id selected. */
-function site_drop_down($name, $id)
+function site_drop_down($name, $id, $required = FALSE)
 {
     global $dbSites;
     $sql  = "SELECT id, name, department FROM `{$dbSites}` ORDER BY name ASC";
     $result = mysql_query($sql);
 
-    $html = "<select name='{$name}'>\n";
+    $html = "<select name='{$name}'";
+    if ($required)
+    {
+    	$html .= " class='required' ";
+    }
+    $html .= ">\n";
     if ($id == 0)
     {
         $html .="<option selected='selected' value='0'></option>\n";
@@ -5954,8 +5965,8 @@ function add_note_form($linkid, $refid)
     global $now, $sit, $iconset;
     $html = "<form name='addnote' action='add_note.php' method='post'>";
     $html .= "<div class='detailhead note'> <div class='detaildate'>".readable_date($now)."</div>\n";
-    $html .= "<img src='{$CONFIG['application_webpath']}images/icons/{$iconset}/16x16/note.png' width='16' height='16' alt='Note icon' /> ";
-    $html .= "New Note by ".user_realname($sit[2])."</div>\n";
+    $html .= icon('note', 16, $GLOBALS['strNote ']);
+    $html .= " New Note by ".user_realname($sit[2])."</div>\n";
     $html .= "<div class='detailentry note'>";
     $html .= "<textarea rows='3' cols='40' name='bodytext' style='width: 94%; margin-top: 5px; margin-bottom: 5px; margin-left: 3%; margin-right: 3%; background-color: transparent; border: 1px dashed #A2A86A;'></textarea>";
     if (!empty($linkid))
@@ -5997,13 +6008,19 @@ function show_notes($linkid, $refid)
         while ($note = mysql_fetch_object($result))
         {
             $html .= "<div class='detailhead note'> <div class='detaildate'>".readable_date(mysqlts2date($note->timestamp));
-            if ($sit[2]==$note->userid) $html .= "<a href='delete_note.php?id={$note->id}&amp;rpath={$_SERVER['PHP_SELF']}?{$_SERVER['QUERY_STRING']}' onclick=\"return confirm_action('{$strAreYouSureDelete}');\"><img src='{$CONFIG['application_webpath']}images/icons/{$iconset}/16x16/delete.png' width='16' height='16' alt='Delete icon' /></a>";
-            $html .= "</div>\n";
-            $html .= "<img src='{$CONFIG['application_webpath']}images/icons/{$iconset}/16x16/note.png' width='16' height='16' alt='Note icon' /> ";
-            $html .= "Note added by ".user_realname($note->userid,TRUE)."</div>\n";
-            $html .= "<div class='detailentry note'>";
-            $html .= nl2br(bbcode($note->bodytext));
-            $html .= "</div>\n";
+            if ($sit[2]==$note->userid)
+            {
+                $html .= "<a href='delete_note.php?id={$note->id}&amp;rpath=";
+                $html .= "{$_SERVER['PHP_SELF']}?{$_SERVER['QUERY_STRING']}' ";
+                $html .= "onclick=\"return confirm_action('{$strAreYouSureDelete}');\">";
+                $html = icon('delete', 16)."</a>";
+                $html .= "</div>\n";
+                $html .= "".icon('note', 16)." ";
+                $html .= "Note added by ".user_realname($note->userid,TRUE)."</div>\n";
+                $html .= "<div class='detailentry note'>";
+                $html .= nl2br(bbcode($note->bodytext));
+                $html .= "</div>\n";
+            }
         }
     }
     return $html;
@@ -6684,9 +6701,9 @@ function display_drafts($type, $result)
         echo "<div class='detaildate'>".date($CONFIG['dateformat_datetime'], $obj->lastupdate);
         echo "</div>";
         echo "<a href='{$page}?action=editdraft&amp;draftid={$obj->id}&amp;id={$id}{$editurlspecific}' class='info'>";
-        echo "<img src='{$CONFIG['application_webpath']}images/icons/{$iconset}/16x16/edit.png' alt='{$GLOBALS['strDraftEdit']}' /></a>";
+        echo icon('edit', 16, $GLOBALS['strDraftEdit'])."</a>";
         echo "<a href='{$page}?action=deletedraft&amp;draftid={$obj->id}&amp;id={$id}' class='info'>";
-        echo "<img src='{$CONFIG['application_webpath']}images/icons/{$iconset}/16x16/delete.png' alt='{$GLOBALS['strDraftDelete']}' /></a>";
+        echo icon('delete', 16, $GLOBALS['strDraftDelete'])."</a>";
         echo "</div>";
         echo "<div class='detailentry'>";
         echo nl2br($obj->content)."</div>";
@@ -6881,11 +6898,11 @@ function user_online_icon($user)
     $users = mysql_fetch_object($result);
     if (($now - mysql2date($users->lastseen) < (60 * 30)))
     {
-        return "<img src='{$CONFIG['application_webpath']}images/icons/{$iconset}/16x16/online.png' width='16' height='16' title=\"{$strOnline}\" alt=\"{$strOnline}\" /> ";
+        return icon('online', 16);
     }
     else
     {
-        return "<img src='{$CONFIG['application_webpath']}images/icons/{$iconset}/16x16/offline.png' width='16' height='16' title=\"{$strOffline}\" alt=\"{$strOffline}\" /> ";
+        return icon('offline', 16);
     }
 }
 
@@ -7734,7 +7751,7 @@ function contract_details($id, $mode='internal')
 
     $html = "<table align='center' class='vertical'>";
     $html .= "<tr><th>{$GLOBALS[strContract]} {$GLOBALS[strID]}:</th>";
-    $html .= "<td><h3><img src='{$CONFIG['application_webpath']}images/icons/{$iconset}/32x32/contract.png' width='32' height='32' alt='' /> ";
+    $html .= "<td><h3>".icon('contract', 32)." ";
     $html .= "{$maintrow['id']}</h3></td></tr>";
     $html .= "<tr><th>{$GLOBALS[strStatus]}:</th><td>";
     if ($maintrow['term'] == 'yes')
@@ -7853,7 +7870,7 @@ function contract_details($id, $mode='internal')
                 foreach($supportedcontacts AS $contact)
                 {
                     $html .= "<tr><th>{$GLOBALS[strContact]} #{$supportcount}:</th>";
-                    $html .= "<td><img src='{$CONFIG['application_webpath']}images/icons/{$iconset}/16x16/contact.png' width='16' height='16' alt='' /> ";
+                    $html .= "<td>".icon('contact')." ";
                     $html .= "<a href=\"contact_details.php?id={$contact}\">".contact_realname($contact)."</a>, ";
                     $html .= contact_site($contact). "</td>";
 
@@ -7914,7 +7931,7 @@ function contract_details($id, $mode='internal')
         $html .="<table align='center'>";
         while ($software=mysql_fetch_array($result))
         {
-            $html .= "<tr><td> <img src='{$CONFIG['application_webpath']}images/icons/{$iconset}/16x16/skill.png' width='16' height='16' alt='' /> ";
+            $html .= "<tr><td> ".icon('skill')." ";
             if ($software->lifetime_end > 0 AND $software->lifetime_end < $now)
             {
                 $html .= "<span class='deleted'>";
@@ -8201,14 +8218,14 @@ function show_next_action()
  * @return string $html icon html
  * @author Kieran Hogg
  */
-function icon($filename, $size, $alt='')
+function icon($filename, $size, $alt='', $title='')
 {
 	global $iconset, $CONFIG;
 	$sizes = array(12, 16, 32);
-        if (empty($alt))
-        {
-            $alt = $filename;
-        }
+    if (empty($alt))
+    {
+    	$alt = $filename;
+    }
 	$file = "{$CONFIG['application_fspath']}htdocs/images/icons/{$iconset}";
 	$file .= "/{$size}x{$size}/{$filename}.png";
 
@@ -8221,7 +8238,8 @@ function icon($filename, $size, $alt='')
 	}
 	elseif (!in_array($size, $sizes))
 	{
-		trigger_error("Incorrect image size", E_USER_WARNING);
+		trigger_error("Incorrect image size for {$file}", E_USER_WARNING);
+		$size = 16;
 	}
 	else
 	{
