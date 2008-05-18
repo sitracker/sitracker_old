@@ -28,21 +28,21 @@ $origref = cleanvar($_REQUEST['origref']);
 $linkref = cleanvar($_REQUEST['linkref']);
 $linktypeid = cleanvar($_REQUEST['linktype']);
 $direction = cleanvar($_REQUEST['dir']);
-if ($direction=='') $direction='lr';
-
+if ($direction == '') $direction = 'lr';
+$redirect = cleanvar($_REQUEST['redirect']);
 
 switch ($action)
 {
     case 'addlink':
         // Insert the link
-        if ($direction=='lr')
+        if ($direction == 'lr')
         $sql = "INSERT INTO `{$dbLinks}` ";
         $sql .= "(linktype, origcolref, linkcolref, userid) ";
         $sql .= "VALUES ('{$linktypeid}', '$origref', '$linkref', '{$sit[2]}')";
         mysql_query($sql);
         if (mysql_error()) trigger_error(mysql_error(),E_USER_ERROR);
 
-        html_redirect("main.php");
+        html_redirect($redirect);
     break;
 
     case '':
@@ -78,6 +78,7 @@ switch ($action)
                 echo "<input type='hidden' name='origref' value='$origref' />";
                 echo "<input type='hidden' name='linktype' value='$linktypeid' />";
                 echo "<input type='hidden' name='dir' value='$direction' />";
+                echo "<input type='hidden' name='redirect' value='{$_SERVER['HTTP_REFERER']}' />";
                 echo "</form>";
             }
             else echo "<p class='error'>Nothing to link</p>";
