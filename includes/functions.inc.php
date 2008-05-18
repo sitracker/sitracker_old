@@ -8218,7 +8218,7 @@ function show_next_action()
  * @return string $html icon html
  * @author Kieran Hogg
  */
-function icon($filename, $size, $alt='', $title='')
+function icon($filename, $size='', $alt='', $title='')
 {
 	global $iconset, $CONFIG;
 	$sizes = array(12, 16, 32);
@@ -8236,7 +8236,7 @@ function icon($filename, $size, $alt='', $title='')
 	{
 		trigger_error("No such image: ".$file, E_USER_WARNING);
 	}
-	elseif (!in_array($size, $sizes))
+	elseif (!in_array($size, $sizes) OR empty($size))
 	{
 		trigger_error("Incorrect image size for {$file}", E_USER_WARNING);
 		$size = 16;
