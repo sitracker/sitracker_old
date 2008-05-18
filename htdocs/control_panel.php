@@ -17,7 +17,8 @@ require ('functions.inc.php');
 require ('auth.inc.php');
 
 include ('htmlheader.inc.php');
-echo "<h2>".icon('settings.png' alt='{$strControlPanel}' /> {$CONFIG['application_shortname']} {$strControlPanel}</h2>";
+echo "<h2>".icon('settings', 32, $strControlPanel);
+echo " {$CONFIG['application_shortname']} {$strControlPanel}</h2>";
 echo "<table align='center'>";
 echo "<thead>";
 echo "<tr><th>{$strUserSettings}</th></tr>";

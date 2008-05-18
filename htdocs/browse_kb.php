@@ -27,11 +27,11 @@ $title = $strBrowseKB;
 include ('htmlheader.inc.php');
 if (empty($mode) && empty($search_string)) $mode='RECENT';
 if (empty($search_string) AND empty($mode)) $search_string='a';
-echo "<h2>".icon('kb.png' width='32' height='32' alt='{$title}' /> ";
+echo "<h2>".icon('kb', 32, $title)." ";
 echo "{$title}</h2>";
 if (strtolower($mode)=='recent') echo "<h4>{$strArticlesPublishedRecently}</h4>";
 elseif (strtolower($mode)=='today') echo "<h4>{$strArticlesPublishedToday}</h4>";
-?>
+?>.png
 <table summary="alphamenu" align="center">
     <tr>
         <td align="center">

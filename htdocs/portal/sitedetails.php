@@ -1,5 +1,5 @@
 <?php
-// edit_site.php - Form for editing a site
+// portal/sitedetails.inc.php - Displays the site details to admins
 //
 // SiT (Support Incident Tracker) - Support call tracking system
 // Copyright (C) 2000-2008 Salford Software Ltd. and Contributors
@@ -7,51 +7,22 @@
 // This software may be used and distributed according to the terms
 // of the GNU General Public License, incorporated herein by reference.
 //
-
-// This Page Is Valid XHTML 1.0 Transitional!  6Feb06
+// Author Kieran Hogg <kieran_hogg[at]users.sourceforge.net>
 
 @include ('set_include_path.inc.php');
-$permission = 3; // Edit existing site details
-require ('db_connect.inc.php');
-require ('functions.inc.php');
+require 'db_connect.inc.php';
+require 'functions.inc.php';
 
-// This page requires authentication
-require ('auth.inc.php');
+$accesslevel = 'admin';
 
-// External variables
-$action = $_REQUEST['action'];
-$site = cleanvar($_REQUEST['site']);
+include 'portalauth.inc.php';
+include 'portalheader.inc.php';
 
-$title = $strEditSite;
-include ('htmlheader.inc.php');
+$site = intval($_SESSION['siteid']);
 
-
-// Show select site form
-if (empty($action) OR $action == "showform" OR empty($site))
+if (isset($_POST['submit']))
 {
-    echo "<h3>{$title}</h3>";
-    echo "<form action='{$_SERVER['PHP_SELF']}?action=edit' method='post'>";
-    echo "<table class='vertical'>";
-    echo "<tr><th>{$strSite}:</th><td>".site_drop_down("site", 0)."</td></tr>\n";
-    echo "</table>\n";
-    echo "<p><input name='submit' type='submit' value=\"{$strContinue}\" /></p>\n";
-    echo "</form>\n";
-}
-elseif ($action == "edit")
-{
-    if ($site == 0)
-    {
-        echo "<p class='error'>{$strMustSelectSite}</p>";
-    }
-    else
-    {
-	    //  Show edit site form
-	    echo show_edit_site($site);
-    }
-}
-elseif ($action == "update")
-{
-    // External Variables
+	// External Variables
     $incident_pools = explode(',', "0,{$CONFIG['incident_pools']}");
     $incident_quantity = $incident_pools[$_POST['incident_poolid']];
     $name = cleanvar($_POST['name']);
@@ -75,16 +46,29 @@ elseif ($action == "update")
 
     // Edit site, update the database
     $errors = 0;
-    // check for blank name
+
     if ($name == "")
     {
         $errors = 1;
         $errors_string .= "<p class='error'>{$strMustEnterName}</p>\n";
     }
+    
+    if ($email == "")
+    {
+    	$errors = 1;
+    	$errors_string .= "<p class='error'>{$strMustEnterEmail}</p>\n";
+    }
+    
+    if ($telephone == "")
+    {
+        $errors = 1;
+    	$errors_string .= "<p class='error'>{$strMustEnterPhoneNum}</p>\n";
+    }
 
     // edit site if no errors
     if ($errors == 0)
     {
+
         replace_tags(3, $site, $tags);
         if (isset($licenserx))
         {
@@ -116,7 +100,7 @@ elseif ($action == "update")
         {
             plugin_do('edit_site_save');
             journal(CFG_LOGGING_NORMAL, $strSiteEdited, sprintf($strSiteXEdited,$site) , CFG_JOURNAL_SITES, $site);
-            html_redirect("site_details.php?id={$site}");
+            html_redirect($_SERVER['PHP_SELF']);
             exit;
         }
     }
@@ -125,5 +109,10 @@ elseif ($action == "update")
         echo $errors_string;
     }
 }
-include ('htmlfooter.inc.php');
+
+echo show_edit_site($site, 'external');
+
+
+
+include 'htmlfooter.inc.php';
 ?>

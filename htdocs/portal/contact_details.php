@@ -7,21 +7,31 @@
 // This software may be used and distributed according to the terms
 // of the GNU General Public License, incorporated herein by reference.
 //
-// Author: Kieran Hogg <kieran_hogg[at]users.sourceforge.net
+// Author Kieran Hogg <kieran_hogg[at]users.sourceforge.net>
 
+@include ('set_include_path.inc.php');
+require 'db_connect.inc.php';
+require 'functions.inc.php';
+
+if (!isset($_GET['id']))
+{
+    $accesslevel = 'any';
+}
+elseif (isset($_GET['id']) AND $_GET['id'] != $_SESSION['contactid'])
+{
+    $accesslevel = 'admin';
+}
+
+include 'portalauth.inc.php';
 include 'portalheader.inc.php';
 
 if (!isset($_GET['id']))
 {
     $id = $_SESSION['contactid'];
 }
-elseif ($_GET['id'] != $_SESSION['contactid'] AND $_SESSION['usertype'] == 'admin')
+elseif ($_GET['id'] != $_SESSION['contactid'])
 {
     $id = intval($_GET['id']);
-}
-else
-{
-    die($strPermissionDenied);
 }
 
 //if new details posted

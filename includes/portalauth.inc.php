@@ -14,6 +14,21 @@
 session_name($CONFIG['session_name']);
 session_start();
 
+if (!isset($accesslevel))
+{
+	include 'portalheader.inc.php';
+	echo "<p class='error'>\$accesslevel not set</p>";
+	include 'htmlfooter.inc.php';
+	exit;
+}
+elseif ($accesslevel == 'admin' AND $_SESSION['usertype'] != 'admin')
+{
+	include 'portalheader.inc.php';
+	echo "<p class='error'>Permission denied</p>";
+	include 'htmlfooter.inc.php';
+	exit;
+}
+
 if ($CONFIG['portal'] == FALSE)
 {
     // portal disabled

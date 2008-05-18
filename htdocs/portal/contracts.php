@@ -7,10 +7,18 @@
 // This software may be used and distributed according to the terms
 // of the GNU General Public License, incorporated herein by reference.
 //
-// Author: Kieran Hogg <kieran_hogg[at]users.sourceforge.net
+// Author Kieran Hogg <kieran_hogg[at]users.sourceforge.net>
 
+@include ('set_include_path.inc.php');
+require 'db_connect.inc.php';
+require 'functions.inc.php';
+
+$accesslevel = 'admin';
+
+include 'portalauth.inc.php';
 include 'portalheader.inc.php';
-//TODO check we're allowed
+
+
 $id = intval($_GET['id']);
 $contactid = intval($_GET['contactid']);
 $action = cleanvar($_GET['action']);

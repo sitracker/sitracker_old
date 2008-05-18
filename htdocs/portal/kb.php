@@ -1,14 +1,21 @@
 <?php
-/*
-portal/kb.php - Show knowledgebase entries
+//portal/kb.php - Show knowledgebase entries
+//
+// SiT (Support Incident Tracker) - Support call tracking system
+// Copyright (C) 2000-2008 Salford Software Ltd. and Contributors
+//
+// This software may be used and distributed according to the terms
+// of the GNU General Public License, incorporated herein by reference.
+//
+// Author Kieran Hogg <kieran_hogg[at]users.sourceforge.net>
 
-SiT (Support Incident Tracker) - Support call tracking system
-Copyright (C) 2000-2008 Salford Software Ltd. and Contributors
+@include ('set_include_path.inc.php');
+require 'db_connect.inc.php';
+require 'functions.inc.php';
 
-This software may be used and distributed according to the terms
-of the GNU General Public License, incorporated herein by reference.
-*/
+$accesslevel = 'any';
 
+include 'portalauth.inc.php';
 include 'portalheader.inc.php';
 
 echo "<h2>".icon('kb', 32)." {$strKnowledgeBase}</h2>";

@@ -10,11 +10,6 @@
 // Authors: Ivan Lucas <ivanlucas[at]users.sourceforge.net>, Kieran Hogg <kieran_hogg[at]users.sourceforge.net>
 // XHTML 1.0 Transitional valid 12/11/07 - KMH
 
-@include ('set_include_path.inc.php');
-$permission = 0; // not required
-require ('db_connect.inc.php');
-require ('functions.inc.php');
-
 // Load session language if it is set and different to the default language
 if (!empty($_SESSION['lang']) AND $_SESSION['lang'] != $CONFIG['default_i18n'])
 {
@@ -22,7 +17,6 @@ if (!empty($_SESSION['lang']) AND $_SESSION['lang'] != $CONFIG['default_i18n'])
 }
 require ('strings.inc.php');
 
-require ('portalauth.inc.php');
 // External variables
 $page = cleanvar($_REQUEST['page']);
 $contractid = cleanvar($_REQUEST['contractid']);

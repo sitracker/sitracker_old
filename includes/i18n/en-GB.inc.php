@@ -683,6 +683,7 @@ $strMustCompleteActivitiesBeforeClosure = 'You must complete all activities for 
 $strMustEnterEmail = 'You must enter an email address';
 $strMustEnterName = 'You must enter a name';
 $strMustEnterNameEscalationPath = 'You must enter a name for the escalation path';
+$strMustEnterPhoneNum = 'You must enter a phone number';
 $strMustEnterProduct = 'You must select a product';
 $strMustEnterProductInformation = 'You must enter some product information';
 $strMustEnterSkillName = 'You must enter a skill name';

@@ -15,7 +15,9 @@ $permission = 0; // no permission required
 
 require ('db_connect.inc.php');
 require ('functions.inc.php');
-// This page requires authentication
+
+$accesslevel = 'any';
+
 require ('portalauth.inc.php');
 // External variables
 $id = cleanvar(intval($_GET['id']));
