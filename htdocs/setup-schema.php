@@ -545,7 +545,7 @@ CREATE TABLE `{$dbLinkTypes}` (
 
 INSERT INTO `{$dbLinkTypes}`
 VALUES (1,'Task','Subtask','Parent Task','tasks','id','tasks','id','name','','view_task.php?id=%id%'),
-(2,'Contact','Contact','Contact Task','tasks','id','contacts','id','forenames','','contact_details.php?id=%id%'),
+(2,'Contact','Contact','Contact Task','tasks','id','contacts','id','CONCAT(forenames, \" \", surname)','','contact_details.php?id=%id%'),
 (3,'Site','Site','Site Task','tasks','id','sites','id','name','','site_details.php?id=%id%'),
 (4,'Incident','Incident','Task','tasks','id','incidents','id','title','','incident_details.php?id=%id%'),
 (5,'Attachments', 'Update', 'File', 'updates', 'id', 'files', 'id', 'filename', '', 'incident_details.php?updateid=%id%&tab=files');
@@ -2034,6 +2034,9 @@ ALTER TABLE `{$dbFiles}` CHANGE `filedate` `filedate` DATETIME NOT NULL ;
 ALTER TABLE `{$dbFiles}` CHANGE `expiry` `expiry` DATETIME NOT NULL ;
 ALTER TABLE `{$dbFiles}` CHANGE `longdescription` `longdescription` TEXT ;
 ALTER TABLE `{$dbFiles}` ADD `usertype` ENUM( 'user', 'contact' ) NOT NULL DEFAULT 'user' AFTER `userid` ;
+
+-- PH 18/05/08
+UPDATE `{$dbLinktypes}` SET `selectionsql` = 'CONCAT(forenames, " ", surname)' WHERE `linktypes`.`id` =2 LIMIT 1 
 
 ";
 
