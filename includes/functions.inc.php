@@ -4909,7 +4909,7 @@ function calculate_working_time($t1, $t2, $publicholidays) {
 */
 function is_active_status($status, $states)
 {
-    if (in_array($status,$states)) return false;
+    if (in_array($status, $states)) return false;
     else return true;
 }
 
