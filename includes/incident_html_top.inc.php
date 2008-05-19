@@ -189,7 +189,7 @@ if ($menu != 'hide')
 {
     if ($_REQUEST['win']=='incomingview')
     {
-        $insql = "SELECT emailfrom, contactid, updateid, tempincoming.id, timestamp
+        $insql = "SELECT emailfrom, contactid, updateid, ti.id, timestamp
                 FROM `{$dbTempIncoming}` AS ti, `{$dbUpdates}` AS u
                 WHERE ti.id = {$id}
                 AND ti.updateid = u.id";
