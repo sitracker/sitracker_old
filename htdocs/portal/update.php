@@ -61,11 +61,11 @@ else
     if (!empty($forenames) AND !empty($surname))
     {
         //TODO change order for a name such as Chinese?
-        $updatebody = "<hr>".sprintf($SYSLANG['strUpdatedViaThePortalBy'], "<strong>{$forenames}", "{$surname}</strong>")."\n\n";
+        $updatebody = "<hr>".sprintf($SYSLANG['strUpdatedViaThePortalBy'], "[b]{$forenames}", "{$surname}[/b]")."\n\n";
     }
     else
     {
-        $updatebody = "<hr>".sprintf($SYSLANG['strUpdatedViaThePortalBy'], "<strong>{$strCustomer}</strong>")."\n\n";
+        $updatebody = "<hr>".sprintf($SYSLANG['strUpdatedViaThePortalBy'], "[b]{$strCustomer}[/b]")."\n\n";
     }
 
     if (!empty($_FILES['attachment']['name']))
@@ -82,7 +82,6 @@ else
         else
         {
             $fileid = mysql_insert_id();
-            //FIXME 3.35 use $SYSLANG
             $updatebody = "{$SYSLANG['strAttachment']}: [[att={$fileid}]]{$filename}[[/att]]".$updatebody;
         }
     }
