@@ -298,9 +298,9 @@ $ttvararray['{applicationversion}'] = array('description' => $application_versio
                                      'replacement' => '$application_version_string;');
 
 $ttvararray['{contactemail}'] = array('description' => $strIncidentsContactEmail,
-                                      'requires' => 'contactid',
-                                     'replacement' => 'contact_email($contactid);',
-                                     'action' => 'ACTION_EMAIL');
+                                      'requires' => 'incidentid',
+                                      'replacement' => 'contact_email(incident_contact($paramarray[\'incidentid\']));',
+                                      'action' => 'ACTION_EMAIL');
 
 $ttvararray['{contactfirstname}'] = array('description' => 'First Name of contact',
                                      'requires' => 'contactid',
