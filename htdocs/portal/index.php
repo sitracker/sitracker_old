@@ -32,12 +32,12 @@ function portal_incident_table($sql)
         $shade = 'shade1';
         $html .=  "<table align='center' width='70%'>";
         $html .=  "<tr>";
-        $html .=  colheader('id', $GLOBALS['strID'], $sort, $order, $filter);
-        $html .=  colheader('title', $GLOBALS['strTitle'], $sort, $order, $filter);
-        $html .=  colheader('owner', $GLOBALS['strOwner'], $sort, $order, $filter);
-        $html .=  colheader('lastupdated', $GLOBALS['strLastUpdated'], $sort, $order, $filter);
-        $html .=  colheader('contact', $GLOBALS['strContact'], $sort, $order, $filter);
-        $html .=  colheader('status', $GLOBALS['strStatus'], $sort, $order, $filter);
+        $html .=  colheader('id', $GLOBALS['strID']);
+        $html .=  colheader('title', $GLOBALS['strTitle']);
+        $html .=  colheader('owner', $GLOBALS['strOwner']);
+        $html .=  colheader('lastupdated', $GLOBALS['strLastUpdated']);
+        $html .=  colheader('contact', $GLOBALS['strContact']);
+        $html .=  colheader('status', $GLOBALS['strStatus']);
         if ($showclosed != "true")
         {
             $html .=  colheader('actions', $GLOBALS['strOperation']);
