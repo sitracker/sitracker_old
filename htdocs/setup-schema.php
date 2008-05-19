@@ -2035,7 +2035,7 @@ ALTER TABLE `{$dbFiles}` CHANGE `longdescription` `longdescription` TEXT ;
 ALTER TABLE `{$dbFiles}` ADD `usertype` ENUM( 'user', 'contact' ) NOT NULL DEFAULT 'user' AFTER `userid` ;
 
 -- PH 18/05/08
-UPDATE `{$dbLinktypes}` SET `selectionsql` = 'CONCAT(forenames, \" \", surname)' WHERE `{$dbLinktypes}`.`id` = 2 LIMIT 1;
+UPDATE `{$dbLinkTypes}` SET `selectionsql` = 'CONCAT(forenames, \" \", surname)' WHERE `{$dbLinktypes}`.`id` = 2 LIMIT 1;
 
 -- INL 19/05/08 Last update using the < 335 schema upgrade system, next we'll use the new system and store the version in this col
 ALTER TABLE `{$dbSystem}` ADD `schema` BIGINT UNSIGNED NOT NULL COMMENT 'DateTime in YYYYMMDDHHMM format';
