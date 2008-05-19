@@ -15,8 +15,8 @@ require 'functions.inc.php';
 
 $accesslevel = 'any';
 
-include 'portalheader.inc.php';
 include 'portalauth.inc.php';
+include 'portalheader.inc.php';
 
 $incidentid = $_REQUEST['id'];
 $sql = "SELECT title, contact, status, opened FROM `{$dbIncidents}` WHERE id={$incidentid}";
