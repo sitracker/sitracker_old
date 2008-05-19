@@ -38,7 +38,7 @@ $page = strip_tags(str_replace('..','',str_replace('//','',str_replace(':','',ur
 // Populate $SYSLANG with system lang
 $file = "{$CONFIG['application_fspath']}includes/i18n/{$CONFIG['default_i18n']}.inc.php";
 if (file_exists($file))
-{
+{    
     $fh = fopen($file, "r");
 
     $theData = fread($fh, filesize($file));
@@ -57,6 +57,7 @@ if (file_exists($file))
             $SYSLANG[$vars[0]] = $vars[1];
         }
     }
+    $_SESSION['syslang'] = $SYSLANG;
 }
 else
 {
