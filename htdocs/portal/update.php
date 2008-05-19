@@ -60,7 +60,8 @@ else
     
     if (!empty($forenames) AND !empty($surname))
     {
-        $updatebody = "<hr><strong>".sprintf($SYSLANG['strUpdatedViaThePortalBy'], "{$forenames} {$surnames}")."</strong>\n\n";
+        //TODO change order for a name such as Chinese?
+        $updatebody = "<hr><strong>".sprintf($SYSLANG['strUpdatedViaThePortalBy'], "{$forenames}", "{$surname}")."</strong>\n\n";
     }
     else
     {
@@ -82,7 +83,7 @@ else
         {
             $fileid = mysql_insert_id();
             //FIXME 3.35 use $SYSLANG
-            $updatebody = "{$GLOBALS['strAttachment']}: [[att={$fileid}]]{$filename}[[/att]]".$updatebody;
+            $updatebody = "{$SYSLANG['strAttachment']}: [[att={$fileid}]]{$filename}[[/att]]".$updatebody;
         }
     }
     //add the update
