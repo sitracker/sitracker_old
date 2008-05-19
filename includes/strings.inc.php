@@ -377,6 +377,10 @@ $ttvararray['{incidenttitle}'] = array('description' => $strIncidentTitle,
                                      'requires' => 'incidentid',
                                      'replacement' => 'incident_title($paramarray[incidentid]);');
 
+$ttvararray['{kbname}'] = array('description' => $strKnowledgeBase,
+                                'requires' => 'kbid',
+                                'replacement' => 'kb_name($paramarray[\'kbid\']);');
+
 $ttvararray['{salesperson}'] = array('description' => 'Salesperson',
                                      'requires' => 'siteid',
                                      'replacement' => 'user_realname(db_read_column(\'owner\', $GLOBALS[\'dbSites\'], $siteid));');

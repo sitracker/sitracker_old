@@ -8312,7 +8312,14 @@ function icon($filename, $size='', $alt='', $title='')
     }
 }
 
-
+/**
+ * Output the html for a KB article
+ *
+ * @param int $id ID of the KB article
+ * @param string $mode whether this is internal or external facing, defaults to internal
+ * @return string $html kb article html
+ * @author Kieran Hogg
+ */
 function kb_article($id, $mode='internal')
 {
     global $CONFIG, $iconset;
@@ -8467,7 +8474,14 @@ function kb_article($id, $mode='internal')
     return $html;
 }
 
-
+/**
+ * Output the html for the edit site form
+ *
+ * @param int $site ID of the site
+ * @param string $mode whether this is internal or external facing, defaults to internal
+ * @return string $html edit site form html
+ * @author Kieran Hogg
+ */
 function show_edit_site($site, $mode='internal')
 {
 	$sql = "SELECT * FROM `{$GLOBALS['dbSites']}` WHERE id='$site' ";
@@ -8556,7 +8570,13 @@ function show_edit_site($site, $mode='internal')
     return $html;
 }
 
-
+/**
+ * Output the html for an add contact form
+ *
+ * @param string $mode whether this is internal or external facing, defaults to internal
+ * @return string $html add contact form html
+ * @author Kieran Hogg
+ */
 function show_add_contact($mode = 'internal')
 {
     $html .= show_form_errors('add_contact');
@@ -8703,7 +8723,11 @@ function show_add_contact($mode = 'internal')
     return $html;
 }
 
-
+/**
+ * Procceses a new contact
+ *
+ * @author Kieran Hogg
+ */
 function process_add_contact()
 {
 	global $now, $CONFIG, $dbContacts;
@@ -8878,6 +8902,27 @@ function process_add_contact()
         clear_form_data('add_contact');
         clear_form_errors('add_contact');
     }
+}
+
+
+/**
+ * Outputs the name of a KB article, used for triggers
+ *
+ * @param int $kbid ID of the KB article
+ * @return string $name kb article name
+ * @author Kieran Hogg
+ */
+function kb_name($kbid)
+{
+    $kbid = intval($kbid);
+	$sql = "SELECT title FROM `{$GLOBALS['dbKBArticles']}` WHERE docid='{$kbid}'";
+	$result = mysql_query($sql);
+	if (mysql_error()) trigger_error("MySQL Query Error ".mysql_error(), E_USER_ERROR);
+	else
+	{
+		$row = mysql_fetch_object($result);
+		return $row->title;
+	}	
 }
 
 // -------------------------- // -------------------------- // --------------------------
