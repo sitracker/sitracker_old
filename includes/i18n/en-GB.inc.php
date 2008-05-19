@@ -1159,6 +1159,7 @@ $strUpdateNewUpdate = 'New update (none of the above)';
 $strUpdatePerUserAbbrev = 'upd per user';
 $strUpdates = 'Updates';
 $strUpdatedFromActivity = 'Updated from Activity by %s';
+$strUpdatedViaThePortalBy = 'Updated via the portal by %s %s';
 $strUpdateSuccessful = 'Update Successful';
 $strUpdateType = 'Update Type';
 $strUploadedBy = 'Uploaded by %s';
