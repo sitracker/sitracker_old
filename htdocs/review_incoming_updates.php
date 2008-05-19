@@ -337,7 +337,8 @@ if ((mysql_num_rows($resultnew) > 0) OR ($realemails > 0))
 }
 else if ($spamcount == 0)
 {
-    echo "<h2>{$strNoRecords}</h2>";
+    echo "<h2>".icon('email', 32)." {$strHoldingQueue}</h2>";
+    echo "<p align='center'>{$strNoRecords}</p>";
 }
 
 if ($spamcount > 0)
