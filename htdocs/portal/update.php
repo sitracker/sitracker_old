@@ -61,11 +61,11 @@ else
     if (!empty($forenames) AND !empty($surname))
     {
         //TODO change order for a name such as Chinese?
-        $updatebody = "<hr><strong>".sprintf($SYSLANG['strUpdatedViaThePortalBy'], "{$forenames}", "{$surname}")."</strong>\n\n";
+        $updatebody = "<hr>".sprintf($SYSLANG['strUpdatedViaThePortalBy'], "<strong>{$forenames}", "{$surname}</strong>")."</strong>\n\n";
     }
     else
     {
-        $updatebody = "<hr><strong>".sprintf($SYSLANG['strUpdatedViaThePortalBy'], $strCustomer)."</strong>\n\n";
+        $updatebody = "<hr>".sprintf($SYSLANG['strUpdatedViaThePortalBy'], "<strong>{$strCustomer}</strong")."\n\n";
     }
 
     if (!empty($_FILES['attachment']['name']))
