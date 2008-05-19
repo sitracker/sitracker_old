@@ -2037,7 +2037,10 @@ ALTER TABLE `{$dbFiles}` ADD `usertype` ENUM( 'user', 'contact' ) NOT NULL DEFAU
 -- PH 18/05/08
 UPDATE `{$dbLinktypes}` SET `selectionsql` = 'CONCAT(forenames, \" \", surname)' WHERE `{$dbLinktypes}`.`id` = 2 LIMIT 1;
 
+-- INL 19/05/08 Last update using the < 335 schema upgrade system, next we'll use the new system and store the version in this col
+ALTER TABLE `{$dbSystem}` ADD `schema` BIGINT NOT NULL COMMENT 'DateTime in YYYYMMDDHHMM format';
 ";
+
 
 // Important: When making changes to the schema you must add SQL to make the alterations
 // to existing databases in $upgrade_schema[] *AND* you must also change $schema[] for
