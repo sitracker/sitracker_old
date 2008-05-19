@@ -325,7 +325,7 @@ function contexthelp(elem, context)
                             elem.firstDescendant().innerHTML = transport.responseText;
                         }
                     },
-                    onFailure: function(){ alert('Something went wrong...') }
+                    onFailure: function(){ alert('Context Help Error\nSorry, we could not retrieve the help tip') }
             });
     }
     elem.observe('mouseout', hidecontexthelp);
