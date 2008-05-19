@@ -1,5 +1,5 @@
 <?php
-// portalheader.inc.php - Header for inclusion in the portal
+// portalheader.inc.php - Header html to be included at the top of portal pages
 //
 // SiT (Support Incident Tracker) - Support call tracking system
 // Copyright (C) 2000-2008 Salford Software Ltd. and Contributors
@@ -7,10 +7,71 @@
 // This software may be used and distributed according to the terms
 // of the GNU General Public License, incorporated herein by reference.
 //
-// Authors: Ivan Lucas <ivanlucas[at]users.sourceforge.net>, Kieran Hogg <kieran_hogg[at]users.sourceforge.net>
-// XHTML 1.0 Transitional valid 12/11/07 - KMH
+// This Page Is Valid XHTML 1.0 Transitional! 27Oct05
+//
+// Authors: Ivan Lucas <ivanlucas[at]users.sourceforge.net>,
+//          Kieran Hogg <kieran_hogg[at]users.sourceforge.net>
 
-// Load session language if it is set and different to the default language
+// Use session language if available, else use default language
+if (!empty($_SESSION['lang'])) $lang = $_SESSION['lang'];
+else $lang = $CONFIG['default_i18n'];
+$SYSLANG = $_SESSION['syslang'];
+echo "<!DOCTYPE html PUBLIC \"-//W3C//DTD XHTML 1.0 Transitional//EN\"\n";
+echo "\"http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd\">\n";
+echo "<html xmlns=\"http://www.w3.org/1999/xhtml\" xml:lang=\"{$lang}\" lang=\"{$lang}\">\n";
+echo "<head>\n";
+echo "<!-- SiT (Support Incident Tracker) - Support call tracking system\n";
+echo "     Copyright (C) 2000-2008 Salford Software Ltd. and Contributors\n\n";
+echo "     This software may be used and distributed according to the terms\n";
+echo "     of the GNU General Public License, incorporated herein by reference. -->\n";
+echo "<meta http-equiv=\"Content-Type\" content=\"text/html;charset={$i18ncharset}\" />\n";
+echo "<meta name=\"GENERATOR\" content=\"{$CONFIG['application_name']} {$application_version_string}\" />\n";
+echo "<title>";
+if (isset($title))
+{
+    echo "$title - {$CONFIG['application_shortname']}";
+}
+else
+{
+    echo "{$CONFIG['application_name']}{$extratitlestring}";
+}
+
+echo "</title>\n";
+echo "<link rel='SHORTCUT ICON' href='{$CONFIG['application_webpath']}images/sit_favicon.png' />\n";
+echo "<style type='text/css'>@import url('{$CONFIG['application_webpath']}styles/sitbase.css');</style>\n";
+if ($_SESSION['auth'] == TRUE)
+{
+    $styleid = $_SESSION['style'];
+}
+else
+{
+    $styleid = $CONFIG['default_interface_style'];
+}
+
+$csssql = "SELECT cssurl, iconset FROM `{$GLOBALS['dbInterfaceStyles']}` WHERE id='{$styleid}'";
+$cssresult = mysql_query($csssql);
+if (mysql_error())trigger_error(mysql_error(),E_USER_WARNING);
+
+list($cssurl, $iconset) = mysql_fetch_row($cssresult);
+unset($styleid);
+echo "<link rel='stylesheet' href='{$CONFIG['application_webpath']}styles/{$cssurl}' />\n";
+
+echo "<script src='{$CONFIG['application_webpath']}scripts/prototype/prototype.js' type='text/javascript'></script>\n";
+echo "<script src='{$CONFIG['application_webpath']}sit.js.php' type='text/javascript'></script>\n";
+echo "<script src='{$CONFIG['application_webpath']}webtrack.js' type='text/javascript'></script>\n";
+// To include a script for a single page, add the filename to the $pagescripts variable before including htmlheader.inc.php
+if (is_array($pagescripts))
+{
+    foreach ($pagescripts AS $pscript)
+    {
+        echo "<script src='{$CONFIG['application_webpath']}scripts/{$pscript}' type='text/javascript'></script>\n";
+    }
+    unset($pagescripts, $pscript);
+}
+
+echo "</head>\n";
+echo "<body>\n";
+echo "<h1 id='apptitle'>{$CONFIG['application_name']}</h1>\n";
 if (!empty($_SESSION['lang']) AND $_SESSION['lang'] != $CONFIG['default_i18n'])
 {
     include("i18n/{$_SESSION['lang']}.inc.php");
@@ -22,9 +83,6 @@ $page = cleanvar($_REQUEST['page']);
 $contractid = cleanvar($_REQUEST['contractid']);
 
 $filter = array('page' => $page);
-$SYSLANG = $_SESSION['syslang'];
-
-include ('htmlheader.inc.php');
 
 //find contracts
 $sql = "SELECT m.*, p.name, ";
@@ -63,8 +121,6 @@ if ($CONFIG['kb_enabled'] AND $CONFIG['portal_kb_enabled'] AND mysql_num_rows($r
     echo "<li><a href='kb.php'>{$strKnowledgeBase}</a></li>";
 }
 
-
-//echo "<li><a href='contactdetails.php'>{$strMyDetails}</a></li>";
 if ($_SESSION['usertype'] == 'admin')
 {
     echo "<li><a href='admin.php'>{$strAdmin}</a></li>";
@@ -79,7 +135,7 @@ echo ", ".contact_site($_SESSION['contactid']);
 echo "</a>";
 echo "</div>";
 echo "</div>";
+echo "<div id='mainframe'>";
 
-
-
+$headerdisplayed = TRUE;
 ?>
