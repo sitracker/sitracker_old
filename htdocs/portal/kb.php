@@ -92,33 +92,6 @@ if($result = mysql_query($sql))
     {
         echo "<p>".sprintf($strShowingXtoXofX, $start+1, $end, $numtotal)."</p>";
     
-        echo "<table align='center' width='80%'>";
-        echo colheader('id', $strID, $sort, $order, $filter, '', '5');
-        echo colheader('title', $strTitle, $sort, $order, $filter);
-        echo colheader('date', $strDate, $sort, $order, $filter, '', '15');
-        echo colheader('author', $strAuthor, $sort, $order, $filter);
-        echo colheader('keywords', $strKeywords, $sort, $order, $filter, '', '15');
-    
-        $shade = 'shade1';
-        while($row = mysql_fetch_object($result))
-        {
-            echo "<tr class='{$shade}'>";
-            echo "<td><a href='kbarticle.php?id={$row->docid}'>";
-            echo icon('kb', 16, $strID);
-            echo " {$CONFIG['kb_id_prefix']}{$row->docid}</a></td>";
-            echo "<td>{$row->name}<br />";
-            echo "<a href='kbarticle.php?id={$row->docid}'>{$row->title}</a></td>";
-            echo "<td>";
-            echo ldate($CONFIG['dateformat_date'], mysql2date($row->published));
-            echo "</td>";
-            echo "<td>".user_realname($row->author)."</td>";
-            echo "<td>{$row->keywords}</td</tr>";
-                    
-            if($shade == 'shade1')
-                $shade = 'shade2';
-            else
-                $shade = 'shade1';
-        }
         echo "<p align='center'>";
     
         if(!empty($_GET['start']))
@@ -139,6 +112,36 @@ if($result = mysql_query($sql))
         {
             echo $strNext;
         }
+        echo "</p>";
+        
+        echo "<table align='center' width='80%'><tr>";
+        echo colheader('id', $strID, $sort, $order, $filter, '', '5');
+        echo colheader('title', $strTitle, $sort, $order, $filter);
+        echo colheader('date', $strDate, $sort, $order, $filter, '', '15');
+        echo colheader('author', $strAuthor, $sort, $order, $filter);
+        echo colheader('keywords', $strKeywords, $sort, $order, $filter, '', '15');
+        echo "</tr>";
+        $shade = 'shade1';
+        while($row = mysql_fetch_object($result))
+        {
+            echo "<tr class='{$shade}'>";
+            echo "<td><a href='kbarticle.php?id={$row->docid}'>";
+            echo icon('kb', 16, $strID);
+            echo " {$CONFIG['kb_id_prefix']}{$row->docid}</a></td>";
+            echo "<td>{$row->name}<br />";
+            echo "<a href='kbarticle.php?id={$row->docid}'>{$row->title}</a></td>";
+            echo "<td>";
+            echo ldate($CONFIG['dateformat_date'], mysql2date($row->published));
+            echo "</td>";
+            echo "<td>".user_realname($row->author)."</td>";
+            echo "<td>{$row->keywords}</td></tr>";
+                    
+            if($shade == 'shade1')
+                $shade = 'shade2';
+            else
+                $shade = 'shade1';
+        }
+        echo "</table>";
     }
     else
     {
@@ -150,7 +153,6 @@ else
     echo "<p align='center'>{$strNoRecords}</p>";
 }
 
-echo "</table>";
 include ('htmlfooter.inc.php');
 
 ?>
