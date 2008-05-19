@@ -325,3 +325,5 @@ div.bbcode_toolbar a:hover
     color: #3366CC;
     text-decoration: none;
 }
+
+div#portaluser { float: right; text-align: right; }

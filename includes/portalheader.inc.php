@@ -63,7 +63,7 @@ if ($CONFIG['kb_enabled'] AND $CONFIG['portal_kb_enabled'] AND mysql_num_rows($r
 }
 
 
-echo "<li><a href='contactdetails.php'>{$strMyDetails}</a></li>";
+//echo "<li><a href='contactdetails.php'>{$strMyDetails}</a></li>";
 if ($_SESSION['usertype'] == 'admin')
 {
     echo "<li><a href='admin.php'>{$strAdmin}</a></li>";
@@ -72,9 +72,10 @@ echo "<li><a href='../logout.php'>{$strLogout}</a></li>";
 
 echo "</ul>";
 
-echo "<div align='right'>";
+echo "<div id='portaluser'><a href='contactdetails.php'>";
 echo contact_realname($_SESSION['contactid']);
 echo ", ".contact_site($_SESSION['contactid']);
+echo "</a>";
 echo "</div>";
 echo "</div>";
 
