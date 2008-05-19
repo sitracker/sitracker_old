@@ -7950,8 +7950,10 @@ function contract_details($id, $mode='internal')
         else
         {
             $html .= "<h3>{$GLOBALS['strAddContact']}</h3>";
-            $html .= "<form action='{$_SERVER['PHP_SELF']}?id={$id}&amp;action=add' method='post' >";
-            $html .= "<p align='center'>Add new supported contact: ".contact_site_drop_down('contactid', 'contactid', maintenance_siteid($id));
+            $html .= "<form action='{$_SERVER['PHP_SELF']}?id={$id}&amp;action=";
+            $html .= "add' method='post' >";
+            $html .= "<p align='center'>Add new supported contact: ";
+            $html .= contact_site_drop_down('contactid', 'contactid', maintenance_siteid($id));
             $html .= help_link('NewSupportedContact')."<br />";
             $html .= "<input type='submit' value='{$GLOBALS['strAdd']}' /></p></form>";
         }
@@ -8002,7 +8004,7 @@ function contract_details($id, $mode='internal')
  * @param $id
  * @returns string path of file
 **/
-function upload_file($file, $id, $type='public')
+function upload_file($file, $incidentid, $updateid, $type='public')
 {
     global $CONFIG, $now;
     $att_max_filesize = return_bytes($CONFIG['upload_max_filesize']);
@@ -8422,31 +8424,35 @@ function kb_article($id, $mode='internal')
         $html .= ldate($CONFIG['dateformat_date'],$pubdate)."<br />";
     }
 
-    if (is_array($author))
+    if ($mode == 'internal')
     {
-        $author=array_unique($author);
-        $countauthors=count($author);
-        $count=1;
-        if ($countauthors > 1)
+        if (is_array($author))
         {
+            $author=array_unique($author);
+            $countauthors=count($author);
+            $count=1;
+            if ($countauthors > 1)
+            {
+                $html .= "{$GLOBALS['strAuthors']}: ";
+            }
+            else
+            {
+                $html .= "{$GLOBALS['strAuthor']}: ";
+            }
+            foreach ($author AS $authorid)
+            {
+                $html .= user_realname($authorid,TRUE);
+                if ($count < $countauthors) $html .= ", " ;
+                $count++;
+            }
             $html .= "<strong>{$GLOBALS['strAuthors']}</strong>: ";
         }
         else
         {
-            $html .= "<strong>{$GLOBALS['strAuthor']}</strong>: ";
-        }
-        foreach ($author AS $authorid)
-        {
-            $html .= user_realname($authorid,TRUE);
-            if ($count < $countauthors) $html .= ", " ;
-            $count++;
+            $html .= "{$GLOBALS['strAuthor']}: {$author}";
         }
     }
-    else
-    {
-        $html .= "{$GLOBALS['strAuthor']}: {$author}";
-    }
-
+    
     $html .= "<br />";
     if (!empty($kbarticle->keywords))
     {
@@ -8639,7 +8645,7 @@ function show_add_contact($mode = 'internal')
     {
         $html .= "value='{$_SESSION['formdata']['add_contact']['email']}";
     }
-    $html .= "/> ";
+    $html .= "/><span class='required'>{$GLOBALS['strRequired']}</span> ";
 
     $html .= "<label>";
     $html .= html_checkbox('dataprotection_email', 'No', TRUE);
