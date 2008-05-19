@@ -1745,7 +1745,7 @@ ALTER TABLE `{$dbUsers}` ADD `var_utc_offset` INT NOT NULL DEFAULT '0' COMMENT '
 INSERT INTO `{$dbUserStatus}` (`id` ,`name`) VALUES ('0', 'Account Disabled');
 ";
 
-$upgrade_schema[335] = "
+$upgrade_schema[335]['t200805191400'] = "
 -- KMH 17/12/07
 CREATE TABLE IF NOT EXISTS `{$dbTriggers}` (
   `id` int(11) NOT NULL auto_increment,
@@ -2038,8 +2038,14 @@ ALTER TABLE `{$dbFiles}` ADD `usertype` ENUM( 'user', 'contact' ) NOT NULL DEFAU
 UPDATE `{$dbLinktypes}` SET `selectionsql` = 'CONCAT(forenames, \" \", surname)' WHERE `{$dbLinktypes}`.`id` = 2 LIMIT 1;
 
 -- INL 19/05/08 Last update using the < 335 schema upgrade system, next we'll use the new system and store the version in this col
-ALTER TABLE `{$dbSystem}` ADD `schema` BIGINT NOT NULL COMMENT 'DateTime in YYYYMMDDHHMM format';
+ALTER TABLE `{$dbSystem}` ADD `schema` BIGINT UNSIGNED NOT NULL COMMENT 'DateTime in YYYYMMDDHHMM format';
 ";
+
+// Schema updates from this point should in the format $upgrade_schema[315]["t200805191404"]
+// where 315 is the sit version and 200805191404 is the timestamp in the format YYYYMMDDHHMM (don't forget the the 't' prefix!)
+
+// Test by Ivan
+$upgrade_schema[335]["t200805191404"] = "UPDATE `{$dbUsers}` SET realname = 'SiT Administrator' WHERE id=1;";
 
 
 // Important: When making changes to the schema you must add SQL to make the alterations

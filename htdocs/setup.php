@@ -243,22 +243,43 @@ function setup_configure()
 
 function setup_exec_sql($sqlquerylist)
 {
-    global $CONFIG;
+    global $CONFIG, $dbSystem, $installed_schema, $application_version;
     if (!empty($sqlquerylist))
     {
-        $sqlqueries = explode( ';', $sqlquerylist);
-        // We don't need the last entry it's blank, as we end with a ;
-        array_pop($sqlqueries);
-        foreach($sqlqueries AS $sql)
+        if (!is_array($sqlquerylist)) $sqlquerylist = array($sqlquerylist);
+
+        // Loop around the queries
+        foreach ($sqlquerylist AS $schemaversion => $queryelement)
         {
-            mysql_query($sql);
-            if (mysql_error())
+            $schemaversion = substr($schemaversion, 1);
+            if ($installed_schema < $schemaversion)
             {
-                $html .= "<p><strong>FAILED:</strong> ".htmlspecialchars($sql)."</p>";
-                $html .= "<p class='error'>".mysql_error()."<br />A MySQL error occurred, this could be because the MySQL user '{$CONFIG['db_username']}' does not have appropriate permission to modify the database schema.<br />";
-                //echo "The SQL command was:<br /><code>$sql</code><br />";
-                $html .= "An error might also be caused by an attempt to upgrade a version that is not supported by this script.<br />";
-                $html .= "Alternatively, you may have found a bug, if you think this is the case please report it.</p>";
+                $sqlqueries = explode( ';', $queryelement);
+                // We don't need the last entry it's blank, as we end with a ;
+                array_pop($sqlqueries);
+                foreach($sqlqueries AS $sql)
+                {
+                    mysql_query($sql);
+                    if (mysql_error())
+                    {
+                        $html .= "<p><strong>FAILED:</strong> <code>".htmlspecialchars($sql)."</code> ({$schemaversion})</p>";
+                        $html .= "<p class='error'>".mysql_error()."<br />A MySQL error occurred, this could be because the MySQL user '{$CONFIG['db_username']}' does not have appropriate permission to modify the database schema.<br />";
+                        //echo "The SQL command was:<br /><code>$sql</code><br />";
+                        $html .= "An error might also be caused by an attempt to upgrade a version that is not supported by this script.<br />";
+                        $html .= "Alternatively, you may have found a bug, if you think this is the case please report it.</p>";
+                    }
+                    else
+                    {
+                        // Update the system schema version
+                        $sql = "REPLACE INTO `{$dbSystem}` ( `id`, `version`, `schema`) VALUES (0, $application_version, $schemaversion)";
+                        mysql_query($sql);
+                        if (mysql_error())
+                        {
+                            echo "<p class='error'>Could not store new schema version number. ".mysql_error()."</p>";
+                            exit;
+                        }
+                    }
+                }
             }
         }
     }
@@ -582,10 +603,10 @@ switch ($_REQUEST['action'])
                     }
                     else
                     {
-                        $sql = "SELECT version FROM `{$dbSystem}` WHERE id = 0";
+                        $sql = "SELECT `version`, `schema` FROM `{$dbSystem}` WHERE id = 0";
                         $result = mysql_query($sql);
                         if (mysql_error()) trigger_error(mysql_error(),E_USER_WARNING);
-                        list($installed_version) = mysql_fetch_row($result);
+                        list($installed_version, $installed_schema) = mysql_fetch_row($result);
                     }
 
                     if (empty($installed_version))
@@ -598,7 +619,8 @@ switch ($_REQUEST['action'])
                     if ($_REQUEST['action']=='upgrade')
                     {
                         // Upgrade schema
-                        for ($v=(($installed_version*100)+1); $v<=($application_version*100); $v++)
+                        // for ($v=(($installed_version*100)+1); $v<=($application_version*100); $v++)
+                        for ($v=(($installed_version*100)); $v<=($application_version*100); $v++)
                         {
                             if (!empty($upgrade_schema[$v]))
                             {
@@ -631,7 +653,7 @@ switch ($_REQUEST['action'])
                             }
                             echo "<p>".mysql_num_rows($result)." incidents upgraded</p>";
                         }
-                        if ($installed_version < 3.40)
+                        if ($installed_version < 3.35)
                         {
                             if ($CONFIG['closure_delay'] > 0 AND $CONFIG['closure_delay'] != 554400)
                             {
@@ -699,7 +721,7 @@ switch ($_REQUEST['action'])
                                     }
                                     else
                                     {
-                                        echo "<p>No upgrade function for {$dashbaordnames->name}</p>";
+                                        echo "<p>No upgrade function for {$dashboardnames->name}</p>";
                                     }
                                 }
                             }
@@ -724,10 +746,23 @@ switch ($_REQUEST['action'])
                     }
                     else
                     {
-                        echo "<p>Your database schema is v".number_format($installed_version,2);
+                        echo "<p>Your database schema is v".number_format($installed_version,2) . "-{$installed_schema}";
                         if ($installed_version < $application_version) echo ", after making a backup you should upgrade your schema to v{$application_version}";
                         echo "</p>";
-                        if ($installed_version < $application_version) echo "<p><a href='setup.php?action=upgrade' class='button'>Upgrade Schema</a></p><br />";
+
+                        if (is_array($upgrade_schema[$installed_version*100]))
+                        {
+                            foreach ($upgrade_schema[$installed_version*100] AS $possible_schema_updates => $nothing)
+                            {
+                                $possible_schema_updates = substr($possible_schema_updates, 1);
+                                if ($possible_schema_updates > $installed_schema) $schemaupgradeneeded = TRUE;
+                                else $schemaupgradeneeded = FALSE;
+                            }
+                        }
+                        if ($installed_version < $application_version OR $schemaupgradeneeded == TRUE)
+                        {
+                            echo "<p><a href='setup.php?action=upgrade' class='button'>Upgrade Schema</a></p><br />";
+                        }
                     }
 
                     if ($_REQUEST['action'] == 'createadminuser' AND setup_check_adminuser()==FALSE)
