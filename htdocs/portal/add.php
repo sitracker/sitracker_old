@@ -22,7 +22,7 @@ $contractid = cleanvar($_REQUEST['contractid']);
 $productid = cleanvar($_REQUEST['product']);
 
 if (!$_REQUEST['action'])
-{    
+{
     $sql = "SELECT *, p.id AS productid, m.id AS id, ";
     $sql .= "(m.incident_quantity - m.incidents_used) AS availableincidents ";
     $sql .= "FROM `{$dbSupportContacts}` AS s, `{$dbMaintenance}` AS m, `{$dbProducts}` AS p ";
@@ -33,24 +33,24 @@ if (!$_REQUEST['action'])
 
     $checkcontract = mysql_query($sql);
     $contract = mysql_fetch_object($checkcontract);
-    $productid = $contract->productid;    
+    $productid = $contract->productid;
     echo "<h2>".icon('add', 32, $strAddIncident)." {$strAddIncident}</h2>";
-    
+
     if(mysql_num_rows($checkcontract) == 0)
     {
         echo "<p class='error'>{$strPermissionDenied}</p>";
        	include 'htmlfooter.inc.php';
        	exit;
     }
-    
+
     echo "<table align='center' width='50%' class='vertical'>";
     echo "<form action='{$_SERVER[PHP_SELF]}?page=add&action=submit' method='post'>";
     echo "<tr><th>{$strArea}:</th><td class='shade1'>".softwareproduct_drop_down('software', 0, $productid, 'external')."<br />";
     //FIXME 3.35 which language
-    echo "NOTE: Not setting one will slow down processing your incident</td></tr>";
+    echo "NOTE: Not setting one may slow down processing your incident</td></tr>"; // FIXME i18n
     echo "<tr><th>{$strTitle}:</th><td class='shade1'><input maxlength='100' name='title' size=40 type='text' /></td></tr>";
     echo "<tr><th width='20%'>{$strProblemDescription}:</th><td class='shade1'>";
-    echo "The more information you can provide, the better</br /><textarea name='probdesc' rows='20' cols='60'>";    
+    echo "The more information you can provide, the better</br /><textarea name='probdesc' rows='20' cols='60'>";
     echo "</textarea></td></tr>";
 
     echo "</table>";
