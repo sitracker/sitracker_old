@@ -1342,7 +1342,7 @@ function contact_drop_down($name, $id, $showsite=FALSE)
     * @param $name string. The name of the field
     * @param $id int. Select this contactID by default
     * @param $siteid int. (optional) Filter list to show contacts from this siteID only
-    * @param $exclude int. (optional) Do not show this contactID in the list
+    * @param $exclude int|array (optional) Do not show this contactID in the list, accepts an int or array of ints
     * @returns string.  HTML select
 */
 function contact_site_drop_down($name, $id, $siteid='', $exclude='')
@@ -1352,7 +1352,20 @@ function contact_site_drop_down($name, $id, $siteid='', $exclude='')
     $sql .= "FROM `{$dbContacts}` AS c, `{$dbSites}` AS s ";
     $sql .= "WHERE c.siteid = s.id AND c.active = 'true' AND s.active = 'true' ";
     if (!empty($siteid)) $sql .= "AND s.id='$siteid' ";
-    if (!empty($exclude)) $sql .= "AND c.id != $exclude ";
+    if (!empty($exclude))
+    {
+        if (is_array($exclude))
+        {
+            foreach($exclude AS $contactid)
+            {
+                $sql .= "AND c.id != $contactid ";
+            }
+        }
+        else
+        {
+            $sql .= "AND c.id != $exclude ";
+        }
+    }
     $sql .= "ORDER BY surname ASC";
     $result = mysql_query($sql);
     if (mysql_error()) trigger_error(mysql_error(),E_USER_WARNING);
@@ -7953,7 +7966,10 @@ function contract_details($id, $mode='internal')
             $html .= "<form action='{$_SERVER['PHP_SELF']}?id={$id}&amp;action=";
             $html .= "add' method='post' >";
             $html .= "<p align='center'>Add new supported contact: ";
-            $html .= contact_site_drop_down('contactid', 'contactid', maintenance_siteid($id));
+            $html .= contact_site_drop_down('contactid',
+                                            'contactid',
+                                            maintenance_siteid($id),
+                                            supported_contacts($id));
             $html .= help_link('NewSupportedContact')."<br />";
             $html .= "<input type='submit' value='{$GLOBALS['strAdd']}' /></p></form>";
         }
