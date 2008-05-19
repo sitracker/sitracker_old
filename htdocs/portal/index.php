@@ -58,7 +58,7 @@ function portal_incident_table($sql)
             $html .= "<td>".user_realname($incident->owner)."</td>";
             $html .= "<td>".ldate($CONFIG['dateformat_datetime'], $incident->lastupdated)."</td>";
             $html .= "<td><a href='contactdetails.php?id={$incident->contactid}'>";
-            $html .= "{$incident->forenames} {$incident->surname}</td>";
+            $html .= "{$incident->forenames} {$incident->surname}</a></td>";
             $html .= "<td>".incidentstatus_name($incident->status, external)."</td>";
             if ($showclosed != "true")
             {
@@ -76,7 +76,7 @@ function portal_incident_table($sql)
                     $html .=  "<a href='close.php?id={$incident->id}'>{$GLOBALS['strRequestClosure']}</a></td>";
                 }
             }
-            echo "</tr>";
+            $html .= "</tr>";
             if ($shade == 'shade1') $shade = 'shade2';
             else $shade = 'shade1';
         }
