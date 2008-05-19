@@ -79,10 +79,10 @@ if ($CONFIG['portal_site_incidents'])
 
     echo "<p align='center'>{$strAdminContactForContracts}</p>";
 
-    echo "<table align='center' class='vertical' width='60%'><tr>";
-    echo colheader('id', $strID, $sort, $order, $filter);
-    echo colheader('product', $strContract, $sort, $order, $filter);
-    echo colheader('expiry', $strExpiryDate, $sort, $order, $filter);
+    echo "<table align='center' width='60%'><tr>";
+    //echo colheader('id', $strID);
+    echo colheader('product', $strContract);
+    echo colheader('expiry', $strExpiryDate);
     echo colheader('visbility', $strVisibility);
     echo colheader('actions', $strActions);
 
@@ -102,11 +102,17 @@ if ($CONFIG['portal_site_incidents'])
         $shade = 'shade1';
         if($row = mysql_fetch_object($result))
         {
-        	if($row->expirydate == -1)
+            if($row->expirydate == -1)
+            {
                 $row->expirydate = $strUnlimited;
+            }
             else
+            {
                 $row->expirydate = ldate("jS F Y", $row->timestamp);
-            echo "<tr class='{$shade}'><td>{$row->id}</td><td>{$row->name}</td><td>{$row->expirydate}</td>";
+            }
+            echo "<tr class='{$shade}'>";
+            //echo "<td>{$row->id}</td>";
+            echo "<td>{$row->name}</td><td>{$row->expirydate}</td>";
             echo "<td>";
 
             if ($row->allcontactssupported == 'yes')
@@ -126,13 +132,13 @@ if ($CONFIG['portal_site_incidents'])
 	            }
 	            echo ">No-one</option>";
 	            echo "<option value='named'";
-                if ($row->var_incident_visible_contacts == 'yes')
+                    if ($row->var_incident_visible_contacts == 'yes')
 	            {
 	            	echo " selected='selected'";
 	            }
 	            echo ">Named Contacts</option>";
 	            echo "<option value='all'";
-            	if ($row->var_incident_visible_all == 'yes')
+                    if ($row->var_incident_visible_all == 'yes')
 	            {
 	            	echo " selected='selected'";
 	            }
