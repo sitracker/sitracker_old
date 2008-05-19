@@ -49,16 +49,16 @@ if (!$_REQUEST['action'])
        	exit;
     }
 
+    echo "<form action='{$_SERVER[PHP_SELF]}?page=add&amp;action=submit' method='post'>";
     echo "<table align='center' width='50%' class='vertical'>";
-    echo "<form action='{$_SERVER[PHP_SELF]}?page=add&action=submit' method='post'>";
     echo "<tr><th>{$strArea}:</th><td class='shade1'>".softwareproduct_drop_down('software', 0, $productid, 'external')."<br />";
     //FIXME 3.35 which language
     echo "NOTE: Not setting one may slow down processing your incident</td></tr>"; // FIXME i18n
     echo "<tr><th>{$strTitle}:</th><td class='shade1'>";
-    echo "<input class='required' maxlength='100' name='title' size=40 type='text' />";
-    echo "<span class='required'><span>{$strRequired}</span></td></tr>";
+    echo "<input class='required' maxlength='100' name='title' size='40' type='text' />";
+    echo " <span class='required'>{$strRequired}</span></td></tr>";
     echo "<tr><th width='20%'>{$strProblemDescription}:</th><td class='shade1'>";
-    echo "The more information you can provide, the better</br />";
+    echo "The more information you can provide, the better<br />";
     echo "<textarea name='probdesc' rows='20' cols='60'>";
     if (!empty($_SESSION['formdata']['portaladdincident']['probdesc']))
     {
@@ -68,8 +68,8 @@ if (!$_REQUEST['action'])
     echo "</textarea></td></tr>";
 
     echo "</table>";
-    echo "<input name='contractid' value='{$contractid}' type='hidden'>";
-    echo "<input name='productid' value='{$productid}' type='hidden'>";
+    echo "<input name='contractid' value='{$contractid}' type='hidden' />";
+    echo "<input name='productid' value='{$productid}' type='hidden' />";
     echo "<p align='center'><input type='submit' value='{$strAddIncident}' /></p>";
     echo "</form>";
 
