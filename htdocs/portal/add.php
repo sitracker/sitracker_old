@@ -92,7 +92,7 @@ else //submit
     $_SESSION['formdata']['portaladdincident'] = $_POST;
     
     $errors = 0;
-    if (empty($incidentitle))
+    if (!isset($incidenttitle))
     {
         $_SESSION['formerrors']['portaladdincident'] .= "<p class='error'>{$strYouMustEnterAnIncidentTitle}</p>";
         $errors = 1;
