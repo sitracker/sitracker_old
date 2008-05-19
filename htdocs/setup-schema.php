@@ -2036,7 +2036,7 @@ ALTER TABLE `{$dbFiles}` CHANGE `longdescription` `longdescription` TEXT ;
 ALTER TABLE `{$dbFiles}` ADD `usertype` ENUM( 'user', 'contact' ) NOT NULL DEFAULT 'user' AFTER `userid` ;
 
 -- PH 18/05/08
-UPDATE `{$dbLinktypes}` SET `selectionsql` = 'CONCAT(forenames, " ", surname)' WHERE `linktypes`.`id` =2 LIMIT 1 
+UPDATE `{$dbLinktypes}` SET `selectionsql` = 'CONCAT(forenames, \" \", surname)' WHERE `{$dbLinktypes}`.`id` = 2 LIMIT 1;
 
 ";
 
