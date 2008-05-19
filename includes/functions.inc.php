@@ -7965,13 +7965,13 @@ function contract_details($id, $mode='internal')
             $html .= "<h3>{$GLOBALS['strAddContact']}</h3>";
             $html .= "<form action='{$_SERVER['PHP_SELF']}?id={$id}&amp;action=";
             $html .= "add' method='post' >";
-            $html .= "<p align='center'>Add new supported contact: ";
+            $html .= "<p align='center'>{$GLOBLAS['strAddNewSupportedContact']} ";
             $html .= contact_site_drop_down('contactid',
                                             'contactid',
                                             maintenance_siteid($id),
                                             supported_contacts($id));
-            $html .= help_link('NewSupportedContact')."<br />";
-            $html .= "<input type='submit' value='{$GLOBALS['strAdd']}' /></p></form>";
+            $html .= help_link('NewSupportedContact');
+            $html .= " <input type='submit' value='{$GLOBALS['strAdd']}' /></p></form>";
         }
 
         $html .= "<p align='center'><a href='addcontact.php'>";
