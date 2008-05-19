@@ -34,6 +34,12 @@ else
     $id = intval($_GET['id']);
 }
 
+if (!empty($_SESSION['formerrors']['portalcontactdetails']))
+{
+    echo $_SESSION['formerrors']['portalcontactdetails'];
+    $_SESSION['formerrors']['portalcontactdetails'] = NULL;
+}
+
 //if new details posted
 if (cleanvar($_REQUEST['action']) == 'update')
 {
@@ -65,31 +71,31 @@ if (cleanvar($_REQUEST['action']) == 'update')
         if (!valid_username($username))
         {
             $errors++;
-            echo "<p class='error'>{$strInvalidUsername}</p>\n";
+            $_SESSION['formerrors']['portalcontactdetails'] .= "<p class='error'>{$strInvalidUsername}</p>\n";
         }
     }
     
     if(!empty($newpass) AND empty($newpass2))
     {
         $errors++;
-        echo "<p class='error'>{$strYouMustEnterYourNewPasswordTwice}</p>\n";
+        $_SESSION['formerrors']['portalcontactdetails'] .= "<p class='error'>{$strYouMustEnterYourNewPasswordTwice}</p>\n";
     }
     elseif($newpass != $newpass2)
     {
         $errors++;
-        echo "<p class='error'>{$strPasswordsDoNotMatch}</p>";
+        $_SESSION['formerrors']['portalcontactdetails'] .= "<p class='error'>{$strPasswordsDoNotMatch}</p>";
     }
     
     if ($surname == '')
     {
         $errors++;
-        echo "<p class='error'>".sprintf($strYouMustEnter, $strSurname)."</p>\n";
+        $_SESSION['formerrors']['portalcontactdetails'] .= "<p class='error'>".sprintf($strYouMustEnter, $strSurname)."</p>\n";
     }
 
     if ($email == "" OR $email=='none' OR $email=='n/a')
     {
         $errors++;
-        echo "<p class='error'>{$strMustEnterEmail}</p>\n";
+        $_SESSION['formerrors']['portalcontactdetails'] .= "<p class='error'>{$strMustEnterEmail}</p>\n";
     }
 
     if ($errors == 0)
@@ -103,9 +109,14 @@ if (cleanvar($_REQUEST['action']) == 'update')
         $updatesql .= "WHERE id='{$id}'";
         mysql_query($updatesql);
         if (mysql_error()) trigger_error("MySQL Query Error ".mysql_error(), E_USER_ERROR);
+        html_redirect($_SERVER['PHP_SELF']);
+    }
+    else
+    {
+        html_redirect($_SERVER['PHP_SELF'], FALSE);
     }
     
-    html_redirect($_SERVER['PHP_SELF']);
+    
 }
 else
 {
