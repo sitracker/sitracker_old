@@ -1253,6 +1253,7 @@ $strYou = 'You';
 $strYouShouldNowDefineSubstituteEngineers = 'You should now define a substitute engineer for each skill';
 $strYouACurrentlyNotAccepting = 'You are currently not accepting incidents. You can change this at the bottom of the main page.';
 $strYouMustEnterYourNewPasswordTwice = 'You must enter your new password twice';
+$strYouMustEnterAnIncidentTitle = 'You must enter an incident title';
 $strYourClosedIncidents = 'Your closed incidents';
 $strYourCurrentIncidents = 'Your current incidents';
 $strYourCurrentOpenIncidents = 'Your current open incidents';
