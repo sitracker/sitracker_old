@@ -28,6 +28,12 @@ As of 3.35 we've changed our minimum requirement for php to 5.0.0
 as php4 has been end-of-life for some time now and won't receive
 any patches at all after 2008-08-08.
 
+This version swaps the load order for config files, if you are
+using /etc/sit.conf these values are now loaded first, and then
+config.inc.php is loaded next.  This may affect your settings
+if you are using both files.  We recommend you use just one
+config file unless your needs are very specific.
+
 This version supports table prefixes, if you use this feature
 any plugins you have installed that are not designed to work
 with 3.35 may break.
