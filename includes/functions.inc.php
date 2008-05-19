@@ -8320,40 +8320,6 @@ function kb_article($id, $mode='internal')
     }
 
     // FIXME this aint valid, style sections need to be in the header
-    $html = "<style type='text/css'>
-    .kbprivate
-    {
-        color: #FFFFFF;
-/*         background-color: #FF3300; */
-        background-image:url({$CONFIG['application_webpath']}images/icons/{$iconset}/16x16/private.png);
-        background-repeat: no-repeat;
-        background-position: top right;
-        border: 2px dashed #FF3300;
-        margin: 3px 0px;
-        padding: 0px 2px;
-    }
-
-    .kbrestricted
-    {
-        background-color: #DDDDDD;
-        background-image:url({$CONFIG['application_webpath']}images/icons/{$iconset}/16x16/private.png);
-        background-repeat: no-repeat;
-        background-position: top right;
-    }
-
-    .keykbprivate
-    {
-        color: #FFFFFF;
-        background-color: #FF3300;
-    }
-
-    .keykbrestricted
-    {
-        background-color: #DDDDDD;
-    }
-
-    </style>";
-
     $html .= "<div id='kbarticle'>";
 
     $sql = "SELECT * FROM `{$GLOBALS['dbKBArticles']}` WHERE docid='{$id}' LIMIT 1";
