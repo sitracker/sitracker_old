@@ -42,7 +42,7 @@ if (empty($_POST['update']) AND empty($_FILES))
     echo "(&lt;{$att_file_size}): ";
     echo "<input type='hidden' name='MAX_FILE_SIZE' value='{$CONFIG['upload_max_filesize']}' />";
     echo "<input type='file' name='attachment' size='40' maxfilesize='{$CONFIG['upload_max_filesize']}' /></p>";
-    echo "<input type='submit' value=\"{$strSave}\"/></form></div>";
+    echo "<input type='submit' value=\"{$strUpdate}\"/></form></div>";
     
     include 'htmlfooter.inc.php';
 }
@@ -81,7 +81,8 @@ else
         else
         {
             $fileid = mysql_insert_id();
-            $updatebody = "{$SYSLANG['strAttachment']}: [[att={$fileid}]]{$filename}[[/att]]\n\n".$updatebody;
+            //FIXME 3.35 use $SYSLANG
+            $updatebody = "{$GLOBALS['strAttachment']}: [[att={$fileid}]]{$filename}[[/att]]".$updatebody;
         }
     }
     //add the update
@@ -172,7 +173,7 @@ else
     }
     else
     {
-        html_redirect("index.php");
+        html_redirect("incident.php?id={$id}");
     }
 }
 
