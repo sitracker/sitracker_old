@@ -89,7 +89,7 @@ CREATE TABLE `{$dbContacts}` (
 ) TYPE=MyISAM ;
 
 INSERT INTO `{$dbContacts}` (`id`, `notify_contactid`, `username`, `password`, `forenames`, `surname`, `jobtitle`, `courtesytitle`, `siteid`, `email`, `phone`, `mobile`, `fax`, `department`, `address1`, `address2`, `city`, `county`, `country`, `postcode`, `dataprotection_email`, `dataprotection_phone`, `dataprotection_address`, `timestamp_added`, `timestamp_modified`, `notes`) VALUES
-(1, 4, 'Acme1', '2830', 'John', 'Acme', 'Chairman', 'Mr', 1, 'acme@example.com', '0666 222111', '', '', '', '', '', '', '', '', '', 'Yes', 'Yes', 'Yes', 1132930556, 1187360933, '');
+(1, 4, 'Acme1', MD5(RAND()), 'John', 'Acme', 'Chairman', 'Mr', 1, 'acme@example.com', '0666 222111', '', '', '', '', '', '', '', '', '', 'Yes', 'Yes', 'Yes', 1132930556, 1187360933, '');
 
 
 CREATE TABLE `{$dbDashboard}` (
@@ -1745,6 +1745,12 @@ ALTER TABLE `{$dbUsers}` ADD `var_utc_offset` INT NOT NULL DEFAULT '0' COMMENT '
 INSERT INTO `{$dbUserStatus}` (`id` ,`name`) VALUES ('0', 'Account Disabled');
 ";
 
+// This update is a pre-requisite for 3.35, there is no SiT release 3.34
+$upgrade_schema[334] = "
+-- INL 19/05/08 Last update using the < 335 schema upgrade system, next we'll use the new system and store the version in this col
+ALTER TABLE `{$dbSystem}` ADD `schema` BIGINT UNSIGNED NOT NULL COMMENT 'DateTime in YYYYMMDDHHMM format';
+";
+
 $upgrade_schema[335]['t200805191400'] = "
 -- KMH 17/12/07
 CREATE TABLE IF NOT EXISTS `{$dbTriggers}` (
@@ -2036,9 +2042,6 @@ ALTER TABLE `{$dbFiles}` ADD `usertype` ENUM( 'user', 'contact' ) NOT NULL DEFAU
 
 -- PH 18/05/08
 UPDATE `{$dbLinkTypes}` SET `selectionsql` = 'CONCAT(forenames, \" \", surname)' WHERE `{$dbLinktypes}`.`id` = 2 LIMIT 1;
-
--- INL 19/05/08 Last update using the < 335 schema upgrade system, next we'll use the new system and store the version in this col
-ALTER TABLE `{$dbSystem}` ADD `schema` BIGINT UNSIGNED NOT NULL COMMENT 'DateTime in YYYYMMDDHHMM format';
 ";
 
 // Schema updates from this point should in the format $upgrade_schema[315]["t200805191404"]

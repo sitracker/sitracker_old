@@ -627,6 +627,7 @@ switch ($_REQUEST['action'])
                                 echo "<p>Updating schema to v".number_format(($v/100),2)."</p>";
                                 //echo  $upgrade_schema[$v];
                                 echo setup_exec_sql($upgrade_schema[$v]);
+                                $upgradeok = TRUE:
                             }
                         }
 

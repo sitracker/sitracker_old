@@ -1676,7 +1676,7 @@ function user_drop_down($name, $id, $accepting=TRUE, $exclude=FALSE, $attribs=""
         }
     }
     $html .= "</select>\n";
-    
+
     if ($return)
     {
     	return $html;
@@ -3566,7 +3566,7 @@ function html_checkbox($name, $state, $return = FALSE)
     {
         $html = "<input type='checkbox' name='{$name}' value='{$state}' />" ;
     }
-    
+
     if ($return)
     {
         return $html;
@@ -3574,7 +3574,7 @@ function html_checkbox($name, $state, $return = FALSE)
     else
     {
         echo $html;
-    }        
+    }
 }
 
 
@@ -7670,9 +7670,12 @@ function contract_software()
             AND p.id=sp.productid
             AND sp.softwareid=s.id ";
     $sql .= "AND (1=0 ";
-    foreach ($_SESSION['contracts'] AS $contract)
+    if (is_array($_SESSION['contracts']))
     {
-        $sql .= "OR m.id={$contract} ";
+        foreach ($_SESSION['contracts'] AS $contract)
+        {
+            $sql .= "OR m.id={$contract} ";
+        }
     }
     $sql .= ")";
 
@@ -7810,7 +7813,7 @@ function contract_details($id, $mode='internal')
         $html .= "<td><a href=\"sitedetails.php\">".$maintrow['sitename']."</a></td></tr>";
     }
     $html .= "<tr><th>{$GLOBALS[strAdminContact]}:</th>";
-    
+
     if ($mode == 'internal')
     {
     	$html .= "<td><a href=\"contact_details.php?id=";
@@ -7879,7 +7882,7 @@ function contract_details($id, $mode='internal')
         $html .= "<tr><th>{$GLOBALS[strNotes]}:</th><td>".$maintrow['maintnotes']."</td></tr>";
     }
     $html .= "</table>";
-    
+
     if ($mode == 'internal')
     {
 	    $html .= "<p align='center'>";
@@ -8280,31 +8283,33 @@ function show_next_action()
  */
 function icon($filename, $size='', $alt='', $title='')
 {
-	global $iconset, $CONFIG;
-	$sizes = array(12, 16, 32);
+    global $iconset, $CONFIG;
+    $sizes = array(12, 16, 32);
+
+    if (!in_array($size, $sizes) OR empty($size))
+    {
+        trigger_error("Incorrect image size for {$file}", E_USER_WARNING);
+        $size = 16;
+    }
+
     if (empty($alt))
     {
-    	$alt = $filename;
+        $alt = $filename;
     }
-	$file = "{$CONFIG['application_fspath']}htdocs/images/icons/{$iconset}";
-	$file .= "/{$size}x{$size}/{$filename}.png";
+    $file = "{$CONFIG['application_fspath']}htdocs/images/icons/{$iconset}";
+    $file .= "/{$size}x{$size}/{$filename}.png";
 
-        $urlpath = "{$CONFIG['application_webpath']}images/icons/{$iconset}";
-	$urlpath .= "/{$size}x{$size}/{$filename}.png";
+    $urlpath = "{$CONFIG['application_webpath']}images/icons/{$iconset}";
+    $urlpath .= "/{$size}x{$size}/{$filename}.png";
 
-	if (!file_exists($file))
-	{
-		trigger_error("No such image: ".$file, E_USER_WARNING);
-	}
-	elseif (!in_array($size, $sizes) OR empty($size))
-	{
-		trigger_error("Incorrect image size for {$file}", E_USER_WARNING);
-		$size = 16;
-	}
-	else
-	{
-		return "<img src='{$urlpath}' alt='{$alt}' title='{$alt}' />";
-	}
+    if (!file_exists($file))
+    {
+        trigger_error("No such image: ".$file, E_USER_WARNING);
+    }
+    else
+    {
+        return "<img src='{$urlpath}' alt='{$alt}' title='{$alt}' />";
+    }
 }
 
 
@@ -8434,7 +8439,7 @@ function kb_article($id, $mode='internal')
             $html .= "{$GLOBALS['strAuthor']}: {$author}";
         }
     }
-    
+
     $html .= "<br />";
     if (!empty($kbarticle->keywords))
     {
@@ -8537,7 +8542,7 @@ function show_edit_site($site, $mode='internal')
 	        {
 	        	$html .= "checked='".$siterow['active']."'";
 	        }
-	        $html .= " value='true' /></td></tr>\n";	
+	        $html .= " value='true' /></td></tr>\n";
 	        $html .= "<tr><th>{$GLOBALS['strNotes']}:</th><td>";
 	        $html .= "<textarea rows='5' cols='30' name='notes'>{$siterow['notes']}</textarea>";
 	        $html .= "</td></tr>\n";
@@ -8567,7 +8572,7 @@ function show_add_contact($mode = 'internal')
     $html .= "method='post' onsubmit=\"return confirm_action('{$GLOBALS['strAreYouSureAdd']})\">";
     $html .= "<table align='center' class='vertical'>";
     $html .= "<tr><th>{$GLOBALS['strName']}</th>\n";
-    
+
     $html .= "<td>";
     $html .= "\n<table><tr><td align='center'>{$GLOBALS['strTitle']}<br />";
     $html .= "<input maxlength='50' name='courtesytitle' title=\"";
@@ -8694,7 +8699,7 @@ function show_add_contact($mode = 'internal')
 
     //cleanup form vars
     clear_form_data('add_contact');
-    
+
     return $html;
 }
 
@@ -8841,7 +8846,7 @@ function process_add_contact()
 		            $extra_headers .= "X-Mailer: {$CONFIG['application_shortname']} {$application_version_string}/PHP " . phpversion() . "\n";
 		            $extra_headers .= "X-Originating-IP: {$_SERVER['REMOTE_ADDR']}\n";
 		            $extra_headers .= "\n"; // add an extra crlf to create a null line to separate headers from body
-		
+
 		            $bodytext = "Hello $forenames\nYou have just been added as a ";
 		        	$bodytext .= "contact on {$CONFIG['application_name']} ";
 		        	$bodytext .= "{$CONFIG['application_uriprefix']}{$CONFIG['application_webpath']}";
@@ -8852,12 +8857,12 @@ function process_add_contact()
 		        	$bodytext .= "username: {$username}\npassword: {$prepassword}\n";
 		        	$bodytext .= "\nPlease note, this password cannot be recovered, ";
 		        	$bodytext .= "only reset. You may change it in the portal.";
-		        	
+
 		        	//FIXME 3.35 use triggers
 		      		echo "mail($email, $strContactDetails, $bodytext, $extra_headers)";
 		        }
 	            journal(CFG_LOGGING_NORMAL,'Contact Added',"$forenames $surname was Added",CFG_JOURNAL_CONTACTS,$newid);
-	            
+
 	            if ($mode == 'internal')
 	            {
 	            	html_redirect("contact_details.php?id=$newid");
@@ -8868,7 +8873,7 @@ function process_add_contact()
             		html_redirect("contactdetails.php?id={$newid}");
             		exit;
         		}
-    		}	            
+    		}
         }
         clear_form_data('add_contact');
         clear_form_errors('add_contact');

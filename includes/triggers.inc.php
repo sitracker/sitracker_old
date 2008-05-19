@@ -609,7 +609,7 @@ function trigger_checks($checkstrings, $paramarray)
 function trigger_description($triggervar)
 {
     global $CONFIG, $iconset, $triggerarray;
-    $html = "".icon('trigger')." ";
+    $html = "".icon('trigger', 16)." ";
     $html .= "<strong>";
     if (!empty($triggervar['name'])) $html .= "{$triggervar['name']}";
     else $html .= "{$trigger}";
@@ -629,7 +629,7 @@ function trigger_description($triggervar)
 function triggeraction_description($trigaction, $editlink=FALSE)
 {
     global $CONFIG, $iconset, $actionarray, $dbEmailTemplates, $dbNoticeTemplates;
-    $html = "".icon('triggeraction')." ";
+    $html = "".icon('triggeraction', 16)." ";
     if (!empty($trigaction->checks)) $html .= "When {$trigaction->checks} ";
     if (!empty($trigaction->template))
     {

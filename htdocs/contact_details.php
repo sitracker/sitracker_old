@@ -245,7 +245,7 @@ while ($contactrow = mysql_fetch_array($contactresult))
                 }
 
                 echo "<tr><td class='$shade'>";
-                echo "".icon('contract')." ";
+                echo "".icon('contract', 16)." ";
                 echo "<a href='contract_details.php?id={$supportedrow['maintenanceid']}'>{$strContract}: {$supportedrow['maintenanceid']}</a></td>";
                 echo "<td class='$shade'>{$supportedrow['productname']}</td>";
                 echo "<td class='$shade'>".ldate($CONFIG['dateformat_date'], $supportedrow['expirydate']);

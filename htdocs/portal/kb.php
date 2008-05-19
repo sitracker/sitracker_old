@@ -45,12 +45,15 @@ if($view != 'all')
 {
     $softwares = contract_software();
     $sql .= "AND (1=0 ";
-    foreach($softwares AS $software)
+    if (is_array($softwares))
     {
-        $sql .= "OR kbs.softwareid={$software} ";
+        foreach($softwares AS $software)
+        {
+            $sql .= "OR kbs.softwareid={$software} ";
+        }
     }
     $sql .= ")";
-    
+
     echo "<p class='info'>{$strShowingOnlyRelevantArticles} - ";
     echo "<a href='{$_SERVER['PHP_SELF']}?view=all'>{$strShowAll}</a></p>";
 }
@@ -91,9 +94,9 @@ if($result = mysql_query($sql))
     if ($numtotal > 0)
     {
         echo "<p>".sprintf($strShowingXtoXofX, $start+1, $end, $numtotal)."</p>";
-    
+
         echo "<p align='center'>";
-    
+
         if(!empty($_GET['start']))
         {
             echo " <a href='{$_SERVER['PHP_SELF']}?start=";
@@ -113,7 +116,7 @@ if($result = mysql_query($sql))
             echo $strNext;
         }
         echo "</p>";
-        
+
         echo "<table align='center' width='80%'><tr>";
         echo colheader('id', $strID, $sort, $order, $filter, '', '5');
         echo colheader('title', $strTitle, $sort, $order, $filter);
@@ -135,7 +138,7 @@ if($result = mysql_query($sql))
             echo "</td>";
             echo "<td>".user_realname($row->author)."</td>";
             echo "<td>{$row->keywords}</td></tr>";
-                    
+
             if($shade == 'shade1')
                 $shade = 'shade2';
             else
