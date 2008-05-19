@@ -120,15 +120,20 @@ if (cleanvar($_REQUEST['action']) == 'update')
 }
 else
 {
-    $sql = "SELECT c.username, c.password, c.forenames, c.surname, c.department, c.address1, c.address2, ";
-    $sql .= "c.county, c.country, c.postcode, c.phone, c.mobile, c.fax, c.email ";
+    $sql = "SELECT c.* ";
     $sql .= "FROM `{$dbContacts}` AS c, `{$dbSites}` AS s ";
     $sql .= "WHERE c.siteid = s.id ";
     $sql .= "AND c.id={$id}";
     $query = mysql_query($sql);
     if (mysql_error()) trigger_error("MySQL Query Error ".mysql_error(), E_USER_ERROR);
     $user = mysql_fetch_object($query);
-    
+
+    if ($user->siteid != $_SESSION['siteid'])
+    {
+        echo "<p class='error'>{$strPermissionDenied}</p>";
+        include 'htmlfooter.inc.php';
+        exit;
+    }
     echo "<h2>".icon('contact', 32)." {$user->forenames} {$user->surname}</h2>";
 
     
