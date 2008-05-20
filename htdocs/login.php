@@ -38,7 +38,7 @@ $page = strip_tags(str_replace('..','',str_replace('//','',str_replace(':','',ur
 // Populate $SYSLANG with system lang
 $file = "{$CONFIG['application_fspath']}includes/i18n/{$CONFIG['default_i18n']}.inc.php";
 if (file_exists($file))
-{    
+{
     $fh = fopen($file, "r");
 
     $theData = fread($fh, filesize($file));
@@ -188,6 +188,7 @@ elseif ($CONFIG['portal'] == TRUE)
         $_SESSION['portalauth'] = TRUE;
         $_SESSION['contactid'] = $contact->id;
         $_SESSION['siteid'] = $contact->siteid;
+        $_SESSION['style'] = $CONFIG['portal_interface_style'];
 
         //if we're an admin contact
         if (admin_contact_contracts($_SESSION['contactid'], $_SESSION['siteid']) != NULL)

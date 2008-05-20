@@ -31,7 +31,7 @@ echo "<h2>".icon('kb', 32, $title)." ";
 echo "{$title}</h2>";
 if (strtolower($mode)=='recent') echo "<h4>{$strArticlesPublishedRecently}</h4>";
 elseif (strtolower($mode)=='today') echo "<h4>{$strArticlesPublishedToday}</h4>";
-?>.png
+?>
 <table summary="alphamenu" align="center">
     <tr>
         <td align="center">
@@ -150,7 +150,7 @@ if (mysql_num_rows($result) >= 1)
         if (empty($kbarticle->title)) $kbarticle->title = $strUntitled;
         else $kbarticle->title = $kbarticle->title;
         echo "<tr class='{$shade}'>";
-        echo "<td>".icon('kb')." {$CONFIG['kb_id_prefix']}".leading_zero(4,$kbarticle->docid)."</td>";
+        echo "<td>".icon('kb', 16)." {$CONFIG['kb_id_prefix']}".leading_zero(4,$kbarticle->docid)."</td>";
         echo "<td>";
         // Lookup what software this applies to
         $ssql = "SELECT * FROM `{$dbKBSoftware}` AS kbs, `{$dbSoftware}` AS s WHERE kbs.softwareid = s.id ";
