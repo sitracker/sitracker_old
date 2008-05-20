@@ -8292,10 +8292,6 @@ function icon($filename, $size='', $alt='', $title='')
         $size = 16;
     }
 
-    if (empty($alt))
-    {
-        $alt = $filename;
-    }
     $file = "{$CONFIG['application_fspath']}htdocs/images/icons/{$iconset}";
     $file .= "/{$size}x{$size}/{$filename}.png";
 
@@ -8308,7 +8304,7 @@ function icon($filename, $size='', $alt='', $title='')
     }
     else
     {
-        return "<img src='{$urlpath}' alt='{$alt}' title='{$alt}' />";
+        return "<img src=\"{$urlpath}\" alt=\"{$alt}\" title=\"{$alt}\" />";
     }
 }
 
