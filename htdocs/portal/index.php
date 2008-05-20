@@ -91,7 +91,7 @@ function portal_incident_table($sql)
 }
 
 
-if (empty($showclosed)) 
+if (empty($showclosed))
 {
 	$showclosed = "false";
 }
@@ -113,7 +113,7 @@ if ($showclosed == "true")
 }
 else
 {
-    echo "<h2>".icon('support', 16, $strYourCurrentOpenIncidents);
+    echo "<h2>".icon('support', 32, $strYourCurrentOpenIncidents);
     echo " {$strYourCurrentOpenIncidents}</h2>";
     echo "<p align='center'>";
     echo icon('close', 16, $strShowClosedIncidents);
