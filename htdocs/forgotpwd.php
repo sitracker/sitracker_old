@@ -97,7 +97,6 @@ switch ($_REQUEST['action'])
         elseif ($mode == 'contact')
         {
             $sql = "SELECT id, username, password FROM `{$dbContacts}` WHERE id = '{$contactid}' LIMIT 1";
-            echo $sql;
         }
         $userresult = mysql_query($sql);
         if (mysql_error()) trigger_error(mysql_error(),E_USER_WARNING);
@@ -106,7 +105,7 @@ switch ($_REQUEST['action'])
         {
             $userdetails = mysql_fetch_object($userresult);
             $hash = md5($userdetails->username.'.'.$userdetails->password);
-            echo "if ($hash == $userhash)";
+
             if ($hash == $userhash)
             {
                 echo "<h2>{$strResetPassword}</h2>";
