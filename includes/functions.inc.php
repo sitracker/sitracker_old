@@ -8288,7 +8288,7 @@ function icon($filename, $size='', $alt='', $title='')
 
     if (!in_array($size, $sizes) OR empty($size))
     {
-        trigger_error("Incorrect image size for {$file}", E_USER_WARNING);
+        trigger_error("Incorrect image size for '{$filename}.png' ", E_USER_WARNING);
         $size = 16;
     }
 
@@ -8304,7 +8304,7 @@ function icon($filename, $size='', $alt='', $title='')
 
     if (!file_exists($file))
     {
-        trigger_error("No such image: ".$file, E_USER_WARNING);
+        trigger_error("No such image: '$filename.png', size {$size}", E_USER_WARNING);
     }
     else
     {
@@ -8922,7 +8922,7 @@ function kb_name($kbid)
 	{
 		$row = mysql_fetch_object($result);
 		return $row->title;
-	}	
+	}
 }
 
 // -------------------------- // -------------------------- // --------------------------
