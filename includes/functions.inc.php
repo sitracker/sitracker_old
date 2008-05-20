@@ -8911,14 +8911,14 @@ function process_add_contact()
 function kb_name($kbid)
 {
     $kbid = intval($kbid);
-	$sql = "SELECT title FROM `{$GLOBALS['dbKBArticles']}` WHERE docid='{$kbid}'";
-	$result = mysql_query($sql);
-	if (mysql_error()) trigger_error("MySQL Query Error ".mysql_error(), E_USER_ERROR);
-	else
-	{
-		$row = mysql_fetch_object($result);
-		return $row->title;
-	}
+    $sql = "SELECT title FROM `{$GLOBALS['dbKBArticles']}` WHERE docid='{$kbid}'";
+    $result = mysql_query($sql);
+    if (mysql_error()) trigger_error("MySQL Query Error ".mysql_error(), E_USER_ERROR);
+    else
+    {
+        $row = mysql_fetch_object($result);
+        return $row->title;
+    }
 }
 
 // -------------------------- // -------------------------- // --------------------------
