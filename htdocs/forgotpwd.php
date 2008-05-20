@@ -9,12 +9,13 @@
 //
 // Authors: Paul Heaney <paulheaney[at]users.sourceforge.net>
 //          Ivan Lucas <ivanlucas[at]users.sourceforge.net>
+//          Kieran Hogg <kieran_hogg[at]users.sourceforge.net>
 
 @include ('set_include_path.inc.php');
 $permission = 0; // not required
 require ('db_connect.inc.php');
 require ('functions.inc.php');
-
+require 'strings.inc.php';
 $title = 'Forgotten Password';
 
 // External variables
@@ -22,12 +23,22 @@ $email = cleanvar($_REQUEST['emailaddress']);
 $username = cleanvar($_REQUEST['username']);
 $userid = cleanvar($_REQUEST['userid']);
 $contactid = cleanvar($_REQUEST['contactid']);
+
+if (!empty($userid))
+{
+    $mode = 'user';
+}
+elseif (!empty($contactid))
+{
+    $mode = 'contact';
+}
 $userhash = cleanvar($_REQUEST['hash']);
 
 switch ($_REQUEST['action'])
 {
     case 'forgotpwd':
     case 'sendpwd':
+    {
         include ('htmlheader.inc.php');
         // First look to see if this is a SiT user
         $sql = "SELECT id, username, password FROM `{$dbUsers}` WHERE email = '{$email}' LIMIT 1";
@@ -37,16 +48,10 @@ switch ($_REQUEST['action'])
         $userdetails = mysql_fetch_object($userresult);
         if ($usercount == 1)
         {
-            $extra_headers = "Reply-To: {$CONFIG['support_email']}\n";
-            $extra_headers .= "X-Mailer: {$CONFIG['application_shortname']} {$application_version_string}/PHP " . phpversion() . "\n";
-            $extra_headers .= "X-Originating-IP: {$_SERVER['REMOTE_ADDR']}\n";
-            $extra_headers .= "\n"; // add an extra crlf to create a null line to separate headers from body
-            $bodytext = "{$strResetPasswordVisit}:\n";
-            $url = parse_url($_SERVER['HTTP_REFERER']);
             $hash = md5($userdetails->username.'.'.$userdetails->password);
+            $url = parse_url($_SERVER['HTTP_REFERER']);
             $reseturl = "{$url['scheme']}://{$url['host']}{$url['path']}?action=confirmreset&amp;userid={$userdetails->id}&amp;hash={$hash}";
-            $bodytext .= "{$reseturl}";
-            mail($email, $strInformationForResettingYourPassword, $bodytext, $extra_headers);
+            trigger('TRIGGER_USER_RESET_PASSWORD', array('userid' => $userdetails->id, 'passwordreseturl' => $reseturl));
             echo "<h3>{$strInformationSent}</h3>";
             echo "<p>{$strInformationSentRegardingSettingPassword}</p>";
             echo "<p><a href='index.php'>{$strBackToLoginPage}</a></p>";
@@ -54,37 +59,22 @@ switch ($_REQUEST['action'])
         else
         {
             // This is a SiT contact, not a user
-            if ($_REQUEST['action'] == 'sendpwd')
-            {
-                $sql = "SELECT username, password, email FROM `{$dbContacts}` WHERE id = '{$contactid}' LIMIT 1";
-            }
-            else
-            {
-                $sql = "SELECT username, password, email FROM `{$dbContacts}` WHERE email = '{$email}' LIMIT 1";
-            }
+            $sql = "SELECT id, username, password, email FROM `{$dbContacts}` WHERE email = '{$email}' LIMIT 1";
+            echo $sql;
             $contactresult = mysql_query($sql);
             if (mysql_error()) trigger_error(mysql_error(),E_USER_WARNING);
 
             $contactcount = mysql_num_rows($contactresult);
             if ($contactcount == 1)
             {
-                while ($row = mysql_fetch_object($contactresult))
-                {
-                    $extra_headers = "Reply-To: {$CONFIG['support_email']}\n";
-                    $extra_headers .= "X-Mailer: {$CONFIG['application_shortname']} {$application_version_string}/PHP " . phpversion() . "\n";
-                    $extra_headers .= "X-Originating-IP: {$_SERVER['REMOTE_ADDR']}\n";
-                    $extra_headers .= "\n"; // add an extra crlf to create a null line to separate headers from body
-
-                    $bodytext = "{$strUsername}: {$row->username}\n{$strPassword}: {$row->password}";
-                    // TODO this mail should use a template and be good for sending new details (sendpwd)
-                    // as well as forgotten password
-                    mail($row->email, $strForgottenPasswordDetails, $bodytext, $extra_headers);
-                    
-                    if ($_REQUEST['action'] == 'sendpwd') $url = $_SERVER['HTTP_REFERER'];
-                    else $url = 'index.php';
-                    html_redirect($url, TRUE, $strDetailsSend);
-                    exit;
-                }
+                $row = mysql_fetch_object($contactresult);
+                $hash = md5($row->username.'.'.$row->password);
+                $url = parse_url($_SERVER['HTTP_REFERER']);
+                $reseturl = "{$url['scheme']}://{$url['host']}{$url['path']}?action=confirmreset&amp;contactid={$row->id}&amp;hash={$hash}";
+                trigger('TRIGGER_CONTACT_RESET_PASSWORD', array('contactid' => $row->id, 'passwordreseturl' => $reseturl));         
+                echo "<h3>{$strInformationSent}</h3>";
+                echo "<p>{$strInformationSentRegardingSettingPassword}</p>";
+                echo "<p><a href='index.php'>{$strBackToLoginPage}</a></p>";                
             }
             else
             {
@@ -95,10 +85,20 @@ switch ($_REQUEST['action'])
         }
         include ('htmlfooter.inc.php');
     break;
-
+    }
+    
     case 'confirmreset':
+    {
         include ('htmlheader.inc.php');
-        $sql = "SELECT id, username, password FROM `{$dbUsers}` WHERE id = '{$userid}' LIMIT 1";
+        if ($mode == 'user')
+        {
+            $sql = "SELECT id, username, password FROM `{$dbUsers}` WHERE id = '{$userid}' LIMIT 1";
+        }
+        elseif ($mode == 'contact')
+        {
+            $sql = "SELECT id, username, password FROM `{$dbContacts}` WHERE id = '{$contactid}' LIMIT 1";
+            echo $sql;
+        }
         $userresult = mysql_query($sql);
         if (mysql_error()) trigger_error(mysql_error(),E_USER_WARNING);
         $usercount = mysql_num_rows($userresult);
@@ -106,6 +106,7 @@ switch ($_REQUEST['action'])
         {
             $userdetails = mysql_fetch_object($userresult);
             $hash = md5($userdetails->username.'.'.$userdetails->password);
+            echo "if ($hash == $userhash)";
             if ($hash == $userhash)
             {
                 echo "<h2>{$strResetPassword}</h2>";
@@ -118,7 +119,14 @@ switch ($_REQUEST['action'])
                 echo "</table>";
                 echo "<p><input type='submit' value='{$strContinue}' /></p>";
 
-                echo "<input type='hidden' name='userid' value='{$userid}' />";
+                if ($mode == 'user')
+                {
+                    echo "<input type='hidden' name='userid' value='{$userid}' />";
+                }
+                elseif ($mode == 'contact')
+                {
+                    echo "<input type='hidden' name='contactid' value='{$contactid}' />";
+                }
                 echo "<input type='hidden' name='hash' value='{$userhash}' />";
                 echo "<input type='hidden' name='action' value='resetpasswordform' />";
                 echo "</form>";
@@ -138,10 +146,19 @@ switch ($_REQUEST['action'])
         }
         include ('htmlfooter.inc.php');
     break;
-
+    }
+    
     case 'resetpasswordform':
         include ('htmlheader.inc.php');
-        $sql = "SELECT id, username, password FROM `{$dbUsers}` WHERE id = '{$userid}' LIMIT 1";
+        if ($mode == 'user')
+        {
+            $sql = "SELECT id, username, password FROM `{$dbUsers}` WHERE id = '{$userid}' LIMIT 1";
+        }
+        elseif ($mode == 'contact')
+        {
+            $sql = "SELECT id, username, password FROM `{$dbContacts}` WHERE id = '{$contactid}' LIMIT 1";
+        }
+        
         $userresult = mysql_query($sql);
         if (mysql_error()) trigger_error(mysql_error(),E_USER_WARNING);
         $usercount = mysql_num_rows($userresult);
@@ -162,7 +179,14 @@ switch ($_REQUEST['action'])
                 echo "<td><input maxlength='50' name='newpassword2' size='30' type='password' />";
                 echo "</td></tr>";
                 echo "</table>";
-                echo "<input type='hidden' name='userid' value='{$userid}' />";
+                if ($mode == 'user')
+                {
+                    echo "<input type='hidden' name='userid' value='{$userid}' />";
+                }
+                elseif ($mode == 'contact')
+                {
+                    echo "<input type='hidden' name='contactid' value='{$contactid}' />";
+                }
                 echo "<input type='hidden' name='hash' value='{$newhash}' />";
                 echo "<input type='hidden' name='action' value='savepassword' />";
                 echo "<p><input type='submit' value='{$strSetPassword}' />";
@@ -189,7 +213,15 @@ switch ($_REQUEST['action'])
         $newpassword1 = cleanvar($_REQUEST['newpassword1']);
         $newpassword2 = cleanvar($_REQUEST['newpassword2']);
         include ('htmlheader.inc.php');
-        $sql = "SELECT id, username, password FROM `{$dbUsers}` WHERE id = '{$userid}' LIMIT 1";
+        if ($mode == 'user')
+        {
+            $sql = "SELECT id, username, password FROM `{$dbUsers}` WHERE id = '{$userid}' LIMIT 1";
+        }
+        elseif ($mode == 'contact')
+        {
+            $sql = "SELECT id, username, password FROM `{$dbContacts}` WHERE id = '{$contactid}' LIMIT 1";
+        }
+
         $userresult = mysql_query($sql);
         if (mysql_error()) trigger_error(mysql_error(),E_USER_WARNING);
         $usercount = mysql_num_rows($userresult);
@@ -199,9 +231,16 @@ switch ($_REQUEST['action'])
             $newhash = md5($userdetails->username.'.ok.'.$userdetails->password);
             if ($newhash == $userhash)
             {
-                if ($newpassword1==$newpassword2)
+                if ($newpassword1 == $newpassword2)
                 {
-                    $usql = "UPDATE `{$dbUsers}` SET password=MD5({$newpassword1}) WHERE id={$userid} LIMIT 1";
+                    if ($mode == 'user')
+                    {
+                        $usql = "UPDATE `{$dbUsers}` SET password=MD5('{$newpassword1}') WHERE id={$userid} LIMIT 1";
+                    }
+                    elseif ($mode == 'contact')
+                    {
+                        $usql = "UPDATE `{$dbContacts}` SET password=MD5('{$newpassword1}') WHERE id={$contactid} LIMIT 1";
+                    }
                     mysql_query($usql);
                     echo "<h3>{$strPasswordReset}</h3>";
                     echo "<p>Your password has been reset, you can now login using the new details.</p>"; // FIXME i18n
