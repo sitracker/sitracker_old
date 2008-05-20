@@ -243,8 +243,8 @@ div#menu li:hover li ul,
 .helplink { vertical-align: super; color: #555; margin-left: 2px; font-size: 85%; }
 .helplink a { text-decoration: none; cursor: help; position: relative; color: #CC0000; }
 .helplink a span { display: none; position: absolute;
-  top: 20px;
-  left: -10px;
+  /*top: 20px;*/
+  /* left: -10px; */
   width: 125px;
   padding: 5px;
   z-index: 100;
@@ -254,9 +254,9 @@ div#menu li:hover li ul,
   -webkit-border-radius: 5px; /* this is just for Safari */
   cursor: pointer;
   text-align: left;
-  margin-right: 20px;
+  /*margin-right: 20px;*/
 }
-.helplink a:hover { font-size: 99%; /* this is just for IE */ text-decoration: underline; color: #CC0000; }
+.helplink a:hover { font-size: 99%; /* this is just for IE */ text-decoration: none; color: #CC0000; }
 /* .helplink a:hover span { display: block; } */
 
 /* Incident Queues */

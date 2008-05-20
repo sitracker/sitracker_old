@@ -309,9 +309,13 @@ function contexthelp(elem, context)
     elem.firstDescendant().innerHTML = loadmsg;
     var epos = findPos(elem.firstDescendant());
     var vwidth = document.viewport.getWidth();
-    if (epos[0] + 125 > vwidth)
+    if (epos[0] + 135 > vwidth)
     {
         elem.firstDescendant().style.left = '-125px';
+    }
+    else
+    {
+        elem.firstDescendant().style.left = '10px';
     }
     if (elem.firstDescendant().innerHTML == '' || elem.firstDescendant().innerHTML == loadmsg)
     {
