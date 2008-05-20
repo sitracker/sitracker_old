@@ -162,7 +162,7 @@ array('name' => 'New contact added',
       );
 
 $triggerarray['TRIGGER_INCIDENT_CLOSED'] =
-array('name' => 'New contact added',
+array('name' => 'Incident closed',
       'description' => 'Occurs when an incident is closed',
       'required' => array('incidentid', 'closeruserid'),
       'type' => 'incident'
@@ -243,7 +243,13 @@ function trigger($triggerid, $paramarray='')
         {
             if (!trigger_checks($triggerobj->checks, $paramarray))
             {
-                return;
+                $checks = trigger_replace_specials($triggerid, $triggerobj->checks, $paramarray);
+                echo $checks;
+                eval("return \$value = $checks;");
+                if($value === FALSE)
+                {
+                    return;                   
+                }
             }
         }
 
