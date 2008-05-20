@@ -137,35 +137,35 @@ $triggerarray['TRIGGER_CONTACT_RESET_PASSWORD'] =
 array('name' => 'Contact reset password',
       'description' => 'Occurs when a contact wants their password resetting',
       'required' => array('contactid', 'passwordreseturl'),
-      'type' => 'system'      
+      'type' => 'system'
       );
 
 $triggerarray['TRIGGER_USER_RESET_PASSWORD'] =
 array('name' => 'User reset password',
       'description' => 'Occurs when a user wants their password resetting',
       'required' => array('userid', 'passwordreseturl'),
-      'type' => 'system'      
+      'type' => 'system'
       );
 
 $triggerarray['TRIGGER_NEW_CONTACT'] =
 array('name' => 'New contact added',
       'description' => 'Occurs when a new contact is added',
       'required' => array('contactid', 'prepassword'),
-      'type' => 'system'      
+      'type' => 'system'
       );
 
 $triggerarray['TRIGGER_INCIDENT_CLOSED'] =
 array('name' => 'New contact added',
       'description' => 'Occurs when an incident is closed',
       'required' => array('incidentid'),
-      'type' => 'incident'      
+      'type' => 'incident'
       );
 
 $triggerarray['TRIGGER_INCIDENT_CLOSED'] =
 array('name' => 'New contact added',
       'description' => 'Occurs when an incident is closed',
       'required' => array('incidentid', 'closeruserid'),
-      'type' => 'incident'      
+      'type' => 'incident'
       );
 
 //set up all the action types
@@ -426,6 +426,7 @@ function send_trigger_email($userid, $triggerid, $template, $paramarray)
 
 
     $mailok = send_email($toemail, $from, $subject, $body);
+    $dbg .= "send_email($toemail, $from, $subject, $body)"; // FIXME BUGBUG remove this debugging
     if ($mailok==FALSE) trigger_error('Internal error sending email: '. $mailerror.' send_mail() failed', E_USER_ERROR);
 }
 
@@ -444,7 +445,7 @@ function send_trigger_email($userid, $triggerid, $template, $paramarray)
 function create_trigger_notice($userid, $noticetext='', $triggertype='',
                                $template, $paramarray='')
 {
-    global $CONFIG, $dbg, $dbNoticeTemplates;
+    global $CONFIG, $dbg, $dbNotices, $dbNoticeTemplates;
     /*if ($CONFIG['debug'])
     {
         $dbg .= print_r($paramarray)."\n";
@@ -466,7 +467,7 @@ function create_trigger_notice($userid, $noticetext='', $triggertype='',
 
             if ($userid == 0 AND $paramarray['userid'] > 0) $userid = $paramarray['userid'];
 
-            $sql = "INSERT into notices (userid, type, text, linktext, link,
+            $sql = "INSERT INTO `{$dbNotices}` (userid, type, text, linktext, link,
                                         referenceid, timestamp) ";
             $sql .= "VALUES ({$userid}, '{$notice->type}', '{$noticetext}',
                             '{$noticelinktext}', '{$noticelink}', '', NOW())";
