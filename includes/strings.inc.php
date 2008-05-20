@@ -302,6 +302,11 @@ $ttvararray['{contactemail}'] = array('description' => $strIncidentsContactEmail
                                       'replacement' => 'contact_email(incident_contact($paramarray[\'incidentid\']));',
                                       'action' => 'ACTION_EMAIL');
 
+$ttvararray['{contactemail}'] = array('description' => $strIncidentsContactEmail,
+                                      'requires' => 'contactid',
+                                      'replacement' => 'contact_email(($paramarray[\'contactid\']));',
+                                      'action' => 'ACTION_EMAIL');
+
 $ttvararray['{contactfirstname}'] = array('description' => 'First Name of contact',
                                      'requires' => 'contactid',
                                      'replacement' => "strtok(contact_realname(\$contactid),' ');");
@@ -402,10 +407,14 @@ $ttvararray['{todaysdate}'] = array('description' => $strCurrentDate,
                                      'replacement' => 'ldate("jS F Y");');
 
 $ttvararray['{useremail}'] = array('description' => $strCurrentUserEmailAddress,
-                                     'replacement' => 'user_email($_SESSION[\'userid\']);');
+                                     'replacement' => 'user_email($paramarray[\'userid\']);');
 
 $ttvararray['{userrealname}'] = array('description' => $strFullNameCurrentUser,
                                      'replacement' => 'user_realname($_SESSION[\'userid\']);');
+
+$ttvararray['{passwordreseturl}'] = array('description' => '',
+                                          'replacement' => '$paramarray[\'passwordreseturl\'];',
+                                          'requires' => 'passwordreseturl');
 
 
 ?>
