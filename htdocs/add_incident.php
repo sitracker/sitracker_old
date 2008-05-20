@@ -91,9 +91,9 @@ if (!empty($incomingid) AND empty($updateid)) $updateid = db_read_column('update
 if (empty($action) OR $action=='showform')
 {
     // TODO This page fails XHTML validation because of dojo attributes - INL 12/12/07
+    $pagescripts = array('dojo/dojo.js');
     include ('htmlheader.inc.php');
     ?>
-    <script type="text/javascript" src="scripts/dojo/dojo.js"></script>
     <script type="text/javascript">
         dojo.require ("dojo.widget.ComboBox");
     </script>
@@ -152,13 +152,13 @@ elseif ($action=='findcontact')
     $altsql .= "WHERE m.product = p.id ";
     $altsql .= "AND m.site = s.id ";
     $altsql .= "AND m.allcontactssupported='yes' ";
-    
+
     if (empty($contactid))
     {
         $newsql = "AND (c.surname LIKE '%$search_string%' OR c.forenames LIKE '%$search_string%' ";
         $newsql .= "OR SOUNDEX('$search_string') = SOUNDEX((CONCAT_WS(' ', c.forenames, c.surname))) ";
         $newsql .= "OR s.name LIKE '%$search_string%') ";
-        
+
         $sql .= $newsql;
         $altsql .= $newsql;
     }
@@ -170,8 +170,8 @@ elseif ($action=='findcontact')
 
     $sql .= "ORDER by c.forenames, c.surname, productname, expirydate ";
     $altsql .= "ORDER by c.forenames, c.surname, productname, expirydate ";
-            
-    $altresult = mysql_query($altsql);    
+
+    $altresult = mysql_query($altsql);
     $result=mysql_query($sql);
     if (mysql_error()) trigger_error("MySQL Query Error ".mysql_error(), E_USER_ERROR);
     if (mysql_num_rows($result)>0)
@@ -261,7 +261,7 @@ elseif ($action=='findcontact')
             $html .=  "<th>{$strName}</th>";
             $html .=  "<th>{$strSite}</th>";
             $html .=  "</tr>\n";
-			
+
             $customermatches = 0;
             while ($contactrow = mysql_fetch_array($result))
             {
@@ -283,7 +283,7 @@ elseif ($action=='findcontact')
             }
             $html .=  "</table>\n";
             $html .= "<p align='center'><a href='add_contact.php'>{$strAddContact}</a></p>";
-            
+
             if ($customermatches > 0)
             {
             	echo $html;
@@ -323,7 +323,7 @@ elseif ($action=='findcontact')
 
         while ($contactrow = mysql_fetch_array($altresult))
         {
-            $str_prefered .= to_row($contactrow);       
+            $str_prefered .= to_row($contactrow);
         }
 
         echo "<h3>{$strPreferred}</h3>";
@@ -384,7 +384,7 @@ elseif ($action=='findcontact')
                     $html .= "Add Site Support Incident</a> ({$site_incident_pool})</td>";
                     $customermatches++;
                 }
-                else 
+                else
                 {
                 	$html .= "<td class='expired'>{$strZeroRemaining}</td>";
                 }
@@ -393,7 +393,7 @@ elseif ($action=='findcontact')
                 $html .= "</tr>\n";
             }
             $html .= "</table>\n";
-            
+
             if ($customermatches > 0)
             {
 	           	echo $html;
@@ -406,13 +406,13 @@ elseif ($action=='findcontact')
             echo "<h3>No matching contacts found</h3>";
             echo "<p align='center'><a href=\"add_contact.php\">{$strAddContact}</a></p>\n";
         }
-        
+
 
         include ('htmlfooter.inc.php');
     }
-    
 
-        
+
+
 }
 elseif ($action=='incidentform')
 {
@@ -433,7 +433,7 @@ elseif ($action=='incidentform')
     }
     </script>
 
-    <form action="<?php echo $_SERVER['PHP_SELF'] ?>?action=assign" 
+    <form action="<?php echo $_SERVER['PHP_SELF'] ?>?action=assign"
     method="post" name="supportdetails" onsubmit="return validateForm(this)">
     <input type="hidden" name="type" value="<?php echo $type ?>" />
     <input type="hidden" name="contactid" value="<?php echo $contactid ?>" />
@@ -441,8 +441,8 @@ elseif ($action=='incidentform')
     <input type="hidden" name="maintid" value="<?php echo $maintid ?>" />
     <input type="hidden" name="siteid" value="<?php echo $siteid ?>" />
     <?php
-    if (!empty($updateid)) 
-    {	
+    if (!empty($updateid))
+    {
     	echo "<input type='hidden' name='updateid' value='$updateid' />";
     }
 
@@ -519,7 +519,7 @@ elseif ($action=='incidentform')
     echo "<tr><th>{$strNextAction}:</th>";
     echo "<td>";
     echo "<input type='text' name='nextaction' maxlength='50' size='30' value='Initial Response' /><br /><br />";
-    echo show_next_action();    
+    echo show_next_action();
     echo "</td></tr>";
     if (empty($updateid))
     {

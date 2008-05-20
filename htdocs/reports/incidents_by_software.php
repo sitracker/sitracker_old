@@ -25,6 +25,7 @@ require ('functions.inc.php');
 require ('auth.inc.php');
 
 $title = $strIncidentsBySkill;
+$pagescripts = array('dojo/dojo.js');
 
 if (empty($_REQUEST['mode']))
 {
@@ -334,7 +335,6 @@ else
             echo "</table></p>";
 
 
-            echo "<script type='text/javascript' src=\"../scripts/dojo/dojo.js\"></script>";
             echo "<script type='text/javascript'>\n//<![CDATA[\n";
                 echo "dojo.require ('dojo.collections.Store');";
                 echo "dojo.require ('dojo.charting.Chart');";

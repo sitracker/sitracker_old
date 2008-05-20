@@ -18,6 +18,8 @@ require ('functions.inc.php');
 // This page requires authentication
 require ('auth.inc.php');
 
+$pagescripts = array('dojo/dojo.js');
+
 // External variables
 $search_string = cleanvar($_REQUEST['search_string']);
 $owner = cleanvar($_REQUEST['owner']);
@@ -74,7 +76,6 @@ if ($submit_value == "go")
 include ('htmlheader.inc.php');
 if ($search_string=='') $search_string='a';
 /*?>
-<script type="text/javascript" src="scripts/dojo/dojo.js"></script>
 <script type="text/javascript">
 //<![CDATA[
     dojo.require ("dojo.widget.ComboBox");

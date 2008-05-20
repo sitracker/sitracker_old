@@ -21,6 +21,7 @@ require ('functions.inc.php');
 require ('auth.inc.php');
 
 $title = $strBrowseContracts;
+$pagescripts = array('dojo/dojo.js');
 
 // External variables
 $productid = cleanvar($_REQUEST['productid']);
@@ -32,7 +33,6 @@ $activeonly = cleanvar($_REQUEST['activeonly']);
 
 include ('htmlheader.inc.php');
 ?>
-<script type="text/javascript" src="scripts/dojo/dojo.js"></script>
 <script type="text/javascript">
 //<![CDATA[
     dojo.require ("dojo.widget.ComboBox");

@@ -18,6 +18,8 @@ require ('functions.inc.php');
 // This page requires authentication
 require ('auth.inc.php');
 
+$pagescripts = array('dojo/dojo.js');
+
 // External variables
 $siteid = mysql_real_escape_string($_REQUEST['siteid']);
 $submit = $_REQUEST['submit'];
@@ -25,9 +27,7 @@ $submit = $_REQUEST['submit'];
 if (empty($submit) OR !empty($_SESSION['formerrors']['add_contact']))
 {
     include ('htmlheader.inc.php');
-    
     ?>
-    <script type="text/javascript" src="scripts/dojo/dojo.js"></script>
     <script type='text/javascript'>
     //<![CDATA[
         dojo.require("dojo.widget.ComboBox");
@@ -148,7 +148,7 @@ else
 
         // concatenate username with insert id to make unique
         $newid = mysql_insert_id();
-        
+
         if ($CONFIG['portal'] AND $_POST['emaildetails'] == 'on')
         {
             trigger('TRIGGER_NEW_CONTACT', array('contactid' => $newid, 'prepassword' => $prepassword));

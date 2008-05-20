@@ -61,12 +61,11 @@ if ($submit_value == 'go')
             header("Location: $url");
         }
 }
-
+$pagescripts = array('dojo/dojo.js');
 include ('htmlheader.inc.php');
 
 if ($search_string=='') $search_string='a';
 ?>
-<script type="text/javascript" src="scripts/dojo/dojo.js"></script>
 <script type="text/javascript">
 //<![CDATA[
 function contact_products_window(contactid)

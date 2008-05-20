@@ -33,8 +33,8 @@ while ($dashboard = mysql_fetch_object($result))
 }
 
 // Valid user
+$pagescripts = array('dojo/dojo.js');
 include('htmlheader.inc.php');
-echo "<script type=\"text/javascript\" src=\"scripts/dojo/dojo.js\"></script>";
 
 $sql = "SELECT dashboard FROM `{$dbUsers}` WHERE id = '".$_SESSION['userid']."'";
 $result = mysql_query($sql);
@@ -259,7 +259,7 @@ else
     $userstatus = "<strong>{$strAccepting}</strong>";
 }
 
-echo sprintf($strLoggedInAsXAndCurrentlyXAndX, 
+echo sprintf($strLoggedInAsXAndCurrentlyXAndX,
              "<strong>{$sit[0]}</strong>",
 			 "<strong>".userstatus_name(user_status($sit[2]))."</strong>",
 			 $userstatus);
