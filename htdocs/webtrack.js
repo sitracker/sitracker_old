@@ -305,13 +305,15 @@ function findPos(obj) {
 function contexthelp(elem, context)
 {
     elem.firstDescendant().style.display = 'block';
+    var loadmsg = "Loading...";
+    elem.firstDescendant().innerHTML = loadmsg;
     var epos = findPos(elem.firstDescendant());
     var vwidth = document.viewport.getWidth();
     if (epos[0] + 125 > vwidth)
     {
         elem.firstDescendant().style.left = '-125px';
     }
-    if (elem.firstDescendant().innerHTML == '')
+    if (elem.firstDescendant().innerHTML == '' || elem.firstDescendant().innerHTML == loadmsg)
     {
         new Ajax.Request(application_webpath + 'ajaxdata.php?action=contexthelp&context=' + context + '&rand=' + get_random(),
         //new Ajax.Request('ajaxdata.php?action=contexthelp&context=' + context + '&rand=' + get_random(),
