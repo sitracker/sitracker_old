@@ -147,6 +147,12 @@ array('name' => 'User reset password',
       'type' => 'system'      
       );
 
+$triggerarray['TRIGGER_NEW_CONTACT'] =
+array('name' => 'New contact added',
+      'description' => 'Occurs when a new contact is added',
+      'required' => array('contactid', 'prepassword'),
+      'type' => 'system'      
+      );
 
 //set up all the action types
 define(ACTION_NONE, 1);
@@ -335,10 +341,6 @@ function trigger_replace_specials($triggerid, $string, $paramarray)
         $dbg .= "\nTRIGGER: notice string before - $string\n";
         $dbg .= "TRIGGER: param array: ".print_r($paramarray,true);
     }
-
-    $url = parse_url($_SERVER['HTTP_REFERER']);
-    $baseurl = "{$url['scheme']}://{$url['host']}";
-    $baseurl .= "{$CONFIG['application_webpath']}";
 
     foreach ($ttvararray AS $identifier => $ttvar)
     {

@@ -8921,6 +8921,15 @@ function kb_name($kbid)
     }
 }
 
+function application_url()
+{
+    global $CONFIG;
+    $url = parse_url($_SERVER['HTTP_REFERER']);
+    $baseurl = "{$url['scheme']}://{$url['host']}";
+    $baseurl .= "{$CONFIG['application_webpath']}";
+    return $baseurl;
+}
+
 // -------------------------- // -------------------------- // --------------------------
 // leave this section at the bottom of functions.inc.php ================================
 

@@ -133,29 +133,6 @@ else
 
         $username = strtolower(substr($surname, 0, strcspn($surname, " ")));
         $prepassword = generate_password();
-
-        if ($CONFIG['portal'] AND $_POST['emaildetails'] == 'on')
-        {
-        	$extra_headers = "Reply-To: {$CONFIG['support_email']}\n";
-            $extra_headers .= "X-Mailer: {$CONFIG['application_shortname']} {$application_version_string}/PHP " . phpversion() . "\n";
-            $extra_headers .= "X-Originating-IP: {$_SERVER['REMOTE_ADDR']}\n";
-            $extra_headers .= "\n"; // add an extra crlf to create a null line to separate headers from body
-
-            $bodytext = "Hello $forenames\nYou have just been added as a ";
-        	$bodytext .= "contact on {$CONFIG['application_name']} ";
-        	$bodytext .= "{$CONFIG['application_uriprefix']}{$CONFIG['application_webpath']}";
-        	$bodytext .= "\nThese details allow you to the login to the portal,";
-        	$bodytext .= " where you can create, update and close your incidents";
-        	$bodytext .= ", as well as view your sites' incidents.\n\n";
-        	$bodytext .= "Your details are as follows:\n";
-        	$bodytext .= "username: {$username}\npassword: {$prepassword}\n";
-        	$bodytext .= "\nPlease note, this password cannot be recovered, ";
-        	$bodytext .= "only reset. You may change it in the portal.";
-        	
-        	//FIXME 3.35 use triggers
-      		mail($email, $strContactDetails, $bodytext, $extra_headers);        	
-        }
-
         $password = md5($prepassword);
 
         $sql  = "INSERT INTO `{$dbContacts}` (username, password, courtesytitle, forenames, surname, jobtitle, ";
@@ -171,6 +148,11 @@ else
 
         // concatenate username with insert id to make unique
         $newid = mysql_insert_id();
+        
+        if ($CONFIG['portal'] AND $_POST['emaildetails'] == 'on')
+        {
+            trigger('TRIGGER_NEW_CONTACT', array('contactid' => $newid, 'prepassword' => $prepassword));
+        }
         $username = $username . $newid;
         $sql = "UPDATE `{$dbContacts}` SET username='$username' WHERE id='$newid'";
         $result = mysql_query($sql);
