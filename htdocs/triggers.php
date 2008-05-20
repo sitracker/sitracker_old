@@ -116,14 +116,14 @@ switch ($_REQUEST['mode'])
         </script>
         <?php
         echo "<h2>".icon('triggeraction', 32)." ";
-        
+
         if ($selecteduser >= 1)
         {
             echo user_realname($selecteduser).': ';
         }
-        
+
         echo "{$strTriggerActions}</h2>";
-        
+
         if (!empty($triggerarray[$id]['name']))
         {
             $name = $triggerarray[$id]['name'];
@@ -135,13 +135,13 @@ switch ($_REQUEST['mode'])
         echo "<div id='container'>";
         echo "<h3>{$strTrigger}</h3>";
         echo "<strong>{$name}</strong>";
-        
+
         echo "<h3>{$strOccurance}</h3>";
         echo $triggerarray[$id]['description'];
-        
+
         echo "<h3>{$strType}</h3>";
         echo $triggerarray[$id]['type']; // FIXME remove displaying type before release
-        
+
         if (is_array($triggerarray[$id]['optional']))
         {
             echo "<h3>{$strParameters}</h3>";
@@ -179,7 +179,8 @@ switch ($_REQUEST['mode'])
         echo "<h3>{$strRules}</h3>";
         if (!empty($triggerarray[$id]['optional']))
         {
-            echo "<tr><td colspan='3'><label>Rules:</label> <textarea cols='30' rows='5' name='rules'></textarea></td></tr>";
+            echo "<tr><td colspan='3'><label for='rules'>{$strRules}:</label><br />";
+            echo "<textarea cols='30' rows='5' id='rules' name='rules'></textarea></td></tr>";
         }
         else
         {
@@ -198,6 +199,7 @@ switch ($_REQUEST['mode'])
 
     case 'save':
         $id = cleanvar($_POST['id']);
+        $userid = cleanvar($_POST['user']);
         // Check that this is a defined trigger
         if (!array_key_exists($id, $triggerarray))
         {
@@ -233,6 +235,7 @@ switch ($_REQUEST['mode'])
     default:
         //display the list
         include ('htmlheader.inc.php');
+
         echo "<h2>".icon('trigger', 32)." ";
         echo "$title</h2>";
         echo "<p align='center'>A list of available triggers and the actions that are set when triggers occur</p>"; // TODO triggers blurb
