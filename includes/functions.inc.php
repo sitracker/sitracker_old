@@ -8844,15 +8844,15 @@ function process_add_contact()
 
         if (!$result)
         {
-        	if ($mode == 'internal')
-        	{
-       			html_redirect("add_contact.php", FALSE);
-   			}
-   			else
-   			{
-   				html_redirect("addcontact.php", FALSE);
-   			}
-    	}
+            if ($mode == 'internal')
+            {
+                html_redirect("add_contact.php", FALSE);
+            }
+            else
+            {
+                html_redirect("addcontact.php", FALSE);
+            }
+        }
         else
         {
             $sql = "SELECT username, password FROM `{$dbContacts}` WHERE id=$newid";
@@ -8860,40 +8860,40 @@ function process_add_contact()
             if (mysql_error()) trigger_error("MySQL Query Error ".mysql_error(), E_USER_ERROR);
             else
             {
-		        if ($CONFIG['portal'] AND $_POST['emaildetails'] == 'on')
-		        {
-		        	$extra_headers = "Reply-To: {$CONFIG['support_email']}\n";
-		            $extra_headers .= "X-Mailer: {$CONFIG['application_shortname']} {$application_version_string}/PHP " . phpversion() . "\n";
-		            $extra_headers .= "X-Originating-IP: {$_SERVER['REMOTE_ADDR']}\n";
-		            $extra_headers .= "\n"; // add an extra crlf to create a null line to separate headers from body
+                if ($CONFIG['portal'] AND $_POST['emaildetails'] == 'on')
+                {
+                    $extra_headers = "Reply-To: {$CONFIG['support_email']}\n";
+                    $extra_headers .= "X-Mailer: {$CONFIG['application_shortname']} {$application_version_string}/PHP " . phpversion() . "\n";
+                    $extra_headers .= "X-Originating-IP: {$_SERVER['REMOTE_ADDR']}\n";
+                    $extra_headers .= "\n"; // add an extra crlf to create a null line to separate headers from body
 
-		            $bodytext = "Hello $forenames\nYou have just been added as a ";
-		        	$bodytext .= "contact on {$CONFIG['application_name']} ";
-		        	$bodytext .= "{$CONFIG['application_uriprefix']}{$CONFIG['application_webpath']}";
-		        	$bodytext .= "\nThese details allow you to the login to the portal,";
-		        	$bodytext .= " where you can create, update and close your incidents";
-		        	$bodytext .= ", as well as view your sites' incidents.\n\n";
-		        	$bodytext .= "Your details are as follows:\n";
-		        	$bodytext .= "username: {$username}\npassword: {$prepassword}\n";
-		        	$bodytext .= "\nPlease note, this password cannot be recovered, ";
-		        	$bodytext .= "only reset. You may change it in the portal.";
+                    $bodytext = "Hello $forenames\nYou have just been added as a ";
+                    $bodytext .= "contact on {$CONFIG['application_name']} ";
+                    $bodytext .= "{$CONFIG['application_uriprefix']}{$CONFIG['application_webpath']}";
+                    $bodytext .= "\nThese details allow you to the login to the portal,";
+                    $bodytext .= " where you can create, update and close your incidents";
+                    $bodytext .= ", as well as view your sites' incidents.\n\n";
+                    $bodytext .= "Your details are as follows:\n";
+                    $bodytext .= "username: {$username}\npassword: {$prepassword}\n";
+                    $bodytext .= "\nPlease note, this password cannot be recovered, ";
+                    $bodytext .= "only reset. You may change it in the portal.";
 
-		        	//FIXME 3.35 use triggers
-		      		echo "mail($email, $strContactDetails, $bodytext, $extra_headers)";
-		        }
-	            journal(CFG_LOGGING_NORMAL,'Contact Added',"$forenames $surname was Added",CFG_JOURNAL_CONTACTS,$newid);
+                    //FIXME 3.35 use triggers
+                    echo "mail($email, $strContactDetails, $bodytext, $extra_headers)";
+                }
+                journal(CFG_LOGGING_NORMAL,'Contact Added',"$forenames $surname was Added",CFG_JOURNAL_CONTACTS,$newid);
 
-	            if ($mode == 'internal')
-	            {
-	            	html_redirect("contact_details.php?id=$newid");
-	            	exit;
-            	}
-            	else
-            	{
-            		html_redirect("contactdetails.php?id={$newid}");
-            		exit;
-        		}
-    		}
+                if ($mode == 'internal')
+                {
+                    html_redirect("contact_details.php?id=$newid");
+                    exit;
+                }
+                else
+                {
+                    html_redirect("contactdetails.php?id={$newid}");
+                    exit;
+                }
+            }
         }
         clear_form_data('add_contact');
         clear_form_errors('add_contact');
