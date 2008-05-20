@@ -19,7 +19,7 @@ include ('mime.inc.php');
  *
  * id - trigger name
  *   description - when the trigger is fired
- *   required - parameters the triggers needs to fire
+ *   required - parameters the triggers needs to fire, 'provides' these to templates
  *   optional - Rules the trigger can check, mimics 'subscription'-type events
  *   type - Trigger type (eg. incident, contact etc)
  */
@@ -152,6 +152,20 @@ array('name' => 'New contact added',
       'description' => 'Occurs when a new contact is added',
       'required' => array('contactid', 'prepassword'),
       'type' => 'system'      
+      );
+
+$triggerarray['TRIGGER_INCIDENT_CLOSED'] =
+array('name' => 'New contact added',
+      'description' => 'Occurs when an incident is closed',
+      'required' => array('incidentid'),
+      'type' => 'incident'      
+      );
+
+$triggerarray['TRIGGER_INCIDENT_CLOSED'] =
+array('name' => 'New contact added',
+      'description' => 'Occurs when an incident is closed',
+      'required' => array('incidentid', 'closeruserid'),
+      'type' => 'incident'      
       );
 
 //set up all the action types
