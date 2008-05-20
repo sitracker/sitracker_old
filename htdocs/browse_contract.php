@@ -118,7 +118,7 @@ if ($activeonly=='yes')
 {
     $sql .= "AND term!='yes' AND (expirydate > $now OR expirydate = '-1') ";
 }
-echo $sql;
+
 if ($search_string != '*')
 {
     if (strlen($search_string)==1)
