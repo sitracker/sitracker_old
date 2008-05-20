@@ -291,7 +291,7 @@ $availabletimezones = array('-720' => 'UTC-12',
 $ttvararray['{applicationname}'] = array('description' => $CONFIG['application_name'],
                                      'replacement' => '$CONFIG[\'application_name\'];');
 
-$ttvararray['{applicationurl}'] = array('description' => application_url(),
+$ttvararray['{applicationurl}'] = array('description' => 'System URL',
                                         'replacement' => 'application_url();');
 
 $ttvararray['{applicationshortname}'] = array('description' => $CONFIG['application_shortname'],
@@ -423,4 +423,10 @@ $ttvararray['{prepassword}'] = array('description' => '',
                                           'replacement' => '$paramarray[\'prepassword\'];',
                                           'requires' => 'prepassword');
 
+$ttvararray['{closeruserid}'] = array('description' => '',
+                                      'replacement' => '$paramarray[\'closeruserid\'];',
+                                      'requires' => 'closeruserid');
+$ttvararray['{closerusername}'] = array('description' => '',
+                                      'replacement' => 'user_email($paramarray[\'closeruserid\']);',
+                                      'requires' => 'closeruserid');
 ?>
