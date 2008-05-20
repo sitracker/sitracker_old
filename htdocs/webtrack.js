@@ -309,13 +309,15 @@ function contexthelp(elem, context)
     elem.firstDescendant().innerHTML = loadmsg;
     var epos = findPos(elem.firstDescendant());
     var vwidth = document.viewport.getWidth();
+    var vheight = document.viewport.getHeight();
     if (epos[0] + 135 > vwidth)
     {
         elem.firstDescendant().style.left = '-125px';
     }
-    else
+    if (epos[1] + 200 > vheight)
     {
-        elem.firstDescendant().style.left = '10px';
+        elem.firstDescendant().style.top = '-200px';
+        elem.firstDescendant().style.left = '5px';
     }
     if (elem.firstDescendant().innerHTML == '' || elem.firstDescendant().innerHTML == loadmsg)
     {
