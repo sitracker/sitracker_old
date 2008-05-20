@@ -2040,7 +2040,26 @@ UPDATE `{$dbLinkTypes}` SET `selectionsql` = 'CONCAT(forenames, \" \", surname)'
 
 // Schema updates from this point should in the format $upgrade_schema[315]["t200805191404"]
 // where 315 is the sit version and 200805191404 is the timestamp in the format YYYYMMDDHHMM (don't forget the the 't' prefix!)
-
+$upgrade_schema[335]["t200805201618"] = "CREATE TABLE IF NOT EXISTS `emailtemplates` (
+  `id` int(11) NOT NULL auto_increment,
+  `name` varchar(50) NOT NULL,
+  `type` enum('usertemplate','system','contact','site','incident','kb','user') NOT NULL default 'user' COMMENT 'usertemplate is personal template owned by a user, user is a template relating to a user',
+  `description` text NOT NULL,
+  `tofield` varchar(100) default NULL,
+  `fromfield` varchar(100) default NULL,
+  `replytofield` varchar(100) default NULL,
+  `ccfield` varchar(100) default NULL,
+  `bccfield` varchar(100) default NULL,
+  `subjectfield` varchar(255) default NULL,
+  `body` text,
+  `customervisibility` enum('show','hide') NOT NULL default 'show',
+  `storeinlog` enum('No','Yes') NOT NULL default 'Yes',
+  `created` datetime default NULL,
+  `createdby` int(11) default NULL,
+  `modified` datetime default NULL,
+  `modifiedby` int(11) default NULL,
+  PRIMARY KEY  (`id`)
+) ENGINE=MyISAM;";
 $upgrade_schema[335]["t200805201619"] = "TRUNCATE `$dbEmailTemplates`;";
 $upgrade_schema[335]["t200805201620"] = "INSERT INTO `$dbEmailTemplates` (`id`, `name`, `type`, `description`, `tofield`, `fromfield`, `replytofield`, `ccfield`, `bccfield`, `subjectfield`, `body`, `customervisibility`, `storeinlog`, `created`, `createdby`, `modified`, `modifiedby`) VALUES(1, 'Support Email', 'incident', 'Used by default when you send an email from an incident.', '{contactemail}', '{supportemail}', '{supportemail}', '', '{useremail}', '[{incidentid}] - {incidenttitle}', 'Hi {contactfirstname},\r\n\r\n{signature}\r\n{globalsignature}', 'show', 'Yes', NULL, NULL, NULL, NULL);";
 $upgrade_schema[335]["t200805201621"] = "INSERT INTO `$dbEmailTemplates` (`id`, `name`, `type`, `description`, `tofield`, `fromfield`, `replytofield`, `ccfield`, `bccfield`, `subjectfield`, `body`, `customervisibility`, `storeinlog`, `created`, `createdby`, `modified`, `modifiedby`) VALUES(2, 'INCIDENT_CLOSURE', 'system', 'Notify contact that the incident has been marked for closure and will be closed shortly', '{contactemail}', '{supportemail}', '{supportemail}', '', '{useremail}', 'Closure Notification: [{incidentid}] - {incidenttitle}', '{contactfirstname},\r\n\r\nIncident {incidentid} has been marked for closure. If you still have outstanding issues relating to this incident then please reply with details, otherwise it will be closed in the next seven days.\r\n\r\n{signature}\r\n{globalsignature}', 'show', 'Yes', NULL, NULL, NULL, NULL);";
