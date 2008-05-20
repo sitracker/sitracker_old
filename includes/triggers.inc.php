@@ -91,7 +91,7 @@ array('name' => 'Waiting Held Email',
       'description' => 'Occurs when there is a new email in the holding queue for x minutes',
       'required' => array('minswaiting'),
       'optional' => array(),
-      'type' => 'system'
+      'type' => 'user'
       );
 
 $triggerarray['TRIGGER_USER_SET_TO_AWAY'] =
@@ -99,8 +99,7 @@ array('name' => 'User Set To Away',
       'description' => 'Occurs when one of your watched engineer goes away',
       'required' => array('engineerid'),
       'optional' => array(),
-      'type' => 'incident',
-      'type' => 'incident'
+      'type' => 'user',
       );
 $triggerarray['TRIGGER_USER_RETURNS'] =
 array('name' => 'User Returns',
@@ -115,7 +114,7 @@ array('name' => 'SiT! Upgraded',
       'description' => 'Occurs when the system is upgraded',
       'required' => array('sitversion'),
       'optional' => array(),
-      'type' => 'system'
+      'type' => 'user'
       );
 
 $triggerarray['TRIGGER_INCIDENT_OWNED_CLOSED_BY_USER'] =
@@ -131,8 +130,22 @@ array('name' => 'Current Language Differs',
       'description' => 'Occurs when your current language setting is different to your profile setting',
       'required' => array('currentlang', 'profilelang'),
       'optional' => array(),
-      'type' => 'system'
+      'type' => 'user'
      );
+
+$triggerarray['TRIGGER_CONTACT_RESET_PASSWORD'] =
+array('name' => 'Contact reset password',
+      'description' => 'Occurs when a contact wants their password resetting',
+      'required' => array('contactid', 'passwordreseturl'),
+      'type' => 'system'      
+      );
+
+$triggerarray['TRIGGER_USER_RESET_PASSWORD'] =
+array('name' => 'User reset password',
+      'description' => 'Occurs when a user wants their password resetting',
+      'required' => array('userid', 'passwordreseturl'),
+      'type' => 'system'      
+      );
 
 
 //set up all the action types
@@ -397,7 +410,6 @@ function send_trigger_email($userid, $triggerid, $template, $paramarray)
 
 
     $mailok = send_email($toemail, $from, $subject, $body);
-
     if ($mailok==FALSE) trigger_error('Internal error sending email: '. $mailerror.' send_mail() failed', E_USER_ERROR);
 }
 
@@ -432,7 +444,6 @@ function create_trigger_notice($userid, $noticetext='', $triggertype='',
         {
             $notice = mysql_fetch_object($query);
             $noticetext = trigger_replace_specials($triggertype, $notice->text, $paramarray);
-//             echo "<h1>trigger_replace_specials($triggertype, $notice->text, $paramarray)</h1>";
             $noticelinktext = trigger_replace_specials($triggertype, $notice->linktext, $paramarray);
             $noticelink = trigger_replace_specials($triggertype, $notice->link, $paramarray);
             if ($CONFIG['debug']) $dbg .= $noticetext."\n";
