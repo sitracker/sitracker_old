@@ -60,7 +60,6 @@ switch ($_REQUEST['action'])
         {
             // This is a SiT contact, not a user
             $sql = "SELECT id, username, password, email FROM `{$dbContacts}` WHERE email = '{$email}' LIMIT 1";
-            echo $sql;
             $contactresult = mysql_query($sql);
             if (mysql_error()) trigger_error(mysql_error(),E_USER_WARNING);
 
