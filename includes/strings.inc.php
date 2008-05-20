@@ -312,11 +312,11 @@ $ttvararray['{contactemail}'] = array('description' => $strIncidentsContactEmail
 
 $ttvararray['{contactfirstname}'] = array('description' => 'First Name of contact',
                                      'requires' => 'contactid',
-                                     'replacement' => "strtok(contact_realname(\$contactid),' ');");
+                                     'replacement' => 'strtok(contact_realname($paramarray[\'contactid\'])," ");');
 
 $ttvararray['{contactname}'] = array('description' => 'Full Name of contact',
                                      'requires' => 'contactid',
-                                     'replacement' => 'contact_realname($contactid);');
+                                     'replacement' => 'contact_realname($paramarray[\'contactid\']);');
 
 $ttvararray['{contactnotify}'] = array('description' => 'The Notify Contact email address (if set)',
                                       'requires' => 'contactid',

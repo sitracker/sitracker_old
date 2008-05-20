@@ -240,7 +240,7 @@ if ($noticeaction == 'dismiss_notice')
 {
     if (is_numeric($noticeid))
     {
-        $sql = "DELETE FROM `{$GLOBALS['dbNotices']}` WHERE id={$noticeid} AND userid={$sit[2]}";
+        $sql = "DELETE FROM `{$GLOBALS['dbNotices']}` WHERE id='{$noticeid}'' AND userid='{$sit[2]}'";
         mysql_query($sql);
         if (mysql_error()) trigger_error(mysql_error(),E_USER_WARNING);
     }
@@ -260,7 +260,7 @@ if ($sit[0] != '')
     }
 
 
-    //display global notices
+    //display (trigger) notices
     $noticesql = "SELECT * FROM `${GLOBALS['dbNotices']}` ";
     // Don't show more than 20 notices, saftey cap
     $noticesql .= "WHERE userid={$sit[2]} ORDER BY timestamp DESC LIMIT 20";
@@ -282,7 +282,11 @@ if ($sit[0] != '')
         {
             $notice->text = bbcode($notice->text);
             //check for the notice types
-            if ($notice->type == WARNING_NOTICE_TYPE)
+            if ($notice->type == TRIGGER_NOTICE_TYPE)
+            {
+                $class = 'trigger';
+            }
+            elseif ($notice->type == WARNING_NOTICE_TYPE)
             {
                 $class = 'warning';
             }
@@ -301,8 +305,21 @@ if ($sit[0] != '')
                 $class = 'info';
             }
 
-            echo "<div class='{$class}'><p class='info'>";
-            echo "<span>(<a href='{$_SERVER[PHP_SELF]}?noticeaction=dismiss_notice&amp;noticeid={$notice->id}{$url}'>{$strDismiss}</a>)</span>";
+            echo "<div class='{$class}'><p class='{$class}'>";
+            if ($notice->type == TRIGGER_NOTICE_TYPE)
+            {
+                echo "<span><a href='{$CONFIG['application_webpath']}triggers.php'>";
+                echo "{$strSettings}</a> | <a href='{$_SERVER[PHP_SELF]}?noticeaction";
+                echo "=dismiss_notice&amp;noticeid={$notice->id}{$url}'>";
+                echo "{$strDismiss}</a></span>";
+            }
+            else
+            {
+                echo "<span><a href='{$_SERVER[PHP_SELF]}?noticeaction";
+                echo "=dismiss_notice&amp;noticeid={$notice->id}{$url}'>";
+                echo "{$strDismiss}</a></span>";
+            }
+            
             if (substr($notice->text, 0, 4) == '$str')
             {
                 $v = substr($notice->text, 1);
@@ -328,9 +345,9 @@ if ($sit[0] != '')
                 echo "</a>";
             }
 
-        echo "<sub>";
-        echo "<em> ".format_date_friendly(strtotime($notice->timestamp))."</em>";
-        echo "</sub></p></div>";
+        echo "<small>";
+        echo "<em> (".format_date_friendly(strtotime($notice->timestamp)).")</em>";
+        echo "</small></p></div>";
         }
 
         if (mysql_num_rows($noticeresult) > 1)
