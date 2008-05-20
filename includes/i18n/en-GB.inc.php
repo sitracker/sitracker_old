@@ -1007,6 +1007,7 @@ $strSessionExpired = 'Your session has expired or you have not yet logged in';
 $strSetPassword = 'Set Password';
 $strSetPermissions = 'Set Permissions';
 $strSetPublicHolidays = 'Set Public Holidays';
+$strSettings = 'Settings';
 $strSetYourStatus = 'Set your Status';
 $strShowActiveOnly = 'Show Active Only';
 $strShowAll = 'Show All';

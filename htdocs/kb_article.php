@@ -113,7 +113,7 @@ if (isset($_POST['submit']))
             if (mysql_error()) trigger_error("MySQL Query Error ".mysql_error(), E_USER_ERROR);
         }
     }
-
+    trigger("TRIGGER_KB_CREATED", array('kbid' => $kbid, 'userid' => $sit[2]));
     html_redirect("kb_view_article.php?id={$kbid}");
     exit;
 }

@@ -48,7 +48,7 @@ option.seperator { border-top: 1px solid black; }
 /* Information and Errors */
 sup.red { color: #F00; font-size: 125%; } /* FIXME doesn't need a class for this */
 td sup { color: #444; }
-p.tip,p.info, p.warning, p.error, h5.warning, h5.error
+p.tip,p.info, p.warning, p.error, p.trigger, h5.warning, h5.error
 {
   background-position: 3px 2px;
   background-repeat: no-repeat;
@@ -76,7 +76,7 @@ p.info
   border: 1px solid #17446B;
   background-color: #F4F6FF;
 }
-p.info span, p.error span, p.warning span { float: right; margin-right: 10px; }
+p.info span, p.error span, p.warning span, p.trigger span { float: right; margin-right: 10px; }
 p.warning, h5.warning
 {
   background-image: url('../images/icons/sit/16x16/warning.png');
@@ -99,7 +99,15 @@ strong.info,em.info,u.info,span.info
 {
    background: #E1FFFF; border: 1px solid #BFD8D8; padding: 2px; cursor: help;
 }
-
+p.trigger
+{
+  background-image: url('../images/icons/oxygen/16x16/trigger.png');
+  background-position: left;
+  background-repeat: no-repeat;
+  color: black;
+  border: 1px solid black;;
+  background-color: #FFFFEB;
+}
 
 #menu
 {

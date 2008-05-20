@@ -92,6 +92,7 @@ define('HOL_PUBLIC', 10);  // Public Holiday (eg. Bank Holiday)
 define('NORMAL_NOTICE_TYPE', 0);
 define('WARNING_NOTICE_TYPE', 1);
 define('CRITICAL_NOTICE_TYPE', 2);
+define('TRIGGER_NOTICE_TYPE', 3);
 
 // Incident statuses
 define("STATUS_ACTIVE",1);
