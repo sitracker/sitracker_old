@@ -383,11 +383,11 @@ while ($incidents = mysql_fetch_array($result))
             echo "<td align='center' class='review'>";
             if ($reviewremain > -86400)
             {
-                echo "".icon('review')." {$strReviewDueNow}";
+                echo "".icon('review', 16)." {$strReviewDueNow}";
             }
             else
             {
-                echo "".icon('review')." ".sprintf($strReviewDueAgo ,format_workday_minutes($reviewremain*-1));
+                echo "".icon('review', 16)." ".sprintf($strReviewDueAgo ,format_workday_minutes($reviewremain*-1));
             }
         }
         else
