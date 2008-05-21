@@ -140,7 +140,7 @@ CREATE TABLE `{$dbEmailSig}` (
 INSERT INTO `{$dbEmailSig}` (`id`, `signature`) VALUES (1, '--\r\n... Powered by Open Source Software: Support Incident Tracker (SiT!) is available free from http://sitracker.sourceforge.net/');
 
 
-CREATE TABLE IF NOT EXISTS {$dbEmailTemplates} (
+CREATE TABLE IF NOT EXISTS `{$dbEmailTemplates}` (
   `id` int(11) NOT NULL auto_increment,
   `name` varchar(50) NOT NULL,
   `type` enum('usertemplate','system','contact','site','incident','kb','user') NOT NULL default 'user' COMMENT 'usertemplate is personal template owned by a user, user is a template relating to a user',
