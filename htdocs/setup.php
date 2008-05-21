@@ -266,14 +266,7 @@ function setup_exec_sql($sqlquerylist)
                         $html .= "<p><strong>FAILED:</strong> <code>".htmlspecialchars($sql)."</code> <span style='color: red;'>({$schemaversion})</span></p>";
                         $html .= "<p class='error'>".mysql_error()."<br />A MySQL error occurred, this could be because the MySQL user '{$CONFIG['db_username']}' does not have appropriate permission to modify the database schema.<br />";
                         //echo "The SQL command was:<br /><code>$sql</code><br />";
-                        if (strpos($errstr, 'does not have appropriate permission')!==FALSE)
-                        {
-                            $html .= "<strong>Check your MySQL permissions allow the schema to be modified</strong>.<br />";
-                        }
-                        else
-                        {
-                            $html .= "An error might also be caused by an attempt to upgrade a version that is not supported by this script.<br />";
-                        }
+                        $html .= "An error might also be caused by an attempt to upgrade a version that is not supported by this script.<br />";
                         $html .= "Alternatively, you may have found a bug, if you think this is the case please report it.</p>";
                     }
                     else
