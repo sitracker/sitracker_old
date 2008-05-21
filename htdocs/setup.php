@@ -262,7 +262,7 @@ function setup_exec_sql($sqlquerylist)
                 array_pop($sqlqueries);
                 foreach($sqlqueries AS $sql)
                 {
-                    $html .= "<p style='border: 1px solid red;'>&bull; <code>".nl2br($sql)."</code></p>\n"; // FIXME
+                    //$html .= "<p style='border: 1px solid red;'>&bull; <code>".nl2br($sql)."</code></p>\n"; // FIXME
                     mysql_query($sql);
                     if (mysql_error())
                     {
