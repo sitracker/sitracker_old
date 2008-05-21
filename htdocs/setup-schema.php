@@ -1745,12 +1745,6 @@ ALTER TABLE `{$dbUsers}` ADD `var_utc_offset` INT NOT NULL DEFAULT '0' COMMENT '
 INSERT INTO `{$dbUserStatus}` (`id` ,`name`) VALUES ('0', 'Account Disabled');
 ";
 
-// This update is a pre-requisite for 3.35, there is no SiT release 3.34
-$upgrade_schema[334] = "
--- INL 19/05/08 Last update using the < 335 schema upgrade system, next we'll use the new system and store the version in this col
-ALTER TABLE `{$dbSystem}` ADD `schema` BIGINT UNSIGNED NOT NULL COMMENT 'DateTime in YYYYMMDDHHMM format';
-";
-
 $upgrade_schema[335]['t200805191400'] = "
 -- KMH 17/12/07
 CREATE TABLE IF NOT EXISTS `{$dbTriggers}` (

@@ -613,11 +613,14 @@ switch ($_REQUEST['action'])
                             $sql = "SELECT `schema` FROM `{$dbSystem}` WHERE id = 0";
                             $result = mysql_query($sql);
                             if (mysql_error()) trigger_error(mysql_error(),E_USER_WARNING);
-                            list($installed_version, $installed_schema) = mysql_fetch_row($result);
+                            list($installed_schema) = mysql_fetch_row($result);
                         }
                         else
                         {
                             $installed_schema = 334;
+                            $sql = "ALTER TABLE `{$dbSystem}` ADD `schema` BIGINT UNSIGNED NOT NULL COMMENT 'DateTime in YYYYMMDDHHMM format'";
+                            $result = mysql_query($sql);
+                            if (mysql_error()) trigger_error(mysql_error(),E_USER_WARNING);
                         }
                     }
 
