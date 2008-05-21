@@ -17,7 +17,17 @@
 
 // TODO we need to clean this schema up to make it confirmed compatible with mysql4
 
-$schema = "CREATE TABLE `{$dbBillingPeriods}` (
+$schema = "CREATE TABLE IF NOT EXISTS `{$dbSystem}` (
+  `id` int(1) NOT NULL default '0',
+  `version` float(3,2) NOT NULL default '0.00',
+  `schema` bigint(20) unsigned NOT NULL COMMENT 'DateTime in YYYYMMDDHHMM format',
+  PRIMARY KEY  (`id`)
+) TYPE=MyISAM;
+
+-- NOTE system must be the first table created.
+
+
+CREATE TABLE `{$dbBillingPeriods}` (
 `servicelevelid` INT( 5 ) NOT NULL ,
 `engineerperiod` INT NOT NULL COMMENT 'In minutes',
 `customerperiod` INT NOT NULL COMMENT 'In minutes',
@@ -130,7 +140,7 @@ CREATE TABLE `{$dbEmailSig}` (
 INSERT INTO `{$dbEmailSig}` (`id`, `signature`) VALUES (1, '--\r\n... Powered by Open Source Software: Support Incident Tracker (SiT!) is available free from http://sitracker.sourceforge.net/');
 
 
-CREATE TABLE IF NOT EXISTS `emailtemplates` (
+CREATE TABLE IF NOT EXISTS {$dbEmailTemplates} (
   `id` int(11) NOT NULL auto_increment,
   `name` varchar(50) NOT NULL,
   `type` enum('usertemplate','system','contact','site','incident','kb','user') NOT NULL default 'user' COMMENT 'usertemplate is personal template owned by a user, user is a template relating to a user',
@@ -1117,13 +1127,6 @@ CREATE TABLE `{$dbSupportContacts}` (
 ) ENGINE=MyISAM;
 
 INSERT INTO `{$dbSupportContacts}` VALUES (1,1,1);
-
-
-CREATE TABLE `{$dbSystem}` (
-  `id` int(1) NOT NULL default '0',
-  `version` float(3,2) NOT NULL default '0.00',
-  PRIMARY KEY  (`id`)
-) ENGINE=MyISAM;
 
 
 CREATE TABLE `{$dbTags}` (
