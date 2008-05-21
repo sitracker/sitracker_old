@@ -130,10 +130,10 @@ CREATE TABLE `{$dbEmailSig}` (
 INSERT INTO `{$dbEmailSig}` (`id`, `signature`) VALUES (1, '--\r\n... Powered by Open Source Software: Support Incident Tracker (SiT!) is available free from http://sitracker.sourceforge.net/');
 
 
-CREATE TABLE `{$dbEmailTemplates}` (
+CREATE TABLE IF NOT EXISTS `emailtemplates` (
   `id` int(11) NOT NULL auto_increment,
   `name` varchar(50) NOT NULL,
-  `type` enum( 'usertemplate', 'system', 'contact', 'site', 'incident', 'kb', 'user') NOT NULL COMMENT 'usertemplate is personal template owned by a user, user is a template relating to a user' DEFAULT 'user',
+  `type` enum('usertemplate','system','contact','site','incident','kb','user') NOT NULL default 'user' COMMENT 'usertemplate is personal template owned by a user, user is a template relating to a user',
   `description` text NOT NULL,
   `tofield` varchar(100) default NULL,
   `fromfield` varchar(100) default NULL,
@@ -144,33 +144,26 @@ CREATE TABLE `{$dbEmailTemplates}` (
   `body` text,
   `customervisibility` enum('show','hide') NOT NULL default 'show',
   `storeinlog` enum('No','Yes') NOT NULL default 'Yes',
+  `created` datetime default NULL,
+  `createdby` int(11) default NULL,
+  `modified` datetime default NULL,
+  `modifiedby` int(11) default NULL,
   PRIMARY KEY  (`id`)
 ) ENGINE=MyISAM;
 
--- FIXME remove ID columns
-INSERT INTO `{$dbEmailTemplates}`(`name`, `type`, `description`, `tofield`, `fromfield`, `replytofield`, `ccfield`, `bccfield`, `subjectfield`, `body`, `customervisibility`, `storeinlog`)
-VALUES ('Support Email','user','','<contactemail>','<supportemail>','<supportemail>','','<useremail>','[<incidentid>] - <incidenttitle>','<contactfirstname>,\r\n\r\n<signature>\r\n<globalsignature>', 'show', 'yes');
-INSERT INTO `{$dbEmailTemplates}`(`name`, `type`, `description`, `tofield`, `fromfield`, `replytofield`, `ccfield`, `bccfield`, `subjectfield`, `body`, `customervisibility`, `storeinlog`)
-VALUES ('User Email','user','','<contactemail>','<useremail>','<useremail>','','','','<signature>\r\n<globalsignature>\r\n', 'show', 'yes');
-INSERT INTO `{$dbEmailTemplates}`(`name`, `type`, `description`, `tofield`, `fromfield`, `replytofield`, `ccfield`, `bccfield`, `subjectfield`, `body`, `customervisibility`, `storeinlog`)
-VALUES ('INCIDENT_CLOSURE','system','Notify contact that the incident has been marked for closure and will be closed shortly','<contactemail>','<supportemail>','<supportemail>','','<useremail>','[<incidentid>] - <incidenttitle>','<contactfirstname>,\r\n\r\nIncident <incidentid> has been marked for closure. If you still have outstanding issues relating to this incident then please reply with details, otherwise it will be closed after the next seven days.\r\n\r\n<signature>\r\n<globalsignature>', 'show', 'yes');
-INSERT INTO `{$dbEmailTemplates}`(`name`, `type`, `description`, `tofield`, `fromfield`, `replytofield`, `ccfield`, `bccfield`, `subjectfield`, `body`, `customervisibility`, `storeinlog`)
-VALUES ('INCIDENT_LOGGED_CALL','system','Acknowledge the contacts telephone call and notify them of the new incident number','<contactemail>','<supportemail>','<supportemail>','','<useremail>','[<incidentid>] - <incidenttitle>','Thank you for your call. The incident <incidentid> has been generated and your details stored in our tracking system. \r\n\r\nYou will be receiving a response from one of our product specialists as soon as possible. When referring to this incident please remember to quote incident <incidentid> in \r\nall communications. \r\n\r\nFor all email communications please title your email as [<incidentid>] - <incidenttitle>\r\n\r\n<globalsignature>\r\n', 'show', 'no');
-INSERT INTO `{$dbEmailTemplates}`(`name`, `type`, `description`, `tofield`, `fromfield`, `replytofield`, `ccfield`, `bccfield`, `subjectfield`, `body`, `customervisibility`, `storeinlog`)
-VALUES ('INCIDENT_CLOSED','system','Notify contact that an incident has now been closed','<contactemail>','<supportemail>','<supportemail>','','','[<incidentid>] - <incidenttitle> - Closed','This is an automated message to let you know that Incident <incidentid> has now been closed. \r\n\r\n<globalsignature>', 'show', 'yes');
-INSERT INTO `{$dbEmailTemplates}`(`name`, `type`, `description`, `tofield`, `fromfield`, `replytofield`, `ccfield`, `bccfield`, `subjectfield`, `body`, `customervisibility`, `storeinlog`)
-VALUES ('OUT_OF_SLA', 'system', '', '<supportmanager>', '<supportemail>', '<supportemail>', '<useremail>', '', '<applicationshortname> SLA: Incident <incidentid> now outside SLA', 'This is an automatic notification that this incident has gone outside its SLA.  The SLA target <info1> expired <info2> minutes ago.\n\nIncident: [<incidentid>] - <incidenttitle>\nOwner: <incidentowner>\nPriority: <incidentpriority>\nExternal Id: <incidentexternalid>\nExternal Engineer: <incidentexternalengineer>\nSite: <contactsite>\nContact: <contactname>\n\n--\n<applicationshortname> v<applicationversion>\n<todaysdate>\n', 'hide', 'yes');
-INSERT INTO `{$dbEmailTemplates}`(`name`, `type`, `description`, `tofield`, `fromfield`, `replytofield`, `ccfield`, `bccfield`, `subjectfield`, `body`, `customervisibility`, `storeinlog`)
-VALUES ('OUT_OF_REVIEW', 'system', '', '<supportmanager>', '<useremail>', '<supportemail>', '<supportemail>', '', '<applicationshortname> Review: Incident <incidentid> due for review soon', 'This is an automatic notification that this incident [<incidentid>] will soon be due for review.\n\nIncident: [<incidentid>] - <incidenttitle>\nEngineer: <incidentowner>\nPriority: <incidentpriority>\nExternal Id: <incidentexternalid>\nExternal Engineer: <incidentexternalengineer>\nSite: <contactsite>\nContact: <contactname>\n\n--\n<applicationshortname> v<applicationversion>\n<todaysdate>', 'hide', 'yes');
-INSERT INTO `{$dbEmailTemplates}`(`name`, `type`, `description`, `tofield`, `fromfield`, `replytofield`, `ccfield`, `bccfield`, `subjectfield`, `body`, `customervisibility`, `storeinlog`)
-VALUES ('INCIDENT_UPDATED','system','Acknoweldge contacts email and update to incident','<contactemail>','<supportemail>','<supportemail>','','','[<incidentid>] - <incidenttitle>','Thank you for your email. The incident <incidentid> has been updated and your details stored in our support database. \r\n\r\nYou will be receiving a response from one of our product specialists as soon as possible.\r\n\r\n<globalsignature>', 'show', 'no');
-INSERT INTO `{$dbEmailTemplates}`(`name`, `type`, `description`, `tofield`, `fromfield`, `replytofield`, `ccfield`, `bccfield`, `subjectfield`, `body`, `customervisibility`, `storeinlog`)
-VALUES ('INCIDENT_CLOSED_EXTERNAL','system','Notify external engineer that an incident has been closed','<incidentexternalemail>','<supportemail>','<supportemail>','','','Incident ref #<incidentexternalid>  - <incidenttitle> CLOSED - [<incidentid>]','<incidentexternalengineerfirstname>,\r\n\r\nThis is an automated email to let you know that Incident <incidentexternalid> has been closed within our tracking system.\r\n\r\nMany thanks for your help.\r\n\r\n<signature>\r\n<globalsignature>', 'hide', 'no');
-INSERT INTO `{$dbEmailTemplates}`(`name`, `type`, `description`, `tofield`, `fromfield`, `replytofield`, `ccfield`, `bccfield`, `subjectfield`, `body`, `customervisibility`, `storeinlog`)
-VALUES ('INCIDENT_LOGGED_EMAIL','system','Acknowledge the contacts email and notify them of the new incident number','<contactemail>','<supportemail>','<supportemail>','','<useremail>','[<incidentid>] - <incidenttitle>','Thank you for your email. The incident <incidentid> has been generated and your details stored in our tracking system. \r\n\r\nYou will be receiving a response from one of our product specialists as soon as possible. When referring to this incident please remember to quote incident <incidentid> in \r\nall communications.\r\n\r\nFor all email communications please title your email as [<incidentid>] - <incidenttitle>\r\n\r\n<globalsignature>', 'show', 'no');
-INSERT INTO `{$dbEmailTemplates}` (`name`, `type`, `description`, `tofield`, `fromfield`, `replytofield`, `ccfield`, `bccfield`, `subjectfield`, `body`, `customervisibility`, `storeinlog`) VALUES ('INCIDENT_REASSIGNED_USER_NOTIFY', 'system', 'Notify user when call assigned to them', '<incidentreassignemailaddress>', '<supportemail>', '<supportemail>', '', '', 'A <incidentpriority> priority call ([<incidentid>] - <incidenttitle>) has been reassigned to you', 'Hi,\r\n\r\nIncident [<incidentid>] entitled <incidenttitle> has been reassigned to you.\r\n\r\nThe details of this incident are:\r\n\r\nPriority: <incidentpriority>\r\nContact: <contactname>\r\nSite: <contactsite>\r\n\r\n\r\nRegards\r\n<applicationname>\r\n\r\n\r\n---\r\n<todaysdate> - <applicationshortname> <applicationversion>', 'hide', 'No');
-INSERT INTO `{$dbEmailTemplates}` (`name`, `type`, `description`, `tofield`, `fromfield`, `replytofield`, `ccfield`, `bccfield`, `subjectfield`, `body`, `customervisibility`, `storeinlog`) VALUES ('NEARING_SLA', 'system', 'Notification when an incident nears its SLA target', '<supportmanageremail>', '<supportemail>', '<supportemail>', '<useremail>', '', '<applicationshortname> SLA: Incident <incidentid> about to breach SLA', 'This is an automatic notification that this incident is about to breach its SLA.  The SLA target <info1> will expire in <info2> minutes.\r\n\r\nIncident: [<incidentid>] - <incidenttitle>\r\nOwner: <incidentowner>\r\nPriority: <incidentpriority>\r\nExternal Id: <incidentexternalid>\r\nExternal Engineer: <incidentexternalengineer>\r\nSite: <contactsite>\r\nContact: <contactname>\r\n\r\n--\r\n<applicationshortname> v<applicationversion>\r\n<todaysdate>\r\n', 'hide', 'Yes');
-
+INSERT INTO `$dbEmailTemplates` (`id`, `name`, `type`, `description`, `tofield`, `fromfield`, `replytofield`, `ccfield`, `bccfield`, `subjectfield`, `body`, `customervisibility`, `storeinlog`, `created`, `createdby`, `modified`, `modifiedby`) VALUES(1, 'Support Email', 'incident', 'Used by default when you send an email from an incident.', '{contactemail}', '{supportemail}', '{supportemail}', '', '{useremail}', '[{incidentid}] - {incidenttitle}', 'Hi {contactfirstname},\r\n\r\n{signature}\r\n{globalsignature}', 'show', 'Yes', NULL, NULL, NULL, NULL);
+INSERT INTO `$dbEmailTemplates` (`id`, `name`, `type`, `description`, `tofield`, `fromfield`, `replytofield`, `ccfield`, `bccfield`, `subjectfield`, `body`, `customervisibility`, `storeinlog`, `created`, `createdby`, `modified`, `modifiedby`) VALUES(2, 'INCIDENT_CLOSURE', 'system', 'Notify contact that the incident has been marked for closure and will be closed shortly', '{contactemail}', '{supportemail}', '{supportemail}', '', '{useremail}', 'Closure Notification: [{incidentid}] - {incidenttitle}', '{contactfirstname},\r\n\r\nIncident {incidentid} has been marked for closure. If you still have outstanding issues relating to this incident then please reply with details, otherwise it will be closed in the next seven days.\r\n\r\n{signature}\r\n{globalsignature}', 'show', 'Yes', NULL, NULL, NULL, NULL);
+INSERT INTO `$dbEmailTemplates` (`id`, `name`, `type`, `description`, `tofield`, `fromfield`, `replytofield`, `ccfield`, `bccfield`, `subjectfield`, `body`, `customervisibility`, `storeinlog`, `created`, `createdby`, `modified`, `modifiedby`) VALUES(3, 'INCIDENT_LOGGED_CONTACT', 'incident', 'Acknowledge the contact\'s contact and notify them of the new incident number', '{contactemail}', '{supportemail}', '{supportemail}', '', '{useremail}', '[{incidentid}] - {incidenttitle}', 'Thank you for your contact. The incident {incidentid} has been generated and your details stored in our tracking system. \r\n\r\nYou will be receiving a response from one of our product specialists as soon as possible. When referring to this incident please remember to quote incident {incidentid} in \r\nall communications. \r\n\r\nFor all email communications please title your email as [{incidentid}] - {incidenttitle}\r\n\r\n{globalsignature}\r\n', 'hide', 'No', NULL, NULL, NULL, NULL);
+INSERT INTO `$dbEmailTemplates` (`id`, `name`, `type`, `description`, `tofield`, `fromfield`, `replytofield`, `ccfield`, `bccfield`, `subjectfield`, `body`, `customervisibility`, `storeinlog`, `created`, `createdby`, `modified`, `modifiedby`) VALUES(4, 'INCIDENT_CLOSED', 'system', 'Notify contact that an incident has now been closed', '{contactemail}', '{supportemail}', '{supportemail}', '', '', 'Incident Closed: [{incidentid}] - {incidenttitle} - Closed', 'This is an automated message to let you know that Incident {incidentid} has now been closed. \r\n\r\n{globalsignature}', 'show', 'Yes', NULL, NULL, NULL, NULL);
+INSERT INTO `$dbEmailTemplates` (`id`, `name`, `type`, `description`, `tofield`, `fromfield`, `replytofield`, `ccfield`, `bccfield`, `subjectfield`, `body`, `customervisibility`, `storeinlog`, `created`, `createdby`, `modified`, `modifiedby`) VALUES(5, 'OUT_OF_SLA', 'system', '', '{supportmanager}', '{supportemail}', '{supportemail}', '{useremail}', '', '{applicationshortname} SLA: Incident {incidentid} now outside SLA', 'This is an automatic notification that this incident has gone outside its SLA.  The SLA target {info1} expired {info2} minutes ago.\n\nIncident: [{incidentid}] - {incidenttitle}\nOwner: {incidentowner}\nPriority: {incidentpriority}\nExternal Id: {incidentexternalid}\nExternal Engineer: {incidentexternalengineer}\nSite: {contactsite}\nContact: {contactname}\n\n--\n{applicationshortname} v{applicationversion}\n{todaysdate}\n', 'hide', 'Yes', NULL, NULL, NULL, NULL);
+INSERT INTO `$dbEmailTemplates` (`id`, `name`, `type`, `description`, `tofield`, `fromfield`, `replytofield`, `ccfield`, `bccfield`, `subjectfield`, `body`, `customervisibility`, `storeinlog`, `created`, `createdby`, `modified`, `modifiedby`) VALUES(6, 'OUT_OF_REVIEW', 'system', '', '{supportmanager}', '{useremail}', '{supportemail}', '{supportemail}', '', '{applicationshortname} Review: Incident {incidentid} due for review soon', 'This is an automatic notification that this incident [{incidentid}] will soon be due for review.\n\nIncident: [{incidentid}] - {incidenttitle}\nEngineer: {incidentowner}\nPriority: {incidentpriority}\nExternal Id: {incidentexternalid}\nExternal Engineer: {incidentexternalengineer}\nSite: {contactsite}\nContact: {contactname}\n\n--\n{applicationshortname} v{applicationversion}\n{todaysdate}', 'hide', 'Yes', NULL, NULL, NULL, NULL);
+INSERT INTO `$dbEmailTemplates` (`id`, `name`, `type`, `description`, `tofield`, `fromfield`, `replytofield`, `ccfield`, `bccfield`, `subjectfield`, `body`, `customervisibility`, `storeinlog`, `created`, `createdby`, `modified`, `modifiedby`) VALUES(7, 'INCIDENT_CLOSED_EXTERNAL', 'system', 'Notify external engineer that an incident has been closed', '{incidentexternalemail}', '{supportemail}', '{supportemail}', '', '', 'Incident ref #{incidentexternalid}  - {incidenttitle} CLOSED - [{incidentid}]', '{incidentexternalengineerfirstname},\r\n\r\nThis is an automated email to let you know that Incident {incidentexternalid} has been closed within our tracking system.\r\n\r\nMany thanks for your help.\r\n\r\n{signature}\r\n{globalsignature}', 'hide', 'No', NULL, NULL, NULL, NULL);
+INSERT INTO `$dbEmailTemplates` (`id`, `name`, `type`, `description`, `tofield`, `fromfield`, `replytofield`, `ccfield`, `bccfield`, `subjectfield`, `body`, `customervisibility`, `storeinlog`, `created`, `createdby`, `modified`, `modifiedby`) VALUES(8, 'INCIDENT_LOGGED_USER', 'incident', 'Notify a user that an incident has been logged', '{useremail}', '{supportemail}', '{supportemail}', '', '', '[{incidentid}] - {incidenttitle}', 'Hi,\r\n\r\nIncident [{incidentid}] {incidenttitle} has been logged.\r\n\r\nThe details of this incident are:\r\n\r\nPriority: {incidentpriority}\r\nContact: {contactname}\r\nSite: {contactsite}\r\n\r\n\r\nRegards\r\n{applicationname}\r\n\r\n\r\n---\r\n{todaysdate} - {applicationshortname} {applicationversion}', 'hide', 'No', NULL, NULL, NULL, NULL);
+INSERT INTO `$dbEmailTemplates` (`id`, `name`, `type`, `description`, `tofield`, `fromfield`, `replytofield`, `ccfield`, `bccfield`, `subjectfield`, `body`, `customervisibility`, `storeinlog`, `created`, `createdby`, `modified`, `modifiedby`) VALUES(9, 'INCIDENT_REASSIGNED_USER_NOTIFY', 'system', 'Notify user when call assigned to them', '{incidentreassignemailaddress}', '{supportemail}', '{supportemail}', '', '', 'A {incidentpriority} priority call ([{incidentid}] - {incidenttitle}) has been reassigned to you', 'Hi,\r\n\r\nIncident [{incidentid}] entitled {incidenttitle} has been reassigned to you.\r\n\r\nThe details of this incident are:\r\n\r\nPriority: {incidentpriority}\r\nContact: {contactname}\r\nSite: {contactsite}\r\n\r\n\r\nRegards\r\n{applicationname}\r\n\r\n\r\n---\r\n{todaysdate} - {applicationshortname} {applicationversion}', 'hide', 'No', NULL, NULL, NULL, NULL);
+INSERT INTO `$dbEmailTemplates` (`id`, `name`, `type`, `description`, `tofield`, `fromfield`, `replytofield`, `ccfield`, `bccfield`, `subjectfield`, `body`, `customervisibility`, `storeinlog`, `created`, `createdby`, `modified`, `modifiedby`) VALUES(10, 'NEARING_SLA', 'system', 'Notification when an incident nears its SLA target', '{supportmanageremail}', '{supportemail}', '{supportemail}', '{useremail}', '', '{applicationshortname} SLA: Incident {incidentid} about to breach SLA', 'This is an automatic notification that this incident is about to breach its SLA.  The SLA target {info1} will expire in {info2} minutes.\r\n\r\nIncident: [{incidentid}] - {incidenttitle}\r\nOwner: {incidentowner}\r\nPriority: {incidentpriority}\r\nExternal Id: {incidentexternalid}\r\nExternal Engineer: {incidentexternalengineer}\r\nSite: {contactsite}\r\nContact: {contactname}\r\n\r\n--\r\n{applicationshortname} v{applicationversion}\r\n{todaysdate}\r\n', 'hide', 'Yes', NULL, NULL, NULL, NULL);
+INSERT INTO `$dbEmailTemplates` (`id`, `name`, `type`, `description`, `tofield`, `fromfield`, `replytofield`, `ccfield`, `bccfield`, `subjectfield`, `body`, `customervisibility`, `storeinlog`, `created`, `createdby`, `modified`, `modifiedby`) VALUES(11, 'CONTACT_RESET_PASSWORD', 'system', 'Sent to a contact to reset their password.', '{contactemail}', '{supportemail}', '{supportemail}', '', '', '{applicationshortname} - password reset', 'Hi {contactfirstname},\r\n\r\nThis is a email to reset your contact portal password for {applicationname}. If you did not request this, please ignore this email.\r\n\r\nTo complete your password reset please visit the following url:\r\n\r\n{passwordreseturl}\r\n\r\n\r\n{globalsignature}', 'hide', 'No', NULL, NULL, NULL, NULL);
+INSERT INTO `$dbEmailTemplates` (`id`, `name`, `type`, `description`, `tofield`, `fromfield`, `replytofield`, `ccfield`, `bccfield`, `subjectfield`, `body`, `customervisibility`, `storeinlog`, `created`, `createdby`, `modified`, `modifiedby`) VALUES(12, 'USER_RESET_PASSWORD', 'system', 'Sent when a user resets their email', '{useremail}', '{supportemail}', '{supportemail}', '', '', '{applicationshortname} - password reset', 'Hi,\r\n\r\nThis is a email to reset your user account password for {applicationname}. If you did not request this, please ignore this email.\r\n\r\nTo complete your password reset please visit the following url:\r\n\r\n{passwordreseturl}\r\n\r\n\r\n{globalsignature}', 'hide', 'No', NULL, NULL, NULL, NULL);
+INSERT INTO `$dbEmailTemplates` (`id`, `name`, `type`, `description`, `tofield`, `fromfield`, `replytofield`, `ccfield`, `bccfield`, `subjectfield`, `body`, `customervisibility`, `storeinlog`, `created`, `createdby`, `modified`, `modifiedby`) VALUES(13, 'NEW_CONTACT_DETAILS', 'system', 'Sent when a new contact is created', '{contactemail}', '{supportemail}', '', '', '', '{applicationshortname} - portal details', 'Hello {contactfirstname},\r\nYou have just been added as a contact on {applicationname} ({applicationurl}).\r\n\r\nThese details allow you to the login to the portal, where you can create, update and close your incidents, as well as view your sites'' incidents.\r\n\r\nYour details are as follows:\r\n\r\nusername: {contactusername}\r\npassword: {prepassword}\r\nPlease note, this password cannot be recovered, only reset. You may change it in the portal.\r\n\r\n{globalsignature}', 'hide', 'No', NULL, NULL, NULL, NULL);
 
 CREATE TABLE `{$dbEscalationPaths}` (
   `id` int(11) NOT NULL auto_increment,
@@ -607,33 +600,32 @@ CREATE TABLE `{$dbNotices}` (
   PRIMARY KEY  (`id`)
 ) ENGINE=MyISAM AUTO_INCREMENT=1 ;
 
+CREATE TABLE IF NOT EXISTS `$dbNoticeTemplates` (
+  `id` int(11) NOT NULL auto_increment,
+  `name` varchar(255) NOT NULL,
+  `type` tinyint(4) NOT NULL,
+  `description` varchar(255) NOT NULL,
+  `text` tinytext NOT NULL,
+  `linktext` varchar(50) default NULL,
+  `link` varchar(100) default NULL,
+  `durability` enum('sticky','session') NOT NULL default 'sticky',
+  PRIMARY KEY  (`id`)
+) ENGINE=MyISAM  ;
 
-CREATE TABLE `{$dbNoticeTemplates}` (
-`id` INT( 11 ) NOT NULL AUTO_INCREMENT PRIMARY KEY ,
-`name` VARCHAR( 255 ) NOT NULL ,
-`type` TINYINT( 4 ) NOT NULL ,
-`description` VARCHAR( 255 ) NOT NULL ,
-`text` TINYTEXT NOT NULL ,
-`linktext` VARCHAR( 50 ) NULL ,
-`link` VARCHAR( 100 ) NULL ,
-`durability` ENUM( 'sticky', 'session' ) NOT NULL DEFAULT 'sticky'
-) ENGINE = MYISAM ;
-
-
-INSERT INTO `{$dbNoticeTemplates}` (`name`, `type`, `description`, `text`, `linktext`, `link`, `durability`) VALUES('TRIGGER_INCIDENT_CREATED', 0, 'Used when a new incident has been created', 'Incident {incidentid} - {incidenttitle} has been logged', 'View Incident', 'javascript:incident_details_window({incidentid})', 'sticky');
-INSERT INTO `{$dbNoticeTemplates}` (`name`, `type`, `description`, `text`, `linktext`, `link`, `durability`) VALUES('TRIGGER_INCIDENT_ASSIGNED_TRIGGER', 0, 'Used when a new incident is assigned to you', 'Incident {incidentid} - {incidenttitle} has been assigned to you', 'View Incident', 'javascript:incident_details_window({incidentid})', 'sticky');
-INSERT INTO `{$dbNoticeTemplates}` (`name`, `type`, `description`, `text`, `linktext`, `link`, `durability`) VALUES('TRIGGER_INCIDENT_NEARING_SLA_TRIGGER', 0, 'Used when one of your incidents nears an SLA', 'Incident {incidentid} - {incidenttitle} is nearing its SLA', 'View Incident', 'javascript:incident_details_window({incidentid})', 'sticky');
-INSERT INTO `{$dbNoticeTemplates}` (`name`, `type`, `description`, `text`, `linktext`, `link`, `durability`) VALUES('TRIGGER_USERS_INCIDENT_NEARING_SLA_TRIGGER', 0, 'Used when a user\'s incident you are watching is assigned to you', '{incidentowner}\'s incident {incidentid} - {incidenttitle} is nearing its SLA', 'View Incident', 'javascript:incident_details_window({incidentid})', 'sticky');
-INSERT INTO `{$dbNoticeTemplates}` (`name`, `type`, `description`, `text`, `linktext`, `link`, `durability`) VALUES('TRIGGER_INCIDENT_EXCEEDED_SLA_TRIGGER', 0, 'Used when one of your incidents exceeds an SLA', 'Incident {incidentid} - {incidenttitle} has exceeded its SLA', 'View Incident', 'javascript:incident_details_window({incidentid})', 'sticky');
-INSERT INTO `{$dbNoticeTemplates}` (`name`, `type`, `description`, `text`, `linktext`, `link`, `durability`) VALUES('TRIGGER_INCIDENT_REVIEW_DUE', 0, 'Used when an incident is due a review', 'Incident {incidentid} - {incidenttitle} is due for review', 'View Incident', 'javascript:incident_details_window({incidentid})', 'sticky');
-INSERT INTO `{$dbNoticeTemplates}` (`name`, `type`, `description`, `text`, `linktext`, `link`, `durability`) VALUES('TRIGGER_KB_CREATED_TRIGGER', 0, 'Used when a new Knowledgebase article is created', 'KB Article {KBname} has been created', NULL, NULL, 'sticky');
-INSERT INTO `{$dbNoticeTemplates}` (`name`, `type`, `description`, `text`, `linktext`, `link`, `durability`) VALUES('TRIGGER_NEW_HELD_EMAIL', 0, 'Used when there is a new email in the holding queue', 'There is a new email in the holding queue', 'View Holding Queue', '{sitpath}/review_incoming_updates.php', 'sticky');
-INSERT INTO `{$dbNoticeTemplates}` (`name`, `type`, `description`, `text`, `linktext`, `link`, `durability`) VALUES('TRIGGER_MINS_HELD_EMAIL', 0, 'Used when there is a new email in the holding queue for x minutes', 'There has been an email in the holding queue for {holdingmins} minutes', 'View Holding Queue', '{sitpath}/review_incoming_updates.php', 'sticky');
-INSERT INTO `{$dbNoticeTemplates}` (`name`, `type`, `description`, `text`, `linktext`, `link`, `durability`) VALUES('TRIGGER_SIT_UPGRADED', 0, 'Used when the system is upgraded', 'SiT! has been upgraded to {sitversion}', 'What\'s New?', '{sitpath}/releasenotes.php', 'sticky');
-INSERT INTO `{$dbNoticeTemplates}` (`name`, `type`, `description`, `text`, `linktext`, `link`, `durability`) VALUES('TRIGGER_INCIDENT_OWNED_CLOSED_BY_USER', 0, 'Used when one of your incidents is closed by another engineer', 'Your incident {incidentid} - {incidenttitle} has been closed by {engineerclosedname}', NULL, NULL, 'sticky');
-INSERT INTO `{$dbNoticeTemplates}` (`name`, `type`, `description`, `text`, `linktext`, `link`, `durability`) VALUES('TRIGGER_USER_SET_TO_AWAY', 0, 'Used when a watched user goes away', '{realname} is now [b]not accepting[/b] incidents', NULL, 'userid=1', 'sticky');
-INSERT INTO `{$dbNoticeTemplates}` (`name`, `type`, `description`, `text`, `linktext`, `link`, `durability`) VALUES('TRIGGER_USER_RETURNS', 0, 'Used when a user sets back to accepting', '{realname} is now [b]accepting[/b] incidents', NULL, NULL, 'sticky');
-
+INSERT INTO `$dbNoticeTemplates` (`name`, `type`, `description`, `text`, `linktext`, `link`, `durability`) VALUES('NOTICE_INCIDENT_CREATED', 3, 'Used when a new incident has been created', 'Incident {incidentid} - {incidenttitle} has been logged', 'View Incident', 'javascript:incident_details_window({incidentid})', 'sticky');
+INSERT INTO `$dbNoticeTemplates` (`name`, `type`, `description`, `text`, `linktext`, `link`, `durability`) VALUES('NOTICE_INCIDENT_ASSIGNED', 3, 'Used when a new incident is assigned to you', 'Incident {incidentid} - {incidenttitle} has been assigned to {userrealname}', 'View Incident', 'javascript:incident_details_window({incidentid})', 'sticky');
+INSERT INTO `$dbNoticeTemplates` (`name`, `type`, `description`, `text`, `linktext`, `link`, `durability`) VALUES('NOTICE_INCIDENT_NEARING_SLA', 3, 'Used when one of your incidents nears an SLA', 'Incident {incidentid} - {incidenttitle}: {nextsla} due in {nextslatime}', 'View Incident', 'javascript:incident_details_window({incidentid})', 'sticky');
+INSERT INTO `$dbNoticeTemplates` (`name`, `type`, `description`, `text`, `linktext`, `link`, `durability`) VALUES('NOTICE_LANGUAGE_DIFFERS', 3, 'Occurs when a user logs in with a different language to their profile language', 'Your current langauge ({currentlang}) is different from your profile language ({profilelang})', 'Keep current language', '{applicationurl}edit_profile.php?mode=savesessionlang', 'sticky');
+INSERT INTO `$dbNoticeTemplates` (`name`, `type`, `description`, `text`, `linktext`, `link`, `durability`) VALUES('NOTICE_NEW_CONTACT', 3, 'Occurs when a new contact is added', '{contactname} has been added as a contact to {contactsite} by {userrealname}', 'View Contact', '{applicationurl}contact_details.php?id={contactid}', 'sticky');
+INSERT INTO `$dbNoticeTemplates` (`name`, `type`, `description`, `text`, `linktext`, `link`, `durability`) VALUES('NOTICE_INCIDENT_REVIEW_DUE', 3, 'Used when an incident is due a review', 'Incident {incidentid} - {incidenttitle} is due for review', 'View Incident', 'javascript:incident_details_window({incidentid})', 'sticky');
+INSERT INTO `$dbNoticeTemplates` (`name`, `type`, `description`, `text`, `linktext`, `link`, `durability`) VALUES('NOTICE_KB_CREATED', 3, 'Used when a new Knowledgebase article is created', 'KB Article {kbname} has been created by {userrealname}', 'View Article', '{sitpath}kbarticle?id={kbid}', 'sticky');
+INSERT INTO `$dbNoticeTemplates` (`name`, `type`, `description`, `text`, `linktext`, `link`, `durability`) VALUES('NOTICE_NEW_HELD_EMAIL', 3, 'Used when there is a new email in the holding queue', 'There is a new email in the holding queue', 'View Holding Queue', '{sitpath}review_incoming_updates.php', 'sticky');
+INSERT INTO `$dbNoticeTemplates` (`name`, `type`, `description`, `text`, `linktext`, `link`, `durability`) VALUES('NOTICE_MINS_HELD_EMAIL', 3, 'Used when there is a new email in the holding queue for x minutes', 'There has been an email in the holding queue for {holdingmins} minutes', 'View Holding Queue', '{sitpath}/review_incoming_updates.php', 'sticky');
+INSERT INTO `$dbNoticeTemplates` (`name`, `type`, `description`, `text`, `linktext`, `link`, `durability`) VALUES('NOTICE_SIT_UPGRADED', 3, 'Used when the system is upgraded', '{applicationshortname} has been upgraded to {applicationversion}', 'What\\''s New?', '{sitpath}releasenotes.php?v={applicationversion}', 'sticky');
+INSERT INTO `$dbNoticeTemplates` (`name`, `type`, `description`, `text`, `linktext`, `link`, `durability`) VALUES('NOTICE_USER_SET_TO_AWAY', 3, 'Used when a watched user goes away', '{userrealname} is now [b]not accepting[/b] incidents', NULL, '', 'sticky');
+INSERT INTO `$dbNoticeTemplates` (`name`, `type`, `description`, `text`, `linktext`, `link`, `durability`) VALUES('NOTICE_USER_RETURNS', 3, 'Used when a user sets back to accepting', '{userrealname} is now [b]accepting[/b] incidents', NULL, NULL, 'sticky');
+INSERT INTO `$dbNoticeTemplates` (`name`, `type`, `description`, `text`, `linktext`, `link`, `durability`) VALUES('NOTICE_INCIDENT_CLOSED', 3, 'Occurs when an incident is closed', '{incidentid} - {incidentname} has been closed by {userrealname}', NULL, NULL, 'sticky');
+INSERT INTO `$dbNoticeTemplates` (`name` ,`type` ,`description` ,`text` ,`linktext` ,`link` ,`durability`) VALUES('NOTICE_NEW_CONTRACT', '3', 'Occurs when a new contact is added', '{contractproduct} contract has been added to {sitename} by {userid}', 'View Contract', '{applicationurl}contract_details.php?id={contractid}', 'sticky');
 
 CREATE TABLE `{$dbPermissions}` (
   `id` int(5) NOT NULL auto_increment,
@@ -1186,6 +1178,44 @@ CREATE TABLE `{$dbTempIncoming}` (
   KEY `updateid` (`updateid`)
 ) ENGINE=MyISAM COMMENT='Temporary store for incoming attachment paths' ;
 
+CREATE TABLE IF NOT EXISTS `$dbTriggers` (
+  `id` int(11) NOT NULL auto_increment,
+  `triggerid` varchar(50) NOT NULL,
+  `userid` tinyint(4) NOT NULL,
+  `action` enum('ACTION_NONE','ACTION_EMAIL','ACTION_NOTICE','ACTION_JOURNAL') NOT NULL default 'ACTION_NONE',
+  `template` int(11) NOT NULL,
+  `parameters` varchar(255) default NULL,
+  `checks` varchar(255) default NULL,
+  PRIMARY KEY  (`id`),
+  KEY `triggerid` (`triggerid`),
+  KEY `userid` (`userid`)
+) ENGINE=MyISAM;
+
+INSERT INTO `$dbTriggers` (`triggerid`, `userid`, `action`, `template`, `parameters`, `checks`) VALUES('TRIGGER_INCIDENT_CREATED', 0, 'ACTION_JOURNAL', 0, '', '');
+INSERT INTO `$dbTriggers` (`triggerid`, `userid`, `action`, `template`, `parameters`, `checks`) VALUES('TRIGGER_INCIDENT_CREATED', 0, 'ACTION_EMAIL', 8, '', '');
+INSERT INTO `$dbTriggers` (`triggerid`, `userid`, `action`, `template`, `parameters`, `checks`) VALUES('TRIGGER_INCIDENT_ASSIGNED', 0, 'ACTION_JOURNAL', 0, '', '');
+INSERT INTO `$dbTriggers` (`triggerid`, `userid`, `action`, `template`, `parameters`, `checks`) VALUES('TRIGGER_INCIDENT_ASSIGNED_WHILE_AWAY', 0, 'ACTION_JOURNAL', 0, '', '');
+INSERT INTO `$dbTriggers` (`triggerid`, `userid`, `action`, `template`, `parameters`, `checks`) VALUES('TRIGGER_INCIDENT_ASSIGNED_WHILE_OFFLINE', 0, 'ACTION_JOURNAL', 0, '', '');
+INSERT INTO `$dbTriggers` (`triggerid`, `userid`, `action`, `template`, `parameters`, `checks`) VALUES('TRIGGER_INCIDENT_NEARING_SLA', 0, 'ACTION_JOURNAL', 0, '', '');
+INSERT INTO `$dbTriggers` (`triggerid`, `userid`, `action`, `template`, `parameters`, `checks`) VALUES('TRIGGER_INCIDENT_REVIEW_DUE', 0, 'ACTION_JOURNAL', 0, '', '');
+INSERT INTO `$dbTriggers` (`triggerid`, `userid`, `action`, `template`, `parameters`, `checks`) VALUES('TRIGGER_KB_CREATED', 0, 'ACTION_JOURNAL', 0, '', '');
+INSERT INTO `$dbTriggers` (`triggerid`, `userid`, `action`, `template`, `parameters`, `checks`) VALUES('TRIGGER_NEW_HELD_EMAIL', 0, 'ACTION_JOURNAL', 0, '', '');
+INSERT INTO `$dbTriggers` (`triggerid`, `userid`, `action`, `template`, `parameters`, `checks`) VALUES('TRIGGER_WAITING_HELD_EMAIL', 0, 'ACTION_JOURNAL', 0, '', '');
+INSERT INTO `$dbTriggers` (`triggerid`, `userid`, `action`, `template`, `parameters`, `checks`) VALUES('TRIGGER_USER_SET_TO_AWAY', 0, 'ACTION_JOURNAL', 0, '', '');
+INSERT INTO `$dbTriggers` (`triggerid`, `userid`, `action`, `template`, `parameters`, `checks`) VALUES('TRIGGER_USER_RETURNS', 0, 'ACTION_JOURNAL', 0, '', '');
+INSERT INTO `$dbTriggers` (`triggerid`, `userid`, `action`, `template`, `parameters`, `checks`) VALUES('TRIGGER_SIT_UPGRADED', 0, 'ACTION_JOURNAL', 0, '', '');
+INSERT INTO `$dbTriggers` (`triggerid`, `userid`, `action`, `template`, `parameters`, `checks`) VALUES('TRIGGER_INCIDENT_OWNED_CLOSED_BY_USER', 0, 'ACTION_JOURNAL', 0, '', '');
+INSERT INTO `$dbTriggers` (`triggerid`, `userid`, `action`, `template`, `parameters`, `checks`) VALUES('TRIGGER_LANGUAGE_DIFFERS', 0, 'ACTION_JOURNAL', 0, '', '');
+INSERT INTO `$dbTriggers` (`triggerid`, `userid`, `action`, `template`, `parameters`, `checks`) VALUES('TRIGGER_CONTACT_RESET_PASSWORD', 0, 'ACTION_JOURNAL', 0, '', '');
+INSERT INTO `$dbTriggers` (`triggerid`, `userid`, `action`, `template`, `parameters`, `checks`) VALUES('TRIGGER_USER_RESET_PASSWORD', 0, 'ACTION_JOURNAL', 0, '', '');
+INSERT INTO `$dbTriggers` (`triggerid`, `userid`, `action`, `template`, `parameters`, `checks`) VALUES('TRIGGER_NEW_CONTACT', 0, 'ACTION_JOURNAL', 0, '', '');
+INSERT INTO `$dbTriggers` (`triggerid`, `userid`, `action`, `template`, `parameters`, `checks`) VALUES('TRIGGER_INCIDENT_CLOSED', 0, 'ACTION_JOURNAL', 0, '', '');
+INSERT INTO `$dbTriggers` (`triggerid`, `userid`, `action`, `template`, `parameters`, `checks`) VALUES('TRIGGER_CONTACT_ADDED', 0, 'ACTION_JOURNAL', 0, '', '');
+INSERT INTO `$dbTriggers` (`triggerid`, `userid`, `action`, `template`, `parameters`, `checks`) VALUES('TRIGGER_NEW_CONTRACT', 0, 'ACTION_JOURNAL', 0, '', '');
+INSERT INTO `$dbTriggers` (`triggerid`, `userid`, `action`, `template`, `parameters`, `checks`) VALUES('TRIGGER_INCIDENT_ASSIGNED', 1, 'ACTION_NOTICE', 2, '', '{userid} == {currentuserid}');
+INSERT INTO `$dbTriggers` (`triggerid`, `userid`, `action`, `template`, `parameters`, `checks`) VALUES('TRIGGER_SIT_UPGRADED', 1, 'ACTION_NOTICE', 10, '', '');
+INSERT INTO `$dbTriggers` (`triggerid`, `userid`, `action`, `template`, `parameters`, `checks`) VALUES('TRIGGER_INCIDENT_CLOSED', 1, 'ACTION_NOTICE', 13, '', '{userid} != {currentuserid}');
+INSERT INTO `$dbTriggers` (`triggerid`, `userid`, `action`, `template`, `parameters`, `checks`) VALUES('TRIGGER_INCIDENT_NEARING_SLA', 1, 'ACTION_NOTICE', 3, '', '{ownerid} == {currentuserid} OR {townerid} == {currentuserid}');
 
 CREATE TABLE `{$dbUpdates}` (
   `id` int(11) NOT NULL auto_increment,
@@ -1373,38 +1403,6 @@ CREATE TABLE `{$dbVendors}` (
 ) ENGINE=MyISAM;
 
 INSERT INTO `{$dbVendors}` VALUES (1,'Default');
-
-
-CREATE TABLE `{$dbTriggers}` (
-  `id` int(11) NOT NULL auto_increment,
-  `triggerid` varchar(50) NOT NULL,
-  `userid` tinyint(4) NOT NULL,
-  `action` enum('ACTION_NONE','ACTION_EMAIL','ACTION_NOTICE','ACTION_JOURNAL') NOT NULL default 'ACTION_NONE',
-  `template` int(11) NOT NULL,
-  `parameters` varchar(255) default NULL,
-  `checks` varchar(255) default NULL,
-  PRIMARY KEY  (`id`),
-  KEY `triggerid` (`triggerid`),
-  KEY `userid` (`userid`)
-) ENGINE=MyISAM;
-
-INSERT INTO `{$dbTriggers}` (triggerid, userid, action) VALUES ('TRIGGER_INCIDENT_CREATED', '0', 'ACTION_JOURNAL');
-INSERT INTO `{$dbTriggers}` (triggerid, userid, action) VALUES ('TRIGGER_INCIDENT_ASSIGNED', '0', 'ACTION_JOURNAL');
-INSERT INTO `{$dbTriggers}` (triggerid, userid, action) VALUES ('TRIGGER_INCIDENT_ASSIGNED_WHILE_AWAY', '0', 'ACTION_JOURNAL');
-INSERT INTO `{$dbTriggers}` (triggerid, userid, action) VALUES ('TRIGGER_INCIDENT_ASSIGNED_WHILE_OFFLINE', '0', 'ACTION_JOURNAL');
-INSERT INTO `{$dbTriggers}` (triggerid, userid, action) VALUES ('TRIGGER_INCIDENT_NEARING_SLA', '0', 'ACTION_JOURNAL');
-INSERT INTO `{$dbTriggers}` (triggerid, userid, action) VALUES ('TRIGGER_USERS_INCIDENT_NEARING_SLA', '0', 'ACTION_JOURNAL');
-INSERT INTO `{$dbTriggers}` (triggerid, userid, action) VALUES ('TRIGGER_INCIDENT_EXCEEDED_SLA', '0', 'ACTION_JOURNAL');
-INSERT INTO `{$dbTriggers}` (triggerid, userid, action) VALUES ('TRIGGER_INCIDENT_REVIEW_DUE', '0', 'ACTION_JOURNAL');
-INSERT INTO `{$dbTriggers}` (triggerid, userid, action) VALUES ('TRIGGER_CRITICAL_INCIDENT_CREATED', '0', 'ACTION_JOURNAL');
-INSERT INTO `{$dbTriggers}` (triggerid, userid, action) VALUES ('TRIGGER_KB_CREATED', '0', 'ACTION_JOURNAL');
-INSERT INTO `{$dbTriggers}` (triggerid, userid, action) VALUES ('TRIGGER_NEW_HELD_EMAIL', '0', 'ACTION_JOURNAL');
-INSERT INTO `{$dbTriggers}` (triggerid, userid, action) VALUES ('TRIGGER_WAITING_HELD_EMAIL', '0', 'ACTION_JOURNAL');
-INSERT INTO `{$dbTriggers}` (triggerid, userid, action) VALUES ('TRIGGER_USER_SET_TO_AWAY', '0', 'ACTION_JOURNAL');
-INSERT INTO `{$dbTriggers}` (triggerid, userid, action) VALUES ('TRIGGER_SIT_UPGRADED', '0', 'ACTION_JOURNAL');
-INSERT INTO `{$dbTriggers}` (triggerid, userid, action) VALUES ('TRIGGER_USER_RETURNS', '0', 'ACTION_JOURNAL');
-INSERT INTO `{$dbTriggers}` (triggerid, userid, action) VALUES ('TRIGGER_INCIDENT_OWNED_CLOSED_BY_USER', '0', 'ACTION_JOURNAL');
-
 ";
 
 // ********************************************************************
