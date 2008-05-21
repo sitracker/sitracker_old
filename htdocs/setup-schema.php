@@ -17,7 +17,14 @@
 
 // TODO we need to clean this schema up to make it confirmed compatible with mysql4
 
-$schema = "CREATE TABLE `{$dbBillingPeriods}` (
+$schema = "CREATE TABLE IF NOT EXISTS `{$dbSystem}` (
+  `id` int(1) NOT NULL default '0',
+  `version` float(3,2) NOT NULL default '0.00',
+  `schema` bigint(20) unsigned NOT NULL COMMENT 'DateTime in YYYYMMDDHHMM format',
+  PRIMARY KEY  (`id`)
+) TYPE=MyISAM;
+
+CREATE TABLE `{$dbBillingPeriods}` (
 `servicelevelid` INT( 5 ) NOT NULL ,
 `engineerperiod` INT NOT NULL COMMENT 'In minutes',
 `customerperiod` INT NOT NULL COMMENT 'In minutes',
@@ -1125,14 +1132,6 @@ CREATE TABLE `{$dbSupportContacts}` (
 ) ENGINE=MyISAM;
 
 INSERT INTO `{$dbSupportContacts}` VALUES (1,1,1);
-
-
-CREATE TABLE `{$dbSystem}` (
-  `id` int(1) NOT NULL default '0',
-  `version` float(3,2) NOT NULL default '0.00',
-  PRIMARY KEY  (`id`)
-) ENGINE=MyISAM;
-
 
 CREATE TABLE `{$dbTags}` (
   `tagid` int(11) NOT NULL auto_increment,

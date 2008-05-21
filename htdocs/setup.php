@@ -248,36 +248,45 @@ function setup_exec_sql($sqlquerylist)
     {
         if (!is_array($sqlquerylist)) $sqlquerylist = array($sqlquerylist);
 
+//         echo "<pre>".print_r($sqlquerylist,true)."</pre>";
+
         // Loop around the queries
         foreach ($sqlquerylist AS $schemaversion => $queryelement)
         {
-            $schemaversion = substr($schemaversion, 1);
-            if ($installed_schema < $schemaversion)
+            if ($schemaversion != '0') $schemaversion = substr($schemaversion, 1);
+//             echo "<p>Schema version $schemaversion, installed schema $installed_schema, query $queryelement</p>";
+            if ($schemaversion == 0 OR $installed_schema < $schemaversion)
             {
                 $sqlqueries = explode( ';', $queryelement);
                 // We don't need the last entry it's blank, as we end with a ;
                 array_pop($sqlqueries);
                 foreach($sqlqueries AS $sql)
                 {
+                    $html .= "<p style='border: 1px solid red;'>&bull; <code>".nl2br($sql)."</code></p>\n"; // FIXME
                     mysql_query($sql);
-                    $errstr = mysql_error();
-                    if ($errstr)
+                    if (mysql_error())
                     {
                         $html .= "<p><strong>FAILED:</strong> <code>".htmlspecialchars($sql)."</code> <span style='color: red;'>({$schemaversion})</span></p>";
                         $html .= "<p class='error'>".mysql_error()."<br />A MySQL error occurred, this could be because the MySQL user '{$CONFIG['db_username']}' does not have appropriate permission to modify the database schema.<br />";
                         //echo "The SQL command was:<br /><code>$sql</code><br />";
-                        $html .= "An error might also be caused by an attempt to upgrade a version that is not supported by this script.<br />";
+                        if (strpos($errstr, 'does not have appropriate permission')!==FALSE)
+                        {
+                            $html .= "<strong>Check your MySQL permissions allow the schema to be modified</strong>.<br />";
+                        }
+                        else
+                        {
+                            $html .= "An error might also be caused by an attempt to upgrade a version that is not supported by this script.<br />";
+                        }
                         $html .= "Alternatively, you may have found a bug, if you think this is the case please report it.</p>";
                     }
                     else
                     {
                         // Update the system schema version
-                        $sql = "REPLACE INTO `{$dbSystem}` ( `id`, `version`, `schema`) VALUES (0, $application_version, $schemaversion)";
-                        mysql_query($sql);
+                        $vsql = "REPLACE INTO `{$dbSystem}` ( `id`, `version`, `schema`) VALUES (0, $application_version, $schemaversion)";
+                        mysql_query($vsql);
                         if (mysql_error())
                         {
-                            echo "<p class='error'>Could not store new schema version number. ".mysql_error()."</p>";
-                            exit;
+                            $html .= "<p class='error'>Could not store new schema version number '$schemaversion'. ".mysql_error()."</p>";
                         }
                     }
                 }
@@ -286,7 +295,6 @@ function setup_exec_sql($sqlquerylist)
     }
     return $html;
 }
-
 
 // Returns TRUE if an admin account exists, or false if not
 function setup_check_adminuser()
@@ -569,19 +577,21 @@ switch ($_REQUEST['action'])
                 {
                     echo "<h2>Creating new database schema...</h2>";
                     // No users table or empty users table, proceed to install
+                    $installed_schema = 0;
+                    $installed_schema = substr(end(array_keys($upgrade_schema[$application_version*100])),1);
                     $errors = setup_exec_sql($schema);
                     if(empty($errors))
                     {
-                        echo "<p>Database created OK</p>";
+                        echo "<p>Schema created OK</p>";
                     }
                     else
                     {
                         echo $errors;
                     }
                     // Set the system version number
-                    $sql = "INSERT INTO `{$dbSystem}` ( id, version) VALUES (0, $application_version)";
+                    $sql = "REPLACE INTO `{$dbSystem}` ( id, version, `schema`) VALUES (0, $application_version, $installed_schema)";
                     mysql_query($sql);
-                    if (mysql_error()) trigger_error($sql.mysql_error(),E_USER_ERROR);
+                    if (mysql_error()) trigger_error(mysql_error(),E_USER_ERROR);
                     $installed_version = $application_version;
                     echo "<h2>Database schema created</h2>";
                     echo "<p>If no errors were reported above you should continue and check the installation.</p>";
@@ -609,7 +619,7 @@ switch ($_REQUEST['action'])
                         if (mysql_error()) trigger_error(mysql_error(),E_USER_WARNING);
                         list($installed_version) = mysql_fetch_row($result);
 
-                        if ($installed_version > 3.35)
+                        if ($installed_version >= 3.35)
                         {
                             $sql = "SELECT `schema` FROM `{$dbSystem}` WHERE id = 0";
                             $result = mysql_query($sql);
