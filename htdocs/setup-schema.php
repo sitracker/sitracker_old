@@ -1752,48 +1752,8 @@ ALTER TABLE `{$dbSystem}` ADD `schema` BIGINT UNSIGNED NOT NULL COMMENT 'DateTim
 ";
 
 $upgrade_schema[335]['t200805191400'] = "
--- KMH 17/12/07
-CREATE TABLE IF NOT EXISTS `{$dbTriggers}` (
-  `id` int(11) NOT NULL auto_increment,
-  `triggerid` varchar(50) NOT NULL,
-  `userid` tinyint(4) NOT NULL,
-  `action` enum('ACTION_NONE','ACTION_EMAIL','ACTION_NOTICE','ACTION_JOURNAL') NOT NULL default 'ACTION_NONE',
-  `template` varchar(50) NOT NULL,
-  `parameters` varchar(255) default NULL,
-  `checks` varchar(255) default NULL,
-  PRIMARY KEY  (`id`),
-  KEY `triggerid` (`triggerid`)
-) ENGINE=MyISAM ;
-
 DROP TABLE IF EXISTS `{$CONFIG['db_tableprefix']}contactflags`;
 DROP TABLE IF EXISTS `{$CONFIG['db_tableprefix']}contactproducts`;
-
--- KMH 18/12/07
-CREATE TABLE `{$dbNoticeTemplates}` (
-`id` INT( 11 ) NOT NULL AUTO_INCREMENT PRIMARY KEY ,
-`name` VARCHAR( 255 ) NOT NULL ,
-`type` TINYINT( 4 ) NOT NULL ,
-`description` VARCHAR( 255 ) NOT NULL ,
-`text` TINYTEXT NOT NULL ,
-`linktext` VARCHAR( 50 ) NULL ,
-`link` VARCHAR( 100 ) NULL ,
-`durability` ENUM( 'sticky', 'session' ) NOT NULL DEFAULT 'sticky',
- INDEX ( `userid` ),
-) ENGINE = MYISAM ;
-
-INSERT INTO `{$dbNoticeTemplates}` (`name`, `type`, `description`, `text`, `linktext`, `link`, `durability`) VALUES('TRIGGER_INCIDENT_CREATED', 0, 'Used when a new incident has been created', 'Incident {incidentid} - {incidenttitle} has been logged', 'View Incident', 'javascript:incident_details_window({incidentid})', 'sticky');
-INSERT INTO `{$dbNoticeTemplates}` (`name`, `type`, `description`, `text`, `linktext`, `link`, `durability`) VALUES('TRIGGER_INCIDENT_ASSIGNED_TRIGGER', 0, 'Used when a new incident is assigned to you', 'Incident {incidentid} - {incidenttitle} has been assigned to you', 'View Incident', 'javascript:incident_details_window({incidentid})', 'sticky');
-INSERT INTO `{$dbNoticeTemplates}` (`name`, `type`, `description`, `text`, `linktext`, `link`, `durability`) VALUES('TRIGGER_INCIDENT_NEARING_SLA_TRIGGER', 0, 'Used when one of your incidents nears an SLA', 'Incident {incidentid} - {incidenttitle} is nearing its SLA', 'View Incident', 'javascript:incident_details_window({incidentid})', 'sticky');
-INSERT INTO `{$dbNoticeTemplates}` (`name`, `type`, `description`, `text`, `linktext`, `link`, `durability`) VALUES('TRIGGER_USERS_INCIDENT_NEARING_SLA_TRIGGER', 0, 'Used when a user\'s incident you are watching is assigned to you', '{incidentowner}\'s incident {incidentid} - {incidenttitle} is nearing its SLA', 'View Incident', 'javascript:incident_details_window({incidentid})', 'sticky');
-INSERT INTO `{$dbNoticeTemplates}` (`name`, `type`, `description`, `text`, `linktext`, `link`, `durability`) VALUES('TRIGGER_INCIDENT_EXCEEDED_SLA_TRIGGER', 0, 'Used when one of your incidents exceeds an SLA', 'Incident {incidentid} - {incidenttitle} has exceeded its SLA', 'View Incident', 'javascript:incident_details_window({incidentid})', 'sticky');
-INSERT INTO `{$dbNoticeTemplates}` (`name`, `type`, `description`, `text`, `linktext`, `link`, `durability`) VALUES('TRIGGER_INCIDENT_REVIEW_DUE', 0, 'Used when an incident is due a review', 'Incident {incidentid} - {incidenttitle} is due for review', 'View Incident', 'javascript:incident_details_window({incidentid})', 'sticky');
-INSERT INTO `{$dbNoticeTemplates}` (`name`, `type`, `description`, `text`, `linktext`, `link`, `durability`) VALUES('TRIGGER_KB_CREATED_TRIGGER', 0, 'Used when a new Knowledgebase article is created', 'KB Article {KBname} has been created', NULL, NULL, 'sticky');
-INSERT INTO `{$dbNoticeTemplates}` (`name`, `type`, `description`, `text`, `linktext`, `link`, `durability`) VALUES('TRIGGER_NEW_HELD_EMAIL', 0, 'Used when there is a new email in the holding queue', 'There is a new email in the holding queue', 'View Holding Queue', '{sitpath}/review_incoming_updates.php', 'sticky');
-INSERT INTO `{$dbNoticeTemplates}` (`name`, `type`, `description`, `text`, `linktext`, `link`, `durability`) VALUES('TRIGGER_MINS_HELD_EMAIL', 0, 'Used when there is a new email in the holding queue for x minutes', 'There has been an email in the holding queue for {holdingmins} minutes', 'View Holding Queue', '{sitpath}/review_incoming_updates.php', 'sticky');
-INSERT INTO `{$dbNoticeTemplates}` (`name`, `type`, `description`, `text`, `linktext`, `link`, `durability`) VALUES('TRIGGER_SIT_UPGRADED', 0, 'Used when the system is upgraded', 'SiT! has been upgraded to {sitversion}', 'What\'s New?', '{sitpath}/releasenotes.php', 'sticky');
-INSERT INTO `{$dbNoticeTemplates}` (`name`, `type`, `description`, `text`, `linktext`, `link`, `durability`) VALUES('TRIGGER_INCIDENT_OWNED_CLOSED_BY_USER', 0, 'Used when one of your incidents is closed by another engineer', 'Your incident {incidentid} - {incidenttitle} has been closed by {engineerclosedname}', NULL, NULL, 'sticky');
-INSERT INTO `{$dbNoticeTemplates}` (`name`, `type`, `description`, `text`, `linktext`, `link`, `durability`) VALUES('TRIGGER_USER_SET_TO_AWAY', 0, 'Used when a watched user goes away', '{realname} is now [b]not accepting[/b] incidents', NULL, 'userid=1', 'sticky');
-INSERT INTO `{$dbNoticeTemplates}` (`name`, `type`, `description`, `text`, `linktext`, `link`, `durability`) VALUES('TRIGGER_USER_RETURNS', 0, 'Used when a user sets back to accepting', '{realname} is now [b]accepting[/b] incidents', NULL, NULL, 'sticky');
 
 -- KMH 06/01/08
 ALTER TABLE `{$CONFIG['db_tableprefix']}emailtype` ADD `triggerid` INT( 11 ) NULL ;
@@ -1806,31 +1766,10 @@ INSERT INTO `{$CONFIG['db_tableprefix']}emailtype` (`id`, `type`, `description`,
 ('TRIGGER_INCIDENT_NEARING_SLA', 'system', 'Trigger email sent when an incident is nearing its SLA.', '<useremail>', '<supportemail>', NULL, NULL, NULL, '[<incidentid>] - <incidenttitle>: SLA approaching', 'Hello <contactfirstname>,\r\n\r\nIncident <incidentid> - <incidenttitle> is approaching its SLA.\r\n\r\n<signature> <globalsignature>\r\n-------------\r\nThis email is sent as a result of a system trigger. If you do not want to receive these emails, you can disable them from the ''Triggers'' page.', 'hide', 'No'),
 ('TRIGGER_INCIDENT_ASSIGNED', 'user', 'Notify user when call assigned to them', '<useremail>', '<supportemail>', NULL, NULL, NULL, '[<incidentid>] - <incidenttitle>: has been assigned to you', 'Hello <contactfirstname>,\r\n\r\nIncident <incidentid> - <incidenttitle> has been assigned to you.\r\n\r\n<signature> <globalsignature>\r\n-------------\r\nThis email is sent as a result of a system trigger. If you do not want to receive these emails, you can disable them from the ''Triggers'' page.', 'show', 'Yes');
 
-INSERT INTO `{$dbNoticeTemplates}` (`id`, `type`, `description`, `text`, `linktext`, `link`, `durability`) VALUES
-('INCIDENT_OWNED_CLOSED_BY_USER', 0, '', 'Your incident <incidentid> - <incidenttitle> has been closed by <engineerclosedname>', NULL, NULL, 'sticky');
-
 -- KMH 17/01/08
 ALTER TABLE `{$dbNotices}` CHANGE `gid` `template` VARCHAR( 255 ) NULL DEFAULT NULL;
 -- INL 22/01/08
 ALTER TABLE `{$dbTasks}` CHANGE `distribution` `distribution` ENUM( 'public', 'private', 'incident', 'event' );
--- KMH 23/01/08
-ALTER TABLE `{$dbTriggers}` ADD `checks` VARCHAR( 255 ) NULL ;
-INSERT INTO `{$dbTriggers}` (triggerid, userid, action) VALUES ('TRIGGER_INCIDENT_CREATED', '0', 'ACTION_JOURNAL');
-INSERT INTO `{$dbTriggers}` (triggerid, userid, action) VALUES ('TRIGGER_INCIDENT_ASSIGNED', '0', 'ACTION_JOURNAL');
-INSERT INTO `{$dbTriggers}` (triggerid, userid, action) VALUES ('TRIGGER_INCIDENT_ASSIGNED_WHILE_AWAY', '0', 'ACTION_JOURNAL');
-INSERT INTO `{$dbTriggers}` (triggerid, userid, action) VALUES ('TRIGGER_INCIDENT_ASSIGNED_WHILE_OFFLINE', '0', 'ACTION_JOURNAL');
-INSERT INTO `{$dbTriggers}` (triggerid, userid, action) VALUES ('TRIGGER_INCIDENT_NEARING_SLA', '0', 'ACTION_JOURNAL');
-INSERT INTO `{$dbTriggers}` (triggerid, userid, action) VALUES ('TRIGGER_USERS_INCIDENT_NEARING_SLA', '0', 'ACTION_JOURNAL');
-INSERT INTO `{$dbTriggers}` (triggerid, userid, action) VALUES ('TRIGGER_INCIDENT_EXCEEDED_SLA', '0', 'ACTION_JOURNAL');
-INSERT INTO `{$dbTriggers}` (triggerid, userid, action) VALUES ('TRIGGER_INCIDENT_REVIEW_DUE', '0', 'ACTION_JOURNAL');
-INSERT INTO `{$dbTriggers}` (triggerid, userid, action) VALUES ('TRIGGER_CRITICAL_INCIDENT_CREATED', '0', 'ACTION_JOURNAL');
-INSERT INTO `{$dbTriggers}` (triggerid, userid, action) VALUES ('TRIGGER_KB_CREATED', '0', 'ACTION_JOURNAL');
-INSERT INTO `{$dbTriggers}` (triggerid, userid, action) VALUES ('TRIGGER_NEW_HELD_EMAIL', '0', 'ACTION_JOURNAL');
-INSERT INTO `{$dbTriggers}` (triggerid, userid, action) VALUES ('TRIGGER_WAITING_HELD_EMAIL', '0', 'ACTION_JOURNAL');
-INSERT INTO `{$dbTriggers}` (triggerid, userid, action) VALUES ('TRIGGER_USER_SET_TO_AWAY', '0', 'ACTION_JOURNAL');
-INSERT INTO `{$dbTriggers}` (triggerid, userid, action) VALUES ('TRIGGER_SIT_UPGRADED', '0', 'ACTION_JOURNAL');
-INSERT INTO `{$dbTriggers}` (triggerid, userid, action) VALUES ('TRIGGER_USER_RETURNS', '0', 'ACTION_JOURNAL');
-INSERT INTO `{$dbTriggers}` (triggerid, userid, action) VALUES ('TRIGGER_INCIDENT_OWNED_CLOSED_BY_USER', '0', 'ACTION_JOURNAL');
 
 -- KMHO 25/01/08
 ALTER TABLE `{$CONFIG['db_tableprefix']}emailtype` CHANGE `type` `type` ENUM( 'usertemplate', 'system', 'contact', 'site', 'incident', 'kb', 'user') NOT NULL COMMENT 'usertemplate is personal template owned by a user, user is a template relating to a user' DEFAULT 'user';
@@ -1844,12 +1783,6 @@ UPDATE `{$CONFIG['db_tableprefix']}emailtype` SET `type` = 'incident' WHERE `id`
 UPDATE `{$CONFIG['db_tableprefix']}emailtype` SET `type` = 'incident' WHERE `id` = 'INCIDENT UPDATED' ;
 UPDATE `{$CONFIG['db_tableprefix']}emailtype` SET `type` = 'incident' WHERE `id` = 'INCIDENT CLOSED EXTERNAL' ;
 UPDATE `{$CONFIG['db_tableprefix']}emailtype` SET `type` = 'incident' WHERE `id` = 'INCIDENT_LOGGED_EMAIL' ;
-
--- KMH 27/01/08
-ALTER TABLE `{$dbTriggers}` ADD `checks` VARCHAR( 255 ) NULL ;
-
--- INL 28/01/08
-ALTER TABLE `{$dbTriggers}` ADD `template` INT( 11 ) NOT NULL AFTER `action` ;
 
 -- INL 29/01/08
 ALTER TABLE `{$dbContacts}` ADD `created` DATETIME NULL ,
@@ -2074,7 +2007,6 @@ $upgrade_schema[335]["t200805201629"] = "INSERT INTO `$dbEmailTemplates` (`id`, 
 $upgrade_schema[335]["t200805201630"] = "INSERT INTO `$dbEmailTemplates` (`id`, `name`, `type`, `description`, `tofield`, `fromfield`, `replytofield`, `ccfield`, `bccfield`, `subjectfield`, `body`, `customervisibility`, `storeinlog`, `created`, `createdby`, `modified`, `modifiedby`) VALUES(11, 'CONTACT_RESET_PASSWORD', 'system', 'Sent to a contact to reset their password.', '{contactemail}', '{supportemail}', '{supportemail}', '', '', '{applicationshortname} - password reset', 'Hi {contactfirstname},\r\n\r\nThis is a email to reset your contact portal password for {applicationname}. If you did not request this, please ignore this email.\r\n\r\nTo complete your password reset please visit the following url:\r\n\r\n{passwordreseturl}\r\n\r\n\r\n{globalsignature}', 'hide', 'No', NULL, NULL, NULL, NULL);";
 $upgrade_schema[335]["t200805201631"] = "INSERT INTO `$dbEmailTemplates` (`id`, `name`, `type`, `description`, `tofield`, `fromfield`, `replytofield`, `ccfield`, `bccfield`, `subjectfield`, `body`, `customervisibility`, `storeinlog`, `created`, `createdby`, `modified`, `modifiedby`) VALUES(12, 'USER_RESET_PASSWORD', 'system', 'Sent when a user resets their email', '{useremail}', '{supportemail}', '{supportemail}', '', '', '{applicationshortname} - password reset', 'Hi,\r\n\r\nThis is a email to reset your user account password for {applicationname}. If you did not request this, please ignore this email.\r\n\r\nTo complete your password reset please visit the following url:\r\n\r\n{passwordreseturl}\r\n\r\n\r\n{globalsignature}', 'hide', 'No', NULL, NULL, NULL, NULL);";
 $upgrade_schema[335]["t200805201632"] = "INSERT INTO `$dbEmailTemplates` (`id`, `name`, `type`, `description`, `tofield`, `fromfield`, `replytofield`, `ccfield`, `bccfield`, `subjectfield`, `body`, `customervisibility`, `storeinlog`, `created`, `createdby`, `modified`, `modifiedby`) VALUES(13, 'NEW_CONTACT_DETAILS', 'system', 'Sent when a new contact is created', '{contactemail}', '{supportemail}', '', '', '', '{applicationshortname} - portal details', 'Hello {contactfirstname},\r\nYou have just been added as a contact on {applicationname} ({applicationurl}).\r\n\r\nThese details allow you to the login to the portal, where you can create, update and close your incidents, as well as view your sites'' incidents.\r\n\r\nYour details are as follows:\r\n\r\nusername: {contactusername}\r\npassword: {prepassword}\r\nPlease note, this password cannot be recovered, only reset. You may change it in the portal.\r\n\r\n{globalsignature}', 'hide', 'No', NULL, NULL, NULL, NULL);";
-$upgrade_schema[335]["t200805202220"] = "UPDATE `$dbNoticeTemplates` SET `type` = ".TRIGGER_NOTICE_TYPE.";";
 
 $update_schema[335]["t200805211129"] = "CREATE TABLE IF NOT EXISTS `noticetemplates` (
   `id` int(11) NOT NULL auto_increment,
@@ -2089,20 +2021,60 @@ $update_schema[335]["t200805211129"] = "CREATE TABLE IF NOT EXISTS `noticetempla
 ) ENGINE=MyISAM  ;";
 
 
-$update_schema[335]["t200805211129"] = "INSERT INTO `$dbNoticeTemplates` (`name`, `type`, `description`, `text`, `linktext`, `link`, `durability`) VALUES('TRIGGER_INCIDENT_CREATED', 3, 'Used when a new incident has been created', 'Incident {incidentid} - {incidenttitle} has been logged', 'View Incident', 'javascript:incident_details_window({incidentid})', 'sticky');";
-$update_schema[335]["t200805211130"] = "INSERT INTO `$dbNoticeTemplates` (`name`, `type`, `description`, `text`, `linktext`, `link`, `durability`) VALUES('TRIGGER_INCIDENT_ASSIGNED', 3, 'Used when a new incident is assigned to you', 'Incident {incidentid} - {incidenttitle} has been assigned to {userrealname}', 'View Incident', 'javascript:incident_details_window({incidentid})', 'sticky');";
-$update_schema[335]["t200805211131"] = "INSERT INTO `$dbNoticeTemplates` (`name`, `type`, `description`, `text`, `linktext`, `link`, `durability`) VALUES('TRIGGER_INCIDENT_NEARING_SLA', 3, 'Used when one of your incidents nears an SLA', 'Incident {incidentid} - {incidenttitle}: {nextsla} due in {nextslatime}', 'View Incident', 'javascript:incident_details_window({incidentid})', 'sticky');";
-$update_schema[335]["t200805211132"] = "INSERT INTO `$dbNoticeTemplates` (`name`, `type`, `description`, `text`, `linktext`, `link`, `durability`) VALUES('TRIGGER_LANGUAGE_DIFFERS', 3, 'Occurs when a user logs in with a different language to their profile language', 'Your current langauge ({currentlang}) is different from your profile language ({profilelang})', 'Keep current language', '{applicationurl}edit_profile.php?mode=savesessionlang', 'sticky');";
-$update_schema[335]["t200805211133"] = "INSERT INTO `$dbNoticeTemplates` (`name`, `type`, `description`, `text`, `linktext`, `link`, `durability`) VALUES('TRIGGER_NEW_CONTACT', 3, 'Occurs when a new contact is added', '{contactname} has been added as a contact to {contactsite} by {userrealname}', 'View Contact', '{applicationurl}contact_details.php?id={contactid}', 'sticky');";
-$update_schema[335]["t200805211134"] = "INSERT INTO `$dbNoticeTemplates` (`name`, `type`, `description`, `text`, `linktext`, `link`, `durability`) VALUES('TRIGGER_INCIDENT_REVIEW_DUE', 3, 'Used when an incident is due a review', 'Incident {incidentid} - {incidenttitle} is due for review', 'View Incident', 'javascript:incident_details_window({incidentid})', 'sticky');";
-$update_schema[335]["t200805211135"] = "INSERT INTO `$dbNoticeTemplates` (`name`, `type`, `description`, `text`, `linktext`, `link`, `durability`) VALUES('TRIGGER_KB_CREATED', 3, 'Used when a new Knowledgebase article is created', 'KB Article {kbname} has been created by {userrealname}', 'View Article', '{sitpath}kbarticle?id={kbid}', 'sticky');";
-$update_schema[335]["t200805211136"] = "INSERT INTO `$dbNoticeTemplates` (`name`, `type`, `description`, `text`, `linktext`, `link`, `durability`) VALUES('TRIGGER_NEW_HELD_EMAIL', 3, 'Used when there is a new email in the holding queue', 'There is a new email in the holding queue', 'View Holding Queue', '{sitpath}review_incoming_updates.php', 'sticky');";
-$update_schema[335]["t200805211137"] = "INSERT INTO `$dbNoticeTemplates` (`name`, `type`, `description`, `text`, `linktext`, `link`, `durability`) VALUES('TRIGGER_MINS_HELD_EMAIL', 3, 'Used when there is a new email in the holding queue for x minutes', 'There has been an email in the holding queue for {holdingmins} minutes', 'View Holding Queue', '{sitpath}/review_incoming_updates.php', 'sticky');";
-$update_schema[335]["t200805211138"] = "INSERT INTO `$dbNoticeTemplates` (`name`, `type`, `description`, `text`, `linktext`, `link`, `durability`) VALUES('TRIGGER_SIT_UPGRADED', 3, 'Used when the system is upgraded', '{applicationshortname} has been upgraded to {applicationversion}', 'What\\''s New?', '{sitpath}releasenotes.php?v={applicationversion}', 'sticky');";
-$update_schema[335]["t200805211139"] = "INSERT INTO `$dbNoticeTemplates` (`name`, `type`, `description`, `text`, `linktext`, `link`, `durability`) VALUES('TRIGGER_USER_SET_TO_AWAY', 3, 'Used when a watched user goes away', '{userrealname} is now [b]not accepting[/b] incidents', NULL, '', 'sticky');";
-$update_schema[335]["t200805211140"] = "INSERT INTO `$dbNoticeTemplates` (`name`, `type`, `description`, `text`, `linktext`, `link`, `durability`) VALUES('TRIGGER_USER_RETURNS', 3, 'Used when a user sets back to accepting', '{userrealname} is now [b]accepting[/b] incidents', NULL, NULL, 'sticky');";
-$update_schema[335]["t200805211141"] = "INSERT INTO `$dbNoticeTemplates` (`name`, `type`, `description`, `text`, `linktext`, `link`, `durability`) VALUES('TRIGGER_INCIDENT_CLOSED', 3, 'Occurs when an incident is closed', '{incidentid} - {incidentname} has been closed by {userrealname}', NULL, NULL, 'sticky');";
-$update_schema[335]["t200805211142"] = "INSERT INTO `$dbNoticeTemplates` (`name` ,`type` ,`description` ,`text` ,`linktext` ,`link` ,`durability`) VALUES('TRIGGER_NEW_CONTRACT', '3', 'Occurs when a new contact is added', '{contractproduct} contract has been added to {sitename} by {userid}', 'View Contract', '{applicationurl}contract_details.php?id={contractid}', 'sticky');";
+$update_schema[335]["t200805211129"] = "INSERT INTO `$dbNoticeTemplates` (`name`, `type`, `description`, `text`, `linktext`, `link`, `durability`) VALUES('NOTICE_INCIDENT_CREATED', 3, 'Used when a new incident has been created', 'Incident {incidentid} - {incidenttitle} has been logged', 'View Incident', 'javascript:incident_details_window({incidentid})', 'sticky');";
+$update_schema[335]["t200805211130"] = "INSERT INTO `$dbNoticeTemplates` (`name`, `type`, `description`, `text`, `linktext`, `link`, `durability`) VALUES('NOTICE_INCIDENT_ASSIGNED', 3, 'Used when a new incident is assigned to you', 'Incident {incidentid} - {incidenttitle} has been assigned to {userrealname}', 'View Incident', 'javascript:incident_details_window({incidentid})', 'sticky');";
+$update_schema[335]["t200805211131"] = "INSERT INTO `$dbNoticeTemplates` (`name`, `type`, `description`, `text`, `linktext`, `link`, `durability`) VALUES('NOTICE_INCIDENT_NEARING_SLA', 3, 'Used when one of your incidents nears an SLA', 'Incident {incidentid} - {incidenttitle}: {nextsla} due in {nextslatime}', 'View Incident', 'javascript:incident_details_window({incidentid})', 'sticky');";
+$update_schema[335]["t200805211132"] = "INSERT INTO `$dbNoticeTemplates` (`name`, `type`, `description`, `text`, `linktext`, `link`, `durability`) VALUES('NOTICE_LANGUAGE_DIFFERS', 3, 'Occurs when a user logs in with a different language to their profile language', 'Your current langauge ({currentlang}) is different from your profile language ({profilelang})', 'Keep current language', '{applicationurl}edit_profile.php?mode=savesessionlang', 'sticky');";
+$update_schema[335]["t200805211133"] = "INSERT INTO `$dbNoticeTemplates` (`name`, `type`, `description`, `text`, `linktext`, `link`, `durability`) VALUES('NOTICE_NEW_CONTACT', 3, 'Occurs when a new contact is added', '{contactname} has been added as a contact to {contactsite} by {userrealname}', 'View Contact', '{applicationurl}contact_details.php?id={contactid}', 'sticky');";
+$update_schema[335]["t200805211134"] = "INSERT INTO `$dbNoticeTemplates` (`name`, `type`, `description`, `text`, `linktext`, `link`, `durability`) VALUES('NOTICE_INCIDENT_REVIEW_DUE', 3, 'Used when an incident is due a review', 'Incident {incidentid} - {incidenttitle} is due for review', 'View Incident', 'javascript:incident_details_window({incidentid})', 'sticky');";
+$update_schema[335]["t200805211135"] = "INSERT INTO `$dbNoticeTemplates` (`name`, `type`, `description`, `text`, `linktext`, `link`, `durability`) VALUES('NOTICE_KB_CREATED', 3, 'Used when a new Knowledgebase article is created', 'KB Article {kbname} has been created by {userrealname}', 'View Article', '{sitpath}kbarticle?id={kbid}', 'sticky');";
+$update_schema[335]["t200805211136"] = "INSERT INTO `$dbNoticeTemplates` (`name`, `type`, `description`, `text`, `linktext`, `link`, `durability`) VALUES('NOTICE_NEW_HELD_EMAIL', 3, 'Used when there is a new email in the holding queue', 'There is a new email in the holding queue', 'View Holding Queue', '{sitpath}review_incoming_updates.php', 'sticky');";
+$update_schema[335]["t200805211137"] = "INSERT INTO `$dbNoticeTemplates` (`name`, `type`, `description`, `text`, `linktext`, `link`, `durability`) VALUES('NOTICE_MINS_HELD_EMAIL', 3, 'Used when there is a new email in the holding queue for x minutes', 'There has been an email in the holding queue for {holdingmins} minutes', 'View Holding Queue', '{sitpath}/review_incoming_updates.php', 'sticky');";
+$update_schema[335]["t200805211138"] = "INSERT INTO `$dbNoticeTemplates` (`name`, `type`, `description`, `text`, `linktext`, `link`, `durability`) VALUES('NOTICE_SIT_UPGRADED', 3, 'Used when the system is upgraded', '{applicationshortname} has been upgraded to {applicationversion}', 'What\\''s New?', '{sitpath}releasenotes.php?v={applicationversion}', 'sticky');";
+$update_schema[335]["t200805211139"] = "INSERT INTO `$dbNoticeTemplates` (`name`, `type`, `description`, `text`, `linktext`, `link`, `durability`) VALUES('NOTICE_USER_SET_TO_AWAY', 3, 'Used when a watched user goes away', '{userrealname} is now [b]not accepting[/b] incidents', NULL, '', 'sticky');";
+$update_schema[335]["t200805211140"] = "INSERT INTO `$dbNoticeTemplates` (`name`, `type`, `description`, `text`, `linktext`, `link`, `durability`) VALUES('NOTICE_USER_RETURNS', 3, 'Used when a user sets back to accepting', '{userrealname} is now [b]accepting[/b] incidents', NULL, NULL, 'sticky');";
+$update_schema[335]["t200805211141"] = "INSERT INTO `$dbNoticeTemplates` (`name`, `type`, `description`, `text`, `linktext`, `link`, `durability`) VALUES('NOTICE_INCIDENT_CLOSED', 3, 'Occurs when an incident is closed', '{incidentid} - {incidentname} has been closed by {userrealname}', NULL, NULL, 'sticky');";
+$update_schema[335]["t200805211142"] = "INSERT INTO `$dbNoticeTemplates` (`name` ,`type` ,`description` ,`text` ,`linktext` ,`link` ,`durability`) VALUES('NOTICE_NEW_CONTRACT', '3', 'Occurs when a new contact is added', '{contractproduct} contract has been added to {sitename} by {userid}', 'View Contract', '{applicationurl}contract_details.php?id={contractid}', 'sticky');";
+
+$update_schema[335]["t200805211550"] = "CREATE TABLE IF NOT EXISTS `triggers` (
+  `id` int(11) NOT NULL auto_increment,
+  `triggerid` varchar(50) NOT NULL,
+  `userid` tinyint(4) NOT NULL,
+  `action` enum('ACTION_NONE','ACTION_EMAIL','ACTION_NOTICE','ACTION_JOURNAL') NOT NULL default 'ACTION_NONE',
+  `template` int(11) NOT NULL,
+  `parameters` varchar(255) default NULL,
+  `checks` varchar(255) default NULL,
+  PRIMARY KEY  (`id`),
+  KEY `triggerid` (`triggerid`),
+  KEY `userid` (`userid`)
+) ENGINE=MyISAM;";
+
+$update_schema[335]["t200805211551"] = "INSERT INTO `triggers` (`triggerid`, `userid`, `action`, `template`, `parameters`, `checks`) VALUES('TRIGGER_INCIDENT_CREATED', 0, 'ACTION_JOURNAL', 0, '', '');";
+$update_schema[335]["t200805211552"] = "INSERT INTO `triggers` (`triggerid`, `userid`, `action`, `template`, `parameters`, `checks`) VALUES('TRIGGER_INCIDENT_CREATED', 0, 'ACTION_EMAIL', 8, '', '');";
+$update_schema[335]["t200805211553"] = "INSERT INTO `triggers` (`triggerid`, `userid`, `action`, `template`, `parameters`, `checks`) VALUES('TRIGGER_INCIDENT_ASSIGNED', 0, 'ACTION_JOURNAL', 0, '', '');";
+$update_schema[335]["t200805211554"] = "INSERT INTO `triggers` (`triggerid`, `userid`, `action`, `template`, `parameters`, `checks`) VALUES('TRIGGER_INCIDENT_ASSIGNED_WHILE_AWAY', 0, 'ACTION_JOURNAL', 0, '', '');";
+$update_schema[335]["t200805211555"] = "INSERT INTO `triggers` (`triggerid`, `userid`, `action`, `template`, `parameters`, `checks`) VALUES('TRIGGER_INCIDENT_ASSIGNED_WHILE_OFFLINE', 0, 'ACTION_JOURNAL', 0, '', '');";
+$update_schema[335]["t200805211556"] = "INSERT INTO `triggers` (`triggerid`, `userid`, `action`, `template`, `parameters`, `checks`) VALUES('TRIGGER_INCIDENT_NEARING_SLA', 0, 'ACTION_JOURNAL', 0, '', '');";
+$update_schema[335]["t200805211557"] = "INSERT INTO `triggers` (`triggerid`, `userid`, `action`, `template`, `parameters`, `checks`) VALUES('TRIGGER_INCIDENT_REVIEW_DUE', 0, 'ACTION_JOURNAL', 0, '', '');";
+$update_schema[335]["t200805211558"] = "INSERT INTO `triggers` (`triggerid`, `userid`, `action`, `template`, `parameters`, `checks`) VALUES('TRIGGER_KB_CREATED', 0, 'ACTION_JOURNAL', 0, '', '');";
+$update_schema[335]["t200805211559"] = "INSERT INTO `triggers` (`triggerid`, `userid`, `action`, `template`, `parameters`, `checks`) VALUES('TRIGGER_NEW_HELD_EMAIL', 0, 'ACTION_JOURNAL', 0, '', '');";
+$update_schema[335]["t200805211600"] = "INSERT INTO `triggers` (`triggerid`, `userid`, `action`, `template`, `parameters`, `checks`) VALUES('TRIGGER_WAITING_HELD_EMAIL', 0, 'ACTION_JOURNAL', 0, '', '');";
+$update_schema[335]["t200805211601"] = "INSERT INTO `triggers` (`triggerid`, `userid`, `action`, `template`, `parameters`, `checks`) VALUES('TRIGGER_USER_SET_TO_AWAY', 0, 'ACTION_JOURNAL', 0, '', '');";
+$update_schema[335]["t200805211602"] = "INSERT INTO `triggers` (`triggerid`, `userid`, `action`, `template`, `parameters`, `checks`) VALUES('TRIGGER_USER_RETURNS', 0, 'ACTION_JOURNAL', 0, '', '');";
+$update_schema[335]["t200805211603"] = "INSERT INTO `triggers` (`triggerid`, `userid`, `action`, `template`, `parameters`, `checks`) VALUES('TRIGGER_SIT_UPGRADED', 0, 'ACTION_JOURNAL', 0, '', '');";
+$update_schema[335]["t200805211604"] = "INSERT INTO `triggers` (`triggerid`, `userid`, `action`, `template`, `parameters`, `checks`) VALUES('TRIGGER_INCIDENT_OWNED_CLOSED_BY_USER', 0, 'ACTION_JOURNAL', 0, '', '');";
+$update_schema[335]["t200805211605"] = "INSERT INTO `triggers` (`triggerid`, `userid`, `action`, `template`, `parameters`, `checks`) VALUES('TRIGGER_LANGUAGE_DIFFERS', 0, 'ACTION_JOURNAL', 0, '', '');";
+$update_schema[335]["t200805211606"] = "INSERT INTO `triggers` (`triggerid`, `userid`, `action`, `template`, `parameters`, `checks`) VALUES('TRIGGER_CONTACT_RESET_PASSWORD', 0, 'ACTION_JOURNAL', 0, '', '');";
+$update_schema[335]["t200805211607"] = "INSERT INTO `triggers` (`triggerid`, `userid`, `action`, `template`, `parameters`, `checks`) VALUES('TRIGGER_USER_RESET_PASSWORD', 0, 'ACTION_JOURNAL', 0, '', '');";
+$update_schema[335]["t200805211608"] = "INSERT INTO `triggers` (`triggerid`, `userid`, `action`, `template`, `parameters`, `checks`) VALUES('TRIGGER_NEW_CONTACT', 0, 'ACTION_JOURNAL', 0, '', '');";
+$update_schema[335]["t200805211609"] = "INSERT INTO `triggers` (`triggerid`, `userid`, `action`, `template`, `parameters`, `checks`) VALUES('TRIGGER_INCIDENT_CLOSED', 0, 'ACTION_JOURNAL', 0, '', '');";
+$update_schema[335]["t200805211610"] = "INSERT INTO `triggers` (`triggerid`, `userid`, `action`, `template`, `parameters`, `checks`) VALUES('TRIGGER_CONTACT_ADDED', 0, 'ACTION_JOURNAL', 0, '', '');";
+$update_schema[335]["t200805211611"] = "INSERT INTO `triggers` (`triggerid`, `userid`, `action`, `template`, `parameters`, `checks`) VALUES('TRIGGER_NEW_CONTRACT', 0, 'ACTION_JOURNAL', 0, '', '');";
+$update_schema[335]["t200805211612"] = "INSERT INTO `triggers` (`triggerid`, `userid`, `action`, `template`, `parameters`, `checks`) VALUES('TRIGGER_INCIDENT_ASSIGNED', 1, 'ACTION_NOTICE', 2, '', '{userid} == {currentuserid}');";
+$update_schema[335]["t200805211613"] = "INSERT INTO `triggers` (`triggerid`, `userid`, `action`, `template`, `parameters`, `checks`) VALUES('TRIGGER_SIT_UPGRADED', 1, 'ACTION_NOTICE', 10, '', '');";
+$update_schema[335]["t200805211614"] = "INSERT INTO `triggers` (`triggerid`, `userid`, `action`, `template`, `parameters`, `checks`) VALUES('TRIGGER_INCIDENT_CLOSED', 1, 'ACTION_NOTICE', 13, '', '{userid} != {currentuserid}');";
+$update_schema[335]["t200805211615"] = "INSERT INTO `triggers` (`triggerid`, `userid`, `action`, `template`, `parameters`, `checks`) VALUES('TRIGGER_INCIDENT_NEARING_SLA', 1, 'ACTION_NOTICE', 3, '', '{ownerid} == {currentuserid} OR {townerid} == {currentuserid}');";
+
 // Important: When making changes to the schema you must add SQL to make the alterations
 // to existing databases in $upgrade_schema[] *AND* you must also change $schema[] for
 // new installations (above the line of stars).
