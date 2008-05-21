@@ -254,7 +254,7 @@ if ($noticeaction == 'dismiss_notice')
 if ($sit[0] != '')
 {
     // Check users email address
-    if (empty($_SESSION['email']) OR !preg_match('/^[a-z0-9_\+-]+(\.[a-z0-9_\+-]+)*@[a-z0-9-]+(\.[a-z0-9-]+)*\.([a-z]{2,4})$/',$_SESSION['email']))
+    if (empty($_SESSION['email']) OR !preg_match('/^[a-zA-Z0-9_\+-]+(\.[a-zA-Z0-9_\+-]+)*@[a-zA-Z0-9-]+(\.[a-zA-Z0-9-]+)*\.([a-zA-Z]{2,4})$/',$_SESSION['email']))
     {
         echo "<p class='error'>{$strInvalidEmailAddress} - <a href='edit_profile.php'>{$strEditEmail}</a></p>";
     }
