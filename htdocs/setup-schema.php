@@ -2036,7 +2036,7 @@ $update_schema[335]["t200805211140"] = "INSERT INTO `$dbNoticeTemplates` (`name`
 $update_schema[335]["t200805211141"] = "INSERT INTO `$dbNoticeTemplates` (`name`, `type`, `description`, `text`, `linktext`, `link`, `durability`) VALUES('NOTICE_INCIDENT_CLOSED', 3, 'Occurs when an incident is closed', '{incidentid} - {incidentname} has been closed by {userrealname}', NULL, NULL, 'sticky');";
 $update_schema[335]["t200805211142"] = "INSERT INTO `$dbNoticeTemplates` (`name` ,`type` ,`description` ,`text` ,`linktext` ,`link` ,`durability`) VALUES('NOTICE_NEW_CONTRACT', '3', 'Occurs when a new contact is added', '{contractproduct} contract has been added to {sitename} by {userid}', 'View Contract', '{applicationurl}contract_details.php?id={contractid}', 'sticky');";
 
-$update_schema[335]["t200805211550"] = "CREATE TABLE IF NOT EXISTS `triggers` (
+$update_schema[335]["t200805211550"] = "CREATE TABLE IF NOT EXISTS `$dbTriggers` (
   `id` int(11) NOT NULL auto_increment,
   `triggerid` varchar(50) NOT NULL,
   `userid` tinyint(4) NOT NULL,
@@ -2049,31 +2049,31 @@ $update_schema[335]["t200805211550"] = "CREATE TABLE IF NOT EXISTS `triggers` (
   KEY `userid` (`userid`)
 ) ENGINE=MyISAM;";
 
-$update_schema[335]["t200805211551"] = "INSERT INTO `triggers` (`triggerid`, `userid`, `action`, `template`, `parameters`, `checks`) VALUES('TRIGGER_INCIDENT_CREATED', 0, 'ACTION_JOURNAL', 0, '', '');";
-$update_schema[335]["t200805211552"] = "INSERT INTO `triggers` (`triggerid`, `userid`, `action`, `template`, `parameters`, `checks`) VALUES('TRIGGER_INCIDENT_CREATED', 0, 'ACTION_EMAIL', 8, '', '');";
-$update_schema[335]["t200805211553"] = "INSERT INTO `triggers` (`triggerid`, `userid`, `action`, `template`, `parameters`, `checks`) VALUES('TRIGGER_INCIDENT_ASSIGNED', 0, 'ACTION_JOURNAL', 0, '', '');";
-$update_schema[335]["t200805211554"] = "INSERT INTO `triggers` (`triggerid`, `userid`, `action`, `template`, `parameters`, `checks`) VALUES('TRIGGER_INCIDENT_ASSIGNED_WHILE_AWAY', 0, 'ACTION_JOURNAL', 0, '', '');";
-$update_schema[335]["t200805211555"] = "INSERT INTO `triggers` (`triggerid`, `userid`, `action`, `template`, `parameters`, `checks`) VALUES('TRIGGER_INCIDENT_ASSIGNED_WHILE_OFFLINE', 0, 'ACTION_JOURNAL', 0, '', '');";
-$update_schema[335]["t200805211556"] = "INSERT INTO `triggers` (`triggerid`, `userid`, `action`, `template`, `parameters`, `checks`) VALUES('TRIGGER_INCIDENT_NEARING_SLA', 0, 'ACTION_JOURNAL', 0, '', '');";
-$update_schema[335]["t200805211557"] = "INSERT INTO `triggers` (`triggerid`, `userid`, `action`, `template`, `parameters`, `checks`) VALUES('TRIGGER_INCIDENT_REVIEW_DUE', 0, 'ACTION_JOURNAL', 0, '', '');";
-$update_schema[335]["t200805211558"] = "INSERT INTO `triggers` (`triggerid`, `userid`, `action`, `template`, `parameters`, `checks`) VALUES('TRIGGER_KB_CREATED', 0, 'ACTION_JOURNAL', 0, '', '');";
-$update_schema[335]["t200805211559"] = "INSERT INTO `triggers` (`triggerid`, `userid`, `action`, `template`, `parameters`, `checks`) VALUES('TRIGGER_NEW_HELD_EMAIL', 0, 'ACTION_JOURNAL', 0, '', '');";
-$update_schema[335]["t200805211600"] = "INSERT INTO `triggers` (`triggerid`, `userid`, `action`, `template`, `parameters`, `checks`) VALUES('TRIGGER_WAITING_HELD_EMAIL', 0, 'ACTION_JOURNAL', 0, '', '');";
-$update_schema[335]["t200805211601"] = "INSERT INTO `triggers` (`triggerid`, `userid`, `action`, `template`, `parameters`, `checks`) VALUES('TRIGGER_USER_SET_TO_AWAY', 0, 'ACTION_JOURNAL', 0, '', '');";
-$update_schema[335]["t200805211602"] = "INSERT INTO `triggers` (`triggerid`, `userid`, `action`, `template`, `parameters`, `checks`) VALUES('TRIGGER_USER_RETURNS', 0, 'ACTION_JOURNAL', 0, '', '');";
-$update_schema[335]["t200805211603"] = "INSERT INTO `triggers` (`triggerid`, `userid`, `action`, `template`, `parameters`, `checks`) VALUES('TRIGGER_SIT_UPGRADED', 0, 'ACTION_JOURNAL', 0, '', '');";
-$update_schema[335]["t200805211604"] = "INSERT INTO `triggers` (`triggerid`, `userid`, `action`, `template`, `parameters`, `checks`) VALUES('TRIGGER_INCIDENT_OWNED_CLOSED_BY_USER', 0, 'ACTION_JOURNAL', 0, '', '');";
-$update_schema[335]["t200805211605"] = "INSERT INTO `triggers` (`triggerid`, `userid`, `action`, `template`, `parameters`, `checks`) VALUES('TRIGGER_LANGUAGE_DIFFERS', 0, 'ACTION_JOURNAL', 0, '', '');";
-$update_schema[335]["t200805211606"] = "INSERT INTO `triggers` (`triggerid`, `userid`, `action`, `template`, `parameters`, `checks`) VALUES('TRIGGER_CONTACT_RESET_PASSWORD', 0, 'ACTION_JOURNAL', 0, '', '');";
-$update_schema[335]["t200805211607"] = "INSERT INTO `triggers` (`triggerid`, `userid`, `action`, `template`, `parameters`, `checks`) VALUES('TRIGGER_USER_RESET_PASSWORD', 0, 'ACTION_JOURNAL', 0, '', '');";
-$update_schema[335]["t200805211608"] = "INSERT INTO `triggers` (`triggerid`, `userid`, `action`, `template`, `parameters`, `checks`) VALUES('TRIGGER_NEW_CONTACT', 0, 'ACTION_JOURNAL', 0, '', '');";
-$update_schema[335]["t200805211609"] = "INSERT INTO `triggers` (`triggerid`, `userid`, `action`, `template`, `parameters`, `checks`) VALUES('TRIGGER_INCIDENT_CLOSED', 0, 'ACTION_JOURNAL', 0, '', '');";
-$update_schema[335]["t200805211610"] = "INSERT INTO `triggers` (`triggerid`, `userid`, `action`, `template`, `parameters`, `checks`) VALUES('TRIGGER_CONTACT_ADDED', 0, 'ACTION_JOURNAL', 0, '', '');";
-$update_schema[335]["t200805211611"] = "INSERT INTO `triggers` (`triggerid`, `userid`, `action`, `template`, `parameters`, `checks`) VALUES('TRIGGER_NEW_CONTRACT', 0, 'ACTION_JOURNAL', 0, '', '');";
-$update_schema[335]["t200805211612"] = "INSERT INTO `triggers` (`triggerid`, `userid`, `action`, `template`, `parameters`, `checks`) VALUES('TRIGGER_INCIDENT_ASSIGNED', 1, 'ACTION_NOTICE', 2, '', '{userid} == {currentuserid}');";
-$update_schema[335]["t200805211613"] = "INSERT INTO `triggers` (`triggerid`, `userid`, `action`, `template`, `parameters`, `checks`) VALUES('TRIGGER_SIT_UPGRADED', 1, 'ACTION_NOTICE', 10, '', '');";
-$update_schema[335]["t200805211614"] = "INSERT INTO `triggers` (`triggerid`, `userid`, `action`, `template`, `parameters`, `checks`) VALUES('TRIGGER_INCIDENT_CLOSED', 1, 'ACTION_NOTICE', 13, '', '{userid} != {currentuserid}');";
-$update_schema[335]["t200805211615"] = "INSERT INTO `triggers` (`triggerid`, `userid`, `action`, `template`, `parameters`, `checks`) VALUES('TRIGGER_INCIDENT_NEARING_SLA', 1, 'ACTION_NOTICE', 3, '', '{ownerid} == {currentuserid} OR {townerid} == {currentuserid}');";
+$update_schema[335]["t200805211551"] = "INSERT INTO `$dbTriggers` (`triggerid`, `userid`, `action`, `template`, `parameters`, `checks`) VALUES('TRIGGER_INCIDENT_CREATED', 0, 'ACTION_JOURNAL', 0, '', '');";
+$update_schema[335]["t200805211552"] = "INSERT INTO `$dbTriggers` (`triggerid`, `userid`, `action`, `template`, `parameters`, `checks`) VALUES('TRIGGER_INCIDENT_CREATED', 0, 'ACTION_EMAIL', 8, '', '');";
+$update_schema[335]["t200805211553"] = "INSERT INTO `$dbTriggers` (`triggerid`, `userid`, `action`, `template`, `parameters`, `checks`) VALUES('TRIGGER_INCIDENT_ASSIGNED', 0, 'ACTION_JOURNAL', 0, '', '');";
+$update_schema[335]["t200805211554"] = "INSERT INTO `$dbTriggers` (`triggerid`, `userid`, `action`, `template`, `parameters`, `checks`) VALUES('TRIGGER_INCIDENT_ASSIGNED_WHILE_AWAY', 0, 'ACTION_JOURNAL', 0, '', '');";
+$update_schema[335]["t200805211555"] = "INSERT INTO `$dbTriggers` (`triggerid`, `userid`, `action`, `template`, `parameters`, `checks`) VALUES('TRIGGER_INCIDENT_ASSIGNED_WHILE_OFFLINE', 0, 'ACTION_JOURNAL', 0, '', '');";
+$update_schema[335]["t200805211556"] = "INSERT INTO `$dbTriggers` (`triggerid`, `userid`, `action`, `template`, `parameters`, `checks`) VALUES('TRIGGER_INCIDENT_NEARING_SLA', 0, 'ACTION_JOURNAL', 0, '', '');";
+$update_schema[335]["t200805211557"] = "INSERT INTO `$dbTriggers` (`triggerid`, `userid`, `action`, `template`, `parameters`, `checks`) VALUES('TRIGGER_INCIDENT_REVIEW_DUE', 0, 'ACTION_JOURNAL', 0, '', '');";
+$update_schema[335]["t200805211558"] = "INSERT INTO `$dbTriggers` (`triggerid`, `userid`, `action`, `template`, `parameters`, `checks`) VALUES('TRIGGER_KB_CREATED', 0, 'ACTION_JOURNAL', 0, '', '');";
+$update_schema[335]["t200805211559"] = "INSERT INTO `$dbTriggers` (`triggerid`, `userid`, `action`, `template`, `parameters`, `checks`) VALUES('TRIGGER_NEW_HELD_EMAIL', 0, 'ACTION_JOURNAL', 0, '', '');";
+$update_schema[335]["t200805211600"] = "INSERT INTO `$dbTriggers` (`triggerid`, `userid`, `action`, `template`, `parameters`, `checks`) VALUES('TRIGGER_WAITING_HELD_EMAIL', 0, 'ACTION_JOURNAL', 0, '', '');";
+$update_schema[335]["t200805211601"] = "INSERT INTO `$dbTriggers` (`triggerid`, `userid`, `action`, `template`, `parameters`, `checks`) VALUES('TRIGGER_USER_SET_TO_AWAY', 0, 'ACTION_JOURNAL', 0, '', '');";
+$update_schema[335]["t200805211602"] = "INSERT INTO `$dbTriggers` (`triggerid`, `userid`, `action`, `template`, `parameters`, `checks`) VALUES('TRIGGER_USER_RETURNS', 0, 'ACTION_JOURNAL', 0, '', '');";
+$update_schema[335]["t200805211603"] = "INSERT INTO `$dbTriggers` (`triggerid`, `userid`, `action`, `template`, `parameters`, `checks`) VALUES('TRIGGER_SIT_UPGRADED', 0, 'ACTION_JOURNAL', 0, '', '');";
+$update_schema[335]["t200805211604"] = "INSERT INTO `$dbTriggers` (`triggerid`, `userid`, `action`, `template`, `parameters`, `checks`) VALUES('TRIGGER_INCIDENT_OWNED_CLOSED_BY_USER', 0, 'ACTION_JOURNAL', 0, '', '');";
+$update_schema[335]["t200805211605"] = "INSERT INTO `$dbTriggers` (`triggerid`, `userid`, `action`, `template`, `parameters`, `checks`) VALUES('TRIGGER_LANGUAGE_DIFFERS', 0, 'ACTION_JOURNAL', 0, '', '');";
+$update_schema[335]["t200805211606"] = "INSERT INTO `$dbTriggers` (`triggerid`, `userid`, `action`, `template`, `parameters`, `checks`) VALUES('TRIGGER_CONTACT_RESET_PASSWORD', 0, 'ACTION_JOURNAL', 0, '', '');";
+$update_schema[335]["t200805211607"] = "INSERT INTO `$dbTriggers` (`triggerid`, `userid`, `action`, `template`, `parameters`, `checks`) VALUES('TRIGGER_USER_RESET_PASSWORD', 0, 'ACTION_JOURNAL', 0, '', '');";
+$update_schema[335]["t200805211608"] = "INSERT INTO `$dbTriggers` (`triggerid`, `userid`, `action`, `template`, `parameters`, `checks`) VALUES('TRIGGER_NEW_CONTACT', 0, 'ACTION_JOURNAL', 0, '', '');";
+$update_schema[335]["t200805211609"] = "INSERT INTO `$dbTriggers` (`triggerid`, `userid`, `action`, `template`, `parameters`, `checks`) VALUES('TRIGGER_INCIDENT_CLOSED', 0, 'ACTION_JOURNAL', 0, '', '');";
+$update_schema[335]["t200805211610"] = "INSERT INTO `$dbTriggers` (`triggerid`, `userid`, `action`, `template`, `parameters`, `checks`) VALUES('TRIGGER_CONTACT_ADDED', 0, 'ACTION_JOURNAL', 0, '', '');";
+$update_schema[335]["t200805211611"] = "INSERT INTO `$dbTriggers` (`triggerid`, `userid`, `action`, `template`, `parameters`, `checks`) VALUES('TRIGGER_NEW_CONTRACT', 0, 'ACTION_JOURNAL', 0, '', '');";
+$update_schema[335]["t200805211612"] = "INSERT INTO `$dbTriggers` (`triggerid`, `userid`, `action`, `template`, `parameters`, `checks`) VALUES('TRIGGER_INCIDENT_ASSIGNED', 1, 'ACTION_NOTICE', 2, '', '{userid} == {currentuserid}');";
+$update_schema[335]["t200805211613"] = "INSERT INTO `$dbTriggers` (`triggerid`, `userid`, `action`, `template`, `parameters`, `checks`) VALUES('TRIGGER_SIT_UPGRADED', 1, 'ACTION_NOTICE', 10, '', '');";
+$update_schema[335]["t200805211614"] = "INSERT INTO `$dbTriggers` (`triggerid`, `userid`, `action`, `template`, `parameters`, `checks`) VALUES('TRIGGER_INCIDENT_CLOSED', 1, 'ACTION_NOTICE', 13, '', '{userid} != {currentuserid}');";
+$update_schema[335]["t200805211615"] = "INSERT INTO `$dbTriggers` (`triggerid`, `userid`, `action`, `template`, `parameters`, `checks`) VALUES('TRIGGER_INCIDENT_NEARING_SLA', 1, 'ACTION_NOTICE', 3, '', '{ownerid} == {currentuserid} OR {townerid} == {currentuserid}');";
 
 // Important: When making changes to the schema you must add SQL to make the alterations
 // to existing databases in $upgrade_schema[] *AND* you must also change $schema[] for
