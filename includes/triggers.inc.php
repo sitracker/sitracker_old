@@ -34,7 +34,7 @@ $triggerarray['TRIGGER_INCIDENT_ASSIGNED'] =
 array('name' => 'Incident Assigned',
       'description' => 'Occurs when a new incident is assigned to you',
       'required' => array('incidentid', 'userid'),
-      'optional' => array(),
+      'optional' => array('userid'),
       'type' => 'incident'
       );
 
@@ -256,7 +256,6 @@ function trigger($triggerid, $paramarray='')
             if (!trigger_checks($triggerobj->checks, $paramarray))
             {
                 $checks = trigger_replace_specials($triggerid, $triggerobj->checks, $paramarray);
-                echo $checks;
                 eval("return \$value = $checks;");
                 if($value === FALSE)
                 {
