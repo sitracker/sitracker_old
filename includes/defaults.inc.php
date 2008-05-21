@@ -215,7 +215,7 @@ $CONFIG['default_i18n'] = 'en-GB';
 $CONFIG['timezone'] = 'Europe/London';
 
 // Incidents closed more than this number of days ago aren't show in the incident queue, -1 means disabled
-$CONFIG['hide_closed_incidents_older_than'] = 30;
+$CONFIG['hide_closed_incidents_older_than'] = 90;
 
 // Following is still BETA
 $CONFIG['auto_chase'] = FALSE;

@@ -440,10 +440,24 @@ $ttvararray['{contractid}'] = array('description' => 'Contract ID',
 
 $ttvararray['{contractproduct}'] = array('description' => 'Contact Product',
                                       'replacement' => 'contract_product($paramarray[\'contractid\']);',
-                                      'required' => 'contractid');
+                                      'requires' => 'contractid');
 
 $ttvararray['{contractsla}'] = array('description' => 'SLA of the maintenance',
                                   'replacement' => 'maintenance_servicelevel($paramarray[\'contractid\']);',
-                                  'required' => 'contractid');
+                                  'requires' => 'contractid');
+
+$ttvararray['{currentuserid}'] = array('description' => $sit[2],
+                                       'replacement' => '$_SESSION[\'userid\'];');
+
+$ttvararray['{userid}'] = array('description' => 'user ID',
+                                'replacement' => '$paramarray[\'userid\'];');
+
+$ttvararray['{ownerid}'] = array('description' => 'Incident owner ID',
+                                 'replacement' => 'incident_owner($paramarray[\'incidentid\'])',
+                                 'requires' => 'incidentid');
+
+$ttvararray['{townerid}'] = array('description' => 'Incident temp owner ID',
+                                 'replacement' => 'incident_towner($paramarray[\'incidentid\'])',
+                                 'requires' => 'incidentid');
 
 ?>

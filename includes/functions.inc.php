@@ -1000,6 +1000,10 @@ function incident_owner($id)
     return db_read_column('owner', $GLOBALS['dbIncidents'], $id);
 }
 
+function incident_towner($id)
+{
+    return db_read_column('towner', $GLOBALS['dbIncidents'], $id);
+}
 
 function incident_contact($id)
 {
@@ -8934,8 +8938,8 @@ function application_url()
 function contract_product($maintid)
 {
     $maintid = intval($maintid);
-    $productid = db_read_column('product', $dbMaintenance, $maintid);
-    $sql = "SELECT name FROM `$dbProducts` WHERE id='{$productid}'";
+    $productid = db_read_column('product', $GLOBALS['dbMaintenance'], $maintid);
+    $sql = "SELECT name FROM `{$GLOBALS['dbProducts']}` WHERE id='{$productid}'";
     $result = mysql_query($sql);
     $productobj = mysql_fetch_object($result);
     if (!empty($productobj->name))
@@ -8951,7 +8955,7 @@ function contract_product($maintid)
 function contract_site($maintid)
 {
     $maintid = intval($maintid);
-    $sql = "SELECT site FROM `$dbMaintenance` WHERE id='{$maintid}'";
+    $sql = "SELECT site FROM `{$GLOBALS['dbMaintenance']}` WHERE id='{$maintid}'";
     $result = mysql_query($sql);
     $maintobj = mysql_fetch_object($result);
     

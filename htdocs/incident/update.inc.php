@@ -583,7 +583,7 @@ else
     // was '$attachment'
     if ($_FILES['attachment']['name'] != '' && isset($_FILES['attachment']['name']) == TRUE)
     {
-        $bodytext = "Attachment: [[att=$fileid]]{$_FILES['attachment']['name']}[[/att]]\n".$bodytext;
+        $bodytext = "Attachment: [[att=$fileid]]{$_FILES['attachment']['name']}[[/att]]\n\n".$bodytext;
     }
     // Debug
     ## if ($target!='') $bodytext = "Target: $target\n".$bodytext;

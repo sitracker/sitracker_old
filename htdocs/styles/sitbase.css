@@ -304,7 +304,9 @@ div#container
 }
 
 div#kbarticle textarea { width: 99%; }
+div#container textarea { width: 99%; }
 div#kbarticle h3 span { color: black; font-size: 70%; font-weight: normal; }
+div#container h3 span { color: black; font-size: 70%; font-weight: normal; }
 
 span.required
 {

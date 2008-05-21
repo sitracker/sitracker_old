@@ -227,7 +227,9 @@ function saction_TimeCalc()
                 {
                     $timetil = $times['next_sla_time']-$newSlaTime;
 
-                    trigger("TRIGGER_INCIDENT_NEARING_SLA", array('incidentid' => $incident['id'], 'nextslatime' => $times['next_sla_time']));
+                    trigger('TRIGGER_INCIDENT_NEARING_SLA', array('incidentid' => $incident['id'],
+                                                                  'nextslatime' => $times['next_sla_time'],
+                                                                  'nextsla' => $slaInfo['sla']));
                 }
             }
         }

@@ -2,13 +2,13 @@
 // This Page Is Valid XHTML 1.0 Transitional! 27Oct05
 echo "</div>"; // mainframe
 echo "<div id='statusbar'>";
-if ($_SESSION['auth']==TRUE) echo "<a href='about.php'>";
+if ($_SESSION['auth'] == TRUE) echo "<a href='about.php'>";
 echo "<img src='{$CONFIG['application_webpath']}images/sitting_man_logo16x16.png' width='16' height='16' border='0' alt='About {$CONFIG['application_shortname']}' />";
-if ($_SESSION['auth']==TRUE) echo "</a>";
+if ($_SESSION['auth'] == TRUE) echo "</a>";
 echo " <strong><a href='http://sitracker.sourceforge.net/'>Support Incident Tracker</a>";
-if ($_SESSION['auth']==TRUE) echo " {$application_version_string}";
+if ($_SESSION['auth'] == TRUE) echo " {$application_version_string}";
 echo "</strong>";
-if ($_SESSION['auth']==TRUE)
+if ($_SESSION['auth'] == TRUE)
 {
     echo " running ";
     if ($CONFIG['demo']) echo "in DEMO mode ";
