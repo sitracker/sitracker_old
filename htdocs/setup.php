@@ -608,7 +608,7 @@ switch ($_REQUEST['action'])
                         if (mysql_error()) trigger_error(mysql_error(),E_USER_WARNING);
                         list($installed_version) = mysql_fetch_row($result);
 
-                        if ($installed_version > 3.34)
+                        if ($installed_version > 3.35)
                         {
                             $sql = "SELECT `schema` FROM `{$dbSystem}` WHERE id = 0";
                             $result = mysql_query($sql);
