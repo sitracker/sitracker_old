@@ -73,7 +73,7 @@ else
             $errors = 0;
             if ($name=='')
             {
-                $_SESSION['formerrors']['add_task']['name'] = "Incident title must not be blank";
+                $_SESSION['formerrors']['add_task']['name'] = "Title must not be blank";
                 $errors++;
             }
 
@@ -113,12 +113,12 @@ else
 
             echo "<form id='addtask' action='{$_SERVER['PHP_SELF']}' method='post'>";
             echo "<table class='vertical'>";
-            echo "<tr><th>{$strTitle}></th>";
+            echo "<tr><th>{$strTitle}</th>";
             echo "<td><input class='required' type='text' name='name' ";
             echo "size='35' maxlength='255'";
             if ($_SESSION['formdata']['add_task']['name'] != '')
                 echo "value='{$_SESSION['formdata']['add_task']['name']}'";
-            echo "/></td></tr>";
+            echo "/> <span class='required'>{$GLOBALS['strRequired']}</span></td></tr>";
 
             echo "<tr><th>{$strDescription}</th>";
             echo "<td><textarea name='description' rows='4' cols='30'>";
