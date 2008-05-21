@@ -58,6 +58,7 @@ $triggerarray['TRIGGER_INCIDENT_NEARING_SLA'] =
 array('name' => 'Incident Nearing SLA',
       'description' => 'Occurs when an incidents nears an SLA',
       'required' => array('incidentid', 'nextslatime', 'nextsla'),
+      'optional' => array('ownerid', 'townerid'),
       'type' => 'incident'
       );
 
@@ -164,6 +165,7 @@ $triggerarray['TRIGGER_INCIDENT_CLOSED'] =
 array('name' => 'Incident closed',
       'description' => 'Occurs when an incident is closed',
       'required' => array('incidentid', 'userid'),
+      'optional' => array('userid'),
       'type' => 'incident'
       );
 
@@ -256,6 +258,7 @@ function trigger($triggerid, $paramarray='')
             if (!trigger_checks($triggerobj->checks, $paramarray))
             {
                 $checks = trigger_replace_specials($triggerid, $triggerobj->checks, $paramarray);
+                echo $checks;
                 eval("return \$value = $checks;");
                 if($value === FALSE)
                 {
@@ -334,7 +337,10 @@ function trigger_action($userid, $triggerid, $action, $paramarray, $template)
         case "ACTION_JOURNAL":
             if (is_array($paramarray))
             {
-                $journalbody = implode($paramarray);
+                foreach (array_keys($paramarray) AS $param)
+                {
+                    $journalbody .= "$param: {$paramarray[$param]}; ";
+                }
             }
             else
             {
