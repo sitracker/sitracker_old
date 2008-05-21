@@ -625,9 +625,14 @@ switch ($_REQUEST['action'])
                         else
                         {
                             $installed_schema = 334;
-                            $sql = "ALTER TABLE `{$dbSystem}` ADD `schema` BIGINT UNSIGNED NOT NULL COMMENT 'DateTime in YYYYMMDDHHMM format'";
+                            $sql = "SHOW COLUMNS FROM `{$dbSystem}` WHERE Field='schema'";
                             $result = mysql_query($sql);
-                            if (mysql_error()) trigger_error(mysql_error(),E_USER_WARNING);
+                            if (mysql_num_rows($result) < 1)
+                            {
+                                $sql = "ALTER TABLE `{$dbSystem}` ADD `schema` BIGINT UNSIGNED NOT NULL COMMENT 'DateTime in YYYYMMDDHHMM format'";
+                                $result = mysql_query($sql);
+                                if (mysql_error()) trigger_error(mysql_error(),E_USER_WARNING);
+                            }
                         }
                     }
 
