@@ -603,10 +603,22 @@ switch ($_REQUEST['action'])
                     }
                     else
                     {
-                        $sql = "SELECT `version`, `schema` FROM `{$dbSystem}` WHERE id = 0";
+                        $sql = "SELECT `version` FROM `{$dbSystem}` WHERE id = 0";
                         $result = mysql_query($sql);
                         if (mysql_error()) trigger_error(mysql_error(),E_USER_WARNING);
-                        list($installed_version, $installed_schema) = mysql_fetch_row($result);
+                        list($installed_version) = mysql_fetch_row($result);
+
+                        if ($installed_version > 3.34)
+                        {
+                            $sql = "SELECT `schema` FROM `{$dbSystem}` WHERE id = 0";
+                            $result = mysql_query($sql);
+                            if (mysql_error()) trigger_error(mysql_error(),E_USER_WARNING);
+                            list($installed_version, $installed_schema) = mysql_fetch_row($result);
+                        }
+                        else
+                        {
+                            $installed_schema = 334;
+                        }
                     }
 
                     if (empty($installed_version))
