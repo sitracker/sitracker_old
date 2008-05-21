@@ -75,12 +75,12 @@ if (mysql_num_rows($result) >= 1)
         echo "<td>";
         if ($task->distribution=='public')
         {
-        	echo $strPublic;
+            echo $strPublic;
         }
         if ($task->distribution=='private')
         {
-        	echo "{$strPrivate} ";
-        	echo icon('private', 16, $strPrivate);
+            echo "{$strPrivate} ";
+            echo icon('private', 16, $strPrivate);
         }
         echo "</td></tr>";
         echo "</table>";
@@ -89,19 +89,20 @@ if (mysql_num_rows($result) >= 1)
         if ($task->completion < 100) echo " | <a href='edit_task.php?id={$taskid}&amp;action=markcomplete'>{$strMarkComplete}</a>";
         echo "</p>";
 
-        echo "<div style='border: 1px solid #CCCCFF; padding: 5px;'>";
-        echo "<p><strong>{$strLinks}</strong>:</p>";
-        // Draw links tree
-        // Have a look what can be linked from tasks
-        echo show_links('tasks', $task->id);
-
-        echo "<p><strong>{$strReverseLinks}</strong>:</p>";
-        echo show_links('tasks', $task->id, 0, '', 'rl');
-
-        echo "</div>";
-
-        echo show_create_links('tasks', $task->id);
-
+//
+//         echo "<div style='border: 1px solid #CCCCFF; padding: 5px;'>";
+//         echo "<p><strong>{$strLinks}</strong>:</p>";
+//         // Draw links tree
+//         // Have a look what can be linked from tasks
+//         echo show_links('tasks', $task->id);
+//
+//         echo "<p><strong>{$strReverseLinks}</strong>:</p>";
+//         echo show_links('tasks', $task->id, 0, '', 'rl');
+//
+//         echo "</div>";
+//
+//         echo show_create_links('tasks', $task->id);
+//
         echo "</div>";
 
         // Notes
