@@ -57,8 +57,7 @@ array('name' => 'Incident Assigned While Offline',
 $triggerarray['TRIGGER_INCIDENT_NEARING_SLA'] =
 array('name' => 'Incident Nearing SLA',
       'description' => 'Occurs when an incidents nears an SLA',
-      'required' => array('incidentid'),
-      'optional' => array('ownerid'),
+      'required' => array('incidentid', 'nextslatime', 'nextsla'),
       'type' => 'incident'
       );
 
@@ -73,7 +72,7 @@ array('name' => 'Incident Review Due',
 $triggerarray['TRIGGER_KB_CREATED'] =
 array('name' => 'Knowledgebase Article Created',
       'description' => 'Occurs when a new Knowledgebase article is created',
-      'required' => array('kbid'),
+      'required' => array('kbid', 'userid'),
       'optional' => array(),
       'type' => 'kb'
       );
@@ -89,7 +88,7 @@ array('name' => 'New Held Email',
 $triggerarray['TRIGGER_WAITING_HELD_EMAIL'] =
 array('name' => 'Waiting Held Email',
       'description' => 'Occurs when there is a new email in the holding queue for x minutes',
-      'required' => array('minswaiting'),
+      'required' => array('holdingmins'),
       'optional' => array(),
       'type' => 'user'
       );
@@ -164,8 +163,21 @@ array('name' => 'New contact added',
 $triggerarray['TRIGGER_INCIDENT_CLOSED'] =
 array('name' => 'Incident closed',
       'description' => 'Occurs when an incident is closed',
-      'required' => array('incidentid', 'closeruserid'),
+      'required' => array('incidentid', 'userid'),
       'type' => 'incident'
+      );
+
+$triggerarray['TRIGGER_CONTACT_ADDED'] =
+array('name' => 'Contact added',
+      'description' => 'Occurs when an new contact is added',
+      'required' => array('contactid', 'userid'),
+      'type' => 'system'
+      );
+
+$triggerarray['TRIGGER_NEW_CONTRACT'] =
+array('name' => 'New contract added',
+      'description' => 'Occurs when a new contract is added',
+      'required' => array('maintid')
       );
 
 //set up all the action types

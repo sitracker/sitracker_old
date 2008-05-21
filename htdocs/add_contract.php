@@ -251,6 +251,7 @@ elseif ($action == "add")
         {
             // show success message
             $id=mysql_insert_id();
+            trigger('TRIGGER_NEW_CONTRACT', array('contractid' => $id, 'userid' => $sit[2]));
             journal(CFG_LOGGING_NORMAL, 'Contract Added', "Contract $id Added", CFG_JOURNAL_MAINTENANCE, $id);
 
             html_redirect("contract_details.php?id=$maintid");

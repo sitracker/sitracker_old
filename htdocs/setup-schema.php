@@ -17,14 +17,7 @@
 
 // TODO we need to clean this schema up to make it confirmed compatible with mysql4
 
-$schema = "CREATE TABLE IF NOT EXISTS `{$dbSystem}` (
-  `id` int(1) NOT NULL default '0',
-  `version` float(3,2) NOT NULL default '0.00',
-  `schema` bigint(20) unsigned NOT NULL COMMENT 'DateTime in YYYYMMDDHHMM format',
-  PRIMARY KEY  (`id`)
-) TYPE=MyISAM;
-
-CREATE TABLE `{$dbBillingPeriods}` (
+$schema = "CREATE TABLE `{$dbBillingPeriods}` (
 `servicelevelid` INT( 5 ) NOT NULL ,
 `engineerperiod` INT NOT NULL COMMENT 'In minutes',
 `customerperiod` INT NOT NULL COMMENT 'In minutes',
@@ -1133,6 +1126,14 @@ CREATE TABLE `{$dbSupportContacts}` (
 
 INSERT INTO `{$dbSupportContacts}` VALUES (1,1,1);
 
+
+CREATE TABLE `{$dbSystem}` (
+  `id` int(1) NOT NULL default '0',
+  `version` float(3,2) NOT NULL default '0.00',
+  PRIMARY KEY  (`id`)
+) ENGINE=MyISAM;
+
+
 CREATE TABLE `{$dbTags}` (
   `tagid` int(11) NOT NULL auto_increment,
   `name` varchar(255) NOT NULL default '',
@@ -1744,6 +1745,12 @@ ALTER TABLE `{$dbUsers}` ADD `var_utc_offset` INT NOT NULL DEFAULT '0' COMMENT '
 INSERT INTO `{$dbUserStatus}` (`id` ,`name`) VALUES ('0', 'Account Disabled');
 ";
 
+// This update is a pre-requisite for 3.35, there is no SiT release 3.34
+$upgrade_schema[334] = "
+-- INL 19/05/08 Last update using the < 335 schema upgrade system, next we'll use the new system and store the version in this col
+ALTER TABLE `{$dbSystem}` ADD `schema` BIGINT UNSIGNED NOT NULL COMMENT 'DateTime in YYYYMMDDHHMM format';
+";
+
 $upgrade_schema[335]['t200805191400'] = "
 -- KMH 17/12/07
 CREATE TABLE IF NOT EXISTS `{$dbTriggers}` (
@@ -1770,7 +1777,8 @@ CREATE TABLE `{$dbNoticeTemplates}` (
 `text` TINYTEXT NOT NULL ,
 `linktext` VARCHAR( 50 ) NULL ,
 `link` VARCHAR( 100 ) NULL ,
-`durability` ENUM( 'sticky', 'session' ) NOT NULL DEFAULT 'sticky'
+`durability` ENUM( 'sticky', 'session' ) NOT NULL DEFAULT 'sticky',
+ INDEX ( `userid` ),
 ) ENGINE = MYISAM ;
 
 INSERT INTO `{$dbNoticeTemplates}` (`name`, `type`, `description`, `text`, `linktext`, `link`, `durability`) VALUES('TRIGGER_INCIDENT_CREATED', 0, 'Used when a new incident has been created', 'Incident {incidentid} - {incidenttitle} has been logged', 'View Incident', 'javascript:incident_details_window({incidentid})', 'sticky');
@@ -1898,22 +1906,22 @@ UPDATE `{$dbIncidentStatus}` SET `ext_name` = 'strUnsupported' WHERE `id` =9 LIM
 UPDATE `{$dbIncidentStatus}` SET `ext_name` = 'strActive' WHERE `id` =10 LIMIT 1 ;
 
 -- KMH 03/04/08
-UPDATE `{$dbInterfaceStyles}` SET `cssurl` = 'sit1.css' WHERE `id` = 1 LIMIT 1;
-UPDATE `{$dbInterfaceStyles}` SET `cssurl` = 'sit2.css' WHERE `id` = 2 LIMIT 1;
-UPDATE `{$dbInterfaceStyles}` SET `cssurl` = 'sit3.css' WHERE `id` = 3 LIMIT 1;
-UPDATE `{$dbInterfaceStyles}` SET `cssurl` = 'sit4.css' WHERE `id` = 4 LIMIT 1;
-UPDATE `{$dbInterfaceStyles}` SET `cssurl` = 'sit5.css' WHERE `id` = 5 LIMIT 1;
-UPDATE `{$dbInterfaceStyles}` SET `cssurl` = 'sit_ph2.css' WHERE `id` = 6 LIMIT 1;
-UPDATE `{$dbInterfaceStyles}` SET `cssurl` = 'sit7.css' WHERE `id` = 7 LIMIT 1;
-UPDATE `{$dbInterfaceStyles}` SET `cssurl` = 'sit8.css' WHERE `id` = 8 LIMIT 1;
-UPDATE `{$dbInterfaceStyles}` SET `cssurl` = 'sit9.css' WHERE `id` = 9 LIMIT 1;
-UPDATE `{$dbInterfaceStyles}` SET `cssurl` = 'sit_ph.css' WHERE `id` = 10 LIMIT 1;
-UPDATE `{$dbInterfaceStyles}` SET `cssurl` = 'sit10.css' WHERE `id` = 11 LIMIT 1;
-UPDATE `{$dbInterfaceStyles}` SET `cssurl` = 'sit11.css' WHERE `id` = 12 LIMIT 1;
-UPDATE `{$dbInterfaceStyles}` SET `cssurl` = 'sit12.css' WHERE `id` = 13 LIMIT 1;
-UPDATE `{$dbInterfaceStyles}` SET `cssurl` = 'sit13.css' WHERE `id` = 14 LIMIT 1;
-UPDATE `{$dbInterfaceStyles}` SET `cssurl` = 'sit14.css' WHERE `id` = 15 LIMIT 1;
-UPDATE `{$dbInterfaceStyles}` SET `iconset` = 'oxygen' WHERE `id` =8 LIMIT 1 ;
+UPDATE `{$dbInterfacestyles}` SET `cssurl` = 'sit1.css' WHERE `id` = 1 LIMIT 1;
+UPDATE `{$dbInterfacestyles}` SET `cssurl` = 'sit2.css' WHERE `id` = 2 LIMIT 1;
+UPDATE `{$dbInterfacestyles}` SET `cssurl` = 'sit3.css' WHERE `id` = 3 LIMIT 1;
+UPDATE `{$dbInterfacestyles}` SET `cssurl` = 'sit4.css' WHERE `id` = 4 LIMIT 1;
+UPDATE `{$dbInterfacestyles}` SET `cssurl` = 'sit5.css' WHERE `id` = 5 LIMIT 1;
+UPDATE `{$dbInterfacestyles}` SET `cssurl` = 'sit_ph2.css' WHERE `id` = 6 LIMIT 1;
+UPDATE `{$dbInterfacestyles}` SET `cssurl` = 'sit7.css' WHERE `id` = 7 LIMIT 1;
+UPDATE `{$dbInterfacestyles}` SET `cssurl` = 'sit8.css' WHERE `id` = 8 LIMIT 1;
+UPDATE `{$dbInterfacestyles}` SET `cssurl` = 'sit9.css' WHERE `id` = 9 LIMIT 1;
+UPDATE `{$dbInterfacestyles}` SET `cssurl` = 'sit_ph.css' WHERE `id` = 10 LIMIT 1;
+UPDATE `{$dbInterfacestyles}` SET `cssurl` = 'sit10.css' WHERE `id` = 11 LIMIT 1;
+UPDATE `{$dbInterfacestyles}` SET `cssurl` = 'sit11.css' WHERE `id` = 12 LIMIT 1;
+UPDATE `{$dbInterfacestyles}` SET `cssurl` = 'sit12.css' WHERE `id` = 13 LIMIT 1;
+UPDATE `{$dbInterfacestyles}` SET `cssurl` = 'sit13.css' WHERE `id` = 14 LIMIT 1;
+UPDATE `{$dbInterfacestyles}` SET `cssurl` = 'sit14.css' WHERE `id` = 15 LIMIT 1;
+UPDATE `{$dbInterfacestyles}` SET `iconset` = 'oxygen' WHERE `id` =8 LIMIT 1 ;
 
 ALTER TABLE `{$dbMaintenance}`
 ADD `var_incident_visible_contacts` ENUM( 'yes', 'no' ) NOT NULL DEFAULT 'no',
@@ -2066,8 +2074,35 @@ $upgrade_schema[335]["t200805201629"] = "INSERT INTO `$dbEmailTemplates` (`id`, 
 $upgrade_schema[335]["t200805201630"] = "INSERT INTO `$dbEmailTemplates` (`id`, `name`, `type`, `description`, `tofield`, `fromfield`, `replytofield`, `ccfield`, `bccfield`, `subjectfield`, `body`, `customervisibility`, `storeinlog`, `created`, `createdby`, `modified`, `modifiedby`) VALUES(11, 'CONTACT_RESET_PASSWORD', 'system', 'Sent to a contact to reset their password.', '{contactemail}', '{supportemail}', '{supportemail}', '', '', '{applicationshortname} - password reset', 'Hi {contactfirstname},\r\n\r\nThis is a email to reset your contact portal password for {applicationname}. If you did not request this, please ignore this email.\r\n\r\nTo complete your password reset please visit the following url:\r\n\r\n{passwordreseturl}\r\n\r\n\r\n{globalsignature}', 'hide', 'No', NULL, NULL, NULL, NULL);";
 $upgrade_schema[335]["t200805201631"] = "INSERT INTO `$dbEmailTemplates` (`id`, `name`, `type`, `description`, `tofield`, `fromfield`, `replytofield`, `ccfield`, `bccfield`, `subjectfield`, `body`, `customervisibility`, `storeinlog`, `created`, `createdby`, `modified`, `modifiedby`) VALUES(12, 'USER_RESET_PASSWORD', 'system', 'Sent when a user resets their email', '{useremail}', '{supportemail}', '{supportemail}', '', '', '{applicationshortname} - password reset', 'Hi,\r\n\r\nThis is a email to reset your user account password for {applicationname}. If you did not request this, please ignore this email.\r\n\r\nTo complete your password reset please visit the following url:\r\n\r\n{passwordreseturl}\r\n\r\n\r\n{globalsignature}', 'hide', 'No', NULL, NULL, NULL, NULL);";
 $upgrade_schema[335]["t200805201632"] = "INSERT INTO `$dbEmailTemplates` (`id`, `name`, `type`, `description`, `tofield`, `fromfield`, `replytofield`, `ccfield`, `bccfield`, `subjectfield`, `body`, `customervisibility`, `storeinlog`, `created`, `createdby`, `modified`, `modifiedby`) VALUES(13, 'NEW_CONTACT_DETAILS', 'system', 'Sent when a new contact is created', '{contactemail}', '{supportemail}', '', '', '', '{applicationshortname} - portal details', 'Hello {contactfirstname},\r\nYou have just been added as a contact on {applicationname} ({applicationurl}).\r\n\r\nThese details allow you to the login to the portal, where you can create, update and close your incidents, as well as view your sites'' incidents.\r\n\r\nYour details are as follows:\r\n\r\nusername: {contactusername}\r\npassword: {prepassword}\r\nPlease note, this password cannot be recovered, only reset. You may change it in the portal.\r\n\r\n{globalsignature}', 'hide', 'No', NULL, NULL, NULL, NULL);";
-$upgrade_schema[335]["t200805212220"] = "UPDATE `$dbNoticeTemplates` SET `type` = ".TRIGGER_NOTICE_TYPE.";";
+$upgrade_schema[335]["t200805202220"] = "UPDATE `$dbNoticeTemplates` SET `type` = ".TRIGGER_NOTICE_TYPE.";";
 
+$update_schema[335]["t200805211129"] = "CREATE TABLE IF NOT EXISTS `noticetemplates` (
+  `id` int(11) NOT NULL auto_increment,
+  `name` varchar(255) NOT NULL,
+  `type` tinyint(4) NOT NULL,
+  `description` varchar(255) NOT NULL,
+  `text` tinytext NOT NULL,
+  `linktext` varchar(50) default NULL,
+  `link` varchar(100) default NULL,
+  `durability` enum('sticky','session') NOT NULL default 'sticky',
+  PRIMARY KEY  (`id`)
+) ENGINE=MyISAM  ;";
+
+
+$update_schema[335]["t200805211129"] = "INSERT INTO `$dbNoticeTemplates` (`name`, `type`, `description`, `text`, `linktext`, `link`, `durability`) VALUES('TRIGGER_INCIDENT_CREATED', 3, 'Used when a new incident has been created', 'Incident {incidentid} - {incidenttitle} has been logged', 'View Incident', 'javascript:incident_details_window({incidentid})', 'sticky');";
+$update_schema[335]["t200805211130"] = "INSERT INTO `$dbNoticeTemplates` (`name`, `type`, `description`, `text`, `linktext`, `link`, `durability`) VALUES('TRIGGER_INCIDENT_ASSIGNED', 3, 'Used when a new incident is assigned to you', 'Incident {incidentid} - {incidenttitle} has been assigned to {userrealname}', 'View Incident', 'javascript:incident_details_window({incidentid})', 'sticky');";
+$update_schema[335]["t200805211131"] = "INSERT INTO `$dbNoticeTemplates` (`name`, `type`, `description`, `text`, `linktext`, `link`, `durability`) VALUES('TRIGGER_INCIDENT_NEARING_SLA', 3, 'Used when one of your incidents nears an SLA', 'Incident {incidentid} - {incidenttitle}: {nextsla} due in {nextslatime}', 'View Incident', 'javascript:incident_details_window({incidentid})', 'sticky');";
+$update_schema[335]["t200805211132"] = "INSERT INTO `$dbNoticeTemplates` (`name`, `type`, `description`, `text`, `linktext`, `link`, `durability`) VALUES('TRIGGER_LANGUAGE_DIFFERS', 3, 'Occurs when a user logs in with a different language to their profile language', 'Your current langauge ({currentlang}) is different from your profile language ({profilelang})', 'Keep current language', '{applicationurl}edit_profile.php?mode=savesessionlang', 'sticky');";
+$update_schema[335]["t200805211133"] = "INSERT INTO `$dbNoticeTemplates` (`name`, `type`, `description`, `text`, `linktext`, `link`, `durability`) VALUES('TRIGGER_NEW_CONTACT', 3, 'Occurs when a new contact is added', '{contactname} has been added as a contact to {contactsite} by {userrealname}', 'View Contact', '{applicationurl}contact_details.php?id={contactid}', 'sticky');";
+$update_schema[335]["t200805211134"] = "INSERT INTO `$dbNoticeTemplates` (`name`, `type`, `description`, `text`, `linktext`, `link`, `durability`) VALUES('TRIGGER_INCIDENT_REVIEW_DUE', 3, 'Used when an incident is due a review', 'Incident {incidentid} - {incidenttitle} is due for review', 'View Incident', 'javascript:incident_details_window({incidentid})', 'sticky');";
+$update_schema[335]["t200805211135"] = "INSERT INTO `$dbNoticeTemplates` (`name`, `type`, `description`, `text`, `linktext`, `link`, `durability`) VALUES('TRIGGER_KB_CREATED', 3, 'Used when a new Knowledgebase article is created', 'KB Article {kbname} has been created by {userrealname}', 'View Article', '{sitpath}kbarticle?id={kbid}', 'sticky');";
+$update_schema[335]["t200805211136"] = "INSERT INTO `$dbNoticeTemplates` (`name`, `type`, `description`, `text`, `linktext`, `link`, `durability`) VALUES('TRIGGER_NEW_HELD_EMAIL', 3, 'Used when there is a new email in the holding queue', 'There is a new email in the holding queue', 'View Holding Queue', '{sitpath}review_incoming_updates.php', 'sticky');";
+$update_schema[335]["t200805211137"] = "INSERT INTO `$dbNoticeTemplates` (`name`, `type`, `description`, `text`, `linktext`, `link`, `durability`) VALUES('TRIGGER_MINS_HELD_EMAIL', 3, 'Used when there is a new email in the holding queue for x minutes', 'There has been an email in the holding queue for {holdingmins} minutes', 'View Holding Queue', '{sitpath}/review_incoming_updates.php', 'sticky');";
+$update_schema[335]["t200805211138"] = "INSERT INTO `$dbNoticeTemplates` (`name`, `type`, `description`, `text`, `linktext`, `link`, `durability`) VALUES('TRIGGER_SIT_UPGRADED', 3, 'Used when the system is upgraded', '{applicationshortname} has been upgraded to {applicationversion}', 'What\\''s New?', '{sitpath}releasenotes.php?v={applicationversion}', 'sticky');";
+$update_schema[335]["t200805211139"] = "INSERT INTO `$dbNoticeTemplates` (`name`, `type`, `description`, `text`, `linktext`, `link`, `durability`) VALUES('TRIGGER_USER_SET_TO_AWAY', 3, 'Used when a watched user goes away', '{userrealname} is now [b]not accepting[/b] incidents', NULL, '', 'sticky');";
+$update_schema[335]["t200805211140"] = "INSERT INTO `$dbNoticeTemplates` (`name`, `type`, `description`, `text`, `linktext`, `link`, `durability`) VALUES('TRIGGER_USER_RETURNS', 3, 'Used when a user sets back to accepting', '{userrealname} is now [b]accepting[/b] incidents', NULL, NULL, 'sticky');";
+$update_schema[335]["t200805211141"] = "INSERT INTO `$dbNoticeTemplates` (`name`, `type`, `description`, `text`, `linktext`, `link`, `durability`) VALUES('TRIGGER_INCIDENT_CLOSED', 3, 'Occurs when an incident is closed', '{incidentid} - {incidentname} has been closed by {userrealname}', NULL, NULL, 'sticky');";
+$update_schema[335]["t200805211142"] = "INSERT INTO `$dbNoticeTemplates` (`name` ,`type` ,`description` ,`text` ,`linktext` ,`link` ,`durability`) VALUES('TRIGGER_NEW_CONTRACT', '3', 'Occurs when a new contact is added', '{contractproduct} contract has been added to {sitename} by {userid}', 'View Contract', '{applicationurl}contract_details.php?id={contractid}', 'sticky');";
 // Important: When making changes to the schema you must add SQL to make the alterations
 // to existing databases in $upgrade_schema[] *AND* you must also change $schema[] for
 // new installations (above the line of stars).

@@ -320,15 +320,19 @@ $ttvararray['{contactname}'] = array('description' => 'Full Name of contact',
 
 $ttvararray['{contactnotify}'] = array('description' => 'The Notify Contact email address (if set)',
                                       'requires' => 'contactid',
-                                     'replacement' => 'contact_notify_email($contactid);');
+                                     'replacement' => 'contact_notify_email($paramarray[\'contactid\']);');
 
 $ttvararray['{contactphone}'] = array('description' => 'Contact phone number',
                                      'requires' => 'contactid',
-                                     'replacement' => 'contact_site($contactid);');
+                                     'replacement' => 'contact_site($paramarray[\'contactid\']);');
 
-$ttvararray['{contactsite}'] = array('description' => 'Site name',
-                                     'requires' => 'siteid',
-                                     'replacement' => 'contact_site($contactid);');
+$ttvararray['{sitename}'] = array('description' => 'Site name',
+                                     'requires' => 'contactid',
+                                     'replacement' => 'contact_site($paramarray[\'contactid\']);');
+
+$ttvararray['{sitename}'] = array('description' => 'Site name',
+                                     'requires' => 'contractid',
+                                     'replacement' => 'contract_site($paramarray[\'contractid\']);');
 
 $ttvararray['{feedbackurl}'] = array('description' => 'Feedback URL',
                                      'requires' => 'incidentid',
@@ -413,7 +417,7 @@ $ttvararray['{useremail}'] = array('description' => $strCurrentUserEmailAddress,
                                      'replacement' => 'user_email($paramarray[\'userid\']);');
 
 $ttvararray['{userrealname}'] = array('description' => $strFullNameCurrentUser,
-                                     'replacement' => 'user_realname($_SESSION[\'userid\']);');
+                                     'replacement' => 'user_realname($paramarray[\'userid\']);');
 
 $ttvararray['{passwordreseturl}'] = array('description' => '',
                                           'replacement' => '$paramarray[\'passwordreseturl\'];',
@@ -423,10 +427,23 @@ $ttvararray['{prepassword}'] = array('description' => '',
                                           'replacement' => '$paramarray[\'prepassword\'];',
                                           'requires' => 'prepassword');
 
-$ttvararray['{closeruserid}'] = array('description' => '',
-                                      'replacement' => '$paramarray[\'closeruserid\'];',
-                                      'requires' => 'closeruserid');
-$ttvararray['{closerusername}'] = array('description' => '',
-                                      'replacement' => 'user_email($paramarray[\'closeruserid\']);',
-                                      'requires' => 'closeruserid');
+$ttvararray['{nextslatime}'] = array('description' => 'Time to next SLA',
+                                     'replacement' => 'format_workday_minutes($GLOBALS[\'now\'] - $paramarray[\'nextslatime\']);',
+                                     'requires' => 'nextslatime');
+$ttvararray['{nextsla}'] = array('description' => 'Next SLA name',
+                                     'replacement' => '$paramarray[\'nextsla\'];',
+                                     'requires' => 'nextsla');
+
+$ttvararray['{contractid}'] = array('description' => 'Contract ID',
+                                 'replacement' => '$paramarray[\'contractid\'];',
+                                  'requires' => 'contractid');
+
+$ttvararray['{contractproduct}'] = array('description' => 'Contact Product',
+                                      'replacement' => 'contract_product($paramarray[\'contractid\']);',
+                                      'required' => 'contractid');
+
+$ttvararray['{contractsla}'] = array('description' => 'SLA of the maintenance',
+                                  'replacement' => 'maintenance_servicelevel($paramarray[\'contractid\']);',
+                                  'required' => 'contractid');
+
 ?>
