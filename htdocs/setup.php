@@ -260,14 +260,15 @@ function setup_exec_sql($sqlquerylist)
                 foreach($sqlqueries AS $sql)
                 {
                     mysql_query($sql);
-                    if (mysql_error())
+                    $errstr = mysql_error()
+                    if ($errstr)
                     {
                         $html .= "<p><strong>FAILED:</strong> <code>".htmlspecialchars($sql)."</code> <span style='color: red;'>({$schemaversion})</span></p>";
                         $html .= "<p class='error'>".mysql_error()."<br />A MySQL error occurred, this could be because the MySQL user '{$CONFIG['db_username']}' does not have appropriate permission to modify the database schema.<br />";
                         //echo "The SQL command was:<br /><code>$sql</code><br />";
-                        if (strpos(mysql_error(), 'does not have appropriate permission')!==FALSE)
+                        if (strpos($errstr, 'does not have appropriate permission')!==FALSE)
                         {
-                        $html .= "<strong>Check your MySQL permissions allow the schema to be modified</strong>.<br />";
+                            $html .= "<strong>Check your MySQL permissions allow the schema to be modified</strong>.<br />";
                         }
                         else
                         {
