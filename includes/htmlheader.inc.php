@@ -240,7 +240,7 @@ if ($noticeaction == 'dismiss_notice')
 {
     if (is_numeric($noticeid))
     {
-        $sql = "DELETE FROM `{$GLOBALS['dbNotices']}` WHERE id='{$noticeid}'' AND userid='{$sit[2]}'";
+        $sql = "DELETE FROM `{$GLOBALS['dbNotices']}` WHERE id='{$noticeid}' AND userid='{$sit[2]}'";
         mysql_query($sql);
         if (mysql_error()) trigger_error(mysql_error(),E_USER_WARNING);
     }
@@ -319,7 +319,7 @@ if ($sit[0] != '')
                 echo "=dismiss_notice&amp;noticeid={$notice->id}{$url}'>";
                 echo "{$strDismiss}</a></span>";
             }
-            
+
             if (substr($notice->text, 0, 4) == '$str')
             {
                 $v = substr($notice->text, 1);
