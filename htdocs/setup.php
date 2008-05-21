@@ -260,7 +260,7 @@ function setup_exec_sql($sqlquerylist)
                 foreach($sqlqueries AS $sql)
                 {
                     mysql_query($sql);
-                    $errstr = mysql_error()
+                    $errstr = mysql_error();
                     if ($errstr)
                     {
                         $html .= "<p><strong>FAILED:</strong> <code>".htmlspecialchars($sql)."</code> <span style='color: red;'>({$schemaversion})</span></p>";
