@@ -156,6 +156,18 @@ array('name' => 'New contract added',
       'required' => array('maintid')
       );
 
+$triggerarray['TRIGGER_NEW_USER'] = 
+array('name' => 'New user added',
+      'description' => 'Occurs when a new user is added',
+      'required' => array('userid')
+      );
+
+$triggerarray['TRIGGER_NEW_SITE'] = 
+array('name' => 'New site added',
+      'description' => 'Occurs when a new site is added',
+      'required' => array('siteid')
+      );
+
 //set up all the action types
 define(ACTION_NONE, 1);
 define(ACTION_NOTICE, 2);
@@ -181,7 +193,6 @@ $actionarray['ACTION_JOURNAL'] =
 array('name' => 'Journal',
       'description' => 'Log the trigger in the system journal'
       );
-
 
 /**
     * Master trigger function, creates a new trigger
