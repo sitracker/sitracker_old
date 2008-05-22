@@ -9055,6 +9055,21 @@ function contract_slaid($maintid)
     return $slaid;    
 }
 
+
+function site_salespersonid($siteid)
+{
+    $siteid = intval($siteid);
+    $salespersonid = db_read_column('owner', $GLOBALS['dbSites'], $siteid);
+    return $salespersonid;
+}
+
+function site_salesperson($siteid)
+{
+    $siteid = intval($siteid);
+    $salespersonid = db_read_column('owner', $GLOBALS['dbSites'], $siteid);
+    return user_realname($salespersonid);
+}
+
 // -------------------------- // -------------------------- // --------------------------
 // leave this section at the bottom of functions.inc.php ================================
 
