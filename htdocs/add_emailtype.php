@@ -20,6 +20,24 @@ require ('auth.inc.php');
 
 include ('htmlheader.inc.php');
 
+
+// **********************************************
+// DEPRECATED as of 3.35 do not use this file
+// *********************************************
+// **********************************************
+// DEPRECATED as of 3.35 do not use this file
+// *********************************************
+// **********************************************
+// DEPRECATED as of 3.35 do not use this file
+// *********************************************
+
+
+trigger_error('DEPRECATED file', E_USER_WARNING);
+
+
+
+
+
 // External variables
 $submit=$_REQUEST['submit'];
 
