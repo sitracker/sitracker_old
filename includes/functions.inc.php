@@ -8332,7 +8332,6 @@ function kb_article($id, $mode='internal')
         exit;
     }
 
-    // FIXME this aint valid, style sections need to be in the header
     $html .= "<div id='kbarticle'>";
 
     $sql = "SELECT * FROM `{$GLOBALS['dbKBArticles']}` WHERE docid='{$id}' LIMIT 1";
@@ -8379,7 +8378,7 @@ function kb_article($id, $mode='internal')
                     include 'htmlfooter.inc.php';
                     exit;
                 }
-                $html .= "<div class='kbprivate'><h3>{$kbcontent->header}</h3>";
+                $html .= "<div class='kbprivate'><h3>{$kbcontent->header} (private)</h3>";
                 $restrictedcontent++;
             break;
 
@@ -8409,13 +8408,21 @@ function kb_article($id, $mode='internal')
 
     }
 
+    if ($restrictedcontent > 0)
+    {
+        $html .= "<h3>{$GLOBALS['strKey']}</h3>";
+        $html .= "<p><span class='keykbprivate'>{$GLOBALS['strPrivate']}</span>".help_link('KBPrivate')." &nbsp; ";
+        $html .= "<span class='keykbrestricted'>{$GLOBALS['strRestricted']}</span>".help_link('KBRestricted')."</p>";
+    }
+
+
     $html .= "<h3>{$GLOBALS['strArticle']}</h3>";
-    $html .= "<strong>{$GLOBALS['strDocumentID']}</strong>: ";
-    $html .= "{$CONFIG['kb_id_prefix']}".leading_zero(4,$kbarticle->docid)."<br />";
-    $pubdate=mysql2date($kbarticle->published);
+    //$html .= "<strong>{$GLOBALS['strDocumentID']}</strong>: ";
+    $html .= "<p><strong>{$CONFIG['kb_id_prefix']}".leading_zero(4,$kbarticle->docid)."</strong> ";
+    $pubdate = mysql2date($kbarticle->published);
     if ($pubdate > 0)
     {
-        $html .= "<strong>{$GLOBALS['strPublished']}</strong>: ";
+        $html .= "{$GLOBALS['strPublished']} ";
         $html .= ldate($CONFIG['dateformat_date'],$pubdate)."<br />";
     }
 
@@ -8428,11 +8435,11 @@ function kb_article($id, $mode='internal')
             $count=1;
             if ($countauthors > 1)
             {
-                $html .= "{$GLOBALS['strAuthors']}: ";
+                $html .= "<strong>{$GLOBALS['strAuthors']}</strong>:<br />";
             }
             else
             {
-                $html .= "{$GLOBALS['strAuthor']}: ";
+                $html .= "<strong>{$GLOBALS['strAuthor']}:</strong> ";
             }
             foreach ($author AS $authorid)
             {
@@ -8440,11 +8447,6 @@ function kb_article($id, $mode='internal')
                 if ($count < $countauthors) $html .= ", " ;
                 $count++;
             }
-            $html .= "<strong>{$GLOBALS['strAuthors']}</strong>: ";
-        }
-        else
-        {
-            $html .= "{$GLOBALS['strAuthor']}: {$author}";
         }
     }
 
@@ -8456,13 +8458,8 @@ function kb_article($id, $mode='internal')
         $html .= "<br />";
     }
 
-    if ($restrictedcontent > 0)
-    {
-        $html .= "<h3>{$GLOBALS['strKey']}</h3>";
-        $html .= "<p><span class='keykbprivate'>{$GLOBALS['strPrivate']}</span>".help_link('KBPrivate')."<br />";
-        $html .= "<span class='keykbrestricted'>{$GLOBALS['strRestricted']}</span>".help_link('KBRestricted')."</p>";
-    }
-    $html .= "<h3>{$GLOBALS['strDisclaimer']}</h3>";
+    //$html .= "<h3>{$GLOBALS['strDisclaimer']}</h3>";
+    $html .= "<hr />";
     $html .= $CONFIG['kb_disclaimer_html'];
     $html .= "</div>";
 
@@ -8981,7 +8978,7 @@ function contract_site($maintid)
     $sql = "SELECT site FROM `{$GLOBALS['dbMaintenance']}` WHERE id='{$maintid}'";
     $result = mysql_query($sql);
     $maintobj = mysql_fetch_object($result);
-    
+
     $sitename = site_name($maintobj->site);
     if (!empty($sitename))
     {
@@ -9016,7 +9013,7 @@ function setup_user_triggers($userid)
         $sqls[] = "INSERT INTO `{$GLOBALS['dbTriggers']}` (`triggerid`, `userid`, `action`, `template`, `parameters`, `checks`)
                   VALUES('TRIGGER_INCIDENT_NEARING_SLA', {$userid}, 'ACTION_NOTICE', 3, '',
                   '{ownerid} == {currentuserid} OR {townerid} == {currentuserid}');";
-                  
+
         foreach ($sqls AS $sql)
         {
             mysql_query($sql);
@@ -9032,7 +9029,7 @@ function setup_user_triggers($userid)
         trigger_error("Invalid userid specified");
         $return = FALSE;
     }
-    
+
     return $return;
 }
 
