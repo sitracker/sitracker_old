@@ -221,7 +221,6 @@ elseif ($action == "add")
             $id = mysql_insert_id();
 
             trigger('TRIGGER_NEW_SITE', array('siteid' => $id));
-            journal(CFG_LOGGING_NORMAL, 'Site Added', "Site {$id} was added", CFG_JOURNAL_SITES, $id);
             html_redirect("site_details.php?id={$id}");
         }
         clear_form_data('add_site');
