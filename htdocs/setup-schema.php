@@ -2019,7 +2019,7 @@ $upgrade_schema[335]["t200805201630"] = "INSERT INTO `{$dbEmailTemplates}` (`id`
 $upgrade_schema[335]["t200805201631"] = "INSERT INTO `{$dbEmailTemplates}` (`id`, `name`, `type`, `description`, `tofield`, `fromfield`, `replytofield`, `ccfield`, `bccfield`, `subjectfield`, `body`, `customervisibility`, `storeinlog`, `created`, `createdby`, `modified`, `modifiedby`) VALUES(12, 'USER_RESET_PASSWORD', 'system', 'Sent when a user resets their email', '{useremail}', '{supportemail}', '{supportemail}', '', '', '{applicationshortname} - password reset', 'Hi,\r\n\r\nThis is a email to reset your user account password for {applicationname}. If you did not request this, please ignore this email.\r\n\r\nTo complete your password reset please visit the following url:\r\n\r\n{passwordreseturl}\r\n\r\n\r\n{globalsignature}', 'hide', 'No', NULL, NULL, NULL, NULL);";
 $upgrade_schema[335]["t200805201632"] = "INSERT INTO `{$dbEmailTemplates}` (`id`, `name`, `type`, `description`, `tofield`, `fromfield`, `replytofield`, `ccfield`, `bccfield`, `subjectfield`, `body`, `customervisibility`, `storeinlog`, `created`, `createdby`, `modified`, `modifiedby`) VALUES(13, 'NEW_CONTACT_DETAILS', 'system', 'Sent when a new contact is created', '{contactemail}', '{supportemail}', '', '', '', '{applicationshortname} - portal details', 'Hello {contactfirstname},\r\nYou have just been added as a contact on {applicationname} ({applicationurl}).\r\n\r\nThese details allow you to the login to the portal, where you can create, update and close your incidents, as well as view your sites'' incidents.\r\n\r\nYour details are as follows:\r\n\r\nusername: {contactusername}\r\npassword: {prepassword}\r\nPlease note, this password cannot be recovered, only reset. You may change it in the portal.\r\n\r\n{globalsignature}', 'hide', 'No', NULL, NULL, NULL, NULL);";
 
-$upgrade_schema[335]["t200805211129"] = "CREATE TABLE IF NOT EXISTS `{$dbNoticeTemplates}` (
+$upgrade_schema[335]["t200805211128"] = "CREATE TABLE IF NOT EXISTS `{$dbNoticeTemplates}` (
   `id` int(11) NOT NULL auto_increment,
   `name` varchar(255) NOT NULL,
   `type` tinyint(4) NOT NULL,
@@ -2061,7 +2061,7 @@ $upgrade_schema[335]["t200805211550"] = "CREATE TABLE IF NOT EXISTS `{$dbTrigger
 ) ENGINE=MyISAM;";
 
 $upgrade_schema[335]["t200805211551"] = "INSERT INTO `{$dbTriggers}` (`triggerid`, `userid`, `action`, `template`, `parameters`, `checks`) VALUES('TRIGGER_INCIDENT_CREATED', 0, 'ACTION_JOURNAL', 0, '', '');";
-$upgrade_schema[335]["t200805211552"] = "INSERT INTO `{$dbTriggers}` (`triggerid`, `userid`, `action`, `template`, `parameters`, `checks`) VALUES('TRIGGER_INCIDENT_CREATED', 0, 'ACTION_EMAIL', 8, '', '');";
+$upgrade_schema[335]["t200805211552"] = "INSERT INTO `{$dbTriggers}` (`triggerid`, `userid`, `action`, `template`, `parameters`, `checks`) VALUES('TRIGGER_INCIDENT_CREATED', 0, 'ACTION_EMAIL', 3, '', '');";
 $upgrade_schema[335]["t200805211553"] = "INSERT INTO `{$dbTriggers}` (`triggerid`, `userid`, `action`, `template`, `parameters`, `checks`) VALUES('TRIGGER_INCIDENT_ASSIGNED', 0, 'ACTION_JOURNAL', 0, '', '');";
 $upgrade_schema[335]["t200805211554"] = "INSERT INTO `{$dbTriggers}` (`triggerid`, `userid`, `action`, `template`, `parameters`, `checks`) VALUES('TRIGGER_INCIDENT_ASSIGNED_WHILE_AWAY', 0, 'ACTION_JOURNAL', 0, '', '');";
 $upgrade_schema[335]["t200805211555"] = "INSERT INTO `{$dbTriggers}` (`triggerid`, `userid`, `action`, `template`, `parameters`, `checks`) VALUES('TRIGGER_INCIDENT_ASSIGNED_WHILE_OFFLINE', 0, 'ACTION_JOURNAL', 0, '', '');";
