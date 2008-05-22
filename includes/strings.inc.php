@@ -332,7 +332,7 @@ array('description' => $strIncidentsContactEmail,
 $ttvararray['{contactemail}'] =
 array('description' => $strIncidentsContactEmail,
       'requires' => 'contactid',
-      'replacement' => 'contact_email(($paramarray[\'contactid\']));',
+      'replacement' => 'contact_email($paramarray[\'contactid\']);',
       'action' => 'ACTION_EMAIL'
       );
 
@@ -580,5 +580,19 @@ array('description' => 'The SLA tag',
       'replacement' => 'servicelevel_id2tag(contract_slaid($paramarray[\'contractid\']));',
       'requires' => 'contractid'
       );
+
+$ttvararray['{sitesalespersonid}'] = 
+array('description' => 'The ID of the site\'s salesperson',
+      'replacement' => 'site_salespersonid($paramarray[\siteid\']);',
+      'requires' => 'siteid'
+      );
+      
+$ttvararray['{sitesalesperson}'] = 
+array('description' => 'The name of the site\'s salesperson',
+      'replacement' => 'site_salesperson($paramarray[\siteid\']);',
+      'requires' => 'siteid'
+      );
+      
+      
 
 ?>
