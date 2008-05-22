@@ -492,13 +492,13 @@ function email_templates($name, $triggertype='system', $selected = '')
 {
     global $dbEmailTemplates, $dbTriggers;;
     $html .= "<select id='{$name}' name='{$name}'>";
-    $sql = "SELECT * FROM `{$dbEmailTemplates}` ";
+    $sql = "SELECT id, name, description FROM `{$dbEmailTemplates}` ";
     $sql .= "WHERE type='{$triggertype}' ORDER BY id";
     $result = mysql_query($sql);
     if (mysql_error()) trigger_error("MySQL Query Error ".mysql_error(), E_USER_WARNING);
     while ($template = mysql_fetch_object($result))
     {
-        $html .= "<option value='{$template->id}'>{$template->name}</option>\n";
+        $html .= "<option value='{$template->id}' title=\"{$template->description}\">{$template->name}</option>\n";
     }
     $html .= "</select>\n";
     return $html;
