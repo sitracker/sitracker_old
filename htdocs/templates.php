@@ -30,11 +30,7 @@ if (empty($action) OR $action == 'showform' OR $action == 'list')
     include ('htmlheader.inc.php');
 
     echo "<h2>{$strTemplates}</h2>";
-    echo "<p align='center'>Please be very careful when editing existing templates, {$CONFIG['application_shortname']} relies on some of these templates to
-    send emails out automatically, if in doubt - seek advice.</p>";
-    echo "<p align='center'>{$strTemplatesShouldNotBeginWith}</p>";
-    echo "<p align='center'><a href='triggers.php'>{$strTriggers}</a> | <a href='add_emailtype.php?action=showform'>{$strAddEmailTemplate}</a> | ";
-    echo "<a href='edit_global_signature.php'>{$strEditGlobalSignature}</a></p>";
+    echo "<p align='center'><a href='triggers.php'>{$strTriggers}</a> | <a href='add_emailtype.php?action=showform'>{$strAddEmailTemplate}</a></p>";
 
     $sql = "SELECT * FROM `{$dbEmailTemplates}` ORDER BY id";
     $result = mysql_query($sql);
@@ -180,10 +176,23 @@ elseif ($action == "edit")
 
         echo "<tr><th>{$strID}: <sup class='red'>*</sup></th><td>";
         echo "<input maxlength='50' name='name' size='5' value='{$template->id} 'readonly='readonly' disabled='disabled' /></td></tr>\n";
-        echo "<tr><th>Template Type:</th><td>{$template->type}";  // FIXME Temporary, remove before release
+        echo "<tr><th>Template Type:</th><td>";
+        if ($templatetype == 'notice')
+        {
+            echo icon('info', 32).' '.$strNotice;
+        }
+        elseif ($templatetype == 'email')
+        {
+            echo icon('email', 32).' '.$strEmail;
+        }
+        else
+        {
+            echo $strOther;
+        }
+        // FIXME Temporary, remove before release
         if ($template->type == 'user') $required = array('incidentid', 'userid');
         else $required = $triggerarray[$trigaction->triggerid]['required'];
-        echo "<br />required: ".print_r($required, true)."<br />";
+        echo "<br />required: <code>".print_r($required, true)."</code><br />";
         echo "</td><tr>";
 
         echo "<tr><th>{$strTemplate}: <sup class='red'>*</sup></th><td><input maxlength='100' name='name' size='40' value=\"{$template->name}\" /></td></tr>\n";
@@ -191,8 +200,8 @@ elseif ($action == "edit")
         switch ($templatetype)
         {
             case 'email':
-
                 echo "<tr><th colspan='2'>{$strEmail}</th></tr>"; // FIXME i18n defaults
+                echo "<tr><td colspan='2'>{$strTemplatesShouldNotBeginWith}</td></tr>";
                 echo "<tr><th>{$strTo}: <sup class='red'>*</sup></th>";
                 echo "<td><input id='tofield' maxlength='100' name='tofield' size='40' value=\"{$template->tofield}\" onfocus=\"recordFocusElement(this);\" /></td></tr>\n";
                 echo "<tr><th>{$strFrom}: <sup class='red'>*</sup></th>";
@@ -273,7 +282,7 @@ elseif ($action == "edit")
             // FIXME i18n email templates
         // Show a list of available template variables.  Only variables that have 'requires' matching the 'required'
         // that the trigger provides is shown
-        echo "<div id='templatevariables' style='width: 48%; float: right; border: 1px solid #CCCCFF; padding: 10px; display:none;'>";
+        echo "<div id='templatevariables' style='width: 48%; max-height: 700px; overflow: scroll; float: right; border: 1px solid #CCCCFF; padding: 10px; display:none;'>";
         echo "<h4>Template Variables</h4>"; // FIXME template variables
         echo "<p align='center'>{$strFollowingSpecialIdentifiers}</p>";
         if (!is_array($required)) echo "<p class='info'>Some of these identifiers might not be available once you add a trigger</p>";
