@@ -142,15 +142,6 @@ switch ($_REQUEST['mode'])
         echo "<h3>{$strType}</h3>";
         echo $triggerarray[$id]['type']; // FIXME remove displaying type before release
 
-        if (is_array($triggerarray[$id]['optional']))
-        {
-            echo "<h3>{$strParameters}</h3>";
-            echo "The following optional parameters may be used: <br />";
-            foreach ($triggerarray[$id]['optional'] AS $param)
-            {
-                echo "<var>{$param}</var> &nbsp; ";
-            }
-        }
         echo "<h3>{$strAction}</h3>";
         echo "<form name='addtrigger' action='{$_SERVER['PHP_SELF']}' method='post'>";
         // echo "<th>Extra {$strParameters}</th>";
@@ -176,10 +167,16 @@ switch ($_REQUEST['mode'])
         echo "<div id='journalbox' style='display:none;'>{$strNone}</div>";
         echo "<div id='none'>{$strNone}</div>";
 //         echo "<td><div id='parametersbox' style='display:none;'><input type='text' name='parameters' size='30' /></div></td>";
+        
         echo "<h3>{$strRules}</h3>";
-        if (!empty($triggerarray[$id]['optional']))
+        if (is_array($triggerarray[$id]['optional']))
         {
-            echo "<tr><td colspan='3'><label for='rules'>{$strRules}:</label><br />";
+            echo "{$strTheFollowingVariables} ";
+            foreach ($triggerarray[$id]['optional'] AS $param)
+            {
+                echo "<var><strong>{{$param}}</strong></var> &nbsp; ";
+            }
+            echo "<br /><br /><tr><td colspan='3'><label for='rules'>{$strRules}:</label><br />";
             echo "<textarea cols='30' rows='5' id='rules' name='rules'></textarea></td></tr>";
         }
         else
