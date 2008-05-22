@@ -8461,7 +8461,14 @@ function kb_article($id, $mode='internal')
     if (!empty($kbarticle->keywords))
     {
         $html .= "<strong>{$GLOBALS['strKeywords']}</strong>: ";
-        $html .= preg_replace("/\[([0-9]+)\]/", "<a href=\"incident_details.php?id=$1\" target=\"_blank\">$0</a>", $kbarticle->keywords);
+        if ($mode == 'internal')
+        {
+            $html .= preg_replace("/\[([0-9]+)\]/", "<a href=\"incident_details.php?id=$1\" target=\"_blank\">$0</a>", $kbarticle->keywords);
+        }
+        else
+        {
+            $html .= $kbarticle->keywords;
+        }
         $html .= "<br />";
     }
 
