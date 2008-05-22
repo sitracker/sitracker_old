@@ -305,18 +305,17 @@ if ($sit[0] != '')
                 $class = 'info';
             }
 
-            echo "<div class='{$class}'><p class='{$class}'>";
+            echo "<div class='{$class}'><p class='{$class}' id='notice{$notice->id}'>";
             if ($notice->type == TRIGGER_NOTICE_TYPE)
             {
                 echo "<span><a href='{$CONFIG['application_webpath']}triggers.php'>";
-                echo "{$strSettings}</a> | <a href='{$_SERVER[PHP_SELF]}?noticeaction";
-                echo "=dismiss_notice&amp;noticeid={$notice->id}{$url}'>";
+                echo "{$strSettings}</a> | ";
+                echo "<a href='javascript:void(0);' onclick=\"dismissNotice({$notice->id}, {$_SESSION['userid']})\">";
                 echo "{$strDismiss}</a></span>";
             }
             else
             {
-                echo "<span><a href='{$_SERVER[PHP_SELF]}?noticeaction";
-                echo "=dismiss_notice&amp;noticeid={$notice->id}{$url}'>";
+                echo "<span><a href='javascript:void(0);' onclick=\"dismissNotice({$notice->id}, {$_SESSION['userid']})\">";
                 echo "{$strDismiss}</a></span>";
             }
 

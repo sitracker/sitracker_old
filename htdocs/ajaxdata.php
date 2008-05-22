@@ -49,6 +49,24 @@ switch($action)
         echo nl2br($helptext);
     break;
 
+    case 'dismiss_notice':
+        $noticeid = cleanvar($_REQUEST['noticeid']);
+        $userid = cleanvar($_REQUEST['userid']);
+        if (is_numeric($noticeid))
+        {
+            $sql = "DELETE FROM `{$GLOBALS['dbNotices']}` WHERE id='{$noticeid}' AND userid='{$userid}'";
+            mysql_query($sql);
+            if (mysql_error()) trigger_error(mysql_error(),E_USER_WARNING);
+            else echo "deleted {$noticeid} $sql";
+        }
+        elseif ($noticeid == 'all')
+        {
+            $sql = "DELETE FROM `{$GLOBALS['dbNotices']}` WHERE userid={$sit[2]} LIMIT 20"; // only delete 20 max as we only show 20 max
+            mysql_query($sql);
+            if (mysql_error()) trigger_error(mysql_error(),E_USER_WARNING);
+        }
+    break;
+
     case 'autocomplete_sitecontact':
     break;
 

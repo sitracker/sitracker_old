@@ -466,3 +466,18 @@ function insertBBCode(element, tag, endtag)
     $(element).selectionStart = caret;
     $(element).selectionEnd = caret;
 }
+
+
+function dismissNotice(noticeid, userid)
+{
+    var div = 'notice' + noticeid;
+    new Ajax.Request(application_webpath + 'ajaxdata.php?action=dismiss_notice&noticeid=' + noticeid + '&userid=' + userid + '&rand=' + get_random(),
+    {
+        method:'get',
+            onSuccess: function(transport)
+            {
+                $(div).hide();
+            },
+            onFailure: function(){ alert('Notice Error\nSorry, we could not dismiss the notice.') }
+    });
+}
