@@ -28,7 +28,7 @@ array('name' => 'Incident Created',
       'description' => 'Occurs when a new incident has been created',
       'required' => array('incidentid','contactid'),
       'optional' => array('contactid', 'siteid', 'priority'),
-      'type' => 'incident');
+      'type' => 'system');
 
 $triggerarray['TRIGGER_INCIDENT_ASSIGNED'] =
 array('name' => 'Incident Assigned',
@@ -262,7 +262,7 @@ function trigger($triggerid, $paramarray='')
                 eval("return \$value = $checks;");
                 if($value === FALSE)
                 {
-                    return;                   
+                    return;
                 }
             }
         }
