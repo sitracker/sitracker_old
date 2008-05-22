@@ -48,19 +48,32 @@ switch ($_REQUEST['mode'])
         {
             html_redirect($_SERVER['PHP_SELF'], FALSE);
         }
-
-        // TODO needs a check that the user has permission to delete the trigger
-
-        $sql = "DELETE FROM `{$dbTriggers}` WHERE id = $id LIMIT 1";
-        mysql_query($sql);
-        if (mysql_error()) trigger_error("MySQL Query Error ".mysql_error(), E_USER_WARNING);
-        if (mysql_affected_rows() >= 1)
+        $triggerowner = db_read_column('userid', $dbTriggers, $id);
+        if ($triggerowner == 0 AND !user_permission($sit[2], 72))
         {
-            html_redirect($_SERVER['PHP_SELF']);
+            html_redirect($_SERVER['PHP_SELF'], FALSE);
+        }
+        elseif ($triggerowner != $sit[2])
+        {
+            html_redirect($_SERVER['PHP_SELF'], FALSE);
+        }
+        elseif ($triggerowner == $sit[2] AND !user_permission($sit[2], 71))
+        {
+            html_redirect($_SERVER['PHP_SELF'], FALSE);
         }
         else
         {
-            html_redirect($_SERVER['PHP_SELF'], FALSE);
+            $sql = "DELETE FROM `{$dbTriggers}` WHERE id = $id LIMIT 1";
+            mysql_query($sql);
+            if (mysql_error()) trigger_error("MySQL Query Error ".mysql_error(), E_USER_WARNING);
+            if (mysql_affected_rows() >= 1)
+            {
+                html_redirect($_SERVER['PHP_SELF']);
+            }
+            else
+            {
+                html_redirect($_SERVER['PHP_SELF'], FALSE);
+            }
         }
         break;
 
@@ -153,9 +166,6 @@ switch ($_REQUEST['mode'])
         echo "<h3>{$strOccurance}</h3>";
         echo $triggerarray[$id]['description'];
 
-        echo "<h3>{$strType}</h3>";
-        echo $triggerarray[$id]['type']; // FIXME remove displaying type before release
-
         echo "<h3>{$strAction}</h3>";
         echo "<form name='addtrigger' action='{$_SERVER['PHP_SELF']}' method='post'>";
         // echo "<th>Extra {$strParameters}</th>";
@@ -194,7 +204,7 @@ switch ($_REQUEST['mode'])
             {
                 $replace = "{".$param."}";
                 $linktitle = $ttvararray[$replace]['description'];
-                echo "<var><strong><a href='javascript:void(0);' title=\"{$linktitle}\" onclick=\"insertRuletext('{{$param}}');\">{{$param}}</a></strong></var> ";
+                echo "<a href='javascript:void(0);' title=\"{$linktitle}\" onclick=\"insertRuletext('{{$param}}');\">{{$param}}</a> ";
             }
             $compoperators = array('==', '!=');
             foreach ($compoperators AS $op)
