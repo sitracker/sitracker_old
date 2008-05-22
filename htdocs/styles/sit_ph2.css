@@ -2,6 +2,9 @@
 /* by Paul Harrison, paul.harrison@salfordsoftware.co.uk - August 2001 */
 /* Recreated by Ivan Lucas - November 2006 */
 
+#masthead { background-image: none;}
+#apptitle, #statusbar { text-align: center; background-color: #FFA953; background-image: none; color: #773E23;}
+
 body        { background-color: #FFFFFF; color: #000000; font-family: Tahoma, Helvetica, sans serif; }
 p       { font-size: 8pt; color: #000000; }
 table       { font-size: 8pt; color: #000000; }
