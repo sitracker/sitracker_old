@@ -80,7 +80,7 @@ if ($sit[0] != '')
 
 echo "</head>\n";
 echo "<body>\n";
-echo "<h1 id='apptitle'>{$CONFIG['application_name']}</h1>\n";
+echo "<div id='masthead'><h1 id='apptitle'>{$CONFIG['application_name']}</h1></div>\n";
 // Show menu if logged in
 if ($sit[0] != '')
 {
