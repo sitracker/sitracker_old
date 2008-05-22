@@ -460,6 +460,8 @@ function create_trigger_notice($userid, $noticetext='', $triggertype='',
             $noticetext = trigger_replace_specials($triggertype, $notice->text, $paramarray);
             $noticelinktext = trigger_replace_specials($triggertype, $notice->linktext, $paramarray);
             $noticelink = trigger_replace_specials($triggertype, $notice->link, $paramarray);
+            $refid = trigger_replace_specials($triggertype, $notice->refid, $paramarray);
+            
             if ($CONFIG['debug']) $dbg .= $noticetext."\n";
 
             if ($userid == 0 AND $paramarray['userid'] > 0) $userid = $paramarray['userid'];
@@ -467,7 +469,7 @@ function create_trigger_notice($userid, $noticetext='', $triggertype='',
             $sql = "INSERT INTO `{$dbNotices}` (userid, type, text, linktext, link,
                                         referenceid, timestamp) ";
             $sql .= "VALUES ({$userid}, '{$notice->type}', '{$noticetext}',
-                            '{$noticelinktext}', '{$noticelink}', '', NOW())";
+                            '{$noticelinktext}', '{$noticelink}', '{$refid}', NOW())";
                             //echo $sql;
             mysql_query($sql);
             if (mysql_error()) trigger_error("MySQL Query Error ".mysql_error(), E_USER_WARNING);
